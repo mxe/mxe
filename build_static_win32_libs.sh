@@ -241,6 +241,7 @@ make install bin_PROGRAMS= noinst_PROGRAMS=
 cd "$SOURCE"
 tar xfvz "$DOWNLOAD/SDL_mixer-$VERSION_SDL_mixer.tar.gz"
 cd "SDL_mixer-$VERSION_SDL_mixer"
+sed 's,for path in /usr/local; do,for path in; do,' -i configure
 ./configure \
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
