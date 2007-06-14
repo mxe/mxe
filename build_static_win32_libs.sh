@@ -213,6 +213,7 @@ tar xfvj "$DOWNLOAD/libgcrypt-$VERSION_libgcrypt.tar.bz2"
 cd "libgcrypt-$VERSION_libgcrypt"
 sed '26i\#include <ws2tcpip.h>' -i src/gcrypt.h.in
 sed '26i\#include <ws2tcpip.h>' -i src/ath.h
+sed 's,sys/times.h,sys/time.h,' -i cipher/random.c
 ./configure \
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
@@ -276,7 +277,9 @@ cd "libpng-$VERSION_libpng"
 ./configure \
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
-    --prefix="$PREFIX"
+    --prefix="$PREFIX" \
+    CFLAGS="-I$PREFIX/include" \
+    LDFLAGS="-L$PREFIX/lib"
 make install bin_PROGRAMS= noinst_PROGRAMS=
 
 
