@@ -17,6 +17,8 @@ PREFIX="$ROOT/usr"
 SOURCE="$ROOT/src"
 DOWNLOAD="$ROOT/download"
 
+PATH="$PREFIX/bin:$PATH"
+
 VERSION_pkg_config=0.21
 VERSION_pthreads=2-8-0
 VERSION_zlib=1.2.3
@@ -197,8 +199,7 @@ cd "libgpg-error-$VERSION_libgpg_error"
 ./configure \
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
-    --prefix="$PREFIX" \
-    PATH="$PREFIX/bin:$PATH"
+    --prefix="$PREFIX"
 make install bin_PROGRAMS= noinst_PROGRAMS=
 
 
@@ -217,8 +218,7 @@ sed 's,sys/times.h,sys/time.h,' -i cipher/random.c
 ./configure \
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
-    --prefix="$PREFIX" \
-    PATH="$PREFIX/bin:$PATH"
+    --prefix="$PREFIX"
 make install bin_PROGRAMS= noinst_PROGRAMS=
 
 
@@ -239,8 +239,7 @@ cd "gnutls-$VERSION_gnutls"
     --with-included-opencdk \
     --with-included-libtasn1 \
     --with-included-libcfg \
-    --with-included-lzo \
-    PATH="$PREFIX/bin:$PATH"
+    --with-included-lzo
 make install bin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
 
 
@@ -259,7 +258,6 @@ sed 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i configure
     --disable-shared \
     --prefix="$PREFIX" \
     --with-gnutls \
-    PATH="$PREFIX/bin:$PATH" \
     CFLAGS="-I$PREFIX/include" \
     LDFLAGS="-L$PREFIX/lib"
 make install bin_PROGRAMS= noinst_PROGRAMS=
@@ -312,7 +310,6 @@ cd "tiff-$VERSION_tiff"
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
     --prefix="$PREFIX" \
-    PATH="$PREFIX/bin:$PATH" \
     CFLAGS="-I$PREFIX/include" \
     LDFLAGS="-L$PREFIX/lib" \
     --without-x
@@ -349,10 +346,9 @@ sed 's,^install-data-local:.*,install-data-local:,' -i src/Makefile.in
     --with-arch="$BUILD" --build="$BUILD" --host="$TARGET" \
     --disable-shared \
     --prefix="$PREFIX" \
-    --with-freetype-config="$PREFIX/bin/freetype-config" \
     --enable-libxml2 \
-    LIBXML2_CFLAGS="`$PREFIX/bin/xml2-config --cflags`" \
-    LIBXML2_LIBS="`$PREFIX/bin/xml2-config --libs`"
+    LIBXML2_CFLAGS="`xml2-config --cflags`" \
+    LIBXML2_LIBS="`xml2-config --libs`"
 make install bin_PROGRAMS= noinst_PROGRAMS=
 
 
@@ -375,9 +371,8 @@ sed 's,-lX11 ,,g' -i configure
     --disable-shared \
     --prefix="$PREFIX" \
     --without-x \
-    PATH="$PREFIX/bin:$PATH" \
     CFLAGS="-DNONDLL -DXMD_H" \
-    LIBS="`$PREFIX/bin/xml2-config --libs`"
+    LIBS="`xml2-config --libs`"
 make install bin_PROGRAMS= noinst_PROGRAMS=
 
 
@@ -415,7 +410,6 @@ cd "smpeg-$VERSION_smpeg.orig"
     --disable-shared \
     --disable-debug \
     --prefix="$PREFIX" \
-    PATH="$PREFIX/bin:$PATH" \
     --disable-gtk-player \
     --disable-opengl-player
 make install bin_PROGRAMS= noinst_PROGRAMS=
@@ -434,8 +428,7 @@ sed 's,for path in /usr/local; do,for path in; do,' -i configure
 ./configure \
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
-    --prefix="$PREFIX" \
-    PATH="$PREFIX/bin:$PATH"
+    --prefix="$PREFIX"
 make install bin_PROGRAMS= noinst_PROGRAMS=
 
 
@@ -469,8 +462,7 @@ sed 's,install-exec-local[^:],,' -i src/Makefile.in
 ./configure \
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
-    --prefix="$PREFIX" \
-    PATH="$PREFIX/bin:$PATH"
+    --prefix="$PREFIX"
 make install bin_PROGRAMS= noinst_PROGRAMS=
 
 
@@ -489,7 +481,6 @@ touch configure
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
     --prefix="$PREFIX" \
-    PATH="$PREFIX/bin:$PATH" \
     CFLAGS="-I$PREFIX/include" \
     LDFLAGS="-L$PREFIX/lib"
 make all install EXEEXT=.remove-me
@@ -509,7 +500,6 @@ cd "gdal-$VERSION_gdal"
     --build="$BUILD" --host="$TARGET" \
     --disable-shared \
     --prefix="$PREFIX" \
-    PATH="$PREFIX/bin:$PATH" \
     EXTRA_INCLUDES="-I$PREFIX/include" \
     LDFLAGS="-L$PREFIX/lib" \
     LIBS="-ljpeg" \
