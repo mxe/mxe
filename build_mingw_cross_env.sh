@@ -1170,8 +1170,12 @@ case "$1" in
 --build)
     cd "$PREFIX"
     tar cv \
-        bin lib libexec \
-        "$TARGET/bin" "$TARGET/include" "$TARGET/lib" \
+        bin \
+        lib \
+        libexec \
+        "$TARGET/bin" \
+        "$TARGET/include" \
+        "$TARGET/lib" \
     | gzip -9 >"$ROOT/mingw_cross_env.tar.gz"
     ;;
 
