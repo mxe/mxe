@@ -94,6 +94,9 @@ case "$1" in
     $BASH "$0" --build
     exit 0
     ;;
+--new-versions)
+    # go ahead
+    ;;
 --download)
     # go ahead
     ;;
@@ -101,7 +104,7 @@ case "$1" in
     # go ahead
     ;;
 *)
-    echo "Usage: $0 [ --download | --build ]"
+    echo "Usage: $0 [ --new-versions | --download | --build ]"
     exit 1
     ;;
 esac
@@ -135,6 +138,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_mingw_runtime=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
+        sed -n 's,.*mingw-runtime-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfz "mingw-runtime-$VERSION_mingw_runtime.tar.gz" &>/dev/null ||
@@ -158,6 +168,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_w32api=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
+        sed -n 's,.*w32api-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfz "w32api-$VERSION_w32api.tar.gz" &>/dev/null ||
@@ -180,6 +197,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_binutils=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
+        sed -n 's,.*binutils-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        head -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -241,6 +265,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_gcc=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
+        sed -n 's,.*gcc-core-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfz "gcc-core-$VERSION_gcc-src.tar.gz" &>/dev/null ||
@@ -297,6 +328,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_pkg_config=`
+        wget -q -O- 'http://pkgconfig.freedesktop.org/' |
+        sed -n 's,.*current release of pkg-config is version \([0-9][^ ]*\) and.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfz "pkg-config-$VERSION_pkg_config.tar.gz" &>/dev/null ||
@@ -324,6 +362,14 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_pthreads=`
+        wget -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' |
+        sed -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | 
+        tr '.' '-' |
+        head -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -354,6 +400,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_zlib=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624' |
+        sed -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfj "zlib-$VERSION_zlib.tar.bz2" &>/dev/null ||
@@ -379,6 +432,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_libxml2=`
+        wget -q -O- 'ftp://xmlsoft.org/libxml2/' |
+        sed -n 's,.*LATEST_LIBXML2_IS_\([0-9][^>]*\)</a>.*,\1,p' | 
+        head -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -411,6 +471,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_libgpg_error=`
+        wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgpg-error/' |
+        sed -n 's,.*libgpg-error-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        tail -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfj "libgpg-error-$VERSION_libgpg_error.tar.bz2" &>/dev/null ||
@@ -438,6 +505,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_libgcrypt=`
+        wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgcrypt/' |
+        sed -n 's,.*libgcrypt-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        tail -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -470,6 +544,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_gnutls=`
+        wget -q -O- 'http://www.gnu.org/software/gnutls/news.html' |
+        sed -n 's,.*GnuTLS \([0-9][^>]*\)</a>.*stable branch.*,\1,p' | 
+        head -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -505,6 +586,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_curl=`
+        wget -q -O- 'http://curl.haxx.se/changes.html' |
+        sed -n 's,.*Fixed in \([0-9][^ ]*\) - .*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfj "curl-$VERSION_curl.tar.bz2" &>/dev/null ||
@@ -535,6 +623,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_libpng=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624' |
+        sed -n 's,.*libpng-\([0-9][^>]*\)-no-config\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfj "libpng-$VERSION_libpng.tar.bz2" &>/dev/null ||
@@ -563,6 +658,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_jpeg=`
+        wget -q -O- 'http://www.ijg.org/files/' |
+        sed -n 's,.*jpegsrc.v\([0-9][^>]*\)\.tar.*,\1,p' | 
+        tail -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfz "jpegsrc.v$VERSION_jpeg.tar.gz" &>/dev/null ||
@@ -590,6 +692,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_tiff=`
+        wget -q -O- 'http://www.remotesensing.org/libtiff/' |
+        sed -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | 
+        head -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -621,6 +730,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_giflib=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=102202' |
+        sed -n 's,.*giflib-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfj "giflib-$VERSION_giflib.tar.bz2" &>/dev/null ||
@@ -651,10 +767,17 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_freetype=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=3157' |
+        sed -n 's,.*freetype-\([2-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfj "freetype-$VERSION_freetype.tar.bz2" &>/dev/null ||
-    wget -c "http://download.savannah.gnu.org/releases/freetype/freetype-$VERSION_freetype.tar.bz2"
+    wget -c "http://downloads.sourceforge.net/freetype/freetype-$VERSION_freetype.tar.bz2"
     ;;
 
 --build)
@@ -678,6 +801,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_fontconfig=`
+        wget -q -O- 'http://fontconfig.org/release/' |
+        sed -n 's,.*fontconfig-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        tail -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -713,6 +843,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_gd=`
+        wget -q -O- 'http://www.libgd.org/Main_Page' |
+        sed -n 's,.*gd-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -752,6 +889,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_SDL=`
+        wget -q -O- 'http://www.libsdl.org/release/changes.html' |
+        sed -n 's,.*SDL \([0-9][^>]*\) Release Notes.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfz "SDL-$VERSION_SDL.tar.gz" &>/dev/null ||
@@ -781,6 +925,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_smpeg=`
+        wget -q -O- 'http://packages.debian.org/unstable/source/smpeg' |
+        sed -n 's,.*smpeg_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | 
+        head -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -817,6 +968,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_SDL_mixer=`
+        wget -q -O- 'http://www.libsdl.org/projects/SDL_mixer/' |
+        sed -n 's,.*SDL_mixer-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfz "SDL_mixer-$VERSION_SDL_mixer.tar.gz" &>/dev/null ||
@@ -848,6 +1006,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_geos=`
+        wget -q -O- 'http://geos.refractions.net/' |
+        sed -n 's,.*geos-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfj "geos-$VERSION_geos.tar.bz2" &>/dev/null ||
@@ -878,6 +1043,13 @@ esac
 
 case "$1" in
 
+--new-versions)
+    echo "VERSION_proj=`
+        wget -q -O- 'http://www.remotesensing.org/proj/' |
+        sed -n 's,.*proj-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`"
+    ;;
+
 --download)
     cd "$DOWNLOAD"
     tar tfz "proj-$VERSION_proj.tar.gz" &>/dev/null ||
@@ -906,6 +1078,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_libgeotiff=`
+        wget -q -O- 'http://www.remotesensing.org/geotiff/geotiff.html' |
+        sed -n 's,.*libgeotiff-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
@@ -937,6 +1116,13 @@ esac
 #---
 
 case "$1" in
+
+--new-versions)
+    echo "VERSION_gdal=`
+        wget -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' |
+        sed -n 's,.*gdal-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`"
+    ;;
 
 --download)
     cd "$DOWNLOAD"
