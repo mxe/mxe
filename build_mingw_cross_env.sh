@@ -5,15 +5,17 @@ set -e
 #---
 #   Build a MinGW cross compiling environment
 #
-#   Version:        -alpha-
-#   Homepage:       http://www.profv.de/mingw_cross_env/
-#   File name:      build_mingw_cross_env.sh
-#   Project start:  2007-06-12
+#   Version:    1.0
+#   Homepage:   http://www.profv.de/mingw_cross_env/
+#   File name:  build_mingw_cross_env.sh
 #
 #   This script compiles a MinGW cross compiler and cross compiles
 #   many free libraries such as GD and SDL. Thus, it provides you
 #   a nice MinGW cross compiling environment. All necessary source
 #   packages are downloaded automatically.
+#
+#   2007-06-12  Project start
+#   2007-06-19  Release 1.0
 #---
 
 
