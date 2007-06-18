@@ -715,8 +715,8 @@ esac
 case "$1" in
 
 --download)
-cd "$DOWNLOAD"
-tar tfj "gd-$VERSION_gd.tar.bz2" &>/dev/null ||
+    cd "$DOWNLOAD"
+    tar tfj "gd-$VERSION_gd.tar.bz2" &>/dev/null ||
     wget -c "http://www.libgd.org/releases/gd-$VERSION_gd.tar.bz2"
     ;;
 
