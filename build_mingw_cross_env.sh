@@ -54,6 +54,10 @@ DOWNLOAD="$ROOT/download"
 
 PATH="$PREFIX/bin:$PATH"
 
+VERSION_mingw_runtime=3.9
+VERSION_w32api=3.7
+VERSION_binutils=2.17.50-20060824-1
+VERSION_gcc=3.4.5-20060117-1
 VERSION_pkg_config=0.21
 VERSION_pthreads=2-8-0
 VERSION_zlib=1.2.3
@@ -65,6 +69,7 @@ VERSION_curl=7.16.2
 VERSION_libpng=1.2.18
 VERSION_jpeg=6b
 VERSION_tiff=3.8.2
+VERSION_giflib=4.1.4
 VERSION_freetype=2.3.4
 VERSION_fontconfig=2.4.2
 VERSION_gd=2.0.35RC4
@@ -123,6 +128,168 @@ esac
 
 
 #---
+#   MinGW Runtime
+#
+#   http://mingw.sourceforge.net/
+#---
+
+case "$1" in
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "mingw-runtime-$VERSION_mingw_runtime.tar.gz" &>/dev/null ||
+    wget -c "http://downloads.sourceforge.net/mingw/mingw-runtime-$VERSION_mingw_runtime.tar.gz"
+    ;;
+
+--build)
+    install -d "$PREFIX/$TARGET"
+    cd "$PREFIX/$TARGET"
+    tar xfvz "$DOWNLOAD/mingw-runtime-$VERSION_mingw_runtime.tar.gz"
+    ;;
+
+esac
+
+
+#---
+#   MinGW Windows API
+#
+#   http://mingw.sourceforge.net/
+#---
+
+case "$1" in
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "w32api-$VERSION_w32api.tar.gz" &>/dev/null ||
+    wget -c "http://downloads.sourceforge.net/mingw/w32api-$VERSION_w32api.tar.gz"
+    ;;
+
+--build)
+    install -d "$PREFIX/$TARGET"
+    cd "$PREFIX/$TARGET"
+    tar xfvz "$DOWNLOAD/w32api-$VERSION_w32api.tar.gz"
+    ;;
+
+esac
+
+
+#---
+#   MinGW binutils
+#
+#   http://mingw.sourceforge.net/
+#---
+
+case "$1" in
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "binutils-$VERSION_binutils-src.tar.gz" &>/dev/null ||
+    wget -c "http://downloads.sourceforge.net/mingw/binutils-$VERSION_binutils-src.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/binutils-$VERSION_binutils-src.tar.gz"
+    cd "binutils-$VERSION_binutils-src"
+    ./configure \
+        --target="$TARGET" \
+        --prefix="$PREFIX" \
+        --with-gcc \
+        --with-gnu-ld \
+        --with-gnu-as \
+        --disable-nls \
+        --disable-shared
+    make
+    make install
+    strip -sv \
+        "$PREFIX/bin/$TARGET-addr2line" \
+        "$PREFIX/bin/$TARGET-ar" \
+        "$PREFIX/bin/$TARGET-as" \
+        "$PREFIX/bin/$TARGET-c++filt" \
+        "$PREFIX/bin/$TARGET-dlltool" \
+        "$PREFIX/bin/$TARGET-dllwrap" \
+        "$PREFIX/bin/$TARGET-gprof" \
+        "$PREFIX/bin/$TARGET-ld" \
+        "$PREFIX/bin/$TARGET-nm" \
+        "$PREFIX/bin/$TARGET-objcopy" \
+        "$PREFIX/bin/$TARGET-objdump" \
+        "$PREFIX/bin/$TARGET-ranlib" \
+        "$PREFIX/bin/$TARGET-readelf" \
+        "$PREFIX/bin/$TARGET-size" \
+        "$PREFIX/bin/$TARGET-strings" \
+        "$PREFIX/bin/$TARGET-strip" \
+        "$PREFIX/bin/$TARGET-windres" \
+        "$PREFIX/$TARGET/bin/ar" \
+        "$PREFIX/$TARGET/bin/as" \
+        "$PREFIX/$TARGET/bin/dlltool" \
+        "$PREFIX/$TARGET/bin/ld" \
+        "$PREFIX/$TARGET/bin/nm" \
+        "$PREFIX/$TARGET/bin/objdump" \
+        "$PREFIX/$TARGET/bin/ranlib" \
+        "$PREFIX/$TARGET/bin/strip" \
+        "$PREFIX/lib/libiberty.a"
+    ;;
+
+esac
+
+
+#---
+#   MinGW GCC
+#
+#   http://mingw.sourceforge.net/
+#---
+
+case "$1" in
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "gcc-core-$VERSION_gcc-src.tar.gz" &>/dev/null ||
+    wget -c "http://downloads.sourceforge.net/mingw/gcc-core-$VERSION_gcc-src.tar.gz"
+    tar tfz "gcc-g++-$VERSION_gcc-src.tar.gz" &>/dev/null ||
+    wget -c "http://downloads.sourceforge.net/mingw/gcc-g++-$VERSION_gcc-src.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/gcc-core-$VERSION_gcc-src.tar.gz"
+    tar xfvz "$DOWNLOAD/gcc-g++-$VERSION_gcc-src.tar.gz"
+    cd "gcc-$VERSION_gcc"
+    ./configure \
+        --target="$TARGET" \
+        --prefix="$PREFIX" \
+        --enable-languages="c,c++" \
+        --enable-version-specific-runtime-libs \
+        --with-gcc \
+        --with-gnu-ld \
+        --with-gnu-as \
+        --disable-nls \
+        --disable-shared \
+        --without-x \
+        --enable-threads=win32 \
+        --disable-win32-registry \
+        --enable-sjlj-exceptions
+    make
+    make install
+    VERSION_gcc_short=`echo "$VERSION_gcc" | cut -d'-' -f1`
+    strip -sv \
+        "$PREFIX/bin/$TARGET-c++" \
+        "$PREFIX/bin/$TARGET-cpp" \
+        "$PREFIX/bin/$TARGET-g++" \
+        "$PREFIX/bin/$TARGET-gcc" \
+        "$PREFIX/bin/$TARGET-gcc-3.4.5" \
+        "$PREFIX/bin/$TARGET-gcov" \
+        "$PREFIX/$TARGET/bin/c++" \
+        "$PREFIX/$TARGET/bin/g++" \
+        "$PREFIX/$TARGET/bin/gcc" \
+        "$PREFIX/libexec/gcc/$TARGET/$VERSION_gcc_short/cc1" \
+        "$PREFIX/libexec/gcc/$TARGET/$VERSION_gcc_short/cc1plus" \
+        "$PREFIX/libexec/gcc/$TARGET/$VERSION_gcc_short/collect2"
+    ;;
+
+esac
+
+
+#---
 #   pkg-config
 #
 #   http://pkg-config.freedesktop.org/
@@ -140,8 +307,11 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/pkg-config-$VERSION_pkg_config.tar.gz"
     cd "pkg-config-$VERSION_pkg_config"
-    ./configure --prefix="$PREFIX"
+    ./configure --prefix="$PREFIX/$TARGET"
     make install
+    install -d "$PREFIX/bin"
+    rm -fv "$PREFIX/bin/$TARGET-pkg-config"
+    ln -s "../$TARGET/bin/pkg-config" "$PREFIX/bin/$TARGET-pkg-config"
     ;;
 
 esac
@@ -167,10 +337,10 @@ case "$1" in
     cd "pthreads-w32-$VERSION_pthreads-release"
     sed '35i\#define PTW32_STATIC_LIB' -i pthread.h
     make CROSS="$TARGET-" GC-static
-    install -d "$PREFIX/lib"
-    install -m664 libpthreadGC2.a "$PREFIX/lib/libpthread.a"
-    install -d "$PREFIX/include"
-    install -m664 pthread.h sched.h semaphore.h "$PREFIX/include/"
+    install -d "$PREFIX/$TARGET/lib"
+    install -m664 libpthreadGC2.a "$PREFIX/$TARGET/lib/libpthread.a"
+    install -d "$PREFIX/$TARGET/include"
+    install -m664 pthread.h sched.h semaphore.h "$PREFIX/$TARGET/include/"
     ;;
 
 esac
@@ -195,7 +365,7 @@ case "$1" in
     tar xfvj "$DOWNLOAD/zlib-$VERSION_zlib.tar.bz2"
     cd "zlib-$VERSION_zlib"
     CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" ./configure \
-        --prefix="$PREFIX"
+        --prefix="$PREFIX/$TARGET"
     make install
     ;;
 
@@ -225,7 +395,7 @@ case "$1" in
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
         --without-debug \
-        --prefix="$PREFIX" \
+        --prefix="$PREFIX/$TARGET" \
         --without-python
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
@@ -254,7 +424,7 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX"
+        --prefix="$PREFIX/$TARGET"
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
@@ -285,7 +455,8 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX"
+        --prefix="$PREFIX/$TARGET" \
+        --with-gpg-error-prefix="$PREFIX/$TARGET"
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
@@ -313,7 +484,8 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX" \
+        --prefix="$PREFIX/$TARGET" \
+        --with-libgcrypt-prefix="$PREFIX/$TARGET" \
         --disable-nls \
         --with-included-opencdk \
         --with-included-libtasn1 \
@@ -347,10 +519,8 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX" \
-        --with-gnutls \
-        CFLAGS="-I$PREFIX/include" \
-        LDFLAGS="-L$PREFIX/lib"
+        --prefix="$PREFIX/$TARGET" \
+        --with-gnutls
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
@@ -378,9 +548,7 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX" \
-        CFLAGS="-I$PREFIX/include" \
-        LDFLAGS="-L$PREFIX/lib"
+        --prefix="$PREFIX/$TARGET"
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
@@ -408,7 +576,7 @@ case "$1" in
     ./configure \
         CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" \
         --disable-shared \
-        --prefix="$PREFIX"
+        --prefix="$PREFIX/$TARGET"
     make install-lib
     ;;
 
@@ -436,11 +604,40 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX" \
-        CFLAGS="-I$PREFIX/include" \
-        LDFLAGS="-L$PREFIX/lib" \
+        --prefix="$PREFIX/$TARGET" \
+        PTHREAD_LIBS="-lpthread -lws2_32" \
         --without-x
     make install bin_PROGRAMS= noinst_PROGRAMS=
+    ;;
+
+esac
+
+
+#---
+#   giflib
+#
+#   http://sourceforge.net/projects/libungif
+#---
+
+case "$1" in
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfj "giflib-$VERSION_giflib.tar.bz2" &>/dev/null ||
+    wget -c "http://downloads.sourceforge.net/libungif/giflib-$VERSION_giflib.tar.bz2"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvj "$DOWNLOAD/giflib-$VERSION_giflib.tar.bz2"
+    cd "giflib-$VERSION_giflib"
+    sed 's,u_int32_t,unsigned int,' -i configure
+    ./configure \
+        --build="$BUILD" --host="$TARGET" \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET" \
+        --without-x
+    make -C lib install
     ;;
 
 esac
@@ -467,7 +664,7 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX"
+        --prefix="$PREFIX/$TARGET"
     make install
     ;;
 
@@ -496,11 +693,13 @@ case "$1" in
     ./configure \
         --with-arch="$BUILD" --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX" \
+        --prefix="$PREFIX/$TARGET" \
+        --with-freetype-config="$PREFIX/$TARGET/bin/freetype-config" \
         --enable-libxml2 \
-        LIBXML2_CFLAGS="`xml2-config --cflags`" \
-        LIBXML2_LIBS="`xml2-config --libs`"
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+        LIBXML2_CFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
+        LIBXML2_LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
+    make -C src install
+    make -C fontconfig install
     ;;
 
 esac
@@ -516,8 +715,8 @@ esac
 case "$1" in
 
 --download)
-    cd "$DOWNLOAD"
-    tar tfj "gd-$VERSION_gd.tar.bz2" &>/dev/null ||
+cd "$DOWNLOAD"
+tar tfj "gd-$VERSION_gd.tar.bz2" &>/dev/null ||
     wget -c "http://www.libgd.org/releases/gd-$VERSION_gd.tar.bz2"
     ;;
 
@@ -532,10 +731,13 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX" \
+        --prefix="$PREFIX/$TARGET" \
+        --with-freetype="$PREFIX/$TARGET" \
         --without-x \
-        CFLAGS="-DNONDLL -DXMD_H" \
-        LIBS="`xml2-config --libs`"
+        LIBPNG12_CONFIG="$PREFIX/$TARGET/bin/libpng12-config" \
+        LIBPNG_CONFIG="$PREFIX/$TARGET/bin/libpng-config" \
+        CFLAGS="-DNONDLL -DXMD_H -L$PREFIX/$TARGET/lib" \
+        LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
@@ -564,7 +766,7 @@ case "$1" in
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
         --disable-debug \
-        --prefix="$PREFIX"
+        --prefix="$PREFIX/$TARGET"
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
@@ -597,7 +799,8 @@ case "$1" in
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
         --disable-debug \
-        --prefix="$PREFIX" \
+        --prefix="$PREFIX/$TARGET" \
+        --with-sdl-prefix="$PREFIX/$TARGET" \
         --disable-gtk-player \
         --disable-opengl-player
     make install bin_PROGRAMS= noinst_PROGRAMS=
@@ -628,7 +831,9 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX"
+        --prefix="$PREFIX/$TARGET" \
+        --with-sdl-prefix="$PREFIX/$TARGET" \
+        --with-smpeg-prefix="$PREFIX/$TARGET"
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
@@ -653,10 +858,11 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/geos-$VERSION_geos.tar.bz2"
     cd "geos-$VERSION_geos"
+    sed 's,-lgeos,-lgeos -lstdc++,' -i tools/geos-config.in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX" \
+        --prefix="$PREFIX/$TARGET" \
         --disable-swig
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
@@ -686,7 +892,7 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX"
+        --prefix="$PREFIX/$TARGET"
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
@@ -716,11 +922,9 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX" \
-        CFLAGS="-I$PREFIX/include" \
-        LDFLAGS="-L$PREFIX/lib"
+        --prefix="$PREFIX/$TARGET"
     make all install EXEEXT=.remove-me
-    rm -fv "$PREFIX"/bin/*.remove-me
+    rm -fv "$PREFIX/$TARGET"/bin/*.remove-me
     ;;
 
 esac
@@ -747,16 +951,15 @@ case "$1" in
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX" \
-        EXTRA_INCLUDES="-I$PREFIX/include" \
-        LDFLAGS="-L$PREFIX/lib" \
+        --prefix="$PREFIX/$TARGET" \
         LIBS="-ljpeg" \
-        CC="$TARGET-g++" \
-        CFLAGS="-O2 -fpermissive" \
-        --with-png="$PREFIX" \
-        --with-libtiff="$PREFIX" \
-        --with-geotiff="$PREFIX" \
-        --with-jpeg="$PREFIX" \
+        --with-png="$PREFIX/$TARGET" \
+        --with-libtiff="$PREFIX/$TARGET" \
+        --with-geotiff="$PREFIX/$TARGET" \
+        --with-jpeg="$PREFIX/$TARGET" \
+        --with-gif="$PREFIX/$TARGET" \
+        --with-curl="$PREFIX/$TARGET/bin/curl-config" \
+        --with-geos="$PREFIX/$TARGET/bin/geos-config" \
         --without-python \
         --without-ngpython
     make lib-target
@@ -780,7 +983,10 @@ case "$1" in
 
 --build)
     cd "$PREFIX"
-    tar cv bin include lib | gzip -9 >"$ROOT/mingw_cross_env.tar.gz"
+    tar cv \
+        bin lib libexec \
+        "$TARGET/bin" "$TARGET/include" "$TARGET/lib" \
+    | gzip -9 >"$ROOT/mingw_cross_env.tar.gz"
     ;;
 
 esac
