@@ -648,12 +648,14 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/curl-$VERSION_curl.tar.bz2"
     cd "curl-$VERSION_curl"
+    sed 's,-I@includedir@,-DCURL_STATICLIB -I@includedir@,' -i curl-config.in
     sed 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i configure
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
-        --with-gnutls
+        --with-gnutls="$PREFIX/$TARGET" \
+        LIBS="-lgcrypt `$PREFIX/$TARGET/bin/gpg-error-config --libs`"
     make install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
