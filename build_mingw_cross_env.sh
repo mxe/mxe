@@ -63,6 +63,7 @@ VERSION_gcc=3.4.5-20060117-1
 VERSION_pkg_config=0.21
 VERSION_pthreads=2-8-0
 VERSION_zlib=1.2.3
+VERSION_gettext=0.16.1
 VERSION_libxml2=2.6.29
 VERSION_libgpg_error=1.5
 VERSION_libgcrypt=1.2.4
@@ -427,6 +428,43 @@ case "$1" in
     CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" ./configure \
         --prefix="$PREFIX/$TARGET"
     make install
+    ;;
+
+esac
+
+
+#---
+#   gettext
+#
+#   http://www.gnu.org/software/gettext/
+#---
+
+case "$1" in
+
+--new-versions)
+    echo "VERSION_gettext=`
+        wget -q -O- 'ftp://ftp.gnu.org/pub/gnu/gettext/' |
+        sed -n 's,.*gettext-\([0-9][^>]*\)\.tar.*,\1,p' |
+        sort | tail -1`"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "gettext-$VERSION_gettext.tar.gz" &>/dev/null ||
+    wget -c "ftp://ftp.gnu.org/pub/gnu/gettext/gettext-$VERSION_gettext.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/gettext-$VERSION_gettext.tar.gz"
+    cd "gettext-$VERSION_gettext"
+    cd gettext-runtime
+    ./configure \
+        --build="$BUILD" --host="$TARGET" \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET" \
+        --enable-threads=win32
+    make -C intl install
     ;;
 
 esac
