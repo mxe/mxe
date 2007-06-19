@@ -5,7 +5,7 @@ set -e
 #---
 #   Build a MinGW cross compiling environment
 #
-#   Version:    1.0
+#   Version:    -
 #   Homepage:   http://www.profv.de/mingw_cross_env/
 #   File name:  build_mingw_cross_env.sh
 #
@@ -57,7 +57,7 @@ DOWNLOAD="$ROOT/download"
 PATH="$PREFIX/bin:$PATH"
 
 VERSION_mingw_runtime=3.9
-VERSION_w32api=3.7
+VERSION_w32api=3.9
 VERSION_binutils=2.17.50-20060824-1
 VERSION_gcc=3.4.5-20060117-1
 VERSION_pkg_config=0.21
@@ -187,6 +187,11 @@ case "$1" in
     install -d "$PREFIX/$TARGET"
     cd "$PREFIX/$TARGET"
     tar xfvz "$DOWNLOAD/w32api-$VERSION_w32api.tar.gz"
+    sed '
+        s,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,
+        s,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,
+        s,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,
+        ' -i "$PREFIX/$TARGET/include/winnt.h"
     ;;
 
 esac
