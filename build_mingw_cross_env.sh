@@ -188,11 +188,12 @@ case "$1" in
     install -d "$PREFIX/$TARGET"
     cd "$PREFIX/$TARGET"
     tar xfvz "$DOWNLOAD/w32api-$VERSION_w32api.tar.gz"
-    sed '
-        s,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,
-        s,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,
-        s,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,
-        ' -i "$PREFIX/$TARGET/include/winnt.h"
+    # fix incompatibilities with gettext
+    sed 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
+    sed 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
+    sed 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i "$PREFIX/$TARGET/include/winnt.h"
+    # fix incompatibilities with jpeg
+    sed 's,typedef unsigned char boolean;,,'           -i "$PREFIX/$TARGET/include/rpcndr.h"
     ;;
 
 esac
