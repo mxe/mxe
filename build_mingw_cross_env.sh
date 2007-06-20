@@ -607,6 +607,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/gnutls-$VERSION_gnutls.tar.bz2"
     cd "gnutls-$VERSION_gnutls"
+    echo "/* DEACTIVATED */" >gl/gai_strerror.c
     ./configure \
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
