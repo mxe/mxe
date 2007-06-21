@@ -650,7 +650,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/curl-$VERSION_curl.tar.bz2"
     cd "curl-$VERSION_curl"
-    sed 's,-I@includedir@,-DCURL_STATICLIB -I@includedir@,' -i curl-config.in
+    sed 's,-I@includedir@,-I@includedir@ -DCURL_STATICLIB,' -i curl-config.in
     sed 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i configure
     ./configure \
         --build="$BUILD" --host="$TARGET" \
@@ -913,6 +913,7 @@ case "$1" in
     touch aclocal.m4
     touch config.hin
     touch Makefile.in
+    sed 's,-I@includedir@,-I@includedir@ -DNONDLL,' -i config/gdlib-config.in
     sed 's,-lX11 ,,g' -i configure
     ./configure \
         --build="$BUILD" --host="$TARGET" \
