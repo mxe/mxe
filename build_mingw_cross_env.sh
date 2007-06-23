@@ -44,13 +44,6 @@ set -ex
 
 
 #---
-#   Portability
-#---
-
-command -v gmake || alias gmake=make
-
-
-#---
 #   Configuration
 #---
 
@@ -90,6 +83,15 @@ VERSION_geos=3.0.0rc4
 VERSION_proj=4.5.0
 VERSION_libgeotiff=1.2.3
 VERSION_gdal=1.4.1
+
+
+#---
+#   Portability
+#---
+
+if ! command -v gmake; then
+    alias gmake=make
+fi
 
 
 #---
