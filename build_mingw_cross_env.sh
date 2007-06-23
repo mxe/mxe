@@ -44,6 +44,13 @@ set -ex
 
 
 #---
+#   Portability
+#---
+
+command -v gmake || alias gmake=make
+
+
+#---
 #   Configuration
 #---
 
@@ -232,8 +239,8 @@ case "$1" in
         --with-gnu-as \
         --disable-nls \
         --disable-shared
-    make
-    make install
+    gmake
+    gmake install
     strip -sv \
         "$PREFIX/bin/$TARGET-addr2line" \
         "$PREFIX/bin/$TARGET-ar" \
@@ -308,8 +315,8 @@ case "$1" in
         --enable-threads=win32 \
         --disable-win32-registry \
         --enable-sjlj-exceptions
-    make
-    make install
+    gmake
+    gmake install
     VERSION_gcc_short=`echo "$VERSION_gcc" | cut -d'-' -f1`
     strip -sv \
         "$PREFIX/bin/$TARGET-c++" \
@@ -355,7 +362,7 @@ case "$1" in
     tar xfvz "$DOWNLOAD/pkg-config-$VERSION_pkg_config.tar.gz"
     cd "pkg-config-$VERSION_pkg_config"
     ./configure --prefix="$PREFIX/$TARGET"
-    make install
+    gmake install
     install -d "$PREFIX/bin"
     rm -fv "$PREFIX/bin/$TARGET-pkg-config"
     ln -s "../$TARGET/bin/pkg-config" "$PREFIX/bin/$TARGET-pkg-config"
@@ -391,7 +398,7 @@ case "$1" in
     tar xfvz "$DOWNLOAD/pthreads-w32-$VERSION_pthreads-release.tar.gz"
     cd "pthreads-w32-$VERSION_pthreads-release"
     sed '35i\#define PTW32_STATIC_LIB' -i pthread.h
-    make CROSS="$TARGET-" GC-static
+    gmake CROSS="$TARGET-" GC-static
     install -d "$PREFIX/$TARGET/lib"
     install -m664 libpthreadGC2.a "$PREFIX/$TARGET/lib/libpthread.a"
     install -d "$PREFIX/$TARGET/include"
@@ -428,7 +435,7 @@ case "$1" in
     cd "zlib-$VERSION_zlib"
     CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" ./configure \
         --prefix="$PREFIX/$TARGET"
-    make install
+    gmake install
     ;;
 
 esac
@@ -465,7 +472,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --enable-threads=win32
-    make -C intl install
+    gmake -C intl install
     ;;
 
 esac
@@ -503,7 +510,7 @@ case "$1" in
         --without-debug \
         --prefix="$PREFIX/$TARGET" \
         --without-python
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -538,7 +545,7 @@ case "$1" in
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -577,7 +584,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-gpg-error-prefix="$PREFIX/$TARGET"
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -619,7 +626,7 @@ case "$1" in
         --with-included-libtasn1 \
         --with-included-libcfg \
         --with-included-lzo
-    make install bin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
     ;;
 
 esac
@@ -658,7 +665,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --with-gnutls="$PREFIX/$TARGET" \
         LIBS="-lgcrypt `$PREFIX/$TARGET/bin/gpg-error-config --libs`"
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -693,7 +700,7 @@ case "$1" in
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -728,7 +735,7 @@ case "$1" in
         CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    make install-lib
+    gmake install-lib
     ;;
 
 esac
@@ -765,7 +772,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         PTHREAD_LIBS="-lpthread -lws2_32" \
         --without-x
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -802,7 +809,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --without-x
-    make -C lib install
+    gmake -C lib install
     ;;
 
 esac
@@ -837,7 +844,7 @@ case "$1" in
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    make install
+    gmake install
     ;;
 
 esac
@@ -877,8 +884,8 @@ case "$1" in
         --enable-libxml2 \
         LIBXML2_CFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
         LIBXML2_LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
-    make -C src install
-    make -C fontconfig install
+    gmake -C src install
+    gmake -C fontconfig install
     ;;
 
 esac
@@ -925,7 +932,7 @@ case "$1" in
         LIBPNG_CONFIG="$PREFIX/$TARGET/bin/libpng-config" \
         CFLAGS="-DNONDLL -DXMD_H -L$PREFIX/$TARGET/lib" \
         LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -961,7 +968,7 @@ case "$1" in
         --disable-shared \
         --disable-debug \
         --prefix="$PREFIX/$TARGET"
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -1004,7 +1011,7 @@ case "$1" in
         --with-sdl-prefix="$PREFIX/$TARGET" \
         --disable-gtk-player \
         --disable-opengl-player
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -1042,7 +1049,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --with-sdl-prefix="$PREFIX/$TARGET" \
         --with-smpeg-prefix="$PREFIX/$TARGET"
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -1079,7 +1086,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --disable-swig
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -1115,7 +1122,7 @@ case "$1" in
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    make install bin_PROGRAMS= noinst_PROGRAMS=
+    gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
 esac
@@ -1152,7 +1159,7 @@ case "$1" in
         --build="$BUILD" --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    make all install EXEEXT=.remove-me
+    gmake all install EXEEXT=.remove-me
     rm -fv "$PREFIX/$TARGET"/bin/*.remove-me
     ;;
 
@@ -1198,14 +1205,14 @@ case "$1" in
         --with-geos="$PREFIX/$TARGET/bin/geos-config" \
         --without-python \
         --without-ngpython
-    make lib-target
-    make install-lib
-    make -C port  install
-    make -C gcore install
-    make -C frmts install
-    make -C alg   install
-    make -C ogr   install OGR_ENABLED=
-    make -C apps  install BIN_LIST=
+    gmake lib-target
+    gmake install-lib
+    gmake -C port  install
+    gmake -C gcore install
+    gmake -C frmts install
+    gmake -C alg   install
+    gmake -C ogr   install OGR_ENABLED=
+    gmake -C apps  install BIN_LIST=
     ;;
 
 esac
@@ -1219,7 +1226,7 @@ case "$1" in
 
 --build)
     cd "$PREFIX"
-    tar cv \
+    tar cfv - \
         bin \
         lib \
         libexec \
