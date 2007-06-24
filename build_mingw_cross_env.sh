@@ -88,9 +88,8 @@ VERSION_gdal=1.4.1
 #   Portability
 #---
 
-if ! command -v gmake; then
-    alias gmake=make
-fi
+if ! command -v gmake; then alias gmake=make; fi
+if ! command -v gsed;  then alias gsed=sed;   fi
 
 
 #---
@@ -152,7 +151,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_mingw_runtime=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        sed -n 's,.*mingw-runtime-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        gsed -n 's,.*mingw-runtime-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -182,7 +181,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_w32api=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        sed -n 's,.*w32api-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        gsed -n 's,.*w32api-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -197,11 +196,11 @@ case "$1" in
     cd "$PREFIX/$TARGET"
     tar xfvz "$DOWNLOAD/w32api-$VERSION_w32api.tar.gz"
     # fix incompatibilities with gettext
-    sed 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
-    sed 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
-    sed 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i "$PREFIX/$TARGET/include/winnt.h"
+    gsed 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
+    gsed 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
+    gsed 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i "$PREFIX/$TARGET/include/winnt.h"
     # fix incompatibilities with jpeg
-    sed 's,typedef unsigned char boolean;,,'           -i "$PREFIX/$TARGET/include/rpcndr.h"
+    gsed 's,typedef unsigned char boolean;,,'           -i "$PREFIX/$TARGET/include/rpcndr.h"
     ;;
 
 esac
@@ -218,7 +217,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_binutils=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        sed -n 's,.*binutils-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        gsed -n 's,.*binutils-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -285,7 +284,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gcc=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        sed -n 's,.*gcc-core-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        gsed -n 's,.*gcc-core-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -348,7 +347,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_pkg_config=`
         wget -q -O- 'http://pkgconfig.freedesktop.org/' |
-        sed -n 's,.*current release of pkg-config is version \([0-9][^ ]*\) and.*,\1,p' | 
+        gsed -n 's,.*current release of pkg-config is version \([0-9][^ ]*\) and.*,\1,p' | 
         head -1`"
     ;;
 
@@ -383,7 +382,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_pthreads=`
         wget -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' |
-        sed -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | 
+        gsed -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | 
         tr '.' '-' |
         head -1`"
     ;;
@@ -398,7 +397,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/pthreads-w32-$VERSION_pthreads-release.tar.gz"
     cd "pthreads-w32-$VERSION_pthreads-release"
-    sed '35i\#define PTW32_STATIC_LIB' -i pthread.h
+    gsed '35i\#define PTW32_STATIC_LIB' -i pthread.h
     gmake CROSS="$TARGET-" GC-static
     install -d "$PREFIX/$TARGET/lib"
     install -m664 libpthreadGC2.a "$PREFIX/$TARGET/lib/libpthread.a"
@@ -420,7 +419,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_zlib=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624' |
-        sed -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -453,7 +452,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gettext=`
         wget -q -O- 'ftp://ftp.gnu.org/pub/gnu/gettext/' |
-        sed -n 's,.*gettext-\([0-9][^>]*\)\.tar.*,\1,p' |
+        gsed -n 's,.*gettext-\([0-9][^>]*\)\.tar.*,\1,p' |
         sort | tail -1`"
     ;;
 
@@ -490,7 +489,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libxml2=`
         wget -q -O- 'ftp://xmlsoft.org/libxml2/' |
-        sed -n 's,.*LATEST_LIBXML2_IS_\([0-9][^>]*\)</a>.*,\1,p' | 
+        gsed -n 's,.*LATEST_LIBXML2_IS_\([0-9][^>]*\)</a>.*,\1,p' | 
         head -1`"
     ;;
 
@@ -504,7 +503,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/libxml2-$VERSION_libxml2.tar.gz"
     cd "libxml2-$VERSION_libxml2"
-    sed 's,`uname`,MinGW,g' -i xml2-config.in
+    gsed 's,`uname`,MinGW,g' -i xml2-config.in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -528,7 +527,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libgpg_error=`
         wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgpg-error/' |
-        sed -n 's,.*libgpg-error-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*libgpg-error-\([0-9][^>]*\)\.tar.*,\1,p' | 
         tail -1`"
     ;;
 
@@ -563,7 +562,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libgcrypt=`
         wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgcrypt/' |
-        sed -n 's,.*libgcrypt-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*libgcrypt-\([0-9][^>]*\)\.tar.*,\1,p' | 
         tail -1`"
     ;;
 
@@ -577,9 +576,9 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/libgcrypt-$VERSION_libgcrypt.tar.bz2"
     cd "libgcrypt-$VERSION_libgcrypt"
-    sed '26i\#include <ws2tcpip.h>' -i src/gcrypt.h.in
-    sed '26i\#include <ws2tcpip.h>' -i src/ath.h
-    sed 's,sys/times.h,sys/time.h,' -i cipher/random.c
+    gsed '26i\#include <ws2tcpip.h>' -i src/gcrypt.h.in
+    gsed '26i\#include <ws2tcpip.h>' -i src/ath.h
+    gsed 's,sys/times.h,sys/time.h,' -i cipher/random.c
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -602,7 +601,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gnutls=`
         wget -q -O- 'http://www.gnu.org/software/gnutls/news.html' |
-        sed -n 's,.*GnuTLS \([0-9][^>]*\)</a>.*stable branch.*,\1,p' | 
+        gsed -n 's,.*GnuTLS \([0-9][^>]*\)</a>.*stable branch.*,\1,p' | 
         head -1`"
     ;;
 
@@ -644,7 +643,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_curl=`
         wget -q -O- 'http://curl.haxx.se/changes.html' |
-        sed -n 's,.*Fixed in \([0-9][^ ]*\) - .*,\1,p' | 
+        gsed -n 's,.*Fixed in \([0-9][^ ]*\) - .*,\1,p' | 
         head -1`"
     ;;
 
@@ -658,8 +657,8 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/curl-$VERSION_curl.tar.bz2"
     cd "curl-$VERSION_curl"
-    sed 's,-I@includedir@,-I@includedir@ -DCURL_STATICLIB,' -i curl-config.in
-    sed 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i configure
+    gsed 's,-I@includedir@,-I@includedir@ -DCURL_STATICLIB,' -i curl-config.in
+    gsed 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -683,7 +682,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libpng=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624' |
-        sed -n 's,.*libpng-\([0-9][^>]*\)-no-config\.tar.*,\1,p' | 
+        gsed -n 's,.*libpng-\([0-9][^>]*\)-no-config\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -718,7 +717,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_jpeg=`
         wget -q -O- 'http://www.ijg.org/files/' |
-        sed -n 's,.*jpegsrc.v\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*jpegsrc.v\([0-9][^>]*\)\.tar.*,\1,p' | 
         tail -1`"
     ;;
 
@@ -753,7 +752,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_tiff=`
         wget -q -O- 'http://www.remotesensing.org/libtiff/' |
-        sed -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | 
+        gsed -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | 
         head -1`"
     ;;
 
@@ -790,7 +789,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_giflib=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=102202' |
-        sed -n 's,.*giflib-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*giflib-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -804,7 +803,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/giflib-$VERSION_giflib.tar.bz2"
     cd "giflib-$VERSION_giflib"
-    sed 's,u_int32_t,unsigned int,' -i configure
+    gsed 's,u_int32_t,unsigned int,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -827,7 +826,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_freetype=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=3157' |
-        sed -n 's,.*freetype-\([2-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*freetype-\([2-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -862,7 +861,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_fontconfig=`
         wget -q -O- 'http://fontconfig.org/release/' |
-        sed -n 's,.*fontconfig-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*fontconfig-\([0-9][^>]*\)\.tar.*,\1,p' | 
         tail -1`"
     ;;
 
@@ -876,7 +875,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/fontconfig-$VERSION_fontconfig.tar.gz"
     cd "fontconfig-$VERSION_fontconfig"
-    sed 's,^install-data-local:.*,install-data-local:,' -i src/Makefile.in
+    gsed 's,^install-data-local:.*,install-data-local:,' -i src/Makefile.in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -905,7 +904,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gd=`
         wget -q -O- 'http://www.libgd.org/Main_Page' |
-        sed -n 's,.*gd-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*gd-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -922,8 +921,8 @@ case "$1" in
     touch aclocal.m4
     touch config.hin
     touch Makefile.in
-    sed 's,-I@includedir@,-I@includedir@ -DNONDLL,' -i config/gdlib-config.in
-    sed 's,-lX11 ,,g' -i configure
+    gsed 's,-I@includedir@,-I@includedir@ -DNONDLL,' -i config/gdlib-config.in
+    gsed 's,-lX11 ,,g' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -951,7 +950,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_SDL=`
         wget -q -O- 'http://www.libsdl.org/release/changes.html' |
-        sed -n 's,.*SDL \([0-9][^>]*\) Release Notes.*,\1,p' | 
+        gsed -n 's,.*SDL \([0-9][^>]*\) Release Notes.*,\1,p' | 
         head -1`"
     ;;
 
@@ -988,7 +987,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_smpeg=`
         wget -q -O- 'http://packages.debian.org/unstable/source/smpeg' |
-        sed -n 's,.*smpeg_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | 
+        gsed -n 's,.*smpeg_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1030,7 +1029,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_SDL_mixer=`
         wget -q -O- 'http://www.libsdl.org/projects/SDL_mixer/' |
-        sed -n 's,.*SDL_mixer-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*SDL_mixer-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1044,7 +1043,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/SDL_mixer-$VERSION_SDL_mixer.tar.gz"
     cd "SDL_mixer-$VERSION_SDL_mixer"
-    sed 's,for path in /usr/local; do,for path in; do,' -i configure
+    gsed 's,for path in /usr/local; do,for path in; do,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -1068,7 +1067,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_geos=`
         wget -q -O- 'http://geos.refractions.net/' |
-        sed -n 's,.*geos-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*geos-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1082,7 +1081,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/geos-$VERSION_geos.tar.bz2"
     cd "geos-$VERSION_geos"
-    sed 's,-lgeos,-lgeos -lstdc++,' -i tools/geos-config.in
+    gsed 's,-lgeos,-lgeos -lstdc++,' -i tools/geos-config.in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -1105,7 +1104,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_proj=`
         wget -q -O- 'http://www.remotesensing.org/proj/' |
-        sed -n 's,.*proj-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*proj-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1119,7 +1118,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/proj-$VERSION_proj.tar.gz"
     cd "proj-$VERSION_proj"
-    sed 's,install-exec-local[^:],,' -i src/Makefile.in
+    gsed 's,install-exec-local[^:],,' -i src/Makefile.in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -1141,7 +1140,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libgeotiff=`
         wget -q -O- 'http://www.remotesensing.org/geotiff/geotiff.html' |
-        sed -n 's,.*libgeotiff-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*libgeotiff-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1155,7 +1154,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/libgeotiff-$VERSION_libgeotiff.tar.gz"
     cd "libgeotiff-$VERSION_libgeotiff"
-    sed 's,/usr/local,@prefix@,' -i bin/Makefile.in
+    gsed 's,/usr/local,@prefix@,' -i bin/Makefile.in
     touch configure
     ./configure \
         --host="$TARGET" \
@@ -1179,7 +1178,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gdal=`
         wget -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' |
-        sed -n 's,.*gdal-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        gsed -n 's,.*gdal-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
