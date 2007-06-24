@@ -48,7 +48,6 @@ set -ex
 #---
 
 TARGET="i386-mingw32msvc"
-BUILD=`gcc -dumpmachine`
 ROOT=`pwd`
 PREFIX="$ROOT/usr"
 SOURCE="$ROOT/src"
@@ -470,7 +469,7 @@ case "$1" in
     cd "gettext-$VERSION_gettext"
     cd gettext-runtime
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --enable-threads=win32
@@ -507,7 +506,7 @@ case "$1" in
     cd "libxml2-$VERSION_libxml2"
     sed 's,`uname`,MinGW,g' -i xml2-config.in
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --without-debug \
         --prefix="$PREFIX/$TARGET" \
@@ -544,7 +543,7 @@ case "$1" in
     tar xfvj "$DOWNLOAD/libgpg-error-$VERSION_libgpg_error.tar.bz2"
     cd "libgpg-error-$VERSION_libgpg_error"
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
@@ -582,7 +581,7 @@ case "$1" in
     sed '26i\#include <ws2tcpip.h>' -i src/ath.h
     sed 's,sys/times.h,sys/time.h,' -i cipher/random.c
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-gpg-error-prefix="$PREFIX/$TARGET"
@@ -619,7 +618,7 @@ case "$1" in
     cd "gnutls-$VERSION_gnutls"
     echo "/* DEACTIVATED */" >gl/gai_strerror.c
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-libgcrypt-prefix="$PREFIX/$TARGET" \
@@ -662,7 +661,7 @@ case "$1" in
     sed 's,-I@includedir@,-I@includedir@ -DCURL_STATICLIB,' -i curl-config.in
     sed 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i configure
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-gnutls="$PREFIX/$TARGET" \
@@ -699,7 +698,7 @@ case "$1" in
     tar xfvj "$DOWNLOAD/libpng-$VERSION_libpng.tar.bz2"
     cd "libpng-$VERSION_libpng"
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
@@ -769,7 +768,7 @@ case "$1" in
     tar xfvz "$DOWNLOAD/tiff-$VERSION_tiff.tar.gz"
     cd "tiff-$VERSION_tiff"
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         PTHREAD_LIBS="-lpthread -lws2_32" \
@@ -807,7 +806,7 @@ case "$1" in
     cd "giflib-$VERSION_giflib"
     sed 's,u_int32_t,unsigned int,' -i configure
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --without-x
@@ -843,7 +842,7 @@ case "$1" in
     tar xfvj "$DOWNLOAD/freetype-$VERSION_freetype.tar.bz2"
     cd "freetype-$VERSION_freetype"
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake install
@@ -879,9 +878,10 @@ case "$1" in
     cd "fontconfig-$VERSION_fontconfig"
     sed 's,^install-data-local:.*,install-data-local:,' -i src/Makefile.in
     ./configure \
-        --with-arch="$BUILD" --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
+        --with-arch="" \
         --with-freetype-config="$PREFIX/$TARGET/bin/freetype-config" \
         --enable-libxml2 \
         LIBXML2_CFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
@@ -925,7 +925,7 @@ case "$1" in
     sed 's,-I@includedir@,-I@includedir@ -DNONDLL,' -i config/gdlib-config.in
     sed 's,-lX11 ,,g' -i configure
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-freetype="$PREFIX/$TARGET" \
@@ -966,7 +966,7 @@ case "$1" in
     tar xfvz "$DOWNLOAD/SDL-$VERSION_SDL.tar.gz"
     cd "SDL-$VERSION_SDL"
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --disable-debug \
         --prefix="$PREFIX/$TARGET"
@@ -1006,7 +1006,7 @@ case "$1" in
     #cp -R "$DOWNLOAD/smpeg-trunk" smpeg-trunk
     #cd smpeg-trunk
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --disable-debug \
         --prefix="$PREFIX/$TARGET" \
@@ -1046,7 +1046,7 @@ case "$1" in
     cd "SDL_mixer-$VERSION_SDL_mixer"
     sed 's,for path in /usr/local; do,for path in; do,' -i configure
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-sdl-prefix="$PREFIX/$TARGET" \
@@ -1084,7 +1084,7 @@ case "$1" in
     cd "geos-$VERSION_geos"
     sed 's,-lgeos,-lgeos -lstdc++,' -i tools/geos-config.in
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --disable-swig
@@ -1121,7 +1121,7 @@ case "$1" in
     cd "proj-$VERSION_proj"
     sed 's,install-exec-local[^:],,' -i src/Makefile.in
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
@@ -1158,7 +1158,7 @@ case "$1" in
     sed 's,/usr/local,@prefix@,' -i bin/Makefile.in
     touch configure
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake all install EXEEXT=.remove-me
@@ -1194,7 +1194,7 @@ case "$1" in
     tar xfvz "$DOWNLOAD/gdal-$VERSION_gdal.tar.gz"
     cd "gdal-$VERSION_gdal"
     ./configure \
-        --build="$BUILD" --host="$TARGET" \
+        --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         LIBS="-ljpeg" \
