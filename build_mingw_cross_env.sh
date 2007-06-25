@@ -541,6 +541,8 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/libgpg-error-$VERSION_libgpg_error.tar.bz2"
     cd "libgpg-error-$VERSION_libgpg_error"
+    # wine confuses the cross-compiling detection, so set it explicitly
+    sed 's,cross_compiling=no,cross_compiling=yes,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -995,21 +997,19 @@ case "$1" in
     cd "$DOWNLOAD"
     tar tfz "smpeg_$VERSION_smpeg.orig.tar.gz" &>/dev/null ||
     wget -c "http://ftp.debian.org/debian/pool/main/s/smpeg/smpeg_$VERSION_smpeg.orig.tar.gz"
-    #svn checkout -r ... svn://svn.icculus.org/smpeg/trunk ...
     ;;
 
 --build)
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/smpeg_$VERSION_smpeg.orig.tar.gz"
     cd "smpeg-$VERSION_smpeg.orig"
-    #cp -R "$DOWNLOAD/smpeg-trunk" smpeg-trunk
-    #cd smpeg-trunk
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --disable-debug \
         --prefix="$PREFIX/$TARGET" \
         --with-sdl-prefix="$PREFIX/$TARGET" \
+        --disable-sdltest \
         --disable-gtk-player \
         --disable-opengl-player
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
@@ -1049,7 +1049,9 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-sdl-prefix="$PREFIX/$TARGET" \
-        --with-smpeg-prefix="$PREFIX/$TARGET"
+        --disable-sdltest \
+        --with-smpeg-prefix="$PREFIX/$TARGET" \
+        --disable-smpegtest
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     ;;
 
