@@ -241,6 +241,8 @@ case "$1" in
         --disable-shared
     gmake
     gmake install
+    cd "$SOURCE"
+    rm -rfv "binutils-$VERSION_binutils-src"
     strip -sv \
         "$PREFIX/bin/$TARGET-addr2line" \
         "$PREFIX/bin/$TARGET-ar" \
@@ -317,6 +319,8 @@ case "$1" in
         --enable-sjlj-exceptions
     gmake
     gmake install
+    cd "$SOURCE"
+    rm -rfv "gcc-$VERSION_gcc"
     VERSION_gcc_short=`echo "$VERSION_gcc" | cut -d'-' -f1`
     strip -sv \
         "$PREFIX/bin/$TARGET-c++" \
@@ -363,6 +367,8 @@ case "$1" in
     cd "pkg-config-$VERSION_pkg_config"
     ./configure --prefix="$PREFIX/$TARGET"
     gmake install
+    cd "$SOURCE"
+    rm -rfv "pkg-config-$VERSION_pkg_config"
     install -d "$PREFIX/bin"
     rm -fv "$PREFIX/bin/$TARGET-pkg-config"
     ln -s "../$TARGET/bin/pkg-config" "$PREFIX/bin/$TARGET-pkg-config"
@@ -403,6 +409,8 @@ case "$1" in
     install -m664 libpthreadGC2.a "$PREFIX/$TARGET/lib/libpthread.a"
     install -d "$PREFIX/$TARGET/include"
     install -m664 pthread.h sched.h semaphore.h "$PREFIX/$TARGET/include/"
+    cd "$SOURCE"
+    rm -rfv "pthreads-w32-$VERSION_pthreads-release"
     ;;
 
 esac
@@ -436,6 +444,8 @@ case "$1" in
     CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" ./configure \
         --prefix="$PREFIX/$TARGET"
     gmake install
+    cd "$SOURCE"
+    rm -rfv "zlib-$VERSION_zlib"
     ;;
 
 esac
@@ -473,6 +483,8 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --enable-threads=win32
     gmake -C intl install
+    cd "$SOURCE"
+    rm -rfv "gettext-$VERSION_gettext"
     ;;
 
 esac
@@ -511,6 +523,8 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --without-python
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libxml2-$VERSION_libxml2"
     ;;
 
 esac
@@ -548,6 +562,8 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libgpg-error-$VERSION_libgpg_error"
     ;;
 
 esac
@@ -587,6 +603,8 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --with-gpg-error-prefix="$PREFIX/$TARGET"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libgcrypt-$VERSION_libgcrypt"
     ;;
 
 esac
@@ -629,6 +647,8 @@ case "$1" in
         --with-included-libcfg \
         --with-included-lzo
     gmake install bin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
+    cd "$SOURCE"
+    rm -rfv "gnutls-$VERSION_gnutls"
     ;;
 
 esac
@@ -668,6 +688,8 @@ case "$1" in
         --with-gnutls="$PREFIX/$TARGET" \
         LIBS="-lgcrypt `$PREFIX/$TARGET/bin/gpg-error-config --libs`"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "curl-$VERSION_curl"
     ;;
 
 esac
@@ -703,6 +725,8 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libpng-$VERSION_libpng"
     ;;
 
 esac
@@ -738,6 +762,8 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake install-lib
+    cd "$SOURCE"
+    rm -rfv "jpeg-$VERSION_jpeg"
     ;;
 
 esac
@@ -775,6 +801,8 @@ case "$1" in
         PTHREAD_LIBS="-lpthread -lws2_32" \
         --without-x
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "tiff-$VERSION_tiff"
     ;;
 
 esac
@@ -812,6 +840,8 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --without-x
     gmake -C lib install
+    cd "$SOURCE"
+    rm -rfv "giflib-$VERSION_giflib"
     ;;
 
 esac
@@ -847,6 +877,8 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake install
+    cd "$SOURCE"
+    rm -rfv "freetype-$VERSION_freetype"
     ;;
 
 esac
@@ -889,6 +921,8 @@ case "$1" in
         LIBXML2_LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
     gmake -C src install
     gmake -C fontconfig install
+    cd "$SOURCE"
+    rm -rfv "fontconfig-$VERSION_fontconfig"
     ;;
 
 esac
@@ -936,6 +970,8 @@ case "$1" in
         CFLAGS="-DNONDLL -DXMD_H -L$PREFIX/$TARGET/lib" \
         LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "gd-$VERSION_gd"
     ;;
 
 esac
@@ -972,6 +1008,8 @@ case "$1" in
         --disable-debug \
         --prefix="$PREFIX/$TARGET"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "SDL-$VERSION_SDL"
     ;;
 
 esac
@@ -1013,6 +1051,8 @@ case "$1" in
         --disable-gtk-player \
         --disable-opengl-player
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "smpeg-$VERSION_smpeg.orig"
     ;;
 
 esac
@@ -1053,6 +1093,8 @@ case "$1" in
         --with-smpeg-prefix="$PREFIX/$TARGET" \
         --disable-smpegtest
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "SDL_mixer-$VERSION_SDL_mixer"
     ;;
 
 esac
@@ -1090,6 +1132,8 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --disable-swig
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "geos-$VERSION_geos"
     ;;
 
 esac
@@ -1126,6 +1170,8 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "proj-$VERSION_proj"
     ;;
 
 esac
@@ -1164,6 +1210,8 @@ case "$1" in
         --prefix="$PREFIX/$TARGET"
     gmake all install EXEEXT=.remove-me
     rm -fv "$PREFIX/$TARGET"/bin/*.remove-me
+    cd "$SOURCE"
+    rm -rfv "libgeotiff-$VERSION_libgeotiff"
     ;;
 
 esac
@@ -1216,6 +1264,8 @@ case "$1" in
     gmake -C alg   install
     gmake -C ogr   install OGR_ENABLED=
     gmake -C apps  install BIN_LIST=
+    cd "$SOURCE"
+    rm -rfv "gdal-$VERSION_gdal"
     ;;
 
 esac
