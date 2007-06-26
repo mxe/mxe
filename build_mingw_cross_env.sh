@@ -372,7 +372,6 @@ case "$1" in
     install -d "$PREFIX/bin"
     rm -fv "$PREFIX/bin/$TARGET-pkg-config"
     ln -s "../$TARGET/bin/pkg-config" "$PREFIX/bin/$TARGET-pkg-config"
-    strip -sv "$PREFIX/$TARGET/bin/pkg-config"
     ;;
 
 esac
@@ -412,7 +411,6 @@ case "$1" in
     install -m664 pthread.h sched.h semaphore.h "$PREFIX/$TARGET/include/"
     cd "$SOURCE"
     rm -rfv "pthreads-w32-$VERSION_pthreads-release"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libpthread.a"
     ;;
 
 esac
@@ -448,7 +446,6 @@ case "$1" in
     gmake install
     cd "$SOURCE"
     rm -rfv "zlib-$VERSION_zlib"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libz.a"
     ;;
 
 esac
@@ -488,7 +485,6 @@ case "$1" in
     gmake -C intl install
     cd "$SOURCE"
     rm -rfv "gettext-$VERSION_gettext"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libintl.a"
     ;;
 
 esac
@@ -529,7 +525,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libxml2-$VERSION_libxml2"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libxml2.a"
     ;;
 
 esac
@@ -569,7 +564,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libgpg-error-$VERSION_libgpg_error"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libgpg-error.a"
     ;;
 
 esac
@@ -611,7 +605,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libgcrypt-$VERSION_libgcrypt"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libgcrypt.a"
     ;;
 
 esac
@@ -656,11 +649,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
     cd "$SOURCE"
     rm -rfv "gnutls-$VERSION_gnutls"
-    $TARGET-strip -sv \
-        "$PREFIX/$TARGET/lib/libgnutls.a" \
-        "$PREFIX/$TARGET/lib/libgnutls-extra.a" \
-        "$PREFIX/$TARGET/lib/libgnutls-openssl.a" \
-        "$PREFIX/$TARGET/lib/libgnutlsxx.a"
     ;;
 
 esac
@@ -702,7 +690,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "curl-$VERSION_curl"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libcurl.a"
     ;;
 
 esac
@@ -740,7 +727,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libpng-$VERSION_libpng"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libpng12.a"
     ;;
 
 esac
@@ -778,7 +764,6 @@ case "$1" in
     gmake install-lib
     cd "$SOURCE"
     rm -rfv "jpeg-$VERSION_jpeg"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libjpeg.a"
     ;;
 
 esac
@@ -818,9 +803,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "tiff-$VERSION_tiff"
-    $TARGET-strip -sv \
-        "$PREFIX/$TARGET/lib/libtiff.a" \
-        "$PREFIX/$TARGET/lib/libtiffxx.a"
     ;;
 
 esac
@@ -860,7 +842,6 @@ case "$1" in
     gmake -C lib install
     cd "$SOURCE"
     rm -rfv "giflib-$VERSION_giflib"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libgif.a"
     ;;
 
 esac
@@ -898,7 +879,6 @@ case "$1" in
     gmake install
     cd "$SOURCE"
     rm -rfv "freetype-$VERSION_freetype"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libfreetype.a"
     ;;
 
 esac
@@ -943,7 +923,6 @@ case "$1" in
     gmake -C fontconfig install
     cd "$SOURCE"
     rm -rfv "fontconfig-$VERSION_fontconfig"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libfontconfig.a"
     ;;
 
 esac
@@ -993,7 +972,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "gd-$VERSION_gd"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libgd.a"
     ;;
 
 esac
@@ -1032,9 +1010,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL-$VERSION_SDL"
-    $TARGET-strip -sv \
-        "$PREFIX/$TARGET/lib/libSDL.a" \
-        "$PREFIX/$TARGET/lib/libSDLmain.a"
     ;;
 
 esac
@@ -1078,7 +1053,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "smpeg-$VERSION_smpeg.orig"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libsmpeg.a"
     ;;
 
 esac
@@ -1121,7 +1095,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL_mixer-$VERSION_SDL_mixer"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libSDL_mixer.a"
     ;;
 
 esac
@@ -1161,9 +1134,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "geos-$VERSION_geos"
-    $TARGET-strip -sv \
-        "$PREFIX/$TARGET/lib/libgeos.a" \
-        "$PREFIX/$TARGET/lib/libgeos_c.a"
     ;;
 
 esac
@@ -1202,7 +1172,6 @@ case "$1" in
     gmake install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "proj-$VERSION_proj"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libproj.a"
     ;;
 
 esac
@@ -1243,7 +1212,6 @@ case "$1" in
     rm -fv "$PREFIX/$TARGET"/bin/*.remove-me
     cd "$SOURCE"
     rm -rfv "libgeotiff-$VERSION_libgeotiff"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libgeotiff.a"
     ;;
 
 esac
@@ -1298,7 +1266,6 @@ case "$1" in
     gmake -C apps  install BIN_LIST=
     cd "$SOURCE"
     rm -rfv "gdal-$VERSION_gdal"
-    $TARGET-strip -sv "$PREFIX/$TARGET/lib/libgdal.a"
     ;;
 
 esac
