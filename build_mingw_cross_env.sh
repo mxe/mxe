@@ -872,6 +872,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/freetype-$VERSION_freetype.tar.bz2"
     cd "freetype-$VERSION_freetype"
+    GNUMAKE=gmake \
     ./configure \
         --host="$TARGET" \
         --disable-shared \
