@@ -70,7 +70,7 @@ VERSION_libxml2=2.6.29
 VERSION_libgpg_error=1.5
 VERSION_libgcrypt=1.2.4
 VERSION_gnutls=1.6.3
-VERSION_curl=7.16.2
+VERSION_curl=7.16.3
 VERSION_libpng=1.2.18
 VERSION_jpeg=6b
 VERSION_tiff=3.8.2
@@ -84,7 +84,7 @@ VERSION_SDL_mixer=1.2.7
 VERSION_geos=3.0.0rc4
 VERSION_proj=4.5.0
 VERSION_libgeotiff=1.2.3
-VERSION_gdal=1.4.1
+VERSION_gdal=1.4.2
 
 
 #---
