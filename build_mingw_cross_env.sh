@@ -91,8 +91,11 @@ VERSION_gdal=1.4.2
 #   Portability
 #---
 
-if ! command -v gmake; then alias gmake=make; fi
-if ! command -v gsed;  then alias gsed=sed;   fi
+MAKE=gmake
+$MAKE -v || MAKE=make
+
+SED=gsed
+$SED -v || SED=sed
 
 
 #---
@@ -154,7 +157,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_mingw_runtime=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        gsed -n 's,.*mingw-runtime-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        $SED -n 's,.*mingw-runtime-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -184,7 +187,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_w32api=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        gsed -n 's,.*w32api-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        $SED -n 's,.*w32api-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -199,11 +202,11 @@ case "$1" in
     cd "$PREFIX/$TARGET"
     tar xfvz "$DOWNLOAD/w32api-$VERSION_w32api.tar.gz"
     # fix incompatibilities with gettext
-    gsed 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
-    gsed 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
-    gsed 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i "$PREFIX/$TARGET/include/winnt.h"
+    $SED 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
+    $SED 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    -i "$PREFIX/$TARGET/include/winnt.h"
+    $SED 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i "$PREFIX/$TARGET/include/winnt.h"
     # fix incompatibilities with jpeg
-    gsed 's,typedef unsigned char boolean;,,'           -i "$PREFIX/$TARGET/include/rpcndr.h"
+    $SED 's,typedef unsigned char boolean;,,'           -i "$PREFIX/$TARGET/include/rpcndr.h"
     ;;
 
 esac
@@ -220,7 +223,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_binutils=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        gsed -n 's,.*binutils-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        $SED -n 's,.*binutils-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -242,8 +245,8 @@ case "$1" in
         --with-gnu-as \
         --disable-nls \
         --disable-shared
-    gmake
-    gmake install
+    $MAKE
+    $MAKE install
     cd "$SOURCE"
     rm -rfv "binutils-$VERSION_binutils-src"
     strip -sv \
@@ -289,7 +292,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gcc=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        gsed -n 's,.*gcc-core-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        $SED -n 's,.*gcc-core-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -320,8 +323,8 @@ case "$1" in
         --enable-threads=win32 \
         --disable-win32-registry \
         --enable-sjlj-exceptions
-    gmake
-    gmake install
+    $MAKE
+    $MAKE install
     cd "$SOURCE"
     rm -rfv "gcc-$VERSION_gcc"
     VERSION_gcc_short=`echo "$VERSION_gcc" | cut -d'-' -f1`
@@ -354,7 +357,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_pkg_config=`
         wget -q -O- 'http://pkgconfig.freedesktop.org/' |
-        gsed -n 's,.*current release of pkg-config is version \([0-9][^ ]*\) and.*,\1,p' | 
+        $SED -n 's,.*current release of pkg-config is version \([0-9][^ ]*\) and.*,\1,p' | 
         head -1`"
     ;;
 
@@ -369,7 +372,7 @@ case "$1" in
     tar xfvz "$DOWNLOAD/pkg-config-$VERSION_pkg_config.tar.gz"
     cd "pkg-config-$VERSION_pkg_config"
     ./configure --prefix="$PREFIX/$TARGET"
-    gmake install
+    $MAKE install
     cd "$SOURCE"
     rm -rfv "pkg-config-$VERSION_pkg_config"
     install -d "$PREFIX/bin"
@@ -391,7 +394,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_pthreads=`
         wget -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' |
-        gsed -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | 
+        $SED -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | 
         tr '.' '-' |
         head -1`"
     ;;
@@ -406,8 +409,8 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/pthreads-w32-$VERSION_pthreads-release.tar.gz"
     cd "pthreads-w32-$VERSION_pthreads-release"
-    gsed '35i\#define PTW32_STATIC_LIB' -i pthread.h
-    gmake CROSS="$TARGET-" GC-static
+    $SED '35i\#define PTW32_STATIC_LIB' -i pthread.h
+    $MAKE CROSS="$TARGET-" GC-static
     install -d "$PREFIX/$TARGET/lib"
     install -m664 libpthreadGC2.a "$PREFIX/$TARGET/lib/libpthread.a"
     install -d "$PREFIX/$TARGET/include"
@@ -430,7 +433,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_zlib=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624' |
-        gsed -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -446,7 +449,7 @@ case "$1" in
     cd "zlib-$VERSION_zlib"
     CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" ./configure \
         --prefix="$PREFIX/$TARGET"
-    gmake install
+    $MAKE install
     cd "$SOURCE"
     rm -rfv "zlib-$VERSION_zlib"
     ;;
@@ -465,7 +468,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_pdcurses=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=30480' |
-        gsed -n 's,.*pdcurs\([0-9][^>]*\)\.zip.*,\1,p' |
+        $SED -n 's,.*pdcurs\([0-9][^>]*\)\.zip.*,\1,p' |
         head -1`"
     ;;
 
@@ -479,8 +482,8 @@ case "$1" in
     cd "$SOURCE"
     unzip "$DOWNLOAD/pdcurs$VERSION_pdcurses.zip" -d "pdcurs$VERSION_pdcurses"
     cd "pdcurs$VERSION_pdcurses"
-    gsed 's,copy,cp,' -i win32/mingwin32.mak
-    gmake -f win32/mingwin32.mak \
+    $SED 's,copy,cp,' -i win32/mingwin32.mak
+    $MAKE -f win32/mingwin32.mak \
         CC="$TARGET-gcc" \
         LIBEXE="$TARGET-ar" \
         DLL=N \
@@ -510,7 +513,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gettext=`
         wget -q -O- 'ftp://ftp.gnu.org/pub/gnu/gettext/' |
-        gsed -n 's,.*gettext-\([0-9][^>]*\)\.tar.*,\1,p' |
+        $SED -n 's,.*gettext-\([0-9][^>]*\)\.tar.*,\1,p' |
         sort | tail -1`"
     ;;
 
@@ -530,7 +533,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --enable-threads=win32
-    gmake -C intl install
+    $MAKE -C intl install
     cd "$SOURCE"
     rm -rfv "gettext-$VERSION_gettext"
     ;;
@@ -549,7 +552,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libiconv=`
         wget -q -O- 'http://ftp.gnu.org/pub/gnu/libiconv/' |
-        gsed -n 's,.*libiconv-\([0-9]*\)\.\([0-9]*\)\(\.[0-9]*\)\.tar.*,\1.\2\3,p' |
+        $SED -n 's,.*libiconv-\([0-9]*\)\.\([0-9]*\)\(\.[0-9]*\)\.tar.*,\1.\2\3,p' |
         sort | tail -1`"
     ;;
 
@@ -568,7 +571,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --disable-shared \
         --disable-nls
-    gmake install
+    $MAKE install
     ;;
 
 esac
@@ -585,7 +588,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libxml2=`
         wget -q -O- 'ftp://xmlsoft.org/libxml2/' |
-        gsed -n 's,.*LATEST_LIBXML2_IS_\([0-9][^>]*\)</a>.*,\1,p' | 
+        $SED -n 's,.*LATEST_LIBXML2_IS_\([0-9][^>]*\)</a>.*,\1,p' | 
         head -1`"
     ;;
 
@@ -599,14 +602,14 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/libxml2-$VERSION_libxml2.tar.gz"
     cd "libxml2-$VERSION_libxml2"
-    gsed 's,`uname`,MinGW,g' -i xml2-config.in
+    $SED 's,`uname`,MinGW,g' -i xml2-config.in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --without-debug \
         --prefix="$PREFIX/$TARGET" \
         --without-python
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libxml2-$VERSION_libxml2"
     ;;
@@ -625,7 +628,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libgpg_error=`
         wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgpg-error/' |
-        gsed -n 's,.*libgpg-error-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*libgpg-error-\([0-9][^>]*\)\.tar.*,\1,p' | 
         tail -1`"
     ;;
 
@@ -645,7 +648,7 @@ case "$1" in
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libgpg-error-$VERSION_libgpg_error"
     ;;
@@ -664,7 +667,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libgcrypt=`
         wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgcrypt/' |
-        gsed -n 's,.*libgcrypt-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*libgcrypt-\([0-9][^>]*\)\.tar.*,\1,p' | 
         tail -1`"
     ;;
 
@@ -678,15 +681,15 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/libgcrypt-$VERSION_libgcrypt.tar.bz2"
     cd "libgcrypt-$VERSION_libgcrypt"
-    gsed '26i\#include <ws2tcpip.h>' -i src/gcrypt.h.in
-    gsed '26i\#include <ws2tcpip.h>' -i src/ath.h
-    gsed 's,sys/times.h,sys/time.h,' -i cipher/random.c
+    $SED '26i\#include <ws2tcpip.h>' -i src/gcrypt.h.in
+    $SED '26i\#include <ws2tcpip.h>' -i src/ath.h
+    $SED 's,sys/times.h,sys/time.h,' -i cipher/random.c
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-gpg-error-prefix="$PREFIX/$TARGET"
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libgcrypt-$VERSION_libgcrypt"
     ;;
@@ -705,7 +708,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gnutls=`
         wget -q -O- 'http://www.gnu.org/software/gnutls/news.html' |
-        gsed -n 's,.*GnuTLS \([0-9][^>]*\)</a>.*stable branch.*,\1,p' | 
+        $SED -n 's,.*GnuTLS \([0-9][^>]*\)</a>.*stable branch.*,\1,p' | 
         head -1`"
     ;;
 
@@ -730,7 +733,7 @@ case "$1" in
         --with-included-libtasn1 \
         --with-included-libcfg \
         --with-included-lzo
-    gmake install bin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
     cd "$SOURCE"
     rm -rfv "gnutls-$VERSION_gnutls"
     ;;
@@ -749,7 +752,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_curl=`
         wget -q -O- 'http://curl.haxx.se/changes.html' |
-        gsed -n 's,.*Fixed in \([0-9][^ ]*\) - .*,\1,p' | 
+        $SED -n 's,.*Fixed in \([0-9][^ ]*\) - .*,\1,p' | 
         head -1`"
     ;;
 
@@ -763,15 +766,15 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/curl-$VERSION_curl.tar.bz2"
     cd "curl-$VERSION_curl"
-    gsed 's,-I@includedir@,-I@includedir@ -DCURL_STATICLIB,' -i curl-config.in
-    gsed 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i configure
+    $SED 's,-I@includedir@,-I@includedir@ -DCURL_STATICLIB,' -i curl-config.in
+    $SED 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-gnutls="$PREFIX/$TARGET" \
         LIBS="-lgcrypt `$PREFIX/$TARGET/bin/gpg-error-config --libs`"
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "curl-$VERSION_curl"
     ;;
@@ -790,7 +793,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libpng=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624' |
-        gsed -n 's,.*libpng-\([0-9][^>]*\)-no-config\.tar.*,\1,p' | 
+        $SED -n 's,.*libpng-\([0-9][^>]*\)-no-config\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -808,7 +811,7 @@ case "$1" in
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libpng-$VERSION_libpng"
     ;;
@@ -827,7 +830,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_jpeg=`
         wget -q -O- 'http://www.ijg.org/files/' |
-        gsed -n 's,.*jpegsrc.v\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*jpegsrc.v\([0-9][^>]*\)\.tar.*,\1,p' | 
         tail -1`"
     ;;
 
@@ -845,7 +848,7 @@ case "$1" in
         CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    gmake install-lib
+    $MAKE install-lib
     cd "$SOURCE"
     rm -rfv "jpeg-$VERSION_jpeg"
     ;;
@@ -864,7 +867,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_tiff=`
         wget -q -O- 'http://www.remotesensing.org/libtiff/' |
-        gsed -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | 
+        $SED -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | 
         head -1`"
     ;;
 
@@ -884,7 +887,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         PTHREAD_LIBS="-lpthread -lws2_32" \
         --without-x
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "tiff-$VERSION_tiff"
     ;;
@@ -903,7 +906,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_giflib=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=102202' |
-        gsed -n 's,.*giflib-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*giflib-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -917,13 +920,13 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/giflib-$VERSION_giflib.tar.bz2"
     cd "giflib-$VERSION_giflib"
-    gsed 's,u_int32_t,unsigned int,' -i configure
+    $SED 's,u_int32_t,unsigned int,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --without-x
-    gmake -C lib install
+    $MAKE -C lib install
     cd "$SOURCE"
     rm -rfv "giflib-$VERSION_giflib"
     ;;
@@ -942,7 +945,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_freetype=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=3157' |
-        gsed -n 's,.*freetype-\([2-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*freetype-\([2-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -956,12 +959,12 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/freetype-$VERSION_freetype.tar.bz2"
     cd "freetype-$VERSION_freetype"
-    GNUMAKE=gmake \
+    GNUMAKE=$MAKE \
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    gmake install
+    $MAKE install
     cd "$SOURCE"
     rm -rfv "freetype-$VERSION_freetype"
     ;;
@@ -980,7 +983,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_fontconfig=`
         wget -q -O- 'http://fontconfig.org/release/' |
-        gsed -n 's,.*fontconfig-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*fontconfig-\([0-9][^>]*\)\.tar.*,\1,p' | 
         tail -1`"
     ;;
 
@@ -994,7 +997,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/fontconfig-$VERSION_fontconfig.tar.gz"
     cd "fontconfig-$VERSION_fontconfig"
-    gsed 's,^install-data-local:.*,install-data-local:,' -i src/Makefile.in
+    $SED 's,^install-data-local:.*,install-data-local:,' -i src/Makefile.in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -1004,8 +1007,8 @@ case "$1" in
         --enable-libxml2 \
         LIBXML2_CFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
         LIBXML2_LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
-    gmake -C src install
-    gmake -C fontconfig install
+    $MAKE -C src install
+    $MAKE -C fontconfig install
     cd "$SOURCE"
     rm -rfv "fontconfig-$VERSION_fontconfig"
     ;;
@@ -1025,7 +1028,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gd=`
         wget -q -O- 'http://www.libgd.org/Main_Page' |
-        gsed -n 's,.*gd-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*gd-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1042,8 +1045,8 @@ case "$1" in
     touch aclocal.m4
     touch config.hin
     touch Makefile.in
-    gsed 's,-I@includedir@,-I@includedir@ -DNONDLL,' -i config/gdlib-config.in
-    gsed 's,-lX11 ,,g' -i configure
+    $SED 's,-I@includedir@,-I@includedir@ -DNONDLL,' -i config/gdlib-config.in
+    $SED 's,-lX11 ,,g' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -1054,7 +1057,7 @@ case "$1" in
         LIBPNG_CONFIG="$PREFIX/$TARGET/bin/libpng-config" \
         CFLAGS="-DNONDLL -DXMD_H -L$PREFIX/$TARGET/lib" \
         LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "gd-$VERSION_gd"
     ;;
@@ -1073,7 +1076,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_SDL=`
         wget -q -O- 'http://www.libsdl.org/release/changes.html' |
-        gsed -n 's,.*SDL \([0-9][^>]*\) Release Notes.*,\1,p' | 
+        $SED -n 's,.*SDL \([0-9][^>]*\) Release Notes.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1092,7 +1095,7 @@ case "$1" in
         --disable-shared \
         --disable-debug \
         --prefix="$PREFIX/$TARGET"
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL-$VERSION_SDL"
     ;;
@@ -1112,7 +1115,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_smpeg=`
         wget -q -O- 'http://packages.debian.org/unstable/source/smpeg' |
-        gsed -n 's,.*smpeg_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | 
+        $SED -n 's,.*smpeg_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1135,7 +1138,7 @@ case "$1" in
         --disable-sdltest \
         --disable-gtk-player \
         --disable-opengl-player
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "smpeg-$VERSION_smpeg.orig"
     ;;
@@ -1154,7 +1157,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_SDL_mixer=`
         wget -q -O- 'http://www.libsdl.org/projects/SDL_mixer/' |
-        gsed -n 's,.*SDL_mixer-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*SDL_mixer-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1168,7 +1171,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/SDL_mixer-$VERSION_SDL_mixer.tar.gz"
     cd "SDL_mixer-$VERSION_SDL_mixer"
-    gsed 's,for path in /usr/local; do,for path in; do,' -i configure
+    $SED 's,for path in /usr/local; do,for path in; do,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -1177,7 +1180,7 @@ case "$1" in
         --disable-sdltest \
         --with-smpeg-prefix="$PREFIX/$TARGET" \
         --disable-smpegtest
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL_mixer-$VERSION_SDL_mixer"
     ;;
@@ -1196,7 +1199,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_geos=`
         wget -q -O- 'http://geos.refractions.net/' |
-        gsed -n 's,.*geos-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*geos-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1210,13 +1213,13 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/geos-$VERSION_geos.tar.bz2"
     cd "geos-$VERSION_geos"
-    gsed 's,-lgeos,-lgeos -lstdc++,' -i tools/geos-config.in
+    $SED 's,-lgeos,-lgeos -lstdc++,' -i tools/geos-config.in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --disable-swig
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "geos-$VERSION_geos"
     ;;
@@ -1235,7 +1238,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_proj=`
         wget -q -O- 'http://www.remotesensing.org/proj/' |
-        gsed -n 's,.*proj-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*proj-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1249,12 +1252,12 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/proj-$VERSION_proj.tar.gz"
     cd "proj-$VERSION_proj"
-    gsed 's,install-exec-local[^:],,' -i src/Makefile.in
+    $SED 's,install-exec-local[^:],,' -i src/Makefile.in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    gmake install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "proj-$VERSION_proj"
     ;;
@@ -1273,7 +1276,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_libgeotiff=`
         wget -q -O- 'http://www.remotesensing.org/geotiff/geotiff.html' |
-        gsed -n 's,.*libgeotiff-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*libgeotiff-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1287,13 +1290,13 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/libgeotiff-$VERSION_libgeotiff.tar.gz"
     cd "libgeotiff-$VERSION_libgeotiff"
-    gsed 's,/usr/local,@prefix@,' -i bin/Makefile.in
+    $SED 's,/usr/local,@prefix@,' -i bin/Makefile.in
     touch configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    gmake all install EXEEXT=.remove-me
+    $MAKE all install EXEEXT=.remove-me
     rm -fv "$PREFIX/$TARGET"/bin/*.remove-me
     cd "$SOURCE"
     rm -rfv "libgeotiff-$VERSION_libgeotiff"
@@ -1313,7 +1316,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_gdal=`
         wget -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' |
-        gsed -n 's,.*gdal-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        $SED -n 's,.*gdal-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`"
     ;;
 
@@ -1341,14 +1344,14 @@ case "$1" in
         --with-geos="$PREFIX/$TARGET/bin/geos-config" \
         --without-python \
         --without-ngpython
-    gmake lib-target
-    gmake install-lib
-    gmake -C port  install
-    gmake -C gcore install
-    gmake -C frmts install
-    gmake -C alg   install
-    gmake -C ogr   install OGR_ENABLED=
-    gmake -C apps  install BIN_LIST=
+    $MAKE lib-target
+    $MAKE install-lib
+    $MAKE -C port  install
+    $MAKE -C gcore install
+    $MAKE -C frmts install
+    $MAKE -C alg   install
+    $MAKE -C ogr   install OGR_ENABLED=
+    $MAKE -C apps  install BIN_LIST=
     cd "$SOURCE"
     rm -rfv "gdal-$VERSION_gdal"
     ;;
