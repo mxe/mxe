@@ -63,7 +63,9 @@ VERSION_gcc=3.4.5-20060117-1
 VERSION_pkg_config=0.21
 VERSION_pthreads=2-8-0
 VERSION_zlib=1.2.3
+VERSION_pdcurses=32
 VERSION_gettext=0.16.1
+VERSION_libiconv=1.9.2
 VERSION_libxml2=2.6.29
 VERSION_libgpg_error=1.5
 VERSION_libgcrypt=1.2.4
@@ -453,6 +455,51 @@ esac
 
 
 #---
+#   PDcurses
+#
+#   http://pdcurses.sourceforge.net/
+#---
+
+case "$1" in
+
+--new-versions)
+    echo "VERSION_pdcurses=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=30480' |
+        gsed -n 's,.*pdcurs\([0-9]{2}\)\.zip.*,\1,p' |
+        head -1`"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    unzip -t "pdcurs$VERSION_pdcurses.zip" &>/dev/null ||
+    wget -c "http://downloads.sourceforge.net/pdcurses/pdcurs$VERSION_pdcurses.zip"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    unzip "$DOWNLOAD/pdcurs$VERSION_pdcurses.zip" -d "pdcurs$VERSION_pdcurses"
+    cd "pdcurs$VERSION_pdcurses"
+    gsed 's,copy,cp,' -i win32/mingwin32.mak
+    gmake -f win32/mingwin32.mak \
+        CC="$TARGET-gcc" \
+        LIBEXE="$TARGET-ar" \
+        DLL=N \
+        PDCURSES_SRCDIR=. \
+        WIDE=Y \
+        UTF8=Y \
+        libs
+    install -d "$PREFIX/$TARGET/include/"
+    install -m644 curses.h panel.h term.h "$PREFIX/$TARGET/include/"
+    install -d "$PREFIX/$TARGET/lib/"
+    install -m644 pdcurses.a panel.a "$PREFIX/$TARGET/lib/"
+    cd "$SOURCE"
+    rm -rfv "pdcurs$VERSION_pdcurses"
+    ;;
+
+esac
+
+
+#---
 #   gettext
 #
 #   http://www.gnu.org/software/gettext/
@@ -486,6 +533,42 @@ case "$1" in
     gmake -C intl install
     cd "$SOURCE"
     rm -rfv "gettext-$VERSION_gettext"
+    ;;
+
+esac
+
+
+#---
+#   libiconv
+#
+#   http://www.gnu.org/software/libiconv/
+#---
+
+case "$1" in
+
+--new-versions)
+    echo "VERSION_libiconv=`
+        wget -q -O- 'http://ftp.gnu.org/pub/gnu/libiconv/' |
+        gsed -n 's,.*libiconv-\([0-9]*\)\.\([0-9]*\)\(\.[0-9]*\)\.tar.*,\1.\2\3,p' |
+        sort | tail -1`"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "libiconv-$VERSION_libiconv.tar.gz" &>/dev/null ||
+    wget -c "http://ftp.gnu.org/pub/gnu/libiconv/libiconv-$VERSION_libiconv.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/libiconv-$VERSION_libiconv.tar.gz"
+    cd "libiconv-$VERSION_libiconv"
+    ./configure \
+        --host="$TARGET" \
+        --prefix="$PREFIX/$TARGET" \
+        --disable-shared \
+        --disable-nls
+    gmake install
     ;;
 
 esac
