@@ -465,7 +465,7 @@ case "$1" in
 --new-versions)
     echo "VERSION_pdcurses=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=30480' |
-        gsed -n 's,.*pdcurs\([0-9]{2}\)\.zip.*,\1,p' |
+        gsed -n 's,.*pdcurs\([0-9][^>]*\)\.zip.*,\1,p' |
         head -1`"
     ;;
 
