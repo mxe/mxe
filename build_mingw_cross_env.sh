@@ -31,6 +31,12 @@ set -ex
 #       build the packages in src/ and usr/, create mingw_cross_env.tar.gz
 #       (needs a prepared download/ directory
 #        or a previous '--download' run)
+#
+#   --build-experimental
+#       build the experimental packages
+#       (allows fast testing of new additions to the script,
+#        needs a prepared mingw_cross_env.tar.gz archive
+#        or a previous '--build' run)
 #---
 
 
@@ -123,13 +129,7 @@ case "$1" in
     $BASH "$0" --build
     exit 0
     ;;
---new-versions)
-    # go ahead
-    ;;
---download)
-    # go ahead
-    ;;
---build)
+--new-versions|--download|--build|--build-experimental)
     # go ahead
     ;;
 *)
@@ -157,10 +157,16 @@ case "$1" in
     ;;
 
 --build)
-    rm -rfv "$PREFIX"
-    rm -rfv "$SOURCE"
-    mkdir -p "$PREFIX"
-    mkdir -p "$SOURCE"
+    rm -rfv  "$PREFIX" "$SOURCE"
+    mkdir -p "$PREFIX" "$SOURCE"
+    ;;
+
+--build-experimental)
+    tar tfz "$ROOT/mingw_cross_env.tar.gz" >/dev/null
+    rm -rfv  "$PREFIX" "$SOURCE"
+    mkdir -p "$PREFIX" "$SOURCE"
+    cd "$PREFIX"
+    tar xfvz "$ROOT/mingw_cross_env.tar.gz"
     ;;
 
 esac
