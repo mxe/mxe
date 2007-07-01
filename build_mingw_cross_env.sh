@@ -3,19 +3,34 @@ set -ex
 
 
 #---
-#   Build a MinGW cross compiling environment
+#   MinGW cross compiling environment  (pre-1.1)
+#   =================================
 #
-#   Version:    -
-#   Homepage:   http://www.profv.de/mingw_cross_env/
-#   File name:  build_mingw_cross_env.sh
+#   http://www.profv.de/mingw_cross_env/
 #
 #   This script compiles a MinGW cross compiler and cross compiles
 #   many free libraries such as GD and SDL. Thus, it provides you
 #   a nice MinGW cross compiling environment. All necessary source
 #   packages are downloaded automatically.
 #
-#   2007-06-12  Project start
-#   2007-06-19  Release 1.0
+#
+#   Usage:  ./build_mingw_cross_env.sh  [ action ]
+#
+#   <no action>
+#       same as '--download', followed by '--build'.
+#
+#   --new-versions
+#       retrieve the new version numbers of all packages
+#       (modifies the script in-place, use with caution!)
+#
+#   --download
+#       download all packages in download/
+#       (resumes incomplete downloads)
+#
+#   --build
+#       build the packages in src/ and usr/, create mingw_cross_env.tar.gz
+#       (needs a prepared download/ directory
+#        or a previous '--download' run)
 #---
 
 
@@ -104,9 +119,7 @@ $SED -v || SED=sed
 
 case "$1" in
 "")
-    echo "Stage 1: $BASH '$0' --download"
     $BASH "$0" --download
-    echo "Stage 2: $BASH '$0' --build"
     $BASH "$0" --build
     exit 0
     ;;
@@ -120,8 +133,10 @@ case "$1" in
     # go ahead
     ;;
 *)
+    # display the first comments of this script as help message
     set - -x
-    echo "Usage: $0 [ --new-versions | --download | --build ]"
+    sed -n '/(c)/ Q; s/\(^$\|^#$\|^#   \)//p' "$0" |
+    more
     exit 1
     ;;
 esac
