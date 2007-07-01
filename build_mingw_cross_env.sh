@@ -87,10 +87,11 @@ VERSION_zlib=1.2.3
 VERSION_pdcurses=32
 VERSION_gettext=0.16.1
 VERSION_libiconv=1.9.2
-VERSION_libxml2=2.6.29
 VERSION_libgpg_error=1.5
 VERSION_libgcrypt=1.2.4
 VERSION_gnutls=1.6.3
+VERSION_libxml2=2.6.29
+VERSION_libxslt=1.1.21
 VERSION_curl=7.16.3
 VERSION_libpng=1.2.18
 VERSION_jpeg=6b
@@ -624,48 +625,6 @@ esac
 
 
 #---
-#   libxml2
-#
-#   http://www.xmlsoft.org/
-#---
-
-case "$1" in
-
---new-versions)
-    VERSION=`
-        wget -q -O- 'ftp://xmlsoft.org/libxml2/' |
-        $SED -n 's,.*LATEST_LIBXML2_IS_\([0-9][^>]*\)</a>.*,\1,p' | 
-        head -1`
-    test -n "$VERSION"
-    $SED "s,^VERSION_libxml2=.*,VERSION_libxml2=$VERSION," -i "$0"
-    ;;
-
---download)
-    cd "$DOWNLOAD"
-    tar tfz "libxml2-$VERSION_libxml2.tar.gz" &>/dev/null ||
-    wget -c "ftp://xmlsoft.org/libxml2/libxml2-$VERSION_libxml2.tar.gz"
-    ;;
-
---build)
-    cd "$SOURCE"
-    tar xfvz "$DOWNLOAD/libxml2-$VERSION_libxml2.tar.gz"
-    cd "libxml2-$VERSION_libxml2"
-    $SED 's,`uname`,MinGW,g' -i xml2-config.in
-    ./configure \
-        --host="$TARGET" \
-        --disable-shared \
-        --without-debug \
-        --prefix="$PREFIX/$TARGET" \
-        --without-python
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
-    cd "$SOURCE"
-    rm -rfv "libxml2-$VERSION_libxml2"
-    ;;
-
-esac
-
-
-#---
 #   libgpg-error
 #
 #   ftp://ftp.gnupg.org/gcrypt/libgpg-error/
@@ -790,6 +749,92 @@ case "$1" in
     $MAKE install bin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
     cd "$SOURCE"
     rm -rfv "gnutls-$VERSION_gnutls"
+    ;;
+
+esac
+
+
+#---
+#   libxml2
+#
+#   http://www.xmlsoft.org/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'ftp://xmlsoft.org/libxml2/' |
+        $SED -n 's,.*LATEST_LIBXML2_IS_\([0-9][^>]*\)</a>.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_libxml2=.*,VERSION_libxml2=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "libxml2-$VERSION_libxml2.tar.gz" &>/dev/null ||
+    wget -c "ftp://xmlsoft.org/libxml2/libxml2-$VERSION_libxml2.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/libxml2-$VERSION_libxml2.tar.gz"
+    cd "libxml2-$VERSION_libxml2"
+    $SED 's,`uname`,MinGW,g' -i xml2-config.in
+    ./configure \
+        --host="$TARGET" \
+        --disable-shared \
+        --without-debug \
+        --prefix="$PREFIX/$TARGET" \
+        --without-python
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libxml2-$VERSION_libxml2"
+    ;;
+
+esac
+
+
+#---
+#   libxslt
+#
+#   http://xmlsoft.org/XSLT/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'ftp://xmlsoft.org/libxslt/' |
+        $SED -n 's,.*LATEST_LIBXSLT_IS_\([0-9][^>]*\)</a>.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_libxslt=.*,VERSION_libxslt=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "libxslt-$VERSION_libxslt.tar.gz" &>/dev/null ||
+    wget -c "ftp://xmlsoft.org/libxslt/libxslt-$VERSION_libxslt.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/libxslt-$VERSION_libxslt.tar.gz"
+    cd "libxslt-$VERSION_libxslt"
+    ./configure \
+        --host="$TARGET" \
+        --disable-shared \
+        --without-debug \
+        --prefix="$PREFIX/$TARGET" \
+        --with-libxml-prefix="$PREFIX/$TARGET" \
+        LIBGCRYPT_CONFIG="$PREFIX/$TARGET/bin/libgcrypt-config" \
+        --without-python \
+        --without-plugins
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libxslt-$VERSION_libxslt"
     ;;
 
 esac
