@@ -898,7 +898,7 @@ esac
 #---
 #   giflib
 #
-#   http://sourceforge.net/projects/libungif
+#   http://sourceforge.net/projects/libungif/
 #---
 
 case "$1" in
