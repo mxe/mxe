@@ -644,7 +644,7 @@ case "$1" in
     tar xfvj "$DOWNLOAD/libgpg-error-$VERSION_libgpg_error.tar.bz2"
     cd "libgpg-error-$VERSION_libgpg_error"
     # wine confuses the cross-compiling detection, so set it explicitly
-    sed 's,cross_compiling=no,cross_compiling=yes,' -i configure
+    $SED 's,cross_compiling=no,cross_compiling=yes,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
