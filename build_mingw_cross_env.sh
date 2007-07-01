@@ -92,6 +92,7 @@ VERSION_libgcrypt=1.2.4
 VERSION_gnutls=1.6.3
 VERSION_libxml2=2.6.29
 VERSION_libxslt=1.1.21
+VERSION_xmlwrapp=0.5.0
 VERSION_curl=7.16.3
 VERSION_libpng=1.2.18
 VERSION_jpeg=6b
@@ -835,6 +836,52 @@ case "$1" in
     $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libxslt-$VERSION_libxslt"
+    ;;
+
+esac
+
+
+#---
+#   xmlwrapp
+#
+#   http://sourceforge.net/projects/xmlwrapp/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=142403' |
+        $SED -n 's,.*xmlwrapp-\([0-9][^>]*\)\.tgz.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    sed "s,^VERSION_xmlwrapp=.*,VERSION_xmlwrapp=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "xmlwrapp-$VERSION_xmlwrapp.tgz" &>/dev/null ||
+    wget -c "http://downloads.sourceforge.net/xmlwrapp/xmlwrapp-$VERSION_xmlwrapp.tgz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/xmlwrapp-$VERSION_xmlwrapp.tgz"
+    cd "xmlwrapp-$VERSION_xmlwrapp"
+    EXSLT_LIBS=`$TARGET-pkg-config libexslt --libs | sed 's,-L[^ ]*,,g'`
+    $SED 's,.*/usr/include.*,,' -i configure.pl
+    $SED "s,-lxslt -lexslt,$EXSLT_LIBS," -i configure.pl
+    CXX="$TARGET-g++" \
+    AR="$TARGET-ar" \
+    CXXFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
+    ./configure.pl \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET" \
+        --xml2-config="$PREFIX/$TARGET/bin/xml2-config" \
+        --xslt-config="$PREFIX/$TARGET/bin/xslt-config"
+    $MAKE install
+    cd "$SOURCE"
+    rm -rfv "xmlwrapp-$VERSION_xmlwrapp"
     ;;
 
 esac
