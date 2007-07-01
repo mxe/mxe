@@ -120,6 +120,7 @@ case "$1" in
     # go ahead
     ;;
 *)
+    set - -x
     echo "Usage: $0 [ --new-versions | --download | --build ]"
     exit 1
     ;;
