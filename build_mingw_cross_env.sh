@@ -1351,7 +1351,8 @@ case "$1" in
         --with-sdl-prefix="$PREFIX/$TARGET" \
         --disable-sdltest \
         --with-smpeg-prefix="$PREFIX/$TARGET" \
-        --disable-smpegtest
+        --disable-smpegtest \
+        --disable-music-mp3-shared
     $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL_mixer-$VERSION_SDL_mixer"
