@@ -1256,6 +1256,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/SDL-$VERSION_SDL.tar.gz"
     cd "SDL-$VERSION_SDL"
+    sed 's,-mwindows,-lwinmm -mwindows,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
