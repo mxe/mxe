@@ -696,6 +696,8 @@ case "$1" in
     $SED '26i\#include <ws2tcpip.h>' -i src/gcrypt.h.in
     $SED '26i\#include <ws2tcpip.h>' -i src/ath.h
     $SED 's,sys/times.h,sys/time.h,' -i cipher/random.c
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $SED 's,cross_compiling=no,cross_compiling=yes,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
