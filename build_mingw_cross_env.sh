@@ -104,6 +104,7 @@ VERSION_gd=2.0.35RC5
 VERSION_SDL=1.2.11
 VERSION_smpeg=0.4.5+cvs20030824
 VERSION_SDL_mixer=1.2.7
+VERSION_SDL_image=1.2.5
 VERSION_geos=3.0.0rc4
 VERSION_proj=4.5.0
 VERSION_libgeotiff=1.2.3
@@ -1354,6 +1355,50 @@ case "$1" in
     $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL_mixer-$VERSION_SDL_mixer"
+    ;;
+
+esac
+
+
+#---
+#   SDL_image
+#
+#   http://www.libsdl.org/projects/SDL_image/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://www.libsdl.org/projects/SDL_image/' |
+        $SED -n 's,.*SDL_image-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_SDL_image=.*,VERSION_SDL_image=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "SDL_image-$VERSION_SDL_image.tar.gz" &>/dev/null ||
+    wget -c "http://www.libsdl.org/projects/SDL_image/release/SDL_image-$VERSION_SDL_image.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/SDL_image-$VERSION_SDL_image.tar.gz"
+    cd "SDL_image-$VERSION_SDL_image"
+    ./configure \
+        --host="$TARGET" \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET" \
+        --with-sdl-prefix="$PREFIX/$TARGET" \
+        --disable-sdltest \
+        --disable-jpg-shared \
+        --disable-png-shared \
+        --disable-tif-shared
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "SDL_image-$VERSION_SDL_image"
     ;;
 
 esac
