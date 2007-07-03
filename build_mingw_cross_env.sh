@@ -138,7 +138,7 @@ case "$1" in
 *)
     # display the first comments of this script as help message
     set - -x
-    sed -n '/(c)/ Q; s/\(^$\|^#$\|^#   \)//p' "$0" |
+    $SED -n '/(c)/ Q; s/\(^$\|^#$\|^#   \)//p' "$0" |
     more
     exit 1
     ;;
@@ -858,7 +858,7 @@ case "$1" in
         $SED -n 's,.*xmlwrapp-\([0-9][^>]*\)\.tgz.*,\1,p' | 
         head -1`
     test -n "$VERSION"
-    sed "s,^VERSION_xmlwrapp=.*,VERSION_xmlwrapp=$VERSION," -i "$0"
+    $SED "s,^VERSION_xmlwrapp=.*,VERSION_xmlwrapp=$VERSION," -i "$0"
     ;;
 
 --download)
@@ -871,7 +871,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/xmlwrapp-$VERSION_xmlwrapp.tgz"
     cd "xmlwrapp-$VERSION_xmlwrapp"
-    EXSLT_LIBS=`$TARGET-pkg-config libexslt --libs | sed 's,-L[^ ]*,,g'`
+    EXSLT_LIBS=`$TARGET-pkg-config libexslt --libs | $SED 's,-L[^ ]*,,g'`
     $SED 's,.*/usr/include.*,,' -i configure.pl
     $SED "s,-lxslt -lexslt,$EXSLT_LIBS," -i configure.pl
     $SED 's,"ranlib",$ENV{"RANLIB"} || "ranlib",g' -i tools/cxxflags
@@ -1260,7 +1260,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/SDL-$VERSION_SDL.tar.gz"
     cd "SDL-$VERSION_SDL"
-    sed 's,-mwindows,-lwinmm -mwindows,' -i configure
+    $SED 's,-mwindows,-lwinmm -mwindows,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
