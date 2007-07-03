@@ -82,7 +82,7 @@ SOURCEFORGE_MIRROR=downloads.sourceforge.net
 
 PATH="$PREFIX/bin:$PATH"
 
-VERSION_mingw_runtime=3.9
+VERSION_mingw_runtime=3.12
 VERSION_w32api=3.9
 VERSION_binutils=2.17.50-20060824-1
 VERSION_gcc=3.4.5-20060117-1
@@ -1571,6 +1571,9 @@ case "$1" in
     tar xfvj "$DOWNLOAD/geos-$VERSION_geos.tar.bz2"
     cd "geos-$VERSION_geos"
     $SED 's,-lgeos,-lgeos -lstdc++,' -i tools/geos-config.in
+    # timezone and gettimeofday are in <time.h> since MinGW runtime 3.10
+    $SED 's,struct timezone {,struct timezone_disabled {,' -i source/headers/geos/timeval.h
+    $SED 's,int gettimeofday,int gettimeofday_disabled,'   -i source/headers/geos/timeval.h
     ./configure \
         --host="$TARGET" \
         --disable-shared \
