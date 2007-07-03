@@ -105,6 +105,9 @@ VERSION_tiff=3.8.2
 VERSION_giflib=4.1.4
 VERSION_freetype=2.3.5
 VERSION_fontconfig=2.4.2
+VERSION_libmikmod=3.2.0-beta2
+VERSION_ogg=1.1.3
+VERSION_vorbis=1.1.2
 VERSION_gd=2.0.35
 VERSION_SDL=1.2.11
 VERSION_smpeg=0.4.5+cvs20030824
@@ -1190,6 +1193,128 @@ esac
 
 
 #---
+#   libMikMod
+#
+#   http://mikmod.raphnet.net/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://mikmod.raphnet.net/' |
+        $SED -n 's,.*libmikmod-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_libmikmod=.*,VERSION_libmikmod=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfj "libmikmod-$VERSION_libmikmod.tar.bz2" &>/dev/null ||
+    wget -c "http://mikmod.raphnet.net/files/libmikmod-$VERSION_libmikmod.tar.bz2"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvj "$DOWNLOAD/libmikmod-$VERSION_libmikmod.tar.bz2"
+    cd "libmikmod-$VERSION_libmikmod"
+    $SED 's,-Dunix,,' -i libmikmod/Makefile.in
+    CC="$TARGET-gcc" \
+    NM="$TARGET-nm" \
+    RANLIB="$TARGET-ranlib" \
+    STRIP="$TARGET-strip" \
+    ./configure \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET" \
+        --disable-esd
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libmikmod-$VERSION_libmikmod"
+    ;;
+
+esac
+
+
+#---
+#   OGG
+#
+#   http://www.xiph.org/ogg/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://www.xiph.org/downloads/' |
+        $SED -n 's,.*libogg-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_ogg=.*,VERSION_ogg=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "libogg-$VERSION_ogg.tar.gz" &>/dev/null ||
+    wget -c "http://downloads.xiph.org/releases/ogg/libogg-$VERSION_ogg.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/libogg-$VERSION_ogg.tar.gz"
+    cd "libogg-$VERSION_ogg"
+    ./configure \
+        --host="$TARGET" \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET"
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libogg-$VERSION_ogg"
+    ;;
+
+esac
+
+
+#---
+#   Vorbis
+#
+#   http://www.vorbis.com/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://www.xiph.org/downloads/' |
+        $SED -n 's,.*libvorbis-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_vorbis=.*,VERSION_vorbis=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "libvorbis-$VERSION_vorbis.tar.gz" &>/dev/null ||
+    wget -c "http://downloads.xiph.org/releases/vorbis/libvorbis-$VERSION_vorbis.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/libvorbis-$VERSION_vorbis.tar.gz"
+    cd "libvorbis-$VERSION_vorbis"
+    ./configure \
+        --host="$TARGET" \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET"
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libvorbis-$VERSION_vorbis"
+    ;;
+
+esac
+
+
+#---
 #   GD
 #   (without support for xpm)
 #
@@ -1360,6 +1485,9 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --with-sdl-prefix="$PREFIX/$TARGET" \
         --disable-sdltest \
+        --enable-music-libmikmod \
+        --enable-music-ogg \
+        --disable-music-ogg-shared \
         --with-smpeg-prefix="$PREFIX/$TARGET" \
         --disable-smpegtest \
         --disable-music-mp3-shared
