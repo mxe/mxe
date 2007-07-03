@@ -536,10 +536,12 @@ case "$1" in
         WIDE=Y \
         UTF8=Y \
         libs
+    $TARGET-ranlib pdcurses.a panel.a
     install -d "$PREFIX/$TARGET/include/"
     install -m644 curses.h panel.h term.h "$PREFIX/$TARGET/include/"
     install -d "$PREFIX/$TARGET/lib/"
-    install -m644 pdcurses.a panel.a "$PREFIX/$TARGET/lib/"
+    install -m644 pdcurses.a "$PREFIX/$TARGET/lib/libpdcurses.a"
+    install -m644 panel.a    "$PREFIX/$TARGET/lib/libpanel.a"
     cd "$SOURCE"
     rm -rfv "pdcurs$VERSION_pdcurses"
     ;;
