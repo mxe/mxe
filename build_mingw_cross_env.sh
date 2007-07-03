@@ -1199,7 +1199,7 @@ case "$1" in
 
 --new-versions)
     VERSION=`
-        wget -q -O- 'http://www.libgd.org/Main_Page' |
+        wget -q -O- 'http://www.libgd.org/releases/' |
         $SED -n 's,.*gd-\([0-9][^>]*\)\.tar.*,\1,p' | 
         head -1`
     test -n "$VERSION"
