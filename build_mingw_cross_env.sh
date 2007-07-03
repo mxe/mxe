@@ -78,6 +78,7 @@ ROOT=`pwd`
 PREFIX="$ROOT/usr"
 SOURCE="$ROOT/src"
 DOWNLOAD="$ROOT/download"
+SOURCEFORGE_MIRROR=downloads.sourceforge.net
 
 PATH="$PREFIX/bin:$PATH"
 
@@ -199,7 +200,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfz "mingw-runtime-$VERSION_mingw_runtime.tar.gz" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/mingw/mingw-runtime-$VERSION_mingw_runtime.tar.gz"
+    wget -c "http://$SOURCEFORGE_MIRROR/mingw/mingw-runtime-$VERSION_mingw_runtime.tar.gz"
     ;;
 
 --build)
@@ -231,7 +232,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfz "w32api-$VERSION_w32api.tar.gz" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/mingw/w32api-$VERSION_w32api.tar.gz"
+    wget -c "http://$SOURCEFORGE_MIRROR/mingw/w32api-$VERSION_w32api.tar.gz"
     ;;
 
 --build)
@@ -269,7 +270,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfz "binutils-$VERSION_binutils-src.tar.gz" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/mingw/binutils-$VERSION_binutils-src.tar.gz"
+    wget -c "http://$SOURCEFORGE_MIRROR/mingw/binutils-$VERSION_binutils-src.tar.gz"
     ;;
 
 --build)
@@ -340,9 +341,9 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfz "gcc-core-$VERSION_gcc-src.tar.gz" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/mingw/gcc-core-$VERSION_gcc-src.tar.gz"
+    wget -c "http://$SOURCEFORGE_MIRROR/mingw/gcc-core-$VERSION_gcc-src.tar.gz"
     tar tfz "gcc-g++-$VERSION_gcc-src.tar.gz" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/mingw/gcc-g++-$VERSION_gcc-src.tar.gz"
+    wget -c "http://$SOURCEFORGE_MIRROR/mingw/gcc-g++-$VERSION_gcc-src.tar.gz"
     ;;
 
 --build)
@@ -487,7 +488,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfj "zlib-$VERSION_zlib.tar.bz2" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/libpng/zlib-$VERSION_zlib.tar.bz2"
+    wget -c "http://$SOURCEFORGE_MIRROR/libpng/zlib-$VERSION_zlib.tar.bz2"
     ;;
 
 --build)
@@ -524,7 +525,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     unzip -t "pdcurs$VERSION_pdcurses.zip" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/pdcurses/pdcurs$VERSION_pdcurses.zip"
+    wget -c "http://$SOURCEFORGE_MIRROR/pdcurses/pdcurs$VERSION_pdcurses.zip"
     ;;
 
 --build)
@@ -870,7 +871,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfz "xmlwrapp-$VERSION_xmlwrapp.tgz" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/xmlwrapp/xmlwrapp-$VERSION_xmlwrapp.tgz"
+    wget -c "http://$SOURCEFORGE_MIRROR/xmlwrapp/xmlwrapp-$VERSION_xmlwrapp.tgz"
     ;;
 
 --build)
@@ -962,7 +963,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfj "libpng-$VERSION_libpng.tar.bz2" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/libpng/libpng-$VERSION_libpng.tar.bz2"
+    wget -c "http://$SOURCEFORGE_MIRROR/libpng/libpng-$VERSION_libpng.tar.bz2"
     ;;
 
 --build)
@@ -1081,7 +1082,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfj "giflib-$VERSION_giflib.tar.bz2" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/libungif/giflib-$VERSION_giflib.tar.bz2"
+    wget -c "http://$SOURCEFORGE_MIRROR/libungif/giflib-$VERSION_giflib.tar.bz2"
     ;;
 
 --build)
@@ -1122,7 +1123,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfj "freetype-$VERSION_freetype.tar.bz2" &>/dev/null ||
-    wget -c "http://downloads.sourceforge.net/freetype/freetype-$VERSION_freetype.tar.bz2"
+    wget -c "http://$SOURCEFORGE_MIRROR/freetype/freetype-$VERSION_freetype.tar.bz2"
     ;;
 
 --build)
