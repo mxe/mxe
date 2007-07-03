@@ -874,14 +874,17 @@ case "$1" in
     EXSLT_LIBS=`$TARGET-pkg-config libexslt --libs | sed 's,-L[^ ]*,,g'`
     $SED 's,.*/usr/include.*,,' -i configure.pl
     $SED "s,-lxslt -lexslt,$EXSLT_LIBS," -i configure.pl
+    $SED 's,"ranlib",$ENV{"RANLIB"} || "ranlib",g' -i tools/cxxflags
     CXX="$TARGET-g++" \
     AR="$TARGET-ar" \
+    RANLIB="$TARGET-ranlib" \
     CXXFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
     ./configure.pl \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --xml2-config="$PREFIX/$TARGET/bin/xml2-config" \
-        --xslt-config="$PREFIX/$TARGET/bin/xslt-config"
+        --xslt-config="$PREFIX/$TARGET/bin/xslt-config" \
+        --disable-examples
     $MAKE install
     cd "$SOURCE"
     rm -rfv "xmlwrapp-$VERSION_xmlwrapp"
