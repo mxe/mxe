@@ -116,10 +116,10 @@ VERSION_gdal=1.4.2
 #---
 
 MAKE=gmake
-$MAKE -v || MAKE=make
+$MAKE --version || MAKE=make
 
 SED=gsed
-$SED -v || SED=sed
+$SED --version || SED=sed
 
 
 #---
