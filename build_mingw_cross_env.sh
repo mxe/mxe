@@ -13,6 +13,10 @@ set -ex
 #   a nice MinGW cross compiling environment. All necessary source
 #   packages are downloaded automatically.
 #
+#   This script is designed to run on any Unix system. It also runs
+#   partly on MSYS. It needs GNU make and GNU sed, so BSD users need
+#   the ports textproc/gsed and devel/gmake.
+#
 #
 #   Usage:  ./build_mingw_cross_env.sh  [ action ]
 #
