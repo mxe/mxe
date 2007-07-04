@@ -92,6 +92,8 @@ VERSION_zlib=1.2.3
 VERSION_pdcurses=32
 VERSION_gettext=0.16.1
 VERSION_libiconv=1.9.2
+VERSION_winpcap=4_0_1
+VERSION_libdnet=1.11
 VERSION_libgpg_error=1.5
 VERSION_libgcrypt=1.2.4
 VERSION_gnutls=1.6.3
@@ -113,6 +115,7 @@ VERSION_SDL=1.2.11
 VERSION_smpeg=0.4.5+cvs20030824
 VERSION_SDL_mixer=1.2.7
 VERSION_SDL_image=1.2.5
+VERSION_fltk=1.1.7
 VERSION_geos=3.0.0rc4
 VERSION_proj=4.5.0
 VERSION_libgeotiff=1.2.3
@@ -248,6 +251,9 @@ case "$1" in
     $SED 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i "$PREFIX/$TARGET/include/winnt.h"
     # fix incompatibilities with jpeg
     $SED 's,typedef unsigned char boolean;,,'           -i "$PREFIX/$TARGET/include/rpcndr.h"
+    # fix missing definitions for WinPcap and libdnet
+    $SED '1i\#include <wtypes.h>'                       -i "$PREFIX/$TARGET/include/iphlpapi.h"
+    $SED '1i\#include <wtypes.h>'                       -i "$PREFIX/$TARGET/include/wincrypt.h"
     ;;
 
 esac
@@ -631,6 +637,115 @@ case "$1" in
         --disable-shared \
         --disable-nls
     $MAKE install
+    ;;
+
+esac
+
+
+#---
+#   WinPcap
+#
+#   http://www.winpcap.org/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://www.winpcap.org/devel.htm' |
+        $SED -n 's,.*WpcapSrc_\([0-9][^>]*\)\.zip.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_winpcap=.*,VERSION_winpcap=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    unzip -t "WpcapSrc_$VERSION_winpcap.zip" &>/dev/null ||
+    wget -c "http://www.winpcap.org/install/bin/WpcapSrc_$VERSION_winpcap.zip"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    unzip "$DOWNLOAD/WpcapSrc_$VERSION_winpcap.zip" -d "WpcapSrc_$VERSION_winpcap"
+    cd "WpcapSrc_$VERSION_winpcap"
+    cd winpcap
+    mv Common common
+    cp -p common/Devioctl.h   common/devioctl.h
+    cp -p common/Ntddndis.h   common/ntddndis.h
+    cp -p common/Ntddpack.h   common/ntddpack.h
+    cp -p common/Packet32.h   common/packet32.h
+    cp -p common/WpcapNames.h common/wpcapnames.h
+    $TARGET-gcc -Icommon -O -c Packet9x/DLL/Packet32.c
+    $TARGET-ar rc libpacket.a Packet32.o
+    $TARGET-ranlib libpacket.a
+    install -d "$PREFIX/$TARGET/include"
+    install -m644 common/*.h "$PREFIX/$TARGET/include/"
+    install -d "$PREFIX/$TARGET/lib"
+    install -m644 libpacket.a "$PREFIX/$TARGET/lib/"
+    mv wpcap/libpcap/Win32/Include/ip6_misc.h wpcap/libpcap/Win32/Include/IP6_misc.h
+    $SED 's,-DHAVE_AIRPCAP_API,,'    -i wpcap/PRJ/GNUmakefile
+    echo -e 'libwpcap.a: ${OBJS}'   >> wpcap/PRJ/GNUmakefile
+    echo -e '\t${AR} rc $@ ${OBJS}' >> wpcap/PRJ/GNUmakefile
+    echo -e '\t${RANLIB} $@'        >> wpcap/PRJ/GNUmakefile
+    echo "/* already handled by <ws2tcpip.h> */" > wpcap/libpcap/Win32/Src/gai_strerror.c
+    cd wpcap/PRJ
+    CC="$TARGET-gcc" \
+    AR="$TARGET-ar" \
+    RANLIB="$TARGET-ranlib" \
+    $MAKE libwpcap.a
+    install -d "$PREFIX/$TARGET/include"
+    install -m644 ../libpcap/*.h ../Win32-Extensions/*.h "$PREFIX/$TARGET/include/"
+    install -d "$PREFIX/$TARGET/lib"
+    install -m644 libwpcap.a "$PREFIX/$TARGET/lib/"
+    cd "$SOURCE"
+    rm -rfv "WpcapSrc_$VERSION_winpcap"
+    ;;
+
+esac
+
+
+#---
+#   libdnet
+#
+#   http://libdnet.sourceforge.net/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=36243' |
+        $SED -n 's,.*libdnet-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_libdnet=.*,VERSION_libdnet=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfz "libdnet-$VERSION_libdnet.tar.gz" &>/dev/null ||
+    wget -c "http://$SOURCEFORGE_MIRROR/libdnet/libdnet-$VERSION_libdnet.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/libdnet-$VERSION_libdnet.tar.gz"
+    cd "libdnet-$VERSION_libdnet"
+    $SED 's,CYGWIN=no,CYGWIN=yes,g'                 -i configure
+    $SED 's,cat /proc/sys/kernel/ostype,,g'         -i configure
+    $SED 's,test -d /usr/include/mingw,true,'       -i configure
+    $SED 's,Iphlpapi,iphlpapi,g'                    -i configure
+    $SED 's,packet.lib,libpacket.a,'                -i configure
+    $SED 's,-lpacket,-lpacket -lws2_32,g'           -i configure
+    $SED "s,/usr/include,$PREFIX/$TARGET/include,g" -i configure
+    ./configure \
+        --host="$TARGET" \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET"
+    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "libdnet-$VERSION_libdnet"
     ;;
 
 esac
@@ -1538,6 +1653,50 @@ case "$1" in
     $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL_image-$VERSION_SDL_image"
+    ;;
+
+esac
+
+
+#---
+#   FLTK
+#
+#   http://www.fltk.org/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://www.fltk.org/' |
+        $SED -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_fltk=.*,VERSION_fltk=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfj "fltk-$VERSION_fltk-source.tar.bz2" &>/dev/null ||
+    wget -c "http://ftp.easysw.com/pub/fltk/$VERSION_fltk/fltk-$VERSION_fltk-source.tar.bz2"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvj "$DOWNLOAD/fltk-$VERSION_fltk-source.tar.bz2"
+    cd "fltk-$VERSION_fltk"
+    $SED 's,\$uname,MINGW,g' -i configure
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $SED 's,cross_compiling=no,cross_compiling=yes,' -i configure
+    ./configure \
+        --host="$TARGET" \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET" \
+        --enable-threads \
+        LIBS="-lws2_32"
+    $MAKE DIRS=src install
+    cd "$SOURCE"
+    rm -rfv "fltk-$VERSION_fltk"
     ;;
 
 esac
