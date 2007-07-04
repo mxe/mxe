@@ -1339,7 +1339,7 @@ case "$1" in
     NM="$TARGET-nm" \
     RANLIB="$TARGET-ranlib" \
     STRIP="$TARGET-strip" \
-    LIBS="-lws2_32"
+    LIBS="-lws2_32" \
     ./configure \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
