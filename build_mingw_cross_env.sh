@@ -1379,6 +1379,8 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/libogg-$VERSION_ogg.tar.gz"
     cd "libogg-$VERSION_ogg"
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $SED 's,cross_compiling=no,cross_compiling=yes,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
@@ -1422,6 +1424,7 @@ case "$1" in
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
+        PKG_CONFIG="$TARGET-pkg-config" \
         LIBS="-lws2_32"
     $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
