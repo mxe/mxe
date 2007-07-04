@@ -637,6 +637,8 @@ case "$1" in
         --disable-shared \
         --disable-nls
     $MAKE install
+    cd "$SOURCE"
+    rm -rfv "libiconv-$VERSION_libiconv"
     ;;
 
 esac
