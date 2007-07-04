@@ -1339,6 +1339,7 @@ case "$1" in
     NM="$TARGET-nm" \
     RANLIB="$TARGET-ranlib" \
     STRIP="$TARGET-strip" \
+    LIBS="-lws2_32"
     ./configure \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
@@ -1420,7 +1421,8 @@ case "$1" in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
-        --prefix="$PREFIX/$TARGET"
+        --prefix="$PREFIX/$TARGET" \
+        LIBS="-lws2_32"
     $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libvorbis-$VERSION_vorbis"
