@@ -1047,6 +1047,8 @@ case "$1" in
     cd "curl-$VERSION_curl"
     $SED 's,-I@includedir@,-I@includedir@ -DCURL_STATICLIB,' -i curl-config.in
     $SED 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i configure
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $SED 's,cross_compiling=no,cross_compiling=yes,' -i configure
     ./configure \
         --host="$TARGET" \
         --disable-shared \
