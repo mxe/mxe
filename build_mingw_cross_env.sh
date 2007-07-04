@@ -14,8 +14,8 @@ set -ex
 #   packages are downloaded automatically.
 #
 #   This script is designed to run on any Unix system. It also runs
-#   partly on MSYS. It needs GNU make and GNU sed, so BSD users need
-#   the ports textproc/gsed and devel/gmake.
+#   partly on MSYS. It needs GNU make and GNU sed, so FreeBSD users
+#   need the ports textproc/gsed and devel/gmake.
 #
 #
 #   Usage:  ./build_mingw_cross_env.sh  [ action ]
@@ -127,10 +127,10 @@ VERSION_gdal=1.4.2
 #---
 
 MAKE=gmake
-$MAKE --version || MAKE=make
+$MAKE --version >&2 || MAKE=make
 
 SED=gsed
-$SED --version || SED=sed
+$SED  --version >&2 || SED=sed
 
 
 #---
