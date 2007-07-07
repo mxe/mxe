@@ -1105,14 +1105,15 @@ esac
 #   jpeg
 #
 #   http://www.ijg.org/
+#   http://packages.debian.org/unstable/source/libjpeg6b
 #---
 
 case "$1" in
 
 --new-versions)
     VERSION=`
-        wget -q -O- 'http://www.ijg.org/files/' |
-        $SED -n 's,.*jpegsrc.v\([0-9][^>]*\)\.tar.*,\1,p' | 
+        wget -q -O- 'http://packages.debian.org/unstable/source/libjpeg6b' |
+        $SED -n 's,.*libjpeg6b_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | 
         tail -1`
     test -n "$VERSION"
     $SED "s,^VERSION_jpeg=.*,VERSION_jpeg=$VERSION," -i "$0"
@@ -1120,13 +1121,13 @@ case "$1" in
 
 --download)
     cd "$DOWNLOAD"
-    tar tfz "jpegsrc.v$VERSION_jpeg.tar.gz" &>/dev/null ||
-    wget -c "http://www.ijg.org/files/jpegsrc.v$VERSION_jpeg.tar.gz"
+    tar tfz "libjpeg6b_$VERSION_jpeg.orig.tar.gz" &>/dev/null ||
+    wget -c "http://ftp.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg6b_$VERSION_jpeg.orig.tar.gz"
     ;;
 
 --build)
     cd "$SOURCE"
-    tar xfvz "$DOWNLOAD/jpegsrc.v$VERSION_jpeg.tar.gz"
+    tar xfvz "$DOWNLOAD/libjpeg6b_$VERSION_jpeg.orig.tar.gz"
     cd "jpeg-$VERSION_jpeg"
     ./configure \
         CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" \
