@@ -294,8 +294,7 @@ case "$1" in
         --with-gnu-as \
         --disable-nls \
         --disable-shared
-    $MAKE
-    $MAKE install
+    $MAKE all install
     cd "$SOURCE"
     rm -rfv "binutils-$VERSION_binutils-src"
     strip -sv \
@@ -374,8 +373,7 @@ case "$1" in
         --enable-threads=win32 \
         --disable-win32-registry \
         --enable-sjlj-exceptions
-    $MAKE
-    $MAKE install
+    $MAKE all install
     cd "$SOURCE"
     rm -rfv "gcc-$VERSION_gcc"
     VERSION_gcc_short=`echo "$VERSION_gcc" | cut -d'-' -f1`
@@ -465,7 +463,7 @@ case "$1" in
     tar xfvz "$DOWNLOAD/pthreads-w32-$VERSION_pthreads-release.tar.gz"
     cd "pthreads-w32-$VERSION_pthreads-release"
     $SED '35i\#define PTW32_STATIC_LIB' -i pthread.h
-    $MAKE CROSS="$TARGET-" GC-static
+    $MAKE GC-static CROSS="$TARGET-"
     install -d "$PREFIX/$TARGET/lib"
     install -m664 libpthreadGC2.a "$PREFIX/$TARGET/lib/libpthread.a"
     install -d "$PREFIX/$TARGET/include"
@@ -542,14 +540,13 @@ case "$1" in
     unzip "$DOWNLOAD/pdcurs$VERSION_pdcurses.zip" -d "pdcurs$VERSION_pdcurses"
     cd "pdcurs$VERSION_pdcurses"
     $SED 's,copy,cp,' -i win32/mingwin32.mak
-    $MAKE -f win32/mingwin32.mak \
+    $MAKE libs -f win32/mingwin32.mak \
         CC="$TARGET-gcc" \
         LIBEXE="$TARGET-ar" \
         DLL=N \
         PDCURSES_SRCDIR=. \
         WIDE=Y \
-        UTF8=Y \
-        libs
+        UTF8=Y
     $TARGET-ranlib pdcurses.a panel.a
     install -d "$PREFIX/$TARGET/include/"
     install -m644 curses.h panel.h term.h "$PREFIX/$TARGET/include/"
@@ -596,7 +593,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --enable-threads=win32
-    $MAKE -C intl install
+    $MAKE install -C intl
     cd "$SOURCE"
     rm -rfv "gettext-$VERSION_gettext"
     ;;
@@ -1217,7 +1214,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --without-x
-    $MAKE -C lib install
+    $MAKE install -C lib
     cd "$SOURCE"
     rm -rfv "giflib-$VERSION_giflib"
     ;;
@@ -1302,8 +1299,8 @@ case "$1" in
         --enable-libxml2 \
         LIBXML2_CFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
         LIBXML2_LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
-    $MAKE -C src install
-    $MAKE -C fontconfig install
+    $MAKE install -C src
+    $MAKE install -C fontconfig
     cd "$SOURCE"
     rm -rfv "fontconfig-$VERSION_fontconfig"
     ;;
@@ -1703,7 +1700,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --enable-threads \
         LIBS="-lws2_32"
-    $MAKE DIRS=src install
+    $MAKE install DIRS=src
     cd "$SOURCE"
     rm -rfv "fltk-$VERSION_fltk"
     ;;
@@ -1880,12 +1877,12 @@ case "$1" in
         --without-ngpython
     $MAKE lib-target
     $MAKE install-lib
-    $MAKE -C port  install
-    $MAKE -C gcore install
-    $MAKE -C frmts install
-    $MAKE -C alg   install
-    $MAKE -C ogr   install OGR_ENABLED=
-    $MAKE -C apps  install BIN_LIST=
+    $MAKE install -C port
+    $MAKE install -C gcore
+    $MAKE install -C frmts
+    $MAKE install -C alg
+    $MAKE install -C ogr  OGR_ENABLED=
+    $MAKE install -C apps BIN_LIST=
     cd "$SOURCE"
     rm -rfv "gdal-$VERSION_gdal"
     ;;
