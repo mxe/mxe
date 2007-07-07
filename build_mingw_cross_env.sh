@@ -120,6 +120,8 @@ VERSION_geos=3.0.0rc4
 VERSION_proj=4.5.0
 VERSION_libgeotiff=1.2.3
 VERSION_gdal=1.4.2
+VERSION_pdflib_lite=7.0.1
+VERSION_libowfat=0.25
 
 
 #---
@@ -1886,6 +1888,102 @@ case "$1" in
     $MAKE install -C apps BIN_LIST=
     cd "$SOURCE"
     rm -rfv "gdal-$VERSION_gdal"
+    ;;
+
+esac
+
+
+#---
+#   PDFlib Lite
+#
+#   http://www.pdflib.com/download/pdflib-family/pdflib-lite/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://www.pdflib.com/download/pdflib-family/pdflib-lite/' |
+        $SED -n 's,.*PDFlib-Lite-\([0-9][^>]*\)\.tar.*,\1,p' |
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_pdflib_lite=.*,VERSION_pdflib_lite=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    DIR=`echo $VERSION_pdflib_lite | $SED 's,[^0-9],,g'`
+    tar tfz "PDFlib-Lite-$VERSION_pdflib_lite.tar.gz" &>/dev/null ||
+    wget -c "http://www.pdflib.com/binaries/PDFlib/$DIR/PDFlib-Lite-$VERSION_pdflib_lite.tar.gz"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvz "$DOWNLOAD/PDFlib-Lite-$VERSION_pdflib_lite.tar.gz"
+    cd "PDFlib-Lite-$VERSION_pdflib_lite"
+    $SED 's,ac_sys_system=`uname -s`,ac_sys_system=MinGW,' -i configure
+    ./configure \
+        --host="$TARGET" \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET" \
+        --with-pnglib="$PREFIX/$TARGET" \
+        --with-tifflib="$PREFIX/$TARGET" \
+        --with-zlib="$PREFIX/$TARGET" \
+        --without-java \
+        --without-py \
+        --without-perl \
+        --without-ruby \
+        --without-tcl \
+        --disable-php \
+        --enable-cxx \
+        --enable-large-files \
+        --with-openssl
+    $SED 's,-DPDF_PLATFORM=[^ ]* ,,' -i config/mkcommon.inc
+    $MAKE all install -C libs
+    cd "$SOURCE"
+    rm -rfv "PDFlib-Lite-$VERSION_pdflib_lite"
+    ;;
+
+esac
+
+
+#---
+#   libowfat
+#
+#   http://www.fefe.de/libowfat/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://www.fefe.de/libowfat/' |
+        $SED -n 's,.*libowfat-\([0-9][^>]*\)\.tar.*,\1,p' |
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_libowfat=.*,VERSION_libowfat=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfj "libowfat-$VERSION_libowfat.tar.bz2" &>/dev/null ||
+    wget -c "http://dl.fefe.de/libowfat-$VERSION_libowfat.tar.bz2"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvj "$DOWNLOAD/libowfat-$VERSION_libowfat.tar.bz2"
+    cd "libowfat-$VERSION_libowfat"
+    $MAKE Makefile -f GNUmakefile \
+        CROSS="$TARGET-" \
+        prefix="$PREFIX/$TARGET" \
+        DIET=
+    $MAKE install \
+        CROSS="$TARGET-" \
+        prefix="$PREFIX/$TARGET" \
+        DIET=
+    cd "$SOURCE"
+    rm -rfv "libowfat-$VERSION_libowfat"
     ;;
 
 esac
