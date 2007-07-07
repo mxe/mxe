@@ -23,6 +23,10 @@ set -ex
 #   <no action>
 #       same as '--download', followed by '--build'.
 #
+#   --list
+#       list all supported packages and their versions to
+#       be built.
+#
 #   --new-versions
 #       retrieve the new version numbers of all packages
 #       (modifies the script in-place, use with caution!)
@@ -143,6 +147,12 @@ case "$1" in
 "")
     $BASH "$0" --download
     $BASH "$0" --build
+    exit 0
+    ;;
+--list)
+    # transform all VERSION_xxx declaration lines of this script
+    set - -x
+    $SED -n 's,^VERSION_\([^=]*\)=\(.*\),\1 (\2),p' "$0"
     exit 0
     ;;
 --new-versions|--download|--build|--build-experimental)
