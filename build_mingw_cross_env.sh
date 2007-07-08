@@ -1961,6 +1961,8 @@ esac
 #   libowfat
 #
 #   http://www.fefe.de/libowfat/
+#
+#   DISBALED -- conflicts with mingw-runtime (e.g. include/io.h)
 #---
 
 case "$1" in
@@ -1980,7 +1982,7 @@ case "$1" in
     wget -c "http://dl.fefe.de/libowfat-$VERSION_libowfat.tar.bz2"
     ;;
 
---build)
+--build-DISABLED)
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/libowfat-$VERSION_libowfat.tar.bz2"
     cd "libowfat-$VERSION_libowfat"
