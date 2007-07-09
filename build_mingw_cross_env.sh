@@ -1964,8 +1964,6 @@ esac
 #   libowfat
 #
 #   http://www.fefe.de/libowfat/
-#
-#   DISBALED -- conflicts with mingw-runtime (e.g. include/io.h)
 #---
 
 case "$1" in
@@ -1985,17 +1983,19 @@ case "$1" in
     wget -c "http://dl.fefe.de/libowfat-$VERSION_libowfat.tar.bz2"
     ;;
 
---build-DISABLED)
+--build)
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/libowfat-$VERSION_libowfat.tar.bz2"
     cd "libowfat-$VERSION_libowfat"
     $MAKE Makefile -f GNUmakefile \
         CROSS="$TARGET-" \
         prefix="$PREFIX/$TARGET" \
+        INCLUDEDIR="$PREFIX/$TARGET/include/libowfat" \
         DIET=
     $MAKE install \
         CROSS="$TARGET-" \
         prefix="$PREFIX/$TARGET" \
+        INCLUDEDIR="$PREFIX/$TARGET/include/libowfat" \
         DIET=
     cd "$SOURCE"
     rm -rfv "libowfat-$VERSION_libowfat"
