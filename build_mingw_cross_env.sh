@@ -152,7 +152,10 @@ case "$1" in
 --list)
     # transform all VERSION_xxx declaration lines of this script
     set - -x
-    $SED -n 's,^VERSION_\([^=]*\)=\(.*\),\1 (\2),p' "$0"
+    awk <"$0" '
+        BEGIN      { FS="^VERSION_|=" }
+        /^VERSION/ { printf "%-13s  %s\n", $2, $3 }' |
+    sort
     exit 0
     ;;
 --new-versions|--download|--build|--build-experimental)
