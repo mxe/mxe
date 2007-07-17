@@ -310,35 +310,8 @@ case "$1" in
         --disable-nls \
         --disable-shared
     $MAKE all install
-    rm -fv "$PREFIX/lib/libiberty.a"
     cd "$SOURCE"
     rm -rfv "binutils-$VERSION_binutils-src"
-    strip -sv \
-        "$PREFIX/bin/$TARGET-addr2line" \
-        "$PREFIX/bin/$TARGET-ar" \
-        "$PREFIX/bin/$TARGET-as" \
-        "$PREFIX/bin/$TARGET-c++filt" \
-        "$PREFIX/bin/$TARGET-dlltool" \
-        "$PREFIX/bin/$TARGET-dllwrap" \
-        "$PREFIX/bin/$TARGET-gprof" \
-        "$PREFIX/bin/$TARGET-ld" \
-        "$PREFIX/bin/$TARGET-nm" \
-        "$PREFIX/bin/$TARGET-objcopy" \
-        "$PREFIX/bin/$TARGET-objdump" \
-        "$PREFIX/bin/$TARGET-ranlib" \
-        "$PREFIX/bin/$TARGET-readelf" \
-        "$PREFIX/bin/$TARGET-size" \
-        "$PREFIX/bin/$TARGET-strings" \
-        "$PREFIX/bin/$TARGET-strip" \
-        "$PREFIX/bin/$TARGET-windres" \
-        "$PREFIX/$TARGET/bin/ar" \
-        "$PREFIX/$TARGET/bin/as" \
-        "$PREFIX/$TARGET/bin/dlltool" \
-        "$PREFIX/$TARGET/bin/ld" \
-        "$PREFIX/$TARGET/bin/nm" \
-        "$PREFIX/$TARGET/bin/objdump" \
-        "$PREFIX/$TARGET/bin/ranlib" \
-        "$PREFIX/$TARGET/bin/strip"
     ;;
 
 esac
@@ -391,20 +364,6 @@ case "$1" in
     $MAKE all install
     cd "$SOURCE"
     rm -rfv "gcc-$VERSION_gcc"
-    VERSION_gcc_short=`echo "$VERSION_gcc" | cut -d'-' -f1`
-    strip -sv \
-        "$PREFIX/bin/$TARGET-c++" \
-        "$PREFIX/bin/$TARGET-cpp" \
-        "$PREFIX/bin/$TARGET-g++" \
-        "$PREFIX/bin/$TARGET-gcc" \
-        "$PREFIX/bin/$TARGET-gcc-3.4.5" \
-        "$PREFIX/bin/$TARGET-gcov" \
-        "$PREFIX/$TARGET/bin/c++" \
-        "$PREFIX/$TARGET/bin/g++" \
-        "$PREFIX/$TARGET/bin/gcc" \
-        "$PREFIX/libexec/gcc/$TARGET/$VERSION_gcc_short/cc1" \
-        "$PREFIX/libexec/gcc/$TARGET/$VERSION_gcc_short/cc1plus" \
-        "$PREFIX/libexec/gcc/$TARGET/$VERSION_gcc_short/collect2"
     ;;
 
 esac
@@ -757,7 +716,7 @@ case "$1" in
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libdnet-$VERSION_libdnet"
     ;;
@@ -798,7 +757,7 @@ case "$1" in
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libgpg-error-$VERSION_libgpg_error"
     ;;
@@ -843,7 +802,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --with-gpg-error-prefix="$PREFIX/$TARGET"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libgcrypt-$VERSION_libgcrypt"
     ;;
@@ -889,7 +848,7 @@ case "$1" in
         --with-included-libtasn1 \
         --with-included-libcfg \
         --with-included-lzo
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
     cd "$SOURCE"
     rm -rfv "gnutls-$VERSION_gnutls"
     ;;
@@ -931,7 +890,7 @@ case "$1" in
         --without-debug \
         --prefix="$PREFIX/$TARGET" \
         --without-python
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libxml2-$VERSION_libxml2"
     ;;
@@ -975,7 +934,7 @@ case "$1" in
         LIBGCRYPT_CONFIG="$PREFIX/$TARGET/bin/libgcrypt-config" \
         --without-python \
         --without-plugins
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libxslt-$VERSION_libxslt"
     ;;
@@ -1069,7 +1028,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --with-gnutls="$PREFIX/$TARGET" \
         LIBS="-lgcrypt `$PREFIX/$TARGET/bin/gpg-error-config --libs`"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "curl-$VERSION_curl"
     ;;
@@ -1108,7 +1067,7 @@ case "$1" in
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libpng-$VERSION_libpng"
     ;;
@@ -1189,7 +1148,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         PTHREAD_LIBS="-lpthread -lws2_32" \
         --without-x
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "tiff-$VERSION_tiff"
     ;;
@@ -1361,7 +1320,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --disable-esd
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libmikmod-$VERSION_libmikmod"
     ;;
@@ -1402,7 +1361,7 @@ case "$1" in
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libogg-$VERSION_ogg"
     ;;
@@ -1443,7 +1402,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         PKG_CONFIG="$TARGET-pkg-config" \
         LIBS="-lws2_32"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "libvorbis-$VERSION_vorbis"
     ;;
@@ -1494,7 +1453,7 @@ case "$1" in
         LIBPNG_CONFIG="$PREFIX/$TARGET/bin/libpng-config" \
         CFLAGS="-DNONDLL -DXMD_H -L$PREFIX/$TARGET/lib" \
         LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "gd-$VERSION_gd"
     ;;
@@ -1535,7 +1494,7 @@ case "$1" in
         --disable-shared \
         --disable-debug \
         --prefix="$PREFIX/$TARGET"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL-$VERSION_SDL"
     ;;
@@ -1580,7 +1539,7 @@ case "$1" in
         --disable-sdltest \
         --disable-gtk-player \
         --disable-opengl-player
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "smpeg-$VERSION_smpeg.orig"
     ;;
@@ -1628,7 +1587,7 @@ case "$1" in
         --with-smpeg-prefix="$PREFIX/$TARGET" \
         --disable-smpegtest \
         --disable-music-mp3-shared
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL_mixer-$VERSION_SDL_mixer"
     ;;
@@ -1672,7 +1631,7 @@ case "$1" in
         --disable-jpg-shared \
         --disable-png-shared \
         --disable-tif-shared
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "SDL_image-$VERSION_SDL_image"
     ;;
@@ -1760,7 +1719,7 @@ case "$1" in
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
         --disable-swig
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "geos-$VERSION_geos"
     ;;
@@ -1800,7 +1759,7 @@ case "$1" in
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET"
-    $MAKE install bin_PROGRAMS= noinst_PROGRAMS=
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "proj-$VERSION_proj"
     ;;
@@ -2005,6 +1964,38 @@ esac
 
 
 #---
+#   Cleanup
+#---
+
+case "$1" in
+
+--build)
+    cd "$PREFIX"
+    rm -rfv \
+        include \
+        info \
+        lib/libiberty.a \
+        man \
+        $TARGET/doc \
+        $TARGET/info \
+        $TARGET/man \
+        $TARGET/sbin \
+        $TARGET/share
+    strip -sv \
+        bin/* \
+        libexec/gcc/$TARGET/*/* \
+        $TARGET/bin/* || echo "strip error ignored"
+    $TARGET-strip -Sv \
+        lib/gcc/$TARGET/*/*.a \
+        lib/gcc/$TARGET/*/*.o \
+        $TARGET/lib/*.a \
+        $TARGET/lib/*.o || echo "strip error ignored"
+    ;;
+
+esac
+
+
+#---
 #   Create package
 #---
 
@@ -2012,14 +2003,7 @@ case "$1" in
 
 --build)
     cd "$PREFIX"
-    tar cfv - \
-        bin \
-        lib \
-        libexec \
-        "$TARGET/bin" \
-        "$TARGET/include" \
-        "$TARGET/lib" \
-    | gzip -9 >"$ROOT/mingw_cross_env.tar.gz"
+    tar cfv - . | gzip -9 >"$ROOT/mingw_cross_env.tar.gz"
     ;;
 
 esac
