@@ -310,6 +310,7 @@ case "$1" in
         --disable-nls \
         --disable-shared
     $MAKE all install
+    rm -fv "$PREFIX/lib/libiberty.a"
     cd "$SOURCE"
     rm -rfv "binutils-$VERSION_binutils-src"
     strip -sv \
@@ -337,8 +338,7 @@ case "$1" in
         "$PREFIX/$TARGET/bin/nm" \
         "$PREFIX/$TARGET/bin/objdump" \
         "$PREFIX/$TARGET/bin/ranlib" \
-        "$PREFIX/$TARGET/bin/strip" \
-        "$PREFIX/lib/libiberty.a"
+        "$PREFIX/$TARGET/bin/strip"
     ;;
 
 esac
