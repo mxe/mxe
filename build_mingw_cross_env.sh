@@ -1947,6 +1947,7 @@ case "$1" in
     cd "$SOURCE"
     tar xfvj "$DOWNLOAD/libowfat-$VERSION_libowfat.tar.bz2"
     cd "libowfat-$VERSION_libowfat"
+    $SED 's,gcc -I\. -MM,$(CROSS)gcc -I. -MM,' -i GNUmakefile
     $MAKE Makefile -f GNUmakefile \
         CROSS="$TARGET-" \
         prefix="$PREFIX/$TARGET" \
@@ -1957,6 +1958,7 @@ case "$1" in
         prefix="$PREFIX/$TARGET" \
         INCLUDEDIR="$PREFIX/$TARGET/include/libowfat" \
         DIET=
+    $SED 's,#include_next <io.h>,#include <io.h>,' -i "$PREFIX/$TARGET/include/libowfat/io.h"
     cd "$SOURCE"
     rm -rfv "libowfat-$VERSION_libowfat"
     ;;
