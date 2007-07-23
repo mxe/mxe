@@ -74,6 +74,20 @@ set -ex
 
 
 #---
+#   Portability
+#---
+
+unset AR CC CFLAGS CROSS CXX CXXFLAGS EXEEXT 
+unset LD LIBS NM PKG_CONFIG RANLIB STRIP
+
+MAKE=gmake
+$MAKE --version >&2 || MAKE=make
+
+SED=gsed
+$SED  --version >&2 || SED=sed
+
+
+#---
 #   Configuration
 #---
 
@@ -126,17 +140,6 @@ VERSION_libgeotiff=1.2.3
 VERSION_gdal=1.4.2
 VERSION_pdflib_lite=7.0.1
 VERSION_libowfat=0.25
-
-
-#---
-#   Portability
-#---
-
-MAKE=gmake
-$MAKE --version >&2 || MAKE=make
-
-SED=gsed
-$SED  --version >&2 || SED=sed
 
 
 #---
