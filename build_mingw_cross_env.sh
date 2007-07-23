@@ -3,7 +3,7 @@ set -ex
 
 
 #---
-#   MinGW cross compiling environment  (pre-1.1)
+#   MinGW cross compiling environment  (1.1)
 #   =================================
 #
 #   http://www.profv.de/mingw_cross_env/
