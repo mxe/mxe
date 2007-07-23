@@ -23,10 +23,6 @@ set -ex
 #   <no action>
 #       same as '--download', followed by '--build'.
 #
-#   --list
-#       list all supported packages and their versions to
-#       be built.
-#
 #   --new-versions
 #       retrieve the new version numbers of all packages
 #       (modifies the script in-place, use with caution!)
@@ -45,12 +41,16 @@ set -ex
 #       (allows fast testing of new additions to the script,
 #        needs a prepared mingw_cross_env.tar.gz archive
 #        or a previous '--build' run)
-#---
-
-
-#---
-#   Copyright (c)  Volker Grabsch <vog@notjusthosting.com>
-#                  Rocco Rutte <pdmef@gmx.net>
+#
+#   --dist
+#       build a source distribution package
+#
+#
+#   Copyright
+#   =========
+#
+#   (c)  Volker Grabsch <vog@notjusthosting.com>
+#        Rocco Rutte <pdmef@gmx.net>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining
 #   a copy of this software and associated documentation files (the
@@ -153,12 +153,28 @@ case "$1" in
     exit 0
     ;;
 --list)
-    # transform all VERSION_xxx declaration lines of this script
     set - -x
+    exit 0
+    ;;
+--dist)
+    sed -n 's/^#$\|^#   //p; /SOFTWARE\./ q' "$0" >README
+    echo                    >>README
+    echo                    >>README
+    echo "List of Packages" >>README
+    echo "================" >>README
+    echo                    >>README
     awk <"$0" '
         BEGIN      { FS="^VERSION_|=" }
         /^VERSION/ { printf "%-13s  %s\n", $2, $3 }' |
-    sort
+    sort >>README
+    hg log -v --style changelog >ChangeLog
+    VERSION=`$SED -n 's/.*(\([a-z0-9.-]*\))$/\1/p' "$0" | head -1`
+    test -n "$VERSION"
+    rm -rf "mingw_cross_env-$VERSION"
+    mkdir  "mingw_cross_env-$VERSION"
+    cp "$0" README ChangeLog "mingw_cross_env-$VERSION/"
+    tar cfv - "mingw_cross_env-$VERSION" | gzip -9 >"mingw_cross_env-$VERSION.tar.gz"
+    rm -rf "mingw_cross_env-$VERSION"
     exit 0
     ;;
 --new-versions|--download|--build|--build-experimental)
@@ -167,8 +183,8 @@ case "$1" in
 *)
     # display the first comments of this script as help message
     set - -x
-    $SED -n '/(c)/ Q; s/\(^$\|^#$\|^#   \)//p' "$0" |
-    more
+    echo
+    $SED -n '/^#   Copyright$/ Q; s/^#$\|^#   //p' "$0" | more
     exit 1
     ;;
 esac
