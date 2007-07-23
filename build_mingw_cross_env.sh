@@ -195,9 +195,9 @@ case "$1" in
 
 --build-experimental)
     tar tfz "$ROOT/mingw_cross_env.tar.gz" >/dev/null
-    rm -rfv  "$PREFIX" "$SOURCE"
-    mkdir -p "$PREFIX" "$SOURCE"
-    cd "$PREFIX"
+    rm -rfv  "$SOURCE" "$PREFIX"
+    mkdir -p "$SOURCE"
+    cd /
     tar xfvz "$ROOT/mingw_cross_env.tar.gz"
     ;;
 
@@ -2008,8 +2008,7 @@ esac
 case "$1" in
 
 --build)
-    cd "$PREFIX"
-    tar cfv - . | gzip -9 >"$ROOT/mingw_cross_env.tar.gz"
+    tar cfv - "$PREFIX" | gzip -9 >"$ROOT/mingw_cross_env.tar.gz"
     ;;
 
 esac
