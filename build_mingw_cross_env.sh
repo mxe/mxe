@@ -3,7 +3,7 @@ set -ex
 
 
 #---
-#   MinGW cross compiling environment  (1.1)
+#   MinGW cross compiling environment  (pre-2.0)
 #   =================================
 #
 #   http://www.profv.de/mingw_cross_env/
@@ -110,6 +110,7 @@ VERSION_zlib=1.2.3
 VERSION_pdcurses=33
 VERSION_gettext=0.16.1
 VERSION_libiconv=1.9.2
+VERSION_tre=0.7.5
 VERSION_winpcap=4_0_1
 VERSION_libdnet=1.11
 VERSION_libgpg_error=1.5
@@ -629,6 +630,46 @@ case "$1" in
     $MAKE install
     cd "$SOURCE"
     rm -rfv "libiconv-$VERSION_libiconv"
+    ;;
+
+esac
+
+
+#---
+#   TRE
+#
+#   http://laurikari.net/tre/
+#---
+
+case "$1" in
+
+--new-versions)
+    VERSION=`
+        wget -q -O- 'http://laurikari.net/tre/download.html' |
+        $SED -n 's,.*tre-\([a-z0-9][^>]*\)\.tar.*,\1,p' |
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_tre=.*,VERSION_tre=$VERSION," -i "$0"
+    ;;
+
+--download)
+    cd "$DOWNLOAD"
+    tar tfj "tre-$VERSION_tre.tar.bz2" &>/dev/null ||
+    wget -c "http://laurikari.net/tre/tre-$VERSION_tre.tar.bz2"
+    ;;
+
+--build)
+    cd "$SOURCE"
+    tar xfvj "$DOWNLOAD/tre-$VERSION_tre.tar.bz2"
+    cd "tre-$VERSION_tre"
+    ./configure \
+        --host="$TARGET" \
+        --disable-shared \
+        --prefix="$PREFIX/$TARGET" \
+        --disable-nls
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    cd "$SOURCE"
+    rm -rfv "tre-$VERSION_tre"
     ;;
 
 esac
