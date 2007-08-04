@@ -1195,7 +1195,8 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfz "tiff-$VERSION_tiff.tar.gz" &>/dev/null ||
-    wget -c "ftp://ftp.remotesensing.org/pub/libtiff/tiff-$VERSION_tiff.tar.gz"
+    wget -t 3 -c "ftp://ftp.remotesensing.org/pub/libtiff/tiff-$VERSION_tiff.tar.gz" ||
+    wget -c "http://dl.maptools.org/dl/libtiff/tiff-$VERSION_tiff.tar.gz"
     ;;
 
 --build)
@@ -1491,7 +1492,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfj "gd-$VERSION_gd.tar.bz2" &>/dev/null ||
-    wget -c "http://www.libgd.org/releases/gd-$VERSION_gd.tar.bz2" ||
+    wget -t 3 -c "http://www.libgd.org/releases/gd-$VERSION_gd.tar.bz2" ||
     wget -c "http://www.libgd.org/releases/oldreleases/gd-$VERSION_gd.tar.bz2"
     ;;
 
@@ -1808,7 +1809,8 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfz "proj-$VERSION_proj.tar.gz" &>/dev/null ||
-    wget -c "ftp://ftp.remotesensing.org/proj/proj-$VERSION_proj.tar.gz"
+    wget -t 3 -c "ftp://ftp.remotesensing.org/proj/proj-$VERSION_proj.tar.gz" ||
+    wget -c "http://dl.maptools.org/dl/proj/proj-$VERSION_proj.tar.gz"
     ;;
 
 --build)
@@ -1848,7 +1850,8 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfz "libgeotiff-$VERSION_libgeotiff.tar.gz" &>/dev/null ||
-    wget -c "ftp://ftp.remotesensing.org/pub/geotiff/libgeotiff/libgeotiff-$VERSION_libgeotiff.tar.gz"
+    wget -t 3 -c "ftp://ftp.remotesensing.org/pub/geotiff/libgeotiff/libgeotiff-$VERSION_libgeotiff.tar.gz" ||
+    wget -c "http://dl.maptools.org/dl/geotiff/libgeotiff/libgeotiff-$VERSION_libgeotiff.tar.gz"
     ;;
 
 --build)
