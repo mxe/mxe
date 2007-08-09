@@ -2051,7 +2051,7 @@ case "$1" in
         bin/* \
         libexec/gcc/$TARGET/*/* \
         $TARGET/bin/* || echo "strip error ignored"
-    $TARGET-strip -Sv \
+    $TARGET-strip -gv \
         lib/gcc/$TARGET/*/*.a \
         lib/gcc/$TARGET/*/*.o \
         $TARGET/lib/*.a \
