@@ -104,26 +104,26 @@ VERSION_mingw_runtime=3.12
 VERSION_w32api=3.9
 VERSION_binutils=2.17.50-20060824-1
 VERSION_gcc=4.2.1-2
-VERSION_pkg_config=0.21
+VERSION_pkg_config=0.22
 VERSION_pthreads=2-8-0
 VERSION_zlib=1.2.3
 VERSION_pdcurses=33
-VERSION_gettext=0.16.1
+VERSION_gettext=0.17
 VERSION_libiconv=1.9.2
 VERSION_tre=0.7.5
-VERSION_winpcap=4_0_1
+VERSION_winpcap=4_0_2
 VERSION_libdnet=1.11
-VERSION_libgpg_error=1.5
-VERSION_libgcrypt=1.2.4
+VERSION_libgpg_error=1.6
+VERSION_libgcrypt=1.4.0
 VERSION_gnutls=1.6.3
-VERSION_libxml2=2.6.29
-VERSION_libxslt=1.1.21
+VERSION_libxml2=2.6.30
+VERSION_libxslt=1.1.22
 VERSION_xmlwrapp=0.5.0
-VERSION_curl=7.16.4
-VERSION_libpng=1.2.18
+VERSION_curl=7.17.1
+VERSION_libpng=1.2.23
 VERSION_jpeg=6b
 VERSION_tiff=3.8.2
-VERSION_giflib=4.1.4
+VERSION_giflib=4.1.6
 VERSION_freetype=2.3.5
 VERSION_fontconfig=2.4.2
 VERSION_libmikmod=3.2.0-beta2
@@ -139,8 +139,8 @@ VERSION_geos=3.0.0rc4
 VERSION_proj=4.5.0
 VERSION_libgeotiff=1.2.4
 VERSION_gdal=1.4.2
-VERSION_pdflib_lite=7.0.1
-VERSION_libowfat=0.25
+VERSION_pdflib_lite=7.0.2
+VERSION_libowfat=0.26
 
 
 #---
@@ -1236,7 +1236,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfj "giflib-$VERSION_giflib.tar.bz2" &>/dev/null ||
-    wget -c "http://$SOURCEFORGE_MIRROR/libungif/giflib-$VERSION_giflib.tar.bz2"
+    wget -c "http://$SOURCEFORGE_MIRROR/giflib/giflib-$VERSION_giflib.tar.bz2"
     ;;
 
 --build)
