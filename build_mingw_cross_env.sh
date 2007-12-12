@@ -103,7 +103,7 @@ PATH="$PREFIX/bin:$PATH"
 VERSION_mingw_runtime=3.12
 VERSION_w32api=3.9
 VERSION_binutils=2.17.50-20060824-1
-VERSION_gcc=3.4.5-20060117-1
+VERSION_gcc=4.2.1-2
 VERSION_pkg_config=0.21
 VERSION_pthreads=2-8-0
 VERSION_zlib=1.2.3
@@ -348,7 +348,7 @@ case "$1" in
 --new-versions)
     VERSION=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        $SED -n 's,.*gcc-core-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        $SED -n 's,.*gcc-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`
     test -n "$VERSION"
     $SED "s,^VERSION_gcc=.*,VERSION_gcc=$VERSION," -i "$0"
@@ -356,17 +356,14 @@ case "$1" in
 
 --download)
     cd "$DOWNLOAD"
-    tar tfz "gcc-core-$VERSION_gcc-src.tar.gz" &>/dev/null ||
-    wget -c "http://$SOURCEFORGE_MIRROR/mingw/gcc-core-$VERSION_gcc-src.tar.gz"
-    tar tfz "gcc-g++-$VERSION_gcc-src.tar.gz" &>/dev/null ||
-    wget -c "http://$SOURCEFORGE_MIRROR/mingw/gcc-g++-$VERSION_gcc-src.tar.gz"
+    tar tfz "gcc-$VERSION_gcc-src.tar.gz" &>/dev/null ||
+    wget -c "http://$SOURCEFORGE_MIRROR/mingw/gcc-$VERSION_gcc-src.tar.gz"
     ;;
 
 --build)
     cd "$SOURCE"
-    tar xfvz "$DOWNLOAD/gcc-core-$VERSION_gcc-src.tar.gz"
-    tar xfvz "$DOWNLOAD/gcc-g++-$VERSION_gcc-src.tar.gz"
-    cd "gcc-$VERSION_gcc"
+    tar xfvz "$DOWNLOAD/gcc-$VERSION_gcc-src.tar.gz"
+    cd "gcc-$VERSION_gcc-src"
     ./configure \
         --target="$TARGET" \
         --prefix="$PREFIX" \
@@ -383,7 +380,7 @@ case "$1" in
         --enable-sjlj-exceptions
     $MAKE all install
     cd "$SOURCE"
-    rm -rfv "gcc-$VERSION_gcc"
+    rm -rfv "gcc-$VERSION_gcc-src"
     ;;
 
 esac
@@ -709,6 +706,7 @@ case "$1" in
     cp -p common/Ntddpack.h   common/ntddpack.h
     cp -p common/Packet32.h   common/packet32.h
     cp -p common/WpcapNames.h common/wpcapnames.h
+    $SED 's,(PCHAR)winpcap_hdr +=,winpcap_hdr +=,' -i Packet9x/DLL/Packet32.c
     $TARGET-gcc -Icommon -O -c Packet9x/DLL/Packet32.c
     $TARGET-ar rc libpacket.a Packet32.o
     $TARGET-ranlib libpacket.a
@@ -717,7 +715,8 @@ case "$1" in
     install -d "$PREFIX/$TARGET/lib"
     install -m644 libpacket.a "$PREFIX/$TARGET/lib/"
     mv wpcap/libpcap/Win32/Include/ip6_misc.h wpcap/libpcap/Win32/Include/IP6_misc.h
-    $SED 's,-DHAVE_AIRPCAP_API,,'    -i wpcap/PRJ/GNUmakefile
+    $SED 's,(char\*)tUstr +=,tUstr +=,' -i wpcap/libpcap/inet.c
+    $SED 's,-DHAVE_AIRPCAP_API,,'   -i wpcap/PRJ/GNUmakefile
     echo -e 'libwpcap.a: ${OBJS}'   >> wpcap/PRJ/GNUmakefile
     echo -e '\t${AR} rc $@ ${OBJS}' >> wpcap/PRJ/GNUmakefile
     echo -e '\t${RANLIB} $@'        >> wpcap/PRJ/GNUmakefile
@@ -1036,7 +1035,7 @@ case "$1" in
     CXX="$TARGET-g++" \
     AR="$TARGET-ar" \
     RANLIB="$TARGET-ranlib" \
-    CXXFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
+    CXXFLAGS="-ffriend-injection `$PREFIX/$TARGET/bin/xml2-config --cflags`" \
     ./configure.pl \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
@@ -1600,7 +1599,8 @@ case "$1" in
         --with-sdl-prefix="$PREFIX/$TARGET" \
         --disable-sdltest \
         --disable-gtk-player \
-        --disable-opengl-player
+        --disable-opengl-player \
+        CFLAGS="-ffriend-injection"
     $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "smpeg-$VERSION_smpeg.orig"
