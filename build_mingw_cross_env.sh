@@ -100,9 +100,9 @@ SOURCEFORGE_MIRROR=downloads.sourceforge.net
 
 PATH="$PREFIX/bin:$PATH"
 
-VERSION_mingw_runtime=3.12
-VERSION_w32api=3.9
-VERSION_binutils=2.17.50-20060824-1
+VERSION_mingw_runtime=3.13
+VERSION_w32api=3.10
+VERSION_binutils=2.18.50-20071123
 VERSION_gcc=4.2.1-2
 VERSION_pkg_config=0.22
 VERSION_pthreads=2-8-0
@@ -318,9 +318,10 @@ case "$1" in
     ;;
 
 --build)
+    VERSION_DIRNAME_binutils=`echo "$VERSION_binutils" | sed 's,-.*,,'`
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/binutils-$VERSION_binutils-src.tar.gz"
-    cd "binutils-$VERSION_binutils-src"
+    cd "binutils-$VERSION_DIRNAME_binutils"
     ./configure \
         --target="$TARGET" \
         --prefix="$PREFIX" \
@@ -331,7 +332,7 @@ case "$1" in
         --disable-shared
     $MAKE all install
     cd "$SOURCE"
-    rm -rfv "binutils-$VERSION_binutils-src"
+    rm -rfv "binutils-$VERSION_DIRNAME_binutils"
     ;;
 
 esac
