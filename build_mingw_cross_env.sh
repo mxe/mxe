@@ -3,7 +3,7 @@ set -ex
 
 
 #---
-#   MinGW cross compiling environment  (1.2)
+#   MinGW cross compiling environment  (pre-2.0)
 #   =================================
 #
 #   http://www.profv.de/mingw_cross_env/
@@ -1766,7 +1766,7 @@ case "$1" in
 --download)
     cd "$DOWNLOAD"
     tar tfj "geos-$VERSION_geos.tar.bz2" &>/dev/null ||
-    wget -c "http://geos.refractions.net/geos-$VERSION_geos.tar.bz2"
+    wget -c "http://geos.refractions.net/downloads/geos-$VERSION_geos.tar.bz2"
     ;;
 
 --build)
