@@ -120,7 +120,7 @@ VERSION_libxml2=2.6.30
 VERSION_libxslt=1.1.22
 VERSION_xmlwrapp=0.5.0
 VERSION_curl=7.17.1
-VERSION_libpng=1.2.23
+VERSION_libpng=1.2.24
 VERSION_jpeg=6b
 VERSION_tiff=3.8.2
 VERSION_giflib=4.1.6
@@ -138,7 +138,7 @@ VERSION_fltk=1.1.7
 VERSION_geos=3.0.0rc5
 VERSION_proj=4.5.0
 VERSION_libgeotiff=1.2.4
-VERSION_gdal=1.4.2
+VERSION_gdal=1.4.4
 VERSION_pdflib_lite=7.0.2
 VERSION_libowfat=0.26
 
