@@ -1,0 +1,146 @@
+URL:  http://www.profv.de/fontconfig-crosscompile-patch/
+File: fontconfig-2.5.0-crosscompile.patch
+
+When cross compiling fontconfig, the code generators of fontconfig
+depend on freetype. This is a big problem, because the FREETYPE_*
+variables (as determined by ./configure) point to the cross-compiled
+freetype instead of the native freetype. Luckily, the code generators
+don't really have this dependency. It is merely introduced as a side
+effect by "fcint.h".
+
+The simplest solution is not to include FREETYPE_CFLAGS in the
+Makefile.am/in of fc-case, fc-arch, etc. and to define a symbol
+NOFREETYPE instead. Then "fcint.h" just needs to exclude any
+freetype dependent code if NOFREETYPE is defined.
+
+This patch for fontconfig-2.5.0 does exactly that.
+
+    -- Volker Grabsch <vog@notjusthosting.com>
+
+
+diff -ruN fontconfig-2.5.0.orig/fc-arch/Makefile.am fontconfig-2.5.0/fc-arch/Makefile.am
+--- fontconfig-2.5.0.orig/fc-arch/Makefile.am	2007-10-25 04:39:14.000000000 +0000
++++ fontconfig-2.5.0/fc-arch/Makefile.am	2007-12-22 20:48:08.000000000 +0000
+@@ -26,7 +26,7 @@
+ EXEEXT = @EXEEXT_FOR_BUILD@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ 
+-INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(FREETYPE_CFLAGS) $(WARN_CFLAGS)
++INCLUDES=-I${top_srcdir}/src -I${top_srcdir} -DNOFREETYPE $(WARN_CFLAGS)
+ 
+ TMPL=fcarch.tmpl.h
+ STMPL=${top_srcdir}/fc-arch/fcarch.tmpl.h
+diff -ruN fontconfig-2.5.0.orig/fc-arch/Makefile.in fontconfig-2.5.0/fc-arch/Makefile.in
+--- fontconfig-2.5.0.orig/fc-arch/Makefile.in	2007-11-14 02:57:07.000000000 +0000
++++ fontconfig-2.5.0/fc-arch/Makefile.in	2007-12-22 20:48:08.000000000 +0000
+@@ -240,7 +240,7 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-INCLUDES = -I${top_srcdir}/src -I${top_srcdir} $(FREETYPE_CFLAGS) $(WARN_CFLAGS)
++INCLUDES = -I${top_srcdir}/src -I${top_srcdir} -DNOFREETYPE $(WARN_CFLAGS)
+ TMPL = fcarch.tmpl.h
+ STMPL = ${top_srcdir}/fc-arch/fcarch.tmpl.h
+ TARG = fcarch.h
+diff -ruN fontconfig-2.5.0.orig/fc-case/Makefile.am fontconfig-2.5.0/fc-case/Makefile.am
+--- fontconfig-2.5.0.orig/fc-case/Makefile.am	2007-10-25 04:42:36.000000000 +0000
++++ fontconfig-2.5.0/fc-case/Makefile.am	2007-12-22 20:48:08.000000000 +0000
+@@ -26,7 +26,7 @@
+ EXEEXT = @EXEEXT_FOR_BUILD@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ 
+-INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(FREETYPE_CFLAGS) $(WARN_CFLAGS)
++INCLUDES=-I${top_srcdir}/src -I${top_srcdir} -DNOFREETYPE $(WARN_CFLAGS)
+ 
+ TMPL=fccase.tmpl.h
+ STMPL=${top_srcdir}/fc-case/${TMPL}
+diff -ruN fontconfig-2.5.0.orig/fc-case/Makefile.in fontconfig-2.5.0/fc-case/Makefile.in
+--- fontconfig-2.5.0.orig/fc-case/Makefile.in	2007-11-14 02:57:07.000000000 +0000
++++ fontconfig-2.5.0/fc-case/Makefile.in	2007-12-22 20:48:08.000000000 +0000
+@@ -240,7 +240,7 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-INCLUDES = -I${top_srcdir}/src -I${top_srcdir} $(FREETYPE_CFLAGS) $(WARN_CFLAGS)
++INCLUDES = -I${top_srcdir}/src -I${top_srcdir} -DNOFREETYPE $(WARN_CFLAGS)
+ TMPL = fccase.tmpl.h
+ STMPL = ${top_srcdir}/fc-case/${TMPL}
+ TARG = fccase.h
+diff -ruN fontconfig-2.5.0.orig/fc-glyphname/Makefile.am fontconfig-2.5.0/fc-glyphname/Makefile.am
+--- fontconfig-2.5.0.orig/fc-glyphname/Makefile.am	2007-10-25 04:40:17.000000000 +0000
++++ fontconfig-2.5.0/fc-glyphname/Makefile.am	2007-12-22 20:48:08.000000000 +0000
+@@ -26,7 +26,7 @@
+ EXEEXT = @EXEEXT_FOR_BUILD@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ 
+-INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(FREETYPE_CFLAGS) $(WARN_CFLAGS)
++INCLUDES=-I${top_srcdir}/src -I${top_srcdir} -DNOFREETYPE $(WARN_CFLAGS)
+ 
+ TMPL=fcglyphname.tmpl.h
+ STMPL=${top_srcdir}/fc-glyphname/${TMPL}
+diff -ruN fontconfig-2.5.0.orig/fc-glyphname/Makefile.in fontconfig-2.5.0/fc-glyphname/Makefile.in
+--- fontconfig-2.5.0.orig/fc-glyphname/Makefile.in	2007-11-14 02:57:07.000000000 +0000
++++ fontconfig-2.5.0/fc-glyphname/Makefile.in	2007-12-22 20:48:08.000000000 +0000
+@@ -240,7 +240,7 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-INCLUDES = -I${top_srcdir}/src -I${top_srcdir} $(FREETYPE_CFLAGS) $(WARN_CFLAGS)
++INCLUDES = -I${top_srcdir}/src -I${top_srcdir} -DNOFREETYPE $(WARN_CFLAGS)
+ TMPL = fcglyphname.tmpl.h
+ STMPL = ${top_srcdir}/fc-glyphname/${TMPL}
+ TARG = fcglyphname.h
+diff -ruN fontconfig-2.5.0.orig/fc-lang/Makefile.am fontconfig-2.5.0/fc-lang/Makefile.am
+--- fontconfig-2.5.0.orig/fc-lang/Makefile.am	2007-10-25 04:40:39.000000000 +0000
++++ fontconfig-2.5.0/fc-lang/Makefile.am	2007-12-22 20:48:08.000000000 +0000
+@@ -26,7 +26,7 @@
+ EXEEXT = @EXEEXT_FOR_BUILD@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ 
+-INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(FREETYPE_CFLAGS) $(WARN_CFLAGS)
++INCLUDES=-I${top_srcdir}/src -I${top_srcdir} -DNOFREETYPE $(WARN_CFLAGS)
+ 
+ TMPL=fclang.tmpl.h
+ STMPL=${top_srcdir}/fc-lang/fclang.tmpl.h
+diff -ruN fontconfig-2.5.0.orig/fc-lang/Makefile.in fontconfig-2.5.0/fc-lang/Makefile.in
+--- fontconfig-2.5.0.orig/fc-lang/Makefile.in	2007-11-14 02:57:08.000000000 +0000
++++ fontconfig-2.5.0/fc-lang/Makefile.in	2007-12-22 20:48:08.000000000 +0000
+@@ -240,7 +240,7 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-INCLUDES = -I${top_srcdir}/src -I${top_srcdir} $(FREETYPE_CFLAGS) $(WARN_CFLAGS)
++INCLUDES = -I${top_srcdir}/src -I${top_srcdir} -DNOFREETYPE $(WARN_CFLAGS)
+ TMPL = fclang.tmpl.h
+ STMPL = ${top_srcdir}/fc-lang/fclang.tmpl.h
+ TARG = fclang.h
+diff -ruN fontconfig-2.5.0.orig/src/fcint.h fontconfig-2.5.0/src/fcint.h
+--- fontconfig-2.5.0.orig/src/fcint.h	2007-11-13 23:23:39.000000000 +0000
++++ fontconfig-2.5.0/src/fcint.h	2007-12-22 21:08:01.000000000 +0000
+@@ -47,7 +47,9 @@
+ #include <time.h>
+ #include <fontconfig/fontconfig.h>
+ #include <fontconfig/fcprivate.h>
++#ifndef NOFREETYPE
+ #include <fontconfig/fcfreetype.h>
++#endif
+ #include "fcdeprecate.h"
+ 
+ #ifndef FC_CONFIG_PATH
+@@ -718,8 +720,10 @@
+ FcPrivate FcChar32
+ FcFreeTypePrivateToUcs4 (FcChar32 private, const FcCharMap *map);
+ 
++#ifndef NOFREETYPE
+ FcPrivate const FcCharMap *
+ FcFreeTypeGetPrivateMap (FT_Encoding encoding);
++#endif
+     
+ /* fcfs.c */
+ 
+@@ -1049,4 +1053,4 @@
+ FcPrivate FcChar8 *
+ FcStrSerialize (FcSerialize *serialize, const FcChar8 *str);
+ 
+-#endif /* _FC_INT_H_ */
++#endif /* _FCINT_H_ */

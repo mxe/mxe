@@ -125,7 +125,7 @@ VERSION_jpeg=6b
 VERSION_tiff=3.8.2
 VERSION_giflib=4.1.6
 VERSION_freetype=2.3.5
-VERSION_fontconfig=2.4.2
+VERSION_fontconfig=2.5.0
 VERSION_libmikmod=3.2.0-beta2
 VERSION_ogg=1.1.3
 VERSION_vorbis=1.2.0
@@ -174,6 +174,7 @@ case "$1" in
     rm -rf "mingw_cross_env-$VERSION"
     mkdir  "mingw_cross_env-$VERSION"
     cp "$0" README ChangeLog "mingw_cross_env-$VERSION/"
+    cp fontconfig-2.5.0-crosscompile.patch "mingw_cross_env-$VERSION/"
     tar cfv - "mingw_cross_env-$VERSION" | gzip -9 >"mingw_cross_env-$VERSION.tar.gz"
     rm -rf "mingw_cross_env-$VERSION"
     exit 0
@@ -1325,18 +1326,21 @@ case "$1" in
     cd "$SOURCE"
     tar xfvz "$DOWNLOAD/fontconfig-$VERSION_fontconfig.tar.gz"
     cd "fontconfig-$VERSION_fontconfig"
+    # apply a portability patch
+    patch -p1 <"$ROOT/fontconfig-2.5.0-crosscompile.patch"
+    # ensure there is no (buggy) attempt to install the *.dll.a file
+    # (remove this line of you want to link dynamically)
     $SED 's,^install-data-local:.*,install-data-local:,' -i src/Makefile.in
     ./configure \
         --host="$TARGET" \
         --disable-shared \
         --prefix="$PREFIX/$TARGET" \
-        --with-arch="" \
+        --with-arch="$TARGET" \
         --with-freetype-config="$PREFIX/$TARGET/bin/freetype-config" \
         --enable-libxml2 \
         LIBXML2_CFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
         LIBXML2_LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
-    $MAKE install -C src
-    $MAKE install -C fontconfig
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd "$SOURCE"
     rm -rfv "fontconfig-$VERSION_fontconfig"
     ;;
