@@ -161,6 +161,18 @@ case "$1" in
     sed -n 's/^#$\|^#   //p; /SOFTWARE\./ q' "$0" >README
     echo                    >>README
     echo                    >>README
+    echo 'Tutorial'         >>README
+    echo '========'         >>README
+    echo                    >>README
+    echo 'http://wiki.njh.eu/Win32_Cross_Compiling_Tutorial' \
+                            >>README
+    echo                    >>README
+    LC_ALL=C w3m -cols 65 -dump \
+         'http://wiki.njh.eu/Win32_Cross_Compiling_Tutorial' \
+    | sed -n '/^Making a Linux MinGW cross compiler$/,/^Hans Bezemer$/ p' \
+    | sed -n '3,$ p'        >>README
+    echo                    >>README
+    echo                    >>README
     echo 'List of Packages' >>README
     echo '================' >>README
     echo                    >>README
