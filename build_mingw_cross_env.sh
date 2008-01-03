@@ -3,7 +3,7 @@ set -ex
 
 
 #---
-#   MinGW cross compiling environment  (1.3)
+#   MinGW cross compiling environment  (pre-2.0)
 #   =================================
 #
 #   http://www.profv.de/mingw_cross_env/
@@ -161,13 +161,13 @@ case "$1" in
     sed -n 's/^#$\|^#   //p; /SOFTWARE\./ q' "$0" >README
     echo                    >>README
     echo                    >>README
-    echo "List of Packages" >>README
-    echo "================" >>README
+    echo 'List of Packages' >>README
+    echo '================' >>README
     echo                    >>README
     awk <"$0" '
         BEGIN      { FS="^VERSION_|=" }
-        /^VERSION/ { printf "%-13s  %s\n", $2, $3 }' |
-    sort >>README
+        /^VERSION/ { printf "%-13s  %s\n", $2, $3 }' \
+    | sort >>README
     hg log -v --style changelog >ChangeLog
     VERSION=`$SED -n 's/.*(\([a-z0-9.-]*\))$/\1/p' "$0" | head -1`
     test -n "$VERSION"
