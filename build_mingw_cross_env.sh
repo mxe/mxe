@@ -51,6 +51,7 @@ set -ex
 #
 #   (c)  Volker Grabsch <vog@notjusthosting.com>
 #        Rocco Rutte <pdmef@gmx.net>
+#        Andreas Roever <roever@users.sf.net>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining
 #   a copy of this software and associated documentation files (the
@@ -1754,6 +1755,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --enable-threads \
         LIBS="-lws2_32"
+    $SED 's,-fno-exceptions,,' makeinclude        
     $MAKE install DIRS=src
     cd "$SOURCE"
     rm -rfv "fltk-$VERSION_fltk"
