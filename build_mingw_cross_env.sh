@@ -1755,7 +1755,7 @@ case "$1" in
         --prefix="$PREFIX/$TARGET" \
         --enable-threads \
         LIBS="-lws2_32"
-    $SED 's,-fno-exceptions,,' makeinclude        
+    $SED 's,-fno-exceptions,,' -i makeinclude        
     $MAKE install DIRS=src
     cd "$SOURCE"
     rm -rfv "fltk-$VERSION_fltk"
