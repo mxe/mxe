@@ -141,7 +141,6 @@ VERSION_proj=4.5.0
 VERSION_libgeotiff=1.2.4
 VERSION_gdal=1.4.4
 VERSION_pdflib_lite=7.0.2
-VERSION_libowfat=0.26
 
 
 #---
@@ -1997,52 +1996,6 @@ case "$1" in
     $MAKE all install -C libs
     cd "$SOURCE"
     rm -rfv "PDFlib-Lite-$VERSION_pdflib_lite"
-    ;;
-
-esac
-
-
-#---
-#   libowfat
-#
-#   http://www.fefe.de/libowfat/
-#---
-
-case "$1" in
-
---new-versions)
-    VERSION=`
-        wget -q -O- 'http://www.fefe.de/libowfat/' |
-        $SED -n 's,.*libowfat-\([0-9][^>]*\)\.tar.*,\1,p' |
-        head -1`
-    test -n "$VERSION"
-    $SED "s,^VERSION_libowfat=.*,VERSION_libowfat=$VERSION," -i "$0"
-    ;;
-
---download)
-    cd "$DOWNLOAD"
-    tar tfj "libowfat-$VERSION_libowfat.tar.bz2" &>/dev/null ||
-    wget -c "http://dl.fefe.de/libowfat-$VERSION_libowfat.tar.bz2"
-    ;;
-
---build)
-    cd "$SOURCE"
-    tar xfvj "$DOWNLOAD/libowfat-$VERSION_libowfat.tar.bz2"
-    cd "libowfat-$VERSION_libowfat"
-    $SED 's,gcc -I\. -MM,$(CROSS)gcc -I. -MM,' -i GNUmakefile
-    $MAKE Makefile -f GNUmakefile \
-        CROSS="$TARGET-" \
-        prefix="$PREFIX/$TARGET" \
-        INCLUDEDIR="$PREFIX/$TARGET/include/libowfat" \
-        DIET=
-    $MAKE install \
-        CROSS="$TARGET-" \
-        prefix="$PREFIX/$TARGET" \
-        INCLUDEDIR="$PREFIX/$TARGET/include/libowfat" \
-        DIET=
-    $SED 's,#include_next <io.h>,#include <io.h>,' -i "$PREFIX/$TARGET/include/libowfat/io.h"
-    cd "$SOURCE"
-    rm -rfv "libowfat-$VERSION_libowfat"
     ;;
 
 esac
