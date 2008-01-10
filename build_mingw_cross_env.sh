@@ -361,7 +361,7 @@ case "$1" in
 --new-versions)
     VERSION=`
         wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
-        $SED -n 's,.*gcc-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        $SED -n 's,.*gcc-\([4-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`
     test -n "$VERSION"
     $SED "s,^VERSION_gcc=.*,VERSION_gcc=$VERSION," -i "$0"
