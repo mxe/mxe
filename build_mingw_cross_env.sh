@@ -101,8 +101,8 @@ SOURCEFORGE_MIRROR=downloads.sourceforge.net
 
 PATH="$PREFIX/bin:$PATH"
 
-VERSION_mingw_runtime=3.13
-VERSION_w32api=3.10
+VERSION_mingw_runtime=3.14
+VERSION_w32api=3.11
 VERSION_binutils=2.18.50-20071123
 VERSION_gcc=4.2.1-2
 VERSION_pkg_config=0.22
@@ -136,8 +136,8 @@ VERSION_smpeg=0.4.5+cvs20030824
 VERSION_SDL_mixer=1.2.8
 VERSION_SDL_image=1.2.6
 VERSION_fltk=1.1.7
-VERSION_geos=3.0.0rc5
-VERSION_proj=4.5.0
+VERSION_geos=3.0.0
+VERSION_proj=4.6.0
 VERSION_libgeotiff=1.2.4
 VERSION_gdal=1.4.4
 VERSION_pdflib_lite=7.0.2
