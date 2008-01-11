@@ -97,7 +97,7 @@ ROOT=`pwd`
 PREFIX="$ROOT/usr"
 SOURCE="$ROOT/src"
 DOWNLOAD="$ROOT/download"
-SOURCEFORGE_MIRROR=downloads.sourceforge.net
+SOURCEFORGE_MIRROR=kent.dl.sourceforge.net
 
 PATH="$PREFIX/bin:$PATH"
 
