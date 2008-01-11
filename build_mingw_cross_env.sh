@@ -103,7 +103,7 @@ PATH="$PREFIX/bin:$PATH"
 
 VERSION_mingw_runtime=3.14
 VERSION_w32api=3.11
-VERSION_binutils=2.18.50-20071123
+VERSION_binutils=2.18.50-20080109
 VERSION_gcc=4.2.1-2
 VERSION_pkg_config=0.22
 VERSION_pthreads=2-8-0
@@ -139,7 +139,7 @@ VERSION_fltk=1.1.7
 VERSION_geos=3.0.0
 VERSION_proj=4.6.0
 VERSION_libgeotiff=1.2.4
-VERSION_gdal=1.4.4
+VERSION_gdal=1.5.0
 VERSION_pdflib_lite=7.0.2
 
 
@@ -1929,6 +1929,7 @@ case "$1" in
         --with-gif="$PREFIX/$TARGET" \
         --with-curl="$PREFIX/$TARGET/bin/curl-config" \
         --with-geos="$PREFIX/$TARGET/bin/geos-config" \
+        --with-expat=no \
         --without-python \
         --without-ngpython
     $MAKE lib-target
