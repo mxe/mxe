@@ -3,7 +3,7 @@ set -ex
 
 
 #---
-#   MinGW cross compiling environment  (1.4)
+#   MinGW cross compiling environment  (pre-2.0)
 #   =================================
 #
 #   http://www.profv.de/mingw_cross_env/
@@ -105,23 +105,23 @@ VERSION_mingw_runtime=3.14
 VERSION_w32api=3.11
 VERSION_binutils=2.18.50-20080109
 VERSION_gcc=4.2.1-2
-VERSION_pkg_config=0.22
+VERSION_pkg_config=0.23
 VERSION_pthreads=2-8-0
 VERSION_zlib=1.2.3
 VERSION_pdcurses=33
 VERSION_gettext=0.17
-VERSION_libiconv=1.9.2
+VERSION_libiconv=1.11.1
 VERSION_tre=0.7.5
 VERSION_winpcap=4_0_2
 VERSION_libdnet=1.11
 VERSION_libgpg_error=1.6
 VERSION_libgcrypt=1.4.0
 VERSION_gnutls=1.6.3
-VERSION_libxml2=2.6.30
+VERSION_libxml2=2.6.31
 VERSION_libxslt=1.1.22
 VERSION_xmlwrapp=0.5.0
-VERSION_curl=7.17.1
-VERSION_libpng=1.2.24
+VERSION_curl=7.18.0
+VERSION_libpng=1.2.25
 VERSION_jpeg=6b
 VERSION_tiff=3.8.2
 VERSION_giflib=4.1.6
