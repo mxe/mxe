@@ -617,7 +617,7 @@ case "$1" in
     VERSION=`
         wget -q -O- 'http://ftp.gnu.org/pub/gnu/libiconv/' |
         $SED -n 's,.*libiconv-\([0-9]*\)\.\([0-9]*\)\(\.[0-9]*\)\.tar.*,\1.\2\3,p' |
-        sort | tail -1`
+        sort -n | tail -1`
     test -n "$VERSION"
     $SED "s,^VERSION_libiconv=.*,VERSION_libiconv=$VERSION," -i "$0"
     ;;
