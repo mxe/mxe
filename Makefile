@@ -16,16 +16,18 @@ PKG_RULES := $(patsubst src/%.mk,%,$(wildcard src/*.mk))
 include src/*.mk
 
 CHECK_ARCHIVE = \
+    $(if $(filter %.tgz,    $(1)),tar tfz '$(1)' >/dev/null 2>&1, \
     $(if $(filter %.tar.gz, $(1)),tar tfz '$(1)' >/dev/null 2>&1, \
     $(if $(filter %.tar.bz2,$(1)),tar tfj '$(1)' >/dev/null 2>&1, \
     $(if $(filter %.zip,    $(1)),unzip -t '$(1)' >/dev/null 2>&1, \
-    $(error Unknown archive format: $(1)))))
+    $(error Unknown archive format: $(1))))))
 
 UNPACK_ARCHIVE = \
+    $(if $(filter %.tgz,    $(1)),tar xvzf '$(1)', \
     $(if $(filter %.tar.gz, $(1)),tar xvzf '$(1)', \
     $(if $(filter %.tar.bz2,$(1)),tar xvjf '$(1)', \
     $(if $(filter %.zip,    $(1)),unzip '$(1)', \
-    $(error Unknown archive format: $(1)))))
+    $(error Unknown archive format: $(1))))))
 
 DOWNLOAD = \
     $(if $(2),wget -t 3 -c '$(1)' || wget -c '$(2)',wget -c '$(1)')
