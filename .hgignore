@@ -1,5 +1,2 @@
-^README$
-^ChangeLog$
-^download/
-^src/
+^pkg/
 ^usr/
