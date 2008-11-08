@@ -31,7 +31,8 @@ Usage
 
     make clean
 
-        remove all package builds
+        remove all package builds,
+        use with caution!
 
     make update
 
