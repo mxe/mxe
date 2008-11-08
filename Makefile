@@ -1,3 +1,6 @@
+# MinGW cross compiling environment
+# see doc/README for further information
+
 JOBS               := 4
 TARGET             := i386-mingw32msvc
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
