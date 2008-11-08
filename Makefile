@@ -6,6 +6,7 @@ VERSION := 2.0
 PREFIX  := $(PWD)/usr
 PKG_DIR := $(PWD)/pkg
 TMP_DIR  = $(PWD)/tmp-$(1)
+PATH    := $(PREFIX)/bin:$(PATH)
 SED     := $(shell gsed --version >/dev/null 2>&1 && echo g)sed
 
 PKG_RULES := $(patsubst src/%.mk,%,$(wildcard src/*.mk))
