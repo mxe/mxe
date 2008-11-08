@@ -6,7 +6,7 @@ $(PKG)_VERSION := 4.2.1-2
 $(PKG)_SUBDIR  := gcc-$($(PKG)_VERSION)-src
 $(PKG)_FILE    := gcc-$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
-$(PKG)_DEPS    := mingwrt w32api binutils
+$(PKG)_DEPS    := mingwrt w32api binutils pkg_config
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=241304' | \
