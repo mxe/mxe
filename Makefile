@@ -29,10 +29,6 @@ DOWNLOAD = \
 .PHONY: all
 all: $(PKG_RULES)
 
-.PHONY: clean
-clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX)/*
-
 define PKG_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/installed.$(1)
@@ -52,13 +48,17 @@ $(PREFIX)/installed.$(1): $(addprefix $(PREFIX)/installed.,$($(1)_DEPS))
 endef
 $(foreach PKG,$(PKG_RULES),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 
+.PHONY: clean
+clean:
+	rm -rf $(call TMP_DIR,*) $(PREFIX)/*
+
+.PHONY: update
 define UPDATE
         $(if $(2), \
             $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i src/$(1).mk, \
             $(error Unable to update version number: $(1)))
 
 endef
-.PHONY: update
 update:
 	$(foreach PKG,$(PKG_RULES),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
 
