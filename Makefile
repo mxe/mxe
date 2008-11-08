@@ -46,6 +46,7 @@ $(PREFIX)/installed.$(1): $(addprefix $(PREFIX)/installed.,$($(1)_DEPS))
 	    $(call DOWNLOAD,$($(1)_URL),$($(1)_URL_2)) )
 	cd '$(2)' && \
 	    $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
+	cd '$(2)/$($(1)_SUBDIR)'
 	$$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR))
 	rm -rfv '$(2)'
 	touch '$$@'
