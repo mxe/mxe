@@ -26,5 +26,5 @@ define $(PKG)_BUILD
         --with-included-libtasn1 \
         --with-included-libcfg \
         --with-included-lzo
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
+    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
 endef
