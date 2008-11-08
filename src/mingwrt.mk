@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir -p '$(PREFIX)/$(TARGET)'
+    install -d '$(PREFIX)/$(TARGET)'
     cd '$(2)' && \
         cp -rpv bin include lib '$(PREFIX)/$(TARGET)'
 endef
