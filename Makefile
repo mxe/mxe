@@ -37,8 +37,8 @@ define PKG_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/installed.$(1)
 $(PREFIX)/installed.$(1): $(addprefix $(PREFIX)/installed.,$($(1)_DEPS))
-	[ -z '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
-	[ -z '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
+	[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
+	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	rm -rf   '$(2)'
 	mkdir -p '$(2)'
 	cd '$(PKG_DIR)' && ( \
