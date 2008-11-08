@@ -29,5 +29,5 @@ define $(PKG)_BUILD
         --enable-threads=win32 \
         --disable-win32-registry \
         --enable-sjlj-exceptions
-    $(MAKE) -C '$(1)' all install
+    $(MAKE) -C '$(1)' -j 1 all install
 endef

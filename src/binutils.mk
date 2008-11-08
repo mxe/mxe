@@ -23,5 +23,5 @@ define $(PKG)_BUILD
         --with-gnu-as \
         --disable-nls \
         --disable-shared
-    $(MAKE) -C '$(1)' all install
+    $(MAKE) -C '$(1)' -j 1 all install
 endef
