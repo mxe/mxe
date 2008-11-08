@@ -42,47 +42,6 @@ Usage
 List of Packages
 ================
 
-    binutils       2.18.50-20080109
-    curl           7.18.0
-    fltk           1.1.7
-    fontconfig     2.5.91
-    freetype       2.3.5
-    gcc            4.2.1-2
-    gd             2.0.35
-    gdal           1.5.0
-    geos           3.0.0
-    gettext        0.17
-    giflib         4.1.6
-    gnutls         1.6.3
-    jpeg           6b
-    libdnet        1.11
-    libgcrypt      1.4.0
-    libgeotiff     1.2.4
-    libgpg_error   1.6
-    libiconv       1.11.1
-    libmikmod      3.2.0-beta2
-    libpng         1.2.25
-    libxml2        2.6.31
-    libxslt        1.1.22
-    mingw_runtime  3.14
-    ogg            1.1.3
-    pdcurses       33
-    pdflib_lite    7.0.2
-    pkg_config     0.23
-    proj           4.6.0
-    pthreads       2-8-0
-    SDL            1.2.11
-    SDL_image      1.2.6
-    SDL_mixer      1.2.8
-    smpeg          0.4.5+cvs20030824
-    tiff           3.8.2
-    tre            0.7.5
-    vorbis         1.2.0
-    w32api         3.11
-    winpcap        4_0_2
-    xmlwrapp       0.5.0
-    zlib           1.2.3
-
 
 Copyright
 =========
