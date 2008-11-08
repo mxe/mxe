@@ -11,13 +11,13 @@ SED     := $(shell gsed --version >/dev/null 2>&1 && echo g)sed
 PKG_RULES := $(patsubst src/%.mk,%,$(wildcard src/*.mk))
 include src/*.mk
 
-ARCHIVE_CHECK = \
+CHECK_ARCHIVE = \
     $(if $(filter %.tar.gz, $(1)),tar tfz '$(1)' >/dev/null 2>&1, \
     $(if $(filter %.tar.bz2,$(1)),tar tfj '$(1)' >/dev/null 2>&1, \
     $(if $(filter %.zip,    $(1)),unzip -t '$(1)' >/dev/null 2>&1, \
     $(error Unknown archive format: $(1)))))
 
-ARCHIVE_UNPACK = \
+UNPACK_ARCHIVE = \
     $(if $(filter %.tar.gz, $(1)),tar xvzf '$(1)', \
     $(if $(filter %.tar.bz2,$(1)),tar xvjf '$(1)', \
     $(if $(filter %.zip,    $(1)),unzip '$(1)', \
@@ -38,10 +38,10 @@ $(PREFIX)/installed.$(1): $(addprefix $(PREFIX)/installed.,$($(1)_DEPS))
 	rm -rf   '$(2)'
 	mkdir -p '$(2)'
 	cd '$(PKG_DIR)' && ( \
-	    $(call ARCHIVE_CHECK,$($(1)_FILE)) || \
+	    $(call CHECK_ARCHIVE,$($(1)_FILE)) || \
 	    $(call DOWNLOAD,$($(1)_URL),$($(1)_URL_2)) )
 	cd '$(2)' && \
-	    $(call ARCHIVE_UNPACK,$(PKG_DIR)/$($(1)_FILE))
+	    $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
 	$$(call $(1)_BUILD,$(1),$(2)/$($(1)_SUBDIR))
 	rm -rfv '$(2)'
 	touch '$$@'
