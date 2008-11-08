@@ -49,6 +49,28 @@ $(PREFIX)/installed.$(1): $(addprefix $(PREFIX)/installed.,$($(1)_DEPS))
 endef
 $(foreach PKG,$(PKG_RULES),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 
+.PHONY: strip
+strip:
+	rm -rf \
+	    $(PREFIX)/include \
+	    $(PREFIX)/info \
+	    $(PREFIX)/lib/libiberty.a \
+	    $(PREFIX)/man \
+	    $(PREFIX)/$(TARGET)/doc \
+	    $(PREFIX)/$(TARGET)/info \
+	    $(PREFIX)/$(TARGET)/man \
+	    $(PREFIX)/$(TARGET)/sbin \
+	    $(PREFIX)/$(TARGET)/share
+	-strip -s \
+	    $(PREFIX)/bin/* \
+	    $(PREFIX)/libexec/gcc/$(TARGET)/*/* \
+	    $(PREFIX)/$(TARGET)/bin/*
+	-$(TARGET)-strip -g \
+	    $(PREFIX)/lib/gcc/$(TARGET)/*/*.a \
+	    $(PREFIX)/lib/gcc/$(TARGET)/*/*.o \
+	    $(PREFIX)/$(TARGET)/lib/*.a \
+	    $(PREFIX)/$(TARGET)/lib/*.o
+
 .PHONY: clean
 clean:
 	rm -rf $(call TMP_DIR,*) $(PREFIX)/*

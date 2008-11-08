@@ -25,6 +25,10 @@ Usage
 
         build package 'foo' and all dependencies
 
+    make strip
+
+        strip all package builds and remove unnecessary files
+
     make clean
 
         remove all package builds
