@@ -15,9 +15,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(2)' && ./configure \
+    cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(2)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
     install -d '$(PREFIX)/$(TARGET)'
     rm -f '$(PREFIX)/bin/$(TARGET)-pkg-config'
     ln -s '../$(TARGET)/bin/pkg-config' '$(PREFIX)/bin/$(TARGET)-pkg-config'

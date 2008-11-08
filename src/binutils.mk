@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(2)' && ./configure \
+    cd '$(1)' && ./configure \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
         --with-gcc \
@@ -23,5 +23,5 @@ define $(PKG)_BUILD
         --with-gnu-as \
         --disable-nls \
         --disable-shared
-    $(MAKE) -C '$(2)' all install
+    $(MAKE) -C '$(1)' all install
 endef

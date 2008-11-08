@@ -16,6 +16,6 @@ endef
 
 define $(PKG)_BUILD
     install -d '$(PREFIX)/$(TARGET)'
-    cd '$(2)' && \
+    cd '$(1)' && \
         cp -rpv bin include lib '$(PREFIX)/$(TARGET)'
 endef

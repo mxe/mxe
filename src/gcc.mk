@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(2)' && ./configure \
+    cd '$(1)' && ./configure \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
         --enable-languages='c,c++' \
@@ -29,5 +29,5 @@ define $(PKG)_BUILD
         --enable-threads=win32 \
         --disable-win32-registry \
         --enable-sjlj-exceptions
-    $(MAKE) -C '$(2)' all install
+    $(MAKE) -C '$(1)' all install
 endef

@@ -16,10 +16,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(2)' && ./configure \
+    cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads=win32
-    $(MAKE) -C '$(2)/intl' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/intl' -j '$(JOBS)' install
 endef

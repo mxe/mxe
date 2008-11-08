@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(2)' && CC='$(TARGET)-gcc' RANLIB='$(TARGET)-ranlib' ./configure \
+    cd '$(1)' && CC='$(TARGET)-gcc' RANLIB='$(TARGET)-ranlib' ./configure \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(2)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

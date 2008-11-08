@@ -16,10 +16,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) '35i\#define PTW32_STATIC_LIB' -i '$(2)/pthread.h'
-    $(MAKE) -C '$(2)' -j '$(JOBS)' GC-static CROSS='$(TARGET)-'
+    $(SED) '35i\#define PTW32_STATIC_LIB' -i '$(1)/pthread.h'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' GC-static CROSS='$(TARGET)-'
     install -d '$(PREFIX)/$(TARGET)/lib'
-    install -m664 '$(2)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
+    install -m664 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
     install -d '$(PREFIX)/$(TARGET)/include'
-    install -m664 '$(2)/pthread.h' '$(2)/sched.h' '$(2)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
+    install -m664 '$(1)/pthread.h' '$(1)/sched.h' '$(1)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
 endef

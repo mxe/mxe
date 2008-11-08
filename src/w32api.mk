@@ -16,14 +16,14 @@ endef
 
 define $(PKG)_BUILD
     # fix incompatibilities with gettext
-    $(SED) 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    -i '$(2)/include/winnt.h'
-    $(SED) 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    -i '$(2)/include/winnt.h'
-    $(SED) 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i '$(2)/include/winnt.h'
+    $(SED) 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    -i '$(1)/include/winnt.h'
+    $(SED) 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    -i '$(1)/include/winnt.h'
+    $(SED) 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i '$(1)/include/winnt.h'
     # fix incompatibilities with jpeg
-    $(SED) 's,typedef unsigned char boolean;,,'           -i '$(2)/include/rpcndr.h'
+    $(SED) 's,typedef unsigned char boolean;,,'           -i '$(1)/include/rpcndr.h'
     # fix missing definitions for WinPcap and libdnet
-    $(SED) '1i\#include <wtypes.h>'                       -i '$(2)/include/iphlpapi.h'
-    $(SED) '1i\#include <wtypes.h>'                       -i '$(2)/include/wincrypt.h'
+    $(SED) '1i\#include <wtypes.h>'                       -i '$(1)/include/iphlpapi.h'
+    $(SED) '1i\#include <wtypes.h>'                       -i '$(1)/include/wincrypt.h'
     install -d '$(PREFIX)/$(TARGET)'
-    cp -rpv '$(2)/include' '$(2)/lib' '$(PREFIX)/$(TARGET)'
+    cp -rpv '$(1)/include' '$(1)/lib' '$(PREFIX)/$(TARGET)'
 endef
