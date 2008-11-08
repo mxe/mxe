@@ -18,7 +18,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
-    install -d '$(PREFIX)/$(TARGET)'
-    rm -f '$(PREFIX)/bin/$(TARGET)-pkg-config'
+    install -d                          '$(PREFIX)/bin'
+    rm -f                               '$(PREFIX)/bin/$(TARGET)-pkg-config'
     ln -s '../$(TARGET)/bin/pkg-config' '$(PREFIX)/bin/$(TARGET)-pkg-config'
 endef
