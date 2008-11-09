@@ -2,7 +2,7 @@
 # http://freetype.sourceforge.net/
 
 PKG            := freetype
-$(PKG)_VERSION := 2.3.5
+$(PKG)_VERSION := 2.3.7
 $(PKG)_SUBDIR  := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE    := freetype-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/freetype/$($(PKG)_FILE)

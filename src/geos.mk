@@ -16,9 +16,6 @@ endef
 
 define $(PKG)_BUILD
     $(SED) 's,-lgeos,-lgeos -lstdc++,' -i '$(1)/tools/geos-config.in'
-    # timezone and gettimeofday are in <time.h> since MinGW runtime 3.10
-    $(SED) 's,struct timezone {,struct timezone_disabled {,' -i '$(1)/source/headers/geos/timeval.h'
-    $(SED) 's,int gettimeofday,int gettimeofday_disabled,'   -i '$(1)/source/headers/geos/timeval.h'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

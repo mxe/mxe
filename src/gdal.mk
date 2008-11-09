@@ -2,7 +2,7 @@
 # http://www.gdal.org/
 
 PKG            := gdal
-$(PKG)_VERSION := 1.5.0
+$(PKG)_VERSION := 1.5.3
 $(PKG)_SUBDIR  := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE    := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://www.gdal.org/dl/$($(PKG)_FILE)

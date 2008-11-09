@@ -2,7 +2,7 @@
 # http://pdcurses.sourceforge.net/
 
 PKG            := pdcurses
-$(PKG)_VERSION := 3.3
+$(PKG)_VERSION := 3.4
 $(PKG)_SUBDIR  := PDCurses-$($(PKG)_VERSION)
 $(PKG)_FILE    := PDCurses-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/pdcurses/$($(PKG)_FILE)

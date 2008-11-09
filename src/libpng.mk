@@ -2,7 +2,7 @@
 # http://www.libpng.org/
 
 PKG            := libpng
-$(PKG)_VERSION := 1.2.25
+$(PKG)_VERSION := 1.2.33
 $(PKG)_SUBDIR  := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE    := libpng-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/libpng/$($(PKG)_FILE)
