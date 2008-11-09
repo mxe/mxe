@@ -1,12 +1,12 @@
 # proj
-# http://www.remotesensing.org/proj/
+# http://trac.osgeo.org/proj/
 
 PKG            := proj
 $(PKG)_VERSION := 4.6.0
 $(PKG)_SUBDIR  := proj-$($(PKG)_VERSION)
 $(PKG)_FILE    := proj-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := ftp://ftp.remotesensing.org/proj/$($(PKG)_FILE)
-$(PKG)_URL_2   := http://dl.maptools.org/dl/proj/$($(PKG)_FILE)
+$(PKG)_URL_2   := http://download.osgeo.org/proj/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 
 define $(PKG)_UPDATE
