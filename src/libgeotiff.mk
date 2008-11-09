@@ -17,7 +17,7 @@ endef
 
 define $(PKG)_BUILD
     $(SED) 's,/usr/local,@prefix@,' -i '$(1)/bin/Makefile.in'
-    touch configure
+    touch '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

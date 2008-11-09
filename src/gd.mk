@@ -16,9 +16,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    touch aclocal.m4
-    touch config.hin
-    touch Makefile.in
+    touch '$(1)/aclocal.m4'
+    touch '$(1)/config.hin'
+    touch '$(1)/Makefile.in'
     $(SED) 's,-I@includedir@,-I@includedir@ -DNONDLL,' -i '$(1)/config/gdlib-config.in'
     $(SED) 's,-lX11 ,,g' -i '$(1)/configure'
     cd '$(1)' && ./configure \
