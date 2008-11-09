@@ -100,7 +100,7 @@ dist:
 	mkdir  'mingw_cross_env-$(VERSION)/src'
 	hg log -v --style changelog >'mingw_cross_env-$(VERSION)/doc/ChangeLog'
 	( \
-	    $(SED) -n '1,/^List/ { s/^\(MinGW cross.*\)/\1  ($(VERSION))/; p }' doc/README && \
+	    $(SED) -n '1,/^List/ { s/^\(    Version:\).*/\1 $(VERSION)/; p }' doc/README && \
 	    echo '================' && \
 	    echo && \
 	    ($(foreach PKG,$(PKG_RULES),echo '$(PKG)' '$($(PKG)_VERSION)';)) | \

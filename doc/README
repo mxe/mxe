@@ -1,13 +1,15 @@
 
-MinGW cross compiling environment
-=================================
+About
+=====
+
+    Version:
 
     http://www.profv.de/mingw_cross_env/
 
     This Makefile compiles a MinGW cross compiler and cross compiles
-    many free libraries such as GD and SDL. Thus, it provides you
-    a nice MinGW cross compiling environment. All necessary source
-    packages are downloaded automatically.
+    many free libraries such as GD and SDL. Thus, it provides a nice
+    MinGW cross compiling environment. All necessary source packages
+    are downloaded automatically.
 
     The Makefile is designed to run on any Unix system. It also runs
     partly on MSYS. It needs GNU make and GNU sed, so FreeBSD users
