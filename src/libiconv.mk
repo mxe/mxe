@@ -9,10 +9,10 @@ $(PKG)_URL     := http://ftp.gnu.org/pub/gnu/libiconv/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://ftp.gnu.org/pub/gnu/libiconv/' | \
-    $(SED) -n 's,.*libiconv-\([0-9]*\)\.\([0-9]*\)\(\.[0-9]*\)\.tar.*,\1.\2\3,p' | \
-    sort -n | \
-    tail -1
+    wget -q -O- 'http://www.gnu.org/software/libiconv/' | \
+    grep 'libiconv-' | \
+    $(SED) -n 's,.*libiconv-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
