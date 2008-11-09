@@ -1,11 +1,11 @@
 # GEOS
-# http://geos.refractions.net/
+# http://trac.osgeo.org/geos/
 
 PKG            := geos
 $(PKG)_VERSION := 3.0.0
 $(PKG)_SUBDIR  := geos-$($(PKG)_VERSION)
 $(PKG)_FILE    := geos-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL     := http://geos.refractions.net/downloads/$($(PKG)_FILE)
+$(PKG)_URL     := http://download.osgeo.org/geos/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 
 define $(PKG)_UPDATE

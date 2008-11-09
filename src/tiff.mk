@@ -5,8 +5,8 @@ PKG            := tiff
 $(PKG)_VERSION := 3.8.2
 $(PKG)_SUBDIR  := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE    := tiff-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL     := ftp://ftp.remotesensing.org/pub/libtiff/$($(PKG)_FILE)
-$(PKG)_URL_2   := http://dl.maptools.org/dl/libtiff/$($(PKG)_FILE)
+$(PKG)_URL     := http://download.osgeo.org/libtiff/$($(PKG)_FILE)
+$(PKG)_URL_2   := ftp://ftp.remotesensing.org/pub/libtiff/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc pthreads zlib jpeg
 
 define $(PKG)_UPDATE

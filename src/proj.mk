@@ -5,8 +5,8 @@ PKG            := proj
 $(PKG)_VERSION := 4.6.0
 $(PKG)_SUBDIR  := proj-$($(PKG)_VERSION)
 $(PKG)_FILE    := proj-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL     := ftp://ftp.remotesensing.org/proj/$($(PKG)_FILE)
-$(PKG)_URL_2   := http://download.osgeo.org/proj/$($(PKG)_FILE)
+$(PKG)_URL     := http://download.osgeo.org/proj/$($(PKG)_FILE)
+$(PKG)_URL_2   := ftp://ftp.remotesensing.org/proj/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 
 define $(PKG)_UPDATE

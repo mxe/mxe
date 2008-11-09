@@ -4,7 +4,7 @@
 PKG            := w32api
 $(PKG)_VERSION := 3.11
 $(PKG)_SUBDIR  := .
-$(PKG)_FILE    := w32api-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE    := w32api-$($(PKG)_VERSION)-dev.tar.gz
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
 $(PKG)_DEPS    :=
 

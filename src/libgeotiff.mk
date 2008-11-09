@@ -5,8 +5,8 @@ PKG            := libgeotiff
 $(PKG)_VERSION := 1.2.4
 $(PKG)_SUBDIR  := libgeotiff-$($(PKG)_VERSION)
 $(PKG)_FILE    := libgeotiff-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL     := ftp://ftp.remotesensing.org/pub/geotiff/libgeotiff/$($(PKG)_FILE)
-$(PKG)_URL_2   := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
+$(PKG)_URL     := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
+$(PKG)_URL_2   := ftp://ftp.remotesensing.org/pub/geotiff/libgeotiff/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc zlib jpeg tiff proj
 
 define $(PKG)_UPDATE
