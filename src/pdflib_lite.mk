@@ -34,6 +34,6 @@ define $(PKG)_BUILD
         --enable-large-files \
         CFLAGS='-D_IOB_ENTRIES=20'
     $(SED) 's,-DPDF_PLATFORM=[^ ]* ,,' -i '$(1)/config/mkcommon.inc'
-    $(MAKE) -C '$(1)/libs' -j '$(JOBS)' all
-    $(MAKE) -C '$(1)/libs' -j 1         install
+    $(MAKE) -C '$(1)/libs' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/libs' -j 1 install
 endef

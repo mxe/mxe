@@ -21,5 +21,6 @@ define $(PKG)_BUILD
         --disable-shared \
         --disable-debug \
         --prefix='$(PREFIX)/$(TARGET)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
