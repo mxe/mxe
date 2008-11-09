@@ -1,5 +1,5 @@
 # SDL
-# http://www.libsdl.org/
+# http://libsdl.org/
 
 PKG            := sdl
 $(PKG)_VERSION := 1.2.11
@@ -9,8 +9,8 @@ $(PKG)_URL     := http://libsdl.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc libiconv
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.libsdl.org/release/changes.html' | \
-    $(SED) -n 's,.*sdl \([0-9][^>]*\) Release Notes.*,\1,p' | \
+    wget -q -O- 'http://libsdl.org/release/changes.html' | \
+    $(SED) -n 's,.*SDL \([0-9][^>]*\) Release Notes.*,\1,p' | \
     head -1
 endef
 
