@@ -2,7 +2,7 @@
 # http://trac.osgeo.org/geotiff/
 
 PKG            := libgeotiff
-$(PKG)_VERSION := 1.2.4
+$(PKG)_VERSION := 1.2.5
 $(PKG)_SUBDIR  := libgeotiff-$($(PKG)_VERSION)
 $(PKG)_FILE    := libgeotiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
