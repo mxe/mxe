@@ -39,7 +39,7 @@ define $(PKG)_BUILD
     CC='$(TARGET)-gcc' \
     AR='$(TARGET)-ar' \
     RANLIB='$(TARGET)-ranlib' \
-    $(MAKE) -C '$(1)/wpcap/PRJ' -j '$(JOBS)' libwpcap.a
+    $(MAKE) -C '$(1)/wpcap/PRJ' -j 1 libwpcap.a
     install -d '$(PREFIX)/$(TARGET)/include'
     install -m644 '$(1)/wpcap/libpcap/'*.h '$(1)/wpcap/Win32-Extensions/'*.h '$(PREFIX)/$(TARGET)/include/'
     install -d '$(PREFIX)/$(TARGET)/lib'

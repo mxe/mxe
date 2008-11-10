@@ -17,7 +17,7 @@ endef
 
 define $(PKG)_BUILD
     $(SED) '35i\#define PTW32_STATIC_LIB' -i '$(1)/pthread.h'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' GC-static CROSS='$(TARGET)-'
+    $(MAKE) -C '$(1)' -j 1 GC-static CROSS='$(TARGET)-'
     install -d '$(PREFIX)/$(TARGET)/lib'
     install -m664 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
     install -d '$(PREFIX)/$(TARGET)/include'

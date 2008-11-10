@@ -32,12 +32,12 @@ define $(PKG)_BUILD
         --with-expat=no \
         --without-python \
         --without-ngpython
-    $(MAKE) -C '$(1)'       -j '$(JOBS)' lib-target
-    $(MAKE) -C '$(1)'       -j '$(JOBS)' install-lib
-    $(MAKE) -C '$(1)/port'  -j '$(JOBS)' install
-    $(MAKE) -C '$(1)/gcore' -j '$(JOBS)' install
-    $(MAKE) -C '$(1)/frmts' -j '$(JOBS)' install
-    $(MAKE) -C '$(1)/alg'   -j '$(JOBS)' install
-    $(MAKE) -C '$(1)/ogr'   -j '$(JOBS)' install OGR_ENABLED=
-    $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install BIN_LIST=
+    $(MAKE) -C '$(1)'       -j 1 lib-target
+    $(MAKE) -C '$(1)'       -j 1 install-lib
+    $(MAKE) -C '$(1)/port'  -j 1 install
+    $(MAKE) -C '$(1)/gcore' -j 1 install
+    $(MAKE) -C '$(1)/frmts' -j 1 install
+    $(MAKE) -C '$(1)/alg'   -j 1 install
+    $(MAKE) -C '$(1)/ogr'   -j 1 install OGR_ENABLED=
+    $(MAKE) -C '$(1)/apps'  -j 1 install BIN_LIST=
 endef
