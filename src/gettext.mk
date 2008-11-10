@@ -21,5 +21,5 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads=win32
-    $(MAKE) -C '$(1)/intl' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/intl' -j '$(JOBS)' SHELL=bash install
 endef
