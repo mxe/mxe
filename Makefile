@@ -62,6 +62,7 @@ strip:
 	    $(PREFIX)/info \
 	    $(PREFIX)/lib/libiberty.a \
 	    $(PREFIX)/man \
+	    $(PREFIX)/share \
 	    $(PREFIX)/$(TARGET)/doc \
 	    $(PREFIX)/$(TARGET)/info \
 	    $(PREFIX)/$(TARGET)/man \
