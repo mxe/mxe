@@ -6,7 +6,7 @@ $(PKG)_VERSION := 7.0.3
 $(PKG)_SUBDIR  := PDFlib-Lite-$($(PKG)_VERSION)
 $(PKG)_FILE    := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://www.pdflib.com/binaries/PDFlib/$(subst .,,$($(PKG)_VERSION))/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc zlib libpng tiff jpeg
+$(PKG)_DEPS    := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.pdflib.com/download/pdflib-family/pdflib-lite/' | \
@@ -20,9 +20,6 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --with-pnglib='$(PREFIX)/$(TARGET)' \
-        --with-tifflib='$(PREFIX)/$(TARGET)' \
-        --with-zlib='$(PREFIX)/$(TARGET)' \
         --without-openssl \
         --without-java \
         --without-py \
