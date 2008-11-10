@@ -20,6 +20,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --without-libexpat-prefix \
         --enable-threads=win32
     $(MAKE) -C '$(1)/intl' -j '$(JOBS)' SHELL=bash install
 endef

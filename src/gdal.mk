@@ -6,7 +6,7 @@ $(PKG)_VERSION := 1.5.3
 $(PKG)_SUBDIR  := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE    := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://www.gdal.org/dl/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc zlib libpng tiff libgeotiff jpeg giflib curl geos
+$(PKG)_DEPS    := gcc zlib libpng tiff libgeotiff jpeg giflib expat curl geos
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
@@ -27,9 +27,9 @@ define $(PKG)_BUILD
         --with-geotiff='$(PREFIX)/$(TARGET)' \
         --with-jpeg='$(PREFIX)/$(TARGET)' \
         --with-gif='$(PREFIX)/$(TARGET)' \
+        --with-expat='$(PREFIX)/$(TARGET)' \
         --with-curl='$(PREFIX)/$(TARGET)/bin/curl-config' \
         --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
-        --with-expat=no \
         --without-python \
         --without-ngpython
     $(MAKE) -C '$(1)'       -j 1 lib-target

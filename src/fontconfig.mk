@@ -6,7 +6,7 @@ $(PKG)_VERSION := 2.6.0
 $(PKG)_SUBDIR  := fontconfig-$($(PKG)_VERSION)
 $(PKG)_FILE    := fontconfig-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://fontconfig.org/release/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc freetype libxml2
+$(PKG)_DEPS    := gcc freetype expat
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://fontconfig.org/release/' | \
@@ -26,8 +26,6 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-arch='$(TARGET)' \
         --with-freetype-config='$(PREFIX)/$(TARGET)/bin/freetype-config' \
-        --enable-libxml2 \
-        LIBXML2_CFLAGS="`$(PREFIX)/$(TARGET)/bin/xml2-config --cflags`" \
-        LIBXML2_LIBS="`$(PREFIX)/$(TARGET)/bin/xml2-config --libs`"
+        --with-expat='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
