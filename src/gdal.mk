@@ -6,7 +6,7 @@ $(PKG)_VERSION := 1.5.3
 $(PKG)_SUBDIR  := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE    := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://www.gdal.org/dl/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc libpng tiff libgeotiff jpeg giflib curl geos
+$(PKG)_DEPS    := gcc zlib libpng tiff libgeotiff jpeg giflib curl geos
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
@@ -20,6 +20,8 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         LIBS='-ljpeg' \
+        --with-threads \
+        --with-libz='$(PREFIX)/$(TARGET)' \
         --with-png='$(PREFIX)/$(TARGET)' \
         --with-libtiff='$(PREFIX)/$(TARGET)' \
         --with-geotiff='$(PREFIX)/$(TARGET)' \
