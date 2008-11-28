@@ -16,11 +16,11 @@ endef
 
 define $(PKG)_BUILD
     mv '$(1)/Common' '$(1)/common'
-    cp -p '$(1)/common/Devioctl.h'   '$(1)/common/devioctl.h'
-    cp -p '$(1)/common/Ntddndis.h'   '$(1)/common/ntddndis.h'
-    cp -p '$(1)/common/Ntddpack.h'   '$(1)/common/ntddpack.h'
-    cp -p '$(1)/common/Packet32.h'   '$(1)/common/packet32.h'
-    cp -p '$(1)/common/WpcapNames.h' '$(1)/common/wpcapnames.h'
+    mv '$(1)/common/Devioctl.h'   '$(1)/common/devioctl.h'
+    mv '$(1)/common/Ntddndis.h'   '$(1)/common/ntddndis.h'
+    mv '$(1)/common/Ntddpack.h'   '$(1)/common/ntddpack.h'
+    mv '$(1)/common/Packet32.h'   '$(1)/common/packet32.h'
+    mv '$(1)/common/WpcapNames.h' '$(1)/common/wpcapnames.h'
     $(SED) 's,(PCHAR)winpcap_hdr +=,winpcap_hdr +=,' -i '$(1)/Packet9x/DLL/Packet32.c'
     cd '$(1)' && $(TARGET)-gcc -Icommon -O -c '$(1)/Packet9x/DLL/Packet32.c'
     $(TARGET)-ar rc '$(1)/libpacket.a' '$(1)/Packet32.o'
