@@ -2,7 +2,7 @@
 # http://curl.haxx.se/libcurl/
 
 PKG            := curl
-$(PKG)_VERSION := 7.19.1
+$(PKG)_VERSION := 7.19.2
 $(PKG)_SUBDIR  := curl-$($(PKG)_VERSION)
 $(PKG)_FILE    := curl-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL     := http://curl.haxx.se/download/$($(PKG)_FILE)

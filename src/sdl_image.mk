@@ -2,7 +2,7 @@
 # http://libsdl.org/projects/SDL_image/
 
 PKG            := sdl_image
-$(PKG)_VERSION := 1.2.6
+$(PKG)_VERSION := 1.2.7
 $(PKG)_SUBDIR  := SDL_image-$($(PKG)_VERSION)
 $(PKG)_FILE    := SDL_image-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)

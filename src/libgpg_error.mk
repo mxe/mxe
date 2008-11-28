@@ -2,7 +2,7 @@
 # ftp://ftp.gnupg.org/gcrypt/libgpg-error/
 
 PKG            := libgpg_error
-$(PKG)_VERSION := 1.6
+$(PKG)_VERSION := 1.7
 $(PKG)_SUBDIR  := libgpg-error-$($(PKG)_VERSION)
 $(PKG)_FILE    := libgpg-error-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL     := ftp://ftp.gnupg.org/gcrypt/libgpg-error/$($(PKG)_FILE)
