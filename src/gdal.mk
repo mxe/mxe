@@ -5,7 +5,7 @@ PKG            := gdal
 $(PKG)_VERSION := 1.5.3
 $(PKG)_SUBDIR  := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE    := gdal-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL     := http://www.gdal.org/dl/$($(PKG)_FILE)
+$(PKG)_URL     := http://download.osgeo.org/gdal/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc zlib libpng tiff libgeotiff jpeg giflib expat curl geos
 
 define $(PKG)_UPDATE
