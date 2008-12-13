@@ -9,9 +9,9 @@ $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/libpng/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624&package_id=5683' | \
-    grep 'libpng-' | \
-    $(SED) -n 's,.*libpng-\([0-9][^>]*\)-no-config\.tar.*,\1,p' | \
+    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624' | \
+    grep 'package_id=5683&amp;release_id=' | \
+    $(SED) -n 's,.*>\([0-9][^<]*\)<.*,\1,p' | \
     head -1
 endef
 
