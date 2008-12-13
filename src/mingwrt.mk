@@ -2,9 +2,9 @@
 # http://mingw.sourceforge.net/
 
 PKG            := mingwrt
-$(PKG)_VERSION := 3.14
+$(PKG)_VERSION := 3.15.1-mingw32
 $(PKG)_SUBDIR  := .
-$(PKG)_FILE    := mingw-runtime-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE    := mingwrt-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
 $(PKG)_DEPS    :=
 
