@@ -17,6 +17,8 @@ endef
 define $(PKG)_BUILD
     $(SED) 's,-lgeos,-lgeos -lstdc++,' -i '$(1)/tools/geos-config.in'
     $(SED) 's,-L\$${libdir}$$,-L$${libdir} -lgeos -lstdc++,' -i '$(1)/tools/geos-config.in'
+    $(SED) 's,-ansi -pedantic,-pedantic,' -i '$(1)/configure.in'
+    $(SED) 's,-ansi -pedantic,-pedantic,' -i '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
