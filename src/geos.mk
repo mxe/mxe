@@ -21,6 +21,8 @@ define $(PKG)_BUILD
     touch '$(1)/aclocal.m4'
     $(SED) 's,-ansi -pedantic,-pedantic,' -i '$(1)/configure'
     touch '$(1)/Makefile.in'
+    touch '$(1)/source/headers/config.h.in'
+    touch '$(1)/source/headers/geos/platform.h.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
