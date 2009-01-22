@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    echo '/* DEACTIVATED */' >'$(1)/gl/gai_strerror.c'
+    echo '/* DEACTIVATED */' > '$(1)/gl/gai_strerror.c'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
