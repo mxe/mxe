@@ -87,7 +87,9 @@ clean:
 define UPDATE
     $(if $(2), \
         $(info $(1): $(2)) \
-        $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i src/$(1).mk, \
+        $(if $(filter $(2),$($(1)_VERSION)), \
+            , \
+            $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i src/$(1).mk), \
         $(error Unable to update version number: $(1)))
 
 endef
