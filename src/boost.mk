@@ -28,6 +28,7 @@ define $(PKG)_BUILD
         threading=multi \
         link=static \
         threadapi=win32 \
+        --layout=system \
         --without-mpi \
         --without-python \
         --prefix='$(PREFIX)/$(TARGET)' \
