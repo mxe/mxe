@@ -9,12 +9,13 @@ VERSION := 2.3
 PREFIX  := $(PWD)/usr
 PKG_DIR := $(PWD)/pkg
 TMP_DIR  = $(PWD)/tmp-$(1)
+TOP_DIR := $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST))))
 PATH    := $(PREFIX)/bin:$(PATH)
 SHELL   := bash
 SED     := $(shell gsed --version >/dev/null 2>&1 && echo g)sed
 
-PKG_RULES := $(patsubst src/%.mk,%,$(wildcard src/*.mk))
-include src/*.mk
+PKG_RULES := $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk))
+include $(TOP_DIR)/src/*.mk
 
 CHECK_ARCHIVE = \
     $(if $(filter %.tgz,    $(1)),tar tfz '$(1)' >/dev/null 2>&1, \
@@ -39,7 +40,7 @@ all: $(PKG_RULES)
 define PKG_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/installed-$(1)
-$(PREFIX)/installed-$(1): src/$(1).mk $(addprefix $(PREFIX)/installed-,$($(1)_DEPS))
+$(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk $(addprefix $(PREFIX)/installed-,$($(1)_DEPS))
 	[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
 	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	rm -rf   '$(2)'
@@ -89,7 +90,7 @@ define UPDATE
         $(info $(1): $(2)) \
         $(if $(filter $(2),$($(1)_VERSION)), \
             , \
-            $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i src/$(1).mk), \
+            $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i '$(TOP_DIR)/src/$(1).mk'), \
         $(error Unable to update version number: $(1)))
 
 endef
@@ -102,19 +103,19 @@ dist:
 	mkdir  'mingw_cross_env-$(VERSION)'
 	mkdir  'mingw_cross_env-$(VERSION)/doc'
 	mkdir  'mingw_cross_env-$(VERSION)/src'
-	hg log -v --style changelog >'mingw_cross_env-$(VERSION)/doc/ChangeLog'
+	(cd '$(TOP_DIR)' && hg log -v --style changelog) >'mingw_cross_env-$(VERSION)/doc/ChangeLog'
 	( \
-	    $(SED) -n '1,/^List/ { s/^\(    Version:\).*/\1 $(VERSION)/; p }' doc/README && \
+	    $(SED) -n '1,/^List/ { s/^\(    Version:\).*/\1 $(VERSION)/; p }' '$(TOP_DIR)/doc/README' && \
 	    echo '================' && \
 	    echo && \
 	    ($(foreach PKG,$(PKG_RULES),echo '$(PKG)' '$($(PKG)_VERSION)';)) | \
 	        awk '{ printf "    %-12s  %s\n", $$1, $$2 }' && \
 	    echo && \
 	    echo && \
-	    $(SED) -n '/^Copyright/,$$ p' doc/README \
+	    $(SED) -n '/^Copyright/,$$ p' '$(TOP_DIR)/doc/README' \
 	) >'mingw_cross_env-$(VERSION)/doc/README'
-	cp -p Makefile 'mingw_cross_env-$(VERSION)/'
-	cp -p src/*.mk 'mingw_cross_env-$(VERSION)/src/'
+	cp -p '$(TOP_DIR)/Makefile' 'mingw_cross_env-$(VERSION)/'
+	cp -p '$(TOP_DIR)/src'/*.mk 'mingw_cross_env-$(VERSION)/src/'
 	tar cvf - 'mingw_cross_env-$(VERSION)' | gzip -9 >'mingw_cross_env-$(VERSION).tar.gz'
 	rm -rf 'mingw_cross_env-$(VERSION)'
 
