@@ -31,6 +31,9 @@ UNPACK_ARCHIVE = \
     $(if $(filter %.zip,    $(1)),unzip '$(1)', \
     $(error Unknown archive format: $(1))))))
 
+UNPACK_PKG_ARCHIVE = \
+    $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
+
 DOWNLOAD = \
     $(if $(2),wget -t 3 -c '$(1)' || wget -c '$(2)',wget -c '$(1)')
 
@@ -49,8 +52,7 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk $(addprefix $(PREFIX)/installed
 	$(if $(value $(1)_BUILD),
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
-	    cd '$(2)' && \
-	        $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
+	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
 	    cd '$(2)/$($(1)_SUBDIR)'
 	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR))
 	    rm -rfv  '$(2)'
