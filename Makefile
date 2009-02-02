@@ -43,16 +43,18 @@ $(1): $(PREFIX)/installed-$(1)
 $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk $(addprefix $(PREFIX)/installed-,$($(1)_DEPS))
 	[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
 	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
-	rm -rf   '$(2)'
-	mkdir -p '$(2)'
 	cd '$(PKG_DIR)' && ( \
 	    $(call CHECK_ARCHIVE,$($(1)_FILE)) || \
 	    $(call DOWNLOAD,$($(1)_URL),$($(1)_URL_2)) )
-	cd '$(2)' && \
-	    $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
-	cd '$(2)/$($(1)_SUBDIR)'
-	$$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR))
-	rm -rfv '$(2)'
+	$(if $(value $(1)_BUILD),
+	    rm -rf   '$(2)'
+	    mkdir -p '$(2)'
+	    cd '$(2)' && \
+	        $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
+	    cd '$(2)/$($(1)_SUBDIR)'
+	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR))
+	    rm -rfv  '$(2)'
+	    ,)
 	touch '$$@'
 endef
 $(foreach PKG,$(PKG_RULES),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
