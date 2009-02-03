@@ -1,21 +1,37 @@
-# MinGW GCC
-# http://mingw.sourceforge.net/
+# TDM-GCC
+# http://www.tdragon.net/recentgcc/
 
 PKG            := gcc
-$(PKG)_VERSION := 4.2.1-2
-$(PKG)_SUBDIR  := gcc-$($(PKG)_VERSION)-src
-$(PKG)_FILE    := gcc-$($(PKG)_VERSION)-src.tar.gz
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
-$(PKG)_DEPS    := mingwrt w32api binutils pkg_config
+$(PKG)_VERSION := 4.3.2-tdm-2
+$(PKG)_SUBDIR  := .
+$(PKG)_FILE    := gcc-$($(PKG)_VERSION)-srcbase.zip
+$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
+$(PKG)_DEPS    := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=241304' | \
-    $(SED) -n 's,.*gcc-\([4-9][^>]*\)-src\.tar.*,\1,p' | \
+    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=200665&package_id=238347' | \
+    grep 'gcc-' | \
+    $(SED) -n 's,.*gcc-\([4-9][^>]*\)-srcbase\.zip.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    # unpack GCC
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-core)
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-g++)
+    # apply TDM patches to GCC
+    cd '$(1)/$(gcc-core_SUBDIR)' && \
+        for p in '$(1)'/*.patch; do \
+            patch -p1 < "$$p"; \
+        done
+    # unpack support libraries
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-gmp)
+    mv '$(1)/$(gcc-gmp_SUBDIR)' '$(1)/$(gcc-core_SUBDIR)/gmp'
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-mpfr)
+    mv '$(1)/$(gcc-mpfr_SUBDIR)' '$(1)/$(gcc-core_SUBDIR)/mpfr'
+    # build
+    mkdir '$(1)/build'
+    cd '$(1)/build' && '$(1)/$(gcc-core_SUBDIR)/configure' \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
         --enable-languages='c,c++' \
@@ -29,5 +45,6 @@ define $(PKG)_BUILD
         --enable-threads=win32 \
         --disable-win32-registry \
         --enable-sjlj-exceptions
-    $(MAKE) -C '$(1)' -j 1 all install
+    $(MAKE) -C '$(1)/build' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/build' -j 1 install
 endef
