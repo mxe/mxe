@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     $(SED) 's,<target-os>windows : lib ;,<target-os>windows : a ;,' -i '$(1)/tools/build/v2/tools/types/lib.jam'
     # compile boost jam
     cd '$(1)/tools/jam/src' && ./build.sh
-    cd '$(1)' && tools/jam/src/bin.linuxx86/bjam \
+    cd '$(1)' && tools/jam/src/bin.*/bjam \
         -j '$(JOBS)' \
         --user-config=user-config.jam \
         target-os=windows \

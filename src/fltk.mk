@@ -25,5 +25,5 @@ define $(PKG)_BUILD
         --enable-threads \
         LIBS='-lws2_32'
     $(SED) 's,-fno-exceptions,,' -i '$(1)/makeinclude'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install DIRS=src
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install DIRS=src LIBCOMMAND='$(TARGET)-ar cr'
 endef
