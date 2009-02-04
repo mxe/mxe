@@ -22,6 +22,6 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j 1 all install EXEEXT=.remove-me
+    $(MAKE) -C '$(1)' -j 1 all install EXEEXT=.remove-me MAKE='$(MAKE)'
     rm -fv '$(PREFIX)/$(TARGET)'/bin/*.remove-me
 endef
