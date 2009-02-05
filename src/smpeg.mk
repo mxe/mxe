@@ -17,6 +17,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
+        AR='$(TARGET)-ar' \
         NM='$(TARGET)-nm' \
         --host='$(TARGET)' \
         --disable-shared \
