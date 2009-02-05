@@ -16,6 +16,7 @@ endef
 
 define $(PKG)_BUILD
     $(SED) 's,-Dunix,,' -i '$(1)/libmikmod/Makefile.in'
+    $(SED) 's,`uname`,MinGW,g' -i '$(1)/configure'
     cd '$(1)' && \
         CC='$(TARGET)-gcc' \
         NM='$(TARGET)-nm' \
