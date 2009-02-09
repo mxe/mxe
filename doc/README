@@ -26,12 +26,12 @@ Usage
 
     make foo bar
 
-        build packages 'foo', 'bar' and their dependencies,
+        build packages "foo", "bar" and their dependencies,
         non-parallel
 
     make foo bar -j 4 JOBS=2
 
-        build packages 'foo', 'bar' and their dependencies,
+        build packages "foo", "bar" and their dependencies,
         where up to 4 packages are build in parallel,
         each with up to 2 compiler processes running in parallel
 
@@ -46,7 +46,8 @@ Usage
 
     make clean-pkg
 
-        remove all unused package files
+        remove all unused package files,
+        handy after a successful "make update"
 
     make update
 
