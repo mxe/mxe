@@ -88,6 +88,13 @@ strip:
 clean:
 	rm -rf $(call TMP_DIR,*) $(PREFIX)/*
 
+.PHONY: clean-pkg
+clean-pkg:
+	rm -f $(patsubst %,'%', \
+                  $(filter-out \
+                      $(foreach PKG,$(PKG_RULES),$(PKG_DIR)/$($(PKG)_FILE)), \
+                      $(wildcard $(PKG_DIR)/*)))
+
 .PHONY: update
 define UPDATE
     $(if $(2), \

@@ -44,6 +44,10 @@ Usage
         remove all package builds,
         use with caution!
 
+    make clean-pkg
+
+        remove all unused package files
+
     make update
 
         update the version numbers of all packages,
