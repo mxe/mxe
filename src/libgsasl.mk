@@ -2,10 +2,10 @@
 # http://www.gnu.org/software/gsasl/
 
 PKG            := libgsasl
-$(PKG)_VERSION := 0.2.9
+$(PKG)_VERSION := 1.0
 $(PKG)_SUBDIR  := libgsasl-$($(PKG)_VERSION)
 $(PKG)_FILE    := libgsasl-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL     := ftp://alpha.gnu.org/pub/gnu/gsasl/$($(PKG)_FILE)
+$(PKG)_URL     := http://ftp.gnu.org/gnu/gsasl/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc libiconv libidn libntlm
 
 define $(PKG)_UPDATE
