@@ -2,7 +2,7 @@
 # http://www.boost.org/
 
 PKG            := boost
-$(PKG)_VERSION := 1_37_0
+$(PKG)_VERSION := 1_38_0
 $(PKG)_SUBDIR  := boost_$($(PKG)_VERSION)
 $(PKG)_FILE    := boost_$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/boost/$($(PKG)_FILE)
