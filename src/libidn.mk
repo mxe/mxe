@@ -1,5 +1,5 @@
-# libidn
-# ftp://ftp.gnu.org/gnu/libidn/
+# Libidn
+# http://www.gnu.org/software/libidn/
 
 PKG            := libidn
 $(PKG)_VERSION := 1.12
