@@ -9,10 +9,10 @@ $(PKG)_URL     := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'ftp://ftp.gnu.org/pub/gnu/gettext/' | \
+    wget -q -O- 'http://www.gnu.org/software/gettext/' | \
+    grep 'gettext-' | \
     $(SED) -n 's,.*gettext-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    sort | \
-    tail -1
+    head -1
 endef
 
 define $(PKG)_BUILD
