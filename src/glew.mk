@@ -18,6 +18,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && $(TARGET)-gcc -O2 -DGLEW_STATIC -Iinclude -c -o glew.o src/glew.c
     cd '$(1)' && $(TARGET)-ar cr libGLEW.a glew.o
+    $(TARGET)-ranlib '$(1)/libGLEW.a'
     install -d '$(PREFIX)/$(TARGET)/lib'
     install -m644 '$(1)/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/'
     install -m644 '$(1)/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/libglew32s.a'
