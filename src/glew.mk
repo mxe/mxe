@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && $(TARGET)-ar cr libGLEW.a glew.o
     install -d '$(PREFIX)/$(TARGET)/lib'
     install -m644 '$(1)/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/'
+    install -m644 '$(1)/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/libglew32s.a'
     install -d '$(PREFIX)/$(TARGET)/include'
     install -d '$(PREFIX)/$(TARGET)/include/GL'
     install -m644 '$(1)/include/GL/glew.h' '$(1)/include/GL/wglew.h' '$(PREFIX)/$(TARGET)/include/GL/'
