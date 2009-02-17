@@ -18,12 +18,18 @@ endef
 define $(PKG)_BUILD
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    # build the win32 thread sources instead of the posix thread sources
+    $(SED) 's,IlmThreadPosix\.,IlmThreadWin32\.,'                   -i '$(1)/IlmThread/Makefile.in'
+    $(SED) 's,IlmThreadSemaphorePosix\.,IlmThreadSemaphoreWin32\.,' -i '$(1)/IlmThread/Makefile.in'
+    $(SED) 's,IlmThreadMutexPosix\.,IlmThreadMutexWin32\.,'         -i '$(1)/IlmThread/Makefile.in'
+    echo '/* disabled */' > '$(1)/IlmThread/IlmThreadSemaphorePosixCompat.cpp'
+    # Because of the previous changes, '--disable-threading' will not disable
+    # threading. It will just disable the unwanted check for pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-threading=no \
-        --disable-posix-sem
+        --disable-threading
     # do the first build step by hand, because programs are built that
     # generate source files
     cd '$(1)/Half' && g++ eLut.cpp -o eLut
