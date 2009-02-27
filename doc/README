@@ -12,8 +12,8 @@ About
     are downloaded automatically.
 
     The Makefile is designed to run on any Unix system. It also runs
-    partly on MSYS. It needs GNU make and GNU sed, so FreeBSD users
-    need the ports textproc/gsed and devel/gmake.
+    partly on MSYS. It needs GNU make (>= 3.81) and GNU sed, so FreeBSD
+    users need the ports textproc/gsed and devel/gmake.
 
 
 Usage
