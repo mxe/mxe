@@ -3,7 +3,7 @@
 
 PKG            := gettext
 $(PKG)_VERSION := 0.17
-$(PKG)_SUBDIR  := gettext-$($(PKG)_VERSION)/gettext-runtime
+$(PKG)_SUBDIR  := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE    := gettext-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
@@ -16,11 +16,32 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    # native build for gettext-tools
+    cd '$(1)/gettext-tools' && ./configure \
+        --disable-shared \
+        --prefix='$(PREFIX)' \
+        --disable-threads \
+        --without-libpth-prefix \
+        --without-libiconv-prefix \
+        --without-libintl-prefix \
+        --without-libglib-2.0-prefix \
+        --without-libcroco-0.6-prefix \
+        --without-libxml2-prefix \
+        --without-libncurses-prefix \
+        --without-libtermcap-prefix \
+        --without-libxcurses-prefix \
+        --without-libcurses-prefix \
+        --without-included-regex \
+        --without-libexpat-prefix \
+        --without-emacs
+    $(MAKE) -C '$(1)/gettext-tools' -j '$(JOBS)' SHELL=bash
+    $(MAKE) -C '$(1)/gettext-tools/src' -j 1 SHELL=bash lib_LTLIBRARIES= install-binPROGRAMS
+    # cross build for gettext-runtime
+    cd '$(1)/gettext-runtime' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --without-libexpat-prefix \
-        --enable-threads=win32
-    $(MAKE) -C '$(1)/intl' -j '$(JOBS)' SHELL=bash install
+        --enable-threads=win32 \
+        --without-libexpat-prefix
+    $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' SHELL=bash install
 endef
