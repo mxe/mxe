@@ -16,20 +16,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,.*/usr/include.*,,' -i '$(1)/configure.pl'
-    EXSLT_LIBS=`$(TARGET)-pkg-config libexslt --libs | $(SED) 's,-L[^ ]*,,g'` \
-    $(SED) "s,-lxslt -lexslt,$$EXSLT_LIBS," -i '$(1)/configure.pl'
-    $(SED) 's,"ranlib",$$ENV{"RANLIB"} || "ranlib",g' -i '$(1)/tools/cxxflags'
-    cd '$(1)' && \
-        CXX='$(TARGET)-g++' \
-        AR='$(TARGET)-ar' \
-        RANLIB='$(TARGET)-ranlib' \
-        CXXFLAGS="-ffriend-injection `$(PREFIX)/$(TARGET)/bin/xml2-config --cflags`" \
-        ./configure.pl \
-            --disable-shared \
-            --prefix='$(PREFIX)/$(TARGET)' \
-            --xml2-config='$(PREFIX)/$(TARGET)/bin/xml2-config' \
-            --xslt-config='$(PREFIX)/$(TARGET)/bin/xslt-config' \
-            --disable-examples
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    cd '$(1)' && ./configure \
+        --host='$(TARGET)' \
+        --disable-shared \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        PKG_CONFIG='$(TARGET)-pkg-config'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
 endef
