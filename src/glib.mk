@@ -21,15 +21,14 @@ define $(PKG)_BUILD
     cd '$(1)/$(glib_SUBDIR)' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)' \
+        --enable-regex \
         --without-threads \
         --disable-selinux \
         --disable-fam \
-        --disable-xattr \
-        --disable-regex
+        --disable-xattr
     $(SED) 's,#define G_ATOMIC.*,,' -i '$(1)/$(glib_SUBDIR)/config.h'
     $(MAKE) -C '$(1)/$(glib_SUBDIR)/glib' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/$(glib_SUBDIR)/gobject' -j '$(JOBS)' \
-        lib_LTLIBRARIES= bin_PROGRAMS=glib-genmarshal install-binPROGRAMS
+    $(MAKE) -C '$(1)/$(glib_SUBDIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
     # cross build
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
