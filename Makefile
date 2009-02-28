@@ -69,6 +69,7 @@ strip:
 	    '$(PREFIX)/lib/libiberty.a' \
 	    '$(PREFIX)/man' \
 	    '$(PREFIX)/share' \
+	    '$(PREFIX)/$(TARGET)/etc' \
 	    '$(PREFIX)/$(TARGET)/doc' \
 	    '$(PREFIX)/$(TARGET)/info' \
 	    '$(PREFIX)/$(TARGET)/lib'/*.def \
