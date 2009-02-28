@@ -71,6 +71,7 @@ strip:
 	    $(PREFIX)/share \
 	    $(PREFIX)/$(TARGET)/doc \
 	    $(PREFIX)/$(TARGET)/info \
+	    $(PREFIX)/$(TARGET)/lib/*.def \
 	    $(PREFIX)/$(TARGET)/man \
 	    $(PREFIX)/$(TARGET)/sbin \
 	    $(PREFIX)/$(TARGET)/share
