@@ -6,7 +6,7 @@ $(PKG)_VERSION := 0.17
 $(PKG)_SUBDIR  := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE    := gettext-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+$(PKG)_DEPS    := gcc libiconv
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.gnu.org/software/gettext/' | \
@@ -42,6 +42,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads=win32 \
-        --without-libexpat-prefix
+        --without-libexpat-prefix \
+        --without-libxml2-prefix
     $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' SHELL=bash install
 endef
