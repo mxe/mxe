@@ -2,7 +2,7 @@
 # http://gcc.gnu.org/
 
 PKG            := gcc-objc
-$(PKG)_VERSION := 4.3.2
+$(PKG)_VERSION := 4.3.3
 $(PKG)_SUBDIR  := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE    := gcc-objc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)

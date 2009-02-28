@@ -2,7 +2,7 @@
 # http://www.tdragon.net/recentgcc/
 
 PKG            := gcc
-$(PKG)_VERSION := 4.3.2-tdm-2
+$(PKG)_VERSION := 4.3.3-tdm-1
 $(PKG)_SUBDIR  := .
 $(PKG)_FILE    := gcc-$($(PKG)_VERSION)-srcbase.zip
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)

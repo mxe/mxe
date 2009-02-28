@@ -2,7 +2,7 @@
 # http://sourceforge.net/projects/xmlwrapp/
 
 PKG            := xmlwrapp
-$(PKG)_VERSION := 0.5.1
+$(PKG)_VERSION := 0.6.0
 $(PKG)_SUBDIR  := xmlwrapp-$($(PKG)_VERSION)
 $(PKG)_FILE    := xmlwrapp-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/xmlwrapp/$($(PKG)_FILE)
