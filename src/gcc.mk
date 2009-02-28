@@ -6,7 +6,7 @@ $(PKG)_VERSION := 4.3.2-tdm-2
 $(PKG)_SUBDIR  := .
 $(PKG)_FILE    := gcc-$($(PKG)_VERSION)-srcbase.zip
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
-$(PKG)_DEPS    := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++
+$(PKG)_DEPS    := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=200665&package_id=238347' | \
@@ -19,6 +19,8 @@ define $(PKG)_BUILD
     # unpack GCC
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-core)
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-g++)
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-objc)
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-fortran)
     # apply TDM patches to GCC
     cd '$(1)/$(gcc-core_SUBDIR)' && \
         for p in '$(1)'/*.patch; do \
@@ -34,7 +36,7 @@ define $(PKG)_BUILD
     cd '$(1)/build' && '$(1)/$(gcc-core_SUBDIR)/configure' \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
-        --enable-languages='c,c++' \
+        --enable-languages='c,c++,objc,fortran' \
         --enable-version-specific-runtime-libs \
         --with-gcc \
         --with-gnu-ld \
