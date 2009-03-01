@@ -1,10 +1,10 @@
 # Libntlm
-# http://josefsson.org/libntlm/
 
 PKG            := libntlm
 $(PKG)_VERSION := 1.0
 $(PKG)_SUBDIR  := libntlm-$($(PKG)_VERSION)
 $(PKG)_FILE    := libntlm-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://josefsson.org/libntlm/
 $(PKG)_URL     := http://josefsson.org/libntlm/releases/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

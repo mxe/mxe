@@ -1,10 +1,10 @@
 # MinGW Runtime
-# http://mingw.sourceforge.net/
 
 PKG            := mingwrt
 $(PKG)_VERSION := 3.15.2-mingw32
 $(PKG)_SUBDIR  := .
 $(PKG)_FILE    := mingwrt-$($(PKG)_VERSION)-dev.tar.gz
+$(PKG)_WEBSITE := http://mingw.sourceforge.net/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
 $(PKG)_DEPS    :=
 

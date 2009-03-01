@@ -1,10 +1,10 @@
 # libdnet
-# http://libdnet.sourceforge.net/
 
 PKG            := libdnet
 $(PKG)_VERSION := 1.11
 $(PKG)_SUBDIR  := libdnet-$($(PKG)_VERSION)
 $(PKG)_FILE    := libdnet-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://libdnet.sourceforge.net/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/libdnet/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc winpcap
 

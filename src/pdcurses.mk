@@ -1,10 +1,10 @@
 # PDcurses
-# http://pdcurses.sourceforge.net/
 
 PKG            := pdcurses
 $(PKG)_VERSION := 3.4
 $(PKG)_SUBDIR  := PDCurses-$($(PKG)_VERSION)
 $(PKG)_FILE    := PDCurses-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://pdcurses.sourceforge.net/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/pdcurses/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

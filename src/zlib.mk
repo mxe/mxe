@@ -1,10 +1,10 @@
 # zlib
-# http://www.zlib.net/
 
 PKG            := zlib
 $(PKG)_VERSION := 1.2.3
 $(PKG)_SUBDIR  := zlib-$($(PKG)_VERSION)
 $(PKG)_FILE    := zlib-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.zlib.net/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/libpng/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

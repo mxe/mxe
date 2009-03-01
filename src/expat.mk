@@ -1,10 +1,10 @@
 # Expat XML Parser
-# http://expat.sourceforge.net/
 
 PKG            := expat
 $(PKG)_VERSION := 2.0.1
 $(PKG)_SUBDIR  := expat-$($(PKG)_VERSION)
 $(PKG)_FILE    := expat-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://expat.sourceforge.net/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/expat/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

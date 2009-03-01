@@ -1,10 +1,10 @@
 # wxWidgets
-# http://www.wxwidgets.org/
 
 PKG            := wxwidgets
 $(PKG)_VERSION := 2.8.9
 $(PKG)_SUBDIR  := wxMSW-$($(PKG)_VERSION)
 $(PKG)_FILE    := wxMSW-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.wxwidgets.org/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/wxwindows/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc libiconv libpng jpeg tiff sdl tre zlib expat
 

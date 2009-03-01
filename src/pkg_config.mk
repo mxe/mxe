@@ -1,10 +1,10 @@
 # pkg-config
-# http://pkg-config.freedesktop.org/
 
 PKG            := pkg_config
 $(PKG)_VERSION := 0.23
 $(PKG)_SUBDIR  := pkg-config-$($(PKG)_VERSION)
 $(PKG)_FILE    := pkg-config-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://pkg-config.freedesktop.org/
 $(PKG)_URL     := http://pkgconfig.freedesktop.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS    :=
 

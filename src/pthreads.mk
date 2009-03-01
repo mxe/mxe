@@ -1,10 +1,10 @@
 # pthreads-w32
-# http://sourceware.org/pthreads-win32/
 
 PKG            := pthreads
 $(PKG)_VERSION := 2-8-0
 $(PKG)_SUBDIR  := pthreads-w32-$($(PKG)_VERSION)-release
 $(PKG)_FILE    := pthreads-w32-$($(PKG)_VERSION)-release.tar.gz
+$(PKG)_WEBSITE := http://sourceware.org/pthreads-win32/
 $(PKG)_URL     := ftp://sourceware.org/pub/pthreads-win32/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

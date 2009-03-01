@@ -1,10 +1,10 @@
 # GLEW
-# http://glew.sourceforge.net/
 
 PKG            := glew
 $(PKG)_VERSION := 1.5.1
 $(PKG)_SUBDIR  := glew
 $(PKG)_FILE    := glew-$($(PKG)_VERSION)-src.tgz
+$(PKG)_WEBSITE := http://glew.sourceforge.net/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/glew/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

@@ -1,10 +1,10 @@
 # Pango
-# http://www.pango.org/
 
 PKG            := pango
 $(PKG)_VERSION := 1.22.4
 $(PKG)_SUBDIR  := pango-$($(PKG)_VERSION)
 $(PKG)_FILE    := pango-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.pango.org/
 $(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc fontconfig freetype cairo glib
 

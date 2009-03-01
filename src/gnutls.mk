@@ -1,10 +1,10 @@
 # GnuTLS
-# http://www.gnu.org/software/gnutls/
 
 PKG            := gnutls
 $(PKG)_VERSION := 1.6.3
 $(PKG)_SUBDIR  := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE    := gnutls-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.gnu.org/software/gnutls/
 $(PKG)_URL     := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc libgcrypt
 

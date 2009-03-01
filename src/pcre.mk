@@ -1,10 +1,10 @@
 # PCRE
-# http://www.pcre.org/
 
 PKG            := pcre
 $(PKG)_VERSION := 7.8
 $(PKG)_SUBDIR  := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE    := pcre-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.pcre.org/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/pcre/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

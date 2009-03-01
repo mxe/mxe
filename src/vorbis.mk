@@ -1,10 +1,10 @@
 # Vorbis
-# http://www.vorbis.com/
 
 PKG            := vorbis
 $(PKG)_VERSION := 1.2.0
 $(PKG)_SUBDIR  := libvorbis-$($(PKG)_VERSION)
 $(PKG)_FILE    := libvorbis-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://www.vorbis.com/
 $(PKG)_URL     := http://downloads.xiph.org/releases/vorbis/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc pthreads ogg
 

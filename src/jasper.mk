@@ -1,10 +1,10 @@
 # JasPer
-# http://www.ece.uvic.ca/~mdadams/jasper/
 
 PKG            := jasper
 $(PKG)_VERSION := 1.900.1
 $(PKG)_SUBDIR  := jasper-$($(PKG)_VERSION)
 $(PKG)_FILE    := jasper-$($(PKG)_VERSION).zip
+$(PKG)_WEBSITE := http://www.ece.uvic.ca/~mdadams/jasper/
 $(PKG)_URL     := http://www.ece.uvic.ca/~mdadams/jasper/software/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc jpeg
 

@@ -1,10 +1,10 @@
 # OpenEXR
-# http://www.openexr.com/
 
 PKG            := openexr
 $(PKG)_VERSION := 1.6.1
 $(PKG)_SUBDIR  := openexr-$($(PKG)_VERSION)
 $(PKG)_FILE    := openexr-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://www.openexr.com/
 $(PKG)_URL     := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc ilmbase
 

@@ -1,10 +1,10 @@
 # gettext
-# http://www.gnu.org/software/gettext/
 
 PKG            := gettext
 $(PKG)_VERSION := 0.17
 $(PKG)_SUBDIR  := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE    := gettext-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://www.gnu.org/software/gettext/
 $(PKG)_URL     := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc libiconv
 

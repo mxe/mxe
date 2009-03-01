@@ -1,10 +1,10 @@
 # WinPcap
-# http://www.winpcap.org/
 
 PKG            := winpcap
 $(PKG)_VERSION := 4_0_2
 $(PKG)_SUBDIR  := winpcap
 $(PKG)_FILE    := WpcapSrc_$($(PKG)_VERSION).zip
+$(PKG)_WEBSITE := http://www.winpcap.org/
 $(PKG)_URL     := http://www.winpcap.org/install/bin/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

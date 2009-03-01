@@ -1,10 +1,10 @@
 # GD  (without support for xpm)
-# http://www.libgd.org/
 
 PKG            := gd
 $(PKG)_VERSION := 2.0.35
 $(PKG)_SUBDIR  := gd-$($(PKG)_VERSION)
 $(PKG)_FILE    := gd-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.libgd.org/
 $(PKG)_URL     := http://www.libgd.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2   := http://www.libgd.org/releases/oldreleases/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc freetype libpng libxml2

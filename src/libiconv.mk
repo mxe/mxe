@@ -1,10 +1,10 @@
 # libiconv
-# http://www.gnu.org/software/libiconv/
 
 PKG            := libiconv
 $(PKG)_VERSION := 1.12
 $(PKG)_SUBDIR  := libiconv-$($(PKG)_VERSION)
 $(PKG)_FILE    := libiconv-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://www.gnu.org/software/libiconv/
 $(PKG)_URL     := http://ftp.gnu.org/pub/gnu/libiconv/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

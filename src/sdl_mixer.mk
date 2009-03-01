@@ -1,10 +1,10 @@
 # SDL_mixer
-# http://libsdl.org/projects/SDL_mixer/
 
 PKG            := sdl_mixer
 $(PKG)_VERSION := 1.2.8
 $(PKG)_SUBDIR  := SDL_mixer-$($(PKG)_VERSION)
 $(PKG)_FILE    := SDL_mixer-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://libsdl.org/projects/SDL_mixer/
 $(PKG)_URL     := http://libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc sdl libmikmod ogg smpeg
 

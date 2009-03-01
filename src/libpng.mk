@@ -1,10 +1,10 @@
 # libpng
-# http://www.libpng.org/
 
 PKG            := libpng
 $(PKG)_VERSION := 1.2.35
 $(PKG)_SUBDIR  := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE    := libpng-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.libpng.org/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/libpng/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc zlib
 

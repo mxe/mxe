@@ -1,10 +1,10 @@
 # GDAL
-# http://www.gdal.org/
 
 PKG            := gdal
 $(PKG)_VERSION := 1.6.0
 $(PKG)_SUBDIR  := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE    := gdal-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://www.gdal.org/
 $(PKG)_URL     := http://download.osgeo.org/gdal/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc zlib libpng tiff libgeotiff jpeg giflib expat curl geos
 

@@ -1,10 +1,10 @@
 # SDL_ttf
-# http://libsdl.org/projects/SDL_ttf/
 
 PKG            := sdl_ttf
 $(PKG)_VERSION := 2.0.9
 $(PKG)_SUBDIR  := SDL_ttf-$($(PKG)_VERSION)
 $(PKG)_FILE    := SDL_ttf-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://libsdl.org/projects/SDL_ttf/
 $(PKG)_URL     := http://libsdl.org/projects/SDL_ttf/release/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc sdl freetype
 

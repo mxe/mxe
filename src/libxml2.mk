@@ -1,10 +1,10 @@
 # libxml2
-# http://www.xmlsoft.org/
 
 PKG            := libxml2
 $(PKG)_VERSION := 2.7.3
 $(PKG)_SUBDIR  := libxml2-$($(PKG)_VERSION)
 $(PKG)_FILE    := libxml2-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://www.xmlsoft.org/
 $(PKG)_URL     := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

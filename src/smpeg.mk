@@ -1,10 +1,10 @@
 # smpeg
-# http://icculus.org/smpeg/
 # http://packages.debian.org/unstable/source/smpeg
 
 PKG            := smpeg
 $(PKG)_VERSION := 0.4.5+cvs20030824
 $(PKG)_SUBDIR  := smpeg-$($(PKG)_VERSION).orig
+$(PKG)_WEBSITE := http://icculus.org/smpeg/
 $(PKG)_FILE    := smpeg_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_URL     := http://ftp.debian.org/debian/pool/main/s/smpeg/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc sdl

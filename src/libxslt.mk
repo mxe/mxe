@@ -1,10 +1,10 @@
 # libxslt
-# http://xmlsoft.org/XSLT/
 
 PKG            := libxslt
 $(PKG)_VERSION := 1.1.24
 $(PKG)_SUBDIR  := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE    := libxslt-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://xmlsoft.org/XSLT/
 $(PKG)_URL     := ftp://xmlsoft.org/libxslt/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc libxml2 libgcrypt
 

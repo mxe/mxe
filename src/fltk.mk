@@ -1,10 +1,10 @@
 # FLTK
-# http://www.fltk.org/
 
 PKG            := fltk
 $(PKG)_VERSION := 1.1.9
 $(PKG)_SUBDIR  := fltk-$($(PKG)_VERSION)
 $(PKG)_FILE    := fltk-$($(PKG)_VERSION)-source.tar.bz2
+$(PKG)_WEBSITE := http://www.fltk.org/
 $(PKG)_URL     := http://ftp.easysw.com/pub/fltk/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc pthreads zlib jpeg libpng
 

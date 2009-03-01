@@ -1,10 +1,10 @@
 # libMikMod
-# http://mikmod.raphnet.net/
 
 PKG            := libmikmod
 $(PKG)_VERSION := 3.2.0-beta2
 $(PKG)_SUBDIR  := libmikmod-$($(PKG)_VERSION)
 $(PKG)_FILE    := libmikmod-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://mikmod.raphnet.net/
 $(PKG)_URL     := http://mikmod.raphnet.net/files/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc pthreads
 

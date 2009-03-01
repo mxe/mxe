@@ -1,10 +1,10 @@
 # SDL
-# http://libsdl.org/
 
 PKG            := sdl
 $(PKG)_VERSION := 1.2.11
 $(PKG)_SUBDIR  := SDL-$($(PKG)_VERSION)
 $(PKG)_FILE    := SDL-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://libsdl.org/
 $(PKG)_URL     := http://libsdl.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc libiconv
 

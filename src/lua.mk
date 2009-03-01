@@ -1,10 +1,10 @@
 # Lua
-# http://www.lua.org/
 
 PKG            := lua
 $(PKG)_VERSION := 5.1.4
 $(PKG)_SUBDIR  := lua-$($(PKG)_VERSION)
 $(PKG)_FILE    := lua-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://www.lua.org/
 $(PKG)_URL     := http://www.lua.org/ftp/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

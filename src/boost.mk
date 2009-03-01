@@ -1,10 +1,10 @@
 # Boost C++ Library
-# http://www.boost.org/
 
 PKG            := boost
 $(PKG)_VERSION := 1_38_0
 $(PKG)_SUBDIR  := boost_$($(PKG)_VERSION)
 $(PKG)_FILE    := boost_$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.boost.org/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/boost/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc zlib bzip2 expat
 

@@ -1,10 +1,10 @@
 # fontconfig
-# http://fontconfig.org/
 
 PKG            := fontconfig
 $(PKG)_VERSION := 2.6.0
 $(PKG)_SUBDIR  := fontconfig-$($(PKG)_VERSION)
 $(PKG)_FILE    := fontconfig-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://fontconfig.org/
 $(PKG)_URL     := http://fontconfig.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc freetype expat
 

@@ -1,10 +1,10 @@
 # jpeg
-# http://www.ijg.org/
 # http://packages.debian.org/unstable/source/libjpeg6b
 
 PKG            := jpeg
 $(PKG)_VERSION := 6b
 $(PKG)_SUBDIR  := jpeg-$($(PKG)_VERSION)
+$(PKG)_WEBSITE := http://www.ijg.org/
 $(PKG)_FILE    := libjpeg6b_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_URL     := http://ftp.debian.org/debian/pool/main/libj/libjpeg6b/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc

@@ -1,10 +1,10 @@
 # MPFR for GCC
-# http://www.mpfr.org/
 
 PKG            := gcc-mpfr
 $(PKG)_VERSION := 2.3.2
 $(PKG)_SUBDIR  := mpfr-$($(PKG)_VERSION)
 $(PKG)_FILE    := mpfr-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.mpfr.org/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
 $(PKG)_DEPS    :=
 

@@ -1,10 +1,10 @@
 # MinGW Windows API
-# http://mingw.sourceforge.net/
 
 PKG            := w32api
 $(PKG)_VERSION := 3.13-mingw32
 $(PKG)_SUBDIR  := .
 $(PKG)_FILE    := w32api-$($(PKG)_VERSION)-dev.tar.gz
+$(PKG)_WEBSITE := http://mingw.sourceforge.net/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
 $(PKG)_DEPS    :=
 

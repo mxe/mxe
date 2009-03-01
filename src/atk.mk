@@ -1,10 +1,10 @@
 # ATK
-# http://www.gtk.org/
 
 PKG            := atk
 $(PKG)_VERSION := 1.24.0
 $(PKG)_SUBDIR  := atk-$($(PKG)_VERSION)
 $(PKG)_FILE    := atk-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.gtk.org/
 $(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc glib gettext
 

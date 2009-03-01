@@ -1,10 +1,10 @@
 # GMP for GCC
-# http://www.gmplib.org/
 
 PKG            := gcc-gmp
 $(PKG)_VERSION := 4.2.4
 $(PKG)_SUBDIR  := gmp-$($(PKG)_VERSION)
 $(PKG)_FILE    := gmp-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://www.gmplib.org/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
 $(PKG)_DEPS    :=
 

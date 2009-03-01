@@ -1,10 +1,10 @@
 # TDM-GCC
-# http://www.tdragon.net/recentgcc/
 
 PKG            := gcc
 $(PKG)_VERSION := 4.3.3-tdm-1
 $(PKG)_SUBDIR  := .
 $(PKG)_FILE    := gcc-$($(PKG)_VERSION)-srcbase.zip
+$(PKG)_WEBSITE := http://www.tdragon.net/recentgcc/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
 $(PKG)_DEPS    := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran
 

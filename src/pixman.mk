@@ -1,10 +1,10 @@
 # pixman
-# http://cairographics.org/
 
 PKG            := pixman
 $(PKG)_VERSION := 0.14.0
 $(PKG)_SUBDIR  := pixman-$($(PKG)_VERSION)
 $(PKG)_FILE    := pixman-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://cairographics.org/
 $(PKG)_URL     := http://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

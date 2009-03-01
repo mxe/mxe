@@ -1,10 +1,10 @@
 # cairo
-# http://cairographics.org/
 
 PKG            := cairo
 $(PKG)_VERSION := 1.8.6
 $(PKG)_SUBDIR  := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE    := cairo-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://cairographics.org/
 $(PKG)_URL     := http://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc zlib libpng fontconfig freetype pthreads pixman
 

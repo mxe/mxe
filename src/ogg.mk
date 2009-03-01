@@ -1,10 +1,10 @@
 # OGG
-# http://www.xiph.org/ogg/
 
 PKG            := ogg
 $(PKG)_VERSION := 1.1.3
 $(PKG)_SUBDIR  := libogg-$($(PKG)_VERSION)
 $(PKG)_FILE    := libogg-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE := http://www.xiph.org/ogg/
 $(PKG)_URL     := http://downloads.xiph.org/releases/ogg/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc
 

@@ -1,10 +1,10 @@
 # GCC fortran
-# http://gcc.gnu.org/
 
 PKG            := gcc-fortran
 $(PKG)_VERSION := 4.3.3
 $(PKG)_SUBDIR  := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE    := gcc-fortran-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://gcc.gnu.org/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
 $(PKG)_DEPS    :=
 

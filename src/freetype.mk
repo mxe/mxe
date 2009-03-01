@@ -1,10 +1,10 @@
 # freetype
-# http://freetype.sourceforge.net/
 
 PKG            := freetype
 $(PKG)_VERSION := 2.3.8
 $(PKG)_SUBDIR  := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE    := freetype-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE := http://freetype.sourceforge.net/
 $(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/freetype/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc zlib
 
