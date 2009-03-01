@@ -16,6 +16,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    sed 's,DllMain,static _disabled_DllMain,' -i '$(1)/gdk/win32/gdkmain-win32.c'
+    sed 's,DllMain,static _disabled_DllMain,' -i '$(1)/gdk-pixbuf/gdk-pixbuf-io.c'
+    sed 's,DllMain,static _disabled_DllMain,' -i '$(1)/gtk/gtkmain.c'
+    sed 's,__declspec(dllimport),,' -i '$(1)/gdk/gdktypes.h'
     sed 's,^\(Libs:.*\)@GTK_EXTRA_LIBS@,\1@GTK_DEP_LIBS@,' -i '$(1)/gtk+-2.0.pc.in'
     sed 's,^\(gtkbuiltincache\.h:\),_disabled_\1,' -i '$(1)/gtk/Makefile.in'
     sed 's,^\(install-data-local:.*\) install-libtool-import-lib,\1,' -i '$(1)/modules/other/gail/libgail-util/Makefile.in'
@@ -24,6 +28,7 @@ define $(PKG)_BUILD
     sed 's,enable_static=no,enable_static=yes,' -i '$(1)/configure'
     sed 's,enable_shared=yes,enable_shared=no,' -i '$(1)/configure'
     sed 's,\(STATIC_LIB_DEPS="[^"]*\) \$$LIBJPEG,\1 $$LIBJASPER $$LIBJPEG,' -i '$(1)/configure'
+    sed 's/-Wl,-luuid/-luuid/' -i '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

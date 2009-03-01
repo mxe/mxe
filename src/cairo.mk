@@ -6,7 +6,7 @@ $(PKG)_VERSION := 1.8.6
 $(PKG)_SUBDIR  := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE    := cairo-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL     := http://cairographics.org/releases/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc zlib libpng fontconfig freetype pthreads
+$(PKG)_DEPS    := gcc zlib libpng fontconfig freetype pthreads pixman
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://cairographics.org/releases/' | \
@@ -16,10 +16,32 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    sed 's,^\(Libs:.*\),\1 @CAIRO_NONPKGCONFIG_LIBS@,' -i '$(1)/src/cairo.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-gtk-doc
+        --disable-gtk-doc \
+        --disable-test-surfaces \
+        --disable-gcov \
+        --disable-xlib \
+        --disable-xlib-xrender \
+        --disable-xcb \
+        --disable-quartz \
+        --disable-quartz-font \
+        --disable-quartz-image \
+        --disable-os2 \
+        --disable-beos \
+        --disable-glitz \
+        --disable-directfb \
+        --enable-win32 \
+        --enable-win32-font \
+        --enable-png \
+        --enable-ft \
+        --enable-ps \
+        --enable-pdf \
+        --enable-svg \
+        --enable-pthread \
+        LIBS="-lmsimg32 -lpthread -lws2_32 `$(TARGET)-pkg-config pixman-1 --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

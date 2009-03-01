@@ -16,6 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    sed 's,DllMain,static _disabled_DllMain,' -i '$(1)/pango/pango-utils.c'
     sed 's,"[^"]*must build as DLL[^"]*","(disabled warning)",' -i '$(1)/configure'
     sed 's,enable_static=no,enable_static=yes,' -i '$(1)/configure'
     sed 's,enable_shared=yes,enable_shared=no,' -i '$(1)/configure'

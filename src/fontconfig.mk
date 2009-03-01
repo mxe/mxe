@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     $(SED) 's,^install-data-local:.*,install-data-local:,' -i '$(1)/src/Makefile.in'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    sed 's,^\(Libs:.*\),\1 @EXPAT_LIBS@ @FREETYPE_LIBS@,' -i '$(1)/fontconfig.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
