@@ -5,7 +5,7 @@ PKG            := gtk
 $(PKG)_VERSION := 2.14.7
 $(PKG)_SUBDIR  := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE    := gtk+-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(word 1,$(subst ., ,$($(PKG)_VERSION))).$(word 2,$(subst ., ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
+$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc gettext libpng jpeg tiff jasper glib atk pango cairo
 
 define $(PKG)_UPDATE

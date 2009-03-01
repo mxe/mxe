@@ -5,7 +5,7 @@ PKG            := libgsf
 $(PKG)_VERSION := 1.14.11
 $(PKG)_SUBDIR  := libgsf-$($(PKG)_VERSION)
 $(PKG)_FILE    := libgsf-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/libgsf/$(word 1,$(subst ., ,$($(PKG)_VERSION))).$(word 2,$(subst ., ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
+$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/libgsf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc zlib bzip2 glib libxml2
 
 define $(PKG)_UPDATE

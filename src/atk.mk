@@ -5,7 +5,7 @@ PKG            := atk
 $(PKG)_VERSION := 1.24.0
 $(PKG)_SUBDIR  := atk-$($(PKG)_VERSION)
 $(PKG)_FILE    := atk-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/atk/$(word 1,$(subst ., ,$($(PKG)_VERSION))).$(word 2,$(subst ., ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
+$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc glib gettext
 
 define $(PKG)_UPDATE

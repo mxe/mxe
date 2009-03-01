@@ -5,7 +5,7 @@ PKG            := glib
 $(PKG)_VERSION := 2.18.4
 $(PKG)_SUBDIR  := glib-$($(PKG)_VERSION)
 $(PKG)_FILE    := glib-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/glib/$(word 1,$(subst ., ,$($(PKG)_VERSION))).$(word 2,$(subst ., ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
+$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc gettext pcre libiconv pthreads
 
 define $(PKG)_UPDATE

@@ -14,6 +14,9 @@ PATH    := $(PREFIX)/bin:$(PATH)
 SHELL   := bash
 SED     := $(shell gsed --version >/dev/null 2>&1 && echo g)sed
 
+SHORT_PKG_VERSION = \
+    $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
+
 PKG_RULES := $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk))
 include $(TOP_DIR)/src/*.mk
 
