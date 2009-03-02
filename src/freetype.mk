@@ -11,7 +11,7 @@ $(PKG)_DEPS    := gcc zlib
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=3157&package_id=3121' | \
     grep 'freetype-' | \
-    $(SED) -n 's,.*freetype-\([2-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*freetype-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

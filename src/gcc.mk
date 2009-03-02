@@ -11,7 +11,7 @@ $(PKG)_DEPS    := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core g
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=200665&package_id=238347' | \
     grep 'gcc-' | \
-    $(SED) -n 's,.*gcc-\([4-9][^>]*\)-srcbase\.zip.*,\1,p' | \
+    $(SED) -n 's,.*gcc-\([0-9][^>]*\)-srcbase\.zip.*,\1,p' | \
     head -1
 endef
 

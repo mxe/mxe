@@ -11,7 +11,7 @@ $(PKG)_DEPS    := gcc zlib bzip2 expat
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=7586&package_id=8041' | \
     grep 'boost_' | \
-    $(SED) -n 's,.*boost_\([1-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*boost_\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

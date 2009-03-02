@@ -11,7 +11,7 @@ $(PKG)_DEPS    := gcc
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=67586&package_id=67942' | \
     grep 'glew-' | \
-    $(SED) -n 's,.*glew-\([1-9][^>]*\)-src\.tgz.*,\1,p' | \
+    $(SED) -n 's,.*glew-\([0-9][^>]*\)-src\.tgz.*,\1,p' | \
     head -1
 endef
 

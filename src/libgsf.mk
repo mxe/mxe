@@ -11,7 +11,7 @@ $(PKG)_DEPS    := gcc zlib bzip2 glib libxml2
 define $(PKG)_UPDATE
     wget -q -O- -U 'mingw_cross_env' 'http://freshmeat.net/projects/libgsf/' | \
     grep 'libgsf-' | \
-    $(SED) -n 's,.*libgsf-\([1-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*libgsf-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

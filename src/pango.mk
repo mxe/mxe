@@ -11,7 +11,7 @@ $(PKG)_DEPS    := gcc fontconfig freetype cairo glib
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.gtk.org/download-windows.html' | \
     grep 'pango-' | \
-    $(SED) -n 's,.*pango-\([1-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*pango-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

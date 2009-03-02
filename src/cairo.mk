@@ -11,7 +11,7 @@ $(PKG)_DEPS    := gcc zlib libpng fontconfig freetype pthreads pixman
 define $(PKG)_UPDATE
     wget -q -O- 'http://cairographics.org/releases/' | \
     grep 'LATEST-cairo-' | \
-    $(SED) -n 's,.*"LATEST-cairo-\([1-9][^"]*\)".*,\1,p' | \
+    $(SED) -n 's,.*"LATEST-cairo-\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef
 

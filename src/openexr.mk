@@ -11,7 +11,7 @@ $(PKG)_DEPS    := gcc ilmbase
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.openexr.com/downloads.html' | \
     grep 'openexr-' | \
-    $(SED) -n 's,.*openexr-\([1-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*openexr-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

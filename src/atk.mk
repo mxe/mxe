@@ -11,7 +11,7 @@ $(PKG)_DEPS    := gcc glib gettext
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.gtk.org/download-windows.html' | \
     grep 'atk-' | \
-    $(SED) -n 's,.*atk-\([1-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*atk-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

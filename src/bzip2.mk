@@ -11,7 +11,7 @@ $(PKG)_DEPS    := gcc
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.bzip.org/downloads.html' | \
     grep 'bzip2-' | \
-    $(SED) -n 's,.*bzip2-\([1-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*bzip2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
