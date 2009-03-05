@@ -30,7 +30,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/$(glib_SUBDIR)/glib' -j '$(JOBS)'
     $(MAKE) -C '$(1)/$(glib_SUBDIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
     # cross build
-    sed 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' -i '$(1)/glib-2.0.pc.in'
+    $(SED) 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' -i '$(1)/glib-2.0.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

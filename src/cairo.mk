@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    sed 's,^\(Libs:.*\),\1 @CAIRO_NONPKGCONFIG_LIBS@,' -i '$(1)/src/cairo.pc.in'
+    $(SED) 's,^\(Libs:.*\),\1 @CAIRO_NONPKGCONFIG_LIBS@,' -i '$(1)/src/cairo.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

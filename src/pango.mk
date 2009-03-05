@@ -16,11 +16,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    sed 's,DllMain,static _disabled_DllMain,' -i '$(1)/pango/pango-utils.c'
-    sed 's,"[^"]*must build as DLL[^"]*","(disabled warning)",' -i '$(1)/configure'
-    sed 's,enable_static=no,enable_static=yes,' -i '$(1)/configure'
-    sed 's,enable_shared=yes,enable_shared=no,' -i '$(1)/configure'
-    sed 's,^install-data-local:.*,install-data-local:,' -i '$(1)/modules/Makefile.in'
+    $(SED) 's,DllMain,static _disabled_DllMain,' -i '$(1)/pango/pango-utils.c'
+    $(SED) 's,"[^"]*must build as DLL[^"]*","(disabled warning)",' -i '$(1)/configure'
+    $(SED) 's,enable_static=no,enable_static=yes,' -i '$(1)/configure'
+    $(SED) 's,enable_shared=yes,enable_shared=no,' -i '$(1)/configure'
+    $(SED) 's,^install-data-local:.*,install-data-local:,' -i '$(1)/modules/Makefile.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
