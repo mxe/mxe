@@ -16,13 +16,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' -i '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-compat24 \
+        --enable-compat26 \
+        --enable-gui \
         --enable-stl \
+        --enable-threads \
         --enable-unicode \
+        --disable-universal \
         --with-themes=all \
         --with-msw \
         --with-opengl \
@@ -40,10 +45,7 @@ define $(PKG)_BUILD
         --without-cocoa \
         --without-wine \
         --without-pm \
-        --without-mgl \
-        --without-directfb \
         --without-microwin \
-        --without-x11 \
         --without-libxpm \
         --without-libmspack \
         --without-gnomeprint \
@@ -55,5 +57,6 @@ define $(PKG)_BUILD
         CXXFLAGS="-I$(PREFIX)/$(TARGET)/include/tre" \
         LIBS=" `$(TARGET)-pkg-config tre --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= __install_wxrc___depname=
+    install -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/bin/$(TARGET)-wx-config'
 endef
