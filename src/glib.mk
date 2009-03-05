@@ -6,7 +6,7 @@ $(PKG)_SUBDIR  := glib-$($(PKG)_VERSION)
 $(PKG)_FILE    := glib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE := http://www.gtk.org/
 $(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc gettext pcre libiconv pthreads
+$(PKG)_DEPS    := gcc gettext pcre libiconv
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.gtk.org/download-windows.html' | \
@@ -29,15 +29,15 @@ define $(PKG)_BUILD
     $(SED) 's,#define G_ATOMIC.*,,' -i '$(1)/$(glib_SUBDIR)/config.h'
     $(MAKE) -C '$(1)/$(glib_SUBDIR)/glib' -j '$(JOBS)'
     $(MAKE) -C '$(1)/$(glib_SUBDIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+
     # cross build
     $(SED) 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' -i '$(1)/glib-2.0.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --with-threads=posix \
+        --with-threads=win32 \
         --with-pcre=system \
-        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        LIBS="-lws2_32"
+        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
