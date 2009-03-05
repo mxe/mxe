@@ -9,8 +9,9 @@ $(PKG)_URL     := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
 $(PKG)_DEPS    := gcc libgcrypt
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.gnu.org/software/gnutls/news.html' | \
-    $(SED) -n 's,.*GnuTLS \([0-9][^>]*\)</a>.*stable branch.*,\1,p' | \
+    wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
+    grep '<a class="list subject"' | \
+    $(SED) -n 's,.*<a[^>]*>\([0-9][^>]*\)<.*,\1,p' | \
     head -1
 endef
 
