@@ -38,7 +38,7 @@ UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
 
 DOWNLOAD = \
-    $(if $(2),wget -t 3 -c '$(1)' || wget -c '$(2)',wget -c '$(1)')
+    $(if $(2),wget -T 30 -t 3 -c '$(1)' || wget -c '$(2)',wget -c '$(1)')
 
 .PHONY: all
 all: $(PKG_RULES)
