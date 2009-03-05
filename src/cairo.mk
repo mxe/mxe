@@ -6,7 +6,7 @@ $(PKG)_SUBDIR  := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE    := cairo-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE := http://cairographics.org/
 $(PKG)_URL     := http://cairographics.org/releases/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc zlib libpng fontconfig freetype pthreads pixman
+$(PKG)_DEPS    := gcc zlib libpng fontconfig freetype pixman
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://cairographics.org/releases/' | \
@@ -41,7 +41,7 @@ define $(PKG)_BUILD
         --enable-ps \
         --enable-pdf \
         --enable-svg \
-        --enable-pthread \
-        LIBS="-lmsimg32 -lpthread -lws2_32 `$(TARGET)-pkg-config pixman-1 --libs`"
+        --disable-pthread \
+        LIBS="-lmsimg32 `$(TARGET)-pkg-config pixman-1 --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
