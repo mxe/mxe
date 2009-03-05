@@ -1,7 +1,7 @@
 # GnuTLS
 
 PKG            := gnutls
-$(PKG)_VERSION := 2.7.6
+$(PKG)_VERSION := 2.6.4
 $(PKG)_SUBDIR  := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE    := gnutls-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE := http://www.gnu.org/software/gnutls/
@@ -12,7 +12,7 @@ $(PKG)_DEPS    := gcc libgcrypt
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
     grep '<a class="list subject"' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9][^>]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^>]*\)<.*,\1,p' | \
     head -1
 endef
 
