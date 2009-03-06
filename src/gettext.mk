@@ -22,7 +22,7 @@ define $(PKG)_BUILD
         --prefix='$(1)/libiconv' \
         --disable-shared \
         --disable-nls
-    $(MAKE) -C '$(1)/$(libiconv_SUBDIR)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/$(libiconv_SUBDIR)' -j 1 install
 
     # native build for gettext-tools
     cd '$(1)/gettext-tools' && ./configure \
