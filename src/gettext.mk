@@ -21,17 +21,16 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)' \
         --disable-threads \
+        --with-included-gettext \
+        --with-included-glib \
+        --with-included-libcroco \
+        --with-included-libxml \
+        --with-included-regex \
         --without-libpth-prefix \
-        --without-libiconv-prefix \
-        --without-libintl-prefix \
-        --without-libglib-2.0-prefix \
-        --without-libcroco-0.6-prefix \
-        --without-libxml2-prefix \
         --without-libncurses-prefix \
         --without-libtermcap-prefix \
         --without-libxcurses-prefix \
         --without-libcurses-prefix \
-        --without-included-regex \
         --without-libexpat-prefix \
         --without-emacs
     $(MAKE) -C '$(1)/gettext-tools' -j '$(JOBS)' SHELL=bash
