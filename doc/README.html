@@ -1,0 +1,426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <title>MinGW cross compiling environment</title>
+
+    <style type="text/css">
+        body {
+            font-size: 11pt;
+            width: 30em;
+        }
+        h1, h2 {
+            font-family: sans-serif;
+        }
+        h1 {
+            font-size: 14pt;
+            background-color: #afa;
+            padding-top:    6pt;
+            padding-bottom: 6pt;
+        }
+        h2 {
+            font-size: 14pt;
+            background-color: #aff;
+        }
+        li, dt {
+            margin-bottom: 0.8em;
+        }
+        .authors li {
+            margin-bottom: 0em;
+        }
+        .usage dt {
+            font-family: monospace;
+        }
+        dd {
+            margin-bottom: 1em;
+        }
+        table {
+            border-collapse: separate;
+            border-spacing: 1px;
+        }
+        td, dt {
+            background-color: #eee;
+        }
+    </style>
+
+</head>
+<body>
+
+<h1>MinGW cross compiling environment</h1>
+
+    <p>
+    This Makefile compiles a MinGW cross compiler and cross compiles
+    many free libraries such as GD and SDL. Thus, it provides a nice
+    MinGW cross compiling environment. All necessary source packages
+    are downloaded automatically.
+    </p>
+
+    <p>
+    The Makefile is designed to run on any Unix system. It also runs
+    partly on MSYS. It needs GNU make (&gt;= 3.81) and GNU sed, so
+    FreeBSD users need the ports textproc/gsed and devel/gmake.
+    </p>
+
+    <p>
+    Project website: <a href="http://www.profv.de/mingw_cross_env/"
+                             >http://www.profv.de/mingw_cross_env/</a>
+    </p>
+
+<h2>News</h2>
+
+    <dl>
+    <dt>2009-02-09 - Release 2.3</dt>
+    <dd>
+        <p>
+        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.3.tar.gz">Download</a> |
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.3">Changelog</a>
+        </p>
+
+        <p>
+        This release fixes some serious build problems on FreeBSD and MacOS-X.
+        </p>
+
+        <p>
+        The Makefile has a new target "clean-pkg"
+        and allows to be called from a separate build directory
+        via "make -f .../Makefile".
+        </p>
+
+        <p>
+        Some new versions of the packages are supported,
+        especially GCC-4.3 by switching from MinGW GCC to
+        <a href="http://www.tdragon.net/recentgcc/">TDM-GCC</a>.
+        </p>
+    </dd>
+    </dl>
+
+<h2>Tutorials</h2>
+
+    <ul>
+    <li>
+        (outdated) <a href="http://wiki.njh.eu/Win32_Cross_Compiling_Tutorial">Win32 Cross Compiling Tutorial</a>
+        by Hans Bezemer
+    </li>
+    </ul>
+
+<h2>For Developers</h2>
+
+    <ul>
+    <li>
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi">Web Repository</a>
+    </li>
+    <li>
+        Install
+        <a href="http://www.selenic.com/mercurial/">Mercurial</a>
+        and run this command:
+        <pre>hg clone http://www.profv.de/mingw_cross_env/hgweb.cgi mingw_cross_env</pre>
+    </li>
+    </ul>
+
+<h2>Features</h2>
+
+    <ul>
+    <li>
+        easy to adapt and to extend
+    </li>
+    <li>
+        builds many free libraries in addition to the cross compiler
+    </li>
+    <li>
+        can also build just a subset of the packages,
+        and automatically builds their dependencies
+    </li>
+    <li>
+        downloads all needed packages
+    </li>
+    <li>
+        is able to update the new version numbers of all packages
+    </li>
+    <li>
+        directly uses source packages,
+        thus ensuring the whole build mechanism is transparent
+    </li>
+    <li>
+        allows inter-package and intra-package parallel builds whenever possible
+    </li>
+    <li>
+        creates libraries to be linked statically, no DLL hell
+    </li>
+
+    </ul>
+
+<h2>Usage</h2>
+
+    <dl class="usage">
+
+    <dt>make</dt>
+
+        <dd>
+        build all packages,
+        non-parallel
+        </dd>
+
+    <dt>make foo bar</dt>
+
+        <dd>
+        build packages "foo", "bar" and their dependencies,
+        non-parallel
+        </dd>
+
+    <dt>make foo bar -j 4 JOBS=2</dt>
+
+        <dd>
+        build packages "foo", "bar" and their dependencies,
+        where up to 4 packages are build in parallel,
+        each with up to 2 compiler processes running in parallel
+        </dd>
+
+    <dt>make strip</dt>
+
+        <dd>
+        strip all package builds and remove unnecessary files
+        </dd>
+
+    <dt>make clean</dt>
+
+        <dd>
+        remove all package builds,
+        use with caution!
+        </dd>
+
+    <dt>make clean-pkg</dt>
+
+        <dd>
+        remove all unused package files,
+        handy after a successful "make update"
+        </dd>
+
+    <dt>make update</dt>
+
+        <dd>
+        update the version numbers of all packages,
+        use with caution!
+        </dd>
+
+    <dt>make dist</dt>
+
+        <dd>
+        build a source distribution tarball
+        </dd>
+
+    </dl>
+
+<h2>List of Packages</h2>
+
+    <table>
+    <!-- begin of package list -->
+    <!-- end of package list -->
+    </table>
+
+<h2>Copyright</h2>
+
+    <p>Authors:</p>
+    <ul class="authors">
+        <li>Volker Grabsch &lt;vog@notjusthosting.com&gt;</li>
+        <li>Rocco Rutte</li>
+        <li>Andreas Roever</li>
+        <li>Martin Lambers</li>
+    </ul>
+
+    <p>
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject
+    to the following conditions:
+    </p>
+
+    <p>
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    </p>
+
+<h2>See also</h2>
+
+    <p>
+    <a href="http://www.sandroid.org/imcross/">IMCROSS</a>
+    is another project with a very similar goal.
+    </p>
+
+<h2>History</h2>
+
+    <dl>
+
+    <dt>2009-01-31 - Release 2.2<dt>
+    <dd>
+        <p>
+        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.2.tar.gz">Download</a> |
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.2">Changelog</a>
+        </p>
+
+        <p>
+        This release fixes some minor build problems.
+        </p>
+
+        <p>
+        It also supports some new packages and
+        some newer versions of the already supported packages.
+        </p>
+
+        <p>
+        Parallelization is now disabled by default.
+        See README.
+        </p>
+    </dd>
+
+    <dt>2008-12-13 - Release 2.1</dt>
+    <dd>
+        <p>
+        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.1.tar.gz">Download</a> |
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.1">Changelog</a>
+        </p>
+
+        <p>
+        This release fixes a download error caused by the GDAL project.
+        They suddenly changed their download URLs.
+        <a href="http://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
+        </p>
+
+        <p>
+        In addition, some newer versions of various packages are supported.
+        </p>
+
+        <p>
+        There is also a small compatibility fix for OS X.
+        </p>
+    </dd>
+
+    <dt>2008-11-10 - Release 2.0</dt>
+    <dd>
+        <p>
+        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.0.tar.gz">Download</a> |
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.0">Changelog</a>
+        </p>
+
+        <p>
+        The shell script has been rewritten as Makefile
+        and supports partial builds and parallel builds.
+        </p>
+
+        <p>
+        As usual,
+        this release also supports some new packages and
+        some newer versions of the already supported packages.
+        </p>
+    </dd>
+
+    <dt>2008-01-11 - Release 1.4</dt>
+    <dd>
+        <p>
+        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.4.tar.gz">Download</a> |
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.4">Changelog</a>
+        </p>
+
+        <p>
+        This release now includes a tutorial by Hans Bezemer
+        and has improved compile options of FLTK.
+        As usual, it supports some newer versions of the libraries.
+        </p>
+
+        <p>
+        At the <a href="http://www.fefe.de/nowindows/">request of its author</a>,
+        libowfat is no longer supported from this release on.
+        </p>
+
+        <p>
+        The script now uses a specific SourceForge mirror
+        instead of randomly chosen ones,
+        because the download phase
+        often stumbled on some very slow mirrors.
+        </p>
+    </dd>
+
+    <dt>2007-12-23 - Release 1.3</dt>
+    <dd>
+        <p>
+        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.3.tar.gz">Download</a> |
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.3">Changelog</a>
+        </p>
+
+        <p>
+        A sudden change in the download URLs of GEOS
+        made the automatic download fail.
+        <a href="http://www.w3.org/Provider/Style/URI">Such changes should never happen!</a>
+        But it happened,
+        and this quick release is an attempt to limit the damage.
+        </p>
+
+        <p>
+        This release also supports some newer versions of the libraries
+        including support for fontconfig-2.5.0.
+        </p>
+    </dd>
+
+    <dt>2007-12-13 - Release 1.2</dt>
+    <dd>
+        <p>
+        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.2.tar.gz">Download</a> |
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.2">Changelog</a>
+        </p>
+
+        <p>
+        This release is a switch from gcc-3 to gcc-4.
+        It also supports a new library and
+        some newer versions of the already supported libraries.
+        </p>
+    </dd>
+
+    <dt>2007-07-24 - Release 1.1</dt>
+    <dd>
+        <p>
+        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.1.tar.gz">Download</a> |
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.1">Changelog</a>
+        </p>
+
+        <p>
+        This release is the result of the public attention the release 1.0 got.
+        It contains many improvements suggested by its first users,
+        and adds support for many new libraries.
+        </p>
+
+        <p>
+        Thanks to Rocco Rutte who contributed many code snippets.
+        </p>
+    </dd>
+
+    <dt>2007-06-19 - Release 1.0</dt>
+    <dd>
+        <p>
+        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.0.tar.gz">Download</a> |
+        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.0">Changelog</a>
+        </p>
+
+        <p>
+        This first release has been created in a 7-day-sprint.
+        </p>
+    </dd>
+
+    <dt>2007-06-12 - Project start</dt>
+    <dd>
+    </dd>
+
+    </dl>
+
+</body>
+</html>

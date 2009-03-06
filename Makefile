@@ -121,15 +121,13 @@ dist:
 	mkdir  'mingw_cross_env-$(VERSION)/src'
 	(cd '$(TOP_DIR)' && hg log -v --style changelog) >'mingw_cross_env-$(VERSION)/doc/ChangeLog'
 	( \
-	    $(SED) -n '1,/^List/ { s/^\(    Version:\).*/\1 $(VERSION)/; p }' '$(TOP_DIR)/doc/README' && \
-	    echo '================' && \
-	    echo && \
-	    ($(foreach PKG,$(PKG_RULES),echo '$(PKG)' '$($(PKG)_VERSION)';)) | \
-	        awk '{ printf "    %-12s  %s\n", $$1, $$2 }' && \
-	    echo && \
-	    echo && \
-	    $(SED) -n '/^Copyright/,$$ p' '$(TOP_DIR)/doc/README' \
-	) >'mingw_cross_env-$(VERSION)/doc/README'
+	    $(SED) -n '1,/<!-- begin of package list -->/ p' '$(TOP_DIR)/doc/README.html' && \
+	    ($(foreach PKG,$(PKG_RULES), \
+	        echo '    <tr><td><a href="$($(PKG)_WEBSITE)">$(PKG)</a></td><td>$($(PKG)_VERSION)</td></tr>';)) && \
+	    $(SED) -n '/<!-- end of package list -->/,$$ p' '$(TOP_DIR)/doc/README.html' \
+	) >'$(TOP_DIR)/README.html'
+	cp -p '$(TOP_DIR)/README.html' 'mingw_cross_env-$(VERSION)/doc/'
+	cd 'mingw_cross_env-$(VERSION)/doc' && lynx -dump -width 75 -nolist -force_html README.html >README
 	cp -p '$(TOP_DIR)/Makefile' 'mingw_cross_env-$(VERSION)/'
 	cp -p '$(TOP_DIR)/src'/*.mk 'mingw_cross_env-$(VERSION)/src/'
 	tar cvf - 'mingw_cross_env-$(VERSION)' | gzip -9 >'mingw_cross_env-$(VERSION).tar.gz'
