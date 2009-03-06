@@ -16,8 +16,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # native build for glib-genmarshal
+    # native build for glib-genmarshal, without gettext
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,glib)
+    $(SED) 's,gt_cv_have_gettext=yes,gt_cv_have_gettext=no,' -i '$(1)/$(glib_SUBDIR)/configure'
+    $(SED) '/You must.*have gettext/,/exit 1;/ s,.*exit 1;.*,},' -i '$(1)/$(glib_SUBDIR)/configure'
     cd '$(1)/$(glib_SUBDIR)' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)' \
