@@ -16,11 +16,20 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # native build of libiconv (used by gettext-tools)
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,libiconv)
+    cd '$(1)/$(libiconv_SUBDIR)' && ./configure \
+        --prefix='$(1)/libiconv' \
+        --disable-shared \
+        --disable-nls
+    $(MAKE) -C '$(1)/$(libiconv_SUBDIR)' -j '$(JOBS)' install
+
     # native build for gettext-tools
     cd '$(1)/gettext-tools' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)' \
         --disable-threads \
+        --with-libiconv-prefix='$(1)/libiconv' \
         --with-included-gettext \
         --with-included-glib \
         --with-included-libcroco \
@@ -35,6 +44,7 @@ define $(PKG)_BUILD
         --without-emacs
     $(MAKE) -C '$(1)/gettext-tools' -j '$(JOBS)' SHELL=bash
     $(MAKE) -C '$(1)/gettext-tools/src' -j 1 SHELL=bash lib_LTLIBRARIES= install-binPROGRAMS
+
     # cross build for gettext-runtime
     cd '$(1)/gettext-runtime' && ./configure \
         --host='$(TARGET)' \
