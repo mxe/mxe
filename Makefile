@@ -15,6 +15,25 @@ SHELL   := bash
 SED     := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 INSTALL := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 
+# unset any environment variables which might cause trouble
+AR =
+CC =
+CFLAGS =
+CPP =
+CPPFLAGS =
+CROSS =
+CXX =
+CXXCPP =
+CXXFLAGS =
+EXEEXT =
+LD =
+LDFLAGS =
+LIBS =
+NM =
+PKG_CONFIG =
+RANLIB =
+STRIP =
+
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
 
