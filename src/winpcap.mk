@@ -25,10 +25,10 @@ define $(PKG)_BUILD
     cd '$(1)' && $(TARGET)-gcc -Icommon -O -c '$(1)/Packet9x/DLL/Packet32.c'
     $(TARGET)-ar rc '$(1)/libpacket.a' '$(1)/Packet32.o'
     $(TARGET)-ranlib '$(1)/libpacket.a'
-    install -d '$(PREFIX)/$(TARGET)/include'
-    install -m644 '$(1)/common'/*.h '$(PREFIX)/$(TARGET)/include/'
-    install -d '$(PREFIX)/$(TARGET)/lib'
-    install -m644 '$(1)/libpacket.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -m644 '$(1)/common'/*.h '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
+    $(INSTALL) -m644 '$(1)/libpacket.a' '$(PREFIX)/$(TARGET)/lib/'
     mv '$(1)/wpcap/libpcap/Win32/Include/ip6_misc.h' '$(1)/wpcap/libpcap/Win32/Include/IP6_misc.h'
     $(SED) 's,(char\*)tUstr +=,tUstr +=,' -i '$(1)/wpcap/libpcap/inet.c'
     $(SED) 's,-DHAVE_AIRPCAP_API,,'    -i '$(1)/wpcap/PRJ/GNUmakefile'
@@ -40,8 +40,8 @@ define $(PKG)_BUILD
     AR='$(TARGET)-ar' \
     RANLIB='$(TARGET)-ranlib' \
     $(MAKE) -C '$(1)/wpcap/PRJ' -j 1 libwpcap.a
-    install -d '$(PREFIX)/$(TARGET)/include'
-    install -m644 '$(1)/wpcap/libpcap/'*.h '$(1)/wpcap/Win32-Extensions/'*.h '$(PREFIX)/$(TARGET)/include/'
-    install -d '$(PREFIX)/$(TARGET)/lib'
-    install -m644 '$(1)/wpcap/PRJ/libwpcap.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -m644 '$(1)/wpcap/libpcap/'*.h '$(1)/wpcap/Win32-Extensions/'*.h '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
+    $(INSTALL) -m644 '$(1)/wpcap/PRJ/libwpcap.a' '$(PREFIX)/$(TARGET)/lib/'
 endef

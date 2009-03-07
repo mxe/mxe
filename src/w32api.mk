@@ -24,6 +24,6 @@ define $(PKG)_BUILD
     # fix missing definitions for WinPcap and libdnet
     $(SED) '1i\#include <wtypes.h>'                       -i '$(1)/include/iphlpapi.h'
     $(SED) '1i\#include <wtypes.h>'                       -i '$(1)/include/wincrypt.h'
-    install -d '$(PREFIX)/$(TARGET)'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)'
     cp -rpv '$(1)/include' '$(1)/lib' '$(PREFIX)/$(TARGET)'
 endef

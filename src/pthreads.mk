@@ -18,8 +18,8 @@ endef
 define $(PKG)_BUILD
     $(SED) '35i\#define PTW32_STATIC_LIB' -i '$(1)/pthread.h'
     $(MAKE) -C '$(1)' -j 1 GC-static CROSS='$(TARGET)-'
-    install -d '$(PREFIX)/$(TARGET)/lib'
-    install -m664 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
-    install -d '$(PREFIX)/$(TARGET)/include'
-    install -m664 '$(1)/pthread.h' '$(1)/sched.h' '$(1)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
+    $(INSTALL) -m664 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -m664 '$(1)/pthread.h' '$(1)/sched.h' '$(1)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
 endef

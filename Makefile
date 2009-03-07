@@ -13,6 +13,7 @@ TOP_DIR := $(patsubst %/,%,$(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIS
 PATH    := $(PREFIX)/bin:$(PATH)
 SHELL   := bash
 SED     := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
+INSTALL := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))

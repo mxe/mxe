@@ -25,9 +25,9 @@ define $(PKG)_BUILD
         WIDE=Y \
         UTF8=Y
     $(TARGET)-ranlib '$(1)/pdcurses.a' '$(1)/panel.a'
-    install -d '$(PREFIX)/$(TARGET)/include/'
-    install -m644 '$(1)/curses.h' '$(1)/panel.h' '$(1)/term.h' '$(PREFIX)/$(TARGET)/include/'
-    install -d '$(PREFIX)/$(TARGET)/lib/'
-    install -m644 '$(1)/pdcurses.a' '$(PREFIX)/$(TARGET)/lib/libpdcurses.a'
-    install -m644 '$(1)/panel.a'    '$(PREFIX)/$(TARGET)/lib/libpanel.a'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/curses.h' '$(1)/panel.h' '$(1)/term.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/pdcurses.a' '$(PREFIX)/$(TARGET)/lib/libpdcurses.a'
+    $(INSTALL) -m644 '$(1)/panel.a'    '$(PREFIX)/$(TARGET)/lib/libpanel.a'
 endef
