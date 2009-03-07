@@ -12,7 +12,7 @@ TMP_DIR  = $(PWD)/tmp-$(1)
 TOP_DIR := $(patsubst %/,%,$(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))))
 PATH    := $(PREFIX)/bin:$(PATH)
 SHELL   := bash
-SED     := $(shell gsed --version >/dev/null 2>&1 && echo g)sed
+SED     := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
