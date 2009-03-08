@@ -53,6 +53,7 @@ define $(PKG)_BUILD
         --with-threads=win32 \
         --with-pcre=system \
         --with-libiconv=gnu \
+        CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
