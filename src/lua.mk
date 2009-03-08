@@ -26,5 +26,6 @@ define $(PKG)_BUILD
         INSTALL_MAN='$(1)/noinstall' \
         TO_BIN='lua.h' \
         RANLIB='$(TARGET)-ranlib' \
+        INSTALL='$(INSTALL)' \
         install ranlib
 endef
