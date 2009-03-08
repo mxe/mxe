@@ -58,15 +58,39 @@
     </p>
 
     <p>
-    The Makefile is designed to run on any Unix system. It also runs
-    partly on MSYS. It needs GNU make (&gt;= 3.81) and GNU sed, so
-    FreeBSD users need the ports textproc/gsed and devel/gmake.
+    The Makefile is designed to run on any Unix system.
     </p>
 
     <p>
     Project website: <a href="http://www.profv.de/mingw_cross_env/"
                              >http://www.profv.de/mingw_cross_env/</a>
     </p>
+
+<h2>Prerequisites</h2>
+
+    <dl>
+
+    <dt>Linux</dt>
+    <dd>
+        Install GNU make (&gt;= 3.81), GNU sed and GCC.
+    </dd>
+
+    <dt>FreeBSD</dt>
+    <dd>
+        <pre>pkg_add -r bash gmake gsed wget unzip perl</pre>
+    </dd>
+
+    <dt>MacOS X</dt>
+    <dd>
+        Install
+        <a href="http://developer.apple.com/TOOLS/xcode/">Xcode</a>
+        and
+        <a href="http://www.macports.org/">MacPorts</a>,
+        then run:
+        <pre>sudo port install gmake gsed wget</pre>
+    </dd>
+
+    </dl>
 
 <h2>News</h2>
 
