@@ -99,11 +99,11 @@ strip:
 	    '$(PREFIX)/$(TARGET)/man' \
 	    '$(PREFIX)/$(TARGET)/sbin' \
 	    '$(PREFIX)/$(TARGET)/share'
-	-strip -s \
+	-strip -Sx \
 	    '$(PREFIX)/bin'/* \
 	    '$(PREFIX)/libexec/gcc/$(TARGET)'/*/* \
 	    '$(PREFIX)/$(TARGET)/bin'/*
-	-$(TARGET)-strip -g \
+	-$(TARGET)-strip -S \
 	    '$(PREFIX)/lib/gcc/$(TARGET)'/*/*.a \
 	    '$(PREFIX)/lib/gcc/$(TARGET)'/*/*.o \
 	    '$(PREFIX)/$(TARGET)/lib'/*.a \
