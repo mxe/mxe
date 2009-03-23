@@ -1,7 +1,7 @@
 # Pango
 
 PKG            := pango
-$(PKG)_VERSION := 1.22.4
+$(PKG)_VERSION := 1.24.0
 $(PKG)_SUBDIR  := pango-$($(PKG)_VERSION)
 $(PKG)_FILE    := pango-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE := http://www.pango.org/

@@ -1,7 +1,7 @@
 # wxWidgets
 
 PKG            := wxwidgets
-$(PKG)_VERSION := 2.8.9
+$(PKG)_VERSION := 2.8.10
 $(PKG)_SUBDIR  := wxMSW-$($(PKG)_VERSION)
 $(PKG)_FILE    := wxMSW-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE := http://www.wxwidgets.org/

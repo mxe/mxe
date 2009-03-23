@@ -1,7 +1,7 @@
 # freetype
 
 PKG            := freetype
-$(PKG)_VERSION := 2.3.8
+$(PKG)_VERSION := 2.3.9
 $(PKG)_SUBDIR  := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE    := freetype-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE := http://freetype.sourceforge.net/
