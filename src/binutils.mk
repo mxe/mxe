@@ -1,7 +1,7 @@
 # MinGW binutils
 
 PKG            := binutils
-$(PKG)_VERSION := 2.19.1-mingw32
+$(PKG)_VERSION := 2.19.1
 $(PKG)_SUBDIR  := binutils-$(firstword $(subst -, ,$($(PKG)_VERSION)))
 $(PKG)_FILE    := binutils-$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_WEBSITE := http://mingw.sourceforge.net/
