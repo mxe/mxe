@@ -1,7 +1,7 @@
 # GEOS
 
 PKG            := geos
-$(PKG)_VERSION := 3.1.0rc2
+$(PKG)_VERSION := 3.1.0
 $(PKG)_SUBDIR  := geos-$($(PKG)_VERSION)
 $(PKG)_FILE    := geos-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE := http://trac.osgeo.org/geos/

@@ -1,7 +1,7 @@
 # Libidn
 
 PKG            := libidn
-$(PKG)_VERSION := 1.13
+$(PKG)_VERSION := 1.14
 $(PKG)_SUBDIR  := libidn-$($(PKG)_VERSION)
 $(PKG)_FILE    := libidn-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE := http://www.gnu.org/software/libidn/
