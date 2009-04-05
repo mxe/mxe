@@ -57,9 +57,6 @@ UNPACK_ARCHIVE = \
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
 
-DOWNLOAD = \
-    $(if $(2),wget -T 30 -t 3 -c '$(1)' || wget -c '$(2)',wget -c '$(1)')
-
 .PHONY: all
 all: $(PKG_RULES)
 
@@ -71,7 +68,10 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk $(addprefix $(PREFIX)/installed
 	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	cd '$(PKG_DIR)' && ( \
 	    $(call CHECK_ARCHIVE,$($(1)_FILE)) || \
-	    $(call DOWNLOAD,$($(1)_URL),$($(1)_URL_2)) )
+	    $(if $($(1)_URL_2), \
+	        wget -T 30 -t 3 -c -O '$($(1)_FILE)' '$($(1)_URL)' || \
+	            wget -c -O '$($(1)_FILE)' '$($(1)_URL_2)', \
+	        wget -c -O '$($(1)_FILE)' '$($(1)_URL)'))
 	$(if $(value $(1)_BUILD),
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
