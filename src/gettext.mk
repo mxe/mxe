@@ -24,6 +24,12 @@ define $(PKG)_BUILD
         --disable-nls
     $(MAKE) -C '$(1)/$(libiconv_SUBDIR)' -j 1 install
 
+    # bugfix for gettext
+    # This problem will be solved in gettext >= 1.8. See:
+    # http://git.savannah.gnu.org/cgit/gettext.git/commit/?id=ecad95f51a11409cc0d30b22913a8ba77d3edf1d
+    sed 's/O_CREAT);/O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);/' \
+    	-i '$(1)/gettext-tools/src/write-catalog.c'
+
     # native build for gettext-tools
     cd '$(1)/gettext-tools' && ./configure \
         --disable-shared \
