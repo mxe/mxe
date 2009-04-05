@@ -1,12 +1,13 @@
 # GLib
 
-PKG            := glib
-$(PKG)_VERSION := 2.20.0
-$(PKG)_SUBDIR  := glib-$($(PKG)_VERSION)
-$(PKG)_FILE    := glib-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.gtk.org/
-$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc gettext pcre libiconv
+PKG             := glib
+$(PKG)_VERSION  := 2.20.0
+$(PKG)_CHECKSUM := 4d653ef39fd1ebe7b64217fd824dfb1bbbde7007
+$(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
+$(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.gtk.org/
+$(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc gettext pcre libiconv
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.gtk.org/download-windows.html' | \

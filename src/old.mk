@@ -1,12 +1,13 @@
 # old
 
-PKG            := old
-$(PKG)_VERSION := 0.17
-$(PKG)_SUBDIR  := old-$($(PKG)_VERSION)
-$(PKG)_FILE    := old-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://blitiri.com.ar/p/old/
-$(PKG)_URL     := http://blitiri.com.ar/p/old/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := old
+$(PKG)_VERSION  := 0.17
+$(PKG)_CHECKSUM := d519a8282b0774c344ffeb1b4899f8be53d6d7b3
+$(PKG)_SUBDIR   := old-$($(PKG)_VERSION)
+$(PKG)_FILE     := old-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://blitiri.com.ar/p/old/
+$(PKG)_URL      := http://blitiri.com.ar/p/old/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://blitiri.com.ar/p/old/' | \

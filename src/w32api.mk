@@ -1,12 +1,13 @@
 # MinGW Windows API
 
-PKG            := w32api
-$(PKG)_VERSION := 3.13-mingw32
-$(PKG)_SUBDIR  := .
-$(PKG)_FILE    := w32api-$($(PKG)_VERSION)-dev.tar.gz
-$(PKG)_WEBSITE := http://mingw.sourceforge.net/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
-$(PKG)_DEPS    :=
+PKG             := w32api
+$(PKG)_VERSION  := 3.13-mingw32
+$(PKG)_CHECKSUM := 5eb7d8ec0fe032a92bea3a2c8282a78df2f1793c
+$(PKG)_SUBDIR   := .
+$(PKG)_FILE     := w32api-$($(PKG)_VERSION)-dev.tar.gz
+$(PKG)_WEBSITE  := http://mingw.sourceforge.net/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
+$(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=11550' | \

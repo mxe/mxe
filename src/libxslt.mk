@@ -1,12 +1,13 @@
 # libxslt
 
-PKG            := libxslt
-$(PKG)_VERSION := 1.1.24
-$(PKG)_SUBDIR  := libxslt-$($(PKG)_VERSION)
-$(PKG)_FILE    := libxslt-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://xmlsoft.org/XSLT/
-$(PKG)_URL     := ftp://xmlsoft.org/libxslt/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc libxml2 libgcrypt
+PKG             := libxslt
+$(PKG)_VERSION  := 1.1.24
+$(PKG)_CHECKSUM := b5402e24abff5545ed76f6a55049cbebc664bd58
+$(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
+$(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://xmlsoft.org/XSLT/
+$(PKG)_URL      := ftp://xmlsoft.org/libxslt/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libxml2 libgcrypt
 
 define $(PKG)_UPDATE
     wget -q -O- 'ftp://xmlsoft.org/libxslt/' | \

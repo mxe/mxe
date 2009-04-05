@@ -1,13 +1,14 @@
 # GD  (without support for xpm)
 
-PKG            := gd
-$(PKG)_VERSION := 2.0.35
-$(PKG)_SUBDIR  := gd-$($(PKG)_VERSION)
-$(PKG)_FILE    := gd-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.libgd.org/
-$(PKG)_URL     := http://www.libgd.org/releases/$($(PKG)_FILE)
-$(PKG)_URL_2   := http://www.libgd.org/releases/oldreleases/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc freetype libpng libxml2
+PKG             := gd
+$(PKG)_VERSION  := 2.0.35
+$(PKG)_CHECKSUM := ccf34a610abff2dbf133a20c4d2a4aa94939018a
+$(PKG)_SUBDIR   := gd-$($(PKG)_VERSION)
+$(PKG)_FILE     := gd-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.libgd.org/
+$(PKG)_URL      := http://www.libgd.org/releases/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://www.libgd.org/releases/oldreleases/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc freetype libpng libxml2
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.libgd.org/releases/' | \

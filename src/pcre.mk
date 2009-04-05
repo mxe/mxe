@@ -1,12 +1,13 @@
 # PCRE
 
-PKG            := pcre
-$(PKG)_VERSION := 7.8
-$(PKG)_SUBDIR  := pcre-$($(PKG)_VERSION)
-$(PKG)_FILE    := pcre-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.pcre.org/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/pcre/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := pcre
+$(PKG)_VERSION  := 7.8
+$(PKG)_CHECKSUM := 552909f9d18e1954eec639f926957a4cb2de1ec3
+$(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
+$(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.pcre.org/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/pcre/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=10194&package_id=9960' | \

@@ -1,12 +1,13 @@
 # libdnet
 
-PKG            := libdnet
-$(PKG)_VERSION := 1.11
-$(PKG)_SUBDIR  := libdnet-$($(PKG)_VERSION)
-$(PKG)_FILE    := libdnet-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://libdnet.sourceforge.net/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/libdnet/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc winpcap
+PKG             := libdnet
+$(PKG)_VERSION  := 1.11
+$(PKG)_CHECKSUM := e2ae8c7f0ca95655ae9f77fd4a0e2235dc4716bf
+$(PKG)_SUBDIR   := libdnet-$($(PKG)_VERSION)
+$(PKG)_FILE     := libdnet-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://libdnet.sourceforge.net/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/libdnet/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc winpcap
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=36243&package_id=28560' | \

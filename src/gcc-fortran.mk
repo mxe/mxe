@@ -1,12 +1,13 @@
 # GCC fortran
 
-PKG            := gcc-fortran
-$(PKG)_VERSION := 4.3.3
-$(PKG)_SUBDIR  := gcc-$($(PKG)_VERSION)
-$(PKG)_FILE    := gcc-fortran-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://gcc.gnu.org/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
-$(PKG)_DEPS    :=
+PKG             := gcc-fortran
+$(PKG)_VERSION  := 4.3.3
+$(PKG)_CHECKSUM := 14d8a5974fa16dcd5a9e2452db7fa9afc46b3be4
+$(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
+$(PKG)_FILE     := gcc-fortran-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://gcc.gnu.org/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
+$(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=200665&package_id=238462' | \

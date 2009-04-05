@@ -1,12 +1,13 @@
 # Boost C++ Library
 
-PKG            := boost
-$(PKG)_VERSION := 1_38_0
-$(PKG)_SUBDIR  := boost_$($(PKG)_VERSION)
-$(PKG)_FILE    := boost_$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.boost.org/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/boost/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc zlib bzip2 expat
+PKG             := boost
+$(PKG)_VERSION  := 1_38_0
+$(PKG)_CHECKSUM := b32ff8133b0a38a74553c0d33cb1d70b3ce2d8f1
+$(PKG)_SUBDIR   := boost_$($(PKG)_VERSION)
+$(PKG)_FILE     := boost_$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.boost.org/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/boost/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc zlib bzip2 expat
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=7586&package_id=8041' | \

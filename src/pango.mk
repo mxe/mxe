@@ -1,12 +1,13 @@
 # Pango
 
-PKG            := pango
-$(PKG)_VERSION := 1.24.0
-$(PKG)_SUBDIR  := pango-$($(PKG)_VERSION)
-$(PKG)_FILE    := pango-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.pango.org/
-$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc fontconfig freetype cairo glib
+PKG             := pango
+$(PKG)_VERSION  := 1.24.0
+$(PKG)_CHECKSUM := 32e99f3f1b4ca550225837bf35d581d4d92d08a9
+$(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
+$(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.pango.org/
+$(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc fontconfig freetype cairo glib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.gtk.org/download-windows.html' | \

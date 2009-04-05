@@ -1,12 +1,13 @@
 # Lua
 
-PKG            := lua
-$(PKG)_VERSION := 5.1.4
-$(PKG)_SUBDIR  := lua-$($(PKG)_VERSION)
-$(PKG)_FILE    := lua-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://www.lua.org/
-$(PKG)_URL     := http://www.lua.org/ftp/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := lua
+$(PKG)_VERSION  := 5.1.4
+$(PKG)_CHECKSUM := 2b11c8e60306efb7f0734b747588f57995493db7
+$(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)
+$(PKG)_FILE     := lua-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.lua.org/
+$(PKG)_URL      := http://www.lua.org/ftp/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.lua.org/download.html' | \

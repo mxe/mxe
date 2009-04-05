@@ -1,12 +1,13 @@
 # libgsf
 
-PKG            := libgsf
-$(PKG)_VERSION := 1.14.11
-$(PKG)_SUBDIR  := libgsf-$($(PKG)_VERSION)
-$(PKG)_FILE    := libgsf-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://ftp.gnome.org/pub/gnome/sources/libgsf/
-$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/libgsf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc zlib bzip2 glib libxml2
+PKG             := libgsf
+$(PKG)_VERSION  := 1.14.11
+$(PKG)_CHECKSUM := 9f097ba5e3d538f6810ae27941a918964aea1de9
+$(PKG)_SUBDIR   := libgsf-$($(PKG)_VERSION)
+$(PKG)_FILE     := libgsf-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://ftp.gnome.org/pub/gnome/sources/libgsf/
+$(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgsf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc zlib bzip2 glib libxml2
 
 define $(PKG)_UPDATE
     wget -q -O- -U 'mingw_cross_env' 'http://freshmeat.net/projects/libgsf/' | \

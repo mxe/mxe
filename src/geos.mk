@@ -1,12 +1,13 @@
 # GEOS
 
-PKG            := geos
-$(PKG)_VERSION := 3.1.0
-$(PKG)_SUBDIR  := geos-$($(PKG)_VERSION)
-$(PKG)_FILE    := geos-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://trac.osgeo.org/geos/
-$(PKG)_URL     := http://download.osgeo.org/geos/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := geos
+$(PKG)_VERSION  := 3.1.0
+$(PKG)_CHECKSUM := a36b462e4afac91d7aacef9944bff0706ea64168
+$(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
+$(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://trac.osgeo.org/geos/
+$(PKG)_URL      := http://download.osgeo.org/geos/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://geos.refractions.net/' | \

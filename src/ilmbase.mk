@@ -1,12 +1,13 @@
 # IlmBase
 
-PKG            := ilmbase
-$(PKG)_VERSION := 1.0.1
-$(PKG)_SUBDIR  := ilmbase-$($(PKG)_VERSION)
-$(PKG)_FILE    := ilmbase-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://www.openexr.com/
-$(PKG)_URL     := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := ilmbase
+$(PKG)_VERSION  := 1.0.1
+$(PKG)_CHECKSUM := 143adc547be83c6df75831ae957eef4b2706c9c0
+$(PKG)_SUBDIR   := ilmbase-$($(PKG)_VERSION)
+$(PKG)_FILE     := ilmbase-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.openexr.com/
+$(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.openexr.com/downloads.html' | \

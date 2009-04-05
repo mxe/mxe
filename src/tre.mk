@@ -1,12 +1,13 @@
 # TRE
 
-PKG            := tre
-$(PKG)_VERSION := 0.7.5
-$(PKG)_SUBDIR  := tre-$($(PKG)_VERSION)
-$(PKG)_FILE    := tre-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://laurikari.net/tre/
-$(PKG)_URL     := http://laurikari.net/tre/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := tre
+$(PKG)_VERSION  := 0.7.5
+$(PKG)_CHECKSUM := 16b860479341f3179ef987765aacda9e2803f7bb
+$(PKG)_SUBDIR   := tre-$($(PKG)_VERSION)
+$(PKG)_FILE     := tre-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://laurikari.net/tre/
+$(PKG)_URL      := http://laurikari.net/tre/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://laurikari.net/tre/download.html' | \

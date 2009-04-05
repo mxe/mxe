@@ -1,12 +1,13 @@
 # GLEW
 
-PKG            := glew
-$(PKG)_VERSION := 1.5.1
-$(PKG)_SUBDIR  := glew
-$(PKG)_FILE    := glew-$($(PKG)_VERSION)-src.tgz
-$(PKG)_WEBSITE := http://glew.sourceforge.net/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/glew/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := glew
+$(PKG)_VERSION  := 1.5.1
+$(PKG)_CHECKSUM := a94113169d46487ccda1bb2fde68fa1803bdf009
+$(PKG)_SUBDIR   := glew
+$(PKG)_FILE     := glew-$($(PKG)_VERSION)-src.tgz
+$(PKG)_WEBSITE  := http://glew.sourceforge.net/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/glew/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=67586&package_id=67942' | \

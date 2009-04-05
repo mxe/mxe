@@ -1,12 +1,13 @@
 # MPFR for GCC
 
-PKG            := gcc-mpfr
-$(PKG)_VERSION := 2.3.2
-$(PKG)_SUBDIR  := mpfr-$($(PKG)_VERSION)
-$(PKG)_FILE    := mpfr-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.mpfr.org/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
-$(PKG)_DEPS    :=
+PKG             := gcc-mpfr
+$(PKG)_VERSION  := 2.3.2
+$(PKG)_CHECKSUM := 37dbd478e1c136f37cf4c68eb1522e86e2307288
+$(PKG)_SUBDIR   := mpfr-$($(PKG)_VERSION)
+$(PKG)_FILE     := mpfr-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.mpfr.org/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
+$(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=200665&package_id=238462' | \

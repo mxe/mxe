@@ -1,12 +1,13 @@
 # libgcrypt
 
-PKG            := libgcrypt
-$(PKG)_VERSION := 1.4.4
-$(PKG)_SUBDIR  := libgcrypt-$($(PKG)_VERSION)
-$(PKG)_FILE    := libgcrypt-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := ftp://ftp.gnupg.org/gcrypt/libgcrypt/
-$(PKG)_URL     := ftp://ftp.gnupg.org/gcrypt/libgcrypt/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc libgpg_error
+PKG             := libgcrypt
+$(PKG)_VERSION  := 1.4.4
+$(PKG)_CHECKSUM := 3987f0efcbb7048c136d5c859e88eee1763a14f6
+$(PKG)_SUBDIR   := libgcrypt-$($(PKG)_VERSION)
+$(PKG)_FILE     := libgcrypt-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := ftp://ftp.gnupg.org/gcrypt/libgcrypt/
+$(PKG)_URL      := ftp://ftp.gnupg.org/gcrypt/libgcrypt/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libgpg_error
 
 define $(PKG)_UPDATE
     wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgcrypt/' | \

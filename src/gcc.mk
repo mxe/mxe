@@ -1,12 +1,13 @@
 # TDM-GCC
 
-PKG            := gcc
-$(PKG)_VERSION := 4.3.3-tdm-1
-$(PKG)_SUBDIR  := .
-$(PKG)_FILE    := gcc-$($(PKG)_VERSION)-srcbase.zip
-$(PKG)_WEBSITE := http://www.tdragon.net/recentgcc/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
-$(PKG)_DEPS    := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran
+PKG             := gcc
+$(PKG)_VERSION  := 4.3.3-tdm-1
+$(PKG)_CHECKSUM := 74a2f7867e27e414ffd5973fe6e70c8ac0f9d53c
+$(PKG)_SUBDIR   := .
+$(PKG)_FILE     := gcc-$($(PKG)_VERSION)-srcbase.zip
+$(PKG)_WEBSITE  := http://www.tdragon.net/recentgcc/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
+$(PKG)_DEPS     := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=200665&package_id=238347' | \

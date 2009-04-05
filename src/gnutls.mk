@@ -1,13 +1,14 @@
 # GnuTLS
 
-PKG            := gnutls
-$(PKG)_VERSION := 2.6.4
-$(PKG)_SUBDIR  := gnutls-$($(PKG)_VERSION)
-$(PKG)_FILE    := gnutls-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.gnu.org/software/gnutls/
-$(PKG)_URL     := ftp://ftp.gnu.org/pub/gnu/gnutls/$($(PKG)_FILE)
-$(PKG)_URL_2   := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc libgcrypt
+PKG             := gnutls
+$(PKG)_VERSION  := 2.6.4
+$(PKG)_CHECKSUM := 11dd1e11599906a32b3ff92308f4c4dbaadbad58
+$(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
+$(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
+$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gnutls/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libgcrypt
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \

@@ -1,13 +1,14 @@
 # GeoTiff
 
-PKG            := libgeotiff
-$(PKG)_VERSION := 1.2.5
-$(PKG)_SUBDIR  := libgeotiff-$($(PKG)_VERSION)
-$(PKG)_FILE    := libgeotiff-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://trac.osgeo.org/geotiff/
-$(PKG)_URL     := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
-$(PKG)_URL_2   := ftp://ftp.remotesensing.org/pub/geotiff/libgeotiff/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc zlib jpeg tiff proj
+PKG             := libgeotiff
+$(PKG)_VERSION  := 1.2.5
+$(PKG)_CHECKSUM := 38b10070374636fedfdde328ff1c9f3c6e8e581f
+$(PKG)_SUBDIR   := libgeotiff-$($(PKG)_VERSION)
+$(PKG)_FILE     := libgeotiff-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://trac.osgeo.org/geotiff/
+$(PKG)_URL      := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.remotesensing.org/pub/geotiff/libgeotiff/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc zlib jpeg tiff proj
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://trac.osgeo.org/geotiff/' | \

@@ -1,12 +1,13 @@
 # fontconfig
 
-PKG            := fontconfig
-$(PKG)_VERSION := 2.6.0
-$(PKG)_SUBDIR  := fontconfig-$($(PKG)_VERSION)
-$(PKG)_FILE    := fontconfig-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://fontconfig.org/
-$(PKG)_URL     := http://fontconfig.org/release/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc freetype expat
+PKG             := fontconfig
+$(PKG)_VERSION  := 2.6.0
+$(PKG)_CHECKSUM := 93752566b8327485b153bd156049614f779b4c57
+$(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
+$(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://fontconfig.org/
+$(PKG)_URL      := http://fontconfig.org/release/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc freetype expat
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://fontconfig.org/release/' | \

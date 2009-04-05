@@ -1,12 +1,13 @@
 # Libntlm
 
-PKG            := libntlm
-$(PKG)_VERSION := 1.0
-$(PKG)_SUBDIR  := libntlm-$($(PKG)_VERSION)
-$(PKG)_FILE    := libntlm-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://josefsson.org/libntlm/
-$(PKG)_URL     := http://josefsson.org/libntlm/releases/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := libntlm
+$(PKG)_VERSION  := 1.0
+$(PKG)_CHECKSUM := c6b351f2c0e5b999204d429c743d0005ba927fa4
+$(PKG)_SUBDIR   := libntlm-$($(PKG)_VERSION)
+$(PKG)_FILE     := libntlm-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://josefsson.org/libntlm/
+$(PKG)_URL      := http://josefsson.org/libntlm/releases/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=libntlm.git;a=tags' | \

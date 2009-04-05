@@ -1,12 +1,13 @@
 # GMP for GCC
 
-PKG            := gcc-gmp
-$(PKG)_VERSION := 4.2.4
-$(PKG)_SUBDIR  := gmp-$($(PKG)_VERSION)
-$(PKG)_FILE    := gmp-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.gmplib.org/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
-$(PKG)_DEPS    :=
+PKG             := gcc-gmp
+$(PKG)_VERSION  := 4.2.4
+$(PKG)_CHECKSUM := bb721f94fbeeb8c609104540b408da6707c370ec
+$(PKG)_SUBDIR   := gmp-$($(PKG)_VERSION)
+$(PKG)_FILE     := gmp-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.gmplib.org/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
+$(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=200665&package_id=238462' | \

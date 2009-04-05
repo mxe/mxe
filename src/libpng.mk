@@ -1,12 +1,13 @@
 # libpng
 
-PKG            := libpng
-$(PKG)_VERSION := 1.2.35
-$(PKG)_SUBDIR  := libpng-$($(PKG)_VERSION)
-$(PKG)_FILE    := libpng-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.libpng.org/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/libpng/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc zlib
+PKG             := libpng
+$(PKG)_VERSION  := 1.2.35
+$(PKG)_CHECKSUM := aad4faf21a1fc5853a55a2ff51351707bde3f6ac
+$(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
+$(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.libpng.org/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/libpng/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624' | \

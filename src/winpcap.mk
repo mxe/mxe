@@ -1,12 +1,13 @@
 # WinPcap
 
-PKG            := winpcap
-$(PKG)_VERSION := 4_0_2
-$(PKG)_SUBDIR  := winpcap
-$(PKG)_FILE    := WpcapSrc_$($(PKG)_VERSION).zip
-$(PKG)_WEBSITE := http://www.winpcap.org/
-$(PKG)_URL     := http://www.winpcap.org/install/bin/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := winpcap
+$(PKG)_VERSION  := 4_0_2
+$(PKG)_CHECKSUM := faa4e0cd73352d400d123be63b9c6c02c7e132d1
+$(PKG)_SUBDIR   := winpcap
+$(PKG)_FILE     := WpcapSrc_$($(PKG)_VERSION).zip
+$(PKG)_WEBSITE  := http://www.winpcap.org/
+$(PKG)_URL      := http://www.winpcap.org/install/bin/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.winpcap.org/devel.htm' | \

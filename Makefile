@@ -5,15 +5,16 @@ JOBS               := 1
 TARGET             := i386-mingw32msvc
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
-VERSION := 2.5
-PREFIX  := $(PWD)/usr
-PKG_DIR := $(PWD)/pkg
-TMP_DIR  = $(PWD)/tmp-$(1)
-TOP_DIR := $(patsubst %/,%,$(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))))
-PATH    := $(PREFIX)/bin:$(PATH)
-SHELL   := bash
-SED     := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
-INSTALL := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
+VERSION  := 2.5
+PREFIX   := $(PWD)/usr
+PKG_DIR  := $(PWD)/pkg
+TMP_DIR   = $(PWD)/tmp-$(1)
+MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
+PATH     := $(PREFIX)/bin:$(PATH)
+SHELL    := bash
+SED      := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
+INSTALL  := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 
 # unset any environment variables which might cause trouble
 AR =
@@ -40,13 +41,6 @@ SHORT_PKG_VERSION = \
 PKG_RULES := $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk))
 include $(TOP_DIR)/src/*.mk
 
-CHECK_ARCHIVE = \
-    $(if $(filter %.tgz,    $(1)),tar tfz '$(1)' >/dev/null 2>&1, \
-    $(if $(filter %.tar.gz, $(1)),tar tfz '$(1)' >/dev/null 2>&1, \
-    $(if $(filter %.tar.bz2,$(1)),tar tfj '$(1)' >/dev/null 2>&1, \
-    $(if $(filter %.zip,    $(1)),unzip -t '$(1)' >/dev/null 2>&1, \
-    $(error Unknown archive format: $(1))))))
-
 UNPACK_ARCHIVE = \
     $(if $(filter %.tgz,    $(1)),tar xvzf '$(1)', \
     $(if $(filter %.tar.gz, $(1)),tar xvzf '$(1)', \
@@ -57,6 +51,18 @@ UNPACK_ARCHIVE = \
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
 
+PKG_CHECKSUM = \
+    sha1sum -b '$(PKG_DIR)/$($(1)_FILE)' | $(SED) -n 's,^\([0-9a-f]\{40\}\).*,\1,p'
+
+CHECK_PKG_ARCHIVE = \
+    [ '$($(1)_CHECKSUM)' == "`$(call PKG_CHECKSUM,$(1))`" ]
+
+DOWNLOAD_PKG_ARCHIVE = \
+    $(if $($(1)_URL_2), \
+        wget -T 30 -t 3 -c -O '$(PKG_DIR)/$($(1)_FILE)' '$($(1)_URL)' \
+        || wget -c -O '$(PKG_DIR)/$($(1)_FILE)' '$($(1)_URL_2)', \
+        wget -c -O '$(PKG_DIR)/$($(1)_FILE)' '$($(1)_URL)')
+
 .PHONY: all
 all: $(PKG_RULES)
 
@@ -66,12 +72,10 @@ $(1): $(PREFIX)/installed-$(1)
 $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk $(addprefix $(PREFIX)/installed-,$($(1)_DEPS))
 	[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
 	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
-	cd '$(PKG_DIR)' && ( \
-	    $(call CHECK_ARCHIVE,$($(1)_FILE)) || \
-	    $(if $($(1)_URL_2), \
-	        wget -T 30 -t 3 -c -O '$($(1)_FILE)' '$($(1)_URL)' || \
-	            wget -c -O '$($(1)_FILE)' '$($(1)_URL_2)', \
-	        wget -c -O '$($(1)_FILE)' '$($(1)_URL)'))
+	$(if $$(shell $(call CHECK_PKG_ARCHIVE,$(1)) || echo 'error'),
+	    $(call DOWNLOAD_PKG_ARCHIVE,$(1))
+	    $(call CHECK_PKG_ARCHIVE,$(1))
+	    ,)
 	$(if $(value $(1)_BUILD),
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
@@ -122,16 +126,21 @@ clean-pkg:
 
 .PHONY: update
 define UPDATE
-    $(if $(2), \
-        $(info $(1): $(2)) \
-        $(if $(filter $(2),$($(1)_VERSION)), \
-            , \
-            $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i '$(TOP_DIR)/src/$(1).mk'), \
+    $(if $(2),
+        $(info $(1): $(2))
+        $(if $(filter $(2),$($(1)_VERSION)),
+            ,
+            $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i '$(TOP_DIR)/src/$(1).mk'
+            $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)'),
         $(error Unable to update version number: $(1)))
 
 endef
 update:
 	$(foreach PKG,$(PKG_RULES),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
+
+update-checksum-%:
+	$(call DOWNLOAD_PKG_ARCHIVE,$*)
+	$(SED) 's/^\([^ ]*_CHECKSUM *:=\).*/\1 $(shell $(call PKG_CHECKSUM,$*))/' -i '$(TOP_DIR)/src/$*.mk'
 
 .PHONY: dist
 dist:

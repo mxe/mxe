@@ -1,12 +1,13 @@
 # Libidn
 
-PKG            := libidn
-$(PKG)_VERSION := 1.14
-$(PKG)_SUBDIR  := libidn-$($(PKG)_VERSION)
-$(PKG)_FILE    := libidn-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://www.gnu.org/software/libidn/
-$(PKG)_URL     := ftp://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc libiconv
+PKG             := libidn
+$(PKG)_VERSION  := 1.14
+$(PKG)_CHECKSUM := ab68746b9c74f07605b6b0ee13dc0b4b7b8101a8
+$(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
+$(PKG)_FILE     := libidn-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.gnu.org/software/libidn/
+$(PKG)_URL      := ftp://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=libidn.git;a=tags' | \

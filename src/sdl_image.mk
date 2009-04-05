@@ -1,12 +1,13 @@
 # SDL_image
 
-PKG            := sdl_image
-$(PKG)_VERSION := 1.2.7
-$(PKG)_SUBDIR  := SDL_image-$($(PKG)_VERSION)
-$(PKG)_FILE    := SDL_image-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://libsdl.org/projects/SDL_image/
-$(PKG)_URL     := http://libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc sdl jpeg libpng tiff
+PKG             := sdl_image
+$(PKG)_VERSION  := 1.2.7
+$(PKG)_CHECKSUM := 0cffd05e41014651e7114d7fea309c9f37ef2d8a
+$(PKG)_SUBDIR   := SDL_image-$($(PKG)_VERSION)
+$(PKG)_FILE     := SDL_image-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://libsdl.org/projects/SDL_image/
+$(PKG)_URL      := http://libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc sdl jpeg libpng tiff
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://libsdl.org/projects/SDL_image/' | \

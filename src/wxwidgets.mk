@@ -1,12 +1,13 @@
 # wxWidgets
 
-PKG            := wxwidgets
-$(PKG)_VERSION := 2.8.10
-$(PKG)_SUBDIR  := wxMSW-$($(PKG)_VERSION)
-$(PKG)_FILE    := wxMSW-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.wxwidgets.org/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/wxwindows/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc libiconv libpng jpeg tiff sdl tre zlib expat
+PKG             := wxwidgets
+$(PKG)_VERSION  := 2.8.10
+$(PKG)_CHECKSUM := e674086391ce5c8e64ef1823654d6f88b064c8e0
+$(PKG)_SUBDIR   := wxMSW-$($(PKG)_VERSION)
+$(PKG)_FILE     := wxMSW-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.wxwidgets.org/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/wxwindows/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libiconv libpng jpeg tiff sdl tre zlib expat
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=9863&package_id=14078' | \

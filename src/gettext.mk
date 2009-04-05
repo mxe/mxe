@@ -1,12 +1,13 @@
 # gettext
 
-PKG            := gettext
-$(PKG)_VERSION := 0.17
-$(PKG)_SUBDIR  := gettext-$($(PKG)_VERSION)
-$(PKG)_FILE    := gettext-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://www.gnu.org/software/gettext/
-$(PKG)_URL     := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc libiconv
+PKG             := gettext
+$(PKG)_VERSION  := 0.17
+$(PKG)_CHECKSUM := c51803d9f745f6ace36bd09c0486d5735ce399cf
+$(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
+$(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.gnu.org/software/gettext/
+$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.gnu.org/software/gettext/' | \

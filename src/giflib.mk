@@ -1,12 +1,13 @@
 # giflib
 
-PKG            := giflib
-$(PKG)_VERSION := 4.1.6
-$(PKG)_SUBDIR  := giflib-$($(PKG)_VERSION)
-$(PKG)_FILE    := giflib-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://sourceforge.net/projects/libungif/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/giflib/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := giflib
+$(PKG)_VERSION  := 4.1.6
+$(PKG)_CHECKSUM := 22680f604ec92065f04caf00b1c180ba74fb8562
+$(PKG)_SUBDIR   := giflib-$($(PKG)_VERSION)
+$(PKG)_FILE     := giflib-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://sourceforge.net/projects/libungif/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/giflib/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=102202&package_id=119585' | \

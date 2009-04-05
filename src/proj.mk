@@ -1,13 +1,14 @@
 # proj
 
-PKG            := proj
-$(PKG)_VERSION := 4.6.1
-$(PKG)_SUBDIR  := proj-$($(PKG)_VERSION)
-$(PKG)_FILE    := proj-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://trac.osgeo.org/proj/
-$(PKG)_URL     := http://download.osgeo.org/proj/$($(PKG)_FILE)
-$(PKG)_URL_2   := ftp://ftp.remotesensing.org/proj/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := proj
+$(PKG)_VERSION  := 4.6.1
+$(PKG)_CHECKSUM := ddfdad6cba28af5f91b14fd6690bd22bbbc79390
+$(PKG)_SUBDIR   := proj-$($(PKG)_VERSION)
+$(PKG)_FILE     := proj-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://trac.osgeo.org/proj/
+$(PKG)_URL      := http://download.osgeo.org/proj/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.remotesensing.org/proj/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://trac.osgeo.org/proj/' | \

@@ -1,12 +1,13 @@
 # MinGW Runtime
 
-PKG            := mingwrt
-$(PKG)_VERSION := 3.15.2-mingw32
-$(PKG)_SUBDIR  := .
-$(PKG)_FILE    := mingwrt-$($(PKG)_VERSION)-dev.tar.gz
-$(PKG)_WEBSITE := http://mingw.sourceforge.net/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
-$(PKG)_DEPS    :=
+PKG             := mingwrt
+$(PKG)_VERSION  := 3.15.2-mingw32
+$(PKG)_CHECKSUM := 36ef40de84cb8778e68f883d1cf320d9e627342d
+$(PKG)_SUBDIR   := .
+$(PKG)_FILE     := mingwrt-$($(PKG)_VERSION)-dev.tar.gz
+$(PKG)_WEBSITE  := http://mingw.sourceforge.net/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
+$(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=11598' | \

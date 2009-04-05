@@ -1,12 +1,13 @@
 # GDAL
 
-PKG            := gdal
-$(PKG)_VERSION := 1.6.0
-$(PKG)_SUBDIR  := gdal-$($(PKG)_VERSION)
-$(PKG)_FILE    := gdal-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://www.gdal.org/
-$(PKG)_URL     := http://download.osgeo.org/gdal/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc zlib libpng tiff libgeotiff jpeg giflib expat curl geos
+PKG             := gdal
+$(PKG)_VERSION  := 1.6.0
+$(PKG)_CHECKSUM := cae5a891231ee5794350d1626a688d802a429423
+$(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
+$(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.gdal.org/
+$(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc zlib libpng tiff libgeotiff jpeg giflib expat curl geos
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \

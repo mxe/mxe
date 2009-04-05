@@ -1,12 +1,13 @@
 # SDL
 
-PKG            := sdl
-$(PKG)_VERSION := 1.2.11
-$(PKG)_SUBDIR  := SDL-$($(PKG)_VERSION)
-$(PKG)_FILE    := SDL-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://libsdl.org/
-$(PKG)_URL     := http://libsdl.org/release/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc libiconv
+PKG             := sdl
+$(PKG)_VERSION  := 1.2.11
+$(PKG)_CHECKSUM := 2259134d714e35ab1469d513674a3cd02510d198
+$(PKG)_SUBDIR   := SDL-$($(PKG)_VERSION)
+$(PKG)_FILE     := SDL-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://libsdl.org/
+$(PKG)_URL      := http://libsdl.org/release/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://libsdl.org/release/changes.html' | \

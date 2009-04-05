@@ -1,12 +1,13 @@
 # GTK+
 
-PKG            := gtk
-$(PKG)_VERSION := 2.16.0
-$(PKG)_SUBDIR  := gtk+-$($(PKG)_VERSION)
-$(PKG)_FILE    := gtk+-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := http://www.gtk.org/
-$(PKG)_URL     := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc gettext libpng jpeg tiff jasper glib atk pango cairo
+PKG             := gtk
+$(PKG)_VERSION  := 2.16.0
+$(PKG)_CHECKSUM := b737ad4b224a3cff966ef43b2682c696d756764c
+$(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
+$(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.gtk.org/
+$(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc gettext libpng jpeg tiff jasper glib atk pango cairo
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.gtk.org/download-windows.html' | \

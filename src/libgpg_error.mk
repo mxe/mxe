@@ -1,12 +1,13 @@
 # libgpg-error
 
-PKG            := libgpg_error
-$(PKG)_VERSION := 1.7
-$(PKG)_SUBDIR  := libgpg-error-$($(PKG)_VERSION)
-$(PKG)_FILE    := libgpg-error-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE := ftp://ftp.gnupg.org/gcrypt/libgpg-error/
-$(PKG)_URL     := ftp://ftp.gnupg.org/gcrypt/libgpg-error/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := libgpg_error
+$(PKG)_VERSION  := 1.7
+$(PKG)_CHECKSUM := bf8c6babe1e28cae7dd6374ca24ddcc42d57e902
+$(PKG)_SUBDIR   := libgpg-error-$($(PKG)_VERSION)
+$(PKG)_FILE     := libgpg-error-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := ftp://ftp.gnupg.org/gcrypt/libgpg-error/
+$(PKG)_URL      := ftp://ftp.gnupg.org/gcrypt/libgpg-error/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgpg-error/' | \

@@ -1,12 +1,13 @@
 # libxml2
 
-PKG            := libxml2
-$(PKG)_VERSION := 2.7.3
-$(PKG)_SUBDIR  := libxml2-$($(PKG)_VERSION)
-$(PKG)_FILE    := libxml2-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://www.xmlsoft.org/
-$(PKG)_URL     := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := libxml2
+$(PKG)_VERSION  := 2.7.3
+$(PKG)_CHECKSUM := fd4e427fb55c977876bc74c0e552ef7d3d794a07
+$(PKG)_SUBDIR   := libxml2-$($(PKG)_VERSION)
+$(PKG)_FILE     := libxml2-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.xmlsoft.org/
+$(PKG)_URL      := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'ftp://xmlsoft.org/libxml2/' | \

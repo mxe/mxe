@@ -1,12 +1,13 @@
 # Libgsasl
 
-PKG            := libgsasl
-$(PKG)_VERSION := 1.1
-$(PKG)_SUBDIR  := libgsasl-$($(PKG)_VERSION)
-$(PKG)_FILE    := libgsasl-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://www.gnu.org/software/gsasl/
-$(PKG)_URL     := http://ftp.gnu.org/gnu/gsasl/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc libiconv libidn libntlm
+PKG             := libgsasl
+$(PKG)_VERSION  := 1.1
+$(PKG)_CHECKSUM := 6261807a5251eba564175169af0662e6e1583ca7
+$(PKG)_SUBDIR   := libgsasl-$($(PKG)_VERSION)
+$(PKG)_FILE     := libgsasl-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.gnu.org/software/gsasl/
+$(PKG)_URL      := http://ftp.gnu.org/gnu/gsasl/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libiconv libidn libntlm
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gsasl.git;a=tags' | \

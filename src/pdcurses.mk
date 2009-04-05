@@ -1,12 +1,13 @@
 # PDcurses
 
-PKG            := pdcurses
-$(PKG)_VERSION := 3.4
-$(PKG)_SUBDIR  := PDCurses-$($(PKG)_VERSION)
-$(PKG)_FILE    := PDCurses-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE := http://pdcurses.sourceforge.net/
-$(PKG)_URL     := http://$(SOURCEFORGE_MIRROR)/pdcurses/$($(PKG)_FILE)
-$(PKG)_DEPS    := gcc
+PKG             := pdcurses
+$(PKG)_VERSION  := 3.4
+$(PKG)_CHECKSUM := e36684442a6171cc3a5165c8c49c70f67db7288c
+$(PKG)_SUBDIR   := PDCurses-$($(PKG)_VERSION)
+$(PKG)_FILE     := PDCurses-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://pdcurses.sourceforge.net/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/pdcurses/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=30480&package_id=22452' | \
