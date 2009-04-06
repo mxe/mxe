@@ -172,6 +172,14 @@
         everything else is usually already there.
     </dd>
 
+    <dt>Minimal Debian</dt>
+    <dd>
+        Create a minimal Debian system with
+        <a href="http://www.debian-administration.org/articles/426">debootstrap</a>,
+        then run:
+        <pre>aptitude install -R g++ make openssl unzip bzip2 patch</pre>
+    </dd>
+
     <dt>FreeBSD</dt>
     <dd>
         <pre>pkg_add -r bash gmake gsed wget unzip perl</pre>
