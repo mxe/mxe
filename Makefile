@@ -140,7 +140,7 @@ update:
 
 update-checksum-%:
 	$(call DOWNLOAD_PKG_ARCHIVE,$*)
-	$(SED) 's/^\([^ ]*_CHECKSUM *:=\).*/\1 $(shell $(call PKG_CHECKSUM,$*))/' -i '$(TOP_DIR)/src/$*.mk'
+	$(SED) 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' -i '$(TOP_DIR)/src/$*.mk'
 
 .PHONY: dist
 dist:
