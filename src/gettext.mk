@@ -22,6 +22,8 @@ define $(PKG)_BUILD
     cd '$(1)/$(libiconv_SUBDIR)' && ./configure \
         --prefix='$(1)/libiconv' \
         --disable-shared \
+        --disable-java \
+        --disable-csharp \
         --disable-nls
     $(MAKE) -C '$(1)/$(libiconv_SUBDIR)' -j 1 install
 
@@ -29,12 +31,14 @@ define $(PKG)_BUILD
     # This problem will be solved in gettext >= 1.8. See:
     # http://git.savannah.gnu.org/cgit/gettext.git/commit/?id=ecad95f51a11409cc0d30b22913a8ba77d3edf1d
     $(SED) 's/O_CREAT);/O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);/' \
-    	-i '$(1)/gettext-tools/src/write-catalog.c'
+        -i '$(1)/gettext-tools/src/write-catalog.c'
 
     # native build for gettext-tools
     cd '$(1)/gettext-tools' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)' \
+        --disable-java \
+        --disable-csharp \
         --disable-threads \
         --with-libiconv-prefix='$(1)/libiconv' \
         --with-included-gettext \
