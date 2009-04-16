@@ -4,8 +4,8 @@ PKG             := jpeg
 $(PKG)_VERSION  := 6b
 $(PKG)_CHECKSUM := 7079f0d6c42fad0cfba382cf6ad322add1ace8f9
 $(PKG)_SUBDIR   := jpeg-$($(PKG)_VERSION)
-$(PKG)_WEBSITE  := http://www.ijg.org/
 $(PKG)_FILE     := libjpeg6b_$($(PKG)_VERSION).orig.tar.gz
+$(PKG)_WEBSITE  := http://www.ijg.org/
 $(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libj/libjpeg6b/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

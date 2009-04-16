@@ -4,8 +4,8 @@ PKG             := smpeg
 $(PKG)_VERSION  := 0.4.5+cvs20030824
 $(PKG)_CHECKSUM := d3460181f4b5e79b33f3bf4e9642a4fe6f98bc89
 $(PKG)_SUBDIR   := smpeg-$($(PKG)_VERSION).orig
-$(PKG)_WEBSITE  := http://icculus.org/smpeg/
 $(PKG)_FILE     := smpeg_$($(PKG)_VERSION).orig.tar.gz
+$(PKG)_WEBSITE  := http://icculus.org/smpeg/
 $(PKG)_URL      := http://ftp.debian.org/debian/pool/main/s/smpeg/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl
 
