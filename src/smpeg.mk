@@ -1,5 +1,4 @@
 # smpeg
-# http://packages.debian.org/unstable/source/smpeg
 
 PKG             := smpeg
 $(PKG)_VERSION  := 0.4.5+cvs20030824

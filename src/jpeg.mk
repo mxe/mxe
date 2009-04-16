@@ -1,5 +1,4 @@
 # jpeg
-# http://packages.debian.org/unstable/source/libjpeg6b
 
 PKG             := jpeg
 $(PKG)_VERSION  := 6b
