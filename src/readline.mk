@@ -23,6 +23,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --enable-multibyte \
         --without-purify \
         --with-curses \
         LIBS='-lpdcurses'
