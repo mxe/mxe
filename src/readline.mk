@@ -26,5 +26,5 @@ define $(PKG)_BUILD
         --without-purify \
         --with-curses \
         LIBS='-lpdcurses'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install SHARED_LIBS=
 endef
