@@ -18,6 +18,8 @@ endef
 
 define $(PKG)_BUILD
     $(SED) '1i\#define PCRE_STATIC' -i '$(1)/pcre.h.in'
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
