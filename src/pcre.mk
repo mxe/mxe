@@ -17,7 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) '1i\#define PCRE_STATIC' -i '$(1)/pcre.h.in'
+    $(SED) 's,__declspec(dllimport),,' -i '$(1)/pcre.h.in'
+    $(SED) 's,__declspec(dllimport),,' -i '$(1)/pcreposix.h'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
     cd '$(1)' && ./configure \
