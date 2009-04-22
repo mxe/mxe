@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) '1i\#define PCRE_STATIC' -i '$(1)/pcre.h.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
