@@ -2,7 +2,7 @@
 
 PKG             := mingwrt
 $(PKG)_VERSION  := 3.15.2-mingw32
-$(PKG)_CHECKSUM := 36ef40de84cb8778e68f883d1cf320d9e627342d
+$(PKG)_CHECKSUM := 9f562408b94202ecff558e683e5d7df5440612c4
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := mingwrt-$($(PKG)_VERSION)-dev.tar.gz
 $(PKG)_WEBSITE  := http://mingw.sourceforge.net/
