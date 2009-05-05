@@ -1,8 +1,8 @@
 # libiconv
 
 PKG             := libiconv
-$(PKG)_VERSION  := 1.12
-$(PKG)_CHECKSUM := a5738d7dfbbd01c49e8ce026ea4ffa0f01af0179
+$(PKG)_VERSION  := 1.13
+$(PKG)_CHECKSUM := 10e5f7d26a59430a9a88a3d0b557634e6f72c859
 $(PKG)_SUBDIR   := libiconv-$($(PKG)_VERSION)
 $(PKG)_FILE     := libiconv-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/libiconv/
