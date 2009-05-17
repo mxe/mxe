@@ -30,6 +30,8 @@ define $(PKG)_BUILD
     $(SED) 's,enable_shared=yes,enable_shared=no,' -i '$(1)/configure'
     $(SED) 's,\(STATIC_LIB_DEPS="[^"]*\) \$$LIBJPEG,\1 $$LIBJASPER $$LIBJPEG,' -i '$(1)/configure'
     $(SED) 's/-Wl,-luuid/-luuid/' -i '$(1)/configure'
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
