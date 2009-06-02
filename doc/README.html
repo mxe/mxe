@@ -55,23 +55,63 @@
 
 <h1>MinGW cross compiling environment</h1>
 
-    <p>
-    This Makefile compiles a MinGW cross compiler and cross compiles
-    many free libraries such as GD and SDL. Thus, it provides a nice
-    MinGW cross compiling environment. All necessary source packages
-    are downloaded automatically.
-    </p>
-
-    <p>
-    The Makefile is designed to run on any Unix system.
-    </p>
+<h2>Introduction</h2>
 
     <p>
     Project website: <a href="http://www.profv.de/mingw_cross_env/"
                              >http://www.profv.de/mingw_cross_env/</a>
     </p>
 
-<h2>News</h2>
+    <p>
+    This Makefile compiles a MinGW cross compiler and cross compiles
+    many free libraries such as GD and SDL. Thus, it provides a nice
+    MinGW cross compiling environment. It
+    </p>
+
+    <ul>
+    <li>
+        is designed to run on any Unix system
+    </li>
+    <li>
+        is easy to adapt and to extend
+    </li>
+    <li>
+        builds many free libraries in addition to the cross compiler
+    </li>
+    <li>
+        can also build just a subset of the packages,
+        and automatically builds their dependencies
+    </li>
+    <li>
+        downloads all needed packages
+        and verifies them by their checksums
+    </li>
+    <li>
+        is able to update the version numbers of all packages automatically
+    </li>
+    <li>
+        directly uses source packages,
+        thus ensuring the whole build mechanism is transparent
+    </li>
+    <li>
+        allows inter-package and intra-package parallel builds
+        whenever possible
+    </li>
+    <li>
+        creates libraries to be linked statically, no DLL hell
+    </li>
+    </ul>
+
+<h2>Tutorial</h2>
+
+    <ul>
+    <li>
+        <a href="http://wiki.njh.eu/Win32_Cross_Compiling_Tutorial">Win32 Cross Compiling Tutorial</a>
+        by Hans Bezemer
+    </li>
+    </ul>
+
+<h2>Latest Release</h2>
 
     <dl>
 
@@ -101,62 +141,20 @@
 
     </dl>
 
-<h2>Tutorials</h2>
+<h2>Development Version</h2>
 
-    <ul>
-    <li>
-        <a href="http://wiki.njh.eu/Win32_Cross_Compiling_Tutorial">Win32 Cross Compiling Tutorial</a>
-        by Hans Bezemer
-    </li>
-    </ul>
+    <p>
+    To obtain the current development version,
+    install
+    <a href="http://www.selenic.com/mercurial/">Mercurial</a>
+    and run:
+    <pre>hg clone http://www.profv.de/mingw_cross_env/hgweb.cgi mingw_cross_env</pre>
+    </p>
 
-<h2>For Developers</h2>
-
-    <ul>
-    <li>
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi">Web Repository</a>
-    </li>
-    <li>
-        Install
-        <a href="http://www.selenic.com/mercurial/">Mercurial</a>
-        and run:
-        <pre>hg clone http://www.profv.de/mingw_cross_env/hgweb.cgi mingw_cross_env</pre>
-    </li>
-    </ul>
-
-<h2>Features</h2>
-
-    <ul>
-    <li>
-        easy to adapt and to extend
-    </li>
-    <li>
-        builds many free libraries in addition to the cross compiler
-    </li>
-    <li>
-        can also build just a subset of the packages,
-        and automatically builds their dependencies
-    </li>
-    <li>
-        downloads all needed packages
-        and verifies them by their checksums
-    </li>
-    <li>
-        is able to update the version numbers of all packages automatically
-    </li>
-    <li>
-        directly uses source packages,
-        thus ensuring the whole build mechanism is transparent
-    </li>
-    <li>
-        allows inter-package and intra-package parallel builds
-        whenever possible
-    </li>
-    <li>
-        creates libraries to be linked statically, no DLL hell
-    </li>
-
-    </ul>
+    <p>
+    You can also browse the
+    <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi">Web Repository</a>.
+    </p>
 
 <h2>Prerequisites</h2>
 
@@ -306,15 +304,6 @@
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     </p>
-
-<h2>See also</h2>
-
-    <ul>
-    <li>
-        <a href="http://www.sandroid.org/imcross/">IMCROSS</a>
-        is another project with a very similar goal.
-    </li>
-    </ul>
 
 <h2>History</h2>
 
@@ -548,6 +537,15 @@
     </dd>
 
     </dl>
+
+<h2>See also</h2>
+
+    <ul>
+    <li>
+        <a href="http://www.sandroid.org/imcross/">IMCROSS</a>
+        is another project with a very similar goal.
+    </li>
+    </ul>
 
 </body>
 </html>
