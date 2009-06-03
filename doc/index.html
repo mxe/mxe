@@ -29,6 +29,7 @@
         }
         #navigation ul {
             padding-left: 0em;
+            margin-left: 0em;
             margin-top: 1.5em;
             margin-bottom: 0em;
             list-style-type: none;
@@ -66,6 +67,8 @@
         }
         #navigation {
             position: fixed;
+            float: left; /* hack for ancient browsers
+                            which don't support "position: fixed;" */
             margin-top:  1em;
             margin-left: 1em;
             padding-left:   1em;
