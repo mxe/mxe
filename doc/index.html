@@ -192,7 +192,7 @@ tar -xzvf mingw_cross_env-<span class="version">X.Y</span>.tar.gz</pre>
 
     <p>
     Now you should save any previous installation
-    of the MinGW cross compiling environment.
+    of the mingw_cross_env.
     Assuming you've installed it under
     /opt/mingw (any other directory will do as well),
     you should execute the following commands:
@@ -220,7 +220,7 @@ exit</pre>
 
     <p>
     Enter the directory where you've unpacked the
-    MinGW cross compiling environment.
+    mingw_cross_env.
     Now it depends on what you actually want &ndash; or need.
     </p>
 
@@ -230,7 +230,7 @@ exit</pre>
     <pre>make</pre>
     <p>
     you're in for a long wait,
-    because the MinGW cross compiling environment
+    because the mingw_cross_env
     <a href="#packages">compiles a lot of stuff</a>.
     On the other hand it doesn't require any intervention,
     so you're free to do whatever you like
@@ -257,7 +257,8 @@ exit</pre>
     <p>
     After you're done it just needs a little post-installation.
     Edit your .bashrc script in order to change $PATH:
-    <pre>export PATH=/<em>where MinGW cross compiler is installed</em>/usr/bin:$PATH</pre>
+    </p>
+    <pre>export PATH=/<em>where mingw_cross_env is installed</em>/usr/bin:$PATH</pre>
 
     <p>
     BTW, note that any compiler related environment variables
