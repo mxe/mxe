@@ -11,13 +11,15 @@
             font-size: 11pt;
             margin-top: 0em;
         }
-        h1, h2 {
+        h1, h2, h3 {
             font-family: sans-serif;
-            margin-top: 0em;
         }
         h2 {
             font-size: 14pt;
-            padding-top: 1em;
+        }
+        h3 {
+            font-size: 11pt;
+            background-color: #eee;
         }
         #navigation a {
             text-decoration: none;
@@ -64,6 +66,11 @@
     @media screen, handheld {
         h1 {
             font-size: 12pt;
+            margin-top: 0em;
+        }
+        h2 {
+            margin-top: 0em;
+            padding-top: 1em;
         }
         #navigation {
             position: fixed;
@@ -163,12 +170,131 @@
 <div class="section">
 <h2 id="tutorial">Tutorial</h2>
 
-    <ul>
-    <li>
-        <a href="http://wiki.njh.eu/Win32_Cross_Compiling_Tutorial">Win32 Cross Compiling Tutorial</a>
-        by Hans Bezemer
-    </li>
-    </ul>
+    <h3>Step 1: Download and Unpack</h3>
+
+    <p>
+    First, download the
+    <a href="#latest-release">latest release</a>
+    and unpack the tarball:
+    </p>
+    <pre>wget http://www.profv.de/mingw_cross_env/mingw_cross_env-2.5.tar.gz
+tar -xzvf mingw_cross_env-2.5.tar.gz</pre>
+
+    <p>
+    If you don't mind installing it in your home directory,
+    just skip the following step and go straight to step 3.
+    </p>
+
+    <h3>Step 2: System-wide Installation (optional)</h3>
+
+    <p>
+    Now you should save any previous installation
+    of the MinGW cross compiling environment.
+    Assuming you've installed it under
+    /opt/mingw (any other directory will do as well),
+    you should execute the following commands:
+    </p>
+    <pre>su
+mv /opt/mingw /opt/mingw.old
+exit</pre>
+
+    <p>
+    Then you need to transfer the entire directory to its definitive location.
+    We will assume again you use /opt/mingw,
+    but feel free to use any other directory if you like.
+    </p>
+    <pre>su
+mv mingw_cross_env-2.5 /opt/mingw
+exit</pre>
+
+    <p>
+    We're almost done.
+    Just change to your newly created directory and get going:
+    </p>
+    <pre>cd /opt/mingw</pre>
+
+    <h3>Step 3: Build mingw_cross_env</h3>
+
+    <p>
+    Enter the directory where you've unpacked the
+    MinGW cross compiling environment.
+    Now it depends on what you actually want - or need.
+    </p>
+
+    <p>
+    If you choose to enter:
+    </p>
+    <pre>make</pre>
+    <p>
+    you're in for a long wait,
+    because the MinGW cross compiling environment
+    <a href="#packages">compiles a lot of stuff</a>.
+    On the other hand it doesn't require any intervention,
+    so you're free to do whatever you like
+    - like watch a movie or go for a night on the town.
+    When it's done you'll find that you've installed
+    a very capable Win32 cross compiler onto your system.
+    </p>
+
+    <p>
+    If you only need the most basic tools you can also use:
+    </p>
+    <pre>make gcc</pre>
+    <p>
+    and add any additional packages you need later on.
+    You can also supply a host of packages on the
+    <a href="#usage">command line</a>,
+    e.g.:
+    </p>
+    <pre>make gtk lua libidn</pre>
+    <p>
+    You'll always end up with a consistent cross compiler environment.
+    </p>
+
+    <p>
+    After you're done it just needs a little post-installation.
+    Edit your .bashrc script in order to change $PATH:
+    <pre>export PATH=/<em>where MinGW cross compiler is installed</em>/usr/bin:$PATH</pre>
+
+    <p>
+    BTW, note that any compiler related environment variables
+    (like $CC, $LDFLAGS, etc.)
+    may spoil your compiling pleasure,
+    so be sure to delete or disable those.
+    </p>
+
+    <h3>Step 4: Build your Project</h3>
+
+    <p>
+    You probably will have to make a few adjustments to your Makefile:
+    </p>
+    <pre>CC=$(CROSS)gcc
+LD=$(CROSS)ld
+AR=$(CROSS)ar</pre>
+    <p>
+    You may have to add a few others, depending on your project.
+    Then, all you have to do is type this:
+    </p>
+    <pre>make CROSS="i386-mingw32msvc-"</pre>
+
+    <p>
+    If you're using configure, all you have to do is:
+    </p>
+    <pre>./configure --host="i386-mingw32msvc"
+make</pre>
+    <p>
+    That's it!
+    </p>
+
+    <p>
+    Don't let any warnings put you off.
+    A warning like this is absolutely harmless:
+    </p>
+    <pre>configure: WARNING: If you wanted to set the --build type, don't use --host.
+If a cross compiler is detected then cross compile mode will be used.</pre>
+    <p>
+    Everything will be just fine.
+    </p>
 </div>
 
 <div class="section">
@@ -358,6 +484,7 @@
         <li>Giuseppe Scrivano</li>
         <li>Martin Gerhardy</li>
         <li>Mark Brand</li>
+        <li>Hans Bezemer</li>
     </ul>
 
     <p>
@@ -627,6 +754,8 @@
     </li>
     <li>
         <a href="http://freshmeat.net/projects/mingw_cross_env">Project entry on Freshmeat</a>
+        with a filled
+        <a href="http://freshmeat.net/projects/mingw_cross_env/comments">comments section</a>
     </li>
     <li>
         <a href="http://www.sandroid.org/imcross/">IMCROSS</a>
@@ -638,6 +767,14 @@
         <a href="http://lxer.com/module/newswire/view/118868">LXer</a>
         and
         <a href="http://www.linuxtoday.com/developer/2009041501335RVSWDV">Linux Today</a>
+    </li>
+    <li>
+        <a href="http://wiki.njh.eu/Cross_Compiling_for_Win32">Cross Compiling for Win32</a>
+        &#x2013; an overview of the various possibilities for win32 cross compiling
+    </li>
+    <li>
+        <a href="http://wiki.wxwidgets.org/Cross-Compiling_Under_Linux#Cross-compiling_under_Linux_for_MS_Windows">Cross-compiling under Linux for MS Windows</a>
+        &#x2013; a very old, but good win32 cross compiling tutorial
     </li>
     </ul>
 </div>
