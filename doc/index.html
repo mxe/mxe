@@ -177,8 +177,8 @@
     <a href="#latest-release">latest release</a>
     and unpack the tarball:
     </p>
-    <pre>wget http://www.profv.de/mingw_cross_env/mingw_cross_env-2.5.tar.gz
-tar -xzvf mingw_cross_env-2.5.tar.gz</pre>
+    <pre>wget http://www.profv.de/mingw_cross_env/mingw_cross_env-<span class="version">X.Y</span>.tar.gz
+tar -xzvf mingw_cross_env-<span class="version">X.Y</span>.tar.gz</pre>
 
     <p>
     If you don't mind installing it in your home directory,
@@ -204,7 +204,7 @@ exit</pre>
     but feel free to use any other directory if you like.
     </p>
     <pre>su
-mv mingw_cross_env-2.5 /opt/mingw
+mv mingw_cross_env-<span class="version">X.Y</span> /opt/mingw
 exit</pre>
 
     <p>
@@ -275,12 +275,12 @@ AR=$(CROSS)ar</pre>
     You may have to add a few others, depending on your project.
     Then, all you have to do is type this:
     </p>
-    <pre>make CROSS="i386-mingw32msvc-"</pre>
+    <pre>make CROSS="<span class="target">i386-mingw32msvc</span>-"</pre>
 
     <p>
     If you're using configure, all you have to do is:
     </p>
-    <pre>./configure --host="i386-mingw32msvc"
+    <pre>./configure --host="<span class="target">i386-mingw32msvc</span>"
 make</pre>
     <p>
     That's it!

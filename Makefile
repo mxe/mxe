@@ -154,7 +154,10 @@ dist:
 	    ($(foreach PKG,$(PKG_RULES), \
 	        echo '    <tr><td><a href="$($(PKG)_WEBSITE)">$(PKG)</a></td><td>$($(PKG)_VERSION)</td></tr>';)) && \
 	    $(SED) -n '/<!-- end of package list -->/,$$ p' '$(TOP_DIR)/doc/index.html' \
-	) >'$(TOP_DIR)/index.html'
+	) \
+	| $(SED) 's,\(<span class="version">\)[^<]*\(</span>\),\1$(VERSION)\2,g' \
+	| $(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' \
+	>'$(TOP_DIR)/index.html'
 	cp -p '$(TOP_DIR)/index.html' 'mingw_cross_env-$(VERSION)/doc/'
 	cd 'mingw_cross_env-$(VERSION)/doc' && lynx -dump -width 75 -nolist -force_html index.html >README
 	cp -p '$(TOP_DIR)/Makefile' 'mingw_cross_env-$(VERSION)/'
