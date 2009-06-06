@@ -17,13 +17,19 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # applications which use libusb need to be linked with
-    # -lusb -lusbd -lsetupapi -lntoskrnl
+    # convert DOS line endings
     sed 's,\r$$,,' -i '$(1)/Makefile'
-    echo -e '$$(LIB_TARGET).a: $$(DLL_OBJECTS) $$(DRIVER_OBJECTS)' >> '$(1)/Makefile'
-    echo -e '\t$$(AR) rc $$@ $$^'                                  >> '$(1)/Makefile'
-    echo -e '\t$$(host_prefix)ranlib $$@'                          >> '$(1)/Makefile'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' host_prefix=$(TARGET) libusbd.a libusb.a
+
+    # don't actually build the library (DLL file),
+    # just create the DLL import stubs
+    $(MAKE) -C '$(1)' -j '$(JOBS)' host_prefix=$(TARGET) libusbd.a
+    cd '$(1)' && $(TARGET)-dlltool \
+        --dllname libusb0.dll \
+        --kill-at \
+        --add-stdcall-underscore \
+        --def libusb0.def \
+        --output-lib libusb.a
+
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m664 '$(1)/src/usb.h' '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
