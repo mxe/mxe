@@ -109,7 +109,7 @@
         <li><a href="#development"   >Development Version</a></li>
     </ul>
     <ul>
-        <li><a href="#prerequisites" >Prerequisites</a></li>
+        <li><a href="#requirements"  >Requirements</a></li>
         <li><a href="#usage"         >Usage</a></li>
         <li><a href="#packages"      >List of Packages</a></li>
         <li><a href="#copyright"     >Copyright</a></li>
@@ -132,7 +132,7 @@
     <ul>
     <li>
         is designed to
-        <a href="#prerequisites">run on any Unix system</a>
+        <a href="#requirements">run on any Unix system</a>
     </li>
     <li>
         is easy to adapt and to extend
@@ -357,40 +357,83 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
 </div>
 
 <div class="section">
-<h2 id="prerequisites">Prerequisites</h2>
+<h2 id="requirements">Requirements</h2>
 
-    <dl>
+    <p>
+    Mingw_cross_env requires a recent Unix system
+    where the following components are installed:
+    </p>
 
-    <dt>Linux</dt>
-    <dd>
-        Install GCC, GNU Make (&gt;= 3.81) and SCons (&gt;= 0.98),
-        everything else is usually already there.
-    </dd>
+    <table>
+    <tr>
+        <td><a href="http://www.gnu.org/software/bash/">Bash</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.bzip.org/">Bzip2</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://gcc.gnu.org/">GCC</a> (gcc, g++)</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.gnu.org/software/make/">GNU Make</a></td>
+        <td>&gt;= 3.81</td>
+    </tr>
+    <tr>
+        <td><a href="http://www.gnu.org/software/sed/">GNU Sed</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.openssl.org/">OpenSSL</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.gnu.org/software/patch/">Patch</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.perl.org/">Perl</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.scons.org/">SCons</a></td>
+        <td>&gt;= 0.98</td>
+    </tr>
+    <tr>
+        <td><a href="http://www.info-zip.org/UnZip.html">UnZip</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.gnu.org/software/wget/">Wget</a></td>
+        <td></td>
+    </tr>
+    </table>
 
-    <dt>Minimal Debian</dt>
-    <dd>
-        Create a minimal Debian system with
-        <a href="http://www.debian-administration.org/articles/426">debootstrap</a>,
-        then run:
-        <pre>aptitude install -R g++ make scons openssl unzip bzip2 patch</pre>
-    </dd>
+    <p>
+    Detailed installation instructions
+    for various systems follow.
+    </p>
 
-    <dt>FreeBSD</dt>
-    <dd>
-        <pre>pkg_add -r bash gmake gsed wget unzip perl</pre>
-    </dd>
+    <h3>Debian</h3>
 
-    <dt>MacOS X</dt>
-    <dd>
-        Install
-        <a href="http://developer.apple.com/TOOLS/xcode/">Xcode</a>
-        and
-        <a href="http://www.macports.org/">MacPorts</a>,
-        then run:
-        <pre>sudo port install gmake gsed wget scons</pre>
-    </dd>
+    <pre>aptitude install -R bzip2 g++ make openssl patch scons unzip</pre>
 
-    </dl>
+    <h3>FreeBSD</h3>
+
+    <pre>pkg_add -r bash gmake gsed perl unzip wget</pre>
+
+    <h3>MacOS X</h3>
+
+    <p>
+    Install
+    <a href="http://developer.apple.com/TOOLS/xcode/">Xcode</a>
+    and
+    <a href="http://www.macports.org/">MacPorts</a>,
+    then run:
+    </p>
+    <pre>sudo port install gmake gsed scons wget</pre>
 </div>
 
 <div class="section">
