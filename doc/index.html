@@ -176,7 +176,14 @@
     <h3>Step 1: Download and Unpack</h3>
 
     <p>
-    First, download the
+    First, you should ensure that your system meets
+    mingw_cross_env's
+    <a href="#requirements">requirements</a>.
+    You probably need to install some stuff.
+    </p>
+
+    <p>
+    When everything is fine, download the
     <a href="#latest-release">latest release</a>
     and unpack the tarball:
     </p>
@@ -230,8 +237,8 @@ exit</pre>
     <pre>make</pre>
     <p>
     you're in for a long wait,
-    because the mingw_cross_env
-    <a href="#packages">compiles a lot of stuff</a>.
+    because it compiles
+    <a href="#packages">a lot of packages</a>.
     On the other hand it doesn't require any intervention,
     so you're free to do whatever you like
     &ndash; like watch a movie or go for a night on the town.
@@ -256,48 +263,65 @@ exit</pre>
 
     <p>
     After you're done it just needs a little post-installation.
+    </p>
+
+    <h3>Step 4: Environment Variables</h3>
+
+    <p>
     Edit your .bashrc script in order to change $PATH:
     </p>
     <pre>export PATH=/<em>where mingw_cross_env is installed</em>/usr/bin:$PATH</pre>
 
     <p>
-    BTW, note that any compiler related environment variables
+    Note that any compiler related environment variables
     (like $CC, $LDFLAGS, etc.)
     may spoil your compiling pleasure,
     so be sure to delete or disable those.
     </p>
 
-    <h3>Step 4: Build your Project</h3>
+    <p>
+    Congratulations!
+    You're ready to cross compile anything you like.
+    </p>
+
+    <h3>Step 5a: Cross compile your Project (Autotools)</h3>
 
     <p>
-    You probably will have to make a few adjustments to your Makefile:
+    If you use the
+    <a href="http://www.lrde.epita.fr/~adl/autotools.html">Autotools</a>,
+    all you have to do is:
+    </p>
+    <pre>./configure --host=<span class="target">i386-mingw32msvc</span>
+make</pre>
+
+    <p>
+    Don't worry about a warning like this:
+    </p>
+    <pre>configure: WARNING: If you wanted to set the --build type, don't use --host.
+If a cross compiler is detected then cross compile mode will be used.</pre>
+    <p>
+    Everything will be just fine.
+    </p>
+
+    <h3>Step 5b: Cross compile your Project (Makefile)</h3>
+
+    <p>
+    If you have a handwritten Makefile,
+    you probably will have to make a few adjustments to it:
     </p>
     <pre>CC=$(CROSS)gcc
 LD=$(CROSS)ld
 AR=$(CROSS)ar</pre>
     <p>
     You may have to add a few others, depending on your project.
-    Then, all you have to do is type this:
     </p>
-    <pre>make CROSS="<span class="target">i386-mingw32msvc</span>-"</pre>
 
     <p>
-    If you're using configure, all you have to do is:
+    Then, all you have to do is:
     </p>
-    <pre>./configure --host="<span class="target">i386-mingw32msvc</span>"
-make</pre>
+    <pre>make CROSS=<span class="target">i386-mingw32msvc</span>-</pre>
     <p>
     That's it!
-    </p>
-
-    <p>
-    Don't let any warnings put you off.
-    A warning like this is absolutely harmless:
-    </p>
-    <pre>configure: WARNING: If you wanted to set the --build type, don't use --host.
-If a cross compiler is detected then cross compile mode will be used.</pre>
-    <p>
-    Everything will be just fine.
     </p>
 </div>
 
