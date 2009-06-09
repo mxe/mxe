@@ -18,7 +18,7 @@ endef
 
 define $(PKG)_BUILD
     # convert DOS line endings
-    sed 's,\r$$,,' -i '$(1)/Makefile'
+    $(SED) 's,\r$$,,' -i '$(1)/Makefile'
 
     # don't actually build the library (DLL file),
     # just create the DLL import stubs
