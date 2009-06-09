@@ -1,5 +1,5 @@
 # MinGW cross compiling environment
-# see doc/README for further information
+# see doc/index.html or doc/README for further information
 
 JOBS               := 1
 TARGET             := i386-mingw32msvc
