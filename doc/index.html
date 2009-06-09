@@ -398,6 +398,10 @@ AR=$(CROSS)ar</pre>
         <td></td>
     </tr>
     <tr>
+        <td>LibC for 32-bit</td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="http://gcc.gnu.org/">GCC</a> (gcc, g++)</td>
         <td></td>
     </tr>
@@ -445,6 +449,11 @@ AR=$(CROSS)ar</pre>
     <pre>aptitude install -R bash bzip2 g++ make sed openssl patch \
                     perl scons unzip wget</pre>
 
+    <p>
+    On a 64-bit system, install also:
+    </p>
+    <pre>aptitude install -R gcc-multilib</pre>
+
     <h3>FreeBSD</h3>
 
     <pre>pkg_add -r bash gmake gsed perl scons unzip wget</pre>
@@ -452,6 +461,11 @@ AR=$(CROSS)ar</pre>
     <h3>Frugalware</h3>
 
     <pre>pacman-g2 -S scons</pre>
+
+    <p>
+    On a 64-bit system, install also:
+    </p>
+    <pre>pacman-g2 -S libgcc-emul</pre>
 
     <h3>MacOS X</h3>
 
