@@ -462,6 +462,22 @@ AR=$(CROSS)ar</pre>
     then run:
     </p>
     <pre>sudo port install gmake gsed scons wget</pre>
+
+    <h3>Solaris</h3>
+
+    <p>
+    First, install all requirements
+    that already ship with Solaris:
+    </p>
+    <pre>pfexec pkg install SUNWgcc SUNWgmake</pre>
+
+    <p>
+    Then download and install SCons by hand:
+    </p>
+    <pre>wget http://prdownloads.sourceforge.net/scons/scons-1.2.0.tar.gz
+tar -xzf scons-1.2.0.tar.gz
+cd scons-1.2.0
+pfexec python setup.py install</pre>
 </div>
 
 <div class="section">
