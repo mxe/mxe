@@ -1,8 +1,8 @@
 # GCC fortran
 
 PKG             := gcc-fortran
-$(PKG)_VERSION  := 4.3.3
-$(PKG)_CHECKSUM := 14d8a5974fa16dcd5a9e2452db7fa9afc46b3be4
+$(PKG)_VERSION  := 4.4.0
+$(PKG)_CHECKSUM := 5f9e32d9061937e7706d35d2d5458675352b1368
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-fortran-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://gcc.gnu.org/

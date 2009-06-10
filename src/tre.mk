@@ -1,8 +1,8 @@
 # TRE
 
 PKG             := tre
-$(PKG)_VERSION  := 0.7.5
-$(PKG)_CHECKSUM := 16b860479341f3179ef987765aacda9e2803f7bb
+$(PKG)_VERSION  := 0.7.6
+$(PKG)_CHECKSUM := d8a59d2d7287f8a7df8674d97843bd8a4870be78
 $(PKG)_SUBDIR   := tre-$($(PKG)_VERSION)
 $(PKG)_FILE     := tre-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://laurikari.net/tre/

@@ -1,10 +1,10 @@
 # TDM-GCC
 
 PKG             := gcc
-$(PKG)_VERSION  := 4.3.3-tdm-1
-$(PKG)_CHECKSUM := 74a2f7867e27e414ffd5973fe6e70c8ac0f9d53c
+$(PKG)_VERSION  := 4.4.0-tdm-1
+$(PKG)_CHECKSUM := ec1c81acf0581b4f1e2d5498ce9cd015b63e917b
 $(PKG)_SUBDIR   := .
-$(PKG)_FILE     := gcc-$($(PKG)_VERSION)-srcbase.zip
+$(PKG)_FILE     := gcc-$($(PKG)_VERSION)-srcbase-2.zip
 $(PKG)_WEBSITE  := http://www.tdragon.net/recentgcc/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/tdm-gcc/$($(PKG)_FILE)
 $(PKG)_DEPS     := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran
@@ -12,7 +12,7 @@ $(PKG)_DEPS     := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=200665&package_id=238347' | \
     grep 'gcc-' | \
-    $(SED) -n 's,.*gcc-\([0-9][^>]*\)-srcbase\.zip.*,\1,p' | \
+    $(SED) -n 's,.*gcc-\([0-9][^>]*\)-srcbase[-0-9]*\.zip.*,\1,p' | \
     head -1
 endef
 

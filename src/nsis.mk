@@ -1,8 +1,8 @@
 # NSIS
 
 PKG             := nsis
-$(PKG)_VERSION  := 2.44
-$(PKG)_CHECKSUM := 07db4bcbbba7b66b4e1553c2d6ea42ed8eaab66a
+$(PKG)_VERSION  := 2.45
+$(PKG)_CHECKSUM := ce02adf68dbedc798615ffb212d27a9b03d5defb
 $(PKG)_SUBDIR   := nsis-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := nsis-$($(PKG)_VERSION)-src.tar.bz2
 $(PKG)_WEBSITE  := http://nsis.sourceforge.net/
