@@ -446,8 +446,8 @@ AR=$(CROSS)ar</pre>
 
     <h3>Debian</h3>
 
-    <pre>aptitude install -R bash bzip2 g++ make sed openssl patch \
-                    perl scons unzip wget</pre>
+    <pre>aptitude install -R bash bzip2 g++ make sed openssl \
+                    patch perl scons unzip wget</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -485,7 +485,8 @@ AR=$(CROSS)ar</pre>
     First, install all requirements
     that already ship with Solaris:
     </p>
-    <pre>pfexec pkg install SUNWgcc SUNWgmake</pre>
+    <pre>pfexec pkg install SUNWgcc SUNWgmake SUNWgsed SUNWgzip \
+                   SUNWlibm SUNWgpch SUNWunzip SUNWwget</pre>
 
     <p>
     Then download and install SCons by hand:
