@@ -2,7 +2,7 @@
 
 PKG             := pdflib_lite
 $(PKG)_VERSION  := 7.0.4p4
-$(PKG)_CHECKSUM := 90bb4768cde81f2331b9763027f40b8497684d06
+$(PKG)_CHECKSUM := 36d3f8cedeed95ec68ae90f489d9bfb40b4c6593
 $(PKG)_SUBDIR   := PDFlib-Lite-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.pdflib.com/download/pdflib-family/pdflib-lite/
