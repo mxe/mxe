@@ -72,7 +72,9 @@ all: $(PKG_RULES)
 define PKG_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/installed-$(1)
-$(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk $(addprefix $(PREFIX)/installed-,$($(1)_DEPS))
+$(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
+                          $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
+                          $(addprefix $(PREFIX)/installed-,$($(1)_DEPS))
 	[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
 	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -84,6 +86,8 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk $(addprefix $(PREFIX)/installed
 	    mkdir -p '$(2)'
 	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
 	    cd '$(2)/$($(1)_SUBDIR)'
+	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
+	        (cd '$(2)/$($(1)_SUBDIR)' && patch -p1) < $(PKG_PATCH))
 	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR))
 	    rm -rfv  '$(2)'
 	    ,)
@@ -163,8 +167,9 @@ dist:
 	>'$(TOP_DIR)/index.html'
 	cp -p '$(TOP_DIR)/index.html' 'mingw_cross_env-$(VERSION)/doc/'
 	cd 'mingw_cross_env-$(VERSION)/doc' && lynx -dump -width 75 -nolist -force_html index.html >README
-	cp -p '$(TOP_DIR)/Makefile' 'mingw_cross_env-$(VERSION)/'
-	cp -p '$(TOP_DIR)/src'/*.mk 'mingw_cross_env-$(VERSION)/src/'
+	cp -p '$(TOP_DIR)/Makefile'    'mingw_cross_env-$(VERSION)/'
+	cp -p '$(TOP_DIR)/src'/*.mk    'mingw_cross_env-$(VERSION)/src/'
+	cp -p '$(TOP_DIR)/src'/*.patch 'mingw_cross_env-$(VERSION)/src/'
 	tar cvf - 'mingw_cross_env-$(VERSION)' | gzip -9 >'mingw_cross_env-$(VERSION).tar.gz'
 	rm -rf 'mingw_cross_env-$(VERSION)'
 
