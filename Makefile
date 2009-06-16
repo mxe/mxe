@@ -84,10 +84,14 @@ download-$(1): $(TOP_DIR)/src/$(1).mk $(addprefix download-,$($(1)_DEPS))
 .PHONY: $(1)
 $(1): $(PREFIX)/installed-$(1)
 $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
-                          download-$(1) \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(addprefix $(PREFIX)/installed-,$($(1)_DEPS))
 	[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
+	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
+	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
+	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
+	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
+	    fi
 	$(if $(value $(1)_BUILD),
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
