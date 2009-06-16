@@ -377,6 +377,10 @@ AR=$(CROSS)ar</pre>
         <p>
         Almost all packages are updated to their latest version.
         </p>
+
+        <p>
+        The command "make download" is implemented.
+        </p>
     </dd>
 
     <dt>Old Releases</dt>
@@ -530,6 +534,10 @@ pfexec python setup.py install</pre>
 <div class="section">
 <h2 id="usage">Usage</h2>
 
+    <p>
+    All build commands also download the packages if necessary.
+    </p>
+
     <dl class="usage">
 
     <dt>make</dt>
@@ -561,6 +569,28 @@ pfexec python setup.py install</pre>
         build packages "foo", "bar" and their dependencies,
         where up to 4 packages are build in parallel,
         each with up to 2 compiler processes running in parallel
+        </dd>
+
+    <dt>make download</dt>
+
+        <dd>
+        download all packages,
+        non-parallel,
+        such that subsequent builds work without internet access
+        </dd>
+
+    <dt>make download-foo download-bar</dt>
+
+        <dd>
+        download packages "foo", "bar" and their dependencies,
+        non-parallel
+        </dd>
+
+    <dt>make download-foo download-bar -j 4</dt>
+
+        <dd>
+        download packages "foo", "bar" and their dependencies,
+        where up to 4 packages are downloaded in parallel
         </dd>
 
     <dt>make strip</dt>
