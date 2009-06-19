@@ -41,7 +41,7 @@ STRIP =
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
 
-PKG_RULES := $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk))
+PKG_RULES := $(sort $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk)))
 include $(TOP_DIR)/src/*.mk
 
 UNPACK_ARCHIVE = \
