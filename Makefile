@@ -41,7 +41,7 @@ STRIP =
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
 
-PKG_RULES := $(sort $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk)))
+PKGS := $(sort $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk)))
 include $(TOP_DIR)/src/*.mk
 
 UNPACK_ARCHIVE = \
@@ -67,10 +67,10 @@ DOWNLOAD_PKG_ARCHIVE = \
         wget -c -O '$(PKG_DIR)/$($(1)_FILE)' '$($(1)_URL)')
 
 .PHONY: all
-all: $(PKG_RULES)
+all: $(PKGS)
 
 .PHONY: download
-download: $(addprefix download-,$(PKG_RULES))
+download: $(addprefix download-,$(PKGS))
 
 define PKG_RULE
 .PHONY: download-$(1)
@@ -107,7 +107,7 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
 	    ,)
 	touch '$$@'
 endef
-$(foreach PKG,$(PKG_RULES),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
+$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 
 .PHONY: strip
 strip:
@@ -142,7 +142,7 @@ clean:
 clean-pkg:
 	rm -f $(patsubst %,'%', \
                   $(filter-out \
-                      $(foreach PKG,$(PKG_RULES),$(PKG_DIR)/$($(PKG)_FILE)), \
+                      $(foreach PKG,$(PKGS),$(PKG_DIR)/$($(PKG)_FILE)), \
                       $(wildcard $(PKG_DIR)/*)))
 
 .PHONY: update
@@ -157,7 +157,7 @@ define UPDATE
 
 endef
 update:
-	$(foreach PKG,$(PKG_RULES),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
+	$(foreach PKG,$(PKGS),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
 
 update-checksum-%:
 	$(call DOWNLOAD_PKG_ARCHIVE,$*)
@@ -172,7 +172,7 @@ dist:
 	(cd '$(TOP_DIR)' && hg log -v --style changelog) >'mingw_cross_env-$(VERSION)/doc/ChangeLog'
 	( \
 	    $(SED) -n '1,/<!-- begin of package list -->/ p' '$(TOP_DIR)/doc/index.html' && \
-	    ($(foreach PKG,$(PKG_RULES), \
+	    ($(foreach PKG,$(PKGS), \
 	        echo '    <tr><td><a href="$($(PKG)_WEBSITE)">$(PKG)</a></td><td>$($(PKG)_VERSION)</td></tr>';)) && \
 	    $(SED) -n '/<!-- end of package list -->/,$$ p' '$(TOP_DIR)/doc/index.html' \
 	) \
