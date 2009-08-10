@@ -1,8 +1,8 @@
 # Vorbis
 
 PKG             := vorbis
-$(PKG)_VERSION  := 1.2.0
-$(PKG)_CHECKSUM := 6ff5f9d9d71cc385ee180171cc21af5653b76a16
+$(PKG)_VERSION  := 1.2.3
+$(PKG)_CHECKSUM := a93251aa5e4f142db4fa6433de80797f80960fac
 $(PKG)_SUBDIR   := libvorbis-$($(PKG)_VERSION)
 $(PKG)_FILE     := libvorbis-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.vorbis.com/
