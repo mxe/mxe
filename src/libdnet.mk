@@ -10,10 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/libdnet/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc winpcap
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=36243&package_id=28560' | \
-    grep 'libdnet-' | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libdnet/files/libdnet/) | \
     $(SED) -n 's,.*libdnet-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD

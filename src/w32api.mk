@@ -10,9 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/mingw/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=11550' | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/mingw/files/MinGW API for MS-Windows/) | \
     $(SED) -n 's,.*w32api-\([0-9][^>]*\)-src\.tar.*,\1,p' | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD

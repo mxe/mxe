@@ -10,10 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/libusb-win32/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=78138&package_id=79216' | \
-    grep 'libusb-win32-src-' | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/) | \
     $(SED) -n 's,.*libusb-win32-src-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD

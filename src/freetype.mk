@@ -10,10 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/freetype/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=3157&package_id=3121' | \
-    grep 'freetype-' | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/freetype/files/freetype2/) | \
     $(SED) -n 's,.*freetype-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD

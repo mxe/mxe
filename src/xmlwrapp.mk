@@ -10,10 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/xmlwrapp/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libxml2 libxslt
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=142403&package_id=156331' | \
-    grep 'xmlwrapp-' | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/xmlwrapp/files/xmlwrapp/) | \
     $(SED) -n 's,.*xmlwrapp-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD

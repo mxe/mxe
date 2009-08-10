@@ -10,10 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/pdcurses/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=30480&package_id=22452' | \
-    grep 'PDCurses-' | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/pdcurses/files/pdcurses/) | \
     $(SED) -n 's,.*PDCurses-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD

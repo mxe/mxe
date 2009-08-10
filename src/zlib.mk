@@ -10,10 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/libpng/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624&package_id=14274' | \
-    grep 'zlib-' | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libpng/files/zlib/) | \
     $(SED) -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD

@@ -10,10 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/glew/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=67586&package_id=67942' | \
-    grep 'glew-' | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/glew/files/glew/) | \
     $(SED) -n 's,.*glew-\([0-9][^>]*\)-src\.tgz.*,\1,p' | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD

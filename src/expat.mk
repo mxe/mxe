@@ -10,10 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/expat/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=10127&package_id=10780' | \
-    grep 'expat-' | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/expat/files/expat/) | \
     $(SED) -n 's,.*expat-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD
