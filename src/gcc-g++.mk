@@ -21,8 +21,8 @@
 
 # GCC g++
 PKG             := gcc-g++
-$(PKG)_VERSION  := 4.4.0
-$(PKG)_CHECKSUM := 063d5acca79ec00276cf6ebdba414804abf3fcb6
+$(PKG)_VERSION  := 4.4.1
+$(PKG)_CHECKSUM := 921c8c18287cabc4c515b4a52c70e445160bd161
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-g++-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://gcc.gnu.org/

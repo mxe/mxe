@@ -21,10 +21,10 @@
 
 # TDM-GCC
 PKG             := gcc
-$(PKG)_VERSION  := 4.4.0-tdm-1
-$(PKG)_CHECKSUM := ec1c81acf0581b4f1e2d5498ce9cd015b63e917b
+$(PKG)_VERSION  := 4.4.1-tdm-1
+$(PKG)_CHECKSUM := 2ea56a81128f16a1076307a722373cfc0f1e6465
 $(PKG)_SUBDIR   := .
-$(PKG)_FILE     := gcc-$($(PKG)_VERSION)-srcbase-2.zip
+$(PKG)_FILE     := gcc-$($(PKG)_VERSION)-srcbase.zip
 $(PKG)_WEBSITE  := http://www.tdragon.net/recentgcc/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/TDM%20Sources/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran
