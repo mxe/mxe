@@ -26,7 +26,8 @@ $(PKG)_CHECKSUM := b2091a3830d8230a97aa0ced429935e7caef00ee
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gdal.org/
-$(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.remotesensing.org/gdal/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://download.osgeo.org/gdal/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libpng tiff libgeotiff jpeg giflib expat curl geos
 
 define $(PKG)_UPDATE

@@ -26,8 +26,8 @@ $(PKG)_CHECKSUM := 549e67b6a15b42bfcd72fe17cda7c9a198a393eb
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.remotesensing.org/libtiff/
-$(PKG)_URL      := http://download.osgeo.org/libtiff/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.remotesensing.org/pub/libtiff/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.remotesensing.org/libtiff/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://download.osgeo.org/libtiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads zlib jpeg
 
 define $(PKG)_UPDATE
