@@ -26,7 +26,7 @@ $(PKG)_CHECKSUM := 2ea56a81128f16a1076307a722373cfc0f1e6465
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION)-srcbase.zip
 $(PKG)_WEBSITE  := http://www.tdragon.net/recentgcc/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/TDM%20Sources/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/TDM Sources/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran
 
 define $(PKG)_UPDATE

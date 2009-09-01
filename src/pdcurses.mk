@@ -26,7 +26,7 @@ $(PKG)_CHECKSUM := e36684442a6171cc3a5165c8c49c70f67db7288c
 $(PKG)_SUBDIR   := PDCurses-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDCurses-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://pdcurses.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/pdcurses/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/pdcurses/pdcurses/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

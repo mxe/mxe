@@ -26,7 +26,7 @@ $(PKG)_CHECKSUM := 967e280f284d02284b0cd8872a8e2e04bfdc7283
 $(PKG)_SUBDIR   := zlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := zlib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.zlib.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/libpng/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libpng/zlib/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

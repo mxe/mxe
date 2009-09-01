@@ -27,7 +27,7 @@ $(PKG)_CHECKSUM := a433ff5cf8dd24f5308491c8500a2143497b4b8f
 $(PKG)_SUBDIR   := $(PKG)-win32-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-win32-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://libusb-win32.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/libusb-win32/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusb-win32/libusb-win32-releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

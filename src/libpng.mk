@@ -26,7 +26,7 @@ $(PKG)_CHECKSUM := 09749931ab6bdef7d392efd76813406a95708432
 $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.libpng.org/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/libpng/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libpng/libpng-master/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE

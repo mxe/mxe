@@ -26,7 +26,7 @@ $(PKG)_CHECKSUM := a4a34f71313ac042455355c01ad851791971a7fa
 $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.pcre.org/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/pcre/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/pcre/pcre/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

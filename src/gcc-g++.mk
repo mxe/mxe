@@ -26,7 +26,7 @@ $(PKG)_CHECKSUM := 921c8c18287cabc4c515b4a52c70e445160bd161
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-g++-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://gcc.gnu.org/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/Vanilla%20Sources/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/Vanilla Sources/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE

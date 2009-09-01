@@ -26,7 +26,7 @@ $(PKG)_CHECKSUM := f99d03177548c94184a8788c1d6eefecbd4b99bc
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-objc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://gcc.gnu.org/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/Vanilla%20Sources/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/Vanilla Sources/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE

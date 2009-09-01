@@ -26,7 +26,7 @@ $(PKG)_CHECKSUM := ce02adf68dbedc798615ffb212d27a9b03d5defb
 $(PKG)_SUBDIR   := nsis-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := nsis-$($(PKG)_VERSION)-src.tar.bz2
 $(PKG)_WEBSITE  := http://nsis.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/nsis/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/nsis/NSIS 2/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

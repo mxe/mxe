@@ -26,7 +26,7 @@ $(PKG)_CHECKSUM := af96d589bd13737080cd02620685c665f9807397
 $(PKG)_SUBDIR   := xmlwrapp-$($(PKG)_VERSION)
 $(PKG)_FILE     := xmlwrapp-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://sourceforge.net/projects/xmlwrapp/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/xmlwrapp/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xmlwrapp/xmlwrapp/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libxml2 libxslt
 
 define $(PKG)_UPDATE
