@@ -29,6 +29,7 @@ SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 VERSION  := 2.8
 PREFIX   := $(PWD)/usr
 PKG_DIR  := $(PWD)/pkg
+DIST_DIR := $(PWD)/dist
 TMP_DIR   = $(PWD)/tmp-$(1)
 MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
@@ -194,11 +195,13 @@ update-checksum-%:
 
 .PHONY: dist
 dist:
-	rm -rf 'mingw-cross-env-$(VERSION)'
-	mkdir  'mingw-cross-env-$(VERSION)'
-	mkdir  'mingw-cross-env-$(VERSION)/doc'
-	mkdir  'mingw-cross-env-$(VERSION)/src'
-	(cd '$(TOP_DIR)' && hg log -v --style changelog) >'mingw-cross-env-$(VERSION)/doc/ChangeLog'
+	[ -d '$(DIST_DIR)' ]          || mkdir '$(DIST_DIR)'
+	[ -d '$(DIST_DIR)/web' ]      || mkdir '$(DIST_DIR)/web'
+	[ -d '$(DIST_DIR)/releases' ] || mkdir '$(DIST_DIR)/releases'
+	rm -rf '$(DIST_DIR)/mingw-cross-env-$(VERSION)'
+	mkdir  '$(DIST_DIR)/mingw-cross-env-$(VERSION)'
+	mkdir  '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc'
+	mkdir  '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src'
 	( \
 	    $(SED) -n '1,/<!-- begin of package list -->/ p' '$(TOP_DIR)/doc/index.html' && \
 	    ($(foreach PKG,$(PKGS), \
@@ -207,13 +210,14 @@ dist:
 	) \
 	| $(SED) 's,\(<span class="version">\)[^<]*\(</span>\),\1$(VERSION)\2,g' \
 	| $(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' \
-	>'$(TOP_DIR)/index.html'
-	cp -p '$(TOP_DIR)/index.html'       'mingw-cross-env-$(VERSION)/doc/'
-	cp -p '$(TOP_DIR)/doc'/screenshot-* 'mingw-cross-env-$(VERSION)/doc/'
-	cd 'mingw-cross-env-$(VERSION)/doc' && lynx -dump -width 75 -nolist -force_html index.html >README
-	cp -p '$(TOP_DIR)/Makefile'    'mingw-cross-env-$(VERSION)/'
-	cp -p '$(TOP_DIR)/src'/*.mk    'mingw-cross-env-$(VERSION)/src/'
-	cp -p '$(TOP_DIR)/src'/*.patch 'mingw-cross-env-$(VERSION)/src/'
-	tar cvf - 'mingw-cross-env-$(VERSION)' | gzip -9 >'mingw-cross-env-$(VERSION).tar.gz'
-	rm -rf 'mingw-cross-env-$(VERSION)'
+	>'$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/index.html'
+	cp -p '$(TOP_DIR)/doc'/screenshot-* '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/'
+	cp -p '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc'/* '$(DIST_DIR)/web/'
+	(cd '$(TOP_DIR)' && hg log -v --style changelog) >'$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/ChangeLog'
+	cd '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc' && lynx -dump -width 75 -nolist -force_html index.html >README
+	cp -p '$(TOP_DIR)/Makefile'    '$(DIST_DIR)/mingw-cross-env-$(VERSION)/'
+	cp -p '$(TOP_DIR)/src'/*.mk    '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
+	cp -p '$(TOP_DIR)/src'/*.patch '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
+	(cd '$(DIST_DIR)' && tar cvf - 'mingw-cross-env-$(VERSION)' | gzip -9) >'$(DIST_DIR)/releases/mingw-cross-env-$(VERSION).tar.gz'
+	rm -rf '$(DIST_DIR)/mingw-cross-env-$(VERSION)'
 
