@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Volker Grabsch <vog@notjusthosting.com>
+# Copyright (C) 2009  Volker Grabsch
 #                     Mark Brand
 #
 # Permission is hereby granted, free of charge, to any person obtaining
