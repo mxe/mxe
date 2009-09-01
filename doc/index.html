@@ -196,7 +196,7 @@
 
     <p>
     First, you should ensure that your system meets
-    mingw_cross_env's
+    mingw-cross-env's
     <a href="#requirements">requirements</a>.
     You probably need to install some stuff.
     </p>
@@ -205,11 +205,11 @@
     When everything is fine, download the
     <a href="#latest-release">latest release</a>:
     </p>
-    <pre>wget http://www.profv.de/mingw_cross_env/mingw_cross_env-<span class="version">X.Y</span>.tar.gz</pre>
+    <pre>wget http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-<span class="version">X.Y</span>.tar.gz</pre>
     <p>
     and unpack the tarball:
     </p>
-    <pre>tar -xzvf mingw_cross_env-<span class="version">X.Y</span>.tar.gz</pre>
+    <pre>tar -xzvf mingw-cross-env-<span class="version">X.Y</span>.tar.gz</pre>
 
     <p>
     If you don't mind installing it in your home directory,
@@ -220,7 +220,7 @@
 
     <p>
     Now you should save any previous installation
-    of the mingw_cross_env.
+    of the mingw-cross-env.
     Assuming you've installed it under
     /opt/mingw (any other directory will do as well),
     you should execute the following commands:
@@ -235,7 +235,7 @@ exit</pre>
     but feel free to use any other directory if you like.
     </p>
     <pre>su
-mv mingw_cross_env-<span class="version">X.Y</span> /opt/mingw
+mv mingw-cross-env-<span class="version">X.Y</span> /opt/mingw
 exit</pre>
 
     <p>
@@ -244,11 +244,11 @@ exit</pre>
     </p>
     <pre>cd /opt/mingw</pre>
 
-    <h3>Step 3: Build mingw_cross_env</h3>
+    <h3>Step 3: Build mingw-cross-env</h3>
 
     <p>
     Enter the directory where you've unpacked the
-    mingw_cross_env.
+    mingw-cross-env.
     Now it depends on what you actually want &ndash; or need.
     </p>
 
@@ -291,7 +291,7 @@ exit</pre>
     <p>
     Edit your .bashrc script in order to change $PATH:
     </p>
-    <pre>export PATH=/<em>where mingw_cross_env is installed</em>/usr/bin:$PATH</pre>
+    <pre>export PATH=/<em>where mingw-cross-env is installed</em>/usr/bin:$PATH</pre>
 
     <p>
     Note that any compiler related environment variables
@@ -354,12 +354,20 @@ AR=$(CROSS)ar</pre>
     <dt>2009-xx-xx &ndash; Release 2.8</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.8.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.8">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.8.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.8">Changelog</a>
         </p>
 
         <p>
         This release ...
+        </p>
+
+        <p>
+        The whole mingw-cross-env project has moved to
+        <a href="https://savannah.nongnu.org/">Savannah</a>.
+        So almost all URIs have changed,
+        but the old URIs
+        redirect to the new locations seamlessly.
         </p>
 
         <p>
@@ -385,11 +393,11 @@ AR=$(CROSS)ar</pre>
     and run:
     </p>
 
-    <pre>hg clone http://www.profv.de/mingw_cross_env/hgweb.cgi mingw_cross_env</pre>
+    <pre>hg clone http://hg.savannah.nongnu.org/hgweb/mingw-cross-env mingw-cross-env</pre>
 
     <p>
     You can also browse the
-    <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi">Web Repository</a>.
+    <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env">Web Repository</a>.
     </p>
 </div>
 
@@ -397,7 +405,7 @@ AR=$(CROSS)ar</pre>
 <h2 id="requirements">Requirements</h2>
 
     <p>
-    Mingw_cross_env requires a recent Unix system
+    Mingw-cross-env requires a recent Unix system
     where the following components are installed:
     </p>
 
@@ -672,8 +680,8 @@ pfexec python setup.py install</pre>
     <dt>2009-08-11 &ndash; Release 2.7</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.7.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.7">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.7.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.7">Changelog</a>
         </p>
 
         <p>
@@ -694,8 +702,8 @@ pfexec python setup.py install</pre>
     <dt>2009-06-19 &ndash; Release 2.6</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.6.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.6">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.6.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.6">Changelog</a>
         </p>
 
         <p>
@@ -726,8 +734,8 @@ pfexec python setup.py install</pre>
     <dt>2009-04-06 &ndash; Release 2.5</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.5.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.5">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.5.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.5">Changelog</a>
         </p>
 
         <p>
@@ -754,8 +762,8 @@ pfexec python setup.py install</pre>
     <dt>2009-03-08 &ndash; Release 2.4</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.4.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.4">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.4.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.4">Changelog</a>
         </p>
 
         <p>
@@ -772,8 +780,8 @@ pfexec python setup.py install</pre>
     <dt>2009-02-09 &ndash; Release 2.3</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.3.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.3">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.3.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.3">Changelog</a>
         </p>
 
         <p>
@@ -796,8 +804,8 @@ pfexec python setup.py install</pre>
     <dt>2009-01-31 &ndash; Release 2.2<dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.2.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.2">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.2.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.2">Changelog</a>
         </p>
 
         <p>
@@ -817,8 +825,8 @@ pfexec python setup.py install</pre>
     <dt>2008-12-13 &ndash; Release 2.1</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.1.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.1">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.1.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.1">Changelog</a>
         </p>
 
         <p>
@@ -839,8 +847,8 @@ pfexec python setup.py install</pre>
     <dt>2008-11-10 &ndash; Release 2.0</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-2.0.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=2.0">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.0.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.0">Changelog</a>
         </p>
 
         <p>
@@ -858,8 +866,8 @@ pfexec python setup.py install</pre>
     <dt>2008-01-11 &ndash; Release 1.4</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.4.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.4">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.4.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.4">Changelog</a>
         </p>
 
         <p>
@@ -884,8 +892,8 @@ pfexec python setup.py install</pre>
     <dt>2007-12-23 &ndash; Release 1.3</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.3.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.3">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.3.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.3">Changelog</a>
         </p>
 
         <p>
@@ -905,8 +913,8 @@ pfexec python setup.py install</pre>
     <dt>2007-12-13 &ndash; Release 1.2</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.2.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.2">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.2.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.2">Changelog</a>
         </p>
 
         <p>
@@ -919,8 +927,8 @@ pfexec python setup.py install</pre>
     <dt>2007-07-24 &ndash; Release 1.1</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.1.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.1">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.1.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.1">Changelog</a>
         </p>
 
         <p>
@@ -937,8 +945,8 @@ pfexec python setup.py install</pre>
     <dt>2007-06-19 &ndash; Release 1.0</dt>
     <dd>
         <p>
-        <a href="http://www.profv.de/mingw_cross_env/mingw_cross_env-1.0.tar.gz">Download</a> |
-        <a href="http://www.profv.de/mingw_cross_env/hgweb.cgi?cl=1.0">Changelog</a>
+        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.0.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.0">Changelog</a>
         </p>
 
         <p>
@@ -960,7 +968,10 @@ pfexec python setup.py install</pre>
 
     <ul>
     <li>
-        <a href="http://www.profv.de/mingw_cross_env/">Project website</a>
+        <a href="http://www.nongnu.org/mingw-cross-env/">Project website</a>
+    </li>
+    <li>
+        <a href="http://savannah.nongnu.org/projects/mingw-cross-env">Project entry on Savannah</a>
     </li>
     <li>
         <a href="http://freshmeat.net/projects/mingw_cross_env">Project entry on Freshmeat</a>

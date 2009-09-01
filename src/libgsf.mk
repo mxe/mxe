@@ -30,7 +30,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgsf/$(call SHORT_PK
 $(PKG)_DEPS     := gcc zlib bzip2 glib libxml2
 
 define $(PKG)_UPDATE
-    wget -q -O- -U 'mingw_cross_env' 'http://freshmeat.net/projects/libgsf/' | \
+    wget -q -O- -U 'mingw-cross-env' 'http://freshmeat.net/projects/libgsf/' | \
     grep 'libgsf/releases' | \
     $(SED) -n 's,.*<a href="/projects/libgsf/releases/[^"]*">\([0-9][^<]*\)</a>.*,\1,p' | \
     head -1
