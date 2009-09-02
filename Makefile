@@ -132,7 +132,9 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
 	        exit 1; \
 	    fi; \
 	fi
-	@echo '[build]    $(1)'
+	$(if $(value $(1)_BUILD),
+	    @echo '[build]    $(1)'
+	    ,)
 	@if (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(PREFIX)/log-$(1)'; then \
 	    echo '[done]     $(1)'; \
 	else \
