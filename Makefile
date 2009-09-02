@@ -125,6 +125,10 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
 	    fi
+	(time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(PREFIX)/log-$(1)'
+
+.PHONY: build-only-$(1)
+build-only-$(1):
 	$(if $(value $(1)_BUILD),
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
@@ -135,13 +139,14 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
 	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR))
 	    rm -rfv  '$(2)'
 	    ,)
-	touch '$$@'
+	touch '$(PREFIX)/installed-$(1)'
 endef
 $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 
 .PHONY: strip
 strip:
 	rm -rf \
+	    '$(PREFIX)'/log-* \
 	    '$(PREFIX)/include' \
 	    '$(PREFIX)/info' \
 	    '$(PREFIX)/lib/libiberty.a' \
