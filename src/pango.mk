@@ -21,8 +21,8 @@
 
 # Pango
 PKG             := pango
-$(PKG)_VERSION  := 1.24.2
-$(PKG)_CHECKSUM := dbc418be727d522720cd280e4368ff5ba3133852
+$(PKG)_VERSION  := 1.24.5
+$(PKG)_CHECKSUM := a5aa40b78546a7ee59f21804b172e5d47ef776ad
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.pango.org/
