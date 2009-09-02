@@ -21,8 +21,8 @@
 
 # SQLite
 PKG             := sqlite
-$(PKG)_VERSION  := 3.6.16
-$(PKG)_CHECKSUM := ef829429d1cd71cd7353e0c8fe47bc7304d698a8
+$(PKG)_VERSION  := 3.6.17
+$(PKG)_CHECKSUM := 8de30d82f38012cb2fbee1c6a1be0d8615d483b2
 $(PKG)_SUBDIR   := sqlite-$($(PKG)_VERSION)
 $(PKG)_FILE     := sqlite-amalgamation-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.sqlite.org/
