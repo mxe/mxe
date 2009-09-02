@@ -22,8 +22,8 @@
 
 # Boost C++ Library
 PKG             := boost
-$(PKG)_VERSION  := 1_38_0
-$(PKG)_CHECKSUM := b32ff8133b0a38a74553c0d33cb1d70b3ce2d8f1
+$(PKG)_VERSION  := 1_40_0
+$(PKG)_CHECKSUM := 9dbaa06ce1d99ce310011c2eaf816ecb003b3096
 $(PKG)_SUBDIR   := boost_$($(PKG)_VERSION)
 $(PKG)_FILE     := boost_$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.boost.org/
@@ -49,7 +49,7 @@ define $(PKG)_BUILD
         threading=multi \
         link=static \
         threadapi=win32 \
-        --layout=system \
+        --layout=tagged \
         --without-mpi \
         --without-python \
         --prefix='$(PREFIX)/$(TARGET)' \
