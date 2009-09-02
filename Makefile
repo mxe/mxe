@@ -109,7 +109,7 @@ download-$(1): $(addprefix download-,$($(1)_DEPS))
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
-	    fi
+	fi
 
 .PHONY: $(1)
 $(1): $(PREFIX)/installed-$(1)
@@ -121,7 +121,7 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
-	    fi
+	fi
 	(time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(PREFIX)/log-$(1)'
 
 .PHONY: build-only-$(1)
