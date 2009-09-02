@@ -116,13 +116,35 @@ $(1): $(PREFIX)/installed-$(1)
 $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(addprefix $(PREFIX)/installed-,$($(1)_DEPS))
-	[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
-	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
-	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
-	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
-	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
+	@[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
+	@[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
+	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
+	    echo '[download] $(1)'; \
+	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)) &> '$(PREFIX)/log-$(1)'; \
+	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
+	        echo; \
+	        echo 'Wrong checksum of package $(1)!'; \
+	        echo '------------------------------------------------------------'; \
+	        tail -n 10 '$(PREFIX)/log-$(1)' | $(SED) -n '/./p'; \
+	        echo '------------------------------------------------------------'; \
+	        echo '[log]      $(PREFIX)/log-$(1)'; \
+	        echo; \
+	        exit 1; \
+	    fi; \
 	fi
-	(time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(PREFIX)/log-$(1)'
+	@echo '[build]    $(1)'
+	@if (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(PREFIX)/log-$(1)'; then \
+	    echo '[done]     $(1)'; \
+	else \
+	    echo; \
+	    echo 'Failed to build package $(1)!'; \
+	    echo '------------------------------------------------------------'; \
+	    tail -n 10 '$(PREFIX)/log-$(1)' | $(SED) -n '/./p'; \
+	    echo '------------------------------------------------------------'; \
+	    echo '[log]      $(PREFIX)/log-$(1)'; \
+	    echo; \
+	    exit 1; \
+	fi
 
 .PHONY: build-only-$(1)
 build-only-$(1):
