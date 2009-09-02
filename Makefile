@@ -195,9 +195,9 @@ update-checksum-%:
 
 .PHONY: dist
 dist:
-	[ -d '$(DIST_DIR)' ]          || mkdir '$(DIST_DIR)'
-	[ -d '$(DIST_DIR)/web' ]      || mkdir '$(DIST_DIR)/web'
-	[ -d '$(DIST_DIR)/releases' ] || mkdir '$(DIST_DIR)/releases'
+	[ -d '$(DIST_DIR)' ]          || mkdir -p '$(DIST_DIR)'
+	[ -d '$(DIST_DIR)/web' ]      || mkdir    '$(DIST_DIR)/web'
+	[ -d '$(DIST_DIR)/releases' ] || mkdir    '$(DIST_DIR)/releases'
 	rm -rf '$(DIST_DIR)/mingw-cross-env-$(VERSION)'
 	mkdir  '$(DIST_DIR)/mingw-cross-env-$(VERSION)'
 	mkdir  '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc'
