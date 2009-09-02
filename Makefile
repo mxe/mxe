@@ -135,9 +135,7 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
 	$(if $(value $(1)_BUILD),
 	    @echo '[build]    $(1)'
 	    ,)
-	@if (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(PREFIX)/log-$(1)'; then \
-	    echo '[done]     $(1)'; \
-	else \
+	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(PREFIX)/log-$(1)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
@@ -147,6 +145,7 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo; \
 	    exit 1; \
 	fi
+	@echo '[done]     $(1)'
 
 .PHONY: build-only-$(1)
 build-only-$(1):
