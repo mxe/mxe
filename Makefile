@@ -104,10 +104,7 @@ download: $(addprefix download-,$(PKGS))
 
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1): $(addprefix download-only-,$($(1)_DEPS)) download-only-$(1)
-
-.PHONY: download-only-$(1)
-download-only-$(1): $(TOP_DIR)/src/$(1).mk
+download-$(1): $(addprefix download-,$($(1)_DEPS))
 	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
