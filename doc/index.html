@@ -530,7 +530,7 @@ AR=$(CROSS)ar</pre>
     there are open issues with the NSIS package.
     </p>
 
-    <h3>MacOS X</h3>
+    <h3>MacOS X (≤ 10.5)</h3>
 
     <p>
     Install
@@ -540,6 +540,16 @@ AR=$(CROSS)ar</pre>
     then run:
     </p>
     <pre>sudo port install gmake gsed scons wget</pre>
+
+    <h3>MacOS 10.6</h3>
+
+    <p>
+    As of September 2009,
+    <a href="http://lists.gnu.org/archive/html/mingw-cross-env-list/2009-09/msg00016.html">MacOS 10.6 fails to build a vanilla GCC</a>,
+    <a href="http://lists.gnu.org/archive/html/mingw-cross-env-list/2009-09/msg00013.html">let alone a GCC cross compiler</a>.
+    As long as this serious defect persists in MacOS,
+    mingw-cross-env will be completely unable to work there.
+    </p>
 
     <h3>Solaris</h3>
 
