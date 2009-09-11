@@ -26,7 +26,7 @@ JOBS               := 1
 TARGET             := i386-mingw32msvc
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
-VERSION  := 2.8
+VERSION  := 2.9
 PREFIX   := $(PWD)/usr
 PKG_DIR  := $(PWD)/pkg
 DIST_DIR := $(PWD)/dist
