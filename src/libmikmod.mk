@@ -27,7 +27,7 @@ $(PKG)_SUBDIR   := libmikmod-$($(PKG)_VERSION)
 $(PKG)_FILE     := libmikmod-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://mikmod.raphnet.net/
 $(PKG)_URL      := http://mikmod.raphnet.net/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://mikmod.raphnet.net/' | \
