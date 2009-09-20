@@ -85,6 +85,7 @@ define $(PKG)_BUILD
     $(INSTALL) -m664 '$(1)/$(gcc-pthreads_SUBDIR)/sched.h'     '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/$(gcc-pthreads_SUBDIR)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
     # build libgomp
+    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/$(gcc-core_SUBDIR)/libgomp/configure'
     mkdir '$(1)/build/$(TARGET)/libgomp'
     cd '$(1)/build/$(TARGET)/libgomp' && '$(1)/$(gcc-core_SUBDIR)/libgomp/configure' \
         $(gcc_CONFIGURE_OPTIONS) \
