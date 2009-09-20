@@ -22,8 +22,8 @@
 # libxslt
 PKG             := libxslt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.24
-$(PKG)_CHECKSUM := b5402e24abff5545ed76f6a55049cbebc664bd58
+$(PKG)_VERSION  := 1.1.25
+$(PKG)_CHECKSUM := 36465606a27da29b1f573712f1ae8c0d5a8770ce
 $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://xmlsoft.org/XSLT/

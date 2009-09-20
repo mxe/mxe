@@ -22,8 +22,8 @@
 # fontconfig
 PKG             := fontconfig
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.7.2
-$(PKG)_CHECKSUM := 4f7fdb3b00ff5a361636815299d8a00301a4f4d7
+$(PKG)_VERSION  := 2.7.3
+$(PKG)_CHECKSUM := bc84b883673a7f43f2849f06ec110c4eaccfb42c
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
 $(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://fontconfig.org/
