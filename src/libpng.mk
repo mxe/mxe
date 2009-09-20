@@ -27,6 +27,7 @@ $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.libpng.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libpng/00-libpng-stable/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://$(SOURCEFORGE_MIRROR)/project/libpng/libpng-stable/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
