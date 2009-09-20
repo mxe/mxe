@@ -22,6 +22,7 @@
 
 # Boost C++ Library
 PKG             := boost
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1_40_0
 $(PKG)_CHECKSUM := 9dbaa06ce1d99ce310011c2eaf816ecb003b3096
 $(PKG)_SUBDIR   := boost_$($(PKG)_VERSION)

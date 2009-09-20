@@ -21,6 +21,7 @@
 
 # GDAL
 PKG             := gdal
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.2
 $(PKG)_CHECKSUM := 1d9e1d8f01f06bca99e7335d7e86dff784eee819
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)

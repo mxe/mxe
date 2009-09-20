@@ -21,6 +21,7 @@
 
 # Readline
 PKG             := readline
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.0
 $(PKG)_CHECKSUM := 1e511b091514ef631c539552316787c75ace5262
 $(PKG)_SUBDIR   := readline-$($(PKG)_VERSION)

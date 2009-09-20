@@ -21,6 +21,7 @@
 
 # GCC fortran
 PKG             := gcc-fortran
+$(PKG)_IGNORE   := 4.4.1
 $(PKG)_VERSION  := 4.4.0
 $(PKG)_CHECKSUM := 5f9e32d9061937e7706d35d2d5458675352b1368
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)

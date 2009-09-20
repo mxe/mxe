@@ -22,6 +22,7 @@
 
 # libevent
 PKG             := libevent
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4.12
 $(PKG)_CHECKSUM := ad5013cf5646e6fc6d0b832c0284b35086250c8b
 $(PKG)_SUBDIR   := libevent-$($(PKG)_VERSION)-stable

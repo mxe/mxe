@@ -21,6 +21,7 @@
 
 # libiconv
 PKG             := libiconv
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.13.1
 $(PKG)_CHECKSUM := 5b0524131cf0d7abd50734077f13aaa5508f6bbe
 $(PKG)_SUBDIR   := libiconv-$($(PKG)_VERSION)

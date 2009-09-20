@@ -21,6 +21,7 @@
 
 # FLTK
 PKG             := fltk
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.9
 $(PKG)_CHECKSUM := 6f21903dc53c829ec71e8e49655eb19e624c8247
 $(PKG)_SUBDIR   := fltk-$($(PKG)_VERSION)

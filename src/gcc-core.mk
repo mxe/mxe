@@ -21,6 +21,7 @@
 
 # GCC core
 PKG             := gcc-core
+$(PKG)_IGNORE   := 4.4.1
 $(PKG)_VERSION  := 4.4.0
 $(PKG)_CHECKSUM := 081c5a1e49157b9c48fe97497633b6ff39032eb5
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)

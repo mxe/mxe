@@ -21,6 +21,7 @@
 
 # TRE
 PKG             := tre
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.7.6
 $(PKG)_CHECKSUM := d8a59d2d7287f8a7df8674d97843bd8a4870be78
 $(PKG)_SUBDIR   := tre-$($(PKG)_VERSION)

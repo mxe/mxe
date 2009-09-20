@@ -21,6 +21,7 @@
 
 # WinPcap
 PKG             := winpcap
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4_0_2
 $(PKG)_CHECKSUM := faa4e0cd73352d400d123be63b9c6c02c7e132d1
 $(PKG)_SUBDIR   := winpcap

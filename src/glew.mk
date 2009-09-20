@@ -22,6 +22,7 @@
 
 # GLEW
 PKG             := glew
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.5.1
 $(PKG)_CHECKSUM := a94113169d46487ccda1bb2fde68fa1803bdf009
 $(PKG)_SUBDIR   := glew

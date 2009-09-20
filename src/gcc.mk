@@ -21,6 +21,7 @@
 
 # TDM-GCC
 PKG             := gcc
+$(PKG)_IGNORE   := 4.4.1-tdm-1
 $(PKG)_VERSION  := 4.4.0-tdm-1
 $(PKG)_CHECKSUM := ec1c81acf0581b4f1e2d5498ce9cd015b63e917b
 $(PKG)_SUBDIR   := .

@@ -22,6 +22,7 @@
 
 # OpenEXR
 PKG             := openexr
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.1
 $(PKG)_CHECKSUM := b3650e6542f0e09daadb2d467425530bc8eec333
 $(PKG)_SUBDIR   := openexr-$($(PKG)_VERSION)

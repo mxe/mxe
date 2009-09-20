@@ -21,6 +21,7 @@
 
 # GEOS
 PKG             := geos
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.1
 $(PKG)_CHECKSUM := cafb76a3e5fbcd7d9588d3fdcec8fa4fcd8b9fa4
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)

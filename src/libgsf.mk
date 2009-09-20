@@ -21,6 +21,7 @@
 
 # libgsf
 PKG             := libgsf
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.14.11
 $(PKG)_CHECKSUM := 9f097ba5e3d538f6810ae27941a918964aea1de9
 $(PKG)_SUBDIR   := libgsf-$($(PKG)_VERSION)

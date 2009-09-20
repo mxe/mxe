@@ -21,6 +21,7 @@
 
 # cURL
 PKG             := curl
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 7.19.6
 $(PKG)_CHECKSUM := b7cb98c7a6577de7073d0b0c23eecdb8ed993e8e
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)

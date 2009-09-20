@@ -21,6 +21,7 @@
 
 # giflib
 PKG             := giflib
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.1.6
 $(PKG)_CHECKSUM := 22680f604ec92065f04caf00b1c180ba74fb8562
 $(PKG)_SUBDIR   := giflib-$($(PKG)_VERSION)

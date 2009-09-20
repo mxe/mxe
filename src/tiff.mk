@@ -21,6 +21,7 @@
 
 # LibTIFF
 PKG             := tiff
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.9.1
 $(PKG)_CHECKSUM := 675ad1977023a89201b80cd5cd4abadea7ba0897
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)

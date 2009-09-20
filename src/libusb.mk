@@ -22,6 +22,7 @@
 
 # LibUsb
 PKG             := libusb
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.12.2
 $(PKG)_CHECKSUM := a433ff5cf8dd24f5308491c8500a2143497b4b8f
 $(PKG)_SUBDIR   := $(PKG)-win32-src-$($(PKG)_VERSION)

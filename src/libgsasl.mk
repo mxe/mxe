@@ -22,6 +22,7 @@
 
 # Libgsasl
 PKG             := libgsasl
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2
 $(PKG)_CHECKSUM := a3e2d84a94c188aa84e2ce42fee2179b16792fd0
 $(PKG)_SUBDIR   := libgsasl-$($(PKG)_VERSION)

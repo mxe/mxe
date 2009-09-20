@@ -21,6 +21,7 @@
 
 # PDcurses
 PKG             := pdcurses
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4
 $(PKG)_CHECKSUM := e36684442a6171cc3a5165c8c49c70f67db7288c
 $(PKG)_SUBDIR   := PDCurses-$($(PKG)_VERSION)

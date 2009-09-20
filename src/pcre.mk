@@ -21,6 +21,7 @@
 
 # PCRE
 PKG             := pcre
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 7.9
 $(PKG)_CHECKSUM := a4a34f71313ac042455355c01ad851791971a7fa
 $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)

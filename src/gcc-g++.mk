@@ -21,6 +21,7 @@
 
 # GCC g++
 PKG             := gcc-g++
+$(PKG)_IGNORE   := 4.4.1
 $(PKG)_VERSION  := 4.4.0
 $(PKG)_CHECKSUM := 063d5acca79ec00276cf6ebdba414804abf3fcb6
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)

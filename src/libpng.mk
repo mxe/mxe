@@ -21,6 +21,7 @@
 
 # libpng
 PKG             := libpng
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.39
 $(PKG)_CHECKSUM := 62cfa076066e70f923edea82045b67921cc5ea50
 $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)

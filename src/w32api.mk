@@ -21,6 +21,7 @@
 
 # MinGW Windows API
 PKG             := w32api
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.13
 $(PKG)_CHECKSUM := 5eb7d8ec0fe032a92bea3a2c8282a78df2f1793c
 $(PKG)_SUBDIR   := .

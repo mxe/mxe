@@ -21,6 +21,7 @@
 
 # Pango
 PKG             := pango
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.24.5
 $(PKG)_CHECKSUM := a5aa40b78546a7ee59f21804b172e5d47ef776ad
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)

@@ -22,6 +22,7 @@
 
 # popt
 PKG             := popt
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.15
 $(PKG)_CHECKSUM := d9bc3067a4e7e62ac0bd9818e8cd649ee0dd12dc
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)

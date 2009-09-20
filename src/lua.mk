@@ -22,6 +22,7 @@
 
 # Lua
 PKG             := lua
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.1.4
 $(PKG)_CHECKSUM := 2b11c8e60306efb7f0734b747588f57995493db7
 $(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)

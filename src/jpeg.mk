@@ -21,6 +21,7 @@
 
 # jpeg
 PKG             := jpeg
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6b
 $(PKG)_CHECKSUM := 7079f0d6c42fad0cfba382cf6ad322add1ace8f9
 $(PKG)_SUBDIR   := jpeg-$($(PKG)_VERSION)

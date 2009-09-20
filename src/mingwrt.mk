@@ -21,6 +21,7 @@
 
 # MinGW Runtime
 PKG             := mingwrt
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.16
 $(PKG)_CHECKSUM := 770ff5001989d8a9a1ec4f3621d8f264a24e178f
 $(PKG)_SUBDIR   := .

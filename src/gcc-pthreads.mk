@@ -21,6 +21,7 @@
 
 # Pthreads-w32 for GCC
 PKG             := gcc-pthreads
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2-8-0
 $(PKG)_CHECKSUM := da8371cb20e8e238f96a1d0651212f154d84a9ac
 $(PKG)_SUBDIR   := pthreads-w32-$($(PKG)_VERSION)-release

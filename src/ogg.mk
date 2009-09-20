@@ -21,6 +21,7 @@
 
 # OGG
 PKG             := ogg
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.4
 $(PKG)_CHECKSUM := 868ace372004cf303231b954c60a836acbd71065
 $(PKG)_SUBDIR   := libogg-$($(PKG)_VERSION)

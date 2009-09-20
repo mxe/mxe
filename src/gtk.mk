@@ -21,6 +21,7 @@
 
 # GTK+
 PKG             := gtk
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.16.5
 $(PKG)_CHECKSUM := 4482e698730c8ea88239512a49306dc27a661145
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)

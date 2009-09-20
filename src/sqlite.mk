@@ -21,6 +21,7 @@
 
 # SQLite
 PKG             := sqlite
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.6.17
 $(PKG)_CHECKSUM := 8de30d82f38012cb2fbee1c6a1be0d8615d483b2
 $(PKG)_SUBDIR   := sqlite-$($(PKG)_VERSION)

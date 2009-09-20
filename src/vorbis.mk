@@ -21,6 +21,7 @@
 
 # Vorbis
 PKG             := vorbis
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.3
 $(PKG)_CHECKSUM := a93251aa5e4f142db4fa6433de80797f80960fac
 $(PKG)_SUBDIR   := libvorbis-$($(PKG)_VERSION)

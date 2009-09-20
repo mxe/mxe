@@ -21,6 +21,7 @@
 
 # zlib
 PKG             := zlib
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.3
 $(PKG)_CHECKSUM := 967e280f284d02284b0cd8872a8e2e04bfdc7283
 $(PKG)_SUBDIR   := zlib-$($(PKG)_VERSION)

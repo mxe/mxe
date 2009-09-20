@@ -21,6 +21,7 @@
 
 # freetype
 PKG             := freetype
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.9
 $(PKG)_CHECKSUM := db08969cb5053879ff9e973fe6dd2c52c7ea2d4e
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)

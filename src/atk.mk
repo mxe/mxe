@@ -21,6 +21,7 @@
 
 # ATK
 PKG             := atk
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.26.0
 $(PKG)_CHECKSUM := c31ae32fc7304430cdd45e7e85c7fda788e39471
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)

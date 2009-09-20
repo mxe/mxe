@@ -21,6 +21,7 @@
 
 # bzip2
 PKG             := bzip2
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.5
 $(PKG)_CHECKSUM := 8b02713ea0c8eb501cc8bdac4432d7f29700f767
 $(PKG)_SUBDIR   := bzip2-$($(PKG)_VERSION)

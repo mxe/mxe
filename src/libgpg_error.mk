@@ -21,6 +21,7 @@
 
 # libgpg-error
 PKG             := libgpg_error
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.7
 $(PKG)_CHECKSUM := bf8c6babe1e28cae7dd6374ca24ddcc42d57e902
 $(PKG)_SUBDIR   := libgpg-error-$($(PKG)_VERSION)

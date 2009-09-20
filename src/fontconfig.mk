@@ -21,6 +21,7 @@
 
 # fontconfig
 PKG             := fontconfig
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7.2
 $(PKG)_CHECKSUM := 4f7fdb3b00ff5a361636815299d8a00301a4f4d7
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)

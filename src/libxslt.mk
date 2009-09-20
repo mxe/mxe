@@ -21,6 +21,7 @@
 
 # libxslt
 PKG             := libxslt
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.24
 $(PKG)_CHECKSUM := b5402e24abff5545ed76f6a55049cbebc664bd58
 $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)

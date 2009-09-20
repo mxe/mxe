@@ -21,6 +21,7 @@
 
 # cairo
 PKG             := cairo
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.8
 $(PKG)_CHECKSUM := e4b8b219427d1ca3dc95f5f44914dce1ae0c3766
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)

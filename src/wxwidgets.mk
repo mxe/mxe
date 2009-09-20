@@ -21,6 +21,7 @@
 
 # wxWidgets
 PKG             := wxwidgets
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.8.10
 $(PKG)_CHECKSUM := e674086391ce5c8e64ef1823654d6f88b064c8e0
 $(PKG)_SUBDIR   := wxMSW-$($(PKG)_VERSION)

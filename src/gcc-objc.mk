@@ -21,6 +21,7 @@
 
 # GCC objc
 PKG             := gcc-objc
+$(PKG)_IGNORE   := 4.4.1
 $(PKG)_VERSION  := 4.4.0
 $(PKG)_CHECKSUM := 21cd70e01c211553c59123c62b4f33330ad212c4
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)

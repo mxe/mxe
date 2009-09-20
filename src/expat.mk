@@ -21,6 +21,7 @@
 
 # Expat XML Parser
 PKG             := expat
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.1
 $(PKG)_CHECKSUM := 663548c37b996082db1f2f2c32af060d7aa15c2d
 $(PKG)_SUBDIR   := expat-$($(PKG)_VERSION)

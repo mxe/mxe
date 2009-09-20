@@ -21,6 +21,7 @@
 
 # MPFR for GCC
 PKG             := gcc-mpfr
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4.1
 $(PKG)_CHECKSUM := 1f965793526cafefb30cda64cebf3712cb75b488
 $(PKG)_SUBDIR   := mpfr-$($(PKG)_VERSION)

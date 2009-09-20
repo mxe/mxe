@@ -21,6 +21,7 @@
 
 # NSIS
 PKG             := nsis
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.45
 $(PKG)_CHECKSUM := ce02adf68dbedc798615ffb212d27a9b03d5defb
 $(PKG)_SUBDIR   := nsis-$($(PKG)_VERSION)-src

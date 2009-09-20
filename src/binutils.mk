@@ -21,6 +21,7 @@
 
 # MinGW binutils
 PKG             := binutils
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.19.1
 $(PKG)_CHECKSUM := 7e930435c47991c4070b1c74b010350e4669011f
 $(PKG)_SUBDIR   := binutils-$(firstword $(subst -, ,$($(PKG)_VERSION)))

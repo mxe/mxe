@@ -22,6 +22,7 @@
 
 # Theora
 PKG             := theora
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0
 $(PKG)_CHECKSUM := 70d1195a706a06520f96f5eda9b65e0587151830
 $(PKG)_SUBDIR   := libtheora-$($(PKG)_VERSION)

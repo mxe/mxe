@@ -21,6 +21,7 @@
 
 # GeoTiff
 PKG             := libgeotiff
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.5
 $(PKG)_CHECKSUM := 38b10070374636fedfdde328ff1c9f3c6e8e581f
 $(PKG)_SUBDIR   := libgeotiff-$($(PKG)_VERSION)

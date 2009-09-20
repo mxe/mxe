@@ -22,6 +22,7 @@
 
 # SDL_ttf
 PKG             := sdl_ttf
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.9
 $(PKG)_CHECKSUM := 6bc3618b08ddbbf565fe8f63f624782c15e1cef2
 $(PKG)_SUBDIR   := SDL_ttf-$($(PKG)_VERSION)

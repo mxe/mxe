@@ -21,6 +21,7 @@
 
 # libgcrypt
 PKG             := libgcrypt
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4.4
 $(PKG)_CHECKSUM := 3987f0efcbb7048c136d5c859e88eee1763a14f6
 $(PKG)_SUBDIR   := libgcrypt-$($(PKG)_VERSION)

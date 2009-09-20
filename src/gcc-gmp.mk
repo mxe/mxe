@@ -21,6 +21,7 @@
 
 # GMP for GCC
 PKG             := gcc-gmp
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.3.0
 $(PKG)_CHECKSUM := 86dbd8a6b2fbb4c75760a80009227c9a11b801a9
 $(PKG)_SUBDIR   := gmp-$($(PKG)_VERSION)

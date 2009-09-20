@@ -22,6 +22,7 @@
 
 # IlmBase
 PKG             := ilmbase
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.1
 $(PKG)_CHECKSUM := 143adc547be83c6df75831ae957eef4b2706c9c0
 $(PKG)_SUBDIR   := ilmbase-$($(PKG)_VERSION)

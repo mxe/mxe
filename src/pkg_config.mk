@@ -21,6 +21,7 @@
 
 # pkg-config
 PKG             := pkg_config
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.23
 $(PKG)_CHECKSUM := b59dddd6b5320bd74c0f74b3339618a327096b2a
 $(PKG)_SUBDIR   := pkg-config-$($(PKG)_VERSION)
