@@ -67,7 +67,7 @@ define $(PKG)_BUILD
     mv '$(1)/$(gcc-mpfr_SUBDIR)' '$(1)/$(gcc-core_SUBDIR)/mpfr'
     # build everything of GCC except libgomp and libmudflap
     mkdir '$(1)/build'
-    cd '$(1)/build' && '$(1)/$(gcc-core_SUBDIR)/configure' \
+    cd    '$(1)/build' && '$(1)/$(gcc-core_SUBDIR)/configure' \
         $(gcc_CONFIGURE_OPTIONS) \
         --enable-threads=win32 \
         --disable-libgomp \
@@ -87,7 +87,7 @@ define $(PKG)_BUILD
     # build libgomp
     $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/$(gcc-core_SUBDIR)/libgomp/configure'
     mkdir '$(1)/build/$(TARGET)/libgomp'
-    cd '$(1)/build/$(TARGET)/libgomp' && '$(1)/$(gcc-core_SUBDIR)/libgomp/configure' \
+    cd    '$(1)/build/$(TARGET)/libgomp' && '$(1)/$(gcc-core_SUBDIR)/libgomp/configure' \
         $(gcc_CONFIGURE_OPTIONS) \
         --host='$(TARGET)' \
         LIBS='-lws2_32'

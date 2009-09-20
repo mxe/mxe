@@ -32,6 +32,6 @@ $(PKG)_DEPS     :=
 define $(PKG)_UPDATE
     wget -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' | \
     $(SED) -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | \
-        tr '.' '-' | \
+    tr '.' '-' | \
     head -1
 endef
