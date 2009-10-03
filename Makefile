@@ -204,10 +204,10 @@ clean-pkg:
 define UPDATE
     $(if $(2),
         $(if $(filter $(2),$($(1)_IGNORE)),
-            $(info IGNORED  $(1): $(2)),
+            $(info IGNORED  $(1)  $(2)),
             $(if $(filter $(2),$($(1)_VERSION)),
-                $(info .        $(1): $(2)),
-                $(info NEW      $(1): $(2))
+                $(info .        $(1)  $(2)),
+                $(info NEW      $(1)  $(2))
                 $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i '$(TOP_DIR)/src/$(1).mk'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)')),
         $(error Unable to update version number: $(1)))
