@@ -28,7 +28,7 @@ $(PKG)_SUBDIR   := wxMSW-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxMSW-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.wxwidgets.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/wxMSW/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv libpng jpeg tiff sdl tre zlib expat
+$(PKG)_DEPS     := gcc libiconv libpng jpeg tiff sdl zlib expat
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/wxwindows/files/wxMSW/) | \
@@ -55,7 +55,7 @@ define $(PKG)_BUILD
         --with-libpng=sys \
         --with-libjpeg=sys \
         --with-libtiff=sys \
-        --with-regex=sys \
+        --with-regex=yes \
         --with-zlib=sys \
         --with-expat=sys \
         --with-sdl \
@@ -73,10 +73,7 @@ define $(PKG)_BUILD
         --without-gnomevfs \
         --without-hildon \
         --without-dmalloc \
-        --without-odbc \
-        CFLAGS="-I$(PREFIX)/$(TARGET)/include/tre" \
-        CXXFLAGS="-I$(PREFIX)/$(TARGET)/include/tre" \
-        LIBS=" `$(TARGET)-pkg-config tre --libs`"
+        --without-odbc
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= __install_wxrc___depname=
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/bin/$(TARGET)-wx-config'
@@ -101,7 +98,7 @@ define $(PKG)_BUILD
         --with-libpng=sys \
         --with-libjpeg=sys \
         --with-libtiff=sys \
-        --with-regex=sys \
+        --with-regex=yes \
         --with-zlib=sys \
         --with-expat=sys \
         --with-sdl \
@@ -119,10 +116,7 @@ define $(PKG)_BUILD
         --without-gnomevfs \
         --without-hildon \
         --without-dmalloc \
-        --without-odbc \
-        CFLAGS="-I$(PREFIX)/$(TARGET)/include/tre" \
-        CXXFLAGS="-I$(PREFIX)/$(TARGET)/include/tre" \
-        LIBS=" `$(TARGET)-pkg-config tre --libs`"
+        --without-odbc
     $(MAKE) -C '$(1)/$(wxwidgets_SUBDIR)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # backup of the unicode wx-config script
