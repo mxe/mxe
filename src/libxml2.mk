@@ -22,8 +22,8 @@
 # libxml2
 PKG             := libxml2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.7.4
-$(PKG)_CHECKSUM := 5db9fd452d465422f576592c9e5bcf17ce1b53a2
+$(PKG)_VERSION  := 2.7.5
+$(PKG)_CHECKSUM := 78c88a1798e18efd5da851ccb927032a403b84da
 $(PKG)_SUBDIR   := libxml2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml2-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.xmlsoft.org/

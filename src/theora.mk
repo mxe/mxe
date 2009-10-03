@@ -23,8 +23,8 @@
 # Theora
 PKG             := theora
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0
-$(PKG)_CHECKSUM := 70d1195a706a06520f96f5eda9b65e0587151830
+$(PKG)_VERSION  := 1.1.1
+$(PKG)_CHECKSUM := 0b91be522746a29351a5ee592fd8160940059303
 $(PKG)_SUBDIR   := libtheora-$($(PKG)_VERSION)
 $(PKG)_FILE     := libtheora-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://theora.org/
