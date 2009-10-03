@@ -1,0 +1,186 @@
+Copyright (C) 2009  Mark Brand
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
+to the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+--- qt-everywhere-opensource-src-4.6.0-tp1.native/configure	2009-09-07 13:00:28.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-tp1/configure	2009-10-02 18:22:05.000000000 +0200
+@@ -600,7 +600,7 @@
+ rm -f "$outpath/config.tests/.qmake.cache"
+ cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
+ 
+-QMakeVar add styles "cde mac motif plastique cleanlooks windows"
++QMakeVar add styles "cde mac motif plastique cleanlooks windows windowsxp windowsvista"
+ QMakeVar add decorations "default windows styled"
+ QMakeVar add mouse-drivers "pc"
+ if [ "$UNAME_SYSTEM" = "Linux" ] ; then
+@@ -4961,7 +4961,11 @@
+         echo "Basic XLib functionality test failed!"
+         echo " You might need to modify the include and library search paths by editing"
+         echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
+-        exit 1
++echo NOTICE: This is a specially modifed configure script!
++echo For our purposes we do not need or want X11.
++echo For the natve target we only build the tools.
++echo For the win32-g++ target there is no X11
++#        exit 1
+     fi
+ 
+     # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
+@@ -7594,7 +7598,10 @@
+         [ "$IN_ROOT" = "no" ] && continue
+ 
+         case $a in
+-        *winmain/winmain.pro) continue ;;
++        *winmain/winmain.pro)
++            if [ "$XPLATFORM" != "win32-g++" ]; then
++                continue
++            fi ;;
+         *s60main/s60main.pro) continue ;;
+         */qmake/qmake.pro) continue ;;
+         *tools/bootstrap*|*tools/moc*|*tools/rcc*|*tools/uic*) SPEC=$QMAKESPEC ;;
+--- qt-everywhere-opensource-src-4.6.0-tp1.native/src/gui/inputmethod/qwininputcontext_win.cpp	2009-09-07 13:00:30.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-tp1/src/gui/inputmethod/qwininputcontext_win.cpp	2009-10-02 09:57:20.000000000 +0200
+@@ -49,6 +49,8 @@
+ #include "qtextformat.h"
+ #include "qtextboundaryfinder.h"
+ 
++bool qt_sendSpontaneousEvent(QObject*, QEvent*);
++
+ //#define Q_IME_DEBUG
+ 
+ #ifdef Q_IME_DEBUG
+--- qt-everywhere-opensource-src-4.6.0-tp1.native/mkspecs/win32-g++/qplatformdefs.h	2009-09-07 13:00:28.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-tp1/mkspecs/win32-g++/qplatformdefs.h	2009-10-02 09:57:20.000000000 +0200
+@@ -160,5 +160,7 @@
+ # define W_OK	2
+ # define R_OK	4
+ 
++// for some reason this isn't declared where it should be
++LRESULT CALLBACK qt_internal_proc(HWND hwnd, UINT message, WPARAM wp, LPARAM lp);
+ 
+ #endif // QPLATFORMDEFS_H
+--- qt-everywhere-opensource-src-4.6.0-tp1.native/mkspecs/win32-g++/qmake.conf	2009-09-07 13:00:28.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-tp1/mkspecs/win32-g++/qmake.conf	2009-10-02 09:57:20.000000000 +0200
+@@ -3,23 +3,30 @@
+ #
+ # Written for MinGW
+ #
++load(qt_config)
+ 
+ MAKEFILE_GENERATOR	= MINGW
+ TEMPLATE		= app
+ CONFIG			+= qt warn_on release link_prl copy_dir_files debug_and_release debug_and_release_target precompile_header
++CONFIG			+= exceptions windows win32
++CONFIG			-= freetype
++QT_CONFIG		-= freetype
+ QT			+= core gui
+ DEFINES			+= UNICODE QT_LARGEFILE_SUPPORT
++DEFINES			-= QT_LARGEFILE_SUPPORT
++DEFINES			+= QT_TABLET QT_SESSIONMANAGER QT_NO_DIRECT3D QT_NO_CODECS
+ QMAKE_COMPILER_DEFINES  += __GNUC__ WIN32
+ 
+ QMAKE_EXT_OBJ           = .o
+ QMAKE_EXT_RES           = _res.o
+ 
+-QMAKE_CC		= gcc
++QMAKE_CC		= HOSTPLATFORMPREFIX-gcc
+ QMAKE_LEX		= flex
+ QMAKE_LEXFLAGS		=
+ QMAKE_YACC		= byacc
+ QMAKE_YACCFLAGS		= -d
+ QMAKE_CFLAGS		=
++QMAKE_CFLAGS		+= -isystem HOSTPLATFORMINCLUDE
+ QMAKE_CFLAGS_DEPS	= -M
+ QMAKE_CFLAGS_WARN_ON	= -Wall
+ QMAKE_CFLAGS_WARN_OFF	= -w
+@@ -27,7 +34,7 @@
+ QMAKE_CFLAGS_DEBUG	= -g
+ QMAKE_CFLAGS_YACC	= -Wno-unused -Wno-parentheses
+ 
+-QMAKE_CXX		= g++
++QMAKE_CXX		= HOSTPLATFORMPREFIX-g++
+ QMAKE_CXXFLAGS		= $$QMAKE_CFLAGS
+ QMAKE_CXXFLAGS_DEPS	= $$QMAKE_CFLAGS_DEPS
+ QMAKE_CXXFLAGS_WARN_ON	= $$QMAKE_CFLAGS_WARN_ON
+@@ -42,6 +49,7 @@
+ QMAKE_CXXFLAGS_EXCEPTIONS_OFF = -fno-exceptions
+ 
+ QMAKE_INCDIR		=
++QMAKE_INCDIR		+= .
+ QMAKE_INCDIR_QT		= $$[QT_INSTALL_HEADERS]
+ QMAKE_LIBDIR_QT		= $$[QT_INSTALL_LIBS]
+ 
+@@ -50,8 +58,8 @@
+ QMAKE_RUN_CXX		= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $obj $src
+ QMAKE_RUN_CXX_IMP	= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
+ 
+-QMAKE_LINK		= g++
+-QMAKE_LINK_C		= gcc
++QMAKE_LINK		= HOSTPLATFORMPREFIX-g++
++QMAKE_LINK_C		= HOSTPLATFORMPREFIX-gcc
+ QMAKE_LFLAGS		= -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
+ QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads -Wl
+ QMAKE_LFLAGS_EXCEPTIONS_OFF =
+@@ -72,15 +80,18 @@
+ QMAKE_LIBS_COMPAT       = -ladvapi32 -lshell32 -lcomdlg32 -luser32 -lgdi32 -lws2_32
+ QMAKE_LIBS_QT_ENTRY     = -lmingw32 -lqtmain
+ 
++QMAKE_SH				= bash
++
+ !isEmpty(QMAKE_SH) {
+     MINGW_IN_SHELL      = 1
+ 	QMAKE_DIR_SEP		= /
+ 	QMAKE_COPY		= cp
+-	QMAKE_COPY_DIR		= xcopy /s /q /y /i
++	QMAKE_COPY_DIR		= cp -r
+ 	QMAKE_MOVE		= mv
+ 	QMAKE_DEL_FILE		= rm
+-	QMAKE_MKDIR		= mkdir
++	QMAKE_MKDIR		= mkdir -p
+ 	QMAKE_DEL_DIR		= rmdir
++	QMAKE_SYMBOLIC_LINK	= ln -s
+     QMAKE_CHK_DIR_EXISTS = test -d
+ } else {
+ 	QMAKE_COPY		= copy /y
+@@ -92,15 +103,15 @@
+     QMAKE_CHK_DIR_EXISTS	= if not exist
+ }
+ 
+-QMAKE_MOC		= $$[QT_INSTALL_BINS]$${DIR_SEPARATOR}moc.exe
+-QMAKE_UIC		= $$[QT_INSTALL_BINS]$${DIR_SEPARATOR}uic.exe
+-QMAKE_IDC		= $$[QT_INSTALL_BINS]$${DIR_SEPARATOR}idc.exe
+-
+-QMAKE_IDL		= midl
+-QMAKE_LIB		= ar -ru
+-QMAKE_RC		= windres
++QMAKE_MOC		= moc
++QMAKE_UIC		= uic
++QMAKE_IDC		= idc
++QMAKE_RCC		= rcc
++
++#QMAKE_IDL		= midl
++QMAKE_LIB		= HOSTPLATFORMPREFIX-ar -ru
++QMAKE_RC		= HOSTPLATFORMPREFIX-windres
+ QMAKE_ZIP		= zip -r -9
+ 
+-QMAKE_STRIP		= strip
++QMAKE_STRIP		= HOSTPLATFORMPREFIX-strip
+ QMAKE_STRIPFLAGS_LIB 	+= --strip-unneeded
+-load(qt_config)
