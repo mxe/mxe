@@ -78,6 +78,7 @@ define $(PKG)_BUILD
     # unpack and build pthreads (needed by libgomp)
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-pthreads)
     $(SED) '35i\#define PTW32_STATIC_LIB' -i '$(1)/$(gcc-pthreads_SUBDIR)/pthread.h'
+    $(SED) 's,#include "config.h",,'      -i '$(1)/$(gcc-pthreads_SUBDIR)/pthread.h'
     $(MAKE) -C '$(1)/$(gcc-pthreads_SUBDIR)' -j 1 GC-static CROSS='$(TARGET)-'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m664 '$(1)/$(gcc-pthreads_SUBDIR)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
