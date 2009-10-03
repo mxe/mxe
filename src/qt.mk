@@ -86,16 +86,16 @@ define $(PKG)_BUILD
     ln -s win32 '$(1)'/mkspecs/features/unix
 
     # Adjust the mkspec values that contain the TARGET platform prefix
-    $(SED) 's/HOSTPLATFORMPREFIX-/$(TARGET)-/g;'                  -i '$(1)'/mkspecs/win32-g++/qmake.conf
-    $(SED) 's^HOSTPLATFORMINCLUDE^$(PREFIX)/$(TARGET)/include^g;' -i '$(1)'/mkspecs/win32-g++/qmake.conf
+    $(SED) 's,HOSTPLATFORMPREFIX-,$(TARGET)-,g'                  -i '$(1)'/mkspecs/win32-g++/qmake.conf
+    $(SED) 's,HOSTPLATFORMINCLUDE,$(PREFIX)/$(TARGET)/include,g' -i '$(1)'/mkspecs/win32-g++/qmake.conf
 
     # Make sure qmake doesn't use compilation paths meant for unix
     find '$(1)'/src -name '*.pr[oi]' -exec \
-        $(SED) 's/\(^\|[^_/]\)unix/\1linux/g;' -i {} \;
+        $(SED) 's,\(^\|[^_/]\)unix,\1linux,g' -i {} \;
 
     # Make qmake use compilation paths meant for Windows
     find '$(1)'/src -name '*.pr[oi]' -exec \
-        $(SED) 's/\(^\|[^_/]\)win32\([^-]\|$$\)/\1unix\2/g;' -i {} \;
+        $(SED) 's,\(^\|[^_/]\)win32\([^-]\|$$\),\1unix\2,g' -i {} \;
 
     # Fix-ups for files not found during configure
     # Probably errors in QT 4.6 Technology Preview 1
@@ -111,7 +111,7 @@ define $(PKG)_BUILD
     ln -s ../Grammar.cpp  '$(1)'/src/3rdparty/webkit/JavaScriptCore/generated/debug/
 
     # Fix case of filename
-    $(SED) 's/QWidget\.h/qwidget.h/g;' -i '$(1)'/src/3rdparty/webkit/WebCore/plugins/win/PluginViewWin.cpp
+    $(SED) 's,QWidget\.h,qwidget.h,g' -i '$(1)'/src/3rdparty/webkit/WebCore/plugins/win/PluginViewWin.cpp
 
     # Configure Qt for MinGW target
     cd '$(1)' && ./configure \
