@@ -45,10 +45,6 @@ define $(PKG)_BUILD
     # of the patched directory here, it is important that the changes
     # in the patches do not break the native build.
 
-    # Bogus install bin directory for the DLLs
-    # Should stay empty because of -prefix-install
-    mkdir '$(1)'/bindirsink
-
     # First configure a minimal native version of Qt
     # for moc, rcc, uic and qmake
     cp -a '$(1)' '$(1)'.native
@@ -57,7 +53,6 @@ define $(PKG)_BUILD
         -confirm-license \
         -prefix '$(PREFIX)/$(TARGET)' \
         -prefix-install \
-        -bindir '$(1)'/bindirsink \
         -fast \
         -nomake demos \
         -nomake examples \
@@ -70,7 +65,12 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'.native -j $(JOBS) sub-moc
     $(MAKE) -C '$(1)'.native -j $(JOBS) sub-rcc
     $(MAKE) -C '$(1)'.native -j $(JOBS) sub-uic
-    $(MAKE) -C '$(1)'.native clean
+
+    # install the native tools manually
+    $(INSTALL) -m755 '$(1)'.native/bin/moc   '$(PREFIX)/bin/$(TARGET)-moc'
+    $(INSTALL) -m755 '$(1)'.native/bin/rcc   '$(PREFIX)/bin/$(TARGET)-rcc'
+    $(INSTALL) -m755 '$(1)'.native/bin/uic   '$(PREFIX)/bin/$(TARGET)-uic'
+    $(INSTALL) -m755 '$(1)'.native/bin/qmake '$(PREFIX)/bin/$(TARGET)-qmake'
 
     # Trick the build system into using native tools
     ln -s '$(1)'.native/bin/{moc,rcc,uic,qmake} '$(1)'/bin/
@@ -144,9 +144,6 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(TARGET)-ranlib '$(1)'/lib/*.a
+    rm -rf '$(PREFIX)/$(TARGET)/mkspecs'
     $(MAKE) -C '$(1)' install
-
-    # install native tools manually
-    $(INSTALL) -m755 '$(1)'.native/bin/{moc,rcc,uic} '$(PREFIX)/$(TARGET)/bin/'
-    $(INSTALL) -m755 '$(1)'.native/bin/qmake '$(PREFIX)/bin/$(TARGET)-qmake'
 endef

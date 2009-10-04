@@ -1,4 +1,5 @@
 Copyright (C) 2009  Mark Brand
+                    Volker Grabsch
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -170,10 +171,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -QMAKE_IDL		= midl
 -QMAKE_LIB		= ar -ru
 -QMAKE_RC		= windres
-+QMAKE_MOC		= moc
-+QMAKE_UIC		= uic
-+QMAKE_IDC		= idc
-+QMAKE_RCC		= rcc
++#QMAKE_IDC		= HOSTPLATFORMPREFIX-idc
++QMAKE_MOC		= HOSTPLATFORMPREFIX-moc
++QMAKE_RCC		= HOSTPLATFORMPREFIX-rcc
++QMAKE_UIC		= HOSTPLATFORMPREFIX-uic
 +
 +#QMAKE_IDL		= midl
 +QMAKE_LIB		= HOSTPLATFORMPREFIX-ar -ru
