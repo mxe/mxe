@@ -54,6 +54,7 @@ define $(PKG)_BUILD
         -prefix '$(PREFIX)/$(TARGET)' \
         -prefix-install \
         -fast \
+        -no-exceptions \
         -nomake demos \
         -nomake examples \
         -nomake libs \
