@@ -28,7 +28,7 @@ $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION)-srcbase-2.zip
 $(PKG)_WEBSITE  := http://www.tdragon.net/recentgcc/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/TDM Sources/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := pkg_config mingwrt w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran gcc-pthreads
+$(PKG)_DEPS     := pkg_config mingwrt mingwrt-dll w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran gcc-pthreads
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/tdm-gcc/files/Sources/) | \
