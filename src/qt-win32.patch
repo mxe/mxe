@@ -56,27 +56,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          *s60main/s60main.pro) continue ;;
          */qmake/qmake.pro) continue ;;
          *tools/bootstrap*|*tools/moc*|*tools/rcc*|*tools/uic*) SPEC=$QMAKESPEC ;;
---- qt-everywhere-opensource-src-4.6.0-tp1.native/src/gui/inputmethod/qwininputcontext_win.cpp	2009-09-07 13:00:30.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-tp1/src/gui/inputmethod/qwininputcontext_win.cpp	2009-10-02 09:57:20.000000000 +0200
-@@ -49,6 +49,8 @@
- #include "qtextformat.h"
- #include "qtextboundaryfinder.h"
- 
-+bool qt_sendSpontaneousEvent(QObject*, QEvent*);
-+
- //#define Q_IME_DEBUG
- 
- #ifdef Q_IME_DEBUG
---- qt-everywhere-opensource-src-4.6.0-tp1.native/mkspecs/win32-g++/qplatformdefs.h	2009-09-07 13:00:28.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-tp1/mkspecs/win32-g++/qplatformdefs.h	2009-10-02 09:57:20.000000000 +0200
-@@ -160,5 +160,7 @@
- # define W_OK	2
- # define R_OK	4
- 
-+// for some reason this isn't declared where it should be
-+LRESULT CALLBACK qt_internal_proc(HWND hwnd, UINT message, WPARAM wp, LPARAM lp);
- 
- #endif // QPLATFORMDEFS_H
 --- qt-everywhere-opensource-src-4.6.0-tp1.native/mkspecs/win32-g++/qmake.conf	2009-09-07 13:00:28.000000000 +0200
 +++ qt-everywhere-opensource-src-4.6.0-tp1/mkspecs/win32-g++/qmake.conf	2009-10-02 09:57:20.000000000 +0200
 @@ -3,23 +3,30 @@
