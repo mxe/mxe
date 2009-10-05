@@ -40,14 +40,9 @@ endef
 
 define $(PKG)_BUILD
 
-    # Note on patchfile qt-win32.patch
-    # A patchfile should have been applied already. Since we make a copy
-    # of the patched directory here, it is important that the changes
-    # in the patches do not break the native build.
-
-    # First configure a minimal native version of Qt
-    # for moc, rcc, uic and qmake
-    cp -a '$(1)' '$(1)'.native
+    # Native, unpatched build of Qt for moc, rcc, uic and qmake
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,qt)
+    mv '$(1)/$(qt_SUBDIR)' '$(1).native'
     cd '$(1)'.native && ./configure \
         -opensource \
         -confirm-license \
