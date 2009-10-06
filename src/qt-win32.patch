@@ -32,15 +32,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMakeVar add decorations "default windows styled"
  QMakeVar add mouse-drivers "pc"
  if [ "$UNAME_SYSTEM" = "Linux" ] ; then
-@@ -4961,7 +4961,11 @@
+@@ -4961,7 +4961,9 @@
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
 -        exit 1
 +echo NOTICE: This is a specially modifed configure script!
-+echo For our purposes we do not need or want X11.
-+echo For the natve target we only build the tools.
-+echo For the win32-g++ target there is no X11
++echo For our purposes we do not want X11.
 +#        exit 1
      fi
  

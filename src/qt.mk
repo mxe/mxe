@@ -43,6 +43,8 @@ define $(PKG)_BUILD
     # Native, unpatched build of Qt for moc, rcc, uic and qmake
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,qt)
     mv '$(1)/$(qt_SUBDIR)' '$(1).native'
+    $(SED) 's,PLATFORM_X11=yes,PLATFORM_X11=no,'           -i '$(1)'.native/configure
+    $(SED) 's,PLATFORM=solaris-cc$$,PLATFORM=solaris-g++,' -i '$(1)'.native/configure
     cd '$(1)'.native && ./configure \
         -opensource \
         -confirm-license \
@@ -115,6 +117,7 @@ define $(PKG)_BUILD
         -confirm-license \
         -xplatform win32-g++ \
         -host-arch i386 \
+        -host-little-endian \
         -little-endian \
         -exceptions \
         -static \
