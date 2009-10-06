@@ -1,5 +1,6 @@
 Copyright (C) 2009  Mark Brand
                     Volker Grabsch
+                    Martin Lambers
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -44,7 +45,18 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -7594,7 +7598,10 @@
+@@ -5035,7 +5039,9 @@
+             echo " You might need to modify the include and library search paths by editing"
+             echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
+             echo " ${XQMAKESPEC}."
+-            exit 1
++echo NOTICE: This is a specially modifed configure script!
++echo For our purposes we do not want the OpenGL functionality test.
++#            exit 1
+         fi
+         case "$PLATFORM" in
+         hpux*)
+@@ -7594,7 +7600,10 @@
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in

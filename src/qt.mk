@@ -126,6 +126,7 @@ define $(PKG)_BUILD
         -plugin-sql-sqlite \
         -plugin-sql-mysql \
         -script \
+        -opengl desktop \
         -webkit \
         -phonon \
         -no-phonon-backend \
