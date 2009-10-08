@@ -77,7 +77,7 @@ UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
 
 PKG_CHECKSUM = \
-    openssl sha1 '$(PKG_DIR)/$($(1)_FILE)' | $(SED) -n 's,^.*\([0-9a-f]\{40\}\)$$,\1,p'
+    openssl sha1 '$(PKG_DIR)/$($(1)_FILE)' 2>/dev/null | $(SED) -n 's,^.*\([0-9a-f]\{40\}\)$$,\1,p'
 
 CHECK_PKG_ARCHIVE = \
     [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1))`" ]
