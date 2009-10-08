@@ -112,6 +112,7 @@ define $(PKG)_BUILD
     $(SED) 's,QWidget\.h,qwidget.h,g' -i '$(1)'/src/3rdparty/webkit/WebCore/plugins/win/PluginViewWin.cpp
 
     # Configure Qt for MinGW target
+    $(SED) 's,PLATFORM=solaris-cc$$,PLATFORM=solaris-g++,' -i '$(1)'/configure
     cd '$(1)' && ./configure \
         -opensource \
         -confirm-license \
