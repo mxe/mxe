@@ -22,8 +22,8 @@
 # freetype
 PKG             := freetype
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3.9
-$(PKG)_CHECKSUM := db08969cb5053879ff9e973fe6dd2c52c7ea2d4e
+$(PKG)_VERSION  := 2.3.10
+$(PKG)_CHECKSUM := 3d0e083c7788bab949a7ed9dc9923411ec040d19
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://freetype.sourceforge.net/
