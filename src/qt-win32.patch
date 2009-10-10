@@ -43,7 +43,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5035,7 +5039,9 @@
+@@ -5035,7 +5037,9 @@
              echo " You might need to modify the include and library search paths by editing"
              echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
              echo " ${XQMAKESPEC}."
@@ -54,7 +54,25 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -7594,7 +7600,11 @@
+@@ -6087,11 +6091,12 @@
+     QT_CONFIG="$QT_CONFIG freetype"
+ fi
+ 
+-if [ "x$PLATFORM_MAC" = "xyes" ]; then
+-    #On Mac we implicitly link against libz, so we
+-    #never use the 3rdparty stuff.
+-    [ "$CFG_ZLIB" = "yes" ] && CFG_ZLIB="system"
+-fi
++# We're cross compiling, so we respect the user setting.
++#if [ "x$PLATFORM_MAC" = "xyes" ]; then
++#    #On Mac we implicitly link against libz, so we
++#    #never use the 3rdparty stuff.
++#    [ "$CFG_ZLIB" = "yes" ] && CFG_ZLIB="system"
++#fi
+ if [ "$CFG_ZLIB" = "yes" ]; then
+     QT_CONFIG="$QT_CONFIG zlib"
+ elif [ "$CFG_ZLIB" = "system" ]; then
+@@ -7594,7 +7599,11 @@
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
