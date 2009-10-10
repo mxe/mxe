@@ -30,7 +30,7 @@ $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sqlite zlib tiff libpng libmng jpeg
+$(PKG)_DEPS     := gcc sqlite
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
@@ -149,11 +149,12 @@ define $(PKG)_BUILD
         -nomake docs \
         -nomake examples \
         -system-sqlite \
-        -system-zlib \
-        -system-libtiff \
-        -system-libpng \
-        -system-libmng \
-        -system-libjpeg \
+        -qt-zlib \
+        -qt-gif \
+        -qt-libtiff \
+        -qt-libpng \
+        -qt-libmng \
+        -qt-libjpeg \
         -continue
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
