@@ -54,12 +54,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -7594,7 +7600,7 @@
+@@ -7594,7 +7600,11 @@
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
 -        *winmain/winmain.pro) continue ;;
-+        *winmain/winmain.pro) [ "$XPLATFORM" != "win32-g++" ] && continue; SPEC=$XQMAKESPEC ;;
++        *winmain/winmain.pro)
++            case "$XPLATFORM" in
++            win32*) SPEC=$XQMAKESPEC ;;
++            *) continue ;;
++            esac ;;
          *s60main/s60main.pro) continue ;;
          */qmake/qmake.pro) continue ;;
          *tools/bootstrap*|*tools/moc*|*tools/rcc*|*tools/uic*) SPEC=$QMAKESPEC ;;
