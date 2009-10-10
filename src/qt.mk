@@ -68,6 +68,7 @@ define $(PKG)_BUILD
 
     # rebuild qmake to use "-unix" as default and to use the correct "ar" command
     $(SED) 's,\(Option::TARG_MODE Option::target_mode = Option::TARG_\)[A-Z_]*,\1UNIX_MODE,' -i '$(1)'.native/qmake/option.cpp
+    $(SED) 's,"ar -M,"$(TARGET)-ar -M,' -i '$(1)'.native/qmake/generators/win32/mingw_make.cpp
     $(MAKE) -C '$(1)'.native/qmake -j $(JOBS)
 
     # install the native tools manually
