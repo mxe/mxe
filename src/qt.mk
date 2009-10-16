@@ -30,7 +30,7 @@ $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sqlite
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
@@ -132,10 +132,6 @@ define $(PKG)_BUILD
         -prefix '$(PREFIX)/$(TARGET)' \
         -prefix-install \
         -bindir '$(1)'/bindirsink \
-        -plugin-sql-odbc \
-        -plugin-sql-psql \
-        -plugin-sql-sqlite \
-        -plugin-sql-mysql \
         -script \
         -opengl desktop \
         -webkit \
@@ -148,7 +144,6 @@ define $(PKG)_BUILD
         -nomake demos \
         -nomake docs \
         -nomake examples \
-        -system-sqlite \
         -qt-zlib \
         -qt-gif \
         -qt-libtiff \
