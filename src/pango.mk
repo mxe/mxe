@@ -1,4 +1,5 @@
 # Copyright (C) 2009  Volker Grabsch
+#                     Tony Theodore
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -53,6 +54,7 @@ define $(PKG)_BUILD
         --without-x \
         --enable-explicit-deps \
         --with-included-modules \
-        --without-dynamic-modules
+        --without-dynamic-modules \
+        CXX='$(TARGET)-g++'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
