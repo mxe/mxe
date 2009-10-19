@@ -134,7 +134,6 @@ define $(PKG)_BUILD
         -bindir '$(1)'/bindirsink \
         -script \
         -opengl desktop \
-        -webkit \
         -phonon \
         -no-phonon-backend \
         -accessibility \
