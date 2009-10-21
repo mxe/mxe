@@ -31,8 +31,9 @@ $(PKG)_URL      := http://libsdl.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://libsdl.org/release/changes.html' | \
-    $(SED) -n 's,.*SDL \([0-9][^>]*\) Release Notes.*,\1,p' | \
+    wget -q -O- 'http://www.libsdl.org/cgi/viewvc.cgi/tags/SDL/?sortby=date' | \
+    grep '<a name="' | \
+    $(SED) -n 's,.*<a name="release-\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef
 

@@ -31,8 +31,9 @@ $(PKG)_URL      := http://libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl libmikmod ogg smpeg
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://libsdl.org/projects/SDL_mixer/' | \
-    $(SED) -n 's,.*SDL_mixer-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    wget -q -O- 'http://www.libsdl.org/cgi/viewvc.cgi/tags/SDL_mixer/?sortby=date' | \
+    grep '<a name="' | \
+    $(SED) -n 's,.*<a name="release-\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef
 

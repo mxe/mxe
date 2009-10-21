@@ -31,9 +31,9 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_
 $(PKG)_DEPS     := gcc gettext pcre libiconv
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.gtk.org/download-windows.html' | \
-    grep 'glib-' | \
-    $(SED) -n 's,.*glib-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    wget -q -O- 'http://git.gnome.org/cgit/glib/refs/tags' | \
+    grep '<a href=' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1
 endef
 

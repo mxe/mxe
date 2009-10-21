@@ -32,8 +32,9 @@ $(PKG)_URL      := http://libsdl.org/projects/SDL_ttf/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl freetype
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://libsdl.org/projects/SDL_ttf/' | \
-    $(SED) -n 's,.*SDL_ttf-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    wget -q -O- 'http://www.libsdl.org/cgi/viewvc.cgi/tags/SDL_ttf/?sortby=date' | \
+    grep '<a name="' | \
+    $(SED) -n 's,.*<a name="release-\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef
 
