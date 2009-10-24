@@ -26,7 +26,7 @@ JOBS               := 1
 TARGET             := i686-pc-mingw32
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
-VERSION  := 2.9
+VERSION  := 2.10
 PREFIX   := $(PWD)/usr
 PKG_DIR  := $(PWD)/pkg
 DIST_DIR := $(PWD)/dist
