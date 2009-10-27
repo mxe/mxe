@@ -19,21 +19,24 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# MinGW binutils
+# GNU Binutils
 PKG             := binutils
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.19.1
-$(PKG)_CHECKSUM := 7e930435c47991c4070b1c74b010350e4669011f
-$(PKG)_SUBDIR   := binutils-$(firstword $(subst -, ,$($(PKG)_VERSION)))
-$(PKG)_FILE     := binutils-$($(PKG)_VERSION)-src.tar.gz
-$(PKG)_WEBSITE  := http://mingw.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/GNU Binutils/Current Release_ GNU binutils-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := mingwrt w32api
+$(PKG)_VERSION  := 2.20
+$(PKG)_CHECKSUM := 747e7b4d94bce46587236dc5f428e5b412a590dc
+$(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
+$(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://www.gnu.org/software/binutils/
+$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/binutils/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/binutils/$($(PKG)_FILE)
+$(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/mingw/files/GNU Binutils/) | \
-    $(SED) -n 's,.*binutils-\([0-9][^>]*\)-src\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceware.org/cgi-bin/cvsweb.cgi/src/binutils/?cvsroot=src' | \
+    grep '<OPTION>binutils-' | \
+    $(SED) -n 's,.*binutils-\([0-9][0-9_]*\).*,\1,p' | \
+    $(SED) 's,_,.,g' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
