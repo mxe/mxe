@@ -19,21 +19,24 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# TDM-GCC
+# GCC
 PKG             := gcc
-$(PKG)_IGNORE   := 4.4.1-tdm-2
-$(PKG)_VERSION  := 4.4.0-tdm-1
-$(PKG)_CHECKSUM := ec1c81acf0581b4f1e2d5498ce9cd015b63e917b
-$(PKG)_SUBDIR   := .
-$(PKG)_FILE     := gcc-$($(PKG)_VERSION)-srcbase-2.zip
-$(PKG)_WEBSITE  := http://www.tdragon.net/recentgcc/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/TDM Sources/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := pkg_config mingwrt mingwrt-dll w32api binutils gcc-gmp gcc-mpfr gcc-core gcc-g++ gcc-objc gcc-fortran gcc-pthreads
+$(PKG)_IGNORE   := 4.4.2
+$(PKG)_VERSION  := 4.4.0
+$(PKG)_CHECKSUM := 9215af6beb900ca1eef1d6a40c3dabe990203b25
+$(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
+$(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
+$(PKG)_WEBSITE  := http://gcc.gnu.org/
+$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := pkg_config mingwrt mingwrt-dll w32api binutils gcc-gmp gcc-mpfr gcc-tdm gcc-pthreads
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/tdm-gcc/files/Sources/) | \
-    $(SED) -n 's,.*gcc-\([0-9][^>]*\)-srcbase[-0-9]*\.zip.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://gcc.gnu.org/viewcvs/tags/?sortby=date' | \
+    grep '<a name="gcc_' | \
+    $(SED) -n 's,.*<a name="gcc_\([0-9][^"]*\)_release".*,\1,p' | \
+    $(SED) 's,_,.,g' | \
+    head -1
 endef
 
 $(PKG)_CONFIGURE_OPTIONS := \
@@ -51,24 +54,23 @@ $(PKG)_CONFIGURE_OPTIONS := \
         --enable-sjlj-exceptions
 
 define $(PKG)_BUILD
-    # unpack GCC
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-core)
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-g++)
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-objc)
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-fortran)
-    # apply TDM patches to GCC
-    cd '$(1)/$(gcc-core_SUBDIR)' && \
-        for p in '$(1)'/*.patch; do \
-            patch -p1 < "$$p"; \
+    # unpack TDM-GCC
+    mkdir '$(1)/gcc-tdm'
+    cd    '$(1)/gcc-tdm' && $(call UNPACK_PKG_ARCHIVE,gcc-tdm)
+    # apply TDM-GCC patches
+    cd '$(1)' && \
+        for p in '$(1)'/gcc-tdm/*.patch; do \
+            $(SED) 's,\r$$,,' -i "$$p" || exit 1; \
+            patch -p1 < "$$p" || exit 1; \
         done
     # unpack support libraries
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-gmp)
-    mv '$(1)/$(gcc-gmp_SUBDIR)' '$(1)/$(gcc-core_SUBDIR)/gmp'
+    mv '$(1)/$(gcc-gmp_SUBDIR)' '$(1)/gmp'
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-mpfr)
-    mv '$(1)/$(gcc-mpfr_SUBDIR)' '$(1)/$(gcc-core_SUBDIR)/mpfr'
+    mv '$(1)/$(gcc-mpfr_SUBDIR)' '$(1)/mpfr'
     # build everything of GCC except libgomp and libmudflap
     mkdir '$(1)/build'
-    cd    '$(1)/build' && '$(1)/$(gcc-core_SUBDIR)/configure' \
+    cd    '$(1)/build' && '$(1)/configure' \
         $(gcc_CONFIGURE_OPTIONS) \
         --enable-threads=win32 \
         --disable-libgomp \
@@ -87,9 +89,9 @@ define $(PKG)_BUILD
     $(INSTALL) -m664 '$(1)/$(gcc-pthreads_SUBDIR)/sched.h'     '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/$(gcc-pthreads_SUBDIR)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
     # build libgomp
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/$(gcc-core_SUBDIR)/libgomp/configure'
+    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/libgomp/configure'
     mkdir '$(1)/build/$(TARGET)/libgomp'
-    cd    '$(1)/build/$(TARGET)/libgomp' && '$(1)/$(gcc-core_SUBDIR)/libgomp/configure' \
+    cd    '$(1)/build/$(TARGET)/libgomp' && '$(1)/libgomp/configure' \
         $(gcc_CONFIGURE_OPTIONS) \
         --host='$(TARGET)' \
         LIBS='-lws2_32'
