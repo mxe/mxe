@@ -21,8 +21,8 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
---- qt-everywhere-opensource-src-4.6.0-tp1.native/configure	2009-09-07 13:00:28.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-tp1/configure	2009-10-02 18:22:05.000000000 +0200
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/configure   2009-10-13 17:34:09.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-beta1/configure  2009-10-25 13:14:22.000000000 +0100
 @@ -600,7 +600,7 @@
  rm -f "$outpath/config.tests/.qmake.cache"
  cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
@@ -32,7 +32,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMakeVar add decorations "default windows styled"
  QMakeVar add mouse-drivers "pc"
  if [ "$UNAME_SYSTEM" = "Linux" ] ; then
-@@ -4961,7 +4961,9 @@
+@@ -4956,7 +4956,9 @@
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
@@ -43,7 +43,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5035,7 +5037,9 @@
+@@ -5030,7 +5032,9 @@
              echo " You might need to modify the include and library search paths by editing"
              echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
              echo " ${XQMAKESPEC}."
@@ -54,7 +54,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -6087,11 +6091,12 @@
+@@ -6096,11 +6100,12 @@
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -72,7 +72,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  if [ "$CFG_ZLIB" = "yes" ]; then
      QT_CONFIG="$QT_CONFIG zlib"
  elif [ "$CFG_ZLIB" = "system" ]; then
-@@ -7594,7 +7599,11 @@
+@@ -7610,7 +7615,11 @@
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
@@ -193,3 +193,41 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 +QMAKE_STRIP		= HOSTPLATFORMPREFIX-strip
  QMAKE_STRIPFLAGS_LIB 	+= --strip-unneeded
 -load(qt_config)
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/src/3rdparty/webkit/JavaScriptCore/jsc.pro	2009-10-13 17:34:08.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-beta1/src/3rdparty/webkit/JavaScriptCore/jsc.pro	2009-10-25 20:23:25.000000000 +0100
+@@ -20,6 +20,13 @@
+ } else { # Release
+     OBJECTS_DIR = obj/release
+ }
++
++# MAB: Added by analogy to JavaScriptCore.pro and WebCore.pro
++# JavaScriptCore.pri needs to know path for generated sources
++isEmpty(GENERATED_SOURCES_DIR):GENERATED_SOURCES_DIR = generated
++GENERATED_SOURCES_DIR_SLASH = $${GENERATED_SOURCES_DIR}$${QMAKE_DIR_SEP}
++
++INCLUDEPATH += $$GENERATED_SOURCES_DIR
+ OBJECTS_DIR_WTR = $$OBJECTS_DIR$${QMAKE_DIR_SEP}
+ include($$PWD/JavaScriptCore.pri)
+
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/src/3rdparty/webkit/WebKit/qt/Plugins/Plugins.pro	2009-10-13 17:34:08.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-beta1/src/3rdparty/webkit/WebKit/qt/Plugins/Plugins.pro	2009-10-25 21:08:46.000000000 +0100
+@@ -4,7 +4,7 @@
+ HEADERS += ICOHandler.h
+ SOURCES += ICOHandler.cpp
+ 
+-include(../../WebKit.pri)
++include(../../../WebKit.pri)
+ 
+ contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols 
+ unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-10-13 17:34:08.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-beta1/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-10-25 13:17:35.000000000 +0100
+@@ -16,7 +16,7 @@
+     include($$QT_SOURCE_TREE/src/qbase.pri)
+     INSTALLS =
+     DESTDIR = $$OLDDESTDIR
+-    PRECOMPILED_HEADER = $$PWD/../WebKit/qt/WebKit_pch.h
++    PRECOMPILED_HEADER = $$PWD/../../webkit/WebKit/qt/WebKit_pch.h
+     DEFINES *= NDEBUG
+ }
+ 

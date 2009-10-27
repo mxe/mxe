@@ -24,8 +24,8 @@
 # Qt
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.6.0-tp1
-$(PKG)_CHECKSUM := 4394bea076279ea090549d3caa00cc1f5e33a22b
+$(PKG)_VERSION  := 4.6.0-beta1
+$(PKG)_CHECKSUM := ab3898f0d7307decbce03a6fc6829218bba17311
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
@@ -44,6 +44,11 @@ define $(PKG)_BUILD
     # Native, unpatched build of Qt for moc, rcc, uic and qmake
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,qt)
     mv '$(1)/$(qt_SUBDIR)' '$(1).native'
+
+    # But, 4.6.0-beta1 native build needs this bugfix too
+    cp '$(1)'/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro \
+       '$(1).native'/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro
+
     $(SED) 's,PLATFORM_X11=yes,PLATFORM_X11=no,'           -i '$(1)'.native/configure
     $(SED) 's,PLATFORM=solaris-cc$$,PLATFORM=solaris-g++,' -i '$(1)'.native/configure
     cd '$(1)'.native && ./configure \
@@ -90,7 +95,8 @@ define $(PKG)_BUILD
     mv '$(1)'/mkspecs/features/unix '$(1)'/mkspecs/features/unix.orig
     ln -s win32 '$(1)'/mkspecs/features/unix
 
-    # Adjust the mkspec values that contain the TARGET platform prefix
+    # Adjust the mkspec values that contain the TARGET platform prefix.
+    # The patch ensures planted strings HOSTPLATFORMPREFIX and HOSTPLATFORMINCLUDE.
     $(SED) 's,HOSTPLATFORMPREFIX-,$(TARGET)-,g'                  -i '$(1)'/mkspecs/win32-g++/qmake.conf
     $(SED) 's,HOSTPLATFORMINCLUDE,$(PREFIX)/$(TARGET)/include,g' -i '$(1)'/mkspecs/win32-g++/qmake.conf
 
@@ -101,22 +107,6 @@ define $(PKG)_BUILD
     # Make qmake use compilation paths meant for Windows
     find '$(1)'/src -name '*.pr[oi]' -exec \
         $(SED) 's,\(^\|[^_/]\)win32\([^-]\|$$\),\1unix\2,g' -i {} \;
-
-    # Fix-ups for files not found during configure
-    # Probably errors in QT 4.6 Technology Preview 1
-    ln -s ../WebKit.pri '$(1)'/src/3rdparty/webkit/WebKit
-
-    # Fix-ups for files not found during make
-    # Probably errors in QT 4.6 Technology Preview 1
-    mkdir                 '$(1)'/src/3rdparty/webkit/JavaScriptCore/generated/release
-    ln -s ../chartables.c '$(1)'/src/3rdparty/webkit/JavaScriptCore/generated/release/
-    ln -s ../Grammar.cpp  '$(1)'/src/3rdparty/webkit/JavaScriptCore/generated/release/
-    mkdir                 '$(1)'/src/3rdparty/webkit/JavaScriptCore/generated/debug
-    ln -s ../chartables.c '$(1)'/src/3rdparty/webkit/JavaScriptCore/generated/debug/
-    ln -s ../Grammar.cpp  '$(1)'/src/3rdparty/webkit/JavaScriptCore/generated/debug/
-
-    # Fix case of filename
-    $(SED) 's,QWidget\.h,qwidget.h,g' -i '$(1)'/src/3rdparty/webkit/WebCore/plugins/win/PluginViewWin.cpp
 
     # Configure Qt for MinGW target
     cd '$(1)' && ./configure \
@@ -134,7 +124,8 @@ define $(PKG)_BUILD
         -bindir '$(1)'/bindirsink \
         -script \
         -opengl desktop \
-        -phonon \
+        -no-webkit \
+        -no-phonon \
         -no-phonon-backend \
         -accessibility \
         -no-reduce-exports \
