@@ -120,7 +120,7 @@ $(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
 	@[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
-	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)) &> '$(PREFIX)/log-$(1)'; \
+	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(PREFIX)/log-$(1)'; \
 	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	        echo; \
 	        echo 'Wrong checksum of package $(1)!'; \
