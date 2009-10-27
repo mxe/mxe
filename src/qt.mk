@@ -134,6 +134,7 @@ define $(PKG)_BUILD
         -nomake demos \
         -nomake docs \
         -nomake examples \
+        -plugin-sql-sqlite \
         -qt-zlib \
         -qt-gif \
         -qt-libtiff \
