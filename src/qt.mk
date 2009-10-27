@@ -36,6 +36,7 @@ define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
     grep '<li><a href="/qt/qt/commit/' | \
     $(SED) -n 's,.*<a[^>]*>v\([0-9][^>]*\)<.*,\1,p' | \
+    grep -v tp | \
     tail -1
 endef
 
