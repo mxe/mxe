@@ -1,0 +1,55 @@
+Copyright (C) 2009  Mark Brand
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
+to the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+--- libodbc++-0.2.5.orig/configure	2009-08-20 23:41:27.000000000 +0200
++++ libodbc++-0.2.5/configure	2009-10-27 22:48:23.000000000 +0100
+@@ -22680,7 +22680,8 @@
+ then
+ 	{ { echo "$as_me:$LINENO: error: No ODBC driver manager configured. Pperhaps you need to give configure --with-odbc=/some/location?" >&5
+ echo "$as_me: error: No ODBC driver manager configured. Pperhaps you need to give configure --with-odbc=/some/location?" >&2;}
+-   { (exit 1); exit 1; }; }
++   #{ (exit 1); exit 1; }; }
++}
+ fi
+ 
+ 
+--- libodbc++-0.2.5.orig/src/datastream.h	2009-01-06 12:20:05.000000000 +0100
++++ libodbc++-0.2.5/src/datastream.h	2009-10-27 23:14:22.000000000 +0100
+@@ -35,7 +35,7 @@
+ #if defined(ODBCXX_QT)
+ # include <qiodevice.h>
+ #endif
+-
++#include <stdio.h>
+ namespace odbc {
+ 
+ #if !defined(ODBCXX_QT)
+--- libodbc++-0.2.5.orig/include/odbc++/resultset.h	2009-03-07 07:41:09.000000000 +0100
++++ libodbc++-0.2.5/include/odbc++/resultset.h	2009-10-27 23:07:54.000000000 +0100
+@@ -474,7 +474,7 @@
+      * @param idx The column index, starting at 1
+      * @param val The value to set
+      */
+-	Guid ResultSet::getGuid(int idx);
++	Guid getGuid(int idx);
+ #endif
+     /** Sets the value of a column to an int
+      * @param idx The column index, starting at 1
