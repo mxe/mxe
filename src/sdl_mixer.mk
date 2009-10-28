@@ -22,13 +22,13 @@
 # SDL_mixer
 PKG             := sdl_mixer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.8
-$(PKG)_CHECKSUM := 7fa56d378f9ca53434f9470aeb2997ad84a348c6
+$(PKG)_VERSION  := 1.2.9
+$(PKG)_CHECKSUM := 33c43d868ec7a30de1a44a6ac05e5419b5ff53df
 $(PKG)_SUBDIR   := SDL_mixer-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_mixer-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://libsdl.org/projects/SDL_mixer/
 $(PKG)_URL      := http://libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl libmikmod ogg smpeg
+$(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis smpeg
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.libsdl.org/cgi/viewvc.cgi/tags/SDL_mixer/?sortby=date' | \
@@ -45,11 +45,17 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
-        --enable-music-libmikmod \
+        --enable-music-mod \
         --enable-music-ogg \
+        --disable-music-flac \
+        --enable-music-mp3 \
+        --disable-music-mod-shared \
         --disable-music-ogg-shared \
-        --with-smpeg-prefix='$(PREFIX)/$(TARGET)' \
+        --disable-music-flac-shared \
+        --disable-music-mp3-shared \
         --disable-smpegtest \
-        --disable-music-mp3-shared
+        --with-smpeg-prefix='$(PREFIX)/$(TARGET)' \
+        LIBMIKMOD_CONFIG='$(PREFIX)/$(TARGET)/bin/libmikmod-config' \
+        LIBS='-lvorbis -logg'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

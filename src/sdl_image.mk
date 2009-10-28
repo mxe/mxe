@@ -22,8 +22,8 @@
 # SDL_image
 PKG             := sdl_image
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.7
-$(PKG)_CHECKSUM := 0cffd05e41014651e7114d7fea309c9f37ef2d8a
+$(PKG)_VERSION  := 1.2.8
+$(PKG)_CHECKSUM := ce9f208b57e4bb5e677c79b6a241f86f5430dda4
 $(PKG)_SUBDIR   := SDL_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_image-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://libsdl.org/projects/SDL_image/

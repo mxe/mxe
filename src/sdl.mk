@@ -22,8 +22,8 @@
 # SDL
 PKG             := sdl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.11
-$(PKG)_CHECKSUM := 2259134d714e35ab1469d513674a3cd02510d198
+$(PKG)_VERSION  := 1.2.14
+$(PKG)_CHECKSUM := ba625b4b404589b97e92d7acd165992debe576dd
 $(PKG)_SUBDIR   := SDL-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://libsdl.org/
