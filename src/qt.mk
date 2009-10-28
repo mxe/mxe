@@ -30,7 +30,7 @@ $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc libodbc++
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
@@ -97,7 +97,7 @@ define $(PKG)_BUILD
     ln -s win32 '$(1)'/mkspecs/features/unix
 
     # Adjust the mkspec values that contain the TARGET platform prefix.
-    # The patch ensures planted strings HOSTPLATFORMPREFIX and HOSTPLATFORMINCLUDE.
+    # The patch planted strings HOSTPLATFORMPREFIX and HOSTPLATFORMINCLUDE.
     $(SED) 's,HOSTPLATFORMPREFIX-,$(TARGET)-,g'                  -i '$(1)'/mkspecs/win32-g++/qmake.conf
     $(SED) 's,HOSTPLATFORMINCLUDE,$(PREFIX)/$(TARGET)/include,g' -i '$(1)'/mkspecs/win32-g++/qmake.conf
 
@@ -136,13 +136,14 @@ define $(PKG)_BUILD
         -nomake docs \
         -nomake examples \
         -plugin-sql-sqlite \
+        -plugin-sql-odbc \
         -qt-zlib \
         -qt-gif \
         -qt-libtiff \
         -qt-libpng \
         -qt-libmng \
         -qt-libjpeg \
-        -continue
+        -v
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(TARGET)-ranlib '$(1)'/lib/*.a

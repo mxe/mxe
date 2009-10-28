@@ -21,8 +21,8 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
---- qt-everywhere-opensource-src-4.6.0-beta1.native/configure   2009-10-13 17:34:09.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-beta1/configure  2009-10-25 13:14:22.000000000 +0100
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/configure	2009-10-28 00:04:38.000000000 +0100
++++ qt-everywhere-opensource-src-4.6.0-beta1/configure	2009-10-28 00:13:15.000000000 +0100
 @@ -600,7 +600,7 @@
  rm -f "$outpath/config.tests/.qmake.cache"
  cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
@@ -32,7 +32,19 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMakeVar add decorations "default windows styled"
  QMakeVar add mouse-drivers "pc"
  if [ "$UNAME_SYSTEM" = "Linux" ] ; then
-@@ -4956,7 +4956,9 @@
+@@ -4598,7 +4598,10 @@
+         ;;
+         odbc)
+             if [ "$CFG_SQL_odbc" != "no" ]; then
+-                if [ "$PLATFORM_MAC" != "yes" ] && "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/odbc "ODBC" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++                if [ "$XPLATFORM" = "win32-g++" ]; then
++                    echo "We cannot test for ODBC support since we are cross building for win32-g++, so we assume it is there."
++                    CFG_SQL_odbc=plugin
++                elif [ "$PLATFORM_MAC" != "yes" ] && "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/odbc "ODBC" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+                     if [ "$CFG_SQL_odbc" = "auto" ]; then
+                         CFG_SQL_odbc=plugin
+                     fi
+@@ -4956,7 +4959,9 @@
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
@@ -43,7 +55,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5030,7 +5032,9 @@
+@@ -5030,7 +5035,9 @@
              echo " You might need to modify the include and library search paths by editing"
              echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
              echo " ${XQMAKESPEC}."
@@ -54,7 +66,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -6096,11 +6100,12 @@
+@@ -6096,11 +6103,12 @@
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -72,7 +84,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  if [ "$CFG_ZLIB" = "yes" ]; then
      QT_CONFIG="$QT_CONFIG zlib"
  elif [ "$CFG_ZLIB" = "system" ]; then
-@@ -7610,7 +7615,11 @@
+@@ -7610,7 +7618,11 @@
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
