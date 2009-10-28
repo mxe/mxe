@@ -210,7 +210,8 @@ define UPDATE
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
                 $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i '$(TOP_DIR)/src/$(1).mk'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                    || $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' -i '$(TOP_DIR)/src/$(1).mk')),
+                    || { $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' -i '$(TOP_DIR)/src/$(1).mk'; \
+                         exit 1; })),
         $(error Unable to update version number: $(1)))
 
 endef
