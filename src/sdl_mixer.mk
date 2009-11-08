@@ -26,8 +26,8 @@ $(PKG)_VERSION  := 1.2.9
 $(PKG)_CHECKSUM := 33c43d868ec7a30de1a44a6ac05e5419b5ff53df
 $(PKG)_SUBDIR   := SDL_mixer-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_mixer-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://libsdl.org/projects/SDL_mixer/
-$(PKG)_URL      := http://libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_mixer/
+$(PKG)_URL      := http://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis smpeg
 
 define $(PKG)_UPDATE

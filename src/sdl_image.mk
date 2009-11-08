@@ -26,8 +26,8 @@ $(PKG)_VERSION  := 1.2.8
 $(PKG)_CHECKSUM := ce9f208b57e4bb5e677c79b6a241f86f5430dda4
 $(PKG)_SUBDIR   := SDL_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_image-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://libsdl.org/projects/SDL_image/
-$(PKG)_URL      := http://libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_image/
+$(PKG)_URL      := http://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl jpeg libpng tiff
 
 define $(PKG)_UPDATE

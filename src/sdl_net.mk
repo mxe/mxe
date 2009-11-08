@@ -27,8 +27,8 @@ $(PKG)_VERSION  := 1.2.7
 $(PKG)_CHECKSUM := b46c7e3221621cc34fec1238f1b5f0ce8972274d
 $(PKG)_SUBDIR   := SDL_net-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_net-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://libsdl.org/projects/SDL_net/
-$(PKG)_URL      := http://libsdl.org/projects/SDL_net/release/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_net/
+$(PKG)_URL      := http://www.libsdl.org/projects/SDL_net/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl
 
 define $(PKG)_UPDATE
