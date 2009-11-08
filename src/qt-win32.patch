@@ -21,8 +21,8 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
---- qt-everywhere-opensource-src-4.6.0-beta1.native/configure	2009-10-28 00:04:38.000000000 +0100
-+++ qt-everywhere-opensource-src-4.6.0-beta1/configure	2009-10-28 00:13:15.000000000 +0100
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/configure	2009-10-29 14:02:18.000000000 +0100
++++ qt-everywhere-opensource-src-4.6.0-beta1/configure	2009-10-29 14:00:46.000000000 +0100
 @@ -600,7 +600,7 @@
  rm -f "$outpath/config.tests/.qmake.cache"
  cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
@@ -32,7 +32,79 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMakeVar add decorations "default windows styled"
  QMakeVar add mouse-drivers "pc"
  if [ "$UNAME_SYSTEM" = "Linux" ] ; then
-@@ -4598,7 +4598,10 @@
+@@ -725,6 +725,7 @@
+ CFG_3DNOW=auto
+ CFG_SSE=auto
+ CFG_SSE2=auto
++CFG_RTTI=auto
+ CFG_REDUCE_RELOCATIONS=no
+ CFG_IPV6=auto
+ CFG_NAS=no
+@@ -4374,7 +4375,10 @@
+ 
+ # detect mmx support
+ if [ "${CFG_MMX}" = "auto" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/mmx "mmx" $L_FLAGS $I_FLAGS $l_FLAGS "-mmmx"; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++      echo "Using MMX for win32-g++ target"
++      CFG_MMX=yes
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/mmx "mmx" $L_FLAGS $I_FLAGS $l_FLAGS "-mmmx"; then
+ 	CFG_MMX=yes
+     else
+ 	CFG_MMX=no
+@@ -4383,7 +4387,10 @@
+ 
+ # detect 3dnow support
+ if [ "${CFG_3DNOW}" = "auto" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/3dnow "3dnow" $L_FLAGS $I_FLAGS $l_FLAGS "-m3dnow"; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++        echo "Using SSE for win32-g++ target"
++        CFG_3DNOW=yes
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/3dnow "3dnow" $L_FLAGS $I_FLAGS $l_FLAGS "-m3dnow"; then
+ 	CFG_3DNOW=yes
+     else
+ 	CFG_3DNOW=no
+@@ -4392,7 +4399,10 @@
+ 
+ # detect sse support
+ if [ "${CFG_SSE}" = "auto" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sse "sse" $L_FLAGS $I_FLAGS $l_FLAGS "-msse"; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++        echo "Using SSE for win32-g++ target"
++        CFG_SSE=yes
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sse "sse" $L_FLAGS $I_FLAGS $l_FLAGS "-msse"; then
+ 	CFG_SSE=yes
+     else
+ 	CFG_SSE=no
+@@ -4401,13 +4411,26 @@
+ 
+ # detect sse2 support
+ if [ "${CFG_SSE2}" = "auto" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sse2 "sse2" $L_FLAGS $I_FLAGS $l_FLAGS "-msse2"; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++      echo "Using SSE2 for win32-g++ target"
++      CFG_SSE2=yes
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sse2 "sse2" $L_FLAGS $I_FLAGS $l_FLAGS "-msse2"; then
+        CFG_SSE2=yes
+     else
+        CFG_SSE2=no
+     fi
+ fi
+ 
++# detect rtti support
++if [ "${CFG_RTTI}" = "auto" ]; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++      echo "Using RTTI for win32-g++ target"
++      CFG_RTTI=yes
++    else
++      CFG_RTTI=no
++    fi
++fi
++
+ # check iWMMXt support
+ if [ "$CFG_IWMMXT" = "yes" ]; then
+     "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/iwmmxt "iwmmxt" $L_FLAGS $I_FLAGS $l_FLAGS "-mcpu=iwmmxt"
+@@ -4598,7 +4621,10 @@
          ;;
          odbc)
              if [ "$CFG_SQL_odbc" != "no" ]; then
@@ -44,7 +116,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                      if [ "$CFG_SQL_odbc" = "auto" ]; then
                          CFG_SQL_odbc=plugin
                      fi
-@@ -4956,7 +4959,9 @@
+@@ -4956,7 +4982,9 @@
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
@@ -55,7 +127,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5030,7 +5035,9 @@
+@@ -5030,7 +5058,9 @@
              echo " You might need to modify the include and library search paths by editing"
              echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
              echo " ${XQMAKESPEC}."
@@ -66,7 +138,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -6096,11 +6103,12 @@
+@@ -6016,6 +6046,7 @@
+ [ "$CFG_3DNOW" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG 3dnow"
+ [ "$CFG_SSE" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse"
+ [ "$CFG_SSE2" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse2"
++[ "$CFG_RTTI" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG rtti"
+ [ "$CFG_IWMMXT" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG iwmmxt"
+ [ "$PLATFORM_MAC" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG $CFG_MAC_ARCHS"
+ if [ "$CFG_IPV6" = "yes" ]; then
+@@ -6096,11 +6127,12 @@
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -84,7 +164,25 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  if [ "$CFG_ZLIB" = "yes" ]; then
      QT_CONFIG="$QT_CONFIG zlib"
  elif [ "$CFG_ZLIB" = "system" ]; then
-@@ -7610,7 +7618,11 @@
+@@ -7025,7 +7057,7 @@
+ 
+ cat >>"$QTCONFIG.tmp" <<EOF
+ #configuration
+-CONFIG += $QTCONFIG_CONFIG
++CONFIG += $QMAKE_CONFIG $QTCONFIG_CONFIG
+ QT_ARCH = $CFG_ARCH
+ QT_EDITION = $Edition
+ QT_CONFIG += $QT_CONFIG
+@@ -7297,7 +7329,7 @@
+ fi
+ echo "STL support ......... $CFG_STL"
+ echo "PCH support ......... $CFG_PRECOMPILE"
+-echo "MMX/3DNOW/SSE/SSE2..  ${CFG_MMX}/${CFG_3DNOW}/${CFG_SSE}/${CFG_SSE2}"
++echo "MMX/3DNOW/SSE/SSE2/RTTI..  ${CFG_MMX}/${CFG_3DNOW}/${CFG_SSE}/${CFG_SSE2}/${CFG_RTTI}"
+ if [ "${CFG_ARCH}" = "arm" ]; then
+     echo "iWMMXt support ...... ${CFG_IWMMXT}"
+ fi
+@@ -7610,7 +7642,11 @@
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
