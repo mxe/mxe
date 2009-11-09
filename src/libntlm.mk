@@ -23,8 +23,8 @@
 # Libntlm
 PKG             := libntlm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1
-$(PKG)_CHECKSUM := d7608bea4820cdf879a5b10bc956391fb3973f08
+$(PKG)_VERSION  := 1.2
+$(PKG)_CHECKSUM := 27538a3375690a37574fa991fbd327d150d8b505
 $(PKG)_SUBDIR   := libntlm-$($(PKG)_VERSION)
 $(PKG)_FILE     := libntlm-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://josefsson.org/libntlm/
