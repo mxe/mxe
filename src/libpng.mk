@@ -36,6 +36,7 @@ define $(PKG)_UPDATE
     grep '<a class="list name"' | \
     $(SED) -n 's,.*<a[^>]*>v\([0-9][^>]*\)<.*,\1,p' | \
     grep -v beta | \
+    grep -v rc | \
     head -1
 endef
 
