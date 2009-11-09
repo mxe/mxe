@@ -54,5 +54,5 @@ define $(PKG)_BUILD
         --enable-libiconv \
         --enable-msdblib \
         --with-tdsver=8.0
-    $(MAKE) -C '$(1)' install -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
