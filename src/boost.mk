@@ -34,6 +34,7 @@ $(PKG)_DEPS     := gcc zlib bzip2 expat
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/boost/files/boost/) | \
     $(SED) -n 's,.*boost_\([0-9][^>]*\)\.tar.*,\1,p' | \
+    grep -v beta | \
     tail -1
 endef
 
