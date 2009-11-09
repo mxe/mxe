@@ -22,8 +22,8 @@
 # WinPcap
 PKG             := winpcap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4_0_2
-$(PKG)_CHECKSUM := faa4e0cd73352d400d123be63b9c6c02c7e132d1
+$(PKG)_VERSION  := 4_1_1
+$(PKG)_CHECKSUM := f2f7dd0dc29dd3d89bfdab5a9ed192aa5ffa8eb0
 $(PKG)_SUBDIR   := winpcap
 $(PKG)_FILE     := WpcapSrc_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://www.winpcap.org/
@@ -38,13 +38,12 @@ endef
 
 define $(PKG)_BUILD
     mv '$(1)/Common' '$(1)/common'
-    -cp -p '$(1)/common/Devioctl.h'   '$(1)/common/devioctl.h'
-    -cp -p '$(1)/common/Ntddndis.h'   '$(1)/common/ntddndis.h'
-    -cp -p '$(1)/common/Ntddpack.h'   '$(1)/common/ntddpack.h'
-    -cp -p '$(1)/common/Packet32.h'   '$(1)/common/packet32.h'
-    -cp -p '$(1)/common/WpcapNames.h' '$(1)/common/wpcapnames.h'
-    $(SED) 's,(PCHAR)winpcap_hdr +=,winpcap_hdr +=,' -i '$(1)/Packet9x/DLL/Packet32.c'
-    cd '$(1)' && $(TARGET)-gcc -Icommon -O -c '$(1)/Packet9x/DLL/Packet32.c'
+    mv '$(1)/packetNtx/Dll/strsafe.h' '$(1)/packetNtx/Dll/StrSafe.h'
+    -cp '$(1)/common/Packet32.h' '$(1)/common/packet32.h'
+    $(SED) '/#include/ s,\\,/,g'        -i '$(1)/packetNtx/Dll/Packet32.c'
+    $(SED) 's,#include <Iphlpapi\.h>,,' -i '$(1)/packetNtx/Dll/Packet32.c'
+    $(SED) 's,#include <IPIfCons\.h>,,' -i '$(1)/packetNtx/Dll/Packet32.c'
+    cd '$(1)' && $(TARGET)-gcc -Icommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/Packet32.c'
     $(TARGET)-ar rc '$(1)/libpacket.a' '$(1)/Packet32.o'
     $(TARGET)-ranlib '$(1)/libpacket.a'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
