@@ -44,12 +44,12 @@ define $(PKG)_BUILD
     # Since we build only client libary, use bogus tzdata to satisfy configure.
     # We have to build the shared library, but we won't install it.
     cd '$(1)' && ./configure \
-      --prefix='$(PREFIX)/$(TARGET)' \
-      --host='$(TARGET)' \
-      --disable-rpath \
-      --without-readline \
-      --with-zlib \
-      --with-system-tzdata=/dev/null
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --host='$(TARGET)' \
+        --disable-rpath \
+        --without-readline \
+        --with-zlib \
+        --with-system-tzdata=/dev/null
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)'
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install enable_shared=no
     $(INSTALL) -m664 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
