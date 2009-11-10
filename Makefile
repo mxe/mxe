@@ -177,8 +177,7 @@ strip:
 	    '$(PREFIX)/$(TARGET)/info' \
 	    '$(PREFIX)/$(TARGET)/lib'/*.def \
 	    '$(PREFIX)/$(TARGET)/man' \
-	    '$(PREFIX)/$(TARGET)/sbin' \
-	    '$(PREFIX)/$(TARGET)/share'
+	    '$(PREFIX)/$(TARGET)/sbin'
 	-strip -Sx \
 	    '$(PREFIX)/bin'/* \
 	    '$(PREFIX)/libexec/gcc/$(TARGET)'/*/* \
