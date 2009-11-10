@@ -43,9 +43,6 @@ define $(PKG)_BUILD
     $(SED) 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i '$(1)/include/winnt.h'
     # fix incompatibilities with jpeg
     $(SED) 's,typedef unsigned char boolean;,,'           -i '$(1)/include/rpcndr.h'
-    # fix missing definitions for WinPcap and libdnet
-    $(SED) '1i\#include <wtypes.h>'                       -i '$(1)/include/iphlpapi.h'
-    $(SED) '1i\#include <wtypes.h>'                       -i '$(1)/include/wincrypt.h'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)'
     cp -rpv '$(1)/include' '$(1)/lib' '$(PREFIX)/$(TARGET)'
 endef

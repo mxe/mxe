@@ -41,9 +41,11 @@ define $(PKG)_BUILD
     $(SED) 's,cat /proc/sys/kernel/ostype,,g'             -i '$(1)/configure'
     $(SED) 's,test -d /usr/include/mingw,true,'           -i '$(1)/configure'
     $(SED) 's,Iphlpapi,iphlpapi,g'                        -i '$(1)/configure'
-    $(SED) 's,packet.lib,libpacket.a,'                    -i '$(1)/configure'
+    $(SED) 's,packet32\.h,Packet32.h,g'                   -i '$(1)/configure'
+    $(SED) 's,packet\.lib,libpacket.a,'                   -i '$(1)/configure'
     $(SED) 's,-lpacket,-lpacket -lws2_32,g'               -i '$(1)/configure'
     $(SED) 's,/usr/include,$(PREFIX)/$(TARGET)/include,g' -i '$(1)/configure'
+    $(SED) 's,#include <Ntddndis.h>,#include <ddk/ntddndis.h>,' -i '$(1)/src/eth-win32.c'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
