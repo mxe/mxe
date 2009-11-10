@@ -415,6 +415,12 @@ AR=$(CROSS)ar</pre>
     <pre>hg clone http://hg.savannah.nongnu.org/hgweb/mingw-cross-env mingw-cross-env</pre>
 
     <p>
+    To retrieve updates, run:
+    </p>
+
+    <pre>hg pull -u</pre>
+
+    <p>
     You can also browse the
     <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env">web repository</a>.
     </p>
@@ -637,15 +643,16 @@ pfexec python setup.py install</pre>
 
         <dd>
         remove all unused package files,
-        handy after a successful "make update"
+        handy after a successful update
         </dd>
 
     <dt>make update</dt>
 
         <dd>
+        for internal use only!
+        &ndash;
         update the version numbers of all packages,
         download the new versions and note their checksums
-        &ndash; use with caution!
         </dd>
 
     <dt>make dist</dt>
