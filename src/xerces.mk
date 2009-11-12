@@ -60,9 +60,9 @@ define $(PKG)_BUILD
         --enable-msgloader-inmemory \
         --disable-msgloader-iconv \
         --disable-msgloader-icu \
-        --with-curl \
+        --with-curl='$(PREFIX)/$(TARGET)' \
         --without-icu \
-        LIBS='-lws2_32'
+        LIBS="-lws2_32 `$(TARGET)-pkg-config --libs libcurl`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
