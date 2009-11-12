@@ -21,8 +21,8 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
---- qt-everywhere-opensource-src-4.6.0-beta1.native/configure	2009-10-29 14:02:18.000000000 +0100
-+++ qt-everywhere-opensource-src-4.6.0-beta1/configure	2009-10-29 14:00:46.000000000 +0100
+--- a/configure	2009-10-13 17:34:09.000000000 +0200
++++ b/configure	2009-11-11 14:49:32.000000000 +0100
 @@ -600,7 +600,7 @@
  rm -f "$outpath/config.tests/.qmake.cache"
  cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
@@ -40,7 +40,19 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  CFG_REDUCE_RELOCATIONS=no
  CFG_IPV6=auto
  CFG_NAS=no
-@@ -4374,7 +4375,10 @@
+@@ -4366,7 +4367,10 @@
+ #-------------------------------------------------------------------------------
+ 
+ # detect availability of float math.h functions
+-if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/floatmath "floatmath" $L_FLAGS $I_FLAGS $l_FLAGS; then
++if [ "$XPLATFORM" = "win32-g++" ]; then
++    echo "Using FLOATMATH for win32-g++ target"
++    CFG_USE_FLOATMATH=yes
++elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/floatmath "floatmath" $L_FLAGS $I_FLAGS $l_FLAGS; then
+     CFG_USE_FLOATMATH=yes
+ else
+     CFG_USE_FLOATMATH=no
+@@ -4374,7 +4378,10 @@
  
  # detect mmx support
  if [ "${CFG_MMX}" = "auto" ]; then
@@ -52,7 +64,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  	CFG_MMX=yes
      else
  	CFG_MMX=no
-@@ -4383,7 +4387,10 @@
+@@ -4383,7 +4390,10 @@
  
  # detect 3dnow support
  if [ "${CFG_3DNOW}" = "auto" ]; then
@@ -64,7 +76,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  	CFG_3DNOW=yes
      else
  	CFG_3DNOW=no
-@@ -4392,7 +4399,10 @@
+@@ -4392,7 +4402,10 @@
  
  # detect sse support
  if [ "${CFG_SSE}" = "auto" ]; then
@@ -76,7 +88,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  	CFG_SSE=yes
      else
  	CFG_SSE=no
-@@ -4401,13 +4411,26 @@
+@@ -4401,13 +4414,26 @@
  
  # detect sse2 support
  if [ "${CFG_SSE2}" = "auto" ]; then
@@ -104,7 +116,79 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  # check iWMMXt support
  if [ "$CFG_IWMMXT" = "yes" ]; then
      "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/iwmmxt "iwmmxt" $L_FLAGS $I_FLAGS $l_FLAGS "-mcpu=iwmmxt"
-@@ -4598,7 +4621,10 @@
+@@ -4433,7 +4459,10 @@
+     ZLIB_FORCED=yes
+ fi
+ if [ "$CFG_ZLIB" = "auto" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/zlib "zlib" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++       echo "We cannot test for system ZLIB since we are cross building for win32-g++, so we assume it is there."
++       CFG_ZLIB=system
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/zlib "zlib" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+        CFG_ZLIB=system
+     else
+        CFG_ZLIB=yes
+@@ -4450,7 +4479,10 @@
+ fi
+ # detect jpeg
+ if [ "$CFG_LIBJPEG" = "auto" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libjpeg "libjpeg" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++       echo "We cannot test for system LIBJPEG since we are cross building for win32-g++, so we assume it is there."
++       CFG_LIBJPEG=system
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libjpeg "libjpeg" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+        CFG_LIBJPEG=system
+     else
+        CFG_LIBJPEG=qt
+@@ -4477,7 +4509,10 @@
+ 
+ # detect tiff
+ if [ "$CFG_LIBTIFF" = "auto" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libtiff "libtiff" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++        echo "We cannot test for system LIBTIFF since we are cross building for win32-g++, so we assume it is there."
++        CFG_LIBTIFF=system
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libtiff "libtiff" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+         CFG_LIBTIFF=system
+     else
+         CFG_LIBTIFF=qt
+@@ -4494,7 +4529,10 @@
+ fi
+ # detect mng
+ if [ "$CFG_LIBMNG" = "auto" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libmng "libmng" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++       echo "We cannot test for system LIBMNG since we are cross building for win32-g++, so we assume it is there."
++       CFG_LIBMNG=system
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libmng "libmng" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+        CFG_LIBMNG=system
+     else
+        CFG_LIBMNG=qt
+@@ -4503,7 +4541,10 @@
+ 
+ # detect png
+ if [ "$CFG_LIBPNG" = "auto" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libpng "libpng" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++       echo "We cannot test for system LIBPNG since we are cross building for win32-g++, so we assume it is there."
++       CFG_LIBPNG=system
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libpng "libpng" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+        CFG_LIBPNG=system
+     else
+        CFG_LIBPNG=qt
+@@ -4570,7 +4611,10 @@
+             fi
+             ;;
+         psql)
+-            if [ "$CFG_SQL_psql" != "no" ]; then
++            if [ "$XPLATFORM" = "win32-g++" ]; then
++                echo "We cannot test for PostgreSQL support since we are cross building for win32-g++, so we assume it is there."
++                CFG_SQL_psql=plugin
++            elif [ "$CFG_SQL_psql" != "no" ]; then
+                 if "$WHICH" pg_config >/dev/null 2>&1; then
+                     QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null`
+                     QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null`
+@@ -4598,7 +4642,10 @@
          ;;
          odbc)
              if [ "$CFG_SQL_odbc" != "no" ]; then
@@ -116,7 +200,47 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                      if [ "$CFG_SQL_odbc" = "auto" ]; then
                          CFG_SQL_odbc=plugin
                      fi
-@@ -4956,7 +4982,9 @@
+@@ -4643,7 +4690,12 @@
+             ;;
+         tds)
+             if [ "$CFG_SQL_tds" != "no" ]; then
+-                if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/tds "TDS" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++                if [ "$XPLATFORM" = "win32-g++" ]; then
++                    echo "We cannot test for TDS since we are cross building for win32-g++, so we assume it is there."
++                    if [ "CFG_SQL_tds" = "auto" ]; then
++                        CFG_SQL_tds=plugin
++                    fi
++                elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/tds "TDS" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+                     if [ "$CFG_SQL_tds" = "auto" ]; then
+                         CFG_SQL_tds=plugin
+                     fi
+@@ -4725,7 +4777,13 @@
+                         QT_CFLAGS_SQLITE=`$PKG_CONFIG --cflags sqlite3 2>/dev/null`
+                         QT_LFLAGS_SQLITE=`$PKG_CONFIG --libs sqlite3 2>/dev/null`
+                     fi
+-                    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sqlite "SQLite" $QT_LFLAGS_SQLITE $L_FLAGS $QT_CFLAGS_SQLITE $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++                    if [ "$XPLATFORM" = "win32-g++" ]; then
++                        echo "We cannot test for system sqlite since we are cross building for win32-g++, so we assume it is there."
++                        if [ "$CFG_SQL_sqlite" = "auto" ]; then
++                            CFG_SQL_sqlite=plugin
++                        fi
++                        QMAKE_CONFIG="$QMAKE_CONFIG system-sqlite"
++                    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sqlite "SQLite" $QT_LFLAGS_SQLITE $L_FLAGS $QT_CFLAGS_SQLITE $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+                         if [ "$CFG_SQL_sqlite" = "auto" ]; then
+                             CFG_SQL_sqlite=plugin
+                         fi
+@@ -4796,7 +4854,9 @@
+ 
+ # auto-detect iconv(3) support
+ if [ "$CFG_ICONV" != "no" ]; then
+-    if [ "$PLATFORM_QWS" = "yes" ]; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++        CFG_ICONV=no
++    elif [ "$PLATFORM_QWS" = "yes" ]; then
+ 	CFG_ICONV=no
+     elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" "$OPT_VERBOSE" "$relpath" "$outpath" "config.tests/unix/iconv" "POSIX iconv" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+         CFG_ICONV=yes
+@@ -4956,7 +5016,9 @@
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
@@ -127,7 +251,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5030,7 +5058,9 @@
+@@ -5030,7 +5092,9 @@
              echo " You might need to modify the include and library search paths by editing"
              echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
              echo " ${XQMAKESPEC}."
@@ -138,7 +262,42 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -6016,6 +6046,7 @@
+@@ -5531,7 +5595,10 @@
+ fi
+ 
+ HAVE_STL=no
+-if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/stl "STL" $L_FLAGS $I_FLAGS $l_FLAGS; then
++if [ "$XPLATFORM" = "win32-g++" ]; then
++    echo "Using STL for win32-g++ target"
++    HAVE_STL=yes
++elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/stl "STL" $L_FLAGS $I_FLAGS $l_FLAGS; then
+     HAVE_STL=yes
+ fi
+ 
+@@ -5553,7 +5620,10 @@
+ 
+ # find if the platform supports IPv6
+ if [ "$CFG_IPV6" != "no" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/ipv6 "IPv6" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++        echo "Using IPV6 for win32-g++ target"
++        CFG_IPV6=yes
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/ipv6 "IPv6" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+         CFG_IPV6=yes
+     else
+         if [ "$CFG_IPV6" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
+@@ -5684,7 +5754,9 @@
+ 
+ # detect OpenSSL
+ if [ "$CFG_OPENSSL" != "no" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/openssl "OpenSSL" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++        echo "We cannot test for system CFG_OPENSSL since we are cross building for win32-g++, so we assume it is there."
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/openssl "OpenSSL" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+         if [ "$CFG_OPENSSL" = "auto" ]; then
+             CFG_OPENSSL=yes
+         fi
+@@ -6016,6 +6088,7 @@
  [ "$CFG_3DNOW" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG 3dnow"
  [ "$CFG_SSE" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse"
  [ "$CFG_SSE2" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse2"
@@ -146,7 +305,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  [ "$CFG_IWMMXT" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG iwmmxt"
  [ "$PLATFORM_MAC" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG $CFG_MAC_ARCHS"
  if [ "$CFG_IPV6" = "yes" ]; then
-@@ -6096,11 +6127,12 @@
+@@ -6096,11 +6169,12 @@
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -164,7 +323,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  if [ "$CFG_ZLIB" = "yes" ]; then
      QT_CONFIG="$QT_CONFIG zlib"
  elif [ "$CFG_ZLIB" = "system" ]; then
-@@ -7025,7 +7057,7 @@
+@@ -7025,7 +7099,7 @@
  
  cat >>"$QTCONFIG.tmp" <<EOF
  #configuration
@@ -173,7 +332,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QT_ARCH = $CFG_ARCH
  QT_EDITION = $Edition
  QT_CONFIG += $QT_CONFIG
-@@ -7297,7 +7329,7 @@
+@@ -7117,7 +7191,7 @@
+ if [ '!' -z "$OPENSSL_LIBS" ]; then
+     echo "OPENSSL_LIBS = $OPENSSL_LIBS" >> "$CACHEFILE.tmp"
+ elif [ "$CFG_OPENSSL" = "linked" ]; then
+-    echo "OPENSSL_LIBS = -lssl -lcrypto" >> "$CACHEFILE.tmp"
++    echo "OPENSSL_LIBS = `$PKG_CONFIG --libs openssl`" >> "$CACHEFILE.tmp"
+ fi
+ 
+ #dump in the SDK info
+@@ -7297,7 +7371,7 @@
  fi
  echo "STL support ......... $CFG_STL"
  echo "PCH support ......... $CFG_PRECOMPILE"
@@ -182,7 +350,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  if [ "${CFG_ARCH}" = "arm" ]; then
      echo "iWMMXt support ...... ${CFG_IWMMXT}"
  fi
-@@ -7610,7 +7642,11 @@
+@@ -7610,7 +7684,11 @@
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
@@ -195,9 +363,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          *s60main/s60main.pro) continue ;;
          */qmake/qmake.pro) continue ;;
          *tools/bootstrap*|*tools/moc*|*tools/rcc*|*tools/uic*) SPEC=$QMAKESPEC ;;
---- qt-everywhere-opensource-src-4.6.0-tp1.native/mkspecs/win32-g++/qmake.conf	2009-09-07 13:00:28.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-tp1/mkspecs/win32-g++/qmake.conf	2009-10-02 09:57:20.000000000 +0200
-@@ -3,23 +3,30 @@
+--- a/mkspecs/win32-g++/qmake.conf	2009-10-13 17:34:08.000000000 +0200
++++ b/mkspecs/win32-g++/qmake.conf	2009-11-11 23:30:46.000000000 +0100
+@@ -3,23 +3,31 @@
  #
  # Written for MinGW
  #
@@ -226,10 +394,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMAKE_YACCFLAGS		= -d
  QMAKE_CFLAGS		=
 +QMAKE_CFLAGS		+= -isystem HOSTPLATFORMINCLUDE
++QMAKE_CFLAGS		+= -pipe
  QMAKE_CFLAGS_DEPS	= -M
  QMAKE_CFLAGS_WARN_ON	= -Wall
  QMAKE_CFLAGS_WARN_OFF	= -w
-@@ -27,7 +34,7 @@
+@@ -27,7 +35,7 @@
  QMAKE_CFLAGS_DEBUG	= -g
  QMAKE_CFLAGS_YACC	= -Wno-unused -Wno-parentheses
  
@@ -238,7 +407,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMAKE_CXXFLAGS		= $$QMAKE_CFLAGS
  QMAKE_CXXFLAGS_DEPS	= $$QMAKE_CFLAGS_DEPS
  QMAKE_CXXFLAGS_WARN_ON	= $$QMAKE_CFLAGS_WARN_ON
-@@ -42,6 +49,7 @@
+@@ -42,6 +50,7 @@
  QMAKE_CXXFLAGS_EXCEPTIONS_OFF = -fno-exceptions
  
  QMAKE_INCDIR		=
@@ -246,7 +415,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMAKE_INCDIR_QT		= $$[QT_INSTALL_HEADERS]
  QMAKE_LIBDIR_QT		= $$[QT_INSTALL_LIBS]
  
-@@ -50,8 +58,8 @@
+@@ -50,8 +59,8 @@
  QMAKE_RUN_CXX		= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $obj $src
  QMAKE_RUN_CXX_IMP	= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
  
@@ -257,7 +426,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMAKE_LFLAGS		= -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
  QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads -Wl
  QMAKE_LFLAGS_EXCEPTIONS_OFF =
-@@ -72,15 +80,18 @@
+@@ -72,15 +81,18 @@
  QMAKE_LIBS_COMPAT       = -ladvapi32 -lshell32 -lcomdlg32 -luser32 -lgdi32 -lws2_32
  QMAKE_LIBS_QT_ENTRY     = -lmingw32 -lqtmain
  
@@ -278,7 +447,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      QMAKE_CHK_DIR_EXISTS = test -d
  } else {
  	QMAKE_COPY		= copy /y
-@@ -92,15 +103,15 @@
+@@ -92,15 +104,16 @@
      QMAKE_CHK_DIR_EXISTS	= if not exist
  }
  
@@ -303,6 +472,18 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 +QMAKE_STRIP		= HOSTPLATFORMPREFIX-strip
  QMAKE_STRIPFLAGS_LIB 	+= --strip-unneeded
 -load(qt_config)
++PKG_CONFIG		= HOSTPLATFORMPREFIX-pkg-config
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-10-13 17:34:08.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-beta1/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-10-25 13:17:35.000000000 +0100
+@@ -16,7 +16,7 @@
+     include($$QT_SOURCE_TREE/src/qbase.pri)
+     INSTALLS =
+     DESTDIR = $$OLDDESTDIR
+-    PRECOMPILED_HEADER = $$PWD/../WebKit/qt/WebKit_pch.h
++    PRECOMPILED_HEADER = $$PWD/../../webkit/WebKit/qt/WebKit_pch.h
+     DEFINES *= NDEBUG
+ }
+ 
 --- qt-everywhere-opensource-src-4.6.0-beta1.native/src/3rdparty/webkit/JavaScriptCore/jsc.pro	2009-10-13 17:34:08.000000000 +0200
 +++ qt-everywhere-opensource-src-4.6.0-beta1/src/3rdparty/webkit/JavaScriptCore/jsc.pro	2009-10-25 20:23:25.000000000 +0100
 @@ -20,6 +20,13 @@
@@ -330,14 +511,140 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  
  contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols 
  unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
---- qt-everywhere-opensource-src-4.6.0-beta1.native/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-10-13 17:34:08.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-beta1/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-10-25 13:17:35.000000000 +0100
-@@ -16,7 +16,7 @@
-     include($$QT_SOURCE_TREE/src/qbase.pri)
-     INSTALLS =
-     DESTDIR = $$OLDDESTDIR
--    PRECOMPILED_HEADER = $$PWD/../WebKit/qt/WebKit_pch.h
-+    PRECOMPILED_HEADER = $$PWD/../../webkit/WebKit/qt/WebKit_pch.h
-     DEFINES *= NDEBUG
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/src/plugins/sqldrivers/tds/main.cpp	2009-10-13 17:34:08.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-beta1/src/plugins/sqldrivers/tds/main.cpp	2009-10-31 21:37:19.000000000 +0100
+@@ -47,6 +47,7 @@
+ #define _WINSCARD_H_
+ #include <windows.h>
+ #endif
++#define Q_USE_SYBASE
+ #include "../../../sql/drivers/tds/qsql_tds.h"
+ 
+ QT_BEGIN_NAMESPACE
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/src/plugins/sqldrivers/tds/tds.pro	2009-10-13 17:34:08.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-beta1/src/plugins/sqldrivers/tds/tds.pro	2009-11-01 22:31:16.000000000 +0100
+@@ -5,11 +5,6 @@
+ SOURCES		= main.cpp \
+ 		  ../../../sql/drivers/tds/qsql_tds.cpp
+ 
+-unix:!contains( LIBS, .*sybdb.* ):LIBS 	*= -lsybdb
+-
+-win32 {
+-    !win32-borland:LIBS *= -lNTWDBLIB
+-    win32-borland:LIBS 	*= $(BCB)/lib/PSDK/NTWDBLIB.LIB
+-}
+-
++#Patched to use FreeTDS targetting MinGW
++LIBS *=  -lsybdb -liconv -lws2_32
+ include(../qsqldriverbase.pri)
+--- a/src/sql/drivers/tds/qsql_tds.cpp	2009-10-13 17:34:08.000000000 +0200
++++ b/src/sql/drivers/tds/qsql_tds.cpp	2009-11-11 14:45:10.000000000 +0100
+@@ -47,7 +47,8 @@
+ #else
+ #define Q_USE_SYBASE
+ #endif
+-
++//Force SYBASE because we use FreeTDS
++#define Q_USE_SYBASE
+ #include "qsql_tds.h"
+ 
+ #include <qvariant.h>
+@@ -164,13 +165,13 @@
+ 
+ extern "C" {
+ static int CS_PUBLIC qTdsMsgHandler (DBPROCESS* dbproc,
+-                            DBINT /*msgno*/,
++                            DBINT msgno,
+                             int msgstate,
+                             int severity,
+                             char* msgtext,
+-                            char* /*srvname*/,
++                            char* srvname,
+                             char* /*procname*/,
+-                            int /*line*/)
++                            int line)
+ {
+     QTDSResultPrivate* p = errs()->value(dbproc);
+ 
+@@ -181,9 +182,20 @@
+     }
+ 
+     if (severity > 0) {
+-        QString errMsg = QString::fromLatin1("%1 (%2)").arg(QString::fromAscii(msgtext)).arg(
+-                                    msgstate);
++        QString errMsg = QString::fromLatin1("%1 (Msg %2, Level %3, State %4, Server %5, Line %6)")
++                         .arg(QString::fromAscii(msgtext))
++                         .arg(msgno)
++                         .arg(severity)
++                         .arg(msgstate)
++                         .arg(QString::fromAscii(srvname))
++                         .arg(line);
+         p->addErrorMsg(errMsg);
++        if (severity > 10) {
++            // Severe messages are really errors in the sense of lastError
++            errMsg = p->getErrorMsgs();
++            p->lastError = qMakeError(errMsg, QSqlError::UnknownError, msgno);
++            p->clearErrorMsgs();
++        }
+     }
+ 
+     return INT_CANCEL;
+--- qt-everywhere-opensource-src-4.6.0-beta1.native/src/sql/drivers/tds/qsql_tds.h	2009-10-13 17:34:08.000000000 +0200
++++ qt-everywhere-opensource-src-4.6.0-beta1/src/sql/drivers/tds/qsql_tds.h	2009-10-31 21:48:13.000000000 +0100
+@@ -48,7 +48,8 @@
+ 
+ #ifdef Q_OS_WIN32
+ #define WIN32_LEAN_AND_MEAN
+-#define DBNTWIN32 // indicates 32bit windows dblib
++//#define DBNTWIN32 // indicates 32bit windows dblib
++#include <winsock2.h>
+ #include <QtCore/qt_windows.h>
+ #include <sqlfront.h>
+ #include <sqldb.h>
+diff -urN a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
+--- a/src/corelib/tools/tools.pri	2009-10-13 17:34:08.000000000 +0200
++++ b/src/corelib/tools/tools.pri	2009-11-11 21:50:19.000000000 +0100
+@@ -96,7 +96,7 @@
+         ../3rdparty/zlib/zutil.c
+ } else:!contains(QT_CONFIG, no-zlib) {
+    unix:LIBS_PRIVATE += -lz
+-#  win32:LIBS += libz.lib
++   win32:LIBS += -lz
  }
  
+ DEFINES += HB_EXPORT=Q_CORE_EXPORT
+diff -urN a/src/gui/image/image.pri b/src/gui/image/image.pri
+--- a/src/gui/image/image.pri	2009-10-13 17:34:08.000000000 +0200
++++ b/src/gui/image/image.pri	2009-11-11 22:27:26.000000000 +0100
+@@ -94,7 +94,10 @@
+ 
+     contains(QT_CONFIG, system-png) {
+         unix:LIBS_PRIVATE  += -lpng
+-        win32:LIBS += libpng.lib
++        win32:LIBS += -lpng
++        contains(QT_CONFIG, system-zlib) {
++            win32:LIBS += -lz
++        }
+     } else {
+         !isEqual(QT_ARCH, i386):!isEqual(QT_ARCH, x86_64):DEFINES += PNG_NO_ASSEMBLER_CODE
+         INCLUDEPATH  += ../3rdparty/libpng ../3rdparty/zlib
+diff -urN a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
+--- a/src/gui/painting/painting.pri	2009-10-13 17:34:08.000000000 +0200
++++ b/src/gui/painting/painting.pri	2009-11-11 22:28:30.000000000 +0100
+@@ -384,6 +384,6 @@
+    INCLUDEPATH += ../3rdparty/zlib
+ } else:!contains(QT_CONFIG, no-zlib) {
+    unix:LIBS_PRIVATE += -lz
+-#  win32:LIBS += libz.lib
++   win32:LIBS += -lz
+ }
+ 
+diff -urN a/src/svg/svg.pro b/src/svg/svg.pro
+--- a/src/svg/svg.pro	2009-10-13 17:34:08.000000000 +0200
++++ b/src/svg/svg.pro	2009-11-11 21:45:17.000000000 +0100
+@@ -47,4 +47,5 @@
+    INCLUDEPATH += ../3rdparty/zlib
+ } else:!contains(QT_CONFIG, no-zlib) {
+    unix:LIBS_PRIVATE += -lz
++   win32:LIBS += -lz
+ }

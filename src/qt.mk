@@ -30,7 +30,7 @@ $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++
+$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpng
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
@@ -117,6 +117,7 @@ define $(PKG)_BUILD
         -host-arch i386 \
         -host-little-endian \
         -little-endian \
+        -force-pkg-config \
         -release \
         -exceptions \
         -static \
@@ -137,12 +138,15 @@ define $(PKG)_BUILD
         -nomake examples \
         -plugin-sql-sqlite \
         -plugin-sql-odbc \
-        -qt-zlib \
+        -plugin-sql-psql \
+        -plugin-sql-tds \
+        -system-zlib \
         -qt-gif \
         -qt-libtiff \
-        -qt-libpng \
+        -system-libpng \
         -qt-libmng \
         -qt-libjpeg \
+        -openssl-linked \
         -v
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
