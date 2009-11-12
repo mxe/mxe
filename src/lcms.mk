@@ -23,9 +23,9 @@
 # lcms
 PKG             := lcms
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.17
-$(PKG)_CHECKSUM := 083eb02890048f843803a5974914e54b5e034493
-$(PKG)_SUBDIR   := lcms-$($(PKG)_VERSION)
+$(PKG)_VERSION  := 1.18a
+$(PKG)_CHECKSUM := 657837dcc3992a0b0aa538c4b5a4ead82a7cbbb3
+$(PKG)_SUBDIR   := lcms-$(subst a,,$($(PKG)_VERSION))
 $(PKG)_FILE     := lcms-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.littlecms.com/
 $(PKG)_URL      := http://www.littlecms.com/$($(PKG)_FILE)
