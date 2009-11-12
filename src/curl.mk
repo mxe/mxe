@@ -37,7 +37,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,-I@includedir@,-I@includedir@ -DCURL_STATICLIB,' -i '$(1)/curl-config.in'
+    $(SED) '/^#endif/ i#define CURL_STATICLIB' -i '$(1)/include/curl/curlbuild.h.in'
     $(SED) 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i '$(1)/configure'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
