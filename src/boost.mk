@@ -46,6 +46,7 @@ define $(PKG)_BUILD
     cd '$(1)/tools/jam/src' && ./build.sh
     cd '$(1)' && tools/jam/src/bin.*/bjam \
         -j '$(JOBS)' \
+        --ignore-site-config \
         --user-config=user-config.jam \
         target-os=windows \
         threading=multi \
