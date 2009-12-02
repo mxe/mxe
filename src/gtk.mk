@@ -21,7 +21,7 @@
 
 # GTK+
 PKG             := gtk
-$(PKG)_IGNORE   := 2.18.4
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.19.0
 $(PKG)_CHECKSUM := b7df96eea0b01f7973c9a2e0a0d4e36a63b0feac
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
@@ -34,6 +34,7 @@ define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/cgit/gtk+/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
+    grep -v '2\.18\.' | \
     head -1
 endef
 
