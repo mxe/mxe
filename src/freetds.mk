@@ -50,12 +50,9 @@ define $(PKG)_BUILD
         --disable-rpath \
         --disable-dependency-tracking \
         --disable-shared \
-        --disable-apps \
-        --disable-server \
-        --disable-pool \
         --enable-static \
         --enable-libiconv \
         --enable-msdblib \
         --with-tdsver=8.0
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
