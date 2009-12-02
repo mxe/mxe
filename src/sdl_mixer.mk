@@ -21,7 +21,7 @@
 
 # SDL_mixer
 PKG             := sdl_mixer
-$(PKG)_IGNORE   := 1.2.9
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.10
 $(PKG)_CHECKSUM := ee644e805aca76c0ad368c3697206f7ee3266a33
 $(PKG)_SUBDIR   := SDL_mixer-$($(PKG)_VERSION)
