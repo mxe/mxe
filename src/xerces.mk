@@ -36,6 +36,7 @@ define $(PKG)_UPDATE
     grep '<a name="' | \
     $(SED) -n 's,.*<a name="Xerces-C_\([0-9][^"]*\)".*,\1,p' | \
     $(SED) 's,_,.,g' | \
+    grep -v rc | \
     head -1
 endef
 
