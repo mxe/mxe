@@ -35,6 +35,7 @@ define $(PKG)_UPDATE
     wget -q -O- 'http://libpng.git.sourceforge.net/git/gitweb.cgi?p=libpng/libpng;a=tags' | \
     grep '<a class="list name"' | \
     $(SED) -n 's,.*<a[^>]*>v\([0-9][^>]*\)<.*,\1,p' | \
+    grep -v alpha | \
     grep -v beta | \
     grep -v rc | \
     head -1
