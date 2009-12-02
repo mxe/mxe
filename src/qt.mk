@@ -35,8 +35,7 @@ $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpn
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
     grep '<li><a href="/qt/qt/commit/' | \
-    $(SED) -n 's,.*<a[^>]*>v\([0-9][^>]*\)<.*,\1,p' | \
-    grep -v tp | \
+    $(SED) -n 's,.*<a[^>]*>v\([0-9][^>-]*\)<.*,\1,p' | \
     tail -1
 endef
 
