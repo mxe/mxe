@@ -22,12 +22,12 @@
 # MinGW Windows API
 PKG             := w32api
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.13
-$(PKG)_CHECKSUM := 5eb7d8ec0fe032a92bea3a2c8282a78df2f1793c
+$(PKG)_VERSION  := 3.14
+$(PKG)_CHECKSUM := f1c81109796c4c87243b074ebb5f85a5552e0219
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := w32api-$($(PKG)_VERSION)-mingw32-dev.tar.gz
 $(PKG)_WEBSITE  := http://mingw.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW API for MS-Windows/Current Release_ w32api-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW API for MS-Windows/w32api-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
