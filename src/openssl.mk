@@ -49,7 +49,7 @@ define $(PKG)_BUILD
         zlib \
         no-shared \
         --prefix='$(PREFIX)/$(TARGET)'
-    make -C '$(1)' install -j 1 \
+    $(MAKE) -C '$(1)' install -j 1 \
         CC='$(TARGET)-gcc' \
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar rcu'
