@@ -22,7 +22,7 @@
 
 # freeglut
 PKG             := freeglut
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 2.6.0-rc3
 $(PKG)_VERSION  := 2.6.0-rc1
 $(PKG)_CHECKSUM := 0bf40f0134695a95032de8cf8305c13dc8d654e5
 $(PKG)_SUBDIR   := freeglut-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
