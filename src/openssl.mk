@@ -30,7 +30,7 @@ $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.openssl.org/
 $(PKG)_URL      := http://www.openssl.org/source/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.openssl.org/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := gcc zlib libgcrypt
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.openssl.org/source/' | \
