@@ -44,6 +44,12 @@ define $(PKG)_BUILD
     # http://wagner.pp.ru/~vitus/articles/openssl-mingw.html
     $(SED) 's,^$$IsMK1MF=1.*,,' -i '$(1)'/Configure
     $(SED) 's,static type _hide_##name,type _hide_##name,' -i '$(1)'/e_os2.h
+
+    # use winsock2 instead of winsock
+    $(SED) 's,wsock32,ws2_32,g' -i '$(1)'/Configure
+    find '$(1)' -type f -exec \
+        $(SED) 's,winsock\.h,winsock2.h,g' -i {} \;
+
     cd '$(1)' && CC='$(TARGET)-gcc' ./Configure \
         mingw \
         zlib \

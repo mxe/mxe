@@ -40,7 +40,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # Beware --with-gnutls broken detection.
+    # package uses winsock2.h, so it should link to ws2_32 instead of wsock32
+    $(SED) 's,wsock32,ws2_32,g' -i '$(1)'/configure
+
+    # beware --with-gnutls broken detection
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
