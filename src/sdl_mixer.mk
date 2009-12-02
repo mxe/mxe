@@ -22,8 +22,8 @@
 # SDL_mixer
 PKG             := sdl_mixer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.10
-$(PKG)_CHECKSUM := ee644e805aca76c0ad368c3697206f7ee3266a33
+$(PKG)_VERSION  := 1.2.11
+$(PKG)_CHECKSUM := ef5d45160babeb51eafa7e4019cec38324ee1a5d
 $(PKG)_SUBDIR   := SDL_mixer-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_mixer-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_mixer/

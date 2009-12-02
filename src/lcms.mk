@@ -23,8 +23,8 @@
 # lcms
 PKG             := lcms
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.18a
-$(PKG)_CHECKSUM := 657837dcc3992a0b0aa538c4b5a4ead82a7cbbb3
+$(PKG)_VERSION  := 1.19
+$(PKG)_CHECKSUM := d5b075ccffc0068015f74f78e4bc39138bcfe2d4
 $(PKG)_SUBDIR   := lcms-$(subst a,,$($(PKG)_VERSION))
 $(PKG)_FILE     := lcms-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.littlecms.com/
