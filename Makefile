@@ -91,8 +91,7 @@ DOWNLOAD_PKG_ARCHIVE = \
 SOURCEFORGE_FILES = \
     wget -q -O- '$(1)' | \
     grep 'title="/' | \
-    $(SED) -n 's,.*title="\(/[^:]*\).*released on \([^ "]* [^ "]* [^ "]*\)",\2 \1,p' | \
-    while read d1 d2 d3 url; do echo "`date -d "$$d1 $$d2 $$d3" +%Y-%m-%d`" "$$url"; done | \
+    $(SED) -n 's,.*title="\(/[^:]*\).*released on \([0-9-]*\)",\2 \1,p' | \
     sort | \
     $(SED) 's,^[^ ]* ,,'
 
