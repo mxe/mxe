@@ -21,9 +21,10 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
---- a/configure	2009-10-13 17:34:09.000000000 +0200
-+++ b/configure	2009-11-11 14:49:32.000000000 +0100
-@@ -600,7 +600,7 @@
+diff -urN a/configure b/configure
+--- a/configure	2009-11-11 14:15:38.000000000 +0100
++++ b/configure	2009-11-17 12:21:07.000000000 +0100
+@@ -601,7 +601,7 @@
  rm -f "$outpath/config.tests/.qmake.cache"
  cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
  
@@ -32,7 +33,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMakeVar add decorations "default windows styled"
  QMakeVar add mouse-drivers "pc"
  if [ "$UNAME_SYSTEM" = "Linux" ] ; then
-@@ -725,6 +725,7 @@
+@@ -727,6 +727,7 @@
  CFG_3DNOW=auto
  CFG_SSE=auto
  CFG_SSE2=auto
@@ -40,7 +41,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  CFG_REDUCE_RELOCATIONS=no
  CFG_IPV6=auto
  CFG_NAS=no
-@@ -4366,7 +4367,10 @@
+@@ -4420,7 +4421,10 @@
  #-------------------------------------------------------------------------------
  
  # detect availability of float math.h functions
@@ -52,7 +53,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      CFG_USE_FLOATMATH=yes
  else
      CFG_USE_FLOATMATH=no
-@@ -4374,7 +4378,10 @@
+@@ -4428,7 +4432,10 @@
  
  # detect mmx support
  if [ "${CFG_MMX}" = "auto" ]; then
@@ -64,7 +65,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  	CFG_MMX=yes
      else
  	CFG_MMX=no
-@@ -4383,7 +4390,10 @@
+@@ -4437,7 +4444,10 @@
  
  # detect 3dnow support
  if [ "${CFG_3DNOW}" = "auto" ]; then
@@ -76,7 +77,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  	CFG_3DNOW=yes
      else
  	CFG_3DNOW=no
-@@ -4392,7 +4402,10 @@
+@@ -4446,7 +4456,10 @@
  
  # detect sse support
  if [ "${CFG_SSE}" = "auto" ]; then
@@ -88,7 +89,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  	CFG_SSE=yes
      else
  	CFG_SSE=no
-@@ -4401,13 +4414,26 @@
+@@ -4455,13 +4468,26 @@
  
  # detect sse2 support
  if [ "${CFG_SSE2}" = "auto" ]; then
@@ -116,7 +117,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  # check iWMMXt support
  if [ "$CFG_IWMMXT" = "yes" ]; then
      "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/iwmmxt "iwmmxt" $L_FLAGS $I_FLAGS $l_FLAGS "-mcpu=iwmmxt"
-@@ -4433,7 +4459,10 @@
+@@ -4487,7 +4513,10 @@
      ZLIB_FORCED=yes
  fi
  if [ "$CFG_ZLIB" = "auto" ]; then
@@ -128,7 +129,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         CFG_ZLIB=system
      else
         CFG_ZLIB=yes
-@@ -4450,7 +4479,10 @@
+@@ -4504,7 +4533,10 @@
  fi
  # detect jpeg
  if [ "$CFG_LIBJPEG" = "auto" ]; then
@@ -140,7 +141,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         CFG_LIBJPEG=system
      else
         CFG_LIBJPEG=qt
-@@ -4477,7 +4509,10 @@
+@@ -4531,7 +4563,10 @@
  
  # detect tiff
  if [ "$CFG_LIBTIFF" = "auto" ]; then
@@ -152,7 +153,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          CFG_LIBTIFF=system
      else
          CFG_LIBTIFF=qt
-@@ -4494,7 +4529,10 @@
+@@ -4548,7 +4583,10 @@
  fi
  # detect mng
  if [ "$CFG_LIBMNG" = "auto" ]; then
@@ -164,7 +165,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         CFG_LIBMNG=system
      else
         CFG_LIBMNG=qt
-@@ -4503,7 +4541,10 @@
+@@ -4557,7 +4595,10 @@
  
  # detect png
  if [ "$CFG_LIBPNG" = "auto" ]; then
@@ -176,7 +177,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         CFG_LIBPNG=system
      else
         CFG_LIBPNG=qt
-@@ -4570,7 +4611,10 @@
+@@ -4624,7 +4665,10 @@
              fi
              ;;
          psql)
@@ -188,7 +189,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                  if "$WHICH" pg_config >/dev/null 2>&1; then
                      QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null`
                      QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null`
-@@ -4598,7 +4642,10 @@
+@@ -4652,7 +4696,10 @@
          ;;
          odbc)
              if [ "$CFG_SQL_odbc" != "no" ]; then
@@ -200,7 +201,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                      if [ "$CFG_SQL_odbc" = "auto" ]; then
                          CFG_SQL_odbc=plugin
                      fi
-@@ -4643,7 +4690,12 @@
+@@ -4697,7 +4744,12 @@
              ;;
          tds)
              if [ "$CFG_SQL_tds" != "no" ]; then
@@ -214,7 +215,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                      if [ "$CFG_SQL_tds" = "auto" ]; then
                          CFG_SQL_tds=plugin
                      fi
-@@ -4725,7 +4777,13 @@
+@@ -4779,7 +4831,13 @@
                          QT_CFLAGS_SQLITE=`$PKG_CONFIG --cflags sqlite3 2>/dev/null`
                          QT_LFLAGS_SQLITE=`$PKG_CONFIG --libs sqlite3 2>/dev/null`
                      fi
@@ -229,7 +230,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                          if [ "$CFG_SQL_sqlite" = "auto" ]; then
                              CFG_SQL_sqlite=plugin
                          fi
-@@ -4796,7 +4854,9 @@
+@@ -4850,7 +4908,9 @@
  
  # auto-detect iconv(3) support
  if [ "$CFG_ICONV" != "no" ]; then
@@ -240,7 +241,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  	CFG_ICONV=no
      elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" "$OPT_VERBOSE" "$relpath" "$outpath" "config.tests/unix/iconv" "POSIX iconv" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
          CFG_ICONV=yes
-@@ -4956,7 +5016,9 @@
+@@ -5010,7 +5070,9 @@
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
@@ -251,7 +252,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5030,7 +5092,9 @@
+@@ -5084,7 +5146,9 @@
              echo " You might need to modify the include and library search paths by editing"
              echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
              echo " ${XQMAKESPEC}."
@@ -262,7 +263,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -5531,7 +5595,10 @@
+@@ -5585,7 +5649,10 @@
  fi
  
  HAVE_STL=no
@@ -274,7 +275,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      HAVE_STL=yes
  fi
  
-@@ -5553,7 +5620,10 @@
+@@ -5607,7 +5674,10 @@
  
  # find if the platform supports IPv6
  if [ "$CFG_IPV6" != "no" ]; then
@@ -286,7 +287,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          CFG_IPV6=yes
      else
          if [ "$CFG_IPV6" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
-@@ -5684,7 +5754,9 @@
+@@ -5738,7 +5808,9 @@
  
  # detect OpenSSL
  if [ "$CFG_OPENSSL" != "no" ]; then
@@ -297,7 +298,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          if [ "$CFG_OPENSSL" = "auto" ]; then
              CFG_OPENSSL=yes
          fi
-@@ -6016,6 +6088,7 @@
+@@ -6083,6 +6155,7 @@
  [ "$CFG_3DNOW" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG 3dnow"
  [ "$CFG_SSE" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse"
  [ "$CFG_SSE2" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse2"
@@ -305,7 +306,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  [ "$CFG_IWMMXT" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG iwmmxt"
  [ "$PLATFORM_MAC" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG $CFG_MAC_ARCHS"
  if [ "$CFG_IPV6" = "yes" ]; then
-@@ -6096,11 +6169,12 @@
+@@ -6163,11 +6236,12 @@
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -323,7 +324,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  if [ "$CFG_ZLIB" = "yes" ]; then
      QT_CONFIG="$QT_CONFIG zlib"
  elif [ "$CFG_ZLIB" = "system" ]; then
-@@ -7025,7 +7099,7 @@
+@@ -7098,7 +7172,7 @@
  
  cat >>"$QTCONFIG.tmp" <<EOF
  #configuration
@@ -332,7 +333,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QT_ARCH = $CFG_ARCH
  QT_EDITION = $Edition
  QT_CONFIG += $QT_CONFIG
-@@ -7117,7 +7191,7 @@
+@@ -7190,7 +7264,7 @@
  if [ '!' -z "$OPENSSL_LIBS" ]; then
      echo "OPENSSL_LIBS = $OPENSSL_LIBS" >> "$CACHEFILE.tmp"
  elif [ "$CFG_OPENSSL" = "linked" ]; then
@@ -341,8 +342,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  fi
  
  #dump in the SDK info
-@@ -7297,7 +7371,7 @@
- fi
+@@ -7371,7 +7445,7 @@
+ echo "Declarative module .. $CFG_DECLARATIVE"
  echo "STL support ......... $CFG_STL"
  echo "PCH support ......... $CFG_PRECOMPILE"
 -echo "MMX/3DNOW/SSE/SSE2..  ${CFG_MMX}/${CFG_3DNOW}/${CFG_SSE}/${CFG_SSE2}"
@@ -350,7 +351,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  if [ "${CFG_ARCH}" = "arm" ]; then
      echo "iWMMXt support ...... ${CFG_IWMMXT}"
  fi
-@@ -7610,7 +7684,11 @@
+@@ -7684,7 +7758,11 @@
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
@@ -361,10 +362,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 +            *) continue ;;
 +            esac ;;
          *s60main/s60main.pro) continue ;;
+         *examples/activeqt/*) continue ;;
          */qmake/qmake.pro) continue ;;
-         *tools/bootstrap*|*tools/moc*|*tools/rcc*|*tools/uic*) SPEC=$QMAKESPEC ;;
---- a/mkspecs/win32-g++/qmake.conf	2009-10-13 17:34:08.000000000 +0200
-+++ b/mkspecs/win32-g++/qmake.conf	2009-11-11 23:30:46.000000000 +0100
+diff -urN a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
+--- a/mkspecs/win32-g++/qmake.conf	2009-11-11 14:15:37.000000000 +0100
++++ b/mkspecs/win32-g++/qmake.conf	2009-11-17 12:21:07.000000000 +0100
 @@ -3,23 +3,31 @@
  #
  # Written for MinGW
@@ -473,8 +475,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  QMAKE_STRIPFLAGS_LIB 	+= --strip-unneeded
 -load(qt_config)
 +PKG_CONFIG		= HOSTPLATFORMPREFIX-pkg-config
---- qt-everywhere-opensource-src-4.6.0-beta1.native/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-10-13 17:34:08.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-beta1/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-10-25 13:17:35.000000000 +0100
+diff -urN a/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro
+--- a/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-11-11 14:15:37.000000000 +0100
++++ b/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-11-17 12:21:07.000000000 +0100
 @@ -16,7 +16,7 @@
      include($$QT_SOURCE_TREE/src/qbase.pri)
      INSTALLS =
@@ -484,35 +487,47 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      DEFINES *= NDEBUG
  }
  
---- qt-everywhere-opensource-src-4.6.0-beta1.native/src/3rdparty/webkit/JavaScriptCore/jsc.pro	2009-10-13 17:34:08.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-beta1/src/3rdparty/webkit/JavaScriptCore/jsc.pro	2009-10-25 20:23:25.000000000 +0100
-@@ -20,6 +20,13 @@
- } else { # Release
-     OBJECTS_DIR = obj/release
+diff -urN a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
+--- a/src/corelib/tools/tools.pri	2009-11-11 14:15:37.000000000 +0100
++++ b/src/corelib/tools/tools.pri	2009-11-17 12:21:07.000000000 +0100
+@@ -97,7 +97,7 @@
+         ../3rdparty/zlib/zutil.c
+ } else:!contains(QT_CONFIG, no-zlib) {
+    unix:LIBS_PRIVATE += -lz
+-#  win32:LIBS += libz.lib
++   win32:LIBS += -lz
  }
-+
-+# MAB: Added by analogy to JavaScriptCore.pro and WebCore.pro
-+# JavaScriptCore.pri needs to know path for generated sources
-+isEmpty(GENERATED_SOURCES_DIR):GENERATED_SOURCES_DIR = generated
-+GENERATED_SOURCES_DIR_SLASH = $${GENERATED_SOURCES_DIR}$${QMAKE_DIR_SEP}
-+
-+INCLUDEPATH += $$GENERATED_SOURCES_DIR
- OBJECTS_DIR_WTR = $$OBJECTS_DIR$${QMAKE_DIR_SEP}
- include($$PWD/JavaScriptCore.pri)
-
---- qt-everywhere-opensource-src-4.6.0-beta1.native/src/3rdparty/webkit/WebKit/qt/Plugins/Plugins.pro	2009-10-13 17:34:08.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-beta1/src/3rdparty/webkit/WebKit/qt/Plugins/Plugins.pro	2009-10-25 21:08:46.000000000 +0100
-@@ -4,7 +4,7 @@
- HEADERS += ICOHandler.h
- SOURCES += ICOHandler.cpp
  
--include(../../WebKit.pri)
-+include(../../../WebKit.pri)
+ DEFINES += HB_EXPORT=Q_CORE_EXPORT
+diff -urN a/src/gui/image/image.pri b/src/gui/image/image.pri
+--- a/src/gui/image/image.pri	2009-11-11 14:15:37.000000000 +0100
++++ b/src/gui/image/image.pri	2009-11-17 12:21:07.000000000 +0100
+@@ -94,7 +94,10 @@
  
- contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols 
- unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
---- qt-everywhere-opensource-src-4.6.0-beta1.native/src/plugins/sqldrivers/tds/main.cpp	2009-10-13 17:34:08.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-beta1/src/plugins/sqldrivers/tds/main.cpp	2009-10-31 21:37:19.000000000 +0100
+     contains(QT_CONFIG, system-png) {
+         unix:LIBS_PRIVATE  += -lpng
+-        win32:LIBS += libpng.lib
++        win32:LIBS += -lpng
++        contains(QT_CONFIG, system-zlib) {
++            win32:LIBS += -lz
++        }
+     } else {
+         !isEqual(QT_ARCH, i386):!isEqual(QT_ARCH, x86_64):DEFINES += PNG_NO_ASSEMBLER_CODE
+         INCLUDEPATH  += ../3rdparty/libpng ../3rdparty/zlib
+diff -urN a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
+--- a/src/gui/painting/painting.pri	2009-11-11 14:15:37.000000000 +0100
++++ b/src/gui/painting/painting.pri	2009-11-17 12:21:07.000000000 +0100
+@@ -384,6 +384,6 @@
+    INCLUDEPATH += ../3rdparty/zlib
+ } else:!contains(QT_CONFIG, no-zlib) {
+    unix:LIBS_PRIVATE += -lz
+-#  win32:LIBS += libz.lib
++   win32:LIBS += -lz
+ }
+ 
+diff -urN a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/main.cpp
+--- a/src/plugins/sqldrivers/tds/main.cpp	2009-11-11 14:15:37.000000000 +0100
++++ b/src/plugins/sqldrivers/tds/main.cpp	2009-11-17 12:21:07.000000000 +0100
 @@ -47,6 +47,7 @@
  #define _WINSCARD_H_
  #include <windows.h>
@@ -521,8 +536,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  #include "../../../sql/drivers/tds/qsql_tds.h"
  
  QT_BEGIN_NAMESPACE
---- qt-everywhere-opensource-src-4.6.0-beta1.native/src/plugins/sqldrivers/tds/tds.pro	2009-10-13 17:34:08.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-beta1/src/plugins/sqldrivers/tds/tds.pro	2009-11-01 22:31:16.000000000 +0100
+diff -urN a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds.pro
+--- a/src/plugins/sqldrivers/tds/tds.pro	2009-11-11 14:15:37.000000000 +0100
++++ b/src/plugins/sqldrivers/tds/tds.pro	2009-11-17 12:21:07.000000000 +0100
 @@ -5,11 +5,6 @@
  SOURCES		= main.cpp \
  		  ../../../sql/drivers/tds/qsql_tds.cpp
@@ -537,8 +553,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 +#Patched to use FreeTDS targetting MinGW
 +LIBS *=  -lsybdb -liconv -lws2_32
  include(../qsqldriverbase.pri)
---- a/src/sql/drivers/tds/qsql_tds.cpp	2009-10-13 17:34:08.000000000 +0200
-+++ b/src/sql/drivers/tds/qsql_tds.cpp	2009-11-11 14:45:10.000000000 +0100
+diff -urN a/src/sql/drivers/tds/qsql_tds.cpp b/src/sql/drivers/tds/qsql_tds.cpp
+--- a/src/sql/drivers/tds/qsql_tds.cpp	2009-11-11 14:15:37.000000000 +0100
++++ b/src/sql/drivers/tds/qsql_tds.cpp	2009-11-17 12:21:07.000000000 +0100
 @@ -47,7 +47,8 @@
  #else
  #define Q_USE_SYBASE
@@ -549,48 +566,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  #include "qsql_tds.h"
  
  #include <qvariant.h>
-@@ -164,13 +165,13 @@
- 
- extern "C" {
- static int CS_PUBLIC qTdsMsgHandler (DBPROCESS* dbproc,
--                            DBINT /*msgno*/,
-+                            DBINT msgno,
-                             int msgstate,
-                             int severity,
-                             char* msgtext,
--                            char* /*srvname*/,
-+                            char* srvname,
-                             char* /*procname*/,
--                            int /*line*/)
-+                            int line)
- {
-     QTDSResultPrivate* p = errs()->value(dbproc);
- 
-@@ -181,9 +182,20 @@
-     }
- 
-     if (severity > 0) {
--        QString errMsg = QString::fromLatin1("%1 (%2)").arg(QString::fromAscii(msgtext)).arg(
--                                    msgstate);
-+        QString errMsg = QString::fromLatin1("%1 (Msg %2, Level %3, State %4, Server %5, Line %6)")
-+                         .arg(QString::fromAscii(msgtext))
-+                         .arg(msgno)
-+                         .arg(severity)
-+                         .arg(msgstate)
-+                         .arg(QString::fromAscii(srvname))
-+                         .arg(line);
-         p->addErrorMsg(errMsg);
-+        if (severity > 10) {
-+            // Severe messages are really errors in the sense of lastError
-+            errMsg = p->getErrorMsgs();
-+            p->lastError = qMakeError(errMsg, QSqlError::UnknownError, msgno);
-+            p->clearErrorMsgs();
-+        }
-     }
- 
-     return INT_CANCEL;
---- qt-everywhere-opensource-src-4.6.0-beta1.native/src/sql/drivers/tds/qsql_tds.h	2009-10-13 17:34:08.000000000 +0200
-+++ qt-everywhere-opensource-src-4.6.0-beta1/src/sql/drivers/tds/qsql_tds.h	2009-10-31 21:48:13.000000000 +0100
+diff -urN a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
+--- a/src/sql/drivers/tds/qsql_tds.h	2009-11-11 14:15:37.000000000 +0100
++++ b/src/sql/drivers/tds/qsql_tds.h	2009-11-17 12:21:07.000000000 +0100
 @@ -48,7 +48,8 @@
  
  #ifdef Q_OS_WIN32
@@ -601,47 +579,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  #include <QtCore/qt_windows.h>
  #include <sqlfront.h>
  #include <sqldb.h>
-diff -urN a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
---- a/src/corelib/tools/tools.pri	2009-10-13 17:34:08.000000000 +0200
-+++ b/src/corelib/tools/tools.pri	2009-11-11 21:50:19.000000000 +0100
-@@ -96,7 +96,7 @@
-         ../3rdparty/zlib/zutil.c
- } else:!contains(QT_CONFIG, no-zlib) {
-    unix:LIBS_PRIVATE += -lz
--#  win32:LIBS += libz.lib
-+   win32:LIBS += -lz
- }
- 
- DEFINES += HB_EXPORT=Q_CORE_EXPORT
-diff -urN a/src/gui/image/image.pri b/src/gui/image/image.pri
---- a/src/gui/image/image.pri	2009-10-13 17:34:08.000000000 +0200
-+++ b/src/gui/image/image.pri	2009-11-11 22:27:26.000000000 +0100
-@@ -94,7 +94,10 @@
- 
-     contains(QT_CONFIG, system-png) {
-         unix:LIBS_PRIVATE  += -lpng
--        win32:LIBS += libpng.lib
-+        win32:LIBS += -lpng
-+        contains(QT_CONFIG, system-zlib) {
-+            win32:LIBS += -lz
-+        }
-     } else {
-         !isEqual(QT_ARCH, i386):!isEqual(QT_ARCH, x86_64):DEFINES += PNG_NO_ASSEMBLER_CODE
-         INCLUDEPATH  += ../3rdparty/libpng ../3rdparty/zlib
-diff -urN a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
---- a/src/gui/painting/painting.pri	2009-10-13 17:34:08.000000000 +0200
-+++ b/src/gui/painting/painting.pri	2009-11-11 22:28:30.000000000 +0100
-@@ -384,6 +384,6 @@
-    INCLUDEPATH += ../3rdparty/zlib
- } else:!contains(QT_CONFIG, no-zlib) {
-    unix:LIBS_PRIVATE += -lz
--#  win32:LIBS += libz.lib
-+   win32:LIBS += -lz
- }
- 
 diff -urN a/src/svg/svg.pro b/src/svg/svg.pro
---- a/src/svg/svg.pro	2009-10-13 17:34:08.000000000 +0200
-+++ b/src/svg/svg.pro	2009-11-11 21:45:17.000000000 +0100
+--- a/src/svg/svg.pro	2009-11-11 14:15:37.000000000 +0100
++++ b/src/svg/svg.pro	2009-11-17 12:21:07.000000000 +0100
 @@ -47,4 +47,5 @@
     INCLUDEPATH += ../3rdparty/zlib
  } else:!contains(QT_CONFIG, no-zlib) {
