@@ -24,13 +24,13 @@
 # Qt
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.6.0-rc1
-$(PKG)_CHECKSUM := 2fb07479c639fc2f98be0f9b65b0d179e4c637f7
+$(PKG)_VERSION  := 4.6.0
+$(PKG)_CHECKSUM := c2cbbde83f1ebac3b8dd13a112fcad757d395041
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpng
+$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpng jpeg libmng tiff
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
@@ -44,10 +44,6 @@ define $(PKG)_BUILD
     # Native, unpatched build of Qt for moc, rcc, uic and qmake
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,qt)
     mv '$(1)/$(qt_SUBDIR)' '$(1).native'
-
-    # But, 4.6.0-beta1 native build needs this bugfix too
-    cp '$(1)'/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro \
-       '$(1).native'/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro
 
     $(SED) 's,PLATFORM_X11=yes,PLATFORM_X11=no,'           -i '$(1)'.native/configure
     $(SED) 's,PLATFORM=solaris-cc$$,PLATFORM=solaris-g++,' -i '$(1)'.native/configure
@@ -104,7 +100,9 @@ define $(PKG)_BUILD
     find '$(1)'/src -name '*.pr[oi]' -exec \
         $(SED) 's,\(^\|[^_/]\)unix,\1linux,g' -i {} \;
 
-    # Make qmake use compilation paths meant for Windows
+    # Make qmake use compilation paths meant for MinGW or Windows in general
+    find '$(1)'/src -name '*.pr[oi]' -exec \
+        $(SED) 's,\(^\|[^_/]\)win32-g++\([^-]\|$$\),\1unix\2,g' -i {} \;
     find '$(1)'/src -name '*.pr[oi]' -exec \
         $(SED) 's,\(^\|[^_/]\)win32\([^-]\|$$\),\1unix\2,g' -i {} \;
 
@@ -116,6 +114,7 @@ define $(PKG)_BUILD
         -host-arch i386 \
         -host-little-endian \
         -little-endian \
+        -largefile \
         -force-pkg-config \
         -release \
         -exceptions \
@@ -141,10 +140,11 @@ define $(PKG)_BUILD
         -plugin-sql-tds \
         -system-zlib \
         -qt-gif \
-        -qt-libtiff \
+        -system-libtiff \
         -system-libpng \
-        -qt-libmng \
-        -qt-libjpeg \
+        -system-libmng \
+        -system-libjpeg \
+        -system-sqlite \
         -openssl-linked \
         -v
 
@@ -152,4 +152,12 @@ define $(PKG)_BUILD
     $(TARGET)-ranlib '$(1)'/lib/*.a
     rm -rf '$(PREFIX)/$(TARGET)/mkspecs'
     $(MAKE) -C '$(1)' install
+    # Manually created prl files for static plugins to help applications link to system libs
+    $(INSTALL) -m664 '$(1)/lib/qjpeg.prl' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m664 '$(1)/lib/qmng.prl' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m664 '$(1)/lib/qsqlite.prl' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m664 '$(1)/lib/qsqlodbc.prl' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m664 '$(1)/lib/qsqlpsql.prl' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m664 '$(1)/lib/qsqltds.prl' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m664 '$(1)/lib/qtiff.prl' '$(PREFIX)/$(TARGET)/lib/'
 endef

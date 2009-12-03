@@ -22,9 +22,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 diff -urN a/configure b/configure
---- a/configure	2009-11-11 14:15:38.000000000 +0100
-+++ b/configure	2009-11-17 12:21:07.000000000 +0100
-@@ -601,7 +601,7 @@
+--- a/configure	2009-11-27 02:27:48.000000000 +0100
++++ b/configure	2009-12-02 21:44:56.000000000 +0100
+@@ -591,7 +591,7 @@
  rm -f "$outpath/config.tests/.qmake.cache"
  cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
  
@@ -33,7 +33,7 @@ diff -urN a/configure b/configure
  QMakeVar add decorations "default windows styled"
  QMakeVar add mouse-drivers "pc"
  if [ "$UNAME_SYSTEM" = "Linux" ] ; then
-@@ -727,6 +727,7 @@
+@@ -717,6 +717,7 @@
  CFG_3DNOW=auto
  CFG_SSE=auto
  CFG_SSE2=auto
@@ -41,7 +41,7 @@ diff -urN a/configure b/configure
  CFG_REDUCE_RELOCATIONS=no
  CFG_IPV6=auto
  CFG_NAS=no
-@@ -4420,7 +4421,10 @@
+@@ -4424,7 +4425,10 @@
  #-------------------------------------------------------------------------------
  
  # detect availability of float math.h functions
@@ -53,7 +53,7 @@ diff -urN a/configure b/configure
      CFG_USE_FLOATMATH=yes
  else
      CFG_USE_FLOATMATH=no
-@@ -4428,7 +4432,10 @@
+@@ -4432,7 +4436,10 @@
  
  # detect mmx support
  if [ "${CFG_MMX}" = "auto" ]; then
@@ -65,7 +65,7 @@ diff -urN a/configure b/configure
  	CFG_MMX=yes
      else
  	CFG_MMX=no
-@@ -4437,7 +4444,10 @@
+@@ -4441,7 +4448,10 @@
  
  # detect 3dnow support
  if [ "${CFG_3DNOW}" = "auto" ]; then
@@ -77,7 +77,7 @@ diff -urN a/configure b/configure
  	CFG_3DNOW=yes
      else
  	CFG_3DNOW=no
-@@ -4446,7 +4456,10 @@
+@@ -4450,7 +4460,10 @@
  
  # detect sse support
  if [ "${CFG_SSE}" = "auto" ]; then
@@ -89,7 +89,7 @@ diff -urN a/configure b/configure
  	CFG_SSE=yes
      else
  	CFG_SSE=no
-@@ -4455,13 +4468,26 @@
+@@ -4459,13 +4472,26 @@
  
  # detect sse2 support
  if [ "${CFG_SSE2}" = "auto" ]; then
@@ -117,7 +117,7 @@ diff -urN a/configure b/configure
  # check iWMMXt support
  if [ "$CFG_IWMMXT" = "yes" ]; then
      "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/iwmmxt "iwmmxt" $L_FLAGS $I_FLAGS $l_FLAGS "-mcpu=iwmmxt"
-@@ -4487,7 +4513,10 @@
+@@ -4491,7 +4517,10 @@
      ZLIB_FORCED=yes
  fi
  if [ "$CFG_ZLIB" = "auto" ]; then
@@ -129,7 +129,7 @@ diff -urN a/configure b/configure
         CFG_ZLIB=system
      else
         CFG_ZLIB=yes
-@@ -4504,7 +4533,10 @@
+@@ -4508,7 +4537,10 @@
  fi
  # detect jpeg
  if [ "$CFG_LIBJPEG" = "auto" ]; then
@@ -141,7 +141,7 @@ diff -urN a/configure b/configure
         CFG_LIBJPEG=system
      else
         CFG_LIBJPEG=qt
-@@ -4531,7 +4563,10 @@
+@@ -4535,7 +4567,10 @@
  
  # detect tiff
  if [ "$CFG_LIBTIFF" = "auto" ]; then
@@ -153,7 +153,7 @@ diff -urN a/configure b/configure
          CFG_LIBTIFF=system
      else
          CFG_LIBTIFF=qt
-@@ -4548,7 +4583,10 @@
+@@ -4552,7 +4587,10 @@
  fi
  # detect mng
  if [ "$CFG_LIBMNG" = "auto" ]; then
@@ -165,7 +165,7 @@ diff -urN a/configure b/configure
         CFG_LIBMNG=system
      else
         CFG_LIBMNG=qt
-@@ -4557,7 +4595,10 @@
+@@ -4561,7 +4599,10 @@
  
  # detect png
  if [ "$CFG_LIBPNG" = "auto" ]; then
@@ -177,7 +177,7 @@ diff -urN a/configure b/configure
         CFG_LIBPNG=system
      else
         CFG_LIBPNG=qt
-@@ -4624,7 +4665,10 @@
+@@ -4628,7 +4669,10 @@
              fi
              ;;
          psql)
@@ -189,7 +189,7 @@ diff -urN a/configure b/configure
                  if "$WHICH" pg_config >/dev/null 2>&1; then
                      QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null`
                      QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null`
-@@ -4652,7 +4696,10 @@
+@@ -4656,7 +4700,10 @@
          ;;
          odbc)
              if [ "$CFG_SQL_odbc" != "no" ]; then
@@ -201,7 +201,7 @@ diff -urN a/configure b/configure
                      if [ "$CFG_SQL_odbc" = "auto" ]; then
                          CFG_SQL_odbc=plugin
                      fi
-@@ -4697,7 +4744,12 @@
+@@ -4701,7 +4748,12 @@
              ;;
          tds)
              if [ "$CFG_SQL_tds" != "no" ]; then
@@ -215,7 +215,7 @@ diff -urN a/configure b/configure
                      if [ "$CFG_SQL_tds" = "auto" ]; then
                          CFG_SQL_tds=plugin
                      fi
-@@ -4779,7 +4831,13 @@
+@@ -4783,7 +4835,13 @@
                          QT_CFLAGS_SQLITE=`$PKG_CONFIG --cflags sqlite3 2>/dev/null`
                          QT_LFLAGS_SQLITE=`$PKG_CONFIG --libs sqlite3 2>/dev/null`
                      fi
@@ -230,7 +230,7 @@ diff -urN a/configure b/configure
                          if [ "$CFG_SQL_sqlite" = "auto" ]; then
                              CFG_SQL_sqlite=plugin
                          fi
-@@ -4850,7 +4908,9 @@
+@@ -4854,7 +4912,9 @@
  
  # auto-detect iconv(3) support
  if [ "$CFG_ICONV" != "no" ]; then
@@ -241,7 +241,7 @@ diff -urN a/configure b/configure
  	CFG_ICONV=no
      elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" "$OPT_VERBOSE" "$relpath" "$outpath" "config.tests/unix/iconv" "POSIX iconv" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
          CFG_ICONV=yes
-@@ -5010,7 +5070,9 @@
+@@ -5014,7 +5074,9 @@
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
@@ -252,7 +252,7 @@ diff -urN a/configure b/configure
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5084,7 +5146,9 @@
+@@ -5088,7 +5150,9 @@
              echo " You might need to modify the include and library search paths by editing"
              echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
              echo " ${XQMAKESPEC}."
@@ -263,7 +263,7 @@ diff -urN a/configure b/configure
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -5585,7 +5649,10 @@
+@@ -5589,7 +5653,10 @@
  fi
  
  HAVE_STL=no
@@ -275,7 +275,7 @@ diff -urN a/configure b/configure
      HAVE_STL=yes
  fi
  
-@@ -5607,7 +5674,10 @@
+@@ -5611,7 +5678,10 @@
  
  # find if the platform supports IPv6
  if [ "$CFG_IPV6" != "no" ]; then
@@ -287,7 +287,19 @@ diff -urN a/configure b/configure
          CFG_IPV6=yes
      else
          if [ "$CFG_IPV6" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
-@@ -5738,7 +5808,9 @@
+@@ -5725,7 +5795,10 @@
+ 
+ # find if the platform supports X/Open Large File compilation environment
+ if [ "$CFG_LARGEFILE" != "no" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/largefile "X/Open Large File" $L_FLAGS $I_FLAGS $l_FLAGS; then
++    if [ "$XPLATFORM" = "win32-g++" ]; then
++        echo "Using LARGEFILE for win32-g++ target"
++        CFG_LARGEFILE=yes
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/largefile "X/Open Large File" $L_FLAGS $I_FLAGS $l_FLAGS; then
+         CFG_LARGEFILE=yes
+     else
+         if [ "$CFG_LARGEFILE" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
+@@ -5742,7 +5815,9 @@
  
  # detect OpenSSL
  if [ "$CFG_OPENSSL" != "no" ]; then
@@ -298,7 +310,7 @@ diff -urN a/configure b/configure
          if [ "$CFG_OPENSSL" = "auto" ]; then
              CFG_OPENSSL=yes
          fi
-@@ -6083,6 +6155,7 @@
+@@ -6087,6 +6162,7 @@
  [ "$CFG_3DNOW" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG 3dnow"
  [ "$CFG_SSE" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse"
  [ "$CFG_SSE2" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse2"
@@ -306,7 +318,7 @@ diff -urN a/configure b/configure
  [ "$CFG_IWMMXT" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG iwmmxt"
  [ "$PLATFORM_MAC" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG $CFG_MAC_ARCHS"
  if [ "$CFG_IPV6" = "yes" ]; then
-@@ -6163,11 +6236,12 @@
+@@ -6167,11 +6243,12 @@
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -324,7 +336,7 @@ diff -urN a/configure b/configure
  if [ "$CFG_ZLIB" = "yes" ]; then
      QT_CONFIG="$QT_CONFIG zlib"
  elif [ "$CFG_ZLIB" = "system" ]; then
-@@ -7098,7 +7172,7 @@
+@@ -7102,7 +7179,7 @@
  
  cat >>"$QTCONFIG.tmp" <<EOF
  #configuration
@@ -333,7 +345,7 @@ diff -urN a/configure b/configure
  QT_ARCH = $CFG_ARCH
  QT_EDITION = $Edition
  QT_CONFIG += $QT_CONFIG
-@@ -7190,7 +7264,7 @@
+@@ -7194,7 +7271,7 @@
  if [ '!' -z "$OPENSSL_LIBS" ]; then
      echo "OPENSSL_LIBS = $OPENSSL_LIBS" >> "$CACHEFILE.tmp"
  elif [ "$CFG_OPENSSL" = "linked" ]; then
@@ -342,7 +354,7 @@ diff -urN a/configure b/configure
  fi
  
  #dump in the SDK info
-@@ -7371,7 +7445,7 @@
+@@ -7375,7 +7452,7 @@
  echo "Declarative module .. $CFG_DECLARATIVE"
  echo "STL support ......... $CFG_STL"
  echo "PCH support ......... $CFG_PRECOMPILE"
@@ -351,7 +363,7 @@ diff -urN a/configure b/configure
  if [ "${CFG_ARCH}" = "arm" ]; then
      echo "iWMMXt support ...... ${CFG_IWMMXT}"
  fi
-@@ -7684,7 +7758,11 @@
+@@ -7688,7 +7765,11 @@
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
@@ -365,8 +377,8 @@ diff -urN a/configure b/configure
          *examples/activeqt/*) continue ;;
          */qmake/qmake.pro) continue ;;
 diff -urN a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
---- a/mkspecs/win32-g++/qmake.conf	2009-11-11 14:15:37.000000000 +0100
-+++ b/mkspecs/win32-g++/qmake.conf	2009-11-17 12:21:07.000000000 +0100
+--- a/mkspecs/win32-g++/qmake.conf	2009-11-27 02:27:45.000000000 +0100
++++ b/mkspecs/win32-g++/qmake.conf	2009-12-02 20:54:42.000000000 +0100
 @@ -3,23 +3,31 @@
  #
  # Written for MinGW
@@ -475,59 +487,165 @@ diff -urN a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
  QMAKE_STRIPFLAGS_LIB 	+= --strip-unneeded
 -load(qt_config)
 +PKG_CONFIG		= HOSTPLATFORMPREFIX-pkg-config
-diff -urN a/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro
---- a/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-11-11 14:15:37.000000000 +0100
-+++ b/src/3rdparty/javascriptcore/JavaScriptCore/JavaScriptCore.pro	2009-11-17 12:21:07.000000000 +0100
-@@ -16,7 +16,7 @@
-     include($$QT_SOURCE_TREE/src/qbase.pri)
-     INSTALLS =
-     DESTDIR = $$OLDDESTDIR
--    PRECOMPILED_HEADER = $$PWD/../WebKit/qt/WebKit_pch.h
-+    PRECOMPILED_HEADER = $$PWD/../../webkit/WebKit/qt/WebKit_pch.h
-     DEFINES *= NDEBUG
- }
- 
 diff -urN a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
---- a/src/corelib/tools/tools.pri	2009-11-11 14:15:37.000000000 +0100
-+++ b/src/corelib/tools/tools.pri	2009-11-17 12:21:07.000000000 +0100
-@@ -97,7 +97,7 @@
+--- a/src/corelib/tools/tools.pri	2009-11-27 02:27:54.000000000 +0100
++++ b/src/corelib/tools/tools.pri	2009-12-02 20:55:47.000000000 +0100
+@@ -96,8 +96,8 @@
+         ../3rdparty/zlib/uncompr.c \
          ../3rdparty/zlib/zutil.c
  } else:!contains(QT_CONFIG, no-zlib) {
-    unix:LIBS_PRIVATE += -lz
+-   unix:LIBS_PRIVATE += -lz
 -#  win32:LIBS += libz.lib
-+   win32:LIBS += -lz
++    unix|win32-g++:LIBS_PRIVATE += -lz
++    win32-msvc*|win32-icc:LIBS += zdll.lib
  }
  
  DEFINES += HB_EXPORT=Q_CORE_EXPORT
 diff -urN a/src/gui/image/image.pri b/src/gui/image/image.pri
---- a/src/gui/image/image.pri	2009-11-11 14:15:37.000000000 +0100
-+++ b/src/gui/image/image.pri	2009-11-17 12:21:07.000000000 +0100
-@@ -94,7 +94,10 @@
+--- a/src/gui/image/image.pri	2009-11-27 02:27:52.000000000 +0100
++++ b/src/gui/image/image.pri	2009-12-02 21:06:46.000000000 +0100
+@@ -93,11 +93,11 @@
+     SOURCES += image/qpnghandler.cpp
  
      contains(QT_CONFIG, system-png) {
-         unix:LIBS_PRIVATE  += -lpng
+-        unix:LIBS_PRIVATE  += -lpng
 -        win32:LIBS += libpng.lib
-+        win32:LIBS += -lpng
-+        contains(QT_CONFIG, system-zlib) {
-+            win32:LIBS += -lz
-+        }
++        unix|win32-g++:LIBS_PRIVATE  += -lpng
++        win32-msvc*|win32-icc:LIBS += libpng.lib
      } else {
          !isEqual(QT_ARCH, i386):!isEqual(QT_ARCH, x86_64):DEFINES += PNG_NO_ASSEMBLER_CODE
-         INCLUDEPATH  += ../3rdparty/libpng ../3rdparty/zlib
+-        INCLUDEPATH  += ../3rdparty/libpng ../3rdparty/zlib
++        INCLUDEPATH += ../3rdparty/libpng
+         SOURCES += ../3rdparty/libpng/png.c \
+           ../3rdparty/libpng/pngerror.c \
+           ../3rdparty/libpng/pngget.c \
+@@ -114,6 +114,14 @@
+           ../3rdparty/libpng/pngwtran.c \
+           ../3rdparty/libpng/pngwutil.c \
+           ../3rdparty/libpng/pnggccrd.c
++
++        contains(QT_CONFIG, system-zlib) {
++            unix|win32-g++:LIBS_PRIVATE += -lz
++            win32-msvc*|win32-icc:LIBS += zdll.lib
++        } else {
++            INCLUDEPATH  += ../3rdparty/zlib
++        }
++
+     }
+ } else {
+     DEFINES *= QT_NO_IMAGEFORMAT_PNG
 diff -urN a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
---- a/src/gui/painting/painting.pri	2009-11-11 14:15:37.000000000 +0100
-+++ b/src/gui/painting/painting.pri	2009-11-17 12:21:07.000000000 +0100
-@@ -384,6 +384,6 @@
-    INCLUDEPATH += ../3rdparty/zlib
- } else:!contains(QT_CONFIG, no-zlib) {
-    unix:LIBS_PRIVATE += -lz
--#  win32:LIBS += libz.lib
-+   win32:LIBS += -lz
+--- a/src/gui/painting/painting.pri	2009-11-27 02:27:53.000000000 +0100
++++ b/src/gui/painting/painting.pri	2009-12-02 20:55:47.000000000 +0100
+@@ -380,9 +380,9 @@
  }
  
+ contains(QT_CONFIG, zlib) {
+-   INCLUDEPATH += ../3rdparty/zlib
++    INCLUDEPATH += ../3rdparty/zlib
+ } else:!contains(QT_CONFIG, no-zlib) {
+-   unix:LIBS_PRIVATE += -lz
+-#  win32:LIBS += libz.lib
++    unix|win32-g++:LIBS_PRIVATE += -lz
++    win32-msvc*|win32-icc:LIBS += zdll.lib
+ }
+ 
+diff -urN a/src/network/access/access.pri b/src/network/access/access.pri
+--- a/src/network/access/access.pri	2009-11-27 02:27:53.000000000 +0100
++++ b/src/network/access/access.pri	2009-12-02 20:55:47.000000000 +0100
+@@ -57,8 +57,8 @@
+ 
+ #zlib support
+ contains(QT_CONFIG, zlib) {
+-   INCLUDEPATH += ../3rdparty/zlib
++    INCLUDEPATH += ../3rdparty/zlib
+ } else:!contains(QT_CONFIG, no-zlib) {
+-   unix:LIBS_PRIVATE += -lz
+-#  win32:LIBS += libz.lib
++    unix|win32-g++:LIBS_PRIVATE += -lz
++    win32-msvc*|win32-icc:LIBS += zdll.lib
+ }
+diff -urN a/src/plugins/imageformats/jpeg/jpeg.pro b/src/plugins/imageformats/jpeg/jpeg.pro
+--- a/src/plugins/imageformats/jpeg/jpeg.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/imageformats/jpeg/jpeg.pro	2009-12-02 21:09:03.000000000 +0100
+@@ -20,8 +20,8 @@
+ }
+ 
+ contains(QT_CONFIG, system-jpeg) {
+-        unix:LIBS += -ljpeg
+-        win32:LIBS += libjpeg.lib
++        unix|win32-g++:LIBS += -ljpeg
++        win32-msvc*|win32-icc:LIBS += libjpeg.lib
+ }
+ !contains(QT_CONFIG, system-jpeg) {
+ 	INCLUDEPATH += ../../../3rdparty/libjpeg
+diff -urN a/src/plugins/imageformats/mng/mng.pro b/src/plugins/imageformats/mng/mng.pro
+--- a/src/plugins/imageformats/mng/mng.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/imageformats/mng/mng.pro	2009-12-02 21:11:03.000000000 +0100
+@@ -14,10 +14,9 @@
+ }
+ 
+ contains(QT_CONFIG, system-mng) {
+-        unix:LIBS += -lmng
+-        win32:LIBS += libmng.lib
+-}
+-!contains(QT_CONFIG, system-mng) {
++        unix|win32-g++:LIBS += -lmng
++        win32-msvc*|win32-icc:LIBS += libmng.lib
++} else {
+         DEFINES += MNG_BUILD_SO
+         DEFINES += MNG_NO_INCLUDE_JNG
+ 	INCLUDEPATH += ../../../3rdparty/libmng
+@@ -44,10 +43,10 @@
+ }
+ 
+ contains(QT_CONFIG, system-zlib) {
+-        LIBS += -lz
+-}
+-!contains(QT_CONFIG, system-zlib) {
+-        INCLUDEPATH +=  ../../../3rdparty/zlib
++    unix|win32-g++:LIBS_PRIVATE += -lz
++    win32-msvc*|win32-icc:LIBS += zdll.lib
++} else {
++    INCLUDEPATH +=  ../../../3rdparty/zlib
+ }
+ 
+ QTDIR_build:DESTDIR = $$QT_BUILD_TREE/plugins/imageformats
+diff -urN a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/tiff/tiff.pro
+--- a/src/plugins/imageformats/tiff/tiff.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/imageformats/tiff/tiff.pro	2009-12-02 21:12:12.000000000 +0100
+@@ -8,10 +8,9 @@
+            qtiffhandler.cpp
+ 
+ contains(QT_CONFIG, system-tiff) {
+-        unix:LIBS += -ltiff
+-        win32:LIBS += libtiff.lib
+-}
+-!contains(QT_CONFIG, system-tiff) {
++        unix|win32-g++:LIBS += -ltiff
++        win32-msvc*|win32-icc:LIBS += libtiff.lib
++} else {
+ 	INCLUDEPATH += ../../../3rdparty/libtiff/libtiff
+ 	SOURCES  += \
+ 	    ../../../3rdparty/libtiff/libtiff/tif_aux.c \
+@@ -62,10 +61,10 @@
+ }
+ 
+ contains(QT_CONFIG, system-zlib) {
+-        LIBS += -lz
+-}
+-!contains(QT_CONFIG, system-zlib) {
+-        INCLUDEPATH +=  ../../../3rdparty/zlib
++    unix|win32-g++:LIBS_PRIVATE += -lz
++    win32-msvc*|win32-icc:LIBS += zdll.lib
++} else {
++    INCLUDEPATH +=  ../../../3rdparty/zlib
+ }
+ 
+ QTDIR_build:DESTDIR = $$QT_BUILD_TREE/plugins/imageformats
 diff -urN a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/main.cpp
---- a/src/plugins/sqldrivers/tds/main.cpp	2009-11-11 14:15:37.000000000 +0100
-+++ b/src/plugins/sqldrivers/tds/main.cpp	2009-11-17 12:21:07.000000000 +0100
+--- a/src/plugins/sqldrivers/tds/main.cpp	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/sqldrivers/tds/main.cpp	2009-12-02 20:54:42.000000000 +0100
 @@ -47,6 +47,7 @@
  #define _WINSCARD_H_
  #include <windows.h>
@@ -537,8 +655,8 @@ diff -urN a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/mai
  
  QT_BEGIN_NAMESPACE
 diff -urN a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds.pro
---- a/src/plugins/sqldrivers/tds/tds.pro	2009-11-11 14:15:37.000000000 +0100
-+++ b/src/plugins/sqldrivers/tds/tds.pro	2009-11-17 12:21:07.000000000 +0100
+--- a/src/plugins/sqldrivers/tds/tds.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/sqldrivers/tds/tds.pro	2009-12-02 20:54:42.000000000 +0100
 @@ -5,11 +5,6 @@
  SOURCES		= main.cpp \
  		  ../../../sql/drivers/tds/qsql_tds.cpp
@@ -553,9 +671,20 @@ diff -urN a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds.
 +#Patched to use FreeTDS targetting MinGW
 +LIBS *=  -lsybdb -liconv -lws2_32
  include(../qsqldriverbase.pri)
+diff -urN a/src/qbase.pri b/src/qbase.pri
+--- a/src/qbase.pri	2009-11-27 02:27:54.000000000 +0100
++++ b/src/qbase.pri	2009-12-02 20:55:47.000000000 +0100
+@@ -85,7 +85,6 @@
+ }
+ 
+ win32 {
+-    CONFIG += zlib
+     INCLUDEPATH += tmp
+     !static: DEFINES+=QT_MAKEDLL
+ }
 diff -urN a/src/sql/drivers/tds/qsql_tds.cpp b/src/sql/drivers/tds/qsql_tds.cpp
---- a/src/sql/drivers/tds/qsql_tds.cpp	2009-11-11 14:15:37.000000000 +0100
-+++ b/src/sql/drivers/tds/qsql_tds.cpp	2009-11-17 12:21:07.000000000 +0100
+--- a/src/sql/drivers/tds/qsql_tds.cpp	2009-11-27 02:27:52.000000000 +0100
++++ b/src/sql/drivers/tds/qsql_tds.cpp	2009-12-02 20:54:42.000000000 +0100
 @@ -47,7 +47,8 @@
  #else
  #define Q_USE_SYBASE
@@ -567,8 +696,8 @@ diff -urN a/src/sql/drivers/tds/qsql_tds.cpp b/src/sql/drivers/tds/qsql_tds.cpp
  
  #include <qvariant.h>
 diff -urN a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
---- a/src/sql/drivers/tds/qsql_tds.h	2009-11-11 14:15:37.000000000 +0100
-+++ b/src/sql/drivers/tds/qsql_tds.h	2009-11-17 12:21:07.000000000 +0100
+--- a/src/sql/drivers/tds/qsql_tds.h	2009-11-27 02:27:52.000000000 +0100
++++ b/src/sql/drivers/tds/qsql_tds.h	2009-12-02 20:54:42.000000000 +0100
 @@ -48,7 +48,8 @@
  
  #ifdef Q_OS_WIN32
@@ -580,11 +709,91 @@ diff -urN a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
  #include <sqlfront.h>
  #include <sqldb.h>
 diff -urN a/src/svg/svg.pro b/src/svg/svg.pro
---- a/src/svg/svg.pro	2009-11-11 14:15:37.000000000 +0100
-+++ b/src/svg/svg.pro	2009-11-17 12:21:07.000000000 +0100
-@@ -47,4 +47,5 @@
-    INCLUDEPATH += ../3rdparty/zlib
+--- a/src/svg/svg.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/svg/svg.pro	2009-12-02 20:55:47.000000000 +0100
+@@ -44,7 +44,8 @@
+ 
+ #zlib support
+ contains(QT_CONFIG, zlib) {
+-   INCLUDEPATH += ../3rdparty/zlib
++    INCLUDEPATH += ../3rdparty/zlib
  } else:!contains(QT_CONFIG, no-zlib) {
-    unix:LIBS_PRIVATE += -lz
-+   win32:LIBS += -lz
+-   unix:LIBS_PRIVATE += -lz
++    unix|win32-g++:LIBS_PRIVATE += -lz
++    win32-msvc*|win32-icc:LIBS += zdll.lib
  }
+diff -urN a/src/tools/bootstrap/bootstrap.pri b/src/tools/bootstrap/bootstrap.pri
+--- a/src/tools/bootstrap/bootstrap.pri	2009-11-27 02:27:53.000000000 +0100
++++ b/src/tools/bootstrap/bootstrap.pri	2009-12-02 20:55:47.000000000 +0100
+@@ -52,8 +52,8 @@
+     LIBS += -lbootstrap
+ }
+ !contains(QT_CONFIG, zlib):!contains(QT_CONFIG, no-zlib) {
+-   unix:LIBS += -lz
+-#  win32:LIBS += libz.lib
++    unix|win32-g++:LIBS_PRIVATE += -lz
++    win32-msvc*|win32-icc:LIBS += zdll.lib
+ }
+ win32:LIBS += -luser32
+ 
+diff -urN a/src/tools/bootstrap/bootstrap.pro b/src/tools/bootstrap/bootstrap.pro
+--- a/src/tools/bootstrap/bootstrap.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/tools/bootstrap/bootstrap.pro	2009-12-02 20:55:47.000000000 +0100
+@@ -108,6 +108,9 @@
+         ../3rdparty/zlib/trees.c \
+         ../3rdparty/zlib/uncompr.c \
+         ../3rdparty/zlib/zutil.c
++} else:!contains(QT_CONFIG, no-zlib) {
++    unix|win32-g++:LIBS_PRIVATE += -lz
++    win32-msvc*|win32-icc:LIBS += zdll.lib
+ }
+ 
+ lib.CONFIG = dummy_install
+diff -urN a/src/winmain/winmain.pro b/src/winmain/winmain.pro
+--- a/src/winmain/winmain.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/winmain/winmain.pro	2009-12-02 20:55:47.000000000 +0100
+@@ -11,7 +11,7 @@
+ 	win32-g++:DEFINES += QT_NEEDS_QMAIN
+ 	win32-borland:DEFINES += QT_NEEDS_QMAIN
+ 	SOURCES		= qtmain_win.cpp
+-	CONFIG		+= png zlib
++	CONFIG		+= png
+ 	CONFIG		-= jpeg
+ 	INCLUDEPATH	+= tmp $$QMAKE_INCDIR_QT/QtCore
+ }
+diff -urN a/lib/qjpeg.prl b/lib/qjpeg.prl
+--- a/lib/qjpeg.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qjpeg.prl	2009-12-03 00:48:41.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -ljpeg
+diff -urN a/lib/qmng.prl b/lib/qmng.prl
+--- a/lib/qmng.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qmng.prl	2009-12-03 00:56:02.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lmng
+diff -urN a/lib/qsqlite.prl b/lib/qsqlite.prl
+--- a/lib/qsqlite.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qsqlite.prl	2009-12-03 00:56:37.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lsqlite3
+diff -urN a/lib/qsqlodbc.prl b/lib/qsqlodbc.prl
+--- a/lib/qsqlodbc.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qsqlodbc.prl	2009-12-03 00:56:37.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lodbc32
+diff -urN a/lib/qsqlpsql.prl b/lib/qsqlpsql.prl
+--- a/lib/qsqlpsql.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qsqlpsql.prl	2009-12-03 00:56:37.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lpq
+diff -urN a/lib/qsqltds.prl b/lib/qsqltds.prl
+--- a/lib/qsqltds.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qsqltds.prl	2009-12-03 00:56:37.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lsybdb -liconv
+diff -urN a/lib/qtiff.prl b/lib/qtiff.prl
+--- a/lib/qtiff.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qtiff.prl	2009-12-03 00:57:16.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -ltiff
+
