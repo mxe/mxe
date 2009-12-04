@@ -19,9 +19,9 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-diff -urN libvmime-0.9.0/configure.in libvmime-0.9.0.mod/configure.in
---- libvmime-0.9.0/configure.in	2008-10-19 14:36:08.000000000 +0200
-+++ libvmime-0.9.0.mod/configure.in	2009-10-08 01:08:19.000000000 +0200
+diff -urN a/configure.in c/configure.in
+--- libvmime-0.9.0.orig/configure.in	2008-10-19 14:36:08.000000000 +0200
++++ libvmime-0.9.0/configure.in	2009-12-04 14:55:17.000000000 +0100
 @@ -369,7 +369,7 @@
  
  if test "x$conf_tls" = "xyes"; then
@@ -55,9 +55,9 @@ diff -urN libvmime-0.9.0/configure.in libvmime-0.9.0.mod/configure.in
  
  # -pedantic
  OLD_EXTRA_CFLAGS="$EXTRA_CFLAGS"
-diff -urN libvmime-0.9.0/m4/m4_ax_pthread.m4 libvmime-0.9.0.mod/m4/m4_ax_pthread.m4
---- libvmime-0.9.0/m4/m4_ax_pthread.m4	1970-01-01 01:00:00.000000000 +0100
-+++ libvmime-0.9.0.mod/m4/m4_ax_pthread.m4	2009-10-08 01:08:19.000000000 +0200
+diff -urN a/m4/m4_ax_pthread.m4 c/m4/m4_ax_pthread.m4
+--- libvmime-0.9.0.orig/m4/m4_ax_pthread.m4	1970-01-01 01:00:00.000000000 +0100
++++ libvmime-0.9.0/m4/m4_ax_pthread.m4	2009-12-04 14:55:17.000000000 +0100
 @@ -0,0 +1,272 @@
 +# ===========================================================================
 +#           http://www.nongnu.org/autoconf-archive/ax_pthread.html
@@ -331,9 +331,9 @@ diff -urN libvmime-0.9.0/m4/m4_ax_pthread.m4 libvmime-0.9.0.mod/m4/m4_ax_pthread
 +fi
 +AC_LANG_RESTORE
 +])dnl AX_PTHREAD
-diff -urN libvmime-0.9.0/SConstruct libvmime-0.9.0.mod/SConstruct
---- libvmime-0.9.0/SConstruct	2008-10-19 14:27:32.000000000 +0200
-+++ libvmime-0.9.0.mod/SConstruct	2009-10-08 01:08:19.000000000 +0200
+diff -urN a/SConstruct c/SConstruct
+--- libvmime-0.9.0.orig/SConstruct	2008-10-19 14:27:32.000000000 +0200
++++ libvmime-0.9.0/SConstruct	2009-12-04 14:55:17.000000000 +0100
 @@ -1620,7 +1620,7 @@
  
  if test "x$conf_tls" = "xyes"; then
@@ -343,9 +343,42 @@ diff -urN libvmime-0.9.0/SConstruct libvmime-0.9.0.mod/SConstruct
  
  	if test "x$have_gnutls" = "xyes"; then
  		AM_CONDITIONAL(VMIME_HAVE_TLS_SUPPORT, true)
-diff -urN libvmime-0.9.0/src/platforms/windows/windowsFile.cpp libvmime-0.9.0.mod/src/platforms/windows/windowsFile.cpp
---- libvmime-0.9.0/src/platforms/windows/windowsFile.cpp	2008-10-12 10:54:31.000000000 +0200
-+++ libvmime-0.9.0.mod/src/platforms/windows/windowsFile.cpp	2009-10-08 01:08:19.000000000 +0200
+diff -urN a/src/mailbox.cpp c/src/mailbox.cpp
+--- libvmime-0.9.0.orig/src/mailbox.cpp	2008-10-12 11:03:13.000000000 +0200
++++ libvmime-0.9.0/src/mailbox.cpp	2009-12-04 14:56:38.000000000 +0100
+@@ -415,7 +415,7 @@
+ 		bool newLine = true;
+ 
+ 		m_name.encodeAndFold(os, maxLineLength, pos, &pos,
+-			forceEncode ? text::FORCE_ENCODING : 0);
++			text::QUOTE_IF_POSSIBLE | (forceEncode ? text::FORCE_ENCODING : 0));
+ 
+ 		if (pos + m_email.length() + 3 > maxLineLength)
+ 		{
+diff -urN a/src/platforms/posix/posixFile.cpp c/src/platforms/posix/posixFile.cpp
+--- libvmime-0.9.0.orig/src/platforms/posix/posixFile.cpp	2008-10-12 11:42:23.000000000 +0200
++++ libvmime-0.9.0/src/platforms/posix/posixFile.cpp	2009-12-04 16:00:23.000000000 +0100
+@@ -120,6 +120,8 @@
+ {
+ 	if (::write(m_fd, data, count) == -1)
+ 		posixFileSystemFactory::reportError(m_path, errno);
++
++	m_eof = false;
+ }
+ 
+ 
+@@ -166,7 +168,7 @@
+ 	if ((c = ::read(m_fd, data, count)) == -1)
+ 		posixFileSystemFactory::reportError(m_path, errno);
+ 
+-	if (c == 0)
++	if (c == 0 && count != 0)
+ 		m_eof = true;
+ 
+ 	return static_cast <size_type>(c);
+diff -urN a/src/platforms/windows/windowsFile.cpp c/src/platforms/windows/windowsFile.cpp
+--- libvmime-0.9.0.orig/src/platforms/windows/windowsFile.cpp	2008-10-12 10:54:31.000000000 +0200
++++ libvmime-0.9.0/src/platforms/windows/windowsFile.cpp	2009-12-04 14:55:17.000000000 +0100
 @@ -268,7 +268,7 @@
  	return true;
  }
@@ -373,9 +406,50 @@ diff -urN libvmime-0.9.0/src/platforms/windows/windowsFile.cpp libvmime-0.9.0.mo
  {
  	DWORD dwCurPos = SetFilePointer(m_hFile, 0, NULL, FILE_CURRENT);
  	DWORD dwNewPos = SetFilePointer(m_hFile, (LONG)count, NULL, FILE_CURRENT);
-diff -urN libvmime-0.9.0/vmime/platforms/windows/windowsFile.hpp libvmime-0.9.0.mod/vmime/platforms/windows/windowsFile.hpp
---- libvmime-0.9.0/vmime/platforms/windows/windowsFile.hpp	2008-10-12 10:54:33.000000000 +0200
-+++ libvmime-0.9.0.mod/vmime/platforms/windows/windowsFile.hpp	2009-10-08 01:08:19.000000000 +0200
+diff -urN a/src/utility/stringUtils.cpp c/src/utility/stringUtils.cpp
+--- libvmime-0.9.0.orig/src/utility/stringUtils.cpp	2008-10-12 11:11:24.000000000 +0200
++++ libvmime-0.9.0/src/utility/stringUtils.cpp	2009-12-04 16:03:36.000000000 +0100
+@@ -142,7 +142,7 @@
+ 	{
+ 		if (parserHelpers::isAscii(*i))
+ 		{
+-			if (*i != '=' || *(i + 1) != '?') // To avoid bad behaviour...
++			if (*i != '=' || ((i + 1) != end && *(i + 1) != '?')) // To avoid bad behaviour...
+ 				++count;
+ 		}
+ 	}
+diff -urN a/src/word.cpp c/src/word.cpp
+--- libvmime-0.9.0.orig/src/word.cpp	2008-10-12 15:45:39.000000000 +0200
++++ libvmime-0.9.0/src/word.cpp	2009-12-04 14:56:38.000000000 +0100
+@@ -352,10 +352,22 @@
+ 		noEncoding = false;
+ 	}
+ 
+-	if (noEncoding)
++	// If possible and requested (with flag), quote the buffer (no folding is performed).
++	// Quoting is possible if and only if:
++	//  - the whole buffer is ASCII-only
++	//  - the buffer does not contain quoting character (")
++	//  - there is enough remaining space on the current line to hold the whole buffer
++	if ((flags & text::QUOTE_IF_POSSIBLE) &&
++	    asciiCount == m_buffer.length() &&
++	    m_buffer.find('"') == string::npos &&
++	    (curLineLength + 2 /* 2 x " */ + m_buffer.length()) < maxLineLength)
++	{
++		os << '"' << m_buffer << '"';
++		curLineLength += 2 + m_buffer.length();
++	}
++	// We will fold lines without encoding them.
++	else if (noEncoding)
+ 	{
+-		// We will fold lines without encoding them.
+-
+ 		string::const_iterator lastWSpos = m_buffer.end(); // last white-space position
+ 		string::const_iterator curLineStart = m_buffer.begin(); // current line start
+ 
+diff -urN a/vmime/platforms/windows/windowsFile.hpp c/vmime/platforms/windows/windowsFile.hpp
+--- libvmime-0.9.0.orig/vmime/platforms/windows/windowsFile.hpp	2008-10-12 10:54:33.000000000 +0200
++++ libvmime-0.9.0/vmime/platforms/windows/windowsFile.hpp	2009-12-04 14:55:17.000000000 +0100
 @@ -73,7 +73,7 @@
  	bool canRead() const;
  	bool canWrite() const;
@@ -385,3 +459,16 @@ diff -urN libvmime-0.9.0/vmime/platforms/windows/windowsFile.hpp libvmime-0.9.0.
  
  	const path& getFullPath() const;
  
+diff -urN a/vmime/text.hpp c/vmime/text.hpp
+--- libvmime-0.9.0.orig/vmime/text.hpp	2008-10-12 10:54:34.000000000 +0200
++++ libvmime-0.9.0/vmime/text.hpp	2009-12-04 14:56:38.000000000 +0100
+@@ -197,7 +197,8 @@
+ 
+ 		FORCE_NO_ENCODING = (1 << 0),    /**< Just fold lines, don't encode them. */
+ 		FORCE_ENCODING = (1 << 1),       /**< Encode lines even if they are plain ASCII text. */
+-		NO_NEW_LINE_SEQUENCE = (1 << 2)  /**< Use CRLF instead of new-line sequence (CRLF + TAB). */
++		NO_NEW_LINE_SEQUENCE = (1 << 2), /**< Use CRLF instead of new-line sequence (CRLF + TAB). */
++		QUOTE_IF_POSSIBLE = (1 << 3)     /**< Use quoting instead of encoding when possible (even if FORCE_ENCODING is specified). */
+ 	};
+ 
+ 	/** Encode and fold text in respect to RFC-2047.
