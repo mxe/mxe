@@ -128,7 +128,7 @@ define $(PKG)_BUILD
         -qt-gif \
         -system-libtiff \
         -system-libpng \
-        -system-libmng \
+        -qt-libmng \
         -system-libjpeg \
         -system-sqlite \
         -openssl-linked \
@@ -140,7 +140,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' install
     # Manually created prl files for static plugins to help applications link to system libs
     $(INSTALL) -m664 '$(1)/lib/qjpeg.prl' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m664 '$(1)/lib/qmng.prl' '$(PREFIX)/$(TARGET)/lib/'
+#    $(INSTALL) -m664 '$(1)/lib/qmng.prl' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m664 '$(1)/lib/qsqlite.prl' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m664 '$(1)/lib/qsqlodbc.prl' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m664 '$(1)/lib/qsqlpsql.prl' '$(PREFIX)/$(TARGET)/lib/'
