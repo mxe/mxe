@@ -30,7 +30,7 @@ $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpng jpeg libmng tiff
+$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpng jpeg libmng tiff sqlite
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
@@ -87,24 +87,10 @@ define $(PKG)_BUILD
         do echo TEMPLATE = subdirs >'$(1)'/src/tools/"$$f"/"$$f".pro; \
     done
 
-    # Trick the buildsystem into using win32 feature files:
-    mv '$(1)'/mkspecs/features/unix '$(1)'/mkspecs/features/unix.orig
-    ln -s win32 '$(1)'/mkspecs/features/unix
-
     # Adjust the mkspec values that contain the TARGET platform prefix.
     # The patch planted strings HOSTPLATFORMPREFIX and HOSTPLATFORMINCLUDE.
     $(SED) 's,HOSTPLATFORMPREFIX-,$(TARGET)-,g'                  -i '$(1)'/mkspecs/win32-g++/qmake.conf
     $(SED) 's,HOSTPLATFORMINCLUDE,$(PREFIX)/$(TARGET)/include,g' -i '$(1)'/mkspecs/win32-g++/qmake.conf
-
-    # Make sure qmake doesn't use compilation paths meant for unix
-    find '$(1)'/src -name '*.pr[oi]' -exec \
-        $(SED) 's,\(^\|[^_/]\)unix,\1linux,g' -i {} \;
-
-    # Make qmake use compilation paths meant for MinGW or Windows in general
-    find '$(1)'/src -name '*.pr[oi]' -exec \
-        $(SED) 's,\(^\|[^_/]\)win32-g++\([^-]\|$$\),\1unix\2,g' -i {} \;
-    find '$(1)'/src -name '*.pr[oi]' -exec \
-        $(SED) 's,\(^\|[^_/]\)win32\([^-]\|$$\),\1unix\2,g' -i {} \;
 
     # Configure Qt for MinGW target
     cd '$(1)' && ./configure \

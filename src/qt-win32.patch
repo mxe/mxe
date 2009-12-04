@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 diff -urN a/configure b/configure
 --- a/configure	2009-11-27 02:27:48.000000000 +0100
-+++ b/configure	2009-12-02 21:44:56.000000000 +0100
++++ b/configure	2009-12-03 16:19:48.000000000 +0100
 @@ -591,7 +591,7 @@
  rm -f "$outpath/config.tests/.qmake.cache"
  cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
@@ -376,9 +376,119 @@ diff -urN a/configure b/configure
          *s60main/s60main.pro) continue ;;
          *examples/activeqt/*) continue ;;
          */qmake/qmake.pro) continue ;;
+diff -urN a/demos/spreadsheet/spreadsheet.pro b/demos/spreadsheet/spreadsheet.pro
+--- a/demos/spreadsheet/spreadsheet.pro	2009-11-27 02:27:41.000000000 +0100
++++ b/demos/spreadsheet/spreadsheet.pro	2009-12-03 17:47:52.000000000 +0100
+@@ -8,7 +8,7 @@
+ INCLUDEPATH += .
+ 
+ CONFIG += qt warn_on
+-#unix:contains(QT_CONFIG, dbus):QT += dbus
++#unix:!win32:contains(QT_CONFIG, dbus):QT += dbus
+ 
+ # Input
+ HEADERS += printview.h spreadsheet.h spreadsheetdelegate.h spreadsheetitem.h
+diff -urN a/doc/src/snippets/qmake/scopes.pro b/doc/src/snippets/qmake/scopes.pro
+--- a/doc/src/snippets/qmake/scopes.pro	2009-11-27 02:27:44.000000000 +0100
++++ b/doc/src/snippets/qmake/scopes.pro	2009-12-03 21:21:53.000000000 +0100
+@@ -17,7 +17,7 @@
+ }
+ #! [1]
+ 
+-unix {
++unix:!win32 {
+     SOURCES += paintwidget_unix.cpp
+ }
+ 
+diff -urN a/doc/src/snippets/qmake/spaces.pro b/doc/src/snippets/qmake/spaces.pro
+--- a/doc/src/snippets/qmake/spaces.pro	2009-11-27 02:27:44.000000000 +0100
++++ b/doc/src/snippets/qmake/spaces.pro	2009-12-03 17:47:52.000000000 +0100
+@@ -1,9 +1,9 @@
+ #! [quoting library paths with spaces]
+ win32:LIBS += $$quote(C:/mylibs/extra libs/extra.lib)
+-unix:LIBS += $$quote(-L/home/user/extra libs) -lextra
++unix:!win32:LIBS += $$quote(-L/home/user/extra libs) -lextra
+ #! [quoting library paths with spaces]
+ 
+ #! [quoting include paths with spaces]
+ win32:INCLUDEPATH += $$quote(C:/mylibs/extra headers)
+-unix:INCLUDEPATH += $$quote(/home/user/extra headers)
++unix:!win32:INCLUDEPATH += $$quote(/home/user/extra headers)
+ #! [quoting include paths with spaces]
+diff -urN a/examples/itemviews/chart/chart.pro b/examples/itemviews/chart/chart.pro
+--- a/examples/itemviews/chart/chart.pro	2009-11-27 02:27:48.000000000 +0100
++++ b/examples/itemviews/chart/chart.pro	2009-12-03 21:07:18.000000000 +0100
+@@ -4,7 +4,7 @@
+ SOURCES     = main.cpp \
+               mainwindow.cpp \
+               pieview.cpp
+-unix:!mac:!symbian:!vxworks:LIBS+= -lm
++unix:!win32:!mac:!symbian:!vxworks:LIBS+= -lm
+ 
+ TARGET.EPOCHEAPSIZE = 0x200000 0x800000
+ 
+diff -urN a/examples/painting/painterpaths/painterpaths.pro b/examples/painting/painterpaths/painterpaths.pro
+--- a/examples/painting/painterpaths/painterpaths.pro	2009-11-27 02:27:48.000000000 +0100
++++ b/examples/painting/painterpaths/painterpaths.pro	2009-12-03 21:07:18.000000000 +0100
+@@ -3,7 +3,7 @@
+ SOURCES       = main.cpp \
+                 renderarea.cpp \
+                 window.cpp
+-unix:!mac:!symbian:!vxworks:LIBS += -lm
++unix:!win32:!mac:!symbian:!vxworks:LIBS += -lm
+ 
+ # install
+ target.path = $$[QT_INSTALL_EXAMPLES]/painting/painterpaths
+diff -urN a/examples/threads/mandelbrot/mandelbrot.pro b/examples/threads/mandelbrot/mandelbrot.pro
+--- a/examples/threads/mandelbrot/mandelbrot.pro	2009-11-27 02:27:48.000000000 +0100
++++ b/examples/threads/mandelbrot/mandelbrot.pro	2009-12-03 21:07:18.000000000 +0100
+@@ -4,7 +4,7 @@
+                 mandelbrotwidget.cpp \
+                 renderthread.cpp
+ 
+-unix:!mac:!symbian:!vxworks:LIBS += -lm
++unix:!win32:!mac:!symbian:!vxworks:LIBS += -lm
+ 
+ # install
+ target.path = $$[QT_INSTALL_EXAMPLES]/threads/mandelbrot
+diff -urN a/lib/qjpeg.prl b/lib/qjpeg.prl
+--- a/lib/qjpeg.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qjpeg.prl	2009-12-03 16:19:48.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -ljpeg
+diff -urN a/lib/qmng.prl b/lib/qmng.prl
+--- a/lib/qmng.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qmng.prl	2009-12-03 16:19:48.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lmng
+diff -urN a/lib/qsqlite.prl b/lib/qsqlite.prl
+--- a/lib/qsqlite.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qsqlite.prl	2009-12-03 16:19:48.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lsqlite3
+diff -urN a/lib/qsqlodbc.prl b/lib/qsqlodbc.prl
+--- a/lib/qsqlodbc.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qsqlodbc.prl	2009-12-03 16:19:48.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lodbc32
+diff -urN a/lib/qsqlpsql.prl b/lib/qsqlpsql.prl
+--- a/lib/qsqlpsql.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qsqlpsql.prl	2009-12-03 16:19:48.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lpq
+diff -urN a/lib/qsqltds.prl b/lib/qsqltds.prl
+--- a/lib/qsqltds.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qsqltds.prl	2009-12-03 16:19:48.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -lsybdb -liconv
+diff -urN a/lib/qtiff.prl b/lib/qtiff.prl
+--- a/lib/qtiff.prl	1970-01-01 01:00:00.000000000 +0100
++++ b/lib/qtiff.prl	2009-12-03 16:19:48.000000000 +0100
+@@ -0,0 +1 @@
++QMAKE_PRL_LIBS = -ltiff
 diff -urN a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
 --- a/mkspecs/win32-g++/qmake.conf	2009-11-27 02:27:45.000000000 +0100
-+++ b/mkspecs/win32-g++/qmake.conf	2009-12-02 20:54:42.000000000 +0100
++++ b/mkspecs/win32-g++/qmake.conf	2009-12-03 16:19:48.000000000 +0100
 @@ -3,23 +3,31 @@
  #
  # Written for MinGW
@@ -487,9 +597,143 @@ diff -urN a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
  QMAKE_STRIPFLAGS_LIB 	+= --strip-unneeded
 -load(qt_config)
 +PKG_CONFIG		= HOSTPLATFORMPREFIX-pkg-config
+diff -urN a/projects.pro b/projects.pro
+--- a/projects.pro	2009-11-27 02:27:45.000000000 +0100
++++ b/projects.pro	2009-12-03 21:26:24.000000000 +0100
+@@ -55,7 +55,7 @@
+ 
+ !symbian: confclean.depends += clean
+ confclean.commands =
+-unix:!symbian {
++unix:!win32:!symbian {
+   confclean.commands += (cd config.tests/unix/stl && $(MAKE) distclean); \
+ 			(cd config.tests/unix/endian && $(MAKE) distclean); \
+ 			(cd config.tests/unix/ipv6 && $(MAKE) distclean); \
+diff -urN a/qmake/qmake.pri b/qmake/qmake.pri
+--- a/qmake/qmake.pri	2009-11-27 02:27:48.000000000 +0100
++++ b/qmake/qmake.pri	2009-12-03 21:26:24.000000000 +0100
+@@ -117,7 +117,7 @@
+         qxmlstream.h \
+         qxmlutils.h
+ 
+-    unix {
++    unix:!win32 {
+         SOURCES += qfsfileengine_unix.cpp qfsfileengine_iterator_unix.cpp
+         mac {
+           SOURCES += qcore_mac.cpp qsettings_mac.cpp
+diff -urN a/src/3rdparty/javascriptcore/WebKit.pri b/src/3rdparty/javascriptcore/WebKit.pri
+--- a/src/3rdparty/javascriptcore/WebKit.pri	2009-11-27 02:27:50.000000000 +0100
++++ b/src/3rdparty/javascriptcore/WebKit.pri	2009-12-03 21:32:03.000000000 +0100
+@@ -31,7 +31,7 @@
+     DEPENDPATH += $$PWD/WebKit/qt/Api
+ }
+ 
+-!mac:!unix|symbian {
++!mac:!unix|win32|symbian {
+     DEFINES += USE_SYSTEM_MALLOC
+ }
+ 
+diff -urN a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
+--- a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro	2009-11-27 02:27:48.000000000 +0100
++++ b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro	2009-12-03 17:47:51.000000000 +0100
+@@ -34,7 +34,7 @@
+ 
+ CONFIG(release):!CONFIG(QTDIR_build) {
+     contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols
+-    unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
++    unix:!win32:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
+ }
+ 
+ linux-*: DEFINES += HAVE_STDINT_H
+diff -urN a/src/3rdparty/webkit/WebCore/WebCore.pro b/src/3rdparty/webkit/WebCore/WebCore.pro
+--- a/src/3rdparty/webkit/WebCore/WebCore.pro	2009-11-27 02:27:50.000000000 +0100
++++ b/src/3rdparty/webkit/WebCore/WebCore.pro	2009-12-03 21:22:34.000000000 +0100
+@@ -50,12 +50,12 @@
+     lessThan(QT_MINOR_VERSION, 4): QMAKE_PKGCONFIG_REQUIRES += QtXml
+ }
+ 
+-unix:!mac:*-g++*:QMAKE_CXXFLAGS += -ffunction-sections -fdata-sections 
+-unix:!mac:*-g++*:QMAKE_LFLAGS += -Wl,--gc-sections
++unix:!win32:!mac:*-g++*:QMAKE_CXXFLAGS += -ffunction-sections -fdata-sections 
++unix:!win32:!mac:*-g++*:QMAKE_LFLAGS += -Wl,--gc-sections
+ 
+ CONFIG(release):!CONFIG(QTDIR_build) {
+     contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols
+-    unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
++    unix:!win32:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
+ }
+ 
+ linux-*: DEFINES += HAVE_STDINT_H
+@@ -2477,7 +2477,7 @@
+ 
+     } else {
+ 
+-        unix {
++        unix:!win32 {
+     
+             mac {
+                 SOURCES += \
+diff -urN a/src/corelib/arch/generic/arch.pri b/src/corelib/arch/generic/arch.pri
+--- a/src/corelib/arch/generic/arch.pri	2009-11-27 02:27:54.000000000 +0100
++++ b/src/corelib/arch/generic/arch.pri	2009-12-03 22:26:05.000000000 +0100
+@@ -2,5 +2,5 @@
+ # 'generic' architecture
+ #
+ 
+-unix:SOURCES += qatomic_generic_unix.cpp
++unix:!win32:SOURCES += qatomic_generic_unix.cpp
+ win32:SOURCES += qatomic_generic_windows.cpp
+diff -urN a/src/corelib/codecs/codecs.pri b/src/corelib/codecs/codecs.pri
+--- a/src/corelib/codecs/codecs.pri	2009-11-27 02:27:53.000000000 +0100
++++ b/src/corelib/codecs/codecs.pri	2009-12-03 21:17:25.000000000 +0100
+@@ -19,7 +19,7 @@
+ 	codecs/qutfcodec.cpp \
+ 	codecs/qtextcodecplugin.cpp
+ 
+-unix {
++unix:!win32 {
+ 	SOURCES += codecs/qfontlaocodec.cpp
+ 
+         contains(QT_CONFIG,iconv) {
+diff -urN a/src/corelib/kernel/kernel.pri b/src/corelib/kernel/kernel.pri
+--- a/src/corelib/kernel/kernel.pri	2009-11-27 02:27:54.000000000 +0100
++++ b/src/corelib/kernel/kernel.pri	2009-12-03 21:57:49.000000000 +0100
+@@ -89,7 +89,7 @@
+ 		kernel/qcore_mac.cpp
+ }
+ 
+-unix:!symbian {
++unix:!win32:!symbian {
+ 	SOURCES += \
+                 kernel/qcore_unix.cpp \
+                 kernel/qcrashhandler.cpp \
+diff -urN a/src/corelib/plugin/plugin.pri b/src/corelib/plugin/plugin.pri
+--- a/src/corelib/plugin/plugin.pri	2009-11-27 02:27:54.000000000 +0100
++++ b/src/corelib/plugin/plugin.pri	2009-12-03 21:26:24.000000000 +0100
+@@ -19,7 +19,7 @@
+ 	SOURCES += plugin/qlibrary_win.cpp
+ }
+ 
+-unix {
++unix:!win32 {
+ 	SOURCES += plugin/qlibrary_unix.cpp
+ }
+ 
+diff -urN a/src/corelib/thread/thread.pri b/src/corelib/thread/thread.pri
+--- a/src/corelib/thread/thread.pri	2009-11-27 02:27:54.000000000 +0100
++++ b/src/corelib/thread/thread.pri	2009-12-03 22:24:09.000000000 +0100
+@@ -24,7 +24,7 @@
+  	   thread/qthread.cpp \
+            thread/qthreadstorage.cpp 
+ 
+-unix:SOURCES += thread/qmutex_unix.cpp \
++unix:!win32:SOURCES += thread/qmutex_unix.cpp \
+                 thread/qthread_unix.cpp \
+ 		thread/qwaitcondition_unix.cpp
+ 
 diff -urN a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
 --- a/src/corelib/tools/tools.pri	2009-11-27 02:27:54.000000000 +0100
-+++ b/src/corelib/tools/tools.pri	2009-12-02 20:55:47.000000000 +0100
++++ b/src/corelib/tools/tools.pri	2009-12-03 22:30:28.000000000 +0100
 @@ -96,8 +96,8 @@
          ../3rdparty/zlib/uncompr.c \
          ../3rdparty/zlib/zutil.c
@@ -501,9 +745,40 @@ diff -urN a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
  }
  
  DEFINES += HB_EXPORT=Q_CORE_EXPORT
+@@ -118,5 +118,5 @@
+                ../3rdparty/md4
+ 
+ # Note: libm should be present by default becaue this is C++
+-!macx-icc:!vxworks:!symbian:unix:LIBS_PRIVATE += -lm
++!macx-icc:!vxworks:!symbian:!win32:unix:LIBS_PRIVATE += -lm
+ 
+diff -urN a/src/gui/dialogs/dialogs.pri b/src/gui/dialogs/dialogs.pri
+--- a/src/gui/dialogs/dialogs.pri	2009-11-27 02:27:52.000000000 +0100
++++ b/src/gui/dialogs/dialogs.pri	2009-12-03 21:26:24.000000000 +0100
+@@ -46,7 +46,7 @@
+     !win32-borland:!wince*: LIBS += -lshell32 	# the filedialog needs this library
+ }
+ 
+-!mac:!embedded:!symbian:unix {
++!mac:!embedded:!symbian:!win32:unix {
+         HEADERS += dialogs/qpagesetupdialog_unix_p.h
+ 	SOURCES += dialogs/qprintdialog_unix.cpp \
+ 		   dialogs/qpagesetupdialog_unix.cpp
+diff -urN a/src/gui/egl/egl.pri b/src/gui/egl/egl.pri
+--- a/src/gui/egl/egl.pri	2009-11-27 02:27:53.000000000 +0100
++++ b/src/gui/egl/egl.pri	2009-12-03 21:26:24.000000000 +0100
+@@ -10,7 +10,7 @@
+ 
+ wince*: SOURCES += egl/qegl_wince.cpp
+ 
+-unix {
++unix:!win32 {
+     embedded {
+         SOURCES += egl/qegl_qws.cpp
+     } else {
 diff -urN a/src/gui/image/image.pri b/src/gui/image/image.pri
 --- a/src/gui/image/image.pri	2009-11-27 02:27:52.000000000 +0100
-+++ b/src/gui/image/image.pri	2009-12-02 21:06:46.000000000 +0100
++++ b/src/gui/image/image.pri	2009-12-03 16:19:48.000000000 +0100
 @@ -93,11 +93,11 @@
      SOURCES += image/qpnghandler.cpp
  
@@ -536,7 +811,16 @@ diff -urN a/src/gui/image/image.pri b/src/gui/image/image.pri
      DEFINES *= QT_NO_IMAGEFORMAT_PNG
 diff -urN a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
 --- a/src/gui/painting/painting.pri	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/gui/painting/painting.pri	2009-12-02 20:55:47.000000000 +0100
++++ b/src/gui/painting/painting.pri	2009-12-03 22:00:03.000000000 +0100
+@@ -153,7 +153,7 @@
+                 painting/qprintengine_mac.mm \
+ }
+ 
+-unix:!mac:!symbian {
++unix:!win32:!mac:!symbian {
+         HEADERS += \
+                 painting/qprinterinfo_unix_p.h
+         SOURCES += \
 @@ -380,9 +380,9 @@
  }
  
@@ -552,7 +836,7 @@ diff -urN a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
  
 diff -urN a/src/network/access/access.pri b/src/network/access/access.pri
 --- a/src/network/access/access.pri	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/network/access/access.pri	2009-12-02 20:55:47.000000000 +0100
++++ b/src/network/access/access.pri	2009-12-03 16:19:48.000000000 +0100
 @@ -57,8 +57,8 @@
  
  #zlib support
@@ -565,9 +849,49 @@ diff -urN a/src/network/access/access.pri b/src/network/access/access.pri
 +    unix|win32-g++:LIBS_PRIVATE += -lz
 +    win32-msvc*|win32-icc:LIBS += zdll.lib
  }
+diff -urN a/src/network/kernel/kernel.pri b/src/network/kernel/kernel.pri
+--- a/src/network/kernel/kernel.pri	2009-11-27 02:27:53.000000000 +0100
++++ b/src/network/kernel/kernel.pri	2009-12-03 22:31:14.000000000 +0100
+@@ -21,7 +21,7 @@
+ 	   kernel/qnetworkinterface.cpp
+ 
+ symbian: SOURCES += kernel/qhostinfo_unix.cpp kernel/qnetworkinterface_symbian.cpp
+-unix:!symbian:SOURCES += kernel/qhostinfo_unix.cpp kernel/qnetworkinterface_unix.cpp
++unix:!win32:!symbian:SOURCES += kernel/qhostinfo_unix.cpp kernel/qnetworkinterface_unix.cpp
+ win32:SOURCES += kernel/qhostinfo_win.cpp kernel/qnetworkinterface_win.cpp
+ 
+ mac:LIBS_PRIVATE += -framework SystemConfiguration -framework CoreFoundation
+diff -urN a/src/network/socket/socket.pri b/src/network/socket/socket.pri
+--- a/src/network/socket/socket.pri	2009-11-27 02:27:53.000000000 +0100
++++ b/src/network/socket/socket.pri	2009-12-03 22:26:55.000000000 +0100
+@@ -25,10 +25,10 @@
+            socket/qlocalsocket.cpp \
+            socket/qlocalserver.cpp
+ 
+-unix:SOURCES += socket/qnativesocketengine_unix.cpp \
++unix:!win32:SOURCES += socket/qnativesocketengine_unix.cpp \
+                 socket/qlocalsocket_unix.cpp \
+                 socket/qlocalserver_unix.cpp
+-unix:HEADERS += \
++unix:!win32:HEADERS += \
+                 socket/qnet_unix_p.h
+ 
+ win32:SOURCES += socket/qnativesocketengine_win.cpp \
+diff -urN a/src/plugins/codecs/jp/jp.pro b/src/plugins/codecs/jp/jp.pro
+--- a/src/plugins/codecs/jp/jp.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/codecs/jp/jp.pro	2009-12-03 21:26:24.000000000 +0100
+@@ -16,7 +16,7 @@
+ 		  qjpunicode.cpp \
+ 		  main.cpp
+ 
+-unix {
++unix:!win32 {
+ 	HEADERS += qfontjpcodec.h
+ 	SOURCES += qfontjpcodec.cpp
+ }
 diff -urN a/src/plugins/imageformats/jpeg/jpeg.pro b/src/plugins/imageformats/jpeg/jpeg.pro
 --- a/src/plugins/imageformats/jpeg/jpeg.pro	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/plugins/imageformats/jpeg/jpeg.pro	2009-12-02 21:09:03.000000000 +0100
++++ b/src/plugins/imageformats/jpeg/jpeg.pro	2009-12-03 17:47:51.000000000 +0100
 @@ -20,8 +20,8 @@
  }
  
@@ -581,7 +905,7 @@ diff -urN a/src/plugins/imageformats/jpeg/jpeg.pro b/src/plugins/imageformats/jp
  	INCLUDEPATH += ../../../3rdparty/libjpeg
 diff -urN a/src/plugins/imageformats/mng/mng.pro b/src/plugins/imageformats/mng/mng.pro
 --- a/src/plugins/imageformats/mng/mng.pro	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/plugins/imageformats/mng/mng.pro	2009-12-02 21:11:03.000000000 +0100
++++ b/src/plugins/imageformats/mng/mng.pro	2009-12-03 17:47:51.000000000 +0100
 @@ -14,10 +14,9 @@
  }
  
@@ -613,7 +937,7 @@ diff -urN a/src/plugins/imageformats/mng/mng.pro b/src/plugins/imageformats/mng/
  QTDIR_build:DESTDIR = $$QT_BUILD_TREE/plugins/imageformats
 diff -urN a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/tiff/tiff.pro
 --- a/src/plugins/imageformats/tiff/tiff.pro	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/plugins/imageformats/tiff/tiff.pro	2009-12-02 21:12:12.000000000 +0100
++++ b/src/plugins/imageformats/tiff/tiff.pro	2009-12-03 17:47:51.000000000 +0100
 @@ -8,10 +8,9 @@
             qtiffhandler.cpp
  
@@ -628,6 +952,15 @@ diff -urN a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/ti
  	INCLUDEPATH += ../../../3rdparty/libtiff/libtiff
  	SOURCES  += \
  	    ../../../3rdparty/libtiff/libtiff/tif_aux.c \
+@@ -50,7 +49,7 @@
+ 	    win32 {
+ 	       SOURCES += ../../../3rdparty/libtiff/libtiff/tif_win32.c
+ 	    }
+-            unix: {
++            unix:!win32: {
+ 	       SOURCES += ../../../3rdparty/libtiff/libtiff/tif_unix.c
+             }
+             wince*: {
 @@ -62,10 +61,10 @@
  }
  
@@ -643,9 +976,108 @@ diff -urN a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/ti
  }
  
  QTDIR_build:DESTDIR = $$QT_BUILD_TREE/plugins/imageformats
+diff -urN a/src/plugins/phonon/phonon.pro b/src/plugins/phonon/phonon.pro
+--- a/src/plugins/phonon/phonon.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/phonon/phonon.pro	2009-12-03 17:47:51.000000000 +0100
+@@ -2,7 +2,7 @@
+ 
+ SUBDIRS =
+ 
+-unix:contains(QT_CONFIG, gstreamer): SUBDIRS *= gstreamer
++unix:!win32:contains(QT_CONFIG, gstreamer): SUBDIRS *= gstreamer
+ mac:contains(QT_CONFIG, phonon-backend): SUBDIRS *= qt7
+ win32:!wince*:contains(QT_CONFIG, phonon-backend): SUBDIRS *= ds9
+ wince*:contains(QT_CONFIG, phonon-backend): SUBDIRS *= waveout
+diff -urN a/src/plugins/plugins.pro b/src/plugins/plugins.pro
+--- a/src/plugins/plugins.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/plugins.pro	2009-12-03 17:47:51.000000000 +0100
+@@ -1,7 +1,7 @@
+ TEMPLATE = subdirs
+ 
+ SUBDIRS	*= accessible imageformats sqldrivers iconengines script
+-unix:!symbian {
++unix:!win32:!symbian {
+         contains(QT_CONFIG,iconv)|contains(QT_CONFIG,gnu-libiconv):SUBDIRS *= codecs
+ } else {
+         SUBDIRS *= codecs
+diff -urN a/src/plugins/sqldrivers/db2/db2.pro b/src/plugins/sqldrivers/db2/db2.pro
+--- a/src/plugins/sqldrivers/db2/db2.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/sqldrivers/db2/db2.pro	2009-12-03 17:47:51.000000000 +0100
+@@ -4,7 +4,7 @@
+ SOURCES		= main.cpp \
+ 		  ../../../sql/drivers/db2/qsql_db2.cpp
+ 
+-unix:!contains( LIBS, .*db2.* ):LIBS 	*= -ldb2
++unix:!win32:!contains( LIBS, .*db2.* ):LIBS 	*= -ldb2
+ win32:!contains( LIBS, .*db2.* ):LIBS   *= -ldb2cli
+ 
+ include(../qsqldriverbase.pri)
+diff -urN a/src/plugins/sqldrivers/ibase/ibase.pro b/src/plugins/sqldrivers/ibase/ibase.pro
+--- a/src/plugins/sqldrivers/ibase/ibase.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/sqldrivers/ibase/ibase.pro	2009-12-03 22:35:24.000000000 +0100
+@@ -4,9 +4,9 @@
+ SOURCES		= main.cpp \
+ 		  ../../../sql/drivers/ibase/qsql_ibase.cpp
+ 
+-unix:!contains( LIBS, .*gds.* ):!contains( LIBS, .*libfb.* ):LIBS    *= -lgds
++unix:!win32:!contains( LIBS, .*gds.* ):!contains( LIBS, .*libfb.* ):LIBS    *= -lgds
+ 
+-win32:!contains( LIBS, .*gds.* ):!contains( LIBS, .*fbclient.* ) {
++!unix:win32:!contains( LIBS, .*gds.* ):!contains( LIBS, .*fbclient.* ) {
+ 	!win32-borland:LIBS *= -lgds32_ms
+ 	win32-borland:LIBS  += gds32.lib
+ }
+diff -urN a/src/plugins/sqldrivers/mysql/mysql.pro b/src/plugins/sqldrivers/mysql/mysql.pro
+--- a/src/plugins/sqldrivers/mysql/mysql.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/sqldrivers/mysql/mysql.pro	2009-12-03 17:47:51.000000000 +0100
+@@ -4,7 +4,7 @@
+ SOURCES		= main.cpp \
+ 		  ../../../sql/drivers/mysql/qsql_mysql.cpp
+ 
+-unix: {
++unix:!win32: {
+     isEmpty(QT_LFLAGS_MYSQL) {
+         !contains(LIBS, .*mysqlclient.*):!contains(LIBS, .*mysqld.*) {
+             use_libmysqlclient_r:LIBS *= -lmysqlclient_r
+diff -urN a/src/plugins/sqldrivers/oci/oci.pro b/src/plugins/sqldrivers/oci/oci.pro
+--- a/src/plugins/sqldrivers/oci/oci.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/sqldrivers/oci/oci.pro	2009-12-03 17:47:51.000000000 +0100
+@@ -6,7 +6,7 @@
+ 
+ win32:LIBS	*= -loci
+ 
+-unix:!contains( LIBS, .*clnts.* ):LIBS	*= -lclntsh
++unix:!win32:!contains( LIBS, .*clnts.* ):LIBS	*= -lclntsh
+ 
+ macx:QMAKE_LFLAGS += -Wl,-flat_namespace,-U,_environ
+ 
+diff -urN a/src/plugins/sqldrivers/odbc/odbc.pro b/src/plugins/sqldrivers/odbc/odbc.pro
+--- a/src/plugins/sqldrivers/odbc/odbc.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/sqldrivers/odbc/odbc.pro	2009-12-03 21:24:22.000000000 +0100
+@@ -4,7 +4,7 @@
+ SOURCES		= main.cpp \
+ 		  ../../../sql/drivers/odbc/qsql_odbc.cpp
+ 
+-unix {
++unix:!win32 {
+ 	!contains( LIBS, .*odbc.* ) {
+ 	    LIBS 	*= $$QT_LFLAGS_ODBC
+ 	}
+diff -urN a/src/plugins/sqldrivers/psql/psql.pro b/src/plugins/sqldrivers/psql/psql.pro
+--- a/src/plugins/sqldrivers/psql/psql.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/sqldrivers/psql/psql.pro	2009-12-03 17:47:51.000000000 +0100
+@@ -4,7 +4,7 @@
+ SOURCES		= main.cpp \
+ 		  ../../../sql/drivers/psql/qsql_psql.cpp
+ 
+-unix: {
++unix:!win32: {
+     !isEmpty(QT_LFLAGS_PSQL) {
+         LIBS *= $$QT_LFLAGS_PSQL
+         QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
 diff -urN a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/main.cpp
 --- a/src/plugins/sqldrivers/tds/main.cpp	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/plugins/sqldrivers/tds/main.cpp	2009-12-02 20:54:42.000000000 +0100
++++ b/src/plugins/sqldrivers/tds/main.cpp	2009-12-03 16:19:48.000000000 +0100
 @@ -47,6 +47,7 @@
  #define _WINSCARD_H_
  #include <windows.h>
@@ -656,7 +1088,7 @@ diff -urN a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/mai
  QT_BEGIN_NAMESPACE
 diff -urN a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds.pro
 --- a/src/plugins/sqldrivers/tds/tds.pro	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/plugins/sqldrivers/tds/tds.pro	2009-12-02 20:54:42.000000000 +0100
++++ b/src/plugins/sqldrivers/tds/tds.pro	2009-12-03 17:47:51.000000000 +0100
 @@ -5,11 +5,6 @@
  SOURCES		= main.cpp \
  		  ../../../sql/drivers/tds/qsql_tds.cpp
@@ -673,7 +1105,16 @@ diff -urN a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds.
  include(../qsqldriverbase.pri)
 diff -urN a/src/qbase.pri b/src/qbase.pri
 --- a/src/qbase.pri	2009-11-27 02:27:54.000000000 +0100
-+++ b/src/qbase.pri	2009-12-02 20:55:47.000000000 +0100
++++ b/src/qbase.pri	2009-12-03 22:29:08.000000000 +0100
+@@ -39,7 +39,7 @@
+ linux-g++*:QMAKE_LFLAGS += $$QMAKE_LFLAGS_NOUNDEF
+ 
+ contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols
+-unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
++unix:!win32:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
+ contains(QT_CONFIG, largefile):CONFIG += largefile
+ 
+ #mac frameworks
 @@ -85,7 +85,6 @@
  }
  
@@ -682,9 +1123,98 @@ diff -urN a/src/qbase.pri b/src/qbase.pri
      INCLUDEPATH += tmp
      !static: DEFINES+=QT_MAKEDLL
  }
+diff -urN a/src/qt3support/network/network.pri b/src/qt3support/network/network.pri
+--- a/src/qt3support/network/network.pri	2009-11-27 02:27:54.000000000 +0100
++++ b/src/qt3support/network/network.pri	2009-12-03 22:26:12.000000000 +0100
+@@ -25,6 +25,6 @@
+ 		network/q3urloperator.cpp
+ 
+ win32:SOURCES +=  network/q3socketdevice_win.cpp
+-unix:SOURCES += network/q3socketdevice_unix.cpp
++unix:!win32:SOURCES += network/q3socketdevice_unix.cpp
+ mac:LIBS_PRIVATE += -lresolv
+ 
+diff -urN a/src/qt3support/other/other.pri b/src/qt3support/other/other.pri
+--- a/src/qt3support/other/other.pri	2009-11-27 02:27:54.000000000 +0100
++++ b/src/qt3support/other/other.pri	2009-12-03 22:26:12.000000000 +0100
+@@ -18,7 +18,7 @@
+ 		other/q3process.cpp \
+ 		other/q3membuf.cpp
+ 
+-unix:SOURCES += other/q3process_unix.cpp
++unix:!win32:SOURCES += other/q3process_unix.cpp
+ win32:SOURCES+= other/q3process_win.cpp
+ 
+ 
+diff -urN a/src/sql/drivers/drivers.pri b/src/sql/drivers/drivers.pri
+--- a/src/sql/drivers/drivers.pri	2009-11-27 02:27:52.000000000 +0100
++++ b/src/sql/drivers/drivers.pri	2009-12-03 22:34:47.000000000 +0100
+@@ -6,7 +6,7 @@
+     HEADERS +=      drivers/psql/qsql_psql.h
+     SOURCES +=      drivers/psql/qsql_psql.cpp
+ 
+-    unix {
++    unix:!win32 {
+         !isEmpty(QT_LFLAGS_PSQL) {
+             LIBS *= $$QT_LFLAGS_PSQL
+             QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
+@@ -25,7 +25,7 @@
+     HEADERS +=      drivers/mysql/qsql_mysql.h
+     SOURCES +=      drivers/mysql/qsql_mysql.cpp
+ 
+-    unix {
++    unix:!win32 {
+         isEmpty(QT_LFLAGS_MYSQL) {
+             !contains(LIBS, .*mysqlclient.*):!contains(LIBS, .*mysqld.*) {
+                 use_libmysqlclient_r:LIBS *= -lmysqlclient_r
+@@ -48,7 +48,7 @@
+      SOURCES += drivers/odbc/qsql_odbc.cpp
+ 
+      mac:!contains( LIBS, .*odbc.* ):LIBS        *= -liodbc
+-     unix:!contains( LIBS, .*odbc.* ):LIBS       *= -lodbc
++     unix:!win32:!contains( LIBS, .*odbc.* ):LIBS       *= -lodbc
+ 
+      win32 {
+          !win32-borland:LIBS     *= -lodbc32
+@@ -60,7 +60,7 @@
+     HEADERS += drivers/oci/qsql_oci.h
+     SOURCES += drivers/oci/qsql_oci.cpp
+ 
+-    unix:!contains( LIBS, .*clnts.* ):LIBS += -lclntsh
++    unix:!win32:!contains( LIBS, .*clnts.* ):LIBS += -lclntsh
+ 
+     win32:LIBS += -loci
+ }
+@@ -71,7 +71,7 @@
+ 
+     unix:LIBS += -L$SYBASE/lib -lsybdb
+ 
+-    win32 {
++    win32:!unix {
+         !win32-borland:LIBS += -lNTWDBLIB
+         win32-borland:LIBS += $(BCB)/lib/PSDK/NTWDBLIB.LIB
+     }
+@@ -81,7 +81,7 @@
+     HEADERS += drivers/db2/qsql_db2.h
+     SOURCES += drivers/db2/qsql_db2.cpp
+     
+-    unix:LIBS += -ldb2
++    unix:!win32:LIBS += -ldb2
+     
+     win32 {
+         !win32-borland:LIBS += -ldb2cli
+@@ -93,7 +93,7 @@
+     HEADERS += drivers/ibase/qsql_ibase.h
+     SOURCES += drivers/ibase/qsql_ibase.cpp
+     
+-    unix:LIBS *= -lgds  
++    unix:!win32:LIBS *= -lgds  
+     
+     win32 {
+         !win32-borland:LIBS *= -lgds32_ms
 diff -urN a/src/sql/drivers/tds/qsql_tds.cpp b/src/sql/drivers/tds/qsql_tds.cpp
 --- a/src/sql/drivers/tds/qsql_tds.cpp	2009-11-27 02:27:52.000000000 +0100
-+++ b/src/sql/drivers/tds/qsql_tds.cpp	2009-12-02 20:54:42.000000000 +0100
++++ b/src/sql/drivers/tds/qsql_tds.cpp	2009-12-03 16:19:48.000000000 +0100
 @@ -47,7 +47,8 @@
  #else
  #define Q_USE_SYBASE
@@ -697,7 +1227,7 @@ diff -urN a/src/sql/drivers/tds/qsql_tds.cpp b/src/sql/drivers/tds/qsql_tds.cpp
  #include <qvariant.h>
 diff -urN a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
 --- a/src/sql/drivers/tds/qsql_tds.h	2009-11-27 02:27:52.000000000 +0100
-+++ b/src/sql/drivers/tds/qsql_tds.h	2009-12-02 20:54:42.000000000 +0100
++++ b/src/sql/drivers/tds/qsql_tds.h	2009-12-03 16:19:48.000000000 +0100
 @@ -48,7 +48,8 @@
  
  #ifdef Q_OS_WIN32
@@ -710,7 +1240,7 @@ diff -urN a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
  #include <sqldb.h>
 diff -urN a/src/svg/svg.pro b/src/svg/svg.pro
 --- a/src/svg/svg.pro	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/svg/svg.pro	2009-12-02 20:55:47.000000000 +0100
++++ b/src/svg/svg.pro	2009-12-03 20:59:30.000000000 +0100
 @@ -44,7 +44,8 @@
  
  #zlib support
@@ -724,7 +1254,7 @@ diff -urN a/src/svg/svg.pro b/src/svg/svg.pro
  }
 diff -urN a/src/tools/bootstrap/bootstrap.pri b/src/tools/bootstrap/bootstrap.pri
 --- a/src/tools/bootstrap/bootstrap.pri	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/tools/bootstrap/bootstrap.pri	2009-12-02 20:55:47.000000000 +0100
++++ b/src/tools/bootstrap/bootstrap.pri	2009-12-03 16:19:48.000000000 +0100
 @@ -52,8 +52,8 @@
      LIBS += -lbootstrap
  }
@@ -738,7 +1268,16 @@ diff -urN a/src/tools/bootstrap/bootstrap.pri b/src/tools/bootstrap/bootstrap.pr
  
 diff -urN a/src/tools/bootstrap/bootstrap.pro b/src/tools/bootstrap/bootstrap.pro
 --- a/src/tools/bootstrap/bootstrap.pro	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/tools/bootstrap/bootstrap.pro	2009-12-02 20:55:47.000000000 +0100
++++ b/src/tools/bootstrap/bootstrap.pro	2009-12-03 17:47:51.000000000 +0100
+@@ -82,7 +82,7 @@
+            ../../xml/dom/qdom.cpp \
+            ../../xml/sax/qxml.cpp
+ 
+-unix:SOURCES += ../../corelib/io/qfsfileengine_unix.cpp \
++unix:!win32:SOURCES += ../../corelib/io/qfsfileengine_unix.cpp \
+                 ../../corelib/io/qfsfileengine_iterator_unix.cpp
+ 
+ win32:SOURCES += ../../corelib/io/qfsfileengine_win.cpp \
 @@ -108,6 +108,9 @@
          ../3rdparty/zlib/trees.c \
          ../3rdparty/zlib/uncompr.c \
@@ -751,8 +1290,8 @@ diff -urN a/src/tools/bootstrap/bootstrap.pro b/src/tools/bootstrap/bootstrap.pr
  lib.CONFIG = dummy_install
 diff -urN a/src/winmain/winmain.pro b/src/winmain/winmain.pro
 --- a/src/winmain/winmain.pro	2009-11-27 02:27:53.000000000 +0100
-+++ b/src/winmain/winmain.pro	2009-12-02 20:55:47.000000000 +0100
-@@ -11,7 +11,7 @@
++++ b/src/winmain/winmain.pro	2009-12-03 17:47:51.000000000 +0100
+@@ -11,12 +11,12 @@
  	win32-g++:DEFINES += QT_NEEDS_QMAIN
  	win32-borland:DEFINES += QT_NEEDS_QMAIN
  	SOURCES		= qtmain_win.cpp
@@ -761,39 +1300,76 @@ diff -urN a/src/winmain/winmain.pro b/src/winmain/winmain.pro
  	CONFIG		-= jpeg
  	INCLUDEPATH	+= tmp $$QMAKE_INCDIR_QT/QtCore
  }
-diff -urN a/lib/qjpeg.prl b/lib/qjpeg.prl
---- a/lib/qjpeg.prl	1970-01-01 01:00:00.000000000 +0100
-+++ b/lib/qjpeg.prl	2009-12-03 00:48:41.000000000 +0100
-@@ -0,0 +1 @@
-+QMAKE_PRL_LIBS = -ljpeg
-diff -urN a/lib/qmng.prl b/lib/qmng.prl
---- a/lib/qmng.prl	1970-01-01 01:00:00.000000000 +0100
-+++ b/lib/qmng.prl	2009-12-03 00:56:02.000000000 +0100
-@@ -0,0 +1 @@
-+QMAKE_PRL_LIBS = -lmng
-diff -urN a/lib/qsqlite.prl b/lib/qsqlite.prl
---- a/lib/qsqlite.prl	1970-01-01 01:00:00.000000000 +0100
-+++ b/lib/qsqlite.prl	2009-12-03 00:56:37.000000000 +0100
-@@ -0,0 +1 @@
-+QMAKE_PRL_LIBS = -lsqlite3
-diff -urN a/lib/qsqlodbc.prl b/lib/qsqlodbc.prl
---- a/lib/qsqlodbc.prl	1970-01-01 01:00:00.000000000 +0100
-+++ b/lib/qsqlodbc.prl	2009-12-03 00:56:37.000000000 +0100
-@@ -0,0 +1 @@
-+QMAKE_PRL_LIBS = -lodbc32
-diff -urN a/lib/qsqlpsql.prl b/lib/qsqlpsql.prl
---- a/lib/qsqlpsql.prl	1970-01-01 01:00:00.000000000 +0100
-+++ b/lib/qsqlpsql.prl	2009-12-03 00:56:37.000000000 +0100
-@@ -0,0 +1 @@
-+QMAKE_PRL_LIBS = -lpq
-diff -urN a/lib/qsqltds.prl b/lib/qsqltds.prl
---- a/lib/qsqltds.prl	1970-01-01 01:00:00.000000000 +0100
-+++ b/lib/qsqltds.prl	2009-12-03 00:56:37.000000000 +0100
-@@ -0,0 +1 @@
-+QMAKE_PRL_LIBS = -lsybdb -liconv
-diff -urN a/lib/qtiff.prl b/lib/qtiff.prl
---- a/lib/qtiff.prl	1970-01-01 01:00:00.000000000 +0100
-+++ b/lib/qtiff.prl	2009-12-03 00:57:16.000000000 +0100
-@@ -0,0 +1 @@
-+QMAKE_PRL_LIBS = -ltiff
-
+ 
+-!win32:error("$$_FILE_ is intended only for Windows!")
++!win32:warning("$$_FILE_ is intended only for Windows! This warning might be a spurious effect of fromfile function.")
+ include(../qbase.pri)
+ wince*:QMAKE_POST_LINK =
+ 
+diff -urN a/tools/assistant/compat/assistant.pro b/tools/assistant/compat/assistant.pro
+--- a/tools/assistant/compat/assistant.pro	2009-11-27 02:27:46.000000000 +0100
++++ b/tools/assistant/compat/assistant.pro	2009-12-03 17:47:52.000000000 +0100
+@@ -6,7 +6,7 @@
+ 
+ CONFIG += qt warn_on
+ 
+-unix:contains(QT_CONFIG, dbus):QT += dbus
++unix:!win32:contains(QT_CONFIG, dbus):QT += dbus
+ 
+ build_all:!build_pass {
+     CONFIG -= build_all
+@@ -67,7 +67,7 @@
+ 
+ TRANSLATIONS = assistant_de.ts
+ 
+-unix:!contains(QT_CONFIG, zlib):LIBS += -lz
++unix:!win32:!contains(QT_CONFIG, zlib):LIBS += -lz
+ 
+ contains(CONFIG, static): {
+     win32 {
+diff -urN a/tools/assistant/compat/compat.pro b/tools/assistant/compat/compat.pro
+--- a/tools/assistant/compat/compat.pro	2009-11-27 02:27:46.000000000 +0100
++++ b/tools/assistant/compat/compat.pro	2009-12-03 20:59:30.000000000 +0100
+@@ -6,7 +6,7 @@
+ 
+ CONFIG += qt warn_on
+ 
+-unix:contains(QT_CONFIG, dbus):QT += dbus
++unix:!win32:contains(QT_CONFIG, dbus):QT += dbus
+ 
+ build_all:!build_pass {
+     CONFIG -= build_all
+diff -urN a/tools/assistant/compat/lib/lib.pro b/tools/assistant/compat/lib/lib.pro
+--- a/tools/assistant/compat/lib/lib.pro	2009-11-27 02:27:46.000000000 +0100
++++ b/tools/assistant/compat/lib/lib.pro	2009-12-03 21:26:24.000000000 +0100
+@@ -19,7 +19,7 @@
+ DESTDIR                = ../../../../lib
+ DLLDESTDIR             = ../../../../bin
+ 
+-unix {
++unix:!win32 {
+         QMAKE_CFLAGS += $$QMAKE_CFLAGS_SHLIB
+         QMAKE_CXXFLAGS += $$QMAKE_CXXFLAGS_SHLIB
+ }
+diff -urN a/tools/designer/src/designer/designer.pro b/tools/designer/src/designer/designer.pro
+--- a/tools/designer/src/designer/designer.pro	2009-11-27 02:27:46.000000000 +0100
++++ b/tools/designer/src/designer/designer.pro	2009-12-03 17:47:52.000000000 +0100
+@@ -89,5 +89,5 @@
+ 
+ include(../sharedcomponents.pri)
+ 
+-unix:!mac:LIBS += -lm
++unix:!win32:!mac:LIBS += -lm
+ TRANSLATIONS = designer_de.ts
+diff -urN a/tools/tools.pro b/tools/tools.pro
+--- a/tools/tools.pro	2009-11-27 02:27:47.000000000 +0100
++++ b/tools/tools.pro	2009-12-03 17:47:52.000000000 +0100
+@@ -16,7 +16,7 @@
+      SUBDIRS     += linguist
+      symbian: SUBDIRS = designer
+      wince*: SUBDIRS = qtestlib designer
+-     unix:!mac:!embedded:contains(QT_CONFIG, qt3support):SUBDIRS += qtconfig
++     unix:!win32:!mac:!embedded:contains(QT_CONFIG, qt3support):SUBDIRS += qtconfig
+      win32:!wince*:SUBDIRS += activeqt
+ }
+ 
