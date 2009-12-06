@@ -63,7 +63,7 @@ define $(PKG)_BUILD
         --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null
-    $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' haslibarule= shlib= install
+    $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install haslibarule= shlib=
     $(INSTALL) -m664 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/src/include/postgres_ext.h' '$(PREFIX)/$(TARGET)/include/'
 endef
