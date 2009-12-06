@@ -46,12 +46,24 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
+        --disable-shared \
         --disable-rpath \
+        --without-tcl \
+        --without-perl \
+        --without-python \
+        --without-gssapi \
+        --without-krb5 \
+        --without-pam \
+        --without-ldap \
+        --without-bonjour \
+        --without-openssl \
         --without-readline \
+        --without-ossp-uuid \
+        --without-libxml \
+        --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null
-    $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)'
-    $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install enable_shared=no
+    $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' haslibarule= shlib= install
     $(INSTALL) -m664 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/src/include/postgres_ext.h' '$(PREFIX)/$(TARGET)/include/'
 endef
