@@ -62,8 +62,11 @@ define $(PKG)_BUILD
         --without-libxml \
         --without-libxslt \
         --with-zlib \
-        --with-system-tzdata=/dev/null
+        --with-system-tzdata=/dev/null \
+        LIBS='-lsecur32'
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install haslibarule= shlib=
+    $(MAKE) -C '$(1)'/src/port             -j '$(JOBS)'         haslibarule= shlib=
+    $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install haslibarule= shlib=
     $(INSTALL) -m664 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/src/include/postgres_ext.h' '$(PREFIX)/$(TARGET)/include/'
 endef
