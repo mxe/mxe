@@ -87,12 +87,29 @@ define $(PKG)_BUILD
         do echo TEMPLATE = subdirs >'$(1)'/src/tools/"$$f"/"$$f".pro; \
     done
 
+    # Trick the buildsystem into using win32 feature files:
+    mv '$(1)'/mkspecs/features/unix '$(1)'/mkspecs/features/unix.orig
+    ln -s win32 '$(1)'/mkspecs/features/unix
+
     # Adjust the mkspec values that contain the TARGET platform prefix.
     # The patch planted strings HOSTPLATFORMPREFIX and HOSTPLATFORMINCLUDE.
     $(SED) 's,HOSTPLATFORMPREFIX-,$(TARGET)-,g'                  -i '$(1)'/mkspecs/win32-g++/qmake.conf
     $(SED) 's,HOSTPLATFORMINCLUDE,$(PREFIX)/$(TARGET)/include,g' -i '$(1)'/mkspecs/win32-g++/qmake.conf
 
+    # Make sure qmake doesn't use compilation paths meant for unix
+    find '$(1)'/src -name '*.pr[oi]' -exec \
+        $(SED) 's,\(^\|[^_/]\)unix,\1linux,g' -i {} \;
+
+    # Make qmake use compilation paths meant for MinGW or Windows in general
+    find '$(1)'/src -name '*.pr[oi]' -exec \
+        $(SED) 's,\(^\|[^_/]\)win32-g++\([^-]\|$$\),\1unix\2,g' -i {} \;
+    find '$(1)'/src -name '*.pr[oi]' -exec \
+        $(SED) 's,\(^\|[^_/]\)win32\([^-]\|$$\),\1unix\2,g' -i {} \;
+
     # Configure Qt for MinGW target
+    # We prefer static mingw-cross-env system libs for static build:
+    # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite
+    # There is no -system-gif option. NB -system-libmng will not link in shared build.
     cd '$(1)' && ./configure \
         -opensource \
         -confirm-license \
@@ -125,12 +142,12 @@ define $(PKG)_BUILD
         -plugin-sql-psql \
         -plugin-sql-tds \
         -system-zlib \
-        -qt-gif \
-        -system-libtiff \
         -system-libpng \
-        -qt-libmng \
         -system-libjpeg \
+        -system-libtiff \
+        -system-libmng \
         -system-sqlite \
+        -qt-gif \
         -openssl-linked \
         -v
 
@@ -138,12 +155,4 @@ define $(PKG)_BUILD
     $(TARGET)-ranlib '$(1)'/lib/*.a
     rm -rf '$(PREFIX)/$(TARGET)/mkspecs'
     $(MAKE) -C '$(1)' install
-    # Manually created prl files for static plugins to help applications link to system libs
-    $(INSTALL) -m664 '$(1)/lib/qjpeg.prl' '$(PREFIX)/$(TARGET)/lib/'
-#    $(INSTALL) -m664 '$(1)/lib/qmng.prl' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m664 '$(1)/lib/qsqlite.prl' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m664 '$(1)/lib/qsqlodbc.prl' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m664 '$(1)/lib/qsqlpsql.prl' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m664 '$(1)/lib/qsqltds.prl' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m664 '$(1)/lib/qtiff.prl' '$(PREFIX)/$(TARGET)/lib/'
 endef
