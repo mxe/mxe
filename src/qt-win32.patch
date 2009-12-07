@@ -652,6 +652,18 @@ diff -urN a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/ti
  }
  
  QTDIR_build:DESTDIR = $$QT_BUILD_TREE/plugins/imageformats
+diff -urN a/src/plugins/sqldrivers/psql/psql.pro b/src/plugins/sqldrivers/psql/psql.pro
+--- a/src/plugins/sqldrivers/psql/psql.pro	2009-11-27 02:27:53.000000000 +0100
++++ b/src/plugins/sqldrivers/psql/psql.pro	2009-12-07 13:48:22.000000000 +0100
+@@ -14,7 +14,7 @@
+ 
+ win32:!contains(LIBS, .*pq.* ) {
+     !win32-g++:LIBS    *= -llibpq       
+-    win32-g++:LIBS *= -lpq	
++    win32-g++:LIBS *= -lpq -lsecur32
+     LIBS    *= -lws2_32 -ladvapi32
+ }
+ 
 diff -urN a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/main.cpp
 --- a/src/plugins/sqldrivers/tds/main.cpp	2009-11-27 02:27:53.000000000 +0100
 +++ b/src/plugins/sqldrivers/tds/main.cpp	2009-12-05 20:26:31.000000000 +0100
