@@ -30,7 +30,7 @@ $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.postgresql.org/
 $(PKG)_URL      := http://ftp2.nl.postgresql.org/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp10.us.postgresql.org/postgresql/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := gcc zlib readline
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://anoncvs.postgresql.org/cvsweb.cgi/pgsql/' | \
@@ -57,7 +57,7 @@ define $(PKG)_BUILD
         --without-ldap \
         --without-bonjour \
         --without-openssl \
-        --without-readline \
+        --with-readline \
         --without-ossp-uuid \
         --without-libxml \
         --without-libxslt \
