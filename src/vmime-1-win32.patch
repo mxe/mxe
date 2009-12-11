@@ -472,3 +472,23 @@ diff -urN a/vmime/text.hpp c/vmime/text.hpp
  	};
  
  	/** Encode and fold text in respect to RFC-2047.
+--- libvmime-0.9.0.orig/src/messageBuilder.cpp	2009-11-12 11:27:52.000000000 +0100
++++ libvmime-0.9.0/src/messageBuilder.cpp	2009-12-11 14:21:31.000000000 +0100
+@@ -54,11 +54,15 @@
+ 	if (m_from.isEmpty())
+ 		throw exceptions::no_expeditor();
+ 
+-	if (m_to.isEmpty() || m_to.getAddressAt(0)->isEmpty())
++	if ((m_to.isEmpty() || m_to.getAddressAt(0)->isEmpty()) &&
++	    (m_cc.isEmpty() || m_cc.getAddressAt(0)->isEmpty()) &&
++	    (m_bcc.isEmpty() || m_bcc.getAddressAt(0)->isEmpty()))
+ 		throw exceptions::no_recipient();
+ 
+ 	msg->getHeader()->From()->setValue(m_from);
+-	msg->getHeader()->To()->setValue(m_to);
++
++	if (!m_to.isEmpty())
++		msg->getHeader()->To()->setValue(m_to);
+ 
+ 	if (!m_cc.isEmpty())
+ 		msg->getHeader()->Cc()->setValue(m_cc);
