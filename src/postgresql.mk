@@ -30,7 +30,7 @@ $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.postgresql.org/
 $(PKG)_URL      := http://ftp2.nl.postgresql.org/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp10.us.postgresql.org/postgresql/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib readline
+$(PKG)_DEPS     := gcc zlib openssl readline
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://anoncvs.postgresql.org/cvsweb.cgi/pgsql/' | \
@@ -41,8 +41,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # The static OpenSSL libraries are in unix (not win32) naming style.
+    $(SED) 's,SSLEAY32,SSL,' -i '$(1)'/configure
+    $(SED) 's,ssleay32,ssl,' -i '$(1)'/configure
+    $(SED) 's,EAY32,CRYPTO,' -i '$(1)'/configure
+    $(SED) 's,eay32,crypto,' -i '$(1)'/configure
+    $(SED) 's,ssleay32,ssl,' -i '$(1)'/src/interfaces/libpq/Makefile
+    $(SED) 's,eay32,crypto,' -i '$(1)'/src/interfaces/libpq/Makefile
     # Since we build only client libary, use bogus tzdata to satisfy configure.
-    # We have to build the shared library, but we won't install it.
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
@@ -56,14 +62,14 @@ define $(PKG)_BUILD
         --without-pam \
         --without-ldap \
         --without-bonjour \
-        --without-openssl \
+        --with-openssl \
         --with-readline \
         --without-ossp-uuid \
         --without-libxml \
         --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null \
-        LIBS='-lsecur32'
+        LIBS='-lsecur32 -lws2_32 -lgdi32'
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/port             -j '$(JOBS)'         haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install haslibarule= shlib=
