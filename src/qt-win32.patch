@@ -660,7 +660,7 @@ diff -urN a/src/plugins/sqldrivers/psql/psql.pro b/src/plugins/sqldrivers/psql/p
  win32:!contains(LIBS, .*pq.* ) {
      !win32-g++:LIBS    *= -llibpq       
 -    win32-g++:LIBS *= -lpq	
-+    win32-g++:LIBS *= -lpq -lsecur32
++    win32-g++:LIBS *= -lpq -lssl -lcrypto -lsecur32 -lgdi32
      LIBS    *= -lws2_32 -ladvapi32
  }
  
