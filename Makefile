@@ -111,10 +111,10 @@ download-$(1): $(addprefix download-,$($(1)_DEPS))
 	fi
 
 .PHONY: $(1)
-$(1): $(PREFIX)/installed-$(1)
-$(PREFIX)/installed-$(1): $(TOP_DIR)/src/$(1).mk \
+$(1): $(PREFIX)/installed/$(1)
+$(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
-                          $(addprefix $(PREFIX)/installed-,$($(1)_DEPS))
+                          $(addprefix $(PREFIX)/installed/,$($(1)_DEPS))
 	@[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
 	@[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -158,7 +158,8 @@ build-only-$(1):
 	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR))
 	    rm -rfv  '$(2)'
 	    ,)
-	touch '$(PREFIX)/installed-$(1)'
+	[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
+	touch '$(PREFIX)/installed/$(1)'
 endef
 $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 
