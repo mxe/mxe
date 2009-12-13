@@ -120,6 +120,8 @@ $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	@[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
+	    rm -f '$(LOG_DIR)/$(1)-download'; \
+	    ln -s `date +%Y%m%d%H%M%S`'-$(1)-download' '$(LOG_DIR)/$(1)-download'; \
 	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(1)-download'; \
 	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	        echo; \
@@ -135,6 +137,8 @@ $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	$(if $(value $(1)_BUILD),
 	    @echo '[build]    $(1)'
 	    ,)
+	@rm -f '$(LOG_DIR)/$(1)'
+	@ln -s `date +%Y%m%d%H%M%S`'-$(1)' '$(LOG_DIR)/$(1)'
 	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(LOG_DIR)/$(1)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
