@@ -28,6 +28,7 @@ SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
 VERSION  := 2.10
 PREFIX   := $(PWD)/usr
+LOG_DIR  := $(PWD)/log
 PKG_DIR  := $(PWD)/pkg
 DIST_DIR := $(PWD)/dist
 TMP_DIR   = $(PWD)/tmp-$(1)
@@ -115,18 +116,18 @@ $(1): $(PREFIX)/installed/$(1)
 $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(addprefix $(PREFIX)/installed/,$($(1)_DEPS))
-	@[ -d '$(PREFIX)' ] || mkdir -p '$(PREFIX)'
+	@[ -d '$(LOG_DIR)' ] || mkdir -p '$(LOG_DIR)'
 	@[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
-	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(PREFIX)/log-$(1)'; \
+	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(1)'; \
 	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	        echo; \
 	        echo 'Wrong checksum of package $(1)!'; \
 	        echo '------------------------------------------------------------'; \
-	        tail -n 10 '$(PREFIX)/log-$(1)' | $(SED) -n '/./p'; \
+	        tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p'; \
 	        echo '------------------------------------------------------------'; \
-	        echo '[log]      $(PREFIX)/log-$(1)'; \
+	        echo '[log]      $(LOG_DIR)/$(1)'; \
 	        echo; \
 	        exit 1; \
 	    fi; \
@@ -134,13 +135,13 @@ $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	$(if $(value $(1)_BUILD),
 	    @echo '[build]    $(1)'
 	    ,)
-	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(PREFIX)/log-$(1)'; then \
+	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(LOG_DIR)/$(1)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
-	    tail -n 10 '$(PREFIX)/log-$(1)' | $(SED) -n '/./p'; \
+	    tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p'; \
 	    echo '------------------------------------------------------------'; \
-	    echo '[log]      $(PREFIX)/log-$(1)'; \
+	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
 	    exit 1; \
 	fi
@@ -166,7 +167,6 @@ $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 .PHONY: strip
 strip:
 	rm -rf \
-	    '$(PREFIX)'/log-* \
 	    '$(PREFIX)/include' \
 	    '$(PREFIX)/info' \
 	    '$(PREFIX)/lib/libiberty.a' \
