@@ -28,7 +28,7 @@ $(PKG)_CHECKSUM := 4255290de3b66deb4a7233ab41727c1b56739e8c
 $(PKG)_SUBDIR   := zziplib-$($(PKG)_VERSION)
 $(PKG)_FILE     := zziplib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://zziplib.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/zziplib/zziplib13/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/zziplib/zziplib$(word 2,$(subst ., ,$($(PKG)_VERSION)))/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
