@@ -32,10 +32,9 @@ $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$
 $(PKG)_DEPS     := pkg_config mingwrt mingwrt-dll w32api binutils gcc-gmp gcc-mpfr gcc-tdm gcc-pthreads
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://gcc.gnu.org/viewcvs/tags/?sortby=date' | \
-    grep '<a name="gcc_' | \
-    $(SED) -n 's,.*<a name="gcc_\([0-9][^"]*\)_release".*,\1,p' | \
-    $(SED) 's,_,.,g' | \
+    wget -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
+    grep '<a href="gcc-' | \
+    $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 
