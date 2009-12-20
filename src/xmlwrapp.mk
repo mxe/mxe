@@ -23,8 +23,8 @@
 # xmlwrapp
 PKG             := xmlwrapp
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.6.1
-$(PKG)_CHECKSUM := af96d589bd13737080cd02620685c665f9807397
+$(PKG)_VERSION  := 0.6.2
+$(PKG)_CHECKSUM := b3ef8bff215bbacd988790615b76379672105928
 $(PKG)_SUBDIR   := xmlwrapp-$($(PKG)_VERSION)
 $(PKG)_FILE     := xmlwrapp-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://sourceforge.net/projects/xmlwrapp/

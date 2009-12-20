@@ -22,8 +22,8 @@
 # GEOS
 PKG             := geos
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.0rc4
-$(PKG)_CHECKSUM := d03a4b6eff4fad82f9dd63224173efe933bf72f2
+$(PKG)_VERSION  := 3.2.0
+$(PKG)_CHECKSUM := e6925763fb06fa6a7f358ede49bb89f96535b3ef
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
 $(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://trac.osgeo.org/geos/

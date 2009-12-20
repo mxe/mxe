@@ -23,12 +23,12 @@
 # libsndfile
 PKG             := libsndfile
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.20
-$(PKG)_CHECKSUM := d4f88b919c644f54dd4038c4cf4fb2e7b0d32f7b
+$(PKG)_VERSION  := 1.0.21
+$(PKG)_CHECKSUM := 136845a8bb5679e033f8f53fb98ddeb5ee8f1d97
 $(PKG)_SUBDIR   := libsndfile-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsndfile-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.mega-nerd.com/libsndfile/
-$(PKG)_URL      := http://www.mega-nerd.com/libsndfile/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.mega-nerd.com/libsndfile/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sqlite flac ogg vorbis
 
 define $(PKG)_UPDATE
