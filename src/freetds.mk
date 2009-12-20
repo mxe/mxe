@@ -43,6 +43,9 @@ define $(PKG)_BUILD
     # package uses winsock2.h, so it should link to ws2_32 instead of wsock32
     $(SED) 's,wsock32,ws2_32,g' -i '$(1)'/configure
 
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+
     # beware --with-gnutls broken detection
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
