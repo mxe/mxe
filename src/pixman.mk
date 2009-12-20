@@ -31,9 +31,10 @@ $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://cairographics.org/releases/' | \
-    grep 'LATEST-pixman-' | \
-    $(SED) -n 's,.*"LATEST-pixman-\([0-9][^"]*\)".*,\1,p' | \
+    wget -q -O- 'http://cairographics.org/releases/?C=M;O=D' | \
+    grep '<a href="pixman-' | \
+    $(SED) -n 's,.*<a href="pixman-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    grep -v '0\.16\.' | \
     head -1
 endef
 
