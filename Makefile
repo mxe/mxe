@@ -26,18 +26,19 @@ JOBS               := 1
 TARGET             := i686-pc-mingw32
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
-VERSION  := 2.10
-PREFIX   := $(PWD)/usr
-LOG_DIR  := $(PWD)/log
-PKG_DIR  := $(PWD)/pkg
-DIST_DIR := $(PWD)/dist
-TMP_DIR   = $(PWD)/tmp-$(1)
-MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
-TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
-PATH     := $(PREFIX)/bin:$(PATH)
-SHELL    := bash
-SED      := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
-INSTALL  := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
+VERSION   := 2.10
+PREFIX    := $(PWD)/usr
+LOG_DIR   := $(PWD)/log
+TIMESTAMP := $(shell date +%Y%m%d_%H%M%S)
+PKG_DIR   := $(PWD)/pkg
+DIST_DIR  := $(PWD)/dist
+TMP_DIR    = $(PWD)/tmp-$(1)
+MAKEFILE  := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+TOP_DIR   := $(patsubst %/,%,$(dir $(MAKEFILE)))
+PATH      := $(PREFIX)/bin:$(PATH)
+SHELL     := bash
+SED       := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
+INSTALL   := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 
 # unset any environment variables which might cause trouble
 AR =
@@ -116,12 +117,12 @@ $(1): $(PREFIX)/installed/$(1)
 $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(addprefix $(PREFIX)/installed/,$($(1)_DEPS))
-	@[ -d '$(LOG_DIR)' ] || mkdir -p '$(LOG_DIR)'
-	@[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
+	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
+	@[ -d '$(PKG_DIR)' ]              || mkdir -p '$(PKG_DIR)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
 	    rm -f '$(LOG_DIR)/$(1)-download'; \
-	    ln -s `date +%Y%m%d%H%M%S`'-$(1)-download' '$(LOG_DIR)/$(1)-download'; \
+	    ln -s '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
 	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(1)-download'; \
 	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	        echo; \
@@ -138,7 +139,7 @@ $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    @echo '[build]    $(1)'
 	    ,)
 	@rm -f '$(LOG_DIR)/$(1)'
-	@ln -s `date +%Y%m%d%H%M%S`'-$(1)' '$(LOG_DIR)/$(1)'
+	@ln -s '$(TIMESTAMP)/$(1)' '$(LOG_DIR)/$(1)'
 	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(LOG_DIR)/$(1)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
