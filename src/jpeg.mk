@@ -37,6 +37,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # avoid redefinition of INT32
+    $(SED) 's,#ifndef XMD_H,#if (!defined(XMD_H) \&\& !defined(_BASETSD_H)),' -i '$(1)/jmorecfg.h'
     cd '$(1)' && ./configure \
         CC='$(TARGET)-gcc' RANLIB='$(TARGET)-ranlib' \
         --disable-shared \
