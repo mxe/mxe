@@ -19,29 +19,36 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# jpeg
-PKG             := jpeg
+# Exiv2
+PKG             := exiv2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6b
-$(PKG)_CHECKSUM := 7079f0d6c42fad0cfba382cf6ad322add1ace8f9
-$(PKG)_SUBDIR   := jpeg-$($(PKG)_VERSION)
-$(PKG)_FILE     := libjpeg6b_$($(PKG)_VERSION).orig.tar.gz
-$(PKG)_WEBSITE  := http://www.ijg.org/
-$(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libj/libjpeg6b/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_VERSION  := 0.18.2
+$(PKG)_CHECKSUM := 452c824a780843a568eeef68f30785ee4141b0a8
+$(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)
+$(PKG)_FILE     := exiv2-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.exiv2.org/
+$(PKG)_URL      := http://www.exiv2.org/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libiconv zlib expat
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://packages.debian.org/unstable/source/libjpeg6b' | \
-    $(SED) -n 's,.*libjpeg6b_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://www.exiv2.org/download.html' | \
+    grep 'href="exiv2-' | \
+    $(SED) -n 's,.*exiv2-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
-    # avoid redefinition of INT32
-    $(SED) 's,#ifndef XMD_H,#if (!defined(XMD_H) \&\& !defined(_BASETSD_H)),' -i '$(1)/jmorecfg.h'
+    # workaround for the missing snprintf() in the <cstdio> of GCC-4.4.0
+    $(SED) 's,#include <cstdio>,#include <stdio.h>,' -i '$(1)/xmpsdk/src/XMPMeta.cpp'
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
     cd '$(1)' && ./configure \
-        CC='$(TARGET)-gcc' RANLIB='$(TARGET)-ranlib' \
+        --host='$(TARGET)' \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install-lib
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-visibility \
+        --disable-nls \
+        --with-expat
+    $(MAKE) -C '$(1)/xmpsdk/src' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/src'        -j '$(JOBS)' install-lib
 endef
