@@ -551,12 +551,14 @@ AR=$(CROSS)ar</pre>
     <h3>MacOS 10.6</h3>
 
     <p>
-    As of September 2009,
-    <a href="http://lists.gnu.org/archive/html/mingw-cross-env-list/2009-09/msg00016.html">MacOS 10.6 fails to build a vanilla GCC</a>,
-    <a href="http://lists.gnu.org/archive/html/mingw-cross-env-list/2009-09/msg00013.html">let alone a GCC cross compiler</a>.
-    As long as this serious defect persists in MacOS,
-    mingw-cross-env will be completely unable to work there.
+    Install
+    <a href="http://developer.apple.com/TOOLS/xcode/">Xcode</a>
+    and
+    <a href="http://www.macports.org/">MacPorts</a>,
+    then run:
     </p>
+    <pre>sudo port install gmake gsed scons wget gcc_select
+sudo gcc_select gcc40</pre>
 
     <h3>Solaris</h3>
 
