@@ -22,8 +22,8 @@
 # GTK+
 PKG             := gtk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.19.1
-$(PKG)_CHECKSUM := daf7252027555212091896d96244fdc141ebbfa8
+$(PKG)_VERSION  := 2.19.2
+$(PKG)_CHECKSUM := c4e04159f105215314933f6b9bebf4b987c51b28
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/

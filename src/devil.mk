@@ -1,5 +1,4 @@
 # Copyright (C) 2009  Volker Grabsch
-#                     Rocco Rutte
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -20,40 +19,45 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# PDFlib Lite
-PKG             := pdflib_lite
+# DevIL
+PKG             := devil
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.0.4p4
-$(PKG)_CHECKSUM := 36d3f8cedeed95ec68ae90f489d9bfb40b4c6593
-$(PKG)_SUBDIR   := PDFlib-Lite-$($(PKG)_VERSION)
-$(PKG)_FILE     := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.pdflib.com/download/pdflib-family/pdflib-lite/
-$(PKG)_URL      := http://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(subst p, ,$($(PKG)_VERSION))))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_VERSION  := 1.7.8
+$(PKG)_CHECKSUM := bc27e3e830ba666a3af03548789700d10561fcb1
+$(PKG)_SUBDIR   := devil-$($(PKG)_VERSION)
+$(PKG)_FILE     := DevIL-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://openil.sourceforge.net/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/openil/DevIL/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc zlib openexr jpeg jasper lcms libmng libpng tiff sdl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.pdflib.com/products/pdflib-lite-7/' | \
-    $(SED) -n 's,.*PDFlib-Lite-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    wget -q -O- 'http://openil.svn.sourceforge.net/viewvc/openil/tags/?sortby=date' | \
+    grep '<a name="' | \
+    $(SED) -n 's,.*<a name="release-\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,ac_sys_system=`uname -s`,ac_sys_system=MinGW,' -i '$(1)/configure'
+    $(SED) 's,__declspec(dllimport),,' -i '$(1)/include/IL/il.h'
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --without-openssl \
-        --without-java \
-        --without-py \
-        --without-perl \
-        --without-ruby \
-        --without-tcl \
-        --disable-php \
-        --enable-cxx \
-        --enable-large-files \
-        CFLAGS='-D_IOB_ENTRIES=20'
-    $(SED) 's,-DPDF_PLATFORM=[^ ]* ,,' -i '$(1)/config/mkcommon.inc'
-    $(MAKE) -C '$(1)/libs' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/libs' -j 1 install
+        --enable-ILU \
+        --enable-ILUT \
+        --disable-allegro \
+        --enable-directx8 \
+        --enable-directx9 \
+        --enable-opengl \
+        --enable-sdl \
+        --disable-sdltest \
+        --disable-wdp \
+        --with-zlib \
+        --without-squish \
+        --without-nvtt \
+        --without-x \
+        --without-examples
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= INFO_DEPS=
 endef

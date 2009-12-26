@@ -1,5 +1,4 @@
 # Copyright (C) 2009  Volker Grabsch
-#                     Rocco Rutte
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -20,40 +19,36 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# PDFlib Lite
-PKG             := pdflib_lite
+# Exiv2
+PKG             := exiv2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.0.4p4
-$(PKG)_CHECKSUM := 36d3f8cedeed95ec68ae90f489d9bfb40b4c6593
-$(PKG)_SUBDIR   := PDFlib-Lite-$($(PKG)_VERSION)
-$(PKG)_FILE     := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.pdflib.com/download/pdflib-family/pdflib-lite/
-$(PKG)_URL      := http://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(subst p, ,$($(PKG)_VERSION))))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_VERSION  := 0.18.2
+$(PKG)_CHECKSUM := 452c824a780843a568eeef68f30785ee4141b0a8
+$(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)
+$(PKG)_FILE     := exiv2-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.exiv2.org/
+$(PKG)_URL      := http://www.exiv2.org/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libiconv zlib expat
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.pdflib.com/products/pdflib-lite-7/' | \
-    $(SED) -n 's,.*PDFlib-Lite-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    wget -q -O- 'http://www.exiv2.org/download.html' | \
+    grep 'href="exiv2-' | \
+    $(SED) -n 's,.*exiv2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,ac_sys_system=`uname -s`,ac_sys_system=MinGW,' -i '$(1)/configure'
+    # workaround for the missing snprintf() in the <cstdio> of GCC-4.4.0
+    $(SED) 's,#include <cstdio>,#include <stdio.h>,' -i '$(1)/xmpsdk/src/XMPMeta.cpp'
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --without-openssl \
-        --without-java \
-        --without-py \
-        --without-perl \
-        --without-ruby \
-        --without-tcl \
-        --disable-php \
-        --enable-cxx \
-        --enable-large-files \
-        CFLAGS='-D_IOB_ENTRIES=20'
-    $(SED) 's,-DPDF_PLATFORM=[^ ]* ,,' -i '$(1)/config/mkcommon.inc'
-    $(MAKE) -C '$(1)/libs' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/libs' -j 1 install
+        --disable-visibility \
+        --disable-nls \
+        --with-expat
+    $(MAKE) -C '$(1)/xmpsdk/src' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/src'        -j '$(JOBS)' install-lib
 endef
