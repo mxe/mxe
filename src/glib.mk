@@ -28,7 +28,7 @@ $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext pcre libiconv
+$(PKG)_DEPS     := gcc gettext pcre libiconv zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/cgit/glib/refs/tags' | \
