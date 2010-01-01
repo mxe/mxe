@@ -32,7 +32,7 @@ $(PKG)_URL      := http://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(s
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.pdflib.com/products/pdflib-lite-7/' | \
+    wget -q -O- 'http://www.pdflib.com/download/free-software/pdflib-lite/' | \
     $(SED) -n 's,.*PDFlib-Lite-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
