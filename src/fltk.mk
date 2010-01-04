@@ -22,8 +22,8 @@
 # FLTK
 PKG             := fltk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.10rc3
-$(PKG)_CHECKSUM := 7317be02aa71dd4b5e2bb4be58a0fbb4597d0c12
+$(PKG)_VERSION  := 1.1.10
+$(PKG)_CHECKSUM := 0d2b34fede91fa78eeaefb893dd70282f73908a8
 $(PKG)_SUBDIR   := fltk-$($(PKG)_VERSION)
 $(PKG)_FILE     := fltk-$($(PKG)_VERSION)-source.tar.bz2
 $(PKG)_WEBSITE  := http://www.fltk.org/

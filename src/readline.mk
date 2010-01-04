@@ -22,8 +22,8 @@
 # Readline
 PKG             := readline
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.0
-$(PKG)_CHECKSUM := 1e511b091514ef631c539552316787c75ace5262
+$(PKG)_VERSION  := 6.1
+$(PKG)_CHECKSUM := 54840a0dc907e7fa598d7ffcdcbd17bae69ace83
 $(PKG)_SUBDIR   := readline-$($(PKG)_VERSION)
 $(PKG)_FILE     := readline-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://tiswww.case.edu/php/chet/readline/rltop.html
