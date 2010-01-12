@@ -1,5 +1,5 @@
-# Copyright (C) 2009  Volker Grabsch
-#                     Martin Lambers
+# Copyright (C) 2009, 2010  Volker Grabsch
+#                           Martin Lambers
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -23,17 +23,17 @@
 # GLEW
 PKG             := glew
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.1
-$(PKG)_CHECKSUM := a94113169d46487ccda1bb2fde68fa1803bdf009
-$(PKG)_SUBDIR   := glew
-$(PKG)_FILE     := glew-$($(PKG)_VERSION)-src.tgz
+$(PKG)_VERSION  := 1.5.2
+$(PKG)_CHECKSUM := 21fa100ff77d10f6767ef387f65de98eaaaa683f
+$(PKG)_SUBDIR   := glew-$($(PKG)_VERSION)
+$(PKG)_FILE     := glew-$($(PKG)_VERSION).tgz
 $(PKG)_WEBSITE  := http://glew.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/glew/glew/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/glew/files/glew/) | \
-    $(SED) -n 's,.*glew-\([0-9][^>]*\)-src\.tgz.*,\1,p' | \
+    $(SED) -n 's,.*glew-\([0-9][^>]*\)\.tgz.*,\1,p' | \
     tail -1
 endef
 
