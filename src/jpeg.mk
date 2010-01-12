@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Volker Grabsch
+# Copyright (C) 2009, 2010  Volker Grabsch
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -22,26 +22,26 @@
 # jpeg
 PKG             := jpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6b
-$(PKG)_CHECKSUM := 7079f0d6c42fad0cfba382cf6ad322add1ace8f9
+$(PKG)_VERSION  := 8
+$(PKG)_CHECKSUM := 1324834b52428d57479faa062f8b2d98d755d85e
 $(PKG)_SUBDIR   := jpeg-$($(PKG)_VERSION)
-$(PKG)_FILE     := libjpeg6b_$($(PKG)_VERSION).orig.tar.gz
+$(PKG)_FILE     := jpegsrc.v$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.ijg.org/
-$(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libj/libjpeg6b/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.ijg.org/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://packages.debian.org/unstable/source/libjpeg6b' | \
-    $(SED) -n 's,.*libjpeg6b_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://www.ijg.org/' | \
+    $(SED) -n 's,.*jpegsrc\.v\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
     # avoid redefinition of INT32
     $(SED) 's,typedef long INT32;,#include <basetsd.h>,' -i '$(1)/jmorecfg.h'
     cd '$(1)' && ./configure \
-        CC='$(TARGET)-gcc' RANLIB='$(TARGET)-ranlib' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install-lib
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --host='$(TARGET)' \
+        --disable-shared
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
 endef
