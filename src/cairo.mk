@@ -38,6 +38,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) 's,libpng12,libpng,g'                          -i '$(1)/configure'
     $(SED) 's,^\(Libs:.*\),\1 @CAIRO_NONPKGCONFIG_LIBS@,' -i '$(1)/src/cairo.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \

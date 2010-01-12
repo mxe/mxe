@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Volker Grabsch
+# Copyright (C) 2009, 2010  Volker Grabsch
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -22,13 +22,13 @@
 # libpng
 PKG             := libpng
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.41
-$(PKG)_CHECKSUM := e859ce73c5344ce10576d03cab3b660459b30c13
+$(PKG)_VERSION  := 1.4.0
+$(PKG)_CHECKSUM := 886d651394024b5cab7e9cb5afac41b391f1ccd2
 $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.libpng.org/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libpng/00-libpng-stable/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://$(SOURCEFORGE_MIRROR)/project/libpng/libpng-stable/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libpng/01-libpng-master/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.simplesystems.org/pub/libpng/png/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
