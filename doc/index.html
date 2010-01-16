@@ -450,6 +450,10 @@ AR=$(CROSS)ar</pre>
         <td></td>
     </tr>
     <tr>
+        <td><a href="http://www.cmake.org/">CMake</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="http://en.wikipedia.org/wiki/C_standard_library">LibC</a> for 32-bit</td>
         <td></td>
     </tr>
@@ -498,7 +502,7 @@ AR=$(CROSS)ar</pre>
 
     <h3>Debian</h3>
 
-    <pre>aptitude install -R bash bzip2 g++ make sed openssl \
+    <pre>aptitude install -R bash bzip2 cmake g++ make sed openssl \
                     patch perl scons unzip wget</pre>
 
     <p>
@@ -508,7 +512,7 @@ AR=$(CROSS)ar</pre>
 
     <h3>FreeBSD</h3>
 
-    <pre>pkg_add -r bash gmake gsed perl scons unzip wget</pre>
+    <pre>pkg_add -r bash cmake gmake gsed perl scons unzip wget</pre>
 
     <p>
     On 64-bit FreeBSD,
@@ -517,7 +521,7 @@ AR=$(CROSS)ar</pre>
 
     <h3>Frugalware</h3>
 
-    <pre>pacman-g2 -S bash bzip2 gcc make sed openssl \
+    <pre>pacman-g2 -S bash bzip2 cmake gcc make sed openssl \
              patch perl scons unzip wget</pre>
 
     <p>
@@ -534,7 +538,7 @@ AR=$(CROSS)ar</pre>
     <a href="http://www.macports.org/">MacPorts</a>,
     then run:
     </p>
-    <pre>sudo port install gmake gsed scons wget</pre>
+    <pre>sudo port install cmake gmake gsed scons wget</pre>
 
     <h3>MacOS 10.6</h3>
 
@@ -545,7 +549,7 @@ AR=$(CROSS)ar</pre>
     <a href="http://www.macports.org/">MacPorts</a>,
     then run:
     </p>
-    <pre>sudo port install gmake gsed scons wget gcc_select
+    <pre>sudo port install cmake gmake gsed scons wget gcc_select
 sudo gcc_select gcc40</pre>
 
     <h3>Open Solaris 2009.06</h3>
@@ -563,8 +567,9 @@ sudo gcc_select gcc40</pre>
     First, install all requirements
     that already ship with Solaris:
     </p>
-    <pre>pfexec pkg install SUNWgcc SUNWgmake SUNWgsed SUNWgzip \
-                   SUNWlibm SUNWgpch SUNWunzip SUNWwget</pre>
+    <pre>pfexec pkg install SUNWcmake SUNWgcc SUNWgmake SUNWgsed \
+                   SUNWgzip SUNWlibm SUNWgpch SUNWunzip \
+                   SUNWwget</pre>
 
     <p>
     Then download and install SCons by hand:

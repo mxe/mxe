@@ -1,5 +1,6 @@
-# Copyright (C) 2009  Volker Grabsch
-#                     Bart van Andel
+# Copyright (C) 2009, 2010  Volker Grabsch
+#                           Bart van Andel
+#                           Martin Lambers
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -39,6 +40,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
