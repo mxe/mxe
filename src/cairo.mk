@@ -65,6 +65,6 @@ define $(PKG)_BUILD
         --enable-pdf \
         --enable-svg \
         --disable-pthread \
-        LIBS="-lmsimg32 `$(TARGET)-pkg-config pixman-1 --libs`"
+        LIBS="-lmsimg32 -lgdi32 `$(TARGET)-pkg-config pixman-1 --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
