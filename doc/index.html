@@ -361,6 +361,36 @@ AR=$(CROSS)ar</pre>
     That's it!
     </p>
 
+    <h3>Step 5d: Cross compile your Project (OSG)</h3>
+
+    <p>
+    Using static OpenSceneGraph libraries requires a few changes to your source:
+    </p>
+    <ul>
+    <li>
+        Define <code>OSG_LIBRARY_STATIC</code>
+    </li>
+    <li>
+        Use the macro
+        <code>USE_GRAPHICSWINDOW()</code>
+        to explicitly reference your graphics system
+    </li>
+    <li>
+        Use the macro
+        <code>USE_OSGPLUGIN(&lt;plugin&gt;)</code>
+        to explicitly reference any plugin you might want to use
+    </li>
+    </ul>
+    <p>
+    Look at <code>examples/osgstaticviewer/osgstaticviewer.cpp</code> in the
+    OpenSceneGraph source distribution for an example. This example can be
+    compiled with
+    </p>
+    <pre>i686-pc-mingw32-g++ -DOSG_LIBRARY_STATIC \
+    -o osgstaticviewer.exe examples/osgstaticviewer/osgstaticviewer.cpp \
+    `i686-pc-mingw32-pkg-config --cflags openscenegraph-osgViewer openscenegraph-osgPlugins` \
+    `i686-pc-mingw32-pkg-config --static --libs openscenegraph-osgViewer openscenegraph-osgPlugins`</pre>
+
     <h3>Further Steps</h3>
 
     <p>

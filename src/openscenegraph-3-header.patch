@@ -1,0 +1,14 @@
+This file is part of mingw-cross-env.
+See doc/index.html or doc/README for further information.
+
+diff -uNr OpenSceneGraph-2.8.2.orig/src/osgPlugins/txp/TXPNode.cpp OpenSceneGraph-2.8.2/src/osgPlugins/txp/TXPNode.cpp
+--- OpenSceneGraph-2.8.2.orig/src/osgPlugins/txp/TXPNode.cpp	2008-06-16 15:20:51.000000000 +0200
++++ OpenSceneGraph-2.8.2/src/osgPlugins/txp/TXPNode.cpp	2010-01-12 09:00:56.000000000 +0100
+@@ -8,6 +8,7 @@
+ #include <iostream>
+ #include <vector>
+ #include <algorithm>
++#include <cstdio>
+ 
+ #include "TileMapper.h"
+ #include "TXPNode.h"
