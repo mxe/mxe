@@ -24,5 +24,4 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/include/'*.inl '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -d                         '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/lib/'*.a       '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/include/'*.inl '$(PREFIX)/$(TARGET)/include/'
 endef
