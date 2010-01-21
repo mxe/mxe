@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         -DCMAKE_C_COMPILER='$(PREFIX)/bin/$(TARGET)-gcc'   \
         -DCMAKE_INCLUDE_PATH='$(PREFIX)/$(TARGET)/include' \
         -DCMAKE_LIB_PATH='$(PREFIX)/$(TARGET)/lib'         \
+        -DPKG_CONFIG_EXECUTABLE=$(TARGET)-pkg-config       \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'       \
         -DCMAKE_BUILD_TYPE=Release                         \
         -DDYNAMIC_OPENTHREADS=OFF                          \
