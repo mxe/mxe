@@ -2,10 +2,10 @@ This file is part of mingw-cross-env.
 See doc/index.html or doc/README for further information.
 
 diff --git a/configure b/configure
-index 146ba82..d521e2c 100755
+index 033f415..becf8ea 100755
 --- a/configure
 +++ b/configure
-@@ -591,7 +591,7 @@ mkdir -p "$outpath/config.tests"
+@@ -605,7 +605,7 @@ mkdir -p "$outpath/config.tests"
  rm -f "$outpath/config.tests/.qmake.cache"
  cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
  
@@ -14,7 +14,7 @@ index 146ba82..d521e2c 100755
  QMakeVar add decorations "default windows styled"
  QMakeVar add mouse-drivers "pc"
  if [ "$UNAME_SYSTEM" = "Linux" ] ; then
-@@ -717,6 +717,7 @@ CFG_MMX=auto
+@@ -733,6 +733,7 @@ CFG_MMX=auto
  CFG_3DNOW=auto
  CFG_SSE=auto
  CFG_SSE2=auto
@@ -22,7 +22,7 @@ index 146ba82..d521e2c 100755
  CFG_REDUCE_RELOCATIONS=no
  CFG_IPV6=auto
  CFG_NAS=no
-@@ -4424,7 +4425,10 @@ fi # Build qmake
+@@ -4466,7 +4467,10 @@ fi # Build qmake
  #-------------------------------------------------------------------------------
  
  # detect availability of float math.h functions
@@ -34,7 +34,7 @@ index 146ba82..d521e2c 100755
      CFG_USE_FLOATMATH=yes
  else
      CFG_USE_FLOATMATH=no
-@@ -4432,7 +4436,10 @@ fi
+@@ -4474,7 +4478,10 @@ fi
  
  # detect mmx support
  if [ "${CFG_MMX}" = "auto" ]; then
@@ -46,7 +46,7 @@ index 146ba82..d521e2c 100755
  	CFG_MMX=yes
      else
  	CFG_MMX=no
-@@ -4441,7 +4448,10 @@ fi
+@@ -4483,7 +4490,10 @@ fi
  
  # detect 3dnow support
  if [ "${CFG_3DNOW}" = "auto" ]; then
@@ -58,7 +58,7 @@ index 146ba82..d521e2c 100755
  	CFG_3DNOW=yes
      else
  	CFG_3DNOW=no
-@@ -4450,7 +4460,10 @@ fi
+@@ -4492,7 +4502,10 @@ fi
  
  # detect sse support
  if [ "${CFG_SSE}" = "auto" ]; then
@@ -70,7 +70,7 @@ index 146ba82..d521e2c 100755
  	CFG_SSE=yes
      else
  	CFG_SSE=no
-@@ -4459,13 +4472,26 @@ fi
+@@ -4501,13 +4514,26 @@ fi
  
  # detect sse2 support
  if [ "${CFG_SSE2}" = "auto" ]; then
@@ -98,7 +98,7 @@ index 146ba82..d521e2c 100755
  # check iWMMXt support
  if [ "$CFG_IWMMXT" = "yes" ]; then
      "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/iwmmxt "iwmmxt" $L_FLAGS $I_FLAGS $l_FLAGS "-mcpu=iwmmxt"
-@@ -4491,7 +4517,10 @@ if [ "$CFG_ZLIB" = "no" ]; then
+@@ -4542,7 +4568,10 @@ if [ "$CFG_ZLIB" = "no" ]; then
      ZLIB_FORCED=yes
  fi
  if [ "$CFG_ZLIB" = "auto" ]; then
@@ -110,7 +110,7 @@ index 146ba82..d521e2c 100755
         CFG_ZLIB=system
      else
         CFG_ZLIB=yes
-@@ -4508,7 +4537,10 @@ if [ "$CFG_JPEG" = "auto" ]; then
+@@ -4559,7 +4588,10 @@ if [ "$CFG_JPEG" = "auto" ]; then
  fi
  # detect jpeg
  if [ "$CFG_LIBJPEG" = "auto" ]; then
@@ -122,7 +122,7 @@ index 146ba82..d521e2c 100755
         CFG_LIBJPEG=system
      else
         CFG_LIBJPEG=qt
-@@ -4535,7 +4567,10 @@ fi
+@@ -4586,7 +4618,10 @@ fi
  
  # detect tiff
  if [ "$CFG_LIBTIFF" = "auto" ]; then
@@ -134,7 +134,7 @@ index 146ba82..d521e2c 100755
          CFG_LIBTIFF=system
      else
          CFG_LIBTIFF=qt
-@@ -4552,7 +4587,10 @@ if [ "$CFG_MNG" = "auto" ]; then
+@@ -4603,7 +4638,10 @@ if [ "$CFG_MNG" = "auto" ]; then
  fi
  # detect mng
  if [ "$CFG_LIBMNG" = "auto" ]; then
@@ -146,7 +146,7 @@ index 146ba82..d521e2c 100755
         CFG_LIBMNG=system
      else
         CFG_LIBMNG=qt
-@@ -4561,7 +4599,10 @@ fi
+@@ -4612,7 +4650,10 @@ fi
  
  # detect png
  if [ "$CFG_LIBPNG" = "auto" ]; then
@@ -158,7 +158,7 @@ index 146ba82..d521e2c 100755
         CFG_LIBPNG=system
      else
         CFG_LIBPNG=qt
-@@ -4628,7 +4669,11 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -4679,7 +4720,11 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
              fi
              ;;
          psql)
@@ -171,7 +171,7 @@ index 146ba82..d521e2c 100755
                  if "$WHICH" pg_config >/dev/null 2>&1; then
                      QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null`
                      QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null`
-@@ -4656,7 +4701,10 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -4707,7 +4752,10 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
          ;;
          odbc)
              if [ "$CFG_SQL_odbc" != "no" ]; then
@@ -183,7 +183,7 @@ index 146ba82..d521e2c 100755
                      if [ "$CFG_SQL_odbc" = "auto" ]; then
                          CFG_SQL_odbc=plugin
                      fi
-@@ -4701,7 +4749,12 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -4752,7 +4800,12 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
              ;;
          tds)
              if [ "$CFG_SQL_tds" != "no" ]; then
@@ -197,7 +197,7 @@ index 146ba82..d521e2c 100755
                      if [ "$CFG_SQL_tds" = "auto" ]; then
                          CFG_SQL_tds=plugin
                      fi
-@@ -4783,7 +4836,13 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -4834,7 +4887,13 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
                          QT_CFLAGS_SQLITE=`$PKG_CONFIG --cflags sqlite3 2>/dev/null`
                          QT_LFLAGS_SQLITE=`$PKG_CONFIG --libs sqlite3 2>/dev/null`
                      fi
@@ -212,7 +212,7 @@ index 146ba82..d521e2c 100755
                          if [ "$CFG_SQL_sqlite" = "auto" ]; then
                              CFG_SQL_sqlite=plugin
                          fi
-@@ -4854,7 +4913,9 @@ fi
+@@ -4905,7 +4964,9 @@ fi
  
  # auto-detect iconv(3) support
  if [ "$CFG_ICONV" != "no" ]; then
@@ -223,7 +223,7 @@ index 146ba82..d521e2c 100755
  	CFG_ICONV=no
      elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" "$OPT_VERBOSE" "$relpath" "$outpath" "config.tests/unix/iconv" "POSIX iconv" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
          CFG_ICONV=yes
-@@ -5014,7 +5075,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
+@@ -5065,7 +5126,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
@@ -234,7 +234,7 @@ index 146ba82..d521e2c 100755
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5088,7 +5151,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
+@@ -5139,7 +5202,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
              echo " You might need to modify the include and library search paths by editing"
              echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
              echo " ${XQMAKESPEC}."
@@ -245,7 +245,7 @@ index 146ba82..d521e2c 100755
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -5589,7 +5654,10 @@ if [ "$CFG_DOUBLEFORMAT" = "auto" ]; then
+@@ -5640,7 +5705,10 @@ if [ "$CFG_DOUBLEFORMAT" = "auto" ]; then
  fi
  
  HAVE_STL=no
@@ -257,7 +257,7 @@ index 146ba82..d521e2c 100755
      HAVE_STL=yes
  fi
  
-@@ -5611,7 +5679,10 @@ fi
+@@ -5662,7 +5730,10 @@ fi
  
  # find if the platform supports IPv6
  if [ "$CFG_IPV6" != "no" ]; then
@@ -269,7 +269,7 @@ index 146ba82..d521e2c 100755
          CFG_IPV6=yes
      else
          if [ "$CFG_IPV6" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
-@@ -5725,7 +5796,10 @@ fi
+@@ -5776,7 +5847,10 @@ fi
  
  # find if the platform supports X/Open Large File compilation environment
  if [ "$CFG_LARGEFILE" != "no" ]; then
@@ -281,7 +281,7 @@ index 146ba82..d521e2c 100755
          CFG_LARGEFILE=yes
      else
          if [ "$CFG_LARGEFILE" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
-@@ -5742,7 +5816,9 @@ fi
+@@ -5793,7 +5867,9 @@ fi
  
  # detect OpenSSL
  if [ "$CFG_OPENSSL" != "no" ]; then
@@ -292,15 +292,15 @@ index 146ba82..d521e2c 100755
          if [ "$CFG_OPENSSL" = "auto" ]; then
              CFG_OPENSSL=yes
          fi
-@@ -6087,6 +6163,7 @@ fi
+@@ -6141,6 +6217,7 @@ fi
  [ "$CFG_3DNOW" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG 3dnow"
  [ "$CFG_SSE" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse"
  [ "$CFG_SSE2" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse2"
 +[ "$CFG_RTTI" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG rtti"
  [ "$CFG_IWMMXT" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG iwmmxt"
+ [ "$CFG_NEON" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG neon"
  [ "$PLATFORM_MAC" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG $CFG_MAC_ARCHS"
- if [ "$CFG_IPV6" = "yes" ]; then
-@@ -6167,11 +6244,12 @@ else
+@@ -6222,11 +6299,12 @@ else
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -318,7 +318,7 @@ index 146ba82..d521e2c 100755
  if [ "$CFG_ZLIB" = "yes" ]; then
      QT_CONFIG="$QT_CONFIG zlib"
  elif [ "$CFG_ZLIB" = "system" ]; then
-@@ -7102,7 +7180,7 @@ fi
+@@ -7161,7 +7239,7 @@ fi
  
  cat >>"$QTCONFIG.tmp" <<EOF
  #configuration
@@ -327,7 +327,7 @@ index 146ba82..d521e2c 100755
  QT_ARCH = $CFG_ARCH
  QT_EDITION = $Edition
  QT_CONFIG += $QT_CONFIG
-@@ -7194,7 +7272,7 @@ fi
+@@ -7253,7 +7331,7 @@ fi
  if [ '!' -z "$OPENSSL_LIBS" ]; then
      echo "OPENSSL_LIBS = $OPENSSL_LIBS" >> "$CACHEFILE.tmp"
  elif [ "$CFG_OPENSSL" = "linked" ]; then
@@ -336,16 +336,16 @@ index 146ba82..d521e2c 100755
  fi
  
  #dump in the SDK info
-@@ -7375,7 +7453,7 @@ fi
+@@ -7434,7 +7512,7 @@ fi
  echo "Declarative module .. $CFG_DECLARATIVE"
  echo "STL support ......... $CFG_STL"
  echo "PCH support ......... $CFG_PRECOMPILE"
 -echo "MMX/3DNOW/SSE/SSE2..  ${CFG_MMX}/${CFG_3DNOW}/${CFG_SSE}/${CFG_SSE2}"
 +echo "MMX/3DNOW/SSE/SSE2/RTTI..  ${CFG_MMX}/${CFG_3DNOW}/${CFG_SSE}/${CFG_SSE2}/${CFG_RTTI}"
- if [ "${CFG_ARCH}" = "arm" ]; then
+ if [ "$CFG_ARCH" = "arm" ] || [ "$CFG_ARCH" = "armv6" ]; then
      echo "iWMMXt support ...... ${CFG_IWMMXT}"
- fi
-@@ -7688,7 +7766,11 @@ for file in .projects .projects.3; do
+     echo "NEON support ........ ${CFG_NEON}"
+@@ -7752,7 +7830,11 @@ for file in .projects .projects.3; do
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
@@ -515,10 +515,10 @@ index b67be55..6642ae3 100644
      DEFINES *= QT_NO_IMAGEFORMAT_PNG
  }
 diff --git a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
-index 628a109..351b559 100644
+index a6cc9c7..95779a1 100644
 --- a/src/gui/painting/painting.pri
 +++ b/src/gui/painting/painting.pri
-@@ -380,9 +380,9 @@ symbian {
+@@ -387,9 +387,9 @@ neon {
  }
  
  contains(QT_CONFIG, zlib) {
@@ -532,10 +532,10 @@ index 628a109..351b559 100644
  }
  
 diff --git a/src/network/access/access.pri b/src/network/access/access.pri
-index edc1b63..558ecd2 100644
+index aa36890..f009761 100644
 --- a/src/network/access/access.pri
 +++ b/src/network/access/access.pri
-@@ -57,8 +57,8 @@ SOURCES += access/qftp.cpp \
+@@ -59,8 +59,8 @@ SOURCES += access/qftp.cpp \
  
  #zlib support
  contains(QT_CONFIG, zlib) {
@@ -548,16 +548,15 @@ index edc1b63..558ecd2 100644
 +    win32:!win32-g++:LIBS += zdll.lib
  }
 diff --git a/src/network/ssl/ssl.pri b/src/network/ssl/ssl.pri
-index 72ea80f..c5a5833 100644
+index 72ea80f..899aa30 100644
 --- a/src/network/ssl/ssl.pri
 +++ b/src/network/ssl/ssl.pri
-@@ -35,5 +35,12 @@ symbian {
+@@ -35,5 +35,11 @@ symbian {
      RESOURCES += network.qrc
  
      # Add optional SSL libs
 +    !contains(QT_CONFIG, system-zlib):contains(OPENSSL_LIBS, -lz) {
-+        #Use the zlib in QtCore
-+        #-lz probably came from pkg-config which does not know about QtCore
++        # Use the zlib in QtCore
 +        OPENSSL_LIBS -= -lz
 +        OPENSSL_LIBS += -lQtCore4
 +    }
@@ -643,7 +642,7 @@ index 312f99c..29d36f4 100644
  
  QTDIR_build:DESTDIR = $$QT_BUILD_TREE/plugins/imageformats
 diff --git a/src/plugins/sqldrivers/psql/psql.pro b/src/plugins/sqldrivers/psql/psql.pro
-index 29fbada..1879060 100644
+index 29fbada..0a38ee4 100644
 --- a/src/plugins/sqldrivers/psql/psql.pro
 +++ b/src/plugins/sqldrivers/psql/psql.pro
 @@ -4,18 +4,15 @@ HEADERS		= ../../../sql/drivers/psql/qsql_psql.h
@@ -654,7 +653,7 @@ index 29fbada..1879060 100644
 +unix|win32-g++: {
      !isEmpty(QT_LFLAGS_PSQL) {
 -        LIBS *= $$QT_LFLAGS_PSQL
-+        !contains(QT_CONFIG, system-zlib):contains(QT_LFLAGS_PSQL, -lz):QT_LFLAGS_PSQL -= -lz
++        !contains(QT_CONFIG, system-zlib): QT_LFLAGS_PSQL -= -lz
 +        !static:LIBS *= $$QT_LFLAGS_PSQL
          QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
      }
@@ -697,7 +696,7 @@ index 08a166b..f66d5b7 100644
      win32-borland:LIBS 	*= $(BCB)/lib/PSDK/NTWDBLIB.LIB
  }
 diff --git a/src/qbase.pri b/src/qbase.pri
-index 6428130..4b1407b 100644
+index d1a2a75..59eeb1b 100644
 --- a/src/qbase.pri
 +++ b/src/qbase.pri
 @@ -85,7 +85,6 @@ win32-borland {
@@ -709,7 +708,7 @@ index 6428130..4b1407b 100644
      !static: DEFINES+=QT_MAKEDLL
  }
 diff --git a/src/sql/drivers/drivers.pri b/src/sql/drivers/drivers.pri
-index 184eca9..9959ddd 100644
+index 184eca9..aac0267 100644
 --- a/src/sql/drivers/drivers.pri
 +++ b/src/sql/drivers/drivers.pri
 @@ -6,19 +6,16 @@ contains(sql-drivers, psql) {
@@ -721,7 +720,7 @@ index 184eca9..9959ddd 100644
 -            LIBS *= $$QT_LFLAGS_PSQL
 +    unix|win32-g++ {
 +        !static:!isEmpty(QT_LFLAGS_PSQL) {
-+            !contains(QT_CONFIG, system-zlib):contains(QT_LFLAGS_PSQL, -lz):QT_LFLAGS_PSQL -= -lz
++            !contains(QT_CONFIG, system-zlib): QT_LFLAGS_PSQL -= -lz
 +            !static:LIBS *= $$QT_LFLAGS_PSQL
              QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
          }
@@ -781,7 +780,7 @@ index d2a4227..0d3ef83 100644
 +    win32:!win32-g++:LIBS += zdll.lib
  }
 diff --git a/src/tools/bootstrap/bootstrap.pri b/src/tools/bootstrap/bootstrap.pri
-index b4f9b2f..b005c8a 100644
+index b3ee948..18efe9d 100644
 --- a/src/tools/bootstrap/bootstrap.pri
 +++ b/src/tools/bootstrap/bootstrap.pri
 @@ -52,8 +52,8 @@ hpux-acc*|hpuxi-acc* {
@@ -796,10 +795,10 @@ index b4f9b2f..b005c8a 100644
  win32:LIBS += -luser32
  
 diff --git a/src/tools/bootstrap/bootstrap.pro b/src/tools/bootstrap/bootstrap.pro
-index 1f81a6c..0570a28 100644
+index 0dbb90f..e6b43a6 100644
 --- a/src/tools/bootstrap/bootstrap.pro
 +++ b/src/tools/bootstrap/bootstrap.pro
-@@ -108,6 +108,9 @@ contains(QT_CONFIG, zlib) {
+@@ -109,6 +109,9 @@ contains(QT_CONFIG, zlib) {
          ../3rdparty/zlib/trees.c \
          ../3rdparty/zlib/uncompr.c \
          ../3rdparty/zlib/zutil.c
