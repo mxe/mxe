@@ -42,15 +42,15 @@ define $(PKG)_BUILD
         -nomake docs \
         -nomake translations
 
-    $(MAKE) -C '$(1)'.native -j $(JOBS) sub-tools-bootstrap
-    $(MAKE) -C '$(1)'.native -j $(JOBS) sub-moc
-    $(MAKE) -C '$(1)'.native -j $(JOBS) sub-rcc
-    $(MAKE) -C '$(1)'.native -j $(JOBS) sub-uic
+    $(MAKE) -C '$(1)'.native -j '$(JOBS)' sub-tools-bootstrap
+    $(MAKE) -C '$(1)'.native -j '$(JOBS)' sub-moc
+    $(MAKE) -C '$(1)'.native -j '$(JOBS)' sub-rcc
+    $(MAKE) -C '$(1)'.native -j '$(JOBS)' sub-uic
 
     # rebuild qmake to use "-unix" as default and to use the correct "ar" command
     $(SED) 's,\(Option::TARG_MODE Option::target_mode = Option::TARG_\)[A-Z_]*,\1UNIX_MODE,' -i '$(1)'.native/qmake/option.cpp
     $(SED) 's,"ar -M,"$(TARGET)-ar -M,' -i '$(1)'.native/qmake/generators/win32/mingw_make.cpp
-    $(MAKE) -C '$(1)'.native/qmake -j $(JOBS)
+    $(MAKE) -C '$(1)'.native/qmake -j '$(JOBS)'
 
     # install the native tools manually
     $(INSTALL) -m755 '$(1)'.native/bin/moc   '$(PREFIX)/bin/$(TARGET)-moc'
@@ -132,7 +132,7 @@ define $(PKG)_BUILD
         -v
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(TARGET)-ranlib '$(1)'/lib/*.a
+    '$(TARGET)-ranlib' '$(1)'/lib/*.a
     rm -rf '$(PREFIX)/$(TARGET)/mkspecs'
-    $(MAKE) -C '$(1)' install
+    $(MAKE) -C '$(1)' -j 1 install
 endef
