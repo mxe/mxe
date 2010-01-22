@@ -8,12 +8,12 @@ $(PKG)_VERSION  := 7.0.4p4
 $(PKG)_CHECKSUM := 36d3f8cedeed95ec68ae90f489d9bfb40b4c6593
 $(PKG)_SUBDIR   := PDFlib-Lite-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.pdflib.com/download/pdflib-family/pdflib-lite/
+$(PKG)_WEBSITE  := http://www.pdflib.com/download/free-software/pdflib-lite-7/
 $(PKG)_URL      := http://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(subst p, ,$($(PKG)_VERSION))))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.pdflib.com/download/free-software/pdflib-lite/' | \
+    wget -q -O- 'http://www.pdflib.com/download/free-software/pdflib-lite-7/' | \
     $(SED) -n 's,.*PDFlib-Lite-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
