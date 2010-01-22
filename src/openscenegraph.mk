@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     wget -q -O- 'http://www.openscenegraph.org/projects/osg/browser/OpenSceneGraph/tags?order=date&desc=1' | \
     grep '<a ' | \
     $(SED) -n 's,.*>OpenSceneGraph-\([0-9][^<]*\)<.*,\1,p' | \
-    grep -v '2\.8\.' | \
+    grep -v '2\.9\.' | \
     head -1
 endef
 
