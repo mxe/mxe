@@ -3,7 +3,7 @@
 
 # GCC
 PKG             := gcc
-$(PKG)_IGNORE   := 4.4.2
+$(PKG)_IGNORE   := 4.4.3
 $(PKG)_VERSION  := 4.4.0
 $(PKG)_CHECKSUM := 9215af6beb900ca1eef1d6a40c3dabe990203b25
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
