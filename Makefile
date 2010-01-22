@@ -140,7 +140,7 @@ build-only-$(1):
 	    cd '$(2)/$($(1)_SUBDIR)'
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && patch -p1) < $(PKG_PATCH))
-	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR))
+	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    rm -rfv  '$(2)'
 	    ,)
 	[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
