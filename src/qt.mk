@@ -135,4 +135,10 @@ define $(PKG)_BUILD
     '$(TARGET)-ranlib' '$(1)'/lib/*.a
     rm -rf '$(PREFIX)/$(TARGET)/mkspecs'
     $(MAKE) -C '$(1)' -j 1 install
+
+    mkdir            '$(1)/test-qt'
+    cp '$(2)'*       '$(1)/test-qt/'
+    cd               '$(1)/test-qt' && '$(TARGET)-qmake'
+    $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
+    $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
