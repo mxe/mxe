@@ -56,4 +56,17 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install haslibarule= shlib=
     $(INSTALL) -m664 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/src/include/postgres_ext.h' '$(PREFIX)/$(TARGET)/include/'
+    # Build a native pg_config.
+    echo '/* empty */' >'$(1)'/src/include/pg_config_os.h
+    gcc \
+        -I'$(1)'/src/include \
+        -DFRONTEND \
+        '$(1)'/src/port/snprintf.c \
+        '$(1)'/src/port/path.c \
+        '$(1)'/src/port/strlcat.c \
+        '$(1)'/src/port/strlcpy.c \
+        '$(1)'/src/port/thread.c \
+        '$(1)'/src/port/exec.c \
+        '$(1)'/src/bin/pg_config/pg_config.c \
+        -o '$(PREFIX)/$(TARGET)'/bin/pg_config
 endef
