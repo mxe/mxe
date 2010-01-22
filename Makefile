@@ -5,7 +5,7 @@ JOBS               := 1
 TARGET             := i686-pc-mingw32
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
-VERSION   := 2.10
+VERSION   := 2.11
 PREFIX    := $(PWD)/usr
 LOG_DIR   := $(PWD)/log
 TIMESTAMP := $(shell date +%Y%m%d_%H%M%S)
