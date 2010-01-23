@@ -13,7 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_VE
 $(PKG)_DEPS     := gcc openssl
 
 define $(PKG)_UPDATE
-# not implemented
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/gsoap2/files/gSOAP/) | \
+    $(SED) -n 's,.*gsoap_\([0-9][^>]*\)\.tar.*,\1,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
