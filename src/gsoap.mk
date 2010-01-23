@@ -6,10 +6,10 @@ PKG             := gsoap
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7.15
 $(PKG)_CHECKSUM := 9c93d71103ec70074fa8db43d0fe1d3a1fff8d55
-$(PKG)_SUBDIR   := gsoap-2.7
+$(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/2.7.15 stable/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_VERSION) stable/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc openssl
 
 define $(PKG)_UPDATE
