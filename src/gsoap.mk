@@ -32,6 +32,12 @@ define $(PKG)_BUILD
     #   automake --add-missing
     #   autoconf
 
+    # gsoap-3-lex-yacc.patch
+    # Tarball does not supply lex- and yacc-generated sources.
+    # This patch supplies them because mingw-cross-env does not
+    # require yacc or flex.
+    # These files must survive "make clean".
+
     # Native build to get tools wsdl2h and soapcpp2
     cd '$(1)' && ./configure
 
