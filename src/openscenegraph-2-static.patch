@@ -1,18 +1,11 @@
-This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
-
-diff -uNr OpenSceneGraph-2.8.2.orig/src/osgPlugins/exr/ReaderWriterEXR.cpp OpenSceneGraph-2.8.2/src/osgPlugins/exr/ReaderWriterEXR.cpp
 --- OpenSceneGraph-2.8.2.orig/src/osgPlugins/exr/ReaderWriterEXR.cpp	2008-11-27 10:36:18.000000000 +0100
-+++ OpenSceneGraph-2.8.2/src/osgPlugins/exr/ReaderWriterEXR.cpp	2010-01-14 17:55:32.000000000 +0100
-@@ -4,11 +4,6 @@
++++ OpenSceneGraph-2.8.2/src/osgPlugins/exr/ReaderWriterEXR.cpp	2010-01-26 21:36:31.000000000 +0100
+@@ -4,7 +4,7 @@
  #include <osg/Image>
  #include <osg/GL>
  
 -#ifdef _WIN32
--//Make the half format work against openEXR libs 
--#define OPENEXR_DLL
--#endif
--
- #include <osgDB/Registry>
- #include <osgDB/FileNameUtils>
- #include <osgDB/FileUtils>
++#if defined _WIN32 && !defined OSG_LIBRARY_STATIC
+ //Make the half format work against openEXR libs 
+ #define OPENEXR_DLL
+ #endif
