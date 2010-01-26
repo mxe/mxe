@@ -61,7 +61,7 @@ define $(PKG)_BUILD
     ln -s '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)'/gsoap/src/soapcpp2
 
     # Parallel bulds can fail
-    $(MAKE) -C '$(1)' -j 1
+    $(MAKE) -C '$(1)' -j 1 AR='$(TARGET)-ar'
 
     $(MAKE) -C '$(1)' -j 1 install
     # Apparently there is a tradition of compiling gsoap source files into applications.
