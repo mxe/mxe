@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoconf && autoconf && ./configure \
+    cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
