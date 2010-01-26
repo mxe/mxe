@@ -71,7 +71,7 @@ diff -ru portaudio-orig/configure.in portaudio/configure.in
          OTHER_OBJS="$OTHER_OBJS src/os/unix/pa_unix_hostapis.o src/os/unix/pa_unix_util.o"
  esac
  CFLAGS="$CFLAGS $THREAD_CFLAGS"
-+echo CFLAGS: $CFLAGS
++echo "CFLAGS: $CFLAGS"
  
  if test "$enable_cxx" = "yes"; then
     AC_CONFIG_SUBDIRS([bindings/cpp])
