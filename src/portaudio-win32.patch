@@ -8,7 +8,7 @@ diff -ru portaudio-orig/configure.in portaudio/configure.in
  	dnl Mac OS X configuration
  
  	AC_DEFINE(PA_USE_COREAUDIO)
-+        CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/unix"
++	CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/unix"
  	if [[ -d /Developer/SDKs/MacOSX10.5.sdk ]] ; then
  		SHARED_FLAGS="-Werror -framework CoreAudio -framework AudioToolbox -framework AudioUnit -framework Carbon -dynamiclib -arch x86_64 -arch ppc64 -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.3";
  		CFLAGS="-Werror $CFLAGS -arch x86_64 -arch ppc64 -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.3";
@@ -44,7 +44,7 @@ diff -ru portaudio-orig/configure.in portaudio/configure.in
    cygwin* )
  	dnl Cygwin configuration
 -
-+        CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/win"
++	CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/win"
  	OTHER_OBJS="src/hostapi/wmme/pa_win_wmme.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o";
  	CFLAGS="$CFLAGS -DPA_NO_DS -DPA_NO_WDMKS -DPA_NO_ASIO -DPA_NO_WASAPI"
 +
@@ -55,7 +55,7 @@ diff -ru portaudio-orig/configure.in portaudio/configure.in
  	dnl SGI IRIX audio library (AL) configuration (Pieter, oct 2-13, 2003).
  	dnl The 'dmedia' library is needed to read the Unadjusted System Time (UST).
      dnl
-+        CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/unix"
++	CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/unix"
  	AC_CHECK_LIB(pthread, pthread_create, , AC_MSG_ERROR([IRIX posix thread library not found!]))
  	AC_CHECK_LIB(audio,   alOpenPort,     , AC_MSG_ERROR([IRIX audio library not found!]))
  	AC_CHECK_LIB(dmedia,  dmGetUST,       , AC_MSG_ERROR([IRIX digital media library not found!]))
@@ -63,7 +63,7 @@ diff -ru portaudio-orig/configure.in portaudio/configure.in
                  ,
                  AC_MSG_ERROR([libpthread not found!]))
  
-+        CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/unix"
++	CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/unix"
  	if [[ $have_alsa = "yes" ] && [ $with_alsa != "no" ]] ; then
  		DLL_LIBS="$DLL_LIBS -lasound"
  		OTHER_OBJS="$OTHER_OBJS src/hostapi/alsa/pa_linux_alsa.o"
