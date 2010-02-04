@@ -30,6 +30,7 @@ define $(PKG)_BUILD
     cd '$(1)' && aclocal
     cd '$(1)' && automake --add-missing
     cd '$(1)' && autoconf
+    cd '$(1)' && autoheader
 
     # Native build to get tools wsdl2h and soapcpp2
     cd '$(1)' && ./configure \
