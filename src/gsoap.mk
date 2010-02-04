@@ -20,23 +20,16 @@ endef
 
 define $(PKG)_BUILD
 
-    # gsoap-1-link-dom.patch
+    # gsoap-link-dom.patch
     # The code in dom.c(pp) is needed for some applications.
     # Patch adds to the libs for easy linking in mingw-cross-env.
     # Rename dom.cpp to dom_cpp.cpp to prevent collision between
     # dom.c and dom.cpp at dom.o.
 
-    # gsoap-2-autogen.patch
-    # Need to process changes to Makefile.am.
-    #   aclocal
-    #   automake --add-missing
-    #   autoconf
-
-    # gsoap-3-lex-yacc.patch
-    # Tarball does not supply lex- and yacc-generated sources.
-    # This patch supplies them because mingw-cross-env does not
-    # require yacc or flex.
-    # These files must survive "make clean".
+    # Process changes to Makefile.am
+    cd '$(1)' && aclocal
+    cd '$(1)' && automake --add-missing
+    cd '$(1)' && autoconf
 
     # Native build to get tools wsdl2h and soapcpp2
     cd '$(1)' && ./configure
