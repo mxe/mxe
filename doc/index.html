@@ -469,7 +469,19 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <table>
     <tr>
+        <td><a href="http://www.gnu.org/software/autoconf/">Autoconf</a></td>
+        <td>≥ 2.50</td>
+    </tr>
+    <tr>
+        <td><a href="http://sources.redhat.com/automake/">Automake</a></td>
+        <td>≥ 1.10</td>
+    </tr>
+    <tr>
         <td><a href="http://www.gnu.org/software/bash/">Bash</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.gnu.org/software/bison/">Bison</a></td>
         <td></td>
     </tr>
     <tr>
@@ -478,6 +490,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td><a href="http://www.cmake.org/">CMake</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://flex.sourceforge.net/">Flex</a></td>
         <td></td>
     </tr>
     <tr>
@@ -530,8 +546,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3>Debian</h3>
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
-    <pre>aptitude install -R bash bzip2 cmake g++ make sed openssl \
-                    patch perl scons unzip wget</pre>
+    <pre>aptitude install -R autoconf automake bash bison bzip2 \
+                    cmake flex g++ make sed openssl patch \
+                    perl scons unzip wget</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -541,7 +558,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3>FreeBSD</h3>
 
     <!-- http://www.freebsd.org/ports/ -->
-    <pre>pkg_add -r bash cmake gmake gsed perl scons unzip wget</pre>
+    <pre>pkg_add -r autoconf automake bash bison cmake flex gmake \
+           gsed perl scons unzip wget</pre>
 
     <p>
     On 64-bit FreeBSD,
@@ -551,8 +569,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3>Frugalware</h3>
 
     <!-- http://www.frugalware.org/packages -->
-    <pre>pacman-g2 -S bash bzip2 cmake gcc make sed openssl \
-             patch perl scons unzip wget</pre>
+    <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
+             flex gcc make sed openssl patch perl scons \
+             unzip wget</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -569,7 +588,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     then run:
     </p>
     <!-- http://www.macports.org/ports.php -->
-    <pre>sudo port install cmake gmake gsed scons wget</pre>
+    <pre>sudo port install autoconf automake bison cmake flex \
+                  gmake gsed scons wget</pre>
 
     <h3>MacOS 10.6</h3>
 
@@ -581,7 +601,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     then run:
     </p>
     <!-- http://www.macports.org/ports.php -->
-    <pre>sudo port install cmake gmake gsed scons wget gcc_select
+    <pre>sudo port install autoconf automake bison cmake flex \
+                  gmake gsed scons wget gcc_select
 sudo gcc_select gcc40</pre>
 
     <h3>Open Solaris 2009.06</h3>
@@ -600,9 +621,10 @@ sudo gcc_select gcc40</pre>
     that already ship with Solaris:
     </p>
     <!-- http://pkg.opensolaris.org/release/en/search.shtml -->
-    <pre>pfexec pkg install SUNWcmake SUNWgcc SUNWgmake SUNWgsed \
-                   SUNWgzip SUNWlibm SUNWgpch SUNWunzip \
-                   SUNWwget</pre>
+    <pre>pfexec pkg install SUNWaconf SUNWgnu-automake-110 \
+                   SUNWbison SUNWcmake SUNWflexlex SUNWgcc \
+                   SUNWgmake SUNWgsed SUNWgzip SUNWlibm \
+                   SUNWgpch SUNWunzip SUNWwget</pre>
 
     <p>
     Then download and install SCons by hand:
