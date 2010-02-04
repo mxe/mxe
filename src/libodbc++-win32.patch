@@ -1,18 +1,17 @@
 This file is part of mingw-cross-env.
 See doc/index.html or doc/README for further information.
 
---- libodbc++-0.2.5.orig/configure	2009-08-20 23:41:27.000000000 +0200
-+++ libodbc++-0.2.5/configure	2009-10-27 22:48:23.000000000 +0100
-@@ -22680,7 +22680,8 @@
+--- libodbc++-0.2.5.orig/configure.ac	2009-08-20 23:39:08.000000000 +0200
++++ libodbc++-0.2.5/configure.ac	2010-02-04 22:40:32.000000000 +0100
+@@ -118,7 +118,7 @@
+ if test "x$iodbc_ok" != "xyes" &&
+    test "x$odbc_ok" != "xyes" 
  then
- 	{ { echo "$as_me:$LINENO: error: No ODBC driver manager configured. Pperhaps you need to give configure --with-odbc=/some/location?" >&5
- echo "$as_me: error: No ODBC driver manager configured. Pperhaps you need to give configure --with-odbc=/some/location?" >&2;}
--   { (exit 1); exit 1; }; }
-+   #{ (exit 1); exit 1; }; }
-+}
+-	AC_MSG_ERROR([No ODBC driver manager configured. Pperhaps you need to give configure --with-odbc=/some/location?])
++	AC_MSG_WARN([No ODBC driver manager configured. Pperhaps you need to give configure --with-odbc=/some/location?])
  fi
  
- 
+ AC_ARG_WITH(odbc-version,
 --- libodbc++-0.2.5.orig/src/datastream.h	2009-01-06 12:20:05.000000000 +0100
 +++ libodbc++-0.2.5/src/datastream.h	2009-10-27 23:14:22.000000000 +0100
 @@ -35,7 +35,7 @@

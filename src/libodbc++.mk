@@ -20,6 +20,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoconf
+    touch '$(1)/aclocal.m4'
+    touch '$(1)/Makefile.in'
+    touch '$(1)/config.h.in'
     cd '$(1)' && ./configure \
       --prefix='$(PREFIX)/$(TARGET)' \
       --host='$(TARGET)' \
