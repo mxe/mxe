@@ -32,7 +32,8 @@ define $(PKG)_BUILD
     cd '$(1)' && autoconf
 
     # Native build to get tools wsdl2h and soapcpp2
-    cd '$(1)' && ./configure
+    cd '$(1)' && ./configure \
+        --disable-openssl
 
     # Parallel bulds can fail
     $(MAKE) -C '$(1)'/gsoap -j 1
