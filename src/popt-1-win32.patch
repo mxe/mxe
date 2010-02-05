@@ -8,7 +8,7 @@ diff -urN popt-1.15/autogen.sh popt-1.15-mod/autogen.sh
  
  THEDIR="`pwd`"
  
-+../gnulib/gnulib-tool --update
++gnulib-tool --update
 +
  libtoolize=`which glibtoolize 2>/dev/null`
  case $libtoolize in
@@ -38,7 +38,7 @@ diff -urN popt-1.15/configure.ac popt-1.15-mod/configure.ac
 +dnl Gnulib tests.
 +gl_INIT
 +
-+AC_CHECK_HEADERS(float.h fnmatch.h glob.h langinfo.h libintl.h mcheck.h unistd.h  sys/ioctl.h)
++AC_CHECK_HEADERS(float.h fnmatch.h glob.h langinfo.h libintl.h mcheck.h unistd.h sys/ioctl.h)
  
  # For some systems we know that we have ld_version scripts.
  # Use it then as default.

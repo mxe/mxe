@@ -20,6 +20,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && aclocal -I m4
+    cd '$(1)' && autoheader
+    cd '$(1)' && automake --add-missing
+    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
