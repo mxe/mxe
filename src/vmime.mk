@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./bootstrap
     cd '$(1)' && ./configure \
       --prefix='$(PREFIX)/$(TARGET)' \
       --host='$(TARGET)' \
@@ -26,10 +27,6 @@ define $(PKG)_BUILD
       --enable-platform-windows \
       --disable-rpath \
       --disable-dependency-tracking
-
-    # Add the missing "a" suffix for the library.
-    # Otherwise, we get a "libvmime.la" that refers to "libvimime."
-    $(SED) 's/^libext=$$/libext=a/;' -i '$(1)/libtool'
 
     # Disable VMIME_HAVE_MLANG_H
     # We have the header, but there is no implementation for IMultiLanguage in MinGW

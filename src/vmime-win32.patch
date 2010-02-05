@@ -4,6 +4,15 @@ See doc/index.html or doc/README for further information.
 diff -urN a/configure.in c/configure.in
 --- libvmime-0.9.0.orig/configure.in	2008-10-19 14:36:08.000000000 +0200
 +++ libvmime-0.9.0/configure.in	2009-12-04 14:55:17.000000000 +0100
+@@ -125,7 +125,7 @@
+ $CXX -c $CFLAGS $CPPFLAGS mytest.$ac_ext >&5
+ sh libtool --mode=link $CXX -o mytest mytest.o libtest.la >&5 2>/dev/null
+ 
+-if test -x mytest; then
++if test -x mytest -a "$cross_compiling" != yes; then
+ 	myresult=`./mytest`
+ 	if test "X$myresult" = "XPASS"; then
+ 		AC_MSG_RESULT(yes)
 @@ -369,7 +369,7 @@
  
  if test "x$conf_tls" = "xyes"; then
