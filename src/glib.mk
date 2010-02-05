@@ -29,11 +29,13 @@ define $(PKG)_BUILD
         --disable-nls
     $(MAKE) -C '$(1)/$(libiconv_SUBDIR)' -j 1 install
 
-    # native build for glib-genmarshal, without pkg-config and gettext
+    # native build for glib-genmarshal, without pkg-config, gettext, and zlib
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,glib)
     $(SED) 's,^PKG_CONFIG=.*,PKG_CONFIG=echo,' -i '$(1)/$(glib_SUBDIR)/configure'
     $(SED) 's,gt_cv_have_gettext=yes,gt_cv_have_gettext=no,' -i '$(1)/$(glib_SUBDIR)/configure'
     $(SED) '/You must.*have gettext/,/exit 1;/ s,.*exit 1;.*,},' -i '$(1)/$(glib_SUBDIR)/configure'
+    $(SED) 's,found_zlib=no,found_zlib=yes,' -i '$(1)/$(glib_SUBDIR)/configure'
+
     cd '$(1)/$(glib_SUBDIR)' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)' \
