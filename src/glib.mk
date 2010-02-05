@@ -4,8 +4,8 @@
 # GLib
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.23.1
-$(PKG)_CHECKSUM := 2cf7af4f0a4ac9b4f2b9e95661d94985e64c7c5e
+$(PKG)_VERSION  := 2.23.2
+$(PKG)_CHECKSUM := 1d4cd02fe775fec5e1b846b31fa4044362c763b5
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/
@@ -40,7 +40,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)' \
         --enable-regex \
-        --without-threads \
+        --disable-threads \
         --disable-selinux \
         --disable-fam \
         --disable-xattr \
@@ -48,7 +48,8 @@ define $(PKG)_BUILD
         CPPFLAGS='-I$(1)/libiconv/include' \
         LDFLAGS='-L$(1)/libiconv/lib'
     $(SED) 's,#define G_ATOMIC.*,,' -i '$(1)/$(glib_SUBDIR)/config.h'
-    $(MAKE) -C '$(1)/$(glib_SUBDIR)/glib' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/$(glib_SUBDIR)/glib'    -j '$(JOBS)'
+    $(MAKE) -C '$(1)/$(glib_SUBDIR)/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(1)/$(glib_SUBDIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
 
     # cross build
