@@ -4,7 +4,16 @@ See doc/index.html or doc/README for further information.
 diff -ru id3lib-3.8.3-orig/configure.in id3lib-3.8.3/configure.in
 --- id3lib-3.8.3-orig/configure.in	2003-03-02 01:23:00.000000000 +0100
 +++ id3lib-3.8.3/configure.in	2010-01-23 14:15:24.000000000 +0100
-@@ -227,7 +227,6 @@
+@@ -89,6 +89,8 @@
+ 
+ AC_ISC_POSIX
+ 
++AC_CHECK_TOOL([AR], [ar], [:])
++
+ dnl Initialize libtool
+ AM_PROG_LIBTOOL
+ 
+@@ -227,7 +229,6 @@
  )
  AC_CHECK_HEADERS(               \
    string                        \
@@ -12,21 +21,15 @@ diff -ru id3lib-3.8.3-orig/configure.in id3lib-3.8.3/configure.in
    ,,AC_MSG_ERROR([Missing a vital header file for id3lib])
  )
  
-@@ -249,10 +248,10 @@
- AM_CONDITIONAL(ID3_NEEDGETOPT_LONG, test x$ac_cv_func_getopt_long = xno)
- 
+@@ -251,7 +252,7 @@
  AC_CHECK_FUNCS(mkstemp)
--AC_CHECK_FUNCS(
--  truncate                      \
+ AC_CHECK_FUNCS(
+   truncate                      \
 -  ,,AC_MSG_ERROR([Missing a vital function for id3lib])
--)
-+#AC_CHECK_FUNCS(
-+#  truncate                      \
-+#  ,,AC_MSG_ERROR([Missing a vital function for id3lib])
-+#)
++  ,,AC_MSG_WARN([Missing a vital function for id3lib])
+ )
  
  dnl Checks for typedefs, structures, and compiler characteristics.
- AC_TYPE_SIZE_T
 diff -ru id3lib-3.8.3-orig/include/id3/globals.h id3lib-3.8.3/include/id3/globals.h
 --- id3lib-3.8.3-orig/include/id3/globals.h	2003-03-02 01:23:00.000000000 +0100
 +++ id3lib-3.8.3/include/id3/globals.h	2010-01-23 14:22:58.000000000 +0100
