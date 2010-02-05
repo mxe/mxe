@@ -4,8 +4,8 @@
 # libpano13
 PKG             := libpano13
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.9.15_beta3
-$(PKG)_CHECKSUM := 963a7c18b57144b174df063031ed376133a6e522
+$(PKG)_VERSION  := 2.9.17_beta1
+$(PKG)_CHECKSUM := d92238ca00e29b18f26dd86de7e1425ab8ff26a8
 $(PKG)_SUBDIR   := libpano13-$(word 1,$(subst _, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := libpano13-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://panotools.sourceforge.net/
