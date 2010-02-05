@@ -49,8 +49,8 @@ define $(PKG)_BUILD
     # Prevent undefined reference to _rpl_malloc.
     # http://groups.google.com/group/ikarus-users/browse_thread/thread/fd1d101eac32633f
     cd '$(1)' && ac_cv_func_malloc_0_nonnull=yes ./configure \
-      --prefix='$(PREFIX)/$(TARGET)' \
-      --host='$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --host='$(TARGET)'
 
     # Building for mingw requires native soapcpp2
     ln -s '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)'/gsoap/src/soapcpp2
