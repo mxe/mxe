@@ -497,10 +497,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://en.wikipedia.org/wiki/C_standard_library">LibC</a> for 32-bit</td>
-        <td></td>
-    </tr>
-    <tr>
         <td><a href="http://gcc.gnu.org/">GCC</a> (gcc, g++)</td>
         <td></td>
     </tr>
@@ -510,6 +506,14 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td><a href="http://www.gnu.org/software/sed/">GNU Sed</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://en.wikipedia.org/wiki/C_standard_library">LibC</a> for 32-bit</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.gnu.org/software/libtool/">Libtool</a></td>
         <td></td>
     </tr>
     <tr>
@@ -547,8 +551,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>aptitude install -R autoconf automake bash bison bzip2 \
-                    cmake flex g++ make sed openssl patch \
-                    perl scons unzip wget</pre>
+                    cmake flex g++ make sed libtool \
+                    openssl patch perl scons unzip wget</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -559,7 +563,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.freebsd.org/ports/ -->
     <pre>pkg_add -r autoconf automake bash bison cmake flex gmake \
-           gsed perl scons unzip wget</pre>
+           gsed libtool perl scons unzip wget</pre>
 
     <p>
     On 64-bit FreeBSD,
@@ -570,8 +574,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
-             flex gcc make sed openssl patch perl scons \
-             unzip wget</pre>
+             flex gcc make sed libtool openssl patch perl \
+             scons unzip wget</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -589,7 +593,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
-                  gmake gsed scons wget</pre>
+                  gmake gsed libtool scons wget</pre>
 
     <h3>MacOS 10.6</h3>
 
@@ -602,7 +606,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
-                  gmake gsed scons wget gcc_select
+                  gmake gsed libtool scons wget gcc_select
 sudo gcc_select gcc40</pre>
 
     <h3>Open Solaris 2009.06</h3>
@@ -623,8 +627,8 @@ sudo gcc_select gcc40</pre>
     <!-- http://pkg.opensolaris.org/release/en/search.shtml -->
     <pre>pfexec pkg install SUNWaconf SUNWgnu-automake-110 \
                    SUNWbison SUNWcmake SUNWflexlex SUNWgcc \
-                   SUNWgmake SUNWgsed SUNWgzip SUNWlibm \
-                   SUNWgpch SUNWunzip SUNWwget</pre>
+                   SUNWgmake SUNWgsed SUNWlibtool SUNWgzip \
+                   SUNWlibm SUNWgpch SUNWunzip SUNWwget</pre>
 
     <p>
     Then download and install SCons by hand:
