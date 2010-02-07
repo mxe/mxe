@@ -77,4 +77,10 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         LIBS='-lws2_32'
     $(MAKE) -C '$(1)/build/$(TARGET)/libgomp' -j '$(JOBS)' install
+
+    # create pkg-config script
+    (echo '#!/bin/sh'; \
+     echo 'PKG_CONFIG_PATH= PKG_CONFIG_LIBDIR='\''$(PREFIX)/$(TARGET)/lib/pkgconfig'\'' exec pkg-config "$$@"') \
+             > '$(PREFIX)/bin/$(TARGET)-pkg-config'
+    chmod 0755 '$(PREFIX)/bin/$(TARGET)-pkg-config'
 endef
