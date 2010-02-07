@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 diff -ru flac-1.2.1.orig/include/share/alloc.h flac-1.2.1/include/share/alloc.h
 --- flac-1.2.1.orig/include/share/alloc.h       2007-09-12 07:32:21.000000000 +0200

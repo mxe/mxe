@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 diff -ru glib-2.23.2.orig/configure.in glib-2.23.2/configure.in
 --- glib-2.23.2.orig/configure.in	2010-01-25 02:50:02.000000000 +0100

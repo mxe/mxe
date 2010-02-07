@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 diff -urN a/configure.in c/configure.in
 --- libvmime-0.9.0.orig/configure.in	2008-10-19 14:36:08.000000000 +0200

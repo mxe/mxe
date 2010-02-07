@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 diff -urN a/gsoap/Makefile.am b/gsoap/Makefile.am
 --- a/gsoap/Makefile.am	2009-11-07 21:07:06.000000000 +0100

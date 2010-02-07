@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 diff -uNr OpenSceneGraph-2.8.2.orig/CMakeLists.txt OpenSceneGraph-2.8.2/CMakeLists.txt
 --- OpenSceneGraph-2.8.2.orig/CMakeLists.txt	2009-07-28 08:02:27.000000000 +0200

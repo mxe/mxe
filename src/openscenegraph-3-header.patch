@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 diff -uNr OpenSceneGraph-2.8.2.orig/src/osgPlugins/txp/TXPNode.cpp OpenSceneGraph-2.8.2/src/osgPlugins/txp/TXPNode.cpp
 --- OpenSceneGraph-2.8.2.orig/src/osgPlugins/txp/TXPNode.cpp	2008-06-16 15:20:51.000000000 +0200

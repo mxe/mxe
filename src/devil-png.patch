@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 diff -urN devil-1.7.8.orig/src-IL/src/il_icon.c devil-1.7.8/src-IL/src/il_icon.c
 --- devil-1.7.8.orig/src-IL/src/il_icon.c	2009-03-08 08:10:09.000000000 +0100

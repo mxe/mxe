@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 --- smpeg-0.4.5+cvs20030824.orig/config.guess	2009-10-12 19:02:17.000000000 +1100
 +++ smpeg-0.4.5+cvs20030824/config.guess	2009-10-12 19:01:51.000000000 +1100

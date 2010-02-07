@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 diff -ru proj-4.7.0.orig/src/pj_mutex.c proj-4.7.0/src/pj_mutex.c
 --- proj-4.7.0.orig/src/pj_mutex.c	2009-09-23 21:03:26.000000000 +0200

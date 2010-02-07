@@ -1,5 +1,5 @@
 # This file is part of mingw-cross-env.
-# See doc/index.html or doc/README for further information.
+# See doc/index.html for further information.
 
 JOBS               := 1
 TARGET             := i686-pc-mingw32

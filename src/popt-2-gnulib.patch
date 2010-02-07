@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 diff -urN popt-1.15-mod/lib/dummy.c popt-1.15-mod2/lib/dummy.c
 --- popt-1.15-mod/lib/dummy.c	1970-01-01 01:00:00.000000000 +0100

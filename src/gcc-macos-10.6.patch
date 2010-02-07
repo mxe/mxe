@@ -1,5 +1,5 @@
 This file is part of mingw-cross-env.
-See doc/index.html or doc/README for further information.
+See doc/index.html for further information.
 
 --- gcc-4.4.0-orig/gcc/cp/Make-lang.in	2009/09/09 08:14:36	151554
 +++ gcc-4.4.0/gcc/cp/Make-lang.in	2009/09/09 08:46:32	151555
