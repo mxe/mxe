@@ -20,13 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # Don't search for intltool
-    $(SED) 's,\(INTLTOOL_APPLIED_VERSION\)=.*,\1=0.35.0,' -i '$(1)/configure'
-    $(SED) 's,^\(INTLTOOL_UPDATE\)=.*,\1=disabled,' -i '$(1)/configure'
-    $(SED) 's,^\(INTLTOOL_MERGE\)=.*,\1=disabled,' -i '$(1)/configure'
-    $(SED) 's,^\(INTLTOOL_EXTRACT\)=.*,\1=disabled,' -i '$(1)/configure'
-    $(SED) 's,require XML::Parser,,' -i '$(1)/configure'
-    # build
+    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
@@ -41,5 +35,5 @@ define $(PKG)_BUILD
         --with-bz2 \
         --with-gio \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)/gsf' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

@@ -53,6 +53,9 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/$(glib_SUBDIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
 
     # cross build
+    cd '$(1)' && aclocal
+    cd '$(1)' && $(LIBTOOLIZE) --force
+    cd '$(1)' && autoconf
     $(SED) 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' -i '$(1)/glib-2.0.pc.in'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
@@ -65,5 +68,9 @@ define $(PKG)_BUILD
         --with-libiconv=gnu \
         CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)/gobject' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)/gio'     -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
