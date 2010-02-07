@@ -23,12 +23,12 @@ endef
 define $(PKG)_BUILD
     # native build for glib-genmarshal, without pkg-config, gettext and zlib
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,glib)
-    $(SED) 's,^PKG_CONFIG=.*,PKG_CONFIG=echo,'                   -i '$(1)/$(glib_SUBDIR)/configure'
-    $(SED) 's,gt_cv_have_gettext=yes,gt_cv_have_gettext=no,'     -i '$(1)/$(glib_SUBDIR)/configure'
-    $(SED) '/You must.*have gettext/,/exit 1;/ s,.*exit 1;.*,},' -i '$(1)/$(glib_SUBDIR)/configure'
-    $(SED) 's,found_zlib=no,found_zlib=yes,'                     -i '$(1)/$(glib_SUBDIR)/configure'
-
-    cd '$(1)/$(glib_SUBDIR)' && ./configure \
+    mv '$(1)/$(glib_SUBDIR)' '$(1).native'
+    $(SED) 's,^PKG_CONFIG=.*,PKG_CONFIG=echo,'                   -i '$(1).native/configure'
+    $(SED) 's,gt_cv_have_gettext=yes,gt_cv_have_gettext=no,'     -i '$(1).native/configure'
+    $(SED) '/You must.*have gettext/,/exit 1;/ s,.*exit 1;.*,},' -i '$(1).native/configure'
+    $(SED) 's,found_zlib=no,found_zlib=yes,'                     -i '$(1).native/configure'
+    cd '$(1).native' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)' \
         --enable-regex \
@@ -37,10 +37,10 @@ define $(PKG)_BUILD
         --disable-fam \
         --disable-xattr \
         --without-libiconv
-    $(SED) 's,#define G_ATOMIC.*,,' -i '$(1)/$(glib_SUBDIR)/config.h'
-    $(MAKE) -C '$(1)/$(glib_SUBDIR)/glib'    -j '$(JOBS)'
-    $(MAKE) -C '$(1)/$(glib_SUBDIR)/gthread' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/$(glib_SUBDIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    $(SED) 's,#define G_ATOMIC.*,,' -i '$(1).native/config.h'
+    $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
 
     # cross build
     cd '$(1)' && aclocal
