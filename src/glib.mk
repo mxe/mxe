@@ -21,14 +21,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # native build of libiconv (used by glib-genmarshal)
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,libiconv)
-    cd '$(1)/$(libiconv_SUBDIR)' && ./configure \
-        --prefix='$(1)/libiconv' \
-        --disable-shared \
-        --disable-nls
-    $(MAKE) -C '$(1)/$(libiconv_SUBDIR)' -j 1 install
-
     # native build for glib-genmarshal, without pkg-config, gettext and zlib
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,glib)
     $(SED) 's,^PKG_CONFIG=.*,PKG_CONFIG=echo,'                   -i '$(1)/$(glib_SUBDIR)/configure'
@@ -44,9 +36,7 @@ define $(PKG)_BUILD
         --disable-selinux \
         --disable-fam \
         --disable-xattr \
-        --with-libiconv=gnu \
-        CPPFLAGS='-I$(1)/libiconv/include' \
-        LDFLAGS='-L$(1)/libiconv/lib'
+        --without-libiconv
     $(SED) 's,#define G_ATOMIC.*,,' -i '$(1)/$(glib_SUBDIR)/config.h'
     $(MAKE) -C '$(1)/$(glib_SUBDIR)/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1)/$(glib_SUBDIR)/gthread' -j '$(JOBS)'
