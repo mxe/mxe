@@ -659,7 +659,11 @@ sudo gcc_select gcc40</pre>
                    SUNWunzip SUNWwget</pre>
 
     <p>
-    Then download and install SCons by hand:
+    Then make Automake available:
+    </p>
+    <pre>pfexec ln -s aclocal-1.10  /usr/bin/aclocal
+pfexec ln -s automake-1.10 /usr/bin/automake</pre>
+    and download and install SCons by hand:
     </p>
     <pre>wget http://prdownloads.sourceforge.net/scons/scons-1.2.0.tar.gz
 tar -xzf scons-1.2.0.tar.gz
