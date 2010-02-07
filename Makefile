@@ -5,19 +5,20 @@ JOBS               := 1
 TARGET             := i686-pc-mingw32
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
-PREFIX    := $(PWD)/usr
-LOG_DIR   := $(PWD)/log
-TIMESTAMP := $(shell date +%Y%m%d_%H%M%S)
-PKG_DIR   := $(PWD)/pkg
-DIST_DIR  := $(PWD)/dist
-TMP_DIR    = $(PWD)/tmp-$(1)
-MAKEFILE  := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
-TOP_DIR   := $(patsubst %/,%,$(dir $(MAKEFILE)))
-PATH      := $(PREFIX)/bin:$(PATH)
-SHELL     := bash
-SED       := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
-INSTALL   := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
-VERSION   := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
+PREFIX     := $(PWD)/usr
+LOG_DIR    := $(PWD)/log
+TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
+PKG_DIR    := $(PWD)/pkg
+DIST_DIR   := $(PWD)/dist
+TMP_DIR     = $(PWD)/tmp-$(1)
+MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
+PATH       := $(PREFIX)/bin:$(PATH)
+SHELL      := bash
+SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
+INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
+LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
+VERSION    := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
 
 # unset any environment variables which might cause trouble
 AR =

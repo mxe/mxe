@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) 's,libtoolize ,$(LIBTOOLIZE) ,' -i '$(1)'/bootstrap
     cd '$(1)' && ./bootstrap
     cd '$(1)' && ./configure \
       --prefix='$(PREFIX)/$(TARGET)' \
