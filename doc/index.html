@@ -27,7 +27,7 @@
         li, dt {
             margin-bottom: 0.8em;
         }
-        #authors-list li {
+        .compact-list li {
             margin-bottom: 0em;
         }
         .usage dt {
@@ -478,9 +478,19 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 <h2 id="requirements">Requirements</h2>
 
     <p>
-    Mingw-cross-env requires a recent Unix system
-    where the following components are installed:
+    Mingw-cross-env requires a recent Unix system where
+    all components as stated in the table below
+    are installed.
+    Detailed instructions are available for:
     </p>
+
+    <ul class="compact-list">
+        <li><a href="#requirements-debian">Debian</a></li>
+        <li><a href="#requirements-freebsd">FreeBSD</a></li>
+        <li><a href="#requirements-frugalware">Frugalware</a></li>
+        <li><a href="#requirements-macos">MacOS</a></li>
+        <li><a href="#requirements-solaris">Solaris</a></li>
+    </ul>
 
     <table>
     <tr>
@@ -562,12 +572,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     </table>
 
-    <p>
-    Detailed installation instructions
-    for various systems follow.
-    </p>
-
-    <h3>Debian</h3>
+    <h3 id="requirements-debian">Debian</h3>
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>aptitude install -R autoconf automake bash bison bzip2 \
@@ -580,7 +585,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <pre>aptitude install -R g++-multilib</pre>
 
-    <h3>FreeBSD</h3>
+    <h3 id="requirements-freebsd">FreeBSD</h3>
 
     <!-- http://www.freebsd.org/ports/ -->
     <pre>pkg_add -r autoconf automake bash bison cmake flex gmake \
@@ -591,7 +596,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     there are open issues with the NSIS package.
     </p>
 
-    <h3>Frugalware</h3>
+    <h3 id="requirements-frugalware">Frugalware</h3>
 
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
@@ -603,20 +608,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     there are open issues with the NSIS package.
     </p>
 
-    <h3>MacOS X (≤ 10.5)</h3>
-
-    <p>
-    Install
-    <a href="http://developer.apple.com/TOOLS/xcode/">Xcode</a>
-    and
-    <a href="http://www.macports.org/">MacPorts</a>,
-    then run:
-    </p>
-    <!-- http://www.macports.org/ports.php -->
-    <pre>sudo port install autoconf automake bison cmake flex \
-                  gmake gsed libtool pkgconfig scons wget</pre>
-
-    <h3>MacOS 10.6</h3>
+    <h3 id="requirements-macos">MacOS 10.6</h3>
 
     <p>
     Install
@@ -631,7 +623,20 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
                   gcc_select
 sudo gcc_select gcc40</pre>
 
-    <h3>Open Solaris 2009.06</h3>
+    <h3>MacOS X (≤ 10.5)</h3>
+
+    <p>
+    Install
+    <a href="http://developer.apple.com/TOOLS/xcode/">Xcode</a>
+    and
+    <a href="http://www.macports.org/">MacPorts</a>,
+    then run:
+    </p>
+    <!-- http://www.macports.org/ports.php -->
+    <pre>sudo port install autoconf automake bison cmake flex \
+                  gmake gsed libtool pkgconfig scons wget</pre>
+
+    <h3 id="requirements-solaris">Open Solaris 2009.06</h3>
 
     <p>
     Open Solaris seems to have a problem with Binutils 2.20.
@@ -772,7 +777,7 @@ pfexec python setup.py install</pre>
 <div class="section">
 <h2 id="copyright">Copyright © 2009, 2010</h2>
 
-    <ul id="authors-list">
+    <ul id="authors-list" class="compact-list">
     </ul>
 
     <p>(contact via the
