@@ -34,7 +34,7 @@ define $(PKG)_BUILD
 
     # Native build to get tools wsdl2h and soapcpp2
     cd '$(1)' && ./configure \
-        --disable-openssl
+        --enable-openssl
 
     # Parallel bulds can fail
     $(MAKE) -C '$(1)'/gsoap -j 1
