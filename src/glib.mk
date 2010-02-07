@@ -30,7 +30,7 @@ define $(PKG)_BUILD
     $(SED) 's,found_zlib=no,found_zlib=yes,'                     -i '$(1).native/configure'
     cd '$(1).native' && ./configure \
         --disable-shared \
-        --prefix='$(PREFIX)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
         --enable-regex \
         --disable-threads \
         --disable-selinux \
@@ -57,7 +57,8 @@ define $(PKG)_BUILD
         --with-pcre=system \
         --with-libiconv=gnu \
         CXX='$(TARGET)-c++' \
-        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
+        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+        GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal'
     $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
