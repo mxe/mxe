@@ -215,15 +215,15 @@ dist:
 	mkdir  '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc'
 	mkdir  '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src'
 	( \
-	    $(SED) -n '1,/<table id="package-list">/ p' '$(TOP_DIR)/doc/index.html' && \
+	    $(SED) -n '1,/<table id="package-list"/ p' '$(TOP_DIR)/doc/index.html' && \
 	    ($(foreach PKG,$(PKGS), \
 	        echo '    <tr><td><a href="$($(PKG)_WEBSITE)">$(PKG)</a></td><td>$($(PKG)_VERSION)</td></tr>';)) && \
-	    $(SED) -n '/<table id="package-list">/,/<ul id="authors-list">/ p' '$(TOP_DIR)/doc/index.html' | \
+	    $(SED) -n '/<table id="package-list"/,/<ul id="authors-list"/ p' '$(TOP_DIR)/doc/index.html' | \
 	        $(SED) '1d' && \
 	    (LC_ALL=C hg log | $(SED) -n 's,^\(user: *\([^<]*\) <.*\|.*(by \([^)]*\)).*\)$$,\2\3,p' | \
 	        sort | uniq -c | sort -nr | \
 	        $(SED) 's,^ *[0-9]* *\(.*\)$$,    <li>\1</li>,') && \
-	    $(SED) '1,/<ul id="authors-list">/ d' '$(TOP_DIR)/doc/index.html' \
+	    $(SED) '1,/<ul id="authors-list"/ d' '$(TOP_DIR)/doc/index.html' \
 	) \
 	| $(SED) 's,\(<span class="version">\)[^<]*\(</span>\),\1$(VERSION)\2,g' \
 	| $(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' \
