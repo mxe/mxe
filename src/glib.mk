@@ -35,8 +35,7 @@ define $(PKG)_BUILD
         --disable-threads \
         --disable-selinux \
         --disable-fam \
-        --disable-xattr \
-        --without-libiconv
+        --disable-xattr
     $(SED) 's,#define G_ATOMIC.*,,' -i '$(1).native/config.h'
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
