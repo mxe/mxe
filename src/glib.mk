@@ -64,5 +64,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gobject' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gio'     -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)'         -j '$(JOBS)' install-pkgconfigDATA
+    $(MAKE) -C '$(1)'         -j '$(JOBS)' install-pkgconfigDATA install-configexecincludeDATA
 endef
