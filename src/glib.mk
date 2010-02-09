@@ -24,7 +24,6 @@ define $(PKG)_BUILD
     # native build for glib-genmarshal, without pkg-config, gettext and zlib
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,glib)
     mv '$(1)/$(glib_SUBDIR)' '$(1).native'
-    $(SED) 's,^PKG_CONFIG=.*,PKG_CONFIG=echo,'                   -i '$(1).native/configure'
     $(SED) 's,gt_cv_have_gettext=yes,gt_cv_have_gettext=no,'     -i '$(1).native/configure'
     $(SED) '/You must.*have gettext/,/exit 1;/ s,.*exit 1;.*,},' -i '$(1).native/configure'
     $(SED) 's,found_zlib=no,found_zlib=yes,'                     -i '$(1).native/configure'
