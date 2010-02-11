@@ -42,7 +42,7 @@ define $(PKG)_BUILD
     cd '$(1)' && \
         for p in '$(1)'/gcc-tdm/*.patch; do \
             $(SED) 's,\r$$,,' -i "$$p" || exit 1; \
-            patch -p1 < "$$p" || exit 1; \
+            patch -p1 -u < "$$p" || exit 1; \
         done
     # unpack support libraries
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-gmp)
