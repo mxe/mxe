@@ -21,9 +21,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # native build for glib-genmarshal, without pkg-config, gettext and zlib
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,glib)
     mv '$(1)/$(glib_SUBDIR)' '$(1).native'
+
+    # native build of libiconv (used by glib-genmarshal)
+    cd '$(1).native' && $(call UNPACK_PKG_ARCHIVE,libiconv)
+    cd '$(1).native/$(libiconv_SUBDIR)' && ./configure \
+        --disable-shared \
+        --disable-nls
+    $(MAKE) -C '$(1).native/$(libiconv_SUBDIR)' -j '$(JOBS)'
+
+    # native build for glib-genmarshal, without pkg-config, gettext and zlib
     $(SED) 's,gt_cv_have_gettext=yes,gt_cv_have_gettext=no,'     -i '$(1).native/configure'
     $(SED) '/You must.*have gettext/,/exit 1;/ s,.*exit 1;.*,},' -i '$(1).native/configure'
     $(SED) 's,found_zlib=no,found_zlib=yes,'                     -i '$(1).native/configure'
@@ -34,7 +42,10 @@ define $(PKG)_BUILD
         --disable-threads \
         --disable-selinux \
         --disable-fam \
-        --disable-xattr
+        --disable-xattr \
+        --with-libiconv=gnu \
+        CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include' \
+        LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs'
     $(SED) 's,#define G_ATOMIC.*,,' -i '$(1).native/config.h'
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
