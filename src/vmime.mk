@@ -19,12 +19,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # ansi and pedantic are too strict for mingw
+    # The configure script will make the real configuration, but
+    # we need scons to generate configure.in, Makefile.am etc.
+    # ansi and pedantic are too strict for mingw.
     # http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
     $(SED) "s/'-ansi', //;" -i '$(1)/SConstruct'
     $(SED) "s/'-pedantic', //;" -i '$(1)/SConstruct'
+    $(SED) 's/pkg-config/$(TARGET)-pkg-config/g;' -i '$(1)/SConstruct'
 
-    cd '$(1)' && scons autotools sendmail_path=/sbin/sendmail
+    cd '$(1)' && scons autotools \
+         prefix='$(PREFIX)/$(TARGET)' \
+         target='$(TARGET)' \
+         sendmail_path=/sbin/sendmail
 
     $(SED) 's,libtoolize ,$(LIBTOOLIZE) ,' -i '$(1)'/bootstrap
     cd '$(1)' && ./bootstrap
