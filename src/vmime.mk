@@ -26,6 +26,7 @@ define $(PKG)_BUILD
     $(SED) "s/'-ansi', //;" -i '$(1)/SConstruct'
     $(SED) "s/'-pedantic', //;" -i '$(1)/SConstruct'
     $(SED) 's/pkg-config/$(TARGET)-pkg-config/g;' -i '$(1)/SConstruct'
+    $(SED)  's/^sh libtool/sh libtool --tag=CXX/g;' -i '$(1)/SConstruct'
 
     cd '$(1)' && scons autotools \
          prefix='$(PREFIX)/$(TARGET)' \
@@ -40,11 +41,12 @@ define $(PKG)_BUILD
       --disable-shared \
       --enable-platform-windows \
       --disable-rpath \
-      --disable-dependency-tracking
-
-    # Add the missing "a" suffix for the library.
-    # Otherwise, we get a "libvmime.la" that refers to "libvimime."
-    $(SED) 's/^libext=$$/libext=a/;' -i '$(1)/libtool'
+      --disable-dependency-tracking \
+      CC='$(TARGET)-gcc' \
+      CXX='$(TARGET)-g++' \
+      CPP='$(TARGET)-gcc -E' \
+      CXXPP='$(TARGET)-g++ -E' \
+      PKG_CONFIG='$(TARGET)-pkg-config'
 
     # Disable VMIME_HAVE_MLANG_H
     # We have the header, but there is no implementation for IMultiLanguage in MinGW
