@@ -20,6 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) 's,^\(Requires:.*\),\1 libpng,' -i '$(1)/SDL_image.pc.in'
+    echo 'Libs.private: -ltiff -ljpeg -lz' >> '$(1)/SDL_image.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
@@ -31,4 +33,11 @@ define $(PKG)_BUILD
         --disable-tif-shared \
         LIBS='-lz'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        `'$(TARGET)-pkg-config' SDL_image --cflags` \
+        '$(2).c' \
+        `'$(TARGET)-pkg-config' SDL_image --libs` \
+        -o '$(PREFIX)/$(TARGET)/bin/test-sdl_image.exe'
 endef
