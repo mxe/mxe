@@ -31,6 +31,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        `'$(TARGET)-pkg-config' sdl --cflags --static --libs` \
+        `'$(TARGET)-pkg-config' sdl --cflags --libs` \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl.exe'
 endef
