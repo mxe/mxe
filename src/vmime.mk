@@ -23,10 +23,10 @@ define $(PKG)_BUILD
     # we need scons to generate configure.in, Makefile.am etc.
     # ansi and pedantic are too strict for mingw.
     # http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
-    $(SED) "s/'-ansi', //;" -i '$(1)/SConstruct'
-    $(SED) "s/'-pedantic', //;" -i '$(1)/SConstruct'
-    $(SED) 's/pkg-config/$(TARGET)-pkg-config/g;' -i '$(1)/SConstruct'
-    $(SED)  's/^sh libtool/sh libtool --tag=CXX/g;' -i '$(1)/SConstruct'
+    $(SED) "s/'-ansi', //;"                        -i '$(1)/SConstruct'
+    $(SED) "s/'-pedantic', //;"                    -i '$(1)/SConstruct'
+    $(SED) 's/pkg-config/$(TARGET)-pkg-config/g;'  -i '$(1)/SConstruct'
+    $(SED) 's/^sh libtool/sh libtool --tag=CXX/g;' -i '$(1)/SConstruct'
 
     cd '$(1)' && scons autotools \
          prefix='$(PREFIX)/$(TARGET)' \
@@ -36,17 +36,17 @@ define $(PKG)_BUILD
     $(SED) 's,libtoolize ,$(LIBTOOLIZE) ,' -i '$(1)'/bootstrap
     cd '$(1)' && ./bootstrap
     cd '$(1)' && ./configure \
-      --prefix='$(PREFIX)/$(TARGET)' \
-      --host='$(TARGET)' \
-      --disable-shared \
-      --enable-platform-windows \
-      --disable-rpath \
-      --disable-dependency-tracking \
-      CC='$(TARGET)-gcc' \
-      CXX='$(TARGET)-g++' \
-      CPP='$(TARGET)-gcc -E' \
-      CXXPP='$(TARGET)-g++ -E' \
-      PKG_CONFIG='$(TARGET)-pkg-config'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --host='$(TARGET)' \
+        --disable-shared \
+        --enable-platform-windows \
+        --disable-rpath \
+        --disable-dependency-tracking \
+        CC='$(TARGET)-gcc' \
+        CXX='$(TARGET)-g++' \
+        CPP='$(TARGET)-gcc -E' \
+        CXXPP='$(TARGET)-g++ -E' \
+        PKG_CONFIG='$(TARGET)-pkg-config'
 
     # Disable VMIME_HAVE_MLANG_H
     # We have the header, but there is no implementation for IMultiLanguage in MinGW
