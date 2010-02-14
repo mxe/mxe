@@ -382,7 +382,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>i686-pc-mingw32-g++ \
     -o osgstaticviewer.exe examples/osgstaticviewer/osgstaticviewer.cpp \
     `i686-pc-mingw32-pkg-config --cflags openscenegraph-osgViewer openscenegraph-osgPlugins` \
-    `i686-pc-mingw32-pkg-config --static --libs openscenegraph-osgViewer openscenegraph-osgPlugins`</pre>
+    `i686-pc-mingw32-pkg-config --libs openscenegraph-osgViewer openscenegraph-osgPlugins`</pre>
     <p>
     The <code>i686-pc-mingw32-pkg-config</code> command from mingw-cross-env will
     automatically add <code>-DOSG_LIBRARY_STATIC</code> to your compiler flags.
