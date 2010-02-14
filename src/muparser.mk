@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/muparser/files/muparser/) | \
-    $(SED) -n 's,/muparser/Version \([0-9.]*\)/muparser_v.*.tar.gz,\1,p' | \
+    $(SED) -n 's,.*muparser_v\([0-9]\)\([^>]*\)\.tar.*,\1.\2,p' | \
     tail -1
 endef
 
