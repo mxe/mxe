@@ -231,8 +231,6 @@ dist:
 	>'$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/index.html'
 	cp -p '$(TOP_DIR)/doc'/screenshot-* '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/'
 	cp -p '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc'/* '$(DIST_DIR)/web/'
-	(cd '$(TOP_DIR)' && LC_ALL=en_US.UTF-8 hg log -v --style changelog) >'$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/ChangeLog'
-	cd '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc' && lynx -dump -width 75 -nolist -force_html index.html >README
 	cp -p '$(TOP_DIR)/Makefile'    '$(DIST_DIR)/mingw-cross-env-$(VERSION)/'
 	cp -p '$(TOP_DIR)/src'/*.mk    '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
 	cp -p '$(TOP_DIR)/src'/*.patch '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
