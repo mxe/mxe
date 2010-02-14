@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         STRIP='$(TARGET)-strip' \
         LIBS='-lws2_32' \
+        LIBRARY_LIB='-lws2_32' \
         ./configure \
             --disable-shared \
             --prefix='$(PREFIX)/$(TARGET)' \
