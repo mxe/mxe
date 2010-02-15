@@ -35,5 +35,6 @@ define $(PKG)_BUILD
         --with-bz2 \
         --with-gio \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
+    $(MAKE) -C '$(1)'     -j '$(JOBS)' install-pkgconfigDATA
     $(MAKE) -C '$(1)/gsf' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
