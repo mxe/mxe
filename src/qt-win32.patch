@@ -1,8 +1,6 @@
-This file is part of mingw-cross-env.
-See doc/index.html for further information.
-
+# This file is part of mingw-cross-env.
 diff --git a/configure b/configure
-index 033f415..becf8ea 100755
+index ed5891f..3873d7f 100755
 --- a/configure
 +++ b/configure
 @@ -605,7 +605,7 @@ mkdir -p "$outpath/config.tests"
@@ -669,7 +667,7 @@ index 29fbada..0a38ee4 100644
  
  include(../qsqldriverbase.pri)
 diff --git a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/main.cpp
-index 33c1d78..e5af5a6 100644
+index eb654ef..0a17f17 100644
 --- a/src/plugins/sqldrivers/tds/main.cpp
 +++ b/src/plugins/sqldrivers/tds/main.cpp
 @@ -47,6 +47,7 @@
@@ -696,7 +694,7 @@ index 08a166b..f66d5b7 100644
      win32-borland:LIBS 	*= $(BCB)/lib/PSDK/NTWDBLIB.LIB
  }
 diff --git a/src/qbase.pri b/src/qbase.pri
-index d1a2a75..59eeb1b 100644
+index 710a2b6..2c3e91c 100644
 --- a/src/qbase.pri
 +++ b/src/qbase.pri
 @@ -85,7 +85,6 @@ win32-borland {
@@ -737,7 +735,7 @@ index 184eca9..aac0267 100644
  
  contains(sql-drivers, mysql) {
 diff --git a/src/sql/drivers/tds/qsql_tds.cpp b/src/sql/drivers/tds/qsql_tds.cpp
-index ab1c283..b3c89d0 100644
+index 422f866..16785ed 100644
 --- a/src/sql/drivers/tds/qsql_tds.cpp
 +++ b/src/sql/drivers/tds/qsql_tds.cpp
 @@ -47,7 +47,8 @@
@@ -751,7 +749,7 @@ index ab1c283..b3c89d0 100644
  
  #include <qvariant.h>
 diff --git a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
-index ab2b808..31c3178 100644
+index cb318f3..a6354ce 100644
 --- a/src/sql/drivers/tds/qsql_tds.h
 +++ b/src/sql/drivers/tds/qsql_tds.h
 @@ -48,7 +48,8 @@
