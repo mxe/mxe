@@ -26,7 +26,6 @@ define $(PKG)_BUILD
     $(SED) "s/'-ansi', //;"                        -i '$(1)/SConstruct'
     $(SED) "s/'-pedantic', //;"                    -i '$(1)/SConstruct'
     $(SED) 's/pkg-config/$(TARGET)-pkg-config/g;'  -i '$(1)/SConstruct'
-    $(SED) 's/^sh libtool/sh libtool --tag=CXX/g;' -i '$(1)/SConstruct'
 
     cd '$(1)' && scons autotools \
          prefix='$(PREFIX)/$(TARGET)' \
@@ -34,6 +33,7 @@ define $(PKG)_BUILD
          sendmail_path=/sbin/sendmail
 
     $(SED) 's,libtoolize ,$(LIBTOOLIZE) ,' -i '$(1)'/bootstrap
+    $(SED) 's,/bin/bash,/usr/bin/env bash,' -i '$(1)'/bootstrap
     cd '$(1)' && ./bootstrap
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -41,12 +41,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --enable-platform-windows \
         --disable-rpath \
-        --disable-dependency-tracking \
-        CC='$(TARGET)-gcc' \
-        CXX='$(TARGET)-g++' \
-        CPP='$(TARGET)-gcc -E' \
-        CXXPP='$(TARGET)-g++ -E' \
-        PKG_CONFIG='$(TARGET)-pkg-config'
+        --disable-dependency-tracking
 
     # Disable VMIME_HAVE_MLANG_H
     # We have the header, but there is no implementation for IMultiLanguage in MinGW

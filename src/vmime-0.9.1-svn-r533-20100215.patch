@@ -1,7 +1,7 @@
 This file is part of mingw-cross-env.
-diff -urN a/m4/lib-link.m4 b/m4/lib-link.m4
---- a/m4/lib-link.m4	2008-01-05 18:49:17.000000000 +0100
-+++ b/m4/lib-link.m4	2010-02-13 14:43:03.646994537 +0100
+diff -urN b/m4/lib-link.m4 c/m4/lib-link.m4
+--- b/m4/lib-link.m4	2008-01-05 18:49:17.000000000 +0100
++++ c/m4/lib-link.m4	2010-02-15 10:38:53.572219098 +0100
 @@ -1,17 +1,19 @@
 -# lib-link.m4 serial 6 (gettext-0.14.3)
 -dnl Copyright (C) 2001-2005 Free Software Foundation, Inc.
@@ -445,9 +445,9 @@ diff -urN a/m4/lib-link.m4 b/m4/lib-link.m4
 +  fi
 +  AC_SUBST([$1])
 +])
-diff -urN a/m4/lib-prefix.m4 b/m4/lib-prefix.m4
---- a/m4/lib-prefix.m4	2008-01-05 18:49:17.000000000 +0100
-+++ b/m4/lib-prefix.m4	2010-02-13 14:43:03.646994537 +0100
+diff -urN b/m4/lib-prefix.m4 c/m4/lib-prefix.m4
+--- b/m4/lib-prefix.m4	2008-01-05 18:49:17.000000000 +0100
++++ c/m4/lib-prefix.m4	2010-02-15 10:39:25.710466533 +0100
 @@ -1,4 +1,4 @@
 -# lib-prefix.m4 serial 4 (gettext-0.14.2)
 +# lib-prefix.m4 serial 5 (gettext-0.15)
@@ -524,9 +524,9 @@ diff -urN a/m4/lib-prefix.m4 b/m4/lib-prefix.m4
 +    IFS="$acl_save_IFS"
 +  fi
 +])
-diff -urN a/SConstruct b/SConstruct
---- a/SConstruct	2010-02-13 14:39:41.464866746 +0100
-+++ b/SConstruct	2010-02-13 14:43:13.102869335 +0100
+diff -urN b/SConstruct c/SConstruct
+--- b/SConstruct	2010-02-15 10:42:41.522349056 +0100
++++ c/SConstruct	2010-02-15 10:38:27.636218961 +0100
 @@ -459,15 +459,15 @@
  
  
@@ -627,3 +627,12 @@ diff -urN a/SConstruct b/SConstruct
  		'build_tests',
  		'Build unit tests (run with "scons run-tests")',
  		'no',
+@@ -1364,7 +1364,7 @@
+ $CXX -c $CFLAGS $CPPFLAGS mytest.$ac_ext >&5
+ sh libtool --mode=link $CXX -o mytest mytest.o libtest.la >&5 2>/dev/null
+ 
+-if test -x mytest; then
++if test -x mytest -a "$cross_compiling" != yes; then
+ 	myresult=`./mytest`
+ 	if test "X$myresult" = "XPASS"; then
+ 		AC_MSG_RESULT(yes)
