@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://cairographics.org/
 $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib libpng fontconfig freetype pixman
+$(PKG)_DEPS     := gcc zlib libpng fontconfig freetype pixman librsvg
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://cairographics.org/releases/' | \
