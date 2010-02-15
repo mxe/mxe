@@ -57,16 +57,28 @@ define $(PKG)_BUILD
     $(INSTALL) -m664 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/src/include/postgres_ext.h' '$(PREFIX)/$(TARGET)/include/'
     # Build a native pg_config.
-    echo '/* empty */' >'$(1)'/src/include/pg_config_os.h
-    gcc \
-        -I'$(1)'/src/include \
-        -DFRONTEND \
-        '$(1)'/src/port/snprintf.c \
-        '$(1)'/src/port/path.c \
-        '$(1)'/src/port/strlcat.c \
-        '$(1)'/src/port/strlcpy.c \
-        '$(1)'/src/port/thread.c \
-        '$(1)'/src/port/exec.c \
-        '$(1)'/src/bin/pg_config/pg_config.c \
-        -o '$(PREFIX)/$(TARGET)'/bin/pg_config
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,postgresql)
+    mv '$(1)/$(postgresql_SUBDIR)' '$(1).native'
+    $(SED) 's,-DVAL_,-D_DISABLED_VAL_,g' -i '$(1).native'/src/bin/pg_config/Makefile
+    cd '$(1).native' && ./configure \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-shared \
+        --disable-rpath \
+        --without-tcl \
+        --without-perl \
+        --without-python \
+        --without-gssapi \
+        --without-krb5 \
+        --without-pam \
+        --without-ldap \
+        --without-bonjour \
+        --without-openssl \
+        --without-readline \
+        --without-ossp-uuid \
+        --without-libxml \
+        --without-libxslt \
+        --without-zlib \
+        --with-system-tzdata=/dev/null
+    $(MAKE) -C '$(1).native'/src/port          -j '$(JOBS)'
+    $(MAKE) -C '$(1).native'/src/bin/pg_config -j '$(JOBS)' install
 endef
