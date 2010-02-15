@@ -45,7 +45,7 @@ define $(PKG)_BUILD
         --disable-msgloader-icu \
         --with-curl='$(PREFIX)/$(TARGET)' \
         --without-icu \
-        LIBS="-lws2_32 `$(TARGET)-pkg-config --libs libcurl`"
+        LIBS="`$(TARGET)-pkg-config --libs libcurl`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
