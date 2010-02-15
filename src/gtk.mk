@@ -56,4 +56,11 @@ define $(PKG)_BUILD
         --with-included-immodules \
         --without-x
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        `'$(TARGET)-pkg-config' gtk+-2.0 --cflags` \
+        '$(2).c' \
+        `'$(TARGET)-pkg-config' gtk+-2.0 --libs` \
+        -o '$(PREFIX)/$(TARGET)/bin/test-gtk.exe'
 endef
