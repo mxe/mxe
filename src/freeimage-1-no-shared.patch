@@ -1,0 +1,42 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -urN a/Makefile.gnu b/Makefile.gnu
+--- a/Makefile.gnu	2009-07-28 06:35:26.000000000 +0200
++++ b/Makefile.gnu	2010-02-16 11:50:50.509897756 +0100
+@@ -9,7 +9,7 @@
+ INSTALLDIR ?= $(DESTDIR)/usr/lib
+ 
+ # Converts cr/lf to just lf
+-DOS2UNIX = dos2unix
++DOS2UNIX = echo 'dos2unix not needed '
+ 
+ LIBRARIES = -lstdc++
+ 
+@@ -40,13 +40,12 @@
+ 
+ dist: FreeImage
+ 	cp *.a Dist
+-	cp *.so Dist
+ 	cp Source/FreeImage.h Dist
+ 
+ dos2unix:
+ 	@$(DOS2UNIX) $(SRCS) $(INCLS)
+ 
+-FreeImage: $(STATICLIB) $(SHAREDLIB)
++FreeImage: $(STATICLIB)
+ 
+ .c.o:
+ 	$(CC) $(CFLAGS) -c $< -o $@
+@@ -62,9 +61,8 @@
+ 
+ install:
+ 	install -d $(INCDIR) $(INSTALLDIR)
+-	install -m 644 -o root -g root $(HEADER) $(INCDIR)
+-	install -m 644 -o root -g root $(STATICLIB) $(INSTALLDIR)
+-	install -m 755 -o root -g root $(SHAREDLIB) $(INSTALLDIR)
++	install -m 644 $(HEADER) $(INCDIR)
++	install -m 644 $(STATICLIB) $(INSTALLDIR)
+ 
+ clean:
+ 	rm -f core Dist/*.* u2dtmp* $(MODULES) $(STATICLIB) $(SHAREDLIB) $(LIBNAME)
