@@ -4,12 +4,12 @@
 # FreeImage
 PKG             := freeimage
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3131
+$(PKG)_VERSION  := 3.13.1
 $(PKG)_CHECKSUM := 52ba4453aa9682c57104c3420e58f843aaa6ab61
 $(PKG)_SUBDIR   := FreeImage
-$(PKG)_FILE     := FreeImage$($(PKG)_VERSION).zip
+$(PKG)_FILE     := FreeImage$(subst .,,$($(PKG)_VERSION)).zip
 $(PKG)_WEBSITE  := http://freeimage.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/freeimage/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeimage/Source Distribution/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
