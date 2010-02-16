@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib libgsf cairo pango
+$(PKG)_DEPS     := gcc glib libgsf cairo pango gtk
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/librsvg/log' | \
