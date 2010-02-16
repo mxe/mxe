@@ -20,7 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoconf
+    cd '$(1)' && $(LIBTOOLIZE)
+    cd '$(1)' && ./autogen.sh
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
