@@ -1,4 +1,6 @@
 This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
 diff -urN b/m4/lib-link.m4 c/m4/lib-link.m4
 --- b/m4/lib-link.m4	2008-01-05 18:49:17.000000000 +0100
 +++ c/m4/lib-link.m4	2010-02-15 10:38:53.572219098 +0100

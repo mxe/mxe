@@ -1,4 +1,6 @@
 This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
 diff -urN a/AUTHORS b/AUTHORS
 --- a/AUTHORS	2008-07-11 20:42:32.000000000 +0200
 +++ b/AUTHORS	2010-02-09 14:34:54.000000000 +0100
