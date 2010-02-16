@@ -20,6 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) 's,^\(Requires:.*\),\1 gio-2.0,' -i '$(1)'/libgsf-1.pc.in
+    echo 'Libs.private: -lz -lbz2'          >> '$(1)'/libgsf-1.pc.in
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
