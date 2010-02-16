@@ -20,11 +20,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,-lgeos,-lgeos -lstdc++,' -i '$(1)/tools/geos-config.in'
-    $(SED) 's,-L\$${libdir}$$,-L$${libdir} -lgeos -lstdc++,' -i '$(1)/tools/geos-config.in'
-    $(SED) 's,\$$WARNFLAGS -ansi,\$$WARNFLAGS,' -i '$(1)/configure.in'
+    $(SED) -i 's,-lgeos,-lgeos -lstdc++,' '$(1)/tools/geos-config.in'
+    $(SED) -i 's,-L\$${libdir}$$,-L$${libdir} -lgeos -lstdc++,' '$(1)/tools/geos-config.in'
+    $(SED) -i 's,\$$WARNFLAGS -ansi,\$$WARNFLAGS,' '$(1)/configure.in'
     touch '$(1)/aclocal.m4'
-    $(SED) 's,\$$WARNFLAGS -ansi,\$$WARNFLAGS,' -i '$(1)/configure'
+    $(SED) -i 's,\$$WARNFLAGS -ansi,\$$WARNFLAGS,' '$(1)/configure'
     touch '$(1)/Makefile.in'
     touch '$(1)/source/headers/config.h.in'
     touch '$(1)/source/headers/geos/platform.h.in'

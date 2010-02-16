@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,`uname`,MinGW,g' -i '$(1)/xml2-config.in'
+    $(SED) -i 's,`uname`,MinGW,g' '$(1)/xml2-config.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

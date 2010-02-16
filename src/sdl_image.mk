@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,^\(Requires:.*\),\1 libpng,' -i '$(1)/SDL_image.pc.in'
+    $(SED) -i 's,^\(Requires:.*\),\1 libpng,' '$(1)/SDL_image.pc.in'
     echo 'Libs.private: -ltiff -ljpeg -lz' >> '$(1)/SDL_image.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \

@@ -25,8 +25,8 @@ define $(PKG)_BUILD
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,qt)
     mv '$(1)/$(qt_SUBDIR)' '$(1).native'
 
-    $(SED) 's,PLATFORM_X11=yes,PLATFORM_X11=no,'           -i '$(1)'.native/configure
-    $(SED) 's,PLATFORM=solaris-cc$$,PLATFORM=solaris-g++,' -i '$(1)'.native/configure
+    $(SED) -i 's,PLATFORM_X11=yes,PLATFORM_X11=no,'           '$(1)'.native/configure
+    $(SED) -i 's,PLATFORM=solaris-cc$$,PLATFORM=solaris-g++,' '$(1)'.native/configure
     cd '$(1)'.native && ./configure \
         -opensource \
         -confirm-license \
@@ -48,8 +48,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'.native -j '$(JOBS)' sub-uic
 
     # rebuild qmake to use "-unix" as default and to use the correct "ar" command
-    $(SED) 's,\(Option::TARG_MODE Option::target_mode = Option::TARG_\)[A-Z_]*,\1UNIX_MODE,' -i '$(1)'.native/qmake/option.cpp
-    $(SED) 's,"ar -M,"$(TARGET)-ar -M,' -i '$(1)'.native/qmake/generators/win32/mingw_make.cpp
+    $(SED) -i 's,\(Option::TARG_MODE Option::target_mode = Option::TARG_\)[A-Z_]*,\1UNIX_MODE,' '$(1)'.native/qmake/option.cpp
+    $(SED) -i 's,"ar -M,"$(TARGET)-ar -M,' '$(1)'.native/qmake/generators/win32/mingw_make.cpp
     $(MAKE) -C '$(1)'.native/qmake -j '$(JOBS)'
 
     # install the native tools manually
@@ -73,18 +73,18 @@ define $(PKG)_BUILD
 
     # Adjust the mkspec values that contain the TARGET platform prefix.
     # The patch planted strings HOSTPLATFORMPREFIX and HOSTPLATFORMINCLUDE.
-    $(SED) 's,HOSTPLATFORMPREFIX-,$(TARGET)-,g'                  -i '$(1)'/mkspecs/win32-g++/qmake.conf
-    $(SED) 's,HOSTPLATFORMINCLUDE,$(PREFIX)/$(TARGET)/include,g' -i '$(1)'/mkspecs/win32-g++/qmake.conf
+    $(SED) -i 's,HOSTPLATFORMPREFIX-,$(TARGET)-,g'                  '$(1)'/mkspecs/win32-g++/qmake.conf
+    $(SED) -i 's,HOSTPLATFORMINCLUDE,$(PREFIX)/$(TARGET)/include,g' '$(1)'/mkspecs/win32-g++/qmake.conf
 
     # Make sure qmake doesn't use compilation paths meant for unix
     find '$(1)'/src -name '*.pr[oi]' -exec \
-        $(SED) 's,\(^\|[^_/]\)unix,\1linux,g' -i {} \;
+        $(SED) -i 's,\(^\|[^_/]\)unix,\1linux,g' {} \;
 
     # Make qmake use compilation paths meant for MinGW or Windows in general
     find '$(1)'/src -name '*.pr[oi]' -exec \
-        $(SED) 's,\(^\|[^_/]\)win32-g++\([^-]\|$$\),\1unix\2,g' -i {} \;
+        $(SED) -i 's,\(^\|[^_/]\)win32-g++\([^-]\|$$\),\1unix\2,g' {} \;
     find '$(1)'/src -name '*.pr[oi]' -exec \
-        $(SED) 's,\(^\|[^_/]\)win32\([^-]\|$$\),\1unix\2,g' -i {} \;
+        $(SED) -i 's,\(^\|[^_/]\)win32\([^-]\|$$\),\1unix\2,g' {} \;
 
     # Configure Qt for MinGW target
     # We prefer static mingw-cross-env system libs for static build:

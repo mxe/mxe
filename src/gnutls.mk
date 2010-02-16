@@ -22,7 +22,7 @@ endef
 
 define $(PKG)_BUILD
     echo '/* DEACTIVATED */' > '$(1)/gl/gai_strerror.c'
-    $(SED) 's, sed , $(SED) ,g' -i '$(1)/gl/tests/Makefile.in'
+    $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

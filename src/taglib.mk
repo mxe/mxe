@@ -20,9 +20,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) '/#define TAGLIB_EXPORT_H/a#define TAGLIB_STATIC' -i '$(1)/taglib/taglib_export.h'
+    $(SED) -i '/#define TAGLIB_EXPORT_H/a#define TAGLIB_STATIC' '$(1)/taglib/taglib_export.h'
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) '/-fforce-mem/d' -i '$(1)'/configure
+    $(SED) -i '/-fforce-mem/d' '$(1)'/configure
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

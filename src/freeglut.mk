@@ -21,10 +21,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,Windows\.h,windows.h,'   -i '$(1)/src/freeglut_internal.h'
-    $(SED) 's,WindowsX\.h,windowsx.h,' -i '$(1)/src/freeglut_internal.h'
-    $(SED) 's,MMSystem\.h,mmsystem.h,' -i '$(1)/src/freeglut_internal.h'
-    $(SED) 's,Windows\.h,windows.h,'   -i '$(1)/include/GL/freeglut_std.h'
+    $(SED) -i 's,Windows\.h,windows.h,'   '$(1)/src/freeglut_internal.h'
+    $(SED) -i 's,WindowsX\.h,windowsx.h,' '$(1)/src/freeglut_internal.h'
+    $(SED) -i 's,MMSystem\.h,mmsystem.h,' '$(1)/src/freeglut_internal.h'
+    $(SED) -i 's,Windows\.h,windows.h,'   '$(1)/include/GL/freeglut_std.h'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

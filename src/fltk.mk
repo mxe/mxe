@@ -19,15 +19,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,\$$uname,MINGW,g' -i '$(1)/configure'
+    $(SED) -i 's,\$$uname,MINGW,g' '$(1)/configure'
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \
         LIBS='-lws2_32'
-    $(SED) 's,-fno-exceptions,,' -i '$(1)/makeinclude'
+    $(SED) -i 's,-fno-exceptions,,' '$(1)/makeinclude'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install DIRS=src LIBCOMMAND='$(TARGET)-ar cr'
 endef

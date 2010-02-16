@@ -21,11 +21,11 @@ endef
 
 define $(PKG)_BUILD
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     # build the win32 thread sources instead of the posix thread sources
-    $(SED) 's,IlmThreadPosix\.,IlmThreadWin32\.,'                   -i '$(1)/IlmThread/Makefile.in'
-    $(SED) 's,IlmThreadSemaphorePosix\.,IlmThreadSemaphoreWin32\.,' -i '$(1)/IlmThread/Makefile.in'
-    $(SED) 's,IlmThreadMutexPosix\.,IlmThreadMutexWin32\.,'         -i '$(1)/IlmThread/Makefile.in'
+    $(SED) -i 's,IlmThreadPosix\.,IlmThreadWin32\.,'                   '$(1)/IlmThread/Makefile.in'
+    $(SED) -i 's,IlmThreadSemaphorePosix\.,IlmThreadSemaphoreWin32\.,' '$(1)/IlmThread/Makefile.in'
+    $(SED) -i 's,IlmThreadMutexPosix\.,IlmThreadMutexWin32\.,'         '$(1)/IlmThread/Makefile.in'
     echo '/* disabled */' > '$(1)/IlmThread/IlmThreadSemaphorePosixCompat.cpp'
     # Because of the previous changes, '--disable-threading' will not disable
     # threading. It will just disable the unwanted check for pthread.

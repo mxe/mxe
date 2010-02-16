@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,copy,cp,' -i '$(1)/win32/mingwin32.mak'
+    $(SED) -i 's,copy,cp,' '$(1)/win32/mingwin32.mak'
     $(MAKE) -C '$(1)' -j '$(JOBS)' libs -f '$(1)/win32/mingwin32.mak' \
         CC='$(TARGET)-gcc' \
         LIBEXE='$(TARGET)-ar' \

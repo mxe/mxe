@@ -21,10 +21,10 @@ endef
 define $(PKG)_BUILD
     # ensure there is no (buggy) attempt to install the *.dll.a file
     # (remove this line of you want to link dynamically)
-    $(SED) 's,^install-data-local:.*,install-data-local:,' -i '$(1)/src/Makefile.in'
+    $(SED) -i 's,^install-data-local:.*,install-data-local:,' '$(1)/src/Makefile.in'
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
-    $(SED) 's,^\(Libs:.*\),\1 @EXPAT_LIBS@ @FREETYPE_LIBS@,' -i '$(1)/fontconfig.pc.in'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
+    $(SED) -i 's,^\(Libs:.*\),\1 @EXPAT_LIBS@ @FREETYPE_LIBS@,' '$(1)/fontconfig.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

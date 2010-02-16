@@ -20,13 +20,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,DllMain,static _disabled_DllMain,' -i '$(1)/pango/pango-utils.c'
-    $(SED) 's,"[^"]*must build as DLL[^"]*","(disabled warning)",' -i '$(1)/configure'
-    $(SED) 's,enable_static=no,enable_static=yes,' -i '$(1)/configure'
-    $(SED) 's,enable_shared=yes,enable_shared=no,' -i '$(1)/configure'
-    $(SED) 's,^install-data-local:.*,install-data-local:,' -i '$(1)/modules/Makefile.in'
+    $(SED) -i 's,DllMain,static _disabled_DllMain,' '$(1)/pango/pango-utils.c'
+    $(SED) -i 's,"[^"]*must build as DLL[^"]*","(disabled warning)",' '$(1)/configure'
+    $(SED) -i 's,enable_static=no,enable_static=yes,' '$(1)/configure'
+    $(SED) -i 's,enable_shared=yes,enable_shared=no,' '$(1)/configure'
+    $(SED) -i 's,^install-data-local:.*,install-data-local:,' '$(1)/modules/Makefile.in'
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

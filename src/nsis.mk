@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,this->SetIcon(wxICON(nsisicon));,,' -i '$(1)/Contrib/NSIS Menu/nsismenu/nsismenu.cpp'
+    $(SED) -i 's,this->SetIcon(wxICON(nsisicon));,,' '$(1)/Contrib/NSIS Menu/nsismenu/nsismenu.cpp'
     cd '$(1)' && scons \
         PREFIX='$(PREFIX)' \
         `[ -d /usr/local/include ] && echo APPEND_CPPPATH=/usr/local/include` \

@@ -32,9 +32,9 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/$(libiconv_SUBDIR)' -j '$(JOBS)'
 
     # native build for glib-genmarshal, without pkg-config, gettext and zlib
-    $(SED) 's,gt_cv_have_gettext=yes,gt_cv_have_gettext=no,'     -i '$(1).native/configure'
-    $(SED) '/You must.*have gettext/,/exit 1;/ s,.*exit 1;.*,},' -i '$(1).native/configure'
-    $(SED) 's,found_zlib=no,found_zlib=yes,'                     -i '$(1).native/configure'
+    $(SED) -i 's,gt_cv_have_gettext=yes,gt_cv_have_gettext=no,'     '$(1).native/configure'
+    $(SED) -i '/You must.*have gettext/,/exit 1;/ s,.*exit 1;.*,},' '$(1).native/configure'
+    $(SED) -i 's,found_zlib=no,found_zlib=yes,'                     '$(1).native/configure'
     cd '$(1).native' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -46,7 +46,7 @@ define $(PKG)_BUILD
         --with-libiconv=gnu \
         CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include' \
         LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs'
-    $(SED) 's,#define G_ATOMIC.*,,' -i '$(1).native/config.h'
+    $(SED) -i 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
@@ -55,9 +55,9 @@ define $(PKG)_BUILD
     cd '$(1)' && aclocal
     cd '$(1)' && $(LIBTOOLIZE) --force
     cd '$(1)' && autoconf
-    $(SED) 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' -i '$(1)/glib-2.0.pc.in'
+    $(SED) -i 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' '$(1)/glib-2.0.pc.in'
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

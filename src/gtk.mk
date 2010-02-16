@@ -21,21 +21,21 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,DllMain,static _disabled_DllMain,' -i '$(1)/gdk/win32/gdkmain-win32.c'
-    $(SED) 's,DllMain,static _disabled_DllMain,' -i '$(1)/gdk-pixbuf/gdk-pixbuf-io.c'
-    $(SED) 's,DllMain,static _disabled_DllMain,' -i '$(1)/gtk/gtkmain.c'
-    $(SED) 's,__declspec(dllimport),,' -i '$(1)/gdk/gdktypes.h'
-    $(SED) 's,^\(Libs:.*\)@GTK_EXTRA_LIBS@,\1@GTK_DEP_LIBS@,' -i '$(1)/gtk+-2.0.pc.in'
-    $(SED) 's,^\(gtkbuiltincache\.h:\),_disabled_\1,' -i '$(1)/gtk/Makefile.in'
-    $(SED) 's,^\(install-data-local:.*\) install-libtool-import-lib,\1,' -i '$(1)/modules/other/gail/libgail-util/Makefile.in'
-    $(SED) 's,\(BUILT_SOURCES.*=.*\)test-inline-pixbufs.h,\1,' -i '$(1)/demos/Makefile.in'
-    $(SED) 's,"[^"]*must build as DLL[^"]*","(disabled warning)",' -i '$(1)/configure'
-    $(SED) 's,enable_static=no,enable_static=yes,' -i '$(1)/configure'
-    $(SED) 's,enable_shared=yes,enable_shared=no,' -i '$(1)/configure'
-    $(SED) 's,\(STATIC_LIB_DEPS="[^"]*\) \$$LIBJASPER,\1 $$LIBJASPER $$LIBJPEG,' -i '$(1)/configure'
-    $(SED) 's/-Wl,-luuid/-luuid/' -i '$(1)/configure'
+    $(SED) -i 's,DllMain,static _disabled_DllMain,' '$(1)/gdk/win32/gdkmain-win32.c'
+    $(SED) -i 's,DllMain,static _disabled_DllMain,' '$(1)/gdk-pixbuf/gdk-pixbuf-io.c'
+    $(SED) -i 's,DllMain,static _disabled_DllMain,' '$(1)/gtk/gtkmain.c'
+    $(SED) -i 's,__declspec(dllimport),,' '$(1)/gdk/gdktypes.h'
+    $(SED) -i 's,^\(Libs:.*\)@GTK_EXTRA_LIBS@,\1@GTK_DEP_LIBS@,' '$(1)/gtk+-2.0.pc.in'
+    $(SED) -i 's,^\(gtkbuiltincache\.h:\),_disabled_\1,' '$(1)/gtk/Makefile.in'
+    $(SED) -i 's,^\(install-data-local:.*\) install-libtool-import-lib,\1,' '$(1)/modules/other/gail/libgail-util/Makefile.in'
+    $(SED) -i 's,\(BUILT_SOURCES.*=.*\)test-inline-pixbufs.h,\1,' '$(1)/demos/Makefile.in'
+    $(SED) -i 's,"[^"]*must build as DLL[^"]*","(disabled warning)",' '$(1)/configure'
+    $(SED) -i 's,enable_static=no,enable_static=yes,' '$(1)/configure'
+    $(SED) -i 's,enable_shared=yes,enable_shared=no,' '$(1)/configure'
+    $(SED) -i 's,\(STATIC_LIB_DEPS="[^"]*\) \$$LIBJASPER,\1 $$LIBJASPER $$LIBJPEG,' '$(1)/configure'
+    $(SED) -i 's/-Wl,-luuid/-luuid/' '$(1)/configure'
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

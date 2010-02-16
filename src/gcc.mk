@@ -41,7 +41,7 @@ define $(PKG)_BUILD
     # apply TDM-GCC patches
     cd '$(1)' && \
         for p in '$(1)'/gcc-tdm/*.patch; do \
-            $(SED) 's,\r$$,,' -i "$$p" || exit 1; \
+            $(SED) -i 's,\r$$,,' "$$p" || exit 1; \
             patch -p1 -u < "$$p" || exit 1; \
         done
     # unpack support libraries
@@ -60,8 +60,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/build' -j 1 install
     # unpack and build pthreads (needed by libgomp)
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-pthreads)
-    $(SED) '35i\#define PTW32_STATIC_LIB' -i '$(1)/$(gcc-pthreads_SUBDIR)/pthread.h'
-    $(SED) 's,#include "config.h",,'      -i '$(1)/$(gcc-pthreads_SUBDIR)/pthread.h'
+    $(SED) -i '35i\#define PTW32_STATIC_LIB' '$(1)/$(gcc-pthreads_SUBDIR)/pthread.h'
+    $(SED) -i 's,#include "config.h",,'      '$(1)/$(gcc-pthreads_SUBDIR)/pthread.h'
     $(MAKE) -C '$(1)/$(gcc-pthreads_SUBDIR)' -j 1 GC-static CROSS='$(TARGET)-'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m664 '$(1)/$(gcc-pthreads_SUBDIR)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
@@ -70,7 +70,7 @@ define $(PKG)_BUILD
     $(INSTALL) -m664 '$(1)/$(gcc-pthreads_SUBDIR)/sched.h'     '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/$(gcc-pthreads_SUBDIR)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
     # build libgomp
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/libgomp/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/libgomp/configure'
     mkdir '$(1)/build/$(TARGET)/libgomp'
     cd    '$(1)/build/$(TARGET)/libgomp' && '$(1)/libgomp/configure' \
         $(gcc_CONFIGURE_OPTIONS) \

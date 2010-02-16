@@ -19,10 +19,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) '/^#endif/ i#define CURL_STATICLIB' -i '$(1)/include/curl/curlbuild.h.in'
-    $(SED) 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' -i '$(1)/configure'
+    $(SED) -i '/^#endif/ i#define CURL_STATICLIB' '$(1)/include/curl/curlbuild.h.in'
+    $(SED) -i 's,GNUTLS_ENABLED = 1,GNUTLS_ENABLED=1,' '$(1)/configure'
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

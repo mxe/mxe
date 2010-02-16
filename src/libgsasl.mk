@@ -21,7 +21,7 @@ endef
 
 define $(PKG)_BUILD
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && touch src/libgsasl-7.def && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

@@ -21,9 +21,9 @@ endef
 
 define $(PKG)_BUILD
     # workaround for the missing snprintf() in the <cstdio> of GCC-4.4.0
-    $(SED) 's,#include <cstdio>,#include <stdio.h>,' -i '$(1)/xmpsdk/src/XMPMeta.cpp'
+    $(SED) -i 's,#include <cstdio>,#include <stdio.h>,' '$(1)/xmpsdk/src/XMPMeta.cpp'
     # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) 's,cross_compiling=no,cross_compiling=yes,' -i '$(1)/configure'
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

@@ -20,11 +20,11 @@ endef
 
 define $(PKG)_BUILD
     # fix incompatibilities with gettext
-    $(SED) 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    -i '$(1)/include/winnt.h'
-    $(SED) 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    -i '$(1)/include/winnt.h'
-    $(SED) 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i '$(1)/include/winnt.h'
+    $(SED) -i 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    '$(1)/include/winnt.h'
+    $(SED) -i 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    '$(1)/include/winnt.h'
+    $(SED) -i 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' '$(1)/include/winnt.h'
     # fix incompatibilities with jpeg
-    $(SED) 's,typedef unsigned char boolean;,,'           -i '$(1)/include/rpcndr.h'
+    $(SED) -i 's,typedef unsigned char boolean;,,'           '$(1)/include/rpcndr.h'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)'
     cp -rpv '$(1)/include' '$(1)/lib' '$(PREFIX)/$(TARGET)'
 endef

@@ -20,13 +20,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,^\(Requires:.*\),\1 vorbisfile,' -i '$(1)/SDL_mixer.pc.in'
+    $(SED) -i 's,^\(Requires:.*\),\1 vorbisfile,' '$(1)/SDL_mixer.pc.in'
     echo \
         'Libs.private:' \
         "`$(PREFIX)/$(TARGET)/bin/libmikmod-config --libs`" \
         "`$(PREFIX)/$(TARGET)/bin/smpeg-config     --libs`" \
         >> '$(1)/SDL_mixer.pc.in'
-    $(SED) 's,for path in /usr/local; do,for path in; do,' -i '$(1)/configure'
+    $(SED) -i 's,for path in /usr/local; do,for path in; do,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

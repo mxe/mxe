@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,/usr/local,@prefix@,' -i '$(1)/bin/Makefile.in'
+    $(SED) -i 's,/usr/local,@prefix@,' '$(1)/bin/Makefile.in'
     touch '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \

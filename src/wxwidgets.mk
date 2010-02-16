@@ -19,8 +19,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,png_check_sig,png_sig_cmp,g'                       -i '$(1)/configure'
-    $(SED) 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' -i '$(1)/configure'
+    $(SED) -i 's,png_check_sig,png_sig_cmp,g'                       '$(1)/configure'
+    $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
@@ -63,8 +63,8 @@ define $(PKG)_BUILD
 
     # build the wxWidgets variant without unicode support
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,wxwidgets)
-    $(SED) 's,png_check_sig,png_sig_cmp,g'                       -i '$(1)/$(wxwidgets_SUBDIR)/configure'
-    $(SED) 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' -i '$(1)/$(wxwidgets_SUBDIR)/configure'
+    $(SED) -i 's,png_check_sig,png_sig_cmp,g'                       '$(1)/$(wxwidgets_SUBDIR)/configure'
+    $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/$(wxwidgets_SUBDIR)/configure'
     cd '$(1)/$(wxwidgets_SUBDIR)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

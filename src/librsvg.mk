@@ -20,8 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g' -i '$(1)'/Makefile.in
-    $(SED) 's,^\(Requires:.*\),\1 libgsf-1 pangocairo,' -i '$(1)'/librsvg-2.0.pc.in
+    $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g' '$(1)'/Makefile.in
+    $(SED) -i 's,^\(Requires:.*\),\1 libgsf-1 pangocairo,' '$(1)'/librsvg-2.0.pc.in
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

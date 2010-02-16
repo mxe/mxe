@@ -20,7 +20,7 @@ endef
 
 define $(PKG)_BUILD
     # avoid redefinition of INT32
-    $(SED) 's,typedef long INT32;,#include <basetsd.h>,' -i '$(1)/jmorecfg.h'
+    $(SED) -i 's,typedef long INT32;,#include <basetsd.h>,' '$(1)/jmorecfg.h'
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \

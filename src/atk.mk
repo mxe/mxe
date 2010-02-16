@@ -21,7 +21,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,DllMain,static _disabled_DllMain,' -i '$(1)/atk/atkobject.c'
+    $(SED) -i 's,DllMain,static _disabled_DllMain,' '$(1)/atk/atkobject.c'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

@@ -23,12 +23,12 @@ endef
 
 define $(PKG)_BUILD
     # The static OpenSSL libraries are in unix (not win32) naming style.
-    $(SED) 's,SSLEAY32,SSL,' -i '$(1)'/configure
-    $(SED) 's,ssleay32,ssl,' -i '$(1)'/configure
-    $(SED) 's,EAY32,CRYPTO,' -i '$(1)'/configure
-    $(SED) 's,eay32,crypto,' -i '$(1)'/configure
-    $(SED) 's,ssleay32,ssl,' -i '$(1)'/src/interfaces/libpq/Makefile
-    $(SED) 's,eay32,crypto,' -i '$(1)'/src/interfaces/libpq/Makefile
+    $(SED) -i 's,SSLEAY32,SSL,' '$(1)'/configure
+    $(SED) -i 's,ssleay32,ssl,' '$(1)'/configure
+    $(SED) -i 's,EAY32,CRYPTO,' '$(1)'/configure
+    $(SED) -i 's,eay32,crypto,' '$(1)'/configure
+    $(SED) -i 's,ssleay32,ssl,' '$(1)'/src/interfaces/libpq/Makefile
+    $(SED) -i 's,eay32,crypto,' '$(1)'/src/interfaces/libpq/Makefile
     # Since we build only client libary, use bogus tzdata to satisfy configure.
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -59,7 +59,7 @@ define $(PKG)_BUILD
     # Build a native pg_config.
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,postgresql)
     mv '$(1)/$(postgresql_SUBDIR)' '$(1).native'
-    $(SED) 's,-DVAL_,-D_DISABLED_VAL_,g' -i '$(1).native'/src/bin/pg_config/Makefile
+    $(SED) -i 's,-DVAL_,-D_DISABLED_VAL_,g' '$(1).native'/src/bin/pg_config/Makefile
     cd '$(1).native' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \

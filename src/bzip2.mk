@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,sys\\stat\.h,sys/stat.h,g' -i '$(1)/bzip2.c'
+    $(SED) -i 's,sys\\stat\.h,sys/stat.h,g' '$(1)/bzip2.c'
     $(MAKE) -C '$(1)' -j '$(JOBS)' libbz2.a \
         PREFIX='$(PREFIX)/$(TARGET)' \
         CC='$(TARGET)-gcc' \

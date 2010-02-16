@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) 's,\(-lsmpeg\),\1 -lstdc++,' -i '$(1)/smpeg-config.in'
+    $(SED) -i 's,\(-lsmpeg\),\1 -lstdc++,' '$(1)/smpeg-config.in'
     cd '$(1)' && ./configure \
         AR='$(TARGET)-ar' \
         NM='$(TARGET)-nm' \
