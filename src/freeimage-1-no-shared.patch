@@ -40,3 +40,4 @@ diff -urN a/Makefile.gnu b/Makefile.gnu
  
  clean:
  	rm -f core Dist/*.* u2dtmp* $(MODULES) $(STATICLIB) $(SHAREDLIB) $(LIBNAME)
+# Linux makefile for FreeImage
