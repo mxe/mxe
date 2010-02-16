@@ -3,7 +3,7 @@
 
 # Libidn
 PKG             := libidn
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 1.17
 $(PKG)_VERSION  := 1.16
 $(PKG)_CHECKSUM := 33ff88e7111f07f3bb8aa888fdc7848bb319d4ce
 $(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
