@@ -59,8 +59,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        `'$(TARGET)-pkg-config' gtk+-2.0 --cflags` \
-        '$(2).c' \
-        `'$(TARGET)-pkg-config' gtk+-2.0 --libs` \
-        -o '$(PREFIX)/$(TARGET)/bin/test-gtk.exe'
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtk.exe' \
+        `'$(TARGET)-pkg-config' gtk+-2.0 --cflags --libs`
 endef

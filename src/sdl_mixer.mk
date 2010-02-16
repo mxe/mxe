@@ -49,8 +49,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        `'$(TARGET)-pkg-config' SDL_mixer --cflags` \
-        '$(2).c' \
-        `'$(TARGET)-pkg-config' SDL_mixer --libs` \
-        -o '$(PREFIX)/$(TARGET)/bin/test-sdl_mixer.exe'
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_mixer.exe' \
+        `'$(TARGET)-pkg-config' SDL_mixer --cflags --libs`
 endef
