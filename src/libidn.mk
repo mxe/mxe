@@ -3,9 +3,9 @@
 
 # Libidn
 PKG             := libidn
-$(PKG)_IGNORE   := 1.17
-$(PKG)_VERSION  := 1.16
-$(PKG)_CHECKSUM := 33ff88e7111f07f3bb8aa888fdc7848bb319d4ce
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.18
+$(PKG)_CHECKSUM := 0b81360368e5100d1ec5261dea58fc72ef39ab6b
 $(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
 $(PKG)_FILE     := libidn-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/libidn/
