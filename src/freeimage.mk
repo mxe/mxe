@@ -13,7 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeimage/Source Distrib
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-   echo Update not implemented.
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/freeimage/files/) | \
+    $(SED) -n 's,.*/\([0-9][^>]*\)/FreeImage.*,\1,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
