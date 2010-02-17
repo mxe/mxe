@@ -547,22 +547,6 @@ index aa36890..f009761 100644
 +    unix|win32-g++:LIBS_PRIVATE += -lz
 +    win32:!win32-g++:LIBS += zdll.lib
  }
-diff --git a/src/network/ssl/ssl.pri b/src/network/ssl/ssl.pri
-index 72ea80f..899aa30 100644
---- a/src/network/ssl/ssl.pri
-+++ b/src/network/ssl/ssl.pri
-@@ -35,5 +35,11 @@ symbian {
-     RESOURCES += network.qrc
- 
-     # Add optional SSL libs
-+    !contains(QT_CONFIG, system-zlib):contains(OPENSSL_LIBS, -lz) {
-+        # Use the zlib in QtCore
-+        OPENSSL_LIBS -= -lz
-+        OPENSSL_LIBS += -lQtCore4
-+    }
-     LIBS_PRIVATE += $$OPENSSL_LIBS
-+
- }
 diff --git a/src/plugins/imageformats/jpeg/jpeg.pro b/src/plugins/imageformats/jpeg/jpeg.pro
 index ebc79cc..30a19c6 100644
 --- a/src/plugins/imageformats/jpeg/jpeg.pro

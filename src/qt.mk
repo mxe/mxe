@@ -128,7 +128,7 @@ define $(PKG)_BUILD
         -system-libmng \
         -system-sqlite \
         -qt-gif \
-        -openssl-linked \
+        -openssl \
         -v
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
