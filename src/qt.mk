@@ -86,6 +86,9 @@ define $(PKG)_BUILD
     find '$(1)'/src -name '*.pr[oi]' -exec \
         $(SED) -i 's,\(^\|[^_/]\)win32\([^-]\|$$\),\1unix\2,g' {} \;
 
+    # Use the correct pg_config tool
+    $(SED) -i 's,pg_config,$(PREFIX)/$(TARGET)/bin/pg_config,g;' '$(1)'/configure
+
     # Configure Qt for MinGW target
     # We prefer static mingw-cross-env system libs for static build:
     # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite

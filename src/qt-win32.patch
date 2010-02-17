@@ -2,7 +2,7 @@ This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
 diff --git a/configure b/configure
-index ed5891f..3873d7f 100755
+index ed5891f..1a3f573 100755
 --- a/configure
 +++ b/configure
 @@ -605,7 +605,7 @@ mkdir -p "$outpath/config.tests"
@@ -158,20 +158,21 @@ index ed5891f..3873d7f 100755
         CFG_LIBPNG=system
      else
         CFG_LIBPNG=qt
-@@ -4679,7 +4720,11 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
-             fi
-             ;;
-         psql)
--            if [ "$CFG_SQL_psql" != "no" ]; then
-+            if [ "$XPLATFORM" = "win32-g++" ]; then
-+                echo "We cannot test for PostgreSQL support since we are cross building for win32-g++, so we assume it is there."
-+                CFG_SQL_psql=plugin
-+                QT_LFLAGS_PSQL="-lpq -lsecur32 `$PKG_CONFIG --libs openssl`"
-+            elif [ "$CFG_SQL_psql" != "no" ]; then
-                 if "$WHICH" pg_config >/dev/null 2>&1; then
-                     QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null`
-                     QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null`
-@@ -4707,7 +4752,10 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -4686,7 +4727,12 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+                 fi
+                 [ -z "$QT_CFLAGS_PSQL" ] || QT_CFLAGS_PSQL="-I$QT_CFLAGS_PSQL"
+                 [ -z "$QT_LFLAGS_PSQL" ] || QT_LFLAGS_PSQL="-L$QT_LFLAGS_PSQL"
+-                if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/psql "PostgreSQL" $QT_LFLAGS_PSQL $L_FLAGS $QT_CFLAGS_PSQL $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++                if [ "$XPLATFORM" = "win32-g++" ]; then
++                    echo "Skipping test for PSQL in cross build for win32-g++"
++                    if [ "$CFG_SQL_psql" = "auto" ]; then
++                        CFG_SQL_psql=plugin
++                    fi
++                elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/psql "PostgreSQL" $QT_LFLAGS_PSQL $L_FLAGS $QT_CFLAGS_PSQL $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+                     if [ "$CFG_SQL_psql" = "auto" ]; then
+                         CFG_SQL_psql=plugin
+                     fi
+@@ -4707,7 +4753,10 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
          ;;
          odbc)
              if [ "$CFG_SQL_odbc" != "no" ]; then
@@ -183,7 +184,7 @@ index ed5891f..3873d7f 100755
                      if [ "$CFG_SQL_odbc" = "auto" ]; then
                          CFG_SQL_odbc=plugin
                      fi
-@@ -4752,7 +4800,12 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -4752,7 +4801,12 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
              ;;
          tds)
              if [ "$CFG_SQL_tds" != "no" ]; then
@@ -197,7 +198,7 @@ index ed5891f..3873d7f 100755
                      if [ "$CFG_SQL_tds" = "auto" ]; then
                          CFG_SQL_tds=plugin
                      fi
-@@ -4834,7 +4887,13 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -4834,7 +4888,13 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
                          QT_CFLAGS_SQLITE=`$PKG_CONFIG --cflags sqlite3 2>/dev/null`
                          QT_LFLAGS_SQLITE=`$PKG_CONFIG --libs sqlite3 2>/dev/null`
                      fi
@@ -212,7 +213,7 @@ index ed5891f..3873d7f 100755
                          if [ "$CFG_SQL_sqlite" = "auto" ]; then
                              CFG_SQL_sqlite=plugin
                          fi
-@@ -4905,7 +4964,9 @@ fi
+@@ -4905,7 +4965,9 @@ fi
  
  # auto-detect iconv(3) support
  if [ "$CFG_ICONV" != "no" ]; then
@@ -223,7 +224,7 @@ index ed5891f..3873d7f 100755
  	CFG_ICONV=no
      elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" "$OPT_VERBOSE" "$relpath" "$outpath" "config.tests/unix/iconv" "POSIX iconv" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
          CFG_ICONV=yes
-@@ -5065,7 +5126,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
+@@ -5065,7 +5127,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
@@ -234,7 +235,7 @@ index ed5891f..3873d7f 100755
      fi
  
      # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5139,7 +5202,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
+@@ -5139,7 +5203,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
              echo " You might need to modify the include and library search paths by editing"
              echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
              echo " ${XQMAKESPEC}."
@@ -245,7 +246,7 @@ index ed5891f..3873d7f 100755
          fi
          case "$PLATFORM" in
          hpux*)
-@@ -5640,7 +5705,10 @@ if [ "$CFG_DOUBLEFORMAT" = "auto" ]; then
+@@ -5640,7 +5706,10 @@ if [ "$CFG_DOUBLEFORMAT" = "auto" ]; then
  fi
  
  HAVE_STL=no
@@ -257,7 +258,7 @@ index ed5891f..3873d7f 100755
      HAVE_STL=yes
  fi
  
-@@ -5662,7 +5730,10 @@ fi
+@@ -5662,7 +5731,10 @@ fi
  
  # find if the platform supports IPv6
  if [ "$CFG_IPV6" != "no" ]; then
@@ -269,7 +270,7 @@ index ed5891f..3873d7f 100755
          CFG_IPV6=yes
      else
          if [ "$CFG_IPV6" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
-@@ -5776,7 +5847,10 @@ fi
+@@ -5776,7 +5848,10 @@ fi
  
  # find if the platform supports X/Open Large File compilation environment
  if [ "$CFG_LARGEFILE" != "no" ]; then
@@ -281,7 +282,7 @@ index ed5891f..3873d7f 100755
          CFG_LARGEFILE=yes
      else
          if [ "$CFG_LARGEFILE" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
-@@ -5793,7 +5867,9 @@ fi
+@@ -5793,7 +5868,9 @@ fi
  
  # detect OpenSSL
  if [ "$CFG_OPENSSL" != "no" ]; then
@@ -292,7 +293,7 @@ index ed5891f..3873d7f 100755
          if [ "$CFG_OPENSSL" = "auto" ]; then
              CFG_OPENSSL=yes
          fi
-@@ -6141,6 +6217,7 @@ fi
+@@ -6141,6 +6218,7 @@ fi
  [ "$CFG_3DNOW" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG 3dnow"
  [ "$CFG_SSE" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse"
  [ "$CFG_SSE2" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse2"
@@ -300,7 +301,7 @@ index ed5891f..3873d7f 100755
  [ "$CFG_IWMMXT" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG iwmmxt"
  [ "$CFG_NEON" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG neon"
  [ "$PLATFORM_MAC" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG $CFG_MAC_ARCHS"
-@@ -6222,11 +6299,12 @@ else
+@@ -6222,11 +6300,12 @@ else
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -318,7 +319,7 @@ index ed5891f..3873d7f 100755
  if [ "$CFG_ZLIB" = "yes" ]; then
      QT_CONFIG="$QT_CONFIG zlib"
  elif [ "$CFG_ZLIB" = "system" ]; then
-@@ -7161,7 +7239,7 @@ fi
+@@ -7161,7 +7240,7 @@ fi
  
  cat >>"$QTCONFIG.tmp" <<EOF
  #configuration
@@ -327,16 +328,7 @@ index ed5891f..3873d7f 100755
  QT_ARCH = $CFG_ARCH
  QT_EDITION = $Edition
  QT_CONFIG += $QT_CONFIG
-@@ -7253,7 +7331,7 @@ fi
- if [ '!' -z "$OPENSSL_LIBS" ]; then
-     echo "OPENSSL_LIBS = $OPENSSL_LIBS" >> "$CACHEFILE.tmp"
- elif [ "$CFG_OPENSSL" = "linked" ]; then
--    echo "OPENSSL_LIBS = -lssl -lcrypto" >> "$CACHEFILE.tmp"
-+    echo "OPENSSL_LIBS = `$PKG_CONFIG --libs openssl`" >> "$CACHEFILE.tmp"
- fi
- 
- #dump in the SDK info
-@@ -7434,7 +7512,7 @@ fi
+@@ -7434,7 +7513,7 @@ fi
  echo "Declarative module .. $CFG_DECLARATIVE"
  echo "STL support ......... $CFG_STL"
  echo "PCH support ......... $CFG_PRECOMPILE"
@@ -345,7 +337,7 @@ index ed5891f..3873d7f 100755
  if [ "$CFG_ARCH" = "arm" ] || [ "$CFG_ARCH" = "armv6" ]; then
      echo "iWMMXt support ...... ${CFG_IWMMXT}"
      echo "NEON support ........ ${CFG_NEON}"
-@@ -7752,7 +7830,11 @@ for file in .projects .projects.3; do
+@@ -7752,7 +7831,11 @@ for file in .projects .projects.3; do
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
