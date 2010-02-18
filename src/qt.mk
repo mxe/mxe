@@ -94,7 +94,7 @@ define $(PKG)_BUILD
     # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite
     # There is no -system-gif option. NB -system-libmng will not link in shared build.
     # Linking PSQL shared plugin requires PSQL_LIBS. Harmless for static build.
-    cd '$(1)' && PSQL_LIBS="-lpq -lsecur32 $(shell $(TARGET)-pkg-config --static --libs-only-l openssl)" ./configure \
+    cd '$(1)' && PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl`" ./configure \
         -opensource \
         -confirm-license \
         -xplatform win32-g++ \
