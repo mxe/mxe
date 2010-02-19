@@ -19,6 +19,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's,install ,$(INSTALL) ,' '$(1)'/Makefile.gnu
+
     $(MAKE) -C '$(1)' -j '$(JOBS)' -f Makefile.gnu \
         CXX='$(TARGET)-g++' \
         CC='$(TARGET)-gcc' \
