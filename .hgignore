@@ -1,4 +1,4 @@
-^usr/
-^log/
-^pkg/
-^dist/
+^usr($|/)
+^log($|/)
+^pkg($|/)
+^dist($|/)
