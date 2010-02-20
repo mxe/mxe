@@ -23,7 +23,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(1)' && $(SHELL) ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
