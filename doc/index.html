@@ -489,7 +489,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <li><a href="#requirements-freebsd">FreeBSD</a></li>
         <li><a href="#requirements-frugalware">Frugalware</a></li>
         <li><a href="#requirements-macos">MacOS</a></li>
-        <li><a href="#requirements-solaris">Solaris</a></li>
+        <li><a href="#requirements-opensolaris">Open Solaris</a></li>
     </ul>
 
     <table>
@@ -637,11 +637,11 @@ sudo gcc_select gcc40</pre>
                   gmake gsed libtool openssl pkgconfig \
                   scons wget</pre>
 
-    <h3 id="requirements-solaris">Open Solaris 2009.06</h3>
+    <h3 id="requirements-opensolaris">Open Solaris 2009.06</h3>
 
     <p>
     Open Solaris does not fulfill the requirements.
-    Two requirements are hopelessly outdated (M4, Autoconf)
+    Two requirements are hopelessly outdated (M4, Autoconf)&nbsp;<a href="#requirements-opensolaris-dev-note">(*)</a>,
     and one requirement is not provided at all (SCons).
     In addition, due to a bug in its LibC,
     Open Solaris is unable to run some tools of Binutils 2.20.
@@ -650,9 +650,10 @@ sudo gcc_select gcc40</pre>
     </p>
 
     <p>
-    Downgrade mingw-cross-env's Binutils to 2.19 by hand.
-    (A better solution needs yet to be found.)
+    Downgrade mingw-cross-env's Binutils to 2.19 by hand:
     </p>
+    <pre>wget http://hg.savannah.gnu.org/hgweb/mingw-cross-env/raw-file/a69aa7de9d10/src/binutils.mk
+mv binutils.mk /<em>where mingw-cross-env is installed</em>/src/</pre>
 
     <p>
     Install all requirements
@@ -674,7 +675,7 @@ pfexec ln -s automake-1.10 /usr/bin/automake</pre>
 
     <p>
     Edit your .bashrc script to add /usr/local/bin to $PATH,
-    and restart the Bash:
+    and start a new shell session:
     </p>
     <pre>export PATH=/<em>where mingw-cross-env is installed</em>/usr/bin:/usr/local/bin:$PATH</pre>
 
@@ -704,6 +705,14 @@ cd scons-1.2.0
 python setup.py build
 pfexec python setup.py install
 cd ..</pre>
+
+    <p id="requirements-opensolaris-dev-note">
+    (*) If you are using the 
+    <a href="http://pkg.opensolaris.org/dev/en/index.shtml">development repository</a>,
+    M4 and Autoconf will meet the requirements.
+    However, recent versions of bash (4+) from this source
+    will cause certain builds to fail.
+    </p>
 </div>
 
 <div class="section">
