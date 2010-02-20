@@ -646,32 +646,51 @@ sudo gcc_select gcc40</pre>
     A good solution needs yet to be found.
     </p>
 
-    <h3>Solaris</h3>
-
     <p>
     First, install all requirements
     that already ship with Solaris:
     </p>
     <!-- http://pkg.opensolaris.org/release/en/search.shtml -->
-    <pre>pfexec pkg install SUNWaconf SUNWgnu-automake-110 \
-                   SUNWbison SUNWcmake SUNWflexlex \
-                   SUNWgcc SUNWgmake SUNWgsed SUNWgzip \
+    <pre>pfexec pkg install SUNWgnu-automake-110 SUNWbison \
+                   SUNWcmake SUNWflexlex SUNWgcc \
+                   SUNWgmake SUNWgsed SUNWgzip \
                    SUNWlibtool SUNWlibm SUNWopenssl \
                    SUNWgpch SUNWgnome-common-devel \
                    SUNWunzip SUNWwget</pre>
 
     <p>
-    Then make Automake available:
+    and make Automake available:
     </p>
     <pre>pfexec ln -s aclocal-1.10  /usr/bin/aclocal
 pfexec ln -s automake-1.10 /usr/bin/automake</pre>
+
     <p>
-    and download and install SCons by hand:
+    Then download and install M4, Autoconf and SCons by hand:
     </p>
-    <pre>wget http://prdownloads.sourceforge.net/scons/scons-1.2.0.tar.gz
+    <pre>export PATH=/usr/local/bin:$PATH
+
+wget http://ftp.gnu.org/gnu/m4/m4-1.4.5.tar.gz
+tar -xzf m4-1.4.5.tar.gz
+cd m4-1.4.5
+./configure
+make
+pfexec make install
+cd ..
+
+wget http://ftp.gnu.org/gnu/autoconf/autoconf-2.62.tar.gz
+tar -xzf autoconf-2.62.tar.gz
+cd autoconf-2.62
+./configure
+make
+pfexec make install
+cd ..
+
+wget http://downloads.sourceforge.net/project/scons/scons/1.2.0/scons-1.2.0.tar.gz
 tar -xzf scons-1.2.0.tar.gz
 cd scons-1.2.0
-pfexec python setup.py install</pre>
+python setup.py build
+pfexec python setup.py install
+cd ..</pre>
 </div>
 
 <div class="section">
