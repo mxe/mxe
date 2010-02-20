@@ -640,14 +640,22 @@ sudo gcc_select gcc40</pre>
     <h3 id="requirements-solaris">Open Solaris 2009.06</h3>
 
     <p>
-    Open Solaris seems to have a problem with Binutils 2.20.
-    It should work if you
-    downgrade mingw-cross-env's Binutils to 2.19 by hand.
-    A good solution needs yet to be found.
+    Open Solaris does not fulfill the requirements.
+    Two requirements are hopelessly outdated (M4, Autoconf)
+    and one requirement is not provided at all (SCons).
+    In addition, due to a bug in its LibC,
+    Open Solaris is unable to run some tools of Binutils 2.20.
+    If you want to run mingw-cross-env on Open Solaris nevertheless,
+    a lot of manual work is required:
     </p>
 
     <p>
-    First, install all requirements
+    Downgrade mingw-cross-env's Binutils to 2.19 by hand.
+    (A better solution needs yet to be found.)
+    </p>
+
+    <p>
+    Install all requirements
     that already ship with Solaris:
     </p>
     <!-- http://pkg.opensolaris.org/release/en/search.shtml -->
@@ -665,10 +673,15 @@ sudo gcc_select gcc40</pre>
 pfexec ln -s automake-1.10 /usr/bin/automake</pre>
 
     <p>
-    Then download and install M4, Autoconf and SCons by hand:
+    Edit your .bashrc script to add /usr/local/bin to $PATH,
+    and restart the Bash:
     </p>
-    <pre>export PATH=/usr/local/bin:$PATH
+    <pre>export PATH=/<em>where mingw-cross-env is installed</em>/usr/bin:/usr/local/bin:$PATH</pre>
 
+    <p>
+    Download and install M4, Autoconf and SCons by hand:
+    </p>
+    <pre>
 wget http://ftp.gnu.org/gnu/m4/m4-1.4.5.tar.gz
 tar -xzf m4-1.4.5.tar.gz
 cd m4-1.4.5
