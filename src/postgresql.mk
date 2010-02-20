@@ -80,5 +80,6 @@ define $(PKG)_BUILD
         --without-zlib \
         --with-system-tzdata=/dev/null
     $(MAKE) -C '$(1).native'/src/port          -j '$(JOBS)'
-    $(MAKE) -C '$(1).native'/src/bin/pg_config -j '$(JOBS)' install
+    $(MAKE) -C '$(1).native'/src/bin/pg_config -j '$(JOBS)'
+    $(INSTALL) -m755 '$(1).native'/src/bin/pg_config/pg_config '$(PREFIX)/bin/$(TARGET)-pg_config'
 endef

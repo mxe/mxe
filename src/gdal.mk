@@ -44,7 +44,7 @@ define $(PKG)_BUILD
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
         --with-curl='$(PREFIX)/$(TARGET)/bin/curl-config' \
         --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
-        --with-pg='$(PREFIX)/$(TARGET)/bin/pg_config' \
+        --with-pg='$(TARGET)-pg_config' \
         --with-odbc='$(PREFIX)/$(TARGET)' \
         --without-static-proj4 \
         --without-xerces \
