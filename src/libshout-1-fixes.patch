@@ -1,0 +1,45 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -urN a/examples/nonblocking.c b/examples/nonblocking.c
+--- a/examples/nonblocking.c	2006-06-19 19:54:05.000000000 +0200
++++ b/examples/nonblocking.c	2010-02-21 19:55:04.834952292 +0100
+@@ -68,7 +68,11 @@
+ 
+ 	while (ret == SHOUTERR_BUSY) {
+ 	  printf("Connection pending. Sleeping...\n");
++#ifdef __MINGW32__
++	  Sleep(1000);
++#else
+ 	  sleep(1);
++#endif
+ 	  ret = shout_get_connected(shout);
+ 	}
+ 	
+diff -urN a/include/os.h b/include/os.h
+--- a/include/os.h	2005-06-27 23:33:22.000000000 +0200
++++ b/include/os.h	2010-02-21 19:55:04.834952292 +0100
+@@ -1,7 +1,9 @@
+ #ifdef _WIN32
++#ifndef __MINGW32__
+ typedef __int64 int64_t;
+ typedef unsigned __int64 uint64_t;
+ typedef unsigned __int32 uint32_t;
+ typedef __int32 int32_t;
+ typedef int  ssize_t;
+ #endif
++#endif
+diff -urN a/include/shout/shout.h.in b/include/shout/shout.h.in
+--- a/include/shout/shout.h.in	2005-06-27 23:33:21.000000000 +0200
++++ b/include/shout/shout.h.in	2010-02-21 20:14:04.762887368 +0100
+@@ -23,8 +23,10 @@
+ 
+ #include <sys/types.h>
+ #ifdef WIN32
++#ifndef __MINGW32__
+ #include <os.h>
+ #endif
++#endif
+ 
+ #define SHOUTERR_SUCCESS	(0)
+ #define SHOUTERR_INSANE		(-1)
