@@ -4,8 +4,8 @@
 # cairo
 PKG             := cairo
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.8
-$(PKG)_CHECKSUM := e4b8b219427d1ca3dc95f5f44914dce1ae0c3766
+$(PKG)_VERSION  := 1.8.10
+$(PKG)_CHECKSUM := fd5e8ca82ff0e8542ea4c51612cad387f2a49df3
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://cairographics.org/
