@@ -96,6 +96,7 @@ download-$(1): $(addprefix download-,$($(1)_DEPS))
 $(1): $(PREFIX)/installed/$(1)
 $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
+                          $(wildcard $(TOP_DIR)/src/$(1)-test*) \
                           $(addprefix $(PREFIX)/installed/,$($(1)_DEPS))
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@[ -d '$(PKG_DIR)' ]              || mkdir -p '$(PKG_DIR)'
@@ -234,6 +235,7 @@ dist:
 	cp -p '$(TOP_DIR)/Makefile'    '$(DIST_DIR)/mingw-cross-env-$(VERSION)/'
 	cp -p '$(TOP_DIR)/src'/*.mk    '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
 	cp -p '$(TOP_DIR)/src'/*.patch '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
+	cp -p '$(TOP_DIR)/src'/*-test* '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
 	(cd '$(DIST_DIR)' && tar cvf - 'mingw-cross-env-$(VERSION)' | gzip -9) >'$(DIST_DIR)/releases/mingw-cross-env-$(VERSION).tar.gz'
 	rm -rf '$(DIST_DIR)/mingw-cross-env-$(VERSION)'
 
