@@ -4,8 +4,8 @@
 # GLib
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.23.3
-$(PKG)_CHECKSUM := 9ba908954fbcab7f8b74faf483f83b7ef8d28cf9
+$(PKG)_VERSION  := 2.23.4
+$(PKG)_CHECKSUM := a2ba4fac49acc09cca457b20feec178c02075cf1
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/
@@ -21,8 +21,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,glib)
-    mv '$(1)/$(glib_SUBDIR)' '$(1).native'
+    cd '$(1)' && aclocal
+    cd '$(1)' && $(LIBTOOLIZE) --force
+    cd '$(1)' && autoconf
+    cp -Rp '$(1)' '$(1).native'
 
     # native build of libiconv (used by glib-genmarshal)
     cd '$(1).native' && $(call UNPACK_PKG_ARCHIVE,libiconv)
@@ -32,9 +34,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/$(libiconv_SUBDIR)' -j '$(JOBS)'
 
     # native build for glib-genmarshal, without pkg-config, gettext and zlib
-    $(SED) -i 's,gt_cv_have_gettext=yes,gt_cv_have_gettext=no,'     '$(1).native/configure'
-    $(SED) -i '/You must.*have gettext/,/exit 1;/ s,.*exit 1;.*,},' '$(1).native/configure'
-    $(SED) -i 's,found_zlib=no,found_zlib=yes,'                     '$(1).native/configure'
     cd '$(1).native' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -52,9 +51,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
 
     # cross build
-    cd '$(1)' && aclocal
-    cd '$(1)' && $(LIBTOOLIZE) --force
-    cd '$(1)' && autoconf
     $(SED) -i 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' '$(1)/glib-2.0.pc.in'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
