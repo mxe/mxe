@@ -22,6 +22,9 @@ define $(PKG)_BUILD
     cd '$(1)' && aclocal -I m4 -I common/m4
     cd '$(1)' && automake
     cd '$(1)' && autoconf
+    find '$(1)' -name Makefile.in \
+        -exec $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g'       {} \; \
+        -exec $(SED) -i 's,glib-genmarshal,$(PREFIX)/$(TARGET)/bin/glib-genmarshal,g' {} \;
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
