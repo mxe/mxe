@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpng jpeg libmng tiff sqlite
+$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpng jpeg libmng tiff sqlite libiconv glib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
@@ -86,11 +86,19 @@ define $(PKG)_BUILD
     find '$(1)'/src -name '*.pr[oi]' -exec \
         $(SED) -i 's,\(^\|[^_/]\)win32\([^-]\|$$\),\1unix\2,g' {} \;
 
+    # Use the correct pg_config tool
+    $(SED) -i 's,pg_config,$(TARGET)-pg_config,g;' '$(1)'/configure
+
     # Configure Qt for MinGW target
     # We prefer static mingw-cross-env system libs for static build:
     # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite
     # There is no -system-gif option. NB -system-libmng will not link in shared build.
-    cd '$(1)' && ./configure \
+    # Linking QtNetwork4.dll requires OPENSSL_LIBS. Harmless for static build.
+    # QtCore4 provides qt-zlib to openssl. Harmless for system-zlib.
+    # Linking qsqlpsql4.dll plugin requires PSQL_LIBS. Harmless for static build.
+    cd '$(1)' && \
+        OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl` -lQtCore4" \
+        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl`" ./configure \
         -opensource \
         -confirm-license \
         -xplatform win32-g++ \
@@ -129,6 +137,7 @@ define $(PKG)_BUILD
         -system-sqlite \
         -qt-gif \
         -openssl-linked \
+        -no-fontconfig \
         -v
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'

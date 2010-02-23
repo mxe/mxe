@@ -1,11 +1,192 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
+diff --git a/config.tests/unix/compile.test b/config.tests/unix/compile.test
+index 67a4636..824b54a 100755
+--- a/config.tests/unix/compile.test
++++ b/config.tests/unix/compile.test
+@@ -74,7 +74,7 @@ else
+     $MAKE >/dev/null 2>&1
+ fi
+ 
+-[ -x "$EXE" ] && SUCCESS=yes
++[ -x "$EXE" ] || [ -x "release/${EXE}.exe" ] && SUCCESS=yes
+ 
+ # done
+ if [ "$SUCCESS" != "yes" ]; then
+diff --git a/config.tests/unix/getaddrinfo/getaddrinfotest.cpp b/config.tests/unix/getaddrinfo/getaddrinfotest.cpp
+index a00bf15..cb562fe 100644
+--- a/config.tests/unix/getaddrinfo/getaddrinfotest.cpp
++++ b/config.tests/unix/getaddrinfo/getaddrinfotest.cpp
+@@ -42,9 +42,16 @@
+ /* Sample program for configure to test for getaddrinfo on the unix
+      platform. we check for all structures and functions required. */
+ 
++#include <stdio.h>
++#include <stdlib.h>
++#ifdef __MINGW32__
++#include <winsock2.h>
++#include <ws2tcpip.h>
++#else
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <netdb.h>
++#endif
+ 
+ int main()
+ {
+diff --git a/config.tests/unix/iconv/iconv.pro b/config.tests/unix/iconv/iconv.pro
+index 8cdc776..bf4f2e0 100644
+--- a/config.tests/unix/iconv/iconv.pro
++++ b/config.tests/unix/iconv/iconv.pro
+@@ -1,3 +1,4 @@
+ SOURCES = iconv.cpp
+ CONFIG -= qt dylib app_bundle
+ mac:LIBS += -liconv
++win32-g++:LIBS += -liconv
+diff --git a/config.tests/unix/ipv6/ipv6test.cpp b/config.tests/unix/ipv6/ipv6test.cpp
+index 3dc30c3..5783a85 100644
+--- a/config.tests/unix/ipv6/ipv6test.cpp
++++ b/config.tests/unix/ipv6/ipv6test.cpp
+@@ -46,9 +46,14 @@ platforms. We check for the required IPv6 data structures. */
+ #define _HPUX_SOURCE
+ #endif
+ 
++#ifdef __MINGW32__
++#include <winsock2.h>
++#include <ws2tcpip.h>
++#else
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h>
++#endif
+ 
+ int main()
+ {
+diff --git a/config.tests/unix/largefile/largefiletest.cpp b/config.tests/unix/largefile/largefiletest.cpp
+index a5d7313..3a8924c 100644
+--- a/config.tests/unix/largefile/largefiletest.cpp
++++ b/config.tests/unix/largefile/largefiletest.cpp
+@@ -51,6 +51,9 @@ platforms.
+ #include <sys/stat.h>
+ #include <assert.h>
+ #include <stdio.h>
++#ifdef __MINGW32__
++#define ftello ftello64
++#endif
+ 
+ int main( int, char **argv )
+ {
+diff --git a/config.tests/unix/odbc/odbc.cpp b/config.tests/unix/odbc/odbc.cpp
+index 7092c58..f28712e 100644
+--- a/config.tests/unix/odbc/odbc.cpp
++++ b/config.tests/unix/odbc/odbc.cpp
+@@ -38,7 +38,9 @@
+ ** $QT_END_LICENSE$
+ **
+ ****************************************************************************/
+-
++#ifdef __MINGW32__
++#include <windows.h>
++#endif
+ #include <sql.h>
+ #include <sqlext.h>
+ 
+diff --git a/config.tests/unix/odbc/odbc.pro b/config.tests/unix/odbc/odbc.pro
+index c588ede..44bb23b 100644
+--- a/config.tests/unix/odbc/odbc.pro
++++ b/config.tests/unix/odbc/odbc.pro
+@@ -1,4 +1,5 @@
+ SOURCES = odbc.cpp
+ CONFIG -= qt dylib
+ mac:CONFIG -= app_bundle
+-LIBS += -lodbc
++!win32-g++:LIBS += -lodbc
++win32-g++:LIBS += -lodbc32
+diff --git a/config.tests/unix/rtti/rtti.cpp b/config.tests/unix/rtti/rtti.cpp
+new file mode 100644
+index 0000000..e78103c
+--- /dev/null
++++ b/config.tests/unix/rtti/rtti.cpp
+@@ -0,0 +1,45 @@
++/****************************************************************************
++**
++** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
++** All rights reserved.
++** Contact: Nokia Corporation (qt-info@nokia.com)
++**
++** This file is part of the config.tests of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial Usage
++** Licensees holding valid Qt Commercial licenses may use this file in
++** accordance with the Qt Commercial License Agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and Nokia.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 2.1 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU Lesser General Public License version 2.1 requirements
++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
++**
++** In addition, as a special exception, Nokia gives you certain additional
++** rights.  These rights are described in the Nokia Qt LGPL Exception
++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3.0 as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU General Public License version 3.0 requirements will be
++** met: http://www.gnu.org/copyleft/gpl.html.
++**
++** If you have questions regarding the use of this file, please contact
++** Nokia at qt-info@nokia.com.
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++int main(int, char**)
++{
++    return 0;
++}
+diff --git a/config.tests/unix/rtti/rtti.pro b/config.tests/unix/rtti/rtti.pro
+new file mode 100644
+index 0000000..d0aae30
+--- /dev/null
++++ b/config.tests/unix/rtti/rtti.pro
+@@ -0,0 +1,3 @@
++SOURCES = rtti.cpp
++CONFIG -= x11 qt
++mac:CONFIG -= app_bundle
+diff --git a/config.tests/x11/opengl/opengl.pro b/config.tests/x11/opengl/opengl.pro
+index 432bd8d..428dc73 100644
+--- a/config.tests/x11/opengl/opengl.pro
++++ b/config.tests/x11/opengl/opengl.pro
+@@ -7,4 +7,5 @@ for(p, QMAKE_LIBDIR_OPENGL) {
+ }
+ 
+ CONFIG -= qt
+-LIBS += -lGL -lGLU
++!win32-g++:LIBS += -lGL -lGLU
++win32-g++:LIBS += -lopengl32
 diff --git a/configure b/configure
-index ed5891f..3873d7f 100755
+index ed5891f..0e8cd9f 100755
 --- a/configure
 +++ b/configure
-@@ -605,7 +605,7 @@ mkdir -p "$outpath/config.tests"
+@@ -178,6 +178,7 @@ UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
+ # window system detection
+ #-------------------------------------------------------------------------------
+ 
++# XPLATFROM win32-g++ is treated as a subcase of PLATFORM_X11 for convenience
+ PLATFORM_X11=no
+ PLATFORM_MAC=no
+ PLATFORM_QWS=no
+@@ -605,7 +606,7 @@ mkdir -p "$outpath/config.tests"
  rm -f "$outpath/config.tests/.qmake.cache"
  cp "$QMAKE_VARS_FILE" "$outpath/config.tests/.qmake.cache"
  
@@ -14,7 +195,7 @@ index ed5891f..3873d7f 100755
  QMakeVar add decorations "default windows styled"
  QMakeVar add mouse-drivers "pc"
  if [ "$UNAME_SYSTEM" = "Linux" ] ; then
-@@ -733,6 +733,7 @@ CFG_MMX=auto
+@@ -733,6 +734,7 @@ CFG_MMX=auto
  CFG_3DNOW=auto
  CFG_SSE=auto
  CFG_SSE2=auto
@@ -22,277 +203,67 @@ index ed5891f..3873d7f 100755
  CFG_REDUCE_RELOCATIONS=no
  CFG_IPV6=auto
  CFG_NAS=no
-@@ -4466,7 +4467,10 @@ fi # Build qmake
- #-------------------------------------------------------------------------------
+@@ -1602,6 +1604,13 @@ while [ "$#" -gt 0 ]; do
+             UNKNOWN_OPT=yes
+         fi
+         ;;
++    rtti)
++        if [ "$VAL" = "no" ]; then
++            CFG_RTTI="$VAL"
++        else
++            UNKNOWN_OPT=yes
++        fi
++        ;;
+     iwmmxt)
+ 	CFG_IWMMXT="yes"
+ 	;;
+@@ -3482,6 +3491,7 @@ cat << EOF
+     -no-3dnow .......... Do not compile with use of 3DNOW instructions.
+     -no-sse ............ Do not compile with use of SSE instructions.
+     -no-sse2 ........... Do not compile with use of SSE2 instructions.
++    -no-rtti ........... Do not compile with RTTI.
  
- # detect availability of float math.h functions
--if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/floatmath "floatmath" $L_FLAGS $I_FLAGS $l_FLAGS; then
-+if [ "$XPLATFORM" = "win32-g++" ]; then
-+    echo "Using FLOATMATH for win32-g++ target"
-+    CFG_USE_FLOATMATH=yes
-+elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/floatmath "floatmath" $L_FLAGS $I_FLAGS $l_FLAGS; then
-     CFG_USE_FLOATMATH=yes
- else
-     CFG_USE_FLOATMATH=no
-@@ -4474,7 +4478,10 @@ fi
- 
- # detect mmx support
- if [ "${CFG_MMX}" = "auto" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/mmx "mmx" $L_FLAGS $I_FLAGS $l_FLAGS "-mmmx"; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+      echo "Using MMX for win32-g++ target"
-+      CFG_MMX=yes
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/mmx "mmx" $L_FLAGS $I_FLAGS $l_FLAGS "-mmmx"; then
- 	CFG_MMX=yes
-     else
- 	CFG_MMX=no
-@@ -4483,7 +4490,10 @@ fi
- 
- # detect 3dnow support
- if [ "${CFG_3DNOW}" = "auto" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/3dnow "3dnow" $L_FLAGS $I_FLAGS $l_FLAGS "-m3dnow"; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+        echo "Using SSE for win32-g++ target"
-+        CFG_3DNOW=yes
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/3dnow "3dnow" $L_FLAGS $I_FLAGS $l_FLAGS "-m3dnow"; then
- 	CFG_3DNOW=yes
-     else
- 	CFG_3DNOW=no
-@@ -4492,7 +4502,10 @@ fi
- 
- # detect sse support
- if [ "${CFG_SSE}" = "auto" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sse "sse" $L_FLAGS $I_FLAGS $l_FLAGS "-msse"; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+        echo "Using SSE for win32-g++ target"
-+        CFG_SSE=yes
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sse "sse" $L_FLAGS $I_FLAGS $l_FLAGS "-msse"; then
- 	CFG_SSE=yes
-     else
- 	CFG_SSE=no
-@@ -4501,13 +4514,26 @@ fi
- 
- # detect sse2 support
- if [ "${CFG_SSE2}" = "auto" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sse2 "sse2" $L_FLAGS $I_FLAGS $l_FLAGS "-msse2"; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+      echo "Using SSE2 for win32-g++ target"
-+      CFG_SSE2=yes
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sse2 "sse2" $L_FLAGS $I_FLAGS $l_FLAGS "-msse2"; then
-        CFG_SSE2=yes
-     else
-        CFG_SSE2=no
+     -qtnamespace <name>  Wraps all Qt library code in 'namespace <name> {...}'.
+     -qtlibinfix <infix>  Renames all libQt*.so to libQt*<infix>.so.
+@@ -4508,6 +4518,17 @@ if [ "${CFG_SSE2}" = "auto" ]; then
      fi
  fi
  
 +# detect rtti support
 +if [ "${CFG_RTTI}" = "auto" ]; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+      echo "Using RTTI for win32-g++ target"
-+      CFG_RTTI=yes
++    if [ "$XPLATFORM" != "win32-g++" ]; then
++        CFG_RTTI=no
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/rtti "rtti" $L_FLAGS $I_FLAGS $l_FLAGS "-frtti"; then
++        CFG_RTTI=yes
 +    else
-+      CFG_RTTI=no
++        CFG_RTTI=no
 +    fi
 +fi
 +
  # check iWMMXt support
  if [ "$CFG_IWMMXT" = "yes" ]; then
      "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/iwmmxt "iwmmxt" $L_FLAGS $I_FLAGS $l_FLAGS "-mcpu=iwmmxt"
-@@ -4542,7 +4568,10 @@ if [ "$CFG_ZLIB" = "no" ]; then
-     ZLIB_FORCED=yes
- fi
- if [ "$CFG_ZLIB" = "auto" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/zlib "zlib" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+       echo "We cannot test for system ZLIB since we are cross building for win32-g++, so we assume it is there."
-+       CFG_ZLIB=system
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/zlib "zlib" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-        CFG_ZLIB=system
-     else
-        CFG_ZLIB=yes
-@@ -4559,7 +4588,10 @@ if [ "$CFG_JPEG" = "auto" ]; then
- fi
- # detect jpeg
- if [ "$CFG_LIBJPEG" = "auto" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libjpeg "libjpeg" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+       echo "We cannot test for system LIBJPEG since we are cross building for win32-g++, so we assume it is there."
-+       CFG_LIBJPEG=system
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libjpeg "libjpeg" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-        CFG_LIBJPEG=system
-     else
-        CFG_LIBJPEG=qt
-@@ -4586,7 +4618,10 @@ fi
- 
- # detect tiff
- if [ "$CFG_LIBTIFF" = "auto" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libtiff "libtiff" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+        echo "We cannot test for system LIBTIFF since we are cross building for win32-g++, so we assume it is there."
-+        CFG_LIBTIFF=system
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libtiff "libtiff" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-         CFG_LIBTIFF=system
-     else
-         CFG_LIBTIFF=qt
-@@ -4603,7 +4638,10 @@ if [ "$CFG_MNG" = "auto" ]; then
- fi
- # detect mng
- if [ "$CFG_LIBMNG" = "auto" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libmng "libmng" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+       echo "We cannot test for system LIBMNG since we are cross building for win32-g++, so we assume it is there."
-+       CFG_LIBMNG=system
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libmng "libmng" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-        CFG_LIBMNG=system
-     else
-        CFG_LIBMNG=qt
-@@ -4612,7 +4650,10 @@ fi
- 
- # detect png
- if [ "$CFG_LIBPNG" = "auto" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libpng "libpng" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+       echo "We cannot test for system LIBPNG since we are cross building for win32-g++, so we assume it is there."
-+       CFG_LIBPNG=system
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/libpng "libpng" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-        CFG_LIBPNG=system
-     else
-        CFG_LIBPNG=qt
-@@ -4679,7 +4720,11 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
-             fi
-             ;;
-         psql)
--            if [ "$CFG_SQL_psql" != "no" ]; then
-+            if [ "$XPLATFORM" = "win32-g++" ]; then
-+                echo "We cannot test for PostgreSQL support since we are cross building for win32-g++, so we assume it is there."
-+                CFG_SQL_psql=plugin
-+                QT_LFLAGS_PSQL="-lpq -lsecur32 `$PKG_CONFIG --libs openssl`"
-+            elif [ "$CFG_SQL_psql" != "no" ]; then
+@@ -4683,6 +4704,7 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
                  if "$WHICH" pg_config >/dev/null 2>&1; then
                      QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null`
                      QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null`
-@@ -4707,7 +4752,10 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
-         ;;
-         odbc)
-             if [ "$CFG_SQL_odbc" != "no" ]; then
--                if [ "$PLATFORM_MAC" != "yes" ] && "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/odbc "ODBC" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+                if [ "$XPLATFORM" = "win32-g++" ]; then
-+                    echo "We cannot test for ODBC support since we are cross building for win32-g++, so we assume it is there."
-+                    CFG_SQL_odbc=plugin
-+                elif [ "$PLATFORM_MAC" != "yes" ] && "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/odbc "ODBC" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-                     if [ "$CFG_SQL_odbc" = "auto" ]; then
-                         CFG_SQL_odbc=plugin
-                     fi
-@@ -4752,7 +4800,12 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
-             ;;
-         tds)
-             if [ "$CFG_SQL_tds" != "no" ]; then
--                if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/tds "TDS" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+                if [ "$XPLATFORM" = "win32-g++" ]; then
-+                    echo "We cannot test for TDS since we are cross building for win32-g++, so we assume it is there."
-+                    if [ "CFG_SQL_tds" = "auto" ]; then
-+                        CFG_SQL_tds=plugin
-+                    fi
-+                elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/tds "TDS" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-                     if [ "$CFG_SQL_tds" = "auto" ]; then
-                         CFG_SQL_tds=plugin
-                     fi
-@@ -4834,7 +4887,13 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
-                         QT_CFLAGS_SQLITE=`$PKG_CONFIG --cflags sqlite3 2>/dev/null`
-                         QT_LFLAGS_SQLITE=`$PKG_CONFIG --libs sqlite3 2>/dev/null`
-                     fi
--                    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sqlite "SQLite" $QT_LFLAGS_SQLITE $L_FLAGS $QT_CFLAGS_SQLITE $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+                    if [ "$XPLATFORM" = "win32-g++" ]; then
-+                        echo "We cannot test for system sqlite since we are cross building for win32-g++, so we assume it is there."
-+                        if [ "$CFG_SQL_sqlite" = "auto" ]; then
-+                            CFG_SQL_sqlite=plugin
-+                        fi
-+                        QMAKE_CONFIG="$QMAKE_CONFIG system-sqlite"
-+                    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/sqlite "SQLite" $QT_LFLAGS_SQLITE $L_FLAGS $QT_CFLAGS_SQLITE $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-                         if [ "$CFG_SQL_sqlite" = "auto" ]; then
-                             CFG_SQL_sqlite=plugin
-                         fi
-@@ -4905,7 +4964,9 @@ fi
++                    QT_LFLAGS_PSQL="$QT_LFLAGS_PSQL $PSQL_LIBS"
+                 fi
+                 [ -z "$QT_CFLAGS_PSQL" ] || QT_CFLAGS_PSQL="-I$QT_CFLAGS_PSQL"
+                 [ -z "$QT_LFLAGS_PSQL" ] || QT_LFLAGS_PSQL="-L$QT_LFLAGS_PSQL"
+@@ -5060,8 +5082,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
+     fi
  
- # auto-detect iconv(3) support
- if [ "$CFG_ICONV" != "no" ]; then
--    if [ "$PLATFORM_QWS" = "yes" ]; then
+     # Check we actually have X11 :-)
+-    "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/x11/xlib "XLib" $L_FLAGS $I_FLAGS $l_FLAGS $X11TESTS_FLAGS
+-    if [ $? != "0" ]; then
 +    if [ "$XPLATFORM" = "win32-g++" ]; then
-+        CFG_ICONV=no
-+    elif [ "$PLATFORM_QWS" = "yes" ]; then
- 	CFG_ICONV=no
-     elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" "$OPT_VERBOSE" "$relpath" "$outpath" "config.tests/unix/iconv" "POSIX iconv" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-         CFG_ICONV=yes
-@@ -5065,7 +5126,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
++        echo "Skipping XLib test for win32-g++"
++    elif ! "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/x11/xlib "XLib" $L_FLAGS $I_FLAGS $l_FLAGS $X11TESTS_FLAGS; then
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
--        exit 1
-+echo NOTICE: This is a specially modifed configure script!
-+echo For our purposes we do not want X11.
-+#        exit 1
-     fi
- 
-     # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es1cl = ES 1.x common lite, es2 = OpenGL ES 2.x)
-@@ -5139,7 +5202,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
-             echo " You might need to modify the include and library search paths by editing"
-             echo " QMAKE_INCDIR_OPENGL, QMAKE_LIBDIR_OPENGL and QMAKE_LIBS_OPENGL in"
-             echo " ${XQMAKESPEC}."
--            exit 1
-+echo NOTICE: This is a specially modifed configure script!
-+echo For our purposes we do not want the OpenGL functionality test.
-+#            exit 1
-         fi
-         case "$PLATFORM" in
-         hpux*)
-@@ -5640,7 +5705,10 @@ if [ "$CFG_DOUBLEFORMAT" = "auto" ]; then
- fi
- 
- HAVE_STL=no
--if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/stl "STL" $L_FLAGS $I_FLAGS $l_FLAGS; then
-+if [ "$XPLATFORM" = "win32-g++" ]; then
-+    echo "Using STL for win32-g++ target"
-+    HAVE_STL=yes
-+elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/stl "STL" $L_FLAGS $I_FLAGS $l_FLAGS; then
-     HAVE_STL=yes
- fi
- 
-@@ -5662,7 +5730,10 @@ fi
- 
- # find if the platform supports IPv6
- if [ "$CFG_IPV6" != "no" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/ipv6 "IPv6" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+        echo "Using IPV6 for win32-g++ target"
-+        CFG_IPV6=yes
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/ipv6 "IPv6" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-         CFG_IPV6=yes
-     else
-         if [ "$CFG_IPV6" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
-@@ -5776,7 +5847,10 @@ fi
- 
- # find if the platform supports X/Open Large File compilation environment
- if [ "$CFG_LARGEFILE" != "no" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/largefile "X/Open Large File" $L_FLAGS $I_FLAGS $l_FLAGS; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+        echo "Using LARGEFILE for win32-g++ target"
-+        CFG_LARGEFILE=yes
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/largefile "X/Open Large File" $L_FLAGS $I_FLAGS $l_FLAGS; then
-         CFG_LARGEFILE=yes
-     else
-         if [ "$CFG_LARGEFILE" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
-@@ -5793,7 +5867,9 @@ fi
- 
- # detect OpenSSL
- if [ "$CFG_OPENSSL" != "no" ]; then
--    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/openssl "OpenSSL" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+    if [ "$XPLATFORM" = "win32-g++" ]; then
-+        echo "We cannot test for system CFG_OPENSSL since we are cross building for win32-g++, so we assume it is there."
-+    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/openssl "OpenSSL" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-         if [ "$CFG_OPENSSL" = "auto" ]; then
-             CFG_OPENSSL=yes
-         fi
-@@ -6141,6 +6217,7 @@ fi
+@@ -6141,6 +6164,7 @@ fi
  [ "$CFG_3DNOW" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG 3dnow"
  [ "$CFG_SSE" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse"
  [ "$CFG_SSE2" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse2"
@@ -300,25 +271,16 @@ index ed5891f..3873d7f 100755
  [ "$CFG_IWMMXT" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG iwmmxt"
  [ "$CFG_NEON" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG neon"
  [ "$PLATFORM_MAC" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG $CFG_MAC_ARCHS"
-@@ -6222,11 +6299,12 @@ else
+@@ -6222,7 +6246,7 @@ else
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
 -if [ "x$PLATFORM_MAC" = "xyes" ]; then
--    #On Mac we implicitly link against libz, so we
--    #never use the 3rdparty stuff.
--    [ "$CFG_ZLIB" = "yes" ] && CFG_ZLIB="system"
--fi
-+# We're cross compiling, so we respect the user setting.
-+#if [ "x$PLATFORM_MAC" = "xyes" ]; then
-+#    #On Mac we implicitly link against libz, so we
-+#    #never use the 3rdparty stuff.
-+#    [ "$CFG_ZLIB" = "yes" ] && CFG_ZLIB="system"
-+#fi
- if [ "$CFG_ZLIB" = "yes" ]; then
-     QT_CONFIG="$QT_CONFIG zlib"
- elif [ "$CFG_ZLIB" = "system" ]; then
-@@ -7161,7 +7239,7 @@ fi
++if [ "x$PLATFORM_MAC" = "xyes" ] && [ "$XPLATFORM" != "win32-g++" ]; then
+     #On Mac we implicitly link against libz, so we
+     #never use the 3rdparty stuff.
+     [ "$CFG_ZLIB" = "yes" ] && CFG_ZLIB="system"
+@@ -7161,7 +7185,7 @@ fi
  
  cat >>"$QTCONFIG.tmp" <<EOF
  #configuration
@@ -327,16 +289,7 @@ index ed5891f..3873d7f 100755
  QT_ARCH = $CFG_ARCH
  QT_EDITION = $Edition
  QT_CONFIG += $QT_CONFIG
-@@ -7253,7 +7331,7 @@ fi
- if [ '!' -z "$OPENSSL_LIBS" ]; then
-     echo "OPENSSL_LIBS = $OPENSSL_LIBS" >> "$CACHEFILE.tmp"
- elif [ "$CFG_OPENSSL" = "linked" ]; then
--    echo "OPENSSL_LIBS = -lssl -lcrypto" >> "$CACHEFILE.tmp"
-+    echo "OPENSSL_LIBS = `$PKG_CONFIG --libs openssl`" >> "$CACHEFILE.tmp"
- fi
- 
- #dump in the SDK info
-@@ -7434,7 +7512,7 @@ fi
+@@ -7434,7 +7458,7 @@ fi
  echo "Declarative module .. $CFG_DECLARATIVE"
  echo "STL support ......... $CFG_STL"
  echo "PCH support ......... $CFG_PRECOMPILE"
@@ -345,7 +298,7 @@ index ed5891f..3873d7f 100755
  if [ "$CFG_ARCH" = "arm" ] || [ "$CFG_ARCH" = "armv6" ]; then
      echo "iWMMXt support ...... ${CFG_IWMMXT}"
      echo "NEON support ........ ${CFG_NEON}"
-@@ -7752,7 +7830,11 @@ for file in .projects .projects.3; do
+@@ -7752,7 +7776,11 @@ for file in .projects .projects.3; do
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
@@ -548,20 +501,17 @@ index aa36890..f009761 100644
 +    win32:!win32-g++:LIBS += zdll.lib
  }
 diff --git a/src/network/ssl/ssl.pri b/src/network/ssl/ssl.pri
-index 72ea80f..899aa30 100644
+index 72ea80f..cf31a5b 100644
 --- a/src/network/ssl/ssl.pri
 +++ b/src/network/ssl/ssl.pri
-@@ -35,5 +35,11 @@ symbian {
+@@ -34,6 +34,7 @@ symbian {
+     # Include Qt's default CA bundle
      RESOURCES += network.qrc
  
-     # Add optional SSL libs
-+    !contains(QT_CONFIG, system-zlib):contains(OPENSSL_LIBS, -lz) {
-+        # Use the zlib in QtCore
-+        OPENSSL_LIBS -= -lz
-+        OPENSSL_LIBS += -lQtCore4
-+    }
+-    # Add optional SSL libs
++    # Add optional SSL libs, but not accidently system zlib
++    !contains(QT_CONFIG, system-zlib):OPENSSL_LIBS -= -lz
      LIBS_PRIVATE += $$OPENSSL_LIBS
-+
  }
 diff --git a/src/plugins/imageformats/jpeg/jpeg.pro b/src/plugins/imageformats/jpeg/jpeg.pro
 index ebc79cc..30a19c6 100644

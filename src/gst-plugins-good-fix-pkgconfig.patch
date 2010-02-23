@@ -1,0 +1,15 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -ru gst-plugins-good-0.10.18.orig/configure.ac gst-plugins-good-0.10.18/configure.ac
+--- gst-plugins-good-0.10.18.orig/configure.ac	2010-02-10 23:46:02.000000000 +0100
++++ gst-plugins-good-0.10.18/configure.ac	2010-02-23 16:53:57.000000000 +0100
+@@ -216,7 +216,7 @@
+ AG_GST_CHECK_GST_CHECK($GST_MAJORMINOR, [$GST_REQ], no)
+ AG_GST_CHECK_GST_PLUGINS_BASE($GST_MAJORMINOR, [$GSTPB_REQ], yes)
+ 
+-GST_TOOLS_DIR=`pkg-config --variable=toolsdir gstreamer-$GST_MAJORMINOR`
++GST_TOOLS_DIR=`$PKG_CONFIG --variable=toolsdir gstreamer-$GST_MAJORMINOR`
+ if test -z $GST_TOOLS_DIR; then
+   AC_MSG_ERROR([no tools dir defined in GStreamer pkg-config file; core upgrade needed.])
+ fi
