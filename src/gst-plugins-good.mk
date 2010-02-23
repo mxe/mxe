@@ -8,12 +8,14 @@ $(PKG)_VERSION  := 0.10.18
 $(PKG)_CHECKSUM := 74a463ed6e300598bd14f3f8915f2765f5420bd5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org
+$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2 gstreamer liboil libshout cairo directx flac gtk jpeg libpng speex taglib
 
 define $(PKG)_UPDATE
-    echo "Update not implemented"
+    wget -q -O- 'http://cgit.freedesktop.org/gstreamer/gst-plugins-good/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
 endef
 
 define $(PKG)_BUILD

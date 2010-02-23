@@ -8,12 +8,14 @@ $(PKG)_VERSION  := 0.10.26
 $(PKG)_CHECKSUM := 33f6be03b4baf199dbb13f12d8a4f4749f79843f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org
+$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2 gstreamer liboil pango
 
 define $(PKG)_UPDATE
-    echo "Update not implemented"
+    wget -q -O- 'http://cgit.freedesktop.org/gstreamer/gst-plugins-base/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
 endef
 
 define $(PKG)_BUILD

@@ -8,12 +8,14 @@ $(PKG)_VERSION  := 0.10.26
 $(PKG)_CHECKSUM := 868dccf7d2a844af88fd2fcf05c92822285fd9ab
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org
+$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2
 
 define $(PKG)_UPDATE
-    echo "Update not implemented"
+    wget -q -O- 'http://cgit.freedesktop.org/gstreamer/gstreamer/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
 endef
 
 define $(PKG)_BUILD
