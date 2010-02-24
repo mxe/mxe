@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib libgsf cairo pango gtk
+$(PKG)_DEPS     := gcc glib libgsf cairo pango gtk libcroco
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/librsvg/log' | \
@@ -20,8 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g' '$(1)'/Makefile.in
-    $(SED) -i 's,^\(Requires:.*\),\1 libgsf-1 pangocairo,' '$(1)'/librsvg-2.0.pc.in
+    $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g'   '$(1)'/Makefile.in
+    $(SED) -i 's,^\(Requires:.*\),\1 libgsf-1 pangocairo libcroco-0.6,' '$(1)'/librsvg-2.0.pc.in
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
@@ -31,7 +31,7 @@ define $(PKG)_BUILD
         --disable-mozilla-plugin \
         --disable-gtk-doc \
         --with-svgz \
-        --without-croco \
+        --with-croco \
         --without-x
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
