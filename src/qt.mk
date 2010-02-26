@@ -93,11 +93,11 @@ define $(PKG)_BUILD
     # We prefer static mingw-cross-env system libs for static build:
     # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite
     # There is no -system-gif option. NB -system-libmng will not link in shared build.
-    # Linking QtNetwork4.dll requires OPENSSL_LIBS. Harmless for static build.
-    # QtCore4 provides qt-zlib to openssl. Harmless for system-zlib.
-    # Linking qsqlpsql4.dll plugin requires PSQL_LIBS. Harmless for static build.
+    # Linking QtNetwork4.dll requires OPENSSL_LIBS as does linking apps with static Qt.
+    # Linking qsqlpsql4.dll plugin requires PSQL_LIBS as does linking apps with static Qt.
+    # For shared Qt with qt-zlib, add -lQtCore4 to end of OPENSSL_LIBS to satisfy zlib dependency.
     cd '$(1)' && \
-        OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl` -lQtCore4" \
+        OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl`" ./configure \
         -opensource \
         -confirm-license \
