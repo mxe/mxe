@@ -36,14 +36,14 @@ index a00bf15..cb562fe 100644
  int main()
  {
 diff --git a/config.tests/unix/iconv/iconv.pro b/config.tests/unix/iconv/iconv.pro
-index 8cdc776..bf4f2e0 100644
+index 8cdc776..898a017 100644
 --- a/config.tests/unix/iconv/iconv.pro
 +++ b/config.tests/unix/iconv/iconv.pro
-@@ -1,3 +1,4 @@
+@@ -1,3 +1,3 @@
  SOURCES = iconv.cpp
  CONFIG -= qt dylib app_bundle
- mac:LIBS += -liconv
-+win32-g++:LIBS += -liconv
+-mac:LIBS += -liconv
++mac|win32-g++:LIBS += -liconv
 diff --git a/config.tests/unix/ipv6/ipv6test.cpp b/config.tests/unix/ipv6/ipv6test.cpp
 index 3dc30c3..5783a85 100644
 --- a/config.tests/unix/ipv6/ipv6test.cpp
@@ -93,7 +93,7 @@ index 7092c58..f28712e 100644
  #include <sqlext.h>
  
 diff --git a/config.tests/unix/odbc/odbc.pro b/config.tests/unix/odbc/odbc.pro
-index c588ede..44bb23b 100644
+index c588ede..740582a 100644
 --- a/config.tests/unix/odbc/odbc.pro
 +++ b/config.tests/unix/odbc/odbc.pro
 @@ -1,4 +1,5 @@
@@ -101,8 +101,8 @@ index c588ede..44bb23b 100644
  CONFIG -= qt dylib
  mac:CONFIG -= app_bundle
 -LIBS += -lodbc
-+!win32-g++:LIBS += -lodbc
 +win32-g++:LIBS += -lodbc32
++else:LIBS += -lodbc
 diff --git a/config.tests/unix/rtti/rtti.cpp b/config.tests/unix/rtti/rtti.cpp
 new file mode 100644
 index 0000000..e78103c
@@ -164,7 +164,7 @@ index 0000000..d0aae30
 +CONFIG -= x11 qt
 +mac:CONFIG -= app_bundle
 diff --git a/config.tests/x11/opengl/opengl.pro b/config.tests/x11/opengl/opengl.pro
-index 432bd8d..428dc73 100644
+index 432bd8d..94faf15 100644
 --- a/config.tests/x11/opengl/opengl.pro
 +++ b/config.tests/x11/opengl/opengl.pro
 @@ -7,4 +7,5 @@ for(p, QMAKE_LIBDIR_OPENGL) {
@@ -172,10 +172,10 @@ index 432bd8d..428dc73 100644
  
  CONFIG -= qt
 -LIBS += -lGL -lGLU
-+!win32-g++:LIBS += -lGL -lGLU
 +win32-g++:LIBS += -lopengl32
++else:LIBS += -lGL -lGLU
 diff --git a/configure b/configure
-index ed5891f..0e8cd9f 100755
+index ed5891f..02bacd6 100755
 --- a/configure
 +++ b/configure
 @@ -178,6 +178,7 @@ UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
@@ -251,7 +251,19 @@ index ed5891f..0e8cd9f 100755
                  fi
                  [ -z "$QT_CFLAGS_PSQL" ] || QT_CFLAGS_PSQL="-I$QT_CFLAGS_PSQL"
                  [ -z "$QT_LFLAGS_PSQL" ] || QT_LFLAGS_PSQL="-L$QT_LFLAGS_PSQL"
-@@ -5060,8 +5082,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
+@@ -5002,7 +5024,10 @@ if [ "$PLATFORM_X11" = "yes" -o "$PLATFORM_QWS" = "yes" ]; then
+     fi
+ 
+     if [ "$CFG_PHONON" != "no" ]; then
+-        if [ "$CFG_PHONON_BACKEND" != "no" ]; then
++        if [ "$XPLATFORM" = "win32-g++" ]; then
++            echo "Will build Phonon for win32-g++"
++            CFG_PHONON=yes
++        elif [ "$CFG_PHONON_BACKEND" != "no" ]; then
+             if [ "$CFG_GLIB" = "yes" -a "$CFG_GSTREAMER" != "no" ]; then
+                 if [ -n "$PKG_CONFIG" ]; then
+                     QT_CFLAGS_GSTREAMER=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-plugins-base-0.10 2>/dev/null`
+@@ -5060,8 +5085,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
      fi
  
      # Check we actually have X11 :-)
@@ -263,7 +275,7 @@ index ed5891f..0e8cd9f 100755
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
-@@ -6141,6 +6164,7 @@ fi
+@@ -6141,6 +6167,7 @@ fi
  [ "$CFG_3DNOW" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG 3dnow"
  [ "$CFG_SSE" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse"
  [ "$CFG_SSE2" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse2"
@@ -271,7 +283,7 @@ index ed5891f..0e8cd9f 100755
  [ "$CFG_IWMMXT" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG iwmmxt"
  [ "$CFG_NEON" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG neon"
  [ "$PLATFORM_MAC" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG $CFG_MAC_ARCHS"
-@@ -6222,7 +6246,7 @@ else
+@@ -6222,7 +6249,7 @@ else
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -280,7 +292,7 @@ index ed5891f..0e8cd9f 100755
      #On Mac we implicitly link against libz, so we
      #never use the 3rdparty stuff.
      [ "$CFG_ZLIB" = "yes" ] && CFG_ZLIB="system"
-@@ -7161,7 +7185,7 @@ fi
+@@ -7161,7 +7188,7 @@ fi
  
  cat >>"$QTCONFIG.tmp" <<EOF
  #configuration
@@ -289,7 +301,7 @@ index ed5891f..0e8cd9f 100755
  QT_ARCH = $CFG_ARCH
  QT_EDITION = $Edition
  QT_CONFIG += $QT_CONFIG
-@@ -7434,7 +7458,7 @@ fi
+@@ -7434,7 +7461,7 @@ fi
  echo "Declarative module .. $CFG_DECLARATIVE"
  echo "STL support ......... $CFG_STL"
  echo "PCH support ......... $CFG_PRECOMPILE"
@@ -298,7 +310,7 @@ index ed5891f..0e8cd9f 100755
  if [ "$CFG_ARCH" = "arm" ] || [ "$CFG_ARCH" = "armv6" ]; then
      echo "iWMMXt support ...... ${CFG_IWMMXT}"
      echo "NEON support ........ ${CFG_NEON}"
-@@ -7752,7 +7776,11 @@ for file in .projects .projects.3; do
+@@ -7752,7 +7779,11 @@ for file in .projects .projects.3; do
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in
@@ -422,6 +434,19 @@ index b282f69..fb65805 100644
  QMAKE_STRIPFLAGS_LIB 	+= --strip-unneeded
 -load(qt_config)
 +PKG_CONFIG		= HOSTPLATFORMPREFIX-pkg-config
+diff --git a/src/3rdparty/phonon/ds9/videorenderer_soft.cpp b/src/3rdparty/phonon/ds9/videorenderer_soft.cpp
+index f7d42cf..9c7993c 100644
+--- a/src/3rdparty/phonon/ds9/videorenderer_soft.cpp
++++ b/src/3rdparty/phonon/ds9/videorenderer_soft.cpp
+@@ -45,7 +45,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ #endif
+ 
+ #ifndef QT_NO_OPENGL
+-#include <gl/gl.h>
++#include <GL/gl.h>
+ #ifndef GL_FRAGMENT_PROGRAM_ARB
+ #define GL_FRAGMENT_PROGRAM_ARB           0x8804
+ #define GL_PROGRAM_FORMAT_ASCII_ARB       0x8875
 diff --git a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
 index 3406e41..e171584 100644
 --- a/src/corelib/tools/tools.pri
