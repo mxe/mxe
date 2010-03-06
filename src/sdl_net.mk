@@ -28,4 +28,9 @@ define $(PKG)_BUILD
         --disable-sdltest \
         --disable-gui
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_net.exe' \
+        `'$(TARGET)-pkg-config' sdl --cflags --libs` -lSDL_net -lws2_32
 endef
