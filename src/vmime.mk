@@ -32,7 +32,6 @@ define $(PKG)_BUILD
          target='$(TARGET)' \
          sendmail_path=/sbin/sendmail
 
-    $(SED) -i 's,libtoolize ,$(LIBTOOLIZE) ,' '$(1)'/bootstrap
     cd '$(1)' && ./bootstrap
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
