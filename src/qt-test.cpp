@@ -1,7 +1,7 @@
 /* This file is part of mingw-cross-env.       */
 /* See doc/index.html for further information. */
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include "ui_qt-test.h"
 
 #ifdef  Q_OS_AIX
