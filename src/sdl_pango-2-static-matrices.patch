@@ -1,0 +1,71 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+--- SDL_Pango-0.1.2.orig/src/SDL_Pango.h	2010-04-08 11:33:48.000000000 +0200
++++ SDL_Pango-0.1.2/src/SDL_Pango.h	2010-04-08 11:36:51.000000000 +0200
+@@ -46,7 +46,7 @@
+     Uint8 m[4][4];  /*! Matrix variables */
+ } SDLPango_Matrix;
+ 
+-const SDLPango_Matrix _MATRIX_WHITE_BACK
++static const SDLPango_Matrix _MATRIX_WHITE_BACK
+     = {255, 0, 0, 0,
+        255, 0, 0, 0,
+        255, 0, 0, 0,
+@@ -55,9 +55,9 @@
+ /*!
+     Specifies white back and black letter.
+ */
+-const SDLPango_Matrix *MATRIX_WHITE_BACK = &_MATRIX_WHITE_BACK;
++static const SDLPango_Matrix *MATRIX_WHITE_BACK = &_MATRIX_WHITE_BACK;
+ 
+-const SDLPango_Matrix _MATRIX_BLACK_BACK
++static const SDLPango_Matrix _MATRIX_BLACK_BACK
+     = {0, 255, 0, 0,
+        0, 255, 0, 0,
+        0, 255, 0, 0,
+@@ -65,9 +65,9 @@
+ /*!
+     Specifies black back and white letter.
+ */
+-const SDLPango_Matrix *MATRIX_BLACK_BACK = &_MATRIX_BLACK_BACK;
++static const SDLPango_Matrix *MATRIX_BLACK_BACK = &_MATRIX_BLACK_BACK;
+ 
+-const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_BLACK_LETTER
++static const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_BLACK_LETTER
+     = {0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+@@ -75,9 +75,9 @@
+ /*!
+     Specifies transparent back and black letter.
+ */
+-const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_BLACK_LETTER = &_MATRIX_TRANSPARENT_BACK_BLACK_LETTER;
++static const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_BLACK_LETTER = &_MATRIX_TRANSPARENT_BACK_BLACK_LETTER;
+ 
+-const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_WHITE_LETTER
++static const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_WHITE_LETTER
+     = {255, 255, 0, 0,
+        255, 255, 0, 0,
+        255, 255, 0, 0,
+@@ -85,9 +85,9 @@
+ /*!
+     Specifies transparent back and white letter.
+ */
+-const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_WHITE_LETTER = &_MATRIX_TRANSPARENT_BACK_WHITE_LETTER;
++static const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_WHITE_LETTER = &_MATRIX_TRANSPARENT_BACK_WHITE_LETTER;
+ 
+-const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER
++static const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER
+     = {255, 255, 0, 0,
+        255, 255, 0, 0,
+        255, 255, 0, 0,
+@@ -96,7 +96,7 @@
+     Specifies transparent back and transparent letter.
+     This is useful for KARAOKE like rendering.
+ */
+-const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER = &_MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER;
++static const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER = &_MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER;
+ 
+ /*!
+     Specifies direction of text. See Pango reference for detail
