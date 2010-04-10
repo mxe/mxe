@@ -8,14 +8,14 @@ $(PKG)_VERSION  := 1.14
 $(PKG)_CHECKSUM := e1a600e4fe359692e6f0e28b7e12a96681efbe52
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.gnu.org/software/gsl/
+$(PKG)_WEBSITE  := http://www.gnu.org/software/$(PKG)/
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.gnu.org/software/gsl' | \
-    grep -o "GSL-[0-9.]*" | \
-    $(SED) -e s/GSL-//g -e s/'.$'//g | \
+    wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=$(PKG).git;a=tags' | \
+    grep '<a class="list subject"' | \
+    $(SED) -n 's,.*<a[^>]*>[^0-9>]*\([0-9][^>]*\)<.*,\1,p' | \
     head -1
 endef
 
