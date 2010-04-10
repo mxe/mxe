@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
     grep -v alpha | \
     grep -v beta | \
     grep -v rc | \
-    grep -v '1\.2\.' | \
+    grep -v '^1\.2\.' | \
     head -1
 endef
 

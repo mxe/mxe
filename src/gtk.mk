@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/cgit/gtk+/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
-    grep -v '2\.18\.' | \
+    grep -v '^2\.18\.' | \
     head -1
 endef
 

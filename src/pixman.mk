@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     wget -q -O- 'http://cairographics.org/releases/?C=M;O=D' | \
     grep '<a href="pixman-' | \
     $(SED) -n 's,.*<a href="pixman-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    grep -v '0\.16\.' | \
+    grep -v '^0\.16\.' | \
     head -1
 endef
 
