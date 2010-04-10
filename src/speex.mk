@@ -15,7 +15,7 @@ $(PKG)_DEPS     := gcc
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.xiph.org/?p=speex.git;a=tags' | \
     grep '<a class="list name"' | \
-    $(SED) -n 's,.*<a[^>]*>Speex-\([0-9][^>]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*<a[^>]*>Speex-\([0-9][^<]*\)<.*,\1,p' | \
     head -1
 endef
 
