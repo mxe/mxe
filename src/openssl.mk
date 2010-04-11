@@ -4,8 +4,8 @@
 # openssl
 PKG             := openssl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.8m
-$(PKG)_CHECKSUM := 2511c709a47f34d5fa6cd1a1c9cb1699bdffa912
+$(PKG)_VERSION  := 1.0.0
+$(PKG)_CHECKSUM := 3f800ea9fa3da1c0f576d689be7dca3d55a4cb62
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.openssl.org/
@@ -35,6 +35,7 @@ define $(PKG)_BUILD
         mingw \
         zlib \
         no-shared \
+        no-capieng \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' install -j 1 \
         CC='$(TARGET)-gcc' \
