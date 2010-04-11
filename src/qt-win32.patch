@@ -2,15 +2,24 @@ This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
 diff --git a/config.tests/unix/compile.test b/config.tests/unix/compile.test
-index 67a4636..824b54a 100755
+index 67a4636..fa54560 100755
 --- a/config.tests/unix/compile.test
 +++ b/config.tests/unix/compile.test
+@@ -66,7 +66,7 @@ cd "$OUTDIR/$TEST"
+ 
+ test -r Makefile && $MAKE distclean >/dev/null 2>&1
+ 
+-"$OUTDIR/bin/qmake" -nocache -spec "$QMKSPEC" "CONFIG+=$QMAKE_CONFIG" "LIBS*=$LFLAGS" "LIBS+=$MAC_ARCH_LFLAGS" "INCLUDEPATH*=$INCLUDEPATH" "QMAKE_CXXFLAGS*=$CXXFLAGS" "QMAKE_CXXFLAGS+=$MAC_ARCH_CXXFLAGS" "$SRCDIR/$TEST/$EXE.pro" -o "$OUTDIR/$TEST/Makefile"
++"$OUTDIR/bin/qmake" -nocache -spec "$QMKSPEC" "CONFIG+=$QMAKE_CONFIG" "CONFIG-=debug_and_release" "LIBS*=$LFLAGS" "LIBS+=$MAC_ARCH_LFLAGS" "INCLUDEPATH*=$INCLUDEPATH" "QMAKE_CXXFLAGS*=$CXXFLAGS" "QMAKE_CXXFLAGS+=$MAC_ARCH_CXXFLAGS" "$SRCDIR/$TEST/$EXE.pro" -o "$OUTDIR/$TEST/Makefile"
+ 
+ if [ "$VERBOSE" = "yes" ]; then
+     $MAKE
 @@ -74,7 +74,7 @@ else
      $MAKE >/dev/null 2>&1
  fi
  
 -[ -x "$EXE" ] && SUCCESS=yes
-+[ -x "$EXE" ] || [ -x "release/${EXE}.exe" ] && SUCCESS=yes
++[ -x "$EXE" ] || [ -x "${EXE}.exe" ] && SUCCESS=yes
  
  # done
  if [ "$SUCCESS" != "yes" ]; then
@@ -175,7 +184,7 @@ index 432bd8d..94faf15 100644
 +win32-g++:LIBS += -lopengl32
 +else:LIBS += -lGL -lGLU
 diff --git a/configure b/configure
-index ed5891f..02bacd6 100755
+index ed5891f..a070d78 100755
 --- a/configure
 +++ b/configure
 @@ -178,6 +178,7 @@ UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
@@ -251,6 +260,15 @@ index ed5891f..02bacd6 100755
                  fi
                  [ -z "$QT_CFLAGS_PSQL" ] || QT_CFLAGS_PSQL="-I$QT_CFLAGS_PSQL"
                  [ -z "$QT_LFLAGS_PSQL" ] || QT_LFLAGS_PSQL="-L$QT_LFLAGS_PSQL"
+@@ -4707,7 +4729,7 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+         ;;
+         odbc)
+             if [ "$CFG_SQL_odbc" != "no" ]; then
+-                if [ "$PLATFORM_MAC" != "yes" ] && "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/odbc "ODBC" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++                if [ "$PLATFORM_MAC" != "yes" ] || [ "$XPLATFORM" = "win32-g++" ] && "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/odbc "ODBC" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+                     if [ "$CFG_SQL_odbc" = "auto" ]; then
+                         CFG_SQL_odbc=plugin
+                     fi
 @@ -5002,7 +5024,10 @@ if [ "$PLATFORM_X11" = "yes" -o "$PLATFORM_QWS" = "yes" ]; then
      fi
  
@@ -324,7 +342,7 @@ index ed5891f..02bacd6 100755
          *examples/activeqt/*) continue ;;
          */qmake/qmake.pro) continue ;;
 diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
-index b282f69..fb65805 100644
+index b282f69..b537bc7 100644
 --- a/mkspecs/win32-g++/qmake.conf
 +++ b/mkspecs/win32-g++/qmake.conf
 @@ -3,23 +3,31 @@
@@ -401,8 +419,9 @@ index b282f69..fb65805 100644
 -	QMAKE_COPY_DIR		= xcopy /s /q /y /i
 +	QMAKE_COPY_DIR		= cp -r
  	QMAKE_MOVE		= mv
- 	QMAKE_DEL_FILE		= rm
+-	QMAKE_DEL_FILE		= rm
 -	QMAKE_MKDIR		= mkdir
++	QMAKE_DEL_FILE		= rm -f
 +	QMAKE_MKDIR		= mkdir -p
  	QMAKE_DEL_DIR		= rmdir
 +	QMAKE_SYMBOLIC_LINK	= ln -s
