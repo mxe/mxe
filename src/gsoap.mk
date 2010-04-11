@@ -4,10 +4,10 @@
 # gSOAP
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.7.15
-$(PKG)_CHECKSUM := 9c93d71103ec70074fa8db43d0fe1d3a1fff8d55
+$(PKG)_VERSION  := 2.7.16
+$(PKG)_CHECKSUM := 677c75e1c952634564c98d541906c1d14c5b67b3
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
-$(PKG)_FILE     := gsoap_$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_VERSION) stable/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc openssl
