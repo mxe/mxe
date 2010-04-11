@@ -1,0 +1,92 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -urN a/bootstrap b/bootstrap
+--- a/bootstrap	2010-04-11 15:55:51.526807677 +0200
++++ b/bootstrap	2010-04-11 16:02:47.027050352 +0200
+@@ -1,4 +1,3 @@
+-#! /bin/bash
+ #! /usr/bin/env bash
+ #
+ # Bootstrap file for 'autotools' build
+diff -urN a/src/parameterizedHeaderField.cpp b/src/parameterizedHeaderField.cpp
+--- a/src/parameterizedHeaderField.cpp	2010-04-11 15:55:51.482792934 +0200
++++ b/src/parameterizedHeaderField.cpp	2010-04-11 16:02:47.026046027 +0200
+@@ -85,12 +85,32 @@
+ 	const string::value_type* const pstart = buffer.data() + position;
+ 	const string::value_type* p = pstart;
+ 
+-	const string::size_type start = position;
++	// Skip non-significant whitespaces
++	string::size_type valueStart = position;
+ 
+-	while (p < pend && *p != ';') ++p;
++	while (p < pend && parserHelpers::isSpace(*p))
++	{
++		++p;
++		++valueStart;
++	}
+ 
+-	getValue()->parse(buffer, start, position + (p - pstart));
++	// Advance up to ';', if any
++	string::size_type valueLength = 0;
+ 
++	while (p < pend && *p != ';')  // FIXME: support ";" inside quoted or RFC-2047-encoded text
++	{
++		++p;
++		++valueLength;
++	}
++
++	// Trim whitespaces at the end of the value
++	while (valueLength > 0 && parserHelpers::isSpace(buffer[valueStart + valueLength - 1]))
++		--valueLength;
++
++	// Parse value
++	getValue()->parse(buffer, valueStart, valueStart + valueLength);
++
++	// Reset parameters
+ 	removeAllParameters();
+ 
+ 	// If there is one or more parameters following...
+diff -urN a/tests/parser/parameterTest.cpp b/tests/parser/parameterTest.cpp
+--- a/tests/parser/parameterTest.cpp	2010-04-11 15:55:51.494792999 +0200
++++ b/tests/parser/parameterTest.cpp	2010-04-11 16:02:47.026046027 +0200
+@@ -36,6 +36,7 @@
+ 		VMIME_TEST(testGenerate)
+ 		VMIME_TEST(testGenerateRFC2231)
+ 		VMIME_TEST(testNonStandardEncodedParam)
++		VMIME_TEST(testParseNonSignificantWS)
+ 	VMIME_TEST_LIST_END
+ 
+ 
+@@ -53,6 +54,7 @@
+ 	};
+ 
+ 
++#define FIELD_VALUE(f) (f.getValue()->generate())
+ #define PARAM_VALUE(p, n) (p.getParameterAt(n)->getValue().generate())
+ #define PARAM_NAME(p, n) (p.getParameterAt(n)->getName())
+ #define PARAM_CHARSET(p, n) \
+@@ -278,5 +280,22 @@
+ 		VASSERT_EQ("2.3", "Logo VMime.png", PARAM_VALUE(p2, 0));
+ 	}
+ 
++	// Parse parameters with non-significant whitespaces
++	void testParseNonSignificantWS()
++	{
++		parameterizedHeaderField p1;
++		p1.parse(" \t X   \r\n");
++
++		VASSERT_EQ("1.1", "X", FIELD_VALUE(p1));
++
++		parameterizedHeaderField p2;
++		p2.parse(" X  ; param1 =  value1 \r\n");
++
++		VASSERT_EQ("2.1", 1, p2.getParameterCount());
++		VASSERT_EQ("2.2", "X", FIELD_VALUE(p2));
++		VASSERT_EQ("2.3", "param1", PARAM_NAME(p2, 0));
++		VASSERT_EQ("2.4", "value1", PARAM_VALUE(p2, 0));
++	}
++
+ VMIME_TEST_SUITE_END
+ 
