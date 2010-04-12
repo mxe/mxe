@@ -20,6 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    touch '$(1)/configure'
+    touch '$(1)/guile-readline/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
