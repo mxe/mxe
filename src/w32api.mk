@@ -19,10 +19,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # fix incompatibilities with gettext
-    $(SED) -i 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    '$(1)/include/winnt.h'
-    $(SED) -i 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    '$(1)/include/winnt.h'
-    $(SED) -i 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' '$(1)/include/winnt.h'
     # fix incompatibilities with jpeg
     $(SED) -i 's,typedef unsigned char boolean;,,'           '$(1)/include/rpcndr.h'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)'
