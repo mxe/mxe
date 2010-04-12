@@ -1,0 +1,1297 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch contains some DirectX additions for MinGW's w32api
+which were provided by the Qt project. It was generated via
+the following commands:
+
+#---------------------------------------------------------------------#
+wget -c 'http://kent.dl.sourceforge.net/project/mingw/MinGW API for MS-Windows/w32api-3.13/w32api-3.13-mingw32-dev.tar.gz'
+wget -c 'ftp://ftp.qt.nokia.com/misc/MinGW-gcc440_1.zip'
+mkdir a
+(cd a; tar -xf ../w32api-3.13-mingw32-dev.tar.gz include)
+cp -r a b
+unzip -j MinGW-gcc440_1.zip 'mingw/_patches/include.zip'
+unzip -aa -p include.zip '*.patch' | patch -d b/include -p1
+(cd b/include; unzip -aa ../../include.zip '*.h')
+diff -ruN a b > w32api-directx-additions-of-qt.patch
+rm -rf a b include.zip
+rm -f w32api-3.13-mingw32-dev.tar.gz MinGW-gcc440_1.zip
+#---------------------------------------------------------------------#
+
+
+diff -ruN a/include/amvideo.h b/include/amvideo.h
+--- a/include/amvideo.h	2008-12-06 03:31:53.000000000 +0100
++++ b/include/amvideo.h	2010-04-12 17:12:52.000000000 +0200
+@@ -52,10 +52,10 @@
+ 	BITMAPINFOHEADER bmiHeader;
+ } VIDEOINFOHEADER;
+ typedef struct tagVIDEOINFO {
+-	RECT rcSource,
+-	RECT rcTarget,
+-	DWORD dwBitRate,
+-	DWORD dwBitErrorRate,
++	RECT rcSource;
++	RECT rcTarget;
++	DWORD dwBitRate;
++	DWORD dwBitErrorRate;
+ 	REFERENCE_TIME AvgTimePerFrame;
+ 	BITMAPINFOHEADER bmiHeader;
+ 	union {
+diff -ruN a/include/bdatypes.h b/include/bdatypes.h
+--- a/include/bdatypes.h	2008-12-06 03:31:53.000000000 +0100
++++ b/include/bdatypes.h	2010-04-12 17:12:52.000000000 +0200
+@@ -17,9 +17,9 @@
+ } MEDIA_SAMPLE_CONTENT;
+ /*--- DirectShow Reference - DirectShow Structures */
+ typedef struct {
+-	DWORD dwOffset
+-	DWORD dwPacketLength
+-	DWORD dwStride
++	DWORD dwOffset;
++	DWORD dwPacketLength;
++	DWORD dwStride;
+ } MPEG2_TRANSPORT_STRIDE;
+ typedef struct {
+ 	ULONG ulPID;
+diff -ruN a/include/control.h b/include/control.h
+--- a/include/control.h	2008-12-06 03:31:54.000000000 +0100
++++ b/include/control.h	2010-04-12 17:12:52.000000000 +0200
+@@ -11,7 +11,63 @@
+ /*--- DirectShow Reference - DirectShow Data Types */
+ typedef LONG_PTR OAEVENT;
+ typedef LONG_PTR OAHWND;
++typedef LONG OAFilterState;
+ 
++DEFINE_GUID(IID_IBasicAudio,0x56a868b3,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xaf,0x0b,0xa7,0x70);
++DEFINE_GUID(IID_IMediaControl,0x56a868b1,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xaf,0x0b,0xa7,0x70);
++DEFINE_GUID(IID_IMediaEvent,0x56a868b6,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xaf,0x0b,0xa7,0x70);
++DEFINE_GUID(IID_IMediaPosition,0x56a868b2,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xaf,0x0b,0xa7,0x70);
++
++#define INTERFACE IMediaControl
++DECLARE_INTERFACE_(IMediaControl, IDispatch)
++{
++    STDMETHOD(Run)(THIS) PURE;
++    STDMETHOD(Pause)(THIS) PURE;
++    STDMETHOD(Stop)(THIS) PURE;
++    STDMETHOD(GetState)(THIS_ LONG, OAFilterState *) PURE;
++    STDMETHOD(RenderFile)(THIS_ BSTR) PURE;
++    STDMETHOD(AddSourceFilter)(THIS_ BSTR, IDispatch **) PURE;
++    STDMETHOD(get_FilterCollection)(THIS_ IDispatch **) PURE;
++    STDMETHOD(get_RegFilterCollection)(IDispatch **) PURE;
++    STDMETHOD(StopWhenReady)(THIS) PURE;
++};
++#undef INTERFACE    
++#define INTERFACE IBasicAudio
++DECLARE_INTERFACE_(IBasicAudio, IDispatch)
++{
++    STDMETHOD(put_Volume)(THIS_ long) PURE;
++    STDMETHOD(get_Volume)(THIS_ long *) PURE;
++    STDMETHOD(put_Balance)(THIS_ long) PURE;
++    STDMETHOD(get_Balance)(THIS_ long *) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IMediaPosition
++DECLARE_INTERFACE_(IMediaPosition, IDispatch)
++{
++    STDMETHOD(get_Duration)(THIS_ REFTIME *) PURE;
++    STDMETHOD(put_CurrentPosition)(THIS_ REFTIME) PURE;
++    STDMETHOD(get_CurrentPosition)(THIS_ REFTIME *) PURE;
++    STDMETHOD(get_StopTime)(THIS_ REFTIME *) PURE;
++    STDMETHOD(put_StopTime)(THIS_ REFTIME) PURE;
++    STDMETHOD(get_PrerollTime)(THIS_ REFTIME *) PURE;
++    STDMETHOD(put_PrerollTime)(THIS_ REFTIME) PURE;
++    STDMETHOD(put_Rate)(THIS_ double) PURE;
++    STDMETHOD(get_Rate)(THIS_ double *) PURE;
++    STDMETHOD(CanSeekForward)(THIS_ LONG *) PURE;
++    STDMETHOD(CanSeekBackward)(THIS_ LONG *) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IMediaEvent
++DECLARE_INTERFACE_(IMediaEvent, IDispatch)
++{
++    STDMETHOD(GetEventHandle)(THIS_ OAEVENT *) PURE;
++    STDMETHOD(GetEvent)(THIS_ long *, LONG_PTR *, LONG_PTR *, long) PURE;
++    STDMETHOD(WaitForCompletion)(THIS_ long,long *) PURE;
++    STDMETHOD(CancelDefaultHandling)(THIS_ long) PURE;
++    STDMETHOD(RestoreDefaultHandling)(THIS_ long) PURE;
++    STDMETHOD(FreeEventParams)(THIS_ long, LONG_PTR, LONG_PTR) PURE;
++};
++#undef INTERFACE
+ #ifdef __cplusplus
+ }
+ #endif
+diff -ruN a/include/ddraw.h b/include/ddraw.h
+--- a/include/ddraw.h	1970-01-01 01:00:00.000000000 +0100
++++ b/include/ddraw.h	2009-03-09 15:37:42.000000000 +0100
+@@ -0,0 +1,344 @@
++#ifndef _DDRAW_H
++#define _DDRAW_H
++
++#if __GNUC__ >= 3
++#pragma GCC system_header
++#endif
++
++#include <objbase.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++/* interfaces */
++DECLARE_INTERFACE(IDirectDraw);
++DECLARE_INTERFACE(IDirectDrawClipper);
++DECLARE_INTERFACE(IDirectDrawPalette);
++DECLARE_INTERFACE(IDirectDrawSurface);
++typedef IDirectDraw* LPDIRECTDRAW;
++typedef IDirectDrawClipper* LPDIRECTDRAWCLIPPER;
++typedef IDirectDrawPalette* LPDIRECTDRAWPALETTE;
++typedef IDirectDrawSurface* LPDIRECTDRAWSURFACE;
++
++
++#define DD_ROP_SPACE (256/32)
++
++/* struct */
++typedef struct {
++    DWORD dwColorSpaceLowValue;
++    DWORD dwColorSpaceHighValue;
++} DDCOLORKEY, *LPDDCOLORKEY;
++
++typedef struct {
++    DWORD dwSize;
++    DWORD dwDDFX;
++    DWORD dwROP;
++    DWORD dwDDROP;
++    DWORD dwRotationAngle;
++    DWORD dwZBufferOpCode;
++    DWORD dwZBufferLow;
++    DWORD dwZBufferHigh;
++    DWORD dwZBufferBaseDest;
++    DWORD dwZDestConstBitDepth;
++    union {
++        DWORD dwZDestConst;
++        LPDIRECTDRAWSURFACE lpDDSZBufferDest;
++    };
++    DWORD dwZSrcConstBitDepth;
++    union {
++        DWORD dwZSrcConst;
++        LPDIRECTDRAWSURFACE lpDDSZBufferSrc;
++    };
++    DWORD dwAlphaEdgeBlendBitDepth;
++    DWORD dwAlphaEdgeBlend;
++    DWORD dwReserved;
++    DWORD dwAlphaDestConstBitDepth;
++    union {
++        DWORD dwAlphaDestConst;
++        LPDIRECTDRAWSURFACE lpDDSAlphaDest;
++    };
++    DWORD dwAlphaSrcConstBitDepth;
++    union {
++        DWORD dwAlphaSrcConst;
++        LPDIRECTDRAWSURFACE lpDDSAlphaSrc;
++    };
++    union {
++        DWORD dwFillColor;
++        DWORD dwFillDepth;
++        DWORD dwFillPixel;
++        LPDIRECTDRAWSURFACE lpDDSPattern;
++    };
++    DDCOLORKEY ddckDestColorkey;
++    DDCOLORKEY ddckSrcColorkey;
++} DDBLTFX, *LPDDBLTFX;
++
++typedef struct {
++    LPRECT lprDest;
++    LPDIRECTDRAWSURFACE lpDDSSrc;
++    LPRECT lprSrc;
++    DWORD dwFlags;
++    LPDDBLTFX lpDDBltFx;
++} DDBLTBATCH, *LPDDBLTBATCH;
++
++typedef struct {
++    DWORD dwCaps;
++} DDSCAPS, *LPDDSCAPS;
++
++typedef struct
++{
++    DWORD dwCaps;
++    DWORD dwCaps2;
++    DWORD dwCaps3;
++    union {
++        DWORD dwCaps4;
++        DWORD dwVolumeDepth;
++    };
++} DDSCAPS2;
++
++/*this is the DX7 version (we don't support any previous version)*/
++typedef struct {
++    DWORD dwSize;
++    DWORD dwCaps;
++    DWORD dwCaps2;
++    DWORD dwCKeyCaps;
++    DWORD dwFXCaps;
++    DWORD dwFXAlphaCaps;
++    DWORD dwPalCaps;
++    DWORD dwSVCaps;
++    DWORD dwAlphaBltConstBitDepths;
++    DWORD dwAlphaBltPixelBitDepths;
++    DWORD dwAlphaBltSurfaceBitDepths;
++    DWORD dwAlphaOverlayConstBitDepths;
++    DWORD dwAlphaOverlayPixelBitDepths;
++    DWORD dwAlphaOverlaySurfaceBitDepths;
++    DWORD dwZBufferBitDepths;
++    DWORD dwVidMemTotal;
++    DWORD dwVidMemFree;
++    DWORD dwMaxVisibleOverlays;
++    DWORD dwCurrVisibleOverlays;
++    DWORD dwNumFourCCCodes;
++    DWORD dwAlignBoundarySrc;
++    DWORD dwAlignSizeSrc;
++    DWORD dwAlignBoundaryDest;
++    DWORD dwAlignSizeDest;
++    DWORD dwAlignStrideAlign;
++    DWORD dwRops[DD_ROP_SPACE];
++    DDSCAPS ddsOldCaps;
++    DWORD dwMinOverlayStretch;
++    DWORD dwMaxOverlayStretch;
++    DWORD dwMinLiveVideoStretch;
++    DWORD dwMaxLiveVideoStretch;
++    DWORD dwMinHwCodecStretch;
++    DWORD dwMaxHwCodecStretch;
++    DWORD dwReserved1;
++    DWORD dwReserved2;
++    DWORD dwReserved3;
++    DWORD dwSVBCaps;
++    DWORD dwSVBCKeyCaps;
++    DWORD dwSVBFXCaps;
++    DWORD dwSVBRops[DD_ROP_SPACE];
++    DWORD dwVSBCaps;
++    DWORD dwVSBCKeyCaps;
++    DWORD dwVSBFXCaps;
++    DWORD dwVSBRops[DD_ROP_SPACE];
++    DWORD dwSSBCaps;
++    DWORD dwSSBCKeyCaps;
++    DWORD dwSSBFXCaps;
++    DWORD dwSSBRops[DD_ROP_SPACE];
++    DWORD dwMaxVideoPorts;
++    DWORD dwCurrVideoPorts;
++    DWORD dwSVBCaps2;
++    DWORD dwNLVBCaps;
++    DWORD dwNLVBCaps2;
++    DWORD dwNLVBCKeyCaps;
++    DWORD dwNLVBFXCaps;
++    DWORD dwNLVBRops[DD_ROP_SPACE];
++    DDSCAPS2 ddsCaps;
++} DDCAPS, *LPDDCAPS;
++
++typedef struct {
++    DWORD  dwSize;
++    DWORD  dwFlags;
++    DWORD  dwFourCC;
++    union {
++        DWORD  dwRGBBitCount;
++        DWORD  dwYUVBitCount;
++        DWORD  dwZBufferBitDepth;
++        DWORD  dwAlphaBitDepth;
++        DWORD  dwLuminanceBitCount;
++        DWORD  dwBumpBitCount;
++        DWORD  dwPrivateFormatBitCount;
++    };
++    union {
++        DWORD  dwRBitMask;
++        DWORD  dwYBitMask;
++        DWORD  dwStencilBitDepth;
++        DWORD  dwLuminanceBitMask;
++        DWORD  dwBumpDuBitMask;
++        DWORD  dwOperations;
++    };
++    union {
++        DWORD  dwGBitMask;
++        DWORD  dwUBitMask;
++        DWORD  dwZBitMask;
++        DWORD  dwBumpDvBitMask;
++        struct {
++            WORD wFlipMSTypes;
++            WORD wBltMSTypes;
++        } MultiSampleCaps;
++    };
++    union {
++        DWORD  dwBBitMask;
++        DWORD  dwVBitMask;
++        DWORD  dwStencilBitMask;
++        DWORD  dwBumpLuminanceBitMask;
++    };
++    union {
++        DWORD  dwRGBAlphaBitMask;
++        DWORD  dwYUVAlphaBitMask;
++        DWORD  dwLuminanceAlphaBitMask;
++        DWORD  dwRGBZBitMask;
++        DWORD  dwYUVZBitMask;
++    };
++} DDPIXELFORMAT, * LPDDPIXELFORMAT;
++
++typedef struct {
++    DWORD dwSize;
++    DWORD dwFlags;
++    DWORD dwHeight;
++    DWORD dwWidth;
++    union {
++        LONG lPitch;
++        DWORD dwLinearSize;
++    };
++    DWORD dwBackBufferCount;
++    union {
++        DWORD dwMipMapCount;
++        DWORD dwZBufferBitDepth;
++        DWORD dwRefreshRate;
++    };
++    DWORD dwAlphaBitDepth;
++    DWORD dwReserved;
++    LPVOID lpSurface;
++    DDCOLORKEY ddckCKDestOverlay;
++    DDCOLORKEY ddckCKDestBlt;
++    DDCOLORKEY ddckCKSrcOverlay;
++    DDCOLORKEY ddckCKSrcBlt;
++    DDPIXELFORMAT ddpfPixelFormat;
++    DDSCAPS             ddsCaps;
++} DDSURFACEDESC, *LPDDSURFACEDESC;
++
++typedef struct {
++    DWORD dwSize;
++    DWORD dwAlphaEdgeBlendBitDepth;
++    DWORD dwAlphaEdgeBlend;
++    DWORD dwReserved;
++    DWORD dwAlphaDestConstBitDepth;
++    union {
++        DWORD dwAlphaDestConst;
++        LPDIRECTDRAWSURFACE lpDDSAlphaDest;
++    };
++    DWORD dwAlphaSrcConstBitDepth;
++    union {
++        DWORD dwAlphaSrcConst;
++        LPDIRECTDRAWSURFACE lpDDSAlphaSrc;
++    };
++    DDCOLORKEY dckDestColorkey;
++    DDCOLORKEY dckSrcColorkey;
++    DWORD dwDDFX;
++    DWORD dwFlags;
++} DDOVERLAYFX, *LPDDOVERLAYFX;
++
++typedef HRESULT (WINAPI * LPDDENUMMODESCALLBACK)(LPDDSURFACEDESC, LPVOID);
++typedef HRESULT (WINAPI * LPDDENUMSURFACESCALLBACK)(LPDIRECTDRAWSURFACE, LPDDSURFACEDESC, LPVOID);
++
++#define INTERFACE IDirectDrawPalette
++DECLARE_INTERFACE_(IDirectDrawPalette, IUnknown)
++{
++    STDMETHOD(GetCaps)(THIS_ LPDWORD) PURE;
++    STDMETHOD(GetEntries)(THIS_ DWORD,DWORD,DWORD,LPPALETTEENTRY) PURE;
++    STDMETHOD(Initialize)(THIS_ LPDIRECTDRAW, DWORD, LPPALETTEENTRY) PURE;
++    STDMETHOD(SetEntries)(THIS_ DWORD,DWORD,DWORD,LPPALETTEENTRY) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IDirectDrawClipper
++DECLARE_INTERFACE_(IDirectDrawClipper, IUnknown)
++{
++    STDMETHOD(GetClipList)(THIS_ LPRECT, LPRGNDATA, LPDWORD) PURE;
++    STDMETHOD(GetHWnd)(THIS_ HWND *) PURE;
++    STDMETHOD(Initialize)(THIS_ LPDIRECTDRAW, DWORD) PURE;
++    STDMETHOD(IsClipListChanged)(THIS_ BOOL *) PURE;
++    STDMETHOD(SetClipList)(THIS_ LPRGNDATA,DWORD) PURE;
++    STDMETHOD(SetHWnd)(THIS_ DWORD, HWND ) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IDirectDraw
++DECLARE_INTERFACE_(IDirectDraw, IUnknown)
++{
++    STDMETHOD(Compact)(THIS) PURE;
++    STDMETHOD(CreateClipper)(THIS_ DWORD, LPDIRECTDRAWCLIPPER *, IUnknown * ) PURE;
++    STDMETHOD(CreatePalette)(THIS_ DWORD, LPPALETTEENTRY, LPDIRECTDRAWPALETTE *, IUnknown * ) PURE;
++    STDMETHOD(CreateSurface)(THIS_  LPDDSURFACEDESC, LPDIRECTDRAWSURFACE *, IUnknown *) PURE;
++    STDMETHOD(DuplicateSurface)( THIS_ LPDIRECTDRAWSURFACE, LPDIRECTDRAWSURFACE * ) PURE;
++    STDMETHOD(EnumDisplayModes)( THIS_ DWORD, LPDDSURFACEDESC, LPVOID, LPDDENUMMODESCALLBACK ) PURE;
++    STDMETHOD(EnumSurfaces)(THIS_ DWORD, LPDDSURFACEDESC, LPVOID,LPDDENUMSURFACESCALLBACK ) PURE;
++    STDMETHOD(FlipToGDISurface)(THIS) PURE;
++    STDMETHOD(GetCaps)( THIS_ LPDDCAPS, LPDDCAPS) PURE;
++    STDMETHOD(GetDisplayMode)( THIS_ LPDDSURFACEDESC) PURE;
++    STDMETHOD(GetFourCCCodes)(THIS_  LPDWORD, LPDWORD ) PURE;
++    STDMETHOD(GetGDISurface)(THIS_ LPDIRECTDRAWSURFACE *) PURE;
++    STDMETHOD(GetMonitorFrequency)(THIS_ LPDWORD) PURE;
++    STDMETHOD(GetScanLine)(THIS_ LPDWORD) PURE;
++    STDMETHOD(GetVerticalBlankStatus)(THIS_ LPBOOL ) PURE;
++    STDMETHOD(Initialize)(THIS_ GUID *) PURE;
++    STDMETHOD(RestoreDisplayMode)(THIS) PURE;
++    STDMETHOD(SetCooperativeLevel)(THIS_ HWND, DWORD) PURE;
++    STDMETHOD(SetDisplayMode)(THIS_ DWORD, DWORD,DWORD) PURE;
++    STDMETHOD(WaitForVerticalBlank)(THIS_ DWORD, HANDLE ) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IDirectDrawSurface
++DECLARE_INTERFACE_(IDirectDrawSurface, IUnknown)
++{
++    STDMETHOD(AddAttachedSurface)(THIS_ LPDIRECTDRAWSURFACE) PURE;
++    STDMETHOD(AddOverlayDirtyRect)(THIS_ LPRECT) PURE;
++    STDMETHOD(Blt)(THIS_ LPRECT,LPDIRECTDRAWSURFACE, LPRECT,DWORD, LPDDBLTFX) PURE;
++    STDMETHOD(BltBatch)(THIS_ LPDDBLTBATCH, DWORD, DWORD ) PURE;
++    STDMETHOD(BltFast)(THIS_ DWORD,DWORD,LPDIRECTDRAWSURFACE, LPRECT,DWORD) PURE;
++    STDMETHOD(DeleteAttachedSurface)(THIS_ DWORD,LPDIRECTDRAWSURFACE) PURE;
++    STDMETHOD(EnumAttachedSurfaces)(THIS_ LPVOID,LPDDENUMSURFACESCALLBACK) PURE;
++    STDMETHOD(EnumOverlayZOrders)(THIS_ DWORD,LPVOID,LPDDENUMSURFACESCALLBACK) PURE;
++    STDMETHOD(Flip)(THIS_ LPDIRECTDRAWSURFACE, DWORD) PURE;
++    STDMETHOD(GetAttachedSurface)(THIS_ LPDDSCAPS, LPDIRECTDRAWSURFACE *) PURE;
++    STDMETHOD(GetBltStatus)(THIS_ DWORD) PURE;
++    STDMETHOD(GetCaps)(THIS_ LPDDSCAPS) PURE;
++    STDMETHOD(GetClipper)(THIS_ LPDIRECTDRAWCLIPPER *) PURE;
++    STDMETHOD(GetColorKey)(THIS_ DWORD, LPDDCOLORKEY) PURE;
++    STDMETHOD(GetDC)(THIS_ HDC *) PURE;
++    STDMETHOD(GetFlipStatus)(THIS_ DWORD) PURE;
++    STDMETHOD(GetOverlayPosition)(THIS_ LPLONG, LPLONG ) PURE;
++    STDMETHOD(GetPalette)(THIS_ LPDIRECTDRAWPALETTE *) PURE;
++    STDMETHOD(GetPixelFormat)(THIS_ LPDDPIXELFORMAT) PURE;
++    STDMETHOD(GetSurfaceDesc)(THIS_ LPDDSURFACEDESC) PURE;
++    STDMETHOD(Initialize)(THIS_ LPDIRECTDRAW, LPDDSURFACEDESC) PURE;
++    STDMETHOD(IsLost)(THIS) PURE;
++    STDMETHOD(Lock)(THIS_ LPRECT,LPDDSURFACEDESC,DWORD,HANDLE) PURE;
++    STDMETHOD(ReleaseDC)(THIS_ HDC) PURE;
++    STDMETHOD(Restore)(THIS) PURE;
++    STDMETHOD(SetClipper)(THIS_ LPDIRECTDRAWCLIPPER) PURE;
++    STDMETHOD(SetColorKey)(THIS_ DWORD, LPDDCOLORKEY) PURE;
++    STDMETHOD(SetOverlayPosition)(THIS_ LONG, LONG ) PURE;
++    STDMETHOD(SetPalette)(THIS_ LPDIRECTDRAWPALETTE) PURE;
++    STDMETHOD(Unlock)(THIS_ LPVOID) PURE;
++    STDMETHOD(UpdateOverlay)(THIS_ LPRECT, LPDIRECTDRAWSURFACE,LPRECT,DWORD, LPDDOVERLAYFX) PURE;
++    STDMETHOD(UpdateOverlayDisplay)(THIS_ DWORD) PURE;
++    STDMETHOD(UpdateOverlayZOrder)(THIS_ DWORD, LPDIRECTDRAWSURFACE) PURE;
++};
++#undef INTERFACE
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif //_DDRAW_H
+\ Kein Zeilenumbruch am Dateiende.
+diff -ruN a/include/dmodshow.h b/include/dmodshow.h
+--- a/include/dmodshow.h	1970-01-01 01:00:00.000000000 +0100
++++ b/include/dmodshow.h	2009-03-09 16:54:08.000000000 +0100
+@@ -0,0 +1,23 @@
++#ifndef _MODSHOW_H
++#define _MODSHOW_H
++#if __GNUC__ >= 3
++#pragma GCC system_header
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++DEFINE_GUID(CLSID_DMOWrapperFilter, 0x94297043,0xbd82,0x4dfd,0xb0,0xde,0x81,0x77,0x73,0x9c,0x6d,0x20);
++EXTERN_C const IID IID_IDMOWrapperFilter;
++
++#define INTERFACE IDMOWrapperFilter
++DECLARE_INTERFACE_(IDMOWrapperFilter, IUnknown)
++{
++    STDMETHOD(Init)(THIS_ REFCLSID, REFCLSID) PURE;
++};
++#undef INTERFACE
++#ifdef __cplusplus
++}
++#endif
++#endif
+diff -ruN a/include/dmo.h b/include/dmo.h
+--- a/include/dmo.h	1970-01-01 01:00:00.000000000 +0100
++++ b/include/dmo.h	2009-03-09 16:49:50.000000000 +0100
+@@ -0,0 +1,46 @@
++#ifndef _DMO_H
++#define _DMO_H
++
++#if __GNUC__ >= 3
++#pragma GCC system_header
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++
++typedef struct _DMO_PARTIAL_MEDIATYPE {
++   GUID type;
++   GUID subtype;
++} DMO_PARTIAL_MEDIATYPE;
++
++typedef enum {
++   DMO_ENUMF_INCLUDE_KEYED = 0x00000001
++} DMO_ENUM_FLAGS;
++
++DEFINE_GUID(DMOCATEGORY_AUDIO_EFFECT, 0xf3602b3f,0x0592,0x48df,0xa4,0xcd,0x67,0x47,0x21,0xe7,0xeb,0xeb);
++DECLARE_INTERFACE(IEnumDMO);
++
++typedef AM_MEDIA_TYPE DMO_MEDIA_TYPE;
++STDAPI DMOEnum(REFGUID, DWORD, DWORD, const DMO_PARTIAL_MEDIATYPE *, DWORD, const DMO_PARTIAL_MEDIATYPE *,
++               IEnumDMO **);
++STDAPI DMOGetName(REFCLSID, WCHAR [80]);
++
++
++#define INTERFACE IEnumDMO
++DECLARE_INTERFACE_(IEnumDMO, IUnknown)
++{
++    STDMETHOD(Next)(THIS_ DWORD, CLSID *, WCHAR **, DWORD *) PURE;
++    STDMETHOD(Skip)(THIS_ DWORD) PURE;
++    STDMETHOD(Reset)(THIS) PURE;
++    STDMETHOD(Clone)(THIS_ IEnumDMO **) PURE;
++};
++#undef INTERFACE
++
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif //_DMO_H
+\ Kein Zeilenumbruch am Dateiende.
+diff -ruN a/include/dshow.h b/include/dshow.h
+--- a/include/dshow.h	2008-12-06 03:31:56.000000000 +0100
++++ b/include/dshow.h	2010-04-12 17:12:52.000000000 +0200
+@@ -5,7 +5,10 @@
+ #endif
+ 
+ #include <strmif.h>
++#ifdef DSHOW_USE_AMAUDIO
+ #include <amaudio.h>
++#endif
++#include <control.h>
+ #include <amvideo.h>
+ #include <evcode.h>
+ #include <audevcod.h>
+@@ -50,10 +53,6 @@
+ 	AM_WST_STATE_Off = 0,
+ 	AM_WST_STATE_On
+ } AM_WST_STATE,*PAM_WST_STATE;
+-typedef enum _AM_WST_STYLE {
+-	AM_WST_STYLE_None = 0,
+-	AM_WST_STYLE_Invers
+-} AM_WST_STYLE,*PAM_WST_STYLE;
+ typedef enum {
+ 	AM_EXSEEK_CANSEEK= 1,
+ 	AM_EXSEEK_CANSCAN = 2,
+@@ -63,6 +62,10 @@
+ 	AM_EXSEEK_BUFFERING = 32,
+ 	AM_EXSEEK_SENDS_VIDEOFRAMEREADY = 64
+ } AMExtendedSeekingCapabilities;
++typedef enum _AM_WST_STYLE {
++	AM_WST_STYLE_None = 0,
++	AM_WST_STYLE_Invers
++} AM_WST_STYLE,*PAM_WST_STYLE;
+ /*--- DirectShow Reference - DirectShow Structures */
+ typedef struct _AM_WST_PAGE {
+ 	DWORD dwPageNr;
+diff -ruN a/include/medparam.h b/include/medparam.h
+--- a/include/medparam.h	1970-01-01 01:00:00.000000000 +0100
++++ b/include/medparam.h	2009-03-09 16:55:56.000000000 +0100
+@@ -0,0 +1,88 @@
++#ifndef _MEDPARAM_H
++#define _MEDPARAM_H
++#if __GNUC__ >= 3
++#pragma GCC system_header
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#define	MP_CAPS_CURVE_INVSQUARE	( MP_CURVE_INVSQUARE )
++
++/* typedefs */
++typedef DWORD MP_CAPS;
++typedef float MP_DATA;
++typedef DWORD MP_TIMEDATA;
++typedef DWORD MP_FLAGS;
++
++
++/* enum */
++typedef 
++enum _MP_CURVE_TYPE {
++    MP_CURVE_JUMP	= 0x1,
++	MP_CURVE_LINEAR	= 0x2,
++	MP_CURVE_SQUARE	= 0x4,
++	MP_CURVE_INVSQUARE	= 0x8,
++	MP_CURVE_SINE	= 0x10
++} 	MP_CURVE_TYPE;
++
++typedef 
++enum _MP_Type {
++    MPT_INT	= 0,
++	MPT_FLOAT	= ( MPT_INT + 1 ) ,
++	MPT_BOOL	= ( MPT_FLOAT + 1 ) ,
++	MPT_ENUM	= ( MPT_BOOL + 1 ) ,
++	MPT_MAX	= ( MPT_ENUM + 1 ) 
++} MP_TYPE;
++
++/* structs */
++
++typedef struct _MP_PARAMINFO {
++    MP_TYPE mpType;
++    MP_CAPS mopCaps;
++    MP_DATA mpdMinValue;
++    MP_DATA mpdMaxValue;
++    MP_DATA mpdNeutralValue;
++    WCHAR szUnitText[32];
++    WCHAR szLabel[32];
++} MP_PARAMINFO;
++
++typedef struct _MP_ENVELOPE_SEGMENT {
++    REFERENCE_TIME rtStart;
++    REFERENCE_TIME rtEnd;
++    MP_DATA valStart;
++    MP_DATA valEnd;
++    MP_CURVE_TYPE iCurve;
++    MP_FLAGS flags;
++} MP_ENVELOPE_SEGMENT;
++
++/* interfaces */
++EXTERN_C const IID IID_IMediaParamInfo;
++EXTERN_C const IID IID_IMediaParams;
++
++#define INTERFACE IMediaParamInfo
++DECLARE_INTERFACE_(IMediaParamInfo, IUnknown)
++{
++    STDMETHOD(GetParamCount)(THIS_ DWORD *) PURE;
++    STDMETHOD(GetParamInfo)(THIS_ DWORD, MP_PARAMINFO *) PURE;
++    STDMETHOD(GetParamText)(THIS_ DWORD, WCHAR **) PURE;
++    STDMETHOD(GetNumTimeFormats)(THIS_ DWORD *) PURE;
++    STDMETHOD(GetSupportedTimeFormat)(THIS_ DWORD, GUID *) PURE;
++    STDMETHOD(GetCurrentTimeFormat)(THIS_ GUID *, MP_TIMEDATA *) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IMediaParams
++DECLARE_INTERFACE_(IMediaParams, IUnknown)
++{
++    STDMETHOD(GetParam)(THIS_ DWORD, MP_DATA *) PURE;
++    STDMETHOD(SetParam)(THIS_ DWORD, MP_DATA) PURE;
++    STDMETHOD(AddEnvelope)(THIS_ DWORD, DWORD, MP_ENVELOPE_SEGMENT *) PURE;
++    STDMETHOD(FlushEnvelope)(THIS_ DWORD, REFERENCE_TIME, REFERENCE_TIME) PURE;
++    STDMETHOD(SetTimeFormat)(THIS_ GUID, MP_TIMEDATA) PURE;
++};
++#undef INTERFACE
++#ifdef __cplusplus
++}
++#endif
++#endif
+diff -ruN a/include/qnetwork.h b/include/qnetwork.h
+--- a/include/qnetwork.h	1970-01-01 01:00:00.000000000 +0100
++++ b/include/qnetwork.h	2009-03-09 16:15:46.000000000 +0100
+@@ -0,0 +1,49 @@
++#ifndef _QNETWORK_H
++#define _QNETWORK_H
++
++#if __GNUC__ >= 3
++#pragma GCC system_header
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++DEFINE_GUID(IID_IAMMediaContent,0xFA2AA8F4L,0x8B62,0x11D0,0xA5,0x20,0x00,0x00,0x00,0x00,0x00,0x00);
++DEFINE_GUID(IID_IAMNetworkStatus,0xFA2AA8F3L,0x8B62,0x11D0,0xA5,0x20,0x00,0x00,0x00,0x00,0x00,0x00);
++
++#define INTERFACE IAMMediaContent
++DECLARE_INTERFACE_(IAMMediaContent, IDispatch)
++{
++    STDMETHOD(get_AuthorName)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_Title)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_Rating)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_Description)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_Copyright)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_BaseURL)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_LogoURL)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_LogoIconURL)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_WatermarkURL)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_MoreInfoURL)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_MoreInfoBannerImage)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_MoreInfoBannerURL)(THIS_ BSTR*) PURE;
++    STDMETHOD(get_MoreInfoText)(THIS_ BSTR*) PURE;
++};
++#undef INTERFACE
++#define INTERFACE(IAMNetworkStatus)
++DECLARE_INTERFACE_(IAMNetworkStatus, IDispatch)
++{
++    STDMETHOD(get_ReceivedPackets)(THIS_ long*) PURE;
++    STDMETHOD(get_RecoveredPackets)(THIS_ long*) PURE;
++    STDMETHOD(get_LostPackets)(THIS_ long*) PURE;
++    STDMETHOD(get_ReceptionQuality)(THIS_ long*) PURE;
++    STDMETHOD(get_BufferingCount)(THIS_ long*) PURE;
++    STDMETHOD(get_IsBroadcast)(THIS_ VARIANT_BOOL*) PURE;
++    STDMETHOD(get_BufferingProgress)(THIS_ long*) PURE;
++};
++#undef INTERFACE
++#ifdef __cplusplus
++}
++#endif
++
++#endif //_QNETWORK_H
+\ Kein Zeilenumbruch am Dateiende.
+diff -ruN a/include/strmif.h b/include/strmif.h
+--- a/include/strmif.h	2008-12-06 03:32:10.000000000 +0100
++++ b/include/strmif.h	2010-04-12 17:12:52.000000000 +0200
+@@ -4,10 +4,79 @@
+ #pragma GCC system_header
+ #endif
+ 
++#include <ddraw.h>
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+ 
++#define MAX_FILTER_NAME  128
++#define AM_GBF_NOTASYNCPOINT 2
++
++/*--- DirectShow Reference - Forward declarations of Interfaces and typedefs */
++typedef DWORD_PTR HEVENT;
++typedef DWORD_PTR HSEMAPHORE;
++DECLARE_INTERFACE(IBaseFilter);
++DECLARE_INTERFACE(IPin);
++DECLARE_INTERFACE(IFilterGraph);
++DECLARE_INTERFACE(IEnumFilters);
++EXTERN_C const IID IID_IBaseFilter;
++EXTERN_C const IID IID_ICreateDevEnum;
++EXTERN_C const IID IID_IGraphBuilder;
++EXTERN_C const IID IID_IMediaSeeking;
++EXTERN_C const IID IID_IMediaEventSink;
++EXTERN_C const IID IID_IMemInputPin;
++EXTERN_C const IID IID_IEnumPins;
++EXTERN_C const IID IID_IMediaFilter;
++EXTERN_C const IID IID_IEnumMediaTypes;
++EXTERN_C const IID IID_IMemAllocator;
++EXTERN_C const IID IID_IPin;
++EXTERN_C const IID IID_IAsyncReader;
++
++/* class ids*/
++DEFINE_GUID(CLSID_AudioRender,
++0xe30629d1, 0x27e5, 0x11ce, 0x87, 0x5d, 0x0, 0x60, 0x8c, 0xb7, 0x80, 0x66);
++DEFINE_GUID(CLSID_SystemDeviceEnum,
++0x62BE5D10,0x60EB,0x11d0,0xBD,0x3B,0x00,0xA0,0xC9,0x11,0xCE,0x86);
++DEFINE_GUID(CLSID_AudioRendererCategory,
++0xe0f158e1, 0xcb04, 0x11d0, 0xbd, 0x4e, 0x0, 0xa0, 0xc9, 0x11, 0xce, 0x86);
++DEFINE_GUID(CLSID_FilterGraph,
++0xe436ebb3, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70);
++DEFINE_GUID(CLSID_InfTee,
++0xf8388a40, 0xd5bb, 0x11d0, 0xbe, 0x5a, 0x0, 0x80, 0xc7, 0x6, 0x56, 0x8e);
++DEFINE_GUID(CLSID_VideoMixingRenderer9,
++0x51b4abf3, 0x748f, 0x4e3b, 0xa2, 0x76, 0xc8, 0x28, 0x33, 0x0e, 0x92, 0x6a);
++DEFINE_GUID(CLSID_MemoryAllocator,
++0x1e651cc0, 0xb199, 0x11d0, 0x82, 0x12, 0x00, 0xc0, 0x4f, 0xc3, 0x2c, 0x45);
++
++/*other types*/
++DEFINE_GUID(MEDIATYPE_Audio,
++0x73647561, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
++DEFINE_GUID(MEDIATYPE_Video,
++0x73646976, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
++DEFINE_GUID(MEDIATYPE_Stream,
++0xe436eb83, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70);
++DEFINE_GUID(MEDIASUBTYPE_PCM,
++0x00000001, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71);
++DEFINE_GUID(MEDIASUBTYPE_WAVE,
++0xe436eb8b, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70);
++DEFINE_GUID(MEDIASUBTYPE_Avi,
++0xe436eb88, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70);
++DEFINE_GUID(MEDIASUBTYPE_RGB32,
++0xe436eb7e, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70);
++DEFINE_GUID(MEDIASUBTYPE_YV12,
++0x32315659, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
++DEFINE_GUID(MEDIASUBTYPE_YUY2,
++0x32595559, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
++DEFINE_GUID(FORMAT_WaveFormatEx,
++0x05589f81, 0xc356, 0x11ce, 0xbf, 0x01, 0x00, 0xaa, 0x00, 0x55, 0x59, 0x5a);
++DEFINE_GUID(FORMAT_VideoInfo,
++0x05589f80, 0xc356, 0x11ce, 0xbf, 0x01, 0x00, 0xaa, 0x00, 0x55, 0x59, 0x5a);
++DEFINE_GUID(FORMAT_VideoInfo2,
++0xf72a76A0, 0xeb0a, 0x11d0, 0xac, 0xe4, 0x00, 0x00, 0xc0, 0xcc, 0x16, 0xba);
++#define MEDIATYPE_NULL       GUID_NULL
++#define MEDIASUBTYPE_NULL    GUID_NULL
++
+ /*--- DirectShow Reference - DirectShow Enumerated Types - TVAudioMode Enumeration */
+ #define TVAUDIO_MODE_MASK 0x000000FF
+ #define TVAUDIO_PRESET_MASK 0x0000FF00
+@@ -24,6 +93,18 @@
+ 	MERIT_HW_COMPRESSOR = 0x100050
+ };
+ /*--- DirectShow Reference - DirectShow Enumerated Types */
++typedef 
++enum AM_SEEKING_SeekingFlags {
++    AM_SEEKING_NoPositioning	= 0,
++	AM_SEEKING_AbsolutePositioning	= 0x1,
++	AM_SEEKING_RelativePositioning	= 0x2,
++	AM_SEEKING_IncrementalPositioning	= 0x3,
++	AM_SEEKING_PositioningBitsMask	= 0x3,
++	AM_SEEKING_SeekToKeyFrame	= 0x4,
++	AM_SEEKING_ReturnTime	= 0x8,
++	AM_SEEKING_Segment	= 0x10,
++	AM_SEEKING_NoFlush	= 0x20
++} AM_SEEKING_SEEKING_FLAGS;
+ typedef enum _AM_AUDIO_RENDERER_STAT_PARAM {
+ 	AM_AUDREND_STAT_PARAM_BREAK_COUNT = 1,
+ 	AM_AUDREND_STAT_PARAM_SLAVE_MODE,
+@@ -452,7 +533,7 @@
+ 	Famine,
+ 	Flood
+ } QualityMessageType;
+-enum {
++typedef enum {
+ 	REG_PINFLAG_B_ZERO = 0x1,
+ 	REG_PINFLAG_B_RENDERER = 0x2,
+ 	REG_PINFLAG_B_MANY = 0x4,
+@@ -613,6 +694,10 @@
+ 	AMAP_DXVA_TARGET = 0x20
+ } VMRSurfaceAllocationFlags;
+ /*--- DirectShow Reference - DirectShow Structures */
++typedef struct _FilterInfo {
++    WCHAR achName[128];
++    IFilterGraph *pGraph;
++} FILTER_INFO;
+ typedef struct _AllocatorProperties {
+ 	long cBuffers;
+ 	long cbBuffer;
+@@ -731,10 +816,6 @@
+ #define CK_NOCOLORKEY 0x00000000
+ #define CK_INDEX 0x00000001
+ #define CK_RGB 0x00000002
+-typedef struct {
+-	DWORD dw1;
+-	DWORD dw2;
+-} DDCOLORKEY;
+ typedef struct tagDVD_AudioAttributes {
+ 	DVD_AUDIO_APPMODE AppMode;
+ 	DVD_AUDIO_FORMAT AudioFormat; 
+@@ -848,7 +929,7 @@
+ 	BOOL fIsSourceLetterboxed;
+ 	BOOL fIsFilmMode;
+ } DVD_VideoAttributes;
+-struct tagDVD_MenuAttributes {
++typedef struct tagDVD_MenuAttributes {
+ 	BOOL fCompatibleRegion[8];
+ 	DVD_VideoAttributes VideoAttributes;
+ 	BOOL fAudioPresent;
+@@ -1024,7 +1105,7 @@
+ } VMRFrequency;
+ typedef struct tagVMRGUID {
+ 	GUID *pGUID;
+-	GUID GUID;
++	GUID _GUID;
+ } VMRGUID;
+ typedef struct tagVMRMONITORINFO {
+ 	VMRGUID guid;
+@@ -1074,15 +1155,15 @@
+ 	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
+ 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+ 	STDMETHOD_(ULONG,Release)(THIS) PURE;
+-	STDMETHOD_(HRESULT,get_AvailableTVFormats)(THIS_ long*) PURE;
+-	STDMETHOD_(HRESULT,get_HorizontalLocked)(THIS_ long*) PURE;
+-	STDMETHOD_(HRESULT,get_NumberOfLines)(THIS_ long*) PURE;
+-	STDMETHOD_(HRESULT,get_OutputEnable)(THIS_ long*) PURE;
+-	STDMETHOD_(HRESULT,get_TVFormat)(THIS_ long*) PURE;
+-	STDMETHOD_(HRESULT,get_VCRHorizontalLocking)(THIS_ long*) PURE;
+-	STDMETHOD_(HRESULT,put_OutputEnable)(THIS_ long) PURE;
+-	STDMETHOD_(HRESULT,put_TVFormat)(THIS_ long) PURE;
+-	STDMETHOD_(HRESULT,put_VCRHorizontalLocking)(THIS_ long) PURE;
++	STDMETHOD(get_AvailableTVFormats)(THIS_ long*) PURE;
++	STDMETHOD(get_HorizontalLocked)(THIS_ long*) PURE;
++	STDMETHOD(get_NumberOfLines)(THIS_ long*) PURE;
++	STDMETHOD(get_OutputEnable)(THIS_ long*) PURE;
++	STDMETHOD(get_TVFormat)(THIS_ long*) PURE;
++	STDMETHOD(get_VCRHorizontalLocking)(THIS_ long*) PURE;
++	STDMETHOD(put_OutputEnable)(THIS_ long) PURE;
++	STDMETHOD(put_TVFormat)(THIS_ long) PURE;
++	STDMETHOD(put_VCRHorizontalLocking)(THIS_ long) PURE;
+ };
+ #undef INTERFACE
+ #define INTERFACE IAMAudioInputMixer
+@@ -1091,22 +1172,22 @@
+ 	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
+ 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+ 	STDMETHOD_(ULONG,Release)(THIS) PURE;
+-	STDMETHOD_(HRESULT,get_Bass)(THIS_ double*) PURE;
+-	STDMETHOD_(HRESULT,get_BassRange)(THIS_ double*) PURE;
+-	STDMETHOD_(HRESULT,get_Enable)(THIS_ BOOL*) PURE;
+-	STDMETHOD_(HRESULT,get_Loudness)(THIS_ BOOL*) PURE;
+-	STDMETHOD_(HRESULT,get_MixLevel)(THIS_ double*) PURE;
+-	STDMETHOD_(HRESULT,get_Mono)(THIS_ BOOL*) PURE;
+-	STDMETHOD_(HRESULT,get_Pan)(THIS_ double*) PURE;
+-	STDMETHOD_(HRESULT,get_Treble)(THIS_ double*) PURE;
+-	STDMETHOD_(HRESULT,get_TrebleRange)(THIS_ double*) PURE;
+-	STDMETHOD_(HRESULT,put_Bass)(THIS_ double) PURE;
+-	STDMETHOD_(HRESULT,put_Enable)(THIS_ BOOL) PURE;
+-	STDMETHOD_(HRESULT,put_Loudness)(THIS_ BOOL) PURE;
+-	STDMETHOD_(HRESULT,put_MixLevel)(THIS_ double) PURE;
+-	STDMETHOD_(HRESULT,put_Mono)(THIS_ BOOL) PURE;
+-	STDMETHOD_(HRESULT,put_Pan)(THIS_ double) PURE;
+-	STDMETHOD_(HRESULT,put_Treble)(THIS_ double) PURE;
++	STDMETHOD(get_Bass)(THIS_ double*) PURE;
++	STDMETHOD(get_BassRange)(THIS_ double*) PURE;
++	STDMETHOD(get_Enable)(THIS_ BOOL*) PURE;
++	STDMETHOD(get_Loudness)(THIS_ BOOL*) PURE;
++	STDMETHOD(get_MixLevel)(THIS_ double*) PURE;
++	STDMETHOD(get_Mono)(THIS_ BOOL*) PURE;
++	STDMETHOD(get_Pan)(THIS_ double*) PURE;
++	STDMETHOD(get_Treble)(THIS_ double*) PURE;
++	STDMETHOD(get_TrebleRange)(THIS_ double*) PURE;
++	STDMETHOD(put_Bass)(THIS_ double) PURE;
++	STDMETHOD(put_Enable)(THIS_ BOOL) PURE;
++	STDMETHOD(put_Loudness)(THIS_ BOOL) PURE;
++	STDMETHOD(put_MixLevel)(THIS_ double) PURE;
++	STDMETHOD(put_Mono)(THIS_ BOOL) PURE;
++	STDMETHOD(put_Pan)(THIS_ double) PURE;
++	STDMETHOD(put_Treble)(THIS_ double) PURE;
+ };
+ #undef INTERFACE
+ #define INTERFACE IAMAudioRendererStats
+@@ -1115,7 +1196,7 @@
+ 	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
+ 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+ 	STDMETHOD_(ULONG,Release)(THIS) PURE;
+-	STDMETHOD_(HRESULT,GetStatParam)(THIS_ DWORD,DWORD*,DWORD*) PURE;
++	STDMETHOD(GetStatParam)(THIS_ DWORD,DWORD*,DWORD*) PURE;
+ };
+ #undef INTERFACE
+ #define INTERFACE IAMBufferNegotiation
+@@ -1124,8 +1205,8 @@
+ 	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
+ 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+ 	STDMETHOD_(ULONG,Release)(THIS) PURE;
+-	STDMETHOD_(HRESULT,GetAllocatorProperties)(THIS_ ALLOCATOR_PROPERTIES*) PURE;
+-	STDMETHOD_(HRESULT,SuggestAllocatorProperties)(THIS_ const ALLOCATOR_PROPERTIES*) PURE;
++	STDMETHOD(GetAllocatorProperties)(THIS_ ALLOCATOR_PROPERTIES*) PURE;
++	STDMETHOD(SuggestAllocatorProperties)(THIS_ const ALLOCATOR_PROPERTIES*) PURE;
+ };
+ #undef INTERFACE
+ #define INTERFACE IAMCameraControl
+@@ -1134,9 +1215,9 @@
+ 	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
+ 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+ 	STDMETHOD_(ULONG,Release)(THIS) PURE;
+-	STDMETHOD_(HRESULT,Get)(THIS_ long,long*,long*) PURE;
+-	STDMETHOD_(HRESULT,GetRange)(THIS_ long,long*,long*,long*,long*,long*) PURE;
+-	STDMETHOD_(HRESULT,Set)(THIS_ long,long,long) PURE;
++	STDMETHOD(Get)(THIS_ long,long*,long*) PURE;
++	STDMETHOD(GetRange)(THIS_ long,long*,long*,long*,long*,long*) PURE;
++	STDMETHOD(Set)(THIS_ long,long,long) PURE;
+ };
+ #undef INTERFACE
+ 
+@@ -1146,13 +1227,205 @@
+ 	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
+ 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+ 	STDMETHOD_(ULONG,Release)(THIS) PURE;
+-	STDMETHOD_(HRESULT,KeyExchange)(THIS_ GUID*,BYTE**,DWORD*) PURE;
+-	STDMETHOD_(HRESULT,ProtectionCommand)(THIS_ const AMCOPPCommand*) PURE;
+-	STDMETHOD_(HRESULT,ProtectionStatus)(THIS_ const AMCOPPStatusInput*,AMCOPPStatusOutput*) PURE;
+-	STDMETHOD_(HRESULT,SessionSequenceStart)(THIS_ const AMCOPPSignature*) PURE;
++	STDMETHOD(KeyExchange)(THIS_ GUID*,BYTE**,DWORD*) PURE;
++	STDMETHOD(ProtectionCommand)(THIS_ const AMCOPPCommand*) PURE;
++	STDMETHOD(ProtectionStatus)(THIS_ const AMCOPPStatusInput*,AMCOPPStatusOutput*) PURE;
++	STDMETHOD(SessionSequenceStart)(THIS_ const AMCOPPSignature*) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IFilterGraph
++DECLARE_INTERFACE_(IFilterGraph ,IUnknown)
++{
++    STDMETHOD(AddFilter)(THIS_ IBaseFilter *, LPCWSTR) PURE;
++    STDMETHOD(RemoveFilter)(THIS_ IBaseFilter *) PURE;
++    STDMETHOD(EnumFilters)(THIS_ IEnumFilters **) PURE;
++    STDMETHOD(FindFilterByName)(THIS_ LPCWSTR, IBaseFilter **) PURE;
++    STDMETHOD(ConnectDirect)(THIS_ IPin *, IPin *, const AM_MEDIA_TYPE *) PURE;
++    STDMETHOD(Reconnect)(THIS_ IPin *) PURE;
++    STDMETHOD(Disconnect)(THIS_ IPin *) PURE;
++    STDMETHOD(SetDefaultSyncSource)(THIS) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IGraphBuilder
++DECLARE_INTERFACE_(IGraphBuilder ,IFilterGraph)
++{
++    STDMETHOD(Connect)(THIS_ IPin *, IPin *) PURE;
++    STDMETHOD(Render)(THIS_ IPin *) PURE;
++    STDMETHOD(RenderFile)(THIS_ LPCWSTR, LPCWSTR) PURE;
++    STDMETHOD(AddSourceFilter)(THIS_ LPCWSTR, LPCWSTR, IBaseFilter **) PURE;
++    STDMETHOD(SetLogFile)(THIS_ DWORD_PTR) PURE;
++    STDMETHOD(Abort)(THIS) PURE;
++    STDMETHOD(ShouldOperationContinue)(THIS) PURE;
++};
++#undef INTERFACE    
++#define INTERFACE IReferenceClock
++DECLARE_INTERFACE_(IReferenceClock, IUnknown)
++{
++    STDMETHOD(GetTime)(THIS_ REFERENCE_TIME *) PURE;
++    STDMETHOD(AdviseTime)(THIS_ REFERENCE_TIME, REFERENCE_TIME, HEVENT, DWORD_PTR *) PURE;
++    STDMETHOD(AdvisePeriodic)(THIS_ REFERENCE_TIME, REFERENCE_TIME, HSEMAPHORE, DWORD_PTR *) PURE;
++    STDMETHOD(Unadvise)(THIS_ DWORD_PTR) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IEnumFilters
++DECLARE_INTERFACE_(IEnumFilters, IUnknown)
++{
++    STDMETHOD(Next)(THIS_ ULONG, IBaseFilter **, ULONG *) PURE;
++    STDMETHOD(Skip)(THIS_ ULONG) PURE;
++    STDMETHOD(Reset)(THIS) PURE;
++    STDMETHOD(Clone)(THIS_ IEnumFilters **) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IEnumMediaTypes
++DECLARE_INTERFACE_(IEnumMediaTypes, IUnknown)
++{
++    STDMETHOD(Next)(THIS_ ULONG, AM_MEDIA_TYPE **, ULONG *) PURE;
++    STDMETHOD(Skip)(THIS_ ULONG) PURE;
++    STDMETHOD(Reset)(THIS) PURE;
++    STDMETHOD(Clone)(THIS_ IEnumMediaTypes **) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IEnumPins
++DECLARE_INTERFACE_(IEnumPins, IUnknown)
++{
++    STDMETHOD(Next)(THIS_ ULONG, IPin **, ULONG *) PURE;
++    STDMETHOD(Skip)(THIS_ ULONG) PURE;
++    STDMETHOD(Reset)(THIS) PURE;
++    STDMETHOD(Clone)(THIS_ IEnumPins **) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IPin
++DECLARE_INTERFACE_(IPin, IUnknown)
++{
++    STDMETHOD(Connect)(THIS_ IPin *, const AM_MEDIA_TYPE *) PURE;
++    STDMETHOD(ReceiveConnection)(THIS_ IPin *, const AM_MEDIA_TYPE *) PURE;
++    STDMETHOD(Disconnect)(THIS) PURE;
++    STDMETHOD(ConnectedTo)(THIS_ IPin **) PURE;
++    STDMETHOD(ConnectionMediaType)(THIS_ AM_MEDIA_TYPE *) PURE;
++    STDMETHOD(QueryPinInfo)(THIS_ PIN_INFO *) PURE;
++    STDMETHOD(QueryDirection)(THIS_ PIN_DIRECTION *) PURE;
++    STDMETHOD(QueryId)(THIS_ LPWSTR *) PURE;
++    STDMETHOD(QueryAccept)(THIS_ const AM_MEDIA_TYPE *) PURE;
++    STDMETHOD(EnumMediaTypes)(THIS_ IEnumMediaTypes **) PURE;
++    STDMETHOD(QueryInternalConnections)(THIS_ IPin **, ULONG *) PURE;
++    STDMETHOD(EndOfStream)(THIS) PURE;
++    STDMETHOD(BeginFlush)(THIS) PURE;
++    STDMETHOD(EndFlush)(THIS) PURE;
++    STDMETHOD(NewSegment)(THIS_ REFERENCE_TIME, REFERENCE_TIME, double) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IMediaFilter
++DECLARE_INTERFACE_(IMediaFilter, IPersist)
++{
++    STDMETHOD(Stop)(THIS) PURE;
++    STDMETHOD(Pause)(THIS) PURE;
++    STDMETHOD(Run)(THIS_ REFERENCE_TIME) PURE;
++    STDMETHOD(GetState)(THIS_ DWORD, FILTER_STATE *) PURE;
++    STDMETHOD(SetSyncSource)(THIS_ IReferenceClock *) PURE;
++    STDMETHOD(GetSyncSource)(THIS_ IReferenceClock **) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IBaseFilter
++DECLARE_INTERFACE_(IBaseFilter, IMediaFilter)
++{
++    STDMETHOD(EnumPins)(THIS_ IEnumPins **) PURE;
++    STDMETHOD(FindPin)(THIS_ LPCWSTR, IPin **) PURE;
++    STDMETHOD(QueryFilterInfo)(THIS_ FILTER_INFO *) PURE;
++    STDMETHOD(JoinFilterGraph)(THIS_ IFilterGraph *, LPCWSTR) PURE;
++    STDMETHOD(QueryVendorInfo)(THIS_ LPWSTR *) PURE;
+ };
+ #undef INTERFACE
++#define INTERFACE IMediaSeeking
++DECLARE_INTERFACE_(IMediaSeeking, IUnknown)
++{
++    STDMETHOD(GetCapabilities)(THIS_ DWORD *) PURE;
++    STDMETHOD(CheckCapabilities)(THIS_ DWORD *) PURE;
++    STDMETHOD(IsFormatSupported)(THIS_ const GUID *) PURE;
++    STDMETHOD(QueryPreferredFormat)(THIS_ GUID *) PURE;
++    STDMETHOD(GetTimeFormat)(THIS_ GUID *) PURE;
++    STDMETHOD(IsUsingTimeFormat)(THIS_ const GUID *) PURE;
++    STDMETHOD(SetTimeFormat)(THIS_ const GUID *) PURE;
++    STDMETHOD(GetDuration)(THIS_ LONGLONG *) PURE;
++    STDMETHOD(GetStopPosition)(THIS_ LONGLONG *) PURE;
++    STDMETHOD(GetCurrentPosition)(THIS_ LONGLONG *) PURE;
++    STDMETHOD(ConvertTimeFormat)(THIS_ LONGLONG *, const GUID *, LONGLONG, const GUID *) PURE;
++    STDMETHOD(SetPositions)(THIS_ LONGLONG *, DWORD, LONGLONG *, DWORD) PURE;
++    STDMETHOD(GetPositions)(THIS_ LONGLONG *,LONGLONG *) PURE;
++    STDMETHOD(GetAvailable)(THIS_ LONGLONG *, LONGLONG *) PURE;
++    STDMETHOD(SetRate)(THIS_ double) PURE;
++    STDMETHOD(GetRate)(THIS_ double *) PURE;
++    STDMETHOD(GetPreroll)(THIS_ LONGLONG *) PURE;
++};
++#undef INTERFACE
++#define INTERFACE ICreateDevEnum
++DECLARE_INTERFACE_(ICreateDevEnum, IUnknown)
++{
++    STDMETHOD(CreateClassEnumerator)(THIS_ REFCLSID, IEnumMoniker **, DWORD) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IMediaSample
++DECLARE_INTERFACE_(IMediaSample, IUnknown)
++{
++    STDMETHOD(GetPointer)(THIS_ BYTE **) PURE;
++    STDMETHOD_(long, GetSize)(THIS) PURE;
++    STDMETHOD(GetTime)(THIS_ REFERENCE_TIME *, REFERENCE_TIME *) PURE;
++    STDMETHOD(SetTime)(THIS_ REFERENCE_TIME *, REFERENCE_TIME *) PURE;
++    STDMETHOD(IsSyncPoint)(THIS) PURE;
++    STDMETHOD(SetSyncPoint)(THIS_ BOOL) PURE;
++    STDMETHOD(IsPreroll)(THIS) PURE;
++    STDMETHOD(SetPreroll)(THIS_ BOOL) PURE;
++    STDMETHOD_(long, GetActualDataLength)(THIS) PURE;
++    STDMETHOD(SetActualDataLength)(THIS_ long) PURE;
++    STDMETHOD(GetMediaType)(THIS_ AM_MEDIA_TYPE **) PURE;
++    STDMETHOD(SetMediaType)(THIS_ AM_MEDIA_TYPE *) PURE;
++    STDMETHOD(IsDiscontinuity)(THIS) PURE;
++    STDMETHOD(SetDiscontinuity)(THIS_ BOOL) PURE;
++    STDMETHOD(GetMediaTime)(THIS_ LONGLONG *, LONGLONG *) PURE;
++    STDMETHOD(SetMediaTime)(THIS_ LONGLONG *, LONGLONG *) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IMemAllocator
++DECLARE_INTERFACE_(IMemAllocator, IUnknown)
++{
++    STDMETHOD(SetProperties)(THIS_ ALLOCATOR_PROPERTIES *, ALLOCATOR_PROPERTIES *) PURE;
++    STDMETHOD(GetProperties)(THIS_ ALLOCATOR_PROPERTIES *) PURE;
++    STDMETHOD(Commit)(THIS) PURE;
++    STDMETHOD(Decommit)(THIS) PURE;
++    STDMETHOD(GetBuffer)(THIS_ IMediaSample **, REFERENCE_TIME *, REFERENCE_TIME *, DWORD) PURE;
++    STDMETHOD(ReleaseBuffer)(THIS_ IMediaSample *) PURE;
+ 
++};
++#undef INTERFACE
++#define INTERFACE IAsyncReader
++DECLARE_INTERFACE_(IAsyncReader, IUnknown)
++{
++    STDMETHOD(RequestAllocator)(THIS_ IMemAllocator *, ALLOCATOR_PROPERTIES *, IMemAllocator **) PURE;
++    STDMETHOD(Request)(THIS_ IMediaSample *, DWORD_PTR) PURE;
++    STDMETHOD(WaitForNext)(THIS_ DWORD, IMediaSample **, DWORD_PTR *) PURE;
++    STDMETHOD(SyncReadAligned)(THIS_ IMediaSample *) PURE;
++    STDMETHOD(SyncRead)(THIS_ LONGLONG, LONG, BYTE *) PURE;
++    STDMETHOD(Length)(THIS_ LONGLONG *, LONGLONG *) PURE;
++    STDMETHOD(BeginFlush)(THIS) PURE;
++    STDMETHOD(EndFlush)(THIS) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IMediaEventSink
++DECLARE_INTERFACE_(IMediaEventSink, IUnknown)
++{
++    STDMETHOD(Notify)(THIS_ long, LONG_PTR, LONG_PTR) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IMemInputPin
++DECLARE_INTERFACE_(IMemInputPin, IUnknown)
++{
++    STDMETHOD(GetAllocator)(THIS_ IMemAllocator **) PURE;
++    STDMETHOD(NotifyAllocator)(THIS_ IMemAllocator *, BOOL) PURE;
++    STDMETHOD(GetAllocatorRequirements)(THIS_ ALLOCATOR_PROPERTIES *) PURE;
++    STDMETHOD(Receive)(THIS_ IMediaSample *) PURE;
++    STDMETHOD(ReceiveMultiple)(THIS_ IMediaSample **, long, long *) PURE;
++    STDMETHOD(ReceiveCanBlock)(THIS) PURE;
++};
++#undef INTERFACE
+ #ifdef __cplusplus
+ }
+ #endif
+diff -ruN a/include/vmr9.h b/include/vmr9.h
+--- a/include/vmr9.h	2008-12-06 03:32:11.000000000 +0100
++++ b/include/vmr9.h	2010-04-12 17:12:52.000000000 +0200
+@@ -8,6 +8,10 @@
+ extern "C" {
+ #endif
+ 
++EXTERN_C const IID IID_IVMRFilterConfig9;
++EXTERN_C const IID IID_IVMRWindowlessControl9;
++EXTERN_C const IID IID_IVMRMixerControl9;
++
+ /*--- DirectShow Reference - DirectShow Enumerated Types */
+ typedef enum _VMR9_SampleFormat {
+ 	VMR9_SampleReserved = 1,
+@@ -61,7 +65,7 @@
+ 	MixerPref9_RenderTargetRGB = 0x00001000,
+ 	MixerPref9_RenderTargetYUV = 0x00002000,
+ 	MixerPref9_RenderTargetReserved = 0x000FC000,
+-	MixerPref9_RenderTargetMask = 0x000FF000
++	MixerPref9_RenderTargetMask = 0x000FF000,
+ 	MixerPref9_DynamicSwitchToBOB = 0x00100000,
+ 	MixerPref9_DynamicDecimateBy2 = 0x00200000,
+ 	MixerPref9_DynamicReserved = 0x00C00000,
+@@ -128,7 +132,7 @@
+ 	HMONITOR hMon;
+ 	DWORD dwFlags;
+ 	wchar_t szDevice[32];
+-	wchar_t szDescription[512]
++	wchar_t szDescription[512];
+ 	LARGE_INTEGER liDriverVersion;
+ 	DWORD dwVendorId;
+ 	DWORD dwDeviceId;
+@@ -181,7 +185,6 @@
+ 	VMR9Frequency InputSampleFreq;
+ 	VMR9Frequency OutputFrameFreq;
+ } VMR9VideoDesc;
+-/**********
+ typedef struct VMR9VideoStreamInfo{
+ 	IDirect3DSurface9 *pddsVideoSurface;
+ 	DWORD dwWidth;
+@@ -203,8 +206,64 @@
+ 	COLORREF clrSrcKey;
+ 	DWORD dwFilterMode;
+ };
+-**********/
+-
++#define INTERFACE IVMRImageCompositor9
++DECLARE_INTERFACE_(IVMRImageCompositor9, IUnknown)
++{
++    STDMETHOD(InitCompositionDevice)(THIS_ IUnknown *) PURE;
++    STDMETHOD(TermCompositionDevice)(THIS_ IUnknown *) PURE;
++    STDMETHOD(SetStreamMediaType)(THIS_ DWORD, AM_MEDIA_TYPE *, BOOL) PURE;
++    STDMETHOD(CompositeImage)(THIS_ IUnknown *, IDirect3DSurface9 *, AM_MEDIA_TYPE *,
++        REFERENCE_TIME, REFERENCE_TIME, D3DCOLOR, VMR9VideoStreamInfo *, UINT) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IVMRFilterConfig9
++DECLARE_INTERFACE_(IVMRFilterConfig9, IUnknown)
++{
++    STDMETHOD(SetImageCompositor)(THIS_ IVMRImageCompositor9 *) PURE;
++    STDMETHOD(SetNumberOfStreams)(THIS_ DWORD) PURE;
++    STDMETHOD(GetNumberOfStreams)(THIS_ DWORD *) PURE;
++    STDMETHOD(SetRenderingPrefs)(THIS_ DWORD) PURE;
++    STDMETHOD(GetRenderingPrefs)(THIS_ DWORD *) PURE;
++    STDMETHOD(SetRenderingMode)(THIS_ DWORD) PURE;
++    STDMETHOD(GetRenderingMode)(THIS_ DWORD *) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IVMRWindowlessControl9
++DECLARE_INTERFACE_(IVMRWindowlessControl9, IUnknown)
++{
++    STDMETHOD(GetNativeVideoSize)(THIS_ LONG *, LONG *, LONG *, LONG *) PURE;
++    STDMETHOD(GetMinIdealVideoSize)(THIS_ LONG *, LONG *) PURE;
++    STDMETHOD(GetMaxIdealVideoSize)(THIS_ LONG *, LONG *) PURE;
++    STDMETHOD(SetVideoPosition)(THIS_ const LPRECT, const LPRECT) PURE;
++    STDMETHOD(GetVideoPosition)(THIS_ LPRECT, LPRECT) PURE;
++    STDMETHOD(GetAspectRatioMode)(THIS_ DWORD *) PURE;
++    STDMETHOD(SetAspectRatioMode)(THIS_ DWORD) PURE;
++    STDMETHOD(SetVideoClippingWindow)(THIS_ HWND) PURE;
++    STDMETHOD(RepaintVideo)(THIS_ HWND, HDC) PURE;
++    STDMETHOD(DisplayModeChanged)(THIS) PURE;
++    STDMETHOD(GetCurrentImage)(THIS_ BYTE **) PURE;
++    STDMETHOD(SetBorderColor)(THIS_ COLORREF) PURE;
++    STDMETHOD(GetBorderColor)(THIS_ COLORREF *) PURE;
++};
++#undef INTERFACE
++#define INTERFACE IVMRMixerControl9
++DECLARE_INTERFACE_(IVMRMixerControl9, IUnknown)
++{
++    STDMETHOD(SetAlpha)(THIS_ DWORD, float) PURE;
++    STDMETHOD(GetAlpha)(THIS_ DWORD, float *) PURE;
++    STDMETHOD(SetZOrder)(THIS_ DWORD, DWORD) PURE;
++    STDMETHOD(GetZOrder)(THIS_ DWORD, DWORD *) PURE;
++    STDMETHOD(SetOutputRect)(THIS_ DWORD, const VMR9NormalizedRect *) PURE;
++    STDMETHOD(GetOutputRect)(THIS_ DWORD, VMR9NormalizedRect *) PURE;
++    STDMETHOD(SetBackgroundClr)(THIS_ COLORREF) PURE;
++    STDMETHOD(GetBackgroundClr)(THIS_ COLORREF *) PURE;
++    STDMETHOD(SetMixingPrefs)(THIS_ DWORD) PURE;
++    STDMETHOD(GetMixingPrefs)(THIS_ DWORD *) PURE;
++    STDMETHOD(SetProcAmpControl)(THIS_ DWORD, VMR9ProcAmpControl *) PURE;
++    STDMETHOD(GetProcAmpControl)(THIS_ DWORD, VMR9ProcAmpControl *) PURE;
++    STDMETHOD(GetProcAmpControlRange)(THIS_ DWORD, VMR9ProcAmpControlRange *) PURE;
++};
++#undef INTERFACE
+ #ifdef __cplusplus
+ }
+ #endif

@@ -11,7 +11,7 @@ $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://gcc.gnu.org/
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := mingwrt mingwrt-dll w32api directx binutils gcc-gmp gcc-mpfr gcc-tdm gcc-pthreads
+$(PKG)_DEPS     := mingwrt mingwrt-dll w32api binutils gcc-gmp gcc-mpfr gcc-tdm gcc-pthreads
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
