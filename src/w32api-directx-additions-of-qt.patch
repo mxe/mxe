@@ -7,7 +7,7 @@ the following commands:
 
 #---------------------------------------------------------------------#
 wget -c 'http://kent.dl.sourceforge.net/project/mingw/MinGW API for MS-Windows/w32api-3.13/w32api-3.13-mingw32-dev.tar.gz'
-wget -c 'ftp://ftp.qt.nokia.com/misc/MinGW-gcc440_1.zip'
+wget -c 'http://download.qt.nokia.com/misc/MinGW-gcc440_1.zip'
 mkdir a
 (cd a; tar -xf ../w32api-3.13-mingw32-dev.tar.gz include)
 cp -r a b
