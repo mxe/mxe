@@ -30,7 +30,6 @@ define $(PKG)_BUILD
         --enable-ILU \
         --enable-ILUT \
         --disable-allegro \
-        --enable-directx8 \
         --enable-directx9 \
         --enable-opengl \
         --enable-sdl \
