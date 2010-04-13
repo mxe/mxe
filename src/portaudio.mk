@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := portaudio
 $(PKG)_FILE     := pa_stable_v$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.portaudio.com
 $(PKG)_URL      := http://www.portaudio.com/archives/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc directx
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.portaudio.com/download.html' | \
