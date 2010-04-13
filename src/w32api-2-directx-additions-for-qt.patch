@@ -5,7 +5,7 @@ This patch contains some DirectX additions for MinGW's w32api
 which were provided by the Qt project. It was generated via
 the following commands:
 
-#---------------------------------------------------------------------#
+#--------------------------------------------------------------------#
 wget -c 'http://kent.dl.sourceforge.net/project/mingw/MinGW API for MS-Windows/w32api-3.13/w32api-3.13-mingw32-dev.tar.gz'
 wget -c 'ftp://ftp.qt.nokia.com/misc/MinGW-gcc440_1.zip'
 mkdir a
@@ -14,10 +14,10 @@ cp -r a b
 unzip -j MinGW-gcc440_1.zip 'mingw/_patches/include.zip'
 unzip -aa -p include.zip '*.patch' | patch -d b/include -p1
 (cd b/include; unzip -aa ../../include.zip '*.h')
-diff -ruN a b > w32api-directx-additions-of-qt.patch
+diff -ruN a b > w32api-2-directx-additions-for-qt.patch
 rm -rf a b include.zip
 rm -f w32api-3.13-mingw32-dev.tar.gz MinGW-gcc440_1.zip
-#---------------------------------------------------------------------#
+#--------------------------------------------------------------------#
 
 
 diff -ruN a/include/amvideo.h b/include/amvideo.h
