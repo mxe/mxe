@@ -31,8 +31,8 @@ define $(PKG)_BUILD
         --disable-shared \
         --with-threads \
         LIBS='-lintl -liconv'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' schemelib_DATA=
+    $(MAKE) -C '$(1)' -j 1 install schemelib_DATA=
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
