@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := devil-$($(PKG)_VERSION)
 $(PKG)_FILE     := DevIL-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://openil.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/openil/DevIL/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib openexr jpeg jasper lcms libmng libpng tiff sdl
+$(PKG)_DEPS     := gcc freeglut zlib openexr jpeg jasper lcms libmng libpng tiff sdl
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://openil.svn.sourceforge.net/viewvc/openil/tags/?sortby=date' | \
