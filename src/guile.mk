@@ -20,11 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # avoid running the autotools after patching
-    find '$(1)' -name 'aclocal.m4'  -exec touch {} \;
-    find '$(1)' -name 'configure'   -exec touch {} \;
-    find '$(1)' -name 'Makefile.in' -exec touch {} \;
-    find '$(1)' -name '*.h.in'      -exec touch {} \;
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
