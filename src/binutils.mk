@@ -3,7 +3,7 @@
 
 # GNU Binutils
 PKG             := binutils
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 2.20
 $(PKG)_VERSION  := 2.20.1
 $(PKG)_CHECKSUM := fd2ba806e6f3a55cee453cb25c86991b26a75dee
 $(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
