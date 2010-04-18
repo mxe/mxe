@@ -638,17 +638,9 @@ sudo gcc_select gcc40</pre>
     Open Solaris does not fulfill the requirements.
     Two requirements are hopelessly outdated (M4, Autoconf)&nbsp;<a href="#requirements-opensolaris-dev-note">(*)</a>,
     and one requirement is not provided at all (SCons).
-    In addition, due to a bug in its LibC,
-    Open Solaris is unable to run some tools of Binutils 2.20.
     If you want to run mingw-cross-env on Open Solaris nevertheless,
     a lot of manual work is required:
     </p>
-
-    <p>
-    Downgrade mingw-cross-env's Binutils to 2.19 by hand:
-    </p>
-    <pre>wget http://hg.savannah.gnu.org/hgweb/mingw-cross-env/raw-file/a69aa7de9d10/src/binutils.mk
-mv binutils.mk /<em>where mingw-cross-env is installed</em>/src/</pre>
 
     <p>
     Install all requirements
