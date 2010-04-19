@@ -4,8 +4,8 @@
 # ZZIPlib
 PKG             := zziplib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.13.58
-$(PKG)_CHECKSUM := 4255290de3b66deb4a7233ab41727c1b56739e8c
+$(PKG)_VERSION  := 0.13.59
+$(PKG)_CHECKSUM := ddbce25cb36c3b4c2b892e2c8a88fa4a0be29a71
 $(PKG)_SUBDIR   := zziplib-$($(PKG)_VERSION)
 $(PKG)_FILE     := zziplib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://zziplib.sourceforge.net/

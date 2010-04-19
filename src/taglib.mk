@@ -4,8 +4,8 @@
 # TagLib
 PKG             := taglib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.1
-$(PKG)_CHECKSUM := 20d8d95316f084c872e70c9eddc0edd75b75ea09
+$(PKG)_VERSION  := 1.6.2
+$(PKG)_CHECKSUM := b425ebfcc8ec1fad661c247d66ee465afa6fe57c
 $(PKG)_SUBDIR   := taglib-$($(PKG)_VERSION)
 $(PKG)_FILE     := taglib-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://developer.kde.org/~wheeler/taglib.html
