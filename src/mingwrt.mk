@@ -4,8 +4,8 @@
 # MinGW Runtime
 PKG             := mingwrt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.17
-$(PKG)_CHECKSUM := c760e6cd1b509545bae1f75a7ba4a34a641a4176
+$(PKG)_VERSION  := 3.18
+$(PKG)_CHECKSUM := 0c562f3b6a89f376b9edba48ccd7388c535f8c8d
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := mingwrt-$($(PKG)_VERSION)-mingw32-dev.tar.gz
 $(PKG)_WEBSITE  := http://mingw.sourceforge.net/

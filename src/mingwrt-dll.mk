@@ -4,8 +4,8 @@
 # MinGW Runtime DLL
 PKG             := mingwrt-dll
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.17
-$(PKG)_CHECKSUM := 3da95df7238337307b4b5af22d7d0b6ac61250ad
+$(PKG)_VERSION  := 3.18
+$(PKG)_CHECKSUM := 5ecc6db65849cfe2af2ab6226e55bd7ebf704f00
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := mingwrt-$($(PKG)_VERSION)-mingw32-dll.tar.gz
 $(PKG)_WEBSITE  := http://mingw.sourceforge.net/
