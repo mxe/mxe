@@ -4,8 +4,8 @@
 # libpaper
 PKG             := libpaper
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.23+nmu1
-$(PKG)_CHECKSUM := 9091fc346845585ceff105c887f35012c3a39e2b
+$(PKG)_VERSION  := 1.1.23+nmu2
+$(PKG)_CHECKSUM := 4767d4a76fa2e5c77b98e9f7866c3fb5aac6c158
 $(PKG)_SUBDIR   := libpaper-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpaper_$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://packages.debian.org/unstable/libpaper1
