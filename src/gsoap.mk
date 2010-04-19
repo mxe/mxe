@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc openssl
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/gsoap2/files/gSOAP/) | \
-    $(SED) -n 's,.*gsoap_\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*gsoap_\([0-9][^>]*\)\.zip,\1,p' | \
     tail -1
 endef
 
