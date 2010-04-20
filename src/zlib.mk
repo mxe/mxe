@@ -4,8 +4,8 @@
 # zlib
 PKG             := zlib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.4
-$(PKG)_CHECKSUM := 8cf10521c1927daa5e12efc5e1725a0d70e579f3
+$(PKG)_VERSION  := 1.2.5
+$(PKG)_CHECKSUM := 543fa9abff0442edca308772d6cef85557677e02
 $(PKG)_SUBDIR   := zlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := zlib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://zlib.net/
@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && CC='$(TARGET)-gcc' AR='$(TARGET)-ar' RANLIB='$(TARGET)-ranlib' ./configure \
+    cd '$(1)' && CHOST='$(TARGET)' ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --static
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
