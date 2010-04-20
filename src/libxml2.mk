@@ -13,7 +13,7 @@ $(PKG)_URL      := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/cgit/libxml2/refs/tags' | \
+    wget -q -O- 'http://git.gnome.org/browse/libxml2/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=v\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1

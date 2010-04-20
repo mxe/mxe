@@ -13,7 +13,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/atk/$(call SHORT_PKG_V
 $(PKG)_DEPS     := gcc glib gettext
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/cgit/atk/refs/tags' | \
+    wget -q -O- 'http://git.gnome.org/browse/atk/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=ATK_\\([0-9][^']*\\)'.*,\\1,p" | \
     $(SED) 's,_,.,g' | \
