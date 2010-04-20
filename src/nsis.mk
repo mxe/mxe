@@ -21,9 +21,10 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && scons \
-        PREFIX='$(PREFIX)' \
+        PREFIX='$(PREFIX)/$(TARGET)' \
         `[ -d /usr/local/include ] && echo APPEND_CPPPATH=/usr/local/include` \
         `[ -d /usr/local/lib ]     && echo APPEND_LIBPATH=/usr/local/lib` \
         SKIPUTILS='NSIS Menu' \
         install
+    $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/makensis' '$(PREFIX)/bin/$(TARGET)-makensis'
 endef
