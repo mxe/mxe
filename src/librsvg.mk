@@ -13,9 +13,9 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(call SHORT_P
 $(PKG)_DEPS     := gcc glib libgsf cairo pango gtk libcroco
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/librsvg/log' | \
-    grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9][0-9.]*\)<.*,\1,p' | \
+    wget -q -O- 'http://git.gnome.org/browse/librsvg/refs/tags' | \
+    $(SED) -n 's,.*<a[^>]*>LIBRSVG_\([0-9][0-9_]*\)<.*,\1,p' | \
+    $(SED) 's,_,.,g' | \
     head -1
 endef
 
