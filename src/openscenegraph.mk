@@ -3,9 +3,9 @@
 
 # OpenSceneGraph
 PKG             := openscenegraph
-$(PKG)_IGNORE   := 2.8.2b
-$(PKG)_VERSION  := 2.8.2
-$(PKG)_CHECKSUM := f2f0a3285a022640345a81f536459f37f3f38d01
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.8.3
+$(PKG)_CHECKSUM := 90502e4cbd47aac1689cc39d25ab62bbe0bba9fc
 $(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_WEBSITE  := http://www.openscenegraph.org/
