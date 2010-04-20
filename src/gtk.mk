@@ -4,8 +4,8 @@
 # GTK+
 PKG             := gtk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.19.6
-$(PKG)_CHECKSUM := 0a42eeee67fe2f3022f39fdf1a2a3817e520c0ff
+$(PKG)_VERSION  := 2.20.0
+$(PKG)_CHECKSUM := db8a8f1040a813fc1a7872d38b675b4805fa0446
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/
@@ -34,6 +34,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,enable_shared=yes,enable_shared=no,' '$(1)/configure'
     $(SED) -i 's,\(STATIC_LIB_DEPS="[^"]*\) \$$LIBJASPER,\1 $$LIBJASPER $$LIBJPEG,' '$(1)/configure'
     $(SED) -i 's/-Wl,-luuid/-luuid/' '$(1)/configure'
+    $(SED) -i 's/gio-unix/gio-windows/' '$(1)/configure'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \

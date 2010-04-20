@@ -4,8 +4,8 @@
 # GLib
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.24.0
-$(PKG)_CHECKSUM := 32714e64fff52d18db5f077732910215790e0c5b
+$(PKG)_VERSION  := 2.25.1
+$(PKG)_CHECKSUM := ab8eb0af4ea25622d9b0913dbafb51c4571ec8e3
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/
@@ -38,7 +38,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-regex \
-        --disable-threads \
+        --enable-threads \
         --disable-selinux \
         --disable-fam \
         --disable-xattr \
@@ -49,6 +49,11 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    $(MAKE) -C '$(1).native/gmodule' -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gio/xdgmime' -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gio/inotify' -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gio/libasyncns' -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)'
 
     # cross build
     $(SED) -i 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' '$(1)/glib-2.0.pc.in'
@@ -64,6 +69,7 @@ define $(PKG)_BUILD
         CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal'
+    ln -s '$(1).native/gio/gschema-compile' '$(1)/gio/gschema-compile'
     $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
