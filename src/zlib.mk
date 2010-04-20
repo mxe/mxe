@@ -8,14 +8,14 @@ $(PKG)_VERSION  := 1.2.4
 $(PKG)_CHECKSUM := 8cf10521c1927daa5e12efc5e1725a0d70e579f3
 $(PKG)_SUBDIR   := zlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := zlib-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.zlib.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libpng/zlib/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := http://zlib.net/
+$(PKG)_URL      := http://zlib.net/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libpng/files/zlib/) | \
-    $(SED) -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://zlib.net/' | \
+    $(SED) -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,ip' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
