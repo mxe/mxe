@@ -1,0 +1,35 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -r 13edd7b348d4 jmorecfg.h
+--- a/jmorecfg.h	Wed Apr 21 10:15:34 2010 +0200
++++ b/jmorecfg.h	Wed Apr 21 11:36:07 2010 +0200
+@@ -10,6 +10,16 @@
+  * JPEG software for special applications or support machine-dependent
+  * optimizations.  Most users will not need to touch this file.
+  */
++
++
++/*
++ * Load standard definitions on Windows systems to ensure that these
++ * are defined when _building_ as well as _using_ the library.
++ */
++
++#ifdef _WIN32
++#include <windows.h>
++#endif
+ 
+ 
+ /*
+@@ -233,7 +243,11 @@
+  */
+ 
+ #ifndef HAVE_BOOLEAN
++#ifndef _RPCNDR_H_		/* Microsoft defines it in rpcndr.h */
++#ifndef _RPCNDR_H		/* MinGW is slightly different */
+ typedef int boolean;
++#endif
++#endif
+ #endif
+ #ifndef FALSE			/* in case these macros already exist */
+ #define FALSE	0		/* values of boolean */

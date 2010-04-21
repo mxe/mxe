@@ -19,8 +19,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # fix incompatibilities with jpeg
-    $(SED) -i 's,typedef unsigned char boolean;,,'           '$(1)/include/rpcndr.h'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)'
     cp -rpv '$(1)/include' '$(1)/lib' '$(PREFIX)/$(TARGET)'
 endef
