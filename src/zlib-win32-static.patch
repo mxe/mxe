@@ -1,3 +1,6 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
 diff -r 5a13d390f989 Makefile.in
 --- a/Makefile.in	Tue Apr 20 14:59:46 2010 +0200
 +++ b/Makefile.in	Tue Apr 20 17:46:22 2010 +0200
