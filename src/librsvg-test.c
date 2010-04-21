@@ -10,6 +10,7 @@ int main(int argc, char* argv[])
     (void)argc;
     (void)argv;
 
+    g_type_init();
     handle = rsvg_handle_new();
     rsvg_handle_free(handle);
 
