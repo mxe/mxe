@@ -1,0 +1,16 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -r be6033c09175 src/video/windx5/directx.h
+--- a/src/video/windx5/directx.h	Fri Apr 23 18:34:51 2010 +0200
++++ b/src/video/windx5/directx.h	Fri Apr 23 18:42:08 2010 +0200
+@@ -74,9 +74,6 @@
+ #define DIRECTSOUND_VERSION 0x0500
+ #define DIRECTINPUT_VERSION 0x0700
+ 
+-#ifdef __GNUC__
+-#define NONAMELESSUNION
+-#endif
+ #include <ddraw.h>
+ #include <dsound.h>
+ #include <dinput.h>
