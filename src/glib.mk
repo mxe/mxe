@@ -4,8 +4,8 @@
 # GLib
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.25.1
-$(PKG)_CHECKSUM := ab8eb0af4ea25622d9b0913dbafb51c4571ec8e3
+$(PKG)_VERSION  := 2.25.3
+$(PKG)_CHECKSUM := 5a8cf17c44decb27de3fbc202be05c89d55f647d
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/
@@ -69,6 +69,7 @@ define $(PKG)_BUILD
         CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal'
+    ln -s '$(1).native/gio/glib-compile-schemas' '$(1)/gio/glib-compile-schemas'
     ln -s '$(1).native/gio/gschema-compile' '$(1)/gio/gschema-compile'
     $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
