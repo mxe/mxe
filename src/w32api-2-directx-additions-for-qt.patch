@@ -6,11 +6,11 @@ which were provided by the Qt project. It was generated via
 the following commands:
 
 #--------------------------------------------------------------------#
-wget -c 'http://kent.dl.sourceforge.net/project/mingw/MinGW API for MS-Windows/w32api-3.13/w32api-3.13-mingw32-dev.tar.gz'
+wget -c 'http://kent.dl.sourceforge.net/project/mingw/MinGW API for MS-Windows/w32api-3.14/w32api-3.14-mingw32-dev.tar.gz'
 wget -c 'http://download.qt.nokia.com/misc/MinGW-gcc440_1.zip'
 wget -c 'http://websvn.kde.org/*checkout*/trunk/kdesupport/kdewin/include/directx/ddraw.h?revision=987475'
 mkdir a
-(cd a; tar -xf ../w32api-3.13-mingw32-dev.tar.gz include)
+(cd a; tar -xf ../w32api-3.14-mingw32-dev.tar.gz include)
 cp -r a b
 unzip -j MinGW-gcc440_1.zip 'mingw/_patches/include.zip'
 unzip -aa -p include.zip '*.patch' | patch -d b/include -p1
@@ -18,18 +18,22 @@ unzip -aa -p include.zip '*.patch' | patch -d b/include -p1
 # The ddraw.h we got from Qt is not enough to build SDL.
 # This one from Wine/KDE-Win works for both SDL and Qt
 # but we have to comment out some Wine-specific stuff.
+# Also, oddly enough, windef.h seems to use DUMMYUNIONNAME
+# instead of DUMMYUNIONNAME1 found in this ddraw.h. Use the
+# windef.h convention so SDL will build.
 cat 'ddraw.h?revision=987475' \
  | sed 's,.*WINELIB.*,/* & */,g;' \
+ | sed 's,DUMMYUNIONNAME1\;,DUMMYUNIONNAME;,g;' \
  > b/include/ddraw.h
 diff -ruN a b > w32api-2-directx-additions-for-qt.patch
 rm -rf a b include.zip
-rm -f w32api-3.13-mingw32-dev.tar.gz MinGW-gcc440_1.zip 'ddraw.h?revision=987475'
+rm -f w32api-3.14-mingw32-dev.tar.gz MinGW-gcc440_1.zip 'ddraw.h?revision=987475'
 #--------------------------------------------------------------------#
 
 
 diff -ruN a/include/amvideo.h b/include/amvideo.h
---- a/include/amvideo.h	2008-12-06 03:31:53.000000000 +0100
-+++ b/include/amvideo.h	2010-04-25 13:03:46.887145541 +0200
+--- a/include/amvideo.h	2009-11-21 06:31:42.000000000 +0100
++++ b/include/amvideo.h	2010-04-25 20:35:52.184124176 +0200
 @@ -52,10 +52,10 @@
  	BITMAPINFOHEADER bmiHeader;
  } VIDEOINFOHEADER;
@@ -46,8 +50,8 @@ diff -ruN a/include/amvideo.h b/include/amvideo.h
  	BITMAPINFOHEADER bmiHeader;
  	union {
 diff -ruN a/include/bdatypes.h b/include/bdatypes.h
---- a/include/bdatypes.h	2008-12-06 03:31:53.000000000 +0100
-+++ b/include/bdatypes.h	2010-04-25 13:03:46.887145541 +0200
+--- a/include/bdatypes.h	2009-11-21 06:31:42.000000000 +0100
++++ b/include/bdatypes.h	2010-04-25 20:35:52.184124176 +0200
 @@ -17,9 +17,9 @@
  } MEDIA_SAMPLE_CONTENT;
  /*--- DirectShow Reference - DirectShow Structures */
@@ -62,8 +66,8 @@ diff -ruN a/include/bdatypes.h b/include/bdatypes.h
  typedef struct {
  	ULONG ulPID;
 diff -ruN a/include/control.h b/include/control.h
---- a/include/control.h	2008-12-06 03:31:54.000000000 +0100
-+++ b/include/control.h	2010-04-25 13:03:46.887145541 +0200
+--- a/include/control.h	2009-11-21 06:31:43.000000000 +0100
++++ b/include/control.h	2010-04-25 20:35:52.184124176 +0200
 @@ -11,7 +11,63 @@
  /*--- DirectShow Reference - DirectShow Data Types */
  typedef LONG_PTR OAEVENT;
@@ -130,7 +134,7 @@ diff -ruN a/include/control.h b/include/control.h
  #endif
 diff -ruN a/include/ddraw.h b/include/ddraw.h
 --- a/include/ddraw.h	1970-01-01 01:00:00.000000000 +0100
-+++ b/include/ddraw.h	2010-04-25 13:03:46.911124579 +0200
++++ b/include/ddraw.h	2010-04-25 20:35:52.208133591 +0200
 @@ -0,0 +1,2681 @@
 +/*
 + * Copyright (C) the Wine project
@@ -872,7 +876,7 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +	DWORD	dwAlphaBitDepth;        /* C: how many bits for alpha channels*/
 +	DWORD	dwLuminanceBitCount;
 +	DWORD	dwBumpBitCount;
-+    } DUMMYUNIONNAME1;
++    } DUMMYUNIONNAME;
 +    union {
 +	DWORD	dwRBitMask;             /* 10: mask for red bit*/
 +	DWORD	dwYBitMask;             /* 10: mask for Y bits*/
@@ -1106,7 +1110,7 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +	union {
 +		LONG	lPitch;	/* 10: distance to start of next line (return value only)*/
 +		DWORD	dwLinearSize;
-+	} DUMMYUNIONNAME1;
++	} DUMMYUNIONNAME;
 +	DWORD	dwBackBufferCount;/* 14: number of back buffers requested*/
 +	union {
 +		DWORD	dwMipMapCount;/* 18:number of mip-map levels requested*/
@@ -1133,7 +1137,7 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +	union {
 +		LONG	lPitch;	      /*10: distance to start of next line (return value only)*/
 +		DWORD   dwLinearSize; /*10: formless late-allocated optimized surface size */
-+	} DUMMYUNIONNAME1;
++	} DUMMYUNIONNAME;
 +	DWORD	dwBackBufferCount;/* 14: number of back buffers requested*/
 +	union {
 +		DWORD	dwMipMapCount;/* 18:number of mip-map levels requested*/
@@ -1238,7 +1242,7 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +    {
 +        DWORD   dwZDestConst;                   /* Constant to use as Z buffer for dest */
 +        LPDIRECTDRAWSURFACE lpDDSZBufferDest;   /* Surface to use as Z buffer for dest */
-+    } DUMMYUNIONNAME1;
++    } DUMMYUNIONNAME;
 +    DWORD       dwZSrcConstBitDepth;            /* Bit depth used to specify Z constant for source */
 +    union
 +    {
@@ -1302,7 +1306,7 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +    {
 +        DWORD   dwAlphaDestConst;               /* Constant to use as alpha channel for dest */
 +        LPDIRECTDRAWSURFACE lpDDSAlphaDest;     /* Surface to use as alpha channel for dest */
-+    } DUMMYUNIONNAME1;
++    } DUMMYUNIONNAME;
 +    DWORD       dwAlphaSrcConstBitDepth;        /* Bit depth used to specify alpha constant for source */
 +    union
 +    {
@@ -2892,8 +2896,8 @@ diff -ruN a/include/dmo.h b/include/dmo.h
 +#endif //_DMO_H
 \ No newline at end of file
 diff -ruN a/include/dshow.h b/include/dshow.h
---- a/include/dshow.h	2008-12-06 03:31:56.000000000 +0100
-+++ b/include/dshow.h	2010-04-25 13:03:46.887145541 +0200
+--- a/include/dshow.h	2009-11-21 06:31:44.000000000 +0100
++++ b/include/dshow.h	2010-04-25 20:35:52.184124176 +0200
 @@ -5,7 +5,10 @@
  #endif
  
@@ -3074,8 +3078,8 @@ diff -ruN a/include/qnetwork.h b/include/qnetwork.h
 +#endif //_QNETWORK_H
 \ No newline at end of file
 diff -ruN a/include/strmif.h b/include/strmif.h
---- a/include/strmif.h	2008-12-06 03:32:10.000000000 +0100
-+++ b/include/strmif.h	2010-04-25 13:03:46.887145541 +0200
+--- a/include/strmif.h	2009-11-21 06:31:55.000000000 +0100
++++ b/include/strmif.h	2010-04-25 20:35:52.184124176 +0200
 @@ -4,10 +4,79 @@
  #pragma GCC system_header
  #endif
@@ -3532,8 +3536,8 @@ diff -ruN a/include/strmif.h b/include/strmif.h
  }
  #endif
 diff -ruN a/include/vmr9.h b/include/vmr9.h
---- a/include/vmr9.h	2008-12-06 03:32:11.000000000 +0100
-+++ b/include/vmr9.h	2010-04-25 13:03:46.891124634 +0200
+--- a/include/vmr9.h	2009-11-21 06:31:55.000000000 +0100
++++ b/include/vmr9.h	2010-04-25 20:35:52.187132398 +0200
 @@ -8,6 +8,10 @@
  extern "C" {
  #endif
