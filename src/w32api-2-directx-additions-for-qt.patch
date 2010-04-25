@@ -17,9 +17,8 @@ unzip -aa -p include.zip '*.patch' | patch -d b/include -p1
 (cd b/include; unzip -aa ../../include.zip '*.h')
 # The ddraw.h we got from Qt is not enough to build SDL.
 # This one from Wine/KDE-Win works for both SDL and Qt
-# after a little fixing up.
+# but we have to comment out some Wine-specific stuff.
 cat 'ddraw.h?revision=987475' \
- | sed 's/DUMMYUNIONNAME/u/g;' \
  | sed 's,.*WINELIB.*,/* & */,g;' \
  > b/include/ddraw.h
 diff -ruN a b > w32api-2-directx-additions-for-qt.patch
@@ -30,7 +29,7 @@ rm -f w32api-3.13-mingw32-dev.tar.gz MinGW-gcc440_1.zip 'ddraw.h?revision=987475
 
 diff -ruN a/include/amvideo.h b/include/amvideo.h
 --- a/include/amvideo.h	2008-12-06 03:31:53.000000000 +0100
-+++ b/include/amvideo.h	2010-04-14 21:08:32.363036508 +0200
++++ b/include/amvideo.h	2010-04-25 13:03:46.887145541 +0200
 @@ -52,10 +52,10 @@
  	BITMAPINFOHEADER bmiHeader;
  } VIDEOINFOHEADER;
@@ -48,7 +47,7 @@ diff -ruN a/include/amvideo.h b/include/amvideo.h
  	union {
 diff -ruN a/include/bdatypes.h b/include/bdatypes.h
 --- a/include/bdatypes.h	2008-12-06 03:31:53.000000000 +0100
-+++ b/include/bdatypes.h	2010-04-14 21:08:32.363036508 +0200
++++ b/include/bdatypes.h	2010-04-25 13:03:46.887145541 +0200
 @@ -17,9 +17,9 @@
  } MEDIA_SAMPLE_CONTENT;
  /*--- DirectShow Reference - DirectShow Structures */
@@ -64,7 +63,7 @@ diff -ruN a/include/bdatypes.h b/include/bdatypes.h
  	ULONG ulPID;
 diff -ruN a/include/control.h b/include/control.h
 --- a/include/control.h	2008-12-06 03:31:54.000000000 +0100
-+++ b/include/control.h	2010-04-14 21:08:32.363036508 +0200
++++ b/include/control.h	2010-04-25 13:03:46.887145541 +0200
 @@ -11,7 +11,63 @@
  /*--- DirectShow Reference - DirectShow Data Types */
  typedef LONG_PTR OAEVENT;
@@ -131,7 +130,7 @@ diff -ruN a/include/control.h b/include/control.h
  #endif
 diff -ruN a/include/ddraw.h b/include/ddraw.h
 --- a/include/ddraw.h	1970-01-01 01:00:00.000000000 +0100
-+++ b/include/ddraw.h	2010-04-14 21:08:32.391043814 +0200
++++ b/include/ddraw.h	2010-04-25 13:03:46.911124579 +0200
 @@ -0,0 +1,2681 @@
 +/*
 + * Copyright (C) the Wine project
@@ -873,33 +872,33 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +	DWORD	dwAlphaBitDepth;        /* C: how many bits for alpha channels*/
 +	DWORD	dwLuminanceBitCount;
 +	DWORD	dwBumpBitCount;
-+    } u1;
++    } DUMMYUNIONNAME1;
 +    union {
 +	DWORD	dwRBitMask;             /* 10: mask for red bit*/
 +	DWORD	dwYBitMask;             /* 10: mask for Y bits*/
 +	DWORD	dwStencilBitDepth;
 +	DWORD	dwLuminanceBitMask;
 +	DWORD	dwBumpDuBitMask;
-+    } u2;
++    } DUMMYUNIONNAME2;
 +    union {
 +	DWORD	dwGBitMask;             /* 14: mask for green bits*/
 +	DWORD	dwUBitMask;             /* 14: mask for U bits*/
 +	DWORD	dwZBitMask;
 +	DWORD	dwBumpDvBitMask;
-+    } u3;
++    } DUMMYUNIONNAME3;
 +    union {
 +	DWORD   dwBBitMask;             /* 18: mask for blue bits*/
 +	DWORD   dwVBitMask;             /* 18: mask for V bits*/
 +	DWORD	dwStencilBitMask;
 +	DWORD	dwBumpLuminanceBitMask;
-+    } u4;
++    } DUMMYUNIONNAME4;
 +    union {
 +    	DWORD	dwRGBAlphaBitMask;	/* 1C: mask for alpha channel */
 +    	DWORD	dwYUVAlphaBitMask;	/* 1C: mask for alpha channel */
 +	DWORD	dwLuminanceAlphaBitMask;
 +	DWORD	dwRGBZBitMask;		/* 1C: mask for Z channel */
 +	DWORD	dwYUVZBitMask;		/* 1C: mask for Z channel */
-+    } u5;
++    } DUMMYUNIONNAME5;
 +    					/* 20: next structure */
 +} DDPIXELFORMAT,*LPDDPIXELFORMAT;
 +
@@ -1107,13 +1106,13 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +	union {
 +		LONG	lPitch;	/* 10: distance to start of next line (return value only)*/
 +		DWORD	dwLinearSize;
-+	} u1;
++	} DUMMYUNIONNAME1;
 +	DWORD	dwBackBufferCount;/* 14: number of back buffers requested*/
 +	union {
 +		DWORD	dwMipMapCount;/* 18:number of mip-map levels requested*/
 +		DWORD	dwZBufferBitDepth;/*18: depth of Z buffer requested*/
 +		DWORD	dwRefreshRate;/* 18:refresh rate (used when display mode is described)*/
-+	} u2;
++	} DUMMYUNIONNAME2;
 +	DWORD	dwAlphaBitDepth;/* 1C:depth of alpha buffer requested*/
 +	DWORD	dwReserved;	/* 20:reserved*/
 +	LPVOID	lpSurface;	/* 24:pointer to the associated surface memory*/
@@ -1134,20 +1133,20 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +	union {
 +		LONG	lPitch;	      /*10: distance to start of next line (return value only)*/
 +		DWORD   dwLinearSize; /*10: formless late-allocated optimized surface size */
-+	} u1;
++	} DUMMYUNIONNAME1;
 +	DWORD	dwBackBufferCount;/* 14: number of back buffers requested*/
 +	union {
 +		DWORD	dwMipMapCount;/* 18:number of mip-map levels requested*/
 +		DWORD	dwRefreshRate;/* 18:refresh rate (used when display mode is described)*/
 +		DWORD   dwSrcVBHandle;/* 18:source used in VB::Optimize */
-+	} u2;
++	} DUMMYUNIONNAME2;
 +	DWORD	dwAlphaBitDepth;/* 1C:depth of alpha buffer requested*/
 +	DWORD	dwReserved;	/* 20:reserved*/
 +	LPVOID	lpSurface;	/* 24:pointer to the associated surface memory*/
 +	union {
 +		DDCOLORKEY	ddckCKDestOverlay; /* 28: CK for dest overlay use*/
 +		DWORD 		dwEmptyFaceColor;  /* 28: color for empty cubemap faces */
-+	} u3;
++	} DUMMYUNIONNAME3;
 +	DDCOLORKEY	ddckCKDestBlt;	/* 30: CK for destination blt use*/
 +	DDCOLORKEY	ddckCKSrcOverlay;/* 38: CK for source overlay use*/
 +	DDCOLORKEY	ddckCKSrcBlt;	/* 40: CK for source blt use*/
@@ -1155,7 +1154,7 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +	union {
 +		DDPIXELFORMAT	ddpfPixelFormat;/* 48: pixel format description of the surface*/
 +		DWORD 		dwFVF;	/* 48: vertex format description of vertex buffers */
-+	} u4;
++	} DUMMYUNIONNAME4;
 +	DDSCAPS2	ddsCaps;  /* 68: DDraw surface caps */
 +	DWORD		dwTextureStage; /* 78: stage in multitexture cascade */
 +} DDSURFACEDESC2,*LPDDSURFACEDESC2;
@@ -1239,13 +1238,13 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +    {
 +        DWORD   dwZDestConst;                   /* Constant to use as Z buffer for dest */
 +        LPDIRECTDRAWSURFACE lpDDSZBufferDest;   /* Surface to use as Z buffer for dest */
-+    } u1;
++    } DUMMYUNIONNAME1;
 +    DWORD       dwZSrcConstBitDepth;            /* Bit depth used to specify Z constant for source */
 +    union
 +    {
 +        DWORD   dwZSrcConst;                    /* Constant to use as Z buffer for src */
 +        LPDIRECTDRAWSURFACE lpDDSZBufferSrc;    /* Surface to use as Z buffer for src */
-+    } u2;
++    } DUMMYUNIONNAME2;
 +    DWORD       dwAlphaEdgeBlendBitDepth;       /* Bit depth used to specify constant for alpha edge blend */
 +    DWORD       dwAlphaEdgeBlend;               /* Alpha for edge blending */
 +    DWORD       dwReserved;
@@ -1254,20 +1253,20 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +    {
 +        DWORD   dwAlphaDestConst;               /* Constant to use as Alpha Channel */
 +        LPDIRECTDRAWSURFACE lpDDSAlphaDest;     /* Surface to use as Alpha Channel */
-+    } u3;
++    } DUMMYUNIONNAME3;
 +    DWORD       dwAlphaSrcConstBitDepth;        /* Bit depth used to specify alpha constant for source */
 +    union
 +    {
 +        DWORD   dwAlphaSrcConst;                /* Constant to use as Alpha Channel */
 +        LPDIRECTDRAWSURFACE lpDDSAlphaSrc;      /* Surface to use as Alpha Channel */
-+    } u4;
++    } DUMMYUNIONNAME4;
 +    union
 +    {
 +        DWORD   dwFillColor;                    /* color in RGB or Palettized */
 +        DWORD   dwFillDepth;                    /* depth value for z-buffer */
 +	DWORD   dwFillPixel;			/* pixel val for RGBA or RGBZ */
 +        LPDIRECTDRAWSURFACE lpDDSPattern;       /* Surface to use as pattern */
-+    } u5;
++    } DUMMYUNIONNAME5;
 +    DDCOLORKEY  ddckDestColorkey;               /* DestColorkey override */
 +    DDCOLORKEY  ddckSrcColorkey;                /* SrcColorkey override */
 +} DDBLTFX,*LPDDBLTFX;
@@ -1303,13 +1302,13 @@ diff -ruN a/include/ddraw.h b/include/ddraw.h
 +    {
 +        DWORD   dwAlphaDestConst;               /* Constant to use as alpha channel for dest */
 +        LPDIRECTDRAWSURFACE lpDDSAlphaDest;     /* Surface to use as alpha channel for dest */
-+    } u1;
++    } DUMMYUNIONNAME1;
 +    DWORD       dwAlphaSrcConstBitDepth;        /* Bit depth used to specify alpha constant for source */
 +    union
 +    {
 +        DWORD   dwAlphaSrcConst;                /* Constant to use as alpha channel for src */
 +        LPDIRECTDRAWSURFACE lpDDSAlphaSrc;      /* Surface to use as alpha channel for src */
-+    } u2;
++    } DUMMYUNIONNAME2;
 +    DDCOLORKEY  dckDestColorkey;                /* DestColorkey override */
 +    DDCOLORKEY  dckSrcColorkey;                 /* DestColorkey override */
 +    DWORD       dwDDFX;                         /* Overlay FX */
@@ -2894,7 +2893,7 @@ diff -ruN a/include/dmo.h b/include/dmo.h
 \ No newline at end of file
 diff -ruN a/include/dshow.h b/include/dshow.h
 --- a/include/dshow.h	2008-12-06 03:31:56.000000000 +0100
-+++ b/include/dshow.h	2010-04-14 21:08:32.363036508 +0200
++++ b/include/dshow.h	2010-04-25 13:03:46.887145541 +0200
 @@ -5,7 +5,10 @@
  #endif
  
@@ -3076,7 +3075,7 @@ diff -ruN a/include/qnetwork.h b/include/qnetwork.h
 \ No newline at end of file
 diff -ruN a/include/strmif.h b/include/strmif.h
 --- a/include/strmif.h	2008-12-06 03:32:10.000000000 +0100
-+++ b/include/strmif.h	2010-04-14 21:08:32.363036508 +0200
++++ b/include/strmif.h	2010-04-25 13:03:46.887145541 +0200
 @@ -4,10 +4,79 @@
  #pragma GCC system_header
  #endif
@@ -3534,7 +3533,7 @@ diff -ruN a/include/strmif.h b/include/strmif.h
  #endif
 diff -ruN a/include/vmr9.h b/include/vmr9.h
 --- a/include/vmr9.h	2008-12-06 03:32:11.000000000 +0100
-+++ b/include/vmr9.h	2010-04-14 21:08:32.363036508 +0200
++++ b/include/vmr9.h	2010-04-25 13:03:46.891124634 +0200
 @@ -8,6 +8,10 @@
  extern "C" {
  #endif
