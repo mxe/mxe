@@ -46,14 +46,14 @@ define $(PKG)_BUILD
         CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include' \
         LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs'
     $(SED) -i 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
-    $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
-    $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
-    $(MAKE) -C '$(1).native/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
-    $(MAKE) -C '$(1).native/gmodule' -j '$(JOBS)'
-    $(MAKE) -C '$(1).native/gio/xdgmime' -j '$(JOBS)'
-    $(MAKE) -C '$(1).native/gio/inotify' -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/glib'           -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gthread'        -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gobject'        -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    $(MAKE) -C '$(1).native/gmodule'        -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gio/xdgmime'    -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gio/inotify'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gio/libasyncns' -j '$(JOBS)'
-    $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gio'            -j '$(JOBS)'
 
     # cross build
     $(SED) -i 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' '$(1)/glib-2.0.pc.in'
