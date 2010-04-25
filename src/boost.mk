@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    echo 'using gcc : : $(TARGET)-g++ : ;' > '$(1)/user-config.jam'
+    echo 'using gcc : : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar ;' > '$(1)/user-config.jam'
     # make the build script generate .a library files instead of .lib
     $(SED) -i 's,<target-os>windows : lib ;,<target-os>windows : a ;,' '$(1)/tools/build/v2/tools/types/lib.jam'
     # compile boost jam
