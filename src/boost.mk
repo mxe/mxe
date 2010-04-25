@@ -43,4 +43,9 @@ define $(PKG)_BUILD
         -sEXPAT_INCLUDE='$(PREFIX)/$(TARGET)/include' \
         -sEXPAT_LIBPATH='$(PREFIX)/$(TARGET)/lib' \
         stage install
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -std=c++98 -U__STRICT_ANSI__ -pedantic \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-boost.exe' \
+        -lboost_serialization-mt
 endef
