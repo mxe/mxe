@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         --disable-check \
         --disable-tests \
         --disable-examples \
+        --disable-esd \
         --mandir='$(1)/sink' \
         --docdir='$(1)/sink' \
         --with-html-dir='$(1)/sink'
