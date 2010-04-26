@@ -1,0 +1,15 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -r 9eefd9257b2e configure
+--- a/configure	Fri Apr 23 20:00:23 2010 +0200
++++ b/configure	Fri Apr 23 20:01:32 2010 +0200
+@@ -16408,7 +16408,7 @@
+ have_supported_dvb=yes
+ SYS=other
+ 
+-case "$build_os" in
++case "$host_os" in
+   gnu*)
+     have_supported_dvb=no
+     SYS=hurd

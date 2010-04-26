@@ -1,0 +1,33 @@
+diff -r 42ff50f9d875 src/xine-engine/Makefile.am
+--- a/src/xine-engine/Makefile.am	Mon Apr 26 17:53:49 2010 +0200
++++ b/src/xine-engine/Makefile.am	Mon Apr 26 17:56:06 2010 +0200
+@@ -43,13 +43,5 @@
+ 
+ noinst_HEADERS = bswap.h ffmpeg_bswap.h
+ 
+-if WIN32
+-install-exec-local:
+-	cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
+-
+-uninstall-local:
+-	rm -f $(DEF_FILE)
+-endif
+-
+ $(XINEUTILS_LIB):
+ 	$(MAKE) -C $(top_builddir)/src/xine-utils libxineutils.la
+diff -r 42ff50f9d875 src/xine-engine/Makefile.in
+--- a/src/xine-engine/Makefile.in	Mon Apr 26 17:53:49 2010 +0200
++++ b/src/xine-engine/Makefile.in	Mon Apr 26 17:56:06 2010 +0200
+@@ -897,12 +897,6 @@
+ $(LIBXINEPOSIX):
+ 	$(MAKE) -C $(top_builddir)/lib libxineposix.la
+ 
+-@WIN32_TRUE@install-exec-local:
+-@WIN32_TRUE@	cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
+-
+-@WIN32_TRUE@uninstall-local:
+-@WIN32_TRUE@	rm -f $(DEF_FILE)
+-
+ $(XINEUTILS_LIB):
+ 	$(MAKE) -C $(top_builddir)/src/xine-utils libxineutils.la
+ 
