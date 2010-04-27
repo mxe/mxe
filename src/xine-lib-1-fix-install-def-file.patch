@@ -1,0 +1,35 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -r 42ff50f9d875 src/xine-engine/Makefile.am
+--- a/src/xine-engine/Makefile.am	Mon Apr 26 17:53:49 2010 +0200
++++ b/src/xine-engine/Makefile.am	Tue Apr 27 11:57:54 2010 +0200
+@@ -45,10 +45,10 @@
+ 
+ if WIN32
+ install-exec-local:
+-	cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
++	-cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
+ 
+ uninstall-local:
+-	rm -f $(DEF_FILE)
++	-rm -f $(DESTDIR)$(libdir)/$(DEF_FILE)
+ endif
+ 
+ $(XINEUTILS_LIB):
+diff -r 42ff50f9d875 src/xine-engine/Makefile.in
+--- a/src/xine-engine/Makefile.in	Mon Apr 26 17:53:49 2010 +0200
++++ b/src/xine-engine/Makefile.in	Tue Apr 27 11:57:54 2010 +0200
+@@ -898,10 +898,10 @@
+ 	$(MAKE) -C $(top_builddir)/lib libxineposix.la
+ 
+ @WIN32_TRUE@install-exec-local:
+-@WIN32_TRUE@	cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
++@WIN32_TRUE@	-cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
+ 
+ @WIN32_TRUE@uninstall-local:
+-@WIN32_TRUE@	rm -f $(DEF_FILE)
++@WIN32_TRUE@	-rm -f $(DESTDIR)$(libdir)/$(DEF_FILE)
+ 
+ $(XINEUTILS_LIB):
+ 	$(MAKE) -C $(top_builddir)/src/xine-utils libxineutils.la
