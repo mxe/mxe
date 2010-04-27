@@ -33,7 +33,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,enable_shared=yes,enable_shared=no,' '$(1)/configure'
     $(SED) -i 's,\(STATIC_LIB_DEPS="[^"]*\) \$$LIBJASPER,\1 $$LIBJASPER $$LIBJPEG,' '$(1)/configure'
     $(SED) -i 's/-Wl,-luuid/-luuid/' '$(1)/configure'
-    $(SED) -i 's/gio-unix/gio-windows/' '$(1)/configure'
+    $(SED) -i 's/gio-unix/gio/' '$(1)/configure'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
