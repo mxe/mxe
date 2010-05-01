@@ -4,8 +4,8 @@
 # Xerces-C++
 PKG             := xerces
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.0
-$(PKG)_CHECKSUM := 15e45ae354980d6aa58e8c14eb6bc9fd84e51929
+$(PKG)_VERSION  := 3.1.1
+$(PKG)_CHECKSUM := 177ec838c5119df57ec77eddec9a29f7e754c8b2
 $(PKG)_SUBDIR   := xerces-c-$($(PKG)_VERSION)
 $(PKG)_FILE     := xerces-c-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://xerces.apache.org/xerces-c/
