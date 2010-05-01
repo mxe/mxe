@@ -14,10 +14,8 @@ $(PKG)_URL_2    := http://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(
 $(PKG)_DEPS     := gcc libiconv curl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://svn.apache.org/viewvc/xerces/c/tags/?sortby=date' | \
-    grep '<a name="' | \
-    $(SED) -n 's,.*<a name="Xerces-C_\([0-9][^"]*\)".*,\1,p' | \
-    $(SED) 's,_,.,g' | \
+    wget -q -O- 'http://www.apache.org/dist/xerces/c/3/sources/?C=M;O=D' | \
+    $(SED) -n 's,.*<a href="xerces-c-\([0-9][^"]*\)\.tar.*,\1,p' | \
     grep -v rc | \
     head -1
 endef
