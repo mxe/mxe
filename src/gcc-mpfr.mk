@@ -9,11 +9,11 @@ $(PKG)_CHECKSUM := 1f965793526cafefb30cda64cebf3712cb75b488
 $(PKG)_SUBDIR   := mpfr-$($(PKG)_VERSION)
 $(PKG)_FILE     := mpfr-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.mpfr.org/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tdm-gcc/Sources/Vanilla Sources/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/tdm-gcc/files/Sources/) | \
-    $(SED) -n 's,.*mpfr-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'https://gforge.inria.fr/scm/viewvc.php/tags/?root=mpfr&sortby=date' | \
+    $(SED) -n 's,.*<a name="\([0-9][^"]*\)".*,\1,p' | \
+    head -1
 endef
