@@ -28,6 +28,7 @@ define $(PKG)_BUILD
         -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY           \
         -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY           \
         -DCMAKE_C_COMPILER='$(PREFIX)/bin/$(TARGET)-gcc'   \
+        -DCMAKE_CXX_COMPILER='$(PREFIX)/bin/$(TARGET)-g++' \
         -DCMAKE_INCLUDE_PATH='$(PREFIX)/$(TARGET)/include' \
         -DCMAKE_LIB_PATH='$(PREFIX)/$(TARGET)/lib'         \
         -DPKG_CONFIG_EXECUTABLE=$(TARGET)-pkg-config       \
@@ -35,6 +36,7 @@ define $(PKG)_BUILD
         -DCMAKE_BUILD_TYPE=Release                         \
         -DDYNAMIC_OPENTHREADS=OFF                          \
         -DDYNAMIC_OPENSCENEGRAPH=OFF                       \
-        -DBUILD_OSG_APPLICATIONS=OFF
+        -DBUILD_OSG_APPLICATIONS=OFF                       \
+        -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
