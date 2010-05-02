@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --disable-debug \
+        --disable-thread \
         --infodir='$(1)/sink' \
         --mandir='$(1)/sink'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install

@@ -37,6 +37,7 @@ define $(PKG)_BUILD
         --enable-static \
         --enable-libiconv \
         --enable-msdblib \
+        --disable-threadsafe \
         --with-tdsver=8.0
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

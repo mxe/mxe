@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
-        --with-threads \
+        --without-threads \
         LIBS='-lunistring -lintl -liconv'
     $(MAKE) -C '$(1)' -j '$(JOBS)' schemelib_DATA=
     $(MAKE) -C '$(1)' -j 1 install schemelib_DATA=

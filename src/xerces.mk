@@ -27,7 +27,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-libtool-lock \
         --disable-pretty-make \
-        --enable-threads \
+        --disable-threads \
         --enable-network \
         --enable-netaccessor-curl \
         --disable-netaccessor-socket \
