@@ -39,7 +39,8 @@ define $(PKG)_BUILD
         --disable-shared \
         --enable-platform-windows \
         --disable-rpath \
-        --disable-dependency-tracking
+        --disable-dependency-tracking \
+        --without-pthread
 
     # Disable VMIME_HAVE_MLANG_H
     # We have the header, but there is no implementation for IMultiLanguage in MinGW
