@@ -34,6 +34,7 @@ define $(PKG)_BUILD
         -DPKG_CONFIG_EXECUTABLE=$(TARGET)-pkg-config       \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'       \
         -DCMAKE_BUILD_TYPE=Release                         \
+        -DCMAKE_HAVE_PTHREAD_H=OFF                         \
         -DDYNAMIC_OPENTHREADS=OFF                          \
         -DDYNAMIC_OPENSCENEGRAPH=OFF                       \
         -DBUILD_OSG_APPLICATIONS=OFF                       \
