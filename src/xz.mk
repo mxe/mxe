@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --disable-dynamic \
+        --disable-threads \
         --disable-nls
     $(MAKE) -C '$(1)'/src/liblzma -j '$(JOBS)' install
 endef
