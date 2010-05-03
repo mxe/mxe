@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.xine-project.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xine/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib libiconv libmng sdl vorbis theora speex flac freetype fontconfig
+$(PKG)_DEPS     := gcc zlib libiconv libmng sdl vorbis theora speex flac freetype fontconfig pthreads
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://hg.debian.org/hg/xine-lib/xine-lib/tags' | \

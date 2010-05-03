@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := liblo-$($(PKG)_VERSION)
 $(PKG)_FILE     := liblo-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://liblo.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/liblo/liblo/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/liblo/files/liblo/) | \

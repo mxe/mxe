@@ -11,7 +11,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/plotutils/
 $(PKG)_URL      := http://ftpmirror.gnu.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libpng
+$(PKG)_DEPS     := gcc libpng pthreads
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.gnu.org/gnu/plotutils/?C=M;O=D' | \

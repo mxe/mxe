@@ -11,7 +11,7 @@ $(PKG)_FILE     := gd-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.libgd.org/
 $(PKG)_URL      := http://www.libgd.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://www.libgd.org/releases/oldreleases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype libpng jpeg libxml2
+$(PKG)_DEPS     := gcc freetype libpng jpeg libxml2 pthreads
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.libgd.org/releases/' | \

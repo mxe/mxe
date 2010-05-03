@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := fltk-$($(PKG)_VERSION)
 $(PKG)_FILE     := fltk-$($(PKG)_VERSION)-source.tar.bz2
 $(PKG)_WEBSITE  := http://www.fltk.org/
 $(PKG)_URL      := http://ftp.easysw.com/pub/fltk/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib jpeg libpng
+$(PKG)_DEPS     := gcc zlib jpeg libpng pthreads
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.fltk.org/' | \
