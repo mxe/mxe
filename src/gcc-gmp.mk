@@ -4,8 +4,8 @@
 # GMP for GCC
 PKG             := gcc-gmp
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.3.0
-$(PKG)_CHECKSUM := 86dbd8a6b2fbb4c75760a80009227c9a11b801a9
+$(PKG)_VERSION  := 5.0.1
+$(PKG)_CHECKSUM := 6340edc7ceb95f9015a758c7c0d196eb0f441d49
 $(PKG)_SUBDIR   := gmp-$($(PKG)_VERSION)
 $(PKG)_FILE     := gmp-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gmplib.org/
