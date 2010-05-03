@@ -13,7 +13,7 @@ $(PKG)_URL      := $($(PKG)_WEBSITE)/mpc/download/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    wget -q -O- 'https://gforge.inria.fr/scm/viewvc.php/tags/?root=mpc&sortby=date' | \
+    wget -q --no-check-certificate -O- 'https://gforge.inria.fr/scm/viewvc.php/tags/?root=mpc&sortby=date' | \
     $(SED) -n 's,.*<a name="\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef
