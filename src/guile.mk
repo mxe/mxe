@@ -20,11 +20,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # The setting "scm_cv_struct_timespec=no" ensures that Guile
+    # won't try to use the "struct timespec" from <pthreads.h>,
+    # which would fail because we tell Guile not to use Pthreads.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --without-threads \
+        scm_cv_struct_timespec=no \
         LIBS='-lunistring -lintl -liconv'
     $(MAKE) -C '$(1)' -j '$(JOBS)' schemelib_DATA=
     $(MAKE) -C '$(1)' -j 1 install schemelib_DATA=
