@@ -28,4 +28,9 @@ define $(PKG)_BUILD
         --disable-shared \
         LIBS='-lws2_32'
     $(MAKE) -C '$(1)/build/$(TARGET)/libgomp' -j '$(JOBS)' install
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgomp.exe' \
+        -fopenmp
 endef
