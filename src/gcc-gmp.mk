@@ -3,19 +3,16 @@
 
 # GMP for GCC
 PKG             := gcc-gmp
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.0.1
-$(PKG)_CHECKSUM := 6340edc7ceb95f9015a758c7c0d196eb0f441d49
-$(PKG)_SUBDIR   := gmp-$($(PKG)_VERSION)
-$(PKG)_FILE     := gmp-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.gmplib.org/
-$(PKG)_URL      := ftp://ftp.gmplib.org/pub/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_IGNORE    = $(gmp_IGNORE)
+$(PKG)_VERSION   = $(gmp_VERSION)
+$(PKG)_CHECKSUM  = $(gmp_CHECKSUM)
+$(PKG)_SUBDIR    = $(gmp_SUBDIR)
+$(PKG)_FILE      = $(gmp_FILE)
+$(PKG)_WEBSITE   = $(gmp_WEBSITE)
+$(PKG)_URL       = $(gmp_URL)
+$(PKG)_URL_2     = $(gmp_URL_2)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.gmplib.org/' | \
-    grep '<a href="' | \
-    $(SED) -n 's,.*gmp-\([0-9][^>]*\)\.tar\.bz2.*,\1,p' | \
-    grep -v '^4\.' | \
-    head -1
+    echo $(gmp_VERSION)
 endef
