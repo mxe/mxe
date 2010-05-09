@@ -3,7 +3,7 @@
 
 #include <SDL_mixer.h>
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     int initted;
 

@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <jpeglib.h>
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     boolean test_boolean;
     INT32 test_int32;
