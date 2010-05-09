@@ -45,7 +45,9 @@ define $(PKG)_BUILD
         --without-x \
         --disable-win32-registry \
         --enable-sjlj-exceptions \
-        --enable-threads=win32
+        --enable-threads=win32 \
+        --disable-libgomp \
+        --disable-libmudflap
     $(MAKE) -C '$(1)/build' -j '$(JOBS)'
     $(MAKE) -C '$(1)/build' -j 1 install
 
