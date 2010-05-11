@@ -4,8 +4,8 @@
 # GeoTiff
 PKG             := libgeotiff
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.5
-$(PKG)_CHECKSUM := 38b10070374636fedfdde328ff1c9f3c6e8e581f
+$(PKG)_VERSION  := 1.3.0
+$(PKG)_CHECKSUM := b8cde5014cf82fe4683fa35fc81a5ea8d64b940f
 $(PKG)_SUBDIR   := libgeotiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgeotiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://trac.osgeo.org/geotiff/
@@ -25,7 +25,8 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        LIBS='-ljpeg -lz'
     $(MAKE) -C '$(1)' -j 1 all install EXEEXT=.remove-me MAKE='$(MAKE)'
     rm -fv '$(PREFIX)/$(TARGET)'/bin/*.remove-me
 endef
