@@ -4,8 +4,8 @@
 # gst-plugins-good
 PKG             := gst-plugins-good
 $(PKG)_IGNORE   := 0.10.20
-$(PKG)_VERSION  := 0.10.21
-$(PKG)_CHECKSUM := ed619824f5ca4592bfe2b2f6df9d53f08bf5f360
+$(PKG)_VERSION  := 0.10.22
+$(PKG)_CHECKSUM := 381f3603a1704aa36297937808220fb8c6c102f4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
@@ -22,6 +22,9 @@ define $(PKG)_BUILD
     find '$(1)' -name Makefile.in \
         -exec $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g'       {} \; \
         -exec $(SED) -i 's,glib-genmarshal,$(PREFIX)/$(TARGET)/bin/glib-genmarshal,g' {} \;
+    # The value for WAVE_FORMAT_DOLBY_AC3_SPDIF comes from vlc and mplayer:
+    #   http://www.videolan.org/developers/vlc/doc/doxygen/html/vlc__codecs_8h-source.html
+    #   http://lists.mplayerhq.hu/pipermail/mplayer-cvslog/2004-August/019283.html
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -34,5 +37,5 @@ define $(PKG)_BUILD
         --mandir='$(1)/sink' \
         --docdir='$(1)/sink' \
         --with-html-dir='$(1)/sink'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install CFLAGS='-DWAVE_FORMAT_DOLBY_AC3_SPDIF=0x0092'
 endef
