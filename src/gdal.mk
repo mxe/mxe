@@ -4,8 +4,8 @@
 # GDAL
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.1
-$(PKG)_CHECKSUM := 1ff42b51f416da966ee25c42631a3faa3cca5d4d
+$(PKG)_VERSION  := 1.7.2
+$(PKG)_CHECKSUM := a03127530708e3924aec7b505cc2ca4f8153f13c
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gdal.org/

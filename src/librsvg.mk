@@ -4,8 +4,8 @@
 # librsvg
 PKG             := librsvg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.26.2
-$(PKG)_CHECKSUM := 3c529b5e28a8924fa95d74814dd63b53182c903c
+$(PKG)_VERSION  := 2.26.3
+$(PKG)_CHECKSUM := ef0063eaa9e638364cc8ff142aadef8a267b7af5
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
