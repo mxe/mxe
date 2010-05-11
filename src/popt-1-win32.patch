@@ -1,91 +1,10 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-diff -urN popt-1.15/autogen.sh popt-1.15-mod/autogen.sh
---- popt-1.15/autogen.sh	2008-02-14 08:33:39.000000000 +0100
-+++ popt-1.15-mod/autogen.sh	2009-06-16 14:48:40.000000000 +0200
-@@ -5,6 +5,8 @@
- 
- THEDIR="`pwd`"
- 
-+gnulib-tool --update
-+
- libtoolize=`which glibtoolize 2>/dev/null`
- case $libtoolize in
- /*) ;;
-diff -urN popt-1.15/configure.ac popt-1.15-mod/configure.ac
---- popt-1.15/configure.ac	2009-04-12 21:31:09.000000000 +0200
-+++ popt-1.15-mod/configure.ac	2009-06-16 14:48:40.000000000 +0200
-@@ -1,4 +1,4 @@
--AC_PREREQ(2.57)
-+AC_PREREQ([2.59])
- AC_INIT(popt, 1.15, popt-devel@rpm5.org)
- AC_CANONICAL_TARGET
- AC_CONFIG_SRCDIR([popt.h])
-@@ -17,6 +17,7 @@
- ALL_LINGUAS="cs da de eo es fi fr ga gl hu id is it ja ko nb nl pl pt ro ru sk sl sv th tr uk vi wa zh_TW zh_CN"
- 
- AC_PROG_CC
-+gl_EARLY
- AC_PROG_INSTALL
- AC_PROG_LIBTOOL
- 
-@@ -42,7 +43,10 @@
- AC_ISC_POSIX
- AM_C_PROTOTYPES
- 
--AC_CHECK_HEADERS(float.h fnmatch.h glob.h langinfo.h libintl.h mcheck.h unistd.h)
-+dnl Gnulib tests.
-+gl_INIT
-+
-+AC_CHECK_HEADERS(float.h fnmatch.h glob.h langinfo.h libintl.h mcheck.h unistd.h sys/ioctl.h)
- 
- # For some systems we know that we have ld_version scripts.
- # Use it then as default.
-@@ -66,7 +70,7 @@
- AC_CHECK_FUNC(setreuid, [], [
-     AC_CHECK_LIB(ucb, setreuid, [if echo $LIBS | grep -- -lucb >/dev/null ;then :; else LIBS="$LIBS -lc -lucb" USEUCB=y;fi])
- ])
--AC_CHECK_FUNCS(getuid geteuid iconv mtrace __secure_getenv setregid stpcpy strerror vasprintf srandom)
-+AC_CHECK_FUNCS(getuid geteuid iconv mtrace __secure_getenv setregid stpcpy strerror vasprintf srandom random)
- 
- AM_GNU_GETTEXT([external])
- AM_ICONV_LINK
-@@ -80,4 +84,4 @@
- 	[Full path to popt top_srcdir.])
- AC_SUBST(POPT_SOURCE_PATH)
- 
--AC_OUTPUT([Doxyfile Makefile po/Makefile.in])
-+AC_OUTPUT([Doxyfile Makefile  po/Makefile.in lib/Makefile])
-diff -urN popt-1.15/Makefile.am popt-1.15-mod/Makefile.am
---- popt-1.15/Makefile.am	2009-04-12 21:31:09.000000000 +0200
-+++ popt-1.15-mod/Makefile.am	2009-06-16 14:49:34.000000000 +0200
-@@ -8,9 +8,10 @@
- 	footer_no_timestamp.html libpopt.vers \
- 	testit.sh test-poptrc test3-data/0* \
- 	po/*.in po/*.po po/popt.pot \
--	popt.ps
-+	popt.ps \
-+	m4/gnulib-cache.m4
- 
--SUBDIRS = po
-+SUBDIRS = lib po
- 
- INCLUDES = -I. -I$(top_srcdir)
- 
-@@ -40,7 +41,7 @@
- usrlib_LTLIBRARIES = libpopt.la
- 
- libpopt_la_SOURCES = popt.c poptparse.c poptconfig.c popthelp.c poptint.c
--libpopt_la_LDFLAGS = -no-undefined @LTLIBINTL@ @LTLIBICONV@
-+libpopt_la_LDFLAGS = @LTLIBINTL@ @LTLIBICONV@
- 
- if HAVE_LD_VERSION_SCRIPT
- libpopt_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libpopt.vers
-diff -urN popt-1.15/popt.c popt-1.15-mod/popt.c
---- popt-1.15/popt.c	2009-04-12 20:14:38.000000000 +0200
-+++ popt-1.15-mod/popt.c	2009-06-16 14:48:40.000000000 +0200
-@@ -766,6 +766,21 @@
+diff -urN a/popt.c b/popt.c
+--- a/popt.c	2010-01-19 01:39:10.000000000 +0100
++++ b/popt.c	2010-05-12 00:15:14.959504505 +0200
+@@ -972,6 +972,21 @@
  /*@=unqualifiedtrans =nullstate@*/
  }
  
@@ -107,9 +26,9 @@ diff -urN popt-1.15/popt.c popt-1.15-mod/popt.c
  /*@unchecked@*/
  static unsigned int seed = 0;
  
-diff -urN popt-1.15/poptconfig.c popt-1.15-mod/poptconfig.c
---- popt-1.15/poptconfig.c	2009-04-12 20:14:38.000000000 +0200
-+++ popt-1.15-mod/poptconfig.c	2009-06-16 14:48:40.000000000 +0200
+diff -urN a/poptconfig.c b/poptconfig.c
+--- a/poptconfig.c	2009-05-20 15:18:07.000000000 +0200
++++ b/poptconfig.c	2010-05-12 00:15:14.959504505 +0200
 @@ -141,18 +141,23 @@
  int poptSaneFile(const char * fn)
  {
@@ -135,9 +54,9 @@ diff -urN popt-1.15/poptconfig.c popt-1.15-mod/poptconfig.c
      return 1;
  }
  
-diff -urN popt-1.15/popthelp.c popt-1.15-mod/popthelp.c
---- popt-1.15/popthelp.c	2009-04-12 20:14:38.000000000 +0200
-+++ popt-1.15-mod/popthelp.c	2009-06-16 14:48:40.000000000 +0200
+diff -urN a/popthelp.c b/popthelp.c
+--- a/popthelp.c	2009-08-28 02:06:33.000000000 +0200
++++ b/popthelp.c	2010-05-12 00:15:14.964949157 +0200
 @@ -12,8 +12,10 @@
  
  #define        POPT_USE_TIOCGWINSZ

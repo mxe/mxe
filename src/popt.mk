@@ -4,8 +4,8 @@
 # popt
 PKG             := popt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.15
-$(PKG)_CHECKSUM := d9bc3067a4e7e62ac0bd9818e8cd649ee0dd12dc
+$(PKG)_VERSION  := 1.16
+$(PKG)_CHECKSUM := cfe94a15a2404db85858a81ff8de27c8ff3e235e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://freshmeat.net/projects/popt/
@@ -20,10 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && aclocal -I m4
-    cd '$(1)' && autoheader
-    cd '$(1)' && automake --add-missing
-    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
