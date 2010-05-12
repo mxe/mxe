@@ -1,0 +1,16 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://sourceforge.net/tracker/?func=detail&aid=2995373&group_id=6389&atid=306389
+
+--- zziplib-0.13.58/zzip/__fnmatch.h	2009-08-23 07:38:22.000000000 -0400
++++ zziplib-0.13.58/zzip/__fnmatch.h	2010-01-09 13:32:11.311799466 -0500
+@@ -4,6 +4,7 @@
+ 
+ #include <zzip/conf.h>
+ #include <stdio.h>
++#include <string.h>
+ 
+ #ifdef ZZIP_HAVE_FNMATCH_H
+ #include <fnmatch.h>
