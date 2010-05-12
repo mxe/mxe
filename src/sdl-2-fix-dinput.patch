@@ -1,0 +1,30 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://hg.libsdl.org/SDL/rev/daf9e6037596
+
+diff --git a/src/video/windx5/SDL_dx5events.c b/src/video/windx5/SDL_dx5events.c
+--- a/src/video/windx5/SDL_dx5events.c
++++ b/src/video/windx5/SDL_dx5events.c
+@@ -559,13 +559,15 @@
+ 
+ 			active = (wParam && (GetForegroundWindow() == hwnd));
+ 			if ( active ) {
+-				for ( i=0; SDL_DIdev[i]; ++i ) {
+-					IDirectInputDevice2_Acquire(
++				for ( i=0; i<MAX_INPUTS; ++i ) {
++					if (SDL_DIdev[i] != NULL)
++						IDirectInputDevice2_Acquire(
+ 								SDL_DIdev[i]);
+ 				}
+ 			} else {
+-				for ( i=0; SDL_DIdev[i]; ++i ) {
+-					IDirectInputDevice2_Unacquire(
++				for ( i=0; i<MAX_INPUTS; ++i ) {
++					if (SDL_DIdev[i] != NULL) 
++						IDirectInputDevice2_Unacquire(
+ 								SDL_DIdev[i]);
+ 				}
+ 				mouse_lost = 1;
+
