@@ -21,6 +21,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --disable-mmap \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         PKG_CONFIG='$(TARGET)-pkg-config'
