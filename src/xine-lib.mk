@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --disable-mmap \
         --disable-nls \
+        --disable-aalib \
         --enable-mng \
         --disable-real-codecs \
         --without-external-ffmpeg \
