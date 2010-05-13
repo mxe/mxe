@@ -1,0 +1,23 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://tech.groups.yahoo.com/group/pdflib/message/20472
+
+diff -urN a/libs/pdcore/pc_util.c b/libs/pdcore/pc_util.c
+--- a/libs/pdcore/pc_util.c	2010-04-29 15:50:05.000000000 +0200
++++ b/libs/pdcore/pc_util.c	2010-05-11 23:59:03.915954995 +0200
+@@ -30,8 +30,12 @@
+ #include <ieeefp.h>     /* for finite */
+ #endif
+ 
+-#if defined (isfinite)
++#if defined(isfinite)
+ #define PDC_ISFINITE isfinite
++#if defined(__MINGW32__)
++/* MinGW has infinite, but we still need DWORD */
++#include <windef.h>
++#endif
+ #else /* isfinite */
+ 
+ #if defined(WIN32)
