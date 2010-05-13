@@ -4,8 +4,8 @@
 # gettext
 PKG             := gettext
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.17
-$(PKG)_CHECKSUM := c51803d9f745f6ace36bd09c0486d5735ce399cf
+$(PKG)_VERSION  := 0.18
+$(PKG)_CHECKSUM := de396ec6877a451427d8597197d18c2d4b8f1a26
 $(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gettext/
