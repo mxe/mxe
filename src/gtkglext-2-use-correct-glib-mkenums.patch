@@ -1,0 +1,48 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+https://bugzilla.gnome.org/show_bug.cgi?id=618599
+
+diff -r 4a787346ab72 gdk/Makefile.am
+--- a/gdk/Makefile.am	Fri May 14 10:07:05 2010 +0200
++++ b/gdk/Makefile.am	Fri May 14 10:16:08 2010 +0200
+@@ -157,7 +157,7 @@
+ $(srcdir)/gdkglenumtypes.h: stamp-gdkglenumtypes-h
+ 	@true
+ stamp-gdkglenumtypes-h: @REBUILD@ $(gdkglext_public_h_sources) Makefile
+-	( cd $(srcdir) && glib-mkenums \
++	( cd $(srcdir) && $(GLIB_MKENUMS) \
+ 			--fhead "#ifndef __GDK_GL_ENUM_TYPES_H__\n#define __GDK_GL_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
+ 			--fprod "/* enumerations from \"@filename@\" */\n" \
+ 			--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" \
+@@ -167,7 +167,7 @@
+ 	&& rm -f xgen-geth \
+ 	&& echo timestamp > $(@F)
+ $(srcdir)/gdkglenumtypes.c: @REBUILD@ $(gdkglext_public_h_sources) Makefile
+-	( cd $(srcdir) && glib-mkenums \
++	( cd $(srcdir) && $(GLIB_MKENUMS) \
+ 			--fhead "#include \"gdkgl.h\"" \
+ 			--fprod "\n/* enumerations from \"@filename@\" */" \
+ 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
+diff -r 4a787346ab72 gdk/Makefile.in
+--- a/gdk/Makefile.in	Fri May 14 10:07:05 2010 +0200
++++ b/gdk/Makefile.in	Fri May 14 10:28:03 2010 +0200
+@@ -844,7 +844,7 @@
+ $(srcdir)/gdkglenumtypes.h: stamp-gdkglenumtypes-h
+ 	@true
+ stamp-gdkglenumtypes-h: @REBUILD@ $(gdkglext_public_h_sources) Makefile
+-	( cd $(srcdir) && glib-mkenums \
++	( cd $(srcdir) && $(GLIB_MKENUMS) \
+ 			--fhead "#ifndef __GDK_GL_ENUM_TYPES_H__\n#define __GDK_GL_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
+ 			--fprod "/* enumerations from \"@filename@\" */\n" \
+ 			--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" \
+@@ -854,7 +854,7 @@
+ 	&& rm -f xgen-geth \
+ 	&& echo timestamp > $(@F)
+ $(srcdir)/gdkglenumtypes.c: @REBUILD@ $(gdkglext_public_h_sources) Makefile
+-	( cd $(srcdir) && glib-mkenums \
++	( cd $(srcdir) && $(GLIB_MKENUMS) \
+ 			--fhead "#include \"gdkgl.h\"" \
+ 			--fprod "\n/* enumerations from \"@filename@\" */" \
+ 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
