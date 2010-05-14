@@ -1,6 +1,9 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
+This patch has been taken from:
+http://zarb.org/~gc/t/SDL_Pango-0.1.2-API-adds.patch
+
 --- SDL_Pango-0.1.2.orig/src/SDL_Pango.c	2004-12-10 10:06:33.000000000 +0100
 +++ SDL_Pango-0.1.2/src/SDL_Pango.c	2006-09-24 22:46:24.000000000 +0200
 @@ -723,13 +723,8 @@

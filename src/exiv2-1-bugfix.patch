@@ -1,6 +1,9 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
+This patch has been taken from:
+http://dev.exiv2.org/issues/show/690
+
 diff -ru exiv2-0.19.orig/src/convert.cpp exiv2-0.19/src/convert.cpp
 +++ exiv2-0.19.orig/src/convert.cpp	2009-12-28 15:47:58.000000000 +0100
 --- exiv2-0.19/src/convert.cpp	2010-03-25 01:14:57.000000000 +0100

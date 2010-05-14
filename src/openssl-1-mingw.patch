@@ -1,6 +1,9 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
+This patch has been taken from:
+http://www.mail-archive.com/openssl-dev@openssl.org/msg27484.html
+
 diff -ru openssl-1.0.0-orig/apps/speed.c openssl-1.0.0/apps/speed.c
 --- openssl-1.0.0-orig/apps/speed.c	2010-03-03 14:56:18.000000000 -0500
 +++ openssl-1.0.0/apps/speed.c	2010-03-30 02:06:56.763000000 -0400
