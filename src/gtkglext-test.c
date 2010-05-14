@@ -10,6 +10,9 @@ static gboolean eventExpose(GtkWidget *gl, GdkEventExpose *e, gpointer userData)
     GdkGLContext *ctx = gtk_widget_get_gl_context(gl);
     GdkGLDrawable *drawable = gtk_widget_get_gl_drawable(gl);
 
+    (void)e;
+    (void)userData;
+
     gdk_gl_drawable_gl_begin(drawable, ctx);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -28,6 +31,9 @@ static gboolean eventConfigure(GtkWidget *gl, GdkEventConfigure *e, gpointer use
 {
     const guint width = gl->allocation.width;
     const guint height = gl->allocation.height;
+
+    (void)e;
+    (void)userData;
 
     glLoadIdentity();
     glViewport(0, 0, width, height);
