@@ -4,19 +4,18 @@
 # lcms
 PKG             := lcms
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.19
-$(PKG)_CHECKSUM := d5b075ccffc0068015f74f78e4bc39138bcfe2d4
+$(PKG)_VERSION  := 2.0a
+$(PKG)_CHECKSUM := b9d3939764e3b3f33cb9b9f7cffd43520227db9e
 $(PKG)_SUBDIR   := lcms-$(subst a,,$($(PKG)_VERSION))
-$(PKG)_FILE     := lcms-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := lcms$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.littlecms.com/
-$(PKG)_URL      := http://www.littlecms.com/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(subst a,,$($(PKG)_VERSION))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.littlecms.com/downloads.htm' | \
-    grep 'lcms-' | \
-    $(SED) -n 's,.*lcms-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/lcms/files/) | \
+    $(SED) -n 's,.*lcms[0-9]*-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
