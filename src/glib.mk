@@ -43,6 +43,7 @@ define $(PKG)_BUILD
         --disable-fam \
         --disable-xattr \
         --with-libiconv=gnu \
+        --with-pcre=internal \
         CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include' \
         LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs'
     $(SED) -i 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
