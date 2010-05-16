@@ -1,0 +1,39 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -r 0afda95c1aa4 configure.in
+--- a/configure.in	Sun May 16 15:54:15 2010 +0200
++++ b/configure.in	Sun May 16 16:07:08 2010 +0200
+@@ -477,8 +477,8 @@
+ GLIB_GNU_GETTEXT
+ 
+ if test "$gt_cv_have_gettext" != "yes" ; then
+-  AC_MSG_ERROR([
+-*** You must have either have gettext support in your C library, or use the 
++  AC_MSG_WARN([
++*** You should either have gettext support in your C library, or use the
+ *** GNU gettext library. (http://www.gnu.org/software/gettext/gettext.html
+ ])
+ fi
+diff -r f084585629df gio/gsettings.c
+--- a/gio/gsettings.c	Tue Apr 27 23:13:34 2010 +0200
++++ b/gio/gsettings.c	Tue Apr 27 23:17:47 2010 +0200
+@@ -782,16 +782,13 @@
+       const gchar *translated;
+       GError *error = NULL;
+       const gchar *domain;
+-      gint lc_category;
+ 
+       domain = g_settings_schema_get_gettext_domain (settings->priv->schema);
+ 
+       if (lc_char == 't')
+-        lc_category = LC_TIME;
++        translated = dcgettext (domain, unparsed, LC_TIME);
+       else
+-        lc_category = LC_MESSAGES;
+-
+-      translated = dcgettext (domain, unparsed, lc_category);
++        translated = dgettext (domain, unparsed);
+ 
+       if (translated != unparsed)
+         /* it was translated, so we need to re-parse it */

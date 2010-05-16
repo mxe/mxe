@@ -1,9 +1,9 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-diff -ru glib-2.23.2.orig/glib-2.0.pc.in glib-2.23.2/glib-2.0.pc.in
---- glib-2.23.2.orig/glib-2.0.pc.in	2009-04-01 01:04:20.000000000 +0200
-+++ glib-2.23.2/glib-2.0.pc.in	2010-02-07 23:58:08.000000000 +0100
+diff -r ed58be46e216 glib-2.0.pc.in
+--- a/glib-2.0.pc.in	Sun May 16 16:07:16 2010 +0200
++++ b/glib-2.0.pc.in	Sun May 16 16:07:35 2010 +0200
 @@ -3,9 +3,9 @@
  libdir=@libdir@
  includedir=@includedir@
