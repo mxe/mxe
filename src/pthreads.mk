@@ -31,4 +31,9 @@ define $(PKG)_BUILD
     $(INSTALL) -m664 '$(1)/pthread.h'   '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/sched.h'     '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m664 '$(1)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-pthreads.exe' \
+        -lpthread -lws2_32
 endef
