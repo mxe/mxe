@@ -4,12 +4,12 @@
 #include <stdio.h>
 #include <pthread.h>
 
-#define N 10
+#define N 4
 
 void *thread_fn(void *p)
 {
     const int *arg = p;
-    fprintf(stderr, "Hello from thread %d\n", *arg);
+    fprintf(stderr, "Hello from thread %d, nthreads %d\n", *arg, N);
     return NULL;
 }
 
