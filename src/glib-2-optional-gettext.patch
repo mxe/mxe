@@ -1,6 +1,9 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
+This patch has been taken from:
+https://bugzilla.gnome.org/show_bug.cgi?id=617004#c8
+
 diff -r 3241a43cfc79 configure.in
 --- a/configure.in	Sun May 16 16:38:34 2010 +0200
 +++ b/configure.in	Sun May 16 17:02:59 2010 +0200
