@@ -53,7 +53,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)' glib-compile-schemas
 
     # cross build
-    $(SED) -i 's,^\(Libs:.*\),\1 @PCRE_LIBS@ @G_THREAD_LIBS@ @G_LIBS_EXTRA@ -lshlwapi,' '$(1)/glib-2.0.pc.in'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \

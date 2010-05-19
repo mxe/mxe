@@ -1,0 +1,28 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+https://bugzilla.gnome.org/show_bug.cgi?id=619126
+
+diff -r 1168b72613ae configure.in
+--- a/configure.in      Wed May 19 20:15:53 2010 +0200
++++ b/configure.in      Wed May 19 21:11:17 2010 +0200
+@@ -2711,7 +2711,7 @@
+ 	G_LIBS_EXTRA="-luser32 -lkernel32"
+     ;;
+   *-*-mingw*)
+-	G_LIBS_EXTRA="-lws2_32 -lole32"
++	G_LIBS_EXTRA="-lws2_32 -lole32 -lshlwapi"
+     ;;
+   *)
+ 	G_LIBS_EXTRA=""
+diff -r 1168b72613ae glib-2.0.pc.in
+--- a/glib-2.0.pc.in	Wed May 19 20:15:53 2010 +0200
++++ b/glib-2.0.pc.in	Wed May 19 20:17:05 2010 +0200
+@@ -11,5 +11,5 @@
+ Description: C Utility Library
+ Version: @VERSION@
+ Libs: -L${libdir} -lglib-2.0 @INTLLIBS@
+-Libs.private: @ICONV_LIBS@
++Libs.private: @G_THREAD_LIBS@ @G_LIBS_EXTRA@ @PCRE_LIBS@ @INTLLIBS@ @ICONV_LIBS@
+ Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include @GLIB_EXTRA_CFLAGS@
