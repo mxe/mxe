@@ -184,7 +184,7 @@ index 432bd8d..94faf15 100644
 +win32-g++:LIBS += -lopengl32
 +else:LIBS += -lGL -lGLU
 diff --git a/configure b/configure
-index ed5891f..a070d78 100755
+index ed5891f..2a43afa 100755
 --- a/configure
 +++ b/configure
 @@ -178,6 +178,7 @@ UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
@@ -226,7 +226,17 @@ index ed5891f..a070d78 100755
      iwmmxt)
  	CFG_IWMMXT="yes"
  	;;
-@@ -3482,6 +3491,7 @@ cat << EOF
+@@ -2827,6 +2836,9 @@ elif [ "$PLATFORM_MAC" = "yes" ] || [ -z "$CFG_ARCH" ]; then
+     CFG_ARCH=$CFG_HOST_ARCH
+ fi
+ 
++# but windows is windows
++[ "$XPLATFORM" = "win32-g++" ] && CFG_ARCH="windows"
++
+ if [ -d "$relpath/src/corelib/arch/$CFG_ARCH" ]; then
+     if [ "$OPT_VERBOSE" = "yes" ]; then
+         echo "    '$CFG_ARCH' is supported"
+@@ -3482,6 +3494,7 @@ cat << EOF
      -no-3dnow .......... Do not compile with use of 3DNOW instructions.
      -no-sse ............ Do not compile with use of SSE instructions.
      -no-sse2 ........... Do not compile with use of SSE2 instructions.
@@ -234,7 +244,7 @@ index ed5891f..a070d78 100755
  
      -qtnamespace <name>  Wraps all Qt library code in 'namespace <name> {...}'.
      -qtlibinfix <infix>  Renames all libQt*.so to libQt*<infix>.so.
-@@ -4508,6 +4518,17 @@ if [ "${CFG_SSE2}" = "auto" ]; then
+@@ -4508,6 +4521,17 @@ if [ "${CFG_SSE2}" = "auto" ]; then
      fi
  fi
  
@@ -252,7 +262,7 @@ index ed5891f..a070d78 100755
  # check iWMMXt support
  if [ "$CFG_IWMMXT" = "yes" ]; then
      "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/iwmmxt "iwmmxt" $L_FLAGS $I_FLAGS $l_FLAGS "-mcpu=iwmmxt"
-@@ -4683,6 +4704,7 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -4683,6 +4707,7 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
                  if "$WHICH" pg_config >/dev/null 2>&1; then
                      QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null`
                      QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null`
@@ -260,7 +270,7 @@ index ed5891f..a070d78 100755
                  fi
                  [ -z "$QT_CFLAGS_PSQL" ] || QT_CFLAGS_PSQL="-I$QT_CFLAGS_PSQL"
                  [ -z "$QT_LFLAGS_PSQL" ] || QT_LFLAGS_PSQL="-L$QT_LFLAGS_PSQL"
-@@ -4707,7 +4729,7 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -4707,7 +4732,7 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
          ;;
          odbc)
              if [ "$CFG_SQL_odbc" != "no" ]; then
@@ -269,7 +279,7 @@ index ed5891f..a070d78 100755
                      if [ "$CFG_SQL_odbc" = "auto" ]; then
                          CFG_SQL_odbc=plugin
                      fi
-@@ -5002,7 +5024,10 @@ if [ "$PLATFORM_X11" = "yes" -o "$PLATFORM_QWS" = "yes" ]; then
+@@ -5002,7 +5027,10 @@ if [ "$PLATFORM_X11" = "yes" -o "$PLATFORM_QWS" = "yes" ]; then
      fi
  
      if [ "$CFG_PHONON" != "no" ]; then
@@ -281,7 +291,7 @@ index ed5891f..a070d78 100755
              if [ "$CFG_GLIB" = "yes" -a "$CFG_GSTREAMER" != "no" ]; then
                  if [ -n "$PKG_CONFIG" ]; then
                      QT_CFLAGS_GSTREAMER=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-plugins-base-0.10 2>/dev/null`
-@@ -5060,8 +5085,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
+@@ -5060,8 +5088,9 @@ if [ "$PLATFORM_X11" = "yes" ]; then
      fi
  
      # Check we actually have X11 :-)
@@ -293,7 +303,7 @@ index ed5891f..a070d78 100755
          echo "Basic XLib functionality test failed!"
          echo " You might need to modify the include and library search paths by editing"
          echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
-@@ -6141,6 +6167,7 @@ fi
+@@ -6141,6 +6170,7 @@ fi
  [ "$CFG_3DNOW" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG 3dnow"
  [ "$CFG_SSE" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse"
  [ "$CFG_SSE2" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG sse2"
@@ -301,7 +311,7 @@ index ed5891f..a070d78 100755
  [ "$CFG_IWMMXT" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG iwmmxt"
  [ "$CFG_NEON" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG neon"
  [ "$PLATFORM_MAC" = "yes" ] && QMAKE_CONFIG="$QMAKE_CONFIG $CFG_MAC_ARCHS"
-@@ -6222,7 +6249,7 @@ else
+@@ -6222,7 +6252,7 @@ else
      QT_CONFIG="$QT_CONFIG freetype"
  fi
  
@@ -310,7 +320,7 @@ index ed5891f..a070d78 100755
      #On Mac we implicitly link against libz, so we
      #never use the 3rdparty stuff.
      [ "$CFG_ZLIB" = "yes" ] && CFG_ZLIB="system"
-@@ -7161,7 +7188,7 @@ fi
+@@ -7161,7 +7191,7 @@ fi
  
  cat >>"$QTCONFIG.tmp" <<EOF
  #configuration
@@ -319,7 +329,7 @@ index ed5891f..a070d78 100755
  QT_ARCH = $CFG_ARCH
  QT_EDITION = $Edition
  QT_CONFIG += $QT_CONFIG
-@@ -7434,7 +7461,7 @@ fi
+@@ -7434,7 +7464,7 @@ fi
  echo "Declarative module .. $CFG_DECLARATIVE"
  echo "STL support ......... $CFG_STL"
  echo "PCH support ......... $CFG_PRECOMPILE"
@@ -328,7 +338,7 @@ index ed5891f..a070d78 100755
  if [ "$CFG_ARCH" = "arm" ] || [ "$CFG_ARCH" = "armv6" ]; then
      echo "iWMMXt support ...... ${CFG_IWMMXT}"
      echo "NEON support ........ ${CFG_NEON}"
-@@ -7752,7 +7779,11 @@ for file in .projects .projects.3; do
+@@ -7752,7 +7782,11 @@ for file in .projects .projects.3; do
          [ "$IN_ROOT" = "no" ] && continue
  
          case $a in

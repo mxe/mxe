@@ -102,10 +102,11 @@ define $(PKG)_BUILD
         -opensource \
         -confirm-license \
         -xplatform win32-g++ \
+        -arch windows \
+        -little-endian \
         -host-arch i386 \
         -host-little-endian \
-        -little-endian \
-        -largefile \
+        -no-largefile \
         -force-pkg-config \
         -release \
         -exceptions \
