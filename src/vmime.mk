@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := libvmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := libvmime-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://vmime.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/vmime/vmime/0.9/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv gnutls libgsasl
+$(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/vmime/files/vmime/) | \
@@ -39,8 +39,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --enable-platform-windows \
         --disable-rpath \
-        --disable-dependency-tracking \
-        --without-pthread
+        --disable-dependency-tracking
 
     # Disable VMIME_HAVE_MLANG_H
     # We have the header, but there is no implementation for IMultiLanguage in MinGW
@@ -48,4 +47,12 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' install
+
+    $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
+    i686-pc-mingw32-g++ -s -o '$(1)/examples/test-vmime.exe' \
+        -I'$(PREFIX)/$(TARGET)/include' \
+        '$(1)/examples/example6.cpp' \
+        -L'$(PREFIX)/$(TARGET)/lib' \
+        -lvmime -lgnutls -lgsasl -lntlm -lgcrypt -lgpg-error -liconv -lidn -lz -lpthread -lws2_32
+    $(INSTALL) -m755 '$(1)/examples/test-vmime.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
