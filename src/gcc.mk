@@ -15,7 +15,6 @@ $(PKG)_DEPS     := mingwrt mingwrt-dll w32api binutils gcc-gmp gcc-mpc gcc-mpfr
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
-    grep '<a href="gcc-' | \
     $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
     grep -v '^4\.4\.' | \
     head -1

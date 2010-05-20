@@ -14,10 +14,8 @@ $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/binutils/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceware.org/cgi-bin/cvsweb.cgi/src/binutils/?cvsroot=src' | \
-    grep '<OPTION>binutils-' | \
-    $(SED) -n 's,.*binutils-\([0-9][0-9_]*\).*,\1,p' | \
-    $(SED) 's,_,.,g' | \
+    wget -q -O- 'http://ftp.gnu.org/gnu/binutils/?C=M;O=D' | \
+    $(SED) -n 's,.*<a href="binutils-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
