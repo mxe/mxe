@@ -3,7 +3,7 @@
 
 # GLib
 PKG             := glib
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 2.25.6
 $(PKG)_VERSION  := 2.25.3
 $(PKG)_CHECKSUM := 5a8cf17c44decb27de3fbc202be05c89d55f647d
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
