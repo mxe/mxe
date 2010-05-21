@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := libvmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := libvmime-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://vmime.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/vmime/vmime/0.9/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads
+$(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads zlib
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/vmime/files/vmime/) | \
