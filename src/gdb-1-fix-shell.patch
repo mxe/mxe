@@ -1,0 +1,17 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://sourceware.org/bugzilla/show_bug.cgi?id=9098
+
+--- a/gdb/gdbserver/Makefile.in        2010-01-05 02:03:00.000000000 +1100
++++ b/gdb/gdbserver/Makefile.in        2010-05-21 23:49:45.960860228 +1000
+@@ -43,7 +43,7 @@
+ htmldir = $(prefix)/html
+ includedir = @includedir@
+
+-SHELL = /bin/sh
++SHELL = @SHELL@
+ EXEEXT = @EXEEXT@
+
+ INSTALL = @INSTALL@
