@@ -1,0 +1,721 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -urN a/examples/example3.cpp b/examples/example3.cpp
+--- a/examples/example3.cpp	2010-05-24 10:54:47.983682375 +0200
++++ b/examples/example3.cpp	2010-05-24 10:55:53.035683414 +0200
+@@ -73,7 +73,7 @@
+ 
+ 		// -- embed an image (the returned "CID" (content identifier) is used to reference
+ 		// -- the image into HTML content).
+-		vmime::utility::fileSystemFactory* fs =
++		vmime::ref <vmime::utility::fileSystemFactory> fs =
+ 			vmime::platform::getHandler()->getFileSystemFactory();
+ 
+ 		vmime::ref <vmime::utility::file> imageFile =
+diff -urN a/src/body.cpp b/src/body.cpp
+--- a/src/body.cpp	2010-05-24 10:54:48.003683032 +0200
++++ b/src/body.cpp	2010-05-24 10:55:53.031689093 +0200
+@@ -213,8 +213,26 @@
+ 	// Treat the contents as 'simple' data
+ 	else
+ 	{
++		encoding enc;
++
++		try
++		{
++			const ref <const headerField> cef =
++				m_header.acquire()->findField(fields::CONTENT_TRANSFER_ENCODING);
++
++			enc = *cef->getValue().dynamicCast <const encoding>();
++		}
++		catch (exceptions::no_such_field&)
++		{
++			// Defaults to "7bit" (RFC-1521)
++			enc = vmime::encoding(encodingTypes::SEVEN_BIT);
++
++			// Set header field
++			m_header.acquire()->ContentTransferEncoding()->setValue(enc);
++		}
++
+ 		// Extract the (encoded) contents
+-		m_contents = vmime::create <stringContentHandler>(buffer, position, end, getEncoding());
++		m_contents = vmime::create <stringContentHandler>(buffer, position, end, enc);
+ 	}
+ 
+ 	setParsedBounds(position, end);
+@@ -406,6 +424,22 @@
+ // Quick-access functions
+ //
+ 
++
++void body::setContentType(const mediaType& type, const charset& chset)
++{
++	ref <contentTypeField> ctf = m_header.acquire()->ContentType().dynamicCast <contentTypeField>();
++
++	ctf->setValue(type);
++	ctf->setCharset(chset);
++}
++
++
++void body::setContentType(const mediaType& type)
++{
++	m_header.acquire()->ContentType()->setValue(type);
++}
++
++
+ const mediaType body::getContentType() const
+ {
+ 	try
+@@ -423,6 +457,25 @@
+ }
+ 
+ 
++void body::setCharset(const charset& chset)
++{
++	// If a Content-Type field exists, set charset
++	try
++	{
++		ref <contentTypeField> ctf =
++			m_header.acquire()->findField(fields::CONTENT_TYPE).dynamicCast <contentTypeField>();
++
++		ctf->setCharset(chset);
++	}
++	// Else, create a new Content-Type field of default type "text/plain"
++	// and set charset on it
++	catch (exceptions::no_such_field&)
++	{
++		setContentType(mediaType(mediaTypes::TEXT, mediaTypes::TEXT_PLAIN), chset);
++	}
++}
++
++
+ const charset body::getCharset() const
+ {
+ 	try
+@@ -445,6 +498,12 @@
+ }
+ 
+ 
++void body::setEncoding(const encoding& enc)
++{
++	m_header.acquire()->ContentTransferEncoding()->setValue(enc);
++}
++
++
+ const encoding body::getEncoding() const
+ {
+ 	try
+@@ -456,8 +515,15 @@
+ 	}
+ 	catch (exceptions::no_such_field&)
+ 	{
+-		// Defaults to "7bit" (RFC-1521)
+-		return (vmime::encoding(encodingTypes::SEVEN_BIT));
++		if (m_contents->isEncoded())
++		{
++			return m_contents->getEncoding();
++		}
++		else
++		{
++			// Defaults to "7bit" (RFC-1521)
++			return vmime::encoding(encodingTypes::SEVEN_BIT);
++		}
+ 	}
+ }
+ 
+@@ -551,6 +617,32 @@
+ }
+ 
+ 
++void body::setContents(ref <const contentHandler> contents, const mediaType& type)
++{
++	m_contents = contents;
++
++	setContentType(type);
++}
++
++
++void body::setContents(ref <const contentHandler> contents, const mediaType& type, const charset& chset)
++{
++	m_contents = contents;
++
++	setContentType(type, chset);
++}
++
++
++void body::setContents(ref <const contentHandler> contents, const mediaType& type,
++	const charset& chset, const encoding& enc)
++{
++	m_contents = contents;
++
++	setContentType(type, chset);
++	setEncoding(enc);
++}
++
++
+ void body::initNewPart(ref <bodyPart> part)
+ {
+ 	part->m_parent = m_part;
+diff -urN a/src/charset.cpp b/src/charset.cpp
+--- a/src/charset.cpp	2010-05-24 10:54:48.003683032 +0200
++++ b/src/charset.cpp	2010-05-24 10:55:53.031689093 +0200
+@@ -24,6 +24,7 @@
+ #include "vmime/charset.hpp"
+ #include "vmime/exception.hpp"
+ #include "vmime/platform.hpp"
++#include "vmime/encoding.hpp"
+ 
+ #include "vmime/utility/stringUtils.hpp"
+ 
+@@ -140,4 +141,53 @@
+ }
+ 
+ 
++
++// Explicitly force encoding for some charsets
++struct CharsetEncodingEntry
++{
++	CharsetEncodingEntry(const string& charset_, const string& encoding_)
++		: charset(charset_), encoding(encoding_)
++	{
++	}
++
++	const string charset;
++	const string encoding;
++};
++
++CharsetEncodingEntry g_charsetEncodingMap[] =
++{
++	// Use QP encoding for ISO-8859-x charsets
++	CharsetEncodingEntry("iso-8859",     encodingTypes::QUOTED_PRINTABLE),
++	CharsetEncodingEntry("iso8859",      encodingTypes::QUOTED_PRINTABLE),
++
++	// RFC-1468 states:
++	//   " ISO-2022-JP may also be used in MIME Part 2 headers.  The "B"
++	//     encoding should be used with ISO-2022-JP text. "
++	// Use Base64 encoding for all ISO-2022 charsets.
++	CharsetEncodingEntry("iso-2022",     encodingTypes::BASE64),
++	CharsetEncodingEntry("iso2022",      encodingTypes::BASE64),
++
++	// Last entry is not used
++	CharsetEncodingEntry("", "")
++};
++
++
++bool charset::getRecommendedEncoding(encoding& enc) const
++{
++	// Special treatment for some charsets
++	const string cset = utility::stringUtils::toLower(getName());
++
++	for (unsigned int i = 0 ; i < (sizeof(g_charsetEncodingMap) / sizeof(g_charsetEncodingMap[0])) - 1 ; ++i)
++	{
++		if (cset.find(g_charsetEncodingMap[i].charset) != string::npos)
++		{
++			enc = g_charsetEncodingMap[i].encoding;
++			return true;
++		}
++	}
++
++	return false;
++}
++
++
+ } // vmime
+diff -urN a/src/emptyContentHandler.cpp b/src/emptyContentHandler.cpp
+--- a/src/emptyContentHandler.cpp	2010-05-24 10:54:48.007697118 +0200
++++ b/src/emptyContentHandler.cpp	2010-05-24 10:55:53.031689093 +0200
+@@ -96,4 +96,10 @@
+ }
+ 
+ 
++bool emptyContentHandler::isBuffered() const
++{
++	return true;
++}
++
++
+ } // vmime
+diff -urN a/src/encoding.cpp b/src/encoding.cpp
+--- a/src/encoding.cpp	2010-05-24 10:54:48.007697118 +0200
++++ b/src/encoding.cpp	2010-05-24 10:55:53.031689093 +0200
+@@ -110,7 +110,7 @@
+ }
+ 
+ 
+-const encoding encoding::decide
++const encoding encoding::decideImpl
+ 	(const string::const_iterator begin, const string::const_iterator end)
+ {
+ 	const string::difference_type length = end - begin;
+@@ -164,10 +164,40 @@
+ }
+ 
+ 
+-const encoding encoding::decide(ref <const contentHandler> /* data */)
++const encoding encoding::decide
++	(ref <const contentHandler> data, const EncodingUsage usage)
+ {
+-	// TODO: a better solution to do that?
+-	return (encoding(encodingTypes::BASE64));
++	if (usage == USAGE_TEXT && data->isBuffered() &&
++	    data->getLength() > 0 && data->getLength() < 32768)
++	{
++		// Extract data into temporary buffer
++		string buffer;
++		utility::outputStreamStringAdapter os(buffer);
++
++		data->extract(os);
++		os.flush();
++
++		return decideImpl(buffer.begin(), buffer.end());
++	}
++	else
++	{
++		return encoding(encodingTypes::BASE64);
++	}
++}
++
++
++const encoding encoding::decide(ref <const contentHandler> data,
++	const charset& chset, const EncodingUsage usage)
++{
++	if (usage == USAGE_TEXT)
++	{
++		encoding recEncoding;
++
++		if (chset.getRecommendedEncoding(recEncoding))
++			return recEncoding;
++	}
++
++	return decide(data, usage);
+ }
+ 
+ 
+diff -urN a/src/htmlTextPart.cpp b/src/htmlTextPart.cpp
+--- a/src/htmlTextPart.cpp	2010-05-24 10:54:48.011682988 +0200
++++ b/src/htmlTextPart.cpp	2010-05-24 10:55:53.027697497 +0200
+@@ -69,27 +69,20 @@
+ 		ref <bodyPart> part = vmime::create <bodyPart>();
+ 		parent->getBody()->appendPart(part);
+ 
+-		// -- Set header fields
+-		part->getHeader()->ContentType()->setValue
+-			(mediaType(mediaTypes::TEXT, mediaTypes::TEXT_PLAIN));
+-		part->getHeader()->ContentType().dynamicCast <contentTypeField>()->setCharset(m_charset);
+-		part->getHeader()->ContentTransferEncoding()->setValue(encoding(encodingTypes::QUOTED_PRINTABLE));
+-
+ 		// -- Set contents
+-		part->getBody()->setContents(m_plainText);
++		part->getBody()->setContents(m_plainText,
++			mediaType(mediaTypes::TEXT, mediaTypes::TEXT_PLAIN), m_charset,
++			encoding::decide(m_plainText, m_charset, encoding::USAGE_TEXT));
+ 	}
+ 
+ 	// HTML text
+ 	// -- Create a new part
+ 	ref <bodyPart> htmlPart = vmime::create <bodyPart>();
+ 
+-	// -- Set header fields
+-	htmlPart->getHeader()->ContentType()->setValue(mediaType(mediaTypes::TEXT, mediaTypes::TEXT_HTML));
+-	htmlPart->getHeader()->ContentType().dynamicCast <contentTypeField>()->setCharset(m_charset);
+-	htmlPart->getHeader()->ContentTransferEncoding()->setValue(encoding(encodingTypes::QUOTED_PRINTABLE));
+-
+ 	// -- Set contents
+-	htmlPart->getBody()->setContents(m_text);
++	htmlPart->getBody()->setContents(m_text,
++		mediaType(mediaTypes::TEXT, mediaTypes::TEXT_HTML), m_charset,
++		encoding::decide(m_text, m_charset, encoding::USAGE_TEXT));
+ 
+ 	// Handle the case we have embedded objects
+ 	if (!m_objects.empty())
+diff -urN a/src/net/imap/IMAPMessagePartContentHandler.cpp b/src/net/imap/IMAPMessagePartContentHandler.cpp
+--- a/src/net/imap/IMAPMessagePartContentHandler.cpp	2010-05-24 10:54:48.167694191 +0200
++++ b/src/net/imap/IMAPMessagePartContentHandler.cpp	2010-05-24 10:55:53.031689093 +0200
+@@ -173,6 +173,12 @@
+ }
+ 
+ 
++bool IMAPMessagePartContentHandler::isBuffered() const
++{
++	return true;
++}
++
++
+ } // imap
+ } // net
+ } // vmime
+diff -urN a/src/plainTextPart.cpp b/src/plainTextPart.cpp
+--- a/src/plainTextPart.cpp	2010-05-24 10:54:48.039690584 +0200
++++ b/src/plainTextPart.cpp	2010-05-24 10:55:53.031689093 +0200
+@@ -63,13 +63,10 @@
+ 	ref <bodyPart> part = vmime::create <bodyPart>();
+ 	parent->getBody()->appendPart(part);
+ 
+-	// Set header fields
+-	part->getHeader()->ContentType()->setValue(mediaType(mediaTypes::TEXT, mediaTypes::TEXT_PLAIN));
+-	part->getHeader()->ContentType().dynamicCast <contentTypeField>()->setCharset(m_charset);
+-	part->getHeader()->ContentTransferEncoding()->setValue(encoding(encodingTypes::QUOTED_PRINTABLE));
+-
+ 	// Set contents
+-	part->getBody()->setContents(m_text);
++	part->getBody()->setContents(m_text,
++		mediaType(mediaTypes::TEXT, mediaTypes::TEXT_PLAIN), m_charset,
++		encoding::decide(m_text, m_charset, encoding::USAGE_TEXT));
+ }
+ 
+ 
+diff -urN a/src/streamContentHandler.cpp b/src/streamContentHandler.cpp
+--- a/src/streamContentHandler.cpp	2010-05-24 10:54:48.051685838 +0200
++++ b/src/streamContentHandler.cpp	2010-05-24 10:55:53.027697497 +0200
+@@ -201,4 +201,11 @@
+ }
+ 
+ 
++bool streamContentHandler::isBuffered() const
++{
++	// FIXME: some streams can be resetted
++	return false;
++}
++
++
+ } // vmime
+diff -urN a/src/stringContentHandler.cpp b/src/stringContentHandler.cpp
+--- a/src/stringContentHandler.cpp	2010-05-24 10:54:48.051685838 +0200
++++ b/src/stringContentHandler.cpp	2010-05-24 10:55:53.027697497 +0200
+@@ -202,4 +202,10 @@
+ }
+ 
+ 
++bool stringContentHandler::isBuffered() const
++{
++	return true;
++}
++
++
+ } // vmime
+diff -urN a/src/wordEncoder.cpp b/src/wordEncoder.cpp
+--- a/src/wordEncoder.cpp	2010-05-24 10:54:48.175690024 +0200
++++ b/src/wordEncoder.cpp	2010-05-24 10:55:53.027697497 +0200
+@@ -26,6 +26,8 @@
+ #include "vmime/exception.hpp"
+ #include "vmime/charsetConverter.hpp"
+ 
++#include "vmime/encoding.hpp"
++
+ #include "vmime/utility/encoder/b64Encoder.hpp"
+ #include "vmime/utility/encoder/qpEncoder.hpp"
+ 
+@@ -260,50 +262,14 @@
+ }
+ 
+ 
+-// Explicitly force encoding for some charsets
+-struct CharsetEncodingEntry
+-{
+-	CharsetEncodingEntry(const std::string& charset_, const wordEncoder::Encoding encoding_)
+-		: charset(charset_), encoding(encoding_)
+-	{
+-	}
+-
+-	std::string charset;
+-	wordEncoder::Encoding encoding;
+-};
+-
+-CharsetEncodingEntry g_charsetEncodingMap[] =
+-{
+-	// Use QP encoding for ISO-8859-x charsets
+-	CharsetEncodingEntry("iso-8859",     wordEncoder::ENCODING_QP),
+-	CharsetEncodingEntry("iso8859",      wordEncoder::ENCODING_QP),
+-
+-	// RFC-1468 states:
+-	//   " ISO-2022-JP may also be used in MIME Part 2 headers.  The "B"
+-	//     encoding should be used with ISO-2022-JP text. "
+-	// Use Base64 encoding for all ISO-2022 charsets.
+-	CharsetEncodingEntry("iso-2022",     wordEncoder::ENCODING_B64),
+-	CharsetEncodingEntry("iso2022",      wordEncoder::ENCODING_B64),
+-
+-	// Last entry is not used
+-	CharsetEncodingEntry("", wordEncoder::ENCODING_AUTO)
+-};
+-
+-
+ // static
+ bool wordEncoder::isEncodingNeeded(const string& buffer, const charset& charset)
+ {
+-	// Special treatment for some charsets
+-	const string cset = utility::stringUtils::toLower(charset.getName());
++	// Charset-specific encoding
++	encoding recEncoding;
+ 
+-	for (unsigned int i = 0 ; i < (sizeof(g_charsetEncodingMap) / sizeof(g_charsetEncodingMap[0])) - 1 ; ++i)
+-	{
+-		if (cset.find(g_charsetEncodingMap[i].charset) != string::npos)
+-		{
+-			if (g_charsetEncodingMap[i].encoding != wordEncoder::ENCODING_AUTO)
+-				return true;
+-		}
+-	}
++	if (charset.getRecommendedEncoding(recEncoding))
++		return true;
+ 
+ 	// No encoding is needed if the buffer only contains ASCII chars
+ 	if (utility::stringUtils::findFirstNonASCIIchar(buffer.begin(), buffer.end()) != string::npos)
+@@ -322,13 +288,15 @@
+ wordEncoder::Encoding wordEncoder::guessBestEncoding
+ 	(const string& buffer, const charset& charset)
+ {
+-	// Special treatment for some charsets
+-	const string cset = utility::stringUtils::toLower(charset.getName());
++	// Charset-specific encoding
++	encoding recEncoding;
+ 
+-	for (unsigned int i = 0 ; i < (sizeof(g_charsetEncodingMap) / sizeof(g_charsetEncodingMap[0])) - 1 ; ++i)
++	if (charset.getRecommendedEncoding(recEncoding))
+ 	{
+-		if (cset.find(g_charsetEncodingMap[i].charset) != string::npos)
+-			return g_charsetEncodingMap[i].encoding;
++		if (recEncoding == encoding(encodingTypes::QUOTED_PRINTABLE))
++			return ENCODING_QP;
++		else
++			return ENCODING_B64;
+ 	}
+ 
+ 	// Use Base64 if more than 40% non-ASCII, or Quoted-Printable else (default)
+diff -urN a/vmime/body.hpp b/vmime/body.hpp
+--- a/vmime/body.hpp	2010-05-24 10:54:48.079694131 +0200
++++ b/vmime/body.hpp	2010-05-24 10:55:53.035683414 +0200
+@@ -184,6 +184,45 @@
+ 	  */
+ 	void setContents(ref <const contentHandler> contents);
+ 
++	/** Set the body contents and type.
++	  *
++	  * @param contents new body contents
++	  * @param type type of contents
++	  */
++	void setContents(ref <const contentHandler> contents, const mediaType& type);
++
++	/** Set the body contents, type and charset.
++	  *
++	  * @param contents new body contents
++	  * @param type type of contents
++	  * @param charset charset of contents
++	  */
++	void setContents(ref <const contentHandler> contents, const mediaType& type, const charset& chset);
++
++	/** Set the body contents, type, charset and encoding.
++	  *
++	  * @param contents new body contents
++	  * @param type type of contents
++	  * @param charset charset of contents
++	  * @param encoding contents encoding
++	  */
++	void setContents(ref <const contentHandler> contents, const mediaType& type,
++		const charset& chset, const encoding& enc);
++
++	/** Set the MIME type and charset of contents.
++	  * If a charset is defined, it will not be modified.
++	  *
++	  * @param type MIME media type of contents
++	  * @param chset charset of contents
++	  */
++	void setContentType(const mediaType& type, const charset& chset);
++
++	/** Set the MIME type of contents.
++	  *
++	  * @param type MIME media type of contents
++	  */
++	void setContentType(const mediaType& type);
++
+ 	/** Return the media type of the data contained in the body contents.
+ 	  * This is a shortcut for getHeader()->ContentType()->getValue()
+ 	  * on the parent part.
+@@ -192,6 +231,13 @@
+ 	  */
+ 	const mediaType getContentType() const;
+ 
++	/** Set the charset of contents.
++	  * If the type is not set, it will be set to default "text/plain" type.
++	  *
++	  * @param chset charset of contents
++	  */
++	void setCharset(const charset& chset);
++
+ 	/** Return the charset of the data contained in the body contents.
+ 	  * This is a shortcut for getHeader()->ContentType()->getCharset()
+ 	  * on the parent part.
+@@ -200,6 +246,13 @@
+ 	  */
+ 	const charset getCharset() const;
+ 
++	/** Set the output encoding of contents.
++	  * Contents will be encoded (or re-encoded) when this node is being generated.
++	  *
++	  * @param enc encoding of contents
++	  */
++	void setEncoding(const encoding& enc);
++
+ 	/** Return the encoding used to encode the body contents.
+ 	  * This is a shortcut for getHeader()->ContentTransferEncoding()->getValue()
+ 	  * on the parent part.
+diff -urN a/vmime/charset.hpp b/vmime/charset.hpp
+--- a/vmime/charset.hpp	2010-05-24 10:54:48.079694131 +0200
++++ b/vmime/charset.hpp	2010-05-24 10:55:53.031689093 +0200
+@@ -33,6 +33,9 @@
+ {
+ 
+ 
++class encoding;  // forward reference
++
++
+ /** Charset description (basic type).
+   */
+ 
+@@ -59,6 +62,16 @@
+ 
+ 	const std::vector <ref <const component> > getChildComponents() const;
+ 
++	/** Gets the recommended encoding for this charset.
++	  * Note: there may be no recommended encoding.
++	  *
++	  * @param enc output parameter that will hold recommended encoding
++	  * @return true if an encoding is recommended (the encoding is stored
++	  * in the enc parameter), false otherwise (in this case, the enc
++	  * parameter is not modified)
++	  */
++	bool getRecommendedEncoding(encoding& enc) const;
++
+ 	/** Returns the default charset used on the system.
+ 	  *
+ 	  * This function simply calls <code>platformHandler::getLocaleCharset()</code>
+diff -urN a/vmime/contentHandler.hpp b/vmime/contentHandler.hpp
+--- a/vmime/contentHandler.hpp	2010-05-24 10:54:48.171682994 +0200
++++ b/vmime/contentHandler.hpp	2010-05-24 10:55:53.035683414 +0200
+@@ -111,6 +111,13 @@
+ 	  * @return true if no data is managed by this object, false otherwise
+ 	  */
+ 	virtual bool isEmpty() const = 0;
++
++	/** Indicates whether the extract() method can be called multiple times.
++	  *
++	  * @return true if the data can be extracted multiple times, or false
++	  * if not (ie. streamed data from socket)
++	  */
++	virtual bool isBuffered() const = 0;
+ };
+ 
+ 
+diff -urN a/vmime/emptyContentHandler.hpp b/vmime/emptyContentHandler.hpp
+--- a/vmime/emptyContentHandler.hpp	2010-05-24 10:54:48.083683563 +0200
++++ b/vmime/emptyContentHandler.hpp	2010-05-24 10:55:53.031689093 +0200
+@@ -52,6 +52,8 @@
+ 	const vmime::encoding& getEncoding() const;
+ 
+ 	bool isEmpty() const;
++
++	bool isBuffered() const;
+ };
+ 
+ 
+diff -urN a/vmime/encoding.hpp b/vmime/encoding.hpp
+--- a/vmime/encoding.hpp	2010-05-24 10:54:48.083683563 +0200
++++ b/vmime/encoding.hpp	2010-05-24 10:55:53.031689093 +0200
+@@ -45,6 +45,13 @@
+ {
+ public:
+ 
++	enum EncodingUsage
++	{
++		USAGE_TEXT,         /**< Use for body text. */
++		USAGE_BINARY_DATA   /**< Use for attachment, image... */
++	};
++
++
+ 	encoding();
+ 	explicit encoding(const string& name);
+ 	encoding(const encoding& enc);
+@@ -75,20 +82,21 @@
+ 
+ 	/** Decide which encoding to use based on the specified data.
+ 	  *
+-	  * \deprecated Use the new decide() method which takes a contentHandler parameter.
+-	  *
+-	  * @param begin start iterator in buffer
+-	  * @param end end iterator in buffer
++	  * @param data data used to determine encoding
++	  * @param usage context of use of data
+ 	  * @return suitable encoding for specified data
+ 	  */
+-	static const encoding decide(const string::const_iterator begin, const string::const_iterator end);
++	static const encoding decide(ref <const contentHandler> data, const EncodingUsage usage = USAGE_BINARY_DATA);
+ 
+-	/** Decide which encoding to use based on the specified data.
++	/** Decide which encoding to use based on the specified data and charset.
+ 	  *
+ 	  * @param data data used to determine encoding
+-	  * @return suitable encoding for specified data
++	  * @param charset charset of data
++	  * @param usage context of use of data
++	  * @return suitable encoding for specified data and charset
+ 	  */
+-	static const encoding decide(ref <const contentHandler> data);
++	static const encoding decide(ref <const contentHandler> data, const charset& chset, const EncodingUsage usage = USAGE_BINARY_DATA);
++
+ 
+ 	ref <component> clone() const;
+ 	void copyFrom(const component& other);
+@@ -106,6 +114,17 @@
+ 
+ 	string m_name;
+ 
++	/** Decide which encoding to use based on the specified data.
++	  *
++	  * Please note: this will read the whole buffer, so it should be used only
++	  * for small amount of data (eg. text), and not large binary attachments.
++	  *
++	  * @param begin start iterator in buffer
++	  * @param end end iterator in buffer
++	  * @return suitable encoding for specified data
++	  */
++	static const encoding decideImpl(const string::const_iterator begin, const string::const_iterator end);
++
+ public:
+ 
+ 	using component::parse;
+diff -urN a/vmime/net/imap/IMAPMessagePartContentHandler.hpp b/vmime/net/imap/IMAPMessagePartContentHandler.hpp
+--- a/vmime/net/imap/IMAPMessagePartContentHandler.hpp	2010-05-24 10:54:48.171682994 +0200
++++ b/vmime/net/imap/IMAPMessagePartContentHandler.hpp	2010-05-24 10:55:53.035683414 +0200
+@@ -55,6 +55,8 @@
+ 
+ 	bool isEmpty() const;
+ 
++	bool isBuffered() const;
++
+ private:
+ 
+ 	weak_ref <IMAPMessage> m_message;
+diff -urN a/vmime/streamContentHandler.hpp b/vmime/streamContentHandler.hpp
+--- a/vmime/streamContentHandler.hpp	2010-05-24 10:54:48.135692627 +0200
++++ b/vmime/streamContentHandler.hpp	2010-05-24 10:55:53.035683414 +0200
+@@ -62,6 +62,8 @@
+ 
+ 	bool isEmpty() const;
+ 
++	bool isBuffered() const;
++
+ private:
+ 
+ 	// Equals to NO_ENCODING if data is not encoded, otherwise this
+diff -urN a/vmime/stringContentHandler.hpp b/vmime/stringContentHandler.hpp
+--- a/vmime/stringContentHandler.hpp	2010-05-24 10:54:48.135692627 +0200
++++ b/vmime/stringContentHandler.hpp	2010-05-24 10:55:53.031689093 +0200
+@@ -80,6 +80,8 @@
+ 
+ 	bool isEmpty() const;
+ 
++	bool isBuffered() const;
++
+ private:
+ 
+ 	// Equals to NO_ENCODING if data is not encoded, otherwise this
