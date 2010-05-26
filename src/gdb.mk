@@ -22,7 +22,8 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)/gdb' -j 1 install
 endef
