@@ -615,17 +615,19 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <p>
     For C style shells, edit .cshrc
-    <pre>setenv PATH /usr/local/bin:$PATH</pre>
-    For Bourne shells, edit .profile
-    <pre>export PATH = /usr/local/bin:$PATH</pre>
     </p>
+    <pre>setenv PATH /usr/local/bin:$PATH</pre>
+    <p>
+    For Bourne shells, edit .profile
+    </p>
+    <pre>export PATH = /usr/local/bin:$PATH</pre>
     <p>
     On 64-bit FreeBSD,
     there are open issues with the NSIS package. To allow the
     remainder of mingw-cross-env to build, simply remove the 
     package:
-    <pre>rm <em>where mingw-cross-env is unpacked</em>/src/nsis.mk</pre>
     </p>
+    <pre>rm <em>where mingw-cross-env is unpacked</em>/src/nsis.mk</pre>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
 
