@@ -611,8 +611,20 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
            pkg-config scons unzip wget</pre>
 
     <p>
+    Ensure that /usr/local/bin preceeds /usr/bin in your $PATH:
+    </p>
+    <p>
+    For C style shells, edit .cshrc
+    <pre>setenv PATH /usr/local/bin:$PATH</pre>
+    For Bourne shells, edit .profile
+    <pre>export PATH = /usr/local/bin:$PATH</pre>
+    </p>
+    <p>
     On 64-bit FreeBSD,
-    there are open issues with the NSIS package.
+    there are open issues with the NSIS package. To allow the
+    remainder of mingw-cross-env to build, simply remove the 
+    package:
+    <pre>rm <em>where mingw-cross-env is unpacked</em>/src/nsis.mk</pre>
     </p>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
@@ -638,8 +650,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
-                  gmake gsed libtool openssl pkgconfig \
-                  scons wget gcc_select
+                  gsed libtool openssl pkgconfig scons \
+                  wget gcc_select
 sudo gcc_select gcc40</pre>
 
     <h3>MacOS X (≤ 10.5)</h3>
