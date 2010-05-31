@@ -24,8 +24,6 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --disable-debug \
-        --disable-check \
-        --disable-tests \
         --disable-examples \
         --mandir='$(1)/sink' \
         --docdir='$(1)/sink' \

@@ -30,8 +30,6 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --disable-debug \
-        --disable-check \
-        --disable-tests \
         --disable-examples \
         --disable-esd \
         --mandir='$(1)/sink' \
