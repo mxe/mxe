@@ -43,7 +43,6 @@ define $(PKG)_BUILD
         --disable-shared \
         --without-x \
         --disable-win32-registry \
-        --enable-sjlj-exceptions \
         --enable-threads=win32 \
         --disable-libgomp \
         --disable-libmudflap
