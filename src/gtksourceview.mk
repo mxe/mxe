@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gtksourceview-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtksourceview-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://projects.gnome.org/gtksourceview/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gtk libxml2
+$(PKG)_DEPS     := gcc gtk libxml2 gettext
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/gtksourceview/refs/tags' | \
@@ -25,7 +25,8 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-gtk-doc
+        --disable-gtk-doc \
+        --enable-nls
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
