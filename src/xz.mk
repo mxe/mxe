@@ -3,11 +3,11 @@
 
 # XZ
 PKG             := xz
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.999.9beta
-$(PKG)_CHECKSUM := 67cd2598b5149da9b3c126f3483fd632e06b3d48
+$(PKG)_IGNORE   := 4.999.9beta
+$(PKG)_VERSION  := 4.999.9beta-124-gb637
+$(PKG)_CHECKSUM := 11d4de9f57b6d9e24f63472ca65227ba02390230
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://tukaani.org/xz/
 $(PKG)_URL      := http://tukaani.org/xz/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
