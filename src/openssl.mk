@@ -4,8 +4,8 @@
 # openssl
 PKG             := openssl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.0
-$(PKG)_CHECKSUM := 3f800ea9fa3da1c0f576d689be7dca3d55a4cb62
+$(PKG)_VERSION  := 1.0.0a
+$(PKG)_CHECKSUM := b837a9f75a51f456bd533690cf04d3d5714812dc
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.openssl.org/
@@ -21,13 +21,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # workarounds according to
-    # http://wagner.pp.ru/~vitus/articles/openssl-mingw.html
-    $(SED) -i 's,^$$IsMK1MF=1.*,,' '$(1)'/Configure
-    $(SED) -i 's,static type _hide_##name,type _hide_##name,' '$(1)'/e_os2.h
-
-    # use winsock2 instead of winsock
-    $(SED) -i 's,wsock32,ws2_32,g' '$(1)'/Configure
+    # although ws3_32 is used, winsock 1 headers are still referenced
     find '$(1)' -type f -exec \
         $(SED) -i 's,winsock\.h,winsock2.h,g' {} \;
 
