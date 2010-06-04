@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 0c562f3b6a89f376b9edba48ccd7388c535f8c8d
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := mingwrt-$($(PKG)_VERSION)-mingw32-dev.tar.gz
 $(PKG)_WEBSITE  := http://mingw.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW Runtime/mingwrt-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/BaseSystem/RuntimeLibrary/MinGW-RT/mingwrt-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
