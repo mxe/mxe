@@ -7,9 +7,10 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.8.0
 $(PKG)_CHECKSUM := a41692e64b40ebae3cffe83931ddbf8420a10ae3
 $(PKG)_SUBDIR   := tre-$($(PKG)_VERSION)
-$(PKG)_FILE     := tre-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := tre-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://laurikari.net/tre/
 $(PKG)_URL      := http://laurikari.net/tre/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://ftp.de.debian.org/debian/pool/main/t/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
