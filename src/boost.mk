@@ -4,19 +4,19 @@
 # Boost C++ Library
 PKG             := boost
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1_43_0
+$(PKG)_VERSION  := 1.43.0
 $(PKG)_CHECKSUM := b8257b7da2a7222739314f8d1e07e217debe71d6
-$(PKG)_SUBDIR   := boost_$($(PKG)_VERSION)
-$(PKG)_FILE     := boost_$($(PKG)_VERSION).tar.bz2
+$(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_WEBSITE  := http://www.boost.org/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$(subst _,.,$($(PKG)_VERSION))/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib bzip2 expat
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/boost/files/boost/) | \
-    $(SED) -n 's,.*boost_\([0-9][^>]*\)\.tar.*,\1,p' | \
+    wget -q -O- 'http://sourceforge.net/projects/boost/files/boost/?sort=date&sortdir=desc' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     grep -v beta | \
-    tail -1
+    head -1
 endef
 
 define $(PKG)_BUILD

@@ -13,9 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/wxMSW/$($(PKG)
 $(PKG)_DEPS     := gcc libiconv libpng jpeg tiff sdl zlib expat
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/wxwindows/files/wxMSW/) | \
-    $(SED) -n 's,.*wxMSW-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/wxwindows/files/wxMSW/?sort=date&sortdir=desc' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

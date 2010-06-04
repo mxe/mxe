@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/BaseSystem/R
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/mingw/files/MinGW Runtime/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/mingw/files/MinGW/BaseSystem/RuntimeLibrary/MinGW-RT/) | \
     $(SED) -n 's,.*mingwrt-\([0-9][^>]*\)-mingw32-dev\.tar.*,\1,p' | \
     tail -1
 endef
