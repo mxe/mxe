@@ -21,10 +21,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # although ws3_32 is used, winsock 1 headers are still referenced
-    find '$(1)' -type f -exec \
-        $(SED) -i 's,winsock\.h,winsock2.h,g' {} \;
-
     cd '$(1)' && CC='$(TARGET)-gcc' ./Configure \
         mingw \
         zlib \
