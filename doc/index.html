@@ -484,6 +484,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <li><a href="#requirements-debian">Debian</a></li>
         <li><a href="#requirements-freebsd">FreeBSD</a></li>
         <li><a href="#requirements-frugalware">Frugalware</a></li>
+        <li><a href="#requirements-gentoo">Gentoo</a></li>
         <li><a href="#requirements-macos">MacOS</a></li>
         <li><a href="#requirements-opensolaris">Open Solaris</a></li>
     </ul>
@@ -616,6 +617,22 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     On 64-bit Frugalware,
     there are open issues with the NSIS package.
+    </p>
+
+    <h3 id="requirements-gentoo">Gentoo</h3>
+
+    <!-- http://packages.gentoo.org/ -->
+    <pre>emerge sys-devel/autoconf sys-devel/automake \
+       app-shells/bash sys-devel/bison app-arch/bzip2 \
+       dev-util/cmake sys-devel/flex sys-devel/gcc \
+       sys-devel/make sys-apps/sed sys-devel/libtool \
+       dev-libs/openssl sys-devel/patch dev-lang/perl \
+       dev-util/pkgconfig dev-util/scons app-arch/unzip \
+       net-misc/wget</pre>
+
+    <p>
+    There are
+    <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-05/msg00296.html">open issues with Gentoo and GCC-4.5</a>.
     </p>
 
     <h3 id="requirements-macos">MacOS 10.6</h3>
