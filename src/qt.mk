@@ -20,12 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # Adjust the makespec defs that contain the TARGET platform prefix.
-    $(SED) -i 's,/usr/i686-pc-mingw32/,$(PREFIX)/$(TARGET)/,g' '$(1)/mkspecs/win32-g++-cross/qmake.conf'
-    $(SED) -i 's,i686-pc-mingw32-,$(TARGET)-,g'                '$(1)/mkspecs/win32-g++-cross/qmake.conf'
-
-    # Use the correct pg_config tool
-    $(SED) -i 's,pg_config,$(TARGET)-pg_config,g;' '$(1)/configure'
 
     # We prefer static mingw-cross-env system libs for static build:
     # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite
@@ -37,12 +31,12 @@ define $(PKG)_BUILD
     # QT_LARGEFILE_SUPPORT 64 which is not intended for win32.
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
-        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl`" \
+        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
         ./configure \
         -opensource \
         -confirm-license \
         -fast \
-        -xplatform win32-g++-cross \
+        -xplatform unsupported/win32-g++-cross \
         -force-pkg-config \
         -release \
         -exceptions \
