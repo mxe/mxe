@@ -3,7 +3,7 @@ See doc/index.html for further information.
 
 diff -Naur a/config.tests/unix/compile.test b/config.tests/unix/compile.test
 --- a/config.tests/unix/compile.test	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/compile.test	2010-06-05 01:24:34.085687969 +0200
++++ b/config.tests/unix/compile.test	2010-06-05 23:51:20.996424087 +0200
 @@ -65,8 +65,10 @@
  cd "$OUTDIR/$TEST"
  
@@ -27,7 +27,7 @@ diff -Naur a/config.tests/unix/compile.test b/config.tests/unix/compile.test
  if [ "$SUCCESS" != "yes" ]; then
 diff -Naur a/config.tests/unix/getaddrinfo/getaddrinfotest.cpp b/config.tests/unix/getaddrinfo/getaddrinfotest.cpp
 --- a/config.tests/unix/getaddrinfo/getaddrinfotest.cpp	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/getaddrinfo/getaddrinfotest.cpp	2010-06-05 01:24:34.085687969 +0200
++++ b/config.tests/unix/getaddrinfo/getaddrinfotest.cpp	2010-06-05 23:51:20.996424087 +0200
 @@ -42,9 +42,16 @@
  /* Sample program for configure to test for getaddrinfo on the unix
       platform. we check for all structures and functions required. */
@@ -47,7 +47,7 @@ diff -Naur a/config.tests/unix/getaddrinfo/getaddrinfotest.cpp b/config.tests/un
  {
 diff -Naur a/config.tests/unix/iconv/iconv.pro b/config.tests/unix/iconv/iconv.pro
 --- a/config.tests/unix/iconv/iconv.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/iconv/iconv.pro	2010-06-05 01:24:34.665954837 +0200
++++ b/config.tests/unix/iconv/iconv.pro	2010-06-05 23:51:21.891709032 +0200
 @@ -1,3 +1,3 @@
  SOURCES = iconv.cpp
  CONFIG -= qt dylib app_bundle
@@ -55,7 +55,7 @@ diff -Naur a/config.tests/unix/iconv/iconv.pro b/config.tests/unix/iconv/iconv.p
 +mac|win32-g++*:LIBS += -liconv
 diff -Naur a/config.tests/unix/ipv6/ipv6test.cpp b/config.tests/unix/ipv6/ipv6test.cpp
 --- a/config.tests/unix/ipv6/ipv6test.cpp	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/ipv6/ipv6test.cpp	2010-06-05 01:24:34.753688863 +0200
++++ b/config.tests/unix/ipv6/ipv6test.cpp	2010-06-05 23:51:22.210939093 +0200
 @@ -46,9 +46,14 @@
  #define _HPUX_SOURCE
  #endif
@@ -73,7 +73,7 @@ diff -Naur a/config.tests/unix/ipv6/ipv6test.cpp b/config.tests/unix/ipv6/ipv6te
  {
 diff -Naur a/config.tests/unix/odbc/odbc.cpp b/config.tests/unix/odbc/odbc.cpp
 --- a/config.tests/unix/odbc/odbc.cpp	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/odbc/odbc.cpp	2010-06-05 01:24:35.893929533 +0200
++++ b/config.tests/unix/odbc/odbc.cpp	2010-06-05 23:51:24.144204628 +0200
 @@ -39,6 +39,9 @@
  **
  ****************************************************************************/
@@ -86,7 +86,7 @@ diff -Naur a/config.tests/unix/odbc/odbc.cpp b/config.tests/unix/odbc/odbc.cpp
  
 diff -Naur a/config.tests/unix/odbc/odbc.pro b/config.tests/unix/odbc/odbc.pro
 --- a/config.tests/unix/odbc/odbc.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/odbc/odbc.pro	2010-06-05 01:24:37.309682928 +0200
++++ b/config.tests/unix/odbc/odbc.pro	2010-06-05 23:51:24.992961319 +0200
 @@ -1,4 +1,5 @@
  SOURCES = odbc.cpp
  CONFIG -= qt dylib
@@ -96,7 +96,7 @@ diff -Naur a/config.tests/unix/odbc/odbc.pro b/config.tests/unix/odbc/odbc.pro
 +else:LIBS += -lodbc
 diff -Naur a/config.tests/unix/psql/psql.pro b/config.tests/unix/psql/psql.pro
 --- a/config.tests/unix/psql/psql.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/psql/psql.pro	2010-06-05 01:24:37.309682928 +0200
++++ b/config.tests/unix/psql/psql.pro	2010-06-05 23:51:26.096270883 +0200
 @@ -1,4 +1,4 @@
  SOURCES = psql.cpp
  CONFIG -= qt dylib
@@ -105,7 +105,7 @@ diff -Naur a/config.tests/unix/psql/psql.pro b/config.tests/unix/psql/psql.pro
 +LIBS *= -lpq
 diff -Naur a/config.tests/x11/opengl/opengl.pro b/config.tests/x11/opengl/opengl.pro
 --- a/config.tests/x11/opengl/opengl.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/x11/opengl/opengl.pro	2010-06-05 01:24:37.309682928 +0200
++++ b/config.tests/x11/opengl/opengl.pro	2010-06-05 23:51:26.112219397 +0200
 @@ -7,4 +7,5 @@
  }
  
@@ -115,7 +115,7 @@ diff -Naur a/config.tests/x11/opengl/opengl.pro b/config.tests/x11/opengl/opengl
 +else:LIBS += -lGL -lGLU
 diff -Naur a/configure b/configure
 --- a/configure	2010-05-04 02:43:19.000000000 +0200
-+++ b/configure	2010-06-05 01:24:37.313681788 +0200
++++ b/configure	2010-06-05 23:51:26.683734132 +0200
 @@ -780,7 +780,8 @@
  RPATH_FLAGS=
  l_FLAGS=
@@ -410,7 +410,7 @@ diff -Naur a/configure b/configure
          */qmake/qmake.pro) continue ;;
 diff -Naur a/doc/doc.pri b/doc/doc.pri
 --- a/doc/doc.pri	2010-05-04 02:43:14.000000000 +0200
-+++ b/doc/doc.pri	2010-06-05 01:24:37.638010549 +0200
++++ b/doc/doc.pri	2010-06-05 23:51:26.959706710 +0200
 @@ -5,9 +5,9 @@
  DOCS_GENERATION_DEFINES =
  GENERATOR = $$QT_BUILD_TREE/bin/qhelpgenerator
@@ -434,7 +434,7 @@ diff -Naur a/doc/doc.pri b/doc/doc.pri
  }
 diff -Naur a/examples/activeqt/activeqt.pro b/examples/activeqt/activeqt.pro
 --- a/examples/activeqt/activeqt.pro	2010-05-04 02:43:18.000000000 +0200
-+++ b/examples/activeqt/activeqt.pro	2010-06-05 01:24:40.006702943 +0200
++++ b/examples/activeqt/activeqt.pro	2010-06-05 23:51:27.939744609 +0200
 @@ -11,7 +11,7 @@
  
  # For now only the contain examples with mingw, for the others you need
@@ -446,7 +446,7 @@ diff -Naur a/examples/activeqt/activeqt.pro b/examples/activeqt/activeqt.pro
  target.path = $$[QT_INSTALL_EXAMPLES]/activeqt
 diff -Naur a/mkspecs/features/win32/embed_manifest_dll.prf b/mkspecs/features/win32/embed_manifest_dll.prf
 --- a/mkspecs/features/win32/embed_manifest_dll.prf	2010-05-04 02:43:16.000000000 +0200
-+++ b/mkspecs/features/win32/embed_manifest_dll.prf	2010-06-05 01:24:40.679764004 +0200
++++ b/mkspecs/features/win32/embed_manifest_dll.prf	2010-06-05 23:51:28.108337656 +0200
 @@ -1,6 +1,6 @@
  MANIFEST_DIR = $$OBJECTS_DIR
  isEmpty(MANIFEST_DIR):MANIFEST_DIR = .
@@ -457,7 +457,7 @@ diff -Naur a/mkspecs/features/win32/embed_manifest_dll.prf b/mkspecs/features/wi
      NOPATH_TARGET ~= s,\\,/,g       # Change to single type separators
 diff -Naur a/mkspecs/features/win32/embed_manifest_exe.prf b/mkspecs/features/win32/embed_manifest_exe.prf
 --- a/mkspecs/features/win32/embed_manifest_exe.prf	2010-05-04 02:43:16.000000000 +0200
-+++ b/mkspecs/features/win32/embed_manifest_exe.prf	2010-06-05 01:24:41.026073862 +0200
++++ b/mkspecs/features/win32/embed_manifest_exe.prf	2010-06-05 23:51:28.108337656 +0200
 @@ -1,6 +1,6 @@
  MANIFEST_DIR = $$OBJECTS_DIR
  isEmpty(MANIFEST_DIR):MANIFEST_DIR = .
@@ -468,7 +468,7 @@ diff -Naur a/mkspecs/features/win32/embed_manifest_exe.prf b/mkspecs/features/wi
      NOPATH_TARGET ~= s,\\,/,g       # Change to single type separators
 diff -Naur a/mkspecs/unsupported/win32-g++-cross/qmake.conf b/mkspecs/unsupported/win32-g++-cross/qmake.conf
 --- a/mkspecs/unsupported/win32-g++-cross/qmake.conf	1970-01-01 01:00:00.000000000 +0100
-+++ b/mkspecs/unsupported/win32-g++-cross/qmake.conf	2010-06-05 01:24:41.119229276 +0200
++++ b/mkspecs/unsupported/win32-g++-cross/qmake.conf	2010-06-05 23:51:28.108337656 +0200
 @@ -0,0 +1,101 @@
 +#
 +# qmake configuration for win32-g++-cross
@@ -573,7 +573,7 @@ diff -Naur a/mkspecs/unsupported/win32-g++-cross/qmake.conf b/mkspecs/unsupporte
 +load(qt_config)
 diff -Naur a/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h b/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h
 --- a/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h	1970-01-01 01:00:00.000000000 +0100
-+++ b/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h	2010-06-05 01:24:41.497760626 +0200
++++ b/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h	2010-06-05 23:51:28.108337656 +0200
 @@ -0,0 +1,42 @@
 +/****************************************************************************
 +**
@@ -619,7 +619,7 @@ diff -Naur a/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h b/mkspecs/unsup
 +#include "../../win32-g++/qplatformdefs.h"
 diff -Naur a/qmake/generators/metamakefile.cpp b/qmake/generators/metamakefile.cpp
 --- a/qmake/generators/metamakefile.cpp	2010-05-04 02:43:18.000000000 +0200
-+++ b/qmake/generators/metamakefile.cpp	2010-06-05 01:24:42.569682586 +0200
++++ b/qmake/generators/metamakefile.cpp	2010-06-05 23:51:28.108337656 +0200
 @@ -501,9 +501,18 @@
          *host_mode = Option::HOST_UNIX_MODE;
          *target_mode = Option::TARG_UNIX_MODE;
@@ -642,7 +642,7 @@ diff -Naur a/qmake/generators/metamakefile.cpp b/qmake/generators/metamakefile.c
          *target_mode = Option::TARG_MACX_MODE;
 diff -Naur a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
 --- a/qmake/generators/win32/mingw_make.cpp	2010-05-04 02:43:18.000000000 +0200
-+++ b/qmake/generators/win32/mingw_make.cpp	2010-06-05 01:24:42.569682586 +0200
++++ b/qmake/generators/win32/mingw_make.cpp	2010-06-05 23:51:28.108337656 +0200
 @@ -371,7 +371,12 @@
  	    ar_script_file += "." + var("BUILD_NAME");
  	}
@@ -659,7 +659,7 @@ diff -Naur a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/ming
  	if (!var("BUILD_NAME").isEmpty()) {
 diff -Naur a/src/3rdparty/javascriptcore/WebKit.pri b/src/3rdparty/javascriptcore/WebKit.pri
 --- a/src/3rdparty/javascriptcore/WebKit.pri	2010-05-04 02:43:22.000000000 +0200
-+++ b/src/3rdparty/javascriptcore/WebKit.pri	2010-06-05 01:24:42.890928512 +0200
++++ b/src/3rdparty/javascriptcore/WebKit.pri	2010-06-05 23:51:28.108337656 +0200
 @@ -36,7 +36,7 @@
              win32-*|wince* {
                  CONFIG(debug, debug|release):build_pass: QTWEBKITLIBNAME = $${QTWEBKITLIBNAME}d
@@ -671,8 +671,17 @@ diff -Naur a/src/3rdparty/javascriptcore/WebKit.pri b/src/3rdparty/javascriptcor
                  LIBS += -lQtWebKit
 diff -Naur a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
 --- a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro	2010-05-04 02:43:19.000000000 +0200
-+++ b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro	2010-06-05 01:24:42.890928512 +0200
-@@ -38,7 +38,7 @@
++++ b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro	2010-06-05 23:51:28.111706406 +0200
+@@ -12,6 +12,8 @@
+ QT += core
+ 
+ CONFIG += depend_includepath
++target.path=$$[QT_INSTALL_LIBS]
++INSTALLS += target
+ 
+ contains(QT_CONFIG, embedded):CONFIG += embedded
+ 
+@@ -38,7 +40,7 @@
  }
  
  # Pick up 3rdparty libraries from INCLUDE/LIB just like with MSVC
@@ -683,7 +692,7 @@ diff -Naur a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro b/src/3rdpart
      TMPPATH            = $$quote($$(LIB))
 diff -Naur a/src/3rdparty/webkit/WebCore/WebCore.pro b/src/3rdparty/webkit/WebCore/WebCore.pro
 --- a/src/3rdparty/webkit/WebCore/WebCore.pro	2010-05-04 02:43:21.000000000 +0200
-+++ b/src/3rdparty/webkit/WebCore/WebCore.pro	2010-06-05 01:24:42.890928512 +0200
++++ b/src/3rdparty/webkit/WebCore/WebCore.pro	2010-06-05 23:51:28.111706406 +0200
 @@ -100,7 +100,7 @@
  }
  
@@ -704,7 +713,7 @@ diff -Naur a/src/3rdparty/webkit/WebCore/WebCore.pro b/src/3rdparty/webkit/WebCo
      asm_compiler.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_BASE}$${first(QMAKE_EXT_OBJ)}
 diff -Naur a/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro b/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro
 --- a/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro	2010-05-04 02:43:22.000000000 +0200
-+++ b/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro	2010-06-05 01:24:42.893686773 +0200
++++ b/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro	2010-06-05 23:51:28.111706406 +0200
 @@ -12,7 +12,7 @@
  ESCAPE = ""
  win32-msvc*|symbian {
@@ -716,7 +725,7 @@ diff -Naur a/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro b/src/3rdparty
      ESCAPE = "^"
 diff -Naur a/src/3rdparty/webkit/WebKit.pri b/src/3rdparty/webkit/WebKit.pri
 --- a/src/3rdparty/webkit/WebKit.pri	2010-05-04 02:43:22.000000000 +0200
-+++ b/src/3rdparty/webkit/WebKit.pri	2010-06-05 01:24:42.890928512 +0200
++++ b/src/3rdparty/webkit/WebKit.pri	2010-06-05 23:51:28.111706406 +0200
 @@ -24,7 +24,7 @@
              win32-*|wince* {
                  CONFIG(debug, debug|release):build_pass: QTWEBKITLIBNAME = $${QTWEBKITLIBNAME}d
@@ -728,7 +737,7 @@ diff -Naur a/src/3rdparty/webkit/WebKit.pri b/src/3rdparty/webkit/WebKit.pri
                  LIBS += -lQtWebKit
 diff -Naur a/src/activeqt/container/container.pro b/src/activeqt/container/container.pro
 --- a/src/activeqt/container/container.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/src/activeqt/container/container.pro	2010-06-05 01:24:42.893686773 +0200
++++ b/src/activeqt/container/container.pro	2010-06-05 23:51:28.111706406 +0200
 @@ -19,7 +19,7 @@
  
  LIBS    += -lole32 -loleaut32
@@ -740,7 +749,7 @@ diff -Naur a/src/activeqt/container/container.pro b/src/activeqt/container/conta
              qaxbase.h \
 diff -Naur a/src/activeqt/control/control.pro b/src/activeqt/control/control.pro
 --- a/src/activeqt/control/control.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/src/activeqt/control/control.pro	2010-06-05 01:24:42.893686773 +0200
++++ b/src/activeqt/control/control.pro	2010-06-05 23:51:28.111706406 +0200
 @@ -18,11 +18,11 @@
  QTDIR_build:DESTDIR  = $$QT_BUILD_TREE\lib
  
@@ -757,7 +766,7 @@ diff -Naur a/src/activeqt/control/control.pro b/src/activeqt/control/control.pro
              qaxbindable.h \
 diff -Naur a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
 --- a/src/corelib/tools/tools.pri	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/corelib/tools/tools.pri	2010-06-05 01:24:42.893686773 +0200
++++ b/src/corelib/tools/tools.pri	2010-06-05 23:51:28.111706406 +0200
 @@ -106,8 +106,8 @@
          ../3rdparty/zlib/uncompr.c \
          ../3rdparty/zlib/zutil.c
@@ -771,7 +780,7 @@ diff -Naur a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
  DEFINES += HB_EXPORT=Q_CORE_EXPORT
 diff -Naur a/src/gui/image/image.pri b/src/gui/image/image.pri
 --- a/src/gui/image/image.pri	2010-05-04 02:43:24.000000000 +0200
-+++ b/src/gui/image/image.pri	2010-06-05 01:24:42.893686773 +0200
++++ b/src/gui/image/image.pri	2010-06-05 23:51:28.111706406 +0200
 @@ -93,12 +93,12 @@
      SOURCES += image/qpnghandler.cpp
  
@@ -801,7 +810,7 @@ diff -Naur a/src/gui/image/image.pri b/src/gui/image/image.pri
  }
 diff -Naur a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
 --- a/src/gui/painting/painting.pri	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/gui/painting/painting.pri	2010-06-05 01:24:42.893686773 +0200
++++ b/src/gui/painting/painting.pri	2010-06-05 23:51:28.115709598 +0200
 @@ -232,7 +232,7 @@
          IWMMXT_SOURCES += painting/qdrawhelper_iwmmxt.cpp
      }
@@ -823,7 +832,7 @@ diff -Naur a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
  
 diff -Naur a/src/network/access/access.pri b/src/network/access/access.pri
 --- a/src/network/access/access.pri	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/network/access/access.pri	2010-06-05 01:24:42.893686773 +0200
++++ b/src/network/access/access.pri	2010-06-05 23:51:28.115709598 +0200
 @@ -61,6 +61,6 @@
  contains(QT_CONFIG, zlib) {
     INCLUDEPATH += ../3rdparty/zlib
@@ -835,7 +844,7 @@ diff -Naur a/src/network/access/access.pri b/src/network/access/access.pri
  }
 diff -Naur a/src/network/ssl/ssl.pri b/src/network/ssl/ssl.pri
 --- a/src/network/ssl/ssl.pri	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/network/ssl/ssl.pri	2010-06-05 01:24:42.893686773 +0200
++++ b/src/network/ssl/ssl.pri	2010-06-05 23:51:28.115709598 +0200
 @@ -34,6 +34,7 @@
      # Include Qt's default CA bundle
      RESOURCES += network.qrc
@@ -847,7 +856,7 @@ diff -Naur a/src/network/ssl/ssl.pri b/src/network/ssl/ssl.pri
  }
 diff -Naur a/src/plugins/imageformats/jpeg/jpeg.pro b/src/plugins/imageformats/jpeg/jpeg.pro
 --- a/src/plugins/imageformats/jpeg/jpeg.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/imageformats/jpeg/jpeg.pro	2010-06-05 01:24:42.893686773 +0200
++++ b/src/plugins/imageformats/jpeg/jpeg.pro	2010-06-05 23:51:28.115709598 +0200
 @@ -22,8 +22,8 @@
  }
  
@@ -861,7 +870,7 @@ diff -Naur a/src/plugins/imageformats/jpeg/jpeg.pro b/src/plugins/imageformats/j
  	INCLUDEPATH += ../../../3rdparty/libjpeg
 diff -Naur a/src/plugins/imageformats/mng/mng.pro b/src/plugins/imageformats/mng/mng.pro
 --- a/src/plugins/imageformats/mng/mng.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/imageformats/mng/mng.pro	2010-06-05 01:24:42.893686773 +0200
++++ b/src/plugins/imageformats/mng/mng.pro	2010-06-05 23:51:28.115709598 +0200
 @@ -14,8 +14,8 @@
  }
  
@@ -885,7 +894,7 @@ diff -Naur a/src/plugins/imageformats/mng/mng.pro b/src/plugins/imageformats/mng
          INCLUDEPATH +=  ../../../3rdparty/zlib
 diff -Naur a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/tiff/tiff.pro
 --- a/src/plugins/imageformats/tiff/tiff.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/imageformats/tiff/tiff.pro	2010-06-05 01:24:42.893686773 +0200
++++ b/src/plugins/imageformats/tiff/tiff.pro	2010-06-05 23:51:28.115709598 +0200
 @@ -8,8 +8,13 @@
             qtiffhandler.cpp
  
@@ -914,7 +923,7 @@ diff -Naur a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/t
          INCLUDEPATH +=  ../../../3rdparty/zlib
 diff -Naur a/src/plugins/sqldrivers/psql/psql.pro b/src/plugins/sqldrivers/psql/psql.pro
 --- a/src/plugins/sqldrivers/psql/psql.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/sqldrivers/psql/psql.pro	2010-06-05 01:24:42.897682281 +0200
++++ b/src/plugins/sqldrivers/psql/psql.pro	2010-06-05 23:51:28.115709598 +0200
 @@ -4,7 +4,7 @@
  SOURCES		= main.cpp \
  		  ../../../sql/drivers/psql/qsql_psql.cpp
@@ -934,7 +943,7 @@ diff -Naur a/src/plugins/sqldrivers/psql/psql.pro b/src/plugins/sqldrivers/psql/
  include(../qsqldriverbase.pri)
 diff -Naur a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/main.cpp
 --- a/src/plugins/sqldrivers/tds/main.cpp	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/sqldrivers/tds/main.cpp	2010-06-05 01:24:42.897682281 +0200
++++ b/src/plugins/sqldrivers/tds/main.cpp	2010-06-05 23:51:28.115709598 +0200
 @@ -47,6 +47,7 @@
  #define _WINSCARD_H_
  #include <windows.h>
@@ -945,7 +954,7 @@ diff -Naur a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/ma
  QT_BEGIN_NAMESPACE
 diff -Naur a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds.pro
 --- a/src/plugins/sqldrivers/tds/tds.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/sqldrivers/tds/tds.pro	2010-06-05 01:24:42.897682281 +0200
++++ b/src/plugins/sqldrivers/tds/tds.pro	2010-06-05 23:51:28.115709598 +0200
 @@ -6,8 +6,9 @@
  		  ../../../sql/drivers/tds/qsql_tds.cpp
  
@@ -959,7 +968,7 @@ diff -Naur a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds
  }
 diff -Naur a/src/qbase.pri b/src/qbase.pri
 --- a/src/qbase.pri	2010-05-04 02:43:26.000000000 +0200
-+++ b/src/qbase.pri	2010-06-05 01:24:42.897682281 +0200
++++ b/src/qbase.pri	2010-06-05 23:51:28.115709598 +0200
 @@ -85,7 +85,6 @@
  }
  
@@ -970,7 +979,7 @@ diff -Naur a/src/qbase.pri b/src/qbase.pri
  }
 diff -Naur a/src/sql/drivers/drivers.pri b/src/sql/drivers/drivers.pri
 --- a/src/sql/drivers/drivers.pri	2010-05-04 02:43:24.000000000 +0200
-+++ b/src/sql/drivers/drivers.pri	2010-06-05 01:24:42.897682281 +0200
++++ b/src/sql/drivers/drivers.pri	2010-06-05 23:51:28.119704269 +0200
 @@ -6,16 +6,14 @@
      HEADERS +=      drivers/psql/qsql_psql.h
      SOURCES +=      drivers/psql/qsql_psql.cpp
@@ -1003,7 +1012,7 @@ diff -Naur a/src/sql/drivers/drivers.pri b/src/sql/drivers/drivers.pri
  
 diff -Naur a/src/sql/drivers/tds/qsql_tds.cpp b/src/sql/drivers/tds/qsql_tds.cpp
 --- a/src/sql/drivers/tds/qsql_tds.cpp	2010-05-04 02:43:24.000000000 +0200
-+++ b/src/sql/drivers/tds/qsql_tds.cpp	2010-06-05 01:24:42.897682281 +0200
++++ b/src/sql/drivers/tds/qsql_tds.cpp	2010-06-05 23:51:28.119704269 +0200
 @@ -47,7 +47,8 @@
  #else
  #define Q_USE_SYBASE
@@ -1016,7 +1025,7 @@ diff -Naur a/src/sql/drivers/tds/qsql_tds.cpp b/src/sql/drivers/tds/qsql_tds.cpp
  #include <qvariant.h>
 diff -Naur a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
 --- a/src/sql/drivers/tds/qsql_tds.h	2010-05-04 02:43:24.000000000 +0200
-+++ b/src/sql/drivers/tds/qsql_tds.h	2010-06-05 01:24:42.897682281 +0200
++++ b/src/sql/drivers/tds/qsql_tds.h	2010-06-05 23:51:28.119704269 +0200
 @@ -48,7 +48,8 @@
  
  #ifdef Q_OS_WIN32
@@ -1029,7 +1038,7 @@ diff -Naur a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
  #include <sqldb.h>
 diff -Naur a/src/svg/svg.pro b/src/svg/svg.pro
 --- a/src/svg/svg.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/svg/svg.pro	2010-06-05 01:24:42.897682281 +0200
++++ b/src/svg/svg.pro	2010-06-05 23:51:28.119704269 +0200
 @@ -46,5 +46,6 @@
  contains(QT_CONFIG, zlib) {
     INCLUDEPATH += ../3rdparty/zlib
@@ -1040,7 +1049,7 @@ diff -Naur a/src/svg/svg.pro b/src/svg/svg.pro
  }
 diff -Naur a/src/tools/bootstrap/bootstrap.pro b/src/tools/bootstrap/bootstrap.pro
 --- a/src/tools/bootstrap/bootstrap.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/tools/bootstrap/bootstrap.pro	2010-06-05 01:24:42.897682281 +0200
++++ b/src/tools/bootstrap/bootstrap.pro	2010-06-05 23:51:28.119704269 +0200
 @@ -109,6 +109,9 @@
          ../3rdparty/zlib/trees.c \
          ../3rdparty/zlib/uncompr.c \
@@ -1053,7 +1062,7 @@ diff -Naur a/src/tools/bootstrap/bootstrap.pro b/src/tools/bootstrap/bootstrap.p
  lib.CONFIG = dummy_install
 diff -Naur a/src/winmain/winmain.pro b/src/winmain/winmain.pro
 --- a/src/winmain/winmain.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/winmain/winmain.pro	2010-06-05 01:24:42.897682281 +0200
++++ b/src/winmain/winmain.pro	2010-06-05 23:51:28.119704269 +0200
 @@ -8,10 +8,10 @@
  CONFIG	-= qt shared
  
@@ -1069,7 +1078,7 @@ diff -Naur a/src/winmain/winmain.pro b/src/winmain/winmain.pro
  }
 diff -Naur a/tools/activeqt/testcon/testcon.pro b/tools/activeqt/testcon/testcon.pro
 --- a/tools/activeqt/testcon/testcon.pro	2010-05-04 02:43:18.000000000 +0200
-+++ b/tools/activeqt/testcon/testcon.pro	2010-06-05 01:24:42.917690620 +0200
++++ b/tools/activeqt/testcon/testcon.pro	2010-06-05 23:51:28.123713258 +0200
 @@ -16,6 +16,6 @@
  win32-borland {
      QMAKE_POST_LINK = -midl $$QT_SOURCE_TREE/tools/activeqt/testcon/testcon.idl
@@ -1080,7 +1089,7 @@ diff -Naur a/tools/activeqt/testcon/testcon.pro b/tools/activeqt/testcon/testcon
  }
 diff -Naur a/tools/assistant/lib/fulltextsearch/fulltextsearch.pro b/tools/assistant/lib/fulltextsearch/fulltextsearch.pro
 --- a/tools/assistant/lib/fulltextsearch/fulltextsearch.pro	2010-05-04 02:43:17.000000000 +0200
-+++ b/tools/assistant/lib/fulltextsearch/fulltextsearch.pro	2010-06-05 01:24:42.917690620 +0200
++++ b/tools/assistant/lib/fulltextsearch/fulltextsearch.pro	2010-06-05 23:51:28.123713258 +0200
 @@ -29,7 +29,7 @@
  CONFIG(exceptions_off) {
      CONFIG -= exceptions_off
@@ -1092,7 +1101,7 @@ diff -Naur a/tools/assistant/lib/fulltextsearch/fulltextsearch.pro b/tools/assis
          QMAKE_LFLAGS -= -fno-exceptions
 diff -Naur a/tools/configure/configure.pro b/tools/configure/configure.pro
 --- a/tools/configure/configure.pro	2010-05-04 02:43:18.000000000 +0200
-+++ b/tools/configure/configure.pro	2010-06-05 01:24:42.917690620 +0200
++++ b/tools/configure/configure.pro	2010-06-05 23:51:28.123713258 +0200
 @@ -8,7 +8,7 @@
  
  win32 : LIBS += -lole32 -ladvapi32
@@ -1104,7 +1113,7 @@ diff -Naur a/tools/configure/configure.pro b/tools/configure/configure.pro
      QMAKE_CFLAGS_RELEASE -= -MD
 diff -Naur a/tools/qvfb/qvfb.pro b/tools/qvfb/qvfb.pro
 --- a/tools/qvfb/qvfb.pro	2010-05-04 02:43:18.000000000 +0200
-+++ b/tools/qvfb/qvfb.pro	2010-06-05 01:24:42.917690620 +0200
++++ b/tools/qvfb/qvfb.pro	2010-06-05 23:51:28.123713258 +0200
 @@ -42,12 +42,14 @@
  }
  
@@ -1124,7 +1133,7 @@ diff -Naur a/tools/qvfb/qvfb.pro b/tools/qvfb/qvfb.pro
  }
 diff -Naur a/translations/translations.pro b/translations/translations.pro
 --- a/translations/translations.pro	2010-05-04 02:43:16.000000000 +0200
-+++ b/translations/translations.pro	2010-06-05 01:24:42.921690807 +0200
++++ b/translations/translations.pro	2010-06-05 23:51:28.139709194 +0200
 @@ -3,7 +3,8 @@
  LRELEASE = $$QT_BUILD_TREE/bin/lrelease
  win32 {

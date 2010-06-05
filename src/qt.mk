@@ -45,7 +45,7 @@ define $(PKG)_BUILD
         -prefix-install \
         -script \
         -opengl desktop \
-        -no-webkit \
+        -webkit \
         -no-glib \
         -no-gstreamer \
         -no-phonon \
