@@ -4,8 +4,8 @@
 # GLib
 PKG             := glib
 $(PKG)_IGNORE   := 2.25.6
-$(PKG)_VERSION  := 2.25.3
-$(PKG)_CHECKSUM := 5a8cf17c44decb27de3fbc202be05c89d55f647d
+$(PKG)_VERSION  := 2.25.7
+$(PKG)_CHECKSUM := 8423e1f5346ecc629e85adfe5498c2545de421ef
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/

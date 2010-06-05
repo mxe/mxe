@@ -1,0 +1,72 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://mail.gnome.org/archives/gtk-devel-list/2010-June/msg00027.html
+
+diff -urN a/gio/gioenums.h b/gio/gioenums.h
+--- a/gio/gioenums.h	2010-05-24 18:39:22.000000000 +0200
++++ b/gio/gioenums.h	2010-06-05 20:37:07.923709408 +0200
+@@ -770,7 +770,7 @@
+ {
+   G_BUS_NAME_OWNER_FLAGS_NONE = 0,                    /*< nick=none >*/
+   G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT = (1<<0),  /*< nick=allow-replacement >*/
+-  G_BUS_NAME_OWNER_FLAGS_REPLACE = (1<<1),            /*< nick=replace >*/
++  G_BUS_NAME_OWNER_FLAGS_REPLACE = (1<<1)            /*< nick=replace >*/
+ } GBusNameOwnerFlags;
+ 
+ /**
+@@ -804,7 +804,7 @@
+ {
+   G_DBUS_PROXY_FLAGS_NONE = 0,                        /*< nick=none >*/
+   G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES = (1<<0), /*< nick=do-not-load-properties >*/
+-  G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS = (1<<1), /*< nick=do-not-connect-signals >*/
++  G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS = (1<<1) /*< nick=do-not-connect-signals >*/
+ } GDBusProxyFlags;
+ 
+ /**
+@@ -949,7 +949,7 @@
+   G_DBUS_ERROR_INVALID_FILE_CONTENT,             /* org.freedesktop.DBus.Error.InvalidFileContent */
+   G_DBUS_ERROR_SELINUX_SECURITY_CONTEXT_UNKNOWN, /* org.freedesktop.DBus.Error.SELinuxSecurityContextUnknown */
+   G_DBUS_ERROR_ADT_AUDIT_DATA_UNKNOWN,           /* org.freedesktop.DBus.Error.AdtAuditDataUnknown */
+-  G_DBUS_ERROR_OBJECT_PATH_IN_USE,               /* org.freedesktop.DBus.Error.ObjectPathInUse */
++  G_DBUS_ERROR_OBJECT_PATH_IN_USE               /* org.freedesktop.DBus.Error.ObjectPathInUse */
+ } GDBusError;
+ /* Remember to update g_dbus_error_quark() in gdbuserror.c if you extend this enumeration */
+ 
+@@ -988,7 +988,7 @@
+  */
+ typedef enum {
+   G_DBUS_CAPABILITY_FLAGS_NONE = 0,
+-  G_DBUS_CAPABILITY_FLAGS_UNIX_FD_PASSING = (1<<0),
++  G_DBUS_CAPABILITY_FLAGS_UNIX_FD_PASSING = (1<<0)
+ } GDBusCapabilityFlags;
+ 
+ /**
+@@ -1004,7 +1004,7 @@
+  */
+ typedef enum {
+   G_DBUS_CALL_FLAGS_NONE = 0,
+-  G_DBUS_CALL_FLAGS_NO_AUTO_START = (1<<0),
++  G_DBUS_CALL_FLAGS_NO_AUTO_START = (1<<0)
+ } GDBusCallFlags;
+ 
+ /**
+@@ -1088,7 +1088,7 @@
+ {
+   G_DBUS_PROPERTY_INFO_FLAGS_NONE = 0,
+   G_DBUS_PROPERTY_INFO_FLAGS_READABLE = (1<<0),
+-  G_DBUS_PROPERTY_INFO_FLAGS_WRITABLE = (1<<1),
++  G_DBUS_PROPERTY_INFO_FLAGS_WRITABLE = (1<<1)
+ } GDBusPropertyInfoFlags;
+ 
+ /**
+@@ -1105,7 +1105,7 @@
+ typedef enum
+ {
+   G_DBUS_SUBTREE_FLAGS_NONE = 0,
+-  G_DBUS_SUBTREE_FLAGS_DISPATCH_TO_UNENUMERATED_NODES = (1<<0),
++  G_DBUS_SUBTREE_FLAGS_DISPATCH_TO_UNENUMERATED_NODES = (1<<0)
+ } GDBusSubtreeFlags;
+ 
+ /**
