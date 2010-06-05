@@ -1,0 +1,17 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://gcc.gnu.org/ml/gcc-patches/2010-06/msg00387.html
+
+diff -urN a/gcc/ginclude/float.h b/gcc/ginclude/float.h
+--- a/gcc/ginclude/float.h	2009-04-09 17:00:19.000000000 +0200
++++ b/gcc/ginclude/float.h	2010-06-05 12:03:41.887724045 +0200
+@@ -236,3 +236,7 @@
+ #endif /* __STDC_WANT_DEC_FP__ */
+ 
+ #endif /* _FLOAT_H___ */
++
++#ifdef __MINGW32__
++#include_next<float.h>
++#endif
