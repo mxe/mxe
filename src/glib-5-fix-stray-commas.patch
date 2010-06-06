@@ -2,12 +2,42 @@ This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
 This patch has been taken from:
-http://mail.gnome.org/archives/gtk-devel-list/2010-June/msg00027.html
+http://git.gnome.org/browse/glib/commit/?id=07b5cee2a8273d7fdd20371b5494ecd320c3cd1c
 
-diff -urN a/gio/gioenums.h b/gio/gioenums.h
---- a/gio/gioenums.h	2010-05-24 18:39:22.000000000 +0200
-+++ b/gio/gioenums.h	2010-06-05 20:37:07.923709408 +0200
-@@ -770,7 +770,7 @@
+From 07b5cee2a8273d7fdd20371b5494ecd320c3cd1c Mon Sep 17 00:00:00 2001
+From: Murray Cumming <murrayc@murrayc.com>
+Date: Fri, 04 Jun 2010 15:07:05 +0000
+Subject: Gio: gioenums.h: Remove trailing commas to avoid C++ warnings.
+
+---
+diff --git a/gio/gioenums.h b/gio/gioenums.h
+index 936f991..efd08d5 100644
+--- a/gio/gioenums.h
++++ b/gio/gioenums.h
+@@ -195,7 +195,7 @@ typedef enum {
+  * @G_FILE_CREATE_REPLACE_DESTINATION: Replace the destination
+  *    as if it didn't exist before. Don't try to keep any old
+  *    permissions, replace instead of following links. This
+- *    is generally useful if you're doing a "copy over" 
++ *    is generally useful if you're doing a "copy over"
+  *    rather than a "save new version of" replace operation.
+  *    You can think of it as "unlink destination" before
+  *    writing to it, although the implementation may not
+@@ -420,10 +420,10 @@ typedef enum {
+  * @G_IO_ERROR_WOULD_BLOCK: Operation would block.
+  * @G_IO_ERROR_HOST_NOT_FOUND: Host couldn't be found (remote operations).
+  * @G_IO_ERROR_WOULD_MERGE: Operation would merge files.
+- * @G_IO_ERROR_FAILED_HANDLED: Operation failed and a helper program has 
++ * @G_IO_ERROR_FAILED_HANDLED: Operation failed and a helper program has
+  *     already interacted with the user. Do not display any error dialog.
+- * @G_IO_ERROR_TOO_MANY_OPEN_FILES: The current process has too many files 
+- *     open and can't open any more. Duplicate descriptors do count toward 
++ * @G_IO_ERROR_TOO_MANY_OPEN_FILES: The current process has too many files
++ *     open and can't open any more. Duplicate descriptors do count toward
+  *     this limit. Since 2.20
+  * @G_IO_ERROR_NOT_INITIALIZED: The object has not been initialized. Since 2.22
+  * @G_IO_ERROR_ADDRESS_IN_USE: The requested address is already in use. Since 2.22
+@@ -770,7 +770,7 @@ typedef enum
  {
    G_BUS_NAME_OWNER_FLAGS_NONE = 0,                    /*< nick=none >*/
    G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT = (1<<0),  /*< nick=allow-replacement >*/
@@ -16,7 +46,7 @@ diff -urN a/gio/gioenums.h b/gio/gioenums.h
  } GBusNameOwnerFlags;
  
  /**
-@@ -804,7 +804,7 @@
+@@ -804,7 +804,7 @@ typedef enum
  {
    G_DBUS_PROXY_FLAGS_NONE = 0,                        /*< nick=none >*/
    G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES = (1<<0), /*< nick=do-not-load-properties >*/
@@ -25,16 +55,16 @@ diff -urN a/gio/gioenums.h b/gio/gioenums.h
  } GDBusProxyFlags;
  
  /**
-@@ -949,7 +949,7 @@
+@@ -949,7 +949,7 @@ typedef enum
    G_DBUS_ERROR_INVALID_FILE_CONTENT,             /* org.freedesktop.DBus.Error.InvalidFileContent */
    G_DBUS_ERROR_SELINUX_SECURITY_CONTEXT_UNKNOWN, /* org.freedesktop.DBus.Error.SELinuxSecurityContextUnknown */
    G_DBUS_ERROR_ADT_AUDIT_DATA_UNKNOWN,           /* org.freedesktop.DBus.Error.AdtAuditDataUnknown */
 -  G_DBUS_ERROR_OBJECT_PATH_IN_USE,               /* org.freedesktop.DBus.Error.ObjectPathInUse */
-+  G_DBUS_ERROR_OBJECT_PATH_IN_USE               /* org.freedesktop.DBus.Error.ObjectPathInUse */
++  G_DBUS_ERROR_OBJECT_PATH_IN_USE                /* org.freedesktop.DBus.Error.ObjectPathInUse */
  } GDBusError;
  /* Remember to update g_dbus_error_quark() in gdbuserror.c if you extend this enumeration */
  
-@@ -988,7 +988,7 @@
+@@ -988,7 +988,7 @@ typedef enum {
   */
  typedef enum {
    G_DBUS_CAPABILITY_FLAGS_NONE = 0,
@@ -43,7 +73,7 @@ diff -urN a/gio/gioenums.h b/gio/gioenums.h
  } GDBusCapabilityFlags;
  
  /**
-@@ -1004,7 +1004,7 @@
+@@ -1004,7 +1004,7 @@ typedef enum {
   */
  typedef enum {
    G_DBUS_CALL_FLAGS_NONE = 0,
@@ -52,7 +82,7 @@ diff -urN a/gio/gioenums.h b/gio/gioenums.h
  } GDBusCallFlags;
  
  /**
-@@ -1088,7 +1088,7 @@
+@@ -1088,7 +1088,7 @@ typedef enum
  {
    G_DBUS_PROPERTY_INFO_FLAGS_NONE = 0,
    G_DBUS_PROPERTY_INFO_FLAGS_READABLE = (1<<0),
@@ -61,7 +91,7 @@ diff -urN a/gio/gioenums.h b/gio/gioenums.h
  } GDBusPropertyInfoFlags;
  
  /**
-@@ -1105,7 +1105,7 @@
+@@ -1105,7 +1105,7 @@ typedef enum
  typedef enum
  {
    G_DBUS_SUBTREE_FLAGS_NONE = 0,
@@ -70,3 +100,5 @@ diff -urN a/gio/gioenums.h b/gio/gioenums.h
  } GDBusSubtreeFlags;
  
  /**
+--
+cgit v0.8.3.1
