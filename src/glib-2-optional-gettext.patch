@@ -1,0 +1,58 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+https://bugzilla.gnome.org/show_bug.cgi?id=617004#c8
+
+diff -r 3241a43cfc79 configure.in
+--- a/configure.in	Sun May 16 16:38:34 2010 +0200
++++ b/configure.in	Sun May 16 17:02:59 2010 +0200
+@@ -477,8 +477,8 @@
+ GLIB_GNU_GETTEXT
+ 
+ if test "$gt_cv_have_gettext" != "yes" ; then
+-  AC_MSG_ERROR([
+-*** You must have either have gettext support in your C library, or use the 
++  AC_MSG_WARN([
++*** You should either have gettext support in your C library, or use the
+ *** GNU gettext library. (http://www.gnu.org/software/gettext/gettext.html
+ ])
+ fi
+diff -r 3241a43cfc79 gio/gsettings.c
+--- a/gio/gsettings.c	Sun May 16 16:38:34 2010 +0200
++++ b/gio/gsettings.c	Sun May 16 17:02:59 2010 +0200
+@@ -782,16 +782,13 @@
+       const gchar *translated;
+       GError *error = NULL;
+       const gchar *domain;
+-      gint lc_category;
+ 
+       domain = g_settings_schema_get_gettext_domain (settings->priv->schema);
+ 
+       if (lc_char == 't')
+-        lc_category = LC_TIME;
++        translated = dcgettext (domain, unparsed, LC_TIME);
+       else
+-        lc_category = LC_MESSAGES;
+-
+-      translated = dcgettext (domain, unparsed, lc_category);
++        translated = dgettext (domain, unparsed);
+ 
+       if (translated != unparsed)
+         /* it was translated, so we need to re-parse it */
+diff -r 3241a43cfc79 glib/gi18n.h
+--- a/glib/gi18n.h	Sun May 16 16:38:34 2010 +0200
++++ b/glib/gi18n.h	Sun May 16 17:02:59 2010 +0200
+@@ -22,7 +22,12 @@
+ 
+ #include <glib.h>
+ 
++#ifdef ENABLE_NLS
+ #include <libintl.h>
++#else
++#define gettext(String) (String)
++#endif
++
+ #include <string.h>
+ 
+ #define  _(String) gettext (String)
