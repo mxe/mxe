@@ -4,8 +4,8 @@
 # GNU Libtool
 PKG             := libtool
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.8
-$(PKG)_CHECKSUM := e0fd6f9d39c81c2da8b548411c74a46c24442abf
+$(PKG)_VERSION  := 2.2.10
+$(PKG)_CHECKSUM := e8fa9813d8e9a5497c636744e6fd3f55d86eec38
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/$(PKG)/
