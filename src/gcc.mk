@@ -31,6 +31,10 @@ define $(PKG)_BUILD
 
     # build GCC and support libraries
     mkdir '$(1)/build'
+    # mpfr 3.0.0 configure expects these gmp headers here
+    mkdir '$(1)/build/gmp'
+    ln -s '$(1)/gmp/gmp-impl.h' '$(1)/build/gmp/'
+    ln -s '$(1)/gmp/longlong.h' '$(1)/build/gmp/'
     cd    '$(1)/build' && '$(1)/configure' \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
