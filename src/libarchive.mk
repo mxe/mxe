@@ -30,4 +30,9 @@ define $(PKG)_BUILD
         XML2_CONFIG='$(PREFIX)/$(TARGET)'/bin/xml2-config
     $(MAKE) -C '$(1)' -j '$(JOBS)' man_MANS=
     $(MAKE) -C '$(1)' -j 1 install man_MANS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libarchive.exe' \
+        -larchive -lz
 endef
