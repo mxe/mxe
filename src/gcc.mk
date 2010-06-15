@@ -30,12 +30,12 @@ define $(PKG)_BUILD
     mv '$(1)/$(gcc-mpfr_SUBDIR)' '$(1)/mpfr'
 
     # build GCC and support libraries
-    mkdir '$(1)/build'
+    mkdir '$(1).build'
     # mpfr 3.0.0 configure expects these gmp headers here
-    mkdir '$(1)/build/gmp'
-    ln -s '$(1)/gmp/gmp-impl.h' '$(1)/build/gmp/'
-    ln -s '$(1)/gmp/longlong.h' '$(1)/build/gmp/'
-    cd    '$(1)/build' && '$(1)/configure' \
+    mkdir '$(1).build/gmp'
+    ln -s '$(1)/gmp/gmp-impl.h' '$(1).build/gmp/'
+    ln -s '$(1)/gmp/longlong.h' '$(1).build/gmp/'
+    cd    '$(1).build' && '$(1)/configure' \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
         --enable-languages='c,c++,objc,fortran' \
@@ -50,8 +50,8 @@ define $(PKG)_BUILD
         --enable-threads=win32 \
         --disable-libgomp \
         --disable-libmudflap
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/build' -j 1 install
+    $(MAKE) -C '$(1).build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).build' -j 1 install
 
     # create pkg-config script
     (echo '#!/bin/sh'; \
