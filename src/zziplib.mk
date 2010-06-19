@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := zziplib-$($(PKG)_VERSION)
 $(PKG)_FILE     := zziplib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://zziplib.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/zziplib/zziplib$(word 2,$(subst ., ,$($(PKG)_VERSION)))/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/zziplib/files/) | \
