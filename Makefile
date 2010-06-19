@@ -20,28 +20,28 @@ INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
 VERSION    := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
 
-# unset any environment variables which might cause trouble
-AR =
-CC =
-CFLAGS =
-CPP =
-CPPFLAGS =
-CROSS =
-CXX =
-CXXCPP =
-CXXFLAGS =
-EXEEXT =
-EXTRA_CFLAGS =
-EXTRA_LDFLAGS =
-LD =
-LDFLAGS =
-LIBS =
-NM =
-PKG_CONFIG =
-PKG_CONFIG_PATH =
-QMAKESPEC =
-RANLIB =
-STRIP =
+# unexport any environment variables that might cause trouble
+unexport AR
+unexport CC
+unexport CFLAGS
+unexport CPP
+unexport CPPFLAGS
+unexport CROSS
+unexport CXX
+unexport CXXCPP
+unexport CXXFLAGS
+unexport EXEEXT
+unexport EXTRA_CFLAGS
+unexport EXTRA_LDFLAGS
+unexport LD
+unexport LDFLAGS
+unexport LIBS
+unexport NM
+unexport PKG_CONFIG
+unexport PKG_CONFIG_PATH
+unexport QMAKESPEC
+unexport RANLIB
+unexport STRIP
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
