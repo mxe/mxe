@@ -21,7 +21,7 @@ endef
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
         -f '$(1)'/makefiles/makefile.unix \
-        CC=$(TARGET)-gcc
+        CC=$(TARGET)-gcc CFLAGS='-DMNG_BUILD_SO'
     $(TARGET)-ranlib '$(1)/libmng.a'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libmng.a' '$(PREFIX)/$(TARGET)/lib/'
