@@ -48,7 +48,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \
+        -W -Wall -Werror -ansi -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-xerces.exe' \
         -lxerces-c
 endef
