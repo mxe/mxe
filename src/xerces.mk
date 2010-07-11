@@ -46,4 +46,9 @@ define $(PKG)_BUILD
         LIBS="`$(TARGET)-pkg-config --libs libcurl`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-xerces.exe' \
+        -lxerces-c
 endef
