@@ -24,14 +24,14 @@ define $(PKG)_BUILD
     touch '$(1)/config.hin'
     touch '$(1)/Makefile.in'
     $(SED) -i 's,-I@includedir@,-I@includedir@ -DNONDLL,' '$(1)/config/gdlib-config.in'
-    $(SED) -i 's,-lX11 ,,g' '$(1)/configure'
+    $(SED) -i 's,-lX11 ,,g'     '$(1)/configure'
+    $(SED) -i 's,png12,png14,g' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-freetype='$(PREFIX)/$(TARGET)' \
         --without-x \
-        LIBPNG12_CONFIG='$(PREFIX)/$(TARGET)/bin/libpng12-config' \
         LIBPNG_CONFIG='$(PREFIX)/$(TARGET)/bin/libpng-config' \
         CFLAGS='-DNONDLL -DXMD_H -L$(PREFIX)/$(TARGET)/lib' \
         LIBS="`$(PREFIX)/$(TARGET)/bin/xml2-config --libs`"
