@@ -36,4 +36,10 @@ define $(PKG)_BUILD
         CFLAGS='-DNONDLL -DXMD_H -L$(PREFIX)/$(TARGET)/lib' \
         LIBS="`$(PREFIX)/$(TARGET)/bin/xml2-config --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gd.exe' \
+        `'$(PREFIX)/$(TARGET)/bin/gdlib-config' --cflags` \
+        -lgd `'$(PREFIX)/$(TARGET)/bin/gdlib-config' --libs`
 endef
