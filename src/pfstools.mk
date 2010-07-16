@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://pfstools.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc openexr tiff imagemagick
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/pfstools/files/pfstools/) | \
@@ -22,7 +22,18 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared
+        --disable-shared \
+        --disable-netpbm \
+        --enable-openexr \
+        --enable-tiff \
+        --disable-qt \
+        --disable-jpeghdr \
+        --enable-imagemagick \
+        --disable-octave \
+        --enable-opengl \
+        --disable-matlab \
+        --disable-gdal \
+        LIBS='-ljpeg -lz'
     $(MAKE) -C '$(1)'/src/pfs -j '$(JOBS)'
     $(MAKE) -C '$(1)'/src/pfs -j 1 install
 endef
