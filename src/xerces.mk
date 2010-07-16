@@ -21,7 +21,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && $(SHELL) ./configure \
+    cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -43,7 +43,8 @@ define $(PKG)_BUILD
         --disable-msgloader-icu \
         --with-curl='$(PREFIX)/$(TARGET)' \
         --without-icu \
-        LIBS="`$(TARGET)-pkg-config --libs libcurl`"
+        LIBS="`$(TARGET)-pkg-config --libs libcurl`" \
+        CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 

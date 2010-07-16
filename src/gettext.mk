@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads=win32 \
         --without-libexpat-prefix \
-        --without-libxml2-prefix
-    $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' SHELL=bash install
+        --without-libxml2-prefix \
+        CONFIG_SHELL=$(SHELL)
+    $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' install
 endef
