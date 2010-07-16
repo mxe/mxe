@@ -24,6 +24,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
+        --disable-sse2 \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-libtool-lock \
         --disable-pretty-make \
