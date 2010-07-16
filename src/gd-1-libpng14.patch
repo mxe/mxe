@@ -1,0 +1,17 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
+This patch has been taken from:
+http://bugs.gentoo.org/show_bug.cgi?id=305101
+http://repos.archlinux.org/wsvn/packages/gd/trunk/libpng14.patch
+
+--- a/gd_png.c
++++ b/gd_png.c
+@@ -149,7 +149,7 @@
+ 	return NULL;
+   }
+ 
+-	if (!png_check_sig (sig, 8)) { /* bad signature */
++	if (png_sig_cmp (sig, 0, 8)) { /* bad signature */
+     	return NULL;		/* bad signature */
+ 	}
