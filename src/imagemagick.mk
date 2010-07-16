@@ -24,5 +24,6 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
 	--with-x=no
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
+    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=
 endef
