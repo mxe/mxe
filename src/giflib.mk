@@ -23,6 +23,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --without-x
+        --without-x \
+        CPPFLAGS='-D_OPEN_BINARY'
     $(MAKE) -C '$(1)/lib' -j '$(JOBS)' install
 endef
