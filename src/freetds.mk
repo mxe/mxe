@@ -21,6 +21,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./autogen.sh
+    cd '$(1)' &&  libtoolize
+
     # package uses winsock2.h, so it should link to ws2_32 instead of wsock32
     $(SED) -i 's,wsock32,ws2_32,g' '$(1)'/configure
 
@@ -37,7 +40,9 @@ define $(PKG)_BUILD
         --enable-static \
         --enable-libiconv \
         --enable-msdblib \
+        --enable-sspi \
         --disable-threadsafe \
         --with-tdsver=8.0
+    cd '$(1)' && chmod +x doc/txt2man
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
