@@ -1,1146 +1,1109 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-diff -Naur a/config.tests/unix/compile.test b/config.tests/unix/compile.test
---- a/config.tests/unix/compile.test	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/compile.test	2010-06-05 23:51:20.996424087 +0200
-@@ -65,8 +65,10 @@
- cd "$OUTDIR/$TEST"
- 
- test -r Makefile && $MAKE distclean >/dev/null 2>&1
-+# Make sure output from possible previous tests is gone
-+rm -f "$EXE" "${EXE}.exe"
- 
--"$OUTDIR/bin/qmake" -nocache -spec "$QMKSPEC" "CONFIG+=$QMAKE_CONFIG" "LIBS*=$LFLAGS" "LIBS+=$MAC_ARCH_LFLAGS" "INCLUDEPATH*=$INCLUDEPATH" "QMAKE_CXXFLAGS*=$CXXFLAGS" "QMAKE_CXXFLAGS+=$MAC_ARCH_CXXFLAGS" "$SRCDIR/$TEST/$EXE.pro" -o "$OUTDIR/$TEST/Makefile"
-+"$OUTDIR/bin/qmake" -nocache -spec "$QMKSPEC" "CONFIG+=$QMAKE_CONFIG" "CONFIG-=debug_and_release" "LIBS*=$LFLAGS" "LIBS+=$MAC_ARCH_LFLAGS" "INCLUDEPATH*=$INCLUDEPATH" "QMAKE_CXXFLAGS*=$CXXFLAGS" "QMAKE_CXXFLAGS+=$MAC_ARCH_CXXFLAGS" "$SRCDIR/$TEST/$EXE.pro" -o "$OUTDIR/$TEST/Makefile"
- 
- if [ "$VERBOSE" = "yes" ]; then
-     $MAKE
-@@ -74,7 +76,7 @@
-     $MAKE >/dev/null 2>&1
- fi
- 
--[ -x "$EXE" ] && SUCCESS=yes
-+( [ -x "$EXE" ] || [ -x "${EXE}.exe" ] ) && SUCCESS=yes
- 
- # done
- if [ "$SUCCESS" != "yes" ]; then
-diff -Naur a/config.tests/unix/getaddrinfo/getaddrinfotest.cpp b/config.tests/unix/getaddrinfo/getaddrinfotest.cpp
---- a/config.tests/unix/getaddrinfo/getaddrinfotest.cpp	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/getaddrinfo/getaddrinfotest.cpp	2010-06-05 23:51:20.996424087 +0200
-@@ -42,9 +42,16 @@
- /* Sample program for configure to test for getaddrinfo on the unix
-      platform. we check for all structures and functions required. */
- 
-+#include <stdio.h>
-+#include <stdlib.h>
-+#ifdef __MINGW32__
-+#include <winsock2.h>
-+#include <ws2tcpip.h>
-+#else
- #include <sys/types.h>
- #include <sys/socket.h>
- #include <netdb.h>
-+#endif
- 
- int main()
- {
-diff -Naur a/config.tests/unix/iconv/iconv.pro b/config.tests/unix/iconv/iconv.pro
---- a/config.tests/unix/iconv/iconv.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/iconv/iconv.pro	2010-06-05 23:51:21.891709032 +0200
-@@ -1,3 +1,3 @@
- SOURCES = iconv.cpp
- CONFIG -= qt dylib app_bundle
--mac:LIBS += -liconv
-+mac|win32-g++*:LIBS += -liconv
-diff -Naur a/config.tests/unix/ipv6/ipv6test.cpp b/config.tests/unix/ipv6/ipv6test.cpp
---- a/config.tests/unix/ipv6/ipv6test.cpp	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/ipv6/ipv6test.cpp	2010-06-05 23:51:22.210939093 +0200
-@@ -46,9 +46,14 @@
- #define _HPUX_SOURCE
- #endif
- 
-+#ifdef __MINGW32__
-+#include <winsock2.h>
-+#include <ws2tcpip.h>
-+#else
- #include <sys/types.h>
- #include <sys/socket.h>
- #include <netinet/in.h>
-+#endif
- 
- int main()
- {
-diff -Naur a/config.tests/unix/odbc/odbc.cpp b/config.tests/unix/odbc/odbc.cpp
---- a/config.tests/unix/odbc/odbc.cpp	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/odbc/odbc.cpp	2010-06-05 23:51:24.144204628 +0200
-@@ -39,6 +39,9 @@
- **
- ****************************************************************************/
- 
-+#ifdef __MINGW32__
-+#include <windows.h>
-+#endif
- #include <sql.h>
- #include <sqlext.h>
- 
-diff -Naur a/config.tests/unix/odbc/odbc.pro b/config.tests/unix/odbc/odbc.pro
---- a/config.tests/unix/odbc/odbc.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/odbc/odbc.pro	2010-06-05 23:51:24.992961319 +0200
-@@ -1,4 +1,5 @@
- SOURCES = odbc.cpp
- CONFIG -= qt dylib
- mac:CONFIG -= app_bundle
--LIBS += -lodbc
-+win32-g++*:LIBS += -lodbc32
-+else:LIBS += -lodbc
-diff -Naur a/config.tests/unix/psql/psql.pro b/config.tests/unix/psql/psql.pro
---- a/config.tests/unix/psql/psql.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/unix/psql/psql.pro	2010-06-05 23:51:26.096270883 +0200
+Commits backported (cherry-picked) from Qt 4.7 branch.
+http://qt.gitorious.org/qt
+
+commit b6d6681dc40ce34f231e74a63c13855b1e248aa1
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Wed Jul 7 12:05:35 2010 +0200
+
+    Fixed whitespace formatting
+    
+    Merge-request: 715
+    Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+    (cherry picked from commit 42fe2bfb65c85fc630efe32aa1d62d66f2caab2a)
+
+diff --git a/src/plugins/sqldrivers/db2/db2.pro b/src/plugins/sqldrivers/db2/db2.pro
+index 5223beb..25ca499 100644
+--- a/src/plugins/sqldrivers/db2/db2.pro
++++ b/src/plugins/sqldrivers/db2/db2.pro
 @@ -1,4 +1,4 @@
- SOURCES = psql.cpp
- CONFIG -= qt dylib
- mac:CONFIG -= app_bundle
--LIBS += -lpq
-+LIBS *= -lpq
-diff -Naur a/config.tests/x11/opengl/opengl.pro b/config.tests/x11/opengl/opengl.pro
---- a/config.tests/x11/opengl/opengl.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/config.tests/x11/opengl/opengl.pro	2010-06-05 23:51:26.112219397 +0200
-@@ -7,4 +7,5 @@
- }
+-TARGET	 = qsqldb2
++TARGET = qsqldb2
  
- CONFIG -= qt
--LIBS += -lGL -lGLU
-+win32-g++*:LIBS += -lopengl32
-+else:LIBS += -lGL -lGLU
-diff -Naur a/configure b/configure
---- a/configure	2010-05-04 02:43:19.000000000 +0200
-+++ b/configure	2010-06-05 23:51:26.683734132 +0200
-@@ -780,7 +780,8 @@
- RPATH_FLAGS=
- l_FLAGS=
- QCONFIG_FLAGS=
--XPLATFORM=              # This seems to be the QMAKESPEC, like "linux-g++"
-+XPLATFORM=              # This seems to be the QMAKESPEC, like "linux-g++" or "symbian/linux-gcce"
-+XPLATFORM_MINGW=no      # Whether target platform is MinGW (win32-g++*)
- PLATFORM=$QMAKESPEC
- QT_CROSS_COMPILE=no
- OPT_CONFIRM_LICENSE=no
-@@ -1324,7 +1325,9 @@
-         fi
- 	;;
-     arch)
--        if [ "$PLATFORM_MAC" = "yes" ]; then
-+        # if this is a Mac then "windows" probably means
-+        # we are cross-compiling for MinGW
-+        if [ "$PLATFORM_MAC" = "yes" ] && [ "$VAL" != "windows" ]; then
-             CFG_MAC_ARCHS="$CFG_MAC_ARCHS $VAL"
-         else
-             CFG_ARCH=$VAL
-@@ -1442,6 +1445,7 @@
-         ;;
-     xplatform)
-         XPLATFORM="$VAL"
-+        case `basename "$XPLATFORM"` in win32-g++*) XPLATFORM_MINGW=yes;; esac
-         ;;
-     debug-and-release)
-         if [ "$VAL" = "yes" ] || [ "$VAL" = "no" ]; then
-@@ -2581,9 +2585,15 @@
-         "
-         ;;
-      SunOS:5*)
--        #PLATFORM=solaris-g++
--        PLATFORM=solaris-cc
--        #PLATFORM=solaris-cc64
-+        # Remember: We are here setting the platform because none was specified.
-+        # For XPLATFORM_MINGW make the sensible choice.
-+        if [ "$XPLATFORM_MINGW" = "yes" ]; then
-+            PLATFORM="solaris-g++"
-+        else
-+            #PLATFORM=solaris-g++
-+            PLATFORM=solaris-cc
-+            #PLATFORM=solaris-cc64
-+        fi
-         PLATFORM_NOTES="
-             - Also available for Solaris: solaris-g++ solaris-cc-64
-         "
-@@ -2653,6 +2663,9 @@
- fi
- 
- [ -z "$XPLATFORM" ] && XPLATFORM="$PLATFORM"
-+
-+case `basename "$XPLATFORM"` in win32-g++*) XPLATFORM_MINGW=yes;; esac
-+
- if [ -d "$PLATFORM" ]; then
-   QMAKESPEC="$PLATFORM"
- else
-@@ -2914,6 +2927,8 @@
-         CFG_ARCH="$CFG_EMBEDDED"
-         ;;
-     esac
-+elif [ "$XPLATFORM_MINGW" = "yes" ]; then
-+    [ -z "$CFG_ARCH" ] && CFG_ARCH="windows"
- elif [ "$PLATFORM_MAC" = "yes" ] || [ -z "$CFG_ARCH" ]; then
-     CFG_ARCH=$CFG_HOST_ARCH
- fi
-@@ -4071,6 +4086,8 @@
-     Platform="Qt for Mac OS X"
- elif echo "$XPLATFORM" | grep "symbian" > /dev/null ; then
-     Platform="Qt for Symbian"
-+elif [ "$XPLATFORM_MINGW" = "yes" ]; then
-+    Platform="Qt for Windows"
- elif [ '!' -z "`getQMakeConf \"$XQMAKESPEC\" | grep QMAKE_LIBS_X11 | awk '{print $3;}'`" ]; then
-     PLATFORM_X11=yes
-     Platform="Qt for Linux/X11"
-@@ -4653,7 +4670,7 @@
- fi
- 
- # detect neon support
--if ([ "$CFG_ARCH" = "arm" ] || [ "$CFG_ARCH" = "armv6" ]) && [ "${CFG_NEON}" = "auto" ]; then
-+if ( [ "$CFG_ARCH" = "arm" ] || [ "$CFG_ARCH" = "armv6" ] ) && [ "${CFG_NEON}" = "auto" ]; then
-     if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/neon "neon" $L_FLAGS $I_FLAGS $l_FLAGS "-mfpu=neon"; then
- 	CFG_NEON=yes
-     else
-@@ -4683,6 +4700,8 @@
-     fi
- fi
- 
-+[ "$XPLATFORM_MINGW" = "yes" ] && QMakeVar add styles "windowsxp windowsvista"
-+
- if [ "$CFG_S60" = "auto" ]; then
-     if echo "$XPLATFORM" | grep symbian > /dev/null; then
-         CFG_S60=yes
-@@ -4838,12 +4857,15 @@
-             ;;
-         psql)
-             if [ "$CFG_SQL_psql" != "no" ]; then
--                if "$WHICH" pg_config >/dev/null 2>&1; then
-+                # Be careful not to use native pg_config when cross building.
-+                if [ "$XPLATFORM_MINGW" != "yes" ] && "$WHICH" pg_config >/dev/null 2>&1; then
-                     QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null`
-                     QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null`
-                 fi
-                 [ -z "$QT_CFLAGS_PSQL" ] || QT_CFLAGS_PSQL="-I$QT_CFLAGS_PSQL"
-                 [ -z "$QT_LFLAGS_PSQL" ] || QT_LFLAGS_PSQL="-L$QT_LFLAGS_PSQL"
-+                # But, respect PSQL_LIBS if set
-+                [ -z "$PSQL_LIBS" ] || QT_LFLAGS_PSQL="$PSQL_LIBS"
-                 if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/psql "PostgreSQL" $QT_LFLAGS_PSQL $L_FLAGS $QT_CFLAGS_PSQL $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-                     if [ "$CFG_SQL_psql" = "auto" ]; then
-                         CFG_SQL_psql=plugin
-@@ -4865,7 +4887,7 @@
-         ;;
-         odbc)
-             if [ "$CFG_SQL_odbc" != "no" ]; then
--                if [ "$PLATFORM_MAC" != "yes" ] && "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/odbc "ODBC" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-+                if ( [ "$PLATFORM_MAC" != "yes" ] || [ "$XPLATFORM_MINGW" = "yes" ] ) && "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/odbc "ODBC" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-                     if [ "$CFG_SQL_odbc" = "auto" ]; then
-                         CFG_SQL_odbc=plugin
-                     fi
-@@ -5131,8 +5153,8 @@
-     QT_NAMESPACE_MAC_CRC=`"$mactests/crc.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/mac/crc $QT_NAMESPACE $L_FLAGS $I_FLAGS $l_FLAGS`
- fi
- 
-+# X11/QWS
- if [ "$PLATFORM_X11" = "yes" -o "$PLATFORM_QWS" = "yes" ]; then
--
-     # detect EGL support
-     if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" "config.tests/unix/egl" "EGL (EGL/egl.h)" $L_FLAGS $I_FLAGS $l_FLAGS; then
-         # EGL specified by QMAKE_*_EGL, included with <EGL/egl.h>
-@@ -5152,7 +5174,6 @@
-         exit 1
-     fi
- 
--
-     # auto-detect Glib support
-     if [ "$CFG_GLIB" != "no" ]; then
-         if [ -n "$PKG_CONFIG" ]; then
-@@ -5201,6 +5222,7 @@
-     fi
- 
-     # Auto-detect GStreamer support (needed for both Phonon & QtMultimedia)
-+    # But win32 uses ds9 phonon backend instead of gstreamer.
-     if [ "$CFG_PHONON" != "no" -o "$CFG_MEDIASERVICES" != "no" ]; then
-         if [ "$CFG_GLIB" = "yes" -a "$CFG_GSTREAMER" != "no" ]; then
-             if [ -n "$PKG_CONFIG" ]; then
-@@ -5306,7 +5328,7 @@
-     fi
- fi # X11/QWS
- 
--# x11
-+# X11
- if [ "$PLATFORM_X11" = "yes" ]; then
-     x11tests="$relpath/config.tests/x11"
-     X11TESTS_FLAGS=
-@@ -5319,15 +5341,16 @@
-         X11TESTS_FLAGS="$X11TESTS_FLAGS -fpermissive"
-     fi
- 
--    # Check we actually have X11 :-)
--    "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/x11/xlib "XLib" $L_FLAGS $I_FLAGS $l_FLAGS $X11TESTS_FLAGS
--    if [ $? != "0" ]; then
-+    if ! "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/x11/xlib "XLib" $L_FLAGS $I_FLAGS $l_FLAGS $X11TESTS_FLAGS; then
-         echo "Basic XLib functionality test failed!"
-         echo " You might need to modify the include and library search paths by editing"
-         echo " QMAKE_INCDIR_X11 and QMAKE_LIBDIR_X11 in ${XQMAKESPEC}."
-         exit 1
-     fi
-+fi # X11
- 
-+# X11/MINGW OpenGL
-+if [ "$PLATFORM_X11" = "yes" -o "$XPLATFORM_MINGW" = "yes" ]; then
-     # auto-detect OpenGL support (es1 = OpenGL ES 1.x Common, es2 = OpenGL ES 2.x)
-     if [ "$CFG_GUI" = "no" ]; then
-         if [ "$CFG_OPENGL" = "auto" ]; then
-@@ -5417,7 +5440,10 @@
- 	echo "OpenGL Graphics System is disabled due to missing OpenGL support..."
- 	CFG_GRAPHICS_SYSTEM=default
-     fi
-+fi # X11/MINGW OpenGL
- 
-+# X11
-+if [ "$PLATFORM_X11" = "yes" ]; then
-     # auto-detect Xcursor support
-     if [ "$CFG_XCURSOR" != "no" ]; then
- 	if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/x11/xcursor "Xcursor" $L_FLAGS $I_FLAGS $l_FLAGS $X11TESTS_FLAGS; then
-@@ -5832,9 +5858,12 @@
- 
- fi # QWS
- 
-+[ "$XPLATFORM_MINGW" = "yes" ] && [ "$CFG_PHONON" != "no" ] && CFG_PHONON="yes"
-+
- # freetype support
- [ "x$CFG_EMBEDDED" != "xno" ] && CFG_LIBFREETYPE="$CFG_QWS_FREETYPE"
- [ "x$PLATFORM_MAC" = "xyes" ] && CFG_LIBFREETYPE=no
-+[ "$XPLATFORM_MINGW" = "yes" ] && [ "$CFG_LIBFREETYPE" = "auto" ] && CFG_LIBFREETYPE=no
- if [ "$CFG_LIBFREETYPE" = "auto" ]; then
-     if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/freetype "FreeType" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
-         CFG_LIBFREETYPE=system
-@@ -5844,7 +5873,9 @@
- fi
- 
- if [ "$CFG_ENDIAN" = "auto" ]; then
--    if [ "$PLATFORM_MAC" = "yes" ]; then
-+    if [ "$XPLATFORM_MINGW" = "yes" ]; then
-+        CFG_ENDIAN="Q_LITTLE_ENDIAN"
-+    elif [ "$PLATFORM_MAC" = "yes" ]; then
- 	true #leave as auto
-     elif [ "$XPLATFORM" = "symbian-sbsv2" ]; then
-         CFG_ENDIAN="Q_LITTLE_ENDIAN"
-@@ -6170,6 +6201,11 @@
-     fi
- fi
- 
-+if [ "$CFG_LARGEFILE" != "yes" ] && [ "$XPLATFORM_MINGW" = "yes" ]; then
-+    echo "Warning: largefile support cannot be disabled for win32."
-+    CFG_LARGEFILE="yes"
-+fi
-+
- #-------------------------------------------------------------------------------
- # ask for all that hasn't been auto-detected or specified in the arguments
- #-------------------------------------------------------------------------------
-@@ -6272,6 +6308,9 @@
-     fi
- fi
- 
-+# but disable Cocoa if cross-building for mingw
-+[ "$XPLATFORM_MINGW" = "yes" ] && CFG_MAC_COCOA="no"
-+
- # set the global Mac deployment target. This is overridden on an arch-by-arch basis
- # in some cases, see code further down
- case "$PLATFORM,$CFG_MAC_COCOA" in
-@@ -6410,7 +6449,7 @@
- QMakeVar set MOC_DIR ".moc/$QMAKE_OUTDIR"
- QMakeVar set RCC_DIR ".rcc/$QMAKE_OUTDIR"
- QMakeVar set UI_DIR ".uic/$QMAKE_OUTDIR"
--if [ "$CFG_LARGEFILE" = "yes" ]; then
-+if [ "$CFG_LARGEFILE" = "yes" ] && [ "$XPLATFORM_MINGW" != "yes" ]; then
-     QMAKE_CONFIG="$QMAKE_CONFIG largefile"
- fi
- if [ "$CFG_STL" = "no" ]; then
-@@ -6526,7 +6565,7 @@
- fi
- 
- 
--if [ "x$PLATFORM_MAC" = "xyes" ] && [ "$XPLATFORM" != "win32-g++" ]; then
-+if [ "x$PLATFORM_MAC" = "xyes" ] && [ "$XPLATFORM_MINGW" != "yes" ]; then
-     #On Mac we implicitly link against libz, so we
-     #never use the 3rdparty stuff.
-     [ "$CFG_ZLIB" = "yes" ] && CFG_ZLIB="system"
-@@ -6665,6 +6704,12 @@
-     QTCONFIG_CONFIG="$QTCONFIG_CONFIG exceptions"
- fi
- 
-+if [ "$XPLATFORM_MINGW" = "yes" ]; then
-+    # mkspecs/features/win32/default_pre.prf sets "no-rtti".
-+    # Follow default behavior of configure.exe by overriding with "rtti".
-+    QTCONFIG_CONFIG="$QTCONFIG_CONFIG rtti"
-+fi
-+
- if [ "$CFG_ALSA" = "yes" ]; then
-     QT_CONFIG="$QT_CONFIG alsa"
- fi
-@@ -7263,7 +7308,7 @@
- echo '/* Compile time features */' >>"$outpath/src/corelib/global/qconfig.h.new"
- [ '!' -z "$LicenseKeyExt" ] && echo "#define QT_PRODUCT_LICENSEKEY \"$LicenseKeyExt\"" >>"$outpath/src/corelib/global/qconfig.h.new"
- 
--if [ "$CFG_LARGEFILE" = "yes" ]; then
-+if [ "$CFG_LARGEFILE" = "yes" ] && [ "$XPLATFORM_MINGW" != "yes" ]; then
-     echo "#define QT_LARGEFILE_SUPPORT 64" >>"$outpath/src/corelib/global/qconfig.h.new"
- fi
- 
-@@ -7600,7 +7645,7 @@
- EOF
- 
- # Ensure we can link to uninistalled libraries
--if linkerSupportsFlag -rpath-link "$outpath/lib"; then
-+if [ "$XPLATFORM_MINGW" != "yes" ] && linkerSupportsFlag -rpath-link "$outpath/lib"; then
-     echo "QMAKE_LFLAGS    += -Wl,-rpath-link,\$\$QT_BUILD_TREE/lib" >> "$CACHEFILE.tmp"
- fi
- 
-@@ -8137,7 +8182,9 @@
-         [ "$IN_ROOT" = "no" ] && continue
- 
-         case $a in
--        *winmain/winmain.pro) continue ;;
-+        *winmain/winmain.pro)
-+            [ "$XPLATFORM_MINGW" = "yes" ] || continue
-+            SPEC=$XQMAKESPEC ;;
-         *s60main/s60main.pro) continue ;;
-         *examples/activeqt/*) continue ;;
-         */qmake/qmake.pro) continue ;;
-diff -Naur a/doc/doc.pri b/doc/doc.pri
---- a/doc/doc.pri	2010-05-04 02:43:14.000000000 +0200
-+++ b/doc/doc.pri	2010-06-05 23:51:26.959706710 +0200
-@@ -5,9 +5,9 @@
- DOCS_GENERATION_DEFINES =
- GENERATOR = $$QT_BUILD_TREE/bin/qhelpgenerator
- 
--win32:!win32-g++ {
-+win32:!win32-g++* {
-     unixstyle = false
--} else :win32-g++:isEmpty(QMAKE_SH) {
-+} else :win32-g++*:isEmpty(QMAKE_SH) {
-     unixstyle = false
- } else {
-     unixstyle = true
-@@ -36,7 +36,7 @@
-                     $$GENERATOR doc-build/html-qt_zh_CN/qt.qhp -o doc/qch/qt_zh_CN.qch \
-                )
- 
--win32-g++:isEmpty(QMAKE_SH) {
-+win32-g++*:isEmpty(QMAKE_SH) {
- 	QT_DOCUMENTATION = $$replace(QT_DOCUMENTATION, "/", "\\\\")
- 	QT_ZH_CN_DOCUMENTATION = $$replace(QT_ZH_CN_DOCUMENTATION, "/", "\\\\")
- }
-diff -Naur a/examples/activeqt/activeqt.pro b/examples/activeqt/activeqt.pro
---- a/examples/activeqt/activeqt.pro	2010-05-04 02:43:18.000000000 +0200
-+++ b/examples/activeqt/activeqt.pro	2010-06-05 23:51:27.939744609 +0200
-@@ -11,7 +11,7 @@
- 
- # For now only the contain examples with mingw, for the others you need
- # an IDL compiler
--win32-g++|wince*:SUBDIRS = webbrowser
-+win32-g++*|wince*:SUBDIRS = webbrowser
- 
- # install
- target.path = $$[QT_INSTALL_EXAMPLES]/activeqt
-diff -Naur a/mkspecs/features/win32/embed_manifest_dll.prf b/mkspecs/features/win32/embed_manifest_dll.prf
---- a/mkspecs/features/win32/embed_manifest_dll.prf	2010-05-04 02:43:16.000000000 +0200
-+++ b/mkspecs/features/win32/embed_manifest_dll.prf	2010-06-05 23:51:28.108337656 +0200
-@@ -1,6 +1,6 @@
- MANIFEST_DIR = $$OBJECTS_DIR
- isEmpty(MANIFEST_DIR):MANIFEST_DIR = .
--!if(plugin:no_plugin_manifest):if(win32-msvc2005|win32-msvc2008):!static:!equals(TEMPLATE_PREFIX, "vc"):equals(TEMPLATE, "lib") {
-+!if(plugin:no_plugin_manifest):if(win32-msvc2005|win32-msvc2008|win32-msvc2010):!static:!equals(TEMPLATE_PREFIX, "vc"):equals(TEMPLATE, "lib") {
-     NOPATH_TARGET = $$TARGET
-     NOPATH_TARGET ~= s,\\ , ,q      # Remove space escaping (NOPATH_TARGET is quoted)
-     NOPATH_TARGET ~= s,\\,/,g       # Change to single type separators
-diff -Naur a/mkspecs/features/win32/embed_manifest_exe.prf b/mkspecs/features/win32/embed_manifest_exe.prf
---- a/mkspecs/features/win32/embed_manifest_exe.prf	2010-05-04 02:43:16.000000000 +0200
-+++ b/mkspecs/features/win32/embed_manifest_exe.prf	2010-06-05 23:51:28.108337656 +0200
-@@ -1,6 +1,6 @@
- MANIFEST_DIR = $$OBJECTS_DIR
- isEmpty(MANIFEST_DIR):MANIFEST_DIR = .
--if(win32-msvc2005|win32-msvc2008):!equals(TEMPLATE_PREFIX, "vc"):equals(TEMPLATE, "app") {
-+if(win32-msvc2005|win32-msvc2008|win32-msvc2010):!equals(TEMPLATE_PREFIX, "vc"):equals(TEMPLATE, "app") {
-     NOPATH_TARGET = $$TARGET
-     NOPATH_TARGET ~= s,\\ , ,q      # Remove space escaping (NOPATH_TARGET is quoted)
-     NOPATH_TARGET ~= s,\\,/,g       # Change to single type separators
-diff -Naur a/mkspecs/unsupported/win32-g++-cross/qmake.conf b/mkspecs/unsupported/win32-g++-cross/qmake.conf
---- a/mkspecs/unsupported/win32-g++-cross/qmake.conf	1970-01-01 01:00:00.000000000 +0100
-+++ b/mkspecs/unsupported/win32-g++-cross/qmake.conf	2010-06-05 23:51:28.108337656 +0200
-@@ -0,0 +1,101 @@
-+#
-+# qmake configuration for win32-g++-cross
-+#
-+# Written for MinGW cross building on Unix
-+#
-+
-+MAKEFILE_GENERATOR	= MINGW
-+TEMPLATE		= app
-+CONFIG			+= qt warn_on release link_prl copy_dir_files debug_and_release debug_and_release_target precompile_header
-+QT			+= core gui
-+DEFINES			+= UNICODE QT_LARGEFILE_SUPPORT
-+QMAKE_COMPILER_DEFINES  += __GNUC__ WIN32
-+
-+QMAKE_EXT_OBJ           = .o
-+QMAKE_EXT_RES           = _res.o
-+
-+QMAKE_CC		= i686-pc-mingw32-gcc
-+QMAKE_LEX		= flex
-+QMAKE_LEXFLAGS		=
-+QMAKE_YACC		= byacc
-+QMAKE_YACCFLAGS		= -d
-+QMAKE_CFLAGS		= -pipe
-+QMAKE_CFLAGS_DEPS	= -M
-+QMAKE_CFLAGS_WARN_ON	= -Wall
-+QMAKE_CFLAGS_WARN_OFF	= -w
-+QMAKE_CFLAGS_RELEASE	= -O2
-+QMAKE_CFLAGS_DEBUG	= -g
-+QMAKE_CFLAGS_YACC	= -Wno-unused -Wno-parentheses
-+
-+QMAKE_CXX		= i686-pc-mingw32-g++
-+QMAKE_CXXFLAGS		= $$QMAKE_CFLAGS
-+QMAKE_CXXFLAGS_DEPS	= $$QMAKE_CFLAGS_DEPS
-+QMAKE_CXXFLAGS_WARN_ON	= $$QMAKE_CFLAGS_WARN_ON
-+QMAKE_CXXFLAGS_WARN_OFF	= $$QMAKE_CFLAGS_WARN_OFF
-+QMAKE_CXXFLAGS_RELEASE	= $$QMAKE_CFLAGS_RELEASE
-+QMAKE_CXXFLAGS_DEBUG	= $$QMAKE_CFLAGS_DEBUG
-+QMAKE_CXXFLAGS_YACC	= $$QMAKE_CFLAGS_YACC
-+QMAKE_CXXFLAGS_THREAD	= $$QMAKE_CFLAGS_THREAD
-+QMAKE_CXXFLAGS_RTTI_ON	= -frtti
-+QMAKE_CXXFLAGS_RTTI_OFF	= -fno-rtti
-+QMAKE_CXXFLAGS_EXCEPTIONS_ON = -fexceptions -mthreads
-+QMAKE_CXXFLAGS_EXCEPTIONS_OFF = -fno-exceptions
-+
-+QMAKE_INCDIR		=
-+QMAKE_INCDIR_QT		= $$[QT_INSTALL_HEADERS]
-+QMAKE_LIBDIR_QT		= $$[QT_INSTALL_LIBS]
-+
-+QMAKE_RUN_CC		= $(CC) -c $(CFLAGS) $(INCPATH) -o $obj $src
-+QMAKE_RUN_CC_IMP	= $(CC) -c $(CFLAGS) $(INCPATH) -o $@ $<
-+QMAKE_RUN_CXX		= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $obj $src
-+QMAKE_RUN_CXX_IMP	= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
-+
-+QMAKE_LINK		= i686-pc-mingw32-g++
-+QMAKE_LINK_C		= i686-pc-mingw32-gcc
-+QMAKE_LFLAGS		= -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
-+QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads -Wl
-+QMAKE_LFLAGS_EXCEPTIONS_OFF =
-+QMAKE_LFLAGS_RELEASE	= -Wl,-s
-+QMAKE_LFLAGS_DEBUG	=
-+QMAKE_LFLAGS_CONSOLE	= -Wl,-subsystem,console
-+QMAKE_LFLAGS_WINDOWS	= -Wl,-subsystem,windows
-+QMAKE_LFLAGS_DLL        = -shared
-+QMAKE_LINK_OBJECT_MAX	= 10
-+QMAKE_LINK_OBJECT_SCRIPT= object_script
-+
-+
-+QMAKE_LIBS		=
-+QMAKE_LIBS_CORE         = -lkernel32 -luser32 -lshell32 -luuid -lole32 -ladvapi32 -lws2_32
-+QMAKE_LIBS_GUI          = -lgdi32 -lcomdlg32 -loleaut32 -limm32 -lwinmm -lwinspool -lws2_32 -lole32 -luuid -luser32 -ladvapi32
-+QMAKE_LIBS_NETWORK      = -lws2_32
-+QMAKE_LIBS_OPENGL       = -lopengl32 -lglu32 -lgdi32 -luser32
-+QMAKE_LIBS_COMPAT       = -ladvapi32 -lshell32 -lcomdlg32 -luser32 -lgdi32 -lws2_32
-+QMAKE_LIBS_QT_ENTRY     = -lmingw32 -lqtmain
-+
-+QMAKE_SH		= bash
-+
-+MINGW_IN_SHELL		= 1
-+QMAKE_DIR_SEP		= /
-+QMAKE_COPY		= cp
-+QMAKE_COPY_DIR		= cp -r
-+QMAKE_MOVE		= mv
-+QMAKE_DEL_FILE		= rm -f
-+QMAKE_MKDIR		= mkdir -p
-+QMAKE_DEL_DIR		= rmdir
-+QMAKE_SYMBOLIC_LINK	= ln -s
-+QMAKE_CHK_DIR_EXISTS	= test -d
-+
-+#QMAKE_IDC		= i686-pc-mingw32-idc
-+QMAKE_MOC		= i686-pc-mingw32-moc
-+QMAKE_RCC		= i686-pc-mingw32-rcc
-+QMAKE_UIC		= i686-pc-mingw32-uic
-+
-+#QMAKE_IDL		= midl
-+QMAKE_LIB		= i686-pc-mingw32-ar -ru
-+QMAKE_RC		= i686-pc-mingw32-windres
-+QMAKE_ZIP		= zip -r -9
-+
-+QMAKE_STRIP		= i686-pc-mingw32-strip
-+QMAKE_STRIPFLAGS_LIB 	+= --strip-unneeded
-+PKG_CONFIG		= i686-pc-mingw32-pkg-config
-+load(qt_config)
-diff -Naur a/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h b/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h
---- a/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h	1970-01-01 01:00:00.000000000 +0100
-+++ b/mkspecs/unsupported/win32-g++-cross/qplatformdefs.h	2010-06-05 23:51:28.108337656 +0200
-@@ -0,0 +1,42 @@
-+/****************************************************************************
-+**
-+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-+** All rights reserved.
-+** Contact: Nokia Corporation (qt-info@nokia.com)
-+**
-+** This file is part of the qmake spec of the Qt Toolkit.
-+**
-+** $QT_BEGIN_LICENSE:LGPL$
-+** No Commercial Usage
-+** This file contains pre-release code and may not be distributed.
-+** You may use this file in accordance with the terms and conditions
-+** contained in the Technology Preview License Agreement accompanying
-+** this package.
-+**
-+** GNU Lesser General Public License Usage
-+** Alternatively, this file may be used under the terms of the GNU Lesser
-+** General Public License version 2.1 as published by the Free Software
-+** Foundation and appearing in the file LICENSE.LGPL included in the
-+** packaging of this file.  Please review the following information to
-+** ensure the GNU Lesser General Public License version 2.1 requirements
-+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-+**
-+** In addition, as a special exception, Nokia gives you certain additional
-+** rights.  These rights are described in the Nokia Qt LGPL Exception
-+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
-+**
-+** If you have questions regarding the use of this file, please contact
-+** Nokia at qt-info@nokia.com.
-+**
-+**
-+**
-+**
-+**
-+**
-+**
-+**
-+** $QT_END_LICENSE$
-+**
-+****************************************************************************/
-+
-+#include "../../win32-g++/qplatformdefs.h"
-diff -Naur a/qmake/generators/metamakefile.cpp b/qmake/generators/metamakefile.cpp
---- a/qmake/generators/metamakefile.cpp	2010-05-04 02:43:18.000000000 +0200
-+++ b/qmake/generators/metamakefile.cpp	2010-06-05 23:51:28.108337656 +0200
-@@ -501,9 +501,18 @@
-         *host_mode = Option::HOST_UNIX_MODE;
-         *target_mode = Option::TARG_UNIX_MODE;
- #endif
--    } else if (gen == "MSVC.NET" || gen == "MINGW" || gen == "BMAKE") {
-+    } else if (gen == "MSVC.NET" || gen == "BMAKE" || gen == "MSBUILD") {
-         *host_mode = Option::HOST_WIN_MODE;
-         *target_mode = Option::TARG_WIN_MODE;
-+    } else if (gen == "MINGW") {
-+#if defined(Q_OS_MAC)
-+        *host_mode = Option::HOST_MACX_MODE;
-+#elif defined(Q_OS_UNIX)
-+        *host_mode = Option::HOST_UNIX_MODE;
-+#else
-+        *host_mode = Option::HOST_WIN_MODE;
-+#endif
-+        *target_mode = Option::TARG_WIN_MODE;
-     } else if (gen == "PROJECTBUILDER" || gen == "XCODE") {
-         *host_mode = Option::HOST_MACX_MODE;
-         *target_mode = Option::TARG_MACX_MODE;
-diff -Naur a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
---- a/qmake/generators/win32/mingw_make.cpp	2010-05-04 02:43:18.000000000 +0200
-+++ b/qmake/generators/win32/mingw_make.cpp	2010-06-05 23:51:28.108337656 +0200
-@@ -371,7 +371,12 @@
- 	    ar_script_file += "." + var("BUILD_NAME");
- 	}
- 	createArObjectScriptFile(ar_script_file, var("DEST_TARGET"), project->values("OBJECTS"));
--        objectsLinkLine = "ar -M < " + ar_script_file;
-+        // QMAKE_LIB is used for win32, including mingw, whereas QMAKE_AR is used on Unix.
-+        // Strip off any options since the ar commands will be read from file.
-+        QString ar_cmd = var("QMAKE_LIB").section(" ", 0, 0);;
-+        if (ar_cmd.isEmpty())
-+            ar_cmd = "ar";
-+        objectsLinkLine = ar_cmd + " -M < " + ar_script_file;
-     } else {
-         QString ld_script_file = var("QMAKE_LINK_OBJECT_SCRIPT") + "." + var("TARGET");
- 	if (!var("BUILD_NAME").isEmpty()) {
-diff -Naur a/src/3rdparty/javascriptcore/WebKit.pri b/src/3rdparty/javascriptcore/WebKit.pri
---- a/src/3rdparty/javascriptcore/WebKit.pri	2010-05-04 02:43:22.000000000 +0200
-+++ b/src/3rdparty/javascriptcore/WebKit.pri	2010-06-05 23:51:28.108337656 +0200
-@@ -36,7 +36,7 @@
-             win32-*|wince* {
-                 CONFIG(debug, debug|release):build_pass: QTWEBKITLIBNAME = $${QTWEBKITLIBNAME}d
-                 QTWEBKITLIBNAME = $${QTWEBKITLIBNAME}$${QT_MAJOR_VERSION}
--                win32-g++: LIBS += -l$$QTWEBKITLIBNAME
-+                win32-g++*: LIBS += -l$$QTWEBKITLIBNAME
-                 else: LIBS += $${QTWEBKITLIBNAME}.lib
-             } else {
-                 LIBS += -lQtWebKit
-diff -Naur a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
---- a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro	2010-05-04 02:43:19.000000000 +0200
-+++ b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro	2010-06-05 23:51:28.111706406 +0200
-@@ -12,6 +12,8 @@
- QT += core
- 
- CONFIG += depend_includepath
-+target.path=$$[QT_INSTALL_LIBS]
-+INSTALLS += target
- 
- contains(QT_CONFIG, embedded):CONFIG += embedded
- 
-@@ -38,7 +40,7 @@
- }
- 
- # Pick up 3rdparty libraries from INCLUDE/LIB just like with MSVC
--win32-g++ {
-+win32-g++* {
-     TMPPATH            = $$quote($$(INCLUDE))
-     QMAKE_INCDIR_POST += $$split(TMPPATH,";")
-     TMPPATH            = $$quote($$(LIB))
-diff -Naur a/src/3rdparty/webkit/WebCore/WebCore.pro b/src/3rdparty/webkit/WebCore/WebCore.pro
---- a/src/3rdparty/webkit/WebCore/WebCore.pro	2010-05-04 02:43:21.000000000 +0200
-+++ b/src/3rdparty/webkit/WebCore/WebCore.pro	2010-06-05 23:51:28.111706406 +0200
-@@ -100,7 +100,7 @@
- }
- 
- # Pick up 3rdparty libraries from INCLUDE/LIB just like with MSVC
--win32-g++ {
-+win32-g++* {
-     TMPPATH            = $$quote($$(INCLUDE))
-     QMAKE_INCDIR_POST += $$split(TMPPATH,";")
-     TMPPATH            = $$quote($$(LIB))
-@@ -2904,7 +2904,7 @@
-     CONFIG += no_debug_info
- }
- 
--!win32-g++:win32:contains(QMAKE_HOST.arch, x86_64):{
-+!win32-g++*:win32:contains(QMAKE_HOST.arch, x86_64):{
-     asm_compiler.commands = ml64 /c
-     asm_compiler.commands +=  /Fo ${QMAKE_FILE_OUT} ${QMAKE_FILE_IN}
-     asm_compiler.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_BASE}$${first(QMAKE_EXT_OBJ)}
-diff -Naur a/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro b/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro
---- a/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro	2010-05-04 02:43:22.000000000 +0200
-+++ b/src/3rdparty/webkit/WebKit/qt/Api/DerivedSources.pro	2010-06-05 23:51:28.111706406 +0200
-@@ -12,7 +12,7 @@
- ESCAPE = ""
- win32-msvc*|symbian {
-     ESCAPE = "^"
--} else:win32-g++:isEmpty(QMAKE_SH) {
-+} else:win32-g++*:isEmpty(QMAKE_SH) {
-     # MinGW's make will run makefile commands using sh, even if make
-     #  was run from the Windows shell, if it finds sh in the path.
-     ESCAPE = "^"
-diff -Naur a/src/3rdparty/webkit/WebKit.pri b/src/3rdparty/webkit/WebKit.pri
---- a/src/3rdparty/webkit/WebKit.pri	2010-05-04 02:43:22.000000000 +0200
-+++ b/src/3rdparty/webkit/WebKit.pri	2010-06-05 23:51:28.111706406 +0200
-@@ -24,7 +24,7 @@
-             win32-*|wince* {
-                 CONFIG(debug, debug|release):build_pass: QTWEBKITLIBNAME = $${QTWEBKITLIBNAME}d
-                 QTWEBKITLIBNAME = $${QTWEBKITLIBNAME}$${QT_MAJOR_VERSION}
--                win32-g++: LIBS += -l$$QTWEBKITLIBNAME
-+                win32-g++*: LIBS += -l$$QTWEBKITLIBNAME
-                 else: LIBS += $${QTWEBKITLIBNAME}.lib
-             } else {
-                 LIBS += -lQtWebKit
-diff -Naur a/src/activeqt/container/container.pro b/src/activeqt/container/container.pro
---- a/src/activeqt/container/container.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/src/activeqt/container/container.pro	2010-06-05 23:51:28.111706406 +0200
-@@ -19,7 +19,7 @@
- 
- LIBS    += -lole32 -loleaut32
- !wince*:LIBS    += -luser32 -lgdi32 -ladvapi32
--win32-g++:LIBS += -luuid
-+win32-g++*:LIBS += -luuid
- 
- HEADERS =   ../control/qaxaggregated.h \
-             qaxbase.h \
-diff -Naur a/src/activeqt/control/control.pro b/src/activeqt/control/control.pro
---- a/src/activeqt/control/control.pro	2010-05-04 02:43:26.000000000 +0200
-+++ b/src/activeqt/control/control.pro	2010-06-05 23:51:28.111706406 +0200
-@@ -18,11 +18,11 @@
- QTDIR_build:DESTDIR  = $$QT_BUILD_TREE\lib
- 
- DEFINES	+= QAX_SERVER
--win32-g++:DEFINES += QT_NEEDS_QMAIN
-+win32-g++*:DEFINES += QT_NEEDS_QMAIN
- win32-borland:DEFINES += QT_NEEDS_QMAIN
- 
- LIBS    += -luser32 -lole32 -loleaut32 -lgdi32
--win32-g++:LIBS += -luuid
-+win32-g++*:LIBS += -luuid
- 
- HEADERS =   qaxaggregated.h \
-             qaxbindable.h \
-diff -Naur a/src/corelib/tools/tools.pri b/src/corelib/tools/tools.pri
---- a/src/corelib/tools/tools.pri	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/corelib/tools/tools.pri	2010-06-05 23:51:28.111706406 +0200
-@@ -106,8 +106,8 @@
-         ../3rdparty/zlib/uncompr.c \
-         ../3rdparty/zlib/zutil.c
- } else:!contains(QT_CONFIG, no-zlib) {
--   unix:LIBS_PRIVATE += -lz
--#  win32:LIBS += libz.lib
-+   unix|win32-g++*:LIBS_PRIVATE += -lz
-+   win32:!win32-g++*:LIBS += zdll.lib
- }
- 
- DEFINES += HB_EXPORT=Q_CORE_EXPORT
-diff -Naur a/src/gui/image/image.pri b/src/gui/image/image.pri
---- a/src/gui/image/image.pri	2010-05-04 02:43:24.000000000 +0200
-+++ b/src/gui/image/image.pri	2010-06-05 23:51:28.111706406 +0200
-@@ -93,12 +93,12 @@
-     SOURCES += image/qpnghandler.cpp
- 
-     contains(QT_CONFIG, system-png) {
--        unix:LIBS_PRIVATE  += -lpng
--        win32:LIBS += libpng.lib
-+        unix|win32-g++*:LIBS_PRIVATE += -lpng
-+        win32:!win32-g++*:LIBS += libpng.lib
-     } else {
- 	DEFINES *= QT_USE_BUNDLED_LIBPNG
-         !isEqual(QT_ARCH, i386):!isEqual(QT_ARCH, x86_64):DEFINES += PNG_NO_ASSEMBLER_CODE
--        INCLUDEPATH  += ../3rdparty/libpng ../3rdparty/zlib
-+        INCLUDEPATH += ../3rdparty/libpng
-         SOURCES += ../3rdparty/libpng/png.c \
-           ../3rdparty/libpng/pngerror.c \
-           ../3rdparty/libpng/pngget.c \
-@@ -115,6 +115,10 @@
-           ../3rdparty/libpng/pngwtran.c \
-           ../3rdparty/libpng/pngwutil.c
-     }
-+    contains(QT_CONFIG, system-zlib) {
-+        unix|win32-g++*:LIBS_PRIVATE += -lz
-+        win32:!win32-g++*:LIBS += zdll.lib
-+    }
- } else {
-     DEFINES *= QT_NO_IMAGEFORMAT_PNG
- }
-diff -Naur a/src/gui/painting/painting.pri b/src/gui/painting/painting.pri
---- a/src/gui/painting/painting.pri	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/gui/painting/painting.pri	2010-06-05 23:51:28.115709598 +0200
-@@ -232,7 +232,7 @@
-         IWMMXT_SOURCES += painting/qdrawhelper_iwmmxt.cpp
-     }
- 
--    win32-g++|!win32:!*-icc* {
-+    win32-g++*|!win32:!*-icc* {
-         mmx {
-             mmx_compiler.commands = $$QMAKE_CXX -c -Winline
- 
-@@ -403,7 +403,7 @@
- contains(QT_CONFIG, zlib) {
-    INCLUDEPATH += ../3rdparty/zlib
- } else:!contains(QT_CONFIG, no-zlib) {
--   unix:LIBS_PRIVATE += -lz
--#  win32:LIBS += libz.lib
-+   unix|win32-g++*:LIBS_PRIVATE += -lz
-+   win32:!win32-g++*:LIBS += zdll.lib
- }
- 
-diff -Naur a/src/network/access/access.pri b/src/network/access/access.pri
---- a/src/network/access/access.pri	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/network/access/access.pri	2010-06-05 23:51:28.115709598 +0200
-@@ -61,6 +61,6 @@
- contains(QT_CONFIG, zlib) {
-    INCLUDEPATH += ../3rdparty/zlib
- } else:!contains(QT_CONFIG, no-zlib) {
--   unix:LIBS_PRIVATE += -lz
--#  win32:LIBS += libz.lib
-+   unix|win32-g++*:LIBS_PRIVATE += -lz
-+   win32:!win32-g++*:LIBS += zdll.lib
- }
-diff -Naur a/src/network/ssl/ssl.pri b/src/network/ssl/ssl.pri
---- a/src/network/ssl/ssl.pri	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/network/ssl/ssl.pri	2010-06-05 23:51:28.115709598 +0200
-@@ -34,6 +34,7 @@
-     # Include Qt's default CA bundle
-     RESOURCES += network.qrc
- 
--    # Add optional SSL libs
-+    # Add optional SSL libs, but not accidently system zlib
-+    !contains(QT_CONFIG, system-zlib):OPENSSL_LIBS -= -lz
-     LIBS_PRIVATE += $$OPENSSL_LIBS
- }
-diff -Naur a/src/plugins/imageformats/jpeg/jpeg.pro b/src/plugins/imageformats/jpeg/jpeg.pro
---- a/src/plugins/imageformats/jpeg/jpeg.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/imageformats/jpeg/jpeg.pro	2010-06-05 23:51:28.115709598 +0200
-@@ -22,8 +22,8 @@
- }
- 
- contains(QT_CONFIG, system-jpeg) {
--        unix:LIBS += -ljpeg
--        win32:LIBS += libjpeg.lib
-+        unix|win32-g++*:LIBS += -ljpeg
-+        win32:!win32-g++*:LIBS += libjpeg.lib
- }
- !contains(QT_CONFIG, system-jpeg) {
- 	INCLUDEPATH += ../../../3rdparty/libjpeg
-diff -Naur a/src/plugins/imageformats/mng/mng.pro b/src/plugins/imageformats/mng/mng.pro
---- a/src/plugins/imageformats/mng/mng.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/imageformats/mng/mng.pro	2010-06-05 23:51:28.115709598 +0200
-@@ -14,8 +14,8 @@
- }
- 
- contains(QT_CONFIG, system-mng) {
--        unix:LIBS += -lmng
--        win32:LIBS += libmng.lib
-+        unix|win32-g++*:LIBS += -lmng
-+        win32:!win32-g++*:LIBS += libmng.lib
- }
- !contains(QT_CONFIG, system-mng) {
-         DEFINES += MNG_BUILD_SO
-@@ -44,7 +44,8 @@
- }
- 
- contains(QT_CONFIG, system-zlib) {
--        LIBS += -lz
-+    unix|win32-g++*:LIBS += -lz
-+    win32:!win32-g++*:LIBS += zdll.lib
- }
- !contains(QT_CONFIG, system-zlib) {
-         INCLUDEPATH +=  ../../../3rdparty/zlib
-diff -Naur a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/tiff/tiff.pro
---- a/src/plugins/imageformats/tiff/tiff.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/imageformats/tiff/tiff.pro	2010-06-05 23:51:28.115709598 +0200
-@@ -8,8 +8,13 @@
-            qtiffhandler.cpp
- 
- contains(QT_CONFIG, system-tiff) {
--        unix:LIBS += -ltiff
--        win32:LIBS += libtiff.lib
-+        unix|win32-g++*:LIBS += -ltiff
-+        win32:!win32-g++*:LIBS += libtiff.lib
-+
-+        contains(QT_CONFIG, system-jpeg) {
-+                unix|win32-g++*:LIBS += -ljpeg
-+                win32:!win32-g++*:LIBS += libjpeg.lib
-+        }
- }
- !contains(QT_CONFIG, system-tiff) {
- 	INCLUDEPATH += ../../../3rdparty/libtiff/libtiff
-@@ -64,7 +69,8 @@
- }
- 
- contains(QT_CONFIG, system-zlib) {
--        LIBS += -lz
-+    unix|win32-g++*:LIBS += -lz
-+    win32:!win32-g++*:LIBS += zdll.lib
- }
- !contains(QT_CONFIG, system-zlib) {
-         INCLUDEPATH +=  ../../../3rdparty/zlib
-diff -Naur a/src/plugins/sqldrivers/psql/psql.pro b/src/plugins/sqldrivers/psql/psql.pro
---- a/src/plugins/sqldrivers/psql/psql.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/sqldrivers/psql/psql.pro	2010-06-05 23:51:28.115709598 +0200
-@@ -4,7 +4,7 @@
+ HEADERS		= ../../../sql/drivers/db2/qsql_db2.h
  SOURCES		= main.cpp \
- 		  ../../../sql/drivers/psql/qsql_psql.cpp
+diff --git a/src/plugins/sqldrivers/ibase/ibase.pro b/src/plugins/sqldrivers/ibase/ibase.pro
+index ec2bc7b..bb73adb 100644
+--- a/src/plugins/sqldrivers/ibase/ibase.pro
++++ b/src/plugins/sqldrivers/ibase/ibase.pro
+@@ -1,4 +1,4 @@
+-TARGET	 = qsqlibase
++TARGET = qsqlibase
  
--unix|win32-g++: {
-+unix|win32-g++*: {
-     !isEmpty(QT_LFLAGS_PSQL) {
-         !contains(QT_CONFIG, system-zlib): QT_LFLAGS_PSQL -= -lz
-         !static:LIBS *= $$QT_LFLAGS_PSQL
-@@ -13,6 +13,6 @@
-     !contains(LIBS, .*pq.*):LIBS *= -lpq
+ HEADERS		= ../../../sql/drivers/ibase/qsql_ibase.h
+ SOURCES		= main.cpp \
+diff --git a/src/plugins/sqldrivers/mysql/mysql.pro b/src/plugins/sqldrivers/mysql/mysql.pro
+index 9f5c619..b808c8e 100644
+--- a/src/plugins/sqldrivers/mysql/mysql.pro
++++ b/src/plugins/sqldrivers/mysql/mysql.pro
+@@ -1,4 +1,4 @@
+-TARGET	 = qsqlmysql
++TARGET = qsqlmysql
+ 
+ HEADERS		= ../../../sql/drivers/mysql/qsql_mysql.h
+ SOURCES		= main.cpp \
+diff --git a/src/plugins/sqldrivers/oci/oci.pro b/src/plugins/sqldrivers/oci/oci.pro
+index 3bf70a1..d75827e 100644
+--- a/src/plugins/sqldrivers/oci/oci.pro
++++ b/src/plugins/sqldrivers/oci/oci.pro
+@@ -1,4 +1,4 @@
+-TARGET	 = qsqloci
++TARGET = qsqloci
+ 
+ HEADERS		= ../../../sql/drivers/oci/qsql_oci.h
+ SOURCES		= main.cpp \
+diff --git a/src/plugins/sqldrivers/odbc/odbc.pro b/src/plugins/sqldrivers/odbc/odbc.pro
+index 2bf85f1..70070db 100644
+--- a/src/plugins/sqldrivers/odbc/odbc.pro
++++ b/src/plugins/sqldrivers/odbc/odbc.pro
+@@ -1,4 +1,4 @@
+-TARGET	 = qsqlodbc
++TARGET = qsqlodbc
+ 
+ HEADERS		= ../../../sql/drivers/odbc/qsql_odbc.h
+ SOURCES		= main.cpp \
+diff --git a/src/plugins/sqldrivers/psql/psql.pro b/src/plugins/sqldrivers/psql/psql.pro
+index 80a5348..9586695 100644
+--- a/src/plugins/sqldrivers/psql/psql.pro
++++ b/src/plugins/sqldrivers/psql/psql.pro
+@@ -1,4 +1,4 @@
+-TARGET	 = qsqlpsql
++TARGET = qsqlpsql
+ 
+ HEADERS		= ../../../sql/drivers/psql/qsql_psql.h
+ SOURCES		= main.cpp \
+diff --git a/src/plugins/sqldrivers/sqlite/sqlite.pro b/src/plugins/sqldrivers/sqlite/sqlite.pro
+index fb31233..75f04b9 100644
+--- a/src/plugins/sqldrivers/sqlite/sqlite.pro
++++ b/src/plugins/sqldrivers/sqlite/sqlite.pro
+@@ -1,4 +1,4 @@
+-TARGET	 = qsqlite
++TARGET = qsqlite
+ 
+ HEADERS		= ../../../sql/drivers/sqlite/qsql_sqlite.h
+ SOURCES		= smain.cpp \
+diff --git a/src/plugins/sqldrivers/sqlite2/sqlite2.pro b/src/plugins/sqldrivers/sqlite2/sqlite2.pro
+index 88db22a..0f6c19a 100644
+--- a/src/plugins/sqldrivers/sqlite2/sqlite2.pro
++++ b/src/plugins/sqldrivers/sqlite2/sqlite2.pro
+@@ -1,4 +1,4 @@
+-TARGET	 = qsqlite2
++TARGET = qsqlite2
+ 
+ HEADERS		= ../../../sql/drivers/sqlite2/qsql_sqlite2.h
+ SOURCES		= smain.cpp \
+diff --git a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds.pro
+index 08a166b..ba40be5 100644
+--- a/src/plugins/sqldrivers/tds/tds.pro
++++ b/src/plugins/sqldrivers/tds/tds.pro
+@@ -1,4 +1,4 @@
+-TARGET	 = qsqltds
++TARGET = qsqltds
+ 
+ HEADERS		= ../../../sql/drivers/tds/qsql_tds.h
+ 
+
+commit 51d53d80f5e3c4d53b02043b0e85968be097cb68
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Thu Aug 26 22:06:23 2010 +0200
+
+    Revert "Fixed automatic sqlite extraction on Symbian makefile build system."
+    
+    This reverts commit 0aa77f3afe01de462edf0ee6a0bdf78854431cf1.
+    
+    Reverted to avoid collisions with d7557de99b38031906c17c54496cb76a13dec5f7
+    on drivers.pri from 4.7 branch.
+
+diff --git a/mkspecs/common/symbian/symbian.conf b/mkspecs/common/symbian/symbian.conf
+index 7ec5c6c..c1b31e5 100644
+--- a/mkspecs/common/symbian/symbian.conf
++++ b/mkspecs/common/symbian/symbian.conf
+@@ -105,7 +105,6 @@ QMAKE_IDL		  = midl
+ QMAKE_LIB		  = ar -ru
+ QMAKE_RC		  = windres
+ QMAKE_ZIP		  = zip -r -9
+-QMAKE_UNZIP               = unzip -o
+ 
+ QMAKE_TAR                 = tar -cf
+ QMAKE_GZIP                = gzip -9f
+diff --git a/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri b/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri
+deleted file mode 100644
+index ab8d846..0000000
+--- a/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri
++++ /dev/null
+@@ -1,38 +0,0 @@
+-# We just want to include the sqlite3 binaries for Symbian for platforms that do not have them.
+-!symbian-abld:!symbian-sbsv2 {
+-    !symbian_no_export_sqlite:!exists($${EPOCROOT}epoc32/release/armv5/lib/sqlite3.dso) {
+-        symbian_sqlite3_zip_file = $$PWD/SQLite3_v9.2.zip
+-
+-        # The QMAKE_COPY section is to update timestamp on the file.
+-        symbian_sqlite3_header.input = symbian_sqlite3_zip_file
+-        symbian_sqlite3_header.output = sqlite3.h
+-        !isEmpty(MOC_DIR):symbian_sqlite3_header.output = $$MOC_DIR/$$symbian_sqlite3_header.output
+-        symbian_sqlite3_header.CONFIG = combine no_link
+-        symbian_sqlite3_header.dependency_type = TYPE_C
+-        symbian_sqlite3_header.commands = $$QMAKE_UNZIP -j ${QMAKE_FILE_NAME} epoc32/include/stdapis/${QMAKE_FILE_OUT_BASE}.h \
+-                                          && $$QMAKE_COPY ${QMAKE_FILE_OUT_BASE}.h ${QMAKE_FILE_OUT}.tmp \
+-                                          && $$QMAKE_DEL_FILE ${QMAKE_FILE_OUT_BASE}.h \
+-                                          && $$QMAKE_MOVE ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT}
+-        QMAKE_EXTRA_COMPILERS += symbian_sqlite3_header
+-
+-        # The QMAKE_COPY section is to update timestamp on the file.
+-        symbian_sqlite3_dso.input = symbian_sqlite3_zip_file
+-        symbian_sqlite3_dso.output = sqlite3.dso
+-        !isEmpty(OBJECTS_DIR):symbian_sqlite3_dso.output = $$OBJECTS_DIR/$$symbian_sqlite3_dso.output
+-        symbian_sqlite3_dso.CONFIG = combine no_link target_predeps
+-        symbian_sqlite3_dso.commands = $$QMAKE_UNZIP -j ${QMAKE_FILE_NAME} epoc32/release/armv5/lib/${QMAKE_FILE_OUT_BASE}.dso \
+-                                       && $$QMAKE_COPY ${QMAKE_FILE_OUT_BASE}.dso ${QMAKE_FILE_OUT}.tmp \
+-                                       && $$QMAKE_DEL_FILE ${QMAKE_FILE_OUT_BASE}.dso \
+-                                       && $$QMAKE_MOVE ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT}
+-        QMAKE_EXTRA_COMPILERS += symbian_sqlite3_dso
+-
+-        symbian_sqlite3_ver_dso.input = symbian_sqlite3_zip_file
+-        symbian_sqlite3_ver_dso.output = sqlite3{00060003}.dso
+-        !isEmpty(OBJECTS_DIR):symbian_sqlite3_ver_dso.output = $$OBJECTS_DIR/$$symbian_sqlite3_ver_dso.output
+-        symbian_sqlite3_ver_dso.CONFIG = $$symbian_sqlite3_dso.CONFIG
+-        symbian_sqlite3_ver_dso.commands = $$symbian_sqlite3_dso.commands
+-        QMAKE_EXTRA_COMPILERS += symbian_sqlite3_ver_dso
+-
+-        QMAKE_LIBDIR *= $$OBJECTS_DIR
+-    }
+-}
+diff --git a/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pro b/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pro
+index 0d233e6..691cce1 100644
+--- a/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pro
++++ b/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pro
+@@ -2,7 +2,7 @@
+ TEMPLATE = subdirs
+ 
+ # We just want to export the sqlite3 binaries for Symbian for platforms that do not have them.
+-symbian-abld|symbian-sbsv2 {
++symbian {
+     !symbian_no_export_sqlite:!exists($${EPOCROOT}epoc32/release/armv5/lib/sqlite3.dso) {
+         BLD_INF_RULES.prj_exports +=  ":zip SQLite3_v9.2.zip"
+     }
+diff --git a/src/sql/drivers/drivers.pri b/src/sql/drivers/drivers.pri
+index c68442d..05e7265 100644
+--- a/src/sql/drivers/drivers.pri
++++ b/src/sql/drivers/drivers.pri
+@@ -114,8 +114,6 @@ contains(sql-drivers, sqlite) {
+         QMAKE_CXXFLAGS *= $$QT_CFLAGS_SQLITE
+     }
+ 
+-    symbian:include(../../plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri)
+-
+     HEADERS +=      drivers/sqlite/qsql_sqlite.h
+     SOURCES +=      drivers/sqlite/qsql_sqlite.cpp
  }
+
+commit c24f1ac5a184d25b137a3a66b3f6f4d123de4bbd
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Wed Jul 7 12:05:36 2010 +0200
+
+    Consolidate sql driver configuration redundancy
+    
+    Previously sql driver recipes each appeared in both the plugin
+    pro file and src/sql/drivers/drivers.pri for building into QtSql.
+    
+    Split driver recipes into shared pri files.
+    Also split bundled 3rd party sqlite code recipe into a shared pri.
+    
+    Merge-request: 715
+    Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+    (cherry picked from commit d7557de99b38031906c17c54496cb76a13dec5f7)
+
+diff --git a/src/3rdparty/sqlite.pri b/src/3rdparty/sqlite.pri
+new file mode 100644
+index 0000000..575412d
+--- /dev/null
++++ b/src/3rdparty/sqlite.pri
+@@ -0,0 +1,4 @@
++CONFIG(release, debug|release):DEFINES *= NDEBUG
++DEFINES += SQLITE_OMIT_LOAD_EXTENSION SQLITE_OMIT_COMPLETE
++INCLUDEPATH +=  $$PWD/sqlite
++SOURCES +=      $$PWD/sqlite/sqlite3.c
+diff --git a/src/plugins/sqldrivers/db2/db2.pro b/src/plugins/sqldrivers/db2/db2.pro
+index 25ca499..e053f37 100644
+--- a/src/plugins/sqldrivers/db2/db2.pro
++++ b/src/plugins/sqldrivers/db2/db2.pro
+@@ -1,10 +1,6 @@
+ TARGET = qsqldb2
  
--win32:!win32-g++:!contains(LIBS, .*pq.* ) LIBS *= -llibpq -lws2_32 -ladvapi32
-+win32:!win32-g++*:!contains(LIBS, .*pq.* ) LIBS *= -llibpq -lws2_32 -ladvapi32
+-HEADERS		= ../../../sql/drivers/db2/qsql_db2.h
+-SOURCES		= main.cpp \
+-		  ../../../sql/drivers/db2/qsql_db2.cpp
+-
+-unix:!contains( LIBS, .*db2.* ):LIBS 	*= -ldb2
+-win32:!contains( LIBS, .*db2.* ):LIBS   *= -ldb2cli
++SOURCES = main.cpp
++include(../../../sql/drivers/db2/qsql_db2.pri)
  
  include(../qsqldriverbase.pri)
-diff -Naur a/src/plugins/sqldrivers/tds/main.cpp b/src/plugins/sqldrivers/tds/main.cpp
---- a/src/plugins/sqldrivers/tds/main.cpp	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/sqldrivers/tds/main.cpp	2010-06-05 23:51:28.115709598 +0200
-@@ -47,6 +47,7 @@
- #define _WINSCARD_H_
- #include <windows.h>
- #endif
-+#define Q_USE_SYBASE
- #include "../../../sql/drivers/tds/qsql_tds.h"
+diff --git a/src/plugins/sqldrivers/ibase/ibase.pro b/src/plugins/sqldrivers/ibase/ibase.pro
+index bb73adb..7870ec8 100644
+--- a/src/plugins/sqldrivers/ibase/ibase.pro
++++ b/src/plugins/sqldrivers/ibase/ibase.pro
+@@ -1,14 +1,6 @@
+ TARGET = qsqlibase
  
- QT_BEGIN_NAMESPACE
-diff -Naur a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds.pro
---- a/src/plugins/sqldrivers/tds/tds.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/plugins/sqldrivers/tds/tds.pro	2010-06-05 23:51:28.115709598 +0200
-@@ -6,8 +6,9 @@
- 		  ../../../sql/drivers/tds/qsql_tds.cpp
+-HEADERS		= ../../../sql/drivers/ibase/qsql_ibase.h
+-SOURCES		= main.cpp \
+-		  ../../../sql/drivers/ibase/qsql_ibase.cpp
+-
+-unix:!contains( LIBS, .*gds.* ):!contains( LIBS, .*libfb.* ):LIBS    *= -lgds
+-
+-win32:!contains( LIBS, .*gds.* ):!contains( LIBS, .*fbclient.* ) {
+-	!win32-borland:LIBS *= -lgds32_ms
+-	win32-borland:LIBS  += gds32.lib
+-}
++SOURCES = main.cpp
++include(../../../sql/drivers/ibase/qsql_ibase.pri)
  
- unix:!contains( LIBS, .*sybdb.* ):LIBS 	*= -lsybdb
-+win32-g++*:LIBS *=  -lsybdb -liconv -lws2_32
+ include(../qsqldriverbase.pri)
+diff --git a/src/plugins/sqldrivers/mysql/mysql.pro b/src/plugins/sqldrivers/mysql/mysql.pro
+index b808c8e..b6d42ff 100644
+--- a/src/plugins/sqldrivers/mysql/mysql.pro
++++ b/src/plugins/sqldrivers/mysql/mysql.pro
+@@ -1,23 +1,6 @@
+ TARGET = qsqlmysql
  
+-HEADERS		= ../../../sql/drivers/mysql/qsql_mysql.h
+-SOURCES		= main.cpp \
+-		  ../../../sql/drivers/mysql/qsql_mysql.cpp
+-
+-unix: {
+-    isEmpty(QT_LFLAGS_MYSQL) {
+-        !contains(LIBS, .*mysqlclient.*):!contains(LIBS, .*mysqld.*) {
+-            use_libmysqlclient_r:LIBS *= -lmysqlclient_r
+-            else:LIBS *= -lmysqlclient
+-        }
+-    } else {
+-        LIBS *= $$QT_LFLAGS_MYSQL
+-        QMAKE_CXXFLAGS *= $$QT_CFLAGS_MYSQL
+-    }
+-}
+-
+-win32:!contains(LIBS, .*mysql.*):!contains(LIBS, .*mysqld.*) {
+-    LIBS     *= -llibmysql    
+-}
++SOURCES = main.cpp
++include(../../../sql/drivers/mysql/qsql_mysql.pri)
+ 
+ include(../qsqldriverbase.pri)
+diff --git a/src/plugins/sqldrivers/oci/oci.pro b/src/plugins/sqldrivers/oci/oci.pro
+index d75827e..d7dcce9 100644
+--- a/src/plugins/sqldrivers/oci/oci.pro
++++ b/src/plugins/sqldrivers/oci/oci.pro
+@@ -1,13 +1,6 @@
+ TARGET = qsqloci
+ 
+-HEADERS		= ../../../sql/drivers/oci/qsql_oci.h
+-SOURCES		= main.cpp \
+-		  ../../../sql/drivers/oci/qsql_oci.cpp
+-
+-win32:LIBS	*= -loci
+-
+-unix:!contains( LIBS, .*clnts.* ):LIBS	*= -lclntsh
+-
+-macx:QMAKE_LFLAGS += -Wl,-flat_namespace,-U,_environ
++SOURCES = main.cpp
++include(../../../sql/drivers/oci/qsql_oci.pri)
+ 
+ include(../qsqldriverbase.pri)
+diff --git a/src/plugins/sqldrivers/odbc/odbc.pro b/src/plugins/sqldrivers/odbc/odbc.pro
+index 70070db..677eb6e 100644
+--- a/src/plugins/sqldrivers/odbc/odbc.pro
++++ b/src/plugins/sqldrivers/odbc/odbc.pro
+@@ -1,19 +1,6 @@
+ TARGET = qsqlodbc
+ 
+-HEADERS		= ../../../sql/drivers/odbc/qsql_odbc.h
+-SOURCES		= main.cpp \
+-		  ../../../sql/drivers/odbc/qsql_odbc.cpp
+-
+-unix {
+-	!contains( LIBS, .*odbc.* ) {
+-	    LIBS 	*= $$QT_LFLAGS_ODBC
+-	}
+-        DEFINES += UNICODE
+-}
+-
 -win32 {
-+win32:!win32-g++* {
-     !win32-borland:LIBS *= -lNTWDBLIB
-     win32-borland:LIBS 	*= $(BCB)/lib/PSDK/NTWDBLIB.LIB
- }
-diff -Naur a/src/qbase.pri b/src/qbase.pri
---- a/src/qbase.pri	2010-05-04 02:43:26.000000000 +0200
-+++ b/src/qbase.pri	2010-06-05 23:51:28.115709598 +0200
-@@ -85,7 +85,6 @@
- }
+-	!win32-borland:LIBS	*= -lodbc32
+-    	win32-borland:LIBS	*= $(BCB)/lib/PSDK/odbc32.lib
+-}
++SOURCES = main.cpp
++include(../../../sql/drivers/odbc/qsql_odbc.pri)
  
- win32 {
--    CONFIG += zlib
-     INCLUDEPATH += tmp
-     !static: DEFINES+=QT_MAKEDLL
- }
-diff -Naur a/src/sql/drivers/drivers.pri b/src/sql/drivers/drivers.pri
---- a/src/sql/drivers/drivers.pri	2010-05-04 02:43:24.000000000 +0200
-+++ b/src/sql/drivers/drivers.pri	2010-06-05 23:51:28.119704269 +0200
-@@ -6,16 +6,14 @@
-     HEADERS +=      drivers/psql/qsql_psql.h
-     SOURCES +=      drivers/psql/qsql_psql.cpp
+ include(../qsqldriverbase.pri)
+diff --git a/src/plugins/sqldrivers/psql/psql.pro b/src/plugins/sqldrivers/psql/psql.pro
+index 9586695..8276c0a 100644
+--- a/src/plugins/sqldrivers/psql/psql.pro
++++ b/src/plugins/sqldrivers/psql/psql.pro
+@@ -1,18 +1,6 @@
+ TARGET = qsqlpsql
  
--    unix|win32-g++ {
-+    unix|win32-g++* {
-         !static:!isEmpty(QT_LFLAGS_PSQL) {
-             !contains(QT_CONFIG, system-zlib): QT_LFLAGS_PSQL -= -lz
-             !static:LIBS *= $$QT_LFLAGS_PSQL
-             QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
-         }
-         !contains(LIBS, .*pq.*):LIBS *= -lpq
+-HEADERS		= ../../../sql/drivers/psql/qsql_psql.h
+-SOURCES		= main.cpp \
+-		  ../../../sql/drivers/psql/qsql_psql.cpp
+-
+-unix|win32-g++*: {
+-    !isEmpty(QT_LFLAGS_PSQL) {
+-        !contains(QT_CONFIG, system-zlib): QT_LFLAGS_PSQL -= -lz
+-        !static:LIBS *= $$QT_LFLAGS_PSQL
+-        QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
+-    }
+-    !contains(LIBS, .*pq.*):LIBS *= -lpq
+-}
+-
+-win32:!win32-g++*:!contains(LIBS, .*pq.* ) LIBS *= -llibpq -lws2_32 -ladvapi32
++SOURCES = main.cpp
++include(../../../sql/drivers/psql/qsql_psql.pri)
+ 
+ include(../qsqldriverbase.pri)
+diff --git a/src/plugins/sqldrivers/sqlite/sqlite.pro b/src/plugins/sqldrivers/sqlite/sqlite.pro
+index 75f04b9..f4c1671 100644
+--- a/src/plugins/sqldrivers/sqlite/sqlite.pro
++++ b/src/plugins/sqldrivers/sqlite/sqlite.pro
+@@ -1,18 +1,7 @@
+ TARGET = qsqlite
+ 
+-HEADERS		= ../../../sql/drivers/sqlite/qsql_sqlite.h
+-SOURCES		= smain.cpp \
+-		  ../../../sql/drivers/sqlite/qsql_sqlite.cpp
+-
+-!system-sqlite:!contains( LIBS, .*sqlite.* ) {
+-    CONFIG(release, debug|release):DEFINES *= NDEBUG
+-    DEFINES += SQLITE_OMIT_LOAD_EXTENSION SQLITE_OMIT_COMPLETE 
+-    INCLUDEPATH += ../../../3rdparty/sqlite
+-    SOURCES += ../../../3rdparty/sqlite/sqlite3.c
+-} else {
+-    LIBS *= $$QT_LFLAGS_SQLITE
+-    QMAKE_CXXFLAGS *= $$QT_CFLAGS_SQLITE
+-}
++SOURCES = smain.cpp
++include(../../../sql/drivers/sqlite/qsql_sqlite.pri)
+ 
+ wince*: DEFINES += HAVE_LOCALTIME_S=0
+ 
+diff --git a/src/plugins/sqldrivers/sqlite2/sqlite2.pro b/src/plugins/sqldrivers/sqlite2/sqlite2.pro
+index 0f6c19a..e6197b9 100644
+--- a/src/plugins/sqldrivers/sqlite2/sqlite2.pro
++++ b/src/plugins/sqldrivers/sqlite2/sqlite2.pro
+@@ -1,9 +1,6 @@
+ TARGET = qsqlite2
+ 
+-HEADERS		= ../../../sql/drivers/sqlite2/qsql_sqlite2.h
+-SOURCES		= smain.cpp \
+-		  ../../../sql/drivers/sqlite2/qsql_sqlite2.cpp
+-
+-!contains(LIBS, .*sqlite.*):LIBS *= -lsqlite
++SOURCES = smain.cpp
++include(../../../sql/drivers/sqlite2/qsql_sqlite2.pri)
+ 
+ include(../qsqldriverbase.pri)
+diff --git a/src/plugins/sqldrivers/tds/tds.pro b/src/plugins/sqldrivers/tds/tds.pro
+index ba40be5..b8e8ded 100644
+--- a/src/plugins/sqldrivers/tds/tds.pro
++++ b/src/plugins/sqldrivers/tds/tds.pro
+@@ -1,15 +1,6 @@
+ TARGET = qsqltds
+ 
+-HEADERS		= ../../../sql/drivers/tds/qsql_tds.h
+-
+-SOURCES		= main.cpp \
+-		  ../../../sql/drivers/tds/qsql_tds.cpp
+-
+-unix:!contains( LIBS, .*sybdb.* ):LIBS 	*= -lsybdb
+-
+-win32 {
+-    !win32-borland:LIBS *= -lNTWDBLIB
+-    win32-borland:LIBS 	*= $(BCB)/lib/PSDK/NTWDBLIB.LIB
+-}
++SOURCES = main.cpp
++include(../../../sql/drivers/tds/qsql_tds.pri)
+ 
+ include(../qsqldriverbase.pri)
+diff --git a/src/sql/drivers/db2/qsql_db2.pri b/src/sql/drivers/db2/qsql_db2.pri
+new file mode 100644
+index 0000000..e53a8a0
+--- /dev/null
++++ b/src/sql/drivers/db2/qsql_db2.pri
+@@ -0,0 +1,8 @@
++HEADERS += $$PWD/qsql_db2.h
++SOURCES += $$PWD/qsql_db2.cpp
++
++unix {
++    !contains(LIBS, .*db2.*):LIBS *= -ldb2
++} else:!win32-borland {
++    !contains(LIBS, .*db2.*):LIBS *= -ldb2cli
++}
+diff --git a/src/sql/drivers/drivers.pri b/src/sql/drivers/drivers.pri
+index 05e7265..3af5525 100644
+--- a/src/sql/drivers/drivers.pri
++++ b/src/sql/drivers/drivers.pri
+@@ -1,119 +1,11 @@
+-contains(sql-drivers, all ) {
+-    sql-driver +=   psql mysql odbc oci tds db2 sqlite ibase
+-}
+-
+-contains(sql-drivers, psql) {
+-    HEADERS +=      drivers/psql/qsql_psql.h
+-    SOURCES +=      drivers/psql/qsql_psql.cpp
+-
+-    unix|win32-g++* {
+-        !static:!isEmpty(QT_LFLAGS_PSQL) {
+-            !contains(QT_CONFIG, system-zlib): QT_LFLAGS_PSQL -= -lz
+-            !static:LIBS *= $$QT_LFLAGS_PSQL
+-            QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
+-        }
+-        !contains(LIBS, .*pq.*):LIBS *= -lpq
+-    } else:win32:!contains(LIBS, .*pq.* ) LIBS *= -llibpq -lws2_32 -ladvapi32
+-}
+-
+-contains(sql-drivers, mysql) {
+-    HEADERS +=      drivers/mysql/qsql_mysql.h
+-    SOURCES +=      drivers/mysql/qsql_mysql.cpp
+-
+-    unix {
+-        isEmpty(QT_LFLAGS_MYSQL) {
+-            !contains(LIBS, .*mysqlclient.*):!contains(LIBS, .*mysqld.*) {
+-                use_libmysqlclient_r:LIBS *= -lmysqlclient_r
+-                else:LIBS *= -lmysqlclient
+-            }
+-        } else {
+-            LIBS *= $$QT_LFLAGS_MYSQL
+-            QMAKE_CXXFLAGS *= $$QT_CFLAGS_MYSQL
+-        }
 -    }
 -
--    win32:!win32-g++:!contains(LIBS, .*pq.* ) LIBS *= -llibpq -lws2_32 -ladvapi32
-+    } else:win32:!contains(LIBS, .*pq.* ) LIBS *= -llibpq -lws2_32 -ladvapi32
- }
- 
- contains(sql-drivers, mysql) {
-@@ -35,8 +33,8 @@
-     }
- 
-     win32:!contains(LIBS, .*mysql.*):!contains(LIBS, .*mysqld.*) {
--        !win32-g++:LIBS     *= -llibmysql    
--	win32-g++:LIBS	    *= -lmysql
-+        !win32-g++*:LIBS    *= -llibmysql
-+        win32-g++*:LIBS     *= -lmysql
-     }    
- }
- 
-diff -Naur a/src/sql/drivers/tds/qsql_tds.cpp b/src/sql/drivers/tds/qsql_tds.cpp
---- a/src/sql/drivers/tds/qsql_tds.cpp	2010-05-04 02:43:24.000000000 +0200
-+++ b/src/sql/drivers/tds/qsql_tds.cpp	2010-06-05 23:51:28.119704269 +0200
-@@ -47,7 +47,8 @@
- #else
- #define Q_USE_SYBASE
- #endif
+-    win32:!contains(LIBS, .*mysql.*):!contains(LIBS, .*mysqld.*) {
+-        !win32-g++*:LIBS *= -llibmysql
+-        else:LIBS        *= -lmysql
+-    }    
+-}
 -
-+//Force SYBASE because we use FreeTDS
-+#define Q_USE_SYBASE
- #include "qsql_tds.h"
+-contains(sql-drivers, odbc) {
+-     HEADERS += drivers/odbc/qsql_odbc.h
+-     SOURCES += drivers/odbc/qsql_odbc.cpp
+-
+-     mac:!contains( LIBS, .*odbc.* ):LIBS        *= -liodbc
+-     unix:!contains( LIBS, .*odbc.* ):LIBS       *= -lodbc
+-     unix:DEFINES += UNICODE
+-
+-     win32 {
+-         !win32-borland:LIBS *= -lodbc32
+-         else:LIBS           *= $(BCB)/lib/PSDK/odbc32.lib
+-     }
+-}
+-
+-contains(sql-drivers, oci) {
+-    HEADERS += drivers/oci/qsql_oci.h
+-    SOURCES += drivers/oci/qsql_oci.cpp
+-
+-    unix:!contains( LIBS, .*clnts.* ):LIBS += -lclntsh
+-
+-    win32:LIBS += -loci
+-}
+-
+-contains(sql-drivers, tds) {
+-    HEADERS += drivers/tds/qsql_tds.h
+-    SOURCES += drivers/tds/qsql_tds.cpp
+-
+-    unix:LIBS += -L$SYBASE/lib -lsybdb
+-
+-    win32 {
+-        !win32-borland:LIBS += -lNTWDBLIB
+-        else:LIBS           += $(BCB)/lib/PSDK/NTWDBLIB.LIB
+-    }
+-}
+-
+-contains(sql-drivers, db2) {
+-    HEADERS += drivers/db2/qsql_db2.h
+-    SOURCES += drivers/db2/qsql_db2.cpp
+-    
+-    unix:LIBS += -ldb2
+-    
+-    win32 {
+-        !win32-borland:LIBS += -ldb2cli
+-#        else:LIBS          += $(BCB)/lib/PSDK/db2cli.lib
+-    }
+-}
+-
+-contains(sql-drivers, ibase) {
+-    HEADERS += drivers/ibase/qsql_ibase.h
+-    SOURCES += drivers/ibase/qsql_ibase.cpp
+-    
+-    unix:LIBS *= -lgds  
+-    
+-    win32 {
+-        !win32-borland:LIBS *= -lgds32_ms
+-        else:LIBS           += gds32.lib
+-    }
+-}
+-
+-contains(sql-drivers, sqlite2) {
+-    HEADERS += drivers/sqlite2/qsql_sqlite2.h
+-    SOURCES += drivers/sqlite2/qsql_sqlite2.cpp
+-    !contains(LIBS, .*sqlite.*):LIBS *= -lsqlite
+-}
+-
+-contains(sql-drivers, sqlite) {
+-    !system-sqlite:!contains( LIBS, .*sqlite3.* ) {
+-        CONFIG(release, debug|release):DEFINES *= NDEBUG
+-        DEFINES += SQLITE_OMIT_LOAD_EXTENSION SQLITE_OMIT_COMPLETE 
+-        INCLUDEPATH +=  ../3rdparty/sqlite
+-        SOURCES +=      ../3rdparty/sqlite/sqlite3.c
+-    } else {
+-        LIBS *= $$QT_LFLAGS_SQLITE
+-        QMAKE_CXXFLAGS *= $$QT_CFLAGS_SQLITE
+-    }
+-
+-    HEADERS +=      drivers/sqlite/qsql_sqlite.h
+-    SOURCES +=      drivers/sqlite/qsql_sqlite.cpp
+-}
++contains(sql-drivers, all):sql-driver += psql mysql odbc oci tds db2 sqlite ibase
++
++contains(sql-drivers, psql):include($$PWD/sqlite/qsql_psql.pri)
++contains(sql-drivers, mysql):include($$PWD/mysql/qsql_mysql.pri)
++contains(sql-drivers, odbc):include($$PWD/odbc/qsql_odbc.pri)
++contains(sql-drivers, oci):include($$PWD/oci/qsql_oci.pri)
++contains(sql-drivers, tds):include($$PWD/tds/qsql_tds.pri)
++contains(sql-drivers, db2):include($$PWD/db2/qsql_db2.pri)
++contains(sql-drivers, ibase):include($$PWD/db2/qsql_ibase.pri)
++contains(sql-drivers, sqlite2):include($$PWD/sqlite2/qsql_sqlite2.pri)
++contains(sql-drivers, sqlite):include($$PWD/sqlite/qsql_sqlite.pri)
+diff --git a/src/sql/drivers/ibase/qsql_ibase.pri b/src/sql/drivers/ibase/qsql_ibase.pri
+new file mode 100644
+index 0000000..ebcd18a
+--- /dev/null
++++ b/src/sql/drivers/ibase/qsql_ibase.pri
+@@ -0,0 +1,11 @@
++HEADERS += $$PWD/qsql_ibase.h
++SOURCES += $$PWD/qsql_ibase.cpp
++
++unix {
++    !contains(LIBS, .*gds.*):!contains(LIBS, .*libfb.*):LIBS *= -lgds
++} else {
++    !contains(LIBS, .*gds.*):!contains(LIBS, .*fbclient.*) {
++        win32-borland:LIBS += gds32.lib
++        else:LIBS *= -lgds32_ms
++    }
++}
+diff --git a/src/sql/drivers/mysql/qsql_mysql.pri b/src/sql/drivers/mysql/qsql_mysql.pri
+new file mode 100644
+index 0000000..801b891
+--- /dev/null
++++ b/src/sql/drivers/mysql/qsql_mysql.pri
+@@ -0,0 +1,16 @@
++HEADERS += $$PWD/qsql_mysql.h
++SOURCES += $$PWD/qsql_mysql.cpp
++
++unix {
++    isEmpty(QT_LFLAGS_MYSQL) {
++        !contains(LIBS, .*mysqlclient.*):!contains(LIBS, .*mysqld.*) {
++            use_libmysqlclient_r:LIBS *= -lmysqlclient_r
++            else:LIBS *= -lmysqlclient
++        }
++    } else {
++        LIBS *= $$QT_LFLAGS_MYSQL
++        QMAKE_CXXFLAGS *= $$QT_CFLAGS_MYSQL
++    }
++} else {
++    !contains(LIBS, .*mysql.*):!contains(LIBS, .*mysqld.*):LIBS *= -llibmysql
++}
+diff --git a/src/sql/drivers/oci/qsql_oci.pri b/src/sql/drivers/oci/qsql_oci.pri
+new file mode 100644
+index 0000000..6859156
+--- /dev/null
++++ b/src/sql/drivers/oci/qsql_oci.pri
+@@ -0,0 +1,9 @@
++HEADERS += $$PWD/qsql_oci.h
++SOURCES += $$PWD/qsql_oci.cpp
++
++unix {
++    !contains(LIBS, .*clnts.*):LIBS *= -lclntsh
++} else {
++    LIBS *= -loci
++}
++macx:QMAKE_LFLAGS += -Wl,-flat_namespace,-U,_environ
+diff --git a/src/sql/drivers/odbc/qsql_odbc.pri b/src/sql/drivers/odbc/qsql_odbc.pri
+new file mode 100644
+index 0000000..c4c92be
+--- /dev/null
++++ b/src/sql/drivers/odbc/qsql_odbc.pri
+@@ -0,0 +1,13 @@
++HEADERS += $$PWD/qsql_odbc.h
++SOURCES += $$PWD/qsql_odbc.cpp
++
++mac {
++    !contains(LIBS, .*odbc.*):LIBS *= -liodbc
++} else:unix {
++    DEFINES += UNICODE
++    !contains(LIBS, .*odbc.*):LIBS *= $$QT_LFLAGS_ODBC
++} else:win32-borland {
++    LIBS *= $(BCB)/lib/PSDK/odbc32.lib
++} else {
++    LIBS *= -lodbc32
++}
+diff --git a/src/sql/drivers/psql/qsql_psql.pri b/src/sql/drivers/psql/qsql_psql.pri
+new file mode 100644
+index 0000000..c282d57
+--- /dev/null
++++ b/src/sql/drivers/psql/qsql_psql.pri
+@@ -0,0 +1,13 @@
++HEADERS += $$PWD/qsql_psql.h
++SOURCES += $$PWD/qsql_psql.cpp
++
++unix|win32-g++* {
++    !static:!isEmpty(QT_LFLAGS_PSQL) {
++        !contains(QT_CONFIG, system-zlib): QT_LFLAGS_PSQL -= -lz
++        LIBS *= $$QT_LFLAGS_PSQL
++        QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
++    }
++    !contains(LIBS, .*pq.*):LIBS *= -lpq
++} else {
++    !contains(LIBS, .*pq.*):LIBS *= -llibpq -lws2_32 -ladvapi32
++}
+diff --git a/src/sql/drivers/sqlite/qsql_sqlite.pri b/src/sql/drivers/sqlite/qsql_sqlite.pri
+new file mode 100644
+index 0000000..7ad5936
+--- /dev/null
++++ b/src/sql/drivers/sqlite/qsql_sqlite.pri
+@@ -0,0 +1,9 @@
++HEADERS += $$PWD/qsql_sqlite.h
++SOURCES += $$PWD/qsql_sqlite.cpp
++
++!system-sqlite:!contains(LIBS, .*sqlite3.*) {
++    include($$PWD/../../../3rdparty/sqlite.pri)
++} else {
++    LIBS *= $$QT_LFLAGS_SQLITE
++    QMAKE_CXXFLAGS *= $$QT_CFLAGS_SQLITE
++}
+diff --git a/src/sql/drivers/sqlite2/qsql_sqlite2.pri b/src/sql/drivers/sqlite2/qsql_sqlite2.pri
+new file mode 100644
+index 0000000..9f0e807
+--- /dev/null
++++ b/src/sql/drivers/sqlite2/qsql_sqlite2.pri
+@@ -0,0 +1,4 @@
++HEADERS += $PWD/qsql_sqlite2.h
++SOURCES += $PWD/qsql_sqlite2.cpp
++
++!contains(LIBS, .*sqlite.*):LIBS *= -lsqlite
+diff --git a/src/sql/drivers/tds/qsql_tds.pri b/src/sql/drivers/tds/qsql_tds.pri
+new file mode 100644
+index 0000000..e2662ca
+--- /dev/null
++++ b/src/sql/drivers/tds/qsql_tds.pri
+@@ -0,0 +1,10 @@
++HEADERS += $$PWD/qsql_tds.h
++SOURCES += $$PWD/qsql_tds.cpp
++
++unix {
++    !contains(LIBS, .*sybdb.*):LIBS *= -lsybdb
++} else:win32-borland {
++    LIBS *= $(BCB)/lib/PSDK/NTWDBLIB.LIB
++} else {
++    LIBS *= -lNTWDBLIB
++}
+
+commit f32bbfe1b713dacac6ee9b4d6ebb4561a2ca92c3
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Wed Jul 7 12:05:37 2010 +0200
+
+    Simplify *= to += after contains() test
+    
+    Merge-request: 715
+    Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+    (cherry picked from commit 484c05ef374ef1c1043836b074693838d6b30adb)
+
+diff --git a/src/sql/drivers/db2/qsql_db2.pri b/src/sql/drivers/db2/qsql_db2.pri
+index e53a8a0..16557f0 100644
+--- a/src/sql/drivers/db2/qsql_db2.pri
++++ b/src/sql/drivers/db2/qsql_db2.pri
+@@ -2,7 +2,7 @@ HEADERS += $$PWD/qsql_db2.h
+ SOURCES += $$PWD/qsql_db2.cpp
  
- #include <qvariant.h>
-diff -Naur a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
---- a/src/sql/drivers/tds/qsql_tds.h	2010-05-04 02:43:24.000000000 +0200
-+++ b/src/sql/drivers/tds/qsql_tds.h	2010-06-05 23:51:28.119704269 +0200
-@@ -48,7 +48,8 @@
+ unix {
+-    !contains(LIBS, .*db2.*):LIBS *= -ldb2
++    !contains(LIBS, .*db2.*):LIBS += -ldb2
+ } else:!win32-borland {
+-    !contains(LIBS, .*db2.*):LIBS *= -ldb2cli
++    !contains(LIBS, .*db2.*):LIBS += -ldb2cli
+ }
+diff --git a/src/sql/drivers/ibase/qsql_ibase.pri b/src/sql/drivers/ibase/qsql_ibase.pri
+index ebcd18a..33fbb0d 100644
+--- a/src/sql/drivers/ibase/qsql_ibase.pri
++++ b/src/sql/drivers/ibase/qsql_ibase.pri
+@@ -2,10 +2,10 @@ HEADERS += $$PWD/qsql_ibase.h
+ SOURCES += $$PWD/qsql_ibase.cpp
+ 
+ unix {
+-    !contains(LIBS, .*gds.*):!contains(LIBS, .*libfb.*):LIBS *= -lgds
++    !contains(LIBS, .*gds.*):!contains(LIBS, .*libfb.*):LIBS += -lgds
+ } else {
+     !contains(LIBS, .*gds.*):!contains(LIBS, .*fbclient.*) {
+         win32-borland:LIBS += gds32.lib
+-        else:LIBS *= -lgds32_ms
++        else:LIBS += -lgds32_ms
+     }
+ }
+diff --git a/src/sql/drivers/mysql/qsql_mysql.pri b/src/sql/drivers/mysql/qsql_mysql.pri
+index 801b891..1b9c3dd 100644
+--- a/src/sql/drivers/mysql/qsql_mysql.pri
++++ b/src/sql/drivers/mysql/qsql_mysql.pri
+@@ -4,13 +4,13 @@ SOURCES += $$PWD/qsql_mysql.cpp
+ unix {
+     isEmpty(QT_LFLAGS_MYSQL) {
+         !contains(LIBS, .*mysqlclient.*):!contains(LIBS, .*mysqld.*) {
+-            use_libmysqlclient_r:LIBS *= -lmysqlclient_r
+-            else:LIBS *= -lmysqlclient
++            use_libmysqlclient_r:LIBS += -lmysqlclient_r
++            else:LIBS += -lmysqlclient
+         }
+     } else {
+         LIBS *= $$QT_LFLAGS_MYSQL
+         QMAKE_CXXFLAGS *= $$QT_CFLAGS_MYSQL
+     }
+ } else {
+-    !contains(LIBS, .*mysql.*):!contains(LIBS, .*mysqld.*):LIBS *= -llibmysql
++    !contains(LIBS, .*mysql.*):!contains(LIBS, .*mysqld.*):LIBS += -llibmysql
+ }
+diff --git a/src/sql/drivers/oci/qsql_oci.pri b/src/sql/drivers/oci/qsql_oci.pri
+index 6859156..60ccc4c 100644
+--- a/src/sql/drivers/oci/qsql_oci.pri
++++ b/src/sql/drivers/oci/qsql_oci.pri
+@@ -2,7 +2,7 @@ HEADERS += $$PWD/qsql_oci.h
+ SOURCES += $$PWD/qsql_oci.cpp
+ 
+ unix {
+-    !contains(LIBS, .*clnts.*):LIBS *= -lclntsh
++    !contains(LIBS, .*clnts.*):LIBS += -lclntsh
+ } else {
+     LIBS *= -loci
+ }
+diff --git a/src/sql/drivers/odbc/qsql_odbc.pri b/src/sql/drivers/odbc/qsql_odbc.pri
+index c4c92be..8394012 100644
+--- a/src/sql/drivers/odbc/qsql_odbc.pri
++++ b/src/sql/drivers/odbc/qsql_odbc.pri
+@@ -2,10 +2,10 @@ HEADERS += $$PWD/qsql_odbc.h
+ SOURCES += $$PWD/qsql_odbc.cpp
+ 
+ mac {
+-    !contains(LIBS, .*odbc.*):LIBS *= -liodbc
++    !contains(LIBS, .*odbc.*):LIBS += -liodbc
+ } else:unix {
+     DEFINES += UNICODE
+-    !contains(LIBS, .*odbc.*):LIBS *= $$QT_LFLAGS_ODBC
++    !contains(LIBS, .*odbc.*):LIBS += $$QT_LFLAGS_ODBC
+ } else:win32-borland {
+     LIBS *= $(BCB)/lib/PSDK/odbc32.lib
+ } else {
+diff --git a/src/sql/drivers/psql/qsql_psql.pri b/src/sql/drivers/psql/qsql_psql.pri
+index c282d57..97db4be 100644
+--- a/src/sql/drivers/psql/qsql_psql.pri
++++ b/src/sql/drivers/psql/qsql_psql.pri
+@@ -7,7 +7,7 @@ unix|win32-g++* {
+         LIBS *= $$QT_LFLAGS_PSQL
+         QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
+     }
+-    !contains(LIBS, .*pq.*):LIBS *= -lpq
++    !contains(LIBS, .*pq.*):LIBS += -lpq
+ } else {
+-    !contains(LIBS, .*pq.*):LIBS *= -llibpq -lws2_32 -ladvapi32
++    !contains(LIBS, .*pq.*):LIBS += -llibpq -lws2_32 -ladvapi32
+ }
+diff --git a/src/sql/drivers/sqlite2/qsql_sqlite2.pri b/src/sql/drivers/sqlite2/qsql_sqlite2.pri
+index 9f0e807..76fe255 100644
+--- a/src/sql/drivers/sqlite2/qsql_sqlite2.pri
++++ b/src/sql/drivers/sqlite2/qsql_sqlite2.pri
+@@ -1,4 +1,4 @@
+ HEADERS += $PWD/qsql_sqlite2.h
+ SOURCES += $PWD/qsql_sqlite2.cpp
+ 
+-!contains(LIBS, .*sqlite.*):LIBS *= -lsqlite
++!contains(LIBS, .*sqlite.*):LIBS += -lsqlite
+diff --git a/src/sql/drivers/tds/qsql_tds.pri b/src/sql/drivers/tds/qsql_tds.pri
+index e2662ca..c552ead 100644
+--- a/src/sql/drivers/tds/qsql_tds.pri
++++ b/src/sql/drivers/tds/qsql_tds.pri
+@@ -2,7 +2,7 @@ HEADERS += $$PWD/qsql_tds.h
+ SOURCES += $$PWD/qsql_tds.cpp
+ 
+ unix {
+-    !contains(LIBS, .*sybdb.*):LIBS *= -lsybdb
++    !contains(LIBS, .*sybdb.*):LIBS += -lsybdb
+ } else:win32-borland {
+     LIBS *= $(BCB)/lib/PSDK/NTWDBLIB.LIB
+ } else {
+
+commit 72f49a70bb5a719e161aeceea986aac116c270d7
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Thu Jul 8 15:28:24 2010 +0200
+
+    Corrected paths
+    
+    Merge-request: 715
+    Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+    (cherry picked from commit c69dc51e5e03aaa87a9385f5557a4f6b8aaeded3)
+
+diff --git a/src/sql/drivers/drivers.pri b/src/sql/drivers/drivers.pri
+index 3af5525..87cc0b1 100644
+--- a/src/sql/drivers/drivers.pri
++++ b/src/sql/drivers/drivers.pri
+@@ -1,11 +1,11 @@
+ contains(sql-drivers, all):sql-driver += psql mysql odbc oci tds db2 sqlite ibase
+ 
+-contains(sql-drivers, psql):include($$PWD/sqlite/qsql_psql.pri)
++contains(sql-drivers, psql):include($$PWD/psql/qsql_psql.pri)
+ contains(sql-drivers, mysql):include($$PWD/mysql/qsql_mysql.pri)
+ contains(sql-drivers, odbc):include($$PWD/odbc/qsql_odbc.pri)
+ contains(sql-drivers, oci):include($$PWD/oci/qsql_oci.pri)
+ contains(sql-drivers, tds):include($$PWD/tds/qsql_tds.pri)
+ contains(sql-drivers, db2):include($$PWD/db2/qsql_db2.pri)
+-contains(sql-drivers, ibase):include($$PWD/db2/qsql_ibase.pri)
++contains(sql-drivers, ibase):include($$PWD/ibase/qsql_ibase.pri)
+ contains(sql-drivers, sqlite2):include($$PWD/sqlite2/qsql_sqlite2.pri)
+ contains(sql-drivers, sqlite):include($$PWD/sqlite/qsql_sqlite.pri)
+
+commit cc8386f6a7781ece721e9700ba2c290bb14c0d7d
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Thu Jul 29 11:15:00 2010 +0200
+
+    fixes for using freetds
+    
+    DBNTWIN32 only if not Q_USE_SYBASE.
+    Workaround for RETCODE typedef conflict between ODBC and FreeTDS.
+    Include winsock2.h supplies SOCKET for FreeTDS.
+    
+    Merge-request: 684
+    Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+    (cherry picked from commit 3643d21756a6bd9ed06a409457d6e8c93aba3b43)
+
+diff --git a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
+index f23a672..3594a4d 100644
+--- a/src/sql/drivers/tds/qsql_tds.h
++++ b/src/sql/drivers/tds/qsql_tds.h
+@@ -48,7 +48,10 @@
  
  #ifdef Q_OS_WIN32
  #define WIN32_LEAN_AND_MEAN
--#define DBNTWIN32 // indicates 32bit windows dblib
-+//#define DBNTWIN32 // indicates 32bit windows dblib
++#ifndef Q_USE_SYBASE
+ #define DBNTWIN32 // indicates 32bit windows dblib
++#endif
 +#include <winsock2.h>
  #include <QtCore/qt_windows.h>
  #include <sqlfront.h>
  #include <sqldb.h>
-diff -Naur a/src/svg/svg.pro b/src/svg/svg.pro
---- a/src/svg/svg.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/svg/svg.pro	2010-06-05 23:51:28.119704269 +0200
-@@ -46,5 +46,6 @@
- contains(QT_CONFIG, zlib) {
-    INCLUDEPATH += ../3rdparty/zlib
- } else:!contains(QT_CONFIG, no-zlib) {
--   unix:LIBS_PRIVATE += -lz
-+   unix|win32-g++*:LIBS_PRIVATE += -lz
-+   win32:!win32-g++*:LIBS += zdll.lib
- }
-diff -Naur a/src/tools/bootstrap/bootstrap.pro b/src/tools/bootstrap/bootstrap.pro
---- a/src/tools/bootstrap/bootstrap.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/tools/bootstrap/bootstrap.pro	2010-06-05 23:51:28.119704269 +0200
-@@ -109,6 +109,9 @@
-         ../3rdparty/zlib/trees.c \
-         ../3rdparty/zlib/uncompr.c \
-         ../3rdparty/zlib/zutil.c
-+} else:!contains(QT_CONFIG, no-zlib) {
-+    unix|win32-g++*:LIBS_PRIVATE += -lz
-+    win32:!win32-g++*:LIBS += zdll.lib
- }
+diff --git a/src/sql/kernel/qsqldatabase.cpp b/src/sql/kernel/qsqldatabase.cpp
+index 76bc2b0..2ab37de 100644
+--- a/src/sql/kernel/qsqldatabase.cpp
++++ b/src/sql/kernel/qsqldatabase.cpp
+@@ -60,7 +60,10 @@
+ #include "../drivers/oci/qsql_oci.h"
+ #endif
+ #ifdef QT_SQL_TDS
++// conflicting RETCODE typedef between odbc and freetds
++#define RETCODE DBRETCODE
+ #include "../drivers/tds/qsql_tds.h"
++#undef RETCODE
+ #endif
+ #ifdef QT_SQL_DB2
+ #include "../drivers/db2/qsql_db2.h"
+
+commit 0da5d326ddf55bc47f8dfa13572405706d96029f
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Tue Aug 3 16:37:05 2010 +0200
+
+    Improve TDS configuration through QT_LFLAGS_TDS, SYBASE, SYBASE_LIBS
+    
+    Consistent with QT_LFLAGS_*  for other database drivers.
+    Support added to configure shell script and configure.exe.
+    Respect SYBASE and SYBASE_LIBS.
+    Use QT_LFLAGS_TDS in project files.
+    
+    Merge-request: 2416
+    Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+    (cherry picked from commit 2c7621730d30ac418874c18036a7aa34e2aae1d0)
+
+diff --git a/configure b/configure
+index 05633fa..e6b9476 100755
+--- a/configure
++++ b/configure
+@@ -818,6 +818,7 @@ QT_LFLAGS_MYSQL_R=
+ QT_CFLAGS_SQLITE=
+ QT_LFLAGS_SQLITE=
+ QT_LFLAGS_ODBC="-lodbc"
++QT_LFLAGS_TDS=
  
- lib.CONFIG = dummy_install
-diff -Naur a/src/winmain/winmain.pro b/src/winmain/winmain.pro
---- a/src/winmain/winmain.pro	2010-05-04 02:43:25.000000000 +0200
-+++ b/src/winmain/winmain.pro	2010-06-05 23:51:28.119704269 +0200
-@@ -8,10 +8,10 @@
- CONFIG	-= qt shared
+ # flags for libdbus-1
+ QT_CFLAGS_DBUS=
+@@ -4990,7 +4991,9 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+             ;;
+         tds)
+             if [ "$CFG_SQL_tds" != "no" ]; then
+-                if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/tds "TDS" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++                [ -z "$SYBASE" ] || QT_LFLAGS_TDS="-L$SYBASE/lib"
++                [ -z "$SYBASE_LIBS" ] || QT_LFLAGS_TDS="$QT_LFLAGS_TDS $SYBASE_LIBS"
++                if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/tds "TDS" $QT_LFLAGS_TDS $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+                     if [ "$CFG_SQL_tds" = "auto" ]; then
+                         CFG_SQL_tds=plugin
+                     fi
+@@ -7786,6 +7789,9 @@ fi
+ if [ -n "$QT_LFLAGS_ODBC" ]; then
+     echo "QT_LFLAGS_ODBC   = $QT_LFLAGS_ODBC" >> "$CACHEFILE.tmp"
+ fi
++if [ -n "$QT_LFLAGS_TDS" ]; then
++    echo "QT_LFLAGS_TDS   = $QT_LFLAGS_TDS" >> "$CACHEFILE.tmp"
++fi
  
- win32 {
--	win32-g++:DEFINES += QT_NEEDS_QMAIN
-+	win32-g++*:DEFINES += QT_NEEDS_QMAIN
- 	win32-borland:DEFINES += QT_NEEDS_QMAIN
- 	SOURCES		= qtmain_win.cpp
--	CONFIG		+= png zlib
-+	CONFIG		+= png
- 	CONFIG		-= jpeg
- 	INCLUDEPATH	+= tmp $$QMAKE_INCDIR_QT/QtCore
- }
-diff -Naur a/tools/activeqt/testcon/testcon.pro b/tools/activeqt/testcon/testcon.pro
---- a/tools/activeqt/testcon/testcon.pro	2010-05-04 02:43:18.000000000 +0200
-+++ b/tools/activeqt/testcon/testcon.pro	2010-06-05 23:51:28.123713258 +0200
-@@ -16,6 +16,6 @@
- win32-borland {
-     QMAKE_POST_LINK = -midl $$QT_SOURCE_TREE/tools/activeqt/testcon/testcon.idl
+ if [ "$QT_EDITION" != "QT_EDITION_OPENSOURCE" ]; then
+     echo "DEFINES *= QT_EDITION=QT_EDITION_DESKTOP" >> "$CACHEFILE.tmp"
+diff --git a/src/sql/drivers/tds/qsql_tds.pri b/src/sql/drivers/tds/qsql_tds.pri
+index c552ead..037f793 100644
+--- a/src/sql/drivers/tds/qsql_tds.pri
++++ b/src/sql/drivers/tds/qsql_tds.pri
+@@ -1,8 +1,10 @@
+ HEADERS += $$PWD/qsql_tds.h
+ SOURCES += $$PWD/qsql_tds.cpp
+ 
+-unix {
++unix|win32-g++: {
++    !isEmpty(QT_LFLAGS_TDS):!static:LIBS *= $$QT_LFLAGS_TDS
+     !contains(LIBS, .*sybdb.*):LIBS += -lsybdb
++    QMAKE_CXXFLAGS *= $$QT_CFLAGS_TDS
+ } else:win32-borland {
+     LIBS *= $(BCB)/lib/PSDK/NTWDBLIB.LIB
  } else {
--    !win32-g++:QMAKE_POST_LINK = midl $$QT_SOURCE_TREE/tools/activeqt/testcon/testcon.idl && move testcon.tlb $(TARGETDIR)
-+    !win32-g++*:QMAKE_POST_LINK = midl $$QT_SOURCE_TREE/tools/activeqt/testcon/testcon.idl && move testcon.tlb $(TARGETDIR)
+diff --git a/tools/configure/configureapp.cpp b/tools/configure/configureapp.cpp
+index f7dac93..c7e6c16 100644
+--- a/tools/configure/configureapp.cpp
++++ b/tools/configure/configureapp.cpp
+@@ -1029,6 +1029,10 @@ void Configure::parseCmdLine()
+             opensslLibs = configCmdLine.at(i);
+         } else if (configCmdLine.at(i).startsWith("PSQL_LIBS=")) {
+             psqlLibs = configCmdLine.at(i);
++        } else if (configCmdLine.at(i).startsWith("SYBASE=")) {
++            sybase = configCmdLine.at(i);
++        } else if (configCmdLine.at(i).startsWith("SYBASE_LIBS=")) {
++            sybaseLibs = configCmdLine.at(i);
+         }
  
- }
-diff -Naur a/tools/assistant/lib/fulltextsearch/fulltextsearch.pro b/tools/assistant/lib/fulltextsearch/fulltextsearch.pro
---- a/tools/assistant/lib/fulltextsearch/fulltextsearch.pro	2010-05-04 02:43:17.000000000 +0200
-+++ b/tools/assistant/lib/fulltextsearch/fulltextsearch.pro	2010-06-05 23:51:28.123713258 +0200
-@@ -29,7 +29,7 @@
- CONFIG(exceptions_off) {
-     CONFIG -= exceptions_off
-     CONFIG += exceptions
--    !win32|win32-g++ {
-+    !win32|win32-g++* {
-         QMAKE_CFLAGS -= -fno-exceptions
-         QMAKE_CXXFLAGS -= -fno-exceptions
-         QMAKE_LFLAGS -= -fno-exceptions
-diff -Naur a/tools/configure/configure.pro b/tools/configure/configure.pro
---- a/tools/configure/configure.pro	2010-05-04 02:43:18.000000000 +0200
-+++ b/tools/configure/configure.pro	2010-06-05 23:51:28.123713258 +0200
-@@ -8,7 +8,7 @@
+         else if ((configCmdLine.at(i) == "-override-version") || (configCmdLine.at(i) == "-version-override")){
+@@ -2747,6 +2751,17 @@ void Configure::generateOutputVars()
+         }
+     if (!psqlLibs.isEmpty())
+         qmakeVars += QString("QT_LFLAGS_PSQL=") + psqlLibs.section("=", 1);
++
++    {
++        QStringList lflagsTDS;
++        if (!sybase.isEmpty())
++            lflagsTDS += QString("-L") + fixSeparators(sybase.section("=", 1) + "/lib");
++        if (!sybaseLibs.isEmpty())
++            lflagsTDS += sybaseLibs.section("=", 1);
++        if (!lflagsTDS.isEmpty())
++            qmakeVars += QString("QT_LFLAGS_TDS=") + lflagsTDS.join(" ");
++    }
++
+     if (!qmakeSql.isEmpty())
+         qmakeVars += QString("sql-drivers    += ") + qmakeSql.join(" ");
+     if (!qmakeSqlPlugins.isEmpty())
+diff --git a/tools/configure/configureapp.h b/tools/configure/configureapp.h
+index ff2ee8b..b3c07f7 100644
+--- a/tools/configure/configureapp.h
++++ b/tools/configure/configureapp.h
+@@ -134,6 +134,8 @@ private:
+     QStringList qmakeLibs;
+     QString opensslLibs;
+     QString psqlLibs;
++    QString sybase;
++    QString sybaseLibs;
  
- win32 : LIBS += -lole32 -ladvapi32
- win32-msvc.net | win32-msvc2* : QMAKE_CXXFLAGS += /EHsc
--win32-g++ : LIBS += -luuid
-+win32-g++* : LIBS += -luuid
+     QMap<QString,QString> licenseInfo;
+     QString outputLine;
+
+commit 8479bf5654d117322fdb7264b82f7fa9303da9aa
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Tue Aug 24 14:28:42 2010 +0200
+
+    scope fixes and clutter reduction for sql driver projects
+    
+    Add missing wildcard to scope where meant to include all
+    win32-g++ targets.
+    
+    There is no reason to ignore QT_LFLAGS_TDS and QT_LFLAGS_PSQL
+    in static builds. Via LIBS these may end up in QMAKE_PRL_LIBS
+    in QtSql.prl. Also, the isEmpty() tests on these is
+    redundant and only wastes time.
+    
+    Processing of QT_CFLAGS_PSQL should not depend on QT_LFLAGS_PSQL.
+    
+    It no longer seems appropriate to clean up "-lz" here in
+    case of zlib bundled in QtCore. It's reasonable to expect
+    QT_LFLAGS_PSQL to be ready after configure.
+    (cherry picked from commit f1ceaaf96bc658e04f83fd909ad93d1a4d0a2290)
+
+diff --git a/src/sql/drivers/psql/qsql_psql.pri b/src/sql/drivers/psql/qsql_psql.pri
+index 97db4be..6da3540 100644
+--- a/src/sql/drivers/psql/qsql_psql.pri
++++ b/src/sql/drivers/psql/qsql_psql.pri
+@@ -2,12 +2,9 @@ HEADERS += $$PWD/qsql_psql.h
+ SOURCES += $$PWD/qsql_psql.cpp
  
- win32-msvc* {
-     QMAKE_CFLAGS_RELEASE -= -MD
-diff -Naur a/tools/qvfb/qvfb.pro b/tools/qvfb/qvfb.pro
---- a/tools/qvfb/qvfb.pro	2010-05-04 02:43:18.000000000 +0200
-+++ b/tools/qvfb/qvfb.pro	2010-06-05 23:51:28.123713258 +0200
-@@ -42,12 +42,14 @@
- }
- 
- contains(QT_CONFIG, system-png) {
--	LIBS += -lpng
-+    unix|win32-g++*:LIBS_PRIVATE += -lpng
-+    win32:!win32-g++*:LIBS += libpng.lib
+ unix|win32-g++* {
+-    !static:!isEmpty(QT_LFLAGS_PSQL) {
+-        !contains(QT_CONFIG, system-zlib): QT_LFLAGS_PSQL -= -lz
+-        LIBS *= $$QT_LFLAGS_PSQL
+-        QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
+-    }
++    LIBS *= $$QT_LFLAGS_PSQL
+     !contains(LIBS, .*pq.*):LIBS += -lpq
++    QMAKE_CXXFLAGS *= $$QT_CFLAGS_PSQL
  } else {
- 	INCLUDEPATH     += $$QT_SOURCE_TREE/src/3rdparty/libpng
+     !contains(LIBS, .*pq.*):LIBS += -llibpq -lws2_32 -ladvapi32
  }
- contains(QT_CONFIG, system-zlib) {
--	LIBS += -lz
-+    unix|win32-g++*:LIBS_PRIVATE += -lz
-+    win32:!win32-g++*:LIBS += zdll.lib
- } else {
- 	INCLUDEPATH     += $$QT_SOURCE_TREE/src/3rdparty/zlib
- }
-diff -Naur a/translations/translations.pro b/translations/translations.pro
---- a/translations/translations.pro	2010-05-04 02:43:16.000000000 +0200
-+++ b/translations/translations.pro	2010-06-05 23:51:28.139709194 +0200
-@@ -3,7 +3,8 @@
- LRELEASE = $$QT_BUILD_TREE/bin/lrelease
- win32 {
-     LRELEASE ~= s,/,$$QMAKE_DIR_SEP,
--    LRELEASE = $${LRELEASE}.exe
-+    win32-g++-cross:LRELEASE = $${LRELEASE}
-+    else:LRELEASE = $${LRELEASE}.exe
- }
+diff --git a/src/sql/drivers/tds/qsql_tds.pri b/src/sql/drivers/tds/qsql_tds.pri
+index 037f793..521c06b 100644
+--- a/src/sql/drivers/tds/qsql_tds.pri
++++ b/src/sql/drivers/tds/qsql_tds.pri
+@@ -1,8 +1,8 @@
+ HEADERS += $$PWD/qsql_tds.h
+ SOURCES += $$PWD/qsql_tds.cpp
  
- contains(TEMPLATE_PREFIX, vc):vcproj = 1
+-unix|win32-g++: {
+-    !isEmpty(QT_LFLAGS_TDS):!static:LIBS *= $$QT_LFLAGS_TDS
++unix|win32-g++*: {
++    LIBS *= $$QT_LFLAGS_TDS
+     !contains(LIBS, .*sybdb.*):LIBS += -lsybdb
+     QMAKE_CXXFLAGS *= $$QT_CFLAGS_TDS
+ } else:win32-borland {
+
+commit 30a88f1f3beb2300de4d195459d48e26bd0afb43
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Sat Jun 5 23:41:04 2010 +0200
+
+    added missing INSTALLS to JavaScriptCore.pro for static libjscore
+    
+    For static build of Qt on win32-g++*, applications using webkit
+    link to libjscore.a.
+
+diff --git a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
+index 3f1ac86..602cb8d 100644
+--- a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
++++ b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
+@@ -14,6 +14,12 @@ QT -= gui
+ 
+ CONFIG += depend_includepath
+ 
++static:win32-g++* {
++    # applications must link to static libjscore
++    target.path = $$[QT_INSTALL_LIBS]
++    INSTALLS += target
++}
++
+ contains(QT_CONFIG, embedded):CONFIG += embedded
+ 
+ CONFIG(QTDIR_build) {

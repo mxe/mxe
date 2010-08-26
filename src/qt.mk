@@ -4,8 +4,8 @@
 # Qt
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.7.0-beta1
-$(PKG)_CHECKSUM := ae3c3b0fa6e50d333c4bcac7ecd8c50078273046
+$(PKG)_VERSION  := 4.7.0-rc1
+$(PKG)_CHECKSUM := d34f2c277ce153dc18d66b8c5bce405714f1cb4b
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
@@ -21,17 +21,18 @@ endef
 
 define $(PKG)_BUILD
 
+    cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
+
     # We prefer static mingw-cross-env system libs for static build:
     # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite
-    # There is no -system-gif option. NB -system-libmng will not link in shared build.
-    # Linking QtNetwork4.dll requires OPENSSL_LIBS as does linking apps with static Qt.
-    # Linking qsqlpsql4.dll plugin requires PSQL_LIBS as does linking apps with static Qt.
+    # There is no -system-gif option.
+    #
     # For shared Qt with qt-zlib, add -lQtCore4 to end of OPENSSL_LIBS to satisfy zlib dependency.
-    # -no-largefile does not really disable large file support, it just prevents defining
-    # QT_LARGEFILE_SUPPORT 64 which is not intended for win32.
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
+        SYBASE_LIBS="-lsybdb -liconv -lws2_32" \
+        MAKEFLAGS="-j '$(JOBS)'" \
         ./configure \
         -opensource \
         -confirm-license \
@@ -57,10 +58,10 @@ define $(PKG)_BUILD
         -nomake demos \
         -nomake docs \
         -nomake examples \
-        -plugin-sql-sqlite \
-        -plugin-sql-odbc \
-        -plugin-sql-psql \
-        -plugin-sql-tds \
+        -qt-sql-sqlite \
+        -qt-sql-odbc \
+        -qt-sql-psql \
+        -qt-sql-tds -D Q_USE_SYBASE \
         -system-zlib \
         -system-libpng \
         -system-libjpeg \
