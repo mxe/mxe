@@ -4,9 +4,9 @@
 # libevent
 PKG             := libevent
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.14a
-$(PKG)_CHECKSUM := 20347207ca00b8f148de3e2bf0942a804925c08e
-$(PKG)_SUBDIR   := libevent-1.4.14-stable
+$(PKG)_VERSION  := 1.4.14b
+$(PKG)_CHECKSUM := 4a834364c28ad652ddeb00b5f83872506eede7d4
+$(PKG)_SUBDIR   := libevent-$($(PKG)_VERSION)-stable
 $(PKG)_FILE     := libevent-$($(PKG)_VERSION)-stable.tar.gz
 $(PKG)_WEBSITE  := http://monkey.org/~provos/libevent/
 $(PKG)_URL      := http://monkey.org/~provos/$($(PKG)_FILE)
