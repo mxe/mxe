@@ -1107,3 +1107,45 @@ index 3f1ac86..602cb8d 100644
  contains(QT_CONFIG, embedded):CONFIG += embedded
  
  CONFIG(QTDIR_build) {
+
+commit 94675dbcdb6abcc9d3ed4be2bdd188af65970966
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Mon Aug 30 01:12:55 2010 +0200
+
+    fix -debug-and-release in configure script for cross target MinGW
+    
+    Fixed two issues in the configure script that prevented
+    -debug-and-release from working correctly:
+    
+    We now allow dual debug and release mode for MinGW.
+    
+    We follow configure.exe in *not* settting PRECOMPILED_DIR. This gives
+    qmake the freedom to put the debug and release precompiled headers in
+    separate directories.
+
+diff --git a/configure b/configure
+index e6b9476..a0cff96 100755
+--- a/configure
++++ b/configure
+@@ -2275,7 +2275,7 @@ fi
+ 
+ # detect build style
+ if [ "$CFG_DEBUG" = "auto" ]; then
+-    if [ "$PLATFORM_MAC" = "yes" ]; then
++    if [ "$PLATFORM_MAC" = "yes" -o "$XPLATFORM_MINGW" = "yes" ]; then
+         CFG_DEBUG_RELEASE=yes
+         CFG_DEBUG=yes
+     elif [ "$CFG_DEV" = "yes" ]; then
+@@ -6536,7 +6536,11 @@ if [ "$PLATFORM_QWS" = "yes" ]; then
+     QT_CONFIG="$QT_CONFIG embedded"
+     rm -f "src/.moc/$QMAKE_OUTDIR/allmoc.cpp" # needs remaking if config changes
+ fi
+-QMakeVar set PRECOMPILED_DIR ".pch/$QMAKE_OUTDIR"
++if [ "$XPLATFORM_MINGW" != "yes" ]; then
++    # Do not set this here for Windows. Let qmake do it so
++    # debug and release precompiled headers are kept separate.
++    QMakeVar set PRECOMPILED_DIR ".pch/$QMAKE_OUTDIR"
++fi
+ QMakeVar set OBJECTS_DIR ".obj/$QMAKE_OUTDIR"
+ QMakeVar set MOC_DIR ".moc/$QMAKE_OUTDIR"
+ QMakeVar set RCC_DIR ".rcc/$QMAKE_OUTDIR"
