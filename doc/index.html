@@ -486,6 +486,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <li><a href="#requirements-gentoo">Gentoo</a></li>
         <li><a href="#requirements-macos">MacOS</a></li>
         <li><a href="#requirements-opensolaris">Open Solaris</a></li>
+        <li><a href="#requirements-opensuse">openSUSE</a></li>
     </ul>
 
     <table>
@@ -577,7 +578,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>aptitude install -R autoconf automake bash bison bzip2 \
                     cmake flex g++ make sed libtool \
                     openssl libssl-dev patch perl \
-                    pkg-config scons unzip wget</pre>
+                    pkg-config scons unzip wget xz</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -589,7 +590,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.freebsd.org/ports/ -->
     <pre>pkg_add -r automake110 autoconf262 bash bison cmake \
            flex gmake gsed libtool openssl perl \
-           pkg-config scons unzip wget</pre>
+           pkg-config scons unzip wget xz</pre>
 
     <p>
     Ensure that /usr/local/bin preceeds /usr/bin in your $PATH:
@@ -615,7 +616,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
              flex gcc make sed libtool openssl patch \
-             perl pkgconfig scons unzip wget</pre>
+             perl pkgconfig scons unzip wget xz xz-lzma</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -631,7 +632,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
        sys-devel/make sys-apps/sed sys-devel/libtool \
        dev-libs/openssl sys-devel/patch dev-lang/perl \
        dev-util/pkgconfig dev-util/scons app-arch/unzip \
-       net-misc/wget</pre>
+       net-misc/wget xz-utils</pre>
 
     <p>
     There are
@@ -650,7 +651,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
                   gsed libtool openssl pkgconfig scons \
-                  wget gcc_select
+                  wget xz gcc_select
 sudo gcc_select gcc40</pre>
 
     <h3>MacOS X (≤ 10.5)</h3>
@@ -665,7 +666,7 @@ sudo gcc_select gcc40</pre>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
                   gmake gsed libtool openssl pkgconfig \
-                  scons wget</pre>
+                  scons wget xz</pre>
 
     <h3 id="requirements-opensolaris">Open Solaris 2009.06</h3>
 
@@ -735,6 +736,15 @@ cd ..</pre>
     However, recent versions of bash (4+) from this source
     will cause certain builds to fail.
     </p>
+
+    <h3 id="requirements-opensuse">openSUSE</h3>
+
+    <!-- http://software.opensuse.org/113/en -->
+    <pre>zypper install -R autoconf automake bash bison bzip2 \
+                    cmake flex gcc-c++ make sed libtool \
+                    openssl libopenssl-devel patch perl \
+                    pkg-config scons unzip wget xz</pre>
+
 </div>
 
 <div class="section">
