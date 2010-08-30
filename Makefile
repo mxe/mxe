@@ -32,11 +32,11 @@ PKGS := $(sort $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk))
 include $(TOP_DIR)/src/*.mk
 
 UNPACK_ARCHIVE = \
-    $(if $(filter %.tgz,    $(1)),tar xzf '$(1)', \
-    $(if $(filter %.tar.gz, $(1)),tar xzf '$(1)', \
-    $(if $(filter %.tar.bz2,$(1)),tar xjf '$(1)', \
-    $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar -x, \
-    $(if $(filter %.zip,    $(1)),unzip -q '$(1)', \
+    $(if $(filter %.tgz,     $(1)),tar xzf '$(1)', \
+    $(if $(filter %.tar.gz,  $(1)),tar xzf '$(1)', \
+    $(if $(filter %.tar.bz2, $(1)),tar xjf '$(1)', \
+    $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar x, \
+    $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
     $(error Unknown archive format: $(1)))))))
 
 UNPACK_PKG_ARCHIVE = \
