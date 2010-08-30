@@ -1149,3 +1149,26 @@ index e6b9476..a0cff96 100755
  QMakeVar set OBJECTS_DIR ".obj/$QMAKE_OUTDIR"
  QMakeVar set MOC_DIR ".moc/$QMAKE_OUTDIR"
  QMakeVar set RCC_DIR ".rcc/$QMAKE_OUTDIR"
+
+commit 7bdb22e090d0c74dafbd02f950b9c986c4cb4b2a
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Mon Aug 30 15:51:55 2010 +0200
+
+    fix import/export of symbol for static svg plugin
+    
+    Q_DECL_IMPORT is still __declspec(dllimport), which is unsuitable for
+    static code. Changed to Q_CORE_IMPORT.
+
+diff --git a/src/svg/qsvghandler.cpp b/src/svg/qsvghandler.cpp
+index d545440..bf19a88 100644
+--- a/src/svg/qsvghandler.cpp
++++ b/src/svg/qsvghandler.cpp
+@@ -74,7 +74,7 @@ QT_BEGIN_NAMESPACE
+ static const char *qt_inherit_text = "inherit";
+ #define QT_INHERIT QLatin1String(qt_inherit_text)
+ 
+-Q_DECL_IMPORT double qstrtod(const char *s00, char const **se, bool *ok);
++Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
+ 
+ // ======== duplicated from qcolor_p
+ 
