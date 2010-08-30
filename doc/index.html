@@ -339,15 +339,15 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <pre><span class="target">i686-pc-mingw32</span>-qmake
 make</pre>
     <p>
-    Since Qt 4.7-beta2, Qt in mingw-cross-env has the sql drivers (-qt-sql-*)
-    and image handlers for jpeg, tiff, gif, and mng <b>built-in</b> instead of as plugins.
-    To build the image handlers this way, we use backported patches that are expected to
-    appear in a 4.7 release, so this might be different from what you are used to.
+    If you are using Qt plugins
+    such as the svg or ico image handlers,
+    you should also have a look at the
+    <a href="http://qt.nokia.com/doc/plugins-howto.html#static-plugins">Qt documentation about static plugins</a>.
     </p>
     <p>
-    If you are using Qt plugins such as the svg or ico image handler plugins,
-    you still should have a look at the
-    <a href="http://qt.nokia.com/doc/plugins-howto.html#static-plugins">Qt documentation about static plugins</a>.
+    Note the sql drivers (-qt-sql-*)
+    and the image handlers for jpeg, tiff, gif and mng
+    are now built-in, <u>not</u> plugins.
     </p>
 
     <h3>Step 5c: Cross compile your Project (Makefile)</h3>
