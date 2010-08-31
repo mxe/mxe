@@ -1081,38 +1081,11 @@ index 037f793..521c06b 100644
      QMAKE_CXXFLAGS *= $$QT_CFLAGS_TDS
  } else:win32-borland {
 
-commit 30a88f1f3beb2300de4d195459d48e26bd0afb43
+commit 6e4d951c781925dc24dedc905c63f7a7aa325d1d
 Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Sat Jun 5 23:41:04 2010 +0200
+Date:   Mon Aug 30 10:27:12 2010 +0200
 
-    added missing INSTALLS to JavaScriptCore.pro for static libjscore
-    
-    For static build of Qt on win32-g++*, applications using webkit
-    link to libjscore.a.
-
-diff --git a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
-index 3f1ac86..602cb8d 100644
---- a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
-+++ b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
-@@ -14,6 +14,12 @@ QT -= gui
- 
- CONFIG += depend_includepath
- 
-+static:win32-g++* {
-+    # applications must link to static libjscore
-+    target.path = $$[QT_INSTALL_LIBS]
-+    INSTALLS += target
-+}
-+
- contains(QT_CONFIG, embedded):CONFIG += embedded
- 
- CONFIG(QTDIR_build) {
-
-commit 94675dbcdb6abcc9d3ed4be2bdd188af65970966
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Mon Aug 30 01:12:55 2010 +0200
-
-    fix -debug-and-release in configure script for cross target MinGW
+    fix MinGW cross compilation with -debug-and-release
     
     Fixed two issues in the configure script that prevented
     -debug-and-release from working correctly:
@@ -1122,6 +1095,10 @@ Date:   Mon Aug 30 01:12:55 2010 +0200
     We follow configure.exe in *not* settting PRECOMPILED_DIR. This gives
     qmake the freedom to put the debug and release precompiled headers in
     separate directories.
+    
+    Merge-request: 794
+    Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+    (cherry picked from commit b4a7eadb28a49ace84994dcff665b1cabae69652)
 
 diff --git a/configure b/configure
 index e6b9476..a0cff96 100755
@@ -1150,14 +1127,17 @@ index e6b9476..a0cff96 100755
  QMakeVar set MOC_DIR ".moc/$QMAKE_OUTDIR"
  QMakeVar set RCC_DIR ".rcc/$QMAKE_OUTDIR"
 
-commit 7bdb22e090d0c74dafbd02f950b9c986c4cb4b2a
+commit 6556a798f2803298a6884c53a9a15738015a00a4
 Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Mon Aug 30 15:51:55 2010 +0200
+Date:   Mon Aug 30 15:25:54 2010 +0200
 
-    fix import/export of symbol for static svg plugin
+    Fix static build on Windows with MinGW.
     
     Q_DECL_IMPORT is still __declspec(dllimport), which is unsuitable for
-    static code. Changed to Q_CORE_IMPORT.
+    static code.
+    
+    Reviewed-by: Thiago Macieira <thiago.macieira@nokia.com>
+    (cherry picked from commit edbc656bfa5069dd40f64ae3123d6370c2d86538)
 
 diff --git a/src/svg/qsvghandler.cpp b/src/svg/qsvghandler.cpp
 index d545440..bf19a88 100644
@@ -1172,3 +1152,30 @@ index d545440..bf19a88 100644
  
  // ======== duplicated from qcolor_p
  
+
+commit d8e44aea381dbdaa789f2dbb051cd8fc44ce0b31
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Sat Jun 5 23:41:04 2010 +0200
+
+    added missing INSTALLS to JavaScriptCore.pro for static libjscore
+    
+    For static build of Qt on win32-g++*, applications using webkit
+    link to libjscore.a.
+
+diff --git a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
+index 3f1ac86..602cb8d 100644
+--- a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
++++ b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
+@@ -14,6 +14,12 @@ QT -= gui
+ 
+ CONFIG += depend_includepath
+ 
++static:win32-g++* {
++    # applications must link to static libjscore
++    target.path = $$[QT_INSTALL_LIBS]
++    INSTALLS += target
++}
++
+ contains(QT_CONFIG, embedded):CONFIG += embedded
+ 
+ CONFIG(QTDIR_build) {
