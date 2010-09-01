@@ -24,9 +24,6 @@ define $(PKG)_BUILD
     cd '$(1)' && ./autogen.sh
     cd '$(1)' &&  libtoolize
 
-    # package uses winsock2.h, so it should link to ws2_32 instead of wsock32
-    $(SED) -i 's,wsock32,ws2_32,g' '$(1)'/configure
-
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
 
