@@ -4,8 +4,8 @@
 # IlmBase
 PKG             := ilmbase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.1
-$(PKG)_CHECKSUM := 143adc547be83c6df75831ae957eef4b2706c9c0
+$(PKG)_VERSION  := 1.0.2
+$(PKG)_CHECKSUM := fe6a910a90cde80137153e25e175e2b211beda36
 $(PKG)_SUBDIR   := ilmbase-$($(PKG)_VERSION)
 $(PKG)_FILE     := ilmbase-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.openexr.com/

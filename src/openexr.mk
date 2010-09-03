@@ -4,8 +4,8 @@
 # OpenEXR
 PKG             := openexr
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.1
-$(PKG)_CHECKSUM := b3650e6542f0e09daadb2d467425530bc8eec333
+$(PKG)_VERSION  := 1.7.0
+$(PKG)_CHECKSUM := 91d0d4e69f06de956ec7e0710fc58ec0d4c4dc2b
 $(PKG)_SUBDIR   := openexr-$($(PKG)_VERSION)
 $(PKG)_FILE     := openexr-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.openexr.com/
