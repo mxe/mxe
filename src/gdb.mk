@@ -3,8 +3,8 @@
 
 # gdb
 PKG             := gdb
-$(PKG)_VERSION  := 7.1
-$(PKG)_CHECKSUM := 417e2e637a296ea0e1cdddf56233311b8708fa19
+$(PKG)_VERSION  := 7.2
+$(PKG)_CHECKSUM := cae138dee0c11778c471a1d5e4b09e0ae08f9e9d
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gdb/
