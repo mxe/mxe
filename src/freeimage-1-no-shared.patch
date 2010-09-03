@@ -2,8 +2,8 @@ This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
 diff -urN a/Makefile.gnu b/Makefile.gnu
---- a/Makefile.gnu	2009-07-28 06:35:26.000000000 +0200
-+++ b/Makefile.gnu	2010-02-16 11:50:50.509897756 +0100
+--- a/Makefile.gnu	2010-04-29 11:16:50.000000000 +0200
++++ b/Makefile.gnu	2010-09-03 18:38:07.330351960 +0200
 @@ -9,7 +9,7 @@
  INSTALLDIR ?= $(DESTDIR)/usr/lib
  
@@ -28,16 +28,29 @@ diff -urN a/Makefile.gnu b/Makefile.gnu
  
  .c.o:
  	$(CC) $(CFLAGS) -c $< -o $@
-@@ -62,9 +61,8 @@
+@@ -62,12 +61,8 @@
  
  install:
  	install -d $(INCDIR) $(INSTALLDIR)
 -	install -m 644 -o root -g root $(HEADER) $(INCDIR)
 -	install -m 644 -o root -g root $(STATICLIB) $(INSTALLDIR)
 -	install -m 755 -o root -g root $(SHAREDLIB) $(INSTALLDIR)
+-	ln -sf $(SHAREDLIB) $(INSTALLDIR)/$(VERLIBNAME)
+-	ln -sf $(VERLIBNAME) $(INSTALLDIR)/$(LIBNAME)	
+-	ldconfig
 +	install -m 644 $(HEADER) $(INCDIR)
 +	install -m 644 $(STATICLIB) $(INSTALLDIR)
  
  clean:
  	rm -f core Dist/*.* u2dtmp* $(MODULES) $(STATICLIB) $(SHAREDLIB) $(LIBNAME)
-# Linux makefile for FreeImage
+diff -urN a/Source/OpenEXR/Imath/ImathMatrix.h b/Source/OpenEXR/Imath/ImathMatrix.h
+--- a/Source/OpenEXR/Imath/ImathMatrix.h	2010-07-17 12:48:40.000000000 +0200
++++ b/Source/OpenEXR/Imath/ImathMatrix.h	2010-09-03 18:38:37.138598422 +0200
+@@ -49,6 +49,7 @@
+ #include "ImathVec.h"
+ #include "ImathShear.h"
+ 
++#include <string.h>
+ #include <iostream>
+ #include <iomanip>
+ 
