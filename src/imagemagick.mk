@@ -4,8 +4,8 @@
 # ImageMagick
 PKG             := imagemagick
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.6.3-10
-$(PKG)_CHECKSUM := ebe25dba194ab37467a95111377309609993e4cc
+$(PKG)_VERSION  := 6.6.4-0
+$(PKG)_CHECKSUM := e0c2c3791594ab252408e10000bac5c575aaf4ad
 $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.imagemagick.org/

@@ -4,8 +4,8 @@
 # muParser
 PKG             := muparser
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.32
-$(PKG)_CHECKSUM := ff9e7be4408cafbbd6d9256095eaf8ebb12611b1
+$(PKG)_VERSION  := 1.34
+$(PKG)_CHECKSUM := d6d834d3ba2bd3c316c9b3070369d32701703f78
 $(PKG)_SUBDIR   := $(PKG)_v$(subst .,,$($(PKG)_VERSION))
 $(PKG)_FILE     := $(PKG)_v$(subst .,,$($(PKG)_VERSION)).tar.gz
 $(PKG)_WEBSITE  := http://muparser.sourceforge.net/
