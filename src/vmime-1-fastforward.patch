@@ -17230,3 +17230,31 @@ index cb5351a..010c007 100644
  }
  
  
+
+commit b7ec3accd3fa1b6dc7d7724aab968f860fe1930b
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Mon Sep 6 20:20:45 2010 +0000
+
+    Fixed extraction of root part body.
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@563 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/net/imap/IMAPMessage.cpp b/src/net/imap/IMAPMessage.cpp
+index adfef01..bbdba69 100644
+--- a/src/net/imap/IMAPMessage.cpp
++++ b/src/net/imap/IMAPMessage.cpp
+@@ -273,9 +273,12 @@ void IMAPMessage::extract(ref <const part> p, utility::outputStream& os,
+ 	if (peek) command << ".PEEK";
+ 	command << "[";
+ 
+-	if (section.str().empty() && headerOnly)
++	if (section.str().empty())
+ 	{
+-		command << "HEADER";
++		if (headerOnly)
++			command << "HEADER";
++		else
++			command << "TEXT";
+ 	}
+ 	else
+ 	{
