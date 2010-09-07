@@ -33,6 +33,7 @@ define $(PKG)_BUILD
         --disable-examples \
         --disable-esd \
         --disable-aalib \
+        --disable-x \
         --mandir='$(1)/sink' \
         --docdir='$(1)/sink' \
         --with-html-dir='$(1)/sink'
