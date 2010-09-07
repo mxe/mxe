@@ -17258,3 +17258,49 @@ index adfef01..bbdba69 100644
  	}
  	else
  	{
+
+commit 98843499d10a458f7029b054ceb3cda944e52e88
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Tue Sep 7 07:44:15 2010 +0000
+
+    Support filenames with charset (thanks to John van der Kamp, Zarafa).
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@564 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/parameter.cpp b/src/parameter.cpp
+index d923e68..91a7e5c 100644
+--- a/src/parameter.cpp
++++ b/src/parameter.cpp
+@@ -25,6 +25,7 @@
+ #include "vmime/parserHelpers.hpp"
+ 
+ #include "vmime/text.hpp"
++#include "vmime/encoding.hpp"
+ 
+ 
+ namespace vmime
+@@ -322,7 +323,13 @@ void parameter::generate(utility::outputStream& os, const string::size_type maxL
+ 		pos += name.length() + 1;
+ 	}
+ 
+-	bool extended = false;
++	// Check whether there is a recommended encoding for this charset.
++	// If so, the whole buffer will be encoded. Else, the number of
++	// 7-bit (ASCII) bytes in the input will be used to determine if
++	// we need to encode the whole buffer.
++	encoding recommendedEnc;
++	const bool alwaysEncode = m_value.getCharset().getRecommendedEncoding(recommendedEnc);
++	bool extended = alwaysEncode;
+ 
+ 	for (string::size_type i = 0 ; (i < value.length()) && (pos < maxLineLength - 4) ; ++i)
+ 	{
+@@ -454,7 +461,8 @@ void parameter::generate(utility::outputStream& os, const string::size_type maxL
+ 			default:
+ 
+ 				encode = (!parserHelpers::isPrint(c) ||
+-				          !parserHelpers::isAscii(c));
++				          !parserHelpers::isAscii(c) ||
++				          alwaysEncode);
+ 
+ 				break;
+ 			}
