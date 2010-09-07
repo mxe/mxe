@@ -17304,3 +17304,261 @@ index d923e68..91a7e5c 100644
  
  				break;
  			}
+
+commit a5a7e03fd144e6c46e5418f8bdd0e3f754bd980f
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Tue Sep 7 10:46:24 2010 +0000
+
+    Added an option to recognize inline objects as attachments.
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@565 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/attachmentHelper.cpp b/src/attachmentHelper.cpp
+index 65e8c88..c23ee95 100644
+--- a/src/attachmentHelper.cpp
++++ b/src/attachmentHelper.cpp
+@@ -36,7 +36,8 @@ namespace vmime
+ 
+ 
+ // static
+-bool attachmentHelper::isBodyPartAnAttachment(ref <const bodyPart> part)
++bool attachmentHelper::isBodyPartAnAttachment
++	(ref <const bodyPart> part, const unsigned int options)
+ {
+ 	try
+ 	{
+@@ -49,54 +50,63 @@ bool attachmentHelper::isBodyPartAnAttachment(ref <const bodyPart> part)
+ 		if (disp.getName() != contentDispositionTypes::INLINE)
+ 			return true;
+ 
+-		// If the Content-Disposition is 'inline' and there is no
+-		// Content-Id or Content-Location field, it may be an attachment
+-		if (!part->getHeader()->hasField(vmime::fields::CONTENT_ID) &&
+-		    !part->getHeader()->hasField(vmime::fields::CONTENT_LOCATION))
++		if ((options & INLINE_OBJECTS) == 0)
+ 		{
+-			// If this is the root part, it might not be an attachment
+-			if (part->getParentPart() == NULL)
+-				return false;
++			// If the Content-Disposition is 'inline' and there is no
++			// Content-Id or Content-Location field, it may be an attachment
++			if (!part->getHeader()->hasField(vmime::fields::CONTENT_ID) &&
++			    !part->getHeader()->hasField(vmime::fields::CONTENT_LOCATION))
++			{
++				// If this is the root part, it might not be an attachment
++				if (part->getParentPart() == NULL)
++					return false;
+ 
+-			return true;
++				return true;
++			}
++
++			return false;
+ 		}
+ 	}
+ 	catch (exceptions::no_such_field&)
+ 	{
+-		// No "Content-disposition" field: assume "attachment" if
+-		// type is not "text/..." or "multipart/...".
+-		mediaType type;
++		// Will try using Content-Type
++	}
+ 
+-		try
+-		{
+-			const contentTypeField& ctf = dynamic_cast<contentTypeField&>
+-				(*part->getHeader()->findField(fields::CONTENT_TYPE));
++	// Assume "attachment" if type is not "text/..." or "multipart/...".
++	mediaType type;
+ 
+-			type = *ctf.getValue().dynamicCast <const mediaType>();
+-		}
+-		catch (exceptions::no_such_field&)
+-		{
+-			// If this is the root part and no Content-Type field is present,
+-			// then this may not be a MIME message, so do not assume it is
+-			// an attachment
+-			if (part->getParentPart() == NULL)
+-				return false;
++	try
++	{
++		const contentTypeField& ctf = dynamic_cast<contentTypeField&>
++			(*part->getHeader()->findField(fields::CONTENT_TYPE));
+ 
+-			// No "Content-type" field: assume "application/octet-stream".
+-			type = mediaType(mediaTypes::APPLICATION,
+-			                 mediaTypes::APPLICATION_OCTET_STREAM);
+-		}
++		type = *ctf.getValue().dynamicCast <const mediaType>();
++	}
++	catch (exceptions::no_such_field&)
++	{
++		// If this is the root part and no Content-Type field is present,
++		// then this may not be a MIME message, so do not assume it is
++		// an attachment
++		if (part->getParentPart() == NULL)
++			return false;
++
++		// No "Content-type" field: assume "application/octet-stream".
++		type = mediaType(mediaTypes::APPLICATION,
++				     mediaTypes::APPLICATION_OCTET_STREAM);
++	}
+ 
+-		if (type.getType() != mediaTypes::TEXT &&
+-		    type.getType() != mediaTypes::MULTIPART)
++	if (type.getType() != mediaTypes::TEXT &&
++	    type.getType() != mediaTypes::MULTIPART)
++	{
++		if ((options & INLINE_OBJECTS) == 0)
+ 		{
+ 			// If a "Content-Id" field is present, it might be an
+ 			// embedded object (MHTML messages)
+ 			if (part->getHeader()->hasField(vmime::fields::CONTENT_ID))
+ 				return false;
+-
+-			return true;
+ 		}
++
++		return true;
+ 	}
+ 
+ 	return false;
+@@ -104,10 +114,10 @@ bool attachmentHelper::isBodyPartAnAttachment(ref <const bodyPart> part)
+ 
+ 
+ // static
+-ref <const attachment>
+-	attachmentHelper::getBodyPartAttachment(ref <const bodyPart> part)
++ref <const attachment> attachmentHelper::getBodyPartAttachment
++	(ref <const bodyPart> part, const unsigned int options)
+ {
+-	if (!isBodyPartAnAttachment(part))
++	if (!isBodyPartAnAttachment(part, options))
+ 		return NULL;
+ 
+ 	mediaType type;
+@@ -140,22 +150,24 @@ ref <const attachment>
+ 
+ // static
+ const std::vector <ref <const attachment> >
+-	attachmentHelper::findAttachmentsInMessage(ref <const message> msg)
++	attachmentHelper::findAttachmentsInMessage
++		(ref <const message> msg, const unsigned int options)
+ {
+-	return findAttachmentsInBodyPart(msg);
++	return findAttachmentsInBodyPart(msg, options);
+ }
+ 
+ 
+ // static
+ const std::vector <ref <const attachment> >
+-	attachmentHelper::findAttachmentsInBodyPart(ref <const bodyPart> part)
++	attachmentHelper::findAttachmentsInBodyPart
++		(ref <const bodyPart> part, const unsigned int options)
+ {
+ 	std::vector <ref <const attachment> > atts;
+ 
+ 	// Test this part
+-	if (isBodyPartAnAttachment(part))
++	if (isBodyPartAnAttachment(part, options))
+ 	{
+-		atts.push_back(getBodyPartAttachment(part));
++		atts.push_back(getBodyPartAttachment(part, options));
+ 	}
+ 	// Find in sub-parts
+ 	else
+@@ -165,7 +177,7 @@ const std::vector <ref <const attachment> >
+ 		for (int i = 0 ; i < bdy->getPartCount() ; ++i)
+ 		{
+ 			std::vector <ref <const attachment> > partAtts =
+-				findAttachmentsInBodyPart(bdy->getPartAt(i));
++				findAttachmentsInBodyPart(bdy->getPartAt(i), options);
+ 
+ 			std::copy(partAtts.begin(), partAtts.end(), std::back_inserter(atts));
+ 		}
+diff --git a/vmime/attachmentHelper.hpp b/vmime/attachmentHelper.hpp
+index 3ce86c8..a383367 100644
+--- a/vmime/attachmentHelper.hpp
++++ b/vmime/attachmentHelper.hpp
+@@ -30,10 +30,6 @@
+ #include "vmime/attachment.hpp"
+ #include "vmime/message.hpp"
+ 
+-#if VMIME_HAVE_MESSAGING_FEATURES
+-	#include "vmime/net/message.hpp"
+-#endif
+-
+ 
+ namespace vmime
+ {
+@@ -45,31 +41,57 @@ class attachmentHelper
+ {
+ public:
+ 
++	/** Options for use with the following functions:
++	  *     findAttachmentsInMessage,
++	  *     getBodyPartAttachment,
++	  * and isBodyPartAnAttachment.
++	  */
++	enum FindOptions
++	{
++		INLINE_OBJECTS = (1 << 0)        /**< Recognize and return inline objects. The aim is to
++		                                      consider MHTML objects (parts with a "Content-Id" or
++		                                      a "Content-Location", such as inline images) as attachments. */
++	};
++
+ 	/** Test whether a body part is an attachment.
+ 	  *
+ 	  * @param part message part to test
++	  * @param options search options (see FindOptions)
+ 	  * @return true if the part is an attachment, false otherwise
+ 	  */
+-	static bool isBodyPartAnAttachment(ref <const bodyPart> part);
++	static bool isBodyPartAnAttachment(ref <const bodyPart> part, const unsigned int options = 0);
+ 
+ 	/** Return attachment information in the specified body part.
+ 	  * If the specified body part does not contain attachment
+ 	  * information (ie. is not an attachment), NULL is returned.
+ 	  *
+ 	  * @param part message part in which to search
++	  * @param options search options (see FindOptions)
+ 	  * @return attachment found in the part, or NULL
+ 	  */
+ 	static ref <const attachment>
+-		getBodyPartAttachment(ref <const bodyPart> part);
++		getBodyPartAttachment(ref <const bodyPart> part, const unsigned int options = 0);
++
++	/** Find all attachments contained in the specified part
++	  * and all its children parts.
++	  * This is simply a recursive call to getBodyPartAttachment().
++	  *
++	  * @param part part in which to search
++	  * @param options search options (see FindOptions)
++	  * @return a list of attachments found
++	  */
++	static const std::vector <ref <const attachment> >
++		findAttachmentsInBodyPart(ref <const bodyPart> part, const unsigned int options = 0);
+ 
+ 	/** Find all attachments contained in the specified message.
+ 	  * This is simply a recursive call to getBodyPartAttachment().
+ 	  *
+ 	  * @param msg message in which to search
++	  * @param options search options (see FindOptions)
+ 	  * @return a list of attachments found
+ 	  */
+ 	static const std::vector <ref <const attachment> >
+-		findAttachmentsInMessage(ref <const message> msg);
++		findAttachmentsInMessage(ref <const message> msg, const unsigned int options = 0);
+ 
+ 	/** Add an attachment to the specified message.
+ 	  *
+@@ -87,9 +109,6 @@ public:
+ 
+ protected:
+ 
+-	static const std::vector <ref <const attachment> >
+-		findAttachmentsInBodyPart(ref <const bodyPart> part);
+-
+ 	static ref <bodyPart> findBodyPart
+ 		(ref <bodyPart> part, const mediaType& type);
+ };
