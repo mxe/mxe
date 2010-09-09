@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/liblo/liblo/$($(PKG)_VER
 $(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/liblo/files/liblo/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/liblo/files/) | \
     $(SED) -n 's,.*liblo-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

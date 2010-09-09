@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xmlwrapp/xmlwrapp/$($(PK
 $(PKG)_DEPS     := gcc libxml2 libxslt
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/xmlwrapp/files/xmlwrapp/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/xmlwrapp/files/) | \
     $(SED) -n 's,.*xmlwrapp-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

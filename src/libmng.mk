@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libmng/libmng-devel/$($(
 $(PKG)_DEPS     := gcc zlib jpeg
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libmng/files/libmng-devel/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libmng/files/) | \
     $(SED) -n 's,.*libmng-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

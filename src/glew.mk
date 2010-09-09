@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/glew/glew/$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/glew/files/glew/?sort=date&sortdir=desc' | \
+    wget -q -O- 'http://sourceforge.net/projects/glew/files/?sort=date&sortdir=desc' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusb-win32/libusb-win3
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libusb-win32/files/) | \
     $(SED) -n 's,.*libusb-win32-src-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

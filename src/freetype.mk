@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$($(P
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/freetype/files/freetype2/?sort=date&sortdir=desc' | \
+    wget -q -O- 'http://sourceforge.net/projects/freetype/files/?sort=date&sortdir=desc' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

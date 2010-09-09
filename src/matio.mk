@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/matio/files/matio/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/matio/files/) | \
     $(SED) -n 's,.*matio-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

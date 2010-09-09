@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/id3lib/id3lib/$($(PKG)_V
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/id3lib/files/id3lib/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/id3lib/files/) | \
     $(SED) -n 's,.*id3lib-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

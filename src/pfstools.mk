@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc openexr tiff imagemagick
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/pfstools/files/pfstools/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/pfstools/files/) | \
     $(SED) -n 's,.*pfstools-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

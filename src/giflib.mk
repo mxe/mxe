@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/giflib/giflib 4.x/giflib
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/giflib/files/giflib 4.x/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/giflib/files/) | \
     $(SED) -n 's,.*giflib-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

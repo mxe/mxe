@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/expat/expat/$($(PKG)_VER
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/expat/files/expat/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/expat/files/) | \
     $(SED) -n 's,.*expat-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

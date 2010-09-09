@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libdnet/libdnet/libdnet-
 $(PKG)_DEPS     := gcc winpcap
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libdnet/files/libdnet/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libdnet/files/) | \
     $(SED) -n 's,.*libdnet-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

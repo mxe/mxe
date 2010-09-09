@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/muparser/muparser/Versio
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/muparser/files/muparser/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/muparser/files/) | \
     $(SED) -n 's,.*muparser_v\([0-9]\)\([^>]*\)\.tar.*,\1.\2,p' | \
     tail -1
 endef
