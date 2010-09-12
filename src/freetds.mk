@@ -40,6 +40,5 @@ define $(PKG)_BUILD
         --enable-sspi \
         --disable-threadsafe \
         --with-tdsver=8.0
-    cd '$(1)' && chmod +x doc/txt2man
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install man_MANS=
 endef
