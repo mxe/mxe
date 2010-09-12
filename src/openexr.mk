@@ -22,7 +22,7 @@ endef
 define $(PKG)_BUILD
     # unpack and build a native version of ilmbase
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,ilmbase)
-    cd '$(1)/$(ilmbase_SUBDIR)' && ./configure \
+    cd '$(1)/$(ilmbase_SUBDIR)' && $(SHELL) ./configure \
         --disable-shared \
         --prefix='$(1)/ilmbase' \
         --enable-threading=no \

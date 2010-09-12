@@ -29,7 +29,7 @@ define $(PKG)_BUILD
     echo '/* disabled */' > '$(1)/IlmThread/IlmThreadSemaphorePosixCompat.cpp'
     # Because of the previous changes, '--disable-threading' will not disable
     # threading. It will just disable the unwanted check for pthread.
-    cd '$(1)' && ./configure \
+    cd '$(1)' && $(SHELL) ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
