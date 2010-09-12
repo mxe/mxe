@@ -26,7 +26,8 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(1)/ilmbase' \
         --enable-threading=no \
-        --disable-posix-sem
+        --disable-posix-sem \
+        CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)/$(ilmbase_SUBDIR)' -j '$(JOBS)' install \
         bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     # wine confuses the cross-compiling detection, so set it explicitly
