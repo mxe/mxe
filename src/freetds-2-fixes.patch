@@ -1,0 +1,18 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://lists.ibiblio.org/pipermail/freetds/2010q3/026273.html
+
+diff -ur orig/configure.ac new/configure.ac
+--- orig/configure.ac	2010-09-13 22:54:42.000000000 +1000
++++ new/configure.ac	2010-09-13 22:56:35.000000000 +1000
+@@ -12,7 +12,7 @@
+ # ------------------------------------------------------------
+ # Initialization
+ # ------------------------------------------------------------
+-AC_INIT(FreeTDS, 0.83.dev.esyscmd(echo -n $(date +"%Y%m%d")))
++AC_INIT(FreeTDS, 0.83.dev.esyscmd(printf $(date +"%Y%m%d")))
+ AC_CONFIG_SRCDIR(src/dblib/dblib.c)
+ AC_PREREQ(2.53)
+ AC_REVISION($Revision: 1.55 $)
