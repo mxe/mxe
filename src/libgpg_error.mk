@@ -4,8 +4,8 @@
 # libgpg-error
 PKG             := libgpg_error
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8
-$(PKG)_CHECKSUM := f5cf677a7cd684645feaa9704d09eb5cd6d97e8a
+$(PKG)_VERSION  := 1.9
+$(PKG)_CHECKSUM := 6836579e42320b057a2372bbcd0325130fe2561e
 $(PKG)_SUBDIR   := libgpg-error-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgpg-error-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := ftp://ftp.gnupg.org/gcrypt/libgpg-error/
@@ -19,6 +19,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./autogen.sh
+
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
