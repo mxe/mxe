@@ -3,7 +3,7 @@
 
 # GLibmm
 PKG             := glibmm
-$(PKG)_IGNORE   :
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.24.2
 $(PKG)_CHECKSUM := df5f22d2c40ebdf097ecdb4a7dfeef70d1ca24e7
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
@@ -29,7 +29,8 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         CXX='$(TARGET)-c++' \
-        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
+        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+	     MAKE=$(MAKE)
     $(MAKE) -C '$(1)/gio/src' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
     $(MAKE) -C '$(1)'         -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

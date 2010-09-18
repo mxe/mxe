@@ -3,7 +3,7 @@
 
 # libsigc++
 PKG             := libsigc++
-$(PKG)_IGNORE   :
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.8
 $(PKG)_CHECKSUM := c26f57110629c16c0b5a873346b7c1cf0edc9c5e
 $(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
@@ -29,6 +29,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         CXX='$(TARGET)-c++' \
-        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
+        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+	     MAKE=$(MAKE)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
