@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/cunit/CUnit/$($(PKG)_VER
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/cunit/files/cunit/) | \
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/cunit/files/) | \
     $(SED) -n 's,.*CUnit-\([0-9][^>]*\)-src\.tar.*,\1,p' | \
     tail -1
 endef
