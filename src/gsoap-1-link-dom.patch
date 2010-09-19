@@ -1,10 +1,13 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-diff -urN a/gsoap/Makefile.am b/gsoap/Makefile.am
---- a/gsoap/Makefile.am	2009-11-07 21:07:06.000000000 +0100
-+++ b/gsoap/Makefile.am	2010-01-22 21:33:36.000000000 +0100
-@@ -31,22 +31,26 @@
+This patch has been taken from:
+http://sourceforge.net/tracker/index.php?func=detail&aid=2937534&group_id=52781&atid=468023
+
+diff --git a/gsoap/Makefile.am b/gsoap/Makefile.am
+--- a/gsoap/Makefile.am
++++ b/gsoap/Makefile.am
+@@ -31,22 +31,26 @@ stdsoap2_ssl.c: stdsoap2.cpp
  stdsoap2_ssl_cpp.cpp: stdsoap2.cpp
  	$(LN_S) -f $(srcdir)/stdsoap2.cpp stdsoap2_ssl_cpp.cpp
  
@@ -26,12 +29,11 @@ diff -urN a/gsoap/Makefile.am b/gsoap/Makefile.am
 -libgsoapck___a_SOURCES = stdsoap2_ck_cpp.cpp
 +libgsoapck___a_SOURCES = stdsoap2_ck_cpp.cpp dom_cpp.cpp
  libgsoapck___a_CXXFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform) -DWITH_COOKIES
--libgsoapssl_a_SOURCES = stdsoap2_ssl.c
-+libgsoapssl_a_SOURCES = stdsoap2_ssl.c dom.c
- libgsoapssl_a_CFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform) -DWITH_OPENSSL -DWITH_DOM -DWITH_GZIP
--libgsoapssl___a_SOURCES = stdsoap2_ssl_cpp.cpp
+ libgsoapssl_a_SOURCES = stdsoap2_ssl.c dom.c
+ libgsoapssl_a_CFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform) $(WSDL2H_EXTRA_FLAGS) -DWITH_DOM
+-libgsoapssl___a_SOURCES = stdsoap2_ssl_cpp.cpp dom.cpp
 +libgsoapssl___a_SOURCES = stdsoap2_ssl_cpp.cpp dom_cpp.cpp
- libgsoapssl___a_CXXFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform) -DWITH_OPENSSL -DWITH_DOM -DWITH_GZIP
+ libgsoapssl___a_CXXFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform) $(WSDL2H_EXTRA_FLAGS) -DWITH_DOM
  
 -BUILT_SOURCES = stdsoap2_cpp.cpp $(lib_LIBRARIES)
 +BUILT_SOURCES = stdsoap2_cpp.cpp dom_cpp.cpp $(lib_LIBRARIES)
