@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 2.20.3
 $(PKG)_CHECKSUM := ad53f52f18cc3021b7fd6cd06f965471039d5333
 $(PKG)_SUBDIR   := gtkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.gtk.org/
+$(PKG)_WEBSITE  := http://www.gtkmm.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gtk libsigc++ pangomm cairomm atkmm
 
@@ -27,6 +27,6 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-	     MAKE=$(MAKE)
+        MAKE=$(MAKE)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

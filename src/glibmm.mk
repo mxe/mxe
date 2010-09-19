@@ -8,15 +8,14 @@ $(PKG)_VERSION  := 2.24.2
 $(PKG)_CHECKSUM := df5f22d2c40ebdf097ecdb4a7dfeef70d1ca24e7
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.gtk.org/
+$(PKG)_WEBSITE  := http://www.gtkmm.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := glib libsigc++
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/glibmm/refs/tags' | \
     grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>glibmm-*\([0-9][^<]*\)<.*,\1,p' | \
-    grep -v '^2\.24\.' | \
+    $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
     head -1
 endef
 
@@ -30,7 +29,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-	     MAKE=$(MAKE)
+        MAKE=$(MAKE)
     $(MAKE) -C '$(1)/gio/src' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
     $(MAKE) -C '$(1)'         -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

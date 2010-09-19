@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 1.8.4
 $(PKG)_CHECKSUM := fdea579f406261881a0f4f6242a3980aecef382d
 $(PKG)_SUBDIR   := cairomm-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairomm-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://cairographics.org/
+$(PKG)_WEBSITE  := http://cairographics.org/cairomm/
 $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cairo libsigc++
 
@@ -24,6 +24,6 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-	     MAKE=$(MAKE)
+        MAKE=$(MAKE)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
