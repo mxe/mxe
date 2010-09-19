@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := pangomm-$($(PKG)_VERSION)
 $(PKG)_FILE     := pangomm-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.pango.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pangomm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := cairomm glibmm pango
+$(PKG)_DEPS     := gcc cairomm glibmm pango
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/pangomm/refs/tags' | \

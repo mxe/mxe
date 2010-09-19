@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtkmm.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := glib libsigc++
+$(PKG)_DEPS     := gcc glib libsigc++
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/glibmm/refs/tags' | \

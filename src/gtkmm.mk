@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gtkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtkmm.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gtk libsigc++ pangomm cairomm atkmm
+$(PKG)_DEPS     := gcc gtk libsigc++ pangomm cairomm atkmm
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/gtkmm/refs/tags' | \

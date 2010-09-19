@@ -580,9 +580,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>aptitude install -R autoconf automake bash bison bzip2 \
-                    cmake flex g++ make sed libtool openssl\
-                    libssl-dev libxml-parser-perl patch perl \
-                    pkg-config scons unzip wget xz</pre>
+                    cmake flex g++ make sed libtool openssl \
+                    libssl-dev libxml-parser-perl patch \
+                    perl pkg-config scons unzip wget xz</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -636,8 +636,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
        dev-util/cmake sys-devel/flex sys-devel/gcc \
        sys-devel/make sys-apps/sed sys-devel/libtool \
        dev-libs/openssl sys-devel/patch dev-lang/perl \
-       dev-perl/XML-Parser dev-util/pkgconfig dev-util/scons \
-       app-arch/unzip net-misc/wget app-arch/xz-utils</pre>
+       dev-perl/XML-Parser dev-util/pkgconfig \
+       dev-util/scons app-arch/unzip net-misc/wget \
+       app-arch/xz-utils</pre>
 
     <p>
     There are
@@ -690,8 +691,8 @@ sudo gcc_select gcc40</pre>
     <!-- http://pkg.opensolaris.org/release/en/search.shtml -->
     <pre>pfexec pkg install SUNWgnu-automake-110 SUNWbison SUNWcmake \
                    SUNWflexlex SUNWgcc SUNWgmake SUNWgsed \
-                   SUNWgzip SUNWlibtool SUNWlibm SUNWopenssl \
-                   SUNWgpch SUNWperl-xml-parser \
+                   SUNWgzip SUNWlibtool SUNWlibm \
+                   SUNWopenssl SUNWgpch SUNWperl-xml-parser \
                    SUNWgnome-common-devel SUNWunzip SUNWwget</pre>
 
     <p>
