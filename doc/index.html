@@ -551,6 +551,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="http://search.cpan.org/dist/XML-Parser/Parser.pm">Perl XML::Parser</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="http://pkg-config.freedesktop.org/">Pkg-config</a></td>
         <td>≥ 0.16</td>
     </tr>
@@ -576,8 +580,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>aptitude install -R autoconf automake bash bison bzip2 \
-                    cmake flex g++ make sed libtool \
-                    openssl libssl-dev patch perl \
+                    cmake flex g++ make sed libtool openssl\
+                    libssl-dev libxml-parser-perl patch perl \
                     pkg-config scons unzip wget xz</pre>
 
     <p>
@@ -590,7 +594,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.freebsd.org/ports/ -->
     <pre>pkg_add -r automake110 autoconf262 bash bison cmake \
            flex gmake gsed libtool openssl patch perl \
-           pkg-config scons unzip wget</pre>
+           p5-XML-Parser pkg-config scons unzip wget</pre>
 
     <p>
     Ensure that /usr/local/bin preceeds /usr/bin in your $PATH:
@@ -616,7 +620,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
              flex gcc make sed libtool openssl patch \
-             perl pkgconfig scons unzip wget xz xz-lzma</pre>
+             perl perl-xml-parser pkgconfig scons unzip \
+             wget xz xz-lzma</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -631,8 +636,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
        dev-util/cmake sys-devel/flex sys-devel/gcc \
        sys-devel/make sys-apps/sed sys-devel/libtool \
        dev-libs/openssl sys-devel/patch dev-lang/perl \
-       dev-util/pkgconfig dev-util/scons app-arch/unzip \
-       net-misc/wget xz-utils</pre>
+       dev-perl/XML-Parser dev-util/pkgconfig dev-util/scons \
+       app-arch/unzip net-misc/wget app-arch/xz-utils</pre>
 
     <p>
     There are
@@ -650,8 +655,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
-                  gsed libtool openssl pkgconfig scons \
-                  wget xz-devel gcc_select
+                  gsed libtool openssl p5-xml-parser \
+                  pkgconfig scons wget xz-devel gcc_select
 sudo gcc_select gcc40</pre>
 
     <h3>MacOS X (≤ 10.5)</h3>
@@ -665,8 +670,8 @@ sudo gcc_select gcc40</pre>
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
-                  gmake gsed libtool openssl pkgconfig \
-                  scons wget xz-devel</pre>
+                  gmake gsed libtool openssl p5-xml-parser \
+                  pkgconfig scons wget xz-devel</pre>
 
     <h3 id="requirements-opensolaris">Open Solaris 2009.06</h3>
 
@@ -683,12 +688,11 @@ sudo gcc_select gcc40</pre>
     that already ship with Solaris:
     </p>
     <!-- http://pkg.opensolaris.org/release/en/search.shtml -->
-    <pre>pfexec pkg install SUNWgnu-automake-110 SUNWbison \
-                   SUNWcmake SUNWflexlex SUNWgcc \
-                   SUNWgmake SUNWgsed SUNWgzip \
-                   SUNWlibtool SUNWlibm SUNWopenssl \
-                   SUNWgpch SUNWgnome-common-devel \
-                   SUNWunzip SUNWwget</pre>
+    <pre>pfexec pkg install SUNWgnu-automake-110 SUNWbison SUNWcmake \
+                   SUNWflexlex SUNWgcc SUNWgmake SUNWgsed \
+                   SUNWgzip SUNWlibtool SUNWlibm SUNWopenssl \
+                   SUNWgpch SUNWperl-xml-parser \
+                   SUNWgnome-common-devel SUNWunzip SUNWwget</pre>
 
     <p>
     and make Automake available:
@@ -741,9 +745,10 @@ cd ..</pre>
 
     <!-- http://software.opensuse.org/113/en -->
     <pre>zypper install -R autoconf automake bash bison bzip2 \
-                  cmake flex gcc-c++ gettext-tools make sed libtool \
-                  openssl libopenssl-devel patch perl \
-                  pkg-config scons unzip wget xz</pre>
+                  cmake flex gcc-c++ gettext-tools libtool \
+                  make openssl libopenssl-devel patch perl \
+                  perl-XML-Parser pkg-config scons sed \
+                  unzip wget xz</pre>
 
     <h3 id="requirements-opensuse64">openSUSE 11.3 x86_64 (additional)</h3>
     <pre>zypper install -R gcc-32bit glibc-devel-32bit \
