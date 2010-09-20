@@ -1,3 +1,6 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
 --- ./frontend/main.c.backup	2010-07-01 16:53:48.563042615 +0200
 +++ ./frontend/main.c	2010-07-01 16:54:03.379043126 +0200
 @@ -31,7 +31,6 @@

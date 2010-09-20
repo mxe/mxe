@@ -20,7 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-	--host='$(TARGET)' \
+        --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)'
