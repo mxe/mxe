@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_WEBSITE  := http://www.openscenegraph.org/
 $(PKG)_URL      := http://www.openscenegraph.org/downloads/stable_releases/$($(PKG)_SUBDIR)/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc curl giflib jpeg tiff libpng jasper openexr gdal freetype zlib xine-lib
+$(PKG)_DEPS     := gcc curl ffmpeg freetype gdal giflib jasper jpeg libpng openexr tiff xine-lib zlib 
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.openscenegraph.org/projects/osg/browser/OpenSceneGraph/tags?order=date&desc=1' | \
@@ -29,6 +29,7 @@ define $(PKG)_BUILD
         -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY           \
         -DCMAKE_C_COMPILER='$(PREFIX)/bin/$(TARGET)-gcc'   \
         -DCMAKE_CXX_COMPILER='$(PREFIX)/bin/$(TARGET)-g++' \
+        -DCMAKE_CXX_FLAGS=-D__STDC_CONSTANT_MACROS         \
         -DCMAKE_INCLUDE_PATH='$(PREFIX)/$(TARGET)/include' \
         -DCMAKE_LIB_PATH='$(PREFIX)/$(TARGET)/lib'         \
         -DPKG_CONFIG_EXECUTABLE=$(TARGET)-pkg-config       \
