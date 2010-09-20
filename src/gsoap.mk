@@ -4,8 +4,8 @@
 # gSOAP
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.7.17
-$(PKG)_CHECKSUM := 573a08ab7d8ca2d970158911482c308484fdd5ed
+$(PKG)_VERSION  := 2.8.0
+$(PKG)_CHECKSUM := 516559068a61a47b438852f8cb7ad15a4b26c162
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
@@ -34,7 +34,7 @@ define $(PKG)_BUILD
 
     # Native build to get tools wsdl2h and soapcpp2
     cd '$(1)' && ./configure \
-        --enable-openssl
+        --enable-gnutls
 
     # Parallel bulds can fail
     $(MAKE) -C '$(1)'/gsoap -j 1
