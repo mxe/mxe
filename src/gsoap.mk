@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openssl
+$(PKG)_DEPS     := gcc openssl gnutls
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/gsoap2/files/) | \
@@ -33,8 +33,7 @@ define $(PKG)_BUILD
     cd '$(1)' && autoheader
 
     # Native build to get tools wsdl2h and soapcpp2
-    cd '$(1)' && ./configure \
-        --enable-gnutls
+    cd '$(1)' && ./configure
 
     # Parallel bulds can fail
     $(MAKE) -C '$(1)'/gsoap -j 1
@@ -50,7 +49,8 @@ define $(PKG)_BUILD
     # http://groups.google.com/group/ikarus-users/browse_thread/thread/fd1d101eac32633f
     cd '$(1)' && ac_cv_func_malloc_0_nonnull=yes ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --host='$(TARGET)'
+        --host='$(TARGET)' \
+        --enable-gnutls
 
     # Building for mingw requires native soapcpp2
     ln -s '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)'/gsoap/src/soapcpp2
