@@ -1,0 +1,13 @@
+diff -Nru libvpx-0.9.1-orig/configure libvpx-0.9.1/configure
+--- libvpx-0.9.1-orig/configure	2010-07-09 17:10:49.771062118 +0200
++++ libvpx-0.9.1/configure	2010-07-09 17:16:28.583061657 +0200
+@@ -437,9 +437,6 @@
+         }
+     fi
+     check_header stdio.h || die "Unable to invoke compiler: ${CC} ${CFLAGS}"
+-    check_ld <<EOF || die "Toolchain is unable to link executables"
+-int main(void) {return 0;}
+-EOF
+     # check system headers
+     check_header stdint.h
+     check_header pthread.h

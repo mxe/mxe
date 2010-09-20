@@ -1,0 +1,21 @@
+diff -Nru x264-snapshot-20100706-2245.orig/x264.c x264-snapshot-20100706-2245/x264.c
+--- x264-snapshot-20100706-2245.orig/x264.c	2010-07-07 09:33:15.555062464 +0200
++++ x264-snapshot-20100706-2245/x264.c	2010-07-07 09:33:45.155061361 +0200
+@@ -195,7 +195,7 @@
+     cli_opt_t opt;
+     int ret;
+ 
+-#if PTW32_STATIC_LIB
++#ifdef PTW32_STATIC_LIB
+     pthread_win32_process_attach_np();
+     pthread_win32_thread_attach_np();
+ #endif
+@@ -214,7 +214,7 @@
+ 
+     ret = Encode( &param, &opt );
+ 
+-#if PTW32_STATIC_LIB
++#ifdef PTW32_STATIC_LIB
+     pthread_win32_thread_detach_np();
+     pthread_win32_process_detach_np();
+ #endif
