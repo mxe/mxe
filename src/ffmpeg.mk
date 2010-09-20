@@ -19,10 +19,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-  
-    ln -sf $(PREFIX)/$(TARGET)/lib/xvidcore.a $(PREFIX)/$(TARGET)/lib/libxvidcore.a
-    ln -sf $(PREFIX)/$(TARGET)/bin/sdl-config $(PREFIX)/bin/$(TARGET)-sdl-config
- 
     cd '$(1)' && ./configure \
 	--cross-prefix='$(TARGET)'- \
 	--enable-cross-compile \
