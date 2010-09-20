@@ -50,6 +50,7 @@ CHECK_PKG_ARCHIVE = \
     [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1))`" ]
 
 DOWNLOAD_PKG_ARCHIVE = \
+    mkdir -p '$(PKG_DIR)' && \
     $(if $($(1)_URL_2), \
         wget -T 30 -t 3 -c -O '$(PKG_DIR)/$($(1)_FILE)' '$($(1)_URL)' \
         || wget -c -O '$(PKG_DIR)/$($(1)_FILE)' '$($(1)_URL_2)', \
@@ -71,7 +72,6 @@ download: $(addprefix download-,$(PKGS))
 define PKG_RULE
 .PHONY: download-$(1)
 download-$(1): $(addprefix download-,$($(1)_DEPS))
-	[ -d '$(PKG_DIR)' ] || mkdir -p '$(PKG_DIR)'
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
@@ -84,7 +84,6 @@ $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
                           $(addprefix $(PREFIX)/installed/,$($(1)_DEPS))
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
-	@[ -d '$(PKG_DIR)' ]              || mkdir -p '$(PKG_DIR)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
 	    rm -f '$(LOG_DIR)/$(1)-download'; \
