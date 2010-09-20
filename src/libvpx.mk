@@ -20,9 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && \
-	NM="i686-pc-mingw32-nm" \
-	STRIP="i686-pc-mingw32-strip" \
-	CC="i686-pc-mingw32-gcc" \
+	CROSS='$(TARGET)-' \
 	./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
 	--target=x86-win32-gcc \
