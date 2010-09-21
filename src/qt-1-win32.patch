@@ -4,7 +4,7 @@ See doc/index.html for further information.
 Commits backported (cherry-picked) from Qt 4.7 branch.
 http://qt.gitorious.org/qt
 
-commit b6d6681dc40ce34f231e74a63c13855b1e248aa1
+commit 0bbfa914abfa98b305bc989b77ad3a01d7129d42
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Wed Jul 7 12:05:35 2010 +0200
 
@@ -105,7 +105,7 @@ index 08a166b..ba40be5 100644
  HEADERS		= ../../../sql/drivers/tds/qsql_tds.h
  
 
-commit 51d53d80f5e3c4d53b02043b0e85968be097cb68
+commit d324d74123129f77c46e137f2ead8fab911eced4
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Thu Aug 26 22:06:23 2010 +0200
 
@@ -199,7 +199,7 @@ index c68442d..05e7265 100644
      SOURCES +=      drivers/sqlite/qsql_sqlite.cpp
  }
 
-commit c24f1ac5a184d25b137a3a66b3f6f4d123de4bbd
+commit 6dfa85665b11a8257201522b48612a113a8c2d44
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Wed Jul 7 12:05:36 2010 +0200
 
@@ -710,7 +710,7 @@ index 0000000..e2662ca
 +    LIBS *= -lNTWDBLIB
 +}
 
-commit f32bbfe1b713dacac6ee9b4d6ebb4561a2ca92c3
+commit a211bcb2a94906da3a8aace97e19fb980be427fc
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Wed Jul 7 12:05:37 2010 +0200
 
@@ -840,7 +840,7 @@ index e2662ca..c552ead 100644
      LIBS *= $(BCB)/lib/PSDK/NTWDBLIB.LIB
  } else {
 
-commit 72f49a70bb5a719e161aeceea986aac116c270d7
+commit b5f9c3336f58830f9398c66e655b766f49d63077
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Thu Jul 8 15:28:24 2010 +0200
 
@@ -869,7 +869,596 @@ index 3af5525..87cc0b1 100644
  contains(sql-drivers, sqlite2):include($$PWD/sqlite2/qsql_sqlite2.pri)
  contains(sql-drivers, sqlite):include($$PWD/sqlite/qsql_sqlite.pri)
 
-commit cc8386f6a7781ece721e9700ba2c290bb14c0d7d
+commit 61677afc848ccd92de60c3c6a2dab84f2b69350d
+Author: axis <qt-info@nokia.com>
+Date:   Wed Jul 21 16:23:43 2010 +0200
+
+    Merge branch 'raptorConfigurePatches' into 4.7-s60
+    
+    Conflicts:
+    	configure
+    	src/sql/drivers/drivers.pri
+    (cherry picked from commit ccfb67704285f60ce31bb05538f08ca6f32c6f1d)
+
+diff --git a/configure b/configure
+index bab70d3..1ddbb70 100755
+--- a/configure
++++ b/configure
+@@ -728,7 +728,7 @@ CFG_GLIB=auto
+ CFG_GSTREAMER=auto
+ CFG_QGTKSTYLE=auto
+ CFG_QS60STYLE=auto
+-CFG_LARGEFILE=yes
++CFG_LARGEFILE=auto
+ CFG_OPENSSL=auto
+ CFG_PTMALLOC=no
+ CFG_STL=auto
+@@ -3069,12 +3069,17 @@ fi
+ 
+ QMAKE_CONF_COMPILER=`getQMakeConf "$XQMAKESPEC" | grep "^QMAKE_CXX[^_A-Z0-9]" | sed "s,.* *= *\(.*\)$,\1," | tail -1`
+ TEST_COMPILER="$CXX"
++
+ [ -z "$TEST_COMPILER" ] && TEST_COMPILER=$QMAKE_CONF_COMPILER
+-if [ -z "$TEST_COMPILER" ]; then
+-    echo "ERROR: Cannot set the compiler for the configuration tests"
+-    exit 1
++if [ "$XPLATFORM" != "symbian-sbsv2" ]; then
++    #for Symbian we don't need this checking
++    if [ -z "$TEST_COMPILER" ]; then
++        echo "ERROR: Cannot set the compiler for the configuration tests"
++        exit 1
++    fi
+ fi
+ 
++
+ # auto-detect precompiled header support
+ if [ "$CFG_PRECOMPILE" = "auto" ]; then
+     if [ `echo "$CFG_MAC_ARCHS" | wc -w` -gt 1 ]; then
+@@ -3245,122 +3250,137 @@ if [ -z "$QT_INSTALL_PREFIX" ]; then
+ fi
+ QT_INSTALL_PREFIX=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_PREFIX"`
+ 
+-#docs
+-if [ -z "$QT_INSTALL_DOCS" ]; then #default
+-    if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
+-	if [ "$PLATFORM_MAC" = "yes" ]; then
+-	    QT_INSTALL_DOCS="/Developer/Documentation/Qt"
++if echo $XPLATFORM | grep symbian > /dev/null; then
++    [ -z "$QT_HOST_PREFIX" ] && QT_HOST_PREFIX="$QT_INSTALL_PREFIX"
++    [ -z "$QT_INSTALL_DOCS" ] && QT_INSTALL_DOCS=
++    [ -z "$QT_INSTALL_HEADERS" ] && QT_INSTALL_HEADERS=
++    [ -z "$QT_INSTALL_LIBS" ] && QT_INSTALL_LIBS=
++    [ -z "$QT_INSTALL_BINS" ] && QT_INSTALL_BINS=
++    [ -z "$QT_INSTALL_PLUGINS" ] && QT_INSTALL_PLUGINS="\\\\resource\\\\qt$QT_LIBINFIX\\\\plugins"
++    [ -z "$QT_INSTALL_IMPORTS" ] && QT_INSTALL_IMPORTS="\\\\resource\\\\qt$QT_LIBINFIX\\\\imports"
++    [ -z "$QT_INSTALL_DATA" ] && QT_INSTALL_DATA=
++    [ -z "$QT_INSTALL_TRANSLATIONS" ] && QT_INSTALL_TRANSLATIONS="\\\\resource\\\\qt$QT_LIBINFIX\\\\translations"
++    [ -z "$QT_INSTALL_SETTINGS" ] && QT_INSTALL_SETTINGS=
++    [ -z "$QT_INSTALL_EXAMPLES" ] && QT_INSTALL_EXAMPLES=
++    [ -z "$QT_INSTALL_DEMOS" ] && QT_INSTALL_DEMOS=
++else
++    #docs
++    if [ -z "$QT_INSTALL_DOCS" ]; then #default
++        if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
++	    if [ "$PLATFORM_MAC" = "yes" ]; then
++	        QT_INSTALL_DOCS="/Developer/Documentation/Qt"
++            fi
+         fi
+-    fi
+-    [ -z "$QT_INSTALL_DOCS" ] && QT_INSTALL_DOCS="$QT_INSTALL_PREFIX/doc" #fallback
++        [ -z "$QT_INSTALL_DOCS" ] && QT_INSTALL_DOCS="$QT_INSTALL_PREFIX/doc" #fallback
+ 
+-fi
+-QT_INSTALL_DOCS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_DOCS"`
++    fi
++    QT_INSTALL_DOCS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_DOCS"`
+ 
+-#headers
+-if [ -z "$QT_INSTALL_HEADERS" ]; then #default
+-    if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
+-	if [ "$PLATFORM_MAC" = "yes" ]; then
+-	    if [ "$CFG_FRAMEWORK" = "yes" ]; then
+-		QT_INSTALL_HEADERS=
++    #headers
++    if [ -z "$QT_INSTALL_HEADERS" ]; then #default
++        if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
++	    if [ "$PLATFORM_MAC" = "yes" ]; then
++	        if [ "$CFG_FRAMEWORK" = "yes" ]; then
++		    QT_INSTALL_HEADERS=
++                fi
+             fi
+         fi
+-    fi
+-    [ -z "$QT_INSTALL_HEADERS" ] && QT_INSTALL_HEADERS="$QT_INSTALL_PREFIX/include"
++        [ -z "$QT_INSTALL_HEADERS" ] && QT_INSTALL_HEADERS="$QT_INSTALL_PREFIX/include"
+ 
+-fi
+-QT_INSTALL_HEADERS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_HEADERS"`
++    fi
++    QT_INSTALL_HEADERS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_HEADERS"`
+ 
+-#libs
+-if [ -z "$QT_INSTALL_LIBS" ]; then #default
+-    if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
+-	if [ "$PLATFORM_MAC" = "yes" ]; then
+-	    if [ "$CFG_FRAMEWORK" = "yes" ]; then
+-		QT_INSTALL_LIBS="/Libraries/Frameworks"
++    #libs
++    if [ -z "$QT_INSTALL_LIBS" ]; then #default
++        if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
++	    if [ "$PLATFORM_MAC" = "yes" ]; then
++	        if [ "$CFG_FRAMEWORK" = "yes" ]; then
++		    QT_INSTALL_LIBS="/Libraries/Frameworks"
++                fi
+             fi
+         fi
++        [ -z "$QT_INSTALL_LIBS" ] && QT_INSTALL_LIBS="$QT_INSTALL_PREFIX/lib" #fallback
+     fi
+-    [ -z "$QT_INSTALL_LIBS" ] && QT_INSTALL_LIBS="$QT_INSTALL_PREFIX/lib" #fallback
+-fi
+-QT_INSTALL_LIBS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_LIBS"`
++    QT_INSTALL_LIBS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_LIBS"`
+ 
+-#bins
+-if [ -z "$QT_INSTALL_BINS" ]; then #default
+-    if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
+-	if [ "$PLATFORM_MAC" = "yes" ]; then
+-	    QT_INSTALL_BINS="/Developer/Applications/Qt"
++    #bins
++    if [ -z "$QT_INSTALL_BINS" ]; then #default
++        if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
++	    if [ "$PLATFORM_MAC" = "yes" ]; then
++	        QT_INSTALL_BINS="/Developer/Applications/Qt"
++            fi
+         fi
+-    fi
+-    [ -z "$QT_INSTALL_BINS" ] && QT_INSTALL_BINS="$QT_INSTALL_PREFIX/bin" #fallback
++        [ -z "$QT_INSTALL_BINS" ] && QT_INSTALL_BINS="$QT_INSTALL_PREFIX/bin" #fallback
+ 
+-fi
+-QT_INSTALL_BINS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_BINS"`
++    fi
++    QT_INSTALL_BINS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_BINS"`
+ 
+-#plugins
+-if [ -z "$QT_INSTALL_PLUGINS" ]; then #default
+-    if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
+-	if [ "$PLATFORM_MAC" = "yes" ]; then
+-	    QT_INSTALL_PLUGINS="/Developer/Applications/Qt/plugins"
++    #plugins
++    if [ -z "$QT_INSTALL_PLUGINS" ]; then #default
++        if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
++	    if [ "$PLATFORM_MAC" = "yes" ]; then
++	        QT_INSTALL_PLUGINS="/Developer/Applications/Qt/plugins"
++            fi
+         fi
++        [ -z "$QT_INSTALL_PLUGINS" ] && QT_INSTALL_PLUGINS="$QT_INSTALL_PREFIX/plugins" #fallback
+     fi
+-    [ -z "$QT_INSTALL_PLUGINS" ] && QT_INSTALL_PLUGINS="$QT_INSTALL_PREFIX/plugins" #fallback
+-fi
+-QT_INSTALL_PLUGINS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_PLUGINS"`
++    QT_INSTALL_PLUGINS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_PLUGINS"`
+ 
+-#imports
+-if [ -z "$QT_INSTALL_IMPORTS" ]; then #default
+-    if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
+-	if [ "$PLATFORM_MAC" = "yes" ]; then
+-	    QT_INSTALL_IMPORTS="/Developer/Applications/Qt/imports"
++    #imports
++    if [ -z "$QT_INSTALL_IMPORTS" ]; then #default
++        if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
++	    if [ "$PLATFORM_MAC" = "yes" ]; then
++	        QT_INSTALL_IMPORTS="/Developer/Applications/Qt/imports"
++            fi
+         fi
++        [ -z "$QT_INSTALL_IMPORTS" ] && QT_INSTALL_IMPORTS="$QT_INSTALL_PREFIX/imports" #fallback
+     fi
+-    [ -z "$QT_INSTALL_IMPORTS" ] && QT_INSTALL_IMPORTS="$QT_INSTALL_PREFIX/imports" #fallback
+-fi
+-QT_INSTALL_IMPORTS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_IMPORTS"`
++    QT_INSTALL_IMPORTS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_IMPORTS"`
+ 
+-#data
+-if [ -z "$QT_INSTALL_DATA" ]; then #default
+-    QT_INSTALL_DATA="$QT_INSTALL_PREFIX"
+-fi
+-QT_INSTALL_DATA=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_DATA"`
++    #data
++    if [ -z "$QT_INSTALL_DATA" ]; then #default
++        QT_INSTALL_DATA="$QT_INSTALL_PREFIX"
++    fi
++    QT_INSTALL_DATA=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_DATA"`
+ 
+-#translations
+-if [ -z "$QT_INSTALL_TRANSLATIONS" ]; then #default
+-    QT_INSTALL_TRANSLATIONS="$QT_INSTALL_PREFIX/translations"
+-fi
+-QT_INSTALL_TRANSLATIONS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_TRANSLATIONS"`
++    #translations
++    if [ -z "$QT_INSTALL_TRANSLATIONS" ]; then #default
++        QT_INSTALL_TRANSLATIONS="$QT_INSTALL_PREFIX/translations"
++    fi
++    QT_INSTALL_TRANSLATIONS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_TRANSLATIONS"`
+ 
+-#settings
+-if [ -z "$QT_INSTALL_SETTINGS" ]; then #default
+-    if [ "$PLATFORM_MAC" = "yes" ]; then
+-	QT_INSTALL_SETTINGS=/Library/Preferences/Qt
+-    else
+-	QT_INSTALL_SETTINGS=/etc/xdg
++    #settings
++    if [ -z "$QT_INSTALL_SETTINGS" ]; then #default
++        if [ "$PLATFORM_MAC" = "yes" ]; then
++	    QT_INSTALL_SETTINGS=/Library/Preferences/Qt
++        else
++	    QT_INSTALL_SETTINGS=/etc/xdg
++        fi
+     fi
+-fi
+-QT_INSTALL_SETTINGS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_SETTINGS"`
++    QT_INSTALL_SETTINGS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_SETTINGS"`
+ 
+-#examples
+-if [ -z "$QT_INSTALL_EXAMPLES" ]; then #default
+-    if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
+-	if [ "$PLATFORM_MAC" = "yes" ]; then
+-	    QT_INSTALL_EXAMPLES="/Developer/Examples/Qt"
++    #examples
++    if [ -z "$QT_INSTALL_EXAMPLES" ]; then #default
++        if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
++	    if [ "$PLATFORM_MAC" = "yes" ]; then
++	        QT_INSTALL_EXAMPLES="/Developer/Examples/Qt"
++            fi
+         fi
++        [ -z "$QT_INSTALL_EXAMPLES" ] && QT_INSTALL_EXAMPLES="$QT_INSTALL_PREFIX/examples" #fallback
+     fi
+-    [ -z "$QT_INSTALL_EXAMPLES" ] && QT_INSTALL_EXAMPLES="$QT_INSTALL_PREFIX/examples" #fallback
+-fi
+-QT_INSTALL_EXAMPLES=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_EXAMPLES"`
++    QT_INSTALL_EXAMPLES=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_EXAMPLES"`
+ 
+-#demos
+-if [ -z "$QT_INSTALL_DEMOS" ]; then #default
+-    if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
+-	if [ "$PLATFORM_MAC" = "yes" ]; then
+-	    QT_INSTALL_DEMOS="/Developer/Examples/Qt/Demos"
++    #demos
++    if [ -z "$QT_INSTALL_DEMOS" ]; then #default
++        if [ "$CFG_PREFIX_INSTALL" = "no" ]; then
++	    if [ "$PLATFORM_MAC" = "yes" ]; then
++	        QT_INSTALL_DEMOS="/Developer/Examples/Qt/Demos"
++            fi
+         fi
++        [ -z "$QT_INSTALL_DEMOS" ] && QT_INSTALL_DEMOS="$QT_INSTALL_PREFIX/demos"
+     fi
+-    [ -z "$QT_INSTALL_DEMOS" ] && QT_INSTALL_DEMOS="$QT_INSTALL_PREFIX/demos"
++    QT_INSTALL_DEMOS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_DEMOS"`
+ fi
+-QT_INSTALL_DEMOS=`"$relpath/config.tests/unix/makeabs" "$QT_INSTALL_DEMOS"`
+ 
+ #-------------------------------------------------------------------------------
+ # help - interactive parts of the script _after_ this section please
+@@ -4489,8 +4509,13 @@ if true; then ###[ '!' -f "$outpath/bin/qmake" ];
+     mv -f "$QMAKE_QCONFIG_H" "$QCONFIG_H"
+ 
+     #mkspecs/default is used as a (gasp!) default mkspec so QMAKESPEC needn't be set once configured
+-    rm -f mkspecs/default
+-    ln -s `echo $XQMAKESPEC | sed "s,^${relpath}/mkspecs/,,"` mkspecs/default
++    rm -rf mkspecs/default
++    if echo "$XPLATFORM" | grep "symbian-sbsv2" > /dev/null ; then
++#Link is not supported for Symbian build system
++        cp -a mkspecs/`echo $XQMAKESPEC | sed "s,^${relpath}/mkspecs/,,"` mkspecs/default
++    else
++        ln -s `echo $XQMAKESPEC | sed "s,^${relpath}/mkspecs/,,"` mkspecs/default
++    fi
+     # fix makefiles
+     for mkfile in GNUmakefile Makefile; do
+         EXTRA_LFLAGS=
+@@ -4720,6 +4745,10 @@ case "$XPLATFORM" in *symbian*)
+     QMakeVar set styles "windows s60"   #overwrite previous default
+     CFG_LIBFREETYPE=no
+ 
++    if [ "$CFG_LARGEFILE" = auto ]; then
++        CFG_LARGEFILE=no
++    fi
++
+     if test -z "$EPOCROOT"; then
+         echo "Please export EPOCROOT. It should point to the sdk install dir"
+         exit 1
+@@ -4744,15 +4773,24 @@ case "$XPLATFORM" in *symbian*)
+     )
+ 
+     # compile a simple main that uses printf
+-    if ! "$symbiantests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/symbian/simple "simple" $L_FLAGS $I_FLAGS $l_FLAGS
+-    then
+-        echo "Testing your compiler failed. Could not compile a simple application."
+-        echo "Fatal error; Rerun configure with -verbose to get more details."
+-        exit 1;
++    if ! echo $XPLATFORM | grep symbian-sbsv2 > /dev/null; then
++        # Raptor does not support configure tests.
++        if ! "$symbiantests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/symbian/simple "simple" $L_FLAGS $I_FLAGS $l_FLAGS
++        then
++            echo "Testing your compiler failed. Could not compile a simple application."
++            echo "Fatal error; Rerun configure with -verbose to get more details."
++            exit 1;
++        fi
+     fi
+     ;;
+ esac
+ 
++if [ "$CFG_LARGEFILE" = "auto" ]; then
++    #Large files should be enabled for all Linux systems
++    CFG_LARGEFILE=yes
++fi
++
++
+ if [ "$CFG_S60" = "auto" ]; then
+     if echo "$XPLATFORM" | grep symbian > /dev/null; then
+         CFG_S60=yes
+@@ -5068,8 +5106,11 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+             if [ "$CFG_SQL_sqlite" = "auto" ]; then # the default
+                 case "$XPLATFORM" in
+                     symbian*)
+-                    # sqlite on symbian is typically not build in Qt but deployed as a pre-existing sis file.
+-                    CFG_SQL_sqlite=no
++                    # sqlite on symbian is typically not build in Qt but deployed as a pre-existing sis file and should be marked as driver.
++                    # Configuration parameters should be set
++                    CFG_SQL_sqlite=qt
++                    QT_LFLAGS_SQLITE=-lsqlite3
++                    QMAKE_CONFIG="$QMAKE_CONFIG system-sqlite"
+                     ;;
+                 esac
+             fi
+@@ -6075,7 +6116,10 @@ fi
+ 
+ # find if the platform supports IPv6
+ if [ "$CFG_IPV6" != "no" ]; then
+-    if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/ipv6 "IPv6" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
++    if [ "$XPLATFORM" = "symbian-sbsv2" ]; then
++        #IPV6 should always be enabled for Symbian release
++        CFG_IPV6=yes
++    elif "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/ipv6 "IPv6" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+         CFG_IPV6=yes
+     else
+         if [ "$CFG_IPV6" = "yes" ] && [ "$CFG_CONFIGURE_EXIT_ON_ERROR" = "yes" ]; then
+@@ -6188,7 +6232,7 @@ if [ "$CFG_GETIFADDRS" != "no" ]; then
+ fi
+ 
+ # detect OpenSSL
+-if [ "$CFG_OPENSSL" != "no" ]; then
++if [ "$CFG_OPENSSL" != "no" ] && [ "$XPLATFORM" != "symbian-sbsv2" ]; then
+     if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/openssl "OpenSSL" $L_FLAGS $I_FLAGS $l_FLAGS $MAC_CONFIG_TEST_COMMANDLINE; then
+         if [ "$CFG_OPENSSL" = "auto" ]; then
+             CFG_OPENSSL=yes
+@@ -6204,6 +6248,11 @@ if [ "$CFG_OPENSSL" != "no" ]; then
+             CFG_OPENSSL=no
+         fi
+     fi
++else
++    if [ "$CFG_OPENSSL" = "auto" ] && [ "$XPLATFORM" = "symbian-sbsv2" ]; then
++        #OpenSSl should be enabled for Symbian release
++        CFG_OPENSSL=yes
++    fi
+ fi
+ 
+ # detect OpenVG support
+@@ -6259,12 +6308,15 @@ if [ "$CFG_PTMALLOC" != "no" ]; then
+     QMakeVar add QMAKE_LFLAGS "$outpath/lib/libptmalloc3.a"
+ fi
+ 
+-if [ "$CFG_ALSA" = "auto" ]; then
++if [ "$CFG_ALSA" = "auto" ] && [ "$XPLATFORM" != "symbian-sbsv2" ]; then
+     if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/alsa "alsa" $L_FLAGS $I_FLAGS $l_FLAGS; then
+         CFG_ALSA=yes
+     else
+         CFG_ALSA=no
+     fi
++elif [ "$XPLATFORM" = "symbian-sbsv2" ]; then
++    # Disabled for Symbian release
++    CFG_ALSA=no
+ fi
+ 
+ if [ "$CFG_JAVASCRIPTCORE_JIT" = "yes" ] || [ "$CFG_JAVASCRIPTCORE_JIT" = "auto" ]; then 
+@@ -6284,7 +6336,9 @@ fi
+ 
+ if [ "$CFG_AUDIO_BACKEND" = "auto" ]; then
+     if echo "$XPLATFORM" | grep symbian > /dev/null 2>&1; then
+-        "$symbiantests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/symbian/audio "audio" $L_FLAGS $I_FLAGS $l_FLAGS
++         if "$symbiantests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/symbian/audio "audio" $L_FLAGS $I_FLAGS $l_FLAGS ; then
++            CFG_AUDIO_BACKEND=yes
++         fi
+     else
+         CFG_AUDIO_BACKEND=yes
+     fi
+@@ -6293,6 +6347,9 @@ fi
+ if [ "$CFG_LARGEFILE" != "yes" ] && [ "$XPLATFORM_MINGW" = "yes" ]; then
+     echo "Warning: largefile support cannot be disabled for win32."
+     CFG_LARGEFILE="yes"
++elif [ "$CFG_LARGEFILE" != "no" ] && echo "$XPLATFORM" | grep "symbian" > /dev/null; then
++    echo "Warning: largefile support cannot be enabled for symbian."
++    CFG_LARGEFILE="no"
+ fi
+ 
+ #-------------------------------------------------------------------------------
+@@ -6639,6 +6696,7 @@ elif [ "$CFG_TIFF" = "yes" ]; then
+ fi
+ if [ "$CFG_LIBFREETYPE" = "no" ]; then
+     QT_CONFIG="$QT_CONFIG no-freetype"
++    QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_FREETYPE"
+ elif [ "$CFG_LIBFREETYPE" = "system" ]; then
+     QT_CONFIG="$QT_CONFIG system-freetype"
+ else
+@@ -6670,9 +6728,9 @@ if [ "$CFG_S60" = "yes" ]; then
+ fi
+ 
+ if [ "$CFG_SYMBIAN_DEFFILES" = "yes" ]; then
+-    QMAKE_CONFIG="$QMAKE_CONFIG def_files"
++    QTCONFIG_CONFIG="$QTCONFIG_CONFIG def_files"
+ else
+-    QMAKE_CONFIG="$QMAKE_CONFIG def_files_disabled"
++    QTCONFIG_CONFIG="$QTCONFIG_CONFIG def_files_disabled"
+ fi
+ 
+ [ "$CFG_NIS" = "yes" ] && QT_CONFIG="$QT_CONFIG nis"
+@@ -7653,12 +7711,14 @@ else
+     mv "$outpath/src/corelib/global/qconfig.h.new" "$outpath/src/corelib/global/qconfig.h"
+     chmod -w "$outpath/src/corelib/global/qconfig.h"
+     for conf in "$outpath/include/QtCore/qconfig.h" "$outpath/include/Qt/qconfig.h"; do
+-        if [ '!' -f "$conf" ]; then
++        if echo "$XPLATFORM" | grep "symbian-sbsv2" > /dev/null 2>&1 ; then
++            [ -e "$conf" ] && rm -rf "$conf"
++            cp -a "$outpath/src/corelib/global/qconfig.h" "$conf"
++        elif [ '!' -f "$conf" ]; then
+             ln -s "$outpath/src/corelib/global/qconfig.h" "$conf"
+         fi
+     done
+ fi
+-
+ #-------------------------------------------------------------------------------
+ # save configuration into qconfig.pri
+ #-------------------------------------------------------------------------------
+@@ -7728,6 +7788,10 @@ if [ -n "$QT_GCC_MAJOR_VERSION" ]; then
+     echo "QT_GCC_MINOR_VERSION = $QT_GCC_MINOR_VERSION" >> "$QTCONFIG.tmp"
+     echo "QT_GCC_PATCH_VERSION = $QT_GCC_PATCH_VERSION" >> "$QTCONFIG.tmp"
+ fi
++if echo "$XPLATFORM" | grep "symbian-sbsv2" > /dev/null 2>&1; then
++    echo "#Qt for symbian FPU settings" >> "$QTCONFIG.tmp"
++    echo "MMP_RULES += \"ARMFPU softvfp\"" >> "$QTCONFIG.tmp"
++fi
+ # replace qconfig.pri if it differs from the newly created temp file
+ if cmp -s "$QTCONFIG.tmp" "$QTCONFIG"; then
+     rm -f "$QTCONFIG.tmp"
+@@ -8302,7 +8366,9 @@ for file in .projects .projects.3; do
+         *winmain/winmain.pro)
+             [ "$XPLATFORM_MINGW" = "yes" ] || continue
+             SPEC=$XQMAKESPEC ;;
+-        *s60main/s60main.pro) continue ;;
++        *s60main/s60main.pro) if [ -z "`echo "$XPLATFORM" | grep "symbian" >/dev/null`"]; then
++                continue
++            fi;;
+         *examples/activeqt/*) continue ;;
+         */qmake/qmake.pro) continue ;;
+         *tools/bootstrap*|*tools/moc*|*tools/rcc*|*tools/uic*|*linguist/lrelease*) SPEC=$QMAKESPEC ;;
+diff --git a/mkspecs/common/symbian/symbian.conf b/mkspecs/common/symbian/symbian.conf
+index c1b31e5..7ec5c6c 100644
+--- a/mkspecs/common/symbian/symbian.conf
++++ b/mkspecs/common/symbian/symbian.conf
+@@ -105,6 +105,7 @@ QMAKE_IDL		  = midl
+ QMAKE_LIB		  = ar -ru
+ QMAKE_RC		  = windres
+ QMAKE_ZIP		  = zip -r -9
++QMAKE_UNZIP               = unzip -o
+ 
+ QMAKE_TAR                 = tar -cf
+ QMAKE_GZIP                = gzip -9f
+diff --git a/src/gui/text/text.pri b/src/gui/text/text.pri
+index 34311a9..af8daa5 100644
+--- a/src/gui/text/text.pri
++++ b/src/gui/text/text.pri
+@@ -197,8 +197,6 @@ contains(QT_CONFIG, freetype) {
+     # pull in the proper freetype2 include directory
+     include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
+     LIBS_PRIVATE += -lfreetype
+-} else {
+-    DEFINES *= QT_NO_FREETYPE
+ }
+ 
+ contains(QT_CONFIG, fontconfig) {
+diff --git a/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri b/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri
+new file mode 100644
+index 0000000..ab8d846
+--- /dev/null
++++ b/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri
+@@ -0,0 +1,38 @@
++# We just want to include the sqlite3 binaries for Symbian for platforms that do not have them.
++!symbian-abld:!symbian-sbsv2 {
++    !symbian_no_export_sqlite:!exists($${EPOCROOT}epoc32/release/armv5/lib/sqlite3.dso) {
++        symbian_sqlite3_zip_file = $$PWD/SQLite3_v9.2.zip
++
++        # The QMAKE_COPY section is to update timestamp on the file.
++        symbian_sqlite3_header.input = symbian_sqlite3_zip_file
++        symbian_sqlite3_header.output = sqlite3.h
++        !isEmpty(MOC_DIR):symbian_sqlite3_header.output = $$MOC_DIR/$$symbian_sqlite3_header.output
++        symbian_sqlite3_header.CONFIG = combine no_link
++        symbian_sqlite3_header.dependency_type = TYPE_C
++        symbian_sqlite3_header.commands = $$QMAKE_UNZIP -j ${QMAKE_FILE_NAME} epoc32/include/stdapis/${QMAKE_FILE_OUT_BASE}.h \
++                                          && $$QMAKE_COPY ${QMAKE_FILE_OUT_BASE}.h ${QMAKE_FILE_OUT}.tmp \
++                                          && $$QMAKE_DEL_FILE ${QMAKE_FILE_OUT_BASE}.h \
++                                          && $$QMAKE_MOVE ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT}
++        QMAKE_EXTRA_COMPILERS += symbian_sqlite3_header
++
++        # The QMAKE_COPY section is to update timestamp on the file.
++        symbian_sqlite3_dso.input = symbian_sqlite3_zip_file
++        symbian_sqlite3_dso.output = sqlite3.dso
++        !isEmpty(OBJECTS_DIR):symbian_sqlite3_dso.output = $$OBJECTS_DIR/$$symbian_sqlite3_dso.output
++        symbian_sqlite3_dso.CONFIG = combine no_link target_predeps
++        symbian_sqlite3_dso.commands = $$QMAKE_UNZIP -j ${QMAKE_FILE_NAME} epoc32/release/armv5/lib/${QMAKE_FILE_OUT_BASE}.dso \
++                                       && $$QMAKE_COPY ${QMAKE_FILE_OUT_BASE}.dso ${QMAKE_FILE_OUT}.tmp \
++                                       && $$QMAKE_DEL_FILE ${QMAKE_FILE_OUT_BASE}.dso \
++                                       && $$QMAKE_MOVE ${QMAKE_FILE_OUT}.tmp ${QMAKE_FILE_OUT}
++        QMAKE_EXTRA_COMPILERS += symbian_sqlite3_dso
++
++        symbian_sqlite3_ver_dso.input = symbian_sqlite3_zip_file
++        symbian_sqlite3_ver_dso.output = sqlite3{00060003}.dso
++        !isEmpty(OBJECTS_DIR):symbian_sqlite3_ver_dso.output = $$OBJECTS_DIR/$$symbian_sqlite3_ver_dso.output
++        symbian_sqlite3_ver_dso.CONFIG = $$symbian_sqlite3_dso.CONFIG
++        symbian_sqlite3_ver_dso.commands = $$symbian_sqlite3_dso.commands
++        QMAKE_EXTRA_COMPILERS += symbian_sqlite3_ver_dso
++
++        QMAKE_LIBDIR *= $$OBJECTS_DIR
++    }
++}
+diff --git a/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pro b/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pro
+index 691cce1..0d233e6 100644
+--- a/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pro
++++ b/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pro
+@@ -2,7 +2,7 @@
+ TEMPLATE = subdirs
+ 
+ # We just want to export the sqlite3 binaries for Symbian for platforms that do not have them.
+-symbian {
++symbian-abld|symbian-sbsv2 {
+     !symbian_no_export_sqlite:!exists($${EPOCROOT}epoc32/release/armv5/lib/sqlite3.dso) {
+         BLD_INF_RULES.prj_exports +=  ":zip SQLite3_v9.2.zip"
+     }
+diff --git a/src/sql/drivers/sqlite/qsql_sqlite.pri b/src/sql/drivers/sqlite/qsql_sqlite.pri
+index 7ad5936..3560c64 100644
+--- a/src/sql/drivers/sqlite/qsql_sqlite.pri
++++ b/src/sql/drivers/sqlite/qsql_sqlite.pri
+@@ -1,6 +1,8 @@
+ HEADERS += $$PWD/qsql_sqlite.h
+ SOURCES += $$PWD/qsql_sqlite.cpp
+ 
++symbian:include(../../plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri)
++
+ !system-sqlite:!contains(LIBS, .*sqlite3.*) {
+     include($$PWD/../../../3rdparty/sqlite.pri)
+ } else {
+
+commit c50a719da596e2860a6dcf791c2a49d88cad8e4b
+Author: axis <qt-info@nokia.com>
+Date:   Thu Jul 22 16:30:52 2010 +0200
+
+    Fixed an incorrect profile inclusion.
+    
+    RevBy:    Trust me
+    (cherry picked from commit ee95770c89306ee5c2fb00c95dfc51f96c384049)
+
+diff --git a/src/sql/drivers/sqlite/qsql_sqlite.pri b/src/sql/drivers/sqlite/qsql_sqlite.pri
+index 3560c64..78a4e49 100644
+--- a/src/sql/drivers/sqlite/qsql_sqlite.pri
++++ b/src/sql/drivers/sqlite/qsql_sqlite.pri
+@@ -1,7 +1,7 @@
+ HEADERS += $$PWD/qsql_sqlite.h
+ SOURCES += $$PWD/qsql_sqlite.cpp
+ 
+-symbian:include(../../plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri)
++symbian:include($$QT_SOURCE_TREE/src/plugins/sqldrivers/sqlite_symbian/sqlite_symbian.pri)
+ 
+ !system-sqlite:!contains(LIBS, .*sqlite3.*) {
+     include($$PWD/../../../3rdparty/sqlite.pri)
+
+commit 0ce0021788fef7e7f48e7227184511bfbe954603
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Thu Jul 29 11:15:00 2010 +0200
 
@@ -884,7 +1473,7 @@ Date:   Thu Jul 29 11:15:00 2010 +0200
     (cherry picked from commit 3643d21756a6bd9ed06a409457d6e8c93aba3b43)
 
 diff --git a/src/sql/drivers/tds/qsql_tds.h b/src/sql/drivers/tds/qsql_tds.h
-index f23a672..3594a4d 100644
+index cb318f3..b48f12b 100644
 --- a/src/sql/drivers/tds/qsql_tds.h
 +++ b/src/sql/drivers/tds/qsql_tds.h
 @@ -48,7 +48,10 @@
@@ -899,7 +1488,7 @@ index f23a672..3594a4d 100644
  #include <sqlfront.h>
  #include <sqldb.h>
 diff --git a/src/sql/kernel/qsqldatabase.cpp b/src/sql/kernel/qsqldatabase.cpp
-index 76bc2b0..2ab37de 100644
+index 7ad4fc5..5d2a9fa 100644
 --- a/src/sql/kernel/qsqldatabase.cpp
 +++ b/src/sql/kernel/qsqldatabase.cpp
 @@ -60,7 +60,10 @@
@@ -914,7 +1503,7 @@ index 76bc2b0..2ab37de 100644
  #ifdef QT_SQL_DB2
  #include "../drivers/db2/qsql_db2.h"
 
-commit 0da5d326ddf55bc47f8dfa13572405706d96029f
+commit 67571e1c3122ff64927be68d1d2f4b0e30ca77a5
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Tue Aug 3 16:37:05 2010 +0200
 
@@ -930,7 +1519,7 @@ Date:   Tue Aug 3 16:37:05 2010 +0200
     (cherry picked from commit 2c7621730d30ac418874c18036a7aa34e2aae1d0)
 
 diff --git a/configure b/configure
-index 05633fa..e6b9476 100755
+index 1ddbb70..9b1fbbf 100755
 --- a/configure
 +++ b/configure
 @@ -818,6 +818,7 @@ QT_LFLAGS_MYSQL_R=
@@ -941,7 +1530,7 @@ index 05633fa..e6b9476 100755
  
  # flags for libdbus-1
  QT_CFLAGS_DBUS=
-@@ -4990,7 +4991,9 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+@@ -5028,7 +5029,9 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
              ;;
          tds)
              if [ "$CFG_SQL_tds" != "no" ]; then
@@ -952,7 +1541,7 @@ index 05633fa..e6b9476 100755
                      if [ "$CFG_SQL_tds" = "auto" ]; then
                          CFG_SQL_tds=plugin
                      fi
-@@ -7786,6 +7789,9 @@ fi
+@@ -7850,6 +7853,9 @@ fi
  if [ -n "$QT_LFLAGS_ODBC" ]; then
      echo "QT_LFLAGS_ODBC   = $QT_LFLAGS_ODBC" >> "$CACHEFILE.tmp"
  fi
@@ -979,10 +1568,10 @@ index c552ead..037f793 100644
      LIBS *= $(BCB)/lib/PSDK/NTWDBLIB.LIB
  } else {
 diff --git a/tools/configure/configureapp.cpp b/tools/configure/configureapp.cpp
-index f7dac93..c7e6c16 100644
+index a6cd6c1..5b3d714 100644
 --- a/tools/configure/configureapp.cpp
 +++ b/tools/configure/configureapp.cpp
-@@ -1029,6 +1029,10 @@ void Configure::parseCmdLine()
+@@ -1028,6 +1028,10 @@ void Configure::parseCmdLine()
              opensslLibs = configCmdLine.at(i);
          } else if (configCmdLine.at(i).startsWith("PSQL_LIBS=")) {
              psqlLibs = configCmdLine.at(i);
@@ -993,7 +1582,7 @@ index f7dac93..c7e6c16 100644
          }
  
          else if ((configCmdLine.at(i) == "-override-version") || (configCmdLine.at(i) == "-version-override")){
-@@ -2747,6 +2751,17 @@ void Configure::generateOutputVars()
+@@ -2746,6 +2750,17 @@ void Configure::generateOutputVars()
          }
      if (!psqlLibs.isEmpty())
          qmakeVars += QString("QT_LFLAGS_PSQL=") + psqlLibs.section("=", 1);
@@ -1012,7 +1601,7 @@ index f7dac93..c7e6c16 100644
          qmakeVars += QString("sql-drivers    += ") + qmakeSql.join(" ");
      if (!qmakeSqlPlugins.isEmpty())
 diff --git a/tools/configure/configureapp.h b/tools/configure/configureapp.h
-index ff2ee8b..b3c07f7 100644
+index 570806d..be13613 100644
 --- a/tools/configure/configureapp.h
 +++ b/tools/configure/configureapp.h
 @@ -134,6 +134,8 @@ private:
@@ -1025,7 +1614,7 @@ index ff2ee8b..b3c07f7 100644
      QMap<QString,QString> licenseInfo;
      QString outputLine;
 
-commit 8479bf5654d117322fdb7264b82f7fa9303da9aa
+commit ec2569543a436acb6f7e637981754a6bbba38e53
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Tue Aug 24 14:28:42 2010 +0200
 
@@ -1081,7 +1670,7 @@ index 037f793..521c06b 100644
      QMAKE_CXXFLAGS *= $$QT_CFLAGS_TDS
  } else:win32-borland {
 
-commit 6e4d951c781925dc24dedc905c63f7a7aa325d1d
+commit 74c090fc8ffde37e14cf6c0e6ece3ef6b09be3f9
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Mon Aug 30 10:27:12 2010 +0200
 
@@ -1101,7 +1690,7 @@ Date:   Mon Aug 30 10:27:12 2010 +0200
     (cherry picked from commit b4a7eadb28a49ace84994dcff665b1cabae69652)
 
 diff --git a/configure b/configure
-index e6b9476..a0cff96 100755
+index 9b1fbbf..ea390d5 100755
 --- a/configure
 +++ b/configure
 @@ -2275,7 +2275,7 @@ fi
@@ -1113,7 +1702,7 @@ index e6b9476..a0cff96 100755
          CFG_DEBUG_RELEASE=yes
          CFG_DEBUG=yes
      elif [ "$CFG_DEV" = "yes" ]; then
-@@ -6536,7 +6536,11 @@ if [ "$PLATFORM_QWS" = "yes" ]; then
+@@ -6593,7 +6593,11 @@ if [ "$PLATFORM_QWS" = "yes" ]; then
      QT_CONFIG="$QT_CONFIG embedded"
      rm -f "src/.moc/$QMAKE_OUTDIR/allmoc.cpp" # needs remaking if config changes
  fi
@@ -1127,7 +1716,7 @@ index e6b9476..a0cff96 100755
  QMakeVar set MOC_DIR ".moc/$QMAKE_OUTDIR"
  QMakeVar set RCC_DIR ".rcc/$QMAKE_OUTDIR"
 
-commit 6556a798f2803298a6884c53a9a15738015a00a4
+commit 06bd1b423e412a9867e9654776396452df9ab5df
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Mon Aug 30 15:25:54 2010 +0200
 
@@ -1140,7 +1729,7 @@ Date:   Mon Aug 30 15:25:54 2010 +0200
     (cherry picked from commit edbc656bfa5069dd40f64ae3123d6370c2d86538)
 
 diff --git a/src/svg/qsvghandler.cpp b/src/svg/qsvghandler.cpp
-index d545440..bf19a88 100644
+index 8bc8e59..c383bcb 100644
 --- a/src/svg/qsvghandler.cpp
 +++ b/src/svg/qsvghandler.cpp
 @@ -74,7 +74,7 @@ QT_BEGIN_NAMESPACE
@@ -1153,7 +1742,7 @@ index d545440..bf19a88 100644
  // ======== duplicated from qcolor_p
  
 
-commit d8e44aea381dbdaa789f2dbb051cd8fc44ce0b31
+commit 9d48a599f8a29067346bc6f257b4e0a767717349
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Sat Jun 5 23:41:04 2010 +0200
 
