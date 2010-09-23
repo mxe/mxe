@@ -29,4 +29,10 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         MAKE=$(MAKE)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -pedantic -std=c++0x\
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' gtkmm-2.4 --cflags --libs` \
+        -lwinspool -lcomctl32 -lcomdlg32 -ldnsapi
 endef
