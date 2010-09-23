@@ -4,8 +4,8 @@
 # WinPcap
 PKG             := winpcap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4_1_1
-$(PKG)_CHECKSUM := f2f7dd0dc29dd3d89bfdab5a9ed192aa5ffa8eb0
+$(PKG)_VERSION  := 4_1_2
+$(PKG)_CHECKSUM := 9155687ab23dbb2348e7cf93caf8a84f51e94795
 $(PKG)_SUBDIR   := winpcap
 $(PKG)_FILE     := WpcapSrc_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://www.winpcap.org/
