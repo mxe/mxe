@@ -4,8 +4,8 @@
 # cairo
 PKG             := cairo
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.10
-$(PKG)_CHECKSUM := fd5e8ca82ff0e8542ea4c51612cad387f2a49df3
+$(PKG)_VERSION  := 1.10.0
+$(PKG)_CHECKSUM := efe7e47408d5188690228ccadc8523652f6bf702
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://cairographics.org/
@@ -39,6 +39,7 @@ define $(PKG)_BUILD
         --disable-beos \
         --disable-glitz \
         --disable-directfb \
+        --disable-atomic \
         --enable-win32 \
         --enable-win32-font \
         --enable-png \
