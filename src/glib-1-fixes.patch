@@ -116,3 +116,22 @@ index 58e1ecf..17b2133 100644
 -Libs.private: @ICONV_LIBS@
 +Libs.private: @G_THREAD_LIBS@ @G_LIBS_EXTRA@ @PCRE_LIBS@ @INTLLIBS@ @ICONV_LIBS@
  Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include @GLIB_EXTRA_CFLAGS@
+
+commit 83ef7aba98793b7502370971c6de0b115c55e49c
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Sat Sep 25 00:07:33 2010 +0200
+
+    add -ldnsapi to gio-2.0.pc
+
+diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
+index 92cda85..7a4e224 100644
+--- a/gio-2.0.pc.in
++++ b/gio-2.0.pc.in
+@@ -10,6 +10,6 @@ Name: GIO
+ Description: glib I/O library
+ Version: @VERSION@
+ Requires: glib-2.0,gobject-2.0,gmodule-no-export-2.0
+-Libs: -L${libdir} -lgio-2.0
++Libs: -L${libdir} -lgio-2.0 -ldnsapi
+ Libs.private: @ZLIB_LIBS@ @LIBASYNCNS_LIBADD@
+ Cflags: 
