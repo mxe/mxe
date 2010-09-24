@@ -1,0 +1,438 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+commit 1acd5465c0b9f2f612c5904ea7e652475fb3bee6
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 14:43:43 2010 +0200
+
+    s,DllMain,static _disabled_DllMain,
+
+diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
+index 94b7ac7..2c01be6 100644
+--- a/gdk/win32/gdkmain-win32.c
++++ b/gdk/win32/gdkmain-win32.c
+@@ -65,7 +65,7 @@ const GOptionEntry _gdk_windowing_args[] = {
+ };
+ 
+ int __stdcall
+-DllMain (HINSTANCE hinstDLL,
++static _disabled_DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     dwReason,
+ 	 LPVOID    reserved)
+ {
+diff --git a/gtk/gtkmain.c b/gtk/gtkmain.c
+index fdf4730..428fd96 100644
+--- a/gtk/gtkmain.c
++++ b/gtk/gtkmain.c
+@@ -73,7 +73,7 @@
+ static HMODULE gtk_dll;
+ 
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL,
++static _disabled_DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     fdwReason,
+ 	 LPVOID    lpvReserved)
+ {
+
+commit bc446ce0785954ccf28825554c3074a15b4f4071
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 14:46:20 2010 +0200
+
+    s,__declspec(dllimport),,
+
+diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
+index 506f35d..f40de41 100644
+--- a/gdk/gdktypes.h
++++ b/gdk/gdktypes.h
+@@ -41,7 +41,7 @@
+ #  ifdef GDK_COMPILATION
+ #    define GDKVAR __declspec(dllexport)
+ #  else
+-#    define GDKVAR extern __declspec(dllimport)
++#    define GDKVAR extern 
+ #  endif
+ #else
+ #  define GDKVAR extern
+diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
+index 2190973..0a1c43c 100644
+--- a/gtk/gtkdebug.h
++++ b/gtk/gtkdebug.h
+@@ -66,7 +66,7 @@ typedef enum {
+ #  ifdef GTK_COMPILATION
+ #    define GTKVAR __declspec(dllexport)
+ #  else
+-#    define GTKVAR extern __declspec(dllimport)
++#    define GTKVAR extern 
+ #  endif
+ #else
+ #  define GTKVAR extern
+diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
+index 21de92e..2c0f94c 100644
+--- a/gtk/gtkmain.h
++++ b/gtk/gtkmain.h
+@@ -69,7 +69,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
+ #ifdef GTK_COMPILATION
+ #define GTKMAIN_C_VAR __declspec(dllexport)
+ #else
+-#define GTKMAIN_C_VAR extern __declspec(dllimport)
++#define GTKMAIN_C_VAR extern 
+ #endif
+ #else
+ #define GTKMAIN_C_VAR extern
+diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
+index c624aea..b792ea5 100644
+--- a/gtk/gtktexttypes.h
++++ b/gtk/gtktexttypes.h
+@@ -46,7 +46,7 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
+ #ifdef GTK_COMPILATION
+ #define VARIABLE __declspec(dllexport)
+ #else
+-#define VARIABLE extern __declspec(dllimport)
++#define VARIABLE extern 
+ #endif
+ #else
+ #define VARIABLE extern
+
+commit 078f0c210e1706b4028907bf55cc55672d5dc7d3
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 15:03:28 2010 +0200
+
+    s,__declspec(dllexport),,
+
+diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
+index f40de41..07cfb4e 100644
+--- a/gdk/gdktypes.h
++++ b/gdk/gdktypes.h
+@@ -39,7 +39,7 @@
+ 
+ #ifdef G_OS_WIN32
+ #  ifdef GDK_COMPILATION
+-#    define GDKVAR __declspec(dllexport)
++#    define GDKVAR 
+ #  else
+ #    define GDKVAR extern 
+ #  endif
+diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
+index 0a1c43c..507ff69 100644
+--- a/gtk/gtkdebug.h
++++ b/gtk/gtkdebug.h
+@@ -64,7 +64,7 @@ typedef enum {
+ 
+ #ifdef G_OS_WIN32
+ #  ifdef GTK_COMPILATION
+-#    define GTKVAR __declspec(dllexport)
++#    define GTKVAR 
+ #  else
+ #    define GTKVAR extern 
+ #  endif
+diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
+index 2c0f94c..9c47b57 100644
+--- a/gtk/gtkmain.h
++++ b/gtk/gtkmain.h
+@@ -67,7 +67,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
+  */
+ #ifdef G_PLATFORM_WIN32
+ #ifdef GTK_COMPILATION
+-#define GTKMAIN_C_VAR __declspec(dllexport)
++#define GTKMAIN_C_VAR 
+ #else
+ #define GTKMAIN_C_VAR extern 
+ #endif
+diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
+index b792ea5..f382a64 100644
+--- a/gtk/gtktexttypes.h
++++ b/gtk/gtktexttypes.h
+@@ -44,7 +44,7 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
+ 
+ #ifdef G_OS_WIN32
+ #ifdef GTK_COMPILATION
+-#define VARIABLE __declspec(dllexport)
++#define VARIABLE 
+ #else
+ #define VARIABLE extern 
+ #endif
+
+commit 1f0f8944278d888d6d81df1a03458ec7913cde09
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 14:17:22 2010 +0200
+
+    fix gtk+-2.0.pc.in
+
+diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
+index 46853e1..bb53ed2 100644
+--- a/gtk+-2.0.pc.in
++++ b/gtk+-2.0.pc.in
+@@ -11,5 +11,5 @@ Name: GTK+
+ Description: GTK+ Graphical UI Library (${target} target)
+ Version: @VERSION@
+ Requires: gdk-${target}-2.0 @GTK_PACKAGES@
+-Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@
++Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_DEP_LIBS@
+ Cflags: -I${includedir}/gtk-2.0 @GTK_EXTRA_CFLAGS@
+
+commit 74854514567b97b4862e4e6339d1273256bbf747
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 14:48:31 2010 +0200
+
+    disable gtkbuiltincache
+
+diff --git a/gtk/Makefile.in b/gtk/Makefile.in
+index 39a35c2..89bae23 100644
+--- a/gtk/Makefile.in
++++ b/gtk/Makefile.in
+@@ -2872,7 +2872,7 @@ stamp-icons: $(STOCK_ICONS)
+ 	) done 								\
+ 	&& touch stamp-icons
+ 
+-gtkbuiltincache.h: @REBUILD@ stamp-icons
++_disabled_gtkbuiltincache.h: @REBUILD@ stamp-icons
+ 	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+ 	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
+ 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
+
+commit 6e2c98deed33a2a8052176a037229075b0c692ad
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 14:49:50 2010 +0200
+
+    disable test-inline-pixbufs.h
+
+diff --git a/demos/Makefile.in b/demos/Makefile.in
+index 6bffbb8..c866923 100644
+--- a/demos/Makefile.in
++++ b/demos/Makefile.in
+@@ -433,7 +433,7 @@ LDADDS = \
+ 	$(GTK_DEP_LIBS)							\
+ 	$(MATH_LIB)
+ 
+-BUILT_SOURCES = test-inline-pixbufs.h
++BUILT_SOURCES = 
+ testpixbuf_DEPENDENCIES = $(DEPS)
+ testpixbuf_drawable_DEPENDENCIES = $(DEPS)
+ testpixbuf_save_DEPENDENCIES = $(DEPS)
+
+commit 6a7535018b0530f5d6cf2fc39e3194dae226e443
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 14:51:04 2010 +0200
+
+    permit static building
+
+diff --git a/configure b/configure
+index f203b13..51e6619 100755
+--- a/configure
++++ b/configure
+@@ -4347,9 +4347,9 @@ if test "${enable_static+set}" = set; then :
+   enableval=$enable_static; p=${PACKAGE-default}
+     case $enableval in
+     yes) enable_static=yes ;;
+-    no) enable_static=no ;;
++    no) enable_static=yes ;;
+     *)
+-     enable_static=no
++     enable_static=yes
+       # Look at the argument we got.  We use all the common list separators.
+       lt_save_ifs="$IFS"; IFS="${IFS}$PATH_SEPARATOR,"
+       for pkg in $enableval; do
+@@ -4362,7 +4362,7 @@ if test "${enable_static+set}" = set; then :
+       ;;
+     esac
+ else
+-  enable_static=no
++  enable_static=yes
+ fi
+ 
+ 
+@@ -4930,15 +4930,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ if test "$os_win32" = "yes"; then
+   if test x$enable_static = xyes -o x$enable_static = x; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling static library build, must build as DLL on Windows." >&5
+-$as_echo "$as_me: WARNING: Disabling static library build, must build as DLL on Windows." >&2;}
+-    enable_static=no
++    { $as_echo "(disabled warning)" >&5
++$as_echo "(disabled warning)" >&2;}
++    enable_static=yes
+   fi
+   if test x$enable_shared = xno; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Enabling shared library build, must build as DLL on Windows." >&5
+-$as_echo "$as_me: WARNING: Enabling shared library build, must build as DLL on Windows." >&2;}
++    { $as_echo "(disabled warning)" >&5
++$as_echo "(disabled warning)" >&2;}
+   fi
+-  enable_shared=yes
++  enable_shared=no
+ fi
+ 
+ enable_win32_dll=yes
+@@ -8241,7 +8241,7 @@ done
+ if test "${enable_shared+set}" = set; then :
+   enableval=$enable_shared; p=${PACKAGE-default}
+     case $enableval in
+-    yes) enable_shared=yes ;;
++    yes) enable_shared=no ;;
+     no) enable_shared=no ;;
+     *)
+       enable_shared=no
+@@ -8250,14 +8250,14 @@ if test "${enable_shared+set}" = set; then :
+       for pkg in $enableval; do
+ 	IFS="$lt_save_ifs"
+ 	if test "X$pkg" = "X$p"; then
+-	  enable_shared=yes
++	  enable_shared=no
+ 	fi
+       done
+       IFS="$lt_save_ifs"
+       ;;
+     esac
+ else
+-  enable_shared=yes
++  enable_shared=no
+ fi
+ 
+ 
+@@ -11970,7 +11970,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+   # are all built from PIC.
+   case $host_os in
+   aix3*)
+-    test "$enable_shared" = yes && enable_static=no
++    test "$enable_shared" = yes && enable_static=yes
+     if test -n "$RANLIB"; then
+       archive_cmds="$archive_cmds~\$RANLIB \$lib"
+       postinstall_cmds='$RANLIB $lib'
+@@ -11979,7 +11979,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+ 
+   aix[4-9]*)
+     if test "$host_cpu" != ia64 && test "$aix_use_runtimelinking" = no ; then
+-      test "$enable_shared" = yes && enable_static=no
++      test "$enable_shared" = yes && enable_static=yes
+     fi
+     ;;
+   esac
+
+commit 1a86c4abd517485c154224fd78b851118ac3c0b7
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 14:53:18 2010 +0200
+
+    no -Wl
+
+diff --git a/configure b/configure
+index 51e6619..8c04264 100755
+--- a/configure
++++ b/configure
+@@ -22951,7 +22951,7 @@ fi
+ fi
+ 
+ if test "x$gdktarget" = "xwin32"; then
+-  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid"
++  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -luuid"
+    if true; then
+   USE_WIN32_TRUE=
+   USE_WIN32_FALSE='#'
+
+commit 6d32f30c154a6fcc459f6efebae913a7b3325e79
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 14:54:15 2010 +0200
+
+    gio not gio-unix
+
+diff --git a/configure b/configure
+index 8c04264..d3e5e21 100755
+--- a/configure
++++ b/configure
+@@ -23171,9 +23171,9 @@ fi
+ CFLAGS="$saved_cflags"
+ LDFLAGS="$saved_ldflags"
+ 
+-# Pull in gio-unix for GDesktopAppInfo usage, see at least gdkapplaunchcontext-x11.c
++# Pull in gio for GDesktopAppInfo usage, see at least gdkapplaunchcontext-x11.c
+ if test "x$gdktarget" = "xx11"; then
+-  GDK_PACKAGES="$PANGO_PACKAGES gio-unix-2.0 $X_PACKAGES gdk-pixbuf-2.0 cairo-$cairo_backend"
++  GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 $X_PACKAGES gdk-pixbuf-2.0 cairo-$cairo_backend"
+ else
+   GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
+ fi
+
+commit 61da66059b505c8d489f44eaef9bd34846d3c2a8
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 14:55:33 2010 +0200
+
+    set cross_compiling explicitly to avoid Wine interference
+
+diff --git a/configure b/configure
+index d3e5e21..7ae7a5d 100755
+--- a/configure
++++ b/configure
+@@ -555,7 +555,7 @@ ac_default_prefix=/usr/local
+ ac_clean_files=
+ ac_config_libobj_dir=.
+ LIBOBJS=
+-cross_compiling=no
++cross_compiling=yes
+ subdirs=
+ MFLAGS=
+ MAKEFLAGS=
+@@ -3872,7 +3872,7 @@ $as_echo "$ac_try_echo"; } >&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; }; then
+-    cross_compiling=no
++    cross_compiling=yes
+   else
+     if test "$cross_compiling" = maybe; then
+ 	cross_compiling=yes
+
+commit bd50ae9f7b151743c7f301aed2a71017f3bf0e13
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 15:30:49 2010 +0200
+
+    removed duplicate _gtk_marshal_OBJECT__VOID()
+
+diff --git a/perf/marshalers.c b/perf/marshalers.c
+index f533ab0..0a37ba4 100644
+--- a/perf/marshalers.c
++++ b/perf/marshalers.c
+@@ -49,43 +49,6 @@
+ #endif /* !G_ENABLE_DEBUG */
+ 
+ 
+-/* OBJECT:VOID (./marshalers.list:1) */
+-void
+-_gtk_marshal_OBJECT__VOID (GClosure     *closure,
+-                           GValue       *return_value G_GNUC_UNUSED,
+-                           guint         n_param_values,
+-                           const GValue *param_values,
+-                           gpointer      invocation_hint G_GNUC_UNUSED,
+-                           gpointer      marshal_data)
+-{
+-  typedef GObject* (*GMarshalFunc_OBJECT__VOID) (gpointer     data1,
+-                                                 gpointer     data2);
+-  register GMarshalFunc_OBJECT__VOID callback;
+-  register GCClosure *cc = (GCClosure*) closure;
+-  register gpointer data1, data2;
+-  GObject* v_return;
+-
+-  g_return_if_fail (return_value != NULL);
+-  g_return_if_fail (n_param_values == 1);
+-
+-  if (G_CCLOSURE_SWAP_DATA (closure))
+-    {
+-      data1 = closure->data;
+-      data2 = g_value_peek_pointer (param_values + 0);
+-    }
+-  else
+-    {
+-      data1 = g_value_peek_pointer (param_values + 0);
+-      data2 = closure->data;
+-    }
+-  callback = (GMarshalFunc_OBJECT__VOID) (marshal_data ? marshal_data : cc->callback);
+-
+-  v_return = callback (data1,
+-                       data2);
+-
+-  g_value_take_object (return_value, v_return);
+-}
+-
+ /* VOID:ENUM,OBJECT,DOUBLE (./marshalers.list:2) */
+ void
+ _gtk_marshal_VOID__ENUM_OBJECT_DOUBLE (GClosure     *closure,

@@ -4,8 +4,8 @@
 # GLib
 PKG             := glib
 $(PKG)_IGNORE   := 2.25.6
-$(PKG)_VERSION  := 2.25.7
-$(PKG)_CHECKSUM := 8423e1f5346ecc629e85adfe5498c2545de421ef
+$(PKG)_VERSION  := 2.25.17
+$(PKG)_CHECKSUM := b800d4138145b6081c4191d808559409eff72b26
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/
@@ -51,6 +51,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
     $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)' glib-compile-schemas
+    # configure will expect to find this in PATH
+    $(INSTALL) -m755 '$(1).native/gio/glib-compile-schemas' '$(PREFIX)/bin/glib-compile-schemas'
 
     # cross build
     # wine confuses the cross-compiling detection, so set it explicitly
@@ -65,11 +67,10 @@ define $(PKG)_BUILD
         CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal'
-    ln -s '$(1).native/gio/glib-compile-schemas' '$(1)/gio/glib-compile-schemas'
     $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gobject' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gio'     -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
-    $(MAKE) -C '$(1)'         -j '$(JOBS)' install-pkgconfigDATA install-configexecincludeDATA
+    $(MAKE) -C '$(1)'         -j '$(JOBS)' install-pkgconfigDATA
 endef
