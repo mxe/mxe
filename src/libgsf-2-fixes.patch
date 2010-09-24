@@ -1,0 +1,26 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+commit 908f4325d4977e67dc1d1840ce3e67bb9492de71
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 23:34:26 2010 +0200
+
+    s,DllMain,static _disabled_DllMain,
+
+diff --git a/gsf/gsf-utils.c b/gsf/gsf-utils.c
+index 4e54b09..b8261e5 100644
+--- a/gsf/gsf-utils.c
++++ b/gsf/gsf-utils.c
+@@ -109,9 +109,9 @@ static GTypeModule *static_type_module = NULL;
+ #include <windows.h>
+ static HMODULE gsf_dll_hmodule;
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved);
++static _disabled_DllMain (HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved);
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL, DWORD fdwReason, G_GNUC_UNUSED LPVOID lpvReserved)
++static _disabled_DllMain (HINSTANCE hinstDLL, DWORD fdwReason, G_GNUC_UNUSED LPVOID lpvReserved)
+ {
+ 	if (fdwReason == DLL_PROCESS_ATTACH) gsf_dll_hmodule = hinstDLL;
+ 	return TRUE;

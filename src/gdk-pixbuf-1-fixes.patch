@@ -1,0 +1,29 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+commit d5e7a81cbe6339e1d0dbf97f8814c28e2c806d80
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Fri Sep 24 23:31:24 2010 +0200
+
+    s,DllMain,static _disabled_DllMain,
+
+diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
+index aa4964f..c925934 100644
+--- a/gdk-pixbuf/gdk-pixbuf-io.c
++++ b/gdk-pixbuf/gdk-pixbuf-io.c
+@@ -226,12 +226,12 @@ skip_space (const char **pos)
+   
+ #ifdef G_OS_WIN32
+ 
+-/* DllMain function needed to tuck away the gdk-pixbuf DLL handle */
++/* static _disabled_DllMain function needed to tuck away the gdk-pixbuf DLL handle */
+ 
+ static HMODULE gdk_pixbuf_dll;
+ 
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL,
++static _disabled_DllMain (HINSTANCE hinstDLL,
+          DWORD     fdwReason,
+          LPVOID    lpvReserved)
+ {
