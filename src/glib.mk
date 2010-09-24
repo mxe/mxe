@@ -14,9 +14,10 @@ $(PKG)_DEPS     := gcc gettext pcre libiconv zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>glib-*\([0-9][^<]*\)<.*,\1,p' | \
-    grep -v '^2\.24\.' | \
+    grep '<a href=./browse/glib/tag/[?]id=[0-9.]\+' | \
+    $(SED) 's,^.*a href=./browse/glib/tag/[?]id=\([0-9.]\+\).*,\1,' | \
+    grep "^2\.25\.1[0-9]" | \
+    sort -r | \
     head -1
 endef
 
