@@ -43,6 +43,7 @@ define $(PKG)_BUILD
         --disable-selinux \
         --disable-fam \
         --disable-xattr \
+        --disable-dtrace \
         --with-libiconv=gnu \
         --with-pcre=internal \
         CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include' \
