@@ -22,8 +22,6 @@ endef
 define $(PKG)_BUILD
     # unpack and build a native version of ilmbase
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,ilmbase)
-    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/ilmbase-*.patch)),
-        (cd '$(1)/$(ilmbase_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
     cd '$(1)/$(ilmbase_SUBDIR)' && $(SHELL) ./configure \
         --disable-shared \
         --prefix='$(1)/ilmbase' \

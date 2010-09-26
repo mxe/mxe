@@ -31,8 +31,7 @@ define $(PKG)_BUILD
     cd '$(1).native' && $(call UNPACK_PKG_ARCHIVE,libiconv)
     cd '$(1).native/$(libiconv_SUBDIR)' && ./configure \
         --disable-shared \
-        --disable-nls \
-        $(OSX_CC_ENV)
+        --disable-nls
     $(MAKE) -C '$(1).native/$(libiconv_SUBDIR)' -j '$(JOBS)'
 
     # native build for glib-genmarshal, without pkg-config, gettext and zlib
@@ -48,8 +47,7 @@ define $(PKG)_BUILD
         --with-libiconv=gnu \
         --with-pcre=internal \
         CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include' \
-        LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs' \
-        $(OSX_CC_ENV)
+        LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs'
     $(SED) -i 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
