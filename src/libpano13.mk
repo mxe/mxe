@@ -23,6 +23,8 @@ define $(PKG)_BUILD
     $(SED) -i 's,WINDOWSX\.H,windowsx.h,'                                                  '$(1)/sys_win.h'
     $(SED) -i 's,\$${WINDRES-windres},$(TARGET)-windres,'                                  '$(1)/build/win32/compile-resource'
     $(SED) -i 's,m4 -DBUILDNUMBER=\$$buildnumber,$(SED) "s/BUILDNUMBER/\$$buildnumber/g",' '$(1)/build/win32/compile-resource'
+    $(SED) -i 's,\(@HAVE_MINGW_TRUE@am__objects_4 = .*\),\1 ppm.lo,'                       '$(1)/Makefile.in'
+    $(SED) -i 's,\(@HAVE_MINGW_TRUE@WIN_SRC = .*\),\1 ppm.c,'                              '$(1)/Makefile.in'
     $(SED) -i 's,mv.*libpano13\.dll.*,,'                                                   '$(1)/Makefile.in'
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
