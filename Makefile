@@ -20,6 +20,7 @@ PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
 VERSION    := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
+OSX_CC_ENV := $(shell [ $$(uname -s) == "Darwin" ] && echo CC="'gcc -arch `uname -m`'")
 
 # unexport any environment variables that might cause trouble
 unexport AR CC CFLAGS CPP CPPFLAGS CROSS CXX CXXCPP CXXFLAGS EXEEXT
