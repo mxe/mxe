@@ -26,6 +26,8 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-modules \
+        --with-included-loaders
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
