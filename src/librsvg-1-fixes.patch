@@ -1,0 +1,44 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+commit 1ff5a73bee660f1d61f9cdd7c8d7aff29e959c4c
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Mon Sep 27 12:00:52 2010 +0200
+
+    fix .pc requirements
+
+diff --git a/librsvg.pc.in b/librsvg.pc.in
+index 372f199..b6ee7a9 100644
+--- a/librsvg.pc.in
++++ b/librsvg.pc.in
+@@ -9,7 +9,7 @@ css_supported=@CSS_SUPPORTED@
+ Name: librsvg
+ Description: library that renders svg files
+ Version: @VERSION@
+-Requires: glib-2.0 gio-2.0 gdk-pixbuf-2.0 cairo
++Requires: glib-2.0 gio-2.0 gdk-pixbuf-2.0 cairo libgsf-1 pangocairo libcroco-0.6
+ Requires.private:
+ Libs: -L${libdir} -lrsvg-@RSVG_API_MAJOR_VERSION@ -lm
+ Cflags: -I${includedir}/librsvg-@RSVG_API_VERSION@
+
+commit 9a7e7ebee9aab83659b9aced51fb53de5427138d
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Mon Sep 27 12:02:45 2010 +0200
+
+    fix stray comma
+    
+    Taken from https://bugzilla.gnome.org/show_bug.cgi?id=630714
+
+diff --git a/rsvg.h b/rsvg.h
+index 37e7930..41c4127 100644
+--- a/rsvg.h
++++ b/rsvg.h
+@@ -139,7 +139,7 @@ gboolean rsvg_handle_has_sub (RsvgHandle * handle, const char *id);
+ /* GIO APIs */
+ 
+ typedef enum {
+-    RSVG_HANDLE_FLAGS_NONE        = 0,
++    RSVG_HANDLE_FLAGS_NONE        = 0
+ } RsvgHandleFlags;
+ 
+ void        rsvg_handle_set_base_gfile (RsvgHandle *handle,

@@ -4,8 +4,8 @@
 # librsvg
 PKG             := librsvg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.26.3
-$(PKG)_CHECKSUM := ef0063eaa9e638364cc8ff142aadef8a267b7af5
+$(PKG)_VERSION  := 2.32.0
+$(PKG)_CHECKSUM := 252727b948a29b36dae0022e0c620538bcb158f8
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
@@ -14,14 +14,12 @@ $(PKG)_DEPS     := gcc glib libgsf cairo pango gtk libcroco
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/librsvg/refs/tags' | \
-    $(SED) -n 's,.*<a[^>]*>LIBRSVG_\([0-9][0-9_]*\)<.*,\1,p' | \
-    $(SED) 's,_,.,g' | \
+    $(SED) -n 's,.*<a[^>]*>\([0-9][0-9.]*\)<.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
     $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g'   '$(1)'/Makefile.in
-    $(SED) -i 's,^\(Requires:.*\),\1 libgsf-1 pangocairo libcroco-0.6,' '$(1)'/librsvg-2.0.pc.in
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
