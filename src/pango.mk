@@ -4,8 +4,8 @@
 # Pango
 PKG             := pango
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.28.1
-$(PKG)_CHECKSUM := 2d5907f0ff108cb9c27f69d8e4de564ff3d30221
+$(PKG)_VERSION  := 1.28.2
+$(PKG)_CHECKSUM := 326e9afa015ac5328fb1f9ecc2212e327396008c
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.pango.org/
@@ -20,13 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,DllMain,static _disabled_DllMain,' '$(1)/pango/pango-utils.c'
-    $(SED) -i 's,"[^"]*must build as DLL[^"]*","(disabled warning)",' '$(1)/configure'
-    $(SED) -i 's,enable_static=no,enable_static=yes,' '$(1)/configure'
-    $(SED) -i 's,enable_shared=yes,enable_shared=no,' '$(1)/configure'
-    $(SED) -i 's,^install-data-local:.*,install-data-local:,' '$(1)/modules/Makefile.in'
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
@@ -36,6 +29,7 @@ define $(PKG)_BUILD
         --enable-explicit-deps \
         --with-included-modules \
         --without-dynamic-modules \
-        CXX='$(TARGET)-g++'
+        CXX='$(TARGET)-g++' \
+        LIBS='-lusp10'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
