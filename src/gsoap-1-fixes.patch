@@ -1,0 +1,343 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From bf6538613777117219542408d7353b182a169d06 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Wed, 29 Sep 2010 20:40:24 +0200
+Subject: [PATCH 1/3] link dom
+
+This patch has been taken from:
+http://sourceforge.net/tracker/index.php?func=detail&aid=2937534&group_id=52781&atid=468023
+
+diff --git a/gsoap/Makefile.am b/gsoap/Makefile.am
+index a9d280c..9a0d640 100644
+--- a/gsoap/Makefile.am
++++ b/gsoap/Makefile.am
+@@ -31,22 +31,26 @@ stdsoap2_ssl.c: stdsoap2.cpp
+ stdsoap2_ssl_cpp.cpp: stdsoap2.cpp
+ 	$(LN_S) -f $(srcdir)/stdsoap2.cpp stdsoap2_ssl_cpp.cpp
+ 
++## do the same fo dom.cpp since we want to link it into the cpp libs and dom.c into the c libs
++dom_cpp.cpp: dom.cpp
++	$(LN_S) -f $(srcdir)/dom.cpp dom_cpp.cpp
++
+ lib_LIBRARIES = libgsoap.a libgsoap++.a libgsoapck.a libgsoapck++.a libgsoapssl.a libgsoapssl++.a
+ 
+-libgsoap_a_SOURCES = stdsoap2.c
++libgsoap_a_SOURCES = stdsoap2.c dom.c
+ libgsoap_a_CFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform)
+-libgsoap___a_SOURCES = stdsoap2_cpp.cpp
++libgsoap___a_SOURCES = stdsoap2_cpp.cpp dom_cpp.cpp
+ libgsoap___a_CXXFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform)
+-libgsoapck_a_SOURCES = stdsoap2_ck.c
++libgsoapck_a_SOURCES = stdsoap2_ck.c dom.c
+ libgsoapck_a_CFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform) -DWITH_COOKIES
+-libgsoapck___a_SOURCES = stdsoap2_ck_cpp.cpp
++libgsoapck___a_SOURCES = stdsoap2_ck_cpp.cpp dom_cpp.cpp
+ libgsoapck___a_CXXFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform) -DWITH_COOKIES
+ libgsoapssl_a_SOURCES = stdsoap2_ssl.c dom.c
+ libgsoapssl_a_CFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform) $(WSDL2H_EXTRA_FLAGS) -DWITH_DOM
+-libgsoapssl___a_SOURCES = stdsoap2_ssl_cpp.cpp dom.cpp
++libgsoapssl___a_SOURCES = stdsoap2_ssl_cpp.cpp dom_cpp.cpp
+ libgsoapssl___a_CXXFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) -D$(platform) $(WSDL2H_EXTRA_FLAGS) -DWITH_DOM
+ 
+-BUILT_SOURCES = stdsoap2_cpp.cpp $(lib_LIBRARIES)
++BUILT_SOURCES = stdsoap2_cpp.cpp dom_cpp.cpp $(lib_LIBRARIES)
+ 
+ include_HEADERS = stdsoap2.h
+ 
+-- 
+1.7.1
+
+
+From 237ed7cf43323b1cc1f1e9ecd8e29c1168f785fe Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Wed, 29 Sep 2010 20:42:09 +0200
+Subject: [PATCH 2/3] winsock2
+
+This patch has been taken from:
+http://sourceforge.net/tracker/?func=detail&aid=3071779&group_id=52781&atid=468023
+
+diff --git a/README.txt b/README.txt
+index 941f134..3fae519 100644
+--- a/README.txt
++++ b/README.txt
+@@ -238,7 +238,7 @@ versus Lex, and Bison versus Yacc.
+ 
+ Win32 builds of clients and services requires winsock.dll. To do this in
+ Visual C++ 6.0, go to "Project", "settings", select the "Link" tab (the
+-project file needs to be selected in the file view) and add "wsock32.lib" to
++project file needs to be selected in the file view) and add "ws2_32.lib" to
+ the "Object/library modules" entry. The distribution contains a Visual Studio
+ 2005 project example in the 'samples/calc_vs2005' folder with the necessary
+ project settings to link libraries and automatically invoke to soapcpp2
+diff --git a/gsoap/VisualStudio2005/README.txt b/gsoap/VisualStudio2005/README.txt
+index b20c078..ea5b441 100644
+--- a/gsoap/VisualStudio2005/README.txt
++++ b/gsoap/VisualStudio2005/README.txt
+@@ -1,7 +1,7 @@
+ 
+ Visual Studio 2005 Solution files for soapcpp2 and wsdl2h.
+ 
+-If not already installed, install the Platform SDK (R2) for winsock.h
++If not already installed, install the Platform SDK (R2) for winsock2.h
+ 
+ To build soapcpp2, first install Bison and Flex (in the default dirs):
+ 	http://gnuwin32.sourceforge.net/packages/bison.htm
+diff --git a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp
+index 834a4b8..8f64326 100644
+--- a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp
++++ b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp
+@@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
+ 
+ Installation note:
+ 
+-Win32 build needs winsock.dll (Visual C++ "wsock32.lib")
++Win32 build needs winsock.dll (Visual C++ "ws2_32.lib")
+ To do this in Visual C++ 6.0, go to "Project", "settings", select the "Link"
+ tab (the project file needs to be selected in the file view) and add
+-"wsock32.lib" to the "Object/library modules" entry
++"ws2_32.lib" to the "Object/library modules" entry
+ 
+ On Mac OS X with gcc (GCC) 3.1 20020420 (prerelease) you MUST compile with
+ -fstack_check when using -O2 because gcc 3.1 has a bug that smashes the stack
+@@ -76,7 +76,7 @@ when locally allocated data exceeds 64K.
+ #  ifdef UNDER_CE
+ #   pragma comment(lib, "winsock.lib")
+ #  else
+-#   pragma comment(lib, "wsock32.lib")
++#   pragma comment(lib, "ws2_32.lib")
+ #  endif
+ #  pragma warning(disable : 4996) /* disable deprecation warnings */
+ # endif
+diff --git a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h
+index 35e1a53..a1baf27 100644
+--- a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h
++++ b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h
+@@ -660,7 +660,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
+ #  define SOAP_GAI_STRERROR gai_strerrorA
+ # else
+ #  ifndef __BORLANDC__
+-#   include <winsock.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
++#   include <winsock2.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
+ /* # include <winsock2.h> */ /* Alternative: use winsock2 (not available with eVC), enable this line and comment out the line above */
+ #  else
+ #   include <winsock2.h> /* Borland C */
+diff --git a/gsoap/doc/soapdoc2.html b/gsoap/doc/soapdoc2.html
+index 3a26e9b..6645738 100644
+--- a/gsoap/doc/soapdoc2.html
++++ b/gsoap/doc/soapdoc2.html
+@@ -2599,10 +2599,10 @@ the need to know the details of the SOAP encoding used.
+ <div class="p"><!----></div>
+ 
+ <ul>
+-<li> Win32 builds need winsock.dll (MS Visual C++ "wsock32.lib")
++<li> Win32 builds need winsock.dll (MS Visual C++ "ws2_32.lib")
+ To do this in Visual C++ 6.0, go to "Project", "settings", select the "Link"
+ tab (the project file needs to be selected in the file view) and add
+-"<i>wsock32.lib</i>" to the "<i>Object/library modules</i>" entry.<br /><br /></li>
++"<i>ws2_32.lib</i>" to the "<i>Object/library modules</i>" entry.<br /><br /></li>
+ 
+ <li> Use files with extension .cpp only (don't mix .c with .cpp).<br /><br /></li>
+ 
+diff --git a/gsoap/mod_gsoap/gsoap_win/isapi/samples/calc/winstuff.cpp b/gsoap/mod_gsoap/gsoap_win/isapi/samples/calc/winstuff.cpp
+index cbc00a9..739a151 100644
+--- a/gsoap/mod_gsoap/gsoap_win/isapi/samples/calc/winstuff.cpp
++++ b/gsoap/mod_gsoap/gsoap_win/isapi/samples/calc/winstuff.cpp
+@@ -6,7 +6,7 @@
+ #include <winsock2.h>
+ 
+ #if _MSC_VER > 1000
+-#pragma comment(lib, "wsock32")
++#pragma comment(lib, "ws2_32")
+ #endif
+ 
+ static struct WSAInit { \
+diff --git a/gsoap/mod_gsoap/gsoap_win/isapi/samples/dime/winstuff.cpp b/gsoap/mod_gsoap/gsoap_win/isapi/samples/dime/winstuff.cpp
+index 7fe114c..10bed86 100644
+--- a/gsoap/mod_gsoap/gsoap_win/isapi/samples/dime/winstuff.cpp
++++ b/gsoap/mod_gsoap/gsoap_win/isapi/samples/dime/winstuff.cpp
+@@ -8,7 +8,7 @@
+ 
+ 
+ #if _MSC_VER > 1000
+-#pragma comment(lib, "wsock32")
++#pragma comment(lib, "ws2_32")
+ #endif
+ 
+ static struct WSAInit { \
+diff --git a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp
+index 834a4b8..8f64326 100644
+--- a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp
++++ b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp
+@@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
+ 
+ Installation note:
+ 
+-Win32 build needs winsock.dll (Visual C++ "wsock32.lib")
++Win32 build needs winsock.dll (Visual C++ "ws2_32.lib")
+ To do this in Visual C++ 6.0, go to "Project", "settings", select the "Link"
+ tab (the project file needs to be selected in the file view) and add
+-"wsock32.lib" to the "Object/library modules" entry
++"ws2_32.lib" to the "Object/library modules" entry
+ 
+ On Mac OS X with gcc (GCC) 3.1 20020420 (prerelease) you MUST compile with
+ -fstack_check when using -O2 because gcc 3.1 has a bug that smashes the stack
+@@ -76,7 +76,7 @@ when locally allocated data exceeds 64K.
+ #  ifdef UNDER_CE
+ #   pragma comment(lib, "winsock.lib")
+ #  else
+-#   pragma comment(lib, "wsock32.lib")
++#   pragma comment(lib, "ws2_32.lib")
+ #  endif
+ #  pragma warning(disable : 4996) /* disable deprecation warnings */
+ # endif
+diff --git a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h
+index 35e1a53..a1baf27 100644
+--- a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h
++++ b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h
+@@ -660,7 +660,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
+ #  define SOAP_GAI_STRERROR gai_strerrorA
+ # else
+ #  ifndef __BORLANDC__
+-#   include <winsock.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
++#   include <winsock2.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
+ /* # include <winsock2.h> */ /* Alternative: use winsock2 (not available with eVC), enable this line and comment out the line above */
+ #  else
+ #   include <winsock2.h> /* Borland C */
+diff --git a/gsoap/samples/wsse/stdsoap2.c b/gsoap/samples/wsse/stdsoap2.c
+index 834a4b8..8f64326 100644
+--- a/gsoap/samples/wsse/stdsoap2.c
++++ b/gsoap/samples/wsse/stdsoap2.c
+@@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
+ 
+ Installation note:
+ 
+-Win32 build needs winsock.dll (Visual C++ "wsock32.lib")
++Win32 build needs winsock.dll (Visual C++ "ws2_32.lib")
+ To do this in Visual C++ 6.0, go to "Project", "settings", select the "Link"
+ tab (the project file needs to be selected in the file view) and add
+-"wsock32.lib" to the "Object/library modules" entry
++"ws2_32.lib" to the "Object/library modules" entry
+ 
+ On Mac OS X with gcc (GCC) 3.1 20020420 (prerelease) you MUST compile with
+ -fstack_check when using -O2 because gcc 3.1 has a bug that smashes the stack
+@@ -76,7 +76,7 @@ when locally allocated data exceeds 64K.
+ #  ifdef UNDER_CE
+ #   pragma comment(lib, "winsock.lib")
+ #  else
+-#   pragma comment(lib, "wsock32.lib")
++#   pragma comment(lib, "ws2_32.lib")
+ #  endif
+ #  pragma warning(disable : 4996) /* disable deprecation warnings */
+ # endif
+diff --git a/gsoap/samples/wsse/stdsoap2.h b/gsoap/samples/wsse/stdsoap2.h
+index 35e1a53..a1baf27 100644
+--- a/gsoap/samples/wsse/stdsoap2.h
++++ b/gsoap/samples/wsse/stdsoap2.h
+@@ -660,7 +660,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
+ #  define SOAP_GAI_STRERROR gai_strerrorA
+ # else
+ #  ifndef __BORLANDC__
+-#   include <winsock.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
++#   include <winsock2.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
+ /* # include <winsock2.h> */ /* Alternative: use winsock2 (not available with eVC), enable this line and comment out the line above */
+ #  else
+ #   include <winsock2.h> /* Borland C */
+diff --git a/gsoap/stdsoap2.c b/gsoap/stdsoap2.c
+index 834a4b8..8f64326 100644
+--- a/gsoap/stdsoap2.c
++++ b/gsoap/stdsoap2.c
+@@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
+ 
+ Installation note:
+ 
+-Win32 build needs winsock.dll (Visual C++ "wsock32.lib")
++Win32 build needs winsock.dll (Visual C++ "ws2_32.lib")
+ To do this in Visual C++ 6.0, go to "Project", "settings", select the "Link"
+ tab (the project file needs to be selected in the file view) and add
+-"wsock32.lib" to the "Object/library modules" entry
++"ws2_32.lib" to the "Object/library modules" entry
+ 
+ On Mac OS X with gcc (GCC) 3.1 20020420 (prerelease) you MUST compile with
+ -fstack_check when using -O2 because gcc 3.1 has a bug that smashes the stack
+@@ -76,7 +76,7 @@ when locally allocated data exceeds 64K.
+ #  ifdef UNDER_CE
+ #   pragma comment(lib, "winsock.lib")
+ #  else
+-#   pragma comment(lib, "wsock32.lib")
++#   pragma comment(lib, "ws2_32.lib")
+ #  endif
+ #  pragma warning(disable : 4996) /* disable deprecation warnings */
+ # endif
+diff --git a/gsoap/stdsoap2.cpp b/gsoap/stdsoap2.cpp
+index 834a4b8..8f64326 100644
+--- a/gsoap/stdsoap2.cpp
++++ b/gsoap/stdsoap2.cpp
+@@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
+ 
+ Installation note:
+ 
+-Win32 build needs winsock.dll (Visual C++ "wsock32.lib")
++Win32 build needs winsock.dll (Visual C++ "ws2_32.lib")
+ To do this in Visual C++ 6.0, go to "Project", "settings", select the "Link"
+ tab (the project file needs to be selected in the file view) and add
+-"wsock32.lib" to the "Object/library modules" entry
++"ws2_32.lib" to the "Object/library modules" entry
+ 
+ On Mac OS X with gcc (GCC) 3.1 20020420 (prerelease) you MUST compile with
+ -fstack_check when using -O2 because gcc 3.1 has a bug that smashes the stack
+@@ -76,7 +76,7 @@ when locally allocated data exceeds 64K.
+ #  ifdef UNDER_CE
+ #   pragma comment(lib, "winsock.lib")
+ #  else
+-#   pragma comment(lib, "wsock32.lib")
++#   pragma comment(lib, "ws2_32.lib")
+ #  endif
+ #  pragma warning(disable : 4996) /* disable deprecation warnings */
+ # endif
+diff --git a/gsoap/stdsoap2.h b/gsoap/stdsoap2.h
+index 35e1a53..a1baf27 100644
+--- a/gsoap/stdsoap2.h
++++ b/gsoap/stdsoap2.h
+@@ -660,7 +660,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
+ #  define SOAP_GAI_STRERROR gai_strerrorA
+ # else
+ #  ifndef __BORLANDC__
+-#   include <winsock.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
++#   include <winsock2.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
+ /* # include <winsock2.h> */ /* Alternative: use winsock2 (not available with eVC), enable this line and comment out the line above */
+ #  else
+ #   include <winsock2.h> /* Borland C */
+-- 
+1.7.1
+
+
+From bfbf2b17a5c652afe8c650e5f7ebfaa05f7b1927 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Wed, 29 Sep 2010 20:44:00 +0200
+Subject: [PATCH 3/3] add missing -lgpg-error
+
+This patch has been taken from:
+http://sourceforge.net/tracker/?func=detail&aid=3071775&group_id=52781&atid=468023
+
+diff --git a/configure.in b/configure.in
+index 2133283..cd2113c 100644
+--- a/configure.in
++++ b/configure.in
+@@ -167,8 +167,8 @@ if test "x$with_openssl" = "xyes"; then
+   if test "x$with_gnutls" = "xyes"; then
+     AC_MSG_RESULT(yes)
+     WSDL2H_EXTRA_FLAGS="-DWITH_GNUTLS -DWITH_GZIP"
+-    WSDL2H_EXTRA_LIBS="-lgnutls -lgcrypt -lz"
+-    SAMPLE_SSL_LIBS="-lgnutls -lgcrypt -lz"
++    WSDL2H_EXTRA_LIBS="-lgnutls -lgcrypt -lgpg-error -lz"
++    SAMPLE_SSL_LIBS="-lgnutls -lgcrypt -lgpg-error -lz"
+     WSDL2H_SOAP_CPP_LIB="libgsoapssl++.a"
+   else
+     AC_MSG_RESULT(no)
+-- 
+1.7.1
+
