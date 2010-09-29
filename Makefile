@@ -22,9 +22,11 @@ LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
 VERSION    := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
 
 # unexport any environment variables that might cause trouble
-unexport AR CC CFLAGS CPP CPPFLAGS CROSS CXX CXXCPP CXXFLAGS EXEEXT
-unexport EXTRA_CFLAGS EXTRA_LDFLAGS LD LDFLAGS LIBS NM PKG_CONFIG
-unexport PKG_CONFIG_PATH QMAKESPEC RANLIB STRIP
+unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
+unexport CPPFLAGS CROSS CXX CXXCPP CXXFLAGS EXEEXT EXTRA_CFLAGS
+unexport EXTRA_LDFLAGS LD LDFLAGS LIBRARY_PATH LIBS NM
+unexport OBJC_INCLUDE_PATH PKG_CONFIG PKG_CONFIG_PATH QMAKESPEC
+unexport RANLIB STRIP
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
