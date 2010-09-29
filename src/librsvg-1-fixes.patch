@@ -1,11 +1,13 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-commit 1ff5a73bee660f1d61f9cdd7c8d7aff29e959c4c
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Mon Sep 27 12:00:52 2010 +0200
+Contains ad hoc patches for cross building.
 
-    fix .pc requirements
+From 1ff5a73bee660f1d61f9cdd7c8d7aff29e959c4c Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Mon, 27 Sep 2010 12:00:52 +0200
+Subject: [PATCH 1/2] fix .pc requirements
+
 
 diff --git a/librsvg.pc.in b/librsvg.pc.in
 index 372f199..b6ee7a9 100644
@@ -20,14 +22,16 @@ index 372f199..b6ee7a9 100644
  Requires.private:
  Libs: -L${libdir} -lrsvg-@RSVG_API_MAJOR_VERSION@ -lm
  Cflags: -I${includedir}/librsvg-@RSVG_API_VERSION@
+-- 
+1.7.1
 
-commit 9a7e7ebee9aab83659b9aced51fb53de5427138d
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Mon Sep 27 12:02:45 2010 +0200
 
-    fix stray comma
-    
-    Taken from https://bugzilla.gnome.org/show_bug.cgi?id=630714
+From 9a7e7ebee9aab83659b9aced51fb53de5427138d Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Mon, 27 Sep 2010 12:02:45 +0200
+Subject: [PATCH 2/2] fix stray comma
+
+Taken from https://bugzilla.gnome.org/show_bug.cgi?id=630714
 
 diff --git a/rsvg.h b/rsvg.h
 index 37e7930..41c4127 100644
@@ -42,3 +46,6 @@ index 37e7930..41c4127 100644
  } RsvgHandleFlags;
  
  void        rsvg_handle_set_base_gfile (RsvgHandle *handle,
+-- 
+1.7.1
+

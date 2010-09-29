@@ -3,11 +3,11 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-commit 1acd5465c0b9f2f612c5904ea7e652475fb3bee6
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 14:43:43 2010 +0200
+From 1acd5465c0b9f2f612c5904ea7e652475fb3bee6 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 14:43:43 +0200
+Subject: [PATCH 01/11] s,DllMain,static _disabled_DllMain,
 
-    s,DllMain,static _disabled_DllMain,
 
 diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
 index 94b7ac7..2c01be6 100644
@@ -35,12 +35,15 @@ index fdf4730..428fd96 100644
  	 DWORD     fdwReason,
  	 LPVOID    lpvReserved)
  {
+-- 
+1.7.1
 
-commit bc446ce0785954ccf28825554c3074a15b4f4071
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 14:46:20 2010 +0200
 
-    s,__declspec(dllimport),,
+From bc446ce0785954ccf28825554c3074a15b4f4071 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 14:46:20 +0200
+Subject: [PATCH 02/11] s,__declspec(dllimport),,
+
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
 index 506f35d..f40de41 100644
@@ -94,12 +97,15 @@ index c624aea..b792ea5 100644
  #endif
  #else
  #define VARIABLE extern
+-- 
+1.7.1
 
-commit 078f0c210e1706b4028907bf55cc55672d5dc7d3
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 15:03:28 2010 +0200
 
-    s,__declspec(dllexport),,
+From 078f0c210e1706b4028907bf55cc55672d5dc7d3 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 15:03:28 +0200
+Subject: [PATCH 03/11] s,__declspec(dllexport),,
+
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
 index f40de41..07cfb4e 100644
@@ -153,12 +159,15 @@ index b792ea5..f382a64 100644
  #else
  #define VARIABLE extern 
  #endif
+-- 
+1.7.1
 
-commit 69568bc7c8627d117521548192730665a9623b80
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 14:17:22 2010 +0200
 
-    fix gtk+-2.0.pc.in
+From 69568bc7c8627d117521548192730665a9623b80 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 14:17:22 +0200
+Subject: [PATCH 04/11] fix gtk+-2.0.pc.in
+
 
 diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
 index 46853e1..7f3eb22 100644
@@ -171,12 +180,15 @@ index 46853e1..7f3eb22 100644
 -Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@
 +Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
  Cflags: -I${includedir}/gtk-2.0 @GTK_EXTRA_CFLAGS@
+-- 
+1.7.1
 
-commit 1f60f6943b5c67a199660618e546de5f0faafeef
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 14:48:31 2010 +0200
 
-    disable gtkbuiltincache
+From 1f60f6943b5c67a199660618e546de5f0faafeef Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 14:48:31 +0200
+Subject: [PATCH 05/11] disable gtkbuiltincache
+
 
 diff --git a/gtk/Makefile.in b/gtk/Makefile.in
 index 39a35c2..89bae23 100644
@@ -191,12 +203,15 @@ index 39a35c2..89bae23 100644
  	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
  	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
  	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
+-- 
+1.7.1
 
-commit e24f3fb7d18d0690dddd1fdb1a629a06d49b4c11
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 14:49:50 2010 +0200
 
-    disable test-inline-pixbufs.h
+From e24f3fb7d18d0690dddd1fdb1a629a06d49b4c11 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 14:49:50 +0200
+Subject: [PATCH 06/11] disable test-inline-pixbufs.h
+
 
 diff --git a/demos/Makefile.in b/demos/Makefile.in
 index 6bffbb8..c866923 100644
@@ -211,12 +226,15 @@ index 6bffbb8..c866923 100644
  testpixbuf_DEPENDENCIES = $(DEPS)
  testpixbuf_drawable_DEPENDENCIES = $(DEPS)
  testpixbuf_save_DEPENDENCIES = $(DEPS)
+-- 
+1.7.1
 
-commit b34df7c9461a798e9a8202eec886ac5e173da3ea
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 14:51:04 2010 +0200
 
-    permit static building
+From b34df7c9461a798e9a8202eec886ac5e173da3ea Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 14:51:04 +0200
+Subject: [PATCH 07/11] permit static building
+
 
 diff --git a/configure b/configure
 index f203b13..51e6619 100755
@@ -309,12 +327,15 @@ index f203b13..51e6619 100755
      fi
      ;;
    esac
+-- 
+1.7.1
 
-commit 831f94ccf7a26662bfc9e8d22b9ae9eaea740bbb
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 14:53:18 2010 +0200
 
-    no -Wl
+From 831f94ccf7a26662bfc9e8d22b9ae9eaea740bbb Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 14:53:18 +0200
+Subject: [PATCH 08/11] no -Wl
+
 
 diff --git a/configure b/configure
 index 51e6619..8c04264 100755
@@ -329,12 +350,15 @@ index 51e6619..8c04264 100755
     if true; then
    USE_WIN32_TRUE=
    USE_WIN32_FALSE='#'
+-- 
+1.7.1
 
-commit 2ec5f9d9ea8d7d80758c5272ff2e94fd0e7856e8
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 14:54:15 2010 +0200
 
-    gio not gio-unix
+From 2ec5f9d9ea8d7d80758c5272ff2e94fd0e7856e8 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 14:54:15 +0200
+Subject: [PATCH 09/11] gio not gio-unix
+
 
 diff --git a/configure b/configure
 index 8c04264..d3e5e21 100755
@@ -352,12 +376,15 @@ index 8c04264..d3e5e21 100755
  else
    GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
  fi
+-- 
+1.7.1
 
-commit 3e9c211536912bf78c44172b7f6ecd8860887166
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 14:55:33 2010 +0200
 
-    set cross_compiling explicitly to avoid Wine interference
+From 3e9c211536912bf78c44172b7f6ecd8860887166 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 14:55:33 +0200
+Subject: [PATCH 10/11] set cross_compiling explicitly to avoid Wine interference
+
 
 diff --git a/configure b/configure
 index d3e5e21..7ae7a5d 100755
@@ -381,12 +408,15 @@ index d3e5e21..7ae7a5d 100755
    else
      if test "$cross_compiling" = maybe; then
  	cross_compiling=yes
+-- 
+1.7.1
 
-commit 01cc2d128be8a19c1434b912e378deae3b1bfcf9
-Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Fri Sep 24 15:30:49 2010 +0200
 
-    removed duplicate _gtk_marshal_OBJECT__VOID()
+From 01cc2d128be8a19c1434b912e378deae3b1bfcf9 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 24 Sep 2010 15:30:49 +0200
+Subject: [PATCH 11/11] removed duplicate _gtk_marshal_OBJECT__VOID()
+
 
 diff --git a/perf/marshalers.c b/perf/marshalers.c
 index f533ab0..0a37ba4 100644
@@ -436,3 +466,6 @@ index f533ab0..0a37ba4 100644
  /* VOID:ENUM,OBJECT,DOUBLE (./marshalers.list:2) */
  void
  _gtk_marshal_VOID__ENUM_OBJECT_DOUBLE (GClosure     *closure,
+-- 
+1.7.1
+
