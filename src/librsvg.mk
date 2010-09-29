@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-pixbuf-loader \
+        --disable-pixbuf-loader \
         --disable-gtk-theme \
         --disable-mozilla-plugin \
         --disable-gtk-doc \
