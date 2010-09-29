@@ -1,0 +1,58 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From c71783745127d3af9ab40f6a4cb95ac13ad2707b Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Wed, 29 Sep 2010 23:08:44 +0200
+Subject: [PATCH 1/2] allow deprecated GdkSpanFunc
+
+
+diff --git a/gtkglext/gtkmm/gl/Makefile.in b/gtkglext/gtkmm/gl/Makefile.in
+index 13afa02..152f930 100644
+--- a/gtkglext/gtkmm/gl/Makefile.in
++++ b/gtkglext/gtkmm/gl/Makefile.in
+@@ -209,7 +209,6 @@ sublib_cflags = \
+ 	$(GTKGLEXTMM_DEP_CFLAGS)	\
+ 	-DGTKMM_GL_COMPILATION		\
+ 	-DG_DISABLE_DEPRECATED		\
+-	-DGDK_DISABLE_DEPRECATED	\
+ 	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
+ 	-DGTK_DISABLE_DEPRECATED
+ 
+-- 
+1.7.1
+
+
+From b3a26572b965ada869cc388b6bfce5c54b6ab704 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Wed, 29 Sep 2010 23:18:40 +0200
+Subject: [PATCH 2/2] wine workaround: s,cross_compiling=no,cross_compiling=yes,
+
+
+diff --git a/configure b/configure
+index 508d229..65f61fb 100755
+--- a/configure
++++ b/configure
+@@ -409,7 +409,7 @@ exec 6>&1
+ #
+ ac_default_prefix=/usr/local
+ ac_config_libobj_dir=.
+-cross_compiling=no
++cross_compiling=yes
+ subdirs=
+ MFLAGS=
+ MAKEFLAGS=
+@@ -2486,7 +2486,7 @@ if test "$cross_compiling" != yes; then
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; }; then
+-    cross_compiling=no
++    cross_compiling=yes
+   else
+     if test "$cross_compiling" = maybe; then
+ 	cross_compiling=yes
+-- 
+1.7.1
+
