@@ -154,14 +154,14 @@ index b792ea5..f382a64 100644
  #define VARIABLE extern 
  #endif
 
-commit 1f0f8944278d888d6d81df1a03458ec7913cde09
+commit 69568bc7c8627d117521548192730665a9623b80
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Fri Sep 24 14:17:22 2010 +0200
 
     fix gtk+-2.0.pc.in
 
 diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
-index 46853e1..bb53ed2 100644
+index 46853e1..7f3eb22 100644
 --- a/gtk+-2.0.pc.in
 +++ b/gtk+-2.0.pc.in
 @@ -11,5 +11,5 @@ Name: GTK+
@@ -169,10 +169,10 @@ index 46853e1..bb53ed2 100644
  Version: @VERSION@
  Requires: gdk-${target}-2.0 @GTK_PACKAGES@
 -Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@
-+Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_DEP_LIBS@
++Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
  Cflags: -I${includedir}/gtk-2.0 @GTK_EXTRA_CFLAGS@
 
-commit 74854514567b97b4862e4e6339d1273256bbf747
+commit 1f60f6943b5c67a199660618e546de5f0faafeef
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Fri Sep 24 14:48:31 2010 +0200
 
@@ -192,7 +192,7 @@ index 39a35c2..89bae23 100644
  	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
  	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 
-commit 6e2c98deed33a2a8052176a037229075b0c692ad
+commit e24f3fb7d18d0690dddd1fdb1a629a06d49b4c11
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Fri Sep 24 14:49:50 2010 +0200
 
@@ -212,7 +212,7 @@ index 6bffbb8..c866923 100644
  testpixbuf_drawable_DEPENDENCIES = $(DEPS)
  testpixbuf_save_DEPENDENCIES = $(DEPS)
 
-commit 6a7535018b0530f5d6cf2fc39e3194dae226e443
+commit b34df7c9461a798e9a8202eec886ac5e173da3ea
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Fri Sep 24 14:51:04 2010 +0200
 
@@ -310,7 +310,7 @@ index f203b13..51e6619 100755
      ;;
    esac
 
-commit 1a86c4abd517485c154224fd78b851118ac3c0b7
+commit 831f94ccf7a26662bfc9e8d22b9ae9eaea740bbb
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Fri Sep 24 14:53:18 2010 +0200
 
@@ -330,7 +330,7 @@ index 51e6619..8c04264 100755
    USE_WIN32_TRUE=
    USE_WIN32_FALSE='#'
 
-commit 6d32f30c154a6fcc459f6efebae913a7b3325e79
+commit 2ec5f9d9ea8d7d80758c5272ff2e94fd0e7856e8
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Fri Sep 24 14:54:15 2010 +0200
 
@@ -353,7 +353,7 @@ index 8c04264..d3e5e21 100755
    GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
  fi
 
-commit 61da66059b505c8d489f44eaef9bd34846d3c2a8
+commit 3e9c211536912bf78c44172b7f6ecd8860887166
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Fri Sep 24 14:55:33 2010 +0200
 
@@ -382,7 +382,7 @@ index d3e5e21..7ae7a5d 100755
      if test "$cross_compiling" = maybe; then
  	cross_compiling=yes
 
-commit bd50ae9f7b151743c7f301aed2a71017f3bf0e13
+commit 01cc2d128be8a19c1434b912e378deae3b1bfcf9
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Fri Sep 24 15:30:49 2010 +0200
 

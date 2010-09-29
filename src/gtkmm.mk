@@ -33,6 +33,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -pedantic -std=c++0x \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm.exe' \
-        `'$(TARGET)-pkg-config' gtkmm-2.4 --cflags --libs` \
-        -lwinspool -lcomctl32 -lcomdlg32 -ldnsapi
+        `'$(TARGET)-pkg-config' gtkmm-2.4 --cflags --libs`
 endef

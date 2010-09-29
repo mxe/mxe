@@ -45,5 +45,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtk.exe' \
-        `'$(TARGET)-pkg-config' gtk+-2.0 --cflags --libs` -ldnsapi
+        `'$(TARGET)-pkg-config' gtk+-2.0 --cflags --libs`
 endef
