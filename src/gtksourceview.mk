@@ -4,8 +4,8 @@
 # GTKSourceView
 PKG             := gtksourceview
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.10.3
-$(PKG)_CHECKSUM := 318a495315b1b6e67d7a5ef2ea68060cb68b511a
+$(PKG)_VERSION  := 2.10.5
+$(PKG)_CHECKSUM := 5081dc7a081954d0af73852c22e874a746bda30e
 $(PKG)_SUBDIR   := gtksourceview-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtksourceview-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://projects.gnome.org/gtksourceview/
@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=GTKSOURCEVIEW_\\([0-9]*_[0-9]*[02468]_[^<]*\\)'.*,\\1,p" | \
     $(SED) 's,_,.,g' | \
+    grep -v '^2\.9' | \
     head -1
 endef
 
