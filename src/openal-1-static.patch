@@ -1,0 +1,21 @@
+--- a/include/AL/al.h	2010-03-29 08:23:32.000000000 +0200
++++ b/include/AL/al.h	2010-09-30 15:45:27.845778136 +0200
+@@ -5,6 +5,10 @@
+ extern "C" {
+ #endif
+ 
++#if 1
++ #define AL_API
++ #define AL_APIENTRY
++#else
+ #if defined(_WIN32) && !defined(_XBOX)
+  #if defined(AL_BUILD_LIBRARY)
+   #define AL_API __declspec(dllexport)
+@@ -18,6 +22,7 @@
+   #define AL_API extern
+  #endif
+ #endif
++#endif
+ 
+ #if defined(_WIN32)
+  #define AL_APIENTRY __cdecl
