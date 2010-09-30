@@ -4,8 +4,8 @@
 # GnuTLS
 PKG             := gnutls
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.10.1
-$(PKG)_CHECKSUM := 507ff8ad7c1e042f8ecaa4314f32777e74caf0d3
+$(PKG)_VERSION  := 2.10.2
+$(PKG)_CHECKSUM := 2704b7b86fc5e3444afcf20feb7bc9ff117d4816
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
