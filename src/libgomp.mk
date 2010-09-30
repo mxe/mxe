@@ -11,7 +11,7 @@ $(PKG)_FILE      = $(gcc_FILE)
 $(PKG)_WEBSITE  := http://gcc.gnu.org/projects/gomp/
 $(PKG)_URL       = $(gcc_URL)
 $(PKG)_URL_2     = $(gcc_URL_2)
-$(PKG)_DEPS     := pthreads
+$(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
     echo $(gcc_VERSION)

@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gtkglext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglext-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://gtkglext.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglext/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gtk
+$(PKG)_DEPS     := gcc gtk
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/cgit/gtkglext/refs/tags' | \
