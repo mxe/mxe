@@ -33,9 +33,11 @@ define $(PKG)_BUILD
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'       \
         -DCMAKE_BUILD_TYPE=Release                         \
         -DLIBTYPE=STATIC
-    cd '$(1)/build' && $(MAKE) -j '$(JOBS)'
-    cd '$(1)/build' && cp -fv  OpenAL32.a $(PREFIX)/$(TARGET)/lib/libOpenAL32.a
-    cd '$(1)/build' && cp -rfv openal.pc  $(PREFIX)/$(TARGET)/lib/pkgconfig
-    $(SED) -i 's,^\(Libs:.*\),\1 -lwinmm,' $(PREFIX)/$(TARGET)/lib/pkgconfig/openal.pc
-    cd '$(1)' && cp -rfv include/*  $(PREFIX)/$(TARGET)/include
+    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+    ln -sf '$(PREFIX)/$(TARGET)/lib/OpenAL32.a' '$(PREFIX)/$(TARGET)/lib/libOpenAL32.a'
+    
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-openal.exe' \
+        `'$(TARGET)-pkg-config' openal --cflags --libs`
 endef
