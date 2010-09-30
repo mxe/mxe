@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY           \
         -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY           \
         -DCMAKE_C_COMPILER='$(PREFIX)/bin/$(TARGET)-gcc'   \
-        -DCMAKE_CXX_COMPILER='$(PREFIX)/bin/$(TARGET)-gcc' \
+        -DCMAKE_CXX_COMPILER='$(PREFIX)/bin/$(TARGET)-g++' \
         -DCMAKE_INCLUDE_PATH='$(PREFIX)/$(TARGET)/include' \
         -DCMAKE_LIB_PATH='$(PREFIX)/$(TARGET)/lib'         \
         -DPKG_CONFIG_EXECUTABLE=$(TARGET)-pkg-config       \
