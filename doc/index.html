@@ -534,6 +534,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="http://freedesktop.org/wiki/Software/intltool/">Intltool</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="http://en.wikipedia.org/wiki/C_standard_library">LibC</a> for 32-bit</td>
         <td></td>
     </tr>
@@ -583,9 +587,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>aptitude install -R autoconf automake bash bison bzip2 \
-                    cmake flex g++ make sed libtool openssl \
-                    libssl-dev libxml-parser-perl patch \
-                    perl pkg-config scons unzip wget xz-utils</pre>
+                    cmake flex g++ intltool make sed \
+                    libtool openssl libssl-dev \
+                    libxml-parser-perl patch perl \
+                    pkg-config scons unzip wget xz-utils</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -603,8 +608,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.freebsd.org/ports/ -->
     <pre>pkg_add -r automake110 autoconf262 bash bison cmake \
-           flex gmake gsed libtool openssl patch perl \
-           p5-XML-Parser pkg-config scons unzip wget</pre>
+           flex gmake gsed intltool libtool openssl \
+           patch perl p5-XML-Parser pkg-config scons \
+           unzip wget</pre>
 
     <p>
     Ensure that /usr/local/bin preceeds /usr/bin in your $PATH:
@@ -629,9 +635,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
-             flex gcc make sed libtool openssl patch \
-             perl perl-xml-parser pkgconfig scons unzip \
-             wget xz xz-lzma</pre>
+             flex gcc intltool make sed libtool openssl \
+             patch perl perl-xml-parser pkgconfig scons \
+             unzip wget xz xz-lzma</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -644,11 +650,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>emerge sys-devel/autoconf sys-devel/automake \
        app-shells/bash sys-devel/bison app-arch/bzip2 \
        dev-util/cmake sys-devel/flex sys-devel/gcc \
-       sys-devel/make sys-apps/sed sys-devel/libtool \
-       dev-libs/openssl sys-devel/patch dev-lang/perl \
-       dev-perl/XML-Parser dev-util/pkgconfig \
-       dev-util/scons app-arch/unzip net-misc/wget \
-       app-arch/xz-utils</pre>
+       dev-util/intltool sys-devel/make sys-apps/sed \
+       sys-devel/libtool dev-libs/openssl sys-devel/patch \
+       dev-lang/perl dev-perl/XML-Parser \
+       dev-util/pkgconfig dev-util/scons app-arch/unzip \
+       net-misc/wget app-arch/xz-utils</pre>
 
     <p>
     There are
@@ -666,8 +672,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
-                  gsed libtool openssl p5-xml-parser \
-                  pkgconfig scons wget xz-devel gcc_select
+                  gsed intltool libtool openssl \
+                  p5-xml-parser pkgconfig scons \
+                  wget xz-devel gcc_select
 sudo gcc_select gcc40</pre>
 
     <h3>MacOS X (≤ 10.5)</h3>
@@ -681,17 +688,19 @@ sudo gcc_select gcc40</pre>
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
-                  gmake gsed libtool openssl p5-xml-parser \
-                  pkgconfig scons wget xz-devel</pre>
+                  gmake gsed intltool libtool openssl \
+                  p5-xml-parser pkgconfig scons wget \
+                  xz-devel</pre>
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
     <!-- http://software.opensuse.org/113/en -->
     <pre>zypper install -R autoconf automake bash bison bzip2 \
-                  cmake flex gcc-c++ gettext-tools libtool \
-                  make openssl libopenssl-devel patch perl \
-                  perl-XML-Parser pkg-config scons sed \
-                  unzip wget xz</pre>
+                  cmake flex gcc-c++ gettext-tools \
+                  intltool libtool make openssl \
+                  libopenssl-devel patch perl \
+                  perl-XML-Parser pkg-config scons \
+                  sed unzip wget xz</pre>
 
     <h3 id="requirements-opensuse64">openSUSE 11.3 x86_64 (additional)</h3>
     <pre>zypper install -R gcc-32bit glibc-devel-32bit \
