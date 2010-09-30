@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gtkglextmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglextmm-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://gtkglext.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gtkmm
+$(PKG)_DEPS     := gcc gtkglext gtkmm
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/cgit/gtkglextmm/refs/tags' | \
@@ -32,8 +32,7 @@ define $(PKG)_BUILD
         INFO_DEPS=
 
     '$(TARGET)-g++' \
-        -W -Wall \
+        -W -Wall -Werror -pedantic -std=c++0x \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(TARGET).exe' \
-        `'$(TARGET)-pkg-config' gtkglextmm-1.2 --cflags --libs` \
-        -lwinspool -lcomctl32 -lcomdlg32 -ldnsapi
+        `'$(TARGET)-pkg-config' gtkglextmm-1.2 --cflags --libs`
 endef
