@@ -1,0 +1,106 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From cd2b1b4a0ae81dddd3fa70c06528a7024ada7a5f Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 1 Oct 2010 12:54:06 +0200
+Subject: [PATCH] SigC changed to sigc
+
+
+diff --git a/plotmm/curve.h b/plotmm/curve.h
+index 8d22e19..05065fc 100644
+--- a/plotmm/curve.h
++++ b/plotmm/curve.h
+@@ -140,7 +140,7 @@ namespace PlotMM {
+ 			  int from = 0, int to = -1);
+ 
+ 	//! Signals that this curve has changed in some way or the other
+-	SigC::Signal0<void> signal_curve_changed;
++	sigc::signal0<void> signal_curve_changed;
+ 
+     protected:
+ 	virtual void init(const Glib::ustring &title);
+diff --git a/plotmm/plot.cc b/plotmm/plot.cc
+index 90aa5f8..6696171 100644
+--- a/plotmm/plot.cc
++++ b/plotmm/plot.cc
+@@ -322,7 +322,7 @@ Plot::Plot() :
+       connect(sigc::mem_fun(*this,&Plot::on_canvas_expose_event));
+ #else
+     canvas_.signal_expose_event().
+-      connect(SigC::slot(*this,&Plot::on_canvas_expose_event));
++      connect(sigc::slot(*this,&Plot::on_canvas_expose_event));
+ #endif
+ 
+     show_all();
+@@ -406,19 +406,19 @@ void Plot::replot()
+ }
+ 
+ //! Return the signal owned by plot canvas
+-SigC::Signal3<void,int,int,GdkEventButton*> Plot::signal_plot_mouse_press()
++sigc::signal3<void,int,int,GdkEventButton*> Plot::signal_plot_mouse_press()
+ {
+     return canvas_.signal_plot_mouse_press;
+ }
+ 
+ //! Return the signal owned by plot canvas
+-SigC::Signal3<void,int,int,GdkEventButton*> Plot::signal_plot_mouse_release()
++sigc::signal3<void,int,int,GdkEventButton*> Plot::signal_plot_mouse_release()
+ {
+     return canvas_.signal_plot_mouse_release;
+ }
+ 
+ //! Return the signal owned by plot canvas
+-SigC::Signal3<void,int,int,GdkEventMotion*> Plot::signal_plot_mouse_move()
++sigc::signal3<void,int,int,GdkEventMotion*> Plot::signal_plot_mouse_move()
+ {
+     return canvas_.signal_plot_mouse_move;
+ }
+diff --git a/plotmm/plot.h b/plotmm/plot.h
+index 79533a8..f522b40 100644
+--- a/plotmm/plot.h
++++ b/plotmm/plot.h
+@@ -79,9 +79,9 @@ namespace PlotMM
+ 	virtual void clear();
+ 	virtual void end_replot();
+ 
+-	SigC::Signal3<void,int,int,GdkEventButton*> signal_plot_mouse_press;
+-	SigC::Signal3<void,int,int,GdkEventButton*> signal_plot_mouse_release;
+-	SigC::Signal3<void,int,int,GdkEventMotion*> signal_plot_mouse_move;
++	sigc::signal3<void,int,int,GdkEventButton*> signal_plot_mouse_press;
++	sigc::signal3<void,int,int,GdkEventButton*> signal_plot_mouse_release;
++	sigc::signal3<void,int,int,GdkEventMotion*> signal_plot_mouse_move;
+ 
+     protected:
+ 	virtual bool on_expose_event(GdkEventExpose* event);
+@@ -141,9 +141,9 @@ namespace PlotMM
+ 	Scale *scale(PlotAxisID id) { return tickMark_[id]; }
+ 	PlotLabel *label(PlotAxisID id) { return axisLabel_[id]; }
+ 
+-	SigC::Signal3<void,int,int,GdkEventButton*> signal_plot_mouse_press();
+-	SigC::Signal3<void,int,int,GdkEventButton*> signal_plot_mouse_release();
+-	SigC::Signal3<void,int,int,GdkEventMotion*> signal_plot_mouse_move();
++	sigc::signal3<void,int,int,GdkEventButton*> signal_plot_mouse_press();
++	sigc::signal3<void,int,int,GdkEventButton*> signal_plot_mouse_release();
++	sigc::signal3<void,int,int,GdkEventMotion*> signal_plot_mouse_move();
+ 
+ 	void set_selection(const Rectangle &r);
+ 	Rectangle get_selection() { return select_; }
+diff --git a/plotmm/scale.h b/plotmm/scale.h
+index 333f456..cf8e355 100644
+--- a/plotmm/scale.h
++++ b/plotmm/scale.h
+@@ -133,7 +133,7 @@ namespace PlotMM
+ 	/*! This signal is thrown whenever the scale is enabled or disabled
+ 	 *  \sa set_enabled, enabled
+ 	 */
+-	SigC::Signal1<void,bool> signal_enabled;
++	sigc::signal1<void,bool> signal_enabled;
+ 
+     protected:
+ 	virtual void on_realize();
+-- 
+1.7.1
+
