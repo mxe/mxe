@@ -1,10 +1,19 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-diff -urN a/examples/nonblocking.c b/examples/nonblocking.c
---- a/examples/nonblocking.c	2006-06-19 19:54:05.000000000 +0200
-+++ b/examples/nonblocking.c	2010-02-21 19:55:04.834952292 +0100
-@@ -68,7 +68,11 @@
+Contains ad hoc patches for cross building.
+
+From 25255ff19813e122e6442518b29a55c15860d3a3 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 1 Oct 2010 17:20:29 +0200
+Subject: [PATCH] mingw fixes
+
+
+diff --git a/examples/nonblocking.c b/examples/nonblocking.c
+index 0f4aa68..49a3d36 100644
+--- a/examples/nonblocking.c
++++ b/examples/nonblocking.c
+@@ -68,7 +68,11 @@ int main()
  
  	while (ret == SHOUTERR_BUSY) {
  	  printf("Connection pending. Sleeping...\n");
@@ -16,9 +25,10 @@ diff -urN a/examples/nonblocking.c b/examples/nonblocking.c
  	  ret = shout_get_connected(shout);
  	}
  	
-diff -urN a/include/os.h b/include/os.h
---- a/include/os.h	2005-06-27 23:33:22.000000000 +0200
-+++ b/include/os.h	2010-02-21 19:55:04.834952292 +0100
+diff --git a/include/os.h b/include/os.h
+index 7d065b3..d7ae425 100755
+--- a/include/os.h
++++ b/include/os.h
 @@ -1,7 +1,9 @@
  #ifdef _WIN32
 +#ifndef __MINGW32__
@@ -29,9 +39,10 @@ diff -urN a/include/os.h b/include/os.h
  typedef int  ssize_t;
  #endif
 +#endif
-diff -urN a/include/shout/shout.h.in b/include/shout/shout.h.in
---- a/include/shout/shout.h.in	2005-06-27 23:33:21.000000000 +0200
-+++ b/include/shout/shout.h.in	2010-02-21 20:14:04.762887368 +0100
+diff --git a/include/shout/shout.h.in b/include/shout/shout.h.in
+index 43b0e7a..b026c10 100644
+--- a/include/shout/shout.h.in
++++ b/include/shout/shout.h.in
 @@ -23,8 +23,10 @@
  
  #include <sys/types.h>
@@ -43,3 +54,6 @@ diff -urN a/include/shout/shout.h.in b/include/shout/shout.h.in
  
  #define SHOUTERR_SUCCESS	(0)
  #define SHOUTERR_INSANE		(-1)
+-- 
+1.7.1
+
