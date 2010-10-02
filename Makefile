@@ -15,10 +15,10 @@ MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PATH       := $(PREFIX)/bin:$(PATH)
 SHELL      := bash
-SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
-PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
+PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
+SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 VERSION    := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
 
 # unexport any environment variables that might cause trouble
