@@ -13,6 +13,10 @@ $(PKG)_URL      := http://icculus.org/SDL_sound/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis smpeg
 
 define $(PKG)_UPDATE
+    wget -q -O- 'http://hg.icculus.org/icculus/SDL_sound/tags' | \
+    grep 'release-' | \
+    $(SED) -n 's,.*release-\([0-9.]*\)<.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

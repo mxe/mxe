@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc gtkmm
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/plotmm/files/plotmm/) | \
-    $(SED) -n 's,.*plotmm-\([0-9][^>]*\)-\.tar.*,\1,p' | \
+    $(SED) -n 's,.*plotmm-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef
 
