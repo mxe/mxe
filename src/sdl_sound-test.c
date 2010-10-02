@@ -44,4 +44,6 @@ int main( int argc, char** argv )
 	printf("Format: %s\n", sample->decoder->description);
 	printf("Decoded %d bytes of data.\n", sample->buffer_size);
 	Sound_FreeSample(sample);
+
+	return 0;
 }

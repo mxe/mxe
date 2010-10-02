@@ -38,6 +38,15 @@ define $(PKG)_BUILD
         --disable-smpegtest \
         --with-smpeg-prefix='$(PREFIX)/$(TARGET)' \
         LIBMIKMOD_CONFIG='$(PREFIX)/$(TARGET)/bin/libmikmod-config' \
-        LIBS='-lvorbis -logg'
+        LIBS='-lvorbis -logg' \
+        CFLAGS='-fno-inline'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -std=c99 -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_sound.exe' \
+        `'$(TARGET)-pkg-config' sdl --cflags --libs` \
+        -lSDL_sound \
+        `'$(TARGET)-pkg-config' vorbisfile --libs` \
+        -lspeex -lmikmod
 endef
