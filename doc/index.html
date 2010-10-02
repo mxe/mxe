@@ -839,7 +839,7 @@ sudo gcc_select gcc40</pre>
 
         <p>
         BTW, we're always curious about the applications people are porting.
-        We maintain is a
+        We maintain a
         <a href="#used-by">list of projects</a>
         which use mingw-cross-env.
         No matter whether your project is free or proprietary
@@ -885,7 +885,7 @@ sudo gcc_select gcc40</pre>
         The easiest way to get the dependencies right
         is to start with a minimal setup.
         That is,
-        initialize mingw-corss-env with <code>make gcc</code> only.
+        initialize mingw-cross-env with <code>make gcc</code> only.
         </p>
 
         <p>
@@ -898,7 +898,7 @@ sudo gcc_select gcc40</pre>
         <p>
         Write your <code>$(PKG)_BUILD</code>.
         If your library has a <code>./configure</code> script,
-        enable/disable all depdency libraries explicitly
+        enable/disable all dependency libraries explicitly
         via "<code>--enable-*</code>" and "<code>--disable-*</code>" options.
         </p>
     </li>
@@ -983,7 +983,7 @@ https://...</pre>
 
     <li>
         <p>
-        Check that you don't have "dirty stuf" in your <code>*.mk</code> files,
+        Check that you don't have "dirty stuff" in your <code>*.mk</code> files,
         such as TAB characters or trailing spaces at lines endings.
         Have a look at random <code>*.mk</code> files
         to get a feeling for the coding style.
