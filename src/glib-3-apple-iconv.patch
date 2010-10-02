@@ -12,7 +12,7 @@ diff -urN glib-2.25.17.orig/glib/gconvert.c glib-2.25.17/glib/gconvert.c
  #error GNU libiconv in use but included iconv.h not from libiconv
  #endif
 -#if !defined(USE_LIBICONV_GNU) && defined (_LIBICONV_H)
-+#if !defined(USE_LIBICONV_GNU) && defined (_LIBICONV_H) && !(defined(__APPLE__) && defined(__LP64__))
++#if !defined(USE_LIBICONV_GNU) && defined (_LIBICONV_H) && !defined(__APPLE__)
  #error GNU libiconv not in use but included iconv.h is from libiconv
  #endif
  
