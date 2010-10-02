@@ -471,6 +471,189 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     feel free to join the
     <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">project mailing list</a>.
     </p>
+    
+<h2 id="new-packages">New Package Submission</h2>
+    <ol>
+    <li>
+    <p>
+    The package should be a 
+    <a href="http://www.gnu.org/philosophy/free-sw.html">free</a> 
+    <a href="http://www.debian.org/social_contract#guidelines">software<a> 
+    <a href="http://www.opensource.org/osd.html">library</a> 
+    that is really used by one of your applications.
+    </p>
+    
+    <p>
+    BTW, we're always curious about the applications people are
+    porting. On our project website, there is a 
+    <a href="#used-by">list of projects</a> 
+    which use mingw-cross-env. No matter whether your project is
+    free or proprietary - as long as it has it's own website, we'd be
+    happy to link to it.
+    </p>
+    
+    <p>
+    Also, feel free to link to us. :-)
+    </p>
+    </li>
+    
+    <li>
+    <p>
+    Grep through the src/*.mk files to find a project that is most
+    similar to yours. (Really, "grep" is your friend.)
+    </p>
+    
+    <p>
+    E.g., when adding a GNU library, you should take a package like 
+    <a href="http://hg.savannah.gnu.org/hgweb/mingw-cross-env/file/tip/src/gettext.mk">gettext.mk</a> 
+    or 
+    <a href="http://hg.savannah.gnu.org/hgweb/mingw-cross-env/file/tip/src/libiconv.mk">libiconv.mk</a> 
+    as the base of your work. Or, when using 
+    a SourceForge project, you should start with a copy of 
+    <a href="http://hg.savannah.gnu.org/hgweb/mingw-cross-env/file/tip/src/xmlwrapp.mk">xmlwrapp.mk</a>.
+    </p>
+    </li>
+    
+    <li>
+    <p>
+    Adjust the comments, fill in the <code>$(PKG)_*</code> fields. 
+    Be especially careful with the <code>$(PKG)_DEPS</code> section. 
+    The easiest way to get the dependencies right is to start with 
+    a minimal setup i.e. <code>make gcc</code> only.
+    </p>
+    </li>
+    
+    <li>
+    <p>
+    Write your <code>$(PKG)_BUILD</code>. If your library has a 
+    ./configure script, enable/disable all depdency libraries 
+    explicitly via <code>"--enable-*"</code> and 
+    <code>"--disable-*"</code> options.
+    </p>
+    </li>
+    
+    <li>
+    <p>
+    You might also have to provide a patch for it. In that case, have
+    a look at other patches such as 
+    <a href="http://hg.savannah.gnu.org/hgweb/mingw-cross-env/file/tip/src/sdl-2-fix-dinput.patch">
+        sdl-2-fix-dinput.patch</a>. 
+    In particular, each patch file should be named as:
+    </p>
+    
+    <p>
+    <pre>PACKAGE-PATCHNUMBER-DESCRIPTION.patch</pre>
+    </p>
+    <p>
+    and should start with:
+    </p>
+    <pre>
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+https://...
+    </pre>
+    <p>
+    where the URL points to the bugtracker entry, mailing list entry
+    or website you took the patch from.
+    </p>
+    
+    <p>
+    If you created the patch yourself, please offer it to the 
+    upstream project first, and point to _that_ URL, using the 
+    same wording: "This patch has been taken from:".
+    </p>
+    
+    <p>
+    Depending on the feedback you get from the project, you might
+    want to improve your patch.
+    </p>
+    </li>
+    
+    <li>
+    <p>
+    If you find some time, please provide a minimal test program for
+    it. It should be simple, stand alone and should work unmodified
+    for many (all?) future versions of the library. Test programs
+    are named as:
+    </p>
+    <pre>PACKAGE-test.c
+    or
+PACKAGE-test.cpp</pre>
+
+    <p>
+    depending on whether it is a C or C++ library. To get a clue,
+    please have a look at existing test programs such as 
+    <a href="http://hg.savannah.gnu.org/hgweb/mingw-cross-env/file/tip/src/sdl-test.c">sdl-test.c</a>.
+    </p>
+    
+    <p>
+    At the very end of your *.mk file you should build the test
+    program in a generic way, using strict compiler flags. The 
+    last few lines of 
+    <a href="http://hg.savannah.gnu.org/hgweb/mingw-cross-env/file/tip/src/sdl.mk">sdl.mk</a> 
+    will give you a clue.
+    </p>
+    </li>
+    
+    <li>
+    <p>
+    You could also try to provide a <code>$(PKG)_UPDATE</code> 
+    section. However, that requires some experience and 
+    "feeling" for it. So it is perfectly okay if you leave the 
+    <code>$(PKG)_UPDATE</code> section empty. We'll fill that 
+    in for you. It's a funny exercise.
+    </p>
+    </li>
+    
+    <li>
+    <p>
+    Check that you don't have "dirty stuf" in your *.mk files, such
+    as TAB characters or trailing spaces at lines endings. Have
+    a look at random *.mk files to get a feeling for the coding
+    style.
+    </p>
+    
+    <p>
+    The same holds for your test program.
+    </p>
+    
+    <p>
+    However, patch files should always appear in the same coding
+    style as the files they are patching.
+    </p>
+    
+    <p>
+    Finally, in your <code>$(PKG)_BUILD</code> section, please 
+    check that you use our portability variables:
+    </p>
+    <pre>
+    sed        -> $(SED)
+    make       -> $(MAKE)
+    bash       -> $(SHELL)
+    patch      -> $(PATCH)
+    install    -> $(INSTALL)
+    libtoolize -> $(LIBTOOLIZE)</pre>
+    </li>
+    
+    <li>
+    <p>
+    Check whether everything runs fine. If you have some trouble,
+    don't hesitate to ask on the 
+    <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">mailing list</a>, 
+    providing your *.mk file so far.
+    </p>
+    </li>
+
+    <li>
+    <p>
+    Propose your final *.mk file to the mailing list. Don't forget
+    to tell us if there are some pieces in your *.mk file you feel
+    unsure about. We'll then have a specific look at those parts,
+    which avoids trouble for you and us in the future.
+    </p>
+    </li>
 </div>
 
 <div class="section">
@@ -813,6 +996,9 @@ sudo gcc_select gcc40</pre>
 
     <table id="package-list">
     </table>
+    <p>
+    See something missing? Feel free to <a href="#new-packages">propose a new package</a>.
+    </p>
 </div>
 
 <div class="section">
