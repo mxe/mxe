@@ -494,7 +494,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <li><a href="#requirements-freebsd">FreeBSD</a></li>
         <li><a href="#requirements-frugalware">Frugalware</a></li>
         <li><a href="#requirements-gentoo">Gentoo</a></li>
-        <li><a href="#requirements-macos">MacOS</a></li>
+        <li><a href="#requirements-macos">Mac OS X</a></li>
         <li><a href="#requirements-opensuse">openSUSE</a></li>
     </ul>
 
@@ -667,7 +667,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-05/msg00296.html">open issues with Gentoo and GCC-4.5</a>.
     </p>
 
-    <h3 id="requirements-macos">MacOS 10.6</h3>
+    <h3 id="requirements-macos">Mac OS X</h3>
 
     <p>
     Install
@@ -680,23 +680,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>sudo port install autoconf automake bison cmake flex \
                   gsed intltool libtool openssl \
                   p5-xml-parser pkgconfig scons \
-                  wget xz-devel gcc_select
-sudo gcc_select gcc40</pre>
-
-    <h3>MacOS X (≤ 10.5)</h3>
-
+                  wget xz-devel</pre>
     <p>
-    Install
-    <a href="http://developer.apple.com/TOOLS/xcode/">Xcode</a>
-    and
-    <a href="http://www.macports.org/">MacPorts</a>,
-    then run:
+    On Mac OS X ≤ 10.5, also select a more recent GCC:
     </p>
-    <!-- http://www.macports.org/ports.php -->
-    <pre>sudo port install autoconf automake bison cmake flex \
-                  gmake gsed intltool libtool openssl \
-                  p5-xml-parser pkgconfig scons wget \
-                  xz-devel</pre>
+    <pre>sudo port install gcc_select
+sudo gcc_select gcc42</pre>
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
