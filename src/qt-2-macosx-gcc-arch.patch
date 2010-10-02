@@ -1,0 +1,20 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+The native build complains about:
+
+"You are building a 64-bit application, but using a 32-bit version of Qt. Check your build configuration."
+
+diff -ur a/mkspecs/macx-g++/qmake.conf b/mkspecs/macx-g++/qmake.conf
+--- a/mkspecs/macx-g++/qmake.conf	2010-09-26 23:32:05.000000000 +1000
++++ b/mkspecs/macx-g++/qmake.conf	2010-09-26 23:31:29.000000000 +1000
+@@ -13,8 +13,8 @@
+ QT			+= core gui
+ QMAKE_INCREMENTAL_STYLE = sublib
+ 
+-QMAKE_CC		 = gcc
+-QMAKE_CXX		 = g++
++QMAKE_CC		 = gcc -arch i386
++QMAKE_CXX		 = g++ -arch i386
+ 
+ include(../common/mac-g++.conf)
