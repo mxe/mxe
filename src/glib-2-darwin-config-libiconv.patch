@@ -1,0 +1,15 @@
+--- glib-2.25.17/configure.ac	2010-10-02 19:12:16.000000000 +1000
++++ glib-2.25.17.native/configure.ac	2010-10-02 19:50:40.000000000 +1000
+@@ -374,6 +374,12 @@
+ dnl
+ dnl We do this before the gettext checks, to avoid distortion
+ 
++case $host in
++  *-*-darwin*)
++    with_libiconv=native
++    ;;
++esac
++
+ dnl On Windows we use a native implementation
+ 
+ if test x"$glib_native_win32" = xyes; then
