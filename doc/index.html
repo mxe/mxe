@@ -587,6 +587,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td><a href="http://tukaani.org/xz/">XZ Utils</a></td>
         <td></td>
     </tr>
+    <tr>
+        <td><a href="http://www.tortall.net/projects/yasm/">Yasm</a></td>
+        <td></td>
+    </tr>
     </table>
 
     <h3 id="requirements-debian">Debian</h3>
@@ -596,7 +600,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
                     cmake flex g++ intltool make sed \
                     libtool openssl libssl-dev \
                     libxml-parser-perl patch perl \
-                    pkg-config scons unzip wget xz-utils</pre>
+                    pkg-config scons unzip wget \
+                    xz-utils yasm</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -616,7 +621,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>pkg_add -r automake110 autoconf262 bash bison cmake \
            flex gmake gsed intltool libtool openssl \
            patch perl p5-XML-Parser pkg-config scons \
-           unzip wget</pre>
+           unzip wget yasm</pre>
 
     <p>
     Ensure that /usr/local/bin preceeds /usr/bin in your $PATH:
@@ -643,7 +648,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
              flex gcc intltool make sed libtool openssl \
              patch perl perl-xml-parser pkgconfig scons \
-             unzip wget xz xz-lzma</pre>
+             unzip wget xz xz-lzma yasm</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -660,7 +665,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
        sys-devel/libtool dev-libs/openssl sys-devel/patch \
        dev-lang/perl dev-perl/XML-Parser \
        dev-util/pkgconfig dev-util/scons app-arch/unzip \
-       net-misc/wget app-arch/xz-utils</pre>
+       net-misc/wget app-arch/xz-utils dev-lang/yasm</pre>
 
     <p>
     There are
@@ -680,7 +685,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>sudo port install autoconf automake bison cmake flex \
                   gsed intltool libtool openssl \
                   p5-xml-parser pkgconfig scons \
-                  wget xz-devel</pre>
+                  wget xz-devel yasm</pre>
     <p>
     On Mac OS X ≤ 10.5, also select a more recent GCC:
     </p>
@@ -695,7 +700,7 @@ sudo gcc_select gcc42</pre>
                   intltool libtool make openssl \
                   libopenssl-devel patch perl \
                   perl-XML-Parser pkg-config scons \
-                  sed unzip wget xz</pre>
+                  sed unzip wget xz yasm</pre>
 
     <h3 id="requirements-opensuse64">openSUSE 11.3 x86_64 (additional)</h3>
     <pre>zypper install -R gcc-32bit glibc-devel-32bit \
