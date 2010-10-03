@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := SDL_sound-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_sound-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://icculus.org/SDL_sound/
 $(PKG)_URL      := http://icculus.org/SDL_sound/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis smpeg
+$(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis smpeg speex
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://hg.icculus.org/icculus/SDL_sound/tags' | \
