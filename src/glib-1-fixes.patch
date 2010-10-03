@@ -3,10 +3,10 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 637620b33c175676972419ae674806825a390734 Mon Sep 17 00:00:00 2001
+From 4693f62d3f01f7b7d26607e6eed843202cbf90f7 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Thu, 23 Sep 2010 21:36:04 +0200
-Subject: [PATCH 1/5] no gtk doc check
+Subject: [PATCH 1/7] no gtk doc check
 
 
 diff --git a/configure.ac b/configure.ac
@@ -26,10 +26,10 @@ index a821267..2e541d2 100644
 1.7.1
 
 
-From 8f4fde8f0ab605720ef0baf7ef8080479b34af63 Mon Sep 17 00:00:00 2001
+From 46d0d473e6fb32c5204d063cad5f5073d2a139a5 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Thu, 23 Sep 2010 21:41:51 +0200
-Subject: [PATCH 2/5] optional gettext
+Subject: [PATCH 2/7] optional gettext
 
 
 diff --git a/configure.ac b/configure.ac
@@ -68,10 +68,10 @@ index c710046..269bfdf 100644
 1.7.1
 
 
-From 0a998b24fdb3ae5397ff5ad498260165300a4393 Mon Sep 17 00:00:00 2001
+From 3473b5183b2e59d247cd1db053efc6c9ecaf2aab Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Thu, 23 Sep 2010 21:42:46 +0200
-Subject: [PATCH 3/5] fix tool paths
+Subject: [PATCH 3/7] fix tool paths
 
 
 diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
@@ -95,10 +95,10 @@ index 3d1ac12..58e1ecf 100644
 1.7.1
 
 
-From 7ddbe18ccce7aede0cef972c6035058151c3ce10 Mon Sep 17 00:00:00 2001
+From 0e57514812500d5d4dee03e1be8059a25876dd99 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Thu, 23 Sep 2010 21:45:50 +0200
-Subject: [PATCH 4/5] fix dependency libs
+Subject: [PATCH 4/7] fix dependency libs
 
 
 diff --git a/configure.ac b/configure.ac
@@ -129,10 +129,10 @@ index 58e1ecf..17b2133 100644
 1.7.1
 
 
-From 83ef7aba98793b7502370971c6de0b115c55e49c Mon Sep 17 00:00:00 2001
+From 87931c81f6401fb0c25064ec0ba2edca9ec53924 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Sat, 25 Sep 2010 00:07:33 +0200
-Subject: [PATCH 5/5] add -ldnsapi to gio-2.0.pc
+Subject: [PATCH 5/7] add -ldnsapi to gio-2.0.pc
 
 
 diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
@@ -147,6 +147,58 @@ index 92cda85..7a4e224 100644
 +Libs: -L${libdir} -lgio-2.0 -ldnsapi
  Libs.private: @ZLIB_LIBS@ @LIBASYNCNS_LIBADD@
  Cflags: 
+-- 
+1.7.1
+
+
+From 58d20f08e876298e795f7282ddc6cfccbe6f05fe Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Sun, 3 Oct 2010 20:24:46 +0200
+Subject: [PATCH 6/7] darwin config libiconv
+
+
+diff --git a/configure.ac b/configure.ac
+index e472768..a681285 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -374,6 +374,12 @@ dnl ***********************
+ dnl
+ dnl We do this before the gettext checks, to avoid distortion
+ 
++case $host in
++  *-*-darwin*)
++    with_libiconv=native
++    ;;
++esac
++
+ dnl On Windows we use a native implementation
+ 
+ if test x"$glib_native_win32" = xyes; then
+-- 
+1.7.1
+
+
+From a340fa1dfbf9a8ac58cd1b026bd26de30d7fc581 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Sun, 3 Oct 2010 20:25:32 +0200
+Subject: [PATCH 7/7] apple iconv
+
+This patch has been taken from:
+http://mail.gnome.org/archives/gtk-list/2009-August/msg00146.html
+
+diff --git a/glib/gconvert.c b/glib/gconvert.c
+index 52a3dd8..d8b4f89 100644
+--- a/glib/gconvert.c
++++ b/glib/gconvert.c
+@@ -61,7 +61,7 @@
+ #if defined(USE_LIBICONV_GNU) && !defined (_LIBICONV_H)
+ #error GNU libiconv in use but included iconv.h not from libiconv
+ #endif
+-#if !defined(USE_LIBICONV_GNU) && defined (_LIBICONV_H)
++#if !defined(USE_LIBICONV_GNU) && defined (_LIBICONV_H) && !defined(__APPLE__)
+ #error GNU libiconv not in use but included iconv.h is from libiconv
+ #endif
+ 
 -- 
 1.7.1
 
