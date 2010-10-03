@@ -1,0 +1,78 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://code.google.com/p/webm/issues/detail?id=54
+
+diff -urN libvpx-0.9.2.orig/build/make/armlink_adapter.sh libvpx-0.9.2.new/build/make/armlink_adapter.sh
+--- libvpx-0.9.2.orig/build/make/armlink_adapter.sh	2010-09-03 04:56:47.000000000 +1000
++++ libvpx-0.9.2.new/build/make/armlink_adapter.sh	2010-10-01 14:43:18.000000000 +1000
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ ##
+ ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##
+diff -urN libvpx-0.9.2.orig/build/make/configure.sh libvpx-0.9.2.new/build/make/configure.sh
+--- libvpx-0.9.2.orig/build/make/configure.sh	2010-09-03 04:56:47.000000000 +1000
++++ libvpx-0.9.2.new/build/make/configure.sh	2010-10-01 14:43:18.000000000 +1000
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ ##
+ ##  configure.sh
+ ##
+diff -urN libvpx-0.9.2.orig/build/make/gen_asm_deps.sh libvpx-0.9.2.new/build/make/gen_asm_deps.sh
+--- libvpx-0.9.2.orig/build/make/gen_asm_deps.sh	2010-09-03 04:56:47.000000000 +1000
++++ libvpx-0.9.2.new/build/make/gen_asm_deps.sh	2010-10-01 14:43:18.000000000 +1000
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ ##
+ ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##
+diff -urN libvpx-0.9.2.orig/build/make/gen_msvs_def.sh libvpx-0.9.2.new/build/make/gen_msvs_def.sh
+--- libvpx-0.9.2.orig/build/make/gen_msvs_def.sh	2010-09-03 04:56:47.000000000 +1000
++++ libvpx-0.9.2.new/build/make/gen_msvs_def.sh	2010-10-01 14:43:18.000000000 +1000
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ ##
+ ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##
+diff -urN libvpx-0.9.2.orig/build/make/gen_msvs_proj.sh libvpx-0.9.2.new/build/make/gen_msvs_proj.sh
+--- libvpx-0.9.2.orig/build/make/gen_msvs_proj.sh	2010-09-03 04:56:47.000000000 +1000
++++ libvpx-0.9.2.new/build/make/gen_msvs_proj.sh	2010-10-01 14:43:18.000000000 +1000
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ ##
+ ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##
+diff -urN libvpx-0.9.2.orig/build/make/gen_msvs_sln.sh libvpx-0.9.2.new/build/make/gen_msvs_sln.sh
+--- libvpx-0.9.2.orig/build/make/gen_msvs_sln.sh	2010-09-03 04:56:47.000000000 +1000
++++ libvpx-0.9.2.new/build/make/gen_msvs_sln.sh	2010-10-01 14:43:18.000000000 +1000
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ ##
+ ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##
+diff -urN libvpx-0.9.2.orig/build/make/version.sh libvpx-0.9.2.new/build/make/version.sh
+--- libvpx-0.9.2.orig/build/make/version.sh	2010-09-03 04:56:47.000000000 +1000
++++ libvpx-0.9.2.new/build/make/version.sh	2010-10-01 14:43:18.000000000 +1000
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ ##
+ ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##
+diff -urN libvpx-0.9.2.orig/configure libvpx-0.9.2.new/configure
+--- libvpx-0.9.2.orig/configure	2010-09-03 04:56:47.000000000 +1000
++++ libvpx-0.9.2.new/configure	2010-10-01 14:43:18.000000000 +1000
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/bin/sh
+ ##
+ ##  configure
+ ##
