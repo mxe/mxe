@@ -14,8 +14,8 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.videolan.org/pub/videolan/x264/snapshots/' | \
-    $(SED) -n 's,.*<a href="x264-\snapshot-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    head -1
+    $(SED) -n 's,.*<a href="x264-snapshot-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
