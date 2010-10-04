@@ -14,8 +14,7 @@ $(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis smpeg speex
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://hg.icculus.org/icculus/SDL_sound/tags' | \
-    grep 'release-' | \
-    $(SED) -n 's,.*release-\([0-9.]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef
 

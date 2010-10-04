@@ -3,7 +3,7 @@
 
 # GLib
 PKG             := glib
-$(PKG)_IGNORE   := 2.25.6
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.26.0
 $(PKG)_CHECKSUM := 9d7e9dce2add3fadc35079ad291a94f45ebcf706
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
@@ -14,10 +14,8 @@ $(PKG)_DEPS     := gcc gettext pcre libiconv zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
-    grep '<a href=./browse/glib/tag/[?]id=[0-9.]\+' | \
-    $(SED) 's,^.*a href=./browse/glib/tag/[?]id=\([0-9.]\+\).*,\1,' | \
-    grep "^2\.25\.1[0-9]" | \
-    sort -r | \
+    $(SED) -n "s,.*tag/?id=\([0-9][^']*\).*,\1,p" | \
+    grep -v "^2\.25\." | \
     head -1
 endef
 

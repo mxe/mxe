@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc glib libgsf cairo pango gtk libcroco
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/librsvg/refs/tags' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9][0-9.]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*<a[^>]*>\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef
 

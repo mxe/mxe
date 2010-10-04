@@ -14,8 +14,7 @@ $(PKG)_DEPS     := gcc sdl freetype
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://hg.libsdl.org/SDL_ttf/tags' | \
-    grep 'release-' | \
-    $(SED) -n 's,.*release-\([0-9.]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef
 
