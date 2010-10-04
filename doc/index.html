@@ -549,7 +549,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td><a href="http://www.gnu.org/software/libtool/">Libtool</a></td>
-        <td></td>
+        <td>≥ 2.2</td>
     </tr>
     <tr>
         <td><a href="http://www.openssl.org/">OpenSSL</a>-dev</td>
@@ -613,7 +613,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <a href="http://backports.debian.org/">backports</a>
     are required:
     </p>
-    <pre>aptitude install -R -t lenny-backports autoconf xz-utils</pre>
+    <pre>aptitude install -R -t lenny-backports autoconf libtool \
+                                       xz-utils</pre>
 
     <h3 id="requirements-freebsd">FreeBSD</h3>
 
