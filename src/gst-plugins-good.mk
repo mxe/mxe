@@ -3,7 +3,7 @@
 
 # gst-plugins-good
 PKG             := gst-plugins-good
-$(PKG)_IGNORE   := 0.10.20
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.10.25
 $(PKG)_CHECKSUM := 37339cc8a4e78bce253b9b85c7f25564ef7742f0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
