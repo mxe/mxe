@@ -14,8 +14,7 @@ $(PKG)_DEPS     := gcc gettext pcre libiconv zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
-    $(SED) -n "s,.*tag/?id=\([0-9][^']*\).*,\1,p" | \
-    grep -v "^2\.25\." | \
+    $(SED) -n "s,.*tag/?id=\([0-9]\+\.[0-9]*[02468]\.[^']*\).*,\1,p" | \
     head -1
 endef
 
