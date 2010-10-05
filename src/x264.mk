@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-pthread
-    $(MAKE) -C '$(1)' -j 1 uninstall
     $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j 1 uninstall
     $(MAKE) -C '$(1)' -j 1 install
 endef
