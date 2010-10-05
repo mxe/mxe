@@ -14,8 +14,7 @@ $(PKG)_DEPS     := gcc gtk libxml2
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/gtksourceview/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=GTKSOURCEVIEW_\\([0-9]*_[0-9]*[02468]_[^<]*\\)'.*,\\1,p" | \
+    $(SED) -n 's,.*>GTKSOURCEVIEW_\([0-9]\+_[0-9]*[02468]_[^<]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
     grep -v '^2\.9' | \
     head -1
