@@ -50,8 +50,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
     $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)' glib-compile-schemas
-    # configure will expect to find this in PATH
-    $(INSTALL) -m755 '$(1).native/gio/glib-compile-schemas' '$(PREFIX)/bin/glib-compile-schemas'
+    $(INSTALL) -m755 '$(1).native/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
 
     # cross build
     # wine confuses the cross-compiling detection, so set it explicitly
@@ -65,7 +64,8 @@ define $(PKG)_BUILD
         --with-libiconv=gnu \
         CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal'
+        GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
+        GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas'
     $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
