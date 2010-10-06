@@ -25,7 +25,8 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
-        --with-x=no
+        --with-x=no \
+        ac_cv_prog_freetype_config='$(PREFIX)/$(TARGET)/bin/freetype-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=
 endef
