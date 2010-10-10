@@ -1768,3 +1768,28 @@ index 3f1ac86..602cb8d 100644
  contains(QT_CONFIG, embedded):CONFIG += embedded
  
  CONFIG(QTDIR_build) {
+
+commit f9b9cf2a816380f70e41155344a769c2ad71ad28
+Author: Mark Brand <mabrand@mabrand.nl>
+Date:   Sun Oct 10 11:14:20 2010 +0200
+
+    use specified pkg-config
+    
+    Respect the pkg-config tool specified in qmake.conf. This is
+    useful when crossbuilding.
+
+diff --git a/mkspecs/features/link_pkgconfig.prf b/mkspecs/features/link_pkgconfig.prf
+index 4c528aa..90cc836 100644
+--- a/mkspecs/features/link_pkgconfig.prf
++++ b/mkspecs/features/link_pkgconfig.prf
+@@ -1,6 +1,7 @@
+ # handle pkg-config files
++isEmpty(PKG_CONFIG):PKG_CONFIG=pkg-config
+ for(PKGCONFIG_LIB, $$list($$unique(PKGCONFIG))) {
+-    QMAKE_CXXFLAGS += $$system(pkg-config --cflags $$PKGCONFIG_LIB)
+-    QMAKE_CFLAGS += $$system(pkg-config --cflags $$PKGCONFIG_LIB)
+-    LIBS += $$system(pkg-config --libs $$PKGCONFIG_LIB)
++    QMAKE_CXXFLAGS += $$system($$PKG_CONFIG --cflags $$PKGCONFIG_LIB)
++    QMAKE_CFLAGS += $$system($$PKG_CONFIG --cflags $$PKGCONFIG_LIB)
++    LIBS += $$system($$PKG_CONFIG --libs $$PKGCONFIG_LIB)
+ }
