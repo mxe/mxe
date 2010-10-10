@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := SDL_sound-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_sound-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://icculus.org/SDL_sound/
 $(PKG)_URL      := http://icculus.org/SDL_sound/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis smpeg speex
+$(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis flac speex
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://hg.icculus.org/icculus/SDL_sound/tags' | \
@@ -32,24 +32,23 @@ define $(PKG)_BUILD
         --enable-au \
         --enable-shn \
         --enable-midi \
-        --enable-smpeg \
+        --disable-smpeg \
         --enable-mpglib \
         --enable-mikmod \
-        --enable-modplug \
+        --disable-modplug \
         --enable-ogg \
         --enable-flac \
         --enable-speex \
-        --enable-physfs \
+        --disable-physfs \
         --disable-altcvt \
-        LIBS='-lvorbis -logg' \
+        LIBS="`'$(TARGET)-pkg-config' vorbisfile flac speex --libs` `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --libs`" \
         CFLAGS='-fno-inline'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -std=c99 -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_sound.exe' \
-        `'$(TARGET)-pkg-config' sdl --cflags --libs` \
         -lSDL_sound \
-        `'$(TARGET)-pkg-config' vorbisfile --libs` \
-        -lspeex -lmikmod
+        `'$(TARGET)-pkg-config' sdl vorbisfile flac speex --cflags --libs` \
+        `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --cflags --libs`
 endef
