@@ -31,4 +31,9 @@ define $(PKG)_BUILD
             --prefix='$(PREFIX)/$(TARGET)' \
             --disable-esd
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -std=c99 -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libmikmod.exe' \
+        `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --cflags --libs`
 endef
