@@ -19,24 +19,28 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,for path in /usr/local; do,for path in; do,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
-        --enable-music-mod \
-        --enable-music-ogg \
-        --disable-music-flac \
-        --enable-music-mp3 \
-        --disable-music-mod-shared \
-        --disable-music-ogg-shared \
-        --disable-music-flac-shared \
-        --disable-music-mp3-shared \
-        --disable-smpegtest \
-        --with-smpeg-prefix='$(PREFIX)/$(TARGET)' \
-        LIBMIKMOD_CONFIG='$(PREFIX)/$(TARGET)/bin/libmikmod-config' \
+        --enable-voc \
+        --enable-wav \
+        --enable-raw \
+        --enable-aiff \
+        --enable-au \
+        --enable-shn \
+        --enable-midi \
+        --enable-smpeg \
+        --enable-mpglib \
+        --enable-mikmod \
+        --enable-modplug \
+        --enable-ogg \
+        --enable-flac \
+        --enable-speex \
+        --enable-physfs \
+        --disable-altcvt \
         LIBS='-lvorbis -logg' \
         CFLAGS='-fno-inline'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
