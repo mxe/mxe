@@ -17562,3 +17562,112 @@ index 3ce86c8..a383367 100644
  	static ref <bodyPart> findBodyPart
  		(ref <bodyPart> part, const mediaType& type);
  };
+
+commit 81d279e1f26e9938489ed0a64f26a0873e86b7ee
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Tue Oct 12 09:45:16 2010 +0000
+
+    Encode quotation marks in QP/RFC-2047.
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@566 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/utility/encoder/qpEncoder.cpp b/src/utility/encoder/qpEncoder.cpp
+index c3a8c6d..e20be9f 100644
+--- a/src/utility/encoder/qpEncoder.cpp
++++ b/src/utility/encoder/qpEncoder.cpp
+@@ -236,6 +236,7 @@ utility::stream::size_type qpEncoder::encode(utility::inputStream& in,
+ 		case '>':
+ 		case '[':
+ 		case ']':
++		case '"':
+ 		{
+ 			if (rfc2047)
+ 			{
+diff --git a/tests/parser/textTest.cpp b/tests/parser/textTest.cpp
+index 4a7e394..b455d91 100644
+--- a/tests/parser/textTest.cpp
++++ b/tests/parser/textTest.cpp
+@@ -46,6 +46,7 @@ VMIME_TEST_SUITE_BEGIN
+ 		VMIME_TEST(testWordGenerateMultiBytes)
+ 		VMIME_TEST(testWordGenerateQuote)
+ 		VMIME_TEST(testWordGenerateSpecialCharsets)
++		VMIME_TEST(testWordGenerateSpecials)
+ 	VMIME_TEST_LIST_END
+ 
+ 
+@@ -370,5 +371,12 @@ VMIME_TEST_SUITE_BEGIN
+ 				vmime::charset("iso-2022-jp")).generate(100)));
+ 	}
+ 
++	void testWordGenerateSpecials()
++	{
++		// In RFC-2047, quotation marks (ASCII 22h) should be encoded
++		VASSERT_EQ("1", "=?UTF-8?Q?=22=C3=9Cml=C3=A4ute=22?=",
++			vmime::word("\x22\xC3\x9Cml\xC3\xA4ute\x22", vmime::charset("UTF-8")).generate());
++	}
++
+ VMIME_TEST_SUITE_END
+ 
+diff --git a/tests/utility/encoderTest.cpp b/tests/utility/encoderTest.cpp
+index 4e2c9a7..f2d42b6 100644
+--- a/tests/utility/encoderTest.cpp
++++ b/tests/utility/encoderTest.cpp
+@@ -33,15 +33,19 @@ VMIME_TEST_SUITE_BEGIN
+ 	VMIME_TEST_LIST_BEGIN
+ 		VMIME_TEST(testBase64)
+ 		VMIME_TEST(testQuotedPrintable)
++		VMIME_TEST(testQuotedPrintable_RFC2047)
+ 	VMIME_TEST_LIST_END
+ 
+ 
+ 	// Encoding helper function
+-	static const vmime::string encode(const vmime::string& name, const vmime::string& in, int maxLineLength = 0)
++	static const vmime::string encode(const vmime::string& name, const vmime::string& in,
++		int maxLineLength = 0, const vmime::propertySet props = vmime::propertySet())
+ 	{
+ 		vmime::ref <vmime::utility::encoder::encoder> enc =
+ 			vmime::utility::encoder::encoderFactory::getInstance()->create(name);
+ 
++		enc->getProperties() = props;
++
+ 		if (maxLineLength != 0)
+ 			enc->getProperties()["maxlinelength"] = maxLineLength;
+ 
+@@ -284,6 +288,37 @@ VMIME_TEST_SUITE_BEGIN
+ 		}
+ 	}
+ 
++	void testQuotedPrintable_RFC2047()
++	{
++		/*
++		 * The RFC (http://tools.ietf.org/html/rfc2047#section-5) says:
++		 *
++		 *    In this case the set of characters that may be used in a "Q"-encoded
++		 *    'encoded-word' is restricted to: <upper and lower case ASCII
++		 *    letters, decimal digits, "!", "*", "+", "-", "/", "=", and "_"
++		 *    (underscore, ASCII 95.)>.  An 'encoded-word' that appears within a
++		 *    'phrase' MUST be separated from any adjacent 'word', 'text' or
++		 *    'special' by 'linear-white-space'.
++		 */
++
++		vmime::propertySet encProps;
++		encProps["rfc2047"] = true;
++
++		// Ensure 'especials' are encoded
++		VASSERT_EQ("especials.1",  "=2C", encode("quoted-printable", ",", 10, encProps));
++		VASSERT_EQ("especials.2",  "=3B", encode("quoted-printable", ";", 10, encProps));
++		VASSERT_EQ("especials.3",  "=3A", encode("quoted-printable", ":", 10, encProps));
++		VASSERT_EQ("especials.4",  "=5F", encode("quoted-printable", "_", 10, encProps));
++		VASSERT_EQ("especials.5",  "=40", encode("quoted-printable", "@", 10, encProps));
++		VASSERT_EQ("especials.6",  "=28", encode("quoted-printable", "(", 10, encProps));
++		VASSERT_EQ("especials.7",  "=29", encode("quoted-printable", ")", 10, encProps));
++		VASSERT_EQ("especials.8",  "=3C", encode("quoted-printable", "<", 10, encProps));
++		VASSERT_EQ("especials.9",  "=3E", encode("quoted-printable", ">", 10, encProps));
++		VASSERT_EQ("especials.10", "=5B", encode("quoted-printable", "[", 10, encProps));
++		VASSERT_EQ("especials.11", "=5D", encode("quoted-printable", "]", 10, encProps));
++		VASSERT_EQ("especials.12", "=22", encode("quoted-printable", "\"", 10, encProps));
++	}
++
+ 	// TODO: UUEncode
+ 
+ VMIME_TEST_SUITE_END
