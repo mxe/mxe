@@ -17671,3 +17671,547 @@ index 4e2c9a7..f2d42b6 100644
  	// TODO: UUEncode
  
  VMIME_TEST_SUITE_END
+
+commit fb268637f2f06d710f0ef475d71a8d4034a28e6c
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Tue Oct 12 17:10:58 2010 +0000
+
+    Better RFC-2047 encoding.
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@567 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/utility/encoder/qpEncoder.cpp b/src/utility/encoder/qpEncoder.cpp
+index e20be9f..aa95022 100644
+--- a/src/utility/encoder/qpEncoder.cpp
++++ b/src/utility/encoder/qpEncoder.cpp
+@@ -51,10 +51,52 @@ const std::vector <string> qpEncoder::getAvailableProperties() const
+ 
+ 
+ 
+-// Encoding table
++// Hex-encoding table
+ const unsigned char qpEncoder::sm_hexDigits[] = "0123456789ABCDEF";
+ 
+-// Decoding table
++
++// RFC-2047 encoding table: we always encode RFC-2047 using the restricted
++// charset, that is the one used for 'phrase' in From/To/Cc/... headers.
++//
++// " The set of characters that may be used in a "Q"-encoded 'encoded-word'
++//   is restricted to: <upper and lower case ASCII letters, decimal digits,
++//   "!", "*", "+", "-", "/", "=", and "_" (underscore, ASCII 95.)>. "
++//
++// Two special cases:
++// - encode space (32) as underscore (95)
++// - encode underscore as hex (=5F)
++//
++// This is a quick lookup table:
++//   '1' means "encode", '0' means "no encoding"
++//
++const unsigned char qpEncoder::sm_RFC2047EncodeTable[] =
++{
++	/*   0  NUL */ 1, /*   1  SOH */ 1, /*   2  STX */ 1, /*   3  ETX */ 1, /*   4  EOT */ 1, /*   5  ENQ */ 1,
++	/*   6  ACK */ 1, /*   7  BEL */ 1, /*   8   BS */ 1, /*   9  TAB */ 1, /*  10   LF */ 1, /*  11   VT */ 1,
++	/*  12   FF */ 1, /*  13   CR */ 1, /*  14   SO */ 1, /*  15   SI */ 1, /*  16  DLE */ 1, /*  17  DC1 */ 1,
++	/*  18  DC2 */ 1, /*  19  DC3 */ 1, /*  20  DC4 */ 1, /*  21  NAK */ 1, /*  22  SYN */ 1, /*  23  ETB */ 1,
++	/*  24  CAN */ 1, /*  25   EM */ 1, /*  26  SUB */ 1, /*  27  ESC */ 1, /*  28   FS */ 1, /*  29   GS */ 1,
++	/*  30   RS */ 1, /*  31   US */ 1, /*  32 SPACE*/ 1, /*  33    ! */ 0, /*  34    " */ 1, /*  35    # */ 1,
++	/*  36    $ */ 1, /*  37    % */ 1, /*  38    & */ 1, /*  39    ' */ 1, /*  40    ( */ 1, /*  41    ) */ 1,
++	/*  42    * */ 0, /*  43    + */ 0, /*  44    , */ 1, /*  45    - */ 0, /*  46    . */ 1, /*  47    / */ 0,
++	/*  48    0 */ 0, /*  49    1 */ 0, /*  50    2 */ 0, /*  51    3 */ 0, /*  52    4 */ 0, /*  53    5 */ 0,
++	/*  54    6 */ 0, /*  55    7 */ 0, /*  56    8 */ 0, /*  57    9 */ 0, /*  58    : */ 1, /*  59    ; */ 1,
++	/*  60    < */ 1, /*  61    = */ 1, /*  62    > */ 1, /*  63    ? */ 1, /*  64    @ */ 1, /*  65    A */ 0,
++	/*  66    B */ 0, /*  67    C */ 0, /*  68    D */ 0, /*  69    E */ 0, /*  70    F */ 0, /*  71    G */ 0,
++	/*  72    H */ 0, /*  73    I */ 0, /*  74    J */ 0, /*  75    K */ 0, /*  76    L */ 0, /*  77    M */ 0,
++	/*  78    N */ 0, /*  79    O */ 0, /*  80    P */ 0, /*  81    Q */ 0, /*  82    R */ 0, /*  83    S */ 0,
++	/*  84    T */ 0, /*  85    U */ 0, /*  86    V */ 0, /*  87    W */ 0, /*  88    X */ 0, /*  89    Y */ 0,
++	/*  90    Z */ 0, /*  91    [ */ 1, /*  92    " */ 1, /*  93    ] */ 1, /*  94    ^ */ 1, /*  95    _ */ 1,
++	/*  96    ` */ 1, /*  97    a */ 0, /*  98    b */ 0, /*  99    c */ 0, /* 100    d */ 0, /* 101    e */ 0,
++	/* 102    f */ 0, /* 103    g */ 0, /* 104    h */ 0, /* 105    i */ 0, /* 106    j */ 0, /* 107    k */ 0,
++	/* 108    l */ 0, /* 109    m */ 0, /* 110    n */ 0, /* 111    o */ 0, /* 112    p */ 0, /* 113    q */ 0,
++	/* 114    r */ 0, /* 115    s */ 0, /* 116    t */ 0, /* 117    u */ 0, /* 118    v */ 0, /* 119    w */ 0,
++	/* 120    x */ 0, /* 121    y */ 0, /* 122    z */ 0, /* 123    { */ 1, /* 124    | */ 1, /* 125    } */ 1,
++	/* 126    ~ */ 1, /* 127  DEL */ 1
++};
++
++
++// Hex-decoding table
+ const unsigned char qpEncoder::sm_hexDecodeTable[256] =
+ {
+ 	 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+@@ -76,6 +118,36 @@ const unsigned char qpEncoder::sm_hexDecodeTable[256] =
+ };
+ 
+ 
++// static
++bool qpEncoder::RFC2047_isEncodingNeededForChar(const unsigned char c)
++{
++	return (c >= 128 || sm_RFC2047EncodeTable[c] != 0);
++}
++
++
++// static
++int qpEncoder::RFC2047_getEncodedLength(const unsigned char c)
++{
++	if (c >= 128 || sm_RFC2047EncodeTable[c] != 0)
++	{
++		if (c == 32)  // space
++		{
++			// Encoded as "_"
++			return 1;
++		}
++		else
++		{
++			// Hex encoding
++			return 3;
++		}
++	}
++	else
++	{
++		return 1;  // no encoding
++	}
++}
++
++
+ #ifndef VMIME_BUILDING_DOC
+ 
+ #define QP_ENCODE_HEX(x) \
+@@ -83,7 +155,7 @@ const unsigned char qpEncoder::sm_hexDecodeTable[256] =
+ 	outBuffer[outBufferPos + 1] = sm_hexDigits[x >> 4];  \
+ 	outBuffer[outBufferPos + 2] = sm_hexDigits[x & 0xF]; \
+ 	outBufferPos += 3;                                       \
+-	curCol += 3;
++	curCol += 3
+ 
+ #define QP_WRITE(s, x, l) s.write(reinterpret_cast <utility::stream::value_type*>(x), l)
+ 
+@@ -145,34 +217,51 @@ utility::stream::size_type qpEncoder::encode(utility::inputStream& in,
+ 		// Get the next char and encode it
+ 		const unsigned char c = static_cast <unsigned char>(buffer[bufferPos++]);
+ 
+-		switch (c)
+-		{
+-		case '.':
++		if (rfc2047)
+ 		{
+-			if (!rfc2047 && curCol == 0)
++			if (c >= 128 || sm_RFC2047EncodeTable[c] != 0)
+ 			{
+-				// If a '.' appears at the beginning of a line, we encode it to
+-				// to avoid problems with SMTP servers... ("\r\n.\r\n" means the
+-				// end of data transmission).
+-				QP_ENCODE_HEX('.')
+-				continue;
++				if (c == 32)  // space
++				{
++					// RFC-2047, Page 5, 4.2. The "Q" encoding:
++					// << The 8-bit hexadecimal value 20 (e.g., ISO-8859-1 SPACE) may be
++					// represented as "_" (underscore, ASCII 95.). >>
++					outBuffer[outBufferPos++] = '_';
++					++curCol;
++				}
++				else
++				{
++					// Other characters: '=' + hexadecimal encoding
++					QP_ENCODE_HEX(c);
++				}
++			}
++			else
++			{
++				// No encoding
++				outBuffer[outBufferPos++] = c;
++				++curCol;
+ 			}
+-
+-			outBuffer[outBufferPos++] = '.';
+-			++curCol;
+-			break;
+ 		}
+-		case ' ':
++		else
+ 		{
+-			// RFC-2047, Page 5, 4.2. The "Q" encoding:
+-			// << The 8-bit hexadecimal value 20 (e.g., ISO-8859-1 SPACE) may be
+-			// represented as "_" (underscore, ASCII 95.). >>
+-			if (rfc2047)
++			switch (c)
+ 			{
+-				outBuffer[outBufferPos++] = '_';
++			case 46:  // .
++			{
++				if (curCol == 0)
++				{
++					// If a '.' appears at the beginning of a line, we encode it to
++					// to avoid problems with SMTP servers... ("\r\n.\r\n" means the
++					// end of data transmission).
++					QP_ENCODE_HEX('.');
++					continue;
++				}
++
++				outBuffer[outBufferPos++] = '.';
+ 				++curCol;
++				break;
+ 			}
+-			else
++			case 32:  // space
+ 			{
+ 				// Need to get more data?
+ 				if (bufferPos >= bufferLength)
+@@ -192,100 +281,74 @@ utility::stream::size_type qpEncoder::encode(utility::inputStream& in,
+ 					outBuffer[outBufferPos++] = ' ';
+ 					++curCol;
+ 				}
+-			}
+ 
+-			break;
+-		}
+-		case '\t':
+-		{
+-			QP_ENCODE_HEX(c)
+-			break;
+-		}
+-		case '\r':
+-		case '\n':
+-		{
+-			// Text mode (where using CRLF or LF or ... does not
+-			// care for a new line...)
+-			if (text)
+-			{
+-				outBuffer[outBufferPos++] = c;
+-				++curCol;
++				break;
+ 			}
+-			// Binary mode (where CR and LF bytes are important!)
+-			else
++			case 9:   // TAB
+ 			{
+-				QP_ENCODE_HEX(c)
+-			}
+-
+-			break;
+-		}
+-		case '=':
+-		{
+-			QP_ENCODE_HEX('=')
+-			break;
+-		}
+-		// RFC-2047 'especials' characters
+-		case ',':
+-		case ';':
+-		case ':':
+-		case '_':
+-		case '@':
+-		case '(':
+-		case ')':
+-		case '<':
+-		case '>':
+-		case '[':
+-		case ']':
+-		case '"':
+-		{
+-			if (rfc2047)
+-			{
+-				QP_ENCODE_HEX(c)
++				QP_ENCODE_HEX(c);
++				break;
+ 			}
+-			else
++			case 13:  // CR
++			case 10:  // LF
+ 			{
+-				outBuffer[outBufferPos++] = c;
+-				++curCol;
+-			}
++				// Text mode (where using CRLF or LF or ... does not
++				// care for a new line...)
++				if (text)
++				{
++					outBuffer[outBufferPos++] = c;
++					++curCol;
++				}
++				// Binary mode (where CR and LF bytes are important!)
++				else
++				{
++					QP_ENCODE_HEX(c);
++				}
+ 
+-			break;
+-		}
+-		/*
+-			Rule #2: (Literal representation) Octets with decimal values of 33
+-			through 60 inclusive, and 62 through 126, inclusive, MAY be
+-			represented as the ASCII characters which correspond to those
+-			octets (EXCLAMATION POINT through LESS THAN, and GREATER THAN
+-			through TILDE, respectively).
+-		*/
+-		default:
+-		{
+-			//if ((c >= 33 && c <= 60) || (c >= 62 && c <= 126))
+-			if (c >= 33 && c <= 126 && c != 61 && c != 63)
+-			{
+-				outBuffer[outBufferPos++] = c;
+-				++curCol;
++				break;
+ 			}
+-			// Other characters: '=' + hexadecimal encoding
+-			else
++			case 61:  // =
+ 			{
+-				QP_ENCODE_HEX(c)
++				QP_ENCODE_HEX('=');
++				break;
+ 			}
++			/*
++				Rule #2: (Literal representation) Octets with decimal values of 33
++				through 60 inclusive, and 62 through 126, inclusive, MAY be
++				represented as the ASCII characters which correspond to those
++				octets (EXCLAMATION POINT through LESS THAN, and GREATER THAN
++				through TILDE, respectively).
++			*/
++			default:
++
++				//if ((c >= 33 && c <= 60) || (c >= 62 && c <= 126))
++				if (c >= 33 && c <= 126 && c != 61 && c != 63)
++				{
++					outBuffer[outBufferPos++] = c;
++					++curCol;
++				}
++				// Other characters: '=' + hexadecimal encoding
++				else
++				{
++					QP_ENCODE_HEX(c);
++				}
+ 
+-			break;
+-		}
++				break;
+ 
+-		}
++			} // switch (c)
+ 
+-		// Soft line break : "=\r\n"
+-		if (cutLines && curCol >= maxLineLength - 1)
+-		{
+-			outBuffer[outBufferPos] = '=';
+-			outBuffer[outBufferPos + 1] = '\r';
+-			outBuffer[outBufferPos + 2] = '\n';
++			// Soft line break : "=\r\n"
++			if (cutLines && curCol >= maxLineLength - 1)
++			{
++				outBuffer[outBufferPos] = '=';
++				outBuffer[outBufferPos + 1] = '\r';
++				outBuffer[outBufferPos + 2] = '\n';
+ 
+-			outBufferPos += 3;
+-			curCol = 0;
+-		}
++				outBufferPos += 3;
++				curCol = 0;
++			}
++
++		} // !rfc2047
+ 
+ 		++inTotal;
+ 
+diff --git a/src/wordEncoder.cpp b/src/wordEncoder.cpp
+index 22994ed..67bd7a1 100644
+--- a/src/wordEncoder.cpp
++++ b/src/wordEncoder.cpp
+@@ -150,29 +150,9 @@ const string wordEncoder::getNextChunk(const string::size_type maxLength)
+ 			while ((inputCount == 0 || outputCount < maxLength) && (inputCount < remaining))
+ 			{
+ 				const unsigned char c = m_buffer[m_pos + inputCount];
+-				bool encoded = true;
+-
+-				switch (c)
+-				{
+-				case ',':
+-				case ';':
+-				case ':':
+-				case '_':
+-				case '=':
+-
+-					encoded = true;
+-					break;
+-
+-				default:
+-
+-					if (c >= 33 && c <= 126 && c != 61)
+-						encoded = false;
+-
+-					break;
+-				}
+ 
+ 				inputCount++;
+-				outputCount += (encoded ? 3 : 1);
++				outputCount += utility::encoder::qpEncoder::RFC2047_getEncodedLength(c);
+ 			}
+ 
+ 			// Encode chunk
+@@ -217,28 +197,7 @@ const string wordEncoder::getNextChunk(const string::size_type maxLength)
+ 				for (string::size_type i = 0, n = encodeBytes.length() ; i < n ; ++i)
+ 				{
+ 					const unsigned char c = encodeBytes[i];
+-					bool encoded = true;
+-
+-					switch (c)
+-					{
+-					case ',':
+-					case ';':
+-					case ':':
+-					case '_':
+-					case '=':
+-
+-						encoded = true;
+-						break;
+-
+-					default:
+-
+-						if (c >= 33 && c <= 126 && c != 61)
+-							encoded = false;
+-
+-						break;
+-					}
+-
+-					outputCount += (encoded ? 3 : 1);
++					outputCount += utility::encoder::qpEncoder::RFC2047_getEncodedLength(c);
+ 				}
+ 			}
+ 
+diff --git a/vmime/utility/encoder/qpEncoder.hpp b/vmime/utility/encoder/qpEncoder.hpp
+index 098b4c8..a969126 100644
+--- a/vmime/utility/encoder/qpEncoder.hpp
++++ b/vmime/utility/encoder/qpEncoder.hpp
+@@ -47,10 +47,14 @@ public:
+ 
+ 	const std::vector <string> getAvailableProperties() const;
+ 
++	static bool RFC2047_isEncodingNeededForChar(const unsigned char c);
++	static int RFC2047_getEncodedLength(const unsigned char c);
++
+ protected:
+ 
+ 	static const unsigned char sm_hexDigits[17];
+ 	static const unsigned char sm_hexDecodeTable[256];
++	static const unsigned char sm_RFC2047EncodeTable[128];
+ };
+ 
+ 
+
+commit 3c46d1a864399d924a4a7c8a0cfdd348ecfd5fbc
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Tue Oct 12 20:01:34 2010 +0000
+
+    Fixed missing whitespace in text parsing.
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@568 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/text.cpp b/src/text.cpp
+index a2fe060..2454456 100644
+--- a/src/text.cpp
++++ b/src/text.cpp
+@@ -299,6 +299,12 @@ void text::createFromString(const string& in, const charset& ch)
+ 					}
+ 					else
+ 					{
++						if (count)
++						{
++							ref <word> w = getWordAt(getWordCount() - 1);
++							w->getBuffer() += ' ';
++						}
++
+ 						appendWord(vmime::create <word>(chunk, ch));
+ 
+ 						prevIs8bit = true;
+@@ -314,6 +320,12 @@ void text::createFromString(const string& in, const charset& ch)
+ 					}
+ 					else
+ 					{
++						if (count)
++						{
++							ref <word> w = getWordAt(getWordCount() - 1);
++							w->getBuffer() += ' ';
++						}
++
+ 						appendWord(vmime::create <word>
+ 							(chunk, charset(charsets::US_ASCII)));
+ 
+diff --git a/tests/parser/textTest.cpp b/tests/parser/textTest.cpp
+index b455d91..c60da5a 100644
+--- a/tests/parser/textTest.cpp
++++ b/tests/parser/textTest.cpp
+@@ -47,6 +47,9 @@ VMIME_TEST_SUITE_BEGIN
+ 		VMIME_TEST(testWordGenerateQuote)
+ 		VMIME_TEST(testWordGenerateSpecialCharsets)
+ 		VMIME_TEST(testWordGenerateSpecials)
++
++		VMIME_TEST(testWhitespace)
++		VMIME_TEST(testWhitespaceMBox)
+ 	VMIME_TEST_LIST_END
+ 
+ 
+@@ -141,9 +144,9 @@ VMIME_TEST_SUITE_BEGIN
+ 		t2.createFromString(s2, c2);
+ 
+ 		VASSERT_EQ("2.1", 3, t2.getWordCount());
+-		VASSERT_EQ("2.2", "some ASCII characters and special chars:", t2.getWordAt(0)->getBuffer());
++		VASSERT_EQ("2.2", "some ASCII characters and special chars: ", t2.getWordAt(0)->getBuffer());
+ 		VASSERT_EQ("2.3", vmime::charset(vmime::charsets::US_ASCII), t2.getWordAt(0)->getCharset());
+-		VASSERT_EQ("2.4", "\xf1\xf2\xf3\xf4", t2.getWordAt(1)->getBuffer());
++		VASSERT_EQ("2.4", "\xf1\xf2\xf3\xf4 ", t2.getWordAt(1)->getBuffer());
+ 		VASSERT_EQ("2.5", c2, t2.getWordAt(1)->getCharset());
+ 		VASSERT_EQ("2.6", "and then more ASCII chars.", t2.getWordAt(2)->getBuffer());
+ 		VASSERT_EQ("2.7", vmime::charset(vmime::charsets::US_ASCII), t2.getWordAt(2)->getCharset());
+@@ -378,5 +381,52 @@ VMIME_TEST_SUITE_BEGIN
+ 			vmime::word("\x22\xC3\x9Cml\xC3\xA4ute\x22", vmime::charset("UTF-8")).generate());
+ 	}
+ 
++	void testWhitespace()
++	{
++		// Create
++		vmime::text text;
++		text.createFromString("Achim Br\xc3\xa4ndt", vmime::charsets::UTF_8);
++
++		VASSERT_EQ("1", 2, text.getWordCount());
++		VASSERT_EQ("2", "Achim ", text.getWordAt(0)->getBuffer());
++		VASSERT_EQ("3", "us-ascii", text.getWordAt(0)->getCharset());
++		VASSERT_EQ("4", "Br\xc3\xa4ndt", text.getWordAt(1)->getBuffer());
++		VASSERT_EQ("5", "utf-8", text.getWordAt(1)->getCharset());
++
++		// Generate
++		VASSERT_EQ("6", "Achim =?utf-8?Q?Br=C3=A4ndt?=", text.generate());
++
++		// Parse
++		text.parse("=?us-ascii?Q?Achim_?= =?utf-8?Q?Br=C3=A4ndt?=");
++
++		VASSERT_EQ("7", 2, text.getWordCount());
++		VASSERT_EQ("8", "Achim ", text.getWordAt(0)->getBuffer());
++		VASSERT_EQ("9", "us-ascii", text.getWordAt(0)->getCharset());
++		VASSERT_EQ("10", "Br\xc3\xa4ndt", text.getWordAt(1)->getBuffer());
++		VASSERT_EQ("11", "utf-8", text.getWordAt(1)->getCharset());
++	}
++
++	void testWhitespaceMBox()
++	{
++		// Space MUST be encoded inside a word
++		vmime::mailbox mbox(vmime::text("Achim Br\xc3\xa4ndt", vmime::charsets::UTF_8), "me@vmime.org");
++		VASSERT_EQ("generate1", "=?us-ascii?Q?Achim_?= =?utf-8?Q?Br=C3=A4ndt?= <me@vmime.org>", mbox.generate());
++
++		vmime::text txt;
++		txt.appendWord(vmime::create <vmime::word>("Achim ", "us-ascii"));
++		txt.appendWord(vmime::create <vmime::word>("Br\xc3\xa4ndt", "utf-8"));
++		mbox = vmime::mailbox(txt, "me@vmime.org");
++		VASSERT_EQ("generate2", "=?us-ascii?Q?Achim_?= =?utf-8?Q?Br=C3=A4ndt?= <me@vmime.org>", mbox.generate());
++
++		mbox.parse("=?us-ascii?Q?Achim?= =?utf-8?Q?Br=C3=A4ndt?= <me@vmime.org>");
++		VASSERT_EQ("parse.name.count", 2, mbox.getName().getWordCount());
++		VASSERT_EQ("parse.name.word1.buffer", "Achim", mbox.getName().getWordAt(0)->getBuffer());
++		VASSERT_EQ("parse.name.word1.charset", "us-ascii", mbox.getName().getWordAt(0)->getCharset());
++		VASSERT_EQ("parse.name.word2.buffer", "Br\xc3\xa4ndt", mbox.getName().getWordAt(1)->getBuffer());
++		VASSERT_EQ("parse.name.word2.charset", "utf-8", mbox.getName().getWordAt(1)->getCharset());
++
++		VASSERT_EQ("parse.email", "me@vmime.org", mbox.getEmail());
++	}
++
+ VMIME_TEST_SUITE_END
+ 
