@@ -4,8 +4,8 @@
 # libsndfile
 PKG             := libsndfile
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.22
-$(PKG)_CHECKSUM := 2bf823dcacf8ee78c56b8a877672753ee24d9d3b
+$(PKG)_VERSION  := 1.0.23
+$(PKG)_CHECKSUM := dee36861b503fe7754f0131364523f45720a0914
 $(PKG)_SUBDIR   := libsndfile-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsndfile-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.mega-nerd.com/libsndfile/
@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         --enable-sqlite \
         --enable-external-libs \
         --disable-octave \
-        --disable-alsa
+        --disable-alsa \
+        --disable-shave
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= html_DATA=
 endef
