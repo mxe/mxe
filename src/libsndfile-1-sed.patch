@@ -1,0 +1,14 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
+--- libsndfile-1.0.23/configure.orig	2010-10-13 02:08:53.000000000 +1100
++++ libsndfile-1.0.23/configure	2010-10-13 02:14:19.000000000 +1100
+@@ -18485,7 +18485,7 @@
+ 	OS_SPECIFIC_LINKS=" -static-libgcc $OS_SPECIFIC_LINKS"
+ 	fi
+ 
+-WIN_RC_VERSION=`echo $PACKAGE_VERSION | sed -re "s/p.*//" -e "s/\./,/g"`
++WIN_RC_VERSION=`echo $PACKAGE_VERSION | $SED -re "s/p.*//" -e "s/\./,/g"`
+ 
+ #-------------------------------------------------------------------------------
+ 
