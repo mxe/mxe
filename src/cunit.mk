@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    chmod +x '$(1)/install-sh'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
