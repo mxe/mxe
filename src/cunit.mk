@@ -4,10 +4,10 @@
 # cunit
 PKG             := cunit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1-0
-$(PKG)_CHECKSUM := 05920c1defda3527cee3bc82fb9eadf45c5ea7a1
+$(PKG)_VERSION  := 2.1-1
+$(PKG)_CHECKSUM := a6aee7e346ba672c7723561f3e3253bfe53087ca
 $(PKG)_SUBDIR   := CUnit-$($(PKG)_VERSION)
-$(PKG)_FILE     := CUnit-$($(PKG)_VERSION)-src.tar.gz
+$(PKG)_FILE     := CUnit-$($(PKG)_VERSION)-src.tar.bz2
 $(PKG)_WEBSITE  := http://cunit.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/cunit/CUnit/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
