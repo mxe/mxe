@@ -4,8 +4,8 @@
 # cunit
 PKG             := cunit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1-1
-$(PKG)_CHECKSUM := a6aee7e346ba672c7723561f3e3253bfe53087ca
+$(PKG)_VERSION  := 2.1-2
+$(PKG)_CHECKSUM := 6c2d0627eb64c09c7140726d6bf814cf531a3ce0
 $(PKG)_SUBDIR   := CUnit-$($(PKG)_VERSION)
 $(PKG)_FILE     := CUnit-$($(PKG)_VERSION)-src.tar.bz2
 $(PKG)_WEBSITE  := http://cunit.sourceforge.net/
@@ -19,7 +19,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    chmod +x '$(1)/install-sh'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
