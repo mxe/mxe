@@ -18215,3 +18215,96 @@ index b455d91..c60da5a 100644
 +
  VMIME_TEST_SUITE_END
  
+
+commit 5c4011ca61000a4ae09705d360d6b85ea9128dc3
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Mon Oct 18 14:20:34 2010 +0000
+
+    Fold non-encoded lines in the case there is no whitespace in them.
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@569 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/word.cpp b/src/word.cpp
+index 9d0177f..db720dc 100644
+--- a/src/word.cpp
++++ b/src/word.cpp
+@@ -351,7 +351,6 @@ void word::generate(utility::outputStream& os, const string::size_type maxLineLe
+ 	//  - there is enough remaining space on the current line to hold the whole buffer
+ 	if (!encodingNeeded &&
+ 	    (flags & text::QUOTE_IF_POSSIBLE) &&
+-	    !encodingNeeded &&
+ 	    m_buffer.find('"') == string::npos &&
+ 	    (curLineLength + 2 /* 2 x " */ + m_buffer.length()) < maxLineLength)
+ 	{
+@@ -361,6 +360,40 @@ void word::generate(utility::outputStream& os, const string::size_type maxLineLe
+ 	// We will fold lines without encoding them.
+ 	else if (!encodingNeeded)
+ 	{
++		// Here, we could have the following conditions:
++		//
++		//  * a maximum line length of N bytes
++		//  * a buffer containing N+1 bytes, with no whitespace
++		//
++		// Look in the buffer for any run (ie. whitespace-separated sequence) which
++		// is longer than the maximum line length. If there is one, then force encoding,
++		// so that no generated line is longer than the maximum line length.
++		string::size_type maxRunLength = 0;
++		string::size_type curRunLength = 0;
++
++		for (string::const_iterator p = m_buffer.begin(), end = m_buffer.end() ; p != end ; ++p)
++		{
++			if (parserHelpers::isSpace(*p))
++			{
++				maxRunLength = std::max(maxRunLength, curRunLength);
++				curRunLength = 0;
++			}
++			else
++			{
++				curRunLength++;
++			}
++		}
++
++		maxRunLength = std::max(maxRunLength, curRunLength);
++
++		if (maxRunLength >= maxLineLength - 3)
++		{
++			// Generate with encoding forced
++			generate(os, maxLineLength, curLinePos, newLinePos, flags | text::FORCE_ENCODING, state);
++			return;
++		}
++
++		// Output runs, and fold line when a whitespace is encountered
+ 		string::const_iterator lastWSpos = m_buffer.end(); // last white-space position
+ 		string::const_iterator curLineStart = m_buffer.begin(); // current line start
+ 
+diff --git a/tests/parser/textTest.cpp b/tests/parser/textTest.cpp
+index c60da5a..b84f376 100644
+--- a/tests/parser/textTest.cpp
++++ b/tests/parser/textTest.cpp
+@@ -50,6 +50,8 @@ VMIME_TEST_SUITE_BEGIN
+ 
+ 		VMIME_TEST(testWhitespace)
+ 		VMIME_TEST(testWhitespaceMBox)
++
++		VMIME_TEST(testFoldingAscii)
+ 	VMIME_TEST_LIST_END
+ 
+ 
+@@ -428,5 +430,17 @@ VMIME_TEST_SUITE_BEGIN
+ 		VASSERT_EQ("parse.email", "me@vmime.org", mbox.getEmail());
+ 	}
+ 
++	void testFoldingAscii()
++	{
++		// In this test, no encoding is needed, but line should be folded anyway
++		vmime::word w("01234567890123456789012345678901234567890123456789"
++		              "01234567890123456789012345678901234567890123456789", vmime::charset("us-ascii"));
++
++		VASSERT_EQ("fold.ascii",
++			"=?us-ascii?Q?01234567890123456789012345678901234?=\r\n"
++			" =?us-ascii?Q?5678901234567890123456789012345678?=\r\n"
++			" =?us-ascii?Q?9012345678901234567890123456789?=", w.generate(50));
++	}
++
+ VMIME_TEST_SUITE_END
+ 
