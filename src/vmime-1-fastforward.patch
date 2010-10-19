@@ -18308,3 +18308,116 @@ index c60da5a..b84f376 100644
 +
  VMIME_TEST_SUITE_END
  
+
+commit efeffacbf9ef683edb4c6cd92b9582df67b8fca4
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Tue Oct 19 13:28:43 2010 +0000
+
+    Added support for DRAFT flag.
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@570 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/AUTHORS b/AUTHORS
+index f0b5e2d..6acebd0 100644
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -20,6 +20,7 @@ VMIME CONTRIBUTORS
+  - Pierre Thierry <nowhere.man@levallois.eu.org> (patches for STL algorithms)
+  - Zarafa <http://developer.zarafa.com/VmimePatches>
+  - Bartek Szurgot <vempirelord@wp.pl, http://baszerr.org>
++ - Achim Brändt <http://sourceforge.net/users/a-brandt/>
+ 
+ Please apologize if I have forgotten someone here.  ;)
+ See SVN Changelog for full list.
+diff --git a/src/net/imap/IMAPMessage.cpp b/src/net/imap/IMAPMessage.cpp
+index bbdba69..bc661ed 100644
+--- a/src/net/imap/IMAPMessage.cpp
++++ b/src/net/imap/IMAPMessage.cpp
+@@ -555,6 +555,7 @@ void IMAPMessage::setFlags(const int flags, const int mode)
+ 	if (flags & FLAG_MARKED) flagList.push_back("\\Flagged");
+ 	if (flags & FLAG_DELETED) flagList.push_back("\\Deleted");
+ 	if (flags & FLAG_SEEN) flagList.push_back("\\Seen");
++	if (flags & FLAG_DRAFT) flagList.push_back("\\Draft");
+ 
+ 	if (!flagList.empty())
+ 	{
+diff --git a/src/net/imap/IMAPUtils.cpp b/src/net/imap/IMAPUtils.cpp
+index c4651ed..0d6fc47 100644
+--- a/src/net/imap/IMAPUtils.cpp
++++ b/src/net/imap/IMAPUtils.cpp
+@@ -419,10 +419,12 @@ int IMAPUtils::messageFlagsFromFlags(const IMAPParser::flag_list* list)
+ 		case IMAPParser::flag::SEEN:
+ 			flags |= message::FLAG_SEEN;
+ 			break;
++		case IMAPParser::flag::DRAFT:
++			flags |= message::FLAG_DRAFT;
++			break;
+ 
+ 		default:
+ 		//case IMAPParser::flag::UNKNOWN:
+-		//case IMAPParser::flag::DRAFT:
+ 			break;
+ 		}
+ 	}
+@@ -439,6 +441,7 @@ const string IMAPUtils::messageFlagList(const int flags)
+ 	if (flags & message::FLAG_MARKED) flagList.push_back("\\Flagged");
+ 	if (flags & message::FLAG_DELETED) flagList.push_back("\\Deleted");
+ 	if (flags & message::FLAG_SEEN) flagList.push_back("\\Seen");
++	if (flags & message::FLAG_DRAFT) flagList.push_back("\\Draft");
+ 
+ 	if (!flagList.empty())
+ 	{
+diff --git a/src/net/maildir/maildirUtils.cpp b/src/net/maildir/maildirUtils.cpp
+index 19887b2..3430d1f 100644
+--- a/src/net/maildir/maildirUtils.cpp
++++ b/src/net/maildir/maildirUtils.cpp
+@@ -102,6 +102,7 @@ int maildirUtils::extractFlags(const utility::file::path::component& comp)
+ 		case 'T': case 't': flags |= message::FLAG_DELETED; break;
+ 		case 'F': case 'f': flags |= message::FLAG_MARKED; break;
+ 		case 'P': case 'p': flags |= message::FLAG_PASSED; break;
++		case 'D': case 'd': flags |= message::FLAG_DRAFT; break;
+ 		}
+ 	}
+ 
+@@ -121,6 +122,7 @@ const utility::file::path::component maildirUtils::buildFlags(const int flags)
+ 	if (flags & message::FLAG_REPLIED) str += "R";
+ 	if (flags & message::FLAG_SEEN)    str += "S";
+ 	if (flags & message::FLAG_DELETED) str += "T";
++	if (flags & message::FLAG_DRAFT)   str += "D";
+ 
+ 	return (utility::file::path::component(str));
+ }
+diff --git a/vmime/net/message.hpp b/vmime/net/message.hpp
+index b6ebef8..1fbd008 100644
+--- a/vmime/net/message.hpp
++++ b/vmime/net/message.hpp
+@@ -227,6 +227,7 @@ public:
+ 		FLAG_REPLIED = (1 << 3),   /**< User replied to this message. */
+ 		FLAG_MARKED  = (1 << 4),   /**< Used-defined flag. */
+ 		FLAG_PASSED  = (1 << 5),   /**< Message has been resent/forwarded/bounced. */
++		FLAG_DRAFT   = (1 << 6),   /**< Message is marked as a 'draft'. */
+ 
+ 		FLAG_UNDEFINED = 9999      /**< Used internally (this should not be returned
+ 		                                by the flags() function). */
+
+commit c853ee3020480e91878813730d6beb2b29bf2323
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Tue Oct 19 14:25:44 2010 +0000
+
+    Fixed wrong name.
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@571 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/AUTHORS b/AUTHORS
+index 6acebd0..4164052 100644
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -20,7 +20,7 @@ VMIME CONTRIBUTORS
+  - Pierre Thierry <nowhere.man@levallois.eu.org> (patches for STL algorithms)
+  - Zarafa <http://developer.zarafa.com/VmimePatches>
+  - Bartek Szurgot <vempirelord@wp.pl, http://baszerr.org>
+- - Achim Brändt <http://sourceforge.net/users/a-brandt/>
++ - Achim Brandt <http://sourceforge.net/users/a-brandt/>
+ 
+ Please apologize if I have forgotten someone here.  ;)
+ See SVN Changelog for full list.
