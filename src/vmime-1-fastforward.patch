@@ -18421,3 +18421,25 @@ index 6acebd0..4164052 100644
  
  Please apologize if I have forgotten someone here.  ;)
  See SVN Changelog for full list.
+
+commit accc75399541bcaff0a8c7c4bd282370be9ca494
+Author: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date:   Wed Oct 20 09:37:39 2010 +0000
+
+    Return failed email address in exception for RCPT TO.
+    
+    git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@572 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/net/smtp/SMTPTransport.cpp b/src/net/smtp/SMTPTransport.cpp
+index 71f166b..204daae 100644
+--- a/src/net/smtp/SMTPTransport.cpp
++++ b/src/net/smtp/SMTPTransport.cpp
+@@ -583,7 +583,7 @@ void SMTPTransport::send(const mailbox& expeditor, const mailboxList& recipients
+ 		if ((resp = readResponse())->getCode() != 250)
+ 		{
+ 			internalDisconnect();
+-			throw exceptions::command_error("RCPT TO", resp->getText());
++			throw exceptions::command_error("RCPT TO", resp->getText(), mbox.getEmail());
+ 		}
+ 	}
+ 
