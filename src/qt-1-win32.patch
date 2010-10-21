@@ -1742,22 +1742,26 @@ index 8bc8e59..c383bcb 100644
  // ======== duplicated from qcolor_p
  
 
-commit 91396840d9a182a56fec73d9f15f83aad8b88847
+commit 53cd4f3b95b52423253f98a44476709de461148b
 Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Sun Oct 10 11:14:20 2010 +0200
+Date:   Mon Oct 11 17:15:44 2010 +0200
 
     use specified pkg-config
     
     Respect the pkg-config tool specified in qmake.conf. This is
     useful when crossbuilding.
+    
+    Merge-request: 850
+    Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+    (cherry picked from commit 89a853370d94373c6ef1c9fabcfb5bf19c20f7c9)
 
 diff --git a/mkspecs/features/link_pkgconfig.prf b/mkspecs/features/link_pkgconfig.prf
-index 4c528aa..90cc836 100644
+index 4c528aa..d70e5de 100644
 --- a/mkspecs/features/link_pkgconfig.prf
 +++ b/mkspecs/features/link_pkgconfig.prf
 @@ -1,6 +1,7 @@
  # handle pkg-config files
-+isEmpty(PKG_CONFIG):PKG_CONFIG=pkg-config
++isEmpty(PKG_CONFIG):PKG_CONFIG = pkg-config
  for(PKGCONFIG_LIB, $$list($$unique(PKGCONFIG))) {
 -    QMAKE_CXXFLAGS += $$system(pkg-config --cflags $$PKGCONFIG_LIB)
 -    QMAKE_CFLAGS += $$system(pkg-config --cflags $$PKGCONFIG_LIB)
@@ -1767,15 +1771,19 @@ index 4c528aa..90cc836 100644
 +    LIBS += $$system($$PKG_CONFIG --libs $$PKGCONFIG_LIB)
  }
 
-commit e4db94db6af14a2b9a187b33424c63473cf15391
+commit c7ee2a2446966a261fdf1287ca781343a813987e
 Author: Mark Brand <mabrand@mabrand.nl>
-Date:   Thu Oct 14 20:55:31 2010 +0200
+Date:   Fri Oct 15 14:56:03 2010 +0200
 
     removed obsolete -qt-gif configure option
     
     Since "-system-gif" is not offered, offering "-qt-gif" is unnecessary
     and perhaps misleading. By default the GIF handler is built from code
     included with Qt, unless suppressed by "-no-gif".
+    
+    Merge-request: 859
+    Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+    (cherry picked from commit dfe9084344d73d59f4569c8be6104ce83ae0df95)
 
 diff --git a/configure b/configure
 index ea390d5..4d9bb9f 100755
@@ -1840,7 +1848,7 @@ index 5b3d714..8c207df 100644
          desc("LIBPNG", "no",    "-no-libpng",           "Do not compile PNG support.");
          desc("LIBPNG", "qt",    "-qt-libpng",           "Use the libpng bundled with Qt.");
 
-commit 79facb99cd75f142b734668a4cf2a3376966de2a
+commit a3383784b155dc3df03e39b8a5696fea3872915b
 Author: Mark Brand <mabrand@mabrand.nl>
 Date:   Sat Jun 5 23:41:04 2010 +0200
 
