@@ -1,0 +1,44 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+These patches have been taken from:
+https://svn.boost.org/trac/boost/changeset/66006
+https://svn.boost.org/trac/boost/changeset/66140
+
+--- trunk/boost/asio/error.hpp	(revision 62499)
++++ trunk/boost/asio/error.hpp	(revision 66006)
+@@ -20,5 +20,5 @@
+ #include <boost/system/error_code.hpp>
+ #if defined(BOOST_WINDOWS) || defined(__CYGWIN__)
+-# include <WinError.h>
++# include <winerror.h>
+ #else
+ # include <cerrno>
+--- trunk/libs/thread/src/win32/tss_pe.cpp	(revision 62718)
++++ trunk/libs/thread/src/win32/tss_pe.cpp	(revision 66140)
+@@ -39,4 +39,10 @@
+ }
+ 
++#if (__MINGW32_MAJOR_VERSION >3) || ((__MINGW32_MAJOR_VERSION==3) && (__MINGW32_MINOR_VERSION>=18))
++extern "C"
++{
++    PIMAGE_TLS_CALLBACK __crt_xl_tls_callback__ __attribute__ ((section(".CRT$XLB"))) = on_tls_callback;
++}
++#else
+ extern "C" {
+ 
+@@ -51,8 +57,6 @@
+ 
+     PIMAGE_TLS_CALLBACK __crt_xl_start__ __attribute__ ((section(".CRT$XLA"))) = 0;
+-    PIMAGE_TLS_CALLBACK __crt_xl_tls_callback__ __attribute__ ((section(".CRT$XLB"))) = on_tls_callback;
+     PIMAGE_TLS_CALLBACK __crt_xl_end__ __attribute__ ((section(".CRT$XLZ"))) = 0;
+ }
+-
+ extern "C" const IMAGE_TLS_DIRECTORY32 _tls_used __attribute__ ((section(".rdata$T"))) =
+ {
+@@ -64,4 +68,5 @@
+         (DWORD) 0
+ };
++#endif
+ 
+ 
