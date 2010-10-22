@@ -24,7 +24,8 @@ define $(PKG)_BUILD
         ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --target=x86-win32-gcc \
-        --disable-examples
+        --disable-examples \
+        --disable-install-docs
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
     $(TARGET)-ranlib $(PREFIX)/$(TARGET)/lib/libvpx.a
