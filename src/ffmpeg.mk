@@ -4,10 +4,10 @@
 # ffmpeg
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.6
-$(PKG)_CHECKSUM := 9e4bc2f1fdb4565bea54d7fb38e705b40620e208
+$(PKG)_VERSION  := 0.6.1
+$(PKG)_CHECKSUM := 24ada1d35fc000980090e773101e101ca45f85e5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.ffmpeg.org/
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 faad2 faac lame libvpx opencore-amr sdl speex theora vorbis x264 xvidcore zlib
