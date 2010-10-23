@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 0.1.7
 $(PKG)_CHECKSUM := f3f803ec5feae5a3fdb0fa3937277669e854386e
 $(PKG)_SUBDIR   := libsamplerate-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsamplerate-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.mega-nerd.com/SRC
+$(PKG)_WEBSITE  := http://www.mega-nerd.com/SRC/
 $(PKG)_URL      := http://www.mega-nerd.com/SRC/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
