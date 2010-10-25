@@ -500,6 +500,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <ul class="compact-list">
         <li><a href="#requirements-debian">Debian</a></li>
+        <li><a href="#requirements-fedora">Fedora</a></li>
         <li><a href="#requirements-freebsd">FreeBSD</a></li>
         <li><a href="#requirements-frugalware">Frugalware</a></li>
         <li><a href="#requirements-gentoo">Gentoo</a></li>
@@ -624,6 +625,14 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <pre>aptitude install -R -t lenny-backports autoconf libtool \
                                        xz-utils</pre>
+
+    <h3 id="requirements-fedora">Fedora</h3>
+
+    <!-- https://admin.fedoraproject.org/pkgdb/ -->
+    <pre>yum install autoconf automake bash bison bzip2 cmake \
+            flex gcc-c++ intltool make sed libtool \
+            openssl-devel patch perl pkgconfig scons \
+            yasm unzip wget xz</pre>
 
     <h3 id="requirements-freebsd">FreeBSD</h3>
 
