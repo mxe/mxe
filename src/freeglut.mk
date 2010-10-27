@@ -13,11 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeglut/freeglut/$(word
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://freeglut.svn.sourceforge.net/viewvc/freeglut/tags/?sortby=date' | \
-    grep '<a name="' | \
-    $(SED) -n 's,.*<a name="FG_\([0-9][^"]*\)".*,\1,p' | \
-    $(SED) 's,_RC,-rc,g; s,_,.,g' | \
-    head -1
+    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/freeglut/files/) | \
+    $(SED) -n 's,.*freeglut-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
