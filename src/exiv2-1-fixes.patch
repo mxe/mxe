@@ -1,0 +1,48 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://dev.exiv2.org/projects/exiv2/repository/revisions/2370
+
+--- trunk/src/psdimage.cpp	(revision 2369)
++++ trunk/src/psdimage.cpp	(revision 2370)
+@@ -419,24 +419,24 @@
+             uint32_t curOffset = io_->tell();
+ 
+             // Write IPTC_NAA resource block
+-            if (   resourceId == kPhotoshopResourceID_IPTC_NAA
+-                || (resourceId > kPhotoshopResourceID_IPTC_NAA && iptcDone == false)) {
++            if ((resourceId == kPhotoshopResourceID_IPTC_NAA  ||
++                 resourceId >  kPhotoshopResourceID_IPTC_NAA) && iptcDone == false) {
+                 newResLength += writeIptcData(iptcData_, outIo);
+                 resourceSize = (resourceSize + 1) & ~1;    // adjust for padding
+                 iptcDone = true;
+             }
+ 
+             // Write ExifInfo resource block
+-            else if (   resourceId == kPhotoshopResourceID_ExifInfo
+-                     || (resourceId > kPhotoshopResourceID_ExifInfo && exifDone == false)) {
++            else if ((resourceId == kPhotoshopResourceID_ExifInfo  ||
++                      resourceId >  kPhotoshopResourceID_ExifInfo) && exifDone == false) {
+                 newResLength += writeExifData(exifData_, outIo);
+                 resourceSize = (resourceSize + 1) & ~1;    // adjust for padding
+                 exifDone = true;
+             }
+ 
+             // Write XMPpacket resource block
+-            else if (   resourceId == kPhotoshopResourceID_XMPPacket
+-                     || (resourceId > kPhotoshopResourceID_XMPPacket && xmpDone == false)) {
++            else if ((resourceId == kPhotoshopResourceID_XMPPacket  ||
++                      resourceId >  kPhotoshopResourceID_XMPPacket) && xmpDone == false) {
+                 newResLength += writeXmpData(xmpData_, outIo);
+                 resourceSize = (resourceSize + 1) & ~1;    // adjust for padding
+                 xmpDone = true;
+@@ -456,7 +456,7 @@
+                 us2Data(buf, resourceId, bigEndian);
+                 if (outIo.write(buf, 2) != 2) throw Error(21);
+                 // Write resource name as Pascal string
+-                buf[0] = resourceNameLength & 0x000f;
++                buf[0] = resourceNameLength & 0x00ff;
+                 if (outIo.write(buf, 1) != 1) throw Error(21);
+                 buf[0] = resourceNameFirstChar;
+                 if (outIo.write(buf, 1) != 1) throw Error(21);
