@@ -3,7 +3,7 @@
 
 # XZ
 PKG             := xz
-$(PKG)_IGNORE   := 4.999.9beta
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.0.0
 $(PKG)_CHECKSUM := bcce697d7f09584f0feb21e35b13a15ba7417a1f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
