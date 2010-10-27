@@ -4,8 +4,8 @@
 # cURL
 PKG             := curl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.21.1
-$(PKG)_CHECKSUM := d6ad8d7caf6e15f318e7b9f69dee8f67c807b1a0
+$(PKG)_VERSION  := 7.21.2
+$(PKG)_CHECKSUM := f729552a905033dbd0d2cf56e40c7048f2d8331e
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://curl.haxx.se/libcurl/
