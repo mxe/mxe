@@ -16,7 +16,7 @@ $(PKG)_DEPS     := gcc libpng pthreads
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.gnu.org/gnu/plotutils/?C=M;O=D' | \
     grep '<a href="plotutils-' | \
-    $(SED) -n 's,.*plotutils-\([0-9][^<]*\)\.tar\.gz.*,\1,p' | \
+    $(SED) -n 's,.*plotutils-\([0-9][^<]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

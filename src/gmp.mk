@@ -16,7 +16,7 @@ $(PKG)_DEPS     := gcc
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.gmplib.org/' | \
     grep '<a href="' | \
-    $(SED) -n 's,.*gmp-\([0-9][^>]*\)\.tar\.bz2.*,\1,p' | \
+    $(SED) -n 's,.*gmp-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v '^4\.' | \
     head -1
 endef

@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads zlib
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/vmime/files/) | \
-    $(SED) -n 's,.*vmime-\([0-9][^>]*\)\.tar\.bz2.*,\1,p' | \
+    $(SED) -n 's,.*vmime-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef
 

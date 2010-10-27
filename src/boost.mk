@@ -14,6 +14,7 @@ $(PKG)_DEPS     := gcc zlib bzip2 expat
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/projects/boost/files/?sort=date&sortdir=desc' | \
+    grep boost | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     grep -v beta | \
     head -1
