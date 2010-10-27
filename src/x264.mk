@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := ac3698005058173b27bf8a79a6eaf276a930e764
 $(PKG)_SUBDIR   := $(PKG)-snapshot-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-snapshot-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.videolan.org/developers/x264.html
-$(PKG)_URL      := http://ftp.videolan.org/pub/videolan/$(PKG)/snapshots/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/snapshots/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
