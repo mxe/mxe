@@ -4,8 +4,8 @@
 # Qt
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.7.0
-$(PKG)_CHECKSUM := a5796c8f468c8f59249e5c696f913864c979f411
+$(PKG)_VERSION  := 4.7.1
+$(PKG)_CHECKSUM := fcf764d39d982c7f84703821582bd10c3192e341
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
@@ -20,9 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-
-    cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
-
     # We prefer static mingw-cross-env system libs for static build:
     # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite
     # There is no -system-gif option.
