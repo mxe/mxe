@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := libmng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libmng-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.libmng.com/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libmng/libmng-devel/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib jpeg
+$(PKG)_DEPS     := gcc zlib jpeg lcms1
 
 define $(PKG)_UPDATE
     $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libmng/files/) | \
@@ -21,7 +21,7 @@ endef
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
         -f '$(1)'/makefiles/makefile.unix \
-        CC=$(TARGET)-gcc CFLAGS='-DMNG_BUILD_SO'
+        CC=$(TARGET)-gcc CFLAGS='-DMNG_BUILD_SO -DMNG_FULL_CMS'
     $(TARGET)-ranlib '$(1)/libmng.a'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libmng.a' '$(PREFIX)/$(TARGET)/lib/'

@@ -62,7 +62,7 @@ define $(PKG)_BUILD
         -system-libpng \
         -system-libjpeg \
         -system-libtiff \
-        -system-libmng \
+        -system-libmng -llcms\
         -system-sqlite \
         -openssl-linked \
         -v
