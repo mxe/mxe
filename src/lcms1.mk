@@ -1,7 +1,7 @@
 # This file is part of mingw-cross-env.
 # See doc/index.html for further information.
 
-# lcms
+# lcms1
 PKG             := lcms1
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.19
