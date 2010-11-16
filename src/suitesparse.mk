@@ -20,17 +20,9 @@ endef
 
 define $(PKG)_BUILD
     
-    # If not building metis in it's makefile, then
-    # build it here since the config seems to expect it
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,metis)
-    $(SED) -i 's,cc,$(TARGET)-gcc,'        $(1)/$(metis_SUBDIR)/Makefile.in
-    $(SED) -i 's,ar ,$(TARGET)-ar ,'       $(1)/$(metis_SUBDIR)/Makefile.in
-    $(SED) -i 's,ranlib,$(TARGET)-ranlib,' $(1)/$(metis_SUBDIR)/Makefile.in
-    $(MAKE) -C '$(1)/$(metis_SUBDIR)/Lib' -j '$(JOBS)'
-
-    # Otherwise hack the config so it can find metis
-    #$(SED) -i 's,\(METIS_PATH = \)\(.    $(INSTALL) -m664 '$(1)/.    $(INSTALL) -m664 '$(1)/metis-4.0\),\1'$(PREFIX)/$(TARGET)/include/metis',' $(1)/UFconfig/UFconfig.mk
-    #$(SED) -i 's,\(METIS = \)\(.    $(INSTALL) -m664 '$(1)/.    $(INSTALL) -m664 '$(1)/metis-4.0/libmetis.a\),\1'$(PREFIX)/$(TARGET)/lib/libmetis.a',' $(1)/UFconfig/UFconfig.mk
+    # change the config to find metis
+    $(SED) -i 's,\(METIS_PATH = \)\(.    $(INSTALL) -m664 '$(1)/.    $(INSTALL) -m664 '$(1)/metis-4.0\),\1'$(PREFIX)/$(TARGET)/include/metis',' $(1)/UFconfig/UFconfig.mk
+    $(SED) -i 's,\(METIS = \)\(.    $(INSTALL) -m664 '$(1)/.    $(INSTALL) -m664 '$(1)/metis-4.0/libmetis.a\),\1'$(PREFIX)/$(TARGET)/lib/libmetis.a',' $(1)/UFconfig/UFconfig.mk
     
     # use cross tools
     $(SED) -i 's,cc,$(TARGET)-gcc,'        $(1)/UFconfig/UFconfig.mk

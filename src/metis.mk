@@ -18,10 +18,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_NO_BUILD
-    # Don't build metis here, build inline with suitesparse instead
-    # since it looks in an odd location for the headers
-    # Change this to $(PKG)_BUILD to actually build and install
+define $(PKG)_BUILD
     $(SED) -i 's,cc,$(TARGET)-gcc,'        $(1)/Makefile.in
     $(SED) -i 's,ar ,$(TARGET)-ar ,'       $(1)/Makefile.in
     $(SED) -i 's,ranlib,$(TARGET)-ranlib,' $(1)/Makefile.in
