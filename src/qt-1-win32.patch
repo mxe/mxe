@@ -7,7 +7,7 @@ http://qt.gitorious.org/qt
 From fd085b59f5900459f946a5307999598f7e714740 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 11 Oct 2010 17:15:44 +0200
-Subject: [PATCH 1/4] use specified pkg-config
+Subject: [PATCH 1/5] use specified pkg-config
 
 Respect the pkg-config tool specified in qmake.conf. This is
 useful when crossbuilding.
@@ -38,7 +38,7 @@ index 4c528aa..d70e5de 100644
 From 8c882ffc1d1c50ecad255e1f9c5f174fa00f36b4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 15 Oct 2010 14:56:03 +0200
-Subject: [PATCH 2/4] removed obsolete -qt-gif configure option
+Subject: [PATCH 2/5] removed obsolete -qt-gif configure option
 
 Since "-system-gif" is not offered, offering "-qt-gif" is unnecessary
 and perhaps misleading. By default the GIF handler is built from code
@@ -117,7 +117,7 @@ index 983416a..c6b0a02 100644
 From 69c2dddd8a7e51c74a79c524d4d0f01e54aa9994 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 5 Jun 2010 23:41:04 +0200
-Subject: [PATCH 3/4] added missing INSTALLS to JavaScriptCore.pro for static libjscore
+Subject: [PATCH 3/5] added missing INSTALLS to JavaScriptCore.pro for static libjscore
 
 For static build of Qt on win32-g++*, applications using webkit
 link to libjscore.a.
@@ -146,7 +146,7 @@ index a805170..027eb0f 100644
 From de9c5f7ab3ce90e825d3dac66fea2bea377d93ff Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 9 Nov 2010 20:09:45 +0100
-Subject: [PATCH 4/4] Partially restored support for static linking of QtWebKit
+Subject: [PATCH 4/5] Partially restored support for static linking of QtWebKit
 
 Support was removed by 4221d629e2cf37ee8c5ba7cb595b05ab8c82f113.
 Static QtWebkit might be supported by mingw-cross-env.
@@ -168,6 +168,29 @@ index 6110264..abf577f 100755
  
  CFG_CONCURRENT="yes"
  if [ "$canBuildQtConcurrent" = "no" ]; then
+-- 
+1.7.1
+
+
+From 25b262ebbae41932caf39c4065de42e0a4753906 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 16 Nov 2010 20:06:28 +0100
+Subject: [PATCH 5/5] explicitly include -llcms for -lmng (mingw-cross-env specific)
+
+
+diff --git a/src/gui/image/qmnghandler.pri b/src/gui/image/qmnghandler.pri
+index ffb98de..c213e09 100644
+--- a/src/gui/image/qmnghandler.pri
++++ b/src/gui/image/qmnghandler.pri
+@@ -3,7 +3,7 @@ INCLUDEPATH *= $$PWD
+ HEADERS += $$PWD/qmnghandler_p.h
+ SOURCES += $$PWD/qmnghandler.cpp
+ contains(QT_CONFIG, system-mng) {
+-        if(unix|win32-g++*):LIBS += -lmng
++        if(unix|win32-g++*):LIBS += -lmng -llcms
+         else:win32:         LIBS += libmng.lib
+ } else {
+     include($$PWD/../../3rdparty/libmng.pri)
 -- 
 1.7.1
 
