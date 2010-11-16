@@ -1,6 +1,9 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
+This patch has been taken from:
+http://forum.dcmtk.org/viewtopic.php?t=2563
+
 --- dcmtk-3.5.4.orig/ofstd/libsrc/ofthread.cc	2005-12-08 16:49:02.000000000 +0100
 +++ dcmtk-3.5.4/ofstd/libsrc/ofthread.cc	2010-06-15 21:34:29.234201660 +0200
 @@ -139,7 +139,7 @@
