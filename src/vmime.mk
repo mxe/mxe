@@ -4,8 +4,8 @@
 # VMime
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.0
-$(PKG)_CHECKSUM := 02215e1d8ea758f486c32e7bff63a04f71a9b736
+$(PKG)_VERSION  := 0.9.1
+$(PKG)_CHECKSUM := 3e8dd8855e423db438d465777efeb523c4abb5f3
 $(PKG)_SUBDIR   := libvmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := libvmime-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://vmime.sourceforge.net/
