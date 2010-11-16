@@ -26,12 +26,13 @@ define $(PKG)_BUILD
         --with-libtiff \
         --with-libpng \
         --with-libxml \
-        --with-libxmlinc='$(PREFIX)/$(TARGET)/include/libxml2' \
+        --with-libxmlinc='$(PREFIX)/$(TARGET)' \
         --with-zlib \
         --without-libwrap \
         CXX='$(TARGET)-g++' \
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar' \
-        ARFLAGS=cru
+        ARFLAGS=cru \
+        ac_cv_my_c_rightshift_unsigned=no
     $(MAKE) -C '$(1)' -j '$(JOBS)' install-lib
 endef
