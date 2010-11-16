@@ -8,18 +8,18 @@ $(PKG)_VERSION  :=
 $(PKG)_CHECKSUM := a8a765ebb8d753c7ad161ccd9191be42d3dc8bd9
 $(PKG)_SUBDIR   := CBLAS
 $(PKG)_FILE     := cblas.tgz
-$(PKG)_WEBSITE  := http://www.netlib.org/
+$(PKG)_WEBSITE  := http://www.netlib.org/blas
 $(PKG)_URL      := http://www.netlib.org/blas/blast-forum/cblas.tgz
 $(PKG)_DEPS     := gcc
 
 
 define $(PKG)_BUILD
 
-    cp $(1)/Makefile.LINUX $(1)/Makefile.WIN32
-    $(SED) -i 's,CBDIR = $$(HOME)/CBLAS,CBDIR = $(1),g'   '$(1)/Makefile.WIN32'
-    $(SED) -i 's,FC = g77,FC = $(TARGET)-gfortran,g'   '$(1)/Makefile.WIN32'
-    ln -s $(1)/Makefile.WIN32 $(1)/Makefile.in
-    mkdir $(1)/WIN32
+    cp $(1)/Makefile.LINUX $(1)/Makefile.MINGW32
+    $(SED) -i 's,CBDIR = $$(HOME)/CBLAS,CBDIR = $(1),g'   '$(1)/Makefile.MINGW32'
+    $(SED) -i 's,FC = g77,FC = $(TARGET)-gfortran,g'   '$(1)/Makefile.MINGW32'
+    ln -s $(1)/Makefile.MINGW32 $(1)/Makefile.in
+    mkdir $(1)/MINGW32
     make  -C $(1) alllib
     cd $(1) && $(TARGET)-ar cr libcblas.a src/*.o 
     	
