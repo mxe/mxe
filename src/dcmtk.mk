@@ -22,16 +22,16 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-	--with-openssl \
-	--with-libtiff \
-	--with-libpng \
-	--with-libxml \
-	--with-libxmlinc='$(PREFIX)/$(TARGET)/include/libxml2' \
-	--with-zlib \
-	--without-libwrap \
-	CXX='$(TARGET)-g++' \
-	RANLIB='$(TARGET)-ranlib' \
-	AR='$(TARGET)-ar' \
-	ARFLAGS=cru
+        --with-openssl \
+        --with-libtiff \
+        --with-libpng \
+        --with-libxml \
+        --with-libxmlinc='$(PREFIX)/$(TARGET)/include/libxml2' \
+        --with-zlib \
+        --without-libwrap \
+        CXX='$(TARGET)-g++' \
+        RANLIB='$(TARGET)-ranlib' \
+        AR='$(TARGET)-ar' \
+        ARFLAGS=cru
     $(MAKE) -C '$(1)' -j '$(JOBS)' install-lib
 endef
