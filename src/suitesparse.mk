@@ -33,9 +33,9 @@ define $(PKG)_BUILD
     # gfortran does not need libg2c
     $(SED) -i 's,-lg2c,,' '$(1)/UFconfig/UFconfig.mk'
 
-    # exclude the demos from building in order to avoid the _rand48 problems
-    $(SED) -i 's,( cd Demo ; $$(MAKE) ),#( cd Demo ; $$(MAKE) ),' '$(1)/CHOLMOD/Makefile'
-    $(SED) -i 's,( cd Demo ; $$(MAKE) ),#( cd Demo ; $$(MAKE) ),' '$(1)/SPQR/Makefile'
+    # exclude demos
+    find '$(1)' -name 'Makefile' \
+        -exec $(SED) -i 's,( cd Demo,#( cd Demo,' {} \;
 
     # build all
     $(MAKE) -C '$(1)' -j '$(JOBS)'

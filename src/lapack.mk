@@ -25,7 +25,7 @@ define $(PKG)_BUILD
     $(SED) -i 's, ar, $(TARGET)-ar,g'           '$(1)/make.inc'
     $(SED) -i 's, ranlib, $(TARGET)-ranlib,g'   '$(1)/make.inc'
 
-    $(MAKE) -C '$(1)' -j '$(JOBS)' lapacklib
+    $(MAKE) -C '$(1)/SRC' -j '$(JOBS)'
     $(INSTALL) -d                            '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m664 '$(1)/lapack_MINGW32.a' '$(PREFIX)/$(TARGET)/lib/liblapack.a'
 endef
