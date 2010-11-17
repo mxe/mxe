@@ -1,19 +1,19 @@
 # This file is part of mingw-cross-env.
 # See doc/index.html for further information.
 
-# metis
+# METIS
 PKG             := metis
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.0
 $(PKG)_CHECKSUM := 580568308e1fa40e5a7a77cacbf27f865d6c01af
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_WEBSITE  := http://glaros.dtc.umn.edu/
+$(PKG)_WEBSITE  := http://glaros.dtc.umn.edu/gkhome/views/metis
 $(PKG)_URL      := http://glaros.dtc.umn.edu/gkhome/fetch/sw/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.cise.ufl.edu/research/sparse/SuiteSparse/' | \
+    wget -q -O- 'http://glaros.dtc.umn.edu/gkhome/metis/metis/download' | \
     $(SED) -n 's,.*metis-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
