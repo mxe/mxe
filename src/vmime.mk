@@ -49,7 +49,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' install
 
     $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
-    i686-pc-mingw32-g++ -s -o '$(1)/examples/test-vmime.exe' \
+    $(TARGET)-g++ -s -o '$(1)/examples/test-vmime.exe' \
         -I'$(PREFIX)/$(TARGET)/include' \
         '$(1)/examples/example6.cpp' \
         -L'$(PREFIX)/$(TARGET)/lib' \
