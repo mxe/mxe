@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 1
 $(PKG)_CHECKSUM := 0aeca4ed45f2e5519977747ed6bcf80d1b0335d2
 $(PKG)_SUBDIR   := BLAS
 $(PKG)_FILE     := $(PKG).tgz
-$(PKG)_WEBSITE  := http://www.netlib.org/
+$(PKG)_WEBSITE  := http://www.netlib.org/$(PKG)/
 $(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

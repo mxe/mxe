@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 3.4.0
 $(PKG)_CHECKSUM := 6de027d48a573659b40ddf57c10e32b39ab034c6
 $(PKG)_SUBDIR   := SuiteSparse
 $(PKG)_FILE     := SuiteSparse-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.cise.ufl.edu/
+$(PKG)_WEBSITE  := http://www.cise.ufl.edu/research/sparse/SuiteSparse/
 $(PKG)_URL      := http://www.cise.ufl.edu/research/sparse/SuiteSparse/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc metis blas lapack
 
