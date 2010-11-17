@@ -26,8 +26,8 @@ define $(PKG)_BUILD
     cd '$(1)' && $(TARGET)-ar cr libcblas.a src/*.o
 
     $(INSTALL) -d                           '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m664 '$(1)/libcblas.a'      '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/libcblas.a'      '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -d                           '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m664 '$(1)/src/cblas.h'     '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m664 '$(1)/src/cblas_f77.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/src/cblas.h'     '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/src/cblas_f77.h' '$(PREFIX)/$(TARGET)/include/'
 endef

@@ -26,11 +26,11 @@ define $(PKG)_BUILD
     $(SED) -i 's,#include "config.h",,'      '$(1)/pthread.h'
     $(MAKE) -C '$(1)' -j 1 GC-static CROSS='$(TARGET)-'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m664 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
+    $(INSTALL) -m644 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m664 '$(1)/pthread.h'   '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m664 '$(1)/sched.h'     '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m664 '$(1)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/pthread.h'   '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/sched.h'     '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/semaphore.h' '$(PREFIX)/$(TARGET)/include/'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \

@@ -22,5 +22,5 @@ define $(PKG)_BUILD
     cd '$(1)' && $(TARGET)-ar cr libblas.a *.o
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m664 '$(1)/libblas.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/libblas.a' '$(PREFIX)/$(TARGET)/lib/'
 endef

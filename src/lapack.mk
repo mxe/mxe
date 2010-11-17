@@ -27,5 +27,5 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)/SRC' -j '$(JOBS)'
     $(INSTALL) -d                            '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m664 '$(1)/lapack_MINGW32.a' '$(PREFIX)/$(TARGET)/lib/liblapack.a'
+    $(INSTALL) -m644 '$(1)/lapack_MINGW32.a' '$(PREFIX)/$(TARGET)/lib/liblapack.a'
 endef

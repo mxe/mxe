@@ -28,7 +28,7 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar' \
         RANLIB='$(TARGET)-ranlib'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m664 '$(1)/libbz2.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/libbz2.a' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m664 '$(1)/bzlib.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/bzlib.h' '$(PREFIX)/$(TARGET)/include/'
 endef

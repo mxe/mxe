@@ -33,8 +33,8 @@ define $(PKG)_BUILD
         --output-lib libusb.a
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m664 '$(1)/src/usb.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/src/usb.h' '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m664 '$(1)/libusb.a'  '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m664 '$(1)/libusbd.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/libusb.a'  '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/libusbd.a' '$(PREFIX)/$(TARGET)/lib/'
 endef
