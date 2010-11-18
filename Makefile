@@ -21,6 +21,11 @@ PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 VERSION    := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
 
+REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
+                gcc $(INSTALL) intltoolize $(LIBTOOLIZE) $(MAKE) \
+                openssl $(PATCH) $(PERL) pkg-config scons $(SED) \
+                unzip wget xz yasm
+
 # unexport any environment variables that might cause trouble
 unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
 unexport CPPFLAGS CROSS CXX CXXCPP CXXFLAGS EXEEXT EXTRA_CFLAGS
@@ -68,6 +73,23 @@ SOURCEFORGE_FILES = \
 .PHONY: all
 all: $(PKGS)
 
+.PHONY: check-requirements
+define CHECK_REQUIREMENT
+    @if ! $(1) --help &>/dev/null; then \
+        echo; \
+        echo 'Missing requirement: $(1)'; \
+        echo; \
+        echo 'Please have a look at "doc/index.html" to ensure'; \
+        echo 'that your system meets all requirements.'; \
+        echo; \
+        exit 1; \
+    fi
+
+endef
+check-requirements:
+	@echo '[check requirements]'
+	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
+
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
 
@@ -81,7 +103,8 @@ download-$(1): $(addprefix download-,$($(1)_DEPS))
 
 .PHONY: $(1)
 $(1): $(PREFIX)/installed/$(1)
-$(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
+$(PREFIX)/installed/$(1): check-requirements \
+                          $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
                           $(addprefix $(PREFIX)/installed/,$($(1)_DEPS))
