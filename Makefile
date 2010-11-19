@@ -103,11 +103,11 @@ download-$(1): $(addprefix download-,$($(1)_DEPS))
 
 .PHONY: $(1)
 $(1): $(PREFIX)/installed/$(1)
-$(PREFIX)/installed/$(1): check-requirements \
-                          $(TOP_DIR)/src/$(1).mk \
+$(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
-                          $(addprefix $(PREFIX)/installed/,$($(1)_DEPS))
+                          $(addprefix $(PREFIX)/installed/,$($(1)_DEPS)) \
+                          | check-requirements
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
