@@ -86,9 +86,12 @@ define CHECK_REQUIREMENT
     fi
 
 endef
-check-requirements:
+check-requirements: $(PREFIX)/installed/check-requirements
+$(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	@echo '[check requirements]'
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
+	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
+	@touch '$@'
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
