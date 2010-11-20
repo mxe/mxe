@@ -4,8 +4,8 @@
 # Boost C++ Library
 PKG             := boost
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.44.0
-$(PKG)_CHECKSUM := 0dfeaad7a316ddfdcdb8a7e42443ef048ad18c01
+$(PKG)_VERSION  := 1.45.0
+$(PKG)_CHECKSUM := eb7424ef99df4e38af7431e38ff9849651b8aaf5
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_WEBSITE  := http://www.boost.org/
@@ -25,8 +25,8 @@ define $(PKG)_BUILD
     # make the build script generate .a library files instead of .lib
     $(SED) -i 's,<target-os>windows : lib ;,<target-os>windows : a ;,' '$(1)/tools/build/v2/tools/types/lib.jam'
     # compile boost jam
-    cd '$(1)/tools/jam/src' && ./build.sh
-    cd '$(1)' && tools/jam/src/bin.*/bjam \
+    cd '$(1)/tools/build/v2/engine/src' && ./build.sh
+    cd '$(1)' && tools/build/v2/engine/src/bin.*/bjam \
         -j '$(JOBS)' \
         --ignore-site-config \
         --user-config=user-config.jam \
