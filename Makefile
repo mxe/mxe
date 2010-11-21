@@ -22,9 +22,9 @@ SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 VERSION    := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
 
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
-                gcc $(INSTALL) intltoolize $(LIBTOOLIZE) $(MAKE) \
-                openssl $(PATCH) $(PERL) pkg-config scons $(SED) \
-                unzip wget xz yasm
+                gcc intltoolize $(LIBTOOLIZE) $(MAKE) openssl \
+                $(PATCH) $(PERL) pkg-config scons $(SED) unzip \
+                wget xz yasm
 
 # unexport any environment variables that might cause trouble
 unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
