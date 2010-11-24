@@ -33,6 +33,7 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar' \
         ARFLAGS=cru \
+        LIBTOOL=$(LIBTOOL) \
         ac_cv_my_c_rightshift_unsigned=no
     $(MAKE) -C '$(1)' -j '$(JOBS)' install-lib
 endef
