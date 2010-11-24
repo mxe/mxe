@@ -16,15 +16,16 @@ TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PATH       := $(PREFIX)/bin:$(PATH)
 SHELL      := bash
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
+LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
 PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 VERSION    := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
 
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
-                gcc intltoolize $(LIBTOOLIZE) $(MAKE) openssl \
-                $(PATCH) $(PERL) pkg-config scons $(SED) unzip \
-                wget xz yasm
+                gcc intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
+                $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
+                scons $(SED) unzip wget xz yasm
 
 # unexport any environment variables that might cause trouble
 unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
