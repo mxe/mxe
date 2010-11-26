@@ -19,17 +19,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's, mxmldoc testmxml mxml.xml , ,' '$(1)/Makefile.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --disable-threads \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' libmxml.a
-    $(TARGET)-ranlib '$(1)/libmxml.a'
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/libmxml.a' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m644 '$(1)/mxml.h' '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m644 '$(1)/mxml.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    $(MAKE) -C '$(1)' -j 1 install-libmxml.a
+    $(INSTALL) -d                   '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -m644 '$(1)/mxml.h'  '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -d                   '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    $(INSTALL) -m644 '$(1)/mxml.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
 endef
