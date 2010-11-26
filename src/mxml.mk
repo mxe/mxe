@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_WEBSITE  := http://www.minixml.org/
 $(PKG)_URL      := http://ftp.easysw.com/pub/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.easysw.com/pub/mxml/?C=M;O=D' | \
@@ -22,8 +22,8 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
-        --disable-threads \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --enable-threads
     $(MAKE) -C '$(1)' -j '$(JOBS)' libmxml.a
     $(MAKE) -C '$(1)' -j 1 install-libmxml.a
     $(INSTALL) -d                   '$(PREFIX)/$(TARGET)/include'
