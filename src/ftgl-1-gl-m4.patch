@@ -1,0 +1,20 @@
+--- ftgl-2.1.3~rc5/m4/gl.m4	2008-05-05 16:48:57.000000000 +0200
++++ ftgl-2.1.3~rc5/m4/gl.m4.new	2010-09-20 14:55:27.000000000 +0200
+@@ -63,6 +63,8 @@
+     LIBS="-lGL"
+ fi
+ AC_LINK_IFELSE([AC_LANG_CALL([],[glBegin])],[HAVE_GL=yes], [HAVE_GL=no])
++HAVE_GL=yes
++LIBS="-lopengl32"
+ if test "x$HAVE_GL" = xno ; then
+     if test "x$GL_X_LIBS" != x ; then
+         LIBS="-lGL $GL_X_LIBS"
+@@ -105,6 +107,8 @@
+ AC_MSG_CHECKING([for GLU library])
+ LIBS="-lGLU $GL_LIBS"
+ AC_LINK_IFELSE([AC_LANG_CALL([],[gluNewTess])],[HAVE_GLU=yes], [HAVE_GLU=no])
++LIBS="-lglu32 $GL_LIBS"
++HAVE_GLU=yes
+ if test "x$HAVE_GLU" = xno ; then
+     if test "x$GL_X_LIBS" != x ; then
+         LIBS="-lGLU $GL_LIBS $GL_X_LIBS"
