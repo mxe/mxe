@@ -13,8 +13,8 @@ $(PKG)_URL      := http://ftp.easysw.com/pub/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_F
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.minixml.org/software.php' | \
-    $(SED) -n 's,.*mxml-\([0-9][^>]*\)\.tar.*,\1,ip' | \
+    wget -q -O- 'http://ftp.easysw.com/pub/mxml/?C=M;O=D' | \
+    $(SED) -n 's,.*<a href="\([0-9][^"]*\)/.*,\1,p' | \
     head -1
 endef
 
