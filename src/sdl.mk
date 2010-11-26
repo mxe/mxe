@@ -24,7 +24,6 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
-        --disable-debug \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \
         --enable-directx \
