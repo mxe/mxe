@@ -19,11 +19,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && aclocal -I m4
+    cd '$(1)' && $(LIBTOOLIZE)
+    cd '$(1)' && automake --gnu
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --without-x \
         --disable-freetypetest \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+        --with-ft-prefix='$(PREFIX)/$(TARGET)'
+    $(MAKE) -C '$(1)/src' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)/src' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
