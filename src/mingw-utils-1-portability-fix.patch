@@ -1,0 +1,160 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://sourceforge.net/tracker/?func=detail&aid=3119898&group_id=2435&atid=102435
+
+diff -r 62cf992c82c9 reimp/reimp.c
+--- a/reimp/reimp.c	Fri Nov 26 19:02:28 2010 +0100
++++ b/reimp/reimp.c	Fri Nov 26 19:14:59 2010 +0100
+@@ -80,20 +80,20 @@
+   return 1;
+ }
+ 
+-static int do_import (char *, uint32, FILE *);
++static int do_import (char *, uint32_t, FILE *);
+ 
+ /* read second linker member and process all archive members */
+ static int
+ read_link_member (struct ar_hdr *hdr, FILE *f)
+ {
+-  uint32 n_memb;
+-  uint32 n_syms;
+-  uint32 *ofs;
+-  uint16 *idx;
++  uint32_t n_memb;
++  uint32_t n_syms;
++  uint32_t *ofs;
++  uint16_t *idx;
+   char *buf;
+   char *sym;
+-  uint32 n;
+-  uint16 i;
++  uint32_t n;
++  uint16_t i;
+ 
+   /* FIXME: are offsets and sizes in host endianness?  Currently we
+      assume so. */
+@@ -305,7 +305,7 @@
+ }
+ 
+ void
+-extract_member (char *name, uint32 size, FILE *f)
++extract_member (char *name, uint32_t size, FILE *f)
+ {
+   static int non_imports = 0;
+   char buf[2048];
+@@ -379,7 +379,7 @@
+ 
+ /* process an import */
+ static int
+-do_import (char *name, uint32 offset, FILE *f)
++do_import (char *name, uint32_t offset, FILE *f)
+ {
+   struct ar_hdr ar_hdr;
+   struct imp_hdr imp_hdr;
+diff -r 62cf992c82c9 reimp/reimp.h
+--- a/reimp/reimp.h	Fri Nov 26 19:02:28 2010 +0100
++++ b/reimp/reimp.h	Fri Nov 26 19:14:59 2010 +0100
+@@ -1,14 +1,6 @@
+ #include <stddef.h>
++#include <stdint.h>
+ #include <stdio.h>
+-
+-/* we need integers of specific sizes */
+-#ifndef uint32
+-#define uint32 unsigned long
+-#endif
+-
+-#ifndef uint16
+-#define uint16 unsigned short
+-#endif
+ 
+ /* defines for archive */
+ #ifndef ARMAG
+@@ -41,13 +33,13 @@
+ 
+ /* import header */
+ struct imp_hdr {
+-  uint16 sig1;
+-  uint16 sig2;
+-  uint16 version;
+-  uint32 time;
+-  uint32 size;
+-  uint16 ord_or_hint;
+-  uint16 type;
++  uint16_t sig1;
++  uint16_t sig2;
++  uint16_t version;
++  uint32_t time;
++  uint32_t size;
++  uint16_t ord_or_hint;
++  uint16_t type;
+ };
+ 
+ /* sig1 */
+@@ -67,7 +59,7 @@
+ #define IMPORT_NAME_UNDECORATE	IMPNT(3)
+ #define TEST_IMPNT(t,v) (((t) & IMPNT(7)) == (v))
+ 
+-uint32 swap_endian (uint32);
++uint32_t swap_endian (uint32_t);
+ 
+ #ifdef BIG_ENDIAN
+ #define btonat(u) u
+@@ -87,7 +79,7 @@
+ 
+ #if !defined(_WIN32) && !defined(__MSDOS__)
+ #define spawnvp do_spawn
+-int spawnvp (int, char *, char **);
++int spawnvp (int, char *, const char * const *);
+ #define P_WAIT 0
+ #define P_NOWAIT 1
+ #endif
+diff -r 62cf992c82c9 reimp/util.c
+--- a/reimp/util.c	Fri Nov 26 19:02:28 2010 +0100
++++ b/reimp/util.c	Fri Nov 26 19:14:59 2010 +0100
+@@ -1,6 +1,7 @@
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <unistd.h>
+ 
+ #include <reimp.h>
+ 
+@@ -9,14 +10,14 @@
+ #define swapb(a,b) a ^= b; b ^= a; a ^= b
+ 
+ /* swap little <=> big endian */
+-uint32
+-swap_endian (uint32 u)
++uint32_t
++swap_endian (uint32_t u)
+ {
+ #define swapb(a,b) a ^= b; b ^= a; a ^= b
+   unsigned char *p = (unsigned char *) &u;
+   swapb (p[0], p[3]);
+   swapb (p[1], p[2]);
+-  return *((uint32 *) p);
++  return *((uint32_t *) p);
+ }
+ 
+ 
+@@ -79,7 +80,7 @@
+ #endif
+ 
+ int
+-spawnvp (int mode, char *path, char **argv)
++spawnvp (int mode, char *path, const char * const *argv)
+ {
+   int pid;
+   int status;
+@@ -89,7 +90,7 @@
+     case -1:
+       return -1;
+     case 0:
+-      execvp (path, argv);
++      execvp (path, (char * const *) argv);
+ 
+       _exit (EXIT_FAILURE);
+       break;
