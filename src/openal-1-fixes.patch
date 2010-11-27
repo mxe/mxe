@@ -9,6 +9,44 @@ Date: Fri, 1 Oct 2010 18:44:51 +0200
 Subject: [PATCH] cross building workarounds
 
 
+diff --git a/Alc/ALc.c b/Alc/ALc.c
+--- a/Alc/ALc.c
++++ b/Alc/ALc.c
+@@ -239,34 +239,8 @@
+ 
+ ///////////////////////////////////////////////////////
+ // ALC Related helper functions
+-#ifdef _WIN32
+-static void alc_init(void);
+-static void alc_deinit(void);
+-
+-BOOL APIENTRY DllMain(HANDLE hModule,DWORD ul_reason_for_call,LPVOID lpReserved)
+-{
+-    (void)lpReserved;
+-
+-    // Perform actions based on the reason for calling.
+-    switch(ul_reason_for_call)
+-    {
+-        case DLL_PROCESS_ATTACH:
+-            DisableThreadLibraryCalls(hModule);
+-            alc_init();
+-            break;
+-
+-        case DLL_PROCESS_DETACH:
+-            alc_deinit();
+-            break;
+-    }
+-    return TRUE;
+-}
+-#else
+-#ifdef HAVE_GCC_DESTRUCTOR
+ static void alc_init(void) __attribute__((constructor));
+ static void alc_deinit(void) __attribute__((destructor));
+-#endif
+-#endif
+ 
+ static void alc_init(void)
+ {
 diff --git a/include/AL/al.h b/include/AL/al.h
 index c409701..f4cf45b 100644
 --- a/include/AL/al.h
