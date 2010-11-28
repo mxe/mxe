@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := SuiteSparse
 $(PKG)_FILE     := SuiteSparse-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.cise.ufl.edu/research/sparse/SuiteSparse/
 $(PKG)_URL      := http://www.cise.ufl.edu/research/sparse/SuiteSparse/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc metis blas lapack
+$(PKG)_DEPS     := gcc blas lapack metis
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.cise.ufl.edu/research/sparse/SuiteSparse/' | \
@@ -19,26 +19,20 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # set path to metis
-    $(SED) -i 's,METIS_PATH =.*,METIS_PATH = $(PREFIX)/$(TARGET)/include/metis,' '$(1)/UFconfig/UFconfig.mk'
-    $(SED) -i 's,METIS =.*,METIS = $(PREFIX)/$(TARGET)/lib/libmetis.a,'          '$(1)/UFconfig/UFconfig.mk'
-
-    # use cross tools
-    $(SED) -i 's,cc,$(TARGET)-gcc,'        '$(1)/UFconfig/UFconfig.mk'
-    $(SED) -i 's,g++,$(TARGET)-g++,'       '$(1)/UFconfig/UFconfig.mk'
-    $(SED) -i 's,f77,$(TARGET)-gfortran,'  '$(1)/UFconfig/UFconfig.mk'
-    $(SED) -i 's,ar ,$(TARGET)-ar ,'       '$(1)/UFconfig/UFconfig.mk'
-    $(SED) -i 's,ranlib,$(TARGET)-ranlib,' '$(1)/UFconfig/UFconfig.mk'
-
-    # gfortran does not need libg2c
-    $(SED) -i 's,-lg2c,,' '$(1)/UFconfig/UFconfig.mk'
-
     # exclude demos
     find '$(1)' -name 'Makefile' \
         -exec $(SED) -i 's,( cd Demo,#( cd Demo,' {} \;
 
     # build all
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' \
+        CC='$(TARGET)-gcc' \
+        CPLUSPLUS='$(TARGET)-g++' \
+        F77='$(TARGET)-gfortran' \
+        AR='$(TARGET)-ar cr' \
+        RANLIB='$(TARGET)-ranlib' \
+        BLAS='-lblas -lgfortran -lgfortranbegin' \
+        METIS_PATH='$(PREFIX)/$(TARGET)/include/metis' \
+        METIS='$(PREFIX)/$(TARGET)/lib/libmetis.a'
 
     # install library files
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
