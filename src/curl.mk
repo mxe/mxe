@@ -13,8 +13,8 @@ $(PKG)_URL      := http://curl.haxx.se/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libidn
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://curl.haxx.se/changes.html' | \
-    $(SED) -n 's,.*Fixed in \([0-9][^ ]*\) - .*,\1,p' | \
+    wget -q -O- 'http://curl.haxx.se/download/?C=M;O=D' | \
+    $(SED) -n 's,.*curl-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
