@@ -1,0 +1,51 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://opensource.creative.com/pipermail/openal-devel/2010-November/005759.html
+
+diff -r 37cec05f2c93 Alc/ALc.c
+--- a/Alc/ALc.c	Sun Nov 28 20:53:45 2010 +0100
++++ b/Alc/ALc.c	Sun Nov 28 21:19:52 2010 +0100
+@@ -239,7 +239,10 @@
+ 
+ ///////////////////////////////////////////////////////
+ // ALC Related helper functions
+-#ifdef _WIN32
++#if defined(HAVE_GCC_DESTRUCTOR)
++static void alc_init(void) __attribute__((constructor));
++static void alc_deinit(void) __attribute__((destructor));
++#elif defined(_WIN32)
+ static void alc_init(void);
+ static void alc_deinit(void);
+ 
+@@ -261,11 +264,6 @@
+     }
+     return TRUE;
+ }
+-#else
+-#ifdef HAVE_GCC_DESTRUCTOR
+-static void alc_init(void) __attribute__((constructor));
+-static void alc_deinit(void) __attribute__((destructor));
+-#endif
+ #endif
+ 
+ static void alc_init(void)
+diff -r 37cec05f2c93 CMakeLists.txt
+--- a/CMakeLists.txt	Sun Nov 28 20:53:45 2010 +0100
++++ b/CMakeLists.txt	Sun Nov 28 21:19:52 2010 +0100
+@@ -123,11 +123,11 @@
+         "Flags used by the compiler during debug builds."
+         FORCE)
+ 
++    CHECK_C_SOURCE_COMPILES("int foo() __attribute__((destructor));
++                             int main() {return 0;}" HAVE_GCC_DESTRUCTOR)
++
+     # Set visibility options if available
+     IF(NOT WIN32)
+-        CHECK_C_SOURCE_COMPILES("int foo() __attribute__((destructor));
+-                                 int main() {return 0;}" HAVE_GCC_DESTRUCTOR)
+-
+         CHECK_C_COMPILER_FLAG(-fvisibility=hidden HAVE_VISIBILITY_SWITCH)
+         IF(HAVE_VISIBILITY_SWITCH)
+             CHECK_C_SOURCE_COMPILES("int foo() __attribute__((visibility(\"default\")));

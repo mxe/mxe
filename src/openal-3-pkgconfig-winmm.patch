@@ -1,0 +1,17 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://opensource.creative.com/pipermail/openal-devel/2010-November/005759.html
+
+diff -r 37cec05f2c93 CMakeLists.txt
+--- a/CMakeLists.txt	Sun Nov 28 20:53:45 2010 +0100
++++ b/CMakeLists.txt	Sun Nov 28 21:24:44 2010 +0100
+@@ -376,6 +376,7 @@
+                 SET(BACKENDS  "${BACKENDS} WinMM,")
+ 
+                 SET(EXTRA_LIBS winmm ${EXTRA_LIBS})
++                SET(PKG_CONFIG_LIBS ${PKG_CONFIG_LIBS} -lwinmm)
+             ENDIF()
+         ENDIF()
+     ENDIF()

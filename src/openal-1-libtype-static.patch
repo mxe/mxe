@@ -1,0 +1,75 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://opensource.creative.com/pipermail/openal-devel/2010-November/005759.html
+
+diff -r 37cec05f2c93 CMakeLists.txt
+--- a/CMakeLists.txt	Sun Nov 28 20:53:45 2010 +0100
++++ b/CMakeLists.txt	Sun Nov 28 22:12:22 2010 +0100
+@@ -428,6 +428,14 @@
+ SET(includedir "\${prefix}/include")
+ SET(PACKAGE_VERSION "${LIB_VERSION}")
+ 
++# Library type (static/shared)
++IF(NOT LIBTYPE)
++    SET(LIBTYPE SHARED)
++ENDIF()
++IF(LIBTYPE STREQUAL "STATIC")
++    SET(PKG_CONFIG_CFLAGS -DAL_LIBTYPE_STATIC ${PKG_CONFIG_CFLAGS})
++ENDIF()
++
+ # End configuration
+ CONFIGURE_FILE(
+     "${OpenAL_SOURCE_DIR}/config.h.in"
+@@ -438,9 +446,6 @@
+     @ONLY)
+ 
+ # Build a library
+-IF(NOT LIBTYPE)
+-    SET(LIBTYPE SHARED)
+-ENDIF()
+ ADD_LIBRARY(${LIBNAME} ${LIBTYPE} ${OPENAL_OBJS} ${ALC_OBJS})
+ SET_TARGET_PROPERTIES(${LIBNAME} PROPERTIES DEFINE_SYMBOL AL_BUILD_LIBRARY
+                                             COMPILE_FLAGS -DAL_ALEXT_PROTOTYPES
+@@ -477,6 +482,7 @@
+ 
+ IF(EXAMPLES)
+     ADD_EXECUTABLE(openal-info examples/openal-info.c)
++    ADD_DEFINITIONS(${PKG_CONFIG_CFLAGS})
+     TARGET_LINK_LIBRARIES(openal-info ${LIBNAME})
+     INSTALL(TARGETS openal-info
+             RUNTIME DESTINATION bin
+diff -r 37cec05f2c93 include/AL/al.h
+--- a/include/AL/al.h	Sun Nov 28 20:53:45 2010 +0100
++++ b/include/AL/al.h	Sun Nov 28 22:12:22 2010 +0100
+@@ -5,7 +5,7 @@
+ extern "C" {
+ #endif
+ 
+-#if defined(_WIN32) && !defined(_XBOX)
++#if defined(_WIN32) && !defined(_XBOX) && !defined(AL_LIBTYPE_STATIC)
+  #if defined(AL_BUILD_LIBRARY)
+   #define AL_API __declspec(dllexport)
+  #else
+diff -r 37cec05f2c93 include/AL/alc.h
+--- a/include/AL/alc.h	Sun Nov 28 20:53:45 2010 +0100
++++ b/include/AL/alc.h	Sun Nov 28 22:12:22 2010 +0100
+@@ -5,7 +5,7 @@
+ extern "C" {
+ #endif
+ 
+-#if defined(_WIN32) && !defined(_XBOX)
++#if defined(_WIN32) && !defined(_XBOX) && !defined(AL_LIBTYPE_STATIC)
+  #if defined(AL_BUILD_LIBRARY)
+   #define ALC_API __declspec(dllexport)
+  #else
+diff -r 37cec05f2c93 openal.pc.in
+--- a/openal.pc.in	Sun Nov 28 20:53:45 2010 +0100
++++ b/openal.pc.in	Sun Nov 28 22:12:22 2010 +0100
+@@ -8,4 +8,4 @@
+ Requires: @PKG_CONFIG_REQUIRES@
+ Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} -l@LIBNAME@ @PKG_CONFIG_LIBS@
+-Cflags: -I${includedir}
++Cflags: -I${includedir} @PKG_CONFIG_CFLAGS@
