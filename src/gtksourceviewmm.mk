@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 2.10.1
 $(PKG)_CHECKSUM := 7f6fb046427054d85c791a4b1fc0f742a3313c8a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://projects.gnome.org/gtksourceview/
+$(PKG)_WEBSITE  := http://projects.gnome.org/gtksourceviewmm/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtksourceviewmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gtkmm gtksourceview
 
@@ -16,6 +16,7 @@ define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/cgit/gtksourceviewmm/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=gtksourceviewmm-\\([0-9][^']*\\)'.*,\\1,p" | \
+    grep -v '^2\.9[0-9]\.' | \
     head -1
 endef
 

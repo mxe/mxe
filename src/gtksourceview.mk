@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/gtksourceview/refs/tags' | \
     $(SED) -n 's,.*>GTKSOURCEVIEW_\([0-9]\+_[0-9]*[02468]_[^<]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
-    grep -v '^2\.9' | \
+    grep -v '^2\.9[0-9]\.' | \
     head -1
 endef
 

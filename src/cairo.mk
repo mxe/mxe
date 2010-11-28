@@ -13,9 +13,8 @@ $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libpng fontconfig freetype pixman
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://cairographics.org/releases/' | \
-    grep 'LATEST-cairo-' | \
-    $(SED) -n 's,.*"LATEST-cairo-\([0-9][^"]*\)".*,\1,p' | \
+    wget -q -O- 'http://cairographics.org/releases/?C=M;O=D' | \
+    $(SED) -n 's,.*"cairo-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

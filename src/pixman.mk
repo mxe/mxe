@@ -4,8 +4,8 @@
 # pixman
 PKG             := pixman
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.19.6
-$(PKG)_CHECKSUM := 1ecd608c4464ec099830d0c088bf4ec5d318b86e
+$(PKG)_VERSION  := 0.21.2
+$(PKG)_CHECKSUM := c0ff07d7e4877dd4d0d369ca09e50ca956e3386e
 $(PKG)_SUBDIR   := pixman-$($(PKG)_VERSION)
 $(PKG)_FILE     := pixman-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://cairographics.org/
@@ -14,9 +14,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://cairographics.org/releases/?C=M;O=D' | \
-    grep '<a href="pixman-' | \
-    $(SED) -n 's,.*<a href="pixman-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    grep -v '^0\.16\.' | \
+    $(SED) -n 's,.*"pixman-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

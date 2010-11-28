@@ -60,9 +60,12 @@ CHECK_PKG_ARCHIVE = \
 DOWNLOAD_PKG_ARCHIVE = \
     mkdir -p '$(PKG_DIR)' && \
     $(if $($(1)_URL_2), \
-        wget -T 30 -t 3 -c -O '$(PKG_DIR)/$($(1)_FILE)' '$($(1)_URL)' \
-        || wget -c -O '$(PKG_DIR)/$($(1)_FILE)' '$($(1)_URL_2)', \
-        wget -c -O '$(PKG_DIR)/$($(1)_FILE)' '$($(1)_URL)')
+        ( wget -T 30 -O- '$($(1)_URL)' || wget -O- '$($(1)_URL_2)' ), \
+        wget -O- '$($(1)_URL)') \
+    $(if $($(1)_FIX_GZIP), \
+        | gzip -d | gzip -9n, \
+        ) \
+    > '$(PKG_DIR)/$($(1)_FILE)'
 
 SOURCEFORGE_FILES = \
     wget -q -O- '$(1)' | \

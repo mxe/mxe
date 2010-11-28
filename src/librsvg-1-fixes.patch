@@ -1,7 +1,7 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-Contains ad hoc patches for cross building.
+Contains an ad hoc patch for cross building.
 
 From 1ff5a73bee660f1d61f9cdd7c8d7aff29e959c4c Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
@@ -24,28 +24,3 @@ index 372f199..b6ee7a9 100644
  Cflags: -I${includedir}/librsvg-@RSVG_API_VERSION@
 -- 
 1.7.1
-
-
-From 9a7e7ebee9aab83659b9aced51fb53de5427138d Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Mon, 27 Sep 2010 12:02:45 +0200
-Subject: [PATCH 2/2] fix stray comma
-
-Taken from https://bugzilla.gnome.org/show_bug.cgi?id=630714
-
-diff --git a/rsvg.h b/rsvg.h
-index 37e7930..41c4127 100644
---- a/rsvg.h
-+++ b/rsvg.h
-@@ -139,7 +139,7 @@ gboolean rsvg_handle_has_sub (RsvgHandle * handle, const char *id);
- /* GIO APIs */
- 
- typedef enum {
--    RSVG_HANDLE_FLAGS_NONE        = 0,
-+    RSVG_HANDLE_FLAGS_NONE        = 0
- } RsvgHandleFlags;
- 
- void        rsvg_handle_set_base_gfile (RsvgHandle *handle,
--- 
-1.7.1
-
