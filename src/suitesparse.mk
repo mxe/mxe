@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := SuiteSparse
 $(PKG)_FILE     := SuiteSparse-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.cise.ufl.edu/research/sparse/SuiteSparse/
 $(PKG)_URL      := http://www.cise.ufl.edu/research/sparse/SuiteSparse/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc blas lapack metis
+$(PKG)_DEPS     := gcc blas lapack
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.cise.ufl.edu/research/sparse/SuiteSparse/' | \
@@ -31,8 +31,7 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar cr' \
         RANLIB='$(TARGET)-ranlib' \
         BLAS='-lblas -lgfortran -lgfortranbegin' \
-        METIS_PATH='$(PREFIX)/$(TARGET)/include/metis' \
-        METIS='$(PREFIX)/$(TARGET)/lib/libmetis.a'
+        CHOLMOD_CONFIG='-DNPARTITION'
 
     # install library files
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
