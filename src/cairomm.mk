@@ -13,9 +13,9 @@ $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc cairo libsigc++
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://cairographics.org/releases/' | \
-    grep 'LATEST-cairomm-' | \
-    $(SED) -n 's,.*"LATEST-cairomm-\([0-9][^"]*\)".*,\1,p' | \
+    wget -q -O- 'http://cairographics.org/releases/?C=M;O=D' | \
+    $(SED) -n 's,.*"cairomm-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    grep -v '^1\.8\.' | \
     head -1
 endef
 

@@ -14,9 +14,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://cairographics.org/releases/?C=M;O=D' | \
-    grep '<a href="pixman-' | \
-    $(SED) -n 's,.*<a href="pixman-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    grep -v '^0\.16\.' | \
+    $(SED) -n 's,.*"pixman-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
