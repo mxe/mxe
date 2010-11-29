@@ -29,4 +29,9 @@ define $(PKG)_BUILD
         --with-libidn \
         LIBS="-lgcrypt -liconv `$(PREFIX)/$(TARGET)/bin/gpg-error-config --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-curl.exe' \
+        `'$(TARGET)-pkg-config' libcurl --cflags --libs`
 endef
