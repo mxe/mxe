@@ -9,8 +9,8 @@ $(PKG)_CHECKSUM := b8cde5014cf82fe4683fa35fc81a5ea8d64b940f
 $(PKG)_SUBDIR   := libgeotiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgeotiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://trac.osgeo.org/geotiff/
-$(PKG)_URL      := http://ftp.remotesensing.org/geotiff/libgeotiff/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.remotesensing.org/geotiff/libgeotiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg tiff proj
 
 define $(PKG)_UPDATE

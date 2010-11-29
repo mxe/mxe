@@ -9,8 +9,8 @@ $(PKG)_CHECKSUM := a4e32d55afbbcabd0391a9c89995e8e8a19961de
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.remotesensing.org/libtiff/
-$(PKG)_URL      := http://ftp.remotesensing.org/libtiff/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://download.osgeo.org/libtiff/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.osgeo.org/libtiff/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.remotesensing.org/libtiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg
 
 define $(PKG)_UPDATE

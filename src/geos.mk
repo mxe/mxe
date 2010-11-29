@@ -9,8 +9,8 @@ $(PKG)_CHECKSUM := 6917d6d1d4e79f58d9f931bf351024709fabbc5a
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
 $(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://trac.osgeo.org/geos/
-$(PKG)_URL      := http://ftp.remotesensing.org/geos/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://download.osgeo.org/geos/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.osgeo.org/geos/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.remotesensing.org/geos/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
