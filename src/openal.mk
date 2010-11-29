@@ -13,9 +13,9 @@ $(PKG)_URL      := http://kcat.strangesoft.net/openal-releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://kcat.strangesoft.net/openal-releases/' | \
-    $(SED) -n 's,.*openal-soft-\([0-9][^<]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://kcat.strangesoft.net/openal-releases/?C=M;O=D' | \
+    $(SED) -n 's,.*"openal-soft-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
