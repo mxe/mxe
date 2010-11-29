@@ -11,7 +11,7 @@ $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gnutls/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgcrypt
+$(PKG)_DEPS     := gcc zlib libgcrypt
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         --with-included-opencdk \
         --with-included-libtasn1 \
         --with-included-libcfg \
-        --with-included-lzo
+        --with-included-lzo \
+        LIBS='-lz'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
 endef

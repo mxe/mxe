@@ -1,0 +1,15 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
+This patch has been taken from:
+https://issues.apache.org/jira/browse/XERCESC-1951
+
+diff -r a3f28cf10046 xerces-c.pc.in
+--- a/xerces-c.pc.in	Mon Nov 29 00:46:50 2010 +0100
++++ b/xerces-c.pc.in	Mon Nov 29 00:58:47 2010 +0100
+@@ -7,4 +7,5 @@
+ Description: Validating XML parser library for C++
+ Version: @VERSION@
+ Libs: -L${libdir} -lxerces-c
++Libs.private: @CURL_LIBS@
+ Cflags: -I${includedir}

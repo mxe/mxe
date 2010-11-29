@@ -25,8 +25,8 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --with-gnutls='$(PREFIX)/$(TARGET)' \
-        --with-libidn='$(PREFIX)/$(TARGET)' \
+        --with-gnutls \
+        --with-libidn \
         LIBS="-lgcrypt -liconv `$(PREFIX)/$(TARGET)/bin/gpg-error-config --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
