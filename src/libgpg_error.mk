@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && aclocal -I m4 
+    cd '$(1)' && aclocal -I m4
     cd '$(1)' && autoheader
     cd '$(1)' && automake --gnu
     cd '$(1)' && autoconf

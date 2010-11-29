@@ -35,7 +35,7 @@ define $(PKG)_BUILD
         -DLIBTYPE=STATIC
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/lib/OpenAL32.a' '$(PREFIX)/$(TARGET)/lib/libOpenAL32.a'
-    
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-openal.exe' \
