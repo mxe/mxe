@@ -13,7 +13,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/cppunit/cppunit/$($(PKG)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/cppunit/files/cppunit/?sort=date&sortdir=desc' | \
+    wget -q -O- 'http://sourceforge.net/projects/cppunit/files/cppunit/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
