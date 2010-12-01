@@ -13,9 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/cppunit/cppunit/$($(PKG)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/cppunit/files/) | \
-    $(SED) -n 's,.*cppunit-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/cppunit/files/cppunit/?sort=date&sortdir=desc' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
