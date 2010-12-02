@@ -6,16 +6,15 @@ PKG             := taglib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.3
 $(PKG)_CHECKSUM := ee54f10c63f236ef1c29c82e39c227a75a7e3785
-$(PKG)_SUBDIR   := taglib-$($(PKG)_VERSION)
-$(PKG)_FILE     := taglib-$($(PKG)_VERSION).tar.gz
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_WEBSITE  := http://developer.kde.org/~wheeler/taglib.html
 $(PKG)_URL      := http://developer.kde.org/~wheeler/files/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://websvn.kde.org/tags/taglib/?sortby=date' | \
-    grep '<a name="' | \
-    $(SED) -n 's,.*<a name="\([0-9][^"]*\)".*,\1,p' | \
+    wget -q -O- 'http://developer.kde.org/~wheeler/files/src/?C=M;O=D' | \
+    $(SED) -n 's,.*"taglib-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
