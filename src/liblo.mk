@@ -6,16 +6,16 @@ PKG             := liblo
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.26
 $(PKG)_CHECKSUM := 21942c8f19e9829b5842cb85352f98c49dfbc823
-$(PKG)_SUBDIR   := liblo-$($(PKG)_VERSION)
-$(PKG)_FILE     := liblo-$($(PKG)_VERSION).tar.gz
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_WEBSITE  := http://liblo.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/liblo/liblo/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/liblo/files/) | \
-    $(SED) -n 's,.*liblo-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/liblo/files/liblo/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

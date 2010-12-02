@@ -13,10 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/tinyxml/files/tinyxml/) | \
-    $(SED) -n 's,.*tinyxml_\([0-9][^>]*\)\.tar.*,\1,p' | \
-    $(SED) 's,_,.,g' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/tinyxml/files/tinyxml/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

@@ -13,9 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(subst a,
 $(PKG)_DEPS     := gcc jpeg tiff zlib
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/lcms/files/) | \
-    $(SED) -n 's,.*lcms[0-9]*-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/lcms/files/lcms/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

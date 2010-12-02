@@ -13,9 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/Utilities/$(
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/mingw/files/MinGW/Utilities/mingw-utils/) | \
-    $(SED) -n 's,.*mingw-utils-\([0-9][^>]*\)-mingw32-src\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/mingw/files/MinGW/Utilities/mingw-utils/' | \
+    $(SED) -n 's,.*mingw-utils-\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

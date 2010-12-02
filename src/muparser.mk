@@ -7,15 +7,15 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.34
 $(PKG)_CHECKSUM := d6d834d3ba2bd3c316c9b3070369d32701703f78
 $(PKG)_SUBDIR   := $(PKG)_v$(subst .,,$($(PKG)_VERSION))
-$(PKG)_FILE     := $(PKG)_v$(subst .,,$($(PKG)_VERSION)).tar.gz
-$(PKG)_WEBSITE  := http://muparser.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/muparser/muparser/Version%20$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_WEBSITE  := http://$(PKG).sourceforge.net/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/Version $($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/muparser/files/) | \
-    $(SED) -n 's,.*muparser_v\([0-9]\)\([^>]*\)\.tar.*,\1.\2,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/muparser/files/muparser/' | \
+    $(SED) -n 's,.*Version%20\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

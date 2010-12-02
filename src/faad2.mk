@@ -13,9 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/faac/$(PKG)-src/$(PKG)-$
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/faac/files/faac/) | \
-    $(SED) -n 's,.*faad2-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/faac/files/faad2-src/' | \
+    $(SED) -n 's,.*faad2-\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

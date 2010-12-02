@@ -13,9 +13,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FI
 $(PKG)_DEPS     := gcc openssl gnutls
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/gsoap2/files/) | \
-    $(SED) -n 's,.*gsoap_\([0-9][^>]*\)\.zip,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/gsoap2/files/gSOAP/' | \
+    $(SED) -n 's,.*gsoap_\([0-9][^>]*\)\.zip.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

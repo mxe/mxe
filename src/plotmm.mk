@@ -6,16 +6,16 @@ PKG             := plotmm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.2
 $(PKG)_CHECKSUM := 64da0930b7c8994d59769597917cca05df989258
-$(PKG)_SUBDIR   := plotmm-$($(PKG)_VERSION)
-$(PKG)_FILE     := plotmm-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://plotmm.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/plotmm/plotmm/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_WEBSITE  := http://$(PKG).sourceforge.net/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gtkmm
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/plotmm/files/plotmm/) | \
-    $(SED) -n 's,.*plotmm-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/plotmm/files/plotmm/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

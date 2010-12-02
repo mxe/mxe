@@ -6,16 +6,16 @@ PKG             := libdnet
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.11
 $(PKG)_CHECKSUM := e2ae8c7f0ca95655ae9f77fd4a0e2235dc4716bf
-$(PKG)_SUBDIR   := libdnet-$($(PKG)_VERSION)
-$(PKG)_FILE     := libdnet-$($(PKG)_VERSION).tar.gz
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_WEBSITE  := http://libdnet.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libdnet/libdnet/libdnet-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc winpcap
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libdnet/files/) | \
-    $(SED) -n 's,.*libdnet-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/libdnet/files/libdnet/' | \
+    $(SED) -n 's,.*/libdnet-\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

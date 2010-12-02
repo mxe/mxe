@@ -7,15 +7,15 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.2
 $(PKG)_CHECKSUM := 6109587b0f8e53d1d963e9e02f7298bf0d197d5d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://pfstools.sourceforge.net/
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_WEBSITE  := http://$(PKG).sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/pfstools/files/) | \
-    $(SED) -n 's,.*pfstools-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/pfstools/files/pfstools/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

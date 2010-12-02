@@ -67,13 +67,6 @@ DOWNLOAD_PKG_ARCHIVE = \
         ) \
     > '$(PKG_DIR)/$($(1)_FILE)'
 
-SOURCEFORGE_FILES = \
-    wget -q -O- '$(1)' | \
-    grep 'title="/' | \
-    $(SED) -n 's,.*title="\(/[^:]*\).*released on \([0-9-]*\)",\2 \1,p' | \
-    sort | \
-    $(SED) 's,^[^ ]* ,,'
-
 .PHONY: all
 all: $(PKGS)
 

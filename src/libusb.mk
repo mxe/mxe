@@ -7,15 +7,15 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.12.2
 $(PKG)_CHECKSUM := a433ff5cf8dd24f5308491c8500a2143497b4b8f
 $(PKG)_SUBDIR   := $(PKG)-win32-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-win32-src-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_WEBSITE  := http://libusb-win32.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusb-win32/libusb-win32-releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)-win32/$(PKG)-win32-releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/libusb-win32/files/) | \
-    $(SED) -n 's,.*libusb-win32-src-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

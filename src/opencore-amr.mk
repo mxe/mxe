@@ -7,15 +7,15 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.2
 $(PKG)_CHECKSUM := 289478d49701213255e9d63a93aae9ad472125cc
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://opencore-amr.sourceforge.net/
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_WEBSITE  := http://$(PKG).sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/opencore-amr/files/opencore-amr/) | \
-    $(SED) -n 's,.*opencore-amr-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/opencore-amr/files/opencore-amr/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

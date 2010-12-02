@@ -6,16 +6,16 @@ PKG             := xmlwrapp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.6.2
 $(PKG)_CHECKSUM := b3ef8bff215bbacd988790615b76379672105928
-$(PKG)_SUBDIR   := xmlwrapp-$($(PKG)_VERSION)
-$(PKG)_FILE     := xmlwrapp-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://sourceforge.net/projects/xmlwrapp/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xmlwrapp/xmlwrapp/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_WEBSITE  := http://sourceforge.net/projects/$(PKG)/
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libxml2 libxslt
 
 define $(PKG)_UPDATE
-    $(call SOURCEFORGE_FILES,http://sourceforge.net/projects/xmlwrapp/files/) | \
-    $(SED) -n 's,.*xmlwrapp-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    wget -q -O- 'http://sourceforge.net/projects/xmlwrapp/files/xmlwrapp/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
