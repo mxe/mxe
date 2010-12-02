@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 3.15
 $(PKG)_CHECKSUM := a1f8f3767970663b3394e37919c0a4ea029473d6
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-1-mingw32-dev.tar.lzma
-$(PKG)_WEBSITE  := http://mingw.sourceforge.net/
+$(PKG)_WEBSITE  := http://www.mingw.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/BaseSystem/RuntimeLibrary/Win32-API/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
