@@ -22,7 +22,6 @@ define $(PKG)_BUILD
     find '$(1)' -name Makefile.in \
         -exec $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g'       {} \; \
         -exec $(SED) -i 's,glib-genmarshal,$(PREFIX)/$(TARGET)/bin/glib-genmarshal,g' {} \;
-    $(SED) -i 's,YYYY_MM_DD=`. ,YYYY_MM_DD=`,g' '$(1)'/configure
     # The value for WAVE_FORMAT_DOLBY_AC3_SPDIF comes from vlc and mplayer:
     #   http://www.videolan.org/developers/vlc/doc/doxygen/html/vlc__codecs_8h-source.html
     #   http://lists.mplayerhq.hu/pipermail/mplayer-cvslog/2004-August/019283.html

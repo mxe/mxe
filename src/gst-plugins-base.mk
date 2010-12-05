@@ -22,7 +22,6 @@ define $(PKG)_BUILD
     find '$(1)' -name Makefile.in \
         -exec $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g'       {} \; \
         -exec $(SED) -i 's,glib-genmarshal,$(PREFIX)/$(TARGET)/bin/glib-genmarshal,g' {} \;
-    $(SED) -i 's,YYYY_MM_DD=`. ,YYYY_MM_DD=`,g' '$(1)'/configure
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
