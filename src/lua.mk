@@ -34,7 +34,7 @@ define $(PKG)_BUILD
         install ranlib
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -std=c99 -pedantic \
+        -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lua.exe' \
         -llua
 endef

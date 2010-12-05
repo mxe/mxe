@@ -5,11 +5,14 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-int main (int argc, char **argv) {
+int main(int argc, char *argv[])
+{
+    lua_State *L;
+
     (void)argc;
     (void)argv;
-    
-    lua_State *L = lua_open();
+
+    L = lua_open();
     lua_close(L);
     return 0;
 }
