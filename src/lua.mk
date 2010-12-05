@@ -32,4 +32,9 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         INSTALL='$(INSTALL)' \
         install ranlib
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -std=c99 -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lua.exe' \
+        -llua
 endef
