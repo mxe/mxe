@@ -117,4 +117,10 @@ define $(PKG)_BUILD
 
     # restore the unicode wx-config script
     mv '$(PREFIX)/$(TARGET)/bin/wx-config-backup' '$(PREFIX)/$(TARGET)/bin/wx-config'
+
+    # build test program
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -pedantic -std=gnu++0x \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-wxwidgets.exe' \
+        `'$(TARGET)-wx-config' --cflags --libs`
 endef
