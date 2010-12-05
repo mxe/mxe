@@ -25,6 +25,8 @@ define $(PKG)_BUILD
     # The value for WAVE_FORMAT_DOLBY_AC3_SPDIF comes from vlc and mplayer:
     #   http://www.videolan.org/developers/vlc/doc/doxygen/html/vlc__codecs_8h-source.html
     #   http://lists.mplayerhq.hu/pipermail/mplayer-cvslog/2004-August/019283.html
+    # following autoconf call is only required for release 0.10.26
+    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
