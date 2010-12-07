@@ -10,6 +10,7 @@ $(PKG)_SUBDIR   := mpfr-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_WEBSITE  := http://www.mpfr.org/
 $(PKG)_URL      := http://www.mpfr.org/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://ftp.gnu.org/gnu/mpfr/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
