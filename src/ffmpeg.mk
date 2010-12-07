@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.6.1
 $(PKG)_CHECKSUM := 24ada1d35fc000980090e773101e101ca45f85e5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_WEBSITE  := http://www.ffmpeg.org/
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://launchpad.net/ffmpeg/main/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
@@ -30,9 +30,9 @@ define $(PKG)_BUILD
         --disable-debug \
         --disable-doc \
         --enable-memalign-hack \
-        --enable-gpl \
-        --enable-version3 \
-        --enable-nonfree \
+        --disable-gpl \
+        --disable-version3 \
+        --disable-nonfree \
         --enable-postproc \
         --enable-libspeex \
         --enable-libtheora \
