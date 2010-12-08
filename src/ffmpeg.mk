@@ -30,8 +30,8 @@ define $(PKG)_BUILD
         --disable-debug \
         --disable-doc \
         --enable-memalign-hack \
-        --disable-gpl \
-        --disable-version3 \
+        --enable-gpl \
+        --enable-version3 \
         --disable-nonfree \
         --enable-postproc \
         --enable-libspeex \
