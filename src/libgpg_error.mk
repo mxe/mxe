@@ -4,8 +4,8 @@
 # libgpg-error
 PKG             := libgpg_error
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.9
-$(PKG)_CHECKSUM := 6836579e42320b057a2372bbcd0325130fe2561e
+$(PKG)_VERSION  := 1.10
+$(PKG)_CHECKSUM := 95b324359627fbcb762487ab6091afbe59823b29
 $(PKG)_SUBDIR   := libgpg-error-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgpg-error-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := ftp://ftp.gnupg.org/gcrypt/libgpg-error/
@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgpg-error/' | \
-    $(SED) -n 's,.*libgpg-error-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*libgpg-error-\([1-9]\.[1-9][0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef
 
