@@ -4,8 +4,8 @@
 # GNU Binutils
 PKG             := binutils
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.20.1
-$(PKG)_CHECKSUM := fd2ba806e6f3a55cee453cb25c86991b26a75dee
+$(PKG)_VERSION  := 2.21
+$(PKG)_CHECKSUM := ef93235588eb443e4c4a77f229a8d131bccaecc6
 $(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
 $(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/binutils/
