@@ -628,6 +628,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
             openssl-devel patch perl pkgconfig scons \
             yasm unzip wget xz</pre>
 
+    <p>
+    On 64-bit Fedora,
+    there are <a href="#open-issue-nsis">
+    open issues with the NSIS package.</a>
+    </p>
+
     <h3 id="requirements-freebsd">FreeBSD</h3>
 
     <!-- http://www.freebsd.org/ports/ -->
@@ -649,11 +655,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>export PATH = /usr/local/bin:$PATH</pre>
     <p>
     On 64-bit FreeBSD,
-    there are open issues with the NSIS package. To allow the
-    remainder of mingw-cross-env to build, simply remove the
-    package:
+    there are <a href="#open-issue-nsis">
+    open issues with the NSIS package.</a>
     </p>
-    <pre>rm <em>where mingw-cross-env is unpacked</em>/src/nsis.mk</pre>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
 
@@ -665,7 +669,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     On 64-bit Frugalware,
-    there are open issues with the NSIS package.
+    there are <a href="#open-issue-nsis">
+    open issues with the NSIS package.</a>
     </p>
 
     <h3 id="requirements-gentoo">Gentoo</h3>
@@ -836,6 +841,21 @@ sudo gcc_select gcc42</pre>
     <p>
     See something missing? Feel free to <a href="#creating-packages">create a new package</a>.
     </p>
+    <h3>Open Issues</h3>
+    <h4 id="open-issue-nsis">NSIS</h4>
+    <p>
+    The NSIS package contains some native tools that are 
+    currently 32-bit only. In order to build these on a 
+    64-bit system, multi-lib support must enabled in the 
+    compiler toolchain. However, not all operating systems 
+    enable this. 
+    </p>
+    <p>
+    Since no other packages depend it, the remainder of 
+    mingw-cross-env can be successfully built by simply 
+    removing the package:
+    </p>
+    <pre>rm <em>where mingw-cross-env is unpacked</em>/src/nsis.mk</pre>
 </div>
 
 <div class="section">
