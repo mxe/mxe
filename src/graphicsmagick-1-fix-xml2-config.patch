@@ -1,0 +1,44 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://sourceforge.net/tracker/?func=detail&aid=3130497&group_id=73485&atid=537937
+
+diff -r 89c7abc7139f configure.ac
+--- a/configure.ac	Mon Dec 06 15:42:37 2010 +0100
++++ b/configure.ac	Mon Dec 06 16:39:59 2010 +0100
+@@ -2135,12 +2135,13 @@
+         # Debian installs libxml headers under /usr/include/libxml2/libxml with
+         # the shared library installed under /usr/lib, whereas the package
+         # installs itself under $prefix/libxml and $prefix/lib.
+-        xml2_prefix=`xml2-config --prefix`
++        xml2_prefix=`"$xml2_config" --prefix`
+         if test -d "${xml2_prefix}/include/libxml2"
+         then
+           CPPFLAGS="$CPPFLAGS -I${xml2_prefix}/include/libxml2"
+         fi
+         LDFLAGS="$LDFLAGS -L${xml2_prefix}/lib"
++        LIBS="$LIBS `"$xml2_config" --libs`"
+      fi
+     failed=0
+     passed=0
+@@ -2156,8 +2157,9 @@
+         LDFLAGS="$OLD_LDFLAGS"
+         CPPFLAGS="$OLD_CPPFLAGS"
+     else
+-	LIB_XML='-lxml2'
++	LIB_XML=`"$xml2_config" --libs`
+ 	LIBS="$LIB_XML $LIBS"
++	CPPFLAGS="$CPPFLAGS `"$xml2_config" --cflags`"
+ 	AC_DEFINE(HasXML,1,Define if you have XML library)
+ 	AC_MSG_RESULT(yes)
+         have_xml='yes'
+diff -r 89c7abc7139f magick/GraphicsMagick.pc.in
+--- a/magick/GraphicsMagick.pc.in	Mon Dec 06 15:42:37 2010 +0100
++++ b/magick/GraphicsMagick.pc.in	Mon Dec 06 16:39:59 2010 +0100
+@@ -8,4 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Description: GraphicsMagick image processing library
+ Libs: -L${libdir} -lGraphicsMagick
++Libs.private: @MAGICK_API_LDFLAGS@ @MAGICK_API_LIBS@
+ Cflags: -I${includedir} @MAGICK_API_PC_CPPFLAGS@
