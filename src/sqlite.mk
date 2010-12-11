@@ -5,16 +5,15 @@
 PKG             := sqlite
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3070400
-$(PKG)_CHECKSUM := b57dce795c377c038d066076d2c62e4bd028e78f
-$(PKG)_SUBDIR   := sqlite-3.7.4
-$(PKG)_FILE     := sqlite-autoconf-$($(PKG)_VERSION).tar.gz
+$(PKG)_CHECKSUM := 43848641320cb60fb7f445bc295b9870cdc127be
+$(PKG)_SUBDIR   := $(PKG)-autoconf-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_WEBSITE  := http://www.sqlite.org/
 $(PKG)_URL      := http://www.sqlite.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.sqlite.org/download.html' | \
-    grep 'sqlite-autoconf-' | \
     $(SED) -n 's,.*sqlite-autoconf-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
