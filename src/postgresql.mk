@@ -22,6 +22,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cp -Rp '$(1)' '$(1).native'
     # The static OpenSSL libraries are in unix (not win32) naming style.
     $(SED) -i 's,SSLEAY32,SSL,' '$(1)'/configure
     $(SED) -i 's,ssleay32,ssl,' '$(1)'/configure
@@ -57,8 +58,6 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/src/include/postgres_ext.h' '$(PREFIX)/$(TARGET)/include/'
     # Build a native pg_config.
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,postgresql)
-    mv '$(1)/$(postgresql_SUBDIR)' '$(1).native'
     $(SED) -i 's,-DVAL_,-D_DISABLED_VAL_,g' '$(1).native'/src/bin/pg_config/Makefile
     cd '$(1).native' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
