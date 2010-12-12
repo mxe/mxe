@@ -7,9 +7,9 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0.0
 $(PKG)_CHECKSUM := 8ae8bc72ac26a0f17ad9f57c520264c056c64770
 $(PKG)_SUBDIR   := mpfr-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
+$(PKG)_FILE     := mpfr-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.mpfr.org/
-$(PKG)_URL      := http://www.mpfr.org/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.gnu.org/gnu/mpfr/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 

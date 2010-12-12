@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 6340edc7ceb95f9015a758c7c0d196eb0f441d49
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gmplib.org/
-$(PKG)_URL      := ftp://ftp.gmplib.org/pub/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_URL      := ftp://ftp.gmplib.org/pub/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

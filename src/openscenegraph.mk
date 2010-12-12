@@ -7,9 +7,9 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.8.3
 $(PKG)_CHECKSUM := 90502e4cbd47aac1689cc39d25ab62bbe0bba9fc
 $(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).zip
+$(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://www.openscenegraph.org/
-$(PKG)_URL      := http://www.openscenegraph.org/downloads/stable_releases/$($(PKG)_SUBDIR)/source/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-$($(PKG)_VERSION)/source/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc curl ffmpeg freetype gdal giflib jasper jpeg libpng openexr tiff xine-lib zlib
 
 define $(PKG)_UPDATE
