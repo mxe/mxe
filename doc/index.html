@@ -304,7 +304,19 @@ exit</pre>
     <pre>export PATH=/<em>where mingw-cross-env is installed</em>/usr/bin:$PATH</pre>
 
     <p>
-    Note that any compiler related environment variables
+    In case you are using custom $PKG_CONFIG_PATH entries,
+    you can add separate entries for MinGW cross builds:
+    </p>
+    <pre>export PKG_CONFIG_PATH="<em>entries for native builds</em>"</pre>
+    <pre>export PKG_CONFIG_PATH_<span class="target-underscore">i686_pc_mingw32</span>="<em>entries for mingw-cross-env builds</em>"</pre>
+    <p>
+    Remember to use <span class="target">i686-pc-mingw32</span>-pkg-config
+    instead of pkg-config for cross builds.
+    The Autotools do that automatically for you.
+    </p>
+
+    <p>
+    Note that any other compiler related environment variables
     (like $CC, $LDFLAGS, etc.)
     may spoil your compiling pleasure,
     so be sure to delete or disable those.
@@ -363,7 +375,8 @@ make</pre>
     </p>
     <pre>CC=$(CROSS)gcc
 LD=$(CROSS)ld
-AR=$(CROSS)ar</pre>
+AR=$(CROSS)ar
+PKG_CONFIG=$(CROSS)pkg-config</pre>
     <p>
     You may have to add a few others, depending on your project.
     </p>
