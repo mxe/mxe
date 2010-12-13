@@ -1,0 +1,229 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Cherry picked fixes from svn
+http://sourceforge.net/projects/vmime/develop
+
+Produced with this script:
+#--------------------------------------------------------------------#
+#!/bin/bash
+
+(
+  echo "This file is part of mingw-cross-env."
+  echo "See doc/index.html for further information."
+  echo
+  echo "Cherry picked fixes from svn"
+  echo "http://sourceforge.net/projects/vmime/develop"
+  echo
+  echo "Produced with this script:"
+  echo "#--------------------------------------------------------------------#"
+  cat "$0"
+  echo "#--------------------------------------------------------------------#"
+) > src/vmime-1-fixes.patch
+
+# setup git svn clone
+#cd ~/projects/vmime/git
+#git svn clone -s https://vmime.svn.sourceforge.net/svnroot/vmime
+#git reset --hard
+# get updates
+#git svn fetch
+#git svn rebase
+#git checkout v0.9.1
+#git checkout -b 0.9.1-fixes
+#git cherry-pick
+
+GITDIR=~/projects/vmime/git/vmime
+
+(
+  cd $GITDIR
+  echo
+  git format-patch -p --relative=vmime --stdout v0.9.1..0.9.1-fixes
+) >> src/vmime-1-fixes.patch
+#--------------------------------------------------------------------#
+
+From c6f077e695b75d9ff9a32d1621f6a320c8ce70f1 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Tue, 30 Nov 2010 14:57:03 +0000
+Subject: [PATCH 1/4] Initialize and delete object.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@577 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/vmime/net/imap/IMAPParser.hpp b/vmime/net/imap/IMAPParser.hpp
+index 0f3e9ec..d71c3ca 100644
+--- a/vmime/net/imap/IMAPParser.hpp
++++ b/vmime/net/imap/IMAPParser.hpp
+@@ -3823,7 +3823,9 @@ public:
+ 
+ 		msg_att_item()
+ 			: m_date_time(NULL), m_number(NULL), m_envelope(NULL),
+-			  m_uniqueid(NULL), m_nstring(NULL), m_body(NULL), m_flag_list(NULL)
++			  m_uniqueid(NULL), m_nstring(NULL), m_body(NULL), m_flag_list(NULL),
++			  m_section(NULL)
++              
+ 		{
+ 		}
+ 
+@@ -3836,6 +3838,7 @@ public:
+ 			delete (m_nstring);
+ 			delete (m_body);
+ 			delete (m_flag_list);
++ 			delete (m_section);
+ 		}
+ 
+ 		void go(IMAPParser& parser, string& line, string::size_type* currentPos)
+-- 
+1.7.1
+
+
+From 41203315eacf53230dd7bdb0cf2b0d1078ddee39 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Wed, 8 Dec 2010 08:52:54 +0000
+Subject: [PATCH 2/4] No extra space between ':' and '<' in MAIL FROM and RCPT TO. Wait for server response after QUIT and before closing connection.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@579 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/net/smtp/SMTPTransport.cpp b/src/net/smtp/SMTPTransport.cpp
+index 204daae..d9fb7b8 100644
+--- a/src/net/smtp/SMTPTransport.cpp
++++ b/src/net/smtp/SMTPTransport.cpp
+@@ -516,6 +516,7 @@ void SMTPTransport::internalDisconnect()
+ 	try
+ 	{
+ 		sendRequest("QUIT");
++		readResponse();
+ 	}
+ 	catch (exception&)
+ 	{
+@@ -565,7 +566,7 @@ void SMTPTransport::send(const mailbox& expeditor, const mailboxList& recipients
+ 	// Emit the "MAIL" command
+ 	ref <SMTPResponse> resp;
+ 
+-	sendRequest("MAIL FROM: <" + expeditor.getEmail() + ">");
++	sendRequest("MAIL FROM:<" + expeditor.getEmail() + ">");
+ 
+ 	if ((resp = readResponse())->getCode() != 250)
+ 	{
+@@ -578,7 +579,7 @@ void SMTPTransport::send(const mailbox& expeditor, const mailboxList& recipients
+ 	{
+ 		const mailbox& mbox = *recipients.getMailboxAt(i);
+ 
+-		sendRequest("RCPT TO: <" + mbox.getEmail() + ">");
++		sendRequest("RCPT TO:<" + mbox.getEmail() + ">");
+ 
+ 		if ((resp = readResponse())->getCode() != 250)
+ 		{
+-- 
+1.7.1
+
+
+From 969b56f4bd61ddb8277c04ac2a1e35e029ec058b Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Fri, 10 Dec 2010 16:24:06 +0000
+Subject: [PATCH 3/4] Fixed unit test after bug fix.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@580 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/tests/net/smtp/SMTPTransportTest.cpp b/tests/net/smtp/SMTPTransportTest.cpp
+index 5015552..6552f9e 100644
+--- a/tests/net/smtp/SMTPTransportTest.cpp
++++ b/tests/net/smtp/SMTPTransportTest.cpp
+@@ -165,7 +165,7 @@ public:
+ 			}
+ 			else if (cmd == "MAIL")
+ 			{
+-				VASSERT_EQ("MAIL", std::string("MAIL FROM: <expeditor@test.vmime.org>"), line);
++				VASSERT_EQ("MAIL", std::string("MAIL FROM:<expeditor@test.vmime.org>"), line);
+ 
+ 				localSend("250 OK\r\n");
+ 			}
+-- 
+1.7.1
+
+
+From 50743da0712b216533acdc09069f1bfc81f988c6 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Fri, 10 Dec 2010 16:54:38 +0000
+Subject: [PATCH 4/4] Fixed boundary parsing (thanks to John van der Kamp, Zarafa).
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@581 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/body.cpp b/src/body.cpp
+index 13dff6b..738d3e7 100644
+--- a/src/body.cpp
++++ b/src/body.cpp
+@@ -127,10 +127,30 @@ void body::parse(const string& buffer, const string::size_type position,
+ 		const string boundarySep("--" + boundary);
+ 
+ 		string::size_type partStart = position;
+-		string::size_type pos = buffer.find(boundarySep, position);
++		string::size_type pos = position;
+ 
+ 		bool lastPart = false;
+ 
++		while (pos != string::npos && pos < end)
++		{
++			pos = buffer.find(boundarySep, pos);
++
++			if (pos == string::npos ||
++			    ((pos == 0 || buffer[pos - 1] == '\n') &&
++			     (buffer[pos + boundarySep.length()] == '\r' ||
++			      buffer[pos + boundarySep.length()] == '\n' ||
++			      buffer[pos + boundarySep.length()] == '-'
++			     )
++			    )
++			   )
++			{
++				break;
++			}
++
++			// boundary not a beginning of line, or just a prefix of another, continue the search.
++			pos++;
++		}
++
+ 		if (pos != string::npos && pos < end)
+ 		{
+ 			m_prologText = string(buffer.begin() + position, buffer.begin() + pos);
+@@ -181,7 +201,26 @@ void body::parse(const string& buffer, const string::size_type position,
+ 			}
+ 
+ 			partStart = pos;
+-			pos = buffer.find(boundarySep, partStart);
++
++			while (pos != string::npos && pos < end)
++			{
++				pos = buffer.find(boundarySep, pos);
++
++				if (pos == string::npos ||
++				    ((pos == 0 || buffer[pos - 1] == '\n') &&
++				     (buffer[pos + boundarySep.length()] == '\r' ||
++				      buffer[pos + boundarySep.length()] == '\n' ||
++					buffer[pos + boundarySep.length()] == '-'
++				     )
++				    )
++				   )
++				{
++					break;
++				}
++
++				// boundary not a beginning of line, or just a prefix of another, continue the search.
++				pos++;
++			}
+ 		}
+ 
+ 		m_contents = vmime::create <emptyContentHandler>();
+diff --git a/tests/parser/bodyPartTest.cpp b/tests/parser/bodyPartTest.cpp
+index 12c4f74..df2bf85 100644
+--- a/tests/parser/bodyPartTest.cpp
++++ b/tests/parser/bodyPartTest.cpp
+@@ -84,7 +84,7 @@ VMIME_TEST_SUITE_BEGIN
+ 		vmime::string str =
+ 			"Content-Type: multipart/mixed; boundary=\"MY-BOUNDARY\""
+ 			"\r\n\r\n"
+-			"--MY-BOUNDARY\r\nHEADER1\r\n\r\nBODY1"
++			"--MY-BOUNDARY\r\nHEADER1\r\n\r\nBODY1\r\n"
+ 			"--MY-BOUNDARY\r\nHEADER2\r\n\r\nBODY2";
+ 
+ 		vmime::bodyPart p;
+-- 
+1.7.1
+
