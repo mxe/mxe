@@ -4,8 +4,8 @@
 # Libgsasl
 PKG             := libgsasl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.4
-$(PKG)_CHECKSUM := d32d29a5c599b2d54f214fc5747559bc890f24de
+$(PKG)_VERSION  := 1.6.0
+$(PKG)_CHECKSUM := bb760a943ac487d332d5216559cd5fa765952245
 $(PKG)_SUBDIR   := libgsasl-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgsasl-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gsasl/
