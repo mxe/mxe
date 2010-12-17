@@ -7,7 +7,7 @@ http://qt.gitorious.org/qt
 From fd085b59f5900459f946a5307999598f7e714740 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 11 Oct 2010 17:15:44 +0200
-Subject: [PATCH 1/5] use specified pkg-config
+Subject: [PATCH 1/6] use specified pkg-config
 
 Respect the pkg-config tool specified in qmake.conf. This is
 useful when crossbuilding.
@@ -38,7 +38,7 @@ index 4c528aa..d70e5de 100644
 From 8c882ffc1d1c50ecad255e1f9c5f174fa00f36b4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 15 Oct 2010 14:56:03 +0200
-Subject: [PATCH 2/5] removed obsolete -qt-gif configure option
+Subject: [PATCH 2/6] removed obsolete -qt-gif configure option
 
 Since "-system-gif" is not offered, offering "-qt-gif" is unnecessary
 and perhaps misleading. By default the GIF handler is built from code
@@ -114,10 +114,39 @@ index 983416a..c6b0a02 100644
 1.7.1
 
 
-From 69c2dddd8a7e51c74a79c524d4d0f01e54aa9994 Mon Sep 17 00:00:00 2001
+From 25b3c0f218d603349cce0bef006d5bfeab4cf9da Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@nokia.com>
+Date: Tue, 28 Sep 2010 10:45:43 +0200
+Subject: [PATCH 3/6] Use quint64 (long long) instead of long for the GCC assembly code.
+
+Windows 64-bit has sizeof(long) == 4, which doesn't match the register
+size.
+
+Task-number: reported on IRC
+Reviewed-by: Trust Me
+(cherry picked from commit 61e0576f7b6b7cf3330f58b51e3e5e213919c6bf)
+
+diff --git a/src/corelib/tools/qsimd.cpp b/src/corelib/tools/qsimd.cpp
+index e727bfc..9c0502b 100644
+--- a/src/corelib/tools/qsimd.cpp
++++ b/src/corelib/tools/qsimd.cpp
+@@ -286,7 +286,7 @@ static inline uint detectProcessorFeatures()
+     uint feature_result = 0;
+ 
+ #if defined(Q_CC_GNU)
+-    long tmp;
++    quint64 tmp;
+     asm ("xchg %%rbx, %1\n"
+          "cpuid\n"
+          "xchg %%rbx, %1\n"
+-- 
+1.7.1
+
+
+From 84bdbb6986ae82aed2e2b4ccaa6d46dabdfb95b9 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 5 Jun 2010 23:41:04 +0200
-Subject: [PATCH 3/5] added missing INSTALLS to JavaScriptCore.pro for static libjscore
+Subject: [PATCH 4/6] added missing INSTALLS to JavaScriptCore.pro for static libjscore
 
 For static build of Qt on win32-g++*, applications using webkit
 link to libjscore.a.
@@ -143,10 +172,10 @@ index a805170..027eb0f 100644
 1.7.1
 
 
-From de9c5f7ab3ce90e825d3dac66fea2bea377d93ff Mon Sep 17 00:00:00 2001
+From fcc081c29f5b7c1ac8478551faeb7d1a5f8ef09c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 9 Nov 2010 20:09:45 +0100
-Subject: [PATCH 4/5] Partially restored support for static linking of QtWebKit
+Subject: [PATCH 5/6] Partially restored support for static linking of QtWebKit
 
 Support was removed by 4221d629e2cf37ee8c5ba7cb595b05ab8c82f113.
 Static QtWebkit might be supported by mingw-cross-env.
@@ -172,10 +201,10 @@ index 6110264..abf577f 100755
 1.7.1
 
 
-From 25b262ebbae41932caf39c4065de42e0a4753906 Mon Sep 17 00:00:00 2001
+From ffa10cdfb05589c5d4e962b0ad9d2b42d7bcaadc Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 16 Nov 2010 20:06:28 +0100
-Subject: [PATCH 5/5] explicitly include -llcms for -lmng (mingw-cross-env specific)
+Subject: [PATCH 6/6] explicitly include -llcms for -lmng (mingw-cross-env specific)
 
 
 diff --git a/src/gui/image/qmnghandler.pri b/src/gui/image/qmnghandler.pri
