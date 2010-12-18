@@ -237,6 +237,7 @@ dist:
 	| $(SED) 's,\(<span class="version">\)[^<]*\(</span>\),\1$(VERSION)\2,g' \
 	| $(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' \
 	| $(SED) 's,\(<span class="target-underscore">\)[^<]*\(</span>\),\1$(subst -,_,$(TARGET))\2,g' \
+	| $(SED) 's;\(<span class="years">\)[^<]*\(</span>\);\1'"`LC_ALL=en_US.UTF-8 hg log | $(SED) -n 's,^date:.*\s\([0-9]\{4\}\)\s.*$$,\1,p' | sort -nu | $(SED) -n '1 h; 2,$$ H; $$ {x; s/\n/, /gp}'`"'\2;g' \
 	>'$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/index.html'
 	cp -p '$(TOP_DIR)/doc'/screenshot-* '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/'
 	cp -p '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc'/* '$(DIST_DIR)/web/'
