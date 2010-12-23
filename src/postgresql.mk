@@ -15,7 +15,7 @@ $(PKG)_DEPS     := gcc zlib openssl
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \
-    grep 'refs/tags/REL[0-9_]*"' | \
+    grep 'refs/tags/REL9[0-9_]*"' | \
     $(SED) 's,.*refs/tags/REL\(.*\)".*,\1,g;' | \
     $(SED) 's,_,.,g' | \
     head -1
