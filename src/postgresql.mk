@@ -4,8 +4,8 @@
 # PostgreSQL
 PKG             := postgresql
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.0.1
-$(PKG)_CHECKSUM := 7adeb3c4b661115ec6eb4e5896edfee71f87245e
+$(PKG)_VERSION  := 9.0.2
+$(PKG)_CHECKSUM := 42a9518a2f11fa1d09a23bc628b00e992d3bcf4a
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.postgresql.org/
