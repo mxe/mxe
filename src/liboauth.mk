@@ -23,10 +23,12 @@ define $(PKG)_BUILD
        --host='$(TARGET)' \
        --prefix='$(PREFIX)/$(TARGET)' \
        --disable-shared \
-       --disable-curl \
-       HASH_LIBS="`$(TARGET)-pkg-config --libs libcrypto`" \
-       HASH_CFLAGS="`$(TARGET)-pkg-config --cflags libcrypto`"
+       --disable-curl
    $(MAKE) -C '$(1)' -j '$(JOBS)'
-   $(MAKE) -C '$(1)' -j '$(JOBS)' check
-   $(MAKE) -C '$(1)' -j '$(JOBS)' install
+   $(MAKE) -C '$(1)' -j 1 install
+   
+   '$(TARGET)-gcc' \
+       -W -Wall -Werror -ansi -pedantic \
+       '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-liboauth.exe' \
+       `'$(TARGET)-pkg-config' oauth --cflags --libs`
 endef
