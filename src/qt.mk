@@ -65,6 +65,7 @@ define $(PKG)_BUILD
         -system-libmng \
         -system-sqlite \
         -openssl-linked \
+        -dbus-linked \
         -v
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
