@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpng jpeg libmng tiff sqlite libiconv
+$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl libgcrypt zlib libpng jpeg libmng tiff sqlite libiconv dbus
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
