@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext pcre libiconv zlib
+$(PKG)_DEPS     := gcc gettext pcre libiconv zlib dbus
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
@@ -72,4 +72,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/gobject' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gio'     -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
     $(MAKE) -C '$(1)'         -j '$(JOBS)' install-pkgconfigDATA
+exit -1
 endef
