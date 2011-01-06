@@ -4,10 +4,10 @@ See doc/index.html for further information.
 Commits backported (cherry-picked) from Qt 4.7 branch.
 http://qt.gitorious.org/qt
 
-From fd085b59f5900459f946a5307999598f7e714740 Mon Sep 17 00:00:00 2001
+From 7768549da9215c85baa9bd983937e5c8010fdedf Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 11 Oct 2010 17:15:44 +0200
-Subject: [PATCH 1/6] use specified pkg-config
+Subject: [PATCH 01/11] use specified pkg-config
 
 Respect the pkg-config tool specified in qmake.conf. This is
 useful when crossbuilding.
@@ -35,10 +35,10 @@ index 4c528aa..d70e5de 100644
 1.7.1
 
 
-From 8c882ffc1d1c50ecad255e1f9c5f174fa00f36b4 Mon Sep 17 00:00:00 2001
+From e7a88af7492caca935492d94a49e033154c61ffb Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 15 Oct 2010 14:56:03 +0200
-Subject: [PATCH 2/6] removed obsolete -qt-gif configure option
+Subject: [PATCH 02/11] removed obsolete -qt-gif configure option
 
 Since "-system-gif" is not offered, offering "-qt-gif" is unnecessary
 and perhaps misleading. By default the GIF handler is built from code
@@ -114,10 +114,10 @@ index 983416a..c6b0a02 100644
 1.7.1
 
 
-From 25b3c0f218d603349cce0bef006d5bfeab4cf9da Mon Sep 17 00:00:00 2001
+From 850a442ea98a44434917db439bac1e77064ab647 Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@nokia.com>
 Date: Tue, 28 Sep 2010 10:45:43 +0200
-Subject: [PATCH 3/6] Use quint64 (long long) instead of long for the GCC assembly code.
+Subject: [PATCH 03/11] Use quint64 (long long) instead of long for the GCC assembly code.
 
 Windows 64-bit has sizeof(long) == 4, which doesn't match the register
 size.
@@ -143,10 +143,10 @@ index e727bfc..9c0502b 100644
 1.7.1
 
 
-From 84bdbb6986ae82aed2e2b4ccaa6d46dabdfb95b9 Mon Sep 17 00:00:00 2001
+From 5f527934a1e8d1ccef6c9cc1a47ec8b47d50af48 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 5 Jun 2010 23:41:04 +0200
-Subject: [PATCH 4/6] added missing INSTALLS to JavaScriptCore.pro for static libjscore
+Subject: [PATCH 04/11] added missing INSTALLS to JavaScriptCore.pro for static libjscore
 
 For static build of Qt on win32-g++*, applications using webkit
 link to libjscore.a.
@@ -172,10 +172,10 @@ index a805170..027eb0f 100644
 1.7.1
 
 
-From fcc081c29f5b7c1ac8478551faeb7d1a5f8ef09c Mon Sep 17 00:00:00 2001
+From 3ab314a4ab6674b3007c8e0d050809c9544be1b3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 9 Nov 2010 20:09:45 +0100
-Subject: [PATCH 5/6] Partially restored support for static linking of QtWebKit
+Subject: [PATCH 05/11] Partially restored support for static linking of QtWebKit
 
 Support was removed by 4221d629e2cf37ee8c5ba7cb595b05ab8c82f113.
 Static QtWebkit might be supported by mingw-cross-env.
@@ -201,10 +201,10 @@ index 6110264..abf577f 100755
 1.7.1
 
 
-From ffa10cdfb05589c5d4e962b0ad9d2b42d7bcaadc Mon Sep 17 00:00:00 2001
+From dbad27ffa9cfdb14a08dcada25efe12e13964b8f Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 16 Nov 2010 20:06:28 +0100
-Subject: [PATCH 6/6] explicitly include -llcms for -lmng (mingw-cross-env specific)
+Subject: [PATCH 06/11] explicitly include -llcms for -lmng (mingw-cross-env specific)
 
 
 diff --git a/src/gui/image/qmnghandler.pri b/src/gui/image/qmnghandler.pri
@@ -220,6 +220,571 @@ index ffb98de..c213e09 100644
          else:win32:         LIBS += libmng.lib
  } else {
      include($$PWD/../../3rdparty/libmng.pri)
+-- 
+1.7.1
+
+
+From 3112e8b990ea7e6777043351e0ed68610fe9c321 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 6 Jan 2011 21:18:35 +0100
+Subject: [PATCH 07/11] fix double directory separator
+
+
+diff --git a/qmake/generators/unix/unixmake2.cpp b/qmake/generators/unix/unixmake2.cpp
+index 6d59981..77799ad 100644
+--- a/qmake/generators/unix/unixmake2.cpp
++++ b/qmake/generators/unix/unixmake2.cpp
+@@ -1345,8 +1345,13 @@ UnixMakefileGenerator::pkgConfigFileName(bool fixify)
+     if(dot != -1)
+         ret = ret.left(dot);
+     ret += Option::pkgcfg_ext;
+-    if(!project->isEmpty("QMAKE_PKGCONFIG_DESTDIR"))
+-        ret.prepend(project->first("QMAKE_PKGCONFIG_DESTDIR") + Option::dir_sep);
++    QString subdir = project->first("QMAKE_PKGCONFIG_DESTDIR");
++    if(!subdir.isEmpty()) {
++        // initOutPaths() appends dir_sep, but just to be safe..
++        if (!subdir.endsWith(Option::dir_sep))
++            ret.prepend(Option::dir_sep);
++        ret.prepend(subdir);
++    }
+     if(fixify) {
+         if(QDir::isRelativePath(ret) && !project->isEmpty("DESTDIR"))
+             ret.prepend(project->first("DESTDIR"));
+-- 
+1.7.1
+
+
+From 03cee774dc546232e198ab2bfc71a28edf307e14 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 6 Jan 2011 14:11:09 +0100
+Subject: [PATCH 08/11] allow pkg-config file writing by generators other than unix
+
+It is useful to generate .pc files when using the win32 generator,
+particularly when cross-building on unix for mingw. This is made
+possible by moving the relevant methods from the unix generator to the
+base class.
+
+diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
+index 3543296..644f19c 100644
+--- a/qmake/generators/makefile.cpp
++++ b/qmake/generators/makefile.cpp
+@@ -3123,4 +3123,182 @@ MakefileGenerator::openOutput(QFile &file, const QString &build) const
+     return false;
+ }
+ 
++QString
++MakefileGenerator::pkgConfigFileName(bool fixify)
++{
++    QString ret = var("TARGET");
++    int slsh = ret.lastIndexOf(Option::dir_sep);
++    if(slsh != -1)
++        ret = ret.right(ret.length() - slsh - 1);
++    if(ret.startsWith("lib"))
++        ret = ret.mid(3);
++    int dot = ret.indexOf('.');
++    if(dot != -1)
++        ret = ret.left(dot);
++    ret += Option::pkgcfg_ext;
++    QString subdir = project->first("QMAKE_PKGCONFIG_DESTDIR");
++    if(!subdir.isEmpty()) {
++        // initOutPaths() appends dir_sep, but just to be safe..
++        if (!subdir.endsWith(Option::dir_sep))
++            ret.prepend(Option::dir_sep);
++        ret.prepend(subdir);
++    }
++    if(fixify) {
++        if(QDir::isRelativePath(ret) && !project->isEmpty("DESTDIR"))
++            ret.prepend(project->first("DESTDIR"));
++        ret = Option::fixPathToLocalOS(fileFixify(ret, qmake_getpwd(), Option::output_dir));
++    }
++    return ret;
++}
++
++QString
++MakefileGenerator::pkgConfigPrefix() const
++{
++    if(!project->isEmpty("QMAKE_PKGCONFIG_PREFIX"))
++        return project->first("QMAKE_PKGCONFIG_PREFIX");
++    return QLibraryInfo::location(QLibraryInfo::PrefixPath);
++}
++
++QString
++MakefileGenerator::pkgConfigFixPath(QString path) const
++{
++    QString prefix = pkgConfigPrefix();
++    if(path.startsWith(prefix))
++        path = path.replace(prefix, "${prefix}");
++    return path;
++}
++
++void
++MakefileGenerator::writePkgConfigFile()
++{
++    QString fname = pkgConfigFileName(), lname = fname;
++    mkdir(fileInfo(fname).path());
++    int slsh = lname.lastIndexOf(Option::dir_sep);
++    if(slsh != -1)
++        lname = lname.right(lname.length() - slsh - 1);
++    QFile ft(fname);
++    if(!ft.open(QIODevice::WriteOnly))
++        return;
++    project->values("ALL_DEPS").append(fileFixify(fname));
++    QTextStream t(&ft);
++
++    QString prefix = pkgConfigPrefix();
++    QString libDir = project->first("QMAKE_PKGCONFIG_LIBDIR");
++    if(libDir.isEmpty())
++        libDir = prefix + Option::dir_sep + "lib" + Option::dir_sep;
++    QString includeDir = project->first("QMAKE_PKGCONFIG_INCDIR");
++    if(includeDir.isEmpty())
++        includeDir = prefix + "/include";
++
++    t << "prefix=" << prefix << endl;
++    t << "exec_prefix=${prefix}\n"
++      << "libdir=" << pkgConfigFixPath(libDir) << "\n"
++      << "includedir=" << pkgConfigFixPath(includeDir) << endl;
++    // non-standard entry. Provides useful info normally only
++    // contained in the internal .qmake.cache file
++    t << varGlue("CONFIG", "qt_config=", " ", "") << endl;
++
++    //extra PKGCONFIG variables
++    const QStringList &pkgconfig_vars = project->values("QMAKE_PKGCONFIG_VARIABLES");
++    for(int i = 0; i < pkgconfig_vars.size(); ++i) {
++        QString var = project->first(pkgconfig_vars.at(i) + ".name"),
++                val = project->values(pkgconfig_vars.at(i) + ".value").join(" ");
++        if(var.isEmpty())
++            continue;
++        if(val.isEmpty()) {
++            const QStringList &var_vars = project->values(pkgconfig_vars.at(i) + ".variable");
++            for(int v = 0; v < var_vars.size(); ++v) {
++                const QStringList &vars = project->values(var_vars.at(v));
++                for(int var = 0; var < vars.size(); ++var) {
++                    if(!val.isEmpty())
++                        val += " ";
++                    val += pkgConfigFixPath(vars.at(var));
++                }
++            }
++        }
++        t << var << "=" << val << endl;
++    }
++
++    t << endl;
++
++    QString name = project->first("QMAKE_PKGCONFIG_NAME");
++    if(name.isEmpty()) {
++        name = project->first("QMAKE_ORIG_TARGET").toLower();
++        name.replace(0, 1, name[0].toUpper());
++    }
++    t << "Name: " << name << endl;
++    QString desc = project->values("QMAKE_PKGCONFIG_DESCRIPTION").join(" ");
++    if(desc.isEmpty()) {
++        if(name.isEmpty()) {
++            desc = project->first("QMAKE_ORIG_TARGET").toLower();
++            desc.replace(0, 1, desc[0].toUpper());
++        } else {
++            desc = name;
++        }
++        if(project->first("TEMPLATE") == "lib") {
++            if(project->isActiveConfig("plugin"))
++               desc += " Plugin";
++            else
++               desc += " Library";
++        } else if(project->first("TEMPLATE") == "app") {
++            desc += " Application";
++        }
++    }
++    t << "Description: " << desc << endl;
++    t << "Version: " << project->first("VERSION") << endl;
++
++    // libs
++    t << "Libs: ";
++    QString pkgConfiglibDir;
++    QString pkgConfiglibName;
++    if (Option::target_mode == Option::TARG_MACX_MODE && project->isActiveConfig("lib_bundle")) {
++        pkgConfiglibDir = "-F${libdir}";
++        QString bundle;
++        if (!project->isEmpty("QMAKE_FRAMEWORK_BUNDLE_NAME"))
++            bundle = unescapeFilePath(project->first("QMAKE_FRAMEWORK_BUNDLE_NAME"));
++        else
++            bundle = unescapeFilePath(project->first("TARGET"));
++        int suffix = bundle.lastIndexOf(".framework");
++        if (suffix != -1)
++            bundle = bundle.left(suffix);
++        pkgConfiglibName = "-framework " + bundle + " ";
++    } else {
++        pkgConfiglibDir = "-L${libdir}";
++        pkgConfiglibName = "-l" + lname.left(lname.length()-Option::libtool_ext.length());
++    }
++    t << pkgConfiglibDir << " " << pkgConfiglibName << " " << endl;
++
++    QStringList libs;
++    if(!project->isEmpty("QMAKE_INTERNAL_PRL_LIBS")) {
++        libs = project->values("QMAKE_INTERNAL_PRL_LIBS");
++    } else {
++        libs << "QMAKE_LIBS"; //obvious one
++    }
++    libs << "QMAKE_LIBS_PRIVATE";
++    libs << "QMAKE_LFLAGS_THREAD"; //not sure about this one, but what about things like -pthread?
++    t << "Libs.private: ";
++    for(QStringList::ConstIterator it = libs.begin(); it != libs.end(); ++it) {
++        t << project->values((*it)).join(" ") << " ";
++    }
++    t << endl;
++
++    // flags
++    // ### too many
++    t << "Cflags: "
++        // << var("QMAKE_CXXFLAGS") << " "
++      << varGlue("PRL_EXPORT_DEFINES","-D"," -D"," ")
++      << project->values("PRL_EXPORT_CXXFLAGS").join(" ")
++      << project->values("QMAKE_PKGCONFIG_CFLAGS").join(" ")
++        //      << varGlue("DEFINES","-D"," -D"," ")
++      << " -I${includedir}" << endl;
++
++    // requires
++    const QString requires = project->values("QMAKE_PKGCONFIG_REQUIRES").join(" ");
++    if (!requires.isEmpty()) {
++        t << "Requires: " << requires << endl;
++    }
++
++    t << endl;
++}
++
+ QT_END_NAMESPACE
+diff --git a/qmake/generators/makefile.h b/qmake/generators/makefile.h
+index ac377f2..dc0422d 100644
+--- a/qmake/generators/makefile.h
++++ b/qmake/generators/makefile.h
+@@ -105,6 +105,11 @@ protected:
+     virtual bool writeStubMakefile(QTextStream &t);
+     virtual bool writeMakefile(QTextStream &t);
+ 
++    QString pkgConfigPrefix() const;
++    QString pkgConfigFileName(bool fixify=true);
++    QString pkgConfigFixPath(QString) const;
++    void writePkgConfigFile();   // for pkg-config
++
+     //generating subtarget makefiles
+     struct SubTarget
+     {
+diff --git a/qmake/generators/unix/unixmake.h b/qmake/generators/unix/unixmake.h
+index a694eab..a2c3503 100644
+--- a/qmake/generators/unix/unixmake.h
++++ b/qmake/generators/unix/unixmake.h
+@@ -51,10 +51,6 @@ class UnixMakefileGenerator : public MakefileGenerator
+     bool init_flag, include_deps;
+     QString libtoolFileName(bool fixify=true);
+     void writeLibtoolFile();     // for libtool
+-    QString pkgConfigPrefix() const;
+-    QString pkgConfigFileName(bool fixify=true);
+-    QString pkgConfigFixPath(QString) const;
+-    void writePkgConfigFile();   // for pkg-config
+     void writePrlFile(QTextStream &);
+ 
+ public:
+diff --git a/qmake/generators/unix/unixmake2.cpp b/qmake/generators/unix/unixmake2.cpp
+index 77799ad..025201f 100644
+--- a/qmake/generators/unix/unixmake2.cpp
++++ b/qmake/generators/unix/unixmake2.cpp
+@@ -1332,182 +1332,4 @@ UnixMakefileGenerator::writeLibtoolFile()
+         "libdir='" << Option::fixPathToTargetOS(install_dir, false) << "'\n";
+ }
+ 
+-QString
+-UnixMakefileGenerator::pkgConfigFileName(bool fixify)
+-{
+-    QString ret = var("TARGET");
+-    int slsh = ret.lastIndexOf(Option::dir_sep);
+-    if(slsh != -1)
+-        ret = ret.right(ret.length() - slsh - 1);
+-    if(ret.startsWith("lib"))
+-        ret = ret.mid(3);
+-    int dot = ret.indexOf('.');
+-    if(dot != -1)
+-        ret = ret.left(dot);
+-    ret += Option::pkgcfg_ext;
+-    QString subdir = project->first("QMAKE_PKGCONFIG_DESTDIR");
+-    if(!subdir.isEmpty()) {
+-        // initOutPaths() appends dir_sep, but just to be safe..
+-        if (!subdir.endsWith(Option::dir_sep))
+-            ret.prepend(Option::dir_sep);
+-        ret.prepend(subdir);
+-    }
+-    if(fixify) {
+-        if(QDir::isRelativePath(ret) && !project->isEmpty("DESTDIR"))
+-            ret.prepend(project->first("DESTDIR"));
+-        ret = Option::fixPathToLocalOS(fileFixify(ret, qmake_getpwd(), Option::output_dir));
+-    }
+-    return ret;
+-}
+-
+-QString
+-UnixMakefileGenerator::pkgConfigPrefix() const
+-{
+-    if(!project->isEmpty("QMAKE_PKGCONFIG_PREFIX"))
+-        return project->first("QMAKE_PKGCONFIG_PREFIX");
+-    return QLibraryInfo::location(QLibraryInfo::PrefixPath);
+-}
+-
+-QString
+-UnixMakefileGenerator::pkgConfigFixPath(QString path) const
+-{
+-    QString prefix = pkgConfigPrefix();
+-    if(path.startsWith(prefix))
+-        path = path.replace(prefix, "${prefix}");
+-    return path;
+-}
+-
+-void
+-UnixMakefileGenerator::writePkgConfigFile()
+-{
+-    QString fname = pkgConfigFileName(), lname = fname;
+-    mkdir(fileInfo(fname).path());
+-    int slsh = lname.lastIndexOf(Option::dir_sep);
+-    if(slsh != -1)
+-        lname = lname.right(lname.length() - slsh - 1);
+-    QFile ft(fname);
+-    if(!ft.open(QIODevice::WriteOnly))
+-        return;
+-    project->values("ALL_DEPS").append(fileFixify(fname));
+-    QTextStream t(&ft);
+-
+-    QString prefix = pkgConfigPrefix();
+-    QString libDir = project->first("QMAKE_PKGCONFIG_LIBDIR");
+-    if(libDir.isEmpty())
+-        libDir = prefix + Option::dir_sep + "lib" + Option::dir_sep;
+-    QString includeDir = project->first("QMAKE_PKGCONFIG_INCDIR");
+-    if(includeDir.isEmpty())
+-        includeDir = prefix + "/include";
+-
+-    t << "prefix=" << prefix << endl;
+-    t << "exec_prefix=${prefix}\n"
+-      << "libdir=" << pkgConfigFixPath(libDir) << "\n"
+-      << "includedir=" << pkgConfigFixPath(includeDir) << endl;
+-    // non-standard entry. Provides useful info normally only
+-    // contained in the internal .qmake.cache file
+-    t << varGlue("CONFIG", "qt_config=", " ", "") << endl;
+-
+-    //extra PKGCONFIG variables
+-    const QStringList &pkgconfig_vars = project->values("QMAKE_PKGCONFIG_VARIABLES");
+-    for(int i = 0; i < pkgconfig_vars.size(); ++i) {
+-        QString var = project->first(pkgconfig_vars.at(i) + ".name"),
+-                val = project->values(pkgconfig_vars.at(i) + ".value").join(" ");
+-        if(var.isEmpty())
+-            continue;
+-        if(val.isEmpty()) {
+-            const QStringList &var_vars = project->values(pkgconfig_vars.at(i) + ".variable");
+-            for(int v = 0; v < var_vars.size(); ++v) {
+-                const QStringList &vars = project->values(var_vars.at(v));
+-                for(int var = 0; var < vars.size(); ++var) {
+-                    if(!val.isEmpty())
+-                        val += " ";
+-                    val += pkgConfigFixPath(vars.at(var));
+-                }
+-            }
+-        }
+-        t << var << "=" << val << endl;
+-    }
+-
+-    t << endl;
+-
+-    QString name = project->first("QMAKE_PKGCONFIG_NAME");
+-    if(name.isEmpty()) {
+-        name = project->first("QMAKE_ORIG_TARGET").toLower();
+-        name.replace(0, 1, name[0].toUpper());
+-    }
+-    t << "Name: " << name << endl;
+-    QString desc = project->values("QMAKE_PKGCONFIG_DESCRIPTION").join(" ");
+-    if(desc.isEmpty()) {
+-        if(name.isEmpty()) {
+-            desc = project->first("QMAKE_ORIG_TARGET").toLower();
+-            desc.replace(0, 1, desc[0].toUpper());
+-        } else {
+-            desc = name;
+-        }
+-        if(project->first("TEMPLATE") == "lib") {
+-            if(project->isActiveConfig("plugin"))
+-               desc += " Plugin";
+-            else
+-               desc += " Library";
+-        } else if(project->first("TEMPLATE") == "app") {
+-            desc += " Application";
+-        }
+-    }
+-    t << "Description: " << desc << endl;
+-    t << "Version: " << project->first("VERSION") << endl;
+-
+-    // libs
+-    t << "Libs: ";
+-    QString pkgConfiglibDir;
+-    QString pkgConfiglibName;
+-    if (Option::target_mode == Option::TARG_MACX_MODE && project->isActiveConfig("lib_bundle")) {
+-        pkgConfiglibDir = "-F${libdir}";
+-        QString bundle;
+-        if (!project->isEmpty("QMAKE_FRAMEWORK_BUNDLE_NAME"))
+-            bundle = unescapeFilePath(project->first("QMAKE_FRAMEWORK_BUNDLE_NAME"));
+-        else
+-            bundle = unescapeFilePath(project->first("TARGET"));
+-        int suffix = bundle.lastIndexOf(".framework");
+-        if (suffix != -1)
+-            bundle = bundle.left(suffix);
+-        pkgConfiglibName = "-framework " + bundle + " ";
+-    } else {
+-        pkgConfiglibDir = "-L${libdir}";
+-        pkgConfiglibName = "-l" + lname.left(lname.length()-Option::libtool_ext.length());
+-    }
+-    t << pkgConfiglibDir << " " << pkgConfiglibName << " " << endl;
+-
+-    QStringList libs;
+-    if(!project->isEmpty("QMAKE_INTERNAL_PRL_LIBS")) {
+-        libs = project->values("QMAKE_INTERNAL_PRL_LIBS");
+-    } else {
+-        libs << "QMAKE_LIBS"; //obvious one
+-    }
+-    libs << "QMAKE_LIBS_PRIVATE";
+-    libs << "QMAKE_LFLAGS_THREAD"; //not sure about this one, but what about things like -pthread?
+-    t << "Libs.private: ";
+-    for(QStringList::ConstIterator it = libs.begin(); it != libs.end(); ++it) {
+-        t << project->values((*it)).join(" ") << " ";
+-    }
+-    t << endl;
+-
+-    // flags
+-    // ### too many
+-    t << "Cflags: "
+-        // << var("QMAKE_CXXFLAGS") << " "
+-      << varGlue("PRL_EXPORT_DEFINES","-D"," -D"," ")
+-      << project->values("PRL_EXPORT_CXXFLAGS").join(" ")
+-      << project->values("QMAKE_PKGCONFIG_CFLAGS").join(" ")
+-        //      << varGlue("DEFINES","-D"," -D"," ")
+-      << " -I${includedir}" << endl;
+-
+-    // requires
+-    const QString requires = project->values("QMAKE_PKGCONFIG_REQUIRES").join(" ");
+-    if (!requires.isEmpty()) {
+-        t << "Requires: " << requires << endl;
+-    }
+-
+-    t << endl;
+-}
+-
+ QT_END_NAMESPACE
+-- 
+1.7.1
+
+
+From 17670cac8877e00a0db168363cc70394c0b00eb2 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 6 Jan 2011 22:14:45 +0100
+Subject: [PATCH 09/11] add ability to write and install pkg-config files for mingw
+
+
+diff --git a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
+index ffc6085..3d84bc1 100644
+--- a/qmake/generators/win32/mingw_make.cpp
++++ b/qmake/generators/win32/mingw_make.cpp
+@@ -142,6 +142,9 @@ bool MingwMakefileGenerator::writeMakefile(QTextStream &t)
+ 
+     if(project->first("TEMPLATE") == "app" ||
+        project->first("TEMPLATE") == "lib") {
++        if(project->isActiveConfig("create_pc") && project->first("TEMPLATE") == "lib")
++            writePkgConfigFile();
++
+         if(Option::mkfile::do_stub_makefile) {
+             t << "QMAKE    = " << var("QMAKE_QMAKE") << endl;
+             QStringList &qut = project->values("QMAKE_EXTRA_TARGETS");
+diff --git a/qmake/generators/win32/winmakefile.cpp b/qmake/generators/win32/winmakefile.cpp
+index cfe5859..519d79e 100644
+--- a/qmake/generators/win32/winmakefile.cpp
++++ b/qmake/generators/win32/winmakefile.cpp
+@@ -803,6 +803,18 @@ QString Win32MakefileGenerator::defaultInstall(const QString &t)
+                 uninst.append("\n\t");
+             uninst.append("-$(DEL_FILE) \"" + dst_prl + "\"");
+         }
++        if(project->isActiveConfig("create_pc")) {
++            QString dst_pc = pkgConfigFileName(false);
++            if (!dst_pc.isEmpty()) {
++                dst_pc = filePrefixRoot(root, targetdir + dst_pc);
++                if(!ret.isEmpty())
++                    ret += "\n\t";
++                ret += "-$(INSTALL_FILE) \"" + pkgConfigFileName(true) + "\" \"" + dst_pc + "\"";
++                if(!uninst.isEmpty())
++                    uninst.append("\n\t");
++                uninst.append("-$(DEL_FILE) \"" + dst_pc + "\"");
++            }
++        }
+         if(project->isActiveConfig("shared") && !project->isActiveConfig("plugin")) {
+             QString lib_target = getLibTarget();
+             lib_target.remove('"');
+-- 
+1.7.1
+
+
+From 652e1752b2ddd9f87a54fcb101679244581b0c4d Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 6 Jan 2011 14:20:36 +0100
+Subject: [PATCH 10/11] enable pkg-config files when cross building for mingw
+
+
+diff --git a/src/qbase.pri b/src/qbase.pri
+index 680693f..30e330e 100644
+--- a/src/qbase.pri
++++ b/src/qbase.pri
+@@ -152,6 +152,21 @@ unix:!symbian {
+    QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace prefix_replace
+ }
+ 
++win32-g++-cross {
++   CONFIG     += create_pc
++   QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS]
++   QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS]/$$TARGET
++   QMAKE_PKGCONFIG_CFLAGS = -I$$[QT_INSTALL_HEADERS]
++   QMAKE_PKGCONFIG_DESTDIR = pkgconfig
++   include_replace.match = $$QMAKE_INCDIR_QT
++   include_replace.replace = $$[QT_INSTALL_HEADERS]
++   lib_replace.match = $$QMAKE_LIBDIR_QT
++   lib_replace.replace = $$[QT_INSTALL_LIBS]
++   prefix_replace.match = $$QT_BUILD_TREE
++   prefix_replace.replace = $$[QT_INSTALL_PREFIX]
++   QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace prefix_replace
++}
++
+ contains(QT_PRODUCT, OpenSource.*):DEFINES *= QT_OPENSOURCE
+ DEFINES *= QT_NO_CAST_TO_ASCII QT_ASCII_CAST_WARNINGS
+ contains(QT_CONFIG, qt3support):DEFINES *= QT3_SUPPORT
+-- 
+1.7.1
+
+
+From 0ed29b4c6a7ac1f6d034c4c8f03aeae4d30f7e5b Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 6 Jan 2011 14:21:32 +0100
+Subject: [PATCH 11/11] write pkg-config file when installing jscore library
+
+
+diff --git a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
+index 027eb0f..f0c738c 100644
+--- a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
++++ b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
+@@ -236,3 +236,18 @@ SOURCES += \
+ 
+ # Disable C++0x mode in JSC for those who enabled it in their Qt's mkspec
+ *-g++*:QMAKE_CXXFLAGS -= -std=c++0x -std=gnu++0x
++
++win32-g++-cross {
++   CONFIG     += create_pc
++   QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS]
++   QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS]/$$TARGET
++   QMAKE_PKGCONFIG_CFLAGS = -I$$[QT_INSTALL_HEADERS]
++   QMAKE_PKGCONFIG_DESTDIR = pkgconfig
++   include_replace.match = $$QMAKE_INCDIR_QT
++   include_replace.replace = $$[QT_INSTALL_HEADERS]
++   lib_replace.match = $$QMAKE_LIBDIR_QT
++   lib_replace.replace = $$[QT_INSTALL_LIBS]
++   prefix_replace.match = $$QT_BUILD_TREE
++   prefix_replace.replace = $$[QT_INSTALL_PREFIX]
++   QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace prefix_replace
++}
 -- 
 1.7.1
 
