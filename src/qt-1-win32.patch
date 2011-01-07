@@ -718,7 +718,7 @@ index cfe5859..519d79e 100644
 1.7.1
 
 
-From ef1a14b06d6a38de6c582156315bdf82d7d3f681 Mon Sep 17 00:00:00 2001
+From 1bb4c08b95d61d81f55cf2b1d332dc9fc5a974be Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 14:20:36 +0100
 Subject: [PATCH 10/11] qt project files: create pkg-config files for mingw
@@ -845,14 +845,14 @@ index 7f79d0b..b16c5a1 100644
  # Input
  HEADERS += $$PHONON_DIR/abstractaudiooutput.h \
 diff --git a/src/qbase.pri b/src/qbase.pri
-index 680693f..cbc6d6f 100644
+index 680693f..b3d2af3 100644
 --- a/src/qbase.pri
 +++ b/src/qbase.pri
 @@ -152,6 +152,14 @@ unix:!symbian {
     QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace prefix_replace
  }
  
-+win32-g++-* {
++win32-g++* {
 +   CONFIG += create_pc
 +   QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS]
 +   QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS]/$$TARGET
@@ -1023,7 +1023,7 @@ index 7b94587..6e0a247 100644
 1.7.1
 
 
-From 9fa54b3c4fbd927a20def88ad4b056a9a8972147 Mon Sep 17 00:00:00 2001
+From 091a5e41827b3475e8e1ca58670a15d3b1cec0c4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 14:21:32 +0100
 Subject: [PATCH 11/11] pkg-config file for jscore (mingw-cross-env specific)
