@@ -224,10 +224,10 @@ index ffb98de..c213e09 100644
 1.7.1
 
 
-From 3112e8b990ea7e6777043351e0ed68610fe9c321 Mon Sep 17 00:00:00 2001
+From dbfa4220ab19e03518cd04c2a677f328c6c32f28 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 21:18:35 +0100
-Subject: [PATCH 07/11] fix double directory separator
+Subject: [PATCH 07/11] qmake: fix double directory separator
 
 
 diff --git a/qmake/generators/unix/unixmake2.cpp b/qmake/generators/unix/unixmake2.cpp
@@ -254,15 +254,13 @@ index 6d59981..77799ad 100644
 1.7.1
 
 
-From 03cee774dc546232e198ab2bfc71a28edf307e14 Mon Sep 17 00:00:00 2001
+From 874ad5e097a9c690ed0267a627bbe2b1d8bac0e3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 14:11:09 +0100
-Subject: [PATCH 08/11] allow pkg-config file writing by generators other than unix
+Subject: [PATCH 08/11] qmake: don't limit pkg-config writing to unix generator
 
-It is useful to generate .pc files when using the win32 generator,
-particularly when cross-building on unix for mingw. This is made
-possible by moving the relevant methods from the unix generator to the
-base class.
+Move pkg-config related methods from unix generator to base class
+so they can be used by other generators too.
 
 diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
 index 3543296..644f19c 100644
@@ -673,10 +671,10 @@ index 77799ad..025201f 100644
 1.7.1
 
 
-From 17670cac8877e00a0db168363cc70394c0b00eb2 Mon Sep 17 00:00:00 2001
+From 86ba332d9176e763ce8abbed86ed7b4f643009d4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 22:14:45 +0100
-Subject: [PATCH 09/11] add ability to write and install pkg-config files for mingw
+Subject: [PATCH 09/11] qmake: write and install pkg-config files for mingw
 
 
 diff --git a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
@@ -720,70 +718,332 @@ index cfe5859..519d79e 100644
 1.7.1
 
 
-From 652e1752b2ddd9f87a54fcb101679244581b0c4d Mon Sep 17 00:00:00 2001
+From ef1a14b06d6a38de6c582156315bdf82d7d3f681 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 14:20:36 +0100
-Subject: [PATCH 10/11] enable pkg-config files when cross building for mingw
+Subject: [PATCH 10/11] qt project files: create pkg-config files for mingw
 
+This is mostly the same as for unix.
 
+diff --git a/src/3rdparty/webkit/WebCore/WebCore.pro b/src/3rdparty/webkit/WebCore/WebCore.pro
+index 5f688f3..ac29ad6 100644
+--- a/src/3rdparty/webkit/WebCore/WebCore.pro
++++ b/src/3rdparty/webkit/WebCore/WebCore.pro
+@@ -85,9 +85,7 @@ moduleFile=$$PWD/../WebKit/qt/qt_webkit_version.pri
+ isEmpty(QT_BUILD_TREE):include($$moduleFile)
+ VERSION = $${QT_WEBKIT_MAJOR_VERSION}.$${QT_WEBKIT_MINOR_VERSION}.$${QT_WEBKIT_PATCH_VERSION}
+ 
+-unix {
+-    QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui QtNetwork
+-}
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui QtNetwork
+ 
+ unix:!mac:*-g++*:QMAKE_CXXFLAGS += -ffunction-sections -fdata-sections 
+ unix:!mac:*-g++*:QMAKE_LFLAGS += -Wl,--gc-sections
+diff --git a/src/dbus/dbus.pro b/src/dbus/dbus.pro
+index 46a723a..52ed217 100644
+--- a/src/dbus/dbus.pro
++++ b/src/dbus/dbus.pro
+@@ -12,7 +12,7 @@ contains(QT_CONFIG, dbus-linked) {
+ }
+ 
+ # INCLUDEPATH += .
+-unix { 
++unix|win32-g++* {
+     QMAKE_PKGCONFIG_DESCRIPTION = Qt \
+         DBus \
+         module
+diff --git a/src/declarative/declarative.pro b/src/declarative/declarative.pro
+index 510e7a5..5be4b92 100644
+--- a/src/declarative/declarative.pro
++++ b/src/declarative/declarative.pro
+@@ -7,7 +7,7 @@ DEFINES   += QT_BUILD_DECLARATIVE_LIB QT_NO_URL_CAST_FROM_STRING
+ win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x66000000
+ solaris-cc*:QMAKE_CXXFLAGS_RELEASE -= -O2
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
+ 
+ exists("qdeclarative_enable_gcov") {
+     QMAKE_CXXFLAGS = -fprofile-arcs -ftest-coverage -fno-elide-constructors
+diff --git a/src/gui/gui.pro b/src/gui/gui.pro
+index 13d2c77..6458a7a 100644
+--- a/src/gui/gui.pro
++++ b/src/gui/gui.pro
+@@ -7,7 +7,7 @@ irix-cc*:QMAKE_CXXFLAGS += -no_prelink -ptused
+ 
+ !win32:!embedded:!mac:!symbian:CONFIG      += x11
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore
+ 
+ include(../qbase.pri)
+ 
+diff --git a/src/multimedia/multimedia.pro b/src/multimedia/multimedia.pro
+index 852322d..e827cdd 100644
+--- a/src/multimedia/multimedia.pro
++++ b/src/multimedia/multimedia.pro
+@@ -4,7 +4,7 @@ QT = core gui
+ 
+ DEFINES += QT_BUILD_MULTIMEDIA_LIB QT_NO_USING_NAMESPACE
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
+ 
+ include(../qbase.pri)
+ 
+diff --git a/src/network/network.pro b/src/network/network.pro
+index 5e33080..3c0f7d0 100644
+--- a/src/network/network.pro
++++ b/src/network/network.pro
+@@ -13,7 +13,7 @@ DEFINES += QT_BUILD_NETWORK_LIB QT_NO_USING_NAMESPACE
+ QT = core
+ win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x64000000
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore
+ 
+ include(../qbase.pri)
+ include(access/access.pri)
+diff --git a/src/opengl/opengl.pro b/src/opengl/opengl.pro
+index 0e82467..d467148 100644
+--- a/src/opengl/opengl.pro
++++ b/src/opengl/opengl.pro
+@@ -7,7 +7,7 @@ win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x63000000
+ solaris-cc*:QMAKE_CXXFLAGS_RELEASE -= -O2
+ irix-cc*:QMAKE_CXXFLAGS += -no_prelink -ptused
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
+ 
+ include(../qbase.pri)
+ 
+diff --git a/src/openvg/openvg.pro b/src/openvg/openvg.pro
+index eb60331..448a605 100644
+--- a/src/openvg/openvg.pro
++++ b/src/openvg/openvg.pro
+@@ -42,7 +42,7 @@ symbian {
+ 
+ include(../qbase.pri)
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
+ symbian:TARGET.UID3 = 0x2001E62F
+ 
+ !isEmpty(QMAKE_INCDIR_OPENVG): INCLUDEPATH += $$QMAKE_INCDIR_OPENVG
+diff --git a/src/phonon/phonon.pro b/src/phonon/phonon.pro
+index 7f79d0b..b16c5a1 100644
+--- a/src/phonon/phonon.pro
++++ b/src/phonon/phonon.pro
+@@ -11,7 +11,7 @@ DEFINES += MAKE_PHONON_LIB
+ 
+ PHONON_DIR = $$QT_SOURCE_TREE/src/3rdparty/phonon/phonon
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui QtNetwork
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui QtNetwork
+ 
+ # Input
+ HEADERS += $$PHONON_DIR/abstractaudiooutput.h \
 diff --git a/src/qbase.pri b/src/qbase.pri
-index 680693f..30e330e 100644
+index 680693f..cbc6d6f 100644
 --- a/src/qbase.pri
 +++ b/src/qbase.pri
-@@ -152,6 +152,21 @@ unix:!symbian {
+@@ -152,6 +152,14 @@ unix:!symbian {
     QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace prefix_replace
  }
  
-+win32-g++-cross {
-+   CONFIG     += create_pc
++win32-g++-* {
++   CONFIG += create_pc
 +   QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS]
 +   QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS]/$$TARGET
 +   QMAKE_PKGCONFIG_CFLAGS = -I$$[QT_INSTALL_HEADERS]
 +   QMAKE_PKGCONFIG_DESTDIR = pkgconfig
-+   include_replace.match = $$QMAKE_INCDIR_QT
-+   include_replace.replace = $$[QT_INSTALL_HEADERS]
-+   lib_replace.match = $$QMAKE_LIBDIR_QT
-+   lib_replace.replace = $$[QT_INSTALL_LIBS]
-+   prefix_replace.match = $$QT_BUILD_TREE
-+   prefix_replace.replace = $$[QT_INSTALL_PREFIX]
-+   QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace prefix_replace
 +}
 +
  contains(QT_PRODUCT, OpenSource.*):DEFINES *= QT_OPENSOURCE
  DEFINES *= QT_NO_CAST_TO_ASCII QT_ASCII_CAST_WARNINGS
  contains(QT_CONFIG, qt3support):DEFINES *= QT3_SUPPORT
+diff --git a/src/qt3support/qt3support.pro b/src/qt3support/qt3support.pro
+index a30117c..1e0717d 100644
+--- a/src/qt3support/qt3support.pro
++++ b/src/qt3support/qt3support.pro
+@@ -21,7 +21,7 @@ include(canvas/canvas.pri)
+ include(network/network.pri)
+ include(painting/painting.pri)
+ 
+-unix {
++unix|win32-g++* {
+    QMAKE_PKGCONFIG_CFLAGS += -DQT3_SUPPORT
+    QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui QtNetwork QtSql
+ }
+diff --git a/src/script/script.pro b/src/script/script.pro
+index 4ee86d7..4a3f009 100644
+--- a/src/script/script.pro
++++ b/src/script/script.pro
+@@ -7,7 +7,7 @@ DEFINES   += QT_NO_USING_NAMESPACE
+ DEFINES   += QLALR_NO_QSCRIPTGRAMMAR_DEBUG_INFO
+ #win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x66000000       ### FIXME
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore
+ 
+ include(../qbase.pri)
+ 
+diff --git a/src/scripttools/scripttools.pro b/src/scripttools/scripttools.pro
+index b1df7aa..061dea5 100644
+--- a/src/scripttools/scripttools.pro
++++ b/src/scripttools/scripttools.pro
+@@ -5,7 +5,7 @@ DEFINES   += QT_BUILD_SCRIPTTOOLS_LIB
+ DEFINES   += QT_NO_USING_NAMESPACE
+ #win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x66000000
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui QtScript
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui QtScript
+ 
+ include(../qbase.pri)
+ 
+diff --git a/src/sql/sql.pro b/src/sql/sql.pro
+index b8f819d..54f4289 100644
+--- a/src/sql/sql.pro
++++ b/src/sql/sql.pro
+@@ -5,7 +5,7 @@ DEFINES += QT_BUILD_SQL_LIB
+ DEFINES += QT_NO_USING_NAMESPACE
+ win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x62000000
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore
+ 
+ include(../qbase.pri)
+ 
+diff --git a/src/svg/svg.pro b/src/svg/svg.pro
+index 7b5251a..79f284a 100644
+--- a/src/svg/svg.pro
++++ b/src/svg/svg.pro
+@@ -6,7 +6,7 @@ DEFINES   += QT_NO_USING_NAMESPACE
+ win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x66000000
+ solaris-cc*:QMAKE_CXXFLAGS_RELEASE -= -O2
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore QtGui
+ 
+ include(../qbase.pri)
+ 
+diff --git a/src/xml/xml.pro b/src/xml/xml.pro
+index 8d1bf68..019153c 100644
+--- a/src/xml/xml.pro
++++ b/src/xml/xml.pro
+@@ -4,7 +4,7 @@ QT         = core
+ DEFINES   += QT_BUILD_XML_LIB QT_NO_USING_NAMESPACE
+ win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x61000000
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore
+ 
+ include(../qbase.pri)
+ 
+diff --git a/src/xmlpatterns/xmlpatterns.pro b/src/xmlpatterns/xmlpatterns.pro
+index e50d184..d22f417 100644
+--- a/src/xmlpatterns/xmlpatterns.pro
++++ b/src/xmlpatterns/xmlpatterns.pro
+@@ -5,7 +5,7 @@ QT = core \
+ DEFINES += QT_BUILD_XMLPATTERNS_LIB \
+     QT_NO_USING_NAMESPACE
+ win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x61000000
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore \
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore \
+     QtNetwork
+ include(../qbase.pri)
+ PRECOMPILED_HEADER = ../corelib/global/qt_pch.h
+diff --git a/tools/assistant/lib/fulltextsearch/fulltextsearch.pro b/tools/assistant/lib/fulltextsearch/fulltextsearch.pro
+index 4d2fddb..d0e7a87 100644
+--- a/tools/assistant/lib/fulltextsearch/fulltextsearch.pro
++++ b/tools/assistant/lib/fulltextsearch/fulltextsearch.pro
+@@ -23,7 +23,7 @@ contains(QT_CONFIG, reduce_exports) {
+     linux*-g++*:DEFINES += _GLIBCXX_EXTERN_TEMPLATE=0
+ }
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES = QtCore
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES = QtCore
+ 
+ # impossible to disable exceptions in clucene atm
+ CONFIG(exceptions_off) {
+diff --git a/tools/assistant/lib/lib.pro b/tools/assistant/lib/lib.pro
+index 26d3456..03821b2 100644
+--- a/tools/assistant/lib/lib.pro
++++ b/tools/assistant/lib/lib.pro
+@@ -19,7 +19,7 @@ if(!debug_and_release|build_pass):CONFIG(debug, debug|release) {
+     win32:qclucene = $${qclucene}d
+ }
+ linux-lsb-g++:LIBS_PRIVATE += --lsb-shared-libs=$$qclucene
+-unix:QMAKE_PKGCONFIG_REQUIRES += QtNetwork \
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES += QtNetwork \
+     QtSql \
+     QtXml
+ LIBS_PRIVATE += -l$$qclucene
+diff --git a/tools/designer/src/components/lib/lib.pro b/tools/designer/src/components/lib/lib.pro
+index 0ada845..50a8b00 100644
+--- a/tools/designer/src/components/lib/lib.pro
++++ b/tools/designer/src/components/lib/lib.pro
+@@ -64,7 +64,7 @@ PRECOMPILED_HEADER= lib_pch.h
+ include(../../sharedcomponents.pri)
+ include(../component.pri)
+ 
+-unix {
++unix|win32-g++* {
+     QMAKE_PKGCONFIG_REQUIRES = QtCore QtDesigner QtGui QtXml
+     contains(QT_CONFIG, script): QMAKE_PKGCONFIG_REQUIRES += QtScript
+ }
+diff --git a/tools/designer/src/lib/lib.pro b/tools/designer/src/lib/lib.pro
+index 495976d..3ba6f52 100644
+--- a/tools/designer/src/lib/lib.pro
++++ b/tools/designer/src/lib/lib.pro
+@@ -13,7 +13,7 @@ isEmpty(QT_MAJOR_VERSION) {
+    VERSION=$${QT_MAJOR_VERSION}.$${QT_MINOR_VERSION}.$${QT_PATCH_VERSION}
+ }
+ 
+-unix:QMAKE_PKGCONFIG_REQUIRES += QtXml
++unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES += QtXml
+ 
+ include(../../../../src/qt_targets.pri)
+ QMAKE_TARGET_PRODUCT = Designer
+diff --git a/tools/designer/src/uitools/uitools.pro b/tools/designer/src/uitools/uitools.pro
+index 7b94587..6e0a247 100644
+--- a/tools/designer/src/uitools/uitools.pro
++++ b/tools/designer/src/uitools/uitools.pro
+@@ -35,7 +35,7 @@ INSTALLS        += quitools_headers
+ target.path=$$[QT_INSTALL_LIBS]
+ INSTALLS        += target
+ 
+-unix {
++unix|win32-g++* {
+    CONFIG     += create_pc
+    QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS]
+    QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS]/$$TARGET
 -- 
 1.7.1
 
 
-From 0ed29b4c6a7ac1f6d034c4c8f03aeae4d30f7e5b Mon Sep 17 00:00:00 2001
+From 9fa54b3c4fbd927a20def88ad4b056a9a8972147 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 14:21:32 +0100
-Subject: [PATCH 11/11] write pkg-config file when installing jscore library
+Subject: [PATCH 11/11] pkg-config file for jscore (mingw-cross-env specific)
 
 
 diff --git a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
-index 027eb0f..f0c738c 100644
+index 027eb0f..44bbc3f 100644
 --- a/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
 +++ b/src/3rdparty/webkit/JavaScriptCore/JavaScriptCore.pro
-@@ -236,3 +236,18 @@ SOURCES += \
+@@ -236,3 +236,11 @@ SOURCES += \
  
  # Disable C++0x mode in JSC for those who enabled it in their Qt's mkspec
  *-g++*:QMAKE_CXXFLAGS -= -std=c++0x -std=gnu++0x
 +
-+win32-g++-cross {
-+   CONFIG     += create_pc
++win32-g++-* {
++   CONFIG += create_pc
 +   QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS]
 +   QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS]/$$TARGET
 +   QMAKE_PKGCONFIG_CFLAGS = -I$$[QT_INSTALL_HEADERS]
 +   QMAKE_PKGCONFIG_DESTDIR = pkgconfig
-+   include_replace.match = $$QMAKE_INCDIR_QT
-+   include_replace.replace = $$[QT_INSTALL_HEADERS]
-+   lib_replace.match = $$QMAKE_LIBDIR_QT
-+   lib_replace.replace = $$[QT_INSTALL_LIBS]
-+   prefix_replace.match = $$QT_BUILD_TREE
-+   prefix_replace.replace = $$[QT_INSTALL_PREFIX]
-+   QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace prefix_replace
 +}
 -- 
 1.7.1
