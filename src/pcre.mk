@@ -4,8 +4,8 @@
 # PCRE
 PKG             := pcre
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8.10
-$(PKG)_CHECKSUM := 8b345da0f835b2caabff071b0b5bab40564652be
+$(PKG)_VERSION  := 8.12
+$(PKG)_CHECKSUM := 2219b372bff53ee29a7e44ecf5977ad15df01cea
 $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.pcre.org/
