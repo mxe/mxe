@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.netlib.org/lapack/' | \
-    $(SED) -n 's_for  LAPACK, version \([0-9]\.[0-9]\.[0-9]\)_\1_ip' | \
+    $(SED) -n 's_.*>LAPACK, version \([0-9]\.[0-9]\.[0-9]\).*_\1_ip' | \
     head -1
 endef
 
