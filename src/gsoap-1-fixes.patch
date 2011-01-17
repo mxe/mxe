@@ -3,7 +3,7 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From bf6538613777117219542408d7353b182a169d06 Mon Sep 17 00:00:00 2001
+From 71debfc0517651491ba4a63a40a7687233107b82 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Wed, 29 Sep 2010 20:40:24 +0200
 Subject: [PATCH 1/3] link dom
@@ -52,7 +52,7 @@ index a9d280c..9a0d640 100644
 1.7.1
 
 
-From 237ed7cf43323b1cc1f1e9ecd8e29c1168f785fe Mon Sep 17 00:00:00 2001
+From 9686ca99a2a69112f7a8cea46158908c2598787f Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Wed, 29 Sep 2010 20:42:09 +0200
 Subject: [PATCH 2/3] winsock2
@@ -87,7 +87,7 @@ index b20c078..ea5b441 100644
  To build soapcpp2, first install Bison and Flex (in the default dirs):
  	http://gnuwin32.sourceforge.net/packages/bison.htm
 diff --git a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp
-index 834a4b8..8f64326 100644
+index 1ffcb1c..98dc973 100644
 --- a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp
 +++ b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp
 @@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
@@ -113,7 +113,7 @@ index 834a4b8..8f64326 100644
  #  pragma warning(disable : 4996) /* disable deprecation warnings */
  # endif
 diff --git a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h
-index 35e1a53..a1baf27 100644
+index 75608ef..38467a4 100644
 --- a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h
 +++ b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h
 @@ -660,7 +660,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
@@ -126,10 +126,10 @@ index 35e1a53..a1baf27 100644
  #  else
  #   include <winsock2.h> /* Borland C */
 diff --git a/gsoap/doc/soapdoc2.html b/gsoap/doc/soapdoc2.html
-index 3a26e9b..6645738 100644
+index 24ceec8..9d7e5d3 100644
 --- a/gsoap/doc/soapdoc2.html
 +++ b/gsoap/doc/soapdoc2.html
-@@ -2599,10 +2599,10 @@ the need to know the details of the SOAP encoding used.
+@@ -2601,10 +2601,10 @@ the need to know the details of the SOAP encoding used.
  <div class="p"><!----></div>
  
  <ul>
@@ -169,7 +169,7 @@ index 7fe114c..10bed86 100644
  
  static struct WSAInit { \
 diff --git a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp
-index 834a4b8..8f64326 100644
+index 1ffcb1c..98dc973 100644
 --- a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp
 +++ b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp
 @@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
@@ -195,7 +195,7 @@ index 834a4b8..8f64326 100644
  #  pragma warning(disable : 4996) /* disable deprecation warnings */
  # endif
 diff --git a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h
-index 35e1a53..a1baf27 100644
+index 75608ef..38467a4 100644
 --- a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h
 +++ b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h
 @@ -660,7 +660,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
@@ -207,47 +207,8 @@ index 35e1a53..a1baf27 100644
  /* # include <winsock2.h> */ /* Alternative: use winsock2 (not available with eVC), enable this line and comment out the line above */
  #  else
  #   include <winsock2.h> /* Borland C */
-diff --git a/gsoap/samples/wsse/stdsoap2.c b/gsoap/samples/wsse/stdsoap2.c
-index 834a4b8..8f64326 100644
---- a/gsoap/samples/wsse/stdsoap2.c
-+++ b/gsoap/samples/wsse/stdsoap2.c
-@@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
- 
- Installation note:
- 
--Win32 build needs winsock.dll (Visual C++ "wsock32.lib")
-+Win32 build needs winsock.dll (Visual C++ "ws2_32.lib")
- To do this in Visual C++ 6.0, go to "Project", "settings", select the "Link"
- tab (the project file needs to be selected in the file view) and add
--"wsock32.lib" to the "Object/library modules" entry
-+"ws2_32.lib" to the "Object/library modules" entry
- 
- On Mac OS X with gcc (GCC) 3.1 20020420 (prerelease) you MUST compile with
- -fstack_check when using -O2 because gcc 3.1 has a bug that smashes the stack
-@@ -76,7 +76,7 @@ when locally allocated data exceeds 64K.
- #  ifdef UNDER_CE
- #   pragma comment(lib, "winsock.lib")
- #  else
--#   pragma comment(lib, "wsock32.lib")
-+#   pragma comment(lib, "ws2_32.lib")
- #  endif
- #  pragma warning(disable : 4996) /* disable deprecation warnings */
- # endif
-diff --git a/gsoap/samples/wsse/stdsoap2.h b/gsoap/samples/wsse/stdsoap2.h
-index 35e1a53..a1baf27 100644
---- a/gsoap/samples/wsse/stdsoap2.h
-+++ b/gsoap/samples/wsse/stdsoap2.h
-@@ -660,7 +660,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
- #  define SOAP_GAI_STRERROR gai_strerrorA
- # else
- #  ifndef __BORLANDC__
--#   include <winsock.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
-+#   include <winsock2.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
- /* # include <winsock2.h> */ /* Alternative: use winsock2 (not available with eVC), enable this line and comment out the line above */
- #  else
- #   include <winsock2.h> /* Borland C */
 diff --git a/gsoap/stdsoap2.c b/gsoap/stdsoap2.c
-index 834a4b8..8f64326 100644
+index 1ffcb1c..98dc973 100644
 --- a/gsoap/stdsoap2.c
 +++ b/gsoap/stdsoap2.c
 @@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
@@ -273,7 +234,7 @@ index 834a4b8..8f64326 100644
  #  pragma warning(disable : 4996) /* disable deprecation warnings */
  # endif
 diff --git a/gsoap/stdsoap2.cpp b/gsoap/stdsoap2.cpp
-index 834a4b8..8f64326 100644
+index 1ffcb1c..98dc973 100644
 --- a/gsoap/stdsoap2.cpp
 +++ b/gsoap/stdsoap2.cpp
 @@ -52,10 +52,10 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
@@ -299,7 +260,7 @@ index 834a4b8..8f64326 100644
  #  pragma warning(disable : 4996) /* disable deprecation warnings */
  # endif
 diff --git a/gsoap/stdsoap2.h b/gsoap/stdsoap2.h
-index 35e1a53..a1baf27 100644
+index 75608ef..38467a4 100644
 --- a/gsoap/stdsoap2.h
 +++ b/gsoap/stdsoap2.h
 @@ -660,7 +660,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
@@ -315,7 +276,7 @@ index 35e1a53..a1baf27 100644
 1.7.1
 
 
-From bfbf2b17a5c652afe8c650e5f7ebfaa05f7b1927 Mon Sep 17 00:00:00 2001
+From 7d42e796bf5fa5faa16baa41a0b259638210d239 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Wed, 29 Sep 2010 20:44:00 +0200
 Subject: [PATCH 3/3] add missing -lgpg-error
@@ -324,10 +285,10 @@ This patch has been taken from:
 http://sourceforge.net/tracker/?func=detail&aid=3071775&group_id=52781&atid=468023
 
 diff --git a/configure.in b/configure.in
-index 2133283..cd2113c 100644
+index 6d99934..da4cf08 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -167,8 +167,8 @@ if test "x$with_openssl" = "xyes"; then
+@@ -168,8 +168,8 @@ if test "x$with_openssl" = "xyes"; then
    if test "x$with_gnutls" = "xyes"; then
      AC_MSG_RESULT(yes)
      WSDL2H_EXTRA_FLAGS="-DWITH_GNUTLS -DWITH_GZIP"
