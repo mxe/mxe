@@ -4,8 +4,8 @@
 # liboauth
 PKG             := liboauth
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.1
-$(PKG)_CHECKSUM := f554a8f5e4edbabd64df7638cf4a2f9060ac5671
+$(PKG)_VERSION  := 0.9.3
+$(PKG)_CHECKSUM := a7e5a641d20588d2370062fa3d26201fdcc19aab
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://liboauth.sourceforge.net/
