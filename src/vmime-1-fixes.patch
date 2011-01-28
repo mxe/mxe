@@ -44,7 +44,7 @@ GITDIR=~/projects/vmime/git/vmime
 From c6f077e695b75d9ff9a32d1621f6a320c8ce70f1 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Tue, 30 Nov 2010 14:57:03 +0000
-Subject: [PATCH 1/5] Initialize and delete object.
+Subject: [PATCH 1/6] Initialize and delete object.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@577 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -78,7 +78,7 @@ index 0f3e9ec..d71c3ca 100644
 From 41203315eacf53230dd7bdb0cf2b0d1078ddee39 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Wed, 8 Dec 2010 08:52:54 +0000
-Subject: [PATCH 2/5] No extra space between ':' and '<' in MAIL FROM and RCPT TO. Wait for server response after QUIT and before closing connection.
+Subject: [PATCH 2/6] No extra space between ':' and '<' in MAIL FROM and RCPT TO. Wait for server response after QUIT and before closing connection.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@579 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -119,7 +119,7 @@ index 204daae..d9fb7b8 100644
 From 969b56f4bd61ddb8277c04ac2a1e35e029ec058b Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:24:06 +0000
-Subject: [PATCH 3/5] Fixed unit test after bug fix.
+Subject: [PATCH 3/6] Fixed unit test after bug fix.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@580 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -143,7 +143,7 @@ index 5015552..6552f9e 100644
 From 50743da0712b216533acdc09069f1bfc81f988c6 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:54:38 +0000
-Subject: [PATCH 4/5] Fixed boundary parsing (thanks to John van der Kamp, Zarafa).
+Subject: [PATCH 4/6] Fixed boundary parsing (thanks to John van der Kamp, Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@581 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -231,7 +231,7 @@ index 12c4f74..df2bf85 100644
 From b6d2b4765c9472ff333cace13c57c6af0e866ee0 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 21 Jan 2011 15:28:06 +0000
-Subject: [PATCH 5/5] Fixed possible infinite loop (thanks to John van der Kamp, Zarafa).
+Subject: [PATCH 5/6] Fixed possible infinite loop (thanks to John van der Kamp, Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@582 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -276,6 +276,30 @@ index b84f376..746ac94 100644
 +
  VMIME_TEST_SUITE_END
  
+-- 
+1.7.1
+
+
+From 022339ab63430d792d0314f51dd7854eabd5736e Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Fri, 28 Jan 2011 12:11:08 +0000
+Subject: [PATCH 6/6] Fixed possible read to invalid memory location (thanks to Alexander Konovalov).
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@583 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/word.cpp b/src/word.cpp
+index 1c1c1a6..fa08d33 100644
+--- a/src/word.cpp
++++ b/src/word.cpp
+@@ -460,7 +460,7 @@ void word::generate(utility::outputStream& os, const string::size_type maxLineLe
+ 
+ 					os << string(curLineStart, p);
+ 
+-					if (parserHelpers::isSpace(*(p - 1)))
++					if (p != m_buffer.begin() && parserHelpers::isSpace(*(p - 1)))
+ 						state->lastCharIsSpace = true;
+ 					else
+ 						state->lastCharIsSpace = false;
 -- 
 1.7.1
 
