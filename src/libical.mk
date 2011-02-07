@@ -29,5 +29,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libical.exe' \
-        -lical -lpthread
+        `'$(TARGET)-pkg-config' libical --cflags --libs`
 endef
