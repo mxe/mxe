@@ -3,7 +3,7 @@
 
 # PDcurses
 PKG             := libical
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 0.46
 $(PKG)_VERSION  := 0.44
 $(PKG)_CHECKSUM := f781150e2d98806e91b7e0bee02abdc6baf9ac7d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
