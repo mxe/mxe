@@ -1,0 +1,14 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been made by: garethcoco@gmail.com
+
+--- libical-0.44/libical.pc.in  2011-02-02 15:33:11.363284126 -0500
++++ libical-0.44/libical.pc.in  2011-02-02 15:32:44.202284263 -0500
+@@ -6,6 +6,6 @@
+ Name: libical
+ Description: An implementation of basic iCAL protocols
+ Version: @VERSION@
+-Libs: -L${libdir} -lical -licalss -licalvcal
++Libs: -L${libdir} -lical -licalss -licalvcal @PTHREAD_LIBS@
+ Cflags: -I${includedir}/

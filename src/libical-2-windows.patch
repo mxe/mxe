@@ -1,0 +1,282 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+https://build.opensuse.org/package/view_file?file=libical-0.44-windows.patch&package=mingw32-libical&project=windows%3Amingw%3Awin32
+
+--- libical-0.44/src/libical/icaltime.c	2009-09-27 04:38:51.000000000 +0200
++++ libical-0.44/src/libical/icaltime.c	2010-03-17 14:55:36.000000000 +0100
+@@ -45,14 +45,19 @@
+ #include "icaltimezone.h"
+ #include "icalvalue.h"
+ 
+-#ifdef WIN32
++#ifdef _WIN32
+ #include <windows.h>
+ 
+ #define snprintf      _snprintf
+ #define strcasecmp    stricmp
+ #endif
+ 
+-#ifdef WIN32
++#ifdef HAVE_PTHREAD
++ #include <pthread.h>    
++    static pthread_mutex_t tzid_mutex = PTHREAD_MUTEX_INITIALIZER;
++#endif
++
++#ifdef _WIN32
+ /* Undef the similar macro from pthread.h, it doesn't check if
+  * gmtime() returns NULL.
+  */
+@@ -62,11 +67,6 @@
+ #define gmtime_r(tp,tmp) (gmtime(tp)?(*(tmp)=*gmtime(tp),(tmp)):0)
+ #endif
+ 
+-#ifdef HAVE_PTHREAD
+- #include <pthread.h>    
+-    static pthread_mutex_t tzid_mutex = PTHREAD_MUTEX_INITIALIZER;
+-#endif
+-
+ /*
+  *  Function to convert a struct tm time specification
+  *  to an ANSI time_t using the specified time zone.
+@@ -192,18 +192,20 @@
+  *
+  */
+ struct icaltimetype 
+-icaltime_from_timet_with_zone(const time_t tm, const int is_date,
++icaltime_from_timet_with_zone(time_t tm, const int is_date,
+ 	const icaltimezone *zone)
+ {
+     struct icaltimetype tt;
+     struct tm t;
+     icaltimezone *utc_zone;
+ 
++	if (tm < 0) tm=0;
++
+     utc_zone = icaltimezone_get_utc_timezone ();
+ 
+     /* Convert the time_t to a struct tm in UTC time. We can trust gmtime
+        for this. */
+-#ifdef HAVE_PTHREAD
++#if defined(HAVE_PTHREAD) || defined(_WIN32)
+     gmtime_r (&tm, &t);
+ #else
+     t = *(gmtime (&tm));
+--- libical-0.44/src/libical/icaltimezone.c	2009-09-27 04:38:51.000000000 +0200
++++ libical-0.44/src/libical/icaltimezone.c	2010-03-19 14:34:25.000000000 +0100
+@@ -59,6 +59,61 @@
+ /** This is the toplevel directory where the timezone data is installed in. */
+ #define ZONEINFO_DIRECTORY	PACKAGE_DATA_DIR "/zoneinfo"
+ 
++#ifdef _WIN32
++/* search for data relative to where we are installed */
++
++static HMODULE hmodule;
++
++BOOL WINAPI
++DllMain (HINSTANCE hinstDLL,
++	 DWORD     fdwReason,
++	 LPVOID    lpvReserved)
++{
++	switch (fdwReason)
++    {
++	case DLL_PROCESS_ATTACH:
++		hmodule = hinstDLL;
++		break;
++    }
++
++  return TRUE;
++}
++
++char *
++get_zoneinfo_directory (void)
++{
++	static char retval[1000];
++	static int beenhere = 0;
++
++	unsigned char *p;
++
++	if (beenhere)
++		return retval;
++
++	if (!GetModuleFileName (hmodule, (CHAR *) retval, sizeof(retval) - 10))
++		return ZONEINFO_DIRECTORY;
++
++	p = _mbsrchr ((const unsigned char *) retval, '\\');
++	*p = '\0';
++	p = _mbsrchr ((const unsigned char *) retval, '\\');
++	if (p) {
++		if (stricmp ((const char *) (p+1), "bin") == 0)
++			*p = '\0';
++	}
++	strcat (retval, "\\share\\libical\\zoneinfo");
++
++	beenhere = 1;
++
++	return retval;
++}
++
++#undef ZONEINFO_DIRECTORY
++#define ZONEINFO_DIRECTORY get_zoneinfo_directory ()
++
++#endif
++
++
++
+ /** The prefix we use to uniquely identify TZIDs.
+     It must begin and end with forward slashes.
+  */
+@@ -1943,96 +1998,7 @@
+ 
+ static const char* get_zone_directory(void)
+ {
+-#ifndef WIN32
+ 	return zone_files_directory == NULL ? ZONEINFO_DIRECTORY : zone_files_directory;
+-#else
+-	wchar_t wbuffer[1000];
+-	char buffer[1000], zoneinfodir[1000], dirname[1000];
+-	int used_default;
+-	static char *cache = NULL;
+-	char *dirslash, *zislash;
+-	struct stat st;
+-
+-	if (zone_files_directory)
+-	    return zone_files_directory;
+-
+-	if (cache)
+-	    return cache;
+-
+-	/* Get the filename of the application */
+-	if (!GetModuleFileNameW (NULL, wbuffer, sizeof (wbuffer) / sizeof (wbuffer[0])))
+-	    return ZONEINFO_DIRECTORY;
+-
+-	/* Convert to system codepage */
+-	if (!WideCharToMultiByte (CP_ACP, 0, wbuffer, -1, buffer, sizeof (buffer),
+-				  NULL, &used_default) ||
+-	    used_default) {
+-	    /* Failed, try 8.3 format */
+-	    if (!GetShortPathNameW (wbuffer, wbuffer,
+-				    sizeof (wbuffer) / sizeof (wbuffer[0])) ||
+-		!WideCharToMultiByte (CP_ACP, 0, wbuffer, -1, buffer, sizeof (buffer),
+-				      NULL, &used_default) ||
+-		used_default)
+-		return ZONEINFO_DIRECTORY;
+-	}
+-	/* Look for the zoneinfo directory somewhere in the path where
+-	 * the app is installed. If the path to the app is
+-	 *
+-	 *	C:\opt\evo-2.6\bin\evolution-2.6.exe 
+-	 *
+-	 * and the compile-time ZONEINFO_DIRECTORY is
+-	 *
+-	 *	C:/devel/target/evo/share/evolution-data-server-1.6/zoneinfo,
+-	 *
+-	 * we check the pathnames:
+-	 *
+-	 *	C:\opt\evo-2.6/devel/target/evo/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:\opt\evo-2.6/target/evo/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:\opt\evo-2.6/evo/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:\opt\evo-2.6/share/evolution-data-server-1.6/zoneinfo		<===
+-	 *	C:\opt\evo-2.6/evolution-data-server-1.6/zoneinfo
+-	 *	C:\opt\evo-2.6/zoneinfo
+-	 *	C:\opt/devel/target/evo/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:\opt/target/evo/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:\opt/evo/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:\opt/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:\opt/evolution-data-server-1.6/zoneinfo
+-	 *	C:\opt/zoneinfo
+-	 *	C:/devel/target/evo/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:/target/evo/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:/evo/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:/share/evolution-data-server-1.6/zoneinfo
+-	 *	C:/evolution-data-server-1.6/zoneinfo
+-	 *	C:/zoneinfo
+-	 *
+-	 * In Evolution's case, we would get a match already at the
+-	 * fourth pathname check.
+-	 */
+-
+-	/* Strip away basename of app .exe first */
+-	dirslash = _mbsrchr (buffer, '\\');
+-	if (dirslash)
+-	    *dirslash = '\0';
+-
+-	while ((dirslash = _mbsrchr (buffer, '\\'))) {
+-	    /* Strip one more directory from app .exe location */
+-	    *dirslash = '\0';
+-	    
+-	    strcpy (zoneinfodir, ZONEINFO_DIRECTORY);
+-	    while ((zislash = _mbschr (zoneinfodir, '/'))) {
+-		*zislash = '.';
+-		strcpy (dirname, buffer);
+-		strcat (dirname, "/");
+-		strcat (dirname, zislash + 1);
+-		if (stat (dirname, &st) == 0 &&
+-		    S_ISDIR (st.st_mode)) {
+-		    cache = strdup (dirname);
+-		    return cache;
+-		}
+-	    }
+-	}
+-	return ZONEINFO_DIRECTORY;
+-#endif
+ }
+ 
+ void set_zone_directory(char *path)
+--- libical-0.44/src/libical/icaltz-util.c	2010-03-17 15:04:14.000000000 +0100
++++ libical-0.44/src/libical/icaltz-util.c	2010-03-19 14:38:56.000000000 +0100
+@@ -41,6 +42,10 @@
+ #include <libical/icalerror.h>
+ #include <icaltz-util.h>
+ 
++/** This is the filename of the file containing the city names and
++    coordinates of all the builtin timezones. */
++#define ZONES_TAB_FILENAME	"zones.tab"
++
+ typedef struct 
+ {
+ 	char	ttisgmtcnt [4];	
+@@ -53,7 +58,7 @@
+ 
+ static int r_pos [] = {1, 2, 3, -2, -1};
+ 
+-static char *search_paths [] = {"/usr/share/zoneinfo","/usr/lib/zoneinfo","/etc/zoneinfo","/usr/share/lib/zoneinfo"};
++static char *search_paths [] = {"/usr/share/zoneinfo","/usr/lib/zoneinfo","/etc/zoneinfo","/usr/share/lib/zoneinfo",PACKAGE_DATA_DIR "/zoneinfo"};
+ static char *zdir = NULL;
+ 
+ #define NUM_SEARCH_PATHS (sizeof (search_paths)/ sizeof (search_paths [0]))
+@@ -174,12 +179,24 @@
+ 	return;
+ }
+ 
++#ifdef _WIN32
++char * get_zoneinfo_directory		(void);
++#endif
++
+ static void
+ set_zone_directory (void)
+ {
+ 	char file_path[PATH_MAX];
+-	const char *fname = ZONES_TAB_SYSTEM_FILENAME;
++
++#ifdef _WIN32
++	const char *fname = ZONES_TAB_FILENAME;
++
++	sprintf (file_path, "%s\\%s", get_zoneinfo_directory(), fname);
++	if (!access (file_path, F_OK|R_OK))
++		zdir = strdup(get_zoneinfo_directory());
++#else
+ 	int i;	
++	const char *fname = ZONES_TAB_SYSTEM_FILENAME;
+ 
+ 	for (i = 0;i < NUM_SEARCH_PATHS; i++) {
+ 		sprintf (file_path, "%s/%s", search_paths [i], fname);
+@@ -188,6 +205,7 @@
+ 			break;
+ 		}
+ 	}
++#endif
+ }
+ 
+ 

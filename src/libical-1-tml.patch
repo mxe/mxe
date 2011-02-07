@@ -1,0 +1,197 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+https://build.opensuse.org/package/view_file?file=libical-0.44-tml.patch&package=mingw32-libical&project=windows%3Amingw%3Awin32
+
+--- libical-0.44/autogen.sh	2009-01-08 17:50:28.000000000 +0100
++++ libical-0.44/autogen.sh	2009-04-15 15:25:54.000000000 +0200
+@@ -37,11 +37,6 @@
+ 	exit 1
+ }
+ 
+-if test -z "$*"; then
+-	echo "I am going to run ./configure with no arguments - if you wish "
+-        echo "to pass any to it, please specify them on the $0 command line."
+-fi
+-
+ case $CC in
+ *xlc | *xlc\ * | *lcc | *lcc\ *) am_opt=--include-deps;;
+ esac
+@@ -55,7 +50,3 @@
+ autoconf
+ cd $ORIGDIR
+ 
+-$srcdir/configure "$@"
+-
+-echo 
+-echo "Now type 'make' to compile $PROJECT."
+--- libical-0.44/src/libical/icalrecur.c	2009-01-08 17:50:21.000000000 +0100
++++ libical-0.44/src/libical/icalrecur.c	2009-04-15 15:12:35.000000000 +0200
+@@ -141,16 +141,6 @@
+ 
+ #include <limits.h>
+ 
+-#ifndef HAVE_INTPTR_T
+-#if defined (WIN32) || defined (XP_BEOS)
+-typedef long intptr_t;
+-#endif
+-#endif
+-
+-#ifdef WIN32
+-#define strcasecmp      stricmp
+-#endif
+-
+ #include "icalrecur.h"
+ 
+ #include "icalerror.h"
+--- libical-0.44/src/libical/icaltz-util.c	2009-01-08 17:50:21.000000000 +0100
++++ libical-0.44/src/libical/icaltz-util.c	2009-04-15 15:17:06.000000000 +0200
+@@ -20,67 +20,24 @@
+  * Boston, MA 02110-1301, USA.
+  */
+ 
+-#ifdef HAVE_CONFIG_H
+-#include "config.h"
+-#endif
+ #include <string.h>
+-
+ #if defined(sun) && defined(__SVR4)
+ #include <sys/byteorder.h>
++#elif defined(_WIN32)
++#define BIG_ENDIAN 'B'
++#define LITTLE_ENDIAN 'l'
++#define BYTE_ORDER LITTLE_ENDIAN
++#define bswap32(val) ((((val) & 0x000000ffU) << 24) | (((val) & 0x0000ff00U) <<  8) | (((val) & 0x00ff0000U) >>  8) | (((val) & 0xff000000U) >> 24))
++#elif defined(__linux__)
++#include <byteswap.h>
++#include <endian.h>
+ #else
+-# ifdef HAVE_BYTESWAP_H
+-#  include <byteswap.h>
+-# endif
+-# ifdef HAVE_SYS_ENDIAN_H
+-#  include <sys/endian.h>
+-#  ifdef bswap32
+-#   define bswap_32 bswap32
+-#  else
+-#   define bswap_32 swap32
+-#  endif
+-# endif
+-# ifdef HAVE_ENDIAN_H
+-#  include <endian.h>
+-# endif 
+-#endif
+-
+-#ifdef WIN32
+-#if !defined(HAVE_BYTESWAP_H) && !defined(HAVE_SYS_ENDIAN_H) && !defined(HAVE_ENDIAN_H)
+-#define bswap_16(x) (((x) << 8) & 0xff00) | (((x) >> 8 ) & 0xff)
+-#define bswap_32(x) (((x) << 24) & 0xff000000)  \
+-                    | (((x) << 8) & 0xff0000)   \
+-                    | (((x) >> 8) & 0xff00)     \
+-                    | (((x) >> 24) & 0xff )
+-#define bswap_64(x) ((((x) & 0xff00000000000000ull) >> 56) \
+-                    | (((x) & 0x00ff000000000000ull) >> 40) \
+-                    | (((x) & 0x0000ff0000000000ull) >> 24) \
+-                    | (((x) & 0x000000ff00000000ull) >> 8) \
+-                    | (((x) & 0x00000000ff000000ull) << 8) \
+-                    | (((x) & 0x0000000000ff0000ull) << 24) \
+-                    | (((x) & 0x000000000000ff00ull) << 40) \
+-                    | (((x) & 0x00000000000000ffull) << 56))
++#include <sys/endian.h>
+ #endif
+-#include <io.h>
+-#endif
+-
+-#ifndef PATH_MAX
+-#define PATH_MAX 512
+-#endif
+-
+-#ifndef F_OK
+-#define F_OK 0
+-#endif
+-
+-#ifndef R_OK
+-#define R_OK 4
+-#endif
+-
+ #include <limits.h>
+ #include <time.h>
+ #include <stdlib.h>
+-#ifdef HAVE_UNISTD_H
+ #include <unistd.h>
+-#endif
+ #include <libical/icalerror.h>
+ #include <icaltz-util.h>
+ 
+@@ -139,7 +96,11 @@
+     if ((BYTE_ORDER == BIG_ENDIAN) && sizeof (int) == 4)
+         return *(const int *) ptr;
+     else if (BYTE_ORDER == LITTLE_ENDIAN && sizeof (int) == 4)
++#ifdef __linux__
+         return bswap_32 (*(const int *) ptr);
++#else
++         return bswap32 (*(const unsigned *) ptr);
++#endif
+ #endif
+ 	else
+ 	{
+--- libical-0.44/src/libical/Makefile.am	2009-01-08 17:50:22.000000000 +0100
++++ libical-0.44/src/libical/Makefile.am	2009-04-15 15:27:20.000000000 +0200
+@@ -51,7 +51,7 @@
+ 	-I$(top_builddir)/src/libical	\
+ 	-I$(srcdir)
+ 
+-libical_la_LDFLAGS = -version-info 44:0:44
++libical_la_LDFLAGS = -version-info 44:0:44 -no-undefined
+ 
+ libical_la_LIBADD = $(PTHREAD_LIBS)
+ 
+--- libical-0.44/src/libical/vsnprintf.c	2009-01-08 17:50:22.000000000 +0100
++++ libical-0.44/src/libical/vsnprintf.c	2009-04-15 15:23:35.000000000 +0200
+@@ -1,8 +1,7 @@
+-#ifndef WIN32
+ #include "config.h"
+-#endif
++
+ #ifndef HAVE_SNPRINTF
+-#error DO NOT USE libical version of vsnprintf.
++
+ /*
+  * Revision 12: http://theos.com/~deraadt/snprintf.c
+  *
+--- libical-0.44/src/libicalcap/Makefile.am	2009-01-08 17:50:20.000000000 +0100
++++ libical-0.44/src/libicalcap/Makefile.am	2009-04-15 15:32:11.000000000 +0200
+@@ -34,7 +34,7 @@
+ 	-I$(srcdir)		\
+ 	-DWITH_RR $(RRCAP_CFLAGS)
+ 
+-libicalcap_evolution_la_LDFLAGS = $(RRCAP_LIBS) -version-info 44:0:44
++libicalcap_evolution_la_LDFLAGS = $(RRCAP_LIBS) -version-info 44:0:44 -no-undefined
+ 
+ 
+ libicalcap_evolution_la_SOURCES =		\
+--- libical-0.44/src/libicalss/Makefile.am	2009-01-08 17:50:22.000000000 +0100
++++ libical-0.44/src/libicalss/Makefile.am	2009-04-15 15:34:41.000000000 +0200
+@@ -63,8 +63,8 @@
+ 	-I$(top_builddir)/src/libical	\
+ 	$(BDB_INCLUDE)
+ 
+-libicalss_la_LDFLAGS = -version-info 44:0:44
+-libicalss_la_LIBADD = $(BDB_LIBFILES) 
++libicalss_la_LDFLAGS = -version-info 44:0:44 -no-undefined
++libicalss_la_LIBADD = $(BDB_LIBFILES) $(top_builddir)/src/libical/libical.la
+ 
+ if DEV
+ libicalss_la_DEVSOURCES = icalsslexer.l icalssyacc.y
+--- libical-0.44/src/libicalvcal/Makefile.am	2009-01-08 17:50:23.000000000 +0100
++++ libical-0.44/src/libicalvcal/Makefile.am	2009-04-15 15:31:48.000000000 +0200
+@@ -8,7 +8,7 @@
+ 	-I$(top_builddir)/src/libical	\
+ 	-I$(top_srcdir)/src/libicalss
+ 
+-libicalvcal_la_LDFLAGS = -version-info 44:0:44
++libicalvcal_la_LDFLAGS = -version-info 44:0:44 -no-undefined
+ libicalvcal_la_LIBADD = ../libical/.libs/libical.la
+ 
+ if DEV
