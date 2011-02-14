@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := openexr-$($(PKG)_VERSION)
 $(PKG)_FILE     := openexr-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.openexr.com/
 $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ilmbase
+$(PKG)_DEPS     := gcc ilmbase zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.openexr.com/downloads.html' | \
