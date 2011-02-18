@@ -4,8 +4,8 @@
 # dbus
 PKG             := dbus
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.1
-$(PKG)_CHECKSUM := 112279ff58305027294fe0eb5bee600f68cf0b50
+$(PKG)_VERSION  := 1.4.4
+$(PKG)_CHECKSUM := 273d80445abadb6b440d9912322ae06985cb6923
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://$(PKG).freedesktop.org/
@@ -29,6 +29,8 @@ define $(PKG)_BUILD
         --disable-asserts \
         --disable-shared \
         --enable-static \
+        --disable-tests \
+        --disable-standalone-tests \
         --disable-silent-rules
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
