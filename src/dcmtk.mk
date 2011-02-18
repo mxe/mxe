@@ -4,8 +4,8 @@
 # DCMTK
 PKG             := dcmtk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.5.4
-$(PKG)_CHECKSUM := 169056874947083e68eb941fcd53faaebc862ae5
+$(PKG)_VERSION  := 3.6.0
+$(PKG)_CHECKSUM := 469e017cffc56f36e834aa19c8612111f964f757
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://dicom.offis.de/dcmtk.php.en
