@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gtksourceview-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtksourceview-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://projects.gnome.org/gtksourceview/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gtk libxml2
+$(PKG)_DEPS     := gcc gtk2 libxml2
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/gtksourceview/refs/tags' | \

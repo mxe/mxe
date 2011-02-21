@@ -2,7 +2,7 @@
 # See doc/index.html for further information.
 
 # GTK+
-PKG             := gtk
+PKG             := gtk2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.22.1
 $(PKG)_CHECKSUM := c88d8be4aebd6e59d6ca44d57f6acd18e2be1c08
@@ -15,7 +15,7 @@ $(PKG)_DEPS     := gcc gettext libpng jpeg tiff jasper glib atk pango cairo gdk-
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/gtk+/refs/tags' | \
     grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*<a[^>]*>\([2]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
     grep -v '^2\.9' | \
     head -1
 endef
@@ -44,6 +44,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtk.exe' \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtk2.exe' \
         `'$(TARGET)-pkg-config' gtk+-2.0 --cflags --libs`
 endef
