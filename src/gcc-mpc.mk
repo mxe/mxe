@@ -4,8 +4,8 @@
 # MPC for GCC
 PKG             := gcc-mpc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.8.2
-$(PKG)_CHECKSUM := 339550cedfb013b68749cd47250cd26163b9edd4
+$(PKG)_VERSION  := 0.9
+$(PKG)_CHECKSUM := 229722d553030734d49731844abfef7617b64f1a
 $(PKG)_SUBDIR   := mpc-$($(PKG)_VERSION)
 $(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.multiprecision.org/
