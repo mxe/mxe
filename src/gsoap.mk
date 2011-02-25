@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openssl gnutls
+$(PKG)_DEPS     := gcc gnutls
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/projects/gsoap2/files/gSOAP/' | \
