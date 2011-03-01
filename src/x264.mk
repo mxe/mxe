@@ -23,7 +23,7 @@ define $(PKG)_BUILD
         --cross-prefix='$(TARGET)'- \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-pthread
+        --enable-win32thread
     $(MAKE) -C '$(1)' -j 1 uninstall
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
