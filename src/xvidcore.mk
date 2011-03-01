@@ -4,8 +4,8 @@
 # xvidcore
 PKG             := xvidcore
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.2
-$(PKG)_CHECKSUM := d6e73c725b2fe74695f9fd129966c98f81b27fea
+$(PKG)_VERSION  := 1.3.0
+$(PKG)_CHECKSUM := 2a5b505159245fad1d3d236dc855ca6949ead4c1
 $(PKG)_SUBDIR   := xvidcore/build/generic
 $(PKG)_FILE     := xvidcore-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.xvid.org/

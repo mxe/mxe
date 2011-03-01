@@ -4,8 +4,8 @@
 # SuiteSparse
 PKG             := suitesparse
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.4.0
-$(PKG)_CHECKSUM := 6de027d48a573659b40ddf57c10e32b39ab034c6
+$(PKG)_VERSION  := 3.6.0
+$(PKG)_CHECKSUM := bc430a051de5681d31f819b40b7f0ea0be178e04
 $(PKG)_SUBDIR   := SuiteSparse
 $(PKG)_FILE     := SuiteSparse-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.cise.ufl.edu/research/sparse/SuiteSparse/
