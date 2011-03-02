@@ -5,7 +5,7 @@
 PKG             := cblas
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1
-$(PKG)_CHECKSUM := a8a765ebb8d753c7ad161ccd9191be42d3dc8bd9
+$(PKG)_CHECKSUM := d6970cf52592ef67674a61c78bbd055a4e9d4680
 $(PKG)_SUBDIR   := CBLAS
 $(PKG)_FILE     := $(PKG).tgz
 $(PKG)_WEBSITE  := http://www.netlib.org/blas/
@@ -21,6 +21,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,CBDIR =.*,CBDIR = $(1),g'         '$(1)/Makefile.MINGW32'
     $(SED) -i 's,FC =.*,FC = $(TARGET)-gfortran,g' '$(1)/Makefile.MINGW32'
     $(SED) -i 's, make , $(MAKE) ,g'               '$(1)/Makefile'
+    rm '$(1)/Makefile.in'
     ln -s '$(1)/Makefile.MINGW32' '$(1)/Makefile.in'
     mkdir '$(1)/MINGW32'
     $(MAKE) -C '$(1)' -j '$(JOBS)' alllib
@@ -29,6 +30,6 @@ define $(PKG)_BUILD
     $(INSTALL) -d                           '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libcblas.a'      '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -d                           '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m644 '$(1)/src/cblas.h'     '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m644 '$(1)/src/cblas_f77.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/include/cblas.h'     '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/include/cblas_f77.h' '$(PREFIX)/$(TARGET)/include/'
 endef
