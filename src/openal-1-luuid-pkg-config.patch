@@ -1,0 +1,17 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+
+
+diff -ur openal-soft-1.13.orig/CMakeLists.txt openal-soft-1.13/CMakeLists.txt
+--- openal-soft-1.13.orig/CMakeLists.txt	2011-02-16 07:05:40.000000000 +1100
++++ openal-soft-1.13/CMakeLists.txt	2011-03-02 15:40:02.000000000 +1100
+@@ -393,6 +393,7 @@
+                 SET(BACKENDS  "${BACKENDS} DirectSound \(linked\),")
+                 SET(EXTRA_LIBS dsound ${EXTRA_LIBS})
+             ENDIF()
++            SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -luuid")
+         ENDIF()
+     ENDIF()
+ ENDIF()

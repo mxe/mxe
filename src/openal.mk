@@ -34,7 +34,6 @@ define $(PKG)_BUILD
         -DCMAKE_BUILD_TYPE=Release                         \
         -DLIBTYPE=STATIC
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
-    ln -sf '$(PREFIX)/$(TARGET)/lib/OpenAL32.a' '$(PREFIX)/$(TARGET)/lib/libOpenAL32.a'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
