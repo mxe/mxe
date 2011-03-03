@@ -1,0 +1,27 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+
+
+--- openal-soft-1.13.orig/Alc/dsound.c	2011-02-08 01:44:06.000000000 -0500
++++ openal-soft-1.13/Alc/dsound.c	2011-03-02 22:57:58.000000000 -0500
+@@ -21,7 +21,6 @@
+ #include "config.h"
+ 
+ #define _WIN32_WINNT 0x0500
+-#define INITGUID
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <memory.h>
+@@ -45,8 +44,8 @@
+ #define DSSPEAKER_7POINT1       7
+ #endif
+ 
+-DEFINE_GUID(KSDATAFORMAT_SUBTYPE_PCM, 0x00000001, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
+-DEFINE_GUID(KSDATAFORMAT_SUBTYPE_IEEE_FLOAT, 0x00000003, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
++const GUID KSDATAFORMAT_SUBTYPE_PCM = {0x00000001, 0x0000, 0x0010,{0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}};
++const GUID KSDATAFORMAT_SUBTYPE_IEEE_FLOAT = {0x00000003, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}};
+ 
+ static void *ds_handle;
+ static HRESULT (WINAPI *pDirectSoundCreate)(LPCGUID pcGuidDevice, LPDIRECTSOUND *ppDS, LPUNKNOWN pUnkOuter);
