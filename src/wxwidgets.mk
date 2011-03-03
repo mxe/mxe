@@ -37,7 +37,7 @@ define $(PKG)_BUILD
         --with-themes=all \
         --with-msw \
         --with-opengl \
-        --with-libpng=sys \
+        --with-libpng=builtin \
         --with-libjpeg=sys \
         --with-libtiff=sys \
         --with-regex=yes \
@@ -83,7 +83,7 @@ define $(PKG)_BUILD
         --with-themes=all \
         --with-msw \
         --with-opengl \
-        --with-libpng=sys \
+        --with-libpng=builtin \
         --with-libjpeg=sys \
         --with-libtiff=sys \
         --with-regex=yes \
