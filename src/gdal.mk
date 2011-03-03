@@ -32,7 +32,7 @@ define $(PKG)_BUILD
         --with-pam \
         --without-threads \
         --with-libz='$(PREFIX)/$(TARGET)' \
-        --with-png=internal \
+        --with-png='$(PREFIX)/$(TARGET)' \
         --with-libtiff='$(PREFIX)/$(TARGET)' \
         --with-geotiff='$(PREFIX)/$(TARGET)' \
         --with-jpeg='$(PREFIX)/$(TARGET)' \

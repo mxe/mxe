@@ -1,0 +1,36 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+http://trac.osgeo.org/gdal/changeset/21526
+Index: /branches/1.8/gdal/frmts/png/pngdataset.cpp
+===================================================================
+--- a/frmts/png/pngdataset.cpp	(revision 21032)
++++ b/frmts/png/pngdataset.cpp	(revision 21526)
+@@ -1316,5 +1316,5 @@
+     */
+    check = (png_size_t)VSIFReadL(data, (png_size_t)1, length,
+-                                 (VSILFILE*)png_ptr->io_ptr);
++                                 (VSILFILE*)png_get_io_ptr(png_ptr));
+ 
+    if (check != length)
+@@ -1331,5 +1331,5 @@
+    png_uint_32 check;
+ 
+-   check = VSIFWriteL(data, 1, length, (VSILFILE*)(png_ptr->io_ptr));
++   check = VSIFWriteL(data, 1, length, (VSILFILE*)png_get_io_ptr(png_ptr));
+ 
+    if (check != length)
+@@ -1342,5 +1342,5 @@
+ static void png_vsi_flush(png_structp png_ptr)
+ {
+-    VSIFFlushL( (VSILFILE*)(png_ptr->io_ptr) );
++    VSIFFlushL( (VSILFILE*)png_get_io_ptr(png_ptr) );
+ }
+ 
+@@ -1358,5 +1358,5 @@
+     // semantics.  Ugg. 
+ 
+-    jmp_buf* psSetJmpContext = (jmp_buf*) png_ptr->error_ptr;
++    jmp_buf* psSetJmpContext = (jmp_buf*) png_get_error_ptr(png_ptr);
+     if (psSetJmpContext)
+     {
