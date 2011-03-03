@@ -37,7 +37,7 @@ define $(PKG)_BUILD
         --with-themes=all \
         --with-msw \
         --with-opengl \
-        --with-libpng=builtin \
+        --with-libpng=sys \
         --with-libjpeg=sys \
         --with-libtiff=sys \
         --with-regex=yes \
@@ -65,6 +65,8 @@ define $(PKG)_BUILD
 
     # build the wxWidgets variant without unicode support
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,wxwidgets)
+    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/wxwidgets-*.patch)),
+    (cd '$(1)/$(wxwidgets_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
     $(SED) -i 's,png_check_sig,png_sig_cmp,g'                       '$(1)/$(wxwidgets_SUBDIR)/configure'
     $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/$(wxwidgets_SUBDIR)/configure'
     # wine confuses the cross-compiling detection, so set it explicitly
@@ -83,7 +85,7 @@ define $(PKG)_BUILD
         --with-themes=all \
         --with-msw \
         --with-opengl \
-        --with-libpng=builtin \
+        --with-libpng=sys \
         --with-libjpeg=sys \
         --with-libtiff=sys \
         --with-regex=yes \
