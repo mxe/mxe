@@ -1,0 +1,28 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Posted 4 March 2011 on:
+https://mailhost.informatik.uni-hamburg.de/pipermail/vigra/
+
+diff --git a/src/impex/png.cxx b/src/impex/png.cxx
+index 23786ef..6d0b012 100644
+--- a/src/impex/png.cxx
++++ b/src/impex/png.cxx
+@@ -320,7 +320,7 @@ namespace vigra {
+ #if (PNG_LIBPNG_VER > 10008) && defined(PNG_READ_iCCP_SUPPORTED)
+         char * dummyName;
+         int dummyCompType;
+-        char * profilePtr;
++        png_byte * profilePtr;
+         png_uint_32 profileLen;
+         if (png_get_valid( png, info, PNG_INFO_iCCP )) {
+             png_get_iCCP(png, info, &dummyName, &dummyCompType, &profilePtr, &profileLen) ;
+@@ -592,7 +592,7 @@ namespace vigra {
+         // set icc profile
+         if (iccProfile.size() > 0) {
+             png_set_iCCP(png, info, (png_charp)("icc"), 0,
+-                         (png_charp)iccProfile.begin(), (png_uint_32)iccProfile.size());
++                         (png_byte*)iccProfile.begin(), (png_uint_32)iccProfile.size());
+         }
+ #endif
+ 
