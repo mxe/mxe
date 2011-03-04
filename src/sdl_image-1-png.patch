@@ -1,0 +1,100 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff --git a/IMG_png.c b/IMG_png.c
+index a79fb9c..8e395a5 100644
+--- a/IMG_png.c
++++ b/IMG_png.c
+@@ -80,8 +80,8 @@ static struct {
+ 	void (*png_destroy_read_struct) (png_structpp png_ptr_ptr, png_infopp info_ptr_ptr, png_infopp end_info_ptr_ptr);
+ 	png_uint_32 (*png_get_IHDR) (png_structp png_ptr, png_infop info_ptr, png_uint_32 *width, png_uint_32 *height, int *bit_depth, int *color_type, int *interlace_method, int *compression_method, int *filter_method);
+ 	png_voidp (*png_get_io_ptr) (png_structp png_ptr);
+-	png_uint_32 (*png_get_tRNS) (png_structp png_ptr, png_infop info_ptr, png_bytep *trans, int *num_trans, png_color_16p *trans_values);
+-	png_uint_32 (*png_get_valid) (png_structp png_ptr, png_infop info_ptr, png_uint_32 flag);
++	png_uint_32 (*png_get_tRNS) (png_const_structp png_ptr, png_infop info_ptr, png_bytep *trans, int *num_trans, png_color_16p *trans_values);
++	png_uint_32 (*png_get_valid) (png_const_structp png_ptr, png_const_infop info_ptr, png_uint_32 flag);
+ 	void (*png_read_image) (png_structp png_ptr, png_bytepp image);
+ 	void (*png_read_info) (png_structp png_ptr, png_infop info_ptr);
+ 	void (*png_read_update_info) (png_structp png_ptr, png_infop info_ptr);
+@@ -90,7 +90,7 @@ static struct {
+ 	void (*png_set_packing) (png_structp png_ptr);
+ 	void (*png_set_read_fn) (png_structp png_ptr, png_voidp io_ptr, png_rw_ptr read_data_fn);
+ 	void (*png_set_strip_16) (png_structp png_ptr);
+-	int (*png_sig_cmp) (png_bytep sig, png_size_t start, png_size_t num_to_check);
++	int (*png_sig_cmp) (png_const_bytep sig, png_size_t start, png_size_t num_to_check);
+ } lib;
+ 
+ #ifdef LOAD_PNG_DYNAMIC
+@@ -347,7 +347,7 @@ SDL_Surface *IMG_LoadPNG_RW(SDL_RWops *src)
+ 	 * the normal method of doing things with libpng).  REQUIRED unless you
+ 	 * set up your own error handlers in png_create_read_struct() earlier.
+ 	 */
+-	if ( setjmp(png_ptr->jmpbuf) ) {
++	if ( setjmp (png_jmpbuf(png_ptr)) ) {
+ 		error = "Error reading the PNG file.";
+ 		goto done;
+ 	}
+@@ -416,9 +416,9 @@ SDL_Surface *IMG_LoadPNG_RW(SDL_RWops *src)
+ 			Rmask = 0x000000FF;
+ 			Gmask = 0x0000FF00;
+ 			Bmask = 0x00FF0000;
+-			Amask = (info_ptr->channels == 4) ? 0xFF000000 : 0;
++            Amask = (png_get_channels(png_ptr, info_ptr) == 4) ? 0xFF000000 : 0;
+ 		} else {
+-		        int s = (info_ptr->channels == 4) ? 0 : 8;
++            int s = (png_get_channels(png_ptr, info_ptr) == 4) ? 0 : 8;
+ 			Rmask = 0xFF000000 >> s;
+ 			Gmask = 0x00FF0000 >> s;
+ 			Bmask = 0x0000FF00 >> s;
+@@ -426,7 +426,7 @@ SDL_Surface *IMG_LoadPNG_RW(SDL_RWops *src)
+ 		}
+ 	}
+ 	surface = SDL_AllocSurface(SDL_SWSURFACE, width, height,
+-			bit_depth*info_ptr->channels, Rmask,Gmask,Bmask,Amask);
++            bit_depth*png_get_channels(png_ptr, info_ptr), Rmask,Gmask,Bmask,Amask);
+ 	if ( surface == NULL ) {
+ 		error = "Out of memory";
+ 		goto done;
+@@ -465,23 +465,27 @@ SDL_Surface *IMG_LoadPNG_RW(SDL_RWops *src)
+ 	*/
+ 
+ 	/* Load the palette, if any */
+-	palette = surface->format->palette;
++    palette = surface->format->palette;
++    png_colorp info_palette = 0;
++    int info_num_palette = 0;
++    png_get_PLTE(png_ptr, info_ptr, &info_palette, &info_num_palette);
++
+ 	if ( palette ) {
+ 	    if(color_type == PNG_COLOR_TYPE_GRAY) {
+-		palette->ncolors = 256;
+-		for(i = 0; i < 256; i++) {
+-		    palette->colors[i].r = i;
+-		    palette->colors[i].g = i;
+-		    palette->colors[i].b = i;
+-		}
+-	    } else if (info_ptr->num_palette > 0 ) {
+-		palette->ncolors = info_ptr->num_palette; 
+-		for( i=0; i<info_ptr->num_palette; ++i ) {
+-		    palette->colors[i].b = info_ptr->palette[i].blue;
+-		    palette->colors[i].g = info_ptr->palette[i].green;
+-		    palette->colors[i].r = info_ptr->palette[i].red;
+-		}
+-	    }
++            palette->ncolors = 256;
++            for(i = 0; i < 256; i++) {
++                palette->colors[i].r = i;
++                palette->colors[i].g = i;
++                palette->colors[i].b = i;
++            }
++        } else if (info_num_palette > 0 ) {
++            palette->ncolors = info_num_palette;
++            for( i=0; i<info_num_palette; ++i ) {
++                palette->colors[i].b = info_palette[i].blue;
++                palette->colors[i].g = info_palette[i].green;
++                palette->colors[i].r = info_palette[i].red;
++            }
++        }
+ 	}
+ 
+ done:	/* Clean up and return */
