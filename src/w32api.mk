@@ -4,8 +4,8 @@
 # MinGW Windows API
 PKG             := w32api
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.15
-$(PKG)_CHECKSUM := a1f8f3767970663b3394e37919c0a4ea029473d6
+$(PKG)_VERSION  := 3.16
+$(PKG)_CHECKSUM := 5b6c1503efc44791fad72512febeed943e4ce393
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-1-mingw32-dev.tar.lzma
 $(PKG)_WEBSITE  := http://www.mingw.org/

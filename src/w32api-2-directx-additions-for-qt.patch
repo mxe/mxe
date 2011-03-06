@@ -49,22 +49,6 @@ diff -ruN a/include/amvideo.h b/include/amvideo.h
  	REFERENCE_TIME AvgTimePerFrame;
  	BITMAPINFOHEADER bmiHeader;
  	union {
-diff -ruN a/include/bdatypes.h b/include/bdatypes.h
---- a/include/bdatypes.h	2009-11-21 06:31:42.000000000 +0100
-+++ b/include/bdatypes.h	2010-04-25 20:35:52.184124176 +0200
-@@ -17,9 +17,9 @@
- } MEDIA_SAMPLE_CONTENT;
- /*--- DirectShow Reference - DirectShow Structures */
- typedef struct {
--	DWORD dwOffset
--	DWORD dwPacketLength
--	DWORD dwStride
-+	DWORD dwOffset;
-+	DWORD dwPacketLength;
-+	DWORD dwStride;
- } MPEG2_TRANSPORT_STRIDE;
- typedef struct {
- 	ULONG ulPID;
 diff -ruN a/include/control.h b/include/control.h
 --- a/include/control.h	2009-11-21 06:31:43.000000000 +0100
 +++ b/include/control.h	2010-04-25 20:35:52.184124176 +0200
