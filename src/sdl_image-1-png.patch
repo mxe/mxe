@@ -1,6 +1,9 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
+This patch has been taken from:
+http://lists.libsdl.org/pipermail/sdl-libsdl.org/2011-March/079946.html
+
 diff --git a/IMG_png.c b/IMG_png.c
 index a79fb9c..67af463 100644
 --- a/IMG_png.c
