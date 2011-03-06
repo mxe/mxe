@@ -17,6 +17,9 @@ int main(int argc, char *argv[])
     image = IMG_Load("test.png");
     screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE);
 
+    if (SDL_BlitSurface(image, NULL, screen, NULL) < 0) return 1;
+    SDL_UpdateRect(screen, 0, 0, image->w, image->h);
+    SDL_Delay(3000);
     SDL_Quit();
     return 0;
 }
