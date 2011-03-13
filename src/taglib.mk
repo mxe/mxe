@@ -4,8 +4,8 @@
 # TagLib
 PKG             := taglib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.3
-$(PKG)_CHECKSUM := ee54f10c63f236ef1c29c82e39c227a75a7e3785
+$(PKG)_VERSION  := 1.7
+$(PKG)_CHECKSUM := 5138e1665182bc2171e298ff31518c9ad72ddf23
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://developer.kde.org/~wheeler/taglib.html
@@ -19,13 +19,20 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i '/#define TAGLIB_EXPORT_H/a#define TAGLIB_STATIC' '$(1)/taglib/taglib_export.h'
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    mkdir '$(1)/build'
+    cd '$(1)/build' && cmake ..                            \
+        -DCMAKE_SYSTEM_NAME=Windows                        \
+        -DCMAKE_FIND_ROOT_PATH='$(PREFIX)/$(TARGET)'       \
+        -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER          \
+        -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY           \
+        -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY           \
+        -DCMAKE_C_COMPILER='$(PREFIX)/bin/$(TARGET)-gcc'   \
+        -DCMAKE_CXX_COMPILER='$(PREFIX)/bin/$(TARGET)-g++' \
+        -DCMAKE_INCLUDE_PATH='$(PREFIX)/$(TARGET)/include' \
+        -DCMAKE_LIB_PATH='$(PREFIX)/$(TARGET)/lib'         \
+        -DPKG_CONFIG_EXECUTABLE=$(TARGET)-pkg-config       \
+        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'       \
+        -DCMAKE_BUILD_TYPE=Release                         \
+        -DENABLE_STATIC=ON
+    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 endef
