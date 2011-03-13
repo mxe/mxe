@@ -4,8 +4,8 @@
 # Boost C++ Library
 PKG             := boost
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.46.0
-$(PKG)_CHECKSUM := 1fbd865602b61a881c0e6093f58adf999e28ca4d
+$(PKG)_VERSION  := 1.46.1
+$(PKG)_CHECKSUM := 3ca6e173ec805e5126868d8a03618e587aa26aef
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_WEBSITE  := http://www.boost.org/
