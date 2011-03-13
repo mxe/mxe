@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc freetype
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/projects/ftgl/files/FTGL Source/' | \
-    $(SED) -n 's,.*>\([0-9][^<]*\).*,\1,p' | \
+    $(SED) -n 's,.*title="/FTGL Source/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 
