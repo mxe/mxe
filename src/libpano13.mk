@@ -6,10 +6,10 @@ PKG             := libpano13
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.9.17
 $(PKG)_CHECKSUM := 418689985ea622bc234cd4eccec42180c12821b2
-$(PKG)_SUBDIR   := libpano13-$(word 1,$(subst _, ,$($(PKG)_VERSION)))
-$(PKG)_FILE     := libpano13-$($(PKG)_VERSION).tar.gz
+$(PKG)_SUBDIR   := $(PKG)-$(word 1,$(subst _, ,$($(PKG)_VERSION)))
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://panotools.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/panotools/libpano13/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/panotools/$(PKG)/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff libpng zlib
 
 define $(PKG)_UPDATE
