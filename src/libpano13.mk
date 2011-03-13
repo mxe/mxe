@@ -9,12 +9,11 @@ $(PKG)_CHECKSUM := 418689985ea622bc234cd4eccec42180c12821b2
 $(PKG)_SUBDIR   := libpano13-$(word 1,$(subst _, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := libpano13-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://panotools.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/panotools/libpano13/libpano13-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/panotools/libpano13/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff libpng zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/api/file/index/project-id/96188/rss?path=/libpano13' | \
-    grep '/download</link>' | \
     $(SED) -n 's,.*libpano13-\([0-9].*\)\.tar.*,\1,p' | \
     tail -1
 endef
