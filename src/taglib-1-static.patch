@@ -1,3 +1,9 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+https://bugs.kde.org/show_bug.cgi?id=268441
+
 diff --git a/bindings/c/CMakeLists.txt b/bindings/c/CMakeLists.txt
 index 79c7a6b..fa4056d 100644
 --- a/bindings/c/CMakeLists.txt
