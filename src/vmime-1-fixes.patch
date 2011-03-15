@@ -44,7 +44,7 @@ GITDIR=~/projects/vmime/git/vmime
 From c6f077e695b75d9ff9a32d1621f6a320c8ce70f1 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Tue, 30 Nov 2010 14:57:03 +0000
-Subject: [PATCH 1/6] Initialize and delete object.
+Subject: [PATCH 1/7] Initialize and delete object.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@577 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -72,13 +72,13 @@ index 0f3e9ec..d71c3ca 100644
  
  		void go(IMAPParser& parser, string& line, string::size_type* currentPos)
 -- 
-1.7.1
+1.7.4.1
 
 
 From 41203315eacf53230dd7bdb0cf2b0d1078ddee39 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Wed, 8 Dec 2010 08:52:54 +0000
-Subject: [PATCH 2/6] No extra space between ':' and '<' in MAIL FROM and RCPT TO. Wait for server response after QUIT and before closing connection.
+Subject: [PATCH 2/7] No extra space between ':' and '<' in MAIL FROM and RCPT TO. Wait for server response after QUIT and before closing connection.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@579 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -113,13 +113,13 @@ index 204daae..d9fb7b8 100644
  		if ((resp = readResponse())->getCode() != 250)
  		{
 -- 
-1.7.1
+1.7.4.1
 
 
 From 969b56f4bd61ddb8277c04ac2a1e35e029ec058b Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:24:06 +0000
-Subject: [PATCH 3/6] Fixed unit test after bug fix.
+Subject: [PATCH 3/7] Fixed unit test after bug fix.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@580 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -137,13 +137,13 @@ index 5015552..6552f9e 100644
  				localSend("250 OK\r\n");
  			}
 -- 
-1.7.1
+1.7.4.1
 
 
 From 50743da0712b216533acdc09069f1bfc81f988c6 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:54:38 +0000
-Subject: [PATCH 4/6] Fixed boundary parsing (thanks to John van der Kamp, Zarafa).
+Subject: [PATCH 4/7] Fixed boundary parsing (thanks to John van der Kamp, Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@581 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -225,13 +225,13 @@ index 12c4f74..df2bf85 100644
  
  		vmime::bodyPart p;
 -- 
-1.7.1
+1.7.4.1
 
 
 From b6d2b4765c9472ff333cace13c57c6af0e866ee0 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 21 Jan 2011 15:28:06 +0000
-Subject: [PATCH 5/6] Fixed possible infinite loop (thanks to John van der Kamp, Zarafa).
+Subject: [PATCH 5/7] Fixed possible infinite loop (thanks to John van der Kamp, Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@582 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -277,13 +277,13 @@ index b84f376..746ac94 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.1
+1.7.4.1
 
 
 From 022339ab63430d792d0314f51dd7854eabd5736e Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 28 Jan 2011 12:11:08 +0000
-Subject: [PATCH 6/6] Fixed possible read to invalid memory location (thanks to Alexander Konovalov).
+Subject: [PATCH 6/7] Fixed possible read to invalid memory location (thanks to Alexander Konovalov).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@583 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -301,5 +301,211 @@ index 1c1c1a6..fa08d33 100644
  					else
  						state->lastCharIsSpace = false;
 -- 
-1.7.1
+1.7.4.1
+
+
+From 7f1024917b3df6be013e18a2e0f0f1b13f4d112b Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Wed, 9 Mar 2011 18:03:31 +0000
+Subject: [PATCH 7/7] Fixed bug #3174903. Fixed word parsing when buffer does not end with NL. Fixed 'no encoding' when forced.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@584 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 07ebf241115eba44675223e307d212c772e1cc08)
+
+diff --git a/src/body.cpp b/src/body.cpp
+index 738d3e7..8596833 100644
+--- a/src/body.cpp
++++ b/src/body.cpp
+@@ -153,7 +153,10 @@ void body::parse(const string& buffer, const string::size_type position,
+ 
+ 		if (pos != string::npos && pos < end)
+ 		{
+-			m_prologText = string(buffer.begin() + position, buffer.begin() + pos);
++			vmime::text text;
++			text.parse(buffer, position, pos);
++
++			m_prologText = text.getWholeBuffer();
+ 		}
+ 
+ 		for (int index = 0 ; !lastPart && (pos != string::npos) && (pos < end) ; ++index)
+@@ -246,7 +249,10 @@ void body::parse(const string& buffer, const string::size_type position,
+ 		// Treat remaining text as epilog
+ 		else if (partStart < end)
+ 		{
+-			m_epilogText = string(buffer.begin() + partStart, buffer.begin() + end);
++			vmime::text text;
++			text.parse(buffer, partStart, end);
++
++			m_epilogText = text.getWholeBuffer();
+ 		}
+ 	}
+ 	// Treat the contents as 'simple' data
+@@ -333,7 +339,7 @@ void body::generate(utility::outputStream& os, const string::size_type maxLineLe
+ 
+ 		if (!prologText.empty())
+ 		{
+-			text prolog(word(prologText, getCharset()));
++			text prolog(prologText, vmime::charset("us-ascii"));
+ 
+ 			prolog.encodeAndFold(os, maxLineLength, 0,
+ 				NULL, text::FORCE_NO_ENCODING | text::NO_NEW_LINE_SEQUENCE);
+@@ -356,7 +362,7 @@ void body::generate(utility::outputStream& os, const string::size_type maxLineLe
+ 
+ 		if (!epilogText.empty())
+ 		{
+-			text epilog(word(epilogText, getCharset()));
++			text epilog(epilogText, vmime::charset("us-ascii"));
+ 
+ 			epilog.encodeAndFold(os, maxLineLength, 0,
+ 				NULL, text::FORCE_NO_ENCODING | text::NO_NEW_LINE_SEQUENCE);
+diff --git a/src/word.cpp b/src/word.cpp
+index fa08d33..aeaa737 100644
+--- a/src/word.cpp
++++ b/src/word.cpp
+@@ -102,7 +102,9 @@ ref <word> word::parseNext(const string& buffer, const string::size_type positio
+ 				++pos;
+ 
+ 			unencoded += buffer.substr(startPos, endPos - startPos);
+-			unencoded += ' ';
++
++			if (pos != end)  // ignore white-spaces at end
++				unencoded += ' ';
+ 
+ 			startPos = pos;
+ 			continue;
+@@ -191,14 +193,15 @@ ref <word> word::parseNext(const string& buffer, const string::size_type positio
+ 		++pos;
+ 	}
+ 
+-	// Treat unencoded text at the end of the buffer
+-	if (end != startPos)
+-	{
+-		if (startPos != pos && !isFirst && prevIsEncoded)
+-			unencoded += whiteSpaces;
++	if (startPos != end && !isFirst && prevIsEncoded)
++		unencoded += whiteSpaces;
+ 
++	if (startPos != end)
+ 		unencoded += buffer.substr(startPos, end - startPos);
+ 
++	// Treat unencoded text at the end of the buffer
++	if (!unencoded.empty())
++	{
+ 		ref <word> w = vmime::create <word>(unencoded, charset(charsets::US_ASCII));
+ 		w->setParsedBounds(position, end);
+ 
+@@ -337,12 +340,14 @@ void word::generate(utility::outputStream& os, const string::size_type maxLineLe
+ 		state = &defaultGeneratorState;
+ 
+ 	// Find out if encoding is forced or required by contents + charset
+-	bool encodingNeeded = (flags & text::FORCE_ENCODING) != 0;
++	bool encodingNeeded = false;
+ 
+-	if (encodingNeeded == false)
+-		encodingNeeded = wordEncoder::isEncodingNeeded(m_buffer, m_charset);
+-	else if ((flags & text::FORCE_NO_ENCODING) != 0)
++	if ((flags & text::FORCE_NO_ENCODING) != 0)
+ 		encodingNeeded = false;
++	else if ((flags & text::FORCE_ENCODING) != 0)
++		encodingNeeded = true;
++	else  // auto-detect
++		encodingNeeded = wordEncoder::isEncodingNeeded(m_buffer, m_charset);
+ 
+ 	// If possible and requested (with flag), quote the buffer (no folding is performed).
+ 	// Quoting is possible if and only if:
+diff --git a/tests/parser/bodyPartTest.cpp b/tests/parser/bodyPartTest.cpp
+index df2bf85..b129913 100644
+--- a/tests/parser/bodyPartTest.cpp
++++ b/tests/parser/bodyPartTest.cpp
+@@ -34,6 +34,8 @@ VMIME_TEST_SUITE_BEGIN
+ 		VMIME_TEST(testParse)
+ 		VMIME_TEST(testGenerate)
+ 		VMIME_TEST(testParseMissingLastBoundary)
++		VMIME_TEST(testPrologEpilog)
++		VMIME_TEST(testPrologEncoding)
+ 	VMIME_TEST_LIST_END
+ 
+ 
+@@ -105,5 +107,79 @@ VMIME_TEST_SUITE_BEGIN
+ 		VASSERT_EQ("1", "Foo: bar\r\n\r\nBaz", p1.generate());
+ 	}
+ 
++	void testPrologEpilog()
++	{
++		const char testMail[] =
++			"To: test@vmime.org\r\n"
++			"From: test@vmime.org\r\n"
++			"Subject: Prolog and epilog test\r\n"
++			"Content-Type: multipart/mixed; \r\n"
++			" boundary=\"=_boundary\"\r\n"
++			"\r\n"
++			"Prolog text\r\n"
++			"--=_boundary\r\n"
++			"Content-Type: text/plain\r\n"
++			"\r\n"
++			"Part1\r\n"
++			"--=_boundary--\r\n"
++			"Epilog text";
++
++		vmime::bodyPart part;
++		part.parse(testMail);
++
++		VASSERT_EQ("prolog", "Prolog text", part.getBody()->getPrologText());
++		VASSERT_EQ("epilog", "Epilog text", part.getBody()->getEpilogText());
++	}
++
++	// Test for bug fix: prolog should not be encoded
++	// http://sourceforge.net/tracker/?func=detail&atid=525568&aid=3174903&group_id=69724
++	void testPrologEncoding()
++	{
++		const char testmail[] =
++			"To: test@vmime.org\r\n"
++			"From: test@vmime.org\r\n"
++			"Subject: Prolog encoding test\r\n"
++			"Content-Type: multipart/mixed; \r\n"
++			" boundary=\"=_+ZWjySayKqSf2CyrfnNpaAcO6-G1HpoXdHZ4YyswAWqEY39Q\"\r\n"
++			"\r\n"
++			"This is a multi-part message in MIME format. Your mail reader does not\r\n"
++			"understand MIME message format.\r\n"
++			"--=_+ZWjySayKqSf2CyrfnNpaAcO6-G1HpoXdHZ4YyswAWqEY39Q\r\n"
++			"Content-Type: text/html; charset=windows-1251\r\n"
++			"Content-Transfer-Encoding: quoted-printable\r\n"
++			"\r\n"
++			"=DD=F2=EE =F2=E5=EA=F1=F2=EE=E2=E0=FF =F7=E0=F1=F2=FC =F1=EB=EE=E6=ED=EE=E3=\r\n"
++			"=EE =F1=EE=EE=E1=F9=E5=ED=E8=FF\r\n"
++			"--=_+ZWjySayKqSf2CyrfnNpaAcO6-G1HpoXdHZ4YyswAWqEY39Q\r\n"
++			"Content-Type: application/octet-stream; charset=windows-1251\r\n"
++			"Content-Disposition: attachment; filename=FNS.zip\r\n"
++			"Content-Transfer-Encoding: base64\r\n"
++			"\r\n"
++			"UEsDBB...snap...EEAAAAAA==\r\n"
++			"--=_+ZWjySayKqSf2CyrfnNpaAcO6-G1HpoXdHZ4YyswAWqEY39Q--\r\n"
++			"Epilog text";
++
++		vmime::ref<vmime::message> msg = vmime::create<vmime::message>();
++
++		std::string istr(testmail);
++
++		std::string ostr;
++		vmime::utility::outputStreamStringAdapter out(ostr);
++
++		for (int i = 0 ; i < 10 ; ++i)
++		{
++			ostr.clear();
++
++			msg->parse(istr);
++			msg->generate(out);
++
++			istr = ostr;
++		}
++
++		VASSERT_EQ("prolog", "This is a multi-part message in MIME format. Your mail reader"
++					   " does not understand MIME message format.", msg->getBody()->getPrologText());
++		VASSERT_EQ("epilog", "Epilog text", msg->getBody()->getEpilogText());
++	}
++
+ VMIME_TEST_SUITE_END
+ 
+-- 
+1.7.4.1
 
