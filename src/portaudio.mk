@@ -27,6 +27,11 @@ define $(PKG)_BUILD
         --with-host_os=mingw \
         --with-winapi=directx \
         --with-dxdir=$(PREFIX)/$(TARGET)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' SHARED_FLAGS= TESTS=
+    $(MAKE) -C '$(1)' -j 1 install
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-portaudio.exe' \
+        `'$(TARGET)-pkg-config' portaudio-2.0 --cflags --libs`
 endef
