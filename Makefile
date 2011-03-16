@@ -27,6 +27,8 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
                 scons $(SED) unzip wget xz yasm
 
+CMAKE_TOOLCHAIN_FILE := $(PREFIX)/$(TARGET)/share/cmake/mingw-cross-env-conf.cmake
+
 # unexport any environment variables that might cause trouble
 unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
 unexport CPPFLAGS CROSS CXX CXXCPP CXXFLAGS EXEEXT EXTRA_CFLAGS

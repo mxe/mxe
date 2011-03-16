@@ -19,27 +19,16 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake .                                   \
-        -DCMAKE_SYSTEM_NAME=Windows                        \
-        -DCMAKE_FIND_ROOT_PATH='$(PREFIX)/$(TARGET)'       \
-        -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER          \
-        -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY           \
-        -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY           \
-        -DCMAKE_C_COMPILER='$(PREFIX)/bin/$(TARGET)-gcc'   \
-        -DCMAKE_CXX_COMPILER='$(PREFIX)/bin/$(TARGET)-g++' \
-        -DCMAKE_CXX_FLAGS=-D__STDC_CONSTANT_MACROS         \
-        -DCMAKE_INCLUDE_PATH='$(PREFIX)/$(TARGET)/include' \
-        -DCMAKE_LIB_PATH='$(PREFIX)/$(TARGET)/lib'         \
-        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'       \
-        -DCMAKE_BUILD_TYPE=Release                         \
-        -DPHYSFS_BUILD_SHARED=FALSE                        \
-        -DPHYSFS_INTERNAL_ZLIB=FALSE                       \
-        -DPHYSFS_BUILD_TEST=FALSE                          \
+    cd '$(1)' && cmake . \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DPHYSFS_BUILD_SHARED=FALSE \
+        -DPHYSFS_INTERNAL_ZLIB=FALSE \
+        -DPHYSFS_BUILD_TEST=FALSE \
         -DPHYSFS_BUILD_WX_TEST=FALSE
         $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic -std=c99\
+        -W -Wall -Werror -ansi -pedantic -std=c99 \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-physfs.exe' \
         -lphysfs -lz
 endef

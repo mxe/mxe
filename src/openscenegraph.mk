@@ -22,24 +22,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake .                                   \
-        -DCMAKE_SYSTEM_NAME=Windows                        \
-        -DCMAKE_FIND_ROOT_PATH='$(PREFIX)/$(TARGET)'       \
-        -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER          \
-        -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY           \
-        -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY           \
-        -DCMAKE_C_COMPILER='$(PREFIX)/bin/$(TARGET)-gcc'   \
-        -DCMAKE_CXX_COMPILER='$(PREFIX)/bin/$(TARGET)-g++' \
-        -DCMAKE_CXX_FLAGS=-D__STDC_CONSTANT_MACROS         \
-        -DCMAKE_INCLUDE_PATH='$(PREFIX)/$(TARGET)/include' \
-        -DCMAKE_LIB_PATH='$(PREFIX)/$(TARGET)/lib'         \
-        -DPKG_CONFIG_EXECUTABLE=$(TARGET)-pkg-config       \
-        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'       \
-        -DCMAKE_BUILD_TYPE=Release                         \
-        -DCMAKE_HAVE_PTHREAD_H=OFF                         \
-        -DDYNAMIC_OPENTHREADS=OFF                          \
-        -DDYNAMIC_OPENSCENEGRAPH=OFF                       \
-        -DBUILD_OSG_APPLICATIONS=OFF                       \
+    cd '$(1)' && cmake . \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DCMAKE_CXX_FLAGS=-D__STDC_CONSTANT_MACROS \
+        -DCMAKE_HAVE_PTHREAD_H=OFF \
+        -DDYNAMIC_OPENTHREADS=OFF \
+        -DDYNAMIC_OPENSCENEGRAPH=OFF \
+        -DBUILD_OSG_APPLICATIONS=OFF \
         -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

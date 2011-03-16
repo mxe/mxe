@@ -20,19 +20,8 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'
-    cd '$(1)/build' && cmake ..                            \
-        -DCMAKE_SYSTEM_NAME=Windows                        \
-        -DCMAKE_FIND_ROOT_PATH='$(PREFIX)/$(TARGET)'       \
-        -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER          \
-        -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY           \
-        -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY           \
-        -DCMAKE_C_COMPILER='$(PREFIX)/bin/$(TARGET)-gcc'   \
-        -DCMAKE_CXX_COMPILER='$(PREFIX)/bin/$(TARGET)-g++' \
-        -DCMAKE_INCLUDE_PATH='$(PREFIX)/$(TARGET)/include' \
-        -DCMAKE_LIB_PATH='$(PREFIX)/$(TARGET)/lib'         \
-        -DPKG_CONFIG_EXECUTABLE=$(TARGET)-pkg-config       \
-        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'       \
-        -DCMAKE_BUILD_TYPE=Release                         \
+    cd '$(1)/build' && cmake .. \
+        -DCMAKE_TOOLCHAIN_FILE=$(CMAKE_TOOLCHAIN_FILE) \
         -DENABLE_STATIC=ON
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 endef
