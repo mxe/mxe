@@ -50,9 +50,7 @@ define $(PKG)_BUILD
 
     $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
     $(TARGET)-g++ -s -o '$(1)/examples/test-vmime.exe' \
-        -I'$(PREFIX)/$(TARGET)/include' \
         '$(1)/examples/example6.cpp' \
-        -L'$(PREFIX)/$(TARGET)/lib' \
-        -lvmime -lgnutls -lgsasl -lntlm -lgcrypt -lgpg-error -liconv -lidn -lz -lpthread -lws2_32
+        `'$(TARGET)-pkg-config' vmime --cflags --libs`
     $(INSTALL) -m755 '$(1)/examples/test-vmime.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef

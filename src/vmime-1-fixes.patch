@@ -510,22 +510,31 @@ index df2bf85..b129913 100644
 1.7.4.1
 
 
-From 9a1437295208e86a3b9ebe503826ee52c7175997 Mon Sep 17 00:00:00 2001
+From 720396d3bf9803f2cd5651ed9ee27b8b39d60145 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 15 Mar 2011 15:59:05 +0100
-Subject: [PATCH 8/8] fix .pc file for mingw
+Subject: [PATCH 8/8] add dependencies to .pc file
 
 
 diff --git a/SConstruct b/SConstruct
-index fb01edf..ed0c376 100644
+index fb01edf..6e8aba2 100644
 --- a/SConstruct
 +++ b/SConstruct
+@@ -1089,7 +1089,7 @@ def generateAutotools(target, source, env):
+ 	vmime_pc_in.write("Description: " + packageDescription + "\n")
+ 	vmime_pc_in.write("Version: @VERSION@\n")
+ 	vmime_pc_in.write("Requires: @GSASL_REQUIRED@\n")
+-	vmime_pc_in.write("Libs: -L${libdir} -l@GENERIC_VERSIONED_LIBRARY_NAME@ @GSASL_LIBS@ @LIBGNUTLS_LIBS@ @VMIME_ADDITIONAL_PC_LIBS@\n")
++	vmime_pc_in.write("Libs: -L${libdir} -l@GENERIC_VERSIONED_LIBRARY_NAME@ @GSASL_LIBS@ @LIBGNUTLS_LIBS@ @LIBICONV@ @PTHREAD_LIBS@ @VMIME_ADDITIONAL_PC_LIBS@\n")
+ 	#vmime_pc_in.write("Cflags: -I${includedir}/@GENERIC_VERSIONED_LIBRARY_NAME@\n")
+ 	vmime_pc_in.write("Cflags: -I${includedir}/ @LIBGNUTLS_CFLAGS@\n")
+ 	vmime_pc_in.close()
 @@ -1709,7 +1709,7 @@ fi
  
  # -- Link with Winsock (Windows)
  if test "x$VMIME_DETECT_PLATFORM" = "xwindows"; then
 -	VMIME_ADDITIONAL_PC_LIBS="$VMIME_ADDITIONAL_PC_LIBS -lwsock32"
-+	VMIME_ADDITIONAL_PC_LIBS="$VMIME_ADDITIONAL_PC_LIBS -liconv -lws2_32"
++	VMIME_ADDITIONAL_PC_LIBS="$VMIME_ADDITIONAL_PC_LIBS -lws2_32"
  fi
  
  # -- getaddrinfo (POSIX)
