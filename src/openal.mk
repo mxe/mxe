@@ -20,7 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE=$(CMAKE_TOOLCHAIN_FILE) \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DLIBTYPE=STATIC
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 
