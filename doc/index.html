@@ -346,7 +346,16 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     Everything will be just fine.
     </p>
 
-    <h3>Step 5b: Cross compile your Project (Qt)</h3>
+    <h3>Step 5b: Cross compile your Project (CMake)</h3>
+
+    <p>
+    If you have a
+    <a href="http://www.cmake.org/">CMake</a> project,
+    you can use the provided toolchain file:
+    </p>
+    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where mingw-cross-env is installed</em>/usr/<span class="target">i686-pc-mingw32</span>/share/cmake/mingw-cross-env-conf.cmake</pre>
+
+    <h3>Step 5c: Cross compile your Project (Qt)</h3>
 
     <p>
     If you have a
@@ -367,7 +376,7 @@ make</pre>
     are built-in, <em>not</em> plugins.
     </p>
 
-    <h3>Step 5c: Cross compile your Project (Makefile)</h3>
+    <h3>Step 5d: Cross compile your Project (Makefile)</h3>
 
     <p>
     If you have a handwritten Makefile,
@@ -389,7 +398,7 @@ PKG_CONFIG=$(CROSS)pkg-config</pre>
     That's it!
     </p>
 
-    <h3>Step 5d: Cross compile your Project (OSG)</h3>
+    <h3>Step 5e: Cross compile your Project (OSG)</h3>
 
     <p>
     Using static OpenSceneGraph libraries requires a few changes to your source.
