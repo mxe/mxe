@@ -246,7 +246,9 @@ dist:
 	cp -p '$(TOP_DIR)/src'/*.patch '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
 	cp -p '$(TOP_DIR)/src'/*-test* '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
 	(cd '$(DIST_DIR)' && tar cvf - 'mingw-cross-env-$(VERSION)' | gzip -9) >'$(DIST_DIR)/mingw-cross-env-$(VERSION).tar.gz'
+	@echo
 	@echo 'Upload will start in 5 seconds. Last chance to cancel! (Ctrl+C)'
+	@echo
 	@sleep 5
 	mkdir '$(DIST_DIR)/web'
 	cd '$(DIST_DIR)/web' && cvs -d :ext:cvs.savannah.nongnu.org:/web/mingw-cross-env co mingw-cross-env
