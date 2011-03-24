@@ -4,8 +4,8 @@
 # pfstools
 PKG             := pfstools
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.2
-$(PKG)_CHECKSUM := 6109587b0f8e53d1d963e9e02f7298bf0d197d5d
+$(PKG)_VERSION  := 1.8.3
+$(PKG)_CHECKSUM := b13d1863944afc4a88eb6ec92954677995399ab7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://$(PKG).sourceforge.net/
