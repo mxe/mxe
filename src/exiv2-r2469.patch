@@ -1,0 +1,79 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
+This patch has been taken from:
+http://dev.exiv2.org/issues/764
+
+Index: trunk/src/psdimage.cpp
+===================================================================
+--- trunk/src/psdimage.cpp	(revision 2468)
++++ trunk/src/psdimage.cpp	(revision 2469)
+@@ -400,7 +400,7 @@
+             uint32_t resourceType = getULong(buf, bigEndian);
+ 
+             if (resourceType != kPhotoshopResourceType) {
+-                break; // bad resource type
++                throw Error(3, "Photoshop"); // bad resource type
+             }
+             uint16_t resourceId = getUShort(buf + 4, bigEndian);
+             uint32_t resourceNameLength = buf[6];
+@@ -416,13 +416,13 @@
+             if (io_->read(buf, 4) != 4) throw Error(3, "Photoshop");
+ 
+             uint32_t resourceSize = getULong(buf, bigEndian);
++            uint32_t pResourceSize = (resourceSize + 1) & ~1;    // padded resource size
+             uint32_t curOffset = io_->tell();
+ 
+             // Write IPTC_NAA resource block
+             if ((resourceId == kPhotoshopResourceID_IPTC_NAA  ||
+                  resourceId >  kPhotoshopResourceID_IPTC_NAA) && iptcDone == false) {
+                 newResLength += writeIptcData(iptcData_, outIo);
+-                resourceSize = (resourceSize + 1) & ~1;    // adjust for padding
+                 iptcDone = true;
+             }
+ 
+@@ -430,7 +430,6 @@
+             else if ((resourceId == kPhotoshopResourceID_ExifInfo  ||
+                       resourceId >  kPhotoshopResourceID_ExifInfo) && exifDone == false) {
+                 newResLength += writeExifData(exifData_, outIo);
+-                resourceSize = (resourceSize + 1) & ~1;    // adjust for padding
+                 exifDone = true;
+             }
+ 
+@@ -438,7 +437,6 @@
+             else if ((resourceId == kPhotoshopResourceID_XMPPacket  ||
+                       resourceId >  kPhotoshopResourceID_XMPPacket) && xmpDone == false) {
+                 newResLength += writeXmpData(xmpData_, outIo);
+-                resourceSize = (resourceSize + 1) & ~1;    // adjust for padding
+                 xmpDone = true;
+             }
+ 
+@@ -467,10 +465,9 @@
+ 
+                 readTotal = 0;
+                 toRead = 0;
+-                resourceSize = (resourceSize + 1) & ~1;        // pad to even
+-                while (readTotal < resourceSize) {
+-                    toRead =   static_cast<long>(resourceSize - readTotal) < lbuf.size_
+-                             ? static_cast<long>(resourceSize - readTotal) : lbuf.size_;
++                while (readTotal < pResourceSize) {
++                    toRead =   static_cast<long>(pResourceSize - readTotal) < lbuf.size_
++                             ? static_cast<long>(pResourceSize - readTotal) : lbuf.size_;
+                     if (io_->read(lbuf.pData_, toRead) != toRead) {
+                         throw Error(3, "Photoshop");
+                     }
+@@ -478,11 +475,11 @@
+                     if (outIo.write(lbuf.pData_, toRead) != toRead) throw Error(21);
+                 }
+                 if (outIo.error()) throw Error(21);
+-                newResLength += resourceSize + adjResourceNameLen + 12;
++                newResLength += pResourceSize + adjResourceNameLen + 12;
+             }
+ 
+-            io_->seek(curOffset + resourceSize, BasicIo::beg);
+-            oldResLength -= (12 + adjResourceNameLen + resourceSize);
++            io_->seek(curOffset + pResourceSize, BasicIo::beg);
++            oldResLength -= (12 + adjResourceNameLen + pResourceSize);
+         }
+ 
+         // Append IPTC_NAA resource block, if not yet written
