@@ -24,6 +24,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,#include <cstdio>,#include <stdio.h>,' '$(1)/xmpsdk/src/XMPMeta.cpp'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
+    $(SED) -i 's/ -no-undefined//;' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
