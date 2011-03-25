@@ -33,7 +33,7 @@ define $(PKG)_BUILD
     ln -sf $(PREFIX)/$(TARGET)/bin/sdl-config $(PREFIX)/bin/$(TARGET)-sdl-config
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic \
+        -W -Wall -Werror -ansi -pedantic -Wno-unused-but-set-variable \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl.exe' \
         `'$(TARGET)-pkg-config' sdl --cflags --libs`
 endef
