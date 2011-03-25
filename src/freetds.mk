@@ -27,7 +27,6 @@ define $(PKG)_BUILD
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
 
-    # beware --with-gnutls broken detection
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
@@ -40,6 +39,7 @@ define $(PKG)_BUILD
         --enable-sspi \
         --disable-threadsafe \
         --with-tdsver=7.2 \
-        --with-gnutls
+        --with-gnutls \
+        PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install man_MANS=
 endef
