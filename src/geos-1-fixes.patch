@@ -1,7 +1,9 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-Contains ad hoc patches for cross building.
+Patches for GCC 4.6 compatibility.
+Backported from 3 patches from this thread:
+http://lists.osgeo.org/pipermail/geos-devel/2011-March/005156.html
 
 From d63201ebcc9c6e186660a70973e2fb485fb2c681 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
