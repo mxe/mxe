@@ -24,7 +24,8 @@ define $(PKG)_BUILD
         -DPHYSFS_BUILD_SHARED=FALSE \
         -DPHYSFS_INTERNAL_ZLIB=FALSE \
         -DPHYSFS_BUILD_TEST=FALSE \
-        -DPHYSFS_BUILD_WX_TEST=FALSE
+        -DPHYSFS_BUILD_WX_TEST=FALSE \
+        -DCMAKE_C_FLAGS='-Wno-unused-but-set-variable'
         $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \
