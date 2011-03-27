@@ -36,7 +36,6 @@ define $(PKG)_BUILD
     $(SED) -i 's,(char\*)tUstr +=,tUstr +=,' '$(1)/wpcap/libpcap/inet.c'
     $(SED) -i 's,-DHAVE_AIRPCAP_API,,'    '$(1)/wpcap/PRJ/GNUmakefile'
     $(SED) -i 's,/common,/Common,'        '$(1)/wpcap/PRJ/GNUmakefile'
-    $(SED) -i 's,-mno-cygwin,,' '$(1)/wpcap/PRJ/GNUmakefile'
     echo -e 'libwpcap.a: $${OBJS}'     >> '$(1)/wpcap/PRJ/GNUmakefile'
     echo -e '\t$${AR} rc $$@ $${OBJS}' >> '$(1)/wpcap/PRJ/GNUmakefile'
     echo -e '\t$${RANLIB} $$@'         >> '$(1)/wpcap/PRJ/GNUmakefile'

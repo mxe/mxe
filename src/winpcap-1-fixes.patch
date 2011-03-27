@@ -1,0 +1,27 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From ae2d9b90df55a6c1ba801675a81723ceb8377e62 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Sun, 27 Mar 2011 23:49:46 +0200
+Subject: [PATCH] remove obsolete -mno-cygwin
+
+
+diff --git a/wpcap/PRJ/GNUmakefile b/wpcap/PRJ/GNUmakefile
+index ccf3677..8313b4c 100644
+--- a/wpcap/PRJ/GNUmakefile
++++ b/wpcap/PRJ/GNUmakefile
+@@ -32,7 +32,7 @@ CFLAGS = -I ../libpcap -I ../libpcap/bpf -I ../libpcap/lbl \
+ 	-DHAVE_REMOTE -DHAVE_AIRPCAP_API \
+ 	-DHAVE_TC_API \
+ 	-DHAVE_ADDRINFO \
+-	-mno-cygwin -shared ${OPTFLAGS}
++	-shared ${OPTFLAGS}
+ LDFLAGS = -Wl,--out-implib,../lib/libwpcap.a
+ LIBS = -L ../../${PACKET_DIR}/DLL/Project -lPacket -lws2_32
+ OBJS = ../libpcap/bpf/net/bpf_filter.o \
+-- 
+1.7.4.1
+
