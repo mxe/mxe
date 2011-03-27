@@ -20,8 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # workaround for the missing snprintf() in the <cstdio> of GCC-4.4.0
-    $(SED) -i 's,#include <cstdio>,#include <stdio.h>,' '$(1)/xmpsdk/src/XMPMeta.cpp'
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     $(SED) -i 's/ -no-undefined//;' '$(1)/configure'
