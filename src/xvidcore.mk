@@ -19,9 +19,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoconf
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
-    $(SED) -i 's,-mno-cygwin,,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)'
