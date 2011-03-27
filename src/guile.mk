@@ -36,7 +36,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install schemelib_DATA=
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic -Wno-unused-but-set-variable \
+        -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-guile.exe' \
         `'$(TARGET)-pkg-config' guile-1.8 --cflags --libs`
 endef

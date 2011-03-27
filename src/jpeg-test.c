@@ -16,6 +16,9 @@ int main(int argc, char *argv[])
 
     test_boolean = TRUE;
     test_int32 = 1;
+    (void)test_boolean;
+    (void)test_int32;
+
     jpeg_create_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
 

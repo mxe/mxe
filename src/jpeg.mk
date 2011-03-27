@@ -26,7 +26,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic -Werror -Wno-unused-but-set-variable \
+        -W -Wall -Werror -ansi -pedantic -Werror \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-jpeg.exe' \
         -ljpeg
 endef
