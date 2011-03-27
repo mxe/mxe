@@ -1,0 +1,41 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
+This patch has been taken from:
+http://dev.exiv2.org/issues/767
+
+Index: trunk/config/configure.ac
+===================================================================
+--- trunk/config/configure.ac	(revision 2471)
++++ trunk/config/configure.ac	(revision 2472)
+@@ -31,12 +31,6 @@
+ AC_PROG_LN_S
+ AC_PROG_MAKE_SET
+ AC_CANONICAL_HOST
+-# Add flag for DLL on Windows
+-case "$host_os" in
+-*mingw* | *cygwin*)
+-    LDFLAGS="$LDFLAGS -no-undefined"
+-    ;;
+-esac
+ 
+ # ---------------------------------------------------------------------------
+ # i18n support
+@@ -204,6 +198,17 @@
+ fi
+ AC_SUBST(EXV_LIB_STATIC)
+ 
++# Add flag for DLL on Windows
++#
++# This must happen after all other configure checks, because
++# the "-no-undefined" flag is only for libtool and may not be
++# passed to GCC by accident.
++case "$host_os" in
++*mingw* | *cygwin*)
++    LDFLAGS="$LDFLAGS -no-undefined"
++    ;;
++esac
++
+ # ---------------------------------------------------------------------------
+ # Create output files.
+ # ---------------------------------------------------------------------------

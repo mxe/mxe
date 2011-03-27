@@ -20,9 +20,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # rebuild configure script as one of the patches modifies configure.ac
+    $(MAKE) -C '$(1)/config' -f config.make
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
-    $(SED) -i 's/ -no-undefined//;' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
