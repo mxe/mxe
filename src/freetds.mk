@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := freetds-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetds-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.freetds.org/
 $(PKG)_URL      := http://ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv
+$(PKG)_DEPS     := gcc libiconv gnutls
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://freetds.cvs.sourceforge.net/viewvc/freetds/freetds/' | \
@@ -27,7 +27,6 @@ define $(PKG)_BUILD
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
 
-    # beware --with-gnutls broken detection
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
@@ -39,6 +38,8 @@ define $(PKG)_BUILD
         --enable-msdblib \
         --enable-sspi \
         --disable-threadsafe \
-        --with-tdsver=8.0
+        --with-tdsver=7.2 \
+        --with-gnutls \
+        PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install man_MANS=
 endef

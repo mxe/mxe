@@ -28,6 +28,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,-lpacket,-lpacket -lws2_32,g'               '$(1)/configure'
     $(SED) -i 's,/usr/include,$(PREFIX)/$(TARGET)/include,g' '$(1)/configure'
     $(SED) -i 's,#include <Ntddndis.h>,#include <ddk/ntddndis.h>,' '$(1)/src/eth-win32.c'
+    $(SED) -i 's,-mno-cygwin,,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

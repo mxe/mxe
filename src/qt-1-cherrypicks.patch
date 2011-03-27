@@ -7,7 +7,7 @@ http://qt.gitorious.org/qt
 From 8f36bff28b648f65845cd56255a6c5b2cb7f8e42 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 15 Oct 2010 14:56:03 +0200
-Subject: [PATCH 01/12] removed obsolete -qt-gif configure option
+Subject: [PATCH 01/14] removed obsolete -qt-gif configure option
 
 Since "-system-gif" is not offered, offering "-qt-gif" is unnecessary
 and perhaps misleading. By default the GIF handler is built from code
@@ -90,7 +90,7 @@ index 15c0ddb..dd5647b 100644
 From 6f97b6dab051bc2899907ac794495bc7542d4337 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:54 +0100
-Subject: [PATCH 02/12] qmake: fix double directory separator
+Subject: [PATCH 02/14] qmake: fix double directory separator
 
 Merge-request: 2543
 Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
@@ -126,7 +126,7 @@ index df580fd..81a379f 100644
 From da69fe08f058ac49788559d333bcec747b94d208 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:55 +0100
-Subject: [PATCH 03/12] qmake: don't limit pkg-config writing to unix generator
+Subject: [PATCH 03/14] qmake: don't limit pkg-config writing to unix generator
 
 Move pkg-config related methods from unix generator to base class
 so they can be used by other generators too.
@@ -553,7 +553,7 @@ index 81a379f..1846d56 100644
 From c870095011276897127ed801570d0b4cce79d552 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:56 +0100
-Subject: [PATCH 04/12] qmake: write and install pkg-config files for mingw
+Subject: [PATCH 04/14] qmake: write and install pkg-config files for mingw
 
 Merge-request: 2543
 Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
@@ -607,7 +607,7 @@ index 8af7ddd..6d0a5c4 100644
 From 8414d5630e66546be5d5eb0e832c80dcddea5d77 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:57 +0100
-Subject: [PATCH 05/12] qt project files: create pkg-config files for mingw
+Subject: [PATCH 05/14] qt project files: create pkg-config files for mingw
 
 This is mostly the same as for unix.
 
@@ -940,7 +940,7 @@ index 7b94587..6e0a247 100644
 From 1cf4420ae5221d649880cc0d2e1b1895a19ad106 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 20:21:05 +0100
-Subject: [PATCH 06/12] Fix static build on Windows with MinGW.
+Subject: [PATCH 06/14] Fix static build on Windows with MinGW.
 
 Q_DECL_IMPORT is still __declspec(dllimport), which is unsuitable for
 static code.
@@ -1127,7 +1127,7 @@ index ee5c7d9..cdff46c 100644
 From e285e9993d4f2c6823782840d89f44c1bab74afa Mon Sep 17 00:00:00 2001
 From: Bernhard Rosenkraenzer <br@blankpage.ch>
 Date: Thu, 27 Jan 2011 13:48:13 +0100
-Subject: [PATCH 07/12] Allow the user to select imageformats to be built as plugin vs internal
+Subject: [PATCH 07/14] Allow the user to select imageformats to be built as plugin vs internal
 
 This adds what is already there for different plugin types to
 imageformats plugins -- allowing the user to configure which
@@ -1235,7 +1235,7 @@ index dd5647b..b6e80ea 100644
 From 095583fb68a8ae02fd16790eaaa922693d268443 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 16 Nov 2010 20:06:28 +0100
-Subject: [PATCH 08/12] explicitly include -llcms for -lmng (mingw-cross-env specific)
+Subject: [PATCH 08/14] explicitly include -llcms for -lmng (mingw-cross-env specific)
 
 ---
  src/gui/image/qmnghandler.pri |    2 +-
@@ -1261,7 +1261,7 @@ index ffb98de..c213e09 100644
 From 3baf871e135d70edbc2431038708886d2795b8b3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 5 Jun 2010 23:41:04 +0200
-Subject: [PATCH 09/12] added missing INSTALLS to JavaScriptCore.pro for static libjscore (mingw-cross-env specific)
+Subject: [PATCH 09/14] added missing INSTALLS to JavaScriptCore.pro for static libjscore (mingw-cross-env specific)
 
 For static build of Qt on win32-g++*, applications using webkit
 link to libjscore.a.
@@ -1293,7 +1293,7 @@ index a805170..027eb0f 100644
 From 9e5d4702daa1168ab14ba936014dd6a7bb5671c9 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 9 Nov 2010 20:09:45 +0100
-Subject: [PATCH 10/12] Partially restored support for static linking of QtWebKit (mingw-cross-env specific)
+Subject: [PATCH 10/14] Partially restored support for static linking of QtWebKit (mingw-cross-env specific)
 
 Support was removed by 4221d629e2cf37ee8c5ba7cb595b05ab8c82f113.
 Static QtWebkit might be supported by mingw-cross-env.
@@ -1325,7 +1325,7 @@ index 207dcc1..b10b0a2 100755
 From 61064254a0c5c2c3785909acf60cabdbdcb18d5b Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 14:21:32 +0100
-Subject: [PATCH 11/12] pkg-config file for jscore (mingw-cross-env specific)
+Subject: [PATCH 11/14] pkg-config file for jscore (mingw-cross-env specific)
 
 ---
  .../webkit/JavaScriptCore/JavaScriptCore.pro       |    8 ++++++++
@@ -1354,7 +1354,7 @@ index 027eb0f..44bbc3f 100644
 From 0ad5aac2fdc0f2e81f94c92867bb4e15b3da3ddf Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 21 Feb 2011 22:22:04 +0100
-Subject: [PATCH 12/12] workaround for native build on OSX (mingw-cross-env specific)
+Subject: [PATCH 12/14] workaround for native build on OSX (mingw-cross-env specific)
 
 The native build complains about:
 "You are building a 64-bit application, but using a 32-bit version of
@@ -1378,6 +1378,72 @@ index 4464686..ba0c45b 100644
  
  include(../common/mac-g++.conf)
  
+-- 
+1.7.4.1
+
+
+From db85d5c4df98ee12261f62fa637e629b120680a6 Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
+Date: Mon, 10 Jan 2011 20:09:24 +0100
+Subject: [PATCH 13/14] fix -enable-stdcall-fixup usage
+
+the leading "-Wl," was apparently accidentally split off to the wrong
+line.
+
+Task-number: QTBUG-15391
+Reviewed-by: mariusSO
+(cherry picked from commit 0953ee31dba532603fb7dfbde78c99aafb048bef)
+---
+ mkspecs/win32-g++/qmake.conf |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
+index ec216aa..2d9833b 100644
+--- a/mkspecs/win32-g++/qmake.conf
++++ b/mkspecs/win32-g++/qmake.conf
+@@ -52,8 +52,8 @@ QMAKE_RUN_CXX_IMP	= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
+ 
+ QMAKE_LINK		= g++
+ QMAKE_LINK_C		= gcc
+-QMAKE_LFLAGS		= -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
+-QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads -Wl
++QMAKE_LFLAGS		= -Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
++QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads
+ QMAKE_LFLAGS_EXCEPTIONS_OFF =
+ QMAKE_LFLAGS_RELEASE	= -Wl,-s
+ QMAKE_LFLAGS_DEBUG	=
+-- 
+1.7.4.1
+
+
+From ed4c5f0a04a90da94c1b9ea9cd504b7ad1e14ae1 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 27 Mar 2011 20:55:48 +0200
+Subject: [PATCH 14/14] fix -enable-stdcall-fixup usage
+
+the leading "-Wl," was apparently accidentally split off to the wrong
+line.
+
+Originally done in 0953ee3 for mkspecs/win32-g++.
+---
+ mkspecs/unsupported/win32-g++-cross/qmake.conf |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mkspecs/unsupported/win32-g++-cross/qmake.conf b/mkspecs/unsupported/win32-g++-cross/qmake.conf
+index 7e077a1..efc3de2 100644
+--- a/mkspecs/unsupported/win32-g++-cross/qmake.conf
++++ b/mkspecs/unsupported/win32-g++-cross/qmake.conf
+@@ -52,8 +52,8 @@ QMAKE_RUN_CXX_IMP	= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
+ 
+ QMAKE_LINK		= i686-pc-mingw32-g++
+ QMAKE_LINK_C		= i686-pc-mingw32-gcc
+-QMAKE_LFLAGS		= -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
+-QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads -Wl
++QMAKE_LFLAGS		= -Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
++QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads
+ QMAKE_LFLAGS_EXCEPTIONS_OFF =
+ QMAKE_LFLAGS_RELEASE	= -Wl,-s
+ QMAKE_LFLAGS_DEBUG	=
 -- 
 1.7.4.1
 

@@ -4,8 +4,8 @@
 # xvidcore
 PKG             := xvidcore
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.0
-$(PKG)_CHECKSUM := 2a5b505159245fad1d3d236dc855ca6949ead4c1
+$(PKG)_VERSION  := 1.3.1
+$(PKG)_CHECKSUM := 68c73b9a00dfb830083f619335eb876b0f845bec
 $(PKG)_SUBDIR   := xvidcore/build/generic
 $(PKG)_FILE     := xvidcore-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.xvid.org/
@@ -21,6 +21,7 @@ endef
 define $(PKG)_BUILD
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
+    $(SED) -i 's,-mno-cygwin,,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)'

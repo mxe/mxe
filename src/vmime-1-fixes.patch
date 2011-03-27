@@ -510,11 +510,13 @@ index df2bf85..b129913 100644
 1.7.4.1
 
 
-From 720396d3bf9803f2cd5651ed9ee27b8b39d60145 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 15 Mar 2011 15:59:05 +0100
-Subject: [PATCH 8/8] add dependencies to .pc file
+From 1c0648c2a3ee4072869446755c8a7604614752e1 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 27 Mar 2011 11:26:55 +0000
+Subject: [PATCH 8/8] Allow static linking in mingw-cross-env. Added 'iconv' and uses 'ws2_32' instead of 'winsock32' (#3213487).
 
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@585 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 22ca7dc23b6bbbc8cc6aedd569ec938ecae96e92)
 
 diff --git a/SConstruct b/SConstruct
 index fb01edf..6e8aba2 100644

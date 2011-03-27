@@ -1,0 +1,38 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
+This patch has been taken from:
+https://bugs.xine-project.org/show_bug.cgi?id=411
+
+diff --git a/configure.ac b/configure.ac
+index dc53a73..90f23a8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -281,7 +281,6 @@ case "$host_os" in
+       GOOM_LIBS="-liberty"
+       LDFLAGS="-Wl,--enable-stdcall-fixup $LDFLAGS"
+     fi
+-    LDFLAGS="-no-undefined $LDFLAGS"
+     ;;
+ esac
+ AC_SUBST(GOOM_LIBS)
+@@ -2877,6 +2876,19 @@ mv -f libtool.tmp libtool
+ chmod +x libtool
+ 
+ dnl ---------------------------------------------
++dnl Libtool flag for Windows:
++dnl
++dnl The "-no-undefined" flag must be added after all other
++dnl configure checks, because it is only for libtool and
++dnl must not be passed to GCC by accident.
++dnl ---------------------------------------------
++case "$host_os" in
++  mingw* | cygwin*)
++    LDFLAGS="-no-undefined $LDFLAGS"
++    ;;
++esac
++
++dnl ---------------------------------------------
+ dnl Some infos:
+ dnl ---------------------------------------------
+ 
