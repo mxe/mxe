@@ -4,8 +4,8 @@
 # wxWidgets
 PKG             := wxwidgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.11
-$(PKG)_CHECKSUM := fa31e7fdb972baa28d89a7196391a9c1371e5f0e
+$(PKG)_VERSION  := 2.8.12
+$(PKG)_CHECKSUM := 39552f3e49341197fea8373824ec609c757e890b
 $(PKG)_SUBDIR   := wxMSW-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxMSW-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.wxwidgets.org/
