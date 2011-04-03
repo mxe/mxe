@@ -23,9 +23,9 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
-	--disable-png \
-	--disable-enca \
-	--enable-fontconfig
+        --disable-png \
+        --disable-enca \
+        --enable-fontconfig
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 
