@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc freetype fontconfig
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://code.google.com/p/libass/downloads/list?sort=-uploaded' | \
-    $(SED) -n 's,.*libass-\([0-9][^<]*\)\.tar.bz2,\1,p' | \
+    $(SED) -n 's,.*libass-\([0-9][^<]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
