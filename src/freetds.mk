@@ -10,6 +10,7 @@ $(PKG)_SUBDIR   := freetds-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetds-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.freetds.org/
 $(PKG)_URL      := http://ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://ftp.de.debian.org/debian/pool/main/f/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
