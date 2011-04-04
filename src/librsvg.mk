@@ -4,8 +4,8 @@
 # librsvg
 PKG             := librsvg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.32.1
-$(PKG)_CHECKSUM := 2762cfa3a4e9c9ee845c7f23a824dbd13583ebf0
+$(PKG)_VERSION  := 2.34.0
+$(PKG)_CHECKSUM := 59e01568a6b201fc45828a76b942f790859cddeb
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
@@ -19,7 +19,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g'   '$(1)'/Makefile.in
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
