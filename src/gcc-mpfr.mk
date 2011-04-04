@@ -4,8 +4,8 @@
 # MPFR for GCC
 PKG             := gcc-mpfr
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.0
-$(PKG)_CHECKSUM := 8ae8bc72ac26a0f17ad9f57c520264c056c64770
+$(PKG)_VERSION  := 3.0.1
+$(PKG)_CHECKSUM := fbf402fc196724ae60ef01eb6ca8490b1ea4db69
 $(PKG)_SUBDIR   := mpfr-$($(PKG)_VERSION)
 $(PKG)_FILE     := mpfr-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.mpfr.org/
