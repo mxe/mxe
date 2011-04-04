@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := mpc-$($(PKG)_VERSION)
 $(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.multiprecision.org/
 $(PKG)_URL      := $($(PKG)_WEBSITE)/mpc/download/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://ftp.de.debian.org/debian/pool/main/m/mpclib/mpclib_$($(PKG)_VERSION).orig.tar.gz
+$(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/m/mpclib/mpclib_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
