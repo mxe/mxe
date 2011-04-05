@@ -10,6 +10,7 @@ $(PKG)_SUBDIR   := CBLAS
 $(PKG)_FILE     := $(PKG).tgz
 $(PKG)_WEBSITE  := http://www.netlib.org/blas/
 $(PKG)_URL      := http://www.netlib.org/blas/blast-forum/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.eq.uc.pt/pub/software/math/netlib/blas/blast-forum/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
