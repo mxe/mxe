@@ -257,8 +257,7 @@ dist:
 	cd '$(DIST_DIR)/web/mingw-cross-env' && cvs commit -m 'upload'
 	sleep 2  # wait for the "triggered webpages update" to complete
 	x-www-browser \
-	    'http://validator.w3.org/check?uri=http://mingw-cross-env.nongnu.org/' \
-	    'http://jigsaw.w3.org/css-validator/validator?uri=http://mingw-cross-env.nongnu.org/' \
+	    'http://validator.w3.org/unicorn/check?ucn_uri=http://mingw-cross-env.nongnu.org/' \
 	    'http://mingw-cross-env.nongnu.org/#latest-release' \
 	    'https://bitbucket.org/vog/mingw-cross-env/downloads#new-download-form' \
 	    'http://freshmeat.net/projects/mingw_cross_env/releases/new'
