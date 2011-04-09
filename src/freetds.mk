@@ -4,12 +4,12 @@
 # FreeTDS
 PKG             := freetds
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.82
-$(PKG)_CHECKSUM := 7e2a0c9e41c240c2d1c7f69c6f278e9a5bb80c2d
-$(PKG)_SUBDIR   := freetds-$($(PKG)_VERSION)
-$(PKG)_FILE     := freetds-$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 0.91rc1
+$(PKG)_CHECKSUM := b963170cac2bce47317c6f0784dc3151441312a4
+$(PKG)_SUBDIR   := freetds-0.91.dev.20110409RC1
+$(PKG)_FILE     := freetds-$($(PKG)_VERSION).tgz
 $(PKG)_WEBSITE  := http://www.freetds.org/
-$(PKG)_URL      := http://ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/$($(PKG)_FILE)
+$(PKG)_URL      := http://ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/release_candidates/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.de.debian.org/debian/pool/main/f/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_DEPS     := gcc libiconv gnutls
 
@@ -22,9 +22,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && NOCONFIGURE=true ./autogen.sh
-    cd '$(1)' && $(LIBTOOLIZE)
-
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
 
