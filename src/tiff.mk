@@ -4,8 +4,8 @@
 # LibTIFF
 PKG             := tiff
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.9.4
-$(PKG)_CHECKSUM := a4e32d55afbbcabd0391a9c89995e8e8a19961de
+$(PKG)_VERSION  := 3.9.5
+$(PKG)_CHECKSUM := f40aab20fb2f609b5cbc1171c40b66a1445e3773
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.remotesensing.org/libtiff/
