@@ -1,78 +1,10 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-Taken from https://bugs.freedesktop.org/show_bug.cgi?id=32805
-
-From 3266c13ab957fccb20ae811f044feb7eff66f4bb Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 4 Jan 2011 00:46:29 +0100
-Subject: [PATCH 1/2] sysdeps-win needs _dbus_path_is_absolute
-
-
-diff --git a/dbus/dbus-sysdeps-util-win.c b/dbus/dbus-sysdeps-util-win.c
-index 2f21409..9a056ec 100644
---- a/dbus/dbus-sysdeps-util-win.c
-+++ b/dbus/dbus-sysdeps-util-win.c
-@@ -677,23 +677,6 @@ _dbus_directory_close (DBusDirIter *iter)
-   dbus_free (iter);
- }
- 
--/**
-- * Checks whether the filename is an absolute path
-- *
-- * @param filename the filename
-- * @returns #TRUE if an absolute path
-- */
--dbus_bool_t
--_dbus_path_is_absolute (const DBusString *filename)
--{
--  if (_dbus_string_get_length (filename) > 0)
--    return _dbus_string_get_byte (filename, 1) == ':'
--           || _dbus_string_get_byte (filename, 0) == '\\'
--           || _dbus_string_get_byte (filename, 0) == '/';
--  else
--    return FALSE;
--}
--
- /** @} */ /* End of DBusInternalsUtils functions */
- 
- /**
-diff --git a/dbus/dbus-sysdeps-win.c b/dbus/dbus-sysdeps-win.c
-index b70ac6a..19f6fa0 100644
---- a/dbus/dbus-sysdeps-win.c
-+++ b/dbus/dbus-sysdeps-win.c
-@@ -3557,6 +3557,23 @@ _dbus_delete_directory (const DBusString *filename,
-   return TRUE;
- }
- 
-+/**
-+ * Checks whether the filename is an absolute path
-+ *
-+ * @param filename the filename
-+ * @returns #TRUE if an absolute path
-+ */
-+dbus_bool_t
-+_dbus_path_is_absolute (const DBusString *filename)
-+{
-+  if (_dbus_string_get_length (filename) > 0)
-+    return _dbus_string_get_byte (filename, 1) == ':'
-+           || _dbus_string_get_byte (filename, 0) == '\\'
-+           || _dbus_string_get_byte (filename, 0) == '/';
-+  else
-+    return FALSE;
-+}
-+
- /** @} end of sysdeps-win */
- /* tests in dbus-sysdeps-util.c */
- 
--- 
-1.7.1
-
-
 From 7241e09abbfc2021f2a7e5cbded70222023fa7e6 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 4 Jan 2011 00:47:49 +0100
-Subject: [PATCH 2/2] always static in mingw-cross-env
+Subject: [PATCH 1/1] always static in mingw-cross-env
 
 
 diff --git a/dbus/dbus-macros.h b/dbus/dbus-macros.h
