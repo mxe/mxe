@@ -4,8 +4,8 @@
 # gSOAP
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.1
-$(PKG)_CHECKSUM := da9a1cc8128ed56fc290f22c81b978ac830b8445
+$(PKG)_VERSION  := 2.8.2
+$(PKG)_CHECKSUM := 199b7d4cf0b6a5bf81a2198e39f03c092ffc05a7
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
@@ -19,19 +19,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-
-    # gsoap-link-dom.patch
-    # The code in dom.c(pp) is needed for some applications.
-    # Patch adds to the libs for easy linking in mingw-cross-env.
-    # Rename dom.cpp to dom_cpp.cpp to prevent collision between
-    # dom.c and dom.cpp at dom.o.
-
-    # Process changes to Makefile.am
-    cd '$(1)' && aclocal
-    cd '$(1)' && automake --add-missing
-    cd '$(1)' && autoconf
-    cd '$(1)' && autoheader
-
     # Native build to get tools wsdl2h and soapcpp2
     cd '$(1)' && ./configure
 
