@@ -5,7 +5,7 @@
 PKG             := blas
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1
-$(PKG)_CHECKSUM := 0aeca4ed45f2e5519977747ed6bcf80d1b0335d2
+$(PKG)_CHECKSUM := a643b737c30a0a5b823e11e33c9d46a605122c61
 $(PKG)_SUBDIR   := BLAS
 $(PKG)_FILE     := $(PKG).tgz
 $(PKG)_WEBSITE  := http://www.netlib.org/$(PKG)/
