@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := fa6b50badf287fc8d853285d4d6fc6544fe76c6a
 $(PKG)_SUBDIR   := freetds-0.91.dev.20110415RC2
 $(PKG)_FILE     := freetds-$($(PKG)_VERSION).tgz
 $(PKG)_WEBSITE  := http://www.freetds.org/
-$(PKG)_URL      := http://ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.de.debian.org/debian/pool/main/f/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_DEPS     := gcc libiconv gnutls
 
