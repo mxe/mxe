@@ -41,6 +41,7 @@ define $(PKG)_BUILD
         --with-gnu-as \
         --disable-nls \
         --disable-shared \
+        --disable-sjlj-exceptions \
         --without-x \
         --disable-win32-registry \
         --enable-threads=win32 \
