@@ -15,7 +15,7 @@ $(PKG)_DEPS     := gcc gettext libpng jpeg tiff jasper glib atk pango cairo gdk-
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/browse/gtk+/refs/tags' | \
     grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>\([2]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*<a[^>]*>\(2\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
     grep -v '^2\.9' | \
     head -1
 endef
