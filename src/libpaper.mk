@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 6927f75d126373d32d89751d2a7fe3e99cc9b4a1
 $(PKG)_SUBDIR   := libpaper-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpaper_$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://packages.debian.org/unstable/libpaper1
-$(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libp/libpaper/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
