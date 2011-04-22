@@ -13,9 +13,7 @@ $(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/snapshots/$(
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://ftp.videolan.org/pub/videolan/x264/snapshots/' | \
-    $(SED) -n 's,.*<a href="x264-snapshot-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    tail -1
+    date -d yesterday +%Y%m%d-2245
 endef
 
 define $(PKG)_BUILD
