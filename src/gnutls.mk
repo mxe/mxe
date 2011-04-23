@@ -35,6 +35,7 @@ define $(PKG)_BUILD
         --disable-guile \
         --with-included-libtasn1 \
         --with-included-libcfg \
+        --with-included-pakchois \
         --with-libgcrypt \
         --without-lzo \
         LIBS='-lz'
