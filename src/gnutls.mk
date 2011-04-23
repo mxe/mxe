@@ -3,7 +3,7 @@
 
 # GnuTLS
 PKG             := gnutls
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 2.12.3
 $(PKG)_VERSION  := 2.12.2
 $(PKG)_CHECKSUM := 210130d50a13510987a72d7023407e324379567d
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
