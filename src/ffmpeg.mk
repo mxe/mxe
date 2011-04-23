@@ -4,14 +4,14 @@
 # ffmpeg
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.6.2
-$(PKG)_CHECKSUM := d4e464d4111971b9cef10be7a1efa3677a899338
+$(PKG)_VERSION  := 0.6.90-rc0
+$(PKG)_CHECKSUM := a5c898a220a7f2220a49a37c44d273d1775d081c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.ffmpeg.org/
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://launchpad.net/ffmpeg/main/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 faad2 lame libvpx opencore-amr sdl speex theora vorbis x264 xvidcore zlib
+$(PKG)_DEPS     := gcc bzip2 lame libvpx opencore-amr sdl speex theora vorbis x264 xvidcore zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.ffmpeg.org/download.html' | \
@@ -34,12 +34,13 @@ define $(PKG)_BUILD
         --enable-version3 \
         --disable-nonfree \
         --enable-postproc \
+        --disable-pthreads \
+        --enable-w32threads \
         --enable-libspeex \
         --enable-libtheora \
         --enable-libvorbis \
         --enable-libmp3lame \
         --enable-libxvid \
-        --enable-libfaad \
         --disable-libfaac \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
