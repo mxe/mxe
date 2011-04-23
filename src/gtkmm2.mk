@@ -2,7 +2,7 @@
 # See doc/index.html for further information.
 
 # GTKMM
-PKG             := gtkmm
+PKG             := gtkmm2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.24.0
 $(PKG)_CHECKSUM := 9b9e68360fb3f5faa7f221acba56f0d75a8198d2
@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
     grep '<a href=' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
     grep -v '^2\.9' | \
+    grep '^2\.' | \
     head -1
 endef
 
@@ -32,6 +33,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -pedantic -std=c++0x \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm.exe' \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm2.exe' \
         `'$(TARGET)-pkg-config' gtkmm-2.4 --cflags --libs`
 endef
