@@ -4,8 +4,8 @@
 # ATKmm
 PKG             := atkmm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.22.2
-$(PKG)_CHECKSUM := e9d9e5e158f5a709fbad3436c61c4a48d5b1c8a3
+$(PKG)_VERSION  := 2.22.5
+$(PKG)_CHECKSUM := 0cae95ac770fb7adda7aea392916d16be195fc07
 $(PKG)_SUBDIR   := atkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := atkmm-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtkmm.org/

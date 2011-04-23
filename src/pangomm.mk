@@ -4,8 +4,8 @@
 # Pangomm
 PKG             := pangomm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.27.1
-$(PKG)_CHECKSUM := 272ea0c12186deb95b6120e120cd64c1e7ec21c4
+$(PKG)_VERSION  := 2.28.2
+$(PKG)_CHECKSUM := 31bcbb0c8773fdde6f4ea9b4a79fdf7159f94520
 $(PKG)_SUBDIR   := pangomm-$($(PKG)_VERSION)
 $(PKG)_FILE     := pangomm-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.pango.org/
