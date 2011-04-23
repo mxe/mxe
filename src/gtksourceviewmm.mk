@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://projects.gnome.org/gtksourceviewmm/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtksourceviewmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gtkmm gtksourceview
+$(PKG)_DEPS     := gcc gtkmm2 gtksourceview
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/cgit/gtksourceviewmm/refs/tags' | \

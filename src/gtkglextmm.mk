@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gtkglextmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglextmm-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://gtkglext.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gtkglext gtkmm
+$(PKG)_DEPS     := gcc gtkglext gtkmm2
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.gnome.org/cgit/gtkglextmm/refs/tags' | \
