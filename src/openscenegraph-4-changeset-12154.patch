@@ -4,10 +4,10 @@ See doc/index.html for further information.
 This patch has been taken from:
 http://www.openscenegraph.org/projects/osg/changeset/12154/
 
-Index: /OpenSceneGraph/trunk/src/osgPlugins/ffmpeg/FFmpegHeaders.hpp
+Index: trunk/src/osgPlugins/ffmpeg/FFmpegHeaders.hpp
 ===================================================================
---- /OpenSceneGraph/trunk/src/osgPlugins/ffmpeg/FFmpegHeaders.hpp (revision 10053)
-+++ /OpenSceneGraph/trunk/src/osgPlugins/ffmpeg/FFmpegHeaders.hpp (revision 12154)
+--- trunk/src/osgPlugins/ffmpeg/FFmpegHeaders.hpp (revision 10053)
++++ trunk/src/osgPlugins/ffmpeg/FFmpegHeaders.hpp (revision 12154)
 @@ -7,4 +7,5 @@
  {
  #define __STDC_CONSTANT_MACROS
