@@ -32,10 +32,12 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \
+        --disable-guile \
         --with-included-libtasn1 \
         --with-included-libcfg \
         --with-libgcrypt \
-        --with-lzo \
+        --without-lzo \
         LIBS='-lz'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
+exit 1
 endef
