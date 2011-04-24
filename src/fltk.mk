@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \
         LIBS='-lws2_32'
+    # enable exceptions, because disabling them doesn't make any sense on PCs
     $(SED) -i 's,-fno-exceptions,,' '$(1)/makeinclude'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install DIRS=src LIBCOMMAND='$(TARGET)-ar cr'
 endef
