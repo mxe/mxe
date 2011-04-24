@@ -4,17 +4,18 @@
 # FLTK
 PKG             := fltk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.10
-$(PKG)_CHECKSUM := 0d2b34fede91fa78eeaefb893dd70282f73908a8
-$(PKG)_SUBDIR   := fltk-$($(PKG)_VERSION)
-$(PKG)_FILE     := fltk-$($(PKG)_VERSION)-source.tar.bz2
+$(PKG)_VERSION  := 1.3.x-r8617
+$(PKG)_CHECKSUM := 9539b7671a7a3bfdd2a7f1ef23b670ead91d8f2d
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_WEBSITE  := http://www.fltk.org/
-$(PKG)_URL      := http://ftp.easysw.com/pub/fltk/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.easysw.com/pub/fltk/snapshots/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg libpng pthreads
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.fltk.org/' | \
     $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
+    grep -v '^1\.1\.' | \
     head -1
 endef
 
