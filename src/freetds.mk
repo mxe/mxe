@@ -5,8 +5,8 @@
 PKG             := freetds
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.91rc
-$(PKG)_CHECKSUM := fa6b50badf287fc8d853285d4d6fc6544fe76c6a
-$(PKG)_SUBDIR   := freetds-0.91.dev.20110415RC2
+$(PKG)_CHECKSUM := e8bd50c212b905b03b397e095f252ad9fab638ab
+$(PKG)_SUBDIR   := freetds-0.91.dev.20110425RC2
 $(PKG)_FILE     := freetds-$($(PKG)_VERSION).tgz
 $(PKG)_WEBSITE  := http://www.freetds.org/
 $(PKG)_URL      := http://www.ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/$($(PKG)_FILE)
