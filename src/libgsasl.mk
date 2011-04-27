@@ -26,8 +26,14 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-nls \
         --with-libiconv-prefix='$(PREFIX)/$(TARGET)' \
         --with-libidn-prefix='$(PREFIX)/$(TARGET)' \
         --with-libntlm-prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgsasl.exe' \
+        `'$(TARGET)-pkg-config' libgsasl --cflags --libs`
 endef
