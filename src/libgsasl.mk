@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := libgsasl-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgsasl-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gsasl/
 $(PKG)_URL      := http://ftp.gnu.org/gnu/gsasl/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv libidn libntlm
+$(PKG)_DEPS     := gcc libiconv libidn libntlm libgcrypt
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gsasl.git;a=tags' | \

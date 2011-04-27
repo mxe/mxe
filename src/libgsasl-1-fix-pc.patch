@@ -12,5 +12,5 @@ index bbfed53..8d97241 100644
  URL: http://www.gnu.org/software/gsasl/
  Version: @VERSION@
 -Libs: -L${libdir} -lgsasl
-+Libs: -L${libdir} -lgsasl -lidn -lntlm
++Libs: -L${libdir} -lgsasl -lidn -lntlm -lgcrypt -lgpg-error
  Cflags: -I${includedir}
