@@ -1,14 +1,14 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-Hack to use pkg-config with static linking.
+This patch has been proposed to upstream:
+http://www.gnu.org/software/libidn/#bugs
 
 --- a/libidn.pc.in
 +++ b/libidn.pc.in
-@@ -19,5 +19,5 @@
- Description: IETF stringprep, nameprep, punycode, IDNA text processing.
+@@ -20,4 +20,5 @@
  URL: http://www.gnu.org/software/libidn/
  Version: @VERSION@
--Libs: -L${libdir} -lidn
-+Libs: -L${libdir} -lidn -liconv
+ Libs: -L${libdir} -lidn
++Libs.private: @LTLIBICONV@
  Cflags: -I${includedir}
