@@ -1,16 +1,14 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-Hack to use pkg-config with static linking.
+This patch has been proposed to upstream:
+http://www.gnu.org/software/gsasl/#bugs
 
-diff --git a/libgsasl.pc.in b/libgsasl.pc.in
-index bbfed53..8d97241 100644
 --- a/libgsasl.pc.in
 +++ b/libgsasl.pc.in
-@@ -14,5 +14,5 @@ Name: libgsasl
- Description: GNU Simple Authentication and Security Layer (SASL)
+@@ -15,4 +15,5 @@
  URL: http://www.gnu.org/software/gsasl/
  Version: @VERSION@
--Libs: -L${libdir} -lgsasl
-+Libs: -L${libdir} -lgsasl -lidn -lntlm -lgcrypt -lgpg-error
+ Libs: -L${libdir} -lgsasl
++Libs.private: @LTLIBGCRYPT@ @LTLIBIDN@ @LTLIBNTLM@
  Cflags: -I${includedir}
