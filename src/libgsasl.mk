@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \
+        --with-libgcrypt \
         --with-libiconv-prefix='$(PREFIX)/$(TARGET)' \
         --with-libidn-prefix='$(PREFIX)/$(TARGET)' \
         --with-libntlm-prefix='$(PREFIX)/$(TARGET)'
