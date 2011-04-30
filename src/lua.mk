@@ -32,9 +32,11 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         INSTALL='$(INSTALL)' \
         install ranlib
+    $(SED) -i 's,^prefix=.*,prefix=$(PREFIX)/$(TARGET),' '$(1)/etc/lua.pc'
+    $(INSTALL) -m644 '$(1)/etc/lua.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/lua.pc'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lua.exe' \
-        -llua
+        `'$(TARGET)-pkg-config' lua --cflags --libs`
 endef
