@@ -4,13 +4,12 @@
 # FreeTDS
 PKG             := freetds
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.91rc
-$(PKG)_CHECKSUM := a8826fe3d21afeff6d5e56087ffcdff6f49b8ecd
-$(PKG)_SUBDIR   := freetds-0.91.dev.20110508RC2
-$(PKG)_FILE     := freetds-$($(PKG)_VERSION).tgz
+$(PKG)_VERSION  := 0.91.dev.20110509RC2
+$(PKG)_CHECKSUM := 1e0cb8958d56267d90538a9971641b1a808201dd
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.freetds.org/
-$(PKG)_URL      := http://www.ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/f/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
+$(PKG)_URL      := http://bitbucket.org/mabrand/mingw-cross-env/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv gnutls
 
 define $(PKG)_UPDATE
