@@ -4,8 +4,8 @@
 # cairomm
 PKG             := cairomm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.9.8
-$(PKG)_CHECKSUM := ce27835ac69f5b4bd88653655dabf09c868accf9
+$(PKG)_VERSION  := 1.10.0
+$(PKG)_CHECKSUM := f08bf8a331067f0d1e876523f07238fba6b26b99
 $(PKG)_SUBDIR   := cairomm-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairomm-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://cairographics.org/cairomm/

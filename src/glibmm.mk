@@ -4,8 +4,8 @@
 # GLibmm
 PKG             := glibmm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.28.0
-$(PKG)_CHECKSUM := ba9b40224a6543911ffbfd7268aa9a9172613a73
+$(PKG)_VERSION  := 2.28.1
+$(PKG)_CHECKSUM := 76cfba52d8fb1e3f46d14c3fea31269deb49e2fc
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtkmm.org/
