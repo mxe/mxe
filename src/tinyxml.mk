@@ -4,8 +4,8 @@
 # tinyxml
 PKG             := tinyxml
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.6.1
-$(PKG)_CHECKSUM := 2ff9c177a6c0bef10cbd27700b71826801c12987
+$(PKG)_VERSION  := 2.6.2
+$(PKG)_CHECKSUM := cba3f50dd657cb1434674a03b21394df9913d764
 $(PKG)_SUBDIR   := $(PKG)
 $(PKG)_FILE     := $(PKG)_$(subst .,_,$($(PKG)_VERSION)).tar.gz
 $(PKG)_WEBSITE  := http://sourceforge.net/projects/$(PKG)/
