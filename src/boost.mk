@@ -13,8 +13,8 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VER
 $(PKG)_DEPS     := gcc zlib bzip2 expat
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/boost/files/boost/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    wget -q -O- 'http://www.boost.org/users/download/' | \
+    $(SED) -n 's,.*/boost/\([0-9][^"/]*\)/".*,\1,p' | \
     grep -v beta | \
     head -1
 endef
