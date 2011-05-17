@@ -14,6 +14,10 @@ $(PKG)_URL_2    := http://ftp.uni-magdeburg.de/aftp/mirror/linux/slackware/sourc
 $(PKG)_DEPS     := gcc freetype libpng jpeg libxml2 pthreads
 
 define $(PKG)_UPDATE
+    echo 'Warning: Update for package gd is temporarily disabled.' >&2;
+    echo $(gd_VERSION)
+endef
+define $(PKG)_UPDATE_orig
     wget -q -O- 'http://www.libgd.org/releases/' | \
     $(SED) -n 's,.*gd-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
