@@ -13,6 +13,10 @@ $(PKG)_URL      := http://bitbucket.org/mabrand/mingw-cross-env/downloads/$($(PK
 $(PKG)_DEPS     := gcc libiconv gnutls
 
 define $(PKG)_UPDATE
+    echo 'Warning: Update for package freetds is temporarily disabled.' >&2;
+    echo $(freetds_VERSION)
+endef
+define $(PKG)_UPDATE_orig
     wget -q -O- 'http://freetds.cvs.sourceforge.net/viewvc/freetds/freetds/' | \
     grep '<option>R' | \
     $(SED) -n 's,.*R\([0-9][0-9_]*\)<.*,\1,p' | \
