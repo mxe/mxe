@@ -13,7 +13,7 @@ $(PKG)_URL      := http://bitbucket.org/mabrand/mingw-cross-env/downloads/$($(PK
 $(PKG)_DEPS     := gcc libiconv gnutls
 
 define $(PKG)_UPDATE
-    echo 'Warning: Update for package freetds is temporarily disabled.' >&2;
+    echo 'Warning: Updates are temporarily disabled for package freetds.' >&2;
     echo $(freetds_VERSION)
 endef
 define $(PKG)_UPDATE_orig
