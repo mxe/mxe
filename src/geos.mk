@@ -4,8 +4,8 @@
 # GEOS
 PKG             := geos
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.2
-$(PKG)_CHECKSUM := 6917d6d1d4e79f58d9f931bf351024709fabbc5a
+$(PKG)_VERSION  := 3.3.0rc1
+$(PKG)_CHECKSUM := 6a8f7153d887d7a5085dcee62251b6f9c82a2283
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
 $(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://trac.osgeo.org/geos/
@@ -20,14 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,-lgeos,-lgeos -lstdc++,' '$(1)/tools/geos-config.in'
-    $(SED) -i 's,-L\$${libdir}$$,-L$${libdir} -lgeos -lstdc++,' '$(1)/tools/geos-config.in'
-    $(SED) -i 's,\$$WARNFLAGS -ansi,\$$WARNFLAGS,' '$(1)/configure.in'
-    touch '$(1)/aclocal.m4'
-    $(SED) -i 's,\$$WARNFLAGS -ansi,\$$WARNFLAGS,' '$(1)/configure'
-    touch '$(1)/Makefile.in'
-    touch '$(1)/source/headers/config.h.in'
-    touch '$(1)/source/headers/geos/platform.h.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
