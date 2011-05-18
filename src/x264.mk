@@ -4,8 +4,8 @@
 # x264
 PKG             := x264
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 20110509-2245
-$(PKG)_CHECKSUM := 767cac0d1cdfdf6ce610e5752ef27b881087ecc9
+$(PKG)_VERSION  := 20110517-2245
+$(PKG)_CHECKSUM := 51aa8e7ac683ef1bfeec638d0e44e2bd94a25a92
 $(PKG)_SUBDIR   := $(PKG)-snapshot-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-snapshot-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.videolan.org/developers/x264.html
@@ -21,6 +21,8 @@ define $(PKG)_BUILD
         --cross-prefix='$(TARGET)'- \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-shared \
+        --enable-static \
         --enable-win32thread
     $(MAKE) -C '$(1)' -j 1 uninstall
     $(MAKE) -C '$(1)' -j '$(JOBS)'
