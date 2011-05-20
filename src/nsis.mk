@@ -21,6 +21,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && scons \
+        MINGW_CROSS_PREFIX='$(TARGET)-' \
         PREFIX='$(PREFIX)/$(TARGET)' \
         `[ -d /usr/local/include ] && echo APPEND_CPPPATH=/usr/local/include` \
         `[ -d /usr/local/lib ]     && echo APPEND_LIBPATH=/usr/local/lib` \
