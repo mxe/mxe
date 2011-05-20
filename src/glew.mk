@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         -e "s|@exec_prefix@|$(PREFIX)/$(TARGET)/bin|g" \
         -e "s|@includedir@|$(PREFIX)/$(TARGET)/include/GL|g" \
         -e "s|@version@|$(glew_VERSION)|g" \
-        -e "s|Cflags: |Cflags: -DGLEW_STATIC |g" \
-        -e "s|-lGLEW|-lGLEW -lopengl32|g" \
+        -e "s|@cflags@|-DGLEW_STATIC|g" \
+        -e "s|-l@libname@|-lGLEW -lopengl32|g" \
         < '$(1)'/glew.pc.in > '$(1)'/glew.pc
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/'
