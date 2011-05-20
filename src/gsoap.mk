@@ -31,6 +31,9 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' clean
 
+    # wine confuses the cross-compiling detection, so set it explicitly
+    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
+
     # Build for mingw. Static by default.
     # Prevent undefined reference to _rpl_malloc.
     # http://groups.google.com/group/ikarus-users/browse_thread/thread/fd1d101eac32633f
