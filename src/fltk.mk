@@ -33,4 +33,10 @@ define $(PKG)_BUILD
     # enable exceptions, because disabling them doesn't make any sense on PCs
     $(SED) -i 's,-fno-exceptions,,' '$(1)/makeinclude'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install DIRS=src LIBCOMMAND='$(TARGET)-ar cr'
+    ln -sf $(PREFIX)/$(TARGET)/bin/fltk-config $(PREFIX)/bin/$(TARGET)-fltk-config
+    
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -pedantic -ansi \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-fltk.exe' \
+        `$(TARGET)-fltk-config --cxxflags --ldstaticflags`
 endef
