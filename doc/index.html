@@ -702,7 +702,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     Install
-    <a href="http://developer.apple.com/TOOLS/xcode/">Xcode (v3.2x)</a>
+    <a href="http://developer.apple.com/xcode/">Xcode 3</a>
     and
     <a href="http://www.macports.org/">MacPorts</a>,
     then run:
@@ -718,7 +718,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>sudo port install gcc_select
 sudo gcc_select gcc42</pre>
     <p>
-    Xcode 4 is not supported. 
+    Xcode 4 is not supported yet.
     </p>
 
     <h3 id="requirements-opensuse">openSUSE</h3>
@@ -737,6 +737,22 @@ sudo gcc_select gcc42</pre>
     <pre>zypper install -R gcc-32bit glibc-devel-32bit \
                   libgcc45-32bit libgomp45-32bit \
                   libstdc++45-devel-32bit</pre>
+
+    <h3 id="open-issue-nsis">Open Issues with NSIS</h3>
+
+    <p>
+    The NSIS package contains some native tools that are
+    currently 32-bit only. In order to build these on a
+    64-bit system, multi-lib support must be enabled in the
+    compiler toolchain. However, not all operating systems
+    support this.
+    </p>
+    <p>
+    Since no other packages depend on it, the remainder of
+    mingw-cross-env can be successfully built by simply
+    removing the package:
+    </p>
+    <pre>rm <em>where mingw-cross-env is unpacked</em>/src/nsis.mk</pre>
 </div>
 
 <div class="section">
@@ -859,24 +875,6 @@ sudo gcc_select gcc42</pre>
     </p>
     <table id="package-list">
     </table>
-
-    <h3>Open Issues</h3>
-
-    <h4 id="open-issue-nsis">NSIS</h4>
-
-    <p>
-    The NSIS package contains some native tools that are 
-    currently 32-bit only. In order to build these on a 
-    64-bit system, multi-lib support must be enabled in the 
-    compiler toolchain. However, not all operating systems 
-    support this.
-    </p>
-    <p>
-    Since no other packages depend it, the remainder of
-    mingw-cross-env can be successfully built by simply
-    removing the package:
-    </p>
-    <pre>rm <em>where mingw-cross-env is unpacked</em>/src/nsis.mk</pre>
 </div>
 
 <div class="section">
