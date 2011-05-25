@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := f30fc496687bbb3ad353aba65fdd01a40b452da3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.freetds.org/
-$(PKG)_URL      := http://bitbucket.org/mabrand/mingw-cross-env/downloads/$($(PKG)_FILE)
+$(PKG)_URL      := https://bitbucket.org/mabrand/mingw-cross-env/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv gnutls
 
 define $(PKG)_UPDATE
