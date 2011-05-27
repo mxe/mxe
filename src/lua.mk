@@ -23,15 +23,15 @@ define $(PKG)_BUILD
         INSTALL_TOP='$(PREFIX)/$(TARGET)' \
         CC='$(TARGET)-gcc' \
         AR='$(TARGET)-ar rcu' \
+        RANLIB='$(TARGET)-ranlib' \
         a
     $(MAKE) -C '$(1)' -j 1 \
         INSTALL_TOP='$(PREFIX)/$(TARGET)' \
         INSTALL_BIN='$(1)/noinstall' \
         INSTALL_MAN='$(1)/noinstall' \
         TO_BIN='lua.h' \
-        RANLIB='$(TARGET)-ranlib' \
         INSTALL='$(INSTALL)' \
-        install ranlib
+        install
     $(SED) -i 's,^prefix=.*,prefix=$(PREFIX)/$(TARGET),' '$(1)/etc/lua.pc'
     $(INSTALL) -m644 '$(1)/etc/lua.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/lua.pc'
 
