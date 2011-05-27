@@ -19,6 +19,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # don't build and install docs
+    (echo '# DISABLED'; echo 'all:'; echo 'install:') > '$(1)/docs/Makefile.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-mmap \
