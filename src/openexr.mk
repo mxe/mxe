@@ -41,8 +41,7 @@ define $(PKG)_BUILD
         --disable-threading \
         --disable-posix-sem \
         --disable-ilmbasetest
-    # do the first build step by hand, because a program is built that
-    # generates a source file
+    # build the code generator manually
     cd '$(1)/IlmImf' && g++ \
         -I'$(1)/ilmbase/include/OpenEXR' \
         -L'$(1)/ilmbase/lib' \
