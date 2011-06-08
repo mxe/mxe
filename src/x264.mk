@@ -4,8 +4,8 @@
 # x264
 PKG             := x264
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 20110517-2245
-$(PKG)_CHECKSUM := 51aa8e7ac683ef1bfeec638d0e44e2bd94a25a92
+$(PKG)_VERSION  := 20110607-2245
+$(PKG)_CHECKSUM := a75660dc7c485ef4cef7cc3f8cd05cf8602e1004
 $(PKG)_SUBDIR   := $(PKG)-snapshot-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-snapshot-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.videolan.org/developers/x264.html

@@ -4,8 +4,8 @@
 # lcms
 PKG             := lcms
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1
-$(PKG)_CHECKSUM := 0ce856a004068ff6e22f9f2d7b94a11b9b469bf9
+$(PKG)_VERSION  := 2.2
+$(PKG)_CHECKSUM := b46f862690b37baa9e5be5a9355b8023df8bef6a
 $(PKG)_SUBDIR   := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION))
 $(PKG)_FILE     := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION)).tar.gz
 $(PKG)_WEBSITE  := http://www.littlecms.com/

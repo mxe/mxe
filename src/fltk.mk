@@ -4,8 +4,8 @@
 # FLTK
 PKG             := fltk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.x-r8659
-$(PKG)_CHECKSUM := 97d5002f1f3a32bf78634954e63c491483e727ac
+$(PKG)_VERSION  := 1.3.x-r8772
+$(PKG)_CHECKSUM := d8cbdaa2e61160ebf45444c0fd432fe0ffa03f17
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_WEBSITE  := http://www.fltk.org/

@@ -1,0 +1,32 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch taken from https://bugs.freedesktop.org/show_bug.cgi?id=37838
+
+From fb42ebba06d89c0fd9ca3b753b9f1d9837cf798f Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 1 Jun 2011 23:51:21 +0200
+Subject: [PATCH] don't try to build dbus-daemon-launch-helper for Windows
+
+Fixed regression in b0acded which breaks build for Windows.
+---
+ bus/Makefile.am |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/bus/Makefile.am b/bus/Makefile.am
+index dfb3bc3..73765f5 100644
+--- a/bus/Makefile.am
++++ b/bus/Makefile.am
+@@ -150,7 +150,9 @@ bus_test_launch_helper_CPPFLAGS= -DDBUS_STATIC_BUILD	\
+ ## even when not doing "make check"
+ noinst_PROGRAMS = $(TESTS)
+ dbus_daemon_exec_PROGRAMS = dbus-daemon
++if DBUS_UNIX
+ libexec_PROGRAMS = dbus-daemon-launch-helper
++endif DBUS_UNIX
+ 
+ ## note that TESTS has special meaning (stuff to use in make check)
+ ## so if adding tests not to be run in make check, don't add them to
+-- 
+1.7.4.2
+

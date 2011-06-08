@@ -4,8 +4,8 @@
 # dbus
 PKG             := dbus
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.0
-$(PKG)_CHECKSUM := 4f0c82af6de628d7359dcdbc0da402f8e369e367
+$(PKG)_VERSION  := 1.5.2
+$(PKG)_CHECKSUM := 26e78f6f0ea7d5151b60e905061e11979fb6098a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://$(PKG).freedesktop.org/
@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(1)' && automake && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-xml=expat \
@@ -29,8 +29,6 @@ define $(PKG)_BUILD
         --disable-asserts \
         --disable-shared \
         --enable-static \
-        --disable-tests \
-        --disable-standalone-tests \
         --disable-silent-rules
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
