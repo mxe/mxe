@@ -3,12 +3,12 @@
 
 # GnuTLS
 PKG             := gnutls
-$(PKG)_VERSION  := 2.12.6.1
-$(PKG)_CHECKSUM := c7cf31eac9c74ca2889775c7465b50346294736a
+$(PKG)_VERSION  := 2.12.7
+$(PKG)_CHECKSUM := 41943d8f8648072a8e6a40cb213c91acf0451937
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gnutls/$($(PKG)_FILE)
+$(PKG)_URL      := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libgcrypt
 
