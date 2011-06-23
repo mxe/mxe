@@ -1,0 +1,15 @@
+The wrong source files are specified in the makefile.
+There is one wrapper source file which includes all and
+implements additional functions.
+
+--- a/src/Makefile.in	2011-03-11 01:21:16.000000000 +0100
++++ b/src/Makefile.in	2011-03-11 01:22:04.000000000 +0100
+@@ -20,7 +20,7 @@
+ 	cp ../include/libirc_events.h  @prefix@/include/libirc_events.h 
+ 	cp libirc.a @prefix@/include/lib/libirc.a
+ 
+-$(OBJS): utils.c dcc.c errors.c portable.c sockets.c colors.c
++$(OBJS): libircclient.c
+ 
+ libircclient.a: $(OBJS)
+ 	$(AR) libircclient.a $(OBJS)

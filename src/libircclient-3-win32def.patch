@@ -1,0 +1,105 @@
+Use the proper WIN32 define.
+
+--- a/src/sockets.c	2011-05-26 21:29:33.000000000 +0200
++++ b/src/sockets.c	2011-05-26 21:30:25.000000000 +0200
+@@ -15,7 +15,7 @@
+ /*
+  * The sockets interface was moved out to simplify going OpenSSL integration.
+  */
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	#include <sys/socket.h>
+ 	#include <netdb.h>
+ 	#include <arpa/inet.h>	
+@@ -47,7 +47,7 @@
+ 
+ static int socket_error()
+ {
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	return errno;
+ #else
+ 	return WSAGetLastError();
+@@ -64,7 +64,7 @@
+ 
+ static int socket_make_nonblocking (socket_t * sock)
+ {
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	return fcntl (*sock, F_SETFL, fcntl (*sock, F_GETFL,0 ) | O_NONBLOCK) != 0;
+ #else
+ 	unsigned long mode = 0;
+@@ -75,7 +75,7 @@
+ 
+ static int socket_close (socket_t * sock)
+ {
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	close (*sock);
+ #else
+ 	closesocket (*sock);
+--- a/src/portable.c	2011-05-26 21:29:27.000000000 +0200
++++ b/src/portable.c	2011-05-26 21:30:03.000000000 +0200
+@@ -13,7 +13,7 @@
+  */
+ 
+ 
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	#include "config.h"
+ 	#include <stdio.h>
+ 	#include <stdarg.h>
+@@ -65,7 +65,7 @@
+ 
+ static inline int libirc_mutex_init (port_mutex_t * mutex)
+ {
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	InitializeCriticalSection (mutex);
+ 	return 0;
+ #elif defined (PTHREAD_MUTEX_RECURSIVE)
+@@ -78,13 +78,13 @@
+ 
+ 	return pthread_mutex_init (mutex, 0);
+ 
+-#endif /* defined (WIN32) */
++#endif /* defined (_WIN32) */
+ }
+ 
+ 
+ static inline void libirc_mutex_destroy (port_mutex_t * mutex)
+ {
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	DeleteCriticalSection (mutex);
+ #else
+ 	pthread_mutex_destroy (mutex);
+@@ -94,7 +94,7 @@
+ 
+ static inline void libirc_mutex_lock (port_mutex_t * mutex)
+ {
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	EnterCriticalSection (mutex);
+ #else
+ 	pthread_mutex_lock (mutex);
+@@ -104,7 +104,7 @@
+ 
+ static inline void libirc_mutex_unlock (port_mutex_t * mutex)
+ {
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	LeaveCriticalSection (mutex);
+ #else
+ 	pthread_mutex_unlock (mutex);
+--- a/include/libircclient.h	2011-05-26 21:35:53.000000000 +0200
++++ b/include/libircclient.h	2011-05-26 21:36:04.000000000 +0200
+@@ -43,7 +43,7 @@
+ #ifndef INCLUDE_LIBIRC_H
+ #define INCLUDE_LIBIRC_H
+ 
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	#include <sys/select.h>	/* fd_set */
+ #else
+ 	#include <winsock2.h>
