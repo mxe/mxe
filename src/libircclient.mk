@@ -22,7 +22,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
-	--host='$(TARGET)' \
+        --host='$(TARGET)' \
         --disable-debug \
         --enable-threads \
         --disable-ipv6
