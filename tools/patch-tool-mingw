@@ -7,7 +7,7 @@ cmd=$1
 pkg=$2
 
 # mingw-cross-env directory
-mcedir=~/dev/mingw-cross-env
+mcedir=~/mingw-cross-env
 
 # directory for unpacked tarballs/git repos
 gitsdir=~/gits
