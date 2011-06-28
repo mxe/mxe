@@ -4,7 +4,7 @@ See doc/index.html for further information.
 diff -uNr OpenSceneGraph-2.8.3.orig/CMakeLists.txt OpenSceneGraph-2.8.3/CMakeLists.txt
 --- OpenSceneGraph-2.8.3.orig/CMakeLists.txt	2010-04-01 11:02:54.000000000 +0200
 +++ OpenSceneGraph-2.8.3/CMakeLists.txt	2010-04-20 07:41:05.000000000 +0200
-@@ -802,12 +802,34 @@
+@@ -810,12 +810,34 @@
  
  # Generate pkg-config configuration file
  
