@@ -7,7 +7,7 @@ http://qt.gitorious.org/qt
 From bb75d02785da59c967dee09006700488af9f482e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 15 Oct 2010 14:56:03 +0200
-Subject: [PATCH 01/16] removed obsolete -qt-gif configure option
+Subject: [PATCH 01/17] removed obsolete -qt-gif configure option
 
 Since "-system-gif" is not offered, offering "-qt-gif" is unnecessary
 and perhaps misleading. By default the GIF handler is built from code
@@ -84,13 +84,13 @@ index 15c0ddb..dd5647b 100644
          desc("LIBPNG", "no",    "-no-libpng",           "Do not compile PNG support.");
          desc("LIBPNG", "qt",    "-qt-libpng",           "Use the libpng bundled with Qt.");
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From b5e382d8335628edf5d5c5a1671682de7c50c6d2 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:54 +0100
-Subject: [PATCH 02/16] qmake: fix double directory separator
+Subject: [PATCH 02/17] qmake: fix double directory separator
 
 Merge-request: 2543
 Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
@@ -120,13 +120,14 @@ index df580fd..81a379f 100644
          if(QDir::isRelativePath(ret) && !project->isEmpty("DESTDIR"))
              ret.prepend(project->first("DESTDIR"));
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From f35c452aaf665489060d317ce180d192433abd24 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:55 +0100
-Subject: [PATCH 03/16] qmake: don't limit pkg-config writing to unix generator
+Subject: [PATCH 03/17] qmake: don't limit pkg-config writing to unix
+ generator
 
 Move pkg-config related methods from unix generator to base class
 so they can be used by other generators too.
@@ -547,13 +548,13 @@ index 81a379f..1846d56 100644
 -
  QT_END_NAMESPACE
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From e8afbb5a998931c154aa83ed87be6521cb8d50d3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:56 +0100
-Subject: [PATCH 04/16] qmake: write and install pkg-config files for mingw
+Subject: [PATCH 04/17] qmake: write and install pkg-config files for mingw
 
 Merge-request: 2543
 Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
@@ -601,13 +602,13 @@ index 8af7ddd..6d0a5c4 100644
              QString lib_target = getLibTarget();
              lib_target.remove('"');
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From 175b395655d3f24aea0e4232069853dca1c33efd Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:57 +0100
-Subject: [PATCH 05/16] qt project files: create pkg-config files for mingw
+Subject: [PATCH 05/17] qt project files: create pkg-config files for mingw
 
 This is mostly the same as for unix.
 
@@ -934,13 +935,13 @@ index 7b94587..6e0a247 100644
     QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS]
     QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS]/$$TARGET
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From 5ef7985e6015c09735094545a07ed93832075507 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 20:21:05 +0100
-Subject: [PATCH 06/16] Fix static build on Windows with MinGW.
+Subject: [PATCH 06/17] Fix static build on Windows with MinGW.
 
 Q_DECL_IMPORT is still __declspec(dllimport), which is unsuitable for
 static code.
@@ -1121,13 +1122,14 @@ index ee5c7d9..cdff46c 100644
  int QVGPixmapData::metric(QPaintDevice::PaintDeviceMetric metric) const
  {
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From 3411ae8c3d83b3eb9407c8c338336e95fe74edf3 Mon Sep 17 00:00:00 2001
 From: Bernhard Rosenkraenzer <br@blankpage.ch>
 Date: Thu, 27 Jan 2011 13:48:13 +0100
-Subject: [PATCH 07/16] Allow the user to select imageformats to be built as plugin vs internal
+Subject: [PATCH 07/17] Allow the user to select imageformats to be built as
+ plugin vs internal
 
 This adds what is already there for different plugin types to
 imageformats plugins -- allowing the user to configure which
@@ -1229,13 +1231,14 @@ index dd5647b..b6e80ea 100644
          // IDE project generation -----------------------------------
          else if (configCmdLine.at(i) == "-no-dsp")
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From 8d719e67c51987fb6439ea1d05a2b10684b974e1 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 16 Nov 2010 20:06:28 +0100
-Subject: [PATCH 08/16] explicitly include -llcms for -lmng (mingw-cross-env specific)
+Subject: [PATCH 08/17] explicitly include -llcms for -lmng (mingw-cross-env
+ specific)
 
 ---
  src/gui/image/qmnghandler.pri |    2 +-
@@ -1255,13 +1258,14 @@ index ffb98de..c213e09 100644
  } else {
      include($$PWD/../../3rdparty/libmng.pri)
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From c34bd635af9263d1a719cd270db123b1a787640c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 5 Jun 2010 23:41:04 +0200
-Subject: [PATCH 09/16] added missing INSTALLS to JavaScriptCore.pro for static libjscore (mingw-cross-env specific)
+Subject: [PATCH 09/17] added missing INSTALLS to JavaScriptCore.pro for
+ static libjscore (mingw-cross-env specific)
 
 For static build of Qt on win32-g++*, applications using webkit
 link to libjscore.a.
@@ -1287,13 +1291,14 @@ index a805170..027eb0f 100644
  
  CONFIG(QTDIR_build) {
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From c56ec08a3e3af1a9beae552872b443c6a7cf401c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 9 Nov 2010 20:09:45 +0100
-Subject: [PATCH 10/16] Partially restored support for static linking of QtWebKit (mingw-cross-env specific)
+Subject: [PATCH 10/17] Partially restored support for static linking of
+ QtWebKit (mingw-cross-env specific)
 
 Support was removed by 4221d629e2cf37ee8c5ba7cb595b05ab8c82f113.
 Static QtWebkit might be supported by mingw-cross-env.
@@ -1319,13 +1324,13 @@ index 207dcc1..b10b0a2 100755
  CFG_CONCURRENT="yes"
  if [ "$canBuildQtConcurrent" = "no" ]; then
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From 074e13614d6071247600eea3c3d6a1f4c4f4a0d5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 14:21:32 +0100
-Subject: [PATCH 11/16] pkg-config file for jscore (mingw-cross-env specific)
+Subject: [PATCH 11/17] pkg-config file for jscore (mingw-cross-env specific)
 
 ---
  .../webkit/JavaScriptCore/JavaScriptCore.pro       |    8 ++++++++
@@ -1348,13 +1353,14 @@ index 027eb0f..44bbc3f 100644
 +   QMAKE_PKGCONFIG_DESTDIR = pkgconfig
 +}
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From c907c7c1f0922416fd5f19cb477b71c6f97fee45 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 21 Feb 2011 22:22:04 +0100
-Subject: [PATCH 12/16] workaround for native build on OSX (mingw-cross-env specific)
+Subject: [PATCH 12/17] workaround for native build on OSX (mingw-cross-env
+ specific)
 
 The native build complains about:
 "You are building a 64-bit application, but using a 32-bit version of
@@ -1379,13 +1385,13 @@ index 4464686..ba0c45b 100644
  include(../common/mac-g++.conf)
  
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From ac552171a0729e1fae026741e4ec89a415298667 Mon Sep 17 00:00:00 2001
 From: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
 Date: Mon, 10 Jan 2011 20:09:24 +0100
-Subject: [PATCH 13/16] fix -enable-stdcall-fixup usage
+Subject: [PATCH 13/17] fix -enable-stdcall-fixup usage
 
 the leading "-Wl," was apparently accidentally split off to the wrong
 line.
@@ -1413,13 +1419,13 @@ index ec216aa..2d9833b 100644
  QMAKE_LFLAGS_RELEASE	= -Wl,-s
  QMAKE_LFLAGS_DEBUG	=
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From 0e32298cb08ef1168dc6c06dd48bab8ee62c6e5d Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 28 Mar 2011 13:33:58 +0200
-Subject: [PATCH 14/16] fix -enable-stdcall-fixup usage
+Subject: [PATCH 14/17] fix -enable-stdcall-fixup usage
 
 the leading "-Wl," was apparently accidentally split off to the wrong
 line.
@@ -1449,13 +1455,14 @@ index 7e077a1..efc3de2 100644
  QMAKE_LFLAGS_RELEASE	= -Wl,-s
  QMAKE_LFLAGS_DEBUG	=
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From 0a9731cad65337c7084791b54db8bfeb0939dc7d Mon Sep 17 00:00:00 2001
 From: Jonathan Liu <net147@gmail.com>
 Date: Mon, 4 Apr 2011 13:01:48 +0200
-Subject: [PATCH 15/16] win32-g++: Correct the order of linked Windows libraries
+Subject: [PATCH 15/17] win32-g++: Correct the order of linked Windows
+ libraries
 
 On Windows 7, kernel32.dll exports many of the same functions as
 advapi32.dll. If executables link to these functions in kernel32.dll
@@ -1530,13 +1537,14 @@ index 8f46a2e..3a0ab12 100644
  
      qnx {
 -- 
-1.7.4.2
+1.7.5.4
 
 
 From c4a1848f4178fe99daa2c12ad1f14e8de14cc389 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 5 Apr 2011 10:35:58 +0200
-Subject: [PATCH 16/16] win32-g++: Correct the order of linked Windows libraries
+Subject: [PATCH 16/17] win32-g++: Correct the order of linked Windows
+ libraries
 
 Commit a6d48ca corrected the problem for win32-g++. Here we do the same
 for win32-g++-cross.
@@ -1562,5 +1570,43 @@ index efc3de2..6eed244 100644
  QMAKE_LIBS_NETWORK      = -lws2_32
  QMAKE_LIBS_OPENGL       = -lglu32 -lopengl32 -lgdi32 -luser32
 -- 
-1.7.4.2
+1.7.5.4
+
+
+From 1ffce5a22631ab83f7baa35618c7a97725e4552e Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 28 Jun 2011 23:02:29 +0200
+Subject: [PATCH 17/17] use static text codec plugins for qdbusviewer
+ (mingw-cross-env specific)
+
+---
+ tools/qdbus/qdbusviewer/qdbusviewer.pro   |    2 ++
+ tools/qdbus/qdbusviewer/staticplugins.cpp |    5 +++++
+ 2 files changed, 7 insertions(+), 0 deletions(-)
+ create mode 100644 tools/qdbus/qdbusviewer/staticplugins.cpp
+
+diff --git a/tools/qdbus/qdbusviewer/qdbusviewer.pro b/tools/qdbus/qdbusviewer/qdbusviewer.pro
+index 6727691..21ce253 100644
+--- a/tools/qdbus/qdbusviewer/qdbusviewer.pro
++++ b/tools/qdbus/qdbusviewer/qdbusviewer.pro
+@@ -27,4 +27,6 @@ mac {
+ 
+ win32 {
+     RC_FILE = qdbusviewer.rc
++    QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs
++    SOURCES += staticplugins.cpp
+ }
+diff --git a/tools/qdbus/qdbusviewer/staticplugins.cpp b/tools/qdbus/qdbusviewer/staticplugins.cpp
+new file mode 100644
+index 0000000..47f5bf3
+--- /dev/null
++++ b/tools/qdbus/qdbusviewer/staticplugins.cpp
+@@ -0,0 +1,5 @@
++#include <QtPlugin>
++Q_IMPORT_PLUGIN(qcncodecs)
++Q_IMPORT_PLUGIN(qjpcodecs)
++Q_IMPORT_PLUGIN(qtwcodecs)
++Q_IMPORT_PLUGIN(qkrcodecs)
+-- 
+1.7.5.4
 
