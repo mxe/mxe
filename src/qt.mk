@@ -28,7 +28,7 @@ define $(PKG)_BUILD
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
-        SYBASE_LIBS="-lsybdb -lws2_32" \
+        SYBASE_LIBS="-lsybdb -liconv -lws2_32" \
         ./configure \
         -opensource \
         -confirm-license \
