@@ -4,4 +4,3 @@
 TARGET   = test-qt
 SOURCES += qt-test.cpp
 FORMS   += qt-test.ui
-QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs
