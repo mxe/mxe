@@ -2,6 +2,7 @@
 /* See doc/index.html for further information. */
 
 #include <QApplication>
+#include <QtPlugin>
 #include "ui_qt-test.h"
 
 #ifdef  Q_OS_AIX
@@ -143,6 +144,11 @@
 #ifndef Q_WS_WIN
 #error "Q_WS_WIN is not defined"
 #endif
+
+Q_IMPORT_PLUGIN(qcncodecs)
+Q_IMPORT_PLUGIN(qjpcodecs)
+Q_IMPORT_PLUGIN(qtwcodecs)
+Q_IMPORT_PLUGIN(qkrcodecs)
 
 int main(int argc, char *argv[])
 {
