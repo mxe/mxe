@@ -145,11 +145,6 @@
 #error "Q_WS_WIN is not defined"
 #endif
 
-Q_IMPORT_PLUGIN(qcncodecs)
-Q_IMPORT_PLUGIN(qjpcodecs)
-Q_IMPORT_PLUGIN(qtwcodecs)
-Q_IMPORT_PLUGIN(qkrcodecs)
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

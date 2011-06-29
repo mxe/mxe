@@ -1573,81 +1573,51 @@ index efc3de2..6eed244 100644
 1.7.6
 
 
-From f6eb05daf463a25bb045ce81dcc889cf4b73a140 Mon Sep 17 00:00:00 2001
+From 31cbd33f7f47bbfe52de9b27a6020e87f309d2be Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 28 Jun 2011 23:02:29 +0200
 Subject: [PATCH 17/17] link static text codec plugins (mingw-cross-env
  specific)
 
 Static QtCore for Windows introduces dependencies on the text codec plugins.
+Without this patch, users would have to handle these dependencies explicitly
+when building any Qt application.
 ---
- staticcodecplugins/staticcodecplugins.cpp |    5 +++++
- staticcodecplugins/staticcodecplugins.pri |    4 ++++
- tools/qdbus/qdbus/qdbus.pro               |    1 +
- tools/qdbus/qdbuscpp2xml/qdbuscpp2xml.pro |    1 +
- tools/qdbus/qdbusviewer/qdbusviewer.pro   |    1 +
- tools/qdbus/qdbusxml2cpp/qdbusxml2cpp.pro |    1 +
- 6 files changed, 13 insertions(+), 0 deletions(-)
- create mode 100644 staticcodecplugins/staticcodecplugins.cpp
- create mode 100644 staticcodecplugins/staticcodecplugins.pri
+ src/corelib/corelib.pro                   |    1 +
+ src/plugins/codecs/staticcodecplugins.cpp |    5 +++++
+ src/plugins/codecs/staticcodecplugins.pri |    2 ++
+ 3 files changed, 8 insertions(+), 0 deletions(-)
+ create mode 100644 src/plugins/codecs/staticcodecplugins.cpp
+ create mode 100644 src/plugins/codecs/staticcodecplugins.pri
 
-diff --git a/staticcodecplugins/staticcodecplugins.cpp b/staticcodecplugins/staticcodecplugins.cpp
+diff --git a/src/corelib/corelib.pro b/src/corelib/corelib.pro
+index 06aa191..21a8316 100644
+--- a/src/corelib/corelib.pro
++++ b/src/corelib/corelib.pro
+@@ -40,3 +40,4 @@ symbian: {
+                   "$${LITERAL_HASH}endif"
+     MMP_RULES += pagingBlock
+ }
++win32:static:include(../plugins/codecs/staticcodecplugins.pri)
+diff --git a/src/plugins/codecs/staticcodecplugins.cpp b/src/plugins/codecs/staticcodecplugins.cpp
 new file mode 100644
 index 0000000..47f5bf3
 --- /dev/null
-+++ b/staticcodecplugins/staticcodecplugins.cpp
++++ b/src/plugins/codecs/staticcodecplugins.cpp
 @@ -0,0 +1,5 @@
 +#include <QtPlugin>
 +Q_IMPORT_PLUGIN(qcncodecs)
 +Q_IMPORT_PLUGIN(qjpcodecs)
 +Q_IMPORT_PLUGIN(qtwcodecs)
 +Q_IMPORT_PLUGIN(qkrcodecs)
-diff --git a/staticcodecplugins/staticcodecplugins.pri b/staticcodecplugins/staticcodecplugins.pri
+diff --git a/src/plugins/codecs/staticcodecplugins.pri b/src/plugins/codecs/staticcodecplugins.pri
 new file mode 100644
-index 0000000..4efe0a6
+index 0000000..a579487
 --- /dev/null
-+++ b/staticcodecplugins/staticcodecplugins.pri
-@@ -0,0 +1,4 @@
-+win32 {
-+    QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs
-+    SOURCES += $$PWD/staticcodecplugins.cpp
-+}
-diff --git a/tools/qdbus/qdbus/qdbus.pro b/tools/qdbus/qdbus/qdbus.pro
-index ea732ef..705c83d 100644
---- a/tools/qdbus/qdbus/qdbus.pro
-+++ b/tools/qdbus/qdbus/qdbus.pro
-@@ -8,3 +8,4 @@ win32:CONFIG += console
- 
- target.path=$$[QT_INSTALL_BINS]
- INSTALLS += target
-+include(../../../staticcodecplugins/staticcodecplugins.pri)
-diff --git a/tools/qdbus/qdbuscpp2xml/qdbuscpp2xml.pro b/tools/qdbus/qdbuscpp2xml/qdbuscpp2xml.pro
-index 9ee1d37..17ac7ab 100644
---- a/tools/qdbus/qdbuscpp2xml/qdbuscpp2xml.pro
-+++ b/tools/qdbus/qdbuscpp2xml/qdbuscpp2xml.pro
-@@ -8,3 +8,4 @@ win32:CONFIG += console
- 
- target.path=$$[QT_INSTALL_BINS]
- INSTALLS += target
-+include(../../../staticcodecplugins/staticcodecplugins.pri)
-diff --git a/tools/qdbus/qdbusviewer/qdbusviewer.pro b/tools/qdbus/qdbusviewer/qdbusviewer.pro
-index 6727691..1e0e374 100644
---- a/tools/qdbus/qdbusviewer/qdbusviewer.pro
-+++ b/tools/qdbus/qdbusviewer/qdbusviewer.pro
-@@ -28,3 +28,4 @@ mac {
- win32 {
-     RC_FILE = qdbusviewer.rc
- }
-+include(../../../staticcodecplugins/staticcodecplugins.pri)
-diff --git a/tools/qdbus/qdbusxml2cpp/qdbusxml2cpp.pro b/tools/qdbus/qdbusxml2cpp/qdbusxml2cpp.pro
-index 6f78c7c..a953206 100644
---- a/tools/qdbus/qdbusxml2cpp/qdbusxml2cpp.pro
-+++ b/tools/qdbus/qdbusxml2cpp/qdbusxml2cpp.pro
-@@ -8,3 +8,4 @@ win32:CONFIG += console
- 
- target.path=$$[QT_INSTALL_BINS]
- INSTALLS += target
-+include(../../../staticcodecplugins/staticcodecplugins.pri)
++++ b/src/plugins/codecs/staticcodecplugins.pri
+@@ -0,0 +1,2 @@
++QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs
++SOURCES += $$PWD/staticcodecplugins.cpp
 -- 
 1.7.6
 
