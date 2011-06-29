@@ -1,0 +1,33 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch taken from:
+http://lists.openscenegraph.org/pipermail/osg-submissions-openscenegraph.org/2011-June/008449.html
+
+From 6876c578528ecc61088940fb9358e393811e43ef Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 28 Jun 2011 00:34:27 +0200
+Subject: [PATCH] remove include of obsolete curl/types.h
+
+Quoth curl-7.21.7/CHANGES:
+
+    Removed types.h (it's been unused since April 2004)
+---
+ src/osgPlugins/curl/ReaderWriterCURL.cpp |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+diff --git a/src/osgPlugins/curl/ReaderWriterCURL.cpp b/src/osgPlugins/curl/ReaderWriterCURL.cpp
+index 83aee7b..daf156f 100644
+--- a/src/osgPlugins/curl/ReaderWriterCURL.cpp
++++ b/src/osgPlugins/curl/ReaderWriterCURL.cpp
+@@ -21,7 +21,6 @@
+ #include <fstream>
+ 
+ #include <curl/curl.h>
+-#include <curl/types.h>
+ 
+ #include "ReaderWriterCURL.h"
+ 
+-- 
+1.7.5.4
+

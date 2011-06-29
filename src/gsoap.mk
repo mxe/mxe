@@ -4,8 +4,8 @@
 # gSOAP
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.2
-$(PKG)_CHECKSUM := 199b7d4cf0b6a5bf81a2198e39f03c092ffc05a7
+$(PKG)_VERSION  := 2.8.3
+$(PKG)_CHECKSUM := 55677239751253b48f448eb30a7585df97cba486
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/

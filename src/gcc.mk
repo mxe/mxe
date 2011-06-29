@@ -4,8 +4,8 @@
 # GCC
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.6.0
-$(PKG)_CHECKSUM := dcbb5ce724c4bf87b9ec93473d16b71e9ebac483
+$(PKG)_VERSION  := 4.6.1
+$(PKG)_CHECKSUM := 8bf66f7a71534ba564563a0ba0b2517aead8ac30
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://gcc.gnu.org/

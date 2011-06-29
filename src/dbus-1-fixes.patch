@@ -11,7 +11,7 @@ diff --git a/dbus/dbus-macros.h b/dbus/dbus-macros.h
 index d1e40ec..3a32355 100644
 --- a/dbus/dbus-macros.h
 +++ b/dbus/dbus-macros.h
-@@ -158,6 +158,7 @@
+@@ -172,6 +172,7 @@
   */
  
  #if defined(_WIN32)
