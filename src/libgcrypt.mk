@@ -4,8 +4,8 @@
 # libgcrypt
 PKG             := libgcrypt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.6
-$(PKG)_CHECKSUM := 445b9e158aaf91e24eae3d1040c6213e9d9f5ba6
+$(PKG)_VERSION  := 1.5.0
+$(PKG)_CHECKSUM := 3e776d44375dc1a710560b98ae8437d5da6e32cf
 $(PKG)_SUBDIR   := libgcrypt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgcrypt-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := ftp://ftp.gnupg.org/gcrypt/libgcrypt/
