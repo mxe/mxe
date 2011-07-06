@@ -4,8 +4,8 @@
 # pixman
 PKG             := pixman
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.21.8
-$(PKG)_CHECKSUM := fe0118cc00c266e364bf391b839ebaadd42d1692
+$(PKG)_VERSION  := 0.23.2
+$(PKG)_CHECKSUM := 5100c1e2d4566e507ead5c638d2a66bb165b2e63
 $(PKG)_SUBDIR   := pixman-$($(PKG)_VERSION)
 $(PKG)_FILE     := pixman-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://cairographics.org/
