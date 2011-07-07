@@ -44,7 +44,7 @@ GITDIR=~/projects/vmime/git/vmime
 From c6f077e695b75d9ff9a32d1621f6a320c8ce70f1 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Tue, 30 Nov 2010 14:57:03 +0000
-Subject: [PATCH 01/20] Initialize and delete object.
+Subject: [PATCH 01/21] Initialize and delete object.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@577 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -78,7 +78,7 @@ index 0f3e9ec..d71c3ca 100644
 From 41203315eacf53230dd7bdb0cf2b0d1078ddee39 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Wed, 8 Dec 2010 08:52:54 +0000
-Subject: [PATCH 02/20] No extra space between ':' and '<' in MAIL FROM and
+Subject: [PATCH 02/21] No extra space between ':' and '<' in MAIL FROM and
  RCPT TO. Wait for server response after QUIT and
  before closing connection.
 
@@ -121,7 +121,7 @@ index 204daae..d9fb7b8 100644
 From 969b56f4bd61ddb8277c04ac2a1e35e029ec058b Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:24:06 +0000
-Subject: [PATCH 03/20] Fixed unit test after bug fix.
+Subject: [PATCH 03/21] Fixed unit test after bug fix.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@580 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -145,7 +145,7 @@ index 5015552..6552f9e 100644
 From 50743da0712b216533acdc09069f1bfc81f988c6 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:54:38 +0000
-Subject: [PATCH 04/20] Fixed boundary parsing (thanks to John van der Kamp,
+Subject: [PATCH 04/21] Fixed boundary parsing (thanks to John van der Kamp,
  Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@581 5301114d-f842-0410-bbdd-996ee0417009
@@ -234,7 +234,7 @@ index 12c4f74..df2bf85 100644
 From b6d2b4765c9472ff333cace13c57c6af0e866ee0 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 21 Jan 2011 15:28:06 +0000
-Subject: [PATCH 05/20] Fixed possible infinite loop (thanks to John van der
+Subject: [PATCH 05/21] Fixed possible infinite loop (thanks to John van der
  Kamp, Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@582 5301114d-f842-0410-bbdd-996ee0417009
@@ -287,7 +287,7 @@ index b84f376..746ac94 100644
 From 022339ab63430d792d0314f51dd7854eabd5736e Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 28 Jan 2011 12:11:08 +0000
-Subject: [PATCH 06/20] Fixed possible read to invalid memory location (thanks
+Subject: [PATCH 06/21] Fixed possible read to invalid memory location (thanks
  to Alexander Konovalov).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@583 5301114d-f842-0410-bbdd-996ee0417009
@@ -312,7 +312,7 @@ index 1c1c1a6..fa08d33 100644
 From 7f1024917b3df6be013e18a2e0f0f1b13f4d112b Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Wed, 9 Mar 2011 18:03:31 +0000
-Subject: [PATCH 07/20] Fixed bug #3174903. Fixed word parsing when buffer
+Subject: [PATCH 07/21] Fixed bug #3174903. Fixed word parsing when buffer
  does not end with NL. Fixed 'no encoding' when
  forced.
 
@@ -520,7 +520,7 @@ index df2bf85..b129913 100644
 From 1c0648c2a3ee4072869446755c8a7604614752e1 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 27 Mar 2011 11:26:55 +0000
-Subject: [PATCH 08/20] Allow static linking in mingw-cross-env. Added 'iconv'
+Subject: [PATCH 08/21] Allow static linking in mingw-cross-env. Added 'iconv'
  and uses 'ws2_32' instead of 'winsock32' (#3213487).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@585 5301114d-f842-0410-bbdd-996ee0417009
@@ -555,7 +555,7 @@ index fb01edf..6e8aba2 100644
 From c6c596b10702a98b59978c81c01dc7f4f33157c9 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Thu, 31 Mar 2011 19:13:03 +0000
-Subject: [PATCH 09/20] Flush stateful data from iconv (thanks to John van der
+Subject: [PATCH 09/21] Flush stateful data from iconv (thanks to John van der
  Kamp, Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@586 5301114d-f842-0410-bbdd-996ee0417009
@@ -638,7 +638,7 @@ index 8ad71d7..54a09a7 100644
 From dce9b255556d59773bbbdd9027fd1b1bd5627886 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Jun 2011 19:39:09 +0000
-Subject: [PATCH 10/20] Requested email change.
+Subject: [PATCH 10/21] Requested email change.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@587 5301114d-f842-0410-bbdd-996ee0417009
 (cherry picked from commit 418a39a7d33921672bd1c4beb31c8a31bc87d8dd)
@@ -663,7 +663,7 @@ index 20a0181..bbddb30 100644
 From 42612622a7c42aac7bef1605d9ba8117aa651789 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Tue, 14 Jun 2011 18:37:54 +0000
-Subject: [PATCH 11/20] Fixed compilation issue following namespace change.
+Subject: [PATCH 11/21] Fixed compilation issue following namespace change.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@588 5301114d-f842-0410-bbdd-996ee0417009
 (cherry picked from commit 4008955783ef566b98b16762c7bfa28df26e9198)
@@ -701,7 +701,7 @@ index 1ddb3d0..243b1da 100644
 From 43346ae2d6c39af2ed16e64cc6d7f89f427a0fee Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 17:51:33 +0000
-Subject: [PATCH 12/20] Fixed parsing of an attachment filename that is
+Subject: [PATCH 12/21] Fixed parsing of an attachment filename that is
  between 66 and 76 characters long (Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@589 5301114d-f842-0410-bbdd-996ee0417009
@@ -728,7 +728,7 @@ index 91a7e5c..f59d5ab 100644
 From 5ef189953965b639a9038da337e104592417c465 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 18:08:12 +0000
-Subject: [PATCH 13/20] Correctly generate attachment names which are long and
+Subject: [PATCH 13/21] Correctly generate attachment names which are long and
  have high characters for Outlook Express (Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@590 5301114d-f842-0410-bbdd-996ee0417009
@@ -869,7 +869,7 @@ index f59d5ab..d757e1b 100644
 From caa3cbc0fe9218d3d494bfed1afed2ee620a2e4e Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 18:16:49 +0000
-Subject: [PATCH 14/20] Alias for UTF-7 charset.
+Subject: [PATCH 14/21] Alias for UTF-7 charset.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@591 5301114d-f842-0410-bbdd-996ee0417009
 (cherry picked from commit f7ad17cffea462faf8cbe4f785644da0f3ee812a)
@@ -906,7 +906,7 @@ index e043186..0fda450 100644
 From 97d992cda306d96a8dda948abb9806ee2c2ce587 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 18:39:35 +0000
-Subject: [PATCH 15/20] Fixed messageBuilder to accept an empty mailbox group
+Subject: [PATCH 15/21] Fixed messageBuilder to accept an empty mailbox group
  in 'To:' field, to allow for undisclosed-recipients
  (Zarafa).
 
@@ -945,7 +945,7 @@ index 870d59e..3597b3a 100644
 From db98569ef427f9f3fac9a9dcc25ab8b6f2b3bd91 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 18:49:55 +0000
-Subject: [PATCH 16/20] Added support for mailboxes that specify an (encoded)
+Subject: [PATCH 16/21] Added support for mailboxes that specify an (encoded)
  full name with an empty email address, set by a <>
  marker (Zarafa).
 
@@ -1020,7 +1020,7 @@ index 8411daa..9ebadca 100644
 From aa5ab140e90a6222e5f03b337711444be845fbd0 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 24 Jun 2011 15:46:23 +0000
-Subject: [PATCH 17/20] Added missing libs in pkg-config file.
+Subject: [PATCH 17/21] Added missing libs in pkg-config file.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@594 5301114d-f842-0410-bbdd-996ee0417009
 (cherry picked from commit 960f2195516eb776eea7b7e4f92612192edfdcd9)
@@ -1045,7 +1045,7 @@ index 6e8aba2..4c0cb0e 100644
 From bf98b31b36ba2228d4f1c25cd3f7680d47cc8910 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sat, 25 Jun 2011 17:07:53 +0000
-Subject: [PATCH 18/20] Fixed parsing of empty body parts (thanks to John van
+Subject: [PATCH 18/21] Fixed parsing of empty body parts (thanks to John van
  der Kamp, from Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@595 5301114d-f842-0410-bbdd-996ee0417009
@@ -1110,7 +1110,7 @@ index b129913..075b8f9 100644
 From a256cc5632b86098d9106ab46ef7fceef34caf5a Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 26 Jun 2011 08:19:11 +0000
-Subject: [PATCH 19/20] Use gnutls_priority_set_direct() instead of GNUTLS
+Subject: [PATCH 19/21] Use gnutls_priority_set_direct() instead of GNUTLS
  deprecated functions.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@596 5301114d-f842-0410-bbdd-996ee0417009
@@ -1221,7 +1221,7 @@ index 010c007..af73a05 100644
 From f50943c55df6889a4b1e65ed9918a1ab5d12a321 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 26 Jun 2011 12:47:25 +0000
-Subject: [PATCH 20/20] Fixed encoding of whitespace. Fixed old test case.
+Subject: [PATCH 20/21] Fixed encoding of whitespace. Fixed old test case.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@597 5301114d-f842-0410-bbdd-996ee0417009
 (cherry picked from commit 70a0282a3f96febf973475a298ac95ffaab82c3c)
@@ -1309,6 +1309,41 @@ index 746ac94..43ec836 100644
 +
  VMIME_TEST_SUITE_END
  
+-- 
+1.7.6
+
+
+From 5a5ba65ba599502006f63a0327d493a293f8d135 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 7 Jul 2011 20:18:05 +0200
+Subject: [PATCH 21/21] solve configure: error: conditional
+ "HAVE_GNUTLS_PRIORITY_FUNCS" was never defined
+
+The error was produced by with_sasl=no with_tls=no.
+
+See http://sourceware.org/ml/automake/2005-01/msg00037.html
+
+"..must arrange for every AM_CONDITIONAL to be invoked every time
+configure is run."
+
+diff --git a/SConstruct b/SConstruct
+index 6e9a399..5aa5427 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -1654,8 +1654,13 @@ if test "x$conf_tls" = "xyes"; then
+ 			AM_CONDITIONAL(HAVE_GNUTLS_PRIORITY_FUNCS, false)
+ 			HAVE_GNUTLS_PRIORITY_FUNCS=0
+ 		fi
++	else
++		AM_CONDITIONAL(HAVE_GNUTLS_PRIORITY_FUNCS, false)
++		HAVE_GNUTLS_PRIORITY_FUNCS=0
+ 	fi
+ else
++	AM_CONDITIONAL(HAVE_GNUTLS_PRIORITY_FUNCS, false)
++	HAVE_GNUTLS_PRIORITY_FUNCS=0
+ 	AM_CONDITIONAL(VMIME_HAVE_TLS_SUPPORT, false)
+ 	VMIME_HAVE_TLS_SUPPORT=0
+ fi
 -- 
 1.7.6
 
