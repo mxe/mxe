@@ -27,4 +27,9 @@ define $(PKG)_BUILD
         --enable-static
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
+    
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gsl.exe' \
+        -lgsl
 endef
