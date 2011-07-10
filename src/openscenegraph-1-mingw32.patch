@@ -1,0 +1,19 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch taken from:
+http://lists.openscenegraph.org/pipermail/osg-submissions-openscenegraph.org/2011-July/008465.html
+
+diff --git a/src/osgPlugins/dicom/ReaderWriterDICOM.cpp b/src/osgPlugins/dicom/ReaderWriterDICOM.cpp
+index 785ac9e..c5b4507 100644
+--- a/src/osgPlugins/dicom/ReaderWriterDICOM.cpp
++++ b/src/osgPlugins/dicom/ReaderWriterDICOM.cpp
+@@ -19,7 +19,7 @@
+ #include <osgVolume/RayTracedTechnique>
+ 
+ #ifdef  USE_DCMTK
+-    #ifndef _WIN32
++    #if !defined(_WIN32) || defined(__MINGW32__)
+         #define HAVE_CONFIG_H
+     #endif
+ 
