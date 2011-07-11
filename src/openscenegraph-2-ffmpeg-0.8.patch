@@ -1,0 +1,73 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 96c2a9b9f909399adde17e6851e08eb182c37e37 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Mon, 11 Jul 2011 10:02:48 +0200
+Subject: [PATCH] Fix for compiling OSG with the latest FFmpeg
+
+Patch taken from:
+
+http://lists.openscenegraph.org/pipermail/osg-submissions-openscenegraph.org/2011-July/008462.html
+
+Hi Robert,
+
+I've found that the latest ffmpeg made some functions and macros
+deprecated, which led to compilation errors in the OSG plugin. I tried
+fixing them and tested with the version ffmpeg-git-5d4fd1d (ffmpeg
+version > 0.8, libavcodec = 53.7.0) under Windows.
+
+Cheers,
+
+Wang Rui
+
+diff --git a/src/osgPlugins/ffmpeg/FFmpegDecoder.cpp b/src/osgPlugins/ffmpeg/FFmpegDecoder.cpp
+index bd13085..1aa45fc 100644
+--- a/src/osgPlugins/ffmpeg/FFmpegDecoder.cpp
++++ b/src/osgPlugins/ffmpeg/FFmpegDecoder.cpp
+@@ -11,6 +11,20 @@
+ #include <string.h>
+ #include <iostream>
+ 
++// Changes for FFMpeg version greater than 0.6
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(52, 64, 0)
++#define CODEC_TYPE_AUDIO AVMEDIA_TYPE_AUDIO
++#define CODEC_TYPE_VIDEO AVMEDIA_TYPE_VIDEO
++#endif
++
++#ifdef AVERROR
++#define AVERROR_IO AVERROR(EIO)
++#define AVERROR_NUMEXPECTED AVERROR(EDOM)
++#define AVERROR_NOMEM AVERROR(ENOMEM)
++#define AVERROR_NOFMT AVERROR(EILSEQ)
++#define AVERROR_NOTSUPP AVERROR(ENOSYS)
++#define AVERROR_NOENT AVERROR(ENOENT)
++#endif
+ 
+ namespace osgFFmpeg {
+ 
+diff --git a/src/osgPlugins/ffmpeg/FFmpegParameters.cpp b/src/osgPlugins/ffmpeg/FFmpegParameters.cpp
+index bfa1819..db1736b 100644
+--- a/src/osgPlugins/ffmpeg/FFmpegParameters.cpp
++++ b/src/osgPlugins/ffmpeg/FFmpegParameters.cpp
+@@ -5,6 +5,15 @@
+ #include <iostream>
+ #include <sstream>
+ 
++#if LIBAVCODEC_VERSION_MAJOR >= 53
++extern "C"
++{
++    #include <parseutils.h>
++}
++#define av_parse_video_frame_size av_parse_video_size
++#define av_parse_video_frame_rate av_parse_video_rate
++#endif
++
+ #if LIBAVCODEC_VERSION_MAJOR >= 53 || \
+     (LIBAVCODEC_VERSION_MAJOR==52 && LIBAVCODEC_VERSION_MINOR>=49)
+ 
+-- 
+1.7.6
+
