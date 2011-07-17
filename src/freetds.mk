@@ -4,8 +4,8 @@
 # FreeTDS
 PKG             := freetds
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.91.dev.20110712RC2
-$(PKG)_CHECKSUM := 2c410799d70318cbe4ee1600af02bdd9dbd8dbab
+$(PKG)_VERSION  := 0.91.dev.20110715RC2
+$(PKG)_CHECKSUM := d03a00683ba43fa579f7a4a0e89288e518a50786
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://www.freetds.org/
