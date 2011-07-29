@@ -31,8 +31,6 @@ define $(PKG)_BUILD
         --disable-visibility \
         --disable-nls \
         --with-expat
-    # fix pkg-config linker flags
-    $(SED) -i 's,-no-undefined,,' '$(1)/config/exiv2.pc'
     $(MAKE) -C '$(1)/xmpsdk/src' -j '$(JOBS)'
     $(MAKE) -C '$(1)/src'        -j '$(JOBS)' install-lib
 endef
