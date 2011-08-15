@@ -43,7 +43,7 @@ define $(PKG)_BUILD
         --enable-gnutls
 
     # Building for mingw requires native soapcpp2
-    ln -s '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)'/gsoap/src/soapcpp2
+    ln -sf '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)/gsoap/src/soapcpp2'
 
     # Parallel bulds can fail
     $(MAKE) -C '$(1)' -j 1 AR='$(TARGET)-ar'

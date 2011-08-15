@@ -30,5 +30,5 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/../../src/xvid.h' '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/build/xvidcore.a' '$(PREFIX)/$(TARGET)/lib/'
-    ln -sf $(PREFIX)/$(TARGET)/lib/xvidcore.a $(PREFIX)/$(TARGET)/lib/libxvidcore.a
+    ln -sf '$(PREFIX)/$(TARGET)/lib/xvidcore.a' '$(PREFIX)/$(TARGET)/lib/libxvidcore.a'
 endef
