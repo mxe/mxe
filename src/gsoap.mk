@@ -33,6 +33,8 @@ define $(PKG)_BUILD
 
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
+    # fix hard-coded gnutls dependencies
+    $(SED) -i "s/-lgnutls -lgcrypt -lgpg-error -lz/`'$(TARGET)-pkg-config' --libs-only-l gnutls`/g;" '$(1)/configure'
 
     # Build for mingw. Static by default.
     # Prevent undefined reference to _rpl_malloc.
