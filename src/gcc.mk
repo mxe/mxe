@@ -34,6 +34,7 @@ define $(PKG)_BUILD
     cd    '$(1).build' && '$(1)/configure' \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
+        --libdir='$(PREFIX)/lib' \
         --enable-languages='c,c++,objc,fortran' \
         --enable-version-specific-runtime-libs \
         --with-gcc \
