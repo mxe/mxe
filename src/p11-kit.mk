@@ -4,8 +4,8 @@
 # p11-kit
 PKG             := p11-kit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.3
-$(PKG)_CHECKSUM := 5568c659f11e9bf3f3d70d54778e4653ac998d22
+$(PKG)_VERSION  := 0.4
+$(PKG)_CHECKSUM := e12c6918e5de9f26f197bcc1a274bbfbf24efe06
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://p11-glue.freedesktop.org/
