@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/$(PKG)/
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libtool gmp libiconv gettext libunistring gc libffi readline
+$(PKG)_DEPS     := gcc libtool gmp libiconv gettext libunistring gc libffi readline dlfcn-win32
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=$(PKG).git;a=tags' | \
@@ -30,7 +30,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --without-threads \
         scm_cv_struct_timespec=no \
-        LIBS='-lunistring -lintl -liconv' \
+        LIBS='-lunistring -lintl -liconv -ldl' \
         CFLAGS='-Wno-unused-but-set-variable'
     $(MAKE) -C '$(1)' -j '$(JOBS)' schemelib_DATA=
     $(MAKE) -C '$(1)' -j 1 install schemelib_DATA=

@@ -1,0 +1,23 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 5c32340c7e89fc36c881de1ee8872df32e2cb91d Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Wed, 17 Aug 2011 21:58:39 +0200
+Subject: [PATCH] let configure succeed
+
+
+diff --git a/configure b/configure
+index 3ae2f88..a16c7eb 100755
+--- a/configure
++++ b/configure
+@@ -190,3 +190,4 @@ enabled shared && {
+     echo "msvc:   $msvc";
+     echo "strip:  $stripping";
+ }
++true
+-- 
+1.7.6
+
