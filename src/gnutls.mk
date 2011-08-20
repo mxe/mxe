@@ -10,7 +10,7 @@ $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
 $(PKG)_URL      := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib libgcrypt p11-kit
+$(PKG)_DEPS     := gcc zlib libgcrypt
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
@@ -37,6 +37,7 @@ define $(PKG)_BUILD
         --with-included-pakchois \
         --with-libgcrypt \
         --without-lzo \
+        --without-p11-kit
         LIBS='-lz'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
 endef
