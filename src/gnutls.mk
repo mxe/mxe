@@ -37,7 +37,7 @@ define $(PKG)_BUILD
         --with-included-pakchois \
         --with-libgcrypt \
         --without-lzo \
-        --without-p11-kit
+        --without-p11-kit \
         LIBS='-lz'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
 endef
