@@ -3,8 +3,8 @@
 
 # GnuTLS
 PKG             := gnutls
-$(PKG)_VERSION  := 2.12.8
-$(PKG)_CHECKSUM := b250d3ddf3fafe69916f248d7ba909ae92022a35
+$(PKG)_VERSION  := 2.12.9
+$(PKG)_CHECKSUM := 9a775466d5bf6976e77e5f659d136e0a4733a58a
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
