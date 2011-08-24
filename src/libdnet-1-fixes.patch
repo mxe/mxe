@@ -1,0 +1,29 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 830ac87570520d72a173a351c082503c4d1b2911 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Wed, 24 Aug 2011 18:01:19 +0200
+Subject: [PATCH] do not redefine ssize_t
+
+
+diff --git a/include/dnet/os.h b/include/dnet/os.h
+index c12c7b2..9e8bdd2 100644
+--- a/include/dnet/os.h
++++ b/include/dnet/os.h
+@@ -23,8 +23,10 @@
+   typedef u_short	uint16_t;
+   typedef u_int		uint32_t;
+ # ifndef __CYGWIN__
++# ifndef _SSIZE_T_
+   typedef long		ssize_t;
+ # endif
++# endif
+ #else
+ # include <sys/param.h>
+ # include <sys/types.h>
+-- 
+1.7.6
+

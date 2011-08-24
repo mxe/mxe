@@ -1,0 +1,27 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 5dc5ed0a476884c696e0ac01f9298ba02c213290 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Wed, 24 Aug 2011 18:08:23 +0200
+Subject: [PATCH] do not redefine ssize_t
+
+
+diff --git a/libarchive/archive.h b/libarchive/archive.h
+index 5ca28eb..f33a8ed 100644
+--- a/libarchive/archive.h
++++ b/libarchive/archive.h
+@@ -52,7 +52,7 @@
+ /* These should match the types used in 'struct stat' */
+ #if defined(_WIN32) && !defined(__CYGWIN__)
+ #define	__LA_INT64_T	__int64
+-# if defined(_SSIZE_T_DEFINED)
++# if defined(_SSIZE_T_DEFINED) || defined(_SSIZE_T_)
+ #  define	__LA_SSIZE_T	ssize_t
+ # elif defined(_WIN64)
+ #  define	__LA_SSIZE_T	__int64
+-- 
+1.7.6
+
