@@ -61,6 +61,7 @@ define $(PKG)_BUILD
     [ -d '$(dir $(CMAKE_TOOLCHAIN_FILE))' ] || mkdir -p '$(dir $(CMAKE_TOOLCHAIN_FILE))'
     (echo 'set(BUILD_SHARED_LIBS OFF)'; \
      echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
+     echo 'set(MSYS 1)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH $(PREFIX)/$(TARGET))'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)'; \
