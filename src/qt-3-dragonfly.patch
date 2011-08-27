@@ -1,0 +1,19 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch is inspired by:
+
+http://cvsweb.NetBSD.org/bsdweb.cgi/pkgsrc/x11/qt4-libs/Makefile.common?rev=1.27&content-type=text/x-cvsweb-markup
+
+diff -ur qt-everywhere-opensource-src-4.7.3.orig/configure qt-everywhere-opensource-src-4.7.3/configure
+--- qt-everywhere-opensource-src-4.7.3.orig/configure	2011-08-28 04:51:54.000000000 +1000
++++ qt-everywhere-opensource-src-4.7.3/configure	2011-08-28 04:57:14.000000000 +1000
+@@ -2650,7 +2650,7 @@
+      ULTRIX:*)
+         PLATFORM=ultrix-g++
+         ;;
+-     FreeBSD:*)
++     FreeBSD:*|DragonFly:*)
+         PLATFORM=freebsd-g++
+         PLATFORM_NOTES="
+             - Also available for FreeBSD: freebsd-icc
