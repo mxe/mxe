@@ -4,8 +4,8 @@
 # GLEW
 PKG             := glew
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.0
-$(PKG)_CHECKSUM := ed555d15d0f01239b262c4cf803e97d60d8a18b6
+$(PKG)_VERSION  := 1.7.0
+$(PKG)_CHECKSUM := 9266f2360c1687a96f2ea06419671d370b2928d1
 $(PKG)_SUBDIR   := glew-$($(PKG)_VERSION)
 $(PKG)_FILE     := glew-$($(PKG)_VERSION).tgz
 $(PKG)_WEBSITE  := http://glew.sourceforge.net/

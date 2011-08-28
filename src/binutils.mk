@@ -4,9 +4,9 @@
 # GNU Binutils
 PKG             := binutils
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.21.1
-$(PKG)_CHECKSUM := f188490772cc902ec44a76545887bff60dbfa22d
-$(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
+$(PKG)_VERSION  := 2.21.1a
+$(PKG)_CHECKSUM := 525255ca6874b872540c9967a1d26acfbc7c8230
+$(PKG)_SUBDIR   := binutils-2.21.1
 $(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/binutils/
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/binutils/$($(PKG)_FILE)
