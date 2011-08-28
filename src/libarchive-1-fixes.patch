@@ -1,13 +1,12 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-Contains ad hoc patches for cross building.
+Patch taken from
+http://code.google.com/p/libarchive/source/detail?r=3649
 
-From 5dc5ed0a476884c696e0ac01f9298ba02c213290 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Wed, 24 Aug 2011 18:08:23 +0200
-Subject: [PATCH] do not redefine ssize_t
-
+mingwrt 3.20 provides ssize_t and defines _SSIZE_T_. This patch
+allows libarchive to use this ssize_t instead of defining its
+own which causes build failure. Applies to libarchive 2.8.4.
 
 diff --git a/libarchive/archive.h b/libarchive/archive.h
 index 5ca28eb..f33a8ed 100644
