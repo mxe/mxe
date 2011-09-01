@@ -4,10 +4,10 @@ See doc/index.html for further information.
 Commits backported (cherry-picked) from Qt 4.7 branch.
 http://qt.gitorious.org/qt
 
-From bb75d02785da59c967dee09006700488af9f482e Mon Sep 17 00:00:00 2001
+From f536051241fe2be447ce57b5ad2410d786a16eaa Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 15 Oct 2010 14:56:03 +0200
-Subject: [PATCH 01/17] removed obsolete -qt-gif configure option
+Subject: [PATCH 01/15] removed obsolete -qt-gif configure option
 
 Since "-system-gif" is not offered, offering "-qt-gif" is unnecessary
 and perhaps misleading. By default the GIF handler is built from code
@@ -22,10 +22,10 @@ Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
  2 files changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/configure b/configure
-index 7abe0eb..c159cd4 100755
+index 3b7a1f3..4257e68 100755
 --- a/configure
 +++ b/configure
-@@ -1570,8 +1570,7 @@ while [ "$#" -gt 0 ]; do
+@@ -1540,8 +1540,7 @@ while [ "$#" -gt 0 ]; do
          fi
          ;;
      gif)
@@ -35,7 +35,7 @@ index 7abe0eb..c159cd4 100755
              CFG_GIF="$VAL"
          else
              UNKNOWN_OPT=yes
-@@ -3544,7 +3543,7 @@ Usage:  $relconf [-h] [-prefix <dir>] [-prefix-install] [-bindir <dir>] [-libdir
+@@ -3518,7 +3517,7 @@ Usage:  $relconf [-h] [-prefix <dir>] [-prefix-install] [-bindir <dir>] [-libdir
          [-accessibility] [-no-stl] [-stl] [-no-sql-<driver>] [-sql-<driver>]
          [-plugin-sql-<driver>] [-system-sqlite] [-no-qt3support] [-qt3support]
          [-platform] [-D <string>] [-I <string>] [-L <string>] [-help]
@@ -44,7 +44,7 @@ index 7abe0eb..c159cd4 100755
          [-no-libpng] [-qt-libpng] [-system-libpng] [-no-libmng] [-qt-libmng]
          [-system-libmng] [-no-libjpeg] [-qt-libjpeg] [-system-libjpeg] [-make <part>]
          [-nomake <part>] [-R <string>]  [-l <string>] [-no-rpath]  [-rpath] [-continue]
-@@ -3773,8 +3772,6 @@ Third Party Libraries:
+@@ -3747,8 +3746,6 @@ Third Party Libraries:
                           See http://www.gzip.org/zlib
  
      -no-gif ............ Do not compile GIF reading support.
@@ -54,7 +54,7 @@ index 7abe0eb..c159cd4 100755
      -no-libtiff ........ Do not compile TIFF support.
      -qt-libtiff ........ Use the libtiff bundled with Qt.
 diff --git a/tools/configure/configureapp.cpp b/tools/configure/configureapp.cpp
-index 15c0ddb..dd5647b 100644
+index 69cd70b..307b845 100644
 --- a/tools/configure/configureapp.cpp
 +++ b/tools/configure/configureapp.cpp
 @@ -590,8 +590,6 @@ void Configure::parseCmdLine()
@@ -66,7 +66,7 @@ index 15c0ddb..dd5647b 100644
  
          else if (configCmdLine.at(i) == "-no-libtiff") {
              dictionary[ "TIFF"] = "no";
-@@ -1661,7 +1659,7 @@ bool Configure::displayHelp()
+@@ -1663,7 +1661,7 @@ bool Configure::displayHelp()
                      "[-no-qmake] [-qmake] [-dont-process] [-process]\n"
                      "[-no-style-<style>] [-qt-style-<style>] [-redo]\n"
                      "[-saveconfig <config>] [-loadconfig <config>]\n"
@@ -75,7 +75,7 @@ index 15c0ddb..dd5647b 100644
                      "[-qt-libpng] [-system-libpng] [-no-libtiff] [-qt-libtiff]\n"
                      "[-system-libtiff] [-no-libjpeg] [-qt-libjpeg] [-system-libjpeg]\n"
                      "[-no-libmng] [-qt-libmng] [-system-libmng] [-no-qt3support] [-mmx]\n"
-@@ -1794,7 +1792,6 @@ bool Configure::displayHelp()
+@@ -1796,7 +1794,6 @@ bool Configure::displayHelp()
          desc("ZLIB", "system",  "-system-zlib",         "Use zlib from the operating system.\nSee http://www.gzip.org/zlib\n");
  
          desc("GIF", "no",       "-no-gif",              "Do not compile GIF reading support.");
@@ -84,13 +84,13 @@ index 15c0ddb..dd5647b 100644
          desc("LIBPNG", "no",    "-no-libpng",           "Do not compile PNG support.");
          desc("LIBPNG", "qt",    "-qt-libpng",           "Use the libpng bundled with Qt.");
 -- 
-1.7.6
+1.7.6.1
 
 
-From b5e382d8335628edf5d5c5a1671682de7c50c6d2 Mon Sep 17 00:00:00 2001
+From 67f88bc3dd4bb2488a83e5f34f80c1338d994288 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:54 +0100
-Subject: [PATCH 02/17] qmake: fix double directory separator
+Subject: [PATCH 02/15] qmake: fix double directory separator
 
 Merge-request: 2543
 Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
@@ -100,10 +100,10 @@ Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
  1 files changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/qmake/generators/unix/unixmake2.cpp b/qmake/generators/unix/unixmake2.cpp
-index df580fd..81a379f 100644
+index 911b617..607c889 100644
 --- a/qmake/generators/unix/unixmake2.cpp
 +++ b/qmake/generators/unix/unixmake2.cpp
-@@ -1345,8 +1345,13 @@ UnixMakefileGenerator::pkgConfigFileName(bool fixify)
+@@ -1346,8 +1346,13 @@ UnixMakefileGenerator::pkgConfigFileName(bool fixify)
      if(dot != -1)
          ret = ret.left(dot);
      ret += Option::pkgcfg_ext;
@@ -120,13 +120,13 @@ index df580fd..81a379f 100644
          if(QDir::isRelativePath(ret) && !project->isEmpty("DESTDIR"))
              ret.prepend(project->first("DESTDIR"));
 -- 
-1.7.6
+1.7.6.1
 
 
-From f35c452aaf665489060d317ce180d192433abd24 Mon Sep 17 00:00:00 2001
+From 52730b299439cb39afc6ecd6ce382c52cf02ea75 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:55 +0100
-Subject: [PATCH 03/17] qmake: don't limit pkg-config writing to unix
+Subject: [PATCH 03/15] qmake: don't limit pkg-config writing to unix
  generator
 
 Move pkg-config related methods from unix generator to base class
@@ -143,10 +143,10 @@ Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
  4 files changed, 183 insertions(+), 182 deletions(-)
 
 diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
-index 77b9979..d77f002 100644
+index 80c31e3..0b29a78 100644
 --- a/qmake/generators/makefile.cpp
 +++ b/qmake/generators/makefile.cpp
-@@ -3123,4 +3123,182 @@ MakefileGenerator::openOutput(QFile &file, const QString &build) const
+@@ -3126,4 +3126,182 @@ MakefileGenerator::openOutput(QFile &file, const QString &build) const
      return false;
  }
  
@@ -330,7 +330,7 @@ index 77b9979..d77f002 100644
 +
  QT_END_NAMESPACE
 diff --git a/qmake/generators/makefile.h b/qmake/generators/makefile.h
-index b674a44..9b5b4a3 100644
+index 4167ecb..2bfc0c9 100644
 --- a/qmake/generators/makefile.h
 +++ b/qmake/generators/makefile.h
 @@ -105,6 +105,11 @@ protected:
@@ -346,7 +346,7 @@ index b674a44..9b5b4a3 100644
      struct SubTarget
      {
 diff --git a/qmake/generators/unix/unixmake.h b/qmake/generators/unix/unixmake.h
-index ad54833..b28da82 100644
+index d6d6b34..0b8d269 100644
 --- a/qmake/generators/unix/unixmake.h
 +++ b/qmake/generators/unix/unixmake.h
 @@ -51,10 +51,6 @@ class UnixMakefileGenerator : public MakefileGenerator
@@ -361,10 +361,10 @@ index ad54833..b28da82 100644
  
  public:
 diff --git a/qmake/generators/unix/unixmake2.cpp b/qmake/generators/unix/unixmake2.cpp
-index 81a379f..1846d56 100644
+index 607c889..de490b8 100644
 --- a/qmake/generators/unix/unixmake2.cpp
 +++ b/qmake/generators/unix/unixmake2.cpp
-@@ -1332,182 +1332,4 @@ UnixMakefileGenerator::writeLibtoolFile()
+@@ -1333,182 +1333,4 @@ UnixMakefileGenerator::writeLibtoolFile()
          "libdir='" << Option::fixPathToTargetOS(install_dir, false) << "'\n";
  }
  
@@ -548,13 +548,13 @@ index 81a379f..1846d56 100644
 -
  QT_END_NAMESPACE
 -- 
-1.7.6
+1.7.6.1
 
 
-From e8afbb5a998931c154aa83ed87be6521cb8d50d3 Mon Sep 17 00:00:00 2001
+From bb39cfa681e38eb6a9a16d99aed901603020cdc4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:56 +0100
-Subject: [PATCH 04/17] qmake: write and install pkg-config files for mingw
+Subject: [PATCH 04/15] qmake: write and install pkg-config files for mingw
 
 Merge-request: 2543
 Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
@@ -565,7 +565,7 @@ Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
  2 files changed, 15 insertions(+), 0 deletions(-)
 
 diff --git a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
-index 3202cb8..492b584 100644
+index 8ba1d2a..661c5d6 100644
 --- a/qmake/generators/win32/mingw_make.cpp
 +++ b/qmake/generators/win32/mingw_make.cpp
 @@ -142,6 +142,9 @@ bool MingwMakefileGenerator::writeMakefile(QTextStream &t)
@@ -579,10 +579,10 @@ index 3202cb8..492b584 100644
              t << "QMAKE    = " << var("QMAKE_QMAKE") << endl;
              QStringList &qut = project->values("QMAKE_EXTRA_TARGETS");
 diff --git a/qmake/generators/win32/winmakefile.cpp b/qmake/generators/win32/winmakefile.cpp
-index 8af7ddd..6d0a5c4 100644
+index e3fc467..3013807 100644
 --- a/qmake/generators/win32/winmakefile.cpp
 +++ b/qmake/generators/win32/winmakefile.cpp
-@@ -803,6 +803,18 @@ QString Win32MakefileGenerator::defaultInstall(const QString &t)
+@@ -831,6 +831,18 @@ QString Win32MakefileGenerator::defaultInstall(const QString &t)
                  uninst.append("\n\t");
              uninst.append("-$(DEL_FILE) \"" + dst_prl + "\"");
          }
@@ -602,13 +602,13 @@ index 8af7ddd..6d0a5c4 100644
              QString lib_target = getLibTarget();
              lib_target.remove('"');
 -- 
-1.7.6
+1.7.6.1
 
 
-From 175b395655d3f24aea0e4232069853dca1c33efd Mon Sep 17 00:00:00 2001
+From a4dd9f14820aa2fcd2c35f675622fccc9c8888d5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 10 Jan 2011 16:41:57 +0100
-Subject: [PATCH 05/17] qt project files: create pkg-config files for mingw
+Subject: [PATCH 05/15] qt project files: create pkg-config files for mingw
 
 This is mostly the same as for unix.
 
@@ -641,10 +641,10 @@ Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
  22 files changed, 29 insertions(+), 23 deletions(-)
 
 diff --git a/src/3rdparty/webkit/WebCore/WebCore.pro b/src/3rdparty/webkit/WebCore/WebCore.pro
-index 37d216d..008bef7 100644
+index c70a168..6f50c7a 100644
 --- a/src/3rdparty/webkit/WebCore/WebCore.pro
 +++ b/src/3rdparty/webkit/WebCore/WebCore.pro
-@@ -85,9 +85,7 @@ moduleFile=$$PWD/../WebKit/qt/qt_webkit_version.pri
+@@ -84,9 +84,7 @@ moduleFile=$$PWD/../WebKit/qt/qt_webkit_version.pri
  isEmpty(QT_BUILD_TREE):include($$moduleFile)
  VERSION = $${QT_WEBKIT_MAJOR_VERSION}.$${QT_WEBKIT_MINOR_VERSION}.$${QT_WEBKIT_PATCH_VERSION}
  
@@ -669,7 +669,7 @@ index 46a723a..52ed217 100644
          DBus \
          module
 diff --git a/src/declarative/declarative.pro b/src/declarative/declarative.pro
-index 1ad888b..4ed4f9f 100644
+index 27ceaf0..ed6b8cb 100644
 --- a/src/declarative/declarative.pro
 +++ b/src/declarative/declarative.pro
 @@ -6,7 +6,7 @@ DEFINES   += QT_BUILD_DECLARATIVE_LIB QT_NO_URL_CAST_FROM_STRING
@@ -682,7 +682,7 @@ index 1ad888b..4ed4f9f 100644
  exists("qdeclarative_enable_gcov") {
      QMAKE_CXXFLAGS = -fprofile-arcs -ftest-coverage -fno-elide-constructors
 diff --git a/src/gui/gui.pro b/src/gui/gui.pro
-index 4d51fa8..05d961c 100644
+index cf492d6..a3783d2 100644
 --- a/src/gui/gui.pro
 +++ b/src/gui/gui.pro
 @@ -7,7 +7,7 @@ irix-cc*:QMAKE_CXXFLAGS += -no_prelink -ptused
@@ -721,7 +721,7 @@ index 7ed7d3a..948922b 100644
  include(../qbase.pri)
  include(access/access.pri)
 diff --git a/src/opengl/opengl.pro b/src/opengl/opengl.pro
-index 0e82467..d467148 100644
+index 4375358..ff3bd6b 100644
 --- a/src/opengl/opengl.pro
 +++ b/src/opengl/opengl.pro
 @@ -7,7 +7,7 @@ win32-msvc*|win32-icc:QMAKE_LFLAGS += /BASE:0x63000000
@@ -760,7 +760,7 @@ index 7f79d0b..b16c5a1 100644
  # Input
  HEADERS += $$PHONON_DIR/abstractaudiooutput.h \
 diff --git a/src/qbase.pri b/src/qbase.pri
-index babea56..a72bc76 100644
+index 5d78336..9d78690 100644
 --- a/src/qbase.pri
 +++ b/src/qbase.pri
 @@ -152,6 +152,14 @@ unix:!symbian {
@@ -935,200 +935,13 @@ index 7b94587..6e0a247 100644
     QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS]
     QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS]/$$TARGET
 -- 
-1.7.6
+1.7.6.1
 
 
-From 5ef7985e6015c09735094545a07ed93832075507 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 10 Jan 2011 20:21:05 +0100
-Subject: [PATCH 06/17] Fix static build on Windows with MinGW.
-
-Q_DECL_IMPORT is still __declspec(dllimport), which is unsuitable for
-static code.
-
-Commit edbc656b changed Q_DECL_IMPORT_IMPORT to Q_CORE_EXPORT when
-declaring QtCore functions in svg.
-
-Now we change Q_DECL_IMPORT to Q_GUI_EXPORT when declaring QtGui
-functions into opengl and openvg.
-
-Also removed the redundant keyword "extern" from the function declarations.
-
-Merge-request: 2540
-Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
-Reviewed-by: mariusSO
-(cherry picked from commit 7ec1c27e662dfd4393491f90bfcb9c868cc0a23f)
----
- .../gl2paintengineex/qpaintengineex_opengl2.cpp    |    4 ++--
- src/opengl/qglframebufferobject.cpp                |    4 ++--
- src/opengl/qglpixelbuffer.cpp                      |    4 ++--
- src/opengl/qglpixmapfilter.cpp                     |    6 +++---
- src/opengl/qpaintengine_opengl.cpp                 |    2 +-
- src/opengl/qpixmapdata_gl.cpp                      |    4 ++--
- src/openvg/qpaintengine_vg.cpp                     |    8 ++++----
- src/openvg/qpixmapdata_vg.cpp                      |    4 ++--
- 8 files changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/src/opengl/gl2paintengineex/qpaintengineex_opengl2.cpp b/src/opengl/gl2paintengineex/qpaintengineex_opengl2.cpp
-index 251fcb9..34f4e75 100644
---- a/src/opengl/gl2paintengineex/qpaintengineex_opengl2.cpp
-+++ b/src/opengl/gl2paintengineex/qpaintengineex_opengl2.cpp
-@@ -102,7 +102,7 @@ extern Q_GUI_EXPORT bool qt_cleartype_enabled;
- extern bool qt_applefontsmoothing_enabled;
- #endif
- 
--Q_DECL_IMPORT extern QImage qt_imageForBrush(int brushStyle, bool invert);
-+Q_GUI_EXPORT QImage qt_imageForBrush(int brushStyle, bool invert);
- 
- ////////////////////////////////// Private Methods //////////////////////////////////////////
- 
-@@ -1154,7 +1154,7 @@ void QGL2PaintEngineEx::fill(const QVectorPath &path, const QBrush &brush)
-     d->fill(path);
- }
- 
--extern Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
-+Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
- 
- 
- void QGL2PaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
-diff --git a/src/opengl/qglframebufferobject.cpp b/src/opengl/qglframebufferobject.cpp
-index 6faa645..d57ffc5 100644
---- a/src/opengl/qglframebufferobject.cpp
-+++ b/src/opengl/qglframebufferobject.cpp
-@@ -1171,8 +1171,8 @@ void QGLFramebufferObject::drawTexture(const QPointF &point, QMacCompatGLuint te
- }
- #endif
- 
--Q_DECL_IMPORT extern int qt_defaultDpiX();
--Q_DECL_IMPORT extern int qt_defaultDpiY();
-+Q_GUI_EXPORT int qt_defaultDpiX();
-+Q_GUI_EXPORT int qt_defaultDpiY();
- 
- /*! \reimp */
- int QGLFramebufferObject::metric(PaintDeviceMetric metric) const
-diff --git a/src/opengl/qglpixelbuffer.cpp b/src/opengl/qglpixelbuffer.cpp
-index 931f701..815afee 100644
---- a/src/opengl/qglpixelbuffer.cpp
-+++ b/src/opengl/qglpixelbuffer.cpp
-@@ -416,8 +416,8 @@ QPaintEngine *QGLPixelBuffer::paintEngine() const
- #endif
- }
- 
--Q_DECL_IMPORT extern int qt_defaultDpiX();
--Q_DECL_IMPORT extern int qt_defaultDpiY();
-+Q_GUI_EXPORT int qt_defaultDpiX();
-+Q_GUI_EXPORT int qt_defaultDpiY();
- 
- /*! \reimp */
- int QGLPixelBuffer::metric(PaintDeviceMetric metric) const
-diff --git a/src/opengl/qglpixmapfilter.cpp b/src/opengl/qglpixmapfilter.cpp
-index 5305e10..eeb791f 100644
---- a/src/opengl/qglpixmapfilter.cpp
-+++ b/src/opengl/qglpixmapfilter.cpp
-@@ -63,8 +63,8 @@
- QT_BEGIN_NAMESPACE
- 
- // qpixmapfilter.cpp
--Q_DECL_IMPORT void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed = 0);
--Q_DECL_IMPORT QImage qt_halfScaled(const QImage &source);
-+Q_GUI_EXPORT void qt_blurImage(QImage &blurImage, qreal radius, bool quality, int transposed = 0);
-+Q_GUI_EXPORT QImage qt_halfScaled(const QImage &source);
- 
- void QGLPixmapFilterBase::bindTexture(const QPixmap &src) const
- {
-@@ -436,7 +436,7 @@ static inline uint nextMultiple(uint x, uint multiplier)
-     return x + multiplier - mod;
- }
- 
--Q_DECL_IMPORT void qt_memrotate90_gl(const quint32 *src, int srcWidth, int srcHeight, int srcStride,
-+Q_GUI_EXPORT void qt_memrotate90_gl(const quint32 *src, int srcWidth, int srcHeight, int srcStride,
-                        quint32 *dest, int dstStride);
- 
- bool QGLPixmapBlurFilter::processGL(QPainter *painter, const QPointF &pos, const QPixmap &src, const QRectF &) const
-diff --git a/src/opengl/qpaintengine_opengl.cpp b/src/opengl/qpaintengine_opengl.cpp
-index 0b0f910..c04311d 100644
---- a/src/opengl/qpaintengine_opengl.cpp
-+++ b/src/opengl/qpaintengine_opengl.cpp
-@@ -79,7 +79,7 @@
- 
- QT_BEGIN_NAMESPACE
- 
--Q_DECL_IMPORT extern QImage qt_imageForBrush(int brushStyle, bool invert); //in qbrush.cpp
-+Q_GUI_EXPORT QImage qt_imageForBrush(int brushStyle, bool invert); //in qbrush.cpp
- #ifdef QT_MAC_USE_COCOA
- extern void *qt_current_nsopengl_context(); // qgl_mac.mm
- #endif
-diff --git a/src/opengl/qpixmapdata_gl.cpp b/src/opengl/qpixmapdata_gl.cpp
-index 0ac647c..d901ab8 100644
---- a/src/opengl/qpixmapdata_gl.cpp
-+++ b/src/opengl/qpixmapdata_gl.cpp
-@@ -739,8 +739,8 @@ QGLTexture* QGLPixmapData::texture() const
-     return &m_texture;
- }
- 
--Q_DECL_IMPORT extern int qt_defaultDpiX();
--Q_DECL_IMPORT extern int qt_defaultDpiY();
-+Q_GUI_EXPORT int qt_defaultDpiX();
-+Q_GUI_EXPORT int qt_defaultDpiY();
- 
- int QGLPixmapData::metric(QPaintDevice::PaintDeviceMetric metric) const
- {
-diff --git a/src/openvg/qpaintengine_vg.cpp b/src/openvg/qpaintengine_vg.cpp
-index ec2936e..af077e4 100644
---- a/src/openvg/qpaintengine_vg.cpp
-+++ b/src/openvg/qpaintengine_vg.cpp
-@@ -77,8 +77,8 @@ static const qreal aliasedCoordinateDelta = 0.5 - 0.015625;
- 
- #if !defined(QVG_NO_DRAW_GLYPHS)
- 
--Q_DECL_IMPORT extern int qt_defaultDpiX();
--Q_DECL_IMPORT extern int qt_defaultDpiY();
-+Q_GUI_EXPORT int qt_defaultDpiX();
-+Q_GUI_EXPORT int qt_defaultDpiY();
- 
- class QVGPaintEnginePrivate;
- 
-@@ -526,7 +526,7 @@ void QVGPaintEnginePrivate::setTransform
-     vgLoadMatrix(mat);
- }
- 
--Q_DECL_IMPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
-+Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
- 
- void QVGPaintEnginePrivate::updateTransform(QPaintDevice *pdev)
- {
-@@ -994,7 +994,7 @@ VGPath QVGPaintEnginePrivate::roundedRectPath(const QRectF &rect, qreal xRadius,
-     return vgpath;
- }
- 
--Q_DECL_IMPORT extern QImage qt_imageForBrush(int style, bool invert);
-+Q_GUI_EXPORT QImage qt_imageForBrush(int style, bool invert);
- 
- static QImage colorizeBitmap(const QImage &image, const QColor &color)
- {
-diff --git a/src/openvg/qpixmapdata_vg.cpp b/src/openvg/qpixmapdata_vg.cpp
-index ee5c7d9..cdff46c 100644
---- a/src/openvg/qpixmapdata_vg.cpp
-+++ b/src/openvg/qpixmapdata_vg.cpp
-@@ -412,8 +412,8 @@ void QVGPixmapData::reclaimImages()
-     destroyImages();
- }
- 
--Q_DECL_IMPORT extern int qt_defaultDpiX();
--Q_DECL_IMPORT extern int qt_defaultDpiY();
-+Q_GUI_EXPORT int qt_defaultDpiX();
-+Q_GUI_EXPORT int qt_defaultDpiY();
- 
- int QVGPixmapData::metric(QPaintDevice::PaintDeviceMetric metric) const
- {
--- 
-1.7.6
-
-
-From 3411ae8c3d83b3eb9407c8c338336e95fe74edf3 Mon Sep 17 00:00:00 2001
+From d3de771560a60cad3d3fc560efc25d09c61e1db7 Mon Sep 17 00:00:00 2001
 From: Bernhard Rosenkraenzer <br@blankpage.ch>
 Date: Thu, 27 Jan 2011 13:48:13 +0100
-Subject: [PATCH 07/17] Allow the user to select imageformats to be built as
+Subject: [PATCH 06/15] Allow the user to select imageformats to be built as
  plugin vs internal
 
 This adds what is already there for different plugin types to
@@ -1145,10 +958,10 @@ Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
  2 files changed, 35 insertions(+), 1 deletions(-)
 
 diff --git a/configure b/configure
-index c159cd4..207dcc1 100755
+index 4257e68..946c74b 100755
 --- a/configure
 +++ b/configure
-@@ -908,6 +908,16 @@ if [ -d "$relpath/src/plugins/gfxdrivers" ]; then
+@@ -887,6 +887,16 @@ if [ -d "$relpath/src/plugins/gfxdrivers" ]; then
    CFG_GFX_OFF="$CFG_GFX_AVAILABLE" # assume all off
  fi
  
@@ -1165,7 +978,7 @@ index c159cd4..207dcc1 100755
  #-------------------------------------------------------------------------------
  # parse command line arguments
  #-------------------------------------------------------------------------------
-@@ -2060,7 +2070,7 @@ while [ "$#" -gt 0 ]; do
+@@ -2030,7 +2040,7 @@ while [ "$#" -gt 0 ]; do
              UNKNOWN_OPT=yes
          fi
          ;;
@@ -1174,7 +987,7 @@ index c159cd4..207dcc1 100755
          # if Qt style options were used, $VAL can be "no", "qt", or "plugin"
          # if autoconf style options were used, $VAL can be "yes" or "no"
          [ "$VAL" = "yes" ] && VAL=qt
-@@ -2102,6 +2112,13 @@ while [ "$#" -gt 0 ]; do
+@@ -2072,6 +2082,13 @@ while [ "$#" -gt 0 ]; do
  		avail="$CFG_MOUSE_PLUGIN_AVAILABLE"
  	    fi
              ;;
@@ -1188,7 +1001,7 @@ index c159cd4..207dcc1 100755
          *)
              avail=""
              echo "BUG: Unhandled type $VAR used in $CURRENT_OPT"
-@@ -2122,6 +2139,11 @@ while [ "$#" -gt 0 ]; do
+@@ -2092,6 +2109,11 @@ while [ "$#" -gt 0 ]; do
              # set the CFG_SQL_driver
              eval "CFG_SQL_$VAL=\$OPT"
              continue
@@ -1201,7 +1014,7 @@ index c159cd4..207dcc1 100755
  
          if [ "$OPT" = "plugin" ] || [ "$OPT" = "qt" ]; then
 diff --git a/tools/configure/configureapp.cpp b/tools/configure/configureapp.cpp
-index dd5647b..b6e80ea 100644
+index 307b845..1d654fe 100644
 --- a/tools/configure/configureapp.cpp
 +++ b/tools/configure/configureapp.cpp
 @@ -437,6 +437,7 @@ void Configure::parseCmdLine()
@@ -1231,13 +1044,13 @@ index dd5647b..b6e80ea 100644
          // IDE project generation -----------------------------------
          else if (configCmdLine.at(i) == "-no-dsp")
 -- 
-1.7.6
+1.7.6.1
 
 
-From 8d719e67c51987fb6439ea1d05a2b10684b974e1 Mon Sep 17 00:00:00 2001
+From e586c2c3df5877dabdf4a6197054b2d24cb10b29 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 16 Nov 2010 20:06:28 +0100
-Subject: [PATCH 08/17] explicitly include -llcms for -lmng (mingw-cross-env
+Subject: [PATCH 07/15] explicitly include -llcms for -lmng (mingw-cross-env
  specific)
 
 ---
@@ -1258,13 +1071,13 @@ index ffb98de..c213e09 100644
  } else {
      include($$PWD/../../3rdparty/libmng.pri)
 -- 
-1.7.6
+1.7.6.1
 
 
-From c34bd635af9263d1a719cd270db123b1a787640c Mon Sep 17 00:00:00 2001
+From aecb4e7acbb0d2386dcb2e7ad0ed39868d4d63fa Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 5 Jun 2010 23:41:04 +0200
-Subject: [PATCH 09/17] added missing INSTALLS to JavaScriptCore.pro for
+Subject: [PATCH 08/15] added missing INSTALLS to JavaScriptCore.pro for
  static libjscore (mingw-cross-env specific)
 
 For static build of Qt on win32-g++*, applications using webkit
@@ -1291,13 +1104,13 @@ index a805170..027eb0f 100644
  
  CONFIG(QTDIR_build) {
 -- 
-1.7.6
+1.7.6.1
 
 
-From c56ec08a3e3af1a9beae552872b443c6a7cf401c Mon Sep 17 00:00:00 2001
+From 6c13eb0e3ab8f0e4bbf6ed79d31ff5255b2446ae Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 9 Nov 2010 20:09:45 +0100
-Subject: [PATCH 10/17] Partially restored support for static linking of
+Subject: [PATCH 09/15] Partially restored support for static linking of
  QtWebKit (mingw-cross-env specific)
 
 Support was removed by 4221d629e2cf37ee8c5ba7cb595b05ab8c82f113.
@@ -1307,10 +1120,10 @@ Static QtWebkit might be supported by mingw-cross-env.
  1 files changed, 0 insertions(+), 6 deletions(-)
 
 diff --git a/configure b/configure
-index 207dcc1..b10b0a2 100755
+index 946c74b..53c433c 100755
 --- a/configure
 +++ b/configure
-@@ -7179,12 +7179,6 @@ if [ "$CFG_GUI" = "no" ]; then
+@@ -7151,12 +7151,6 @@ if [ "$CFG_GUI" = "no" ]; then
      canBuildWebKit="no"
  fi
  
@@ -1324,13 +1137,13 @@ index 207dcc1..b10b0a2 100755
  CFG_CONCURRENT="yes"
  if [ "$canBuildQtConcurrent" = "no" ]; then
 -- 
-1.7.6
+1.7.6.1
 
 
-From 074e13614d6071247600eea3c3d6a1f4c4f4a0d5 Mon Sep 17 00:00:00 2001
+From 6f62b8fc99daaac463bb8d3d781eb432006577e5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Jan 2011 14:21:32 +0100
-Subject: [PATCH 11/17] pkg-config file for jscore (mingw-cross-env specific)
+Subject: [PATCH 10/15] pkg-config file for jscore (mingw-cross-env specific)
 
 ---
  .../webkit/JavaScriptCore/JavaScriptCore.pro       |    8 ++++++++
@@ -1353,13 +1166,13 @@ index 027eb0f..44bbc3f 100644
 +   QMAKE_PKGCONFIG_DESTDIR = pkgconfig
 +}
 -- 
-1.7.6
+1.7.6.1
 
 
-From c907c7c1f0922416fd5f19cb477b71c6f97fee45 Mon Sep 17 00:00:00 2001
+From 0db184b757308a8135032069a13722a4b713dc2b Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 21 Feb 2011 22:22:04 +0100
-Subject: [PATCH 12/17] workaround for native build on OSX (mingw-cross-env
+Subject: [PATCH 11/15] workaround for native build on OSX (mingw-cross-env
  specific)
 
 The native build complains about:
@@ -1385,198 +1198,13 @@ index 4464686..ba0c45b 100644
  include(../common/mac-g++.conf)
  
 -- 
-1.7.6
+1.7.6.1
 
 
-From ac552171a0729e1fae026741e4ec89a415298667 Mon Sep 17 00:00:00 2001
-From: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
-Date: Mon, 10 Jan 2011 20:09:24 +0100
-Subject: [PATCH 13/17] fix -enable-stdcall-fixup usage
-
-the leading "-Wl," was apparently accidentally split off to the wrong
-line.
-
-Task-number: QTBUG-15391
-Reviewed-by: mariusSO
-(cherry picked from commit 0953ee31dba532603fb7dfbde78c99aafb048bef)
----
- mkspecs/win32-g++/qmake.conf |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
-index ec216aa..2d9833b 100644
---- a/mkspecs/win32-g++/qmake.conf
-+++ b/mkspecs/win32-g++/qmake.conf
-@@ -52,8 +52,8 @@ QMAKE_RUN_CXX_IMP	= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
- 
- QMAKE_LINK		= g++
- QMAKE_LINK_C		= gcc
--QMAKE_LFLAGS		= -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
--QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads -Wl
-+QMAKE_LFLAGS		= -Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
-+QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads
- QMAKE_LFLAGS_EXCEPTIONS_OFF =
- QMAKE_LFLAGS_RELEASE	= -Wl,-s
- QMAKE_LFLAGS_DEBUG	=
--- 
-1.7.6
-
-
-From 0e32298cb08ef1168dc6c06dd48bab8ee62c6e5d Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 28 Mar 2011 13:33:58 +0200
-Subject: [PATCH 14/17] fix -enable-stdcall-fixup usage
-
-the leading "-Wl," was apparently accidentally split off to the wrong
-line.
-
-Originally done in 0953ee3 for mkspecs/win32-g++.
-
-Merge-request: 1154
-Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
-(cherry picked from commit 1dac22d30849f0dfb38f281c59afc886b1046bb3)
----
- mkspecs/unsupported/win32-g++-cross/qmake.conf |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/mkspecs/unsupported/win32-g++-cross/qmake.conf b/mkspecs/unsupported/win32-g++-cross/qmake.conf
-index 7e077a1..efc3de2 100644
---- a/mkspecs/unsupported/win32-g++-cross/qmake.conf
-+++ b/mkspecs/unsupported/win32-g++-cross/qmake.conf
-@@ -52,8 +52,8 @@ QMAKE_RUN_CXX_IMP	= $(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@ $<
- 
- QMAKE_LINK		= i686-pc-mingw32-g++
- QMAKE_LINK_C		= i686-pc-mingw32-gcc
--QMAKE_LFLAGS		= -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
--QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads -Wl
-+QMAKE_LFLAGS		= -Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc
-+QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads
- QMAKE_LFLAGS_EXCEPTIONS_OFF =
- QMAKE_LFLAGS_RELEASE	= -Wl,-s
- QMAKE_LFLAGS_DEBUG	=
--- 
-1.7.6
-
-
-From 0a9731cad65337c7084791b54db8bfeb0939dc7d Mon Sep 17 00:00:00 2001
-From: Jonathan Liu <net147@gmail.com>
-Date: Mon, 4 Apr 2011 13:01:48 +0200
-Subject: [PATCH 15/17] win32-g++: Correct the order of linked Windows
- libraries
-
-On Windows 7, kernel32.dll exports many of the same functions as
-advapi32.dll. If executables link to these functions in kernel32.dll
-instead of advapi32.dll, running these executables on older versions
-of Windows will cause an entry point error. This would occur due to
-kernel32 being specified before advapi32.
-
-To resolve this issue, advapi32 is specified before kernel32 when
-linking.
-
-Task-number: QTBUG-18537
-Merge-request: 1169
-Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
-(cherry picked from commit a6d48ca57403539ab8e00d16f80bd4cd334e1b5c)
----
- mkspecs/win32-g++/qmake.conf |    2 +-
- qmake/Makefile.win32-g++     |    2 +-
- qmake/Makefile.win32-g++-sh  |    2 +-
- qmake/qmake.pri              |    2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
-index 2d9833b..bf69999 100644
---- a/mkspecs/win32-g++/qmake.conf
-+++ b/mkspecs/win32-g++/qmake.conf
-@@ -65,7 +65,7 @@ QMAKE_LINK_OBJECT_SCRIPT= object_script
- 
- 
- QMAKE_LIBS		=
--QMAKE_LIBS_CORE         = -lkernel32 -luser32 -lshell32 -luuid -lole32 -ladvapi32 -lws2_32
-+QMAKE_LIBS_CORE         = -lole32 -luuid -lws2_32 -ladvapi32 -lshell32 -luser32 -lkernel32
- QMAKE_LIBS_GUI          = -lgdi32 -lcomdlg32 -loleaut32 -limm32 -lwinmm -lwinspool -lws2_32 -lole32 -luuid -luser32 -ladvapi32
- QMAKE_LIBS_NETWORK      = -lws2_32
- QMAKE_LIBS_OPENGL       = -lglu32 -lopengl32 -lgdi32 -luser32
-diff --git a/qmake/Makefile.win32-g++ b/qmake/Makefile.win32-g++
-index 29fbd0a..5a46e41 100644
---- a/qmake/Makefile.win32-g++
-+++ b/qmake/Makefile.win32-g++
-@@ -28,7 +28,7 @@ CFLAGS	    =	-c -o$@ -O \
- 		-DQT_BOOTSTRAPPED -DQLIBRARYINFO_EPOCROOT
- CXXFLAGS    =   $(CFLAGS)
- LFLAGS	    = -static-libgcc -static-libstdc++ -s
--LIBS	    = -lole32 -luuid
-+LIBS	    = -lole32 -luuid -ladvapi32 -lkernel32
- LINKQMAKE   =	g++ $(LFLAGS) -o qmake.exe $(OBJS) $(QTOBJS) $(LIBS)
- ADDCLEAN    =
- 
-diff --git a/qmake/Makefile.win32-g++-sh b/qmake/Makefile.win32-g++-sh
-index 9c7942c..6ca7514 100644
---- a/qmake/Makefile.win32-g++-sh
-+++ b/qmake/Makefile.win32-g++-sh
-@@ -28,7 +28,7 @@ CFLAGS	    =	-c -o$@ -O \
- 		-DQT_BOOTSTRAPPED -DQLIBRARYINFO_EPOCROOT
- CXXFLAGS    =   $(CFLAGS)
- LFLAGS	    = -static-libgcc -static-libstdc++ -s
--LIBS	    = -lole32 -luuid
-+LIBS	    = -lole32 -luuid -ladvapi32 -lkernel32
- LINKQMAKE   =	g++ $(LFLAGS) -o qmake.exe $(OBJS) $(QTOBJS) $(LIBS)
- ADDCLEAN    =
- 
-diff --git a/qmake/qmake.pri b/qmake/qmake.pri
-index 8f46a2e..3a0ab12 100644
---- a/qmake/qmake.pri
-+++ b/qmake/qmake.pri
-@@ -135,7 +135,7 @@ bootstrap { #Qt code
- 	SOURCES += qfsfileengine_win.cpp qfsfileengine_iterator_win.cpp qsettings_win.cpp \
-             qsystemlibrary.cpp
-         win32-msvc*:LIBS += ole32.lib advapi32.lib
--        win32-g++*:LIBS += -lole32 -luuid
-+        win32-g++*:LIBS += -lole32 -luuid -ladvapi32 -lkernel32
-     }
- 
-     qnx {
--- 
-1.7.6
-
-
-From c4a1848f4178fe99daa2c12ad1f14e8de14cc389 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 5 Apr 2011 10:35:58 +0200
-Subject: [PATCH 16/17] win32-g++: Correct the order of linked Windows
- libraries
-
-Commit a6d48ca corrected the problem for win32-g++. Here we do the same
-for win32-g++-cross.
-
-Merge-request: 1173
-Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@nokia.com>
-(cherry picked from commit 63ea4ba0ceb8f625da48ddbe31f96b2148f62146)
----
- mkspecs/unsupported/win32-g++-cross/qmake.conf |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/mkspecs/unsupported/win32-g++-cross/qmake.conf b/mkspecs/unsupported/win32-g++-cross/qmake.conf
-index efc3de2..6eed244 100644
---- a/mkspecs/unsupported/win32-g++-cross/qmake.conf
-+++ b/mkspecs/unsupported/win32-g++-cross/qmake.conf
-@@ -65,7 +65,7 @@ QMAKE_LINK_OBJECT_SCRIPT= object_script
- 
- 
- QMAKE_LIBS		=
--QMAKE_LIBS_CORE         = -lkernel32 -luser32 -lshell32 -luuid -lole32 -ladvapi32 -lws2_32
-+QMAKE_LIBS_CORE         = -lole32 -luuid -lws2_32 -ladvapi32 -lshell32 -luser32 -lkernel32
- QMAKE_LIBS_GUI          = -lgdi32 -lcomdlg32 -loleaut32 -limm32 -lwinmm -lwinspool -lws2_32 -lole32 -luuid -luser32 -ladvapi32
- QMAKE_LIBS_NETWORK      = -lws2_32
- QMAKE_LIBS_OPENGL       = -lglu32 -lopengl32 -lgdi32 -luser32
--- 
-1.7.6
-
-
-From 31cbd33f7f47bbfe52de9b27a6020e87f309d2be Mon Sep 17 00:00:00 2001
+From b24117a7f8a1b1f32d09f8f563a058e8445fc124 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 28 Jun 2011 23:02:29 +0200
-Subject: [PATCH 17/17] link static text codec plugins (mingw-cross-env
+Subject: [PATCH 12/15] link static text codec plugins (mingw-cross-env
  specific)
 
 Static QtCore for Windows introduces dependencies on the text codec plugins.
@@ -1619,5 +1247,97 @@ index 0000000..a579487
 +QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs
 +SOURCES += $$PWD/staticcodecplugins.cpp
 -- 
-1.7.6
+1.7.6.1
+
+
+From 8623b9265243f31b6895c31346e2956fcd78436d Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 1 Sep 2011 13:47:10 +0200
+Subject: [PATCH 13/15] fix building on GNU/kFreeBSD (mingw-cross-specific)
+
+This patch has been taken from:
+
+http://anonscm.debian.org/gitweb/?p=pkg-kde/qt/qt4-x11.git;a=blob;f=debian/patches/50_kfreebsd_Q_OS.diff;h=4a8db71ff07a91efdf822baa120a3542ccf1d7f2;hb=HEAD
+
+Author: Pino Toscano <pino@kde.org>
+Description: Fixes FTBFS on GNU/kFreeBSD by creating new Q_OS_FREEBSD_KERNEL.
+Last-Update: 2010-10-06
+---
+ src/corelib/global/qglobal.h |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/src/corelib/global/qglobal.h b/src/corelib/global/qglobal.h
+index b8f3bb0..61588f1 100644
+--- a/src/corelib/global/qglobal.h
++++ b/src/corelib/global/qglobal.h
+@@ -221,6 +221,8 @@ namespace QT_NAMESPACE {}
+ #elif defined(__FreeBSD__) || defined(__DragonFly__)
+ #  define Q_OS_FREEBSD
+ #  define Q_OS_BSD4
++#elif defined(__FreeBSD_kernel__)
++#  define Q_OS_FREEBSD_KERNEL
+ #elif defined(__NetBSD__)
+ #  define Q_OS_NETBSD
+ #  define Q_OS_BSD4
+-- 
+1.7.6.1
+
+
+From 698c9932336929598c5896b45930ede7c7a0bed5 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 1 Sep 2011 13:49:47 +0200
+Subject: [PATCH 14/15] fix missing platform when building on GNU/kFreeBSD
+ (mingw-cross-env specific)
+
+This patch is inspired by:
+http://anonscm.debian.org/gitweb/?p=pkg-kde/qt/qt4-x11.git;a=blob;f=debian/rules;h=47e5efbf09f77e6da51a3d719d2f6be47f69d096;hb=HEAD
+
+For the time being, glibc-g++ is simply a copy of linux-g++.
+---
+ configure |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/configure b/configure
+index 53c433c..ad23674 100755
+--- a/configure
++++ b/configure
+@@ -2608,6 +2608,9 @@ if [ -z "$PLATFORM" ]; then
+      GNU:*)
+         PLATFORM=hurd-g++
+         ;;
++     GNU/kFreeBSD:*)
++        PLATFORM=linux-g++
++        ;;
+      dgux:*)
+         PLATFORM=dgux-g++
+         ;;
+-- 
+1.7.6.1
+
+
+From 4679cb1b70f4e399ab9010a23998aa335f256437 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 1 Sep 2011 13:51:50 +0200
+Subject: [PATCH 15/15] fix building on dragonfly (mingw-cross-env specific)
+
+This patch is inspired by:                                                                                                                                       http://cvsweb.NetBSD.org/bsdweb.cgi/pkgsrc/x11/qt4-libs/Makefile.common?rev=1.27&content-type=text/x-cvsweb-markup
+---
+ configure |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/configure b/configure
+index ad23674..de5df9f 100755
+--- a/configure
++++ b/configure
+@@ -2620,7 +2620,7 @@ if [ -z "$PLATFORM" ]; then
+      ULTRIX:*)
+         PLATFORM=ultrix-g++
+         ;;
+-     FreeBSD:*)
++     FreeBSD:*|DragonFly:*)
+         PLATFORM=freebsd-g++
+         PLATFORM_NOTES="
+             - Also available for FreeBSD: freebsd-icc
+-- 
+1.7.6.1
 
