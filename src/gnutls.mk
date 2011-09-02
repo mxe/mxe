@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
     grep '<a class="list name"' | \
     $(SED) -n 's,.*<a[^>]*>gnutls_\([0-9]*_[0-9]*[02468]_[^<]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
+    grep -v '^3\.' | \
     head -1
 endef
 
