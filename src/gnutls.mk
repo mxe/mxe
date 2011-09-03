@@ -41,4 +41,9 @@ define $(PKG)_BUILD
         --without-p11-kit \
         LIBS='-lz'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gnutls.exe' \
+        `'$(TARGET)-pkg-config' gnutls --cflags --libs`
 endef
