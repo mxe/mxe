@@ -39,7 +39,8 @@ define $(PKG)_BUILD
         --with-libgcrypt \
         --without-lzo \
         --without-p11-kit \
-        LIBS='-lz'
+        LIBS='-lz' \
+        ac_cv_prog_AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
 
     '$(TARGET)-gcc' \
