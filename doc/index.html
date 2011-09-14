@@ -340,6 +340,12 @@ exit</pre>
 make</pre>
 
     <p>
+    If you build a library, you might also want to enforce a static build:
+    </p>
+    <pre>./configure --host=<span class="target">i686-pc-mingw32</span> --enable-static --disable-shared
+make</pre>
+
+    <p>
     Don't worry about a warning like this:
     </p>
     <pre>configure: WARNING: If you wanted to set the --build type, don't use --host.
