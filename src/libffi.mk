@@ -4,8 +4,8 @@
 # libffi
 PKG             := libffi
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.9
-$(PKG)_CHECKSUM := 56e41f87780e09d06d279690e53d4ea2c371ea88
+$(PKG)_VERSION  := 3.0.10
+$(PKG)_CHECKSUM := 97abf70e6a6d315d9259d58ac463663051d471e1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://sourceware.org/$(PKG)/

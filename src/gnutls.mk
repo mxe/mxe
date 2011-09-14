@@ -3,12 +3,12 @@
 
 # GnuTLS
 PKG             := gnutls
-$(PKG)_VERSION  := 2.12.5
-$(PKG)_CHECKSUM := dd45d4fb7c365d18803b9eafef838b310c899d67
+$(PKG)_VERSION  := 2.12.10
+$(PKG)_CHECKSUM := 52ed0bfa3dc7900f8da22f29eaace6ec34439223
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gnutls/$($(PKG)_FILE)
+$(PKG)_URL      := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libgcrypt
 
@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
     grep '<a class="list name"' | \
     $(SED) -n 's,.*<a[^>]*>gnutls_\([0-9]*_[0-9]*[02468]_[^<]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
+    grep -v '^3\.' | \
     head -1
 endef
 
@@ -37,6 +38,13 @@ define $(PKG)_BUILD
         --with-included-pakchois \
         --with-libgcrypt \
         --without-lzo \
-        LIBS='-lz'
+        --without-p11-kit \
+        LIBS='-lz' \
+        ac_cv_prog_AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gnutls.exe' \
+        `'$(TARGET)-pkg-config' gnutls --cflags --libs`
 endef

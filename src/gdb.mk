@@ -3,9 +3,9 @@
 
 # gdb
 PKG             := gdb
-$(PKG)_VERSION  := 7.2
-$(PKG)_CHECKSUM := cae138dee0c11778c471a1d5e4b09e0ae08f9e9d
-$(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
+$(PKG)_VERSION  := 7.3a
+$(PKG)_CHECKSUM := d68061206a3485bab32da3fb751c6c3b913c2b9c
+$(PKG)_SUBDIR   := gdb-7.3
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gdb/
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
@@ -15,6 +15,7 @@ $(PKG)_DEPS     := gcc expat libiconv zlib
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.gnu.org/gnu/gdb/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="gdb-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    sort -r |\
     head -1
 endef
 
@@ -25,5 +26,5 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/gdb' -j 1 install
+    $(MAKE) -C '$(1)' -j 1 install
 endef

@@ -4,8 +4,8 @@
 # OGG
 PKG             := ogg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.2
-$(PKG)_CHECKSUM := deeb1959f84de9277e74bca17ec66fa20ced9f08
+$(PKG)_VERSION  := 1.3.0
+$(PKG)_CHECKSUM := a900af21b6d7db1c7aa74eb0c39589ed9db991b8
 $(PKG)_SUBDIR   := libogg-$($(PKG)_VERSION)
 $(PKG)_FILE     := libogg-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.xiph.org/ogg/

@@ -1,0 +1,26 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 2f8e6d6727a6140e12b8af09a64cdec05054162e Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Wed, 17 Aug 2011 14:01:51 +0200
+Subject: [PATCH] adding missing ws2_32 to Libs.private
+
+
+diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
+index bac5f42..eb4e6df 100644
+--- a/lib/gnutls.pc.in
++++ b/lib/gnutls.pc.in
+@@ -20,6 +20,6 @@ Description: Transport Security Layer implementation for the GNU system
+ URL: http://www.gnu.org/software/gnutls/
+ Version: @VERSION@
+ Libs: -L${libdir} -lgnutls
+-Libs.private: @LTLIBGCRYPT@ @LTLIBNETTLE@ @NETTLE_LIBS@ @GNUTLS_ZLIB_LIBS_PRIVATE@
++Libs.private: @LTLIBGCRYPT@ @LTLIBNETTLE@ @NETTLE_LIBS@ @P11_KIT_LIBS@ @GNUTLS_ZLIB_LIBS_PRIVATE@ -lws2_32
+ @GNUTLS_REQUIRES_PRIVATE@
+ Cflags: -I${includedir}
+-- 
+1.7.6
+

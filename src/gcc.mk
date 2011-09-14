@@ -4,8 +4,8 @@
 # GCC
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.6.0
-$(PKG)_CHECKSUM := dcbb5ce724c4bf87b9ec93473d16b71e9ebac483
+$(PKG)_VERSION  := 4.6.1
+$(PKG)_CHECKSUM := 8bf66f7a71534ba564563a0ba0b2517aead8ac30
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://gcc.gnu.org/
@@ -34,6 +34,7 @@ define $(PKG)_BUILD
     cd    '$(1).build' && '$(1)/configure' \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
+        --libdir='$(PREFIX)/lib' \
         --enable-languages='c,c++,objc,fortran' \
         --enable-version-specific-runtime-libs \
         --with-gcc \
@@ -60,6 +61,7 @@ define $(PKG)_BUILD
     [ -d '$(dir $(CMAKE_TOOLCHAIN_FILE))' ] || mkdir -p '$(dir $(CMAKE_TOOLCHAIN_FILE))'
     (echo 'set(BUILD_SHARED_LIBS OFF)'; \
      echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
+     echo 'set(MSYS 1)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH $(PREFIX)/$(TARGET))'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)'; \

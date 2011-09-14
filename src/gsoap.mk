@@ -4,8 +4,8 @@
 # gSOAP
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.2
-$(PKG)_CHECKSUM := 199b7d4cf0b6a5bf81a2198e39f03c092ffc05a7
+$(PKG)_VERSION  := 2.8.3
+$(PKG)_CHECKSUM := 55677239751253b48f448eb30a7585df97cba486
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
@@ -33,6 +33,8 @@ define $(PKG)_BUILD
 
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
+    # fix hard-coded gnutls dependencies
+    $(SED) -i "s/-lgnutls -lgcrypt -lgpg-error -lz/`'$(TARGET)-pkg-config' --libs-only-l gnutls`/g;" '$(1)/configure'
 
     # Build for mingw. Static by default.
     # Prevent undefined reference to _rpl_malloc.
@@ -43,7 +45,7 @@ define $(PKG)_BUILD
         --enable-gnutls
 
     # Building for mingw requires native soapcpp2
-    ln -s '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)'/gsoap/src/soapcpp2
+    ln -sf '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)/gsoap/src/soapcpp2'
 
     # Parallel bulds can fail
     $(MAKE) -C '$(1)' -j 1 AR='$(TARGET)-ar'

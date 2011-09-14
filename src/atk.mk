@@ -4,8 +4,8 @@
 # ATK
 PKG             := atk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := a11205c094ce68cbe3ee7dd92163e08e00c34cce
+$(PKG)_VERSION  := 2.0.1
+$(PKG)_CHECKSUM := f830ff27590e4dd486ebe6538e2b03484faee10a
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gtk.org/
