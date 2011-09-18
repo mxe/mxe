@@ -4,8 +4,8 @@
 # Exiv2
 PKG             := exiv2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.21.1
-$(PKG)_CHECKSUM := d33e0efbad5d6a7af7f2e6d1d0beb6e7c941cfca
+$(PKG)_VERSION  := 0.22
+$(PKG)_CHECKSUM := 35211d853a986fe1b008fca14db090726e8dcce3
 $(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)
 $(PKG)_FILE     := exiv2-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.exiv2.org/
@@ -20,8 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # rebuild configure script as one of the patches modifies configure.ac
-    $(MAKE) -C '$(1)/config' -f config.make
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
