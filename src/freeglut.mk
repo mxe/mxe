@@ -31,5 +31,10 @@ define $(PKG)_BUILD
         --disable-debug \
         --without-progs \
         --without-x
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= EXPORT_FLAGS='-DFREEGLUT_STATIC'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-freeglut.exe' \
+        -lglut -lglu32 -lopengl32 -lwinmm -lgdi32 -mwindows -DFREEGLUT_STATIC
 endef
