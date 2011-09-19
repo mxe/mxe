@@ -24,6 +24,11 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(1)/$(TARGET)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/$(TARGET)' -j 1 install
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -std=c99 -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libffi.exe' \
+        `'$(TARGET)-pkg-config' libffi --cflags --libs`
 endef
