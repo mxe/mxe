@@ -39,4 +39,9 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/GL'
     $(INSTALL) -m644 '$(1)/include/GL/glew.h' '$(1)/include/GL/wglew.h' '$(PREFIX)/$(TARGET)/include/GL/'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-glew.exe' \
+        `'$(TARGET)-pkg-config' glew --cflags --libs`
 endef
