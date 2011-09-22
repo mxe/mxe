@@ -41,4 +41,3 @@ define $(PKG)_BUILD
         -DVIGRA_STATIC_LIB \
         -lvigraimpex `'$(TARGET)-pkg-config' OpenEXR --cflags --libs` -ltiff -lpng -ljpeg -lz -lstdc++
 endef
-
