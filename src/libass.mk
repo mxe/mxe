@@ -4,8 +4,8 @@
 # libass
 PKG             := libass
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.13
-$(PKG)_CHECKSUM := 05e210bd081af3e542778bd3a687724547fcd2ca
+$(PKG)_VERSION  := 0.10.0
+$(PKG)_CHECKSUM := 7a0ea048f687421f3e1314988ca02f04861fc5f0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_WEBSITE  := http://code.google.com/p/libass/
