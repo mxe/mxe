@@ -4,8 +4,8 @@
 # PostgreSQL
 PKG             := postgresql
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.1.0
-$(PKG)_CHECKSUM := 25d4999b587fb4e85ed4b541967c5c2d52354ba1
+$(PKG)_VERSION  := 9.1.1
+$(PKG)_CHECKSUM := 4df7b6f6b23acdac5ea198e3623796a2b62fc7a4
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.postgresql.org/
@@ -18,6 +18,7 @@ define $(PKG)_UPDATE
     grep 'refs/tags/REL9[0-9_]*"' | \
     $(SED) 's,.*refs/tags/REL\(.*\)".*,\1,g;' | \
     $(SED) 's,_,.,g' | \
+    grep -v '^9\.\0' | \
     head -1
 endef
 
