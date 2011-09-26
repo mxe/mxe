@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_WEBSITE  := http://code.google.com/p/libass/
 $(PKG)_URL      := http://libass.googlecode.com/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype fontconfig
+$(PKG)_DEPS     := gcc freetype fontconfig fribidi
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://code.google.com/p/libass/downloads/list?sort=-uploaded' | \
