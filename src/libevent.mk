@@ -8,12 +8,12 @@ $(PKG)_VERSION  := 2.0.14
 $(PKG)_CHECKSUM := b52b466f5a418744faf5f12b0fe3877cb7fb0b6e
 $(PKG)_SUBDIR   := libevent-$($(PKG)_VERSION)-stable
 $(PKG)_FILE     := libevent-$($(PKG)_VERSION)-stable.tar.gz
-$(PKG)_WEBSITE  := http://monkey.org/~provos/libevent/
+$(PKG)_WEBSITE  := http://libevent.org
 $(PKG)_URL      := https://github.com/downloads/$(PKG)/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.monkey.org/~provos/libevent/' | \
+    wget -q -O- 'http://libevent.org/' | \
     grep 'libevent-' | \
     $(SED) -n 's,.*libevent-\([0-9][^>]*\)-stable\.tar.*,\1,p' | \
     head -1
