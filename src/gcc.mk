@@ -47,7 +47,9 @@ define $(PKG)_BUILD
         --disable-win32-registry \
         --enable-threads=win32 \
         --disable-libgomp \
-        --disable-libmudflap
+        --disable-libmudflap \
+        --with-mpfr-include='$(1)/mpfr/src' \
+        --with-mpfr-lib='$(1).build/mpfr/src/.libs'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 
