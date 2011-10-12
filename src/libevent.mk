@@ -4,8 +4,8 @@
 # libevent
 PKG             := libevent
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.14
-$(PKG)_CHECKSUM := b52b466f5a418744faf5f12b0fe3877cb7fb0b6e
+$(PKG)_VERSION  := 2.0.15
+$(PKG)_CHECKSUM := 8e4f662f3bed28f82f89a5d0afaecac75adfa925
 $(PKG)_SUBDIR   := libevent-$($(PKG)_VERSION)-stable
 $(PKG)_FILE     := libevent-$($(PKG)_VERSION)-stable.tar.gz
 $(PKG)_WEBSITE  := http://libevent.org
