@@ -22,7 +22,6 @@ define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DQT_QMAKE_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-qmake' \
         -DCMAKE_BUILD_TYPE=Release \
         -DLIBTYPE=STATIC
 
