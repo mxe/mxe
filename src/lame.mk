@@ -4,8 +4,8 @@
 # lame
 PKG             := lame
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.98.4
-$(PKG)_CHECKSUM := eb29c7c937b9b7330ca979dfabc25ab2a31b9db2
+$(PKG)_VERSION  := 3.99
+$(PKG)_CHECKSUM := 6c311fb9c7849048fc29ffe150ac39af03f57504
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://lame.sourceforge.net/
