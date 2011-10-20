@@ -13,7 +13,7 @@ $(PKG)_URL      := http://www.libssh2.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc openssl zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.libssh2.org/download/' | \
+    wget -q -O- 'http://www.libssh2.org/download/?C=M;O=D' | \
     grep 'libssh2-' | \
     $(SED) -n 's,.*libssh2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
