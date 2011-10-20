@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := libssh2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh2-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.libssh2.org
 $(PKG)_URL      := http://www.libssh2.org/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := 
+$(PKG)_DEPS     := gcc openssl zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.libssh2.org/download/' | \
@@ -26,4 +26,9 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libssh2.exe' \
+        -lssh2
 endef
