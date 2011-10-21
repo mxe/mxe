@@ -6,10 +6,10 @@ PKG             := eigen
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.16
 $(PKG)_CHECKSUM := 16732775f93174563e575c3570395a11a5e57104
-$(PKG)_SUBDIR   := eigen-eigen-$($(PKG)_VERSION)
+$(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := lib$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://eigen.tuxfamily.org/
-$(PKG)_URL      := http://bitbucket.org/eigen/eigen/get/$($(PKG)_FILE)
+$(PKG)_URL      := http://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

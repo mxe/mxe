@@ -1,0 +1,307 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 89e55b180994db937e019678a2abccd0c6f73f7e Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 21 Oct 2011 23:08:52 +0200
+Subject: [PATCH 1/2] adjustments for mingw-cross-env
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e5af443..7d77f9d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -135,6 +135,8 @@ set(ALL_CGAL_LIBRARIES CGAL CGAL_Core CGAL_ImageIO CGAL_Qt3 CGAL_Qt4 CACHE INTER
+ #
+ #--------------------------------------------------------------------------------------------------
+ 
++uniquely_add_flags( CXXFLAGS "-DBOOST_THREAD_USE_LIB;-DBoost_USE_STATIC_LIBS" )
++SET(CMAKE_CXX_FLAGS_RELEASE "-DBOOST_THREAD_USE_LIB -DBoost_USE_STATIC_LIBS -O3 -DNDEBUG" CACHE STRING blah FORCE)
+ if( MSVC )
+   
+   uniquely_add_flags ( CGAL_CXX_FLAGS "-D_CRT_SECURE_NO_DEPRECATE;-D_SCL_SECURE_NO_DEPRECATE;-D_CRT_SECURE_NO_WARNINGS;-D_SCL_SECURE_NO_WARNINGS" )
+diff --git a/TryRunResults.cgal.cmake b/TryRunResults.cgal.cmake
+new file mode 100644
+index 0000000..cba9b44
+--- /dev/null
++++ b/TryRunResults.cgal.cmake
+@@ -0,0 +1,139 @@
++SET( CGAL_CFG_ARRAY_MEMBER_INITIALIZATION_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_DENORMALS_COMPILE_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_FPU_ROUNDING_MODE_UNWINDING_VC_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_IEEE_754_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_ISTREAM_INT_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_LONGNAME_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_MATCHING_BUG_5
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_MATCHING_BUG_6
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NESTED_CLASS_FRIEND_DECLARATION_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_ARRAY
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_AUTO
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_DECLTYPE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_DEFAULT_TEMPLATE_ARGUMENTS_FOR_FUNCTION_TEMPLATES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_DELEGATING_CONSTRUCTORS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_DELETED_AND_DEFAULT_FUNCTIONS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_INITIALIZER_LISTS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_ISFINITE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_LAMBDAS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_LONG_LONG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_RVALUE_REFERENCE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_TUPLE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_VARIADIC_TEMPLATES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_LIMITS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_LOGICAL_OPERATORS_ALTERNATIVES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_MESSAGE_PRAGMA_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_NEXTAFTER
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_STATEMENT_EXPRESSIONS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_STL
++     0
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_TMPL_IN_TMPL_PARAM
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_TR1_ARRAY
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_TR1_TUPLE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_WARNING_CPP_DIRECTIVE_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NUMERIC_LIMITS_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_OUTOFLINE_MEMBER_DEFINITION_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_TYPENAME_BEFORE_DEFAULT_ARGUMENT_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_USING_BASE_MEMBER_BUG_2
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( GCC_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( GMP_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( MPFR_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( QT4_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( ZLIB_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( GCC_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( GMP_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( MPFR_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( QT4_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( ZLIB_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++
+diff --git a/cmake/modules/FindBoost.cmake b/cmake/modules/FindBoost.cmake
+index fbdde88..5d8a0a9 100644
+--- a/cmake/modules/FindBoost.cmake
++++ b/cmake/modules/FindBoost.cmake
+@@ -167,6 +167,7 @@
+ #
+ 
+ include( CGAL_VersionUtils )
++set(Boost_USE_STATIC_LIBS   ON)
+ 
+ 
+ #-------------------------------------------------------------------------------
+@@ -706,7 +707,9 @@ ELSE (_boost_IN_CACHE)
+     ENDIF( Boost_USE_STATIC_LIBS )
+ 
+     # Find libraries (search in user defined directories first)
++    SET ( _boost_COMPILER "_win32")
+     SET ( _boost_${UPPERCOMPONENT}_LIBRARY_RELEASE_NAMES   
++      ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}
+       ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
+       ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${_boost_STATIC_TAG}-${Boost_LIB_VERSION}
+       ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
+diff --git a/include/CGAL/Constrained_Delaunay_triangulation_2.h b/include/CGAL/Constrained_Delaunay_triangulation_2.h
+index f1a7201..23a53c9 100644
+--- a/include/CGAL/Constrained_Delaunay_triangulation_2.h
++++ b/include/CGAL/Constrained_Delaunay_triangulation_2.h
+@@ -389,7 +389,7 @@ is_flipable(Face_handle f, int i, bool perturb) const
+   Face_handle ni = f->neighbor(i); 
+   if (is_infinite(f) || is_infinite(ni)) return false; 
+   if (f->is_constrained(i)) return false;
+-  return (side_of_oriented_circle(ni, f->vertex(i)->point(), perturb) 
++  return (this->side_of_oriented_circle(ni, f->vertex(i)->point(), perturb)
+                                         == ON_POSITIVE_SIDE);
+ }
+ 
+@@ -493,7 +493,7 @@ test_conflict(const Point& p, Face_handle fh) const
+   // return true  if P is inside the circumcircle of fh
+   // if fh is infinite, return true when p is in the positive
+   // halfspace or on the boundary and in the  finite edge of fh
+-  Oriented_side os = side_of_oriented_circle(fh,p,true);
++  Oriented_side os = this->side_of_oriented_circle(fh,p,true);
+   if (os == ON_POSITIVE_SIDE) return true;
+  
+   if (os == ON_ORIENTED_BOUNDARY && is_infinite(fh)) {
+-- 
+1.7.7
+
+
+From 409bdc176dd09636a7e80a08bbfade0dadbd198b Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 21 Oct 2011 23:33:52 +0200
+Subject: [PATCH 2/2] disable dependency version checks
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7d77f9d..bfc2d91 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -162,7 +162,7 @@ if( "${CMAKE_CXX_COMPILER}" MATCHES "icl" OR "${CMAKE_CXX_COMPILER}" MATCHES "ic
+   message( STATUS "Intel compiler is detected." )
+   set( IntelCompiler_FOUND TRUE )
+ 
+-  get_dependency_version(IntelCompiler)
++  #get_dependency_version(IntelCompiler)
+ 
+   if( "${IntelCompiler_VERSION}" LESS "1100" )
+     message("Intel Compiler version ${IntelCompiler_VERSION} is not supported by CGAL-${CGAL_MAJOR_VERSION}.${CGAL_MINOR_VERSION}! (too old, must be 11.0 or after)")
+@@ -177,7 +177,7 @@ if ( CMAKE_COMPILER_IS_GNUCXX )
+ 
+   set( GCC_FOUND TRUE )
+   
+-  get_dependency_version(GCC)
++  #get_dependency_version(GCC)
+   
+   if ( "${GCC_VERSION}" MATCHES "Not" OR "${GCC_VERSION}" MATCHES "Unknown" )
+     set( GCC_FOUND FALSE )
+diff --git a/cmake/modules/CGAL_SetupGMP.cmake b/cmake/modules/CGAL_SetupGMP.cmake
+index 1ff612c..efca627 100644
+--- a/cmake/modules/CGAL_SetupGMP.cmake
++++ b/cmake/modules/CGAL_SetupGMP.cmake
+@@ -11,14 +11,14 @@ if ( NOT CGAL_GMP_SETUP )
+       message( STATUS "GMP include:     ${GMP_INCLUDE_DIR}" )
+       message( STATUS "GMP libraries:   ${GMP_LIBRARIES}" )
+       message( STATUS "GMP definitions: ${GMP_DEFINITIONS}" )
+-      get_dependency_version(GMP)
++      #get_dependency_version(GMP)
+ 
+       message( STATUS "MPFR include:      ${MPFR_INCLUDE_DIR}" )
+       message( STATUS "MPFR libraries:    ${MPFR_LIBRARIES}" )
+       message( STATUS "MPFR definitions:  ${MPFR_DEFINITIONS}" )
+       set( MPFR_DEPENDENCY_LIBRARIES   ${GMP_LIBRARIES} )
+       set( MPFR_DEPENDENCY_INCLUDE_DIR ${GMP_INCLUDE_DIR} )
+-      get_dependency_version(MPFR)
++      #get_dependency_version(MPFR)
+           
+       set ( CGAL_USE_GMP 1 )
+       set ( CGAL_USE_MPFR 1 )
+diff --git a/src/CGALQt4/CMakeLists.txt b/src/CGALQt4/CMakeLists.txt
+index 0c1b4e9..7d9e6de 100644
+--- a/src/CGALQt4/CMakeLists.txt
++++ b/src/CGALQt4/CMakeLists.txt
+@@ -27,9 +27,9 @@ if( QT4_FOUND )
+     
+     include(${QT_USE_FILE})
+ 
+-    get_dependency_version(OPENGL OpenGL)
++    #get_dependency_version(OPENGL OpenGL)
+     
+-    get_dependency_version(QT4 QT)
++    #get_dependency_version(QT4 QT)
+ 
+     if(COMMAND add_config_flag)
+       set( CGAL_HAS_QT4 TRUE ) 
+diff --git a/src/CGALimageIO/CMakeLists.txt b/src/CGALimageIO/CMakeLists.txt
+index d48a50b..0e06610 100644
+--- a/src/CGALimageIO/CMakeLists.txt
++++ b/src/CGALimageIO/CMakeLists.txt
+@@ -23,7 +23,7 @@ if(WITH_VTK)
+ endif(WITH_VTK)
+ 
+ if(OPENGL_FOUND)
+-  get_dependency_version(OPENGL OpenGL)
++  #get_dependency_version(OPENGL OpenGL)
+   
+   message( STATUS "OpenGL include:     ${OPENGL_INCLUDE_DIR}" )
+   message( STATUS "OpenGL libraries:   ${OPENGL_LIBRARIES}" )
+@@ -32,7 +32,7 @@ if(OPENGL_FOUND)
+   cache_set(CGAL_ImageIO_3RD_PARTY_LIBRARIES    ${OPENGL_LIBRARIES}   )
+ 
+   if(ZLIB_FOUND)
+-    get_dependency_version(ZLIB)
++    #get_dependency_version(ZLIB)
+     message( STATUS "ZLib   include:     ${ZLIB_INCLUDE_DIR}" )
+     message( STATUS "ZLib   libraries:   ${ZLIB_LIBRARY}" )
+     cache_set(CGAL_ImageIO_3RD_PARTY_INCLUDE_DIRS ${CGAL_ImageIO_3RD_PARTY_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIR} )
+-- 
+1.7.7
+
