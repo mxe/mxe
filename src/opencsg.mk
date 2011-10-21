@@ -20,11 +20,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/src' && $(SED) -i 's/release/release staticlib\nDEFINES += FREEGLUT_STATIC GLEW_STATIC/g' src.pro
-    cd '$(1)/example' && $(SED) -i 's,\(lGLEW\),\1 -lglut -lglu32 -lopengl32 -lwinmm -lgdi32\nDEFINES += FREEGLUT_STATIC GLEW_STATIC,g' example.pro
-    cd '$(1)/example' && $(SED) -i 's,opencsgexample,test-libopencsg\nRelease:DESTDIR = $(PREFIX)/$(TARGET)/bin/,g' example.pro
-    cd '$(1)/src' && '$(TARGET)-qmake' src.pro && $(MAKE) -C '$(1)/src' -j '$(JOBS)'
-    cd '$(1)/example' && '$(TARGET)-qmake' example.pro && $(MAKE) -C '$(1)/example' -j '$(JOBS)'
+    cd '$(1)/src' && '$(TARGET)-qmake' src.pro
+    $(MAKE) -C '$(1)/src' -j '$(JOBS)'
+    cd '$(1)/example' && '$(TARGET)-qmake' example.pro
+    $(MAKE) -C '$(1)/example' -j '$(JOBS)'
     $(INSTALL) -m644 '$(1)/lib/libopencsg.a' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/include/opencsg.h' '$(PREFIX)/$(TARGET)/include/'
 endef
