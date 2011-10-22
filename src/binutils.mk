@@ -4,9 +4,9 @@
 # GNU Binutils
 PKG             := binutils
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.21
-$(PKG)_CHECKSUM := ef93235588eb443e4c4a77f229a8d131bccaecc6
-$(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
+$(PKG)_VERSION  := 2.21.1a
+$(PKG)_CHECKSUM := 525255ca6874b872540c9967a1d26acfbc7c8230
+$(PKG)_SUBDIR   := binutils-2.21.1
 $(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/binutils/
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/binutils/$($(PKG)_FILE)
@@ -16,6 +16,7 @@ $(PKG)_DEPS     :=
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.gnu.org/gnu/binutils/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="binutils-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    grep '^2\.[2-9][1-9]' | \
     head -1
 endef
 
