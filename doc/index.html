@@ -462,6 +462,14 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         </p>
     </dd>
 
+    <dt>Release Updates</dt>
+    <dd>
+        <p>
+        If you are experiencing problems with a release
+        (e.g. broken download links), try the 
+        <a href="#development">stable development branch.</a>
+    </dd>
+    
     <dt>Old Releases</dt>
     <dd>
         <a href="#history">History</a>
@@ -474,6 +482,45 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 <h2 id="development">Development Version</h2>
 
     <p>
+    For the sake of simplicity, there are two development
+    branches - "default" and "stable". Although it might
+    seem obvious, here's an overview of the types of
+    changes that go into each branch:
+    </p>
+
+    <ul class="compact-list">
+        <li>
+            Any change in the build scripts goes into "default".
+        </li>
+        <li>
+            Any package upgrade goes into "default".
+        </li>
+        <li>
+            Any documentation upgrade that refers to a feature
+            not present in stable goes into "default".
+        </li>
+        <li>
+            Anything else that doesn't effect the build goes
+            into "stable".
+        </li>
+        <li>
+            Any non-critical improvement to the main Makefile
+            goes into "stable".
+        </li>
+        <li>
+            Any improvement in the package download URLs or
+            package version recognition goes into "stable".
+        </li>
+        <li>
+            When in doubt, use "default" rather than "stable".
+        </li>
+        <li>
+            After a successful testing phase, the whole "default"
+            branch will be merged (moved) into "stable".
+        </li>
+    </ul>
+
+    <p>
     To obtain the current development version,
     install
     <a href="http://mercurial.selenic.com/">Mercurial</a>
@@ -482,6 +529,13 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <pre>hg clone http://hg.savannah.nongnu.org/hgweb/mingw-cross-env</pre>
 
+    <p>
+    The stable version can be obtained by:
+    </p>
+
+    <pre>hg clone -b stable \
+        http://hg.savannah.nongnu.org/hgweb/mingw-cross-env</pre>
+    
     <p>
     To retrieve updates, run:
     </p>
