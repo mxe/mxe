@@ -22,9 +22,10 @@ endef
 define $(PKG)_BUILD
     cd '$(1)/src' && '$(TARGET)-qmake' src.pro
     $(MAKE) -C '$(1)/src' -j '$(JOBS)'
-    $(SED) -i 's,opencsgexample,test-opencsg\nRelease:DESTDIR = $(PREFIX)/$(TARGET)/bin/,' '$(1)/example/example.pro'
+    $(INSTALL) -m644 '$(1)/include/opencsg.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/lib/libopencsg.a' '$(PREFIX)/$(TARGET)/lib/'
+
     cd '$(1)/example' && '$(TARGET)-qmake' example.pro
     $(MAKE) -C '$(1)/example' -j '$(JOBS)'
-    $(INSTALL) -m644 '$(1)/lib/libopencsg.a' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/include/opencsg.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m755 '$(1)/example/release/opencsgexample.exe' '$(PREFIX)/$(TARGET)/bin/test-opencsg.exe'
 endef
