@@ -13,11 +13,9 @@ diff --git a/example/example.pro b/example/example.pro
 index 8891a28..6c88ee6 100644
 --- a/example/example.pro
 +++ b/example/example.pro
-@@ -1,10 +1,12 @@
- TEMPLATE	= app
--TARGET		= opencsgexample
-+TARGET		= test-opencsg
-+Release:DESTDIR = /home/brand/projects/mingw-cross-env.dev/local/usr/i686-pc-mingw32/bin/
+@@ -1,10 +1,11 @@
+ TEMPLATE       = app
+ TARGET         = opencsgexample
  
  CONFIG	 	+= opengl warn_on release
  INCLUDEPATH += ../glew/include ../include
