@@ -6,7 +6,7 @@ Contains ad hoc patches for cross building.
 From 89e55b180994db937e019678a2abccd0c6f73f7e Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 21 Oct 2011 23:08:52 +0200
-Subject: [PATCH 1/2] adjustments for mingw-cross-env
+Subject: [PATCH] adjustments for mingw-cross-env
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -211,97 +211,6 @@ index f1a7201..23a53c9 100644
    if (os == ON_POSITIVE_SIDE) return true;
   
    if (os == ON_ORIENTED_BOUNDARY && is_infinite(fh)) {
--- 
-1.7.7
-
-
-From 409bdc176dd09636a7e80a08bbfade0dadbd198b Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Fri, 21 Oct 2011 23:33:52 +0200
-Subject: [PATCH 2/2] disable dependency version checks
-
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 7d77f9d..bfc2d91 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -162,7 +162,7 @@ if( "${CMAKE_CXX_COMPILER}" MATCHES "icl" OR "${CMAKE_CXX_COMPILER}" MATCHES "ic
-   message( STATUS "Intel compiler is detected." )
-   set( IntelCompiler_FOUND TRUE )
- 
--  get_dependency_version(IntelCompiler)
-+  #get_dependency_version(IntelCompiler)
- 
-   if( "${IntelCompiler_VERSION}" LESS "1100" )
-     message("Intel Compiler version ${IntelCompiler_VERSION} is not supported by CGAL-${CGAL_MAJOR_VERSION}.${CGAL_MINOR_VERSION}! (too old, must be 11.0 or after)")
-@@ -177,7 +177,7 @@ if ( CMAKE_COMPILER_IS_GNUCXX )
- 
-   set( GCC_FOUND TRUE )
-   
--  get_dependency_version(GCC)
-+  #get_dependency_version(GCC)
-   
-   if ( "${GCC_VERSION}" MATCHES "Not" OR "${GCC_VERSION}" MATCHES "Unknown" )
-     set( GCC_FOUND FALSE )
-diff --git a/cmake/modules/CGAL_SetupGMP.cmake b/cmake/modules/CGAL_SetupGMP.cmake
-index 1ff612c..efca627 100644
---- a/cmake/modules/CGAL_SetupGMP.cmake
-+++ b/cmake/modules/CGAL_SetupGMP.cmake
-@@ -11,14 +11,14 @@ if ( NOT CGAL_GMP_SETUP )
-       message( STATUS "GMP include:     ${GMP_INCLUDE_DIR}" )
-       message( STATUS "GMP libraries:   ${GMP_LIBRARIES}" )
-       message( STATUS "GMP definitions: ${GMP_DEFINITIONS}" )
--      get_dependency_version(GMP)
-+      #get_dependency_version(GMP)
- 
-       message( STATUS "MPFR include:      ${MPFR_INCLUDE_DIR}" )
-       message( STATUS "MPFR libraries:    ${MPFR_LIBRARIES}" )
-       message( STATUS "MPFR definitions:  ${MPFR_DEFINITIONS}" )
-       set( MPFR_DEPENDENCY_LIBRARIES   ${GMP_LIBRARIES} )
-       set( MPFR_DEPENDENCY_INCLUDE_DIR ${GMP_INCLUDE_DIR} )
--      get_dependency_version(MPFR)
-+      #get_dependency_version(MPFR)
-           
-       set ( CGAL_USE_GMP 1 )
-       set ( CGAL_USE_MPFR 1 )
-diff --git a/src/CGALQt4/CMakeLists.txt b/src/CGALQt4/CMakeLists.txt
-index 0c1b4e9..7d9e6de 100644
---- a/src/CGALQt4/CMakeLists.txt
-+++ b/src/CGALQt4/CMakeLists.txt
-@@ -27,9 +27,9 @@ if( QT4_FOUND )
-     
-     include(${QT_USE_FILE})
- 
--    get_dependency_version(OPENGL OpenGL)
-+    #get_dependency_version(OPENGL OpenGL)
-     
--    get_dependency_version(QT4 QT)
-+    #get_dependency_version(QT4 QT)
- 
-     if(COMMAND add_config_flag)
-       set( CGAL_HAS_QT4 TRUE ) 
-diff --git a/src/CGALimageIO/CMakeLists.txt b/src/CGALimageIO/CMakeLists.txt
-index d48a50b..0e06610 100644
---- a/src/CGALimageIO/CMakeLists.txt
-+++ b/src/CGALimageIO/CMakeLists.txt
-@@ -23,7 +23,7 @@ if(WITH_VTK)
- endif(WITH_VTK)
- 
- if(OPENGL_FOUND)
--  get_dependency_version(OPENGL OpenGL)
-+  #get_dependency_version(OPENGL OpenGL)
-   
-   message( STATUS "OpenGL include:     ${OPENGL_INCLUDE_DIR}" )
-   message( STATUS "OpenGL libraries:   ${OPENGL_LIBRARIES}" )
-@@ -32,7 +32,7 @@ if(OPENGL_FOUND)
-   cache_set(CGAL_ImageIO_3RD_PARTY_LIBRARIES    ${OPENGL_LIBRARIES}   )
- 
-   if(ZLIB_FOUND)
--    get_dependency_version(ZLIB)
-+    #get_dependency_version(ZLIB)
-     message( STATUS "ZLib   include:     ${ZLIB_INCLUDE_DIR}" )
-     message( STATUS "ZLib   libraries:   ${ZLIB_LIBRARY}" )
-     cache_set(CGAL_ImageIO_3RD_PARTY_INCLUDE_DIRS ${CGAL_ImageIO_3RD_PARTY_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIR} )
 -- 
 1.7.7
 
