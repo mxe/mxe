@@ -3,18 +3,16 @@
 
 # MPFR for GCC
 PKG             := gcc-mpfr
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.0
-$(PKG)_CHECKSUM := 9ba6dfe62dad298f0570daf182db31660f7f016c
-$(PKG)_SUBDIR   := mpfr-$($(PKG)_VERSION)
-$(PKG)_FILE     := mpfr-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.mpfr.org/
-$(PKG)_URL      := http://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://ftp.gnu.org/gnu/mpfr/$($(PKG)_FILE)
+$(PKG)_IGNORE    = $(mpfr_IGNORE)
+$(PKG)_VERSION   = $(mpfr_VERSION)
+$(PKG)_CHECKSUM  = $(mpfr_CHECKSUM)
+$(PKG)_SUBDIR    = $(mpfr_SUBDIR)
+$(PKG)_FILE      = $(mpfr_FILE)
+$(PKG)_WEBSITE   = $(mpfr_WEBSITE)
+$(PKG)_URL       = $(mpfr_URL)
+$(PKG)_URL_2     = $(mpfr_URL_2)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    wget -q --no-check-certificate -O- 'https://gforge.inria.fr/scm/viewvc.php/tags/?root=mpfr&sortby=date' | \
-    $(SED) -n 's,.*<a name="\([0-9][^"]*\)".*,\1,p' | \
-    head -1
+    echo $(mpfr_VERSION)
 endef

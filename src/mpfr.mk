@@ -5,11 +5,12 @@
 PKG             := mpfr
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.0
-$(PKG)_CHECKSUM := d7d31b1cc796886a61a57a13bf43a496601d46b5
+$(PKG)_CHECKSUM := 9ba6dfe62dad298f0570daf182db31660f7f016c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.mpfr.org/
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gmp
 
 define $(PKG)_UPDATE
