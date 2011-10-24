@@ -3,31 +3,32 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From c4856742f7d5022fbdcd3ee57849cee4e6d8535f Mon Sep 17 00:00:00 2001
+From 71c4f0a34399fd74d4e39f9985a4c2c56f8b9a43 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Sat, 22 Oct 2011 01:29:03 +0200
 Subject: [PATCH] configure for mingw-cross-env
 
 
 diff --git a/example/example.pro b/example/example.pro
-index 8891a28..6c88ee6 100644
+index 8891a28..02c1fe0 100644
 --- a/example/example.pro
 +++ b/example/example.pro
 @@ -1,10 +1,11 @@
- TEMPLATE       = app
- TARGET         = opencsgexample
+ TEMPLATE	= app
+ TARGET		= opencsgexample
  
- CONFIG	 	+= opengl warn_on release
+-CONFIG	 	+= opengl warn_on release
++CONFIG	 	+= opengl warn_on release link_pkgconfig
  INCLUDEPATH += ../glew/include ../include
  
 -LIBS        += -L../lib -lopencsg -lglut -L../glew/lib -lGLEW
-+LIBS        += -L../lib -lopencsg -lglut -L../glew/lib -lGLEW -lglut -lglu32 -lopengl32 -lwinmm -lgdi32
-+DEFINES += FREEGLUT_STATIC GLEW_STATIC
++LIBS        += -L../lib -lopencsg
++PKGCONFIG	+= glew glut
  
  HEADERS		= displaylistPrimitive.h
  SOURCES		= displaylistPrimitive.cpp main.cpp
 diff --git a/src/src.pro b/src/src.pro
-index db5e1fb..e121df1 100644
+index db5e1fb..4c664ab 100644
 --- a/src/src.pro
 +++ b/src/src.pro
 @@ -3,7 +3,8 @@ TARGET		= opencsg
@@ -35,8 +36,8 @@ index db5e1fb..e121df1 100644
  DESTDIR     = ../lib
  
 -CONFIG		+= opengl warn_on release
-+CONFIG		+= opengl warn_on release staticlib
-+DEFINES += FREEGLUT_STATIC GLEW_STATIC
++CONFIG		+= opengl warn_on release staticlib link_pkgconfig
++PKGCONFIG	+= glew glut
  INCLUDEPATH += ../include ../glew/include ../
  
  HEADERS		= ../include/opencsg.h \
