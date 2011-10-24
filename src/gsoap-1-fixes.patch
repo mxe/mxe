@@ -6,7 +6,7 @@ Contains ad hoc patches for cross building.
 From a4e9166bc8d78b2aee3c25757d479d4c2e53c7be Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Sun, 23 Oct 2011 21:36:53 +0200
-Subject: [PATCH] support static linking to ntlm
+Subject: [PATCH 1/2] support static linking to ntlm
 
 
 diff --git a/configure b/configure
@@ -22,6 +22,76 @@ index ad1830d..be95edf 100755
  			;;
          *-*-freebsd*)   platform=FREEBSD ;;
          *-*-openbsd*)   platform=OPENBSD ;;
+-- 
+1.7.7
+
+
+From da0eb2fc386be0fd914ef8f9a7d6bf73004ea230 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Mon, 24 Oct 2011 11:17:13 +0200
+Subject: [PATCH 2/2] ntlm support in .pc files
+
+
+diff --git a/gsoap++.pc.in b/gsoap++.pc.in
+index 035afd9..3411d55 100644
+--- a/gsoap++.pc.in
++++ b/gsoap++.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoap++ @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
+diff --git a/gsoap.pc.in b/gsoap.pc.in
+index e2607aa..96a54b9 100644
+--- a/gsoap.pc.in
++++ b/gsoap.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C Web Services
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoap @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
+diff --git a/gsoapck++.pc.in b/gsoapck++.pc.in
+index cb03e2f..b349049 100644
+--- a/gsoapck++.pc.in
++++ b/gsoapck++.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services with Cookies Enabled
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoapck++ @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
+diff --git a/gsoapck.pc.in b/gsoapck.pc.in
+index 859a922..e5ce5eb 100644
+--- a/gsoapck.pc.in
++++ b/gsoapck.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C Web Services with Cookies Enabled
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoapck @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
+diff --git a/gsoapssl++.pc.in b/gsoapssl++.pc.in
+index 391d820..791408a 100644
+--- a/gsoapssl++.pc.in
++++ b/gsoapssl++.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services with SSL and ZLIB
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoapssl++ @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
+diff --git a/gsoapssl.pc.in b/gsoapssl.pc.in
+index 79c940a..17c9ee3 100644
+--- a/gsoapssl.pc.in
++++ b/gsoapssl.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C Web Services with SSL and ZLIB
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoapssl @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
 -- 
 1.7.7
 
