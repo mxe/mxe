@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./autogen.sh
     $(SED) -i 's,Windows\.h,windows.h,'   '$(1)/src/freeglut_internal.h'
     $(SED) -i 's,WindowsX\.h,windowsx.h,' '$(1)/src/freeglut_internal.h'
     $(SED) -i 's,MMSystem\.h,mmsystem.h,' '$(1)/src/freeglut_internal.h'
@@ -36,5 +37,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-freeglut.exe' \
-        -lglut -lglu32 -lopengl32 -lwinmm -lgdi32 -mwindows -DFREEGLUT_STATIC
+        `'$(TARGET)-pkg-config' glut --cflags --libs`
 endef
