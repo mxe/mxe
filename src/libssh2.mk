@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := libssh2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh2-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.libssh2.org
 $(PKG)_URL      := http://www.libssh2.org/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openssl zlib
+$(PKG)_DEPS     := gcc libgcrypt zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.libssh2.org/download/?C=M;O=D' | \
@@ -24,6 +24,8 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --without-openssl \
+        --with-libgcrypt \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
 
