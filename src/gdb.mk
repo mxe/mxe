@@ -15,7 +15,8 @@ $(PKG)_DEPS     := gcc expat libiconv zlib
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.gnu.org/gnu/gdb/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="gdb-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    sort -r |\
+    grep -v '^7\.3a' | \
+    sort -r | \
     head -1
 endef
 
