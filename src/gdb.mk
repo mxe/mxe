@@ -3,9 +3,9 @@
 
 # gdb
 PKG             := gdb
-$(PKG)_VERSION  := 7.3a
-$(PKG)_CHECKSUM := d68061206a3485bab32da3fb751c6c3b913c2b9c
-$(PKG)_SUBDIR   := gdb-7.3
+$(PKG)_VERSION  := 7.3.1
+$(PKG)_CHECKSUM := e57f2c7f93536ef54fab728eb733bf2c36550718
+$(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gdb/
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
