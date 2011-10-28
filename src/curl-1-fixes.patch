@@ -1,0 +1,120 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Commits backported (cherry-picked) from upstream.
+http://github.com/bagder/curl
+Also contains mingw-cross-env specific fixes.
+
+From 39817fb04ff2ea4a693a1e853ca5fbd469c2b531 Mon Sep 17 00:00:00 2001
+From: Tim Harder <radhermit@gmail.com>
+Date: Wed, 19 Oct 2011 10:08:56 +0200
+Subject: [PATCH 1/3] gtls: only call gnutls_transport_set_lowat with
+ <gnutls-2.12.0
+
+The default lowat level for gnutls-2.12* is set to zero to avoid
+unnecessary system calls and the gnutls_transport_set_lowat function has
+been totally removed in >=gnutls-3 which causes build failures.
+
+Therefore, the function shouldn't be used except for versions that
+require it, <gnutls-2.12.0.
+(cherry picked from commit 8036da870c5b413a83097b3486c58d13910a471a)
+---
+ lib/gtls.c |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/lib/gtls.c b/lib/gtls.c
+index f75a815..7ca46c8 100644
+--- a/lib/gtls.c
++++ b/lib/gtls.c
+@@ -476,8 +476,10 @@ gtls_connect_step1(struct connectdata *conn,
+   gnutls_transport_set_push_function(session, Curl_gtls_push);
+   gnutls_transport_set_pull_function(session, Curl_gtls_pull);
+ 
++#if GNUTLS_VERSION_NUMBER < 0x020c00
+   /* lowat must be set to zero when using custom push and pull functions. */
+   gnutls_transport_set_lowat(session, 0);
++#endif
+ 
+   /* This might be a reconnect, so we check for a session ID in the cache
+      to speed up things */
+-- 
+1.7.7
+
+
+From fd07a074e806ca3b7e2cc8ea4815eadf354add55 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 28 Oct 2011 13:43:50 +0200
+Subject: [PATCH 2/3] gnutls 3.0 compatibility hack
+
+taken from:
+http://curl.haxx.se/mail/lib-2011-10/0326.html
+---
+ lib/gtls.c |   25 +++++++++++++++++++++++++
+ 1 files changed, 25 insertions(+), 0 deletions(-)
+
+diff --git a/lib/gtls.c b/lib/gtls.c
+index 7ca46c8..b220081 100644
+--- a/lib/gtls.c
++++ b/lib/gtls.c
+@@ -113,6 +113,31 @@ static int gtls_mapped_sockerrno(void)
+   }
+   return gtls_EIO;
+ }
++#if GNUTLS_VERSION_NUMBER >= 0x030000
++/* fixme: ugly workaround for loss of this gnutls function */
++void
++gnutls_transport_set_global_errno (int err)
++{
++#ifdef _WIN32
++  /* Keep this in sync with system_errno */
++  switch (err)
++    {
++    case EAGAIN:
++      SetLastError (WSAEWOULDBLOCK);
++      break;
++    case EINTR:
++      SetLastError (WSAEINTR);
++      break;
++    default:
++      /* We don't care about anything else */
++      SetLastError (NO_ERROR);
++      break;
++    }
++#else
++  errno = err;
++#endif
++}
++#endif
+ #endif
+ 
+ static ssize_t Curl_gtls_push(void *s, const void *buf, size_t len)
+-- 
+1.7.7
+
+
+From f31f9e667f09c68e5f0a5ec1781971fe62ce5424 Mon Sep 17 00:00:00 2001
+From: Volker Grabsch <vog@notjusthosting.com>
+Date: Fri, 28 Oct 2011 13:48:04 +0200
+Subject: [PATCH 3/3] static linking for mingw-cross-env
+
+---
+ include/curl/curlbuild.h.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/include/curl/curlbuild.h.in b/include/curl/curlbuild.h.in
+index fe348f4..c428273 100644
+--- a/include/curl/curlbuild.h.in
++++ b/include/curl/curlbuild.h.in
+@@ -111,6 +111,9 @@
+ /*  EXTERNAL INTERFACE SETTINGS FOR CONFIGURE CAPABLE SYSTEMS ONLY  */
+ /* ================================================================ */
+ 
++/* Configure process defines this to 1 when static linking is requested. */
++#undef CURL_STATICLIB
++
+ /* Configure process defines this to 1 when it finds out that system  */
+ /* header file ws2tcpip.h must be included by the external interface. */
+ #undef CURL_PULL_WS2TCPIP_H
+-- 
+1.7.7
+

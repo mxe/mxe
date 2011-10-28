@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls libntlm
+$(PKG)_DEPS     := gcc gnutls libgcrypt libntlm
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/projects/gsoap2/files/gSOAP/' | \
@@ -34,7 +34,7 @@ define $(PKG)_BUILD
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     # fix hard-coded gnutls dependencies
-    $(SED) -i "s/-lgnutls -lgcrypt -lgpg-error -lz/`'$(TARGET)-pkg-config' --libs-only-l gnutls`/g;" '$(1)/configure'
+    $(SED) -i "s/-lgnutls/`'$(TARGET)-pkg-config' --libs-only-l gnutls`/g;" '$(1)/configure'
 
     # Build for mingw. Static by default.
     # Prevent undefined reference to _rpl_malloc.
