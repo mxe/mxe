@@ -3,21 +3,20 @@
 
 # GnuTLS
 PKG             := gnutls
-$(PKG)_VERSION  := 2.12.12
-$(PKG)_CHECKSUM := 6c87591705b21f7cae845ecdae158a6c5d8f2847
+$(PKG)_VERSION  := 3.0.5
+$(PKG)_CHECKSUM := 9ded8c3c7888d8e34fd019fe9a9c641dbd721e83
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
-$(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
 $(PKG)_URL      := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib libgcrypt
+$(PKG)_DEPS     := gcc zlib nettle
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
     grep '<a class="list name"' | \
     $(SED) -n 's,.*<a[^>]*>gnutls_\([0-9]*_[0-9]*[02468]_[^<]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
-    grep -v '^3\.' | \
     head -1
 endef
 
@@ -35,11 +34,8 @@ define $(PKG)_BUILD
         --disable-guile \
         --with-included-libtasn1 \
         --with-included-libcfg \
-        --with-included-pakchois \
-        --with-libgcrypt \
-        --without-lzo \
         --without-p11-kit \
-        LIBS='-lz' \
+        LIBS='-lz -lws2_32' \
         ac_cv_prog_AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
 
