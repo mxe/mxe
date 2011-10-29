@@ -41,58 +41,55 @@ index f75a815..7ca46c8 100644
 1.7.7
 
 
-From fd07a074e806ca3b7e2cc8ea4815eadf354add55 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 28 Oct 2011 13:43:50 +0200
-Subject: [PATCH 2/3] gnutls 3.0 compatibility hack
+From 878969d2e89751ff445b1f6cb6ac05ad0bc07eb6 Mon Sep 17 00:00:00 2001
+From: Yang Tse <yangsita@gmail.com>
+Date: Sat, 29 Oct 2011 14:58:50 +0200
+Subject: [PATCH 2/3] gtls.c: gnutls_transport_set_global_errno() deprecated
+ in version 2.12.3 (cherry picked from commit
+ f5bb37018647f6088398ca127235ce776eec9bbe)
 
-taken from:
-http://curl.haxx.se/mail/lib-2011-10/0326.html
 ---
- lib/gtls.c |   25 +++++++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
+ lib/gtls.c |   13 +++++++++++--
+ 1 files changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/lib/gtls.c b/lib/gtls.c
-index 7ca46c8..b220081 100644
+index 7ca46c8..c1e9cae 100644
 --- a/lib/gtls.c
 +++ b/lib/gtls.c
-@@ -113,6 +113,31 @@ static int gtls_mapped_sockerrno(void)
-   }
-   return gtls_EIO;
- }
-+#if GNUTLS_VERSION_NUMBER >= 0x030000
-+/* fixme: ugly workaround for loss of this gnutls function */
-+void
-+gnutls_transport_set_global_errno (int err)
-+{
-+#ifdef _WIN32
-+  /* Keep this in sync with system_errno */
-+  switch (err)
-+    {
-+    case EAGAIN:
-+      SetLastError (WSAEWOULDBLOCK);
-+      break;
-+    case EINTR:
-+      SetLastError (WSAEINTR);
-+      break;
-+    default:
-+      /* We don't care about anything else */
-+      SetLastError (NO_ERROR);
-+      break;
-+    }
-+#else
-+  errno = err;
-+#endif
-+}
-+#endif
+@@ -78,6 +78,17 @@ static void tls_log_func(int level, const char *str)
  #endif
+ static bool gtls_inited = FALSE;
  
- static ssize_t Curl_gtls_push(void *s, const void *buf, size_t len)
++#if defined(GNUTLS_VERSION_NUMBER)
++#  if (GNUTLS_VERSION_NUMBER >= 0x020c00)
++#    undef gnutls_transport_set_lowat
++#    define gnutls_transport_set_lowat(A,B) Curl_nop_stmt
++#  endif
++#  if (GNUTLS_VERSION_NUMBER >= 0x020c03)
++#    undef gnutls_transport_set_global_errno
++#    define gnutls_transport_set_global_errno(A) SET_ERRNO((A))
++#  endif
++#endif
++
+ /*
+  * Custom push and pull callback functions used by GNU TLS to read and write
+  * to the socket.  These functions are simple wrappers to send() and recv()
+@@ -476,10 +487,8 @@ gtls_connect_step1(struct connectdata *conn,
+   gnutls_transport_set_push_function(session, Curl_gtls_push);
+   gnutls_transport_set_pull_function(session, Curl_gtls_pull);
+ 
+-#if GNUTLS_VERSION_NUMBER < 0x020c00
+   /* lowat must be set to zero when using custom push and pull functions. */
+   gnutls_transport_set_lowat(session, 0);
+-#endif
+ 
+   /* This might be a reconnect, so we check for a session ID in the cache
+      to speed up things */
 -- 
 1.7.7
 
 
-From f31f9e667f09c68e5f0a5ec1781971fe62ce5424 Mon Sep 17 00:00:00 2001
+From 40ebff7ac932dd2c920d02c8a7aa9da584eafda1 Mon Sep 17 00:00:00 2001
 From: Volker Grabsch <vog@notjusthosting.com>
 Date: Fri, 28 Oct 2011 13:48:04 +0200
 Subject: [PATCH 3/3] static linking for mingw-cross-env
