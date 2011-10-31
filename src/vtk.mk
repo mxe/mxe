@@ -17,14 +17,12 @@ endef
 
 define $(PKG)_BUILD
 
-    # first we need a native build for compile tools
+    # first we need a native build to create the compile tools
     mkdir '$(1)/native_build'
-    cd '$(1)/native_build' && cmake \
-        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'\
-        -DCMAKE_BUILD_TYPE='Release'\
-        ..
-    # only the Utilities need to be built
-    $(MAKE) -C '$(1)/native_build/Utilities' -j '$(JOBS)' VERBOSE=1
+    cd '$(1)/native_build' && cmake -DCMAKE_BUILD_TYPE='Release' ..
+    
+    # only the newly created CompileTools target need to be built
+    $(MAKE) -C '$(1)/native_build' -j '$(JOBS)' VERBOSE=1 CompileTools
         
     # now for the cross compilation
     mkdir '$(1)/cross_build'
