@@ -16,12 +16,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+
+    # first we need a native build for compile tools
     mkdir '$(1)/native_build'
     cd '$(1)/native_build' && cmake \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'\
+        -DCMAKE_BUILD_TYPE='Release'\
         ..
+    # only the Utilities need to be built
     $(MAKE) -C '$(1)/native_build/Utilities' -j '$(JOBS)' VERBOSE=1
-    
+        
+    # now for the cross compilation
     mkdir '$(1)/cross_build'
     cd '$(1)/cross_build' && cmake \
         -C '$(1)/TryRunResults.cmake'\

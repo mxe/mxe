@@ -1,0 +1,55 @@
+--- VTK/Utilities/kwsys/CMakeLists.txt	2011-08-24 15:37:12.000000000 +0200
++++ VTK/Utilities/kwsys/CMakeLists.txt	2011-10-30 00:06:06.402085234 +0200
+@@ -937,13 +937,20 @@
+ # file and build it into the library.  Win9x platforms reproduce the
+ # executable into a temporary directory when it is needed.
+ IF(KWSYS_USE_Process)
+-  IF(NOT UNIX)
++  IF(NOT CMAKE_CROSSCOMPILING)
+     # Build the forwarding executable itself and a program that will
+     # encode it into a C file.
+-    ADD_EXECUTABLE(${KWSYS_NAMESPACE}ProcessFwd9x ProcessFwd9x.c)
+     ADD_EXECUTABLE(${KWSYS_NAMESPACE}EncodeExecutable EncodeExecutable.c)
+-    KWSYS_SET_PROPERTY(TARGET ${KWSYS_NAMESPACE}ProcessFwd9x PROPERTY LABELS ${KWSYS_LABELS_EXE})
+     KWSYS_SET_PROPERTY(TARGET ${KWSYS_NAMESPACE}EncodeExecutable PROPERTY LABELS ${KWSYS_LABELS_EXE})
++    EXPORT(TARGETS ${KWSYS_NAMESPACE}EncodeExecutable FILE ${EXPORT_EXECUTABLES_FILE} NAMESPACE "${EXPORT_EXECUTABLES_NAMESPACE}" APPEND)
++    IF(COMPILE_TOOLS_TARGET)
++      ADD_DEPENDENCIES(${COMPILE_TOOLS_TARGET} ${KWSYS_NAMESPACE}EncodeExecutable)
++    ENDIF(COMPILE_TOOLS_TARGET)
++  ENDIF(NOT CMAKE_CROSSCOMPILING)
++  
++  IF(NOT UNIX)  
++    ADD_EXECUTABLE(${KWSYS_NAMESPACE}ProcessFwd9x ProcessFwd9x.c)
++    KWSYS_SET_PROPERTY(TARGET ${KWSYS_NAMESPACE}ProcessFwd9x PROPERTY LABELS ${KWSYS_LABELS_EXE})
+ 
+     # Construct the location of the executable to be encoded.
+     SET(BIN_DIR ${CMAKE_CURRENT_BINARY_DIR})
+@@ -957,24 +964,23 @@
+     ENDIF(CMAKE_BUILD_TOOL MATCHES "make")
+ 
+     # Take advantage of a better custom command syntax if possible.
+-    SET(CMD ${BIN_DIR}${CFG_INTDIR}/${KWSYS_NAMESPACE}EncodeExecutable.exe)
+     SET(FWD ${BIN_DIR}${CFG_INTDIR}/${KWSYS_NAMESPACE}ProcessFwd9x.exe)
+     IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.6)
+       ADD_CUSTOM_COMMAND(
+         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${KWSYS_NAMESPACE}ProcessFwd9xEnc.c
+-        COMMAND ${CMD}
++        COMMAND ${KWSYS_NAMESPACE}EncodeExecutable
+         ARGS ${FWD} ${CMAKE_CURRENT_BINARY_DIR}/${KWSYS_NAMESPACE}ProcessFwd9xEnc.c
+              ${KWSYS_NAMESPACE} ProcessFwd9x
+-        DEPENDS ${CMD} ${FWD})
++        DEPENDS ${KWSYS_NAMESPACE}EncodeExecutable ${FWD})
+     ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.6)
+       ADD_CUSTOM_COMMAND(
+         TARGET ${KWSYS_NAMESPACE}
+         SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/ProcessFwd9x.c
+-        COMMAND ${CMD}
++        COMMAND ${KWSYS_NAMESPACE}EncodeExecutable
+         ARGS ${FWD} ${CMAKE_CURRENT_BINARY_DIR}/${KWSYS_NAMESPACE}ProcessFwd9xEnc.c
+              ${KWSYS_NAMESPACE} ProcessFwd9x
+         OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/${KWSYS_NAMESPACE}ProcessFwd9xEnc.c
+-        DEPENDS ${CMD} ${FWD})
++        DEPENDS ${KWSYS_NAMESPACE}EncodeExecutable ${FWD})
+     ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.6)
+ 
+     # Make sure build occurs in proper order.
