@@ -1,3 +1,9 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
+This patch has been taken from:
+http://www.vtk.org/Bug/view.php?id=12686
+
 --- VTK/Utilities/kwsys/CMakeLists.txt	2011-08-24 15:37:12.000000000 +0200
 +++ VTK/Utilities/kwsys/CMakeLists.txt	2011-10-30 00:06:06.402085234 +0200
 @@ -937,13 +937,20 @@
