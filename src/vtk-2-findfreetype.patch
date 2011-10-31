@@ -1,6 +1,9 @@
 # This file is part of mingw-cross-env.
 # See doc/index.html for further information.
 
+This patch has been taken from:
+http://www.vtk.org/Bug/view.php?id=12688
+
 --- VTK/CMake/FindFREETYPE.cmake.orig	2011-08-24 15:37:07.000000000 +0200
 +++ VTK/CMake/FindFREETYPE.cmake	2011-10-25 22:55:52.265702464 +0200
 @@ -15,6 +15,7 @@
