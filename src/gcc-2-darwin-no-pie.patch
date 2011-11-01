@@ -1,0 +1,28 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+mingw-cross-env specific workaround for OSX Lion's new ASLR
+causing problems with pre-compiled headers.
+
+1. more recent native compilers don't solve the problem
+2. there isn't an equivalent sysctl for "kernel.randomize_va_space"
+3. there isn't an equivalent command for "setarch -R"
+4. Apple's version of gcc (based on 4.2) uses custom Makefiles that set "-fno-pic"
+
+Patch below achieves a similar result to 4, without drifting
+too far from standard gcc.
+
+--- a/configure
++++ b/configure
+@@ -30,6 +30,11 @@ else
+ esac
+ fi
+ 
++case `uname -sr` in
++  Darwin*11*)
++    LDFLAGS="$LDFLAGS -Wl,-no_pie"
++  ;;
++esac
+ 
+ as_nl='
+ '
