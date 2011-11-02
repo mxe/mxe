@@ -84,8 +84,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/tools/qdbus' -j '$(JOBS)' install
 
     mkdir            '$(1)/test-qt'
-    cp '$(2)'*       '$(1)/test-qt/'
-    cd               '$(1)/test-qt' && '$(TARGET)-qmake'
+    cd               '$(1)/test-qt' && '$(TARGET)-qmake' '$(PWD)/$(2).pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
