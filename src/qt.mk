@@ -22,11 +22,6 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
 
-    # We prefer static mingw-cross-env system libs for static build:
-    # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite
-    # There is no -system-gif option.
-    #
-    # For shared Qt with qt-zlib, add -lQtCore4 to end of OPENSSL_LIBS to satisfy zlib dependency.
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
