@@ -1,0 +1,43 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch taken from:
+https://bugs.xine-project.org/show_bug.cgi?id=430
+
+From 937ff31c13b06d22a094d6a91d2ae33471f2bc58 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 3 Nov 2011 23:48:50 +0100
+Subject: [PATCH] fix include order to avoid conflicting INT32
+
+basetsd.h and jmorecfg.h both define INT32, but jmorecfg.h checks.
+libmng.h introduces jmorecfg.h and so it must follow xine_internal.h
+which introduces basetsd.h.
+---
+ src/demuxers/demux_mng.c |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/demuxers/demux_mng.c b/src/demuxers/demux_mng.c
+index 2fccd0b..bf4dfec 100644
+--- a/src/demuxers/demux_mng.c
++++ b/src/demuxers/demux_mng.c
+@@ -38,8 +38,6 @@
+ #undef HAVE_STDLIB_H
+ #endif
+ 
+-#include <libmng.h>
+-
+ #define LOG_MODULE "demux_mng"
+ #define LOG_VERBOSE
+ /*
+@@ -50,6 +48,8 @@
+ #include "xineutils.h"
+ #include "demux.h"
+ 
++#include <libmng.h>
++
+ typedef struct {
+   demux_plugin_t     demux_plugin;
+ 
+-- 
+1.7.7
+
