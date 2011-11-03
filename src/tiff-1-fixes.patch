@@ -1,0 +1,97 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 17fe30e6f97895b276a1d6efe87096bb665bc5de Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Thu, 3 Nov 2011 13:49:55 +0100
+Subject: [PATCH] backported pkg-config file from libtiff 4.0.0 beta
+
+
+diff --git a/Makefile.am b/Makefile.am
+index 7069094..cb3c51e 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -43,7 +43,8 @@ EXTRA_DIST = \
+ 	SConstruct \
+ 	autogen.sh \
+ 	configure.com \
+-	nmake.opt
++	nmake.opt \
++	libtiff.pc.in
+ 
+ dist_doc_DATA = $(docfiles)
+ 
+@@ -54,3 +55,5 @@ release:
+ 	(rm -f $(top_srcdir)/VERSION && echo $(LIBTIFF_VERSION) > $(top_srcdir)/VERSION)
+ 	(rm -f $(top_srcdir)/libtiff/tiffvers.h && sed 's,LIBTIFF_VERSION,$(LIBTIFF_VERSION),;s,LIBTIFF_RELEASE_DATE,$(LIBTIFF_RELEASE_DATE),' $(top_srcdir)/libtiff/tiffvers.h.in > $(top_srcdir)/libtiff/tiffvers.h)
+ 
++pkgconfigdir = $(libdir)/pkgconfig
++pkgconfig_DATA = libtiff.pc
+diff --git a/configure.ac b/configure.ac
+index b89f373..114aa5a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -109,6 +109,9 @@ case "${host_os}" in
+         ;;
+ esac
+ 
++tiff_libs_private=
++AC_SUBST(tiff_libs_private)
++
+ dnl Checks for header files.
+ AC_CHECK_HEADERS([assert.h fcntl.h io.h limits.h malloc.h search.h sys/time.h unistd.h])
+ 
+@@ -373,6 +376,7 @@ fi
+ if test "$HAVE_ZLIB" = "yes" ; then
+   AC_DEFINE(ZIP_SUPPORT,1,[Support Deflate compression])
+   LIBS="-lz $LIBS"
++  tiff_libs_private="-lz ${tiff_libs_private}"
+ 
+   if test "$HAVE_RPATH" = "yes" -a "x$with_zlib_lib_dir" != "x" ; then
+     LIBDIR="-R $with_zlib_lib_dir $LIBDIR"
+@@ -441,6 +445,7 @@ fi
+ if test "$HAVE_JPEG" = "yes" ; then
+   AC_DEFINE(JPEG_SUPPORT,1,[Support JPEG compression (requires IJG JPEG library)])
+   LIBS="-ljpeg $LIBS"
++  tiff_libs_private="-ljpeg ${tiff_libs_private}"
+ 
+   if test "$HAVE_RPATH" = "yes" -a "x$with_jpeg_lib_dir" != "x" ; then
+     LIBDIR="-R $with_jpeg_lib_dir $LIBDIR"
+@@ -509,6 +514,7 @@ fi
+ if test "$HAVE_JBIG" = "yes" ; then
+   AC_DEFINE(JBIG_SUPPORT,1,[Support ISO JBIG compression (requires JBIG-KIT library)])
+   LIBS="-ljbig $LIBS"
++  tiff_libs_private="-ljbig ${tiff_libs_private}"
+ 
+   if test "$HAVE_RPATH" = "yes" -a "x$with_jbig_lib_dir" != "x" ; then
+     LIBDIR="-R $with_jbig_lib_dir $LIBDIR"
+@@ -659,6 +665,7 @@ AC_CONFIG_FILES([Makefile \
+                  html/Makefile \
+ 		 html/images/Makefile \
+ 		 html/man/Makefile \
++                 libtiff.pc \
+                  libtiff/Makefile \
+                  man/Makefile \
+ 		 port/Makefile \
+diff --git a/libtiff.pc.in b/libtiff.pc.in
+new file mode 100644
+index 0000000..abe75a6
+--- /dev/null
++++ b/libtiff.pc.in
+@@ -0,0 +1,11 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++
++Name: libtiff
++Description:  Tag Image File Format (TIFF) library.
++Version: @VERSION@
++Libs: -L${libdir} -ltiff
++Libs.private: @tiff_libs_private@
++Cflags: -I${includedir}
+-- 
+1.7.7
+
