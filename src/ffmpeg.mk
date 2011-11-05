@@ -4,8 +4,8 @@
 # ffmpeg
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.8.5
-$(PKG)_CHECKSUM := a69d909958b23f8b2509ddda6cdeba2601edf5ff
+$(PKG)_VERSION  := 0.8.6
+$(PKG)_CHECKSUM := ad7eaefa5072ca3c11778f9186fab35558a04478
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.ffmpeg.org/
