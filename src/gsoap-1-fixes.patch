@@ -3,95 +3,65 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From a4e9166bc8d78b2aee3c25757d479d4c2e53c7be Mon Sep 17 00:00:00 2001
+From 35024d3ef8fb879a92de71b738ad985b6e8318af Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
-Date: Sun, 23 Oct 2011 21:36:53 +0200
-Subject: [PATCH 1/2] support static linking to ntlm
+Date: Mon, 19 Sep 2011 15:22:59 +0200
+Subject: [PATCH] bugfix for 2.8.3 from:
+ http://www.cs.fsu.edu/~engelen/soapbugs.html
 
 
-diff --git a/configure b/configure
-index ad1830d..be95edf 100755
---- a/configure
-+++ b/configure
-@@ -4822,7 +4822,7 @@ case "${host}" in
- 			;;
- 	*-*-cygwin*)	platform=CYGWIN ;;
- 	*-*-mingw*)	platform=MINGW
--			SAMPLE_EXTRA_LIBS="-lws2_32 -lkernel32 -luser32 -lgdi32"
-+			SAMPLE_EXTRA_LIBS="-lntlm -lws2_32 -lkernel32 -luser32 -lgdi32"
- 			;;
-         *-*-freebsd*)   platform=FREEBSD ;;
-         *-*-openbsd*)   platform=OPENBSD ;;
+diff --git a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp
+index 6f05170..f31676b 100644
+--- a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp
++++ b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.cpp
+@@ -8261,7 +8261,7 @@ soap_copy_context(struct soap *copy, const struct soap *soap)
+     soap_set_recv_logfile(copy, soap->logfile[SOAP_INDEX_RECV]);
+ #endif
+     copy->local_namespaces = NULL;
+-    soap_set_namespaces(copy, soap->local_namespaces);
++    soap_set_namespaces(copy, soap->namespaces);
+ #ifdef WITH_C_LOCALE
+     copy->c_locale = duplocale(soap->c_locale);
+ #else
+diff --git a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp
+index 6f05170..f31676b 100644
+--- a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp
++++ b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.cpp
+@@ -8261,7 +8261,7 @@ soap_copy_context(struct soap *copy, const struct soap *soap)
+     soap_set_recv_logfile(copy, soap->logfile[SOAP_INDEX_RECV]);
+ #endif
+     copy->local_namespaces = NULL;
+-    soap_set_namespaces(copy, soap->local_namespaces);
++    soap_set_namespaces(copy, soap->namespaces);
+ #ifdef WITH_C_LOCALE
+     copy->c_locale = duplocale(soap->c_locale);
+ #else
+diff --git a/gsoap/stdsoap2.c b/gsoap/stdsoap2.c
+index 6f05170..f31676b 100644
+--- a/gsoap/stdsoap2.c
++++ b/gsoap/stdsoap2.c
+@@ -8261,7 +8261,7 @@ soap_copy_context(struct soap *copy, const struct soap *soap)
+     soap_set_recv_logfile(copy, soap->logfile[SOAP_INDEX_RECV]);
+ #endif
+     copy->local_namespaces = NULL;
+-    soap_set_namespaces(copy, soap->local_namespaces);
++    soap_set_namespaces(copy, soap->namespaces);
+ #ifdef WITH_C_LOCALE
+     copy->c_locale = duplocale(soap->c_locale);
+ #else
+diff --git a/gsoap/stdsoap2.cpp b/gsoap/stdsoap2.cpp
+index 6f05170..f31676b 100644
+--- a/gsoap/stdsoap2.cpp
++++ b/gsoap/stdsoap2.cpp
+@@ -8261,7 +8261,7 @@ soap_copy_context(struct soap *copy, const struct soap *soap)
+     soap_set_recv_logfile(copy, soap->logfile[SOAP_INDEX_RECV]);
+ #endif
+     copy->local_namespaces = NULL;
+-    soap_set_namespaces(copy, soap->local_namespaces);
++    soap_set_namespaces(copy, soap->namespaces);
+ #ifdef WITH_C_LOCALE
+     copy->c_locale = duplocale(soap->c_locale);
+ #else
 -- 
-1.7.7
-
-
-From da0eb2fc386be0fd914ef8f9a7d6bf73004ea230 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Mon, 24 Oct 2011 11:17:13 +0200
-Subject: [PATCH 2/2] ntlm support in .pc files
-
-
-diff --git a/gsoap++.pc.in b/gsoap++.pc.in
-index 035afd9..3411d55 100644
---- a/gsoap++.pc.in
-+++ b/gsoap++.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services
- Version: @VERSION@
- Requires:
- Libs: -L${libdir} -lgsoap++ @SAMPLE_EXTRA_LIBS@
--Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
-+Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
-diff --git a/gsoap.pc.in b/gsoap.pc.in
-index e2607aa..96a54b9 100644
---- a/gsoap.pc.in
-+++ b/gsoap.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C Web Services
- Version: @VERSION@
- Requires:
- Libs: -L${libdir} -lgsoap @SAMPLE_EXTRA_LIBS@
--Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
-+Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
-diff --git a/gsoapck++.pc.in b/gsoapck++.pc.in
-index cb03e2f..b349049 100644
---- a/gsoapck++.pc.in
-+++ b/gsoapck++.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services with Cookies Enabled
- Version: @VERSION@
- Requires:
- Libs: -L${libdir} -lgsoapck++ @SAMPLE_EXTRA_LIBS@
--Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
-+Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
-diff --git a/gsoapck.pc.in b/gsoapck.pc.in
-index 859a922..e5ce5eb 100644
---- a/gsoapck.pc.in
-+++ b/gsoapck.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C Web Services with Cookies Enabled
- Version: @VERSION@
- Requires:
- Libs: -L${libdir} -lgsoapck @SAMPLE_EXTRA_LIBS@
--Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
-+Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
-diff --git a/gsoapssl++.pc.in b/gsoapssl++.pc.in
-index 391d820..791408a 100644
---- a/gsoapssl++.pc.in
-+++ b/gsoapssl++.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services with SSL and ZLIB
- Version: @VERSION@
- Requires:
- Libs: -L${libdir} -lgsoapssl++ @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
--Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
-+Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
-diff --git a/gsoapssl.pc.in b/gsoapssl.pc.in
-index 79c940a..17c9ee3 100644
---- a/gsoapssl.pc.in
-+++ b/gsoapssl.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C Web Services with SSL and ZLIB
- Version: @VERSION@
- Requires:
- Libs: -L${libdir} -lgsoapssl @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
--Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
-+Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
--- 
-1.7.7
+1.7.6.1
 

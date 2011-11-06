@@ -4,17 +4,18 @@
 # gSOAP
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.4
-$(PKG)_CHECKSUM := fea8734c83c2b5f9d07c44c556b27a6ce7ff0649
+$(PKG)_VERSION  := 2.8.3
+$(PKG)_CHECKSUM := 55677239751253b48f448eb30a7585df97cba486
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls libgcrypt libntlm
+$(PKG)_DEPS     := gcc gnutls libgcrypt
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/projects/gsoap2/files/gSOAP/' | \
     $(SED) -n 's,.*gsoap_\([0-9][^>]*\)\.zip.*,\1,p' | \
+    grep -v '2\.8\.4' | \
     head -1
 endef
 
@@ -42,8 +43,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ac_cv_func_malloc_0_nonnull=yes ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
-        --enable-gnutls \
-        CPPFLAGS='-DWITH_NTLM'
+        --enable-gnutls
 
     # Building for mingw requires native soapcpp2
     ln -sf '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)/gsoap/src/soapcpp2'
