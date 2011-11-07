@@ -1,0 +1,37 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 1f0955db1bf81de15e1dd04f1fe29f73ef3983c8 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Mon, 7 Nov 2011 18:01:56 +0100
+Subject: [PATCH] use memxor from nettle
+
+
+diff --git a/gl/memxor.c b/gl/memxor.c
+index 7fec454..d9b62cd 100644
+--- a/gl/memxor.c
++++ b/gl/memxor.c
+@@ -23,7 +23,7 @@
+ #include "memxor.h"
+ 
+ void *
+-memxor (void *restrict dest, const void *restrict src, size_t n)
++gsasl_memxor (void *restrict dest, const void *restrict src, size_t n)
+ {
+   char const *s = src;
+   char *d = dest;
+diff --git a/libgsasl.pc.in b/libgsasl.pc.in
+index b0c477d..d8d8ccc 100644
+--- a/libgsasl.pc.in
++++ b/libgsasl.pc.in
+@@ -16,4 +16,5 @@ URL: http://www.gnu.org/software/gsasl/
+ Version: @VERSION@
+ Libs: -L${libdir} -lgsasl
+ Libs.private: @LTLIBGCRYPT@ @LTLIBIDN@ @LTLIBNTLM@
++Requires.private: nettle
+ Cflags: -I${includedir}
+-- 
+1.7.7
+
