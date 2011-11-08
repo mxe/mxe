@@ -3,8 +3,8 @@
 
 # GnuTLS
 PKG             := gnutls
-$(PKG)_VERSION  := 3.0.6
-$(PKG)_CHECKSUM := 45fe2a7105c790f6cf2616aeebe665a7c397b2c1
+$(PKG)_VERSION  := 3.0.7
+$(PKG)_CHECKSUM := b99aed5cb48e1c156a2e2c6b2becb6c049c299af
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
     grep '<a class="list name"' | \
     $(SED) -n 's,.*<a[^>]*>gnutls_\([0-9]*_[0-9]*[02468]_[^<]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
+    grep -v '^2\.' | \
     head -1
 endef
 
