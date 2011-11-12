@@ -13,9 +13,9 @@ $(PKG)_URL      := http://www.lysator.liu.se/~nisse/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gmp
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.nettle.org/download.html' | \
-    $(SED) -n 's,.*nettle-autoconf-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    wget -q -O- 'http://www.lysator.liu.se/~nisse/archive/' | \
+    $(SED) -n 's,.*nettle-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
