@@ -90,3 +90,44 @@ index 0895a2e..51f8855 100644
 1.7.7
 
 
+From 68609a4508116803346b4fd962f3ed3141c70316 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Sun, 13 Nov 2011 13:45:21 +0100
+Subject: [PATCH 3/3] force graphicsmagick over imagemagick
+
+
+diff --git a/configure.ac b/configure.ac
+index 6af7ef7..2682e39 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1419,21 +1419,12 @@ AC_ARG_WITH([imagemagick],
+ 	AS_HELP_STRING([--without-imagemagick], [Build without ImageMagick image decoder (or GraphicsMagick's compat layer)]))
+ 
+ if test "x$with_imagemagick" != "xno"; then
+-   PKG_CHECK_MODULES([WAND], [Wand], [have_imagemagick=yes], [AC_MSG_RESULT([no]); have_imagemagick=no])
+-   if test "x$have_imagemagick" = 'xno'; then
+-      PKG_CHECK_MODULES([MAGICKWAND], [MagickWand], [have_imagemagick=yes], [AC_MSG_RESULT([no]); have_imagemagick=no])
+-      dnl Avoid $(WAND_FLAGS) $(MAGICKWAND_FLAGS) ...
+-      WAND_CFLAGS="$MAGICKWAND_CFLAGS"
+-      WAND_LIBS="$MAGICKWAND_LIBS"
+-   fi
+-   if test "x$have_imagemagick" = 'xno'; then
+-      PKG_CHECK_MODULES([GRAPHICSMAGICK], [ImageMagick], [have_imagemagick=yes], [AC_MSG_RESULT([no]); have_imagemagick=no])
+-      PKG_CHECK_MODULES([GRAPHICSMAGICKWAND], [GraphicsMagickWand], [have_imagemagick=yes], [AC_MSG_RESULT([no]); have_imagemagick=no])
+-      dnl The following assignments are safe, since they include
+-      dnl the flags for plain GraphicsMagick
+-      WAND_CFLAGS="$GRAPHICSMAGICKWAND_CFLAGS"
+-      WAND_LIBS="$GRAPHICSMAGICKWAND_LIBS"
+-   fi
++   PKG_CHECK_MODULES([GRAPHICSMAGICK], [ImageMagick], [have_imagemagick=yes], [AC_MSG_RESULT([no]); have_imagemagick=no])
++   PKG_CHECK_MODULES([GRAPHICSMAGICKWAND], [GraphicsMagickWand], [have_imagemagick=yes], [AC_MSG_RESULT([no]); have_imagemagick=no])
++   dnl The following assignments are safe, since they include
++   dnl the flags for plain GraphicsMagick
++   WAND_CFLAGS="$GRAPHICSMAGICKWAND_CFLAGS"
++   WAND_LIBS="$GRAPHICSMAGICKWAND_LIBS"
+    if test "x$with_imagemagick" = "xyes" && test "x$have_imagemagick" = "xno"; then
+       AC_MSG_ERROR([ImageMagick support requested, but neither Wand, MagickWand, nor GraphicsMagick were found])
+    elif test "x$have_imagemagick" = "xyes"; then
+-- 
+1.7.7
+
