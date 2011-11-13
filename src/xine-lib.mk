@@ -4,8 +4,8 @@
 # xine-lib
 PKG             := xine-lib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.19
-$(PKG)_CHECKSUM := 5afcc28c5cf2bdaab99d951960f6587797e1e5a0
+$(PKG)_VERSION  := 1.1.20
+$(PKG)_CHECKSUM := 60ce1cea9bf7a6b7d8c60141593a8ed0c54f9445
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.xine-project.org/

@@ -1,0 +1,92 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 10c6f4cb18b2b8e710a89ac36e360f3bb414a81c Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Sun, 13 Nov 2011 11:48:07 +0100
+Subject: [PATCH 1/3] fix-install-def-file
+
+
+diff --git a/src/xine-engine/Makefile.am b/src/xine-engine/Makefile.am
+index 67ae63f..0f94abf 100644
+--- a/src/xine-engine/Makefile.am
++++ b/src/xine-engine/Makefile.am
+@@ -45,10 +45,10 @@ noinst_HEADERS = bswap.h ffmpeg_bswap.h xine_private.h
+ 
+ if WIN32
+ install-exec-local:
+-	cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
++	-cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
+ 
+ uninstall-local:
+-	rm -f $(DEF_FILE)
++	-rm -f $(DESTDIR)$(libdir)/$(DEF_FILE)
+ endif
+ 
+ $(XINEUTILS_LIB):
+diff --git a/src/xine-engine/Makefile.in b/src/xine-engine/Makefile.in
+index 167a32b..0664e1f 100644
+--- a/src/xine-engine/Makefile.in
++++ b/src/xine-engine/Makefile.in
+@@ -905,10 +905,10 @@ $(LIBXINEPOSIX):
+ 	$(MAKE) -C $(top_builddir)/lib libxineposix.la
+ 
+ @WIN32_TRUE@install-exec-local:
+-@WIN32_TRUE@	cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
++@WIN32_TRUE@	-cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
+ 
+ @WIN32_TRUE@uninstall-local:
+-@WIN32_TRUE@	rm -f $(DEF_FILE)
++@WIN32_TRUE@	-rm -f $(DESTDIR)$(libdir)/$(DEF_FILE)
+ 
+ $(XINEUTILS_LIB):
+ 	$(MAKE) -C $(top_builddir)/src/xine-utils libxineutils.la
+-- 
+1.7.7
+
+
+From 536bda7f4b05f9a70bfbeca9578565a03b54c94e Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Sun, 13 Nov 2011 12:05:22 +0100
+Subject: [PATCH 2/3] fake missing definitions for WIN32
+
+Taken from:
+https://bugs.xine-project.org/show_bug.cgi?id=433
+
+diff --git a/src/audio_out/audio_file_out.c b/src/audio_out/audio_file_out.c
+index 0895a2e..51f8855 100644
+--- a/src/audio_out/audio_file_out.c
++++ b/src/audio_out/audio_file_out.c
+@@ -40,6 +40,18 @@
+ 
+ #define GAP_TOLERANCE        INT_MAX
+ 
++#ifdef WIN32
++#ifndef S_IWUSR
++#define S_IWUSR 0x0000
++#endif
++#ifndef S_IRGRP
++#define S_IRGRP 0x0000
++#endif
++#ifndef S_IROTH
++#define S_IROTH 0x0000
++#endif
++#endif
++
+ /* Taken (hStudlyCapsAndAll) from sox's wavwritehdr */
+ 
+ struct wavhdr {
+@@ -116,7 +128,6 @@ static int ao_file_open(ao_driver_t *this_gen, uint32_t bits, uint32_t rate, int
+ 		this->fname = "xine-out.wav";
+ 
+ 	this->fd = xine_create_cloexec(this->fname, O_WRONLY|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+-
+ 	if (this->fd == -1) {
+ 		xprintf (this->xine, XINE_VERBOSITY_LOG, "audio_file_out: Failed to open file '%s': %s\n",
+ 			 this->fname, strerror(errno));
+-- 
+1.7.7
+
+
