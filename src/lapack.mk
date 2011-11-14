@@ -20,13 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cp $(1)/make.inc.example  $(1)/make.inc
-    $(SED) -i 's,PLAT =.*,PLAT = _MINGW32,g'    '$(1)/make.inc'
-    $(SED) -i 's,gfortran,$(TARGET)-gfortran,g' '$(1)/make.inc'
-    $(SED) -i 's, ar, $(TARGET)-ar,g'           '$(1)/make.inc'
-    $(SED) -i 's, ranlib, $(TARGET)-ranlib,g'   '$(1)/make.inc'
-
-    $(MAKE) -C '$(1)/SRC' -j '$(JOBS)'
-    $(INSTALL) -d                            '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/liblapack.a' '$(PREFIX)/$(TARGET)/lib/liblapack.a'
+    cd '$(1)' && cmake \
+        -DCMAKE_TOOLCHAIN_FILE=$(PREFIX)/$(TARGET)/share/cmake/mingw-cross-env-conf.cmake \
+        .
+    $(MAKE) -C '$(1)/SRC' -j '$(JOBS)' install
 endef
