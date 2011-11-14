@@ -70,6 +70,7 @@ define $(PKG)_BUILD
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)'; \
      echo 'set(CMAKE_C_COMPILER $(PREFIX)/bin/$(TARGET)-gcc)'; \
      echo 'set(CMAKE_CXX_COMPILER $(PREFIX)/bin/$(TARGET)-g++)'; \
+     echo 'set(CMAKE_Fortran_COMPILER $(PREFIX)/bin/$(TARGET)-gfortran)'; \
      echo 'set(CMAKE_RC_COMPILER $(PREFIX)/bin/$(TARGET)-windres)'; \
      echo 'set(PKG_CONFIG_EXECUTABLE $(PREFIX)/bin/$(TARGET)-pkg-config)'; \
      echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/bin/$(TARGET)-qmake)'; \
