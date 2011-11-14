@@ -4,8 +4,8 @@
 # lapack
 PKG             := lapack
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.1
-$(PKG)_CHECKSUM := 3ce437e05f0e9a3c8148ec41922f6efeef0ebdac
+$(PKG)_VERSION  := 3.4.0
+$(PKG)_CHECKSUM := a141a19bebbef2a20d35a26eb9c120b1de747b38
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_WEBSITE  := http://www.netlib.org/$(PKG)/
@@ -28,5 +28,5 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)/SRC' -j '$(JOBS)'
     $(INSTALL) -d                            '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/lapack_MINGW32.a' '$(PREFIX)/$(TARGET)/lib/liblapack.a'
+    $(INSTALL) -m644 '$(1)/liblapack.a' '$(PREFIX)/$(TARGET)/lib/liblapack.a'
 endef
