@@ -4,8 +4,8 @@
 # libpng
 PKG             := libpng
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.2
-$(PKG)_CHECKSUM := 50243a46c4745b39e7fcda7a39f498f38e084ad6
+$(PKG)_VERSION  := 1.5.5
+$(PKG)_CHECKSUM := 3583126fdd70a94f4c33c1b717f3ff4201d619af
 $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://www.libpng.org/
@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
     grep -v alpha | \
     grep -v beta | \
     grep -v rc | \
-    grep -v '^1\.4\.' | \
+    grep -v '^1\.[1-4]\.' | \
     head -1
 endef
 

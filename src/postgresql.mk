@@ -4,8 +4,8 @@
 # PostgreSQL
 PKG             := postgresql
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.0.4
-$(PKG)_CHECKSUM := 5c4ebc2abbbc63ce2973974a7d020e7d14a01e73
+$(PKG)_VERSION  := 9.1.1
+$(PKG)_CHECKSUM := 4df7b6f6b23acdac5ea198e3623796a2b62fc7a4
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.postgresql.org/
@@ -18,18 +18,13 @@ define $(PKG)_UPDATE
     grep 'refs/tags/REL9[0-9_]*"' | \
     $(SED) 's,.*refs/tags/REL\(.*\)".*,\1,g;' | \
     $(SED) 's,_,.,g' | \
+    grep -v '^9\.\0' | \
     head -1
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoconf
     cp -Rp '$(1)' '$(1).native'
-    # The static OpenSSL libraries are in unix (not win32) naming style.
-    $(SED) -i 's,SSLEAY32,SSL,' '$(1)'/configure
-    $(SED) -i 's,ssleay32,ssl,' '$(1)'/configure
-    $(SED) -i 's,EAY32,CRYPTO,' '$(1)'/configure
-    $(SED) -i 's,eay32,crypto,' '$(1)'/configure
-    $(SED) -i 's,ssleay32,ssl,' '$(1)'/src/interfaces/libpq/Makefile
-    $(SED) -i 's,eay32,crypto,' '$(1)'/src/interfaces/libpq/Makefile
     # Since we build only client libary, use bogus tzdata to satisfy configure.
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -51,7 +46,7 @@ define $(PKG)_BUILD
         --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null \
-        LIBS='-lsecur32 -lws2_32 -lgdi32'
+        LIBS="-lsecur32 `'i686-pc-mingw32-pkg-config' openssl --libs`"
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/port             -j '$(JOBS)'         haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install haslibarule= shlib=
@@ -79,6 +74,6 @@ define $(PKG)_BUILD
         --without-zlib \
         --with-system-tzdata=/dev/null
     $(MAKE) -C '$(1).native'/src/port          -j '$(JOBS)'
-    $(MAKE) -C '$(1).native'/src/bin/pg_config -j '$(JOBS)'
-    $(INSTALL) -m755 '$(1).native'/src/bin/pg_config/pg_config '$(PREFIX)/bin/$(TARGET)-pg_config'
+    $(MAKE) -C '$(1).native'/src/bin/pg_config -j '$(JOBS)' install
+    ln -sf '$(PREFIX)/$(TARGET)/bin/pg_config' '$(PREFIX)/bin/$(TARGET)-pg_config'
 endef

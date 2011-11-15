@@ -1,0 +1,216 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 89e55b180994db937e019678a2abccd0c6f73f7e Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 21 Oct 2011 23:08:52 +0200
+Subject: [PATCH] adjustments for mingw-cross-env
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e5af443..7d77f9d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -135,6 +135,8 @@ set(ALL_CGAL_LIBRARIES CGAL CGAL_Core CGAL_ImageIO CGAL_Qt3 CGAL_Qt4 CACHE INTER
+ #
+ #--------------------------------------------------------------------------------------------------
+ 
++uniquely_add_flags( CXXFLAGS "-DBOOST_THREAD_USE_LIB;-DBoost_USE_STATIC_LIBS" )
++SET(CMAKE_CXX_FLAGS_RELEASE "-DBOOST_THREAD_USE_LIB -DBoost_USE_STATIC_LIBS -O3 -DNDEBUG" CACHE STRING blah FORCE)
+ if( MSVC )
+   
+   uniquely_add_flags ( CGAL_CXX_FLAGS "-D_CRT_SECURE_NO_DEPRECATE;-D_SCL_SECURE_NO_DEPRECATE;-D_CRT_SECURE_NO_WARNINGS;-D_SCL_SECURE_NO_WARNINGS" )
+diff --git a/TryRunResults.cgal.cmake b/TryRunResults.cgal.cmake
+new file mode 100644
+index 0000000..cba9b44
+--- /dev/null
++++ b/TryRunResults.cgal.cmake
+@@ -0,0 +1,139 @@
++SET( CGAL_CFG_ARRAY_MEMBER_INITIALIZATION_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_DENORMALS_COMPILE_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_FPU_ROUNDING_MODE_UNWINDING_VC_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_IEEE_754_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_ISTREAM_INT_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_LONGNAME_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_MATCHING_BUG_5
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_MATCHING_BUG_6
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NESTED_CLASS_FRIEND_DECLARATION_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_ARRAY
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_AUTO
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_DECLTYPE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_DEFAULT_TEMPLATE_ARGUMENTS_FOR_FUNCTION_TEMPLATES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_DELEGATING_CONSTRUCTORS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_DELETED_AND_DEFAULT_FUNCTIONS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_INITIALIZER_LISTS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_ISFINITE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_LAMBDAS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_LONG_LONG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_RVALUE_REFERENCE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_TUPLE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_CPP0X_VARIADIC_TEMPLATES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_LIMITS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_LOGICAL_OPERATORS_ALTERNATIVES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_MESSAGE_PRAGMA_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_NEXTAFTER
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_STATEMENT_EXPRESSIONS
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_STL
++     0
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_TMPL_IN_TMPL_PARAM
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_TR1_ARRAY
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_TR1_TUPLE
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NO_WARNING_CPP_DIRECTIVE_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_NUMERIC_LIMITS_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_OUTOFLINE_MEMBER_DEFINITION_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_TYPENAME_BEFORE_DEFAULT_ARGUMENT_BUG
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CGAL_CFG_USING_BASE_MEMBER_BUG_2
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( GCC_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( GMP_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( MPFR_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( QT4_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( ZLIB_RUN_RES
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( GCC_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( GMP_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( MPFR_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( QT4_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( ZLIB_RUN_RES__TRYRUN_OUTPUT
++     FAILED_TO_RUN
++     CACHE STRING "Result from TRY_RUN" FORCE)
++
+diff --git a/cmake/modules/FindBoost.cmake b/cmake/modules/FindBoost.cmake
+index fbdde88..5d8a0a9 100644
+--- a/cmake/modules/FindBoost.cmake
++++ b/cmake/modules/FindBoost.cmake
+@@ -167,6 +167,7 @@
+ #
+ 
+ include( CGAL_VersionUtils )
++set(Boost_USE_STATIC_LIBS   ON)
+ 
+ 
+ #-------------------------------------------------------------------------------
+@@ -706,7 +707,9 @@ ELSE (_boost_IN_CACHE)
+     ENDIF( Boost_USE_STATIC_LIBS )
+ 
+     # Find libraries (search in user defined directories first)
++    SET ( _boost_COMPILER "_win32")
+     SET ( _boost_${UPPERCOMPONENT}_LIBRARY_RELEASE_NAMES   
++      ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}
+       ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
+       ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${_boost_STATIC_TAG}-${Boost_LIB_VERSION}
+       ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
+diff --git a/include/CGAL/Constrained_Delaunay_triangulation_2.h b/include/CGAL/Constrained_Delaunay_triangulation_2.h
+index f1a7201..23a53c9 100644
+--- a/include/CGAL/Constrained_Delaunay_triangulation_2.h
++++ b/include/CGAL/Constrained_Delaunay_triangulation_2.h
+@@ -389,7 +389,7 @@ is_flipable(Face_handle f, int i, bool perturb) const
+   Face_handle ni = f->neighbor(i); 
+   if (is_infinite(f) || is_infinite(ni)) return false; 
+   if (f->is_constrained(i)) return false;
+-  return (side_of_oriented_circle(ni, f->vertex(i)->point(), perturb) 
++  return (this->side_of_oriented_circle(ni, f->vertex(i)->point(), perturb)
+                                         == ON_POSITIVE_SIDE);
+ }
+ 
+@@ -493,7 +493,7 @@ test_conflict(const Point& p, Face_handle fh) const
+   // return true  if P is inside the circumcircle of fh
+   // if fh is infinite, return true when p is in the positive
+   // halfspace or on the boundary and in the  finite edge of fh
+-  Oriented_side os = side_of_oriented_circle(fh,p,true);
++  Oriented_side os = this->side_of_oriented_circle(fh,p,true);
+   if (os == ON_POSITIVE_SIDE) return true;
+  
+   if (os == ON_ORIENTED_BOUNDARY && is_infinite(fh)) {
+-- 
+1.7.7
+

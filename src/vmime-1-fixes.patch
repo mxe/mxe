@@ -44,7 +44,7 @@ GITDIR=~/projects/vmime/git/vmime
 From c6f077e695b75d9ff9a32d1621f6a320c8ce70f1 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Tue, 30 Nov 2010 14:57:03 +0000
-Subject: [PATCH 1/8] Initialize and delete object.
+Subject: [PATCH 01/19] Initialize and delete object.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@577 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -72,13 +72,15 @@ index 0f3e9ec..d71c3ca 100644
  
  		void go(IMAPParser& parser, string& line, string::size_type* currentPos)
 -- 
-1.7.4.1
+1.7.6
 
 
 From 41203315eacf53230dd7bdb0cf2b0d1078ddee39 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Wed, 8 Dec 2010 08:52:54 +0000
-Subject: [PATCH 2/8] No extra space between ':' and '<' in MAIL FROM and RCPT TO. Wait for server response after QUIT and before closing connection.
+Subject: [PATCH 02/19] No extra space between ':' and '<' in MAIL FROM and
+ RCPT TO. Wait for server response after QUIT and
+ before closing connection.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@579 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -113,13 +115,13 @@ index 204daae..d9fb7b8 100644
  		if ((resp = readResponse())->getCode() != 250)
  		{
 -- 
-1.7.4.1
+1.7.6
 
 
 From 969b56f4bd61ddb8277c04ac2a1e35e029ec058b Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:24:06 +0000
-Subject: [PATCH 3/8] Fixed unit test after bug fix.
+Subject: [PATCH 03/19] Fixed unit test after bug fix.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@580 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -137,13 +139,14 @@ index 5015552..6552f9e 100644
  				localSend("250 OK\r\n");
  			}
 -- 
-1.7.4.1
+1.7.6
 
 
 From 50743da0712b216533acdc09069f1bfc81f988c6 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:54:38 +0000
-Subject: [PATCH 4/8] Fixed boundary parsing (thanks to John van der Kamp, Zarafa).
+Subject: [PATCH 04/19] Fixed boundary parsing (thanks to John van der Kamp,
+ Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@581 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -225,13 +228,14 @@ index 12c4f74..df2bf85 100644
  
  		vmime::bodyPart p;
 -- 
-1.7.4.1
+1.7.6
 
 
 From b6d2b4765c9472ff333cace13c57c6af0e866ee0 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 21 Jan 2011 15:28:06 +0000
-Subject: [PATCH 5/8] Fixed possible infinite loop (thanks to John van der Kamp, Zarafa).
+Subject: [PATCH 05/19] Fixed possible infinite loop (thanks to John van der
+ Kamp, Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@582 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -277,13 +281,14 @@ index b84f376..746ac94 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.4.1
+1.7.6
 
 
 From 022339ab63430d792d0314f51dd7854eabd5736e Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 28 Jan 2011 12:11:08 +0000
-Subject: [PATCH 6/8] Fixed possible read to invalid memory location (thanks to Alexander Konovalov).
+Subject: [PATCH 06/19] Fixed possible read to invalid memory location (thanks
+ to Alexander Konovalov).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@583 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -301,13 +306,15 @@ index 1c1c1a6..fa08d33 100644
  					else
  						state->lastCharIsSpace = false;
 -- 
-1.7.4.1
+1.7.6
 
 
 From 7f1024917b3df6be013e18a2e0f0f1b13f4d112b Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Wed, 9 Mar 2011 18:03:31 +0000
-Subject: [PATCH 7/8] Fixed bug #3174903. Fixed word parsing when buffer does not end with NL. Fixed 'no encoding' when forced.
+Subject: [PATCH 07/19] Fixed bug #3174903. Fixed word parsing when buffer
+ does not end with NL. Fixed 'no encoding' when
+ forced.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@584 5301114d-f842-0410-bbdd-996ee0417009
 (cherry picked from commit 07ebf241115eba44675223e307d212c772e1cc08)
@@ -507,13 +514,14 @@ index df2bf85..b129913 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.4.1
+1.7.6
 
 
 From 1c0648c2a3ee4072869446755c8a7604614752e1 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 27 Mar 2011 11:26:55 +0000
-Subject: [PATCH 8/8] Allow static linking in mingw-cross-env. Added 'iconv' and uses 'ws2_32' instead of 'winsock32' (#3213487).
+Subject: [PATCH 08/19] Allow static linking in mingw-cross-env. Added 'iconv'
+ and uses 'ws2_32' instead of 'winsock32' (#3213487).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@585 5301114d-f842-0410-bbdd-996ee0417009
 (cherry picked from commit 22ca7dc23b6bbbc8cc6aedd569ec938ecae96e92)
@@ -541,5 +549,655 @@ index fb01edf..6e8aba2 100644
  
  # -- getaddrinfo (POSIX)
 -- 
-1.7.4.1
+1.7.6
+
+
+From c6c596b10702a98b59978c81c01dc7f4f33157c9 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Thu, 31 Mar 2011 19:13:03 +0000
+Subject: [PATCH 09/19] Flush stateful data from iconv (thanks to John van der
+ Kamp, Zarafa).
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@586 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 9e06cc39d47e2eba8f554b337d472cc995be0d9d)
+
+diff --git a/src/charsetConverter.cpp b/src/charsetConverter.cpp
+index 38b9e5e..2135788 100644
+--- a/src/charsetConverter.cpp
++++ b/src/charsetConverter.cpp
+@@ -119,6 +119,7 @@ void charsetConverter::convert(utility::inputStream& in, utility::outputStream&
+ 	size_t inPos = 0;
+ 
+ 	bool prevIsInvalid = false;
++	bool breakAfterNext = false;
+ 
+ 	while (true)
+ 	{
+@@ -126,11 +127,12 @@ void charsetConverter::convert(utility::inputStream& in, utility::outputStream&
+ 		size_t inLength = static_cast <size_t>(in.read(inBuffer + inPos, sizeof(inBuffer) - inPos) + inPos);
+ 		size_t outLength = sizeof(outBuffer);
+ 
+-		const char* inPtr = inBuffer;
++		const char* inPtr = breakAfterNext ? NULL : inBuffer;
++		size_t *ptrLength = breakAfterNext ? NULL : &inLength;
+ 		char* outPtr = outBuffer;
+ 
+ 		// Convert input bytes
+-		if (iconv(cd, ICONV_HACK(&inPtr), &inLength,
++		if (iconv(cd, ICONV_HACK(&inPtr), ptrLength,
+ 			      &outPtr, &outLength) == static_cast <size_t>(-1))
+ 		{
+ 			// Illegal input sequence or input sequence has no equivalent
+@@ -170,9 +172,12 @@ void charsetConverter::convert(utility::inputStream& in, utility::outputStream&
+ 			prevIsInvalid = false;
+ 		}
+ 
+-		// Check for end of data
+-		if (in.eof() && inPos == 0)
++		if (breakAfterNext)
+ 			break;
++
++		// Check for end of data, loop again to flush stateful data from iconv
++		if (in.eof() && inPos == 0)
++			breakAfterNext = true;
+ 	}
+ }
+ 
+diff --git a/tests/parser/charsetTest.cpp b/tests/parser/charsetTest.cpp
+index 8ad71d7..54a09a7 100644
+--- a/tests/parser/charsetTest.cpp
++++ b/tests/parser/charsetTest.cpp
+@@ -100,6 +100,7 @@ VMIME_TEST_SUITE_BEGIN
+ 		VMIME_TEST(testFilterValid1)
+ 		VMIME_TEST(testFilterValid2)
+ 		VMIME_TEST(testFilterValid3)
++		VMIME_TEST(testEncodingHebrew1255)
+ 
+ 		// Test invalid input
+ 		VMIME_TEST(testFilterInvalid1)
+@@ -227,6 +228,15 @@ VMIME_TEST_SUITE_BEGIN
+ 		VASSERT_EQ("1", toHex(expectedOut), toHex(actualOut));
+ 	}
+ 
++	void testEncodingHebrew1255()
++	{
++		// hewbrew string in windows-1255 charset
++		const char data[] = "\xe9\xf9\xf7\xf8\xe9\xf9\xf8\xf7\xe9\xe9\xf9";
++		vmime::word w = vmime::word(data, "windows-1255");
++		vmime::string encoded = w.generate();
++		// less than 60% ascii, base64 received
++		VASSERT_EQ("1", "=?windows-1255?B?6fn3+On5+Pfp6fk=?=", encoded);
++	}
+ 
+ 	// Conversion to hexadecimal for easier debugging
+ 	static const vmime::string toHex(const vmime::string str)
+-- 
+1.7.6
+
+
+From dce9b255556d59773bbbdd9027fd1b1bd5627886 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Fri, 10 Jun 2011 19:39:09 +0000
+Subject: [PATCH 10/19] Requested email change.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@587 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 418a39a7d33921672bd1c4beb31c8a31bc87d8dd)
+
+diff --git a/AUTHORS b/AUTHORS
+index 20a0181..bbddb30 100644
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -21,7 +21,7 @@ AUTHORS file.
+  - Rafael Fernandez <prf@adinet.com.uy>
+  - Xin Li <lixin3@staff.sina.com.cn>
+  - Benjamin Biron <benbiron@gmail.com>
+- - Bertrand Benoit <bsquare@bsquare.levillage.org>
++ - Bertrand Benoit <projettwk@users.sourceforge.net>
+  - Tim Teulings <rael@edge.ping.de>
+  - Georg Sauthoff <gsauthof@techfak.uni-bielefeld.de>
+  - Pierre Thierry <nowhere.man@levallois.eu.org> (patches for STL algorithms)
+-- 
+1.7.6
+
+
+From 42612622a7c42aac7bef1605d9ba8117aa651789 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Tue, 14 Jun 2011 18:37:54 +0000
+Subject: [PATCH 11/19] Fixed compilation issue following namespace change.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@588 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 4008955783ef566b98b16762c7bfa28df26e9198)
+
+diff --git a/examples/example7.cpp b/examples/example7.cpp
+index 1ddb3d0..243b1da 100644
+--- a/examples/example7.cpp
++++ b/examples/example7.cpp
+@@ -43,18 +43,18 @@ int main()
+ 	vmime::platform::setHandler<vmime::platforms::posix::posixHandler>();
+ 
+ 	// Enumerate encoders
+-	vmime::encoderFactory* ef = vmime::encoderFactory::getInstance();
++	vmime::utility::encoder::encoderFactory* ef = vmime::utility::encoder::encoderFactory::getInstance();
+ 
+ 	std::cout << "Available encoders:" << std::endl;
+ 
+ 	for (int i = 0 ; i < ef->getEncoderCount() ; ++i)
+ 	{
+-		vmime::ref <const vmime::encoderFactory::registeredEncoder>
++		vmime::ref <const vmime::utility::encoder::encoderFactory::registeredEncoder>
+ 			enc = ef->getEncoderAt(i);
+ 
+ 		std::cout << "  * " << enc->getName() << std::endl;
+ 
+-		vmime::ref <vmime::encoder> e = enc->create();
++		vmime::ref <vmime::utility::encoder::encoder> e = enc->create();
+ 
+ 		std::vector <vmime::string> props = e->getAvailableProperties();
+ 
+-- 
+1.7.6
+
+
+From 43346ae2d6c39af2ed16e64cc6d7f89f427a0fee Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 19 Jun 2011 17:51:33 +0000
+Subject: [PATCH 12/19] Fixed parsing of an attachment filename that is
+ between 66 and 76 characters long (Zarafa).
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@589 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit e80db1ce802a45b71659d16d77ea47368beeabc1)
+
+diff --git a/src/parameter.cpp b/src/parameter.cpp
+index 91a7e5c..f59d5ab 100644
+--- a/src/parameter.cpp
++++ b/src/parameter.cpp
+@@ -281,7 +281,8 @@ void parameter::generate(utility::outputStream& os, const string::size_type maxL
+ 	bool needQuoting = false;
+ 	string::size_type valueLength = 0;
+ 
+-	for (string::size_type i = 0 ; (i < value.length()) && (pos + valueLength < maxLineLength - 4) ; ++i, ++valueLength)
++	// Use worst-case length name.length()+2 for 'name=' part of line
++	for (string::size_type i = 0 ; (i < value.length()) && (pos + name.length() + 2 + valueLength < maxLineLength - 4) ; ++i, ++valueLength)
+ 	{
+ 		switch (value[i])
+ 		{
+-- 
+1.7.6
+
+
+From 5ef189953965b639a9038da337e104592417c465 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 19 Jun 2011 18:08:12 +0000
+Subject: [PATCH 13/19] Correctly generate attachment names which are long and
+ have high characters for Outlook Express (Zarafa).
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@590 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 58316dddddbfe8a7c582aa52e9abff8ca3a227b6)
+
+diff --git a/src/parameter.cpp b/src/parameter.cpp
+index f59d5ab..d757e1b 100644
+--- a/src/parameter.cpp
++++ b/src/parameter.cpp
+@@ -268,17 +268,19 @@ void parameter::generate(utility::outputStream& os, const string::size_type maxL
+ 	// value is to be generated.
+ 
+ 	// A stream for a temporary storage
+-	std::ostringstream sevenBitBuffer;
++	std::string sevenBitBuffer;
++	utility::outputStreamStringAdapter sevenBitStream(sevenBitBuffer);
+ 
+ 	string::size_type pos = curLinePos;
+ 
+ 	if (pos + name.length() + 10 + value.length() > maxLineLength)
+ 	{
+-		sevenBitBuffer << NEW_LINE_SEQUENCE;
++		sevenBitStream << NEW_LINE_SEQUENCE;
+ 		pos = NEW_LINE_SEQUENCE_LENGTH;
+ 	}
+ 
+ 	bool needQuoting = false;
++	bool needQuotedPrintable = false;
+ 	string::size_type valueLength = 0;
+ 
+ 	// Use worst-case length name.length()+2 for 'name=' part of line
+@@ -308,6 +310,16 @@ void parameter::generate(utility::outputStream& os, const string::size_type maxL
+ 
+ 			needQuoting = true;
+ 			break;
++
++		default:
++
++			if (!parserHelpers::isAscii(value[i]))
++			{
++				needQuotedPrintable = true;
++				needQuoting = true;
++			}
++
++			break;
+ 		}
+ 	}
+ 
+@@ -315,12 +327,12 @@ void parameter::generate(utility::outputStream& os, const string::size_type maxL
+ 
+ 	if (needQuoting)
+ 	{
+-		sevenBitBuffer << name << "=\"";
++		sevenBitStream << name << "=\"";
+ 		pos += name.length() + 2;
+ 	}
+ 	else
+ 	{
+-		sevenBitBuffer << name << "=";
++		sevenBitStream << name << "=";
+ 		pos += name.length() + 1;
+ 	}
+ 
+@@ -332,29 +344,43 @@ void parameter::generate(utility::outputStream& os, const string::size_type maxL
+ 	const bool alwaysEncode = m_value.getCharset().getRecommendedEncoding(recommendedEnc);
+ 	bool extended = alwaysEncode;
+ 
+-	for (string::size_type i = 0 ; (i < value.length()) && (pos < maxLineLength - 4) ; ++i)
++	if (needQuotedPrintable)
+ 	{
+-		const char_t c = value[i];
+-
+-		if (/* needQuoting && */ (c == '"' || c == '\\'))  // 'needQuoting' is implicit
+-		{
+-			sevenBitBuffer << '\\' << value[i];  // escape 'x' with '\x'
+-			pos += 2;
+-		}
+-		else if (parserHelpers::isAscii(c))
+-		{
+-			sevenBitBuffer << value[i];
+-			++pos;
+-		}
+-		else
++		// Send the name in quoted-printable, so outlook express et.al.
++		// will understand the real filename
++		size_t oldLen = sevenBitBuffer.length();
++		m_value.generate(sevenBitStream);
++		pos += sevenBitBuffer.length() - oldLen;
++		extended = true;		// also send with RFC-2231 encoding
++	}
++	else
++	{
++		// Do not chop off this value, but just add the complete name as one header line.
++		for (string::size_type i = 0 ; i < value.length() ; ++i)
+ 		{
+-			extended = true;
++			const char_t c = value[i];
++
++			if (/* needQuoting && */ (c == '"' || c == '\\'))  // 'needQuoting' is implicit
++			{
++				sevenBitStream << '\\' << value[i];  // escape 'x' with '\x'
++				pos += 2;
++			}
++			else if (parserHelpers::isAscii(c))
++			{
++				sevenBitStream << value[i];
++				++pos;
++			}
++			else
++			{
++				extended = true;
++			}
+ 		}
+-	}
++
++	} // !needQuotedPrintable
+ 
+ 	if (needQuoting)
+ 	{
+-		sevenBitBuffer << '"';
++		sevenBitStream << '"';
+ 		++pos;
+ 	}
+ 
+@@ -532,7 +558,7 @@ void parameter::generate(utility::outputStream& os, const string::size_type maxL
+ 		// "7bit/us-ascii" will suffice in this case.
+ 
+ 		// Output what has been stored in temporary buffer so far
+-		os << sevenBitBuffer.str();
++		os << sevenBitBuffer;
+ 	}
+ #endif // !VMIME_ALWAYS_GENERATE_7BIT_PARAMETER
+ 
+-- 
+1.7.6
+
+
+From caa3cbc0fe9218d3d494bfed1afed2ee620a2e4e Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 19 Jun 2011 18:16:49 +0000
+Subject: [PATCH 14/19] Alias for UTF-7 charset.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@591 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit f7ad17cffea462faf8cbe4f785644da0f3ee812a)
+
+diff --git a/src/charset.cpp b/src/charset.cpp
+index e043186..0fda450 100644
+--- a/src/charset.cpp
++++ b/src/charset.cpp
+@@ -45,6 +45,9 @@ charset::charset()
+ charset::charset(const string& name)
+ 	: m_name(name)
+ {
++	// If we receive this rfc-1642 valid MIME charset, convert it to something usefull for iconv
++	if (utility::stringUtils::isStringEqualNoCase(m_name, "unicode-1-1-utf-7"))
++		m_name = "utf-7";
+ }
+ 
+ 
+@@ -60,6 +63,10 @@ void charset::parse(const string& buffer, const string::size_type position,
+ 	m_name = utility::stringUtils::trim
+ 		(string(buffer.begin() + position, buffer.begin() + end));
+ 
++	// If we parsed this rfc-1642 valid MIME charset, convert it to something usefull for iconv
++	if (utility::stringUtils::isStringEqualNoCase(m_name, "unicode-1-1-utf-7"))
++		m_name = "utf-7";
++
+ 	setParsedBounds(position, end);
+ 
+ 	if (newPosition)
+-- 
+1.7.6
+
+
+From 97d992cda306d96a8dda948abb9806ee2c2ce587 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 19 Jun 2011 18:39:35 +0000
+Subject: [PATCH 15/19] Fixed messageBuilder to accept an empty mailbox group
+ in 'To:' field, to allow for undisclosed-recipients
+ (Zarafa).
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@592 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit eac20f47a33a7fdd617f9fd905b8029621259269)
+
+diff --git a/src/messageBuilder.cpp b/src/messageBuilder.cpp
+index 870d59e..3597b3a 100644
+--- a/src/messageBuilder.cpp
++++ b/src/messageBuilder.cpp
+@@ -51,17 +51,15 @@ ref <message> messageBuilder::construct() const
+ 	// Generate the header fields
+ 	msg->getHeader()->Subject()->setValue(m_subject);
+ 
+-	if (m_from.isEmpty())
+-		throw exceptions::no_expeditor();
+-
+-	if ((m_to.isEmpty() || m_to.getAddressAt(0)->isEmpty()) &&
++	if (((m_to.isEmpty()) || (m_to.getAddressAt(0)->isEmpty() && !m_to.getAddressAt(0)->isGroup())) &&
+ 	    (m_cc.isEmpty() || m_cc.getAddressAt(0)->isEmpty()) &&
+ 	    (m_bcc.isEmpty() || m_bcc.getAddressAt(0)->isEmpty()))
+ 	{
+ 		throw exceptions::no_recipient();
+ 	}
+ 
+-	msg->getHeader()->From()->setValue(m_from);
++	if (!m_from.isEmpty())
++		msg->getHeader()->From()->setValue(m_from);
+ 
+ 	if (!m_to.isEmpty())
+ 		msg->getHeader()->To()->setValue(m_to);
+-- 
+1.7.6
+
+
+From db98569ef427f9f3fac9a9dcc25ab8b6f2b3bd91 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 19 Jun 2011 18:49:55 +0000
+Subject: [PATCH 16/19] Added support for mailboxes that specify an (encoded)
+ full name with an empty email address, set by a <>
+ marker (Zarafa).
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@593 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 1e5dfa80a63b0a7fe90406ce4a3de1593f2e4045)
+
+diff --git a/src/mailbox.cpp b/src/mailbox.cpp
+index 5cb0139..fea7479 100644
+--- a/src/mailbox.cpp
++++ b/src/mailbox.cpp
+@@ -88,6 +88,7 @@ void mailbox::parse(const string& buffer, const string::size_type position,
+ 	// Temporary buffers for extracted name and address
+ 	string name;
+ 	string address;
++	bool hadBrackets = false;
+ 
+ 	while (p < pend)
+ 	{
+@@ -283,6 +284,7 @@ void mailbox::parse(const string& buffer, const string::size_type position,
+ 				}
+ 				else if (*p == '>')
+ 				{
++					hadBrackets = true;
+ 					break;
+ 				}
+ 				else if (!parserHelpers::isSpace(*p))
+@@ -309,7 +311,7 @@ void mailbox::parse(const string& buffer, const string::size_type position,
+ 
+ 	// Swap name and address when no address was found
+ 	// (email address is mandatory, whereas name is optional).
+-	if (address.empty() && !name.empty())
++	if (address.empty() && !name.empty() && !hadBrackets)
+ 	{
+ 		m_email.clear();
+ 		m_email.reserve(name.size());
+diff --git a/tests/parser/mailboxTest.cpp b/tests/parser/mailboxTest.cpp
+index 8411daa..9ebadca 100644
+--- a/tests/parser/mailboxTest.cpp
++++ b/tests/parser/mailboxTest.cpp
+@@ -32,6 +32,7 @@ VMIME_TEST_SUITE_BEGIN
+ 
+ 	VMIME_TEST_LIST_BEGIN
+ 		VMIME_TEST(testParse)
++		VMIME_TEST(testEmptyEmailAddress)
+ 	VMIME_TEST_LIST_END
+ 
+ 
+@@ -113,5 +114,19 @@ VMIME_TEST_SUITE_BEGIN
+ 		}
+ 	}
+ 
++	void testEmptyEmailAddress()
++	{
++		vmime::addressList addrList;
++		addrList.parse("\"Full Name\" <>");
++
++		VASSERT_EQ("count", 1, addrList.getAddressCount());
++		VASSERT_EQ("!group", false, addrList.getAddressAt(0)->isGroup());
++
++		vmime::ref <vmime::mailbox> mbox = addrList.getAddressAt(0).dynamicCast <vmime::mailbox>();
++
++		VASSERT_EQ("name", "Full Name", mbox->getName());
++		VASSERT_EQ("email", "", mbox->getEmail());
++	}
++
+ VMIME_TEST_SUITE_END
+ 
+-- 
+1.7.6
+
+
+From aa5ab140e90a6222e5f03b337711444be845fbd0 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Fri, 24 Jun 2011 15:46:23 +0000
+Subject: [PATCH 17/19] Added missing libs in pkg-config file.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@594 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 960f2195516eb776eea7b7e4f92612192edfdcd9)
+
+diff --git a/SConstruct b/SConstruct
+index 6e8aba2..4c0cb0e 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -1089,7 +1089,7 @@ def generateAutotools(target, source, env):
+ 	vmime_pc_in.write("Description: " + packageDescription + "\n")
+ 	vmime_pc_in.write("Version: @VERSION@\n")
+ 	vmime_pc_in.write("Requires: @GSASL_REQUIRED@\n")
+-	vmime_pc_in.write("Libs: -L${libdir} -l@GENERIC_VERSIONED_LIBRARY_NAME@ @GSASL_LIBS@ @LIBGNUTLS_LIBS@ @LIBICONV@ @PTHREAD_LIBS@ @VMIME_ADDITIONAL_PC_LIBS@\n")
++	vmime_pc_in.write("Libs: -L${libdir} -l@GENERIC_VERSIONED_LIBRARY_NAME@ @GSASL_LIBS@ @LIBGNUTLS_LIBS@ @LIBICONV@ @PTHREAD_LIBS@ @LIBICONV@ @PTHREAD_LIBS@ @VMIME_ADDITIONAL_PC_LIBS@\n")
+ 	#vmime_pc_in.write("Cflags: -I${includedir}/@GENERIC_VERSIONED_LIBRARY_NAME@\n")
+ 	vmime_pc_in.write("Cflags: -I${includedir}/ @LIBGNUTLS_CFLAGS@\n")
+ 	vmime_pc_in.close()
+-- 
+1.7.6
+
+
+From bf98b31b36ba2228d4f1c25cd3f7680d47cc8910 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sat, 25 Jun 2011 17:07:53 +0000
+Subject: [PATCH 18/19] Fixed parsing of empty body parts (thanks to John van
+ der Kamp, from Zarafa).
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@595 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 9f9084b71b4e3c96edc6513020984ef76fe26e0c)
+
+diff --git a/src/body.cpp b/src/body.cpp
+index 8596833..9d7d57f 100644
+--- a/src/body.cpp
++++ b/src/body.cpp
+@@ -197,6 +197,11 @@ void body::parse(const string& buffer, const string::size_type position,
+ 			{
+ 				ref <bodyPart> part = vmime::create <bodyPart>();
+ 
++				// End before start may happen on empty bodyparts (directly
++				// successive boundaries without even a line-break)
++				if (partEnd < partStart)
++					std::swap(partStart, partEnd);
++
+ 				part->parse(buffer, partStart, partEnd, NULL);
+ 				part->m_parent = m_part;
+ 
+diff --git a/tests/parser/bodyPartTest.cpp b/tests/parser/bodyPartTest.cpp
+index b129913..075b8f9 100644
+--- a/tests/parser/bodyPartTest.cpp
++++ b/tests/parser/bodyPartTest.cpp
+@@ -36,6 +36,7 @@ VMIME_TEST_SUITE_BEGIN
+ 		VMIME_TEST(testParseMissingLastBoundary)
+ 		VMIME_TEST(testPrologEpilog)
+ 		VMIME_TEST(testPrologEncoding)
++		VMIME_TEST(testSuccessiveBoundaries)
+ 	VMIME_TEST_LIST_END
+ 
+ 
+@@ -181,5 +182,23 @@ VMIME_TEST_SUITE_BEGIN
+ 		VASSERT_EQ("epilog", "Epilog text", msg->getBody()->getEpilogText());
+ 	}
+ 
++	void testSuccessiveBoundaries()
++	{
++		vmime::string str =
++			"Content-Type: multipart/mixed; boundary=\"MY-BOUNDARY\""
++			"\r\n\r\n"
++			"--MY-BOUNDARY\r\nHEADER1\r\n\r\nBODY1\r\n"
++			"--MY-BOUNDARY\r\n"
++			"--MY-BOUNDARY--\r\n";
++
++		vmime::bodyPart p;
++		p.parse(str);
++
++		VASSERT_EQ("count", 2, p.getBody()->getPartCount());
++
++		VASSERT_EQ("part1-body", "BODY1", extractContents(p.getBody()->getPartAt(0)->getBody()->getContents()));
++		VASSERT_EQ("part2-body", "", extractContents(p.getBody()->getPartAt(1)->getBody()->getContents()));
++	}
++
+ VMIME_TEST_SUITE_END
+ 
+-- 
+1.7.6
+
+
+From 35f5f5c7bcaca1a29e470c0e5d777817d1e89612 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 26 Jun 2011 12:47:25 +0000
+Subject: [PATCH 19/19] Fixed encoding of whitespace. Fixed old test case.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@597 5301114d-f842-0410-bbdd-996ee0417009
+(cherry picked from commit 70a0282a3f96febf973475a298ac95ffaab82c3c)
+
+diff --git a/src/text.cpp b/src/text.cpp
+index 2454456..66c3b35 100644
+--- a/src/text.cpp
++++ b/src/text.cpp
+@@ -320,12 +320,6 @@ void text::createFromString(const string& in, const charset& ch)
+ 					}
+ 					else
+ 					{
+-						if (count)
+-						{
+-							ref <word> w = getWordAt(getWordCount() - 1);
+-							w->getBuffer() += ' ';
+-						}
+-
+ 						appendWord(vmime::create <word>
+ 							(chunk, charset(charsets::US_ASCII)));
+ 
+diff --git a/tests/parser/textTest.cpp b/tests/parser/textTest.cpp
+index 746ac94..43ec836 100644
+--- a/tests/parser/textTest.cpp
++++ b/tests/parser/textTest.cpp
+@@ -53,6 +53,8 @@ VMIME_TEST_SUITE_BEGIN
+ 
+ 		VMIME_TEST(testFoldingAscii)
+ 		VMIME_TEST(testForcedNonEncoding)
++
++		VMIME_TEST(testBugFix20110511)
+ 	VMIME_TEST_LIST_END
+ 
+ 
+@@ -149,7 +151,7 @@ VMIME_TEST_SUITE_BEGIN
+ 		VASSERT_EQ("2.1", 3, t2.getWordCount());
+ 		VASSERT_EQ("2.2", "some ASCII characters and special chars: ", t2.getWordAt(0)->getBuffer());
+ 		VASSERT_EQ("2.3", vmime::charset(vmime::charsets::US_ASCII), t2.getWordAt(0)->getCharset());
+-		VASSERT_EQ("2.4", "\xf1\xf2\xf3\xf4 ", t2.getWordAt(1)->getBuffer());
++		VASSERT_EQ("2.4", "\xf1\xf2\xf3\xf4", t2.getWordAt(1)->getBuffer());
+ 		VASSERT_EQ("2.5", c2, t2.getWordAt(1)->getCharset());
+ 		VASSERT_EQ("2.6", "and then more ASCII chars.", t2.getWordAt(2)->getBuffer());
+ 		VASSERT_EQ("2.7", vmime::charset(vmime::charsets::US_ASCII), t2.getWordAt(2)->getCharset());
+@@ -453,5 +455,43 @@ VMIME_TEST_SUITE_BEGIN
+ 		VASSERT_EQ("received.long", "from User\r\n (Ee9GMqZQ8t7IQwftfAFHd2KyScCYRrFSJ50tKEoXv2bVCG4HcPU80GGWiFabAvG77FekpGgF1h@[127.0.0.1])\r\n by servername.hostname.com with esmtp id 1NGTS9-2C0sqG0; Fri, 4 Dec 2009\r\n 09:23:49 +0100", r.generate(78));
+ 	}
+ 
++	void testBugFix20110511()
++	{
++		/*
++
++		 Using the latest version of vmime (0.9.1), encoding the following string: Jean
++		 Gwenaël Dutourd will result in:
++		 Jean =?utf-8?Q?Gwena=C3=ABl_?= Dutourd
++		 However, decoding this will result in Jean Gwenaël  Dutourd (notice two spaces
++		 between the last 2 words).  The encoder adds a _ after the second word, but
++		 since the last word is not encoded, the space between them is not ignored, and
++		 is decoded into an additional space.
++
++		 See: http://sourceforge.net/projects/vmime/forums/forum/237357/topic/4531365
++
++		*/
++
++		const std::string DECODED_TEXT = "Jean Gwenaël Dutourd";
++		const std::string ENCODED_TEXT = "Jean =?utf-8?Q?Gwena=C3=ABl?= Dutourd";
++
++		// Encode
++		VASSERT_EQ("encode", ENCODED_TEXT,
++			vmime::text::newFromString(DECODED_TEXT, vmime::charset("utf-8"))->generate());
++
++		// Decode
++		vmime::text t;
++		t.parse(ENCODED_TEXT);
++
++		// -- words
++		std::ostringstream oss; oss << t;
++		VASSERT_EQ("decode1",
++			"[text: [[word: charset=us-ascii, buffer=Jean ],"
++			        "[word: charset=utf-8, buffer=Gwenaël],"
++				  "[word: charset=us-ascii, buffer= Dutourd]]]", oss.str());
++
++		// -- getWholeBuffer
++		VASSERT_EQ("decode2", DECODED_TEXT, t.getWholeBuffer());
++	}
++
+ VMIME_TEST_SUITE_END
+ 
+-- 
+1.7.6
 

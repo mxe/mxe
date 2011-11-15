@@ -4,13 +4,13 @@
 # libass
 PKG             := libass
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.11
-$(PKG)_CHECKSUM := 6f69f6c4474c649de4fd7913b050bfd4cf8110cb
+$(PKG)_VERSION  := 0.10.0
+$(PKG)_CHECKSUM := 7a0ea048f687421f3e1314988ca02f04861fc5f0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_WEBSITE  := http://code.google.com/p/libass/
 $(PKG)_URL      := http://libass.googlecode.com/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype fontconfig
+$(PKG)_DEPS     := gcc freetype fontconfig fribidi
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://code.google.com/p/libass/downloads/list?sort=-uploaded' | \

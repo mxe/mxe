@@ -1,0 +1,109 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch taken from:
+http://www.nntpnews.info/threads/20303026-packages-xine-lib-xine-lib.spec-xine-lib-xine-lib-ffmpeg-0.8.patch-%28NEW%29-UTF-8-Q-20-...
+
+diff -urN a/src/combined/ffmpeg/ff_audio_decoder.c b/src/combined/ffmpeg/ff_audio_decoder.c
+--- a/src/combined/ffmpeg/ff_audio_decoder.c	2010-03-23 16:41:49.000000000 +0100
++++ b/src/combined/ffmpeg/ff_audio_decoder.c	2011-07-11 10:48:48.967401526 +0200
+@@ -255,6 +255,7 @@
+       buf->decoder_info[2]);
+ 
+   } else if (!(buf->decoder_flags & BUF_FLAG_SPECIAL)) {
++ AVPacket avpkt;
+ 
+     if( !this->decoder_ok ) {
+       if ( ! this->context || ! this->codec ) {
+@@ -286,11 +287,13 @@
+     if (!this->output_open) {
+       if (!this->audio_bits || !this->audio_sample_rate || !this->audio_channels) {
+         decode_buffer_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
+-        avcodec_decode_audio2 (this->context,
+-                              (int16_t *)this->decode_buffer,
+-                              &decode_buffer_size,
+-                              &this->buf[0],
+-                              this->size);
++ av_init_packet(&avpkt);
++ avpkt.data = (uint8_t *)&this->buf[0];
++ avpkt.size = this->size;
++ avpkt.flags = AV_PKT_FLAG_KEY;
++ avcodec_decode_audio3 (this->context,
++ (int16_t *)this->decode_buffer,
++ &decode_buffer_size, &avpkt);
+ 	this->audio_bits = this->context->bits_per_sample;
+ 	this->audio_sample_rate = this->context->sample_rate;
+ 	this->audio_channels = this->context->channels;
+@@ -311,11 +314,13 @@
+       offset = 0;
+       while (this->size>0) {
+         decode_buffer_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
+-        bytes_consumed = avcodec_decode_audio2 (this->context,
+-                                               (int16_t *)this->decode_buffer,
+-                                               &decode_buffer_size,
+-                                               &this->buf[offset],
+-                                               this->size);
++ av_init_packet(&avpkt);
++ avpkt.data = (uint8_t *)&this->buf[offset];
++ avpkt.size = this->size;
++ avpkt.flags = AV_PKT_FLAG_KEY;
++ bytes_consumed = avcodec_decode_audio3 (this->context,
++ (int16_t *)this->decode_buffer,
++ &decode_buffer_size, &avpkt);
+ 
+         if (bytes_consumed<0) {
+           xprintf (this->stream->xine, XINE_VERBOSITY_DEBUG,
+diff -urN a/src/combined/ffmpeg/ff_video_decoder.c b/src/combined/ffmpeg/ff_video_decoder.c
+--- a/src/combined/ffmpeg/ff_video_decoder.c	2010-03-10 20:07:15.000000000 +0100
++++ b/src/combined/ffmpeg/ff_video_decoder.c	2011-07-11 10:48:48.967401526 +0200
+@@ -1055,12 +1055,16 @@
+     }
+ 
+     /* skip decoding b frames if too late */
+-    this->context->hurry_up = (this->skipframes > 0);
++ this->context->skip_frame = (this->skipframes > 0) ? AVDISCARD_NONREF : AVDISCARD_DEFAULT;
+ 
+     lprintf("avcodec_decode_video: size=%d\n", this->mpeg_parser->buffer_size);
+-    len = avcodec_decode_video (this->context, this->av_frame,
+-                                &got_picture, this->mpeg_parser->chunk_buffer,
+-                                this->mpeg_parser->buffer_size);
++ AVPacket avpkt;
++ av_init_packet(&avpkt);
++ avpkt.data = (uint8_t *)this->mpeg_parser->chunk_buffer;
++ avpkt.size = this->mpeg_parser->buffer_size;
++ avpkt.flags = AV_PKT_FLAG_KEY;
++ len = avcodec_decode_video2 (this->context, this->av_frame,
++ &got_picture, &avpkt);
+     lprintf("avcodec_decode_video: decoded_size=%d, got_picture=%d\n",
+             len, got_picture);
+     len = current - buf->content - offset;
+@@ -1112,7 +1116,7 @@
+ 
+     } else {
+ 
+-      if (this->context->hurry_up) {
++ if (this->context->skip_frame != AVDISCARD_DEFAULT) {
+         /* skipped frame, output a bad frame */
+         img = this->stream->video_out->get_frame (this->stream->video_out,
+                                                   this->bih.biWidth,
+@@ -1304,12 +1308,16 @@
+         got_picture = 0;
+       } else {
+         /* skip decoding b frames if too late */
+-        this->context->hurry_up = (this->skipframes > 0);
++ this->context->skip_frame = (this->skipframes > 0) ? AVDISCARD_NONREF : AVDISCARD_DEFAULT;
+ 
+         lprintf("buffer size: %d\n", this->size);
+-        len = avcodec_decode_video (this->context, this->av_frame,
+-                                    &got_picture, &chunk_buf[offset],
+-                                    this->size);
++ AVPacket avpkt;
++ av_init_packet(&avpkt);
++ avpkt.data = (uint8_t *)&chunk_buf[offset];
++ avpkt.size = this->size;
++ avpkt.flags = AV_PKT_FLAG_KEY;
++ len = avcodec_decode_video2 (this->context, this->av_frame,
++ &got_picture, &avpkt);
+ 
+ #ifdef AVCODEC_HAS_REORDERED_OPAQUE
+         /* reset consumed pts value */

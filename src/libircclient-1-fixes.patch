@@ -1,0 +1,172 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 7e5a98fd8854295cfde1987cb7d077c5876111b2 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Thu, 23 Jun 2011 15:45:49 +1000
+Subject: [PATCH 1/3] The wrong source files are specified in the makefile.
+
+There is one wrapper source file which includes all and
+implements additional functions.
+
+diff --git a/src/Makefile.in b/src/Makefile.in
+index 091c6af..e3b7f81 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -20,7 +20,7 @@ install: lib
+ 	cp ../include/libirc_events.h  @prefix@/include/libirc_events.h 
+ 	cp libirc.a @prefix@/include/lib/libirc.a
+ 
+-$(OBJS): utils.c dcc.c errors.c portable.c sockets.c colors.c
++$(OBJS): libircclient.c
+ 
+ libircclient.a: $(OBJS)
+ 	$(AR) libircclient.a $(OBJS)
+-- 
+1.7.3.4
+
+
+From e7a3c62440a8c89c48914d8d45bb2e3d14b9bbd8 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Thu, 23 Jun 2011 15:47:52 +1000
+Subject: [PATCH 2/3] IPv6 support is broken and is forced to be disabled.
+
+This place is sufficient - IPv6 initialisation will now cause an error.
+
+diff --git a/src/libircclient.c b/src/libircclient.c
+index 5d266c0..1ec11c1 100644
+--- a/src/libircclient.c
++++ b/src/libircclient.c
+@@ -194,7 +194,7 @@ int irc_connect6 (irc_session_t * session,
+ 			const char * username,
+ 			const char * realname)
+ {
+-#if defined (ENABLE_IPV6)
++#if 0
+ 	struct sockaddr_in6 saddr;
+ 	struct addrinfo ainfo, *res = NULL;
+ 	char portStr[32];
+-- 
+1.7.3.4
+
+
+From 78326f1af372da340197c15897b54fdd45652bf3 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Thu, 23 Jun 2011 15:48:33 +1000
+Subject: [PATCH 3/3] Use the proper WIN32 define.
+
+
+diff --git a/include/libircclient.h b/include/libircclient.h
+index c78f3b1..23d1a51 100644
+--- a/include/libircclient.h
++++ b/include/libircclient.h
+@@ -43,7 +43,7 @@
+ #ifndef INCLUDE_LIBIRC_H
+ #define INCLUDE_LIBIRC_H
+ 
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	#include <sys/select.h>	/* fd_set */
+ #else
+ 	#include <winsock2.h>
+diff --git a/src/portable.c b/src/portable.c
+index 8071c13..ab8a57b 100644
+--- a/src/portable.c
++++ b/src/portable.c
+@@ -13,7 +13,7 @@
+  */
+ 
+ 
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	#include "config.h"
+ 	#include <stdio.h>
+ 	#include <stdarg.h>
+@@ -65,7 +65,7 @@
+ 
+ static inline int libirc_mutex_init (port_mutex_t * mutex)
+ {
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	InitializeCriticalSection (mutex);
+ 	return 0;
+ #elif defined (PTHREAD_MUTEX_RECURSIVE)
+@@ -78,13 +78,13 @@ static inline int libirc_mutex_init (port_mutex_t * mutex)
+ 
+ 	return pthread_mutex_init (mutex, 0);
+ 
+-#endif /* defined (WIN32) */
++#endif /* defined (_WIN32) */
+ }
+ 
+ 
+ static inline void libirc_mutex_destroy (port_mutex_t * mutex)
+ {
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	DeleteCriticalSection (mutex);
+ #else
+ 	pthread_mutex_destroy (mutex);
+@@ -94,7 +94,7 @@ static inline void libirc_mutex_destroy (port_mutex_t * mutex)
+ 
+ static inline void libirc_mutex_lock (port_mutex_t * mutex)
+ {
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	EnterCriticalSection (mutex);
+ #else
+ 	pthread_mutex_lock (mutex);
+@@ -104,7 +104,7 @@ static inline void libirc_mutex_lock (port_mutex_t * mutex)
+ 
+ static inline void libirc_mutex_unlock (port_mutex_t * mutex)
+ {
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	LeaveCriticalSection (mutex);
+ #else
+ 	pthread_mutex_unlock (mutex);
+diff --git a/src/sockets.c b/src/sockets.c
+index c2b33f1..e73f62c 100644
+--- a/src/sockets.c
++++ b/src/sockets.c
+@@ -15,7 +15,7 @@
+ /*
+  * The sockets interface was moved out to simplify going OpenSSL integration.
+  */
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	#include <sys/socket.h>
+ 	#include <netdb.h>
+ 	#include <arpa/inet.h>	
+@@ -47,7 +47,7 @@
+ 
+ static int socket_error()
+ {
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	return errno;
+ #else
+ 	return WSAGetLastError();
+@@ -64,7 +64,7 @@ static int socket_create (int domain, int type, socket_t * sock)
+ 
+ static int socket_make_nonblocking (socket_t * sock)
+ {
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	return fcntl (*sock, F_SETFL, fcntl (*sock, F_GETFL,0 ) | O_NONBLOCK) != 0;
+ #else
+ 	unsigned long mode = 0;
+@@ -75,7 +75,7 @@ static int socket_make_nonblocking (socket_t * sock)
+ 
+ static int socket_close (socket_t * sock)
+ {
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	close (*sock);
+ #else
+ 	closesocket (*sock);
+-- 
+1.7.3.4
+

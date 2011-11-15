@@ -2,6 +2,7 @@
 /* See doc/index.html for further information. */
 
 #include <QApplication>
+#include <QtPlugin>
 #include "ui_qt-test.h"
 
 #ifdef  Q_OS_AIX

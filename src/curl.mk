@@ -4,13 +4,13 @@
 # cURL
 PKG             := curl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.21.6
-$(PKG)_CHECKSUM := 049a3aff13d283f6e4ea1f9aa3aa6abc067fd42e
+$(PKG)_VERSION  := 7.22.0
+$(PKG)_CHECKSUM := 8e7b2b0ca933812614ec0eade2f83e77632247d6
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://curl.haxx.se/libcurl/
 $(PKG)_URL      := http://curl.haxx.se/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls libidn
+$(PKG)_DEPS     := gcc gnutls libidn libssh2
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://curl.haxx.se/download/?C=M;O=D' | \
@@ -27,7 +27,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-gnutls \
         --with-libidn \
-        LIBS="-lgcrypt -liconv `$(PREFIX)/$(TARGET)/bin/gpg-error-config --libs`"
+        LIBS="-lgcrypt -liconv `$(PREFIX)/$(TARGET)/bin/gpg-error-config --libs` -lssh2"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
