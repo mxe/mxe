@@ -16,7 +16,7 @@ $(PKG)_DEPS     :=
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.gnu.org/gnu/binutils/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="binutils-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    grep '^2\.[2-9][1-9]' | \
+    grep -v '^2\.1' | \
     head -1
 endef
 
