@@ -76,7 +76,7 @@ index fb01edf..55f9223 100644
  # API version number (libtool)
  #
 -- 
-1.7.7
+1.7.7.3
 
 
 From bf282a05cdbbb538a1cafbd7305cece14f5b1571 Mon Sep 17 00:00:00 2001
@@ -110,7 +110,7 @@ index 0f3e9ec..d71c3ca 100644
  
  		void go(IMAPParser& parser, string& line, string::size_type* currentPos)
 -- 
-1.7.7
+1.7.7.3
 
 
 From 941b10bca8e89ca61eebee1345ee3e5cbebd7530 Mon Sep 17 00:00:00 2001
@@ -122,7 +122,7 @@ git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@578 5301114d-f
 
 SKIPPED
 -- 
-1.7.7
+1.7.7.3
 
 
 From 4a4c3a94db671ff7750b32ebf2c998a914717367 Mon Sep 17 00:00:00 2001
@@ -165,7 +165,7 @@ index 204daae..d9fb7b8 100644
  		if ((resp = readResponse())->getCode() != 250)
  		{
 -- 
-1.7.7
+1.7.7.3
 
 
 From 4ea325c953f0cdc669b932aa4961a434656f3ecf Mon Sep 17 00:00:00 2001
@@ -189,7 +189,7 @@ index 5015552..6552f9e 100644
  				localSend("250 OK\r\n");
  			}
 -- 
-1.7.7
+1.7.7.3
 
 
 From ff207927a5aab002f38af0224133b345ab458144 Mon Sep 17 00:00:00 2001
@@ -278,7 +278,7 @@ index 12c4f74..df2bf85 100644
  
  		vmime::bodyPart p;
 -- 
-1.7.7
+1.7.7.3
 
 
 From 3f5172e47f75f64952adef349bec875416ae9b89 Mon Sep 17 00:00:00 2001
@@ -331,7 +331,7 @@ index b84f376..746ac94 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.7
+1.7.7.3
 
 
 From 4e9eb3191066dec7f17592c2ce099b16e6329941 Mon Sep 17 00:00:00 2001
@@ -356,7 +356,7 @@ index 1c1c1a6..fa08d33 100644
  					else
  						state->lastCharIsSpace = false;
 -- 
-1.7.7
+1.7.7.3
 
 
 From 07ebf241115eba44675223e307d212c772e1cc08 Mon Sep 17 00:00:00 2001
@@ -563,7 +563,7 @@ index df2bf85..b129913 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.7
+1.7.7.3
 
 
 From 22ca7dc23b6bbbc8cc6aedd569ec938ecae96e92 Mon Sep 17 00:00:00 2001
@@ -597,7 +597,7 @@ index 55f9223..177f5b4 100644
  
  # -- getaddrinfo (POSIX)
 -- 
-1.7.7
+1.7.7.3
 
 
 From 9e06cc39d47e2eba8f554b337d472cc995be0d9d Mon Sep 17 00:00:00 2001
@@ -679,7 +679,7 @@ index 8ad71d7..54a09a7 100644
  	// Conversion to hexadecimal for easier debugging
  	static const vmime::string toHex(const vmime::string str)
 -- 
-1.7.7
+1.7.7.3
 
 
 From 418a39a7d33921672bd1c4beb31c8a31bc87d8dd Mon Sep 17 00:00:00 2001
@@ -703,7 +703,7 @@ index 20a0181..bbddb30 100644
   - Georg Sauthoff <gsauthof@techfak.uni-bielefeld.de>
   - Pierre Thierry <nowhere.man@levallois.eu.org> (patches for STL algorithms)
 -- 
-1.7.7
+1.7.7.3
 
 
 From 4008955783ef566b98b16762c7bfa28df26e9198 Mon Sep 17 00:00:00 2001
@@ -740,7 +740,7 @@ index 1ddb3d0..243b1da 100644
  		std::vector <vmime::string> props = e->getAvailableProperties();
  
 -- 
-1.7.7
+1.7.7.3
 
 
 From e80db1ce802a45b71659d16d77ea47368beeabc1 Mon Sep 17 00:00:00 2001
@@ -766,7 +766,7 @@ index 91a7e5c..f59d5ab 100644
  		switch (value[i])
  		{
 -- 
-1.7.7
+1.7.7.3
 
 
 From 58316dddddbfe8a7c582aa52e9abff8ca3a227b6 Mon Sep 17 00:00:00 2001
@@ -906,7 +906,7 @@ index f59d5ab..d757e1b 100644
  #endif // !VMIME_ALWAYS_GENERATE_7BIT_PARAMETER
  
 -- 
-1.7.7
+1.7.7.3
 
 
 From f7ad17cffea462faf8cbe4f785644da0f3ee812a Mon Sep 17 00:00:00 2001
@@ -942,7 +942,7 @@ index e043186..0fda450 100644
  
  	if (newPosition)
 -- 
-1.7.7
+1.7.7.3
 
 
 From eac20f47a33a7fdd617f9fd905b8029621259269 Mon Sep 17 00:00:00 2001
@@ -980,7 +980,7 @@ index 870d59e..3597b3a 100644
  	if (!m_to.isEmpty())
  		msg->getHeader()->To()->setValue(m_to);
 -- 
-1.7.7
+1.7.7.3
 
 
 From 1e5dfa80a63b0a7fe90406ce4a3de1593f2e4045 Mon Sep 17 00:00:00 2001
@@ -1054,7 +1054,7 @@ index 8411daa..9ebadca 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.7
+1.7.7.3
 
 
 From 960f2195516eb776eea7b7e4f92612192edfdcd9 Mon Sep 17 00:00:00 2001
@@ -1078,7 +1078,7 @@ index 177f5b4..37c0ac6 100644
  	vmime_pc_in.write("Cflags: -I${includedir}/ @LIBGNUTLS_CFLAGS@\n")
  	vmime_pc_in.close()
 -- 
-1.7.7
+1.7.7.3
 
 
 From 9f9084b71b4e3c96edc6513020984ef76fe26e0c Mon Sep 17 00:00:00 2001
@@ -1142,7 +1142,7 @@ index b129913..075b8f9 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.7
+1.7.7.3
 
 
 From 318848aa87761214a6f21c1ea1a9776a7bcbf83c Mon Sep 17 00:00:00 2001
@@ -1252,7 +1252,7 @@ index 010c007..af73a05 100644
  	gnutls_credentials_set(*m_gnutlsSession,
  		GNUTLS_CRD_ANON, g_gnutlsGlobal.anonCred);
 -- 
-1.7.7
+1.7.7.3
 
 
 From 70a0282a3f96febf973475a298ac95ffaab82c3c Mon Sep 17 00:00:00 2001
@@ -1346,7 +1346,7 @@ index 746ac94..43ec836 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.7
+1.7.7.3
 
 
 From 7d399583a458abe5cd16ce0974bd4dc11daba9f6 Mon Sep 17 00:00:00 2001
@@ -1497,7 +1497,7 @@ index af73a05..7426a73 100644
  
  
 -- 
-1.7.7
+1.7.7.3
 
 
 From aae321dede5e725140534a08a8b2ee997faa30be Mon Sep 17 00:00:00 2001
@@ -1551,7 +1551,7 @@ index 7426a73..d3f6d49 100644
  
  		gnutls_global_init();
 -- 
-1.7.7
+1.7.7.3
 
 
 From af1e5664afb663fb7d26d468adf675fb1b3f8737 Mon Sep 17 00:00:00 2001
@@ -1584,16 +1584,15 @@ index 01ad3f3..11e884b 100644
  
  AC_SUBST(LIBGNUTLS_CFLAGS)
 -- 
-1.7.7
+1.7.7.3
 
 
-From df003ef728016558f366533a5c79d8382d412895 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 7 Nov 2011 21:07:03 +0100
-Subject: [PATCH 26/27] no extra in gnutls 3
+From 41079b2f188bb4a6d8aea9ec1328653faee3e2c9 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Tue, 15 Nov 2011 11:40:42 +0000
+Subject: [PATCH 26/27] GNU TLS 3 has no 'extra' (thanks to mabrand).
 
-Taken from:
-https://sourceforge.net/tracker/?func=detail&aid=3434631&group_id=69724&atid=525570
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@601 5301114d-f842-0410-bbdd-996ee0417009
 
 diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
 index d3f6d49..cb50acc 100644
@@ -1610,41 +1609,28 @@ index d3f6d49..cb50acc 100644
  #include "vmime/config.hpp"
  
 -- 
-1.7.7
+1.7.7.3
 
 
-From 96fa903697c4cdcc2018c3f4f6af9470fe346087 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 8 Nov 2011 09:54:03 +0100
-Subject: [PATCH 27/27] fix smtps verification failure
+From eafae52d9b8ec9682c229090b6208092b1d1e6f1 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Tue, 15 Nov 2011 11:46:07 +0000
+Subject: [PATCH 27/27] Set Diffie-Hellman prime size (bug SF#3434852).
 
-Fixes problem on gnutls 3. Vmime svn revision 600.
-
-Using smtps in examples/example6.cpp fails with a typical
-mail server:
-
-    vmime::exceptions::tls_exception
-    what = gnutls_handshake() returned code ffffffc1:
-    The Diffie-Hellman prime sent by the server is not acceptable
-    (not long enough).
-
-Setting the expected size of the prime solves the problem.
-
-Taken from:
-https://sourceforge.net/tracker/?func=detail&atid=525570&aid=3434852&group_id=69724
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@602 5301114d-f842-0410-bbdd-996ee0417009
 
 diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
-index cb50acc..6fbc4b4 100644
+index cb50acc..0606808 100644
 --- a/src/net/tls/TLSSession.cpp
 +++ b/src/net/tls/TLSSession.cpp
 @@ -139,6 +139,7 @@ TLSSession::TLSSession(ref <security::cert::certificateVerifier> cv)
  	// Sets some default priority on the ciphers, key exchange methods,
  	// macs and compression methods.
  #if HAVE_GNUTLS_PRIORITY_FUNCS
-+        gnutls_dh_set_prime_bits(*m_gnutlsSession, 128);
++	gnutls_dh_set_prime_bits(*m_gnutlsSession, 128);
  
  	if ((res = gnutls_priority_set_direct
  		(*m_gnutlsSession, "NORMAL:%SSL3_RECORD_VERSION", NULL)) != 0)
 -- 
-1.7.7
+1.7.7.3
 
