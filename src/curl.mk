@@ -29,6 +29,7 @@ define $(PKG)_BUILD
         --with-libidn \
         LIBS="-lgcrypt -liconv `$(PREFIX)/$(TARGET)/bin/gpg-error-config --libs` -lssh2"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(INSTALL) -m755 '$(1)/src/curl.exe' '$(PREFIX)/$(TARGET)/bin/'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
