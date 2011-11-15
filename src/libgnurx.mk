@@ -9,11 +9,11 @@ $(PKG)_CHECKSUM := f1e4af2541645dac82362b618aaa849658cd4988
 $(PKG)_SUBDIR   := mingw-libgnurx-$($(PKG)_VERSION)
 $(PKG)_FILE     := mingw-libgnurx-$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_WEBSITE  := http://sourceforge.net/projects/mingw/files/UserContributed/regex/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/UserContributed/regex/mingw-regex-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/Other/UserContributed/regex/mingw-regex-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/mingw/files/UserContributed/regex/' | \
+    wget -q -O- 'http://sourceforge.net/projects/mingw/files/Other/UserContributed/regex/' | \
     grep 'mingw-regex-' | \
     $(SED) -n 's,.*mingw-regex-\([0-9\.]*\).*,\1,p' | \
     sort | \

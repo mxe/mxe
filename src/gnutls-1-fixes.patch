@@ -3,24 +3,24 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 2f8e6d6727a6140e12b8af09a64cdec05054162e Mon Sep 17 00:00:00 2001
+From d5d9241c7e40cfc191dfc33c94381a3895e57cd5 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
-Date: Wed, 17 Aug 2011 14:01:51 +0200
-Subject: [PATCH] adding missing ws2_32 to Libs.private
+Date: Fri, 28 Oct 2011 09:23:41 +0200
+Subject: [PATCH] add missing static library linking
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index bac5f42..eb4e6df 100644
+index 32170b6..6668a5e 100644
 --- a/lib/gnutls.pc.in
 +++ b/lib/gnutls.pc.in
 @@ -20,6 +20,6 @@ Description: Transport Security Layer implementation for the GNU system
  URL: http://www.gnu.org/software/gnutls/
  Version: @VERSION@
  Libs: -L${libdir} -lgnutls
--Libs.private: @LTLIBGCRYPT@ @LTLIBNETTLE@ @NETTLE_LIBS@ @GNUTLS_ZLIB_LIBS_PRIVATE@
-+Libs.private: @LTLIBGCRYPT@ @LTLIBNETTLE@ @NETTLE_LIBS@ @P11_KIT_LIBS@ @GNUTLS_ZLIB_LIBS_PRIVATE@ -lws2_32
+-Libs.private: @LTLIBNETTLE@
++Libs.private: @LTLIBNETTLE@ -lws2_32
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
 -- 
-1.7.6
+1.7.7
 

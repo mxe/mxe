@@ -4,13 +4,13 @@
 # xine-lib
 PKG             := xine-lib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.19
-$(PKG)_CHECKSUM := 5afcc28c5cf2bdaab99d951960f6587797e1e5a0
+$(PKG)_VERSION  := 1.1.20
+$(PKG)_CHECKSUM := 60ce1cea9bf7a6b7d8c60141593a8ed0c54f9445
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.xine-project.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xine/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc faad2 ffmpeg flac fontconfig freetype libiconv libmng pthreads sdl speex theora vorbis zlib
+$(PKG)_DEPS     := gcc faad2 ffmpeg flac fontconfig freetype graphicsmagick libiconv libmng pthreads sdl speex theora vorbis zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://hg.debian.org/hg/xine-lib/xine-lib/tags' | \
@@ -45,7 +45,6 @@ define $(PKG)_BUILD
         --without-external-a52dec \
         --without-external-libmad \
         --without-external-libmpcdec \
-        --without-imagemagick \
         --with-freetype \
         --with-fontconfig \
         --without-alsa \
@@ -57,7 +56,8 @@ define $(PKG)_BUILD
         --without-external-libdts \
         --without-wavpack \
         CFLAGS='-I$(1)/win32/include' \
-        PTHREAD_LIBS='-lpthread -lws2_32'
+        PTHREAD_LIBS='-lpthread -lws2_32' \
+        LIBS="`$(TARGET)-pkg-config --libs libmng`"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef

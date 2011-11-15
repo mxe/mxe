@@ -28,23 +28,61 @@ Produced with this script:
 # get updates
 #git svn fetch
 #git svn rebase
-#git checkout v0.9.1
-#git checkout -b 0.9.1-fixes
-#git cherry-pick
 
 GITDIR=~/projects/vmime/git/vmime
 
 (
   cd $GITDIR
   echo
-  git format-patch -p --relative=vmime --stdout v0.9.1..0.9.1-fixes
+  git format-patch -p --relative=vmime --stdout ":/Version 0.9.1"..master-fixed
 ) >> src/vmime-1-fixes.patch
 #--------------------------------------------------------------------#
 
-From c6f077e695b75d9ff9a32d1621f6a320c8ce70f1 Mon Sep 17 00:00:00 2001
+From ed4451fd3c86faf9ecc03a59ba9f1ad78417a9f9 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Tue, 16 Nov 2010 13:28:05 +0000
+Subject: [PATCH 01/27] Started version 0.9.2.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@576 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/ChangeLog b/ChangeLog
+index 871d055..8fdcdb0 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,4 +1,12 @@
+ 
++VERSION 0.9.2svn
++================
++
++2010-11-16  Vincent Richard  <vincent@vincent-richard.net>
++
++ * Started version 0.9.2.
++
++
+ VERSION 0.9.1
+ =============
+ 
+diff --git a/SConstruct b/SConstruct
+index fb01edf..55f9223 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -29,7 +29,7 @@ import string
+ # Package version number
+ packageVersionMajor = 0
+ packageVersionMinor = 9
+-packageVersionMicro = 1
++packageVersionMicro = 2
+ 
+ # API version number (libtool)
+ #
+-- 
+1.7.7
+
+
+From bf282a05cdbbb538a1cafbd7305cece14f5b1571 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Tue, 30 Nov 2010 14:57:03 +0000
-Subject: [PATCH 01/19] Initialize and delete object.
+Subject: [PATCH 02/27] Initialize and delete object.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@577 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -72,13 +110,25 @@ index 0f3e9ec..d71c3ca 100644
  
  		void go(IMAPParser& parser, string& line, string::size_type* currentPos)
 -- 
-1.7.6
+1.7.7
 
 
-From 41203315eacf53230dd7bdb0cf2b0d1078ddee39 Mon Sep 17 00:00:00 2001
+From 941b10bca8e89ca61eebee1345ee3e5cbebd7530 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Mon, 6 Dec 2010 11:57:44 +0000
+Subject: [PATCH 03/27] Updated deprecated function.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@578 5301114d-f842-0410-bbdd-996ee0417009
+
+SKIPPED
+-- 
+1.7.7
+
+
+From 4a4c3a94db671ff7750b32ebf2c998a914717367 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Wed, 8 Dec 2010 08:52:54 +0000
-Subject: [PATCH 02/19] No extra space between ':' and '<' in MAIL FROM and
+Subject: [PATCH 04/27] No extra space between ':' and '<' in MAIL FROM and
  RCPT TO. Wait for server response after QUIT and
  before closing connection.
 
@@ -115,13 +165,13 @@ index 204daae..d9fb7b8 100644
  		if ((resp = readResponse())->getCode() != 250)
  		{
 -- 
-1.7.6
+1.7.7
 
 
-From 969b56f4bd61ddb8277c04ac2a1e35e029ec058b Mon Sep 17 00:00:00 2001
+From 4ea325c953f0cdc669b932aa4961a434656f3ecf Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:24:06 +0000
-Subject: [PATCH 03/19] Fixed unit test after bug fix.
+Subject: [PATCH 05/27] Fixed unit test after bug fix.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@580 5301114d-f842-0410-bbdd-996ee0417009
 
@@ -139,13 +189,13 @@ index 5015552..6552f9e 100644
  				localSend("250 OK\r\n");
  			}
 -- 
-1.7.6
+1.7.7
 
 
-From 50743da0712b216533acdc09069f1bfc81f988c6 Mon Sep 17 00:00:00 2001
+From ff207927a5aab002f38af0224133b345ab458144 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Dec 2010 16:54:38 +0000
-Subject: [PATCH 04/19] Fixed boundary parsing (thanks to John van der Kamp,
+Subject: [PATCH 06/27] Fixed boundary parsing (thanks to John van der Kamp,
  Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@581 5301114d-f842-0410-bbdd-996ee0417009
@@ -228,13 +278,13 @@ index 12c4f74..df2bf85 100644
  
  		vmime::bodyPart p;
 -- 
-1.7.6
+1.7.7
 
 
-From b6d2b4765c9472ff333cace13c57c6af0e866ee0 Mon Sep 17 00:00:00 2001
+From 3f5172e47f75f64952adef349bec875416ae9b89 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 21 Jan 2011 15:28:06 +0000
-Subject: [PATCH 05/19] Fixed possible infinite loop (thanks to John van der
+Subject: [PATCH 07/27] Fixed possible infinite loop (thanks to John van der
  Kamp, Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@582 5301114d-f842-0410-bbdd-996ee0417009
@@ -281,13 +331,13 @@ index b84f376..746ac94 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.6
+1.7.7
 
 
-From 022339ab63430d792d0314f51dd7854eabd5736e Mon Sep 17 00:00:00 2001
+From 4e9eb3191066dec7f17592c2ce099b16e6329941 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 28 Jan 2011 12:11:08 +0000
-Subject: [PATCH 06/19] Fixed possible read to invalid memory location (thanks
+Subject: [PATCH 08/27] Fixed possible read to invalid memory location (thanks
  to Alexander Konovalov).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@583 5301114d-f842-0410-bbdd-996ee0417009
@@ -306,18 +356,17 @@ index 1c1c1a6..fa08d33 100644
  					else
  						state->lastCharIsSpace = false;
 -- 
-1.7.6
+1.7.7
 
 
-From 7f1024917b3df6be013e18a2e0f0f1b13f4d112b Mon Sep 17 00:00:00 2001
+From 07ebf241115eba44675223e307d212c772e1cc08 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Wed, 9 Mar 2011 18:03:31 +0000
-Subject: [PATCH 07/19] Fixed bug #3174903. Fixed word parsing when buffer
+Subject: [PATCH 09/27] Fixed bug #3174903. Fixed word parsing when buffer
  does not end with NL. Fixed 'no encoding' when
  forced.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@584 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 07ebf241115eba44675223e307d212c772e1cc08)
 
 diff --git a/src/body.cpp b/src/body.cpp
 index 738d3e7..8596833 100644
@@ -514,20 +563,19 @@ index df2bf85..b129913 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.6
+1.7.7
 
 
-From 1c0648c2a3ee4072869446755c8a7604614752e1 Mon Sep 17 00:00:00 2001
+From 22ca7dc23b6bbbc8cc6aedd569ec938ecae96e92 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 27 Mar 2011 11:26:55 +0000
-Subject: [PATCH 08/19] Allow static linking in mingw-cross-env. Added 'iconv'
+Subject: [PATCH 10/27] Allow static linking in mingw-cross-env. Added 'iconv'
  and uses 'ws2_32' instead of 'winsock32' (#3213487).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@585 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 22ca7dc23b6bbbc8cc6aedd569ec938ecae96e92)
 
 diff --git a/SConstruct b/SConstruct
-index fb01edf..6e8aba2 100644
+index 55f9223..177f5b4 100644
 --- a/SConstruct
 +++ b/SConstruct
 @@ -1089,7 +1089,7 @@ def generateAutotools(target, source, env):
@@ -549,17 +597,16 @@ index fb01edf..6e8aba2 100644
  
  # -- getaddrinfo (POSIX)
 -- 
-1.7.6
+1.7.7
 
 
-From c6c596b10702a98b59978c81c01dc7f4f33157c9 Mon Sep 17 00:00:00 2001
+From 9e06cc39d47e2eba8f554b337d472cc995be0d9d Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Thu, 31 Mar 2011 19:13:03 +0000
-Subject: [PATCH 09/19] Flush stateful data from iconv (thanks to John van der
+Subject: [PATCH 11/27] Flush stateful data from iconv (thanks to John van der
  Kamp, Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@586 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 9e06cc39d47e2eba8f554b337d472cc995be0d9d)
 
 diff --git a/src/charsetConverter.cpp b/src/charsetConverter.cpp
 index 38b9e5e..2135788 100644
@@ -632,16 +679,15 @@ index 8ad71d7..54a09a7 100644
  	// Conversion to hexadecimal for easier debugging
  	static const vmime::string toHex(const vmime::string str)
 -- 
-1.7.6
+1.7.7
 
 
-From dce9b255556d59773bbbdd9027fd1b1bd5627886 Mon Sep 17 00:00:00 2001
+From 418a39a7d33921672bd1c4beb31c8a31bc87d8dd Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 10 Jun 2011 19:39:09 +0000
-Subject: [PATCH 10/19] Requested email change.
+Subject: [PATCH 12/27] Requested email change.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@587 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 418a39a7d33921672bd1c4beb31c8a31bc87d8dd)
 
 diff --git a/AUTHORS b/AUTHORS
 index 20a0181..bbddb30 100644
@@ -657,16 +703,15 @@ index 20a0181..bbddb30 100644
   - Georg Sauthoff <gsauthof@techfak.uni-bielefeld.de>
   - Pierre Thierry <nowhere.man@levallois.eu.org> (patches for STL algorithms)
 -- 
-1.7.6
+1.7.7
 
 
-From 42612622a7c42aac7bef1605d9ba8117aa651789 Mon Sep 17 00:00:00 2001
+From 4008955783ef566b98b16762c7bfa28df26e9198 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Tue, 14 Jun 2011 18:37:54 +0000
-Subject: [PATCH 11/19] Fixed compilation issue following namespace change.
+Subject: [PATCH 13/27] Fixed compilation issue following namespace change.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@588 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 4008955783ef566b98b16762c7bfa28df26e9198)
 
 diff --git a/examples/example7.cpp b/examples/example7.cpp
 index 1ddb3d0..243b1da 100644
@@ -695,17 +740,16 @@ index 1ddb3d0..243b1da 100644
  		std::vector <vmime::string> props = e->getAvailableProperties();
  
 -- 
-1.7.6
+1.7.7
 
 
-From 43346ae2d6c39af2ed16e64cc6d7f89f427a0fee Mon Sep 17 00:00:00 2001
+From e80db1ce802a45b71659d16d77ea47368beeabc1 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 17:51:33 +0000
-Subject: [PATCH 12/19] Fixed parsing of an attachment filename that is
+Subject: [PATCH 14/27] Fixed parsing of an attachment filename that is
  between 66 and 76 characters long (Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@589 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit e80db1ce802a45b71659d16d77ea47368beeabc1)
 
 diff --git a/src/parameter.cpp b/src/parameter.cpp
 index 91a7e5c..f59d5ab 100644
@@ -722,17 +766,16 @@ index 91a7e5c..f59d5ab 100644
  		switch (value[i])
  		{
 -- 
-1.7.6
+1.7.7
 
 
-From 5ef189953965b639a9038da337e104592417c465 Mon Sep 17 00:00:00 2001
+From 58316dddddbfe8a7c582aa52e9abff8ca3a227b6 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 18:08:12 +0000
-Subject: [PATCH 13/19] Correctly generate attachment names which are long and
+Subject: [PATCH 15/27] Correctly generate attachment names which are long and
  have high characters for Outlook Express (Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@590 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 58316dddddbfe8a7c582aa52e9abff8ca3a227b6)
 
 diff --git a/src/parameter.cpp b/src/parameter.cpp
 index f59d5ab..d757e1b 100644
@@ -863,16 +906,15 @@ index f59d5ab..d757e1b 100644
  #endif // !VMIME_ALWAYS_GENERATE_7BIT_PARAMETER
  
 -- 
-1.7.6
+1.7.7
 
 
-From caa3cbc0fe9218d3d494bfed1afed2ee620a2e4e Mon Sep 17 00:00:00 2001
+From f7ad17cffea462faf8cbe4f785644da0f3ee812a Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 18:16:49 +0000
-Subject: [PATCH 14/19] Alias for UTF-7 charset.
+Subject: [PATCH 16/27] Alias for UTF-7 charset.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@591 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit f7ad17cffea462faf8cbe4f785644da0f3ee812a)
 
 diff --git a/src/charset.cpp b/src/charset.cpp
 index e043186..0fda450 100644
@@ -900,18 +942,17 @@ index e043186..0fda450 100644
  
  	if (newPosition)
 -- 
-1.7.6
+1.7.7
 
 
-From 97d992cda306d96a8dda948abb9806ee2c2ce587 Mon Sep 17 00:00:00 2001
+From eac20f47a33a7fdd617f9fd905b8029621259269 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 18:39:35 +0000
-Subject: [PATCH 15/19] Fixed messageBuilder to accept an empty mailbox group
+Subject: [PATCH 17/27] Fixed messageBuilder to accept an empty mailbox group
  in 'To:' field, to allow for undisclosed-recipients
  (Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@592 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit eac20f47a33a7fdd617f9fd905b8029621259269)
 
 diff --git a/src/messageBuilder.cpp b/src/messageBuilder.cpp
 index 870d59e..3597b3a 100644
@@ -939,18 +980,17 @@ index 870d59e..3597b3a 100644
  	if (!m_to.isEmpty())
  		msg->getHeader()->To()->setValue(m_to);
 -- 
-1.7.6
+1.7.7
 
 
-From db98569ef427f9f3fac9a9dcc25ab8b6f2b3bd91 Mon Sep 17 00:00:00 2001
+From 1e5dfa80a63b0a7fe90406ce4a3de1593f2e4045 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 19 Jun 2011 18:49:55 +0000
-Subject: [PATCH 16/19] Added support for mailboxes that specify an (encoded)
+Subject: [PATCH 18/27] Added support for mailboxes that specify an (encoded)
  full name with an empty email address, set by a <>
  marker (Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@593 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 1e5dfa80a63b0a7fe90406ce4a3de1593f2e4045)
 
 diff --git a/src/mailbox.cpp b/src/mailbox.cpp
 index 5cb0139..fea7479 100644
@@ -1014,19 +1054,18 @@ index 8411daa..9ebadca 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.6
+1.7.7
 
 
-From aa5ab140e90a6222e5f03b337711444be845fbd0 Mon Sep 17 00:00:00 2001
+From 960f2195516eb776eea7b7e4f92612192edfdcd9 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Fri, 24 Jun 2011 15:46:23 +0000
-Subject: [PATCH 17/19] Added missing libs in pkg-config file.
+Subject: [PATCH 19/27] Added missing libs in pkg-config file.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@594 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 960f2195516eb776eea7b7e4f92612192edfdcd9)
 
 diff --git a/SConstruct b/SConstruct
-index 6e8aba2..4c0cb0e 100644
+index 177f5b4..37c0ac6 100644
 --- a/SConstruct
 +++ b/SConstruct
 @@ -1089,7 +1089,7 @@ def generateAutotools(target, source, env):
@@ -1039,17 +1078,16 @@ index 6e8aba2..4c0cb0e 100644
  	vmime_pc_in.write("Cflags: -I${includedir}/ @LIBGNUTLS_CFLAGS@\n")
  	vmime_pc_in.close()
 -- 
-1.7.6
+1.7.7
 
 
-From bf98b31b36ba2228d4f1c25cd3f7680d47cc8910 Mon Sep 17 00:00:00 2001
+From 9f9084b71b4e3c96edc6513020984ef76fe26e0c Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sat, 25 Jun 2011 17:07:53 +0000
-Subject: [PATCH 18/19] Fixed parsing of empty body parts (thanks to John van
+Subject: [PATCH 20/27] Fixed parsing of empty body parts (thanks to John van
  der Kamp, from Zarafa).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@595 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 9f9084b71b4e3c96edc6513020984ef76fe26e0c)
 
 diff --git a/src/body.cpp b/src/body.cpp
 index 8596833..9d7d57f 100644
@@ -1104,16 +1142,125 @@ index b129913..075b8f9 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.6
+1.7.7
 
 
-From 35f5f5c7bcaca1a29e470c0e5d777817d1e89612 Mon Sep 17 00:00:00 2001
+From 318848aa87761214a6f21c1ea1a9776a7bcbf83c Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 26 Jun 2011 08:19:11 +0000
+Subject: [PATCH 21/27] Use gnutls_priority_set_direct() instead of GNUTLS
+ deprecated functions.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@596 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/SConstruct b/SConstruct
+index 37c0ac6..01ad3f3 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -816,6 +816,7 @@ else:
+ config_hpp.write('// -- TLS/SSL support\n')
+ if env['with_tls'] == 'yes':
+ 	config_hpp.write('#define VMIME_HAVE_TLS_SUPPORT 1\n')
++	config_hpp.write('#define HAVE_GNUTLS_PRIORITY_FUNCS 1\n')
+ else:
+ 	config_hpp.write('#define VMIME_HAVE_TLS_SUPPORT 0\n')
+ 
+@@ -1626,11 +1627,42 @@ if test "x$conf_tls" = "xyes"; then
+ 	else
+ 		AC_MSG_ERROR(can't find an usable version of GNU TLS library)
+ 	fi
++
++	# -- check for gnutls_priority_set_direct() function
++	if test "x$have_gnutls" = "xyes"; then
++		AC_MSG_CHECKING(for gnutls_priority_set_direct)
++
++		LIBS_save="$LIBS"
++		LIBS="$LIBS $LIBGNUTLS_LIBS"
++		CPPFLAGS_save="$CPPFLAGS"
++		CPPFLAGS="$CPPFLAGS $LIBGNUTLS_CFLAGS"
++
++		AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <gnutls/gnutls.h>],
++		                                [gnutls_session s; gnutls_priority_set_direct(s, NULL, NULL);])],
++		               [have_gnutls_priority_funcs=yes],
++		               [have_gnutls_priority_funcs=no])
++
++		CPPFLAGS="$CPPFLAGS_save"
++		LIBS="$LIBS_save"
++
++		AC_MSG_RESULT([$have_gnutls_priority_funcs])
++
++		if test "x$have_gnutls_priority_funcs" = "xyes"; then
++			AM_CONDITIONAL(HAVE_GNUTLS_PRIORITY_FUNCS, true)
++			HAVE_GNUTLS_PRIORITY_FUNCS=1
++		else
++			AM_CONDITIONAL(HAVE_GNUTLS_PRIORITY_FUNCS, false)
++			HAVE_GNUTLS_PRIORITY_FUNCS=0
++		fi
++	fi
+ else
+ 	AM_CONDITIONAL(VMIME_HAVE_TLS_SUPPORT, false)
+ 	VMIME_HAVE_TLS_SUPPORT=0
+ fi
+ 
++AC_SUBST(LIBGNUTLS_CFLAGS)
++AC_SUBST(LIBGNUTLS_LIBS)
++
+ # ** platform handlers
+ 
+ VMIME_BUILTIN_PLATFORMS=''
+@@ -1919,6 +1951,7 @@ typedef unsigned ${VMIME_TYPE_INT32} vmime_uint32;
+ #define VMIME_HAVE_SASL_SUPPORT ${VMIME_HAVE_SASL_SUPPORT}
+ // -- TLS support
+ #define VMIME_HAVE_TLS_SUPPORT ${VMIME_HAVE_TLS_SUPPORT}
++#define HAVE_GNUTLS_PRIORITY_FUNCS ${HAVE_GNUTLS_PRIORITY_FUNCS}
+ // -- Messaging support
+ #define VMIME_HAVE_MESSAGING_FEATURES ${VMIME_HAVE_MESSAGING_FEATURES}
+ """)
+diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
+index 010c007..af73a05 100644
+--- a/src/net/tls/TLSSession.cpp
++++ b/src/net/tls/TLSSession.cpp
+@@ -123,6 +123,21 @@ TLSSession::TLSSession(ref <security::cert::certificateVerifier> cv)
+ 
+ 	// Sets some default priority on the ciphers, key exchange methods,
+ 	// macs and compression methods.
++#if HAVE_GNUTLS_PRIORITY_FUNCS
++
++	if ((res = gnutls_priority_set_direct
++		(*m_gnutlsSession, "NORMAL:%SSL3_RECORD_VERSION", NULL)) != 0)
++	{
++		if ((res = gnutls_priority_set_direct
++			(*m_gnutlsSession, "NORMAL", NULL)) != 0)
++		{
++			throwTLSException
++				("gnutls_priority_set_direct", res);
++		}
++	}
++
++#else  // !HAVE_GNUTLS_PRIORITY_FUNCS
++
+ 	gnutls_set_default_priority(*m_gnutlsSession);
+ 
+ 	// Sets the priority on the certificate types supported by gnutls.
+@@ -197,6 +212,8 @@ TLSSession::TLSSession(ref <security::cert::certificateVerifier> cv)
+ 
+ 	gnutls_compression_set_priority(*m_gnutlsSession, compressionPriority);
+ 
++#endif // !HAVE_GNUTLS_PRIORITY_FUNCS
++
+ 	// Initialize credentials
+ 	gnutls_credentials_set(*m_gnutlsSession,
+ 		GNUTLS_CRD_ANON, g_gnutlsGlobal.anonCred);
+-- 
+1.7.7
+
+
+From 70a0282a3f96febf973475a298ac95ffaab82c3c Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 26 Jun 2011 12:47:25 +0000
-Subject: [PATCH 19/19] Fixed encoding of whitespace. Fixed old test case.
+Subject: [PATCH 22/27] Fixed encoding of whitespace. Fixed old test case.
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@597 5301114d-f842-0410-bbdd-996ee0417009
-(cherry picked from commit 70a0282a3f96febf973475a298ac95ffaab82c3c)
 
 diff --git a/src/text.cpp b/src/text.cpp
 index 2454456..66c3b35 100644
@@ -1199,5 +1346,305 @@ index 746ac94..43ec836 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.6
+1.7.7
+
+
+From 7d399583a458abe5cd16ce0974bd4dc11daba9f6 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sat, 20 Aug 2011 06:35:06 +0000
+Subject: [PATCH 23/27] Use gnutls_strerror() for reporting errors.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@598 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
+index af73a05..7426a73 100644
+--- a/src/net/tls/TLSSession.cpp
++++ b/src/net/tls/TLSSession.cpp
+@@ -41,6 +41,9 @@
+ //#define GNUTLS_DEBUG 1
+ 
+ 
++#include <sstream>
++#include <iomanip>
++
+ #if VMIME_DEBUG && GNUTLS_DEBUG
+ 	#include <iostream>
+ #endif // VMIME_DEBUG && GNUTLS_DEBUG
+@@ -257,119 +260,14 @@ ref <security::cert::certificateVerifier> TLSSession::getCertificateVerifier()
+ 
+ void TLSSession::throwTLSException(const string& fname, const int code)
+ {
+-	string msg = fname + "() returned ";
+-
+-#define ERROR(x) \
+-	case x: msg += #x; break;
+-
+-	switch (code)
+-	{
+-	ERROR(GNUTLS_E_SUCCESS)
+-	ERROR(GNUTLS_E_UNKNOWN_COMPRESSION_ALGORITHM)
+-	ERROR(GNUTLS_E_UNKNOWN_CIPHER_TYPE)
+-	ERROR(GNUTLS_E_LARGE_PACKET)
+-	ERROR(GNUTLS_E_UNSUPPORTED_VERSION_PACKET)
+-	ERROR(GNUTLS_E_UNEXPECTED_PACKET_LENGTH)
+-	ERROR(GNUTLS_E_INVALID_SESSION)
+-	ERROR(GNUTLS_E_FATAL_ALERT_RECEIVED)
+-	ERROR(GNUTLS_E_UNEXPECTED_PACKET)
+-	ERROR(GNUTLS_E_WARNING_ALERT_RECEIVED)
+-	ERROR(GNUTLS_E_ERROR_IN_FINISHED_PACKET)
+-	ERROR(GNUTLS_E_UNEXPECTED_HANDSHAKE_PACKET)
+-	ERROR(GNUTLS_E_UNKNOWN_CIPHER_SUITE)
+-	ERROR(GNUTLS_E_UNWANTED_ALGORITHM)
+-	ERROR(GNUTLS_E_MPI_SCAN_FAILED)
+-	ERROR(GNUTLS_E_DECRYPTION_FAILED)
+-	ERROR(GNUTLS_E_MEMORY_ERROR)
+-	ERROR(GNUTLS_E_DECOMPRESSION_FAILED)
+-	ERROR(GNUTLS_E_COMPRESSION_FAILED)
+-	ERROR(GNUTLS_E_AGAIN)
+-	ERROR(GNUTLS_E_EXPIRED)
+-	ERROR(GNUTLS_E_DB_ERROR)
+-	ERROR(GNUTLS_E_SRP_PWD_ERROR)
+-	ERROR(GNUTLS_E_INSUFFICIENT_CREDENTIALS)
+-	ERROR(GNUTLS_E_HASH_FAILED)
+-	ERROR(GNUTLS_E_BASE64_DECODING_ERROR)
+-	ERROR(GNUTLS_E_MPI_PRINT_FAILED)
+-	ERROR(GNUTLS_E_REHANDSHAKE)
+-	ERROR(GNUTLS_E_GOT_APPLICATION_DATA)
+-	ERROR(GNUTLS_E_RECORD_LIMIT_REACHED)
+-	ERROR(GNUTLS_E_ENCRYPTION_FAILED)
+-	ERROR(GNUTLS_E_PK_ENCRYPTION_FAILED)
+-	ERROR(GNUTLS_E_PK_DECRYPTION_FAILED)
+-	ERROR(GNUTLS_E_PK_SIGN_FAILED)
+-	ERROR(GNUTLS_E_X509_UNSUPPORTED_CRITICAL_EXTENSION)
+-	ERROR(GNUTLS_E_KEY_USAGE_VIOLATION)
+-	ERROR(GNUTLS_E_NO_CERTIFICATE_FOUND)
+-	ERROR(GNUTLS_E_INVALID_REQUEST)
+-	ERROR(GNUTLS_E_SHORT_MEMORY_BUFFER)
+-	ERROR(GNUTLS_E_INTERRUPTED)
+-	ERROR(GNUTLS_E_PUSH_ERROR)
+-	ERROR(GNUTLS_E_PULL_ERROR)
+-	ERROR(GNUTLS_E_RECEIVED_ILLEGAL_PARAMETER)
+-	ERROR(GNUTLS_E_REQUESTED_DATA_NOT_AVAILABLE)
+-	ERROR(GNUTLS_E_PKCS1_WRONG_PAD)
+-	ERROR(GNUTLS_E_RECEIVED_ILLEGAL_EXTENSION)
+-	ERROR(GNUTLS_E_INTERNAL_ERROR)
+-	ERROR(GNUTLS_E_DH_PRIME_UNACCEPTABLE)
+-	ERROR(GNUTLS_E_FILE_ERROR)
+-	ERROR(GNUTLS_E_TOO_MANY_EMPTY_PACKETS)
+-	ERROR(GNUTLS_E_UNKNOWN_PK_ALGORITHM)
+-	ERROR(GNUTLS_E_INIT_LIBEXTRA)
+-	ERROR(GNUTLS_E_LIBRARY_VERSION_MISMATCH)
+-	ERROR(GNUTLS_E_NO_TEMPORARY_RSA_PARAMS)
+-	ERROR(GNUTLS_E_LZO_INIT_FAILED)
+-	ERROR(GNUTLS_E_NO_COMPRESSION_ALGORITHMS)
+-	ERROR(GNUTLS_E_NO_CIPHER_SUITES)
+-	ERROR(GNUTLS_E_OPENPGP_GETKEY_FAILED)
+-	ERROR(GNUTLS_E_PK_SIG_VERIFY_FAILED)
+-	ERROR(GNUTLS_E_ILLEGAL_SRP_USERNAME)
+-	ERROR(GNUTLS_E_SRP_PWD_PARSING_ERROR)
+-	ERROR(GNUTLS_E_NO_TEMPORARY_DH_PARAMS)
+-	ERROR(GNUTLS_E_ASN1_ELEMENT_NOT_FOUND)
+-	ERROR(GNUTLS_E_ASN1_IDENTIFIER_NOT_FOUND)
+-	ERROR(GNUTLS_E_ASN1_DER_ERROR)
+-	ERROR(GNUTLS_E_ASN1_VALUE_NOT_FOUND)
+-	ERROR(GNUTLS_E_ASN1_GENERIC_ERROR)
+-	ERROR(GNUTLS_E_ASN1_VALUE_NOT_VALID)
+-	ERROR(GNUTLS_E_ASN1_TAG_ERROR)
+-	ERROR(GNUTLS_E_ASN1_TAG_IMPLICIT)
+-	ERROR(GNUTLS_E_ASN1_TYPE_ANY_ERROR)
+-	ERROR(GNUTLS_E_ASN1_SYNTAX_ERROR)
+-	ERROR(GNUTLS_E_ASN1_DER_OVERFLOW)
+-	//ERROR(GNUTLS_E_OPENPGP_TRUSTDB_VERSION_UNSUPPORTED)
+-	ERROR(GNUTLS_E_OPENPGP_UID_REVOKED)
+-	ERROR(GNUTLS_E_CERTIFICATE_ERROR)
+-	//ERROR(GNUTLS_E_X509_CERTIFICATE_ERROR)
+-	ERROR(GNUTLS_E_CERTIFICATE_KEY_MISMATCH)
+-	ERROR(GNUTLS_E_UNSUPPORTED_CERTIFICATE_TYPE)
+-	ERROR(GNUTLS_E_X509_UNKNOWN_SAN)
+-	ERROR(GNUTLS_E_OPENPGP_FINGERPRINT_UNSUPPORTED)
+-	ERROR(GNUTLS_E_X509_UNSUPPORTED_ATTRIBUTE)
+-	ERROR(GNUTLS_E_UNKNOWN_HASH_ALGORITHM)
+-	ERROR(GNUTLS_E_UNKNOWN_PKCS_CONTENT_TYPE)
+-	ERROR(GNUTLS_E_UNKNOWN_PKCS_BAG_TYPE)
+-	ERROR(GNUTLS_E_INVALID_PASSWORD)
+-	ERROR(GNUTLS_E_MAC_VERIFY_FAILED)
+-	ERROR(GNUTLS_E_CONSTRAINT_ERROR)
+-	ERROR(GNUTLS_E_BASE64_ENCODING_ERROR)
+-	ERROR(GNUTLS_E_INCOMPATIBLE_GCRYPT_LIBRARY)
+-	//ERROR(GNUTLS_E_INCOMPATIBLE_CRYPTO_LIBRARY)
+-	ERROR(GNUTLS_E_INCOMPATIBLE_LIBTASN1_LIBRARY)
+-	ERROR(GNUTLS_E_OPENPGP_KEYRING_ERROR)
+-	ERROR(GNUTLS_E_X509_UNSUPPORTED_OID)
+-	//ERROR(GNUTLS_E_RANDOM_FAILED)
+-	ERROR(GNUTLS_E_UNIMPLEMENTED_FEATURE)
+-
+-	default:
+-
+-		msg += "unknown error";
+-		break;
+-	}
++	std::ostringstream msg;
+ 
+-#undef ERROR
++	msg << fname + "() returned code ";
++	msg << std::hex << code;
++	msg << ": ";
++	msg << gnutls_strerror(code);
+ 
+-	throw exceptions::tls_exception(msg);
++	throw exceptions::tls_exception(msg.str());
+ }
+ 
+ 
+-- 
+1.7.7
+
+
+From aae321dede5e725140534a08a8b2ee997faa30be Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 21 Aug 2011 08:55:46 +0000
+Subject: [PATCH 24/27] Removed dependency on gcrypt for gnutls version >=
+ 2.12.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@599 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
+index 7426a73..d3f6d49 100644
+--- a/src/net/tls/TLSSession.cpp
++++ b/src/net/tls/TLSSession.cpp
+@@ -26,9 +26,17 @@
+ 
+ #include "vmime/config.hpp"
+ 
++// Dependency on gcrypt is not needed since GNU TLS version 2.12.
++// See here: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=638651
++#if GNUTLS_VERSION_NUMBER <= 0x020b00
++#	define VMIME_GNUTLS_NEEDS_GCRYPT  1
++#endif
++
+ #if VMIME_HAVE_PTHREAD
+ #	include <pthread.h>
+-#	include <gcrypt.h>
++#	if VMIME_GNUTLS_NEEDS_GCRYPT
++#		include <gcrypt.h>
++#	endif
+ #	include <errno.h>
+ #endif // VMIME_HAVE_PTHREAD
+ 
+@@ -49,7 +57,7 @@
+ #endif // VMIME_DEBUG && GNUTLS_DEBUG
+ 
+ 
+-#if VMIME_HAVE_PTHREAD && defined(GCRY_THREAD_OPTION_PTHREAD_IMPL)
++#if VMIME_HAVE_PTHREAD && VMIME_GNUTLS_NEEDS_GCRYPT && defined(GCRY_THREAD_OPTION_PTHREAD_IMPL)
+ extern "C"
+ {
+ 	GCRY_THREAD_OPTION_PTHREAD_IMPL;
+@@ -70,7 +78,9 @@ struct TLSGlobal
+ 	TLSGlobal()
+ 	{
+ #if VMIME_HAVE_PTHREAD && defined(GCRY_THREAD_OPTION_PTHREAD_IMPL)
++	#if VMIME_GNUTLS_NEEDS_GCRYPT
+ 		gcry_control(GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
++	#endif // VMIME_GNUTLS_NEEDS_GCRYPT
+ #endif // VMIME_HAVE_PTHREAD && defined(GCRY_THREAD_OPTION_PTHREAD_IMPL
+ 
+ 		gnutls_global_init();
+-- 
+1.7.7
+
+
+From af1e5664afb663fb7d26d468adf675fb1b3f8737 Mon Sep 17 00:00:00 2001
+From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
+Date: Sun, 21 Aug 2011 09:04:46 +0000
+Subject: [PATCH 25/27] Fixed HAVE_GNUTLS_PRIORITY_FUNCS never defined when
+ configured with no TLS support.
+
+git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@600 5301114d-f842-0410-bbdd-996ee0417009
+
+diff --git a/SConstruct b/SConstruct
+index 01ad3f3..11e884b 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -1654,10 +1654,16 @@ if test "x$conf_tls" = "xyes"; then
+ 			AM_CONDITIONAL(HAVE_GNUTLS_PRIORITY_FUNCS, false)
+ 			HAVE_GNUTLS_PRIORITY_FUNCS=0
+ 		fi
++	else
++		AM_CONDITIONAL(HAVE_GNUTLS_PRIORITY_FUNCS, false)
++		HAVE_GNUTLS_PRIORITY_FUNCS=0
+ 	fi
+ else
+ 	AM_CONDITIONAL(VMIME_HAVE_TLS_SUPPORT, false)
+ 	VMIME_HAVE_TLS_SUPPORT=0
++
++	AM_CONDITIONAL(HAVE_GNUTLS_PRIORITY_FUNCS, false)
++	HAVE_GNUTLS_PRIORITY_FUNCS=0
+ fi
+ 
+ AC_SUBST(LIBGNUTLS_CFLAGS)
+-- 
+1.7.7
+
+
+From df003ef728016558f366533a5c79d8382d412895 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 7 Nov 2011 21:07:03 +0100
+Subject: [PATCH 26/27] no extra in gnutls 3
+
+Taken from:
+https://sourceforge.net/tracker/?func=detail&aid=3434631&group_id=69724&atid=525570
+
+diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
+index d3f6d49..cb50acc 100644
+--- a/src/net/tls/TLSSession.cpp
++++ b/src/net/tls/TLSSession.cpp
+@@ -22,7 +22,9 @@
+ //
+ 
+ #include <gnutls/gnutls.h>
++#if GNUTLS_VERSION_NUMBER < 0x030000
+ #include <gnutls/extra.h>
++#endif
+ 
+ #include "vmime/config.hpp"
+ 
+-- 
+1.7.7
+
+
+From 96fa903697c4cdcc2018c3f4f6af9470fe346087 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 8 Nov 2011 09:54:03 +0100
+Subject: [PATCH 27/27] fix smtps verification failure
+
+Fixes problem on gnutls 3. Vmime svn revision 600.
+
+Using smtps in examples/example6.cpp fails with a typical
+mail server:
+
+    vmime::exceptions::tls_exception
+    what = gnutls_handshake() returned code ffffffc1:
+    The Diffie-Hellman prime sent by the server is not acceptable
+    (not long enough).
+
+Setting the expected size of the prime solves the problem.
+
+Taken from:
+https://sourceforge.net/tracker/?func=detail&atid=525570&aid=3434852&group_id=69724
+
+diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
+index cb50acc..6fbc4b4 100644
+--- a/src/net/tls/TLSSession.cpp
++++ b/src/net/tls/TLSSession.cpp
+@@ -139,6 +139,7 @@ TLSSession::TLSSession(ref <security::cert::certificateVerifier> cv)
+ 	// Sets some default priority on the ciphers, key exchange methods,
+ 	// macs and compression methods.
+ #if HAVE_GNUTLS_PRIORITY_FUNCS
++        gnutls_dh_set_prime_bits(*m_gnutlsSession, 128);
+ 
+ 	if ((res = gnutls_priority_set_direct
+ 		(*m_gnutlsSession, "NORMAL:%SSL3_RECORD_VERSION", NULL)) != 0)
+-- 
+1.7.7
 

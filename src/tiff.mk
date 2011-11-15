@@ -20,6 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./autogen.sh
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
