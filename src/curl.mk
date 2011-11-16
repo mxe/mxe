@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-gnutls \
         --with-libidn \
+        --enable-sspi \
         LIBS="-lgcrypt -liconv `$(PREFIX)/$(TARGET)/bin/gpg-error-config --libs` -lssh2"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
