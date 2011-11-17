@@ -8,7 +8,7 @@ Also contains mingw-cross-env specific fixes.
 From 292b5d892f8858a6e9a6f0c94e08c4b15e547e87 Mon Sep 17 00:00:00 2001
 From: Volker Grabsch <vog@notjusthosting.com>
 Date: Fri, 28 Oct 2011 13:48:04 +0200
-Subject: [PATCH] static linking for mingw-cross-env
+Subject: [PATCH 1/2] static linking for mingw-cross-env
 
 ---
  include/curl/curlbuild.h.in |    3 +++
@@ -28,6 +28,34 @@ index fe348f4..c428273 100644
  /* Configure process defines this to 1 when it finds out that system  */
  /* header file ws2tcpip.h must be included by the external interface. */
  #undef CURL_PULL_WS2TCPIP_H
+-- 
+1.7.7.3
+
+
+From b24211a59e4ce52a08c0caff24b9456f64c55c3f Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 17 Nov 2011 09:12:20 +0100
+Subject: [PATCH 2/2] fix for curl wanting .crt for insecure URLs
+
+Taken from:
+http://curl.haxx.se/mail/lib-2011-11/0181.html
+---
+ src/tool_doswin.c |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
+
+diff --git a/src/tool_doswin.c b/src/tool_doswin.c
+index b23b50a..ef3899e 100644
+--- a/src/tool_doswin.c
++++ b/src/tool_doswin.c
+@@ -285,8 +285,6 @@ CURLcode FindWin32CACert(struct Configurable *config, const char *bundle_file)
+       if(!config->cacert)
+         result = CURLE_OUT_OF_MEMORY;
+     }
+-    else
+-      result = CURLE_SSL_CACERT;
+ 
+     Curl_safefree(buf);
+   }
 -- 
 1.7.7.3
 
