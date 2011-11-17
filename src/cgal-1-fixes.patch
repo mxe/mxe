@@ -6,7 +6,7 @@ Contains ad hoc patches for cross building.
 From 89e55b180994db937e019678a2abccd0c6f73f7e Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 21 Oct 2011 23:08:52 +0200
-Subject: [PATCH] adjustments for mingw-cross-env
+Subject: [PATCH 1/2] adjustments for mingw-cross-env
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -212,5 +212,43 @@ index f1a7201..23a53c9 100644
   
    if (os == ON_ORIENTED_BOUNDARY && is_infinite(fh)) {
 -- 
-1.7.7
+1.7.7.3
+
+
+From 5a7fc183023450d520993a36402a8783d709b683 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 18 Nov 2011 00:08:25 +0100
+Subject: [PATCH 2/2] prevent Qt's moc from choking on BOOST_JOIN
+
+
+diff --git a/include/CGAL/Qt/GraphicsItem.h b/include/CGAL/Qt/GraphicsItem.h
+index 7348d02..807e200 100644
+--- a/include/CGAL/Qt/GraphicsItem.h
++++ b/include/CGAL/Qt/GraphicsItem.h
+@@ -24,7 +24,9 @@
+ #include <CGAL/auto_link/Qt4.h>
+ #include <QObject>
+ #include <QGraphicsItem>
++#ifndef Q_MOC_RUN
+ #include <CGAL/Object.h>
++#endif
+ 
+ 
+ 
+diff --git a/include/CGAL/Qt/GraphicsViewInput.h b/include/CGAL/Qt/GraphicsViewInput.h
+index 6c912cc..a5c5da8 100644
+--- a/include/CGAL/Qt/GraphicsViewInput.h
++++ b/include/CGAL/Qt/GraphicsViewInput.h
+@@ -22,7 +22,9 @@
+ #define CGAL_QT_GRAPHICS_VIEW_INPUT_H
+ 
+ #include <CGAL/auto_link/Qt4.h>
++#ifndef Q_MOC_RUN
+ #include <CGAL/Object.h>
++#endif
+ #include <QObject>
+ 
+ namespace CGAL {
+-- 
+1.7.7.3
 

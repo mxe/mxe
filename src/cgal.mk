@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
 $(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.cgal.org/
 $(PKG)_URL      := https://gforge.inria.fr/frs/download.php/28500/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost gmp mpfr
+$(PKG)_DEPS     := gcc boost gmp mpfr qt
 
 define $(PKG)_UPDATE
     wget -q -O- 'https://gforge.inria.fr/frs/?group_id=52' | \
