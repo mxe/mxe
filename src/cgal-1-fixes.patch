@@ -215,11 +215,13 @@ index f1a7201..23a53c9 100644
 1.7.7.3
 
 
-From 5a7fc183023450d520993a36402a8783d709b683 Mon Sep 17 00:00:00 2001
+From aae0b2e8745754a1d90e080d6afb15f177b0705b Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 18 Nov 2011 00:08:25 +0100
 Subject: [PATCH 2/2] prevent Qt's moc from choking on BOOST_JOIN
 
+Taken from:
+https://lists-sop.inria.fr/sympa/arc/cgal-discuss/2011-11/msg00087.html
 
 diff --git a/include/CGAL/Qt/GraphicsItem.h b/include/CGAL/Qt/GraphicsItem.h
 index 7348d02..807e200 100644
