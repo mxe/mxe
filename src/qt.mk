@@ -30,7 +30,7 @@ define $(PKG)_BUILD
         -opensource \
         -confirm-license \
         -fast \
-        -xplatform unsupported/win32-g++-cross \
+        -xplatform unsupported/win32-g++-4.6-cross \
         -force-pkg-config \
         -release \
         -exceptions \
