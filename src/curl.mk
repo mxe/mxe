@@ -21,6 +21,7 @@ endef
 define $(PKG)_BUILD
     # wine confuses the cross-compiling detection, so set it explicitly
     $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
+    cd '$(1)' && ./buildconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
@@ -28,7 +29,7 @@ define $(PKG)_BUILD
         --with-gnutls \
         --with-libidn \
         --enable-sspi \
-        LIBS="-lgcrypt -liconv `$(PREFIX)/$(TARGET)/bin/gpg-error-config --libs` -lssh2"
+        LIBS="`$(TARGET)-pkg-config --libs libssh2`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \

@@ -8,7 +8,7 @@ Also contains mingw-cross-env specific fixes.
 From 017b42a86ec4cac8a4cd71cc607d0a4d201ff4fd Mon Sep 17 00:00:00 2001
 From: Volker Grabsch <vog@notjusthosting.com>
 Date: Fri, 28 Oct 2011 13:48:04 +0200
-Subject: [PATCH] static linking for mingw-cross-env
+Subject: [PATCH 1/2] static linking for mingw-cross-env
 
 ---
  include/curl/curlbuild.h.in |    3 +++
@@ -28,6 +28,250 @@ index fe348f4..c428273 100644
  /* Configure process defines this to 1 when it finds out that system  */
  /* header file ws2tcpip.h must be included by the external interface. */
  #undef CURL_PULL_WS2TCPIP_H
+-- 
+1.7.7.3
+
+
+From 1ce66d38f2696a25aeac411beaf9e291c8775fe5 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Tue, 15 Nov 2011 11:52:32 +0200
+Subject: [PATCH 2/2] Add support for using nettle instead of gcrypt as gnutls
+ backend (cherry picked from commit
+ 64f328c787ab763cc994eadd6b82f32490d37ebb)
+
+---
+ configure.ac         |   29 +++++++++++++++++++++--------
+ lib/curl_ntlm_core.c |   36 +++++++++++++++++++++++++++++++++++-
+ lib/curl_ntlm_msgs.c |   14 ++++++++++++++
+ lib/gtls.c           |    4 ++++
+ lib/md5.c            |   26 ++++++++++++++++++++++++++
+ 5 files changed, 100 insertions(+), 9 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 64ee1b7..2ba6625 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1799,17 +1799,30 @@ if test "$OPENSSL_ENABLED" != "1"; then
+ fi dnl OPENSSL != 1
+ 
+ dnl ---
+-dnl If GnuTLS is enabled, we MUST verify that it uses libgcrypt since
+-dnl curl code relies on that but recent GnuTLS versions can in fact build
+-dnl with different crypto libraries which curl right now cannot handle
++dnl Check which crypto backend GnuTLS uses
+ dnl ---
+ 
+ if test "$GNUTLS_ENABLED" = "1"; then
+-  AC_CHECK_LIB(gcrypt,
+-               gcry_control, ,
+-    [
+-      AC_MSG_ERROR([need GnuTLS built with gcrypt to function with GnuTLS])
+-    ])
++  USE_GNUTLS_NETTLE=
++  # First check if we can detect either crypto library via transitive linking
++  AC_CHECK_LIB(gnutls, nettle_MD5Init, [ USE_GNUTLS_NETTLE=1 ])
++  if test "$USE_GNUTLS_NETTLE" = ""; then
++    AC_CHECK_LIB(gnutls, gcry_control, [ USE_GNUTLS_NETTLE=0 ])
++  fi
++  # If not, try linking directly to both of them to see if they are available
++  if test "$USE_GNUTLS_NETTLE" = ""; then
++    AC_CHECK_LIB(nettle, nettle_MD5Init, [ USE_GNUTLS_NETTLE=1 ])
++  fi
++  if test "$USE_GNUTLS_NETTLE" = ""; then
++    AC_CHECK_LIB(gcrypt, gcry_control, [ USE_GNUTLS_NETTLE=0 ])
++  fi
++  if test "$USE_GNUTLS_NETTLE" = ""; then
++    AC_MSG_ERROR([GnuTLS found, but neither gcrypt nor nettle found])
++  fi
++  if test "$USE_GNUTLS_NETTLE" = "1"; then
++    AC_DEFINE(USE_GNUTLS_NETTLE, 1, [if GnuTLS uses nettle as crypto backend])
++    AC_SUBST(USE_GNUTLS_NETTLE, [1])
++  fi
+ fi
+ 
+ dnl ---
+diff --git a/lib/curl_ntlm_core.c b/lib/curl_ntlm_core.c
+index 0be16b4..39952d2 100644
+--- a/lib/curl_ntlm_core.c
++++ b/lib/curl_ntlm_core.c
+@@ -63,6 +63,11 @@
+ #    define DESKEY(x) &x
+ #  endif
+ 
++#elif defined(USE_GNUTLS_NETTLE)
++
++#  include <nettle/des.h>
++#  include <nettle/md4.h>
++
+ #elif defined(USE_GNUTLS)
+ 
+ #  include <gcrypt.h>
+@@ -133,7 +138,17 @@ static void extend_key_56_to_64(const unsigned char *key_56, char *key)
+   key[7] = (unsigned char) ((key_56[6] << 1) & 0xFF);
+ }
+ 
+-#if defined(USE_GNUTLS)
++#if defined(USE_GNUTLS_NETTLE)
++
++static void setup_des_key(const unsigned char *key_56,
++                          struct des_ctx *des)
++{
++  char key[8];
++  extend_key_56_to_64(key_56, key);
++  des_set_key(des, key);
++}
++
++#elif defined(USE_GNUTLS)
+ 
+ /*
+  * Turns a 56 bit key into the 64 bit, odd parity key and sets the key.
+@@ -233,6 +248,14 @@ void Curl_ntlm_core_lm_resp(const unsigned char *keys,
+   setup_des_key(keys + 14, DESKEY(ks));
+   DES_ecb_encrypt((DES_cblock*) plaintext, (DES_cblock*) (results + 16),
+                   DESKEY(ks), DES_ENCRYPT);
++#elif defined(USE_GNUTLS_NETTLE)
++  struct des_ctx des;
++  setup_des_key(keys, &des);
++  des_encrypt(&des, 8, results, plaintext);
++  setup_des_key(keys + 7, &des);
++  des_encrypt(&des, 8, results + 8, plaintext);
++  setup_des_key(keys + 14, &des);
++  des_encrypt(&des, 8, results + 16, plaintext);
+ #elif defined(USE_GNUTLS)
+   gcry_cipher_hd_t des;
+ 
+@@ -295,6 +318,12 @@ void Curl_ntlm_core_mk_lm_hash(struct SessionHandle *data,
+     setup_des_key(pw + 7, DESKEY(ks));
+     DES_ecb_encrypt((DES_cblock *)magic, (DES_cblock *)(lmbuffer + 8),
+                     DESKEY(ks), DES_ENCRYPT);
++#elif defined(USE_GNUTLS_NETTLE)
++    struct des_ctx des;
++    setup_des_key(pw, &des);
++    des_encrypt(&des, 8, lmbuffer, magic);
++    setup_des_key(pw + 7, &des);
++    des_encrypt(&des, 8, lmbuffer + 8, magic);
+ #elif defined(USE_GNUTLS)
+     gcry_cipher_hd_t des;
+ 
+@@ -357,6 +386,11 @@ CURLcode Curl_ntlm_core_mk_nt_hash(struct SessionHandle *data,
+     MD4_Init(&MD4pw);
+     MD4_Update(&MD4pw, pw, 2 * len);
+     MD4_Final(ntbuffer, &MD4pw);
++#elif defined(USE_GNUTLS_NETTLE)
++    struct md4_ctx MD4pw;
++    md4_init(&MD4pw);
++    md4_update(&MD4pw, 2 * len, pw);
++    md4_digest(&MD4pw, MD4_DIGEST_SIZE, ntbuffer);
+ #elif defined(USE_GNUTLS)
+     gcry_md_hd_t MD4pw;
+     gcry_md_open(&MD4pw, GCRY_MD_MD4, 0);
+diff --git a/lib/curl_ntlm_msgs.c b/lib/curl_ntlm_msgs.c
+index bfd3e28..712c4b4 100644
+--- a/lib/curl_ntlm_msgs.c
++++ b/lib/curl_ntlm_msgs.c
+@@ -54,6 +54,13 @@
+ #  endif
+ #  include "ssluse.h"
+ 
++#elif defined(USE_GNUTLS_NETTLE)
++
++#  include <nettle/md5.h>
++#  include <gnutls/gnutls.h>
++#  include <gnutls/crypto.h>
++#  define MD5_DIGEST_LENGTH 16
++
+ #elif defined(USE_GNUTLS)
+ 
+ #  include <gcrypt.h>
+@@ -714,6 +721,9 @@ CURLcode Curl_ntlm_create_type3_message(struct SessionHandle *data,
+     MD5_CTX MD5pw;
+     Curl_ossl_seed(data); /* Initiate the seed if not already done */
+     RAND_bytes(entropy, 8);
++#elif defined(USE_GNUTLS_NETTLE)
++    struct md5_ctx MD5pw;
++    gnutls_rnd(GNUTLS_RND_RANDOM, entropy, 8);
+ #elif defined(USE_GNUTLS)
+     gcry_md_hd_t MD5pw;
+     Curl_gtls_seed(data); /* Initiate the seed if not already done */
+@@ -739,6 +749,10 @@ CURLcode Curl_ntlm_create_type3_message(struct SessionHandle *data,
+     MD5_Init(&MD5pw);
+     MD5_Update(&MD5pw, tmp, 16);
+     MD5_Final(md5sum, &MD5pw);
++#elif defined(USE_GNUTLS_NETTLE)
++    md5_init(&MD5pw);
++    md5_update(&MD5pw, 16, tmp);
++    md5_digest(&MD5pw, 16, md5sum);
+ #elif defined(USE_GNUTLS)
+     gcry_md_open(&MD5pw, GCRY_MD_MD5, 0);
+     gcry_md_write(MD5pw, tmp, MD5_DIGEST_LENGTH);
+diff --git a/lib/gtls.c b/lib/gtls.c
+index ed79313..a98a7e8 100644
+--- a/lib/gtls.c
++++ b/lib/gtls.c
+@@ -34,7 +34,9 @@
+ 
+ #include <gnutls/gnutls.h>
+ #include <gnutls/x509.h>
++#ifndef USE_GNUTLS_NETTLE
+ #include <gcrypt.h>
++#endif
+ 
+ #ifdef HAVE_SYS_SOCKET_H
+ #include <sys/socket.h>
+@@ -1032,7 +1034,9 @@ int Curl_gtls_seed(struct SessionHandle *data)
+   static bool ssl_seeded = FALSE;
+ 
+   /* Quickly add a bit of entropy */
++#ifndef USE_GNUTLS_NETTLE
+   gcry_fast_random_poll();
++#endif
+ 
+   if(!ssl_seeded || data->set.str[STRING_SSL_RANDOM_FILE] ||
+      data->set.str[STRING_SSL_EGDSOCKET]) {
+diff --git a/lib/md5.c b/lib/md5.c
+index f26e027..cf8e053 100644
+--- a/lib/md5.c
++++ b/lib/md5.c
+@@ -27,6 +27,30 @@
+ #include "curl_md5.h"
+ #include "curl_hmac.h"
+ 
++#ifdef USE_GNUTLS_NETTLE
++
++#include <nettle/md5.h>
++
++typedef struct md5_ctx MD5_CTX;
++
++static void MD5_Init(MD5_CTX * ctx)
++{
++  md5_init(ctx);
++}
++
++static void MD5_Update(MD5_CTX * ctx,
++                       const unsigned char * input,
++                       unsigned int inputLen)
++{
++  md5_update(ctx, inputLen, input);
++}
++
++static void MD5_Final(unsigned char digest[16], MD5_CTX * ctx)
++{
++  md5_digest(ctx, 16, digest);
++}
++#else
++
+ #ifdef USE_GNUTLS
+ 
+ #include <gcrypt.h>
+@@ -369,6 +393,8 @@ static void Decode (UINT4 *output,
+ 
+ #endif /* USE_GNUTLS */
+ 
++#endif /* USE_GNUTLS_NETTLE */
++
+ const HMAC_params Curl_HMAC_MD5[] = {
+   {
+     (HMAC_hinit_func) MD5_Init,           /* Hash initialization function. */
 -- 
 1.7.7.3
 
