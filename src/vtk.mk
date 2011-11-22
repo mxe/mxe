@@ -33,6 +33,9 @@ define $(PKG)_BUILD
     # only the newly created CompileTools target need to be built
     $(MAKE) -C '$(1)/native_build' -j '$(JOBS)' VERBOSE=1 CompileTools
         
+    # DirectX is detected on Mac OSX but requires a DX10 header - dxgi.h
+    rm '$(1)/CMake/FindDirectX.cmake'
+    
     # now for the cross compilation
     mkdir '$(1)/cross_build'
     cd '$(1)/cross_build' && cmake \
