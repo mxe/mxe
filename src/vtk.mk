@@ -23,7 +23,12 @@ define $(PKG)_BUILD
 
     # first we need a native build to create the compile tools
     mkdir '$(1)/native_build'
-    cd '$(1)/native_build' && cmake -DCMAKE_BUILD_TYPE='Release' ..
+    cd '$(1)/native_build' && cmake \
+        -DCMAKE_BUILD_TYPE='Release' \
+        -DBUILD_TESTING=FALSE \
+        -DOPENGL_INCLUDE_DIR='$(1)/Utilities/ParseOGLExt/headers' \
+        -DVTK_USE_RENDERING=FALSE \
+        ..
     
     # only the newly created CompileTools target need to be built
     $(MAKE) -C '$(1)/native_build' -j '$(JOBS)' VERBOSE=1 CompileTools
