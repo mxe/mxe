@@ -25,6 +25,7 @@ define $(PKG)_BUILD
     echo '/* DEACTIVATED */' > '$(1)/gl/gai_strerror.c'
     $(SED) -i 's/^\(SUBDIRS.*\) tests/\1/;' '$(1)/Makefile.in'
     $(SED) -i 's/^\(SUBDIRS.*\) doc/\1/;' '$(1)/Makefile.in'
+    $(SED) -i 's/ crywrap//;' '$(1)/src/Makefile.in'
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
@@ -36,9 +37,11 @@ define $(PKG)_BUILD
         --with-included-libtasn1 \
         --with-included-libcfg \
         --without-p11-kit \
+        --disable-silent-rules \
+        CPPFLAGS='-DWINVER=0x0501' \
         LIBS='-lz -lws2_32' \
         ac_cv_prog_AR='$(TARGET)-ar'
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
