@@ -41,7 +41,7 @@ define $(PKG)_BUILD
         CPPFLAGS='-DWINVER=0x0501' \
         LIBS='-lz -lws2_32' \
         ac_cv_prog_AR='$(TARGET)-ar'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
