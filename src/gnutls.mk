@@ -10,7 +10,7 @@ $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
 $(PKG)_URL      := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib nettle
+$(PKG)_DEPS     := gcc nettle zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
@@ -22,11 +22,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    echo '/* DEACTIVATED */' > '$(1)/gl/gai_strerror.c'
-    $(SED) -i 's/^\(SUBDIRS.*\) tests/\1/;' '$(1)/Makefile.in'
-    $(SED) -i 's/^\(SUBDIRS.*\) doc/\1/;' '$(1)/Makefile.in'
-    $(SED) -i 's/ crywrap//;' '$(1)/src/Makefile.in'
-    $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.in'
+    $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.am'
+    cd '$(1)' && autoconf
+    cd '$(1)' && automake
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --enable-static \
@@ -39,7 +37,7 @@ define $(PKG)_BUILD
         --without-p11-kit \
         --disable-silent-rules \
         CPPFLAGS='-DWINVER=0x0501' \
-        LIBS='-lz -lws2_32' \
+        LIBS='-lws2_32' \
         ac_cv_prog_AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
