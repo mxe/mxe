@@ -3,7 +3,7 @@
 
 # llvm
 PKG             := llvm
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 2.9
 $(PKG)_VERSION  := 2.8
 $(PKG)_CHECKSUM := 6d49fe039d28e8664de25491c775cb2c599e30c1
 $(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION)
@@ -13,8 +13,10 @@ $(PKG)_URL      := http://llvm.org/releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package llvm.' >&2;
-    echo $($(PKG)_VERSION)
+    wget -q -O- 'http://llvm.org/releases/download.html' | \
+    grep 'Download LLVM' | \
+    $(SED) -n 's,.*\([0-9]\.[0-9]\).*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
