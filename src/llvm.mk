@@ -23,6 +23,9 @@ define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DLIBTYPE=STATIC
+        -DLIBTYPE=STATIC \
+        -DLLVM_TARGETS_TO_BUILD="X86;" \
+        -DLLVM_BUILD_TOOLS=OFF
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+    ln -sf '$(PREFIX)/$(TARGET)/bin/llvm-config' '$(PREFIX)/bin/$(TARGET)-llvm-config'
 endef
