@@ -8,7 +8,7 @@ Also contains mingw-cross-env specific fixes.
 From 017b42a86ec4cac8a4cd71cc607d0a4d201ff4fd Mon Sep 17 00:00:00 2001
 From: Volker Grabsch <vog@notjusthosting.com>
 Date: Fri, 28 Oct 2011 13:48:04 +0200
-Subject: [PATCH 1/4] static linking for mingw-cross-env
+Subject: [PATCH 1/5] static linking for mingw-cross-env
 
 ---
  include/curl/curlbuild.h.in |    3 +++
@@ -35,7 +35,7 @@ index fe348f4..c428273 100644
 From 1ce66d38f2696a25aeac411beaf9e291c8775fe5 Mon Sep 17 00:00:00 2001
 From: Martin Storsjo <martin@martin.st>
 Date: Tue, 15 Nov 2011 11:52:32 +0200
-Subject: [PATCH 2/4] Add support for using nettle instead of gcrypt as gnutls
+Subject: [PATCH 2/5] Add support for using nettle instead of gcrypt as gnutls
  backend (cherry picked from commit
  64f328c787ab763cc994eadd6b82f32490d37ebb)
 
@@ -279,7 +279,7 @@ index f26e027..cf8e053 100644
 From 380fb5054be1ccd85a80220fafbfcb33e1010f05 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 22 Nov 2011 22:48:15 +0100
-Subject: [PATCH 3/4] gnutls: only translate winsock errors for old versions
+Subject: [PATCH 3/5] gnutls: only translate winsock errors for old versions
 
 Bugfix: https handshake fails using gnutls 3 on windows
 http://sourceforge.net/tracker/index.php?func=detail&aid=3441084&group_id=976&atid=100976
@@ -362,7 +362,7 @@ index a98a7e8..c64c8c4 100644
 From 53b8a80e2e1d3a9a51ed461210a5244abdb0edfb Mon Sep 17 00:00:00 2001
 From: Yang Tse <yangsita@gmail.com>
 Date: Thu, 24 Nov 2011 12:11:52 +0100
-Subject: [PATCH 4/4] Fix unreleased regression when using windows gnutls
+Subject: [PATCH 4/5] Fix unreleased regression when using windows gnutls
  versions older than 2.8 (cherry picked from commit
  78feaff9d800efb5d1f97f8653721718a6cf00c8)
 
@@ -435,6 +435,41 @@ index c64c8c4..a2e8d99 100644
    if(ret < 0)
      gnutls_transport_set_global_errno(gtls_mapped_sockerrno());
  #endif
+-- 
+1.7.7.3
+
+
+From 8cd4aa2718f67e50a72bb34c9d8ede803c86b287 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 25 Nov 2011 23:00:16 +0100
+Subject: [PATCH 5/5] configure: add support for pkg-config detection of
+ libidn (cherry picked from commit
+ 874855b743bd7e9bbbaebe2834dd281d2b2cea80)
+
+---
+ configure.ac |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 2ba6625..52158f1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2377,6 +2377,15 @@ case "$LIBIDN" in
+        fi
+ 
+        if test "x$idn" != "xyes"; then
++         dnl check with pkg-config
++         PKG_CHECK_MODULES(LIBIDN_PC, libidn >= 0.0.0, [idn=yes], [idn=no])
++         if test "x$idn" = "xyes"; then
++            LIBS="$LIBS $LIBIDN_PC_LIBS"
++            CPPFLAGS="$CPPFLAGS $LIBIDN_PC_CFLAGS"
++         fi
++       fi
++
++       if test "x$idn" != "xyes"; then
+           dnl check with default paths
+           idn="yes"
+           AC_CHECK_LIB(idn, idna_to_ascii_lz, ,
 -- 
 1.7.7.3
 
