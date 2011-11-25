@@ -29,7 +29,7 @@ define $(PKG)_BUILD
         --with-gnutls \
         --with-libidn \
         --enable-sspi \
-        LIBS="`$(TARGET)-pkg-config --libs libssh2`"
+        LIBS="`$(TARGET)-pkg-config --libs libidn libssh2`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \
