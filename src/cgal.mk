@@ -28,7 +28,7 @@ define $(PKG)_BUILD
         -DCGAL_INSTALL_BIN_DIR:STRING="bin" \
         -DBOOST_LIB_DIAGNOSTIC_DEFINITIONS:STRING="-DBOOST_LIB_DIAGNOSTIC" \
         -DWITH_CGAL_Qt3:BOOL="0" \
-        -DCMAKE_TOOLCHAIN_FILE=$(PREFIX)/$(TARGET)/share/cmake/mingw-cross-env-conf.cmake \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DBOOST_COMPILER=_win32 \
         -DBOOST_THREAD_USE_LIB=1 \
         -DBOOST_USE_STATIC_LIBS=1 \
@@ -37,7 +37,7 @@ define $(PKG)_BUILD
     cd '$(1)/examples/AABB_tree' && cmake \
         -DBOOST_LIB_DIAGNOSTIC_DEFINITIONS:STRING="-DBOOST_LIB_DIAGNOSTIC" \
         -DWITH_CGAL_Qt3:BOOL="0" \
-        -DCMAKE_TOOLCHAIN_FILE=$(PREFIX)/$(TARGET)/share/cmake/mingw-cross-env-conf.cmake \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DBOOST_COMPILER=_win32 \
         -DBOOST_THREAD_USE_LIB=1 \
         -DBOOST_USE_STATIC_LIBS=1 \

@@ -21,7 +21,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE=$(PREFIX)/$(TARGET)/share/cmake/mingw-cross-env-conf.cmake \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         .
     $(MAKE) -C '$(1)/SRC' -j '$(JOBS)' install
