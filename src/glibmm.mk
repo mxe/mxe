@@ -20,11 +20,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # cross build
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build='$(BUILD)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         CXX='$(TARGET)-c++' \

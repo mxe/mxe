@@ -21,10 +21,9 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/pcre.h.in'
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/pcreposix.h'
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build='$(BUILD)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-utf8 \

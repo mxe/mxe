@@ -31,8 +31,6 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' clean
 
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     # fix hard-coded gnutls dependencies
     $(SED) -i "s/-lgnutls/`'$(TARGET)-pkg-config' --libs-only-l gnutls`/g;" '$(1)/configure'
 
@@ -42,6 +40,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ac_cv_func_malloc_0_nonnull=yes ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
+        --build='$(BUILD)' \
         --enable-gnutls \
         CPPFLAGS='-DWITH_NTLM'
 

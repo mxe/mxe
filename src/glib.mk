@@ -53,10 +53,9 @@ define $(PKG)_BUILD
     $(INSTALL) -m755 '$(1).native/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
 
     # cross build
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build='$(BUILD)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-threads=win32 \
