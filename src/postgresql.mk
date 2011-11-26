@@ -46,7 +46,7 @@ define $(PKG)_BUILD
         --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null \
-        LIBS="-lsecur32 `'i686-pc-mingw32-pkg-config' openssl --libs`"
+        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl --libs`"
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/port             -j '$(JOBS)'         haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install haslibarule= shlib=
