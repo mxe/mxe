@@ -15,6 +15,7 @@ $(PKG)_DEPS     := gcc libgpg_error
 define $(PKG)_UPDATE
     wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgcrypt/' | \
     $(SED) -n 's,.*libgcrypt-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    grep -v '^1\.4\.' | \
     tail -1
 endef
 
