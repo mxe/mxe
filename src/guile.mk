@@ -25,7 +25,7 @@ define $(PKG)_BUILD
     # which would fail because we tell Guile not to use Pthreads.
     cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
         --host='$(TARGET)' \
-        --build="`sh ./config.guess`" \
+        --build='$(BUILD)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --without-threads \
