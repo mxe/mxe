@@ -18,9 +18,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && sh autogen.sh
-    cd '$(1)' && ./configure \
+    cd '$(1)' && $(SHELL) ./autogen.sh \
         --host='$(TARGET)' \
+        --build='$(BUILD)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-x
