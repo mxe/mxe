@@ -1,0 +1,28 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
+PKG             := agg
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.5
+$(PKG)_CHECKSUM := 08f23da64da40b90184a0414369f450115cdb328
+$(PKG)_SUBDIR   := agg-$($(PKG)_VERSION)
+$(PKG)_FILE     := agg-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://www.antigrain.com
+$(PKG)_URL      := http://www.antigrain.com/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://www.antigrain.com/download/index.html' | \
+    $(SED) -n 's,.*<A href="http://www.antigrain.com/agg-\([0-9.]*\).tar.gz".*,\1,p' | \
+    head -1
+endef
+
+define $(PKG)_BUILD
+    cd '$(1)' && sh autogen.sh
+    cd '$(1)' && ./configure \
+        --host='$(TARGET)' \
+        --disable-shared \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --without-x
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+endef
