@@ -29,14 +29,11 @@ define $(PKG)_BUILD
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-mpfr)
     mv '$(1)/$(gcc-mpfr_SUBDIR)' '$(1)/mpfr'
 
-    # install config.guess for general use
-    $(INSTALL) -m755 '$(1)/config.guess' '$(PREFIX)/bin'
-    $(INSTALL) -m755 '$(1)/config.sub' '$(PREFIX)/bin'
-
     # build GCC and support libraries
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
         --target='$(TARGET)' \
+        --build='$(BUILD)' \
         --prefix='$(PREFIX)' \
         --libdir='$(PREFIX)/lib' \
         --enable-languages='c,c++,objc,fortran' \

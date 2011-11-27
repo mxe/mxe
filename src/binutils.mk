@@ -21,8 +21,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # install config.guess for general use
+    $(INSTALL) -d '$(PREFIX)/bin'
+    $(INSTALL) -m755 '$(1)/config.guess' '$(PREFIX)/bin/'
+    $(INSTALL) -m755 '$(1)/config.sub' '$(PREFIX)/bin/'
+
+    # Cannot use BUILD which was defined before config.guess existed.
     cd '$(1)' && ./configure \
         --target='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)' \
         --with-gcc \
         --with-gnu-ld \
