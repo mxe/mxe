@@ -3,17 +3,17 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From ed3371ed8a13f169cfd1920ecc794b30bb69cc0b Mon Sep 17 00:00:00 2001
+From 987d02305fd8187bd10bfd292db38f7da705a7f3 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Wed, 29 Sep 2010 00:52:59 +0200
-Subject: [PATCH 1/5] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 1/4] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/pango/pango-utils.c b/pango/pango-utils.c
-index 100dbc7..f60be42 100644
+index 44ec353..72e13f1 100644
 --- a/pango/pango-utils.c
 +++ b/pango/pango-utils.c
-@@ -657,12 +657,12 @@ pango_config_key_get (const char *key)
+@@ -658,12 +658,12 @@ pango_config_key_get (const char *key)
  
  #ifdef G_OS_WIN32
  
@@ -29,20 +29,20 @@ index 100dbc7..f60be42 100644
  	 LPVOID    lpvReserved)
  {
 -- 
-1.7.1
+1.7.7.3
 
 
-From b33f70af495cdaddab9ddccd79aef777e005bb85 Mon Sep 17 00:00:00 2001
+From f0c5d358e54fd9d69133eeff972fdb05592789f3 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Wed, 29 Sep 2010 00:55:07 +0200
-Subject: [PATCH 2/5] static, not shared
+Subject: [PATCH 2/4] static, not shared
 
 
 diff --git a/configure b/configure
-index 352c9c4..a78ace5 100755
+index fb173ce..beb3290 100755
 --- a/configure
 +++ b/configure
-@@ -5942,9 +5942,9 @@ if test "${enable_static+set}" = set; then :
+@@ -5832,9 +5832,9 @@ if test "${enable_static+set}" = set; then :
    enableval=$enable_static; p=${PACKAGE-default}
      case $enableval in
      yes) enable_static=yes ;;
@@ -54,7 +54,7 @@ index 352c9c4..a78ace5 100755
        # Look at the argument we got.  We use all the common list separators.
        lt_save_ifs="$IFS"; IFS="${IFS}$PATH_SEPARATOR,"
        for pkg in $enableval; do
-@@ -5957,7 +5957,7 @@ if test "${enable_static+set}" = set; then :
+@@ -5847,7 +5847,7 @@ if test "${enable_static+set}" = set; then :
        ;;
      esac
  else
@@ -63,7 +63,7 @@ index 352c9c4..a78ace5 100755
  fi
  
  
-@@ -5971,15 +5971,15 @@ fi
+@@ -5861,15 +5861,15 @@ fi
  
  if test "$pango_os_win32" = "yes"; then
    if test x$enable_static = xyes -o x$enable_static = x; then
@@ -85,7 +85,7 @@ index 352c9c4..a78ace5 100755
  fi
  
  case `pwd` in
-@@ -8969,7 +8969,7 @@ fi
+@@ -8968,7 +8968,7 @@ func_stripname_cnf ()
  if test "${enable_shared+set}" = set; then :
    enableval=$enable_shared; p=${PACKAGE-default}
      case $enableval in
@@ -94,7 +94,7 @@ index 352c9c4..a78ace5 100755
      no) enable_shared=no ;;
      *)
        enable_shared=no
-@@ -8978,14 +8978,14 @@ if test "${enable_shared+set}" = set; then :
+@@ -8977,14 +8977,14 @@ if test "${enable_shared+set}" = set; then :
        for pkg in $enableval; do
  	IFS="$lt_save_ifs"
  	if test "X$pkg" = "X$p"; then
@@ -111,7 +111,7 @@ index 352c9c4..a78ace5 100755
  fi
  
  
-@@ -12572,7 +12572,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+@@ -12848,7 +12848,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
    # are all built from PIC.
    case $host_os in
    aix3*)
@@ -120,7 +120,7 @@ index 352c9c4..a78ace5 100755
      if test -n "$RANLIB"; then
        archive_cmds="$archive_cmds~\$RANLIB \$lib"
        postinstall_cmds='$RANLIB $lib'
-@@ -12581,7 +12581,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+@@ -12857,7 +12857,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
  
    aix[4-9]*)
      if test "$host_cpu" != ia64 && test "$aix_use_runtimelinking" = no ; then
@@ -130,20 +130,20 @@ index 352c9c4..a78ace5 100755
      ;;
    esac
 -- 
-1.7.1
+1.7.7.3
 
 
-From 4601f723ef49c010656ef800ce705cd8677833d4 Mon Sep 17 00:00:00 2001
+From 08292532296e3a0f135f6bcd683851d2f41836c6 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Wed, 29 Sep 2010 00:57:12 +0200
-Subject: [PATCH 3/5] no pango-querymodules
+Subject: [PATCH 3/4] no pango-querymodules
 
 
 diff --git a/modules/Makefile.in b/modules/Makefile.in
-index 0d48e08..df71e02 100644
+index 49813f7..afc29c5 100644
 --- a/modules/Makefile.in
 +++ b/modules/Makefile.in
-@@ -643,7 +643,7 @@ uninstall-am: uninstall-local
+@@ -647,7 +647,7 @@ uninstall-am: uninstall-local
  
  @CROSS_COMPILING_FALSE@all-local: pango.modules
  
@@ -153,45 +153,13 @@ index 0d48e08..df71e02 100644
  	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/pango \&\& 	\
  	  $(top_builddir)/pango/pango-querymodules$(EXEEXT) 		\
 -- 
-1.7.1
+1.7.7.3
 
 
-From 53bd7d3d3a83e40eb7d02568b560840ceadd7c0a Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Wed, 29 Sep 2010 00:58:13 +0200
-Subject: [PATCH 4/5] wine workaround s,^install-data-local:.*,install-data-local:,
-
-
-diff --git a/configure b/configure
-index a78ace5..92b1334 100755
---- a/configure
-+++ b/configure
-@@ -694,7 +694,7 @@ ac_default_prefix=/usr/local
- ac_clean_files=
- ac_config_libobj_dir=.
- LIBOBJS=
--cross_compiling=no
-+cross_compiling=yes
- subdirs=
- MFLAGS=
- MAKEFLAGS=
-@@ -3873,7 +3873,7 @@ $as_echo "$ac_try_echo"; } >&5
-   ac_status=$?
-   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-   test $ac_status = 0; }; }; then
--    cross_compiling=no
-+    cross_compiling=yes
-   else
-     if test "$cross_compiling" = maybe; then
- 	cross_compiling=yes
--- 
-1.7.1
-
-
-From ccd472e0aee0109932e261eb1f7d9d24bbf1870c Mon Sep 17 00:00:00 2001
+From c646ee7869c20a1e093f63ec8de8e83e7ca88b27 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Wed, 29 Sep 2010 00:50:08 +0200
-Subject: [PATCH 5/5] add missing lib to pango.pc for static linking
+Subject: [PATCH 4/4] add missing lib to pango.pc for static linking
 
 
 diff --git a/pango.pc.in b/pango.pc.in
@@ -206,5 +174,5 @@ index 5cc3ef8..745b8f0 100644
 +Libs: -L${libdir} -lpango-@PANGO_API_VERSION@ @PKGCONFIG_MATH_LIBS@ -lusp10
  Cflags: -I${includedir}/pango-1.0
 -- 
-1.7.1
+1.7.7.3
 
