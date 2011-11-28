@@ -23,7 +23,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-compat24 \
@@ -71,7 +71,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/$(wxwidgets_SUBDIR)/configure'
     cd '$(1)/$(wxwidgets_SUBDIR)' && ./configure \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-compat24 \

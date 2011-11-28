@@ -25,7 +25,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,^\(Libs:.*\),\1 @EXPAT_LIBS@ @FREETYPE_LIBS@,' '$(1)/fontconfig.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-arch='$(TARGET)' \

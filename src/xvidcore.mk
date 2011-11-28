@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' BUILD_DIR='build' SHARED_LIB=
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'

@@ -26,7 +26,6 @@ define $(PKG)_BUILD
     $(INSTALL) -m755 '$(1)/config.guess' '$(PREFIX)/bin/'
     $(INSTALL) -m755 '$(1)/config.sub' '$(PREFIX)/bin/'
 
-    # Cannot use BUILD which was defined before config.guess existed.
     cd '$(1)' && ./configure \
         --target='$(TARGET)' \
         --build="`config.guess`" \

@@ -22,7 +22,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && touch src/libgsasl-7.def && ./configure \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \

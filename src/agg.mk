@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,libtoolize,$(LIBTOOLIZE),'                             '$(1)/autogen.sh'
     cd '$(1)' && $(SHELL) ./autogen.sh \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-x

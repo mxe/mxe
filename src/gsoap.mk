@@ -40,7 +40,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ac_cv_func_malloc_0_nonnull=yes ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --enable-gnutls \
         CPPFLAGS='-DWITH_NTLM'
 

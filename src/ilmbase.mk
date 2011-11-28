@@ -29,7 +29,7 @@ define $(PKG)_BUILD
     # threading. It will just disable the unwanted check for pthread.
     cd '$(1)' && $(SHELL) ./configure \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-threading \

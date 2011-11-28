@@ -24,7 +24,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,\$$uname,MINGW,g' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \

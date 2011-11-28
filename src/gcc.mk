@@ -33,7 +33,7 @@ define $(PKG)_BUILD
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
         --target='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)' \
         --libdir='$(PREFIX)/lib' \
         --enable-languages='c,c++,objc,fortran' \

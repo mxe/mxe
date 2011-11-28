@@ -23,7 +23,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/pcreposix.h'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-utf8 \

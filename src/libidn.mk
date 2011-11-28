@@ -22,7 +22,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --disable-shared \
         --disable-csharp \
         --prefix='$(PREFIX)/$(TARGET)' \

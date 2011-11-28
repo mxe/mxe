@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     mkdir -p '$(1)/build/$(TARGET)/libgomp'
     cd       '$(1)/build/$(TARGET)/libgomp' && '$(1)/libgomp/configure' \
         --host='$(TARGET)' \
-        --build='$(BUILD)' \
+        --build="`config.guess`" \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
         --enable-version-specific-runtime-libs \
