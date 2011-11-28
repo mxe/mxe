@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := agg-$($(PKG)_VERSION)
 $(PKG)_FILE     := agg-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.antigrain.com
 $(PKG)_URL      := http://www.antigrain.com/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc freetype sdl
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.antigrain.com/download/index.html' | \
@@ -18,6 +18,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's,aclocal,aclocal -I $(PREFIX)/$(TARGET)/share/aclocal,' '$(1)/autogen.sh'
+    $(SED) -i 's,libtoolize,$(LIBTOOLIZE),'                             '$(1)/autogen.sh'
     cd '$(1)' && $(SHELL) ./autogen.sh \
         --host='$(TARGET)' \
         --build='$(BUILD)' \
