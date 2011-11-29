@@ -8,7 +8,7 @@ Also contains mingw-cross-env specific fixes.
 From 017b42a86ec4cac8a4cd71cc607d0a4d201ff4fd Mon Sep 17 00:00:00 2001
 From: Volker Grabsch <vog@notjusthosting.com>
 Date: Fri, 28 Oct 2011 13:48:04 +0200
-Subject: [PATCH 1/6] static linking for mingw-cross-env
+Subject: [PATCH 1/7] static linking for mingw-cross-env
 
 ---
  include/curl/curlbuild.h.in |    3 +++
@@ -35,7 +35,7 @@ index fe348f4..c428273 100644
 From 1ce66d38f2696a25aeac411beaf9e291c8775fe5 Mon Sep 17 00:00:00 2001
 From: Martin Storsjo <martin@martin.st>
 Date: Tue, 15 Nov 2011 11:52:32 +0200
-Subject: [PATCH 2/6] Add support for using nettle instead of gcrypt as gnutls
+Subject: [PATCH 2/7] Add support for using nettle instead of gcrypt as gnutls
  backend (cherry picked from commit
  64f328c787ab763cc994eadd6b82f32490d37ebb)
 
@@ -279,7 +279,7 @@ index f26e027..cf8e053 100644
 From 380fb5054be1ccd85a80220fafbfcb33e1010f05 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 22 Nov 2011 22:48:15 +0100
-Subject: [PATCH 3/6] gnutls: only translate winsock errors for old versions
+Subject: [PATCH 3/7] gnutls: only translate winsock errors for old versions
 
 Bugfix: https handshake fails using gnutls 3 on windows
 http://sourceforge.net/tracker/index.php?func=detail&aid=3441084&group_id=976&atid=100976
@@ -362,7 +362,7 @@ index a98a7e8..c64c8c4 100644
 From 53b8a80e2e1d3a9a51ed461210a5244abdb0edfb Mon Sep 17 00:00:00 2001
 From: Yang Tse <yangsita@gmail.com>
 Date: Thu, 24 Nov 2011 12:11:52 +0100
-Subject: [PATCH 4/6] Fix unreleased regression when using windows gnutls
+Subject: [PATCH 4/7] Fix unreleased regression when using windows gnutls
  versions older than 2.8 (cherry picked from commit
  78feaff9d800efb5d1f97f8653721718a6cf00c8)
 
@@ -442,7 +442,7 @@ index c64c8c4..a2e8d99 100644
 From 8cd4aa2718f67e50a72bb34c9d8ede803c86b287 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 25 Nov 2011 23:00:16 +0100
-Subject: [PATCH 5/6] configure: add support for pkg-config detection of
+Subject: [PATCH 5/7] configure: add support for pkg-config detection of
  libidn (cherry picked from commit
  874855b743bd7e9bbbaebe2834dd281d2b2cea80)
 
@@ -477,7 +477,7 @@ index 2ba6625..52158f1 100644
 From e5d7e688946a01c4c24568981fa7252aadf818b4 Mon Sep 17 00:00:00 2001
 From: Daniel Stenberg <daniel@haxx.se>
 Date: Sun, 27 Nov 2011 20:00:30 +0100
-Subject: [PATCH 6/6] configure: fix to make older pkg-config play well
+Subject: [PATCH 6/7] configure: fix to make older pkg-config play well
 
 configure.ac:1349: error: possibly undefined macro: PKG_CONFIG_LIBDIR
 
@@ -507,6 +507,222 @@ index 52158f1..7d2c7e4 100644
           dnl check with pkg-config
           PKG_CHECK_MODULES(LIBIDN_PC, libidn >= 0.0.0, [idn=yes], [idn=no])
           if test "x$idn" = "xyes"; then
+-- 
+1.7.7.3
+
+
+From 69772182aa9e08e39f42d17abb5af553b493a90c Mon Sep 17 00:00:00 2001
+From: Yang Tse <yangsita@gmail.com>
+Date: Tue, 29 Nov 2011 19:11:34 +0100
+Subject: [PATCH 7/7] configure: avoid usage of macro PKG_CHECK_MODULES
+
+libidn option adjusted in order to use pkg-config info when available
+in a similar way as we already do for other libraries.
+(cherry picked from commit f80a508297e7ece911bbb833436985070e17e6a8)
+---
+ configure.ac |  183 +++++++++++++++++++++++++++++++++++++++++----------------
+ 1 files changed, 131 insertions(+), 52 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 7d2c7e4..94cdd83 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2349,64 +2349,143 @@ dnl Check for the presence of IDN libraries and headers
+ dnl **********************************************************************
+ 
+ AC_MSG_CHECKING([whether to build with libidn])
++OPT_IDN="default"
+ AC_ARG_WITH(libidn,
+ AC_HELP_STRING([--with-libidn=PATH],[Enable libidn usage])
+ AC_HELP_STRING([--without-libidn],[Disable libidn usage]),
+-  [LIBIDN="$withval"])
+-
+-case "$LIBIDN" in
++  [OPT_IDN=$withval])
++case "$OPT_IDN" in
+   no)
+-       AC_MSG_RESULT(no)
+-       ;;
+-  *)   AC_MSG_RESULT(yes)
+-
+-       idn=""
+-       dnl if there is a given path, check that FIRST
+-       if test -n "$LIBIDN"; then
+-         if test "x$LIBIDN" != "xyes"; then
+-            oldLDFLAGS=$LDFLAGS
+-            oldCPPFLAGS=$CPPFLAGS
+-            LDFLAGS="$LDFLAGS -L$LIBIDN/lib"
+-            CPPFLAGS="$CPPFLAGS -I$LIBIDN/include"
+-            idn="yes"
+-            AC_CHECK_LIB(idn, idna_to_ascii_4i, ,
+-                         idn=""
+-                         LDFLAGS=$oldLDFLAGS
+-                         CPPFLAGS=$oldCPPFLAGS)
+-         fi
+-       fi
+-
+-       if test "x$idn" != "xyes"; then
+-
+-         dnl to prevent errors with pkg-config < 0.26
+-         m4_pattern_allow(PKG_CONFIG_LIBDIR)
+-
+-         dnl check with pkg-config
+-         PKG_CHECK_MODULES(LIBIDN_PC, libidn >= 0.0.0, [idn=yes], [idn=no])
+-         if test "x$idn" = "xyes"; then
+-            LIBS="$LIBS $LIBIDN_PC_LIBS"
+-            CPPFLAGS="$CPPFLAGS $LIBIDN_PC_CFLAGS"
+-         fi
+-       fi
+-
+-       if test "x$idn" != "xyes"; then
+-          dnl check with default paths
+-          idn="yes"
+-          AC_CHECK_LIB(idn, idna_to_ascii_lz, ,
+-                       idn="")
+-       fi
+-
+-       if test "x$idn" = "xyes"; then
+-         curl_idn_msg="enabled"
+-         AC_SUBST(IDN_ENABLED, [1])
+-         dnl different versions of libidn have different setups of these:
+-         AC_CHECK_FUNCS( idn_free idna_strerror tld_strerror)
+-         AC_CHECK_HEADERS( idn-free.h tld.h )
+-       fi
+-
+-       ;;
++    dnl --without-libidn option used
++    want_idn="no"
++    AC_MSG_RESULT([no])
++    ;;
++  default)
++    dnl configure option not specified
++    want_idn="yes"
++    want_idn_path="default"
++    AC_MSG_RESULT([(assumed) yes])
++    ;;
++  yes)
++    dnl --with-libidn option used without path
++    want_idn="yes"
++    want_idn_path="default"
++    AC_MSG_RESULT([yes])
++    ;;
++  *)
++    dnl --with-libidn option used with path
++    want_idn="yes"
++    want_idn_path="$withval"
++    AC_MSG_RESULT([yes ($withval)])
++    ;;
+ esac
+ 
++if test "$want_idn" = "yes"; then
++  dnl idn library support has been requested
++  clean_CPPFLAGS="$CPPFLAGS"
++  clean_LDFLAGS="$LDFLAGS"
++  clean_LIBS="$LIBS"
++  PKGCONFIG="no"
++  #
++  if test "$want_idn_path" != "default"; then
++    dnl path has been specified
++    IDN_PCDIR="$want_idn_path/lib$libsuff/pkgconfig"
++    CURL_CHECK_PKGCONFIG(libidn, [$IDN_PCDIR])
++    if test "$PKGCONFIG" != "no"; then
++      IDN_LIBS=`CURL_EXPORT_PCDIR([$IDN_PCDIR]) dnl
++        $PKGCONFIG --libs-only-l libidn 2>/dev/null`
++      IDN_LDFLAGS=`CURL_EXPORT_PCDIR([$IDN_PCDIR]) dnl
++        $PKGCONFIG --libs-only-L libidn 2>/dev/null`
++      IDN_CPPFLAGS=`CURL_EXPORT_PCDIR([$IDN_PCDIR]) dnl
++        $PKGCONFIG --cflags-only-I libidn 2>/dev/null`
++      IDN_DIR=`echo $IDN_LDFLAGS | $SED -e 's/-L//'`
++    else
++      dnl pkg-config not available or provides no info
++      IDN_LIBS="-lidn"
++      IDN_LDFLAGS="-L$want_idn_path/lib$libsuff"
++      IDN_CPPFLAGS="-I$want_idn_path/include"
++      IDN_DIR="$want_idn_path/lib$libsuff"
++    fi
++  else
++    dnl path not specified
++    CURL_CHECK_PKGCONFIG(libidn)
++    if test "$PKGCONFIG" != "no"; then
++      IDN_LIBS=`$PKGCONFIG --libs-only-l libidn 2>/dev/null`
++      IDN_LDFLAGS=`$PKGCONFIG --libs-only-L libidn 2>/dev/null`
++      IDN_CPPFLAGS=`$PKGCONFIG --cflags-only-I libidn 2>/dev/null`
++      IDN_DIR=`echo $IDN_LDFLAGS | $SED -e 's/-L//'`
++    else
++      dnl pkg-config not available or provides no info
++      IDN_LIBS="-lidn"
++    fi
++  fi
++  #
++  if test "$PKGCONFIG" != "no"; then
++    AC_MSG_NOTICE([pkg-config: IDN_LIBS: "$IDN_LIBS"])
++    AC_MSG_NOTICE([pkg-config: IDN_LDFLAGS: "$IDN_LDFLAGS"])
++    AC_MSG_NOTICE([pkg-config: IDN_CPPFLAGS: "$IDN_CPPFLAGS"])
++    AC_MSG_NOTICE([pkg-config: IDN_DIR: "$IDN_DIR"])
++  else
++    AC_MSG_NOTICE([IDN_LIBS: "$IDN_LIBS"])
++    AC_MSG_NOTICE([IDN_LDFLAGS: "$IDN_LDFLAGS"])
++    AC_MSG_NOTICE([IDN_CPPFLAGS: "$IDN_CPPFLAGS"])
++    AC_MSG_NOTICE([IDN_DIR: "$IDN_DIR"])
++  fi
++  #
++  CPPFLAGS="$IDN_CPPFLAGS $CPPFLAGS"
++  LDFLAGS="$IDN_LDFLAGS $LDFLAGS"
++  LIBS="$IDN_LIBS $LIBS"
++  #
++  AC_MSG_CHECKING([if idna_to_ascii_4i can be linked])
++  AC_LINK_IFELSE([
++    AC_LANG_FUNC_LINK_TRY([idna_to_ascii_4i])
++  ],[
++    AC_MSG_RESULT([yes])
++    tst_links_libidn="yes"
++  ],[
++    AC_MSG_RESULT([no])
++    tst_links_libidn="no"
++  ])
++  if test "$tst_links_libidn" = "no"; then
++    AC_MSG_CHECKING([if idna_to_ascii_lz can be linked])
++    AC_LINK_IFELSE([
++      AC_LANG_FUNC_LINK_TRY([idna_to_ascii_lz])
++    ],[
++      AC_MSG_RESULT([yes])
++      tst_links_libidn="yes"
++    ],[
++      AC_MSG_RESULT([no])
++      tst_links_libidn="no"
++    ])
++  fi
++  #
++  if test "$tst_links_libidn" = "yes"; then
++    AC_DEFINE(HAVE_LIBIDN, 1, [Define to 1 if you have the `idn' library (-lidn).])
++    dnl different versions of libidn have different setups of these:
++    AC_CHECK_FUNCS( idn_free idna_strerror tld_strerror )
++    AC_CHECK_HEADERS( idn-free.h tld.h )
++    if test "x$ac_cv_header_tld_h" = "xyes"; then
++      AC_SUBST([IDN_ENABLED], [1])
++      curl_idn_msg="enabled"
++      if test -n "$IDN_DIR"; then
++        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$IDN_DIR"
++        export LD_LIBRARY_PATH
++        AC_MSG_NOTICE([Added $IDN_DIR to LD_LIBRARY_PATH])
++      fi
++    else
++      AC_MSG_WARN([Libraries for IDN support too old: IDN disabled])
++      CPPFLAGS="$clean_CPPFLAGS"
++      LDFLAGS="$clean_LDFLAGS"
++      LIBS="$clean_LIBS"
++    fi
++  else
++    AC_MSG_WARN([Cannot find libraries for IDN support: IDN disabled])
++    CPPFLAGS="$clean_CPPFLAGS"
++    LDFLAGS="$clean_LDFLAGS"
++    LIBS="$clean_LIBS"
++  fi
++fi
++
+ 
+ dnl Let's hope this split URL remains working:
+ dnl http://publibn.boulder.ibm.com/doc_link/en_US/a_doc_lib/aixprggd/ \
 -- 
 1.7.7.3
 
