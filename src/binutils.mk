@@ -24,7 +24,6 @@ define $(PKG)_BUILD
     # install config.guess for general use
     $(INSTALL) -d '$(PREFIX)/bin'
     $(INSTALL) -m755 '$(1)/config.guess' '$(PREFIX)/bin/'
-    $(INSTALL) -m755 '$(1)/config.sub' '$(PREFIX)/bin/'
 
     # install target-specific autotools config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/share'
