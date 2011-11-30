@@ -26,6 +26,10 @@ define $(PKG)_BUILD
     $(INSTALL) -m755 '$(1)/config.guess' '$(PREFIX)/bin/'
     $(INSTALL) -m755 '$(1)/config.sub' '$(PREFIX)/bin/'
 
+    # install target-specific autotools config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/share'
+    echo "ac_cv_build=`$(1)/config.guess`" > '$(PREFIX)/$(TARGET)/share/config.site'
+
     cd '$(1)' && ./configure \
         --target='$(TARGET)' \
         --build="`config.guess`" \
