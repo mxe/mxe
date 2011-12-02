@@ -3,11 +3,11 @@
 
 # llvm
 PKG             := llvm
-$(PKG)_IGNORE   := 2.9
-$(PKG)_VERSION  := 2.8
-$(PKG)_CHECKSUM := 6d49fe039d28e8664de25491c775cb2c599e30c1
-$(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION)
-$(PKG)_FILE     := llvm-$($(PKG)_VERSION).tgz
+$(PKG)_IGNORE   := 
+$(PKG)_VERSION  := 3.0
+$(PKG)_CHECKSUM := b683e7294fcf69887c0d709025d4640f5dca755b
+$(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION).src
+$(PKG)_FILE     := llvm-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://llvm.org
 $(PKG)_URL      := http://llvm.org/releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
