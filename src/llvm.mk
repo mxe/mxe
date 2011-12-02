@@ -26,6 +26,8 @@ define $(PKG)_BUILD
         -DLIBTYPE=STATIC \
         -DLLVM_TARGETS_TO_BUILD="X86;" \
         -DLLVM_BUILD_TOOLS=OFF
-    $(MAKE) -C '$(1)/build' -j 1 install
+    $(MAKE) -C '$(1)/build' -j $(JOBS) llvm-tblgen
+    $(MAKE) -C '$(1)/build' -j $(JOBS) intrinsics_gen
+    $(MAKE) -C '$(1)/build' -j $(JOBS) install
     ln -sf '$(PREFIX)/$(TARGET)/bin/llvm-config' '$(PREFIX)/bin/$(TARGET)-llvm-config'
 endef
