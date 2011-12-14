@@ -22,8 +22,9 @@ define $(PKG)_BUILD
     # Native build to get tools wsdl2h and soapcpp2
     cd '$(1)' && ./configure
 
-    # Parallel bulds can fail
-    $(MAKE) -C '$(1)'/gsoap -j 1
+    # Work around parallel build problem
+    $(MAKE) -C '$(1)'/gsoap/src -j '$(JOBS)' soapcpp2_yacc.h
+    $(MAKE) -C '$(1)'/gsoap -j '$(JOBS)'
 
     # Install the native tools manually
     $(INSTALL) -m755 '$(1)'/gsoap/wsdl/wsdl2h  '$(PREFIX)/bin/$(TARGET)-wsdl2h'
@@ -47,10 +48,11 @@ define $(PKG)_BUILD
     # Building for mingw requires native soapcpp2
     ln -sf '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)/gsoap/src/soapcpp2'
 
-    # Parallel bulds can fail
-    $(MAKE) -C '$(1)' -j 1 AR='$(TARGET)-ar'
+    # Work around parallel build problem
+    $(MAKE) -C '$(1)'/gsoap/src -j '$(JOBS)' soapcpp2_yacc.h AR='$(TARGET)-ar'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' AR='$(TARGET)-ar'
 
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
     # Apparently there is a tradition of compiling gsoap source files into applications.
     # Since we linked dom.cpp and dom.c into the libraries, this should not be necessary.
     # But we bend to tradition and install these sources into mingw-cross-env.
