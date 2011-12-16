@@ -5,7 +5,7 @@
 PKG             := eigen
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.17
-$(PKG)_CHECKSUM := 508d6f4e7ef281b5c15f6d303c2e7fc5b0e1d387
+$(PKG)_CHECKSUM := 7e1674420a8eef7e90e1875ef5b9e828fb9db381
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://eigen.tuxfamily.org/
