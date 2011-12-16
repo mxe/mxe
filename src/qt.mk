@@ -5,9 +5,9 @@
 PKG             := qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.8.0
-$(PKG)_CHECKSUM := 95812c27e66908e1e649f292609482a54d17c7d2
+$(PKG)_CHECKSUM := 2ba35adca8fb9c66a58eca61a15b21df6213f22e
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)-rc1.tar.gz
+$(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
