@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 7e1674420a8eef7e90e1875ef5b9e828fb9db381
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://eigen.tuxfamily.org/
-$(PKG)_URL      := http://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_FILE)
+$(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
