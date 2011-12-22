@@ -1,3 +1,9 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+This patch has been taken from:
+http://freeassociation.svn.sourceforge.net/viewvc/freeassociation/trunk/libical/src/libicalss/CMakeLists.txt?r1=1118&r2=1117&pathrev=1118&diff_format=u
+
 libical-1-parallel-builds.patch  libical-test.c
 [gcoco@Basement mingw-cross-env]$ cat src/libical-1-parallel-builds.patch
 --- ./src/libicalss/CMakeLists.txt      2011/10/10 23:21:07     1106
