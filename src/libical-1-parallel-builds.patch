@@ -1,0 +1,14 @@
+libical-1-parallel-builds.patch  libical-test.c
+[gcoco@Basement mingw-cross-env]$ cat src/libical-1-parallel-builds.patch
+--- ./src/libicalss/CMakeLists.txt      2011/10/10 23:21:07     1106
++++ ./src/libicalss/CMakeLists.txt      2011/12/18 21:56:43     1118
+@@ -28,7 +28,9 @@
+   ${CMAKE_BINARY_DIR}/src/libical/icalderivedvalue.h
+ )
+
+-add_custom_target(icalss-header DEPENDS
++add_custom_target(icalss-header
++  DEPENDS
++  ical-header
+   ${CMAKE_BINARY_DIR}/src/libicalss/icalss.h
+ )

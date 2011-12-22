@@ -1,11 +1,10 @@
 # This file is part of mingw-cross-env.
 # See doc/index.html for further information.
 
-# PDcurses
+# libical
 PKG             := libical
-$(PKG)_IGNORE   := 0.46
-$(PKG)_VERSION  := 0.44
-$(PKG)_CHECKSUM := f781150e2d98806e91b7e0bee02abdc6baf9ac7d
+$(PKG)_VERSION  := 0.48
+$(PKG)_CHECKSUM := 4693cd0438be9f3727146ac1a46aa5b1b93b8c86
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://freeassociation.sourceforge.net/
@@ -19,13 +18,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
-    
+    cd '$(1)' && mkdir build
+    cd '$(1)/build' && cmake .. \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DSTATIC_LIBRARY=true
+    $(MAKE) -C '$(1)/build' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libical.exe' \
