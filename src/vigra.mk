@@ -39,5 +39,5 @@ define $(PKG)_BUILD
     $(TARGET)-g++ \
         '$(2).cpp' -o $(PREFIX)/$(TARGET)/bin/test-vigra.exe \
         -DVIGRA_STATIC_LIB \
-        -lvigraimpex `'$(TARGET)-pkg-config' OpenEXR --cflags --libs` -ltiff -lpng -ljpeg -lz
+        -lvigraimpex `'$(TARGET)-pkg-config' OpenEXR libtiff-4 libpng --cflags --libs` -ljpeg
 endef
