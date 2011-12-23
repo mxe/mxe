@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://freeassociation.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeassociation/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/projects/freeassociation/files/$(PKG)/' | \
@@ -21,9 +21,12 @@ define $(PKG)_BUILD
     cd '$(1)' && mkdir build
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DSTATIC_LIBRARY=true
+        -DSTATIC_LIBRARY=true \
+        -DHAVE_PTHREAD_H=false \
+        -DCMAKE_HAVE_PTHREAD_H=false
+    $(MAKE) -C '$(1)/build' -j '$(JOBS)' ical-header
     $(MAKE) -C '$(1)/build' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/build' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
