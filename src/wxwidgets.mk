@@ -57,7 +57,8 @@ define $(PKG)_BUILD
         --without-gnomevfs \
         --without-hildon \
         --without-dmalloc \
-        --without-odbc
+        --without-odbc \
+        LIBS=" `'$(TARGET)-pkg-config' --libs-only-l libtiff-4`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     -$(MAKE) -C '$(1)/locale' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= allmo
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= __install_wxrc___depname=
@@ -105,7 +106,8 @@ define $(PKG)_BUILD
         --without-gnomevfs \
         --without-hildon \
         --without-dmalloc \
-        --without-odbc
+        --without-odbc \
+        LIBS=" `'$(TARGET)-pkg-config' --libs-only-l libtiff-4`"
     $(MAKE) -C '$(1)/$(wxwidgets_SUBDIR)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # backup of the unicode wx-config script
