@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-modules \
-        --with-included-loaders
+        --with-included-loaders \
+        LIBS="`'$(TARGET)-pkg-config' --libs libtiff-4`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

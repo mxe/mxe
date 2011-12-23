@@ -76,7 +76,7 @@ define $(PKG)_BUILD
         --without-ruby \
         --without-python \
         --without-macosx-framework \
-        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl`"
+        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $(MAKE) -C '$(1)'       -j 1 lib-target
     $(MAKE) -C '$(1)'       -j 1 install-lib
     $(MAKE) -C '$(1)/port'  -j 1 install
