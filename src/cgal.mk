@@ -4,12 +4,12 @@
 # cgal
 PKG             := cgal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.8
-$(PKG)_CHECKSUM := 23748df1e60d62da166d2e395732ae2fe274317d
+$(PKG)_VERSION  := 3.9
+$(PKG)_CHECKSUM := cc99fad7116f221b6301326834f71ff65cebf2eb
 $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
 $(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.cgal.org/
-$(PKG)_URL      := https://gforge.inria.fr/frs/download.php/28500/$($(PKG)_FILE)
+$(PKG)_URL      := https://gforge.inria.fr/frs/download.php/29125/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost gmp mpfr qt
 
 define $(PKG)_UPDATE
@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         -DCGAL_INSTALL_CMAKE_DIR:STRING="lib/CGAL" \
         -DCMAKE_BUILD_TYPE:STRING="Release" \
         -DCGAL_INSTALL_INC_DIR:STRING="include" \
-        -DCGAL_INSTALL_DOC_DIR:STRING="share/doc/CGAL-3.8" \
+        -DCGAL_INSTALL_DOC_DIR:STRING="share/doc/CGAL-3.9" \
         -DCGAL_INSTALL_BIN_DIR:STRING="bin" \
         -DBOOST_LIB_DIAGNOSTIC_DEFINITIONS:STRING="-DBOOST_LIB_DIAGNOSTIC" \
         -DWITH_CGAL_Qt3:BOOL="0" \
