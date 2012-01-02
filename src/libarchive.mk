@@ -4,8 +4,8 @@
 # Libarchive
 PKG             := libarchive
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.4
-$(PKG)_CHECKSUM := b9cc3bbd20bd71f996be9ec738f19fda8653f7af
+$(PKG)_VERSION  := 2.8.5
+$(PKG)_CHECKSUM := e48a3b50de84b1d747f5af9ca5ba90eb6d3a4a78
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://code.google.com/p/libarchive/

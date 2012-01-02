@@ -4,8 +4,8 @@
 # Mini-XML
 PKG             := mxml
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.6
-$(PKG)_CHECKSUM := df180bd2e3890c97fa8a05dd131f9285468cffe1
+$(PKG)_VERSION  := 2.7
+$(PKG)_CHECKSUM := a3bdcab48307794c297e790435bcce7becb9edae
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.minixml.org/

@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         --with-jpeg='$(PREFIX)/$(TARGET)'/lib \
         --with-tiff='$(PREFIX)/$(TARGET)'/lib \
         --with-png='$(PREFIX)/$(TARGET)'/lib \
-        --with-zlib='$(PREFIX)/$(TARGET)'/lib
+        --with-zlib='$(PREFIX)/$(TARGET)'/lib \
+        LIBS="`'$(TARGET)-pkg-config' --libs libtiff-4`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
 endef

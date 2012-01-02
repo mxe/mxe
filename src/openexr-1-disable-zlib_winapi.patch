@@ -1,0 +1,25 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -urN a/IlmImf/ImfPxr24Compressor.cpp b/IlmImf/ImfPxr24Compressor.cpp
+--- a/IlmImf/ImfPxr24Compressor.cpp	2010-07-17 01:11:52.000000000 +0200
++++ b/IlmImf/ImfPxr24Compressor.cpp	2011-09-21 23:41:28.130452657 +0200
+@@ -62,7 +62,6 @@
+ //	string of bytes is compressed with zlib.
+ //
+ //-----------------------------------------------------------------------------
+-#define ZLIB_WINAPI 
+ 
+ #include <ImfPxr24Compressor.h>
+ #include <ImfHeader.h>
+diff -urN a/IlmImf/ImfZipCompressor.cpp b/IlmImf/ImfZipCompressor.cpp
+--- a/IlmImf/ImfZipCompressor.cpp	2010-07-17 01:11:52.000000000 +0200
++++ b/IlmImf/ImfZipCompressor.cpp	2011-09-21 23:42:01.154288691 +0200
+@@ -39,7 +39,6 @@
+ //	class ZipCompressor
+ //
+ //-----------------------------------------------------------------------------
+-#define ZLIB_WINAPI
+ 
+ #include <ImfZipCompressor.h>
+ #include <ImfCheckedArithmetic.h>

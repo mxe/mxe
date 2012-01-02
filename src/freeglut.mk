@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./autogen.sh
     $(SED) -i 's,Windows\.h,windows.h,'   '$(1)/src/freeglut_internal.h'
     $(SED) -i 's,WindowsX\.h,windowsx.h,' '$(1)/src/freeglut_internal.h'
     $(SED) -i 's,MMSystem\.h,mmsystem.h,' '$(1)/src/freeglut_internal.h'
@@ -31,5 +32,10 @@ define $(PKG)_BUILD
         --disable-debug \
         --without-progs \
         --without-x
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= EXPORT_FLAGS='-DFREEGLUT_STATIC'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-freeglut.exe' \
+        `'$(TARGET)-pkg-config' glut --cflags --libs`
 endef

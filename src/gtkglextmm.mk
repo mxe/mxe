@@ -23,6 +23,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install \

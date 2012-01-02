@@ -4,8 +4,8 @@
 # lcms
 PKG             := lcms
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1
-$(PKG)_CHECKSUM := 0ce856a004068ff6e22f9f2d7b94a11b9b469bf9
+$(PKG)_VERSION  := 2.3
+$(PKG)_CHECKSUM := 67d5fabda2f5777ca8387766539b9c871d993133
 $(PKG)_SUBDIR   := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION))
 $(PKG)_FILE     := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION)).tar.gz
 $(PKG)_WEBSITE  := http://www.littlecms.com/
@@ -19,11 +19,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --with-jpeg \
         --with-tiff \

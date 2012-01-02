@@ -1,0 +1,324 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 89e55b180994db937e019678a2abccd0c6f73f7e Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 21 Oct 2011 23:08:52 +0200
+Subject: [PATCH 1/2] adjustments for mingw-cross-env
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e5af443..7d77f9d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -326,6 +326,8 @@
+ #
+ #--------------------------------------------------------------------------------------------------
+ 
++uniquely_add_flags( CXXFLAGS "-DBOOST_THREAD_USE_LIB;-DBoost_USE_STATIC_LIBS" )
++SET(CMAKE_CXX_FLAGS_RELEASE "-DBOOST_THREAD_USE_LIB -DBoost_USE_STATIC_LIBS -O3 -DNDEBUG" CACHE STRING blah FORCE)
+ if( MSVC )
+   
+   uniquely_add_flags ( CGAL_CXX_FLAGS "-D_CRT_SECURE_NO_DEPRECATE;-D_SCL_SECURE_NO_DEPRECATE;-D_CRT_SECURE_NO_WARNINGS;-D_SCL_SECURE_NO_WARNINGS" )
+diff --git a/TryRunResults.cgal.cmake b/TryRunResults.cgal.cmake
+new file mode 100644
+index 0000000..cba9b44
+--- /dev/null
++++ b/TryRunResults.cgal.cmake
+@@ -0,0 +1,192 @@
++SET( GCC_RUN_RES
++     0
++     CACHE STRING "version=4.6.2" FORCE)
++SET( GCC_RUN_RES__TRYRUN_OUTPUT
++     0
++     CACHE STRING "version=4.6.2" FORCE)
++SET( GMP_RUN_RES
++     0
++     CACHE STRING "version=5.0.2" FORCE)
++SET( GMP_RUN_RES__TRYRUN_OUTPUT
++     0
++     CACHE STRING "version=5.0.2" FORCE)
++SET( MPFR_RUN_RES
++     0
++     CACHE STRING "version=3.1.0" FORCE)
++SET( MPFR_RUN_RES__TRYRUN_OUTPUT
++     0
++     CACHE STRING "version=3.1.0" FORCE)
++SET( CGAL_CFG_ARRAY_MEMBER_INITIALIZATION_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_ARRAY_MEMBER_INITIALIZATION_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_DENORMALS_COMPILE_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_DENORMALS_COMPILE_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_FPU_ROUNDING_MODE_UNWINDING_VC_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_FPU_ROUNDING_MODE_UNWINDING_VC_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_IEEE_754_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_IEEE_754_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_ISTREAM_INT_BUG
++     0
++     CACHE STRING "7812" FORCE)
++SET( CGAL_CFG_ISTREAM_INT_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING "7812" FORCE)
++SET( CGAL_CFG_LONGNAME_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_LONGNAME_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_MATCHING_BUG_5
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_MATCHING_BUG_5__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_MATCHING_BUG_6
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_MATCHING_BUG_6__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NESTED_CLASS_FRIEND_DECLARATION_BUG
++     0
++     CACHE STRING "A's do_something\nC's do_something\nB's do_something\nC's do_something" FORCE)
++SET( CGAL_CFG_NESTED_CLASS_FRIEND_DECLARATION_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING "A's do_something\nC's do_something\nB's do_something\nC's do_something" FORCE)
++SET( CGAL_CFG_NO_CPP0X_DELETED_AND_DEFAULT_FUNCTIONS
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_CPP0X_DELETED_AND_DEFAULT_FUNCTIONS__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_CPP0X_ISFINITE
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_CPP0X_ISFINITE__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_CPP0X_LONG_LONG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_CPP0X_LONG_LONG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_LIMITS
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_LIMITS__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_LOGICAL_OPERATORS_ALTERNATIVES
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_LOGICAL_OPERATORS_ALTERNATIVES__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_MESSAGE_PRAGMA_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_MESSAGE_PRAGMA_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_NEXTAFTER
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_NEXTAFTER__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_STATEMENT_EXPRESSIONS
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_STATEMENT_EXPRESSIONS__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_STL
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_STL__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_TMPL_IN_TMPL_PARAM
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_TMPL_IN_TMPL_PARAM__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_TR1_ARRAY
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_TR1_ARRAY__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_TR1_TUPLE
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_TR1_TUPLE__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_WARNING_CPP_DIRECTIVE_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NO_WARNING_CPP_DIRECTIVE_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NUMERIC_LIMITS_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_NUMERIC_LIMITS_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_OUTOFLINE_MEMBER_DEFINITION_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_OUTOFLINE_MEMBER_DEFINITION_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_TEMPLATE_IN_DEFAULT_PARAMETER_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_TEMPLATE_IN_DEFAULT_PARAMETER_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_TYPENAME_BEFORE_DEFAULT_ARGUMENT_BUG
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_TYPENAME_BEFORE_DEFAULT_ARGUMENT_BUG__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_USING_BASE_MEMBER_BUG_2
++     0
++     CACHE STRING " " FORCE)
++SET( CGAL_CFG_USING_BASE_MEMBER_BUG_2__TRYRUN_OUTPUT
++     0
++     CACHE STRING " " FORCE)
++SET( ZLIB_RUN_RES
++     0
++     CACHE STRING "version=1.2.5" FORCE)
++SET( ZLIB_RUN_RES__TRYRUN_OUTPUT
++     0
++     CACHE STRING "version=1.2.5" FORCE)
++SET( QT4_RUN_RES
++     0
++     CACHE STRING "version=4.8.0" FORCE)
++SET( QT4_RUN_RES__TRYRUN_OUTPUT
++     0
++     CACHE STRING "version=4.8.0" FORCE)
+diff --git a/cmake/modules/FindBoost.cmake b/cmake/modules/FindBoost.cmake
+index fbdde88..5d8a0a9 100644
+--- a/cmake/modules/FindBoost.cmake
++++ b/cmake/modules/FindBoost.cmake
+@@ -167,6 +167,7 @@
+ #
+ 
+ include( CGAL_VersionUtils )
++set(Boost_USE_STATIC_LIBS   ON)
+ 
+ 
+ #-------------------------------------------------------------------------------
+@@ -706,7 +707,9 @@ ELSE (_boost_IN_CACHE)
+     ENDIF( Boost_USE_STATIC_LIBS )
+ 
+     # Find libraries (search in user defined directories first)
++    SET ( _boost_COMPILER "_win32")
+     SET ( _boost_${UPPERCOMPONENT}_LIBRARY_RELEASE_NAMES   
++      ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}
+       ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
+       ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_COMPILER}${_boost_MULTITHREADED}${_boost_STATIC_TAG}-${Boost_LIB_VERSION}
+       ${Boost_LIB_PREFIX}boost_${COMPONENT}${_boost_MULTITHREADED}-${Boost_LIB_VERSION}
+diff --git a/include/CGAL/Constrained_Delaunay_triangulation_2.h b/include/CGAL/Constrained_Delaunay_triangulation_2.h
+index f1a7201..23a53c9 100644
+--- a/include/CGAL/Constrained_Delaunay_triangulation_2.h
++++ b/include/CGAL/Constrained_Delaunay_triangulation_2.h
+@@ -389,7 +389,7 @@ is_flipable(Face_handle f, int i, bool perturb) const
+   Face_handle ni = f->neighbor(i); 
+   if (is_infinite(f) || is_infinite(ni)) return false; 
+   if (f->is_constrained(i)) return false;
+-  return (side_of_oriented_circle(ni, f->vertex(i)->point(), perturb) 
++  return (this->side_of_oriented_circle(ni, f->vertex(i)->point(), perturb)
+                                         == ON_POSITIVE_SIDE);
+ }
+ 
+@@ -493,7 +493,7 @@ test_conflict(const Point& p, Face_handle fh) const
+   // return true  if P is inside the circumcircle of fh
+   // if fh is infinite, return true when p is in the positive
+   // halfspace or on the boundary and in the  finite edge of fh
+-  Oriented_side os = side_of_oriented_circle(fh,p,true);
++  Oriented_side os = this->side_of_oriented_circle(fh,p,true);
+   if (os == ON_POSITIVE_SIDE) return true;
+  
+   if (os == ON_ORIENTED_BOUNDARY && is_infinite(fh)) {
+-- 
+1.7.7.3
+
+
+From aae0b2e8745754a1d90e080d6afb15f177b0705b Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Fri, 18 Nov 2011 00:08:25 +0100
+Subject: [PATCH 2/2] prevent Qt's moc from choking on BOOST_JOIN
+
+Taken from:
+https://lists-sop.inria.fr/sympa/arc/cgal-discuss/2011-11/msg00087.html
+
+diff --git a/include/CGAL/Qt/GraphicsItem.h b/include/CGAL/Qt/GraphicsItem.h
+index 7348d02..807e200 100644
+--- a/include/CGAL/Qt/GraphicsItem.h
++++ b/include/CGAL/Qt/GraphicsItem.h
+@@ -24,7 +24,9 @@
+ #include <CGAL/auto_link/Qt4.h>
+ #include <QObject>
+ #include <QGraphicsItem>
++#ifndef Q_MOC_RUN
+ #include <CGAL/Object.h>
++#endif
+ 
+ 
+ 
+diff --git a/include/CGAL/Qt/GraphicsViewInput.h b/include/CGAL/Qt/GraphicsViewInput.h
+index 6c912cc..a5c5da8 100644
+--- a/include/CGAL/Qt/GraphicsViewInput.h
++++ b/include/CGAL/Qt/GraphicsViewInput.h
+@@ -22,7 +22,9 @@
+ #define CGAL_QT_GRAPHICS_VIEW_INPUT_H
+ 
+ #include <CGAL/auto_link/Qt4.h>
++#ifndef Q_MOC_RUN
+ #include <CGAL/Object.h>
++#endif
+ #include <QObject>
+ 
+ namespace CGAL {
+-- 
+1.7.7.3
+diff --git a/cmake/modules/CGAL_Macros.cmake b/cmake/modules/CGAL_Macros.cmake
+--- a/cmake/modules/CGAL_Macros.cmake	2011-12-28 15:19:49.885888900 -0300
++++ b/cmake/modules/CGAL_Macros.cmake	2011-12-28 15:20:20.435888915 -0300
+@@ -164,9 +164,9 @@
+         if ( ${LIB}_RUN_RES EQUAL "0" )
+         
+           string( REGEX MATCH "version=.*\$" ${LIB}_VERSION_LINE ${${LIB}_OUTPUT}  )
+-          string( REPLACE "\n" "" ${LIB}_VERSION_LINE2 ${${LIB}_VERSION_LINE} )
+-          string( REPLACE "\r" "" ${LIB}_VERSION_LINE3 ${${LIB}_VERSION_LINE2} )
+-          string( REPLACE "version=" "" ${LIB}_VERSION ${${LIB}_VERSION_LINE3} )
++          string( REPLACE "\n" "" "${LIB}_VERSION_LINE2" "${${LIB}_VERSION_LINE}" )
++          string( REPLACE "\r" "" "${LIB}_VERSION_LINE3" "${${LIB}_VERSION_LINE2}" )
++          string( REPLACE "version=" "" "${LIB}_VERSION" "${${LIB}_VERSION_LINE3}" )
+           
+         else()
+         
