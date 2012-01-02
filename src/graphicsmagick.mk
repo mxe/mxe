@@ -4,8 +4,8 @@
 # GraphicsMagick
 PKG             := graphicsmagick
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.12
-$(PKG)_CHECKSUM := 6b8a414af162ad8679f2f04b10f128edc8ee3233
+$(PKG)_VERSION  := 1.3.13
+$(PKG)_CHECKSUM := f1f9e88afbb9729513e8868f718e72e66226e556
 $(PKG)_SUBDIR   := GraphicsMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := GraphicsMagick-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.graphicsmagick.org/

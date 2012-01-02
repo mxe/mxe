@@ -1,76 +1,109 @@
 This file is part of mingw-cross-env.
 See doc/index.html for further information.
 
-Patches taken from
-https://sourceforge.net/tracker/?func=detail&aid=3288762&group_id=52781&atid=468023
-https://sourceforge.net/tracker/?func=detail&aid=3288772&group_id=52781&atid=468023
+Contains ad hoc patches for cross building.
 
-From d49ac167169e2db531e1be5a48575186c8bc8799 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Mon, 18 Apr 2011 09:20:27 +0200
-Subject: [PATCH 1/2] use ws2spi instead of wspiapi
+From a4e9166bc8d78b2aee3c25757d479d4c2e53c7be Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 23 Oct 2011 21:36:53 +0200
+Subject: [PATCH 1/3] support static linking to ntlm
 
+---
+ configure |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h
-index 238b7f1..ffccf80 100644
---- a/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h
-+++ b/gsoap/VisualStudio2005/wsdl2h/wsdl2h/stdsoap2.h
-@@ -693,7 +693,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
- # endif
- #  include <winsock2.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
- #  include <ws2tcpip.h>
--#  include <wspiapi.h>
-+#  include <ws2spi.h>
- # ifdef WITH_IPV6
- #  define SOAP_GAI_STRERROR gai_strerrorA
- # endif
-diff --git a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h
-index 238b7f1..ffccf80 100644
---- a/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h
-+++ b/gsoap/samples/calc_vs2005/calc_vs2005/stdsoap2.h
-@@ -693,7 +693,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
- # endif
- #  include <winsock2.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
- #  include <ws2tcpip.h>
--#  include <wspiapi.h>
-+#  include <ws2spi.h>
- # ifdef WITH_IPV6
- #  define SOAP_GAI_STRERROR gai_strerrorA
- # endif
-diff --git a/gsoap/stdsoap2.h b/gsoap/stdsoap2.h
-index 238b7f1..ffccf80 100644
---- a/gsoap/stdsoap2.h
-+++ b/gsoap/stdsoap2.h
-@@ -693,7 +693,7 @@ A commercial use license is available from Genivia, Inc., contact@genivia.com
- # endif
- #  include <winsock2.h> /* Visual Studio 2005 users: you must install the Platform SDK (R2) */
- #  include <ws2tcpip.h>
--#  include <wspiapi.h>
-+#  include <ws2spi.h>
- # ifdef WITH_IPV6
- #  define SOAP_GAI_STRERROR gai_strerrorA
- # endif
+diff --git a/configure b/configure
+index ad1830d..be95edf 100755
+--- a/configure
++++ b/configure
+@@ -4822,7 +4822,7 @@ case "${host}" in
+ 			;;
+ 	*-*-cygwin*)	platform=CYGWIN ;;
+ 	*-*-mingw*)	platform=MINGW
+-			SAMPLE_EXTRA_LIBS="-lws2_32 -lkernel32 -luser32 -lgdi32"
++			SAMPLE_EXTRA_LIBS="-lntlm -lws2_32 -lkernel32 -luser32 -lgdi32"
+ 			;;
+         *-*-freebsd*)   platform=FREEBSD ;;
+         *-*-openbsd*)   platform=OPENBSD ;;
 -- 
-1.7.4.1
+1.7.7
 
 
-From 2ed5f1205a5517c4f1d919942fbebd58327ee3df Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Mon, 18 Apr 2011 10:14:06 +0200
-Subject: [PATCH 2/2] add missing libs to gsoapssl++.pc
+From da0eb2fc386be0fd914ef8f9a7d6bf73004ea230 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 24 Oct 2011 11:17:13 +0200
+Subject: [PATCH 2/3] ntlm support in .pc files
 
+---
+ gsoap++.pc.in    |    2 +-
+ gsoap.pc.in      |    2 +-
+ gsoapck++.pc.in  |    2 +-
+ gsoapck.pc.in    |    2 +-
+ gsoapssl++.pc.in |    2 +-
+ gsoapssl.pc.in   |    2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/gsoapssl++.pc.in b/gsoapssl++.pc.in
-index e8c8f4f..07515fe 100644
---- a/gsoapssl++.pc.in
-+++ b/gsoapssl++.pc.in
-@@ -7,5 +7,5 @@ Name: GSoap
- Description: SOAP C++ Web Services with SSL and ZLIB
+diff --git a/gsoap++.pc.in b/gsoap++.pc.in
+index 035afd9..3411d55 100644
+--- a/gsoap++.pc.in
++++ b/gsoap++.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services
  Version: @VERSION@
  Requires:
--Libs: -L${libdir} -lgsoapssl++
-+Libs: -L${libdir} -lgsoapssl++ @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
- Cflags: -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
+ Libs: -L${libdir} -lgsoap++ @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
+diff --git a/gsoap.pc.in b/gsoap.pc.in
+index e2607aa..96a54b9 100644
+--- a/gsoap.pc.in
++++ b/gsoap.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C Web Services
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoap @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
+diff --git a/gsoapck++.pc.in b/gsoapck++.pc.in
+index cb03e2f..b349049 100644
+--- a/gsoapck++.pc.in
++++ b/gsoapck++.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services with Cookies Enabled
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoapck++ @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
+diff --git a/gsoapck.pc.in b/gsoapck.pc.in
+index 859a922..e5ce5eb 100644
+--- a/gsoapck.pc.in
++++ b/gsoapck.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C Web Services with Cookies Enabled
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoapck @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
+diff --git a/gsoapssl++.pc.in b/gsoapssl++.pc.in
+index 391d820..791408a 100644
+--- a/gsoapssl++.pc.in
++++ b/gsoapssl++.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services with SSL and ZLIB
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoapssl++ @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
+diff --git a/gsoapssl.pc.in b/gsoapssl.pc.in
+index 79c940a..17c9ee3 100644
+--- a/gsoapssl.pc.in
++++ b/gsoapssl.pc.in
+@@ -8,4 +8,4 @@ Description: SOAP C Web Services with SSL and ZLIB
+ Version: @VERSION@
+ Requires:
+ Libs: -L${libdir} -lgsoapssl @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
+-Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
 -- 
-1.7.4.1
+1.7.7
+
 

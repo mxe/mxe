@@ -1,0 +1,28 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 584c7cdb78b5e7a5b15525c0ec28984ea949a9e8 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Thu, 22 Dec 2011 14:00:35 +0100
+Subject: [PATCH] add missing lzma to Libs.private for pkg-config
+
+taken from:
+http://old.nabble.com/-PATCH--add-missing-lzma-to-Libs.private-for-pkg-config-td33023671.html
+
+diff --git a/configure.ac b/configure.ac
+index fa23704..da8e6a5 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -720,6 +720,7 @@ fi
+ if test "$HAVE_LZMA" = "yes" ; then
+   AC_DEFINE(LZMA_SUPPORT,1,[Support LZMA2 compression])
+   LIBS="-llzma $LIBS"
++  tiff_libs_private="-llzma ${tiff_libs_private}"
+ 
+   if test "$HAVE_RPATH" = "yes" -a "x$with_lzma_lib_dir" != "x" ; then
+     LIBDIR="-R $with_lzma_lib_dir $LIBDIR"
+-- 
+1.7.8
+

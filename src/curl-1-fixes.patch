@@ -1,0 +1,728 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Commits backported (cherry-picked) from upstream.
+http://github.com/bagder/curl
+Also contains mingw-cross-env specific fixes.
+
+From 017b42a86ec4cac8a4cd71cc607d0a4d201ff4fd Mon Sep 17 00:00:00 2001
+From: Volker Grabsch <vog@notjusthosting.com>
+Date: Fri, 28 Oct 2011 13:48:04 +0200
+Subject: [PATCH 1/7] static linking for mingw-cross-env
+
+---
+ include/curl/curlbuild.h.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/include/curl/curlbuild.h.in b/include/curl/curlbuild.h.in
+index fe348f4..c428273 100644
+--- a/include/curl/curlbuild.h.in
++++ b/include/curl/curlbuild.h.in
+@@ -111,6 +111,9 @@
+ /*  EXTERNAL INTERFACE SETTINGS FOR CONFIGURE CAPABLE SYSTEMS ONLY  */
+ /* ================================================================ */
+ 
++/* Configure process defines this to 1 when static linking is requested. */
++#undef CURL_STATICLIB
++
+ /* Configure process defines this to 1 when it finds out that system  */
+ /* header file ws2tcpip.h must be included by the external interface. */
+ #undef CURL_PULL_WS2TCPIP_H
+-- 
+1.7.7.3
+
+
+From 1ce66d38f2696a25aeac411beaf9e291c8775fe5 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Tue, 15 Nov 2011 11:52:32 +0200
+Subject: [PATCH 2/7] Add support for using nettle instead of gcrypt as gnutls
+ backend (cherry picked from commit
+ 64f328c787ab763cc994eadd6b82f32490d37ebb)
+
+---
+ configure.ac         |   29 +++++++++++++++++++++--------
+ lib/curl_ntlm_core.c |   36 +++++++++++++++++++++++++++++++++++-
+ lib/curl_ntlm_msgs.c |   14 ++++++++++++++
+ lib/gtls.c           |    4 ++++
+ lib/md5.c            |   26 ++++++++++++++++++++++++++
+ 5 files changed, 100 insertions(+), 9 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 64ee1b7..2ba6625 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1799,17 +1799,30 @@ if test "$OPENSSL_ENABLED" != "1"; then
+ fi dnl OPENSSL != 1
+ 
+ dnl ---
+-dnl If GnuTLS is enabled, we MUST verify that it uses libgcrypt since
+-dnl curl code relies on that but recent GnuTLS versions can in fact build
+-dnl with different crypto libraries which curl right now cannot handle
++dnl Check which crypto backend GnuTLS uses
+ dnl ---
+ 
+ if test "$GNUTLS_ENABLED" = "1"; then
+-  AC_CHECK_LIB(gcrypt,
+-               gcry_control, ,
+-    [
+-      AC_MSG_ERROR([need GnuTLS built with gcrypt to function with GnuTLS])
+-    ])
++  USE_GNUTLS_NETTLE=
++  # First check if we can detect either crypto library via transitive linking
++  AC_CHECK_LIB(gnutls, nettle_MD5Init, [ USE_GNUTLS_NETTLE=1 ])
++  if test "$USE_GNUTLS_NETTLE" = ""; then
++    AC_CHECK_LIB(gnutls, gcry_control, [ USE_GNUTLS_NETTLE=0 ])
++  fi
++  # If not, try linking directly to both of them to see if they are available
++  if test "$USE_GNUTLS_NETTLE" = ""; then
++    AC_CHECK_LIB(nettle, nettle_MD5Init, [ USE_GNUTLS_NETTLE=1 ])
++  fi
++  if test "$USE_GNUTLS_NETTLE" = ""; then
++    AC_CHECK_LIB(gcrypt, gcry_control, [ USE_GNUTLS_NETTLE=0 ])
++  fi
++  if test "$USE_GNUTLS_NETTLE" = ""; then
++    AC_MSG_ERROR([GnuTLS found, but neither gcrypt nor nettle found])
++  fi
++  if test "$USE_GNUTLS_NETTLE" = "1"; then
++    AC_DEFINE(USE_GNUTLS_NETTLE, 1, [if GnuTLS uses nettle as crypto backend])
++    AC_SUBST(USE_GNUTLS_NETTLE, [1])
++  fi
+ fi
+ 
+ dnl ---
+diff --git a/lib/curl_ntlm_core.c b/lib/curl_ntlm_core.c
+index 0be16b4..39952d2 100644
+--- a/lib/curl_ntlm_core.c
++++ b/lib/curl_ntlm_core.c
+@@ -63,6 +63,11 @@
+ #    define DESKEY(x) &x
+ #  endif
+ 
++#elif defined(USE_GNUTLS_NETTLE)
++
++#  include <nettle/des.h>
++#  include <nettle/md4.h>
++
+ #elif defined(USE_GNUTLS)
+ 
+ #  include <gcrypt.h>
+@@ -133,7 +138,17 @@ static void extend_key_56_to_64(const unsigned char *key_56, char *key)
+   key[7] = (unsigned char) ((key_56[6] << 1) & 0xFF);
+ }
+ 
+-#if defined(USE_GNUTLS)
++#if defined(USE_GNUTLS_NETTLE)
++
++static void setup_des_key(const unsigned char *key_56,
++                          struct des_ctx *des)
++{
++  char key[8];
++  extend_key_56_to_64(key_56, key);
++  des_set_key(des, key);
++}
++
++#elif defined(USE_GNUTLS)
+ 
+ /*
+  * Turns a 56 bit key into the 64 bit, odd parity key and sets the key.
+@@ -233,6 +248,14 @@ void Curl_ntlm_core_lm_resp(const unsigned char *keys,
+   setup_des_key(keys + 14, DESKEY(ks));
+   DES_ecb_encrypt((DES_cblock*) plaintext, (DES_cblock*) (results + 16),
+                   DESKEY(ks), DES_ENCRYPT);
++#elif defined(USE_GNUTLS_NETTLE)
++  struct des_ctx des;
++  setup_des_key(keys, &des);
++  des_encrypt(&des, 8, results, plaintext);
++  setup_des_key(keys + 7, &des);
++  des_encrypt(&des, 8, results + 8, plaintext);
++  setup_des_key(keys + 14, &des);
++  des_encrypt(&des, 8, results + 16, plaintext);
+ #elif defined(USE_GNUTLS)
+   gcry_cipher_hd_t des;
+ 
+@@ -295,6 +318,12 @@ void Curl_ntlm_core_mk_lm_hash(struct SessionHandle *data,
+     setup_des_key(pw + 7, DESKEY(ks));
+     DES_ecb_encrypt((DES_cblock *)magic, (DES_cblock *)(lmbuffer + 8),
+                     DESKEY(ks), DES_ENCRYPT);
++#elif defined(USE_GNUTLS_NETTLE)
++    struct des_ctx des;
++    setup_des_key(pw, &des);
++    des_encrypt(&des, 8, lmbuffer, magic);
++    setup_des_key(pw + 7, &des);
++    des_encrypt(&des, 8, lmbuffer + 8, magic);
+ #elif defined(USE_GNUTLS)
+     gcry_cipher_hd_t des;
+ 
+@@ -357,6 +386,11 @@ CURLcode Curl_ntlm_core_mk_nt_hash(struct SessionHandle *data,
+     MD4_Init(&MD4pw);
+     MD4_Update(&MD4pw, pw, 2 * len);
+     MD4_Final(ntbuffer, &MD4pw);
++#elif defined(USE_GNUTLS_NETTLE)
++    struct md4_ctx MD4pw;
++    md4_init(&MD4pw);
++    md4_update(&MD4pw, 2 * len, pw);
++    md4_digest(&MD4pw, MD4_DIGEST_SIZE, ntbuffer);
+ #elif defined(USE_GNUTLS)
+     gcry_md_hd_t MD4pw;
+     gcry_md_open(&MD4pw, GCRY_MD_MD4, 0);
+diff --git a/lib/curl_ntlm_msgs.c b/lib/curl_ntlm_msgs.c
+index bfd3e28..712c4b4 100644
+--- a/lib/curl_ntlm_msgs.c
++++ b/lib/curl_ntlm_msgs.c
+@@ -54,6 +54,13 @@
+ #  endif
+ #  include "ssluse.h"
+ 
++#elif defined(USE_GNUTLS_NETTLE)
++
++#  include <nettle/md5.h>
++#  include <gnutls/gnutls.h>
++#  include <gnutls/crypto.h>
++#  define MD5_DIGEST_LENGTH 16
++
+ #elif defined(USE_GNUTLS)
+ 
+ #  include <gcrypt.h>
+@@ -714,6 +721,9 @@ CURLcode Curl_ntlm_create_type3_message(struct SessionHandle *data,
+     MD5_CTX MD5pw;
+     Curl_ossl_seed(data); /* Initiate the seed if not already done */
+     RAND_bytes(entropy, 8);
++#elif defined(USE_GNUTLS_NETTLE)
++    struct md5_ctx MD5pw;
++    gnutls_rnd(GNUTLS_RND_RANDOM, entropy, 8);
+ #elif defined(USE_GNUTLS)
+     gcry_md_hd_t MD5pw;
+     Curl_gtls_seed(data); /* Initiate the seed if not already done */
+@@ -739,6 +749,10 @@ CURLcode Curl_ntlm_create_type3_message(struct SessionHandle *data,
+     MD5_Init(&MD5pw);
+     MD5_Update(&MD5pw, tmp, 16);
+     MD5_Final(md5sum, &MD5pw);
++#elif defined(USE_GNUTLS_NETTLE)
++    md5_init(&MD5pw);
++    md5_update(&MD5pw, 16, tmp);
++    md5_digest(&MD5pw, 16, md5sum);
+ #elif defined(USE_GNUTLS)
+     gcry_md_open(&MD5pw, GCRY_MD_MD5, 0);
+     gcry_md_write(MD5pw, tmp, MD5_DIGEST_LENGTH);
+diff --git a/lib/gtls.c b/lib/gtls.c
+index ed79313..a98a7e8 100644
+--- a/lib/gtls.c
++++ b/lib/gtls.c
+@@ -34,7 +34,9 @@
+ 
+ #include <gnutls/gnutls.h>
+ #include <gnutls/x509.h>
++#ifndef USE_GNUTLS_NETTLE
+ #include <gcrypt.h>
++#endif
+ 
+ #ifdef HAVE_SYS_SOCKET_H
+ #include <sys/socket.h>
+@@ -1032,7 +1034,9 @@ int Curl_gtls_seed(struct SessionHandle *data)
+   static bool ssl_seeded = FALSE;
+ 
+   /* Quickly add a bit of entropy */
++#ifndef USE_GNUTLS_NETTLE
+   gcry_fast_random_poll();
++#endif
+ 
+   if(!ssl_seeded || data->set.str[STRING_SSL_RANDOM_FILE] ||
+      data->set.str[STRING_SSL_EGDSOCKET]) {
+diff --git a/lib/md5.c b/lib/md5.c
+index f26e027..cf8e053 100644
+--- a/lib/md5.c
++++ b/lib/md5.c
+@@ -27,6 +27,30 @@
+ #include "curl_md5.h"
+ #include "curl_hmac.h"
+ 
++#ifdef USE_GNUTLS_NETTLE
++
++#include <nettle/md5.h>
++
++typedef struct md5_ctx MD5_CTX;
++
++static void MD5_Init(MD5_CTX * ctx)
++{
++  md5_init(ctx);
++}
++
++static void MD5_Update(MD5_CTX * ctx,
++                       const unsigned char * input,
++                       unsigned int inputLen)
++{
++  md5_update(ctx, inputLen, input);
++}
++
++static void MD5_Final(unsigned char digest[16], MD5_CTX * ctx)
++{
++  md5_digest(ctx, 16, digest);
++}
++#else
++
+ #ifdef USE_GNUTLS
+ 
+ #include <gcrypt.h>
+@@ -369,6 +393,8 @@ static void Decode (UINT4 *output,
+ 
+ #endif /* USE_GNUTLS */
+ 
++#endif /* USE_GNUTLS_NETTLE */
++
+ const HMAC_params Curl_HMAC_MD5[] = {
+   {
+     (HMAC_hinit_func) MD5_Init,           /* Hash initialization function. */
+-- 
+1.7.7.3
+
+
+From 380fb5054be1ccd85a80220fafbfcb33e1010f05 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 22 Nov 2011 22:48:15 +0100
+Subject: [PATCH 3/7] gnutls: only translate winsock errors for old versions
+
+Bugfix: https handshake fails using gnutls 3 on windows
+http://sourceforge.net/tracker/index.php?func=detail&aid=3441084&group_id=976&atid=100976
+
+New gnutls versions have an error handler that knows about Winsock
+errors, which is why gnutls_transport_set_global_errno() was deprecated
+and then removed.
+
+This is a correction of commit f5bb370 (blame me) which meant to
+reimplement gnutls_transport_set_global_errno(), which is not necessary.
+(cherry picked from commit 28bac99674f199898f3e803fcfc4167a56a4c058)
+---
+ lib/gtls.c |   15 +++++++++------
+ 1 files changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/lib/gtls.c b/lib/gtls.c
+index a98a7e8..c64c8c4 100644
+--- a/lib/gtls.c
++++ b/lib/gtls.c
+@@ -80,15 +80,17 @@ static void tls_log_func(int level, const char *str)
+ #endif
+ static bool gtls_inited = FALSE;
+ 
++#undef MAP_WINSOCK_ERRORS
+ #if defined(GNUTLS_VERSION_NUMBER)
+ #  if (GNUTLS_VERSION_NUMBER >= 0x020c00)
+ #    undef gnutls_transport_set_lowat
+ #    define gnutls_transport_set_lowat(A,B) Curl_nop_stmt
+ #    define USE_GNUTLS_PRIORITY_SET_DIRECT 1
+ #  endif
+-#  if (GNUTLS_VERSION_NUMBER >= 0x020c03)
+-#    undef gnutls_transport_set_global_errno
+-#    define gnutls_transport_set_global_errno(A) SET_ERRNO((A))
++#  if (GNUTLS_VERSION_NUMBER < 0x020c03)
++#    ifdef USE_WINSOCK
++#      define MAP_WINSOCK_ERRORS
++#    endif
+ #  endif
+ #endif
+ 
+@@ -100,6 +102,7 @@ static bool gtls_inited = FALSE;
+  * us to get specific about the fourth "flags" argument, and to use arbitrary
+  * private data with gnutls_transport_set_ptr if we wish.
+  *
++ * For old gnutls versions, curl must translate Winsock errors:
+  * When these custom push and pull callbacks fail, GNU TLS checks its own
+  * session-specific error variable, and when not set also its own global
+  * errno variable, in order to take appropriate action. GNU TLS does not
+@@ -111,7 +114,7 @@ static bool gtls_inited = FALSE;
+  * error translation must take place in these callbacks.
+  */
+ 
+-#ifdef USE_WINSOCK
++#ifdef MAP_WINSOCK_ERRORS
+ #  define gtls_EINTR  4
+ #  define gtls_EIO    5
+ #  define gtls_EAGAIN 11
+@@ -132,7 +135,7 @@ static int gtls_mapped_sockerrno(void)
+ static ssize_t Curl_gtls_push(void *s, const void *buf, size_t len)
+ {
+   ssize_t ret = swrite(GNUTLS_POINTER_TO_INT_CAST(s), buf, len);
+-#ifdef USE_WINSOCK
++#ifdef MAP_WINSOCK_ERRORS
+   if(ret < 0)
+     gnutls_transport_set_global_errno(gtls_mapped_sockerrno());
+ #endif
+@@ -142,7 +145,7 @@ static ssize_t Curl_gtls_push(void *s, const void *buf, size_t len)
+ static ssize_t Curl_gtls_pull(void *s, void *buf, size_t len)
+ {
+   ssize_t ret = sread(GNUTLS_POINTER_TO_INT_CAST(s), buf, len);
+-#ifdef USE_WINSOCK
++#ifdef MAP_WINSOCK_ERRORS
+   if(ret < 0)
+     gnutls_transport_set_global_errno(gtls_mapped_sockerrno());
+ #endif
+-- 
+1.7.7.3
+
+
+From 53b8a80e2e1d3a9a51ed461210a5244abdb0edfb Mon Sep 17 00:00:00 2001
+From: Yang Tse <yangsita@gmail.com>
+Date: Thu, 24 Nov 2011 12:11:52 +0100
+Subject: [PATCH 4/7] Fix unreleased regression when using windows gnutls
+ versions older than 2.8 (cherry picked from commit
+ 78feaff9d800efb5d1f97f8653721718a6cf00c8)
+
+---
+ lib/gtls.c |   18 +++++++++---------
+ 1 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/lib/gtls.c b/lib/gtls.c
+index c64c8c4..a2e8d99 100644
+--- a/lib/gtls.c
++++ b/lib/gtls.c
+@@ -80,17 +80,14 @@ static void tls_log_func(int level, const char *str)
+ #endif
+ static bool gtls_inited = FALSE;
+ 
+-#undef MAP_WINSOCK_ERRORS
+ #if defined(GNUTLS_VERSION_NUMBER)
+ #  if (GNUTLS_VERSION_NUMBER >= 0x020c00)
+ #    undef gnutls_transport_set_lowat
+ #    define gnutls_transport_set_lowat(A,B) Curl_nop_stmt
+ #    define USE_GNUTLS_PRIORITY_SET_DIRECT 1
+ #  endif
+-#  if (GNUTLS_VERSION_NUMBER < 0x020c03)
+-#    ifdef USE_WINSOCK
+-#      define MAP_WINSOCK_ERRORS
+-#    endif
++#  if (GNUTLS_VERSION_NUMBER >= 0x020c03)
++#    define GNUTLS_MAPS_WINSOCK_ERRORS 1
+ #  endif
+ #endif
+ 
+@@ -102,7 +99,6 @@ static bool gtls_inited = FALSE;
+  * us to get specific about the fourth "flags" argument, and to use arbitrary
+  * private data with gnutls_transport_set_ptr if we wish.
+  *
+- * For old gnutls versions, curl must translate Winsock errors:
+  * When these custom push and pull callbacks fail, GNU TLS checks its own
+  * session-specific error variable, and when not set also its own global
+  * errno variable, in order to take appropriate action. GNU TLS does not
+@@ -112,9 +108,13 @@ static bool gtls_inited = FALSE;
+  * resort global errno variable using gnutls_transport_set_global_errno,
+  * with a transport agnostic error value. This implies that some winsock
+  * error translation must take place in these callbacks.
++ *
++ * Paragraph above applies to GNU TLS versions older than 2.12.3, since
++ * this version GNU TLS does its own internal winsock error translation
++ * using system_errno() function.
+  */
+ 
+-#ifdef MAP_WINSOCK_ERRORS
++#if defined(USE_WINSOCK) && !defined(GNUTLS_MAPS_WINSOCK_ERRORS)
+ #  define gtls_EINTR  4
+ #  define gtls_EIO    5
+ #  define gtls_EAGAIN 11
+@@ -135,7 +135,7 @@ static int gtls_mapped_sockerrno(void)
+ static ssize_t Curl_gtls_push(void *s, const void *buf, size_t len)
+ {
+   ssize_t ret = swrite(GNUTLS_POINTER_TO_INT_CAST(s), buf, len);
+-#ifdef MAP_WINSOCK_ERRORS
++#if defined(USE_WINSOCK) && !defined(GNUTLS_MAPS_WINSOCK_ERRORS)
+   if(ret < 0)
+     gnutls_transport_set_global_errno(gtls_mapped_sockerrno());
+ #endif
+@@ -145,7 +145,7 @@ static ssize_t Curl_gtls_push(void *s, const void *buf, size_t len)
+ static ssize_t Curl_gtls_pull(void *s, void *buf, size_t len)
+ {
+   ssize_t ret = sread(GNUTLS_POINTER_TO_INT_CAST(s), buf, len);
+-#ifdef MAP_WINSOCK_ERRORS
++#if defined(USE_WINSOCK) && !defined(GNUTLS_MAPS_WINSOCK_ERRORS)
+   if(ret < 0)
+     gnutls_transport_set_global_errno(gtls_mapped_sockerrno());
+ #endif
+-- 
+1.7.7.3
+
+
+From 8cd4aa2718f67e50a72bb34c9d8ede803c86b287 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 25 Nov 2011 23:00:16 +0100
+Subject: [PATCH 5/7] configure: add support for pkg-config detection of
+ libidn (cherry picked from commit
+ 874855b743bd7e9bbbaebe2834dd281d2b2cea80)
+
+---
+ configure.ac |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 2ba6625..52158f1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2377,6 +2377,15 @@ case "$LIBIDN" in
+        fi
+ 
+        if test "x$idn" != "xyes"; then
++         dnl check with pkg-config
++         PKG_CHECK_MODULES(LIBIDN_PC, libidn >= 0.0.0, [idn=yes], [idn=no])
++         if test "x$idn" = "xyes"; then
++            LIBS="$LIBS $LIBIDN_PC_LIBS"
++            CPPFLAGS="$CPPFLAGS $LIBIDN_PC_CFLAGS"
++         fi
++       fi
++
++       if test "x$idn" != "xyes"; then
+           dnl check with default paths
+           idn="yes"
+           AC_CHECK_LIB(idn, idna_to_ascii_lz, ,
+-- 
+1.7.7.3
+
+
+From e5d7e688946a01c4c24568981fa7252aadf818b4 Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Sun, 27 Nov 2011 20:00:30 +0100
+Subject: [PATCH 6/7] configure: fix to make older pkg-config play well
+
+configure.ac:1349: error: possibly undefined macro: PKG_CONFIG_LIBDIR
+
+Obviously this is not a problem with pkg-config 0.26 but older versions
+seem to show this.
+
+Fix suggested by: Kamil Dudka
+Reported by: Guenter
+Bug: http://curl.haxx.se/mail/lib-2011-11/0298.html
+(cherry picked from commit 11e52ef0a157acd6a6711b7635cda50467e606ae)
+---
+ configure.ac |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 52158f1..7d2c7e4 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2377,6 +2377,10 @@ case "$LIBIDN" in
+        fi
+ 
+        if test "x$idn" != "xyes"; then
++
++         dnl to prevent errors with pkg-config < 0.26
++         m4_pattern_allow(PKG_CONFIG_LIBDIR)
++
+          dnl check with pkg-config
+          PKG_CHECK_MODULES(LIBIDN_PC, libidn >= 0.0.0, [idn=yes], [idn=no])
+          if test "x$idn" = "xyes"; then
+-- 
+1.7.7.3
+
+
+From 69772182aa9e08e39f42d17abb5af553b493a90c Mon Sep 17 00:00:00 2001
+From: Yang Tse <yangsita@gmail.com>
+Date: Tue, 29 Nov 2011 19:11:34 +0100
+Subject: [PATCH 7/7] configure: avoid usage of macro PKG_CHECK_MODULES
+
+libidn option adjusted in order to use pkg-config info when available
+in a similar way as we already do for other libraries.
+(cherry picked from commit f80a508297e7ece911bbb833436985070e17e6a8)
+---
+ configure.ac |  183 +++++++++++++++++++++++++++++++++++++++++----------------
+ 1 files changed, 131 insertions(+), 52 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 7d2c7e4..94cdd83 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2349,64 +2349,143 @@ dnl Check for the presence of IDN libraries and headers
+ dnl **********************************************************************
+ 
+ AC_MSG_CHECKING([whether to build with libidn])
++OPT_IDN="default"
+ AC_ARG_WITH(libidn,
+ AC_HELP_STRING([--with-libidn=PATH],[Enable libidn usage])
+ AC_HELP_STRING([--without-libidn],[Disable libidn usage]),
+-  [LIBIDN="$withval"])
+-
+-case "$LIBIDN" in
++  [OPT_IDN=$withval])
++case "$OPT_IDN" in
+   no)
+-       AC_MSG_RESULT(no)
+-       ;;
+-  *)   AC_MSG_RESULT(yes)
+-
+-       idn=""
+-       dnl if there is a given path, check that FIRST
+-       if test -n "$LIBIDN"; then
+-         if test "x$LIBIDN" != "xyes"; then
+-            oldLDFLAGS=$LDFLAGS
+-            oldCPPFLAGS=$CPPFLAGS
+-            LDFLAGS="$LDFLAGS -L$LIBIDN/lib"
+-            CPPFLAGS="$CPPFLAGS -I$LIBIDN/include"
+-            idn="yes"
+-            AC_CHECK_LIB(idn, idna_to_ascii_4i, ,
+-                         idn=""
+-                         LDFLAGS=$oldLDFLAGS
+-                         CPPFLAGS=$oldCPPFLAGS)
+-         fi
+-       fi
+-
+-       if test "x$idn" != "xyes"; then
+-
+-         dnl to prevent errors with pkg-config < 0.26
+-         m4_pattern_allow(PKG_CONFIG_LIBDIR)
+-
+-         dnl check with pkg-config
+-         PKG_CHECK_MODULES(LIBIDN_PC, libidn >= 0.0.0, [idn=yes], [idn=no])
+-         if test "x$idn" = "xyes"; then
+-            LIBS="$LIBS $LIBIDN_PC_LIBS"
+-            CPPFLAGS="$CPPFLAGS $LIBIDN_PC_CFLAGS"
+-         fi
+-       fi
+-
+-       if test "x$idn" != "xyes"; then
+-          dnl check with default paths
+-          idn="yes"
+-          AC_CHECK_LIB(idn, idna_to_ascii_lz, ,
+-                       idn="")
+-       fi
+-
+-       if test "x$idn" = "xyes"; then
+-         curl_idn_msg="enabled"
+-         AC_SUBST(IDN_ENABLED, [1])
+-         dnl different versions of libidn have different setups of these:
+-         AC_CHECK_FUNCS( idn_free idna_strerror tld_strerror)
+-         AC_CHECK_HEADERS( idn-free.h tld.h )
+-       fi
+-
+-       ;;
++    dnl --without-libidn option used
++    want_idn="no"
++    AC_MSG_RESULT([no])
++    ;;
++  default)
++    dnl configure option not specified
++    want_idn="yes"
++    want_idn_path="default"
++    AC_MSG_RESULT([(assumed) yes])
++    ;;
++  yes)
++    dnl --with-libidn option used without path
++    want_idn="yes"
++    want_idn_path="default"
++    AC_MSG_RESULT([yes])
++    ;;
++  *)
++    dnl --with-libidn option used with path
++    want_idn="yes"
++    want_idn_path="$withval"
++    AC_MSG_RESULT([yes ($withval)])
++    ;;
+ esac
+ 
++if test "$want_idn" = "yes"; then
++  dnl idn library support has been requested
++  clean_CPPFLAGS="$CPPFLAGS"
++  clean_LDFLAGS="$LDFLAGS"
++  clean_LIBS="$LIBS"
++  PKGCONFIG="no"
++  #
++  if test "$want_idn_path" != "default"; then
++    dnl path has been specified
++    IDN_PCDIR="$want_idn_path/lib$libsuff/pkgconfig"
++    CURL_CHECK_PKGCONFIG(libidn, [$IDN_PCDIR])
++    if test "$PKGCONFIG" != "no"; then
++      IDN_LIBS=`CURL_EXPORT_PCDIR([$IDN_PCDIR]) dnl
++        $PKGCONFIG --libs-only-l libidn 2>/dev/null`
++      IDN_LDFLAGS=`CURL_EXPORT_PCDIR([$IDN_PCDIR]) dnl
++        $PKGCONFIG --libs-only-L libidn 2>/dev/null`
++      IDN_CPPFLAGS=`CURL_EXPORT_PCDIR([$IDN_PCDIR]) dnl
++        $PKGCONFIG --cflags-only-I libidn 2>/dev/null`
++      IDN_DIR=`echo $IDN_LDFLAGS | $SED -e 's/-L//'`
++    else
++      dnl pkg-config not available or provides no info
++      IDN_LIBS="-lidn"
++      IDN_LDFLAGS="-L$want_idn_path/lib$libsuff"
++      IDN_CPPFLAGS="-I$want_idn_path/include"
++      IDN_DIR="$want_idn_path/lib$libsuff"
++    fi
++  else
++    dnl path not specified
++    CURL_CHECK_PKGCONFIG(libidn)
++    if test "$PKGCONFIG" != "no"; then
++      IDN_LIBS=`$PKGCONFIG --libs-only-l libidn 2>/dev/null`
++      IDN_LDFLAGS=`$PKGCONFIG --libs-only-L libidn 2>/dev/null`
++      IDN_CPPFLAGS=`$PKGCONFIG --cflags-only-I libidn 2>/dev/null`
++      IDN_DIR=`echo $IDN_LDFLAGS | $SED -e 's/-L//'`
++    else
++      dnl pkg-config not available or provides no info
++      IDN_LIBS="-lidn"
++    fi
++  fi
++  #
++  if test "$PKGCONFIG" != "no"; then
++    AC_MSG_NOTICE([pkg-config: IDN_LIBS: "$IDN_LIBS"])
++    AC_MSG_NOTICE([pkg-config: IDN_LDFLAGS: "$IDN_LDFLAGS"])
++    AC_MSG_NOTICE([pkg-config: IDN_CPPFLAGS: "$IDN_CPPFLAGS"])
++    AC_MSG_NOTICE([pkg-config: IDN_DIR: "$IDN_DIR"])
++  else
++    AC_MSG_NOTICE([IDN_LIBS: "$IDN_LIBS"])
++    AC_MSG_NOTICE([IDN_LDFLAGS: "$IDN_LDFLAGS"])
++    AC_MSG_NOTICE([IDN_CPPFLAGS: "$IDN_CPPFLAGS"])
++    AC_MSG_NOTICE([IDN_DIR: "$IDN_DIR"])
++  fi
++  #
++  CPPFLAGS="$IDN_CPPFLAGS $CPPFLAGS"
++  LDFLAGS="$IDN_LDFLAGS $LDFLAGS"
++  LIBS="$IDN_LIBS $LIBS"
++  #
++  AC_MSG_CHECKING([if idna_to_ascii_4i can be linked])
++  AC_LINK_IFELSE([
++    AC_LANG_FUNC_LINK_TRY([idna_to_ascii_4i])
++  ],[
++    AC_MSG_RESULT([yes])
++    tst_links_libidn="yes"
++  ],[
++    AC_MSG_RESULT([no])
++    tst_links_libidn="no"
++  ])
++  if test "$tst_links_libidn" = "no"; then
++    AC_MSG_CHECKING([if idna_to_ascii_lz can be linked])
++    AC_LINK_IFELSE([
++      AC_LANG_FUNC_LINK_TRY([idna_to_ascii_lz])
++    ],[
++      AC_MSG_RESULT([yes])
++      tst_links_libidn="yes"
++    ],[
++      AC_MSG_RESULT([no])
++      tst_links_libidn="no"
++    ])
++  fi
++  #
++  if test "$tst_links_libidn" = "yes"; then
++    AC_DEFINE(HAVE_LIBIDN, 1, [Define to 1 if you have the `idn' library (-lidn).])
++    dnl different versions of libidn have different setups of these:
++    AC_CHECK_FUNCS( idn_free idna_strerror tld_strerror )
++    AC_CHECK_HEADERS( idn-free.h tld.h )
++    if test "x$ac_cv_header_tld_h" = "xyes"; then
++      AC_SUBST([IDN_ENABLED], [1])
++      curl_idn_msg="enabled"
++      if test -n "$IDN_DIR"; then
++        LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$IDN_DIR"
++        export LD_LIBRARY_PATH
++        AC_MSG_NOTICE([Added $IDN_DIR to LD_LIBRARY_PATH])
++      fi
++    else
++      AC_MSG_WARN([Libraries for IDN support too old: IDN disabled])
++      CPPFLAGS="$clean_CPPFLAGS"
++      LDFLAGS="$clean_LDFLAGS"
++      LIBS="$clean_LIBS"
++    fi
++  else
++    AC_MSG_WARN([Cannot find libraries for IDN support: IDN disabled])
++    CPPFLAGS="$clean_CPPFLAGS"
++    LDFLAGS="$clean_LDFLAGS"
++    LIBS="$clean_LIBS"
++  fi
++fi
++
+ 
+ dnl Let's hope this split URL remains working:
+ dnl http://publibn.boulder.ibm.com/doc_link/en_US/a_doc_lib/aixprggd/ \
+-- 
+1.7.7.3
+

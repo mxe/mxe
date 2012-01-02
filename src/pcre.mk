@@ -4,8 +4,8 @@
 # PCRE
 PKG             := pcre
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8.12
-$(PKG)_CHECKSUM := 2219b372bff53ee29a7e44ecf5977ad15df01cea
+$(PKG)_VERSION  := 8.21
+$(PKG)_CHECKSUM := 52abf655d94f5208377258ffff27c7b35c53af39
 $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.pcre.org/
@@ -21,10 +21,9 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/pcre.h.in'
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/pcreposix.h'
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-utf8 \

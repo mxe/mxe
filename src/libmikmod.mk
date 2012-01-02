@@ -29,6 +29,7 @@ define $(PKG)_BUILD
         ./configure \
             --disable-shared \
             --prefix='$(PREFIX)/$(TARGET)' \
+            --libdir='$(PREFIX)/$(TARGET)/lib' \
             --disable-esd
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 

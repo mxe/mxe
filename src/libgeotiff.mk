@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        LIBS='-ljpeg -lz'
+        LIBS="`'$(TARGET)-pkg-config' --libs libtiff-4` -ljpeg -lz"
     $(MAKE) -C '$(1)' -j 1 all install EXEEXT=.remove-me MAKE='$(MAKE)'
     rm -fv '$(PREFIX)/$(TARGET)'/bin/*.remove-me
 endef

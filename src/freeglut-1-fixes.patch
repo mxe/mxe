@@ -1,0 +1,56 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 80e19ec2e4f84fb9d0959993b53ade4bd6cb9195 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Mon, 24 Oct 2011 09:40:10 +0200
+Subject: [PATCH] add pkg-config support
+
+based on
+http://old.nabble.com/-PATCH--Add-pkgconfig-file-td23312302.html
+
+diff --git a/Makefile.am b/Makefile.am
+index 39c5628..b504bc6 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -68,3 +68,6 @@ dist-hook:
+ 
+ libtool: $(LIBTOOL_DEPS)
+ 	$(SHELL) ./config.status --recheck
++
++pkgconfigdir = $(libdir)/pkgconfig
++pkgconfig_DATA = glut.pc
+diff --git a/configure.ac b/configure.ac
+index 2f81174..5f069f7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -95,5 +95,5 @@ if test "x$enable_debug" = xyes; then
+ fi
+ 
+ # Generate output.
+-AC_CONFIG_FILES([Makefile doc/Makefile include/GL/Makefile include/Makefile progs/Makefile progs/demos/CallbackMaker/Makefile progs/demos/Fractals/Makefile progs/demos/Fractals_random/Makefile progs/demos/Lorenz/Makefile progs/demos/Makefile progs/demos/One/Makefile progs/demos/shapes/Makefile progs/demos/smooth_opengl3/Makefile progs/demos/spaceball/Makefile src/Makefile])
++AC_CONFIG_FILES([Makefile doc/Makefile include/GL/Makefile include/Makefile progs/Makefile progs/demos/CallbackMaker/Makefile progs/demos/Fractals/Makefile progs/demos/Fractals_random/Makefile progs/demos/Lorenz/Makefile progs/demos/Makefile progs/demos/One/Makefile progs/demos/shapes/Makefile progs/demos/smooth_opengl3/Makefile progs/demos/spaceball/Makefile src/Makefile glut.pc])
+ AC_OUTPUT
+diff --git a/glut.pc.in b/glut.pc.in
+new file mode 100644
+index 0000000..ea57c4a
+--- /dev/null
++++ b/glut.pc.in
+@@ -0,0 +1,12 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@/@PACKAGE@
++
++Name: glut
++Description: A freely licensed alternative to the GLUT library
++Version: @VERSION@
++Libs: -L${libdir} -lglut
++Libs.private: -lglu32 -lopengl32 -lwinmm -lgdi32 -mwindows
++Cflags: -DFREEGLUT_STATIC -I${includedir}
++
+-- 
+1.7.7
+

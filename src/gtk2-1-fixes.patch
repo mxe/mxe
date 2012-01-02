@@ -3,14 +3,14 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 1acd5465c0b9f2f612c5904ea7e652475fb3bee6 Mon Sep 17 00:00:00 2001
+From 2e42ff35296c81959a8fab06aa8d3dacf19632d8 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 14:43:43 +0200
-Subject: [PATCH 01/11] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 01/10] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
-index 94b7ac7..2c01be6 100644
+index dc139be..be2a7ee 100644
 --- a/gdk/win32/gdkmain-win32.c
 +++ b/gdk/win32/gdkmain-win32.c
 @@ -65,7 +65,7 @@ const GOptionEntry _gdk_windowing_args[] = {
@@ -23,10 +23,10 @@ index 94b7ac7..2c01be6 100644
  	 LPVOID    reserved)
  {
 diff --git a/gtk/gtkmain.c b/gtk/gtkmain.c
-index fdf4730..428fd96 100644
+index d081f70..aa2973d 100644
 --- a/gtk/gtkmain.c
 +++ b/gtk/gtkmain.c
-@@ -73,7 +73,7 @@
+@@ -74,7 +74,7 @@
  static HMODULE gtk_dll;
  
  BOOL WINAPI
@@ -36,13 +36,13 @@ index fdf4730..428fd96 100644
  	 LPVOID    lpvReserved)
  {
 -- 
-1.7.1
+1.7.7.3
 
 
-From bc446ce0785954ccf28825554c3074a15b4f4071 Mon Sep 17 00:00:00 2001
+From 86527a238545e47b4770531c79f5f2ead59aab85 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 14:46:20 +0200
-Subject: [PATCH 02/11] s,__declspec(dllimport),,
+Subject: [PATCH 02/10] s,__declspec(dllimport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
@@ -72,7 +72,7 @@ index 2190973..0a1c43c 100644
  #else
  #  define GTKVAR extern
 diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
-index 21de92e..2c0f94c 100644
+index bbea9cd..059d7d0 100644
 --- a/gtk/gtkmain.h
 +++ b/gtk/gtkmain.h
 @@ -69,7 +69,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
@@ -98,13 +98,13 @@ index c624aea..b792ea5 100644
  #else
  #define VARIABLE extern
 -- 
-1.7.1
+1.7.7.3
 
 
-From 078f0c210e1706b4028907bf55cc55672d5dc7d3 Mon Sep 17 00:00:00 2001
+From 7277a7022eb4ffb498475d969057d3a57e687222 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 15:03:28 +0200
-Subject: [PATCH 03/11] s,__declspec(dllexport),,
+Subject: [PATCH 03/10] s,__declspec(dllexport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
@@ -134,7 +134,7 @@ index 0a1c43c..507ff69 100644
  #    define GTKVAR extern 
  #  endif
 diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
-index 2c0f94c..9c47b57 100644
+index 059d7d0..8c360d0 100644
 --- a/gtk/gtkmain.h
 +++ b/gtk/gtkmain.h
 @@ -67,7 +67,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
@@ -160,13 +160,13 @@ index b792ea5..f382a64 100644
  #define VARIABLE extern 
  #endif
 -- 
-1.7.1
+1.7.7.3
 
 
-From 69568bc7c8627d117521548192730665a9623b80 Mon Sep 17 00:00:00 2001
+From 604fcdb64972a82c6a430c36debc9f66c7f05d90 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 14:17:22 +0200
-Subject: [PATCH 04/11] fix gtk+-2.0.pc.in
+Subject: [PATCH 04/10] fix gtk+-2.0.pc.in
 
 
 diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
@@ -181,20 +181,20 @@ index 46853e1..7f3eb22 100644
 +Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
  Cflags: -I${includedir}/gtk-2.0 @GTK_EXTRA_CFLAGS@
 -- 
-1.7.1
+1.7.7.3
 
 
-From 1f60f6943b5c67a199660618e546de5f0faafeef Mon Sep 17 00:00:00 2001
+From a778e96b43b556389f1e3a6712072eaee9e2adb2 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 14:48:31 +0200
-Subject: [PATCH 05/11] disable gtkbuiltincache
+Subject: [PATCH 05/10] disable gtkbuiltincache
 
 
 diff --git a/gtk/Makefile.in b/gtk/Makefile.in
-index 39a35c2..89bae23 100644
+index 76981d8..b6d170f 100644
 --- a/gtk/Makefile.in
 +++ b/gtk/Makefile.in
-@@ -2872,7 +2872,7 @@ stamp-icons: $(STOCK_ICONS)
+@@ -2888,7 +2888,7 @@ stamp-icons: $(STOCK_ICONS)
  	) done 								\
  	&& touch stamp-icons
  
@@ -204,20 +204,20 @@ index 39a35c2..89bae23 100644
  	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
  	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 -- 
-1.7.1
+1.7.7.3
 
 
-From e24f3fb7d18d0690dddd1fdb1a629a06d49b4c11 Mon Sep 17 00:00:00 2001
+From 58310acc28f8e6994281eacac1989e8e6c51c150 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 14:49:50 +0200
-Subject: [PATCH 06/11] disable test-inline-pixbufs.h
+Subject: [PATCH 06/10] disable test-inline-pixbufs.h
 
 
 diff --git a/demos/Makefile.in b/demos/Makefile.in
-index 6bffbb8..c866923 100644
+index 9f90d09..2e4f967 100644
 --- a/demos/Makefile.in
 +++ b/demos/Makefile.in
-@@ -433,7 +433,7 @@ LDADDS = \
+@@ -432,7 +432,7 @@ LDADDS = \
  	$(GTK_DEP_LIBS)							\
  	$(MATH_LIB)
  
@@ -227,20 +227,20 @@ index 6bffbb8..c866923 100644
  testpixbuf_drawable_DEPENDENCIES = $(DEPS)
  testpixbuf_save_DEPENDENCIES = $(DEPS)
 -- 
-1.7.1
+1.7.7.3
 
 
-From b34df7c9461a798e9a8202eec886ac5e173da3ea Mon Sep 17 00:00:00 2001
+From 7532813f3bfe95fe088c06ce11d31c0d3d66c559 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 14:51:04 +0200
-Subject: [PATCH 07/11] permit static building
+Subject: [PATCH 07/10] permit static building
 
 
 diff --git a/configure b/configure
-index f203b13..51e6619 100755
+index 5eedff6..6380da5 100755
 --- a/configure
 +++ b/configure
-@@ -4347,9 +4347,9 @@ if test "${enable_static+set}" = set; then :
+@@ -4361,9 +4361,9 @@ if test "${enable_static+set}" = set; then :
    enableval=$enable_static; p=${PACKAGE-default}
      case $enableval in
      yes) enable_static=yes ;;
@@ -252,7 +252,7 @@ index f203b13..51e6619 100755
        # Look at the argument we got.  We use all the common list separators.
        lt_save_ifs="$IFS"; IFS="${IFS}$PATH_SEPARATOR,"
        for pkg in $enableval; do
-@@ -4362,7 +4362,7 @@ if test "${enable_static+set}" = set; then :
+@@ -4376,7 +4376,7 @@ if test "${enable_static+set}" = set; then :
        ;;
      esac
  else
@@ -261,7 +261,7 @@ index f203b13..51e6619 100755
  fi
  
  
-@@ -4930,15 +4930,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+@@ -4944,15 +4944,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
  
  if test "$os_win32" = "yes"; then
    if test x$enable_static = xyes -o x$enable_static = x; then
@@ -283,7 +283,7 @@ index f203b13..51e6619 100755
  fi
  
  enable_win32_dll=yes
-@@ -8241,7 +8241,7 @@ done
+@@ -8752,7 +8752,7 @@ func_stripname_cnf ()
  if test "${enable_shared+set}" = set; then :
    enableval=$enable_shared; p=${PACKAGE-default}
      case $enableval in
@@ -292,7 +292,7 @@ index f203b13..51e6619 100755
      no) enable_shared=no ;;
      *)
        enable_shared=no
-@@ -8250,14 +8250,14 @@ if test "${enable_shared+set}" = set; then :
+@@ -8761,14 +8761,14 @@ if test "${enable_shared+set}" = set; then :
        for pkg in $enableval; do
  	IFS="$lt_save_ifs"
  	if test "X$pkg" = "X$p"; then
@@ -309,7 +309,7 @@ index f203b13..51e6619 100755
  fi
  
  
-@@ -11970,7 +11970,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+@@ -12632,7 +12632,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
    # are all built from PIC.
    case $host_os in
    aix3*)
@@ -318,7 +318,7 @@ index f203b13..51e6619 100755
      if test -n "$RANLIB"; then
        archive_cmds="$archive_cmds~\$RANLIB \$lib"
        postinstall_cmds='$RANLIB $lib'
-@@ -11979,7 +11979,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+@@ -12641,7 +12641,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
  
    aix[4-9]*)
      if test "$host_cpu" != ia64 && test "$aix_use_runtimelinking" = no ; then
@@ -328,20 +328,20 @@ index f203b13..51e6619 100755
      ;;
    esac
 -- 
-1.7.1
+1.7.7.3
 
 
-From 831f94ccf7a26662bfc9e8d22b9ae9eaea740bbb Mon Sep 17 00:00:00 2001
+From 821882bb862fc86b7152eba82966163d054b488e Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 14:53:18 +0200
-Subject: [PATCH 08/11] no -Wl
+Subject: [PATCH 08/10] no -Wl
 
 
 diff --git a/configure b/configure
-index 51e6619..8c04264 100755
+index 6380da5..7283f17 100755
 --- a/configure
 +++ b/configure
-@@ -22951,7 +22951,7 @@ fi
+@@ -23788,7 +23788,7 @@ fi
  fi
  
  if test "x$gdktarget" = "xwin32"; then
@@ -351,20 +351,20 @@ index 51e6619..8c04264 100755
    USE_WIN32_TRUE=
    USE_WIN32_FALSE='#'
 -- 
-1.7.1
+1.7.7.3
 
 
-From 2ec5f9d9ea8d7d80758c5272ff2e94fd0e7856e8 Mon Sep 17 00:00:00 2001
+From 80745459d75da07c53dbb83c6a79c3d9896e5fd3 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 14:54:15 +0200
-Subject: [PATCH 09/11] gio not gio-unix
+Subject: [PATCH 09/10] gio not gio-unix
 
 
 diff --git a/configure b/configure
-index 8c04264..d3e5e21 100755
+index 7283f17..50e6a86 100755
 --- a/configure
 +++ b/configure
-@@ -23171,9 +23171,9 @@ fi
+@@ -24008,9 +24008,9 @@ fi
  CFLAGS="$saved_cflags"
  LDFLAGS="$saved_ldflags"
  
@@ -377,45 +377,13 @@ index 8c04264..d3e5e21 100755
    GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
  fi
 -- 
-1.7.1
+1.7.7.3
 
 
-From 3e9c211536912bf78c44172b7f6ecd8860887166 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Fri, 24 Sep 2010 14:55:33 +0200
-Subject: [PATCH 10/11] set cross_compiling explicitly to avoid Wine interference
-
-
-diff --git a/configure b/configure
-index d3e5e21..7ae7a5d 100755
---- a/configure
-+++ b/configure
-@@ -555,7 +555,7 @@ ac_default_prefix=/usr/local
- ac_clean_files=
- ac_config_libobj_dir=.
- LIBOBJS=
--cross_compiling=no
-+cross_compiling=yes
- subdirs=
- MFLAGS=
- MAKEFLAGS=
-@@ -3872,7 +3872,7 @@ $as_echo "$ac_try_echo"; } >&5
-   ac_status=$?
-   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-   test $ac_status = 0; }; }; then
--    cross_compiling=no
-+    cross_compiling=yes
-   else
-     if test "$cross_compiling" = maybe; then
- 	cross_compiling=yes
--- 
-1.7.1
-
-
-From 01cc2d128be8a19c1434b912e378deae3b1bfcf9 Mon Sep 17 00:00:00 2001
+From 337e54ef8aa5a4d131e9d9007dedcc42b164e68c Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 15:30:49 +0200
-Subject: [PATCH 11/11] removed duplicate _gtk_marshal_OBJECT__VOID()
+Subject: [PATCH 10/10] removed duplicate _gtk_marshal_OBJECT__VOID()
 
 
 diff --git a/perf/marshalers.c b/perf/marshalers.c
@@ -467,5 +435,5 @@ index f533ab0..0a37ba4 100644
  void
  _gtk_marshal_VOID__ENUM_OBJECT_DOUBLE (GClosure     *closure,
 -- 
-1.7.1
+1.7.7.3
 

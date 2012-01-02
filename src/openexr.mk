@@ -24,7 +24,9 @@ define $(PKG)_BUILD
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,ilmbase)
     $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/ilmbase-*.patch)),
         (cd '$(1)/$(ilmbase_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
+    echo 'echo $1' > '$(1)/$(ilmbase_SUBDIR)/config.sub'
     cd '$(1)/$(ilmbase_SUBDIR)' && $(SHELL) ./configure \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(1)/ilmbase' \
         --enable-threading=no \
@@ -32,10 +34,9 @@ define $(PKG)_BUILD
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)/$(ilmbase_SUBDIR)' -j '$(JOBS)' install \
         bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-threading \

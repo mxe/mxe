@@ -1,0 +1,19 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+diff -Naur libssh2-1.3.0.orig/include/libssh2.h libssh2-1.3.0/include/libssh2.h
+--- libssh2-1.3.0.orig/include/libssh2.h	2011-09-06 15:56:34.000000000 -0500
++++ libssh2-1.3.0/include/libssh2.h	2011-10-17 10:10:13.000000000 -0500
+@@ -88,8 +88,8 @@
+ extern "C" {
+ #endif
+ #ifdef _WIN32
+-# include <BaseTsd.h>
+-# include <WinSock2.h>
++# include <basetsd.h>
++# include <winsock2.h>
+ #endif
+ 
+ #include <stddef.h>

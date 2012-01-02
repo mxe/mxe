@@ -4,8 +4,8 @@
 # Libntlm
 PKG             := libntlm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2
-$(PKG)_CHECKSUM := 27538a3375690a37574fa991fbd327d150d8b505
+$(PKG)_VERSION  := 1.3
+$(PKG)_CHECKSUM := 5dd798d5fb9a75656225052aa88ceb9befbbd4a0
 $(PKG)_SUBDIR   := libntlm-$($(PKG)_VERSION)
 $(PKG)_FILE     := libntlm-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.nongnu.org/libntlm/
@@ -20,10 +20,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
