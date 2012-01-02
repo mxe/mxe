@@ -4,7 +4,7 @@ See doc/index.html for further information.
 diff -Nur file-5.09/magic/Makefile.am file-5.09-mingw-cross-env/magic/Makefile.am
 --- file-5.09/magic/Makefile.am	2011-09-08 23:58:42.000000000 +0200
 +++ file-5.09-mingw-cross-env/magic/Makefile.am	2011-10-23 17:31:31.456765605 +0200
-@@ -246,13 +246,8 @@
+@@ -253,13 +253,8 @@
  
  # FIXME: Build file natively as well so that it can be used to compile
  # the target's magic file; for now we bail if the local version does not match
