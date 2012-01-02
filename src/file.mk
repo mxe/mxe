@@ -4,8 +4,8 @@
 # file
 PKG             := file
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.09
-$(PKG)_CHECKSUM := 9d905f9e50033c3f5be3728473cbb709a41550fb
+$(PKG)_VERSION  := 5.10
+$(PKG)_CHECKSUM := 72fd435e78955ee122b7b3d323ff2f92e6263e89
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.darwinsys.com/file/
