@@ -4,12 +4,12 @@
 # freeglut
 PKG             := freeglut
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.6.0
-$(PKG)_CHECKSUM := 68306c4486c13d005a4e4d54035e0c0b1bdc220b
+$(PKG)_VERSION  := 2.8.0
+$(PKG)_CHECKSUM := 4debbe559c6c9841ce1abaddc9d461d17c6083b1
 $(PKG)_SUBDIR   := freeglut-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := freeglut-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://freeglut.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeglut/freeglut/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeglut/freeglut/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
@@ -20,10 +20,6 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./autogen.sh
-    $(SED) -i 's,Windows\.h,windows.h,'   '$(1)/src/freeglut_internal.h'
-    $(SED) -i 's,WindowsX\.h,windowsx.h,' '$(1)/src/freeglut_internal.h'
-    $(SED) -i 's,MMSystem\.h,mmsystem.h,' '$(1)/src/freeglut_internal.h'
-    $(SED) -i 's,Windows\.h,windows.h,'   '$(1)/include/GL/freeglut_std.h'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
