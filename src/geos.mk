@@ -4,8 +4,8 @@
 # GEOS
 PKG             := geos
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.1
-$(PKG)_CHECKSUM := 4f89e62c636dbf3e5d7e1bfcd6d9a7bff1bcfa60
+$(PKG)_VERSION  := 3.3.2
+$(PKG)_CHECKSUM := 942b0bbc61a059bd5269fddd4c0b44a508670cb3
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
 $(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://trac.osgeo.org/geos/
