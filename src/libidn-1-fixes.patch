@@ -3,17 +3,17 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From ef2bf697ac36cd6b1729fef9c9f994d26d913d60 Mon Sep 17 00:00:00 2001
+From 2d8680323de1e709bfec5194db0119a7395ab78a Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 25 Nov 2011 15:58:28 +0100
 Subject: [PATCH] fix Libs.private
 
 
 diff --git a/libidn.pc.in b/libidn.pc.in
-index 50ad3ca..57efa8b 100644
+index a69d5d3..2d36472 100644
 --- a/libidn.pc.in
 +++ b/libidn.pc.in
-@@ -20,5 +20,5 @@ Description: IETF stringprep, nameprep, punycode, IDNA text processing.
+@@ -19,5 +19,5 @@ Description: IETF stringprep, nameprep, punycode, IDNA text processing.
  URL: http://www.gnu.org/software/libidn/
  Version: @VERSION@
  Libs: -L${libdir} -lidn
@@ -21,5 +21,5 @@ index 50ad3ca..57efa8b 100644
 +Libs.private: -lintl -liconv
  Cflags: -I${includedir}
 -- 
-1.7.7.3
+1.7.8
 
