@@ -4,8 +4,8 @@
 # LibUsb
 PKG             := libusb
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.5.0
-$(PKG)_CHECKSUM := a1b1a23f4f1d7dd42e2a861e69d32cdbcea7b879
+$(PKG)_VERSION  := 1.2.6.0
+$(PKG)_CHECKSUM := 6b90d083e4aee2fa0edbf18dec79d40afe9ded7d
 $(PKG)_SUBDIR   := $(PKG)-win32-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-win32-src-$($(PKG)_VERSION).zip
 $(PKG)_WEBSITE  := http://libusb-win32.sourceforge.net/
