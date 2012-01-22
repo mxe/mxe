@@ -5,8 +5,8 @@
 # Note that IPv6 support is partly broken and therefore disabled.
 PKG             := libircclient
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3
-$(PKG)_CHECKSUM := 19b01d0227e717b58630037131798ee34fb0b414
+$(PKG)_VERSION  := 1.5
+$(PKG)_CHECKSUM := 7aaffc82379db5238ccbf612bd7b85cd8f8306e9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://sourceforge.net/projects/$(PKG)/
@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         --disable-debug \
         --enable-threads \
         --disable-ipv6
-    $(MAKE) -C '$(1)'/src -j '$(JOBS)'
+    $(MAKE) -C '$(1)'/src -j '$(JOBS)' static
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/src/libircclient.a' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/libircclient'
