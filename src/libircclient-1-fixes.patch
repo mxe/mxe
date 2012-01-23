@@ -3,36 +3,51 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From f959d621bbd143eba764a97605dc05c53340ea90 Mon Sep 17 00:00:00 2001
+From 06b27e262de1d156ea31b52762ed372211b72de9 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
-Date: Thu, 23 Jun 2011 15:47:52 +1000
-Subject: [PATCH 1/3] IPv6 support is broken and is forced to be disabled.
-
-This place is sufficient - IPv6 initialisation will now cause an error.
-
-diff --git a/src/libircclient.c b/src/libircclient.c
-index 21a50de..69d2225 100644
---- a/src/libircclient.c
-+++ b/src/libircclient.c
-@@ -239,7 +239,7 @@ int irc_connect6 (irc_session_t * session,
- 			const char * username,
- 			const char * realname)
- {
--#if defined (ENABLE_IPV6)
-+#if 0
- 	struct sockaddr_in6 saddr;
- 	struct addrinfo ainfo, *res = NULL;
- 	char portStr[32], *p;
--- 
-1.7.8.3
+Date: Mon, 23 Jan 2012 08:26:14 +0100
+Subject: [PATCH 1/2] use the proper WIN32 define
 
 
-From 86a3ef0fc754cb1fb25124414b32bcfc65d413d3 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Thu, 23 Jun 2011 15:48:33 +1000
-Subject: [PATCH 2/3] Use the proper WIN32 define.
-
-
+diff --git a/examples/censor.cpp b/examples/censor.cpp
+index 0c15f4c..c784040 100644
+--- a/examples/censor.cpp
++++ b/examples/censor.cpp
+@@ -32,7 +32,7 @@
+ #include <errno.h>
+ #include <string.h>
+ 
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	#include <unistd.h>
+ #endif
+ 
+diff --git a/examples/irctest.c b/examples/irctest.c
+index bd6dbc3..08d2ba7 100644
+--- a/examples/irctest.c
++++ b/examples/irctest.c
+@@ -51,7 +51,7 @@ void addlog (const char * fmt, ...)
+ 	va_list va_alist;
+ 
+ 	va_start (va_alist, fmt);
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	_vsnprintf (buf, sizeof(buf), fmt, va_alist);
+ #else
+ 	vsnprintf (buf, sizeof(buf), fmt, va_alist);
+diff --git a/examples/spammer.c b/examples/spammer.c
+index ae9c2c7..2a0861b 100644
+--- a/examples/spammer.c
++++ b/examples/spammer.c
+@@ -17,7 +17,7 @@
+ #include <errno.h>
+ #include <string.h>
+ 
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	#include <windows.h>
+ 
+ 	#define CREATE_THREAD(id,func,param)	(CreateThread(0, 0, func, param, 0, id) == 0)
 diff --git a/include/libircclient.h b/include/libircclient.h
 index 2dcd44c..af7d769 100644
 --- a/include/libircclient.h
@@ -46,111 +61,14 @@ index 2dcd44c..af7d769 100644
  	#include <sys/select.h>	/* fd_set */
  #else
  	#include <winsock2.h>
-diff --git a/src/portable.c b/src/portable.c
-index 81e0d7b..de85d27 100644
---- a/src/portable.c
-+++ b/src/portable.c
-@@ -12,7 +12,8 @@
-  * License for more details.
-  */
- 
--#if !defined (WIN32)
-+
-+#if !defined (_WIN32)
- 	#include "config.h"
- 	#include <stdio.h>
- 	#include <stdarg.h>
-@@ -71,7 +72,7 @@
- #if defined (ENABLE_THREADS)
- static inline int libirc_mutex_init (port_mutex_t * mutex)
- {
--#if defined (WIN32)
-+#if defined (_WIN32)
- 	InitializeCriticalSection (mutex);
- 	return 0;
- #elif defined (PTHREAD_MUTEX_RECURSIVE)
-@@ -84,13 +85,13 @@ static inline int libirc_mutex_init (port_mutex_t * mutex)
- 
- 	return pthread_mutex_init (mutex, 0);
- 
--#endif /* defined (WIN32) */
-+#endif /* defined (_WIN32) */
- }
- 
- 
- static inline void libirc_mutex_destroy (port_mutex_t * mutex)
- {
--#if defined (WIN32)
-+#if defined (_WIN32)
- 	DeleteCriticalSection (mutex);
- #else
- 	pthread_mutex_destroy (mutex);
-@@ -100,7 +101,7 @@ static inline void libirc_mutex_destroy (port_mutex_t * mutex)
- 
- static inline void libirc_mutex_lock (port_mutex_t * mutex)
- {
--#if defined (WIN32)
-+#if defined (_WIN32)
- 	EnterCriticalSection (mutex);
- #else
- 	pthread_mutex_lock (mutex);
-@@ -110,7 +111,7 @@ static inline void libirc_mutex_lock (port_mutex_t * mutex)
- 
- static inline void libirc_mutex_unlock (port_mutex_t * mutex)
- {
--#if defined (WIN32)
-+#if defined (_WIN32)
- 	LeaveCriticalSection (mutex);
- #else
- 	pthread_mutex_unlock (mutex);
-diff --git a/src/sockets.c b/src/sockets.c
-index 0925fed..0cbb14a 100644
---- a/src/sockets.c
-+++ b/src/sockets.c
-@@ -15,7 +15,7 @@
- /*
-  * The sockets interface was moved out to simplify going OpenSSL integration.
-  */
--#if !defined (WIN32)
-+#if !defined (_WIN32)
- 	#include <sys/socket.h>
- 	#include <netdb.h>
- 	#include <arpa/inet.h>	
-@@ -47,7 +47,7 @@
- 
- static int socket_error()
- {
--#if !defined (WIN32)
-+#if !defined (_WIN32)
- 	return errno;
- #else
- 	return WSAGetLastError();
-@@ -64,7 +64,7 @@ static int socket_create (int domain, int type, socket_t * sock)
- 
- static int socket_make_nonblocking (socket_t * sock)
- {
--#if !defined (WIN32)
-+#if !defined (_WIN32)
- 	return fcntl (*sock, F_SETFL, fcntl (*sock, F_GETFL,0 ) | O_NONBLOCK) != 0;
- #else
- 	unsigned long mode = 0;
-@@ -75,7 +75,7 @@ static int socket_make_nonblocking (socket_t * sock)
- 
- static int socket_close (socket_t * sock)
- {
--#if !defined (WIN32)
-+#if !defined (_WIN32)
- 	close (*sock);
- #else
- 	closesocket (*sock);
 -- 
 1.7.8.3
 
 
-From 7f37c588aeeed6d3fdb7ed15c6d5e6f123b2a2a8 Mon Sep 17 00:00:00 2001
+From 1a54c4dda67b99c1c0c0c68b45a395b741cb7030 Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Sun, 22 Jan 2012 22:39:23 +0100
-Subject: [PATCH 3/3] fix missing header
+Subject: [PATCH 2/2] fix missing header
 
 
 diff --git a/include/libircclient.h b/include/libircclient.h
