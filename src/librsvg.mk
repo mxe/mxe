@@ -4,10 +4,10 @@
 # librsvg
 PKG             := librsvg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.34.2
-$(PKG)_CHECKSUM := 75d0da1136c2c515161799b5dd9d903ed34e552c
+$(PKG)_VERSION  := 2.35.1
+$(PKG)_CHECKSUM := 4f3654328557af3ffd1ff6c31b2f4eddf1fab26b
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
-$(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libgsf cairo pango gtk2 libcroco
