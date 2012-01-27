@@ -13,9 +13,8 @@ $(PKG)_URL      := http://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FIL
 $(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis smpeg
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.libsdl.org/cgi/viewvc.cgi/tags/SDL_mixer/?sortby=date' | \
-    grep '<a name="' | \
-    $(SED) -n 's,.*<a name="release-\([0-9][^"]*\)".*,\1,p' | \
+    wget -q -O- 'http://hg.libsdl.org/SDL_mixer/tags' | \
+    $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef
 
