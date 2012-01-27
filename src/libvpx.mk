@@ -4,8 +4,8 @@
 # vpx
 PKG             := libvpx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.7-p1
-$(PKG)_CHECKSUM := dacfefaf3363f781de43858f09cdd0b0d469e6fc
+$(PKG)_VERSION  := 1.0.0
+$(PKG)_CHECKSUM := 2919e11074fef72fc61ef1a75160050ffaad6074
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://code.google.com/p/webm/
