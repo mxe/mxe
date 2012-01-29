@@ -4,8 +4,8 @@
 # zlib
 PKG             := zlib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.5
-$(PKG)_CHECKSUM := 543fa9abff0442edca308772d6cef85557677e02
+$(PKG)_VERSION  := 1.2.6
+$(PKG)_CHECKSUM := 3d445731e4bfea1cd00f36567d77d6e5f5a19be9
 $(PKG)_SUBDIR   := zlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := zlib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://zlib.net/
