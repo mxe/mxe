@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://www.imagemagick.org/
 $(PKG)_URL      := http://ftp.nluug.nl/ImageMagick/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 ffmpeg fftw freetype jasper jpeg lcms libpng libtool openexr pthreads tiff zlib
+$(PKG)_DEPS     := gcc bzip2 ffmpeg fftw freetype jasper jpeg lcms libpng libtool openexr pthreads tiff
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.imagemagick.org/' | \
@@ -25,7 +25,9 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --with-x=no \
+        --without-zlib \
         ac_cv_prog_freetype_config='$(PREFIX)/$(TARGET)/bin/freetype-config'
+    $(SED) -i 's/#define MAGICKCORE_ZLIB_DELEGATE 1//g' '$(1)/magick/magick-config.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=
 endef
