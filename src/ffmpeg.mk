@@ -36,6 +36,7 @@ define $(PKG)_BUILD
         --enable-postproc \
         --disable-pthreads \
         --enable-w32threads \
+        --enable-avisynth \
         --enable-libspeex \
         --enable-libtheora \
         --enable-libvorbis \
