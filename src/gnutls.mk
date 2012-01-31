@@ -23,6 +23,7 @@ endef
 
 define $(PKG)_BUILD
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.am'
+    cd '$(1)' && aclocal -I m4 -I gl/m4 --install
     cd '$(1)' && autoconf
     cd '$(1)' && automake
     # AI_ADDRCONFIG referenced by src/serv.c but not provided by mingw.
