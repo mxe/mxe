@@ -4,8 +4,8 @@
 # libpng
 PKG             := libpng
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.7
-$(PKG)_CHECKSUM := 534ba6b97f0a14eea83f197beb2d60648392c25c
+$(PKG)_VERSION  := 1.5.8
+$(PKG)_CHECKSUM := d277f2dc8f5ec4e2bbfaabe159a1eef9694bf5ff
 $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://www.libpng.org/
