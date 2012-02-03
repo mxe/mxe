@@ -1,0 +1,30 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
+# libharu
+PKG             := libharu
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.2.1
+$(PKG)_CHECKSUM := b75ec6052b8d72aa7f23d67adcdf9df4847b64ca
+$(PKG)_SUBDIR   := libharu-$($(PKG)_VERSION)
+$(PKG)_FILE     := libharu-$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := http://libharu.org
+$(PKG)_URL      := http://libharu.org/files/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc zlib libpng
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://libharu.org/files/' | \
+    grep 'libharu-' | \
+    $(SED) -n 's,.*libharu-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
+endef
+
+define $(PKG)_BUILD
+    cd '$(1)' && ./configure \
+        --host='$(TARGET)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-shared \
+        --with-zlib \
+        --with-png
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+endef
