@@ -1,3 +1,6 @@
+# This file is part of mingw-cross-env.
+# See doc/index.html for further information.
+
 diff -ur a/cmake/WtFindBoost-vintage.txt b/cmake/WtFindBoost-vintage.txt
 --- a/cmake/WtFindBoost-vintage.txt	2011-11-15 04:49:29.000000000 -0300
 +++ b/cmake/WtFindBoost-vintage.txt	2012-02-02 19:21:07.108060403 -0300
