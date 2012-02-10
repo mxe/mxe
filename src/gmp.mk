@@ -4,8 +4,8 @@
 # GMP
 PKG             := gmp
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.0.3
-$(PKG)_CHECKSUM := 4835e4b3ad04f07431f594830724dbb621233228
+$(PKG)_VERSION  := 5.0.4
+$(PKG)_CHECKSUM := ea4ea7c3f10436ef5ae7a75b3fad163a8b86edc0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.gmplib.org/
