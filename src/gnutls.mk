@@ -3,8 +3,8 @@
 
 # GnuTLS
 PKG             := gnutls
-$(PKG)_VERSION  := 3.0.11
-$(PKG)_CHECKSUM := 62a5c4c3777e5ed707de740667306a583cb0a118
+$(PKG)_VERSION  := 3.0.13
+$(PKG)_CHECKSUM := 8271de0f76ee4a35c238309ed4fb8a94bd1ac53b
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://www.gnu.org/software/gnutls/
@@ -23,7 +23,7 @@ endef
 
 define $(PKG)_BUILD
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.am'
-    cd '$(1)' && aclocal -I m4 -I gl/m4 --install
+    cd '$(1)' && aclocal -I m4 -I gl/m4 -I src/libopts/m4 --install
     cd '$(1)' && autoconf
     cd '$(1)' && automake
     # AI_ADDRCONFIG referenced by src/serv.c but not provided by mingw.
