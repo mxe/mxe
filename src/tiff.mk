@@ -4,8 +4,8 @@
 # LibTIFF
 PKG             := tiff
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0.0
-$(PKG)_CHECKSUM := 85d85520fea40fc9291995a60e3d40cf980b5522
+$(PKG)_VERSION  := 4.0.1
+$(PKG)_CHECKSUM := 8baf382231c9051a1b3eb294581289aa21447171
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.remotesensing.org/libtiff/
@@ -20,7 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./autogen.sh
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
