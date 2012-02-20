@@ -4,8 +4,8 @@
 # FreeImage
 PKG             := freeimage
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.15.1
-$(PKG)_CHECKSUM := 02ae98007fc64d72a8f15ec3ff24c36ac745fbc8
+$(PKG)_VERSION  := 3.15.2
+$(PKG)_CHECKSUM := f9cd3cbbc506424939cdc6b344e3f2d4bf8efe1c
 $(PKG)_SUBDIR   := FreeImage
 $(PKG)_FILE     := FreeImage$(subst .,,$($(PKG)_VERSION)).zip
 $(PKG)_WEBSITE  := http://freeimage.sourceforge.net/
