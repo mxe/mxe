@@ -4,8 +4,8 @@
 # librsvg
 PKG             := librsvg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.35.1
-$(PKG)_CHECKSUM := 4f3654328557af3ffd1ff6c31b2f4eddf1fab26b
+$(PKG)_VERSION  := 2.35.2
+$(PKG)_CHECKSUM := e8ac89cba6ed1adb1ef8427e0026d673d50f1563
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
@@ -21,15 +21,12 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-pixbuf-loader \
         --disable-gtk-theme \
-        --disable-mozilla-plugin \
-        --disable-gtk-doc \
-        --with-svgz \
-        --with-croco \
-        --without-x
+        --disable-gtk-doc
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
