@@ -4,8 +4,8 @@
 # dbus
 PKG             := dbus
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.8
-$(PKG)_CHECKSUM := c5e9e286b5757f892cc21f894145e7f05c8fc813
+$(PKG)_VERSION  := 1.5.10
+$(PKG)_CHECKSUM := d50f1624197a6f8f14cc8ff1943db7c99ce14cde
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://$(PKG).freedesktop.org/
@@ -22,6 +22,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-xml=expat \
         --disable-tests \
