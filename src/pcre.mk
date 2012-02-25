@@ -27,11 +27,13 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-utf8 \
+        --enable-pcre16 \
+        --enable-utf \
         --enable-unicode-properties \
         --disable-cpp \
         --disable-pcregrep-libz \
         --disable-pcregrep-libbz2 \
         --disable-pcretest-libreadline
+    rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/pcre16*.3
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
