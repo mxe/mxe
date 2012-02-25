@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := openexr-$($(PKG)_VERSION)
 $(PKG)_FILE     := openexr-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.openexr.com/
 $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ilmbase zlib
+$(PKG)_DEPS     := gcc ilmbase pthreads zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.openexr.com/downloads.html' | \
@@ -48,7 +48,7 @@ define $(PKG)_BUILD
         -I'$(1)/ilmbase/include/OpenEXR' \
         -L'$(1)/ilmbase/lib' \
         b44ExpLogTable.cpp \
-        -lImath -lHalf -lIex -lIlmThread \
+        -lImath -lHalf -lIex -lIlmThread -lpthread \
         -o b44ExpLogTable
     '$(1)/IlmImf/b44ExpLogTable' > '$(1)/IlmImf/b44ExpLogTable.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
