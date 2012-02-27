@@ -32,5 +32,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_net.exe' \
-        `'$(TARGET)-pkg-config' sdl --cflags --libs` -lSDL_net -lws2_32 -liphlpapi
+        `'$(TARGET)-pkg-config' SDL_net --cflags --libs`
 endef
