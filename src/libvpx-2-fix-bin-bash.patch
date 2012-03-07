@@ -4,72 +4,72 @@ See doc/index.html for further information.
 This patch has been taken from:
 http://code.google.com/p/webm/issues/detail?id=54
 
-diff -urN libvpx-0.9.2.orig/build/make/armlink_adapter.sh libvpx-0.9.2.new/build/make/armlink_adapter.sh
---- libvpx-0.9.2.orig/build/make/armlink_adapter.sh	2010-09-03 04:56:47.000000000 +1000
-+++ libvpx-0.9.2.new/build/make/armlink_adapter.sh	2010-10-01 14:43:18.000000000 +1000
+diff --git a/build/make/armlink_adapter.sh b/build/make/armlink_adapter.sh
+--- a/build/make/armlink_adapter.sh
++++ b/build/make/armlink_adapter.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/usr/bin/env bash
  ##
- ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
-diff -urN libvpx-0.9.2.orig/build/make/configure.sh libvpx-0.9.2.new/build/make/configure.sh
---- libvpx-0.9.2.orig/build/make/configure.sh	2010-09-03 04:56:47.000000000 +1000
-+++ libvpx-0.9.2.new/build/make/configure.sh	2010-10-01 14:43:18.000000000 +1000
+diff --git a/build/make/configure.sh b/build/make/configure.sh
+--- a/build/make/configure.sh
++++ b/build/make/configure.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/usr/bin/env bash
  ##
  ##  configure.sh
  ##
-diff -urN libvpx-0.9.2.orig/build/make/gen_asm_deps.sh libvpx-0.9.2.new/build/make/gen_asm_deps.sh
---- libvpx-0.9.2.orig/build/make/gen_asm_deps.sh	2010-09-03 04:56:47.000000000 +1000
-+++ libvpx-0.9.2.new/build/make/gen_asm_deps.sh	2010-10-01 14:43:18.000000000 +1000
+diff --git a/build/make/gen_asm_deps.sh b/build/make/gen_asm_deps.sh
+--- a/build/make/gen_asm_deps.sh
++++ b/build/make/gen_asm_deps.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/usr/bin/env bash
  ##
- ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
-diff -urN libvpx-0.9.2.orig/build/make/gen_msvs_def.sh libvpx-0.9.2.new/build/make/gen_msvs_def.sh
---- libvpx-0.9.2.orig/build/make/gen_msvs_def.sh	2010-09-03 04:56:47.000000000 +1000
-+++ libvpx-0.9.2.new/build/make/gen_msvs_def.sh	2010-10-01 14:43:18.000000000 +1000
+diff --git a/build/make/gen_msvs_def.sh b/build/make/gen_msvs_def.sh
+--- a/build/make/gen_msvs_def.sh
++++ b/build/make/gen_msvs_def.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/usr/bin/env bash
  ##
- ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
-diff -urN libvpx-0.9.2.orig/build/make/gen_msvs_proj.sh libvpx-0.9.2.new/build/make/gen_msvs_proj.sh
---- libvpx-0.9.2.orig/build/make/gen_msvs_proj.sh	2010-09-03 04:56:47.000000000 +1000
-+++ libvpx-0.9.2.new/build/make/gen_msvs_proj.sh	2010-10-01 14:43:18.000000000 +1000
+diff --git a/build/make/gen_msvs_proj.sh b/build/make/gen_msvs_proj.sh
+--- a/build/make/gen_msvs_proj.sh
++++ b/build/make/gen_msvs_proj.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/usr/bin/env bash
  ##
- ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
-diff -urN libvpx-0.9.2.orig/build/make/gen_msvs_sln.sh libvpx-0.9.2.new/build/make/gen_msvs_sln.sh
---- libvpx-0.9.2.orig/build/make/gen_msvs_sln.sh	2010-09-03 04:56:47.000000000 +1000
-+++ libvpx-0.9.2.new/build/make/gen_msvs_sln.sh	2010-10-01 14:43:18.000000000 +1000
+diff --git a/build/make/gen_msvs_sln.sh b/build/make/gen_msvs_sln.sh
+--- a/build/make/gen_msvs_sln.sh
++++ b/build/make/gen_msvs_sln.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/usr/bin/env bash
  ##
- ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
-diff -urN libvpx-0.9.2.orig/build/make/version.sh libvpx-0.9.2.new/build/make/version.sh
---- libvpx-0.9.2.orig/build/make/version.sh	2010-09-03 04:56:47.000000000 +1000
-+++ libvpx-0.9.2.new/build/make/version.sh	2010-10-01 14:43:18.000000000 +1000
+diff --git a/build/make/version.sh b/build/make/version.sh
+--- a/build/make/version.sh
++++ b/build/make/version.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/usr/bin/env bash
  ##
- ##  Copyright (c) 2010 The VP8 project authors. All Rights Reserved.
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
-diff -urN libvpx-0.9.2.orig/configure libvpx-0.9.2.new/configure
---- libvpx-0.9.2.orig/configure	2010-09-03 04:56:47.000000000 +1000
-+++ libvpx-0.9.2.new/configure	2010-10-01 14:43:18.000000000 +1000
+diff --git a/configure b/configure
+--- a/configure
++++ b/configure
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/usr/bin/env bash

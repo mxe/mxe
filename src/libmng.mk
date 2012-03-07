@@ -27,4 +27,10 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/libmng.a' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/libmng.h' '$(1)/libmng_conf.h' '$(1)/libmng_types.h' '$(PREFIX)/$(TARGET)/include/'
+    $(SED) -e 's^@prefix@^$(PREFIX)/$(TARGET)^;' \
+           -e 's^@VERSION@^$(libmng_VERSION)^;' \
+           -e 's^@mng_libs_private@^-ljpeg^;' \
+           -e 's^@mng_requires_private@^lcms zlib^;' \
+           < '$(1)/libmng.pc.in' > '$(1)/libmng.pc'
+    $(INSTALL) -m644 '$(1)/libmng.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
 endef

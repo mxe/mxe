@@ -1,0 +1,32 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 1a94342a8f86ab72b8d6c24b8ecd974d2821be04 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Thu, 3 Nov 2011 14:40:24 +0100
+Subject: [PATCH] add pkg-config file
+
+
+diff --git a/libmng.pc.in b/libmng.pc.in
+new file mode 100644
+index 0000000..1dfc9fa
+--- /dev/null
++++ b/libmng.pc.in
+@@ -0,0 +1,12 @@
++prefix=@prefix@
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: libmng
++Description:  The MNG library.
++Version: @VERSION@
++Libs: -L${libdir} -lmng
++Libs.private: @mng_libs_private@
++Cflags: -I${includedir}
++Requires.private: @mng_requires_private@
+-- 
+1.7.7
+

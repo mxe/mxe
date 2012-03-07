@@ -4,13 +4,13 @@
 # cURL
 PKG             := curl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.21.6
-$(PKG)_CHECKSUM := 049a3aff13d283f6e4ea1f9aa3aa6abc067fd42e
+$(PKG)_VERSION  := 7.24.0
+$(PKG)_CHECKSUM := 2f2775a67de9fc91b47f5bb70fb7d359f7db55e7
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://curl.haxx.se/libcurl/
 $(PKG)_URL      := http://curl.haxx.se/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls libidn
+$(PKG)_DEPS     := gcc gnutls libidn libssh2
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://curl.haxx.se/download/?C=M;O=D' | \
@@ -19,16 +19,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
+    cd '$(1)' && ./buildconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-gnutls \
         --with-libidn \
-        LIBS="-lgcrypt -liconv `$(PREFIX)/$(TARGET)/bin/gpg-error-config --libs`"
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        --enable-sspi \
+        --with-libssh2
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \

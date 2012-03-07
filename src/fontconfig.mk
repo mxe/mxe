@@ -22,11 +22,10 @@ define $(PKG)_BUILD
     # ensure there is no (buggy) attempt to install the *.dll.a file
     # (remove this line of you want to link dynamically)
     $(SED) -i 's,^install-data-local:.*,install-data-local:,' '$(1)/src/Makefile.in'
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     $(SED) -i 's,^\(Libs:.*\),\1 @EXPAT_LIBS@ @FREETYPE_LIBS@,' '$(1)/fontconfig.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-arch='$(TARGET)' \
