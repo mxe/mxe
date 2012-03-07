@@ -6,7 +6,7 @@ http://sourceforge.net/projects/vmime/develop
 
 Produced with this script:
 #--------------------------------------------------------------------#
-#!/bin/bash
+#!/usr/bin/env bash
 
 (
   echo "This file is part of mingw-cross-env."
