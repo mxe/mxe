@@ -1,8 +1,8 @@
 # This file is part of mingw-cross-env.
 # See doc/index.html for further information.
 
-# libgta
-PKG             := libgta
+# gta
+PKG             := gta
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.2
 $(PKG)_CHECKSUM := 9020944bcd40bd986a879d454d21920a1eb48db7
@@ -31,6 +31,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgta.exe' \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gta.exe' \
         `'$(TARGET)-pkg-config' gta --cflags --libs`
 endef
