@@ -4,13 +4,13 @@
 # Libarchive
 PKG             := libarchive
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.4
-$(PKG)_CHECKSUM := b9cc3bbd20bd71f996be9ec738f19fda8653f7af
+$(PKG)_VERSION  := 3.0.3
+$(PKG)_CHECKSUM := b774e2675e5c1abafbd4d667402e8c3e72313944
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://code.google.com/p/libarchive/
 $(PKG)_URL      := http://libarchive.googlecode.com/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 libxml2 openssl xz zlib
+$(PKG)_DEPS     := gcc bzip2 libiconv libxml2 openssl xz zlib
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://code.google.com/p/libarchive/downloads/list?sort=-uploaded' | \
@@ -34,5 +34,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libarchive.exe' \
-        -larchive -lz
+        `'$(TARGET)-pkg-config' --libs-only-l libarchive`
 endef

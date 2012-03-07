@@ -4,8 +4,8 @@
 # GDAL
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.0
-$(PKG)_CHECKSUM := e5a2802933054050c6fb0b0a0e1f46b5dd195b0a
+$(PKG)_VERSION  := 1.9.0
+$(PKG)_CHECKSUM := e2eaaf0fba39137b40c0d3069ac41dfb6f3c76db
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.gdal.org/
@@ -76,7 +76,7 @@ define $(PKG)_BUILD
         --without-ruby \
         --without-python \
         --without-macosx-framework \
-        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl`"
+        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $(MAKE) -C '$(1)'       -j 1 lib-target
     $(MAKE) -C '$(1)'       -j 1 install-lib
     $(MAKE) -C '$(1)/port'  -j 1 install
@@ -85,5 +85,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/alg'   -j 1 install
     $(MAKE) -C '$(1)/ogr'   -j 1 install OGR_ENABLED=
     $(MAKE) -C '$(1)/apps'  -j 1 install BIN_LIST=
-    ln -sf $(PREFIX)/$(TARGET)/bin/gdal-config $(PREFIX)/bin/$(TARGET)-gdal-config
+    ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef

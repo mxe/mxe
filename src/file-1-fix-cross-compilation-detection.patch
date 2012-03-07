@@ -1,0 +1,21 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -Nur file-5.09/magic/Makefile.am file-5.09-mingw-cross-env/magic/Makefile.am
+--- file-5.09/magic/Makefile.am	2011-09-08 23:58:42.000000000 +0200
++++ file-5.09-mingw-cross-env/magic/Makefile.am	2011-10-23 17:31:31.456765605 +0200
+@@ -253,13 +253,8 @@
+ 
+ # FIXME: Build file natively as well so that it can be used to compile
+ # the target's magic file; for now we bail if the local version does not match
+-if IS_CROSS_COMPILE
+-FILE_COMPILE = file
++FILE_COMPILE = $(top_builddir)/src/file.local
+ FILE_COMPILE_DEP =
+-else
+-FILE_COMPILE = $(top_builddir)/src/file
+-FILE_COMPILE_DEP = $(FILE_COMPILE)
+-endif
+ 
+ ${MAGIC}: $(EXTRA_DIST) $(FILE_COMPILE_DEP)
+ 	@rm -fr magic

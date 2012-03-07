@@ -4,8 +4,8 @@
 # ffmpeg
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.7-rc1
-$(PKG)_CHECKSUM := d15c005f46483fbfc3b678cb1c89123762b56b82
+$(PKG)_VERSION  := 0.10
+$(PKG)_CHECKSUM := a3a7fe25db760a99d51266b33386da9c8552feef
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.ffmpeg.org/
@@ -36,6 +36,7 @@ define $(PKG)_BUILD
         --enable-postproc \
         --disable-pthreads \
         --enable-w32threads \
+        --enable-avisynth \
         --enable-libspeex \
         --enable-libtheora \
         --enable-libvorbis \

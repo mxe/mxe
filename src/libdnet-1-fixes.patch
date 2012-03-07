@@ -1,0 +1,27 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Patch taken from http://sourceforge.net/mailarchive/message.php?msg_id=27995461
+
+mingwrt 3.20 provides ssize_t and defines _SSIZE_T_. This patch
+allows libdnet to use this ssize_t instead of defining its
+own which causes build failure. Applies to libdnet 1.11.
+
+diff --git a/include/dnet/os.h b/include/dnet/os.h
+index c12c7b2..9e8bdd2 100644
+--- a/include/dnet/os.h
++++ b/include/dnet/os.h
+@@ -23,8 +23,10 @@
+   typedef u_short	uint16_t;
+   typedef u_int		uint32_t;
+ # ifndef __CYGWIN__
++# ifndef _SSIZE_T_
+   typedef long		ssize_t;
+ # endif
++# endif
+ #else
+ # include <sys/param.h>
+ # include <sys/types.h>
+-- 
+1.7.6
+

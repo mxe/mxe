@@ -3,14 +3,17 @@ See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From d5e7a81cbe6339e1d0dbf97f8814c28e2c806d80 Mon Sep 17 00:00:00 2001
+From 74e785e4ee6cf375f1c04d9e57e4b70caec6742c Mon Sep 17 00:00:00 2001
 From: mingw-cross-env
 Date: Fri, 24 Sep 2010 23:31:24 +0200
-Subject: [PATCH] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 1/3] s,DllMain,static _disabled_DllMain,
 
+---
+ gdk-pixbuf/gdk-pixbuf-io.c |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
-index aa4964f..c925934 100644
+index 6a5dbce..e5e1c2d 100644
 --- a/gdk-pixbuf/gdk-pixbuf-io.c
 +++ b/gdk-pixbuf/gdk-pixbuf-io.c
 @@ -226,12 +226,12 @@ skip_space (const char **pos)
@@ -29,15 +32,19 @@ index aa4964f..c925934 100644
           LPVOID    lpvReserved)
  {
 -- 
-1.7.1
+1.7.8
 
-From e6a5b2472a4a5d554b587dfcb798b95035caa6fd Mon Sep 17 00:00:00 2001
+
+From 076713fb334bd200d41b056001f7e44fcae695fb Mon Sep 17 00:00:00 2001
 From: Maarten Bosmans <mkbosmans@gmail.com>
 Date: Mon, 24 Jan 2011 10:39:22 +0000
-Subject: Use png_jmpbuf macro
+Subject: [PATCH 2/3] Use png_jmpbuf macro
 
 This makes the png loader compatible with libpng 1.5
 ---
+ gdk-pixbuf/io-png.c |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
+
 diff --git a/gdk-pixbuf/io-png.c b/gdk-pixbuf/io-png.c
 index 79c81fd..76f3304 100644
 --- a/gdk-pixbuf/io-png.c
@@ -96,5 +103,31 @@ index 79c81fd..76f3304 100644
  	       success = FALSE;
  	       goto cleanup;
         }
---
-cgit v0.8.3.4
+-- 
+1.7.8
+
+
+From 98b7ca46c998a497a1bc6cd563e0201d0cd65de0 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 23 Dec 2011 18:54:01 +0100
+Subject: [PATCH 3/3] add libtiff-4 to Requires.private
+
+---
+ gdk-pixbuf-2.0.pc.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/gdk-pixbuf-2.0.pc.in b/gdk-pixbuf-2.0.pc.in
+index 7e61775..bc33627 100644
+--- a/gdk-pixbuf-2.0.pc.in
++++ b/gdk-pixbuf-2.0.pc.in
+@@ -12,6 +12,7 @@ Name: GdkPixbuf
+ Description: Image loading and scaling
+ Version: @VERSION@
+ Requires: gobject-2.0 gmodule-no-export-2.0 @PNG_DEP_CFLAGS_PACKAGES@
++Requires.private: libtiff-4
+ Libs: -L${libdir} -lgdk_pixbuf-@GDK_PIXBUF_API_VERSION@ @GDK_PIXBUF_EXTRA_LIBS@
+ Cflags: -I${includedir}/gdk-pixbuf-@GDK_PIXBUF_API_VERSION@ @GDK_PIXBUF_EXTRA_CFLAGS@
+ 
+-- 
+1.7.8
+

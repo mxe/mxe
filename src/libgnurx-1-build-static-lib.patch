@@ -1,0 +1,18 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+diff -Nur mingw-libgnurx-2.5.1/Makefile.mingw-cross-env mingw-libgnurx-2.5.1-mingw-cross-env/Makefile.mingw-cross-env
+--- mingw-libgnurx-2.5.1/Makefile.mingw-cross-env	1970-01-01 01:00:00.000000000 +0100
++++ mingw-libgnurx-2.5.1-mingw-cross-env/Makefile.mingw-cross-env	2011-10-23 16:57:18.579312050 +0200
+@@ -0,0 +1,11 @@
++include Makefile
++
++libgnurx.a: $(OBJECTS)
++	rm -f $@
++	$(TARGET)-ar rcu $@ $(OBJECTS)
++	$(TARGET)-ranlib $@
++
++install-static: libgnurx.a
++	mkdir -p ${includedir} ${libdir}
++	cp -p ${srcdir}/regex.h ${includedir}
++	cp -p ${srcdir}/libgnurx.a ${libdir}

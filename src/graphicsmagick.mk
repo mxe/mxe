@@ -4,8 +4,8 @@
 # GraphicsMagick
 PKG             := graphicsmagick
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.12
-$(PKG)_CHECKSUM := 6b8a414af162ad8679f2f04b10f128edc8ee3233
+$(PKG)_VERSION  := 1.3.14
+$(PKG)_CHECKSUM := 7ef5711a18da0a3b6b143548a2a7822597ea416d
 $(PKG)_SUBDIR   := GraphicsMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := GraphicsMagick-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.graphicsmagick.org/
@@ -45,7 +45,8 @@ define $(PKG)_BUILD
         --with-xml \
         --with-zlib \
         --without-x \
-        ac_cv_prog_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config'
+        ac_cv_prog_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config' \
+        ac_cv_path_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=
 

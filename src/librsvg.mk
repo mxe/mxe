@@ -4,10 +4,10 @@
 # librsvg
 PKG             := librsvg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.34.0
-$(PKG)_CHECKSUM := 59e01568a6b201fc45828a76b942f790859cddeb
+$(PKG)_VERSION  := 2.35.2
+$(PKG)_CHECKSUM := e8ac89cba6ed1adb1ef8427e0026d673d50f1563
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
-$(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libgsf cairo pango gtk2 libcroco
@@ -21,15 +21,12 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-pixbuf-loader \
         --disable-gtk-theme \
-        --disable-mozilla-plugin \
-        --disable-gtk-doc \
-        --with-svgz \
-        --with-croco \
-        --without-x
+        --disable-gtk-doc
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \

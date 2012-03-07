@@ -4,8 +4,8 @@
 # SDL_mixer
 PKG             := sdl_mixer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.11
-$(PKG)_CHECKSUM := ef5d45160babeb51eafa7e4019cec38324ee1a5d
+$(PKG)_VERSION  := 1.2.12
+$(PKG)_CHECKSUM := a20fa96470ad9e1052f1957b77ffa68fb090b384
 $(PKG)_SUBDIR   := SDL_mixer-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_mixer-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_mixer/
@@ -13,9 +13,8 @@ $(PKG)_URL      := http://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FIL
 $(PKG)_DEPS     := gcc sdl libmikmod ogg vorbis smpeg
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.libsdl.org/cgi/viewvc.cgi/tags/SDL_mixer/?sortby=date' | \
-    grep '<a name="' | \
-    $(SED) -n 's,.*<a name="release-\([0-9][^"]*\)".*,\1,p' | \
+    wget -q -O- 'http://hg.libsdl.org/SDL_mixer/tags' | \
+    $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef
 

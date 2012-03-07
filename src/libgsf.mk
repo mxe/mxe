@@ -4,8 +4,8 @@
 # libgsf
 PKG             := libgsf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.14.20
-$(PKG)_CHECKSUM := d172b454c1b98f9c111df11e000b1ced050bdac9
+$(PKG)_VERSION  := 1.14.21
+$(PKG)_CHECKSUM := 17981f238f1f8dddb7af01c161bd6a1c4d5e85d2
 $(PKG)_SUBDIR   := libgsf-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgsf-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://ftp.gnome.org/pub/gnome/sources/libgsf/
@@ -23,8 +23,6 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,^\(Requires:.*\),\1 gio-2.0,' '$(1)'/libgsf-1.pc.in
     echo 'Libs.private: -lz -lbz2'          >> '$(1)'/libgsf-1.pc.in
-    cd '$(1)' && aclocal -I m4
-    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

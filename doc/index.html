@@ -450,28 +450,15 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <dl>
 
-    <dt>2011-06-07 &ndash; Release <span id="latest-version">2.21</span></dt>
+    <dt>2011-xx-xx &ndash; Release <span id="latest-version">2.22</span></dt>
     <dd>
         <p>
-        <a href="https://bitbucket.org/vog/mingw-cross-env/downloads/mingw-cross-env-2.21.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.21">Changelog</a>
+        <a href="https://bitbucket.org/vog/mingw-cross-env/downloads/mingw-cross-env-2.22.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.22">Changelog</a>
         </p>
 
         <p>
-        Minor bugfixes in several packages.
-        </p>
-
-        <p>
-        Almost all packages are updated to their latest version.
-        </p>
-
-        <p>
-        Packages gtkmm and gtksourceviewmm have been renamed to gtkmm2 and gtksourceviewmm2.
-        </p>
-
-        <p>
-        New packages are supported:
-        libass, poco, and t4k_common.
+        Almost all packages were updated to their latest version.
         </p>
     </dd>
 
@@ -622,6 +609,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="http://www.gnu.org/s/gettext/">GNU Gettext</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="http://www.gnu.org/software/make/">GNU Make</a></td>
         <td>≥ 3.81</td>
     </tr>
@@ -683,11 +674,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     </table>
 
-    <h3 id="requirements-debian">Debian</h3>
+    <h3 id="requirements-debian">Debian (GNU/kFreeBSD &amp; GNU/Linux)</h3>
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>aptitude install -R autoconf automake bash bison bzip2 \
-                    cmake flex g++ intltool make sed \
+                    cmake flex gettext g++ intltool make sed \
                     libtool libltdl-dev openssl libssl-dev \
                     libxml-parser-perl patch perl \
                     pkg-config scons unzip wget \
@@ -702,7 +693,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://admin.fedoraproject.org/pkgdb/ -->
     <pre>yum install autoconf automake bash bison bzip2 cmake \
-            flex gcc-c++ intltool make sed libtool \
+            flex gcc-c++ gettext intltool make sed libtool \
             openssl-devel patch perl pkgconfig scons \
             yasm unzip wget xz</pre>
 
@@ -715,7 +706,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.freebsd.org/ports/ -->
     <pre>pkg_add -r automake111 autoconf268 bash bison cmake \
-           flex gmake gsed intltool libtool openssl \
+           flex gettext gmake gsed intltool libtool openssl \
            patch perl p5-XML-Parser pkg-config scons \
            unzip wget yasm</pre>
 
@@ -739,7 +730,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
-             flex gcc intltool make sed libtool openssl \
+             flex gcc gettext intltool make sed libtool openssl \
              patch perl perl-xml-parser pkgconfig scons \
              unzip wget xz xz-lzma yasm</pre>
 
@@ -754,6 +745,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>emerge sys-devel/autoconf sys-devel/automake \
        app-shells/bash sys-devel/bison app-arch/bzip2 \
        dev-util/cmake sys-devel/flex sys-devel/gcc \
+       sys-devel/gettext \
        dev-util/intltool sys-devel/make sys-apps/sed \
        sys-devel/libtool dev-libs/openssl sys-devel/patch \
        dev-lang/perl dev-perl/XML-Parser \
@@ -771,7 +763,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
-                  gsed intltool libtool openssl \
+                  gettext gsed intltool libtool openssl \
                   p5-xml-parser pkgconfig scons \
                   wget xz yasm</pre>
     <p>
@@ -797,8 +789,8 @@ sudo gcc_select gcc42</pre>
     On 64-bit openSUSE, install also:
     </p>
     <pre>zypper install -R gcc-32bit glibc-devel-32bit \
-                  libgcc45-32bit libgomp45-32bit \
-                  libstdc++45-devel-32bit</pre>
+                  libgcc46-32bit libgomp46-32bit \
+                  libstdc++46-devel-32bit</pre>
 
     <h3 id="open-issue-nsis">Open Issues with NSIS</h3>
 
@@ -1191,6 +1183,31 @@ https://...</pre>
 <h2 id="history">History</h2>
 
     <dl>
+
+    <dt>2011-06-07 &ndash; Release 2.21</dt>
+    <dd>
+        <p>
+        <a href="https://bitbucket.org/vog/mingw-cross-env/downloads/mingw-cross-env-2.21.tar.gz">Download</a> |
+        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.21">Changelog</a>
+        </p>
+
+        <p>
+        Minor bugfixes in several packages.
+        </p>
+
+        <p>
+        Almost all packages are updated to their latest version.
+        </p>
+
+        <p>
+        Packages gtkmm and gtksourceviewmm have been renamed to gtkmm2 and gtksourceviewmm2.
+        </p>
+
+        <p>
+        New packages are supported:
+        libass, poco, and t4k_common.
+        </p>
+    </dd>
 
     <dt>2011-04-05 &ndash; Release 2.20</dt>
     <dd>

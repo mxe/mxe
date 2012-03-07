@@ -18,12 +18,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/libgomp/configure'
-
     mkdir -p '$(1)/build/$(TARGET)/libgomp'
     cd       '$(1)/build/$(TARGET)/libgomp' && '$(1)/libgomp/configure' \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --target='$(TARGET)' \
         --prefix='$(PREFIX)' \
         --enable-version-specific-runtime-libs \

@@ -4,8 +4,8 @@
 # libsigc++
 PKG             := libsigc++
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.9
-$(PKG)_CHECKSUM := ce3bc95c66feda3ed124197d325902f09ea5cdf9
+$(PKG)_VERSION  := 2.2.10
+$(PKG)_CHECKSUM := 240d3e0a02e764a6362f6ce1b32de71401e50844
 $(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsigc++-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://libsigc.sourceforge.net/
@@ -20,11 +20,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # cross build
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         CXX='$(TARGET)-c++' \

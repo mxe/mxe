@@ -4,8 +4,8 @@
 # SDL
 PKG             := sdl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.14
-$(PKG)_CHECKSUM := ba625b4b404589b97e92d7acd165992debe576dd
+$(PKG)_VERSION  := 1.2.15
+$(PKG)_CHECKSUM := 0c5f193ced810b0d7ce3ab06d808cbb5eef03a2c
 $(PKG)_SUBDIR   := SDL-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://www.libsdl.org/
@@ -13,9 +13,8 @@ $(PKG)_URL      := http://www.libsdl.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.libsdl.org/cgi/viewvc.cgi/tags/SDL/?sortby=date' | \
-    grep '<a name="' | \
-    $(SED) -n 's,.*<a name="release-\([0-9][^"]*\)".*,\1,p' | \
+    wget -q -O- 'http://hg.libsdl.org/SDL/tags' | \
+    $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef
 
@@ -30,7 +29,7 @@ define $(PKG)_BUILD
         --disable-stdio-redirect
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    ln -sf $(PREFIX)/$(TARGET)/bin/sdl-config $(PREFIX)/bin/$(TARGET)-sdl-config
+    ln -sf '$(PREFIX)/$(TARGET)/bin/sdl-config' '$(PREFIX)/bin/$(TARGET)-sdl-config'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
