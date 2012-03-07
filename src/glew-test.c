@@ -4,6 +4,15 @@
 #include <stdio.h>
 #include <GL/glew.h>
 
+#ifdef GLEW_MX
+/* We are using the multi-context variant of libGLEW */
+GLEWContext glew_context;
+GLEWContext* glewGetContext()
+{
+    return &glew_context;
+}
+#endif
+
 int main(int argc, char *argv[])
 {
     GLenum err;
