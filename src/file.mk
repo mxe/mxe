@@ -24,15 +24,21 @@ define $(PKG)_BUILD
     # itself. This must match the source code regarding its
     # version. Therefore we build a native one ourselves first.
 
-    cd '$(1)' && ./configure \
+    cp -Rp '$(1)' '$(1).native'
+    cd '$(1).native' && ./configure \
         --disable-shared
-    $(MAKE) -C '$(1)/src' -j '$(JOBS)' file
-    cp '$(1)/src/file' '$(1)/src/file.local'
+    $(MAKE) -C '$(1).native/src' -j '$(JOBS)' file
 
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' clean
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= FILE_COMPILE='$(1).native/src/file'
+    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-file.exe' \
+        -lmagic -lgnurx -lshlwapi
 endef
