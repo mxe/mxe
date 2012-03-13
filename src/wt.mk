@@ -23,6 +23,9 @@ define $(PKG)_BUILD
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_BUILD_TYPE:STRING="Release" \
+        -DBUILD_EXAMPLES=OFF \
+        -DBUILD_TESTS=OFF \
+        -DSHARED_LIBS=OFF \
         -DBOOST_PREFIX='$(PREFIX)/$(TARGET)' \
         -DBOOST_COMPILER=_win32 \
         -DSSL_PREFIX='$(PREFIX)/$(TARGET)' \
