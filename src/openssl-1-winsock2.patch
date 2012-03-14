@@ -7,7 +7,7 @@ http://rt.openssl.org/Ticket/Display.html?id=2285&user=guest&pass=guest
 diff -urN a/e_os.h b/e_os.h
 --- a/e_os.h	2010-05-31 15:18:08.000000000 +0200
 +++ b/e_os.h	2010-06-04 17:43:44.370181869 +0200
-@@ -498,7 +498,7 @@
+@@ -492,7 +492,7 @@
  #      endif
  #      if !defined(IPPROTO_IP)
           /* winsock[2].h was included already? */
@@ -31,7 +31,7 @@ diff -urN a/ssl/dtls1.h b/ssl/dtls1.h
 diff -urN a/ssl/ssltest.c b/ssl/ssltest.c
 --- a/ssl/ssltest.c	2010-01-24 17:57:38.000000000 +0100
 +++ b/ssl/ssltest.c	2010-06-04 17:44:26.134181765 +0200
-@@ -190,7 +190,7 @@
+@@ -193,7 +193,7 @@
  				  */
  
  #ifdef OPENSSL_SYS_WINDOWS
