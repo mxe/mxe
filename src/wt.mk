@@ -19,19 +19,23 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DCMAKE_BUILD_TYPE:STRING="Release" \
+    # build wt libraries
+    mkdir '$(1).build'
+    cd '$(1).build' && cmake \
+        -DCONFIGDIR='$(PREFIX)/$(TARGET)/etc/wt' \
         -DBUILD_EXAMPLES=OFF \
         -DBUILD_TESTS=OFF \
         -DSHARED_LIBS=OFF \
+        -DBOOST_DYNAMIC=OFF \
         -DBOOST_PREFIX='$(PREFIX)/$(TARGET)' \
         -DBOOST_COMPILER=_win32 \
         -DSSL_PREFIX='$(PREFIX)/$(TARGET)' \
         -DOPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         -DGM_PREFIX='$(PREFIX)/$(TARGET)' \
         -DGM_LIBS="`'$(TARGET)-pkg-config' --libs-only-l GraphicsMagick++`" \
-        -DPANGO_FT2_LIBS="`'$(TARGET)-pkg-config' --libs-only-l pangoft2`"
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
+        -DPANGO_FT2_LIBS="`'$(TARGET)-pkg-config' --libs-only-l pangoft2`" \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DCMAKE_BUILD_TYPE:STRING="Release" \
+        '$(1)'
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef
