@@ -86,10 +86,24 @@ define CHECK_REQUIREMENT
     fi
 
 endef
+define CHECK_REQUIREMENT_VERSION
+    @if ! $(1) --version | head -1 | grep ' \($(2)\)$$' >/dev/null; then \
+        echo; \
+        echo 'Wrong version of requirement: $(1)'; \
+        echo; \
+        echo 'Please have a look at "doc/index.html" to ensure'; \
+        echo 'that your system meets all requirements.'; \
+        echo; \
+        exit 1; \
+    fi
+
+endef
 check-requirements: $(PREFIX)/installed/check-requirements
 $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	@echo '[check requirements]'
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
+	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[4-9]\|2\.[7-9][0-9])
+	$(call CHECK_REQUIREMENT_VERSION,automake,1\.[1-9][0-9]\.[0-9]\+)
 	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
 	@touch '$@'
 
