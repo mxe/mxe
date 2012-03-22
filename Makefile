@@ -246,15 +246,11 @@ dist:
 	        echo '    <tr><td><a href="$($(PKG)_WEBSITE)">$(PKG)</a></td><td>$($(PKG)_VERSION)</td></tr>';)) && \
 	    $(SED) -n '/<table id="package-list"/,/<ul id="authors-list"/ p' '$(TOP_DIR)/doc/index.html' | \
 	        $(SED) '1d' && \
-	    (LC_ALL=en_US.UTF-8 hg log | $(SED) -n 's,^\(user: *\([^<]*\) <.*\|.*(by \([^)]*\)).*\)$$,\2\3,p' | \
-	        sort | uniq -c | sort -nr | \
-	        $(SED) 's,^ *[0-9]* *\(.*\)$$,    <li>\1</li>,') && \
 	    $(SED) '1,/<ul id="authors-list"/ d' '$(TOP_DIR)/doc/index.html' \
 	) \
 	| $(SED) 's,\(<span class="version">\)[^<]*\(</span>\),\1$(VERSION)\2,g' \
 	| $(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' \
 	| $(SED) 's,\(<span class="target-underscore">\)[^<]*\(</span>\),\1$(subst -,_,$(TARGET))\2,g' \
-	| $(SED) 's;\(<span class="years">\)[^<]*\(</span>\);\1'"`LC_ALL=en_US.UTF-8 hg log | $(SED) -n 's,^date:.*\s\([0-9]\{4\}\)\s.*$$,\1,p' | sort -nu | $(SED) -n '1 h; 2,$$ H; $$ {x; s/\n/, /gp}'`"'\2;g' \
 	>'$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/index.html'
 	cp -p '$(TOP_DIR)/doc'/screenshot-* '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/'
 	cp -p '$(TOP_DIR)/Makefile'    '$(DIST_DIR)/mingw-cross-env-$(VERSION)/'
