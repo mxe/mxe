@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     values[0] = &s;
 
     if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 1,
-    		       &ffi_type_uint, args) == FFI_OK)
+                           &ffi_type_uint, args) == FFI_OK)
     {
         s = "Hello World!";
         ffi_call(&cif, FFI_FN(puts), &rc, values);

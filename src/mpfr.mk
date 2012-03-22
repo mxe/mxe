@@ -27,8 +27,8 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads=win32 \
-	--with-gmp-include='$(PREFIX)/$(TARGET)/include/'
-	--with-gmp-lib='$(PREFIX)/$(TARGET)/lib/'
+        --with-gmp-include='$(PREFIX)/$(TARGET)/include/'
+        --with-gmp-lib='$(PREFIX)/$(TARGET)/lib/'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

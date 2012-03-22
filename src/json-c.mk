@@ -20,6 +20,6 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --build="`config.guess`"\
-		CFLAGS=-Wno-error
+        CFLAGS=-Wno-error
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

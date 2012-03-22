@@ -6,9 +6,9 @@
 
 int main(int argc, char *argv[])
 {
-	(void)argc;
-	(void)argv;
+    (void)argc;
+    (void)argv;
 
-	fprintf(stdout, "magic file from %s\n", magic_getpath(NULL, 0));
-	return 0;
+    fprintf(stdout, "magic file from %s\n", magic_getpath(NULL, 0));
+    return 0;
 }
