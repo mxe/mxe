@@ -215,13 +215,9 @@
 
     <p>
     When everything is fine, download the
-    <a href="#latest-release">latest release</a>:
+    <a href="#development">current stable version</a>:
     </p>
-    <pre>wget https://bitbucket.org/vog/mingw-cross-env/downloads/mingw-cross-env-<span class="version">X.Y</span>.tar.gz</pre>
-    <p>
-    and unpack the tarball:
-    </p>
-    <pre>tar -xzvf mingw-cross-env-<span class="version">X.Y</span>.tar.gz</pre>
+    <pre>git clone -b stable https://github.com/mxe/mxe.git</pre>
 
     <p>
     If you don't mind installing it in your home directory,
@@ -234,32 +230,32 @@
     Now you should save any previous installation
     of the mingw-cross-env.
     Assuming you've installed it under
-    /opt/mingw (any other directory will do as well),
+    /opt/mxe (any other directory will do as well),
     you should execute the following commands:
     </p>
     <pre>su
-mv /opt/mingw /opt/mingw.old
+mv /opt/mxe /opt/mxe.old
 exit</pre>
 
     <p>
     Then you need to transfer the entire directory to its definitive location.
-    We will assume again you use /opt/mingw,
+    We will assume again you use /opt/mxe,
     but feel free to use any other directory if you like.
     </p>
     <pre>su
-mv mingw-cross-env-<span class="version">X.Y</span> /opt/mingw
+mv mxe /opt/mxe
 exit</pre>
 
     <p>
     We're almost done.
     Just change to your newly created directory and get going:
     </p>
-    <pre>cd /opt/mingw</pre>
+    <pre>cd /opt/mxe</pre>
 
     <h3>Step 3: Build mingw-cross-env</h3>
 
     <p>
-    Enter the directory where you've unpacked the
+    Enter the directory where you've downloaded the
     mingw-cross-env.
     Now it depends on what you actually want &ndash; or need.
     </p>
@@ -453,7 +449,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <dt>2011-xx-xx &ndash; Release <span id="latest-version">2.22</span></dt>
     <dd>
         <p>
-        <a href="https://bitbucket.org/vog/mingw-cross-env/downloads/mingw-cross-env-2.22.tar.gz">Download</a> |
+        <a href="http://mingw-cross-env.nongnu.org/#development">Download</a> |
         <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.22">Changelog</a>
         </p>
 
@@ -469,14 +465,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         </p>
     </dd>
 
-    <dt>Release Updates</dt>
-    <dd>
-        <p>
-        If you are experiencing problems with a release
-        (e.g. broken download links), try the 
-        <a href="#development">stable development branch.</a>
-    </dd>
-    
     <dt>Old Releases</dt>
     <dd>
         <a href="#history">History</a>
@@ -528,26 +516,22 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </ul>
 
     <p>
-    To obtain the current development version,
-    install
-    <a href="http://mercurial.selenic.com/">Mercurial</a>
-    and run:
+    To obtain the current stable version, run:
     </p>
 
-    <pre>hg clone http://hg.savannah.nongnu.org/hgweb/mingw-cross-env</pre>
+    <pre>git clone -b stable https://github.com/mxe/mxe.git</pre>
 
     <p>
-    The stable version can be obtained by:
+    The development version can be obtained by:
     </p>
 
-    <pre>hg clone -b stable \
-        http://hg.savannah.nongnu.org/hgweb/mingw-cross-env</pre>
-    
+    <pre>git clone -b master https://github.com/mxe/mxe.git</pre>
+
     <p>
     To retrieve updates, run:
     </p>
 
-    <pre>hg pull -u</pre>
+    <pre>git pull</pre>
 
     <p>
     You can also browse the
@@ -812,7 +796,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     mingw-cross-env can be successfully built by simply
     removing the package:
     </p>
-    <pre>rm <em>where mingw-cross-env is unpacked</em>/src/nsis.mk</pre>
+    <pre>rm <em>where mingw-cross-env is downloaded</em>/src/nsis.mk</pre>
 </div>
 
 <div class="section">
