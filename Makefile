@@ -243,7 +243,10 @@ dist:
 	( \
 	    $(SED) -n '1,/<table id="package-list"/ p' '$(TOP_DIR)/doc/index.html' && \
 	    ($(foreach PKG,$(PKGS), \
-	        echo '    <tr><td><a href="$($(PKG)_WEBSITE)">$(PKG)</a></td><td>$($(PKG)_VERSION)</td></tr>';)) && \
+	        echo '    <tr>'; \
+	        echo '        <td><a href="$($(PKG)_WEBSITE)">$(PKG)</a></td>'; \
+	        echo '        <td id="$(PKG)-version">$($(PKG)_VERSION)</td>'; \
+	        echo '    </tr>';)) && \
 	    $(SED) '1,/<table id="package-list"/ d' '$(TOP_DIR)/doc/index.html' \
 	) \
 	| $(SED) 's,\(<span class="version">\)[^<]*\(</span>\),\1$(VERSION)\2,g' \
