@@ -4,8 +4,8 @@
 # proj
 PKG             := proj
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.7.0
-$(PKG)_CHECKSUM := bfe59b8dc1ea0c57e1426c37ff2b238fea66acd7
+$(PKG)_VERSION  := 4.8.0
+$(PKG)_CHECKSUM := 5c8d6769a791c390c873fef92134bf20bb20e82a
 $(PKG)_SUBDIR   := proj-$($(PKG)_VERSION)
 $(PKG)_FILE     := proj-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://trac.osgeo.org/proj/
