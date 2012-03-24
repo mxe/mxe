@@ -13,7 +13,7 @@ $(PKG)_URL      := https://gforge.inria.fr/frs/download.php/30385/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost gmp mpfr qt
 
 define $(PKG)_UPDATE
-    wget -q -O- 'https://gforge.inria.fr/frs/?group_id=52' | \
+    wget -q --no-check-certificate -O- 'https://gforge.inria.fr/frs/?group_id=52' | \
     grep 'CGAL-' | \
     $(SED) -n 's,.*CGAL-\([0-9][^>a-z]*\)\.tar.*,\1,p' | \
     head -1
