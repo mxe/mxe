@@ -4,12 +4,12 @@
 # cgal
 PKG             := cgal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.9
-$(PKG)_CHECKSUM := cc99fad7116f221b6301326834f71ff65cebf2eb
+$(PKG)_VERSION  := 4.0
+$(PKG)_CHECKSUM := d1f3f328bc5cb026ddb825cb585c7ae27a8856f7
 $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
-$(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://www.cgal.org/
-$(PKG)_URL      := https://gforge.inria.fr/frs/download.php/29125/$($(PKG)_FILE)
+$(PKG)_URL      := https://gforge.inria.fr/frs/download.php/30385/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost gmp mpfr qt
 
 define $(PKG)_UPDATE
@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         -DBOOST_COMPILER=_win32 \
         -DBOOST_THREAD_USE_LIB=1 \
         -DBOOST_USE_STATIC_LIBS=1 \
+        -DBUILD_SHARED_LIBS=0 \
         -C TryRunResults.cgal.cmake .
     $(MAKE) -C '$(1)' -j $(JOBS)
     cd '$(1)/examples/AABB_tree' && cmake \
@@ -41,6 +42,7 @@ define $(PKG)_BUILD
         -DBOOST_COMPILER=_win32 \
         -DBOOST_THREAD_USE_LIB=1 \
         -DBOOST_USE_STATIC_LIBS=1 \
+        -DBUILD_SHARED_LIBS=0 \
         -DCGAL_DIR:STRING="../.." .
     $(MAKE) -C '$(1)/examples/AABB_tree' -j $(JOBS)
     $(MAKE) -C '$(1)' -j $(JOBS) install
