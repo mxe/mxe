@@ -13,9 +13,9 @@ $(PKG)_URL      := http://libharu.org/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libpng
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://libharu.org/files/' | \
-    grep 'libharu-' | \
+    wget -q -O- 'http://libharu.org/files/?C=M;O=D' | \
     $(SED) -n 's,.*libharu-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    grep -v 'rc' | \
     head -1
 endef
 
