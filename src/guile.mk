@@ -3,7 +3,7 @@
 
 # GNU Guile
 PKG             := guile
-$(PKG)_IGNORE   := 2.0.1
+$(PKG)_IGNORE   := 2.0.5
 $(PKG)_VERSION  := 1.8.7
 $(PKG)_CHECKSUM := 24cd2f06439c76d41d982a7384fe8a0fe5313b54
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
