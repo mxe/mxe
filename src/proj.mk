@@ -20,6 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoconf
+    cd '$(1)' && automake
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

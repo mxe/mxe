@@ -1,0 +1,27 @@
+This file is part of mingw-cross-env.
+See doc/index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From e6d8b644652d5671a77a7eb3935edb1bc80bf0e3 Mon Sep 17 00:00:00 2001
+From: mingw-cross-env
+Date: Sat, 24 Mar 2012 20:16:15 +0100
+Subject: [PATCH] install projects.h
+
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 621b0b4..715d49a 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -4,7 +4,7 @@ EXTRA_PROGRAMS = multistresstest
+ INCLUDES =	-DPROJ_LIB=\"$(pkgdatadir)\" \
+ 		-DMUTEX_@MUTEX_SETTING@ @JNI_INCLUDE@
+ 
+-include_HEADERS = proj_api.h org_proj4_Projections.h
++include_HEADERS = proj_api.h org_proj4_Projections.h projects.h
+ 
+ EXTRA_DIST = makefile.vc proj.def
+ 
+-- 
+1.7.9.2
+
