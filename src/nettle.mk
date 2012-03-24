@@ -15,6 +15,7 @@ $(PKG)_DEPS     := gcc gmp
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.lysator.liu.se/~nisse/archive/' | \
     $(SED) -n 's,.*nettle-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    grep -v 'pre' | \
     tail -1
 endef
 
