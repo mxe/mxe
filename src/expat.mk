@@ -4,8 +4,8 @@
 # Expat XML Parser
 PKG             := expat
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.1
-$(PKG)_CHECKSUM := 663548c37b996082db1f2f2c32af060d7aa15c2d
+$(PKG)_VERSION  := 2.1.0
+$(PKG)_CHECKSUM := b08197d146930a5543a7b99e871cba3da614f6f0
 $(PKG)_SUBDIR   := expat-$($(PKG)_VERSION)
 $(PKG)_FILE     := expat-$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := http://expat.sourceforge.net/
