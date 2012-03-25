@@ -688,9 +688,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://admin.fedoraproject.org/pkgdb/ -->
     <pre>yum install autoconf automake bash bison bzip2 cmake \
-            flex gcc-c++ gettext intltool make sed libtool \
-            openssl-devel patch perl pkgconfig scons \
-            yasm unzip wget xz</pre>
+            flex gcc-c++ gettext git intltool make sed \
+            libtool openssl-devel patch perl pkgconfig \
+            scons yasm unzip wget xz</pre>
 
     <p>
     On 64-bit Fedora,
@@ -701,9 +701,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.freebsd.org/ports/ -->
     <pre>pkg_add -r automake111 autoconf268 bash bison cmake \
-           flex gettext gmake gsed intltool libtool openssl \
-           patch perl p5-XML-Parser pkg-config scons \
-           unzip wget yasm</pre>
+           flex gettext git gmake gsed intltool libtool \
+           openssl patch perl p5-XML-Parser pkg-config \
+           scons unzip wget yasm</pre>
 
     <p>
     Ensure that /usr/local/bin precedes /usr/bin in your $PATH:
@@ -725,9 +725,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
-             flex gcc gettext intltool make sed libtool openssl \
-             patch perl perl-xml-parser pkgconfig scons \
-             unzip wget xz xz-lzma yasm</pre>
+             flex gcc gettext git intltool make sed libtool \
+             openssl patch perl perl-xml-parser pkgconfig \
+             scons unzip wget xz xz-lzma yasm</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -740,7 +740,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>emerge sys-devel/autoconf sys-devel/automake \
        app-shells/bash sys-devel/bison app-arch/bzip2 \
        dev-util/cmake sys-devel/flex sys-devel/gcc \
-       sys-devel/gettext \
+       sys-devel/gettext dev-vcs/git \
        dev-util/intltool sys-devel/make sys-apps/sed \
        sys-devel/libtool dev-libs/openssl sys-devel/patch \
        dev-lang/perl dev-perl/XML-Parser \
@@ -758,8 +758,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install autoconf automake bison cmake flex \
-                  gettext gsed intltool libtool openssl \
-                  p5-xml-parser pkgconfig scons \
+                  gettext git-core gsed intltool libtool \
+                  openssl p5-xml-parser pkgconfig scons \
                   wget xz yasm</pre>
     <p>
     Mac OS X versions ≤ 10.6 are no longer supported.
@@ -769,7 +769,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://software.opensuse.org/113/en -->
     <pre>zypper install -R autoconf automake bash bison bzip2 \
-                  cmake flex gcc-c++ gettext-tools \
+                  cmake flex gcc-c++ gettext-tools git \
                   intltool libtool make openssl \
                   libopenssl-devel patch perl \
                   perl-XML-Parser pkg-config scons \
