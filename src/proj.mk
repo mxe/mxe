@@ -20,14 +20,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoconf
-    cd '$(1)' && aclocal
-    cd '$(1)' && automake
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-mutex
     $(MAKE) -C '$(1)' -j '$(JOBS)'
+    # remove header which is not installed since 4.8.0
+    rm -f '$(PREFIX)/$(TARGET)'/include/projects.h
     $(MAKE) -C '$(1)' -j 1 install
 endef
