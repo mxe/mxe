@@ -4,8 +4,8 @@
 # librsvg
 PKG             := librsvg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.35.2
-$(PKG)_CHECKSUM := e8ac89cba6ed1adb1ef8427e0026d673d50f1563
+$(PKG)_VERSION  := 2.36.0
+$(PKG)_CHECKSUM := 11a2dc00c813da13532d7f16a822b414201e8b1b
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
@@ -26,7 +26,8 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-pixbuf-loader \
         --disable-gtk-theme \
-        --disable-gtk-doc
+        --disable-gtk-doc \
+        --enable-introspection=no
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
