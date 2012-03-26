@@ -8,6 +8,8 @@ From: mingw-cross-env
 Date: Sat, 24 Mar 2012 20:16:15 +0100
 Subject: [PATCH] install projects.h
 
+Cherry-picked from
+http://lists.maptools.org/pipermail/proj/2012-March/006200.html
 
 diff --git a/src/Makefile.am b/src/Makefile.am
 index 621b0b4..715d49a 100644
