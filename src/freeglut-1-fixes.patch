@@ -10,6 +10,9 @@ Subject: [PATCH] add pkg-config support
 
 based on
 http://old.nabble.com/-PATCH--Add-pkgconfig-file-td23312302.html
+
+proposed to upstream
+https://sourceforge.net/tracker/?func=detail&aid=3511842&group_id=1032&atid=101032
 ---
  Makefile.am  |    3 +++
  configure.ac |    1 +
