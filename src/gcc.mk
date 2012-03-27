@@ -59,7 +59,7 @@ define $(PKG)_BUILD
      echo 'PKG_CONFIG_PATH="$$PKG_CONFIG_PATH_$(subst -,_,$(TARGET))" PKG_CONFIG_LIBDIR='\''$(PREFIX)/$(TARGET)/lib/pkgconfig'\'' exec pkg-config --static "$$@"') \
              > '$(PREFIX)/bin/$(TARGET)-pkg-config'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-pkg-config'
-    
+
     # create the CMake toolchain file
     [ -d '$(dir $(CMAKE_TOOLCHAIN_FILE))' ] || mkdir -p '$(dir $(CMAKE_TOOLCHAIN_FILE))'
     (echo 'set(BUILD_SHARED_LIBS OFF)'; \

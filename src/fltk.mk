@@ -33,7 +33,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,-fno-exceptions,,' '$(1)/makeinclude'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install DIRS=src LIBCOMMAND='$(TARGET)-ar cr'
     ln -sf '$(PREFIX)/$(TARGET)/bin/fltk-config' '$(PREFIX)/bin/$(TARGET)-fltk-config'
-    
+
     '$(TARGET)-g++' \
         -W -Wall -Werror -pedantic -ansi \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-fltk.exe' \

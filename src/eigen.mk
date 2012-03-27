@@ -21,6 +21,6 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && \
-    cmake . -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' 
+    cmake . -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
