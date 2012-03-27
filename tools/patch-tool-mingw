@@ -44,6 +44,7 @@ function init_git {
   cd $gitsdir
   echo $pkg_file | grep "\.tar\.gz" >> /dev/null  && tar xf $mcedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.bz2" >> /dev/null && tar xf $mcedir/pkg/$pkg_file
+  echo $pkg_file | grep "\.tar\.xz"  >> /dev/null && xz -dc $mcedir/pkg/$pkg_file | tar xf -
   echo $pkg_file | grep "\.zip" >> /dev/null      && unzip $mcedir/pkg/$pkg_file >> /dev/null
   cd $gitsdir/$pkg_subdir && \
   (git init; git add -A; git commit -m "init") > /dev/null
