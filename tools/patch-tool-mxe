@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Tool for converting between mingw-cross-env patch files and git repos
+# Tool for converting between MXE patch files and git repos
 # Imports and exports patch files in "git format-patch" format.
 
 cmd=$1
 pkg=$2
 
-# mingw-cross-env directory
-mcedir=~/mingw-cross-env
+# MXE directory
+mxedir=~/mxe
 
 # directory for unpacked tarballs/git repos
 gitsdir=~/gits
@@ -16,18 +16,18 @@ gitsdir=~/gits
 # John Doe <John Doe@acme.org>
 author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
 
-pkg_version=`grep '^$(PKG)_VERSION' $mcedir/src/$pkg.mk  | \
+pkg_version=`grep '^$(PKG)_VERSION' $mxedir/src/$pkg.mk  | \
   sed 's/.*:= \(.*\)/\1/'`
 
 pkg_short_version=`echo $pkg_version | sed s/'\(.*\)\.[^.]*$'/'\1'/`
 
-pkg_subdir=`grep '^$(PKG)_SUBDIR' $mcedir/src/$pkg.mk  | \
+pkg_subdir=`grep '^$(PKG)_SUBDIR' $mxedir/src/$pkg.mk  | \
   sed 's/.*:= \(.*\)/\1/' | \
   sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
   sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
   sed s/'$(PKG)'/$pkg/;`
 
-pkg_file=`grep '^$(PKG)_FILE' $mcedir/src/$pkg.mk  | \
+pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
   sed 's/.*:= \(.*\)/\1/' | \
   sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
   sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
@@ -42,10 +42,10 @@ pkg_file=`grep '^$(PKG)_FILE' $mcedir/src/$pkg.mk  | \
 # init
 function init_git {
   cd $gitsdir
-  echo $pkg_file | grep "\.tar\.gz" >> /dev/null  && tar xf $mcedir/pkg/$pkg_file
-  echo $pkg_file | grep "\.tar\.bz2" >> /dev/null && tar xf $mcedir/pkg/$pkg_file
-  echo $pkg_file | grep "\.tar\.xz"  >> /dev/null && xz -dc $mcedir/pkg/$pkg_file | tar xf -
-  echo $pkg_file | grep "\.zip" >> /dev/null      && unzip $mcedir/pkg/$pkg_file >> /dev/null
+  echo $pkg_file | grep "\.tar\.gz" >> /dev/null  && tar xf $mxedir/pkg/$pkg_file
+  echo $pkg_file | grep "\.tar\.bz2" >> /dev/null && tar xf $mxedir/pkg/$pkg_file
+  echo $pkg_file | grep "\.tar\.xz"  >> /dev/null && xz -dc $mxedir/pkg/$pkg_file | tar xf -
+  echo $pkg_file | grep "\.zip" >> /dev/null      && unzip $mxedir/pkg/$pkg_file >> /dev/null
   cd $gitsdir/$pkg_subdir && \
   (git init; git add -A; git commit -m "init") > /dev/null
   git tag dist
@@ -54,19 +54,19 @@ function init_git {
 function export_patch {
   cd $gitsdir/$pkg_subdir && \
   (
-    echo 'This file is part of mingw-cross-env.'
+    echo 'This file is part of MXE.'
     echo 'See doc/index.html for further information.'
     echo ''
     echo 'Contains ad hoc patches for cross building.'
     echo ''
     git format-patch -p --stdout dist..HEAD | \
-    sed 's/^From: .*/From: mingw-cross-env/g;'
-  ) > $mcedir/src/$pkg-1-fixes.patch
+    sed 's/^From: .*/From: MXE/g;'
+  ) > $mxedir/src/$pkg-1-fixes.patch
 }
 
 function import_patch {
   cd $gitsdir/$pkg_subdir && \
-  cat $mcedir/src/$pkg-1-fixes.patch | \
+  cat $mxedir/src/$pkg-1-fixes.patch | \
   sed '/^From/,$  !d' | \
   sed s/'^From: .*'/"From: $author"/'g;' | \
   git am --keep-cr

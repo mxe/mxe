@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From 865936e91293bdc59c2e9c47e5a4b54fb6f1629e Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Wed, 29 Sep 2010 23:08:44 +0200
 Subject: [PATCH] allow deprecated GdkSpanFunc
 

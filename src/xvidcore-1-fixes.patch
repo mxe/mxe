@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From dce4564d204160aee0da5107e69cbdefe2bec921 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Mon, 28 Mar 2011 00:00:51 +0200
 Subject: [PATCH] remove obsolete -mno-cygwin
 

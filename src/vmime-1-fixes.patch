@@ -1,4 +1,4 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Cherry picked fixes from svn
@@ -9,7 +9,7 @@ Produced with this script:
 #!/usr/bin/env bash
 
 (
-  echo "This file is part of mingw-cross-env."
+  echo "This file is part of MXE."
   echo "See doc/index.html for further information."
   echo
   echo "Cherry picked fixes from svn"
@@ -569,7 +569,7 @@ index df2bf85..b129913 100644
 From 22ca7dc23b6bbbc8cc6aedd569ec938ecae96e92 Mon Sep 17 00:00:00 2001
 From: vincent-richard <vincent-richard@5301114d-f842-0410-bbdd-996ee0417009>
 Date: Sun, 27 Mar 2011 11:26:55 +0000
-Subject: [PATCH 10/27] Allow static linking in mingw-cross-env. Added 'iconv'
+Subject: [PATCH 10/27] Allow static linking in MXE. Added 'iconv'
  and uses 'ws2_32' instead of 'winsock32' (#3213487).
 
 git-svn-id: https://vmime.svn.sourceforge.net/svnroot/vmime/trunk@585 5301114d-f842-0410-bbdd-996ee0417009

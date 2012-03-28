@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From 47b80beedcb3d8e6296e2d0b970bb0c82abb4424 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Tue, 14 Feb 2012 12:40:24 +0100
 Subject: [PATCH] fix pkg-config
 

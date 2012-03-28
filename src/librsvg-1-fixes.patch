@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains an ad hoc patch for cross building.
 
 From 1ff5a73bee660f1d61f9cdd7c8d7aff29e959c4c Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Mon, 27 Sep 2010 12:00:52 +0200
 Subject: [PATCH 1/2] fix .pc requirements
 

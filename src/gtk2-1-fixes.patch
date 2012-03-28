@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From 2e42ff35296c81959a8fab06aa8d3dacf19632d8 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 14:43:43 +0200
 Subject: [PATCH 01/10] s,DllMain,static _disabled_DllMain,
 
@@ -40,7 +40,7 @@ index d081f70..aa2973d 100644
 
 
 From 86527a238545e47b4770531c79f5f2ead59aab85 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 14:46:20 +0200
 Subject: [PATCH 02/10] s,__declspec(dllimport),,
 
@@ -102,7 +102,7 @@ index c624aea..b792ea5 100644
 
 
 From 7277a7022eb4ffb498475d969057d3a57e687222 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 15:03:28 +0200
 Subject: [PATCH 03/10] s,__declspec(dllexport),,
 
@@ -164,7 +164,7 @@ index b792ea5..f382a64 100644
 
 
 From 604fcdb64972a82c6a430c36debc9f66c7f05d90 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 14:17:22 +0200
 Subject: [PATCH 04/10] fix gtk+-2.0.pc.in
 
@@ -185,7 +185,7 @@ index 46853e1..7f3eb22 100644
 
 
 From a778e96b43b556389f1e3a6712072eaee9e2adb2 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 14:48:31 +0200
 Subject: [PATCH 05/10] disable gtkbuiltincache
 
@@ -208,7 +208,7 @@ index 76981d8..b6d170f 100644
 
 
 From 58310acc28f8e6994281eacac1989e8e6c51c150 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 14:49:50 +0200
 Subject: [PATCH 06/10] disable test-inline-pixbufs.h
 
@@ -231,7 +231,7 @@ index 9f90d09..2e4f967 100644
 
 
 From 7532813f3bfe95fe088c06ce11d31c0d3d66c559 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 14:51:04 +0200
 Subject: [PATCH 07/10] permit static building
 
@@ -332,7 +332,7 @@ index 5eedff6..6380da5 100755
 
 
 From 821882bb862fc86b7152eba82966163d054b488e Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 14:53:18 +0200
 Subject: [PATCH 08/10] no -Wl
 
@@ -355,7 +355,7 @@ index 6380da5..7283f17 100755
 
 
 From 80745459d75da07c53dbb83c6a79c3d9896e5fd3 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 14:54:15 +0200
 Subject: [PATCH 09/10] gio not gio-unix
 
@@ -381,7 +381,7 @@ index 7283f17..50e6a86 100755
 
 
 From 337e54ef8aa5a4d131e9d9007dedcc42b164e68c Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 24 Sep 2010 15:30:49 +0200
 Subject: [PATCH 10/10] removed duplicate _gtk_marshal_OBJECT__VOID()
 

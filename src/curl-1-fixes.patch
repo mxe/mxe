@@ -1,14 +1,14 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Commits backported (cherry-picked) from upstream.
 http://github.com/bagder/curl
-Also contains mingw-cross-env specific fixes.
+Also contains MXE specific fixes.
 
 From ee69c33117cf616c19e9cd288f08eb4c91bf190d Mon Sep 17 00:00:00 2001
 From: Volker Grabsch <vog@notjusthosting.com>
 Date: Fri, 28 Oct 2011 13:48:04 +0200
-Subject: [PATCH] static linking for mingw-cross-env
+Subject: [PATCH] static linking for MXE
 
 ---
  include/curl/curlbuild.h.in |    3 +++

@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From 6f4063fc97b3acc653605c077c94b862a9808fd4 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 23 Dec 2011 00:07:18 +0100
 Subject: [PATCH] add missing static dependencies to .pc file
 

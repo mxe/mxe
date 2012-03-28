@@ -1,12 +1,12 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From 71c4f0a34399fd74d4e39f9985a4c2c56f8b9a43 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Sat, 22 Oct 2011 01:29:03 +0200
-Subject: [PATCH] configure for mingw-cross-env
+Subject: [PATCH] configure for MXE
 
 
 diff --git a/example/example.pro b/example/example.pro

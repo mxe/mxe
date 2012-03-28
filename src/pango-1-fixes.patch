@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From 987d02305fd8187bd10bfd292db38f7da705a7f3 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Wed, 29 Sep 2010 00:52:59 +0200
 Subject: [PATCH 1/4] s,DllMain,static _disabled_DllMain,
 
@@ -33,7 +33,7 @@ index 44ec353..72e13f1 100644
 
 
 From f0c5d358e54fd9d69133eeff972fdb05592789f3 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Wed, 29 Sep 2010 00:55:07 +0200
 Subject: [PATCH 2/4] static, not shared
 
@@ -134,7 +134,7 @@ index fb173ce..beb3290 100755
 
 
 From 08292532296e3a0f135f6bcd683851d2f41836c6 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Wed, 29 Sep 2010 00:57:12 +0200
 Subject: [PATCH 3/4] no pango-querymodules
 
@@ -157,7 +157,7 @@ index 49813f7..afc29c5 100644
 
 
 From c646ee7869c20a1e093f63ec8de8e83e7ca88b27 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Wed, 29 Sep 2010 00:50:08 +0200
 Subject: [PATCH 4/4] add missing lib to pango.pc for static linking
 

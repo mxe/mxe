@@ -1,7 +1,7 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
-mingw-cross-env specific workaround for OSX Lion's new ASLR
+MXE specific workaround for OSX Lion's new ASLR
 causing problems with pre-compiled headers.
 
 1. more recent native compilers don't solve the problem

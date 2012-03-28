@@ -4,7 +4,7 @@
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-    <title>MinGW cross compiling environment</title>
+    <title>MXE (M cross environment)</title>
 
     <style type="text/css">
         body {
@@ -92,12 +92,12 @@
             padding-right:  1em;
             padding-top:    1em;
             padding-bottom: 1em;
-            width: 12em;
+            width: 14em;
             background-color: #afa;
         }
         .section {
             width: 30em;
-            margin-left: 17em;
+            margin-left: 19em;
             margin-bottom: 100%;
         }
     }
@@ -107,7 +107,7 @@
 <body>
 
 <div id="navigation">
-<h1>MinGW cross&nbsp;compiling environment</h1>
+<h1>MXE (M&nbsp;cross&nbsp;environment)</h1>
 
     <ul>
         <li><a href="#introduction"     >Introduction</a></li>
@@ -134,9 +134,11 @@
 <h2 id="introduction">Introduction</h2>
 
     <p>
-    This Makefile compiles a MinGW cross compiler and cross compiles
-    many free libraries such as GD, SDL and Qt. Thus, it provides a nice
-    MinGW cross compiling environment which
+    MXE (M cross environment) is a Makefile that
+    compiles a cross compiler and cross compiles
+    many free libraries such as SDL and Qt. Thus,
+    it provides a nice cross compiling environment
+    for various target platforms, which
     </p>
 
     <ul>
@@ -175,11 +177,6 @@
         whenever possible
     </li>
     <li>
-        creates libraries to be
-        <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2009-09/msg00025.html">linked statically</a>,
-        no DLL hell
-    </li>
-    <li>
         is already
         <a href="#used-by">used by several projects</a>
     </li>
@@ -208,7 +205,7 @@
 
     <p>
     First, you should ensure that your system meets
-    mingw-cross-env's
+    MXE's
     <a href="#requirements">requirements</a>.
     You will almost certainly have to install some stuff.
     </p>
@@ -228,7 +225,7 @@
 
     <p>
     Now you should save any previous installation
-    of the mingw-cross-env.
+    of the MXE.
     Assuming you've installed it under
     /opt/mxe (any other directory will do as well),
     you should execute the following commands:
@@ -252,11 +249,10 @@ exit</pre>
     </p>
     <pre>cd /opt/mxe</pre>
 
-    <h3>Step 3: Build mingw-cross-env</h3>
+    <h3>Step 3: Build MXE</h3>
 
     <p>
-    Enter the directory where you've downloaded the
-    mingw-cross-env.
+    Enter the directory where you've downloaded the MXE.
     Now it depends on what you actually want &ndash; or need.
     </p>
 
@@ -299,14 +295,14 @@ exit</pre>
     <p>
     Edit your .bashrc script in order to change $PATH:
     </p>
-    <pre>export PATH=/<em>where mingw-cross-env is installed</em>/usr/bin:$PATH</pre>
+    <pre>export PATH=/<em>where MXE is installed</em>/usr/bin:$PATH</pre>
 
     <p>
     In case you are using custom $PKG_CONFIG_PATH entries,
-    you can add separate entries for MinGW cross builds:
+    you can add separate entries for cross builds:
     </p>
     <pre>export PKG_CONFIG_PATH="<em>entries for native builds</em>"</pre>
-    <pre>export PKG_CONFIG_PATH_<span class="target-underscore">i686_pc_mingw32</span>="<em>entries for mingw-cross-env builds</em>"</pre>
+    <pre>export PKG_CONFIG_PATH_<span class="target-underscore">i686_pc_mingw32</span>="<em>entries for MXE builds</em>"</pre>
     <p>
     Remember to use <span class="target">i686-pc-mingw32</span>-pkg-config
     instead of pkg-config for cross builds.
@@ -357,7 +353,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <a href="http://www.cmake.org/">CMake</a> project,
     you can use the provided toolchain file:
     </p>
-    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where mingw-cross-env is installed</em>/usr/<span class="target">i686-pc-mingw32</span>/share/cmake/mingw-cross-env-conf.cmake</pre>
+    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/<span class="target">i686-pc-mingw32</span>/share/cmake/mingw-cross-env-conf.cmake</pre>
 
     <h3>Step 5c: Cross compile your Project (Qt)</h3>
 
@@ -425,7 +421,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     `i686-pc-mingw32-pkg-config --cflags openscenegraph-osgViewer openscenegraph-osgPlugins` \
     `i686-pc-mingw32-pkg-config --libs openscenegraph-osgViewer openscenegraph-osgPlugins`</pre>
     <p>
-    The <code>i686-pc-mingw32-pkg-config</code> command from mingw-cross-env will
+    The <code>i686-pc-mingw32-pkg-config</code> command from MXE will
     automatically add <code>-DOSG_LIBRARY_STATIC</code> to your compiler flags.
     </p>
 
@@ -436,7 +432,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     feel free to join the
     <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">project mailing list</a>
     where you'll get in touch with
-    the mingw-cross-env developers
+    the MXE developers
     and other users.
     </p>
 </div>
@@ -449,7 +445,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <dt>2011-xx-xx &ndash; Release <span id="latest-version">2.22</span></dt>
     <dd>
         <p>
-        <a href="http://mingw-cross-env.nongnu.org/#development">Download</a> |
+        <a href="http://mxe.cc/#development">Download</a> |
         <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.22">Changelog</a>
         </p>
 
@@ -793,10 +789,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <p>
     Since no other packages depend on it, the remainder of
-    mingw-cross-env can be successfully built by simply
+    MXE can be successfully built by simply
     removing the package:
     </p>
-    <pre>rm <em>where mingw-cross-env is downloaded</em>/src/nsis.mk</pre>
+    <pre>rm <em>where MXE is downloaded</em>/src/nsis.mk</pre>
 </div>
 
 <div class="section">
@@ -932,7 +928,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         BTW, we're always curious about the applications people are porting.
         We maintain a
         <a href="#used-by">list of projects</a>
-        which use mingw-cross-env.
+        which use MXE.
         No matter whether your project is free or proprietary
         &ndash; as long as it has its own website,
         we'd be happy to link to it.
@@ -976,7 +972,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         The easiest way to get the dependencies right
         is to start with a minimal setup.
         That is,
-        initialize mingw-cross-env with <code>make gcc</code> only,
+        initialize MXE with <code>make gcc</code> only,
         then check whether your package builds successfully.
         </p>
 
@@ -1006,7 +1002,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <p>
         and should start with:
         </p>
-        <pre>This file is part of mingw-cross-env.
+        <pre>This file is part of MXE.
 See doc/index.html for further information.
 
 This patch has been taken from:
@@ -1833,7 +1829,7 @@ https://...</pre>
 
     <ul class="compact-list">
     <li>
-        <a href="http://mingw-cross-env.nongnu.org/">Project website</a>
+        <a href="http://mxe.cc/">Project website</a>
     </li>
     <li>
         <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">Project mailing list</a>
@@ -1920,7 +1916,7 @@ https://...</pre>
     </li>
     </ul>
 
-    <h3 id="used-by">Projects which use mingw-cross-env</h3>
+    <h3 id="used-by">Projects which use MXE</h3>
 
     <ul class="compact-list">
     <li>

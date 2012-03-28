@@ -1,4 +1,4 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 diff -urN x264-snapshot-20100714-2245/configure x264-snapshot-20100714-2245.new/configure

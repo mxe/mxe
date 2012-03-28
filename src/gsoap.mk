@@ -1,4 +1,4 @@
-# This file is part of mingw-cross-env.
+# This file is part of MXE.
 # See doc/index.html for further information.
 
 # gSOAP
@@ -55,6 +55,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
     # Apparently there is a tradition of compiling gsoap source files into applications.
     # Since we linked dom.cpp and dom.c into the libraries, this should not be necessary.
-    # But we bend to tradition and install these sources into mingw-cross-env.
+    # But we bend to tradition and install these sources into MXE.
     $(INSTALL) -m644 '$(1)/gsoap/'*.c '$(1)/gsoap/'*.cpp '$(PREFIX)/$(TARGET)/share/gsoap'
 endef

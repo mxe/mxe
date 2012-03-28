@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From 2d8680323de1e709bfec5194db0119a7395ab78a Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 25 Nov 2011 15:58:28 +0100
 Subject: [PATCH] fix Libs.private
 

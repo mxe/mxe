@@ -1,4 +1,4 @@
-# This file is part of mingw-cross-env.
+# This file is part of MXE.
 # See doc/index.html for further information.
 
 JOBS               := 1
@@ -28,7 +28,7 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
                 scons $(SED) unzip wget xz yasm
 
-CMAKE_TOOLCHAIN_FILE := $(PREFIX)/$(TARGET)/share/cmake/mingw-cross-env-conf.cmake
+CMAKE_TOOLCHAIN_FILE := $(PREFIX)/$(TARGET)/share/cmake/mxe-conf.cmake
 
 # unexport any environment variables that might cause trouble
 unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP

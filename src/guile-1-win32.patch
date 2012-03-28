@@ -1,4 +1,4 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 diff -ruN guile-1.8.7.orig/configure guile-1.8.7/configure

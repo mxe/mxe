@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From 1f0955db1bf81de15e1dd04f1fe29f73ef3983c8 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Mon, 7 Nov 2011 18:01:56 +0100
 Subject: [PATCH] use memxor from nettle
 

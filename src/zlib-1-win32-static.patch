@@ -1,12 +1,12 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From dfe5701faf3683be7ea53885c58d4bd3499c4d1c Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Sun, 29 Jan 2012 21:51:03 +0100
-Subject: [PATCH] workarounds for mingw-cross-env
+Subject: [PATCH] workarounds for MXE
 
 
 diff --git a/Makefile.in b/Makefile.in

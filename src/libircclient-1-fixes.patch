@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
+This file is part of MXE.
 See doc/index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From 06b27e262de1d156ea31b52762ed372211b72de9 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Mon, 23 Jan 2012 08:26:14 +0100
 Subject: [PATCH 1/2] use the proper WIN32 define
 
@@ -66,7 +66,7 @@ index 2dcd44c..af7d769 100644
 
 
 From 1a54c4dda67b99c1c0c0c68b45a395b741cb7030 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Sun, 22 Jan 2012 22:39:23 +0100
 Subject: [PATCH 2/2] fix missing header
 

@@ -1,4 +1,4 @@
-# This libgnurx is part of mingw-cross-env.
+# This file is part of MXE.
 # See doc/index.html for further information.
 
 # libgnurx
@@ -25,5 +25,5 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -f Makefile.mingw-cross-env -j '$(JOBS)' TARGET=$(TARGET) bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= install-static
+    $(MAKE) -C '$(1)' -f Makefile.mxe -j '$(JOBS)' TARGET=$(TARGET) bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= install-static
 endef
