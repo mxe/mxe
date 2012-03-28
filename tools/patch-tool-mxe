@@ -42,10 +42,10 @@ pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
 # init
 function init_git {
   cd $gitsdir
-  echo $pkg_file | grep "\.tar\.gz" >> /dev/null  && tar xf $mxedir/pkg/$pkg_file
+  echo $pkg_file | grep "\.tar\.gz"  >> /dev/null && tar xf $mxedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.bz2" >> /dev/null && tar xf $mxedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.xz"  >> /dev/null && xz -dc $mxedir/pkg/$pkg_file | tar xf -
-  echo $pkg_file | grep "\.zip" >> /dev/null      && unzip $mxedir/pkg/$pkg_file >> /dev/null
+  echo $pkg_file | grep "\.zip"      >> /dev/null && unzip  $mxedir/pkg/$pkg_file >> /dev/null
   cd $gitsdir/$pkg_subdir && \
   (git init; git add -A; git commit -m "init") > /dev/null
   git tag dist
