@@ -443,21 +443,21 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     For the sake of simplicity, there are just two
-    branches, "default" and "stable". Although it might
+    branches, "master" and "stable". Although it might
     seem obvious, here's an overview of the types of
     changes that go into each branch:
     </p>
 
     <ul class="compact-list">
         <li>
-            Any change of a build script goes into "default".
+            Any change of a build script goes into "master".
         </li>
         <li>
-            Any package upgrade goes into "default".
+            Any package upgrade goes into "master".
         </li>
         <li>
             Any documentation upgrade that refers to a feature
-            not present in stable goes into "default".
+            not present in stable goes into "master".
         </li>
         <li>
             Anything else that doesn't affect the build goes
@@ -472,10 +472,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
             package version recognition goes into "stable".
         </li>
         <li>
-            When in doubt, use "default" rather than "stable".
+            When in doubt, use "master" rather than "stable".
         </li>
         <li>
-            After a successful testing phase, the whole "default"
+            After a successful testing phase, the whole "master"
             branch will be merged (moved) into "stable".
         </li>
     </ul>
