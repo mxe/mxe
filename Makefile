@@ -21,7 +21,6 @@ LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
 PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
-VERSION    := $(shell $(SED) -n 's,^.*<span id="latest-version">\([^<]*\)</span>.*$$,\1,p' '$(TOP_DIR)/doc/index.html')
 
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 gcc intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
@@ -213,9 +212,8 @@ update-checksum-%:
 dist:
 	rm -rf '$(DIST_DIR)'
 	mkdir -p '$(DIST_DIR)'
-	mkdir '$(DIST_DIR)/mingw-cross-env-$(VERSION)'
-	mkdir '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc'
-	mkdir '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src'
+	mkdir '$(DIST_DIR)/mxe'
+	mkdir '$(DIST_DIR)/mxe/doc'
 	( \
 	    $(SED) -n '1,/<table id="package-list"/ p' '$(TOP_DIR)/doc/index.html' && \
 	    ($(foreach PKG,$(PKGS), \
@@ -227,26 +225,20 @@ dist:
 	) \
 	| $(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' \
 	| $(SED) 's,\(<span class="target-underscore">\)[^<]*\(</span>\),\1$(subst -,_,$(TARGET))\2,g' \
-	>'$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/index.html'
-	cp -p '$(TOP_DIR)/doc'/screenshot-* '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/'
-	cp -p '$(TOP_DIR)/Makefile'    '$(DIST_DIR)/mingw-cross-env-$(VERSION)/'
-	cp -p '$(TOP_DIR)/src'/*.mk    '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
-	cp -p '$(TOP_DIR)/src'/*.patch '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
-	cp -p '$(TOP_DIR)/src'/*-test* '$(DIST_DIR)/mingw-cross-env-$(VERSION)/src/'
-	(cd '$(DIST_DIR)' && tar cvf - 'mingw-cross-env-$(VERSION)' | gzip -9) >'$(DIST_DIR)/mingw-cross-env-$(VERSION).tar.gz'
+	>'$(DIST_DIR)/mxe/doc/index.html'
+	cp -p '$(TOP_DIR)/doc'/screenshot-* '$(DIST_DIR)/mxe/doc/'
 	@echo
 	@echo 'Upload will start in 5 seconds. Last chance to cancel! (Ctrl+C)'
 	@echo
 	@sleep 5
 	mkdir '$(DIST_DIR)/web'
 	cd '$(DIST_DIR)/web' && cvs -d :ext:cvs.savannah.nongnu.org:/web/mingw-cross-env co mingw-cross-env
-	cp -p '$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc'/* '$(DIST_DIR)/web/mingw-cross-env/'
+	cp -p '$(DIST_DIR)/mxe/doc'/* '$(DIST_DIR)/web/mingw-cross-env/'
 	cd '$(DIST_DIR)/web/mingw-cross-env' && cvs add * || echo 'Errors on "cvs add" ignored.'
 	cd '$(DIST_DIR)/web/mingw-cross-env' && cvs commit -m 'upload'
 	sleep 2  # wait for the "triggered webpages update" to complete
 	x-www-browser \
 	    'http://validator.w3.org/unicorn/check?ucn_uri=http://mingw-cross-env.nongnu.org/' \
 	    'http://mingw-cross-env.nongnu.org/#latest-release' \
-	    'https://bitbucket.org/vog/mingw-cross-env/downloads#new-download-form' \
 	    'http://freshmeat.net/projects/mingw_cross_env/releases/new'
 
