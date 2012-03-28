@@ -225,7 +225,6 @@ dist:
 	        echo '    </tr>';)) && \
 	    $(SED) '1,/<table id="package-list"/ d' '$(TOP_DIR)/doc/index.html' \
 	) \
-	| $(SED) 's,\(<span class="version">\)[^<]*\(</span>\),\1$(VERSION)\2,g' \
 	| $(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' \
 	| $(SED) 's,\(<span class="target-underscore">\)[^<]*\(</span>\),\1$(subst -,_,$(TARGET))\2,g' \
 	>'$(DIST_DIR)/mingw-cross-env-$(VERSION)/doc/index.html'
