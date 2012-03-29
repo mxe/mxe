@@ -194,9 +194,9 @@ define UPDATE
             $(if $(filter $(2),$($(1)_VERSION)),
                 $(info .        $(1)  $(2)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
-                $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' -i '$(TOP_DIR)/src/$(1).mk'
+                $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                    || { $(SED) 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' -i '$(TOP_DIR)/src/$(1).mk'; \
+                    || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
                          exit 1; })),
         $(error Unable to update version number of package $(1)))
 
@@ -206,7 +206,7 @@ update:
 
 update-checksum-%:
 	$(call DOWNLOAD_PKG_ARCHIVE,$*)
-	$(SED) 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' -i '$(TOP_DIR)/src/$*.mk'
+	$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk'
 
 .PHONY: dist
 dist:
