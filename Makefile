@@ -218,3 +218,16 @@ update-checksum-%:
 	$(call DOWNLOAD_PKG_ARCHIVE,$*)
 	$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk'
 
+cleanup-style:
+	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\
+            echo '[cleanup] $(FILE)'; \
+            $(SED) -i ' \
+                s/\r//g; \
+                s/[ \t]\+$$//; \
+                s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
+                $(if $(filter %Makefile,$(FILE)),,\
+                    s/\t/    /g; \
+                ) \
+            ' $(FILE); \
+        )
+
