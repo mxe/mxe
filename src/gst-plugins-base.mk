@@ -4,11 +4,9 @@
 # gst-plugins-base
 PKG             := gst-plugins-base
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.10.35
 $(PKG)_CHECKSUM := 6d7dc463fed5dd43f79a53ad523fcbd6d0916303
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2 gstreamer liboil pango ogg vorbis theora
 

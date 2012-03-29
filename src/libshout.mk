@@ -4,11 +4,9 @@
 # libshout
 PKG             := libshout
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.2
 $(PKG)_CHECKSUM := cabc409e63f55383f4d85fac26d3056bf0365aac
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.icecast.org/
 $(PKG)_URL      := http://downloads.us.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc vorbis ogg theora speex
 

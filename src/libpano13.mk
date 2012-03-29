@@ -4,11 +4,9 @@
 # libpano13
 PKG             := libpano13
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.9.18_rc2
 $(PKG)_CHECKSUM := 23849bdbdfc9176a2b53d157e58bd24aa0e7276e
 $(PKG)_SUBDIR   := $(PKG)-$(word 1,$(subst _, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://panotools.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/panotools/$(PKG)/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff libpng zlib
 

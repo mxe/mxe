@@ -4,11 +4,9 @@
 # SDL
 PKG             := sdl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.15
 $(PKG)_CHECKSUM := 0c5f193ced810b0d7ce3ab06d808cbb5eef03a2c
 $(PKG)_SUBDIR   := SDL-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.libsdl.org/
 $(PKG)_URL      := http://www.libsdl.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 

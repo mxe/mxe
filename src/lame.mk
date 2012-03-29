@@ -4,11 +4,9 @@
 # lame
 PKG             := lame
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.99
 $(PKG)_CHECKSUM := 91dfd25bedc02759051a6b3af05e61337a575028
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://lame.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

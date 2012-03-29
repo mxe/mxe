@@ -4,11 +4,9 @@
 # GLibmm
 PKG             := glibmm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.28.2
 $(PKG)_CHECKSUM := d15bc0fed7dea6fec73746370653687f74e02592
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.gtkmm.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libsigc++
 

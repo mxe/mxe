@@ -4,11 +4,9 @@
 # VMime
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.1
 $(PKG)_CHECKSUM := 3e8dd8855e423db438d465777efeb523c4abb5f3
 $(PKG)_SUBDIR   := lib$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := lib$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://vmime.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads zlib
 

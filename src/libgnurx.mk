@@ -4,11 +4,9 @@
 # libgnurx
 PKG             := libgnurx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.5.1
 $(PKG)_CHECKSUM := f1e4af2541645dac82362b618aaa849658cd4988
 $(PKG)_SUBDIR   := mingw-libgnurx-$($(PKG)_VERSION)
 $(PKG)_FILE     := mingw-libgnurx-$($(PKG)_VERSION)-src.tar.gz
-$(PKG)_WEBSITE  := http://sourceforge.net/projects/mingw/files/UserContributed/regex/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/Other/UserContributed/regex/mingw-regex-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

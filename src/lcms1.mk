@@ -4,11 +4,9 @@
 # lcms1
 PKG             := lcms1
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.19
 $(PKG)_CHECKSUM := d5b075ccffc0068015f74f78e4bc39138bcfe2d4
 $(PKG)_SUBDIR   := lcms-$($(PKG)_VERSION)
 $(PKG)_FILE     := lcms-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.littlecms.com/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/lcms/lcms/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff zlib
 

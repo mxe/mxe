@@ -4,11 +4,9 @@
 # vtk
 PKG             := vtk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.8.0
 $(PKG)_CHECKSUM := ece52f4fa92811fe927581e60ecb39a8a5f68cd9
 $(PKG)_SUBDIR   := VTK
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.vtk.org/
 $(PKG)_URL      := $($(PKG)_WEBSITE)files/release/5.8/$($(PKG)_FILE)
 $(PKG)_DEPS     := qt expat freetype jpeg libxml2 libpng tiff zlib libodbc++ postgresql
 

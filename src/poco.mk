@@ -4,11 +4,9 @@
 # POCO C++ Libraries
 PKG             := poco
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.3p1
 $(PKG)_CHECKSUM := 9e1ef31d369c67eef2d3ce1ca8f2b6ac5cc38ec4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_WEBSITE  := http://pocoproject.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/sources/$(PKG)-$(word 1,$(subst p, ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

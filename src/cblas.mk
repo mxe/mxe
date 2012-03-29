@@ -4,11 +4,9 @@
 # cblas
 PKG             := cblas
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1
 $(PKG)_CHECKSUM := d6970cf52592ef67674a61c78bbd055a4e9d4680
 $(PKG)_SUBDIR   := CBLAS
 $(PKG)_FILE     := $(PKG).tgz
-$(PKG)_WEBSITE  := http://www.netlib.org/blas/
 $(PKG)_URL      := http://www.netlib.org/blas/blast-forum/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.eq.uc.pt/pub/software/math/netlib/blas/blast-forum/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc

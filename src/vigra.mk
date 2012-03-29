@@ -4,11 +4,9 @@
 # vigra
 PKG             := vigra
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.0
 $(PKG)_CHECKSUM := 09f1d506c2748ebeb7d9f1c77ce387f9e7b837d2
 $(PKG)_SUBDIR   := vigra-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := vigra-$($(PKG)_VERSION)-src.tar.gz
-$(PKG)_WEBSITE  := http://hci.iwr.uni-heidelberg.de/vigra
 $(PKG)_URL      := $($(PKG)_WEBSITE)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff libpng openexr
 

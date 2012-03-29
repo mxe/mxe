@@ -4,11 +4,9 @@
 # lcms
 PKG             := lcms
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3
 $(PKG)_CHECKSUM := 67d5fabda2f5777ca8387766539b9c871d993133
 $(PKG)_SUBDIR   := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION))
 $(PKG)_FILE     := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION)).tar.gz
-$(PKG)_WEBSITE  := http://www.littlecms.com/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(subst a,,$($(PKG)_VERSION))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff zlib
 

@@ -4,11 +4,9 @@
 # DevIL
 PKG             := devil
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.8
 $(PKG)_CHECKSUM := bc27e3e830ba666a3af03548789700d10561fcb1
 $(PKG)_SUBDIR   := devil-$($(PKG)_VERSION)
 $(PKG)_FILE     := DevIL-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://openil.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/openil/DevIL/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freeglut zlib openexr jpeg jasper lcms libmng libpng tiff sdl
 

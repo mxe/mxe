@@ -4,11 +4,9 @@
 # Mini-XML
 PKG             := mxml
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.7
 $(PKG)_CHECKSUM := a3bdcab48307794c297e790435bcce7becb9edae
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.minixml.org/
 $(PKG)_URL      := http://ftp.easysw.com/pub/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads
 

@@ -4,11 +4,9 @@
 # gSOAP
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.8
 $(PKG)_CHECKSUM := 011b507e667d7bb76e30fc8a31055e8cf323311d
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
-$(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libgcrypt libntlm
 

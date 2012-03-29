@@ -4,11 +4,9 @@
 # liboauth
 PKG             := liboauth
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.6
 $(PKG)_CHECKSUM := 9182ca5d7e127589d132377b807d0c8a8878b122
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://liboauth.sourceforge.net/
 $(PKG)_URL      := http://liboauth.sourceforge.net/pool/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc curl openssl
 

@@ -4,11 +4,9 @@
 # gstreamer
 PKG             := gstreamer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.10.35
 $(PKG)_CHECKSUM := ad03b8aca7b2415929b6ecc4c140b178acef39de
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2
 

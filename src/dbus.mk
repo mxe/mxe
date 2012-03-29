@@ -4,11 +4,9 @@
 # dbus
 PKG             := dbus
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.10
 $(PKG)_CHECKSUM := d50f1624197a6f8f14cc8ff1943db7c99ce14cde
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://$(PKG).freedesktop.org/
 $(PKG)_URL      := http://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc expat
 

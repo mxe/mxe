@@ -4,11 +4,9 @@
 # libssh2
 PKG             := libssh2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.0
 $(PKG)_CHECKSUM := 53428b4935ab6eb843d45f1593dc434cb287b93e
 $(PKG)_SUBDIR   := libssh2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh2-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.libssh2.org
 $(PKG)_URL      := http://www.libssh2.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgcrypt zlib
 

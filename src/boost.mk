@@ -4,11 +4,9 @@
 # Boost C++ Library
 PKG             := boost
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.49.0
 $(PKG)_CHECKSUM := 26a52840e9d12f829e3008589abf0a925ce88524
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
-$(PKG)_WEBSITE  := http://www.boost.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib bzip2 expat
 

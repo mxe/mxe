@@ -4,11 +4,9 @@
 # libiberty
 PKG             := libiberty
 $(PKG)_IGNORE    = $(binutils_IGNORE)
-$(PKG)_VERSION   = $(binutils_VERSION)
 $(PKG)_CHECKSUM  = $(binutils_CHECKSUM)
 $(PKG)_SUBDIR    = $(binutils_SUBDIR)/libiberty
 $(PKG)_FILE      = $(binutils_FILE)
-$(PKG)_WEBSITE   = http://gcc.gnu.org/onlinedocs/libiberty/
 $(PKG)_URL       = $(binutils_URL)
 $(PKG)_URL_2     = $(binutils_URL_2)
 $(PKG)_DEPS     := gcc

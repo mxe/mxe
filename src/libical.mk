@@ -3,11 +3,9 @@
 
 # libical
 PKG             := libical
-$(PKG)_VERSION  := 0.48
 $(PKG)_CHECKSUM := 4693cd0438be9f3727146ac1a46aa5b1b93b8c86
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://freeassociation.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeassociation/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

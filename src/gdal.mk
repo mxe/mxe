@@ -4,11 +4,9 @@
 # GDAL
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.9.0
 $(PKG)_CHECKSUM := e2eaaf0fba39137b40c0d3069ac41dfb6f3c76db
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.gdal.org/
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta

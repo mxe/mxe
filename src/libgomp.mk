@@ -4,11 +4,9 @@
 # GCC-libgomp
 PKG             := libgomp
 $(PKG)_IGNORE    = $(gcc_IGNORE)
-$(PKG)_VERSION   = $(gcc_VERSION)
 $(PKG)_CHECKSUM  = $(gcc_CHECKSUM)
 $(PKG)_SUBDIR    = $(gcc_SUBDIR)
 $(PKG)_FILE      = $(gcc_FILE)
-$(PKG)_WEBSITE  := http://gcc.gnu.org/projects/gomp/
 $(PKG)_URL       = $(gcc_URL)
 $(PKG)_URL_2     = $(gcc_URL_2)
 $(PKG)_DEPS     := gcc pthreads

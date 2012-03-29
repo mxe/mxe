@@ -4,11 +4,9 @@
 # CppUnit
 PKG             := cppunit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.12.1
 $(PKG)_CHECKSUM := f1ab8986af7a1ffa6760f4bacf5622924639bf4a
 $(PKG)_SUBDIR   := cppunit-$($(PKG)_VERSION)
 $(PKG)_FILE     := cppunit-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://apps.sourceforge.net/mediawiki/$(PKG)/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

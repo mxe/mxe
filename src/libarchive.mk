@@ -4,11 +4,9 @@
 # Libarchive
 PKG             := libarchive
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.3
 $(PKG)_CHECKSUM := b774e2675e5c1abafbd4d667402e8c3e72313944
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://code.google.com/p/libarchive/
 $(PKG)_URL      := http://libarchive.googlecode.com/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 libiconv libxml2 openssl xz zlib
 

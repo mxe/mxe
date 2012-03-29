@@ -4,11 +4,9 @@
 # opencsg
 PKG             := opencsg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.2
 $(PKG)_CHECKSUM := e2b4abf169ae3e319eb5f6d9ae6136fa96710a05
 $(PKG)_SUBDIR   := OpenCSG-$($(PKG)_VERSION)
 $(PKG)_FILE     := OpenCSG-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.opencsg.org/
 $(PKG)_URL      := http://www.opencsg.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freeglut glew qt
 

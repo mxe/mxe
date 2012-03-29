@@ -4,11 +4,9 @@
 # FLTK
 PKG             := fltk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.0
 $(PKG)_CHECKSUM := 720f2804be6132ebae9909d4e74dedcc00b39d25
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR)-source.tar.gz
-$(PKG)_WEBSITE  := http://www.fltk.org/
 $(PKG)_URL      := http://ftp.easysw.com/pub/fltk/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg libpng pthreads
 

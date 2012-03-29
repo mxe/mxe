@@ -4,11 +4,9 @@
 # MinGW Utilities
 PKG             := mingw-utils
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.4-1
 $(PKG)_CHECKSUM := 716f51d7622b36448fc1e92d2c69d8f41b1cc2df
 $(PKG)_SUBDIR   := $(PKG)-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-mingw32-src.tar.lzma
-$(PKG)_WEBSITE  := http://www.mingw.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/Extension/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

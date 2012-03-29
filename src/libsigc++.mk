@@ -4,11 +4,9 @@
 # libsigc++
 PKG             := libsigc++
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.10
 $(PKG)_CHECKSUM := 240d3e0a02e764a6362f6ce1b32de71401e50844
 $(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsigc++-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://libsigc.sourceforge.net/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libsigc++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

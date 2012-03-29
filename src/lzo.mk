@@ -4,11 +4,9 @@
 # lzo
 PKG             := lzo
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.06
 $(PKG)_CHECKSUM := a11768b8a168ec607750842bbef406f11547b904
 $(PKG)_SUBDIR   := lzo-$($(PKG)_VERSION)
 $(PKG)_FILE     := lzo-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.oberhumer.com/opensource/lzo/
 $(PKG)_URL      := http://www.oberhumer.com/opensource/lzo/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

@@ -4,11 +4,9 @@
 # Exiv2
 PKG             := exiv2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.22
 $(PKG)_CHECKSUM := 35211d853a986fe1b008fca14db090726e8dcce3
 $(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)
 $(PKG)_FILE     := exiv2-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.exiv2.org/
 $(PKG)_URL      := http://www.exiv2.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv zlib expat
 

@@ -4,11 +4,9 @@
 # nettle
 PKG             := nettle
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4
 $(PKG)_CHECKSUM := 1df0cd013e83f73b78a5521411a67e331de3dfa6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.lysator.liu.se/~nisse/nettle/
 $(PKG)_URL      := http://www.lysator.liu.se/~nisse/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gmp
 

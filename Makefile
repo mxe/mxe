@@ -104,6 +104,11 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
 	@touch '$@'
 
+define PKG_DEFINITION
+$(1)_VERSION := $(shell grep ' id="$(1)-version"' '$(TOP_DIR)/doc/index.html' | $(SED) -n 's/^.* id="$(1)-version">\([^<]*\)<.*$$/\1/p')
+endef
+$(foreach PKG,$(PKGS),$(eval $(call PKG_DEFINITION,$(PKG))))
+
 include $(TOP_DIR)/src/*.mk
 
 .PHONY: download
@@ -194,9 +199,9 @@ define UPDATE
             $(if $(filter $(2),$($(1)_VERSION)),
                 $(info .        $(1)  $(2)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
-                $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
+                $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$(2)/' '$(TOP_DIR)/doc/index.html'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                    || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
+                    || { $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$($(1)_VERSION)/' '$(TOP_DIR)/doc/index.html'; \
                          exit 1; })),
         $(error Unable to update version number of package $(1)))
 
@@ -214,16 +219,7 @@ dist:
 	mkdir -p '$(DIST_DIR)'
 	mkdir '$(DIST_DIR)/mxe'
 	mkdir '$(DIST_DIR)/mxe/doc'
-	( \
-	    $(SED) -n '1,/<table id="package-list"/ p' '$(TOP_DIR)/doc/index.html' && \
-	    ($(foreach PKG,$(PKGS), \
-	        echo '    <tr>'; \
-	        echo '        <td><a href="$($(PKG)_WEBSITE)">$(PKG)</a></td>'; \
-	        echo '        <td id="$(PKG)-version">$($(PKG)_VERSION)</td>'; \
-	        echo '    </tr>';)) && \
-	    $(SED) '1,/<table id="package-list"/ d' '$(TOP_DIR)/doc/index.html' \
-	) \
-	| $(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' \
+	$(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' '$(TOP_DIR)/doc/index.html' \
 	| $(SED) 's,\(<span class="target-underscore">\)[^<]*\(</span>\),\1$(subst -,_,$(TARGET))\2,g' \
 	>'$(DIST_DIR)/mxe/doc/index.html'
 	cp -p '$(TOP_DIR)/doc'/screenshot-* '$(DIST_DIR)/mxe/doc/'

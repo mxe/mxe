@@ -4,11 +4,9 @@
 # Wt
 PKG             := wt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.0
 $(PKG)_CHECKSUM := 38cf20980f16b0970c42ace45fd62edb28b6358b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://witty.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/witty/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost openssl libharu graphicsmagick pango postgresql sqlite
 

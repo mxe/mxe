@@ -4,11 +4,9 @@
 # SDL_image
 PKG             := sdl_image
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.12
 $(PKG)_CHECKSUM := 5e3e393d4e366638048bbb10d6a269ea3f4e4cf2
 $(PKG)_SUBDIR   := SDL_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_image-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_image/
 $(PKG)_URL      := http://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl jpeg libpng tiff
 

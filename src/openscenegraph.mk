@@ -4,11 +4,9 @@
 # OpenSceneGraph
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.1
 $(PKG)_CHECKSUM := 13c7e39f6d62047ad944d8d28a0f0eb60384ce33
 $(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
 $(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).zip
-$(PKG)_WEBSITE  := http://www.openscenegraph.org/
 $(PKG)_URL      := http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-$($(PKG)_VERSION)/source/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://distfiles.macports.org/OpenSceneGraph/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc curl ffmpeg freetype gdal giflib jasper jpeg libpng openexr tiff xine-lib zlib dcmtk qt

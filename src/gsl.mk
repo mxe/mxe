@@ -4,11 +4,9 @@
 # GSL
 PKG             := gsl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.14
 $(PKG)_CHECKSUM := e1a600e4fe359692e6f0e28b7e12a96681efbe52
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.gnu.org/software/$(PKG)/
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

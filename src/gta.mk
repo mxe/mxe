@@ -4,11 +4,9 @@
 # gta
 PKG             := gta
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.2
 $(PKG)_CHECKSUM := 9020944bcd40bd986a879d454d21920a1eb48db7
 $(PKG)_SUBDIR   := libgta-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgta-$($(PKG)_VERSION).tar.xz
-$(PKG)_WEBSITE  := http://gta.nongnu.org/
 $(PKG)_URL      := http://download.savannah.gnu.org/releases/gta/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib bzip2 xz
 

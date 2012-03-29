@@ -4,11 +4,9 @@
 # GDK-pixbuf
 PKG             := gdk-pixbuf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.22.1
 $(PKG)_CHECKSUM := b452208963ddd84f7280865695b50255fcafaa2e
 $(PKG)_SUBDIR   := gdk-pixbuf-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdk-pixbuf-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.gdk-pixbuf.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libpng jpeg tiff jasper libiconv
 

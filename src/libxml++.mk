@@ -4,11 +4,9 @@
 # libxml2
 PKG             := libxml++
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.35.2
 $(PKG)_CHECKSUM := 112d6e26a8ce1426aa8931f26ea593484b2081f0
 $(PKG)_SUBDIR   := libxml++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml++-$($(PKG)_VERSION).tar.xz
-$(PKG)_WEBSITE  := http://libxmlplusplus.sourceforge.net/
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/libxml++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libxml2 glibmm
 

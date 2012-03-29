@@ -4,11 +4,9 @@
 # GCC
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.7.0
 $(PKG)_CHECKSUM := 03b8241477a9f8a34f6efe7273d92b9b6dd9fe82
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://gcc.gnu.org/
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := mingwrt w32api binutils gcc-gmp gcc-mpc gcc-mpfr

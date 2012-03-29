@@ -4,11 +4,9 @@
 # PCRE
 PKG             := pcre
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8.30
 $(PKG)_CHECKSUM := 68d28fb383325b8af9e3d481d30f586b46c56022
 $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.pcre.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/pcre/pcre/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc

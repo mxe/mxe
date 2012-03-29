@@ -4,11 +4,9 @@
 # Pangomm
 PKG             := pangomm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.28.2
 $(PKG)_CHECKSUM := 31bcbb0c8773fdde6f4ea9b4a79fdf7159f94520
 $(PKG)_SUBDIR   := pangomm-$($(PKG)_VERSION)
 $(PKG)_FILE     := pangomm-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.pango.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pangomm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc cairomm glibmm pango
 

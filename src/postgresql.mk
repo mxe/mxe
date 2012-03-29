@@ -4,11 +4,9 @@
 # PostgreSQL
 PKG             := postgresql
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.1.3
 $(PKG)_CHECKSUM := 1cf3044415df807c08bb8ad8e40e24e8d375cf34
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.postgresql.org/
 $(PKG)_URL      := http://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib openssl
 

@@ -4,11 +4,9 @@
 # pixman
 PKG             := pixman
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.25.2
 $(PKG)_CHECKSUM := 2785cedd25fb6ded0ceac8d427432f16b074dd52
 $(PKG)_SUBDIR   := pixman-$($(PKG)_VERSION)
 $(PKG)_FILE     := pixman-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://cairographics.org/
 $(PKG)_URL      := http://cairographics.org/snapshots/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://xorg.freedesktop.org/archive/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc

@@ -4,11 +4,9 @@
 # GNU Guile
 PKG             := guile
 $(PKG)_IGNORE   := 2.0.5
-$(PKG)_VERSION  := 1.8.7
 $(PKG)_CHECKSUM := 24cd2f06439c76d41d982a7384fe8a0fe5313b54
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.gnu.org/software/$(PKG)/
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libtool gmp libiconv gettext libunistring gc libffi readline
 

@@ -4,11 +4,9 @@
 # GEOS
 PKG             := geos
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.2
 $(PKG)_CHECKSUM := 942b0bbc61a059bd5269fddd4c0b44a508670cb3
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
 $(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://trac.osgeo.org/geos/
 $(PKG)_URL      := http://download.osgeo.org/geos/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/geos/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc

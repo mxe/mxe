@@ -4,11 +4,9 @@
 # MinGW Runtime
 PKG             := mingwrt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.20
 $(PKG)_CHECKSUM := 7c63f3695968054b7236282f35562bb3a2c388d4
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-mingw32-dev.tar.gz
-$(PKG)_WEBSITE  := http://www.mingw.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/Base/mingw-rt/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 

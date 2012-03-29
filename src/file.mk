@@ -4,11 +4,9 @@
 # file
 PKG             := file
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.11
 $(PKG)_CHECKSUM := df8ffe8759ec8cd85a98dc98e858563ea2555f64
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.darwinsys.com/file/
 $(PKG)_URL      := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgnurx
 

@@ -4,11 +4,9 @@
 # GMP
 PKG             := gmp
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.0.4
 $(PKG)_CHECKSUM := ea4ea7c3f10436ef5ae7a75b3fad163a8b86edc0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.gmplib.org/
 $(PKG)_URL      := ftp://ftp.gmplib.org/pub/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc

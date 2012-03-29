@@ -4,11 +4,9 @@
 # cgal
 PKG             := cgal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0
 $(PKG)_CHECKSUM := d1f3f328bc5cb026ddb825cb585c7ae27a8856f7
 $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
 $(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.xz
-$(PKG)_WEBSITE  := http://www.cgal.org/
 $(PKG)_URL      := https://gforge.inria.fr/frs/download.php/30385/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost gmp mpfr qt
 

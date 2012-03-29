@@ -4,11 +4,9 @@
 # xine-lib
 PKG             := xine-lib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.20.1
 $(PKG)_CHECKSUM := 68e85049723b491ccb22d5123bf8fa780529868a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.xine-project.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xine/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc faad2 ffmpeg flac fontconfig freetype graphicsmagick libiconv libmng pthreads sdl speex theora vorbis zlib
 
