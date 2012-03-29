@@ -1,5 +1,7 @@
-/* This file is part of MXE.                   */
-/* See doc/index.html for further information. */
+/*
+ * This file is part of MXE.
+ * See doc/index.html for further information.
+ */
 
 #include <portaudio.h>
 #include <stdio.h>

@@ -1,7 +1,11 @@
-/* This file is part of MXE.                   */
-/* See doc/index.html for further information. */
+/*
+ * This file is part of MXE.
+ * See doc/index.html for further information.
+ *
+ * This is a slightly modified version of:
+ * http://www.fltk.org/doc-1.3/basics.html
+ */
 
-/* http://www.fltk.org/doc-1.3/basics.html     */
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Box.H>

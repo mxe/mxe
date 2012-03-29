@@ -1,8 +1,10 @@
-/* This file is part of MXE.                   */
-/* See doc/index.html for further information. */
-
-/* This is a slightly modified version of:     */
-/* http://ironalbatross.net/wiki/index.php5?title=CPP_LIBPNG#Minimal_Example_of_writing_a_PNG_File */
+/*
+ * This file is part of MXE.
+ * See doc/index.html for further information.
+ *
+ * This is a slightly modified version of:
+ * http://ironalbatross.net/wiki/index.php5?title=CPP_LIBPNG#Minimal_Example_of_writing_a_PNG_File
+ */
 
 #include <stdio.h>
 #include <stdlib.h>

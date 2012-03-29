@@ -1,5 +1,7 @@
-/* This file is part of MXE.                   */
-/* See doc/index.html for further information. */
+/*
+ * This file is part of MXE.
+ * See doc/index.html for further information.
+ */
 
 #include <stdio.h>
 #include <ffi.h>
