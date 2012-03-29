@@ -12,8 +12,8 @@ using namespace vigra;
 int main(int argc, char *argv[])
 {
     std::string formats = vigra::impexListFormats();
-    
+
     std::cout << "Supported formats: " << formats << std::endl;
-    
+
     return formats.length() > 0;
 }

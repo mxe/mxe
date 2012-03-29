@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     void *values[1];
     char *s;
     int rc;
-    
+
     (void)argc;
     (void)argv;
 

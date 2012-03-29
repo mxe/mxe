@@ -8,11 +8,11 @@
 
 int main(int argc, char *argv[])
 {
-    icalvalue *v; 
+    icalvalue *v;
     char *str;
     (void)argc;
     (void)argv;
-    
+
     v = icalvalue_new_caladdress("cap://value/1");
     str = icalvalue_as_ical_string_r(v);
     printf("String: %s\n", str);

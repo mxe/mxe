@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <gsl/gsl_sf_bessel.h>
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     double x, y;
 

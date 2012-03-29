@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Tool for converting between MXE patch files and git repos
 # Imports and exports patch files in "git format-patch" format.
