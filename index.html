@@ -302,9 +302,9 @@ exit</pre>
     you can add separate entries for cross builds:
     </p>
     <pre>export PKG_CONFIG_PATH="<em>entries for native builds</em>"</pre>
-    <pre>export PKG_CONFIG_PATH_<span class="target-underscore">i686_pc_mingw32</span>="<em>entries for MXE builds</em>"</pre>
+    <pre>export PKG_CONFIG_PATH_i686_pc_mingw32="<em>entries for MXE builds</em>"</pre>
     <p>
-    Remember to use <span class="target">i686-pc-mingw32</span>-pkg-config
+    Remember to use i686-pc-mingw32-pkg-config
     instead of pkg-config for cross builds.
     The Autotools do that automatically for you.
     </p>
@@ -328,13 +328,13 @@ exit</pre>
     <a href="http://www.lrde.epita.fr/~adl/autotools.html">Autotools</a>,
     all you have to do is:
     </p>
-    <pre>./configure --host=<span class="target">i686-pc-mingw32</span>
+    <pre>./configure --host=i686-pc-mingw32
 make</pre>
 
     <p>
     If you build a library, you might also want to enforce a static build:
     </p>
-    <pre>./configure --host=<span class="target">i686-pc-mingw32</span> --enable-static --disable-shared
+    <pre>./configure --host=i686-pc-mingw32 --enable-static --disable-shared
 make</pre>
 
     <p>
@@ -353,7 +353,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <a href="http://www.cmake.org/">CMake</a> project,
     you can use the provided toolchain file:
     </p>
-    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/<span class="target">i686-pc-mingw32</span>/share/cmake/mingw-cross-env-conf.cmake</pre>
+    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/i686-pc-mingw32/share/cmake/mingw-cross-env-conf.cmake</pre>
 
     <h3>Step 5c: Cross compile your Project (Qt)</h3>
 
@@ -362,7 +362,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <a href="http://qt.nokia.com/">Qt</a> application,
     all you have to do is:
     </p>
-    <pre><span class="target">i686-pc-mingw32</span>-qmake
+    <pre>i686-pc-mingw32-qmake
 make</pre>
     <p>
     If you are using Qt plugins
@@ -393,7 +393,7 @@ PKG_CONFIG=$(CROSS)pkg-config</pre>
     <p>
     Then, all you have to do is:
     </p>
-    <pre>make CROSS=<span class="target">i686-pc-mingw32</span>-</pre>
+    <pre>make CROSS=i686-pc-mingw32-</pre>
     <p>
     That's it!
     </p>
