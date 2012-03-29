@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Libntlm
 PKG             := libntlm
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 5dd798d5fb9a75656225052aa88ceb9befbbd4a0

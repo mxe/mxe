@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# blas
 PKG             := blas
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := a643b737c30a0a5b823e11e33c9d46a605122c61

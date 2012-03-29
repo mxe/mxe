@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GTK+
 PKG             := gtk2
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := c15a25ba49eb459b2c4cdc46baedf6cecf08cbcf

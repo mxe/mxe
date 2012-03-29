@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libffi
 PKG             := libffi
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 97abf70e6a6d315d9259d58ac463663051d471e1

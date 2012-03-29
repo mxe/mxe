@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# xvidcore
 PKG             := xvidcore
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 56e065d331545ade04c63c91153b9624b51d6e1b

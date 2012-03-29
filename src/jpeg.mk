@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# jpeg
 PKG             := jpeg
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := f080b2fffc7581f7d19b968092ba9ebc234556ff

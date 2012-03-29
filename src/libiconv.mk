@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libiconv
 PKG             := libiconv
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := be7d67e50d72ff067b2c0291311bc283add36965

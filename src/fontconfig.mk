@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# fontconfig
 PKG             := fontconfig
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 1ab2f437c2261028ae7969892277af2d8d8db489

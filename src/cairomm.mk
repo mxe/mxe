@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# cairomm
 PKG             := cairomm
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := f08bf8a331067f0d1e876523f07238fba6b26b99

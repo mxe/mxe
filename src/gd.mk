@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GD  (without support for xpm)
 PKG             := gd
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := ccf34a610abff2dbf133a20c4d2a4aa94939018a

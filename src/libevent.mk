@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libevent
 PKG             := libevent
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 2a2cc87ce1945f43dfa5a5f9575fef3d14a8f57a

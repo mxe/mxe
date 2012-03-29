@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# faad2
 PKG             := faad2
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 80eaaa5cc576c35dd28863767b795c50cbcc0511

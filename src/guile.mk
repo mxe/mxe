@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GNU Guile
 PKG             := guile
 $(PKG)_IGNORE   := 2.0.5
 $(PKG)_CHECKSUM := 24cd2f06439c76d41d982a7384fe8a0fe5313b54

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# dbus
 PKG             := dbus
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3140ea452337d664dbe6d30f0d990c756d101694

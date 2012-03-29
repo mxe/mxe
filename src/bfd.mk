@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Binary File Descriptor library
 PKG             := bfd
 $(PKG)_IGNORE    = $(binutils_IGNORE)
 $(PKG)_CHECKSUM  = $(binutils_CHECKSUM)

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Lua
 PKG             := lua
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 2b11c8e60306efb7f0734b747588f57995493db7

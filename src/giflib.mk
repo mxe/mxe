@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# giflib
 PKG             := giflib
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 22680f604ec92065f04caf00b1c180ba74fb8562

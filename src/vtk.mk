@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# vtk
 PKG             := vtk
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := ece52f4fa92811fe927581e60ecb39a8a5f68cd9

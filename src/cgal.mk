@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# cgal
 PKG             := cgal
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := d1f3f328bc5cb026ddb825cb585c7ae27a8856f7

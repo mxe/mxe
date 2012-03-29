@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# CppUnit
 PKG             := cppunit
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := f1ab8986af7a1ffa6760f4bacf5622924639bf4a

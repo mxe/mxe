@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libical
 PKG             := libical
 $(PKG)_CHECKSUM := 4693cd0438be9f3727146ac1a46aa5b1b93b8c86
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)

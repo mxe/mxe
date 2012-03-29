@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# openal
 PKG             := openal
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 0e2449375a12cee65a9cea354533dcaabf9d5068

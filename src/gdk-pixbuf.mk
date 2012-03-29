@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GDK-pixbuf
 PKG             := gdk-pixbuf
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := b452208963ddd84f7280865695b50255fcafaa2e

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# id3lib
 PKG             := id3lib
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := c92c880da41d1ec0b242745a901702ae87970838

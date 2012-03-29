@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Libidn
 PKG             := libidn
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 4251c108966375ede4df15d76a1bd9a4440f44ee

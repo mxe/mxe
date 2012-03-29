@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Pangomm
 PKG             := pangomm
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 31bcbb0c8773fdde6f4ea9b4a79fdf7159f94520

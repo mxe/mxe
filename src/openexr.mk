@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# OpenEXR
 PKG             := openexr
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 91d0d4e69f06de956ec7e0710fc58ec0d4c4dc2b

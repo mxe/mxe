@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Xerces-C++
 PKG             := xerces
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 177ec838c5119df57ec77eddec9a29f7e754c8b2

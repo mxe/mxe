@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# SDL_image
 PKG             := sdl_image
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 5e3e393d4e366638048bbb10d6a269ea3f4e4cf2

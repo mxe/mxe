@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# SDL_mixer
 PKG             := sdl_mixer
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := a20fa96470ad9e1052f1957b77ffa68fb090b384

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# MinGW Windows API
 PKG             := w32api
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 1eb60b0cd546bf3efdc3fb89a4118df11da2314a

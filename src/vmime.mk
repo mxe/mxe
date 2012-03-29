@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# VMime
 PKG             := vmime
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3e8dd8855e423db438d465777efeb523c4abb5f3

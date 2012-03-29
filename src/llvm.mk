@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# llvm
 PKG             := llvm
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := b683e7294fcf69887c0d709025d4640f5dca755b

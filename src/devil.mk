@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# DevIL
 PKG             := devil
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := bc27e3e830ba666a3af03548789700d10561fcb1

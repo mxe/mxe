@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# DCMTK
 PKG             := dcmtk
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 469e017cffc56f36e834aa19c8612111f964f757

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# gst-plugins-good
 PKG             := gst-plugins-good
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9c78a751bb2f20ad50a1daf6860e0098e0495f5a

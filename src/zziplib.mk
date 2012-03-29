@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# ZZIPlib
 PKG             := zziplib
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := ddbce25cb36c3b4c2b892e2c8a88fa4a0be29a71

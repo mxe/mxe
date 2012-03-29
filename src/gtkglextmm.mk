@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GtkGLExtmm
 PKG             := gtkglextmm
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 5cd489e07517a88262cd6050f723227664e82996

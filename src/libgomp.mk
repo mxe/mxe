@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GCC-libgomp
 PKG             := libgomp
 $(PKG)_IGNORE    = $(gcc_IGNORE)
 $(PKG)_CHECKSUM  = $(gcc_CHECKSUM)

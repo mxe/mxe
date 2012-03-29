@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Pthreads-w32
 PKG             := pthreads
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := da8371cb20e8e238f96a1d0651212f154d84a9ac

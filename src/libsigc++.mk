@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libsigc++
 PKG             := libsigc++
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 240d3e0a02e764a6362f6ce1b32de71401e50844

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Mini-XML
 PKG             := mxml
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := a3bdcab48307794c297e790435bcce7becb9edae

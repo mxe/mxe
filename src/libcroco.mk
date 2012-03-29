@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Libcroco
 PKG             := libcroco
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 4b0dd540a47f2492b1ac7cd7e3ec63c2ef4c9c2a

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GtkSourceViewmm
 PKG             := gtksourceviewmm2
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 7f6fb046427054d85c791a4b1fc0f742a3313c8a

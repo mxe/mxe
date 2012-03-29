@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libgcrypt
 PKG             := libgcrypt
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3e776d44375dc1a710560b98ae8437d5da6e32cf

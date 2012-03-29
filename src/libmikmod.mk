@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libMikMod
 PKG             := libmikmod
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := f16fc09ee643af295a8642f578bda97a81aaf744

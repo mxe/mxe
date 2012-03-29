@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# freeglut
 PKG             := freeglut
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 4debbe559c6c9841ce1abaddc9d461d17c6083b1

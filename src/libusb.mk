@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# LibUsb
 PKG             := libusb
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 6b90d083e4aee2fa0edbf18dec79d40afe9ded7d

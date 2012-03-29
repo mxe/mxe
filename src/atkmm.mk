@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# ATKmm
 PKG             := atkmm
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9ca44756821f4d431c554e1cf8184989bb25ce12

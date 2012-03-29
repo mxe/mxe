@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# SDL_sound
 PKG             := sdl_sound
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 1984bc20b2c756dc71107a5a0a8cebfe07e58cb1

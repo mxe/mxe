@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# JasPer
 PKG             := jasper
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9c5735f773922e580bf98c7c7dfda9bbed4c5191

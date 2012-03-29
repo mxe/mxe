@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# LibTIFF
 PKG             := tiff
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 8baf382231c9051a1b3eb294581289aa21447171

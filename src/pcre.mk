@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# PCRE
 PKG             := pcre
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 68d28fb383325b8af9e3d481d30f586b46c56022

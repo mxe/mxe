@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# old
 PKG             := old
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := d519a8282b0774c344ffeb1b4899f8be53d6d7b3

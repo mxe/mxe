@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# lapack
 PKG             := lapack
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 910109a931524f8dcc2734ce23fe927b00ca199f

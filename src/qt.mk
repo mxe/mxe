@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Qt
 PKG             := qt
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := a074d0f605f009e23c63e0a4cb9b71c978146ffc

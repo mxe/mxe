@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# gta
 PKG             := gta
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9020944bcd40bd986a879d454d21920a1eb48db7

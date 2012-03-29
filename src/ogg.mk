@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# OGG
 PKG             := ogg
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := a900af21b6d7db1c7aa74eb0c39589ed9db991b8

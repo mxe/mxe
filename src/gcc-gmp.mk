@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GMP for GCC
 PKG             := gcc-gmp
 $(PKG)_IGNORE    = $(gmp_IGNORE)
 $(PKG)_CHECKSUM  = $(gmp_CHECKSUM)

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# MinGW Utilities
 PKG             := mingw-utils
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 716f51d7622b36448fc1e92d2c69d8f41b1cc2df

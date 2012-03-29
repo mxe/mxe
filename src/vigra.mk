@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# vigra
 PKG             := vigra
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 09f1d506c2748ebeb7d9f1c77ce387f9e7b837d2

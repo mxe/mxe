@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GeoTiff
 PKG             := libgeotiff
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := b8cde5014cf82fe4683fa35fc81a5ea8d64b940f

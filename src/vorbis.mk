@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Vorbis
 PKG             := vorbis
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 4b089ace4c8420c479b2fde9c5b01588cf86c959

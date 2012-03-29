@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# FreeImage
 PKG             := freeimage
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 083ef40a1734e33cc34c55ba87019bf5cce9ca4a

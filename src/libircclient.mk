@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libircclient
 # Note that IPv6 support is partly broken and therefore disabled.
 PKG             := libircclient
 $(PKG)_IGNORE   :=

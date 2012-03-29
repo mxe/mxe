@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libdnet
 PKG             := libdnet
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := e2ae8c7f0ca95655ae9f77fd4a0e2235dc4716bf

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# gstreamer
 PKG             := gstreamer
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := ad03b8aca7b2415929b6ecc4c140b178acef39de

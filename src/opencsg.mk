@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# opencsg
 PKG             := opencsg
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := e2b4abf169ae3e319eb5f6d9ae6136fa96710a05

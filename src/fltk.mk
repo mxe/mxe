@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# FLTK
 PKG             := fltk
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 720f2804be6132ebae9909d4e74dedcc00b39d25

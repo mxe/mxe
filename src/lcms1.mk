@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# lcms1
 PKG             := lcms1
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := d5b075ccffc0068015f74f78e4bc39138bcfe2d4

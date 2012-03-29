@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# PlotMM
 PKG             := plotmm
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 64da0930b7c8994d59769597917cca05df989258

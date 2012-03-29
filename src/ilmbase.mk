@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# IlmBase
 PKG             := ilmbase
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := fe6a910a90cde80137153e25e175e2b211beda36

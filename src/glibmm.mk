@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GLibmm
 PKG             := glibmm
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := d15bc0fed7dea6fec73746370653687f74e02592

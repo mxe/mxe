@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libunistring
 PKG             := libunistring
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := e1ea13c24a30bc93932d19eb5ad0704a618506dd

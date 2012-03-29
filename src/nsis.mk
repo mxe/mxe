@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# NSIS
 PKG             := nsis
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 2cc9bff130031a0b1d76b01ec0a9136cdf5992ce

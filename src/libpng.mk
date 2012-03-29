@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libpng
 PKG             := libpng
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 45a8a5c116623d6ab0e2be50f49afacb39a51d46

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libpano13
 PKG             := libpano13
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 23849bdbdfc9176a2b53d157e58bd24aa0e7276e

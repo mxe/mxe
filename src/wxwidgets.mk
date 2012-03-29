@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# wxWidgets
 PKG             := wxwidgets
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 39552f3e49341197fea8373824ec609c757e890b

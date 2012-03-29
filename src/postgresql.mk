@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# PostgreSQL
 PKG             := postgresql
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 1cf3044415df807c08bb8ad8e40e24e8d375cf34

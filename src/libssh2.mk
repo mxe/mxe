@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libssh2
 PKG             := libssh2
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 53428b4935ab6eb843d45f1593dc434cb287b93e

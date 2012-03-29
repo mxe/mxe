@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libmng
 PKG             := libmng
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := c21c84b614500ae1a41c6595d5f81c596e406ca2

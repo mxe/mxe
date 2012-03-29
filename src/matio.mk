@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# matio
 PKG             := matio
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 721b9b57f2437850dd114acca1f422622e2c47e2

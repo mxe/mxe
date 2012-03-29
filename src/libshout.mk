@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libshout
 PKG             := libshout
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := cabc409e63f55383f4d85fac26d3056bf0365aac

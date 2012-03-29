@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Theora
 PKG             := theora
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 0b91be522746a29351a5ee592fd8160940059303

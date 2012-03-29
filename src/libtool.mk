@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GNU Libtool
 PKG             := libtool
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 22b71a8b5ce3ad86e1094e7285981cae10e6ff88

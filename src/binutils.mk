@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GNU Binutils
 PKG             := binutils
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 65b304a0b9a53a686ce50a01173d1f40f8efe404

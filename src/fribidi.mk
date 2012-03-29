@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# FriBidi
 PKG             := fribidi
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3889469d96dbca3d8522231672e14cca77de4d5e

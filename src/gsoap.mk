@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# gSOAP
 PKG             := gsoap
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 011b507e667d7bb76e30fc8a31055e8cf323311d

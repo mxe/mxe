@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# xmlwrapp
 PKG             := xmlwrapp
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := b3ef8bff215bbacd988790615b76379672105928

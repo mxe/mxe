@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# gettext
 PKG             := gettext
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 5009deb02f67fc3c59c8ce6b82408d1d35d4e38f

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# liboil
 PKG             := liboil
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := f9d7103a3a4a4089f56197f81871ae9129d229ed

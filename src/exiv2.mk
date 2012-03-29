@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Exiv2
 PKG             := exiv2
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 35211d853a986fe1b008fca14db090726e8dcce3

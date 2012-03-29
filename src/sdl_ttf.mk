@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# SDL_ttf
 PKG             := sdl_ttf
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 0ccf7c70e26b7801d83f4847766e09f09db15cc6

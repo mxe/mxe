@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libpaper
 PKG             := libpaper
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 1f7a810a433a5a68b099aa92777cc2d0b3d03b42

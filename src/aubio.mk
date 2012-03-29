@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# aubio
 PKG             := aubio
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 8ef7ccbf18a4fa6db712a9192acafc9c8d080978

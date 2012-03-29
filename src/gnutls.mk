@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GnuTLS
 PKG             := gnutls
 $(PKG)_CHECKSUM := 2e2adc41e0c75d8170fdca5955bd007ae93ceada
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)

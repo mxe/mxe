@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# eigen
 PKG             := eigen
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 7e1674420a8eef7e90e1875ef5b9e828fb9db381

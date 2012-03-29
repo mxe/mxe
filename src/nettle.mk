@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# nettle
 PKG             := nettle
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 1df0cd013e83f73b78a5521411a67e331de3dfa6

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GTKMM
 PKG             := gtkmm2
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9b9e68360fb3f5faa7f221acba56f0d75a8198d2

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libxslt
 PKG             := libxslt
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 69f74df8228b504a87e2b257c2d5238281c65154

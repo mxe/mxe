@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# plotutils
 PKG             := plotutils
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 7921301d9dfe8991e3df2829bd733df6b2a70838

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# mpfr
 PKG             := mpfr
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9ba6dfe62dad298f0570daf182db31660f7f016c

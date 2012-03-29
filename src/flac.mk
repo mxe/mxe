@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# FLAC
 PKG             := flac
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := bd54354900181b59db3089347cc84ad81e410b38

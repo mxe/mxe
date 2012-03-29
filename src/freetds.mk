@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# FreeTDS
 PKG             := freetds
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3ab06c8e208e82197dc25d09ae353d9f3be7db52

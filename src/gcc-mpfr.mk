@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# MPFR for GCC
 PKG             := gcc-mpfr
 $(PKG)_IGNORE    = $(mpfr_IGNORE)
 $(PKG)_CHECKSUM  = $(mpfr_CHECKSUM)

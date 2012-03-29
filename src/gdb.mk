@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# gdb
 PKG             := gdb
 $(PKG)_CHECKSUM := 43a3ee582eae4d69c2babea4f8700b7bec8e37fa
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)

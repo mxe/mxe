@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Libarchive
 PKG             := libarchive
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := b774e2675e5c1abafbd4d667402e8c3e72313944

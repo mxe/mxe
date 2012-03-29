@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libiberty
 PKG             := libiberty
 $(PKG)_IGNORE    = $(binutils_IGNORE)
 $(PKG)_CHECKSUM  = $(binutils_CHECKSUM)

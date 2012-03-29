@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Speex
 PKG             := speex
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 52daa72572e844e5165315e208da539b2a55c5eb

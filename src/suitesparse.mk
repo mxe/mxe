@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# SuiteSparse
 PKG             := suitesparse
 $(PKG)_CHECKSUM := d0eb24b43ee2f7def032e80eaa7a589f94f546fc
 $(PKG)_SUBDIR   := SuiteSparse

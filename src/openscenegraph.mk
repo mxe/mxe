@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# OpenSceneGraph
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 13c7e39f6d62047ad944d8d28a0f0eb60384ce33

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GMP
 PKG             := gmp
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := ea4ea7c3f10436ef5ae7a75b3fad163a8b86edc0

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# vpx
 PKG             := libvpx
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 2919e11074fef72fc61ef1a75160050ffaad6074

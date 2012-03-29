@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libodbc++
 PKG             := libodbc++
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 8a77921b21c23926042c413f4a7a187a3656025b

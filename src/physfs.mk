@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# physfs
 PKG             := physfs
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 2d3d3cc819ad26542d34451f44050b85635344d0

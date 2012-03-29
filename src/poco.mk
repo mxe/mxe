@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# POCO C++ Libraries
 PKG             := poco
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9e1ef31d369c67eef2d3ce1ca8f2b6ac5cc38ec4

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# TagLib
 PKG             := taglib
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := bafe0958eb884981cade83d45c18ee34165479b8

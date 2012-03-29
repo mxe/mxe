@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GraphicsMagick
 PKG             := graphicsmagick
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 7ef5711a18da0a3b6b143548a2a7822597ea416d

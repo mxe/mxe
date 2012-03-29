@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libxml2
 PKG             := libxml2
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 859dd535edbb851cc15b64740ee06551a7a17d40

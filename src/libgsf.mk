@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libgsf
 PKG             := libgsf
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := ca1c5aa92a840e322d7cafd9f2dede3d38a69660

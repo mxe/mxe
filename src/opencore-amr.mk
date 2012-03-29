@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# opencore-amr
 PKG             := opencore-amr
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 289478d49701213255e9d63a93aae9ad472125cc

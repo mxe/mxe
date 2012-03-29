@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# ftgl
 PKG             := ftgl
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 8508f26c84001d7bc949246affa03744fa1fd22e

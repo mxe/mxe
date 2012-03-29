@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# portaudio
 PKG             := portaudio
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3841453bb7be672a15b6b632ade6f225eb0a4efc

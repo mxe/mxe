@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# liblo
 PKG             := liblo
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 21942c8f19e9829b5842cb85352f98c49dfbc823

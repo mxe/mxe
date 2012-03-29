@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# ffmpeg
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 743f44a71f93b14c9b26ca2424b0da8457cef4be

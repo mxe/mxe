@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# cunit
 PKG             := cunit
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 6c2d0627eb64c09c7140726d6bf814cf531a3ce0

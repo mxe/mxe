@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Libgsasl
 PKG             := libgsasl
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 2942886514f14801193e505fc5367330d5c6b7de

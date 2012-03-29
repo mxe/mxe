@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libsamplerate
 PKG             := libsamplerate
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := e5fe82c4786be2fa33ca6bd4897db4868347fe70

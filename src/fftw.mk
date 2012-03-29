@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# fftw
 PKG             := fftw
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3fecc492f576503a6a509d2073bd82b3fe0aef13

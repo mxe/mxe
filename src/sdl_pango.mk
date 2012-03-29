@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# SDL_Pango
 PKG             := sdl_pango
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := c30f2941d476d9362850a150d29cb4a93730af68

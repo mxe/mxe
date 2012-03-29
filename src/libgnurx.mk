@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libgnurx
 PKG             := libgnurx
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := f1e4af2541645dac82362b618aaa849658cd4988

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# pfstools
 PKG             := pfstools
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := dc595438f0fd8b40a05d9f9c498892363a1b3f05

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libharu
 PKG             := libharu
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := b75ec6052b8d72aa7f23d67adcdf9df4847b64ca

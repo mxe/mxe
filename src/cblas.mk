@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# cblas
 PKG             := cblas
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := d6970cf52592ef67674a61c78bbd055a4e9d4680

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GCC
 PKG             := gcc
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 03b8241477a9f8a34f6efe7273d92b9b6dd9fe82

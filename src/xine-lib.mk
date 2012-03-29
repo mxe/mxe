@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# xine-lib
 PKG             := xine-lib
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 68e85049723b491ccb22d5123bf8fa780529868a

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# x264
 PKG             := x264
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := a6c4a6786a2347b5b1d50dc0ddfd378bf1890481

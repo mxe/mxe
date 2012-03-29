@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# librsvg
 PKG             := librsvg
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 11a2dc00c813da13532d7f16a822b414201e8b1b

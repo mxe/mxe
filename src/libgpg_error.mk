@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libgpg-error
 PKG             := libgpg_error
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 95b324359627fbcb762487ab6091afbe59823b29

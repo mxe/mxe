@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# pixman
 PKG             := pixman
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 2785cedd25fb6ded0ceac8d427432f16b074dd52

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# QwtPlot3D
 PKG             := qwtplot3d
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 4463fafb8420a91825e165da7a296aaabd70abea

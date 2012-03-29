@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Expat XML Parser
 PKG             := expat
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := b08197d146930a5543a7b99e871cba3da614f6f0

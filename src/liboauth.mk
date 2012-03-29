@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# liboauth
 PKG             := liboauth
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9182ca5d7e127589d132377b807d0c8a8878b122

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# openssl
 PKG             := openssl
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := a6476d33fd38c2e7dfb438d1e3be178cc242c907

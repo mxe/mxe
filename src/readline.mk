@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Readline
 PKG             := readline
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := a9761cd9c3da485eb354175fcc2fe35856bc43ac

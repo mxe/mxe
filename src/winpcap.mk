@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# WinPcap
 PKG             := winpcap
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9155687ab23dbb2348e7cf93caf8a84f51e94795

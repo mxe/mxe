@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# ImageMagick
 PKG             := imagemagick
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 13198d502e95abb305c23c3d56378e9139fcb7c3

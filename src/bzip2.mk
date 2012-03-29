@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# bzip2
 PKG             := bzip2
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3f89f861209ce81a6bab1fd1998c0ef311712002

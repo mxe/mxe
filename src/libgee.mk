@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libgee
 PKG             := libgee
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 78d7fbd0668d01bc23e9772211b4885ae7e479cd

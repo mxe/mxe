@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# muParser
 PKG             := muparser
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := d6d834d3ba2bd3c316c9b3070369d32701703f78

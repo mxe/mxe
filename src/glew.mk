@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GLEW
 PKG             := glew
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 9266f2360c1687a96f2ea06419671d370b2928d1

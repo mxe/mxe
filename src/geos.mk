@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GEOS
 PKG             := geos
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 942b0bbc61a059bd5269fddd4c0b44a508670cb3

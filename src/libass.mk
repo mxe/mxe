@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libass
 PKG             := libass
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 7a0ea048f687421f3e1314988ca02f04861fc5f0

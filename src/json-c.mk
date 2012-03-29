@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# json-c
 PKG             := json-c
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := daaf5eb960fa98e137abc5012f569b83c79be90f

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# GDAL
 PKG             := gdal
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := e2eaaf0fba39137b40c0d3069ac41dfb6f3c76db

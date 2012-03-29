@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Boost C++ Library
 PKG             := boost
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 26a52840e9d12f829e3008589abf0a925ce88524

@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# freetype
 PKG             := freetype
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 5cb80ab9d369c4e81a2221bcf45adcea2c996b9b

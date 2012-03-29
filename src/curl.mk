@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# cURL
 PKG             := curl
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := f6016a24051d98806ca3ddf754592701cb66e00c

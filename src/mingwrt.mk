@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# MinGW Runtime
 PKG             := mingwrt
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 7c63f3695968054b7236282f35562bb3a2c388d4
