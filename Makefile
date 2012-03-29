@@ -218,28 +218,3 @@ update-checksum-%:
 	$(call DOWNLOAD_PKG_ARCHIVE,$*)
 	$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk'
 
-.PHONY: dist
-dist:
-	rm -rf '$(DIST_DIR)'
-	mkdir -p '$(DIST_DIR)'
-	mkdir '$(DIST_DIR)/mxe'
-	mkdir '$(DIST_DIR)/mxe/doc'
-	$(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' '$(TOP_DIR)/index.html' \
-	| $(SED) 's,\(<span class="target-underscore">\)[^<]*\(</span>\),\1$(subst -,_,$(TARGET))\2,g' \
-	>'$(DIST_DIR)/mxe/index.html'
-	cp -p '$(TOP_DIR)/doc'/screenshot-* '$(DIST_DIR)/mxe/doc/'
-	@echo
-	@echo 'Upload will start in 5 seconds. Last chance to cancel! (Ctrl+C)'
-	@echo
-	@sleep 5
-	mkdir '$(DIST_DIR)/web'
-	cd '$(DIST_DIR)/web' && cvs -d :ext:cvs.savannah.nongnu.org:/web/mingw-cross-env co mingw-cross-env
-	cp -p '$(DIST_DIR)/mxe/doc'/* '$(DIST_DIR)/web/mingw-cross-env/'
-	cd '$(DIST_DIR)/web/mingw-cross-env' && cvs add * || echo 'Errors on "cvs add" ignored.'
-	cd '$(DIST_DIR)/web/mingw-cross-env' && cvs commit -m 'upload'
-	sleep 2  # wait for the "triggered webpages update" to complete
-	x-www-browser \
-	    'http://validator.w3.org/unicorn/check?ucn_uri=http://mingw-cross-env.nongnu.org/' \
-	    'http://mingw-cross-env.nongnu.org/#latest-release' \
-	    'http://freshmeat.net/projects/mingw_cross_env/releases/new'
-
