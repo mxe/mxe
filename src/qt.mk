@@ -4,7 +4,7 @@
 # Qt
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2ba35adca8fb9c66a58eca61a15b21df6213f22e
+$(PKG)_CHECKSUM := a074d0f605f009e23c63e0a4cb9b71c978146ffc
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
