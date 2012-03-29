@@ -39,8 +39,6 @@ unexport OBJC_INCLUDE_PATH PKG_CONFIG QMAKESPEC RANLIB STRIP
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
 
-include $(TOP_DIR)/src/*.mk
-
 UNPACK_ARCHIVE = \
     $(if $(filter %.tgz,     $(1)),tar xzf '$(1)', \
     $(if $(filter %.tar.gz,  $(1)),tar xzf '$(1)', \
@@ -105,6 +103,8 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.[1-9][0-9]\.[0-9]\+)
 	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
 	@touch '$@'
+
+include $(TOP_DIR)/src/*.mk
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
