@@ -15,7 +15,6 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-
 define $(PKG)_BUILD
     cd '$(1)' && '$(PREFIX)/bin/$(TARGET)-qmake'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
@@ -25,4 +24,3 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/qwtplot3d'
     $(INSTALL) -m644 '$(1)/include'/*.h  '$(PREFIX)/$(TARGET)/include/qwtplot3d/'
 endef
-
