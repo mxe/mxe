@@ -14,6 +14,7 @@ DIST_DIR   := $(PWD)/dist
 TMP_DIR     = $(PWD)/tmp-$(1)
 MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
+PKGS       := $(sort $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk)))
 PATH       := $(PREFIX)/bin:$(PATH)
 SHELL      := bash
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
@@ -38,7 +39,6 @@ unexport OBJC_INCLUDE_PATH PKG_CONFIG QMAKESPEC RANLIB STRIP
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
 
-PKGS := $(sort $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk)))
 include $(TOP_DIR)/src/*.mk
 
 UNPACK_ARCHIVE = \
