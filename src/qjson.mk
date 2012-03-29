@@ -1,6 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+# QJson
 PKG             := qjson
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 19bbef24132b238e99744bb35194c6dadece98f9

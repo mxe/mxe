@@ -1,6 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+# Anti-Grain Geometry
 PKG             := agg
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 08f23da64da40b90184a0414369f450115cdb328
