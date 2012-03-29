@@ -104,10 +104,15 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
 	@touch '$@'
 
-define PKG_DEFINITION
-$(1)_VERSION := $(shell grep ' id="$(1)-version"' '$(TOP_DIR)/doc/index.html' | $(SED) -n 's/^.* id="$(1)-version">\([^<]*\)<.*$$/\1/p')
+define newline
+
+
 endef
-$(foreach PKG,$(PKGS),$(eval $(call PKG_DEFINITION,$(PKG))))
+$(eval $(subst #,$(newline),$(shell \
+    $(SED) -n \
+        's/^.* id="\([A-Za-z0-9_+-]*\)-version">\([^<]*\)<.*$$/\1_VERSION := \2 #/p' \
+        '$(TOP_DIR)/doc/index.html' \
+)))
 
 include $(TOP_DIR)/src/*.mk
 
