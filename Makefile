@@ -110,7 +110,7 @@ define newline
 endef
 $(eval $(subst #,$(newline),$(shell \
     $(SED) -n \
-        's/^.* id="\([A-Za-z0-9_+-]*\)-version">\([^<]*\)<.*$$/\1_VERSION := \2 #/p' \
+        's/^.* id="\([A-Za-z0-9_+-]*\)-version">\([^<]*\)<.*$$/\1_VERSION := \2#/p' \
         '$(TOP_DIR)/index.html' \
 )))
 
