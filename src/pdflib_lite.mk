@@ -1,5 +1,5 @@
 # This file is part of MXE.
-# See doc/index.html for further information.
+# See index.html for further information.
 
 # PDFlib Lite
 PKG             := pdflib_lite

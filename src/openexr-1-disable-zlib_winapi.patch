@@ -1,5 +1,5 @@
 This file is part of MXE.
-See doc/index.html for further information.
+See index.html for further information.
 
 diff -urN a/IlmImf/ImfPxr24Compressor.cpp b/IlmImf/ImfPxr24Compressor.cpp
 --- a/IlmImf/ImfPxr24Compressor.cpp	2010-07-17 01:11:52.000000000 +0200

@@ -1,6 +1,6 @@
 /*
  * This file is part of MXE.
- * See doc/index.html for further information.
+ * See index.html for further information.
  *
  * This is a simple test program for SDL_sound that tries to
  * decode the file specified as the only command-line argument.

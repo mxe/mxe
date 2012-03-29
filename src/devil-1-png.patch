@@ -1,5 +1,5 @@
 This file is part of MXE.
-See doc/index.html for further information.
+See index.html for further information.
 
 diff -urN devil-1.7.8.orig/src-IL/src/il_icon.c devil-1.7.8/src-IL/src/il_icon.c
 --- devil-1.7.8.orig/src-IL/src/il_icon.c	2009-03-08 08:10:09.000000000 +0100

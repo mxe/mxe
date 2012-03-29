@@ -1,5 +1,5 @@
 This file is part of MXE.
-See doc/index.html for further information.
+See index.html for further information.
 
 Cherry picked fixes from svn
 http://sourceforge.net/projects/vmime/develop
@@ -10,7 +10,7 @@ Produced with this script:
 
 (
   echo "This file is part of MXE."
-  echo "See doc/index.html for further information."
+  echo "See index.html for further information."
   echo
   echo "Cherry picked fixes from svn"
   echo "http://sourceforge.net/projects/vmime/develop"

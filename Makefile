@@ -1,5 +1,5 @@
 # This file is part of MXE.
-# See doc/index.html for further information.
+# See index.html for further information.
 
 JOBS               := 1
 TARGET             := i686-pc-mingw32
@@ -76,7 +76,7 @@ define CHECK_REQUIREMENT
         echo; \
         echo 'Missing requirement: $(1)'; \
         echo; \
-        echo 'Please have a look at "doc/index.html" to ensure'; \
+        echo 'Please have a look at "index.html" to ensure'; \
         echo 'that your system meets all requirements.'; \
         echo; \
         exit 1; \
@@ -88,7 +88,7 @@ define CHECK_REQUIREMENT_VERSION
         echo; \
         echo 'Wrong version of requirement: $(1)'; \
         echo; \
-        echo 'Please have a look at "doc/index.html" to ensure'; \
+        echo 'Please have a look at "index.html" to ensure'; \
         echo 'that your system meets all requirements.'; \
         echo; \
         exit 1; \
@@ -111,7 +111,7 @@ endef
 $(eval $(subst #,$(newline),$(shell \
     $(SED) -n \
         's/^.* id="\([A-Za-z0-9_+-]*\)-version">\([^<]*\)<.*$$/\1_VERSION := \2 #/p' \
-        '$(TOP_DIR)/doc/index.html' \
+        '$(TOP_DIR)/index.html' \
 )))
 
 include $(TOP_DIR)/src/*.mk
@@ -204,9 +204,9 @@ define UPDATE
             $(if $(filter $(2),$($(1)_VERSION)),
                 $(info .        $(1)  $(2)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
-                $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$(2)/' '$(TOP_DIR)/doc/index.html'
+                $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$(2)/' '$(TOP_DIR)/index.html'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                    || { $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$($(1)_VERSION)/' '$(TOP_DIR)/doc/index.html'; \
+                    || { $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$($(1)_VERSION)/' '$(TOP_DIR)/index.html'; \
                          exit 1; })),
         $(error Unable to update version number of package $(1)))
 
@@ -224,9 +224,9 @@ dist:
 	mkdir -p '$(DIST_DIR)'
 	mkdir '$(DIST_DIR)/mxe'
 	mkdir '$(DIST_DIR)/mxe/doc'
-	$(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' '$(TOP_DIR)/doc/index.html' \
+	$(SED) 's,\(<span class="target">\)[^<]*\(</span>\),\1$(TARGET)\2,g' '$(TOP_DIR)/index.html' \
 	| $(SED) 's,\(<span class="target-underscore">\)[^<]*\(</span>\),\1$(subst -,_,$(TARGET))\2,g' \
-	>'$(DIST_DIR)/mxe/doc/index.html'
+	>'$(DIST_DIR)/mxe/index.html'
 	cp -p '$(TOP_DIR)/doc'/screenshot-* '$(DIST_DIR)/mxe/doc/'
 	@echo
 	@echo 'Upload will start in 5 seconds. Last chance to cancel! (Ctrl+C)'

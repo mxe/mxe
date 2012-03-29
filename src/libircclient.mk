@@ -1,5 +1,5 @@
 # This file is part of MXE.
-# See doc/index.html for further information.
+# See index.html for further information.
 
 # libircclient
 # Note that IPv6 support is partly broken and therefore disabled.

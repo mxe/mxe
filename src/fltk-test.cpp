@@ -1,6 +1,6 @@
 /*
  * This file is part of MXE.
- * See doc/index.html for further information.
+ * See index.html for further information.
  *
  * This is a slightly modified version of:
  * http://www.fltk.org/doc-1.3/basics.html
