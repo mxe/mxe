@@ -4,7 +4,7 @@
 # dbus
 PKG             := dbus
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d50f1624197a6f8f14cc8ff1943db7c99ce14cde
+$(PKG)_CHECKSUM := 3140ea452337d664dbe6d30f0d990c756d101694
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
