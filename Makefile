@@ -220,14 +220,17 @@ update-checksum-%:
 
 cleanup-style:
 	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\
-            echo '[cleanup] $(FILE)'; \
-            $(SED) -i ' \
+            $(SED) ' \
                 s/\r//g; \
                 s/[ \t]\+$$//; \
                 s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
                 $(if $(filter %Makefile,$(FILE)),,\
                     s/\t/    /g; \
                 ) \
-            ' $(FILE); \
+            ' < $(FILE) > $(TOP_DIR)/tmp-cleanup-style; \
+            diff -u $(FILE) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
+                || { echo '[cleanup] $(FILE)'; \
+                     cp $(TOP_DIR)/tmp-cleanup-style $(FILE); }; \
+            rm -f $(TOP_DIR)/tmp-cleanup-style; \
         )
 
