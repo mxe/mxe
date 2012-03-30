@@ -26,7 +26,7 @@ DIST_DIR   := $(PWD)/dist
 TMP_DIR     = $(PWD)/tmp-$(1)
 MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
-PKGS       := $(sort $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk)))
+PKGS       := $(shell $(SED) -n 's/^.* id="\([^"]*\)-package".*$$/\1/p' '$(TOP_DIR)/index.html')
 PATH       := $(PREFIX)/bin:$(PATH)
 
 CMAKE_TOOLCHAIN_FILE := $(PREFIX)/$(TARGET)/share/cmake/mxe-conf.cmake
