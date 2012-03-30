@@ -5,17 +5,6 @@ JOBS               := 1
 TARGET             := i686-pc-mingw32
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
-PWD        := $(shell pwd)
-PREFIX     := $(PWD)/usr
-LOG_DIR    := $(PWD)/log
-TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
-PKG_DIR    := $(PWD)/pkg
-DIST_DIR   := $(PWD)/dist
-TMP_DIR     = $(PWD)/tmp-$(1)
-MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
-TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
-PKGS       := $(sort $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk)))
-PATH       := $(PREFIX)/bin:$(PATH)
 SHELL      := bash
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
@@ -27,6 +16,18 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 gcc intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
                 scons $(SED) unzip wget xz yasm
+
+PWD        := $(shell pwd)
+PREFIX     := $(PWD)/usr
+LOG_DIR    := $(PWD)/log
+TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
+PKG_DIR    := $(PWD)/pkg
+DIST_DIR   := $(PWD)/dist
+TMP_DIR     = $(PWD)/tmp-$(1)
+MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
+PKGS       := $(sort $(patsubst $(TOP_DIR)/src/%.mk,%,$(wildcard $(TOP_DIR)/src/*.mk)))
+PATH       := $(PREFIX)/bin:$(PATH)
 
 CMAKE_TOOLCHAIN_FILE := $(PREFIX)/$(TARGET)/share/cmake/mxe-conf.cmake
 
