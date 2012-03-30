@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# FriBidi
 PKG             := fribidi
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.19.2
 $(PKG)_CHECKSUM := 3889469d96dbca3d8522231672e14cca77de4d5e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://fribidi.org/
 $(PKG)_URL      := http://fribidi.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib
 

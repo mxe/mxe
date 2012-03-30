@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# FreeImage
 PKG             := freeimage
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.15.0
-$(PKG)_CHECKSUM := ec2faa01d1b312aab68d77afe62861759c790100
+$(PKG)_CHECKSUM := 083ef40a1734e33cc34c55ba87019bf5cce9ca4a
 $(PKG)_SUBDIR   := FreeImage
 $(PKG)_FILE     := FreeImage$(subst .,,$($(PKG)_VERSION)).zip
-$(PKG)_WEBSITE  := http://freeimage.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeimage/Source Distribution/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

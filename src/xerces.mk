@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# Xerces-C++
 PKG             := xerces
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.1
 $(PKG)_CHECKSUM := 177ec838c5119df57ec77eddec9a29f7e754c8b2
 $(PKG)_SUBDIR   := xerces-c-$($(PKG)_VERSION)
 $(PKG)_FILE     := xerces-c-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://xerces.apache.org/xerces-c/
 $(PKG)_URL      := http://apache.linux-mirror.org/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv curl

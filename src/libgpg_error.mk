@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# libgpg-error
 PKG             := libgpg_error
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.10
 $(PKG)_CHECKSUM := 95b324359627fbcb762487ab6091afbe59823b29
 $(PKG)_SUBDIR   := libgpg-error-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgpg-error-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := ftp://ftp.gnupg.org/gcrypt/libgpg-error/
 $(PKG)_URL      := ftp://ftp.gnupg.org/gcrypt/libgpg-error/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
@@ -19,10 +16,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \

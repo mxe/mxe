@@ -1,36 +1,38 @@
-/* This file is part of mingw-cross-env.       */
-/* See doc/index.html for further information. */
-
-/* This is a slightly modified version of:     */
-/* http://ironalbatross.net/wiki/index.php5?title=CPP_LIBPNG#Minimal_Example_of_writing_a_PNG_File */
+/*
+ * This file is part of MXE.
+ * See index.html for further information.
+ *
+ * This is a slightly modified version of:
+ * http://ironalbatross.net/wiki/index.php5?title=CPP_LIBPNG#Minimal_Example_of_writing_a_PNG_File
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <png.h>
- 
+
 int main(int argc, char *argv[])
 {
     (void)argc;
     (void)argv;
-    
+
     /* PNG structs and types */
     png_byte color_type;
     png_byte bit_depth;
     png_structp png_ptr;
     png_infop info_ptr;
     png_bytep *row_pointers;
- 
+
     int height, width;
     FILE *fp;
- 
+
     width = 640;
     height = 480;
- 
+
     color_type = PNG_COLOR_TYPE_RGB;
     bit_depth = 8; /* Number of bits per color, not per pixel */
- 
+
     /* Dynamic 2D array in C */
     row_pointers = (png_bytep *)malloc( sizeof(png_bytep) * height);
     int i;
@@ -45,7 +47,7 @@ int main(int argc, char *argv[])
             row_pointers[i][2+3*j] = (i * j) % 255; /* B */
         }
     }
- 
+
     /* Write the data out to the PNG file */
     fp = fopen("test.png","wb");
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
@@ -57,13 +59,13 @@ int main(int argc, char *argv[])
     png_write_info(png_ptr, info_ptr);
     png_write_image(png_ptr, row_pointers);
     png_write_end(png_ptr, NULL);
- 
+
     /* Free up memory after use */
     for(i = 0; i < height; i++)
     {
         free(row_pointers[i]);
     }
     free(row_pointers);
- 
+
     return 0;
 }

@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# IlmBase
 PKG             := ilmbase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.2
 $(PKG)_CHECKSUM := fe6a910a90cde80137153e25e175e2b211beda36
 $(PKG)_SUBDIR   := ilmbase-$($(PKG)_VERSION)
 $(PKG)_FILE     := ilmbase-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.openexr.com/
 $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
@@ -20,8 +17,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     # build the win32 thread sources instead of the posix thread sources
     $(SED) -i 's,IlmThreadPosix\.,IlmThreadWin32.,'                   '$(1)/IlmThread/Makefile.in'
     $(SED) -i 's,IlmThreadSemaphorePosix\.,IlmThreadSemaphoreWin32.,' '$(1)/IlmThread/Makefile.in'
@@ -31,6 +26,7 @@ define $(PKG)_BUILD
     # threading. It will just disable the unwanted check for pthread.
     cd '$(1)' && $(SHELL) ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-threading \

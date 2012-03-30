@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# ATKmm
 PKG             := atkmm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.22.5
-$(PKG)_CHECKSUM := 0cae95ac770fb7adda7aea392916d16be195fc07
+$(PKG)_CHECKSUM := 9ca44756821f4d431c554e1cf8184989bb25ce12
 $(PKG)_SUBDIR   := atkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := atkmm-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.gtkmm.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/atkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc atk glibmm
 

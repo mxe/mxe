@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# portaudio
 PKG             := portaudio
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 19_20071207
 $(PKG)_CHECKSUM := 3841453bb7be672a15b6b632ade6f225eb0a4efc
 $(PKG)_SUBDIR   := portaudio
 $(PKG)_FILE     := pa_stable_v$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.portaudio.com
 $(PKG)_URL      := http://www.portaudio.com/archives/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

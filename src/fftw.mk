@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# fftw
 PKG             := fftw
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.2
-$(PKG)_CHECKSUM := d43b799eedfb9408f62f9f056f5e8a645618467b
+$(PKG)_CHECKSUM := 3fecc492f576503a6a509d2073bd82b3fe0aef13
 $(PKG)_SUBDIR   := fftw-$($(PKG)_VERSION)
 $(PKG)_FILE     := fftw-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.fftw.org/
 $(PKG)_URL      := http://www.fftw.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

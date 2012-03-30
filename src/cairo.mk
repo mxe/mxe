@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# cairo
 PKG             := cairo
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.10.2
 $(PKG)_CHECKSUM := ccce5ae03f99c505db97c286a0c9a90a926d3c6e
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://cairographics.org/
 $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libpng fontconfig freetype pixman
 

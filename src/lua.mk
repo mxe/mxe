@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# Lua
 PKG             := lua
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.4
 $(PKG)_CHECKSUM := 2b11c8e60306efb7f0734b747588f57995493db7
 $(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)
 $(PKG)_FILE     := lua-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.lua.org/
 $(PKG)_URL      := http://www.lua.org/ftp/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

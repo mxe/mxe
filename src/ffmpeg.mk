@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# ffmpeg
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.7-rc1
-$(PKG)_CHECKSUM := d15c005f46483fbfc3b678cb1c89123762b56b82
+$(PKG)_CHECKSUM := 743f44a71f93b14c9b26ca2424b0da8457cef4be
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.ffmpeg.org/
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://launchpad.net/ffmpeg/main/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 lame libvpx opencore-amr sdl speex theora vorbis x264 xvidcore zlib
@@ -36,6 +33,7 @@ define $(PKG)_BUILD
         --enable-postproc \
         --disable-pthreads \
         --enable-w32threads \
+        --enable-avisynth \
         --enable-libspeex \
         --enable-libtheora \
         --enable-libvorbis \

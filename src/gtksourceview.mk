@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# GTKSourceView
 PKG             := gtksourceview
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.10.5
 $(PKG)_CHECKSUM := 5081dc7a081954d0af73852c22e874a746bda30e
 $(PKG)_SUBDIR   := gtksourceview-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtksourceview-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://projects.gnome.org/gtksourceview/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gtk2 libxml2
 

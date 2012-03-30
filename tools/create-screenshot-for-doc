@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -eu
+
+if [ "$#" -ne 2 ]; then
+    echo
+    echo "Syntax: $0 [IMAGE.png] [NAME]"
+    echo
+    echo 'IMAGE.png -> screenshot-NAME.png + screenshot-NAME-small.png'
+    echo
+    exit 1
+fi
+
+set -v
+
+IMAGE_FILE="$1"
+NAME="$2"
+
+cat "$IMAGE_FILE" \
+| pngtopnm \
+| pnmtopng -compression 9 \
+> "screenshot-$NAME.png"
+
+cat "screenshot-$NAME.png" \
+| pngtopnm \
+| pnmscale -ysize 128 \
+> "screenshot-$NAME-small.pnm"
+
+pnmquant 256 "screenshot-$NAME-small.pnm" \
+| pnmtopng -compression 9 \
+> "screenshot-$NAME-small.png"
+
+rm -f "screenshot-$NAME-small.pnm"

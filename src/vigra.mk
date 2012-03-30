@@ -1,16 +1,13 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# vigra
 PKG             := vigra
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.1
-$(PKG)_CHECKSUM := f90f54da31a6544057c25df7dbcc6954604de079
+$(PKG)_CHECKSUM := 09f1d506c2748ebeb7d9f1c77ce387f9e7b837d2
 $(PKG)_SUBDIR   := vigra-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := vigra-$($(PKG)_VERSION)-src.tar.gz
-$(PKG)_WEBSITE  := http://hci.iwr.uni-heidelberg.de/vigra
-$(PKG)_URL      := $($(PKG)_WEBSITE)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc jpeg tiff libpng
+$(PKG)_URL      := http://hci.iwr.uni-heidelberg.de/vigra/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc jpeg tiff libpng openexr
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://hci.iwr.uni-heidelberg.de/vigra/' | \
@@ -36,9 +33,8 @@ define $(PKG)_BUILD
         -DWITH_VALGRIND=OFF
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 
-    $(TARGET)-gcc \
+    $(TARGET)-g++ \
         '$(2).cpp' -o $(PREFIX)/$(TARGET)/bin/test-vigra.exe \
         -DVIGRA_STATIC_LIB \
-        -lvigraimpex -ltiff -lpng -ljpeg -lz -lstdc++
+        -lvigraimpex `'$(TARGET)-pkg-config' OpenEXR libtiff-4 libpng --cflags --libs` -ljpeg
 endef
-

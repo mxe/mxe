@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# Speex
 PKG             := speex
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2rc1
 $(PKG)_CHECKSUM := 52daa72572e844e5165315e208da539b2a55c5eb
 $(PKG)_SUBDIR   := speex-$($(PKG)_VERSION)
 $(PKG)_FILE     := speex-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.speex.org/
 $(PKG)_URL      := http://downloads.xiph.org/releases/speex/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

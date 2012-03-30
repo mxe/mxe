@@ -1,10 +1,10 @@
-This file is part of mingw-cross-env.
-See doc/index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
 From cd2b1b4a0ae81dddd3fa70c06528a7024ada7a5f Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
+From: MXE
 Date: Fri, 1 Oct 2010 12:54:06 +0200
 Subject: [PATCH] SigC changed to sigc
 

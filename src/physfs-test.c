@@ -1,7 +1,10 @@
-/* This file is part of mingw-cross-env.       */
-/* See doc/index.html for further information. */
-
-/* modified from test/physfs_test.c */
+/*
+ * This file is part of MXE.
+ * See index.html for further information.
+ *
+ * This is a slightly modified version of:
+ * test/physfs_test.c
+ */
 
 #include "physfs.h"
 #include <stdio.h>

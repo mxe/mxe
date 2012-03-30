@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# proj
 PKG             := proj
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.7.0
-$(PKG)_CHECKSUM := bfe59b8dc1ea0c57e1426c37ff2b238fea66acd7
+$(PKG)_CHECKSUM := 5c8d6769a791c390c873fef92134bf20bb20e82a
 $(PKG)_SUBDIR   := proj-$($(PKG)_VERSION)
 $(PKG)_FILE     := proj-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://trac.osgeo.org/proj/
 $(PKG)_URL      := http://download.osgeo.org/proj/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/proj/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
@@ -26,5 +23,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-mutex
     $(MAKE) -C '$(1)' -j '$(JOBS)'
+    # remove header which is not installed since 4.8.0
+    rm -f '$(PREFIX)/$(TARGET)'/include/projects.h
     $(MAKE) -C '$(1)' -j 1 install
 endef

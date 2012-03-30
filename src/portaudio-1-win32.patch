@@ -1,5 +1,5 @@
-This file is part of mingw-cross-env.
-See doc/index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
 diff -ru portaudio-orig/configure.in portaudio/configure.in
 --- portaudio-orig/configure.in	2007-11-13 22:22:56.000000000 +0100

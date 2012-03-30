@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# Boost C++ Library
 PKG             := boost
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.46.1
-$(PKG)_CHECKSUM := 3ca6e173ec805e5126868d8a03618e587aa26aef
+$(PKG)_CHECKSUM := 26a52840e9d12f829e3008589abf0a925ce88524
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
-$(PKG)_WEBSITE  := http://www.boost.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib bzip2 expat
 
@@ -24,8 +21,8 @@ define $(PKG)_BUILD
     # make the build script generate .a library files instead of .lib
     $(SED) -i 's,<target-os>windows : lib ;,<target-os>windows : a ;,' '$(1)/tools/build/v2/tools/types/lib.jam'
     # compile boost jam
-    cd '$(1)/tools/build/v2/engine/src' && ./build.sh
-    cd '$(1)' && tools/build/v2/engine/src/bin.*/bjam \
+    cd '$(1)/tools/build/v2/engine' && ./build.sh
+    cd '$(1)' && tools/build/v2/engine/bin.*/bjam \
         -j '$(JOBS)' \
         --ignore-site-config \
         --user-config=user-config.jam \

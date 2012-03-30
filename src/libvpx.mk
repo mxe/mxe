@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# vpx
 PKG             := libvpx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.6
-$(PKG)_CHECKSUM := a3522bd2b73d52381ba767ded1cbf4760e9cc6f8
+$(PKG)_CHECKSUM := 2919e11074fef72fc61ef1a75160050ffaad6074
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://code.google.com/p/webm/
 $(PKG)_URL      := http://webm.googlecode.com/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

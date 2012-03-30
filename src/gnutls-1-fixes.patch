@@ -1,0 +1,49 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 6e89465f1e792f5d527708544cce1ef92ae4669b Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Fri, 28 Oct 2011 09:23:41 +0200
+Subject: [PATCH 1/2] add missing static library linking
+
+
+diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
+index c45f8f3..57d0dbb 100644
+--- a/lib/gnutls.pc.in
++++ b/lib/gnutls.pc.in
+@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
+ URL: http://www.gnu.org/software/gnutls/
+ Version: @VERSION@
+ Libs: -L${libdir} -lgnutls
+-Libs.private: @LTLIBNETTLE@
++Libs.private: @LTLIBNETTLE@ @LIBS@
+ @GNUTLS_REQUIRES_PRIVATE@
+ Cflags: -I${includedir}
+-- 
+1.7.9.2
+
+
+From aa11a6f645ce93f80fbffd7e72c6964bdfd68542 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 24 Nov 2011 15:06:06 +0100
+Subject: [PATCH 2/2] disable doc and test (MXE specific)
+
+
+diff --git a/Makefile.am b/Makefile.am
+index 0afe4bd..da7436a 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -23,7 +23,7 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --disable-valgrind-tests
+ 
+ SUBDIRS = gl lib extra po
+ 
+-SUBDIRS += src doc tests
++SUBDIRS += src
+ 
+ if HAVE_GUILE
+ SUBDIRS += guile
+-- 
+1.7.9.2
+

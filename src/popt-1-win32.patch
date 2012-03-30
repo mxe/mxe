@@ -1,5 +1,5 @@
-This file is part of mingw-cross-env.
-See doc/index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
 diff -urN a/popt.c b/popt.c
 --- a/popt.c	2010-01-19 01:39:10.000000000 +0100

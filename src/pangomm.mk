@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# Pangomm
 PKG             := pangomm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.28.2
 $(PKG)_CHECKSUM := 31bcbb0c8773fdde6f4ea9b4a79fdf7159f94520
 $(PKG)_SUBDIR   := pangomm-$($(PKG)_VERSION)
 $(PKG)_FILE     := pangomm-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.pango.org/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pangomm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc cairomm glibmm pango
 
@@ -20,10 +17,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         MAKE=$(MAKE)

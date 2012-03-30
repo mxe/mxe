@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# pfstools
 PKG             := pfstools
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.3
-$(PKG)_CHECKSUM := b13d1863944afc4a88eb6ec92954677995399ab7
+$(PKG)_CHECKSUM := dc595438f0fd8b40a05d9f9c498892363a1b3f05
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://$(PKG).sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

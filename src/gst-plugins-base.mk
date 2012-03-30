@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# gst-plugins-base
 PKG             := gst-plugins-base
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.10.34
-$(PKG)_CHECKSUM := 4db5f3112fe3a74ba46443e577647cff65b727e7
+$(PKG)_CHECKSUM := 6d7dc463fed5dd43f79a53ad523fcbd6d0916303
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2 gstreamer liboil pango ogg vorbis theora
 

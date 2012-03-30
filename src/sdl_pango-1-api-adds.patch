@@ -1,5 +1,5 @@
-This file is part of mingw-cross-env.
-See doc/index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
 This patch has been taken from:
 http://zarb.org/~gc/t/SDL_Pango-0.1.2-API-adds.patch

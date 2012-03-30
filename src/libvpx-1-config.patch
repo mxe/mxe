@@ -1,10 +1,10 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-diff -Nru libvpx-0.9.1-orig/configure libvpx-0.9.1/configure
---- libvpx-0.9.1-orig/configure	2010-07-09 17:10:49.771062118 +0200
-+++ libvpx-0.9.1/configure	2010-07-09 17:16:28.583061657 +0200
-@@ -437,9 +437,6 @@
+diff --git a/configure b/configure
+--- a/configure
++++ b/configure
+@@ -465,9 +465,6 @@ process_detect() {
          }
      fi
      check_header stdio.h || die "Unable to invoke compiler: ${CC} ${CFLAGS}"

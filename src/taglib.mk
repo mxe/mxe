@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# TagLib
 PKG             := taglib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7
-$(PKG)_CHECKSUM := 5138e1665182bc2171e298ff31518c9ad72ddf23
+$(PKG)_CHECKSUM := bafe0958eb884981cade83d45c18ee34165479b8
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://developer.kde.org/~wheeler/taglib.html
 $(PKG)_URL      := http://developer.kde.org/~wheeler/files/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 

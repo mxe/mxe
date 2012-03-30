@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# wxWidgets
 PKG             := wxwidgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.12
 $(PKG)_CHECKSUM := 39552f3e49341197fea8373824ec609c757e890b
 $(PKG)_SUBDIR   := wxMSW-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxMSW-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.wxwidgets.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv libpng jpeg tiff sdl zlib expat
 
@@ -21,10 +18,9 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,png_check_sig,png_sig_cmp,g'                       '$(1)/configure'
     $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/configure'
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-compat24 \
@@ -58,8 +54,10 @@ define $(PKG)_BUILD
         --without-gnomevfs \
         --without-hildon \
         --without-dmalloc \
-        --without-odbc
+        --without-odbc \
+        LIBS=" `'$(TARGET)-pkg-config' --libs-only-l libtiff-4`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    -$(MAKE) -C '$(1)/locale' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= allmo
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= __install_wxrc___depname=
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/bin/$(TARGET)-wx-config'
 
@@ -69,10 +67,9 @@ define $(PKG)_BUILD
     (cd '$(1)/$(wxwidgets_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
     $(SED) -i 's,png_check_sig,png_sig_cmp,g'                       '$(1)/$(wxwidgets_SUBDIR)/configure'
     $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/$(wxwidgets_SUBDIR)/configure'
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/$(wxwidgets_SUBDIR)/configure'
     cd '$(1)/$(wxwidgets_SUBDIR)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-compat24 \
@@ -106,7 +103,8 @@ define $(PKG)_BUILD
         --without-gnomevfs \
         --without-hildon \
         --without-dmalloc \
-        --without-odbc
+        --without-odbc \
+        LIBS=" `'$(TARGET)-pkg-config' --libs-only-l libtiff-4`"
     $(MAKE) -C '$(1)/$(wxwidgets_SUBDIR)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # backup of the unicode wx-config script
