@@ -115,7 +115,7 @@ $(eval $(subst #,$(newline),$(shell \
         '$(TOP_DIR)/index.html' \
 )))
 
-include $(TOP_DIR)/src/*.mk
+include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
