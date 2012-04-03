@@ -1,0 +1,29 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From b5c7c4853307964f0b8e11e2c9edb5bf0f8511f7 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 3 Apr 2012 14:36:58 +0200
+Subject: [PATCH] add static private dependencies to pkg-config for cmake
+
+---
+ CMakeLists.txt |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ef3d08d..88de1e5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -543,6 +543,7 @@ IF(DSOUND)
+                 SET(BACKENDS  "${BACKENDS} DirectSound \(linked\),")
+                 SET(EXTRA_LIBS dsound ${EXTRA_LIBS})
+             ENDIF()
++            SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -luuid -lole32")
+         ENDIF()
+     ENDIF()
+ ENDIF()
+-- 
+1.7.9.2
+
