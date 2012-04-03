@@ -762,10 +762,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <p>
     Since no other packages depend on it, the remainder of
-    MXE can be successfully built by simply
-    removing the package:
+    MXE can be successfully built by simply specifying
+    an empty build rule:
     </p>
-    <pre>rm <em>where MXE is downloaded</em>/src/nsis.mk</pre>
+    <pre>make nsis_BUILD=</pre>
 </div>
 
 <div class="section">
