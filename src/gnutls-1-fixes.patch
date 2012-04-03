@@ -3,11 +3,14 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 6e89465f1e792f5d527708544cce1ef92ae4669b Mon Sep 17 00:00:00 2001
-From: MXE
+From ef8ca0b0c163a5fbca686a292890479c498607c8 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 28 Oct 2011 09:23:41 +0200
-Subject: [PATCH 1/2] add missing static library linking
+Subject: [PATCH 1/3] add missing static library linking
 
+---
+ lib/gnutls.pc.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
 index c45f8f3..57d0dbb 100644
@@ -25,11 +28,14 @@ index c45f8f3..57d0dbb 100644
 1.7.9.2
 
 
-From aa11a6f645ce93f80fbffd7e72c6964bdfd68542 Mon Sep 17 00:00:00 2001
-From: MXE
+From e90e7ac3a472b0bef5475966ac06d7f2f12c712b Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 24 Nov 2011 15:06:06 +0100
-Subject: [PATCH 2/2] disable doc and test (MXE specific)
+Subject: [PATCH 2/3] disable doc and test (mingw-cross-env specific)
 
+---
+ Makefile.am |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Makefile.am b/Makefile.am
 index 0afe4bd..da7436a 100644
@@ -44,6 +50,34 @@ index 0afe4bd..da7436a 100644
  
  if HAVE_GUILE
  SUBDIRS += guile
+-- 
+1.7.9.2
+
+
+From 5f92acf7123fed0e7a2c617a8abea48f00d83c19 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 3 Apr 2012 13:58:42 +0200
+Subject: [PATCH 3/3] Revert "make dist will also make lzip compressed
+ tarball"
+
+This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
+---
+ configure.ac |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index ba60ce8..9af1253 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.0.18], [bug-gnutls@gnu.org])
+ AC_CONFIG_AUX_DIR([build-aux])
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+-AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz dist-lzip -Wall -Werror -Wno-override])
++AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ AM_CONFIG_HEADER(config.h)
+ 
 -- 
 1.7.9.2
 
