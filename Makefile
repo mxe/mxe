@@ -17,7 +17,7 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
                 scons $(SED) unzip wget xz yasm
 
-PWD        := $(shell pwd)
+PWD        := $(shell pwd -P)
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
