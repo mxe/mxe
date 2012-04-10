@@ -5,7 +5,9 @@ JOBS               := 1
 TARGET             := i686-pc-mingw32
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
+PWD        := $(shell pwd)
 SHELL      := bash
+
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
@@ -17,7 +19,6 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
                 scons $(SED) unzip wget xz yasm
 
-PWD        := $(shell pwd)
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
