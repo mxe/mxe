@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# jpeg
 PKG             := jpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8c
-$(PKG)_CHECKSUM := f0a3b88ac4db19667798bee971537eeed552bce9
+$(PKG)_CHECKSUM := f080b2fffc7581f7d19b968092ba9ebc234556ff
 $(PKG)_SUBDIR   := jpeg-$($(PKG)_VERSION)
 $(PKG)_FILE     := jpegsrc.v$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.ijg.org/
 $(PKG)_URL      := http://www.ijg.org/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

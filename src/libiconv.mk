@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# libiconv
 PKG             := libiconv
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.13.1
-$(PKG)_CHECKSUM := 5b0524131cf0d7abd50734077f13aaa5508f6bbe
+$(PKG)_CHECKSUM := be7d67e50d72ff067b2c0291311bc283add36965
 $(PKG)_SUBDIR   := libiconv-$($(PKG)_VERSION)
 $(PKG)_FILE     := libiconv-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.gnu.org/software/libiconv/
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/libiconv/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

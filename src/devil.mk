@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# DevIL
 PKG             := devil
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.8
 $(PKG)_CHECKSUM := bc27e3e830ba666a3af03548789700d10561fcb1
 $(PKG)_SUBDIR   := devil-$($(PKG)_VERSION)
 $(PKG)_FILE     := DevIL-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://openil.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/openil/DevIL/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freeglut zlib openexr jpeg jasper lcms libmng libpng tiff sdl
 
@@ -21,10 +18,9 @@ endef
 
 define $(PKG)_BUILD
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/include/IL/il.h'
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-ILU \

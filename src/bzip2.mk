@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# bzip2
 PKG             := bzip2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.6
 $(PKG)_CHECKSUM := 3f89f861209ce81a6bab1fd1998c0ef311712002
 $(PKG)_SUBDIR   := bzip2-$($(PKG)_VERSION)
 $(PKG)_FILE     := bzip2-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.bzip.org/
 $(PKG)_URL      := http://www.bzip.org/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

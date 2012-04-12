@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# libodbc++
 PKG             := libodbc++
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.2.5
 $(PKG)_CHECKSUM := 8a77921b21c23926042c413f4a7a187a3656025b
 $(PKG)_SUBDIR   := libodbc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libodbc++-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://libodbcxx.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libodbcxx/libodbc++/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

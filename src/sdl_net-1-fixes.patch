@@ -1,0 +1,24 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 50ebb3d0a7e28fa3e85dff386cde7a6315865e76 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 27 Feb 2012 14:41:08 +0100
+Subject: [PATCH] add static dependency to .pc file
+
+
+diff --git a/SDL_net.pc.in b/SDL_net.pc.in
+index b68055e..3ec182b 100644
+--- a/SDL_net.pc.in
++++ b/SDL_net.pc.in
+@@ -8,4 +8,5 @@ Description: net library for Simple DirectMedia Layer
+ Version: @VERSION@
+ Requires: sdl >= @SDL_VERSION@
+ Libs: -L${libdir} -lSDL_net
++Libs.private: -liphlpapi -lws2_32
+ Cflags: -I${includedir}/SDL
+-- 
+1.7.9
+

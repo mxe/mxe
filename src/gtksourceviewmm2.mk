@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# GtkSourceViewmm
 PKG             := gtksourceviewmm2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.10.1
 $(PKG)_CHECKSUM := 7f6fb046427054d85c791a4b1fc0f742a3313c8a
 $(PKG)_SUBDIR   := gtksourceviewmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_WEBSITE  := http://projects.gnome.org/gtksourceviewmm/
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtksourceviewmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gtkmm2 gtksourceview
 
@@ -22,10 +19,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         MAKE=$(MAKE)

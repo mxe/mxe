@@ -1,0 +1,24 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 47b80beedcb3d8e6296e2d0b970bb0c82abb4424 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 14 Feb 2012 12:40:24 +0100
+Subject: [PATCH] fix pkg-config
+
+
+diff --git a/build/pkgconfig/libarchive.pc.in b/build/pkgconfig/libarchive.pc.in
+index 95d7159..8288f31 100644
+--- a/build/pkgconfig/libarchive.pc.in
++++ b/build/pkgconfig/libarchive.pc.in
+@@ -8,4 +8,4 @@ Description: library that can create and read several streaming archive formats
+ Version: @VERSION@
+ Cflags: -I${includedir}
+ Libs: -L${libdir} -larchive
+-Libs.private: @LIBS@
++Libs.private: @LIBS@ -liconv
+-- 
+1.7.8.3
+

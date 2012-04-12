@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# id3lib
 PKG             := id3lib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.8.3
 $(PKG)_CHECKSUM := c92c880da41d1ec0b242745a901702ae87970838
 $(PKG)_SUBDIR   := id3lib-$($(PKG)_VERSION)
 $(PKG)_FILE     := id3lib-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://id3lib.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

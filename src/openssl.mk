@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# openssl
 PKG             := openssl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.0d
-$(PKG)_CHECKSUM := 32ca934f380a547061ddab7221b1a34e4e07e8d5
+$(PKG)_CHECKSUM := a6476d33fd38c2e7dfb438d1e3be178cc242c907
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.openssl.org/
 $(PKG)_URL      := http://www.openssl.org/source/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.openssl.org/source/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libgcrypt

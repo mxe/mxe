@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# libsndfile
 PKG             := libsndfile
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.24
-$(PKG)_CHECKSUM := ade2dad272b52f61bb58aca3a4004b28549ee0f8
+$(PKG)_CHECKSUM := e95d9fca57f7ddace9f197071cbcfb92fa16748e
 $(PKG)_SUBDIR   := libsndfile-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsndfile-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.mega-nerd.com/libsndfile/
 $(PKG)_URL      := http://www.mega-nerd.com/libsndfile/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sqlite flac ogg vorbis
 

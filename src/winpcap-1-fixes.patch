@@ -1,20 +1,155 @@
-This file is part of mingw-cross-env.
-See doc/index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From ae2d9b90df55a6c1ba801675a81723ceb8377e62 Mon Sep 17 00:00:00 2001
-From: mingw-cross-env
-Date: Sun, 27 Mar 2011 23:49:46 +0200
-Subject: [PATCH] remove obsolete -mno-cygwin
-
-
-diff --git a/wpcap/PRJ/GNUmakefile b/wpcap/PRJ/GNUmakefile
-index ccf3677..8313b4c 100644
---- a/wpcap/PRJ/GNUmakefile
-+++ b/wpcap/PRJ/GNUmakefile
-@@ -32,7 +32,7 @@ CFLAGS = -I ../libpcap -I ../libpcap/bpf -I ../libpcap/lbl \
- 	-DHAVE_REMOTE -DHAVE_AIRPCAP_API \
+diff -ur a/packetNtx/Dll/Packet32.c b/packetNtx/Dll/Packet32.c
+--- a/packetNtx/Dll/Packet32.c	2008-11-18 12:17:42.000000000 -0300
++++ b/packetNtx/Dll/Packet32.c	2012-03-20 10:36:30.724465335 -0300
+@@ -44,11 +44,11 @@
+ //
+ #define _CRT_SECURE_NO_WARNINGS
+ 
+-#include <packet32.h>
+-#include <StrSafe.h>
++#include <Packet32.h>
++#include <strsafe.h>
+ 
+ #include "Packet32-Int.h"
+-#include "..\driver\ioctls.h"
++#include "../driver/ioctls.h"
+ 
+ #ifdef HAVE_WANPACKET_API
+ #include "wanpacket/wanpacket.h"
+@@ -98,8 +98,8 @@
+ 
+ #include <windows.h>
+ #include <windowsx.h>
+-#include <Iphlpapi.h>
+-#include <IPIfCons.h>
++#include <iphlpapi.h>
++#include <ipifcons.h>
+ 
+ #include <WpcapNames.h>
+ 
+diff -ur a/wpcap/libpcap/inet.c b/wpcap/libpcap/inet.c
+--- a/wpcap/libpcap/inet.c	2009-10-07 01:20:04.000000000 -0400
++++ b/wpcap/libpcap/inet.c	2012-03-20 10:38:56.920472410 -0300
+@@ -804,7 +804,7 @@
+ 		while(NAdapts--)
+ 		{
+ 			strcpy((char*)tUstr, tAstr);
+-			(char*)tUstr += strlen(tAstr) + 1;;
++			tUstr += strlen(tAstr) + 1;;
+ 			tAstr += strlen(tAstr) + 1;
+ 		}
+ 
+diff -ur a/wpcap/libpcap/Win32/Src/gai_strerror.c b/wpcap/libpcap/Win32/Src/gai_strerror.c
+--- a/wpcap/libpcap/Win32/Src/gai_strerror.c	2009-10-07 01:19:58.000000000 -0400
++++ b/wpcap/libpcap/Win32/Src/gai_strerror.c	2012-03-20 10:41:17.604479218 -0300
+@@ -1,83 +1 @@
+-/*
+- * Copyright (C) 1995, 1996, 1997, and 1998 WIDE Project.
+- * All rights reserved.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. Neither the name of the project nor the names of its contributors
+- *    may be used to endorse or promote products derived from this software
+- *    without specific prior written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+- * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+- * SUCH DAMAGE.
+- */
+-
+-/*
+-#include <sys/cdefs.h>
+-
+-__FBSDID("$FreeBSD: /repoman/r/ncvs/src/lib/libc/net/gai_strerror.c,v 1.1 2005/04/06 12:45:51 ume Exp $");
+-
+-*/
+-
+-#ifdef WIN32
+-
+-#include <ws2tcpip.h>
+-
+-#else
+-
+-#include <netdb.h>
+-
+-#endif
+-
+-/* Entries EAI_ADDRFAMILY (1) and EAI_NODATA (7) are obsoleted, but left */
+-/* for backward compatibility with userland code prior to 2553bis-02 */
+-static char *ai_errlist[] = {
+-	"Success",					/* 0 */
+-	"Address family for hostname not supported",	/* 1 */
+-	"Temporary failure in name resolution",		/* EAI_AGAIN */
+-	"Invalid value for ai_flags",			/* EAI_BADFLAGS */
+-	"Non-recoverable failure in name resolution",	/* EAI_FAIL */
+-	"ai_family not supported",			/* EAI_FAMILY */
+-	"Memory allocation failure", 			/* EAI_MEMORY */
+-	"No address associated with hostname",		/* 7 */
+-	"hostname nor servname provided, or not known",	/* EAI_NONAME */
+-	"servname not supported for ai_socktype",	/* EAI_SERVICE */
+-	"ai_socktype not supported", 			/* EAI_SOCKTYPE */
+-	"System error returned in errno", 		/* EAI_SYSTEM */
+-	"Invalid value for hints",			/* EAI_BADHINTS */
+-	"Resolved protocol is unknown"			/* EAI_PROTOCOL */
+-};
+-
+-#ifndef EAI_MAX
+-#define EAI_MAX (sizeof(ai_errlist)/sizeof(ai_errlist[0]))
+-#endif
+-
+-/* on MingW, gai_strerror is available. 
+-   We need to compile gai_strerrorA only for Cygwin
+- */
+-#ifndef gai_strerror
+-
+-char *
+-WSAAPI gai_strerrorA(int ecode)
+-{
+-	if (ecode >= 0 && ecode < EAI_MAX)
+-		return ai_errlist[ecode];
+-	return "Unknown error";
+-}
+-
+-#endif /* gai_strerror */
+\ No hay ningún carácter de nueva línea al final del archivo
++/* already handled by <ws2tcpip.h> */
+diff -ur a/wpcap/PRJ/GNUmakefile b/wpcap/PRJ/GNUmakefile
+--- a/wpcap/PRJ/GNUmakefile	2009-07-24 08:03:00.000000000 -0400
++++ b/wpcap/PRJ/GNUmakefile	2012-03-20 10:40:51.208477942 -0300
+@@ -22,17 +22,17 @@
+ 
+ CFLAGS = -I ../libpcap -I ../libpcap/bpf -I ../libpcap/lbl \
+ 	-I ../libpcap/Win32/Include -I../libpcap/Win32/Include/ipv6kit \
+-	-I ../../common -I ../Win32-Extensions \
++	-I ../../Common -I ../Win32-Extensions \
+ 	-I ../../../Airpcap_DevPack/include \
+ 	-DLIBPCAP_EXPORTS -DYY_NEVER_INTERACTIVE -Dyylval=pcap_lval \
+ 	-DHAVE_STRERROR -DNEED_ADDRINFO_H -DINET6 -DWIN32 \
+ 	-DSIZEOF_CHAR=1 -DSIZEOF_SHORT=2 -DSIZEOF_INT=4 -DSIZEOF_LONG_LONG=8 -DWPCAP -D'_U_=' \
+ 	-DHAVE_SNPRINTF -DHAVE_VSNPRINTF \
+ 	-DSIZEOF_LONG_LONG=8 \
+-	-DHAVE_REMOTE -DHAVE_AIRPCAP_API \
++	-DHAVE_REMOTE  \
  	-DHAVE_TC_API \
  	-DHAVE_ADDRINFO \
 -	-mno-cygwin -shared ${OPTFLAGS}
@@ -22,6 +157,22 @@ index ccf3677..8313b4c 100644
  LDFLAGS = -Wl,--out-implib,../lib/libwpcap.a
  LIBS = -L ../../${PACKET_DIR}/DLL/Project -lPacket -lws2_32
  OBJS = ../libpcap/bpf/net/bpf_filter.o \
--- 
-1.7.4.1
-
+@@ -88,3 +88,6 @@
+ 	${LEX} ${LFLAGS} -t $< >$*.c
+ .c.o:
+ 	${CC} ${CFLAGS} -o $*.o -c $<
++libwpcap.a: ${OBJS}
++	${AR} rc $@ ${OBJS}
++	${RANLIB} $@
+diff -ur a/wpcap/Win32-Extensions/Win32-Extensions.c b/wpcap/Win32-Extensions/Win32-Extensions.c
+--- a/wpcap/Win32-Extensions/Win32-Extensions.c	2008-05-20 13:25:00.000000000 -0400
++++ b/wpcap/Win32-Extensions/Win32-Extensions.c	2012-03-20 10:38:40.184471601 -0300
+@@ -33,7 +33,7 @@
+ 
+ 
+ #include "pcap-int.h"
+-#include <packet32.h>
++#include <Packet32.h>
+ 
+ #ifdef HAVE_REMOTE
+ #include <pcap-remote.h>

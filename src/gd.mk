@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# GD  (without support for xpm)
 PKG             := gd
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.35
 $(PKG)_CHECKSUM := ccf34a610abff2dbf133a20c4d2a4aa94939018a
 $(PKG)_SUBDIR   := gd-$($(PKG)_VERSION)
 $(PKG)_FILE     := gd-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.libgd.org/
 $(PKG)_URL      := http://www.libgd.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.uni-magdeburg.de/aftp/mirror/linux/slackware/source/l/gd/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype libpng jpeg libxml2 pthreads

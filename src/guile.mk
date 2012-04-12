@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# GNU Guile
 PKG             := guile
-$(PKG)_IGNORE   := 2.0.1
-$(PKG)_VERSION  := 1.8.7
+$(PKG)_IGNORE   := 2.0.5
 $(PKG)_CHECKSUM := 24cd2f06439c76d41d982a7384fe8a0fe5313b54
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.gnu.org/software/$(PKG)/
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libtool gmp libiconv gettext libunistring gc libffi readline
 
@@ -25,7 +22,7 @@ define $(PKG)_BUILD
     # which would fail because we tell Guile not to use Pthreads.
     cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
         --host='$(TARGET)' \
-        --build="`sh ./config.guess`" \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --without-threads \

@@ -1,0 +1,88 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 06b27e262de1d156ea31b52762ed372211b72de9 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 23 Jan 2012 08:26:14 +0100
+Subject: [PATCH 1/2] use the proper WIN32 define
+
+
+diff --git a/examples/censor.cpp b/examples/censor.cpp
+index 0c15f4c..c784040 100644
+--- a/examples/censor.cpp
++++ b/examples/censor.cpp
+@@ -32,7 +32,7 @@
+ #include <errno.h>
+ #include <string.h>
+ 
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	#include <unistd.h>
+ #endif
+ 
+diff --git a/examples/irctest.c b/examples/irctest.c
+index bd6dbc3..08d2ba7 100644
+--- a/examples/irctest.c
++++ b/examples/irctest.c
+@@ -51,7 +51,7 @@ void addlog (const char * fmt, ...)
+ 	va_list va_alist;
+ 
+ 	va_start (va_alist, fmt);
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	_vsnprintf (buf, sizeof(buf), fmt, va_alist);
+ #else
+ 	vsnprintf (buf, sizeof(buf), fmt, va_alist);
+diff --git a/examples/spammer.c b/examples/spammer.c
+index ae9c2c7..2a0861b 100644
+--- a/examples/spammer.c
++++ b/examples/spammer.c
+@@ -17,7 +17,7 @@
+ #include <errno.h>
+ #include <string.h>
+ 
+-#if defined (WIN32)
++#if defined (_WIN32)
+ 	#include <windows.h>
+ 
+ 	#define CREATE_THREAD(id,func,param)	(CreateThread(0, 0, func, param, 0, id) == 0)
+diff --git a/include/libircclient.h b/include/libircclient.h
+index 2dcd44c..af7d769 100644
+--- a/include/libircclient.h
++++ b/include/libircclient.h
+@@ -44,7 +44,7 @@
+ #ifndef INCLUDE_LIBIRC_H
+ #define INCLUDE_LIBIRC_H
+ 
+-#if !defined (WIN32)
++#if !defined (_WIN32)
+ 	#include <sys/select.h>	/* fd_set */
+ #else
+ 	#include <winsock2.h>
+-- 
+1.7.8.3
+
+
+From 1a54c4dda67b99c1c0c0c68b45a395b741cb7030 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 22 Jan 2012 22:39:23 +0100
+Subject: [PATCH 2/2] fix missing header
+
+
+diff --git a/include/libircclient.h b/include/libircclient.h
+index af7d769..57c8516 100644
+--- a/include/libircclient.h
++++ b/include/libircclient.h
+@@ -131,6 +131,7 @@ typedef void (*irc_dcc_callback_t) (irc_session_t * session, irc_dcc_t id, int s
+ #include "libirc_errors.h"
+ #include "libirc_events.h"
+ #include "libirc_options.h"
++#include "libirc_rfcnumeric.h"
+ #undef IN_INCLUDE_LIBIRC_H
+ 
+ 
+-- 
+1.7.8.3
+

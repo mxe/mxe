@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# libxslt
 PKG             := libxslt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.26
 $(PKG)_CHECKSUM := 69f74df8228b504a87e2b257c2d5238281c65154
 $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://xmlsoft.org/XSLT/
 $(PKG)_URL      := ftp://xmlsoft.org/libxslt/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libxml2 libgcrypt
 

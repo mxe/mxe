@@ -1,0 +1,1028 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From ac29986df03482c61dbd7271554e6bc453228bd6 Mon Sep 17 00:00:00 2001
+From: Joerg Riesmeier <dicom@offis.de>
+Date: Thu, 17 Nov 2011 16:13:14 +0000
+Subject: [PATCH] Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang
+ compiler) quiet.
+
+(cherry picked from commit dbadc0d8f3760f65504406c8b2cb8633f868a258)
+
+Conflicts:
+
+	CHANGES.361
+	ofstd/libsrc/ofchrenc.cc
+---
+ dcmimage/include/dcmtk/dcmimage/diargpxt.h |   25 ++++++++++++++-----------
+ dcmimage/include/dcmtk/dcmimage/dicmypxt.h |   11 +++++++----
+ dcmimage/include/dcmtk/dcmimage/dicocpt.h  |   11 +++++++----
+ dcmimage/include/dcmtk/dcmimage/dicoflt.h  |   17 ++++++++++-------
+ dcmimage/include/dcmtk/dcmimage/dicorot.h  |   17 ++++++++++-------
+ dcmimage/include/dcmtk/dcmimage/dicosct.h  |   13 ++++++++-----
+ dcmimage/include/dcmtk/dcmimage/dihsvpxt.h |   11 +++++++----
+ dcmimage/include/dcmtk/dcmimage/dipalpxt.h |   11 +++++++----
+ dcmimage/include/dcmtk/dcmimage/dirgbpxt.h |   15 +++++++++------
+ dcmimage/include/dcmtk/dcmimage/diybrpxt.h |   15 +++++++++------
+ dcmimage/include/dcmtk/dcmimage/diyf2pxt.h |   11 +++++++----
+ dcmimage/include/dcmtk/dcmimage/diyp2pxt.h |   11 +++++++----
+ dcmimgle/include/dcmtk/dcmimgle/diflipt.h  |   11 +++++++----
+ dcmimgle/include/dcmtk/dcmimgle/dimoflt.h  |   15 +++++++++------
+ dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h |   13 ++++++++-----
+ dcmimgle/include/dcmtk/dcmimgle/dimorot.h  |   15 +++++++++------
+ dcmimgle/include/dcmtk/dcmimgle/dimosct.h  |   11 +++++++----
+ dcmimgle/include/dcmtk/dcmimgle/dirotat.h  |   11 +++++++----
+ dcmimgle/include/dcmtk/dcmimgle/discalet.h |   19 +++++++++++--------
+ ofstd/include/dcmtk/ofstd/ofoset.h         |   13 ++++++++-----
+ 20 files changed, 168 insertions(+), 108 deletions(-)
+
+diff --git a/dcmimage/include/dcmtk/dcmimage/diargpxt.h b/dcmimage/include/dcmtk/dcmimage/diargpxt.h
+index 7e3894d..1ed9291 100644
+--- a/dcmimage/include/dcmtk/dcmimage/diargpxt.h
++++ b/dcmimage/include/dcmtk/dcmimage/diargpxt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomARGBPixelTemplate (Header) - UNTESTED !!!
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:29 $
+- *  CVS/RCS Revision: $Revision: 1.21 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.22 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -91,7 +91,7 @@ class DiARGBPixelTemplate
+                  const unsigned long planeSize,
+                  const int bits)
+     {                                             // not very much optimized, but no one really uses ARGB !!
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             register T2 value;
+             const T1 offset = OFstatic_cast(T1, DicomImageClass::maxval(bits - 1));
+@@ -103,9 +103,9 @@ class DiARGBPixelTemplate
+ /*
+                 register const T1 *a = pixel;                                   // points to alpha plane
+                 const T1 *rgb[3];
+-                rgb[0] = a + this->InputCount;                                        // points to red plane
+-                rgb[1] = rgb[0] + this->InputCount;                                   // points to green plane
+-                rgb[2] = rgb[1] + this->InputCount;                                   // points to blue plane
++                rgb[0] = a + this->InputCount;                                  // points to red plane
++                rgb[1] = rgb[0] + this->InputCount;                             // points to green plane
++                rgb[2] = rgb[1] + this->InputCount;                             // points to blue plane
+                 for (i = 0; i < count; ++i)
+                 {
+                     value = OFstatic_cast(T2, *(a++));                          // get alpha value
+@@ -141,10 +141,10 @@ class DiARGBPixelTemplate
+                     /* convert a single frame */
+                     for (l = planeSize; (l != 0) && (i < count); --l, ++i)
+                     {
+-                        value = OFstatic_cast(T2, *(a++));                          // get alpha value
++                        value = OFstatic_cast(T2, *(a++));                      // get alpha value
+                         if (value > 0)
+                         {
+-                            for (int j = 0; j < 3; ++j)                             // set palette color
++                            for (int j = 0; j < 3; ++j)                         // set palette color
+                             {
+                                 if (value <= palette[j]->getFirstEntry(value))
+                                     this->Data[j][i] = OFstatic_cast(T3, palette[j]->getFirstValue());
+@@ -152,12 +152,12 @@ class DiARGBPixelTemplate
+                                     this->Data[j][i] = OFstatic_cast(T3, palette[j]->getLastValue());
+                                 else
+                                     this->Data[j][i] = OFstatic_cast(T3, palette[j]->getValue(value));
+-                                ++rgb[j];                                           // skip RGB values
++                                ++rgb[j];                                       // skip RGB values
+                             }
+                         }
+                         else
+                         {
+-                            for (int j = 0; j < 3; ++j)                             // copy RGB values
++                            for (int j = 0; j < 3; ++j)                         // copy RGB values
+                                 this->Data[j][i] = OFstatic_cast(T3, removeSign(*(rgb[j]++), offset));
+                         }
+                     }
+@@ -204,6 +204,9 @@ class DiARGBPixelTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: diargpxt.h,v $
++ * Revision 1.22  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.21  2010-10-14 13:16:29  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/dicmypxt.h b/dcmimage/include/dcmtk/dcmimage/dicmypxt.h
+index 5357780..bf1161e 100644
+--- a/dcmimage/include/dcmtk/dcmimage/dicmypxt.h
++++ b/dcmimage/include/dcmtk/dcmimage/dicmypxt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomCMYKPixelTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:29 $
+- *  CVS/RCS Revision: $Revision: 1.20 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.21 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -87,7 +87,7 @@ class DiCMYKPixelTemplate
+                  const unsigned long planeSize,
+                  const int bits)
+     {
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             // use the number of input pixels derived from the length of the 'PixelData'
+             // attribute), but not more than the size of the intermediate buffer
+@@ -157,6 +157,9 @@ class DiCMYKPixelTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dicmypxt.h,v $
++ * Revision 1.21  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.20  2010-10-14 13:16:29  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/dicocpt.h b/dcmimage/include/dcmtk/dcmimage/dicocpt.h
+index 0c06de7..3f03b6b 100644
+--- a/dcmimage/include/dcmtk/dcmimage/dicocpt.h
++++ b/dcmimage/include/dcmtk/dcmimage/dicocpt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1998-2010, OFFIS e.V.
++ *  Copyright (C) 1998-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomColorCopyTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:29 $
+- *  CVS/RCS Revision: $Revision: 1.12 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.13 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -86,7 +86,7 @@ class DiColorCopyTemplate
+     inline void copy(const T *pixel[3],
+                      const unsigned long offset)
+     {
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             for (int j = 0; j < 3; j++)
+                 OFBitmanipTemplate<T>::copyMem(pixel[j] + offset, this->Data[j], this->getCount());
+@@ -102,6 +102,9 @@ class DiColorCopyTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dicocpt.h,v $
++ * Revision 1.13  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.12  2010-10-14 13:16:29  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/dicoflt.h b/dcmimage/include/dcmtk/dcmimage/dicoflt.h
+index a5bed81..bc809ab 100644
+--- a/dcmimage/include/dcmtk/dcmimage/dicoflt.h
++++ b/dcmimage/include/dcmtk/dcmimage/dicoflt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1998-2010, OFFIS e.V.
++ *  Copyright (C) 1998-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomColorFlipTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:29 $
+- *  CVS/RCS Revision: $Revision: 1.15 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.16 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -98,14 +98,14 @@ class DiColorFlipTemplate
+                      const int horz,
+                      const int vert)
+     {
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             if (horz && vert)
+-                flipHorzVert(pixel, this->Data);
++                this->flipHorzVert(pixel, this->Data);
+             else if (horz)
+-                flipHorz(pixel, this->Data);
++                this->flipHorz(pixel, this->Data);
+             else if (vert)
+-                flipVert(pixel, this->Data);
++                this->flipVert(pixel, this->Data);
+         }
+     }
+ };
+@@ -118,6 +118,9 @@ class DiColorFlipTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dicoflt.h,v $
++ * Revision 1.16  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.15  2010-10-14 13:16:29  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/dicorot.h b/dcmimage/include/dcmtk/dcmimage/dicorot.h
+index 2bcd71e..c8afd70 100644
+--- a/dcmimage/include/dcmtk/dcmimage/dicorot.h
++++ b/dcmimage/include/dcmtk/dcmimage/dicorot.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1998-2010, OFFIS e.V.
++ *  Copyright (C) 1998-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomColorRotateTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:29 $
+- *  CVS/RCS Revision: $Revision: 1.15 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.16 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -98,14 +98,14 @@ class DiColorRotateTemplate
+     inline void rotate(const T *pixel[3],
+                        const int degree)
+     {
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             if (degree == 90)
+-                rotateRight(pixel, this->Data);
++                this->rotateRight(pixel, this->Data);
+             else if (degree == 180)
+-                rotateTopDown(pixel, this->Data);
++                this->rotateTopDown(pixel, this->Data);
+             else  if (degree == 270)
+-                rotateLeft(pixel, this->Data);
++                this->rotateLeft(pixel, this->Data);
+         }
+     }
+ };
+@@ -118,6 +118,9 @@ class DiColorRotateTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dicorot.h,v $
++ * Revision 1.16  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.15  2010-10-14 13:16:29  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/dicosct.h b/dcmimage/include/dcmtk/dcmimage/dicosct.h
+index 006a829..3bccc45 100644
+--- a/dcmimage/include/dcmtk/dcmimage/dicosct.h
++++ b/dcmimage/include/dcmtk/dcmimage/dicosct.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomColorScaleTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:29 $
+- *  CVS/RCS Revision: $Revision: 1.21 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.22 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -107,8 +107,8 @@ class DiColorScaleTemplate
+     inline void scale(const T *pixel[3],
+                       const int interpolate)
+     {
+-        if (Init(pixel))
+-            scaleData(pixel, this->Data, interpolate);
++        if (this->Init(pixel))
++            this->scaleData(pixel, this->Data, interpolate);
+     }
+ };
+ 
+@@ -120,6 +120,9 @@ class DiColorScaleTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dicosct.h,v $
++ * Revision 1.22  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.21  2010-10-14 13:16:29  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/dihsvpxt.h b/dcmimage/include/dcmtk/dcmimage/dihsvpxt.h
+index 10d8b70..52580ec 100644
+--- a/dcmimage/include/dcmtk/dcmimage/dihsvpxt.h
++++ b/dcmimage/include/dcmtk/dcmimage/dihsvpxt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomHSVPixelTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:29 $
+- *  CVS/RCS Revision: $Revision: 1.25 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.26 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -87,7 +87,7 @@ class DiHSVPixelTemplate
+                  const unsigned long planeSize,
+                  const int bits)
+     {
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             register T2 *r = this->Data[0];
+             register T2 *g = this->Data[1];
+@@ -221,6 +221,9 @@ class DiHSVPixelTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dihsvpxt.h,v $
++ * Revision 1.26  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.25  2010-10-14 13:16:29  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/dipalpxt.h b/dcmimage/include/dcmtk/dcmimage/dipalpxt.h
+index 2e5eef7..1ae2352 100644
+--- a/dcmimage/include/dcmtk/dcmimage/dipalpxt.h
++++ b/dcmimage/include/dcmtk/dcmimage/dipalpxt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomPalettePixelTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:29 $
+- *  CVS/RCS Revision: $Revision: 1.24 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.25 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -92,7 +92,7 @@ class DiPalettePixelTemplate
+     void convert(const T1 *pixel,
+                  DiLookupTable *palette[3])
+     {                                                                // can be optimized if necessary !
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             register const T1 *p = pixel;
+             register T2 value = 0;
+@@ -126,6 +126,9 @@ class DiPalettePixelTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dipalpxt.h,v $
++ * Revision 1.25  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.24  2010-10-14 13:16:29  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/dirgbpxt.h b/dcmimage/include/dcmtk/dcmimage/dirgbpxt.h
+index 85f973d..d9cc7ed 100644
+--- a/dcmimage/include/dcmtk/dcmimage/dirgbpxt.h
++++ b/dcmimage/include/dcmtk/dcmimage/dirgbpxt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomRGBPixelTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:30 $
+- *  CVS/RCS Revision: $Revision: 1.18 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.19 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -87,7 +87,7 @@ class DiRGBPixelTemplate
+                  const unsigned long planeSize,
+                  const int bits)
+     {
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             // use the number of input pixels derived from the length of the 'PixelData'
+             // attribute), but not more than the size of the intermediate buffer
+@@ -129,9 +129,9 @@ class DiRGBPixelTemplate
+             {
+                 register int j;
+                 register unsigned long i;
+-                for (i = 0; i < count; ++i)                         /* for all pixel ... */
++                for (i = 0; i < count; ++i)                             /* for all pixel ... */
+                     for (j = 0; j < 3; ++j)
+-                        this->Data[j][i] = removeSign(*(p++), offset);    /* ... copy planes */
++                        this->Data[j][i] = removeSign(*(p++), offset);  /* ... copy planes */
+             }
+         }
+     }
+@@ -145,6 +145,9 @@ class DiRGBPixelTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dirgbpxt.h,v $
++ * Revision 1.19  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.18  2010-10-14 13:16:30  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/diybrpxt.h b/dcmimage/include/dcmtk/dcmimage/diybrpxt.h
+index 6b523fb..ecd2038 100644
+--- a/dcmimage/include/dcmtk/dcmimage/diybrpxt.h
++++ b/dcmimage/include/dcmtk/dcmimage/diybrpxt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1998-2010, OFFIS e.V.
++ *  Copyright (C) 1998-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomYBRPixelTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:30 $
+- *  CVS/RCS Revision: $Revision: 1.19 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.20 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -91,7 +91,7 @@ class DiYBRPixelTemplate
+                  const int bits,
+                  const OFBool rgb)
+     {
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             const T1 offset = OFstatic_cast(T1, DicomImageClass::maxval(bits - 1));
+             // use the number of input pixels derived from the length of the 'PixelData'
+@@ -266,9 +266,9 @@ class DiYBRPixelTemplate
+                 {
+                     register int j;
+                     register unsigned long i;
+-                    for (i = 0; i < count; ++i)                         /* for all pixel ... */
++                    for (i = 0; i < count; ++i)                             /* for all pixel ... */
+                         for (j = 0; j < 3; ++j)
+-                            this->Data[j][i] = removeSign(*(p++), offset);    /* ... copy planes */
++                            this->Data[j][i] = removeSign(*(p++), offset);  /* ... copy planes */
+                 }
+             }
+         }
+@@ -295,6 +295,9 @@ class DiYBRPixelTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: diybrpxt.h,v $
++ * Revision 1.20  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.19  2010-10-14 13:16:30  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/diyf2pxt.h b/dcmimage/include/dcmtk/dcmimage/diyf2pxt.h
+index ed27796..93d28cc 100644
+--- a/dcmimage/include/dcmtk/dcmimage/diyf2pxt.h
++++ b/dcmimage/include/dcmtk/dcmimage/diyf2pxt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1998-2010, OFFIS e.V.
++ *  Copyright (C) 1998-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomYBR422PixelTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:30 $
+- *  CVS/RCS Revision: $Revision: 1.25 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.26 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -95,7 +95,7 @@ class DiYBR422PixelTemplate
+                  const int bits,
+                  const OFBool rgb)
+     {
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             const T1 offset = OFstatic_cast(T1, DicomImageClass::maxval(bits - 1));
+             register unsigned long i;
+@@ -167,6 +167,9 @@ class DiYBR422PixelTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: diyf2pxt.h,v $
++ * Revision 1.26  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.25  2010-10-14 13:16:30  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimage/include/dcmtk/dcmimage/diyp2pxt.h b/dcmimage/include/dcmtk/dcmimage/diyp2pxt.h
+index 518fed7..0dd9d5b 100644
+--- a/dcmimage/include/dcmtk/dcmimage/diyp2pxt.h
++++ b/dcmimage/include/dcmtk/dcmimage/diyp2pxt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1998-2010, OFFIS e.V.
++ *  Copyright (C) 1998-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomYBRPart422PixelTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:30 $
+- *  CVS/RCS Revision: $Revision: 1.23 $
++ *  Update Date:      $Date: 2011-11-17 16:13:14 $
++ *  CVS/RCS Revision: $Revision: 1.24 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -91,7 +91,7 @@ class DiYBRPart422PixelTemplate
+     void convert(const T1 *pixel,
+                  const int bits)
+     {
+-        if (Init(pixel))
++        if (this->Init(pixel))
+         {
+             register T2 *r = this->Data[0];
+             register T2 *g = this->Data[1];
+@@ -147,6 +147,9 @@ class DiYBRPart422PixelTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: diyp2pxt.h,v $
++ * Revision 1.24  2011-11-17 16:13:14  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.23  2010-10-14 13:16:30  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimgle/include/dcmtk/dcmimgle/diflipt.h b/dcmimgle/include/dcmtk/dcmimgle/diflipt.h
+index 4933fe1..05c198c 100644
+--- a/dcmimgle/include/dcmtk/dcmimgle/diflipt.h
++++ b/dcmimgle/include/dcmtk/dcmimgle/diflipt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomFlipTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:26 $
+- *  CVS/RCS Revision: $Revision: 1.23 $
++ *  Update Date:      $Date: 2011-11-17 16:13:16 $
++ *  CVS/RCS Revision: $Revision: 1.24 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -129,7 +129,7 @@ class DiFlipTemplate
+             else if (vert)
+                 flipVert(src, dest);
+             else
+-                copyPixel(src, dest);
++                this->copyPixel(src, dest);
+         }
+     }
+ 
+@@ -345,6 +345,9 @@ class DiFlipTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: diflipt.h,v $
++ * Revision 1.24  2011-11-17 16:13:16  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.23  2010-10-14 13:16:26  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimgle/include/dcmtk/dcmimgle/dimoflt.h b/dcmimgle/include/dcmtk/dcmimgle/dimoflt.h
+index a88ab9d..52d71a3 100644
+--- a/dcmimgle/include/dcmtk/dcmimgle/dimoflt.h
++++ b/dcmimgle/include/dcmtk/dcmimgle/dimoflt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomMonochromeFlipTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:26 $
+- *  CVS/RCS Revision: $Revision: 1.15 $
++ *  Update Date:      $Date: 2011-11-17 16:13:16 $
++ *  CVS/RCS Revision: $Revision: 1.16 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -106,11 +106,11 @@ class DiMonoFlipTemplate
+             if (this->Data != NULL)
+             {
+                 if (horz && vert)
+-                    flipHorzVert(&pixel, &this->Data);
++                    this->flipHorzVert(&pixel, &this->Data);
+                 else if (horz)
+-                    flipHorz(&pixel, &this->Data);
++                    this->flipHorz(&pixel, &this->Data);
+                 else if (vert)
+-                    flipVert(&pixel, &this->Data);
++                    this->flipVert(&pixel, &this->Data);
+             }
+         }
+     }
+@@ -124,6 +124,9 @@ class DiMonoFlipTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dimoflt.h,v $
++ * Revision 1.16  2011-11-17 16:13:16  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.15  2010-10-14 13:16:26  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h b/dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h
+index e815e90..c190dd6 100644
+--- a/dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h
++++ b/dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomMonochromeInputPixelTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:26 $
+- *  CVS/RCS Revision: $Revision: 1.40 $
++ *  Update Date:      $Date: 2011-11-17 16:13:16 $
++ *  CVS/RCS Revision: $Revision: 1.41 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -76,10 +76,10 @@ class DiMonoInputPixelTemplate
+             else if ((this->Modality != NULL) && this->Modality->hasRescaling())
+             {
+                 rescale(pixel, this->Modality->getRescaleSlope(), this->Modality->getRescaleIntercept());
+-                determineMinMax(OFstatic_cast(T3, this->Modality->getMinValue()), OFstatic_cast(T3, this->Modality->getMaxValue()));
++                this->determineMinMax(OFstatic_cast(T3, this->Modality->getMinValue()), OFstatic_cast(T3, this->Modality->getMaxValue()));
+             } else {
+                 rescale(pixel);                     // "copy" or reference pixel data
+-                determineMinMax(OFstatic_cast(T3, this->Modality->getMinValue()), OFstatic_cast(T3, this->Modality->getMaxValue()));
++                this->determineMinMax(OFstatic_cast(T3, this->Modality->getMinValue()), OFstatic_cast(T3, this->Modality->getMaxValue()));
+             }
+         }
+     }
+@@ -280,6 +280,9 @@ class DiMonoInputPixelTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dimoipxt.h,v $
++ * Revision 1.41  2011-11-17 16:13:16  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.40  2010-10-14 13:16:26  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimgle/include/dcmtk/dcmimgle/dimorot.h b/dcmimgle/include/dcmtk/dcmimgle/dimorot.h
+index 4ef277d..e729424 100644
+--- a/dcmimgle/include/dcmtk/dcmimgle/dimorot.h
++++ b/dcmimgle/include/dcmtk/dcmimgle/dimorot.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomMonochromeRotateTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:26 $
+- *  CVS/RCS Revision: $Revision: 1.16 $
++ *  Update Date:      $Date: 2011-11-17 16:13:16 $
++ *  CVS/RCS Revision: $Revision: 1.17 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -105,11 +105,11 @@ class DiMonoRotateTemplate
+             if (this->Data != NULL)
+             {
+                 if (degree == 90)
+-                    rotateRight(&pixel, &(this->Data));
++                    this->rotateRight(&pixel, &(this->Data));
+                 else if (degree == 180)
+-                    rotateTopDown(&pixel, &(this->Data));
++                    this->rotateTopDown(&pixel, &(this->Data));
+                 else if (degree == 270)
+-                    rotateLeft(&pixel, &(this->Data));
++                    this->rotateLeft(&pixel, &(this->Data));
+             }
+         }
+     }
+@@ -123,6 +123,9 @@ class DiMonoRotateTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dimorot.h,v $
++ * Revision 1.17  2011-11-17 16:13:16  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.16  2010-10-14 13:16:26  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimgle/include/dcmtk/dcmimgle/dimosct.h b/dcmimgle/include/dcmtk/dcmimgle/dimosct.h
+index 60c9abb..8f89855 100644
+--- a/dcmimgle/include/dcmtk/dcmimgle/dimosct.h
++++ b/dcmimgle/include/dcmtk/dcmimgle/dimosct.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomMonochromeScaleTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:26 $
+- *  CVS/RCS Revision: $Revision: 1.20 $
++ *  Update Date:      $Date: 2011-11-17 16:13:16 $
++ *  CVS/RCS Revision: $Revision: 1.21 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -124,7 +124,7 @@ class DiMonoScaleTemplate
+             {
+                 const T value = OFstatic_cast(T, OFstatic_cast(double, DicomImageClass::maxval(bits)) *
+                     OFstatic_cast(double, pvalue) / OFstatic_cast(double, DicomImageClass::maxval(WIDTH_OF_PVALUES)));
+-                scaleData(&pixel, &this->Data, interpolate, value);
++                this->scaleData(&pixel, &this->Data, interpolate, value);
+              }
+         }
+     }
+@@ -138,6 +138,9 @@ class DiMonoScaleTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dimosct.h,v $
++ * Revision 1.21  2011-11-17 16:13:16  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.20  2010-10-14 13:16:26  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimgle/include/dcmtk/dcmimgle/dirotat.h b/dcmimgle/include/dcmtk/dcmimgle/dirotat.h
+index edb452e..2e7e3a0 100644
+--- a/dcmimgle/include/dcmtk/dcmimgle/dirotat.h
++++ b/dcmimgle/include/dcmtk/dcmimgle/dirotat.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomRotateTemplate (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:27 $
+- *  CVS/RCS Revision: $Revision: 1.21 $
++ *  Update Date:      $Date: 2011-11-17 16:13:16 $
++ *  CVS/RCS Revision: $Revision: 1.22 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -132,7 +132,7 @@ class DiRotateTemplate
+         else if (degree == 270)
+             rotateLeft(src, dest);
+         else
+-            copyPixel(src, dest);
++            this->copyPixel(src, dest);
+     }
+ 
+ 
+@@ -358,6 +358,9 @@ class DiRotateTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: dirotat.h,v $
++ * Revision 1.22  2011-11-17 16:13:16  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.21  2010-10-14 13:16:27  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/dcmimgle/include/dcmtk/dcmimgle/discalet.h b/dcmimgle/include/dcmtk/dcmimgle/discalet.h
+index 758dde2..0bcbc70 100644
+--- a/dcmimgle/include/dcmtk/dcmimgle/discalet.h
++++ b/dcmimgle/include/dcmtk/dcmimgle/discalet.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1996-2010, OFFIS e.V.
++ *  Copyright (C) 1996-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -18,8 +18,8 @@
+  *  Purpose: DicomScaleTemplates (Header)
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:16:27 $
+- *  CVS/RCS Revision: $Revision: 1.35 $
++ *  Update Date:      $Date: 2011-11-17 16:13:16 $
++ *  CVS/RCS Revision: $Revision: 1.36 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -206,12 +206,12 @@ class DiScaleTemplate
+                 (Left >= OFstatic_cast(signed long, Columns)) || (Top >= OFstatic_cast(signed long, Rows)))
+             {                                                                         // no image to be displayed
+                 DCMIMGLE_DEBUG("clipping area is fully outside the image boundaries");
+-                fillPixel(dest, value);                                               // ... fill bitmap
++                this->fillPixel(dest, value);                                         // ... fill bitmap
+             }
+             else if ((this->Src_X == this->Dest_X) && (this->Src_Y == this->Dest_Y))  // no scaling
+             {
+                 if ((Left == 0) && (Top == 0) && (Columns == this->Src_X) && (Rows == this->Src_Y))
+-                    copyPixel(src, dest);                                             // copying
++                    this->copyPixel(src, dest);                                       // copying
+                 else if ((Left >= 0) && (OFstatic_cast(Uint16, Left + this->Src_X) <= Columns) &&
+                          (Top >= 0) && (OFstatic_cast(Uint16, Top + this->Src_Y) <= Rows))
+                     clipPixel(src, dest);                                             // clipping
+@@ -567,7 +567,7 @@ class DiScaleTemplate
+         if ((xtemp == NULL) || (xvalue == NULL))
+         {
+             DCMIMGLE_ERROR("can't allocate temporary buffers for interpolation scaling");
+-            clearPixel(dest);
++            this->clearPixel(dest);
+         } else {
+             for (int j = 0; j < this->Planes; ++j)
+             {
+@@ -905,7 +905,7 @@ class DiScaleTemplate
+         if (pTemp == NULL)
+         {
+             DCMIMGLE_ERROR("can't allocate temporary buffer for interpolation scaling");
+-            clearPixel(dest);
++            this->clearPixel(dest);
+         } else {
+ 
+             /*
+@@ -1029,7 +1029,7 @@ class DiScaleTemplate
+         if (pTemp == NULL)
+         {
+             DCMIMGLE_ERROR("can't allocate temporary buffer for interpolation scaling");
+-            clearPixel(dest);
++            this->clearPixel(dest);
+         } else {
+ 
+             /*
+@@ -1190,6 +1190,9 @@ class DiScaleTemplate
+  *
+  * CVS/RCS Log:
+  * $Log: discalet.h,v $
++ * Revision 1.36  2011-11-17 16:13:16  joergr
++ * Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++ *
+  * Revision 1.35  2010-10-14 13:16:27  joergr
+  * Updated copyright header. Added reference to COPYRIGHT file.
+  *
+diff --git a/ofstd/include/dcmtk/ofstd/ofoset.h b/ofstd/include/dcmtk/ofstd/ofoset.h
+index 1a7f208..a534ebf 100644
+--- a/ofstd/include/dcmtk/ofstd/ofoset.h
++++ b/ofstd/include/dcmtk/ofstd/ofoset.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 2002-2010, OFFIS e.V.
++ *  Copyright (C) 2002-2011, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -19,8 +19,8 @@
+  *           of an arbitrary type.
+  *
+  *  Last Update:      $Author: joergr $
+- *  Update Date:      $Date: 2010-10-14 13:15:50 $
+- *  CVS/RCS Revision: $Revision: 1.11 $
++ *  Update Date:      $Date: 2011-11-17 16:13:18 $
++ *  CVS/RCS Revision: $Revision: 1.12 $
+  *  Status:           $State: Exp $
+  *
+  *  CVS/RCS Log at end of file
+@@ -146,7 +146,7 @@ template <class T> class OFOrderedSet : public OFSet<T>
+       {
+         // if size equals num, we need more space
+         if( this->size == this->num )
+-          Resize( this->size * 2 );
++          this->Resize( this->size * 2 );
+ 
+         // copy item
+         T *newItem = new T( item );
+@@ -189,7 +189,7 @@ template <class T> class OFOrderedSet : public OFSet<T>
+         {
+           // if size equals num, we need more space
+           if( this->size == this->num )
+-            Resize( this->size * 2 );
++            this->Resize( this->size * 2 );
+ 
+           // copy item
+           T *newItem = new T( item );
+@@ -508,6 +508,9 @@ template <class T> class OFOrderedSet : public OFSet<T>
+ /*
+ ** CVS/RCS Log:
+ ** $Log: ofoset.h,v $
++** Revision 1.12  2011-11-17 16:13:18  joergr
++** Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang compiler) quiet.
++**
+ ** Revision 1.11  2010-10-14 13:15:50  joergr
+ ** Updated copyright header. Added reference to COPYRIGHT file.
+ **
+-- 
+1.7.9.2
+

@@ -1,7 +1,10 @@
-/* This file is part of mingw-cross-env.       */
-/* See doc/index.html for further information. */
-
-/* modified from /examples/arc.c */
+/*
+ * This file is part of MXE.
+ * See index.html for further information.
+ *
+ * This is a slightly modified version of:
+ * examples/arc.c
+ */
 
 #include "gd.h"
 #include <stdio.h>

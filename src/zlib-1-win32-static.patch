@@ -1,31 +1,47 @@
-This file is part of mingw-cross-env.
-See doc/index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
-diff -r 5a13d390f989 Makefile.in
---- a/Makefile.in	Tue Apr 20 14:59:46 2010 +0200
-+++ b/Makefile.in	Tue Apr 20 17:46:22 2010 +0200
-@@ -167,8 +167,8 @@
+Contains ad hoc patches for cross building.
+
+From dfe5701faf3683be7ea53885c58d4bd3499c4d1c Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 29 Jan 2012 21:51:03 +0100
+Subject: [PATCH] workarounds for MXE
+
+
+diff --git a/Makefile.in b/Makefile.in
+index ea430bf..f2573e7 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -188,11 +188,11 @@ install-libs: $(LIBS)
  	-@if [ ! -d $(DESTDIR)$(sharedlibdir) ]; then mkdir -p $(DESTDIR)$(sharedlibdir); fi
  	-@if [ ! -d $(DESTDIR)$(man3dir)      ]; then mkdir -p $(DESTDIR)$(man3dir); fi
  	-@if [ ! -d $(DESTDIR)$(pkgconfigdir) ]; then mkdir -p $(DESTDIR)$(pkgconfigdir); fi
 -	cp $(STATICLIB) $(DESTDIR)$(libdir)
--	cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)
 +	[ -z '$(STATICLIB)'  ] || cp $(STATICLIB)  $(DESTDIR)$(libdir)
-+	[ -z '$(SHAREDLIBV)' ] || cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)
- 	cd $(DESTDIR)$(libdir); chmod u=rw,go=r $(STATICLIB)
- 	-@(cd $(DESTDIR)$(libdir); $(RANLIB) libz.a || true) >/dev/null 2>&1
- 	-@cd $(DESTDIR)$(sharedlibdir); if test "$(SHAREDLIBV)" -a -f $(SHAREDLIBV); then \
-diff -r 5a13d390f989 configure
---- a/configure	Tue Apr 20 14:59:46 2010 +0200
-+++ b/configure	Tue Apr 20 17:46:22 2010 +0200
-@@ -122,10 +122,7 @@
+ 	chmod 644 $(DESTDIR)$(libdir)/$(STATICLIB)
+ 	-@($(RANLIB) $(DESTDIR)$(libdir)/libz.a || true) >/dev/null 2>&1
+ 	-@if test -n "$(SHAREDLIBV)"; then \
+-	  cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); \
++	  [ -z '$(SHAREDLIBV)' ] || cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); \
+ 	  echo "cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)"; \
+ 	  chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV); \
+ 	  echo "chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV)"; \
+diff --git a/configure b/configure
+index 780317c..6e6a033 100755
+--- a/configure
++++ b/configure
+@@ -180,10 +180,7 @@ if test "$gcc" -eq 1 && ($cc -c $cflags $test.c) >> configure.log 2>&1; then
    CYGWIN* | Cygwin* | cygwin* | OS/2*)
          EXE='.exe' ;;
-   MINGW*|mingw*)
+   MINGW* | mingw*)
 -# temporary bypass
          rm -f $test.[co] $test $test$shared_ext
--        echo "Please use win32/Makefile.gcc instead."
+-        echo "Please use win32/Makefile.gcc instead." | tee -a configure.log
 -        exit 1
          LDSHARED=${LDSHARED-"$cc -shared"}
          LDSHAREDLIBC=""
          EXE='.exe' ;;
+-- 
+1.7.8.3
+

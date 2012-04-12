@@ -1,15 +1,12 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# FreeTDS
 PKG             := freetds
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.91.dev.20110523RC2
-$(PKG)_CHECKSUM := c5848c9bf940782730dddf24a3bff141c9c9c369
+$(PKG)_CHECKSUM := 3ab06c8e208e82197dc25d09ae353d9f3be7db52
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.freetds.org/
-$(PKG)_URL      := https://bitbucket.org/mabrand/mingw-cross-env/downloads/$($(PKG)_FILE)
+$(PKG)_URL      := http://ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv gnutls
 
 define $(PKG)_UPDATE
@@ -25,12 +22,10 @@ define $(PKG)_UPDATE_orig
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
-
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-rpath \
         --disable-dependency-tracking \
         --disable-shared \

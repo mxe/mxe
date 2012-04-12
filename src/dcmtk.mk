@@ -1,15 +1,13 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# DCMTK
 PKG             := dcmtk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.6.0
 $(PKG)_CHECKSUM := 469e017cffc56f36e834aa19c8612111f964f757
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://dicom.offis.de/dcmtk.php.en
 $(PKG)_URL      := ftp://dicom.offis.de/pub/dicom/offis/software/$(PKG)/$(PKG)$(subst .,,$($(PKG)_VERSION))/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/d/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_DEPS     := gcc openssl tiff libpng libxml2 zlib
 
 define $(PKG)_UPDATE

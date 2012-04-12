@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# GtkGLExtmm
 PKG             := gtkglextmm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := 5cd489e07517a88262cd6050f723227664e82996
 $(PKG)_SUBDIR   := gtkglextmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglextmm-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://gtkglext.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gtkglext gtkmm2
 
@@ -23,6 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install \

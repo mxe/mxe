@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# SDL_ttf
 PKG             := sdl_ttf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.10
-$(PKG)_CHECKSUM := 98f6518ec71d94b8ad303a197445e0991850b887
+$(PKG)_CHECKSUM := 0ccf7c70e26b7801d83f4847766e09f09db15cc6
 $(PKG)_SUBDIR   := SDL_ttf-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_ttf-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_ttf/
 $(PKG)_URL      := http://www.libsdl.org/projects/SDL_ttf/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl freetype
 

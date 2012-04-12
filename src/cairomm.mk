@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# cairomm
 PKG             := cairomm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.10.0
 $(PKG)_CHECKSUM := f08bf8a331067f0d1e876523f07238fba6b26b99
 $(PKG)_SUBDIR   := cairomm-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairomm-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://cairographics.org/cairomm/
 $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc cairo libsigc++
 

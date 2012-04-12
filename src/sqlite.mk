@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# SQLite
 PKG             := sqlite
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3070603
-$(PKG)_CHECKSUM := a19e4496e2854e737d55465b77c87e775a362775
+$(PKG)_CHECKSUM := a768f76b10df84d6a2c66178544d42725a8fdaf0
 $(PKG)_SUBDIR   := $(PKG)-autoconf-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-autoconf-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://www.sqlite.org/
 $(PKG)_URL      := http://www.sqlite.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

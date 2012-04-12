@@ -1,5 +1,5 @@
-This file is part of mingw-cross-env.
-See doc/index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
 diff -ru id3lib-3.8.3-orig/configure.in id3lib-3.8.3/configure.in
 --- id3lib-3.8.3-orig/configure.in	2003-03-02 01:23:00.000000000 +0100

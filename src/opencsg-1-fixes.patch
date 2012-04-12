@@ -1,0 +1,46 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 71c4f0a34399fd74d4e39f9985a4c2c56f8b9a43 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 22 Oct 2011 01:29:03 +0200
+Subject: [PATCH] configure for MXE
+
+
+diff --git a/example/example.pro b/example/example.pro
+index 8891a28..02c1fe0 100644
+--- a/example/example.pro
++++ b/example/example.pro
+@@ -1,10 +1,11 @@
+ TEMPLATE	= app
+ TARGET		= opencsgexample
+ 
+-CONFIG	 	+= opengl warn_on release
++CONFIG	 	+= opengl warn_on release link_pkgconfig
+ INCLUDEPATH += ../glew/include ../include
+ 
+-LIBS        += -L../lib -lopencsg -lglut -L../glew/lib -lGLEW
++LIBS        += -L../lib -lopencsg
++PKGCONFIG	+= glew glut
+ 
+ HEADERS		= displaylistPrimitive.h
+ SOURCES		= displaylistPrimitive.cpp main.cpp
+diff --git a/src/src.pro b/src/src.pro
+index db5e1fb..4c664ab 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -3,7 +3,8 @@ TARGET		= opencsg
+ VERSION     = 1.3.1
+ DESTDIR     = ../lib
+ 
+-CONFIG		+= opengl warn_on release
++CONFIG		+= opengl warn_on release staticlib link_pkgconfig
++PKGCONFIG	+= glew glut
+ INCLUDEPATH += ../include ../glew/include ../
+ 
+ HEADERS		= ../include/opencsg.h \
+-- 
+1.7.7
+

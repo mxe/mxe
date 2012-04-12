@@ -1,8 +1,13 @@
-/* Simple test program for SDL_sound that tries to decode the file specified
- * as the only command-line argument.
+/*
+ * This file is part of MXE.
+ * See index.html for further information.
+ *
+ * This is a simple test program for SDL_sound that tries to
+ * decode the file specified as the only command-line argument.
  *
  * This file is in the Public Domain.
  */
+
 #include <stdio.h>
 #include <SDL_sound.h>
 

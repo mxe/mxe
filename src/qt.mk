@@ -1,16 +1,13 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# Qt
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.7.3
-$(PKG)_CHECKSUM := 765eb70d9779f93fefddddda5e6ddb33f4c0b71e
+$(PKG)_CHECKSUM := a074d0f605f009e23c63e0a4cb9b71c978146ffc
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://qt.nokia.com/
 $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite libiconv dbus
+$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
@@ -20,20 +17,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # We prefer static mingw-cross-env system libs for static build:
-    # -system-zlib -system-libpng -system-libjpeg -system-libtiff -system-libmng -system-sqlite
-    # There is no -system-gif option.
-    #
-    # For shared Qt with qt-zlib, add -lQtCore4 to end of OPENSSL_LIBS to satisfy zlib dependency.
+    cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
+
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
-        SYBASE_LIBS="-lsybdb -liconv -lws2_32" \
+        SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -liconv -lws2_32" \
         ./configure \
         -opensource \
         -confirm-license \
         -fast \
-        -xplatform unsupported/win32-g++-cross \
+        -xplatform unsupported/win32-g++-4.6-cross \
         -force-pkg-config \
         -release \
         -exceptions \
@@ -41,6 +35,7 @@ define $(PKG)_BUILD
         -prefix '$(PREFIX)/$(TARGET)' \
         -prefix-install \
         -script \
+        -no-iconv \
         -opengl desktop \
         -webkit \
         -no-glib \
@@ -81,8 +76,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/tools/qdbus' -j '$(JOBS)' install
 
     mkdir            '$(1)/test-qt'
-    cp '$(2)'*       '$(1)/test-qt/'
-    cd               '$(1)/test-qt' && '$(TARGET)-qmake'
+    cd               '$(1)/test-qt' && '$(TARGET)-qmake' '$(PWD)/$(2).pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
