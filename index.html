@@ -475,6 +475,30 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     and to <a href="#creating-packages">propose new packages</a>.
     </p>
 
+    <h3>For Committers</h3>
+
+    <p>
+    The following <code>.git/config</code> settings ensure
+    that the stable branch will always be pushed to the
+    <code>gh-pages</code> branch in addition to the
+    <code>stable</code> branch,
+    thus ensuring the website will always stay in sync:
+    </p>
+    <pre>[remote "origin"]
+        url = git@github.com:mxe/mxe.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+        push = refs/heads/master:refs/heads/master
+        push = refs/heads/stable:refs/heads/stable
+        push = refs/heads/stable:refs/heads/gh-pages
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+[branch "stable"]
+        remote = origin
+        merge = refs/heads/stable</pre>
+
+    <h3>Branch Concept</h3>
+
     <p>
     For the sake of simplicity, there are just two
     branches, "master" and "stable". Although it might
