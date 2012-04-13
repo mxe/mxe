@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         INSTALL='$(INSTALL)' \
         install
     $(SED) -i 's,^prefix=.*,prefix=$(PREFIX)/$(TARGET),' '$(1)/etc/lua.pc'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     $(INSTALL) -m644 '$(1)/etc/lua.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/lua.pc'
 
     '$(TARGET)-gcc' \
