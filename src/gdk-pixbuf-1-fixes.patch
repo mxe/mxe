@@ -27,7 +27,7 @@ index 6a5dbce..e5e1c2d 100644
  
  BOOL WINAPI
 -DllMain (HINSTANCE hinstDLL,
-+static _disabled_DllMain (HINSTANCE hinstDLL,
++gdkpixbuf_DllMain (HINSTANCE hinstDLL,
           DWORD     fdwReason,
           LPVOID    lpvReserved)
  {
