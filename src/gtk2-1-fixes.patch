@@ -18,7 +18,7 @@ index dc139be..be2a7ee 100644
  
  int __stdcall
 -DllMain (HINSTANCE hinstDLL,
-+static _disabled_DllMain (HINSTANCE hinstDLL,
++gdk_DllMain (HINSTANCE hinstDLL,
  	 DWORD     dwReason,
  	 LPVOID    reserved)
  {
@@ -31,7 +31,7 @@ index d081f70..aa2973d 100644
  
  BOOL WINAPI
 -DllMain (HINSTANCE hinstDLL,
-+static _disabled_DllMain (HINSTANCE hinstDLL,
++gtk_DllMain (HINSTANCE hinstDLL,
  	 DWORD     fdwReason,
  	 LPVOID    lpvReserved)
  {
