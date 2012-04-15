@@ -33,6 +33,4 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -pedantic \
         '$(2).cxx' -o '$(PREFIX)/$(TARGET)/bin/test-hunspell.exe' \
         `'$(TARGET)-pkg-config' hunspell --cflags --libs`
-    # Install dummy dictionary needed by the test program
-    $(INSTALL) -m644 -t '$(PREFIX)/$(TARGET)/bin' '$(TOP_DIR)/src/hunspell-test.aff' '$(TOP_DIR)/src/hunspell-test.dic'
 endef
