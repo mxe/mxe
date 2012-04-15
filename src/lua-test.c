@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     (void)argc;
     (void)argv;
 
-    L = lua_open();
+    L = luaL_newstate();
     lua_close(L);
     return 0;
 }
