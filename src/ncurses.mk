@@ -19,19 +19,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-	cd '$(1)' && ./configure \
-		--host='$(TARGET)' \
-		--prefix=$(PREFIX)/$(TARGET) \
-		--disable-home-terminfo \
-		--enable-sp-funcs \
-		--enable-term-driver \
-		--enable-interop \
-		--without-debug \
-		--without-ada \
-		--without-manpages \
-		--enable-pc-files \
-		--with-normal \
-		--without-shared
-	$(MAKE) -C '$(1)' -j '$(JOBS)' install
+    cd '$(1)' && ./configure \
+        --host='$(TARGET)' \
+        --prefix=$(PREFIX)/$(TARGET) \
+        --disable-home-terminfo \
+        --enable-sp-funcs \
+        --enable-term-driver \
+        --enable-interop \
+        --without-debug \
+        --without-ada \
+        --without-manpages \
+        --enable-pc-files \
+        --with-normal \
+        --without-shared
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
-
