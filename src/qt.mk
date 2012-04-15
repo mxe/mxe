@@ -75,6 +75,8 @@ define $(PKG)_BUILD
     cd '$(1)/tools/qdbus' && '$(1)/bin/qmake' qdbus.pro
     $(MAKE) -C '$(1)/tools/qdbus' -j '$(JOBS)' install
 
+    $(SED) -E -i -e 's/^Libs:(.+)4(.*)/Libs:\1\2/' $(PREFIX)/$(TARGET)/lib/pkgconfig/Qt*.pc $(PREFIX)/$(TARGET)/lib/pkgconfig/qtmain.pc
+
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(TARGET)-qmake' '$(PWD)/$(2).pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
