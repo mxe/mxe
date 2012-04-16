@@ -31,6 +31,7 @@ define $(PKG)_BUILD
         -DGM_PREFIX='$(PREFIX)/$(TARGET)' \
         -DGM_LIBS="`'$(TARGET)-pkg-config' --libs-only-l GraphicsMagick++`" \
         -DPANGO_FT2_LIBS="`'$(TARGET)-pkg-config' --libs-only-l pangoft2`" \
+        -DWT_CMAKE_FINDER_INSTALL_DIR='/lib/wt' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_BUILD_TYPE:STRING="Release" \
         '$(1)'
