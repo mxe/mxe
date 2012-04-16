@@ -3,9 +3,9 @@
 
 PKG             := muparser
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d6d834d3ba2bd3c316c9b3070369d32701703f78
-$(PKG)_SUBDIR   := $(PKG)_v$(subst .,,$($(PKG)_VERSION))
-$(PKG)_FILE     := $(PKG)_v$(subst .,,$($(PKG)_VERSION)).tar.gz
+$(PKG)_CHECKSUM := 830383b1bcfa706be5a6ac8b7ba43f32f16a1497
+$(PKG)_SUBDIR   := $(PKG)_v$(subst .,_,$($(PKG)_VERSION))
+$(PKG)_FILE     := $(PKG)_v$(subst .,_,$($(PKG)_VERSION)).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/Version $($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
