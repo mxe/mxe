@@ -75,6 +75,9 @@ define $(PKG)_BUILD
     cd '$(1)/tools/qdbus' && '$(1)/bin/qmake' qdbus.pro
     $(MAKE) -C '$(1)/tools/qdbus' -j '$(JOBS)' install
 
+    cd '$(1)/tools/designer/src/uitools' && '$(1)/bin/qmake' uitools.pro
+    $(MAKE) -C '$(1)/tools/designer/src/uitools' -j '$(JOBS)' install
+
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(TARGET)-qmake' '$(PWD)/$(2).pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
