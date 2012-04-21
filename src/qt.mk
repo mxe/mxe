@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's,i686-pc-mingw32,$(TARGET),g' '$(1)/mkspecs/unsupported/win32-g++-cross/qmake.conf'
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
 
     cd '$(1)' && \
@@ -85,4 +86,4 @@ define $(PKG)_BUILD
 endef
 
 $(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 = $(subst -qt-sql-psql ,-no-sql-psql ,$($(PKG)_BUILD))
