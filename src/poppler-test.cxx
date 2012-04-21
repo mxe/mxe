@@ -7,6 +7,6 @@ int main(int argc, char *argv[])
     (void)argv;
 
     std::cout << "Poppler version: " << poppler::version_string() << std::endl;
-    
+
     return 0;
 }
