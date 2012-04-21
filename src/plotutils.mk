@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --enable-libplotter \
         --enable-libxmi \
         --with-png \

@@ -24,7 +24,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
       --prefix='$(PREFIX)/$(TARGET)' \
       --host='$(TARGET)' \
-      --disable-shared \
+      $(LINK_STYLE) \
       --without-tests \
       --disable-dependency-tracking
     $(MAKE) -C '$(1)' -j '$(JOBS)' install doxygen= progref_dist_files=

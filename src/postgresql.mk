@@ -25,7 +25,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-rpath \
         --without-tcl \
         --without-perl \

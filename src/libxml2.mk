@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,`uname`,MinGW,g' '$(1)/xml2-config.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --without-debug \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-python \

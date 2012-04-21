@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/lib/fribidi-common.h'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-debug \
         --disable-deprecated \

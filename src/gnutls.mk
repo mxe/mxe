@@ -27,8 +27,7 @@ define $(PKG)_BUILD
     # Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms737530%28v=vs.85%29.aspx
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --enable-static \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \
         --disable-guile \

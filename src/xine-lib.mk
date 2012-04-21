@@ -25,8 +25,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-static \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-mmap \
         --disable-nls \
         --disable-aalib \

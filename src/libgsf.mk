@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     echo 'Libs.private: -lz -lbz2'          >> '$(1)'/libgsf-1.pc.in
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \
         --disable-gtk-doc \

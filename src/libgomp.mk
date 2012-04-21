@@ -23,7 +23,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)' \
         --enable-version-specific-runtime-libs \
         --with-gnu-ld \
-        --disable-shared \
+        $(LINK_STYLE) \
         LIBS='-lws2_32'
     $(MAKE) -C '$(1)/build/$(TARGET)/libgomp' -j '$(JOBS)' install
 

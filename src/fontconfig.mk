@@ -23,7 +23,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-arch='$(TARGET)' \
         --with-freetype-config='$(PREFIX)/$(TARGET)/bin/freetype-config' \

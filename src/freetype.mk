@@ -18,7 +18,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && GNUMAKE=$(MAKE) ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

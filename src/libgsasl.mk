@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && touch src/libgsasl-7.def && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \
         --with-libgcrypt \

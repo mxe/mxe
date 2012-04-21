@@ -23,7 +23,7 @@ define $(PKG)_BUILD
         --arch=i686 \
         --target-os=mingw32 \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-debug \
         --disable-doc \
         --enable-memalign-hack \

@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --enable-cxx \
         --without-readline
     $(MAKE) -C '$(1)' -j '$(JOBS)'

@@ -20,7 +20,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --with-x=no \
         --without-zlib \
         ac_cv_prog_freetype_config='$(PREFIX)/$(TARGET)/bin/freetype-config'

@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --enable-threads=win32 \
         --enable-cplusplus
     $(MAKE) -C '$(1)' -j '$(JOBS)'

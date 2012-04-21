@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,ac_sys_system=`uname -s`,ac_sys_system=MinGW,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-openssl \
         --without-java \
