@@ -28,3 +28,6 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/include/iconv.h.inst' '$(PREFIX)/$(TARGET)/include/iconv.h'
 endef
+
+$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)

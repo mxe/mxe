@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_i686-static-mingw32
     $(INSTALL) -d '$(PREFIX)/$(TARGET)'
     cd '$(1)' && \
         cp -rpv include lib '$(PREFIX)/$(TARGET)'

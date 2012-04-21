@@ -27,3 +27,6 @@ define $(PKG)_BUILD
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' install
 endef
+
+$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)

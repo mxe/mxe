@@ -76,3 +76,6 @@ define $(PKG)_BUILD
      echo 'set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel")') \
      > '$(CMAKE_TOOLCHAIN_FILE)'
 endef
+
+$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)

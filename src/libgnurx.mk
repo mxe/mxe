@@ -24,3 +24,6 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -f Makefile.mxe -j '$(JOBS)' TARGET=$(TARGET) bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= install-static
 endef
+
+$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)

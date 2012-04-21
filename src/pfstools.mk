@@ -33,3 +33,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'/src/pfs -j '$(JOBS)'
     $(MAKE) -C '$(1)'/src/pfs -j 1 install
 endef
+
+$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)

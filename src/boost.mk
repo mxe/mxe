@@ -47,3 +47,6 @@ define $(PKG)_BUILD
         -DBOOST_THREAD_USE_LIB \
         -lboost_serialization-mt -lboost_thread_win32-mt
 endef
+
+$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)

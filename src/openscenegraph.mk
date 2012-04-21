@@ -29,3 +29,6 @@ define $(PKG)_BUILD
         -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 endef
+
+$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)

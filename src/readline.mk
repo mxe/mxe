@@ -29,3 +29,6 @@ define $(PKG)_BUILD
         LIBS='-lpdcurses'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install SHARED_LIBS=
 endef
+
+$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)
