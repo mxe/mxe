@@ -1,6 +1,9 @@
 This file is part of MXE.
 See index.html for further information.
 
+Patches 1-3 proposed upstream at https://bugs.freedesktop.org/show_bug.cgi?id=49037
+Patch 4 is an MXE workaround for https://bugs.freedesktop.org/show_bug.cgi?id=49038
+
 From f084359f36e68aaaede8fed598933156e03ac442 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
 Date: Sat, 21 Apr 2012 09:29:25 +0200
