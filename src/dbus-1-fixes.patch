@@ -37,16 +37,18 @@ diff --git a/dbus/dbus-sysdeps-win.c b/dbus/dbus-sysdeps-win.c
 index b492b09..082225f 100644
 --- a/dbus/dbus-sysdeps-win.c
 +++ b/dbus/dbus-sysdeps-win.c
-@@ -55,6 +55,13 @@
+@@ -55,6 +55,15 @@
  #include <ws2tcpip.h>
  #include <wincrypt.h>
  
++#ifndef __MINGW64_VERSION_MAJOR
 +__CRT_INLINE VOID MemoryBarrier(VOID)
 +{
 +  LONG Barrier = 0;
 +  __asm__ __volatile__("xchgl %%eax,%0 "
 +    :"=r" (Barrier));
 +}
++#endif
 +
  /* Declarations missing in mingw's headers */
  extern BOOL WINAPI ConvertStringSidToSidA (LPCSTR  StringSid, PSID *Sid);
