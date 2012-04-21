@@ -2,7 +2,8 @@
 # See index.html for further information.
 
 JOBS               := 1
-TARGET             := i686-pc-mingw32
+TARGETS            := i686-static-mingw32 \
+                      x86_64-static-mingw32
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
 PWD        := $(shell pwd)
@@ -28,8 +29,9 @@ MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* id="\([^"]*\)-package".*$$/\1/p' '$(TOP_DIR)/index.html')
 PATH       := $(PREFIX)/bin:$(PATH)
-
-CMAKE_TOOLCHAIN_FILE := $(PREFIX)/$(TARGET)/share/cmake/mxe-conf.cmake
+LINK_STYLE  = $(if $(findstring dynamic,$(1)), \
+                  --disable-static --enable-shared , \
+                  --enable-static --disable-shared )
 
 # unexport any environment variables that might cause trouble
 unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
@@ -122,18 +124,18 @@ download: $(addprefix download-,$(PKGS))
 
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1): $(addprefix download-,$($(1)_DEPS))
+download-$(1):: $(addprefix download-,$($(1)_DEPS))
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
 	fi
 
 .PHONY: $(1)
-$(1): $(PREFIX)/installed/$(1)
-$(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
+$(1): $(PREFIX)/$(3)/installed/$(1)
+$(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
-                          $(addprefix $(PREFIX)/installed/,$($(1)_DEPS)) \
+                          $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS)) \
                           | check-requirements
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -151,40 +153,47 @@ $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	        exit 1; \
 	    fi; \
 	fi
-	$(if $(value $(1)_BUILD),
-	    @echo '[build]    $(1)'
-	    ,)
-	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)'
-	@ln -sf '$(TIMESTAMP)/$(1)' '$(LOG_DIR)/$(1)'
-	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)'; then \
+	$(if $(value $(1)_BUILD_$(3)),
+	    @echo '[build]    $(1) $(3)',
+	    @echo '[skip]     $(1) $(3)'
+	    )
+	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
+	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
+	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
-	    tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p'; \
+	    tail -n 10 '$(LOG_DIR)/$(1)_$(3)' | $(SED) -n '/./p'; \
 	    echo '------------------------------------------------------------'; \
-	    echo '[log]      $(LOG_DIR)/$(1)'; \
+	    echo '[log]      $(LOG_DIR)/$(1)_$(3)'; \
 	    echo; \
 	    exit 1; \
 	fi
-	@echo '[done]     $(1)'
+	@echo '[done]     $(1) $(3)'
 
-.PHONY: build-only-$(1)
-build-only-$(1):
-	$(if $(value $(1)_BUILD),
+.PHONY: build-only-$(1)_$(3)
+build-only-$(1)_$(3): TARGET = $(3)
+build-only-$(1)_$(3): PKG = $(1)
+build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe.cmake
+build-only-$(1)_$(3): LINK_STYLE = $(4)
+build-only-$(1)_$(3):
+	$(if $(value $(1)_BUILD_$(3)),
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
 	    cd '$(2)/$($(1)_SUBDIR)'
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
-	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    $$(call $(1)_BUILD_$(3),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
-	[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
-	touch '$(PREFIX)/installed/$(1)'
+	[ -d '$(PREFIX)/$(3)/installed' ] || mkdir -p '$(PREFIX)/$(3)/installed'
+	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
-$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
+$(foreach TARGET,$(TARGETS), \
+    $(foreach PKG,$(PKGS), \
+        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)-$(TARGET)),$(TARGET),$(call LINK_STYLE,$(TARGET))))))
 
 .PHONY: clean
 clean:
