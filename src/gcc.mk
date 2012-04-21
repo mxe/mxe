@@ -8,7 +8,7 @@ $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := mingwrt w32api binutils gcc-gmp gcc-mpc gcc-mpfr
+$(PKG)_DEPS     := mingwrt w32api mingw-w64 binutils gcc-gmp gcc-mpc gcc-mpfr
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_SUPPORT_CONFIG
     # unpack support libraries
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-gmp)
     mv '$(1)/$(gcc-gmp_SUBDIR)' '$(1)/gmp'
@@ -48,9 +48,9 @@ define $(PKG)_BUILD
         --disable-libmudflap \
         --with-mpfr-include='$(1)/mpfr/src' \
         --with-mpfr-lib='$(1).build/mpfr/src/.libs'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+endef
 
+define $(PKG)_POST_BUILD
     # create pkg-config script
     (echo '#!/bin/sh'; \
      echo 'PKG_CONFIG_PATH="$$PKG_CONFIG_PATH_$(subst -,_,$(TARGET))" PKG_CONFIG_LIBDIR='\''$(PREFIX)/$(TARGET)/lib/pkgconfig'\'' exec pkg-config --static "$$@"') \
@@ -77,5 +77,42 @@ define $(PKG)_BUILD
      > '$(CMAKE_TOOLCHAIN_FILE)'
 endef
 
-$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)
+define $(PKG)_BUILD_i686-static-mingw32
+    $($(PKG)_SUPPORT_CONFIG) \
+    --disable-sjlj-exceptions
+    $(MAKE) -C '$(1).build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).build' -j 1 install
+    $($(PKG)_POST_BUILD)
+endef
+
+define $(PKG)_BUILD_x86_64-static-mingw32
+    #Win64 Headers and symlinks
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,mingw-w64)
+    mkdir '$(1).headers-build'
+    cd '$(1).headers-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-headers/configure' \
+        --host='$(TARGET)' \
+        --prefix='$(PREFIX)' \
+        --enable-sdk=all
+    $(MAKE) -C '$(1).headers-build' install
+
+    $($(PKG)_SUPPORT_CONFIG) \
+        --disable-multilib \
+        --enable-sjlj-exceptions
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' all-gcc
+    $(MAKE) -C '$(1).build' -j 1 install-gcc
+
+    #mingw-w64-crt
+    mkdir '$(1).crt-build'
+    cd '$(1).crt-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
+        --host='$(TARGET)' \
+        --prefix='$(PREFIX)'
+    $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).crt-build' -j 1 install
+
+    #rest of gcc
+    cd '$(1).build'
+    $(MAKE) -C '$(1).build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).build' -j 1 install
+
+    $($(PKG)_POST_BUILD)
+endef
