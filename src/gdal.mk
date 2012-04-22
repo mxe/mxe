@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_CONFIGURE
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
@@ -39,7 +39,6 @@ define $(PKG)_BUILD
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
         --with-curl='$(PREFIX)/$(TARGET)/bin/curl-config' \
         --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
-        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
         --without-odbc \
         --without-static-proj4 \
@@ -75,6 +74,9 @@ define $(PKG)_BUILD
         --without-python \
         --without-macosx-framework \
         LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+endef
+
+define $(PKG)_MAKE
     $(MAKE) -C '$(1)'       -j 1 lib-target
     $(MAKE) -C '$(1)'       -j 1 install-lib
     $(MAKE) -C '$(1)/port'  -j 1 install
@@ -86,5 +88,14 @@ define $(PKG)_BUILD
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef
 
-$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)
+define $(PKG)_BUILD_i686-static-mingw32
+    $($(PKG)_CONFIGURE)\
+        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config'
+    $($(PKG)_MAKE)
+endef
+
+define $(PKG)_BUILD_x86_64-static-mingw32
+    $($(PKG)_CONFIGURE)\
+        --without-pg
+    $($(PKG)_MAKE)
+endef
