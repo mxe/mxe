@@ -29,7 +29,7 @@ define $(PKG)_BUILD
 
     # Test
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi -pedantic \
+        -W -Wall -Werror -std=c++0x -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hunspell.exe' \
         `'$(TARGET)-pkg-config' hunspell --cflags --libs`
 endef
