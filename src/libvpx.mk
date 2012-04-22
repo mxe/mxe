@@ -20,7 +20,7 @@ define $(PKG)_BUILD
         CROSS='$(TARGET)-' \
         ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --target=x86-win32-gcc \
+        --target=libvpx-target \
         --disable-examples \
         --disable-install-docs
     $(MAKE) -C '$(1)' -j '$(JOBS)'
@@ -28,5 +28,5 @@ define $(PKG)_BUILD
     $(TARGET)-ranlib $(PREFIX)/$(TARGET)/lib/libvpx.a
 endef
 
-$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)
+$(PKG)_BUILD_i686-static-mingw32   = $(subst libvpx-target ,x86-win32-gcc ,$($(PKG)_BUILD))
+$(PKG)_BUILD_x86_64-static-mingw32 = $(subst libvpx-target ,x86_64-win64-gcc ,$($(PKG)_BUILD))
