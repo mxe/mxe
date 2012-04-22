@@ -56,5 +56,4 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/gsoap/'*.c '$(1)/gsoap/'*.cpp '$(PREFIX)/$(TARGET)/share/gsoap'
 endef
 
-$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)
+$(PKG)_BUILD_i686-static-mingw32 = $($(PKG)_BUILD)
