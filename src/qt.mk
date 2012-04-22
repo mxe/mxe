@@ -37,7 +37,7 @@ define $(PKG)_BUILD
         -script \
         -no-iconv \
         -opengl desktop \
-        -webkit \
+        -no-webkit \
         -no-glib \
         -no-gstreamer \
         -no-phonon \
