@@ -24,6 +24,12 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-gpg-error-prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    ln -sf '$(PREFIX)/$(TARGET)/bin/libgcrypt-config' '$(PREFIX)/bin/$(TARGET)-libgcrypt-config'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgcrypt.exe' \
+        `$(TARGET)-libgcrypt-config --cflags --libs`
 endef
 
 $(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
