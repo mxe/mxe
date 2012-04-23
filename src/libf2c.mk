@@ -17,6 +17,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' -f makefile.u all
 
     $(INSTALL) -m644 '$(1)/libf2c.a' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/f2c.h' '$(PREFIX)/$(TARGET)/include/'
 endef
