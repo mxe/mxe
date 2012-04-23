@@ -71,12 +71,15 @@ define $(PKG)_BUILD
     $(INSTALL) -m755 '$(1)/bin/uic'   '$(PREFIX)/bin/$(TARGET)-uic'
     $(INSTALL) -m755 '$(1)/bin/qmake' '$(PREFIX)/bin/$(TARGET)-qmake'
 
+    cd '$(1)/tools/assistant' && '$(1)/bin/qmake' assistant.pro
+    $(MAKE) -C '$(1)/tools/assistant' -j '$(JOBS)' install
+
+    cd '$(1)/tools/designer' && '$(1)/bin/qmake' designer.pro
+    $(MAKE) -C '$(1)/tools/designer' -j '$(JOBS)' install
+
     # at least some of the qdbus tools are useful on target
     cd '$(1)/tools/qdbus' && '$(1)/bin/qmake' qdbus.pro
     $(MAKE) -C '$(1)/tools/qdbus' -j '$(JOBS)' install
-
-    cd '$(1)/tools/designer/src/uitools' && '$(1)/bin/qmake' uitools.pro
-    $(MAKE) -C '$(1)/tools/designer/src/uitools' -j '$(JOBS)' install
 
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(TARGET)-qmake' '$(PWD)/$(2).pro'
