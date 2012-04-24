@@ -37,7 +37,7 @@ define $(PKG)_BUILD
         -script \
         -no-iconv \
         -opengl desktop \
-        -webkit \
+        -no-webkit \
         -no-glib \
         -no-gstreamer \
         -no-phonon \
@@ -70,6 +70,12 @@ define $(PKG)_BUILD
     $(INSTALL) -m755 '$(1)/bin/rcc'   '$(PREFIX)/bin/$(TARGET)-rcc'
     $(INSTALL) -m755 '$(1)/bin/uic'   '$(PREFIX)/bin/$(TARGET)-uic'
     $(INSTALL) -m755 '$(1)/bin/qmake' '$(PREFIX)/bin/$(TARGET)-qmake'
+
+    cd '$(1)/tools/assistant' && '$(1)/bin/qmake' assistant.pro
+    $(MAKE) -C '$(1)/tools/assistant' -j '$(JOBS)' install
+
+    cd '$(1)/tools/designer' && '$(1)/bin/qmake' designer.pro
+    $(MAKE) -C '$(1)/tools/designer' -j '$(JOBS)' install
 
     # at least some of the qdbus tools are useful on target
     cd '$(1)/tools/qdbus' && '$(1)/bin/qmake' qdbus.pro

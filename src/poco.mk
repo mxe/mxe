@@ -20,7 +20,7 @@ define $(PKG)_BUILD
         --config=MinGW-CrossEnv \
         --static \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install CROSSENV=$(TARGET)
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \

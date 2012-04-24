@@ -3,7 +3,7 @@
 
 PKG             := libffi
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 97abf70e6a6d315d9259d58ac463663051d471e1
+$(PKG)_CHECKSUM := bff6a6c886f90ad5e30dee0b46676e8e0297d81d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://sourceware.org/pub/$(PKG)/$($(PKG)_FILE)
