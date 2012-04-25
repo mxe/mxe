@@ -1,0 +1,156 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+[master eae3982] new version
+ 2 files changed, 120 insertions(+), 8 deletions(-)
+ rewrite META (89%)
+ create mode 100644 config.make.mingw-new
+From eae3982782aafcf60a3a43ccd5dc101ae521d8ea Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 26 Apr 2012 00:00:02 +0200
+Subject: [PATCH] new version
+
+
+diff --git a/META b/META
+index 1be30c8..539254a 100644
+--- a/META
++++ b/META
+@@ -1,8 +1,27 @@
+-requires=""
+-version="2.12.0"
+-archive(byte)="lablgtk.cma"
+-archive(byte,init)="lablgtk.cma gtkInit.cmo"
+-archive(native)="lablgtk.cmxa"
+-archive(native,init)="lablgtk.cmxa gtkInit.cmx"
+-linkopts=""
++version="2.14.0"
++requires(mt) = "threads"
++requires(mt,mt_vm) = "threads.vm"
++requires(mt,mt_posix) = "threads.posix"
+ directory="+lablgtk2"
++archive(byte) = "lablgtk.cma"
++archive(native) = "lablgtk.cmxa"
++archive(byte,mt) += "gtkThread.cmo"
++archive(native,mt) += "gtkThread.cmx"
++
++package "init" (
++  requires = "lablgtk2"
++  archive(byte) = "gtkInit.cmo"
++  archive(native) = "gtkInit.cmx"
++)
++
++package "glade" (
++  requires = "lablgtk2"
++  archive(byte) = "lablglade.cma"
++  archive(native) = "lablglade.cmxa"
++)
++
++package "gtkspell" (
++  requires = "lablgtk2"
++  archive(byte) = "lablgtkspell.cma"
++  archive(native) = "lablgtkspell.cmxa"
++)
+diff --git a/config.make.mingw-new b/config.make.mingw-new
+new file mode 100644
+index 0000000..6fefdab
+--- /dev/null
++++ b/config.make.mingw-new
+@@ -0,0 +1,93 @@
++# -*- makefile -*-
++
++TARGET=@target@
++PREFIX=@prefix@/${TARGET}
++
++datarootdir = ${prefix}/share
++CAMLC=${TARGET}-ocamlc
++CAMLOPT=${TARGET}-ocamlopt
++CAMLRUN=${TARGET}-ocamlrun
++CAMLDEP=${TARGET}-ocamldep
++OCAMLDOC=ocamldoc
++CAMLMKTOP=${TARGET}-ocamlmktop
++CAMLMKLIB=${TARGET}-ocamlmklib
++CAMLP4O=camlp4o
++CAMLBEST=opt
++CAMLWIN32=yes
++CAMLDEP=${TARGET}-ocamldep
++CAMLLEX=ocamllex
++CAMLYACC=ocamlyacc
++EXE=.exe
++
++USE_GL=
++USE_GLADE=
++USE_RSVG=
++HAVE_SVGZ=
++USE_GNOMECANVAS=
++USE_GNOMEUI=
++USE_PANEL=
++USE_GTKSPELL=
++USE_GTKSOURCEVIEW=
++USE_GTKSOURCEVIEW2=
++USE_GTKQUARTZ=
++USE_CC=
++DEBUG=
++CC=${TARGET}-gcc
++RANLIB=${TARGET}-ranlib
++XA=.a
++XB=
++XE=
++XO=.o
++XS=.dll
++TOOLCHAIN=unix
++LIBDIR=${PREFIX}/lib/ocaml/
++THREADS_LIB=system
++HAS_DLL_SUPPORT=yes
++HAS_NATIVE_DYNLINK=yes
++
++# if using ocaml >= 3.08, add a -D OCAML_308 (for camlp4)
++ODOC_DEF=-D OCAML_308
++
++# if using ocaml >= 3.11, add a -D HAS_PRINTEXC_BACKTRACE (for camlp4)
++HAS_PRINTEXC_BACKTRACE=-D HAS_PRINTEXC_BACKTRACE
++
++# where to install the binaries
++prefix=${PREFIX}
++exec_prefix=${prefix}
++BINDIR=$(DESTDIR)${exec_prefix}/bin
++
++# where to install the man page
++MANDIR=$(DESTDIR)${datarootdir}/man
++
++INSTALLDIR=$(DESTDIR)${prefix}/lib/ocaml/lablgtk2
++DLLDIR=$(DESTDIR)${prefix}/lib/ocaml/stublibs
++LABLGLDIR=
++
++FILT = -Wl,--export-dynamic
++clean_libs = $(subst -pthread,-ldopt -pthread -ccopt -pthread,$(subst --rpath,-rpath,$(filter-out $(FILT),$(1))))
++
++GTKDIR=${PREFIX}
++
++GTKCFLAGS=@gtkcflags@
++GTK_LIBS = @gtk_libs@
++GTKLIBS:=$(call clean_libs,$(GTK_LIBS))
++GTKGL_LIBS = 
++GTKGLLIBS:=$(call clean_libs,$(GTKGL_LIBS))
++GLADE_LIBS = -L$(GTKDIR)/lib -lglade-2.0 -lgtk-win32-2.0 -lxml2 -lgdk-win32-2.0 -latk-1.0 -lgio-2.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl  
++GLADELIBS:=$(call clean_libs,$(GLADE_LIBS))
++RSVG_LIBS = -L$(GTKDIR)/lib -lrsvg-2 -lgdk_pixbuf-2.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl  
++RSVGLIBS:=$(call clean_libs,$(RSVG_LIBS))
++GNOMECANVAS_LIBS = -L$(GTKDIR)/lib -lgnomecanvas-2 -lart_lgpl_2 -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgio-2.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl  
++GNOMECANVASLIBS:=$(call clean_libs,$(GNOMECANVAS_LIBS))
++GNOMEUI_LIBS = 
++GNOMEUILIBS:=$(call clean_libs,$(GNOMEUI_LIBS))
++PANEL_LIBS = 
++PANELLIBS:=$(call clean_libs,$(PANEL_LIBS))
++GTKSPELL_LIBS = 
++GTKSPELLLIBS:=$(call clean_libs,$(GTKSPELL_LIBS))
++GTKSOURCEVIEW_LIBS = 
++GTKSOURCEVIEWLIBS:=$(call clean_libs,$(GTKSOURCEVIEW_LIBS))
++GTKSOURCEVIEWCFLAGS= 
++GTKSOURCEVIEW2_LIBS = 
++GTKSOURCEVIEW2LIBS:=$(call clean_libs,$(GTKSOURCEVIEW2_LIBS))
++
+-- 
+1.7.5.4
+

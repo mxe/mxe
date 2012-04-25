@@ -1,0 +1,127 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+[master acde190] new version
+ 2 files changed, 15 insertions(+), 16 deletions(-)
+From acde1904890174784e52a0c0f1b693723eecb34c Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Fri, 20 Apr 2012 01:36:34 +0200
+Subject: [PATCH] new version
+
+
+diff --git a/Makefile b/Makefile
+index 0d0f926..264936e 100755
+--- a/Makefile
++++ b/Makefile
+@@ -14,7 +14,7 @@ CHAINS = mingw cygwin msvc
+ 
+ MSVCC = cl /nologo /MD -D_CRT_SECURE_NO_DEPRECATE
+ CYGCC = gcc 
+-MINCC = gcc -mno-cygwin
++MINCC = gcc 
+ OCAMLOPT = ocamlopt
+ #OCAMLOPT = FLEXLINKFLAGS=-real-manifest ocamlopt
+ #LINKFLAGS = unix.cmxa
+@@ -113,7 +113,7 @@ upload_bin: package_bin do_upload_bin
+ upload_bin_64:
+ 	PACKAGE_BIN_SUFFIX=-amd64 $(MAKE) upload_bin
+ 
+-include $(shell cygpath -ad "$(shell ocamlopt -where)/Makefile.config")
++#include $(shell cygpath -ad "$(shell ocamlopt -where)/Makefile.config")
+ 
+ show_toolchain:
+ 	@echo Toolchain for the visible ocamlopt: $(TOOLCHAIN)
+diff --git a/reloc.ml b/reloc.ml
+index 0795e07..9fa1ac1 100755
+--- a/reloc.ml
++++ b/reloc.ml
+@@ -13,6 +13,9 @@
+ open Coff
+ open Cmdline
+ 
++let target = "@target@-"
++let libdir = "@libdir@"
++
+ let search_path = ref []
+ let default_libs = ref []
+ 
+@@ -102,14 +105,10 @@ let cygpath l =
+   get_output (Printf.sprintf "cygpath -m %s" (String.concat " " l))
+ 
+ let gcclib () =
+-  let extra = match !toolchain with
+-  | `MINGW -> "-mno-cygwin "
+-  | _ -> ""
+-  in
+-  Filename.dirname (get_output1 (Printf.sprintf "gcc %s-print-libgcc-file-name" extra))
++  Filename.dirname (get_output1 (Printf.sprintf "%sgcc -print-libgcc-file-name" target))
+ 
+ let file_exists fn =
+-  if Sys.file_exists fn then Some fn
++  if Sys.file_exists fn && not (Sys.is_directory fn) then Some fn
+   else if !use_cygpath && Sys.file_exists (fn ^ ".lnk") then
+     Some (get_output1 (Printf.sprintf "cygpath -m %s" fn))
+   else None
+@@ -436,7 +435,7 @@ let dll_exports fn = match !toolchain with
+       failwith "Creation of import library not supported for this toolchain"
+   | `CYGWIN | `MINGW ->
+       let dmp = temp_file "dyndll" ".dmp" in
+-      if cmd_verbose (Printf.sprintf "objdump -p %s > %s" fn dmp) <> 0
++      if cmd_verbose (Printf.sprintf "%sobjdump -p %s > %s" target fn dmp) <> 0
+       then failwith "Error while extracting exports from a DLL";
+       parse_dll_exports dmp
+ 
+@@ -788,7 +787,8 @@ let build_dll link_exe output_file files exts extra_args =
+ 	  extra_args
+     | `MINGW ->
+ 	Printf.sprintf
+-	  "gcc -mno-cygwin %s%s -L. %s %s -o %s %s %s %s %s"
++	  "%sgcc %s%s -L. %s %s -o %s %s %s %s %s"
++	  target
+ 	  (if link_exe = `EXE then "" else "-shared ")
+ 	  (if main_pgm then "" else if !noentry then "-Wl,-e0 " else "-Wl,-e_FlexDLLiniter@12 ")
+ 	  (mk_dirs_opt "-I")
+@@ -860,9 +860,7 @@ let setup_toolchain () = match !toolchain with
+   | `MINGW ->
+       search_path :=
+ 	!dirs @
+-	  [ "/lib";
+-	    "/lib/mingw";
+-	    "/lib/w32api";
++	  [ libdir;
+ 	    gcclib () ];
+       default_libs :=
+ 	["-lmingw32"; "-lgcc"; "-lmoldname"; "-lmingwex"; "-lmsvcrt";
+@@ -891,7 +889,8 @@ let compile_if_needed file =
+ 	    file
+       | `MINGW ->
+ 	  Printf.sprintf
+-	    "gcc -mno-cygwin -c -o %s %s %s"
++	    "%sgcc -c -o %s %s %s"
++		target
+ 	    (Filename.quote tmp_obj)
+ 	    (mk_dirs_opt "-I")
+ 	    file
+@@ -940,7 +939,7 @@ let () =
+     parse_cmdline ();
+     setup_toolchain ();
+ 
+-    use_cygpath :=
++    use_cygpath := false; (*
+       begin
+         match !toolchain, !cygpath_arg with
+         | _, `Yes -> true
+@@ -948,7 +947,7 @@ let () =
+         | (`CYGWIN|`MINGW), `None -> (Sys.command "cygpath -v 2>NUL >NUL" = 0)
+         | (`MSVC|`LIGHTLD), `None -> false
+       end;
+-
++			  *)
+ 
+     if !verbose >= 2 then (
+       Printf.printf "** Use cygpath: %b\n" !use_cygpath;
+-- 
+1.7.5.4
+
