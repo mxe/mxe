@@ -53,7 +53,8 @@ define $(PKG)_BUILD
 
     # create pkg-config script
     (echo '#!/bin/sh'; \
-     echo 'PKG_CONFIG_PATH="$$PKG_CONFIG_PATH_$(subst -,_,$(TARGET))" PKG_CONFIG_LIBDIR='\''$(PREFIX)/$(TARGET)/lib/pkgconfig'\'' exec pkg-config --static "$$@"') \
+     echo 'MXE_PREFIX="$$(cd $$(dirname $$0)/.. && pwd)"'; \
+     echo 'PKG_CONFIG_PATH="$${PKG_CONFIG_PATH_$(subst -,_,$(TARGET))}:$${MXE_PREFIX}/$(TARGET)/share/pkgconfig" PKG_CONFIG_LIBDIR="$${MXE_PREFIX}/$(TARGET)/lib/pkgconfig" exec pkg-config --static "$$@"') \
              > '$(PREFIX)/bin/$(TARGET)-pkg-config'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-pkg-config'
 
@@ -62,17 +63,19 @@ define $(PKG)_BUILD
     (echo 'set(BUILD_SHARED_LIBS OFF)'; \
      echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
      echo 'set(MSYS 1)'; \
-     echo 'set(CMAKE_FIND_ROOT_PATH $(PREFIX)/$(TARGET))'; \
+     echo 'get_filename_component(MXE_CMAKEDIR "$${CMAKE_CURRENT_LIST_FILE}" PATH)'; \
+     echo 'get_filename_component(MXE_PREFIX "$${MXE_CMAKEDIR}/../../.." ABSOLUTE)'; \
+     echo 'set(CMAKE_FIND_ROOT_PATH $${MXE_PREFIX}/$(TARGET))'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)'; \
-     echo 'set(CMAKE_C_COMPILER $(PREFIX)/bin/$(TARGET)-gcc)'; \
-     echo 'set(CMAKE_CXX_COMPILER $(PREFIX)/bin/$(TARGET)-g++)'; \
-     echo 'set(CMAKE_Fortran_COMPILER $(PREFIX)/bin/$(TARGET)-gfortran)'; \
-     echo 'set(CMAKE_RC_COMPILER $(PREFIX)/bin/$(TARGET)-windres)'; \
-     echo 'set(PKG_CONFIG_EXECUTABLE $(PREFIX)/bin/$(TARGET)-pkg-config)'; \
-     echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/bin/$(TARGET)-qmake)'; \
-     echo 'set(CMAKE_INSTALL_PREFIX $(PREFIX)/$(TARGET) CACHE PATH "Installation Prefix")'; \
+     echo 'set(CMAKE_C_COMPILER $${MXE_PREFIX}/bin/$(TARGET)-gcc)'; \
+     echo 'set(CMAKE_CXX_COMPILER $${MXE_PREFIX}/bin/$(TARGET)-g++)'; \
+     echo 'set(CMAKE_Fortran_COMPILER $${MXE_PREFIX}/bin/$(TARGET)-gfortran)'; \
+     echo 'set(CMAKE_RC_COMPILER $${MXE_PREFIX}/bin/$(TARGET)-windres)'; \
+     echo 'set(PKG_CONFIG_EXECUTABLE $${MXE_PREFIX}/bin/$(TARGET)-pkg-config)'; \
+     echo 'set(QT_QMAKE_EXECUTABLE $${MXE_PREFIX}/bin/$(TARGET)-qmake)'; \
+     echo 'set(CMAKE_INSTALL_PREFIX $${MXE_PREFIX}/$(TARGET) CACHE PATH "Installation Prefix")'; \
      echo 'set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel")') \
      > '$(CMAKE_TOOLCHAIN_FILE)'
 endef
