@@ -33,4 +33,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
 
-http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.8.tar.bz2
