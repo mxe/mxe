@@ -12,6 +12,7 @@ mxedir=$(cd $(dirname $0) && cd .. && pwd)
 # directory for unpacked tarballs/git repos
 gitsdir=${mxedir}/gits
 
+mkdir -p ${gitsdir}
 
 
 # John Doe <John Doe@acme.org>
