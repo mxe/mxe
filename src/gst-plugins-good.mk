@@ -37,5 +37,4 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install CFLAGS='-DWAVE_FORMAT_DOLBY_AC3_SPDIF=0x0092'
 endef
 
-$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)
+$(PKG)_BUILD_i686-static-mingw32 = $($(PKG)_BUILD)
