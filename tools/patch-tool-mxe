@@ -16,8 +16,7 @@ gitsdir=~/gits
 # John Doe <John Doe@acme.org>
 author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
 
-pkg_version=`grep '^$(PKG)_VERSION' $mxedir/src/$pkg.mk  | \
-  sed 's/.*:= \(.*\)/\1/'`
+pkg_version=$(sed -n "s/^.* id=\"${pkg}-version\">\([^<]*\)<.*$/\1/p" "${mxedir}/index.html")
 
 pkg_short_version=`echo $pkg_version | sed s/'\(.*\)\.[^.]*$'/'\1'/`
 
