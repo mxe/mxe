@@ -1,0 +1,63 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+https://github.com/ukoethe/vigra/pull/115
+
+From 88437f115f797c14692b06b20629c3b2fc2c6256 Mon Sep 17 00:00:00 2001
+From: Joachim Schleicher <J.Schleicher@stud.uni-heidelberg.de>
+Date: Thu, 26 Apr 2012 19:00:27 +0200
+Subject: [PATCH] modify cmake files for static linking
+
+* add definition -DVIGRA_STATIC_LIB if library is imported using cmake
+* change order of imports that is relevant if linking static
+---
+ config/FindOpenEXR.cmake    |    9 +++++----
+ config/VigraConfig.cmake.in |    5 +++++
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/config/FindOpenEXR.cmake b/config/FindOpenEXR.cmake
+index 0733d10..1e405b5 100644
+--- a/config/FindOpenEXR.cmake
++++ b/config/FindOpenEXR.cmake
+@@ -25,11 +25,11 @@
+ 
+ FIND_PATH(OPENEXR_INCLUDE_DIR ImfRgbaFile.h PATH_SUFFIXES OpenEXR)
+ 
++FIND_LIBRARY(OPENEXR_ILMIMF_LIBRARY NAMES IlmImf)
++FIND_LIBRARY(OPENEXR_IMATH_LIBRARY NAMES Imath)
+ FIND_LIBRARY(OPENEXR_HALF_LIBRARY NAMES Half)
+ FIND_LIBRARY(OPENEXR_IEX_LIBRARY NAMES Iex)
+ FIND_LIBRARY(OPENEXR_ILMTHREAD_LIBRARY NAMES IlmThread)
+-FIND_LIBRARY(OPENEXR_IMATH_LIBRARY NAMES Imath)
+-FIND_LIBRARY(OPENEXR_ILMIMF_LIBRARY NAMES IlmImf)
+ 
+ INCLUDE(FindPackageHandleStandardArgs)
+ FIND_PACKAGE_HANDLE_STANDARD_ARGS(OPENEXR DEFAULT_MSG
+@@ -38,6 +38,7 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(OPENEXR DEFAULT_MSG
+ )
+ 
+ IF(OPENEXR_FOUND)
+-    SET(OPENEXR_LIBRARIES ${OPENEXR_HALF_LIBRARY} ${OPENEXR_IEX_LIBRARY}
+-        ${OPENEXR_ILMTHREAD_LIBRARY} ${OPENEXR_IMATH_LIBRARY} ${OPENEXR_ILMIMF_LIBRARY})
++    SET(OPENEXR_LIBRARIES ${OPENEXR_ILMIMF_LIBRARY}
++        ${OPENEXR_IMATH_LIBRARY} ${OPENEXR_HALF_LIBRARY}
++        ${OPENEXR_IEX_LIBRARY} ${OPENEXR_ILMTHREAD_LIBRARY} )
+ ENDIF(OPENEXR_FOUND)
+diff --git a/config/VigraConfig.cmake.in b/config/VigraConfig.cmake.in
+index f2af5dd..ddcae12 100644
+--- a/config/VigraConfig.cmake.in
++++ b/config/VigraConfig.cmake.in
+@@ -2,4 +2,9 @@ get_filename_component(SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+ get_filename_component(Vigra_TOP_DIR  "${SELF_DIR}/../../" ABSOLUTE)
+ 
+ include(${SELF_DIR}/vigra-targets.cmake)
++get_target_property(VIGRA_TYPE vigraimpex TYPE)
++if(${VIGRA_TYPE} STREQUAL "STATIC_LIBRARY")
++    SET(VIGRA_STATIC_LIB True)
++    ADD_DEFINITIONS(-DVIGRA_STATIC_LIB)
++endif(${VIGRA_TYPE} STREQUAL "STATIC_LIBRARY")
+ get_filename_component(Vigra_INCLUDE_DIRS "${Vigra_TOP_DIR}/include/" ABSOLUTE)
+-- 
+1.7.2.5
+
