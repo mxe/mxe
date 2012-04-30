@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' liblevmar.a
+    $(MAKE) -C '$(1)' -j '$(JOBS)' --host='$(TARGET)' liblevmar.a
     $(INSTALL) -m644 '$(1)/levmar.h' '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/liblevmar.a' '$(PREFIX)/$(TARGET)/lib/'
 endef
