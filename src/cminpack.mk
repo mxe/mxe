@@ -15,8 +15,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DBUILD_SHARED_LIBS=0 
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
     $(MAKE) -C '$(1)' -j $(JOBS)
 
     $(INSTALL) -d                           '$(PREFIX)/$(TARGET)/lib'
