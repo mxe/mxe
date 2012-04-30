@@ -23,11 +23,7 @@ endef
 #   http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/release_docs/INSTALL_MinGW.txt
 
 define $(PKG)_BUILD
-# TODO: 4. Remove unsupported source
-# TODO: 5. Remove tests
-    cd '$(1)' &&  sed -i "s,^TEST_SCRIPT =.*,TEST_SCRIPT =,g" test/Makefile.in tools/h5diff/Makefile.in tools/h5ls/Makefile.in tools/misc/Makefile.in tools/h5copy/Makefile.in tools/h5stat/Makefile.in tools/h5dump/Makefile.in
     cd '$(1)' &&  ./configure \
-	--host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-cxx --enable-fortran
     $(MAKE) -C '$(1)' -j '$(JOBS)' lib
