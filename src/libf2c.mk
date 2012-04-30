@@ -14,7 +14,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' --host='$(TARGET)' -f makefile.u all
-    $(INSTALL) -m644 '$(1)/libf2c.a' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/f2c.h' '$(PREFIX)/$(TARGET)/include/'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' -f makefile.u \
+        CC=$(TARGET)-gcc \
+        AR=$(TARGET)-ar \
+        LD=$(TARGET)-ld \
+        RANLIB=$(TARGET)-ranlib
+    $(INSTALL) -m644 '$(1)/libf2c.a' '$(PREFIX)/$(TARGET)/lib'
+    $(INSTALL) -m644 '$(1)/f2c.h' '$(PREFIX)/$(TARGET)/include'
 endef
