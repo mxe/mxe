@@ -20,6 +20,12 @@ define $(PKG)_BUILD
     cd '$(1)' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
+        -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
         .
     $(MAKE) -C '$(1)/SRC' -j '$(JOBS)' install
+
+    '$(TARGET)-gfortran' \
+        -W -Wall -Werror -pedantic \
+        '$(2).f' -o '$(PREFIX)/$(TARGET)/bin/test-lapack.exe' \
+        -llapack
 endef
