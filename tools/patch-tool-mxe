@@ -7,27 +7,27 @@ cmd=$1
 pkg=$2
 
 # MXE directory
-mxedir=~/mxe
+mxedir=~/src/mxe
+mxesrc=$mxedir/src
 
 # directory for unpacked tarballs/git repos
-gitsdir=~/gits
+gitsdir=~/src/modifs_sources
 
 
 # John Doe <John Doe@acme.org>
 author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
 
-pkg_version=`grep '^$(PKG)_VERSION' $mxedir/src/$pkg.mk  | \
-  sed 's/.*:= \(.*\)/\1/'`
+pkg_version=`grep $pkg-version $mxedir/index.html  | sed s/.*$pkg-version'">\(.*\)<\/td>/\1/'`
 
 pkg_short_version=`echo $pkg_version | sed s/'\(.*\)\.[^.]*$'/'\1'/`
 
-pkg_subdir=`grep '^$(PKG)_SUBDIR' $mxedir/src/$pkg.mk  | \
+pkg_subdir=`grep '^$(PKG)_SUBDIR' $mxesrc/$pkg.mk  | \
   sed 's/.*:= \(.*\)/\1/' | \
   sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
   sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
   sed s/'$(PKG)'/$pkg/;`
 
-pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
+pkg_file=`grep '^$(PKG)_FILE' $mxesrc/$pkg.mk  | \
   sed 's/.*:= \(.*\)/\1/' | \
   sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
   sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
@@ -47,7 +47,7 @@ function init_git {
   echo $pkg_file | grep "\.tar\.xz"  >> /dev/null && xz -dc $mxedir/pkg/$pkg_file | tar xf -
   echo $pkg_file | grep "\.zip"      >> /dev/null && unzip  $mxedir/pkg/$pkg_file >> /dev/null
   cd $gitsdir/$pkg_subdir && \
-  (git init; git add -A; git commit -m "init") > /dev/null
+  (rm -Rf .git; git init; git add -A; git commit -m "init") > /dev/null
   git tag dist
 }
 
@@ -59,14 +59,16 @@ function export_patch {
     echo ''
     echo 'Contains ad hoc patches for cross building.'
     echo ''
+	git add -A;
+	git commit -a -m "new version"
     git format-patch -p --stdout dist..HEAD | \
     sed 's/^From: .*/From: MXE/g;'
-  ) > $mxedir/src/$pkg-1-fixes.patch
+  ) > $mxesrc/$pkg-1-fixes.patch
 }
 
 function import_patch {
   cd $gitsdir/$pkg_subdir && \
-  cat $mxedir/src/$pkg-1-fixes.patch | \
+  cat $mxesrc/$pkg-1-fixes.patch | \
   sed '/^From/,$  !d' | \
   sed s/'^From: .*'/"From: $author"/'g;' | \
   git am --keep-cr

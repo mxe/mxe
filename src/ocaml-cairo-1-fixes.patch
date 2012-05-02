@@ -1,0 +1,60 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+[master 795214c] new version
+ 2 files changed, 21 insertions(+), 4 deletions(-)
+ create mode 100644 META
+From 795214cb5b9e58ef5a65b1464fae9aee9ed6015e Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 29 Apr 2012 19:25:21 +0200
+Subject: [PATCH] new version
+
+
+diff --git a/META b/META
+new file mode 100644
+index 0000000..06060f2
+--- /dev/null
++++ b/META
+@@ -0,0 +1,17 @@
++name = "cairo-ocaml"
++description = "Bindings to the cairo library."
++archive(byte) = "cairo.cma"
++archive(native) = "cairo.cmxa"
++requires = "bigarray"
++
++package "lablgtk2" (
++        requires = "cairo lablgtk2"
++        archive(byte) = "cairo_lablgtk.cma"
++        archive(native) = "cairo_lablgtk.cmxa"
++)
++
++package "pango" (
++        requires = "cairo lablgtk2"
++        archive(byte) = "pango_cairo.cma"
++        archive(native) = "pango_cairo.cmxa"
++)
+\ No newline at end of file
+diff --git a/src/Makefile b/src/Makefile
+index 46a62f6..ec9cf28 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -92,10 +92,10 @@ install: all
+ ifdef OCAMLOPT
+ 	install -m644 *.cmxa *.a *.cmx $(DESTDIR)$(INSTALLDIR)
+ endif
+-	install -m 755 dll*.so $(DESTDIR)$(INSTALLDIR)
+-	if test -w $(DESTDIR)$(OCAMLLIB)/stublibs ; then \
+-          for lib in dll*.so ; do \
+-            ln -s $(INSTALLDIR)/$$lib $(DESTDIR)$(OCAMLLIB)/stublibs ; done ; fi
++#	install -m 755 dll*.so $(DESTDIR)$(INSTALLDIR)
++#	if test -w $(DESTDIR)$(OCAMLLIB)/stublibs ; then \
++#          for lib in dll*.so ; do \
++#            ln -s $(INSTALLDIR)/$$lib $(DESTDIR)$(OCAMLLIB)/stublibs ; done ; fi
+ 
+ DOCFILES = cairo.mli cairo_bigarray.mli cairo_png.mli cairo_pdf.mli cairo_ps.mli cairo_ft.mli
+ ifdef LABLGTKDIR
+-- 
+1.7.5.4
+
