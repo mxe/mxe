@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+Fixes a problem with the mismatched calling conventions in apr and log4cxx.
+See http://www.mail-archive.com/log4cxx-user@logging.apache.org/msg02671.html
+Submitted upstream:
+
+  https://issues.apache.org/jira/browse/LOGCXX-382
+
+diff -NBaur vanilla/src/main/include/log4cxx/helpers/thread.h mingw_cross/src/main/include/log4cxx/helpers/thread.h
+--- vanilla/src/main/include/log4cxx/helpers/thread.h	2008-04-01 07:34:26.000000000 +0900
++++ mingw_cross/src/main/include/log4cxx/helpers/thread.h	2011-05-09 11:08:23.123558232 +0900
+@@ -23,9 +23,13 @@
+ 
+ #if !defined(LOG4CXX_THREAD_FUNC)
+ #if defined(_WIN32)
+-#define LOG4CXX_THREAD_FUNC __stdcall
++  #if defined(__MINGW32__)
++    #define LOG4CXX_THREAD_FUNC
++  #else
++    #define LOG4CXX_THREAD_FUNC __stdcall
++  #endif
+ #else
+-#define LOG4CXX_THREAD_FUNC
++  #define LOG4CXX_THREAD_FUNC
+ #endif
+ #endif
+ 
