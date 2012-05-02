@@ -1,5 +1,5 @@
 This file is part of MXE.
-See doc/index.html for further information.
+See index.html for further information.
 
 Fixes a problem with the mismatched calling conventions in apr and log4cxx.
 See http://www.mail-archive.com/log4cxx-user@logging.apache.org/msg02671.html

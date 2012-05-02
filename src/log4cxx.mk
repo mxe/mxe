@@ -1,5 +1,5 @@
-# This file is part of mxe.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
 PKG             := log4cxx
 $(PKG)_IGNORE   :=

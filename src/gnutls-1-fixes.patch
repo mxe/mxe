@@ -31,7 +31,7 @@ index c45f8f3..57d0dbb 100644
 From e90e7ac3a472b0bef5475966ac06d7f2f12c712b Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 24 Nov 2011 15:06:06 +0100
-Subject: [PATCH 2/3] disable doc and test (mingw-cross-env specific)
+Subject: [PATCH 2/3] disable doc and test (MXE specific)
 
 ---
  Makefile.am |    2 +-
