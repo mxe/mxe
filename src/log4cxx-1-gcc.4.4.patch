@@ -1,0 +1,47 @@
+This file is part of MXE.
+See index.html for further information.
+
+These changes have already been applied to log4cxx trunk to update inclusions
+for recent gcc's.
+
+diff -NBaur vanilla/src/examples/cpp/console.cpp mingw_cross/src/examples/cpp/console.cpp
+--- vanilla/src/examples/cpp/console.cpp	2008-04-01 07:34:52.000000000 +0900
++++ mingw_cross/src/examples/cpp/console.cpp	2011-05-09 10:27:52.923808248 +0900
+@@ -15,6 +15,7 @@
+  * limitations under the License.
+  */
+ 
++#include <cstdio>
+ #include <stdlib.h>
+ #include <log4cxx/logger.h>
+ #include <log4cxx/consoleappender.h>
+@@ -22,6 +23,7 @@
+ #include <log4cxx/logmanager.h>
+ #include <iostream>
+ #include <locale.h>
++#include <string.h>
+ 
+ using namespace log4cxx;
+ using namespace log4cxx::helpers;
+diff -NBaur vanilla/src/main/cpp/inputstreamreader.cpp mingw_cross/src/main/cpp/inputstreamreader.cpp
+--- vanilla/src/main/cpp/inputstreamreader.cpp	2008-04-01 07:34:09.000000000 +0900
++++ mingw_cross/src/main/cpp/inputstreamreader.cpp	2011-05-09 10:27:27.991842868 +0900
+@@ -20,6 +20,7 @@
+ #include <log4cxx/helpers/exception.h>
+ #include <log4cxx/helpers/pool.h>
+ #include <log4cxx/helpers/bytebuffer.h>
++#include <string.h>
+ 
+ using namespace log4cxx;
+ using namespace log4cxx::helpers;
+diff -NBaur vanilla/src/main/cpp/socketoutputstream.cpp mingw_cross/src/main/cpp/socketoutputstream.cpp
+--- vanilla/src/main/cpp/socketoutputstream.cpp	2008-04-01 07:34:09.000000000 +0900
++++ mingw_cross/src/main/cpp/socketoutputstream.cpp	2011-05-09 10:27:27.999058156 +0900
+@@ -19,6 +19,7 @@
+ #include <log4cxx/helpers/socketoutputstream.h>
+ #include <log4cxx/helpers/socket.h>
+ #include <log4cxx/helpers/bytebuffer.h>
++#include <string.h>
+ 
+ using namespace log4cxx;
+ using namespace log4cxx::helpers;
