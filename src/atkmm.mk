@@ -3,9 +3,9 @@
 
 PKG             := atkmm
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9ca44756821f4d431c554e1cf8184989bb25ce12
+$(PKG)_CHECKSUM := 2af04a30dd1f6250d3d35f616bbc34c264b7b327
 $(PKG)_SUBDIR   := atkmm-$($(PKG)_VERSION)
-$(PKG)_FILE     := atkmm-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := atkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/atkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc atk glibmm
 
