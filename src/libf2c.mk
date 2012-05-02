@@ -20,5 +20,5 @@ define $(PKG)_BUILD
         LD=$(TARGET)-ld \
         RANLIB=$(TARGET)-ranlib
     $(INSTALL) -m644 '$(1)/libf2c.a' '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/f2c.h' '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -m644 '$(1)/f2c.h'    '$(PREFIX)/$(TARGET)/include'
 endef
