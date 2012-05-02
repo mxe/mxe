@@ -2,7 +2,9 @@ This file is part of MXE.
 See index.html for further information.
 
 This patch ensures that the correct dependencies can always be found for
-static mingw builds. Not yet submitted upstream.
+static mingw builds. Submitted upstream: 
+
+   https://issues.apache.org/jira/browse/LOGCXX-381
 
 diff -NBaur vanilla/liblog4cxx.pc.in mingw_cross/liblog4cxx.pc.in
 --- vanilla/liblog4cxx.pc.in	2008-04-01 07:34:52.000000000 +0900
