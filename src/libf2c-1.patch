@@ -1,0 +1,57 @@
+--- tmp-libf2c/makefile.u	2012-04-30 22:45:53.611478100 +0200
++++ tmp-libf2c/makefile.xc	2012-04-30 22:46:13.201480616 +0200
+@@ -13,14 +13,17 @@
+ # to the CFLAGS = line below.
+ 
+ .SUFFIXES: .c .o
+-CC = cc
++CC = $(TARGET)-gcc
++AR = $(TARGET)-ar
++RANLIB = $(TARGET)-ranlib
++LD = $(TARGET)-ld
+ SHELL = /bin/sh
+-CFLAGS = -O
++CFLAGS = -O -DUSE_CLOCK
+ 
+ # compile, then strip unnecessary symbols
+ .c.o:
+ 	$(CC) -c -DSkip_f2c_Undefs $(CFLAGS) $*.c
+-	ld -r -x -o $*.xxx $*.o
++	$(LD) -r -x -o $*.xxx $*.o
+ 	mv $*.xxx $*.o
+ ## Under Solaris (and other systems that do not understand ld -x),
+ ## omit -x in the ld line above.
+@@ -72,8 +75,8 @@
+ all: f2c.h signal1.h sysdep1.h libf2c.a
+ 
+ libf2c.a: $(OFILES)
+-	ar r libf2c.a $?
+-	-ranlib libf2c.a
++	$(AR) r libf2c.a $?
++	-$(RANLIB) libf2c.a
+ 
+ ## Shared-library variant: the following rule works on Linux
+ ## systems.  Details are system-dependent.  Under Linux, -fPIC
+@@ -123,7 +126,7 @@
+ 
+ install: libf2c.a
+ 	cp libf2c.a $(LIBDIR)
+-	-ranlib $(LIBDIR)/libf2c.a
++	-$(RANLIB) $(LIBDIR)/libf2c.a
+ 
+ clean:
+ 	rm -f libf2c.a *.o arith.h signal1.h sysdep1.h
+@@ -183,10 +186,9 @@
+ xwsne.o:	fmt.h
+ 
+ arith.h: arithchk.c
+-	$(CC) $(CFLAGS) -DNO_FPINIT arithchk.c -lm ||\
+-	 $(CC) -DNO_LONG_LONG $(CFLAGS) -DNO_FPINIT arithchk.c -lm
+-	./a.out >arith.h
+-	rm -f a.out arithchk.o
++	$(CC) $(CFLAGS) -DNO_FPINIT arithchk.c -lm || $(CC) -DNO_LONG_LONG $(CFLAGS) -DNO_FPINIT arithchk.c -lm
++	./a.exe >arith.h
++	rm -f a.exe arithchk.o
+ 
+ check:
+ 	xsum Notice README abort_.c arithchk.c backspac.c c_abs.c c_cos.c \
