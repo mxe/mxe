@@ -4,13 +4,11 @@
 # sox
 PKG             := sox
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 14.3.2
-$(PKG)_CHECKSUM := ad462114ff47b094078f18148bc9e29e31b42b92
+$(PKG)_CHECKSUM := d809cab382c7a9d015491c69051a9d1c1a1a44f1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_WEBSITE  := http://sox.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libmad lame vorbis ffmpeg flac
+$(PKG)_DEPS     := gcc ffmpeg flac lame libgomp libmad libsndfile vorbis
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/projects/sox/files/sox/' | \
@@ -19,18 +17,23 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
+    # set pkg-config cflags and libs
+    $(SED) -i 's,^\(Cflags:.*\),\1 -fopenmp,' '$(1)/sox.pc.in'
+    $(SED) -i '/Libs.private/d'               '$(1)/sox.pc.in'
+    echo Libs.private: `grep sox_LDADD '$(1)/src/optional-fmts.am' | \
+    $(SED) 's, sox_LDADD += ,,g' | tr -d '\n'` >>'$(1)/sox.pc.in'
+
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared
 
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= EXTRA_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install
 
-    '$(1)/libtool' --tag=CC --mode=link '$(TARGET)-gcc' -all-static \
+    '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sox.exe' \
-        -lsox
+        `'$(TARGET)-pkg-config' sox --cflags --libs`
 endef
