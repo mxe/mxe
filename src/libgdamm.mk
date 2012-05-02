@@ -1,30 +1,24 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
 # libgdamm
 PKG             := libgdamm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.1.2
-$(PKG)_CHECKSUM := 9090858b30d38af4f476092d11de09a10e85d6b9
+$(PKG)_CHECKSUM := f6126d7b46720e3ea4f3d49e03add2e52da233be
 $(PKG)_SUBDIR   := libgdamm-$($(PKG)_VERSION)
-$(PKG)_FILE     := libgdamm-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := https://launchpad.net/libgdamm
+$(PKG)_FILE     := libgdamm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgdamm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgda glibmm
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/libgdamm/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9][^<]*\)<.*,\1,p' | \
-    head -1
+    echo 'TODO: Updates for package libgdamm need to be fixed.' >&2;
+    echo $(libgdamm_VERSION)
 endef
 
 define $(PKG)_BUILD
-    # cross build
-    # wine confuses the cross-compiling detection, so set it explicitly
-    $(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         CXX='$(TARGET)-c++' \

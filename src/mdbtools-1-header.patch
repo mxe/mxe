@@ -1,12 +1,15 @@
+This file is part of MXE.
+See index.html for further information.
+
 diff -ur mdbtools-0.6pre1-orig//include/mdbtools.h mdbtools-0.6pre1//include/mdbtools.h
 --- mdbtools-0.6pre1-orig//include/mdbtools.h	2011-06-01 00:07:12.336088034 +0900
 +++ mdbtools-0.6pre1//include/mdbtools.h	2011-06-01 00:10:51.536088143 +0900
 @@ -147,7 +147,7 @@
  #define IS_JET3(mdb) (mdb->f->jet_version==MDB_VER_JET3)
- 
+
  /* hash to store registered backends */
 -extern GHashTable	*mdb_backends;
 +static GHashTable	*mdb_backends;
- 
+
  /* forward declarations */
  typedef struct mdbindex MdbIndex;

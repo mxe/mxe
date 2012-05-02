@@ -1,21 +1,18 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
 # LibGDA
 PKG             := libgda
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.2.8
-$(PKG)_CHECKSUM := 01b859233407407807b2da1c4c244a5907695b7b
+$(PKG)_CHECKSUM := 61d0b498202b780750633cc2e957c40325d6c705
 $(PKG)_SUBDIR   := libgda-$($(PKG)_VERSION)
-$(PKG)_FILE     := libgda-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.gnome-db.org/
+$(PKG)_FILE     := libgda-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgda/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib libxml2 postgresql
+$(PKG)_DEPS     := gcc glib libxml2 mdbtools postgresql
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/libgda/refs/tags' | \
-    $(SED) -n "s,.*tag/?id=\([0-9]\+\.[0-9]*[02468]\.[^']*\).*,\1,p" | \
-    head -1
+    echo 'TODO: Updates for package libgda need to be fixed.' >&2;
+    echo $(libgda_VERSION)
 endef
 
 define $(PKG)_BUILD
