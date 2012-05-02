@@ -1,0 +1,20 @@
+This file is part of MXE.
+See index.html for further information.
+
+Already applied to log4cxx trunk.
+
+diff -NBaur vanilla/src/main/include/log4cxx/helpers/objectptr.h mingw_cross/src/main/include/log4cxx/helpers/objectptr.h
+--- vanilla/src/main/include/log4cxx/helpers/objectptr.h	2008-04-01 07:34:26.000000000 +0900
++++ mingw_cross/src/main/include/log4cxx/helpers/objectptr.h	2011-05-09 10:30:03.767560165 +0900
+@@ -28,9 +28,9 @@
+ //   switching between the initialization styles.
+ //
+ #if LOG4CXX_HELGRIND
+-#define _LOG4CXX_OBJECTPTR_INIT(x) { exchange(x); 
++#define _LOG4CXX_OBJECTPTR_INIT(x) : ObjectPtrBase() { exchange(x); 
+ #else
+-#define _LOG4CXX_OBJECTPTR_INIT(x) : p(x) {
++#define _LOG4CXX_OBJECTPTR_INIT(x) : ObjectPtrBase(), p(x) {
+ #endif
+ 
+ namespace log4cxx

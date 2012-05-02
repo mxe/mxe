@@ -1,0 +1,17 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -NBaur vanilla/log4cxx-config.cmake mingw_cross/log4cxx-config.cmake
+--- vanilla/log4cxx-config.cmake	1970-01-01 09:00:00.000000000 +0900
++++ mingw_cross/log4cxx-config.cmake	2012-03-14 15:29:54.706247316 +0900
+@@ -0,0 +1,10 @@
++
++set(LOG4CXX_VERSION 0.10.0)
++
++get_filename_component(LOG4CXX_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
++
++set(LOG4CXX_INCLUDE_DIR "${LOG4CXX_CMAKE_DIR}/../../../include" CACHE FILEPATH "Log4cxx include directory")
++set(LOG4CXX_INCLUDE_DIRS "${LOG4CXX_INCLUDE_DIR}")
++set(LOG4CXX_LIBRARY_DIRS "${LOG4CXX_CMAKE_DIR}/../../../lib")
++set(LOG4CXX_LIBRARIES "log4cxx;aprutil-1;iconv;expat;apr-1;rpcrt4;shell32;ws2_32;advapi32;kernel32;msvcrt")
++
