@@ -68,6 +68,18 @@ DOWNLOAD_PKG_ARCHIVE = \
         ) \
     > '$(PKG_DIR)/$($(1)_FILE)'
 
+ifeq ($(IGNORE_SETTINGS),yes)
+    $(info [ignore settings.mk])
+else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
+    include $(PWD)/settings.mk
+else
+    $(info [create settings.mk])
+    $(shell { \
+        echo '#JOBS = $(JOBS)'; \
+        echo '#PKGS ='; \
+    } >'$(PWD)/settings.mk')
+endif
+
 .PHONY: all
 all: $(PKGS)
 
