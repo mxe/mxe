@@ -3,9 +3,9 @@
 
 PKG             := pango
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 467a3dacc0f3173e6fd457524b9ccd9772039a62
+$(PKG)_CHECKSUM := f0bf7974ef3e8826fbbb55c0974466ede1e67dd3
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
-$(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc fontconfig freetype cairo glib
 

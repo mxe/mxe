@@ -3,9 +3,9 @@
 
 PKG             := glibmm
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d15bc0fed7dea6fec73746370653687f74e02592
+$(PKG)_CHECKSUM := bd1962c7de710036875a8b6d7ab7b5e5e50fb7af
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
-$(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libsigc++
 

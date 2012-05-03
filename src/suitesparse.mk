@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         CC='$(TARGET)-gcc' \
         CPLUSPLUS='$(TARGET)-g++' \
         F77='$(TARGET)-gfortran' \
-        AR='$(TARGET)-ar cr' \
+        AR='$(TARGET)-ar' \
         RANLIB='$(TARGET)-ranlib' \
         BLAS='-lblas -lgfortran -lgfortranbegin' \
         CHOLMOD_CONFIG='-DNPARTITION'

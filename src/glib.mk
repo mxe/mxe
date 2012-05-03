@@ -3,9 +3,9 @@
 
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 20cd63705a8805260da0320c65b979233f2e3c18
+$(PKG)_CHECKSUM := 9b11968fedf4da45bcd10c4a8c50012d41b3af50
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
-$(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext pcre libiconv zlib dbus
 
