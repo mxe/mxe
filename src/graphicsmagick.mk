@@ -3,7 +3,7 @@
 
 PKG             := graphicsmagick
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 7ef5711a18da0a3b6b143548a2a7822597ea416d
+$(PKG)_CHECKSUM := 59ab01a1a8a12b26955c64bb2b660b6283855204
 $(PKG)_SUBDIR   := GraphicsMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := GraphicsMagick-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-modules \
