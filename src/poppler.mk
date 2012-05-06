@@ -24,8 +24,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-silent-rules \
-        --disable-shared \
-        --enable-static \
+        $(LINK_STYLE) \
         --enable-xpdf-headers \
         --enable-poppler-qt4 \
         --enable-zlib \

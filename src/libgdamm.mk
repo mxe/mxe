@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
