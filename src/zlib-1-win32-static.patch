@@ -13,7 +13,7 @@ diff --git a/Makefile.in b/Makefile.in
 index ea430bf..f2573e7 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -188,11 +188,11 @@ install-libs: $(LIBS)
+@@ -190,11 +190,11 @@ install-libs: $(LIBS)
  	-@if [ ! -d $(DESTDIR)$(sharedlibdir) ]; then mkdir -p $(DESTDIR)$(sharedlibdir); fi
  	-@if [ ! -d $(DESTDIR)$(man3dir)      ]; then mkdir -p $(DESTDIR)$(man3dir); fi
  	-@if [ ! -d $(DESTDIR)$(pkgconfigdir) ]; then mkdir -p $(DESTDIR)$(pkgconfigdir); fi
@@ -31,7 +31,7 @@ diff --git a/configure b/configure
 index 780317c..6e6a033 100755
 --- a/configure
 +++ b/configure
-@@ -180,10 +180,7 @@ if test "$gcc" -eq 1 && ($cc -c $cflags $test.c) >> configure.log 2>&1; then
+@@ -205,10 +205,7 @@ if test "$gcc" -eq 1 && ($cc -c $cflags $test.c) >> configure.log 2>&1; then
    CYGWIN* | Cygwin* | cygwin* | OS/2*)
          EXE='.exe' ;;
    MINGW* | mingw*)
