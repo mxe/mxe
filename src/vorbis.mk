@@ -24,5 +24,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
 
-$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32 = $($(PKG)_BUILD)
+$(PKG)_BUILD_i686-static-mingw32    = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32  = $($(PKG)_BUILD)
+$(PKG)_BUILD_i686-dynamic-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-dynamic-mingw32 = $($(PKG)_BUILD)

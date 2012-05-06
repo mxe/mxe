@@ -15,5 +15,7 @@ define $(PKG)_UPDATE
     echo $(mingw-w64_VERSION)
 endef
 
-$(PKG)_BUILD_i686-static-mingw32   =
-$(PKG)_BUILD_x86_64-static-mingw32 =
+$(PKG)_BUILD_i686-static-mingw32    =
+$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_i686-dynamic-mingw32   =
+$(PKG)_BUILD_x86_64-dynamic-mingw32 =

@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD_i686-static-mingw32
+define $(PKG)_BUILD
     # native build
     cp -Rp '$(1)' '$(1).native'
     cd '$(1).native' && ./configure \
@@ -32,4 +32,8 @@ define $(PKG)_BUILD_i686-static-mingw32
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
-$(PKG)_BUILD_x86_64-static-mingw32 =
+
+$(PKG)_BUILD_i686-static-mingw32    = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_i686-dynamic-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-dynamic-mingw32 =

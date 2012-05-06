@@ -3,7 +3,9 @@
 
 JOBS               := 1
 TARGETS            := i686-static-mingw32 \
-                      x86_64-static-mingw32
+                      x86_64-static-mingw32 \
+                      i686-dynamic-mingw32 \
+                      x86_64-dynamic-mingw32 \
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 
 PWD        := $(shell pwd)
