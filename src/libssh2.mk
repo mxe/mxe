@@ -33,4 +33,5 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' --cflags --libs libssh2`
 endef
 
-$(PKG)_BUILD_i686-static-mingw32 = $($(PKG)_BUILD)
+$(PKG)_BUILD_i686-static-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_x86_64-static-mingw32 =

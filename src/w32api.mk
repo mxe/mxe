@@ -19,3 +19,4 @@ define $(PKG)_BUILD_i686-static-mingw32
     $(INSTALL) -d '$(PREFIX)/$(TARGET)'
     cp -rpv '$(1)/include' '$(1)/lib' '$(PREFIX)/$(TARGET)'
 endef
+$(PKG)_BUILD_x86_64-static-mingw32 =
