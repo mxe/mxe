@@ -27,10 +27,11 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' install -j 1 \
         CC='$(TARGET)-gcc' \
         RANLIB='$(TARGET)-ranlib' \
+        CROSS_COMPILE='$(TARGET)-' \
         AR='$(TARGET)-ar rcu'
 endef
 
 $(PKG)_BUILD_i686-static-mingw32    = $($(PKG)_BUILD)
 $(PKG)_BUILD_x86_64-static-mingw32  = $(subst mingw ,mingw64 ,$($(PKG)_BUILD))
-$(PKG)_BUILD_i686-dynamic-mingw32   = $($(PKG)_BUILD)
+$(PKG)_BUILD_i686-dynamic-mingw32   = $(subst no-shared ,shared ,$($(PKG)_BUILD))
 $(PKG)_BUILD_x86_64-dynamic-mingw32 = $($(PKG)_BUILD)
