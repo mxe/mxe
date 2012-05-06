@@ -3,7 +3,7 @@
 
 PKG             := fftw
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3fecc492f576503a6a509d2073bd82b3fe0aef13
+$(PKG)_CHECKSUM := 11a8c31186ff5a7d686a79a3f21b2530888e0dc2
 $(PKG)_SUBDIR   := fftw-$($(PKG)_VERSION)
 $(PKG)_FILE     := fftw-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.fftw.org/$($(PKG)_FILE)
@@ -20,6 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \
@@ -29,6 +30,7 @@ define $(PKG)_BUILD
 
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \
@@ -38,6 +40,7 @@ define $(PKG)_BUILD
 
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \
