@@ -3,7 +3,7 @@
 
 PKG             := gmp
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ea4ea7c3f10436ef5ae7a75b3fad163a8b86edc0
+$(PKG)_CHECKSUM := 12a662456033e21aed3e318aef4177f4000afe3b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gmplib.org/pub/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -21,6 +21,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --enable-cxx \
