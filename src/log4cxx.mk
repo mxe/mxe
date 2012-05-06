@@ -33,5 +33,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-log4cxx.exe' \
-        `i686-pc-mingw32-pkg-config liblog4cxx --libs`
+        `$(TARGET)-pkg-config liblog4cxx --libs`
 endef
