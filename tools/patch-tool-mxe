@@ -73,6 +73,11 @@ function init_git {
 
 function export_patch {
   setupEnv
+  if [ ! -d $gitsdir/$pkg_subdir ]; then
+    echo "Error: $gitsdir/$pkg_subdir does not exist, so cannot export patches. Cancelling export." >&2
+    exit 1
+  fi
+
   cd $gitsdir/$pkg_subdir && \
   (
     echo 'This file is part of MXE.'
