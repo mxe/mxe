@@ -72,8 +72,10 @@ function init_git {
   cd $gitsdir/$pkg_subdir && \
   (git init; git add -A; git commit -m "init") > /dev/null
 
-  echo "Tagging distribution tarball state"
+  echo "Creating 'dist' tag for distribution tarball state"
   git tag dist
+
+  echo "Repository ready in $gitsdir/$pkg_subdir"
 }
 
 function export_patch {
@@ -92,7 +94,8 @@ function export_patch {
     echo ''
     git format-patch -p --stdout dist..HEAD | \
     sed 's/^From: .*/From: MXE/g;'
-  ) > $mxedir/src/$pkg-1-fixes.patch
+  ) > $mxedir/src/$pkg-1-fixes.patch && \
+  echo "Generated $mxedir/src/$pkg-1-fixes.patch"
 }
 
 function import_patch {
