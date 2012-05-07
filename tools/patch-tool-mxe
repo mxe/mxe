@@ -73,10 +73,26 @@ function import_patch {
   git am --keep-cr
 }
 
-if [ "$cmd" == "init" ]; then
-  init_git $pkg
-elif [ "$cmd" == "import" ]; then
-  import_patch $pkg
-elif [ "$cmd" == "export" ]; then
-  export_patch $pkg
-fi
+case "$cmd" in
+  init)
+    init_git $pkg
+    ;;
+  import)
+    import_patch $pkg
+    ;;
+  export)
+    export_patch $pkg
+    ;;
+  *)
+    echo "Unrecognized command '${cmd}'" >&2
+    cat <<EOS
+    Usage: $0 COMMAND PACKAGENAME
+    where COMMAND is one of:
+      init - create a git directory for the package with the raw source
+      import - apply the "pkgname-1-fixes.patch" patch commits
+      export - create/replace the "pkgname-1-fixes.patch" patch with a patch of all commits since init.
+EOS
+    exit 1
+    ;;
+esac
+
