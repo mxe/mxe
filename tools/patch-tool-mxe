@@ -46,6 +46,13 @@ setupEnv() {
 function init_git {
   setupEnv
   cd $gitsdir
+  if [ ! -f $mxedir/pkg/$pkg_file ]; then
+    make -C "$mxedir" download-$pkg
+    if [ ! $? -eq 0 ]; then
+      echo "Could not build target download-$pkg - cancelling init." >&2
+      exit 1
+    fi
+  fi
   echo $pkg_file | grep "\.tar\.gz"  >> /dev/null && tar xf $mxedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.bz2" >> /dev/null && tar xf $mxedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.xz"  >> /dev/null && xz -dc $mxedir/pkg/$pkg_file | tar xf -
