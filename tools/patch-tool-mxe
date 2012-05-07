@@ -6,42 +6,45 @@
 cmd=$1
 pkg=$2
 
-# MXE directory
-mxedir=$(cd $(dirname $0) && cd .. && pwd)
+setupEnv() {
+  # MXE directory
+  export mxedir=$(cd $(dirname $0) && cd .. && pwd)
 
-# directory for unpacked tarballs/git repos
-gitsdir=${mxedir}/gits
+  # directory for unpacked tarballs/git repos
+  export gitsdir=${mxedir}/gits
 
-mkdir -p ${gitsdir}
+  mkdir -p ${gitsdir}
 
 
-# John Doe <John Doe@acme.org>
-author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
+  # John Doe <John Doe@acme.org>
+  export author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
 
-pkg_version=$(sed -n "s/^.* id=\"${pkg}-version\">\([^<]*\)<.*$/\1/p" "${mxedir}/index.html")
+  export pkg_version=$(sed -n "s/^.* id=\"${pkg}-version\">\([^<]*\)<.*$/\1/p" "${mxedir}/index.html")
 
-pkg_short_version=`echo $pkg_version | sed s/'\(.*\)\.[^.]*$'/'\1'/`
+  export pkg_short_version=`echo $pkg_version | sed s/'\(.*\)\.[^.]*$'/'\1'/`
 
-pkg_subdir=`grep '^$(PKG)_SUBDIR' $mxedir/src/$pkg.mk  | \
-  sed 's/.*:= \(.*\)/\1/' | \
-  sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
-  sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
-  sed s/'$(PKG)'/$pkg/;`
+  export pkg_subdir=`grep '^$(PKG)_SUBDIR' $mxedir/src/$pkg.mk  | \
+    sed 's/.*:= \(.*\)/\1/' | \
+    sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
+    sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
+    sed s/'$(PKG)'/$pkg/;`
 
-pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
-  sed 's/.*:= \(.*\)/\1/' | \
-  sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
-  sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
-  sed s/'$($(PKG)_SUBDIR)'/$pkg_subdir/ | \
-  sed s/'$(PKG)'/$pkg/;`
+  export pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
+    sed 's/.*:= \(.*\)/\1/' | \
+    sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
+    sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
+    sed s/'$($(PKG)_SUBDIR)'/$pkg_subdir/ | \
+    sed s/'$(PKG)'/$pkg/;`
 
-#echo $pkg
-#echo $pkg_version
-#echo $pkg_subdir
-#echo $pkg_file
+  #echo $pkg
+  #echo $pkg_version
+  #echo $pkg_subdir
+  #echo $pkg_file
 
+}
 # init
 function init_git {
+  setupEnv
   cd $gitsdir
   echo $pkg_file | grep "\.tar\.gz"  >> /dev/null && tar xf $mxedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.bz2" >> /dev/null && tar xf $mxedir/pkg/$pkg_file
@@ -53,6 +56,7 @@ function init_git {
 }
 
 function export_patch {
+  setupEnv
   cd $gitsdir/$pkg_subdir && \
   (
     echo 'This file is part of MXE.'
@@ -66,6 +70,7 @@ function export_patch {
 }
 
 function import_patch {
+  setupEnv
   cd $gitsdir/$pkg_subdir && \
   cat $mxedir/src/$pkg-1-fixes.patch | \
   sed '/^From/,$  !d' | \
