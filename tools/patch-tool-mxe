@@ -87,11 +87,22 @@ function export_patch {
 
 function import_patch {
   setupEnv
-  cd $gitsdir/$pkg_subdir && \
-  cat $mxedir/src/$pkg-1-fixes.patch | \
-  sed '/^From/,$  !d' | \
-  sed s/'^From: .*'/"From: $author"/'g;' | \
-  git am --keep-cr
+  if [ ! -d $gitsdir/$pkg_subdir ]; then
+    echo "Error: $gitsdir/$pkg_subdir does not exist, so cannot import patches. Cancelling import - try 'init' first." >&2
+    exit 1
+  fi
+
+  if [ -f $mxedir/src/$pkg-1-fixes.patch ]; then
+    cd $gitsdir/$pkg_subdir && \
+    cat $mxedir/src/$pkg-1-fixes.patch | \
+    sed '/^From/,$  !d' | \
+    sed s/'^From: .*'/"From: $author"/'g;' | \
+    git am --keep-cr && \
+    echo "Imported $mxedir/src/$pkg-1-fixes.patch"
+  else
+    echo "patch-tool managed file $mxedir/src/$pkg-1-fixes.patch not found. Cancelling import." >&2
+    exit 1
+  fi
 }
 
 case "$cmd" in
