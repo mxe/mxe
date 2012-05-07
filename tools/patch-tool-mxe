@@ -47,6 +47,11 @@ function init_git {
   setupEnv
   cd $gitsdir
 
+  if [ -d $gitsdir/$pkg_subdir ]; then
+    echo "Error: $gitsdir/$pkg_subdir already exists. Cancelling init." >&2
+    exit 1
+  fi
+
   echo "Checking for cached $pkg_file"
   if [ ! -f $mxedir/pkg/$pkg_file ]; then
     make -C "$mxedir" download-$pkg
