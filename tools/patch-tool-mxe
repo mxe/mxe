@@ -46,19 +46,28 @@ setupEnv() {
 function init_git {
   setupEnv
   cd $gitsdir
+
+  echo "Checking for cached $pkg_file"
   if [ ! -f $mxedir/pkg/$pkg_file ]; then
     make -C "$mxedir" download-$pkg
+    echo "Building the mxe Makefile target 'download-$pkg' to get missing file"
     if [ ! $? -eq 0 ]; then
       echo "Could not build target download-$pkg - cancelling init." >&2
       exit 1
     fi
   fi
+
+  echo "Unpacking archive..."
   echo $pkg_file | grep "\.tar\.gz"  >> /dev/null && tar xf $mxedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.bz2" >> /dev/null && tar xf $mxedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.xz"  >> /dev/null && xz -dc $mxedir/pkg/$pkg_file | tar xf -
   echo $pkg_file | grep "\.zip"      >> /dev/null && unzip  $mxedir/pkg/$pkg_file >> /dev/null
+
+  echo "Initializing repo and adding all as first commit"
   cd $gitsdir/$pkg_subdir && \
   (git init; git add -A; git commit -m "init") > /dev/null
+
+  echo "Tagging distribution tarball state"
   git tag dist
 }
 
