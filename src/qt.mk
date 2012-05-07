@@ -83,8 +83,6 @@ define $(PKG)_BUILD
     # In case a MXE tree is relocated, this script can be used
     # to write an appropriate qt.conf file that will override the built-in
     # prefix, etc. in qmake.
-    wget --no-check-certificate -O- \
-      https://raw.github.com/gist/2501032/update-qtconf.sh \
-      > '$(PREFIX)/bin/update-qtconf.sh'
+    cp '$(1)/update-qtconf.sh' '$(PREFIX)/bin/update-qtconf.sh'
     chmod +x '$(PREFIX)/bin/update-qtconf.sh'
 endef
