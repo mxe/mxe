@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.ece.uvic.ca/~mdadams/jasper/software/$($(PKG)_FILE
 $(PKG)_DEPS     := gcc jpeg
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.ece.uvic.ca/~mdadams/jasper/' | \
+    $(WGET) -q -O- 'http://www.ece.uvic.ca/~mdadams/jasper/' | \
     grep 'jasper-' | \
     $(SED) -n 's,.*jasper-\([0-9][^>]*\)\.zip.*,\1,p' | \
     head -1

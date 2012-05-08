@@ -10,7 +10,7 @@ $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2 gstreamer liboil pango ogg vorbis theora
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://cgit.freedesktop.org/gstreamer/gst-plugins-base/refs/tags' | \
+    $(WGET) -q -O- 'http://cgit.freedesktop.org/gstreamer/gst-plugins-base/refs/tags' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1
 endef

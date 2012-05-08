@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.portaudio.com/archives/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.portaudio.com/download.html' | \
+    $(WGET) -q -O- 'http://www.portaudio.com/download.html' | \
     $(SED) -n 's,.*pa_stable_v\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

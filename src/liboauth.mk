@@ -10,7 +10,7 @@ $(PKG)_URL      := http://liboauth.sourceforge.net/pool/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc curl openssl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://liboauth.sourceforge.net/' | \
+    $(WGET) -q -O- 'http://liboauth.sourceforge.net/' | \
     $(SED) -n 's,.*liboauth-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

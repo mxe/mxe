@@ -10,7 +10,7 @@ $(PKG)_URL      := http://fontconfig.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype expat
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://fontconfig.org/release/' | \
+    $(WGET) -q -O- 'http://fontconfig.org/release/' | \
     $(SED) -n 's,.*fontconfig-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

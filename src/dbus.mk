@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc expat
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
+    $(WGET) -q -O- 'http://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
     grep -v '^1\.[01234]\.' | \
     head -1

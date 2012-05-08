@@ -10,7 +10,7 @@ $(PKG)_URL      := http://downloads.us.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc vorbis ogg theora speex
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.icecast.org/download.php' | \
+    $(WGET) -q -O- 'http://www.icecast.org/download.php' | \
     $(SED) -n 's,.*libshout-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

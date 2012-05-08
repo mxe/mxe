@@ -10,7 +10,7 @@ $(PKG)_URL      := http://downloads.xvid.org/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.xvid.org/' | \
+    $(WGET) -q -O- 'http://www.xvid.org/' | \
     $(SED) -n 's,.*Xvid \([0-9][^ ]*\) .*,\1,p' | \
     head -1
 endef

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.debian.org/debian/pool/main/s/$(PKG)/$($(PKG)_FILE
 $(PKG)_DEPS     := gcc sdl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://packages.debian.org/unstable/source/smpeg' | \
+    $(WGET) -q -O- 'http://packages.debian.org/unstable/source/smpeg' | \
     $(SED) -n 's,.*smpeg_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | \
     head -1
 endef

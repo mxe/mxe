@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/FTGL Source/$($(P
 $(PKG)_DEPS     := gcc freetype
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/ftgl/files/FTGL Source/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/ftgl/files/FTGL Source/' | \
     $(SED) -n 's,.*<tr title="\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef

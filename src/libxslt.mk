@@ -10,7 +10,7 @@ $(PKG)_URL      := ftp://xmlsoft.org/libxslt/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libxml2 libgcrypt
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/libxslt/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/libxslt/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=v\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1

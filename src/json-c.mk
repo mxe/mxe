@@ -10,7 +10,7 @@ $(PKG)_URL      := http://oss.metaparadigm.com/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://oss.metaparadigm.com/json-c/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://oss.metaparadigm.com/json-c/?C=M;O=D' | \
     $(SED) -n 's,.*json-c-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

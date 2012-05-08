@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_
 $(PKG)_DEPS     := gcc gettext pcre libiconv zlib dbus
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
     $(SED) -n "s,.*tag/?id=\([0-9]\+\.[0-9]*[02468]\.[^']*\).*,\1,p" | \
     head -1
 endef

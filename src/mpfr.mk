@@ -11,7 +11,7 @@ $(PKG)_URL_2    := http://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gmp
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.mpfr.org/mpfr-current/#download' | \
+    $(WGET) -q -O- 'http://www.mpfr.org/mpfr-current/#download' | \
     grep 'mpfr-' | \
     $(SED) -n 's,.*mpfr-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

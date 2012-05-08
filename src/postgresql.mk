@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(P
 $(PKG)_DEPS     := gcc zlib openssl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \
+    $(WGET) -q -O- 'http://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \
     grep 'refs/tags/REL9[0-9_]*"' | \
     $(SED) 's,.*refs/tags/REL\(.*\)".*,\1,g;' | \
     $(SED) 's,_,.,g' | \

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHO
 $(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/vmime/files/vmime/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/vmime/files/vmime/' | \
     $(SED) -n 's,.*libvmime-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

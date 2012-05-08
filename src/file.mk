@@ -10,7 +10,7 @@ $(PKG)_URL      := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgnurx
 
 define $(PKG)_UPDATE
-    wget -q -O- 'ftp://ftp.astron.com/pub/file/' | \
+    $(WGET) -q -O- 'ftp://ftp.astron.com/pub/file/' | \
     grep 'file-' | \
     $(SED) -n 's,.*file-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1

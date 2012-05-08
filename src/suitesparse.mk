@@ -9,7 +9,7 @@ $(PKG)_URL      := http://www.cise.ufl.edu/research/sparse/SuiteSparse/$($(PKG)_
 $(PKG)_DEPS     := gcc blas lapack
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.cise.ufl.edu/research/sparse/SuiteSparse/' | \
+    $(WGET) -q -O- 'http://www.cise.ufl.edu/research/sparse/SuiteSparse/' | \
     $(SED) -n 's,.*SuiteSparse-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -10,7 +10,7 @@ $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc expat libiconv zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://ftp.gnu.org/gnu/gdb/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gdb/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="gdb-\([0-9][^"]*\)\.tar.*,\1,p' | \
     grep -v '^7\.3a' | \
     sort -r | \

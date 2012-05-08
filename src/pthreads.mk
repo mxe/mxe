@@ -10,7 +10,7 @@ $(PKG)_URL      := ftp://sourceware.org/pub/pthreads-win32/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' | \
+    $(WGET) -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' | \
     $(SED) -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | \
     tr '.' '-' | \
     head -1

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.aubio.org/pub/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc fftw libsamplerate libsndfile
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.aubio.org/download' | \
+    $(WGET) -q -O- 'http://www.aubio.org/download' | \
     $(SED) -n 's,.*aubio-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

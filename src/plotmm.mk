@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc gtkmm2
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/plotmm/files/plotmm/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/plotmm/files/plotmm/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

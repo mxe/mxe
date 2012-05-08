@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_F
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://packages.debian.org/unstable/source/libpaper' | \
+    $(WGET) -q -O- 'http://packages.debian.org/unstable/source/libpaper' | \
     $(SED) -n 's,.*libpaper_\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

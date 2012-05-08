@@ -10,7 +10,7 @@ $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.openexr.com/downloads.html' | \
+    $(WGET) -q -O- 'http://www.openexr.com/downloads.html' | \
     grep 'ilmbase-' | \
     $(SED) -n 's,.*ilmbase-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://icculus.org/physfs/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://icculus.org/physfs/downloads/?M=D' | \
+    $(WGET) -q -O- 'http://icculus.org/physfs/downloads/?M=D' | \
     $(SED) -n 's,.*<a href="physfs-\([0-9][^"]*\)\.tar.*,\1,pI' | \
     head -1
 endef

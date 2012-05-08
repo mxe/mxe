@@ -10,7 +10,7 @@ $(PKG)_URL      := http://llvm.org/releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://llvm.org/releases/download.html' | \
+    $(WGET) -q -O- 'http://llvm.org/releases/download.html' | \
     grep 'Download LLVM' | \
     $(SED) -n 's,.*\([0-9]\.[0-9]\).*,\1,p' | \
     head -1

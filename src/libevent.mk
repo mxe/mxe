@@ -10,7 +10,7 @@ $(PKG)_URL      := https://github.com/downloads/$(PKG)/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://libevent.org/' | \
+    $(WGET) -q -O- 'http://libevent.org/' | \
     grep 'libevent-' | \
     $(SED) -n 's,.*libevent-\([0-9][^>]*\)-stable\.tar.*,\1,p' | \
     head -1

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/sources/$(PKG)-$(
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://pocoproject.org/download/' | \
+    $(WGET) -q -O- 'http://pocoproject.org/download/' | \
     $(SED) -n 's,.*poco-\([0-9][^>/]*\)\.tar.*,\1,p' | \
     head -1
 endef

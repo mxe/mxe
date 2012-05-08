@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/Extension/$(
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/mingw/files/MinGW/Extension/mingw-utils/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/mingw/files/MinGW/Extension/mingw-utils/' | \
     $(SED) -n 's,.*mingw-utils-\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

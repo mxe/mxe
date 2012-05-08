@@ -9,7 +9,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeassociation/$(PKG)/$
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/freeassociation/files/$(PKG)/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/freeassociation/files/$(PKG)/' | \
     $(SED) -n 's,.*/$(PKG)-\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

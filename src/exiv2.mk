@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.exiv2.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv zlib expat
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.exiv2.org/download.html' | \
+    $(WGET) -q -O- 'http://www.exiv2.org/download.html' | \
     grep 'href="exiv2-' | \
     $(SED) -n 's,.*exiv2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

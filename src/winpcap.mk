@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.winpcap.org/install/bin/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.winpcap.org/devel.htm' | \
+    $(WGET) -q -O- 'http://www.winpcap.org/devel.htm' | \
     $(SED) -n 's,.*WpcapSrc_\([0-9][^>]*\)\.zip.*,\1,p' | \
     head -1
 endef

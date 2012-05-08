@@ -10,7 +10,7 @@ $(PKG)_URL      := http://hci.iwr.uni-heidelberg.de/vigra/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff libpng openexr
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://hci.iwr.uni-heidelberg.de/vigra/' | \
+    $(WGET) -q -O- 'http://hci.iwr.uni-heidelberg.de/vigra/' | \
     grep 'Sources' | \
     grep '<a href="vigra' | \
     $(SED) -n 's,.*"vigra-\([0-9][^"]*\)-src.*,\1,p' | \

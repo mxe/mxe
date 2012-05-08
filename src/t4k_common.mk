@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tuxmath/$(PKG)/$($(PKG)_
 $(PKG)_DEPS     := gcc sdl sdl_mixer sdl_image sdl_net sdl_pango sdl_ttf libpng librsvg libxml2 pthreads
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://alioth.debian.org/frs/?group_id=31080' | \
+    $(WGET) -q -O- 'http://alioth.debian.org/frs/?group_id=31080' | \
     $(SED) -n 's,.*t4k_common-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

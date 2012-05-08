@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.vtk.org/files/release/5.8/$($(PKG)_FILE)
 $(PKG)_DEPS     := qt expat freetype jpeg libxml2 libpng tiff zlib libodbc++ postgresql
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
+    $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
     grep 'refs/tags/v[0-9.]*"' | \
     $(SED) 's,.*refs/tags/v\(.*\)".*,\1,g;' | \
     head -1

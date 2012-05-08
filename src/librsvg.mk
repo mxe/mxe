@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(call SHORT_P
 $(PKG)_DEPS     := gcc glib libgsf cairo pango gtk2 libcroco
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/librsvg/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/librsvg/refs/tags' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef

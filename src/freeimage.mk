@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeimage/Source Distrib
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/freeimage/files/Source Distribution/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/freeimage/files/Source Distribution/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

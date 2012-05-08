@@ -11,7 +11,7 @@ $(PKG)_URL_2    := ftp://ftp.eq.uc.pt/pub/software/math/netlib/$(PKG)/$($(PKG)_F
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.netlib.org/lapack/' | \
+    $(WGET) -q -O- 'http://www.netlib.org/lapack/' | \
     $(SED) -n 's_.*>LAPACK, version \([0-9]\.[0-9]\.[0-9]\).*_\1_ip' | \
     head -1
 endef

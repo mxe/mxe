@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(call S
 $(PKG)_DEPS     := gcc gtk2 libxml2
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/gtksourceview/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/gtksourceview/refs/tags' | \
     $(SED) -n 's,.*>GTKSOURCEVIEW_\([0-9]\+_[0-9]*[02468]_[^<]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
     grep -v '^2\.9[0-9]\.' | \

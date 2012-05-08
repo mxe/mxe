@@ -10,7 +10,7 @@ $(PKG)_URL      := http://developer.kde.org/~wheeler/files/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://developer.kde.org/~wheeler/files/src/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://developer.kde.org/~wheeler/files/src/?C=M;O=D' | \
     $(SED) -n 's,.*"taglib-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -11,7 +11,7 @@ $(PKG)_URL_2    := ftp://ftp.remotesensing.org/libtiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg xz
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.remotesensing.org/libtiff/' | \
+    $(WGET) -q -O- 'http://www.remotesensing.org/libtiff/' | \
     $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
     head -1
 endef

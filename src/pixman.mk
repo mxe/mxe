@@ -11,7 +11,7 @@ $(PKG)_URL_2    := http://xorg.freedesktop.org/archive/individual/lib/$($(PKG)_F
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://cairographics.org/snapshots/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://cairographics.org/snapshots/?C=M;O=D' | \
     $(SED) -n 's,.*"pixman-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

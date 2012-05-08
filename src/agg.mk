@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.antigrain.com/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype sdl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.antigrain.com/download/index.html' | \
+    $(WGET) -q -O- 'http://www.antigrain.com/download/index.html' | \
     $(SED) -n 's,.*<A href="http://www.antigrain.com/agg-\([0-9.]*\).tar.gz".*,\1,p' | \
     head -1
 endef

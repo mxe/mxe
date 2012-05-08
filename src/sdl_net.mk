@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.libsdl.org/projects/SDL_net/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.libsdl.org/projects/SDL_net/release/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://www.libsdl.org/projects/SDL_net/release/?C=M;O=D' | \
     $(SED) -n 's,.*SDL_net-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -10,7 +10,7 @@ $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://eigen.tuxfamily.org/index.php?title=Main_Page#Download' | \
+    $(WGET) -q -O- 'http://eigen.tuxfamily.org/index.php?title=Main_Page#Download' | \
     grep 'eigen/get/' | \
     $(SED) -n 's,.*eigen/get/\(2[^>]*\)\.tar.*,\1,p' | \
     head -1

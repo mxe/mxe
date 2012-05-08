@@ -14,7 +14,7 @@ define $(PKG)_UPDATE
     echo $(freetds_VERSION)
 endef
 define $(PKG)_UPDATE_orig
-    wget -q -O- 'http://freetds.cvs.sourceforge.net/viewvc/freetds/freetds/' | \
+    $(WGET) -q -O- 'http://freetds.cvs.sourceforge.net/viewvc/freetds/freetds/' | \
     grep '<option>R' | \
     $(SED) -n 's,.*R\([0-9][0-9_]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \

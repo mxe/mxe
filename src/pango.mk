@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG
 $(PKG)_DEPS     := gcc fontconfig freetype cairo glib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/pango/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/pango/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1

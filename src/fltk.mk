@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.easysw.com/pub/fltk/$($(PKG)_VERSION)/$($(PKG)_FIL
 $(PKG)_DEPS     := gcc zlib jpeg libpng pthreads
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.fltk.org/' | \
+    $(WGET) -q -O- 'http://www.fltk.org/' | \
     $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
     grep -v '^1\.1\.' | \
     head -1

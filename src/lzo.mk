@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.oberhumer.com/opensource/lzo/download/$($(PKG)_FIL
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.oberhumer.com/opensource/lzo/download/' | \
+    $(WGET) -q -O- 'http://www.oberhumer.com/opensource/lzo/download/' | \
     grep 'lzo-' | \
     grep -v 'minilzo-' | \
     $(SED) -n 's,.*lzo-\([0-9][^>]*\)\.tar.*,\1,p' | \

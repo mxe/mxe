@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/lcms/lcms/$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc jpeg tiff zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/lcms/files/lcms/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/lcms/files/lcms/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     grep '^1\.' | \
     head -1

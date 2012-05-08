@@ -11,7 +11,7 @@ $(PKG)_URL_2    := http://$(SOURCEFORGE_MIRROR)/project/libpng/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://zlib.net/' | \
+    $(WGET) -q -O- 'http://zlib.net/' | \
     $(SED) -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,ip' | \
     head -1
 endef

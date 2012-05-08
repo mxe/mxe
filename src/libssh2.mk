@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.libssh2.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgcrypt zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.libssh2.org/download/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://www.libssh2.org/download/?C=M;O=D' | \
     grep 'libssh2-' | \
     $(SED) -n 's,.*libssh2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

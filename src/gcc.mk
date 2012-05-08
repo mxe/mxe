@@ -11,7 +11,7 @@ $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$
 $(PKG)_DEPS     := mingwrt w32api binutils gcc-gmp gcc-mpc gcc-mpfr
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
     grep -v '^4\.[543]\.' | \
     head -1

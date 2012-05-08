@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnu.org/gnu/readline/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pdcurses
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://tiswww.case.edu/php/chet/readline/rltop.html' | \
+    $(WGET) -q -O- 'http://tiswww.case.edu/php/chet/readline/rltop.html' | \
     grep 'readline-' | \
     $(SED) -n 's,.*readline-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://libass.googlecode.com/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype fontconfig fribidi
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://code.google.com/p/libass/downloads/list?sort=-uploaded' | \
+    $(WGET) -q -O- 'http://code.google.com/p/libass/downloads/list?sort=-uploaded' | \
     $(SED) -n 's,.*libass-\([0-9][^<]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.lua.org/ftp/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.lua.org/download.html' | \
+    $(WGET) -q -O- 'http://www.lua.org/download.html' | \
     $(SED) -n 's,.*lua-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

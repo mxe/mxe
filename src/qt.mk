@@ -10,7 +10,7 @@ $(PKG)_URL      := http://get.qt.nokia.com/qt/source/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
+    $(WGET) -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
     grep '<li><a href="/qt/qt/commit/' | \
     $(SED) -n 's,.*<a[^>]*>v\([0-9][^<-]*\)<.*,\1,p' | \
     tail -1

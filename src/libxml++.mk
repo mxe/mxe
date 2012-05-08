@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/libxml++/$(call SHORT_
 $(PKG)_DEPS     := gcc libxml2 glibmm
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/libxml++/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/libxml++/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1

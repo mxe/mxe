@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/libcroco/$(call SHORT_
 $(PKG)_DEPS     := gcc glib libxml2
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/libcroco/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/libcroco/refs/tags' | \
     $(SED) -n 's,.*<a[^>]*>LIBCROCO_\([0-9][0-9_]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
     head -1

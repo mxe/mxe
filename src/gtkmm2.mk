@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(call SHORT_PKG
 $(PKG)_DEPS     := gcc gtk2 libsigc++ pangomm cairomm atkmm
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/gtkmm/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/gtkmm/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
     grep -v '^2\.9' | \

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/flac/flac-src/flac-$($(P
 $(PKG)_DEPS     := gcc libiconv ogg
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://flac.cvs.sourceforge.net/viewvc/flac/flac/' | \
+    $(WGET) -q -O- 'http://flac.cvs.sourceforge.net/viewvc/flac/flac/' | \
     grep '<option>FLAC_RELEASE_' | \
     $(SED) -n 's,.*FLAC_RELEASE_\([0-9][0-9_]*\)__.*,\1,p' | \
     $(SED) 's,_,.,g' | \

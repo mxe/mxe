@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.bzip.org/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.bzip.org/downloads.html' | \
+    $(WGET) -q -O- 'http://www.bzip.org/downloads.html' | \
     grep 'bzip2-' | \
     $(SED) -n 's,.*bzip2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
