@@ -8,6 +8,10 @@ SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 PWD        := $(shell pwd)
 SHELL      := bash
 
+# uncomment for debug :
+#OLD_SHELL := $(SHELL)
+#SHELL = $(warning [$@ ($^) ($?)])$(OLD_SHELL) -x
+
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
@@ -24,8 +28,10 @@ LOG_DIR    := $(PWD)/log
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
+INST_DIR   := $(PREFIX)/installed
 MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
+SRC_DIR    := $(TOP_DIR)/src
 PKGS       := $(shell $(SED) -n 's/^.* id="\([^"]*\)-package".*$$/\1/p' '$(TOP_DIR)/index.html')
 PATH       := $(PREFIX)/bin:$(PATH)
 
@@ -96,13 +102,13 @@ define CHECK_REQUIREMENT_VERSION
     fi
 
 endef
-check-requirements: $(PREFIX)/installed/check-requirements
-$(PREFIX)/installed/check-requirements: $(MAKEFILE)
+check-requirements: $(INST_DIR)/check-requirements
+$(INST_DIR)/check-requirements: $(MAKEFILE)
 	@echo '[check requirements]'
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[4-9]\|2\.[7-9][0-9])
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.[1-9][0-9]\.[0-9]\+)
-	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
+	@[ -d '$(INST_DIR)' ] || mkdir -p '$(INST_DIR)'
 	@touch '$@'
 
 define newline
@@ -115,7 +121,7 @@ $(eval $(subst #,$(newline),$(shell \
         '$(TOP_DIR)/index.html' \
 )))
 
-include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
+include $(patsubst %,$(SRC_DIR)/%.mk,$(PKGS))
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
@@ -129,11 +135,11 @@ download-$(1): $(addprefix download-,$($(1)_DEPS))
 	fi
 
 .PHONY: $(1)
-$(1): $(PREFIX)/installed/$(1)
-$(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
-                          $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
-                          $(wildcard $(TOP_DIR)/src/$(1)-test*) \
-                          $(addprefix $(PREFIX)/installed/,$($(1)_DEPS)) \
+$(1): $(INST_DIR)/$(1)
+$(INST_DIR)/$(1): $(SRC_DIR)/$(1).mk \
+                          $(wildcard $(SRC_DIR)/$(1)-*.patch) \
+                          $(wildcard $(SRC_DIR)/$(1)-test*) \
+                          $(addprefix $(INST_DIR)/,$($(1)_DEPS)) \
                           | check-requirements
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -175,14 +181,14 @@ build-only-$(1):
 	    mkdir -p '$(2)'
 	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
 	    cd '$(2)/$($(1)_SUBDIR)'
-	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
+	    $(foreach PKG_PATCH,$(sort $(wildcard $(SRC_DIR)/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
-	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR),$(SRC_DIR)/$(1)-test)
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
-	[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
-	touch '$(PREFIX)/installed/$(1)'
+	[ -d '$(INST_DIR)' ] || mkdir -p '$(INST_DIR)'
+	touch '$(INST_DIR)/$(1)'
 endef
 $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 
@@ -217,10 +223,10 @@ update:
 
 update-checksum-%:
 	$(call DOWNLOAD_PKG_ARCHIVE,$*)
-	$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk'
+	$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(SRC_DIR)/$*.mk'
 
 cleanup-style:
-	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\
+	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME $(SRC_DIR)/*.mk $(SRC_DIR)/*test.* tools/*)),\
             $(SED) ' \
                 s/\r//g; \
                 s/[ \t]\+$$//; \
