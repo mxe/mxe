@@ -13,6 +13,9 @@ LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
 PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
+WGET       := wget --no-check-certificate \
+                   --user-agent=$(shell wget --version | \
+                   $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 gcc intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
@@ -61,8 +64,8 @@ CHECK_PKG_ARCHIVE = \
 DOWNLOAD_PKG_ARCHIVE = \
     mkdir -p '$(PKG_DIR)' && \
     $(if $($(1)_URL_2), \
-        ( wget -T 30 -t 3 --no-check-certificate -O- '$($(1)_URL)' || wget --no-check-certificate -O- '$($(1)_URL_2)' ), \
-        wget --no-check-certificate -O- '$($(1)_URL)') \
+        ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || $(WGET) -O- '$($(1)_URL_2)' ), \
+        $(WGET) -O- '$($(1)_URL)') \
     $(if $($(1)_FIX_GZIP), \
         | gzip -d | gzip -9n, \
         ) \
