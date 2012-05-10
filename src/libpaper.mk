@@ -3,7 +3,7 @@
 
 PKG             := libpaper
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 1f7a810a433a5a68b099aa92777cc2d0b3d03b42
+$(PKG)_CHECKSUM := 40f16453d7752bf5e3c9e74515650eb37edbb3fe
 $(PKG)_SUBDIR   := libpaper-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpaper_$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_FILE)
@@ -18,6 +18,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
