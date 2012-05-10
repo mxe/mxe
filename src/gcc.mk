@@ -54,7 +54,7 @@ define $(PKG)_BUILD
     # create pkg-config script
     (echo '#!/bin/sh'; \
      echo 'MXE_PREFIX="$$(cd $$(dirname $$0)/.. && pwd)"'; \
-     echo 'PKG_CONFIG_PATH="$${PKG_CONFIG_PATH_$(subst -,_,$(TARGET))}:$${MXE_PREFIX}/$(TARGET)/share/pkgconfig" PKG_CONFIG_LIBDIR="$${MXE_PREFIX}/$(TARGET)/lib/pkgconfig" exec pkg-config --static "$$@"') \
+     echo 'PKG_CONFIG_PATH="$${PKG_CONFIG_PATH_$(subst -,_,$(TARGET))}:$${MXE_PREFIX}/$(TARGET)/share/pkgconfig" PKG_CONFIG_LIBDIR="$${MXE_PREFIX}/$(TARGET)/lib/pkgconfig" exec pkg-config --static --define-variable=prefix=$${MXE_PREFIX}/$(TARGET) "$$@"') \
              > '$(PREFIX)/bin/$(TARGET)-pkg-config'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-pkg-config'
 
