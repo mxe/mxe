@@ -3,7 +3,7 @@
 
 PKG             := sqlite
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a768f76b10df84d6a2c66178544d42725a8fdaf0
+$(PKG)_CHECKSUM := 30e6b0912f074cff5563697367c2ba9608d83bd3
 $(PKG)_SUBDIR   := $(PKG)-autoconf-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-autoconf-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.sqlite.org/$($(PKG)_FILE)
@@ -18,6 +18,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-readline \
