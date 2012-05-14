@@ -3,7 +3,7 @@
 
 PKG             := gc
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := e84cba5d18f4ea5ed4e5fd3f1dc6a46bc190ff6f
+$(PKG)_CHECKSUM := 43c5f2704479dc8d8010fb2c73fa269bf3151d5b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.hpl.hp.com/personal/Hans_Boehm/$(PKG)/$(PKG)_source/$($(PKG)_FILE)
@@ -20,6 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --enable-threads=win32 \
