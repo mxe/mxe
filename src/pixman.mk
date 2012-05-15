@@ -3,7 +3,7 @@
 
 PKG             := pixman
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2785cedd25fb6ded0ceac8d427432f16b074dd52
+$(PKG)_CHECKSUM := ebd1b438a28aca0099777b1e383c60d4fcb88196
 $(PKG)_SUBDIR   := pixman-$($(PKG)_VERSION)
 $(PKG)_FILE     := pixman-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://cairographics.org/snapshots/$($(PKG)_FILE)
