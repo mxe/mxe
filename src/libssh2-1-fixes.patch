@@ -1,0 +1,32 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 6b8a3edae23dc93cc02e6c9572d0796e338ddc4f Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 19 May 2012 10:40:36 +0200
+Subject: [PATCH] libgcrypt does not provide pkg-config support
+
+Commits 04692445d4a32430610ccf8c256e18245cbb3e06
+and e887a8bd0f043fd49e9119756858e75e82dee504 add
+'libgcrypt' to Requires.private of libssh2.pc
+file, but libgcrypt does not provide a .pc file, so
+this does not work.
+---
+ configure.ac |    1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index aa9d397..0d35a27 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -102,7 +102,6 @@ fi
+ # Look for libgcrypt
+ if test "$ac_cv_libssl" != "yes" && test "$use_libgcrypt" != "no"; then
+   AC_LIB_HAVE_LINKFLAGS([gcrypt], [], [#include <gcrypt.h>])
+-  LIBSREQUIRED=libgcrypt
+ fi
+ 
+ AC_SUBST(LIBSREQUIRED)
+-- 
+1.7.9.2
+

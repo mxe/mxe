@@ -3,7 +3,7 @@
 
 PKG             := libssh2
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a5c59eac66f5686f3960f59dcb54b5bf3b339811
+$(PKG)_CHECKSUM := 7fc084254dabe14a9bc90fa3d569faa7ee943e19
 $(PKG)_SUBDIR   := libssh2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.libssh2.org/download/$($(PKG)_FILE)
@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./buildconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
