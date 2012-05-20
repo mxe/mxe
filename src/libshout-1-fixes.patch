@@ -1,0 +1,32 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From b05b2d82333e13f637dffb93f821907f775eb585 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 20 May 2012 23:23:37 +0200
+Subject: [PATCH] mingw fixes
+
+---
+ include/shout/shout.h.in |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/shout/shout.h.in b/include/shout/shout.h.in
+index 682ad49..f412cdc 100644
+--- a/include/shout/shout.h.in
++++ b/include/shout/shout.h.in
+@@ -23,8 +23,10 @@
+ 
+ #include <sys/types.h>
+ #ifdef WIN32
++#ifndef __MINGW32__
+ #include <os.h>
+ #endif
++#endif
+ 
+ #define SHOUTERR_SUCCESS	(0)
+ #define SHOUTERR_INSANE		(-1)
+-- 
+1.7.9.2
+
