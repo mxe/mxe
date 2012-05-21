@@ -3,10 +3,10 @@
 
 PKG             := giflib
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 22680f604ec92065f04caf00b1c180ba74fb8562
+$(PKG)_CHECKSUM := bc942711f75de7d8539f79be34d69c0d53c381c1
 $(PKG)_SUBDIR   := giflib-$($(PKG)_VERSION)
 $(PKG)_FILE     := giflib-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/giflib/giflib 4.x/giflib-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/giflib/giflib-4.x/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
@@ -18,8 +18,9 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-shared \
         --without-x \
         CPPFLAGS='-D_OPEN_BINARY'
     $(MAKE) -C '$(1)/lib' -j '$(JOBS)' install
