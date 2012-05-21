@@ -16,7 +16,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-	cd '$(1)' && autoreconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
 		--build="`config.guess`" \
