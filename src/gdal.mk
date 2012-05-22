@@ -3,7 +3,7 @@
 
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := e2eaaf0fba39137b40c0d3069ac41dfb6f3c76db
+$(PKG)_CHECKSUM := c1eae556398ff7b9332afe9d3022dcd931130808
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_FILE)
@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-bsb \
@@ -65,7 +66,6 @@ define $(PKG)_BUILD
         --without-ingres \
         --without-dods-root \
         --without-dwgdirect \
-        --without-dwg-plt \
         --without-idb \
         --without-sde \
         --without-epsilon \
@@ -73,7 +73,6 @@ define $(PKG)_BUILD
         --without-php \
         --without-ruby \
         --without-python \
-        --without-macosx-framework \
         LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $(MAKE) -C '$(1)'       -j 1 lib-target
     $(MAKE) -C '$(1)'       -j 1 install-lib
