@@ -4,7 +4,7 @@
 diff --git a/configure b/configure
 --- a/configure
 +++ b/configure
-@@ -465,9 +465,6 @@ process_detect() {
+@@ -481,9 +481,6 @@ process_detect() {
          }
      fi
      check_header stdio.h || die "Unable to invoke compiler: ${CC} ${CFLAGS}"

@@ -3,7 +3,7 @@
 
 PKG             := libvpx
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2919e11074fef72fc61ef1a75160050ffaad6074
+$(PKG)_CHECKSUM := 356af5f770c50cd021c60863203d8f30164f6021
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://webm.googlecode.com/files/$($(PKG)_FILE)
