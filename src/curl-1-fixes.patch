@@ -5,29 +5,25 @@ Commits backported (cherry-picked) from upstream.
 http://github.com/bagder/curl
 Also contains MXE specific fixes.
 
-From ee69c33117cf616c19e9cd288f08eb4c91bf190d Mon Sep 17 00:00:00 2001
-From: Volker Grabsch <vog@notjusthosting.com>
-Date: Fri, 28 Oct 2011 13:48:04 +0200
-Subject: [PATCH] static linking for MXE
+From ed729805781e366b68105f074f9e3c17fb81df27 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 24 May 2012 20:45:36 +0200
+Subject: [PATCH] define CURL_STATICLIB via pkg-config
 
 ---
- include/curl/curlbuild.h.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ libcurl.pc.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/curl/curlbuild.h.in b/include/curl/curlbuild.h.in
-index fe348f4..c428273 100644
---- a/include/curl/curlbuild.h.in
-+++ b/include/curl/curlbuild.h.in
-@@ -111,6 +111,9 @@
- /*  EXTERNAL INTERFACE SETTINGS FOR CONFIGURE CAPABLE SYSTEMS ONLY  */
- /* ================================================================ */
- 
-+/* Configure process defines this to 1 when static linking is requested. */
-+#undef CURL_STATICLIB
-+
- /* Configure process defines this to 1 when it finds out that system  */
- /* header file ws2tcpip.h must be included by the external interface. */
- #undef CURL_PULL_WS2TCPIP_H
+diff --git a/libcurl.pc.in b/libcurl.pc.in
+index 2ba9c39..e0ddd8d 100644
+--- a/libcurl.pc.in
++++ b/libcurl.pc.in
+@@ -36,4 +36,4 @@ Description: Library to transfer files with ftp, http, etc.
+ Version: @CURLVERSION@
+ Libs: -L${libdir} -lcurl @LIBS@
+ Libs.private: @LIBCURL_LIBS@ @LIBS@
+-Cflags: -I${includedir}
++Cflags: -DCURL_STATICLIB -I${includedir}
 -- 
-1.7.8.3
+1.7.9.2
 

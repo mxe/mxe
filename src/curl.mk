@@ -3,7 +3,7 @@
 
 PKG             := curl
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f6016a24051d98806ca3ddf754592701cb66e00c
+$(PKG)_CHECKSUM := c2e62eaace2407d377bf544d1f808aea6dddf64c
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://curl.haxx.se/download/$($(PKG)_FILE)
@@ -16,7 +16,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./buildconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
