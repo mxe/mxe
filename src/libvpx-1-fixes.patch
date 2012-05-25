@@ -1,0 +1,154 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+From 0db7805768cb8be8dfe2c95f451fd5965b2b52b7 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 25 May 2012 23:36:41 +0200
+Subject: [PATCH 1/3] add Libs.private to vpx.pc
+
+---
+ libs.mk |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libs.mk b/libs.mk
+index e2ba737..209f77e 100644
+--- a/libs.mk
++++ b/libs.mk
+@@ -242,6 +242,7 @@ vpx.pc: config.mk libs.mk
+ 	$(qexec)echo 'Requires:' >> $@
+ 	$(qexec)echo 'Conflicts:' >> $@
+ 	$(qexec)echo 'Libs: -L$${libdir} -lvpx' >> $@
++	$(qexec)echo 'Libs.private: -lpthread' >> $@
+ 	$(qexec)echo 'Cflags: -I$${includedir}' >> $@
+ INSTALL-LIBS-yes += $(LIBSUBDIR)/pkgconfig/vpx.pc
+ INSTALL_MAPS += $(LIBSUBDIR)/pkgconfig/%.pc %.pc
+-- 
+1.7.9.2
+
+
+From 5805ff3f9f16036b7556d74b2874a6d18ea655fa Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 25 May 2012 23:40:00 +0200
+Subject: [PATCH 2/3] linking as test is not good for cross compiling
+
+---
+ configure |    3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/configure b/configure
+index 62e1ffb..0c4faf9 100755
+--- a/configure
++++ b/configure
+@@ -481,9 +481,6 @@ process_detect() {
+         }
+     fi
+     check_header stdio.h || die "Unable to invoke compiler: ${CC} ${CFLAGS}"
+-    check_ld <<EOF || die "Toolchain is unable to link executables"
+-int main(void) {return 0;}
+-EOF
+     # check system headers
+     check_header stdint.h
+     check_header pthread.h
+-- 
+1.7.9.2
+
+
+From bf308b8ed07f8bf0e9c648314e1f3c070a647731 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 25 May 2012 23:40:55 +0200
+Subject: [PATCH 3/3] fix bin/bash
+
+---
+ build/make/armlink_adapter.sh |    2 +-
+ build/make/configure.sh       |    2 +-
+ build/make/gen_asm_deps.sh    |    2 +-
+ build/make/gen_msvs_def.sh    |    2 +-
+ build/make/gen_msvs_proj.sh   |    2 +-
+ build/make/gen_msvs_sln.sh    |    2 +-
+ build/make/version.sh         |    2 +-
+ configure                     |    2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/build/make/armlink_adapter.sh b/build/make/armlink_adapter.sh
+index b53669c..71cf7e9 100755
+--- a/build/make/armlink_adapter.sh
++++ b/build/make/armlink_adapter.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/configure.sh b/build/make/configure.sh
+index 3c772e5..032b5e8 100755
+--- a/build/make/configure.sh
++++ b/build/make/configure.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  configure.sh
+ ##
+diff --git a/build/make/gen_asm_deps.sh b/build/make/gen_asm_deps.sh
+index 717f870..81b7095 100755
+--- a/build/make/gen_asm_deps.sh
++++ b/build/make/gen_asm_deps.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/gen_msvs_def.sh b/build/make/gen_msvs_def.sh
+index 4defcc2..12e3573 100755
+--- a/build/make/gen_msvs_def.sh
++++ b/build/make/gen_msvs_def.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/gen_msvs_proj.sh b/build/make/gen_msvs_proj.sh
+index 6d42941..4418034 100755
+--- a/build/make/gen_msvs_proj.sh
++++ b/build/make/gen_msvs_proj.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/gen_msvs_sln.sh b/build/make/gen_msvs_sln.sh
+index 240678b..2089f68 100755
+--- a/build/make/gen_msvs_sln.sh
++++ b/build/make/gen_msvs_sln.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/version.sh b/build/make/version.sh
+index 3efb956..b3a9c23 100755
+--- a/build/make/version.sh
++++ b/build/make/version.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/configure b/configure
+index 0c4faf9..5d1db69 100755
+--- a/configure
++++ b/configure
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  configure
+ ##
+-- 
+1.7.9.2
+
