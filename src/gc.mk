@@ -3,8 +3,8 @@
 
 PKG             := gc
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 43c5f2704479dc8d8010fb2c73fa269bf3151d5b
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_CHECKSUM := 042b551d9e313557c8919375c669ae484237cf3e
+$(PKG)_SUBDIR   := $(PKG)-7.2
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.hpl.hp.com/personal/Hans_Boehm/$(PKG)/$(PKG)_source/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
