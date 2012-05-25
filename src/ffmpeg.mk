@@ -3,7 +3,7 @@
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 4fb6f682dbc1b4ea54178040d515fc3a4c05d415
+$(PKG)_CHECKSUM := 1aa3443c20b1c5d132d1fe06de7cc949a7219edd
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    '$(SED)' -i "s^[-]lvpx^`'$(TARGET)'-pkg-config --libs-only-l vpx`^g;" $(1)/configure
     cd '$(1)' && ./configure \
         --cross-prefix='$(TARGET)'- \
         --enable-cross-compile \
