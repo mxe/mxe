@@ -3,7 +3,7 @@
 
 PKG             := pthreads
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := da8371cb20e8e238f96a1d0651212f154d84a9ac
+$(PKG)_CHECKSUM := 24d40e89c2e66a765733e8c98d6f94500343da86
 $(PKG)_SUBDIR   := pthreads-w32-$($(PKG)_VERSION)-release
 $(PKG)_FILE     := pthreads-w32-$($(PKG)_VERSION)-release.tar.gz
 $(PKG)_URL      := ftp://sourceware.org/pub/pthreads-win32/$($(PKG)_FILE)
@@ -17,10 +17,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i '35i\#define PTW32_STATIC_LIB' '$(1)/pthread.h'
-    $(SED) -i '41i\#define PTW32_STATIC_LIB' '$(1)/sched.h'
-    $(SED) -i '41i\#define PTW32_STATIC_LIB' '$(1)/semaphore.h'
-    $(SED) -i 's,#include "config.h",,'      '$(1)/pthread.h'
     $(MAKE) -C '$(1)' -j 1 GC-static CROSS='$(TARGET)-'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
