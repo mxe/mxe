@@ -3,7 +3,7 @@
 
 PKG             := libgsasl
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2942886514f14801193e505fc5367330d5c6b7de
+$(PKG)_CHECKSUM := 08fd5dfdd3d88154cf06cb0759a732790c47b4f7
 $(PKG)_SUBDIR   := libgsasl-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgsasl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/gsasl/$($(PKG)_FILE)

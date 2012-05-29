@@ -13,7 +13,7 @@ diff --git a/gl/memxor.c b/gl/memxor.c
 index 7fec454..d9b62cd 100644
 --- a/gl/memxor.c
 +++ b/gl/memxor.c
-@@ -23,7 +23,7 @@
+@@ -22,7 +22,7 @@
  #include "memxor.h"
  
  void *
