@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := suitesparse
-$(PKG)_CHECKSUM := a453b08877980848f3a5cde242f9865a7b08faad
+$(PKG)_CHECKSUM := 32a21e3af3216b87c4adb885234454648ed2d0c0
 $(PKG)_SUBDIR   := SuiteSparse
 $(PKG)_FILE     := SuiteSparse-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.cise.ufl.edu/research/sparse/SuiteSparse/$($(PKG)_FILE)
