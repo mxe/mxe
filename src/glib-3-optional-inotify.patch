@@ -1,0 +1,31 @@
+This file is part of MXE.
+See index.html for further information.
+
+Allow building without inotify support.
+
+diff --git a/configure.ac b/configure.ac
+index 2d7ce80..e126ca8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1700,11 +1700,18 @@ dnl *****************************
+ dnl ** Check for inotify (GIO) **
+ dnl *****************************
+ inotify_support=no
+-AC_CHECK_HEADERS([sys/inotify.h],
+-[
++
++AC_ARG_ENABLE(inotify,
++              AC_HELP_STRING([--disable-inotify],
++                             [build without inotify support]))
++
++if test "x$enable_inotify" != "xno"; then
++ AC_CHECK_HEADERS([sys/inotify.h],
++ [
+ 	inotify_support=yes
+ 	AC_CHECK_FUNCS(inotify_init1)
+-])
++ ])
++fi
+ 
+ AM_CONDITIONAL(HAVE_INOTIFY, [test "$inotify_support" = "yes"])
+ 
