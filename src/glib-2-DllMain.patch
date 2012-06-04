@@ -1,3 +1,8 @@
+This file is part of MXE.
+See index.html for further information.
+
+Avoid DllMain symbol conflict when linking statically.
+
 diff -uNr glib-2.28.8-orig/gio/giomodule.c glib/gio/giomodule.c
 --- glib-2.28.8-orig/gio/giomodule.c	2011-01-05 22:44:06.000000000 +0100
 +++ glib/gio/giomodule.c	2011-11-23 21:04:43.867004895 +0100
@@ -22,38 +27,20 @@ diff -uNr glib-2.28.8-orig/gio/giomodule.c glib/gio/giomodule.c
  #undef GIO_MODULE_DIR
  
  /* GIO_MODULE_DIR is used only in code called just once,
-diff -uNr glib-2.28.8-orig/glib/gutils.c glib/glib/gutils.c
---- glib-2.28.8-orig/glib/gutils.c	2011-06-06 01:18:49.000000000 +0200
-+++ glib/glib/gutils.c	2011-11-23 21:05:07.822988144 +0100
-@@ -144,10 +144,8 @@
+diff --git a/glib/glib-init.c b/glib/glib-init.c
+index f4edd5c..02bf678 100644
+--- a/glib/glib-init.c
++++ b/glib/glib-init.c
+@@ -226,9 +226,9 @@ glib_init (void)
+ HMODULE glib_dll;
  
- static HMODULE glib_dll = NULL;
- 
--#ifdef DLL_EXPORT
--
  BOOL WINAPI
 -DllMain (HINSTANCE hinstDLL,
+-         DWORD     fdwReason,
+-         LPVOID    lpvReserved)
 +glib_DllMain (HINSTANCE hinstDLL,
- 	 DWORD     fdwReason,
- 	 LPVOID    lpvReserved)
++              DWORD     fdwReason,
++              LPVOID    lpvReserved)
  {
-@@ -157,8 +155,6 @@
-   return TRUE;
- }
- 
--#endif
--
- gchar *
- _glib_get_dll_directory (void)
- {
-@@ -166,10 +162,8 @@
-   gchar *p;
-   wchar_t wc_fn[MAX_PATH];
- 
--#ifdef DLL_EXPORT
-   if (glib_dll == NULL)
-     return NULL;
--#endif
- 
-   /* This code is different from that in
-    * g_win32_get_package_installation_directory_of_module() in that
+   switch (fdwReason)
+     {

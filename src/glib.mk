@@ -3,11 +3,11 @@
 
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9b11968fedf4da45bcd10c4a8c50012d41b3af50
+$(PKG)_CHECKSUM := 5898165e58c8f946c2b1fd05b910fe4476b64164
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext pcre libiconv zlib dbus
+$(PKG)_DEPS     := gcc gettext pcre libiconv zlib libffi dbus
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
@@ -35,6 +35,7 @@ define $(PKG)_BUILD
         --enable-regex \
         --disable-threads \
         --disable-selinux \
+        --disable-inotify \
         --disable-fam \
         --disable-xattr \
         --disable-dtrace \
@@ -45,9 +46,13 @@ define $(PKG)_BUILD
     $(SED) -i 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gmodule' -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    $(MAKE) -C '$(1).native/gio/xdgmime'     -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)' glib-compile-schemas
+    $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)' glib-compile-resources
     $(INSTALL) -m755 '$(1).native/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m755 '$(1).native/gio/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
 
     # cross build
     cd '$(1)' && ./configure \
@@ -58,10 +63,12 @@ define $(PKG)_BUILD
         --with-threads=win32 \
         --with-pcre=system \
         --with-libiconv=gnu \
+        --disable-inotify \
         CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
-        GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas'
+        GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
+        GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources'
     $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
