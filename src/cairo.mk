@@ -3,9 +3,9 @@
 
 PKG             := cairo
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ccce5ae03f99c505db97c286a0c9a90a926d3c6e
+$(PKG)_CHECKSUM := bc2ee50690575f16dab33af42a2e6cdc6451e3f9
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
-$(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libpng fontconfig freetype pixman
 
@@ -44,6 +44,7 @@ define $(PKG)_BUILD
         --enable-pdf \
         --enable-svg \
         --disable-pthread \
+        CFLAGS="$(CFLAGS) -DCAIRO_WIN32_STATIC_BUILD" \
         LIBS="-lmsimg32 -lgdi32 `$(TARGET)-pkg-config pixman-1 --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
