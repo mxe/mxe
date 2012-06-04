@@ -3,7 +3,7 @@
 
 PKG             := geos
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2ecd23c38d74e5f04757dc528ec30858006fb6a7
+$(PKG)_CHECKSUM := 2ec4be729c851460daf89d0d2ab785be5ef4c5c5
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
 $(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://download.osgeo.org/geos/$($(PKG)_FILE)
@@ -19,9 +19,9 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-swig
+        --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
