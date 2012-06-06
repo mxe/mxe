@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_CHECKSUM := df55f60a0426de1f0efb5c1a902e209b069b3d51
+$(PKG)_CHECKSUM := 0c65f6a1e669c0fe85ddb2d645078b3bce9d1518
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
@@ -27,6 +27,7 @@ define $(PKG)_BUILD
     # Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms737530%28v=vs.85%29.aspx
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --enable-static \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
