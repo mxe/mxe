@@ -3,7 +3,7 @@
 
 PKG             := pdflib_lite
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 5b2bf5edc49dba3da0997ade0e191511a37fae01
+$(PKG)_CHECKSUM := 42e0605ae21f4b6d25fa2d20e78fed6df36fbaa9
 $(PKG)_SUBDIR   := PDFlib-Lite-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(subst p, ,$($(PKG)_VERSION))))/$($(PKG)_FILE)
@@ -16,9 +16,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,ac_sys_system=`uname -s`,ac_sys_system=MinGW,' '$(1)/configure'
+    cd '$(1)' && aclocal -I config --install
+    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-openssl \
