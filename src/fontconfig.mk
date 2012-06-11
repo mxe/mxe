@@ -3,7 +3,7 @@
 
 PKG             := fontconfig
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := c85281c06ffe7db1676a107584bbeb7fd290cbcc
+$(PKG)_CHECKSUM := 9f4dff0a6e50ade2b919f33795eae8438a285595
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
 $(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://fontconfig.org/release/$($(PKG)_FILE)
