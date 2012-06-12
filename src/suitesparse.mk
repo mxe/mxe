@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := suitesparse
-$(PKG)_CHECKSUM := a453b08877980848f3a5cde242f9865a7b08faad
+$(PKG)_CHECKSUM := 4f1f5af64625606d58c129087a66d58d90c4dd58
 $(PKG)_SUBDIR   := SuiteSparse
 $(PKG)_FILE     := SuiteSparse-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.cise.ufl.edu/research/sparse/SuiteSparse/$($(PKG)_FILE)
@@ -42,10 +42,10 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/CCOLAMD/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/CHOLMOD/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/COLAMD/Include/'*.h   '$(PREFIX)/$(TARGET)/include/suitesparse/'
+    $(INSTALL) -m644 '$(1)/CSparse/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/CXSparse/Include/'*.h '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/KLU/Include/'*.h      '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/LDL/Include/'*.h      '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/SPQR/Include/'*       '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/UFconfig/'*.h         '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/UMFPACK/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
 endef
