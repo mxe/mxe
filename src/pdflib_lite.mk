@@ -29,7 +29,6 @@ define $(PKG)_BUILD
         --without-perl \
         --without-ruby \
         --without-tcl \
-        --disable-php \
         --enable-cxx \
         --enable-large-files \
         CFLAGS='-D_IOB_ENTRIES=20'
