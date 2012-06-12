@@ -36,6 +36,7 @@ define $(PKG)_BUILD
 
     # install include files
     $(INSTALL) -d                                '$(PREFIX)/$(TARGET)/include/suitesparse/'
+    $(INSTALL) -m644 '$(1)/SuiteSparse_config/'*.h '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/AMD/Include/'*.h      '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/BTF/Include/'*.h      '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/CAMD/Include/'*.h     '$(PREFIX)/$(TARGET)/include/suitesparse/'
