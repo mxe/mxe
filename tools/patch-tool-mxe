@@ -6,52 +6,85 @@
 cmd=$1
 pkg=$2
 
-# MXE directory
-mxedir=~/mxe
+setupEnv() {
+  # MXE directory
+  export mxedir=$(cd $(dirname $0) && cd .. && pwd)
 
-# directory for unpacked tarballs/git repos
-gitsdir=~/gits
+  # directory for unpacked tarballs/git repos
+  export gitsdir=${mxedir}/gits
+
+  mkdir -p ${gitsdir}
 
 
-# John Doe <John Doe@acme.org>
-author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
+  # John Doe <John Doe@acme.org>
+  export author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
 
-pkg_version=`grep '^$(PKG)_VERSION' $mxedir/src/$pkg.mk  | \
-  sed 's/.*:= \(.*\)/\1/'`
+  export pkg_version=$(sed -n "s/^.* id=\"${pkg}-version\">\([^<]*\)<.*$/\1/p" "${mxedir}/index.html")
 
-pkg_short_version=`echo $pkg_version | sed s/'\(.*\)\.[^.]*$'/'\1'/`
+  export pkg_short_version=`echo $pkg_version | sed s/'\(.*\)\.[^.]*$'/'\1'/`
 
-pkg_subdir=`grep '^$(PKG)_SUBDIR' $mxedir/src/$pkg.mk  | \
-  sed 's/.*:= \(.*\)/\1/' | \
-  sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
-  sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
-  sed s/'$(PKG)'/$pkg/;`
+  export pkg_subdir=`grep '^$(PKG)_SUBDIR' $mxedir/src/$pkg.mk  | \
+    sed 's/.*:= \(.*\)/\1/' | \
+    sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
+    sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
+    sed s/'$(PKG)'/$pkg/;`
 
-pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
-  sed 's/.*:= \(.*\)/\1/' | \
-  sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
-  sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
-  sed s/'$($(PKG)_SUBDIR)'/$pkg_subdir/ | \
-  sed s/'$(PKG)'/$pkg/;`
+  export pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
+    sed 's/.*:= \(.*\)/\1/' | \
+    sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
+    sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
+    sed s/'$($(PKG)_SUBDIR)'/$pkg_subdir/ | \
+    sed s/'$(PKG)'/$pkg/;`
 
-#echo $pkg
-#echo $pkg_version
-#echo $pkg_subdir
-#echo $pkg_file
+  #echo $pkg
+  #echo $pkg_version
+  #echo $pkg_subdir
+  #echo $pkg_file
 
+}
 # init
 function init_git {
+  setupEnv
   cd $gitsdir
+
+  if [ -d $gitsdir/$pkg_subdir ]; then
+    echo "Error: $gitsdir/$pkg_subdir already exists. Cancelling init." >&2
+    exit 1
+  fi
+
+  echo "Checking for cached $pkg_file"
+  if [ ! -f $mxedir/pkg/$pkg_file ]; then
+    make -C "$mxedir" download-$pkg
+    echo "Building the mxe Makefile target 'download-$pkg' to get missing file"
+    if [ ! $? -eq 0 ]; then
+      echo "Could not build target download-$pkg - cancelling init." >&2
+      exit 1
+    fi
+  fi
+
+  echo "Unpacking archive..."
   echo $pkg_file | grep "\.tar\.gz"  >> /dev/null && tar xf $mxedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.bz2" >> /dev/null && tar xf $mxedir/pkg/$pkg_file
   echo $pkg_file | grep "\.tar\.xz"  >> /dev/null && xz -dc $mxedir/pkg/$pkg_file | tar xf -
   echo $pkg_file | grep "\.zip"      >> /dev/null && unzip  $mxedir/pkg/$pkg_file >> /dev/null
+
+  echo "Initializing repo and adding all as first commit"
   cd $gitsdir/$pkg_subdir && \
   (git init; git add -A; git commit -m "init") > /dev/null
+
+  echo "Creating 'dist' tag for distribution tarball state"
   git tag dist
+
+  echo "Repository ready in $gitsdir/$pkg_subdir"
 }
 
 function export_patch {
+  setupEnv
+  if [ ! -d $gitsdir/$pkg_subdir ]; then
+    echo "Error: $gitsdir/$pkg_subdir does not exist, so cannot export patches. Cancelling export." >&2
+    exit 1
+  fi
+
   cd $gitsdir/$pkg_subdir && \
   (
     echo 'This file is part of MXE.'
@@ -61,21 +94,50 @@ function export_patch {
     echo ''
     git format-patch -p --stdout dist..HEAD | \
     sed 's/^From: .*/From: MXE/g;'
-  ) > $mxedir/src/$pkg-1-fixes.patch
+  ) > $mxedir/src/$pkg-1-fixes.patch && \
+  echo "Generated $mxedir/src/$pkg-1-fixes.patch"
 }
 
 function import_patch {
-  cd $gitsdir/$pkg_subdir && \
-  cat $mxedir/src/$pkg-1-fixes.patch | \
-  sed '/^From/,$  !d' | \
-  sed s/'^From: .*'/"From: $author"/'g;' | \
-  git am --keep-cr
+  setupEnv
+  if [ ! -d $gitsdir/$pkg_subdir ]; then
+    echo "Error: $gitsdir/$pkg_subdir does not exist, so cannot import patches. Cancelling import - try 'init' first." >&2
+    exit 1
+  fi
+
+  if [ -f $mxedir/src/$pkg-1-fixes.patch ]; then
+    cd $gitsdir/$pkg_subdir && \
+    cat $mxedir/src/$pkg-1-fixes.patch | \
+    sed '/^From/,$  !d' | \
+    sed s/'^From: .*'/"From: $author"/'g;' | \
+    git am --keep-cr && \
+    echo "Imported $mxedir/src/$pkg-1-fixes.patch"
+  else
+    echo "patch-tool managed file $mxedir/src/$pkg-1-fixes.patch not found. Cancelling import." >&2
+    exit 1
+  fi
 }
 
-if [ "$cmd" == "init" ]; then
-  init_git $pkg
-elif [ "$cmd" == "import" ]; then
-  import_patch $pkg
-elif [ "$cmd" == "export" ]; then
-  export_patch $pkg
-fi
+case "$cmd" in
+  init)
+    init_git $pkg
+    ;;
+  import)
+    import_patch $pkg
+    ;;
+  export)
+    export_patch $pkg
+    ;;
+  *)
+    echo "Unrecognized command '${cmd}'" >&2
+    cat <<EOS
+    Usage: $0 COMMAND PACKAGENAME
+    where COMMAND is one of:
+      init - create a git directory for the package with the raw source
+      import - apply the "pkgname-1-fixes.patch" patch commits
+      export - create/replace the "pkgname-1-fixes.patch" patch with a patch of all commits since init.
+EOS
+    exit 1
+    ;;
+esac
+
