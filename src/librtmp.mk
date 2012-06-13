@@ -22,5 +22,6 @@ define $(PKG)_BUILD
         prefix='$(PREFIX)/$(TARGET)' \
         SYS=mingw \
         CRYPTO=GNUTLS \
+        SHARED=no \
         -j '$(JOBS)' install
 endef
