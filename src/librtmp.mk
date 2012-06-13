@@ -4,8 +4,8 @@
 PKG             := librtmp
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := b65ce7708ae79adb51d1f43dd0b6d987076d7c42
-$(PKG)_SUBDIR   := rtmpdump-$($(PKG)_VERSION)
-$(PKG)_FILE     := rtmpdump-$($(PKG)_VERSION).tgz
+$(PKG)_SUBDIR   := rtmpdump-2.3
+$(PKG)_FILE     := rtmpdump-2.3.tgz
 $(PKG)_URL      := http://rtmpdump.mplayerhq.hu/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc openssl
 
