@@ -16,9 +16,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # ensure there is no (buggy) attempt to install the *.dll.a file
-    # (remove this line of you want to link dynamically)
-    $(SED) -i 's,^install-data-local:.*,install-data-local:,' '$(1)/src/Makefile.in'
+    cd '$(1)' && aclocal
+    cd '$(1)' && autoheader
+    cd '$(1)' && libtoolize
+    cd '$(1)' && automake
+    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
