@@ -19,7 +19,6 @@ define $(PKG)_BUILD
     # ensure there is no (buggy) attempt to install the *.dll.a file
     # (remove this line of you want to link dynamically)
     $(SED) -i 's,^install-data-local:.*,install-data-local:,' '$(1)/src/Makefile.in'
-    $(SED) -i 's,^\(Libs:.*\),\1 @EXPAT_LIBS@ @FREETYPE_LIBS@,' '$(1)/fontconfig.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
