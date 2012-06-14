@@ -10,10 +10,8 @@ $(PKG)_URL      := http://rtmpdump.mplayerhq.hu/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://rtmpdump.mplayerhq.hu/download/' | \
-    $(SED) -n 's,.*rtmpdump-\([0-9.]*\)\.tgz.*,\1,ip' | \
-    sort -r | \
-    head -1
+    echo 'Warning: Updates are temporarily disabled for package librtmp.' >&2;
+    echo $(librtmp_VERSION)
 endef
 
 define $(PKG)_BUILD
