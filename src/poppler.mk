@@ -3,7 +3,7 @@
 
 PKG             := poppler
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3753caecba71afaf29f097e0b9c52e0f83a10a59
+$(PKG)_CHECKSUM := a2b09ffe216dbe5f259d71e81327e00edf8c1229
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://poppler.freedesktop.org/$($(PKG)_FILE)
@@ -22,6 +22,7 @@ define $(PKG)_BUILD
     #       undefined)
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-silent-rules \
         --disable-shared \
