@@ -3,29 +3,6 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 4693f62d3f01f7b7d26607e6eed843202cbf90f7 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Thu, 23 Sep 2010 21:36:04 +0200
-Subject: [PATCH 1/5] no gtk doc check
-
-
-diff --git a/configure.ac b/configure.ac
-index a821267..2e541d2 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -2741,8 +2741,6 @@ dnl **************************
- dnl *** Checks for gtk-doc ***
- dnl **************************
- 
--GTK_DOC_CHECK([1.15])
--
- AC_ARG_ENABLE(man,
-               [AC_HELP_STRING([--enable-man],
-                               [regenerate man pages from Docbook [default=no]])],enable_man=yes,
--- 
-1.7.1
-
-
 From 46d0d473e6fb32c5204d063cad5f5073d2a139a5 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Thu, 23 Sep 2010 21:41:51 +0200
@@ -95,57 +72,3 @@ index 3d1ac12..58e1ecf 100644
 1.7.1
 
 
-From 0e57514812500d5d4dee03e1be8059a25876dd99 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Thu, 23 Sep 2010 21:45:50 +0200
-Subject: [PATCH 4/5] fix dependency libs
-
-
-diff --git a/configure.ac b/configure.ac
-index 18c2dea..e472768 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -2698,7 +2698,7 @@ case $host in
- 	G_LIBS_EXTRA="-luser32 -lkernel32"
-     ;;
-   *-*-mingw*)
--	G_LIBS_EXTRA="-lws2_32 -lole32"
-+	G_LIBS_EXTRA="-lws2_32 -lole32 -lshlwapi"
-     ;;
-   *)
- 	G_LIBS_EXTRA=""
-diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
-index 58e1ecf..17b2133 100644
---- a/glib-2.0.pc.in
-+++ b/glib-2.0.pc.in
-@@ -11,5 +11,5 @@ Name: GLib
- Description: C Utility Library
- Version: @VERSION@
- Libs: -L${libdir} -lglib-2.0 @INTLLIBS@
--Libs.private: @ICONV_LIBS@
-+Libs.private: @G_THREAD_LIBS@ @G_LIBS_EXTRA@ @PCRE_LIBS@ @INTLLIBS@ @ICONV_LIBS@
- Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include @GLIB_EXTRA_CFLAGS@
--- 
-1.7.1
-
-
-From 87931c81f6401fb0c25064ec0ba2edca9ec53924 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sat, 25 Sep 2010 00:07:33 +0200
-Subject: [PATCH 5/5] add -ldnsapi to gio-2.0.pc
-
-
-diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
-index 92cda85..7a4e224 100644
---- a/gio-2.0.pc.in
-+++ b/gio-2.0.pc.in
-@@ -10,6 +10,6 @@ Name: GIO
- Description: glib I/O library
- Version: @VERSION@
- Requires: glib-2.0,gobject-2.0,gmodule-no-export-2.0
--Libs: -L${libdir} -lgio-2.0
-+Libs: -L${libdir} -lgio-2.0 -ldnsapi
- Libs.private: @ZLIB_LIBS@ @LIBASYNCNS_LIBADD@
- Cflags: 
--- 
-1.7.1

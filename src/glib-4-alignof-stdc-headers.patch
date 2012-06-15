@@ -1,0 +1,18 @@
+This file is part of MXE.
+See index.html for further information.
+
+Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF. Backported from upstream.
+
+diff --git a/configure.ac b/configure.ac
+index 31f5f0e..f8ff60d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -452,6 +452,8 @@ fi
+ 
+ AC_MSG_RESULT($enable_iconv_cache)
+ 
++# Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF
++AS_IF([false], [AC_CHECK_HEADER([stdint.h])])
+ 
+ dnl
+ dnl zlib support
