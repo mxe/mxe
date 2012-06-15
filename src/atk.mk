@@ -20,6 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-glibtest \
