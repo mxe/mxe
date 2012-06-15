@@ -3,7 +3,7 @@
 
 PKG             := pango
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f0bf7974ef3e8826fbbb55c0974466ede1e67dd3
+$(PKG)_CHECKSUM := f853a35758bed6aba6101e027ba7b4411448236f
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && NOCONFIGURE=1 ./autogen.sh
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \

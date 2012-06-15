@@ -3,17 +3,20 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 987d02305fd8187bd10bfd292db38f7da705a7f3 Mon Sep 17 00:00:00 2001
-From: MXE
+From 2227d3bd55d64510cdb9761a55dfcfa86c594ae4 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 29 Sep 2010 00:52:59 +0200
-Subject: [PATCH 1/4] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 1/3] s,DllMain,static _disabled_DllMain,
 
+---
+ pango/pango-utils.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/pango/pango-utils.c b/pango/pango-utils.c
-index 44ec353..72e13f1 100644
+index c68e2d4..e55b71d 100644
 --- a/pango/pango-utils.c
 +++ b/pango/pango-utils.c
-@@ -658,12 +658,12 @@ pango_config_key_get (const char *key)
+@@ -692,12 +692,12 @@ pango_config_key_get (const char *key)
  
  #ifdef G_OS_WIN32
  
@@ -24,155 +27,101 @@ index 44ec353..72e13f1 100644
  
  BOOL WINAPI
 -DllMain (HINSTANCE hinstDLL,
-+pango_DllMain (HINSTANCE hinstDLL,
++static _disabled_DllMain (HINSTANCE hinstDLL,
  	 DWORD     fdwReason,
  	 LPVOID    lpvReserved)
  {
 -- 
-1.7.7.3
+1.7.10.4
 
 
-From f0c5d358e54fd9d69133eeff972fdb05592789f3 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Wed, 29 Sep 2010 00:55:07 +0200
-Subject: [PATCH 2/4] static, not shared
-
-
-diff --git a/configure b/configure
-index fb173ce..beb3290 100755
---- a/configure
-+++ b/configure
-@@ -5832,9 +5832,9 @@ if test "${enable_static+set}" = set; then :
-   enableval=$enable_static; p=${PACKAGE-default}
-     case $enableval in
-     yes) enable_static=yes ;;
--    no) enable_static=no ;;
-+    no) enable_static=yes ;;
-     *)
--     enable_static=no
-+     enable_static=yes
-       # Look at the argument we got.  We use all the common list separators.
-       lt_save_ifs="$IFS"; IFS="${IFS}$PATH_SEPARATOR,"
-       for pkg in $enableval; do
-@@ -5847,7 +5847,7 @@ if test "${enable_static+set}" = set; then :
-       ;;
-     esac
- else
--  enable_static=no
-+  enable_static=yes
- fi
- 
- 
-@@ -5861,15 +5861,15 @@ fi
- 
- if test "$pango_os_win32" = "yes"; then
-   if test x$enable_static = xyes -o x$enable_static = x; then
--    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling static library build, must build as DLL on Windows." >&5
--$as_echo "$as_me: WARNING: Disabling static library build, must build as DLL on Windows." >&2;}
--    enable_static=no
-+    { $as_echo "(disabled warning)" >&5
-+$as_echo "(disabled warning)" >&2;}
-+    enable_static=yes
-   fi
-   if test x$enable_shared = xno; then
--    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Enabling shared library build, must build as DLL on Windows." >&5
--$as_echo "$as_me: WARNING: Enabling shared library build, must build as DLL on Windows." >&2;}
-+    { $as_echo "(disabled warning)" >&5
-+$as_echo "(disabled warning)" >&2;}
-   fi
--  enable_shared=yes
-+  enable_shared=no
- fi
- 
- case `pwd` in
-@@ -8968,7 +8968,7 @@ func_stripname_cnf ()
- if test "${enable_shared+set}" = set; then :
-   enableval=$enable_shared; p=${PACKAGE-default}
-     case $enableval in
--    yes) enable_shared=yes ;;
-+    yes) enable_shared=no ;;
-     no) enable_shared=no ;;
-     *)
-       enable_shared=no
-@@ -8977,14 +8977,14 @@ if test "${enable_shared+set}" = set; then :
-       for pkg in $enableval; do
- 	IFS="$lt_save_ifs"
- 	if test "X$pkg" = "X$p"; then
--	  enable_shared=yes
-+	  enable_shared=no
- 	fi
-       done
-       IFS="$lt_save_ifs"
-       ;;
-     esac
- else
--  enable_shared=yes
-+  enable_shared=no
- fi
- 
- 
-@@ -12848,7 +12848,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
-   # are all built from PIC.
-   case $host_os in
-   aix3*)
--    test "$enable_shared" = yes && enable_static=no
-+    test "$enable_shared" = yes && enable_static=yes
-     if test -n "$RANLIB"; then
-       archive_cmds="$archive_cmds~\$RANLIB \$lib"
-       postinstall_cmds='$RANLIB $lib'
-@@ -12857,7 +12857,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
- 
-   aix[4-9]*)
-     if test "$host_cpu" != ia64 && test "$aix_use_runtimelinking" = no ; then
--      test "$enable_shared" = yes && enable_static=no
-+      test "$enable_shared" = yes && enable_static=yes
-     fi
-     ;;
-   esac
--- 
-1.7.7.3
-
-
-From 08292532296e3a0f135f6bcd683851d2f41836c6 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Wed, 29 Sep 2010 00:57:12 +0200
-Subject: [PATCH 3/4] no pango-querymodules
-
-
-diff --git a/modules/Makefile.in b/modules/Makefile.in
-index 49813f7..afc29c5 100644
---- a/modules/Makefile.in
-+++ b/modules/Makefile.in
-@@ -647,7 +647,7 @@ uninstall-am: uninstall-local
- 
- @CROSS_COMPILING_FALSE@all-local: pango.modules
- 
--install-data-local: $(top_builddir)/pango/pango-querymodules$(EXEEXT)
-+install-data-local:
- 	@if $(RUN_QUERY_MODULES_TEST) && test -z "$(DESTDIR)" ; then 	\
- 	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/pango \&\& 	\
- 	  $(top_builddir)/pango/pango-querymodules$(EXEEXT) 		\
--- 
-1.7.7.3
-
-
-From c646ee7869c20a1e093f63ec8de8e83e7ca88b27 Mon Sep 17 00:00:00 2001
-From: MXE
+From f168a8e1bf39a2605850ba2619992b6de99c58ba Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 29 Sep 2010 00:50:08 +0200
-Subject: [PATCH 4/4] add missing lib to pango.pc for static linking
+Subject: [PATCH 2/3] add missing lib to pango.pc for static linking
 
+---
+ pango.pc.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/pango.pc.in b/pango.pc.in
-index 5cc3ef8..745b8f0 100644
+index 17a8b7a..16c5981 100644
 --- a/pango.pc.in
 +++ b/pango.pc.in
-@@ -9,5 +9,5 @@ Name: Pango
- Description: Internationalized text handling
+@@ -10,5 +10,5 @@ Description: Internationalized text handling
  Version: @VERSION@
- Requires: glib-2.0,gobject-2.0,gmodule-no-export-2.0
+ Requires: glib-2.0 gobject-2.0
+ Requires.private: gmodule-no-export-2.0
 -Libs: -L${libdir} -lpango-@PANGO_API_VERSION@ @PKGCONFIG_MATH_LIBS@
 +Libs: -L${libdir} -lpango-@PANGO_API_VERSION@ @PKGCONFIG_MATH_LIBS@ -lusp10
  Cflags: -I${includedir}/pango-1.0
 -- 
-1.7.7.3
+1.7.10.4
+
+
+From 6a9d9d2b6151f93a6a0a1a1e3cf8381d47da59a1 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 15 Jun 2012 16:21:40 +0200
+Subject: [PATCH 3/3] do not force shared for win32
+
+---
+ configure.in        |   14 --------------
+ modules/Makefile.am |   17 +----------------
+ 2 files changed, 1 insertion(+), 30 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index 8362280..6a000cc 100644
+--- a/configure.in
++++ b/configure.in
+@@ -147,20 +147,6 @@ CXXFLAGS="$CXXFLAGS -fno-rtti -fno-exceptions"
+ # Win32 stuff
+ #
+ 
+-AC_LIBTOOL_WIN32_DLL
+-AM_DISABLE_STATIC
+-
+-if test "$pango_os_win32" = "yes"; then
+-  if test x$enable_static = xyes -o x$enable_static = x; then
+-    AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
+-    enable_static=no
+-  fi
+-  if test x$enable_shared = xno; then
+-    AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
+-  fi
+-  enable_shared=yes
+-fi
+-
+ AM_PROG_LIBTOOL
+ dnl when using libtool 2.x create libtool early, because it's used in configure
+ m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
+diff --git a/modules/Makefile.am b/modules/Makefile.am
+index dc8a2c8..dc22e59 100644
+--- a/modules/Makefile.am
++++ b/modules/Makefile.am
+@@ -26,22 +26,7 @@ RUN_QUERY_MODULES_TEST=true
+ all-local: pango.modules
+ endif
+ 
+-install-data-local: $(top_builddir)/pango/pango-querymodules$(EXEEXT)
+-	@if $(RUN_QUERY_MODULES_TEST) && test -z "$(DESTDIR)" ; then 	\
+-	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/pango \&\& 	\
+-	  $(top_builddir)/pango/pango-querymodules$(EXEEXT) 		\
+-		\> $(DESTDIR)$(sysconfdir)/pango/pango.modules ;	\
+-	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/pango && 		\
+-	  $(top_builddir)/pango/pango-querymodules$(EXEEXT) 		\
+-		> $(DESTDIR)$(sysconfdir)/pango/pango.modules ;		\
+-	else								\
+-	  echo "***" ; 							\
+-	  echo "*** Warning: $(sysconfdir)/pango/pango.modules" ; 	\
+-	  echo "*** not created" ; 					\
+-	  echo "*** Generate this file on the target system" ; 		\
+-	  echo "*** using pango-querymodules" ; 			\
+-	  echo "***" ; 							\
+-	fi
++install-data-local:
+ 
+ uninstall-local:
+ 	$(RM) $(DESTDIR)$(sysconfdir)/pango/pango.modules
+-- 
+1.7.10.4
 
