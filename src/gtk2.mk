@@ -25,18 +25,12 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-explicit-deps \
-        --disable-gdiplus \
         --disable-glibtest \
         --disable-modules \
         --disable-cups \
         --disable-test-print-backend \
         --disable-gtk-doc \
         --disable-man \
-        --with-libpng \
-        --with-libjpeg \
-        --with-libtiff \
-        --with-libjasper \
-        --with-included-loaders \
         --with-included-immodules \
         --without-x
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
