@@ -16,9 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && aclocal
-    cd '$(1)' && $(LIBTOOLIZE) --force
-    cd '$(1)' && autoconf
+    cd '$(1)' && ./autogen.sh
     cp -Rp '$(1)' '$(1).native'
 
     # native build of libiconv (used by glib-genmarshal)
