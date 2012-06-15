@@ -34,7 +34,6 @@ define $(PKG)_BUILD
         --disable-quartz-image \
         --disable-os2 \
         --disable-beos \
-        --disable-glitz \
         --disable-directfb \
         --disable-atomic \
         --enable-win32 \
