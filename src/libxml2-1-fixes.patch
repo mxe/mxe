@@ -1,0 +1,24 @@
+From 8c3eedd79a80d08a1634ad09d4e343da7dc14759 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 16 Jun 2012 19:44:21 +0200
+Subject: [PATCH] .pc requires.private liblzma
+
+---
+ libxml-2.0.pc.in |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libxml-2.0.pc.in b/libxml-2.0.pc.in
+index 31a1b8c..44e3cbf 100644
+--- a/libxml-2.0.pc.in
++++ b/libxml-2.0.pc.in
+@@ -8,6 +8,7 @@ Name: libXML
+ Version: @VERSION@
+ Description: libXML library version2.
+ Requires:
++Requires.private: liblzma
+ Libs: -L${libdir} -lxml2
+ Libs.private: @THREAD_LIBS@ @Z_LIBS@ @ICONV_LIBS@ @M_LIBS@ @WIN32_EXTRA_LIBADD@ @LIBS@
+ Cflags: @XML_INCLUDEDIR@ @XML_CFLAGS@
+-- 
+1.7.10.4
+
