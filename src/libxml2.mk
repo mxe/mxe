@@ -3,7 +3,7 @@
 
 PKG             := libxml2
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 859dd535edbb851cc15b64740ee06551a7a17d40
+$(PKG)_CHECKSUM := a0c553bd51ba79ab6fff26dc700004c6a41f5250
 $(PKG)_SUBDIR   := libxml2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)
@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,`uname`,MinGW,g' '$(1)/xml2-config.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --without-debug \
         --prefix='$(PREFIX)/$(TARGET)' \

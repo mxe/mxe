@@ -3,7 +3,7 @@
 
 PKG             := libgsf
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ca1c5aa92a840e322d7cafd9f2dede3d38a69660
+$(PKG)_CHECKSUM := 4f19933342b2d42246200e3522b0797a032fdf19
 $(PKG)_SUBDIR   := libgsf-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgsf-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgsf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -22,14 +22,12 @@ define $(PKG)_BUILD
     echo 'Libs.private: -lz -lbz2'          >> '$(1)'/libgsf-1.pc.in
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \
         --disable-gtk-doc \
-        --disable-schemas-install \
         --without-python \
-        --without-gnome-vfs \
-        --without-bonobo \
         --with-zlib \
         --with-bz2 \
         --with-gio \

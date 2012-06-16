@@ -13,7 +13,7 @@ diff --git a/gsf/gsf-utils.c b/gsf/gsf-utils.c
 index d7a7247..cc52d99 100644
 --- a/gsf/gsf-utils.c
 +++ b/gsf/gsf-utils.c
-@@ -119,9 +119,9 @@ static GTypeModule *static_type_module = NULL;
+@@ -115,9 +115,9 @@ static GTypeModule *static_type_module = NULL;
  #include <windows.h>
  static HMODULE gsf_dll_hmodule;
  BOOL WINAPI
