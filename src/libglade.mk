@@ -22,5 +22,5 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
-    cd '$(1)' && make install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
