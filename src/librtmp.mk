@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    make -C '$(1)' \
+    $(MAKE) -C '$(1)' \
         CROSS_COMPILE='$(TARGET)-' \
         prefix='$(PREFIX)/$(TARGET)' \
         SYS=mingw \
