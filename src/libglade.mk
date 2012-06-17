@@ -16,11 +16,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-	cd '$(1)' && autoreconf -fi
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-		--build="`config.guess`" \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
-	cd '$(1)' && make install
+    cd '$(1)' && make install
 endef
