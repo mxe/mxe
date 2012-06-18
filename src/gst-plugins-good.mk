@@ -3,9 +3,9 @@
 
 PKG             := gst-plugins-good
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9c78a751bb2f20ad50a1daf6860e0098e0495f5a
+$(PKG)_CHECKSUM := 566dec4f14c1159f2d044ee7fd0a0c5c7d269f94
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2 gstreamer gst-plugins-base liboil libshout cairo flac gtk2 jpeg libpng speex taglib
 
@@ -24,11 +24,11 @@ define $(PKG)_BUILD
     #   http://lists.mplayerhq.hu/pipermail/mplayer-cvslog/2004-August/019283.html
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --disable-debug \
         --disable-examples \
-        --disable-esd \
         --disable-aalib \
         --disable-x \
         --mandir='$(1)/sink' \

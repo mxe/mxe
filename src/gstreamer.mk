@@ -3,9 +3,9 @@
 
 PKG             := gstreamer
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ad03b8aca7b2415929b6ecc4c140b178acef39de
+$(PKG)_CHECKSUM := 2cae916596bb720b927658d9c8d6a643316288ae
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2
 
@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,glib-genmarshal,$(PREFIX)/$(TARGET)/bin/glib-genmarshal,g' '$(1)'/gst/Makefile.in
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --disable-debug \
