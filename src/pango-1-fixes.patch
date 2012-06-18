@@ -6,7 +6,7 @@ Contains ad hoc patches for cross building.
 From 2227d3bd55d64510cdb9761a55dfcfa86c594ae4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 29 Sep 2010 00:52:59 +0200
-Subject: [PATCH 1/3] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 1/4] s,DllMain,static _disabled_DllMain,
 
 ---
  pango/pango-utils.c |    4 ++--
@@ -38,7 +38,7 @@ index c68e2d4..e55b71d 100644
 From f168a8e1bf39a2605850ba2619992b6de99c58ba Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 29 Sep 2010 00:50:08 +0200
-Subject: [PATCH 2/3] add missing lib to pango.pc for static linking
+Subject: [PATCH 2/4] add missing lib to pango.pc for static linking
 
 ---
  pango.pc.in |    2 +-
@@ -62,7 +62,7 @@ index 17a8b7a..16c5981 100644
 From 6a9d9d2b6151f93a6a0a1a1e3cf8381d47da59a1 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 15 Jun 2012 16:21:40 +0200
-Subject: [PATCH 3/3] do not force shared for win32
+Subject: [PATCH 3/4] do not force shared for win32
 
 ---
  configure.in        |   14 --------------
@@ -122,6 +122,72 @@ index dc8a2c8..dc22e59 100644
  
  uninstall-local:
  	$(RM) $(DESTDIR)$(sysconfdir)/pango/pango.modules
+-- 
+1.7.10.4
+
+
+From fd0523d0d19e0b2ea6ff27689738ce540d1047f7 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 18 Jun 2012 21:36:53 +0200
+Subject: [PATCH 4/4] kill gtk-doc (MXE specific)
+
+---
+ Makefile.am  |    2 +-
+ autogen.sh   |    8 --------
+ configure.in |    9 +--------
+ 3 files changed, 2 insertions(+), 17 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index b0b56ec..663503c 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,6 +1,6 @@
+ ## Process this file with automake to create Makefile.in.
+ 
+-SUBDIRS= pango modules pango-view examples docs tools tests build
++SUBDIRS= pango modules pango-view examples tools tests build
+ 
+ EXTRA_DIST = 			\
+ 	autogen.sh		\
+diff --git a/autogen.sh b/autogen.sh
+index bc7c59c..4e1918c 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -7,14 +7,6 @@ test -n "$srcdir" || srcdir=.
+ olddir=`pwd`
+ cd "$srcdir"
+ 
+-GTKDOCIZE=`which gtkdocize`
+-if test -z $GTKDOCIZE; then
+-	echo "*** No GTK-Doc found, please install it ***"
+-	exit 1
+-else
+-	gtkdocize || exit $?
+-fi
+-
+ AUTORECONF=`which autoreconf`
+ if test -z $AUTORECONF; then
+ 	echo "*** No autoreconf found, please install it ***"
+diff --git a/configure.in b/configure.in
+index 6a000cc..e7538f6 100644
+--- a/configure.in
++++ b/configure.in
+@@ -615,14 +615,7 @@ dnl **************************
+ dnl *** Checks for gtk-doc ***
+ dnl **************************
+ 
+-if $have_cairo ; then : ; else
+-   if  test x$enable_gtk_doc = xyes ; then
+-      AC_MSG_WARN([Cairo not present, disabling doc building])      
+-      enable_gtk_doc=no
+-   fi
+-fi
+-
+-GTK_DOC_CHECK([1.0])
++enable_gtk_doc=no
+ 
+ AC_ARG_ENABLE(man,
+               AC_HELP_STRING([--enable-man],
 -- 
 1.7.10.4
 
