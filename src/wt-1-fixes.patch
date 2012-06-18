@@ -1,10 +1,102 @@
-# This file is part of MXE.
-# See index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
-diff -ur a/cmake/WtFindBoost-vintage.txt b/cmake/WtFindBoost-vintage.txt
---- a/cmake/WtFindBoost-vintage.txt	2011-11-15 04:49:29.000000000 -0300
-+++ b/cmake/WtFindBoost-vintage.txt	2012-02-02 19:21:07.108060403 -0300
-@@ -70,6 +70,7 @@
+From 29e0f572f1c1875089601cb0dcae3bd1c3ea7118 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 18 Jun 2012 13:02:03 +0200
+Subject: [PATCH 1/2] fix case of winsock2.h which matters when cross-building
+
+taken from
+http://sourceforge.net/mailarchive/message.php?msg_id=29421539
+---
+ src/Wt/Auth/HashFunction.C |    2 +-
+ src/Wt/Utils.C             |    2 +-
+ src/http/Configuration.C   |    4 ++--
+ src/web/TimeUtil.C         |    2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/Wt/Auth/HashFunction.C b/src/Wt/Auth/HashFunction.C
+index 6d764fa..34615e0 100644
+--- a/src/Wt/Auth/HashFunction.C
++++ b/src/Wt/Auth/HashFunction.C
+@@ -15,7 +15,7 @@
+ #ifndef WIN32
+ #include <arpa/inet.h>
+ #else
+-#include <Winsock2.h>
++#include <winsock2.h>
+ #endif
+ #endif
+ 
+diff --git a/src/Wt/Utils.C b/src/Wt/Utils.C
+index 02cdf7d..75fca49 100644
+--- a/src/Wt/Utils.C
++++ b/src/Wt/Utils.C
+@@ -13,7 +13,7 @@
+ #ifndef WIN32
+ #include <arpa/inet.h>
+ #else
+-#include <Winsock2.h>
++#include <winsock2.h>
+ #endif
+ 
+ #include "Wt/WLogger"
+diff --git a/src/http/Configuration.C b/src/http/Configuration.C
+index 6312ae6..3ebf772 100644
+--- a/src/http/Configuration.C
++++ b/src/http/Configuration.C
+@@ -18,13 +18,13 @@
+ #endif
+ #ifdef WIN32
+ #include <process.h> // for getpid()
+-#include <Winsock2.h> // for gethostname()
++#include <winsock2.h> // for gethostname()
+ #endif
+ #include <iostream>
+ #include <fstream>
+ 
+ #ifdef __CYGWIN__
+-#include <Winsock2.h> // for gethostname()
++#include <winsock2.h> // for gethostname()
+ #endif
+ 
+ namespace Wt {
+diff --git a/src/web/TimeUtil.C b/src/web/TimeUtil.C
+index fbada4a..94c2423 100644
+--- a/src/web/TimeUtil.C
++++ b/src/web/TimeUtil.C
+@@ -1,7 +1,7 @@
+ #include "TimeUtil.h"
+ 
+ #ifdef _MSC_VER
+-#include "Winsock2.h"
++#include "winsock2.h"
+ #pragma comment (lib, "winmm.lib")
+ namespace {
+ #include <windows.h>
+-- 
+1.7.10.4
+
+
+From f64c3140b11fe2a6d353950229b4edae6ec306a1 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 18 Jun 2012 13:23:21 +0200
+Subject: [PATCH 2/2] fixes for mxe
+
+---
+ cmake/WtFindBoost-vintage.txt |    1 +
+ cmake/WtFindGm.txt            |    6 ++++++
+ cmake/WtFindHaru.txt          |   12 ++++++++++++
+ cmake/WtFindPangoFt2.txt      |   14 +++++++++-----
+ cmake/WtFindSsl.txt           |    5 +++++
+ src/Wt/WRasterImage.C         |    9 ---------
+ 6 files changed, 33 insertions(+), 14 deletions(-)
+
+diff --git a/cmake/WtFindBoost-vintage.txt b/cmake/WtFindBoost-vintage.txt
+index e48b21e..1198139 100644
+--- a/cmake/WtFindBoost-vintage.txt
++++ b/cmake/WtFindBoost-vintage.txt
+@@ -70,6 +70,7 @@ ELSE(MSVC)
        boost_thread-${BOOST_COMPILER}-mt-${BOOST_FLAGS}-${BOOST_VERSION}
        boost_thread-${BOOST_COMPILER}-mt-${BOOST_VERSION}
        boost_thread-${BOOST_COMPILER}-mt
@@ -12,10 +104,11 @@ diff -ur a/cmake/WtFindBoost-vintage.txt b/cmake/WtFindBoost-vintage.txt
        boost_thread-mt-${BOOST_VERSION}
        boost_thread-mt
        boost_thread-${BOOST_COMPILER}-${BOOST_VERSION}
-diff -ur a/cmake/WtFindGm.txt b/cmake/WtFindGm.txt
---- a/cmake/WtFindGm.txt	2011-04-01 07:35:50.000000000 -0300
-+++ b/cmake/WtFindGm.txt	2012-02-02 21:31:04.157439938 -0300
-@@ -59,6 +59,12 @@
+diff --git a/cmake/WtFindGm.txt b/cmake/WtFindGm.txt
+index 76697fc..9bc0fa1 100644
+--- a/cmake/WtFindGm.txt
++++ b/cmake/WtFindGm.txt
+@@ -59,6 +59,12 @@ IF(WIN32)
    ELSE(GM_LIB AND GMPP_LIB AND GM_LIB_DEBUG AND GMPP_LIB_DEBUG AND GM_INCLUDE_DIR)
      SET(GM_FOUND FALSE)
    ENDIF(GM_LIB AND GMPP_LIB AND GM_LIB_DEBUG AND GMPP_LIB_DEBUG AND GM_INCLUDE_DIR)
@@ -28,10 +121,11 @@ diff -ur a/cmake/WtFindGm.txt b/cmake/WtFindGm.txt
  ELSE(WIN32)
    FIND_LIBRARY(GM_LIB
      NAMES
-diff -ur a/cmake/WtFindHaru.txt b/cmake/WtFindHaru.txt
---- a/cmake/WtFindHaru.txt	2011-01-10 05:50:55.000000000 -0300
-+++ b/cmake/WtFindHaru.txt	2012-02-02 21:32:08.165440382 -0300
-@@ -44,6 +44,7 @@
+diff --git a/cmake/WtFindHaru.txt b/cmake/WtFindHaru.txt
+index 4dba35f..642bd58 100644
+--- a/cmake/WtFindHaru.txt
++++ b/cmake/WtFindHaru.txt
+@@ -44,6 +44,7 @@ IF(WIN32)
    FIND_LIBRARY(Z_LIB
      NAMES
        zlib
@@ -39,7 +133,7 @@ diff -ur a/cmake/WtFindHaru.txt b/cmake/WtFindHaru.txt
      PATHS
        ${HARU_PREFIX}/lib
        ${USERLIB_PREFIX}/lib
-@@ -58,6 +59,17 @@
+@@ -58,6 +59,17 @@ IF(WIN32)
        SET(HARU_SUPPORT_LIBS ${HARU_SUPPORT_LIBS} ${Z_LIB})
      ENDIF(Z_LIB)
    ENDIF(HARU_LIB_RELEASE AND HARU_LIB_DEBUG)
@@ -57,10 +151,11 @@ diff -ur a/cmake/WtFindHaru.txt b/cmake/WtFindHaru.txt
    SET(HARU_SUPPORT_LIBS_FOUND TRUE)
  ELSE(WIN32)
    FIND_LIBRARY(HARU_LIB
-diff -ur a/cmake/WtFindPangoFt2.txt b/cmake/WtFindPangoFt2.txt
---- a/cmake/WtFindPangoFt2.txt	2011-11-28 06:26:54.000000000 -0300
-+++ b/cmake/WtFindPangoFt2.txt	2012-02-02 21:17:14.341434198 -0300
-@@ -36,11 +36,15 @@
+diff --git a/cmake/WtFindPangoFt2.txt b/cmake/WtFindPangoFt2.txt
+index cd1e640..b1bbe3d 100644
+--- a/cmake/WtFindPangoFt2.txt
++++ b/cmake/WtFindPangoFt2.txt
+@@ -36,11 +36,15 @@ SET(PANGO_FT2_INCLUDE_DIRS
      ${GLIB2_INCLUDE_DIR}
      ${GLIB2_CONFIG_INCLUDE_DIR})
  
@@ -81,10 +176,11 @@ diff -ur a/cmake/WtFindPangoFt2.txt b/cmake/WtFindPangoFt2.txt
  
  IF (PANGO_INCLUDE_DIR
      AND FT2_INCLUDE_DIR
-diff -ur a/cmake/WtFindSsl.txt b/cmake/WtFindSsl.txt
---- a/cmake/WtFindSsl.txt	2011-09-19 09:34:19.000000000 -0300
-+++ b/cmake/WtFindSsl.txt	2012-02-02 21:17:53.033434468 -0300
-@@ -81,6 +81,11 @@
+diff --git a/cmake/WtFindSsl.txt b/cmake/WtFindSsl.txt
+index fdbcb5f..578baf1 100644
+--- a/cmake/WtFindSsl.txt
++++ b/cmake/WtFindSsl.txt
+@@ -81,6 +81,11 @@ IF(WIN32)
        AND SSL_LIB_DEBUG
        AND SSL_TOO_LIB_RELEASE
        AND SSL_TOO_LIB_DEBUG)
@@ -96,21 +192,10 @@ diff -ur a/cmake/WtFindSsl.txt b/cmake/WtFindSsl.txt
  ELSE (WIN32)
    FIND_LIBRARY(SSL_LIB
      NAMES
-diff -ur a/src/http/Configuration.C b/src/http/Configuration.C
---- a/src/http/Configuration.C	2011-11-24 13:17:42.000000000 -0300
-+++ b/src/http/Configuration.C	2012-02-02 19:21:07.112060403 -0300
-@@ -18,7 +18,7 @@
- #endif
- #ifdef WIN32
- #include <process.h> // for getpid()
--#include <Winsock2.h> // for gethostname()
-+#include <winsock2.h> // for gethostname()
- #endif
- #include <iostream>
- #include <fstream>
-diff -ur a/src/Wt/WRasterImage.C b/src/Wt/WRasterImage.C
---- a/src/Wt/WRasterImage.C	2011-11-24 13:17:42.000000000 -0300
-+++ b/src/Wt/WRasterImage.C	2012-02-02 19:21:07.112060403 -0300
+diff --git a/src/Wt/WRasterImage.C b/src/Wt/WRasterImage.C
+index 4c52f39..e948691 100644
+--- a/src/Wt/WRasterImage.C
++++ b/src/Wt/WRasterImage.C
 @@ -38,15 +38,6 @@
  #define M_PI 3.14159265358979323846
  #endif
@@ -127,3 +212,6 @@ diff -ur a/src/Wt/WRasterImage.C b/src/Wt/WRasterImage.C
  namespace {
    static const double EPSILON = 1E-5;
  
+-- 
+1.7.10.4
+
