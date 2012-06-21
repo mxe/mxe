@@ -3,10 +3,10 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 1f08b1e9d6f6a03e0fe5e62aef85aa1021014953 Mon Sep 17 00:00:00 2001
+From 18aa82eb060ca9ded9720091300a6c31af8382a9 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 28 Oct 2011 09:23:41 +0200
-Subject: [PATCH 1/5] add missing static library linking
+Subject: [PATCH 1/4] add missing static library linking
 
 ---
  lib/gnutls.pc.in |    2 +-
@@ -25,13 +25,13 @@ index c45f8f3..57d0dbb 100644
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
 -- 
-1.7.9.2
+1.7.10.4
 
 
-From bbf2330693746cc45a3df65cba253ce44a353ac3 Mon Sep 17 00:00:00 2001
+From bd254ee873a2f7d6027661beae5d88372f10aa93 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 24 Nov 2011 15:06:06 +0100
-Subject: [PATCH 2/5] disable doc and test (mingw-cross-env specific)
+Subject: [PATCH 2/4] disable doc and test (mingw-cross-env specific)
 
 ---
  Makefile.am |    2 +-
@@ -51,13 +51,13 @@ index 0afe4bd..da7436a 100644
  if HAVE_GUILE
  SUBDIRS += guile
 -- 
-1.7.9.2
+1.7.10.4
 
 
-From 5ee5355a9b34821b99f3f2fa83eb8435ccb45702 Mon Sep 17 00:00:00 2001
+From dce8795ce40246c87fc83d1879f02c9923dba2ed Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
-Subject: [PATCH 3/5] Revert "make dist will also make lzip compressed
+Subject: [PATCH 3/4] Revert "make dist will also make lzip compressed
  tarball"
 
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
@@ -66,10 +66,10 @@ This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configure.ac b/configure.ac
-index f826704..bb4d044 100644
+index 0ad765c..74b778e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.0.20], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.0.19], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
@@ -79,13 +79,13 @@ index f826704..bb4d044 100644
  AM_CONFIG_HEADER(config.h)
  
 -- 
-1.7.9.2
+1.7.10.4
 
 
-From 7f22baaa57d160a22b49d25b8fa4024b754aedcd Mon Sep 17 00:00:00 2001
+From ae55a00b99a60b65e459ebe7ada215ace70b56db Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 Jun 2012 09:57:24 +0200
-Subject: [PATCH 4/5] AM_PROG_AR for automake 1.12 compatibility
+Subject: [PATCH 4/4] AM_PROG_AR for automake 1.12 compatibility
 
 Taken from
 http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
@@ -94,7 +94,7 @@ http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
  1 file changed, 1 insertion(+)
 
 diff --git a/configure.ac b/configure.ac
-index bb4d044..4c9c13a 100644
+index 74b778e..d045aaf 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -37,6 +37,7 @@ dnl Checks for programs.
@@ -106,34 +106,5 @@ index bb4d044..4c9c13a 100644
  
  # For includes/gnutls/gnutls.h.in.
 -- 
-1.7.9.2
-
-
-From da583995c66f2df7cac31435d1609754a6853d07 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 6 Jun 2012 10:09:48 +0200
-Subject: [PATCH 5/5] add missing include wincrypt.h
-
-taken from
-http://lists.gnu.org/archive/html/gnutls-devel/2012-06/msg00001.html
----
- lib/gnutls_x509.c |    3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/lib/gnutls_x509.c b/lib/gnutls_x509.c
-index 71e0d69..130d75c 100644
---- a/lib/gnutls_x509.c
-+++ b/lib/gnutls_x509.c
-@@ -42,6 +42,9 @@
- #include "x509/x509_int.h"
- #include <gnutls_str_array.h>
- #include "read-file.h"
-+#if defined _WIN32 || defined __WIN32__
-+#include <wincrypt.h>
-+#endif
- 
- /*
-  * some x509 certificate parsing functions.
--- 
-1.7.9.2
+1.7.10.4
 
