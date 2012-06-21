@@ -3,7 +3,7 @@
 
 PKG             := libxml++
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 112d6e26a8ce1426aa8931f26ea593484b2081f0
+$(PKG)_CHECKSUM := b2e5ba6066e7fb96cca88e7c37e1e4848552c245
 $(PKG)_SUBDIR   := libxml++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml++-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/libxml++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -19,6 +19,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && CXX="$(TARGET)-g++ -mthreads" ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         MAKE=$(MAKE)
