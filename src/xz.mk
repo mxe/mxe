@@ -3,7 +3,7 @@
 
 PKG             := xz
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 50ce842bea6519537457d9ad90d110a127656786
+$(PKG)_CHECKSUM := 3e976d7715fde43422572c70f927bfdae56a94c3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://tukaani.org/xz/$($(PKG)_FILE)
@@ -18,9 +18,9 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
-        --disable-dynamic \
         --disable-threads \
         --disable-nls
     $(MAKE) -C '$(1)'/src/liblzma -j '$(JOBS)' install
