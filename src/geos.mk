@@ -3,7 +3,7 @@
 
 PKG             := geos
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2ec4be729c851460daf89d0d2ab785be5ef4c5c5
+$(PKG)_CHECKSUM := 791e2b36a9a6114c7f213fae3fc995960c35a428
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
 $(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://download.osgeo.org/geos/$($(PKG)_FILE)
