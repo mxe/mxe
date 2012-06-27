@@ -1,0 +1,90 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+[master 830cc45] new version
+ 3 files changed, 9 insertions(+), 7 deletions(-)
+From 830cc4555eeb7bc4479af2b4bdd3fc8be1c8886f Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 23 Jun 2012 22:25:50 +0200
+Subject: [PATCH] new version
+
+
+diff --git a/Makefile b/Makefile
+index 81b2214..221d0cd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ VERSION = 0.30
+ all: flexlink.exe support
+ 
+-include $(shell cygpath -ad "$(shell ocamlopt -where)/Makefile.config")
++#include $(shell cygpath -ad "$(shell ocamlopt -where)/Makefile.config")
+ 
+ MINGW_PREFIX = i686-w64-mingw32
+ MINCC = $(MINGW_PREFIX)-gcc
+@@ -43,12 +43,12 @@ MSVCC64 = $(MSVCC_ROOT)/amd64/cl.exe /nologo /MD -D_CRT_SECURE_NO_DEPRECATE /GS-
+ CYGCC = gcc 
+ OCAMLOPT = ocamlopt
+ #OCAMLOPT = FLEXLINKFLAGS=-real-manifest ocamlopt
+-#LINKFLAGS = unix.cmxa
++LINKFLAGS = unix.cmxa
+ 
+ #ifeq ($(SYSTEM), win64)
+ #LINKFLAGS=
+ #else
+-LINKFLAGS = -ccopt "-link version_res.o"
++#LINKFLAGS = -ccopt "-link version_res.o"
+ #endif
+ 
+ support:
+@@ -62,7 +62,7 @@ build_mingw64: flexdll_mingw64.o flexdll_initer_mingw64.o
+ 
+ OBJS = version.ml coff.ml cmdline.ml create_dll.ml reloc.ml
+ 
+-flexlink.exe: $(OBJS) version_res.o
++flexlink.exe: $(OBJS)
+ 	@echo Building flexlink.exe with TOOLCHAIN=$(TOOLCHAIN)
+ 	rm -f flexlink.exe
+ 	$(OCAMLOPT) -w -105 -o flexlink.exe $(LINKFLAGS) $(OBJS)
+diff --git a/cmdline.ml b/cmdline.ml
+index cbfbec0..a345efa 100644
+--- a/cmdline.ml
++++ b/cmdline.ml
+@@ -37,8 +37,8 @@ let extra_args = ref []
+ let mode : [`NORMAL | `DUMP | `PATCH] ref = ref `NORMAL
+ let defexports = ref []
+ let noentry = ref false
+-let use_cygpath = ref true
+-let cygpath_arg : [`Yes | `No | `None] ref = ref `None
++let use_cygpath = ref false
++let cygpath_arg : [`Yes | `No | `None] ref = ref `No
+ let implib = ref false
+ let deffile = ref None
+ let stack_reserve = ref None
+diff --git a/reloc.ml b/reloc.ml
+index 1ac7e38..4cd78e1 100644
+--- a/reloc.ml
++++ b/reloc.ml
+@@ -13,6 +13,8 @@
+ open Coff
+ open Cmdline
+ 
++let libdir = "@libdir@"
++
+ let search_path = ref []
+ let default_libs = ref []
+ 
+@@ -977,7 +979,7 @@ let setup_toolchain () =
+       !dirs @
+       [
+        Filename.dirname (get_output1 (!gcc ^ " -print-libgcc-file-name"));
+-       get_output1 (!gcc ^ " -print-sysroot") ^ "/mingw/lib";
++       (*get_output1 (!gcc ^ " -print-sysroot") ^ "/mingw/lib";*)libdir
+       ];
+     default_libs :=
+       ["-lmingw32"; "-lgcc"; "-lmoldname"; "-lmingwex"; "-lmsvcrt";
+-- 
+1.7.9.5
+
