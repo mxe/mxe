@@ -1,0 +1,1264 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+[master 7b6887f] new version
+ 9 files changed, 376 insertions(+), 564 deletions(-)
+ rewrite ocaml.m4 (99%)
+ rewrite src/META.in (83%)
+From 7b6887fdcc67da348930924a4c21dbaddfad8453 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 17 Jun 2012 17:20:07 +0200
+Subject: [PATCH] updates in .c files for compilation with new interfaces ; rewrite of configure script and use of ocaml.m4 from ocaml-autoconf ; patches for cross-compilation
+
+
+diff --git a/configure.ac b/configure.ac
+index 06464b3..86bf05d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,68 +1,62 @@
+ # Process this file with autoconf to produce a configure script.
+ m4_include([ocaml.m4])
+ AC_PREREQ(2.59)
+-AC_INIT(camlimages, 3.2.0, use-omake-to-be-supported@nowhere.com)
++AC_INIT(camlimages, 4.0.0, use-omake-to-be-supported@nowhere.com)
+ AM_INIT_AUTOMAKE([foreign])
+ AM_MAINTAINER_MODE
+ 
+ # Check ocaml
+ AC_PROG_OCAML([3.08])
+-AC_PROG_OCAML_TOOL(OCAMLMKLIB, ocamlmklib)
+ AC_SUBST(OCAMLLIB)
+ 
+ # Check versions to build
+ AC_ARG_ENABLE(
+     [native-library],
+-    AC_HELP_STRING(
+-	[--enable-native-library],
+-	[build native version of library (default)]
+-    ),
+-    [case "$enableval" in
+-	yes) enable_native=$enableval;;
+-	no)  enable_native=$enableval;;
+-	*)   AC_MSG_ERROR([bad value $enableval for --enable-native-library]);;
+-    esac],
+-    [enable_native=yes]
++    AS_HELP_STRING([--disable-native-library], 
++				   [do not build native version of library]),
++    [],
++    []
+ )
+ AC_MSG_CHECKING([wether to build native library])
+-build_native=no
+-if test -n "$OCAMLOPT" && test "$enable_native" = yes; then
++if test -n "$OCAMLOPT" && test "x$enable_native_library" != xno; then
+     AC_MSG_RESULT([yes])
+-    build_native=yes
++    enable_native_library=yes
+ else
+     AC_MSG_RESULT([no])
+-    build_native=no
++    enable_native_library=no
+ fi
+-AM_CONDITIONAL([BUILD_NATIVE], [test "$build_native" = yes])
++AM_CONDITIONAL(BUILD_NATIVE, test x$enable_native_library = xyes)
+ 
+ AC_ARG_ENABLE(
+     [bytecode-library],
+-    AC_HELP_STRING(
+-	[--enable-bytecode-library],
+-	[build bytecode version of library (default)]
+-    ),
+-    [case "$enableval" in
+-	yes) enable_bytecode=$enableval;;
+-	no)  enable_bytecode=$enableval;;
+-	*)   AC_MSG_ERROR([bad value $enableval for --enable-bytecode-library]);;
+-    esac],
+-    [enable_bytecode=yes]
++    AS_HELP_STRING([--disable-bytecode-library], 
++				   [do not build bytecode version of library]),
++    [],
++    []
+ )
+ AC_MSG_CHECKING([wether to build bytecode library])
+-build_bytecode=no
+-if test -n "$OCAMLC" && test "$enable_bytecode" = yes; then
++if test -n "$OCAMLOPT" && test "x$enable_bytecode_library" != xno; then
+     AC_MSG_RESULT([yes])
+-    build_bytecode=yes
++    enable_bytecode_library=yes
+ else
+     AC_MSG_RESULT([no])
+-    build_bytecode=no
++    enable_bytecode_library=no
+ fi
+-AM_CONDITIONAL([BUILD_BYTECODE], [test "$build_bytecode" = yes])
++AM_CONDITIONAL(BUILD_BYTECODE, test x$enable_bytecode_library = xyes)
+ 
+-if test "$build_native" = no && test "$build_bytecode" = no; then
++if test x$enable_native_library = xno && test x$enable_bytecode_library = xno; then
+     AC_MSG_ERROR([neither native nor bytecode library selected])
+ fi
+ 
++AC_ARG_ENABLE(
++    [shared],
++    AS_HELP_STRING([--disable-shared], 
++				   [do not build dynamic shared libraries]),
++    [],
++    []
++)
++AM_CONDITIONAL(BUILD_SHARED, test x$enable_shared != xno)
++
+ # Checks other programs
+ AC_PROG_CC
+ 
+@@ -78,7 +72,8 @@ AC_PATH_XTRA
+ SUPPORT_LABLGTK="false"
+ LABLGTKDIR=
+ 
+-AC_PATH_PROG(PATH_OCAMLFIND, ocamlfind, no)
++AC_CHECK_TOOL([OCAMLFIND],[ocamlfind],[no])
++AC_PATH_PROG(PATH_OCAMLFIND, [$OCAMLFIND], no)
+ 
+ if test "x$PATH_OCAMLFIND" = "x"; then
+   with_ocamlfind_default="no"
+@@ -100,11 +95,12 @@ AC_ARG_WITH(
+     [with_ocamlfind=$with_ocamlfind_default]
+ )	
+ 
+-if test "$with_ocamlfind" = "no"; then
+-  OCAMLSITELIBDIR=$OCAMLLIB/camlimages
+-else
+-  OCAMLSITELIBDIR=$OCAMLLIB/site-lib/camlimages
+-fi
++#if test "$with_ocamlfind" = "no"; then
++#  OCAMLSITELIBDIR=$OCAMLLIB/camlimages
++#else
++#  OCAMLSITELIBDIR=$OCAMLLIB/site-lib/camlimages
++#fi
++OCAMLSITELIBDIR=$OCAMLLIB/camlimages
+ AC_SUBST(OCAMLSITELIBDIR)
+ 
+ AC_ARG_WITH(
+@@ -168,15 +164,8 @@ LABLGTK2DIR=
+ 
+ AC_ARG_WITH(
+     [lablgtk2],
+-    [AC_HELP_STRING(
+-	[--with-lablgtk2],
+-	[enable lablgtk2 support (default: yes)]
+-    )],
+-    [case "$withval" in
+-	yes) with_lablgtk2=yes;;
+-	no)  with_lablgtk2=no;;
+-	*)   AC_MSG_ERROR([bad value $withval for --with-lablgtk2]);;
+-    esac],
++    [AS_HELP_STRING([--with-lablgtk2],[enable lablgtk2 support (default: yes)])],
++    [],
+     [with_lablgtk2=yes]
+ )
+ 
+@@ -202,7 +191,7 @@ else
+ 	    [lablgtk2dir="$OCAMLLIB/lablgtk2"]
+ 	)
+ 
+-	if test -f "$lablgtk2dir/gtk.ml"; then
++	if test -d "$lablgtk2dir"; then
+ 	    AC_MSG_RESULT([found at $lablgtk2dir])
+ 	    SUPPORT_LABLGTK2="true"
+ 	    LABLGTK2DIR="$lablgtk2dir"
+@@ -256,7 +245,7 @@ else
+ 	AC_MSG_CHECKING([if gif bug is fixed])
+ 	save_LDFLAGS="$LDFLAGS"
+ 	LDFLAGS="$LDFLAGS $LIBGIF"
+-	AC_TRY_RUN(
++	AC_RUN_IFELSE(
+ 	    [
+ #include <stdio.h>
+ #include <gif_lib.h>
+@@ -269,7 +258,8 @@ main()
+ 	    [AC_DEFINE([GIFLIB_BUG_FIXED], [1], [Define if the bug in gif library has been fixed.])
+ 	    AC_MSG_RESULT([yes])],
+ 	    [AC_MSG_WARN([buggy gif library, consider rebuilding it with  gcc option -fwritable-strings])
+-	    AC_MSG_RESULT([no])]
++	    AC_MSG_RESULT([no])],
++		[]
+ 	)
+ 	LDFLAGS=$save_LDFLAGS
+     fi
+@@ -356,34 +346,20 @@ LIBTIFF=""
+ 
+ AC_ARG_WITH(
+     [tiff],
+-    [AC_HELP_STRING(
+-	[--with-tiff],
+-	[enable tiff support (default: yes)]
+-    )],
+-    [case "$withval" in
+-	yes) with_tiff=yes;;
+-	no)  with_tiff=no;;
+-	*)   AC_MSG_ERROR([bad value $withval for --with-tiff]);;
+-    esac],
++    [AS_HELP_STRING([--with-tiff],[enable tiff support (default: yes)])],
++    [],
+     [with_tiff=yes]
+ )
+ 
+-if test "$with_tiff" = "no" ; then
+-    AC_MSG_RESULT([disabled])
+-else
+-    AC_CHECK_HEADER(
+-	[tiffio.h],
+-	[AC_CHECK_LIB(
+-	    [tiff],
+-	    [TIFFOpen], 
+-	    [LIBTIFF="-ltiff -lz -ljpeg"
+-	    SUPPORT_TIFF="true"],
+-	    [],
+-	    [-lz -ljpeg]
+-	)]
+-    )
+-fi
+-AC_SUBST(LIBTIFF)
++AS_IF(
++   [test "x$with_tiff" = "xno"],
++   [AC_MSG_RESULT([disabled])],
++   [PKG_CHECK_MODULES(LIBTIFF,
++					  [libtiff-4],
++					  [SUPPORT_TIFF="true"],
++					  [SUPPORT_TIFF="false"])]
++)
++
+ AC_SUBST(SUPPORT_TIFF)
+ AM_CONDITIONAL(HAVE_TIFF, test x$SUPPORT_TIFF = xtrue)
+ 
+@@ -433,36 +409,24 @@ AC_SUBST(SUPPORT_XPM)
+ AM_CONDITIONAL(HAVE_XPM, test x$SUPPORT_XPM = xtrue)
+ 
+ # Checks freetype support
++#AC_DEFINE([SUPPORT_FREETYPE], ["false"], [])
+ SUPPORT_FREETYPE="false"
+-LIBFREETYPE=""
+-INCFREETYPE=""
+ 
+ AC_ARG_WITH(
+     [freetype],
+-    [AC_HELP_STRING(
+-	[--with-freetype],
+-	[enable freetype support (default: yes)]
+-    )],
+-    [case "$withval" in
+-	yes) with_freetype=yes;;
+-	no)  with_freetype=no;;
+-	*)   AC_MSG_ERROR([bad value $withval for --with-freetype]);;
+-    esac],
++    [AS_HELP_STRING([--with-freetype],[enable freetype support (default: yes)])],
++    [],
+     [with_freetype=yes]
+ )
+ 
+-if test "$with_freetype" = "no" ; then
+-    AC_MSG_RESULT([disabled])
+-else
+-    AC_PATH_PROG(FREETYPE_CONFIG, freetype-config)
+-    if test -n "$FREETYPE_CONFIG"; then
+-	LIBFREETYPE=`freetype-config --libs`
+-	INCFREETYPE=`freetype-config --cflags`
+-	SUPPORT_FREETYPE="true"
+-    fi
+-fi
+-AC_SUBST(INCFREETYPE)
+-AC_SUBST(LIBFREETYPE)
++AS_IF(
++   [test "x$with_freetype" = "xno"],[AC_MSG_RESULT([disabled])],
++   [PKG_CHECK_MODULES(FREETYPE2,
++					  [freetype2 >= 0.1],
++					  [SUPPORT_FREETYPE="true"],
++                      [AC_MSG_FAILURE([freetype2 not found])])]
++)
++
+ AC_SUBST(SUPPORT_FREETYPE)
+ AM_CONDITIONAL(HAVE_FREETYPE, test x$SUPPORT_FREETYPE = xtrue)
+  
+@@ -521,7 +485,7 @@ AC_CONFIG_HEADER([config.h])
+ AC_CONFIG_FILES([src/META
+ 		 Makefile
+ 		 src/Makefile
+-	         doc/Makefile
++		 doc/Makefile
+ 		 test/Makefile
+ 		 examples/Makefile
+ 		 examples/converter/Makefile
+@@ -535,7 +499,7 @@ AC_CONFIG_FILES([src/META
+ 		 examples/resize/Makefile
+ 		 examples/tiffps/Makefile
+ 		 examples/ttfimg/Makefile])
+-AC_OUTPUT()
++AC_OUTPUT
+ 
+ cat <<EOF
+ Configuration summary
+@@ -543,7 +507,10 @@ Configuration summary
+ Language:            $OCAMLVERSION
+ Bytecode compiler:   $OCAMLC
+ Native compiler:     $OCAMLOPT
+-OCamlfind:	     $with_ocamlfind
++bytecode :           $enable_bytecode_library
++native :             $enable_native_library
++shared libraries :   $enable_shared
++ocamlfind:           $OCAMLFIND
+ Installed in:        $OCAMLSITELIBDIR
+ Lablgtk support:     $SUPPORT_LABLGTK
+ Lablgtk2 support:    $SUPPORT_LABLGTK2
+diff --git a/examples/liv/Makefile.am b/examples/liv/Makefile.am
+index d201b97..7c993d8 100644
+--- a/examples/liv/Makefile.am
++++ b/examples/liv/Makefile.am
+@@ -37,10 +37,10 @@ OCAMLSOURCES = deficon.ml \
+ 
+ noinst_PROGRAMS =
+ if BUILD_NATIVE
+-noinst_PROGRAMS += liv.opt
++noinst_PROGRAMS += liv.opt$(EXEEXT)
+ endif
+ if BUILD_BYTECODE
+-noinst_PROGRAMS += liv.byt
++noinst_PROGRAMS += liv.byt$(EXEEXT)
+ endif
+ 
+ liv_opt_SOURCES = $(OCAMLSOURCES)
+@@ -61,8 +61,8 @@ EXTRA_DIST = BulletHole.xpm \
+ 	     Monalisa.xpm \
+ 	     sound.xpm
+ 
+-all: liv.byt$(EXEEXT)
+-opt: liv.opt$(EXEEXT)
++#all: liv.byt$(EXEEXT)
++#opt: liv.opt$(EXEEXT)
+ 
+ liv.byt$(EXEEXT): $(OCAMLBYTOBJS)
+ 	$(OCAMLC) -o liv.byt$(EXEEXT) \
+diff --git a/ocaml.m4 b/ocaml.m4
+index 9a59648..6431281 100644
+--- a/ocaml.m4
++++ b/ocaml.m4
+@@ -1,279 +1,197 @@
+-# OCaml macros for autoconf
+-#
+-# Guillaume Rousse <Guillaume.Rousse@inria.fr>
+-# inspired by previous work from:
+-# Georges Mariano
+-# Jean-Christophe Filliātre
+-# Olivier Andrieu
+-# Grigory Batalov
+-
+-
+-# AC_PROG_OCAML([MINIMUM VERSION])
+-# --------------------------------
+-#  check OCaml base system, and set the following variables:
+-#  OCAMLC       OCaml compiler
+-#  OCAMLOPT     OCaml native compiler
+-#  OCAMLDEP     OCaml dependency generator
+-#  OCAMLLIB     OCaml library path
+-#  OCAMLVERSION OCaml version number
+-#  Unless --disable-opt is set by user, optimized versions are used by default.
+-#  Fails if no compiler is found.
+-AC_DEFUN([AC_PROG_OCAML], [
+-
+-    # allow the user to disable the use of optimized versions
+-    AC_ARG_ENABLE(
+-	[native-tools],
+-	AC_HELP_STRING(
+-	    [--enable-native-tools],
+-	    [use native versions of ocaml tools (default)]
+-	),
+-	[case "$enableval" in
+-	    yes) ac_ocaml_enable_native_tools=$enableval;;
+-	    no)  ac_ocaml_enable_native_tools=$enableval;;
+-	    *)   AC_MSG_ERROR([bad value $enableval for --enable-native-tools]);;
+-	esac],
+-	[ac_ocaml_enable_native_tools=yes]
+-    )
+-
+-    # Checking for OCaml compiler
+-    _AC_OCAML_PATH_PROG_FATAL(OCAMLC, ocamlc)
+-
+-    # Checking for OCaml version
+-    AC_CACHE_CHECK(
+-	[for OCaml version],
+-	[ac_cv_ocaml_version],
+-	[ac_cv_ocaml_version=`$OCAMLC -version`]
+-    )
+-    OCAMLVERSION=$ac_cv_ocaml_version
+-
+-    if test -n ["$1"]; then
+-        ac_ocaml_min_version=["$1"];
+-	# Checking for OCaml minimum version
+-	AC_CACHE_CHECK(
+-	    [whether OCaml version >= $ac_ocaml_min_version],
+-	    [ac_cv_ocaml_version_enough],
+-	    [
+-		ac_ocaml_min_major_version=`echo $ac_ocaml_min_version \
+-		    | cut -d. -f1`
+-		ac_ocaml_min_minor_version=`echo $ac_ocaml_min_version \
+-		    | cut -d. -f2`
+-		ac_ocaml_min_micro_version=`echo $ac_ocaml_min_version \
+-		    | cut -d. -f3`
+-		ac_ocaml_major_version=`echo ${OCAMLVERSION%%+*} | cut -d. -f1`
+-		ac_ocaml_minor_version=`echo ${OCAMLVERSION%%+*} | cut -d. -f2`
+-		ac_ocaml_micro_version=`echo ${OCAMLVERSION%%+*} | cut -d. -f3`
+-
+-		if expr                                      \
+-		    \(                                       \
+-			${ac_ocaml_major_version:-0} \>      \
+-			${ac_ocaml_min_major_version:-0}     \
+-		    \) \|                                    \
+-		    \(                                       \
+-			${ac_ocaml_major_version:-0} \=      \
+-			${ac_ocaml_min_major_version:-0} \&  \
+-			${ac_ocaml_minor_version:-0} \>      \
+-			${ac_ocaml_min_minor_version:-0}     \
+-		    \) \|                                    \
+-		    \(                                       \
+-			${ac_ocaml_major_version:-0} \=      \
+-			${ac_ocaml_min_major_version:-0} \&  \
+-			${ac_ocaml_minor_version:-0} \=      \
+-			${ac_ocaml_min_minor_version:-0} \&  \
+-			${ac_ocaml_micro_version:-0} \>=     \
+-			${ac_ocaml_min_micro_version:-0}     \
+-		    \) > /dev/null; then
+-		    ac_cv_ocaml_version_enough=yes
+-		else
+-		    ac_cv_ocaml_version_enough=no
+-		fi
+-	    ]
+-	)
+-
+-	if test "$ac_cv_ocaml_version_enough" = "no"; then
+-	    AC_MSG_ERROR([OCaml version unsufficient])
++dnl autoconf macros for OCaml
++dnl
++dnl Copyright © 2009      Richard W.M. Jones
++dnl Copyright © 2009      Stefano Zacchiroli
++dnl Copyright © 2000-2005 Olivier Andrieu
++dnl Copyright © 2000-2005 Jean-Christophe Filliâtre
++dnl Copyright © 2000-2005 Georges Mariano
++dnl
++dnl For documentation, please read the ocaml.m4 man page.
++
++AC_DEFUN([AC_PROG_OCAML],
++[dnl
++  # checking for ocamlc
++  AC_CHECK_TOOLS([OCAMLC],[ocamlc.opt ocamlc],[no])
++
++  if test "$OCAMLC" != "no"; then
++     OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version* *\(.*\)$|\1|p'`
++     AC_MSG_RESULT([OCaml version is $OCAMLVERSION])
++     # If OCAMLLIB is set, use it
++     if test "$OCAMLLIB" = ""; then
++        OCAMLLIB=`$OCAMLC -where 2>/dev/null || $OCAMLC -v|tail -1|cut -d ' ' -f 4`
++     else
++        AC_MSG_RESULT([OCAMLLIB previously set; preserving it.])
++     fi
++     AC_MSG_RESULT([OCaml library path is $OCAMLLIB])
++
++     AC_SUBST([OCAMLVERSION])
++     AC_SUBST([OCAMLLIB])
++
++     # checking for ocamlopt
++     AC_CHECK_TOOLS([OCAMLOPT],[ocamlopt.opt ocamlopt],[no])
++     OCAMLBEST=byte
++     if test "$OCAMLOPT" = "no"; then
++	AC_MSG_WARN([Cannot find ocamlopt; bytecode compilation only.])
++     else
++	TMPVERSION=`$OCAMLOPT -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
++	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
++	    AC_MSG_RESULT([versions differs from $OCAMLC; $OCAMLOPT discarded.])
++	    OCAMLOPT=no
++	else
++	    OCAMLBEST=opt
+ 	fi
++     fi
++
++     AC_SUBST([OCAMLBEST])
++
++     AC_SUBST([OCAMLOPT])
++  fi
++
++  # checking for ocaml toplevel
++  AC_CHECK_PROG([OCAML],[ocaml],[ocaml],[no])
++
++  # checking for ocamldep
++  AC_CHECK_TOOL([OCAMLDEP],[ocamldep],[no])
++
++  # checking for ocamlmktop
++  AC_CHECK_TOOL([OCAMLMKTOP],[ocamlmktop],[no])
++
++  # checking for ocamlmklib
++  AC_CHECK_TOOL([OCAMLMKLIB],[ocamlmklib],[no])
++
++  # checking for ocamldoc
++  AC_CHECK_PROG([OCAMLDOC],[ocamldoc],[ocamldoc],[no])
++
++  # checking for ocamlbuild
++  AC_CHECK_TOOL([OCAMLBUILD],[ocamlbuild],[no])
++])
++
++
++AC_DEFUN([AC_PROG_OCAMLLEX],
++[dnl
++  # checking for ocamllex
++  AC_CHECK_PROGS([OCAMLLEX],[ocamllex.opt ocamllex],[no])
++])
++
++AC_DEFUN([AC_PROG_OCAMLYACC],
++[dnl
++  AC_CHECK_PROG([OCAMLYACC],[ocamlyacc],[ocamlyacc],[no])
++])
++
++
++AC_DEFUN([AC_PROG_CAMLP4],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++
++  # checking for camlp4
++  AC_CHECK_PROG([CAMLP4],[camlp4],[camlp4],[no])
++  if test "$CAMLP4" != "no"; then
++     TMPVERSION=`$CAMLP4 -v 2>&1| sed -n -e 's|.*version *\(.*\)$|\1|p'`
++     if test "$TMPVERSION" != "$OCAMLVERSION" ; then
++	AC_MSG_RESULT([versions differs from ocamlc])
++        CAMLP4=no
++     fi
++  fi
++  AC_SUBST([CAMLP4])
++
++  # checking for companion tools
++  AC_CHECK_PROG([CAMLP4BOOT],[camlp4boot],[camlp4boot],[no])
++  AC_CHECK_PROG([CAMLP4O],[camlp4o],[camlp4o],[no])
++  AC_CHECK_PROG([CAMLP4OF],[camlp4of],[camlp4of],[no])
++  AC_CHECK_PROG([CAMLP4OOF],[camlp4oof],[camlp4oof],[no])
++  AC_CHECK_PROG([CAMLP4ORF],[camlp4orf],[camlp4orf],[no])
++  AC_CHECK_PROG([CAMLP4PROF],[camlp4prof],[camlp4prof],[no])
++  AC_CHECK_PROG([CAMLP4R],[camlp4r],[camlp4r],[no])
++  AC_CHECK_PROG([CAMLP4RF],[camlp4rf],[camlp4rf],[no])
++])
++
++
++AC_DEFUN([AC_PROG_FINDLIB],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++
++  # checking for ocamlfind
++  AC_CHECK_TOOL([OCAMLFIND],[ocamlfind],[no])
++])
++
++
++dnl Thanks to Jim Meyering for working this next bit out for us.
++dnl XXX We should define AS_TR_SH if it's not defined already
++dnl (eg. for old autoconf).
++AC_DEFUN([AC_CHECK_OCAML_PKG],
++[dnl
++  AC_REQUIRE([AC_PROG_FINDLIB])dnl
++
++  AC_MSG_CHECKING([for OCaml findlib package $1])
++
++  unset found
++  unset pkg
++  found=no
++  for pkg in $1 $2 ; do
++    if $OCAMLFIND query $pkg >/dev/null 2>/dev/null; then
++      AC_MSG_RESULT([found])
++      AS_TR_SH([OCAML_PKG_$1])=$pkg
++      found=yes
++      break
+     fi
+-
+-    # Checking for OCaml library path
+-    AC_CACHE_CHECK(
+-	[for OCaml library path],
+-	[ac_cv_ocaml_library_path],
+-	[ac_cv_ocaml_library_path=`$OCAMLC -where`]
+-    )
+-    OCAMLLIB=$ac_cv_ocaml_library_path
+-
+-    if test "$ac_ocaml_enable_native_tools" = "yes"; then
+-	# Checking for ocamlc.opt
+-	_AC_OCAML_PATH_PROG_NONFATAL(OCAMLC_OPT, ocamlc.opt)
+-	if test -n "$OCAMLC_OPT"; then
+-	    _AC_OCAML_CHECK_VERSION_NONFATAL(OCAMLC_OPT, ocamlc.opt)
+-	fi
+-	if test -n "$OCAMLC_OPT"; then
+-	    OCAMLC=$OCAMLC_OPT
+-	fi
+-    fi
+-
+-    # Checking for OCaml native compiler
+-    _AC_OCAML_PATH_PROG_NONFATAL(OCAMLOPT, ocamlopt, [Cannot find ocamlopt; bytecode compilation only])
+-    if test -n "$OCAMLOPT"; then
+-	_AC_OCAML_CHECK_VERSION_NONFATAL(OCAMLOPT, ocamlopt)
+-    fi
+-    if test -n "$OCAMLOPT"; then
+-        AC_CACHE_CHECK(
+-	    [if OCaml C compiler works],
+-	    [ac_cv_ocaml_c_compiler_works],
+-	    [
+-		touch conftest.c
+-		if $OCAMLC conftest.c >/dev/null 2>&1; then
+-		    ac_cv_ocaml_c_compiler_works=yes
+-		else
+-		    ac_cv_ocaml_c_compiler_works=no
+-		fi
+-		rm -f conftest.c
+-	    ]
+-	)
+-
+-	if test "$ac_cv_ocaml_c_compiler_works" = "no"; then 
+-	    AC_MSG_WARN([bytecode compilation only])
+-	    unset OCAMLOPT
+-	fi
+-    fi
+-
+-    if test "$ac_ocaml_enable_native_tools" = "yes"; then
+-	# Checking for ocamlopt.opt
+-	_AC_OCAML_PATH_PROG_NONFATAL(OCAMLOPT_OPT, ocamlopt.opt)
+-	if test -n "$OCAMLOPT_OPT"; then
+-	    _AC_OCAML_CHECK_VERSION_NONFATAL(OCAMLOPT_OPT, ocamlopt.opt)
+-	fi
+-	if test -n "$OCAMLOPT_OPT"; then
+-	    OCAMLOPT=$OCAMLOPT_OPT
+-	fi
+-    fi
+-
+-    # Checking for ocamldep
+-    _AC_OCAML_PATH_PROG_NONFATAL(OCAMLDEP, ocamldep)
+-
+-    if test "$ac_ocaml_enable_native_tools" = "yes"; then
+-	# Checking for ocamldep.opt
+-	_AC_OCAML_PATH_PROG_NONFATAL(OCAMLDEP_OPT, ocamldep.opt)
+-	if test -n "$OCAMLDEP_OPT"; then
+-	    OCAMLDEP=$OCAMLDEP_OPT
+-	fi
+-    fi
+-
+-    AC_ARG_VAR([OCAMLCFLAGS], [Ocaml compiler flags [none]])
+-
+-]) # AC_PROG_OCAML
+-
+-# AC_PROG_OCAML_TOOL(VARIABLE, PROGRAM)
+-# ---------------------
+-#  check some additional OCaml tool, and set VARIABLE to PROGRAM if found.
+-#  Unless --disable-opt is set by user, optimized versions is used by default.
+-AC_DEFUN([AC_PROG_OCAML_TOOL], [
+-    AC_REQUIRE([AC_PROG_OCAML])
+-
+-    # Checking for bytecode version
+-    _AC_OCAML_PATH_PROG_NONFATAL([$1], [$2])
+-
+-    if test "$ac_ocaml_enable_native_tools" = "yes"; then
+-        # Checking for binary version, using AC_PATH_PROG directly
+-	# to avoid warnings 
+-	AC_PATH_PROG([$1]_OPT, [$2].opt)
+-	if test -n "[$$1]_OPT"; then
+-	    [$1]=[$$1]_OPT
+-	fi
+-    fi
+-]) # AC_PROG_OCAML_TOOL
+-
+-# AC_PROG_CAMLP4
+-# --------------
+-# Check CamlP4 and set the following variables:
+-#   CAMLP4	camlp4
+-#   CAMLP4O	camlp4o
+-#   CAMLP4R	camlp4r
+-#   CAMLP4LIB	parser library path
+-#  Fails if camlp4 is not found
+-AC_DEFUN([AC_PROG_CAMLP4], [
+-    AC_REQUIRE([AC_PROG_OCAML])
+-
+-    # Checking for camlp4
+-    _AC_OCAML_PATH_PROG_FATAL(CAMLP4, camlp4)
+-    _AC_OCAML_CHECK_VERSION_FATAL(CAMLP4, camlp4)
+-
+-    # Checking for Camlp4o
+-    _AC_OCAML_PATH_PROG_NONFATAL(CAMLP4O, camlp4o)
+-
+-    # Checking for Camlp4r
+-    _AC_OCAML_PATH_PROG_NONFATAL(CAMLP4R, camlp4r)
+-
+-    # Searching for parser library path
+-    AC_MSG_CHECKING([for CamlP4 library path])
+-    CAMLP4LIB=`$CAMLP4 -where`
+-    AC_MSG_RESULT([$CAMLP4LIB])
+-
+-]) # AC_PROG_CAMLP4
+-
+-# _AC_OCAML_PATH_PROG_FATAL(VARIABLE, PROGRAM, [MESSAGE])
+-# -------------------------------------------------------
+-# wraps AC_PATH_PROG, issuing an error if PROGRAM
+-# is not found, otherwise affects its path to VARIABLE
+-AC_DEFUN([_AC_OCAML_PATH_PROG_FATAL], [
+-    AC_PATH_PROG([$1], [$2])
+-    if test -z "[$$1]"; then
+-	AC_MSG_ERROR([m4_default([$3], [Cannot find [$2]])])
+-    fi
+-]) # _AC_OCAML_PATH_PROG_FATAL
+-
+-# _AC_OCAML_PATH_PROG_NONFATAL(VARIABLE, PROGRAM, [MESSAGE])
+-# ----------------------------------------------------------
+-# wraps AC_PATH_PROG, issuing a warning if PROGRAM
+-# is not found, otherwise affects its path to VARIABLE
+-AC_DEFUN([_AC_OCAML_PATH_PROG_NONFATAL], [
+-    AC_PATH_PROG([$1], [$2])
+-    if test -z "[$$1]"; then
+-	AC_MSG_WARN([m4_default([$3], [Cannot find [$2]])])
+-    fi
+-]) # _AC_OCAML_PATH_PROG_NONFATAL
+-
+-# _AC_OCAML_CHECK_VERSION(VARIABLE, PROGRAM)
+-# ------------------------------------------
+-# check than PROGRAM version is the same as the OCaml compiler,
+-# otherwise unset VARIABLE
+-AC_DEFUN([_AC_OCAML_CHECK_VERSION], [
+-    AC_CACHE_CHECK(
+-	[wether [$2] version = $OCAMLVERSION],
+-	[ac_cv_ocaml_[$1]_version_ok],
+-	[
+-	    ac_ocaml_[$1]_version=`$[$1] -version`
+-	    if test "$ac_ocaml_[$1]_version" = "$OCAMLVERSION"; then
+-		ac_cv_ocaml_[$1]_version_ok=yes
+-	    else
+-		ac_cv_ocaml_[$1]_version_ok=no
+-	    fi
+-	]
+-    )
+-
+-    if test "$ac_cv_ocaml_[$1]_version_ok" = "no"; then
+-	unset [$1]
+-    fi
+-]) # _AC_OCAML_CHECK_VERSION
+-
+-# _AC_OCAML_CHECK_VERSION_NONFATAL(VARIABLE, PROGRAM)
+-# ------------------------------------------
+-# wraps _AC_OCAML_CHECK_VERSION, issuing a warning if it fails
+-AC_DEFUN([_AC_OCAML_CHECK_VERSION_NONFATAL], [
+-    _AC_OCAML_CHECK_VERSION([$1], [$2])
+-    if test -z ["$$1"]; then
+-	AC_MSG_WARN([[$2] version differs from ocamlc, discarding])
+-    fi
+-]) # _AC_OCAML_CHECK_VERSION_NONFATAL
+-
+-# _AC_OCAML_CHECK_VERSION_FATAL(VARIABLE, PROGRAM)
+-# ------------------------------------------
+-# wraps _AC_OCAML_CHECK_VERSION, issuing an error if it fails
+-AC_DEFUN([_AC_OCAML_CHECK_VERSION_FATAL], [
+-    _AC_OCAML_CHECK_VERSION([$1], [$2])
+-    if test -z ["$$1"]; then
+-	AC_MSG_ERROR([[$2] version differs from ocamlc, aborting])
++  done
++  if test "$found" = "no" ; then
++    AC_MSG_RESULT([not found])
++    AS_TR_SH([OCAML_PKG_$1])=no
++  fi
++
++  AC_SUBST(AS_TR_SH([OCAML_PKG_$1]))
++])
++
++
++AC_DEFUN([AC_CHECK_OCAML_MODULE],
++[dnl
++  AC_MSG_CHECKING([for OCaml module $2])
++
++  cat > conftest.ml <<EOF
++open $3
++EOF
++  unset found
++  for $1 in $$1 $4 ; do
++    if $OCAMLC -c -I "$$1" conftest.ml >&5 2>&5 ; then
++      found=yes
++      break
+     fi
+-]) # _AC_OCAML_CHECK_VERSION_FATAL
++  done
++
++  if test "$found" ; then
++    AC_MSG_RESULT([$$1])
++  else
++    AC_MSG_RESULT([not found])
++    $1=no
++  fi
++  AC_SUBST([$1])
++])
++
++
++dnl XXX Cross-compiling
++AC_DEFUN([AC_CHECK_OCAML_WORD_SIZE],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++  AC_MSG_CHECKING([for OCaml compiler word size])
++  cat > conftest.ml <<EOF
++  print_endline (string_of_int Sys.word_size)
++  EOF
++  OCAML_WORD_SIZE=`$OCAML conftest.ml`
++  AC_MSG_RESULT([$OCAML_WORD_SIZE])
++  AC_SUBST([OCAML_WORD_SIZE])
++])
++
++AC_DEFUN([AC_CHECK_OCAML_OS_TYPE],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++  AC_MSG_CHECKING([OCaml Sys.os_type])
++
++  cat > conftest.ml <<EOF
++  print_string(Sys.os_type);;
++EOF
++
++  OCAML_OS_TYPE=`$OCAML conftest.ml`
++  AC_MSG_RESULT([$OCAML_OS_TYPE])
++  AC_SUBST([OCAML_OS_TYPE])
++])
+diff --git a/src/META.in b/src/META.in
+index 5a42546..e1b1c18 100644
+--- a/src/META.in
++++ b/src/META.in
+@@ -9,60 +9,8 @@ package "core" (
+   archive(native) = "camlimages_core.cmxa"
+ )
+ 
+-package "gif" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_gif.cma"
+-  archive(native) = "camlimages_gif.cmxa"
+-)
+-
+-package "jpeg" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_jpeg.cma"
+-  archive(native) = "camlimages_jpeg.cmxa"
+-)
+-
+-package "png" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_png.cma"
+-  archive(native) = "camlimages_png.cmxa"
+-)
+-
+-package "tiff" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_tiff.cma"
+-  archive(native) = "camlimages_tiff.cmxa"
+-)
+-
+-package "freetype" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_freetype.cma"
+-  archive(native) = "camlimages_freetype.cmxa"
+-)
+-
+-package "xpm" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_xpm.cma"
+-  archive(native) = "camlimages_xpm.cmxa"
+-)
+-
+-package "ps" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_ps.cma"
+-  archive(native) = "camlimages_ps.cmxa"
+-)
+-
+-package "graphics" (
+-  requires = "camlimages.core, graphics"
+-  archive(byte) = "camlimages_graphics.cma"
+-  archive(native) = "camlimages_graphics.cmxa"
+-)
+-
+-package "lablgtk2" (
+-  requires = "camlimages.core, lablgtk2"
+-  archive(byte) = "camlimages_lablgtk2.cma"
+-  archive(native) = "camlimages_lablgtk2.cmxa"
+-)
+-
+ package "all_formats" (
+-  requires = "camlimages.gif, camlimages.jpeg, camlimages.png, camlimages.tiff, camlimages.xpm, camlimages.ps"
++  requires = "graphics, lablgtk2, graphics"
++  archive(byte) = "camlimages.cma"
++  archive(native) = "camlimages.cmxa"  
+ )
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 75a78be..6d90c5d 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -15,34 +15,12 @@
+ #(* $Id: Makefile.am,v 1.34 2009-07-04 03:38:36 furuse Exp $ *)
+ 
+ ocamlsitelibdir = $(OCAMLSITELIBDIR)
+-ocamlsitelib_DATA = camlimages.a \
+-		    camlimages_core.a \
+-		    libcamlimages.a \
+-		    libcamlimages_core.a \
+-		    $(OCAMLINTERFACES) \
+-		    $(OCAMLINTERFACES:.mli=.cmi) \
+-		    META
+-ocamlstublibdir = $(libdir)/ocaml/stublibs
+-ocamlstublib_DATA = dllcamlimages.so dllcamlimages_core.so
+-
+-if BUILD_NATIVE
+-ocamlsitelib_DATA += camlimages.cmxa camlimages_core.cmxa
+-endif
+-
+-if BUILD_BYTECODE
+-ocamlsitelib_DATA += camlimages.cma camlimages_core.cma
+-endif
+-
+-BUILT_SOURCES = $(OCAMLBUILTSOURCES)
+ 
+ OCAMLCFLAGS	= -warn-error A -annot
+-LINKFLAGS	=	 
++#LINKFLAGS	= 
+ AM_OCAMLCFLAGS	=
+ AM_CFLAGS	= -I .. -DHAVE_CONFIG_H
+ 
+-# use two different variables here to avoid a circular dependency
+-# between Makefile and .depend file
+-OCAMLBUILTSOURCES = camlimages.ml
+ OCAMLSOURCES_CORE =	mstring.ml \
+ 			color.ml \
+ 			region.ml \
+@@ -88,59 +66,54 @@ OCAMLINTERFACES = info.mli \
+ 		  reduce.mli \
+ 	 	  blend.mli \
+ 		  bmp.mli \
+-	          ppm.mli \
+-	          xvthumb.mli \
+-	          oXvthumb.mli \
++	      ppm.mli \
++	      xvthumb.mli \
++	      oXvthumb.mli \
+ 		  colorhist.mli \
+ 		  geometry.mli 
+ 
+ CSOURCES_CORE = 
++OTHER_CMI =
+ 
+ if HAVE_GIF
+-OCAMLSOURCES_CORE += 	gif.ml \
+-			oGif.ml
+-OCAMLINTERFACES += gif.mli
+-CSOURCES_CORE += gifread.c \
+-	    gifwrite.c
++OCAMLSOURCES_CORE += gif.ml oGif.ml
++OCAMLINTERFACES   += gif.mli
++OTHER_CMI         += oGif.cmi
++CSOURCES_CORE     += gifread.c gifwrite.c
+ endif
+ 
+ if HAVE_PNG
+-OCAMLSOURCES_CORE += 	png.ml \
+-			oPng.ml
+-OCAMLINTERFACES += png.mli
+-CSOURCES_CORE += pngread.c \
+-	    pngwrite.c
++OCAMLSOURCES_CORE += png.ml oPng.ml
++OCAMLINTERFACES   += png.mli
++CSOURCES_CORE     += pngread.c pngwrite.c
+ endif
+ 
+ if HAVE_JPEG
+-OCAMLSOURCES_CORE += 	jpeg.ml \
+-			oJpeg.ml
+-OCAMLINTERFACES += jpeg.mli
+-CSOURCES_CORE += jpegread.c \
+-	    jpegwrite.c
++OCAMLSOURCES_CORE += jpeg.ml oJpeg.ml
++OCAMLINTERFACES   += jpeg.mli
++OTHER_CMI          += oJpeg.cmi
++CSOURCES_CORE     += jpegread.c jpegwrite.c
+ endif
+ 
+ if HAVE_TIFF
+-OCAMLSOURCES_CORE += 	tiff.ml \
+-			oTiff.ml
+-OCAMLINTERFACES += tiff.mli
+-CSOURCES_CORE += tiffread.c \
+-	    tiffwrite.c
++OCAMLSOURCES_CORE += tiff.ml oTiff.ml
++OCAMLINTERFACES   += tiff.mli
++OTHER_CMI         += oTiff.cmi
++CSOURCES_CORE     += tiffread.c tiffwrite.c
++AM_CFLAGS         += @LIBTIFF_CFLAGS@
+ endif
+ 
+ if HAVE_XPM
+-OCAMLSOURCES_CORE += 	xpm.ml \
+-			oXpm.ml
+-OCAMLINTERFACES += xpm.mli
+-CSOURCES_CORE += xpmread.c \
+-	    xpmwrite.c
+-AM_CFLAGS += $(INCXPM)
++OCAMLSOURCES_CORE += xpm.ml oXpm.ml
++OCAMLINTERFACES   += xpm.mli
++CSOURCES_CORE     += xpmread.c xpmwrite.c
++AM_CFLAGS         += $(INCXPM)
+ endif
+ 
+ if HAVE_PS
+-OCAMLSOURCES_CORE += 	ps.ml \
+-			oPs.ml
+-OCAMLINTERFACES += ps.mli
++OCAMLSOURCES_CORE += ps.ml oPs.ml
++OCAMLINTERFACES   += ps.mli
++OTHER_CMI         += oPs.cmi
+ endif
+ 
+ ### end of core
+@@ -148,8 +121,10 @@ endif
+ OCAMLSOURCES= $(OCAMLSOURCES_CORE)
+ CSOURCES= $(CSOURCES_CORE)
+ 
+-OCAMLSOURCES += graphic_image.ml oGraphic.ml
+-OCAMLINTERFACES += graphic_image.mli
++OCAMLSOURCES      += graphic_image.ml oGraphic.ml
++OCAMLINTERFACES   += graphic_image.mli
++OTHER_CMI         += oGraphic.cmi
++OTHER_CMI         += units.cmi oBmp.cmi oPpm.cmi camlimages.cmi
+ 
+ # now obsolete
+ # if HAVE_LABLGTK
+@@ -163,64 +138,59 @@ OCAMLINTERFACES += graphic_image.mli
+ # endif
+ 
+ if HAVE_LABLGTK2
+-OCAMLSOURCES += ximage.ml \
+-		oXimage.ml \
+-		imagegdk.ml
+-OCAMLINTERFACES += ximage.mli \
+-		   oXimage.mli \
+-		   imagegdk.mli
+-AM_OCAMLCFLAGS += -I $(LABLGTK2DIR)
++OCAMLSOURCES      += ximage.ml oXimage.ml imagegdk.ml ximage2.ml oXimage2.ml
++OCAMLINTERFACES   += ximage.mli oXimage.mli imagegdk.mli
++OTHER_CMI         += ximage2.cmi oXimage2.cmi
++AM_OCAMLCFLAGS    += -I $(LABLGTK2DIR)
+ endif
+ 
+ if HAVE_FREETYPE
+-OCAMLSOURCES += ftlow.ml \
+-		freetype.ml \
+-		jis_table.ml \
+-		jis_unicode.ml \
+-		fttext.ml \
+-		oFreetype.ml
+-OCAMLINTERFACES += ftlow.mli \
+-		   freetype.mli \
+-		   jis_unicode.mli \
+-		   fttext.mli
+-CSOURCES += ftintf.c
+-AM_CFLAGS += $(INCFREETYPE)
++OCAMLSOURCES      += ftlow.ml freetype.ml jis_table.ml jis_unicode.ml \
++			         fttext.ml oFreetype.ml
++OCAMLINTERFACES   += ftlow.mli freetype.mli jis_unicode.mli fttext.mli
++CSOURCES          += ftintf.c
++AM_CFLAGS         += @FREETYPE2_CFLAGS@
++OTHER_CMI         += oFreetype.cmi jis_table.cmi
+ endif
+ 
+-ocamlsitelib_DATA += units.cmi oXpm.cmi
+-if HAVE_TIFF
+-ocamlsitelib_DATA += oTiff.cmi
+-endif
+-if HAVE_PS
+-ocamlsitelib_DATA += oPs.cmi
+-endif
+-ocamlsitelib_DATA += oPpm.cmi oPng.cmi oJpeg.cmi oGraphic.cmi
+-if HAVE_GIF
+-ocamlsitelib_DATA += oGif.cmi
++ocamlsitelib_DATA = \
++		    $(OCAMLINTERFACES) \
++		    $(OCAMLINTERFACES:.mli=.cmi) \
++		    camlimages.a \
++		    camlimages_core.a \
++		    libcamlimages.a \
++		    libcamlimages_core.a \
++		    META
++ocamlstublibdir = $(libdir)/ocaml/stublibs
++
++if BUILD_SHARED
++ocamlstublib_DATA = dllcamlimages.so dllcamlimages_core.so
+ endif
+-if HAVE_FREETYPE
+-ocamlsitelib_DATA += oFreetype.cmi
++
++if BUILD_NATIVE
++ocamlsitelib_DATA += camlimages.cmxa camlimages_core.cmxa
+ endif
+-ocamlsitelib_DATA += oBmp.cmi
+-if HAVE_FREETYPE
+-ocamlsitelib_DATA += jis_table.cmi
++
++if BUILD_BYTECODE
++ocamlsitelib_DATA += camlimages.cma camlimages_core.cma
+ endif
+-ocamlsitelib_DATA += camlimages.cmi
++
++ocamlsitelib_DATA += $(OTHER_CMI)
+ 
+ EXTRA_DIST = $(OCAMLSOURCES) $(OCAMLINTERFACES) $(CSOURCES) camlimages.ml.in META.in
+ 
+ CLEANFILES = $(OCAMLBYTOBJS) \
+ 	     $(OCAMLOPTOBJS) \
+ 	     $(OCAMLOPTOBJS:.cmx=.o) \
+-	     $(OCAMLBUILTSOURCES:.ml=.cmi) \
++	     camlimages.cmi \
+ 	     $(OCAMLSOURCES:.ml=.cmi) \
+-	     $(OCAMLBUILTSOURCES:.ml=.annot) \
++	     camlimages.annot \
+ 	     $(OCAMLSOURCES:.ml=.annot) \
+ 	     $(OCAMLINTERFACES:.mli=.cmi) \
+ 	     info.cmi \
+ 	     $(COBJS) \
+ 	     dllcamlimages_core.so \
+-             libcamlimages_core.a \
++	     libcamlimages_core.a \
+ 	     camlimages_core.cma \
+ 	     camlimages_core.cmxa \
+ 	     camlimages_core.a \
+@@ -233,14 +203,14 @@ CLEANFILES = $(OCAMLBYTOBJS) \
+ 	     camlimages.ml \
+ 	     META
+ 
+-OCAMLBYTOBJS_CORE	= $(OCAMLBUILTSOURCES:.ml=.cmo) $(OCAMLSOURCES_CORE:.ml=.cmo)
+-OCAMLBYTOBJS	= $(OCAMLBUILTSOURCES:.ml=.cmo) $(OCAMLSOURCES:.ml=.cmo)
+-OCAMLOPTOBJS_CORE	= $(OCAMLBUILTSOURCES:.ml=.cmx) $(OCAMLSOURCES_CORE:.ml=.cmx)
+-OCAMLOPTOBJS	= $(OCAMLBUILTSOURCES:.ml=.cmx) $(OCAMLSOURCES:.ml=.cmx)
++OCAMLBYTOBJS_CORE = camlimages.cmo $(OCAMLSOURCES_CORE:.ml=.cmo)
++OCAMLBYTOBJS	  = camlimages.cmo $(OCAMLSOURCES:.ml=.cmo)
++OCAMLOPTOBJS_CORE = camlimages.cmx $(OCAMLSOURCES_CORE:.ml=.cmx)
++OCAMLOPTOBJS	  = camlimages.cmx $(OCAMLSOURCES:.ml=.cmx)
+ COBJS_CORE	= $(CSOURCES_CORE:.c=.o)
+ COBJS		= $(CSOURCES:.c=.o)
+-EXTCLIB_CORE	= $(LIBXPM) $(LIBTIFF) $(LIBPNG) $(LIBJPEG) $(LIBGIF)
+-EXTCLIB		= $(EXTCLIB_CORE) $(LIBFREETYPE) 
++EXTCLIB_CORE = $(LIBXPM) @LIBTIFF_LIBS@ $(LIBPNG) $(LIBJPEG) $(LIBGIF)
++EXTCLIB		 = $(EXTCLIB_CORE) @FREETYPE2_LIBS@ 
+ 
+ camlimages_core.a libcamlimages_core.a dllcamlimages_core.so: $(COBJS_CORE)
+ 	$(OCAMLMKLIB) -o camlimages_core $(EXTCLIB_CORE) $(LDFLAGS) $(COBJS_CORE)
+diff --git a/src/gifread.c b/src/gifread.c
+index ecf40c4..55499d4 100644
+--- a/src/gifread.c
++++ b/src/gifread.c
+@@ -200,7 +200,12 @@ value dGifGetLine( value hdl )
+ 
+   if( DGifGetLine(GifFile, String_val(buf), GifFile->Image.Width ) 
+       == GIF_ERROR ){
+-    PrintGifError ();
++	/* was PrintGifError() before removal in giflib-4.2.0 */
++    char *Err = GifErrorString();
++    if (Err != NULL)
++        fprintf(stderr, "\nGIF-LIB error: %s.\n", Err);
++    else
++        fprintf(stderr, "\nGIF-LIB undefined error %d.\n", GifError());
+     failwith("DGifGetLine");
+   }
+   CAMLreturn(buf);
+diff --git a/src/gifwrite.c b/src/gifwrite.c
+index 4b6399f..9252d1d 100644
+--- a/src/gifwrite.c
++++ b/src/gifwrite.c
+@@ -25,7 +25,7 @@
+ 
+ #include <gif_lib.h>
+ 
+-int list_length( value list )
++int get_list_length( value list )
+ {
+   CAMLparam1(list);
+   CAMLlocal1(l);
+@@ -133,7 +133,11 @@ value eGifPutLine( value oc, value buf )
+ 
+   if ( EGifPutLine(GifFileOut, String_val(buf), GifFileOut->Image.Width) 
+        == GIF_ERROR ){
+-    PrintGifError ();
++	char *Err = GifErrorString();
++    if (Err != NULL)
++        fprintf(stderr, "\nGIF-LIB error: %s.\n", Err);
++    else
++        fprintf(stderr, "\nGIF-LIB undefined error %d.\n", GifError());
+     failwith("EGifPutLine");
+   }
+   CAMLreturn(Val_unit);
+@@ -151,7 +155,7 @@ value eGifPutExtension( value oc, value ext )
+   int i;
+ 
+   extCode = Int_val(Field(ext,0));
+-  extLen = list_length( Field(ext,1) );
++  extLen = get_list_length( Field(ext,1) );
+   if( (extension = malloc(sizeof(char*) * extLen)) == NULL ){
+     failwith("EGifPutExtension");
+   }
+diff --git a/src/pngread.c b/src/pngread.c
+index cc576e8..ce25110 100644
+--- a/src/pngread.c
++++ b/src/pngread.c
+@@ -69,7 +69,7 @@ value read_png_file_as_rgb24( name )
+   }
+ 
+   /* error handling */
+-  if (setjmp(png_ptr->jmpbuf)) {
++  if (setjmp(png_jmpbuf(png_ptr))) {
+     /* Free all of the memory associated with the png_ptr and info_ptr */
+     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+     fclose(fp);
+@@ -134,7 +134,7 @@ value read_png_file_as_rgb24( name )
+     png_set_rows(png_ptr, info_ptr, row_pointers);
+ 
+     /* Later, we can return something */
+-    if (setjmp(png_ptr->jmpbuf)) {
++    if (setjmp(png_jmpbuf(png_ptr))) {
+       /* Free all of the memory associated with the png_ptr and info_ptr */
+       png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+       fclose(fp);
+@@ -243,7 +243,7 @@ value read_png_file( name )
+   }
+ 
+   /* error handling */
+-  if (setjmp(png_ptr->jmpbuf)) {
++  if (setjmp(png_jmpbuf(png_ptr))) {
+     /* Free all of the memory associated with the png_ptr and info_ptr */
+     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+     fclose(fp);
+@@ -302,7 +302,7 @@ value read_png_file( name )
+     png_set_rows(png_ptr, info_ptr, row_pointers);
+ 
+     /* Later, we can return something */
+-    if (setjmp(png_ptr->jmpbuf)) {
++    if (setjmp(png_jmpbuf(png_ptr))) {
+       /* Free all of the memory associated with the png_ptr and info_ptr */
+       png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+       fclose(fp);
+diff --git a/src/pngwrite.c b/src/pngwrite.c
+index 3248562..6937cd8 100644
+--- a/src/pngwrite.c
++++ b/src/pngwrite.c
+@@ -62,7 +62,7 @@ value write_png_file_rgb( name, buffer, width, height, with_alpha )
+   }
+ 
+   /* error handling */
+-  if (setjmp(png_ptr->jmpbuf)) {
++  if (setjmp(png_jmpbuf(png_ptr))) {
+     /* Free all of the memory associated with the png_ptr and info_ptr */
+     png_destroy_write_struct(&png_ptr, &info_ptr);
+     fclose(fp);
+@@ -171,7 +171,7 @@ value write_png_file_index( name, buffer, cmap, width, height )
+   }
+ 
+   /* error handling */
+-  if (setjmp(png_ptr->jmpbuf)) {
++  if (setjmp(png_jmpbuf(png_ptr))) {
+     /* Free all of the memory associated with the png_ptr and info_ptr */
+     png_destroy_write_struct(&png_ptr, &info_ptr);
+     fclose(fp);
+-- 
+1.7.9.5
+
