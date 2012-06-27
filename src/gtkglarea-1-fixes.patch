@@ -1,0 +1,109 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 8ca212a3a9fa7a034b1fa3680422e9a7cad21d4a Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 17 Jun 2012 09:05:56 +0200
+Subject: [PATCH] deactivates dll build which is not supported by mxe, and
+ introduce option --disable-shared to handle it.
+
+taken from
+https://github.com/GNOME/gtkglarea/pull/1
+
+diff --git a/configure.ac b/configure.ac
+index 07be73f..2728c10 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -53,6 +53,16 @@ if test "$native_win32" = "yes"; then
+ fi
+ AM_CONDITIONAL(MS_LIB_AVAILABLE, test x$ms_librarian = xyes)
+ 
++
++dnl
++dnl  Check if shared libs are enabled
++dnl
++AC_ARG_ENABLE(shared,
++  [AS_HELP_STRING([--disable-shared],[disable support for shared libraries])],
++  [],
++  [])
++AM_CONDITIONAL(USE_SHARED, test x$enable_shared != xno)
++
+ dnl
+ dnl  Check for GTK libraries
+ dnl
+@@ -172,7 +182,7 @@ AC_C_CONST
+ 
+ dnl Checks for library functions.
+ 
+-AC_OUTPUT(
++AC_CONFIG_FILES([
+   Makefile
+   gtkgl-2.0.pc
+   gtkgl/Makefile
+@@ -180,8 +190,8 @@ AC_OUTPUT(
+   docs/Makefile
+   examples/Makefile
+   examples/makefile.mingw
+-)
+-
++])
++AC_OUTPUT
+ 
+ echo "---"
+ echo "Configuration summary"
+diff --git a/gtkgl/Makefile.am b/gtkgl/Makefile.am
+index c7e65cd..23d4fdb 100644
+--- a/gtkgl/Makefile.am
++++ b/gtkgl/Makefile.am
+@@ -1,28 +1,28 @@
+ ## gtkgl directory
+ 
++INSTALL_EXTRA=
++UNINSTALL_EXTRA=
++
+ if OS_WIN32
+ export_symbols = -export-symbols gtkgl.def
+-
++if USE_SHARED
+ install-libtool-import-lib:
+ 	$(INSTALL) .libs/libgtkgl-2.0.dll.a $(DESTDIR)$(libdir)
+ uninstall-libtool-import-lib:
+ 	-rm $(DESTDIR)$(libdir)/libgtkgl-2.0.dll.a
+-else
+-install-libtool-import-lib:
+-uninstall-libtool-import-lib:
++INSTALL_EXTRA += install-libtool-import-lib
++UNINSTALL_EXTRA += uninstall-libtool-import-lib
++endif
+ endif
+ 
+ if MS_LIB_AVAILABLE
+ noinst_DATA = gtkgl-2.0.lib
+-
+ install-ms-lib:
+ 	$(INSTALL) gtkgl-2.0.lib $(DESTDIR)$(libdir)
+-
+ uninstall-ms-lib:
+ 	-rm $(DESTDIR)$(libdir)/gtkgl-2.0.lib
+-else
+-install-ms-lib:
+-uninstall-ms-lib:
++INSTALL_EXTRA += install-ms-lib
++UNINSTALL_EXTRA += uninstall-ms-lib
+ endif
+ 
+ EXTRA_DIST = makefile.mingw makefile.mingw.in gtkgl.def
+@@ -42,6 +42,6 @@ libgtkgl_2_0_la_LIBADD = $(GTK_LIBS) $(GL_LIBS)
+ gtkgl-2.0.lib: libgtkgl-2.0.la gtkgl.def
+ 	lib -name:libgtkgl-2.0-@LT_CURRENT_MINUS_AGE@.dll -def:gtkgl.def -out:$@
+ 
+-install-data-local: install-ms-lib install-libtool-import-lib
++install-data-local: $(INSTALL_EXTRA)
+ 
+-uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
++uninstall-local: $(UNINSTALL_EXTRA)
+-- 
+1.7.9.5
+
