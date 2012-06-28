@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         --disable-verbose-mode \
         --disable-asserts \
         --disable-shared \
+        --disable-maintainer-mode \
         --enable-static \
         --disable-silent-rules
     $(MAKE) -C '$(1)' -j '$(JOBS)' install

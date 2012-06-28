@@ -3,32 +3,10 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 9c99802fc9d0e3b2c90b00ba877ae8be9bab615f Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Tue, 4 Jan 2011 00:47:49 +0100
-Subject: [PATCH 1/2] always static in MXE
-
-
-diff --git a/dbus/dbus-macros.h b/dbus/dbus-macros.h
-index dcd3eeb..8324278 100644
---- a/dbus/dbus-macros.h
-+++ b/dbus/dbus-macros.h
-@@ -172,6 +172,7 @@
-  */
- 
- #if defined(_WIN32)
-+#  define DBUS_STATIC_BUILD
- #  if defined(DBUS_STATIC_BUILD)
- #  define DBUS_EXPORT
- #  elif defined(dbus_1_EXPORTS)
--- 
-1.7.6.3
-
-
 From d7bc1aff67132c09d154999c282e1b391bbe7a39 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 23 Sep 2011 16:24:46 +0200
-Subject: [PATCH 2/2] add missing MemoryBarrier (MXE specific)
+Subject: [PATCH 1/1] add missing MemoryBarrier (MXE specific)
 
 Windows API has this, but it's not in MinGW.
 See http://lists-archives.org/mingw-users/15935-missing-definition-of-memorybarrier.html
