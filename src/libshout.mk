@@ -3,7 +3,7 @@
 
 PKG             := libshout
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a6f26441ec27b6f9b55fba38b99bd1d7ca17fecf
+$(PKG)_CHECKSUM := 147c5670939727420d0e2ad6a20468e2c2db1e20
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.us.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
