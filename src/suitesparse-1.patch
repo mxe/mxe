@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 60ff05e30eaa435a7776b178f5f240f0c11e8f38 Mon Sep 17 00:00:00 2001
+From 169f88aef7ff1d302aa3eac48d779d009780b87f Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 20 May 2012 23:41:27 +0200
 Subject: [PATCH] build lib not demo
@@ -12,10 +12,10 @@ Subject: [PATCH] build lib not demo
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/CHOLMOD/Makefile b/CHOLMOD/Makefile
-index d27ae54..878f9d8 100644
+index 97911ef..4a3bcae 100644
 --- a/CHOLMOD/Makefile
 +++ b/CHOLMOD/Makefile
-@@ -13,7 +13,7 @@ include ../UFconfig/UFconfig.mk
+@@ -14,7 +14,7 @@ include ../SuiteSparse_config/SuiteSparse_config.mk
  
  # Compile the C-callable libraries and the Demo programs.
  all:
@@ -25,12 +25,12 @@ index d27ae54..878f9d8 100644
  # Compile the C-callable libraries only.
  library:
 diff --git a/UMFPACK/Makefile b/UMFPACK/Makefile
-index 6163045..4973e55 100644
+index 622ee39..e19cd2f 100644
 --- a/UMFPACK/Makefile
 +++ b/UMFPACK/Makefile
-@@ -13,7 +13,7 @@ include ../UFconfig/UFconfig.mk
- # compile all C code (except hb, fortran, and fortran64), including AMD and the
- # demos, but not the MATLAB mexFunctions
+@@ -12,7 +12,7 @@ include ../SuiteSparse_config/SuiteSparse_config.mk
+ 
+ # compile all C code (except hb, fortran, and fortran64), incl. AMD and demos
  all:
 -	( cd Demo   ; $(MAKE) )
 +	( cd Lib    ; $(MAKE) )
@@ -38,5 +38,5 @@ index 6163045..4973e55 100644
  # compile just the C-callable UMFPACK library
  library:
 -- 
-1.7.9.2
+1.7.10.4
 
