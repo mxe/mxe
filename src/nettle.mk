@@ -3,7 +3,7 @@
 
 PKG             := nettle
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 1df0cd013e83f73b78a5521411a67e331de3dfa6
+$(PKG)_CHECKSUM := 1061754feb69dd01354525fa7eb6154b28ac887d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.lysator.liu.se/~nisse/archive/$($(PKG)_FILE)
@@ -19,8 +19,9 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --enable-static \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' getopt.o getopt1.o
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
