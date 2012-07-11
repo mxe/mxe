@@ -7,12 +7,8 @@ rebased onto version 0.9.1 tarball files.
 From 17ff5157ffdc749f60b8285f84e64ac5e06d4283 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 16 Nov 2010 13:28:05 +0000
-Subject: [PATCH 01/38] Started version 0.9.2.
+Subject: [PATCH 01/39] Started version 0.9.2.
 
----
- ChangeLog  |    8 ++++++++
- SConstruct |    2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/ChangeLog b/ChangeLog
 index 871d055..8fdcdb0 100644
@@ -45,17 +41,14 @@ index fb01edf..55f9223 100644
  # API version number (libtool)
  #
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From c12ee2b267b9dcfd092a298dfd9a8eec81ab3a0b Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 30 Nov 2010 14:57:03 +0000
-Subject: [PATCH 02/38] Initialize and delete object.
+Subject: [PATCH 02/39] Initialize and delete object.
 
----
- vmime/net/imap/IMAPParser.hpp |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/vmime/net/imap/IMAPParser.hpp b/vmime/net/imap/IMAPParser.hpp
 index 0f3e9ec..d71c3ca 100644
@@ -81,19 +74,16 @@ index 0f3e9ec..d71c3ca 100644
  
  		void go(IMAPParser& parser, string& line, string::size_type* currentPos)
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From fd277afe87485c9d3377964794b76006c6d36a56 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Wed, 8 Dec 2010 08:52:54 +0000
-Subject: [PATCH 03/38] No extra space between ':' and '<' in MAIL FROM and
+Subject: [PATCH 03/39] No extra space between ':' and '<' in MAIL FROM and
  RCPT TO. Wait for server response after QUIT and
  before closing connection.
 
----
- src/net/smtp/SMTPTransport.cpp |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/src/net/smtp/SMTPTransport.cpp b/src/net/smtp/SMTPTransport.cpp
 index 204daae..d9fb7b8 100644
@@ -126,17 +116,14 @@ index 204daae..d9fb7b8 100644
  		if ((resp = readResponse())->getCode() != 250)
  		{
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From d64da50e879c0e480d2e65c43e3b903c3e80101f Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 10 Dec 2010 16:24:06 +0000
-Subject: [PATCH 04/38] Fixed unit test after bug fix.
+Subject: [PATCH 04/39] Fixed unit test after bug fix.
 
----
- tests/net/smtp/SMTPTransportTest.cpp |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tests/net/smtp/SMTPTransportTest.cpp b/tests/net/smtp/SMTPTransportTest.cpp
 index 5015552..6552f9e 100644
@@ -152,19 +139,15 @@ index 5015552..6552f9e 100644
  				localSend("250 OK\r\n");
  			}
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 130d0aabda2a9988913ad201390796775dc16a65 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 10 Dec 2010 16:54:38 +0000
-Subject: [PATCH 05/38] Fixed boundary parsing (thanks to John van der Kamp,
+Subject: [PATCH 05/39] Fixed boundary parsing (thanks to John van der Kamp,
  Zarafa).
 
----
- src/body.cpp                  |   43 +++++++++++++++++++++++++++++++++++++++--
- tests/parser/bodyPartTest.cpp |    2 +-
- 2 files changed, 42 insertions(+), 3 deletions(-)
 
 diff --git a/src/body.cpp b/src/body.cpp
 index 13dff6b..738d3e7 100644
@@ -244,19 +227,15 @@ index 12c4f74..df2bf85 100644
  
  		vmime::bodyPart p;
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From c63f37c888798f0e7e99aa03afda16445a72b7b2 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 21 Jan 2011 15:28:06 +0000
-Subject: [PATCH 06/38] Fixed possible infinite loop (thanks to John van der
+Subject: [PATCH 06/39] Fixed possible infinite loop (thanks to John van der
  Kamp, Zarafa).
 
----
- src/word.cpp              |    2 +-
- tests/parser/textTest.cpp |   11 +++++++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/src/word.cpp b/src/word.cpp
 index db720dc..1c1c1a6 100644
@@ -300,18 +279,15 @@ index b84f376..746ac94 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 1fafad8f913e700b350e6915de8be710fc2d1ced Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 28 Jan 2011 12:11:08 +0000
-Subject: [PATCH 07/38] Fixed possible read to invalid memory location (thanks
+Subject: [PATCH 07/39] Fixed possible read to invalid memory location (thanks
  to Alexander Konovalov).
 
----
- src/word.cpp |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/word.cpp b/src/word.cpp
 index 1c1c1a6..fa08d33 100644
@@ -327,21 +303,16 @@ index 1c1c1a6..fa08d33 100644
  					else
  						state->lastCharIsSpace = false;
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 73298423f695d7c4441d44619e4b7f9de75f566e Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Wed, 9 Mar 2011 18:03:31 +0000
-Subject: [PATCH 08/38] Fixed bug #3174903. Fixed word parsing when buffer
+Subject: [PATCH 08/39] Fixed bug #3174903. Fixed word parsing when buffer
  does not end with NL. Fixed 'no encoding' when
  forced.
 
----
- src/body.cpp                  |   14 +++++---
- src/word.cpp                  |   25 ++++++++------
- tests/parser/bodyPartTest.cpp |   76 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 101 insertions(+), 14 deletions(-)
 
 diff --git a/src/body.cpp b/src/body.cpp
 index 738d3e7..8596833 100644
@@ -538,18 +509,15 @@ index df2bf85..b129913 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 5f5757b9d4bb0febb1e2183578eb91e801a08038 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 27 Mar 2011 11:26:55 +0000
-Subject: [PATCH 09/38] Allow static linking in mingw-cross-env. Added 'iconv'
+Subject: [PATCH 09/39] Allow static linking in mingw-cross-env. Added 'iconv'
  and uses 'ws2_32' instead of 'winsock32' (#3213487).
 
----
- SConstruct |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/SConstruct b/SConstruct
 index 55f9223..177f5b4 100644
@@ -574,19 +542,15 @@ index 55f9223..177f5b4 100644
  
  # -- getaddrinfo (POSIX)
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 2b48b4a68ce3e9b9b1a3f485123af5938a568324 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 31 Mar 2011 19:13:03 +0000
-Subject: [PATCH 10/38] Flush stateful data from iconv (thanks to John van der
+Subject: [PATCH 10/39] Flush stateful data from iconv (thanks to John van der
  Kamp, Zarafa).
 
----
- src/charsetConverter.cpp     |   13 +++++++++----
- tests/parser/charsetTest.cpp |   10 ++++++++++
- 2 files changed, 19 insertions(+), 4 deletions(-)
 
 diff --git a/src/charsetConverter.cpp b/src/charsetConverter.cpp
 index 38b9e5e..2135788 100644
@@ -659,17 +623,14 @@ index 8ad71d7..54a09a7 100644
  	// Conversion to hexadecimal for easier debugging
  	static const vmime::string toHex(const vmime::string str)
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 8d2e039c5201e144ff08e2ff7cf9efe77fe4b3d0 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 10 Jun 2011 19:39:09 +0000
-Subject: [PATCH 11/38] Requested email change.
+Subject: [PATCH 11/39] Requested email change.
 
----
- AUTHORS |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/AUTHORS b/AUTHORS
 index 20a0181..bbddb30 100644
@@ -685,17 +646,14 @@ index 20a0181..bbddb30 100644
   - Georg Sauthoff <gsauthof@techfak.uni-bielefeld.de>
   - Pierre Thierry <nowhere.man@levallois.eu.org> (patches for STL algorithms)
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From cc6317f28ae0b61fea36e1bc78b09dc8300579f8 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 14 Jun 2011 18:37:54 +0000
-Subject: [PATCH 12/38] Fixed compilation issue following namespace change.
+Subject: [PATCH 12/39] Fixed compilation issue following namespace change.
 
----
- examples/example7.cpp |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/examples/example7.cpp b/examples/example7.cpp
 index 1ddb3d0..243b1da 100644
@@ -724,18 +682,15 @@ index 1ddb3d0..243b1da 100644
  		std::vector <vmime::string> props = e->getAvailableProperties();
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From a916d12d44ac43fc8e4729e0a91f4d6243f29a11 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 17:51:33 +0000
-Subject: [PATCH 13/38] Fixed parsing of an attachment filename that is
+Subject: [PATCH 13/39] Fixed parsing of an attachment filename that is
  between 66 and 76 characters long (Zarafa).
 
----
- src/parameter.cpp |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/src/parameter.cpp b/src/parameter.cpp
 index 91a7e5c..f59d5ab 100644
@@ -752,18 +707,15 @@ index 91a7e5c..f59d5ab 100644
  		switch (value[i])
  		{
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 9735165c57000a6368e91ce8852206a20930c1ca Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 18:08:12 +0000
-Subject: [PATCH 14/38] Correctly generate attachment names which are long and
+Subject: [PATCH 14/39] Correctly generate attachment names which are long and
  have high characters for Outlook Express (Zarafa).
 
----
- src/parameter.cpp |   70 ++++++++++++++++++++++++++++++++++++-----------------
- 1 file changed, 48 insertions(+), 22 deletions(-)
 
 diff --git a/src/parameter.cpp b/src/parameter.cpp
 index f59d5ab..d757e1b 100644
@@ -894,17 +846,14 @@ index f59d5ab..d757e1b 100644
  #endif // !VMIME_ALWAYS_GENERATE_7BIT_PARAMETER
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 8d69ad6849d8d6b211674942157f2af8bcd51c26 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 18:16:49 +0000
-Subject: [PATCH 15/38] Alias for UTF-7 charset.
+Subject: [PATCH 15/39] Alias for UTF-7 charset.
 
----
- src/charset.cpp |    7 +++++++
- 1 file changed, 7 insertions(+)
 
 diff --git a/src/charset.cpp b/src/charset.cpp
 index e043186..0fda450 100644
@@ -932,19 +881,16 @@ index e043186..0fda450 100644
  
  	if (newPosition)
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From ccd95daf9cdd7171fc2027afa5d0ad80b0475ded Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 18:39:35 +0000
-Subject: [PATCH 16/38] Fixed messageBuilder to accept an empty mailbox group
+Subject: [PATCH 16/39] Fixed messageBuilder to accept an empty mailbox group
  in 'To:' field, to allow for undisclosed-recipients
  (Zarafa).
 
----
- src/messageBuilder.cpp |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/src/messageBuilder.cpp b/src/messageBuilder.cpp
 index 870d59e..3597b3a 100644
@@ -972,20 +918,16 @@ index 870d59e..3597b3a 100644
  	if (!m_to.isEmpty())
  		msg->getHeader()->To()->setValue(m_to);
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 583e25bcdee132e53e0792cd8f0d8e535cabb743 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 18:49:55 +0000
-Subject: [PATCH 17/38] Added support for mailboxes that specify an (encoded)
+Subject: [PATCH 17/39] Added support for mailboxes that specify an (encoded)
  full name with an empty email address, set by a <>
  marker (Zarafa).
 
----
- src/mailbox.cpp              |    4 +++-
- tests/parser/mailboxTest.cpp |   15 +++++++++++++++
- 2 files changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/src/mailbox.cpp b/src/mailbox.cpp
 index 5cb0139..fea7479 100644
@@ -1049,17 +991,14 @@ index 8411daa..9ebadca 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 461b92f84d5c16b297d33610fcd89fc7ca5a161a Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 24 Jun 2011 15:46:23 +0000
-Subject: [PATCH 18/38] Added missing libs in pkg-config file.
+Subject: [PATCH 18/39] Added missing libs in pkg-config file.
 
----
- SConstruct |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/SConstruct b/SConstruct
 index 177f5b4..37c0ac6 100644
@@ -1075,19 +1014,15 @@ index 177f5b4..37c0ac6 100644
  	vmime_pc_in.write("Cflags: -I${includedir}/ @LIBGNUTLS_CFLAGS@\n")
  	vmime_pc_in.close()
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 2b2c0abd02a17ccff7d49e266b9854f4ea47f8e4 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sat, 25 Jun 2011 17:07:53 +0000
-Subject: [PATCH 19/38] Fixed parsing of empty body parts (thanks to John van
+Subject: [PATCH 19/39] Fixed parsing of empty body parts (thanks to John van
  der Kamp, from Zarafa).
 
----
- src/body.cpp                  |    5 +++++
- tests/parser/bodyPartTest.cpp |   19 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
 
 diff --git a/src/body.cpp b/src/body.cpp
 index 8596833..9d7d57f 100644
@@ -1142,19 +1077,15 @@ index b129913..075b8f9 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 2648d744da0e2e744c7959999ac513c3016072b4 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 26 Jun 2011 08:19:11 +0000
-Subject: [PATCH 20/38] Use gnutls_priority_set_direct() instead of GNUTLS
+Subject: [PATCH 20/39] Use gnutls_priority_set_direct() instead of GNUTLS
  deprecated functions.
 
----
- SConstruct                 |   33 +++++++++++++++++++++++++++++++++
- src/net/tls/TLSSession.cpp |   17 +++++++++++++++++
- 2 files changed, 50 insertions(+)
 
 diff --git a/SConstruct b/SConstruct
 index 37c0ac6..01ad3f3 100644
@@ -1255,18 +1186,14 @@ index 010c007..af73a05 100644
  	gnutls_credentials_set(*m_gnutlsSession,
  		GNUTLS_CRD_ANON, g_gnutlsGlobal.anonCred);
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 1060121ffd4315c3158ffc001040f4f705514e7a Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 26 Jun 2011 12:47:25 +0000
-Subject: [PATCH 21/38] Fixed encoding of whitespace. Fixed old test case.
+Subject: [PATCH 21/39] Fixed encoding of whitespace. Fixed old test case.
 
----
- src/text.cpp              |    6 ------
- tests/parser/textTest.cpp |   42 +++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 41 insertions(+), 7 deletions(-)
 
 diff --git a/src/text.cpp b/src/text.cpp
 index 2454456..66c3b35 100644
@@ -1352,17 +1279,14 @@ index 746ac94..43ec836 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From dc6dc039fc0edccf4630894fa6ed8cd4bf3bb3ce Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sat, 20 Aug 2011 06:35:06 +0000
-Subject: [PATCH 22/38] Use gnutls_strerror() for reporting errors.
+Subject: [PATCH 22/39] Use gnutls_strerror() for reporting errors.
 
----
- src/net/tls/TLSSession.cpp |  120 ++++----------------------------------------
- 1 file changed, 9 insertions(+), 111 deletions(-)
 
 diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
 index af73a05..7426a73 100644
@@ -1505,18 +1429,15 @@ index af73a05..7426a73 100644
  
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 7ea6fc3737ef36407e1c90f3aa05f89a39bdefb7 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 21 Aug 2011 08:55:46 +0000
-Subject: [PATCH 23/38] Removed dependency on gcrypt for gnutls version >=
+Subject: [PATCH 23/39] Removed dependency on gcrypt for gnutls version >=
  2.12.
 
----
- src/net/tls/TLSSession.cpp |   14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
 index 7426a73..d3f6d49 100644
@@ -1561,18 +1482,15 @@ index 7426a73..d3f6d49 100644
  
  		gnutls_global_init();
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From f21c55be642b166a2f0518ace2b179bed3916b23 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 21 Aug 2011 09:04:46 +0000
-Subject: [PATCH 24/38] Fixed HAVE_GNUTLS_PRIORITY_FUNCS never defined when
+Subject: [PATCH 24/39] Fixed HAVE_GNUTLS_PRIORITY_FUNCS never defined when
  configured with no TLS support.
 
----
- SConstruct |    6 ++++++
- 1 file changed, 6 insertions(+)
 
 diff --git a/SConstruct b/SConstruct
 index 01ad3f3..11e884b 100644
@@ -1596,17 +1514,14 @@ index 01ad3f3..11e884b 100644
  
  AC_SUBST(LIBGNUTLS_CFLAGS)
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From d4e66226a696745adafa1767210580f8fbb7ae00 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 15 Nov 2011 11:40:42 +0000
-Subject: [PATCH 25/38] GNU TLS 3 has no 'extra' (thanks to mabrand).
+Subject: [PATCH 25/39] GNU TLS 3 has no 'extra' (thanks to mabrand).
 
----
- src/net/tls/TLSSession.cpp |    2 ++
- 1 file changed, 2 insertions(+)
 
 diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
 index d3f6d49..cb50acc 100644
@@ -1623,17 +1538,14 @@ index d3f6d49..cb50acc 100644
  #include "vmime/config.hpp"
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From bacbe512e406d22f6acc83597fcdfc2d624cf82b Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 15 Nov 2011 11:46:07 +0000
-Subject: [PATCH 26/38] Set Diffie-Hellman prime size (bug SF#3434852).
+Subject: [PATCH 26/39] Set Diffie-Hellman prime size (bug SF#3434852).
 
----
- src/net/tls/TLSSession.cpp |    1 +
- 1 file changed, 1 insertion(+)
 
 diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
 index cb50acc..0606808 100644
@@ -1648,17 +1560,14 @@ index cb50acc..0606808 100644
  	if ((res = gnutls_priority_set_direct
  		(*m_gnutlsSession, "NORMAL:%SSL3_RECORD_VERSION", NULL)) != 0)
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 6574b60a303c5d864e840aa23959656bb2803485 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 22 Dec 2011 08:51:28 +0000
-Subject: [PATCH 27/38] Updated coding conventions.
+Subject: [PATCH 27/39] Updated coding conventions.
 
----
- HACKING |   53 +++++++++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 45 insertions(+), 8 deletions(-)
 
 diff --git a/HACKING b/HACKING
 index 4f35a53..f51d738 100644
@@ -1771,25 +1680,16 @@ index 4f35a53..f51d738 100644
  4. Comments
  ===========
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 130e5223dea0af2f8d9d01cca7845be4e1a08d13 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 11:46:39 +0200
-Subject: [PATCH 28/38] Added function to retrieve sequence numbers of
+Subject: [PATCH 28/39] Added function to retrieve sequence numbers of
  messages whose UID is greater or equal than a
  specified UID (thanks to Zahi Mashael).
 
----
- src/net/imap/IMAPFolder.cpp         |   56 +++++++++++++++++++++++++++++++++++
- src/net/maildir/maildirFolder.cpp   |    6 ++++
- src/net/pop3/POP3Folder.cpp         |    6 ++++
- vmime/net/folder.hpp                |    7 +++++
- vmime/net/imap/IMAPFolder.hpp       |    2 ++
- vmime/net/maildir/maildirFolder.hpp |    2 ++
- vmime/net/pop3/POP3Folder.hpp       |    2 ++
- 7 files changed, 81 insertions(+)
 
 diff --git a/src/net/imap/IMAPFolder.cpp b/src/net/imap/IMAPFolder.cpp
 index 0122d21..50a2f2b 100644
@@ -1950,18 +1850,14 @@ index abaa8eb..c482908 100644
  
  	void registerMessage(POP3Message* msg);
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 3f1a565b8b532f0d11a13d3f6d763b00c8ce625b Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 11:55:07 +0200
-Subject: [PATCH 29/38] Added .gitignore.
+Subject: [PATCH 29/39] Added .gitignore.
 
----
- .gitignore |   11 +++++++++++
- 1 file changed, 11 insertions(+)
- create mode 100644 .gitignore
 
 diff --git a/.gitignore b/.gitignore
 new file mode 100644
@@ -1981,17 +1877,14 @@ index 0000000..44e03a8
 +.sconsign.dblite
 +/options.cache
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 5937bcda0fac9cb80d0cecbaa663ecdfe2839c09 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 12:08:01 +0200
-Subject: [PATCH 30/38] Added check before dereferencing.
+Subject: [PATCH 30/39] Added check before dereferencing.
 
----
- vmime/utility/smartPtr.hpp |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/vmime/utility/smartPtr.hpp b/vmime/utility/smartPtr.hpp
 index c448632..df63685 100644
@@ -2009,17 +1902,14 @@ index c448632..df63685 100644
  		}
  	}
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From b0d74ce63ea9563ef4b218bce2497bd668dfad29 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 12:34:51 +0200
-Subject: [PATCH 31/38] Updated README.
+Subject: [PATCH 31/39] Updated README.
 
----
- README |   30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
 
 diff --git a/README b/README
 index 6921cea..7db9175 100644
@@ -2058,18 +1948,15 @@ index 6921cea..7db9175 100644
 +* SASL authentication (using GNU SASL)
 +
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 350fada21a4f11c2f633a3cde1f2195efefe7e32 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 22:10:54 +0200
-Subject: [PATCH 32/38] Added test: Ensure '7bit' encoding is used when body
+Subject: [PATCH 32/39] Added test: Ensure '7bit' encoding is used when body
  is 7-bit only.
 
----
- tests/parser/bodyPartTest.cpp |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
 
 diff --git a/tests/parser/bodyPartTest.cpp b/tests/parser/bodyPartTest.cpp
 index 075b8f9..e1d47a3 100644
@@ -2103,17 +1990,14 @@ index 075b8f9..e1d47a3 100644
  VMIME_TEST_SUITE_END
  
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 6c877ea41a2e408df61ac6f988c3bae7e0821141 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 22:29:32 +0200
-Subject: [PATCH 33/38] Added tests for Quoted-Printable encoding.
+Subject: [PATCH 33/39] Added tests for Quoted-Printable encoding.
 
----
- tests/utility/encoderTest.cpp |   31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
 
 diff --git a/tests/utility/encoderTest.cpp b/tests/utility/encoderTest.cpp
 index f2d42b6..b2d6bc8 100644
@@ -2165,21 +2049,15 @@ index f2d42b6..b2d6bc8 100644
  	{
  		/*
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From e88f062ab58654aee3cf45f94e8a5dd6c1256279 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 23:15:04 +0200
-Subject: [PATCH 34/38] Fixed wrong encoding of line breaks in QP-encoded text
+Subject: [PATCH 34/39] Fixed wrong encoding of line breaks in QP-encoded text
  (issue #7).
 
----
- src/encoding.cpp                  |   52 ++++++++++++++++++++++++++++++++-----
- src/utility/encoder/qpEncoder.cpp |    9 ++++---
- tests/parser/bodyPartTest.cpp     |   24 +++++++++++++++++
- vmime/encoding.hpp                |   16 ++++++++++++
- 4 files changed, 91 insertions(+), 10 deletions(-)
 
 diff --git a/src/encoding.cpp b/src/encoding.cpp
 index 0919d44..b4e79db 100644
@@ -2422,17 +2300,14 @@ index ba78081..42f5246 100644
  	/** Decide which encoding to use based on the specified data.
  	  *
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From ea77bdba96588345090e3de81d9d6af116edeeb5 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 6 Apr 2012 22:26:18 +0200
-Subject: [PATCH 35/38] Fixed memory leak.
+Subject: [PATCH 35/39] Fixed memory leak.
 
----
- src/net/tls/TLSSocket.cpp |    6 ++++++
- 1 file changed, 6 insertions(+)
 
 diff --git a/src/net/tls/TLSSocket.cpp b/src/net/tls/TLSSocket.cpp
 index dab0338..3cccc1e 100644
@@ -2452,107 +2327,14 @@ index dab0338..3cccc1e 100644
  	{
  		disconnect();
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 440d491fd6da134fcb5f19416743e8f2044556bf Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sat, 14 Apr 2012 13:46:05 +0200
-Subject: [PATCH 36/38] Split stream.hpp/.cpp into multiple source files.
+Subject: [PATCH 36/39] Split stream.hpp/.cpp into multiple source files.
 
----
- SConstruct                                      |   14 +
- src/charsetConverter.cpp                        |    2 +
- src/component.cpp                               |    1 +
- src/encoding.cpp                                |    1 +
- src/fileAttachment.cpp                          |    1 +
- src/generatedMessageAttachment.cpp              |    2 +
- src/htmlTextPart.cpp                            |    2 +
- src/mdn/MDNHelper.cpp                           |    2 +
- src/mdn/receivedMDNInfos.cpp                    |    2 +
- src/message.cpp                                 |    2 +
- src/net/imap/IMAPFolder.cpp                     |    2 +
- src/net/imap/IMAPMessage.cpp                    |    2 +
- src/net/imap/IMAPMessagePartContentHandler.cpp  |    3 +
- src/net/maildir/maildirFolder.cpp               |    3 +
- src/net/maildir/maildirMessage.cpp              |    2 +
- src/net/pop3/POP3Message.cpp                    |    2 +
- src/net/pop3/POP3Store.cpp                      |    1 +
- src/net/sendmail/sendmailTransport.cpp          |    2 +
- src/net/smtp/SMTPTransport.cpp                  |    2 +
- src/net/transport.cpp                           |    3 +
- src/parameter.cpp                               |    3 +
- src/parsedMessageAttachment.cpp                 |    2 +
- src/security/cert/X509Certificate.cpp           |    2 +
- src/security/sasl/SASLContext.cpp               |    3 +
- src/streamContentHandler.cpp                    |    4 +
- src/stringContentHandler.cpp                    |    4 +
- src/utility/encoder/defaultEncoder.cpp          |    2 +
- src/utility/inputStream.cpp                     |   33 ++
- src/utility/inputStreamAdapter.cpp              |   70 ++++
- src/utility/inputStreamByteBufferAdapter.cpp    |   90 +++++
- src/utility/inputStreamPointerAdapter.cpp       |   46 +++
- src/utility/inputStreamSocketAdapter.cpp        |   82 ++++
- src/utility/inputStreamStringAdapter.cpp        |   94 +++++
- src/utility/inputStreamStringProxyAdapter.cpp   |   89 +++++
- src/utility/outputStream.cpp                    |   33 ++
- src/utility/outputStreamAdapter.cpp             |   54 +++
- src/utility/outputStreamByteArrayAdapter.cpp    |   51 +++
- src/utility/outputStreamSocketAdapter.cpp       |   68 ++++
- src/utility/outputStreamStringAdapter.cpp       |   51 +++
- src/utility/stream.cpp                          |  485 -----------------------
- src/utility/streamUtils.cpp                     |   92 +++++
- src/utility/stringProxy.cpp                     |    2 +
- src/word.cpp                                    |    3 +
- src/wordEncoder.cpp                             |    3 +
- vmime/base.hpp                                  |   20 +-
- vmime/charset.hpp                               |    2 +
- vmime/component.hpp                             |    2 +
- vmime/net/imap/IMAPParser.hpp                   |    5 +-
- vmime/utility/filteredStream.hpp                |    3 +-
- vmime/utility/inputStream.hpp                   |   76 ++++
- vmime/utility/inputStreamAdapter.hpp            |   64 +++
- vmime/utility/inputStreamByteBufferAdapter.hpp  |   63 +++
- vmime/utility/inputStreamPointerAdapter.hpp     |   63 +++
- vmime/utility/inputStreamSocketAdapter.hpp      |   77 ++++
- vmime/utility/inputStreamStringAdapter.hpp      |   66 +++
- vmime/utility/inputStreamStringProxyAdapter.hpp |   68 ++++
- vmime/utility/outputStream.hpp                  |  107 +++++
- vmime/utility/outputStreamAdapter.hpp           |   62 +++
- vmime/utility/outputStreamByteArrayAdapter.hpp  |   58 +++
- vmime/utility/outputStreamSocketAdapter.hpp     |   75 ++++
- vmime/utility/outputStreamStringAdapter.hpp     |   59 +++
- vmime/utility/stream.hpp                        |  381 +-----------------
- vmime/utility/streamUtils.hpp                   |   66 +++
- vmime/utility/stringProxy.hpp                   |    1 +
- vmime/vmime.hpp                                 |   16 +
- 65 files changed, 1884 insertions(+), 867 deletions(-)
- create mode 100644 src/utility/inputStream.cpp
- create mode 100644 src/utility/inputStreamAdapter.cpp
- create mode 100644 src/utility/inputStreamByteBufferAdapter.cpp
- create mode 100644 src/utility/inputStreamPointerAdapter.cpp
- create mode 100644 src/utility/inputStreamSocketAdapter.cpp
- create mode 100644 src/utility/inputStreamStringAdapter.cpp
- create mode 100644 src/utility/inputStreamStringProxyAdapter.cpp
- create mode 100644 src/utility/outputStream.cpp
- create mode 100644 src/utility/outputStreamAdapter.cpp
- create mode 100644 src/utility/outputStreamByteArrayAdapter.cpp
- create mode 100644 src/utility/outputStreamSocketAdapter.cpp
- create mode 100644 src/utility/outputStreamStringAdapter.cpp
- create mode 100644 src/utility/streamUtils.cpp
- create mode 100644 vmime/utility/inputStream.hpp
- create mode 100644 vmime/utility/inputStreamAdapter.hpp
- create mode 100644 vmime/utility/inputStreamByteBufferAdapter.hpp
- create mode 100644 vmime/utility/inputStreamPointerAdapter.hpp
- create mode 100644 vmime/utility/inputStreamSocketAdapter.hpp
- create mode 100644 vmime/utility/inputStreamStringAdapter.hpp
- create mode 100644 vmime/utility/inputStreamStringProxyAdapter.hpp
- create mode 100644 vmime/utility/outputStream.hpp
- create mode 100644 vmime/utility/outputStreamAdapter.hpp
- create mode 100644 vmime/utility/outputStreamByteArrayAdapter.hpp
- create mode 100644 vmime/utility/outputStreamSocketAdapter.hpp
- create mode 100644 vmime/utility/outputStreamStringAdapter.hpp
- create mode 100644 vmime/utility/streamUtils.hpp
 
 diff --git a/SConstruct b/SConstruct
 index 11e884b..ea5c4eb 100644
@@ -5939,98 +5721,17 @@ index f187b9e..fd04853 100644
  #include "vmime/messageBuilder.hpp"
  #include "vmime/messageParser.hpp"
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From be30b47f09c5358db2ac8e42fa2bb4a14ec24c51 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Mon, 16 Apr 2012 22:32:33 +0200
-Subject: [PATCH 37/38] Added ability to parse directly from an input stream
+Subject: [PATCH 37/39] Added ability to parse directly from an input stream
  (eg. file). This allows very big messages to be
  parsed without loading the whole message data into
  memory.
 
----
- ChangeLog                                          |    6 +
- SConstruct                                         |    3 +
- src/addressList.cpp                                |    8 +-
- src/body.cpp                                       |  220 ++++++++++++++------
- src/bodyPart.cpp                                   |   17 +-
- src/charset.cpp                                    |    8 +-
- src/component.cpp                                  |  137 ++++++++++--
- src/contentDisposition.cpp                         |    8 +-
- src/dateTime.cpp                                   |    8 +-
- src/disposition.cpp                                |    8 +-
- src/encoding.cpp                                   |    8 +-
- src/header.cpp                                     |    8 +-
- src/headerField.cpp                                |    8 +-
- src/mailbox.cpp                                    |    8 +-
- src/mailboxGroup.cpp                               |    8 +-
- src/mailboxList.cpp                                |    6 +-
- src/mediaType.cpp                                  |    8 +-
- src/message.cpp                                    |    9 +-
- src/messageId.cpp                                  |    8 +-
- src/messageIdSequence.cpp                          |    8 +-
- src/parameter.cpp                                  |   40 ++--
- src/parameterizedHeaderField.cpp                   |   12 +-
- src/path.cpp                                       |   12 +-
- src/platforms/posix/posixFile.cpp                  |   20 ++
- src/platforms/windows/windowsFile.cpp              |   18 ++
- src/relay.cpp                                      |    8 +-
- src/streamContentHandler.cpp                       |    4 +
- src/text.cpp                                       |    8 +-
- src/utility/inputStreamAdapter.cpp                 |   12 ++
- src/utility/inputStreamByteBufferAdapter.cpp       |   13 ++
- src/utility/inputStreamStringAdapter.cpp           |   13 ++
- src/utility/inputStreamStringProxyAdapter.cpp      |   13 ++
- src/utility/parserInputStreamAdapter.cpp           |  162 ++++++++++++++
- src/utility/seekableInputStreamRegionAdapter.cpp   |   95 +++++++++
- src/utility/stream.cpp                             |    4 +
- src/utility/streamUtils.cpp                        |   29 +++
- src/word.cpp                                       |    8 +-
- tests/parser/bodyPartTest.cpp                      |   89 ++++++++
- vmime/addressList.hpp                              |   20 +-
- vmime/body.hpp                                     |   20 +-
- vmime/bodyPart.hpp                                 |   20 +-
- vmime/charset.hpp                                  |   20 +-
- vmime/component.hpp                                |   97 +++++++--
- vmime/contentDisposition.hpp                       |   20 +-
- vmime/dateTime.hpp                                 |   20 +-
- vmime/disposition.hpp                              |   20 +-
- vmime/encoding.hpp                                 |   20 +-
- vmime/header.hpp                                   |   20 +-
- vmime/headerField.hpp                              |   25 ++-
- vmime/mailbox.hpp                                  |   15 +-
- vmime/mailboxGroup.hpp                             |   20 +-
- vmime/mailboxList.hpp                              |   20 +-
- vmime/mediaType.hpp                                |   20 +-
- vmime/message.hpp                                  |   23 +-
- vmime/messageId.hpp                                |   28 ++-
- vmime/messageIdSequence.hpp                        |   20 +-
- vmime/parameter.hpp                                |   22 +-
- vmime/parameterizedHeaderField.hpp                 |   22 +-
- vmime/parserHelpers.hpp                            |    4 +
- vmime/path.hpp                                     |   19 +-
- vmime/platforms/posix/posixFile.hpp                |    6 +-
- vmime/platforms/windows/windowsFile.hpp            |    3 +
- vmime/relay.hpp                                    |   18 +-
- vmime/text.hpp                                     |   19 +-
- vmime/utility/inputStreamAdapter.hpp               |    6 +-
- vmime/utility/inputStreamByteBufferAdapter.hpp     |    6 +-
- vmime/utility/inputStreamStringAdapter.hpp         |    6 +-
- vmime/utility/inputStreamStringProxyAdapter.hpp    |    6 +-
- vmime/utility/parserInputStreamAdapter.hpp         |  173 +++++++++++++++
- vmime/utility/seekableInputStream.hpp              |   64 ++++++
- vmime/utility/seekableInputStreamRegionAdapter.hpp |   71 +++++++
- vmime/utility/stream.hpp                           |    4 +
- vmime/utility/streamUtils.hpp                      |   13 ++
- vmime/word.hpp                                     |   49 ++++-
- 74 files changed, 1643 insertions(+), 378 deletions(-)
- create mode 100644 src/utility/parserInputStreamAdapter.cpp
- create mode 100644 src/utility/seekableInputStreamRegionAdapter.cpp
- create mode 100644 vmime/utility/parserInputStreamAdapter.hpp
- create mode 100644 vmime/utility/seekableInputStream.hpp
- create mode 100644 vmime/utility/seekableInputStreamRegionAdapter.hpp
 
 diff --git a/ChangeLog b/ChangeLog
 index 8fdcdb0..1b5b2cf 100644
@@ -9756,17 +9457,14 @@ index ad848ec..492aab5 100644
  
  	// The "m_buffer" of this word holds the data, and this data is encoded
 -- 
-1.7.10.3
+1.7.10.4
 
 
 From 2e05e574fde890c7ec6dd9f3930d06b1b492ea80 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 27 Apr 2012 08:34:26 +0200
-Subject: [PATCH 38/38] Fixed duplicate file reference (thanks to Enes Albay).
+Subject: [PATCH 38/39] Fixed duplicate file reference (thanks to Enes Albay).
 
----
- SConstruct |    1 -
- 1 file changed, 1 deletion(-)
 
 diff --git a/SConstruct b/SConstruct
 index 2690172..1f3c7c9 100644
@@ -9781,5 +9479,28 @@ index 2690172..1f3c7c9 100644
  	'utility/progressListener.cpp', 'utility/progressListener.hpp',
  	'utility/random.cpp', 'utility/random.hpp',
 -- 
-1.7.10.3
+1.7.10.4
+
+
+From 799629fd8b21a716f3e3abc6e6a5264555470d85 Mon Sep 17 00:00:00 2001
+From: Vincent Richard <vincent@vincent-richard.net>
+Date: Fri, 6 Jul 2012 18:45:02 +0200
+Subject: [PATCH 39/39] Fixed issue #10.
+
+
+diff --git a/src/net/imap/IMAPMessage.cpp b/src/net/imap/IMAPMessage.cpp
+index 702d5f2..8006920 100644
+--- a/src/net/imap/IMAPMessage.cpp
++++ b/src/net/imap/IMAPMessage.cpp
+@@ -279,8 +279,6 @@ void IMAPMessage::extract(ref <const part> p, utility::outputStream& os,
+ 	{
+ 		if (headerOnly)
+ 			command << "HEADER";
+-		else
+-			command << "TEXT";
+ 	}
+ 	else
+ 	{
+-- 
+1.7.10.4
 
