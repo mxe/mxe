@@ -3,23 +3,26 @@
 
 PKG             := json-c
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := daaf5eb960fa98e137abc5012f569b83c79be90f
+$(PKG)_CHECKSUM := f90f643c8455da21d57b3e8866868a944a93c596
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://oss.metaparadigm.com/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/downloads/$(PKG)/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://oss.metaparadigm.com/json-c/?C=M;O=D' | \
-    $(SED) -n 's,.*json-c-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(WGET) - q -O 'https://github.com/json-c/json-c/downloads' | \
+    grep '<a href="/downloads/json-c/json-c/' | \
+    $(SED) -n -s,.*href="/downloads/json-c/json-c/json-c-\([0-9.]*\).tar.gz,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./autogen.sh
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --build="`config.guess`"\
+        --disable-shared
         CFLAGS=-Wno-error
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
