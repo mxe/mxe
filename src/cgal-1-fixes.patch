@@ -3,10 +3,10 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From a2df8b5dea68d02643faa69b7119628eb1751d5e Mon Sep 17 00:00:00 2001
-From: MXE
+From d9b95ae188d2631da8d193b38ae11b3227f26b58 Mon Sep 17 00:00:00 2001
+From: "mxe@mxe.cc" <mxe@mxe.cc>
 Date: Fri, 21 Oct 2011 23:08:52 +0200
-Subject: [PATCH 1/3] adjustments for MXE
+Subject: [PATCH 1/4] adjustments for MXE
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -271,13 +271,13 @@ index bb59f8c..9cebb51 100644
   
    if (os == ON_ORIENTED_BOUNDARY && is_infinite(fh)) {
 -- 
-1.7.7
+1.7.10.4
 
 
-From 7393c43ef7534fc8a9289992cdcb9ebefa293680 Mon Sep 17 00:00:00 2001
-From: MXE
+From e70713f3c915d871e5f71bcdb883e410626dbfaf Mon Sep 17 00:00:00 2001
+From: "mxe@mxe.cc" <mxe@mxe.cc>
 Date: Fri, 18 Nov 2011 00:08:25 +0100
-Subject: [PATCH 2/3] prevent Qt's moc from choking on BOOST_JOIN
+Subject: [PATCH 2/4] prevent Qt's moc from choking on BOOST_JOIN
 
 Taken from:
 https://lists-sop.inria.fr/sympa/arc/cgal-discuss/2011-11/msg00087.html
@@ -300,13 +300,13 @@ index 62d0485..852fcc9 100644
          else()
          
 -- 
-1.7.7
+1.7.10.4
 
 
-From ac8a99188725f1cb848c6cec3e33c52363754797 Mon Sep 17 00:00:00 2001
-From: MXE
+From 6798554267e98685638dd4467541bc0dd388d136 Mon Sep 17 00:00:00 2001
+From: "mxe@mxe.cc" <mxe@mxe.cc>
 Date: Wed, 28 Mar 2012 00:25:48 +1100
-Subject: [PATCH 3/3] Cmake min version 2.8.6 is only for Windows DLLs
+Subject: [PATCH 3/4] Cmake min version 2.8.6 is only for Windows DLLs
 
 http://www.cgal.org/Manual/latest/doc_html/installation_manual/Chapter_installation_manual.html
 
@@ -327,5 +327,28 @@ index bb8c02f..1f0a4cb 100644
  else()
    cmake_minimum_required(VERSION 2.6.2)
 -- 
-1.7.7
+1.7.10.4
+
+
+From 4d6d1341564e5b3e46850e80959a1bb2e111c4ba Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 18 Jul 2012 00:43:17 +0200
+Subject: [PATCH 4/4] boost 1.50 compatibility
+
+
+diff --git a/cmake/modules/CGAL_SetupBoost.cmake b/cmake/modules/CGAL_SetupBoost.cmake
+index fc3dc11..d72074f 100644
+--- a/cmake/modules/CGAL_SetupBoost.cmake
++++ b/cmake/modules/CGAL_SetupBoost.cmake
+@@ -3,7 +3,7 @@ if ( NOT CGAL_Boost_Setup )
+   include(CGAL_TweakFindBoost)
+   # In the documentation, we say we require Boost-1.39, but technically we
+   # require 1.33.1. Some packages may require more recent versions, though.
+-  find_package( Boost 1.33.1 REQUIRED thread )
++  find_package( Boost 1.33.1 REQUIRED thread system chrono )
+   
+   message( STATUS "Boost include:     ${Boost_INCLUDE_DIRS}" )
+   message( STATUS "Boost libraries:   ${Boost_LIBRARIES}" )
+-- 
+1.7.10.4
 
