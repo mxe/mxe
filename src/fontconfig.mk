@@ -3,7 +3,7 @@
 
 PKG             := fontconfig
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 1ab2f437c2261028ae7969892277af2d8d8db489
+$(PKG)_CHECKSUM := d47c6fa5693f91e274d655b5644dd333716c1395
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
 $(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://fontconfig.org/release/$($(PKG)_FILE)
@@ -16,18 +16,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && aclocal
-    cd '$(1)' && autoheader
-    cd '$(1)' && libtoolize
-    cd '$(1)' && automake
-    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-arch='$(TARGET)' \
-        --with-freetype-config='$(PREFIX)/$(TARGET)/bin/freetype-config' \
         --with-expat='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
