@@ -1,0 +1,16 @@
+This file is part of MXE.
+See index.html for further information.
+
+see http://lists.fedoraproject.org/pipermail/mingw/2009-May/001567.html
+
+--- a/configure.in	2012-07-12 01:57:09.000000000 +0200
++++ b/configure.in	2012-07-12 01:59:06.000000000 +0200
+@@ -25,8 +25,6 @@
+ # Checks for library functions.
+ AC_FUNC_VPRINTF
+ AC_FUNC_MEMCMP
+-AC_FUNC_MALLOC
+-AC_FUNC_REALLOC
+ AC_CHECK_FUNCS(strndup strerror vsnprintf vasprintf open vsyslog strncasecmp)
+ 
+ AM_PROG_LIBTOOL
