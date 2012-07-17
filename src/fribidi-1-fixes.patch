@@ -1,0 +1,93 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 76bd700b45f139679f16e649354eb23a99317b44 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 17 Jul 2012 10:07:07 +0200
+Subject: [PATCH] only include glib.h
+
+
+diff --git a/charset/fribidi-char-sets.c b/charset/fribidi-char-sets.c
+index 9de05f8..8e8df8b 100644
+--- a/charset/fribidi-char-sets.c
++++ b/charset/fribidi-char-sets.c
+@@ -114,7 +114,7 @@ static FriBidiCharSetHandler char_sets[FRIBIDI_CHAR_SETS_NUM + 1] = {
+ };
+ 
+ #if FRIBIDI_USE_GLIB+0
+-# include <glib/gstrfuncs.h>
++# include <glib.h>
+ # define fribidi_strcasecmp g_ascii_strcasecmp
+ #else /* !FRIBIDI_USE_GLIB */
+ static char
+diff --git a/lib/common.h b/lib/common.h
+index 7615ccc..f4bf357 100644
+--- a/lib/common.h
++++ b/lib/common.h
+@@ -57,7 +57,7 @@
+ #  define SIZEOF_VOID_P GLIB_SIZEOF_VOID_P
+ # endif	/* !SIZEOF_VOID_P */
+ # ifndef __FRIBIDI_DOC
+-#  include <glib/gmem.h>
++#  include <glib.h>
+ # endif	/* !__FRIBIDI_DOC */
+ # ifndef fribidi_malloc
+ #  define fribidi_malloc g_try_malloc
+@@ -65,12 +65,12 @@
+ # endif	/* !fribidi_malloc */
+ # ifndef fribidi_assert
+ #  ifndef __FRIBIDI_DOC
+-#   include <glib/gmessages.h>
++#   include <glib.h>
+ #  endif /* !__FRIBIDI_DOC */
+ #  define fribidi_assert g_assert
+ # endif	/* !fribidi_assert */
+ # ifndef __FRIBIDI_DOC
+-#  include <glib/gmacros.h>
++#  include <glib.h>
+ # endif	/* !__FRIBIDI_DOC */
+ # ifndef FRIBIDI_BEGIN_STMT
+ #  define FRIBIDI_BEGIN_STMT G_STMT_START {
+diff --git a/lib/fribidi-common.h b/lib/fribidi-common.h
+index 4724913..6010b84 100644
+--- a/lib/fribidi-common.h
++++ b/lib/fribidi-common.h
+@@ -62,7 +62,7 @@
+ 
+ #if FRIBIDI_USE_GLIB+0
+ # ifndef __FRIBIDI_DOC
+-#  include <glib/gmacros.h>
++#  include <glib.h>
+ # endif	/* !__FRIBIDI_DOC */
+ # define FRIBIDI_BEGIN_DECLS		G_BEGIN_DECLS
+ # define FRIBIDI_END_DECLS		G_END_DECLS
+diff --git a/lib/fribidi-types.h b/lib/fribidi-types.h
+index 6a72a53..27c9c3d 100644
+--- a/lib/fribidi-types.h
++++ b/lib/fribidi-types.h
+@@ -40,8 +40,7 @@
+ 
+ #if FRIBIDI_USE_GLIB+0
+ # ifndef __FRIBIDI_DOC
+-#  include <glib/gtypes.h>
+-#  include <glib/gunicode.h>
++#  include <glib.h>
+ # endif	/* !__FRIBIDI_DOC */
+ # define FRIBIDI_INT8_LOCAL		gint8
+ # define FRIBIDI_INT16_LOCAL		gint16
+diff --git a/lib/mem.h b/lib/mem.h
+index b1208da..60f0a4e 100644
+--- a/lib/mem.h
++++ b/lib/mem.h
+@@ -42,7 +42,7 @@
+ #if FRIBIDI_USE_GLIB+0
+ 
+ #ifndef __FRIBIDI_DOC
+-# include <glib/gmem.h>
++# include <glib.h>
+ #endif /* !__FRIBIDI_DOC */
+ 
+ #define FriBidiMemChunk GMemChunk
+-- 
+1.7.10.4
+
