@@ -1,0 +1,24 @@
+This file is part of MXE.
+See index.html for further information.
+
+
+--- dlfcn-win32-r19/dlfcn.h.orig	2007-06-28 07:50:08.000000000 +0200
++++ dlfcn-win32-r19/dlfcn.h	2012-07-27 06:32:50.000000000 +0200
+@@ -36,10 +36,16 @@
+ 
+ #define RTLD_DEFAULT    0
+ #define RTLD_NEXT       0
+-
++
++#ifdef __cplusplus
++extern "C" {
++#endif
+ void *dlopen ( const char *file, int mode );
+ int   dlclose( void *handle );
+ void *dlsym  ( void *handle, const char *name );
+ char *dlerror( void );
++#ifdef __cplusplus
++}
++#endif
+ 
+ #endif /* DLFCN_H */
