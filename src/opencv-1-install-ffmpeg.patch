@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+
+--- OpenCV-2.4.2.orig/CMakeLists.txt	2012-06-29 00:56:14.000000000 +0200
++++ OpenCV-2.4.2/CMakeLists.txt	2012-07-25 23:30:49.000000000 +0200
+@@ -38,7 +38,7 @@
+   #Android: set output folder to ${CMAKE_BINARY_DIR}
+   set( LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_BINARY_DIR} CACHE PATH "root for library output, set this to change where android libs are compiled to" )
+   # any crosscompiling
+-  set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
++  #set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
+ endif(NOT CMAKE_TOOLCHAIN_FILE)
+ 
+ # --------------------------------------------------------------
+
+
+--- OpenCV-2.4.2.orig/modules/highgui/CMakeLists.txt	2012-06-30 00:55:12.000000000 +0200
++++ OpenCV-2.4.2/modules/highgui/CMakeLists.txt	2012-07-25 22:12:57.000000000 +0200
+@@ -231,7 +231,7 @@
+ ocv_add_precompiled_headers(${the_module})
+ ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated-declarations)
+ 
+-if(WIN32 AND WITH_FFMPEG)
++if(WIN32 AND WITH_FFMPEG AND NOT CMAKE_TOOLCHAIN_FILE)
+   #copy ffmpeg dll to the output folder
+   if(MSVC64 OR MINGW64)
+     set(FFMPEG_SUFFIX _64)
