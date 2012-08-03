@@ -1,0 +1,87 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+http://dev.exiv2.org/projects/exiv2/repository/revisions/2796
+
+Index: trunk/src/basicio.cpp
+===================================================================
+--- trunk/src/basicio.cpp	(revision 2795)
++++ trunk/src/basicio.cpp	(revision 2796)
+@@ -61,6 +61,11 @@
+ # include <unistd.h>                    // for getpid, stat
+ #endif
+ 
++// Platform specific headers for handling extended attributes (xattr)
++#if defined(__APPLE__)
++# include <sys/xattr.h>
++#endif
++
+ #if defined WIN32 && !defined __CYGWIN__
+ // Windows doesn't provide mode_t, nlink_t
+ typedef unsigned short mode_t;
+@@ -131,6 +136,8 @@
+         int switchMode(OpMode opMode);
+         //! stat wrapper for internal use
+         int stat(StructStat& buf) const;
++        //! copy extended attributes (xattr) from another file
++        void copyXattrFrom(const FileIo& src);
+ #if defined WIN32 && !defined __CYGWIN__
+         // Windows function to determine the number of hardlinks (on NTFS)
+         DWORD winNumberOfLinks() const;
+@@ -252,6 +259,47 @@
+         return ret;
+     } // FileIo::Impl::stat
+ 
++    void FileIo::Impl::copyXattrFrom(const FileIo& src)
++    {
++#if defined(__APPLE__)
++# if defined(EXV_UNICODE_PATH)
++#  error No xattr API for MacOS X with unicode support
++# endif
++        const ssize_t namebufSize = ::listxattr(src.p_->path_.c_str(), 0, 0, 0);
++        if (namebufSize < 0) {
++            throw Error(2, src.p_->path_, strError(), "listxattr");
++        }
++        if (namebufSize == 0) {
++            // No extended attributes in source file
++            return;
++        }
++        char namebuf[namebufSize];
++        if (::listxattr(src.p_->path_.c_str(), namebuf, sizeof(namebuf), 0) != namebufSize) {
++            throw Error(2, src.p_->path_, strError(), "listxattr");
++        }
++        for (ssize_t namebufPos = 0; namebufPos < namebufSize;) {
++            const char *name = namebuf + namebufPos;
++            namebufPos += strlen(name) + 1;
++            const ssize_t valueSize = ::getxattr(src.p_->path_.c_str(), name, 0, 0, 0, 0);
++            if (valueSize < 0) {
++                throw Error(2, src.p_->path_, strError(), "getxattr");
++            }
++            char value[valueSize];
++            if (::getxattr(src.p_->path_.c_str(), name, value, sizeof(value), 0, 0) != valueSize) {
++                throw Error(2, src.p_->path_, strError(), "getxattr");
++            }
++#ifdef DEBUG
++            EXV_DEBUG << "Copying xattr \"" << name << "\" with value size " << valueSize << "\n";
++#endif
++            if (::setxattr(path_.c_str(), name, value, valueSize, 0, 0) != 0) {
++                throw Error(2, path_, strError(), "setxattr");
++            }
++        }
++#else
++        // No xattr support for this platform.
++#endif
++    } // FileIo::Impl::copyXattrFrom
++
+ #if defined WIN32 && !defined __CYGWIN__
+     DWORD FileIo::Impl::winNumberOfLinks() const
+     {
+@@ -521,6 +569,7 @@
+                     throw Error(10, path(), "w+b", strError());
+                 }
+             }
++            fileIo->p_->copyXattrFrom(*this);
+             basicIo = fileIo;
+         }
+         else {
