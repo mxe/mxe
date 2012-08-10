@@ -25,4 +25,9 @@ define $(PKG)_BUILD
         --disable-shared
         CFLAGS=-Wno-error
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+	
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-json-c.exe' \
+        `'$(TARGET)-pkg-config' json --cflags --libs`
 endef
