@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 5b2bf5edc49dba3da0997ade0e191511a37fae01
 $(PKG)_SUBDIR   := PDFlib-Lite-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(subst p, ,$($(PKG)_VERSION))))/$($(PKG)_FILE)
+$(PKG)_URL      := https://distfiles.macports.org/pdflib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
