@@ -1,109 +1,31 @@
 This file is part of MXE.
 See index.html for further information.
 
-Commits backported (cherry-picked) from upstream.
-http://github.com/bagder/curl
-Also contains MXE specific fixes.
+From 29c2441e39372b34dfac348954385d2fecb361d1 Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Mon, 6 Aug 2012 15:04:25 +0200
+Subject: [PATCH] gtls: fix build failure by including nettle-specific headers
 
-From 07bcce2b2d7b51f2b7aadba8c842cc4b6ca70bb8 Mon Sep 17 00:00:00 2001
-From: Yang Tse <yangsita@gmail.com>
-Date: Fri, 25 May 2012 23:59:38 +0200
-Subject: [PATCH] Fix libcurl.pc and curl-config generation for static MingW*
- cross builds
+Bug: http://curl.haxx.se/bug/view.cgi?id=3554668
+Reported by: Anthony G. Basile
+(cherry picked from commit 986c7949c0638bebb99bd08d63216433254c2185)
 
-(cherry picked from commit a379a4c1637cfe266bfa95c2c878f9cc06ce2f6a)
----
- configure.ac   |    3 +++
- curl-config.in |   12 +++++++++---
- libcurl.pc.in  |    4 ++--
- 3 files changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/configure.ac b/configure.ac
-index 2300c8c..db40f18 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -240,6 +240,7 @@ AM_CONDITIONAL(MIMPURE, test x$mimpure = xyes)
- AC_MSG_CHECKING([if we need BUILDING_LIBCURL])
- use_cppflag_building_libcurl="no"
- use_cppflag_curl_staticlib="no"
-+CPPFLAG_CURL_STATICLIB=""
- case $host in
-   *-*-mingw*)
-     AC_MSG_RESULT(yes)
-@@ -249,6 +250,7 @@ case $host in
-     then
-       AC_MSG_RESULT(yes)
-       use_cppflag_curl_staticlib="yes"
-+      CPPFLAG_CURL_STATICLIB="-DCURL_STATICLIB"
-     else
-       AC_MSG_RESULT(no)
-     fi
-@@ -259,6 +261,7 @@ case $host in
- esac
- AM_CONDITIONAL(USE_CPPFLAG_BUILDING_LIBCURL, test x$use_cppflag_building_libcurl = xyes)
- AM_CONDITIONAL(USE_CPPFLAG_CURL_STATICLIB, test x$use_cppflag_curl_staticlib = xyes)
-+AC_SUBST(CPPFLAG_CURL_STATICLIB)
+diff --git a/lib/gtls.c b/lib/gtls.c
+index d981ef1..c750a6f 100644
+--- a/lib/gtls.c
++++ b/lib/gtls.c
+@@ -34,7 +34,10 @@
  
- # Determine whether all dependent libraries must be specified when linking
- if test "X$enable_shared" = "Xyes" -a "X$link_all_deplibs" = "Xno"
-diff --git a/curl-config.in b/curl-config.in
-index 3d02a03..a3ca8b5 100644
---- a/curl-config.in
-+++ b/curl-config.in
-@@ -6,7 +6,7 @@
- #                            | (__| |_| |  _ <| |___
- #                             \___|\___/|_| \_\_____|
- #
--# Copyright (C) 2001 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
-+# Copyright (C) 2001 - 2012, Daniel Stenberg, <daniel@haxx.se>, et al.
- #
- # This software is licensed as described in the file COPYING, which
- # you should have received as part of this distribution. The terms
-@@ -24,6 +24,7 @@
- prefix=@prefix@
- exec_prefix=@exec_prefix@
- includedir=@includedir@
-+cppflag_curl_staticlib=@CPPFLAG_CURL_STATICLIB@
+ #include <gnutls/gnutls.h>
+ #include <gnutls/x509.h>
+-#ifndef USE_GNUTLS_NETTLE
++#ifdef USE_GNUTLS_NETTLE
++#include <gnutls/crypto.h>
++#include <nettle/md5.h>
++#else
+ #include <gcrypt.h>
+ #endif
  
- usage()
- {
-@@ -128,10 +129,15 @@ while test $# -gt 0; do
- 	;;
- 
-     --cflags)
-+        if test "X$cppflag_curl_staticlib" = "X-DCURL_STATICLIB"; then
-+          CPPFLAG_CURL_STATICLIB="-DCURL_STATICLIB "
-+        else
-+          CPPFLAG_CURL_STATICLIB=""
-+        fi
-        	if test "X@includedir@" = "X/usr/include"; then
--          echo ""
-+          echo "$(CPPFLAG_CURL_STATICLIB)"
-         else
--          echo "-I@includedir@"
-+          echo "$(CPPFLAG_CURL_STATICLIB)-I@includedir@"
-         fi
-        	;;
- 
-diff --git a/libcurl.pc.in b/libcurl.pc.in
-index 2ba9c39..6e878c5 100644
---- a/libcurl.pc.in
-+++ b/libcurl.pc.in
-@@ -5,7 +5,7 @@
- #                            | (__| |_| |  _ <| |___
- #                             \___|\___/|_| \_\_____|
- #
--# Copyright (C) 1998 - 2011, Daniel Stenberg, <daniel@haxx.se>, et al.
-+# Copyright (C) 1998 - 2012, Daniel Stenberg, <daniel@haxx.se>, et al.
- #
- # This software is licensed as described in the file COPYING, which
- # you should have received as part of this distribution. The terms
-@@ -36,4 +36,4 @@ Description: Library to transfer files with ftp, http, etc.
- Version: @CURLVERSION@
- Libs: -L${libdir} -lcurl @LIBS@
- Libs.private: @LIBCURL_LIBS@ @LIBS@
--Cflags: -I${includedir}
-+Cflags: -I${includedir} @CPPFLAG_CURL_STATICLIB@
 -- 
-1.7.9.2
+1.7.10.4
 
