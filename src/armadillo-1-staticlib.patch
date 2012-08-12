@@ -1,0 +1,54 @@
+This file is part of MXE.
+See index.html for further information.
+
+--- armadillo-3.2.4/CMakeLists.txt.orig	2012-07-11 10:08:37.000000000 +0200
++++ armadillo-3.2.4/CMakeLists.txt	2012-07-26 23:04:15.000000000 +0200
+@@ -40,7 +40,7 @@
+ set(ARMA_USE_ATLAS   false)
+ set(ARMA_USE_BOOST   false)
+ #set(ARMA_USE_HDF5    false)
+-set(ARMA_USE_WRAPPER true )
++set(ARMA_USE_WRAPPER false )
+ 
+ 
+ if(WIN32)
+@@ -113,6 +113,10 @@
+     if(BLAS_FOUND)
+       set(ARMA_USE_BLAS true)
+     endif()
++
++    if(CBLAS_FOUND)
++      set(ARMA_USE_CBLAS true)
++    endif()
+     
+     if(CLAPACK_FOUND AND CBLAS_FOUND)
+       message(STATUS "CLAPACK_INCLUDE_DIR = ${CLAPACK_INCLUDE_DIR}")
+@@ -159,12 +163,16 @@
+   
+ else()
+   
++  if(ARMA_USE_LAPACK STREQUAL true)
++    set(ARMA_LIBS ${ARMA_LIBS} ${LAPACK_LIBRARIES})
++  endif()
++
+   if(ARMA_USE_BLAS STREQUAL true)
+     set(ARMA_LIBS ${ARMA_LIBS} ${BLAS_LIBRARIES})
+   endif()
+-  
+-  if(ARMA_USE_LAPACK STREQUAL true)
+-    set(ARMA_LIBS ${ARMA_LIBS} ${LAPACK_LIBRARIES})
++
++  if(ARMA_USE_CBLAS STREQUAL true)
++    set(ARMA_LIBS ${ARMA_LIBS} ${CBLAS_LIBRARIES})
+   endif()
+   
+   if(ARMA_USE_ATLAS STREQUAL true)
+@@ -264,7 +272,7 @@
+ #set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
+ 
+ 
+-add_library( armadillo SHARED src/wrap_libs )
++add_library( armadillo STATIC src/wrap_libs )
+ target_link_libraries( armadillo ${ARMA_LIBS} )
+ 
+ set_target_properties(armadillo PROPERTIES VERSION ${ARMA_MAJOR}.${ARMA_MINOR}.${ARMA_PATCH} SOVERSION 3)

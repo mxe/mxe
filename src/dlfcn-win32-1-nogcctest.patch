@@ -1,0 +1,34 @@
+This file is part of MXE.
+See index.html for further information.
+
+
+--- dlfcn-win32-r19/configure.orig	2009-01-11 22:31:27.000000000 +0100
++++ dlfcn-win32-r19/configure	2012-07-27 05:30:10.000000000 +0200
+@@ -126,21 +126,6 @@
+     exit 1;
+ }
+ 
+-# simple cc test
+-cat > /tmp/test.c << EOF
+-#include <windows.h>
+-void function(void)
+-{ LoadLibrary(NULL); }
+-EOF
+-echo testing compiler: $cc -shared -o /tmp/test.dll /tmp/test.c
+-$cc -shared -o /tmp/test.dll /tmp/test.c
+-
+-test "$?" != 0 && {
+-    echo "$cc could not create shared file with Windows API functions.";
+-    echo "Make sure your MinGW system is working properly.";
+-    exit 1;
+-}
+-
+ if enabled msvc; then
+     disabled shared && {
+         echo "MSVC understands static libraries created by gcc."
+@@ -190,3 +175,4 @@
+     echo "msvc:   $msvc";
+     echo "strip:  $stripping";
+ }
++echo "done"
+\ No newline at end of file
