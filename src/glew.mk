@@ -3,7 +3,7 @@
 
 PKG             := glew
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 641c6bb3f924ec786e1e6cf2b1b230f594e0f0e4
+$(PKG)_CHECKSUM := 9291f5c5afefd482c7f3e91ffb3cd4716c6c9ffe
 $(PKG)_SUBDIR   := glew-$($(PKG)_VERSION)
 $(PKG)_FILE     := glew-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/glew/glew/$($(PKG)_VERSION)/$($(PKG)_FILE)
