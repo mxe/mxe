@@ -3,15 +3,15 @@
 
 PKG             := portaudio
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3841453bb7be672a15b6b632ade6f225eb0a4efc
+$(PKG)_CHECKSUM := f07716c470603729a55b70f5af68f4a6807097eb
 $(PKG)_SUBDIR   := portaudio
-$(PKG)_FILE     := pa_stable_v$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := pa_stable_v$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://www.portaudio.com/archives/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.portaudio.com/download.html' | \
-    $(SED) -n 's,.*pa_stable_v\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*pa_stable_v\([0-9][^>]*\)\.tgz,\1,p' | \
     head -1
 endef
 
@@ -22,7 +22,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-host_os=mingw \
-        --with-winapi=directx \
+        --with-winapi=wmme,directx,wasapi,wdmks \
         --with-dxdir=$(PREFIX)/$(TARGET)
     $(MAKE) -C '$(1)' -j '$(JOBS)' SHARED_FLAGS= TESTS=
     $(MAKE) -C '$(1)' -j 1 install
