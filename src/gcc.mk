@@ -59,9 +59,10 @@ define $(PKG)_BUILD
 
     # create the CMake toolchain file
     [ -d '$(dir $(CMAKE_TOOLCHAIN_FILE))' ] || mkdir -p '$(dir $(CMAKE_TOOLCHAIN_FILE))'
-    (echo 'set(BUILD_SHARED_LIBS OFF)'; \
-     echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
+    (echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
      echo 'set(MSYS 1)'; \
+     echo 'set(BUILD_SHARED_LIBS OFF)'; \
+     echo 'set(CMAKE_BUILD_TYPE Release)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH $(PREFIX)/$(TARGET))'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)'; \
@@ -70,6 +71,8 @@ define $(PKG)_BUILD
      echo 'set(CMAKE_CXX_COMPILER $(PREFIX)/bin/$(TARGET)-g++)'; \
      echo 'set(CMAKE_Fortran_COMPILER $(PREFIX)/bin/$(TARGET)-gfortran)'; \
      echo 'set(CMAKE_RC_COMPILER $(PREFIX)/bin/$(TARGET)-windres)'; \
+     echo 'set(CMAKE_AR $(PREFIX)/bin/$(TARGET)-ar)'; \
+     echo 'set(CMAKE_RANLIB $(PREFIX)/bin/$(TARGET)-ranlib)'; \
      echo 'set(PKG_CONFIG_EXECUTABLE $(PREFIX)/bin/$(TARGET)-pkg-config)'; \
      echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/bin/$(TARGET)-qmake)'; \
      echo 'set(CMAKE_INSTALL_PREFIX $(PREFIX)/$(TARGET) CACHE PATH "Installation Prefix")'; \
