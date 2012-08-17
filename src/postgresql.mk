@@ -3,7 +3,7 @@
 
 PKG             := postgresql
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := c75fd5696af02a275a104260eac8b3a4abe35682
+$(PKG)_CHECKSUM := 8411f39e7cff8d691d908de7823b72426433faa2
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -25,6 +25,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --disable-rpath \
         --without-tcl \

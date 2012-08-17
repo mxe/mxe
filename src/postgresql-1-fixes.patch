@@ -3,17 +3,14 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 43bdcd7403f7e58f4da47a84a324ee02f80ba4c9 Mon Sep 17 00:00:00 2001
+From a0093acc09e43bf4a1ce6af42b1fdaf9cabb30f9 Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:02:33 +0200
 Subject: [PATCH 1/2] use unix style names for openssl on mingw-cross-env
 
----
- configure.in |    9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
 
 diff --git a/configure.in b/configure.in
-index ff0063d..c64b88e 100644
+index 696533e..a47bd9d 100644
 --- a/configure.in
 +++ b/configure.in
 @@ -943,13 +943,8 @@ fi
@@ -33,25 +30,22 @@ index ff0063d..c64b88e 100644
  
  if test "$with_pam" = yes ; then
 -- 
-1.7.9.2
+1.7.11.4
 
 
-From fc01a0853f56b3ce377e0b5fd461e3ee8a89877d Mon Sep 17 00:00:00 2001
+From 0347e52b2da42d3d2d988aca6ca9eb09a8db353d Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:09:38 +0200
 Subject: [PATCH 2/2] do not check autoconf version
 
----
- configure.in |    4 ----
- 1 file changed, 4 deletions(-)
 
 diff --git a/configure.in b/configure.in
-index c64b88e..ee52a70 100644
+index a47bd9d..c132e94 100644
 --- a/configure.in
 +++ b/configure.in
 @@ -19,10 +19,6 @@ m4_pattern_forbid(^PGAC_)dnl to catch undefined macros
  
- AC_INIT([PostgreSQL], [9.1.4], [pgsql-bugs@postgresql.org])
+ AC_INIT([PostgreSQL], [9.1.5], [pgsql-bugs@postgresql.org])
  
 -m4_if(m4_defn([m4_PACKAGE_VERSION]), [2.63], [], [m4_fatal([Autoconf version 2.63 is required.
 -Untested combinations of 'autoconf' and PostgreSQL versions are not
@@ -61,5 +55,5 @@ index c64b88e..ee52a70 100644
  AC_CONFIG_SRCDIR([src/backend/access/common/heaptuple.c])
  AC_CONFIG_AUX_DIR(config)
 -- 
-1.7.9.2
+1.7.11.4
 
