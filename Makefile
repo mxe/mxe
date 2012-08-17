@@ -3,7 +3,7 @@
 
 JOBS               := 1
 TARGET             := i686-pc-mingw32
-SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
+SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 
 PWD        := $(shell pwd)
 SHELL      := bash
