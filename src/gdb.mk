@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := gdb
-$(PKG)_CHECKSUM := 1b0f8c3778d4b10c8d2be6922ac01a9900e8116c
+$(PKG)_CHECKSUM := 79b61152813e5730fa670c89e5fc3c04b670b02c
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
@@ -20,6 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         CONFIG_SHELL=$(SHELL)
