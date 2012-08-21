@@ -3,7 +3,7 @@
 
 PKG             := boost
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ee06f89ed472cf369573f8acf9819fbc7173344e
+$(PKG)_CHECKSUM := 52ef06895b97cc9981b8abf1997c375ca79f30c5
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -17,6 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # context switched library introduced in boost 1.51.0 does not build
+    rm -r '$(1)/libs/context'
     # old version appears to interfere
     rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
     echo 'using gcc : : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar ;' > '$(1)/user-config.jam'
