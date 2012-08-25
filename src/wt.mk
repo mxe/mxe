@@ -33,6 +33,7 @@ define $(PKG)_BUILD
         -DPANGO_FT2_LIBS="`'$(TARGET)-pkg-config' --libs-only-l pangoft2`" \
         -DWT_CMAKE_FINDER_INSTALL_DIR='/lib/wt' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DCMAKE_BUILD_TYPE:STRING="Release" \
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef

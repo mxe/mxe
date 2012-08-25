@@ -19,6 +19,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && cmake \
         -DCGAL_INSTALL_CMAKE_DIR:STRING="lib/CGAL" \
+        -DCMAKE_BUILD_TYPE:STRING="Release" \
         -DCGAL_INSTALL_INC_DIR:STRING="include" \
         -DCGAL_INSTALL_DOC_DIR:STRING="share/doc/CGAL-3.9" \
         -DCGAL_INSTALL_BIN_DIR:STRING="bin" \
