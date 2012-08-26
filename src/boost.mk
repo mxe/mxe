@@ -35,6 +35,7 @@ define $(PKG)_BUILD
         --layout=tagged \
         --without-mpi \
         --without-python \
+        --without-context \
         --prefix='$(PREFIX)/$(TARGET)' \
         --exec-prefix='$(PREFIX)/$(TARGET)/bin' \
         --libdir='$(PREFIX)/$(TARGET)/lib' \
