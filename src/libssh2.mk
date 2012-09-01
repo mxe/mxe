@@ -24,8 +24,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-openssl \
         --with-libgcrypt \
-        PKG_CONFIG='$(TARGET)-pkg-config' \
-        LIBS="-lgcrypt `$(PREFIX)/$(TARGET)/bin/gpg-error-config --libs`"
+        PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
 
     '$(TARGET)-gcc' \
