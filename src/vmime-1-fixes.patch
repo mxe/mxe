@@ -7,7 +7,7 @@ rebased onto version 0.9.1 tarball files.
 From 17ff5157ffdc749f60b8285f84e64ac5e06d4283 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 16 Nov 2010 13:28:05 +0000
-Subject: [PATCH 01/39] Started version 0.9.2.
+Subject: [PATCH 01/42] Started version 0.9.2.
 
 
 diff --git a/ChangeLog b/ChangeLog
@@ -47,7 +47,7 @@ index fb01edf..55f9223 100644
 From c12ee2b267b9dcfd092a298dfd9a8eec81ab3a0b Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 30 Nov 2010 14:57:03 +0000
-Subject: [PATCH 02/39] Initialize and delete object.
+Subject: [PATCH 02/42] Initialize and delete object.
 
 
 diff --git a/vmime/net/imap/IMAPParser.hpp b/vmime/net/imap/IMAPParser.hpp
@@ -80,7 +80,7 @@ index 0f3e9ec..d71c3ca 100644
 From fd277afe87485c9d3377964794b76006c6d36a56 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Wed, 8 Dec 2010 08:52:54 +0000
-Subject: [PATCH 03/39] No extra space between ':' and '<' in MAIL FROM and
+Subject: [PATCH 03/42] No extra space between ':' and '<' in MAIL FROM and
  RCPT TO. Wait for server response after QUIT and
  before closing connection.
 
@@ -122,7 +122,7 @@ index 204daae..d9fb7b8 100644
 From d64da50e879c0e480d2e65c43e3b903c3e80101f Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 10 Dec 2010 16:24:06 +0000
-Subject: [PATCH 04/39] Fixed unit test after bug fix.
+Subject: [PATCH 04/42] Fixed unit test after bug fix.
 
 
 diff --git a/tests/net/smtp/SMTPTransportTest.cpp b/tests/net/smtp/SMTPTransportTest.cpp
@@ -145,7 +145,7 @@ index 5015552..6552f9e 100644
 From 130d0aabda2a9988913ad201390796775dc16a65 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 10 Dec 2010 16:54:38 +0000
-Subject: [PATCH 05/39] Fixed boundary parsing (thanks to John van der Kamp,
+Subject: [PATCH 05/42] Fixed boundary parsing (thanks to John van der Kamp,
  Zarafa).
 
 
@@ -233,7 +233,7 @@ index 12c4f74..df2bf85 100644
 From c63f37c888798f0e7e99aa03afda16445a72b7b2 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 21 Jan 2011 15:28:06 +0000
-Subject: [PATCH 06/39] Fixed possible infinite loop (thanks to John van der
+Subject: [PATCH 06/42] Fixed possible infinite loop (thanks to John van der
  Kamp, Zarafa).
 
 
@@ -285,7 +285,7 @@ index b84f376..746ac94 100644
 From 1fafad8f913e700b350e6915de8be710fc2d1ced Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 28 Jan 2011 12:11:08 +0000
-Subject: [PATCH 07/39] Fixed possible read to invalid memory location (thanks
+Subject: [PATCH 07/42] Fixed possible read to invalid memory location (thanks
  to Alexander Konovalov).
 
 
@@ -309,7 +309,7 @@ index 1c1c1a6..fa08d33 100644
 From 73298423f695d7c4441d44619e4b7f9de75f566e Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Wed, 9 Mar 2011 18:03:31 +0000
-Subject: [PATCH 08/39] Fixed bug #3174903. Fixed word parsing when buffer
+Subject: [PATCH 08/42] Fixed bug #3174903. Fixed word parsing when buffer
  does not end with NL. Fixed 'no encoding' when
  forced.
 
@@ -515,7 +515,7 @@ index df2bf85..b129913 100644
 From 5f5757b9d4bb0febb1e2183578eb91e801a08038 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 27 Mar 2011 11:26:55 +0000
-Subject: [PATCH 09/39] Allow static linking in mingw-cross-env. Added 'iconv'
+Subject: [PATCH 09/42] Allow static linking in mingw-cross-env. Added 'iconv'
  and uses 'ws2_32' instead of 'winsock32' (#3213487).
 
 
@@ -548,7 +548,7 @@ index 55f9223..177f5b4 100644
 From 2b48b4a68ce3e9b9b1a3f485123af5938a568324 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 31 Mar 2011 19:13:03 +0000
-Subject: [PATCH 10/39] Flush stateful data from iconv (thanks to John van der
+Subject: [PATCH 10/42] Flush stateful data from iconv (thanks to John van der
  Kamp, Zarafa).
 
 
@@ -629,7 +629,7 @@ index 8ad71d7..54a09a7 100644
 From 8d2e039c5201e144ff08e2ff7cf9efe77fe4b3d0 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 10 Jun 2011 19:39:09 +0000
-Subject: [PATCH 11/39] Requested email change.
+Subject: [PATCH 11/42] Requested email change.
 
 
 diff --git a/AUTHORS b/AUTHORS
@@ -652,7 +652,7 @@ index 20a0181..bbddb30 100644
 From cc6317f28ae0b61fea36e1bc78b09dc8300579f8 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 14 Jun 2011 18:37:54 +0000
-Subject: [PATCH 12/39] Fixed compilation issue following namespace change.
+Subject: [PATCH 12/42] Fixed compilation issue following namespace change.
 
 
 diff --git a/examples/example7.cpp b/examples/example7.cpp
@@ -688,7 +688,7 @@ index 1ddb3d0..243b1da 100644
 From a916d12d44ac43fc8e4729e0a91f4d6243f29a11 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 17:51:33 +0000
-Subject: [PATCH 13/39] Fixed parsing of an attachment filename that is
+Subject: [PATCH 13/42] Fixed parsing of an attachment filename that is
  between 66 and 76 characters long (Zarafa).
 
 
@@ -713,7 +713,7 @@ index 91a7e5c..f59d5ab 100644
 From 9735165c57000a6368e91ce8852206a20930c1ca Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 18:08:12 +0000
-Subject: [PATCH 14/39] Correctly generate attachment names which are long and
+Subject: [PATCH 14/42] Correctly generate attachment names which are long and
  have high characters for Outlook Express (Zarafa).
 
 
@@ -852,7 +852,7 @@ index f59d5ab..d757e1b 100644
 From 8d69ad6849d8d6b211674942157f2af8bcd51c26 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 18:16:49 +0000
-Subject: [PATCH 15/39] Alias for UTF-7 charset.
+Subject: [PATCH 15/42] Alias for UTF-7 charset.
 
 
 diff --git a/src/charset.cpp b/src/charset.cpp
@@ -887,7 +887,7 @@ index e043186..0fda450 100644
 From ccd95daf9cdd7171fc2027afa5d0ad80b0475ded Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 18:39:35 +0000
-Subject: [PATCH 16/39] Fixed messageBuilder to accept an empty mailbox group
+Subject: [PATCH 16/42] Fixed messageBuilder to accept an empty mailbox group
  in 'To:' field, to allow for undisclosed-recipients
  (Zarafa).
 
@@ -924,7 +924,7 @@ index 870d59e..3597b3a 100644
 From 583e25bcdee132e53e0792cd8f0d8e535cabb743 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 19 Jun 2011 18:49:55 +0000
-Subject: [PATCH 17/39] Added support for mailboxes that specify an (encoded)
+Subject: [PATCH 17/42] Added support for mailboxes that specify an (encoded)
  full name with an empty email address, set by a <>
  marker (Zarafa).
 
@@ -997,7 +997,7 @@ index 8411daa..9ebadca 100644
 From 461b92f84d5c16b297d33610fcd89fc7ca5a161a Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 24 Jun 2011 15:46:23 +0000
-Subject: [PATCH 18/39] Added missing libs in pkg-config file.
+Subject: [PATCH 18/42] Added missing libs in pkg-config file.
 
 
 diff --git a/SConstruct b/SConstruct
@@ -1020,7 +1020,7 @@ index 177f5b4..37c0ac6 100644
 From 2b2c0abd02a17ccff7d49e266b9854f4ea47f8e4 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sat, 25 Jun 2011 17:07:53 +0000
-Subject: [PATCH 19/39] Fixed parsing of empty body parts (thanks to John van
+Subject: [PATCH 19/42] Fixed parsing of empty body parts (thanks to John van
  der Kamp, from Zarafa).
 
 
@@ -1083,7 +1083,7 @@ index b129913..075b8f9 100644
 From 2648d744da0e2e744c7959999ac513c3016072b4 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 26 Jun 2011 08:19:11 +0000
-Subject: [PATCH 20/39] Use gnutls_priority_set_direct() instead of GNUTLS
+Subject: [PATCH 20/42] Use gnutls_priority_set_direct() instead of GNUTLS
  deprecated functions.
 
 
@@ -1192,7 +1192,7 @@ index 010c007..af73a05 100644
 From 1060121ffd4315c3158ffc001040f4f705514e7a Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 26 Jun 2011 12:47:25 +0000
-Subject: [PATCH 21/39] Fixed encoding of whitespace. Fixed old test case.
+Subject: [PATCH 21/42] Fixed encoding of whitespace. Fixed old test case.
 
 
 diff --git a/src/text.cpp b/src/text.cpp
@@ -1285,7 +1285,7 @@ index 746ac94..43ec836 100644
 From dc6dc039fc0edccf4630894fa6ed8cd4bf3bb3ce Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sat, 20 Aug 2011 06:35:06 +0000
-Subject: [PATCH 22/39] Use gnutls_strerror() for reporting errors.
+Subject: [PATCH 22/42] Use gnutls_strerror() for reporting errors.
 
 
 diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
@@ -1435,7 +1435,7 @@ index af73a05..7426a73 100644
 From 7ea6fc3737ef36407e1c90f3aa05f89a39bdefb7 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 21 Aug 2011 08:55:46 +0000
-Subject: [PATCH 23/39] Removed dependency on gcrypt for gnutls version >=
+Subject: [PATCH 23/42] Removed dependency on gcrypt for gnutls version >=
  2.12.
 
 
@@ -1488,7 +1488,7 @@ index 7426a73..d3f6d49 100644
 From f21c55be642b166a2f0518ace2b179bed3916b23 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sun, 21 Aug 2011 09:04:46 +0000
-Subject: [PATCH 24/39] Fixed HAVE_GNUTLS_PRIORITY_FUNCS never defined when
+Subject: [PATCH 24/42] Fixed HAVE_GNUTLS_PRIORITY_FUNCS never defined when
  configured with no TLS support.
 
 
@@ -1520,7 +1520,7 @@ index 01ad3f3..11e884b 100644
 From d4e66226a696745adafa1767210580f8fbb7ae00 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 15 Nov 2011 11:40:42 +0000
-Subject: [PATCH 25/39] GNU TLS 3 has no 'extra' (thanks to mabrand).
+Subject: [PATCH 25/42] GNU TLS 3 has no 'extra' (thanks to mabrand).
 
 
 diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
@@ -1544,7 +1544,7 @@ index d3f6d49..cb50acc 100644
 From bacbe512e406d22f6acc83597fcdfc2d624cf82b Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Tue, 15 Nov 2011 11:46:07 +0000
-Subject: [PATCH 26/39] Set Diffie-Hellman prime size (bug SF#3434852).
+Subject: [PATCH 26/42] Set Diffie-Hellman prime size (bug SF#3434852).
 
 
 diff --git a/src/net/tls/TLSSession.cpp b/src/net/tls/TLSSession.cpp
@@ -1566,7 +1566,7 @@ index cb50acc..0606808 100644
 From 6574b60a303c5d864e840aa23959656bb2803485 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 22 Dec 2011 08:51:28 +0000
-Subject: [PATCH 27/39] Updated coding conventions.
+Subject: [PATCH 27/42] Updated coding conventions.
 
 
 diff --git a/HACKING b/HACKING
@@ -1686,7 +1686,7 @@ index 4f35a53..f51d738 100644
 From 130e5223dea0af2f8d9d01cca7845be4e1a08d13 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 11:46:39 +0200
-Subject: [PATCH 28/39] Added function to retrieve sequence numbers of
+Subject: [PATCH 28/42] Added function to retrieve sequence numbers of
  messages whose UID is greater or equal than a
  specified UID (thanks to Zahi Mashael).
 
@@ -1856,7 +1856,7 @@ index abaa8eb..c482908 100644
 From 3f1a565b8b532f0d11a13d3f6d763b00c8ce625b Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 11:55:07 +0200
-Subject: [PATCH 29/39] Added .gitignore.
+Subject: [PATCH 29/42] Added .gitignore.
 
 
 diff --git a/.gitignore b/.gitignore
@@ -1883,7 +1883,7 @@ index 0000000..44e03a8
 From 5937bcda0fac9cb80d0cecbaa663ecdfe2839c09 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 12:08:01 +0200
-Subject: [PATCH 30/39] Added check before dereferencing.
+Subject: [PATCH 30/42] Added check before dereferencing.
 
 
 diff --git a/vmime/utility/smartPtr.hpp b/vmime/utility/smartPtr.hpp
@@ -1908,7 +1908,7 @@ index c448632..df63685 100644
 From b0d74ce63ea9563ef4b218bce2497bd668dfad29 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 12:34:51 +0200
-Subject: [PATCH 31/39] Updated README.
+Subject: [PATCH 31/42] Updated README.
 
 
 diff --git a/README b/README
@@ -1954,7 +1954,7 @@ index 6921cea..7db9175 100644
 From 350fada21a4f11c2f633a3cde1f2195efefe7e32 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 22:10:54 +0200
-Subject: [PATCH 32/39] Added test: Ensure '7bit' encoding is used when body
+Subject: [PATCH 32/42] Added test: Ensure '7bit' encoding is used when body
  is 7-bit only.
 
 
@@ -1996,7 +1996,7 @@ index 075b8f9..e1d47a3 100644
 From 6c877ea41a2e408df61ac6f988c3bae7e0821141 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 22:29:32 +0200
-Subject: [PATCH 33/39] Added tests for Quoted-Printable encoding.
+Subject: [PATCH 33/42] Added tests for Quoted-Printable encoding.
 
 
 diff --git a/tests/utility/encoderTest.cpp b/tests/utility/encoderTest.cpp
@@ -2055,7 +2055,7 @@ index f2d42b6..b2d6bc8 100644
 From e88f062ab58654aee3cf45f94e8a5dd6c1256279 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Thu, 5 Apr 2012 23:15:04 +0200
-Subject: [PATCH 34/39] Fixed wrong encoding of line breaks in QP-encoded text
+Subject: [PATCH 34/42] Fixed wrong encoding of line breaks in QP-encoded text
  (issue #7).
 
 
@@ -2306,7 +2306,7 @@ index ba78081..42f5246 100644
 From ea77bdba96588345090e3de81d9d6af116edeeb5 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 6 Apr 2012 22:26:18 +0200
-Subject: [PATCH 35/39] Fixed memory leak.
+Subject: [PATCH 35/42] Fixed memory leak.
 
 
 diff --git a/src/net/tls/TLSSocket.cpp b/src/net/tls/TLSSocket.cpp
@@ -2333,7 +2333,7 @@ index dab0338..3cccc1e 100644
 From 440d491fd6da134fcb5f19416743e8f2044556bf Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Sat, 14 Apr 2012 13:46:05 +0200
-Subject: [PATCH 36/39] Split stream.hpp/.cpp into multiple source files.
+Subject: [PATCH 36/42] Split stream.hpp/.cpp into multiple source files.
 
 
 diff --git a/SConstruct b/SConstruct
@@ -5727,7 +5727,7 @@ index f187b9e..fd04853 100644
 From be30b47f09c5358db2ac8e42fa2bb4a14ec24c51 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Mon, 16 Apr 2012 22:32:33 +0200
-Subject: [PATCH 37/39] Added ability to parse directly from an input stream
+Subject: [PATCH 37/42] Added ability to parse directly from an input stream
  (eg. file). This allows very big messages to be
  parsed without loading the whole message data into
  memory.
@@ -9463,7 +9463,7 @@ index ad848ec..492aab5 100644
 From 2e05e574fde890c7ec6dd9f3930d06b1b492ea80 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 27 Apr 2012 08:34:26 +0200
-Subject: [PATCH 38/39] Fixed duplicate file reference (thanks to Enes Albay).
+Subject: [PATCH 38/42] Fixed duplicate file reference (thanks to Enes Albay).
 
 
 diff --git a/SConstruct b/SConstruct
@@ -9485,7 +9485,7 @@ index 2690172..1f3c7c9 100644
 From 799629fd8b21a716f3e3abc6e6a5264555470d85 Mon Sep 17 00:00:00 2001
 From: Vincent Richard <vincent@vincent-richard.net>
 Date: Fri, 6 Jul 2012 18:45:02 +0200
-Subject: [PATCH 39/39] Fixed issue #10.
+Subject: [PATCH 39/42] Fixed issue #10.
 
 
 diff --git a/src/net/imap/IMAPMessage.cpp b/src/net/imap/IMAPMessage.cpp
@@ -9501,6 +9501,816 @@ index 702d5f2..8006920 100644
  	}
  	else
  	{
+-- 
+1.7.10.4
+
+
+From 72cf7a025f7764998609683904eea1046a766d97 Mon Sep 17 00:00:00 2001
+From: Vincent Richard <vincent@vincent-richard.net>
+Date: Sat, 28 Jul 2012 13:01:48 +0200
+Subject: [PATCH 40/42] Added functions to get messages by UID (IMAP only for
+ now).
+
+
+diff --git a/src/net/imap/IMAPFolder.cpp b/src/net/imap/IMAPFolder.cpp
+index 81bf386..3d8c17e 100644
+--- a/src/net/imap/IMAPFolder.cpp
++++ b/src/net/imap/IMAPFolder.cpp
+@@ -208,7 +208,7 @@ void IMAPFolder::open(const int mode, bool failIfModeIsNotAvailable)
+ 					{
+ 					case IMAPParser::resp_text_code::UIDVALIDITY:
+ 
+-						m_uidValidity = code->nz_number()->value();
++						m_uidValidity = static_cast <unsigned int>(code->nz_number()->value());
+ 						break;
+ 
+ 					default:
+@@ -550,6 +550,109 @@ std::vector <ref <message> > IMAPFolder::getMessages(const std::vector <int>& nu
+ }
+ 
+ 
++ref <message> IMAPFolder::getMessageByUID(const message::uid& uid)
++{
++	std::vector <message::uid> uids;
++	uids.push_back(uid);
++
++	std::vector <ref <message> > msgs = getMessagesByUID(uids);
++
++	if (msgs.size() == 0)
++		throw exceptions::message_not_found();
++
++	return msgs[0];
++}
++
++
++std::vector <ref <message> > IMAPFolder::getMessagesByUID(const std::vector <message::uid>& uids)
++{
++	if (!isOpen())
++		throw exceptions::illegal_state("Folder not open");
++
++	if (uids.size() == 0)
++		return std::vector <ref <message> >();
++
++	//     C: . UID FETCH uuuu1,uuuu2,uuuu3 UID
++	//     S: * nnnn1 FETCH (UID uuuu1)
++	//     S: * nnnn2 FETCH (UID uuuu2)
++	//     S: * nnnn3 FETCH (UID uuuu3)
++	//     S: . OK UID FETCH completed
++
++	// Prepare command and arguments
++	std::ostringstream cmd;
++	cmd.imbue(std::locale::classic());
++
++	cmd << "UID FETCH " << IMAPUtils::extractUIDFromGlobalUID(uids[0]);
++
++	for (unsigned int i = 1, n = uids.size() ; i < n ; ++i)
++		cmd << "," << IMAPUtils::extractUIDFromGlobalUID(uids[i]);
++
++	cmd << " UID";
++
++	// Send the request
++	m_connection->send(true, cmd.str(), true);
++
++	// Get the response
++	utility::auto_ptr <IMAPParser::response> resp(m_connection->readResponse());
++
++	if (resp->isBad() || resp->response_done()->response_tagged()->
++			resp_cond_state()->status() != IMAPParser::resp_cond_state::OK)
++	{
++		throw exceptions::command_error("UID FETCH ... UID", m_connection->getParser()->lastLine(), "bad response");
++	}
++
++	// Process the response
++	const std::vector <IMAPParser::continue_req_or_response_data*>& respDataList =
++		resp->continue_req_or_response_data();
++
++	std::vector <ref <message> > messages;
++
++	for (std::vector <IMAPParser::continue_req_or_response_data*>::const_iterator
++	     it = respDataList.begin() ; it != respDataList.end() ; ++it)
++	{
++		if ((*it)->response_data() == NULL)
++		{
++			throw exceptions::command_error("UID FETCH ... UID",
++				m_connection->getParser()->lastLine(), "invalid response");
++		}
++
++		const IMAPParser::message_data* messageData =
++			(*it)->response_data()->message_data();
++
++		// We are only interested in responses of type "FETCH"
++		if (messageData == NULL || messageData->type() != IMAPParser::message_data::FETCH)
++			continue;
++
++		// Get Process fetch response for this message
++		const int msgNum = static_cast <int>(messageData->number());
++		message::uid msgUID, msgFullUID;
++
++		// Find UID in message attributes
++		const std::vector <IMAPParser::msg_att_item*> atts = messageData->msg_att()->items();
++
++		for (std::vector <IMAPParser::msg_att_item*>::const_iterator
++		     it = atts.begin() ; it != atts.end() ; ++it)
++		{
++			if ((*it)->type() == IMAPParser::msg_att_item::UID)
++			{
++				msgFullUID = IMAPUtils::makeGlobalUID(m_uidValidity, (*it)->unique_id()->value());
++				msgUID = (*it)->unique_id()->value();
++
++				break;
++			}
++		}
++
++		if (!msgUID.empty())
++		{
++			ref <IMAPFolder> thisFolder = thisRef().dynamicCast <IMAPFolder>();
++			messages.push_back(vmime::create <IMAPMessage>(thisFolder, msgNum, msgFullUID));
++		}
++	}
++
++	return messages;
++}
++
++
+ int IMAPFolder::getMessageCount()
+ {
+ 	if (!isOpen())
+@@ -730,7 +833,7 @@ void IMAPFolder::fetchMessages(std::vector <ref <message> >& msg, const int opti
+ 
+ 			if (msg != numberToMsg.end())
+ 			{
+-				(*msg).second->processFetchResponse(options, messageData->msg_att());
++				(*msg).second->processFetchResponse(options, messageData);
+ 
+ 				if (progress)
+ 					progress->progress(++current, total);
+@@ -1781,7 +1884,7 @@ std::vector <int> IMAPFolder::getMessageNumbersStartingOnUID(const message::uid&
+ 	std::ostringstream command;
+ 	command.imbue(std::locale::classic());
+ 
+-	command << "SEARCH UID " << uid;
++	command << "SEARCH UID " << uid << ":*";
+ 
+ 	// Send the request
+ 	m_connection->send(true, command.str(), true);
+diff --git a/src/net/imap/IMAPMessage.cpp b/src/net/imap/IMAPMessage.cpp
+index 8006920..7202a7d 100644
+--- a/src/net/imap/IMAPMessage.cpp
++++ b/src/net/imap/IMAPMessage.cpp
+@@ -98,6 +98,14 @@ IMAPMessage::IMAPMessage(ref <IMAPFolder> folder, const int num)
+ }
+ 
+ 
++IMAPMessage::IMAPMessage(ref <IMAPFolder> folder, const int num, const uid& uniqueId)
++	: m_folder(folder), m_num(num), m_size(-1), m_flags(FLAG_UNDEFINED),
++	  m_expunged(false), m_uid(uniqueId), m_structure(NULL)
++{
++	folder->registerMessage(this);
++}
++
++
+ IMAPMessage::~IMAPMessage()
+ {
+ 	ref <IMAPFolder> folder = m_folder.acquire();
+@@ -271,7 +279,11 @@ void IMAPMessage::extract(ref <const part> p, utility::outputStream& os,
+ 	std::ostringstream command;
+ 	command.imbue(std::locale::classic());
+ 
+-	command << "FETCH " << m_num << " BODY";
++	if (m_uid.empty())
++		command << "FETCH " << m_num << " BODY";
++	else
++		command << "UID FETCH " << IMAPUtils::extractUIDFromGlobalUID(m_uid) << " BODY";
++
+ 	if (peek) command << ".PEEK";
+ 	command << "[";
+ 
+@@ -361,19 +373,18 @@ void IMAPMessage::fetch(ref <IMAPFolder> msgFolder, const int options)
+ 			continue;
+ 
+ 		// Process fetch response for this message
+-		processFetchResponse(options, messageData->msg_att());
++		processFetchResponse(options, messageData);
+ 	}
+ }
+ 
+ 
+ void IMAPMessage::processFetchResponse
+-	(const int options, const IMAPParser::msg_att* msgAtt)
++	(const int options, const IMAPParser::message_data* msgData)
+ {
+ 	ref <IMAPFolder> folder = m_folder.acquire();
+ 
+ 	// Get message attributes
+-	const std::vector <IMAPParser::msg_att_item*> atts =
+-		msgAtt->items();
++	const std::vector <IMAPParser::msg_att_item*> atts = msgData->msg_att()->items();
+ 
+ 	int flags = 0;
+ 
+@@ -389,12 +400,7 @@ void IMAPMessage::processFetchResponse
+ 		}
+ 		case IMAPParser::msg_att_item::UID:
+ 		{
+-			std::ostringstream oss;
+-			oss.imbue(std::locale::classic());
+-
+-			oss << folder->m_uidValidity << ":" << (*it)->unique_id()->value();
+-
+-			m_uid = oss.str();
++			m_uid = IMAPUtils::makeGlobalUID(folder->m_uidValidity, (*it)->unique_id()->value());
+ 			break;
+ 		}
+ 		case IMAPParser::msg_att_item::ENVELOPE:
+diff --git a/src/net/imap/IMAPUtils.cpp b/src/net/imap/IMAPUtils.cpp
+index 0d6fc47..eceac16 100644
+--- a/src/net/imap/IMAPUtils.cpp
++++ b/src/net/imap/IMAPUtils.cpp
+@@ -540,6 +540,24 @@ const string IMAPUtils::listToSet(const std::vector <int>& list, const int max,
+ 
+ 
+ // static
++const string IMAPUtils::listToSet(const std::vector <message::uid>& list)
++{
++	if (list.size() == 0)
++		return "";
++
++	std::ostringstream res;
++	res.imbue(std::locale::classic());
++
++	res << extractUIDFromGlobalUID(list[0]);
++
++	for (unsigned int i = 1, n = list.size() ; i < n ; ++i)
++		res << "," << extractUIDFromGlobalUID(list[i]);
++
++	return res.str();
++}
++
++
++// static
+ const string IMAPUtils::dateTime(const vmime::datetime& date)
+ {
+ 	std::ostringstream res;
+@@ -609,7 +627,8 @@ const string IMAPUtils::dateTime(const vmime::datetime& date)
+ 
+ 
+ // static
+-const string IMAPUtils::buildFetchRequest(const std::vector <int>& list, const int options)
++const string IMAPUtils::buildFetchRequestImpl
++	(const std::string& mode, const std::string& set, const int options)
+ {
+ 	// Example:
+ 	//   C: A654 FETCH 2:4 (FLAGS BODY[HEADER.FIELDS (DATE FROM)])
+@@ -671,7 +690,10 @@ const string IMAPUtils::buildFetchRequest(const std::vector <int>& list, const i
+ 	std::ostringstream command;
+ 	command.imbue(std::locale::classic());
+ 
+-	command << "FETCH " << listToSet(list, -1, false) << " (";
++	if (mode == "uid")
++		command << "UID FETCH " << set << " (";
++	else
++		command << "FETCH " << set << " (";
+ 
+ 	for (std::vector <string>::const_iterator it = items.begin() ;
+ 	     it != items.end() ; ++it)
+@@ -687,6 +709,20 @@ const string IMAPUtils::buildFetchRequest(const std::vector <int>& list, const i
+ 
+ 
+ // static
++const string IMAPUtils::buildFetchRequest(const std::vector <int>& list, const int options)
++{
++	return buildFetchRequestImpl("number", listToSet(list, -1, false), options);
++}
++
++
++// static
++const string IMAPUtils::buildFetchRequest(const std::vector <message::uid>& list, const int options)
++{
++	return buildFetchRequestImpl("uid", listToSet(list), options);
++}
++
++
++// static
+ void IMAPUtils::convertAddressList
+ 	(const IMAPParser::address_list& src, mailboxList& dest)
+ {
+@@ -706,6 +742,46 @@ void IMAPUtils::convertAddressList
+ }
+ 
+ 
++// static
++unsigned int IMAPUtils::extractUIDFromGlobalUID(const message::uid& uid)
++{
++	message::uid::size_type colonPos = uid.find(':');
++
++	if (colonPos == message::uid::npos)
++	{
++		std::istringstream iss(uid);
++		iss.imbue(std::locale::classic());
++
++		unsigned int n = 0;
++		iss >> n;
++
++		return n;
++	}
++	else
++	{
++		std::istringstream iss(uid.substr(colonPos + 1));
++		iss.imbue(std::locale::classic());
++
++		unsigned int n = 0;
++		iss >> n;
++
++		return n;
++	}
++}
++
++
++// static
++const message::uid IMAPUtils::makeGlobalUID(const unsigned int UIDValidity, const unsigned int messageUID)
++{
++	std::ostringstream oss;
++	oss.imbue(std::locale::classic());
++
++	oss << UIDValidity << ":" << messageUID;
++
++	return message::uid(oss.str());
++}
++
++
+ } // imap
+ } // net
+ } // vmime
+diff --git a/src/net/maildir/maildirFolder.cpp b/src/net/maildir/maildirFolder.cpp
+index 8c4b275..b606cda 100644
+--- a/src/net/maildir/maildirFolder.cpp
++++ b/src/net/maildir/maildirFolder.cpp
+@@ -444,6 +444,18 @@ std::vector <ref <message> > maildirFolder::getMessages(const std::vector <int>&
+ }
+ 
+ 
++ref <message> maildirFolder::getMessageByUID(const message::uid& /* uid */)
++{
++	throw exceptions::operation_not_supported();
++}
++
++
++std::vector <ref <message> > maildirFolder::getMessagesByUID(const std::vector <message::uid>& /* uids */)
++{
++	throw exceptions::operation_not_supported();
++}
++
++
+ int maildirFolder::getMessageCount()
+ {
+ 	return (m_messageCount);
+diff --git a/src/net/pop3/POP3Folder.cpp b/src/net/pop3/POP3Folder.cpp
+index e085609..21e7a8b 100644
+--- a/src/net/pop3/POP3Folder.cpp
++++ b/src/net/pop3/POP3Folder.cpp
+@@ -249,6 +249,18 @@ std::vector <ref <message> > POP3Folder::getMessages(const int from, const int t
+ }
+ 
+ 
++ref <message> POP3Folder::getMessageByUID(const message::uid& /* uid */)
++{
++	throw exceptions::operation_not_supported();
++}
++
++
++std::vector <ref <message> > POP3Folder::getMessagesByUID(const std::vector <message::uid>& /* uids */)
++{
++	throw exceptions::operation_not_supported();
++}
++
++
+ std::vector <ref <message> > POP3Folder::getMessages(const std::vector <int>& nums)
+ {
+ 	ref <POP3Store> store = m_store.acquire();
+diff --git a/vmime/net/folder.hpp b/vmime/net/folder.hpp
+index df9cbaf..a50ee0e 100644
+--- a/vmime/net/folder.hpp
++++ b/vmime/net/folder.hpp
+@@ -169,7 +169,7 @@ public:
+ 	  */
+ 	virtual bool isOpen() const = 0;
+ 
+-	/** Get a new reference to a message in this folder.
++	/** Get a new reference to a message in this folder, given its number.
+ 	  *
+ 	  * @param num message sequence number
+ 	  * @return a new object referencing the specified message
+@@ -177,7 +177,7 @@ public:
+ 	  */
+ 	virtual ref <message> getMessage(const int num) = 0;
+ 
+-	/** Get new references to messages in this folder.
++	/** Get new references to messages in this folder, given their numbers.
+ 	  *
+ 	  * @param from sequence number of the first message to get
+ 	  * @param to sequence number of the last message to get
+@@ -186,14 +186,30 @@ public:
+ 	  */
+ 	virtual std::vector <ref <message> > getMessages(const int from = 1, const int to = -1) = 0;
+ 
+-	/** Get new references to messages in this folder.
++	/** Get new references to messages in this folder, given their numbers.
+ 	  *
+-	  * @param nums sequence numbers of the messages to delete
++	  * @param nums sequence numbers of the messages to retrieve
+ 	  * @return new objects referencing the specified messages
+ 	  * @throw net_exception if an error occurs
+ 	  */
+ 	virtual std::vector <ref <message> > getMessages(const std::vector <int>& nums) = 0;
+ 
++	/** Get message in this folder, given its UID.
++	  *
++	  * @param uid UID of message to retrieve
++	  * @return a new object referencing the specified message
++	  * @throw net_exception if an error occurs
++	  */
++	virtual ref <message> getMessageByUID(const message::uid& uid) = 0;
++
++	/** Get messages in this folder, given their UIDs.
++	  *
++	  * @param uids UIDs of messages to retrieve
++	  * @return new objects referencing the specified messages
++	  * @throw net_exception if an error occurs
++	  */
++	virtual std::vector <ref <message> > getMessagesByUID(const std::vector <message::uid>& uids) = 0;
++
+ 	/** Return the number of messages in this folder.
+ 	  *
+ 	  * @return number of messages in the folder
+diff --git a/vmime/net/imap/IMAPFolder.hpp b/vmime/net/imap/IMAPFolder.hpp
+index cc52596..3337858 100644
+--- a/vmime/net/imap/IMAPFolder.hpp
++++ b/vmime/net/imap/IMAPFolder.hpp
+@@ -84,6 +84,12 @@ public:
+ 	ref <message> getMessage(const int num);
+ 	std::vector <ref <message> > getMessages(const int from = 1, const int to = -1);
+ 	std::vector <ref <message> > getMessages(const std::vector <int>& nums);
++
++	ref <message> getMessageByUID(const message::uid& uid);
++	std::vector <ref <message> > getMessagesByUID(const std::vector <message::uid>& uids);
++
++	std::vector <int> getMessageNumbersStartingOnUID(const message::uid& uid);
++
+ 	int getMessageCount();
+ 
+ 	ref <folder> getFolder(const folder::path::component& name);
+@@ -120,8 +126,6 @@ public:
+ 
+ 	int getFetchCapabilities() const;
+ 
+-	std::vector <int> getMessageNumbersStartingOnUID(const message::uid& uid);
+-
+ private:
+ 
+ 	void registerMessage(IMAPMessage* msg);
+@@ -152,7 +156,7 @@ private:
+ 
+ 	int m_messageCount;
+ 
+-	int m_uidValidity;
++	unsigned int m_uidValidity;
+ 
+ 	std::vector <IMAPMessage*> m_messages;
+ };
+diff --git a/vmime/net/imap/IMAPMessage.hpp b/vmime/net/imap/IMAPMessage.hpp
+index edbf69f..fbba6e7 100644
+--- a/vmime/net/imap/IMAPMessage.hpp
++++ b/vmime/net/imap/IMAPMessage.hpp
+@@ -50,6 +50,7 @@ private:
+ 	friend class vmime::creator;  // vmime::create <IMAPMessage>
+ 
+ 	IMAPMessage(ref <IMAPFolder> folder, const int num);
++	IMAPMessage(ref <IMAPFolder> folder, const int num, const uid& uniqueId);
+ 	IMAPMessage(const IMAPMessage&) : message() { }
+ 
+ 	~IMAPMessage();
+@@ -83,7 +84,7 @@ private:
+ 
+ 	void fetch(ref <IMAPFolder> folder, const int options);
+ 
+-	void processFetchResponse(const int options, const IMAPParser::msg_att* msgAtt);
++	void processFetchResponse(const int options, const IMAPParser::message_data* msgData);
+ 
+ 	/** Recursively fetch part header for all parts in the structure.
+ 	  *
+diff --git a/vmime/net/imap/IMAPUtils.hpp b/vmime/net/imap/IMAPUtils.hpp
+index d1ed5c8..9c9c420 100644
+--- a/vmime/net/imap/IMAPUtils.hpp
++++ b/vmime/net/imap/IMAPUtils.hpp
+@@ -29,6 +29,7 @@
+ #include "vmime/dateTime.hpp"
+ 
+ #include "vmime/net/folder.hpp"
++#include "vmime/net/message.hpp"
+ #include "vmime/net/imap/IMAPParser.hpp"
+ 
+ #include "vmime/mailboxList.hpp"
+@@ -65,8 +66,8 @@ public:
+ 
+ 	static const string messageFlagList(const int flags);
+ 
+-	/** Build an "IMAP set" given a list. The function tries to group
+-	  * consecutive message numbers to reduce the list.
++	/** Build an "IMAP set" given a list of message numbers. The function tries
++	  * to group consecutive message numbers to reduce the list.
+ 	  *
+ 	  * Example:
+ 	  *    IN  = "1,2,3,4,5,7,8,13,15,16,17"
+@@ -81,6 +82,13 @@ public:
+ 	static const string listToSet(const std::vector <int>& list,
+ 		const int max = -1, const bool alreadySorted = false);
+ 
++	/** Build an "IMAP set" set given a list of message UIDs.
++	  *
++	  * @param list list of message UIDs
++	  * @return a set corresponding to the list
++	  */
++	static const string listToSet(const std::vector <message::uid>& list);
++
+ 	/** Format a date/time to IMAP date/time format.
+ 	  *
+ 	  * @param date date/time to format
+@@ -88,7 +96,7 @@ public:
+ 	  */
+ 	static const string dateTime(const vmime::datetime& date);
+ 
+-	/** Construct a fetch request for the specified messages.
++	/** Construct a fetch request for the specified messages, designated by their sequence numbers.
+ 	  *
+ 	  * @param list list of message numbers
+ 	  * @param options fetch options
+@@ -96,12 +104,40 @@ public:
+ 	  */
+ 	static const string buildFetchRequest(const std::vector <int>& list, const int options);
+ 
++	/** Construct a fetch request for the specified messages, designated by their UIDs.
++	  *
++	  * @param list list of message UIDs
++	  * @param options fetch options
++	  * @return fetch request
++	  */
++	static const string buildFetchRequest(const std::vector <message::uid>& list, const int options);
++
+ 	/** Convert a parser-style address list to a mailbox list.
+ 	  *
+ 	  * @param src input address list
+ 	  * @param dest output mailbox list
+ 	  */
+ 	static void convertAddressList(const IMAPParser::address_list& src, mailboxList& dest);
++
++	/** Extract the message UID from a globally unique UID.
++	  *
++	  * @param uid globally unique UID (as returned by makeGlobalUID(), for example)
++	  * @return message UID
++	  */
++	static unsigned int extractUIDFromGlobalUID(const message::uid& uid);
++
++	/** Construct a globally unique UID from UID Validity and a message UID.
++	  *
++	  * @param UIDValidity UID Validity of the folder
++	  * @param messageUID UID of the message
++	  * @return global UID
++	  */
++	static const message::uid makeGlobalUID(const unsigned int UIDValidity, const unsigned int messageUID);
++
++private:
++
++	static const string buildFetchRequestImpl
++		(const std::string& mode, const std::string& set, const int options);
+ };
+ 
+ 
+diff --git a/vmime/net/maildir/maildirFolder.hpp b/vmime/net/maildir/maildirFolder.hpp
+index 68b5b89..c9ba899 100644
+--- a/vmime/net/maildir/maildirFolder.hpp
++++ b/vmime/net/maildir/maildirFolder.hpp
+@@ -85,6 +85,10 @@ public:
+ 	ref <message> getMessage(const int num);
+ 	std::vector <ref <message> > getMessages(const int from = 1, const int to = -1);
+ 	std::vector <ref <message> > getMessages(const std::vector <int>& nums);
++
++	ref <message> getMessageByUID(const message::uid& uid);
++	std::vector <ref <message> > getMessagesByUID(const std::vector <message::uid>& uids);
++
+ 	int getMessageCount();
+ 
+ 	ref <folder> getFolder(const folder::path::component& name);
+diff --git a/vmime/net/pop3/POP3Folder.hpp b/vmime/net/pop3/POP3Folder.hpp
+index c482908..090f948 100644
+--- a/vmime/net/pop3/POP3Folder.hpp
++++ b/vmime/net/pop3/POP3Folder.hpp
+@@ -83,6 +83,10 @@ public:
+ 	ref <message> getMessage(const int num);
+ 	std::vector <ref <message> > getMessages(const int from = 1, const int to = -1);
+ 	std::vector <ref <message> > getMessages(const std::vector <int>& nums);
++
++	ref <message> getMessageByUID(const message::uid& uid);
++	std::vector <ref <message> > getMessagesByUID(const std::vector <message::uid>& uids);
++
+ 	int getMessageCount();
+ 
+ 	ref <folder> getFolder(const folder::path::component& name);
+-- 
+1.7.10.4
+
+
+From 7501f61214b06a35c8fce7772fd48dded2cad335 Mon Sep 17 00:00:00 2001
+From: Vincent Richard <vincent@vincent-richard.net>
+Date: Mon, 30 Jul 2012 11:23:23 +0200
+Subject: [PATCH 41/42] Fixed compilation warning.
+
+
+diff --git a/vmime/utility/parserInputStreamAdapter.hpp b/vmime/utility/parserInputStreamAdapter.hpp
+index c24fa44..861e75b 100644
+--- a/vmime/utility/parserInputStreamAdapter.hpp
++++ b/vmime/utility/parserInputStreamAdapter.hpp
+@@ -82,7 +82,7 @@ public:
+ 
+ 			m_stream->seek(initialPos);
+ 
+-			return (readBytes == 1 ? buffer[0] : 0);
++			return (readBytes == 1 ? buffer[0] : static_cast <value_type>(0));
+ 		}
+ 		catch (...)
+ 		{
+@@ -101,7 +101,7 @@ public:
+ 		value_type buffer[1];
+ 		const size_type readBytes = m_stream->read(buffer, 1);
+ 
+-		return (readBytes == 1 ? buffer[0] : 0);
++		return (readBytes == 1 ? buffer[0] : static_cast <value_type>(0));
+ 	}
+ 
+ 	/** Check whether the bytes following the current position match
+-- 
+1.7.10.4
+
+
+From f9f9b3bf52c76e1803855d1c44147f68ec9f62f2 Mon Sep 17 00:00:00 2001
+From: Vincent Richard <vincent@vincent-richard.net>
+Date: Mon, 30 Jul 2012 20:45:17 +0200
+Subject: [PATCH 42/42] Fixed body part extraction (only body should be
+ extracted).
+
+
+diff --git a/src/net/imap/IMAPMessage.cpp b/src/net/imap/IMAPMessage.cpp
+index 7202a7d..808f7d1 100644
+--- a/src/net/imap/IMAPMessage.cpp
++++ b/src/net/imap/IMAPMessage.cpp
+@@ -192,7 +192,7 @@ void IMAPMessage::extract(utility::outputStream& os, utility::progressListener*
+ 	if (!folder)
+ 		throw exceptions::folder_not_found();
+ 
+-	extract(NULL, os, progress, start, length, false, peek);
++	extractImpl(NULL, os, progress, start, length, EXTRACT_HEADER | EXTRACT_BODY | (peek ? EXTRACT_PEEK : 0));
+ }
+ 
+ 
+@@ -205,7 +205,7 @@ void IMAPMessage::extractPart
+ 	if (!folder)
+ 		throw exceptions::folder_not_found();
+ 
+-	extract(p, os, progress, start, length, false, peek);
++	extractImpl(p, os, progress, start, length, EXTRACT_HEADER | EXTRACT_BODY | (peek ? EXTRACT_PEEK : 0));
+ }
+ 
+ 
+@@ -219,7 +219,7 @@ void IMAPMessage::fetchPartHeader(ref <part> p)
+ 	std::ostringstream oss;
+ 	utility::outputStreamAdapter ossAdapter(oss);
+ 
+-	extract(p, ossAdapter, NULL, 0, -1, true, true);
++	extractImpl(p, ossAdapter, NULL, 0, -1, EXTRACT_HEADER | EXTRACT_PEEK);
+ 
+ 	p.dynamicCast <IMAPPart>()->getOrCreateHeader().parse(oss.str());
+ }
+@@ -240,9 +240,9 @@ void IMAPMessage::fetchPartHeaderForStructure(ref <structure> str)
+ }
+ 
+ 
+-void IMAPMessage::extract(ref <const part> p, utility::outputStream& os,
++void IMAPMessage::extractImpl(ref <const part> p, utility::outputStream& os,
+ 	utility::progressListener* progress, const int start,
+-	const int length, const bool headerOnly, const bool peek) const
++	const int length, const int extractFlags) const
+ {
+ 	ref <const IMAPFolder> folder = m_folder.acquire();
+ 
+@@ -284,18 +284,45 @@ void IMAPMessage::extract(ref <const part> p, utility::outputStream& os,
+ 	else
+ 		command << "UID FETCH " << IMAPUtils::extractUIDFromGlobalUID(m_uid) << " BODY";
+ 
+-	if (peek) command << ".PEEK";
++	/*
++	   BODY[]               header + body
++	   BODY.PEEK[]          header + body (peek)
++	   BODY[HEADER]         header
++	   BODY.PEEK[HEADER]    header (peek)
++	   BODY[TEXT]           body
++	   BODY.PEEK[TEXT]      body (peek)
++	*/
++
++	if (extractFlags & EXTRACT_PEEK)
++		command << ".PEEK";
++
+ 	command << "[";
+ 
+ 	if (section.str().empty())
+ 	{
+-		if (headerOnly)
++		// header + body
++		if ((extractFlags & EXTRACT_HEADER) && (extractFlags & EXTRACT_BODY))
++			command << "";
++		// body only
++		else if (extractFlags & EXTRACT_BODY)
++			command << "TEXT";
++		// header only
++		else if (extractFlags & EXTRACT_HEADER)
+ 			command << "HEADER";
+ 	}
+ 	else
+ 	{
+ 		command << section.str();
+-		if (headerOnly) command << ".MIME";   // "MIME" not "HEADER" for parts
++
++		// header + body
++		if ((extractFlags & EXTRACT_HEADER) && (extractFlags & EXTRACT_BODY))
++			*((int *) 0)=42;//throw exceptions::operation_not_supported();
++		// body only
++		else if (extractFlags & EXTRACT_BODY)
++			command << ".TEXT";
++		// header only
++		else if (extractFlags & EXTRACT_HEADER)
++			command << ".MIME";   // "MIME" not "HEADER" for parts
+ 	}
+ 
+ 	command << "]";
+@@ -318,7 +345,7 @@ void IMAPMessage::extract(ref <const part> p, utility::outputStream& os,
+ 	}
+ 
+ 
+-	if (!headerOnly)
++	if (extractFlags & EXTRACT_BODY)
+ 	{
+ 		// TODO: update the flags (eg. flag "\Seen" may have been set)
+ 	}
+diff --git a/src/net/imap/IMAPMessagePartContentHandler.cpp b/src/net/imap/IMAPMessagePartContentHandler.cpp
+index 85c6ec2..c2cd647 100644
+--- a/src/net/imap/IMAPMessagePartContentHandler.cpp
++++ b/src/net/imap/IMAPMessagePartContentHandler.cpp
+@@ -121,7 +121,7 @@ void IMAPMessagePartContentHandler::extract
+ 	// No decoding to perform
+ 	if (!isEncoded())
+ 	{
+-		msg->extractPart(part, os, progress);
++		msg->extractImpl(part, os, progress, 0, -1, IMAPMessage::EXTRACT_BODY);
+ 	}
+ 	// Need to decode data
+ 	else
+@@ -130,7 +130,7 @@ void IMAPMessagePartContentHandler::extract
+ 		std::ostringstream oss;
+ 		utility::outputStreamAdapter tmp(oss);
+ 
+-		msg->extractPart(part, tmp, NULL);
++		msg->extractImpl(part, tmp, NULL, 0, -1, IMAPMessage::EXTRACT_BODY);
+ 
+ 		// Encode temporary buffer to output stream
+ 		utility::inputStreamStringAdapter is(oss.str());
+diff --git a/vmime/net/imap/IMAPMessage.hpp b/vmime/net/imap/IMAPMessage.hpp
+index fbba6e7..06f8091 100644
+--- a/vmime/net/imap/IMAPMessage.hpp
++++ b/vmime/net/imap/IMAPMessage.hpp
+@@ -47,6 +47,7 @@ class IMAPMessage : public message
+ private:
+ 
+ 	friend class IMAPFolder;
++	friend class IMAPMessagePartContentHandler;
+ 	friend class vmime::creator;  // vmime::create <IMAPMessage>
+ 
+ 	IMAPMessage(ref <IMAPFolder> folder, const int num);
+@@ -101,7 +102,16 @@ private:
+ 	  */
+ 	void constructParsedMessage(ref <bodyPart> parentPart, ref <structure> str, int level = 0);
+ 
+-	void extract(ref <const part> p, utility::outputStream& os, utility::progressListener* progress, const int start, const int length, const bool headerOnly, const bool peek) const;
++
++	enum ExtractFlags
++	{
++		EXTRACT_HEADER = 0x1,
++		EXTRACT_BODY = 0x2,
++		EXTRACT_PEEK = 0x10
++	};
++
++	void extractImpl(ref <const part> p, utility::outputStream& os, utility::progressListener* progress,
++		const int start, const int length, const int extractFlags) const;
+ 
+ 
+ 	ref <header> getOrCreateHeader();
 -- 
 1.7.10.4
 
