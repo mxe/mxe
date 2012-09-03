@@ -3,7 +3,7 @@
 
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := e1e2edef1d63ed677d6534d32800c2e1f7ad0e73
+$(PKG)_CHECKSUM := bc352a283610e0cd2fe0dbedbc45613844090fcb
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://releases.qt-project.org/qt4/source/$($(PKG)_FILE)
