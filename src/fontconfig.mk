@@ -3,9 +3,9 @@
 
 PKG             := fontconfig
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d47c6fa5693f91e274d655b5644dd333716c1395
+$(PKG)_CHECKSUM := c51c9865047a9546f41cedefbf955cc9bd846517
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
-$(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://fontconfig.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype expat
 
