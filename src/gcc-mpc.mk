@@ -3,7 +3,7 @@
 
 PKG             := gcc-mpc
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 20af7cc481433c019285a2c1757ac65e244e1e06
+$(PKG)_CHECKSUM := 8c7e19ad0dd9b3b5cc652273403423d6cf0c5edf
 $(PKG)_SUBDIR   := mpc-$($(PKG)_VERSION)
 $(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.multiprecision.org/mpc/download/$($(PKG)_FILE)
