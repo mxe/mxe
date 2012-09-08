@@ -2039,6 +2039,23 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <li>
         <p>
+            Add your package to the <a href="#packages">list of packages</a>.
+        </p>
+        <p>
+            Each package gets its own table row element with table cells having IDs
+            specifying your .mk file, package version and website:
+        </p>
+        <pre>
+&lt;tr&gt;
+    &lt;td id="gettext-package"&gt;gettext&lt;/td&gt;
+    &lt;td id="gettext-version"&gt;0.18.1.1&lt;/td&gt;
+    &lt;td id="gettext-website"&gt;&lt;a href="http://www.gnu.org/software/gettext/"&gt;gettext&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+        </pre>
+    </li>
+
+    <li>
+        <p>
         Write your <code>$(PKG)_BUILD</code>.
         If your library has a <code>./configure</code> script,
         enable/disable all dependency libraries explicitly
