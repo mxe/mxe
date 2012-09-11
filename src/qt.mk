@@ -18,7 +18,6 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
-
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
@@ -27,7 +26,8 @@ define $(PKG)_BUILD
         -opensource \
         -confirm-license \
         -fast \
-        -xplatform unsupported/win32-g++-4.6-cross \
+        -xplatform win32-g++-4.6 \
+        -device-option CROSS_COMPILE=$(TARGET)- \
         -force-pkg-config \
         -release \
         -exceptions \
