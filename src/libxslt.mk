@@ -3,7 +3,7 @@
 
 PKG             := libxslt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 69f74df8228b504a87e2b257c2d5238281c65154
+$(PKG)_CHECKSUM := f8072177f1ffe1b9bb8759a9e3e6349e1eac1f66
 $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://xmlsoft.org/libxslt/$($(PKG)_FILE)
