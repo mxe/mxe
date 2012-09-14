@@ -1,0 +1,268 @@
+This file is part of MXE.
+See index.html for further information.
+
+These patches have been taken from:
+http://dev.exiv2.org/issues/847
+
+From ffb5b66c5b1aeb77c1f95ef69a573030c6370e0c Mon Sep 17 00:00:00 2001
+From: vog <vog@b7c8b350-86e7-0310-a4b4-de8f6a8f16a3>
+Date: Fri, 14 Sep 2012 16:06:23 +0000
+Subject: [PATCH 1/4] Issue #847: Add recognition of explicit and implicit
+ BeginPageSetup
+
+git-svn-id: svn://dev.exiv2.org/svn/trunk@2869 b7c8b350-86e7-0310-a4b4-de8f6a8f16a3
+---
+ src/epsimage.cpp |   28 ++++++++++++++++++++++------
+ 1 file changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/src/epsimage.cpp b/src/epsimage.cpp
+index c937942..51e5bb4 100644
+--- a/src/epsimage.cpp
++++ b/src/epsimage.cpp
+@@ -386,6 +386,7 @@ namespace {
+         size_t posBeginPhotoshop = posEndEps;
+         size_t posEndPhotoshop = posEndEps;
+         size_t posPage = posEndEps;
++        size_t posBeginPageSetup = posEndEps;
+         size_t posEndPageSetup = posEndEps;
+         size_t posPageTrailer = posEndEps;
+         size_t posEof = posEndEps;
+@@ -397,7 +398,6 @@ namespace {
+         bool implicitPage = false;
+         bool implicitPageTrailer = false;
+         bool inDefaultsPreviewPrologSetup = false;
+-        bool inPageSetup = false;
+         bool inRemovableEmbedding = false;
+         std::string removableEmbeddingEndLine;
+         unsigned int removableEmbeddingsWithUnmarkedTrailer = 0;
+@@ -465,7 +465,7 @@ namespace {
+                 #endif
+                 throw Error(write ? 21 : 14);
+             } else if (line == "%%BeginPageSetup") {
+-                inPageSetup = true;
++                posBeginPageSetup = startPos;
+             } else if (!inRemovableEmbedding && line == "%Exiv2BeginXMP: Before %%EndPageSetup") {
+                 inRemovableEmbedding = true;
+                 removableEmbeddings.push_back(std::make_pair(startPos, startPos));
+@@ -510,18 +510,34 @@ namespace {
+             if (posPage == posEndEps && posEndComments != posEndEps && !inDefaultsPreviewPrologSetup && !inRemovableEmbedding && !onlyWhitespaces(line)) {
+                 posPage = startPos;
+                 implicitPage = true;
++                posBeginPageSetup = startPos;
+                 posEndPageSetup = startPos;
+                 #ifdef DEBUG
+-                EXV_DEBUG << "readWriteEpsMetadata: Found implicit Page and EndPageSetup at position: " << startPos << "\n";
++                EXV_DEBUG << "readWriteEpsMetadata: Found implicit Page, BeginPageSetup and EndPageSetup at position: " << startPos << "\n";
+                 #endif
+             }
+-            if (posEndPageSetup == posEndEps && posPage != posEndEps && !inPageSetup && !inRemovableEmbedding && line.size() >= 1 && line[0] != '%') {
++            if (posBeginPageSetup == posEndEps && posPage != posEndEps && !inRemovableEmbedding && line.size() >= 1 && line[0] != '%') {
++                posBeginPageSetup = startPos;
+                 posEndPageSetup = startPos;
+                 #ifdef DEBUG
+-                EXV_DEBUG << "readWriteEpsMetadata: Found implicit EndPageSetup at position: " << startPos << "\n";
++                EXV_DEBUG << "readWriteEpsMetadata: Found implicit BeginPageSetup and EndPageSetup at position: " << startPos << "\n";
+                 #endif
+             }
+             if (line.size() >= 1 && line[0] != '%') continue; // performance optimization
++            if (line == "%%EOF" || line == "%%Trailer" || line == "%%PageTrailer") {
++                if (posBeginPageSetup == posEndEps) {
++                    posBeginPageSetup = startPos;
++                    #ifdef DEBUG
++                    EXV_DEBUG << "readWriteEpsMetadata: Found implicit BeginPageSetup at position: " << startPos << "\n";
++                    #endif
++                }
++                if (posEndPageSetup == posEndEps) {
++                    posEndPageSetup = startPos;
++                    #ifdef DEBUG
++                    EXV_DEBUG << "readWriteEpsMetadata: Found implicit EndPageSetup at position: " << startPos << "\n";
++                    #endif
++                }
++            }
+             if (line == "%%EOF" || line == "%%Trailer") {
+                 if (posPageTrailer == posEndEps) {
+                     posPageTrailer = startPos;
+@@ -561,7 +577,6 @@ namespace {
+             } else if (line == "%%EndSetup") {
+                 inDefaultsPreviewPrologSetup = false;
+             } else if (posEndPageSetup == posEndEps && line == "%%EndPageSetup") {
+-                inPageSetup = false;
+                 posEndPageSetup = startPos;
+             } else if (posPageTrailer == posEndEps && line == "%%PageTrailer") {
+                 posPageTrailer = startPos;
+@@ -815,6 +830,7 @@ namespace {
+             positions.push_back(posExiv2Website);
+             positions.push_back(posEndComments);
+             positions.push_back(posPage);
++            positions.push_back(posBeginPageSetup);
+             positions.push_back(posEndPageSetup);
+             positions.push_back(posPageTrailer);
+             positions.push_back(posEof);
+-- 
+1.7.10.4
+
+From f8c9c6114bf7631bb0dba67582c2666b05b2ff9f Mon Sep 17 00:00:00 2001
+From: vog <vog@b7c8b350-86e7-0310-a4b4-de8f6a8f16a3>
+Date: Fri, 14 Sep 2012 16:06:26 +0000
+Subject: [PATCH 2/4] Issue #847: Always insert BeginPageSetup/EndPageSetup
+ when missing
+
+git-svn-id: svn://dev.exiv2.org/svn/trunk@2870 b7c8b350-86e7-0310-a4b4-de8f6a8f16a3
+---
+ src/epsimage.cpp |   21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/src/epsimage.cpp b/src/epsimage.cpp
+index 51e5bb4..9276eb5 100644
+--- a/src/epsimage.cpp
++++ b/src/epsimage.cpp
+@@ -935,6 +935,11 @@ namespace {
+                         writeTemp(*tempIo, "%%EndPageComments" + lineEnding);
+                     }
+                 }
++                if (pos == posBeginPageSetup) {
++                    if (line != "%%BeginPageSetup") {
++                        writeTemp(*tempIo, "%%BeginPageSetup" + lineEnding);
++                    }
++                }
+                 if (useFlexibleEmbedding) {
+                     // insert XMP metadata into existing flexible embedding
+                     if (pos == xmpPos) {
+@@ -947,7 +952,8 @@ namespace {
+                         EXV_DEBUG << "readWriteEpsMetadata: Skipping to " << skipPos << " at " << __FILE__ << ":" << __LINE__ << "\n";
+                         #endif
+                     }
+-                } else {
++                }
++                if (!useFlexibleEmbedding) {
+                     // remove preceding embedding(s)
+                     for (std::vector<std::pair<size_t, size_t> >::const_iterator e = removableEmbeddings.begin(); e != removableEmbeddings.end(); e++) {
+                         if (pos == e->first) {
+@@ -960,9 +966,6 @@ namespace {
+                     }
+                     // insert XMP metadata with new flexible embedding, if necessary
+                     if (pos == posEndPageSetup && !deleteXmp) {
+-                        if (line != "%%EndPageSetup") {
+-                            writeTemp(*tempIo, "%%BeginPageSetup" + lineEnding);
+-                        }
+                         writeTemp(*tempIo, "%Exiv2BeginXMP: Before %%EndPageSetup" + lineEnding);
+                         if (corelDraw) {
+                             writeTemp(*tempIo, "%Exiv2Notice: The following line is needed by CorelDRAW." + lineEnding);
+@@ -1004,10 +1007,14 @@ namespace {
+                             writeTemp(*tempIo, "@sv" + lineEnding);
+                         }
+                         writeTemp(*tempIo, "%Exiv2EndXMP" + lineEnding);
+-                        if (line != "%%EndPageSetup") {
+-                            writeTemp(*tempIo, "%%EndPageSetup" + lineEnding);
+-                        }
+                     }
++                }
++                if (pos == posEndPageSetup) {
++                    if (line != "%%EndPageSetup") {
++                        writeTemp(*tempIo, "%%EndPageSetup" + lineEnding);
++                    }
++                }
++                if (!useFlexibleEmbedding) {
+                     if (pos == posPageTrailer && !deleteXmp) {
+                         if (!implicitPageTrailer) {
+                             skipPos = posLineEnd;
+-- 
+1.7.10.4
+
+From b22ff432f0205d77d1b9e0ad2cd314ab6cdf20b0 Mon Sep 17 00:00:00 2001
+From: vog <vog@b7c8b350-86e7-0310-a4b4-de8f6a8f16a3>
+Date: Fri, 14 Sep 2012 16:06:29 +0000
+Subject: [PATCH 3/4] Issue #847: Split recognition of implicit Page,
+ BeginPageSetup and EndPageSetup
+
+git-svn-id: svn://dev.exiv2.org/svn/trunk@2871 b7c8b350-86e7-0310-a4b4-de8f6a8f16a3
+---
+ src/epsimage.cpp |   17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/src/epsimage.cpp b/src/epsimage.cpp
+index 9276eb5..57051a1 100644
+--- a/src/epsimage.cpp
++++ b/src/epsimage.cpp
+@@ -396,6 +396,7 @@ namespace {
+         bool illustrator8 = false;
+         bool corelDraw = false;
+         bool implicitPage = false;
++        bool implicitPageSetup = false;
+         bool implicitPageTrailer = false;
+         bool inDefaultsPreviewPrologSetup = false;
+         bool inRemovableEmbedding = false;
+@@ -510,29 +511,35 @@ namespace {
+             if (posPage == posEndEps && posEndComments != posEndEps && !inDefaultsPreviewPrologSetup && !inRemovableEmbedding && !onlyWhitespaces(line)) {
+                 posPage = startPos;
+                 implicitPage = true;
+-                posBeginPageSetup = startPos;
+-                posEndPageSetup = startPos;
+                 #ifdef DEBUG
+-                EXV_DEBUG << "readWriteEpsMetadata: Found implicit Page, BeginPageSetup and EndPageSetup at position: " << startPos << "\n";
++                EXV_DEBUG << "readWriteEpsMetadata: Found implicit Page at position: " << startPos << "\n";
+                 #endif
+             }
+-            if (posBeginPageSetup == posEndEps && posPage != posEndEps && !inRemovableEmbedding && line.size() >= 1 && line[0] != '%') {
++            if (posBeginPageSetup == posEndEps && (implicitPage || (posPage != posEndEps && !inRemovableEmbedding && line.size() >= 1 && line[0] != '%'))) {
+                 posBeginPageSetup = startPos;
++                implicitPageSetup = true;
++                #ifdef DEBUG
++                EXV_DEBUG << "readWriteEpsMetadata: Found implicit BeginPageSetup at position: " << startPos << "\n";
++                #endif
++            }
++            if (posEndPageSetup == posEndEps && implicitPageSetup) {
+                 posEndPageSetup = startPos;
+                 #ifdef DEBUG
+-                EXV_DEBUG << "readWriteEpsMetadata: Found implicit BeginPageSetup and EndPageSetup at position: " << startPos << "\n";
++                EXV_DEBUG << "readWriteEpsMetadata: Found implicit EndPageSetup at position: " << startPos << "\n";
+                 #endif
+             }
+             if (line.size() >= 1 && line[0] != '%') continue; // performance optimization
+             if (line == "%%EOF" || line == "%%Trailer" || line == "%%PageTrailer") {
+                 if (posBeginPageSetup == posEndEps) {
+                     posBeginPageSetup = startPos;
++                    implicitPageSetup = true;
+                     #ifdef DEBUG
+                     EXV_DEBUG << "readWriteEpsMetadata: Found implicit BeginPageSetup at position: " << startPos << "\n";
+                     #endif
+                 }
+                 if (posEndPageSetup == posEndEps) {
+                     posEndPageSetup = startPos;
++                    implicitPageSetup = true;
+                     #ifdef DEBUG
+                     EXV_DEBUG << "readWriteEpsMetadata: Found implicit EndPageSetup at position: " << startPos << "\n";
+                     #endif
+-- 
+1.7.10.4
+
+From 41fb1a2ff54a9377763e4a66544c2234f9b055c8 Mon Sep 17 00:00:00 2001
+From: vog <vog@b7c8b350-86e7-0310-a4b4-de8f6a8f16a3>
+Date: Fri, 14 Sep 2012 17:01:36 +0000
+Subject: [PATCH 4/4] Issue #847: Ensure that Photoshop will always recognize
+ modified Photoshop EPS files
+
+For a full description of this issue, see:
+http://dev.exiv2.org/issues/847
+
+git-svn-id: svn://dev.exiv2.org/svn/trunk@2873 b7c8b350-86e7-0310-a4b4-de8f6a8f16a3
+---
+ src/epsimage.cpp |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/epsimage.cpp b/src/epsimage.cpp
+index 57051a1..4a0ca3a 100644
+--- a/src/epsimage.cpp
++++ b/src/epsimage.cpp
+@@ -522,7 +522,7 @@ namespace {
+                 EXV_DEBUG << "readWriteEpsMetadata: Found implicit BeginPageSetup at position: " << startPos << "\n";
+                 #endif
+             }
+-            if (posEndPageSetup == posEndEps && implicitPageSetup) {
++            if (posEndPageSetup == posEndEps && implicitPageSetup && !inRemovableEmbedding && line.size() >= 1 && line[0] != '%') {
+                 posEndPageSetup = startPos;
+                 #ifdef DEBUG
+                 EXV_DEBUG << "readWriteEpsMetadata: Found implicit EndPageSetup at position: " << startPos << "\n";
+-- 
+1.7.10.4
+
