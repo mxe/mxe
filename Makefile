@@ -5,6 +5,7 @@ JOBS               := 1
 TARGET             := i686-pc-mingw32
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
+PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 
 PWD        := $(shell pwd)
 SHELL      := bash
@@ -65,9 +66,13 @@ CHECK_PKG_ARCHIVE = \
 DOWNLOAD_PKG_ARCHIVE = \
     mkdir -p '$(PKG_DIR)' && \
     $(if $($(1)_URL_2), \
-        ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || $(WGET) -O- '$($(1)_URL_2)' || \
-          $(WGET) -O- '$(PKG_MIRROR)/$($(1)_FILE)' ), \
-        ( $(WGET) -O- '$($(1)_URL)' || $(WGET) -O- '$(PKG_MIRROR)/$($(1)_FILE)' )) \
+        ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
+          $(WGET) -O- '$($(1)_URL_2)' || \
+          $(WGET) -O- '$(PKG_MIRROR)/$($(1)_FILE)' || \
+          $(WGET) -O- '$(PKG_CDN)/$($(1)_FILE)' ), \
+        ( $(WGET) -O- '$($(1)_URL)' || \
+          $(WGET) -O- '$(PKG_MIRROR)/$($(1)_FILE)' || \
+          $(WGET) -O- '$(PKG_CDN)/$($(1)_FILE)' )) \
     $(if $($(1)_FIX_GZIP), \
         | gzip -d | gzip -9n, \
         ) \
