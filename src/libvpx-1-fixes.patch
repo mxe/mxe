@@ -1,14 +1,13 @@
-# This file is part of MXE.
-# See index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
-From 0db7805768cb8be8dfe2c95f451fd5965b2b52b7 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+Contains ad hoc patches for cross building.
+
+From 01c0e284b4d458fade9f8b2288863f3dd4dbc81a Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 25 May 2012 23:36:41 +0200
-Subject: [PATCH 1/3] add Libs.private to vpx.pc
+Subject: [PATCH 1/4] add Libs.private to vpx.pc
 
----
- libs.mk |    1 +
- 1 file changed, 1 insertion(+)
 
 diff --git a/libs.mk b/libs.mk
 index e2ba737..209f77e 100644
@@ -23,17 +22,14 @@ index e2ba737..209f77e 100644
  INSTALL-LIBS-yes += $(LIBSUBDIR)/pkgconfig/vpx.pc
  INSTALL_MAPS += $(LIBSUBDIR)/pkgconfig/%.pc %.pc
 -- 
-1.7.9.2
+1.7.11.5
 
 
-From 5805ff3f9f16036b7556d74b2874a6d18ea655fa Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+From 73c1c32c41b75a432fbe092fb621474a760d0f51 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 25 May 2012 23:40:00 +0200
-Subject: [PATCH 2/3] linking as test is not good for cross compiling
+Subject: [PATCH 2/4] linking as test is not good for cross compiling
 
----
- configure |    3 ---
- 1 file changed, 3 deletions(-)
 
 diff --git a/configure b/configure
 index 62e1ffb..0c4faf9 100755
@@ -50,24 +46,14 @@ index 62e1ffb..0c4faf9 100755
      check_header stdint.h
      check_header pthread.h
 -- 
-1.7.9.2
+1.7.11.5
 
 
-From bf308b8ed07f8bf0e9c648314e1f3c070a647731 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+From 88bedac576559c599f3084b4eaa61a2ef85cfd06 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 25 May 2012 23:40:55 +0200
-Subject: [PATCH 3/3] fix bin/bash
+Subject: [PATCH 3/4] fix bin/bash
 
----
- build/make/armlink_adapter.sh |    2 +-
- build/make/configure.sh       |    2 +-
- build/make/gen_asm_deps.sh    |    2 +-
- build/make/gen_msvs_def.sh    |    2 +-
- build/make/gen_msvs_proj.sh   |    2 +-
- build/make/gen_msvs_sln.sh    |    2 +-
- build/make/version.sh         |    2 +-
- configure                     |    2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/build/make/armlink_adapter.sh b/build/make/armlink_adapter.sh
 index b53669c..71cf7e9 100755
@@ -150,5 +136,30 @@ index 0c4faf9..5d1db69 100755
  ##  configure
  ##
 -- 
-1.7.9.2
+1.7.11.5
+
+
+From 3d905203699e813027233bd0f19b05d44b98470d Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 17 Sep 2012 20:23:14 +1000
+Subject: [PATCH 4/4] Fix for building on OSX
+
+Taken from:
+https://gerrit.chromium.org/gerrit/#/c/26027/
+
+diff --git a/build/make/gen_asm_deps.sh b/build/make/gen_asm_deps.sh
+index 81b7095..158ec34 100755
+--- a/build/make/gen_asm_deps.sh
++++ b/build/make/gen_asm_deps.sh
+@@ -42,7 +42,7 @@ done
+ 
+ [ -n "$srcfile" ] || show_help
+ sfx=${sfx:-asm}
+-includes=$(LC_ALL=C egrep -i "include +\"?+[a-z0-9_/]+\.${sfx}" $srcfile |
++includes=$(LC_ALL=C egrep -i "include +\"?[a-z0-9_/]+\.${sfx}" $srcfile |
+            perl -p -e "s;.*?([a-z0-9_/]+.${sfx}).*;\1;")
+ #" restore editor state
+ for inc in ${includes}; do
+-- 
+1.7.11.5
 
