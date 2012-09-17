@@ -18,7 +18,8 @@ endef
 define $(PKG)_BUILD
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DLIBTYPE=STATIC
+        -DLIBTYPE=STATIC \
+        -DEXAMPLES=FALSE
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \
