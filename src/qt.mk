@@ -28,6 +28,7 @@ define $(PKG)_BUILD
         -fast \
         -xplatform win32-g++-4.6 \
         -device-option CROSS_COMPILE=$(TARGET)- \
+        -device-option PKG_CONFIG='$(TARGET)-pkg-config' \
         -force-pkg-config \
         -release \
         -exceptions \
