@@ -23,7 +23,8 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-host_os=mingw \
         --with-winapi=wmme,directx,wasapi,wdmks \
-        --with-dxdir=$(PREFIX)/$(TARGET)
+        --with-dxdir=$(PREFIX)/$(TARGET) \
+        ac_cv_path_AR=$(TARGET)-ar
     $(MAKE) -C '$(1)' -j '$(JOBS)' SHARED_FLAGS= TESTS=
     $(MAKE) -C '$(1)' -j 1 install
 
