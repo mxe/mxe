@@ -3,7 +3,7 @@
 
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := e1e2edef1d63ed677d6534d32800c2e1f7ad0e73
+$(PKG)_CHECKSUM := bc352a283610e0cd2fe0dbedbc45613844090fcb
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://releases.qt-project.org/qt4/source/$($(PKG)_FILE)
@@ -18,7 +18,6 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
-
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
@@ -27,7 +26,8 @@ define $(PKG)_BUILD
         -opensource \
         -confirm-license \
         -fast \
-        -xplatform unsupported/win32-g++-4.6-cross \
+        -xplatform win32-g++-4.6 \
+        -device-option CROSS_COMPILE=$(TARGET)- \
         -force-pkg-config \
         -release \
         -exceptions \
