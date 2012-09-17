@@ -47,7 +47,8 @@ define $(PKG)_BUILD
         --disable-libgomp \
         --disable-libmudflap \
         --with-mpfr-include='$(1)/mpfr/src' \
-        --with-mpfr-lib='$(1).build/mpfr/src/.libs'
+        --with-mpfr-lib='$(1).build/mpfr/src/.libs' \
+        $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 
