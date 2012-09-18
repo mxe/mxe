@@ -191,6 +191,7 @@ $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	@echo '[done]     $(1)'
 
 .PHONY: build-only-$(1)
+build-only-$(1): PKG = $(1)
 build-only-$(1):
 	$(if $(value $(1)_BUILD),
 	    rm -rf   '$(2)'
