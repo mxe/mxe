@@ -9,6 +9,11 @@ $(PKG)_FILE     := plibc-$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_URL      := http://sourceforge.net/projects/plibc/files/plibc/$($(PKG)_VERSION)/$($(PKG)_FILE)/download
 $(PKG)_DEPS     := gcc
 
+define $(PKG)_UPDATE
+    echo 'TODO: Updates for package plibc  need to be fixed.' >&2;
+    echo $(plibc_VERSION)
+endef
+
 define $(PKG)_BUILD
     cd '$(1)' && \
     chmod 0755 configure && \
