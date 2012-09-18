@@ -15,10 +15,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && \
-    chmod 0755 configure && \
-    ./configure \
+    chmod 0755 '$(1)/configure'
+    cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-static \
         --disable-shared
