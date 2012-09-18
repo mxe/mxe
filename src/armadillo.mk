@@ -17,12 +17,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && \
-    cmake . -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
+    cd '$(1)' && cmake . -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 
-# note: don't use -Werror with GCC 4.7.0 and .1
-'$(TARGET)-g++' \
+    # note: don't use -Werror with GCC 4.7.0 and .1
+    '$(TARGET)-g++' \
         -W -Wall \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-armadillo.exe' \
         -larmadillo -llapack -lblas -lgfortran
