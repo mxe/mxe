@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.am'
     cd '$(1)' && aclocal -I m4 -I gl/m4 -I src/libopts/m4 --install
     cd '$(1)' && autoconf
-    cd '$(1)' && automake
+    cd '$(1)' && automake --add-missing
     # AI_ADDRCONFIG referenced by src/serv.c but not provided by mingw.
     # Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms737530%28v=vs.85%29.aspx
     cd '$(1)' && ./configure \
