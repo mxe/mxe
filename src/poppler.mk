@@ -47,7 +47,8 @@ define $(PKG)_BUILD
         --disable-gtk-doc-html \
         --disable-gtk-doc-pdf \
         --with-font-configuration=win32 \
-        LIBS="`'$(TARGET)-pkg-config' zlib liblzma --libs` -ljpeg"
+        LIBS="`'$(TARGET)-pkg-config' zlib liblzma --libs` -ljpeg" \
+        PKG_CONFIG_PATH_i686_pc_mingw32='$(PREFIX)/$(TARGET)/qt/lib/pkgconfig:$PKG_CONFIG_PATH_i686_pc_mingw32'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # Test program
