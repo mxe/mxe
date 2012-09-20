@@ -3,10 +3,10 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 6e89465f1e792f5d527708544cce1ef92ae4669b Mon Sep 17 00:00:00 2001
-From: MXE
+From 2192552e7e1321b985803eca20a433c19b9384d1 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 28 Oct 2011 09:23:41 +0200
-Subject: [PATCH 1/2] add missing static library linking
+Subject: [PATCH 1/4] add missing static library linking
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
@@ -22,13 +22,13 @@ index c45f8f3..57d0dbb 100644
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
 -- 
-1.7.9.2
+1.7.10.4
 
 
-From aa11a6f645ce93f80fbffd7e72c6964bdfd68542 Mon Sep 17 00:00:00 2001
-From: MXE
+From b11d2c59f0c8793717d8c718c8d4836fcae86a2b Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 24 Nov 2011 15:06:06 +0100
-Subject: [PATCH 2/2] disable doc and test (MXE specific)
+Subject: [PATCH 2/4] disable doc and test (MXE specific)
 
 
 diff --git a/Makefile.am b/Makefile.am
@@ -45,5 +45,52 @@ index 0afe4bd..da7436a 100644
  if HAVE_GUILE
  SUBDIRS += guile
 -- 
-1.7.9.2
+1.7.10.4
+
+
+From 49019993012db5eea6d9b3f37c4d2c9b4c619a8a Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 6 Jun 2012 09:57:24 +0200
+Subject: [PATCH 3/4] AM_PROG_AR for automake 1.12 compatibility
+
+Taken from
+http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
+
+diff --git a/configure.ac b/configure.ac
+index 83c3577..6e2897b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -37,6 +37,7 @@ dnl Checks for programs.
+ AC_PROG_CC
+ AM_PROG_AS
+ AC_PROG_CXX
++m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+ gl_EARLY
+ 
+ # For includes/gnutls/gnutls.h.in.
+-- 
+1.7.10.4
+
+
+From 82e1e1d59d357dfdebbe88575a440d0d7675533d Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 18 Jul 2012 00:58:59 +0200
+Subject: [PATCH 4/4] relax automake
+
+
+diff --git a/configure.ac b/configure.ac
+index 6e2897b..024d31e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.0.17], [bug-gnutls@gnu.org])
+ AC_CONFIG_AUX_DIR([build-aux])
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+-AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
++AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz -Wall -Wno-override])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ AM_CONFIG_HEADER(config.h)
+ 
+-- 
+1.7.10.4
 
