@@ -3,10 +3,10 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 18aa82eb060ca9ded9720091300a6c31af8382a9 Mon Sep 17 00:00:00 2001
+From 90387fb055e690a0d47c247f2ec8c2478bc7c942 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 28 Oct 2011 09:23:41 +0200
-Subject: [PATCH 1/5] add missing static library linking
+Subject: [PATCH 1/7] add missing static library linking
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
@@ -25,14 +25,14 @@ index c45f8f3..57d0dbb 100644
 1.7.10.4
 
 
-From bd254ee873a2f7d6027661beae5d88372f10aa93 Mon Sep 17 00:00:00 2001
+From 622969864d2c2ae3e96572bae6e64e3d585d86eb Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 24 Nov 2011 15:06:06 +0100
-Subject: [PATCH 2/5] disable doc and test (mingw-cross-env specific)
+Subject: [PATCH 2/7] disable doc and test (mingw-cross-env specific)
 
 
 diff --git a/Makefile.am b/Makefile.am
-index 0afe4bd..da7436a 100644
+index 2eebb77..1633fcb 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -23,7 +23,7 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --disable-valgrind-tests
@@ -48,24 +48,24 @@ index 0afe4bd..da7436a 100644
 1.7.10.4
 
 
-From dce8795ce40246c87fc83d1879f02c9923dba2ed Mon Sep 17 00:00:00 2001
+From 922dd8e34aeedfd2130339b037b92b61840d72eb Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
-Subject: [PATCH 3/5] Revert "make dist will also make lzip compressed
+Subject: [PATCH 3/7] Revert "make dist will also make lzip compressed
  tarball"
 
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
 
 diff --git a/configure.ac b/configure.ac
-index 0ad765c..74b778e 100644
+index ccd2729..8797ec7 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.0.19], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.1], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
--AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz dist-lzip -Wall -Werror -Wno-override])
-+AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
+-AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz dist-lzip -Wall -Werror -Wno-override])
++AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
  AM_CONFIG_HEADER(config.h)
  
@@ -73,16 +73,16 @@ index 0ad765c..74b778e 100644
 1.7.10.4
 
 
-From ae55a00b99a60b65e459ebe7ada215ace70b56db Mon Sep 17 00:00:00 2001
+From fcd06b20700bbf26b740d1c9d22750c829ef6216 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 Jun 2012 09:57:24 +0200
-Subject: [PATCH 4/5] AM_PROG_AR for automake 1.12 compatibility
+Subject: [PATCH 4/7] AM_PROG_AR for automake 1.12 compatibility
 
 Taken from
 http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
 
 diff --git a/configure.ac b/configure.ac
-index 74b778e..d045aaf 100644
+index 8797ec7..fb167f9 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -37,6 +37,7 @@ dnl Checks for programs.
@@ -97,25 +97,193 @@ index 74b778e..d045aaf 100644
 1.7.10.4
 
 
-From dd5b4ce15f94ba9bdbbab9d5036eea0a284e9715 Mon Sep 17 00:00:00 2001
+From 6b6c5670a25161c61c6bc24a45ede8a4daf6590b Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 18 Jul 2012 00:58:59 +0200
-Subject: [PATCH 5/5] relax automake
+Date: Thu, 16 Aug 2012 11:13:47 +0200
+Subject: [PATCH 5/7] allow automake warnings not to be errors
 
 
 diff --git a/configure.ac b/configure.ac
-index d045aaf..e9afeb4 100644
+index fb167f9..36b4026 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.0.19], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.1], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
--AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
-+AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz -Wall -Wno-override])
+-AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
++AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Wno-override])
  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
  AM_CONFIG_HEADER(config.h)
  
+-- 
+1.7.10.4
+
+
+From 46635a2529108e077ee2585bd3de5532415cf68b Mon Sep 17 00:00:00 2001
+From: Nikos Mavrogiannopoulos <nmav@gnutls.org>
+Date: Sat, 15 Sep 2012 13:43:28 +0200
+Subject: [PATCH 6/7] mingw32 support. Based on patch by LRN. (cherry picked
+ from commit 2cc740eb52abac318176c49f8e8358666c8457cd)
+
+
+diff --git a/lib/gnutls_global.c b/lib/gnutls_global.c
+index 8b84f46..4c9eabf 100644
+--- a/lib/gnutls_global.c
++++ b/lib/gnutls_global.c
+@@ -270,6 +270,13 @@ gnutls_global_init (void)
+       goto out;
+     }
+ 
++  result = gnutls_system_global_init ();
++  if (result < 0)
++    {
++      gnutls_assert ();
++      goto out;
++    }
++
+ #ifdef ENABLE_PKCS11
+   gnutls_pkcs11_init (GNUTLS_PKCS11_FLAG_AUTO, NULL);
+ #endif
+@@ -302,6 +309,7 @@ gnutls_global_deinit (void)
+       asn1_delete_structure (&_gnutls_pkix1_asn);
+       _gnutls_crypto_deregister ();
+       _gnutls_cryptodev_deinit ();
++      gnutls_system_global_deinit ();
+ #ifdef ENABLE_PKCS11
+       gnutls_pkcs11_deinit ();
+ #endif
+diff --git a/lib/system.c b/lib/system.c
+index 067f189..b22e07d 100644
+--- a/lib/system.c
++++ b/lib/system.c
+@@ -31,6 +31,11 @@
+ #ifdef _WIN32
+ # include <windows.h>
+ # include <wincrypt.h>
++#  if defined(__MINGW32__) && !defined(__MINGW64__) && __MINGW32_MAJOR_VERSION <= 3 && __MINGW32_MINOR_VERSION <= 20
++typedef PCCRL_CONTEXT WINAPI (*Type_CertEnumCRLsInStore) (HCERTSTORE hCertStore, PCCRL_CONTEXT pPrevCrlContext);
++static Type_CertEnumCRLsInStore Loaded_CertEnumCRLsInStore;
++static HMODULE Crypt32_dll;
++#  endif
+ 
+ #else
+ # ifdef HAVE_PTHREAD_LOCKS
+@@ -51,10 +56,7 @@
+ /* System specific function wrappers.
+  */
+ 
+-/* wrappers for write() and writev()
+- */
+ #ifdef _WIN32
+-
+ int
+ system_errno (gnutls_transport_ptr p)
+ {
+@@ -150,9 +152,6 @@ int fd = GNUTLS_POINTER_TO_INT(ptr);
+ /* Thread stuff */
+ 
+ #ifdef HAVE_WIN32_LOCKS
+-
+-
+-/* FIXME: win32 locks are untested */
+ static int
+ gnutls_system_mutex_init (void **priv)
+ {
+@@ -285,6 +284,41 @@ mutex_deinit_func gnutls_mutex_deinit = gnutls_system_mutex_deinit;
+ mutex_lock_func gnutls_mutex_lock = gnutls_system_mutex_lock;
+ mutex_unlock_func gnutls_mutex_unlock = gnutls_system_mutex_unlock;
+ 
++int
++gnutls_system_global_init ()
++{
++#ifdef _WIN32
++# if defined(__MINGW32__) && !defined(__MINGW64__) && __MINGW32_MAJOR_VERSION <= 3 && __MINGW32_MINOR_VERSION <= 20
++  HMODULE crypto;
++  crypto = LoadLibraryA ("Crypt32.dll");
++
++  if (crypto == NULL)
++    return GNUTLS_E_CRYPTO_INIT_FAILED;
++
++  Loaded_CertEnumCRLsInStore = (Type_CertEnumCRLsInStore) GetProcAddress (crypto, "CertEnumCRLsInStore");
++  if (Loaded_CertEnumCRLsInStore == NULL)
++    {
++      FreeLibrary (crypto);
++      return GNUTLS_E_CRYPTO_INIT_FAILED;
++    }
++
++  Crypt32_dll = crypto;
++# endif
++#endif
++  return 0;
++}
++
++void
++gnutls_system_global_deinit ()
++{
++#ifdef _WIN32
++# if defined(__MINGW32__) && !defined(__MINGW64__) && __MINGW32_MAJOR_VERSION <= 3 && __MINGW32_MINOR_VERSION <= 20
++  FreeLibrary (Crypt32_dll);
++# endif
++#endif
++}
++
++
+ #define CONFIG_PATH ".gnutls"
+ 
+ /* Returns a path to store user-specific configuration
+@@ -392,7 +426,7 @@ gnutls_x509_trust_list_add_system_trust(gnutls_x509_trust_list_t list,
+     if (store == NULL) return GNUTLS_E_FILE_ERROR;
+ 
+     cert = CertEnumCertificatesInStore(store, NULL);
+-    crl = CertEnumCRLsInStore(store, NULL);
++    crl = Loaded_CertEnumCRLsInStore(store, NULL);
+ 
+     while(cert != NULL) 
+       {
+@@ -414,7 +448,7 @@ gnutls_x509_trust_list_add_system_trust(gnutls_x509_trust_list_t list,
+             data.size = crl->cbCrlEncoded;
+             gnutls_x509_trust_list_add_trust_mem(list, NULL, &data, GNUTLS_X509_FMT_DER, tl_flags, tl_vflags);
+           }
+-        crl = CertEnumCRLsInStore(store, crl);
++        crl = Loaded_CertEnumCRLsInStore(store, crl);
+       }
+     CertCloseStore(store, 0);
+   }
+diff --git a/lib/system.h b/lib/system.h
+index 0178bd5..0afbdd2 100644
+--- a/lib/system.h
++++ b/lib/system.h
+@@ -71,4 +71,7 @@ struct timespec ts;
+ 
+ int _gnutls_find_config_path(char* path, size_t max_size);
+ 
++int gnutls_system_global_init ();
++void gnutls_system_global_deinit ();
++
+ #endif /* SYSTEM_H */
+-- 
+1.7.10.4
+
+
+From ee1fab5fb04a698fb50e6ba2b571424ef40ffbbe Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 20 Sep 2012 12:59:19 +0200
+Subject: [PATCH 7/7] add missing libs to Libs.private
+
+
+diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
+index 57d0dbb..02a6ef7 100644
+--- a/lib/gnutls.pc.in
++++ b/lib/gnutls.pc.in
+@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
+ URL: http://www.gnu.org/software/gnutls/
+ Version: @VERSION@
+ Libs: -L${libdir} -lgnutls
+-Libs.private: @LTLIBNETTLE@ @LIBS@
++Libs.private: @LTLIBNETTLE@ @LIBS@ -lcrypt32 -lws2_32
+ @GNUTLS_REQUIRES_PRIVATE@
+ Cflags: -I${includedir}
 -- 
 1.7.10.4
 

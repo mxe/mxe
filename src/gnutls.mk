@@ -2,17 +2,16 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_CHECKSUM := df55f60a0426de1f0efb5c1a902e209b069b3d51
+$(PKG)_CHECKSUM := 4badef78839de0d2606cb1767f44232fb606d941
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/gnu/gnutls/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc nettle zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
     grep '<a class="list name"' | \
-    $(SED) -n 's,.*<a[^>]*>gnutls_\([0-9]*_[0-9]*[02468]_[^<]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*<a[^>]*>gnutls_\([0-9]*_[0-9]*[012468]_[^<]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
     grep -v '^2\.' | \
     head -1
@@ -37,7 +36,7 @@ define $(PKG)_BUILD
         --with-included-libcfg \
         --without-p11-kit \
         --disable-silent-rules \
-        CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400' \
+        CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
         LIBS='-lws2_32' \
         ac_cv_prog_AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
