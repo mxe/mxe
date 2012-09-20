@@ -1,37 +1,18 @@
 This file is part of MXE.
 See index.html for further information.
 
---- armadillo-3.4.0/CMakeLists.txt.orig	2012-09-06 09:43:16.000000000 +0200
-+++ armadillo-3.4.0/CMakeLists.txt	2012-09-09 16:18:57.000000000 +0200
+diff -urN a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2012-09-14 16:43:20.000000000 +0200
++++ b/CMakeLists.txt	2012-09-20 20:39:05.073039124 +0200
 @@ -40,7 +40,7 @@
  set(ARMA_USE_ATLAS   false)
  set(ARMA_USE_BOOST   false)
  set(ARMA_USE_HDF5    false)
--set(ARMA_USE_WRAPPER true )
-+set(ARMA_USE_WRAPPER false)
+-set(ARMA_USE_WRAPPER true )  # set this to false if you prefer to directly link with LAPACK and/or BLAS (eg. -llapack -lblas) instead of -larmadillo
++set(ARMA_USE_WRAPPER false )  # set this to false if you prefer to directly link with LAPACK and/or BLAS (eg. -llapack -lblas) instead of -larmadillo
  
  
  if(WIN32)
-@@ -158,15 +158,15 @@
-   endif()
-   
- else()
-+
-+  if(ARMA_USE_LAPACK STREQUAL true)
-+    set(ARMA_LIBS ${ARMA_LIBS} ${LAPACK_LIBRARIES})
-+  endif()
-   
-   if(ARMA_USE_BLAS STREQUAL true)
-     set(ARMA_LIBS ${ARMA_LIBS} ${BLAS_LIBRARIES})
-   endif()
-   
--  if(ARMA_USE_LAPACK STREQUAL true)
--    set(ARMA_LIBS ${ARMA_LIBS} ${LAPACK_LIBRARIES})
--  endif()
--  
-   if(ARMA_USE_ATLAS STREQUAL true)
-     set(ARMA_LIBS ${ARMA_LIBS} ${CBLAS_LIBRARIES})
-     set(ARMA_LIBS ${ARMA_LIBS} ${CLAPACK_LIBRARIES})
 @@ -263,7 +263,7 @@
  #set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
  
