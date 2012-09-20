@@ -3,11 +3,11 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3ab74e63a8f2120b4f2c5557f5ffec6907337137
+$(PKG)_CHECKSUM := a464ba0f26eef24c29bcd1e7489421117fb9ee35
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := mingwrt w32api binutils gcc-gmp gcc-mpc gcc-mpfr
 
 define $(PKG)_UPDATE
