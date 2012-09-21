@@ -15,8 +15,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
-    cd '$(1)' && ./autogen.sh
+define $(PKG)_NATIVE_BUILD
     cp -Rp '$(1)' '$(1).native'
 
     # native build of libiconv (used by glib-genmarshal)
@@ -51,7 +50,23 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)' glib-compile-resources
     $(INSTALL) -m755 '$(1).native/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m755 '$(1).native/gio/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
+endef
 
+define $(PKG)_SYMLINK
+    ln -sf `which glib-genmarshal`        '$(PREFIX)/$(TARGET)/bin/'
+    ln -sf `which glib-compile-schemas`   '$(PREFIX)/$(TARGET)/bin/'
+    ln -sf `which glib-compile-resources` '$(PREFIX)/$(TARGET)/bin/'
+endef
+
+define $(PKG)_BUILD
+    cd '$(1)' && ./autogen.sh
+    rm -f '$(PREFIX)/$(TARGET)/bin/glib-*'
+    $(if $(findstring y,\
+            $(shell [ -x "`which glib-genmarshal`" ] && \
+                    [ -x "`which glib-compile-schemas`" ] && \
+                    [ -x "`which glib-compile-resources`" ] && echo y)), \
+        $($(PKG)_SYMLINK), \
+        $($(PKG)_NATIVE_BUILD))
     # cross build
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
