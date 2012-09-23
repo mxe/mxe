@@ -1,96 +1,11 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 29e0f572f1c1875089601cb0dcae3bd1c3ea7118 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 18 Jun 2012 13:02:03 +0200
-Subject: [PATCH 1/2] fix case of winsock2.h which matters when cross-building
-
-taken from
-http://sourceforge.net/mailarchive/message.php?msg_id=29421539
----
- src/Wt/Auth/HashFunction.C |    2 +-
- src/Wt/Utils.C             |    2 +-
- src/http/Configuration.C   |    4 ++--
- src/web/TimeUtil.C         |    2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/src/Wt/Auth/HashFunction.C b/src/Wt/Auth/HashFunction.C
-index 6d764fa..34615e0 100644
---- a/src/Wt/Auth/HashFunction.C
-+++ b/src/Wt/Auth/HashFunction.C
-@@ -15,7 +15,7 @@
- #ifndef WIN32
- #include <arpa/inet.h>
- #else
--#include <Winsock2.h>
-+#include <winsock2.h>
- #endif
- #endif
- 
-diff --git a/src/Wt/Utils.C b/src/Wt/Utils.C
-index 02cdf7d..75fca49 100644
---- a/src/Wt/Utils.C
-+++ b/src/Wt/Utils.C
-@@ -13,7 +13,7 @@
- #ifndef WIN32
- #include <arpa/inet.h>
- #else
--#include <Winsock2.h>
-+#include <winsock2.h>
- #endif
- 
- #include "Wt/WLogger"
-diff --git a/src/http/Configuration.C b/src/http/Configuration.C
-index 6312ae6..3ebf772 100644
---- a/src/http/Configuration.C
-+++ b/src/http/Configuration.C
-@@ -18,13 +18,13 @@
- #endif
- #ifdef WIN32
- #include <process.h> // for getpid()
--#include <Winsock2.h> // for gethostname()
-+#include <winsock2.h> // for gethostname()
- #endif
- #include <iostream>
- #include <fstream>
- 
- #ifdef __CYGWIN__
--#include <Winsock2.h> // for gethostname()
-+#include <winsock2.h> // for gethostname()
- #endif
- 
- namespace Wt {
-diff --git a/src/web/TimeUtil.C b/src/web/TimeUtil.C
-index fbada4a..94c2423 100644
---- a/src/web/TimeUtil.C
-+++ b/src/web/TimeUtil.C
-@@ -1,7 +1,7 @@
- #include "TimeUtil.h"
- 
- #ifdef _MSC_VER
--#include "Winsock2.h"
-+#include "winsock2.h"
- #pragma comment (lib, "winmm.lib")
- namespace {
- #include <windows.h>
--- 
-1.7.10.4
-
-
-From f64c3140b11fe2a6d353950229b4edae6ec306a1 Mon Sep 17 00:00:00 2001
+From 52fc36d3d87c8fc3df1b4bb005ef39bd61db2fef Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 18 Jun 2012 13:23:21 +0200
-Subject: [PATCH 2/2] fixes for mxe
+Subject: [PATCH] fixes for mxe
 
----
- cmake/WtFindBoost-vintage.txt |    1 +
- cmake/WtFindGm.txt            |    6 ++++++
- cmake/WtFindHaru.txt          |   12 ++++++++++++
- cmake/WtFindPangoFt2.txt      |   14 +++++++++-----
- cmake/WtFindSsl.txt           |    5 +++++
- src/Wt/WRasterImage.C         |    9 ---------
- 6 files changed, 33 insertions(+), 14 deletions(-)
 
 diff --git a/cmake/WtFindBoost-vintage.txt b/cmake/WtFindBoost-vintage.txt
 index e48b21e..1198139 100644

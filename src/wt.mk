@@ -3,10 +3,10 @@
 
 PKG             := wt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 6102a9a2be36cedf41aa6095de6a2a9505629fd6
+$(PKG)_CHECKSUM := 30f754d631905c4e7ef55ad095b6e480bada642f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/witty/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/witty/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost openssl libharu graphicsmagick pango postgresql sqlite
 
 define $(PKG)_UPDATE
