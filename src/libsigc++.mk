@@ -3,7 +3,7 @@
 
 PKG             := libsigc++
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 493d6e60c08bd8ec3688478d176e04b5713ced2a
+$(PKG)_CHECKSUM := bbec3d8c54a17f19d63f9decbb91b0d79ea0d02e
 $(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsigc++-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libsigc++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
