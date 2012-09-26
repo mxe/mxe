@@ -3,7 +3,7 @@
 
 PKG             := postgresql
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 6ab154052dd62bb9b0cf2cd666384f7b25eefaf5
+$(PKG)_CHECKSUM := cea9601b3acd1484fd98441b49a15ea1c42057ec
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -14,7 +14,7 @@ define $(PKG)_UPDATE
     grep 'refs/tags/REL9[0-9_]*"' | \
     $(SED) 's,.*refs/tags/REL\(.*\)".*,\1,g;' | \
     $(SED) 's,_,.,g' | \
-    grep -v '^9\.\0' | \
+    grep -v '^9\.[01]' | \
     head -1
 endef
 
