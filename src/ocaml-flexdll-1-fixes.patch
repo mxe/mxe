@@ -1,0 +1,57 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 78c4c5447fb711713ac56774f0751485b25df4bd Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 23 Jun 2012 22:25:50 +0200
+Subject: [PATCH] modifications for cross-compilation
+
+part of this patch is taken from
+http://code.google.com/p/flexdll/issues/detail?id=2
+
+diff --git a/Makefile b/Makefile
+index 81b2214..7a15574 100644
+--- a/Makefile
++++ b/Makefile
+@@ -43,12 +43,12 @@ MSVCC64 = $(MSVCC_ROOT)/amd64/cl.exe /nologo /MD -D_CRT_SECURE_NO_DEPRECATE /GS-
+ CYGCC = gcc 
+ OCAMLOPT = ocamlopt
+ #OCAMLOPT = FLEXLINKFLAGS=-real-manifest ocamlopt
+-#LINKFLAGS = unix.cmxa
++LINKFLAGS = unix.cmxa
+ 
+ #ifeq ($(SYSTEM), win64)
+ #LINKFLAGS=
+ #else
+-LINKFLAGS = -ccopt "-link version_res.o"
++#LINKFLAGS = -ccopt "-link version_res.o"
+ #endif
+ 
+ support:
+@@ -62,7 +62,7 @@ build_mingw64: flexdll_mingw64.o flexdll_initer_mingw64.o
+ 
+ OBJS = version.ml coff.ml cmdline.ml create_dll.ml reloc.ml
+ 
+-flexlink.exe: $(OBJS) version_res.o
++flexlink.exe: $(OBJS)
+ 	@echo Building flexlink.exe with TOOLCHAIN=$(TOOLCHAIN)
+ 	rm -f flexlink.exe
+ 	$(OCAMLOPT) -w -105 -o flexlink.exe $(LINKFLAGS) $(OBJS)
+diff --git a/reloc.ml b/reloc.ml
+index 1ac7e38..1187f39 100644
+--- a/reloc.ml
++++ b/reloc.ml
+@@ -977,7 +977,7 @@ let setup_toolchain () =
+       !dirs @
+       [
+        Filename.dirname (get_output1 (!gcc ^ " -print-libgcc-file-name"));
+-       get_output1 (!gcc ^ " -print-sysroot") ^ "/mingw/lib";
++       (*get_output1 (!gcc ^ " -print-sysroot") ^ "/mingw/lib";*)
+       ];
+     default_libs :=
+       ["-lmingw32"; "-lgcc"; "-lmoldname"; "-lmingwex"; "-lmsvcrt";
+-- 
+1.7.9.5
+
