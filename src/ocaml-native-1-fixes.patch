@@ -1,0 +1,293 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 71a88993df13ccaaab5957ad2a0aef3adf1d49ff Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 3 Oct 2012 09:25:11 +0200
+Subject: [PATCH 1/5] findlib.ml
+
+
+diff --git a/ocamlbuild/findlib.ml b/ocamlbuild/findlib.ml
+index b5ef878..77454ed 100644
+--- a/ocamlbuild/findlib.ml
++++ b/ocamlbuild/findlib.ml
+@@ -44,7 +44,7 @@ let report_error e =
+   prerr_endline (string_of_error e);
+   exit 2
+ 
+-let ocamlfind = "ocamlfind"
++let ocamlfind = "@target@-ocamlfind"
+ 
+ type package = {
+   name: string;
+-- 
+1.7.2.5
+
+
+From a1a25210b44d5c7064d5c7a7002676a114b5f539 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 3 Oct 2012 09:26:40 +0200
+Subject: [PATCH 2/5] main.ml : warnings on use of option -use-ocamlfind
+
+
+diff --git a/ocamlbuild/main.ml b/ocamlbuild/main.ml
+index 3b9bd89..7045867 100644
+--- a/ocamlbuild/main.ml
++++ b/ocamlbuild/main.ml
+@@ -152,6 +152,14 @@ let proceed () =
+   Ocaml_specific.init ();
+   Hooks.call_hook Hooks.After_rules;
+ 
++  if not !Options.use_ocamlfind then begin
++	if !Param_tags.ocamlfind_tags_used <> StringSet.empty then 
++	  Log.eprintf "Warning: Tag(s) '%s' can only work with option -use-ocamlfind"
++		(String.concat "," (StringSet.elements !Param_tags.ocamlfind_tags_used));
++	if !Options.ocaml_pkgs <> [] then
++	  Log.eprintf "Warning: Options -pkg and -pkgs only work with -use-ocamlfind"
++  end;
++
+   Param_tags.init ();
+ 
+   Sys.chdir newpwd;
+-- 
+1.7.2.5
+
+
+From aa7642e19ec9a81bcdda382d4682ab20df0013ba Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 3 Oct 2012 09:29:23 +0200
+Subject: [PATCH 3/5] param_tags : use of special tags considering whether state of option -use-ocamlfind
+
+
+diff --git a/ocamlbuild/param_tags.ml b/ocamlbuild/param_tags.ml
+index 02001de..1aae306 100644
+--- a/ocamlbuild/param_tags.ml
++++ b/ocamlbuild/param_tags.ml
+@@ -12,15 +12,24 @@
+ 
+ (* Original author: Romain Bardou *)
+ 
+-module StringSet = Set.Make(String)
++(* 1 : 'acknowledge' while reading user input;
++   2 : 'declare '    to declare what tags are parameterised tags
++   3 : 'init'        to check acknowledged vs declared tags,
++   and perform declared actions *)
++
++module StringSet = My_std.StringSet
+ module SSOSet = Set.Make(struct
+   type t = string * string option
+   let compare = Pervasives.compare
+ end)
+ 
+-(* tag name -> tag action (string -> unit) *)
++(* tag (string) -> action (string -> unit) *)
++(* all parameterised tags must be declared here *)
+ let declared_tags = Hashtbl.create 17
+ 
++(* set of tags that were read (see 'acknowledge'): 
++   ("package",Some "lablgtk2") if "package(lablgtk2)" was read ;
++   ("foo",None) if "foo" was read *)
+ let acknowledged_tags = ref SSOSet.empty
+ 
+ let only_once f =
+@@ -32,25 +41,32 @@ let only_once f =
+       f param
+     end
+ 
+-let declare name action =
+-  Hashtbl.add declared_tags name (only_once action)
++let declare tag action =
++  Hashtbl.add declared_tags tag (only_once action)
+ 
+-let acknowledge tag =
+-  let tag = Lexers.tag_gen (Lexing.from_string tag) in
+-  acknowledged_tags := SSOSet.add tag !acknowledged_tags
++let ocamlfind_tags_used = ref StringSet.empty
+ 
+-let really_acknowledge (name, param) =
+-  match param with
+-    | None ->
+-        if Hashtbl.mem declared_tags name then
+-          Log.eprintf "Warning: tag %S expects a parameter" name
+-    | Some param ->
+-        let actions = List.rev (Hashtbl.find_all declared_tags name) in
+-        if actions = [] then
+-          Log.eprintf "Warning: tag %S does not expect a parameter, but is used with parameter %S" name param;
+-        List.iter (fun f -> f param) actions
++let acknowledge tag_string =
++  let sso = Lexers.tag_gen (Lexing.from_string tag_string) in
++  let tag = fst sso in
++  (match tag with
++  | "package" | "predicate" | "syntax" -> 
++	ocamlfind_tags_used := StringSet.add tag !ocamlfind_tags_used
++  | _ -> ()
++  );
++  acknowledged_tags := SSOSet.add sso !acknowledged_tags
+ 
+ let init () =
+-  SSOSet.iter really_acknowledge !acknowledged_tags
++  SSOSet.iter (fun (tag,param) ->
++	match param with
++    | None ->
++      if Hashtbl.mem declared_tags tag then
++        Log.eprintf "Warning: tag %S expects a parameter" tag
++    | Some param ->
++      let actions = List.rev (Hashtbl.find_all declared_tags tag) in
++      if actions = [] then
++        Log.eprintf "Warning: tag %S does not expect a parameter, but is used with parameter %S" tag param;
++      List.iter (fun f -> f param) actions
++  ) !acknowledged_tags
+ 
+ let make = Printf.sprintf "%s(%s)"
+-- 
+1.7.2.5
+
+
+From e1f2adad03b52d5b71dea7fd6e2169d361366d60 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 3 Oct 2012 09:30:21 +0200
+Subject: [PATCH 4/5] param_tags : use of special tags considering whether state of option -use-ocamlfind (mli)
+
+
+diff --git a/ocamlbuild/param_tags.mli b/ocamlbuild/param_tags.mli
+index a0047af..0839534 100644
+--- a/ocamlbuild/param_tags.mli
++++ b/ocamlbuild/param_tags.mli
+@@ -12,29 +12,38 @@
+ 
+ (* Original author: Romain Bardou *)
+ 
++(** just a check for use of tag "package" that implies ocamlfind use *)
++val ocamlfind_tags_used : My_std.StringSet.t ref
++
+ val declare: string -> (string -> unit) -> unit
+   (** Declare a parameterized tag.
+ 
+-[declare "name" action]: [action "param"] will be executed (once) by [init]
+-if a tag of the form [name(param)] is [acknowledge]d.
+-
+-A given tag may be declared several times with different actions. All actions
+-will be executed, in the order they were declared. *)
++[declare tag action] declares [tag] as a parameterized tag.
++A given tag may be declared several times with different actions.
++[init] will execute all actions in the order they were declared. 
++Example : [declare "package" action] *)
+ 
+ val acknowledge: string -> unit
+   (** Acknowledge a tag.
+ 
+-If the tag is of the form [X(Y)], and have been declared using [declare],
+-then the actions given using [declare] will be executed with [Y] as parameter
+-when [init] is executed. The action will only be called once per
+-acknowledged parameter. *)
++[acknowledge "package(lablgtk2)"] will store the tag "package" with
++parameter [Some "lablgtk2"].
++[acknowledge "annot"] will store the tag "annot" with 
++parameter [None] *)
+ 
+ val init: unit -> unit
+   (** Initialize parameterized tags.
+ 
+-Call this function once all tags have been [declare]d and [acknowledge]d.
++[init] checks in turn each acknowledged tag along with its parameter :
++- if the tag is declared (e.g "package"), and parameter=Some "lablgtk2",
++calls declared actions (only once) on "lablgtk2".
++- if the tag is not declared (e.g "annot"), and parameter=None, nothing is done
++- if the tag is not declared, but there is a parameter, raise a warning
++- if the tag is declared, but there is no parameter, raise a warning
+ If you [declare] or [acknowledge] a tag after having called [init], this will
+-have no effect. [init] should only be called once. *)
++have no effect. 
++[init] must be called once all tags have been marked with [declare] and
++[acknowledge]. It should only be called once. *)
+ 
+ val make: Tags.elt -> string -> Tags.elt
+   (** Make a parameterized tag instance.
+-- 
+1.7.2.5
+
+
+From 82118f5d8e0cb7a0193479d0e7459d265692551a Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 3 Oct 2012 09:31:13 +0200
+Subject: [PATCH 5/5] options : support for prefixed ocaml-tools with ocamlfind
+
+
+diff --git a/ocamlbuild/options.ml b/ocamlbuild/options.ml
+index 1be4b63..48f6648 100644
+--- a/ocamlbuild/options.ml
++++ b/ocamlbuild/options.ml
+@@ -39,16 +39,17 @@ let use_menhir = ref false
+ let catch_errors = ref true
+ let use_ocamlfind = ref false
+ 
+-let mk_virtual_solvers =
++let mk_virtual_solvers target =
+   let dir = Ocamlbuild_where.bindir in
+   List.iter begin fun cmd ->
+-    let opt = cmd ^ ".opt" in
++	let target_cmd = target^cmd in
++    let opt = target_cmd ^ ".opt" in
+     let a_opt = A opt in
+-    let a_cmd = A cmd in
++    let a_cmd = A target_cmd in
+     let search_in_path = memo Command.search_in_path in
+     let solver () =
+       if sys_file_exists !dir then
+-        let long = filename_concat !dir cmd in
++        let long = filename_concat !dir target_cmd in
+         let long_opt = long ^ ".opt" in
+         if file_or_exe_exists long_opt then A long_opt
+         else if file_or_exe_exists long then A long
+@@ -61,9 +62,9 @@ let mk_virtual_solvers =
+   end
+ 
+ let () =
+-  mk_virtual_solvers
+-    ["ocamlc"; "ocamlopt"; "ocamldep"; "ocamldoc";
+-    "ocamlyacc"; "menhir"; "ocamllex"; "ocamlmklib"; "ocamlmktop"; "ocamlfind"]
++  mk_virtual_solvers "@target@-" 
++	["ocamlc"; "ocamlopt"; "ocamldep"; "ocamlmklib"; "ocamlmktop"; "ocamlfind"];
++  mk_virtual_solvers "" ["ocamldoc"; "ocamlyacc"; "menhir"; "ocamllex"; "ocamlfind"]
+ let ocamlc = ref (V"OCAMLC")
+ let ocamlopt = ref (V"OCAMLOPT")
+ let ocamldep = ref (V"OCAMLDEP")
+@@ -73,7 +74,7 @@ let ocamllex = ref (V"OCAMLLEX")
+ let ocamlmklib = ref (V"OCAMLMKLIB")
+ let ocamlmktop = ref (V"OCAMLMKTOP")
+ let ocamlrun = ref N
+-let ocamlfind x = S[V"OCAMLFIND"; x]
++let ocamlfind = (V"OCAMLFIND")
+ let program_to_execute = ref false
+ let must_clean = ref false
+ let show_documentation = ref false
+@@ -261,11 +262,19 @@ let init () =
+     (* TODO: warning message when using an option such as -ocamlc *)
+     (* Note that plugins can still modify these variables After_options.
+        This design decision can easily be changed. *)
+-    ocamlc := ocamlfind & A"ocamlc";
+-    ocamlopt := ocamlfind & A"ocamlopt";
+-    ocamldep := ocamlfind & A"ocamldep";
+-    ocamldoc := ocamlfind & A"ocamldoc";
+-    ocamlmktop := ocamlfind & A"ocamlmktop";
++	List.iter (fun (option,string) ->
++	  (match !option with
++	  | Sh s
++	  | A s ->
++		Log.eprintf "Warning : Command '-%s %s' overidden by option -use-ocamlfind" string s
++	  | _ -> ()
++	  );
++	  option := S[ocamlfind; A string]
++	) [(ocamlc,"ocamlc");
++	   (ocamlopt,"ocamlopt");
++	   (ocamldep,"ocamldep");
++	   (ocamldoc,"ocamldoc");
++	   (ocamlmktop,"ocamlmktop")]
+   end;
+ 
+   let reorder x y = x := !x @ (List.concat (List.rev !y)) in
+-- 
+1.7.2.5
+
