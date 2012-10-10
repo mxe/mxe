@@ -3,9 +3,9 @@
 
 PKG             := curl
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 51f563587720b71047b6e307412d49ce24ad7bfb
+$(PKG)_CHECKSUM := f75cdcd81ae3cb1eef1b5ff9e736a46cb1d6d2c9
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
-$(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.lzma
 $(PKG)_URL      := http://curl.haxx.se/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libidn libssh2
 
