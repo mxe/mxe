@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         --with-gnutls \
         --with-libidn \
         --enable-sspi \
+        --enable-ipv6 \
         --with-libssh2
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
