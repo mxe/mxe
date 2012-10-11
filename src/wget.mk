@@ -21,8 +21,6 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --enable-static \
-        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-ssl=gnutls
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
