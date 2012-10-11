@@ -10,10 +10,8 @@ $(PKG)_URL      := ftp://sourceware.org/pub/pthreads-win32/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' | \
-    $(SED) -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | \
-    tr '.' '-' | \
-    head -1
+    $(WGET) -q -O- 'ftp://sourceware.org/pub/pthreads-win32/dll-latest/include/pthread.h' | \
+    $(SED) -n 's/^#define PTW32_VERSION \([^,]*\),\([^,]*\),\([^,]*\),.*/\1-\2-\3/p;'
 endef
 
 define $(PKG)_BUILD
