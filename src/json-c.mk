@@ -10,9 +10,8 @@ $(PKG)_URL      := https://github.com/downloads/$(PKG)/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) - q -O 'https://github.com/json-c/json-c/downloads' | \
-    grep '<a href="/downloads/json-c/json-c/' | \
-    $(SED) -n -s,.*href="/downloads/json-c/json-c/json-c-\([0-9.]*\).tar.gz,\1,p' | \
+    $(WGET) -q -O- 'https://github.com/json-c/json-c/downloads' | \
+    $(SED) -n 's,.*href="/downloads/json-c/json-c/json-c-\([0-9.]*\).tar.gz.*,\1,p' | \
     head -1
 endef
 
