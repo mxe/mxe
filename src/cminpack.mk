@@ -10,7 +10,7 @@ $(PKG)_URL      := http://devernay.free.fr/hacks/cminpack/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://devernay.free.fr/hacks/cminpack/cminpack.html' | \
+    $(WGET) -q -O- 'http://devernay.free.fr/hacks/cminpack/index.html' | \
     $(SED) -n 's,.*cminpack-\([0-9.]*\)\.tar.*,\1,p' | \
     head -1
 endef
