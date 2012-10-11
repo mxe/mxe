@@ -11,7 +11,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.portaudio.com/download.html' | \
-    $(SED) -n 's,.*pa_stable_v\([0-9][^>]*\)\.tgz,\1,p' | \
+    $(SED) -n 's,.*pa_stable_v\([0-9][^>]*\)\.tgz.*,\1,p' | \
     head -1
 endef
 
