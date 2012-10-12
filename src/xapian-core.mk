@@ -9,6 +9,12 @@ $(PKG)_FILE     := xapian-core-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://oligarchy.co.uk/xapian/$($(PKG)_VERSION)/xapian-core-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc zlib
 
+define $(PKG)_UPDATE
+    $(WGET) -q -O- http://xapian.org/download | \
+    $(SED) -n 's,.*<a HREF="http://oligarchy.co.uk/xapian/\([^/]*\)/xapian-core[^"]*">.*,\1,p' | \
+    head -1
+endef
+
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
