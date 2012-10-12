@@ -3,7 +3,7 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 7cc6a28af1fde387b055cfafe2b73f7e33b48acc Mon Sep 17 00:00:00 2001
+From de80b70d5d0e687d9c07f5ca270bb2ceb93d4dfa Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 28 Oct 2011 09:23:41 +0200
 Subject: [PATCH 1/6] add missing static library linking
@@ -25,19 +25,19 @@ index c45f8f3..57d0dbb 100644
 1.7.10.4
 
 
-From b444c40c36670329480354b1e51b4f24d4f617bf Mon Sep 17 00:00:00 2001
+From 69da51d8c6b8720503a8b6220baf6a653d3e77b0 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 24 Nov 2011 15:06:06 +0100
 Subject: [PATCH 2/6] disable doc and test (mingw-cross-env specific)
 
 
 diff --git a/Makefile.am b/Makefile.am
-index e866bd3..8fc5d5d 100644
+index 74208b1..c46e900 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -23,7 +23,7 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --disable-valgrind-tests
  
- SUBDIRS = gl lib extra po
+ SUBDIRS = gl lib extra libdane po
  
 -SUBDIRS += src doc tests
 +SUBDIRS += src
@@ -48,7 +48,7 @@ index e866bd3..8fc5d5d 100644
 1.7.10.4
 
 
-From f7f6a76620f805a7c5f207a1870049719f66d855 Mon Sep 17 00:00:00 2001
+From 50868df9034b6e8ad459363edaca1436794e7212 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
 Subject: [PATCH 3/6] Revert "make dist will also make lzip compressed
@@ -57,10 +57,10 @@ Subject: [PATCH 3/6] Revert "make dist will also make lzip compressed
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
 
 diff --git a/configure.ac b/configure.ac
-index d3bec26..23a4d6a 100644
+index 8d337ee..8c0a76e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.2], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.3], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
@@ -73,7 +73,7 @@ index d3bec26..23a4d6a 100644
 1.7.10.4
 
 
-From 51a9cc85a5fda679b63a70fd6d22ccceef02fcc2 Mon Sep 17 00:00:00 2001
+From 613dff6244621ad8eef5afdf38edc16f90a275a4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 Jun 2012 09:57:24 +0200
 Subject: [PATCH 4/6] AM_PROG_AR for automake 1.12 compatibility
@@ -82,7 +82,7 @@ Taken from
 http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
 
 diff --git a/configure.ac b/configure.ac
-index 23a4d6a..63760b3 100644
+index 8c0a76e..14e6da2 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -37,6 +37,7 @@ dnl Checks for programs.
@@ -97,17 +97,17 @@ index 23a4d6a..63760b3 100644
 1.7.10.4
 
 
-From e91df6db4077b54c0003ca23ace3eba48402af1c Mon Sep 17 00:00:00 2001
+From 37a6a85032d3ef7bb4ec05c106da01b2354778f4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 16 Aug 2012 11:13:47 +0200
 Subject: [PATCH 5/6] allow automake warnings not to be errors
 
 
 diff --git a/configure.ac b/configure.ac
-index 63760b3..4f7622a 100644
+index 14e6da2..0e427ce 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.2], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.3], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
@@ -120,7 +120,7 @@ index 63760b3..4f7622a 100644
 1.7.10.4
 
 
-From 969e618b7945e786fe23bc5a3643bf5e9e8adbd4 Mon Sep 17 00:00:00 2001
+From a1907c3679fc845ac5b241d25c86fb1106f63f84 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 20 Sep 2012 12:59:19 +0200
 Subject: [PATCH 6/6] add missing libs to Libs.private
