@@ -1,43 +1,40 @@
-From 971738e2fc2bc3faae52952dd08ee08b34ff4b86 Mon Sep 17 00:00:00 2001
-From: Matthias Gehre <M.Gehre@gmx.de>
-Date: Mon, 9 Jul 2012 13:13:49 +0200
-Subject: [PATCH 1/4] Rename DllMain to pango_DllMain
+This file is part of MXE.
+See index.html for further information.
 
----
- pango/pango-utils.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+From 6dc99b57932d52db33413b9f054ef8843f697ec0 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 29 Sep 2010 00:52:59 +0200
+Subject: [PATCH 1/4] s,DllMain,static _disabled_DllMain,
+
 
 diff --git a/pango/pango-utils.c b/pango/pango-utils.c
-index c68e2d4..47ca433 100644
+index 18ffa26..aac59ab 100644
 --- a/pango/pango-utils.c
 +++ b/pango/pango-utils.c
-@@ -692,12 +692,12 @@ pango_config_key_get (const char *key)
+@@ -691,12 +691,12 @@ pango_config_key_get (const char *key)
  
  #ifdef G_OS_WIN32
  
 -/* DllMain function needed to tuck away the DLL handle */
-+/* pango_DllMain function needed to tuck away the DLL handle */
++/* static _disabled_DllMain function needed to tuck away the DLL handle */
  
- static HMODULE pango_dll;
+ static HMODULE pango_dll; /* MT-safe */
  
  BOOL WINAPI
 -DllMain (HINSTANCE hinstDLL,
-+pango_DllMain (HINSTANCE hinstDLL,
++static _disabled_DllMain (HINSTANCE hinstDLL,
  	 DWORD     fdwReason,
  	 LPVOID    lpvReserved)
  {
 -- 
-1.7.9.5
+1.7.10.4
 
 
-From 779c533bf4354cbc747d82532f4798e6ef006d1b Mon Sep 17 00:00:00 2001
+From e5359406f68e5bb4bd5f1b9516f9d28f41e8b38e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 29 Sep 2010 00:50:08 +0200
 Subject: [PATCH 2/4] add missing lib to pango.pc for static linking
 
----
- pango.pc.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/pango.pc.in b/pango.pc.in
 index 17a8b7a..16c5981 100644
@@ -51,24 +48,20 @@ index 17a8b7a..16c5981 100644
 +Libs: -L${libdir} -lpango-@PANGO_API_VERSION@ @PKGCONFIG_MATH_LIBS@ -lusp10
  Cflags: -I${includedir}/pango-1.0
 -- 
-1.7.9.5
+1.7.10.4
 
 
-From 4340125c6b7f26106f7f021ec4c9612f7384e6c1 Mon Sep 17 00:00:00 2001
+From 8a4c71a44d76896fcdb610f50eaa07be3d108c3d Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 15 Jun 2012 16:21:40 +0200
 Subject: [PATCH 3/4] do not force shared for win32
 
----
- configure.in        |   14 --------------
- modules/Makefile.am |   17 +----------------
- 2 files changed, 1 insertion(+), 30 deletions(-)
 
 diff --git a/configure.in b/configure.in
-index 8362280..6a000cc 100644
+index a0e0057..fe1f7fe 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -147,20 +147,6 @@ CXXFLAGS="$CXXFLAGS -fno-rtti -fno-exceptions"
+@@ -142,20 +142,6 @@ AC_CHECK_HEADERS(unistd.h sys/mman.h)
  # Win32 stuff
  #
  
@@ -90,10 +83,10 @@ index 8362280..6a000cc 100644
  dnl when using libtool 2.x create libtool early, because it's used in configure
  m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
 diff --git a/modules/Makefile.am b/modules/Makefile.am
-index dc8a2c8..dc22e59 100644
+index 73b42f4..19c5a4f 100644
 --- a/modules/Makefile.am
 +++ b/modules/Makefile.am
-@@ -26,22 +26,7 @@ RUN_QUERY_MODULES_TEST=true
+@@ -21,22 +21,7 @@ RUN_QUERY_MODULES_TEST=true
  all-local: pango.modules
  endif
  
@@ -118,22 +111,17 @@ index dc8a2c8..dc22e59 100644
  uninstall-local:
  	$(RM) $(DESTDIR)$(sysconfdir)/pango/pango.modules
 -- 
-1.7.9.5
+1.7.10.4
 
 
-From ff735b2f71b07e7216856a473ed283eb24dd012a Mon Sep 17 00:00:00 2001
+From ed84a78833202e38407f47e1fcd28fa8e612d536 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 18 Jun 2012 21:36:53 +0200
 Subject: [PATCH 4/4] kill gtk-doc (MXE specific)
 
----
- Makefile.am  |    2 +-
- autogen.sh   |    8 --------
- configure.in |    9 +--------
- 3 files changed, 2 insertions(+), 17 deletions(-)
 
 diff --git a/Makefile.am b/Makefile.am
-index b0b56ec..663503c 100644
+index 1ac018a..1999723 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -1,6 +1,6 @@
@@ -164,10 +152,10 @@ index bc7c59c..4e1918c 100755
  if test -z $AUTORECONF; then
  	echo "*** No autoreconf found, please install it ***"
 diff --git a/configure.in b/configure.in
-index 6a000cc..e7538f6 100644
+index fe1f7fe..23c4311 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -615,14 +615,7 @@ dnl **************************
+@@ -568,14 +568,7 @@ dnl **************************
  dnl *** Checks for gtk-doc ***
  dnl **************************
  
@@ -184,5 +172,5 @@ index 6a000cc..e7538f6 100644
  AC_ARG_ENABLE(man,
                AC_HELP_STRING([--enable-man],
 -- 
-1.7.9.5
+1.7.10.4
 
