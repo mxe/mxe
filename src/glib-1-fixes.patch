@@ -3,21 +3,17 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 2a15b5d8c570d34e44d315116219bcd731054a54 Mon Sep 17 00:00:00 2001
+From eacb3702acc44de8e5a3c9a324cb9a81333e3737 Mon Sep 17 00:00:00 2001
 From: "a@mxe.cc" <a@mxe.cc>
 Date: Thu, 23 Sep 2010 21:41:51 +0200
 Subject: [PATCH 1/8] optional gettext
 
----
- configure.ac |    4 ++--
- glib/gi18n.h |    5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index cadd925..241284d 100644
+index 054485f..9321fbc 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -479,8 +479,8 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
+@@ -482,8 +482,8 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
  GLIB_GNU_GETTEXT
  
  if test "$gt_cv_have_gettext" != "yes" ; then
@@ -49,14 +45,11 @@ index c710046..269bfdf 100644
 1.7.10.4
 
 
-From 6e19d772238eb429fe0ea77b65dbc9d8a5d89afa Mon Sep 17 00:00:00 2001
+From c88a15fbac3076f772894ebcd2003786b37603d4 Mon Sep 17 00:00:00 2001
 From: "a@mxe.cc" <a@mxe.cc>
 Date: Thu, 23 Sep 2010 21:42:46 +0200
 Subject: [PATCH 2/8] fix tool paths
 
----
- glib-2.0.pc.in |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
 index 4a8898e..5164bae 100644
@@ -79,18 +72,14 @@ index 4a8898e..5164bae 100644
 1.7.10.4
 
 
-From 556504bac07f4d80c0d9e50be1090f3ae02a653b Mon Sep 17 00:00:00 2001
+From fdf03eb9fff0532fa6dea660a5665242f6ccac9e Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:25:01 +0200
 Subject: [PATCH 3/8] Avoid DllMain symbol conflict when linking statically
 
----
- gio/giomodule.c  |    6 +-----
- glib/glib-init.c |    6 +++---
- 2 files changed, 4 insertions(+), 8 deletions(-)
 
 diff --git a/gio/giomodule.c b/gio/giomodule.c
-index d8ce138..679279f 100644
+index 37a9e70..2e5ef9b 100644
 --- a/gio/giomodule.c
 +++ b/gio/giomodule.c
 @@ -782,10 +782,8 @@ extern GType _g_network_monitor_netlink_get_type (void);
@@ -135,20 +124,17 @@ index f4edd5c..02bf678 100644
 1.7.10.4
 
 
-From a83efeaa712bdfe43a1fcada6775ce2c89781631 Mon Sep 17 00:00:00 2001
+From 64c337b9654441cc1b90ed3ac86f928073ec208e Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:27:22 +0200
 Subject: [PATCH 4/8] Allow building without inotify support
 
----
- configure.ac |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 241284d..04d8590 100644
+index 9321fbc..5c6bb3e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1700,11 +1700,18 @@ dnl *****************************
+@@ -1712,11 +1712,18 @@ dnl *****************************
  dnl ** Check for inotify (GIO) **
  dnl *****************************
  inotify_support=no
@@ -174,21 +160,18 @@ index 241284d..04d8590 100644
 1.7.10.4
 
 
-From e3d193f7e4f3d1ada0d65ccdccab1f28ef6d23d3 Mon Sep 17 00:00:00 2001
+From c80c435bd8d92857eeb54273024ca8782fa089c6 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:28:14 +0200
 Subject: [PATCH 5/8] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
  Backported from upstream
 
----
- configure.ac |    2 ++
- 1 file changed, 2 insertions(+)
 
 diff --git a/configure.ac b/configure.ac
-index 04d8590..29b6252 100644
+index 5c6bb3e..8754c21 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -452,6 +452,8 @@ fi
+@@ -455,6 +455,8 @@ fi
  
  AC_MSG_RESULT($enable_iconv_cache)
  
@@ -201,14 +184,11 @@ index 04d8590..29b6252 100644
 1.7.10.4
 
 
-From 08b493b8480f360ab21a0ce5c79b096392a389a8 Mon Sep 17 00:00:00 2001
+From e7e2c1c881813a2a17bfec7b63c673eb979b3833 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:06 +0200
 Subject: [PATCH 6/8] Link with dnsapi
 
----
- gio-2.0.pc.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
 index 9f7123f..b0d5779 100644
@@ -226,22 +206,18 @@ index 9f7123f..b0d5779 100644
 1.7.10.4
 
 
-From 645849d2055b1c7a46132a8b83739290b316ffba Mon Sep 17 00:00:00 2001
+From c1f83b6ae587c99fefd482d0b1bfbe1d962320d4 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:38 +0200
 Subject: [PATCH 7/8] Ensure globals are initialized even when DllMain is not
  being run
 
----
- glib/gmain.c         |    6 +++
- glib/gthread-win32.c |  106 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 112 insertions(+)
 
 diff --git a/glib/gmain.c b/glib/gmain.c
-index 760f179..878ac14 100644
+index c0c4581..bef8b99 100644
 --- a/glib/gmain.c
 +++ b/glib/gmain.c
-@@ -1981,12 +1981,15 @@ g_get_real_time (void)
+@@ -2157,12 +2157,15 @@ g_get_real_time (void)
  #ifdef G_OS_WIN32
  static ULONGLONG (*g_GetTickCount64) (void) = NULL;
  static guint32 g_win32_tick_epoch = 0;
@@ -257,7 +233,7 @@ index 760f179..878ac14 100644
    g_GetTickCount64 = NULL;
    kernel32 = GetModuleHandle ("KERNEL32.DLL");
    if (kernel32 != NULL)
-@@ -2105,6 +2108,9 @@ g_get_monotonic_time (void)
+@@ -2281,6 +2284,9 @@ g_get_monotonic_time (void)
     *    timeBeginPeriod() to increase it as much as they want
     */
  
@@ -610,43 +586,26 @@ index 5a9ac97..e4d1d48 100644
 1.7.10.4
 
 
-From e6c9e1075e9c176d0184cff07d6f2eef224ab608 Mon Sep 17 00:00:00 2001
+From f7b3f3f390131d41855da11622eb18870aec0731 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 18 Jun 2012 16:02:12 +0200
 Subject: [PATCH 8/8] kill docs and gtk-doc dependence (mxe-specific)
 
----
- Makefile.am                                        |    5 +-
- autogen.sh                                         |    7 -
- configure.ac                                       |    2 -
- docs/Makefile.am                                   |   11 --
- docs/reference/Makefile.am                         |    3 -
- docs/reference/gio/Makefile.am                     |  181 --------------------
- .../gio/gdbus-object-manager-example/Makefile.am   |   68 --------
- docs/reference/glib/Makefile.am                    |  129 --------------
- docs/reference/gobject/Makefile.am                 |  103 -----------
- 9 files changed, 2 insertions(+), 507 deletions(-)
- delete mode 100644 docs/Makefile.am
- delete mode 100644 docs/reference/Makefile.am
- delete mode 100644 docs/reference/gio/Makefile.am
- delete mode 100644 docs/reference/gio/gdbus-object-manager-example/Makefile.am
- delete mode 100644 docs/reference/glib/Makefile.am
- delete mode 100644 docs/reference/gobject/Makefile.am
 
 diff --git a/Makefile.am b/Makefile.am
-index f5c510d..28d77c6 100644
+index 55be9d2..f000f10 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -6,7 +6,7 @@ include $(top_srcdir)/Makefile.decl
  
  ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
  
--SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
-+SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio po
  DIST_SUBDIRS = $(SUBDIRS) build
- 
- bin_SCRIPTS = glib-gettextize
-@@ -62,8 +62,7 @@ BUILT_EXTRA_DIST = 		\
+ if BUILD_MODULAR_TESTS
+ SUBDIRS += tests 
+@@ -67,8 +67,7 @@ BUILT_EXTRA_DIST = 		\
  	README			\
  	INSTALL			\
  	ChangeLog		\
@@ -657,43 +616,46 @@ index f5c510d..28d77c6 100644
  CONFIGURE_DEPENDENCIES = acglib.m4
  
 diff --git a/autogen.sh b/autogen.sh
-index 01011d9..bc0ab0b 100755
+index 4bbc00d..bc0ab0b 100755
 --- a/autogen.sh
 +++ b/autogen.sh
-@@ -7,12 +7,6 @@ test -n "$srcdir" || srcdir=.
+@@ -7,18 +7,6 @@ test -n "$srcdir" || srcdir=.
  olddir=`pwd`
  cd "$srcdir"
  
--GTKDOCIZE=`which gtkdocize`
+-GTKDOCIZE=$(which gtkdocize 2>/dev/null)
 -if test -z $GTKDOCIZE; then
--        echo "*** No GTK-Doc found, please install it ***"
--        exit 1
+-        echo "You don't have gtk-doc installed, and thus won't be able to generate the documentation."
+-        rm -f gtk-doc.make
+-        cat > gtk-doc.make <<EOF
+-EXTRA_DIST =
+-CLEANFILES =
+-EOF
+-else
+-        gtkdocize || exit $?
 -fi
 -
  AUTORECONF=`which autoreconf`
  if test -z $AUTORECONF; then
          echo "*** No autoreconf found, please install it ***"
-@@ -24,7 +18,6 @@ fi
- # regenerated from their corresponding *.in files by ./configure anyway.
- touch README INSTALL
- 
--gtkdocize || exit $?
- autoreconf --force --install --verbose || exit $?
- 
- cd "$olddir"
 diff --git a/configure.ac b/configure.ac
-index 29b6252..24a0c3c 100644
+index 8754c21..4936f3c 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2598,8 +2598,6 @@ dnl **************************
+@@ -2605,13 +2605,6 @@ AS_IF([ test $cross_compiling = yes && test x$enable_modular_tests = xyes], [
+ dnl **************************
  dnl *** Checks for gtk-doc ***
  dnl **************************
- 
+-# gtkdocize greps for ^GTK_DOC_CHECK and parses it, so you need to have
+-# it on it's own line.
+-m4_ifdef([GTK_DOC_CHECK], [
 -GTK_DOC_CHECK([1.15], [--flavour no-tmpl])
--
+-],[
+-AM_CONDITIONAL([ENABLE_GTK_DOC],[false])
+-])
+ 
  AC_ARG_ENABLE(man,
-               [AC_HELP_STRING([--enable-man],
-                               [regenerate man pages from Docbook [default=no]])],enable_man=yes,
+               [AS_HELP_STRING([--enable-man],
 diff --git a/docs/Makefile.am b/docs/Makefile.am
 deleted file mode 100644
 index 2349f44..0000000
@@ -722,10 +684,10 @@ index 63cf90d..0000000
 -SUBDIRS = glib gobject gio
 diff --git a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 deleted file mode 100644
-index 7d2d264..0000000
+index 64d95fe..0000000
 --- a/docs/reference/gio/Makefile.am
 +++ /dev/null
-@@ -1,181 +0,0 @@
+@@ -1,179 +0,0 @@
 -include $(top_srcdir)/Makefile.decl
 -NULL =
 -
@@ -870,7 +832,11 @@ index 7d2d264..0000000
 -EXTRA_DIST +=			\
 -	version.xml.in
 -
--man_MANS =			\
+-man_MANS =
+-
+-if ENABLE_MAN
+-
+-man_MANS +=			\
 -	gio-querymodules.1	\
 -	glib-compile-schemas.1	\
 -	glib-compile-resources.1	\
@@ -879,31 +845,25 @@ index 7d2d264..0000000
 -	gdbus.1			\
 -	gdbus-codegen.1
 -
--if ENABLE_MAN
+-XSLTPROC_FLAGS = \
+-        --nonet \
+-        --stringparam man.output.quietly 1 \
+-        --stringparam funcsynopsis.style ansi \
+-        --stringparam man.th.extra1.suppress 1 \
+-        --stringparam man.authors.section.enabled 0 \
+-        --stringparam man.copyright.section.enabled 0
 -
 -.xml.1:
--	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
--
--dist-local-check-mans-enabled:
--	if grep "Man generation disabled" $(man_MANS) >/dev/null; then $(RM) $(man_MANS); fi
--
--else
--
--$(man_MANS):
--	echo Man generation disabled.  Creating dummy $@.  Configure with --enable-man to enable it.
--	echo Man generation disabled.  Remove this file, configure with --enable-man, and rebuild > $@
--
--dist-local-check-mans-enabled:
--	echo "*** --enable-man must be used in order to make dist"
--	false
+-	$(AM_V_GEN) $(XSLTPROC) $(XSLTPROC_FLAGS) http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 -
 -endif
 -
--MAINTAINERCLEANFILES = $(man_MANS) $(BUILT_SOURCES)
+-CLEANFILES ?=
+-CLEANFILES += $(man_MANS)
 -
 -EXTRA_DIST += $(man_MANS)
 -
--dist-hook-local: dist-local-check-mans-enabled all-local
+-dist-hook-local: all-local
 -
 -gio-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
@@ -983,10 +943,10 @@ index 90c10aa..0000000
 -	rm -rf $(DESTDIR)$(datadir)/gtk-doc/html/gdbus-object-manager-example
 diff --git a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
 deleted file mode 100644
-index 2ceae09..0000000
+index 54918c8..0000000
 --- a/docs/reference/glib/Makefile.am
 +++ /dev/null
-@@ -1,129 +0,0 @@
+@@ -1,128 +0,0 @@
 -## Process this file with automake to produce Makefile.in
 -include $(top_srcdir)/Makefile.decl
 -
@@ -996,7 +956,7 @@ index 2ceae09..0000000
 -DOC_MODULE=glib
 -
 -# The top-level SGML file.
--DOC_MAIN_SGML_FILE=glib-docs.sgml
+-DOC_MAIN_SGML_FILE=glib-docs.xml
 -
 -# The directory containing the source code. Relative to $(srcdir)
 -DOC_SOURCE_DIR=$(top_srcdir)/glib $(top_srcdir)/gmodule
@@ -1049,13 +1009,14 @@ index 2ceae09..0000000
 -
 -# Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 -content_files =				\
--	cross.sgml			\
--	running.sgml			\
--	building.sgml			\
--	changes.sgml			\
--	compiling.sgml			\
--	resources.sgml			\
--	regex-syntax.sgml		\
+-	cross.xml			\
+-	running.xml			\
+-	building.xml			\
+-	changes.xml			\
+-	compiling.xml			\
+-	programming.xml			\
+-	resources.xml			\
+-	regex-syntax.xml		\
 -	version.xml			\
 -	glib-gettextize.xml		\
 -	gtester.xml			\
@@ -1064,7 +1025,7 @@ index 2ceae09..0000000
 -	gvariant-text.xml
 -
 -expand_content_files = 			\
--	compiling.sgml
+-	compiling.xml
 -
 -# Extra options to supply to gtkdoc-fixref
 -FIXXREF_OPTIONS=--extra-dir=$(srcdir)/../gobject/html --extra-dir=$(srcdir)/../gio/html
@@ -1083,42 +1044,40 @@ index 2ceae09..0000000
 -
 -########################################################################
 -
--man_MANS =		  	\
+-man_MANS =
+-
+-if ENABLE_MAN
+-
+-man_MANS += \
 -	glib-gettextize.1 	\
 -	gtester.1		\
 -	gtester-report.1
 -
--if ENABLE_MAN
+-XSLTPROC_FLAGS = \
+-        --nonet \
+-        --stringparam man.output.quietly 1 \
+-        --stringparam funcsynopsis.style ansi \
+-        --stringparam man.th.extra1.suppress 1 \
+-        --stringparam man.authors.section.enabled 0 \
+-        --stringparam man.copyright.section.enabled 0
 -
 -.xml.1:
--	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
--
--dist-local-check-mans-enabled:
--	if grep "Man generation disabled" $(man_MANS) >/dev/null; then $(RM) $(man_MANS); fi
--
--else
--
--$(man_MANS):
--	echo Man generation disabled.  Creating dummy $@.  Configure with --enable-man to enable it.
--	echo Man generation disabled.  Remove this file, configure with --enable-man, and rebuild > $@
--
--dist-local-check-mans-enabled:
--	echo "*** --enable-man must be used in order to make dist"
--	false
+-	$(AM_V_GEN) $(XSLTPROC) $(XSLTPROC_FLAGS) http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 -
 -endif
 -
--MAINTAINERCLEANFILES = $(man_MANS) $(BUILT_SOURCES)
+-CLEANFILES ?=
+-CLEANFILES += $(man_MANS)
 -
 -EXTRA_DIST += $(man_MANS)
 -
--dist-hook-local: dist-local-check-mans-enabled all-local
+-dist-hook-local: all-local
 -
 -glib-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
 diff --git a/docs/reference/gobject/Makefile.am b/docs/reference/gobject/Makefile.am
 deleted file mode 100644
-index 3a637b7..0000000
+index 48d88f8..0000000
 --- a/docs/reference/gobject/Makefile.am
 +++ /dev/null
 @@ -1,103 +0,0 @@
@@ -1131,7 +1090,7 @@ index 3a637b7..0000000
 -DOC_MODULE=gobject
 -
 -# The top-level SGML file.
--DOC_MAIN_SGML_FILE=gobject-docs.sgml
+-DOC_MAIN_SGML_FILE=gobject-docs.xml
 -
 -# The directory containing the source code. Relative to $(srcdir)
 -DOC_SOURCE_DIR=$(top_srcdir)/gobject
@@ -1151,6 +1110,7 @@ index 3a637b7..0000000
 -IGNORE_HFILES = \
 -	tests			\
 -	gobject_trace.h		\
+-	gtype-private.h		\
 -	gatomicarray.h
 -
 -
@@ -1192,36 +1152,35 @@ index 3a637b7..0000000
 -
 -########################################################################
 -
--man_MANS = 			\
+-man_MANS =
+-
+-if ENABLE_MAN
+-
+-man_MANS += 			\
 -	glib-mkenums.1 		\
 -	glib-genmarshal.1 	\
 -	gobject-query.1
 -
--if ENABLE_MAN
+-
+-XSLTPROC_FLAGS = \
+-        --nonet \
+-        --stringparam man.output.quietly 1 \
+-        --stringparam funcsynopsis.style ansi \
+-        --stringparam man.th.extra1.suppress 1 \
+-        --stringparam man.authors.section.enabled 0 \
+-        --stringparam man.copyright.section.enabled 0
 -
 -.xml.1:
--	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
--
--dist-local-check-mans-enabled:
--	if grep "Man generation disabled" $(man_MANS) >/dev/null; then $(RM) $(man_MANS); fi
--
--else
--
--$(man_MANS):
--	echo Man generation disabled.  Creating dummy $@.  Configure with --enable-man to enable it.
--	echo Man generation disabled.  Remove this file, configure with --enable-man, and rebuild > $@
--
--dist-local-check-mans-enabled:
--	echo "*** --enable-man must be used in order to make dist"
--	false
+-	$(AM_V_GEN) $(XSLTPROC) $(XSLTPROC_FLAGS) http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 -
 -endif
 -
--MAINTAINERCLEANFILES = $(man_MANS) $(BUILT_SOURCES)
+-CLEANFILES ?=
+-CLEANFILES += $(man_MANS)
 -
 -EXTRA_DIST += $(man_MANS)
 -
--dist-hook-local: dist-local-check-mans-enabled all-local
+-dist-hook-local: all-local
 -
 -gobject-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
