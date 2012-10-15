@@ -3,7 +3,7 @@
 
 PKG             := giflib
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 0b032c2104a0956e2f91b6c11ff8c5515421cd8b
+$(PKG)_CHECKSUM := 98477ca6224e3f42e443255a93c5c86d0723e2d6
 $(PKG)_SUBDIR   := giflib-$($(PKG)_VERSION)
 $(PKG)_FILE     := giflib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/giflib/giflib-5.x/$($(PKG)_FILE)
@@ -25,7 +25,6 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
-        --without-x \
         CPPFLAGS='-D_OPEN_BINARY'
     echo 'all:' > '$(1)/doc/Makefile'
     $(MAKE) -C '$(1)/lib' -j '$(JOBS)' install
