@@ -25,7 +25,7 @@ define $(PKG)_BUILD
 		-no-tk \
 		-no-shared-libs \
 		-verbose
-	$(MAKE) -C '$(1)' -j '$(JOBS)' world opt
+	$(MAKE) -C '$(1)' -j 1 world opt
 	$(SED) -i "s,@target@,$(TARGET),g" $(1)/ocamlbuild/options.ml
 	$(SED) -i "s,@target@,$(TARGET),g" $(1)/ocamlbuild/findlib.ml
 	$(MAKE) -C '$(1)' -j '$(JOBS)' ocamlbuild.native
