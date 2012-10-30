@@ -3,9 +3,9 @@
 
 PKG             := physfs
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2d3d3cc819ad26542d34451f44050b85635344d0
+$(PKG)_CHECKSUM := 327308c777009a41bbabb9159b18c4c0ac069537
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := http://icculus.org/physfs/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
