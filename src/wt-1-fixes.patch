@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 52fc36d3d87c8fc3df1b4bb005ef39bd61db2fef Mon Sep 17 00:00:00 2001
+From e04e1c624c65e0acb0249aa3c4980d95e79f592c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 18 Jun 2012 13:23:21 +0200
 Subject: [PATCH] fixes for mxe
@@ -108,10 +108,10 @@ index fdbcb5f..578baf1 100644
    FIND_LIBRARY(SSL_LIB
      NAMES
 diff --git a/src/Wt/WRasterImage.C b/src/Wt/WRasterImage.C
-index 4c52f39..e948691 100644
+index 471edfa..95632be 100644
 --- a/src/Wt/WRasterImage.C
 +++ b/src/Wt/WRasterImage.C
-@@ -38,15 +38,6 @@
+@@ -39,15 +39,6 @@
  #define M_PI 3.14159265358979323846
  #endif
  
