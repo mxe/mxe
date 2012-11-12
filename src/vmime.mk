@@ -3,16 +3,16 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3e8dd8855e423db438d465777efeb523c4abb5f3
-$(PKG)_SUBDIR   := lib$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := lib$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := 24a32dcc2eaf78d4a53541936ef72e4cf4f0a6ff
+$(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$(PKG)_FILE
 $(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/vmime/files/vmime/' | \
-    $(SED) -n 's,.*libvmime-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    $(WGET) -q -O- 'https://github.com/kisli/vmime/commits/master' | \
+    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
