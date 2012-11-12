@@ -3,7 +3,7 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 24a32dcc2eaf78d4a53541936ef72e4cf4f0a6ff
+$(PKG)_CHECKSUM := c33ca934b341ba6e145bb152c83ff4f31a49ba89
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$(PKG)_FILE
@@ -16,24 +16,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's/pkg-config/$(TARGET)-pkg-config/g;'  '$(1)/SConstruct'
-
-    # The configure script will make the real configuration, but
-    # we need scons to generate configure.in, Makefile.am etc.
-    cd '$(1)' && scons autotools \
-         prefix='$(PREFIX)/$(TARGET)' \
-         target='$(TARGET)' \
-         sendmail_path=/sbin/sendmail
-
-    cd '$(1)' && ./bootstrap
-    cd '$(1)' && ./configure \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --enable-platform-windows \
-        --disable-rpath \
-        --disable-dependency-tracking
+    cd '$(1)' && cmake \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
+        -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
+        .
 
     # Disable VMIME_HAVE_MLANG_H
     # We have the header, but there is no implementation for IMultiLanguage in MinGW
@@ -41,10 +28,11 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' install
+    $(INSTALL) -m644 '$(1)/vmime/config.hpp' '$(PREFIX)/$(TARGET)/include/vmime/'
 
     $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
     $(TARGET)-g++ -s -o '$(1)/examples/test-vmime.exe' \
         '$(1)/examples/example6.cpp' \
-        `'$(TARGET)-pkg-config' vmime --cflags --libs`
+        `'$(TARGET)-pkg-config' libvmime --cflags --libs`
     $(INSTALL) -m755 '$(1)/examples/test-vmime.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
