@@ -3,10 +3,10 @@
 
 PKG             := harfbuzz
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := cf2141c89a293995a0ae89e379884d2a6e89b963
+$(PKG)_CHECKSUM := c99ed7881bbeadbb9fbeb544b28d2174ddac5910
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.freedesktop.org/software/$(PKG)/release/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.freedesktop.org/software/$(PKG)/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib cairo freetype
 
 define $(PKG)_UPDATE
