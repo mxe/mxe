@@ -4,10 +4,6 @@ Date: Wed, 30 Jun 2010 22:34:59 +0000
 Subject: [PATCH 01/34] zlib dependency is only when CRYPTO is enabled
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@536 400ebc74-4327-4243-bc38-086b20814532
----
- Makefile          |    9 +++++----
- librtmp/hashswf.c |    4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/Makefile b/Makefile
 index 7470eb4..c7767b4 100644
@@ -63,9 +59,6 @@ Date: Thu, 1 Jul 2010 12:00:43 +0000
 Subject: [PATCH 02/34] Fix typo
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@537 400ebc74-4327-4243-bc38-086b20814532
----
- Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
 index c7767b4..1fcdd78 100644
@@ -91,9 +84,6 @@ Subject: [PATCH 03/34] Document the escape coding used for special characters
  in values
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@538 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/librtmp.3 |   11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/librtmp/librtmp.3 b/librtmp/librtmp.3
 index 055b52b..a5a7558 100644
@@ -132,10 +122,6 @@ Date: Sat, 3 Jul 2010 10:28:57 +0000
 Subject: [PATCH 04/34] Update from prev commit
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@539 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/librtmp.3      |    2 +-
- librtmp/librtmp.3.html |   13 +++++++++----
- 2 files changed, 10 insertions(+), 5 deletions(-)
 
 diff --git a/librtmp/librtmp.3 b/librtmp/librtmp.3
 index a5a7558..66197d5 100644
@@ -193,9 +179,6 @@ Date: Mon, 5 Jul 2010 20:07:39 +0000
 Subject: [PATCH 05/34] Hide strtime()
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@541 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/hashswf.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/librtmp/hashswf.c b/librtmp/hashswf.c
 index 277f21c..23e754b 100644
@@ -220,9 +203,6 @@ Date: Mon, 5 Jul 2010 20:16:55 +0000
 Subject: [PATCH 06/34] Remove obsolete XBOX defs
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@542 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/rtmp_sys.h |   11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/librtmp/rtmp_sys.h b/librtmp/rtmp_sys.h
 index 0874cbe..6a3f215 100644
@@ -260,9 +240,6 @@ Date: Mon, 5 Jul 2010 20:17:16 +0000
 Subject: [PATCH 07/34] Update XBOX/XBMC support
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@543 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/hashswf.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/librtmp/hashswf.c b/librtmp/hashswf.c
 index 23e754b..3c56b69 100644
@@ -287,9 +264,6 @@ Date: Thu, 8 Jul 2010 10:38:33 +0000
 Subject: [PATCH 08/34] Don't link explicitly against static library
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@544 400ebc74-4327-4243-bc38-086b20814532
----
- Makefile |   27 +++++++++++++--------------
- 1 file changed, 13 insertions(+), 14 deletions(-)
 
 diff --git a/Makefile b/Makefile
 index 1fcdd78..741e438 100644
@@ -357,9 +331,6 @@ Date: Thu, 8 Jul 2010 11:11:47 +0000
 Subject: [PATCH 09/34] Fix install target
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@545 400ebc74-4327-4243-bc38-086b20814532
----
- Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
 index 741e438..75628dd 100644
@@ -384,11 +355,6 @@ Date: Mon, 12 Jul 2010 08:20:04 +0000
 Subject: [PATCH 10/34] MacOSX/Darwin shared library flags
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@546 400ebc74-4327-4243-bc38-086b20814532
----
- Makefile         |    3 +++
- README           |    6 +++++-
- librtmp/Makefile |   11 ++++++++++-
- 3 files changed, 18 insertions(+), 2 deletions(-)
 
 diff --git a/Makefile b/Makefile
 index 75628dd..fda3c74 100644
@@ -489,10 +455,6 @@ Subject: [PATCH 11/34] Fixes for Darwin - use dylib, not bundle for shared
  lib
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@547 400ebc74-4327-4243-bc38-086b20814532
----
- Makefile         |    2 +-
- librtmp/Makefile |   17 +++++++++++------
- 2 files changed, 12 insertions(+), 7 deletions(-)
 
 diff --git a/Makefile b/Makefile
 index fda3c74..c322e9a 100644
@@ -556,9 +518,6 @@ Date: Tue, 10 Aug 2010 06:41:50 +0000
 Subject: [PATCH 12/34] More dynlib tweaks
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@548 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/Makefile |   48 ++++++++++++++++++++++++++----------------------
- 1 file changed, 26 insertions(+), 22 deletions(-)
 
 diff --git a/librtmp/Makefile b/librtmp/Makefile
 index a4bf67e..6a1b08b 100644
@@ -670,10 +629,6 @@ Date: Fri, 13 Aug 2010 20:05:35 +0000
 Subject: [PATCH 13/34] Substitute libdir in pkgconfig file
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@549 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/Makefile      |    3 ++-
- librtmp/librtmp.pc.in |    2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/librtmp/Makefile b/librtmp/Makefile
 index 6a1b08b..7cba62a 100644
@@ -711,9 +666,6 @@ Date: Fri, 13 Aug 2010 20:34:58 +0000
 Subject: [PATCH 14/34] Less case-sensitive check for Content-length: header
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@550 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/rtmp.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
 index f152648..5c678fd 100644
@@ -748,9 +700,6 @@ Subject: [PATCH 15/34] Log error message for unsupported SWF Verification
  types
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@551 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/rtmp.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
 index 5c678fd..3e4e00a 100644
@@ -785,10 +734,6 @@ Date: Tue, 26 Oct 2010 23:51:10 +0000
 Subject: [PATCH 16/34] Timeout fix from Antti Ajanki
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@552 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/rtmp.c |    3 +++
- rtmpdump.c     |    2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
 index 3e4e00a..db882dc 100644
@@ -827,9 +772,6 @@ Date: Fri, 24 Dec 2010 22:35:35 +0000
 Subject: [PATCH 17/34] Fix infinite loop on Error/Close
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@554 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/rtmp.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
 index db882dc..e6e8ed8 100644
@@ -858,9 +800,6 @@ Date: Fri, 25 Feb 2011 05:51:40 +0000
 Subject: [PATCH 18/34] Fix FLV timestamps during resume
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@557 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/rtmp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
 index e6e8ed8..e2925a7 100644
@@ -885,10 +824,6 @@ Date: Thu, 10 Mar 2011 14:30:06 +0000
 Subject: [PATCH 19/34] Add Libs.private to pkgconfig for Windows
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@558 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/Makefile      |    6 ++++--
- librtmp/librtmp.pc.in |    1 +
- 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/librtmp/Makefile b/librtmp/Makefile
 index 7cba62a..87618af 100644
@@ -934,10 +869,6 @@ Date: Thu, 10 Mar 2011 14:33:32 +0000
 Subject: [PATCH 20/34] Fix typos in prev commit
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@559 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/Makefile      |    2 +-
- librtmp/librtmp.pc.in |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/librtmp/Makefile b/librtmp/Makefile
 index 87618af..1ea31a0 100644
@@ -973,9 +904,6 @@ Date: Mon, 14 Mar 2011 06:48:09 +0000
 Subject: [PATCH 21/34] Bump up play command buffer sizes
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@560 400ebc74-4327-4243-bc38-086b20814532
----
- rtmpsrv.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/rtmpsrv.c b/rtmpsrv.c
 index f2af85b..4d5699f 100644
@@ -1009,9 +937,6 @@ Date: Wed, 16 Mar 2011 12:11:21 +0000
 Subject: [PATCH 22/34] Fix rtmpt read hangs
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@561 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/rtmp.c |   17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
 index e2925a7..3042c7f 100644
@@ -1065,9 +990,6 @@ Date: Sat, 19 Mar 2011 23:32:53 +0000
 Subject: [PATCH 23/34] Drop back on the handshake version, avoid rtmpe 9
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@562 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/handshake.h |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/librtmp/handshake.h b/librtmp/handshake.h
 index 958579a..d4d2913 100644
@@ -1096,9 +1018,6 @@ Date: Tue, 22 Mar 2011 15:13:18 +0000
 Subject: [PATCH 24/34] Fix prev commit
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@563 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/handshake.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/librtmp/handshake.h b/librtmp/handshake.h
 index d4d2913..b172dbf 100644
@@ -1125,9 +1044,6 @@ Date: Thu, 7 Apr 2011 19:07:31 +0000
 Subject: [PATCH 25/34] Handle Play.PublishNotify like Play.Start
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@566 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/rtmp.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
 index 3042c7f..286b6ae 100644
@@ -1162,9 +1078,6 @@ Date: Thu, 7 Apr 2011 19:11:13 +0000
 Subject: [PATCH 26/34] Handle multiple sessions at once (ugly)
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@567 400ebc74-4327-4243-bc38-086b20814532
----
- rtmpsuck.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
 
 diff --git a/rtmpsuck.c b/rtmpsuck.c
 index ce6d879..3293e8b 100644
@@ -1229,12 +1142,6 @@ Subject: [PATCH 27/34] Use symbolic constants for packet types. From Peter
  Miller @ opensource.org.au
 
 git-svn-id: svn://svn.mplayerhq.hu/rtmpdump/trunk@568 400ebc74-4327-4243-bc38-086b20814532
----
- librtmp/rtmp.c |  132 ++++++++++++++++++++++++++++++--------------------------
- librtmp/rtmp.h |   26 +++++++++--
- rtmpsrv.c      |    8 ++--
- rtmpsuck.c     |  112 ++++++++++++++++++++++++++---------------------
- 4 files changed, 161 insertions(+), 117 deletions(-)
 
 diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
 index 286b6ae..5ef3ae9 100644
@@ -2092,9 +1999,6 @@ Date: Tue, 5 Jul 2011 09:48:23 -0400
 Subject: [PATCH 28/34] add -shared to mingw ldflags, fixes compilation error
  patch by Martin Storsjo
 
----
- librtmp/Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/librtmp/Makefile b/librtmp/Makefile
 index 1ea31a0..785e869 100644
@@ -2124,9 +2028,6 @@ This reverts commit aa2825fbb1d1f70652d558a730baed28149ebbdd.
 Conflicts:
 
 	librtmp/handshake.h
----
- librtmp/handshake.h |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/librtmp/handshake.h b/librtmp/handshake.h
 index b172dbf..958579a 100644
@@ -2154,9 +2055,6 @@ From: Howard Chu <hyc@symas.com>
 Date: Mon, 11 Jul 2011 16:12:39 -0700
 Subject: [PATCH 30/34] Add RTMPE type 9 handshake signature
 
----
- librtmp/handshake.h |  349 +++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 336 insertions(+), 13 deletions(-)
 
 diff --git a/librtmp/handshake.h b/librtmp/handshake.h
 index 958579a..98bf3c8 100644
@@ -2583,9 +2481,6 @@ Date: Mon, 11 Jul 2011 16:41:28 -0700
 Subject: [PATCH 31/34] Add LIB_RTMP macro
 
 Allows changing to static linking on the cmd line
----
- Makefile |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
 index c322e9a..1597be8 100644
@@ -2610,9 +2505,6 @@ From: Howard Chu <hyc@symas.com>
 Date: Mon, 11 Jul 2011 17:19:25 -0700
 Subject: [PATCH 32/34] Additional credit for RTMPE 9 keys
 
----
- README |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/README b/README
 index 5689853..865c6c4 100644
@@ -2638,10 +2530,6 @@ From: Howard Chu <hyc@symas.com>
 Date: Mon, 11 Jul 2011 17:22:43 -0700
 Subject: [PATCH 33/34] Version bump
 
----
- Makefile         |    2 +-
- librtmp/Makefile |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Makefile b/Makefile
 index 1597be8..6ef5742 100644
@@ -2672,9 +2560,6 @@ From: Howard Chu <hyc@symas.com>
 Date: Mon, 11 Jul 2011 17:24:33 -0700
 Subject: [PATCH 34/34] v2.4 changes
 
----
- ChangeLog |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/ChangeLog b/ChangeLog
 index f57c580..fb2319f 100644
