@@ -21,5 +21,6 @@ define $(PKG)_BUILD
         SYS=mingw \
         CRYPTO=GNUTLS \
         SHARED=no \
+        LIB_GNUTLS="`$(TARGET)-pkg-config --libs-only-l gnutls`" \
         -j '$(JOBS)' install
 endef
