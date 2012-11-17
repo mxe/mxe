@@ -3,7 +3,7 @@
 
 PKG             := pango
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a29a17eae7117a1330aaa7b01795322a6ef966b6
+$(PKG)_CHECKSUM := bb785dc821d878444d7ed56e4212bc0a645166c6
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
