@@ -3,7 +3,7 @@
 
 PKG             := libevent
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 20bb4a1a296ac93c08dfc32ae19ab874cab67a0c
+$(PKG)_CHECKSUM := 3e6674772eb77de24908c6267c698146420ab699
 $(PKG)_SUBDIR   := libevent-$($(PKG)_VERSION)-stable
 $(PKG)_FILE     := libevent-$($(PKG)_VERSION)-stable.tar.gz
 $(PKG)_URL      := https://github.com/downloads/$(PKG)/$(PKG)/$($(PKG)_FILE)
