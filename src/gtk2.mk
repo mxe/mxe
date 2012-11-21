@@ -3,7 +3,7 @@
 
 PKG             := gtk2
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := baf5c73e186352cad767392a6b55840be0326ddc
+$(PKG)_CHECKSUM := 8091fc47f8ea7f05af3400e683662068b1ef4d7b
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
