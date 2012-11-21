@@ -3,7 +3,7 @@
 
 PKG             := libxslt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f8072177f1ffe1b9bb8759a9e3e6349e1eac1f66
+$(PKG)_CHECKSUM := 4df177de629b2653db322bfb891afa3c0d1fa221
 $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://xmlsoft.org/libxslt/$($(PKG)_FILE)
@@ -19,6 +19,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --without-debug \
         --prefix='$(PREFIX)/$(TARGET)' \
