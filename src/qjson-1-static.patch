@@ -1,16 +1,16 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 5c1a9928d925dacebb56f191fec349077c750dbf Mon Sep 17 00:00:00 2001
+From d456ebfe73b1a06beb8423c94f3b01edb6bc7507 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 23 Nov 2012 08:41:43 +0100
-Subject: [PATCH 1/2] build as static lib
+Subject: [PATCH] build as static lib
 
 taken from:
 http://sourceforge.net/mailarchive/forum.php?thread_name=4E1DBC0D.10000%40jrit.at&forum_name=qjson-devel
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 07d84c6..3aee52d 100644
+index 13e65f1..99fd8e6 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -31,6 +31,13 @@ SET(FRAMEWORK_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/Library/Frameworks"
@@ -71,48 +71,6 @@ index 9a807b9..7e6646a 100644
     /* We are building this library */
  #  define QJSON_EXPORT Q_DECL_EXPORT
  # else
--- 
-1.7.10.4
-
-
-From dbe71952b8b91359172f7f253a7cc07c1e746443 Mon Sep 17 00:00:00 2001
-From: Flavio Castelli <fcastelli@suse.com>
-Date: Thu, 22 Nov 2012 21:19:15 +0100
-Subject: [PATCH 2/2] Fix unsafe pointer usage in Serializer::serialize().
-
-This fixes issue #3.
-(cherry picked from commit 56701d72da8a57a64522ff455d7aa460033398a9)
-
-diff --git a/ChangeLog b/ChangeLog
-index fa16030..6ae4d9d 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -1,3 +1,7 @@
-+Thu Nov 22 21:20:11 CET 2012  Flavio Castelli <flavio@castelli.name>
-+
-+	* Fix unsafe pointer usage in Serializer::serialize()
-+
- ----------------------------------------------------------------------
- Wed Nov 21 22:01:51 CET 2012  Flavio Castelli <flavio@castelli.name>
- 
-diff --git a/src/serializer.cpp b/src/serializer.cpp
-index 4ff3d54..b88827d 100644
---- a/src/serializer.cpp
-+++ b/src/serializer.cpp
-@@ -368,12 +368,12 @@ void Serializer::serialize( const QVariant& v, QIODevice* io, bool* ok)
- 
- QByteArray Serializer::serialize( const QVariant &v, bool *ok)
- {
-+  bool _ok = true;
-   d->errorMessage.clear();
- 
-   if (ok) {
-     *ok = true;
-   } else {
--    bool _ok = true;
-     ok = &_ok;
-   }
- 
 -- 
 1.7.10.4
 

@@ -3,7 +3,7 @@
 
 PKG             := qjson
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 6a571194d24aed23f36642f5d24d97f6b1080d4a
+$(PKG)_CHECKSUM := 197ccfd533f17bcf40428e68a82e6622047ed4ab
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
