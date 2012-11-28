@@ -1,37 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 0e2179c67d0cd618be29b30425bda18c23a2ddf0 Mon Sep 17 00:00:00 2001
-From: Dmitry Smirnov <onlyjob@member.fsf.org>
-Date: Mon, 13 Aug 2012 23:34:51 +0200
-Subject: [PATCH 1/2] configure: gcrypt doesn't come with pkg-config support
-
-... so use plain old -lgcrypt to the linker to link with it.
-
-Fixes #225
-(cherry picked from commit e470738a0cf302abfd2891b80dbac4ac3e7eedd2)
-
-diff --git a/configure.ac b/configure.ac
-index aa9d397..dfc6988 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -102,7 +102,7 @@ fi
- # Look for libgcrypt
- if test "$ac_cv_libssl" != "yes" && test "$use_libgcrypt" != "no"; then
-   AC_LIB_HAVE_LINKFLAGS([gcrypt], [], [#include <gcrypt.h>])
--  LIBSREQUIRED=libgcrypt
-+  LIBS="$LIBS -lgcrypt"
- fi
- 
- AC_SUBST(LIBSREQUIRED)
--- 
-1.7.10.4
-
-
-From 75ecbf4e5ca3c977418f60db42ba03c13d0e68f9 Mon Sep 17 00:00:00 2001
+From 9cca5b7a1274f4e263441944b906f054118b8387 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 2 Sep 2012 00:55:28 +0200
-Subject: [PATCH 2/2] include gpg-error with gcrypt for static linking
+Subject: [PATCH] include gpg-error with gcrypt for static linking
  (mxe-specific)
 
 
