@@ -8,7 +8,7 @@ $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta
+$(PKG)_DEPS     := gcc zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf4 hdf5 netcdf
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
@@ -42,6 +42,9 @@ define $(PKG)_BUILD
         --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
         --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
+        --with-hdf4='$(PREFIX)/$(TARGET)' \
+        --with-hdf5='$(PREFIX)/$(TARGET)' \
+        --with-netcdf='$(PREFIX)/$(TARGET)' \
         --without-odbc \
         --without-static-proj4 \
         --without-xerces \
@@ -50,12 +53,9 @@ define $(PKG)_BUILD
         --without-spatialite \
         --without-cfitsio \
         --without-pcraster \
-        --without-netcdf \
         --without-pcidsk \
         --without-ogdi \
         --without-fme \
-        --without-hdf4 \
-        --without-hdf5 \
         --without-ecw \
         --without-kakadu \
         --without-mrsid \
@@ -73,7 +73,7 @@ define $(PKG)_BUILD
         --without-php \
         --without-ruby \
         --without-python \
-        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+        LIBS="-ljpeg -lsecur32 -lportablexdr -lmsvcr80 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $(MAKE) -C '$(1)'       -j 1 lib-target
     $(MAKE) -C '$(1)'       -j 1 install-lib
     $(MAKE) -C '$(1)/port'  -j 1 install
