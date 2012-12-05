@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         static \
         MYBINS= \
         MYLIBS=libqdbm.a \
-        AR=i686-pc-mingw32-ar \
-        RANLIB=i686-pc-mingw32-ranlib
+        AR='$(TARGET)-ar' \
+        RANLIB='$(TARGET)-ranlib'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     $(INSTALL) -m644 '$(1)/libqdbm.a' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/qdbm.pc'   '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
