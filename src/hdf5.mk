@@ -22,7 +22,8 @@ define $(PKG)_BUILD
         --disable-direct-vfd \
         --prefix='$(PREFIX)/$(TARGET)' \
         CPPFLAGS="-DH5_HAVE_WIN32_API -D__MSVCRT_VERSION__=0x0800" \
-        LIBS="-lmsvcr80"
+        LIBS="-lmsvcr80" \
+        AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)'/src -j '$(JOBS)'
     $(MAKE) -C '$(1)'/src -j 1 install
     $(MAKE) -C '$(1)'/c++/src -j '$(JOBS)'
