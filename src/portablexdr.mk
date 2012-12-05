@@ -10,7 +10,8 @@ $(PKG)_URL      := http://people.redhat.com/~rjones/portablexdr/files/$($(PKG)_F
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    /bin/false
+    echo 'TODO: write update script for $(PKG).' >&2;
+    echo $($(PKG)_VERSION)
 endef
 
 define $(PKG)_BUILD

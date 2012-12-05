@@ -10,7 +10,8 @@ $(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/$($(PKG)_FILE
 $(PKG)_DEPS     := gcc zlib jpeg portablexdr
 
 define $(PKG)_UPDATE
-    /bin/false
+    echo 'TODO: write update script for $(PKG).' >&2;
+    echo $($(PKG)_VERSION)
 endef
 
 define $(PKG)_BUILD

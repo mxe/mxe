@@ -10,7 +10,8 @@ $(PKG)_URL      := http://www.unidata.ucar.edu/downloads/netcdf/ftp/$($(PKG)_FIL
 $(PKG)_DEPS     := gcc curl zlib hdf4 hdf5
 
 define $(PKG)_UPDATE
-    /bin/false
+    echo 'TODO: write update script for $(PKG).' >&2;
+    echo $($(PKG)_VERSION)
 endef
 
 # NetCDF uses '#ifdef IGNORE' as a synonym to '#if 0' in several places.
