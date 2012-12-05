@@ -14,6 +14,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && $(LIBTOOLIZE) --force
     cd '$(1)' && autoreconf && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
