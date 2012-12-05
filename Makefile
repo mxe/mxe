@@ -63,16 +63,19 @@ PKG_CHECKSUM = \
 CHECK_PKG_ARCHIVE = \
     [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1))`" ]
 
+ESCAPE_PKG = \
+	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
+
 DOWNLOAD_PKG_ARCHIVE = \
     mkdir -p '$(PKG_DIR)' && \
     $(if $($(1)_URL_2), \
         ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
           $(WGET) -O- '$($(1)_URL_2)' || \
-          $(WGET) -O- '$(PKG_MIRROR)/$($(1)_FILE)' || \
-          $(WGET) -O- '$(PKG_CDN)/$($(1)_FILE)' ), \
+          $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+          $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
         ( $(WGET) -O- '$($(1)_URL)' || \
-          $(WGET) -O- '$(PKG_MIRROR)/$($(1)_FILE)' || \
-          $(WGET) -O- '$(PKG_CDN)/$($(1)_FILE)' )) \
+          $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+          $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
     $(if $($(1)_FIX_GZIP), \
         | gzip -d | gzip -9n, \
         ) \
