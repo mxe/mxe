@@ -10,7 +10,8 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc zlib bzip2 pthreads levmar
 
 define $(PKG)_UPDATE
-    /bin/false
+    echo 'TODO: write update script for $(PKG).' >&2;
+    echo $($(PKG)_VERSION)
 endef
 
 define $(PKG)_BUILD
