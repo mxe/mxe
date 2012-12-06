@@ -3,7 +3,7 @@
 
 PKG             := openal
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := e6d69db13ec15465b83a45ef89978e8a0f55beca
+$(PKG)_CHECKSUM := 2c6aebeefaa010e5e318811506384dfb74bc0ee9
 $(PKG)_SUBDIR   := openal-soft-$($(PKG)_VERSION)
 $(PKG)_FILE     := openal-soft-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://kcat.strangesoft.net/openal-releases/$($(PKG)_FILE)
