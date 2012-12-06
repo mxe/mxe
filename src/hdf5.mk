@@ -22,8 +22,7 @@ define $(PKG)_BUILD
         --enable-cxx \
         --disable-direct-vfd \
         --prefix='$(PREFIX)/$(TARGET)' \
-        CPPFLAGS="-DH5_HAVE_WIN32_API -D__MSVCRT_VERSION__=0x0800" \
-        LIBS="-lmsvcr80" \
+        CPPFLAGS="-DH5_HAVE_WIN32_API -DH5_HAVE_MINGW" \
         AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)'/src -j '$(JOBS)'
     $(MAKE) -C '$(1)'/src -j 1 install

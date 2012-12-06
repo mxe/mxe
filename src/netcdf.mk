@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         --enable-netcdf-4 \
         --enable-hdf4 \
         --prefix='$(PREFIX)/$(TARGET)' \
-        CPPFLAGS="-D__MSVCRT_VERSION__=0x0800 -D_DLGS_H" \
-        LIBS="-lmfhdf -ldf -lmsvcr80 -lportablexdr -lws2_32"
+        CPPFLAGS="-D_DLGS_H" \
+        LIBS="-lmfhdf -ldf -lportablexdr -lws2_32"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
