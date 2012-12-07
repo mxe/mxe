@@ -13,7 +13,7 @@ diff -urN a/CMakeLists.txt b/CMakeLists.txt
  
  
  if(WIN32)
-@@ -263,7 +263,7 @@
+@@ -271,7 +271,7 @@
  #set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
  
  
