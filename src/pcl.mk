@@ -10,7 +10,8 @@ $(PKG)_URL      := http://www.pointclouds.org/assets/files/$($(PKG)_VERSION)/$($
 $(PKG)_DEPS     := gcc libgomp boost eigen flann vtk
 
 define $(PKG)_UPDATE
-    /bin/false
+    echo 'TODO: write update script for $(PKG).' >&2;
+    echo $($(PKG)_VERSION)
 endef
 
 # There is a strange problem where including <cfloat> leads to an error
