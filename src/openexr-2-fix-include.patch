@@ -1,0 +1,20 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+
+http://lists.gnu.org/archive/html/openexr-devel/2010-08/msg00006.html
+
+diff -urN openexr-1.7.1.orig/IlmImf/ImfHuf.h openexr-1.7.1/IlmImf/ImfHuf.h
+--- openexr-1.7.1.orig/IlmImf/ImfHuf.h	2012-12-09 22:33:49.000000000 +1100
++++ openexr-1.7.1/IlmImf/ImfHuf.h	2012-12-09 22:35:59.000000000 +1100
+@@ -32,7 +32,7 @@
+ //
+ ///////////////////////////////////////////////////////////////////////////
+ 
+-
++#include <string.h>
+ 
+ #ifndef INCLUDED_IMF_HUF_H
+ #define INCLUDED_IMF_HUF_H
+
