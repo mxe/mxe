@@ -29,7 +29,8 @@ define $(PKG)_BUILD
         --prefix='$(1)/ilmbase' \
         --enable-threading=no \
         --disable-posix-sem \
-        CONFIG_SHELL=$(SHELL)
+        CONFIG_SHELL=$(SHELL) \
+        SHELL=$(SHELL)
     $(MAKE) -C '$(1)/$(ilmbase_SUBDIR)' -j '$(JOBS)' install \
         bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd '$(1)' && ./configure \
