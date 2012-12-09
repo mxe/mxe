@@ -3,7 +3,7 @@
 
 PKG             := fltk
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 717242e8aa118020cc05aa788015a2933895b99c
+$(PKG)_CHECKSUM := 25071d6bb81cc136a449825bfd574094b48f07fb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR)-source.tar.gz
 $(PKG)_URL      := http://ftp.easysw.com/pub/fltk/$($(PKG)_VERSION)/$($(PKG)_FILE)
