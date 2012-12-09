@@ -1,14 +1,13 @@
 # This file is part of mingw-cross-env.
 # See doc/index.html for further information.
 
-# zlib
-PKG                := ocaml-core
-$(PKG)_IGNORE    :=
+PKG             := ocaml-core
+$(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := $(ocaml-native_CHECKSUM)
-$(PKG)_SUBDIR    := $(ocaml-native_SUBDIR)
-$(PKG)_FILE        := $(ocaml-native_FILE)
-$(PKG)_URL        := $(ocaml-native_URL)
-$(PKG)_DEPS        := gcc bfd ocaml-flexdll ocaml-native
+$(PKG)_SUBDIR   := $(ocaml-native_SUBDIR)
+$(PKG)_FILE     := $(ocaml-native_FILE)
+$(PKG)_URL      := $(ocaml-native_URL)
+$(PKG)_DEPS     := gcc bfd ocaml-flexdll ocaml-native
 
 define $(PKG)_UPDATE
     $(call ocaml-native_UPDATE)
