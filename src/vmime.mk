@@ -20,6 +20,7 @@ define $(PKG)_BUILD
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
+        -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=False \
         .
 
     # Disable VMIME_HAVE_MLANG_H
