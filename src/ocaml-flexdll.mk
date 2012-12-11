@@ -23,7 +23,6 @@ define $(PKG)_BUILD
         all
     mkdir -p '$(PREFIX)/$(TARGET)/lib/ocaml/flexdll'
     cd '$(1)' && mv flexlink.exe flexlink
-    cd '$(1)' && strip --remove-section=.comment --remove-section=.note flexlink
     cd '$(1)' && $(INSTALL) -m 0755 flexdll.h '$(PREFIX)/$(TARGET)/include'
     cd '$(1)' && $(INSTALL) -m 0755 flexlink flexdll_mingw.o \
         flexdll_initer_mingw.o \
@@ -31,7 +30,7 @@ define $(PKG)_BUILD
     # create flexdll scripts
     cd '$(PREFIX)/bin' && ln -sf '$(PREFIX)/$(TARGET)/lib/ocaml/flexdll/flexlink'
     (echo '#!/bin/sh'; \
-     echo 'exec flexlink -I $(PREFIX)/$(TARGET)/lib -chain mingw -nocygpath "$$@"') \
+     echo 'FLEXDIR="$(PREFIX)/$(TARGET)/lib/ocaml/flexdll" exec flexlink -I $(PREFIX)/$(TARGET)/lib -chain mingw -nocygpath "$$@"') \
             > '$(PREFIX)/bin/$(TARGET)-flexlink'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-flexlink'
 
