@@ -10,7 +10,7 @@ $(PKG)_URL      := http://alain.frisch.fr/flexdll/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ocaml-native
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://alain.frisch.fr/flexdll/' | \
+    wget -q -O- 'http://alain.frisch.fr/flexdll/?C=M;O=D' | \
     $(SED) -n 's,.*flexdll-\([0-9][^>]*\)\.tar.gz.*,\1,ip' | \
     head -1
 endef
