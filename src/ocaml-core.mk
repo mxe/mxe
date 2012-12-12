@@ -34,14 +34,14 @@ define $(PKG)_BUILD
       -host '$(TARGET)' \
       -x11lib /usr/lib \
       -verbose
-    $(MAKE) -C '$(1)' core
+    $(MAKE) -C '$(1)' -j 1 core
     # Now move the working ocamlrun, ocamlc into the boot/ directory,
     # overwriting the binary versions which ship with the compiler with
     # ones that contain the filename-win32-dirsep patch.
-    $(MAKE) -C '$(1)' coreboot
+    $(MAKE) -C '$(1)' -j 1 coreboot
     # second time, otherwise Segfault in some cases (depending on the runing system?)
-    $(MAKE) -C '$(1)' coreboot
-    $(MAKE) -C '$(1)' all
+    $(MAKE) -C '$(1)' -j 1 coreboot
+    $(MAKE) -C '$(1)' -j 1 all
     # install ocamldoc and camlp4 (non cross versions)
     $(MAKE) -C '$(1)/ocamldoc' install
     cd '$(1)' && BINDIR=$(PREFIX)/$(TARGET)/bin \
