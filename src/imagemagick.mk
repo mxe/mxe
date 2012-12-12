@@ -3,7 +3,7 @@
 
 PKG             := imagemagick
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 13198d502e95abb305c23c3d56378e9139fcb7c3
+$(PKG)_CHECKSUM := 507b2f65c4522f41c40dace38849179e80b68fad
 $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.nluug.nl/ImageMagick/$($(PKG)_FILE)
@@ -23,6 +23,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --with-x=no \
         --without-zlib \
+        --disable-largefile \
         ac_cv_prog_freetype_config='$(PREFIX)/$(TARGET)/bin/freetype-config'
     $(SED) -i 's/#define MAGICKCORE_ZLIB_DELEGATE 1//g' '$(1)/magick/magick-config.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
