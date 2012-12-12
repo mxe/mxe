@@ -12,6 +12,7 @@ $(PKG)_DEPS     := gcc zlib
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://code.google.com/p/protobuf/downloads/list?sort=-uploaded' | \
     $(SED) -n 's,.*protobuf-\([0-9][^<]*\)\.tar.*,\1,p' | \
+    grep -v 'rc' | \
     head -1
 endef
 
