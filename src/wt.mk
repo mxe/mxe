@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/witty/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost openssl libharu graphicsmagick pango postgresql sqlite
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/witty/files/witty/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/witty/files/wt/' | \
     $(SED) -n 's,.*wt-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef
