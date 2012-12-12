@@ -34,5 +34,5 @@ define $(PKG)_BUILD
         -DBUILD_examples=OFF \
         -DBUILD_global_tests=OFF \
         -DBUILD_tools=OFF
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(1)' -j 1 install VERBOSE=1
 endef
