@@ -11,8 +11,8 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/atgreen/libffi/tags' | \
-    grep '<a href="/atgreen/libffi/tarball/' | \
-    $(SED) -n 's,.*href="/atgreen/libffi/tarball/v\([0-9][^"]*\)".*,\1,p' | \
+    grep '<a href="/atgreen/libffi/archive/' | \
+    $(SED) -n 's,.*href="/atgreen/libffi/archive/v\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
