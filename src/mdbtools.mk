@@ -12,8 +12,8 @@ $(PKG)_DEPS     := gcc glib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/brianb/mdbtools/tags' | \
-    grep '<a href="/brianb/mdbtools/tarball/' | \
-    $(SED) -n 's,.*href="/brianb/mdbtools/tarball/\([0-9][^"_]*\)".*,\1,p' | \
+    grep '<a href="/brianb/mdbtools/archive/' | \
+    $(SED) -n 's,.*href="/brianb/mdbtools/archive/\([0-9][^"_]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
