@@ -10,12 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/giflib/giflib-5.x/$($(PK
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://giflib.git.sourceforge.net/git/gitweb.cgi?p=giflib/giflib;a=tags' | \
-    grep '<a class="list name"' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9][^<]*\)<.*,\1,p' | \
-    grep -v alpha | \
-    grep -v beta | \
-    grep -v rc | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/giflib/files/giflib-5.x/' | \
+    grep '<a href.*giflib.*bz2/download' | \
+    $(SED) -n 's,.*giflib-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
