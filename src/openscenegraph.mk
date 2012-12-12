@@ -13,8 +13,7 @@ $(PKG)_DEPS     := gcc curl ffmpeg freetype gdal giflib jasper jpeg libpng opene
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.openscenegraph.org/projects/osg/browser/OpenSceneGraph/tags?order=date&desc=1' | \
     grep '<a ' | \
-    $(SED) -n 's,.*>OpenSceneGraph-\([0-9][^<]*\)<.*,\1,p' | \
-    grep -v '^2\.9\.' | \
+    $(SED) -n 's,.*>OpenSceneGraph-\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
     head -1
 endef
 
