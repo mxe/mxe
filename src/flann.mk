@@ -10,8 +10,10 @@ $(PKG)_URL      := http://people.cs.ubc.ca/~mariusm/uploads/FLANN/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- 'http://people.cs.ubc.ca/~mariusm/index.php/FLANN/Changelog' | \
+    grep 'Version' | \
+    $(SED) -n 's,.*Version.\([0-9.]*\).*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
