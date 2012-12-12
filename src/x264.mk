@@ -3,7 +3,7 @@
 
 PKG             := x264
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a6c4a6786a2347b5b1d50dc0ddfd378bf1890481
+$(PKG)_CHECKSUM := f076166e7927562837383bbfb91430b2c7a3caf2
 $(PKG)_SUBDIR   := $(PKG)-snapshot-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-snapshot-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/snapshots/$($(PKG)_FILE)
