@@ -10,8 +10,10 @@ $(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF5/current/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib pthreads
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- 'http://www.hdfgroup.org/ftp/HDF5/current/src/' | \
+    grep '<a href.*hdf5.*bz2' | \
+    $(SED) -n 's,.*hdf5-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
