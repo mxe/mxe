@@ -4,7 +4,6 @@
  */
 
 #include <QApplication>
-#include <QtPlugin>
 #include "ui_qt-test.h"
 
 int main(int argc, char *argv[])
@@ -14,5 +13,6 @@ int main(int argc, char *argv[])
     Ui::MainWindow u;
     u.setupUi(&w);
     w.show();
+    a.aboutQt();
     return a.exec();
 }
