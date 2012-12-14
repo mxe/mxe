@@ -1,3 +1,8 @@
+(*
+This file is part of MXE.
+See index.html for further information.
+*)
+
 let on_expose_event widget _ =
   let open Cairo in
   let drawable = widget#misc#window in
@@ -23,4 +28,3 @@ let () =
   window#set_default_size ~width:590 ~height:80;
   window#show ();
   GMain.main ()
-  
