@@ -710,7 +710,7 @@ index fda935e..54ae4b4 100755
 -      then \
 -        echo $(CLIBS:lib%$(XA)=dll%$(XA)) ; \
 -    fi`
-+	ocamlfind install lablgtk2 ../META `find -type f`
++	ocamlfind install lablgtk2 ../META `find . -type f`
  	$(RANLIB) $(CLIBS:%="`ocamlfind query lablgtk2 | tr -d '\r'`"/%)
  	@if test -f lablgtk.cmxa; \
  	  then ($(RANLIB) $(MLLIBS:%.cma="`ocamlfind query lablgtk2 | tr -d '\r'`"/%$(XA)) $(EXTRA_MLLIBS:%.cma="`ocamlfind query lablgtk2 | tr -d '\r'`"/%$(XA)) ); fi
@@ -755,9 +755,9 @@ index 54ae4b4..aa09593 100755
  # Install using ocamlfind
  findlib-install:
  	mkdir -p "$(BINDIR)"
--	ocamlfind install lablgtk2 ../META `find -type f`
+-	ocamlfind install lablgtk2 ../META `find . -type f`
 -	$(RANLIB) $(CLIBS:%="`ocamlfind query lablgtk2 | tr -d '\r'`"/%)
-+	$(OCAMLFIND) install lablgtk2 ../META `find -type f`
++	$(OCAMLFIND) install lablgtk2 ../META `find . -type f`
 +	$(RANLIB) $(CLIBS:%="`$(OCAMLFIND) query lablgtk2 | tr -d '\r'`"/%)
  	@if test -f lablgtk.cmxa; \
 -	  then ($(RANLIB) $(MLLIBS:%.cma="`ocamlfind query lablgtk2 | tr -d '\r'`"/%$(XA)) $(EXTRA_MLLIBS:%.cma="`ocamlfind query lablgtk2 | tr -d '\r'`"/%$(XA)) ); fi
