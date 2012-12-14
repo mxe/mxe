@@ -49,6 +49,8 @@ define $(PKG)_BUILD
      > $(PREFIX)/$(TARGET)/etc/findlib.conf
 
     # test
-    cp '$(2).ml' '$(1)/test.ml'
-    cd '$(1)' && '$(TARGET)-ocamlfind' opt test.ml
+    '$(TARGET)-ocamlfind' opt \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        < '$(2).ml'
+
 endef

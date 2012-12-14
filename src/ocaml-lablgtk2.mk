@@ -26,6 +26,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/src' -j 1 install
 
     # test
-    cp '$(2).ml' '$(1)/test.ml'
-    cd '$(1)' && '$(TARGET)-ocamlfind' opt -package lablgtk2.gl -linkpkg test.ml
+    '$(TARGET)-ocamlfind' opt -linkpkg \
+        -package lablgtk2.gl \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        < '$(2).ml'
 endef

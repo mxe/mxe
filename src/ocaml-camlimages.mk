@@ -28,7 +28,10 @@ define $(PKG)_BUILD
     $(SED) -i 's,sed,$(SED),g' $(1)/Makefile
     $(SED) -i 's,sed,$(SED),g' $(1)/src/Makefile
     $(MAKE) -C '$(1)' -j 1 install
+
     # test
-    cp '$(2).ml' '$(1)/test.ml'
-    cd '$(1)' && '$(TARGET)-ocamlfind' opt -linkpkg -package camlimages test.ml
+    '$(TARGET)-ocamlfind' opt -linkpkg \
+        -package camlimages \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        < '$(2).ml'
 endef

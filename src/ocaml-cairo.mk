@@ -23,10 +23,11 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
     cd '$(1)' && cp -f META $(PREFIX)/$(TARGET)/lib/ocaml/cairo/
+
     # test
-    cp '$(2).ml' '$(1)/test.ml'
-    cd '$(1)' && '$(TARGET)-ocamlfind' opt -linkpkg \
+    '$(TARGET)-ocamlfind' opt -linkpkg \
         -package lablgtk2.auto-init \
         -package cairo.lablgtk2 \
-        test.ml
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        < '$(2).ml'
 endef
