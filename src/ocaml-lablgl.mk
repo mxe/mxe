@@ -43,9 +43,9 @@ define $(PKG)_BUILD
      echo 'VAR2DEF=$(TARGET)-ocamlrun $$(SRCDIR)/var2def'; \
      echo 'VAR2SWITCH=$(TARGET)-ocamlrun $$(SRCDIR)/var2switch') \
      > $(1)/Makefile.config
-    cd '$(1)' && sed -i 's/ocamlc/$(TARGET)-ocamlc/g' src/Makefile
-    cd '$(1)' && sed -i 's/camlp4o/$(TARGET)-camlp4o/g' src/Makefile
-    $(MAKE) -C '$(1)' -j '$(JOBS)' lib libopt install
+    cd '$(1)' && $(SED) -i 's/ocamlc/$(TARGET)-ocamlc/g' src/Makefile
+    cd '$(1)' && $(SED) -i 's/camlp4o/$(TARGET)-camlp4o/g' src/Makefile
+    $(MAKE) -C '$(1)' -j 1 lib libopt install
     (echo 'version="$($(PKG)_VERSION)"'; \
      echo 'directory="+lablGL"'; \
      echo 'archive(byte) = "lablgl.cma"'; \
