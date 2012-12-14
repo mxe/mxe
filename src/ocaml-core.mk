@@ -111,8 +111,10 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' install
     $(MAKE) -C '$(1)' installopt
     # Rename all the binaries to target-binary
-    for f in ocamlc ocamlcp ocamlrun ocamldep ocamlmklib ocamlmktop ocamlopt ocamlprof camlp4prof camlp4boot camlp4 camlp4oof camlp4of camlp4o camlp4rf camlp4r camlp4orf ocamldoc ocamllex ; do \
-      cp -f $(PREFIX)/$(TARGET)/bin/$$f $(PREFIX)/bin/$(TARGET)-$$f; \
+    for f in ocamlc ocamlcp ocamlrun ocamldep ocamlmklib ocamlmktop ocamlopt \
+      ocamlprof camlp4prof camlp4boot camlp4 camlp4oof camlp4of camlp4o \
+      camlp4rf camlp4r camlp4orf ocamldoc ocamllex ocamlyacc; do \
+        cp -f $(PREFIX)/$(TARGET)/bin/$$f $(PREFIX)/bin/$(TARGET)-$$f; \
     done
 
     # test ocamlopt
