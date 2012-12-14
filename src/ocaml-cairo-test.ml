@@ -22,7 +22,7 @@ let () =
       ~title:"transparency"
       ~position:`CENTER () in
   ignore(window#event#connect#after#expose
-	   (on_expose_event window));
+       (on_expose_event window));
   ignore(window#connect#destroy GMain.quit);
   window#misc#set_app_paintable true;
   window#set_default_size ~width:590 ~height:80;
