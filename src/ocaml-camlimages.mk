@@ -3,12 +3,10 @@
 
 PKG				:= ocaml-camlimages
 $(PKG)_IGNORE	:=
-#REVISION : wget -q -O- 'https://bitbucket.org/camlspotter/camlimages/downloads' | sed -n 's,.*camlspotter/camlimages/src/\(.*\)">caml.*,\1,ip'
 $(PKG)_CHECKSUM := 3ff44142386970003d3cff1446ad351b36759a8e
-# ATTENTION, checksum a revoir avec vrai paquet
 $(PKG)_SUBDIR	:= camlspotter-camlimages-c803efa9d5d3
-$(PKG)_FILE		:= v4.0.1.tar.gz
-$(PKG)_URL		:= https://bitbucket.org/camlspotter/camlimages/get/v4.0.1.tar.gz
+$(PKG)_FILE		:= v$($(PKG)_VERSION).tar.gz
+$(PKG)_URL		:= https://bitbucket.org/camlspotter/camlimages/get/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS		:= ocaml-findlib freetype libpng giflib tiff ocaml-lablgtk2
 
 define $(PKG)_UPDATE
