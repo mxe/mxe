@@ -1,0 +1,2383 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From c09e9baa34783c7dd44cc5afc65f1f4b4030ebf2 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 12 Aug 2012 20:55:49 +0200
+Subject: [PATCH 1/4] set back configure build system that enables cross compilation (instead of OMake)
+
+this patch and next ones are taken from camlimages bug tracker :
+http://modulogic.inria.fr/bugtracker/view.php?id=7
+
+diff --git a/Makefile.am b/Makefile.am
+new file mode 100644
+index 0000000..cdaf30d
+--- /dev/null
++++ b/Makefile.am
+@@ -0,0 +1,58 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.9 2010/03/10 14:32:55 remy Exp $ *)
++
++SUBDIRS = src examples doc
++
++if HAVE_FREETYPE
++if HAVE_GIF
++SUBDIRS += test
++endif
++endif
++
++CVSRELEASETAG = Release-$(subst .,_,$(VERSION))
++ANNOUNCEFILE  = Announce-$(VERSION)
++
++WEBSITEDIR = /net/yquem/infosystems/www/bazaar/$(PACKAGE)
++FTPSITEDIR = /net/yquem/infosystems/ftp/$(PACKAGE)
++CVSROOTDIR = /net/yquem/devel/caml/repository/
++CVSPKGDIR  = bazar-ocaml/$(PACKAGE)
++
++cvstag:
++	cvs tag -c $(CVSRELEASETAG)
++
++cvsuntag:
++	cvs tag -d $(CVSRELEASETAG)
++
++announce:
++	mail -n -s "New release $(VERSION) of $(NAME)" \
++		caml-announce@inria.fr < $(ANNOUNCEFILE)
++
++website: dist
++	if [ -d $(WEBSITEDIR) ]; then     \
++		: ; \
++	else                              \
++		$(INSTALL) -d -g caml -m 775 $(WEBSITEDIR); \
++	fi
++	$(INSTALL) -g caml -m 775 $(DIST_ARCHIVES) $(WEBSITEDIR)
++	$(INSTALL) -g caml -m 775 doc/*.html $(WEBSITEDIR)
++	$(INSTALL) -g caml -m 775 doc/*.jpg $(WEBSITEDIR)
++	cd $(WEBSITEDIR) && ln -sf eng.html index.html
++
++# ftpsite: dist
++# 	if [ ! -d $(FTPSITEDIR) ]; then                     \
++# 		$(INSTALL) -d -g caml -m g+w $(FTPSITEDIR); \
++# 	done
++# 	$(INSTALL) -g caml -m g+w $(DISTFILE) $(FTPSITEDIR)
+diff --git a/Makefile.rules b/Makefile.rules
+new file mode 100644
+index 0000000..a2a41d9
+--- /dev/null
++++ b/Makefile.rules
+@@ -0,0 +1,36 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.rules,v 1.22 2007/02/08 07:52:20 rousse Exp $ *)
++
++SUFFIXES = .ml .mli .cmo .cmi .cmx .c .o
++
++.ml.cmo:
++	$(OCAMLC) $(OCAMLCFLAGS) $(AM_OCAMLCFLAGS) -o $@ -c $<
++
++.mli.cmi:
++	$(OCAMLC) $(OCAMLCFLAGS) $(AM_OCAMLCFLAGS) -o $@ -c $<
++
++.ml.cmx:
++	$(OCAMLOPT) $(OCAMLCFLAGS) $(AM_OCAMLCFLAGS) -o $@ -c $<
++
++.c.o: $(top_srcdir)/config.h
++	$(OCAMLC) -ccopt "-o $@ $(CFLAGS) $(AM_CFLAGS)" -c $< 
++
++# moving to $(srcdir) is needed in case of VPATH build
++.depend: $(OCAMLSOURCES) $(OCAMLINTERFACES) $(top_srcdir)/config.status
++	(cd $(srcdir) && $(OCAMLDEP) $(OCAMLSOURCES) $(OCAMLINTERFACES)) > .depend 
++
++# ugly stuff for make time include
++@AMDEP_TRUE@@am__include@ @am__quote@.depend@am__quote@
+diff --git a/Makefile.variables b/Makefile.variables
+new file mode 100644
+index 0000000..c29c97b
+--- /dev/null
++++ b/Makefile.variables
+@@ -0,0 +1,49 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.variables,v 1.9 2008/02/17 23:24:15 furuse Exp $ *)
++
++OCAMLBYTOBJS	= $(OCAMLBUILTSOURCES:.ml=.cmo) $(OCAMLSOURCES:.ml=.cmo)
++OCAMLOPTOBJS	= $(OCAMLBUILTSOURCES:.ml=.cmx) $(OCAMLSOURCES:.ml=.cmx)
++COBJS		= $(CSOURCES:.c=.o)
++
++# flags needed to build examples
++CAMLIMAGES_INCLUDES = -I $(top_builddir)/src
++CAMLIMAGES_LIBS = 
++
++if HAVE_LABLGTK2
++CAMLIMAGES_INCLUDES += -I $(LABLGTK2DIR)
++CAMLIMAGES_LIBS += lablgtk.cma
++endif
++
++if HAVE_LABLGTK
++CAMLIMAGES_INCLUDES += -I $(LABLGTKDIR)
++CAMLIMAGES_LIBS += lablgtk.cma
++endif
++
++CAMLIMAGES_LIBS_CORE = camlimages_core.cma
++CAMLIMAGES_LIBS += graphics.cma camlimages.cma
++
++DLLPATHS	= -dllpath $(top_srcdir)/src
++AM_OCAMLCFLAGS	= $(CAMLIMAGES_INCLUDES)
++AM_LINKFLAGS	= $(CAMLIMAGES_INCLUDES)
++
++OCAMLLIBS	= $(CAMLIMAGES_LIBS) $(OTHER_LIBS)
++OCAMLLIBS_CORE	= $(CAMLIMAGES_LIBS_CORE) $(OTHER_LIBS)
++
++CLEANFILES = $(OCAMLBYTOBJS) \
++	     $(OCAMLOPTOBJS) \
++	     $(OCAMLOPTOBJS:.cmx=.o) \
++	     $(OCAMLSOURCES:.ml=.cmi) \
++	     $(COBJS)
+diff --git a/configure.ac b/configure.ac
+index 06464b3..12269c9 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,68 +1,62 @@
+ # Process this file with autoconf to produce a configure script.
+ m4_include([ocaml.m4])
+ AC_PREREQ(2.59)
+-AC_INIT(camlimages, 3.2.0, use-omake-to-be-supported@nowhere.com)
++AC_INIT(camlimages, 4.0.1, use-omake-to-be-supported@nowhere.com)
+ AM_INIT_AUTOMAKE([foreign])
+ AM_MAINTAINER_MODE
+ 
+ # Check ocaml
+ AC_PROG_OCAML([3.08])
+-AC_PROG_OCAML_TOOL(OCAMLMKLIB, ocamlmklib)
+ AC_SUBST(OCAMLLIB)
+ 
+ # Check versions to build
+ AC_ARG_ENABLE(
+     [native-library],
+-    AC_HELP_STRING(
+-	[--enable-native-library],
+-	[build native version of library (default)]
+-    ),
+-    [case "$enableval" in
+-	yes) enable_native=$enableval;;
+-	no)  enable_native=$enableval;;
+-	*)   AC_MSG_ERROR([bad value $enableval for --enable-native-library]);;
+-    esac],
+-    [enable_native=yes]
++    AS_HELP_STRING([--disable-native-library], 
++				   [do not build native version of library]),
++    [],
++    []
+ )
+ AC_MSG_CHECKING([wether to build native library])
+-build_native=no
+-if test -n "$OCAMLOPT" && test "$enable_native" = yes; then
++if test -n "$OCAMLOPT" && test "x$enable_native_library" != xno; then
+     AC_MSG_RESULT([yes])
+-    build_native=yes
++    enable_native_library=yes
+ else
+     AC_MSG_RESULT([no])
+-    build_native=no
++    enable_native_library=no
+ fi
+-AM_CONDITIONAL([BUILD_NATIVE], [test "$build_native" = yes])
++AM_CONDITIONAL(BUILD_NATIVE, test x$enable_native_library = xyes)
+ 
+ AC_ARG_ENABLE(
+     [bytecode-library],
+-    AC_HELP_STRING(
+-	[--enable-bytecode-library],
+-	[build bytecode version of library (default)]
+-    ),
+-    [case "$enableval" in
+-	yes) enable_bytecode=$enableval;;
+-	no)  enable_bytecode=$enableval;;
+-	*)   AC_MSG_ERROR([bad value $enableval for --enable-bytecode-library]);;
+-    esac],
+-    [enable_bytecode=yes]
++    AS_HELP_STRING([--disable-bytecode-library], 
++				   [do not build bytecode version of library]),
++    [],
++    []
+ )
+ AC_MSG_CHECKING([wether to build bytecode library])
+-build_bytecode=no
+-if test -n "$OCAMLC" && test "$enable_bytecode" = yes; then
++if test -n "$OCAMLOPT" && test "x$enable_bytecode_library" != xno; then
+     AC_MSG_RESULT([yes])
+-    build_bytecode=yes
++    enable_bytecode_library=yes
+ else
+     AC_MSG_RESULT([no])
+-    build_bytecode=no
++    enable_bytecode_library=no
+ fi
+-AM_CONDITIONAL([BUILD_BYTECODE], [test "$build_bytecode" = yes])
++AM_CONDITIONAL(BUILD_BYTECODE, test x$enable_bytecode_library = xyes)
+ 
+-if test "$build_native" = no && test "$build_bytecode" = no; then
++if test x$enable_native_library = xno && test x$enable_bytecode_library = xno; then
+     AC_MSG_ERROR([neither native nor bytecode library selected])
+ fi
+ 
++AC_ARG_ENABLE(
++    [shared],
++    AS_HELP_STRING([--disable-shared], 
++				   [do not build dynamic shared libraries]),
++    [],
++    []
++)
++AM_CONDITIONAL(BUILD_SHARED, test x$enable_shared != xno)
++
+ # Checks other programs
+ AC_PROG_CC
+ 
+@@ -78,7 +72,8 @@ AC_PATH_XTRA
+ SUPPORT_LABLGTK="false"
+ LABLGTKDIR=
+ 
+-AC_PATH_PROG(PATH_OCAMLFIND, ocamlfind, no)
++AC_CHECK_TOOL([OCAMLFIND],[ocamlfind],[no])
++AC_PATH_PROG(PATH_OCAMLFIND, [$OCAMLFIND], no)
+ 
+ if test "x$PATH_OCAMLFIND" = "x"; then
+   with_ocamlfind_default="no"
+@@ -100,11 +95,12 @@ AC_ARG_WITH(
+     [with_ocamlfind=$with_ocamlfind_default]
+ )	
+ 
+-if test "$with_ocamlfind" = "no"; then
+-  OCAMLSITELIBDIR=$OCAMLLIB/camlimages
+-else
+-  OCAMLSITELIBDIR=$OCAMLLIB/site-lib/camlimages
+-fi
++#if test "$with_ocamlfind" = "no"; then
++#  OCAMLSITELIBDIR=$OCAMLLIB/camlimages
++#else
++#  OCAMLSITELIBDIR=$OCAMLLIB/site-lib/camlimages
++#fi
++OCAMLSITELIBDIR=$OCAMLLIB/camlimages
+ AC_SUBST(OCAMLSITELIBDIR)
+ 
+ AC_ARG_WITH(
+@@ -168,15 +164,8 @@ LABLGTK2DIR=
+ 
+ AC_ARG_WITH(
+     [lablgtk2],
+-    [AC_HELP_STRING(
+-	[--with-lablgtk2],
+-	[enable lablgtk2 support (default: yes)]
+-    )],
+-    [case "$withval" in
+-	yes) with_lablgtk2=yes;;
+-	no)  with_lablgtk2=no;;
+-	*)   AC_MSG_ERROR([bad value $withval for --with-lablgtk2]);;
+-    esac],
++    [AS_HELP_STRING([--with-lablgtk2],[enable lablgtk2 support (default: yes)])],
++    [],
+     [with_lablgtk2=yes]
+ )
+ 
+@@ -202,7 +191,7 @@ else
+ 	    [lablgtk2dir="$OCAMLLIB/lablgtk2"]
+ 	)
+ 
+-	if test -f "$lablgtk2dir/gtk.ml"; then
++	if test -d "$lablgtk2dir"; then
+ 	    AC_MSG_RESULT([found at $lablgtk2dir])
+ 	    SUPPORT_LABLGTK2="true"
+ 	    LABLGTK2DIR="$lablgtk2dir"
+@@ -256,7 +245,7 @@ else
+ 	AC_MSG_CHECKING([if gif bug is fixed])
+ 	save_LDFLAGS="$LDFLAGS"
+ 	LDFLAGS="$LDFLAGS $LIBGIF"
+-	AC_TRY_RUN(
++	AC_RUN_IFELSE(
+ 	    [
+ #include <stdio.h>
+ #include <gif_lib.h>
+@@ -269,7 +258,8 @@ main()
+ 	    [AC_DEFINE([GIFLIB_BUG_FIXED], [1], [Define if the bug in gif library has been fixed.])
+ 	    AC_MSG_RESULT([yes])],
+ 	    [AC_MSG_WARN([buggy gif library, consider rebuilding it with  gcc option -fwritable-strings])
+-	    AC_MSG_RESULT([no])]
++	    AC_MSG_RESULT([no])],
++		[]
+ 	)
+ 	LDFLAGS=$save_LDFLAGS
+     fi
+@@ -356,34 +346,20 @@ LIBTIFF=""
+ 
+ AC_ARG_WITH(
+     [tiff],
+-    [AC_HELP_STRING(
+-	[--with-tiff],
+-	[enable tiff support (default: yes)]
+-    )],
+-    [case "$withval" in
+-	yes) with_tiff=yes;;
+-	no)  with_tiff=no;;
+-	*)   AC_MSG_ERROR([bad value $withval for --with-tiff]);;
+-    esac],
++    [AS_HELP_STRING([--with-tiff],[enable tiff support (default: yes)])],
++    [],
+     [with_tiff=yes]
+ )
+ 
+-if test "$with_tiff" = "no" ; then
+-    AC_MSG_RESULT([disabled])
+-else
+-    AC_CHECK_HEADER(
+-	[tiffio.h],
+-	[AC_CHECK_LIB(
+-	    [tiff],
+-	    [TIFFOpen], 
+-	    [LIBTIFF="-ltiff -lz -ljpeg"
+-	    SUPPORT_TIFF="true"],
+-	    [],
+-	    [-lz -ljpeg]
+-	)]
+-    )
+-fi
+-AC_SUBST(LIBTIFF)
++AS_IF(
++   [test "x$with_tiff" = "xno"],
++   [AC_MSG_RESULT([disabled])],
++   [PKG_CHECK_MODULES(LIBTIFF,
++					  [libtiff-4],
++					  [SUPPORT_TIFF="true"],
++					  [SUPPORT_TIFF="false"])]
++)
++
+ AC_SUBST(SUPPORT_TIFF)
+ AM_CONDITIONAL(HAVE_TIFF, test x$SUPPORT_TIFF = xtrue)
+ 
+@@ -433,36 +409,24 @@ AC_SUBST(SUPPORT_XPM)
+ AM_CONDITIONAL(HAVE_XPM, test x$SUPPORT_XPM = xtrue)
+ 
+ # Checks freetype support
++#AC_DEFINE([SUPPORT_FREETYPE], ["false"], [])
+ SUPPORT_FREETYPE="false"
+-LIBFREETYPE=""
+-INCFREETYPE=""
+ 
+ AC_ARG_WITH(
+     [freetype],
+-    [AC_HELP_STRING(
+-	[--with-freetype],
+-	[enable freetype support (default: yes)]
+-    )],
+-    [case "$withval" in
+-	yes) with_freetype=yes;;
+-	no)  with_freetype=no;;
+-	*)   AC_MSG_ERROR([bad value $withval for --with-freetype]);;
+-    esac],
++    [AS_HELP_STRING([--with-freetype],[enable freetype support (default: yes)])],
++    [],
+     [with_freetype=yes]
+ )
+ 
+-if test "$with_freetype" = "no" ; then
+-    AC_MSG_RESULT([disabled])
+-else
+-    AC_PATH_PROG(FREETYPE_CONFIG, freetype-config)
+-    if test -n "$FREETYPE_CONFIG"; then
+-	LIBFREETYPE=`freetype-config --libs`
+-	INCFREETYPE=`freetype-config --cflags`
+-	SUPPORT_FREETYPE="true"
+-    fi
+-fi
+-AC_SUBST(INCFREETYPE)
+-AC_SUBST(LIBFREETYPE)
++AS_IF(
++   [test "x$with_freetype" = "xno"],[AC_MSG_RESULT([disabled])],
++   [PKG_CHECK_MODULES(FREETYPE2,
++					  [freetype2 >= 0.1],
++					  [SUPPORT_FREETYPE="true"],
++                      [AC_MSG_FAILURE([freetype2 not found])])]
++)
++
+ AC_SUBST(SUPPORT_FREETYPE)
+ AM_CONDITIONAL(HAVE_FREETYPE, test x$SUPPORT_FREETYPE = xtrue)
+  
+@@ -521,7 +485,7 @@ AC_CONFIG_HEADER([config.h])
+ AC_CONFIG_FILES([src/META
+ 		 Makefile
+ 		 src/Makefile
+-	         doc/Makefile
++		 doc/Makefile
+ 		 test/Makefile
+ 		 examples/Makefile
+ 		 examples/converter/Makefile
+@@ -535,7 +499,7 @@ AC_CONFIG_FILES([src/META
+ 		 examples/resize/Makefile
+ 		 examples/tiffps/Makefile
+ 		 examples/ttfimg/Makefile])
+-AC_OUTPUT()
++AC_OUTPUT
+ 
+ cat <<EOF
+ Configuration summary
+@@ -543,7 +507,10 @@ Configuration summary
+ Language:            $OCAMLVERSION
+ Bytecode compiler:   $OCAMLC
+ Native compiler:     $OCAMLOPT
+-OCamlfind:	     $with_ocamlfind
++bytecode :           $enable_bytecode_library
++native :             $enable_native_library
++shared libraries :   $enable_shared
++ocamlfind:           $OCAMLFIND
+ Installed in:        $OCAMLSITELIBDIR
+ Lablgtk support:     $SUPPORT_LABLGTK
+ Lablgtk2 support:    $SUPPORT_LABLGTK2
+diff --git a/doc/Makefile.am b/doc/Makefile.am
+new file mode 100644
+index 0000000..3c4ac76
+--- /dev/null
++++ b/doc/Makefile.am
+@@ -0,0 +1,36 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#                                                                     #
++#  Copyright 2004 Institut National de Recherche en Informatique et   #
++#  en Automatique.  Distributed only by permission.                   #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.2 2007/01/08 16:44:30 rousse Exp $ *)
++
++noinst_DATA = eng.html
++
++CLEANFILES = eng.html
++
++EXTRA_DIST = eng.html.in \
++	     crop-icon.jpg \
++	     crop.jpg \
++	     edge-icon.jpg \
++	     edge.jpg \
++	     fumicaml2-small.jpg \
++	     lvdemo-icon.jpg \
++	     lvdemo.jpg \
++	     test.jpg \
++	     test-small.jpg \
++	     ttfimg-icon.jpg \
++	     ttfimg.jpg
++
++eng.html: $(top_srcdir)/config.status eng.html.in
++	rm -f eng.html eng.html.tmp
++	sed \
++		-e 's,@VERSION\@,$(VERSION),g' \
++		$(srcdir)/eng.html.in > eng.html.tmp
++	mv eng.html.tmp eng.html
+diff --git a/doc/sphinx/Makefile b/doc/sphinx/Makefile
+new file mode 100644
+index 0000000..45073fd
+--- /dev/null
++++ b/doc/sphinx/Makefile
+@@ -0,0 +1,89 @@
++# Makefile for Sphinx documentation
++#
++
++# You can set these variables from the command line.
++SPHINXOPTS    =
++SPHINXBUILD   = sphinx-build
++PAPER         =
++BUILDDIR      = _build
++
++# Internal variables.
++PAPEROPT_a4     = -D latex_paper_size=a4
++PAPEROPT_letter = -D latex_paper_size=letter
++ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
++
++.PHONY: help clean html dirhtml pickle json htmlhelp qthelp latex changes linkcheck doctest
++
++help:
++	@echo "Please use \`make <target>' where <target> is one of"
++	@echo "  html      to make standalone HTML files"
++	@echo "  dirhtml   to make HTML files named index.html in directories"
++	@echo "  pickle    to make pickle files"
++	@echo "  json      to make JSON files"
++	@echo "  htmlhelp  to make HTML files and a HTML help project"
++	@echo "  qthelp    to make HTML files and a qthelp project"
++	@echo "  latex     to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
++	@echo "  changes   to make an overview of all changed/added/deprecated items"
++	@echo "  linkcheck to check all external links for integrity"
++	@echo "  doctest   to run all doctests embedded in the documentation (if enabled)"
++
++clean:
++	-rm -rf $(BUILDDIR)/*
++
++html:
++	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
++	@echo
++	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
++
++dirhtml:
++	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
++	@echo
++	@echo "Build finished. The HTML pages are in $(BUILDDIR)/dirhtml."
++
++pickle:
++	$(SPHINXBUILD) -b pickle $(ALLSPHINXOPTS) $(BUILDDIR)/pickle
++	@echo
++	@echo "Build finished; now you can process the pickle files."
++
++json:
++	$(SPHINXBUILD) -b json $(ALLSPHINXOPTS) $(BUILDDIR)/json
++	@echo
++	@echo "Build finished; now you can process the JSON files."
++
++htmlhelp:
++	$(SPHINXBUILD) -b htmlhelp $(ALLSPHINXOPTS) $(BUILDDIR)/htmlhelp
++	@echo
++	@echo "Build finished; now you can run HTML Help Workshop with the" \
++	      ".hhp project file in $(BUILDDIR)/htmlhelp."
++
++qthelp:
++	$(SPHINXBUILD) -b qthelp $(ALLSPHINXOPTS) $(BUILDDIR)/qthelp
++	@echo
++	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
++	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
++	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/CamlImages.qhcp"
++	@echo "To view the help file:"
++	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/CamlImages.qhc"
++
++latex:
++	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
++	@echo
++	@echo "Build finished; the LaTeX files are in $(BUILDDIR)/latex."
++	@echo "Run \`make all-pdf' or \`make all-ps' in that directory to" \
++	      "run these through (pdf)latex."
++
++changes:
++	$(SPHINXBUILD) -b changes $(ALLSPHINXOPTS) $(BUILDDIR)/changes
++	@echo
++	@echo "The overview file is in $(BUILDDIR)/changes."
++
++linkcheck:
++	$(SPHINXBUILD) -b linkcheck $(ALLSPHINXOPTS) $(BUILDDIR)/linkcheck
++	@echo
++	@echo "Link check complete; look for any errors in the above output " \
++	      "or in $(BUILDDIR)/linkcheck/output.txt."
++
++doctest:
++	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
++	@echo "Testing of doctests in the sources finished, look at the " \
++	      "results in $(BUILDDIR)/doctest/output.txt."
+diff --git a/examples/Makefile.am b/examples/Makefile.am
+new file mode 100644
+index 0000000..38d4474
+--- /dev/null
++++ b/examples/Makefile.am
+@@ -0,0 +1,37 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            FranÃ§ois Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.2 2007/01/08 14:04:48 rousse Exp $ *)
++
++SUBDIRS = crop normalize converter edgedetect imgstat monochrome resize
++
++if HAVE_LABLGTK
++if HAVE_GIF
++SUBDIRS += gifanim
++endif
++endif
++
++if HAVE_LABLGTK2
++if HAVE_JPEG
++SUBDIRS += liv
++endif
++endif
++
++if HAVE_FREETYPE
++SUBDIRS += ttfimg
++endif
++
++if HAVE_TIFF
++SUBDIRS += tiffps
++endif
+diff --git a/examples/converter/Makefile.am b/examples/converter/Makefile.am
+new file mode 100644
+index 0000000..1de0339
+--- /dev/null
++++ b/examples/converter/Makefile.am
+@@ -0,0 +1,43 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.7 2008/02/17 23:24:15 furuse Exp $ *)
++
++OCAMLSOURCES = converter.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += converter.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += converter.byt
++endif
++
++converter_opt_SOURCES = $(OCAMLSOURCES)
++converter_byt_SOURCES = $(OCAMLSOURCES)
++
++include ../../Makefile.variables
++
++converter.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o converter.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE) $(OCAMLBYTOBJS)
++
++
++converter.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o converter.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/crop/Makefile.am b/examples/crop/Makefile.am
+new file mode 100644
+index 0000000..23e3852
+--- /dev/null
++++ b/examples/crop/Makefile.am
+@@ -0,0 +1,44 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.7 2008/02/17 23:24:15 furuse Exp $ *)
++
++OCAMLSOURCES = crop.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += crop.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += crop.byt
++endif
++
++crop_opt_SOURCES = $(OCAMLSOURCES)
++crop_byt_SOURCES = $(OCAMLSOURCES)
++
++OTHER_LIBS = unix.cma
++
++include ../../Makefile.variables
++
++crop.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o crop.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE) $(OCAMLBYTOBJS)
++
++crop.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o crop.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/edgedetect/Makefile.am b/examples/edgedetect/Makefile.am
+new file mode 100644
+index 0000000..556730a
+--- /dev/null
++++ b/examples/edgedetect/Makefile.am
+@@ -0,0 +1,42 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.7 2008/02/17 23:24:15 furuse Exp $ *)
++
++OCAMLSOURCES = edge.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += edge.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += edge.byt
++endif
++
++edge_opt_SOURCES = $(OCAMLSOURCES)
++edge_byt_SOURCES = $(OCAMLSOURCES)
++
++include ../../Makefile.variables
++
++edge.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o edge.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE) $(OCAMLBYTOBJS)
++
++edge.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o edge.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/gifanim/Makefile.am b/examples/gifanim/Makefile.am
+new file mode 100644
+index 0000000..1c8c5e0
+--- /dev/null
++++ b/examples/gifanim/Makefile.am
+@@ -0,0 +1,50 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.6 2007/02/20 21:19:05 rousse Exp $ *)
++
++OCAMLSOURCES = guienv.ml usleep.ml gifanim.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += gifanim.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += gifanim.byt
++endif
++
++gifanim_opt_SOURCES = $(OCAMLSOURCES)
++gifanim_byt_SOURCES = $(OCAMLSOURCES)
++
++OTHER_LIBS = unix.cma
++
++include ../../Makefile.variables
++
++all: byt opt
++
++byt: gifanim.byt
++
++opt: gifanim.opt
++
++gifanim.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o gifanim.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS) $(OCAMLBYTOBJS)
++
++gifanim.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o gifanim.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/imgstat/Makefile.am b/examples/imgstat/Makefile.am
+new file mode 100644
+index 0000000..b74f90c
+--- /dev/null
++++ b/examples/imgstat/Makefile.am
+@@ -0,0 +1,42 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.8 2008/02/17 23:24:16 furuse Exp $ *)
++
++OCAMLSOURCES = imgstat.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += imgstat.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += imgstat.byt
++endif
++
++imgstat_opt_SOURCES = $(OCAMLSOURCES)
++imgstat_byt_SOURCES = $(OCAMLSOURCES)
++
++include ../../Makefile.variables
++
++imgstat.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o imgstat.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE) $(OCAMLBYTOBJS)
++
++imgstat.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o imgstat.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/liv-furuse/Makefile.am b/examples/liv-furuse/Makefile.am
+new file mode 100644
+index 0000000..7c993d8
+--- /dev/null
++++ b/examples/liv-furuse/Makefile.am
+@@ -0,0 +1,77 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.9 2008/06/16 22:35:41 furuse Exp $ *)
++
++OCAMLSOURCES = deficon.ml \
++	       mylazy.ml \
++	       cache.ml \
++	       livmisc.ml \
++	       gui.ml \
++	       jWidget.ml \
++	       seq.ml \
++	       tout.ml \
++	       enhance.ml \
++	       display.ml \
++	       viewer.ml \
++	       edge.ml \
++	       pathfind.ml \
++	       iconcap.ml \
++	       livshtype.ml \
++	       icon.ml \
++	       livsh.ml \
++	       scandir.ml \
++	       jpf.ml \
++	       liv.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += liv.opt$(EXEEXT)
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += liv.byt$(EXEEXT)
++endif
++
++liv_opt_SOURCES = $(OCAMLSOURCES)
++liv_byt_SOURCES = $(OCAMLSOURCES)
++
++OTHER_LIBS = unix.cma
++
++include ../../Makefile.variables
++
++EXTRA_DIST = BulletHole.xpm \
++	     faceanm.gif \
++	     FilesLink.xpm \
++	     FileUnknown.xpm \
++	     File.xpm \
++	     FolderLink.xpm \
++	     Folder.xpm \
++	     livdemo.jpg \
++	     Monalisa.xpm \
++	     sound.xpm
++
++#all: liv.byt$(EXEEXT)
++#opt: liv.opt$(EXEEXT)
++
++liv.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o liv.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS) $(OCAMLBYTOBJS)
++
++liv.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o liv.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/liv/Makefile.am b/examples/liv/Makefile.am
+new file mode 100644
+index 0000000..7c993d8
+--- /dev/null
++++ b/examples/liv/Makefile.am
+@@ -0,0 +1,77 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.9 2008/06/16 22:35:41 furuse Exp $ *)
++
++OCAMLSOURCES = deficon.ml \
++	       mylazy.ml \
++	       cache.ml \
++	       livmisc.ml \
++	       gui.ml \
++	       jWidget.ml \
++	       seq.ml \
++	       tout.ml \
++	       enhance.ml \
++	       display.ml \
++	       viewer.ml \
++	       edge.ml \
++	       pathfind.ml \
++	       iconcap.ml \
++	       livshtype.ml \
++	       icon.ml \
++	       livsh.ml \
++	       scandir.ml \
++	       jpf.ml \
++	       liv.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += liv.opt$(EXEEXT)
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += liv.byt$(EXEEXT)
++endif
++
++liv_opt_SOURCES = $(OCAMLSOURCES)
++liv_byt_SOURCES = $(OCAMLSOURCES)
++
++OTHER_LIBS = unix.cma
++
++include ../../Makefile.variables
++
++EXTRA_DIST = BulletHole.xpm \
++	     faceanm.gif \
++	     FilesLink.xpm \
++	     FileUnknown.xpm \
++	     File.xpm \
++	     FolderLink.xpm \
++	     Folder.xpm \
++	     livdemo.jpg \
++	     Monalisa.xpm \
++	     sound.xpm
++
++#all: liv.byt$(EXEEXT)
++#opt: liv.opt$(EXEEXT)
++
++liv.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o liv.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS) $(OCAMLBYTOBJS)
++
++liv.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o liv.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/monochrome/Makefile.am b/examples/monochrome/Makefile.am
+new file mode 100644
+index 0000000..9cfb0bc
+--- /dev/null
++++ b/examples/monochrome/Makefile.am
+@@ -0,0 +1,42 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.7 2008/02/17 23:24:16 furuse Exp $ *)
++
++OCAMLSOURCES = monochrome.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += monochrome.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += monochrome.byt
++endif
++
++monochrome_opt_SOURCES = $(OCAMLSOURCES)
++monochrome_byt_SOURCES = $(OCAMLSOURCES)
++
++include ../../Makefile.variables
++
++monochrome.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o monochrome.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE) $(OCAMLBYTOBJS)
++
++monochrome.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o monochrome.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/normalize/Makefile.am b/examples/normalize/Makefile.am
+new file mode 100644
+index 0000000..6af840b
+--- /dev/null
++++ b/examples/normalize/Makefile.am
+@@ -0,0 +1,42 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.8 2008/02/17 23:24:16 furuse Exp $ *)
++
++OCAMLSOURCES = normalize.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += normalize.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += normalize.byt
++endif
++
++normalize_opt_SOURCES = $(OCAMLSOURCES)
++normalize_byt_SOURCES = $(OCAMLSOURCES)
++
++include ../../Makefile.variables
++
++normalize.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o normalize.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE) $(OCAMLBYTOBJS)
++
++normalize.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o normalize.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/resize/Makefile.am b/examples/resize/Makefile.am
+new file mode 100644
+index 0000000..10a181c
+--- /dev/null
++++ b/examples/resize/Makefile.am
+@@ -0,0 +1,42 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.7 2008/02/17 23:24:16 furuse Exp $ *)
++
++OCAMLSOURCES = resize.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += resize.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += resize.byt
++endif
++
++resize_opt_SOURCES = $(OCAMLSOURCES)
++resize_byt_SOURCES = $(OCAMLSOURCES)
++
++include ../../Makefile.variables
++
++resize.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o resize.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE) $(OCAMLBYTOBJS)
++
++resize.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o resize.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS_CORE:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/tiffps/Makefile.am b/examples/tiffps/Makefile.am
+new file mode 100644
+index 0000000..56e657d
+--- /dev/null
++++ b/examples/tiffps/Makefile.am
+@@ -0,0 +1,42 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.7 2007/02/20 21:19:11 rousse Exp $ *)
++
++OCAMLSOURCES = tiffps.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += tiffps.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += tiffps.byt
++endif
++
++tiffps_opt_SOURCES = $(OCAMLSOURCES)
++tiffps_byt_SOURCES = $(OCAMLSOURCES)
++
++include ../../Makefile.variables
++
++tiffps.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o tiffps.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS) $(OCAMLBYTOBJS)
++
++tiffps.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o tiffps.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/examples/ttfimg/Makefile.am b/examples/ttfimg/Makefile.am
+new file mode 100644
+index 0000000..32a518d
+--- /dev/null
++++ b/examples/ttfimg/Makefile.am
+@@ -0,0 +1,42 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.6 2007/02/20 21:19:15 rousse Exp $ *)
++
++OCAMLSOURCES = ttfimg.ml
++
++noinst_PROGRAMS =
++if BUILD_NATIVE
++noinst_PROGRAMS += ttfimg.opt
++endif
++if BUILD_BYTECODE
++noinst_PROGRAMS += ttfimg.byt
++endif
++
++ttfimg_opt_SOURCES = $(OCAMLSOURCES)
++ttfimg_byt_SOURCES = $(OCAMLSOURCES)
++
++include ../../Makefile.variables
++
++ttfimg.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o ttfimg.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS) $(OCAMLBYTOBJS)
++
++ttfimg.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o ttfimg.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++include ../../Makefile.rules
+diff --git a/ocaml.m4 b/ocaml.m4
+index 9a59648..6431281 100644
+--- a/ocaml.m4
++++ b/ocaml.m4
+@@ -1,279 +1,197 @@
+-# OCaml macros for autoconf
+-#
+-# Guillaume Rousse <Guillaume.Rousse@inria.fr>
+-# inspired by previous work from:
+-# Georges Mariano
+-# Jean-Christophe FilliÄtre
+-# Olivier Andrieu
+-# Grigory Batalov
+-
+-
+-# AC_PROG_OCAML([MINIMUM VERSION])
+-# --------------------------------
+-#  check OCaml base system, and set the following variables:
+-#  OCAMLC       OCaml compiler
+-#  OCAMLOPT     OCaml native compiler
+-#  OCAMLDEP     OCaml dependency generator
+-#  OCAMLLIB     OCaml library path
+-#  OCAMLVERSION OCaml version number
+-#  Unless --disable-opt is set by user, optimized versions are used by default.
+-#  Fails if no compiler is found.
+-AC_DEFUN([AC_PROG_OCAML], [
+-
+-    # allow the user to disable the use of optimized versions
+-    AC_ARG_ENABLE(
+-	[native-tools],
+-	AC_HELP_STRING(
+-	    [--enable-native-tools],
+-	    [use native versions of ocaml tools (default)]
+-	),
+-	[case "$enableval" in
+-	    yes) ac_ocaml_enable_native_tools=$enableval;;
+-	    no)  ac_ocaml_enable_native_tools=$enableval;;
+-	    *)   AC_MSG_ERROR([bad value $enableval for --enable-native-tools]);;
+-	esac],
+-	[ac_ocaml_enable_native_tools=yes]
+-    )
+-
+-    # Checking for OCaml compiler
+-    _AC_OCAML_PATH_PROG_FATAL(OCAMLC, ocamlc)
+-
+-    # Checking for OCaml version
+-    AC_CACHE_CHECK(
+-	[for OCaml version],
+-	[ac_cv_ocaml_version],
+-	[ac_cv_ocaml_version=`$OCAMLC -version`]
+-    )
+-    OCAMLVERSION=$ac_cv_ocaml_version
+-
+-    if test -n ["$1"]; then
+-        ac_ocaml_min_version=["$1"];
+-	# Checking for OCaml minimum version
+-	AC_CACHE_CHECK(
+-	    [whether OCaml version >= $ac_ocaml_min_version],
+-	    [ac_cv_ocaml_version_enough],
+-	    [
+-		ac_ocaml_min_major_version=`echo $ac_ocaml_min_version \
+-		    | cut -d. -f1`
+-		ac_ocaml_min_minor_version=`echo $ac_ocaml_min_version \
+-		    | cut -d. -f2`
+-		ac_ocaml_min_micro_version=`echo $ac_ocaml_min_version \
+-		    | cut -d. -f3`
+-		ac_ocaml_major_version=`echo ${OCAMLVERSION%%+*} | cut -d. -f1`
+-		ac_ocaml_minor_version=`echo ${OCAMLVERSION%%+*} | cut -d. -f2`
+-		ac_ocaml_micro_version=`echo ${OCAMLVERSION%%+*} | cut -d. -f3`
+-
+-		if expr                                      \
+-		    \(                                       \
+-			${ac_ocaml_major_version:-0} \>      \
+-			${ac_ocaml_min_major_version:-0}     \
+-		    \) \|                                    \
+-		    \(                                       \
+-			${ac_ocaml_major_version:-0} \=      \
+-			${ac_ocaml_min_major_version:-0} \&  \
+-			${ac_ocaml_minor_version:-0} \>      \
+-			${ac_ocaml_min_minor_version:-0}     \
+-		    \) \|                                    \
+-		    \(                                       \
+-			${ac_ocaml_major_version:-0} \=      \
+-			${ac_ocaml_min_major_version:-0} \&  \
+-			${ac_ocaml_minor_version:-0} \=      \
+-			${ac_ocaml_min_minor_version:-0} \&  \
+-			${ac_ocaml_micro_version:-0} \>=     \
+-			${ac_ocaml_min_micro_version:-0}     \
+-		    \) > /dev/null; then
+-		    ac_cv_ocaml_version_enough=yes
+-		else
+-		    ac_cv_ocaml_version_enough=no
+-		fi
+-	    ]
+-	)
+-
+-	if test "$ac_cv_ocaml_version_enough" = "no"; then
+-	    AC_MSG_ERROR([OCaml version unsufficient])
++dnl autoconf macros for OCaml
++dnl
++dnl Copyright Â© 2009      Richard W.M. Jones
++dnl Copyright Â© 2009      Stefano Zacchiroli
++dnl Copyright Â© 2000-2005 Olivier Andrieu
++dnl Copyright Â© 2000-2005 Jean-Christophe FilliÃ¢tre
++dnl Copyright Â© 2000-2005 Georges Mariano
++dnl
++dnl For documentation, please read the ocaml.m4 man page.
++
++AC_DEFUN([AC_PROG_OCAML],
++[dnl
++  # checking for ocamlc
++  AC_CHECK_TOOLS([OCAMLC],[ocamlc.opt ocamlc],[no])
++
++  if test "$OCAMLC" != "no"; then
++     OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version* *\(.*\)$|\1|p'`
++     AC_MSG_RESULT([OCaml version is $OCAMLVERSION])
++     # If OCAMLLIB is set, use it
++     if test "$OCAMLLIB" = ""; then
++        OCAMLLIB=`$OCAMLC -where 2>/dev/null || $OCAMLC -v|tail -1|cut -d ' ' -f 4`
++     else
++        AC_MSG_RESULT([OCAMLLIB previously set; preserving it.])
++     fi
++     AC_MSG_RESULT([OCaml library path is $OCAMLLIB])
++
++     AC_SUBST([OCAMLVERSION])
++     AC_SUBST([OCAMLLIB])
++
++     # checking for ocamlopt
++     AC_CHECK_TOOLS([OCAMLOPT],[ocamlopt.opt ocamlopt],[no])
++     OCAMLBEST=byte
++     if test "$OCAMLOPT" = "no"; then
++	AC_MSG_WARN([Cannot find ocamlopt; bytecode compilation only.])
++     else
++	TMPVERSION=`$OCAMLOPT -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
++	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
++	    AC_MSG_RESULT([versions differs from $OCAMLC; $OCAMLOPT discarded.])
++	    OCAMLOPT=no
++	else
++	    OCAMLBEST=opt
+ 	fi
++     fi
++
++     AC_SUBST([OCAMLBEST])
++
++     AC_SUBST([OCAMLOPT])
++  fi
++
++  # checking for ocaml toplevel
++  AC_CHECK_PROG([OCAML],[ocaml],[ocaml],[no])
++
++  # checking for ocamldep
++  AC_CHECK_TOOL([OCAMLDEP],[ocamldep],[no])
++
++  # checking for ocamlmktop
++  AC_CHECK_TOOL([OCAMLMKTOP],[ocamlmktop],[no])
++
++  # checking for ocamlmklib
++  AC_CHECK_TOOL([OCAMLMKLIB],[ocamlmklib],[no])
++
++  # checking for ocamldoc
++  AC_CHECK_PROG([OCAMLDOC],[ocamldoc],[ocamldoc],[no])
++
++  # checking for ocamlbuild
++  AC_CHECK_TOOL([OCAMLBUILD],[ocamlbuild],[no])
++])
++
++
++AC_DEFUN([AC_PROG_OCAMLLEX],
++[dnl
++  # checking for ocamllex
++  AC_CHECK_PROGS([OCAMLLEX],[ocamllex.opt ocamllex],[no])
++])
++
++AC_DEFUN([AC_PROG_OCAMLYACC],
++[dnl
++  AC_CHECK_PROG([OCAMLYACC],[ocamlyacc],[ocamlyacc],[no])
++])
++
++
++AC_DEFUN([AC_PROG_CAMLP4],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++
++  # checking for camlp4
++  AC_CHECK_PROG([CAMLP4],[camlp4],[camlp4],[no])
++  if test "$CAMLP4" != "no"; then
++     TMPVERSION=`$CAMLP4 -v 2>&1| sed -n -e 's|.*version *\(.*\)$|\1|p'`
++     if test "$TMPVERSION" != "$OCAMLVERSION" ; then
++	AC_MSG_RESULT([versions differs from ocamlc])
++        CAMLP4=no
++     fi
++  fi
++  AC_SUBST([CAMLP4])
++
++  # checking for companion tools
++  AC_CHECK_PROG([CAMLP4BOOT],[camlp4boot],[camlp4boot],[no])
++  AC_CHECK_PROG([CAMLP4O],[camlp4o],[camlp4o],[no])
++  AC_CHECK_PROG([CAMLP4OF],[camlp4of],[camlp4of],[no])
++  AC_CHECK_PROG([CAMLP4OOF],[camlp4oof],[camlp4oof],[no])
++  AC_CHECK_PROG([CAMLP4ORF],[camlp4orf],[camlp4orf],[no])
++  AC_CHECK_PROG([CAMLP4PROF],[camlp4prof],[camlp4prof],[no])
++  AC_CHECK_PROG([CAMLP4R],[camlp4r],[camlp4r],[no])
++  AC_CHECK_PROG([CAMLP4RF],[camlp4rf],[camlp4rf],[no])
++])
++
++
++AC_DEFUN([AC_PROG_FINDLIB],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++
++  # checking for ocamlfind
++  AC_CHECK_TOOL([OCAMLFIND],[ocamlfind],[no])
++])
++
++
++dnl Thanks to Jim Meyering for working this next bit out for us.
++dnl XXX We should define AS_TR_SH if it's not defined already
++dnl (eg. for old autoconf).
++AC_DEFUN([AC_CHECK_OCAML_PKG],
++[dnl
++  AC_REQUIRE([AC_PROG_FINDLIB])dnl
++
++  AC_MSG_CHECKING([for OCaml findlib package $1])
++
++  unset found
++  unset pkg
++  found=no
++  for pkg in $1 $2 ; do
++    if $OCAMLFIND query $pkg >/dev/null 2>/dev/null; then
++      AC_MSG_RESULT([found])
++      AS_TR_SH([OCAML_PKG_$1])=$pkg
++      found=yes
++      break
+     fi
+-
+-    # Checking for OCaml library path
+-    AC_CACHE_CHECK(
+-	[for OCaml library path],
+-	[ac_cv_ocaml_library_path],
+-	[ac_cv_ocaml_library_path=`$OCAMLC -where`]
+-    )
+-    OCAMLLIB=$ac_cv_ocaml_library_path
+-
+-    if test "$ac_ocaml_enable_native_tools" = "yes"; then
+-	# Checking for ocamlc.opt
+-	_AC_OCAML_PATH_PROG_NONFATAL(OCAMLC_OPT, ocamlc.opt)
+-	if test -n "$OCAMLC_OPT"; then
+-	    _AC_OCAML_CHECK_VERSION_NONFATAL(OCAMLC_OPT, ocamlc.opt)
+-	fi
+-	if test -n "$OCAMLC_OPT"; then
+-	    OCAMLC=$OCAMLC_OPT
+-	fi
+-    fi
+-
+-    # Checking for OCaml native compiler
+-    _AC_OCAML_PATH_PROG_NONFATAL(OCAMLOPT, ocamlopt, [Cannot find ocamlopt; bytecode compilation only])
+-    if test -n "$OCAMLOPT"; then
+-	_AC_OCAML_CHECK_VERSION_NONFATAL(OCAMLOPT, ocamlopt)
+-    fi
+-    if test -n "$OCAMLOPT"; then
+-        AC_CACHE_CHECK(
+-	    [if OCaml C compiler works],
+-	    [ac_cv_ocaml_c_compiler_works],
+-	    [
+-		touch conftest.c
+-		if $OCAMLC conftest.c >/dev/null 2>&1; then
+-		    ac_cv_ocaml_c_compiler_works=yes
+-		else
+-		    ac_cv_ocaml_c_compiler_works=no
+-		fi
+-		rm -f conftest.c
+-	    ]
+-	)
+-
+-	if test "$ac_cv_ocaml_c_compiler_works" = "no"; then 
+-	    AC_MSG_WARN([bytecode compilation only])
+-	    unset OCAMLOPT
+-	fi
+-    fi
+-
+-    if test "$ac_ocaml_enable_native_tools" = "yes"; then
+-	# Checking for ocamlopt.opt
+-	_AC_OCAML_PATH_PROG_NONFATAL(OCAMLOPT_OPT, ocamlopt.opt)
+-	if test -n "$OCAMLOPT_OPT"; then
+-	    _AC_OCAML_CHECK_VERSION_NONFATAL(OCAMLOPT_OPT, ocamlopt.opt)
+-	fi
+-	if test -n "$OCAMLOPT_OPT"; then
+-	    OCAMLOPT=$OCAMLOPT_OPT
+-	fi
+-    fi
+-
+-    # Checking for ocamldep
+-    _AC_OCAML_PATH_PROG_NONFATAL(OCAMLDEP, ocamldep)
+-
+-    if test "$ac_ocaml_enable_native_tools" = "yes"; then
+-	# Checking for ocamldep.opt
+-	_AC_OCAML_PATH_PROG_NONFATAL(OCAMLDEP_OPT, ocamldep.opt)
+-	if test -n "$OCAMLDEP_OPT"; then
+-	    OCAMLDEP=$OCAMLDEP_OPT
+-	fi
+-    fi
+-
+-    AC_ARG_VAR([OCAMLCFLAGS], [Ocaml compiler flags [none]])
+-
+-]) # AC_PROG_OCAML
+-
+-# AC_PROG_OCAML_TOOL(VARIABLE, PROGRAM)
+-# ---------------------
+-#  check some additional OCaml tool, and set VARIABLE to PROGRAM if found.
+-#  Unless --disable-opt is set by user, optimized versions is used by default.
+-AC_DEFUN([AC_PROG_OCAML_TOOL], [
+-    AC_REQUIRE([AC_PROG_OCAML])
+-
+-    # Checking for bytecode version
+-    _AC_OCAML_PATH_PROG_NONFATAL([$1], [$2])
+-
+-    if test "$ac_ocaml_enable_native_tools" = "yes"; then
+-        # Checking for binary version, using AC_PATH_PROG directly
+-	# to avoid warnings 
+-	AC_PATH_PROG([$1]_OPT, [$2].opt)
+-	if test -n "[$$1]_OPT"; then
+-	    [$1]=[$$1]_OPT
+-	fi
+-    fi
+-]) # AC_PROG_OCAML_TOOL
+-
+-# AC_PROG_CAMLP4
+-# --------------
+-# Check CamlP4 and set the following variables:
+-#   CAMLP4	camlp4
+-#   CAMLP4O	camlp4o
+-#   CAMLP4R	camlp4r
+-#   CAMLP4LIB	parser library path
+-#  Fails if camlp4 is not found
+-AC_DEFUN([AC_PROG_CAMLP4], [
+-    AC_REQUIRE([AC_PROG_OCAML])
+-
+-    # Checking for camlp4
+-    _AC_OCAML_PATH_PROG_FATAL(CAMLP4, camlp4)
+-    _AC_OCAML_CHECK_VERSION_FATAL(CAMLP4, camlp4)
+-
+-    # Checking for Camlp4o
+-    _AC_OCAML_PATH_PROG_NONFATAL(CAMLP4O, camlp4o)
+-
+-    # Checking for Camlp4r
+-    _AC_OCAML_PATH_PROG_NONFATAL(CAMLP4R, camlp4r)
+-
+-    # Searching for parser library path
+-    AC_MSG_CHECKING([for CamlP4 library path])
+-    CAMLP4LIB=`$CAMLP4 -where`
+-    AC_MSG_RESULT([$CAMLP4LIB])
+-
+-]) # AC_PROG_CAMLP4
+-
+-# _AC_OCAML_PATH_PROG_FATAL(VARIABLE, PROGRAM, [MESSAGE])
+-# -------------------------------------------------------
+-# wraps AC_PATH_PROG, issuing an error if PROGRAM
+-# is not found, otherwise affects its path to VARIABLE
+-AC_DEFUN([_AC_OCAML_PATH_PROG_FATAL], [
+-    AC_PATH_PROG([$1], [$2])
+-    if test -z "[$$1]"; then
+-	AC_MSG_ERROR([m4_default([$3], [Cannot find [$2]])])
+-    fi
+-]) # _AC_OCAML_PATH_PROG_FATAL
+-
+-# _AC_OCAML_PATH_PROG_NONFATAL(VARIABLE, PROGRAM, [MESSAGE])
+-# ----------------------------------------------------------
+-# wraps AC_PATH_PROG, issuing a warning if PROGRAM
+-# is not found, otherwise affects its path to VARIABLE
+-AC_DEFUN([_AC_OCAML_PATH_PROG_NONFATAL], [
+-    AC_PATH_PROG([$1], [$2])
+-    if test -z "[$$1]"; then
+-	AC_MSG_WARN([m4_default([$3], [Cannot find [$2]])])
+-    fi
+-]) # _AC_OCAML_PATH_PROG_NONFATAL
+-
+-# _AC_OCAML_CHECK_VERSION(VARIABLE, PROGRAM)
+-# ------------------------------------------
+-# check than PROGRAM version is the same as the OCaml compiler,
+-# otherwise unset VARIABLE
+-AC_DEFUN([_AC_OCAML_CHECK_VERSION], [
+-    AC_CACHE_CHECK(
+-	[wether [$2] version = $OCAMLVERSION],
+-	[ac_cv_ocaml_[$1]_version_ok],
+-	[
+-	    ac_ocaml_[$1]_version=`$[$1] -version`
+-	    if test "$ac_ocaml_[$1]_version" = "$OCAMLVERSION"; then
+-		ac_cv_ocaml_[$1]_version_ok=yes
+-	    else
+-		ac_cv_ocaml_[$1]_version_ok=no
+-	    fi
+-	]
+-    )
+-
+-    if test "$ac_cv_ocaml_[$1]_version_ok" = "no"; then
+-	unset [$1]
+-    fi
+-]) # _AC_OCAML_CHECK_VERSION
+-
+-# _AC_OCAML_CHECK_VERSION_NONFATAL(VARIABLE, PROGRAM)
+-# ------------------------------------------
+-# wraps _AC_OCAML_CHECK_VERSION, issuing a warning if it fails
+-AC_DEFUN([_AC_OCAML_CHECK_VERSION_NONFATAL], [
+-    _AC_OCAML_CHECK_VERSION([$1], [$2])
+-    if test -z ["$$1"]; then
+-	AC_MSG_WARN([[$2] version differs from ocamlc, discarding])
+-    fi
+-]) # _AC_OCAML_CHECK_VERSION_NONFATAL
+-
+-# _AC_OCAML_CHECK_VERSION_FATAL(VARIABLE, PROGRAM)
+-# ------------------------------------------
+-# wraps _AC_OCAML_CHECK_VERSION, issuing an error if it fails
+-AC_DEFUN([_AC_OCAML_CHECK_VERSION_FATAL], [
+-    _AC_OCAML_CHECK_VERSION([$1], [$2])
+-    if test -z ["$$1"]; then
+-	AC_MSG_ERROR([[$2] version differs from ocamlc, aborting])
++  done
++  if test "$found" = "no" ; then
++    AC_MSG_RESULT([not found])
++    AS_TR_SH([OCAML_PKG_$1])=no
++  fi
++
++  AC_SUBST(AS_TR_SH([OCAML_PKG_$1]))
++])
++
++
++AC_DEFUN([AC_CHECK_OCAML_MODULE],
++[dnl
++  AC_MSG_CHECKING([for OCaml module $2])
++
++  cat > conftest.ml <<EOF
++open $3
++EOF
++  unset found
++  for $1 in $$1 $4 ; do
++    if $OCAMLC -c -I "$$1" conftest.ml >&5 2>&5 ; then
++      found=yes
++      break
+     fi
+-]) # _AC_OCAML_CHECK_VERSION_FATAL
++  done
++
++  if test "$found" ; then
++    AC_MSG_RESULT([$$1])
++  else
++    AC_MSG_RESULT([not found])
++    $1=no
++  fi
++  AC_SUBST([$1])
++])
++
++
++dnl XXX Cross-compiling
++AC_DEFUN([AC_CHECK_OCAML_WORD_SIZE],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++  AC_MSG_CHECKING([for OCaml compiler word size])
++  cat > conftest.ml <<EOF
++  print_endline (string_of_int Sys.word_size)
++  EOF
++  OCAML_WORD_SIZE=`$OCAML conftest.ml`
++  AC_MSG_RESULT([$OCAML_WORD_SIZE])
++  AC_SUBST([OCAML_WORD_SIZE])
++])
++
++AC_DEFUN([AC_CHECK_OCAML_OS_TYPE],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++  AC_MSG_CHECKING([OCaml Sys.os_type])
++
++  cat > conftest.ml <<EOF
++  print_string(Sys.os_type);;
++EOF
++
++  OCAML_OS_TYPE=`$OCAML conftest.ml`
++  AC_MSG_RESULT([$OCAML_OS_TYPE])
++  AC_SUBST([OCAML_OS_TYPE])
++])
+diff --git a/src/Makefile.am b/src/Makefile.am
+new file mode 100644
+index 0000000..6d90c5d
+--- /dev/null
++++ b/src/Makefile.am
+@@ -0,0 +1,256 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.34 2009-07-04 03:38:36 furuse Exp $ *)
++
++ocamlsitelibdir = $(OCAMLSITELIBDIR)
++
++OCAMLCFLAGS	= -warn-error A -annot
++#LINKFLAGS	= 
++AM_OCAMLCFLAGS	=
++AM_CFLAGS	= -I .. -DHAVE_CONFIG_H
++
++OCAMLSOURCES_CORE =	mstring.ml \
++			color.ml \
++			region.ml \
++			tmpfile.ml \
++			bitmap.ml \
++			genimage.ml \
++			rgba32.ml \
++			rgb24.ml \
++			index8.ml \
++			index16.ml \
++			cmyk32.ml \
++			images.ml \
++			oColor.ml \
++			oImages.ml \
++			reduce.ml \
++			geometry.ml \
++			colorhist.ml \
++			blend.ml \
++			bmp.ml \
++			oBmp.ml \
++			ppm.ml \
++			oPpm.ml \
++			xvthumb.ml \
++			oXvthumb.ml \
++			units.ml
++
++OCAMLINTERFACES = info.mli \
++		  mstring.mli \
++		  color.mli \
++		  region.mli \
++		  tmpfile.mli \
++		  bitmap.mli \
++		  image_intf.mli \
++		  genimage.mli \
++		  rgba32.mli \
++		  rgb24.mli \
++		  index8.mli \
++		  index16.mli \
++		  cmyk32.mli \
++	  	  images.mli \
++		  oColor.mli \
++		  oImages.mli \
++		  reduce.mli \
++	 	  blend.mli \
++		  bmp.mli \
++	      ppm.mli \
++	      xvthumb.mli \
++	      oXvthumb.mli \
++		  colorhist.mli \
++		  geometry.mli 
++
++CSOURCES_CORE = 
++OTHER_CMI =
++
++if HAVE_GIF
++OCAMLSOURCES_CORE += gif.ml oGif.ml
++OCAMLINTERFACES   += gif.mli
++OTHER_CMI         += oGif.cmi
++CSOURCES_CORE     += gifread.c gifwrite.c
++endif
++
++if HAVE_PNG
++OCAMLSOURCES_CORE += png.ml oPng.ml
++OCAMLINTERFACES   += png.mli
++CSOURCES_CORE     += pngread.c pngwrite.c
++endif
++
++if HAVE_JPEG
++OCAMLSOURCES_CORE += jpeg.ml oJpeg.ml
++OCAMLINTERFACES   += jpeg.mli
++OTHER_CMI          += oJpeg.cmi
++CSOURCES_CORE     += jpegread.c jpegwrite.c
++endif
++
++if HAVE_TIFF
++OCAMLSOURCES_CORE += tiff.ml oTiff.ml
++OCAMLINTERFACES   += tiff.mli
++OTHER_CMI         += oTiff.cmi
++CSOURCES_CORE     += tiffread.c tiffwrite.c
++AM_CFLAGS         += @LIBTIFF_CFLAGS@
++endif
++
++if HAVE_XPM
++OCAMLSOURCES_CORE += xpm.ml oXpm.ml
++OCAMLINTERFACES   += xpm.mli
++CSOURCES_CORE     += xpmread.c xpmwrite.c
++AM_CFLAGS         += $(INCXPM)
++endif
++
++if HAVE_PS
++OCAMLSOURCES_CORE += ps.ml oPs.ml
++OCAMLINTERFACES   += ps.mli
++OTHER_CMI         += oPs.cmi
++endif
++
++### end of core
++
++OCAMLSOURCES= $(OCAMLSOURCES_CORE)
++CSOURCES= $(CSOURCES_CORE)
++
++OCAMLSOURCES      += graphic_image.ml oGraphic.ml
++OCAMLINTERFACES   += graphic_image.mli
++OTHER_CMI         += oGraphic.cmi
++OTHER_CMI         += units.cmi oBmp.cmi oPpm.cmi camlimages.cmi
++
++# now obsolete
++# if HAVE_LABLGTK
++# OCAMLSOURCES += ximage.ml \
++# 		oXimage.ml \
++# 		imagegdk.ml
++# OCAMLINTERFACES += ximage.mli \
++# 		   oXimage.mli \
++# 		   imagegdk.mli
++# AM_OCAMLCFLAGS += -I $(LABLGTKDIR)
++# endif
++
++if HAVE_LABLGTK2
++OCAMLSOURCES      += ximage.ml oXimage.ml imagegdk.ml ximage2.ml oXimage2.ml
++OCAMLINTERFACES   += ximage.mli oXimage.mli imagegdk.mli
++OTHER_CMI         += ximage2.cmi oXimage2.cmi
++AM_OCAMLCFLAGS    += -I $(LABLGTK2DIR)
++endif
++
++if HAVE_FREETYPE
++OCAMLSOURCES      += ftlow.ml freetype.ml jis_table.ml jis_unicode.ml \
++			         fttext.ml oFreetype.ml
++OCAMLINTERFACES   += ftlow.mli freetype.mli jis_unicode.mli fttext.mli
++CSOURCES          += ftintf.c
++AM_CFLAGS         += @FREETYPE2_CFLAGS@
++OTHER_CMI         += oFreetype.cmi jis_table.cmi
++endif
++
++ocamlsitelib_DATA = \
++		    $(OCAMLINTERFACES) \
++		    $(OCAMLINTERFACES:.mli=.cmi) \
++		    camlimages.a \
++		    camlimages_core.a \
++		    libcamlimages.a \
++		    libcamlimages_core.a \
++		    META
++ocamlstublibdir = $(libdir)/ocaml/stublibs
++
++if BUILD_SHARED
++ocamlstublib_DATA = dllcamlimages.so dllcamlimages_core.so
++endif
++
++if BUILD_NATIVE
++ocamlsitelib_DATA += camlimages.cmxa camlimages_core.cmxa
++endif
++
++if BUILD_BYTECODE
++ocamlsitelib_DATA += camlimages.cma camlimages_core.cma
++endif
++
++ocamlsitelib_DATA += $(OTHER_CMI)
++
++EXTRA_DIST = $(OCAMLSOURCES) $(OCAMLINTERFACES) $(CSOURCES) camlimages.ml.in META.in
++
++CLEANFILES = $(OCAMLBYTOBJS) \
++	     $(OCAMLOPTOBJS) \
++	     $(OCAMLOPTOBJS:.cmx=.o) \
++	     camlimages.cmi \
++	     $(OCAMLSOURCES:.ml=.cmi) \
++	     camlimages.annot \
++	     $(OCAMLSOURCES:.ml=.annot) \
++	     $(OCAMLINTERFACES:.mli=.cmi) \
++	     info.cmi \
++	     $(COBJS) \
++	     dllcamlimages_core.so \
++	     libcamlimages_core.a \
++	     camlimages_core.cma \
++	     camlimages_core.cmxa \
++	     camlimages_core.a \
++	     camlimages_core.ml \
++	     libcamlimages.a \
++	     dllcamlimages.so \
++	     camlimages.cma \
++	     camlimages.cmxa \
++	     camlimages.a \
++	     camlimages.ml \
++	     META
++
++OCAMLBYTOBJS_CORE = camlimages.cmo $(OCAMLSOURCES_CORE:.ml=.cmo)
++OCAMLBYTOBJS	  = camlimages.cmo $(OCAMLSOURCES:.ml=.cmo)
++OCAMLOPTOBJS_CORE = camlimages.cmx $(OCAMLSOURCES_CORE:.ml=.cmx)
++OCAMLOPTOBJS	  = camlimages.cmx $(OCAMLSOURCES:.ml=.cmx)
++COBJS_CORE	= $(CSOURCES_CORE:.c=.o)
++COBJS		= $(CSOURCES:.c=.o)
++EXTCLIB_CORE = $(LIBXPM) @LIBTIFF_LIBS@ $(LIBPNG) $(LIBJPEG) $(LIBGIF)
++EXTCLIB		 = $(EXTCLIB_CORE) @FREETYPE2_LIBS@ 
++
++camlimages_core.a libcamlimages_core.a dllcamlimages_core.so: $(COBJS_CORE)
++	$(OCAMLMKLIB) -o camlimages_core $(EXTCLIB_CORE) $(LDFLAGS) $(COBJS_CORE)
++
++camlimages.a libcamlimages.a dllcamlimages.so: $(COBJS)
++	$(OCAMLMKLIB) -o camlimages $(EXTCLIB) $(LDFLAGS) $(COBJS)
++
++
++camlimages_core.cma: $(OCAMLBYTOBJS_CORE) camlimages_core.a dllcamlimages_core.so
++	$(OCAMLMKLIB) -linkall -o camlimages_core $(EXTCLIB_CORE) $(LDFLAGS) $(OCAMLBYTOBJS_CORE)
++
++camlimages.cma: $(OCAMLBYTOBJS) camlimages.a dllcamlimages.so
++	$(OCAMLMKLIB) -linkall -o camlimages $(EXTCLIB) $(LDFLAGS) $(OCAMLBYTOBJS)
++
++camlimages_core.cmxa: $(OCAMLOPTOBJS_CORE) camlimages_core.a dllcamlimages_core.so
++	$(OCAMLMKLIB) -linkall -o camlimages_core $(EXTCLIB_CORE) $(LDFLAGS) $(OCAMLOPTOBJS_CORE)
++
++camlimages.cmxa: $(OCAMLOPTOBJS) camlimages.a dllcamlimages.so
++	$(OCAMLMKLIB) -linkall -o camlimages $(EXTCLIB) $(LDFLAGS) $(OCAMLOPTOBJS)
++
++camlimages.ml: $(top_srcdir)/config.status camlimages.ml.in
++	rm -f camlimages.ml camlimages.ml.tmp
++	sed \
++		-e 's,@VERSION\@,$(VERSION),g' \
++		-e 's,@SUPPORT_GIF\@,$(SUPPORT_GIF),g' \
++		-e 's,@SUPPORT_PNG\@,$(SUPPORT_PNG),g' \
++		-e 's,@SUPPORT_JPEG\@,$(SUPPORT_JPEG),g' \
++		-e 's,@SUPPORT_TIFF\@,$(SUPPORT_TIFF),g' \
++		-e 's,@SUPPORT_FREETYPE\@,$(SUPPORT_FREETYPE),g' \
++		-e 's,@SUPPORT_PS\@,$(SUPPORT_PS),g' \
++		-e 's,@SUPPORT_XPM\@,$(SUPPORT_XPM),g' \
++		-e 's,@PATH_RGB_TXT\@,$(PATH_RGB_TXT),g' \
++		-e 's,@GS\@,$(GS),g' \
++		-e 's,@WORD_SIZE\@,$(WORD_SIZE),g' \
++		$(srcdir)/camlimages.ml.in > camlimages.ml.tmp
++	mv camlimages.ml.tmp camlimages.ml
++
++top: all
++	$(OCAMLMKTOP) -custom -o customtop -ccopt "-L." \
++		$(WITH_UNIX) \
++		$(WITH_CAMLIMAGES)
++
++include ../Makefile.rules
+diff --git a/test/Makefile.am b/test/Makefile.am
+new file mode 100644
+index 0000000..a02b0bf
+--- /dev/null
++++ b/test/Makefile.am
+@@ -0,0 +1,54 @@
++#*********************************************************************#
++#                                                                     #
++#                          Caml Images                                #
++#                                                                     #
++#            François Pessaux, projet Cristal, INRIA Rocquencourt     #
++#            Pierre Weis, projet Cristal, INRIA Rocquencourt          #
++#            Jun Furuse, projet Cristal, INRIA Rocquencourt           #
++#                                                                     #
++#  Copyright 1999-2004,                                               #
++#  Institut National de Recherche en Informatique et en Automatique.  #
++#  Distributed only by permission.                                    #
++#                                                                     #
++#*********************************************************************#
++
++#(* $Id: Makefile.am,v 1.6 2007/02/20 21:19:22 rousse Exp $ *)
++
++OCAMLSOURCES = test.ml
++
++TESTS =
++check_PROGRAMS =
++if BUILD_NATIVE
++check_PROGRAMS += test.opt
++TESTS += test.opts
++endif
++if BUILD_BYTECODE
++check_PROGRAMS += test.byt
++TESTS += test.byt
++endif
++
++test_opt_SOURCES = $(OCAMLSOURCES)
++test_byt_SOURCES = $(OCAMLSOURCES)
++
++include ../Makefile.variables
++
++EXTRA_DIST = images micap.ttf
++
++CLEANFILES += out.image
++
++test.byt$(EXEEXT): $(OCAMLBYTOBJS)
++	$(OCAMLC) -o test.byt$(EXEEXT) \
++		$(DLLPATHS) $(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS) $(OCAMLBYTOBJS)
++
++test.opt$(EXEEXT): $(OCAMLOPTOBJS)
++	$(OCAMLOPT) -o test.opt$(EXEEXT) \
++		$(LINKFLAGS) $(AM_LINKFLAGS) \
++		$(OCAMLLIBS:.cma=.cmxa) $(OCAMLOPTOBJS)
++
++dist-hook:
++	rm -rf $(distdir)/images/CVS
++	rm -f $(distdir)/images/.cvsignore
++
++
++include ../Makefile.rules
+-- 
+1.7.2.5
+
+
+From 79be4b11cf6e32056ac199efb48728fd7a09bbe9 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 12 Aug 2012 20:56:46 +0200
+Subject: [PATCH 2/4] modify META file with ad-hock patch to make it usable in MXE
+
+
+diff --git a/src/META.in b/src/META.in
+index 45e96d6..e1b1c18 100644
+--- a/src/META.in
++++ b/src/META.in
+@@ -2,68 +2,15 @@ name = "CamlImages"
+ version = "@PACKAGE_VERSION@"
+ description = "Objective Caml image processing library"
+ 
+-archive(byte) = "camlimages.cma"
+-archive(native) = "camlimages.cmxa"
++requires = "camlimages.core"
+ 
+ package "core" (
+   archive(byte) = "camlimages_core.cma"
+   archive(native) = "camlimages_core.cmxa"
+ )
+ 
+-package "gif" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_gif.cma"
+-  archive(native) = "camlimages_gif.cmxa"
+-)
+-
+-package "jpeg" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_jpeg.cma"
+-  archive(native) = "camlimages_jpeg.cmxa"
+-)
+-
+-package "png" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_png.cma"
+-  archive(native) = "camlimages_png.cmxa"
+-)
+-
+-package "tiff" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_tiff.cma"
+-  archive(native) = "camlimages_tiff.cmxa"
+-)
+-
+-package "freetype" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_freetype.cma"
+-  archive(native) = "camlimages_freetype.cmxa"
+-)
+-
+-package "xpm" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_xpm.cma"
+-  archive(native) = "camlimages_xpm.cmxa"
+-)
+-
+-package "ps" (
+-  requires = "camlimages.core"
+-  archive(byte) = "camlimages_ps.cma"
+-  archive(native) = "camlimages_ps.cmxa"
+-)
+-
+-package "graphics" (
+-  requires = "camlimages.core, graphics"
+-  archive(byte) = "camlimages_graphics.cma"
+-  archive(native) = "camlimages_graphics.cmxa"
+-)
+-
+-package "lablgtk2" (
+-  requires = "camlimages.core, lablgtk2"
+-  archive(byte) = "camlimages_lablgtk2.cma"
+-  archive(native) = "camlimages_lablgtk2.cmxa"
+-)
+-
+ package "all_formats" (
+-  requires = "camlimages.gif, camlimages.jpeg, camlimages.png, camlimages.tiff, camlimages.xpm, camlimages.ps"
++  requires = "graphics, lablgtk2, graphics"
++  archive(byte) = "camlimages.cma"
++  archive(native) = "camlimages.cmxa"  
+ )
+-- 
+1.7.2.5
+
+
+From 7ecf7a9c4ca35e5f43514cfc634d09999ee0a099 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 12 Aug 2012 20:58:10 +0200
+Subject: [PATCH 3/4] update gifread.c and gifwrite.c for new giflib-5.0.0, and png for similar purpose
+
+
+diff --git a/src/gifread.c b/src/gifread.c
+index ecf40c4..097db1d 100644
+--- a/src/gifread.c
++++ b/src/gifread.c
+@@ -140,7 +140,7 @@ value dGifOpenFileName( value name )
+   GifFileType *GifFile;
+   int i;
+ 
+-  if((GifFile = DGifOpenFileName( String_val(name) )) == NULL){
++  if((GifFile = DGifOpenFileName( String_val(name) , NULL )) == NULL){
+     failwith("DGifOpenFileName");
+   }
+ 
+@@ -200,7 +200,12 @@ value dGifGetLine( value hdl )
+ 
+   if( DGifGetLine(GifFile, String_val(buf), GifFile->Image.Width ) 
+       == GIF_ERROR ){
+-    PrintGifError ();
++	/* was PrintGifError() before removal in giflib-4.2.0 */
++    char *Err = GifErrorString(GifFile->Error);
++    if (Err != NULL)
++        fprintf(stderr, "\nGIF-LIB error: %s.\n", Err);
++    else
++        fprintf(stderr, "\nGIF-LIB undefined error %d.\n", GifFile->Error);
+     failwith("DGifGetLine");
+   }
+   CAMLreturn(buf);
+diff --git a/src/gifwrite.c b/src/gifwrite.c
+index 4b6399f..caf04c0 100644
+--- a/src/gifwrite.c
++++ b/src/gifwrite.c
+@@ -25,7 +25,7 @@
+ 
+ #include <gif_lib.h>
+ 
+-int list_length( value list )
++int get_list_length( value list )
+ {
+   CAMLparam1(list);
+   CAMLlocal1(l);
+@@ -52,7 +52,7 @@ ColorMapObject *ColorMapObject_val( value cmap )
+ fprintf(stderr, "Creating map with length = %d ...\n", len);
+ fflush(stderr);
+ */
+-  cmapobj = MakeMapObject( len, NULL );
++  cmapobj = GifMakeMapObject( len, NULL );
+   for(i=0; i< len; i++){
+     cmapobj->Colors[i].Red   = Int_val(Field(Field(cmap,i),0));
+     cmapobj->Colors[i].Green = Int_val(Field(Field(cmap,i),1));
+@@ -68,7 +68,7 @@ value eGifOpenFileName( name )
+ 
+   GifFileType *GifFileOut;
+ 
+-  if ((GifFileOut = EGifOpenFileName( String_val( name ), 0) )== NULL) {
++  if ((GifFileOut = EGifOpenFileName( String_val( name ), 0, NULL) )== NULL) {
+     failwith("EGifOpenFileName");
+   }
+   /* gcc -fwritable-strings is required to compile libungif */
+@@ -133,7 +133,11 @@ value eGifPutLine( value oc, value buf )
+ 
+   if ( EGifPutLine(GifFileOut, String_val(buf), GifFileOut->Image.Width) 
+        == GIF_ERROR ){
+-    PrintGifError ();
++	char *Err = GifErrorString(GifFileOut->Error);
++    if (Err != NULL)
++        fprintf(stderr, "\nGIF-LIB error: %s.\n", Err);
++    else
++        fprintf(stderr, "\nGIF-LIB undefined error %d.\n", GifFileOut->Error);
+     failwith("EGifPutLine");
+   }
+   CAMLreturn(Val_unit);
+@@ -151,7 +155,7 @@ value eGifPutExtension( value oc, value ext )
+   int i;
+ 
+   extCode = Int_val(Field(ext,0));
+-  extLen = list_length( Field(ext,1) );
++  extLen = get_list_length( Field(ext,1) );
+   if( (extension = malloc(sizeof(char*) * extLen)) == NULL ){
+     failwith("EGifPutExtension");
+   }
+diff --git a/src/pngread.c b/src/pngread.c
+index cc576e8..ce25110 100644
+--- a/src/pngread.c
++++ b/src/pngread.c
+@@ -69,7 +69,7 @@ value read_png_file_as_rgb24( name )
+   }
+ 
+   /* error handling */
+-  if (setjmp(png_ptr->jmpbuf)) {
++  if (setjmp(png_jmpbuf(png_ptr))) {
+     /* Free all of the memory associated with the png_ptr and info_ptr */
+     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+     fclose(fp);
+@@ -134,7 +134,7 @@ value read_png_file_as_rgb24( name )
+     png_set_rows(png_ptr, info_ptr, row_pointers);
+ 
+     /* Later, we can return something */
+-    if (setjmp(png_ptr->jmpbuf)) {
++    if (setjmp(png_jmpbuf(png_ptr))) {
+       /* Free all of the memory associated with the png_ptr and info_ptr */
+       png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+       fclose(fp);
+@@ -243,7 +243,7 @@ value read_png_file( name )
+   }
+ 
+   /* error handling */
+-  if (setjmp(png_ptr->jmpbuf)) {
++  if (setjmp(png_jmpbuf(png_ptr))) {
+     /* Free all of the memory associated with the png_ptr and info_ptr */
+     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+     fclose(fp);
+@@ -302,7 +302,7 @@ value read_png_file( name )
+     png_set_rows(png_ptr, info_ptr, row_pointers);
+ 
+     /* Later, we can return something */
+-    if (setjmp(png_ptr->jmpbuf)) {
++    if (setjmp(png_jmpbuf(png_ptr))) {
+       /* Free all of the memory associated with the png_ptr and info_ptr */
+       png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+       fclose(fp);
+diff --git a/src/pngwrite.c b/src/pngwrite.c
+index 3248562..6937cd8 100644
+--- a/src/pngwrite.c
++++ b/src/pngwrite.c
+@@ -62,7 +62,7 @@ value write_png_file_rgb( name, buffer, width, height, with_alpha )
+   }
+ 
+   /* error handling */
+-  if (setjmp(png_ptr->jmpbuf)) {
++  if (setjmp(png_jmpbuf(png_ptr))) {
+     /* Free all of the memory associated with the png_ptr and info_ptr */
+     png_destroy_write_struct(&png_ptr, &info_ptr);
+     fclose(fp);
+@@ -171,7 +171,7 @@ value write_png_file_index( name, buffer, cmap, width, height )
+   }
+ 
+   /* error handling */
+-  if (setjmp(png_ptr->jmpbuf)) {
++  if (setjmp(png_jmpbuf(png_ptr))) {
+     /* Free all of the memory associated with the png_ptr and info_ptr */
+     png_destroy_write_struct(&png_ptr, &info_ptr);
+     fclose(fp);
+-- 
+1.7.2.5
+
+
+From f35cfc4a23431f0da77f9fa75f6d102a7b09e094 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 3 Oct 2012 09:37:05 +0200
+Subject: [PATCH 4/4] META : add camlimages.lablgtk2 and camlimages.freetype (referencing camlimages.all_formats)
+
+
+diff --git a/src/META.in b/src/META.in
+index e1b1c18..5994beb 100644
+--- a/src/META.in
++++ b/src/META.in
+@@ -9,8 +9,16 @@ package "core" (
+   archive(native) = "camlimages_core.cmxa"
+ )
+ 
++package "lablgtk2" (
++  requires = "graphics, lablgtk2, camlimages.all_formats"
++)
++
++package "freetype" (
++  requires = "camlimages.all_formats"
++)
++
+ package "all_formats" (
+-  requires = "graphics, lablgtk2, graphics"
++  requires = "graphics"
+   archive(byte) = "camlimages.cma"
+   archive(native) = "camlimages.cmxa"  
+ )
+-- 
+1.7.2.5
+

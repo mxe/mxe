@@ -111,7 +111,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' install
     $(MAKE) -C '$(1)' installopt
     # Rename all the binaries to target-binary
-    for f in ocamlc ocamlcp ocamlrun ocamldep ocamlmklib ocamlmktop ocamlopt ocamlprof camlp4prof camlp4boot camlp4 camlp4oof camlp4of camlp4o camlp4rf camlp4r camlp4orf ocamldoc ; do \
+    for f in ocamlc ocamlcp ocamlrun ocamldep ocamlmklib ocamlmktop ocamlopt ocamlprof camlp4prof camlp4boot camlp4 camlp4oof camlp4of camlp4o camlp4rf camlp4r camlp4orf ocamldoc ocamllex ; do \
       cp -f $(PREFIX)/$(TARGET)/bin/$$f $(PREFIX)/bin/$(TARGET)-$$f; \
     done
 
@@ -121,7 +121,4 @@ define $(PKG)_BUILD
     # test ocamlbuild
     mkdir '$(1)/tmp' && cp '$(2).ml' '$(1)/tmp/test.ml'
     cd '$(1)/tmp' && $(TARGET)-ocamlbuild test.native
-    # test
-    cp '$(2).ml' '$(1)/test.ml'
-    cd '$(1)' && '$(TARGET)-ocamlopt' test.ml
 endef
