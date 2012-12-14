@@ -1,13 +1,13 @@
 # This file is part of mingw-cross-env.
 # See doc/index.html for further information.
 
-PKG                := ocaml-lablgl
-$(PKG)_IGNORE    :=
+PKG             := ocaml-lablgl
+$(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 996f0aba788f5fa1531587fb06d667b94237cc92
-$(PKG)_SUBDIR    := lablGL
-$(PKG)_FILE        := lablgl-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL        := http://wwwfun.kurims.kyoto-u.ac.jp/soft/olabl/dist/$($(PKG)_FILE)
-$(PKG)_DEPS        := ocaml-findlib gtkglarea
+$(PKG)_SUBDIR   := lablGL
+$(PKG)_FILE     := lablgl-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://wwwfun.kurims.kyoto-u.ac.jp/soft/olabl/dist/$($(PKG)_FILE)
+$(PKG)_DEPS     := ocaml-findlib gtkglarea
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html' | \

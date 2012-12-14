@@ -1,14 +1,13 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG                := ocaml-cairo
-$(PKG)_IGNORE    :=
+PKG             := ocaml-cairo
+$(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := d5835620bea005d5d5239f889b10a922fda2520b
-$(PKG)_SUBDIR    := cairo-ocaml-$($(PKG)_VERSION)
-$(PKG)_FILE        := cairo-ocaml_$($(PKG)_VERSION).orig.tar.gz
-# URL http://cgit.freedesktop.org/cairo-ocaml/snapshot/$($(PKG)_FILE) gives a different checksum at each download, so I use the debian version.
-$(PKG)_URL        := http://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/$($(PKG)_FILE)
-$(PKG)_DEPS        := ocaml-core ocaml-findlib ocaml-lablgtk2
+$(PKG)_SUBDIR   := cairo-ocaml-$($(PKG)_VERSION)
+$(PKG)_FILE     := cairo-ocaml_$($(PKG)_VERSION).orig.tar.gz
+$(PKG)_URL      := http://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/$($(PKG)_FILE)
+$(PKG)_DEPS     := ocaml-core ocaml-findlib ocaml-lablgtk2
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml' | \

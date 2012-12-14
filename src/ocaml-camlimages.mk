@@ -1,13 +1,13 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG                := ocaml-camlimages
-$(PKG)_IGNORE    :=
+PKG             := ocaml-camlimages
+$(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3ff44142386970003d3cff1446ad351b36759a8e
-$(PKG)_SUBDIR    := camlspotter-camlimages-c803efa9d5d3
-$(PKG)_FILE        := v$($(PKG)_VERSION).tar.gz
-$(PKG)_URL        := https://bitbucket.org/camlspotter/camlimages/get/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS        := ocaml-findlib freetype libpng giflib tiff ocaml-lablgtk2
+$(PKG)_SUBDIR   := camlspotter-camlimages-c803efa9d5d3
+$(PKG)_FILE     := v$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://bitbucket.org/camlspotter/camlimages/get/v$($(PKG)_VERSION).tar.gz
+$(PKG)_DEPS     := ocaml-findlib freetype libpng giflib tiff ocaml-lablgtk2
 
 define $(PKG)_UPDATE
     wget -q -O- 'https://bitbucket.org/camlspotter/camlimages/downloads' | \

@@ -1,13 +1,13 @@
 # This file is part of mingw-cross-env.
 # See doc/index.html for further information.
 
-PKG                := ocaml-findlib
-$(PKG)_IGNORE    :=
+PKG             := ocaml-findlib
+$(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 5d1a52b77145348ded29fefe13736694aabb1868
-$(PKG)_SUBDIR    := findlib-$($(PKG)_VERSION)
-$(PKG)_FILE        := findlib-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL        := http://download.camlcity.org/download/$($(PKG)_FILE)
-$(PKG)_DEPS        := ocaml-core
+$(PKG)_SUBDIR   := findlib-$($(PKG)_VERSION)
+$(PKG)_FILE     := findlib-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://download.camlcity.org/download/$($(PKG)_FILE)
+$(PKG)_DEPS     := ocaml-core
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://download.camlcity.org/download' | \
@@ -20,14 +20,14 @@ define $(PKG)_BUILD
     # build
     rm -f $(1)/src/findlib/ocaml_args.ml
     cd '$(1)' && \
-      PATH="$(PREFIX)/$(TARGET)/bin/ocaml-native:$(PATH)" \
-      ./configure \
-      -config $(PREFIX)/$(TARGET)/etc/findlib.conf \
-      -bindir $(PREFIX)/$(TARGET)/bin \
-      -sitelib $(PREFIX)/$(TARGET)/lib/ocaml \
-      -mandir $(PREFIX)/$(TARGET)/share/man \
-      -with-toolbox \
-      -no-topfind \
+        PATH="$(PREFIX)/$(TARGET)/bin/ocaml-native:$(PATH)" \
+        ./configure \
+            -config $(PREFIX)/$(TARGET)/etc/findlib.conf \
+            -bindir $(PREFIX)/$(TARGET)/bin \
+            -sitelib $(PREFIX)/$(TARGET)/lib/ocaml \
+            -mandir $(PREFIX)/$(TARGET)/share/man \
+            -with-toolbox \
+            -no-topfind
 
     # no-topfind because it wants to be installed in /usr/bin, and creates blocking
     # error
