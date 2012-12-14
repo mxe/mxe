@@ -27,7 +27,9 @@ define $(PKG)_BUILD
 		--host $(TARGET) \
 		--disable-bytecode-library \
 		--disable-shared
-	$(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(SED) -i 's,sed,$(SED),g' $(1)/Makefile
+    $(SED) -i 's,sed,$(SED),g' $(1)/src/Makefile
+    $(MAKE) -C '$(1)' -j 1 install
 	# test
 	cp '$(2).ml' '$(1)/test.ml'
 	cd '$(1)' && '$(TARGET)-ocamlfind' opt -linkpkg -package camlimages test.ml
