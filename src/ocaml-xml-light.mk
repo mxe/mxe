@@ -16,13 +16,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i "s,@target@,$(TARGET),g" '$(1)/Makefile'
-    $(SED) -i 's/ocamllex/$(TARGET)-ocamllex/g' '$(1)/Makefile'
+    $(SED) -i "s,@target@,$(TARGET),g"            '$(1)/Makefile'
+    $(SED) -i 's,ocamllex,$(TARGET)-ocamllex,g'   '$(1)/Makefile'
+    $(SED) -i 's,ocamlyacc,$(TARGET)-ocamlyacc,g' '$(1)/Makefile'
     $(SED) -i "s,@installdir@,$(PREFIX)/$(TARGET)/lib/ocaml/xml-light,g" $(1)/Makefile
     $(MAKE) -C '$(1)' xml_parser.ml
-    $(MAKE) -C '$(1)' -j '$(JOBS)' # without seperated previous step, does not work
+    $(MAKE) -C '$(1)' -j 1 # without seperated previous step, does not work
     mkdir -p $(PREFIX)/$(TARGET)/lib/ocaml/xml-light
-    # install.. 
+    # install..
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
     (echo 'version="$($(PKG)_VERSION)"'; \
      echo 'directory="+xml-light"'; \
