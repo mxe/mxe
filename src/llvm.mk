@@ -3,9 +3,9 @@
 
 PKG             := llvm
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := b683e7294fcf69887c0d709025d4640f5dca755b
+$(PKG)_CHECKSUM := 234c96e73ef81aec9a54da92fc2a9024d653b059
 $(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION).src
-$(PKG)_FILE     := llvm-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := llvm-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := http://llvm.org/releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DLIBTYPE=STATIC \
-        -DLLVM_TARGETS_TO_BUILD="X86;" \
+        -DLLVM_TARGETS_TO_BUILD="X86" \
         -DLLVM_BUILD_TOOLS=OFF
     $(MAKE) -C '$(1)/build' -j $(JOBS) llvm-tblgen
     $(MAKE) -C '$(1)/build' -j $(JOBS) intrinsics_gen
