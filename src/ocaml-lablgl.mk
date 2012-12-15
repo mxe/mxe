@@ -10,7 +10,7 @@ $(PKG)_URL      := http://wwwfun.kurims.kyoto-u.ac.jp/soft/olabl/dist/$($(PKG)_F
 $(PKG)_DEPS     := ocaml-findlib gtkglarea
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html' | \
+    $(WGET) -q -O- 'http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html' | \
     $(SED) -n 's,.*lablgl-\([^>]*\)\.tar.*,\1,ip' | \
     head -1
 endef

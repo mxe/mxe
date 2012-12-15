@@ -10,8 +10,8 @@ $(PKG)_URL      := https://bitbucket.org/camlspotter/camlimages/get/v$($(PKG)_VE
 $(PKG)_DEPS     := ocaml-findlib freetype libpng giflib tiff ocaml-lablgtk2
 
 define $(PKG)_UPDATE
-    wget -q -O- 'https://bitbucket.org/camlspotter/camlimages/downloads' | \
-    $(SED) -n 's,.*camlimages-\([0-9][^>]*\)\.tar.*,\1,ip' | \
+    $(WGET) -q -O- 'https://bitbucket.org/camlspotter/camlimages/downloads' | \
+    $(SED) -n 's,.*get/v\([0-9][^>]*\)\.tar.*,\1,ip' | \
     head -1
 endef
 

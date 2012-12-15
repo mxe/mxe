@@ -10,8 +10,8 @@ $(PKG)_URL      := https://forge.ocamlcore.org/frs/download.php/979/$($(PKG)_FIL
 $(PKG)_DEPS     := ocaml-findlib libglade gtkglarea ocaml-lablgl gtk2
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://forge.ocamlcore.org/frs/?group_id=220' | \
-    sed -n 's,.*lablgtk-\(2[^>]*\)\.tar.*,\1,ip' | \
+    $(WGET) -q -O- 'http://forge.ocamlcore.org/frs/?group_id=220' | \
+    $(SED) -n 's,.*lablgtk-\(2[^>]*\)\.tar.*,\1,ip' | \
     sort | \
     tail -1
 endef

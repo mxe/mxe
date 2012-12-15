@@ -10,8 +10,8 @@ $(PKG)_URL      := http://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/$($(P
 $(PKG)_DEPS     := ocaml-core ocaml-findlib ocaml-lablgtk2
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml' | \
-    $(SED) -n 's,.*cairo-ocaml-\([0-9][^>]*\)\.orig\.tar.*,\1,ip' | \
+    $(WGET) -q -O- 'http://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/?C=M;O=D' | \
+    $(SED) -n 's,.*cairo-ocaml_\([0-9][^>]*\)\.orig\.tar.*,\1,ip' | \
     head -1
 endef
 
