@@ -49,6 +49,7 @@ define $(PKG)_BUILD
             -system-pcre \
             -openssl-linked \
             -dbus-linked \
+            $(shell [ `uname` == 'Darwin' ] && echo -no-c++11) \
             -v
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
