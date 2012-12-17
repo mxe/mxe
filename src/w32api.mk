@@ -16,6 +16,19 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     cp -rpv '$(1)/include' '$(1)/lib' '$(PREFIX)/$(TARGET)'
+
+    # create pkg-config files
+    (echo 'Name: gl'; \
+     echo 'Version: 0'; \
+     echo 'Description: OpenGL'; \
+     echo 'Libs: -lopengl32';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/gl.pc'
+
+    (echo 'Name: glu'; \
+     echo 'Version: 0'; \
+     echo 'Description: OpenGL'; \
+     echo 'Libs: -lglu32';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/glu.pc'
 endef
