@@ -3,7 +3,7 @@
 
 PKG             := gmp
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 12a662456033e21aed3e318aef4177f4000afe3b
+$(PKG)_CHECKSUM := 4ef73083785386cb54445a7fb6ef7e43bc4ed07a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gmplib.org/pub/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
