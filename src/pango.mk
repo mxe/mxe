@@ -3,7 +3,7 @@
 
 PKG             := pango
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 804297d05cf2f67915b1200d7110f38ea591b60f
+$(PKG)_CHECKSUM := 0f390c43ba51e851d35e8dd9eb7eb8f72eef4035
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -24,8 +24,6 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-gtk-doc \
-        --without-x \
         --enable-explicit-deps \
         --with-included-modules \
         --without-dynamic-modules \
