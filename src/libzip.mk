@@ -16,9 +16,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-# TODO: send a patch upstream
-    echo 'Requires: zlib' >> '$(1)/libzip.pc.in'
-
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
