@@ -21,7 +21,6 @@ define $(PKG)_BUILD
         ./configure \
             -opensource \
             -confirm-license \
-            -fast \
             -xplatform win32-g++ \
             -device-option CROSS_COMPILE=${TARGET}- \
             -device-option PKG_CONFIG='${TARGET}-pkg-config' \
@@ -33,7 +32,6 @@ define $(PKG)_BUILD
             -no-glib \
             -accessibility \
             -no-reduce-exports \
-            -no-rpath \
             -nomake demos \
             -nomake examples \
             -nomake docs \
