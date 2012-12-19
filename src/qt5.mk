@@ -3,10 +3,10 @@
 
 PKG             := qt5
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 0be5c66e9132e4d7c82a1f6f5569165186dba5f6
+$(PKG)_CHECKSUM := 24e7403f569796f3879b5c930ac4749363cc507b
 $(PKG)_SUBDIR   := qt-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := qt-everywhere-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://releases.qt-project.org/qt5.0/rc2/single/$($(PKG)_FILE)
+$(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/single/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus pcre fontconfig freetype
 
 define $(PKG)_UPDATE
