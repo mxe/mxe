@@ -1,16 +1,16 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := qt5
+PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 24e7403f569796f3879b5c930ac4749363cc507b
-$(PKG)_SUBDIR   := qt-everywhere-opensource-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := qt-everywhere-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/single/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus pcre fontconfig freetype
+$(PKG)_CHECKSUM := 3d553ed3fe4065b8453939831c007ec896ceb9ab
+$(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
+$(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules_tar/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package qt5.' >&2;
+    echo 'Warning: Updates are temporarily disabled for package qtbase.' >&2;
 endef
 
 define $(PKG)_BUILD
@@ -53,9 +53,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt5'
     $(MAKE) -C '$(1)' -j 1 install
-
-    # missing plugin description files
-    $(INSTALL) -m644 '$(1)/qtbase/mkspecs/modules/qt_plugin_'*'.pri' '$(PREFIX)/$(TARGET)/qt5/mkspecs/modules/'
 
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qt-test.pro'

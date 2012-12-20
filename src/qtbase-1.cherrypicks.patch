@@ -1,0 +1,107 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 34475e6e4d05051ba80197846d932acb9492663b Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 24 Sep 2012 19:53:55 +0200
+Subject: [PATCH 1/3] use pkg-config for freetype
+
+Change-Id: Id0b048b44bcebf066c21efeb89f9c1781023a593
+
+diff --git a/src/plugins/platforms/windows/windows.pro b/src/plugins/platforms/windows/windows.pro
+index 7f73465..1de1d74 100644
+--- a/src/plugins/platforms/windows/windows.pro
++++ b/src/plugins/platforms/windows/windows.pro
+@@ -169,6 +169,10 @@ contains(QT_CONFIG, freetype) {
+                qwindowsfontdatabase_ft.h
+     SOURCES += \
+                qwindowsfontdatabase_ft.cpp
++    static {
++        CONFIG += link_pkgconfig
++        PKGCONFIG += freetype2
++    }
+ }
+ 
+ OTHER_FILES += windows.json
+-- 
+1.7.10.4
+
+
+From 6338d13b9ed413f68af28d112ca6d5c59e9df45d Mon Sep 17 00:00:00 2001
+From: Miikka Heikkinen <miikka.heikkinen@digia.com>
+Date: Fri, 14 Dec 2012 11:51:28 +0200
+Subject: [PATCH 2/3] Fix installation of plugin module .pris in static Qt
+ builds
+
+When building Qt static, plugins get module .pri file, but those files
+do not get installed in Windows. This is because both .pri generation
+and install target statements are scoped with !build_pass, which means
+Makefile.Debug and Makefile.Release do not get install_pritarget
+target.
+
+Fixed by doing only the .pri generation in !build_pass scope.
+
+Task-number: QTBUG-28606
+Change-Id: If3f49b578af1d9171a8bce67793ecb3f902a6da8
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+Reviewed-by: Mark Brand <mabrand@mabrand.nl>
+(cherry picked from commit 4c5584f0a3c003106d07d0cf8b512108b9ff541a)
+
+diff --git a/mkspecs/features/qt_plugin.prf b/mkspecs/features/qt_plugin.prf
+index f547e2d..6e5f27b 100644
+--- a/mkspecs/features/qt_plugin.prf
++++ b/mkspecs/features/qt_plugin.prf
+@@ -20,16 +20,18 @@ contains(QT_CONFIG, c++11):CONFIG += c++11
+ contains(QT_CONFIG, static):CONFIG += static
+ else:CONFIG += shared
+ 
+-!build_pass:static {
++static {
+     isEmpty(MODULE): MODULE = $$basename(TARGET)
+ 
+     MODULE_PRI = $$MODULE_QMAKE_OUTDIR/mkspecs/modules/qt_plugin_$${MODULE}.pri
+ 
+-    MODULE_PRI_CONT = \
+-        "QT_PLUGIN.$${MODULE}.TYPE = $$PLUGIN_TYPE" \
+-        "QT_PLUGIN.$${MODULE}.CLASS_NAME = $$PLUGIN_CLASS_NAME"
++    !build_pass {
++        MODULE_PRI_CONT = \
++            "QT_PLUGIN.$${MODULE}.TYPE = $$PLUGIN_TYPE" \
++            "QT_PLUGIN.$${MODULE}.CLASS_NAME = $$PLUGIN_CLASS_NAME"
+ 
+-    write_file($$MODULE_PRI, MODULE_PRI_CONT)|error("Aborting.")
++        write_file($$MODULE_PRI, MODULE_PRI_CONT)|error("Aborting.")
++    }
+ 
+     pritarget.path = $$[QT_HOST_DATA]/mkspecs/modules
+     pritarget.files = $$MODULE_PRI
+-- 
+1.7.10.4
+
+
+From 6ed40cc9bb1fc9011cd1e97ba6ed1ec2263dc86b Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 19 Dec 2012 23:44:05 +0100
+Subject: [PATCH 3/3] fix QMAKE_MAKE for x-mingw
+
+Change-Id: I694c74046a307c2887af1c30cca36f95e242adc1
+
+diff --git a/mkspecs/features/configure.prf b/mkspecs/features/configure.prf
+index ff52c6b..e567641 100644
+--- a/mkspecs/features/configure.prf
++++ b/mkspecs/features/configure.prf
+@@ -1,7 +1,9 @@
+ equals(MAKEFILE_GENERATOR, UNIX): \
+     QMAKE_MAKE = make
+-else:equals(MAKEFILE_GENERATOR, MINGW): \
+-    QMAKE_MAKE = mingw32-make
++else:equals(MAKEFILE_GENERATOR, MINGW) {
++    !isEmpty(CROSS_COMPILE):QMAKE_MAKE = make
++    else:QMAKE_MAKE = mingw32-make
++}
+ else:if(equals(MAKEFILE_GENERATOR, MSVC.NET)|equals(MAKEFILE_GENERATOR, MSBUILD)): \
+     QMAKE_MAKE = nmake
+ else: \
+-- 
+1.7.10.4
+
