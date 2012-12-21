@@ -1,0 +1,21 @@
+This file is part of MXE.
+See index.html for further information.
+
+This is a quick&dirty fix.
+
+The bug is being discussed at
+http://www.nih.at/listarchive/libzip-discuss/msg00304.html
+
+--- a/lib/zip.h	2012-03-15 10:28:05.000000000 +0100
++++ b/lib/zip.h	2012-12-18 02:05:31.416621709 +0100
+@@ -37,8 +37,8 @@
+ 
+ 
+ #ifndef ZIP_EXTERN
+-#ifdef _WIN32
+-#define ZIP_EXTERN __declspec(dllimport)
++#ifdef _MSC_VER
++#define ZIP_EXTERN __declspec(dllexport)
+ #else
+ #define ZIP_EXTERN
+ #endif
