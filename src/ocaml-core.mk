@@ -43,7 +43,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 coreboot
     $(MAKE) -C '$(1)' -j 1 all
     # install ocamldoc and camlp4 (non cross versions)
-    $(MAKE) -C '$(1)/ocamldoc' install
+    $(MAKE) -C '$(1)/ocamldoc' -j 1 install
     cd '$(1)' && BINDIR=$(PREFIX)/$(TARGET)/bin \
                  LIBDIR=$(PREFIX)/$(TARGET)/lib/ocaml \
                  PREFIX=$(PREFIX)/$(TARGET) \
@@ -93,23 +93,23 @@ define $(PKG)_BUILD
     ####### build mingw ocaml
     # Just rebuild some small bits that we need for the following
     # 'make opt' to work.  Note that 'make all' fails here.
-    $(MAKE) -C '$(1)/byterun' libcamlrun.a
-    $(MAKE) -C '$(1)' ocaml ocamlc
-    $(MAKE) -C '$(1)/stdlib'
-    $(MAKE) -C '$(1)/tools' ocamlmklib
+    $(MAKE) -C '$(1)/byterun' -j 1 libcamlrun.a
+    $(MAKE) -C '$(1)' -j 1 ocaml ocamlc
+    $(MAKE) -C '$(1)/stdlib' -j 1
+    $(MAKE) -C '$(1)/tools' -j 1 ocamlmklib
     # Build ocamlopt
-    $(MAKE) -C '$(1)' opt
+    $(MAKE) -C '$(1)' -j 1 opt
     # Now build otherlibs for ocamlopt
     cd '$(1)' && \
       for i in $(OTHER_LIBS); do \
-        $(MAKE) -C otherlibs/$$i clean; \
-        $(MAKE) -C otherlibs/$$i all; \
-        $(MAKE) -C otherlibs/$$i allopt; \
+        $(MAKE) -C otherlibs/$$i -j 1 clean; \
+        $(MAKE) -C otherlibs/$$i -j 1 all; \
+        $(MAKE) -C otherlibs/$$i -j 1 allopt; \
     done
 
     ####### installation
-    $(MAKE) -C '$(1)' install
-    $(MAKE) -C '$(1)' installopt
+    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(1)' -j 1 installopt
     # Rename all the binaries to target-binary
     for f in ocamlc ocamlcp ocamlrun ocamldep ocamlmklib ocamlmktop ocamlopt \
       ocamlprof camlp4prof camlp4boot camlp4 camlp4oof camlp4of camlp4o \
