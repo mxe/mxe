@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.nih.at/libzip/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.nih.at/libzip/' | \
+    $(WGET) -q -O- 'http://www.nih.at/libzip/' | \
     $(SED) -n 's,.*libzip-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

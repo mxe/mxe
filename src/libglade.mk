@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/$($(PKG)_
 $(PKG)_DEPS     := gcc libxml2 atk glib gtk2
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/' | \
+    $(WGET) -q -O- 'http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/' | \
     $(SED) -n 's,.*"libglade-\([0-9][^"]*\)\.tar.gz.*,\1,p' | \
     tail -1
 endef

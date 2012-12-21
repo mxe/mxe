@@ -10,7 +10,7 @@ $(PKG)_URL      := http://fallabs.com/qdbm/qdbm-1.8.78.tar.gz
 $(PKG)_DEPS     := gcc bzip2 libiconv lzo zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://fallabs.com/qdbm/' | \
+    $(WGET) -q -O- 'http://fallabs.com/qdbm/' | \
     grep 'qdbm-' | \
     $(SED) -n 's,.*qdbm-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
