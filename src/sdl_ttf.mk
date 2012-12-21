@@ -16,6 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    echo 'Requires.private: freetype2' >> '$(1)/SDL_ttf.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
