@@ -89,7 +89,8 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '#JOBS = $(JOBS)'; \
-        echo '#PKGS ='; \
+        echo '#.DEFAULT my-pkgs:'; \
+        echo '#my-pkgs: boost curl file flac lzo pthreads vorbis wxwidgets'; \
     } >'$(PWD)/settings.mk')
 endif
 
