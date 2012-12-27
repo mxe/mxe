@@ -1,0 +1,20 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+http://thread.gmane.org/gmane.comp.compilers.llvm.cvs/128419/focus=128572
+
+diff -ur llvm-3.2.src.orig/cmake/modules/AddLLVM.cmake llvm-3.2.src/cmake/modules/AddLLVM.cmake
+--- llvm-3.2.src.orig/cmake/modules/AddLLVM.cmake	2012-12-27 14:33:13.000000000 +1100
++++ llvm-3.2.src/cmake/modules/AddLLVM.cmake	2012-12-27 14:35:37.000000000 +1100
+@@ -277,7 +277,9 @@
+     COMMAND ${LIT_COMMAND} ${ARG_DEFAULT_ARGS}
+     COMMENT "${comment}"
+     )
+-  add_dependencies(${target} ${ARG_DEPENDS})
++  if( ARG_DEPENDS )
++    add_dependencies(${target} ${ARG_DEPENDS})
++  endif()
+ endfunction()
+ 
+ # A function to add a set of lit test suites to be driven through 'check-*' targets.
