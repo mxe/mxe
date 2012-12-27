@@ -49,7 +49,6 @@ define $(PKG)_SUPPORT_CONFIG
         --with-mpfr-include='$(1)/mpfr/src' \
         --with-mpfr-lib='$(1).build/mpfr/src/.libs' \
         $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
 endef
 
 define $(PKG)_POST_BUILD
