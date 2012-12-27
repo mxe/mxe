@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 JOBS               := 1
-TARGETS            := i686-static-mingw32 \
+MXE_TARGETS        := i686-static-mingw32 \
                       x86_64-static-mingw32 \
                       i686-dynamic-mingw32
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
@@ -219,7 +219,7 @@ build-only-$(1)_$(3):
 	[ -d '$(PREFIX)/$(3)/installed' ] || mkdir -p '$(PREFIX)/$(3)/installed'
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
-$(foreach TARGET,$(TARGETS), \
+$(foreach TARGET,$(MXE_TARGETS), \
     $(foreach PKG,$(PKGS), \
         $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)-$(TARGET)),$(TARGET),$(call LINK_STYLE,$(TARGET))))))
 
