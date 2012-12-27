@@ -11,7 +11,7 @@ $(PKG)_URL_2    := http://apache.mirror.cdnetworks.com//logging/log4cxx/0.10.0/$
 $(PKG)_DEPS     := gcc apr-util
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://logging.apache.org/log4cxx/download.html' | \
+    $(WGET) -q -O- 'http://logging.apache.org/log4cxx/download.html' | \
     $(SED) -n 's,.*log4cxx-\([0-9.]*\)\.tar.*,\1,p' | \
     head -1
 endef

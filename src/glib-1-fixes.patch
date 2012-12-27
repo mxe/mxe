@@ -3,40 +3,17 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 4693f62d3f01f7b7d26607e6eed843202cbf90f7 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Thu, 23 Sep 2010 21:36:04 +0200
-Subject: [PATCH 1/5] no gtk doc check
-
-
-diff --git a/configure.ac b/configure.ac
-index a821267..2e541d2 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -2741,8 +2741,6 @@ dnl **************************
- dnl *** Checks for gtk-doc ***
- dnl **************************
- 
--GTK_DOC_CHECK([1.15])
--
- AC_ARG_ENABLE(man,
-               [AC_HELP_STRING([--enable-man],
-                               [regenerate man pages from Docbook [default=no]])],enable_man=yes,
--- 
-1.7.1
-
-
-From 46d0d473e6fb32c5204d063cad5f5073d2a139a5 Mon Sep 17 00:00:00 2001
-From: MXE
+From eacb3702acc44de8e5a3c9a324cb9a81333e3737 Mon Sep 17 00:00:00 2001
+From: "a@mxe.cc" <a@mxe.cc>
 Date: Thu, 23 Sep 2010 21:41:51 +0200
-Subject: [PATCH 2/5] optional gettext
+Subject: [PATCH 1/8] optional gettext
 
 
 diff --git a/configure.ac b/configure.ac
-index 2e541d2..18c2dea 100644
+index 054485f..9321fbc 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -464,8 +464,8 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
+@@ -482,8 +482,8 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
  GLIB_GNU_GETTEXT
  
  if test "$gt_cv_have_gettext" != "yes" ; then
@@ -65,17 +42,17 @@ index c710046..269bfdf 100644
  
  #define  _(String) gettext (String)
 -- 
-1.7.1
+1.7.10.4
 
 
-From 3473b5183b2e59d247cd1db053efc6c9ecaf2aab Mon Sep 17 00:00:00 2001
-From: MXE
+From c88a15fbac3076f772894ebcd2003786b37603d4 Mon Sep 17 00:00:00 2001
+From: "a@mxe.cc" <a@mxe.cc>
 Date: Thu, 23 Sep 2010 21:42:46 +0200
-Subject: [PATCH 3/5] fix tool paths
+Subject: [PATCH 2/8] fix tool paths
 
 
 diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
-index 3d1ac12..58e1ecf 100644
+index 4a8898e..5164bae 100644
 --- a/glib-2.0.pc.in
 +++ b/glib-2.0.pc.in
 @@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
@@ -92,60 +69,1121 @@ index 3d1ac12..58e1ecf 100644
  Name: GLib
  Description: C Utility Library
 -- 
-1.7.1
+1.7.10.4
 
 
-From 0e57514812500d5d4dee03e1be8059a25876dd99 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Thu, 23 Sep 2010 21:45:50 +0200
-Subject: [PATCH 4/5] fix dependency libs
+From fdf03eb9fff0532fa6dea660a5665242f6ccac9e Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
+Date: Fri, 15 Jun 2012 15:25:01 +0200
+Subject: [PATCH 3/8] Avoid DllMain symbol conflict when linking statically
+
+
+diff --git a/gio/giomodule.c b/gio/giomodule.c
+index 37a9e70..2e5ef9b 100644
+--- a/gio/giomodule.c
++++ b/gio/giomodule.c
+@@ -782,10 +782,8 @@ extern GType _g_network_monitor_netlink_get_type (void);
+ 
+ static HMODULE gio_dll = NULL;
+ 
+-#ifdef DLL_EXPORT
+-
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL,
++gio_DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     fdwReason,
+ 	 LPVOID    lpvReserved)
+ {
+@@ -801,8 +799,6 @@ _g_io_win32_get_module (void)
+   return gio_dll;
+ }
+ 
+-#endif
+-
+ #undef GIO_MODULE_DIR
+ 
+ /* GIO_MODULE_DIR is used only in code called just once,
+diff --git a/glib/glib-init.c b/glib/glib-init.c
+index f4edd5c..02bf678 100644
+--- a/glib/glib-init.c
++++ b/glib/glib-init.c
+@@ -226,9 +226,9 @@ glib_init (void)
+ HMODULE glib_dll;
+ 
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL,
+-         DWORD     fdwReason,
+-         LPVOID    lpvReserved)
++glib_DllMain (HINSTANCE hinstDLL,
++              DWORD     fdwReason,
++              LPVOID    lpvReserved)
+ {
+   switch (fdwReason)
+     {
+-- 
+1.7.10.4
+
+
+From 64c337b9654441cc1b90ed3ac86f928073ec208e Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
+Date: Fri, 15 Jun 2012 15:27:22 +0200
+Subject: [PATCH 4/8] Allow building without inotify support
 
 
 diff --git a/configure.ac b/configure.ac
-index 18c2dea..e472768 100644
+index 9321fbc..5c6bb3e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2698,7 +2698,7 @@ case $host in
- 	G_LIBS_EXTRA="-luser32 -lkernel32"
-     ;;
-   *-*-mingw*)
--	G_LIBS_EXTRA="-lws2_32 -lole32"
-+	G_LIBS_EXTRA="-lws2_32 -lole32 -lshlwapi"
-     ;;
-   *)
- 	G_LIBS_EXTRA=""
-diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
-index 58e1ecf..17b2133 100644
---- a/glib-2.0.pc.in
-+++ b/glib-2.0.pc.in
-@@ -11,5 +11,5 @@ Name: GLib
- Description: C Utility Library
- Version: @VERSION@
- Libs: -L${libdir} -lglib-2.0 @INTLLIBS@
--Libs.private: @ICONV_LIBS@
-+Libs.private: @G_THREAD_LIBS@ @G_LIBS_EXTRA@ @PCRE_LIBS@ @INTLLIBS@ @ICONV_LIBS@
- Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include @GLIB_EXTRA_CFLAGS@
+@@ -1712,11 +1712,18 @@ dnl *****************************
+ dnl ** Check for inotify (GIO) **
+ dnl *****************************
+ inotify_support=no
+-AC_CHECK_HEADERS([sys/inotify.h],
+-[
++
++AC_ARG_ENABLE(inotify,
++              AC_HELP_STRING([--disable-inotify],
++                             [build without inotify support]))
++
++if test "x$enable_inotify" != "xno"; then
++ AC_CHECK_HEADERS([sys/inotify.h],
++ [
+ 	inotify_support=yes
+ 	AC_CHECK_FUNCS(inotify_init1)
+-])
++ ])
++fi
+ 
+ AM_CONDITIONAL(HAVE_INOTIFY, [test "$inotify_support" = "yes"])
+ 
 -- 
-1.7.1
+1.7.10.4
 
 
-From 87931c81f6401fb0c25064ec0ba2edca9ec53924 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sat, 25 Sep 2010 00:07:33 +0200
-Subject: [PATCH 5/5] add -ldnsapi to gio-2.0.pc
+From c80c435bd8d92857eeb54273024ca8782fa089c6 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
+Date: Fri, 15 Jun 2012 15:28:14 +0200
+Subject: [PATCH 5/8] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
+ Backported from upstream
+
+
+diff --git a/configure.ac b/configure.ac
+index 5c6bb3e..8754c21 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -455,6 +455,8 @@ fi
+ 
+ AC_MSG_RESULT($enable_iconv_cache)
+ 
++# Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF
++AS_IF([false], [AC_CHECK_HEADER([stdint.h])])
+ 
+ dnl
+ dnl zlib support
+-- 
+1.7.10.4
+
+
+From e7e2c1c881813a2a17bfec7b63c673eb979b3833 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
+Date: Fri, 15 Jun 2012 15:29:06 +0200
+Subject: [PATCH 6/8] Link with dnsapi
 
 
 diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
-index 92cda85..7a4e224 100644
+index 9f7123f..b0d5779 100644
 --- a/gio-2.0.pc.in
 +++ b/gio-2.0.pc.in
-@@ -10,6 +10,6 @@ Name: GIO
- Description: glib I/O library
+@@ -13,6 +13,6 @@ Description: glib I/O library
  Version: @VERSION@
- Requires: glib-2.0,gobject-2.0,gmodule-no-export-2.0
+ Requires: glib-2.0 gobject-2.0
+ Requires.private: gmodule-no-export-2.0
 -Libs: -L${libdir} -lgio-2.0
 +Libs: -L${libdir} -lgio-2.0 -ldnsapi
- Libs.private: @ZLIB_LIBS@ @LIBASYNCNS_LIBADD@
- Cflags: 
+ Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@
+ Cflags:
 -- 
-1.7.1
+1.7.10.4
+
+
+From c1f83b6ae587c99fefd482d0b1bfbe1d962320d4 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
+Date: Fri, 15 Jun 2012 15:29:38 +0200
+Subject: [PATCH 7/8] Ensure globals are initialized even when DllMain is not
+ being run
+
+
+diff --git a/glib/gmain.c b/glib/gmain.c
+index c0c4581..bef8b99 100644
+--- a/glib/gmain.c
++++ b/glib/gmain.c
+@@ -2157,12 +2157,15 @@ g_get_real_time (void)
+ #ifdef G_OS_WIN32
+ static ULONGLONG (*g_GetTickCount64) (void) = NULL;
+ static guint32 g_win32_tick_epoch = 0;
++static gboolean g_win32_clock_is_initialized;
+ 
+ G_GNUC_INTERNAL void
+ g_clock_win32_init (void)
+ {
+   HMODULE kernel32;
+ 
++  g_win32_clock_is_initialized = TRUE;
++
+   g_GetTickCount64 = NULL;
+   kernel32 = GetModuleHandle ("KERNEL32.DLL");
+   if (kernel32 != NULL)
+@@ -2281,6 +2284,9 @@ g_get_monotonic_time (void)
+    *    timeBeginPeriod() to increase it as much as they want
+    */
+ 
++  if (!g_win32_clock_is_initialized)
++    g_clock_win32_init ();
++
+   if (g_GetTickCount64 != NULL)
+     {
+       guint32 ticks_as_32bit;
+diff --git a/glib/gthread-win32.c b/glib/gthread-win32.c
+index 5a9ac97..e4d1d48 100644
+--- a/glib/gthread-win32.c
++++ b/glib/gthread-win32.c
+@@ -117,18 +117,28 @@ typedef struct
+   void     (__stdcall * WakeConditionVariable)       (gpointer cond);
+ } GThreadImplVtable;
+ 
++/* Needed for static builds where DllMain initializer doesn't get called */
++static gboolean g_threads_is_initialized;
++G_GNUC_INTERNAL void g_thread_win32_init (void);
++
+ static GThreadImplVtable g_thread_impl_vtable;
+ 
+ /* {{{1 GMutex */
+ void
+ g_mutex_init (GMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.InitializeSRWLock (mutex);
+ }
+ 
+ void
+ g_mutex_clear (GMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   if (g_thread_impl_vtable.DeleteSRWLock != NULL)
+     g_thread_impl_vtable.DeleteSRWLock (mutex);
+ }
+@@ -136,18 +146,27 @@ g_mutex_clear (GMutex *mutex)
+ void
+ g_mutex_lock (GMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.AcquireSRWLockExclusive (mutex);
+ }
+ 
+ gboolean
+ g_mutex_trylock (GMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   return g_thread_impl_vtable.TryAcquireSRWLockExclusive (mutex);
+ }
+ 
+ void
+ g_mutex_unlock (GMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.ReleaseSRWLockExclusive (mutex);
+ }
+ 
+@@ -158,6 +177,9 @@ g_rec_mutex_impl_new (void)
+ {
+   CRITICAL_SECTION *cs;
+ 
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   cs = g_slice_new (CRITICAL_SECTION);
+   InitializeCriticalSection (cs);
+ 
+@@ -168,6 +190,10 @@ static void
+ g_rec_mutex_impl_free (CRITICAL_SECTION *cs)
+ {
+   DeleteCriticalSection (cs);
++
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_slice_free (CRITICAL_SECTION, cs);
+ }
+ 
+@@ -176,6 +202,9 @@ g_rec_mutex_get_impl (GRecMutex *mutex)
+ {
+   CRITICAL_SECTION *impl = mutex->p;
+ 
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   if G_UNLIKELY (mutex->p == NULL)
+     {
+       impl = g_rec_mutex_impl_new ();
+@@ -190,30 +219,45 @@ g_rec_mutex_get_impl (GRecMutex *mutex)
+ void
+ g_rec_mutex_init (GRecMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   mutex->p = g_rec_mutex_impl_new ();
+ }
+ 
+ void
+ g_rec_mutex_clear (GRecMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_rec_mutex_impl_free (mutex->p);
+ }
+ 
+ void
+ g_rec_mutex_lock (GRecMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   EnterCriticalSection (g_rec_mutex_get_impl (mutex));
+ }
+ 
+ void
+ g_rec_mutex_unlock (GRecMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   LeaveCriticalSection (mutex->p);
+ }
+ 
+ gboolean
+ g_rec_mutex_trylock (GRecMutex *mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   return TryEnterCriticalSection (g_rec_mutex_get_impl (mutex));
+ }
+ 
+@@ -222,12 +266,18 @@ g_rec_mutex_trylock (GRecMutex *mutex)
+ void
+ g_rw_lock_init (GRWLock *lock)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.InitializeSRWLock (lock);
+ }
+ 
+ void
+ g_rw_lock_clear (GRWLock *lock)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   if (g_thread_impl_vtable.DeleteSRWLock != NULL)
+     g_thread_impl_vtable.DeleteSRWLock (lock);
+ }
+@@ -235,36 +285,54 @@ g_rw_lock_clear (GRWLock *lock)
+ void
+ g_rw_lock_writer_lock (GRWLock *lock)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.AcquireSRWLockExclusive (lock);
+ }
+ 
+ gboolean
+ g_rw_lock_writer_trylock (GRWLock *lock)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   return g_thread_impl_vtable.TryAcquireSRWLockExclusive (lock);
+ }
+ 
+ void
+ g_rw_lock_writer_unlock (GRWLock *lock)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.ReleaseSRWLockExclusive (lock);
+ }
+ 
+ void
+ g_rw_lock_reader_lock (GRWLock *lock)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.AcquireSRWLockShared (lock);
+ }
+ 
+ gboolean
+ g_rw_lock_reader_trylock (GRWLock *lock)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   return g_thread_impl_vtable.TryAcquireSRWLockShared (lock);
+ }
+ 
+ void
+ g_rw_lock_reader_unlock (GRWLock *lock)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.ReleaseSRWLockShared (lock);
+ }
+ 
+@@ -272,12 +340,18 @@ g_rw_lock_reader_unlock (GRWLock *lock)
+ void
+ g_cond_init (GCond *cond)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.InitializeConditionVariable (cond);
+ }
+ 
+ void
+ g_cond_clear (GCond *cond)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   if (g_thread_impl_vtable.DeleteConditionVariable)
+     g_thread_impl_vtable.DeleteConditionVariable (cond);
+ }
+@@ -285,12 +359,18 @@ g_cond_clear (GCond *cond)
+ void
+ g_cond_signal (GCond *cond)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.WakeConditionVariable (cond);
+ }
+ 
+ void
+ g_cond_broadcast (GCond *cond)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.WakeAllConditionVariable (cond);
+ }
+ 
+@@ -298,6 +378,9 @@ void
+ g_cond_wait (GCond  *cond,
+              GMutex *entered_mutex)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   g_thread_impl_vtable.SleepConditionVariableSRW (cond, entered_mutex, INFINITE, 0);
+ }
+ 
+@@ -308,6 +391,9 @@ g_cond_wait_until (GCond  *cond,
+ {
+   gint64 span;
+ 
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   span = end_time - g_get_monotonic_time ();
+ 
+   if G_UNLIKELY (span < 0)
+@@ -340,6 +426,9 @@ g_private_get_impl (GPrivate *key)
+ 
+   if G_UNLIKELY (impl == 0)
+     {
++      if (!g_threads_is_initialized)
++        g_thread_win32_init ();
++
+       EnterCriticalSection (&g_private_lock);
+       impl = (DWORD) key->p;
+       if (impl == 0)
+@@ -433,6 +522,9 @@ g_system_thread_free (GRealThread *thread)
+ {
+   GThreadWin32 *wt = (GThreadWin32 *) thread;
+ 
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   win32_check_for_error (CloseHandle (wt->handle));
+   g_slice_free (GThreadWin32, wt);
+ }
+@@ -440,6 +532,9 @@ g_system_thread_free (GRealThread *thread)
+ void
+ g_system_thread_exit (void)
+ {
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   _endthreadex (0);
+ }
+ 
+@@ -448,6 +543,9 @@ g_thread_win32_proxy (gpointer data)
+ {
+   GThreadWin32 *self = data;
+ 
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   self->proxy (self);
+ 
+   g_system_thread_exit ();
+@@ -465,6 +563,9 @@ g_system_thread_new (GThreadFunc   func,
+   GThreadWin32 *thread;
+   guint ignore;
+ 
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   thread = g_slice_new0 (GThreadWin32);
+   thread->proxy = func;
+ 
+@@ -494,6 +595,9 @@ g_system_thread_wait (GRealThread *thread)
+ {
+   GThreadWin32 *wt = (GThreadWin32 *) thread;
+ 
++  if (!g_threads_is_initialized)
++    g_thread_win32_init ();
++
+   win32_check_for_error (WAIT_FAILED != WaitForSingleObject (wt->handle, INFINITE));
+ }
+ 
+@@ -985,6 +1089,8 @@ g_thread_lookup_native_funcs (void)
+ G_GNUC_INTERNAL void
+ g_thread_win32_init (void)
+ {
++  g_threads_is_initialized = TRUE;
++
+   if (!g_thread_lookup_native_funcs ())
+     g_thread_xp_init ();
+ 
+-- 
+1.7.10.4
+
+
+From f7b3f3f390131d41855da11622eb18870aec0731 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 18 Jun 2012 16:02:12 +0200
+Subject: [PATCH 8/8] kill docs and gtk-doc dependence (mxe-specific)
+
+
+diff --git a/Makefile.am b/Makefile.am
+index 55be9d2..f000f10 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -6,7 +6,7 @@ include $(top_srcdir)/Makefile.decl
+ 
+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
+ 
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio po
+ DIST_SUBDIRS = $(SUBDIRS) build
+ if BUILD_MODULAR_TESTS
+ SUBDIRS += tests 
+@@ -67,8 +67,7 @@ BUILT_EXTRA_DIST = 		\
+ 	README			\
+ 	INSTALL			\
+ 	ChangeLog		\
+-	config.h.win32		\
+-	gtk-doc.make
++	config.h.win32
+ 
+ CONFIGURE_DEPENDENCIES = acglib.m4
+ 
+diff --git a/autogen.sh b/autogen.sh
+index 4bbc00d..bc0ab0b 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -7,18 +7,6 @@ test -n "$srcdir" || srcdir=.
+ olddir=`pwd`
+ cd "$srcdir"
+ 
+-GTKDOCIZE=$(which gtkdocize 2>/dev/null)
+-if test -z $GTKDOCIZE; then
+-        echo "You don't have gtk-doc installed, and thus won't be able to generate the documentation."
+-        rm -f gtk-doc.make
+-        cat > gtk-doc.make <<EOF
+-EXTRA_DIST =
+-CLEANFILES =
+-EOF
+-else
+-        gtkdocize || exit $?
+-fi
+-
+ AUTORECONF=`which autoreconf`
+ if test -z $AUTORECONF; then
+         echo "*** No autoreconf found, please install it ***"
+diff --git a/configure.ac b/configure.ac
+index 8754c21..4936f3c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2605,13 +2605,6 @@ AS_IF([ test $cross_compiling = yes && test x$enable_modular_tests = xyes], [
+ dnl **************************
+ dnl *** Checks for gtk-doc ***
+ dnl **************************
+-# gtkdocize greps for ^GTK_DOC_CHECK and parses it, so you need to have
+-# it on it's own line.
+-m4_ifdef([GTK_DOC_CHECK], [
+-GTK_DOC_CHECK([1.15], [--flavour no-tmpl])
+-],[
+-AM_CONDITIONAL([ENABLE_GTK_DOC],[false])
+-])
+ 
+ AC_ARG_ENABLE(man,
+               [AS_HELP_STRING([--enable-man],
+diff --git a/docs/Makefile.am b/docs/Makefile.am
+deleted file mode 100644
+index 2349f44..0000000
+--- a/docs/Makefile.am
++++ /dev/null
+@@ -1,11 +0,0 @@
+-## Process this file with automake to produce Makefile.in
+-include $(top_srcdir)/Makefile.decl
+-
+-SUBDIRS = reference
+-
+-EXTRA_DIST += debugging.txt macros.txt
+-
+-files:
+-	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
+-	  echo $$p; \
+-	done
+diff --git a/docs/reference/Makefile.am b/docs/reference/Makefile.am
+deleted file mode 100644
+index 63cf90d..0000000
+--- a/docs/reference/Makefile.am
++++ /dev/null
+@@ -1,3 +0,0 @@
+-include $(top_srcdir)/Makefile.decl
+-
+-SUBDIRS = glib gobject gio
+diff --git a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
+deleted file mode 100644
+index 64d95fe..0000000
+--- a/docs/reference/gio/Makefile.am
++++ /dev/null
+@@ -1,179 +0,0 @@
+-include $(top_srcdir)/Makefile.decl
+-NULL =
+-
+-SUBDIRS = gdbus-object-manager-example
+-
+-# The name of the module.
+-DOC_MODULE=gio
+-
+-# The top-level SGML file.
+-DOC_MAIN_SGML_FILE=gio-docs.xml
+-
+-# Extra options to supply to gtkdoc-scan
+-SCAN_OPTIONS=--deprecated-guards="G_DISABLE_DEPRECATED" \
+-             --ignore-decorators="G_GNUC_WARN_UNUSED_RESULT"
+-
+-# The directory containing the source code. Relative to $(srcdir)
+-DOC_SOURCE_DIR=$(top_srcdir)/gio
+-
+-BUILT_HFILES=gioenumtypes.h
+-HFILE_GLOB=$(top_srcdir)/gio/*.h
+-CFILE_GLOB=$(top_srcdir)/gio/*.c
+-
+-IGNORE_HFILES = \
+-	fam				\
+-	fen				\
+-	gdbus-2.0			\
+-	gvdb				\
+-	inotify				\
+-	libasyncns			\
+-	tests				\
+-	win32				\
+-	xdgmime				\
+-	gapplicationimpl.h		\
+-	gasynchelper.h			\
+-	gcontenttypeprivate.h		\
+-	gdbusauth.h			\
+-	gdbusauthmechanismanon.h	\
+-	gdbusauthmechanismexternal.h	\
+-	gdbusauthmechanism.h		\
+-	gdbusauthmechanismsha1.h	\
+-	gdbusprivate.h			\
+-	gdelayedsettingsbackend.h	\
+-	gdummyfile.h			\
+-	gdummyproxyresolver.h		\
+-	gdummytlsbackend.h		\
+-	gfileattribute-priv.h		\
+-	gfileinfo-priv.h		\
+-	giomodule-priv.h		\
+-	glocaldirectorymonitor.h	\
+-	glocalfileenumerator.h		\
+-	glocalfile.h			\
+-	glocalfileinfo.h		\
+-	glocalfileinputstream.h		\
+-	glocalfileiostream.h		\
+-	glocalfilemonitor.h		\
+-	glocalfileoutputstream.h	\
+-	glocalvfs.h			\
+-	gmountprivate.h			\
+-	gnativevolumemonitor.h		\
+-	gnetworkingprivate.h		\
+-	gnetworkmonitorbase.h		\
+-	gnetworkmonitornetlink.h	\
+-	gpollfilemonitor.h		\
+-	gregistrysettingsbackend.h	\
+-	gsettingsbackendinternal.h	\
+-	gsettings-mapping.h		\
+-	gsettingsschema-internal.h	\
+-	gsocketinputstream.h		\
+-	gsocketoutputstream.h		\
+-	gsocks4aproxy.h			\
+-	gsocks4proxy.h			\
+-	gsocks5proxy.h			\
+-	gthreadedresolver.h		\
+-	gunionvolumemonitor.h		\
+-	gunixmount.h			\
+-	gunixresolver.h			\
+-	gunixvolume.h			\
+-	gunixvolumemonitor.h		\
+-	gwin32appinfo.h			\
+-	gwin32mount.h			\
+-	gwin32resolver.h		\
+-	gwin32volumemonitor.h
+-
+-
+-# CFLAGS and LDFLAGS for compiling scan program. Only needed
+-# if $(DOC_MODULE).types is non-empty.
+-INCLUDES = \
+-	$(gio_INCLUDES)			\
+-	$(GLIB_DEBUG_FLAGS)
+-
+-GTKDOC_LIBS = \
+-	$(top_builddir)/glib/libglib-2.0.la		\
+-	$(top_builddir)/gobject/libgobject-2.0.la	\
+-	$(top_builddir)/gmodule/libgmodule-2.0.la	\
+-	$(top_builddir)/gio/libgio-2.0.la		\
+-	$(NULL)
+-
+-# Extra options to supply to gtkdoc-mkdb
+-MKDB_OPTIONS = --output-format=xml --sgml-mode --name-space=g \
+-	--ignore-files='libasyncns tests'
+-
+-# Images to copy into HTML directory
+-HTML_IMAGES =			\
+-	gvfs-overview.png	\
+-	menu-example.png	\
+-	menu-model.png
+-
+-content_files =			\
+-	version.xml		\
+-	overview.xml		\
+-	migrating-posix.xml	\
+-	migrating-gnome-vfs.xml	\
+-	migrating-gconf.xml	\
+-	migrating-gdbus.xml	\
+-	gio-querymodules.xml	\
+-	glib-compile-schemas.xml\
+-	glib-compile-resources.xml	\
+-	gsettings.xml		\
+-	gresource.xml		\
+-	gdbus.xml		\
+-	gdbus-codegen.xml	\
+-	$(NULL)
+-
+-expand_content_files =		\
+-	overview.xml		\
+-	migrating-posix.xml	\
+-	migrating-gnome-vfs.xml	\
+-	migrating-gconf.xml	\
+-	migrating-gdbus.xml	\
+-	gdbus-codegen.xml	\
+-	$(NULL)
+-
+-extra_files =			\
+-	version.xml.in		\
+-	gvfs-overview.odg
+-
+-# Extra options to supply to gtkdoc-fixref
+-FIXXREF_OPTIONS=--extra-dir=$(srcdir)/../glib/html --extra-dir=$(srcdir)/../gobject/html
+-
+-include $(top_srcdir)/gtk-doc.make
+-
+-EXTRA_DIST +=			\
+-	version.xml.in
+-
+-man_MANS =
+-
+-if ENABLE_MAN
+-
+-man_MANS +=			\
+-	gio-querymodules.1	\
+-	glib-compile-schemas.1	\
+-	glib-compile-resources.1	\
+-	gsettings.1		\
+-	gresource.1		\
+-	gdbus.1			\
+-	gdbus-codegen.1
+-
+-XSLTPROC_FLAGS = \
+-        --nonet \
+-        --stringparam man.output.quietly 1 \
+-        --stringparam funcsynopsis.style ansi \
+-        --stringparam man.th.extra1.suppress 1 \
+-        --stringparam man.authors.section.enabled 0 \
+-        --stringparam man.copyright.section.enabled 0
+-
+-.xml.1:
+-	$(AM_V_GEN) $(XSLTPROC) $(XSLTPROC_FLAGS) http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+-
+-endif
+-
+-CLEANFILES ?=
+-CLEANFILES += $(man_MANS)
+-
+-EXTRA_DIST += $(man_MANS)
+-
+-dist-hook-local: all-local
+-
+-gio-docs-clean: clean
+-	cd $(srcdir) && rm -rf xml html
+diff --git a/docs/reference/gio/gdbus-object-manager-example/Makefile.am b/docs/reference/gio/gdbus-object-manager-example/Makefile.am
+deleted file mode 100644
+index 90c10aa..0000000
+--- a/docs/reference/gio/gdbus-object-manager-example/Makefile.am
++++ /dev/null
+@@ -1,68 +0,0 @@
+-include $(top_srcdir)/Makefile.decl
+-NULL =
+-
+-# The name of the module.
+-DOC_MODULE=gdbus-object-manager-example
+-
+-# The top-level SGML file.
+-DOC_MAIN_SGML_FILE=gdbus-object-manager-example-docs.xml
+-
+-# Extra options to supply to gtkdoc-scan
+-SCAN_OPTIONS=--deprecated-guards="G_DISABLE_DEPRECATED"
+-
+-# The directory containing the source code. Relative to $(srcdir)
+-DOC_SOURCE_DIR=$(top_builddir)/gio/tests/gdbus-object-manager-example
+-
+-HFILE_GLOB=$(top_builddir)/gio/tests/gdbus-object-manager-example/*.h
+-CFILE_GLOB=$(top_builddir)/gio/tests/gdbus-object-manager-example/*.c
+-
+-# Headers to ignore
+-IGNORE_HFILES=				\
+-	$(NULL)
+-
+-# CFLAGS and LDFLAGS for compiling scan program. Only needed
+-# if $(DOC_MODULE).types is non-empty.
+-INCLUDES = \
+-	$(gio_INCLUDES)			\
+-	$(GLIB_DEBUG_FLAGS)
+-
+-GTKDOC_LIBS = \
+-	$(top_builddir)/glib/libglib-2.0.la		\
+-	$(top_builddir)/gobject/libgobject-2.0.la	\
+-	$(top_builddir)/gmodule/libgmodule-2.0.la	\
+-	$(top_builddir)/gio/libgio-2.0.la		\
+-	$(top_builddir)/gio/tests/gdbus-object-manager-example/libgdbus-example-objectmanager.la \
+-	$(NULL)
+-
+-# Extra options to supply to gtkdoc-mkdb
+-MKDB_OPTIONS = --output-format=xml --sgml-mode --name-space=g \
+-	$(NULL)
+-
+-# Images to copy into HTML directory
+-HTML_IMAGES =			\
+-	$(NULL)
+-
+-content_files =			\
+-	$(NULL)
+-
+-expand_content_files =		\
+-	$(NULL)
+-
+-extra_files =			\
+-	$(NULL)
+-
+-include $(top_srcdir)/gtk-doc.make
+-
+-EXTRA_DIST +=			\
+-	$(NULL)
+-
+-MAINTAINERCLEANFILES = $(BUILT_SOURCES)
+-
+-dist-hook-local: all-local
+-
+-gdbus-object-manager-example-docs-clean: clean
+-	cd $(srcdir) && rm -rf xml html
+-
+-# Nuke installed docs (don't know how to avoid installing them)
+-install-data-hook :
+-	rm -rf $(DESTDIR)$(datadir)/gtk-doc/html/gdbus-object-manager-example
+diff --git a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
+deleted file mode 100644
+index 54918c8..0000000
+--- a/docs/reference/glib/Makefile.am
++++ /dev/null
+@@ -1,128 +0,0 @@
+-## Process this file with automake to produce Makefile.in
+-include $(top_srcdir)/Makefile.decl
+-
+-AUTOMAKE_OPTIONS = 1.6
+-
+-# The name of the module.
+-DOC_MODULE=glib
+-
+-# The top-level SGML file.
+-DOC_MAIN_SGML_FILE=glib-docs.xml
+-
+-# The directory containing the source code. Relative to $(srcdir)
+-DOC_SOURCE_DIR=$(top_srcdir)/glib $(top_srcdir)/gmodule
+-
+-# Extra options to supply to gtkdoc-scan
+-SCAN_OPTIONS=--deprecated-guards="G_DISABLE_DEPRECATED" --ignore-decorators="GLIB_VAR|G_GNUC_WARN_UNUSED_RESULT"
+-
+-# Extra options to supply to gtkdoc-mkdb
+-MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=g
+-
+-# Used for dependencies
+-HFILE_GLOB=$(top_srcdir)/glib/*.h $(top_srcdir)/gmodule/*.h
+-CFILE_GLOB=$(top_srcdir)/glib/*.c $(top_srcdir)/gmodule/*.c
+-
+-# Ignore some private headers
+-IGNORE_HFILES = \
+-	gallocator.h		\
+-	gdatasetprivate.h	\
+-	glibintl.h		\
+-	gbsearcharray.h		\
+-	glib-private.h		\
+-	gmoduleconf.h		\
+-	gthreadprivate.h	\
+-	gunibreak.h		\
+-	gunicomp.h		\
+-	gunidecomp.h		\
+-	gunichartables.h	\
+-	glib_probes.h		\
+-	glib_trace.h		\
+-	libcharset.h		\
+-	gdebug.h		\
+-	gprintfint.h		\
+-	gmirroringtable.h	\
+-	gscripttable.h		\
+-	glib-mirroring-tab	\
+-	gnulib			\
+-	pcre			\
+-	update-pcre		\
+-	gbytesprivate.h		\
+-	gvariant-internal.h	\
+-	gvariant-serialiser.h	\
+-	gvariant-core.h		\
+-	gvarianttypeinfo.h	\
+-	gwakeup.h
+-
+-# Images to copy into HTML directory
+-HTML_IMAGES =  				\
+-	file-name-encodings.png		\
+-	mainloop-states.gif
+-
+-# Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
+-content_files =				\
+-	cross.xml			\
+-	running.xml			\
+-	building.xml			\
+-	changes.xml			\
+-	compiling.xml			\
+-	programming.xml			\
+-	resources.xml			\
+-	regex-syntax.xml		\
+-	version.xml			\
+-	glib-gettextize.xml		\
+-	gtester.xml			\
+-	gtester-report.xml		\
+-	gvariant-varargs.xml		\
+-	gvariant-text.xml
+-
+-expand_content_files = 			\
+-	compiling.xml
+-
+-# Extra options to supply to gtkdoc-fixref
+-FIXXREF_OPTIONS=--extra-dir=$(srcdir)/../gobject/html --extra-dir=$(srcdir)/../gio/html
+-
+-# include common portion ...
+-include $(top_srcdir)/gtk-doc.make
+-
+-# Other files to distribute
+-EXTRA_DIST +=				\
+-	file-name-encodings.png		\
+-	file-name-encodings.sxd		\
+-	mainloop-states.fig		\
+-	mainloop-states.png		\
+-	mainloop-states.eps		\
+-	version.xml.in
+-
+-########################################################################
+-
+-man_MANS =
+-
+-if ENABLE_MAN
+-
+-man_MANS += \
+-	glib-gettextize.1 	\
+-	gtester.1		\
+-	gtester-report.1
+-
+-XSLTPROC_FLAGS = \
+-        --nonet \
+-        --stringparam man.output.quietly 1 \
+-        --stringparam funcsynopsis.style ansi \
+-        --stringparam man.th.extra1.suppress 1 \
+-        --stringparam man.authors.section.enabled 0 \
+-        --stringparam man.copyright.section.enabled 0
+-
+-.xml.1:
+-	$(AM_V_GEN) $(XSLTPROC) $(XSLTPROC_FLAGS) http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+-
+-endif
+-
+-CLEANFILES ?=
+-CLEANFILES += $(man_MANS)
+-
+-EXTRA_DIST += $(man_MANS)
+-
+-dist-hook-local: all-local
+-
+-glib-docs-clean: clean
+-	cd $(srcdir) && rm -rf xml html
+diff --git a/docs/reference/gobject/Makefile.am b/docs/reference/gobject/Makefile.am
+deleted file mode 100644
+index 48d88f8..0000000
+--- a/docs/reference/gobject/Makefile.am
++++ /dev/null
+@@ -1,103 +0,0 @@
+-## Process this file with automake to produce Makefile.in
+-include $(top_srcdir)/Makefile.decl
+-
+-AUTOMAKE_OPTIONS = 1.6
+-
+-# The name of the module.
+-DOC_MODULE=gobject
+-
+-# The top-level SGML file.
+-DOC_MAIN_SGML_FILE=gobject-docs.xml
+-
+-# The directory containing the source code. Relative to $(srcdir)
+-DOC_SOURCE_DIR=$(top_srcdir)/gobject
+-
+-# Extra options to supply to gtkdoc-scan
+-SCAN_OPTIONS=--deprecated-guards="G_DISABLE_DEPRECATED" \
+-             --ignore-decorators="G_GNUC_INTERNAL|G_GNUC_WARN_UNUSED_RESULT"
+-
+-# Extra options to supply to gtkdoc-mkdb
+-MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=g
+-
+-# Used for dependencies
+-HFILE_GLOB=$(top_srcdir)/gobject/*.h
+-CFILE_GLOB=$(top_srcdir)/gobject/*.c
+-
+-# Headers to ignore
+-IGNORE_HFILES = \
+-	tests			\
+-	gobject_trace.h		\
+-	gtype-private.h		\
+-	gatomicarray.h
+-
+-
+-# CFLAGS and LDFLAGS for compiling scan program. Only needed
+-# if $(DOC_MODULE).types is non-empty.
+-INCLUDES = \
+-	-I$(srcdir) 			\
+-	$(gobject_INCLUDES) 		\
+-	$(GLIB_DEBUG_FLAGS)
+-GTKDOC_LIBS = \
+-	$(top_builddir)/glib/libglib-2.0.la	\
+-	$(top_builddir)/gobject/libgobject-2.0.la
+-
+-# Images to copy into HTML directory
+-HTML_IMAGES =  \
+-	images/glue.png
+-
+-# Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
+-content_files = version.xml 		\
+-		glib-mkenums.xml 	\
+-		glib-genmarshal.xml	\
+-		gobject-query.xml \
+-		tut_gobject.xml \
+-		tut_gsignal.xml \
+-		tut_gtype.xml \
+-		tut_howto.xml \
+-		tut_intro.xml \
+-		tut_tools.xml
+-
+-# Extra options to supply to gtkdoc-fixref
+-FIXXREF_OPTIONS=--extra-dir=$(srcdir)/../glib/html
+-
+-include $(top_srcdir)/gtk-doc.make
+-
+-# Other files to distribute
+-EXTRA_DIST += 		\
+-	gobject.cI	\
+-	version.xml.in
+-
+-########################################################################
+-
+-man_MANS =
+-
+-if ENABLE_MAN
+-
+-man_MANS += 			\
+-	glib-mkenums.1 		\
+-	glib-genmarshal.1 	\
+-	gobject-query.1
+-
+-
+-XSLTPROC_FLAGS = \
+-        --nonet \
+-        --stringparam man.output.quietly 1 \
+-        --stringparam funcsynopsis.style ansi \
+-        --stringparam man.th.extra1.suppress 1 \
+-        --stringparam man.authors.section.enabled 0 \
+-        --stringparam man.copyright.section.enabled 0
+-
+-.xml.1:
+-	$(AM_V_GEN) $(XSLTPROC) $(XSLTPROC_FLAGS) http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+-
+-endif
+-
+-CLEANFILES ?=
+-CLEANFILES += $(man_MANS)
+-
+-EXTRA_DIST += $(man_MANS)
+-
+-dist-hook-local: all-local
+-
+-gobject-docs-clean: clean
+-	cd $(srcdir) && rm -rf xml html
+-- 
+1.7.10.4
+

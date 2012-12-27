@@ -3,7 +3,7 @@
 
 PKG             := tiff
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 8baf382231c9051a1b3eb294581289aa21447171
+$(PKG)_CHECKSUM := 652e97b78f1444237a82cbcfe014310e776eb6f0
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/libtiff/$($(PKG)_FILE)
@@ -11,7 +11,7 @@ $(PKG)_URL_2    := ftp://ftp.remotesensing.org/libtiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg xz
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.remotesensing.org/libtiff/' | \
+    $(WGET) -q -O- 'http://www.remotesensing.org/libtiff/' | \
     $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
     head -1
 endef
@@ -19,6 +19,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-x

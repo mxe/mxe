@@ -3,14 +3,14 @@
 
 PKG             := libsigc++
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 493d6e60c08bd8ec3688478d176e04b5713ced2a
+$(PKG)_CHECKSUM := 6d23b44ab37b4f908c850c3d9898e42da54a0d8d
 $(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsigc++-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libsigc++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/libsigc++2/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/libsigc++2/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9][^<]*\)<.*,\1,p' | \
     head -1

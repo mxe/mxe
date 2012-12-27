@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)$(word 2,$(
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/zziplib/files/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/zziplib/files/' | \
     $(SED) -n 's,.*zziplib-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

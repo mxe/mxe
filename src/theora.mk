@@ -10,7 +10,7 @@ $(PKG)_URL      := http://downloads.xiph.org/releases/theora/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ogg vorbis
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.xiph.org/downloads/' | \
+    $(WGET) -q -O- 'http://www.xiph.org/downloads/' | \
     $(SED) -n 's,.*libtheora-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

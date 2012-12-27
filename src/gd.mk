@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
     echo $(gd_VERSION)
 endef
 define $(PKG)_UPDATE_orig
-    wget -q -O- 'http://www.libgd.org/releases/' | \
+    $(WGET) -q -O- 'http://www.libgd.org/releases/' | \
     $(SED) -n 's,.*gd-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

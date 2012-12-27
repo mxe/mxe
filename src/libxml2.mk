@@ -3,14 +3,14 @@
 
 PKG             := libxml2
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 859dd535edbb851cc15b64740ee06551a7a17d40
+$(PKG)_CHECKSUM := a43d7c0a8e463ac5a7846254f2a732a9af146fab
 $(PKG)_SUBDIR   := libxml2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc xz
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/libxml2/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/libxml2/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=v\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1
@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,`uname`,MinGW,g' '$(1)/xml2-config.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         $(LINK_STYLE) \
         --without-debug \
         --prefix='$(PREFIX)/$(TARGET)' \

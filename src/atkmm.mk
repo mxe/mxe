@@ -10,7 +10,7 @@ $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/atkmm/$(call SHORT_PKG
 $(PKG)_DEPS     := gcc atk glibmm
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/atkmm/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/atkmm/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9][^<]*\)<.*,\1,p' | \
     head -1

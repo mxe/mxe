@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3ab06c8e208e82197dc25d09ae353d9f3be7db52
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://ibiblio.org/pub/Linux/ALPHA/$(PKG)/stable/$($(PKG)_FILE)
+$(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv gnutls
 
 define $(PKG)_UPDATE
@@ -14,7 +14,7 @@ define $(PKG)_UPDATE
     echo $(freetds_VERSION)
 endef
 define $(PKG)_UPDATE_orig
-    wget -q -O- 'http://freetds.cvs.sourceforge.net/viewvc/freetds/freetds/' | \
+    $(WGET) -q -O- 'http://freetds.cvs.sourceforge.net/viewvc/freetds/freetds/' | \
     grep '<option>R' | \
     $(SED) -n 's,.*R\([0-9][0-9_]*\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \

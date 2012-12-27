@@ -3,14 +3,14 @@
 
 PKG             := taglib
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := bafe0958eb884981cade83d45c18ee34165479b8
+$(PKG)_CHECKSUM := e657384ccf3284db2daba32dccece74534286012
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://developer.kde.org/~wheeler/files/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://developer.kde.org/~wheeler/files/src/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://developer.kde.org/~wheeler/files/src/?C=M;O=D' | \
     $(SED) -n 's,.*"taglib-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

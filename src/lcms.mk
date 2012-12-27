@@ -3,14 +3,14 @@
 
 PKG             := lcms
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 67d5fabda2f5777ca8387766539b9c871d993133
+$(PKG)_CHECKSUM := 9944902864283af49e4e21a1ca456db4e04ea7c2
 $(PKG)_SUBDIR   := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION))
 $(PKG)_FILE     := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION)).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(subst a,,$($(PKG)_VERSION))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/lcms/files/lcms/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/lcms/files/lcms/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

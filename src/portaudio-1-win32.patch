@@ -1,89 +1,73 @@
 This file is part of MXE.
 See index.html for further information.
 
-diff -ru portaudio-orig/configure.in portaudio/configure.in
---- portaudio-orig/configure.in	2007-11-13 22:22:56.000000000 +0100
-+++ portaudio/configure.in	2010-01-23 17:04:37.000000000 +0100
-@@ -139,6 +139,7 @@
- 	dnl Mac OS X configuration
+diff -aur portaudio/src/hostapi/dsound/pa_win_ds.c portaudio-patched/src/hostapi/dsound/pa_win_ds.c
+--- portaudio/src/hostapi/dsound/pa_win_ds.c	2011-11-10 14:51:15.000000000 +0000
++++ portaudio-patched/src/hostapi/dsound/pa_win_ds.c	2012-03-02 21:45:29.000000000 +0000
+@@ -860,6 +860,9 @@
+                             case DSSPEAKER_STEREO:           count = 2; break;
+                             case DSSPEAKER_SURROUND:         count = 4; break;
+                             case DSSPEAKER_5POINT1:          count = 6; break;
++#ifndef DSSPEAKER_7POINT1
++#define DSSPEAKER_7POINT1 0x00000007
++#endif
+                             case DSSPEAKER_7POINT1:          count = 8; break;
+ #ifndef DSSPEAKER_7POINT1_SURROUND
+ #define DSSPEAKER_7POINT1_SURROUND 0x00000008
+diff -aur portaudio/src/hostapi/wdmks/pa_win_wdmks.c portaudio-patched/src/hostapi/wdmks/pa_win_wdmks.c
+--- portaudio/src/hostapi/wdmks/pa_win_wdmks.c	2011-02-17 15:56:04.000000000 +0000
++++ portaudio-patched/src/hostapi/wdmks/pa_win_wdmks.c	2012-03-02 21:49:13.000000000 +0000
+@@ -136,6 +136,7 @@
  
- 	AC_DEFINE(PA_USE_COREAUDIO)
-+	CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/unix"
- 	if [[ -d /Developer/SDKs/MacOSX10.5.sdk ]] ; then
- 		SHARED_FLAGS="-Werror -framework CoreAudio -framework AudioToolbox -framework AudioUnit -framework Carbon -dynamiclib -arch x86_64 -arch ppc64 -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.3";
- 		CFLAGS="-Werror $CFLAGS -arch x86_64 -arch ppc64 -arch i386 -arch ppc -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.3";
-@@ -167,6 +168,7 @@
-         dnl MingW configuration
+ #include <mmreg.h>
+ #include <ks.h>
++#define _WAVEFORMATEXTENSIBLE_
+ #include <ksmedia.h>
+ #include <tchar.h>
+ #include <assert.h>
+--- portaudio/configure.in 14:07:02.000000000 +0000
++++ portaudio-patched/configure.in	2012-05-27 14:08:34.000000000 +0000
+@@ -247,7 +247,7 @@
+         if [[ "x$with_directx" = "xyes" ]]; then
+             DXDIR="$with_dxdir"
+             add_objects src/hostapi/dsound/pa_win_ds.o src/hostapi/dsound/pa_win_ds_dynlink.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o src/os/win/pa_win_coinitialize.o src/os/win/pa_win_waveformat.o
+-            LIBS="-lwinmm -lm -ldsound -lole32"
++            LIBS="$LIBS -lwinmm -lm -ldsound -lole32"
+             DLL_LIBS="${DLL_LIBS} -lwinmm -lm -L$DXDIR/lib -ldsound -lole32"
+             #VC98="\"/c/Program Files/Microsoft Visual Studio/VC98/Include\""
+             #CFLAGS="$CFLAGS -I$VC98 -DPA_NO_WMME -DPA_NO_ASIO"
+@@ -257,7 +257,7 @@
+         if [[ "x$with_asio" = "xyes" ]]; then
+             ASIODIR="$with_asiodir"
+             add_objects src/hostapi/asio/pa_asio.o src/common/pa_ringbuffer.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o src/os/win/pa_win_coinitialize.o src/hostapi/asio/iasiothiscallresolver.o $ASIODIR/common/asio.o $ASIODIR/host/asiodrivers.o $ASIODIR/host/pc/asiolist.o
+-            LIBS="-lwinmm -lm -lole32 -luuid"
++            LIBS="$LIBS -lwinmm -lm -lole32 -luuid"
+             DLL_LIBS="${DLL_LIBS} -lwinmm -lm -lole32 -luuid"
+             CFLAGS="$CFLAGS -ffast-math -fomit-frame-pointer -I\$(top_srcdir)/src/hostapi/asio -I$ASIODIR/host/pc -I$ASIODIR/common -I$ASIODIR/host -UPA_USE_ASIO -DPA_USE_ASIO=1 -DWINDOWS"
  
-         echo "WINAPI: $with_winapi"
-+        CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/win"
-         if [[ $with_winapi = "directx" ]] ; then
-             if [[ $with_dxdir ]] ; then
-               DXDIR="$with_dxdir";
-@@ -174,15 +176,15 @@
-               DXDIR="/usr/local/dx7sdk";
-             fi
-             echo "DXDIR: $DXDIR"
--            OTHER_OBJS="src/hostapi/dsound/pa_win_ds.o src/hostapi/dsound/pa_win_ds_dynlink.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o";
-+            OTHER_OBJS="src/hostapi/dsound/pa_win_ds.o src/hostapi/dsound/pa_win_ds_dynlink.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o src/os/win/pa_win_waveformat.o";
-             LIBS="-lwinmm -lm -ldsound -lole32";
-             PADLL="portaudio.dll";
- 	    THREAD_CFLAGS="-mthreads"
-             SHARED_FLAGS="-shared";
--            DLL_LIBS="${DLL_LIBS} -lwinmm -lm -L./dx7sdk/lib -ldsound -lole32";
-+            DLL_LIBS="${DLL_LIBS} -lwinmm -lm -L${DXDIR}/lib -ldsound -lole32";
-             #VC98="\"/c/Program Files/Microsoft Visual Studio/VC98/Include\"";
-             #CFLAGS="$CFLAGS -I$VC98 -DPA_NO_WMME -DPA_NO_ASIO";
--            CFLAGS="$CFLAGS -I\$(top_srcdir)/include -I$DXDIR/include -DPA_NO_WMME -DPA_NO_ASIO" -DPA_NO_WDMKS;
-+            CFLAGS="$CFLAGS -I\$(top_srcdir)/include -I$DXDIR/include -DPA_NO_WMME -DPA_NO_ASIO -DPA_NO_WDMKS";
-         elif [[ $with_winapi = "asio" ]] ; then
-             if [[ $with_asiodir ]] ; then
-               ASIODIR="$with_asiodir";
-@@ -228,9 +230,10 @@
+@@ -273,7 +273,7 @@
+         if [[ "x$with_wdmks" = "xyes" ]]; then
+             DXDIR="$with_dxdir"
+             add_objects src/hostapi/wdmks/pa_win_wdmks.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o
+-            LIBS="-lwinmm -lm -luuid -lsetupapi -lole32"
++            LIBS="$LIBS -lwinmm -lm -luuid -lsetupapi -lole32"
+             DLL_LIBS="${DLL_LIBS} -lwinmm -lm -L$DXDIR/lib -luuid -lsetupapi -lole32"
+             #VC98="\"/c/Program Files/Microsoft Visual Studio/VC98/Include\""
+             #CFLAGS="$CFLAGS -I$VC98 -DPA_NO_WMME -DPA_NO_ASIO"
+@@ -282,14 +282,14 @@
  
-   cygwin* )
- 	dnl Cygwin configuration
--
-+	CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/win"
- 	OTHER_OBJS="src/hostapi/wmme/pa_win_wmme.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o";
- 	CFLAGS="$CFLAGS -DPA_NO_DS -DPA_NO_WDMKS -DPA_NO_ASIO -DPA_NO_WASAPI"
-+
- 	LIBS="-lwinmm -lm";
- 	PADLL="portaudio.dll";
- 	THREAD_CFLAGS="-mthreads"
-@@ -242,6 +245,7 @@
- 	dnl SGI IRIX audio library (AL) configuration (Pieter, oct 2-13, 2003).
- 	dnl The 'dmedia' library is needed to read the Unadjusted System Time (UST).
-     dnl
-+	CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/unix"
- 	AC_CHECK_LIB(pthread, pthread_create, , AC_MSG_ERROR([IRIX posix thread library not found!]))
- 	AC_CHECK_LIB(audio,   alOpenPort,     , AC_MSG_ERROR([IRIX audio library not found!]))
- 	AC_CHECK_LIB(dmedia,  dmGetUST,       , AC_MSG_ERROR([IRIX digital media library not found!]))
-@@ -271,6 +275,7 @@
-                 ,
-                 AC_MSG_ERROR([libpthread not found!]))
+         if [[ "x$with_wmme" = "xyes" ]]; then
+             add_objects src/hostapi/wmme/pa_win_wmme.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o src/os/win/pa_win_waveformat.o
+-            LIBS="-lwinmm -lm -lole32 -luuid"
++            LIBS="$LIBS -lwinmm -lm -lole32 -luuid"
+             DLL_LIBS="${DLL_LIBS} -lwinmm"
+             CFLAGS="$CFLAGS -UPA_USE_WMME -DPA_USE_WMME=1"
+         fi
  
-+	CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/unix"
- 	if [[ $have_alsa = "yes" ] && [ $with_alsa != "no" ]] ; then
- 		DLL_LIBS="$DLL_LIBS -lasound"
- 		OTHER_OBJS="$OTHER_OBJS src/hostapi/alsa/pa_linux_alsa.o"
-@@ -305,6 +310,7 @@
-         OTHER_OBJS="$OTHER_OBJS src/os/unix/pa_unix_hostapis.o src/os/unix/pa_unix_util.o"
- esac
- CFLAGS="$CFLAGS $THREAD_CFLAGS"
-+echo "CFLAGS: $CFLAGS"
- 
- if test "$enable_cxx" = "yes"; then
-    AC_CONFIG_SUBDIRS([bindings/cpp])
-diff -ru portaudio-orig/Makefile.in portaudio/Makefile.in
---- portaudio-orig/Makefile.in	2007-10-24 17:29:04.000000000 +0200
-+++ portaudio/Makefile.in	2010-01-23 17:00:40.000000000 +0100
-@@ -16,7 +16,7 @@
- libdir = @libdir@
- includedir = @includedir@
- CC = @CC@
--CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src/common -I$(top_srcdir)/src/os/unix @CFLAGS@ @DEFS@
-+CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src/common @CFLAGS@ @DEFS@
- LIBS = @LIBS@
- AR = @AR@
- RANLIB = @RANLIB@
+         if [[ "x$with_wasapi" = "xyes" ]]; then
+             add_objects src/hostapi/wasapi/pa_win_wasapi.o src/common/pa_ringbuffer.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o src/os/win/pa_win_coinitialize.o src/os/win/pa_win_waveformat.o
+-            LIBS="-lwinmm -lm -lole32 -luuid"
++            LIBS="$LIBS -lwinmm -lm -lole32 -luuid"
+             DLL_LIBS="${DLL_LIBS} -lwinmm -lole32"
+             CFLAGS="$CFLAGS -I\$(top_srcdir)/src/hostapi/wasapi/mingw-include -UPA_USE_WASAPI -DPA_USE_WASAPI=1"
+         fi

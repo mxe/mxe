@@ -3,44 +3,17 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 25255ff19813e122e6442518b29a55c15860d3a3 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Fri, 1 Oct 2010 17:20:29 +0200
+From b05b2d82333e13f637dffb93f821907f775eb585 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 20 May 2012 23:23:37 +0200
 Subject: [PATCH] mingw fixes
 
+---
+ include/shout/shout.h.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/examples/nonblocking.c b/examples/nonblocking.c
-index 0f4aa68..49a3d36 100644
---- a/examples/nonblocking.c
-+++ b/examples/nonblocking.c
-@@ -68,7 +68,11 @@ int main()
- 
- 	while (ret == SHOUTERR_BUSY) {
- 	  printf("Connection pending. Sleeping...\n");
-+#ifdef __MINGW32__
-+	  Sleep(1000);
-+#else
- 	  sleep(1);
-+#endif
- 	  ret = shout_get_connected(shout);
- 	}
- 	
-diff --git a/include/os.h b/include/os.h
-index 7d065b3..d7ae425 100755
---- a/include/os.h
-+++ b/include/os.h
-@@ -1,7 +1,9 @@
- #ifdef _WIN32
-+#ifndef __MINGW32__
- typedef __int64 int64_t;
- typedef unsigned __int64 uint64_t;
- typedef unsigned __int32 uint32_t;
- typedef __int32 int32_t;
- typedef int  ssize_t;
- #endif
-+#endif
 diff --git a/include/shout/shout.h.in b/include/shout/shout.h.in
-index 43b0e7a..b026c10 100644
+index 682ad49..f412cdc 100644
 --- a/include/shout/shout.h.in
 +++ b/include/shout/shout.h.in
 @@ -23,8 +23,10 @@
@@ -55,5 +28,5 @@ index 43b0e7a..b026c10 100644
  #define SHOUTERR_SUCCESS	(0)
  #define SHOUTERR_INSANE		(-1)
 -- 
-1.7.1
+1.7.9.2
 

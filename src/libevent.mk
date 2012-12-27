@@ -3,14 +3,14 @@
 
 PKG             := libevent
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 28c109190345ce5469add8cf3f45c5dd57fe2a85
+$(PKG)_CHECKSUM := 3e6674772eb77de24908c6267c698146420ab699
 $(PKG)_SUBDIR   := libevent-$($(PKG)_VERSION)-stable
 $(PKG)_FILE     := libevent-$($(PKG)_VERSION)-stable.tar.gz
 $(PKG)_URL      := https://github.com/downloads/$(PKG)/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://libevent.org/' | \
+    $(WGET) -q -O- 'http://libevent.org/' | \
     grep 'libevent-' | \
     $(SED) -n 's,.*libevent-\([0-9][^>]*\)-stable\.tar.*,\1,p' | \
     head -1

@@ -3,15 +3,15 @@
 
 PKG             := mpfr
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9ba6dfe62dad298f0570daf182db31660f7f016c
+$(PKG)_CHECKSUM := 7527c322b91fe8e6055ead551e1b46b9f1712ccd
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gmp
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.mpfr.org/mpfr-current/#download' | \
+    $(WGET) -q -O- 'http://www.mpfr.org/mpfr-current/#download' | \
     grep 'mpfr-' | \
     $(SED) -n 's,.*mpfr-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

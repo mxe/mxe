@@ -3,25 +3,32 @@
 
 PKG             := json-c
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := daaf5eb960fa98e137abc5012f569b83c79be90f
+$(PKG)_CHECKSUM := f90f643c8455da21d57b3e8866868a944a93c596
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://oss.metaparadigm.com/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/downloads/$(PKG)/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://oss.metaparadigm.com/json-c/?C=M;O=D' | \
-    $(SED) -n 's,.*json-c-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- 'https://github.com/json-c/json-c/downloads' | \
+    $(SED) -n 's,.*href="/downloads/json-c/json-c/json-c-\([0-9.]*\).tar.gz.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./autogen.sh
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --build="`config.guess`"\
+        --disable-shared
         CFLAGS=-Wno-error
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-json-c.exe' \
+        `'$(TARGET)-pkg-config' json --cflags --libs`
 endef
 
 $(PKG)_BUILD_i686-static-mingw32    = $($(PKG)_BUILD)

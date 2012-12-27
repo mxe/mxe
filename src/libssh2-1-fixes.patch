@@ -1,0 +1,25 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 9cca5b7a1274f4e263441944b906f054118b8387 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 2 Sep 2012 00:55:28 +0200
+Subject: [PATCH] include gpg-error with gcrypt for static linking
+ (mxe-specific)
+
+
+diff --git a/configure.ac b/configure.ac
+index dfc6988..748dd21 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -103,6 +103,7 @@ fi
+ if test "$ac_cv_libssl" != "yes" && test "$use_libgcrypt" != "no"; then
+   AC_LIB_HAVE_LINKFLAGS([gcrypt], [], [#include <gcrypt.h>])
+   LIBS="$LIBS -lgcrypt"
++  LIBS="$LIBS `${prefix}/bin/gpg-error-config --libs`"
+ fi
+ 
+ AC_SUBST(LIBSREQUIRED)
+-- 
+1.7.10.4
+

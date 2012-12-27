@@ -11,7 +11,7 @@ $(PKG)_URL_2    := ftp://ftp.remotesensing.org/geotiff/libgeotiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg tiff proj
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://trac.osgeo.org/geotiff/' | \
+    $(WGET) -q -O- 'http://trac.osgeo.org/geotiff/' | \
     $(SED) -n 's,.*libgeotiff-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

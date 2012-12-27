@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     g_type_init();
     handle = rsvg_handle_new();
-    rsvg_handle_free(handle);
+    g_object_unref(handle);
 
     return 0;
 }

@@ -1,0 +1,244 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+[master 8ae01b4] new version
+ 4 files changed, 48 insertions(+), 58 deletions(-)
+ create mode 100644 META
+From 8ae01b48ebab343933829d2891480d7202bbf1ae Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 17 Jun 2012 17:42:39 +0200
+Subject: [PATCH] use of ocaml.m4 from ocaml-autoconf ; modifications for cross-compilation
+
+taken from
+https://bugs.freedesktop.org/show_bug.cgi?id=51994
+
+diff --git a/META b/META
+new file mode 100644
+index 0000000..06060f2
+--- /dev/null
++++ b/META
+@@ -0,0 +1,17 @@
++name = "cairo-ocaml"
++description = "Bindings to the cairo library."
++archive(byte) = "cairo.cma"
++archive(native) = "cairo.cmxa"
++requires = "bigarray"
++
++package "lablgtk2" (
++        requires = "cairo lablgtk2"
++        archive(byte) = "cairo_lablgtk.cma"
++        archive(native) = "cairo_lablgtk.cmxa"
++)
++
++package "pango" (
++        requires = "cairo lablgtk2"
++        archive(byte) = "pango_cairo.cma"
++        archive(native) = "pango_cairo.cmxa"
++)
+\ No newline at end of file
+diff --git a/configure.ac b/configure.ac
+index 6c8c4e9..dc72693 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -16,7 +16,7 @@ AC_ARG_VAR(LABLGTKDIR,[Location of the LablGTK library])
+ 
+ if test $use_gtk = yes ; then
+   # Check for LablGTK
+-  AC_CHECK_OCAML_MODULE(lablgtk, LABLGTKDIR, Gobject, +lablgtk2 +lablgtk)
++  AC_CHECK_OCAML_MODULE(LABLGTKDIR, lablgtk, Gobject, +lablgtk2 +lablgtk)
+ 
+   if test "$LABLGTKDIR" ; then
+     # Check for gdk-pixbuf
+diff --git a/src/Makefile b/src/Makefile
+index 46a62f6..ec9cf28 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -92,10 +92,10 @@ install: all
+ ifdef OCAMLOPT
+ 	install -m644 *.cmxa *.a *.cmx $(DESTDIR)$(INSTALLDIR)
+ endif
+-	install -m 755 dll*.so $(DESTDIR)$(INSTALLDIR)
+-	if test -w $(DESTDIR)$(OCAMLLIB)/stublibs ; then \
+-          for lib in dll*.so ; do \
+-            ln -s $(INSTALLDIR)/$$lib $(DESTDIR)$(OCAMLLIB)/stublibs ; done ; fi
++#	install -m 755 dll*.so $(DESTDIR)$(INSTALLDIR)
++#	if test -w $(DESTDIR)$(OCAMLLIB)/stublibs ; then \
++#          for lib in dll*.so ; do \
++#            ln -s $(INSTALLDIR)/$$lib $(DESTDIR)$(OCAMLLIB)/stublibs ; done ; fi
+ 
+ DOCFILES = cairo.mli cairo_bigarray.mli cairo_png.mli cairo_pdf.mli cairo_ps.mli cairo_ft.mli
+ ifdef LABLGTKDIR
+diff --git a/support/ocaml.m4 b/support/ocaml.m4
+index 9d6e910..6431281 100644
+--- a/support/ocaml.m4
++++ b/support/ocaml.m4
+@@ -11,10 +11,10 @@ dnl For documentation, please read the ocaml.m4 man page.
+ AC_DEFUN([AC_PROG_OCAML],
+ [dnl
+   # checking for ocamlc
+-  AC_CHECK_TOOL([OCAMLC],[ocamlc],[no])
++  AC_CHECK_TOOLS([OCAMLC],[ocamlc.opt ocamlc],[no])
+ 
+   if test "$OCAMLC" != "no"; then
+-     OCAMLVERSION=$($OCAMLC -version)
++     OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version* *\(.*\)$|\1|p'`
+      AC_MSG_RESULT([OCaml version is $OCAMLVERSION])
+      # If OCAMLLIB is set, use it
+      if test "$OCAMLLIB" = ""; then
+@@ -28,14 +28,14 @@ AC_DEFUN([AC_PROG_OCAML],
+      AC_SUBST([OCAMLLIB])
+ 
+      # checking for ocamlopt
+-     AC_CHECK_TOOL([OCAMLOPT],[ocamlopt],[no])
++     AC_CHECK_TOOLS([OCAMLOPT],[ocamlopt.opt ocamlopt],[no])
+      OCAMLBEST=byte
+      if test "$OCAMLOPT" = "no"; then
+ 	AC_MSG_WARN([Cannot find ocamlopt; bytecode compilation only.])
+      else
+-	TMPVERSION=$($OCAMLOPT -version)
++	TMPVERSION=`$OCAMLOPT -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
+ 	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
+-	    AC_MSG_RESULT([versions differs from ocamlc; ocamlopt discarded.])
++	    AC_MSG_RESULT([versions differs from $OCAMLC; $OCAMLOPT discarded.])
+ 	    OCAMLOPT=no
+ 	else
+ 	    OCAMLBEST=opt
+@@ -44,33 +44,11 @@ AC_DEFUN([AC_PROG_OCAML],
+ 
+      AC_SUBST([OCAMLBEST])
+ 
+-     # checking for ocamlc.opt
+-     AC_CHECK_TOOL([OCAMLCDOTOPT],[ocamlc.opt],[no])
+-     if test "$OCAMLCDOTOPT" != "no"; then
+-	TMPVERSION=$($OCAMLCDOTOPT -version)
+-	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
+-	    AC_MSG_RESULT([versions differs from ocamlc; ocamlc.opt discarded.])
+-	else
+-	    OCAMLC=$OCAMLCDOTOPT
+-	fi
+-     fi
+-
+-     # checking for ocamlopt.opt
+-     if test "$OCAMLOPT" != "no" ; then
+-	AC_CHECK_TOOL([OCAMLOPTDOTOPT],[ocamlopt.opt],[no])
+-	if test "$OCAMLOPTDOTOPT" != "no"; then
+-	   TMPVERSION=$($OCAMLOPTDOTOPT -version)
+-	   if test "$TMPVERSION" != "$OCAMLVERSION" ; then
+-	      AC_MSG_RESULT([version differs from ocamlc; ocamlopt.opt discarded.])
+-	   else
+-	      OCAMLOPT=$OCAMLOPTDOTOPT
+-	   fi
+-        fi
+-     fi
++     AC_SUBST([OCAMLOPT])
+   fi
+ 
+   # checking for ocaml toplevel
+-  AC_CHECK_TOOL([OCAML],[ocaml],[no])
++  AC_CHECK_PROG([OCAML],[ocaml],[ocaml],[no])
+ 
+   # checking for ocamldep
+   AC_CHECK_TOOL([OCAMLDEP],[ocamldep],[no])
+@@ -82,7 +60,7 @@ AC_DEFUN([AC_PROG_OCAML],
+   AC_CHECK_TOOL([OCAMLMKLIB],[ocamlmklib],[no])
+ 
+   # checking for ocamldoc
+-  AC_CHECK_TOOL([OCAMLDOC],[ocamldoc],[no])
++  AC_CHECK_PROG([OCAMLDOC],[ocamldoc],[ocamldoc],[no])
+ 
+   # checking for ocamlbuild
+   AC_CHECK_TOOL([OCAMLBUILD],[ocamlbuild],[no])
+@@ -92,18 +70,12 @@ AC_DEFUN([AC_PROG_OCAML],
+ AC_DEFUN([AC_PROG_OCAMLLEX],
+ [dnl
+   # checking for ocamllex
+-  AC_CHECK_TOOL([OCAMLLEX],[ocamllex],[no])
+-  if test "$OCAMLLEX" != "no"; then
+-    AC_CHECK_TOOL([OCAMLLEXDOTOPT],[ocamllex.opt],[no])
+-    if test "$OCAMLLEXDOTOPT" != "no"; then
+-	OCAMLLEX=$OCAMLLEXDOTOPT
+-    fi
+-  fi
++  AC_CHECK_PROGS([OCAMLLEX],[ocamllex.opt ocamllex],[no])
+ ])
+ 
+ AC_DEFUN([AC_PROG_OCAMLYACC],
+ [dnl
+-  AC_CHECK_TOOL([OCAMLYACC],[ocamlyacc],[no])
++  AC_CHECK_PROG([OCAMLYACC],[ocamlyacc],[ocamlyacc],[no])
+ ])
+ 
+ 
+@@ -112,24 +84,25 @@ AC_DEFUN([AC_PROG_CAMLP4],
+   AC_REQUIRE([AC_PROG_OCAML])dnl
+ 
+   # checking for camlp4
+-  AC_CHECK_TOOL([CAMLP4],[camlp4],[no])
++  AC_CHECK_PROG([CAMLP4],[camlp4],[camlp4],[no])
+   if test "$CAMLP4" != "no"; then
+-     TMPVERSION=$($CAMLP4 -version)
++     TMPVERSION=`$CAMLP4 -v 2>&1| sed -n -e 's|.*version *\(.*\)$|\1|p'`
+      if test "$TMPVERSION" != "$OCAMLVERSION" ; then
+ 	AC_MSG_RESULT([versions differs from ocamlc])
+         CAMLP4=no
+      fi
+   fi
++  AC_SUBST([CAMLP4])
+ 
+   # checking for companion tools
+-  AC_CHECK_TOOL([CAMLP4BOOT],[camlp4boot],[no])
+-  AC_CHECK_TOOL([CAMLP4O],[camlp4o],[no])
+-  AC_CHECK_TOOL([CAMLP4OF],[camlp4of],[no])
+-  AC_CHECK_TOOL([CAMLP4OOF],[camlp4oof],[no])
+-  AC_CHECK_TOOL([CAMLP4ORF],[camlp4orf],[no])
+-  AC_CHECK_TOOL([CAMLP4PROF],[camlp4prof],[no])
+-  AC_CHECK_TOOL([CAMLP4R],[camlp4r],[no])
+-  AC_CHECK_TOOL([CAMLP4RF],[camlp4rf],[no])
++  AC_CHECK_PROG([CAMLP4BOOT],[camlp4boot],[camlp4boot],[no])
++  AC_CHECK_PROG([CAMLP4O],[camlp4o],[camlp4o],[no])
++  AC_CHECK_PROG([CAMLP4OF],[camlp4of],[camlp4of],[no])
++  AC_CHECK_PROG([CAMLP4OOF],[camlp4oof],[camlp4oof],[no])
++  AC_CHECK_PROG([CAMLP4ORF],[camlp4orf],[camlp4orf],[no])
++  AC_CHECK_PROG([CAMLP4PROF],[camlp4prof],[camlp4prof],[no])
++  AC_CHECK_PROG([CAMLP4R],[camlp4r],[camlp4r],[no])
++  AC_CHECK_PROG([CAMLP4RF],[camlp4rf],[camlp4rf],[no])
+ ])
+ 
+ 
+@@ -173,26 +146,26 @@ AC_DEFUN([AC_CHECK_OCAML_PKG],
+ 
+ AC_DEFUN([AC_CHECK_OCAML_MODULE],
+ [dnl
+-  AC_MSG_CHECKING([for OCaml module $1])
++  AC_MSG_CHECKING([for OCaml module $2])
+ 
+   cat > conftest.ml <<EOF
+ open $3
+ EOF
+   unset found
+-  for $2 in $$2 $4 ; do
+-    if $OCAMLC -c -I "$$2" conftest.ml >&5 2>&5 ; then
++  for $1 in $$1 $4 ; do
++    if $OCAMLC -c -I "$$1" conftest.ml >&5 2>&5 ; then
+       found=yes
+       break
+     fi
+   done
+ 
+   if test "$found" ; then
+-    AC_MSG_RESULT([$$2])
++    AC_MSG_RESULT([$$1])
+   else
+     AC_MSG_RESULT([not found])
+     $1=no
+   fi
+-  AC_SUBST([$2])
++  AC_SUBST([$1])
+ ])
+ 
+ 
+-- 
+1.7.9.5
+

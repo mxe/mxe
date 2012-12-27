@@ -1,0 +1,5368 @@
+From dc762e41a090b5c238bd7daedab13def69eb140b Mon Sep 17 00:00:00 2001
+From: toine512 <toine512@gmail.com>
+Date: Thu, 21 Jul 2011 17:10:13 -0700
+Subject: [PATCH 01/64] Squashed commit of the following:
+
+commit 84b160fdc8e6aaff9b5b214d90e8f002cc4185dd
+Author: toine512 <toine512@gmail.com>
+Date:   Wed Jul 20 23:09:26 2011 +0200
+
+    Updates man .. again
+
+commit 717c562b844595f5b24da268a5f5203d921ebc89
+Author: toine512 <toine512@gmail.com>
+Date:   Wed Jul 20 21:00:44 2011 +0200
+
+    More updates in man files, regenerating HTML files needed
+
+commit 8196cf03b2ff7b9483166302bf79a0760fed2772
+Author: toine512 <toine512@gmail.com>
+Date:   Wed Jul 20 20:42:41 2011 +0200
+
+    Updates ChangeLog
+
+commit 7a6931cffd0ffd2d0997ffed2bd7609e9a043387
+Author: toine512 <toine512@gmail.com>
+Date:   Wed Jul 20 20:37:40 2011 +0200
+
+    Updates man files, regenerating HTML files is needed
+
+commit 1cb67af20bb4085b87123299956c6b4d2d2b1484
+Author: toine512 <toine512@gmail.com>
+Date:   Wed Jul 20 20:03:16 2011 +0200
+
+    Implements Justin.tv support (NetStream.Authenticate.UsherToken)
+
+diff --git a/ChangeLog b/ChangeLog
+index fb2319f..c3b1a14 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -4,6 +4,9 @@ Copyright 2009-2011 Howard Chu
+ Copyright 2009 The Flvstreamer Team
+ http://rtmpdump.mplayerhq.hu/
+ 
++20 July 2011
++- add NetStream.Authenticate.UsherToken for Justin.tv
++
+ 11 July 2011, v2.4
+ - add RTMPE type 9 handshake support
+ 
+diff --git a/librtmp/librtmp.3 b/librtmp/librtmp.3
+index 66197d5..7c424aa 100644
+--- a/librtmp/librtmp.3
++++ b/librtmp/librtmp.3
+@@ -1,5 +1,5 @@
+-.TH LIBRTMP 3 "2010-07-03" "RTMPDump v2.3"
+-.\" Copyright 2010 Howard Chu.
++.TH LIBRTMP 3 "2011-07-20" "RTMPDump v2.4"
++.\" Copyright 2011 Howard Chu.
+ .\" Copying permitted according to the GNU General Public License V2.
+ .SH NAME
+ librtmp \- RTMPDump Real-Time Messaging Protocol API
+@@ -161,6 +161,9 @@ These options handle additional authentication requests from the server.
+ Key for SecureToken response, used if the server requires SecureToken
+ authentication.
+ .TP
++.BI jtv= JSON
++JSON token used by legacy Justin.tv servers. Invokes NetStream.Authenticate.UsherToken
++.TP
+ .BI swfVfy= 0|1
+ If the value is 1 or TRUE, the SWF player is retrieved from the
+ specified
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 5ef3ae9..adcff1f 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -96,6 +96,7 @@ static int SendDeleteStream(RTMP *r, double dStreamId);
+ static int SendFCSubscribe(RTMP *r, AVal *subscribepath);
+ static int SendPlay(RTMP *r);
+ static int SendBytesReceived(RTMP *r);
++static int SendUsherToken(RTMP *r, AVal *usherToken);
+ 
+ #if 0				/* unused */
+ static int SendBGHasStream(RTMP *r, double dId, AVal *playpath);
+@@ -335,6 +336,7 @@ RTMP_SetupStream(RTMP *r,
+ 		 uint32_t swfSize,
+ 		 AVal *flashVer,
+ 		 AVal *subscribepath,
++		 AVal *usherToken,
+ 		 int dStart,
+ 		 int dStop, int bLiveStream, long int timeout)
+ {
+@@ -355,6 +357,8 @@ RTMP_SetupStream(RTMP *r,
+     RTMP_Log(RTMP_LOGDEBUG, "auth     : %s", auth->av_val);
+   if (subscribepath && subscribepath->av_val)
+     RTMP_Log(RTMP_LOGDEBUG, "subscribepath : %s", subscribepath->av_val);
++  if (usherToken && usherToken->av_val)
++    RTMP_Log(RTMP_LOGDEBUG, "NetStream.Authenticate.UsherToken : %s", usherToken->av_val);
+   if (flashVer && flashVer->av_val)
+     RTMP_Log(RTMP_LOGDEBUG, "flashVer : %s", flashVer->av_val);
+   if (dStart > 0)
+@@ -420,6 +424,8 @@ RTMP_SetupStream(RTMP *r,
+     r->Link.flashVer = RTMP_DefaultFlashVer;
+   if (subscribepath && subscribepath->av_len)
+     r->Link.subscribepath = *subscribepath;
++  if (usherToken && usherToken->av_len)
++    r->Link.usherToken = *usherToken;
+   r->Link.seekTime = dStart;
+   r->Link.stopTime = dStop;
+   if (bLiveStream)
+@@ -477,6 +483,8 @@ static struct urlopt {
+   	"Stream is live, no seeking possible" },
+   { AVC("subscribe"), OFF(Link.subscribepath), OPT_STR, 0,
+   	"Stream to subscribe to" },
++  { AVC("jtv"), OFF(Link.usherToken),          OPT_STR, 0,
++  	"Justin.tv authentication token" },
+   { AVC("token"),     OFF(Link.token),	       OPT_STR, 0,
+   	"Key for SecureToken response" },
+   { AVC("swfVfy"),    OFF(Link.lFlags),        OPT_BOOL, RTMP_LF_SWFV,
+@@ -1641,6 +1649,39 @@ SendFCSubscribe(RTMP *r, AVal *subscribepath)
+   return RTMP_SendPacket(r, &packet, TRUE);
+ }
+ 
++//Justin.tv specific authentication
++static const AVal av_NetStream_Authenticate_UsherToken = AVC("NetStream.Authenticate.UsherToken"); //SAVC() isn't suitable for that
++
++static int
++SendUsherToken(RTMP *r, AVal *usherToken)
++{
++  RTMPPacket packet;
++  char pbuf[1024], *pend = pbuf + sizeof(pbuf);
++  char *enc;
++  packet.m_nChannel = 0x03;	/* control channel (invoke) */
++  packet.m_headerType = RTMP_PACKET_SIZE_MEDIUM;
++  packet.m_packetType = RTMP_PACKET_TYPE_INVOKE;
++  packet.m_nTimeStamp = 0;
++  packet.m_nInfoField2 = 0;
++  packet.m_hasAbsTimestamp = 0;
++  packet.m_body = pbuf + RTMP_MAX_HEADER_SIZE;
++
++  RTMP_Log(RTMP_LOGDEBUG, "UsherToken: %s", usherToken->av_val);
++  enc = packet.m_body;
++  enc = AMF_EncodeString(enc, pend, &av_NetStream_Authenticate_UsherToken);
++  enc = AMF_EncodeNumber(enc, pend, ++r->m_numInvokes);
++  *enc++ = AMF_NULL;
++  enc = AMF_EncodeString(enc, pend, usherToken);
++
++  if (!enc)
++    return FALSE;
++
++  packet.m_nBodySize = enc - packet.m_body;
++
++  return RTMP_SendPacket(r, &packet, FALSE);
++}
++/******************************************/
++
+ SAVC(releaseStream);
+ 
+ static int
+@@ -2364,6 +2405,9 @@ HandleInvoke(RTMP *r, const char *body, unsigned int nBodySize)
+ 
+ 	  if (!(r->Link.protocol & RTMP_FEATURE_WRITE))
+ 	    {
++	      /* Authenticate on Justin.tv legacy servers before sending FCSubscribe */
++	      if (r->Link.usherToken.av_len)
++	        SendUsherToken(r, &r->Link.usherToken);
+ 	      /* Send the FCSubscribe if live stream or if subscribepath is set */
+ 	      if (r->Link.subscribepath.av_len)
+ 	        SendFCSubscribe(r, &r->Link.subscribepath);
+diff --git a/librtmp/rtmp.h b/librtmp/rtmp.h
+index 1ece207..6b2ae5b 100644
+--- a/librtmp/rtmp.h
++++ b/librtmp/rtmp.h
+@@ -155,6 +155,7 @@ extern "C"
+     AVal auth;
+     AVal flashVer;
+     AVal subscribepath;
++    AVal usherToken;
+     AVal token;
+     AMFObject extras;
+     int edepth;
+@@ -297,6 +298,7 @@ extern "C"
+ 			uint32_t swfSize,
+ 			AVal *flashVer,
+ 			AVal *subscribepath,
++			AVal *usherToken,
+ 			int dStart,
+ 			int dStop, int bLiveStream, long int timeout);
+ 
+diff --git a/rtmpdump.1 b/rtmpdump.1
+index 2395de9..0d9de8d 100644
+--- a/rtmpdump.1
++++ b/rtmpdump.1
+@@ -1,5 +1,5 @@
+-.TH RTMPDUMP 1 "2010-05-02" "RTMPDump v2.2e"
+-.\" Copyright 2010 Howard Chu.
++.TH RTMPDUMP 1 "2011-07-20" "RTMPDump v2.4"
++.\" Copyright 2011 Howard Chu.
+ .\" Copying permitted according to the GNU General Public License V2.
+ .SH NAME
+ rtmpdump \- RTMP streaming media client
+@@ -51,6 +51,8 @@ rtmpdump \- RTMP streaming media client
+ [\c
+ .BI \-T \ key\fR]
+ [\c
++.BI \-j \ JSON\fR]
++[\c
+ .BI \-w \ swfHash\fR]
+ [\c
+ .BI \-x \ swfSize\fR]
+@@ -210,6 +212,9 @@ These options handle additional authentication requests from the server.
+ Key for SecureToken response, used if the server requires SecureToken
+ authentication.
+ .TP
++\fB\-\-jtv		\-j\fP\ \fIJSON\fP
++JSON token used by legacy Justin.tv servers. Invokes NetStream.Authenticate.UsherToken
++.TP
+ \fB\-\-swfhash		\-w\fP\ \fIhexstring\fP
+ SHA256 hash of the decompressed SWF file. This option may be needed if
+ the server uses SWF Verification, but see the
+diff --git a/rtmpdump.c b/rtmpdump.c
+index c1cd95b..ec1de85 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -692,6 +692,8 @@ void usage(char *prog)
+ 	  RTMP_LogPrintf
+ 	    ("--token|-T key          Key for SecureToken response\n");
+ 	  RTMP_LogPrintf
++	    ("--jtv|-j JSON           Authentication token for Justin.tv legacy servers\n");
++	  RTMP_LogPrintf
+ 	    ("--hashes|-#             Display progress with hashes, not with the byte counter\n");
+ 	  RTMP_LogPrintf
+ 	    ("--buffer|-b             Buffer time in milliseconds (default: %lu)\n",
+@@ -738,6 +740,7 @@ main(int argc, char **argv)
+   AVal hostname = { 0, 0 };
+   AVal playpath = { 0, 0 };
+   AVal subscribepath = { 0, 0 };
++  AVal usherToken = { 0, 0 }; //Justin.tv auth token
+   int port = -1;
+   int protocol = RTMP_PROTOCOL_UNDEFINED;
+   int retries = 0;
+@@ -839,12 +842,13 @@ main(int argc, char **argv)
+     {"debug", 0, NULL, 'z'},
+     {"quiet", 0, NULL, 'q'},
+     {"verbose", 0, NULL, 'V'},
++    {"jtv", 1, NULL, 'j'},
+     {0, 0, 0, 0}
+   };
+ 
+   while ((opt =
+ 	  getopt_long(argc, argv,
+-		      "hVveqzr:s:t:p:a:b:f:o:u:C:n:c:l:y:Ym:k:d:A:B:T:w:x:W:X:S:#",
++		      "hVveqzr:s:t:p:a:b:f:o:u:C:n:c:l:y:Ym:k:d:A:B:T:w:x:W:X:S:#j:",
+ 		      longopts, NULL)) != -1)
+     {
+       switch (opt)
+@@ -1051,6 +1055,9 @@ main(int argc, char **argv)
+ 	case 'S':
+ 	  STR2AVAL(sockshost, optarg);
+ 	  break;
++    case 'j':
++      STR2AVAL(usherToken, optarg);
++      break;
+ 	default:
+ 	  RTMP_LogPrintf("unknown option: %c\n", opt);
+ 	  usage(argv[0]);
+@@ -1167,7 +1174,7 @@ main(int argc, char **argv)
+ 
+   RTMP_SetupStream(&rtmp, protocol, &hostname, port, &sockshost, &playpath,
+ 		   &tcUrl, &swfUrl, &pageUrl, &app, &auth, &swfHash, swfSize,
+-		   &flashVer, &subscribepath, dSeek, dStopOffset, bLiveStream, timeout);
++		   &flashVer, &subscribepath, &usherToken, dSeek, dStopOffset, bLiveStream, timeout);
+ 
+   /* Try to keep the stream moving if it pauses on us */
+   if (!bLiveStream && !(protocol & RTMP_FEATURE_HTTP))
+diff --git a/rtmpgw.8 b/rtmpgw.8
+index 197a2d6..0a231b4 100644
+--- a/rtmpgw.8
++++ b/rtmpgw.8
+@@ -1,5 +1,5 @@
+-.TH RTMPGW 8 "2010-05-02" "RTMPDump v2.2e"
+-.\" Copyright 2010 Howard Chu.
++.TH RTMPGW 8 "2011-07-20" "RTMPDump v2.4"
++.\" Copyright 2011 Howard Chu.
+ .\" Copying permitted according to the GNU General Public License V2.
+ .SH NAME
+ rtmpgw \- RTMP streaming media gateway
+@@ -50,6 +50,8 @@ rtmpgw \- RTMP streaming media gateway
+ [\c
+ .BI \-T \ key\fR]
+ [\c
++.BI \-j \ JSON\fR]
++[\c
+ .BI \-w \ swfHash\fR]
+ [\c
+ .BI \-x \ swfSize\fR]
+@@ -193,6 +195,9 @@ These options handle additional authentication requests from the server.
+ Key for SecureToken response, used if the server requires SecureToken
+ authentication.
+ .TP
++\fB\-\-jtv		\-j\fP\ \fIJSON\fP
++JSON token used by legacy Justin.tv servers. Invokes NetStream.Authenticate.UsherToken
++.TP
+ \fB\-\-swfhash		\-w\fP\ \fIhexstring\fP
+ SHA256 hash of the decompressed SWF file. This option may be needed if
+ the server uses SWF Verification, but see the
+diff --git a/rtmpgw.c b/rtmpgw.c
+index 10a99e8..ce7319a 100644
+--- a/rtmpgw.c
++++ b/rtmpgw.c
+@@ -95,6 +95,7 @@ typedef struct
+   AVal flashVer;
+   AVal token;
+   AVal subscribepath;
++  AVal usherToken; //Justin.tv auth token
+   AVal sockshost;
+   AMFObject extras;
+   int edepth;
+@@ -552,7 +553,7 @@ void processTCPrequest(STREAMING_SERVER * server,	// server socket and state (ou
+   RTMP_Init(&rtmp);
+   RTMP_SetBufferMS(&rtmp, req.bufferTime);
+   RTMP_SetupStream(&rtmp, req.protocol, &req.hostname, req.rtmpport, &req.sockshost,
+-		   &req.playpath, &req.tcUrl, &req.swfUrl, &req.pageUrl, &req.app, &req.auth, &req.swfHash, req.swfSize, &req.flashVer, &req.subscribepath, dSeek, req.dStopOffset,
++		   &req.playpath, &req.tcUrl, &req.swfUrl, &req.pageUrl, &req.app, &req.auth, &req.swfHash, req.swfSize, &req.flashVer, &req.subscribepath, &req.usherToken, dSeek, req.dStopOffset,
+ 		   req.bLiveStream, req.timeout);
+   /* backward compatibility, we always sent this as true before */
+   if (req.auth.av_len)
+@@ -953,6 +954,9 @@ ParseOption(char opt, char *arg, RTMP_REQUEST * req)
+     case 'z':
+       RTMP_debuglevel = RTMP_LOGALL;
+       break;
++    case 'j':
++      STR2AVAL(req->usherToken, arg);
++      break;
+     default:
+       RTMP_LogPrintf("unknown option: %c, arg: %s\n", opt, arg);
+       return FALSE;
+@@ -1023,6 +1027,7 @@ main(int argc, char **argv)
+     {"debug", 0, NULL, 'z'},
+     {"quiet", 0, NULL, 'q'},
+     {"verbose", 0, NULL, 'V'},
++    {"jtv", 1, NULL, 'j'},
+     {0, 0, 0, 0}
+   };
+ 
+@@ -1035,7 +1040,7 @@ main(int argc, char **argv)
+ 
+   while ((opt =
+ 	  getopt_long(argc, argv,
+-		      "hvqVzr:s:t:p:a:f:u:n:c:l:y:m:d:D:A:B:T:g:w:x:W:X:S:", longopts,
++		      "hvqVzr:s:t:p:a:f:u:n:c:l:y:m:d:D:A:B:T:g:w:x:W:X:S:j:", longopts,
+ 		      NULL)) != -1)
+     {
+       switch (opt)
+@@ -1095,6 +1100,8 @@ main(int argc, char **argv)
+ 	    ("--stop|-B num           Stop at num seconds into stream\n");
+ 	  RTMP_LogPrintf
+ 	    ("--token|-T key          Key for SecureToken response\n");
++      RTMP_LogPrintf
++	    ("--jtv|-j JSON           Authentication token for Justin.tv legacy servers\n");
+ 	  RTMP_LogPrintf
+ 	    ("--buffer|-b             Buffer time in milliseconds (default: %lu)\n\n",
+ 	     defaultRTMPRequest.bufferTime);
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index f1b6c66..cf52bfa 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -116,6 +116,7 @@ typedef struct
+   AVal swfHash;
+   AVal flashVer;
+   AVal subscribepath;
++  AVal usherToken;
+   uint32_t swfSize;
+ 
+   uint32_t dStartOffset;
+-- 
+1.7.10.4
+
+
+From a2fb387404cb0da99cf439d58478fff701398700 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Thu, 21 Jul 2011 17:31:14 -0700
+Subject: [PATCH 02/64] Regenerate HTML docs, minor tweaks
+
+
+diff --git a/librtmp/librtmp.3.html b/librtmp/librtmp.3.html
+index e5e6f4b..6f59851 100644
+--- a/librtmp/librtmp.3.html
++++ b/librtmp/librtmp.3.html
+@@ -6,10 +6,10 @@
+ <tr><td>LIBRTMP(3)<td align="center"><td align="right">LIBRTMP(3)
+ </thead>
+ <tfoot>
+-<tr><td>RTMPDump v2.3<td align="center">2010-07-03<td align="right">LIBRTMP(3)
++<tr><td>RTMPDump v2.4<td align="center">2011-07-20<td align="right">LIBRTMP(3)
+ </tfoot>
+ <tbody><tr><td colspan="3"><br><br><ul>
+-<!-- Copyright 2010 Howard Chu.
++<!-- Copyright 2011 Howard Chu.
+  Copying permitted according to the GNU General Public License V2.-->
+ </ul>
+ 
+@@ -238,6 +238,12 @@ authentication.
+ </dl>
+ <p>
+ <dl compact><dt>
++<b>jtv=</b><i>JSON</i>
++<dd>
++JSON token used by legacy Justin.tv servers. Invokes NetStream.Authenticate.UsherToken
++</dl>
++<p>
++<dl compact><dt>
+ <b>swfVfy=</b><i>0|1</i>
+ <dd>
+ If the value is 1 or TRUE, the SWF player is retrieved from the
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index adcff1f..8d76164 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -484,7 +484,7 @@ static struct urlopt {
+   { AVC("subscribe"), OFF(Link.subscribepath), OPT_STR, 0,
+   	"Stream to subscribe to" },
+   { AVC("jtv"), OFF(Link.usherToken),          OPT_STR, 0,
+-  	"Justin.tv authentication token" },
++	"Justin.tv authentication token" },
+   { AVC("token"),     OFF(Link.token),	       OPT_STR, 0,
+   	"Key for SecureToken response" },
+   { AVC("swfVfy"),    OFF(Link.lFlags),        OPT_BOOL, RTMP_LF_SWFV,
+@@ -1649,8 +1649,8 @@ SendFCSubscribe(RTMP *r, AVal *subscribepath)
+   return RTMP_SendPacket(r, &packet, TRUE);
+ }
+ 
+-//Justin.tv specific authentication
+-static const AVal av_NetStream_Authenticate_UsherToken = AVC("NetStream.Authenticate.UsherToken"); //SAVC() isn't suitable for that
++/* Justin.tv specific authentication */
++static const AVal av_NetStream_Authenticate_UsherToken = AVC("NetStream.Authenticate.UsherToken");
+ 
+ static int
+ SendUsherToken(RTMP *r, AVal *usherToken)
+diff --git a/rtmpdump.1.html b/rtmpdump.1.html
+index 7f17636..826f722 100644
+--- a/rtmpdump.1.html
++++ b/rtmpdump.1.html
+@@ -6,10 +6,10 @@
+ <tr><td>RTMPDUMP(1)<td align="center"><td align="right">RTMPDUMP(1)
+ </thead>
+ <tfoot>
+-<tr><td>RTMPDump v2.2e<td align="center">2010-05-02<td align="right">RTMPDUMP(1)
++<tr><td>RTMPDump v2.4<td align="center">2011-07-20<td align="right">RTMPDUMP(1)
+ </tfoot>
+ <tbody><tr><td colspan="3"><br><br><ul>
+-<!-- Copyright 2010 Howard Chu.
++<!-- Copyright 2011 Howard Chu.
+  Copying permitted according to the GNU General Public License V2.-->
+ </ul>
+ 
+@@ -42,6 +42,7 @@ rtmpdump &minus; RTMP streaming media client
+ [<b>&minus;b</b><i>&nbsp;buffer</i>]
+ [<b>&minus;m</b><i>&nbsp;timeout</i>]
+ [<b>&minus;T</b><i>&nbsp;key</i>]
++[<b>&minus;j</b><i>&nbsp;JSON</i>]
+ [<b>&minus;w</b><i>&nbsp;swfHash</i>]
+ [<b>&minus;x</b><i>&nbsp;swfSize</i>]
+ [<b>&minus;W</b><i>&nbsp;swfUrl</i>]
+@@ -275,6 +276,12 @@ authentication.
+ </dl>
+ <p>
+ <dl compact><dt>
++<b>&minus;&minus;jtv		&minus;j</b>&nbsp;<i>JSON</i>
++<dd>
++JSON token used by legacy Justin.tv servers. Invokes NetStream.Authenticate.UsherToken
++</dl>
++<p>
++<dl compact><dt>
+ <b>&minus;&minus;swfhash		&minus;w</b>&nbsp;<i>hexstring</i>
+ <dd>
+ SHA256 hash of the decompressed SWF file. This option may be needed if
+diff --git a/rtmpdump.c b/rtmpdump.c
+index ec1de85..89c053a 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -1055,9 +1055,9 @@ main(int argc, char **argv)
+ 	case 'S':
+ 	  STR2AVAL(sockshost, optarg);
+ 	  break;
+-    case 'j':
+-      STR2AVAL(usherToken, optarg);
+-      break;
++	case 'j':
++	  STR2AVAL(usherToken, optarg);
++	  break;
+ 	default:
+ 	  RTMP_LogPrintf("unknown option: %c\n", opt);
+ 	  usage(argv[0]);
+diff --git a/rtmpgw.8.html b/rtmpgw.8.html
+index 58b8f35..68d6734 100644
+--- a/rtmpgw.8.html
++++ b/rtmpgw.8.html
+@@ -6,10 +6,10 @@
+ <tr><td>RTMPGW(8)<td align="center"><td align="right">RTMPGW(8)
+ </thead>
+ <tfoot>
+-<tr><td>RTMPDump v2.2e<td align="center">2010-05-02<td align="right">RTMPGW(8)
++<tr><td>RTMPDump v2.4<td align="center">2011-07-20<td align="right">RTMPGW(8)
+ </tfoot>
+ <tbody><tr><td colspan="3"><br><br><ul>
+-<!-- Copyright 2010 Howard Chu.
++<!-- Copyright 2011 Howard Chu.
+  Copying permitted according to the GNU General Public License V2.-->
+ </ul>
+ 
+@@ -41,6 +41,7 @@ rtmpgw &minus; RTMP streaming media gateway
+ [<b>&minus;b</b><i>&nbsp;buffer</i>]
+ [<b>&minus;m</b><i>&nbsp;timeout</i>]
+ [<b>&minus;T</b><i>&nbsp;key</i>]
++[<b>&minus;j</b><i>&nbsp;JSON</i>]
+ [<b>&minus;w</b><i>&nbsp;swfHash</i>]
+ [<b>&minus;x</b><i>&nbsp;swfSize</i>]
+ [<b>&minus;W</b><i>&nbsp;swfUrl</i>]
+@@ -249,6 +250,12 @@ authentication.
+ </dl>
+ <p>
+ <dl compact><dt>
++<b>&minus;&minus;jtv		&minus;j</b>&nbsp;<i>JSON</i>
++<dd>
++JSON token used by legacy Justin.tv servers. Invokes NetStream.Authenticate.UsherToken
++</dl>
++<p>
++<dl compact><dt>
+ <b>&minus;&minus;swfhash		&minus;w</b>&nbsp;<i>hexstring</i>
+ <dd>
+ SHA256 hash of the decompressed SWF file. This option may be needed if
+diff --git a/rtmpgw.c b/rtmpgw.c
+index ce7319a..733e105 100644
+--- a/rtmpgw.c
++++ b/rtmpgw.c
+@@ -1100,7 +1100,7 @@ main(int argc, char **argv)
+ 	    ("--stop|-B num           Stop at num seconds into stream\n");
+ 	  RTMP_LogPrintf
+ 	    ("--token|-T key          Key for SecureToken response\n");
+-      RTMP_LogPrintf
++	  RTMP_LogPrintf
+ 	    ("--jtv|-j JSON           Authentication token for Justin.tv legacy servers\n");
+ 	  RTMP_LogPrintf
+ 	    ("--buffer|-b             Buffer time in milliseconds (default: %lu)\n\n",
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index cf52bfa..f1b6c66 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -116,7 +116,6 @@ typedef struct
+   AVal swfHash;
+   AVal flashVer;
+   AVal subscribepath;
+-  AVal usherToken;
+   uint32_t swfSize;
+ 
+   uint32_t dStartOffset;
+-- 
+1.7.10.4
+
+
+From ed99ad05b34031fac74230760c77d4d1a6a9e706 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Sat, 30 Apr 2011 14:29:58 +0300
+Subject: [PATCH 03/64] Remove the generated pkg-config file on make clean
+
+
+diff --git a/librtmp/Makefile b/librtmp/Makefile
+index d61e7a4..c95c8a6 100644
+--- a/librtmp/Makefile
++++ b/librtmp/Makefile
+@@ -76,7 +76,7 @@ OBJS=rtmp.o log.o amf.o hashswf.o parseurl.o
+ all:	librtmp.a $(SO_LIB)
+ 
+ clean:
+-	rm -f *.o *.a *.$(SOX) *.$(SO_EXT)
++	rm -f *.o *.a *.$(SOX) *.$(SO_EXT) librtmp.pc
+ 
+ librtmp.a: $(OBJS)
+ 	$(AR) rs $@ $?
+-- 
+1.7.10.4
+
+
+From 749018b7c7c4e0090ea17c104dc094ab74326c08 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Sat, 30 Apr 2011 14:30:00 +0300
+Subject: [PATCH 04/64] Create the SODIR, too
+
+When SYS=mingw, this differs from LIBDIR.
+
+diff --git a/librtmp/Makefile b/librtmp/Makefile
+index c95c8a6..aa4a339 100644
+--- a/librtmp/Makefile
++++ b/librtmp/Makefile
+@@ -100,7 +100,7 @@ librtmp.pc: librtmp.pc.in Makefile
+ install:	install_base $(SO_INST)
+ 
+ install_base:	librtmp.a librtmp.pc
+-	-mkdir -p $(INCDIR) $(LIBDIR)/pkgconfig $(MANDIR)/man3
++	-mkdir -p $(INCDIR) $(LIBDIR)/pkgconfig $(MANDIR)/man3 $(SODIR)
+ 	cp amf.h http.h log.h rtmp.h $(INCDIR)
+ 	cp librtmp.a $(LIBDIR)
+ 	cp librtmp.pc $(LIBDIR)/pkgconfig
+-- 
+1.7.10.4
+
+
+From 9931c44867d157621ae10cf489ba336091dfab6b Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Sat, 30 Apr 2011 14:30:01 +0300
+Subject: [PATCH 05/64] Generate and install an import lib for the built DLL
+
+
+diff --git a/librtmp/Makefile b/librtmp/Makefile
+index aa4a339..b88baf4 100644
+--- a/librtmp/Makefile
++++ b/librtmp/Makefile
+@@ -54,9 +54,14 @@ SODIR=$(SODIR_$(SYS))
+ SO_LDFLAGS_posix=-shared -Wl,-soname,$@
+ SO_LDFLAGS_darwin=-dynamiclib -flat_namespace -undefined suppress -fno-common \
+ 	-headerpad_max_install_names
+-SO_LDFLAGS_mingw=-shared
++SO_LDFLAGS_mingw=-shared -Wl,--out-implib,librtmp.dll.a
+ SO_LDFLAGS=$(SO_LDFLAGS_$(SYS))
+ 
++INSTALL_IMPLIB_posix=
++INSTALL_IMPLIB_darwin=
++INSTALL_IMPLIB_mingw=cp librtmp.dll.a $(LIBDIR)
++INSTALL_IMPLIB=$(INSTALL_IMPLIB_$(SYS))
++
+ SHARED=yes
+ SODEF_yes=-fPIC
+ SOLIB_yes=librtmp.$(SO_EXT)
+@@ -108,5 +113,6 @@ install_base:	librtmp.a librtmp.pc
+ 
+ install_so:	librtmp.$(SO_EXT)
+ 	cp librtmp.$(SO_EXT) $(SODIR)
++	$(INSTALL_IMPLIB)
+ 	cd $(SODIR); ln -sf librtmp.$(SO_EXT) librtmp.$(SOX)
+ 
+-- 
+1.7.10.4
+
+
+From 060206d121657d7e45c01ac022dd071c877b4caa Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Fri, 15 Jul 2011 13:46:02 +0300
+Subject: [PATCH 06/64] Check the return value from RTMP_SendBytesReceived()
+
+This avoids double frees in RTMP_Close(), if the
+RTMP_SendBytesReceived() call failed, which earlier led
+to RTMP_ReadPacket() writing back an already freed buffer
+(freed by RTMP_Close() within WriteN()) into m_vecChannelsIn.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 8d76164..f85cd83 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -1338,7 +1338,8 @@ ReadN(RTMP *r, char *buffer, int n)
+ 	  r->m_nBytesIn += nRead;
+ 	  if (r->m_bSendCounter
+ 	      && r->m_nBytesIn > r->m_nBytesInSent + r->m_nClientBW / 2)
+-	    SendBytesReceived(r);
++	    if (!SendBytesReceived(r))
++	        return FALSE;
+ 	}
+       /*RTMP_Log(RTMP_LOGDEBUG, "%s: %d bytes\n", __FUNCTION__, nBytes); */
+ #ifdef _DEBUG
+-- 
+1.7.10.4
+
+
+From 159a06ebe6d82ef20f2c77c497d55af00d2e0b78 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Fri, 15 Jul 2011 13:46:03 +0300
+Subject: [PATCH 07/64] Don't try to close an already closed socket
+
+This could happen if WriteN() (called within SendBytesReceived())
+failed.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index f85cd83..df2cb27 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -3626,7 +3626,9 @@ RTMPSockBuf_Close(RTMPSockBuf *sb)
+       sb->sb_ssl = NULL;
+     }
+ #endif
+-  return closesocket(sb->sb_socket);
++  if (sb->sb_socket != -1)
++      return closesocket(sb->sb_socket);
++  return 0;
+ }
+ 
+ #define HEX2BIN(a)	(((a)&0x40)?((a)&0xf)+9:((a)&0xf))
+-- 
+1.7.10.4
+
+
+From 530d02fccf24f98e2e318418b2fa3e3420056fda Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Fri, 22 Jul 2011 18:04:05 -0700
+Subject: [PATCH 08/64] Fix MDH_free() for PolarSSL
+
+Reported by Reijo Tomperi <aggro80@users.sourceforge.net>
+
+diff --git a/librtmp/dh.h b/librtmp/dh.h
+index 8e285a6..efef0fd 100644
+--- a/librtmp/dh.h
++++ b/librtmp/dh.h
+@@ -53,7 +53,7 @@ typedef struct MDH {
+ } MDH;
+ 
+ #define MDH_new()	calloc(1,sizeof(MDH))
+-#define MDH_free(vp)	{MDH *dh = vp; dhm_free(&dh->ctx); MP_free(dh->p); MP_free(dh->g); MP_free(dh->pub_key); MP_free(dh->priv_key); free(dh);}
++#define MDH_free(vp)	{MDH *_dh = vp; dhm_free(&_dh->ctx); MP_free(_dh->p); MP_free(_dh->g); MP_free(_dh->pub_key); MP_free(_dh->priv_key); free(_dh);}
+ 
+ static int MDH_generate_key(MDH *dh)
+ {
+-- 
+1.7.10.4
+
+
+From b627335dc37fd5265ac6d23a441ee2d89ab503c8 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Fri, 22 Jul 2011 18:06:27 -0700
+Subject: [PATCH 09/64] Plug potential memleak
+
+Reported by Reijo Tomperi <aggro80@users.sourceforge.net>
+
+diff --git a/rtmpdump.c b/rtmpdump.c
+index 89c053a..e506fa9 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -444,7 +444,7 @@ Download(RTMP * rtmp,		// connected RTMP object
+ {
+   int32_t now, lastUpdate;
+   int bufferSize = 64 * 1024;
+-  char *buffer = (char *) malloc(bufferSize);
++  char *buffer;
+   int nRead = 0;
+   off_t size = ftello(file);
+   unsigned long lastPercent = 0;
+@@ -505,6 +505,8 @@ Download(RTMP * rtmp,		// connected RTMP object
+   rtmp->m_read.nMetaHeaderSize = nMetaHeaderSize;
+   rtmp->m_read.nInitialFrameSize = nInitialFrameSize;
+ 
++  buffer = (char *) malloc(bufferSize);
++
+   now = RTMP_GetTime();
+   lastUpdate = now - 1000;
+   do
+-- 
+1.7.10.4
+
+
+From ec422962d58b8e0d9bfcf0af6e450e0e349947da Mon Sep 17 00:00:00 2001
+From: "Scott D. Davilla" <davilla@xbmc.org>
+Date: Fri, 29 Jul 2011 11:26:35 -0700
+Subject: [PATCH 10/64] Darwin dylib updates
+
+Bring in line with current practice for Darwin dynamic libs
+
+diff --git a/librtmp/Makefile b/librtmp/Makefile
+index b88baf4..a0125f1 100644
+--- a/librtmp/Makefile
++++ b/librtmp/Makefile
+@@ -52,8 +52,8 @@ SODIR_mingw=$(BINDIR)
+ SODIR=$(SODIR_$(SYS))
+ 
+ SO_LDFLAGS_posix=-shared -Wl,-soname,$@
+-SO_LDFLAGS_darwin=-dynamiclib -flat_namespace -undefined suppress -fno-common \
+-	-headerpad_max_install_names
++SO_LDFLAGS_darwin=-dynamiclib -twolevel_namespace -undefined dynamic_lookup \
++	-fno-common -headerpad_max_install_names -install_name $(libdir)/$@
+ SO_LDFLAGS_mingw=-shared -Wl,--out-implib,librtmp.dll.a
+ SO_LDFLAGS=$(SO_LDFLAGS_$(SYS))
+ 
+-- 
+1.7.10.4
+
+
+From 024d201c36e1b40f4f4d473e87d405e1b411230f Mon Sep 17 00:00:00 2001
+From: KSV <faltuvisitor@yahoo.co.in>
+Date: Sun, 31 Jul 2011 12:33:46 -0700
+Subject: [PATCH 11/64] Justin.TV usherToken detection
+
+
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index f1b6c66..805ce0d 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -95,6 +95,7 @@ STREAMING_SERVER *rtmpServer = 0;	// server structure pointer
+ 
+ STREAMING_SERVER *startStreaming(const char *address, int port);
+ void stopStreaming(STREAMING_SERVER * server);
++char *strreplace(char *srcstr, int srclen, char *orig, char *repl);
+ 
+ typedef struct
+ {
+@@ -261,6 +262,7 @@ static const AVal av_NetStream_Play_Stop = AVC("NetStream.Play.Stop");
+ static const AVal av_Stopped_playing = AVC("Stopped playing");
+ SAVC(details);
+ SAVC(clientid);
++static const AVal av_NetStream_Authenticate_UsherToken = AVC("NetStream.Authenticate.UsherToken");
+ 
+ static int
+ SendPlayStart(RTMP *r)
+@@ -575,6 +577,13 @@ ServeInvoke(STREAMING_SERVER *server, RTMP * r, RTMPPacket *packet, unsigned int
+     {
+       SendResultNumber(r, txn, 10.0);
+     }
++  else if (AVMATCH(&method, &av_NetStream_Authenticate_UsherToken))
++    {
++      AMFObjectProperty *prop = AMF_GetProp(&obj, NULL, 3);
++      AMFProp_GetString(prop, &r->Link.usherToken);
++      prop->p_vu.p_aval.av_len = 0;
++      prop->p_vu.p_aval.av_val = NULL;
++    }
+   else if (AVMATCH(&method, &av_play))
+     {
+       char *file, *p, *q, *cmd, *ptr;
+@@ -591,10 +600,11 @@ ServeInvoke(STREAMING_SERVER *server, RTMP * r, RTMPPacket *packet, unsigned int
+       if (r->Link.tcUrl.av_len)
+ 	{
+ 	  len = server->arglen + r->Link.playpath.av_len + 4 +
+-	    sizeof("rtmpdump") + r->Link.playpath.av_len + 12;
++	    sizeof("rtmpdump") + r->Link.playpath.av_len + 12 +
++	    r->Link.usherToken.av_len + 64;
+ 	  server->argc += 5;
+ 
+-	  cmd = malloc(len + server->argc * sizeof(AVal));
++	  cmd = malloc(len + (server->argc + 2) * sizeof(AVal));
+ 	  ptr = cmd;
+ 	  argv = (AVal *)(cmd + len);
+ 	  argv[0].av_val = cmd;
+@@ -640,6 +650,17 @@ ServeInvoke(STREAMING_SERVER *server, RTMP * r, RTMPPacket *packet, unsigned int
+ 	      ptr += sprintf(ptr, " -p \"%s\"", r->Link.pageUrl.av_val);
+ 	      argv[argc++].av_len = r->Link.pageUrl.av_len;
+ 	    }
++          if (r->Link.usherToken.av_val)
++            {
++              char *usherToken = strreplace(r->Link.usherToken.av_val, r->Link.usherToken.av_len, "\"", "\\\"");
++	      argv[argc].av_val = ptr + 1;
++	      argv[argc++].av_len = 5;
++	      argv[argc].av_val = ptr + 8;
++              ptr += sprintf(ptr, " --jtv \"%s\"", usherToken);
++	      argv[argc++].av_len = strlen(usherToken);
++              server->argc += 2;
++              free(usherToken);
++            }
+ 	  if (r->Link.extras.o_num) {
+ 	    ptr = dumpAMF(&r->Link.extras, ptr, argv, &argc);
+ 	    AMF_Reset(&r->Link.extras);
+@@ -1111,3 +1132,39 @@ main(int argc, char **argv)
+ #endif
+   return nStatus;
+ }
++
++char *
++strreplace(char *srcstr, int srclen, char *orig, char *repl)
++{
++  char *ptr = NULL, *srcstrstart = srcstr;
++  int origlen = strlen(orig);
++  int repllen = strlen(repl);
++  if (!srclen)
++    srclen = strlen(srcstr);
++  char *srcend = srcstr + srclen;
++  int deststrbuffer = srclen / origlen * repllen;
++  if (deststrbuffer < srclen)
++    deststrbuffer = srclen;
++  char *deststr = calloc(deststrbuffer + 1, sizeof(char));
++  char *deststrstart = deststr;
++
++  if ( (ptr = strstr(srcstr, orig)) )
++  {
++    do
++    {
++      int len = ptr - srcstrstart;
++      memcpy(deststrstart, srcstrstart, len);
++      srcstrstart += len + origlen;
++      deststrstart += len;
++      memcpy(deststrstart, repl, repllen);
++      deststrstart += repllen;
++      ptr = strstr(srcstrstart, orig);
++    }
++    while (ptr && (ptr < srcend));
++    strncpy(deststrstart, srcstrstart, srcend-srcstrstart);
++    return deststr;
++  }
++
++  strncpy(deststr, srcstr, srclen);
++  return deststr;
++}
+-- 
+1.7.10.4
+
+
+From f1abda046ca5a3f1efa63033c542e686b43dbcf3 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Sun, 31 Jul 2011 13:21:12 -0700
+Subject: [PATCH 12/64] Cleanup previous commit
+
+
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index 805ce0d..b45aae3 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -1,6 +1,6 @@
+ /*  Simple RTMP Server
+  *  Copyright (C) 2009 Andrej Stepanchuk
+- *  Copyright (C) 2009 Howard Chu
++ *  Copyright (C) 2009-2011 Howard Chu
+  *
+  *  This Program is free software; you can redistribute it and/or modify
+  *  it under the terms of the GNU General Public License as published by
+@@ -95,7 +95,10 @@ STREAMING_SERVER *rtmpServer = 0;	// server structure pointer
+ 
+ STREAMING_SERVER *startStreaming(const char *address, int port);
+ void stopStreaming(STREAMING_SERVER * server);
+-char *strreplace(char *srcstr, int srclen, char *orig, char *repl);
++void AVreplace(AVal *src, const AVal *orig, const AVal *repl);
++
++static const AVal av_dquote = AVC("\"");
++static const AVal av_escdquote = AVC("\\\"");
+ 
+ typedef struct
+ {
+@@ -579,10 +582,12 @@ ServeInvoke(STREAMING_SERVER *server, RTMP * r, RTMPPacket *packet, unsigned int
+     }
+   else if (AVMATCH(&method, &av_NetStream_Authenticate_UsherToken))
+     {
+-      AMFObjectProperty *prop = AMF_GetProp(&obj, NULL, 3);
+-      AMFProp_GetString(prop, &r->Link.usherToken);
+-      prop->p_vu.p_aval.av_len = 0;
+-      prop->p_vu.p_aval.av_val = NULL;
++      AVal usherToken;
++      AMFProp_GetString(AMF_GetProp(&obj, NULL, 3), &usherToken);
++      AVreplace(&usherToken, &av_dquote, &av_escdquote);
++      server->arglen += 6 + usherToken.av_len;
++      server->argc += 2;
++      r->Link.usherToken = usherToken;
+     }
+   else if (AVMATCH(&method, &av_play))
+     {
+@@ -600,11 +605,10 @@ ServeInvoke(STREAMING_SERVER *server, RTMP * r, RTMPPacket *packet, unsigned int
+       if (r->Link.tcUrl.av_len)
+ 	{
+ 	  len = server->arglen + r->Link.playpath.av_len + 4 +
+-	    sizeof("rtmpdump") + r->Link.playpath.av_len + 12 +
+-	    r->Link.usherToken.av_len + 64;
++	    sizeof("rtmpdump") + r->Link.playpath.av_len + 12;
+ 	  server->argc += 5;
+ 
+-	  cmd = malloc(len + (server->argc + 2) * sizeof(AVal));
++	  cmd = malloc(len + server->argc * sizeof(AVal));
+ 	  ptr = cmd;
+ 	  argv = (AVal *)(cmd + len);
+ 	  argv[0].av_val = cmd;
+@@ -650,17 +654,17 @@ ServeInvoke(STREAMING_SERVER *server, RTMP * r, RTMPPacket *packet, unsigned int
+ 	      ptr += sprintf(ptr, " -p \"%s\"", r->Link.pageUrl.av_val);
+ 	      argv[argc++].av_len = r->Link.pageUrl.av_len;
+ 	    }
+-          if (r->Link.usherToken.av_val)
+-            {
+-              char *usherToken = strreplace(r->Link.usherToken.av_val, r->Link.usherToken.av_len, "\"", "\\\"");
++	  if (r->Link.usherToken.av_val)
++	    {
+ 	      argv[argc].av_val = ptr + 1;
+-	      argv[argc++].av_len = 5;
+-	      argv[argc].av_val = ptr + 8;
+-              ptr += sprintf(ptr, " --jtv \"%s\"", usherToken);
+-	      argv[argc++].av_len = strlen(usherToken);
+-              server->argc += 2;
+-              free(usherToken);
+-            }
++	      argv[argc++].av_len = 2;
++	      argv[argc].av_val = ptr + 5;
++	      ptr += sprintf(ptr, " -j \"%s\"", r->Link.usherToken.av_val);
++	      argv[argc++].av_len = r->Link.usherToken.av_len;
++	      free(r->Link.usherToken.av_val);
++	      r->Link.usherToken.av_val = NULL;
++	      r->Link.usherToken.av_len = 0;
++	    }
+ 	  if (r->Link.extras.o_num) {
+ 	    ptr = dumpAMF(&r->Link.extras, ptr, argv, &argc);
+ 	    AMF_Reset(&r->Link.extras);
+@@ -932,6 +936,11 @@ cleanup:
+   rtmp.Link.pageUrl.av_val = NULL;
+   rtmp.Link.app.av_val = NULL;
+   rtmp.Link.flashVer.av_val = NULL;
++  if (rtmp.Link.usherToken.av_val)
++    {
++      free(rtmp.Link.usherToken.av_val);
++      rtmp.Link.usherToken.av_val = NULL;
++    }
+   RTMP_LogPrintf("done!\n\n");
+ 
+ quit:
+@@ -1133,38 +1142,42 @@ main(int argc, char **argv)
+   return nStatus;
+ }
+ 
+-char *
+-strreplace(char *srcstr, int srclen, char *orig, char *repl)
++void
++AVreplace(AVal *src, const AVal *orig, const AVal *repl)
+ {
+-  char *ptr = NULL, *srcstrstart = srcstr;
+-  int origlen = strlen(orig);
+-  int repllen = strlen(repl);
+-  if (!srclen)
+-    srclen = strlen(srcstr);
+-  char *srcend = srcstr + srclen;
+-  int deststrbuffer = srclen / origlen * repllen;
+-  if (deststrbuffer < srclen)
+-    deststrbuffer = srclen;
+-  char *deststr = calloc(deststrbuffer + 1, sizeof(char));
+-  char *deststrstart = deststr;
+-
+-  if ( (ptr = strstr(srcstr, orig)) )
+-  {
+-    do
++  char *srcbeg = src->av_val;
++  char *srcend = src->av_val + src->av_len;
++  char *dest, *sptr, *dptr;
++  int n = 0;
++
++  /* count occurrences of orig in src */
++  sptr = src->av_val;
++  while (sptr < srcend && (sptr = strstr(sptr, orig->av_val)))
+     {
+-      int len = ptr - srcstrstart;
+-      memcpy(deststrstart, srcstrstart, len);
+-      srcstrstart += len + origlen;
+-      deststrstart += len;
+-      memcpy(deststrstart, repl, repllen);
+-      deststrstart += repllen;
+-      ptr = strstr(srcstrstart, orig);
++      n++;
++      sptr += orig->av_len;
+     }
+-    while (ptr && (ptr < srcend));
+-    strncpy(deststrstart, srcstrstart, srcend-srcstrstart);
+-    return deststr;
+-  }
++  if (!n)
++    return;
+ 
+-  strncpy(deststr, srcstr, srclen);
+-  return deststr;
++  dest = malloc(src->av_len + 1 + (repl->av_len - orig->av_len) * n);
++
++  sptr = src->av_val;
++  dptr = dest;
++  while (sptr < srcend && (sptr = strstr(sptr, orig->av_val)))
++    {
++      n = sptr - srcbeg;
++      memcpy(dptr, srcbeg, n);
++      srcbeg += n;
++      dptr += n;
++      memcpy(dptr, repl->av_val, repl->av_len);
++      dptr += repl->av_len;
++      sptr += orig->av_len;
++    }
++  n = srcend - srcbeg;
++  memcpy(dptr, srcbeg, n);
++  dptr += n;
++  *dptr = '\0';
++  src->av_val = dest;
++  src->av_len = dptr - dest;
+ }
+-- 
+1.7.10.4
+
+
+From 8880d1456b282ee79979adbe7b6a6eb8ad371081 Mon Sep 17 00:00:00 2001
+From: Chris Larsen <clarsen@euphoriaaudio.com>
+Date: Tue, 2 Aug 2011 12:33:44 -0400
+Subject: [PATCH 13/64] Unexpected BW Response Fix
+
+Bug: SendCheckBWResult sends an invalid bw response due to casting issues
+from a double to an int.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index df2cb27..5311a8a 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -2339,7 +2339,7 @@ HandleInvoke(RTMP *r, const char *body, unsigned int nBodySize)
+ {
+   AMFObject obj;
+   AVal method;
+-  int txn;
++  double txn;
+   int ret = 0, nRes;
+   if (body[0] != 0x02)		/* make sure it is a string method name we start with */
+     {
+@@ -2357,7 +2357,7 @@ HandleInvoke(RTMP *r, const char *body, unsigned int nBodySize)
+ 
+   AMF_Dump(&obj);
+   AMFProp_GetString(AMF_GetProp(&obj, NULL, 0), &method);
+-  txn = (int)AMFProp_GetNumber(AMF_GetProp(&obj, NULL, 1));
++  txn = AMFProp_GetNumber(AMF_GetProp(&obj, NULL, 1));
+   RTMP_Log(RTMP_LOGDEBUG, "%s, server invoking <%s>", __FUNCTION__, method.av_val);
+ 
+   if (AVMATCH(&method, &av__result))
+@@ -2366,7 +2366,7 @@ HandleInvoke(RTMP *r, const char *body, unsigned int nBodySize)
+       int i;
+ 
+       for (i=0; i<r->m_numCalls; i++) {
+-  	if (r->m_methodCalls[i].num == txn) {
++	if (r->m_methodCalls[i].num == (int)txn) {
+ 	  methodInvoked = r->m_methodCalls[i].name;
+ 	  AV_erase(r->m_methodCalls, &r->m_numCalls, i, FALSE);
+ 	  break;
+-- 
+1.7.10.4
+
+
+From c528451068de033d7cc76eb1c5a606c10215fcfb Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Wed, 3 Aug 2011 11:46:07 -0700
+Subject: [PATCH 14/64] Fix <arpa/inet.h> include order
+
+
+diff --git a/librtmp/rtmp_sys.h b/librtmp/rtmp_sys.h
+index 6a3f215..638374f 100644
+--- a/librtmp/rtmp_sys.h
++++ b/librtmp/rtmp_sys.h
+@@ -46,10 +46,10 @@
+ #include <sys/socket.h>
+ #include <sys/times.h>
+ #include <netdb.h>
+-#include <arpa/inet.h>
+ #include <unistd.h>
+ #include <netinet/in.h>
+ #include <netinet/tcp.h>
++#include <arpa/inet.h>
+ #define GetSockError()	errno
+ #define SetSockError(e)	errno = e
+ #undef closesocket
+-- 
+1.7.10.4
+
+
+From a1114e09bf0d74ef1d575eb88f3aa36bc7c6d790 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 9 Aug 2011 14:44:14 -0700
+Subject: [PATCH 15/64] Fix AVreplace for usherToken
+
+
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index b45aae3..91fc4da 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -1168,11 +1168,11 @@ AVreplace(AVal *src, const AVal *orig, const AVal *repl)
+     {
+       n = sptr - srcbeg;
+       memcpy(dptr, srcbeg, n);
+-      srcbeg += n;
+       dptr += n;
+       memcpy(dptr, repl->av_val, repl->av_len);
+       dptr += repl->av_len;
+       sptr += orig->av_len;
++      srcbeg = sptr;
+     }
+   n = srcend - srcbeg;
+   memcpy(dptr, srcbeg, n);
+-- 
+1.7.10.4
+
+
+From c58cfb3e9208c6e6bc1aa18f1b1d650d799084e5 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Thu, 11 Aug 2011 18:02:10 -0700
+Subject: [PATCH 16/64] Add RD_NO_CONNECT return code for Connect failures
+
+
+diff --git a/rtmpdump.c b/rtmpdump.c
+index e506fa9..01decf9 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -46,6 +46,7 @@
+ #define RD_SUCCESS		0
+ #define RD_FAILED		1
+ #define RD_INCOMPLETE		2
++#define RD_NO_CONNECT		3
+ 
+ #define DEF_TIMEOUT	30	/* seconds */
+ #define DEF_BUFTIME	(10 * 60 * 60 * 1000)	/* 10 hours default */
+@@ -1253,7 +1254,7 @@ main(int argc, char **argv)
+ 
+ 	  if (!RTMP_Connect(&rtmp, NULL))
+ 	    {
+-	      nStatus = RD_FAILED;
++	      nStatus = RD_NO_CONNECT;
+ 	      break;
+ 	    }
+ 
+-- 
+1.7.10.4
+
+
+From 6230845ab0fba07289d4b2d9b97269e4b2d90766 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Sun, 25 Sep 2011 03:07:14 -0700
+Subject: [PATCH 17/64] PolarSSL support now requires version 1.0.0.
+
+
+diff --git a/README b/README
+index 865c6c4..dcf5f52 100644
+--- a/README
++++ b/README
+@@ -50,6 +50,7 @@ library. You can also turn it off if desired
+ The rtmpdump programs still link to the static library, regardless.
+ 
+ Note that if using OpenSSL, you must have version 0.9.8 or newer.
++For Polar SSL you must have version 1.0.0 or newer.
+ 
+ Credit goes to team boxee for the XBMC RTMP code originally used in RTMPDumper.
+ The current code is based on the XBMC code but rewritten in C by Howard Chu.
+diff --git a/librtmp/dh.h b/librtmp/dh.h
+index efef0fd..a9f3763 100644
+--- a/librtmp/dh.h
++++ b/librtmp/dh.h
+@@ -30,14 +30,14 @@
+ #ifdef USE_POLARSSL
+ #include <polarssl/dhm.h>
+ typedef mpi * MP_t;
+-#define MP_new(m)	m = malloc(sizeof(mpi)); mpi_init(m, NULL)
++#define MP_new(m)	m = malloc(sizeof(mpi)); mpi_init(m)
+ #define MP_set_w(mpi, w)	mpi_lset(mpi, w)
+ #define MP_cmp(u, v)	mpi_cmp_mpi(u, v)
+ #define MP_set(u, v)	mpi_copy(u, v)
+ #define MP_sub_w(mpi, w)	mpi_sub_int(mpi, mpi, w)
+ #define MP_cmp_1(mpi)	mpi_cmp_int(mpi, 1)
+ #define MP_modexp(r, y, q, p)	mpi_exp_mod(r, y, q, p, NULL)
+-#define MP_free(mpi)	mpi_free(mpi, NULL); free(mpi)
++#define MP_free(mpi)	mpi_free(mpi); free(mpi)
+ #define MP_gethex(u, hex, res)	MP_new(u); res = mpi_read_string(u, 16, hex) == 0
+ #define MP_bytes(u)	mpi_size(u)
+ #define MP_setbin(u,buf,len)	mpi_write_binary(u,buf,len)
+@@ -71,9 +71,8 @@ static int MDH_generate_key(MDH *dh)
+ 
+ static int MDH_compute_key(uint8_t *secret, size_t len, MP_t pub, MDH *dh)
+ {
+-  int n = len;
+   MP_set(&dh->ctx.GY, pub);
+-  dhm_calc_secret(&dh->ctx, secret, &n);
++  dhm_calc_secret(&dh->ctx, secret, &len);
+   return 0;
+ }
+ 
+diff --git a/librtmp/rtmp_sys.h b/librtmp/rtmp_sys.h
+index 638374f..c3fd4a6 100644
+--- a/librtmp/rtmp_sys.h
++++ b/librtmp/rtmp_sys.h
+@@ -71,7 +71,8 @@ typedef struct tls_ctx {
+ #define TLS_CTX tls_ctx *
+ #define TLS_client(ctx,s)	s = malloc(sizeof(ssl_context)); ssl_init(s);\
+ 	ssl_set_endpoint(s, SSL_IS_CLIENT); ssl_set_authmode(s, SSL_VERIFY_NONE);\
+-	ssl_set_rng(s, havege_rand, &ctx->hs); ssl_set_ciphers(s, ssl_default_ciphers);\
++	ssl_set_rng(s, havege_rand, &ctx->hs);\
++	ssl_set_ciphersuites(s, ssl_default_ciphersuites);\
+ 	ssl_set_session(s, 1, 600, &ctx->ssn)
+ #define TLS_setfd(s,fd)	ssl_set_bio(s, net_recv, &fd, net_send, &fd)
+ #define TLS_connect(s)	ssl_handshake(s)
+-- 
+1.7.10.4
+
+
+From 60218d0af0f4bd683ecdebe49986f188820cf8ce Mon Sep 17 00:00:00 2001
+From: Kirill Zorin <cyril.zorin@gmail.com>
+Date: Fri, 30 Sep 2011 13:38:23 -0400
+Subject: [PATCH 18/64] fixed undefined behaviour due to union assignment
+
+
+diff --git a/librtmp/amf.c b/librtmp/amf.c
+index 7fa289e..ae920e4 100644
+--- a/librtmp/amf.c
++++ b/librtmp/amf.c
+@@ -1111,7 +1111,7 @@ AMF_AddProp(AMFObject *obj, const AMFObjectProperty *prop)
+   if (!(obj->o_num & 0x0f))
+     obj->o_props =
+       realloc(obj->o_props, (obj->o_num + 16) * sizeof(AMFObjectProperty));
+-  obj->o_props[obj->o_num++] = *prop;
++  memcpy(&obj->o_props[obj->o_num++], prop, sizeof(AMFObjectProperty));
+ }
+ 
+ int
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 5311a8a..4b17a49 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -2584,7 +2584,7 @@ RTMP_FindFirstMatchingProperty(AMFObject *obj, const AVal *name,
+ 
+       if (AVMATCH(&prop->p_name, name))
+ 	{
+-	  *p = *prop;
++	  memcpy(p, prop, sizeof(*prop));
+ 	  return TRUE;
+ 	}
+ 
+@@ -2610,7 +2610,7 @@ RTMP_FindPrefixProperty(AMFObject *obj, const AVal *name,
+       if (prop->p_name.av_len > name->av_len &&
+       	  !memcmp(prop->p_name.av_val, name->av_val, name->av_len))
+ 	{
+-	  *p = *prop;
++	  memcpy(p, prop, sizeof(*prop));
+ 	  return TRUE;
+ 	}
+ 
+-- 
+1.7.10.4
+
+
+From c90c05892cbaebfb1b2095759597d9fb38238c64 Mon Sep 17 00:00:00 2001
+From: KSV <faltuvistor@yahoo.co.in>
+Date: Mon, 7 Nov 2011 11:38:27 -0800
+Subject: [PATCH 19/64] Fix bytes-received report
+
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 4b17a49..a9c1bc1 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -1337,7 +1337,7 @@ ReadN(RTMP *r, char *buffer, int n)
+ 	  nBytes = nRead;
+ 	  r->m_nBytesIn += nRead;
+ 	  if (r->m_bSendCounter
+-	      && r->m_nBytesIn > r->m_nBytesInSent + r->m_nClientBW / 2)
++	      && r->m_nBytesIn > ( r->m_nBytesInSent + r->m_nClientBW / 10))
+ 	    if (!SendBytesReceived(r))
+ 	        return FALSE;
+ 	}
+-- 
+1.7.10.4
+
+
+From b3467069ad7c26d748ca13ce0ee88a41f85b22dd Mon Sep 17 00:00:00 2001
+From: Jeff Johnson <jeff@rogueamoeba.com>
+Date: Mon, 7 Nov 2011 11:43:26 -0800
+Subject: [PATCH 20/64] Fix getting swf hash with https URLs
+
+
+diff --git a/librtmp/hashswf.c b/librtmp/hashswf.c
+index 3c56b69..5576730 100644
+--- a/librtmp/hashswf.c
++++ b/librtmp/hashswf.c
+@@ -163,7 +163,7 @@ HTTP_get(struct HTTP_ctx *http, const char *url, HTTP_read_callback *cb)
+ #else
+       TLS_client(RTMP_TLS_ctx, sb.sb_ssl);
+       TLS_setfd(sb.sb_ssl, sb.sb_socket);
+-      if ((i = TLS_connect(sb.sb_ssl)) < 0)
++      if (TLS_connect(sb.sb_ssl) < 0)
+ 	{
+ 	  RTMP_Log(RTMP_LOGERROR, "%s, TLS_Connect failed", __FUNCTION__);
+ 	  ret = HTTPRES_LOST_CONNECTION;
+-- 
+1.7.10.4
+
+
+From 90799efbb67f415ff930d68905e8267d5aa5dc4e Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 8 Nov 2011 02:04:01 -0800
+Subject: [PATCH 21/64] Increase tcUrl buffer size
+
+
+diff --git a/rtmpdump.c b/rtmpdump.c
+index 01decf9..a8fa128 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -1152,9 +1152,9 @@ main(int argc, char **argv)
+ 
+   if (tcUrl.av_len == 0)
+     {
+-      char str[512] = { 0 };
++      char str[1024];
+ 
+-      tcUrl.av_len = snprintf(str, 511, "%s://%.*s:%d/%.*s",
++      tcUrl.av_len = snprintf(str, sizeof(str), "%s://%.*s:%d/%.*s",
+ 	  	   RTMPProtocolStringsLower[protocol], hostname.av_len,
+ 		   hostname.av_val, port, app.av_len, app.av_val);
+       tcUrl.av_val = (char *) malloc(tcUrl.av_len + 1);
+-- 
+1.7.10.4
+
+
+From 9df7959a71ec33cc9c83c9d3ef25c17b1c527f0e Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 8 Nov 2011 02:05:01 -0800
+Subject: [PATCH 22/64] Spell Referer according to RFC1945
+
+
+diff --git a/librtmp/hashswf.c b/librtmp/hashswf.c
+index 5576730..0320480 100644
+--- a/librtmp/hashswf.c
++++ b/librtmp/hashswf.c
+@@ -141,7 +141,7 @@ HTTP_get(struct HTTP_ctx *http, const char *url, HTTP_read_callback *cb)
+     return HTTPRES_LOST_CONNECTION;
+   i =
+     sprintf(sb.sb_buf,
+-	    "GET %s HTTP/1.0\r\nUser-Agent: %s\r\nHost: %s\r\nReferrer: %.*s\r\n",
++	    "GET %s HTTP/1.0\r\nUser-Agent: %s\r\nHost: %s\r\nReferer: %.*s\r\n",
+ 	    path, AGENT, host, (int)(path - url + 1), url);
+   if (http->date[0])
+     i += sprintf(sb.sb_buf + i, "If-Modified-Since: %s\r\n", http->date);
+-- 
+1.7.10.4
+
+
+From 1c77ff43439068981d2ad9872952922a1ee37f89 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 8 Nov 2011 02:13:14 -0800
+Subject: [PATCH 23/64] Calculate tcUrl length
+
+
+diff --git a/rtmpdump.c b/rtmpdump.c
+index a8fa128..892a8bc 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -1152,13 +1152,12 @@ main(int argc, char **argv)
+ 
+   if (tcUrl.av_len == 0)
+     {
+-      char str[1024];
+-
+-      tcUrl.av_len = snprintf(str, sizeof(str), "%s://%.*s:%d/%.*s",
++	  tcUrl.av_len = strlen(RTMPProtocolStringsLower[protocol]) +
++	  	hostname.av_len + app.av_len + sizeof("://:65535/");
++      tcUrl.av_val = (char *) malloc(tcUrl.av_len);
++      tcUrl.av_len = snprintf(tcUrl.av_val, tcUrl.av_len, "%s://%.*s:%d/%.*s",
+ 	  	   RTMPProtocolStringsLower[protocol], hostname.av_len,
+ 		   hostname.av_val, port, app.av_len, app.av_val);
+-      tcUrl.av_val = (char *) malloc(tcUrl.av_len + 1);
+-      strcpy(tcUrl.av_val, str);
+     }
+ 
+   int first = 1;
+-- 
+1.7.10.4
+
+
+From 30fcf46fc82f96ca41b710fc38bbc15f2489795e Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 8 Nov 2011 02:14:21 -0800
+Subject: [PATCH 24/64] Check for malloc failure in prev commit
+
+
+diff --git a/rtmpdump.c b/rtmpdump.c
+index 892a8bc..c37def2 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -1155,6 +1155,8 @@ main(int argc, char **argv)
+ 	  tcUrl.av_len = strlen(RTMPProtocolStringsLower[protocol]) +
+ 	  	hostname.av_len + app.av_len + sizeof("://:65535/");
+       tcUrl.av_val = (char *) malloc(tcUrl.av_len);
++	  if (!tcUrl.av_val)
++	    return RD_FAILED;
+       tcUrl.av_len = snprintf(tcUrl.av_val, tcUrl.av_len, "%s://%.*s:%d/%.*s",
+ 	  	   RTMPProtocolStringsLower[protocol], hostname.av_len,
+ 		   hostname.av_val, port, app.av_len, app.av_val);
+-- 
+1.7.10.4
+
+
+From 83e701eef0d7947713280fe3e7561bed1e7195f5 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Mon, 14 Nov 2011 16:09:26 -0800
+Subject: [PATCH 25/64] Fix missing log message parameter
+
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index a9c1bc1..4da318b 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -974,7 +974,7 @@ SocksNegotiate(RTMP *r)
+       }
+     else
+       {
+-        RTMP_Log(RTMP_LOGERROR, "%s, SOCKS returned error code %d", packet[1]);
++        RTMP_Log(RTMP_LOGERROR, "%s, SOCKS returned error code %d", __FUNCTION__, packet[1]);
+         return FALSE;
+       }
+   }
+-- 
+1.7.10.4
+
+
+From 949da84ab1f659597d6e7fa1ef0ab8fc1ca8e246 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Mon, 14 Nov 2011 16:11:13 -0800
+Subject: [PATCH 26/64] Tell gcc about log format strings
+
+
+diff --git a/librtmp/log.h b/librtmp/log.h
+index 97c9aac..2adb111 100644
+--- a/librtmp/log.h
++++ b/librtmp/log.h
+@@ -48,9 +48,15 @@ extern RTMP_LogLevel RTMP_debuglevel;
+ typedef void (RTMP_LogCallback)(int level, const char *fmt, va_list);
+ void RTMP_LogSetCallback(RTMP_LogCallback *cb);
+ void RTMP_LogSetOutput(FILE *file);
++#ifdef __GNUC__
++void RTMP_LogPrintf(const char *format, ...) __attribute__ ((__format__ (__printf__, 1, 2)));
++void RTMP_LogStatus(const char *format, ...) __attribute__ ((__format__ (__printf__, 1, 2)));
++void RTMP_Log(int level, const char *format, ...) __attribute__ ((__format__ (__printf__, 2, 3)));
++#else
+ void RTMP_LogPrintf(const char *format, ...);
+ void RTMP_LogStatus(const char *format, ...);
+ void RTMP_Log(int level, const char *format, ...);
++#endif
+ void RTMP_LogHex(int level, const uint8_t *data, unsigned long len);
+ void RTMP_LogHexString(int level, const uint8_t *data, unsigned long len);
+ void RTMP_LogSetLevel(RTMP_LogLevel lvl);
+-- 
+1.7.10.4
+
+
+From 45556fb3b372402d7bd5235832176f58dede90ae Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Mon, 14 Nov 2011 16:12:26 -0800
+Subject: [PATCH 27/64] Fix mismatched format string conversions
+
+
+diff --git a/librtmp/amf.c b/librtmp/amf.c
+index ae920e4..f9ecf21 100644
+--- a/librtmp/amf.c
++++ b/librtmp/amf.c
+@@ -586,7 +586,7 @@ AMF3Prop_Decode(AMFObjectProperty *prop, const char *pBuffer, int nSize,
+     case AMF3_ARRAY:
+     case AMF3_BYTE_ARRAY:
+     default:
+-      RTMP_Log(RTMP_LOGDEBUG, "%s - AMF3 unknown/unsupported datatype 0x%02x, @0x%08X",
++      RTMP_Log(RTMP_LOGDEBUG, "%s - AMF3 unknown/unsupported datatype 0x%02x, @%p",
+ 	  __FUNCTION__, (unsigned char)(*pBuffer), pBuffer);
+       return -1;
+     }
+@@ -772,7 +772,7 @@ AMFProp_Decode(AMFObjectProperty *prop, const char *pBuffer, int nSize,
+ 	break;
+       }
+     default:
+-      RTMP_Log(RTMP_LOGDEBUG, "%s - unknown datatype 0x%02x, @0x%08X", __FUNCTION__,
++      RTMP_Log(RTMP_LOGDEBUG, "%s - unknown datatype 0x%02x, @%p", __FUNCTION__,
+ 	  prop->p_type, pBuffer - 1);
+       return -1;
+     }
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 4da318b..52d0254 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -185,7 +185,7 @@ void
+ RTMPPacket_Dump(RTMPPacket *p)
+ {
+   RTMP_Log(RTMP_LOGDEBUG,
+-      "RTMP PACKET: packet type: 0x%02x. channel: 0x%02x. info 1: %d info 2: %d. Body size: %lu. body: 0x%02x",
++      "RTMP PACKET: packet type: 0x%02x. channel: 0x%02x. info 1: %d info 2: %d. Body size: %u. body: 0x%02x",
+       p->m_packetType, p->m_nChannel, p->m_nTimeStamp, p->m_nInfoField2,
+       p->m_nBodySize, p->m_body ? (unsigned char)p->m_body[0] : 0);
+ }
+@@ -367,7 +367,7 @@ RTMP_SetupStream(RTMP *r,
+     RTMP_Log(RTMP_LOGDEBUG, "StopTime      : %d msec", dStop);
+ 
+   RTMP_Log(RTMP_LOGDEBUG, "live     : %s", bLiveStream ? "yes" : "no");
+-  RTMP_Log(RTMP_LOGDEBUG, "timeout  : %d sec", timeout);
++  RTMP_Log(RTMP_LOGDEBUG, "timeout  : %ld sec", timeout);
+ 
+ #ifdef CRYPTO
+   if (swfSHA256Hash != NULL && swfSize > 0)
+@@ -376,7 +376,7 @@ RTMP_SetupStream(RTMP *r,
+       r->Link.SWFSize = swfSize;
+       RTMP_Log(RTMP_LOGDEBUG, "SWFSHA256:");
+       RTMP_LogHex(RTMP_LOGDEBUG, r->Link.SWFHash, sizeof(r->Link.SWFHash));
+-      RTMP_Log(RTMP_LOGDEBUG, "SWFSize  : %lu", r->Link.SWFSize);
++      RTMP_Log(RTMP_LOGDEBUG, "SWFSize  : %u", r->Link.SWFSize);
+     }
+   else
+     {
+@@ -1161,14 +1161,14 @@ RTMP_ClientPacket(RTMP *r, RTMPPacket *packet)
+     case RTMP_PACKET_TYPE_FLEX_STREAM_SEND:
+       /* flex stream send */
+       RTMP_Log(RTMP_LOGDEBUG,
+-	  "%s, flex stream send, size %lu bytes, not supported, ignoring",
++	  "%s, flex stream send, size %u bytes, not supported, ignoring",
+ 	  __FUNCTION__, packet->m_nBodySize);
+       break;
+ 
+     case RTMP_PACKET_TYPE_FLEX_SHARED_OBJECT:
+       /* flex shared object */
+       RTMP_Log(RTMP_LOGDEBUG,
+-	  "%s, flex shared object, size %lu bytes, not supported, ignoring",
++	  "%s, flex shared object, size %u bytes, not supported, ignoring",
+ 	  __FUNCTION__, packet->m_nBodySize);
+       break;
+ 
+@@ -1176,7 +1176,7 @@ RTMP_ClientPacket(RTMP *r, RTMPPacket *packet)
+       /* flex message */
+       {
+ 	RTMP_Log(RTMP_LOGDEBUG,
+-	    "%s, flex message, size %lu bytes, not fully supported",
++	    "%s, flex message, size %u bytes, not fully supported",
+ 	    __FUNCTION__, packet->m_nBodySize);
+ 	/*RTMP_LogHex(packet.m_body, packet.m_nBodySize); */
+ 
+@@ -1198,7 +1198,7 @@ RTMP_ClientPacket(RTMP *r, RTMPPacket *packet)
+       }
+     case RTMP_PACKET_TYPE_INFO:
+       /* metadata (notify) */
+-      RTMP_Log(RTMP_LOGDEBUG, "%s, received: notify %lu bytes", __FUNCTION__,
++      RTMP_Log(RTMP_LOGDEBUG, "%s, received: notify %u bytes", __FUNCTION__,
+ 	  packet->m_nBodySize);
+       if (HandleMetadata(r, packet->m_body, packet->m_nBodySize))
+ 	bHasMediaPacket = 1;
+@@ -1211,7 +1211,7 @@ RTMP_ClientPacket(RTMP *r, RTMPPacket *packet)
+ 
+     case RTMP_PACKET_TYPE_INVOKE:
+       /* invoke */
+-      RTMP_Log(RTMP_LOGDEBUG, "%s, received: invoke %lu bytes", __FUNCTION__,
++      RTMP_Log(RTMP_LOGDEBUG, "%s, received: invoke %u bytes", __FUNCTION__,
+ 	  packet->m_nBodySize);
+       /*RTMP_LogHex(packet.m_body, packet.m_nBodySize); */
+ 
+@@ -2373,7 +2373,7 @@ HandleInvoke(RTMP *r, const char *body, unsigned int nBodySize)
+ 	}
+       }
+       if (!methodInvoked.av_val) {
+-        RTMP_Log(RTMP_LOGDEBUG, "%s, received result id %d without matching request",
++        RTMP_Log(RTMP_LOGDEBUG, "%s, received result id %f without matching request",
+ 	  __FUNCTION__, txn);
+ 	goto leave;
+       }
+@@ -3055,7 +3055,7 @@ RTMP_ReadPacket(RTMP *r, RTMPPacket *packet)
+ 
+   if (ReadN(r, packet->m_body + packet->m_nBytesRead, nChunk) != nChunk)
+     {
+-      RTMP_Log(RTMP_LOGERROR, "%s, failed to read RTMP packet body. len: %lu",
++      RTMP_Log(RTMP_LOGERROR, "%s, failed to read RTMP packet body. len: %u",
+ 	  __FUNCTION__, packet->m_nBodySize);
+       return FALSE;
+     }
+@@ -4176,7 +4176,7 @@ Read_1_Packet(RTMP *r, char *buf, unsigned int buflen)
+ 		  if (pos + 11 + dataSize > nPacketLen)
+ 		    {
+ 		      RTMP_Log(RTMP_LOGERROR,
+-			  "Wrong data size (%lu), stream corrupted, aborting!",
++			  "Wrong data size (%u), stream corrupted, aborting!",
+ 			  dataSize);
+ 		      ret = RTMP_READ_ERROR;
+ 		      break;
+-- 
+1.7.10.4
+
+
+From 5d03a4f0d6216da92830306436eae7eb318d5115 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Mon, 14 Nov 2011 16:17:27 -0800
+Subject: [PATCH 28/64] Fix log messages
+
+
+diff --git a/rtmpdump.c b/rtmpdump.c
+index c37def2..34bfdba 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -686,7 +686,7 @@ void usage(char *prog)
+ 	  RTMP_LogPrintf
+ 	    ("--resume|-e             Resume a partial RTMP download\n");
+ 	  RTMP_LogPrintf
+-	    ("--timeout|-m num        Timeout connection num seconds (default: %lu)\n",
++	    ("--timeout|-m num        Timeout connection num seconds (default: %u)\n",
+ 	     DEF_TIMEOUT);
+ 	  RTMP_LogPrintf
+ 	    ("--start|-A num          Start at num seconds into stream (not valid when using --live)\n");
+@@ -699,7 +699,7 @@ void usage(char *prog)
+ 	  RTMP_LogPrintf
+ 	    ("--hashes|-#             Display progress with hashes, not with the byte counter\n");
+ 	  RTMP_LogPrintf
+-	    ("--buffer|-b             Buffer time in milliseconds (default: %lu)\n",
++	    ("--buffer|-b             Buffer time in milliseconds (default: %u)\n",
+ 	     DEF_BUFTIME);
+ 	  RTMP_LogPrintf
+ 	    ("--skip|-k num           Skip num keyframes when looking for last keyframe to resume from. Useful if resume fails (default: %d)\n\n",
+diff --git a/rtmpgw.c b/rtmpgw.c
+index 733e105..0cf56bb 100644
+--- a/rtmpgw.c
++++ b/rtmpgw.c
+@@ -563,7 +563,7 @@ void processTCPrequest(STREAMING_SERVER * server,	// server socket and state (ou
+   rtmp.Link.token = req.token;
+   rtmp.m_read.timestamp = dSeek;
+ 
+-  RTMP_LogPrintf("Connecting ... port: %d, app: %s\n", req.rtmpport, req.app);
++  RTMP_LogPrintf("Connecting ... port: %d, app: %s\n", req.rtmpport, req.app.av_val);
+   if (!RTMP_Connect(&rtmp, NULL))
+     {
+       RTMP_LogPrintf("%s, failed to connect!\n", __FUNCTION__);
+@@ -738,7 +738,7 @@ stopStreaming(STREAMING_SERVER * server)
+ 
+       if (closesocket(server->socket))
+ 	RTMP_Log(RTMP_LOGERROR, "%s: Failed to close listening socket, error %d",
+-	    GetSockError());
++	    __FUNCTION__, GetSockError());
+ 
+       server->state = STREAMING_STOPPED;
+     }
+@@ -1103,7 +1103,7 @@ main(int argc, char **argv)
+ 	  RTMP_LogPrintf
+ 	    ("--jtv|-j JSON           Authentication token for Justin.tv legacy servers\n");
+ 	  RTMP_LogPrintf
+-	    ("--buffer|-b             Buffer time in milliseconds (default: %lu)\n\n",
++	    ("--buffer|-b             Buffer time in milliseconds (default: %u)\n\n",
+ 	     defaultRTMPRequest.bufferTime);
+ 
+ 	  RTMP_LogPrintf
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index 91fc4da..b662d54 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -765,7 +765,7 @@ ServePacket(STREAMING_SERVER *server, RTMP *r, RTMPPacket *packet)
+ {
+   int ret = 0;
+ 
+-  RTMP_Log(RTMP_LOGDEBUG, "%s, received packet type %02X, size %lu bytes", __FUNCTION__,
++  RTMP_Log(RTMP_LOGDEBUG, "%s, received packet type %02X, size %u bytes", __FUNCTION__,
+     packet->m_packetType, packet->m_nBodySize);
+ 
+   switch (packet->m_packetType)
+@@ -812,7 +812,7 @@ ServePacket(STREAMING_SERVER *server, RTMP *r, RTMPPacket *packet)
+ 
+     case 0x11:			// flex message
+       {
+-	RTMP_Log(RTMP_LOGDEBUG, "%s, flex message, size %lu bytes, not fully supported",
++	RTMP_Log(RTMP_LOGDEBUG, "%s, flex message, size %u bytes, not fully supported",
+ 	    __FUNCTION__, packet->m_nBodySize);
+ 	//RTMP_LogHex(packet.m_body, packet.m_nBodySize);
+ 
+@@ -840,7 +840,7 @@ ServePacket(STREAMING_SERVER *server, RTMP *r, RTMPPacket *packet)
+ 
+     case 0x14:
+       // invoke
+-      RTMP_Log(RTMP_LOGDEBUG, "%s, received: invoke %lu bytes", __FUNCTION__,
++      RTMP_Log(RTMP_LOGDEBUG, "%s, received: invoke %u bytes", __FUNCTION__,
+ 	  packet->m_nBodySize);
+       //RTMP_LogHex(packet.m_body, packet.m_nBodySize);
+ 
+@@ -1053,7 +1053,7 @@ stopStreaming(STREAMING_SERVER * server)
+ 
+       if (closesocket(server->socket))
+ 	RTMP_Log(RTMP_LOGERROR, "%s: Failed to close listening socket, error %d",
+-	    GetSockError());
++	    __FUNCTION__, GetSockError());
+ 
+       server->state = STREAMING_STOPPED;
+     }
+diff --git a/rtmpsuck.c b/rtmpsuck.c
+index 661e64b..e886179 100644
+--- a/rtmpsuck.c
++++ b/rtmpsuck.c
+@@ -456,7 +456,7 @@ ServePacket(STREAMING_SERVER *server, int which, RTMPPacket *packet)
+ {
+   int ret = 0;
+ 
+-  RTMP_Log(RTMP_LOGDEBUG, "%s, %s sent packet type %02X, size %lu bytes", __FUNCTION__,
++  RTMP_Log(RTMP_LOGDEBUG, "%s, %s sent packet type %02X, size %u bytes", __FUNCTION__,
+     cst[which], packet->m_packetType, packet->m_nBodySize);
+ 
+   switch (packet->m_packetType)
+@@ -649,7 +649,7 @@ WriteStream(char **buf,	// target pointer, maybe preallocated
+ 		  if (pos + 11 + dataSize > nPacketLen)
+ 		    {
+ 		      RTMP_Log(RTMP_LOGERROR,
+-			  "Wrong data size (%lu), stream corrupted, aborting!",
++			  "Wrong data size (%u), stream corrupted, aborting!",
+ 			  dataSize);
+ 		      ret = -2;
+ 		      break;
+@@ -1117,7 +1117,7 @@ stopStreaming(STREAMING_SERVER * server)
+ 
+       if (fd && closesocket(fd))
+ 	RTMP_Log(RTMP_LOGERROR, "%s: Failed to close listening socket, error %d",
+-	    GetSockError());
++	    __FUNCTION__, GetSockError());
+ 
+       server->state = STREAMING_STOPPED;
+     }
+-- 
+1.7.10.4
+
+
+From 4e06e218e230a86608637b613499984703a342cf Mon Sep 17 00:00:00 2001
+From: Antti Ajanki <antti.ajanki@iki.fi>
+Date: Thu, 22 Dec 2011 17:54:10 -0800
+Subject: [PATCH 29/64] Support decoding AMF_XML_DOC
+
+MF_XML_DOC data is an XML document which is encoded similarly to a
+long string.
+
+diff --git a/librtmp/amf.c b/librtmp/amf.c
+index f9ecf21..659421e 100644
+--- a/librtmp/amf.c
++++ b/librtmp/amf.c
+@@ -735,13 +735,15 @@ AMFProp_Decode(AMFObjectProperty *prop, const char *pBuffer, int nSize,
+ 	break;
+       }
+     case AMF_LONG_STRING:
++    case AMF_XML_DOC:
+       {
+ 	unsigned int nStringSize = AMF_DecodeInt32(pBuffer);
+ 	if (nSize < (long)nStringSize + 4)
+ 	  return -1;
+ 	AMF_DecodeLongString(pBuffer, &prop->p_vu.p_aval);
+ 	nSize -= (4 + nStringSize);
+-	prop->p_type = AMF_STRING;
++	if (prop->p_type == AMF_LONG_STRING)
++	  prop->p_type = AMF_STRING;
+ 	break;
+       }
+     case AMF_RECORDSET:
+@@ -750,12 +752,6 @@ AMFProp_Decode(AMFObjectProperty *prop, const char *pBuffer, int nSize,
+ 	return -1;
+ 	break;
+       }
+-    case AMF_XML_DOC:
+-      {
+-	RTMP_Log(RTMP_LOGERROR, "AMF_XML_DOC not supported!");
+-	return -1;
+-	break;
+-      }
+     case AMF_TYPED_OBJECT:
+       {
+ 	RTMP_Log(RTMP_LOGERROR, "AMF_TYPED_OBJECT not supported!");
+-- 
+1.7.10.4
+
+
+From adb77ff4d72cea92b7c307ccb64e9aa930d866da Mon Sep 17 00:00:00 2001
+From: Joshua Allmann <joshua.allmann@gmail.com>
+Date: Fri, 24 Feb 2012 13:44:29 -0800
+Subject: [PATCH 30/64] Remove extra object end tag in Connect reply
+
+
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index b662d54..9aa62f3 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -223,9 +223,6 @@ SendConnectResult(RTMP *r, double txn)
+   *enc++ = 0;
+   *enc++ = 0;
+   *enc++ = AMF_OBJECT_END;
+-  *enc++ = 0;
+-  *enc++ = 0;
+-  *enc++ = AMF_OBJECT_END;
+ 
+   packet.m_nBodySize = enc - packet.m_body;
+ 
+-- 
+1.7.10.4
+
+
+From 2ad1d5d133a46ceeaaa05c9375e293f332871f3b Mon Sep 17 00:00:00 2001
+From: Josh Allmann <joshua.allmann@gmail.com>
+Date: Fri, 24 Feb 2012 13:46:59 -0800
+Subject: [PATCH 31/64] Fix upper bound check in AMF_GetProp
+
+
+diff --git a/librtmp/amf.c b/librtmp/amf.c
+index 659421e..ce84f81 100644
+--- a/librtmp/amf.c
++++ b/librtmp/amf.c
+@@ -1121,7 +1121,7 @@ AMF_GetProp(AMFObject *obj, const AVal *name, int nIndex)
+ {
+   if (nIndex >= 0)
+     {
+-      if (nIndex <= obj->o_num)
++      if (nIndex < obj->o_num)
+ 	return &obj->o_props[nIndex];
+     }
+   else
+-- 
+1.7.10.4
+
+
+From eea470fa5f9a5481a36dedd257549595ef7480d6 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Thu, 8 Mar 2012 23:10:11 -0800
+Subject: [PATCH 32/64] Add support for building with gnutls with nettle as
+ backend
+
+
+diff --git a/Makefile b/Makefile
+index 6ef5742..0cf41be 100644
+--- a/Makefile
++++ b/Makefile
+@@ -13,6 +13,7 @@ CRYPTO=OPENSSL
+ #CRYPTO=GNUTLS
+ LIBZ=-lz
+ LIB_GNUTLS=-lgnutls -lgcrypt $(LIBZ)
++LIB_GNUTLS_NETTLE=-lgnutls -lhogweed -lnettle -lgmp $(LIBZ)
+ LIB_OPENSSL=-lssl -lcrypto $(LIBZ)
+ LIB_POLARSSL=-lpolarssl $(LIBZ)
+ CRYPTO_LIB=$(LIB_$(CRYPTO))
+diff --git a/librtmp/Makefile b/librtmp/Makefile
+index a0125f1..353c6c8 100644
+--- a/librtmp/Makefile
++++ b/librtmp/Makefile
+@@ -21,14 +21,17 @@ CRYPTO=OPENSSL
+ DEF_POLARSSL=-DUSE_POLARSSL
+ DEF_OPENSSL=-DUSE_OPENSSL
+ DEF_GNUTLS=-DUSE_GNUTLS
++DEF_GNUTLS_NETTLE=-DUSE_GNUTLS_NETTLE
+ DEF_=-DNO_CRYPTO
+ REQ_GNUTLS=gnutls
++REQ_GNUTLS_NETTLE=gnutls
+ REQ_OPENSSL=libssl,libcrypto
+ LIBZ=-lz
+ LIBS_posix=
+ LIBS_darwin=
+ LIBS_mingw=-lws2_32 -lwinmm -lgdi32
+ LIB_GNUTLS=-lgnutls -lgcrypt $(LIBZ)
++LIB_GNUTLS_NETTLE=-lgnutls -lhogweed -lnettle -lgmp $(LIBZ)
+ LIB_OPENSSL=-lssl -lcrypto $(LIBZ)
+ LIB_POLARSSL=-lpolarssl $(LIBZ)
+ PRIVATE_LIBS=$(LIBS_$(SYS))
+diff --git a/librtmp/dh.h b/librtmp/dh.h
+index a9f3763..830000e 100644
+--- a/librtmp/dh.h
++++ b/librtmp/dh.h
+@@ -76,7 +76,8 @@ static int MDH_compute_key(uint8_t *secret, size_t len, MP_t pub, MDH *dh)
+   return 0;
+ }
+ 
+-#elif defined(USE_GNUTLS)
++#elif defined(USE_GNUTLS) || defined(USE_GNUTLS_NETTLE)
++#ifdef USE_GNUTLS
+ #include <gcrypt.h>
+ typedef gcry_mpi_t MP_t;
+ #define MP_new(m)	m = gcry_mpi_new(1)
+@@ -91,6 +92,23 @@ typedef gcry_mpi_t MP_t;
+ #define MP_bytes(u)	(gcry_mpi_get_nbits(u) + 7) / 8
+ #define MP_setbin(u,buf,len)	gcry_mpi_print(GCRYMPI_FMT_USG,buf,len,NULL,u)
+ #define MP_getbin(u,buf,len)	gcry_mpi_scan(&u,GCRYMPI_FMT_USG,buf,len,NULL)
++#else
++#include <gmp.h>
++#include <nettle/bignum.h>
++typedef mpz_ptr MP_t;
++#define MP_new(m)	m = malloc(sizeof(*m)); mpz_init2(m, 1)
++#define MP_set_w(mpi, w)	mpz_set_ui(mpi, w)
++#define MP_cmp(u, v)	mpz_cmp(u, v)
++#define MP_set(u, v)	mpz_set(u, v)
++#define MP_sub_w(mpi, w)	mpz_sub_ui(mpi, mpi, w)
++#define MP_cmp_1(mpi)	mpz_cmp_ui(mpi, 1)
++#define MP_modexp(r, y, q, p)	mpz_powm(r, y, q, p)
++#define MP_free(mpi)	mpz_clear(mpi); free(mpi)
++#define MP_gethex(u, hex, res)	u = malloc(sizeof(*u)); mpz_init2(u, 1); res = (mpz_set_str(u, hex, 16) == 0)
++#define MP_bytes(u)	(mpz_sizeinbase(u, 2) + 7) / 8
++#define MP_setbin(u,buf,len)	nettle_mpz_get_str_256(len,buf,u)
++#define MP_getbin(u,buf,len)	u = malloc(sizeof(*u)); mpz_init2(u, 1); nettle_mpz_set_str_256_u(u,len,buf)
++#endif
+ 
+ typedef struct MDH {
+   MP_t p;
+diff --git a/librtmp/handshake.h b/librtmp/handshake.h
+index 98bf3c8..4c2ea7f 100644
+--- a/librtmp/handshake.h
++++ b/librtmp/handshake.h
+@@ -59,6 +59,26 @@ typedef gcry_cipher_hd_t	RC4_handle;
+ #define RC4_encrypt2(h,l,s,d)	gcry_cipher_encrypt(h,(void *)d,l,(void *)s,l)
+ #define RC4_free(h)	gcry_cipher_close(h)
+ 
++#elif defined(USE_GNUTLS_NETTLE)
++#include <nettle/hmac.h>
++#include <nettle/arcfour.h>
++#ifndef SHA256_DIGEST_LENGTH
++#define SHA256_DIGEST_LENGTH    32
++#endif
++#undef HMAC_CTX
++#define HMAC_CTX	struct hmac_sha256_ctx
++#define HMAC_setup(ctx, key, len)	hmac_sha256_set_key(&ctx, len, key)
++#define HMAC_crunch(ctx, buf, len)	hmac_sha256_update(&ctx, len, buf)
++#define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; hmac_sha256_digest(&ctx, SHA256_DIGEST_LENGTH, dig)
++#define HMAC_close(ctx)
++
++typedef struct arcfour_ctx*	RC4_handle;
++#define RC4_alloc(h)	*h = malloc(sizeof(struct arcfour_ctx))
++#define RC4_setkey(h,l,k)	arcfour_set_key(h, l, k)
++#define RC4_encrypt(h,l,d)	arcfour_crypt(h,l,(uint8_t *)d,(uint8_t *)d)
++#define RC4_encrypt2(h,l,s,d)	arcfour_crypt(h,l,(uint8_t *)d,(uint8_t *)s)
++#define RC4_free(h)	free(h)
++
+ #else	/* USE_OPENSSL */
+ #include <openssl/sha.h>
+ #include <openssl/hmac.h>
+diff --git a/librtmp/hashswf.c b/librtmp/hashswf.c
+index 0320480..8cefd3b 100644
+--- a/librtmp/hashswf.c
++++ b/librtmp/hashswf.c
+@@ -52,6 +52,17 @@
+ #define HMAC_crunch(ctx, buf, len)	gcry_md_write(ctx, buf, len)
+ #define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; memcpy(dig, gcry_md_read(ctx, 0), dlen)
+ #define HMAC_close(ctx)	gcry_md_close(ctx)
++#elif defined(USE_GNUTLS_NETTLE)
++#include <nettle/hmac.h>
++#ifndef SHA256_DIGEST_LENGTH
++#define SHA256_DIGEST_LENGTH	32
++#endif
++#undef HMAC_CTX
++#define HMAC_CTX	struct hmac_sha256_ctx
++#define HMAC_setup(ctx, key, len)	hmac_sha256_set_key(&ctx, len, key)
++#define HMAC_crunch(ctx, buf, len)	hmac_sha256_update(&ctx, len, buf)
++#define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; hmac_sha256_digest(&ctx, SHA256_DIGEST_LENGTH, dig)
++#define HMAC_close(ctx)
+ #else	/* USE_OPENSSL */
+ #include <openssl/ssl.h>
+ #include <openssl/sha.h>
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 52d0254..5cd7b8d 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -34,7 +34,7 @@
+ #ifdef CRYPTO
+ #ifdef USE_POLARSSL
+ #include <polarssl/havege.h>
+-#elif defined(USE_GNUTLS)
++#elif defined(USE_GNUTLS) || defined(USE_GNUTLS_NETTLE)
+ #include <gnutls/gnutls.h>
+ #else	/* USE_OPENSSL */
+ #include <openssl/ssl.h>
+@@ -204,7 +204,7 @@ RTMP_TLS_Init()
+   /* Do this regardless of NO_SSL, we use havege for rtmpe too */
+   RTMP_TLS_ctx = calloc(1,sizeof(struct tls_ctx));
+   havege_init(&RTMP_TLS_ctx->hs);
+-#elif defined(USE_GNUTLS) && !defined(NO_SSL)
++#elif (defined(USE_GNUTLS) || defined(USE_GNUTLS_NETTLE)) && !defined(NO_SSL)
+   /* Technically we need to initialize libgcrypt ourselves if
+    * we're not going to call gnutls_global_init(). Ignoring this
+    * for now.
+diff --git a/librtmp/rtmp_sys.h b/librtmp/rtmp_sys.h
+index c3fd4a6..478c59f 100644
+--- a/librtmp/rtmp_sys.h
++++ b/librtmp/rtmp_sys.h
+@@ -81,7 +81,7 @@ typedef struct tls_ctx {
+ #define TLS_shutdown(s)	ssl_close_notify(s)
+ #define TLS_close(s)	ssl_free(s); free(s)
+ 
+-#elif defined(USE_GNUTLS)
++#elif defined(USE_GNUTLS) || defined(USE_GNUTLS_NETTLE)
+ #include <gnutls/gnutls.h>
+ typedef struct tls_ctx {
+ 	gnutls_certificate_credentials_t cred;
+-- 
+1.7.10.4
+
+
+From 7340f6dbc6b3c8e552baab2e5a891c2de75cddcc Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Thu, 8 Mar 2012 23:19:45 -0800
+Subject: [PATCH 33/64] Cleanup prev commit, drop gcrypt support
+
+
+diff --git a/Makefile b/Makefile
+index 0cf41be..a1595a8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -12,8 +12,7 @@ CRYPTO=OPENSSL
+ #CRYPTO=POLARSSL
+ #CRYPTO=GNUTLS
+ LIBZ=-lz
+-LIB_GNUTLS=-lgnutls -lgcrypt $(LIBZ)
+-LIB_GNUTLS_NETTLE=-lgnutls -lhogweed -lnettle -lgmp $(LIBZ)
++LIB_GNUTLS=-lgnutls -lhogweed -lnettle -lgmp $(LIBZ)
+ LIB_OPENSSL=-lssl -lcrypto $(LIBZ)
+ LIB_POLARSSL=-lpolarssl $(LIBZ)
+ CRYPTO_LIB=$(LIB_$(CRYPTO))
+diff --git a/librtmp/Makefile b/librtmp/Makefile
+index 353c6c8..74ee3b5 100644
+--- a/librtmp/Makefile
++++ b/librtmp/Makefile
+@@ -21,17 +21,14 @@ CRYPTO=OPENSSL
+ DEF_POLARSSL=-DUSE_POLARSSL
+ DEF_OPENSSL=-DUSE_OPENSSL
+ DEF_GNUTLS=-DUSE_GNUTLS
+-DEF_GNUTLS_NETTLE=-DUSE_GNUTLS_NETTLE
+ DEF_=-DNO_CRYPTO
+ REQ_GNUTLS=gnutls
+-REQ_GNUTLS_NETTLE=gnutls
+ REQ_OPENSSL=libssl,libcrypto
+ LIBZ=-lz
+ LIBS_posix=
+ LIBS_darwin=
+ LIBS_mingw=-lws2_32 -lwinmm -lgdi32
+-LIB_GNUTLS=-lgnutls -lgcrypt $(LIBZ)
+-LIB_GNUTLS_NETTLE=-lgnutls -lhogweed -lnettle -lgmp $(LIBZ)
++LIB_GNUTLS=-lgnutls -lhogweed -lnettle -lgmp $(LIBZ)
+ LIB_OPENSSL=-lssl -lcrypto $(LIBZ)
+ LIB_POLARSSL=-lpolarssl $(LIBZ)
+ PRIVATE_LIBS=$(LIBS_$(SYS))
+diff --git a/librtmp/dh.h b/librtmp/dh.h
+index 830000e..9959532 100644
+--- a/librtmp/dh.h
++++ b/librtmp/dh.h
+@@ -76,23 +76,7 @@ static int MDH_compute_key(uint8_t *secret, size_t len, MP_t pub, MDH *dh)
+   return 0;
+ }
+ 
+-#elif defined(USE_GNUTLS) || defined(USE_GNUTLS_NETTLE)
+-#ifdef USE_GNUTLS
+-#include <gcrypt.h>
+-typedef gcry_mpi_t MP_t;
+-#define MP_new(m)	m = gcry_mpi_new(1)
+-#define MP_set_w(mpi, w)	gcry_mpi_set_ui(mpi, w)
+-#define MP_cmp(u, v)	gcry_mpi_cmp(u, v)
+-#define MP_set(u, v)	gcry_mpi_set(u, v)
+-#define MP_sub_w(mpi, w)	gcry_mpi_sub_ui(mpi, mpi, w)
+-#define MP_cmp_1(mpi)	gcry_mpi_cmp_ui(mpi, 1)
+-#define MP_modexp(r, y, q, p)	gcry_mpi_powm(r, y, q, p)
+-#define MP_free(mpi)	gcry_mpi_release(mpi)
+-#define MP_gethex(u, hex, res)	res = (gcry_mpi_scan(&u, GCRYMPI_FMT_HEX, hex, 0, 0) == 0)
+-#define MP_bytes(u)	(gcry_mpi_get_nbits(u) + 7) / 8
+-#define MP_setbin(u,buf,len)	gcry_mpi_print(GCRYMPI_FMT_USG,buf,len,NULL,u)
+-#define MP_getbin(u,buf,len)	gcry_mpi_scan(&u,GCRYMPI_FMT_USG,buf,len,NULL)
+-#else
++#elif defined(USE_GNUTLS)
+ #include <gmp.h>
+ #include <nettle/bignum.h>
+ typedef mpz_ptr MP_t;
+@@ -108,7 +92,6 @@ typedef mpz_ptr MP_t;
+ #define MP_bytes(u)	(mpz_sizeinbase(u, 2) + 7) / 8
+ #define MP_setbin(u,buf,len)	nettle_mpz_get_str_256(len,buf,u)
+ #define MP_getbin(u,buf,len)	u = malloc(sizeof(*u)); mpz_init2(u, 1); nettle_mpz_set_str_256_u(u,len,buf)
+-#endif
+ 
+ typedef struct MDH {
+   MP_t p;
+diff --git a/librtmp/handshake.h b/librtmp/handshake.h
+index 4c2ea7f..0438486 100644
+--- a/librtmp/handshake.h
++++ b/librtmp/handshake.h
+@@ -43,27 +43,10 @@ typedef arc4_context *	RC4_handle;
+ #define RC4_free(h)	free(h)
+ 
+ #elif defined(USE_GNUTLS)
+-#include <gcrypt.h>
+-#ifndef SHA256_DIGEST_LENGTH
+-#define SHA256_DIGEST_LENGTH	32
+-#endif
+-#define HMAC_CTX	gcry_md_hd_t
+-#define HMAC_setup(ctx, key, len)	gcry_md_open(&ctx, GCRY_MD_SHA256, GCRY_MD_FLAG_HMAC); gcry_md_setkey(ctx, key, len)
+-#define HMAC_crunch(ctx, buf, len)	gcry_md_write(ctx, buf, len)
+-#define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; memcpy(dig, gcry_md_read(ctx, 0), dlen); gcry_md_close(ctx)
+-
+-typedef gcry_cipher_hd_t	RC4_handle;
+-#define	RC4_alloc(h)	gcry_cipher_open(h, GCRY_CIPHER_ARCFOUR, GCRY_CIPHER_MODE_STREAM, 0)
+-#define RC4_setkey(h,l,k)	gcry_cipher_setkey(h,k,l)
+-#define RC4_encrypt(h,l,d)	gcry_cipher_encrypt(h,(void *)d,l,NULL,0)
+-#define RC4_encrypt2(h,l,s,d)	gcry_cipher_encrypt(h,(void *)d,l,(void *)s,l)
+-#define RC4_free(h)	gcry_cipher_close(h)
+-
+-#elif defined(USE_GNUTLS_NETTLE)
+ #include <nettle/hmac.h>
+ #include <nettle/arcfour.h>
+ #ifndef SHA256_DIGEST_LENGTH
+-#define SHA256_DIGEST_LENGTH    32
++#define SHA256_DIGEST_LENGTH	32
+ #endif
+ #undef HMAC_CTX
+ #define HMAC_CTX	struct hmac_sha256_ctx
+diff --git a/librtmp/hashswf.c b/librtmp/hashswf.c
+index 8cefd3b..9f4e2c0 100644
+--- a/librtmp/hashswf.c
++++ b/librtmp/hashswf.c
+@@ -42,17 +42,6 @@
+ #define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; sha2_hmac_finish(&ctx, dig)
+ #define HMAC_close(ctx)
+ #elif defined(USE_GNUTLS)
+-#include <gnutls/gnutls.h>
+-#include <gcrypt.h>
+-#ifndef SHA256_DIGEST_LENGTH
+-#define SHA256_DIGEST_LENGTH	32
+-#endif
+-#define HMAC_CTX	gcry_md_hd_t
+-#define HMAC_setup(ctx, key, len)	gcry_md_open(&ctx, GCRY_MD_SHA256, GCRY_MD_FLAG_HMAC); gcry_md_setkey(ctx, key, len)
+-#define HMAC_crunch(ctx, buf, len)	gcry_md_write(ctx, buf, len)
+-#define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; memcpy(dig, gcry_md_read(ctx, 0), dlen)
+-#define HMAC_close(ctx)	gcry_md_close(ctx)
+-#elif defined(USE_GNUTLS_NETTLE)
+ #include <nettle/hmac.h>
+ #ifndef SHA256_DIGEST_LENGTH
+ #define SHA256_DIGEST_LENGTH	32
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 5cd7b8d..52d0254 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -34,7 +34,7 @@
+ #ifdef CRYPTO
+ #ifdef USE_POLARSSL
+ #include <polarssl/havege.h>
+-#elif defined(USE_GNUTLS) || defined(USE_GNUTLS_NETTLE)
++#elif defined(USE_GNUTLS)
+ #include <gnutls/gnutls.h>
+ #else	/* USE_OPENSSL */
+ #include <openssl/ssl.h>
+@@ -204,7 +204,7 @@ RTMP_TLS_Init()
+   /* Do this regardless of NO_SSL, we use havege for rtmpe too */
+   RTMP_TLS_ctx = calloc(1,sizeof(struct tls_ctx));
+   havege_init(&RTMP_TLS_ctx->hs);
+-#elif (defined(USE_GNUTLS) || defined(USE_GNUTLS_NETTLE)) && !defined(NO_SSL)
++#elif defined(USE_GNUTLS) && !defined(NO_SSL)
+   /* Technically we need to initialize libgcrypt ourselves if
+    * we're not going to call gnutls_global_init(). Ignoring this
+    * for now.
+diff --git a/librtmp/rtmp_sys.h b/librtmp/rtmp_sys.h
+index 478c59f..c3fd4a6 100644
+--- a/librtmp/rtmp_sys.h
++++ b/librtmp/rtmp_sys.h
+@@ -81,7 +81,7 @@ typedef struct tls_ctx {
+ #define TLS_shutdown(s)	ssl_close_notify(s)
+ #define TLS_close(s)	ssl_free(s); free(s)
+ 
+-#elif defined(USE_GNUTLS) || defined(USE_GNUTLS_NETTLE)
++#elif defined(USE_GNUTLS)
+ #include <gnutls/gnutls.h>
+ typedef struct tls_ctx {
+ 	gnutls_certificate_credentials_t cred;
+-- 
+1.7.10.4
+
+
+From 603ff20e9e717a70b5b0c011f3413cf376d0c2f6 Mon Sep 17 00:00:00 2001
+From: Ulrik Dickow <u.dickow@gmail.com>
+Date: Thu, 26 Jul 2012 04:57:23 -0700
+Subject: [PATCH 34/64] Add .gitignore to ignore generated files
+
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..c7ec44f
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,9 @@
++*.[oa]
++*.exe
++*.so
++*.so.[0-9]
++*.dylib
++rtmpdump
++rtmpgw
++rtmpsrv
++rtmpsuck
+-- 
+1.7.10.4
+
+
+From e0056c51cc1710c9a44d2a2c4e2f344fa9cabcf4 Mon Sep 17 00:00:00 2001
+From: Ulrik Dickow <u.dickow@gmail.com>
+Date: Tue, 24 Jul 2012 17:17:26 +0200
+Subject: [PATCH 35/64] Add option --realtime (-R) to rtmpdump to disable the
+ BUFX hack
+
+
+diff --git a/rtmpdump.1 b/rtmpdump.1
+index 0d9de8d..7bb5328 100644
+--- a/rtmpdump.1
++++ b/rtmpdump.1
+@@ -1,4 +1,4 @@
+-.TH RTMPDUMP 1 "2011-07-20" "RTMPDump v2.4"
++.TH RTMPDUMP 1 "2012-07-24" "RTMPDump v2.4"
+ .\" Copyright 2011 Howard Chu.
+ .\" Copying permitted according to the GNU General Public License V2.
+ .SH NAME
+@@ -177,6 +177,12 @@ live streams is possible.
+ Name of live stream to subscribe to. Defaults to
+ .IR playpath .
+ .TP
++.B \-\-realtime	\-R
++Download approximately in realtime, without attempting to speed up via
++Pause/Unpause commands ("the BUFX hack").
++Useful for servers that jump backwards in time at the Unpause command.
++Resuming and seeking in realtime streams is still possible.
++.TP
+ .B \-\-resume		\-e
+ Resume an incomplete RTMP download.
+ .TP
+diff --git a/rtmpdump.1.html b/rtmpdump.1.html
+index 826f722..4c39b35 100644
+--- a/rtmpdump.1.html
++++ b/rtmpdump.1.html
+@@ -6,7 +6,7 @@
+ <tr><td>RTMPDUMP(1)<td align="center"><td align="right">RTMPDUMP(1)
+ </thead>
+ <tfoot>
+-<tr><td>RTMPDump v2.4<td align="center">2011-07-20<td align="right">RTMPDUMP(1)
++<tr><td>RTMPDump v2.4<td align="center">2012-07-24<td align="right">RTMPDUMP(1)
+ </tfoot>
+ <tbody><tr><td colspan="3"><br><br><ul>
+ <!-- Copyright 2011 Howard Chu.
+@@ -34,6 +34,7 @@ rtmpdump &minus; RTMP streaming media client
+ [<b>&minus;y</b><i>&nbsp;playpath</i>]
+ [<b>&minus;Y</b>]
+ [<b>&minus;v</b>]
++[<b>&minus;R</b>]
+ [<b>&minus;d</b><i>&nbsp;subscription</i>]
+ [<b>&minus;e</b>]
+ [<b>&minus;k</b><i>&nbsp;skip</i>]
+@@ -218,6 +219,15 @@ Name of live stream to subscribe to. Defaults to
+ </dl>
+ <p>
+ <dl compact><dt>
++<b>&minus;&minus;realtime &minus;R</b>
++<dd>
++Download approximately in realtime, without attempting to speed up via
++Pause/Unpause commands (&quot;the BUFX hack&quot;).
++Useful for servers that jump backwards in time at the Unpause command.
++Resuming and seeking in realtime streams is still possible.
++</dl>
++<p>
++<dl compact><dt>
+ <b>&minus;&minus;resume &minus;e</b>
+ <dd>
+ Resume an incomplete RTMP download.
+diff --git a/rtmpdump.c b/rtmpdump.c
+index 34bfdba..e52f7d4 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -441,7 +441,7 @@ GetLastKeyframe(FILE * file,	// output file [in]
+ 
+ int
+ Download(RTMP * rtmp,		// connected RTMP object
+-	 FILE * file, uint32_t dSeek, uint32_t dStopOffset, double duration, int bResume, char *metaHeader, uint32_t nMetaHeaderSize, char *initialFrame, int initialFrameType, uint32_t nInitialFrameSize, int nSkipKeyFrames, int bStdoutMode, int bLiveStream, int bHashes, int bOverrideBufferTime, uint32_t bufferTime, double *percent)	// percentage downloaded [out]
++	 FILE * file, uint32_t dSeek, uint32_t dStopOffset, double duration, int bResume, char *metaHeader, uint32_t nMetaHeaderSize, char *initialFrame, int initialFrameType, uint32_t nInitialFrameSize, int nSkipKeyFrames, int bStdoutMode, int bLiveStream, int bRealtimeStream, int bHashes, int bOverrideBufferTime, uint32_t bufferTime, double *percent)	// percentage downloaded [out]
+ {
+   int32_t now, lastUpdate;
+   int bufferSize = 64 * 1024;
+@@ -492,6 +492,8 @@ Download(RTMP * rtmp,		// connected RTMP object
+ 		    bResume ? "Resuming" : "Starting",
+ 		    (double) size / 1024.0);
+ 	}
++      if (bRealtimeStream)
++	RTMP_LogPrintf("  in approximately realtime (disabled BUFX speedup hack)\n");
+     }
+ 
+   if (dStopOffset > 0)
+@@ -682,6 +684,8 @@ void usage(char *prog)
+ 	  RTMP_LogPrintf
+ 	    ("--subscribe|-d string   Stream name to subscribe to (otherwise defaults to playpath if live is specifed)\n");
+ 	  RTMP_LogPrintf
++	    ("--realtime|-R           Don't attempt to speed up download via the Pause/Unpause BUFX hack\n");
++	  RTMP_LogPrintf
+ 	    ("--flv|-o string         FLV output file name, if the file name is - print stream to stdout\n");
+ 	  RTMP_LogPrintf
+ 	    ("--resume|-e             Resume a partial RTMP download\n");
+@@ -748,6 +752,7 @@ main(int argc, char **argv)
+   int protocol = RTMP_PROTOCOL_UNDEFINED;
+   int retries = 0;
+   int bLiveStream = FALSE;	// is it a live stream? then we can't seek/resume
++  int bRealtimeStream = FALSE;  // If true, disable the BUFX hack (be patient)
+   int bHashes = FALSE;		// display byte counters not hashes by default
+ 
+   long int timeout = DEF_TIMEOUT;	// timeout connection after 120 seconds
+@@ -832,6 +837,7 @@ main(int argc, char **argv)
+ #endif
+     {"flashVer", 1, NULL, 'f'},
+     {"live", 0, NULL, 'v'},
++    {"realtime", 0, NULL, 'R'},
+     {"flv", 1, NULL, 'o'},
+     {"resume", 0, NULL, 'e'},
+     {"timeout", 1, NULL, 'm'},
+@@ -851,7 +857,7 @@ main(int argc, char **argv)
+ 
+   while ((opt =
+ 	  getopt_long(argc, argv,
+-		      "hVveqzr:s:t:p:a:b:f:o:u:C:n:c:l:y:Ym:k:d:A:B:T:w:x:W:X:S:#j:",
++		      "hVveqzRr:s:t:p:a:b:f:o:u:C:n:c:l:y:Ym:k:d:A:B:T:w:x:W:X:S:#j:",
+ 		      longopts, NULL)) != -1)
+     {
+       switch (opt)
+@@ -936,6 +942,9 @@ main(int argc, char **argv)
+ 	case 'v':
+ 	  bLiveStream = TRUE;	// no seeking or resuming possible!
+ 	  break;
++	case 'R':
++	  bRealtimeStream = TRUE; // seeking and resuming is still possible
++	  break;
+ 	case 'd':
+ 	  STR2AVAL(subscribepath, optarg);
+ 	  break;
+@@ -1181,7 +1190,7 @@ main(int argc, char **argv)
+ 		   &flashVer, &subscribepath, &usherToken, dSeek, dStopOffset, bLiveStream, timeout);
+ 
+   /* Try to keep the stream moving if it pauses on us */
+-  if (!bLiveStream && !(protocol & RTMP_FEATURE_HTTP))
++  if (!bLiveStream && !bRealtimeStream && !(protocol & RTMP_FEATURE_HTTP))
+     rtmp.Link.lFlags |= RTMP_LF_BUFX;
+ 
+   off_t size = 0;
+@@ -1348,8 +1357,8 @@ main(int argc, char **argv)
+ 
+       nStatus = Download(&rtmp, file, dSeek, dStopOffset, duration, bResume,
+ 			 metaHeader, nMetaHeaderSize, initialFrame,
+-			 initialFrameType, nInitialFrameSize,
+-			 nSkipKeyFrames, bStdoutMode, bLiveStream, bHashes,
++			 initialFrameType, nInitialFrameSize, nSkipKeyFrames,
++			 bStdoutMode, bLiveStream, bRealtimeStream, bHashes,
+ 			 bOverrideBufferTime, bufferTime, &percent);
+       free(initialFrame);
+       initialFrame = NULL;
+-- 
+1.7.10.4
+
+
+From 87d47b876f818fe5c949e08c699238bc22a3c7b1 Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Tue, 30 Oct 2012 08:16:36 -0700
+Subject: [PATCH 36/64] Make rtmpdump handle full RTMP URLs with "-i"
+
+
+diff --git a/rtmpdump.c b/rtmpdump.c
+index e52f7d4..2b30eb2 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -640,6 +640,8 @@ void usage(char *prog)
+ 	    ("\n%s: This program dumps the media content streamed over RTMP.\n\n", prog);
+ 	  RTMP_LogPrintf("--help|-h               Prints this help screen.\n");
+ 	  RTMP_LogPrintf
++	    ("--url|-i url            URL with options included (e.g. rtmp://host[:port]/path swfUrl=url tcUrl=url)\n");
++	  RTMP_LogPrintf
+ 	    ("--rtmp|-r url           URL (e.g. rtmp://host[:port]/path)\n");
+ 	  RTMP_LogPrintf
+ 	    ("--host|-n hostname      Overrides the hostname in the rtmp url\n");
+@@ -760,6 +762,7 @@ main(int argc, char **argv)
+   uint32_t dStopOffset = 0;
+   RTMP rtmp = { 0 };
+ 
++  AVal fullUrl = { 0, 0 };
+   AVal swfUrl = { 0, 0 };
+   AVal tcUrl = { 0, 0 };
+   AVal pageUrl = { 0, 0 };
+@@ -822,6 +825,7 @@ main(int argc, char **argv)
+     {"protocol", 1, NULL, 'l'},
+     {"playpath", 1, NULL, 'y'},
+     {"playlist", 0, NULL, 'Y'},
++    {"url", 1, NULL, 'i'},
+     {"rtmp", 1, NULL, 'r'},
+     {"swfUrl", 1, NULL, 's'},
+     {"tcUrl", 1, NULL, 't'},
+@@ -857,7 +861,7 @@ main(int argc, char **argv)
+ 
+   while ((opt =
+ 	  getopt_long(argc, argv,
+-		      "hVveqzRr:s:t:p:a:b:f:o:u:C:n:c:l:y:Ym:k:d:A:B:T:w:x:W:X:S:#j:",
++		      "hVveqzRr:s:t:i:p:a:b:f:o:u:C:n:c:l:y:Ym:k:d:A:B:T:w:x:W:X:S:#j:",
+ 		      longopts, NULL)) != -1)
+     {
+       switch (opt)
+@@ -1000,6 +1004,9 @@ main(int argc, char **argv)
+ 	      }
+ 	    break;
+ 	  }
++	case 'i':
++	  STR2AVAL(fullUrl, optarg);
++          break;
+ 	case 's':
+ 	  STR2AVAL(swfUrl, optarg);
+ 	  break;
+@@ -1078,32 +1085,32 @@ main(int argc, char **argv)
+ 	}
+     }
+ 
+-  if (!hostname.av_len)
++  if (!hostname.av_len && !fullUrl.av_len)
+     {
+       RTMP_Log(RTMP_LOGERROR,
+ 	  "You must specify a hostname (--host) or url (-r \"rtmp://host[:port]/playpath\") containing a hostname");
+       return RD_FAILED;
+     }
+-  if (playpath.av_len == 0)
++  if (playpath.av_len == 0 && !fullUrl.av_len)
+     {
+       RTMP_Log(RTMP_LOGERROR,
+ 	  "You must specify a playpath (--playpath) or url (-r \"rtmp://host[:port]/playpath\") containing a playpath");
+       return RD_FAILED;
+     }
+ 
+-  if (protocol == RTMP_PROTOCOL_UNDEFINED)
++  if (protocol == RTMP_PROTOCOL_UNDEFINED && !fullUrl.av_len)
+     {
+       RTMP_Log(RTMP_LOGWARNING,
+ 	  "You haven't specified a protocol (--protocol) or rtmp url (-r), using default protocol RTMP");
+       protocol = RTMP_PROTOCOL_RTMP;
+     }
+-  if (port == -1)
++  if (port == -1 && !fullUrl.av_len)
+     {
+       RTMP_Log(RTMP_LOGWARNING,
+ 	  "You haven't specified a port (--port) or rtmp url (-r), using default port 1935");
+       port = 0;
+     }
+-  if (port == 0)
++  if (port == 0 && !fullUrl.av_len)
+     {
+       if (protocol & RTMP_FEATURE_SSL)
+ 	port = 443;
+@@ -1185,9 +1192,20 @@ main(int argc, char **argv)
+ 	}
+     }
+ 
+-  RTMP_SetupStream(&rtmp, protocol, &hostname, port, &sockshost, &playpath,
+-		   &tcUrl, &swfUrl, &pageUrl, &app, &auth, &swfHash, swfSize,
+-		   &flashVer, &subscribepath, &usherToken, dSeek, dStopOffset, bLiveStream, timeout);
++  if (!fullUrl.av_len)
++    {
++      RTMP_SetupStream(&rtmp, protocol, &hostname, port, &sockshost, &playpath,
++		       &tcUrl, &swfUrl, &pageUrl, &app, &auth, &swfHash, swfSize,
++		       &flashVer, &subscribepath, &usherToken, dSeek, dStopOffset, bLiveStream, timeout);
++    }
++  else
++    {
++      if (RTMP_SetupURL(&rtmp, fullUrl.av_val) == FALSE)
++        {
++          RTMP_Log(RTMP_LOGERROR, "Couldn't parse URL: %s", fullUrl.av_val);
++          return RD_FAILED;
++	}
++    }
+ 
+   /* Try to keep the stream moving if it pauses on us */
+   if (!bLiveStream && !bRealtimeStream && !(protocol & RTMP_FEATURE_HTTP))
+-- 
+1.7.10.4
+
+
+From 3fcbcb9a0bae6de03401f32939d3d243cdd7b865 Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Thu, 19 Jul 2012 17:22:03 +0100
+Subject: [PATCH 37/64] Make rtmpgw handle full RTMP URLs with "-i"
+
+or --url. Just as rtmpdump and librtmp already can.
+
+diff --git a/rtmpgw.c b/rtmpgw.c
+index 0cf56bb..ab255d4 100644
+--- a/rtmpgw.c
++++ b/rtmpgw.c
+@@ -85,6 +85,7 @@ typedef struct
+   uint32_t bufferTime;
+ 
+   char *rtmpurl;
++  AVal fullUrl;
+   AVal playpath;
+   AVal swfUrl;
+   AVal tcUrl;
+@@ -469,14 +470,14 @@ void processTCPrequest(STREAMING_SERVER * server,	// server socket and state (ou
+     }
+ 
+   // do necessary checks right here to make sure the combined request of default values and GET parameters is correct
+-  if (!req.hostname.av_len)
++  if (!req.hostname.av_len && !req.fullUrl.av_len)
+     {
+       RTMP_Log(RTMP_LOGERROR,
+ 	  "You must specify a hostname (--host) or url (-r \"rtmp://host[:port]/playpath\") containing a hostname");
+       status = "400 Missing Hostname";
+       goto filenotfound;
+     }
+-  if (req.playpath.av_len == 0)
++  if (req.playpath.av_len == 0 && !req.fullUrl.av_len)
+     {
+       RTMP_Log(RTMP_LOGERROR,
+ 	  "You must specify a playpath (--playpath) or url (-r \"rtmp://host[:port]/playpath\") containing a playpath");
+@@ -484,19 +485,19 @@ void processTCPrequest(STREAMING_SERVER * server,	// server socket and state (ou
+       goto filenotfound;;
+     }
+ 
+-  if (req.protocol == RTMP_PROTOCOL_UNDEFINED)
++  if (req.protocol == RTMP_PROTOCOL_UNDEFINED && !req.fullUrl.av_len)
+     {
+       RTMP_Log(RTMP_LOGWARNING,
+ 	  "You haven't specified a protocol (--protocol) or rtmp url (-r), using default protocol RTMP");
+       req.protocol = RTMP_PROTOCOL_RTMP;
+     }
+-  if (req.rtmpport == -1)
++  if (req.rtmpport == -1 && !req.fullUrl.av_len)
+     {
+       RTMP_Log(RTMP_LOGWARNING,
+ 	  "You haven't specified a port (--port) or rtmp url (-r), using default port");
+       req.rtmpport = 0;
+     }
+-  if (req.rtmpport == 0)
++  if (req.rtmpport == 0 && !req.fullUrl.av_len)
+     {
+       if (req.protocol & RTMP_FEATURE_SSL)
+ 	req.rtmpport = 443;
+@@ -552,9 +553,20 @@ void processTCPrequest(STREAMING_SERVER * server,	// server socket and state (ou
+   RTMP_Log(RTMP_LOGDEBUG, "Setting buffer time to: %dms", req.bufferTime);
+   RTMP_Init(&rtmp);
+   RTMP_SetBufferMS(&rtmp, req.bufferTime);
+-  RTMP_SetupStream(&rtmp, req.protocol, &req.hostname, req.rtmpport, &req.sockshost,
+-		   &req.playpath, &req.tcUrl, &req.swfUrl, &req.pageUrl, &req.app, &req.auth, &req.swfHash, req.swfSize, &req.flashVer, &req.subscribepath, &req.usherToken, dSeek, req.dStopOffset,
+-		   req.bLiveStream, req.timeout);
++  if (!req.fullUrl.av_len)
++    {
++      RTMP_SetupStream(&rtmp, req.protocol, &req.hostname, req.rtmpport, &req.sockshost,
++		       &req.playpath, &req.tcUrl, &req.swfUrl, &req.pageUrl, &req.app, &req.auth, &req.swfHash, req.swfSize, &req.flashVer, &req.subscribepath, &req.usherToken, dSeek, req.dStopOffset,
++		       req.bLiveStream, req.timeout);
++    }
++  else
++    {
++      if (RTMP_SetupURL(&rtmp, req.fullUrl.av_val) == FALSE)
++        {
++          RTMP_Log(RTMP_LOGERROR, "Couldn't parse URL: %s", req.fullUrl.av_val);
++          return;
++        }
++    }
+   /* backward compatibility, we always sent this as true before */
+   if (req.auth.av_len)
+     rtmp.Link.lFlags |= RTMP_LF_AUTH;
+@@ -908,6 +920,9 @@ ParseOption(char opt, char *arg, RTMP_REQUEST * req)
+ 	  }
+ 	break;
+       }
++    case 'i':
++      STR2AVAL(req->fullUrl, optarg);
++      break;
+     case 's':
+       STR2AVAL(req->swfUrl, arg);
+       break;
+@@ -993,6 +1008,7 @@ main(int argc, char **argv)
+   int opt;
+   struct option longopts[] = {
+     {"help", 0, NULL, 'h'},
++    {"url", 1, NULL, 'i'},
+     {"host", 1, NULL, 'n'},
+     {"port", 1, NULL, 'c'},
+     {"socks", 1, NULL, 'S'},
+@@ -1040,7 +1056,7 @@ main(int argc, char **argv)
+ 
+   while ((opt =
+ 	  getopt_long(argc, argv,
+-		      "hvqVzr:s:t:p:a:f:u:n:c:l:y:m:d:D:A:B:T:g:w:x:W:X:S:j:", longopts,
++		      "hvqVzr:s:t:i:p:a:f:u:n:c:l:y:m:d:D:A:B:T:g:w:x:W:X:S:j:", longopts,
+ 		      NULL)) != -1)
+     {
+       switch (opt)
+@@ -1050,6 +1066,8 @@ main(int argc, char **argv)
+ 	    ("\nThis program serves media content streamed from RTMP onto HTTP.\n\n");
+ 	  RTMP_LogPrintf("--help|-h               Prints this help screen.\n");
+ 	  RTMP_LogPrintf
++	    ("--url|-i url            URL with options included (e.g. rtmp://host[:port]/path swfUrl=url tcUrl=url)\n");
++	  RTMP_LogPrintf
+ 	    ("--rtmp|-r url           URL (e.g. rtmp://host[:port]/path)\n");
+ 	  RTMP_LogPrintf
+ 	    ("--host|-n hostname      Overrides the hostname in the rtmp url\n");
+-- 
+1.7.10.4
+
+
+From 75a6167863bc415845b9130d6f8f437cbdc185f7 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 30 Oct 2012 08:20:14 -0700
+Subject: [PATCH 38/64] Fix bogus optarg refs in prev commit
+
+
+diff --git a/rtmpgw.c b/rtmpgw.c
+index ab255d4..3e47602 100644
+--- a/rtmpgw.c
++++ b/rtmpgw.c
+@@ -921,7 +921,7 @@ ParseOption(char opt, char *arg, RTMP_REQUEST * req)
+ 	break;
+       }
+     case 'i':
+-      STR2AVAL(req->fullUrl, optarg);
++      STR2AVAL(req->fullUrl, arg);
+       break;
+     case 's':
+       STR2AVAL(req->swfUrl, arg);
+@@ -942,7 +942,7 @@ ParseOption(char opt, char *arg, RTMP_REQUEST * req)
+       STR2AVAL(req->auth, arg);
+       break;
+     case 'C':
+-      parseAMF(&req->extras, optarg, &req->edepth);
++      parseAMF(&req->extras, arg, &req->edepth);
+       break;
+     case 'm':
+       req->timeout = atoi(arg);
+-- 
+1.7.10.4
+
+
+From dc1ddd3b3f567c036f6909af7f1bfdc135331439 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 30 Oct 2012 08:28:15 -0700
+Subject: [PATCH 39/64] Fix rare infinite loop on EOF
+
+reported by Matt Robison <rtmpdump@nerdoftheherd.com>
+
+diff --git a/rtmpdump.c b/rtmpdump.c
+index 2b30eb2..13741a7 100644
+--- a/rtmpdump.c
++++ b/rtmpdump.c
+@@ -580,12 +580,14 @@ Download(RTMP * rtmp,		// connected RTMP object
+ 		}
+ 	    }
+ 	}
+-#ifdef _DEBUG
+       else
+ 	{
++#ifdef _DEBUG
+ 	  RTMP_Log(RTMP_LOGDEBUG, "zero read!");
+-	}
+ #endif
++	  if (rtmp->m_read.status == RTMP_READ_EOF)
++	    break;
++	}
+ 
+     }
+   while (!RTMP_ctrlC && nRead > -1 && RTMP_IsConnected(rtmp) && !RTMP_IsTimedout(rtmp));
+-- 
+1.7.10.4
+
+
+From a312ac7770207bd7d07725c1aef43725206e803a Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 30 Oct 2012 08:41:49 -0700
+Subject: [PATCH 40/64] Fix compat with PolarSSL >= 1.1.0
+
+
+diff --git a/librtmp/dh.h b/librtmp/dh.h
+index 9959532..fa264f8 100644
+--- a/librtmp/dh.h
++++ b/librtmp/dh.h
+@@ -29,6 +29,9 @@
+ 
+ #ifdef USE_POLARSSL
+ #include <polarssl/dhm.h>
++#if POLARSSL_VERSION_NUMBER < 0x01010100
++#define havege_random	havege_rand
++#endif
+ typedef mpi * MP_t;
+ #define MP_new(m)	m = malloc(sizeof(mpi)); mpi_init(m)
+ #define MP_set_w(mpi, w)	mpi_lset(mpi, w)
+@@ -61,7 +64,7 @@ static int MDH_generate_key(MDH *dh)
+   MP_set(&dh->ctx.P, dh->p);
+   MP_set(&dh->ctx.G, dh->g);
+   dh->ctx.len = 128;
+-  dhm_make_public(&dh->ctx, 1024, out, 1, havege_rand, &RTMP_TLS_ctx->hs);
++  dhm_make_public(&dh->ctx, 1024, out, 1, havege_random, &RTMP_TLS_ctx->hs);
+   MP_new(dh->pub_key);
+   MP_new(dh->priv_key);
+   MP_set(dh->pub_key, &dh->ctx.GX);
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 52d0254..76a6b4f 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -33,6 +33,7 @@
+ 
+ #ifdef CRYPTO
+ #ifdef USE_POLARSSL
++#include <polarssl/version.h>
+ #include <polarssl/havege.h>
+ #elif defined(USE_GNUTLS)
+ #include <gnutls/gnutls.h>
+diff --git a/librtmp/rtmp_sys.h b/librtmp/rtmp_sys.h
+index c3fd4a6..1bf0735 100644
+--- a/librtmp/rtmp_sys.h
++++ b/librtmp/rtmp_sys.h
+@@ -61,9 +61,13 @@
+ #include "rtmp.h"
+ 
+ #ifdef USE_POLARSSL
++#include <polarssl/version.h>
+ #include <polarssl/net.h>
+ #include <polarssl/ssl.h>
+ #include <polarssl/havege.h>
++#if POLARSSL_VERSION_NUMBER < 0x01010100
++#define havege_random	havege_rand
++#endif
+ typedef struct tls_ctx {
+ 	havege_state hs;
+ 	ssl_session ssn;
+@@ -71,7 +75,7 @@ typedef struct tls_ctx {
+ #define TLS_CTX tls_ctx *
+ #define TLS_client(ctx,s)	s = malloc(sizeof(ssl_context)); ssl_init(s);\
+ 	ssl_set_endpoint(s, SSL_IS_CLIENT); ssl_set_authmode(s, SSL_VERIFY_NONE);\
+-	ssl_set_rng(s, havege_rand, &ctx->hs);\
++	ssl_set_rng(s, havege_random, &ctx->hs);\
+ 	ssl_set_ciphersuites(s, ssl_default_ciphersuites);\
+ 	ssl_set_session(s, 1, 600, &ctx->ssn)
+ #define TLS_setfd(s,fd)	ssl_set_bio(s, net_recv, &fd, net_send, &fd)
+-- 
+1.7.10.4
+
+
+From 1d07cfa60402ace8472f4661112595f1fe661913 Mon Sep 17 00:00:00 2001
+From: Matthew Garrett <mjg59@srcf.ucam.org>
+Date: Sun, 8 Jul 2012 16:26:14 -0400
+Subject: [PATCH 41/64] Fix socks support for SetupURL
+
+SetupURL assigns sockshost but never parses the data. This patch factors
+the code out from SetupStream into a common function and adds it to
+SetupURL.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 76a6b4f..682e3b8 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -321,6 +321,31 @@ static const char DEFAULT_FLASH_VER[] = DEF_VERSTR;
+ const AVal RTMP_DefaultFlashVer =
+   { (char *)DEFAULT_FLASH_VER, sizeof(DEFAULT_FLASH_VER) - 1 };
+ 
++static void
++SocksSetup(RTMP *r, AVal *sockshost)
++{
++  if (sockshost->av_len)
++    {
++      const char *socksport = strchr(sockshost->av_val, ':');
++      char *hostname = strdup(sockshost->av_val);
++
++      if (socksport)
++	hostname[socksport - sockshost->av_val] = '\0';
++      r->Link.sockshost.av_val = hostname;
++      r->Link.sockshost.av_len = strlen(hostname);
++
++      r->Link.socksport = socksport ? atoi(socksport + 1) : 1080;
++      RTMP_Log(RTMP_LOGDEBUG, "Connecting via SOCKS proxy: %s:%d", r->Link.sockshost.av_val,
++	  r->Link.socksport);
++    }
++  else
++    {
++      r->Link.sockshost.av_val = NULL;
++      r->Link.sockshost.av_len = 0;
++      r->Link.socksport = 0;
++    }
++}
++
+ void
+ RTMP_SetupStream(RTMP *r,
+ 		 int protocol,
+@@ -385,26 +410,7 @@ RTMP_SetupStream(RTMP *r,
+     }
+ #endif
+ 
+-  if (sockshost->av_len)
+-    {
+-      const char *socksport = strchr(sockshost->av_val, ':');
+-      char *hostname = strdup(sockshost->av_val);
+-
+-      if (socksport)
+-	hostname[socksport - sockshost->av_val] = '\0';
+-      r->Link.sockshost.av_val = hostname;
+-      r->Link.sockshost.av_len = strlen(hostname);
+-
+-      r->Link.socksport = socksport ? atoi(socksport + 1) : 1080;
+-      RTMP_Log(RTMP_LOGDEBUG, "Connecting via SOCKS proxy: %s:%d", r->Link.sockshost.av_val,
+-	  r->Link.socksport);
+-    }
+-  else
+-    {
+-      r->Link.sockshost.av_val = NULL;
+-      r->Link.sockshost.av_len = 0;
+-      r->Link.socksport = 0;
+-    }
++  SocksSetup(r, sockshost);
+ 
+   if (tcUrl && tcUrl->av_len)
+     r->Link.tcUrl = *tcUrl;
+@@ -757,6 +763,8 @@ int RTMP_SetupURL(RTMP *r, char *url)
+ 	  (unsigned char *)r->Link.SWFHash, r->Link.swfAge);
+ #endif
+ 
++  SocksSetup(r, &r->Link.sockshost);
++
+   if (r->Link.port == 0)
+     {
+       if (r->Link.protocol & RTMP_FEATURE_SSL)
+-- 
+1.7.10.4
+
+
+From b77a7dc719f8b04274db91f6344f4358a78d9c5f Mon Sep 17 00:00:00 2001
+From: goggle1 <goggle1@163.com>
+Date: Tue, 30 Oct 2012 08:47:19 -0700
+Subject: [PATCH 42/64] Handle AMF_ECMA_ARRAY and AMF_STRICT_ARRAY objects
+
+
+diff --git a/librtmp/amf.c b/librtmp/amf.c
+index ce84f81..1406be4 100644
+--- a/librtmp/amf.c
++++ b/librtmp/amf.c
+@@ -396,6 +396,14 @@ AMFProp_Encode(AMFObjectProperty *prop, char *pBuffer, char *pBufEnd)
+       pBuffer = AMF_Encode(&prop->p_vu.p_object, pBuffer, pBufEnd);
+       break;
+ 
++    case AMF_ECMA_ARRAY:            
++      pBuffer = AMF_EncodeEcmaArray(&prop->p_vu.p_object, pBuffer, pBufEnd);
++      break;
++      
++    case AMF_STRICT_ARRAY:      
++      pBuffer = AMF_EncodeArray(&prop->p_vu.p_object, pBuffer, pBufEnd);
++      break;
++      
+     default:
+       RTMP_Log(RTMP_LOGERROR, "%s, invalid type. %d", __FUNCTION__, prop->p_type);
+       pBuffer = NULL;
+@@ -700,7 +708,7 @@ AMFProp_Decode(AMFObjectProperty *prop, const char *pBuffer, int nSize,
+ 	if (nRes == -1)
+ 	  return -1;
+ 	nSize -= nRes;
+-	prop->p_type = AMF_OBJECT;
++	//prop->p_type = AMF_OBJECT;
+ 	break;
+       }
+     case AMF_OBJECT_END:
+@@ -718,7 +726,7 @@ AMFProp_Decode(AMFObjectProperty *prop, const char *pBuffer, int nSize,
+ 	if (nRes == -1)
+ 	  return -1;
+ 	nSize -= nRes;
+-	prop->p_type = AMF_OBJECT;
++	//prop->p_type = AMF_OBJECT;
+ 	break;
+       }
+     case AMF_DATE:
+@@ -815,6 +823,18 @@ AMFProp_Dump(AMFObjectProperty *prop)
+       AMF_Dump(&prop->p_vu.p_object);
+       return;
+     }
++  else if (prop->p_type == AMF_ECMA_ARRAY)
++    {
++      RTMP_Log(RTMP_LOGDEBUG, "Property: <%sECMA_ARRAY>", strRes);
++      AMF_Dump(&prop->p_vu.p_object);
++      return;
++    }
++  else if (prop->p_type == AMF_STRICT_ARRAY)
++    {
++      RTMP_Log(RTMP_LOGDEBUG, "Property: <%sSTRICT_ARRAY>", strRes);
++      AMF_Dump(&prop->p_vu.p_object);
++      return;
++    }
+ 
+   switch (prop->p_type)
+     {
+@@ -888,6 +908,76 @@ AMF_Encode(AMFObject *obj, char *pBuffer, char *pBufEnd)
+   return pBuffer;
+ }
+ 
++char *
++AMF_EncodeEcmaArray(AMFObject *obj, char *pBuffer, char *pBufEnd)
++{
++  int i;
++
++  if (pBuffer+4 >= pBufEnd)
++    return NULL;
++
++  *pBuffer++ = AMF_ECMA_ARRAY;
++
++  pBuffer = AMF_EncodeInt32(pBuffer, pBufEnd, obj->o_num);
++
++  for (i = 0; i < obj->o_num; i++)
++    {
++      char *res = AMFProp_Encode(&obj->o_props[i], pBuffer, pBufEnd);
++      if (res == NULL)
++	{
++	  RTMP_Log(RTMP_LOGERROR, "AMF_Encode - failed to encode property in index %d",
++	      i);
++	  break;
++	}
++      else
++	{
++	  pBuffer = res;
++	}
++    }
++
++  if (pBuffer + 3 >= pBufEnd)
++    return NULL;			/* no room for the end marker */
++
++  pBuffer = AMF_EncodeInt24(pBuffer, pBufEnd, AMF_OBJECT_END);
++
++  return pBuffer;
++}
++
++char *
++AMF_EncodeArray(AMFObject *obj, char *pBuffer, char *pBufEnd)
++{
++  int i;
++
++  if (pBuffer+4 >= pBufEnd)
++    return NULL;
++
++  *pBuffer++ = AMF_STRICT_ARRAY;
++
++  pBuffer = AMF_EncodeInt32(pBuffer, pBufEnd, obj->o_num);
++
++  for (i = 0; i < obj->o_num; i++)
++    {
++      char *res = AMFProp_Encode(&obj->o_props[i], pBuffer, pBufEnd);
++      if (res == NULL)
++	{
++	  RTMP_Log(RTMP_LOGERROR, "AMF_Encode - failed to encode property in index %d",
++	      i);
++	  break;
++	}
++      else
++	{
++	  pBuffer = res;
++	}
++    }
++
++  //if (pBuffer + 3 >= pBufEnd)
++  //  return NULL;			/* no room for the end marker */
++
++  //pBuffer = AMF_EncodeInt24(pBuffer, pBufEnd, AMF_OBJECT_END);
++
++  return pBuffer;
++}
++
+ int
+ AMF_DecodeArray(AMFObject *obj, const char *pBuffer, int nSize,
+ 		int nArrayLen, int bDecodeName)
+diff --git a/librtmp/amf.h b/librtmp/amf.h
+index b945beb..5a47d77 100644
+--- a/librtmp/amf.h
++++ b/librtmp/amf.h
+@@ -104,6 +104,9 @@ extern "C"
+   double AMF_DecodeNumber(const char *data);
+ 
+   char *AMF_Encode(AMFObject * obj, char *pBuffer, char *pBufEnd);
++  char *AMF_EncodeEcmaArray(AMFObject *obj, char *pBuffer, char *pBufEnd);
++  char *AMF_EncodeArray(AMFObject *obj, char *pBuffer, char *pBufEnd);
++  
+   int AMF_Decode(AMFObject * obj, const char *pBuffer, int nSize,
+ 		 int bDecodeName);
+   int AMF_DecodeArray(AMFObject * obj, const char *pBuffer, int nSize,
+-- 
+1.7.10.4
+
+
+From 294135e6eafeb1ac338ac4bb11ebd5ef62c748b9 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 30 Oct 2012 08:50:34 -0700
+Subject: [PATCH 43/64] Cleanup prev commit
+
+
+diff --git a/librtmp/amf.c b/librtmp/amf.c
+index 1406be4..563486c 100644
+--- a/librtmp/amf.c
++++ b/librtmp/amf.c
+@@ -396,14 +396,14 @@ AMFProp_Encode(AMFObjectProperty *prop, char *pBuffer, char *pBufEnd)
+       pBuffer = AMF_Encode(&prop->p_vu.p_object, pBuffer, pBufEnd);
+       break;
+ 
+-    case AMF_ECMA_ARRAY:            
++    case AMF_ECMA_ARRAY:
+       pBuffer = AMF_EncodeEcmaArray(&prop->p_vu.p_object, pBuffer, pBufEnd);
+       break;
+-      
+-    case AMF_STRICT_ARRAY:      
++
++    case AMF_STRICT_ARRAY:
+       pBuffer = AMF_EncodeArray(&prop->p_vu.p_object, pBuffer, pBufEnd);
+       break;
+-      
++
+     default:
+       RTMP_Log(RTMP_LOGERROR, "%s, invalid type. %d", __FUNCTION__, prop->p_type);
+       pBuffer = NULL;
+@@ -708,7 +708,6 @@ AMFProp_Decode(AMFObjectProperty *prop, const char *pBuffer, int nSize,
+ 	if (nRes == -1)
+ 	  return -1;
+ 	nSize -= nRes;
+-	//prop->p_type = AMF_OBJECT;
+ 	break;
+       }
+     case AMF_OBJECT_END:
+@@ -726,7 +725,6 @@ AMFProp_Decode(AMFObjectProperty *prop, const char *pBuffer, int nSize,
+ 	if (nRes == -1)
+ 	  return -1;
+ 	nSize -= nRes;
+-	//prop->p_type = AMF_OBJECT;
+ 	break;
+       }
+     case AMF_DATE:
+diff --git a/librtmp/amf.h b/librtmp/amf.h
+index 5a47d77..5de414b 100644
+--- a/librtmp/amf.h
++++ b/librtmp/amf.h
+@@ -106,7 +106,7 @@ extern "C"
+   char *AMF_Encode(AMFObject * obj, char *pBuffer, char *pBufEnd);
+   char *AMF_EncodeEcmaArray(AMFObject *obj, char *pBuffer, char *pBufEnd);
+   char *AMF_EncodeArray(AMFObject *obj, char *pBuffer, char *pBufEnd);
+-  
++
+   int AMF_Decode(AMFObject * obj, const char *pBuffer, int nSize,
+ 		 int bDecodeName);
+   int AMF_DecodeArray(AMFObject * obj, const char *pBuffer, int nSize,
+-- 
+1.7.10.4
+
+
+From d70c3f677d3d80763adf54c4e1329c57ed8af3ba Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Sun, 20 May 2012 23:36:57 +0300
+Subject: [PATCH 44/64] Allocate the RTMP struct dynamically
+
+This struct is over 1 MB in size, and doesn't fit on the stack
+on OS X.
+
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index 9aa62f3..956abab 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -886,7 +886,7 @@ void doServe(STREAMING_SERVER * server,	// server socket and state (our listenin
+ {
+   server->state = STREAMING_IN_PROGRESS;
+ 
+-  RTMP rtmp = { 0 };		/* our session with the real client */
++  RTMP *rtmp = RTMP_Alloc();		/* our session with the real client */
+   RTMPPacket packet = { 0 };
+ 
+   // timeout for http requests
+@@ -906,38 +906,39 @@ void doServe(STREAMING_SERVER * server,	// server socket and state (our listenin
+     }
+   else
+     {
+-      RTMP_Init(&rtmp);
+-      rtmp.m_sb.sb_socket = sockfd;
+-      if (!RTMP_Serve(&rtmp))
++      RTMP_Init(rtmp);
++      rtmp->m_sb.sb_socket = sockfd;
++      if (!RTMP_Serve(rtmp))
+ 	{
+ 	  RTMP_Log(RTMP_LOGERROR, "Handshake failed");
+ 	  goto cleanup;
+ 	}
+     }
+   server->arglen = 0;
+-  while (RTMP_IsConnected(&rtmp) && RTMP_ReadPacket(&rtmp, &packet))
++  while (RTMP_IsConnected(rtmp) && RTMP_ReadPacket(rtmp, &packet))
+     {
+       if (!RTMPPacket_IsReady(&packet))
+ 	continue;
+-      ServePacket(server, &rtmp, &packet);
++      ServePacket(server, rtmp, &packet);
+       RTMPPacket_Free(&packet);
+     }
+ 
+ cleanup:
+   RTMP_LogPrintf("Closing connection... ");
+-  RTMP_Close(&rtmp);
++  RTMP_Close(rtmp);
+   /* Should probably be done by RTMP_Close() ... */
+-  rtmp.Link.playpath.av_val = NULL;
+-  rtmp.Link.tcUrl.av_val = NULL;
+-  rtmp.Link.swfUrl.av_val = NULL;
+-  rtmp.Link.pageUrl.av_val = NULL;
+-  rtmp.Link.app.av_val = NULL;
+-  rtmp.Link.flashVer.av_val = NULL;
+-  if (rtmp.Link.usherToken.av_val)
++  rtmp->Link.playpath.av_val = NULL;
++  rtmp->Link.tcUrl.av_val = NULL;
++  rtmp->Link.swfUrl.av_val = NULL;
++  rtmp->Link.pageUrl.av_val = NULL;
++  rtmp->Link.app.av_val = NULL;
++  rtmp->Link.flashVer.av_val = NULL;
++  if (rtmp->Link.usherToken.av_val)
+     {
+-      free(rtmp.Link.usherToken.av_val);
+-      rtmp.Link.usherToken.av_val = NULL;
++      free(rtmp->Link.usherToken.av_val);
++      rtmp->Link.usherToken.av_val = NULL;
+     }
++  RTMP_Free(rtmp);
+   RTMP_LogPrintf("done!\n\n");
+ 
+ quit:
+-- 
+1.7.10.4
+
+
+From f14b6ac18d779cfb1431c59344bd59a0b0445e08 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Sun, 20 May 2012 23:36:58 +0300
+Subject: [PATCH 45/64] Replace hardcoded constants and comments with proper
+ named constants
+
+
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index 956abab..fc727bc 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -767,47 +767,40 @@ ServePacket(STREAMING_SERVER *server, RTMP *r, RTMPPacket *packet)
+ 
+   switch (packet->m_packetType)
+     {
+-    case 0x01:
+-      // chunk size
++    case RTMP_PACKET_TYPE_CHUNK_SIZE:
+ //      HandleChangeChunkSize(r, packet);
+       break;
+ 
+-    case 0x03:
+-      // bytes read report
++    case RTMP_PACKET_TYPE_BYTES_READ_REPORT:
+       break;
+ 
+-    case 0x04:
+-      // ctrl
++    case RTMP_PACKET_TYPE_CONTROL:
+ //      HandleCtrl(r, packet);
+       break;
+ 
+-    case 0x05:
+-      // server bw
++    case RTMP_PACKET_TYPE_SERVER_BW:
+ //      HandleServerBW(r, packet);
+       break;
+ 
+-    case 0x06:
+-      // client bw
++    case RTMP_PACKET_TYPE_CLIENT_BW:
+  //     HandleClientBW(r, packet);
+       break;
+ 
+-    case 0x08:
+-      // audio data
++    case RTMP_PACKET_TYPE_AUDIO:
+       //RTMP_Log(RTMP_LOGDEBUG, "%s, received: audio %lu bytes", __FUNCTION__, packet.m_nBodySize);
+       break;
+ 
+-    case 0x09:
+-      // video data
++    case RTMP_PACKET_TYPE_VIDEO:
+       //RTMP_Log(RTMP_LOGDEBUG, "%s, received: video %lu bytes", __FUNCTION__, packet.m_nBodySize);
+       break;
+ 
+-    case 0x0F:			// flex stream send
++    case RTMP_PACKET_TYPE_FLEX_STREAM_SEND:
+       break;
+ 
+-    case 0x10:			// flex shared object
++    case RTMP_PACKET_TYPE_FLEX_SHARED_OBJECT:
+       break;
+ 
+-    case 0x11:			// flex message
++    case RTMP_PACKET_TYPE_FLEX_MESSAGE:
+       {
+ 	RTMP_Log(RTMP_LOGDEBUG, "%s, flex message, size %u bytes, not fully supported",
+ 	    __FUNCTION__, packet->m_nBodySize);
+@@ -827,16 +820,13 @@ ServePacket(STREAMING_SERVER *server, RTMP *r, RTMPPacket *packet)
+ 	  RTMP_Close(r);
+ 	break;
+       }
+-    case 0x12:
+-      // metadata (notify)
++    case RTMP_PACKET_TYPE_INFO:
+       break;
+ 
+-    case 0x13:
+-      /* shared object */
++    case RTMP_PACKET_TYPE_SHARED_OBJECT:
+       break;
+ 
+-    case 0x14:
+-      // invoke
++    case RTMP_PACKET_TYPE_INVOKE:
+       RTMP_Log(RTMP_LOGDEBUG, "%s, received: invoke %u bytes", __FUNCTION__,
+ 	  packet->m_nBodySize);
+       //RTMP_LogHex(packet.m_body, packet.m_nBodySize);
+@@ -845,8 +835,7 @@ ServePacket(STREAMING_SERVER *server, RTMP *r, RTMPPacket *packet)
+ 	RTMP_Close(r);
+       break;
+ 
+-    case 0x16:
+-      /* flv */
++    case RTMP_PACKET_TYPE_FLASH_VIDEO:
+ 	break;
+     default:
+       RTMP_Log(RTMP_LOGDEBUG, "%s, unknown packet type received: 0x%02x", __FUNCTION__,
+-- 
+1.7.10.4
+
+
+From 6df3b1f2015f928d74a675bda542c354b893c2c2 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Tue, 30 Oct 2012 08:57:43 -0700
+Subject: [PATCH 46/64] Add functions for doing server side TLS initialization
+
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 682e3b8..cba8b6c 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -35,6 +35,19 @@
+ #ifdef USE_POLARSSL
+ #include <polarssl/version.h>
+ #include <polarssl/havege.h>
++
++static const char *my_dhm_P =
++    "E4004C1F94182000103D883A448B3F80" \
++    "2CE4B44A83301270002C20D0321CFD00" \
++    "11CCEF784C26A400F43DFB901BCA7538" \
++    "F2C6B176001CF5A0FD16D2C48B1D0C1C" \
++    "F6AC8E1DA6BCC3B4E1F96B0564965300" \
++    "FFA1D0B601EB2800F489AA512C4B248C" \
++    "01F76949A60BB7F00A40B1EAB64BDD48" \
++    "E8A700D60B7F1200FA8E77B0A979DABF";
++
++static const char *my_dhm_G = "4";
++
+ #elif defined(USE_GNUTLS)
+ #include <gnutls/gnutls.h>
+ #else	/* USE_OPENSSL */
+@@ -228,6 +241,82 @@ RTMP_TLS_Init()
+ #endif
+ }
+ 
++void *
++RTMP_TLS_AllocServerContext(const char* cert, const char* key)
++{
++  void *ctx = NULL;
++#ifdef CRYPTO
++  if (!RTMP_TLS_ctx)
++    RTMP_TLS_Init();
++#ifdef USE_POLARSSL
++  tls_server_ctx *tc = ctx = calloc(1, sizeof(struct tls_server_ctx));
++  tc->dhm_P = my_dhm_P;
++  tc->dhm_G = my_dhm_G;
++  tc->hs = &RTMP_TLS_ctx->hs;
++  if (x509parse_crtfile(&tc->cert, cert)) {
++      free(tc);
++      return NULL;
++  }
++  if (x509parse_keyfile(&tc->key, key, NULL)) {
++      x509_free(&tc->cert);
++      free(tc);
++      return NULL;
++  }
++#elif defined(USE_GNUTLS) && !defined(NO_SSL)
++  gnutls_certificate_allocate_credentials((gnutls_certificate_credentials*) &ctx);
++  if (gnutls_certificate_set_x509_key_file(ctx, cert, key, GNUTLS_X509_FMT_PEM) != 0) {
++    gnutls_certificate_free_credentials(ctx);
++    return NULL;
++  }
++#elif !defined(NO_SSL) /* USE_OPENSSL */
++  ctx = SSL_CTX_new(SSLv23_server_method());
++  FILE *f = fopen(key, "r");
++  if (!f) {
++      SSL_CTX_free(ctx);
++      return NULL;
++  }
++  EVP_PKEY *k = PEM_read_PrivateKey(f, NULL, NULL, NULL);
++  fclose(f);
++  if (!k) {
++      SSL_CTX_free(ctx);
++      return NULL;
++  }
++  SSL_CTX_use_PrivateKey(ctx, k);
++  EVP_PKEY_free(k);
++  f = fopen(cert, "r");
++  if (!f) {
++      SSL_CTX_free(ctx);
++      return NULL;
++  }
++  X509 *c = PEM_read_X509(f, NULL, NULL, NULL);
++  fclose(f);
++  if (!c) {
++      SSL_CTX_free(ctx);
++      return NULL;
++  }
++  SSL_CTX_use_certificate(ctx, c);
++  X509_free(c);
++#endif
++#endif
++  return ctx;
++}
++
++void
++RTMP_TLS_FreeServerContext(void *ctx)
++{
++#ifdef CRYPTO
++#ifdef USE_POLARSSL
++  x509_free(&((tls_server_ctx*)ctx)->cert);
++  rsa_free(&((tls_server_ctx*)ctx)->key);
++  free(ctx);
++#elif defined(USE_GNUTLS) && !defined(NO_SSL)
++  gnutls_certificate_free_credentials(ctx);
++#elif !defined(NO_SSL) /* USE_OPENSSL */
++  SSL_CTX_free(ctx);
++#endif
++#endif
++}
++
+ RTMP *
+ RTMP_Alloc()
+ {
+@@ -868,6 +957,23 @@ RTMP_Connect0(RTMP *r, struct sockaddr * service)
+ }
+ 
+ int
++RTMP_TLS_Accept(RTMP *r, void *ctx)
++{
++#if defined(CRYPTO) && !defined(NO_SSL)
++  TLS_server(ctx, r->m_sb.sb_ssl);
++  TLS_setfd(r->m_sb.sb_ssl, r->m_sb.sb_socket);
++  if (TLS_accept(r->m_sb.sb_ssl) < 0)
++    {
++      RTMP_Log(RTMP_LOGERROR, "%s, TLS_Connect failed", __FUNCTION__);
++      return FALSE;
++    }
++  return TRUE;
++#else
++  return FALSE;
++#endif
++}
++
++int
+ RTMP_Connect1(RTMP *r, RTMPPacket *cp)
+ {
+   if (r->Link.protocol & RTMP_FEATURE_SSL)
+diff --git a/librtmp/rtmp.h b/librtmp/rtmp.h
+index 6b2ae5b..76e01fd 100644
+--- a/librtmp/rtmp.h
++++ b/librtmp/rtmp.h
+@@ -307,6 +307,7 @@ extern "C"
+   int RTMP_Connect0(RTMP *r, struct sockaddr *svc);
+   int RTMP_Connect1(RTMP *r, RTMPPacket *cp);
+   int RTMP_Serve(RTMP *r);
++  int RTMP_TLS_Accept(RTMP *r, void *ctx);
+ 
+   int RTMP_ReadPacket(RTMP *r, RTMPPacket *packet);
+   int RTMP_SendPacket(RTMP *r, RTMPPacket *packet, int queue);
+@@ -329,6 +330,9 @@ extern "C"
+   void RTMP_Free(RTMP *r);
+   void RTMP_EnableWrite(RTMP *r);
+ 
++  void *RTMP_TLS_AllocServerContext(const char* cert, const char* key);
++  void RTMP_TLS_FreeServerContext(void *ctx);
++
+   int RTMP_LibVersion(void);
+   void RTMP_UserInterrupt(void);	/* user typed Ctrl-C */
+ 
+diff --git a/librtmp/rtmp_sys.h b/librtmp/rtmp_sys.h
+index 1bf0735..2cdb705 100644
+--- a/librtmp/rtmp_sys.h
++++ b/librtmp/rtmp_sys.h
+@@ -72,14 +72,30 @@ typedef struct tls_ctx {
+ 	havege_state hs;
+ 	ssl_session ssn;
+ } tls_ctx;
++typedef struct tls_server_ctx {
++	havege_state *hs;
++	x509_cert cert;
++	rsa_context key;
++	ssl_session ssn;
++	const char *dhm_P, *dhm_G;
++} tls_server_ctx;
++
+ #define TLS_CTX tls_ctx *
+ #define TLS_client(ctx,s)	s = malloc(sizeof(ssl_context)); ssl_init(s);\
+ 	ssl_set_endpoint(s, SSL_IS_CLIENT); ssl_set_authmode(s, SSL_VERIFY_NONE);\
+ 	ssl_set_rng(s, havege_random, &ctx->hs);\
+ 	ssl_set_ciphersuites(s, ssl_default_ciphersuites);\
+ 	ssl_set_session(s, 1, 600, &ctx->ssn)
++#define TLS_server(ctx,s)	s = malloc(sizeof(ssl_context)); ssl_init(s);\
++	ssl_set_endpoint(s, SSL_IS_SERVER); ssl_set_authmode(s, SSL_VERIFY_NONE);\
++	ssl_set_rng(s, havege_rand, ((tls_server_ctx*)ctx)->hs);\
++	ssl_set_ciphersuites(s, ssl_default_ciphersuites);\
++	ssl_set_session(s, 1, 600, &((tls_server_ctx*)ctx)->ssn);\
++	ssl_set_own_cert(s, &((tls_server_ctx*)ctx)->cert, &((tls_server_ctx*)ctx)->key);\
++	ssl_set_dh_param(s, ((tls_server_ctx*)ctx)->dhm_P, ((tls_server_ctx*)ctx)->dhm_G)
+ #define TLS_setfd(s,fd)	ssl_set_bio(s, net_recv, &fd, net_send, &fd)
+ #define TLS_connect(s)	ssl_handshake(s)
++#define TLS_accept(s)	ssl_handshake(s)
+ #define TLS_read(s,b,l)	ssl_read(s,(unsigned char *)b,l)
+ #define TLS_write(s,b,l)	ssl_write(s,(unsigned char *)b,l)
+ #define TLS_shutdown(s)	ssl_close_notify(s)
+@@ -93,8 +109,10 @@ typedef struct tls_ctx {
+ } tls_ctx;
+ #define TLS_CTX	tls_ctx *
+ #define TLS_client(ctx,s)	gnutls_init((gnutls_session_t *)(&s), GNUTLS_CLIENT); gnutls_priority_set(s, ctx->prios); gnutls_credentials_set(s, GNUTLS_CRD_CERTIFICATE, ctx->cred)
++#define TLS_server(ctx,s)	gnutls_init((gnutls_session_t *)(&s), GNUTLS_SERVER); gnutls_priority_set_direct(s, "NORMAL", NULL); gnutls_credentials_set(s, GNUTLS_CRD_CERTIFICATE, ctx)
+ #define TLS_setfd(s,fd)	gnutls_transport_set_ptr(s, (gnutls_transport_ptr_t)(long)fd)
+ #define TLS_connect(s)	gnutls_handshake(s)
++#define TLS_accept(s)	gnutls_handshake(s)
+ #define TLS_read(s,b,l)	gnutls_record_recv(s,b,l)
+ #define TLS_write(s,b,l)	gnutls_record_send(s,b,l)
+ #define TLS_shutdown(s)	gnutls_bye(s, GNUTLS_SHUT_RDWR)
+@@ -103,8 +121,10 @@ typedef struct tls_ctx {
+ #else	/* USE_OPENSSL */
+ #define TLS_CTX	SSL_CTX *
+ #define TLS_client(ctx,s)	s = SSL_new(ctx)
++#define TLS_server(ctx,s)	s = SSL_new(ctx)
+ #define TLS_setfd(s,fd)	SSL_set_fd(s,fd)
+ #define TLS_connect(s)	SSL_connect(s)
++#define TLS_accept(s)	SSL_accept(s)
+ #define TLS_read(s,b,l)	SSL_read(s,b,l)
+ #define TLS_write(s,b,l)	SSL_write(s,b,l)
+ #define TLS_shutdown(s)	SSL_shutdown(s)
+-- 
+1.7.10.4
+
+
+From 002ef6f6be2bbdf852ff64ab6981d709435a9045 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Sun, 20 May 2012 23:37:35 +0300
+Subject: [PATCH 47/64] Support rtmps in rtmpsrv
+
+
+diff --git a/rtmpsrv.c b/rtmpsrv.c
+index fc727bc..a9e9045 100644
+--- a/rtmpsrv.c
++++ b/rtmpsrv.c
+@@ -92,6 +92,7 @@ typedef struct
+ } STREAMING_SERVER;
+ 
+ STREAMING_SERVER *rtmpServer = 0;	// server structure pointer
++void *sslCtx = NULL;
+ 
+ STREAMING_SERVER *startStreaming(const char *address, int port);
+ void stopStreaming(STREAMING_SERVER * server);
+@@ -897,6 +898,11 @@ void doServe(STREAMING_SERVER * server,	// server socket and state (our listenin
+     {
+       RTMP_Init(rtmp);
+       rtmp->m_sb.sb_socket = sockfd;
++      if (sslCtx && !RTMP_TLS_Accept(rtmp, sslCtx))
++        {
++	  RTMP_Log(RTMP_LOGERROR, "TLS handshake failed");
++	  goto cleanup;
++        }
+       if (!RTMP_Serve(rtmp))
+ 	{
+ 	  RTMP_Log(RTMP_LOGERROR, "Handshake failed");
+@@ -1061,20 +1067,32 @@ int
+ main(int argc, char **argv)
+ {
+   int nStatus = RD_SUCCESS;
++  int i;
+ 
+   // http streaming server
+   char DEFAULT_HTTP_STREAMING_DEVICE[] = "0.0.0.0";	// 0.0.0.0 is any device
+ 
+   char *rtmpStreamingDevice = DEFAULT_HTTP_STREAMING_DEVICE;	// streaming device, default 0.0.0.0
+   int nRtmpStreamingPort = 1935;	// port
++  char *cert = NULL, *key = NULL;
+ 
+   RTMP_LogPrintf("RTMP Server %s\n", RTMPDUMP_VERSION);
+   RTMP_LogPrintf("(c) 2010 Andrej Stepanchuk, Howard Chu; license: GPL\n\n");
+ 
+   RTMP_debuglevel = RTMP_LOGINFO;
+ 
+-  if (argc > 1 && !strcmp(argv[1], "-z"))
+-    RTMP_debuglevel = RTMP_LOGALL;
++  for (i = 1; i < argc; i++)
++    {
++      if (!strcmp(argv[i], "-z"))
++        RTMP_debuglevel = RTMP_LOGALL;
++      else if (!strcmp(argv[i], "-c") && i + 1 < argc)
++        cert = argv[++i];
++      else if (!strcmp(argv[i], "-k") && i + 1 < argc)
++        key = argv[++i];
++    }
++
++  if (cert && key)
++    sslCtx = RTMP_TLS_AllocServerContext(cert, key);
+ 
+   // init request
+   memset(&defaultRTMPRequest, 0, sizeof(RTMP_REQUEST));
+@@ -1118,6 +1136,9 @@ main(int argc, char **argv)
+     }
+   RTMP_Log(RTMP_LOGDEBUG, "Done, exiting...");
+ 
++  if (sslCtx)
++    RTMP_TLS_FreeServerContext(sslCtx);
++
+   CleanupSockets();
+ 
+ #ifdef _DEBUG
+-- 
+1.7.10.4
+
+
+From 8e527f61afbcb72eb7d8ae1f507765cdc2df2785 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Mon, 21 May 2012 18:17:29 +0300
+Subject: [PATCH 48/64] Add null termination to buffers before using strstr
+
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index cba8b6c..83f3247 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -3673,7 +3673,7 @@ RTMPSockBuf_Fill(RTMPSockBuf *sb)
+ 
+   while (1)
+     {
+-      nBytes = sizeof(sb->sb_buf) - sb->sb_size - (sb->sb_start - sb->sb_buf);
++      nBytes = sizeof(sb->sb_buf) - 1 - sb->sb_size - (sb->sb_start - sb->sb_buf);
+ #if defined(CRYPTO) && !defined(NO_SSL)
+       if (sb->sb_ssl)
+ 	{
+@@ -3852,6 +3852,7 @@ HTTP_read(RTMP *r, int fill)
+     return -2;
+   if (strncmp(r->m_sb.sb_start, "HTTP/1.1 200 ", 13))
+     return -1;
++  r->m_sb.sb_start[r->m_sb.sb_size] = '\0';
+   ptr = r->m_sb.sb_start + sizeof("HTTP/1.1 200");
+   while ((ptr = strstr(ptr, "Content-"))) {
+     if (!strncasecmp(ptr+8, "length:", 7)) break;
+-- 
+1.7.10.4
+
+
+From 895392a7161ceb37ac32b3fb4a910b350361b13f Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Mon, 21 May 2012 18:17:30 +0300
+Subject: [PATCH 49/64] Buffer more data before returning successfully from
+ HTTP_read, if needed
+
+This fixes issues if the http header and the payload data
+are sent in separate packets (as they normally are), and the
+buffer contains the full header but none of the payload.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 83f3247..0d28666 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -3846,6 +3846,7 @@ HTTP_read(RTMP *r, int fill)
+   char *ptr;
+   int hlen;
+ 
++restart:
+   if (fill)
+     RTMPSockBuf_Fill(&r->m_sb);
+   if (r->m_sb.sb_size < 144)
+@@ -3865,6 +3866,12 @@ HTTP_read(RTMP *r, int fill)
+   if (!ptr)
+     return -1;
+   ptr += 4;
++  if (ptr + (r->m_clientID.av_val ? 1 : hlen) > r->m_sb.sb_start + r->m_sb.sb_size)
++    {
++      if (fill)
++        goto restart;
++      return -2;
++    }
+   r->m_sb.sb_size -= ptr - r->m_sb.sb_start;
+   r->m_sb.sb_start = ptr;
+   r->m_unackd--;
+-- 
+1.7.10.4
+
+
+From 4ded9e053744e54286ab9af4e9657f5926a79a2c Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Mon, 21 May 2012 18:17:31 +0300
+Subject: [PATCH 50/64] Don't require 144 bytes to be buffered before
+ proceeding with HTTP_read
+
+This makes the code more flexible, if servers were to use
+smaller headers.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 0d28666..21e2c18 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -3849,11 +3849,20 @@ HTTP_read(RTMP *r, int fill)
+ restart:
+   if (fill)
+     RTMPSockBuf_Fill(&r->m_sb);
+-  if (r->m_sb.sb_size < 144)
++  if (r->m_sb.sb_size < 13) {
++    if (fill)
++      goto restart;
+     return -2;
++  }
+   if (strncmp(r->m_sb.sb_start, "HTTP/1.1 200 ", 13))
+     return -1;
+   r->m_sb.sb_start[r->m_sb.sb_size] = '\0';
++  if (!strstr(r->m_sb.sb_start, "\r\n\r\n")) {
++    if (fill)
++      goto restart;
++    return -2;
++  }
++
+   ptr = r->m_sb.sb_start + sizeof("HTTP/1.1 200");
+   while ((ptr = strstr(ptr, "Content-"))) {
+     if (!strncasecmp(ptr+8, "length:", 7)) break;
+-- 
+1.7.10.4
+
+
+From 91921dda7002ea8ffed9dfb74ad2913dfdd0b1ed Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Mon, 21 May 2012 18:17:32 +0300
+Subject: [PATCH 51/64] Refill if HTTP_read indicated it needs more data
+
+HTTP_read wants to skip past the first payload byte, so
+it actually needs to have at least 144 + 1 bytes buffered.
+
+This also avoids relying on the magic 144 byte constant altogether,
+which could easily break if servers include less reply headers.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 21e2c18..6183d20 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -1403,9 +1403,11 @@ ReadN(RTMP *r, char *buffer, int n)
+       int nBytes = 0, nRead;
+       if (r->Link.protocol & RTMP_FEATURE_HTTP)
+         {
++	  int refill = 0;
+ 	  while (!r->m_resplen)
+ 	    {
+-	      if (r->m_sb.sb_size < 144)
++	      int ret;
++	      if (r->m_sb.sb_size < 13 || refill)
+ 	        {
+ 		  if (!r->m_unackd)
+ 		    HTTP_Post(r, RTMPT_IDLE, "", 1);
+@@ -1416,12 +1418,20 @@ ReadN(RTMP *r, char *buffer, int n)
+ 		      return 0;
+ 		    }
+ 		}
+-	      if (HTTP_read(r, 0) == -1)
++	      if ((ret = HTTP_read(r, 0)) == -1)
+ 		{
+ 		  RTMP_Log(RTMP_LOGDEBUG, "%s, No valid HTTP response found", __FUNCTION__);
+ 		  RTMP_Close(r);
+ 		  return 0;
+ 		}
++              else if (ret == -2)
++                {
++                  refill = 1;
++                }
++              else
++                {
++                  refill = 0;
++                }
+ 	    }
+ 	  if (r->m_resplen && !r->m_sb.sb_size)
+ 	    RTMPSockBuf_Fill(&r->m_sb);
+-- 
+1.7.10.4
+
+
+From 4a08069f086b68e99f33e931583148f4090960a3 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Mon, 21 May 2012 23:52:11 +0300
+Subject: [PATCH 52/64] Use CRLF newlines consistently for all HTTP POST
+ headers
+
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 6183d20..ab52c49 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -3835,8 +3835,8 @@ HTTP_Post(RTMP *r, RTMPTCmd cmd, const char *buf, int len)
+   int hlen = snprintf(hbuf, sizeof(hbuf), "POST /%s%s/%d HTTP/1.1\r\n"
+     "Host: %.*s:%d\r\n"
+     "Accept: */*\r\n"
+-    "User-Agent: Shockwave Flash\n"
+-    "Connection: Keep-Alive\n"
++    "User-Agent: Shockwave Flash\r\n"
++    "Connection: Keep-Alive\r\n"
+     "Cache-Control: no-cache\r\n"
+     "Content-type: application/x-fcs\r\n"
+     "Content-length: %d\r\n\r\n", RTMPT_cmds[cmd],
+-- 
+1.7.10.4
+
+
+From 0fb1d9936fb25f0755bb8b4afc95db048efe4526 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Wed, 30 May 2012 22:06:57 +0300
+Subject: [PATCH 53/64] Free skipped packets in RTMP_GetNextMediaPacket
+
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index ab52c49..d35b58a 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -1206,6 +1206,7 @@ RTMP_GetNextMediaPacket(RTMP *r, RTMPPacket *packet)
+ 		  packet->m_nTimeStamp, packet->m_hasAbsTimestamp,
+ 		  r->m_mediaStamp);
+ #endif
++	      RTMPPacket_Free(packet);
+ 	      continue;
+ 	    }
+ 	  r->m_pausing = 0;
+-- 
+1.7.10.4
+
+
+From a9282329c3be3bb95f31137867fad9920b682d6d Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Wed, 30 May 2012 22:07:23 +0300
+Subject: [PATCH 54/64] Allocate the channel arrays dynamically
+
+This avoids having to allocate space for all theoretical channels
+if most of them aren't used. This drops the size of the full
+RTMP struct from over 1200 KB to 16 KB (on 64 bit), and as long as
+only channels with a low number are used, the amount of total
+allocated memory stays far below what it was before.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index d35b58a..6f6e97b 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -1216,7 +1216,8 @@ RTMP_GetNextMediaPacket(RTMP *r, RTMPPacket *packet)
+   if (bHasMediaPacket)
+     r->m_bPlaying = TRUE;
+   else if (r->m_sb.sb_timedout && !r->m_pausing)
+-    r->m_pauseStamp = r->m_channelTimestamp[r->m_mediaChannel];
++    r->m_pauseStamp = r->m_mediaChannel < r->m_channelsAllocatedIn ?
++                      r->m_channelTimestamp[r->m_mediaChannel] : 0;
+ 
+   return bHasMediaPacket;
+ }
+@@ -1998,7 +1999,8 @@ RTMP_SendPause(RTMP *r, int DoPause, int iTime)
+ int RTMP_Pause(RTMP *r, int DoPause)
+ {
+   if (DoPause)
+-    r->m_pauseStamp = r->m_channelTimestamp[r->m_mediaChannel];
++    r->m_pauseStamp = r->m_mediaChannel < r->m_channelsAllocatedIn ?
++                      r->m_channelTimestamp[r->m_mediaChannel] : 0;
+   return RTMP_SendPause(r, DoPause, r->m_pauseStamp);
+ }
+ 
+@@ -2953,7 +2955,8 @@ HandleCtrl(RTMP *r, const RTMPPacket *packet)
+ 	    break;
+ 	  if (!r->m_pausing)
+ 	    {
+-	      r->m_pauseStamp = r->m_channelTimestamp[r->m_mediaChannel];
++	      r->m_pauseStamp = r->m_mediaChannel < r->m_channelsAllocatedIn ?
++	                        r->m_channelTimestamp[r->m_mediaChannel] : 0;
+ 	      RTMP_SendPause(r, TRUE, r->m_pauseStamp);
+ 	      r->m_pausing = 1;
+ 	    }
+@@ -3098,6 +3101,26 @@ RTMP_ReadPacket(RTMP *r, RTMPPacket *packet)
+ 
+   nSize = packetSize[packet->m_headerType];
+ 
++  if (packet->m_nChannel >= r->m_channelsAllocatedIn)
++    {
++      int n = packet->m_nChannel + 10;
++      int *timestamp = realloc(r->m_channelTimestamp, sizeof(int) * n);
++      RTMPPacket **packets = realloc(r->m_vecChannelsIn, sizeof(RTMPPacket*) * n);
++      if (!timestamp)
++        free(r->m_channelTimestamp);
++      if (!packets)
++        free(r->m_vecChannelsIn);
++      r->m_channelTimestamp = timestamp;
++      r->m_vecChannelsIn = packets;
++      if (!timestamp || !packets) {
++        r->m_channelsAllocatedIn = 0;
++        return FALSE;
++      }
++      memset(r->m_channelTimestamp + r->m_channelsAllocatedIn, 0, sizeof(int) * (n - r->m_channelsAllocatedIn));
++      memset(r->m_vecChannelsIn + r->m_channelsAllocatedIn, 0, sizeof(RTMPPacket*) * (n - r->m_channelsAllocatedIn));
++      r->m_channelsAllocatedIn = n;
++    }
++
+   if (nSize == RTMP_LARGE_HEADER_SIZE)	/* if we get a full header the timestamp is absolute */
+     packet->m_hasAbsTimestamp = TRUE;
+ 
+@@ -3373,7 +3396,7 @@ RTMP_SendChunk(RTMP *r, RTMPChunk *chunk)
+ int
+ RTMP_SendPacket(RTMP *r, RTMPPacket *packet, int queue)
+ {
+-  const RTMPPacket *prevPacket = r->m_vecChannelsOut[packet->m_nChannel];
++  const RTMPPacket *prevPacket;
+   uint32_t last = 0;
+   int nSize;
+   int hSize, cSize;
+@@ -3383,6 +3406,22 @@ RTMP_SendPacket(RTMP *r, RTMPPacket *packet, int queue)
+   int nChunkSize;
+   int tlen;
+ 
++  if (packet->m_nChannel >= r->m_channelsAllocatedOut)
++    {
++      int n = packet->m_nChannel + 10;
++      RTMPPacket **packets = realloc(r->m_vecChannelsOut, sizeof(RTMPPacket*) * n);
++      if (!packets) {
++        free(r->m_vecChannelsOut);
++        r->m_vecChannelsOut = NULL;
++        r->m_channelsAllocatedOut = 0;
++        return FALSE;
++      }
++      r->m_vecChannelsOut = packets;
++      memset(r->m_vecChannelsOut + r->m_channelsAllocatedOut, 0, sizeof(RTMPPacket*) * (n - r->m_channelsAllocatedOut));
++      r->m_channelsAllocatedOut = n;
++    }
++
++  prevPacket = r->m_vecChannelsOut[packet->m_nChannel];
+   if (prevPacket && packet->m_headerType != RTMP_PACKET_SIZE_LARGE)
+     {
+       /* compress a bit by using the prev packet's attributes */
+@@ -3619,7 +3658,7 @@ RTMP_Close(RTMP *r)
+   r->m_write.m_nBytesRead = 0;
+   RTMPPacket_Free(&r->m_write);
+ 
+-  for (i = 0; i < RTMP_CHANNELS; i++)
++  for (i = 0; i < r->m_channelsAllocatedIn; i++)
+     {
+       if (r->m_vecChannelsIn[i])
+ 	{
+@@ -3627,12 +3666,23 @@ RTMP_Close(RTMP *r)
+ 	  free(r->m_vecChannelsIn[i]);
+ 	  r->m_vecChannelsIn[i] = NULL;
+ 	}
++    }
++  free(r->m_vecChannelsIn);
++  r->m_vecChannelsIn = NULL;
++  free(r->m_channelTimestamp);
++  r->m_channelTimestamp = NULL;
++  r->m_channelsAllocatedIn = 0;
++  for (i = 0; i < r->m_channelsAllocatedOut; i++)
++    {
+       if (r->m_vecChannelsOut[i])
+ 	{
+ 	  free(r->m_vecChannelsOut[i]);
+ 	  r->m_vecChannelsOut[i] = NULL;
+ 	}
+     }
++  free(r->m_vecChannelsOut);
++  r->m_vecChannelsOut = NULL;
++  r->m_channelsAllocatedOut = 0;
+   AV_clear(r->m_methodCalls, r->m_numCalls);
+   r->m_methodCalls = NULL;
+   r->m_numCalls = 0;
+diff --git a/librtmp/rtmp.h b/librtmp/rtmp.h
+index 76e01fd..8cb6e45 100644
+--- a/librtmp/rtmp.h
++++ b/librtmp/rtmp.h
+@@ -253,9 +253,11 @@ extern "C"
+     int m_numCalls;
+     RTMP_METHOD *m_methodCalls;	/* remote method calls queue */
+ 
+-    RTMPPacket *m_vecChannelsIn[RTMP_CHANNELS];
+-    RTMPPacket *m_vecChannelsOut[RTMP_CHANNELS];
+-    int m_channelTimestamp[RTMP_CHANNELS];	/* abs timestamp of last packet */
++    int m_channelsAllocatedIn;
++    int m_channelsAllocatedOut;
++    RTMPPacket **m_vecChannelsIn;
++    RTMPPacket **m_vecChannelsOut;
++    int *m_channelTimestamp;	/* abs timestamp of last packet */
+ 
+     double m_fAudioCodecs;	/* audioCodecs for the connect packet */
+     double m_fVideoCodecs;	/* videoCodecs for the connect packet */
+-- 
+1.7.10.4
+
+
+From 630c8db7d1ee2889d0c26a77d95050c01caf5d5a Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Tue, 30 Oct 2012 09:09:25 -0700
+Subject: [PATCH 55/64] Add adobe authentication support
+
+From: Sergiy <piratfm@gmail.com>
+
+To use this, add flashver=FMLE/3.0\20(compatible;\20FMSc/1.0)
+and pubUser=<username> pubUser=<password> to the RTMP url.
+
+This should both work for generic adobe authentication, and for
+publishing to akamai.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 6f6e97b..391a3b4 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -27,6 +27,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <assert.h>
++#include <time.h>
+ 
+ #include "rtmp_sys.h"
+ #include "log.h"
+@@ -35,6 +36,9 @@
+ #ifdef USE_POLARSSL
+ #include <polarssl/version.h>
+ #include <polarssl/havege.h>
++#include <polarssl/md5.h>
++#include <polarssl/base64.h>
++#define MD5_DIGEST_LENGTH 16
+ 
+ static const char *my_dhm_P =
+     "E4004C1F94182000103D883A448B3F80" \
+@@ -50,9 +54,15 @@ static const char *my_dhm_G = "4";
+ 
+ #elif defined(USE_GNUTLS)
+ #include <gnutls/gnutls.h>
++#define MD5_DIGEST_LENGTH 16
++#include <nettle/base64.h>
++#include <nettle/md5.h>
+ #else	/* USE_OPENSSL */
+ #include <openssl/ssl.h>
+ #include <openssl/rc4.h>
++#include <openssl/md5.h>
++#include <openssl/bio.h>
++#include <openssl/buffer.h>
+ #endif
+ TLS_CTX RTMP_TLS_ctx;
+ #endif
+@@ -595,6 +605,10 @@ static struct urlopt {
+   	"Buffer time in milliseconds" },
+   { AVC("timeout"),   OFF(Link.timeout),       OPT_INT, 0,
+   	"Session timeout in seconds" },
++  { AVC("pubUser"),   OFF(Link.pubUser),       OPT_STR, 0,
++        "Publisher username" },
++  { AVC("pubPasswd"), OFF(Link.pubPasswd),     OPT_STR, 0,
++        "Publisher password" },
+   { {NULL,0}, 0, 0}
+ };
+ 
+@@ -2433,6 +2447,239 @@ AV_clear(RTMP_METHOD *vals, int num)
+   free(vals);
+ }
+ 
++
++#ifdef CRYPTO
++static int
++b64enc(const unsigned char *input, int length, char *output, int maxsize)
++{
++#ifdef USE_POLARSSL
++  int buf_size = maxsize;
++  if(base64_encode((unsigned char *) output, &buf_size, input, length) == 0)
++    {
++      output[buf_size] = '\0';
++      return 1;
++    }
++  else
++    {
++      RTMP_Log(RTMP_LOGDEBUG, "%s, error", __FUNCTION__);
++      return 0;
++    }
++#elif defined(USE_GNUTLS)
++  if (BASE64_ENCODE_RAW_LENGTH(length) <= maxsize)
++    base64_encode_raw((uint8_t*) output, length, input);
++  else
++    {
++      RTMP_Log(RTMP_LOGDEBUG, "%s, error", __FUNCTION__);
++      return 0;
++    }
++#else   /* USE_OPENSSL */
++  BIO *bmem, *b64;
++  BUF_MEM *bptr;
++
++  b64 = BIO_new(BIO_f_base64());
++  bmem = BIO_new(BIO_s_mem());
++  b64 = BIO_push(b64, bmem);
++  BIO_write(b64, input, length);
++  if (BIO_flush(b64) == 1)
++    {
++      BIO_get_mem_ptr(b64, &bptr);
++      memcpy(output, bptr->data, bptr->length-1);
++      output[bptr->length-1] = '\0';
++    }
++  else
++    {
++      RTMP_Log(RTMP_LOGDEBUG, "%s, error", __FUNCTION__);
++      return 0;
++    }
++  BIO_free_all(b64);
++#endif
++  return 1;
++}
++
++#ifdef USE_POLARSSL
++#define md5sum(x,y,z)  md5(x,y,z);
++#elif defined(USE_GNUTLS)
++static void md5sum(const unsigned char *data, int len, unsigned char *out)
++{
++    struct md5_ctx ctx;
++    md5_init(&ctx);
++    md5_update(&ctx, len, data);
++    md5_digest(&ctx, MD5_DIGEST_LENGTH, out);
++}
++#else
++#define md5sum(x,y,z)  MD5(x,y,z);
++#endif
++
++static const AVal av_authmod_adobe = AVC("authmod=adobe");
++
++static int
++PublisherAuth(RTMP *r, AVal *description)
++{
++  char *token_in = NULL;
++  char *ptr;
++  unsigned char md5sum_val[MD5_DIGEST_LENGTH+1];
++  int challenge2_data;
++#define RESPONSE_LEN 32
++#define CHALLENGE2_LEN 16
++#define SALTED2_LEN (32+8+8+8)
++  char response[RESPONSE_LEN];
++  char challenge2[CHALLENGE2_LEN];
++  char salted2[SALTED2_LEN];
++  AVal pubToken;
++
++  if (strstr(description->av_val, av_authmod_adobe.av_val) != NULL)
++    {
++      if(strstr(description->av_val, "code=403 need auth") != NULL)
++        {
++            if (strstr(r->Link.app.av_val, av_authmod_adobe.av_val) != NULL) {
++              RTMP_Log(RTMP_LOGERROR, "%s, wrong pubUser & pubPasswd for publisher auth", __FUNCTION__);
++              r->Link.pFlags |= RTMP_PUB_CLEAN;
++              return 0;
++            } else if(r->Link.pubUser.av_len && r->Link.pubPasswd.av_len) {
++              pubToken.av_val = malloc(r->Link.pubUser.av_len + av_authmod_adobe.av_len + 8);
++              pubToken.av_len = sprintf(pubToken.av_val, "?%s&user=%s",
++                      av_authmod_adobe.av_val,
++                      r->Link.pubUser.av_val);
++              RTMP_Log(RTMP_LOGDEBUG, "%s, pubToken1: %s", __FUNCTION__, pubToken.av_val);
++              r->Link.pFlags |= RTMP_PUB_NAME;
++            } else {
++              RTMP_Log(RTMP_LOGERROR, "%s, need to set pubUser & pubPasswd for publisher auth", __FUNCTION__);
++              r->Link.pFlags |= RTMP_PUB_CLEAN;
++              return 0;
++            }
++        }
++      else if((token_in = strstr(description->av_val, "?reason=needauth")) != NULL)
++        {
++          char *par, *val = NULL, *orig_ptr;
++          char *user = NULL;
++          char *salt = NULL;
++          char *opaque = NULL;
++          char *challenge = NULL;
++          char *salted1;
++
++          ptr = orig_ptr = strdup(token_in);
++          while (ptr)
++            {
++              par = ptr;
++              ptr = strchr(par, '&');
++              if(ptr)
++                  *ptr++ = '\0';
++
++              val =  strchr(par, '=');
++              if(val)
++                  *val++ = '\0';
++
++              if (strcmp(par, "user") == 0){
++                  user = val;
++              } else if (strcmp(par, "salt") == 0){
++                  salt = val;
++              } else if (strcmp(par, "opaque") == 0){
++                  opaque = val;
++              } else if (strcmp(par, "challenge") == 0){
++                  challenge = val;
++              }
++
++              RTMP_Log(RTMP_LOGDEBUG, "%s, par:\"%s\" = val:\"%s\"", __FUNCTION__, par, val);
++            }
++
++            /* hash1 = base64enc(md5(user + _aodbeAuthSalt + password)) */
++            salted1 = malloc(strlen(user)+strlen(salt)+r->Link.pubPasswd.av_len+1);
++            strcpy(salted1, user);
++            strcat(salted1, salt);
++            strcat(salted1, r->Link.pubPasswd.av_val);
++            md5sum((unsigned char*) salted1, strlen(salted1), md5sum_val);
++            RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, salted1);
++            free(salted1);
++
++            RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
++
++            b64enc(md5sum_val, MD5_DIGEST_LENGTH, salted2, SALTED2_LEN);
++            RTMP_Log(RTMP_LOGDEBUG, "%s, b64(md5_1) = %s", __FUNCTION__, salted2);
++
++            srand( time(NULL) );
++            challenge2_data = rand();
++
++            b64enc((unsigned char *) &challenge2_data, sizeof(int), challenge2, CHALLENGE2_LEN);
++            RTMP_Log(RTMP_LOGDEBUG, "%s, b64(%d) = %s", __FUNCTION__, challenge2_data, challenge2);
++
++            /* response = base64enc(md5(hash1 + opaque + challenge2)) */
++            if (opaque)
++                strcat(salted2, opaque);
++            if (challenge)
++                strcat(salted2, challenge);
++            strcat(salted2, challenge2);
++
++            md5sum((unsigned char*) salted2, strlen(salted2), md5sum_val);
++            RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, salted2);
++            RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
++
++            b64enc(md5sum_val, MD5_DIGEST_LENGTH, response, RESPONSE_LEN);
++            RTMP_Log(RTMP_LOGDEBUG, "%s, b64(md5_2) = %s", __FUNCTION__, response);
++
++            /* have all hashes, create auth token for the end of app */
++            pubToken.av_val = malloc(32 + strlen(challenge2) + strlen(response) + (opaque ? strlen(opaque) : 0));
++            pubToken.av_len = sprintf(pubToken.av_val,
++                    "&challenge=%s&response=%s&opaque=%s",
++                    challenge2,
++                    response,
++                    opaque ? opaque : "");
++            RTMP_Log(RTMP_LOGDEBUG, "%s, pubToken2: %s", __FUNCTION__, pubToken.av_val);
++            free(orig_ptr);
++            r->Link.pFlags |= RTMP_PUB_RESP|RTMP_PUB_CLATE;
++        }
++      else if(strstr(description->av_val, "?reason=authfailed") != NULL)
++        {
++          RTMP_Log(RTMP_LOGERROR, "%s, Authentication failed: wrong password", __FUNCTION__);
++          r->Link.pFlags |= RTMP_PUB_CLEAN;
++          return 0;
++        }
++      else if(strstr(description->av_val, "?reason=nosuchuser") != NULL)
++        {
++          RTMP_Log(RTMP_LOGERROR, "%s, Authentication failed: no such user", __FUNCTION__);
++          r->Link.pFlags |= RTMP_PUB_CLEAN;
++          return 0;
++        }
++      else
++        {
++          RTMP_Log(RTMP_LOGERROR, "%s, Authentication failed: unknown auth mode: %s",
++                  __FUNCTION__, description->av_val);
++          r->Link.pFlags |= RTMP_PUB_CLEAN;
++          return 0;
++        }
++
++      ptr = malloc(r->Link.app.av_len + pubToken.av_len);
++      strncpy(ptr, r->Link.app.av_val, r->Link.app.av_len);
++      strncpy(ptr + r->Link.app.av_len, pubToken.av_val, pubToken.av_len);
++      r->Link.app.av_len += pubToken.av_len;
++      if(r->Link.pFlags & RTMP_PUB_ALLOC)
++          free(r->Link.app.av_val);
++      r->Link.app.av_val = ptr;
++
++      ptr = malloc(r->Link.tcUrl.av_len + pubToken.av_len);
++      strncpy(ptr, r->Link.tcUrl.av_val, r->Link.tcUrl.av_len);
++      strncpy(ptr + r->Link.tcUrl.av_len, pubToken.av_val, pubToken.av_len);
++      r->Link.tcUrl.av_len += pubToken.av_len;
++      if(r->Link.pFlags & RTMP_PUB_ALLOC)
++          free(r->Link.tcUrl.av_val);
++      r->Link.tcUrl.av_val = ptr;
++
++      free(pubToken.av_val);
++      r->Link.pFlags |= RTMP_PUB_ALLOC;
++
++      RTMP_Log(RTMP_LOGDEBUG, "%s, new app: %.*s tcUrl: %.*s playpath: %s", __FUNCTION__,
++              r->Link.app.av_len, r->Link.app.av_val,
++              r->Link.tcUrl.av_len, r->Link.tcUrl.av_val,
++              r->Link.playpath.av_val);
++    }
++  else
++    {
++      return 0;
++    }
++  return 1;
++}
++#endif
++
++
+ SAVC(onBWDone);
+ SAVC(onFCSubscribe);
+ SAVC(onFCUnsubscribe);
+@@ -2442,6 +2689,7 @@ SAVC(_error);
+ SAVC(close);
+ SAVC(code);
+ SAVC(level);
++SAVC(description);
+ SAVC(onStatus);
+ SAVC(playlist_ready);
+ static const AVal av_NetStream_Failed = AVC("NetStream.Failed");
+@@ -2460,6 +2708,8 @@ AVC("NetStream.Play.PublishNotify");
+ static const AVal av_NetStream_Play_UnpublishNotify =
+ AVC("NetStream.Play.UnpublishNotify");
+ static const AVal av_NetStream_Publish_Start = AVC("NetStream.Publish.Start");
++static const AVal av_NetConnection_Connect_Rejected =
++AVC("NetConnection.Connect.Rejected");
+ 
+ /* Returns 0 for OK/Failed/error, 1 for 'Stop or Complete' */
+ static int
+@@ -2601,12 +2851,73 @@ HandleInvoke(RTMP *r, const char *body, unsigned int nBodySize)
+     }
+   else if (AVMATCH(&method, &av__error))
+     {
++#ifdef CRYPTO
++      AVal methodInvoked = {0};
++      int i;
++
++      if (r->Link.protocol & RTMP_FEATURE_WRITE)
++        {
++          for (i=0; i<r->m_numCalls; i++)
++            {
++              if (r->m_methodCalls[i].num == txn)
++                {
++                  methodInvoked = r->m_methodCalls[i].name;
++                  AV_erase(r->m_methodCalls, &r->m_numCalls, i, FALSE);
++                  break;
++                }
++            }
++          if (!methodInvoked.av_val)
++            {
++              RTMP_Log(RTMP_LOGDEBUG, "%s, received result id %f without matching request",
++                    __FUNCTION__, txn);
++              goto leave;
++            }
++
++          RTMP_Log(RTMP_LOGDEBUG, "%s, received error for method call <%s>", __FUNCTION__,
++          methodInvoked.av_val);
++
++          if (AVMATCH(&methodInvoked, &av_connect))
++            {
++              AMFObject obj2;
++              AVal code, level, description;
++              AMFProp_GetObject(AMF_GetProp(&obj, NULL, 3), &obj2);
++              AMFProp_GetString(AMF_GetProp(&obj2, &av_code, -1), &code);
++              AMFProp_GetString(AMF_GetProp(&obj2, &av_level, -1), &level);
++              AMFProp_GetString(AMF_GetProp(&obj2, &av_description, -1), &description);
++              RTMP_Log(RTMP_LOGDEBUG, "%s, error description: %s", __FUNCTION__, description.av_val);
++              /* if PublisherAuth returns 1, then reconnect */
++              PublisherAuth(r, &description);
++            }
++        }
++      else
++        {
++          RTMP_Log(RTMP_LOGERROR, "rtmp server sent error");
++        }
++      free(methodInvoked.av_val);
++#else
+       RTMP_Log(RTMP_LOGERROR, "rtmp server sent error");
++#endif
+     }
+   else if (AVMATCH(&method, &av_close))
+     {
+       RTMP_Log(RTMP_LOGERROR, "rtmp server requested close");
+       RTMP_Close(r);
++#ifdef CRYPTO
++      if ((r->Link.protocol & RTMP_FEATURE_WRITE) &&
++              !(r->Link.pFlags & RTMP_PUB_CLEAN) &&
++              (  !(r->Link.pFlags & RTMP_PUB_NAME) ||
++                 !(r->Link.pFlags & RTMP_PUB_RESP) ||
++                 (r->Link.pFlags & RTMP_PUB_CLATE) ) )
++        {
++          /* clean later */
++          if(r->Link.pFlags & RTMP_PUB_CLATE)
++              r->Link.pFlags |= RTMP_PUB_CLEAN;
++          RTMP_Log(RTMP_LOGERROR, "authenticating publisher");
++
++          if (!RTMP_Connect(r, NULL) || !RTMP_ConnectStream(r, 0))
++              goto leave;
++       }
++#endif
+     }
+   else if (AVMATCH(&method, &av_onStatus))
+     {
+@@ -3695,9 +4006,6 @@ RTMP_Close(RTMP *r)
+   r->m_resplen = 0;
+   r->m_unackd = 0;
+ 
+-  free(r->Link.playpath0.av_val);
+-  r->Link.playpath0.av_val = NULL;
+-
+   if (r->Link.lFlags & RTMP_LF_FTCU)
+     {
+       free(r->Link.tcUrl.av_val);
+@@ -3706,6 +4014,20 @@ RTMP_Close(RTMP *r)
+     }
+ 
+ #ifdef CRYPTO
++  if (!(r->Link.protocol & RTMP_FEATURE_WRITE) || (r->Link.pFlags & RTMP_PUB_CLEAN))
++    {
++      free(r->Link.playpath0.av_val);
++      r->Link.playpath0.av_val = NULL;
++    }
++  if ((r->Link.protocol & RTMP_FEATURE_WRITE) &&
++      (r->Link.pFlags & RTMP_PUB_CLEAN) &&
++      (r->Link.pFlags & RTMP_PUB_ALLOC))
++    {
++      free(r->Link.app.av_val);
++      r->Link.app.av_val = NULL;
++      free(r->Link.tcUrl.av_val);
++      r->Link.tcUrl.av_val = NULL;
++    }
+   if (r->Link.dh)
+     {
+       MDH_free(r->Link.dh);
+@@ -3721,6 +4043,9 @@ RTMP_Close(RTMP *r)
+       RC4_free(r->Link.rc4keyOut);
+       r->Link.rc4keyOut = NULL;
+     }
++#else
++  free(r->Link.playpath0.av_val);
++  r->Link.playpath0.av_val = NULL;
+ #endif
+ }
+ 
+diff --git a/librtmp/rtmp.h b/librtmp/rtmp.h
+index 8cb6e45..d723070 100644
+--- a/librtmp/rtmp.h
++++ b/librtmp/rtmp.h
+@@ -157,6 +157,8 @@ extern "C"
+     AVal subscribepath;
+     AVal usherToken;
+     AVal token;
++    AVal pubUser;
++    AVal pubPasswd;
+     AMFObject extras;
+     int edepth;
+ 
+@@ -176,6 +178,13 @@ extern "C"
+     int protocol;
+     int timeout;		/* connection timeout in seconds */
+ 
++#define RTMP_PUB_NAME   0x0001  /* send login to server */
++#define RTMP_PUB_RESP   0x0002  /* send salted password hash */
++#define RTMP_PUB_ALLOC  0x0004  /* allocated data for new tcUrl & app */
++#define RTMP_PUB_CLEAN  0x0008  /* need to free allocated data for newer tcUrl & app at exit */
++#define RTMP_PUB_CLATE  0x0010  /* late clean tcUrl & app at exit */
++    int pFlags;
++
+     unsigned short socksport;
+     unsigned short port;
+ 
+-- 
+1.7.10.4
+
+
+From 9ecf540e4d5bdc85c17668fa7ead93cc375111ca Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Axelsson?= <bjorn.axelsson@intinor.se>
+Date: Tue, 20 Mar 2012 19:12:23 +0200
+Subject: [PATCH 56/64] Add support for limelight authentication
+
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 391a3b4..5ea1c76 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -2511,6 +2511,18 @@ static void md5sum(const unsigned char *data, int len, unsigned char *out)
+ #endif
+ 
+ static const AVal av_authmod_adobe = AVC("authmod=adobe");
++static const AVal av_authmod_llnw  = AVC("authmod=llnw");
++
++static char *hexenc(unsigned char *inbuf, int len)
++{
++    char *dst = malloc(len * 2 + 1), *ptr = dst;
++    while(len--) {
++        sprintf(ptr, "%02x", *inbuf++);
++        ptr += 2;
++    }
++    *ptr = '\0';
++    return dst;
++}
+ 
+ static int
+ PublisherAuth(RTMP *r, AVal *description)
+@@ -2671,6 +2683,178 @@ PublisherAuth(RTMP *r, AVal *description)
+               r->Link.tcUrl.av_len, r->Link.tcUrl.av_val,
+               r->Link.playpath.av_val);
+     }
++  else if (strstr(description->av_val, av_authmod_llnw.av_val) != NULL)
++    {
++      if(strstr(description->av_val, "code=403 need auth") != NULL)
++        {
++            /* This part seems to be the same for llnw and adobe */
++
++            if (strstr(r->Link.app.av_val, av_authmod_llnw.av_val) != NULL) {
++              RTMP_Log(RTMP_LOGERROR, "%s, wrong pubUser & pubPasswd for publisher auth", __FUNCTION__);
++              r->Link.pFlags |= RTMP_PUB_CLEAN;
++              return 0;
++            } else if(r->Link.pubUser.av_len && r->Link.pubPasswd.av_len) {
++              pubToken.av_val = malloc(r->Link.pubUser.av_len + av_authmod_llnw.av_len + 8);
++              pubToken.av_len = sprintf(pubToken.av_val, "?%s&user=%s",
++                      av_authmod_llnw.av_val,
++                      r->Link.pubUser.av_val);
++              RTMP_Log(RTMP_LOGDEBUG, "%s, pubToken1: %s", __FUNCTION__, pubToken.av_val);
++              r->Link.pFlags |= RTMP_PUB_NAME;
++            } else {
++              RTMP_Log(RTMP_LOGERROR, "%s, need to set pubUser & pubPasswd for publisher auth", __FUNCTION__);
++              r->Link.pFlags |= RTMP_PUB_CLEAN;
++              return 0;
++            }
++        }
++      else if((token_in = strstr(description->av_val, "?reason=needauth")) != NULL)
++        {
++          char *orig_ptr;
++          char *par, *val = NULL;
++          char *user = NULL;
++          char *nonce = NULL;
++
++          ptr = orig_ptr = strdup(token_in);
++          /* Extract parameters (we need user and nonce) */
++          while (ptr)
++            {
++              par = ptr;
++              ptr = strchr(par, '&');
++              if(ptr)
++                  *ptr++ = '\0';
++
++              val =  strchr(par, '=');
++              if(val)
++                  *val++ = '\0';
++
++              if (strcmp(par, "user") == 0){
++                  user = val;
++              } else if (strcmp(par, "nonce") == 0){
++                  nonce = val;
++              }
++
++              RTMP_Log(RTMP_LOGDEBUG, "%s, par:\"%s\" = val:\"%s\"", __FUNCTION__, par, val);
++            }
++
++          // FIXME: handle case where user==NULL or nonce==NULL
++
++          /* llnw auth method
++           * Seems to be closely based on HTTP Digest Auth:
++           *    http://tools.ietf.org/html/rfc2617
++           *    http://en.wikipedia.org/wiki/Digest_access_authentication
++           */
++
++          const char *authmod = "llnw";
++          const char *realm = "live";
++          const char *method = "publish";
++          const char *qop = "auth";
++          char *tmpbuf;
++
++          /* nc = 1..connection count (or rather, number of times cnonce has been reused) */
++          int nc = 1;
++          /* nchex = hexenc(nc) (8 hex digits according to RFC 2617) */
++          char nchex[9];
++          sprintf(nchex, "%08x", nc);
++          /* cnonce = hexenc(4 random bytes) (initialized on first connection) */
++          char cnonce[9];
++          srand( time(NULL) ); // FIXME: a lib shouldn't call srand()
++          sprintf(cnonce, "%08x", rand());
++
++          /* hash1 = hexenc(md5(user + ":" + realm + ":" + password)) */
++          tmpbuf = malloc(strlen(user) + 1 + strlen(realm) + 1 + r->Link.pubPasswd.av_len + 1);
++          sprintf(tmpbuf, "%s:%s:%s", user, realm, r->Link.pubPasswd.av_val);
++          md5sum((unsigned char*)tmpbuf, strlen(tmpbuf), md5sum_val);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, tmpbuf);
++          RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
++          free(tmpbuf);
++          char *hash1 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
++
++          /* hash2 = hexenc(md5(method + ":/" + app + "/" + appInstance)) */
++          /* Extract appname + appinstance without query parameters */
++          char *apptmp = malloc(r->Link.app.av_len + 1), *qpos;
++          memcpy(apptmp, r->Link.app.av_val, r->Link.app.av_len);
++          apptmp[r->Link.app.av_len] = '\0';
++          if((qpos = strchr(apptmp, '?')))
++              *qpos = '\0';
++
++          tmpbuf = malloc(strlen(method) + 2 + strlen(apptmp) + 1);
++          sprintf(tmpbuf, "%s:/%s", method, apptmp);
++          md5sum((unsigned char*)tmpbuf, strlen(tmpbuf), md5sum_val);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, tmpbuf);
++          RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
++          free(tmpbuf);
++          char *hash2 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
++
++          free(apptmp);
++
++          /* hash3 = hexenc(md5(hash1 + ":" + nonce + ":" + nchex + ":" + cnonce + ":" + qop + ":" + hash2)) */
++          tmpbuf = malloc(strlen(hash1) + 1 + strlen(nonce) + 1 + strlen(nchex) + 1 + strlen(cnonce) + 1 + strlen(qop) + 1 + strlen(hash2) + 1);
++          sprintf(tmpbuf, "%s:%s:%s:%s:%s:%s", hash1, nonce, nchex, cnonce, qop, hash2);
++          md5sum((unsigned char*)tmpbuf, strlen(tmpbuf), md5sum_val);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, tmpbuf);
++          RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
++          free(tmpbuf);
++          char *hash3 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
++
++          /* pubToken = &authmod=<authmod>&user=<username>&nonce=<nonce>&cnonce=<cnonce>&nc=<nchex>&response=<hash3> */
++          /* Append nonces and response to query string which already contains
++           * user + authmod */
++          pubToken.av_val = malloc(64 + strlen(authmod) + strlen(user) + strlen(nonce) + strlen(cnonce) + strlen(nchex) + strlen(hash3));
++          sprintf(pubToken.av_val,
++                  "&nonce=%s&cnonce=%s&nc=%s&response=%s",
++                  nonce, cnonce, nchex, hash3);
++          pubToken.av_len = strlen(pubToken.av_val);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, pubToken2: %s", __FUNCTION__, pubToken.av_val);
++          r->Link.pFlags |= RTMP_PUB_RESP|RTMP_PUB_CLATE;
++
++          free(hash1);
++          free(hash2);
++          free(hash3);
++          free(orig_ptr);
++        }
++      else if(strstr(description->av_val, "?reason=authfail") != NULL)
++        {
++          RTMP_Log(RTMP_LOGERROR, "%s, Authentication failed", __FUNCTION__);
++          r->Link.pFlags |= RTMP_PUB_CLEAN;
++          return 0;
++        }
++      else if(strstr(description->av_val, "?reason=nosuchuser") != NULL)
++        {
++          RTMP_Log(RTMP_LOGERROR, "%s, Authentication failed: no such user", __FUNCTION__);
++          r->Link.pFlags |= RTMP_PUB_CLEAN;
++          return 0;
++        }
++      else
++        {
++          RTMP_Log(RTMP_LOGERROR, "%s, Authentication failed: unknown auth mode: %s",
++                  __FUNCTION__, description->av_val);
++          r->Link.pFlags |= RTMP_PUB_CLEAN;
++          return 0;
++        }
++
++      ptr = malloc(r->Link.app.av_len + pubToken.av_len);
++      strncpy(ptr, r->Link.app.av_val, r->Link.app.av_len);
++      strncpy(ptr + r->Link.app.av_len, pubToken.av_val, pubToken.av_len);
++      r->Link.app.av_len += pubToken.av_len;
++      if(r->Link.pFlags & RTMP_PUB_ALLOC)
++          free(r->Link.app.av_val);
++      r->Link.app.av_val = ptr;
++
++      ptr = malloc(r->Link.tcUrl.av_len + pubToken.av_len);
++      strncpy(ptr, r->Link.tcUrl.av_val, r->Link.tcUrl.av_len);
++      strncpy(ptr + r->Link.tcUrl.av_len, pubToken.av_val, pubToken.av_len);
++      r->Link.tcUrl.av_len += pubToken.av_len;
++      if(r->Link.pFlags & RTMP_PUB_ALLOC)
++          free(r->Link.tcUrl.av_val);
++      r->Link.tcUrl.av_val = ptr;
++
++      free(pubToken.av_val);
++      r->Link.pFlags |= RTMP_PUB_ALLOC;
++
++      RTMP_Log(RTMP_LOGDEBUG, "%s, new app: %.*s tcUrl: %.*s playpath: %s", __FUNCTION__,
++              r->Link.app.av_len, r->Link.app.av_val,
++              r->Link.tcUrl.av_len, r->Link.tcUrl.av_val,
++              r->Link.playpath.av_val);
++    }
+   else
+     {
+       return 0;
+-- 
+1.7.10.4
+
+
+From 883c33489403ed360a01d1a47ec76d476525b49e Mon Sep 17 00:00:00 2001
+From: LRN <lrn1986@gmail.com>
+Date: Sat, 5 May 2012 21:15:36 +0400
+Subject: [PATCH 57/64] Fix dll name to have SO_VERSION
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+subj is attached
+
+Changes librtmp.dll into librtmp-$(SO_VERSION).dll, the same form that
+libtool uses.
+librtmp.dll is still created from librtmp-$(SO_VERSION).dll via `ln
+- -sf'; obviously, it makes a hardlink when called in MSYS, but that's
+no worse than what we have right now.
+
+Please, CC me, since i'm not subscibed to this list
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (MingW32)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iQEcBAEBAgAGBQJPpWA2AAoJEOs4Jb6SI2Cw+xIH/jqI7SbM1nMHBhFDSDtDFxim
+zzlX5zsU9Ss45ZX9VMdzXLSDvxsuB6a97svMlipU2HOs4Ba1rcO8fdNII/8lD7nt
+yIWiGDcyZNXP7xBXJOVahYwzDzpyGhOychl2XlgW8/9lY7V1DYFjlPUSWdfw8IH0
+iUX6PKMjrN3n4TTIh1kTwG0YHBRq2JdsRAaTB1uQDwBwNFkNPegWTO8oVvtlb1sc
+gxhmN08o/S7nWAJRs5+Ah9eYSvWJral5yzIcxeOISGkZJxLs16F0b5iVtd2J1xN4
+3mNQH4W3n7q/EcsF18/UwI8VjcAZnyCXMGI1VXp9frFEvm8//Bv9jSrWKfrZPwI=
+=/n61
+-----END PGP SIGNATURE-----
+
+From 4d885c0ef9eab89ec7ed1383fd5cba5587a6a311 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A0=D1=83=D1=81=D0=BB=D0=B0=D0=BD=20=D0=98=D0=B6=D0=B1=D1?=
+ =?UTF-8?q?=83=D0=BB=D0=B0=D1=82=D0=BE=D0=B2?= <lrn1986@gmail.com>
+Date: Sat, 5 May 2012 21:05:30 +0400
+Subject: [PATCH] Fix dll name to have SO_VERSION
+
+diff --git a/librtmp/Makefile b/librtmp/Makefile
+index 74ee3b5..96c076b 100644
+--- a/librtmp/Makefile
++++ b/librtmp/Makefile
+@@ -39,11 +39,11 @@ CRYPTO_DEF=$(DEF_$(CRYPTO))
+ SO_VERSION=0
+ SOX_posix=so
+ SOX_darwin=dylib
+-SOX_mingw=so	# useless
++SOX_mingw=dll
+ SOX=$(SOX_$(SYS))
+-SO_posix=$(SOX).$(SO_VERSION)
+-SO_darwin=$(SO_VERSION).$(SOX)
+-SO_mingw=dll
++SO_posix=.$(SOX).$(SO_VERSION)
++SO_darwin=.$(SO_VERSION).$(SOX)
++SO_mingw=-$(SO_VERSION).$(SOX)
+ SO_EXT=$(SO_$(SYS))
+ 
+ SODIR_posix=$(LIBDIR)
+@@ -64,7 +64,7 @@ INSTALL_IMPLIB=$(INSTALL_IMPLIB_$(SYS))
+ 
+ SHARED=yes
+ SODEF_yes=-fPIC
+-SOLIB_yes=librtmp.$(SO_EXT)
++SOLIB_yes=librtmp$(SO_EXT)
+ SOINST_yes=install_so
+ SO_DEF=$(SODEF_$(SHARED))
+ SO_LIB=$(SOLIB_$(SHARED))
+@@ -81,12 +81,12 @@ OBJS=rtmp.o log.o amf.o hashswf.o parseurl.o
+ all:	librtmp.a $(SO_LIB)
+ 
+ clean:
+-	rm -f *.o *.a *.$(SOX) *.$(SO_EXT) librtmp.pc
++	rm -f *.o *.a *.$(SOX) *$(SO_EXT) librtmp.pc
+ 
+ librtmp.a: $(OBJS)
+ 	$(AR) rs $@ $?
+ 
+-librtmp.$(SO_EXT): $(OBJS)
++librtmp$(SO_EXT): $(OBJS)
+ 	$(CC) $(SO_LDFLAGS) $(LDFLAGS) -o $@ $^ $> $(CRYPTO_LIB)
+ 	ln -sf $@ librtmp.$(SOX)
+ 
+@@ -111,8 +111,8 @@ install_base:	librtmp.a librtmp.pc
+ 	cp librtmp.pc $(LIBDIR)/pkgconfig
+ 	cp librtmp.3 $(MANDIR)/man3
+ 
+-install_so:	librtmp.$(SO_EXT)
+-	cp librtmp.$(SO_EXT) $(SODIR)
++install_so:	librtmp$(SO_EXT)
++	cp librtmp$(SO_EXT) $(SODIR)
+ 	$(INSTALL_IMPLIB)
+-	cd $(SODIR); ln -sf librtmp.$(SO_EXT) librtmp.$(SOX)
++	cd $(SODIR); ln -sf librtmp$(SO_EXT) librtmp.$(SOX)
+ 
+-- 
+1.7.10.4
+
+
+From e42b5d0926b1a668d7fbd794a70f31040c5f198d Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 30 Oct 2012 11:17:41 -0700
+Subject: [PATCH 58/64] Cleanup authentication code
+
+from commit 9ecf540e4d5bdc85c17668fa7ead93cc375111ca
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 5ea1c76..6d04708 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -2497,17 +2497,16 @@ b64enc(const unsigned char *input, int length, char *output, int maxsize)
+ }
+ 
+ #ifdef USE_POLARSSL
+-#define md5sum(x,y,z)  md5(x,y,z);
++#define MD5_CTX	md5_context
++#define MD5_Init(ctx)	md5_starts(ctx)
++#define MD5_Update(ctx,data,len)	md5_update(ctx,data,len)
++#define MD5_Final(dig,ctx)	md5_finish(ctx,dig)
+ #elif defined(USE_GNUTLS)
+-static void md5sum(const unsigned char *data, int len, unsigned char *out)
+-{
+-    struct md5_ctx ctx;
+-    md5_init(&ctx);
+-    md5_update(&ctx, len, data);
+-    md5_digest(&ctx, MD5_DIGEST_LENGTH, out);
+-}
++typedef struct md5_ctx	MD5_CTX
++#define MD5_Init(ctx)	md5_init(ctx)
++#define MD5_Update(ctx,data,len)	md5_update(ctx,len,data)
++#define MD5_Final(dig,ctx)	md5_digest(ctx,MD5_DIGEST_LENGTH,dig)
+ #else
+-#define md5sum(x,y,z)  MD5(x,y,z);
+ #endif
+ 
+ static const AVal av_authmod_adobe = AVC("authmod=adobe");
+@@ -2530,10 +2529,14 @@ PublisherAuth(RTMP *r, AVal *description)
+   char *token_in = NULL;
+   char *ptr;
+   unsigned char md5sum_val[MD5_DIGEST_LENGTH+1];
++  MD5_CTX md5ctx;
+   int challenge2_data;
+ #define RESPONSE_LEN 32
+ #define CHALLENGE2_LEN 16
+ #define SALTED2_LEN (32+8+8+8)
++#define B64DIGEST_LEN	22	/* 16 byte digest => 22 b64 chars */
++#define B64INT_LEN	6	/* 4 byte int => 6 b64 chars */
++#define HEXHASH_LEN	(2*MD5_DIGEST_LENGTH)
+   char response[RESPONSE_LEN];
+   char challenge2[CHALLENGE2_LEN];
+   char salted2[SALTED2_LEN];
+@@ -2563,11 +2566,9 @@ PublisherAuth(RTMP *r, AVal *description)
+       else if((token_in = strstr(description->av_val, "?reason=needauth")) != NULL)
+         {
+           char *par, *val = NULL, *orig_ptr;
+-          char *user = NULL;
+-          char *salt = NULL;
+-          char *opaque = NULL;
+-          char *challenge = NULL;
+-          char *salted1;
++	  AVal user, salt, opaque, challenge, *aptr = NULL;
++	  opaque.av_len = 0;
++	  challenge.av_len = 0;
+ 
+           ptr = orig_ptr = strdup(token_in);
+           while (ptr)
+@@ -2581,60 +2582,72 @@ PublisherAuth(RTMP *r, AVal *description)
+               if(val)
+                   *val++ = '\0';
+ 
++	      if (aptr) {
++		aptr->av_len = par - aptr->av_val - 1;
++		aptr = NULL;
++	      }
+               if (strcmp(par, "user") == 0){
+-                  user = val;
++                  user.av_val = val;
++		  aptr = &user;
+               } else if (strcmp(par, "salt") == 0){
+-                  salt = val;
++                  salt.av_val = val;
++		  aptr = &salt;
+               } else if (strcmp(par, "opaque") == 0){
+-                  opaque = val;
++                  opaque.av_val = val;
++		  aptr = &opaque;
+               } else if (strcmp(par, "challenge") == 0){
+-                  challenge = val;
++                  challenge.av_val = val;
++		  aptr = &challenge;
+               }
+ 
+               RTMP_Log(RTMP_LOGDEBUG, "%s, par:\"%s\" = val:\"%s\"", __FUNCTION__, par, val);
+             }
++	  if (aptr)
++	    aptr->av_len = strlen(aptr->av_val);
++
++	  /* hash1 = base64enc(md5(user + _aodbeAuthSalt + password)) */
++	  MD5_Init(&md5ctx);
++	  MD5_Update(&md5ctx, user.av_val, user.av_len);
++	  MD5_Update(&md5ctx, salt.av_val, salt.av_len);
++	  MD5_Update(&md5ctx, r->Link.pubPasswd.av_val, r->Link.pubPasswd.av_len);
++	  MD5_Final(md5sum_val, &md5ctx);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s%s%s) =>", __FUNCTION__,
++	    user.av_val, salt.av_val, r->Link.pubPasswd.av_val);
++          RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
+ 
+-            /* hash1 = base64enc(md5(user + _aodbeAuthSalt + password)) */
+-            salted1 = malloc(strlen(user)+strlen(salt)+r->Link.pubPasswd.av_len+1);
+-            strcpy(salted1, user);
+-            strcat(salted1, salt);
+-            strcat(salted1, r->Link.pubPasswd.av_val);
+-            md5sum((unsigned char*) salted1, strlen(salted1), md5sum_val);
+-            RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, salted1);
+-            free(salted1);
+-
+-            RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
+-
+-            b64enc(md5sum_val, MD5_DIGEST_LENGTH, salted2, SALTED2_LEN);
+-            RTMP_Log(RTMP_LOGDEBUG, "%s, b64(md5_1) = %s", __FUNCTION__, salted2);
++          b64enc(md5sum_val, MD5_DIGEST_LENGTH, salted2, SALTED2_LEN);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, b64(md5_1) = %s", __FUNCTION__, salted2);
+ 
+-            srand( time(NULL) );
++	/* FIXME: what byte order does this depend on? */
+             challenge2_data = rand();
+ 
+             b64enc((unsigned char *) &challenge2_data, sizeof(int), challenge2, CHALLENGE2_LEN);
+             RTMP_Log(RTMP_LOGDEBUG, "%s, b64(%d) = %s", __FUNCTION__, challenge2_data, challenge2);
+ 
++	  MD5_Init(&md5ctx);
++	  MD5_Update(&md5ctx, salted2, B64DIGEST_LEN);
+             /* response = base64enc(md5(hash1 + opaque + challenge2)) */
+-            if (opaque)
+-                strcat(salted2, opaque);
+-            if (challenge)
+-                strcat(salted2, challenge);
+-            strcat(salted2, challenge2);
+-
+-            md5sum((unsigned char*) salted2, strlen(salted2), md5sum_val);
+-            RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, salted2);
+-            RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
++	  if (opaque.av_len)
++	    MD5_Update(&md5ctx, opaque.av_val, opaque.av_len);
++	  if (challenge.av_len)
++	    MD5_Update(&md5ctx, challenge.av_val, challenge.av_len);
++	  MD5_Update(&md5ctx, challenge2, B64INT_LEN);
++	  MD5_Final(md5sum_val, &md5ctx);
++
++          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s%s%s) =>", __FUNCTION__,
++	    salted2, opaque.av_len ? opaque.av_val : "", challenge2);
++          RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
+ 
+-            b64enc(md5sum_val, MD5_DIGEST_LENGTH, response, RESPONSE_LEN);
+-            RTMP_Log(RTMP_LOGDEBUG, "%s, b64(md5_2) = %s", __FUNCTION__, response);
++          b64enc(md5sum_val, MD5_DIGEST_LENGTH, response, RESPONSE_LEN);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, b64(md5_2) = %s", __FUNCTION__, response);
+ 
+             /* have all hashes, create auth token for the end of app */
+-            pubToken.av_val = malloc(32 + strlen(challenge2) + strlen(response) + (opaque ? strlen(opaque) : 0));
++            pubToken.av_val = malloc(32 + B64INT_LEN + B64DIGEST_LEN + opaque.av_len);
+             pubToken.av_len = sprintf(pubToken.av_val,
+                     "&challenge=%s&response=%s&opaque=%s",
+                     challenge2,
+                     response,
+-                    opaque ? opaque : "");
++                    opaque.av_len ? opaque.av_val : "");
+             RTMP_Log(RTMP_LOGDEBUG, "%s, pubToken2: %s", __FUNCTION__, pubToken.av_val);
+             free(orig_ptr);
+             r->Link.pFlags |= RTMP_PUB_RESP|RTMP_PUB_CLATE;
+@@ -2710,8 +2723,26 @@ PublisherAuth(RTMP *r, AVal *description)
+         {
+           char *orig_ptr;
+           char *par, *val = NULL;
+-          char *user = NULL;
+-          char *nonce = NULL;
++	  char *hash1, *hash2, *hash3;
++	  AVal user, nonce, *aptr = NULL;
++	  AVal apptmp;
++
++          /* llnw auth method
++           * Seems to be closely based on HTTP Digest Auth:
++           *    http://tools.ietf.org/html/rfc2617
++           *    http://en.wikipedia.org/wiki/Digest_access_authentication
++           */
++
++          const char authmod[] = "llnw";
++          const char realm[] = "live";
++          const char method[] = "publish";
++          const char qop[] = "auth";
++          /* nc = 1..connection count (or rather, number of times cnonce has been reused) */
++          int nc = 1;
++          /* nchex = hexenc(nc) (8 hex digits according to RFC 2617) */
++          char nchex[9];
++          /* cnonce = hexenc(4 random bytes) (initialized on first connection) */
++          char cnonce[9];
+ 
+           ptr = orig_ptr = strdup(token_in);
+           /* Extract parameters (we need user and nonce) */
+@@ -2726,82 +2757,84 @@ PublisherAuth(RTMP *r, AVal *description)
+               if(val)
+                   *val++ = '\0';
+ 
++	      if (aptr) {
++		aptr->av_len = par - aptr->av_val - 1;
++		aptr = NULL;
++	      }
+               if (strcmp(par, "user") == 0){
+-                  user = val;
++                user.av_val = val;
++		aptr = &user;
+               } else if (strcmp(par, "nonce") == 0){
+-                  nonce = val;
++                nonce.av_val = val;
++		aptr = &nonce;
+               }
+ 
+               RTMP_Log(RTMP_LOGDEBUG, "%s, par:\"%s\" = val:\"%s\"", __FUNCTION__, par, val);
+             }
++	  if (aptr)
++	    aptr->av_len = strlen(aptr->av_val);
+ 
+-          // FIXME: handle case where user==NULL or nonce==NULL
+-
+-          /* llnw auth method
+-           * Seems to be closely based on HTTP Digest Auth:
+-           *    http://tools.ietf.org/html/rfc2617
+-           *    http://en.wikipedia.org/wiki/Digest_access_authentication
+-           */
+-
+-          const char *authmod = "llnw";
+-          const char *realm = "live";
+-          const char *method = "publish";
+-          const char *qop = "auth";
+-          char *tmpbuf;
++          /* FIXME: handle case where user==NULL or nonce==NULL */
+ 
+-          /* nc = 1..connection count (or rather, number of times cnonce has been reused) */
+-          int nc = 1;
+-          /* nchex = hexenc(nc) (8 hex digits according to RFC 2617) */
+-          char nchex[9];
+           sprintf(nchex, "%08x", nc);
+-          /* cnonce = hexenc(4 random bytes) (initialized on first connection) */
+-          char cnonce[9];
+-          srand( time(NULL) ); // FIXME: a lib shouldn't call srand()
+           sprintf(cnonce, "%08x", rand());
+ 
+           /* hash1 = hexenc(md5(user + ":" + realm + ":" + password)) */
+-          tmpbuf = malloc(strlen(user) + 1 + strlen(realm) + 1 + r->Link.pubPasswd.av_len + 1);
+-          sprintf(tmpbuf, "%s:%s:%s", user, realm, r->Link.pubPasswd.av_val);
+-          md5sum((unsigned char*)tmpbuf, strlen(tmpbuf), md5sum_val);
+-          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, tmpbuf);
++	  MD5_Init(&md5ctx);
++	  MD5_Update(&md5ctx, user.av_val, user.av_len);
++	  MD5_Update(&md5ctx, ":", 1);
++	  MD5_Update(&md5ctx, realm, sizeof(realm)-1);
++	  MD5_Update(&md5ctx, ":", 1);
++	  MD5_Update(&md5ctx, r->Link.pubPasswd.av_val, r->Link.pubPasswd.av_len);
++	  MD5_Final(md5sum_val, &md5ctx);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s:%s:%s) =>", __FUNCTION__,
++	    user.av_val, realm, r->Link.pubPasswd.av_val);
+           RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
+-          free(tmpbuf);
+-          char *hash1 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
++          hash1 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
+ 
+           /* hash2 = hexenc(md5(method + ":/" + app + "/" + appInstance)) */
+           /* Extract appname + appinstance without query parameters */
+-          char *apptmp = malloc(r->Link.app.av_len + 1), *qpos;
+-          memcpy(apptmp, r->Link.app.av_val, r->Link.app.av_len);
+-          apptmp[r->Link.app.av_len] = '\0';
+-          if((qpos = strchr(apptmp, '?')))
+-              *qpos = '\0';
+-
+-          tmpbuf = malloc(strlen(method) + 2 + strlen(apptmp) + 1);
+-          sprintf(tmpbuf, "%s:/%s", method, apptmp);
+-          md5sum((unsigned char*)tmpbuf, strlen(tmpbuf), md5sum_val);
+-          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, tmpbuf);
++	  apptmp = r->Link.app;
++	  ptr = strchr(apptmp.av_val, '?');
++	  if (ptr)
++	    apptmp.av_len = ptr - apptmp.av_val;
++
++	  MD5_Init(&md5ctx);
++	  MD5_Update(&md5ctx, method, sizeof(method)-1);
++	  MD5_Update(&md5ctx, ":/", 2);
++	  MD5_Update(&md5ctx, apptmp.av_val, apptmp.av_len);
++	  MD5_Final(md5sum_val, &md5ctx);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s:/%.*s) =>", __FUNCTION__,
++	    method, apptmp.av_len, apptmp.av_val);
+           RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
+-          free(tmpbuf);
+-          char *hash2 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
+-
+-          free(apptmp);
++          hash2 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
+ 
+           /* hash3 = hexenc(md5(hash1 + ":" + nonce + ":" + nchex + ":" + cnonce + ":" + qop + ":" + hash2)) */
+-          tmpbuf = malloc(strlen(hash1) + 1 + strlen(nonce) + 1 + strlen(nchex) + 1 + strlen(cnonce) + 1 + strlen(qop) + 1 + strlen(hash2) + 1);
+-          sprintf(tmpbuf, "%s:%s:%s:%s:%s:%s", hash1, nonce, nchex, cnonce, qop, hash2);
+-          md5sum((unsigned char*)tmpbuf, strlen(tmpbuf), md5sum_val);
+-          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s) =>", __FUNCTION__, tmpbuf);
++	  MD5_Init(&md5ctx);
++	  MD5_Update(&md5ctx, hash1, HEXHASH_LEN);
++	  MD5_Update(&md5ctx, ":", 1);
++	  MD5_Update(&md5ctx, nonce.av_val, nonce.av_len);
++	  MD5_Update(&md5ctx, ":", 1);
++	  MD5_Update(&md5ctx, nchex, sizeof(nchex)-1);
++	  MD5_Update(&md5ctx, ":", 1);
++	  MD5_Update(&md5ctx, cnonce, sizeof(cnonce)-1);
++	  MD5_Update(&md5ctx, ":", 1);
++	  MD5_Update(&md5ctx, qop, sizeof(qop)-1);
++	  MD5_Update(&md5ctx, ":", 1);
++	  MD5_Update(&md5ctx, hash2, HEXHASH_LEN);
++	  MD5_Final(md5sum_val, &md5ctx);
++          RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s:%s:%s:%s:%s:%s) =>", __FUNCTION__,
++	    hash1, nonce.av_val, nchex, cnonce, qop, hash2);
+           RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
+-          free(tmpbuf);
+-          char *hash3 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
++          hash3 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
+ 
+           /* pubToken = &authmod=<authmod>&user=<username>&nonce=<nonce>&cnonce=<cnonce>&nc=<nchex>&response=<hash3> */
+           /* Append nonces and response to query string which already contains
+            * user + authmod */
+-          pubToken.av_val = malloc(64 + strlen(authmod) + strlen(user) + strlen(nonce) + strlen(cnonce) + strlen(nchex) + strlen(hash3));
++          pubToken.av_val = malloc(64 + sizeof(authmod)-1 + user.av_len + nonce.av_len + sizeof(cnonce)-1 + sizeof(nchex)-1 + HEXHASH_LEN);
+           sprintf(pubToken.av_val,
+                   "&nonce=%s&cnonce=%s&nc=%s&response=%s",
+-                  nonce, cnonce, nchex, hash3);
++                  nonce.av_val, cnonce, nchex, hash3);
+           pubToken.av_len = strlen(pubToken.av_val);
+           RTMP_Log(RTMP_LOGDEBUG, "%s, pubToken2: %s", __FUNCTION__, pubToken.av_val);
+           r->Link.pFlags |= RTMP_PUB_RESP|RTMP_PUB_CLATE;
+-- 
+1.7.10.4
+
+
+From 1f6c6434d6794b3ba14540a141bab358eba48b13 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 30 Oct 2012 11:30:07 -0700
+Subject: [PATCH 59/64] More authentication cleanup
+
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 6d04708..4858e24 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -2512,15 +2512,14 @@ typedef struct md5_ctx	MD5_CTX
+ static const AVal av_authmod_adobe = AVC("authmod=adobe");
+ static const AVal av_authmod_llnw  = AVC("authmod=llnw");
+ 
+-static char *hexenc(unsigned char *inbuf, int len)
++static void hexenc(unsigned char *inbuf, int len, char *dst)
+ {
+-    char *dst = malloc(len * 2 + 1), *ptr = dst;
++    char *ptr = dst;
+     while(len--) {
+         sprintf(ptr, "%02x", *inbuf++);
+         ptr += 2;
+     }
+     *ptr = '\0';
+-    return dst;
+ }
+ 
+ static int
+@@ -2723,7 +2722,7 @@ PublisherAuth(RTMP *r, AVal *description)
+         {
+           char *orig_ptr;
+           char *par, *val = NULL;
+-	  char *hash1, *hash2, *hash3;
++	  char hash1[HEXHASH_LEN+1], hash2[HEXHASH_LEN+1], hash3[HEXHASH_LEN+1];
+ 	  AVal user, nonce, *aptr = NULL;
+ 	  AVal apptmp;
+ 
+@@ -2790,7 +2789,7 @@ PublisherAuth(RTMP *r, AVal *description)
+           RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s:%s:%s) =>", __FUNCTION__,
+ 	    user.av_val, realm, r->Link.pubPasswd.av_val);
+           RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
+-          hash1 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
++          hexenc(md5sum_val, MD5_DIGEST_LENGTH, hash1);
+ 
+           /* hash2 = hexenc(md5(method + ":/" + app + "/" + appInstance)) */
+           /* Extract appname + appinstance without query parameters */
+@@ -2807,7 +2806,7 @@ PublisherAuth(RTMP *r, AVal *description)
+           RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s:/%.*s) =>", __FUNCTION__,
+ 	    method, apptmp.av_len, apptmp.av_val);
+           RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
+-          hash2 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
++          hexenc(md5sum_val, MD5_DIGEST_LENGTH, hash2);
+ 
+           /* hash3 = hexenc(md5(hash1 + ":" + nonce + ":" + nchex + ":" + cnonce + ":" + qop + ":" + hash2)) */
+ 	  MD5_Init(&md5ctx);
+@@ -2826,7 +2825,7 @@ PublisherAuth(RTMP *r, AVal *description)
+           RTMP_Log(RTMP_LOGDEBUG, "%s, md5(%s:%s:%s:%s:%s:%s) =>", __FUNCTION__,
+ 	    hash1, nonce.av_val, nchex, cnonce, qop, hash2);
+           RTMP_LogHexString(RTMP_LOGDEBUG, md5sum_val, MD5_DIGEST_LENGTH);
+-          hash3 = hexenc(md5sum_val, MD5_DIGEST_LENGTH);
++          hexenc(md5sum_val, MD5_DIGEST_LENGTH, hash3);
+ 
+           /* pubToken = &authmod=<authmod>&user=<username>&nonce=<nonce>&cnonce=<cnonce>&nc=<nchex>&response=<hash3> */
+           /* Append nonces and response to query string which already contains
+@@ -2839,9 +2838,6 @@ PublisherAuth(RTMP *r, AVal *description)
+           RTMP_Log(RTMP_LOGDEBUG, "%s, pubToken2: %s", __FUNCTION__, pubToken.av_val);
+           r->Link.pFlags |= RTMP_PUB_RESP|RTMP_PUB_CLATE;
+ 
+-          free(hash1);
+-          free(hash2);
+-          free(hash3);
+           free(orig_ptr);
+         }
+       else if(strstr(description->av_val, "?reason=authfail") != NULL)
+-- 
+1.7.10.4
+
+
+From 9d6dc72d7c43554dbe8cdb02f450807230df8c25 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Tue, 30 Oct 2012 19:22:16 +0200
+Subject: [PATCH 60/64] Simplify initializing the TLS server context
+
+This does the same thing, but I wasn't aware of these functions
+when I initially wrote this.
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 4858e24..d72f105 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -280,32 +280,14 @@ RTMP_TLS_AllocServerContext(const char* cert, const char* key)
+   }
+ #elif !defined(NO_SSL) /* USE_OPENSSL */
+   ctx = SSL_CTX_new(SSLv23_server_method());
+-  FILE *f = fopen(key, "r");
+-  if (!f) {
++  if (!SSL_CTX_use_certificate_chain_file(ctx, cert)) {
+       SSL_CTX_free(ctx);
+       return NULL;
+   }
+-  EVP_PKEY *k = PEM_read_PrivateKey(f, NULL, NULL, NULL);
+-  fclose(f);
+-  if (!k) {
++  if (!SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_PEM)) {
+       SSL_CTX_free(ctx);
+       return NULL;
+   }
+-  SSL_CTX_use_PrivateKey(ctx, k);
+-  EVP_PKEY_free(k);
+-  f = fopen(cert, "r");
+-  if (!f) {
+-      SSL_CTX_free(ctx);
+-      return NULL;
+-  }
+-  X509 *c = PEM_read_X509(f, NULL, NULL, NULL);
+-  fclose(f);
+-  if (!c) {
+-      SSL_CTX_free(ctx);
+-      return NULL;
+-  }
+-  SSL_CTX_use_certificate(ctx, c);
+-  X509_free(c);
+ #endif
+ #endif
+   return ctx;
+-- 
+1.7.10.4
+
+
+From f3e3e6b507ac0df89a11764abd15cc9535593735 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Axelsson?= <bjorn.axelsson@intinor.se>
+Date: Tue, 30 Oct 2012 19:31:01 +0200
+Subject: [PATCH 61/64] Look for a fourth slash when splitting the url into
+ app+playpath
+
+
+diff --git a/librtmp/parseurl.c b/librtmp/parseurl.c
+index 0183958..646c70c 100644
+--- a/librtmp/parseurl.c
++++ b/librtmp/parseurl.c
+@@ -137,12 +137,14 @@ parsehost:
+ 	 * application = app[/appinstance]
+ 	 */
+ 
+-	char *slash2, *slash3 = NULL;
++	char *slash2, *slash3 = NULL, *slash4 = NULL;
+ 	int applen, appnamelen;
+ 
+ 	slash2 = strchr(p, '/');
+ 	if(slash2)
+ 		slash3 = strchr(slash2+1, '/');
++	if(slash3)
++		slash4 = strchr(slash3+1, '/');
+ 
+ 	applen = end-p; /* ondemand, pass all parameters as app */
+ 	appnamelen = applen; /* ondemand length */
+@@ -156,7 +158,9 @@ parsehost:
+                 appnamelen = 8;
+         }
+ 	else { /* app!=ondemand, so app is app[/appinstance] */
+-		if(slash3)
++		if(slash4)
++			appnamelen = slash4-p;
++		else if(slash3)
+ 			appnamelen = slash3-p;
+ 		else if(slash2)
+ 			appnamelen = slash2-p;
+-- 
+1.7.10.4
+
+
+From e79a07c8625b56ebb182c12343518faff4902de7 Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Tue, 30 Oct 2012 14:40:14 -0700
+Subject: [PATCH 62/64] PolarSSL version fixes
+
+Fix commit a312ac7770207bd7d07725c1aef43725206e803a
+
+diff --git a/librtmp/dh.h b/librtmp/dh.h
+index fa264f8..e29587b 100644
+--- a/librtmp/dh.h
++++ b/librtmp/dh.h
+@@ -29,9 +29,6 @@
+ 
+ #ifdef USE_POLARSSL
+ #include <polarssl/dhm.h>
+-#if POLARSSL_VERSION_NUMBER < 0x01010100
+-#define havege_random	havege_rand
+-#endif
+ typedef mpi * MP_t;
+ #define MP_new(m)	m = malloc(sizeof(mpi)); mpi_init(m)
+ #define MP_set_w(mpi, w)	mpi_lset(mpi, w)
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index d72f105..720669e 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -34,7 +34,6 @@
+ 
+ #ifdef CRYPTO
+ #ifdef USE_POLARSSL
+-#include <polarssl/version.h>
+ #include <polarssl/havege.h>
+ #include <polarssl/md5.h>
+ #include <polarssl/base64.h>
+@@ -2435,7 +2434,7 @@ static int
+ b64enc(const unsigned char *input, int length, char *output, int maxsize)
+ {
+ #ifdef USE_POLARSSL
+-  int buf_size = maxsize;
++  size_t buf_size = maxsize;
+   if(base64_encode((unsigned char *) output, &buf_size, input, length) == 0)
+     {
+       output[buf_size] = '\0';
+@@ -2481,7 +2480,7 @@ b64enc(const unsigned char *input, int length, char *output, int maxsize)
+ #ifdef USE_POLARSSL
+ #define MD5_CTX	md5_context
+ #define MD5_Init(ctx)	md5_starts(ctx)
+-#define MD5_Update(ctx,data,len)	md5_update(ctx,data,len)
++#define MD5_Update(ctx,data,len)	md5_update(ctx,(unsigned char *)data,len)
+ #define MD5_Final(dig,ctx)	md5_finish(ctx,dig)
+ #elif defined(USE_GNUTLS)
+ typedef struct md5_ctx	MD5_CTX
+diff --git a/librtmp/rtmp_sys.h b/librtmp/rtmp_sys.h
+index 2cdb705..6e2356a 100644
+--- a/librtmp/rtmp_sys.h
++++ b/librtmp/rtmp_sys.h
+@@ -65,7 +65,7 @@
+ #include <polarssl/net.h>
+ #include <polarssl/ssl.h>
+ #include <polarssl/havege.h>
+-#if POLARSSL_VERSION_NUMBER < 0x01010100
++#if POLARSSL_VERSION_NUMBER < 0x01010000
+ #define havege_random	havege_rand
+ #endif
+ typedef struct tls_ctx {
+@@ -88,7 +88,7 @@ typedef struct tls_server_ctx {
+ 	ssl_set_session(s, 1, 600, &ctx->ssn)
+ #define TLS_server(ctx,s)	s = malloc(sizeof(ssl_context)); ssl_init(s);\
+ 	ssl_set_endpoint(s, SSL_IS_SERVER); ssl_set_authmode(s, SSL_VERIFY_NONE);\
+-	ssl_set_rng(s, havege_rand, ((tls_server_ctx*)ctx)->hs);\
++	ssl_set_rng(s, havege_random, ((tls_server_ctx*)ctx)->hs);\
+ 	ssl_set_ciphersuites(s, ssl_default_ciphersuites);\
+ 	ssl_set_session(s, 1, 600, &((tls_server_ctx*)ctx)->ssn);\
+ 	ssl_set_own_cert(s, &((tls_server_ctx*)ctx)->cert, &((tls_server_ctx*)ctx)->key);\
+-- 
+1.7.10.4
+
+
+From feb81c8b3e0102b2eed18a34cbfb1e8a513e99ae Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Thu, 1 Nov 2012 17:00:31 -0700
+Subject: [PATCH 63/64] Fix gnutls build
+
+Missing semicolon in e42b5d0926b1a668d7fbd794a70f31040c5f198d
+
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 720669e..0e00059 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -2483,7 +2483,7 @@ b64enc(const unsigned char *input, int length, char *output, int maxsize)
+ #define MD5_Update(ctx,data,len)	md5_update(ctx,(unsigned char *)data,len)
+ #define MD5_Final(dig,ctx)	md5_finish(ctx,dig)
+ #elif defined(USE_GNUTLS)
+-typedef struct md5_ctx	MD5_CTX
++typedef struct md5_ctx	MD5_CTX;
+ #define MD5_Init(ctx)	md5_init(ctx)
+ #define MD5_Update(ctx,data,len)	md5_update(ctx,len,data)
+ #define MD5_Final(dig,ctx)	md5_digest(ctx,MD5_DIGEST_LENGTH,dig)
+-- 
+1.7.10.4
+
+
+From 19d36368f6c1ec6fa55df319173ca93048309f9a Mon Sep 17 00:00:00 2001
+From: Howard Chu <hyc@highlandsun.com>
+Date: Fri, 9 Nov 2012 07:58:08 -0800
+Subject: [PATCH 64/64] PolarSSL 1.2.x compat
+
+
+diff --git a/librtmp/rtmp_sys.h b/librtmp/rtmp_sys.h
+index 6e2356a..85d7e53 100644
+--- a/librtmp/rtmp_sys.h
++++ b/librtmp/rtmp_sys.h
+@@ -68,6 +68,11 @@
+ #if POLARSSL_VERSION_NUMBER < 0x01010000
+ #define havege_random	havege_rand
+ #endif
++#if POLARSSL_VERSION_NUMBER >= 0x01020000
++#define	SSL_SET_SESSION(S,resume,timeout,ctx)	ssl_set_session(S,ctx)
++#else
++#define	SSL_SET_SESSION(S,resume,timeout,ctx)	ssl_set_session(S,resume,timeout,ctx)
++#endif
+ typedef struct tls_ctx {
+ 	havege_state hs;
+ 	ssl_session ssn;
+@@ -85,12 +90,12 @@ typedef struct tls_server_ctx {
+ 	ssl_set_endpoint(s, SSL_IS_CLIENT); ssl_set_authmode(s, SSL_VERIFY_NONE);\
+ 	ssl_set_rng(s, havege_random, &ctx->hs);\
+ 	ssl_set_ciphersuites(s, ssl_default_ciphersuites);\
+-	ssl_set_session(s, 1, 600, &ctx->ssn)
++	SSL_SET_SESSION(s, 1, 600, &ctx->ssn)
+ #define TLS_server(ctx,s)	s = malloc(sizeof(ssl_context)); ssl_init(s);\
+ 	ssl_set_endpoint(s, SSL_IS_SERVER); ssl_set_authmode(s, SSL_VERIFY_NONE);\
+ 	ssl_set_rng(s, havege_random, ((tls_server_ctx*)ctx)->hs);\
+ 	ssl_set_ciphersuites(s, ssl_default_ciphersuites);\
+-	ssl_set_session(s, 1, 600, &((tls_server_ctx*)ctx)->ssn);\
++	SSL_SET_SESSION(s, 1, 600, &((tls_server_ctx*)ctx)->ssn);\
+ 	ssl_set_own_cert(s, &((tls_server_ctx*)ctx)->cert, &((tls_server_ctx*)ctx)->key);\
+ 	ssl_set_dh_param(s, ((tls_server_ctx*)ctx)->dhm_P, ((tls_server_ctx*)ctx)->dhm_G)
+ #define TLS_setfd(s,fd)	ssl_set_bio(s, net_recv, &fd, net_send, &fd)
+-- 
+1.7.10.4
+

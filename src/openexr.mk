@@ -3,14 +3,15 @@
 
 PKG             := openexr
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 91d0d4e69f06de956ec7e0710fc58ec0d4c4dc2b
+$(PKG)_CHECKSUM := b97cc40af82a8514c95c7a6a31f4e3233dcc2912
 $(PKG)_SUBDIR   := openexr-$($(PKG)_VERSION)
 $(PKG)_FILE     := openexr-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://github.com/downloads/openexr/openexr/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ilmbase pthreads zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.openexr.com/downloads.html' | \
+    $(WGET) -q -O- 'http://www.openexr.com/downloads.html' | \
     grep 'openexr-' | \
     $(SED) -n 's,.*openexr-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
@@ -28,7 +29,8 @@ define $(PKG)_BUILD
         --prefix='$(1)/ilmbase' \
         --enable-threading=no \
         --disable-posix-sem \
-        CONFIG_SHELL=$(SHELL)
+        CONFIG_SHELL=$(SHELL) \
+        SHELL=$(SHELL)
     $(MAKE) -C '$(1)/$(ilmbase_SUBDIR)' -j '$(JOBS)' install \
         bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd '$(1)' && ./configure \

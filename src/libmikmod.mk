@@ -10,7 +10,7 @@ $(PKG)_URL      := http://mikmod.raphnet.net/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://mikmod.raphnet.net/' | \
+    $(WGET) -q -O- 'http://mikmod.raphnet.net/' | \
     $(SED) -n 's,.*libmikmod-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

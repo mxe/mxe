@@ -16,7 +16,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index ef3d08d..88de1e5 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -543,6 +543,7 @@ IF(DSOUND)
+@@ -603,6 +603,7 @@ IF(DSOUND)
                  SET(BACKENDS  "${BACKENDS} DirectSound \(linked\),")
                  SET(EXTRA_LIBS dsound ${EXTRA_LIBS})
              ENDIF()

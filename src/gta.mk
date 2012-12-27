@@ -3,14 +3,14 @@
 
 PKG             := gta
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9020944bcd40bd986a879d454d21920a1eb48db7
+$(PKG)_CHECKSUM := 867614e47edcae96fa5d89b2fd154539d8be644a
 $(PKG)_SUBDIR   := libgta-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgta-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.savannah.gnu.org/releases/gta/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib bzip2 xz
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gta.git;a=tags' | \
+    $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gta.git;a=tags' | \
     grep '<a class="list subject"' | \
     $(SED) -n 's,.*<a[^>]*>libgta-\([0-9.]*\)<.*,\1,p' | \
     head -1

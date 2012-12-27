@@ -11,7 +11,7 @@ $(PKG)_URL_2    := ftp://ftp.remotesensing.org/proj/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://trac.osgeo.org/proj/' | \
+    $(WGET) -q -O- 'http://trac.osgeo.org/proj/' | \
     $(SED) -n 's,.*proj-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://downloads.xiph.org/releases/speex/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.xiph.org/?p=speex.git;a=tags' | \
+    $(WGET) -q -O- 'http://git.xiph.org/?p=speex.git;a=tags' | \
     grep '<a class="list name"' | \
     $(SED) -n 's,.*<a[^>]*>Speex-\([0-9][^<]*\)<.*,\1,p' | \
     head -1

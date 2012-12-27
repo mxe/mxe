@@ -10,7 +10,7 @@ $(PKG)_URL      := http://libarchive.googlecode.com/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 libiconv libxml2 openssl xz zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://code.google.com/p/libarchive/downloads/list?sort=-uploaded' | \
+    $(WGET) -q -O- 'http://code.google.com/p/libarchive/downloads/list?sort=-uploaded' | \
     $(SED) -n 's,.*libarchive-\([0-9][^<]*\)\.tar.*,\1,p' | \
     head -1
 endef

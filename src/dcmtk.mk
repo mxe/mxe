@@ -11,7 +11,7 @@ $(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/d/$(PKG)/$(PKG)_$($(PK
 $(PKG)_DEPS     := gcc openssl tiff libpng libxml2 zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://dicom.offis.de/dcmtk.php.en' | \
+    $(WGET) -q -O- 'http://dicom.offis.de/dcmtk.php.en' | \
     $(SED) -n 's,.*/dcmtk-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

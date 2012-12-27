@@ -1,0 +1,864 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 7a45f91cc0f2b0c1744b2ee725ca1999ad24a72b Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 13 Sep 2012 23:21:18 +0200
+Subject: [PATCH 1/6] split configure.in in configure.ac and ocaml.m4.
+ Makefile.am links to src/Makefile
+
+
+diff --git a/Makefile.am b/Makefile.am
+new file mode 100644
+index 0000000..af437a6
+--- /dev/null
++++ b/Makefile.am
+@@ -0,0 +1 @@
++SUBDIRS = src
+diff --git a/configure.ac b/configure.ac
+new file mode 100644
+index 0000000..3b27786
+--- /dev/null
++++ b/configure.ac
+@@ -0,0 +1,406 @@
++#
++# autoconf input for Objective Caml programs
++# Modified by the lablgtk2 development team
++# Original copyright (C) 2001 Jean-Christophe Filli�tre
++#   from a first script by Georges Mariano 
++# 
++# This library is free software; you can redistribute it and/or
++# modify it under the terms of the GNU Library General Public
++# License version 2, as published by the Free Software Foundation.
++# 
++# This library is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
++# 
++# See the GNU Library General Public License version 2 for more details
++# (enclosed in the file LGPL).
++
++AC_PREREQ([2.59])
++AC_INIT(lablgtk2, 2.14.2)
++AM_INIT_AUTOMAKE([foreign -Wall])
++
++m4_include([ocaml.m4])
++
++# Check for Ocaml compilers
++
++# we first look for ocamlc in the path; if not present, we fail
++dnl AC_CHECK_PROG(CAMLC,ocamlc,ocamlc,no)
++dnl if test "$CAMLC" = no ; then
++dnl 	AC_MSG_ERROR(Cannot find ocamlc.)
++dnl fi
++AC_PROG_OCAML([3.08])
++AC_PROG_FINDLIB
++
++dnl # we extract Ocaml version number and library path
++dnl OCAMLVERSION=`$CAMLC -version`
++dnl echo "ocaml version is $OCAMLVERSION"
++dnl OCAMLLIB=`$CAMLC -where | tr -d '\\r'`
++dnl echo "ocaml library path is $OCAMLLIB"
++LIBDIR=$OCAMLLIB
++
++AC_ARG_WITH(libdir,
++	[  --with-libdir=/path     install libs in /path/lablgtk2 and /path/stublibs],
++	LIBDIR=$withval)
++
++# then we look for ocamlopt; if not present, we issue a warning
++# if the version is not the same, we also discard it
++# we set OCAMLBEST to "opt" or "byte", whether ocamlopt is available or not
++dnl AC_CHECK_PROG(CAMLOPT,ocamlopt,ocamlopt,no)
++dnl OCAMLBEST=byte
++dnl if test "$CAMLOPT" = no ; then
++dnl 	AC_MSG_WARN(Cannot find ocamlopt; bytecode compilation only.)
++dnl else
++dnl 	AC_MSG_CHECKING(ocamlopt version)
++dnl 	TMPVERSION=`$CAMLOPT -version`
++dnl 	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
++dnl 	    AC_MSG_RESULT(differs from ocamlc; ocamlopt discarded.)
++dnl 	    CAMLOPT=no
++dnl 	else
++dnl 	    AC_MSG_RESULT(ok)
++dnl 	    OCAMLBEST=opt
++dnl 	fi
++dnl fi
++
++dnl # checking for ocamlc.opt
++dnl AC_CHECK_PROG(OCAMLCDOTOPT,ocamlc.opt,ocamlc.opt,no)
++dnl if test "$OCAMLCDOTOPT" != no ; then
++dnl 	AC_MSG_CHECKING(ocamlc.opt version)
++dnl 	TMPVERSION=`$OCAMLCDOTOPT -version`
++dnl 	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
++dnl 	    AC_MSG_RESULT(differs from ocamlc; ocamlc.opt discarded.)
++dnl 	else
++dnl 	    AC_MSG_RESULT(ok)
++dnl 	    CAMLC=$OCAMLCDOTOPT
++dnl 	fi
++dnl fi
++
++dnl # checking for ocamlopt.opt
++dnl if test "$CAMLOPT" != no ; then
++dnl     AC_CHECK_PROG(OCAMLOPTDOTOPT,ocamlopt.opt,ocamlopt.opt,no)
++dnl     if test "$OCAMLOPTDOTOPT" != no ; then
++dnl 	AC_MSG_CHECKING(ocamlc.opt version)
++dnl 	TMPVER=`$OCAMLOPTDOTOPT -version`
++dnl 	if test "$TMPVER" != "$OCAMLVERSION" ; then
++dnl 	    AC_MSG_RESULT(differs from ocamlc; ocamlopt.opt discarded.)
++dnl 	else
++dnl 	    AC_MSG_RESULT(ok)
++dnl 	    CAMLOPT=$OCAMLOPTDOTOPT
++dnl 	fi
++dnl     fi
++dnl fi
++
++# ocamlrun, ocamldep, ocamllex and ocamlyacc should also be present in the path
++AC_CHECK_TOOL([OCAMLRUN],[ocamlrun],[no])
++if test "$OCAMLRUN" = no ; then
++	AC_MSG_ERROR(Cannot find ocamlrun.)
++fi
++
++dnl AC_CHECK_PROG(OCAMLDEP,ocamldep,ocamldep,no)
++dnl if test "$OCAMLDEP" = no ; then
++dnl 	AC_MSG_ERROR(Cannot find ocamldep.)
++dnl fi
++
++dnl AC_CHECK_PROG(OCAMLDOC,ocamldoc,ocamldoc,no)
++dnl if test "$OCAMLDOC" = no ; then
++dnl 	AC_MSG_RESULT(Cannot find ocamldoc.)
++dnl fi
++
++dnl AC_CHECK_PROG(OCAMLLEX,ocamllex,ocamllex,no)
++dnl if test "$OCAMLLEX" = no ; then
++dnl     AC_MSG_ERROR(Cannot find ocamllex.)
++dnl #else
++dnl #    AC_CHECK_PROG(OCAMLLEXDOTOPT,ocamllex.opt,ocamllex.opt,no)
++dnl #    if test "$OCAMLLEXDOTOPT" != no ; then
++dnl #	OCAMLLEX=$OCAMLLEXDOTOPT
++dnl #    fi
++dnl fi
++AC_PROG_OCAMLLEX
++
++dnl AC_CHECK_PROG(OCAMLYACC,ocamlyacc,ocamlyacc,no)
++dnl if test "$OCAMLYACC" = no ; then
++dnl 	AC_MSG_ERROR(Cannot find ocamlyacc.)
++dnl fi
++AC_PROG_OCAMLYACC
++
++dnl AC_CHECK_PROG(CAMLMKTOP,ocamlmktop,ocamlmktop,no)
++dnl if test "$CAMLMKTOP" = no ; then
++dnl 	AC_MSG_ERROR(Cannot find ocamlmktop.)
++dnl fi
++
++dnl AC_CHECK_PROG(CAMLMKLIB,ocamlmklib,ocamlmklib,no)
++dnl if test "$CAMLMKLIB" = no ; then
++dnl 	AC_MSG_ERROR(Cannot find ocamlmklib.)
++dnl fi
++
++dnl AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
++dnl if test "$CAMLP4O" = no ; then
++dnl 	AC_MSG_ERROR(Cannot find camlp4o.)
++dnl fi
++AC_PROG_CAMLP4
++
++if expr "$OCAMLVERSION" '>=' '3.08' > /dev/null ; then
++   ODOC_DEF="-D OCAML_308"
++fi
++AC_SUBST(ODOC_DEF)
++
++if expr "$OCAMLVERSION" '>=' '3.11' > /dev/null ; then
++   HAS_PRINTEXC_BACKTRACE="-D HAS_PRINTEXC_BACKTRACE"
++fi
++AC_SUBST(HAS_PRINTEXC_BACKTRACE)
++
++# Check for which kind of threads is used
++AC_MSG_CHECKING(for ocaml threads)
++AC_ARG_WITH(threads,
++        [AC_HELP_STRING([--with-threads=(yes|system|vm|no)],
++                           [specify a thread implementation to use])],
++        [],
++        [with_threads=yes])
++THREADS_LIB="$with_threads"
++if (test "$THREADS_LIB" = yes || test "$THREADS_LIB" = system) && \
++   test -r "$OCAMLLIB/threads/threads.cma"; then
++  THREADS_LIB="system"
++elif (test "$THREADS_LIB" = yes || test "$THREADS_LIB" = vm) && \
++   test -r "$OCAMLLIB/vmthreads/stdlib.cma"; then
++  THREADS_LIB="vm"
++elif test "$THREADS_LIB" = yes; then
++  echo; AC_MSG_ERROR(Cannot use threads)
++elif test "$THREADS_LIB" != no; then
++  echo; AC_MSG_ERROR(Cannot use $THREADS_LIB threads)
++fi
++AC_MSG_RESULT(use $THREADS_LIB threads)
++
++# Check for dll support
++HAS_DLL_SUPPORT="no"
++AC_MSG_CHECKING(for ocaml dll support)
++if test -r "$OCAMLLIB/stublibs/dllunix.so" ||
++   test -r "$OCAMLLIB/stublibs/dllunix.dll"
++then HAS_DLL_SUPPORT="yes"
++fi
++AC_MSG_RESULT($HAS_DLL_SUPPORT)
++
++AC_PROG_RANLIB
++
++dnl # get the C compiler used by ocamlc
++dnl if test -z "$CC" ; then
++dnl   touch conftest.c
++dnl   CC=$($CAMLC -verbose -c conftest.c 2>&1 | head -1 | sed ['s/^+ \([^ ]*\) .*$/\1/'])
++dnl   echo [OCaml uses $CC to compile C files]
++dnl fi
++AC_PROG_CC
++
++# platform
++dnl AC_MSG_CHECKING(platform)
++dnl echo "print_endline Sys.os_type ;;" > conftest.ml
++dnl ac_ocaml_platform=$(ocaml conftest.ml | tr -d '\r')
++dnl AC_MSG_RESULT($ac_ocaml_platform)
++dnl if test $ac_ocaml_platform = Win32 ; then
++dnl     OCAMLWIN32=yes
++dnl     EXE=.exe
++dnl     XS=.dll
++dnl else
++dnl     OCAMLWIN32=no
++dnl     EXE=
++dnl     XS=.so
++dnl fi
++AC_CHECK_OCAML_OS_TYPE
++if test x$OCAML_OS_TYPE = xWin32 ; then
++    OCAMLWIN32=yes
++    EXE=.exe
++    XS=.dll
++else
++    OCAMLWIN32=no
++    EXE=
++    XS=.so
++fi
++
++# Working native Dynlink
++AC_MSG_CHECKING(native dynlink)
++echo "Dynlink.loadfile \"foo\";;" > test_dynlink.ml
++if ($OCAMLOPT -shared -o test_dynlink.cmxs test_dynlink.ml) 2> /dev/null ; then
++   HAS_NATIVE_DYNLINK=yes
++else
++   HAS_NATIVE_DYNLINK=no
++fi
++
++# GTK 2 auto configuration
++
++dnl LABLGTK_PKG(variable, autoconf package, help string, pkgconfig package)
++dnl creates USE_variable ("yes" if used, "" if not)
++dnl creates FORCE_variable ("yes" if required by user, "no" if not)
++dnl creates variablePKG = pkgconfig if used
++AC_DEFUN([LABLGTK_PKG], [
++AC_ARG_WITH($2,
++			[$3],
++			USE_$1=$withval; FORCE_$1=yes,
++			USE_$1=yes; FORCE_$1=no
++)
++AS_IF([test $USE_$1 = yes],
++	  [PKG_CHECK_MODULES($1,$4,,[
++	if test $FORCE_$1 = yes ; then
++	  AC_MSG_ERROR($2 enforced but no support found)
++        else
++          USE_$1=no
++	fi])]
++)
++if test $USE_$1 = yes ; then
++	USE_$1=1
++	$1[]PKG=$4
++else
++	unset USE_$1
++fi
++AC_SUBST(USE_$1)]
++)
++
++GTKPKG=gtk+-2.0 
++
++LABLGTK_PKG(GTKGL,gl,
++	    	[AS_HELP_STRING([--without-gl],
++				[override autodetected GtkGLArea support. Requires LablGL])],
++	    	gtkgl-2.0)
++
++# Check for LablGL, if gtkgl detected. will use both or none
++# Either adds LABLGLDIR, or clears USE_GTKGL,GTKGLDIR and GTKGLPKG
++if test -n "$USE_GTKGL" ; then
++      AC_MSG_CHECKING(lablGL directory)
++      cat > conftest.ml << EOF
++      open Raw
++EOF
++      if $OCAMLC -c -I "${LABLGLDIR:=+lablGL}" conftest.ml > /dev/null 2>&1 ; then
++        AC_MSG_RESULT($LABLGLDIR)
++      else
++        if test $FORCE_GTKGL = yes ; then
++	  AC_MSG_ERROR(gtkgl enforced but lablGL not found)
++	else
++	  AC_MSG_RESULT(no)
++      	  unset USE_GTKGL
++	  unset GTKGLPKG
++          unset LABLGLDIR
++	fi
++      fi
++fi
++
++# put after PKG_CHECK_MODULES, otherwise cross pkg-config is not detected
++AM_PATH_GTK_2_0(2.0.0, :, AC_MSG_ERROR(GTK+ is required))
++
++LABLGTK_PKG(GLADE, glade,
++            [  --without-glade         override autodetected libglade support],
++            libglade-2.0)
++
++LABLGTK_PKG(RSVG, rsvg,
++            [  --without-rsvg          override autodetected librsvg support],
++            librsvg-2.0)
++# Check for SVGZ support
++if test -n "$USE_RSVG" ; then
++    ac_ocaml_libs="$LIBS"
++    LIBS="$LIBS $RSVG_LIBS"
++    AC_CHECK_FUNC(rsvg_handle_new_gz, [HAVE_SVGZ=-DHAVE_SVGZ], [unset HAVE_SVGZ])
++    # this tests seems broken on my ubuntu FF
++    unset HAVE_SVGZ
++    LIBS="$ac_ocaml_libs"
++else
++    unset HAVE_SVGZ
++fi
++
++LABLGTK_PKG(GNOMECANVAS, gnomecanvas,
++            [  --without-gnomecanvas   override autodetected libgnomecanvas support],
++            libgnomecanvas-2.0)
++
++LABLGTK_PKG(GNOMEUI, gnomeui,
++            [  --without-gnomeui       override autodetected libgnomeui support],
++            libgnomeui-2.0)
++
++LABLGTK_PKG(PANEL, panel,
++            [  --without-panel         override autodetected libpanelapplet support],
++            libpanelapplet-2.0)
++
++LABLGTK_PKG(GTKSPELL, gtkspell,
++            [  --without-gtkspell      override autodetected gtkspell support],
++            gtkspell-2.0)
++
++LABLGTK_PKG(GTKSOURCEVIEW, gtksourceview,
++            [  --without-gtksourceview      override autodetected gtksourceview support],
++            gtksourceview-1.0)
++
++LABLGTK_PKG(GTKSOURCEVIEW2, gtksourceview2,
++            [  --without-gtksourceview2      override autodetected gtksourceview 2 support],
++            gtksourceview-2.0)
++
++LABLGTK_PKG(GTKQUARTZ, quartz,
++            [  --without-quartz      override autodetected quartz support],
++            gtk+-quartz-2.0)
++
++PKG_CHECK_MODULES(GTKALL,$GTKPKG $GTKGLPKG $GLADEPKG $RSVGPKG $GNOMECANVASPKG $GNOMEUIPKG $PANELPKG $GTKSPELLPKG $GTKSOURCEVIEW2PKG $GTKQUARTZPKG)
++
++AC_ARG_ENABLE(debug,
++        [  --enable-debug          enable debug mode],
++	AC_MSG_RESULT(Debug mode enabled) ; DEBUG=1,
++	DEBUG=)
++
++# substitutions to perform
++
++AC_SUBST(EXE)
++AC_SUBST(XS)
++AC_SUBST(LIBDIR)
++dnl AC_SUBST(OCAMLBEST)
++AC_SUBST(OCAMLWIN32)
++dnl AC_SUBST(OCAMLDEP)
++AC_SUBST(OCAMLRUN)
++dnl AC_SUBST(OCAMLLEX)
++dnl AC_SUBST(OCAMLYACC)
++AC_SUBST(THREADS_LIB)
++AC_SUBST(HAS_DLL_SUPPORT)
++AC_SUBST(HAS_NATIVE_DYNLINK)
++
++AC_SUBST(CAMLC,$OCAMLC)
++AC_SUBST(CAMLOPT,$OCAMLOPT)
++dnl AC_SUBST(OCAMLDOC)
++AC_SUBST(CAMLMKTOP,$OCAMLMKTOP)
++AC_SUBST(CAMLMKLIB,$OCAMLMKLIB)
++dnl AC_SUBST(CAMLP4O)
++AC_SUBST(LABLGLDIR)
++AC_SUBST(HAVE_SVGZ)
++AC_SUBST(USE_CC)
++AC_SUBST(DEBUG)
++
++# Finally create the config.make from config.make.in
++dnl AC_OUTPUT(config.make)
++dnl chmod a-w config.make
++AC_CONFIG_FILES(Makefile config.make)
++AC_OUTPUT
++
++AC_DEFUN([CONF_SUMMARY], [
++echo $ECHO_N "	$1 $ECHO_C"
++if test -n "$USE_$2"
++then echo "	yes"
++else if test "$FORCE_$2" = "yes"
++     then echo "	disabled"
++     else echo "	not found"
++     fi
++fi])
++
++echo
++if test $LIBDIR=$OCAMLLIB ; then
++  echo "Default install dirs are : $LIBDIR/lablgtk2 and $LIBDIR/stublibs"
++  echo "Compile with $OCAMLC -I +lablgtk2"
++else
++  echo "Install dirs are : $LIBDIR/lablgtk2 and $LIBDIR/stublibs"
++  echo "Compile with $OCAMLC -I $LIBDIR/lablgtk2 and add $LIBDIR/stublibs either to  OCAMLLIB/ld.conf or to CAML_LD_LIBRARY_PATH"
++fi
++
++echo ; echo "LablGTK configuration:"
++echo "	threads  	$THREADS_LIB"
++echo "	native dynlink 	$HAS_NATIVE_DYNLINK"
++CONF_SUMMARY(GtkGLArea, GTKGL)
++CONF_SUMMARY(libglade, GLADE)
++CONF_SUMMARY(librsvg , RSVG)
++CONF_SUMMARY(libgnomecanvas, GNOMECANVAS)
++CONF_SUMMARY(libgnomeui, GNOMEUI)
++CONF_SUMMARY(libpanelapplet, PANEL)
++CONF_SUMMARY(gtkspell, GTKSPELL)
++CONF_SUMMARY(gtksourceview 1, GTKSOURCEVIEW)
++CONF_SUMMARY(gtksourceview 2, GTKSOURCEVIEW2)
++CONF_SUMMARY(quartz   , GTKQUARTZ)
++echo
++echo $ECHO_N "	debug   $ECHO_C"
++if test -n "$DEBUG" ; then echo "	yes" ; else echo "	no" ; fi
++echo -e  "	C compiler	$CC"
+diff --git a/ocaml.m4 b/ocaml.m4
+new file mode 100644
+index 0000000..6431281
+--- /dev/null
++++ b/ocaml.m4
+@@ -0,0 +1,197 @@
++dnl autoconf macros for OCaml
++dnl
++dnl Copyright © 2009      Richard W.M. Jones
++dnl Copyright © 2009      Stefano Zacchiroli
++dnl Copyright © 2000-2005 Olivier Andrieu
++dnl Copyright © 2000-2005 Jean-Christophe Filliâtre
++dnl Copyright © 2000-2005 Georges Mariano
++dnl
++dnl For documentation, please read the ocaml.m4 man page.
++
++AC_DEFUN([AC_PROG_OCAML],
++[dnl
++  # checking for ocamlc
++  AC_CHECK_TOOLS([OCAMLC],[ocamlc.opt ocamlc],[no])
++
++  if test "$OCAMLC" != "no"; then
++     OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version* *\(.*\)$|\1|p'`
++     AC_MSG_RESULT([OCaml version is $OCAMLVERSION])
++     # If OCAMLLIB is set, use it
++     if test "$OCAMLLIB" = ""; then
++        OCAMLLIB=`$OCAMLC -where 2>/dev/null || $OCAMLC -v|tail -1|cut -d ' ' -f 4`
++     else
++        AC_MSG_RESULT([OCAMLLIB previously set; preserving it.])
++     fi
++     AC_MSG_RESULT([OCaml library path is $OCAMLLIB])
++
++     AC_SUBST([OCAMLVERSION])
++     AC_SUBST([OCAMLLIB])
++
++     # checking for ocamlopt
++     AC_CHECK_TOOLS([OCAMLOPT],[ocamlopt.opt ocamlopt],[no])
++     OCAMLBEST=byte
++     if test "$OCAMLOPT" = "no"; then
++	AC_MSG_WARN([Cannot find ocamlopt; bytecode compilation only.])
++     else
++	TMPVERSION=`$OCAMLOPT -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
++	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
++	    AC_MSG_RESULT([versions differs from $OCAMLC; $OCAMLOPT discarded.])
++	    OCAMLOPT=no
++	else
++	    OCAMLBEST=opt
++	fi
++     fi
++
++     AC_SUBST([OCAMLBEST])
++
++     AC_SUBST([OCAMLOPT])
++  fi
++
++  # checking for ocaml toplevel
++  AC_CHECK_PROG([OCAML],[ocaml],[ocaml],[no])
++
++  # checking for ocamldep
++  AC_CHECK_TOOL([OCAMLDEP],[ocamldep],[no])
++
++  # checking for ocamlmktop
++  AC_CHECK_TOOL([OCAMLMKTOP],[ocamlmktop],[no])
++
++  # checking for ocamlmklib
++  AC_CHECK_TOOL([OCAMLMKLIB],[ocamlmklib],[no])
++
++  # checking for ocamldoc
++  AC_CHECK_PROG([OCAMLDOC],[ocamldoc],[ocamldoc],[no])
++
++  # checking for ocamlbuild
++  AC_CHECK_TOOL([OCAMLBUILD],[ocamlbuild],[no])
++])
++
++
++AC_DEFUN([AC_PROG_OCAMLLEX],
++[dnl
++  # checking for ocamllex
++  AC_CHECK_PROGS([OCAMLLEX],[ocamllex.opt ocamllex],[no])
++])
++
++AC_DEFUN([AC_PROG_OCAMLYACC],
++[dnl
++  AC_CHECK_PROG([OCAMLYACC],[ocamlyacc],[ocamlyacc],[no])
++])
++
++
++AC_DEFUN([AC_PROG_CAMLP4],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++
++  # checking for camlp4
++  AC_CHECK_PROG([CAMLP4],[camlp4],[camlp4],[no])
++  if test "$CAMLP4" != "no"; then
++     TMPVERSION=`$CAMLP4 -v 2>&1| sed -n -e 's|.*version *\(.*\)$|\1|p'`
++     if test "$TMPVERSION" != "$OCAMLVERSION" ; then
++	AC_MSG_RESULT([versions differs from ocamlc])
++        CAMLP4=no
++     fi
++  fi
++  AC_SUBST([CAMLP4])
++
++  # checking for companion tools
++  AC_CHECK_PROG([CAMLP4BOOT],[camlp4boot],[camlp4boot],[no])
++  AC_CHECK_PROG([CAMLP4O],[camlp4o],[camlp4o],[no])
++  AC_CHECK_PROG([CAMLP4OF],[camlp4of],[camlp4of],[no])
++  AC_CHECK_PROG([CAMLP4OOF],[camlp4oof],[camlp4oof],[no])
++  AC_CHECK_PROG([CAMLP4ORF],[camlp4orf],[camlp4orf],[no])
++  AC_CHECK_PROG([CAMLP4PROF],[camlp4prof],[camlp4prof],[no])
++  AC_CHECK_PROG([CAMLP4R],[camlp4r],[camlp4r],[no])
++  AC_CHECK_PROG([CAMLP4RF],[camlp4rf],[camlp4rf],[no])
++])
++
++
++AC_DEFUN([AC_PROG_FINDLIB],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++
++  # checking for ocamlfind
++  AC_CHECK_TOOL([OCAMLFIND],[ocamlfind],[no])
++])
++
++
++dnl Thanks to Jim Meyering for working this next bit out for us.
++dnl XXX We should define AS_TR_SH if it's not defined already
++dnl (eg. for old autoconf).
++AC_DEFUN([AC_CHECK_OCAML_PKG],
++[dnl
++  AC_REQUIRE([AC_PROG_FINDLIB])dnl
++
++  AC_MSG_CHECKING([for OCaml findlib package $1])
++
++  unset found
++  unset pkg
++  found=no
++  for pkg in $1 $2 ; do
++    if $OCAMLFIND query $pkg >/dev/null 2>/dev/null; then
++      AC_MSG_RESULT([found])
++      AS_TR_SH([OCAML_PKG_$1])=$pkg
++      found=yes
++      break
++    fi
++  done
++  if test "$found" = "no" ; then
++    AC_MSG_RESULT([not found])
++    AS_TR_SH([OCAML_PKG_$1])=no
++  fi
++
++  AC_SUBST(AS_TR_SH([OCAML_PKG_$1]))
++])
++
++
++AC_DEFUN([AC_CHECK_OCAML_MODULE],
++[dnl
++  AC_MSG_CHECKING([for OCaml module $2])
++
++  cat > conftest.ml <<EOF
++open $3
++EOF
++  unset found
++  for $1 in $$1 $4 ; do
++    if $OCAMLC -c -I "$$1" conftest.ml >&5 2>&5 ; then
++      found=yes
++      break
++    fi
++  done
++
++  if test "$found" ; then
++    AC_MSG_RESULT([$$1])
++  else
++    AC_MSG_RESULT([not found])
++    $1=no
++  fi
++  AC_SUBST([$1])
++])
++
++
++dnl XXX Cross-compiling
++AC_DEFUN([AC_CHECK_OCAML_WORD_SIZE],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++  AC_MSG_CHECKING([for OCaml compiler word size])
++  cat > conftest.ml <<EOF
++  print_endline (string_of_int Sys.word_size)
++  EOF
++  OCAML_WORD_SIZE=`$OCAML conftest.ml`
++  AC_MSG_RESULT([$OCAML_WORD_SIZE])
++  AC_SUBST([OCAML_WORD_SIZE])
++])
++
++AC_DEFUN([AC_CHECK_OCAML_OS_TYPE],
++[dnl
++  AC_REQUIRE([AC_PROG_OCAML])dnl
++  AC_MSG_CHECKING([OCaml Sys.os_type])
++
++  cat > conftest.ml <<EOF
++  print_string(Sys.os_type);;
++EOF
++
++  OCAML_OS_TYPE=`$OCAML conftest.ml`
++  AC_MSG_RESULT([$OCAML_OS_TYPE])
++  AC_SUBST([OCAML_OS_TYPE])
++])
+-- 
+1.7.9.5
+
+
+From 412fb361bc02b4d1d4e5e3d3f6481595fcbf83b9 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 13 Sep 2012 23:29:39 +0200
+Subject: [PATCH 2/6] install = findlib-uninstall + findlib-install to remove
+ error if 'make install' is called a second time
+
+
+diff --git a/src/Makefile b/src/Makefile
+index c498882..fda935e 100755
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -23,7 +23,7 @@ TARGETS = varcc$(XE) lablgtktop$(XE) lablgtk2$(XB) gdk_pixbuf_mlsource$(XE) \
+ 
+ all: byte
+ world: byte $(CAMLBEST)
+-install: findlib-install
++install: findlib-uninstall findlib-install
+ uninstall: findlib-uninstall
+ 
+ MLLIBS = lablgtk.cma
+-- 
+1.7.9.5
+
+
+From c17556b4d42274c4190a6b29aa10eef730aa4e21 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 13 Sep 2012 23:33:57 +0200
+Subject: [PATCH 3/6] allows install with 'make lablgtkopt' only
+
+
+diff --git a/src/Makefile b/src/Makefile
+index fda935e..54ae4b4 100755
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -391,42 +391,7 @@ old-uninstall:
+ # Install using ocamlfind
+ findlib-install:
+ 	mkdir -p "$(BINDIR)"
+-	ocamlfind install lablgtk2 ../META \
+-    build.ml \
+-    $(CLIBS) \
+-    $(ALLOBJS:.cmo=.cmi) $(EXTRA_OBJS:.cmo=.cmi) \
+-    *.mli \
+-    $(ALLOBJS:.cmo=.ml) $(ALLTHOBJS:.cmo=.ml) $(EXTRA_OBJS:.cmo=.ml) \
+-    $(EXTRA_MLLIBS) $(MLLIBS) $(INITOBJS) \
+-    varcc$(XE) propcc$(XE) \
+-    `if test $(THREADS_LIB) != no; \
+-      then echo $(ALLTHOBJS) $(ALLTHOBJS:.cmo=.cmi) ; \
+-    fi` \
+-    `if test $(THREADS_LIB) = vm || test $(HAS_DLL_SUPPORT) != yes; \
+-      then echo lablgtktop$(XE) ; \
+-    fi` \
+-    *.h \
+-    `if test -f lablgtk.cmxa; \
+-      then \
+-        echo $(MLLIBS:.cma=.cmxa) $(MLLIBS:.cma=$(XA)) \
+-          $(EXTRA_MLLIBS:.cma=.cmxa) $(EXTRA_MLLIBS:.cma=$(XA)) ; \
+-          if test "$(HAS_NATIVE_DYNLINK)" = "yes" ; \
+-            then echo $(MLLIBS:.cma=.cmxs) $(EXTRA_MLLIBS:.cma=.cmxs) ; \
+-          fi; \
+-        echo  $(ALLOBJS:.cmo=.cmx) $(EXTRA_OBJS:.cmo=.cmx) ; \
+-        echo $(INITOBJS:.cmo=$(XO)) ; \
+-        if test -f gtkThread.cmx; then \
+-          echo $(THOBJS:.cmo=.cmx) $(THOBJS:.cmo=$(XO)) ; \
+-        fi ; \
+-    fi` \
+-    `if test -f dlllablgtk2$(XS); \
+-      then \
+-        echo "-dll $(CLIBS:lib%$(XA)=dll%$(XS)) -nodll" ; \
+-    fi` \
+-    `if test -f dlllablgtk2$(XA); \
+-      then \
+-        echo $(CLIBS:lib%$(XA)=dll%$(XA)) ; \
+-    fi`
++	ocamlfind install lablgtk2 ../META `find . -type f`
+ 	$(RANLIB) $(CLIBS:%="`ocamlfind query lablgtk2 | tr -d '\r'`"/%)
+ 	@if test -f lablgtk.cmxa; \
+ 	  then ($(RANLIB) $(MLLIBS:%.cma="`ocamlfind query lablgtk2 | tr -d '\r'`"/%$(XA)) $(EXTRA_MLLIBS:%.cma="`ocamlfind query lablgtk2 | tr -d '\r'`"/%$(XA)) ); fi
+@@ -436,7 +401,9 @@ findlib-install:
+ 	if test -f lablgladecc$(XE); then \
+ 	  cp lablgladecc$(XE) "$(BINDIR)/lablgladecc2$(XE)"; \
+ 	fi
+-	cp gdk_pixbuf_mlsource$(XE) "$(BINDIR)"
++	if test -f gdk_pixbuf_mlsource$(XE); then \
++	  cp gdk_pixbuf_mlsource$(XE) "$(BINDIR)"; \
++	fi
+ 
+ findlib-uninstall:
+ 	ocamlfind remove lablgtk2
+-- 
+1.7.9.5
+
+
+From 19debade0cd5de6f3ea1d5771ecc627906e3c22f Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 13 Sep 2012 23:36:37 +0200
+Subject: [PATCH 4/6] add prefixed ocamlfind support
+
+
+diff --git a/config.make.in b/config.make.in
+index e689bda..0edb14a 100644
+--- a/config.make.in
++++ b/config.make.in
+@@ -3,6 +3,7 @@
+ datarootdir = @datarootdir@
+ CAMLC=@CAMLC@
+ CAMLOPT=@CAMLOPT@
++OCAMLFIND=@OCAMLFIND@
+ CAMLRUN=@OCAMLRUN@
+ CAMLDEP=@OCAMLDEP@
+ OCAMLDOC=@OCAMLDOC@
+diff --git a/src/Makefile b/src/Makefile
+index 54ae4b4..aa09593 100755
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -391,12 +391,12 @@ old-uninstall:
+ # Install using ocamlfind
+ findlib-install:
+ 	mkdir -p "$(BINDIR)"
+-	ocamlfind install lablgtk2 ../META `find . -type f`
+-	$(RANLIB) $(CLIBS:%="`ocamlfind query lablgtk2 | tr -d '\r'`"/%)
++	$(OCAMLFIND) install lablgtk2 ../META `find . -type f`
++	$(RANLIB) $(CLIBS:%="`$(OCAMLFIND) query lablgtk2 | tr -d '\r'`"/%)
+ 	@if test -f lablgtk.cmxa; \
+-	  then ($(RANLIB) $(MLLIBS:%.cma="`ocamlfind query lablgtk2 | tr -d '\r'`"/%$(XA)) $(EXTRA_MLLIBS:%.cma="`ocamlfind query lablgtk2 | tr -d '\r'`"/%$(XA)) ); fi
++	  then ($(RANLIB) $(MLLIBS:%.cma="`$(OCAMLFIND) query lablgtk2 | tr -d '\r'`"/%$(XA)) $(EXTRA_MLLIBS:%.cma="`$(OCAMLFIND) query lablgtk2 | tr -d '\r'`"/%$(XA)) ); fi
+ 	rm lablgtk2$(XB)
+-	$(MAKE) INSTALLDIR=`ocamlfind query lablgtk2 | tr -d '\r'` lablgtk2$(XB)
++	$(MAKE) INSTALLDIR=`$(OCAMLFIND) query lablgtk2 | tr -d '\r'` lablgtk2$(XB)
+ 	cp lablgtk2$(XB) "$(BINDIR)"
+ 	if test -f lablgladecc$(XE); then \
+ 	  cp lablgladecc$(XE) "$(BINDIR)/lablgladecc2$(XE)"; \
+@@ -406,7 +406,7 @@ findlib-install:
+ 	fi
+ 
+ findlib-uninstall:
+-	ocamlfind remove lablgtk2
++	$(OCAMLFIND) remove lablgtk2
+ 	for f in lablgladecc2$(XE) lablgtk2$(XB) gdk_pixbuf_mlsource$(XE); \
+ 	  do rm -f "$(BINDIR)"/$$f; done
+ 
+-- 
+1.7.9.5
+
+
+From 8c5204c3b7db4449f66092f3bb58277bf3c4c777 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 13 Sep 2012 23:39:01 +0200
+Subject: [PATCH 5/6] remove a command that is already called in uninstall,
+ and which fails if used as is
+
+
+diff --git a/src/Makefile b/src/Makefile
+index aa09593..e1f1c88 100755
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -395,7 +395,6 @@ findlib-install:
+ 	$(RANLIB) $(CLIBS:%="`$(OCAMLFIND) query lablgtk2 | tr -d '\r'`"/%)
+ 	@if test -f lablgtk.cmxa; \
+ 	  then ($(RANLIB) $(MLLIBS:%.cma="`$(OCAMLFIND) query lablgtk2 | tr -d '\r'`"/%$(XA)) $(EXTRA_MLLIBS:%.cma="`$(OCAMLFIND) query lablgtk2 | tr -d '\r'`"/%$(XA)) ); fi
+-	rm lablgtk2$(XB)
+ 	$(MAKE) INSTALLDIR=`$(OCAMLFIND) query lablgtk2 | tr -d '\r'` lablgtk2$(XB)
+ 	cp lablgtk2$(XB) "$(BINDIR)"
+ 	if test -f lablgladecc$(XE); then \
+-- 
+1.7.9.5
+
+
+From d7972344ade17f341ef658c6561943bc87f2fc00 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 30 Sep 2012 17:44:48 +0200
+Subject: [PATCH 6/6] use prefixed ocamlp4 tools if available
+
+
+diff --git a/configure.ac b/configure.ac
+index 3b27786..205186a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -356,7 +356,7 @@ AC_SUBST(CAMLOPT,$OCAMLOPT)
+ dnl AC_SUBST(OCAMLDOC)
+ AC_SUBST(CAMLMKTOP,$OCAMLMKTOP)
+ AC_SUBST(CAMLMKLIB,$OCAMLMKLIB)
+-dnl AC_SUBST(CAMLP4O)
++AC_SUBST(CAMLP4O)
+ AC_SUBST(LABLGLDIR)
+ AC_SUBST(HAVE_SVGZ)
+ AC_SUBST(USE_CC)
+diff --git a/ocaml.m4 b/ocaml.m4
+index 6431281..8dd2101 100644
+--- a/ocaml.m4
++++ b/ocaml.m4
+@@ -84,7 +84,7 @@ AC_DEFUN([AC_PROG_CAMLP4],
+   AC_REQUIRE([AC_PROG_OCAML])dnl
+ 
+   # checking for camlp4
+-  AC_CHECK_PROG([CAMLP4],[camlp4],[camlp4],[no])
++  AC_CHECK_TOOL([CAMLP4],[camlp4],[no])
+   if test "$CAMLP4" != "no"; then
+      TMPVERSION=`$CAMLP4 -v 2>&1| sed -n -e 's|.*version *\(.*\)$|\1|p'`
+      if test "$TMPVERSION" != "$OCAMLVERSION" ; then
+@@ -95,14 +95,14 @@ AC_DEFUN([AC_PROG_CAMLP4],
+   AC_SUBST([CAMLP4])
+ 
+   # checking for companion tools
+-  AC_CHECK_PROG([CAMLP4BOOT],[camlp4boot],[camlp4boot],[no])
+-  AC_CHECK_PROG([CAMLP4O],[camlp4o],[camlp4o],[no])
+-  AC_CHECK_PROG([CAMLP4OF],[camlp4of],[camlp4of],[no])
+-  AC_CHECK_PROG([CAMLP4OOF],[camlp4oof],[camlp4oof],[no])
+-  AC_CHECK_PROG([CAMLP4ORF],[camlp4orf],[camlp4orf],[no])
+-  AC_CHECK_PROG([CAMLP4PROF],[camlp4prof],[camlp4prof],[no])
+-  AC_CHECK_PROG([CAMLP4R],[camlp4r],[camlp4r],[no])
+-  AC_CHECK_PROG([CAMLP4RF],[camlp4rf],[camlp4rf],[no])
++  AC_CHECK_TOOL([CAMLP4BOOT],[camlp4boot],[no])
++  AC_CHECK_TOOL([CAMLP4O],[camlp4o],[no])
++  AC_CHECK_TOOL([CAMLP4OF],[camlp4of],[no])
++  AC_CHECK_TOOL([CAMLP4OOF],[camlp4oof],[no])
++  AC_CHECK_TOOL([CAMLP4ORF],[camlp4orf],[no])
++  AC_CHECK_TOOL([CAMLP4PROF],[camlp4prof],[no])
++  AC_CHECK_TOOL([CAMLP4R],[camlp4r],[no])
++  AC_CHECK_TOOL([CAMLP4RF],[camlp4rf],[no])
+ ])
+ 
+ 
+-- 
+1.7.9.5
+

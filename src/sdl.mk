@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.libsdl.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://hg.libsdl.org/SDL/tags' | \
+    $(WGET) -q -O- 'http://hg.libsdl.org/SDL/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef

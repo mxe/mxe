@@ -3,14 +3,14 @@
 
 PKG             := vigra
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 09f1d506c2748ebeb7d9f1c77ce387f9e7b837d2
+$(PKG)_CHECKSUM := 6e4981f4ce75932ec62df6523f577c327f885ba0
 $(PKG)_SUBDIR   := vigra-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := vigra-$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_URL      := http://hci.iwr.uni-heidelberg.de/vigra/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff libpng openexr
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://hci.iwr.uni-heidelberg.de/vigra/' | \
+    $(WGET) -q -O- 'http://hci.iwr.uni-heidelberg.de/vigra/' | \
     grep 'Sources' | \
     grep '<a href="vigra' | \
     $(SED) -n 's,.*"vigra-\([0-9][^"]*\)-src.*,\1,p' | \

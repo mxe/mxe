@@ -3,22 +3,19 @@
 
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9b11968fedf4da45bcd10c4a8c50012d41b3af50
+$(PKG)_CHECKSUM := f2b94ca757191dddba686e54b32b3dfc5ad5d8fb
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext pcre libiconv zlib dbus
+$(PKG)_DEPS     := gcc gettext pcre libiconv zlib libffi dbus
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
     $(SED) -n "s,.*tag/?id=\([0-9]\+\.[0-9]*[02468]\.[^']*\).*,\1,p" | \
     head -1
 endef
 
-define $(PKG)_BUILD
-    cd '$(1)' && aclocal
-    cd '$(1)' && $(LIBTOOLIZE) --force
-    cd '$(1)' && autoconf
+define $(PKG)_NATIVE_BUILD
     cp -Rp '$(1)' '$(1).native'
 
     # native build of libiconv (used by glib-genmarshal)
@@ -35,6 +32,7 @@ define $(PKG)_BUILD
         --enable-regex \
         --disable-threads \
         --disable-selinux \
+        --disable-inotify \
         --disable-fam \
         --disable-xattr \
         --disable-dtrace \
@@ -45,10 +43,30 @@ define $(PKG)_BUILD
     $(SED) -i 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/gmodule' -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    $(MAKE) -C '$(1).native/gio/xdgmime'     -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)' glib-compile-schemas
+    $(MAKE) -C '$(1).native/gio'     -j '$(JOBS)' glib-compile-resources
     $(INSTALL) -m755 '$(1).native/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m755 '$(1).native/gio/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
+endef
 
+define $(PKG)_SYMLINK
+    ln -sf `which glib-genmarshal`        '$(PREFIX)/$(TARGET)/bin/'
+    ln -sf `which glib-compile-schemas`   '$(PREFIX)/$(TARGET)/bin/'
+    ln -sf `which glib-compile-resources` '$(PREFIX)/$(TARGET)/bin/'
+endef
+
+define $(PKG)_BUILD
+    cd '$(1)' && ./autogen.sh
+    rm -f '$(PREFIX)/$(TARGET)/bin/glib-*'
+    $(if $(findstring y,\
+            $(shell [ -x "`which glib-genmarshal`" ] && \
+                    [ -x "`which glib-compile-schemas`" ] && \
+                    [ -x "`which glib-compile-resources`" ] && echo y)), \
+        $($(PKG)_SYMLINK), \
+        $($(PKG)_NATIVE_BUILD))
     # cross build
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
@@ -58,10 +76,12 @@ define $(PKG)_BUILD
         --with-threads=win32 \
         --with-pcre=system \
         --with-libiconv=gnu \
+        --disable-inotify \
         CXX='$(TARGET)-c++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
-        GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas'
+        GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
+        GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources'
     $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=

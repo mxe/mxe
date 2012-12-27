@@ -11,7 +11,7 @@ $(PKG)_URL_2    := http://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(
 $(PKG)_DEPS     := gcc libiconv curl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.apache.org/dist/xerces/c/3/sources/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://www.apache.org/dist/xerces/c/3/sources/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="xerces-c-\([0-9][^"]*\)\.tar.*,\1,p' | \
     grep -v rc | \
     head -1

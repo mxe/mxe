@@ -3,14 +3,14 @@
 
 PKG             := atk
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := b9808b77c7905eb46fc2b64587ef93beab37470a
+$(PKG)_CHECKSUM := 951f9cd195dcab855c7779cfcba21153106cb754
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib gettext
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/atk/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/atk/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=ATK_\\([0-9]*_[0-9]*[02468]_[^<]*\\)'.*,\\1,p" | \
     $(SED) 's,_,.,g' | \
@@ -20,6 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-glibtest \

@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/openil/DevIL/$($(PKG)_VE
 $(PKG)_DEPS     := gcc freeglut zlib openexr jpeg jasper lcms libmng libpng tiff sdl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://openil.svn.sourceforge.net/viewvc/openil/tags/?sortby=date' | \
+    $(WGET) -q -O- 'http://openil.svn.sourceforge.net/viewvc/openil/tags/?sortby=date' | \
     grep '<a name="' | \
     $(SED) -n 's,.*<a name="release-\([0-9][^"]*\)".*,\1,p' | \
     head -1

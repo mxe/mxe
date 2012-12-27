@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.mega-nerd.com/SRC/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.mega-nerd.com/SRC/download.html' | \
+    $(WGET) -q -O- 'http://www.mega-nerd.com/SRC/download.html' | \
     $(SED) -n 's,.*libsamplerate-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v alpha | \
     grep -v beta | \

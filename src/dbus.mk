@@ -3,14 +3,14 @@
 
 PKG             := dbus
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3140ea452337d664dbe6d30f0d990c756d101694
+$(PKG)_CHECKSUM := d9634807d1de9b64727ae2178e3af2227fca0fca
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc expat
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
+    $(WGET) -q -O- 'http://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
     grep -v '^1\.[01234]\.' | \
     head -1
@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         --disable-verbose-mode \
         --disable-asserts \
         $(LINK_STYLE) \
+        --disable-maintainer-mode \
         --disable-silent-rules
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

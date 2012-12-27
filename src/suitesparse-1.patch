@@ -1,19 +1,42 @@
---- SuiteSparse-3.7.0/CHOLMOD/Makefile	2011-12-08 19:56:52.000000000 +0100
-+++ SuiteSparse-3.6.0/CHOLMOD/Makefile	2011-01-25 21:05:49.000000000 +0100
-@@ -13,6 +13,6 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 169f88aef7ff1d302aa3eac48d779d009780b87f Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 20 May 2012 23:41:27 +0200
+Subject: [PATCH] build lib not demo
+
+---
+ CHOLMOD/Makefile |    2 +-
+ UMFPACK/Makefile |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CHOLMOD/Makefile b/CHOLMOD/Makefile
+index 97911ef..4a3bcae 100644
+--- a/CHOLMOD/Makefile
++++ b/CHOLMOD/Makefile
+@@ -14,7 +14,7 @@ include ../SuiteSparse_config/SuiteSparse_config.mk
  
  # Compile the C-callable libraries and the Demo programs.
  all:
-+	( cd Lib ; $(MAKE) )
 -	( cd Demo ; $(MAKE) )
++	( cd Lib ; $(MAKE) )
  
  # Compile the C-callable libraries only.
---- SuiteSparse-3.7.0/UMFPACK/Makefile	2011-12-08 20:57:27.000000000 +0100
-+++ SuiteSparse-3.6.1/UMFPACK/Makefile	2011-01-25 21:07:50.000000000 +0100
-@@ -13,5 +13,5 @@
- # compile all C code (except hb, fortran, and fortran64), including AMD and the
- # demos, but not the MATLAB mexFunctions
- all:
-+	( cd Lib    ; $(MAKE) )
--	( cd Demo   ; $(MAKE) )
+ library:
+diff --git a/UMFPACK/Makefile b/UMFPACK/Makefile
+index 622ee39..e19cd2f 100644
+--- a/UMFPACK/Makefile
++++ b/UMFPACK/Makefile
+@@ -12,7 +12,7 @@ include ../SuiteSparse_config/SuiteSparse_config.mk
  
+ # compile all C code (except hb, fortran, and fortran64), incl. AMD and demos
+ all:
+-	( cd Demo   ; $(MAKE) )
++	( cd Lib    ; $(MAKE) )
+ 
+ # compile just the C-callable UMFPACK library
+ library:
+-- 
+1.7.10.4
+

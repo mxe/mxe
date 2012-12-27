@@ -3,15 +3,15 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 03b8241477a9f8a34f6efe7273d92b9b6dd9fe82
+$(PKG)_CHECKSUM := a464ba0f26eef24c29bcd1e7489421117fb9ee35
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := mingwrt w32api mingw-w64 binutils gcc-gmp gcc-mpc gcc-mpfr
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
     grep -v '^4\.[543]\.' | \
     head -1
@@ -47,7 +47,9 @@ define $(PKG)_SUPPORT_CONFIG
         --disable-libgomp \
         --disable-libmudflap \
         --with-mpfr-include='$(1)/mpfr/src' \
-        --with-mpfr-lib='$(1).build/mpfr/src/.libs'
+        --with-mpfr-lib='$(1).build/mpfr/src/.libs' \
+        $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
+    $(MAKE) -C '$(1).build' -j '$(JOBS)'
 endef
 
 define $(PKG)_POST_BUILD
@@ -59,9 +61,10 @@ define $(PKG)_POST_BUILD
 
     # create the CMake toolchain file
     [ -d '$(dir $(CMAKE_TOOLCHAIN_FILE))' ] || mkdir -p '$(dir $(CMAKE_TOOLCHAIN_FILE))'
-    (echo 'set(BUILD_SHARED_LIBS OFF)'; \
-     echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
+    (echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
      echo 'set(MSYS 1)'; \
+     echo 'set(BUILD_SHARED_LIBS OFF)'; \
+     echo 'set(CMAKE_BUILD_TYPE Release)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH $(PREFIX)/$(TARGET))'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)'; \

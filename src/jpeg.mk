@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.ijg.org/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.ijg.org/' | \
+    $(WGET) -q -O- 'http://www.ijg.org/' | \
     $(SED) -n 's,.*jpegsrc\.v\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

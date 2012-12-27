@@ -10,14 +10,27 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/Base/$(PKG)/
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/mingw/files/MinGW/Base/w32api/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/mingw/files/MinGW/Base/w32api/' | \
     $(SED) -n 's,.*w32api-\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     cp -rpv '$(1)/include' '$(1)/lib' '$(PREFIX)/$(TARGET)'
+
+    # create pkg-config files
+    (echo 'Name: gl'; \
+     echo 'Version: 0'; \
+     echo 'Description: OpenGL'; \
+     echo 'Libs: -lopengl32';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/gl.pc'
+
+    (echo 'Name: glu'; \
+     echo 'Version: 0'; \
+     echo 'Description: OpenGL'; \
+     echo 'Libs: -lglu32';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/glu.pc'
 endef
 
 $(PKG)_BUILD_i686-static-mingw32    = $($(PKG)_BUILD)

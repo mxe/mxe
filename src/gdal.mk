@@ -3,15 +3,15 @@
 
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := e2eaaf0fba39137b40c0d3069ac41dfb6f3c76db
+$(PKG)_CHECKSUM := 7eda6a4d735b8d6903740e0acdd702b43515e351
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta
+$(PKG)_DEPS     := gcc zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf4 hdf5 netcdf
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
+    $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
     $(SED) -n 's,.*gdal-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
@@ -20,6 +20,7 @@ define $(PKG)_CONFIGURE
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-bsb \
@@ -39,7 +40,11 @@ define $(PKG)_CONFIGURE
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
         --with-curl='$(PREFIX)/$(TARGET)/bin/curl-config' \
         --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
+        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
+        --with-hdf4='$(PREFIX)/$(TARGET)' \
+        --with-hdf5='$(PREFIX)/$(TARGET)' \
+        --with-netcdf='$(PREFIX)/$(TARGET)' \
         --without-odbc \
         --without-static-proj4 \
         --without-xerces \
@@ -48,12 +53,9 @@ define $(PKG)_CONFIGURE
         --without-spatialite \
         --without-cfitsio \
         --without-pcraster \
-        --without-netcdf \
         --without-pcidsk \
         --without-ogdi \
         --without-fme \
-        --without-hdf4 \
-        --without-hdf5 \
         --without-ecw \
         --without-kakadu \
         --without-mrsid \
@@ -64,7 +66,6 @@ define $(PKG)_CONFIGURE
         --without-ingres \
         --without-dods-root \
         --without-dwgdirect \
-        --without-dwg-plt \
         --without-idb \
         --without-sde \
         --without-epsilon \
@@ -72,8 +73,7 @@ define $(PKG)_CONFIGURE
         --without-php \
         --without-ruby \
         --without-python \
-        --without-macosx-framework \
-        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
 endef
 
 define $(PKG)_MAKE

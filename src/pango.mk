@@ -3,27 +3,27 @@
 
 PKG             := pango
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f0bf7974ef3e8826fbbb55c0974466ede1e67dd3
+$(PKG)_CHECKSUM := 0f390c43ba51e851d35e8dd9eb7eb8f72eef4035
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc fontconfig freetype cairo glib
+$(PKG)_DEPS     := gcc fontconfig freetype cairo glib harfbuzz
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.gnome.org/browse/pango/refs/tags' | \
+    $(WGET) -q -O- 'http://git.gnome.org/browse/pango/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1
 endef
 
 define $(PKG)_BUILD
+    rm '$(1)'/docs/Makefile.am
+    cd '$(1)' && NOCONFIGURE=1 ./autogen.sh
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-gtk-doc \
-        --without-x \
         --enable-explicit-deps \
         --with-included-modules \
         --without-dynamic-modules \

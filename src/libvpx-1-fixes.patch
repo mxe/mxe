@@ -1,0 +1,165 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 01c0e284b4d458fade9f8b2288863f3dd4dbc81a Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Fri, 25 May 2012 23:36:41 +0200
+Subject: [PATCH 1/4] add Libs.private to vpx.pc
+
+
+diff --git a/libs.mk b/libs.mk
+index e2ba737..209f77e 100644
+--- a/libs.mk
++++ b/libs.mk
+@@ -242,6 +242,7 @@ vpx.pc: config.mk libs.mk
+ 	$(qexec)echo 'Requires:' >> $@
+ 	$(qexec)echo 'Conflicts:' >> $@
+ 	$(qexec)echo 'Libs: -L$${libdir} -lvpx' >> $@
++	$(qexec)echo 'Libs.private: -lpthread' >> $@
+ 	$(qexec)echo 'Cflags: -I$${includedir}' >> $@
+ INSTALL-LIBS-yes += $(LIBSUBDIR)/pkgconfig/vpx.pc
+ INSTALL_MAPS += $(LIBSUBDIR)/pkgconfig/%.pc %.pc
+-- 
+1.7.11.5
+
+
+From 73c1c32c41b75a432fbe092fb621474a760d0f51 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Fri, 25 May 2012 23:40:00 +0200
+Subject: [PATCH 2/4] linking as test is not good for cross compiling
+
+
+diff --git a/configure b/configure
+index 62e1ffb..0c4faf9 100755
+--- a/configure
++++ b/configure
+@@ -481,9 +481,6 @@ process_detect() {
+         }
+     fi
+     check_header stdio.h || die "Unable to invoke compiler: ${CC} ${CFLAGS}"
+-    check_ld <<EOF || die "Toolchain is unable to link executables"
+-int main(void) {return 0;}
+-EOF
+     # check system headers
+     check_header stdint.h
+     check_header pthread.h
+-- 
+1.7.11.5
+
+
+From 88bedac576559c599f3084b4eaa61a2ef85cfd06 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Fri, 25 May 2012 23:40:55 +0200
+Subject: [PATCH 3/4] fix bin/bash
+
+
+diff --git a/build/make/armlink_adapter.sh b/build/make/armlink_adapter.sh
+index b53669c..71cf7e9 100755
+--- a/build/make/armlink_adapter.sh
++++ b/build/make/armlink_adapter.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/configure.sh b/build/make/configure.sh
+index 3c772e5..032b5e8 100755
+--- a/build/make/configure.sh
++++ b/build/make/configure.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  configure.sh
+ ##
+diff --git a/build/make/gen_asm_deps.sh b/build/make/gen_asm_deps.sh
+index 717f870..81b7095 100755
+--- a/build/make/gen_asm_deps.sh
++++ b/build/make/gen_asm_deps.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/gen_msvs_def.sh b/build/make/gen_msvs_def.sh
+index 4defcc2..12e3573 100755
+--- a/build/make/gen_msvs_def.sh
++++ b/build/make/gen_msvs_def.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/gen_msvs_proj.sh b/build/make/gen_msvs_proj.sh
+index 6d42941..4418034 100755
+--- a/build/make/gen_msvs_proj.sh
++++ b/build/make/gen_msvs_proj.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/gen_msvs_sln.sh b/build/make/gen_msvs_sln.sh
+index 240678b..2089f68 100755
+--- a/build/make/gen_msvs_sln.sh
++++ b/build/make/gen_msvs_sln.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/version.sh b/build/make/version.sh
+index 3efb956..b3a9c23 100755
+--- a/build/make/version.sh
++++ b/build/make/version.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/configure b/configure
+index 0c4faf9..5d1db69 100755
+--- a/configure
++++ b/configure
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  configure
+ ##
+-- 
+1.7.11.5
+
+
+From 3d905203699e813027233bd0f19b05d44b98470d Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 17 Sep 2012 20:23:14 +1000
+Subject: [PATCH 4/4] Fix for building on OSX
+
+Taken from:
+https://gerrit.chromium.org/gerrit/#/c/26027/
+
+diff --git a/build/make/gen_asm_deps.sh b/build/make/gen_asm_deps.sh
+index 81b7095..158ec34 100755
+--- a/build/make/gen_asm_deps.sh
++++ b/build/make/gen_asm_deps.sh
+@@ -42,7 +42,7 @@ done
+ 
+ [ -n "$srcfile" ] || show_help
+ sfx=${sfx:-asm}
+-includes=$(LC_ALL=C egrep -i "include +\"?+[a-z0-9_/]+\.${sfx}" $srcfile |
++includes=$(LC_ALL=C egrep -i "include +\"?[a-z0-9_/]+\.${sfx}" $srcfile |
+            perl -p -e "s;.*?([a-z0-9_/]+.${sfx}).*;\1;")
+ #" restore editor state
+ for inc in ${includes}; do
+-- 
+1.7.11.5
+

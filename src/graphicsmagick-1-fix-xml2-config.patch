@@ -8,7 +8,7 @@ diff --git a/configure.ac b/configure.ac
 index 979d2c4..12d4555 100755
 --- a/configure.ac
 +++ b/configure.ac
-@@ -2388,12 +2388,13 @@ then
+@@ -2373,12 +2373,13 @@ then
          # Debian installs libxml headers under /usr/include/libxml2/libxml with
          # the shared library installed under /usr/lib, whereas the package
          # installs itself under $prefix/libxml and $prefix/lib.
@@ -23,7 +23,7 @@ index 979d2c4..12d4555 100755
       fi
      failed=0
      passed=0
-@@ -2416,8 +2417,9 @@ then
+@@ -2401,8 +2402,9 @@ then
          LDFLAGS="$OLD_LDFLAGS"
          CPPFLAGS="$OLD_CPPFLAGS"
      else
@@ -38,9 +38,10 @@ diff --git a/magick/GraphicsMagick.pc.in b/magick/GraphicsMagick.pc.in
 index 5757b37..87e3fd4 100644
 --- a/magick/GraphicsMagick.pc.in
 +++ b/magick/GraphicsMagick.pc.in
-@@ -8,4 +8,5 @@ Name: GraphicsMagick
+@@ -8,4 +8,6 @@ Name: GraphicsMagick
  Version: @PACKAGE_VERSION@
  Description: GraphicsMagick image processing library
++Requires.private: libxml-2.0
  Libs: -L${libdir} -lGraphicsMagick
 +Libs.private: @MAGICK_API_LDFLAGS@ @MAGICK_API_LIBS@
  Cflags: -I${includedir} @MAGICK_API_PC_CPPFLAGS@

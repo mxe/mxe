@@ -1,62 +1,19 @@
 This file is part of MXE.
 See index.html for further information.
 
-Contains ad hoc patches for cross building.
-
-From 4968ed3c3300976ce8b24c52c729db6bd264057c Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sun, 13 Nov 2011 11:48:07 +0100
-Subject: [PATCH 1/4] fix-install-def-file
-
-
-diff --git a/src/xine-engine/Makefile.am b/src/xine-engine/Makefile.am
-index 67ae63f..0f94abf 100644
---- a/src/xine-engine/Makefile.am
-+++ b/src/xine-engine/Makefile.am
-@@ -45,10 +45,10 @@ noinst_HEADERS = bswap.h ffmpeg_bswap.h xine_private.h
- 
- if WIN32
- install-exec-local:
--	cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
-+	-cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
- 
- uninstall-local:
--	rm -f $(DEF_FILE)
-+	-rm -f $(DESTDIR)$(libdir)/$(DEF_FILE)
- endif
- 
- $(XINEUTILS_LIB):
-diff --git a/src/xine-engine/Makefile.in b/src/xine-engine/Makefile.in
-index 167a32b..0664e1f 100644
---- a/src/xine-engine/Makefile.in
-+++ b/src/xine-engine/Makefile.in
-@@ -905,10 +905,10 @@ $(LIBXINEPOSIX):
- 	$(MAKE) -C $(top_builddir)/lib libxineposix.la
- 
- @WIN32_TRUE@install-exec-local:
--@WIN32_TRUE@	cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
-+@WIN32_TRUE@	-cp -p $(DEF_FILE) $(DESTDIR)$(libdir)
- 
- @WIN32_TRUE@uninstall-local:
--@WIN32_TRUE@	rm -f $(DEF_FILE)
-+@WIN32_TRUE@	-rm -f $(DESTDIR)$(libdir)/$(DEF_FILE)
- 
- $(XINEUTILS_LIB):
- 	$(MAKE) -C $(top_builddir)/src/xine-utils libxineutils.la
--- 
-1.7.8.3
-
-
-From 86f2d23f9229e17aa4a54ca982b8f95de5ee4644 Mon Sep 17 00:00:00 2001
-From: MXE
+From 6dc46ed1253c1fce1cfa8d360e352b5bc12d0d3b Mon Sep 17 00:00:00 2001
+From: "mxe@mxe.cc" <mxe@mxe.cc>
 Date: Sun, 13 Nov 2011 12:05:22 +0100
-Subject: [PATCH 2/4] fake missing definitions for WIN32
+Subject: [PATCH 1/4] fake missing definitions for WIN32
 
 Taken from:
 https://bugs.xine-project.org/show_bug.cgi?id=433
+---
+ src/audio_out/audio_file_out.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/src/audio_out/audio_file_out.c b/src/audio_out/audio_file_out.c
-index 802461e..8b9b704 100644
+index bc40d4e..a613a89 100644
 --- a/src/audio_out/audio_file_out.c
 +++ b/src/audio_out/audio_file_out.c
 @@ -53,6 +53,18 @@
@@ -79,17 +36,20 @@ index 802461e..8b9b704 100644
  
  struct wavhdr {
 -- 
-1.7.8.3
+1.7.10.4
 
 
-From 42946ec1f900d22b62cb28996b9f12d11d7be7a8 Mon Sep 17 00:00:00 2001
-From: MXE
+From 4a7cd803cbc3daa3f19fdc6b34fb93e1994bc2f5 Mon Sep 17 00:00:00 2001
+From: "mxe@mxe.cc" <mxe@mxe.cc>
 Date: Sun, 13 Nov 2011 13:45:21 +0100
-Subject: [PATCH 3/4] force graphicsmagick over imagemagick
+Subject: [PATCH 2/4] force graphicsmagick over imagemagick
 
+---
+ configure.ac |    9 ---------
+ 1 file changed, 9 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index b175301..d37ba36 100644
+index 9112b58..67f1147 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -1412,14 +1412,6 @@ AC_ARG_WITH([imagemagick],
@@ -116,37 +76,68 @@ index b175301..d37ba36 100644
        AC_MSG_ERROR([ImageMagick support requested, but neither Wand, MagickWand, nor GraphicsMagick were found])
     elif test "x$have_imagemagick" = "xyes"; then
 -- 
-1.7.8.3
+1.7.10.4
 
 
-From f0fa8b5b9570cdf88788067b1a76669c6863ac9f Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Mon, 30 Jan 2012 09:21:33 +0100
-Subject: [PATCH 4/4] zlib 1.2.6 compatibility
+From 5b362f4aed3a814a351cd259efb62b40761ddb3d Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 27 May 2012 23:28:57 +0200
+Subject: [PATCH 3/4] add missing localtime_r
+
+Previously provided by pthreads-w32-2-8-0-release, which is also
+the source of this version.
+---
+ src/localtime_r.h         |    3 +++
+ src/xine-engine/scratch.c |    1 +
+ 2 files changed, 4 insertions(+)
+ create mode 100644 src/localtime_r.h
+
+diff --git a/src/localtime_r.h b/src/localtime_r.h
+new file mode 100644
+index 0000000..ec778c5
+--- /dev/null
++++ b/src/localtime_r.h
+@@ -0,0 +1,3 @@
++#define localtime_r( _clock, _result ) \
++        ( *(_result) = *localtime( (_clock) ), \
++          (_result) )
+diff --git a/src/xine-engine/scratch.c b/src/xine-engine/scratch.c
+index 39bb592..41d561b 100644
+--- a/src/xine-engine/scratch.c
++++ b/src/xine-engine/scratch.c
+@@ -36,6 +36,7 @@
+ 
+ #include "xineutils.h"
+ #include "scratch.h"
++#include "localtime_r.h"
+ 
+ static void XINE_FORMAT_PRINTF(2, 0)
+   scratch_printf (scratch_buffer_t *this, const char *format, va_list argp)
+-- 
+1.7.10.4
 
 
-diff --git a/src/xine-engine/osd.c b/src/xine-engine/osd.c
-index 1d22ea3..0fbde93 100644
---- a/src/xine-engine/osd.c
-+++ b/src/xine-engine/osd.c
-@@ -650,7 +650,7 @@ static void osd_set_position (osd_object_t *osd, int x, int y) {
-   osd->display_y = y;
+From 0d3546c3c12a8bf311c9751f0d0d2e3a95569657 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 27 May 2012 23:23:19 +0200
+Subject: [PATCH 4/4] ffmpeg 0.11 removed avcodec_init
+
+---
+ src/combined/ffmpeg/ffmpeg_decoder.c |    1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/combined/ffmpeg/ffmpeg_decoder.c b/src/combined/ffmpeg/ffmpeg_decoder.c
+index 879df53..84ee1a3 100644
+--- a/src/combined/ffmpeg/ffmpeg_decoder.c
++++ b/src/combined/ffmpeg/ffmpeg_decoder.c
+@@ -312,7 +312,6 @@ void avcodec_register_all(void)
+ 
+ void init_once_routine(void) {
+   pthread_mutex_init(&ffmpeg_lock, NULL);
+-  avcodec_init();
+   avcodec_register_all();
  }
  
--static uint16_t gzread_i16(gzFile *fp) {
-+static uint16_t gzread_i16(gzFile fp) {
-   uint16_t ret;
-   ret = gzgetc(fp);
-   ret |= (gzgetc(fp)<<8);
-@@ -663,7 +663,7 @@ static uint16_t gzread_i16(gzFile *fp) {
- 
- static int osd_renderer_load_font(osd_renderer_t *this, char *filename) {
- 
--  gzFile      *fp;
-+  gzFile      fp;
-   osd_font_t  *font = NULL;
-   int          i, ret = 0;
- 
 -- 
-1.7.8.3
+1.7.10.4
 

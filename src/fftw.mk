@@ -3,14 +3,14 @@
 
 PKG             := fftw
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3fecc492f576503a6a509d2073bd82b3fe0aef13
+$(PKG)_CHECKSUM := 11487180928d05746d431ebe7a176b52fe205cf9
 $(PKG)_SUBDIR   := fftw-$($(PKG)_VERSION)
 $(PKG)_FILE     := fftw-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.fftw.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.fftw.org/download.html' | \
+    $(WGET) -q -O- 'http://www.fftw.org/download.html' | \
     $(SED) -n 's,.*fftw-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v alpha | \
     grep -v beta | \
@@ -20,15 +20,16 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-threads \
-        --enable-double
+        --enable-threads
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \
@@ -38,6 +39,7 @@ define $(PKG)_BUILD
 
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \

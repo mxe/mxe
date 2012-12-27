@@ -3,44 +3,11 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 7b90b53e9d48aa13aaa42d60b060fb3ff9a5f11c Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Mon, 20 Feb 2012 09:02:05 +0100
-Subject: [PATCH 1/3] add missing header for mingw
-
-taken from
-https://sourceforge.net/tracker/?func=detail&aid=3489514&group_id=11504&atid=311504
----
- .../Source/LibRawLite/src/libraw_datastream.cpp    |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/Source/LibRawLite/src/libraw_datastream.cpp b/Source/LibRawLite/src/libraw_datastream.cpp
-index 33a81b9..c5d57f6 100644
---- a/Source/LibRawLite/src/libraw_datastream.cpp
-+++ b/Source/LibRawLite/src/libraw_datastream.cpp
-@@ -8,7 +8,10 @@
- #else
- #define NO_JASPER
- #endif
--
-+#ifdef __MINGW32__
-+#include <stdexcept>
-+#include <winbase.h>
-+#endif
- 
- LibRaw_byte_buffer::LibRaw_byte_buffer(unsigned sz) 
- { 
--- 
-1.7.9.2
-
-From fa251a7e33ac1c73992a5825a1f1f2fa888af93c Mon Sep 17 00:00:00 2001
-From: MXE
+From bc927f5ebeb38f83d6b6d36de6f4af679232ca11 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 20 Feb 2012 08:58:53 +0100
-Subject: [PATCH 2/3] makefile workarounds (MXE)
+Subject: [PATCH 1/3] makefile workarounds (MXE)
 
----
- FreeImage/Makefile.gnu |   13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/Makefile.gnu b/Makefile.gnu
 index e6007ae..631eb82 100644
@@ -86,16 +53,14 @@ index e6007ae..631eb82 100644
  clean:
  	rm -f core Dist/*.* u2dtmp* $(MODULES) $(STATICLIB) $(SHAREDLIB) $(LIBNAME)
 -- 
-1.7.9.2
+1.7.10.4
 
-From 5f52e869fdcc5a18592a6b87b83ce1f6c15a3ac0 Mon Sep 17 00:00:00 2001
-From: MXE
+
+From d0f85974b3e4057a9779d6dfad7c133f3a05f094 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 20 Feb 2012 09:47:08 +0100
-Subject: [PATCH 3/3] required win version (MXE)
+Subject: [PATCH 2/3] required win version (MXE)
 
----
- FreeImage/Makefile.gnu |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Makefile.gnu b/Makefile.gnu
 index 631eb82..1809017 100644
@@ -114,5 +79,31 @@ index 631eb82..1809017 100644
  
  ifeq ($(shell sh -c 'uname -m 2>/dev/null || echo not'),x86_64)
 -- 
-1.7.9.2
+1.7.10.4
+
+
+From f1a9c3261457568064127586e9c782664bb8df78 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 27 Oct 2012 22:57:27 +0200
+Subject: [PATCH 3/3] include string.h for memset
+
+taken from https://sourceforge.net/tracker/?func=detail&aid=3581223&group_id=11504&atid=311504
+
+diff --git a/Source/OpenEXR/IlmImf/ImfAutoArray.h b/Source/OpenEXR/IlmImf/ImfAutoArray.h
+index edb8b10..0b1378e 100644
+--- a/Source/OpenEXR/IlmImf/ImfAutoArray.h
++++ b/Source/OpenEXR/IlmImf/ImfAutoArray.h
+@@ -45,6 +45,10 @@
+ //-----------------------------------------------------------------------------
+ 
+ #include "OpenEXRConfig.h"
++#ifdef __MINGW32__
++// needed for memset
++#include <string.h>
++#endif
+ 
+ namespace Imf {
+ 
+-- 
+1.7.10.4
 

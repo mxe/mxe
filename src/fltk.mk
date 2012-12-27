@@ -3,14 +3,14 @@
 
 PKG             := fltk
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 720f2804be6132ebae9909d4e74dedcc00b39d25
+$(PKG)_CHECKSUM := 25071d6bb81cc136a449825bfd574094b48f07fb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR)-source.tar.gz
 $(PKG)_URL      := http://ftp.easysw.com/pub/fltk/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg libpng pthreads
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.fltk.org/' | \
+    $(WGET) -q -O- 'http://www.fltk.org/' | \
     $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
     grep -v '^1\.1\.' | \
     head -1

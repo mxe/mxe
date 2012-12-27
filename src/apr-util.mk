@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := apr-util
-$(PKG)_IGNORE   := 1.4.1
+$(PKG)_IGNORE   := 1.5.1
 $(PKG)_CHECKSUM := f5aaf15542209fee479679299dc4cb1ac0924a59
 $(PKG)_SUBDIR   := apr-util-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-util-$($(PKG)_VERSION).tar.gz
@@ -11,7 +11,7 @@ $(PKG)_URL_2    := http://archive.apache.org/dist/apr/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc apr expat libiconv
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://apr.apache.org/download.cgi' | \
+    $(WGET) -q -O- 'http://apr.apache.org/download.cgi' | \
     grep 'aprutil1.*best' |
     $(SED) -n 's,.*APR-util \([0-9.]*\).*,\1,p'
 endef

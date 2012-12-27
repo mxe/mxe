@@ -3,22 +3,24 @@
 
 PKG             := pdflib_lite
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 5b2bf5edc49dba3da0997ade0e191511a37fae01
+$(PKG)_CHECKSUM := 42e0605ae21f4b6d25fa2d20e78fed6df36fbaa9
 $(PKG)_SUBDIR   := PDFlib-Lite-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(subst p, ,$($(PKG)_VERSION))))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.pdflib.com/download/free-software/pdflib-lite-7/' | \
+    $(WGET) -q -O- 'http://www.pdflib.com/download/free-software/pdflib-lite-7/' | \
     $(SED) -n 's,.*PDFlib-Lite-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,ac_sys_system=`uname -s`,ac_sys_system=MinGW,' '$(1)/configure'
+    cd '$(1)' && aclocal -I config --install
+    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-openssl \
@@ -27,7 +29,6 @@ define $(PKG)_BUILD
         --without-perl \
         --without-ruby \
         --without-tcl \
-        --disable-php \
         --enable-cxx \
         --enable-large-files \
         CFLAGS='-D_IOB_ENTRIES=20'

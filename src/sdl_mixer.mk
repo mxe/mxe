@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FIL
 $(PKG)_DEPS     := gcc sdl libmodplug ogg vorbis smpeg
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://hg.libsdl.org/SDL_mixer/tags' | \
+    $(WGET) -q -O- 'http://hg.libsdl.org/SDL_mixer/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef

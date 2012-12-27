@@ -3,7 +3,7 @@
 
 PKG             := geos
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2ecd23c38d74e5f04757dc528ec30858006fb6a7
+$(PKG)_CHECKSUM := 454c9b61f158de509db60a69512414a0a1b0743b
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
 $(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://download.osgeo.org/geos/$($(PKG)_FILE)
@@ -11,7 +11,7 @@ $(PKG)_URL_2    := ftp://ftp.remotesensing.org/geos/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://geos.refractions.net/' | \
+    $(WGET) -q -O- 'http://geos.refractions.net/' | \
     $(SED) -n 's,.*geos-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
@@ -19,9 +19,9 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         $(LINK_STYLE) \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-swig
+        --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \

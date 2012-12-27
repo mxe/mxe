@@ -3,14 +3,14 @@
 
 PKG             := lua
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 08f84c355cdd646f617f09cebea48bd832415829
+$(PKG)_CHECKSUM := 6bb1b0a39b6a5484b71a83323c690154f86b2021
 $(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)
 $(PKG)_FILE     := lua-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.lua.org/ftp/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.lua.org/download.html' | \
+    $(WGET) -q -O- 'http://www.lua.org/download.html' | \
     $(SED) -n 's,.*lua-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

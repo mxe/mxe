@@ -10,7 +10,7 @@ $(PKG)_URL      := http://www.opencsg.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freeglut glew qt
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.opencsg.org/#download' | \
+    $(WGET) -q -O- 'http://www.opencsg.org/#download' | \
     grep 'OpenCSG-' | \
     $(SED) -n 's,.*OpenCSG-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

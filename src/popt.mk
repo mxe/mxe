@@ -11,7 +11,7 @@ $(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/p/$(PKG)/$(PKG)_$($(PK
 $(PKG)_DEPS     := gcc libiconv gettext
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://rpm5.org/files/popt/' | \
+    $(WGET) -q -O- 'http://rpm5.org/files/popt/' | \
     grep 'popt-' | \
     $(SED) -n 's,.*popt-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1

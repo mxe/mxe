@@ -3,14 +3,14 @@
 
 PKG             := poco
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9e1ef31d369c67eef2d3ce1ca8f2b6ac5cc38ec4
+$(PKG)_CHECKSUM := fd19d6d25504f9cdaf345880ddf64aa688dea170
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/sources/$(PKG)-$(word 1,$(subst p, ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://pocoproject.org/download/' | \
+    $(WGET) -q -O- 'http://pocoproject.org/download/' | \
     $(SED) -n 's,.*poco-\([0-9][^>/]*\)\.tar.*,\1,p' | \
     head -1
 endef

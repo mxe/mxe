@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(PKG).freedesktop.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://cgit.freedesktop.org/liboil/refs/tags' | \
+    $(WGET) -q -O- 'http://cgit.freedesktop.org/liboil/refs/tags' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1
 endef

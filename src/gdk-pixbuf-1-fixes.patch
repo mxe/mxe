@@ -3,21 +3,18 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 74e785e4ee6cf375f1c04d9e57e4b70caec6742c Mon Sep 17 00:00:00 2001
-From: MXE
+From 38f4e914e458de6963a3fddbb57dbf8cd0fb83b4 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 24 Sep 2010 23:31:24 +0200
 Subject: [PATCH 1/3] s,DllMain,static _disabled_DllMain,
 
----
- gdk-pixbuf/gdk-pixbuf-io.c |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
-index 6a5dbce..e5e1c2d 100644
+index 411ceb6..64db155 100644
 --- a/gdk-pixbuf/gdk-pixbuf-io.c
 +++ b/gdk-pixbuf/gdk-pixbuf-io.c
-@@ -226,12 +226,12 @@ skip_space (const char **pos)
-   
+@@ -230,12 +230,12 @@ get_file_formats (void)
+ 
  #ifdef G_OS_WIN32
  
 -/* DllMain function needed to tuck away the gdk-pixbuf DLL handle */
@@ -32,102 +29,69 @@ index 6a5dbce..e5e1c2d 100644
           LPVOID    lpvReserved)
  {
 -- 
-1.7.8
+1.7.10.4
 
 
-From 076713fb334bd200d41b056001f7e44fcae695fb Mon Sep 17 00:00:00 2001
-From: Maarten Bosmans <mkbosmans@gmail.com>
-Date: Mon, 24 Jan 2011 10:39:22 +0000
-Subject: [PATCH 2/3] Use png_jmpbuf macro
-
-This makes the png loader compatible with libpng 1.5
----
- gdk-pixbuf/io-png.c |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/gdk-pixbuf/io-png.c b/gdk-pixbuf/io-png.c
-index 79c81fd..76f3304 100644
---- a/gdk-pixbuf/io-png.c
-+++ b/gdk-pixbuf/io-png.c
-@@ -183,7 +183,7 @@ png_simple_error_callback(png_structp png_save_ptr,
-                              error_msg);
-         }
- 
--        longjmp (png_save_ptr->jmpbuf, 1);
-+        longjmp (png_jmpbuf(png_save_ptr), 1);
- }
- 
- static void
-@@ -287,7 +287,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
- 		return NULL;
- 	}
- 
--	if (setjmp (png_ptr->jmpbuf)) {
-+	if (setjmp (png_jmpbuf(png_ptr))) {
- 	    	g_free (rows);
- 
- 		if (pixbuf)
-@@ -459,7 +459,7 @@ gdk_pixbuf__png_image_begin_load (GdkPixbufModuleSizeFunc size_func,
-                 return NULL;
-         }
-         
--	if (setjmp (lc->png_read_ptr->jmpbuf)) {
-+	if (setjmp (png_jmpbuf(lc->png_read_ptr))) {
- 		if (lc->png_info_ptr)
- 			png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
-                 g_free(lc);
-@@ -531,7 +531,7 @@ gdk_pixbuf__png_image_load_increment(gpointer context,
-         lc->error = error;
-         
-         /* Invokes our callbacks as needed */
--	if (setjmp (lc->png_read_ptr->jmpbuf)) {
-+	if (setjmp (png_jmpbuf(lc->png_read_ptr))) {
-                 lc->error = NULL;
- 		return FALSE;
- 	} else {
-@@ -769,7 +769,7 @@ png_error_callback(png_structp png_read_ptr,
-                              error_msg);
-         }
- 
--        longjmp (png_read_ptr->jmpbuf, 1);
-+        longjmp (png_jmpbuf(png_read_ptr), 1);
- }
- 
- static void
-@@ -978,7 +978,7 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
- 	       success = FALSE;
- 	       goto cleanup;
-        }
--       if (setjmp (png_ptr->jmpbuf)) {
-+       if (setjmp (png_jmpbuf(png_ptr))) {
- 	       success = FALSE;
- 	       goto cleanup;
-        }
--- 
-1.7.8
-
-
-From 98b7ca46c998a497a1bc6cd563e0201d0cd65de0 Mon Sep 17 00:00:00 2001
+From 0903d316c228bf2a6ba9fe11188851a357cde43e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 23 Dec 2011 18:54:01 +0100
-Subject: [PATCH 3/3] add libtiff-4 to Requires.private
+Date: Fri, 12 Oct 2012 12:24:51 +0200
+Subject: [PATCH 2/3] add libtiff to required.private in .pc
 
----
- gdk-pixbuf-2.0.pc.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
 
 diff --git a/gdk-pixbuf-2.0.pc.in b/gdk-pixbuf-2.0.pc.in
-index 7e61775..bc33627 100644
+index 7addefc..a07a46f 100644
 --- a/gdk-pixbuf-2.0.pc.in
 +++ b/gdk-pixbuf-2.0.pc.in
-@@ -12,6 +12,7 @@ Name: GdkPixbuf
+@@ -12,7 +12,7 @@ Name: GdkPixbuf
  Description: Image loading and scaling
  Version: @VERSION@
- Requires: gobject-2.0 gmodule-no-export-2.0 @PNG_DEP_CFLAGS_PACKAGES@
-+Requires.private: libtiff-4
- Libs: -L${libdir} -lgdk_pixbuf-@GDK_PIXBUF_API_VERSION@ @GDK_PIXBUF_EXTRA_LIBS@
+ Requires: gobject-2.0
+-Requires.private: gmodule-no-export-2.0 @PNG_DEP_CFLAGS_PACKAGES@
++Requires.private: gmodule-no-export-2.0 @PNG_DEP_CFLAGS_PACKAGES@ libtiff-4
+ Libs: -L${libdir} -lgdk_pixbuf-@GDK_PIXBUF_API_VERSION@
+ Libs.private: @GDK_PIXBUF_EXTRA_LIBS@
  Cflags: -I${includedir}/gdk-pixbuf-@GDK_PIXBUF_API_VERSION@ @GDK_PIXBUF_EXTRA_CFLAGS@
- 
 -- 
-1.7.8
+1.7.10.4
+
+
+From 1e76ff73dcd6f191584bb05c8ccc9b0a16394a0d Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 12 Oct 2012 12:25:27 +0200
+Subject: [PATCH 3/3] allow static
+
+
+diff --git a/configure.ac b/configure.ac
+index a5224f8..a1fc2d0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -131,16 +131,16 @@ case $host in
+     ;;
+ esac
+ 
+-if test "$os_win32" = "yes"; then
+-  if test x$enable_static = xyes -o x$enable_static = x; then
+-    AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
+-    enable_static=no
+-  fi
+-  if test x$enable_shared = xno; then
+-    AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
+-  fi
+-  enable_shared=yes
+-fi
++dnl if test "$os_win32" = "yes"; then
++dnl   if test x$enable_static = xyes -o x$enable_static = x; then
++dnl     AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
++dnl     enable_static=no
++dnl   fi
++dnl   if test x$enable_shared = xno; then
++dnl     AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
++dnl   fi
++dnl   enable_shared=yes
++dnl fi
+ 
+ dnl Initialize libtool
+ LT_PREREQ([2.2.6])
+-- 
+1.7.10.4
 

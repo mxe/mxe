@@ -3,14 +3,14 @@
 
 PKG             := libvpx
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2919e11074fef72fc61ef1a75160050ffaad6074
+$(PKG)_CHECKSUM := 356af5f770c50cd021c60863203d8f30164f6021
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://webm.googlecode.com/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://code.google.com/p/webm/downloads/list?sort=-uploaded' | \
+    $(WGET) -q -O- 'http://code.google.com/p/webm/downloads/list?sort=-uploaded' | \
     $(SED) -n 's,.*libvpx-v\([0-9][^<]*\)\.tar.*,\1,p' | \
     head -1
 endef
