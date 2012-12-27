@@ -4,10 +4,11 @@
 # Mingw-w64
 PKG             := mingw-w64
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := bdbe8e33c630b82c14e4280e8bcfb8dc4b247f18
+$(PKG)_CHECKSUM := 55f74b8b87c9b081844a1ba46e97b1db696f6e00
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://downloads.sourceforge.net/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
