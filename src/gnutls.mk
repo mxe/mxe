@@ -6,7 +6,7 @@ $(PKG)_CHECKSUM := 93efeab75cad6f656eae1123c10e3692db727bd5
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/gnutls/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext nettle zlib
+$(PKG)_DEPS     := gcc gettext nettle pcre zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
@@ -22,6 +22,8 @@ define $(PKG)_BUILD
     cd '$(1)' && aclocal -I m4 -I gl/m4 -I src/libopts/m4 --install
     cd '$(1)' && autoconf
     cd '$(1)' && automake --add-missing
+    # skip the run test for libregex support since we are cross compiling
+    $(SED) -i 's/libopts_cv_with_libregex=no/libopts_cv_with_libregex=yes/g;' '$(1)/configure'
     # AI_ADDRCONFIG referenced by src/serv.c but not provided by mingw.
     # Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms737530%28v=vs.85%29.aspx
     cd '$(1)' && ./configure \
@@ -34,6 +36,10 @@ define $(PKG)_BUILD
         --disable-guile \
         --with-included-libtasn1 \
         --with-included-libcfg \
+        --with-libregex='$(PREFIX)/$(TARGET)' \
+        --with-regex-header=pcreposix.h \
+        --with-libregex-cflags="`'$(TARGET)-pkg-config' libpcreposix --cflags`" \
+        --with-libregex-libs="`'$(TARGET)-pkg-config' libpcreposix --libs`" \
         --without-p11-kit \
         --disable-silent-rules \
         CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
