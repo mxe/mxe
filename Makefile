@@ -29,6 +29,8 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
+LOG_Z_EXT  := .gz
+LOG_Z_CMD  := | gzip -9n
 REMOVE_LOG := true
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
@@ -216,11 +218,11 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    @echo '[build]    $(1)',
 	    @echo '[skip]     $(1)'
 	    )
-	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
-	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)'
-	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
-	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)$(LOG_Z_EXT)'
+	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)$(LOG_Z_EXT)'
+	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)$(LOG_Z_EXT)'
+	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)$(LOG_Z_EXT)'
+	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' $(LOG_Z_CMD)) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
