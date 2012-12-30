@@ -3,10 +3,8 @@
 
 JOBS               := 1
 MXE_TARGETS        := i686-static-mingw32 \
-                      x86_64-static-mingw32 \
-                      i686-dynamic-mingw32 \
-                      x86_64-dynamic-mingw32
-SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
+                      x86_64-static-mingw32
+SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 
