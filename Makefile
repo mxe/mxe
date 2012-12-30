@@ -189,8 +189,6 @@ $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
-                          $(if $(value $(3)_DEPS), \
-                              $(PREFIX)/$($(3)_DEPS)/installed/$(1)) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS)) \
                           | check-requirements $(3)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
