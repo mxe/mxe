@@ -170,12 +170,15 @@ $(1): | $(if $(value $(1)_DEPS), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 		$($(1)_DEPS)
-	@echo '[target]   $(1) $(strip with goals from\
+	@echo '[target]   $(1) $(strip with \
 			   $(if $(value MAKECMDGOALS),\
-				   command line:$(words $(MAKECMDGOALS)),\
+				   $(words $(MAKECMDGOALS)) goal$(shell [ $(words \
+				       $(MAKECMDGOALS)) == 1 ] || printf s) from command line,\
 				   $(if $(value LOCAL_PKG_LIST),\
-					   settings.mk:$(words $(LOCAL_PKG_LIST)),\
-					   src/*.mk:$(words $(PKGS)))))'
+				       $(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words \
+				           $(LOCAL_PKG_LIST)) == 1 ] || printf s) from settings.mk,\
+				       $(words $(PKGS)) goal$(shell [ $(words \
+				           $(PKGS)) == 1 ] || printf s) from src/*.mk)))'
 endef
 $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
