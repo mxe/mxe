@@ -26,8 +26,3 @@ define $(PKG)_BUILD
     echo 'all:' > '$(1)/doc/Makefile'
     $(MAKE) -C '$(1)/lib' -j '$(JOBS)' install
 endef
-
-$(PKG)_BUILD_i686-static-mingw32    = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32  = $($(PKG)_BUILD)
-$(PKG)_BUILD_i686-dynamic-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-dynamic-mingw32 = $($(PKG)_BUILD)

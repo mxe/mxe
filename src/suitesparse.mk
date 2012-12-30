@@ -51,8 +51,3 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/SPQR/Include/'*       '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/UMFPACK/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
 endef
-
-$(PKG)_BUILD_i686-static-mingw32    = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32  = $($(PKG)_BUILD)
-$(PKG)_BUILD_i686-dynamic-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-dynamic-mingw32 = $($(PKG)_BUILD)

@@ -39,8 +39,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
-
-$(PKG)_BUILD_i686-static-mingw32    = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-static-mingw32  = $($(PKG)_BUILD)
-$(PKG)_BUILD_i686-dynamic-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-dynamic-mingw32 = $($(PKG)_BUILD)

@@ -30,5 +30,3 @@ endef
 
 $(PKG)_BUILD_i686-static-mingw32    = $(subst libvpx-target ,x86-win32-gcc ,$($(PKG)_BUILD))
 $(PKG)_BUILD_x86_64-static-mingw32  = $(subst libvpx-target ,x86_64-win64-gcc ,$($(PKG)_BUILD))
-$(PKG)_BUILD_i686-dynamic-mingw32   = $($(PKG)_BUILD)
-$(PKG)_BUILD_x86_64-dynamic-mingw32 = $($(PKG)_BUILD)

@@ -57,9 +57,4 @@ define $(PKG)_BUILD
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
 
-$(PKG)_BUILD_i686-static-mingw32    = $($(PKG)_BUILD)
 $(PKG)_BUILD_x86_64-static-mingw32  = $(subst -qt-sql-psql ,-no-sql-psql ,$($(PKG)_BUILD))
-$(PKG)_BUILD_i686-dynamic-mingw32   = $(subst -no-webkit ,-webkit ,\
-                                      $(subst -static , -shared ,\
-                                      $($(PKG)_BUILD)))
-$(PKG)_BUILD_x86_64-dynamic-mingw32 = $($(PKG)_BUILD)
