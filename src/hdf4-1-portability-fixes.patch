@@ -15,7 +15,7 @@ See index.html for further information.
    *-mac-*)              BAR="mac"         ;;
    *-apple*)             BAR="apple"       ;;
    i686-pc-cygwin*)      BAR="linux"       ;;
-+  i686-pc-mingw*)	BAR="linux"       ;;
++  *-*-mingw*)	         BAR="linux"       ;;
    *)                    echo "*** unknown host $host!"; exit 1 ;;
  esac
  src_files="mfhdf/libsrc/config/netcdf-FOO.h:mfhdf/libsrc/netcdf.h
