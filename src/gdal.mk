@@ -42,9 +42,7 @@ define $(PKG)_CONFIGURE
         --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
         --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
-        --with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
-        --with-netcdf='$(PREFIX)/$(TARGET)' \
         --without-odbc \
         --without-static-proj4 \
         --without-xerces \
@@ -72,8 +70,7 @@ define $(PKG)_CONFIGURE
         --without-perl \
         --without-php \
         --without-ruby \
-        --without-python \
-        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+        --without-python
 endef
 
 define $(PKG)_MAKE
@@ -90,12 +87,16 @@ endef
 
 define $(PKG)_BUILD_i686-static-mingw32
     $($(PKG)_CONFIGURE)\
-        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config'
+        --with-hdf4='$(PREFIX)/$(TARGET)' \
+        --with-netcdf='$(PREFIX)/$(TARGET)' \
+        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
+        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $($(PKG)_MAKE)
 endef
 
 define $(PKG)_BUILD_x86_64-static-mingw32
     $($(PKG)_CONFIGURE)\
-        --without-pg
+        --without-pg \
+        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $($(PKG)_MAKE)
 endef
