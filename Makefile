@@ -172,7 +172,7 @@ $(1): | $(if $(value $(1)_DEPS), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 		$($(1)_DEPS)
-	@echo '[build]    $(1) $(strip with goals from\
+	@echo '[target]   $(1) $(strip with goals from\
 			   $(if $(value MAKECMDGOALS),\
 				   command line:$(words $(MAKECMDGOALS)),\
 				   $(if $(value LOCAL_PKG_LIST),\
@@ -212,10 +212,14 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	        exit 1; \
 	    fi; \
 	fi
-	$(if $(value $(1)_BUILD_$(3)),
+	$(if $(or $(value $(1)_BUILD_$(3)),\
+	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
 	    @echo '[build]    $(1)',
-	    @echo '[skip]     $(1)'
+	    $(if $(findstring undefined,$(origin $(1)_BUILD_$(3))),
+	        @echo '[no-op]    $(1)',
+	        @echo '[exclude]  $(1)'
 	    )
+	)
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
@@ -237,14 +241,16 @@ build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe.cmake
 build-only-$(1)_$(3): LINK_STYLE = $(4)
 build-only-$(1)_$(3):
-	$(if $(value $(1)_BUILD_$(3)),
+	$(if $(or $(value $(1)_BUILD_$(3)),\
+	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
 	    cd '$(2)/$($(1)_SUBDIR)'
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
-	    $$(call $(1)_BUILD_$(3),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    $$(call $(if $(value $(1)_BUILD_$(3)),$(1)_BUILD_$(3),$(1)_BUILD),\
+			$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
