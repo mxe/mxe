@@ -29,7 +29,6 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
-COMPRESS   := gzip -9n
 REMOVE_LOG := true
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
@@ -230,7 +229,6 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo; \
 	    exit 1; \
 	fi
-	@$(COMPRESS) '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@echo '[done]     $(1)'
 
 .PHONY: build-only-$(1)_$(3)
