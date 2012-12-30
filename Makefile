@@ -4,7 +4,8 @@
 JOBS               := 1
 MXE_TARGETS        := i686-static-mingw32 \
                       x86_64-static-mingw32 \
-                      i686-dynamic-mingw32
+                      i686-dynamic-mingw32 \
+                      x86_64-dynamic-mingw32
 SOURCEFORGE_MIRROR := kent.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
@@ -150,6 +151,28 @@ include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
 
+define TARGET_DEPS
+$(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
+                     $(SED) -n 's,.*$(1)\(.*\),\1,p' | \
+                     awk '{print $$1}')
+endef
+$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_DEPS,$(TARGET))))
+
+define TARGET_RULE
+.PHONY: $(1)
+$(1): | $(if $(value $(1)_DEPS), \
+			$(if $(value MAKECMDGOALS),\
+				$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MAKECMDGOALS)), \
+				$(if $(value MY_PKGS),\
+					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MY_PKGS)), \
+					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
+		$($(1)_DEPS)
+	@echo '[building target] $(1) $($(1)_DEPS) $(MAKECMDGOALS) $(MY_PKGS)'
+#	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
+#	@touch '$(PREFIX)/installed/$(1)'
+endef
+$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
+
 define PKG_RULE
 .PHONY: download-$(1)
 download-$(1):: $(addprefix download-,$($(1)_DEPS))
@@ -163,8 +186,10 @@ $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
+                          $(if $(value $(3)_DEPS), \
+                              $(PREFIX)/$($(3)_DEPS)/installed/$(1)) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS)) \
-                          | check-requirements
+                          | check-requirements $(3)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
@@ -182,8 +207,8 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    fi; \
 	fi
 	$(if $(value $(1)_BUILD_$(3)),
-	    @echo '[build]    $(1) $(3)',
-	    @echo '[skip]     $(1) $(3)'
+	    @echo '[build]    $(1)',
+	    @echo '[skip]     $(1)'
 	    )
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
@@ -197,7 +222,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo; \
 	    exit 1; \
 	fi
-	@echo '[done]     $(1) $(3)'
+	@echo '[done]     $(1)'
 
 .PHONY: build-only-$(1)_$(3)
 build-only-$(1)_$(3): TARGET = $(3)
