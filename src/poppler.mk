@@ -3,7 +3,7 @@
 
 PKG             := poppler
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 5eb351381e6d7994bdf7f09bb5c1075f41d79381
+$(PKG)_CHECKSUM := d9cfc390a5aa2aaf976318d9bf3642336f625981
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://poppler.freedesktop.org/$($(PKG)_FILE)
@@ -47,7 +47,7 @@ define $(PKG)_BUILD
         --disable-gtk-doc-pdf \
         --with-font-configuration=win32 \
         PKG_CONFIG_PATH_$(subst -,_,$(TARGET))='$(PREFIX)/$(TARGET)/qt/lib/pkgconfig' \
-        LIBS="`'$(TARGET)-pkg-config' zlib liblzma --libs` -ljpeg"
+        LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # Test program
