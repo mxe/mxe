@@ -219,16 +219,15 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    @echo '[skip]     $(1)'
 	    )
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)$(LOG_Z_EXT)'
-	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)$(LOG_Z_EXT)'
-	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)$(LOG_Z_EXT)'
-	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)$(LOG_Z_EXT)'
-	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' $(LOG_Z_CMD)) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	@ln -sf '$(TIMESTAMP)/$(1)_$(3)$(LOG_Z_EXT)' '$(LOG_DIR)/$(1)_$(3)$(LOG_Z_EXT)'
+	@ln -sf '$(TIMESTAMP)/$(1)_$(3)$(LOG_Z_EXT)' '$(LOG_DIR)/$(1)$(LOG_Z_EXT)'
+	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' $(LOG_Z_CMD)) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)$(LOG_Z_EXT)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
-	    tail -n 10 '$(LOG_DIR)/$(1)_$(3)' | $(SED) -n '/./p'; \
+	    tail -n 10 '$(LOG_DIR)/$(1)_$(3)$(LOG_Z_EXT)' | $(SED) -n '/./p'; \
 	    echo '------------------------------------------------------------'; \
-	    echo '[log]      $(LOG_DIR)/$(1)_$(3)'; \
+	    echo '[log]      $(LOG_DIR)/$(1)_$(3)$(LOG_Z_EXT)'; \
 	    echo; \
 	    exit 1; \
 	fi
