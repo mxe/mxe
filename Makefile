@@ -91,8 +91,8 @@ else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
 else
     $(info [create settings.mk])
     $(shell { \
-        echo '#JOBS = $(JOBS)'; \
-        echo '#MXE_TARGETS := i686-pc-mingw32 i686-static-mingw32 x86_64-static-mingw32'; \
+        echo '#JOBS := $(JOBS)'; \
+        echo '#MXE_TARGETS := i686-pc-mingw32 x86_64-static-mingw32'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
         echo '#REMOVE_LOG := $(REMOVE_LOG)'; \
         echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
@@ -160,6 +160,14 @@ $(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
 endef
 $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_DEPS,$(TARGET))))
 
+TARGET_HEADER = \
+    $(strip with \
+	$(if $(value MAKECMDGOALS),\
+		$(words $(MAKECMDGOALS)) goal$(shell [ $(words $(MAKECMDGOALS)) == 1 ] || echo s) from command line,\
+	$(if $(value LOCAL_PKG_LIST),\
+		$(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words $(LOCAL_PKG_LIST)) == 1 ] || echo s) from settings.mk,\
+		$(words $(PKGS)) goal$(shell [ $(words $(PKGS)) == 1 ] || echo s) from src/*.mk)))
+
 define TARGET_RULE
 .PHONY: $(1)
 $(1): | $(if $(value $(1)_DEPS), \
@@ -169,15 +177,7 @@ $(1): | $(if $(value $(1)_DEPS), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 		$($(1)_DEPS)
-	@echo '[target]   $(1) $(strip with \
-			   $(if $(value MAKECMDGOALS),\
-				   $(words $(MAKECMDGOALS)) goal$(shell [ $(words \
-				       $(MAKECMDGOALS)) == 1 ] || printf s) from command line,\
-				   $(if $(value LOCAL_PKG_LIST),\
-				       $(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words \
-				           $(LOCAL_PKG_LIST)) == 1 ] || printf s) from settings.mk,\
-				       $(words $(PKGS)) goal$(shell [ $(words \
-				           $(PKGS)) == 1 ] || printf s) from src/*.mk)))'
+	@echo '[target]   $(1) $(call TARGET_HEADER)'
 endef
 $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
@@ -258,11 +258,11 @@ build-only-$(1)_$(3):
 endef
 $(foreach TARGET,$(MXE_TARGETS), \
     $(foreach PKG,$(PKGS), \
-        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)-$(TARGET)),$(TARGET),$(call LINK_STYLE,$(TARGET))))))
+        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET),$(call LINK_STYLE,$(TARGET))))))
 
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX)/* $(if $(value REMOVE_LOG),$(LOG_DIR)/*)
+	rm -rf $(call TMP_DIR,*) $(PREFIX)/* $(if $(value REMOVE_LOG),$(LOG_DIR))
 
 .PHONY: clean-pkg
 clean-pkg:
