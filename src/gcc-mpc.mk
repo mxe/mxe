@@ -15,6 +15,3 @@ define $(PKG)_UPDATE
     $(SED) -n 's,.*<a name="\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef
-
-$(PKG)_BUILD_i686-static-mingw32    =
-$(PKG)_BUILD_x86_64-static-mingw32  =

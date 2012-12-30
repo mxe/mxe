@@ -13,6 +13,3 @@ $(PKG)_DEPS     :=
 define $(PKG)_UPDATE
     echo $(mpfr_VERSION)
 endef
-
-$(PKG)_BUILD_i686-static-mingw32    =
-$(PKG)_BUILD_x86_64-static-mingw32  =
