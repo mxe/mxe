@@ -94,8 +94,11 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '#JOBS = $(JOBS)'; \
-        echo '#.DEFAULT my-pkgs:'; \
-        echo '#my-pkgs: boost curl file flac lzo pthreads vorbis wxwidgets'; \
+        echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
+        echo '#MXE_TARGETS := i686-pc-mingw32 x86_64-pc-mingw32'; \
+        echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
+        echo '#.DEFAULT local-pkg-list:'; \
+        echo '#local-pkg-list: $(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
 endif
 
@@ -163,15 +166,15 @@ define TARGET_RULE
 $(1): | $(if $(value $(1)_DEPS), \
 			$(if $(value MAKECMDGOALS),\
 				$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MAKECMDGOALS)), \
-				$(if $(value MY_PKGS),\
-					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MY_PKGS)), \
+				$(if $(value LOCAL_PKG_LIST),\
+					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 		$($(1)_DEPS)
 	@echo '[build]    $(1) $(strip with goals from\
 			   $(if $(value MAKECMDGOALS),\
 				   command line:$(words $(MAKECMDGOALS)),\
-				   $(if $(value MY_PKGS),\
-					   settings.mk:$(words $(MY_PKGS)),\
+				   $(if $(value LOCAL_PKG_LIST),\
+					   settings.mk:$(words $(LOCAL_PKG_LIST)),\
 					   src/*.mk:$(words $(PKGS)))))'
 endef
 $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
