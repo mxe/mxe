@@ -29,6 +29,7 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
+REMOVE_LOG := true
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
@@ -94,11 +95,12 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '#JOBS = $(JOBS)'; \
+        echo '#MXE_TARGETS := $(MXE_TARGETS)'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
-        echo '#MXE_TARGETS := i686-pc-mingw32 x86_64-pc-mingw32'; \
+        echo '#REMOVE_LOG := $(REMOVE_LOG)'; \
         echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
         echo '#.DEFAULT local-pkg-list:'; \
-        echo '#local-pkg-list: $(LOCAL_PKG_LIST)'; \
+        echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
 endif
 
@@ -215,7 +217,9 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    @echo '[skip]     $(1)'
 	    )
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
+	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
+	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
 	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
@@ -254,7 +258,7 @@ $(foreach TARGET,$(MXE_TARGETS), \
 
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX)/*
+	rm -rf $(call TMP_DIR,*) $(PREFIX)/* $(if $(value REMOVE_LOG),$(LOG_DIR)/*)
 
 .PHONY: clean-pkg
 clean-pkg:
