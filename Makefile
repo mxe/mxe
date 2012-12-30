@@ -2,8 +2,7 @@
 # See index.html for further information.
 
 JOBS               := 1
-MXE_TARGETS        := i686-static-mingw32 \
-                      x86_64-static-mingw32
+MXE_TARGETS        := i686-pc-mingw32
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
@@ -93,7 +92,7 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '#JOBS = $(JOBS)'; \
-        echo '#MXE_TARGETS := $(MXE_TARGETS)'; \
+        echo '#MXE_TARGETS := i686-pc-mingw32 i686-static-mingw32 x86_64-static-mingw32'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
         echo '#REMOVE_LOG := $(REMOVE_LOG)'; \
         echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \

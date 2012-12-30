@@ -85,7 +85,7 @@ define $(PKG)_MAKE
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef
 
-define $(PKG)_BUILD_i686-static-mingw32
+define $(PKG)_BUILD_i686-pc-mingw32
     $($(PKG)_CONFIGURE)\
         --with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-netcdf='$(PREFIX)/$(TARGET)' \

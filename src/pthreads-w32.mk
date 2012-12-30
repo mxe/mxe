@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD_i686-static-mingw32
+define $(PKG)_BUILD_i686-pc-mingw32
     $(SED) -i '35i\#define PTW32_STATIC_LIB' '$(1)/pthread.h'
     $(SED) -i '41i\#define PTW32_STATIC_LIB' '$(1)/sched.h'
     $(SED) -i '41i\#define PTW32_STATIC_LIB' '$(1)/semaphore.h'

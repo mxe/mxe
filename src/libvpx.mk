@@ -28,5 +28,5 @@ define $(PKG)_BUILD
     $(TARGET)-ranlib $(PREFIX)/$(TARGET)/lib/libvpx.a
 endef
 
-$(PKG)_BUILD_i686-static-mingw32    = $(subst libvpx-target ,x86-win32-gcc ,$($(PKG)_BUILD))
+$(PKG)_BUILD_i686-pc-mingw32    = $(subst libvpx-target ,x86-win32-gcc ,$($(PKG)_BUILD))
 $(PKG)_BUILD_x86_64-static-mingw32  = $(subst libvpx-target ,x86_64-win64-gcc ,$($(PKG)_BUILD))

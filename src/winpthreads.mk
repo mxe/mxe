@@ -27,4 +27,4 @@ define $(PKG)_BUILD
         -lpthread -lws2_32
 endef
 
-$(PKG)_BUILD_i686-static-mingw32    =
+$(PKG)_BUILD_i686-pc-mingw32    =

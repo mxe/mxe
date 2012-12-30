@@ -79,7 +79,7 @@ define $(PKG)_POST_BUILD
      > '$(CMAKE_TOOLCHAIN_FILE)'
 endef
 
-define $(PKG)_BUILD_i686-static-mingw32
+define $(PKG)_BUILD_i686-pc-mingw32
     $($(PKG)_SUPPORT_CONFIG) \
     --disable-sjlj-exceptions
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
