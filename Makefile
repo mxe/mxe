@@ -167,9 +167,12 @@ $(1): | $(if $(value $(1)_DEPS), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MY_PKGS)), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 		$($(1)_DEPS)
-	@echo '[building target] $(1) $($(1)_DEPS) $(MAKECMDGOALS) $(MY_PKGS)'
-#	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
-#	@touch '$(PREFIX)/installed/$(1)'
+	@echo '[build]    $(1) $(strip with goals from\
+			   $(if $(value MAKECMDGOALS),\
+				   command line:$(words $(MAKECMDGOALS)),\
+				   $(if $(value MY_PKGS),\
+					   settings.mk:$(words $(MY_PKGS)),\
+					   src/*.mk:$(words $(PKGS)))))'
 endef
 $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
