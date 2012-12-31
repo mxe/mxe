@@ -870,6 +870,24 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         where up to 4 packages are downloaded in parallel
         </dd>
 
+    <dt>make show-dependencies-foo show-dependencies-bar</dt>
+
+        <dd>
+        shows a list of packages that
+        "foo" and "bar" depend on,
+        in the order they would be built
+        (effects of -j options aside)
+        </dd>
+
+    <dt>make show-dependents-foo show-dependents-bar</dt>
+
+        <dd>
+        shows a list of packages that
+        depend on "foo" and "bar",
+        in the approximate order
+        they would be rebuilt
+        </dd>
+
     <dt>make clean</dt>
 
         <dd>
