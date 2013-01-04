@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 JOBS               := 1
-TARGET             := i686-pc-mingw32
+MXE_TARGET         := i686-pc-mingw32
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
@@ -217,7 +217,7 @@ build-only-$(1)_$(3):
 	[ -d '$(PREFIX)/$(3)/installed' ] || mkdir -p '$(PREFIX)/$(3)/installed'
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
-$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET))))
+$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(MXE_TARGET))))
 
 .PHONY: clean
 clean:
