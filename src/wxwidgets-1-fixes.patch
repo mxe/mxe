@@ -1,0 +1,11 @@
+--- ./src/msw/textctrl.cpp	2013-01-02 21:47:03.000000000 +0100
++++ ./src/msw/textctrl.cpp	2013-01-02 21:46:53.000000000 +0100
+@@ -992,7 +992,7 @@
+ 
+     EDITSTREAM eds;
+     wxZeroMemory(eds);
+-    eds.dwCookie = (DWORD)&data;
++    eds.dwCookie = (DWORD_PTR)&data;
+     eds.pfnCallback = wxRichEditStreamOut;
+ 
+     ::SendMessage
