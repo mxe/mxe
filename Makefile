@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 JOBS               := 1
-MXE_TARGET         := i686-pc-mingw32
+MXE_TARGETS        := i686-pc-mingw32
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
@@ -86,9 +86,12 @@ else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
 else
     $(info [create settings.mk])
     $(shell { \
-        echo '#JOBS = $(JOBS)'; \
-        echo '#.DEFAULT my-pkgs:'; \
-        echo '#my-pkgs: boost curl file flac lzo pthreads vorbis wxwidgets'; \
+        echo '#JOBS := $(JOBS)'; \
+        echo '#MXE_TARGETS := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32'; \
+        echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
+        echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
+        echo '#.DEFAULT local-pkg-list:'; \
+        echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
 endif
 
@@ -144,9 +147,37 @@ include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
 
+define TARGET_DEPS
+$(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
+                     $(SED) -n 's,.*$(1)\(.*\),\1,p' | \
+                     awk '{print $$1}')
+endef
+$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_DEPS,$(TARGET))))
+
+TARGET_HEADER = \
+    $(strip with \
+	$(if $(value MAKECMDGOALS),\
+		$(words $(MAKECMDGOALS)) goal$(shell [ $(words $(MAKECMDGOALS)) == 1 ] || echo s) from command line,\
+	$(if $(value LOCAL_PKG_LIST),\
+		$(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words $(LOCAL_PKG_LIST)) == 1 ] || echo s) from settings.mk,\
+		$(words $(PKGS)) goal$(shell [ $(words $(PKGS)) == 1 ] || echo s) from src/*.mk)))
+
+define TARGET_RULE
+.PHONY: $(1)
+$(1): | $(if $(value $(1)_DEPS), \
+			$(if $(value MAKECMDGOALS),\
+				$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MAKECMDGOALS)), \
+				$(if $(value LOCAL_PKG_LIST),\
+					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
+					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
+		$($(1)_DEPS)
+	@echo '[target]   $(1) $(call TARGET_HEADER)'
+endef
+$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
+
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1): $(addprefix download-,$($(1)_DEPS))
+download-$(1):: $(addprefix download-,$($(1)_DEPS))
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
@@ -158,7 +189,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS)) \
-                          | check-requirements
+                          | check-requirements $(3)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
@@ -183,9 +214,10 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	        @echo '[exclude]  $(1)'
 	     )
 	 )
-	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)'
-	@ln -sf '$(TIMESTAMP)/$(1)' '$(LOG_DIR)/$(1)'
-	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)'; then \
+	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
+	@[ $(words $(MXE_TARGETS)) == 1 ] || ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
+	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
+	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
@@ -217,7 +249,9 @@ build-only-$(1)_$(3):
 	[ -d '$(PREFIX)/$(3)/installed' ] || mkdir -p '$(PREFIX)/$(3)/installed'
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
-$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(MXE_TARGET))))
+$(foreach TARGET,$(MXE_TARGETS), \
+    $(foreach PKG,$(PKGS), \
+        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET)))))
 
 .PHONY: clean
 clean:
