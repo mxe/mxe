@@ -124,3 +124,5 @@ define $(PKG)_BUILD
     mkdir '$(1)/tmp' && cp '$(2).ml' '$(1)/tmp/test.ml'
     cd '$(1)/tmp' && $(TARGET)-ocamlbuild test.native
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =

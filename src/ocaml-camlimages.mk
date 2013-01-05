@@ -35,3 +35,5 @@ define $(PKG)_BUILD
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         < '$(2).ml'
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =

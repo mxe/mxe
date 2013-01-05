@@ -29,3 +29,5 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar rcu'
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mingw ,mingw64 ,$($(PKG)_BUILD))

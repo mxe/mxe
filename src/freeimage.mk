@@ -32,3 +32,5 @@ define $(PKG)_BUILD
         INCDIR='$(PREFIX)/$(TARGET)/include' \
         INSTALLDIR='$(PREFIX)/$(TARGET)/lib'
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =

@@ -37,3 +37,5 @@ define $(PKG)_BUILD
     #chmod 0755 '$(PREFIX)/bin/$(TARGET)-ocamlbuild'
     # test will be done once cross ocamlopt is built
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =

@@ -36,3 +36,5 @@ define $(PKG)_BUILD
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =
