@@ -1,0 +1,41 @@
+_make()
+{
+    local cur prev pkgs tgts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    pkgs=$( for x in `ls -l src/*.mk | gsed -n 's,.*src/\(.*\)\.mk,\1,p'`; do echo ${x} ; done )
+    tgts="i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32"
+
+    case "${cur}" in
+	build-only-*_*)
+	    local base=`echo ${cur} | gsed -n 's,\(.*_\).*,\1,p'`
+	    local _tgts=$( for x in ${tgts}; do echo $base${x} ; done )
+	    COMPREPLY=( $(compgen -W "${_tgts}" -- ${cur}) )
+        return 0
+        ;;
+	build-only-*)
+	    local _pkgs=$( for x in ${pkgs}; do echo build-only-${x} ; done )
+	    COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+        return 0
+        ;;
+	download-*)
+	    local _pkgs=$( for x in ${pkgs}; do echo download-${x} ; done )
+	    COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+        return 0
+        ;;
+	update-checksum-*)
+	    local _pkgs=$( for x in ${pkgs}; do echo update-checksum-${x} ; done )
+	    COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+        return 0
+        ;;
+    [!-]*)
+        pkgs+=" build-only- check-requirements clean clean-pkg download download- update-checksum-"
+        COMPREPLY=( $(compgen -W "${pkgs}" -- ${cur}) )
+        return 0
+        ;;
+    esac
+
+}
+complete -o nospace -o default -F _make make
