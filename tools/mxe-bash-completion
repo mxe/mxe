@@ -1,11 +1,15 @@
-_make()
+export MXE_DIR=`pwd`
+export PATH=$MXE_DIR/usr/bin:$PATH
+alias mxe='make -C $MXE_DIR'
+
+_mxe()
 {
     local cur prev pkgs tgts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-    pkgs=$( for x in `ls -l src/*.mk | gsed -n 's,.*src/\(.*\)\.mk,\1,p'`; do echo ${x} ; done )
+    pkgs=$( for x in `ls -l $MXE_DIR/src/*.mk | gsed -n 's,.*src/\(.*\)\.mk,\1,p'`; do echo ${x} ; done )
     tgts="i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32"
 
     case "${cur}" in
@@ -38,4 +42,4 @@ _make()
     esac
 
 }
-complete -o nospace -o default -F _make make
+complete -o nospace -o default -F _mxe mxe make
