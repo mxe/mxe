@@ -6,7 +6,7 @@ https://bugs.freedesktop.org/show_bug.cgi?id=55494
 
 --- harfbuzz-0.9.6/src/hb-uniscribe.cc	2012-08-18 17:59:46 +0000
 +++ harfbuzz-0.9.6/src/hb-uniscribe.cc	2012-10-01 12:19:53 +0000
-@@ -315,161 +315,16 @@ retry:
+@@ -312,161 +312,16 @@ retry:
    bidi_state.uBidiLevel = HB_DIRECTION_IS_FORWARD (buffer->props.direction) ? 0 : 1;
    bidi_state.fOverrideDirection = 1;
  

@@ -2,19 +2,16 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_CHECKSUM := 93efeab75cad6f656eae1123c10e3692db727bd5
+$(PKG)_CHECKSUM := 3c4d9fc40305895079676a6ebb01d87da810cd8d
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://ftp.gnu.org/gnu/gnutls/$($(PKG)_FILE)
+$(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1//$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext nettle pcre zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
-    grep '<a class="list name"' | \
-    $(SED) -n 's,.*<a[^>]*>gnutls_\([0-9]*_[0-9]*[012468]_[^<]*\)<.*,\1,p' | \
-    $(SED) 's,_,.,g' | \
-    grep -v '^2\.' | \
-    head -1
+    $(WGET) wget -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/ | \
+    $(SED) -n 's,.*gnutls-\([1-9]\.[0-9].[0-9]\)\..*,\1,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
@@ -34,7 +31,6 @@ define $(PKG)_BUILD
         --disable-nls \
         --disable-guile \
         --with-included-libtasn1 \
-        --with-included-libcfg \
         --with-libregex='$(PREFIX)/$(TARGET)' \
         --with-regex-header=pcreposix.h \
         --with-libregex-cflags="`'$(TARGET)-pkg-config' libpcreposix --cflags`" \
