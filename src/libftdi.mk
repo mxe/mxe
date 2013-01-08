@@ -22,6 +22,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --enable-static \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --without-examples
+        --without-examples \
+        HAVELIBUSB=yes
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
