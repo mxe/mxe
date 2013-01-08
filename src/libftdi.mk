@@ -18,9 +18,10 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --disable-shared \
         --enable-static \
-        --without-examples \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --without-examples
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
