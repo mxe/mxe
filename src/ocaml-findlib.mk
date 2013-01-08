@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 5d1a52b77145348ded29fefe13736694aabb1868
 $(PKG)_SUBDIR   := findlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := findlib-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.camlcity.org/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := ocaml-core
+$(PKG)_DEPS     := gcc ocaml-core
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://download.camlcity.org/download' | \
