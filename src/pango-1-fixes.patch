@@ -155,7 +155,7 @@ diff --git a/configure.ac b/configure.ac
 index ac62a89..96837d6 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -568,14 +568,7 @@ dnl **************************
+@@ -563,14 +563,7 @@ dnl **************************
  dnl *** Checks for gtk-doc ***
  dnl **************************
  

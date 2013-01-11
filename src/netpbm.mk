@@ -10,8 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/netpbm/super_stable/$($(
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- 'http://sourceforge.net/projects/netpbm/files/super_stable/' | \
+    $(SED) -n 's,.*netpbm-\([0-9][^>]*\)\.tgz.*,\1,p' | \
+    head -1
 endef
 
 # The Netpbm package has its own weird build system...
