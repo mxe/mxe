@@ -4,7 +4,7 @@ See index.html for further information.
 From 34475e6e4d05051ba80197846d932acb9492663b Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 24 Sep 2012 19:53:55 +0200
-Subject: [PATCH 1/3] use pkg-config for freetype
+Subject: [PATCH 1/6] use pkg-config for freetype
 
 Change-Id: Id0b048b44bcebf066c21efeb89f9c1781023a593
 
@@ -30,7 +30,7 @@ index 7f73465..1de1d74 100644
 From 6338d13b9ed413f68af28d112ca6d5c59e9df45d Mon Sep 17 00:00:00 2001
 From: Miikka Heikkinen <miikka.heikkinen@digia.com>
 Date: Fri, 14 Dec 2012 11:51:28 +0200
-Subject: [PATCH 2/3] Fix installation of plugin module .pris in static Qt
+Subject: [PATCH 2/6] Fix installation of plugin module .pris in static Qt
  builds
 
 When building Qt static, plugins get module .pri file, but those files
@@ -79,29 +79,288 @@ index f547e2d..6e5f27b 100644
 1.7.10.4
 
 
-From 6ed40cc9bb1fc9011cd1e97ba6ed1ec2263dc86b Mon Sep 17 00:00:00 2001
+From f804729c85813fa0df696ccb3be8714e453c32f2 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 19 Dec 2012 23:44:05 +0100
-Subject: [PATCH 3/3] fix QMAKE_MAKE for x-mingw
+Subject: [PATCH 3/6] fix QMAKE_MAKE for x-mingw
 
 Change-Id: I694c74046a307c2887af1c30cca36f95e242adc1
 
 diff --git a/mkspecs/features/configure.prf b/mkspecs/features/configure.prf
-index ff52c6b..e567641 100644
+index ff52c6b..39144e7 100644
 --- a/mkspecs/features/configure.prf
 +++ b/mkspecs/features/configure.prf
-@@ -1,7 +1,9 @@
- equals(MAKEFILE_GENERATOR, UNIX): \
+@@ -1,11 +1,15 @@
+-equals(MAKEFILE_GENERATOR, UNIX): \
++equals(MAKEFILE_GENERATOR, UNIX) {
      QMAKE_MAKE = make
 -else:equals(MAKEFILE_GENERATOR, MINGW): \
 -    QMAKE_MAKE = mingw32-make
-+else:equals(MAKEFILE_GENERATOR, MINGW) {
-+    !isEmpty(CROSS_COMPILE):QMAKE_MAKE = make
-+    else:QMAKE_MAKE = mingw32-make
-+}
- else:if(equals(MAKEFILE_GENERATOR, MSVC.NET)|equals(MAKEFILE_GENERATOR, MSBUILD)): \
+-else:if(equals(MAKEFILE_GENERATOR, MSVC.NET)|equals(MAKEFILE_GENERATOR, MSBUILD)): \
++} else:equals(MAKEFILE_GENERATOR, MINGW) {
++    !equals(QMAKE_HOST.os, Windows): \
++        QMAKE_MAKE = make
++    else: \
++        QMAKE_MAKE = mingw32-make
++} else:if(equals(MAKEFILE_GENERATOR, MSVC.NET)|equals(MAKEFILE_GENERATOR, MSBUILD)) {
      QMAKE_MAKE = nmake
- else: \
+-else: \
++} else {
+     error("Configure tests are not supported with the $$MAKEFILE_GENERATOR Makefile generator.")
++}
+ 
+ # Ensure that a cache is present. If none was found on startup, this will create
+ # one in the build directory of the project which loads this feature.
+-- 
+1.7.10.4
+
+
+From 413f3df786a1d12e0a7cb07cf8c0fd135f06e57f Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 22 Dec 2012 17:45:34 +0100
+Subject: [PATCH 4/6] WIP: qmake writeFile(): work around concurrent
+ QDir::mkpath() failure
+
+This actually happened when building qtimageformats with make -j4.
+Failure in mkspecs/features/qt_plugin.prf:
+    write_file($$MODULE_PRI, MODULE_PRI_CONT)|error("Aborting.") with make -j4.
+
+Change-Id: Ibc685f613d721e178e6aff408905d77b0ce1740a
+
+diff --git a/qmake/library/qmakebuiltins.cpp b/qmake/library/qmakebuiltins.cpp
+index bafa867..d8b03f7 100644
+--- a/qmake/library/qmakebuiltins.cpp
++++ b/qmake/library/qmakebuiltins.cpp
+@@ -310,9 +310,17 @@ QMakeEvaluator::writeFile(const QString &ctx, const QString &fn, QIODevice::Open
+ {
+     QFileInfo qfi(fn);
+     if (!QDir::current().mkpath(qfi.path())) {
+-        evalError(fL1S("Cannot create %1directory %2.")
+-                  .arg(ctx, QDir::toNativeSeparators(qfi.path())));
+-        return ReturnFalse;
++        // could have failed due to concurrent mkpath attempt
++#ifdef Q_OS_WIN
++       Sleep(1000);
++#else
++       sleep(1);
++#endif
++        if (!qfi.dir().exists()) {
++            evalError(fL1S("Cannot create %1directory %2.")
++                      .arg(ctx, QDir::toNativeSeparators(qfi.path())));
++            return ReturnFalse;
++        }
+     }
+     QString errStr;
+     if (!doWriteFile(qfi.filePath(), mode, contents, &errStr)) {
+-- 
+1.7.10.4
+
+
+From 240ea06f01981baa243684d183b7b7d2cd3ffe0a Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 11 Jan 2013 00:30:41 +0100
+Subject: [PATCH 5/6] consolidate generation of metafile install targets
+
+Metafiles such as .prl and .pc files contain paths that have to be
+adjusted during installation. The same code is used for unix and
+windows so move it into the base class.
+
+Change-Id: I82db89ec83820a4fa0214ba15e7cd63438f6dc91
+
+diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
+index 0456d6b..c323625 100644
+--- a/qmake/generators/makefile.cpp
++++ b/qmake/generators/makefile.cpp
+@@ -3285,4 +3285,25 @@ MakefileGenerator::writePkgConfigFile()
+     t << endl;
+ }
+ 
++QString MakefileGenerator::installMetaFile(const ProKey &replace_rule, const ProString &src, const QString &dst)
++{
++    QString ret;
++    if (project->isEmpty(replace_rule)
++        || project->isActiveConfig("no_sed_meta_install")
++        || project->isEmpty("QMAKE_STREAM_EDITOR")) {
++        ret += "-$(INSTALL_FILE) \"" + src + "\" \"" + dst + "\"";
++    } else {
++        ret += "-$(SED)";
++        const ProStringList &replace_rules = project->values(replace_rule);
++        for (int r = 0; r < replace_rules.size(); ++r) {
++            const ProString match = project->first(ProKey(replace_rules.at(r) + ".match")),
++                        replace = project->first(ProKey(replace_rules.at(r) + ".replace"));
++            if (!match.isEmpty() /*&& match != replace*/)
++                ret += " -e \"s," + match + "," + replace + ",g\"";
++        }
++        ret += " \"" + src + "\" >\"" + dst + "\"";
++    }
++    return ret;
++}
++
+ QT_END_NAMESPACE
+diff --git a/qmake/generators/makefile.h b/qmake/generators/makefile.h
+index 0b471d0..5bae827 100644
+--- a/qmake/generators/makefile.h
++++ b/qmake/generators/makefile.h
+@@ -248,6 +248,8 @@ protected:
+     inline QStringList fileFixify(const QStringList& files, FileFixifyType fix, bool canon=true) const
+     { return fileFixify(files, QString(), QString(), fix, canon); }
+ 
++    QString installMetaFile(const ProKey &replace_rule, const ProString &src, const QString &dst);
++
+ public:
+     MakefileGenerator();
+     virtual ~MakefileGenerator();
+diff --git a/qmake/generators/unix/unixmake.cpp b/qmake/generators/unix/unixmake.cpp
+index 8a1a29c..77995eb 100644
+--- a/qmake/generators/unix/unixmake.cpp
++++ b/qmake/generators/unix/unixmake.cpp
+@@ -868,32 +868,15 @@ UnixMakefileGenerator::defaultInstall(const QString &t)
+                 if(!uninst.isEmpty())
+                     uninst.append("\n\t");
+                 uninst.append("-$(DEL_FILE) \"" + dst_meta + "\"");
+-                const ProKey replace_rule("QMAKE_" + type.toUpper() + "_INSTALL_REPLACE");
+                 const QString dst_meta_dir = fileInfo(dst_meta).path();
+                 if(!dst_meta_dir.isEmpty()) {
+                     if(!ret.isEmpty())
+                         ret += "\n\t";
+                     ret += mkdir_p_asstring(dst_meta_dir, true);
+                 }
+-                QString install_meta = "$(INSTALL_FILE) \"" + src_meta + "\" \"" + dst_meta + "\"";
+-                if(project->isEmpty(replace_rule) || project->isActiveConfig("no_sed_meta_install")) {
+-                    if(!ret.isEmpty())
+-                        ret += "\n\t";
+-                    ret += "-" + install_meta;
+-                } else {
+-                    if(!ret.isEmpty())
+-                        ret += "\n\t";
+-                    ret += "-$(SED)";
+-                    const ProStringList &replace_rules = project->values(replace_rule);
+-                    for(int r = 0; r < replace_rules.size(); ++r) {
+-                        const ProString &match = project->first(ProKey(replace_rules.at(r) + ".match")),
+-                                    &replace = project->first(ProKey(replace_rules.at(r) + ".replace"));
+-                        if(!match.isEmpty() /*&& match != replace*/)
+-                            ret += " -e \"s," + match + "," + replace + ",g\"";
+-                    }
+-                    ret += " \"" + src_meta + "\" >\"" + dst_meta + "\"";
+-                    //ret += " || " + install_meta;
+-                }
++                if (!ret.isEmpty())
++                    ret += "\n\t";
++                ret += installMetaFile(ProKey("QMAKE_" + type.toUpper() + "_INSTALL_REPLACE"), ProString(src_meta), dst_meta);
+             }
+         }
+     }
+diff --git a/qmake/generators/win32/winmakefile.cpp b/qmake/generators/win32/winmakefile.cpp
+index fc98c3d..a614bf9 100644
+--- a/qmake/generators/win32/winmakefile.cpp
++++ b/qmake/generators/win32/winmakefile.cpp
+@@ -846,22 +846,7 @@ QString Win32MakefileGenerator::defaultInstall(const QString &t)
+                 }
+                 if(!ret.isEmpty())
+                     ret += "\n\t";
+-                const ProKey replace_rule("QMAKE_PKGCONFIG_INSTALL_REPLACE");
+-                if (project->isEmpty(replace_rule)
+-                    || project->isActiveConfig("no_sed_meta_install")
+-                    || project->isEmpty("QMAKE_STREAM_EDITOR")) {
+-                    ret += "-$(INSTALL_FILE) \"" + pkgConfigFileName(true) + "\" \"" + dst_pc + "\"";
+-                } else {
+-                    ret += "-$(SED)";
+-                    const ProStringList &replace_rules = project->values(replace_rule);
+-                    for (int r = 0; r < replace_rules.size(); ++r) {
+-                        const ProString match = project->first(ProKey(replace_rules.at(r) + ".match")),
+-                                    replace = project->first(ProKey(replace_rules.at(r) + ".replace"));
+-                        if (!match.isEmpty() /*&& match != replace*/)
+-                            ret += " -e \"s," + match + "," + replace + ",g\"";
+-                    }
+-                    ret += " \"" + pkgConfigFileName(true) + "\" >\"" + dst_pc + "\"";
+-                }
++                ret += installMetaFile(ProKey("QMAKE_PKGCONFIG_INSTALL_REPLACE"), ProString(pkgConfigFileName(true)), dst_pc);
+                 if(!uninst.isEmpty())
+                     uninst.append("\n\t");
+                 uninst.append("-$(DEL_FILE) \"" + dst_pc + "\"");
+-- 
+1.7.10.4
+
+
+From 97b4255f44a5e07b2c0bef4819e4c286d989a6be Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 11 Jan 2013 00:30:25 +0100
+Subject: [PATCH 6/6] adjust paths in installed prl files for windows
+
+Task-number: QTBUG-28902
+Change-Id: Ice9983a69813690c0d4b96ca11589440182569a0
+
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index 22cec4d..a436a8c 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -173,6 +173,7 @@ load(qt_installs)
+ 
+ unix|win32-g++* {
+    CONFIG += create_pc
++   QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
+    QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
+    QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
+    QMAKE_PKGCONFIG_CFLAGS = -I${includedir}/$$MODULE_INCNAME
+@@ -190,7 +191,6 @@ unix|win32-g++* {
+ 
+ unix {
+    CONFIG += create_libtool explicitlib
+-   QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
+    QMAKE_LIBTOOL_LIBDIR = $$[QT_INSTALL_LIBS/raw]
+    QMAKE_LIBTOOL_INSTALL_REPLACE += include_replace lib_replace
+ }
+diff --git a/mkspecs/features/qt_plugin.prf b/mkspecs/features/qt_plugin.prf
+index 6e5f27b..9851e1e 100644
+--- a/mkspecs/features/qt_plugin.prf
++++ b/mkspecs/features/qt_plugin.prf
+@@ -47,3 +47,15 @@ load(qt_targets)
+ 
+ wince*:LIBS += $$QMAKE_LIBS_GUI
+ QMAKE_LFLAGS += $$QMAKE_LFLAGS_NOUNDEF
++
++unix|win32-g++* {
++   QMAKE_PRL_INSTALL_REPLACE += lib_replace
++   !isEmpty(_QMAKE_SUPER_CACHE_): \
++      rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
++   else:!isEmpty(MODULE_QMAKE_OUTDIR): \
++      rplbase = $$MODULE_QMAKE_OUTDIR
++   else: \
++      rplbase = $$[QT_INSTALL_PREFIX/get]
++   lib_replace.match = $$rplbase/lib
++   lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
++}
+diff --git a/qmake/generators/win32/winmakefile.cpp b/qmake/generators/win32/winmakefile.cpp
+index a614bf9..bc692e5 100644
+--- a/qmake/generators/win32/winmakefile.cpp
++++ b/qmake/generators/win32/winmakefile.cpp
+@@ -829,7 +829,7 @@ QString Win32MakefileGenerator::defaultInstall(const QString &t)
+             if(slsh != -1)
+                 dst_prl = dst_prl.right(dst_prl.length() - slsh - 1);
+             dst_prl = filePrefixRoot(root, targetdir + dst_prl);
+-            ret += "-$(INSTALL_FILE) \"" + project->first("QMAKE_INTERNAL_PRL_FILE") + "\" \"" + dst_prl + "\"";
++            ret += installMetaFile(ProKey("QMAKE_PRL_INSTALL_REPLACE"), project->first("QMAKE_INTERNAL_PRL_FILE"), dst_prl);
+             if(!uninst.isEmpty())
+                 uninst.append("\n\t");
+             uninst.append("-$(DEL_FILE) \"" + dst_prl + "\"");
+diff --git a/src/winmain/winmain.pro b/src/winmain/winmain.pro
+index e5da5bd..7b1c4ee 100644
+--- a/src/winmain/winmain.pro
++++ b/src/winmain/winmain.pro
+@@ -25,3 +25,13 @@ TARGET = $$qtLibraryTarget($$TARGET$$QT_LIBINFIX) #do this towards the end
+ load(qt_targets)
+ 
+ wince*:QMAKE_POST_LINK =
++
++unix|win32-g++* {
++   QMAKE_PRL_INSTALL_REPLACE += lib_replace
++   !isEmpty(_QMAKE_SUPER_CACHE_): \
++      rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
++   else: \
++      rplbase = $$[QT_INSTALL_PREFIX/get]
++   lib_replace.match = $$rplbase/lib
++   lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
++}
 -- 
 1.7.10.4
 
