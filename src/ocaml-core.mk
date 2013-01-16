@@ -3,7 +3,7 @@
 
 PKG             := ocaml-core
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := $(ocaml-native_CHECKSUM)
+$(PKG)_CHECKSUM := 5abf04cd4fccfcc980e8592995b9159014f23f53
 $(PKG)_SUBDIR   := $(ocaml-native_SUBDIR)
 $(PKG)_FILE     := $(ocaml-native_FILE)
 $(PKG)_URL      := $(ocaml-native_URL)
