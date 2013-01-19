@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 6ebc6c4762c95c5abb96db33289b81780a4fbda6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := http://libass.googlecode.com/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype fontconfig fribidi
+$(PKG)_DEPS     := gcc freetype fontconfig fribidi harfbuzz
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://code.google.com/p/libass/downloads/list?sort=-uploaded' | \
@@ -22,7 +22,8 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --disable-enca \
-        --enable-fontconfig
+        --enable-fontconfig \
+        --enable-harfbuzz
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 
