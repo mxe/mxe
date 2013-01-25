@@ -1,0 +1,14 @@
+This file is part of MXE.
+See index.html for further information.
+
+--- a/src/matio_private.h	2013-01-25 22:56:35.791936384 +0100
++++ b/src/matio_private.h	2013-01-25 22:56:48.915937755 +0100
+@@ -60,7 +60,7 @@
+  * @endif
+  */
+ struct _mat_t {
+-    void *fp;               /**< File pointer for the MAT file */
++    FILE *fp;               /**< File pointer for the MAT file */
+     char *header;           /**< MAT File header string */
+     char *subsys_offset;    /**< offset */
+     char *filename;         /**< Filename of the MAT file */
