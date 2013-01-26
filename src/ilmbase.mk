@@ -25,13 +25,12 @@ define $(PKG)_BUILD
     echo '/* disabled */' > '$(1)/IlmThread/IlmThreadSemaphorePosixCompat.cpp'
     # Because of the previous changes, '--disable-threading' will not disable
     # threading. It will just disable the unwanted check for pthread.
-    cd '$(1)' && $(SHELL) ./configure \
+    cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-threading \
-        CONFIG_SHELL=$(SHELL)
+        --disable-threading
     # do the first build step by hand, because programs are built that
     # generate source files
     cd '$(1)/Half' && g++ eLut.cpp -o eLut
