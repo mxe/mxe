@@ -1,0 +1,61 @@
+diff -urN a-3.3.0/Lib/distutils/cygwinccompiler.py b-3.3.0/Lib/distutils/cygwinccompiler.py
+--- a-3.3.0/Lib/distutils/cygwinccompiler.py	Fri Nov 16 17:26:57 2012
++++ b-3.3.0/Lib/distutils/cygwinccompiler.py	Fri Nov 16 17:27:14 2012
+@@ -58,6 +58,7 @@
+ from distutils import log
+ from distutils.version import LooseVersion
+ from distutils.spawn import find_executable
++from subprocess import Popen, PIPE
+ 
+ def get_msvcr():
+     """Include the appropriate MSVC runtime library if Python was built
+@@ -395,7 +396,7 @@
+         return (CONFIG_H_UNCERTAIN,
+                 "couldn't read '%s': %s" % (fn, exc.strerror))
+ 
+-RE_VERSION = re.compile(b'(\d+\.\d+(\.\d+)*)')
++RE_VERSION = re.compile(b'[\D\s]*(\d+\.\d+(\.\d+)*)[\D\s]*$')
+ 
+ def _find_exe_version(cmd):
+     """Find the version of an executable by running `cmd` in the shell.
+@@ -423,5 +424,14 @@
+ 
+     If not possible it returns None for it.
+     """
+-    commands = ['gcc -dumpversion', 'ld -v', 'dllwrap --version']
++    gcc = os.environ.get('CC') or 'gcc'
++    ld = 'ld'
++    out = Popen(gcc+' --print-prog-name ld', shell=True, stdout=PIPE).stdout
++    try:
++        ld = test=str(out.read(),encoding='utf-8').strip()
++    finally:
++        out.close()
++    dllwrap = os.environ.get('DLLWRAP') or 'dllwrap'
++    # MinGW64 doesn't have i686-w64-mingw32-ld, so instead we ask gcc.
++    commands = [gcc+' -dumpversion', ld+' -v', dllwrap+' --version']
+     return tuple([_find_exe_version(cmd) for cmd in commands])
+diff -urN a-3.3.0/Modules/Setup.config.in b-3.3.0/Modules/Setup.config.in
+--- a-3.3.0/Modules/Setup.config.in	Fri Nov 16 17:27:00 2012
++++ b-3.3.0/Modules/Setup.config.in	Fri Nov 16 17:27:14 2012
+@@ -17,6 +17,7 @@
+ @BUILDIN_WIN32_MODULE@winreg ../PC/winreg.c
+ @BUILDIN_WIN32_MODULE@time timemodule.c
+ @BUILDIN_WIN32_MODULE@msvcrt ../PC/msvcrtmodule.c
++@BUILDIN_WIN32_MODULE@_winapi _winapi.c
+ 
+ 
+ # The rest of the modules previously listed in this file are built
+diff -urN a-3.3.0/setup.py b-3.3.0/setup.py
+--- a-3.3.0/setup.py	Fri Nov 16 17:27:05 2012
++++ b-3.3.0/setup.py	Fri Nov 16 17:27:14 2012
+@@ -972,7 +972,9 @@
+                 for p in ['_msi.c']],
+                 libraries=['msi','cabinet','rpcrt4']) )
+ 
+-            exts.append( Extension('_winapi', ['_winapi.c']) )
++            # Added to Setup.config.in as now needed earlier since I
++            # use subprocess (which uses Popen) in cygwinccompiler.py
++            # exts.append( Extension('_winapi', ['_winapi.c']) )
+ 
+             # On win32 host(mingw build in MSYS environment) show that site.py
+             # fail to load if some modules are not build-in:
