@@ -10,7 +10,7 @@ $(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodul
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package qtxmlpatterns.' >&2;
+    echo $(qtbase_VERSION)
 endef
 
 define $(PKG)_BUILD

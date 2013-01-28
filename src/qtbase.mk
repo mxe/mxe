@@ -10,7 +10,10 @@ $(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodul
 $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype dbus
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package qtbase.' >&2;
+    $(WGET) -q -O- http://origin.releases.qt-project.org/qt5/ | \
+    $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
+    grep -iv -- '-rc' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
