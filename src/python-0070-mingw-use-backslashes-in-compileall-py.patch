@@ -1,0 +1,12 @@
+diff -urN a-3.3.0/Lib/compileall.py b-3.3.0/Lib/compileall.py
+--- a-3.3.0/Lib/compileall.py	Fri Nov 16 17:35:37 2012
++++ b-3.3.0/Lib/compileall.py	Fri Nov 16 17:36:36 2012
+@@ -47,6 +47,8 @@
+         if name == '__pycache__':
+             continue
+         fullname = os.path.join(dir, name)
++        if sys.platform == "win32" and sys.version.find("GCC") >= 0:
++            fullname = fullname.replace('\\','/')
+         if ddir is not None:
+             dfile = os.path.join(ddir, name)
+         else:

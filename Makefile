@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 JOBS               := 1
-TARGET             := i686-pc-mingw32
+TARGET             := i686-pc-mingw32 x86_64-static-mingw32
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
