@@ -1,36 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 34475e6e4d05051ba80197846d932acb9492663b Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 24 Sep 2012 19:53:55 +0200
-Subject: [PATCH 1/9] use pkg-config for freetype
-
-Change-Id: Id0b048b44bcebf066c21efeb89f9c1781023a593
-
-diff --git a/src/plugins/platforms/windows/windows.pro b/src/plugins/platforms/windows/windows.pro
-index 7f73465..1de1d74 100644
---- a/src/plugins/platforms/windows/windows.pro
-+++ b/src/plugins/platforms/windows/windows.pro
-@@ -169,6 +169,10 @@ contains(QT_CONFIG, freetype) {
-                qwindowsfontdatabase_ft.h
-     SOURCES += \
-                qwindowsfontdatabase_ft.cpp
-+    static {
-+        CONFIG += link_pkgconfig
-+        PKGCONFIG += freetype2
-+    }
- }
- 
- OTHER_FILES += windows.json
--- 
-1.7.10.4
-
-
-From 6338d13b9ed413f68af28d112ca6d5c59e9df45d Mon Sep 17 00:00:00 2001
+From 0ce550fe4687de132788957afb9c0786e1c064e0 Mon Sep 17 00:00:00 2001
 From: Miikka Heikkinen <miikka.heikkinen@digia.com>
 Date: Fri, 14 Dec 2012 11:51:28 +0200
-Subject: [PATCH 2/9] Fix installation of plugin module .pris in static Qt
+Subject: [PATCH 1/9] Fix installation of plugin module .pris in static Qt
  builds
 
 When building Qt static, plugins get module .pri file, but those files
@@ -79,12 +53,23 @@ index f547e2d..6e5f27b 100644
 1.7.10.4
 
 
-From f804729c85813fa0df696ccb3be8714e453c32f2 Mon Sep 17 00:00:00 2001
+From 000b4bf09c9127d882455ddf7a3b2eac329dfd3d Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 19 Dec 2012 23:44:05 +0100
-Subject: [PATCH 3/9] fix QMAKE_MAKE for x-mingw
+Subject: [PATCH 2/9] fix QMAKE_MAKE for qtCompileTest for cross building
+ modules
+
+Cross bulding on unix for mingw exploits the fact that makefiles
+generated for mingw work with plain make. There is no mingw32-make, so
+this is the only option.
+
+Arguably, plain make could also be used in an MSYS environment,
+perhaps detected by MINGW_IN_SHELL, but there might be good reasons I
+don't know about not to do this.
 
 Change-Id: I694c74046a307c2887af1c30cca36f95e242adc1
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+(cherry picked from commit 99e5496ff7abc6bf1436783e951231ffd9a83ca0)
 
 diff --git a/mkspecs/features/configure.prf b/mkspecs/features/configure.prf
 index ff52c6b..39144e7 100644
@@ -115,57 +100,18 @@ index ff52c6b..39144e7 100644
 1.7.10.4
 
 
-From 413f3df786a1d12e0a7cb07cf8c0fd135f06e57f Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sat, 22 Dec 2012 17:45:34 +0100
-Subject: [PATCH 4/9] WIP: qmake writeFile(): work around concurrent
- QDir::mkpath() failure
-
-This actually happened when building qtimageformats with make -j4.
-Failure in mkspecs/features/qt_plugin.prf:
-    write_file($$MODULE_PRI, MODULE_PRI_CONT)|error("Aborting.") with make -j4.
-
-Change-Id: Ibc685f613d721e178e6aff408905d77b0ce1740a
-
-diff --git a/qmake/library/qmakebuiltins.cpp b/qmake/library/qmakebuiltins.cpp
-index bafa867..d8b03f7 100644
---- a/qmake/library/qmakebuiltins.cpp
-+++ b/qmake/library/qmakebuiltins.cpp
-@@ -310,9 +310,17 @@ QMakeEvaluator::writeFile(const QString &ctx, const QString &fn, QIODevice::Open
- {
-     QFileInfo qfi(fn);
-     if (!QDir::current().mkpath(qfi.path())) {
--        evalError(fL1S("Cannot create %1directory %2.")
--                  .arg(ctx, QDir::toNativeSeparators(qfi.path())));
--        return ReturnFalse;
-+        // could have failed due to concurrent mkpath attempt
-+#ifdef Q_OS_WIN
-+       Sleep(1000);
-+#else
-+       sleep(1);
-+#endif
-+        if (!qfi.dir().exists()) {
-+            evalError(fL1S("Cannot create %1directory %2.")
-+                      .arg(ctx, QDir::toNativeSeparators(qfi.path())));
-+            return ReturnFalse;
-+        }
-     }
-     QString errStr;
-     if (!doWriteFile(qfi.filePath(), mode, contents, &errStr)) {
--- 
-1.7.10.4
-
-
-From fbf3bacff5acc30e67b51dcf7abdd34d3b7811bc Mon Sep 17 00:00:00 2001
+From ac199082b2e3d4fe3cdf73e4bc46c9892fe2fbed Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 11 Jan 2013 00:30:41 +0100
-Subject: [PATCH 5/9] consolidate generation of metafile install targets
+Subject: [PATCH 3/9] consolidate generation of metafile install targets
 
 Metafiles such as .prl and .pc files contain paths that have to be
 adjusted during installation. The same code is used for unix and
 windows so move it into the base class.
 
 Change-Id: I82db89ec83820a4fa0214ba15e7cd63438f6dc91
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+(cherry picked from commit d089ecb711afcd13a32e24103e270ba000cdc68c)
 
 diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
 index 0456d6b..d7202d0 100644
@@ -282,137 +228,10 @@ index fc98c3d..145dddc 100644
 1.7.10.4
 
 
-From ec08dee48e4ebba9156ec6d40fe24f485dab133e Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 11 Jan 2013 00:30:25 +0100
-Subject: [PATCH 6/9] adjust paths in installed prl files for mingw
-
-Task-number: QTBUG-28902
-Change-Id: Ice9983a69813690c0d4b96ca11589440182569a0
-
-diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 22cec4d..2a88e02 100644
---- a/mkspecs/features/qt_module.prf
-+++ b/mkspecs/features/qt_module.prf
-@@ -186,11 +186,11 @@ unix|win32-g++* {
-    lib_replace.match = $$rplbase/lib
-    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
-    QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace
-+   QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
- }
- 
- unix {
-    CONFIG += create_libtool explicitlib
--   QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
-    QMAKE_LIBTOOL_LIBDIR = $$[QT_INSTALL_LIBS/raw]
-    QMAKE_LIBTOOL_INSTALL_REPLACE += include_replace lib_replace
- }
-diff --git a/mkspecs/features/qt_plugin.prf b/mkspecs/features/qt_plugin.prf
-index 6e5f27b..fd53c73 100644
---- a/mkspecs/features/qt_plugin.prf
-+++ b/mkspecs/features/qt_plugin.prf
-@@ -47,3 +47,13 @@ load(qt_targets)
- 
- wince*:LIBS += $$QMAKE_LIBS_GUI
- QMAKE_LFLAGS += $$QMAKE_LFLAGS_NOUNDEF
-+
-+unix|win32-g++* {
-+    !isEmpty(_QMAKE_SUPER_CACHE_): \
-+        rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
-+    else: \
-+        rplbase = $$MODULE_QMAKE_OUTDIR
-+    lib_replace.match = $$rplbase/lib
-+    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
-+    QMAKE_PRL_INSTALL_REPLACE += lib_replace
-+}
-diff --git a/qmake/generators/win32/winmakefile.cpp b/qmake/generators/win32/winmakefile.cpp
-index 145dddc..f8633f3 100644
---- a/qmake/generators/win32/winmakefile.cpp
-+++ b/qmake/generators/win32/winmakefile.cpp
-@@ -829,7 +829,7 @@ QString Win32MakefileGenerator::defaultInstall(const QString &t)
-             if(slsh != -1)
-                 dst_prl = dst_prl.right(dst_prl.length() - slsh - 1);
-             dst_prl = filePrefixRoot(root, targetdir + dst_prl);
--            ret += "-$(INSTALL_FILE) \"" + project->first("QMAKE_INTERNAL_PRL_FILE") + "\" \"" + dst_prl + "\"";
-+            ret += installMetaFile(ProKey("QMAKE_PRL_INSTALL_REPLACE"), project->first("QMAKE_INTERNAL_PRL_FILE").toQString(), dst_prl);
-             if(!uninst.isEmpty())
-                 uninst.append("\n\t");
-             uninst.append("-$(DEL_FILE) \"" + dst_prl + "\"");
-diff --git a/src/winmain/winmain.pro b/src/winmain/winmain.pro
-index e5da5bd..cf2fe45 100644
---- a/src/winmain/winmain.pro
-+++ b/src/winmain/winmain.pro
-@@ -25,3 +25,13 @@ TARGET = $$qtLibraryTarget($$TARGET$$QT_LIBINFIX) #do this towards the end
- load(qt_targets)
- 
- wince*:QMAKE_POST_LINK =
-+
-+unix|win32-g++* {
-+    !isEmpty(_QMAKE_SUPER_CACHE_): \
-+        rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
-+    else: \
-+        rplbase = $$[QT_INSTALL_PREFIX/get]
-+    lib_replace.match = $$rplbase/lib
-+    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
-+    QMAKE_PRL_INSTALL_REPLACE += lib_replace
-+}
--- 
-1.7.10.4
-
-
-From fa7432005e3c228a09abd364369a526a06738081 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 11 Jan 2013 23:13:42 +0100
-Subject: [PATCH 7/9] adjust paths in installed module metafiles
-
-Change-Id: I056a923288965b560a4e9b0ba7add1aac912199f
-
-diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 2a88e02..d3d886f 100644
---- a/mkspecs/features/qt_module.prf
-+++ b/mkspecs/features/qt_module.prf
-@@ -180,7 +180,7 @@ unix|win32-g++* {
-    !isEmpty(_QMAKE_SUPER_CACHE_): \
-       rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
-    else: \
--      rplbase = $$[QT_INSTALL_PREFIX/get]
-+      rplbase = $$MODULE_QMAKE_OUTDIR
-    include_replace.match = $$rplbase/include
-    include_replace.replace = $$[QT_INSTALL_HEADERS/raw]
-    lib_replace.match = $$rplbase/lib
--- 
-1.7.10.4
-
-
-From 83cbba468a50d5ecca2bfeb5780ad97a9890f3f2 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 25 Jan 2013 23:49:56 +0100
-Subject: [PATCH 8/9] adjust lib path in installed qml plugin prls
-
-Change-Id: Ia70da8f0f0b7abb4ea2a46cb4068c0827888b322
-
-diff --git a/mkspecs/features/qml_plugin.prf b/mkspecs/features/qml_plugin.prf
-index c700dda..bb89369 100644
---- a/mkspecs/features/qml_plugin.prf
-+++ b/mkspecs/features/qml_plugin.prf
-@@ -78,3 +78,9 @@ load(qt_targets)
- }
- 
- load(qml_module)
-+
-+unix|win32-g++* {
-+    lib_replace.match = $$eval(QT.$${CXX_MODULE}.libs)
-+    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
-+    QMAKE_PRL_INSTALL_REPLACE += lib_replace
-+}
--- 
-1.7.10.4
-
-
-From 05df017edaba8601cafee7579d2c3618378607aa Mon Sep 17 00:00:00 2001
+From be189203bf0c06f51750a5150ebd97ac7372f13f Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 27 Jan 2013 14:03:16 +0100
-Subject: [PATCH 9/9] don't prematurely reduce LIBS when adding sql link lists
+Subject: [PATCH 4/9] don't prematurely reduce LIBS when adding sql link lists
 
 It's possible that different database libraries share dependencies.
 We need to keep their link lists intact here so that QtSql's .prl and
@@ -420,6 +239,8 @@ We need to keep their link lists intact here so that QtSql's .prl and
 when building the drivers into QtSql and using static linking.
 
 Change-Id: Id371b127099f2790fe7cccd0c7059607600f447d
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+(cherry picked from commit 9ef48277f959ff759bd9fba36c907ef5ed67f5b1)
 
 diff --git a/src/sql/drivers/mysql/qsql_mysql.pri b/src/sql/drivers/mysql/qsql_mysql.pri
 index c9ec257..0423eb4 100644
@@ -472,6 +293,215 @@ index 3b5a689..38aab2f 100644
      !contains(LIBS, .*sybdb.*):LIBS += -lsybdb
      QMAKE_CXXFLAGS *= $$QT_CFLAGS_TDS
  } else {
+-- 
+1.7.10.4
+
+
+From aa2e332cbe96a0eeab521826e1a543dfa0457cff Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 29 Jan 2013 21:56:24 +0100
+Subject: [PATCH 5/9] adjust paths in installed module metafiles from modular
+ build
+
+Fully modular prefix build now puts the includes and libs into each
+module's own builddir, so the else branch was simply bogus. Replaced
+the else branch with the real base for modular builds. This allows
+the paths to be successfully replaced when installing metafiles.
+
+Change-Id: I056a923288965b560a4e9b0ba7add1aac912199f
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+(cherry picked from commit 0e1427b0a6c3d304aabecd3d33708ecb0544fdba)
+
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index 22cec4d..ec02bd2 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -180,7 +180,7 @@ unix|win32-g++* {
+    !isEmpty(_QMAKE_SUPER_CACHE_): \
+       rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
+    else: \
+-      rplbase = $$[QT_INSTALL_PREFIX/get]
++      rplbase = $$MODULE_QMAKE_OUTDIR
+    include_replace.match = $$rplbase/include
+    include_replace.replace = $$[QT_INSTALL_HEADERS/raw]
+    lib_replace.match = $$rplbase/lib
+-- 
+1.7.10.4
+
+
+From e6bffe37b3da3a59241dfc514411ee71ca60076a Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 11 Jan 2013 00:30:25 +0100
+Subject: [PATCH 6/9] adjust paths in installed prl files for mingw
+
+Curiously, qmake could fix .prl and .pc files for unix, but only .pc
+files for MinGW. qt_module.prf seems to have known this.
+
+Task-number: QTBUG-28902
+Change-Id: Ice9983a69813690c0d4b96ca11589440182569a0
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+(cherry picked from commit 6d90c2e9cbfeeb560ffaeed94d908997f90d0877)
+
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index ec02bd2..d3d886f 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -186,11 +186,11 @@ unix|win32-g++* {
+    lib_replace.match = $$rplbase/lib
+    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
+    QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace
++   QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
+ }
+ 
+ unix {
+    CONFIG += create_libtool explicitlib
+-   QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
+    QMAKE_LIBTOOL_LIBDIR = $$[QT_INSTALL_LIBS/raw]
+    QMAKE_LIBTOOL_INSTALL_REPLACE += include_replace lib_replace
+ }
+diff --git a/qmake/generators/win32/winmakefile.cpp b/qmake/generators/win32/winmakefile.cpp
+index 145dddc..f8633f3 100644
+--- a/qmake/generators/win32/winmakefile.cpp
++++ b/qmake/generators/win32/winmakefile.cpp
+@@ -829,7 +829,7 @@ QString Win32MakefileGenerator::defaultInstall(const QString &t)
+             if(slsh != -1)
+                 dst_prl = dst_prl.right(dst_prl.length() - slsh - 1);
+             dst_prl = filePrefixRoot(root, targetdir + dst_prl);
+-            ret += "-$(INSTALL_FILE) \"" + project->first("QMAKE_INTERNAL_PRL_FILE") + "\" \"" + dst_prl + "\"";
++            ret += installMetaFile(ProKey("QMAKE_PRL_INSTALL_REPLACE"), project->first("QMAKE_INTERNAL_PRL_FILE").toQString(), dst_prl);
+             if(!uninst.isEmpty())
+                 uninst.append("\n\t");
+             uninst.append("-$(DEL_FILE) \"" + dst_prl + "\"");
+-- 
+1.7.10.4
+
+
+From d8916f439332aa060bba645debb785bc9a22179a Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 29 Jan 2013 21:51:31 +0100
+Subject: [PATCH 7/9] fix path adjustments in installed metafiles
+
+Task-number: QTBUG-28902
+Change-Id: Ia70da8f0f0b7abb4ea2a46cb4068c0827888b322
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+(cherry picked from commit 2be4d6ba022e1349b1b231ae852235f557c6fc20)
+
+diff --git a/mkspecs/features/qml_plugin.prf b/mkspecs/features/qml_plugin.prf
+index c700dda..c90e09d 100644
+--- a/mkspecs/features/qml_plugin.prf
++++ b/mkspecs/features/qml_plugin.prf
+@@ -78,3 +78,12 @@ load(qt_targets)
+ }
+ 
+ load(qml_module)
++
++unix|win32-g++* {
++    !isEmpty(_QMAKE_SUPER_CACHE_): \
++        lib_replace.match = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*/lib
++    else: \
++        lib_replace.match = $$eval(QT.$${CXX_MODULE}.libs)
++    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
++    QMAKE_PRL_INSTALL_REPLACE += lib_replace
++}
+diff --git a/mkspecs/features/qt_plugin.prf b/mkspecs/features/qt_plugin.prf
+index 6e5f27b..fd53c73 100644
+--- a/mkspecs/features/qt_plugin.prf
++++ b/mkspecs/features/qt_plugin.prf
+@@ -47,3 +47,13 @@ load(qt_targets)
+ 
+ wince*:LIBS += $$QMAKE_LIBS_GUI
+ QMAKE_LFLAGS += $$QMAKE_LFLAGS_NOUNDEF
++
++unix|win32-g++* {
++    !isEmpty(_QMAKE_SUPER_CACHE_): \
++        rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
++    else: \
++        rplbase = $$MODULE_QMAKE_OUTDIR
++    lib_replace.match = $$rplbase/lib
++    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
++    QMAKE_PRL_INSTALL_REPLACE += lib_replace
++}
+diff --git a/src/winmain/winmain.pro b/src/winmain/winmain.pro
+index e5da5bd..6c64a8c 100644
+--- a/src/winmain/winmain.pro
++++ b/src/winmain/winmain.pro
+@@ -25,3 +25,9 @@ TARGET = $$qtLibraryTarget($$TARGET$$QT_LIBINFIX) #do this towards the end
+ load(qt_targets)
+ 
+ wince*:QMAKE_POST_LINK =
++
++unix|win32-g++* {
++    lib_replace.match = $$[QT_INSTALL_LIBS/get]
++    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
++    QMAKE_PRL_INSTALL_REPLACE += lib_replace
++}
+-- 
+1.7.10.4
+
+
+From 811f937a3e1e6a82c46c84aa54bec99ecd897a9e Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 24 Sep 2012 19:53:55 +0200
+Subject: [PATCH 8/9] use pkg-config for freetype
+
+Change-Id: Id0b048b44bcebf066c21efeb89f9c1781023a593
+
+diff --git a/src/plugins/platforms/windows/windows.pro b/src/plugins/platforms/windows/windows.pro
+index 7f73465..1de1d74 100644
+--- a/src/plugins/platforms/windows/windows.pro
++++ b/src/plugins/platforms/windows/windows.pro
+@@ -169,6 +169,10 @@ contains(QT_CONFIG, freetype) {
+                qwindowsfontdatabase_ft.h
+     SOURCES += \
+                qwindowsfontdatabase_ft.cpp
++    static {
++        CONFIG += link_pkgconfig
++        PKGCONFIG += freetype2
++    }
+ }
+ 
+ OTHER_FILES += windows.json
+-- 
+1.7.10.4
+
+
+From 1f91a58111f6d5645f8c4ef332ec7c9f4fa49e43 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 22 Dec 2012 17:45:34 +0100
+Subject: [PATCH 9/9] WIP: qmake writeFile(): work around concurrent
+ QDir::mkpath() failure
+
+This actually happened when building qtimageformats with make -j4.
+Failure in mkspecs/features/qt_plugin.prf:
+    write_file($$MODULE_PRI, MODULE_PRI_CONT)|error("Aborting.") with make -j4.
+
+Change-Id: Ibc685f613d721e178e6aff408905d77b0ce1740a
+
+diff --git a/qmake/library/qmakebuiltins.cpp b/qmake/library/qmakebuiltins.cpp
+index bafa867..d8b03f7 100644
+--- a/qmake/library/qmakebuiltins.cpp
++++ b/qmake/library/qmakebuiltins.cpp
+@@ -310,9 +310,17 @@ QMakeEvaluator::writeFile(const QString &ctx, const QString &fn, QIODevice::Open
+ {
+     QFileInfo qfi(fn);
+     if (!QDir::current().mkpath(qfi.path())) {
+-        evalError(fL1S("Cannot create %1directory %2.")
+-                  .arg(ctx, QDir::toNativeSeparators(qfi.path())));
+-        return ReturnFalse;
++        // could have failed due to concurrent mkpath attempt
++#ifdef Q_OS_WIN
++       Sleep(1000);
++#else
++       sleep(1);
++#endif
++        if (!qfi.dir().exists()) {
++            evalError(fL1S("Cannot create %1directory %2.")
++                      .arg(ctx, QDir::toNativeSeparators(qfi.path())));
++            return ReturnFalse;
++        }
+     }
+     QString errStr;
+     if (!doWriteFile(qfi.filePath(), mode, contents, &errStr)) {
 -- 
 1.7.10.4
 
