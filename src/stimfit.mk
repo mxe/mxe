@@ -10,9 +10,9 @@ $(PKG)_URL      := https://stimfit.googlecode.com/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libbiosig wxwidgets hdf5 boost fftw
 
 define $(PKG)_UPDATE
-#    wget -q -O- 'http://biosig.sourceforge.net/download.html' | \
-#    $(SED) -n 's_.*>libbiosig, version \([0-9]\.[0-9]\.[0-9]\).*tar.gz_\1_ip' | \
-     (cd $(HOME)/src/stimfit/ && git log | head -1)
+    wget -q -O- 'http://code.google.com/p/stimfit/downloads/list' | \
+    $(SED) -n 's_.*name=stimfit-\([0-9\.]*\)\.tar\.gz.*_\1_ip' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
