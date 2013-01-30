@@ -21,8 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && autoreconf && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --enable-static \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-modules \
         --with-included-loaders \
@@ -30,3 +29,5 @@ define $(PKG)_BUILD
         LIBS="`'$(TARGET)-pkg-config' --libs libtiff-4`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

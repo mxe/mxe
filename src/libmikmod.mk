@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         STRIP='$(TARGET)-strip' \
         ./configure \
-            --disable-shared \
+            $(LINK_STYLE) \
             --prefix='$(PREFIX)/$(TARGET)' \
             --libdir='$(PREFIX)/$(TARGET)/lib' \
             --disable-esd
@@ -35,3 +35,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libmikmod.exe' \
         `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

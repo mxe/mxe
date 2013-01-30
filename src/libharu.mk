@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --with-zlib='$(PREFIX)/$(TARGET)' \
         --with-png='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install

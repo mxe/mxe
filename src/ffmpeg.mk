@@ -21,10 +21,10 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --cross-prefix='$(TARGET)'- \
         --enable-cross-compile \
-        --arch=i686 \
+        --arch=$(patsubst -%,,$(TARGET)) \
         --target-os=mingw32 \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-debug \
         --disable-doc \
         --enable-memalign-hack \
@@ -47,4 +47,11 @@ define $(PKG)_BUILD
         --enable-libvpx
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
+endef
+
+
+define $(PKG)_BUILD_x86_64-static-mingw32
+    $(subst enable-libmp3lame,disable-libmp3lame,\
+    $(subst enable-libxvid,disable-libxvid,\
+    $($(PKG)_BUILD)))
 endef

@@ -20,7 +20,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --with-jpeg \
         --with-tiff \
         --with-zlib

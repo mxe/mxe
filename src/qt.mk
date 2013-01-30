@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's,i686-pc-mingw32,$(TARGET),g' '$(1)/mkspecs/unsupported/win32-g++-cross/qmake.conf'
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
@@ -87,3 +88,5 @@ define $(PKG)_BUILD
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  = $(subst -qt-sql-psql ,-no-sql-psql ,$($(PKG)_BUILD))

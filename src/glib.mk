@@ -71,7 +71,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-threads=win32 \
         --with-pcre=system \

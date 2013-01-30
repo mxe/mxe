@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 JOBS               := 1
-TARGET             := i686-pc-mingw32 x86_64-static-mingw32
+MXE_TARGETS        := i686-pc-mingw32
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
@@ -26,6 +26,7 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
+REMOVE_LOG := true
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
@@ -34,7 +35,9 @@ TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* id="\([^"]*\)-package">.*$$/\1/p' '$(TOP_DIR)/index.html')
 PATH       := $(PREFIX)/bin:$(PATH)
 
-CMAKE_TOOLCHAIN_FILE := $(PREFIX)/$(TARGET)/share/cmake/mxe-conf.cmake
+LINK_STYLE  = $(if $(findstring dynamic,$(1)), \
+                  --disable-static --enable-shared , \
+                  --enable-static --disable-shared )
 
 # unexport any environment variables that might cause trouble
 unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
@@ -88,9 +91,13 @@ else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
 else
     $(info [create settings.mk])
     $(shell { \
-        echo '#JOBS = $(JOBS)'; \
-        echo '#.DEFAULT my-pkgs:'; \
-        echo '#my-pkgs: boost curl file flac lzo pthreads vorbis wxwidgets'; \
+        echo '#JOBS := $(JOBS)'; \
+        echo '#MXE_TARGETS := i686-pc-mingw32 x86_64-static-mingw32'; \
+        echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
+        echo '#REMOVE_LOG := $(REMOVE_LOG)'; \
+        echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
+        echo '#.DEFAULT local-pkg-list:'; \
+        echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
 endif
 
@@ -146,21 +153,49 @@ include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
 
+define TARGET_DEPS
+$(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
+                     $(SED) -n 's,.*$(1)\(.*\),\1,p' | \
+                     awk '{print $$1}')
+endef
+$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_DEPS,$(TARGET))))
+
+TARGET_HEADER = \
+    $(strip with \
+	$(if $(value MAKECMDGOALS),\
+		$(words $(MAKECMDGOALS)) goal$(shell [ $(words $(MAKECMDGOALS)) == 1 ] || echo s) from command line,\
+	$(if $(value LOCAL_PKG_LIST),\
+		$(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words $(LOCAL_PKG_LIST)) == 1 ] || echo s) from settings.mk,\
+		$(words $(PKGS)) goal$(shell [ $(words $(PKGS)) == 1 ] || echo s) from src/*.mk)))
+
+define TARGET_RULE
+.PHONY: $(1)
+$(1): | $(if $(value $(1)_DEPS), \
+			$(if $(value MAKECMDGOALS),\
+				$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MAKECMDGOALS)), \
+				$(if $(value LOCAL_PKG_LIST),\
+					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
+					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
+		$($(1)_DEPS)
+	@echo '[target]   $(1) $(call TARGET_HEADER)'
+endef
+$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
+
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1): $(addprefix download-,$($(1)_DEPS))
+download-$(1):: $(addprefix download-,$($(1)_DEPS))
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
 	fi
 
 .PHONY: $(1)
-$(1): $(PREFIX)/installed/$(1)
-$(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
+$(1): $(PREFIX)/$(3)/installed/$(1)
+$(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
-                          $(addprefix $(PREFIX)/installed/,$($(1)_DEPS)) \
-                          | check-requirements
+                          $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS)) \
+                          | check-requirements $(3)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
@@ -177,45 +212,57 @@ $(PREFIX)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	        exit 1; \
 	    fi; \
 	fi
-	$(if $(value $(1)_BUILD),
-	    @echo '[build]    $(1)'
-	    ,)
-	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)'
-	@ln -sf '$(TIMESTAMP)/$(1)' '$(LOG_DIR)/$(1)'
-	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)'; then \
+	$(if $(or $(value $(1)_BUILD_$(3)),\
+	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
+	    @echo '[build]    $(1)',
+	    $(if $(findstring undefined,$(origin $(1)_BUILD_$(3))),
+	        @echo '[no-op]    $(1)',
+	        @echo '[exclude]  $(1)'
+	    )
+	)
+	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
+	@[ $(words $(MXE_TARGETS)) == 1 ] || ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
+	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
+	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
-	    tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p'; \
+	    tail -n 10 '$(LOG_DIR)/$(1)_$(3)' | $(SED) -n '/./p'; \
 	    echo '------------------------------------------------------------'; \
-	    echo '[log]      $(LOG_DIR)/$(1)'; \
+	    echo '[log]      $(LOG_DIR)/$(1)_$(3)'; \
 	    echo; \
 	    exit 1; \
 	fi
 	@echo '[done]     $(1)'
 
-.PHONY: build-only-$(1)
-build-only-$(1): PKG = $(1)
-build-only-$(1):
-	$(if $(value $(1)_BUILD),
+.PHONY: build-only-$(1)_$(3)
+build-only-$(1)_$(3): TARGET = $(3)
+build-only-$(1)_$(3): PKG = $(1)
+build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe.cmake
+build-only-$(1)_$(3): LINK_STYLE = $(4)
+build-only-$(1)_$(3):
+	$(if $(or $(value $(1)_BUILD_$(3)),\
+	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
 	    cd '$(2)/$($(1)_SUBDIR)'
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
-	    $$(call $(1)_BUILD,$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    $$(call $(if $(value $(1)_BUILD_$(3)),$(1)_BUILD_$(3),$(1)_BUILD),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
-	[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
-	touch '$(PREFIX)/installed/$(1)'
+	[ -d '$(PREFIX)/$(3)/installed' ] || mkdir -p '$(PREFIX)/$(3)/installed'
+	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
-$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
+$(foreach TARGET,$(MXE_TARGETS), \
+    $(foreach PKG,$(PKGS), \
+        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET),$(call LINK_STYLE,$(TARGET))))))
 
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX)/*
+	rm -rf $(call TMP_DIR,*) $(PREFIX)/* $(if $(value REMOVE_LOG),$(LOG_DIR))
 
 .PHONY: clean-pkg
 clean-pkg:
@@ -262,3 +309,24 @@ cleanup-style:
             rm -f $(TOP_DIR)/tmp-cleanup-style; \
         )
 
+define SHOW_DEPENDENCIES
+.PHONY: show-dependencies-$(1)
+show-dependencies-$(1): $(TOP_DIR)/tmp-dependencies/$(1)
+$(TOP_DIR)/tmp-dependencies/$(1): $(addprefix $(TOP_DIR)/tmp-dependencies/,$($(1)_DEPS))
+	@echo '$(1)'
+	$(if $(value CREATE_DEPENDENCIES),
+	@[ -d '$(TOP_DIR)/tmp-dependencies' ] || mkdir -p '$(TOP_DIR)/tmp-dependencies'
+	@touch $(TOP_DIR)/tmp-dependencies/$(1))
+endef
+$(foreach PKG,$(PKGS),$(eval $(call SHOW_DEPENDENCIES,$(PKG))))
+
+.PHONY: show-dependencies
+show-dependencies: $(addprefix show-dependencies-,$(PKGS))
+
+show-dependents-%:
+	@rm -rf '$(TOP_DIR)/tmp-dependencies'
+	@mkdir -p '$(TOP_DIR)/tmp-dependencies'
+	@touch $(addprefix $(TOP_DIR)/tmp-dependencies/,$(PKGS))
+	@rm -f '$(TOP_DIR)/tmp-dependencies/$*'
+	@$(MAKE) -f '$(MAKEFILE)' show-dependencies CREATE_DEPENDENCIES=true
+	@rm -rf '$(TOP_DIR)/tmp-dependencies'

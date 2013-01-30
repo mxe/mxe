@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-rpath \
         --without-tcl \
         --without-perl \
@@ -74,3 +74,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native'/src/bin/pg_config -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/pg_config' '$(PREFIX)/bin/$(TARGET)-pg_config'
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

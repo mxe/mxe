@@ -20,7 +20,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-thread \
         --infodir='$(1)/sink' \
         --mandir='$(1)/sink'

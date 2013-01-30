@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-debug \
         --disable-examples \
         --mandir='$(1)/sink' \
@@ -27,3 +27,5 @@ define $(PKG)_BUILD
         --with-html-dir='$(1)/sink'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-csharp \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-libiconv-prefix='$(PREFIX)/$(TARGET)'

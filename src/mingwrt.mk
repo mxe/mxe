@@ -20,3 +20,5 @@ define $(PKG)_BUILD
     cd '$(1)' && \
         cp -rpv include lib '$(PREFIX)/$(TARGET)'
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

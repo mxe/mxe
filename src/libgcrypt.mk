@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-gpg-error-prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
@@ -31,3 +31,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgcrypt.exe' \
         `$(TARGET)-libgcrypt-config --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-debug \
         --disable-examples \
         --disable-aalib \
@@ -36,3 +36,5 @@ define $(PKG)_BUILD
         --with-html-dir='$(1)/sink'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install CFLAGS='-DWAVE_FORMAT_DOLBY_AC3_SPDIF=0x0092'
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

@@ -19,8 +19,7 @@ define $(PKG)_BUILD
     # Note: the configure file doesn't pick up pdcurses, so "ui" is disabled
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --enable-static \
-        --disable-shared \
+        $(LINK_STYLE) \
         --with-warnings \
         --without-ui \
         --with-readline \
@@ -30,7 +29,7 @@ define $(PKG)_BUILD
 
     # Test
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi -pedantic \
+        -W -Wall -Werror -std=c++0x -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hunspell.exe' \
         `'$(TARGET)-pkg-config' hunspell --cflags --libs`
 endef

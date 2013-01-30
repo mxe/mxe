@@ -38,3 +38,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-libircclient.exe' \
         -lircclient -lws2_32
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

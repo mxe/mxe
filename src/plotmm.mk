@@ -19,10 +19,12 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared
+        $(LINK_STYLE)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install \
         bin_PROGRAMS= \
         sbin_PROGRAMS= \
         noinst_PROGRAMS= \
         INFO_DEPS=
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

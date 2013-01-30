@@ -18,10 +18,12 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-sdlpango \
         --with-sdlnet \
         --with-rsvg
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

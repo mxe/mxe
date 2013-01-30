@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && touch src/libgsasl-7.def && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \
         --with-libgcrypt \
@@ -34,3 +34,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgsasl.exe' \
         `'$(TARGET)-pkg-config' libgsasl --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

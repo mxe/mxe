@@ -25,8 +25,7 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-silent-rules \
-        --disable-shared \
-        --enable-static \
+        $(LINK_STYLE) \
         --enable-xpdf-headers \
         --enable-poppler-qt4 \
         --enable-zlib \
@@ -57,4 +56,3 @@ define $(PKG)_BUILD
         '$(2).cxx' -o '$(PREFIX)/$(TARGET)/bin/test-poppler.exe' \
         `'$(TARGET)-pkg-config' poppler poppler-cpp --cflags --libs`
 endef
-

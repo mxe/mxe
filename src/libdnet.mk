@@ -28,7 +28,9 @@ define $(PKG)_BUILD
     $(SED) -i 's,-mno-cygwin,,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

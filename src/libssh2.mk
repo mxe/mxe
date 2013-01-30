@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./buildconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-openssl \
         --with-libgcrypt \
@@ -32,3 +32,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libssh2.exe' \
         `'$(TARGET)-pkg-config' --cflags --libs libssh2`
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-modules \
         --with-threads \
@@ -53,3 +53,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-graphicsmagick.exe' \
         `'$(TARGET)-pkg-config' GraphicsMagick++ --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

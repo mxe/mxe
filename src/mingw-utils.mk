@@ -27,8 +27,10 @@ define $(PKG)_BUILD
     # cross build
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

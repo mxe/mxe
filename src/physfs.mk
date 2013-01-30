@@ -29,3 +29,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-physfs.exe' \
         -lphysfs -lz
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

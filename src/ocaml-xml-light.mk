@@ -31,3 +31,5 @@ define $(PKG)_BUILD
      echo 'archive(native) = "xml-light.cmxa"') \
      > $(PREFIX)/$(TARGET)/lib/ocaml/xml-light/META
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

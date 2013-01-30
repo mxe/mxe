@@ -38,3 +38,5 @@ define $(PKG)_BUILD
     #works if wine is installed :
     #cd '$(1)/test' && ./dump.exe plug1.dll plug2.dll
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32 =

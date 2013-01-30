@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-pixbuf-loader \
         --disable-gtk-theme \
@@ -32,3 +32,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-librsvg.exe' \
         `'$(TARGET)-pkg-config' librsvg-2.0 --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

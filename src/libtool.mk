@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)/libltdl' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --enable-ltdl-install
     $(MAKE) -C '$(1)/libltdl' -j '$(JOBS)'
     $(MAKE) -C '$(1)/libltdl' -j 1 install

@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-host_os=mingw \
         --with-winapi=wmme,directx,wasapi,wdmks \
@@ -33,3 +33,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-portaudio.exe' \
         `'$(TARGET)-pkg-config' portaudio-2.0 --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

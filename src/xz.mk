@@ -20,7 +20,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-threads \
         --disable-nls
     $(MAKE) -C '$(1)'/src/liblzma -j '$(JOBS)' install

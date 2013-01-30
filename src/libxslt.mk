@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        $(LINK_STYLE) \
         --without-debug \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-libxml-prefix='$(PREFIX)/$(TARGET)' \
@@ -28,3 +28,5 @@ define $(PKG)_BUILD
         --without-plugins
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

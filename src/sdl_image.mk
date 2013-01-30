@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,^\(Requires:.*\),\1 libtiff-4 libpng,' '$(1)/SDL_image.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \

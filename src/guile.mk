@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --without-threads \
         scm_cv_struct_timespec=no \
         LIBS='-lunistring -lintl -liconv' \
@@ -37,3 +37,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-guile.exe' \
         `'$(TARGET)-pkg-config' guile-1.8 --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

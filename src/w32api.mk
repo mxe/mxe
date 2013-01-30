@@ -32,3 +32,5 @@ define $(PKG)_BUILD
      echo 'Libs: -lglu32';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/glu.pc'
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

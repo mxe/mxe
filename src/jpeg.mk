@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
-        --disable-shared
+        $(LINK_STYLE)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
 
     '$(TARGET)-gcc' \

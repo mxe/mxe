@@ -27,3 +27,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-openal.exe' \
         `'$(TARGET)-pkg-config' openal --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-static-mingw32  =

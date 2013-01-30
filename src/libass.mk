@@ -20,7 +20,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(LINK_STYLE) \
         --disable-enca \
         --enable-fontconfig
     $(MAKE) -C '$(1)' -j '$(JOBS)'
