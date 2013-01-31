@@ -1,72 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 1c8e01e0938fffc78fe074a4bfff6f287f521eb0 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 20 Dec 2012 01:20:49 +0100
-Subject: [PATCH 1/2] fix include statements
-
-
-diff --git a/src/plugins/directshow/camera/dscameraservice.cpp b/src/plugins/directshow/camera/dscameraservice.cpp
-index 6d29741..fcbd1ef 100644
---- a/src/plugins/directshow/camera/dscameraservice.cpp
-+++ b/src/plugins/directshow/camera/dscameraservice.cpp
-@@ -44,7 +44,7 @@
- 
- #if defined(HAVE_WIDGETS)
- #include <QtWidgets/qwidget.h>
--#include <QVideoWidgetControl.h>
-+#include <QVideoWidgetControl>
- #endif
- 
- #include "dscameraservice.h"
-diff --git a/src/plugins/directshow/camera/dsvideodevicecontrol.cpp b/src/plugins/directshow/camera/dsvideodevicecontrol.cpp
-index 4686569..7c33d13 100644
---- a/src/plugins/directshow/camera/dsvideodevicecontrol.cpp
-+++ b/src/plugins/directshow/camera/dsvideodevicecontrol.cpp
-@@ -49,7 +49,7 @@
- #include <dshow.h>
- #include <objbase.h>
- #include <initguid.h>
--#include <Ocidl.h>
-+#include <ocidl.h>
- #include <string.h>
- 
- extern const CLSID CLSID_VideoInputDeviceCategory;
-diff --git a/src/plugins/directshow/camera/dsvideowidgetcontrol.cpp b/src/plugins/directshow/camera/dsvideowidgetcontrol.cpp
-index 843719b..d7a913d 100644
---- a/src/plugins/directshow/camera/dsvideowidgetcontrol.cpp
-+++ b/src/plugins/directshow/camera/dsvideowidgetcontrol.cpp
-@@ -42,7 +42,7 @@
- #include <QtCore/qcoreevent.h>
- #include <QtCore/qtimer.h>
- 
--#include "DSVideoWidgetControl.h"
-+#include "dsvideowidgetcontrol.h"
- #include "dscamerasession.h"
- 
- QT_BEGIN_NAMESPACE
-diff --git a/src/plugins/directshow/camera/dsvideowidgetcontrol.h b/src/plugins/directshow/camera/dsvideowidgetcontrol.h
-index ac390c8..9249c31 100644
---- a/src/plugins/directshow/camera/dsvideowidgetcontrol.h
-+++ b/src/plugins/directshow/camera/dsvideowidgetcontrol.h
-@@ -49,7 +49,7 @@
- #include <QtMultimedia/qvideosurfaceformat.h>
- 
- #include <qvideowidgetcontrol.h>
--#include "DsCameraControl.h"
-+#include "dscameracontrol.h"
- 
- QT_BEGIN_HEADER
- 
--- 
-1.7.10.4
-
-
-From 7bf0aafc591af9c2a0f6a600cbec03e78c8ed72a Mon Sep 17 00:00:00 2001
+From af295c0f78cfc8e54601048d5da66f6e81f6661e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 13 Dec 2012 20:23:48 +0100
-Subject: [PATCH 2/2] remove duplicate defs (mxe-specific)
+Subject: [PATCH] remove duplicate defs (mxe-specific)
 
 
 diff --git a/src/multimedia/audio/qaudiodeviceinfo_win32_p.cpp b/src/multimedia/audio/qaudiodeviceinfo_win32_p.cpp

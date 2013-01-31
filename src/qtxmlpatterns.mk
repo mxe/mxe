@@ -3,7 +3,7 @@
 
 PKG             := qtxmlpatterns
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := bc3af9ad83e2cd6d91b26352abb9f5c650593891
+$(PKG)_CHECKSUM := da4c7def8a89fd8ca35e8ed25bb59a3034429882
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules_tar/$($(PKG)_FILE)

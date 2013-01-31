@@ -3,7 +3,7 @@
 
 PKG             := qttranslations
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 73b14d114da8a1a5eb7073eefda01d563e35bcb5
+$(PKG)_CHECKSUM := c24dba6d0cb1cf8af2369863ee7e8340b7a798fd
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules_tar/$($(PKG)_FILE)

@@ -3,7 +3,7 @@
 
 PKG             := qtjsbackend
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9f499e144080318fb6c40501b854db909f8ba3d2
+$(PKG)_CHECKSUM := 14ca98f71f5f209f09c321204f31e810b4ae1cec
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules_tar/$($(PKG)_FILE)
