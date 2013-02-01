@@ -4,7 +4,7 @@ See index.html for further information.
 From 990c4a3ec111502fcb4738a6772e90d294cce2cd Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 11 Jan 2013 00:30:41 +0100
-Subject: [PATCH 1/8] consolidate generation of metafile install targets
+Subject: [PATCH 1/7] consolidate generation of metafile install targets
 
 Metafiles such as .prl and .pc files contain paths that have to be
 adjusted during installation. The same code is used for unix and
@@ -132,7 +132,7 @@ index bda035e..3b2c620 100644
 From 569deb7d1a39e17fb5635411a68d374233f74818 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 27 Jan 2013 14:03:16 +0100
-Subject: [PATCH 2/8] don't prematurely reduce LIBS when adding sql link lists
+Subject: [PATCH 2/7] don't prematurely reduce LIBS when adding sql link lists
 
 It's possible that different database libraries share dependencies.
 We need to keep their link lists intact here so that QtSql's .prl and
@@ -201,7 +201,7 @@ index 3b5a689..38aab2f 100644
 From a541a0a510b148b684cdb15da4e6a276e3c6ef83 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 29 Jan 2013 21:56:24 +0100
-Subject: [PATCH 3/8] adjust paths in installed module metafiles from modular
+Subject: [PATCH 3/7] adjust paths in installed module metafiles from modular
  build
 
 Fully modular prefix build now puts the includes and libs into each
@@ -233,7 +233,7 @@ index 50e9469..3ade5a9 100644
 From facc35e0c2f6b51ad4cbcdfe79475db155ba52e5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 11 Jan 2013 00:30:25 +0100
-Subject: [PATCH 4/8] adjust paths in installed prl files for mingw
+Subject: [PATCH 4/7] adjust paths in installed prl files for mingw
 
 Curiously, qmake could fix .prl and .pc files for unix, but only .pc
 files for MinGW. qt_module.prf seems to have known this.
@@ -280,7 +280,7 @@ index 3b2c620..2270a00 100644
 From d6a4dcb0dd88fa6fb4c352d48bf0445341e7de35 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 29 Jan 2013 21:51:31 +0100
-Subject: [PATCH 5/8] fix path adjustments in installed metafiles
+Subject: [PATCH 5/7] fix path adjustments in installed metafiles
 
 Task-number: QTBUG-28902
 Change-Id: Ia70da8f0f0b7abb4ea2a46cb4068c0827888b322
@@ -343,7 +343,7 @@ index 32eae0b..b8c920b 100644
 From fca2cfc4dd5495246a29b229d98ee0b545ed6242 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 24 Sep 2012 19:53:55 +0200
-Subject: [PATCH 6/8] use pkg-config for freetype
+Subject: [PATCH 6/7] use pkg-config for freetype
 
 Change-Id: Id0b048b44bcebf066c21efeb89f9c1781023a593
 
@@ -369,7 +369,7 @@ index 7f73465..1de1d74 100644
 From 09426fcce6676ae7952106e3ade04cea38d9a684 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 22 Dec 2012 17:45:34 +0100
-Subject: [PATCH 7/8] WIP: qmake writeFile(): work around concurrent
+Subject: [PATCH 7/7] WIP: qmake writeFile(): work around concurrent
  QDir::mkpath() failure
 
 This actually happened when building qtimageformats with make -j4.
@@ -403,34 +403,6 @@ index bafa867..d8b03f7 100644
      }
      QString errStr;
      if (!doWriteFile(qfi.filePath(), mode, contents, &errStr)) {
--- 
-1.7.10.4
-
-
-From 93da132789ebb2988867838fe6373dbfba52e101 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 31 Jan 2013 17:24:50 +0100
-Subject: [PATCH 8/8] fix buld failure on mingw
-
-See also 2cc9a9a51d6742708b1ea41c7338755e2a0ee9e9
-
-Change-Id: I802d5c673b544fb3a17e9273030876928faa5c46
-
-diff --git a/src/dbus/qdbusmessage.h b/src/dbus/qdbusmessage.h
-index 386078d..27ffee2 100644
---- a/src/dbus/qdbusmessage.h
-+++ b/src/dbus/qdbusmessage.h
-@@ -49,6 +49,10 @@
- 
- #ifndef QT_NO_DBUS
- 
-+#if defined(Q_OS_WIN) && defined(interface)
-+#undef interface
-+#endif
-+
- QT_BEGIN_HEADER
- 
- QT_BEGIN_NAMESPACE
 -- 
 1.7.10.4
 
