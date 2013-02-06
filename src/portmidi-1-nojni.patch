@@ -1,0 +1,46 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch disables the Java Native Interface dependency.
+
+--- a/pm_common/CMakeLists.txt	2013-01-27 17:48:15.819279645 +0100
++++ b/pm_common/CMakeLists.txt	2013-01-27 17:52:31.702624256 +0100
+@@ -88,9 +88,9 @@
+     # /MD is multithread DLL, /MT is multithread. Change to static:
+     include(../pm_win/static.cmake)
+     
+-    include(FindJNI)
++#    include(FindJNI)
+ 
+-    set(JAVA_INCLUDE_PATHS ${JAVA_INCLUDE_PATH} ${JAVA_INCLUDE_PATH2})
++#    set(JAVA_INCLUDE_PATHS ${JAVA_INCLUDE_PATH} ${JAVA_INCLUDE_PATH2})
+     # message(STATUS "JAVA_INCLUDE_PATHS: " ${JAVA_INCLUDE_PATHS})
+ 
+     set(WINSRC pmwin pmwinmm)
+@@ -99,7 +99,7 @@
+     set(PM_NEEDED_LIBS winmm.lib)
+   endif(WIN32)
+ endif(UNIX)
+-set(JNI_EXTRA_LIBS ${PM_NEEDED_LIBS} ${JAVA_JVM_LIBRARY})
++#set(JNI_EXTRA_LIBS ${PM_NEEDED_LIBS} ${JAVA_JVM_LIBRARY})
+ 
+ # this completes the list of library sources by adding shared code
+ list(APPEND LIBSRC pmutil portmidi)
+@@ -110,12 +110,12 @@
+ target_link_libraries(portmidi-static ${PM_NEEDED_LIBS})
+ 
+ # define the jni library
+-include_directories(${JAVA_INCLUDE_PATHS})
++#include_directories(${JAVA_INCLUDE_PATHS})
+ 
+-set(JNISRC ${LIBSRC} ../pm_java/pmjni/pmjni.c)
+-add_library(pmjni SHARED ${JNISRC})
+-target_link_libraries(pmjni ${JNI_EXTRA_LIBS})
+-set_target_properties(pmjni PROPERTIES EXECUTABLE_EXTENSION "jnilib")
++#set(JNISRC ${LIBSRC} ../pm_java/pmjni/pmjni.c)
++#add_library(pmjni SHARED ${JNISRC})
++#target_link_libraries(pmjni ${JNI_EXTRA_LIBS})
++#set_target_properties(pmjni PROPERTIES EXECUTABLE_EXTENSION "jnilib")
+ 
+ # install the libraries (Linux and Mac OS X command line)
+ if(UNIX)
