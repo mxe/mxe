@@ -29,6 +29,7 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/porttime/porttime.h'  '$(PREFIX)/$(TARGET)/include/'
 
     '$(TARGET)-gcc' \
-        '$(1)/pm_test/test.c' -o '$(PREFIX)/$(TARGET)/bin/test-portmidi.exe' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-portmidi.exe' \
         -lportmidi -lwinmm
 endef
