@@ -4,7 +4,7 @@
 # sox
 PKG             := sox
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d809cab382c7a9d015491c69051a9d1c1a1a44f1
+$(PKG)_CHECKSUM := 71f05afc51e3d9b03376b2f98fd452d3a274d595
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)

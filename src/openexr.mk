@@ -51,4 +51,9 @@ define $(PKG)_BUILD
         -o b44ExpLogTable
     '$(1)/IlmImf/b44ExpLogTable' > '$(1)/IlmImf/b44ExpLogTable.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-g++' \
+        -Wall -Wextra -std=gnu++0x \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-openexr.exe' \
+        `'$(TARGET)-pkg-config' OpenEXR --cflags --libs`
 endef

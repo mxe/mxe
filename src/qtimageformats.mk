@@ -3,14 +3,14 @@
 
 PKG             := qtimageformats
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 982ff8bd139db4d72ee42d5372d6e8520c693368
+$(PKG)_CHECKSUM := 20e4f307029a463ec59cc1d97522bab54287d4be
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules_tar/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase libmng tiff
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package qtimageformats.' >&2;
+    echo $(qtbase_VERSION)
 endef
 
 define $(PKG)_BUILD
