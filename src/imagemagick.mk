@@ -25,8 +25,15 @@ define $(PKG)_BUILD
         --with-x=no \
         --without-zlib \
         --disable-largefile \
-        ac_cv_prog_freetype_config='$(PREFIX)/$(TARGET)/bin/freetype-config'
+        --without-threads \
+        --with-freetype='$(PREFIX)/$(TARGET)/bin/freetype-config'
+    $(SED) -i 's/#define MAGICKCORE_HAVE_PTHREAD 1//g' '$(1)/magick/magick-baseconfig.h'
     $(SED) -i 's/#define MAGICKCORE_ZLIB_DELEGATE 1//g' '$(1)/magick/magick-config.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=
+
+    '$(1)'/libtool --mode=link --tag=CXX \
+        '$(TARGET)-g++' -Wall -Wextra -std=gnu++0x \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-imagemagick.exe' \
+        `'$(TARGET)-pkg-config' ImageMagick++ --cflags --libs`
 endef
