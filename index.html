@@ -458,6 +458,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>git clone -b master https://github.com/mxe/mxe.git</pre>
 
     <p>
+    <strong>N.B.</strong> when using the development version,
+    ensure you use the local documentation (index.html) -
+    the website reflects the stable branch.
+    </p>
+
+    <p>
     To retrieve updates, run:
     </p>
 
@@ -618,6 +624,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="http://sourceware.org/libffi/">libffi</td>
+        <td>≥ 3.0.0</td>
+    </tr>
+    <tr>
         <td><a href="http://www.gnu.org/software/libtool/">Libtool</a></td>
         <td>≥ 2.2</td>
     </tr>
@@ -679,18 +689,15 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>aptitude install -R g++-multilib libc6-dev-i386</pre>
 
     <p>
-    On Debian Squeeze, install cmake from
-    <a href="http://backports-master.debian.org/Instructions/">backports</a>.
-    </p>
-    <p>
-    Add this line:
+    On Debian Squeeze, you'll need some packages from
+    <a href="http://backports-master.debian.org/Instructions/">backports</a>. Add this line:
     </p>
     <pre>deb http://backports.debian.org/debian-backports squeeze-backports main</pre>
     <p>
     to your sources.list (or add a new file with the ".list" extension to /etc/apt/sources.list.d/)
     </p>
     <pre>apt-get update
-aptitude -t squeeze-backports install cmake</pre>
+aptitude -t squeeze-backports install cmake yasm</pre>
 
     <h3 id="requirements-fedora">Fedora</h3>
 
