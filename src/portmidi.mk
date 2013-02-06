@@ -9,6 +9,11 @@ $(PKG)_FILE     := $(PKG)-src-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/portmedia/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
+define $(PKG)_UPDATE
+    echo 'TODO: Updates for package portmidi need to be fixed.' >&2;
+    echo $(portmidi_VERSION)
+endef
+
 define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && cmake .. \
