@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf && ./configure \
+    cd '$(1)' && autoreconf --force --install && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
