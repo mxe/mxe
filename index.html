@@ -683,18 +683,15 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>aptitude install -R g++-multilib libc6-dev-i386</pre>
 
     <p>
-    On Debian Squeeze, install cmake from
-    <a href="http://backports-master.debian.org/Instructions/">backports</a>.
-    </p>
-    <p>
-    Add this line:
+    On Debian Squeeze, you'll need some packages from
+    <a href="http://backports-master.debian.org/Instructions/">backports</a>. Add this line:
     </p>
     <pre>deb http://backports.debian.org/debian-backports squeeze-backports main</pre>
     <p>
     to your sources.list (or add a new file with the ".list" extension to /etc/apt/sources.list.d/)
     </p>
     <pre>apt-get update
-aptitude -t squeeze-backports install cmake</pre>
+aptitude -t squeeze-backports install cmake yasm</pre>
 
     <h3 id="requirements-fedora">Fedora</h3>
 
