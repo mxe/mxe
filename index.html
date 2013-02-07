@@ -2256,7 +2256,9 @@ aptitude -t squeeze-backports install cmake yasm</pre>
         Adjust the comments,
         fill in the <code>$(PKG)_*</code> fields.
         </p>
-
+	<p>
+	<b><code>$(PKG)_CHECKSUM</code> must be computed with openssl sh1 &lt;archive&gt;</b>
+	</p>
         <p>
         Be especially careful with the <code>$(PKG)_DEPS</code> section.
         The easiest way to get the dependencies right
