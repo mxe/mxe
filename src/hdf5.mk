@@ -36,6 +36,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'/hl/c++/src -j 1 install
 
     ## test hdf5
-    '$(TARGET)-g++' -W -Wall -ansi '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-hdf5.exe' -lhdf5_hl -lhdf5 -lz
-
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hdf5.exe' \
+        -lhdf5_hl -lhdf5 -lz
 endef
