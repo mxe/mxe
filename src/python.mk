@@ -9,8 +9,7 @@ $(PKG)_FILE     := Python-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://python.org/ftp/python/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 
-
-PATH_TO_HOST_PYTHON := $(PWD)/$($(PKG)_SUBDIR)/
+PATH_TO_HOST_PYTHON := $(PREFIX)/share/$($(PKG)_SUBDIR)
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://python.org/download/releases/' | \
@@ -19,19 +18,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-
 	## Build HOSTPYTHON and Parser/pgen on HOST with unpatched sources
 	## http://randomsplat.com/id5-cross-compiling-python-for-embedded-linux.html
-	if ! ($(PATH_TO_HOST_PYTHON)hostpython --version) ; then \
+	if ! $(PATH_TO_HOST_PYTHON)/python --version ; then \
 		echo "Built host python and Parser/pgen in $(PATH_TO_HOST_PYTHON)";  \
 		( cd $$(dirname $(PATH_TO_HOST_PYTHON)) && tar xf $(PWD)/pkg/$($(PKG)_FILE) ); \
-		( cd $(PATH_TO_HOST_PYTHON)   && \
+		( cd $(PATH_TO_HOST_PYTHON) && \
 			./configure && \
-			make python Parser/pgen Modules/_freeze_importlib && \
-			mv python hostpython && \
-			mv Parser/pgen Parser/hostpgen && \
-			mv Modules/_freeze_importlib Modules/host_freeze_importlib && \
-			make distclean) ;  \
+			$(MAKE) python Parser/pgen Modules/_freeze_importlib \
+			) ; \
 	fi
 
 	## Cross compiling python, see also
@@ -50,7 +45,7 @@ define $(PKG)_BUILD
 		cross_compiling=yes \
 		CONFIG_SITE=config.site \
 		CC_FOR_BUILD=$(TARGET)-gcc \
-		PYTHON_FOR_BUILD=$(PATH_TO_HOST_PYTHON)hostpython  \
+		PYTHON_FOR_BUILD=$(PREFIX)/$(TARGET)/python.exe \
 		ac_cv_have_long_long_format=yes \
 		./configure  \
 		--without-threads \
@@ -67,9 +62,9 @@ define $(PKG)_BUILD
 
 	PYTHONHOME='$(1)':'$(1)'/Lib/ \
 	$(MAKE) -C '$(1)' \
-		HOSTPYTHON=$(PATH_TO_HOST_PYTHON)hostpython \
-		HOSTPGEN=$(PATH_TO_HOST_PYTHON)Parser/hostpgen \
-		HOST_FREEZE_IMPORTLIB=$(PATH_TO_HOST_PYTHON)Modules/host_freeze_importlib \
+		HOSTPYTHON=$(PATH_TO_HOST_PYTHON)/python \
+		HOSTPGEN=$(PATH_TO_HOST_PYTHON)/Parser/pgen \
+		HOST_FREEZE_IMPORTLIB=$(PATH_TO_HOST_PYTHON)/Modules/_freeze_importlib \
 		BLDSHARED="$(TARGET)-gcc -shared" \
 		CROSS_COMPILE=$(TARGET)- \
 		CROSS_COMPILE_TARGET=yes \
@@ -80,14 +75,12 @@ define $(PKG)_BUILD
 	## runtime test using wine 
 	[[ -z `wine '$(1)'/python.exe --version` ]] || echo "no runtime test - because wine is not available"
 		
-
-	## Installation: 
-
+	## Install target system
 	rm -rf '$(PREFIX)/$(TARGET)/$($(PKG)_SUBDIR)'
 	cp -r '$(1)'  '$(PREFIX)/$(TARGET)/'
+	cp -r '$(1)/python.exe'  '$(PREFIX)/$(TARGET)/bin/'
 
 	ln -sf '$(PREFIX)/$(TARGET)/$($(PKG)_SUBDIR)/Include' '$(PREFIX)/$(TARGET)/include/$($(PKG)_SUBDIR)'
-
 	
 endef
 
