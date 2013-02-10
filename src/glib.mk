@@ -88,4 +88,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/gobject' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gio'     -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
     $(MAKE) -C '$(1)'         -j '$(JOBS)' install-pkgconfigDATA
+    $(MAKE) -C '$(1)/m4macros' install
 endef
