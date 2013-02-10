@@ -10,7 +10,8 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-	# not implemented 
+    echo 'TODO: write update script for $(PKG).' >&2;
+    echo $($(PKG)_VERSION)
 endef
 
 define $(PKG)_BUILD
@@ -19,5 +20,10 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         PKG_CONFIG='$(TARGET)-pkg-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install \
+        bin_PROGRAMS= \
+        sbin_PROGRAMS= \
+        noinst_PROGRAMS= \
+        html_DATA= \
+        AR='$(TARGET)-ar'
 endef
