@@ -3,42 +3,19 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 36503de724d45b8c5dc9ea06a306d6648cf444aa Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 24 Nov 2011 15:06:06 +0100
-Subject: [PATCH 1/7] disable doc and test (mingw-cross-env specific)
-
-
-diff --git a/Makefile.am b/Makefile.am
-index c4a4bfa..78943a7 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -23,7 +23,7 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --disable-valgrind-tests
- 
- SUBDIRS = gl lib extra libdane po
- 
--SUBDIRS += src doc tests
-+SUBDIRS += src
- 
- if HAVE_GUILE
- SUBDIRS += guile
--- 
-1.7.10.4
-
-
-From 53dee0b90e8018b27ebd91ce44606d69ad18eb97 Mon Sep 17 00:00:00 2001
+From 0d7d131f630e9b83447168d5075c6b153d75b17f Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
-Subject: [PATCH 2/7] Revert "make dist will also make lzip compressed
+Subject: [PATCH 1/5] Revert "make dist will also make lzip compressed
  tarball"
 
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
 
 diff --git a/configure.ac b/configure.ac
-index 1047442..cff91bb 100644
+index 6921f64..e9aa0a5 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.7], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.8], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
@@ -51,16 +28,16 @@ index 1047442..cff91bb 100644
 1.7.10.4
 
 
-From ec72b114f6a07986a71880707cb6cc197e7ed674 Mon Sep 17 00:00:00 2001
+From 4fcb5bad47662b04c758d8bf7ba6111e1914ffde Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 Jun 2012 09:57:24 +0200
-Subject: [PATCH 3/7] AM_PROG_AR for automake 1.12 compatibility
+Subject: [PATCH 2/5] AM_PROG_AR for automake 1.12 compatibility
 
 Taken from
 http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
 
 diff --git a/configure.ac b/configure.ac
-index cff91bb..847bcdb 100644
+index e9aa0a5..dc73e0c 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -37,6 +37,7 @@ dnl Checks for programs.
@@ -75,17 +52,17 @@ index cff91bb..847bcdb 100644
 1.7.10.4
 
 
-From 2d8e156262d39aa281988f844f40d3f006b12e63 Mon Sep 17 00:00:00 2001
+From b6dc5712432a3cb03b9155e5862968157688c93f Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 16 Aug 2012 11:13:47 +0200
-Subject: [PATCH 4/7] allow automake warnings not to be errors
+Subject: [PATCH 3/5] allow automake warnings not to be errors
 
 
 diff --git a/configure.ac b/configure.ac
-index 847bcdb..38465c4 100644
+index dc73e0c..b9a460c 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.7], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.8], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
@@ -98,34 +75,10 @@ index 847bcdb..38465c4 100644
 1.7.10.4
 
 
-From 4376d4f5bc04f3118babb5eed7c4bb67fd2d8c1b Mon Sep 17 00:00:00 2001
-From: Nikos Mavrogiannopoulos <nmav@gnutls.org>
-Date: Mon, 4 Feb 2013 18:12:31 +0100
-Subject: [PATCH 5/7] Corrected typo. Reported by Mark Brand. (cherry picked
- from commit b94c3e7c6e8fba6a66a83efabd6376726eac3ba6)
-
-
-diff --git a/lib/nettle/rnd.c b/lib/nettle/rnd.c
-index 4c91827..b2883ee 100644
---- a/lib/nettle/rnd.c
-+++ b/lib/nettle/rnd.c
-@@ -164,7 +164,7 @@ do_device_source (int init)
-     }
- 
-   if ((device_fd != 0)
--      && (init || timespec_sub_sec(&current_time, &device_last_read) > DEVICE_READ_INTERVAL)))
-+      && (init || timespec_sub_sec(&current_time, &device_last_read) > DEVICE_READ_INTERVAL))
-     {
- 
-       /* More than 20 minutes since we last read the device */
--- 
-1.7.10.4
-
-
-From 5a063bc916d00fc40d2f3f53a76d78e5ac638cba Mon Sep 17 00:00:00 2001
+From 4733e2dc6a083a3c97f1b2fcfbee5b8137769516 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 4 Feb 2013 16:11:12 +0100
-Subject: [PATCH 6/7] add missing private lib to pc file
+Subject: [PATCH 4/5] add missing private lib to pc file
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
@@ -144,17 +97,17 @@ index 5e2ae11..1b9952a 100644
 1.7.10.4
 
 
-From b0f379cab21f61c319ff0af21b01f7bfc8cab0ff Mon Sep 17 00:00:00 2001
+From ef1f80e2946990bb87072fac5f01fa10c9cdc973 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 6 Feb 2013 08:43:43 +0100
-Subject: [PATCH 7/7] relax automake version check
+Subject: [PATCH 5/5] relax automake version check
 
 
 diff --git a/configure.ac b/configure.ac
-index 38465c4..af557df 100644
+index b9a460c..4d4f166 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.7], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.8], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
