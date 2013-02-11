@@ -1,7 +1,7 @@
 export MXE_DIR=`pwd`
 export PATH=$MXE_DIR/usr/bin:$PATH
 alias mxe='make -C $MXE_DIR'
-unset `grep '^unexport' Makefile | gsed -n 's,unexport,,p' | tr '\n' ' '`
+unset `grep '^unexport' Makefile | sed -n 's,unexport,,p' | tr '\n' ' '`
 
 _mxe()
 {
