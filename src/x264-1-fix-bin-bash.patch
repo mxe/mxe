@@ -10,3 +10,12 @@ diff -urN x264-snapshot-20100714-2245/version.sh x264-snapshot-20100714-2245.new
  [ -n "$1" ] && cd $1
  git rev-list HEAD | sort > config.git-hash
  LOCALVER=`wc -l config.git-hash | awk '{print $1}'`
+diff -urN x264-snapshot-20100714-2245/configure x264-snapshot-20100714-2245.new/configure
+--- x264-snapshot-20100714-2245/configure	2010-07-15 06:45:07.000000000 +1000
++++ x264-snapshot-20100714-2245.new/configure	2010-10-03 23:58:24.000000000 +1100
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ if test x"$1" = x"-h" -o x"$1" = x"--help" ; then
+ cat <<EOF

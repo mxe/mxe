@@ -3,14 +3,17 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3d553ed3fe4065b8453939831c007ec896ceb9ab
+$(PKG)_CHECKSUM := 0bf71dc3a7ac13b7795801aa66673077749082c9
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules_tar/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype dbus
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package qtbase.' >&2;
+    $(WGET) -q -O- http://origin.releases.qt-project.org/qt5/ | \
+    $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
+    grep -iv -- '-rc' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

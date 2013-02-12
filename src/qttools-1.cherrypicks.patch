@@ -1,0 +1,110 @@
+This file is part of MXE.
+See index.html for further information.
+
+From c25e78b3974062052d3fd9e6da496e34dc511fcd Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@digia.com>
+Date: Fri, 1 Feb 2013 09:34:41 +0100
+Subject: [PATCH] QtDBus-tools: Remove module includes.
+
+Change-Id: I4b6754c7bd513a2c479c52a0428bd7eee857c6ca
+Reviewed-by: Kai Koehne <kai.koehne@digia.com>
+(cherry picked from commit 6463881156d05b0e39bbca91f2d0c5892b0a9368)
+
+diff --git a/src/qdbus/qdbus/qdbus.cpp b/src/qdbus/qdbus/qdbus.cpp
+index 0ce6563..345f046 100644
+--- a/src/qdbus/qdbus/qdbus.cpp
++++ b/src/qdbus/qdbus/qdbus.cpp
+@@ -47,7 +47,13 @@
+ #include <QtCore/qmetaobject.h>
+ #include <QtXml/QDomDocument>
+ #include <QtXml/QDomElement>
+-#include <QtDBus/QtDBus>
++#include <QtDBus/QDBusConnection>
++#include <QtDBus/QDBusInterface>
++#include <QtDBus/QDBusConnectionInterface>
++#include <QtDBus/QDBusVariant>
++#include <QtDBus/QDBusArgument>
++#include <QtDBus/QDBusMessage>
++#include <QtDBus/QDBusReply>
+ #include <private/qdbusutil_p.h>
+ 
+ QT_BEGIN_NAMESPACE
+diff --git a/src/qdbus/qdbusviewer/qdbusmodel.cpp b/src/qdbus/qdbusviewer/qdbusmodel.cpp
+index e2405a1..5bf656b 100644
+--- a/src/qdbus/qdbusviewer/qdbusmodel.cpp
++++ b/src/qdbus/qdbusviewer/qdbusmodel.cpp
+@@ -42,7 +42,11 @@
+ #include "qdbusmodel.h"
+ 
+ #include <QtCore/qvector.h>
+-#include <QtXml/QtXml>
++#include <QtCore/QDebug>
++#include <QtXml/QDomDocument>
++#include <QtDBus/QDBusObjectPath>
++#include <QtDBus/QDBusInterface>
++#include <QtDBus/QDBusReply>
+ 
+ struct QDBusItem
+ {
+diff --git a/src/qdbus/qdbusviewer/qdbusmodel.h b/src/qdbus/qdbusviewer/qdbusmodel.h
+index d9db699..f6b1366 100644
+--- a/src/qdbus/qdbusviewer/qdbusmodel.h
++++ b/src/qdbus/qdbusviewer/qdbusmodel.h
+@@ -43,12 +43,13 @@
+ #define QDBUSMODEL_H
+ 
+ #include <QtCore/qabstractitemmodel.h>
+-#include <QtDBus/QtDBus>
++#include <QtDBus/QDBusConnection>
+ 
+ struct QDBusItem;
+ 
+ QT_FORWARD_DECLARE_CLASS(QDomDocument);
+ QT_FORWARD_DECLARE_CLASS(QDomElement);
++QT_FORWARD_DECLARE_CLASS(QDBusObjectPath)
+ 
+ 
+ class QDBusModel: public QAbstractItemModel
+diff --git a/src/qdbus/qdbusviewer/qdbusviewer.cpp b/src/qdbus/qdbusviewer/qdbusviewer.cpp
+index c6d8f1f..95072fb 100644
+--- a/src/qdbus/qdbusviewer/qdbusviewer.cpp
++++ b/src/qdbus/qdbusviewer/qdbusviewer.cpp
+@@ -43,11 +43,11 @@
+ #include "qdbusmodel.h"
+ #include "propertydialog.h"
+ 
+-#include <QtXml/QtXml>
+ 
+ #include <QtWidgets/QTreeWidget>
+ #include <QtCore/QStringListModel>
+ #include <QtCore/QSortFilterProxyModel>
++#include <QtCore/QMetaProperty>
+ #include <QtWidgets/QLineEdit>
+ #include <QtWidgets/QListView>
+ #include <QtWidgets/QTextBrowser>
+@@ -58,6 +58,9 @@
+ #include <QtWidgets/QInputDialog>
+ #include <QtWidgets/QMessageBox>
+ #include <QtWidgets/QMenu>
++#include <QtDBus/QDBusConnectionInterface>
++#include <QtDBus/QDBusInterface>
++#include <QtDBus/QDBusMetaType>
+ 
+ #include <private/qdbusutil_p.h>
+ 
+diff --git a/src/qdbus/qdbusviewer/qdbusviewer.h b/src/qdbus/qdbusviewer/qdbusviewer.h
+index cbfcb68..00e166a 100644
+--- a/src/qdbus/qdbusviewer/qdbusviewer.h
++++ b/src/qdbus/qdbusviewer/qdbusviewer.h
+@@ -43,7 +43,7 @@
+ #define QDBUSVIEWER_H
+ 
+ #include <QtWidgets/QWidget>
+-#include <QtDBus/QtDBus>
++#include <QtDBus/QDBusConnection>
+ 
+ QT_FORWARD_DECLARE_CLASS(QTreeView)
+ QT_FORWARD_DECLARE_CLASS(QTreeWidget)
+-- 
+1.7.10.4
+
