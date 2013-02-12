@@ -37,4 +37,4 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =

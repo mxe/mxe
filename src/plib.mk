@@ -1,12 +1,12 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := portablexdr
+PKG             := plib
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 1fb556185ca68d9ba07ad2be0576b166375a75bb
+$(PKG)_CHECKSUM := d014009343e2194a30aaba650e8cecf1bf54bd53
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://people.redhat.com/~rjones/portablexdr/files/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
@@ -17,12 +17,16 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        PKG_CONFIG='$(TARGET)-pkg-config'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install \
+        bin_PROGRAMS= \
+        sbin_PROGRAMS= \
+        noinst_PROGRAMS= \
+        html_DATA= \
         AR='$(TARGET)-ar'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =

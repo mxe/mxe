@@ -39,4 +39,4 @@ define $(PKG)_BUILD
     #cd '$(1)/test' && ./dump.exe plug1.dll plug2.dll
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32 =
+$(PKG)_BUILD_x86_64-w64-mingw32 =

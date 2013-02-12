@@ -6,7 +6,7 @@ Contains ad hoc patches for cross building.
 From 36503de724d45b8c5dc9ea06a306d6648cf444aa Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 24 Nov 2011 15:06:06 +0100
-Subject: [PATCH 1/6] disable doc and test (mingw-cross-env specific)
+Subject: [PATCH 1/7] disable doc and test (mingw-cross-env specific)
 
 
 diff --git a/Makefile.am b/Makefile.am
@@ -29,7 +29,7 @@ index c4a4bfa..78943a7 100644
 From 53dee0b90e8018b27ebd91ce44606d69ad18eb97 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
-Subject: [PATCH 2/6] Revert "make dist will also make lzip compressed
+Subject: [PATCH 2/7] Revert "make dist will also make lzip compressed
  tarball"
 
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
@@ -54,7 +54,7 @@ index 1047442..cff91bb 100644
 From ec72b114f6a07986a71880707cb6cc197e7ed674 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 Jun 2012 09:57:24 +0200
-Subject: [PATCH 3/6] AM_PROG_AR for automake 1.12 compatibility
+Subject: [PATCH 3/7] AM_PROG_AR for automake 1.12 compatibility
 
 Taken from
 http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
@@ -78,7 +78,7 @@ index cff91bb..847bcdb 100644
 From 2d8e156262d39aa281988f844f40d3f006b12e63 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 16 Aug 2012 11:13:47 +0200
-Subject: [PATCH 4/6] allow automake warnings not to be errors
+Subject: [PATCH 4/7] allow automake warnings not to be errors
 
 
 diff --git a/configure.ac b/configure.ac
@@ -90,7 +90,7 @@ index 847bcdb..38465c4 100644
  AC_CONFIG_MACRO_DIR([m4])
  
 -AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
-+AM_INIT_AUTOMAKE([1.11.1 no-dist-gzip dist-xz -Wall -Wno-override])
++AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Wno-override])
  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
  AC_CONFIG_HEADERS([config.h])
  
@@ -101,7 +101,7 @@ index 847bcdb..38465c4 100644
 From 4376d4f5bc04f3118babb5eed7c4bb67fd2d8c1b Mon Sep 17 00:00:00 2001
 From: Nikos Mavrogiannopoulos <nmav@gnutls.org>
 Date: Mon, 4 Feb 2013 18:12:31 +0100
-Subject: [PATCH 5/6] Corrected typo. Reported by Mark Brand. (cherry picked
+Subject: [PATCH 5/7] Corrected typo. Reported by Mark Brand. (cherry picked
  from commit b94c3e7c6e8fba6a66a83efabd6376726eac3ba6)
 
 
@@ -125,7 +125,7 @@ index 4c91827..b2883ee 100644
 From 5a063bc916d00fc40d2f3f53a76d78e5ac638cba Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 4 Feb 2013 16:11:12 +0100
-Subject: [PATCH 6/6] add missing private lib to pc file
+Subject: [PATCH 6/7] add missing private lib to pc file
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
@@ -140,6 +140,29 @@ index 5e2ae11..1b9952a 100644
 +Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @LIB_CLOCK_GETTIME@ -lcrypt32
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
+-- 
+1.7.10.4
+
+
+From b0f379cab21f61c319ff0af21b01f7bfc8cab0ff Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 6 Feb 2013 08:43:43 +0100
+Subject: [PATCH 7/7] relax automake version check
+
+
+diff --git a/configure.ac b/configure.ac
+index 38465c4..af557df 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.7], [bug-gnutls@gnu.org])
+ AC_CONFIG_AUX_DIR([build-aux])
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+-AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Wno-override])
++AM_INIT_AUTOMAKE([1.11.1 no-dist-gzip dist-xz -Wall -Wno-override])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ AC_CONFIG_HEADERS([config.h])
+ 
 -- 
 1.7.10.4
 
