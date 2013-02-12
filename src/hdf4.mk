@@ -32,4 +32,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'/mfhdf/libsrc -j 1 install
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =

@@ -36,4 +36,4 @@ define $(PKG)_BUILD
         < '$(2).ml'
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =

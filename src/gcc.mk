@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_SUPPORT_CONFIG
+define $(PKG)_PRE_CONFIGURE
     # unpack support libraries
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-gmp)
     mv '$(1)/$(gcc-gmp_SUBDIR)' '$(1)/gmp'
@@ -25,8 +25,10 @@ define $(PKG)_SUPPORT_CONFIG
     mv '$(1)/$(gcc-mpc_SUBDIR)' '$(1)/mpc'
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-mpfr)
     mv '$(1)/$(gcc-mpfr_SUBDIR)' '$(1)/mpfr'
+endef
 
-    # build GCC and support libraries
+define $(PKG)_CONFIGURE
+    # configure gcc and support libraries
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
         --target='$(TARGET)' \
@@ -40,7 +42,7 @@ define $(PKG)_SUPPORT_CONFIG
         --with-gnu-as \
         --disable-nls \
         --disable-shared \
-        --disable-sjlj-exceptions \
+        --disable-multilib \
         --without-x \
         --disable-win32-registry \
         --enable-threads=win32 \
@@ -79,42 +81,59 @@ define $(PKG)_POST_BUILD
      > '$(CMAKE_TOOLCHAIN_FILE)'
 endef
 
+define $(PKG)_POST_BUILD_mingw32
+    # create pkg-config files
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: gl'; \
+     echo 'Version: 0'; \
+     echo 'Description: OpenGL'; \
+     echo 'Libs: -lopengl32';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/gl.pc'
+
+    (echo 'Name: glu'; \
+     echo 'Version: 0'; \
+     echo 'Description: OpenGL'; \
+     echo 'Libs: -lglu32';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/glu.pc'
+endef
+
 define $(PKG)_BUILD_i686-pc-mingw32
-    $($(PKG)_SUPPORT_CONFIG) \
-    --disable-sjlj-exceptions
+    # build full cross gcc
+    $($(PKG)_PRE_CONFIGURE) \
+    $($(PKG)_CONFIGURE) \
+        --disable-sjlj-exceptions
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
     $($(PKG)_POST_BUILD)
+    $($(PKG)_POST_BUILD_mingw32)
 endef
 
-define $(PKG)_BUILD_x86_64-static-mingw32
-    #Win64 Headers and symlinks
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,mingw-w64)
-    mkdir '$(1).headers-build'
-    cd '$(1).headers-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-headers/configure' \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)' \
-        --enable-sdk=all
-    $(MAKE) -C '$(1).headers-build' install
-
-    $($(PKG)_SUPPORT_CONFIG) \
-        --disable-multilib \
+define $(PKG)_BUILD_mingw-w64
+    # build standalone gcc
+    $($(PKG)_PRE_CONFIGURE) \
+    $($(PKG)_CONFIGURE) \
         --enable-sjlj-exceptions
     $(MAKE) -C '$(1).build' -j '$(JOBS)' all-gcc
     $(MAKE) -C '$(1).build' -j 1 install-gcc
 
-    #mingw-w64-crt
+    # build mingw-w64-crt
+    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,mingw-w64)
     mkdir '$(1).crt-build'
     cd '$(1).crt-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
         --host='$(TARGET)' \
-        --prefix='$(PREFIX)'
+        --prefix='$(PREFIX)' \
+        mxe-config-opts
     $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
     $(MAKE) -C '$(1).crt-build' -j 1 install
 
-    #rest of gcc
+    # build rest of gcc
     cd '$(1).build'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 
     $($(PKG)_POST_BUILD)
+    $($(PKG)_POST_BUILD_mingw32)
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mxe-config-opts,--disable-lib32,$($(PKG)_BUILD_mingw-w64))
+$(PKG)_BUILD_i686-w64-mingw32   = $(subst mxe-config-opts,--disable-lib64,$($(PKG)_BUILD_mingw-w64))

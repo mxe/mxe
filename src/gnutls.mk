@@ -28,6 +28,7 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-rpath \
         --disable-nls \
         --disable-guile \
         --with-included-libtasn1 \

@@ -49,9 +49,4 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install
 endef
 
-
-define $(PKG)_BUILD_x86_64-static-mingw32
-    $(subst enable-libmp3lame,disable-libmp3lame,\
-    $(subst enable-libxvid,disable-libxvid,\
-    $($(PKG)_BUILD)))
-endef
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst enable-libxvid,disable-libxvid,$($(PKG)_BUILD))
