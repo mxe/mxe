@@ -10,8 +10,9 @@ $(PKG)_URL      := http://downloads.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.xiph.org/downloads/' | \
+    $(WGET) -q -O- 'http://downloads.xiph.org/releases/opus/?C=M;O=D' | \
     $(SED) -n 's,.*opus-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    grep -v 'alpha' | \
     head -1
 endef
 
