@@ -1,7 +1,10 @@
 export MXE_DIR=`pwd`
 export PATH=$MXE_DIR/usr/bin:$PATH
 alias mxe='make -C $MXE_DIR'
-unset `grep '^unexport' Makefile | gsed -n 's,unexport,,p' | tr '\n' ' '`
+
+SED=`gsed --help >/dev/null 2>&1 && echo g`sed
+
+unset `grep '^unexport' Makefile | $SED -n 's,unexport,,p' | tr '\n' ' '`
 
 _mxe()
 {
@@ -10,12 +13,12 @@ _mxe()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-    pkgs=$( for x in `ls -l $MXE_DIR/src/*.mk | gsed -n 's,.*src/\(.*\)\.mk,\1,p'`; do echo ${x} ; done )
+    pkgs=$( for x in `ls -l $MXE_DIR/src/*.mk | $SED -n 's,.*src/\(.*\)\.mk,\1,p'`; do echo ${x} ; done )
     tgts="i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32"
 
     case "${cur}" in
 	build-only-*_*)
-	    local base=`echo ${cur} | gsed -n 's,\(.*_\).*,\1,p'`
+	    local base=`echo ${cur} | $SED -n 's,\(.*_\).*,\1,p'`
 	    local _tgts=$( for x in ${tgts}; do echo $base${x} ; done )
 	    COMPREPLY=( $(compgen -W "${_tgts}" -- ${cur}) )
         return 0
