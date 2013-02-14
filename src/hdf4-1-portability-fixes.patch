@@ -3,14 +3,6 @@ See index.html for further information.
 
 --- a/configure.ac	2012-12-02 11:01:36.252405122 +0100
 +++ b/configure.ac	2012-12-02 11:00:05.580408916 +0100
-@@ -556,7 +556,6 @@
- dnl ======================================================================
- 
- dnl Always put the /usr/include/rpc directory first in the search list.
--CPPFLAGS="-I/usr/include/rpc $CPPFLAGS"
- 
- dnl ----------------------------------------------------------------------
- dnl We're trying to link against the rpc library when building on Cygwin,
 @@ -739,6 +739,7 @@
    *-mac-*)              BAR="mac"         ;;
    *-apple*)             BAR="apple"       ;;
