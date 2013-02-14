@@ -20,7 +20,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --includedir='$(PREFIX)/$(TARGET)/include/plibc'
+        --includedir='$(PREFIX)/$(TARGET)/include/plibc' \
         --enable-static \
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
