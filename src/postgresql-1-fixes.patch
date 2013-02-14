@@ -3,14 +3,14 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 494e5750567b3bf897615d2ca1f368b1e3add093 Mon Sep 17 00:00:00 2001
+From b69ebe2d2df8a8fd2569f7fc5a37842af2af9cc2 Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:02:33 +0200
 Subject: [PATCH 1/2] use unix style names for openssl on mingw-cross-env
 
 
 diff --git a/configure.in b/configure.in
-index af99340..cd80bbc 100644
+index 82a535e..4639101 100644
 --- a/configure.in
 +++ b/configure.in
 @@ -926,13 +926,8 @@ fi
@@ -33,19 +33,19 @@ index af99340..cd80bbc 100644
 1.7.10.4
 
 
-From 2f790f5e10c26ac26a5eecfb23f6fbd06fa50eea Mon Sep 17 00:00:00 2001
+From d7f5abe97d30b7a94ea8a89173e1eeeb38f7666d Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:09:38 +0200
 Subject: [PATCH 2/2] do not check autoconf version
 
 
 diff --git a/configure.in b/configure.in
-index cd80bbc..a2cf7a8 100644
+index 4639101..5a26aa5 100644
 --- a/configure.in
 +++ b/configure.in
 @@ -19,10 +19,6 @@ m4_pattern_forbid(^PGAC_)dnl to catch undefined macros
  
- AC_INIT([PostgreSQL], [9.2.2], [pgsql-bugs@postgresql.org])
+ AC_INIT([PostgreSQL], [9.2.3], [pgsql-bugs@postgresql.org])
  
 -m4_if(m4_defn([m4_PACKAGE_VERSION]), [2.63], [], [m4_fatal([Autoconf version 2.63 is required.
 -Untested combinations of 'autoconf' and PostgreSQL versions are not

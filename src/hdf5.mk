@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf && ./configure \
+    cd '$(1)' && autoreconf --force --install && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
@@ -34,4 +34,10 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'/hl/src -j 1 install
     $(MAKE) -C '$(1)'/hl/c++/src -j '$(JOBS)'
     $(MAKE) -C '$(1)'/hl/c++/src -j 1 install
+
+    ## test hdf5
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hdf5.exe' \
+        -lhdf5_hl -lhdf5 -lz
 endef

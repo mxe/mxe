@@ -458,6 +458,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>git clone -b master https://github.com/mxe/mxe.git</pre>
 
     <p>
+    <strong>N.B.</strong> when using the development version,
+    ensure you use the local documentation (index.html) -
+    the website reflects the stable branch.
+    </p>
+
+    <p>
     To retrieve updates, run:
     </p>
 
@@ -618,6 +624,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="http://sourceware.org/libffi/">libffi</td>
+        <td>≥ 3.0.0</td>
+    </tr>
+    <tr>
         <td><a href="http://www.gnu.org/software/libtool/">Libtool</a></td>
         <td>≥ 2.2</td>
     </tr>
@@ -679,18 +689,15 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>aptitude install -R g++-multilib libc6-dev-i386</pre>
 
     <p>
-    On Debian Squeeze, install cmake from
-    <a href="http://backports-master.debian.org/Instructions/">backports</a>.
-    </p>
-    <p>
-    Add this line:
+    On Debian Squeeze, you'll need some packages from
+    <a href="http://backports-master.debian.org/Instructions/">backports</a>. Add this line:
     </p>
     <pre>deb http://backports.debian.org/debian-backports squeeze-backports main</pre>
     <p>
     to your sources.list (or add a new file with the ".list" extension to /etc/apt/sources.list.d/)
     </p>
     <pre>apt-get update
-aptitude -t squeeze-backports install cmake</pre>
+aptitude -t squeeze-backports install cmake yasm</pre>
 
     <h3 id="requirements-fedora">Fedora</h3>
 
@@ -987,7 +994,7 @@ aptitude -t squeeze-backports install cmake</pre>
     </tr>
     <tr>
         <td id="cairo-package">cairo</td>
-        <td id="cairo-version">1.12.12</td>
+        <td id="cairo-version">1.12.14</td>
         <td id="cairo-website"><a href="http://cairographics.org/">cairo</a></td>
     </tr>
     <tr>
@@ -1022,7 +1029,7 @@ aptitude -t squeeze-backports install cmake</pre>
     </tr>
     <tr>
         <td id="curl-package">curl</td>
-        <td id="curl-version">7.28.1</td>
+        <td id="curl-version">7.29.0</td>
         <td id="curl-website"><a href="http://curl.haxx.se/libcurl/">cURL</a></td>
     </tr>
     <tr>
@@ -1062,7 +1069,7 @@ aptitude -t squeeze-backports install cmake</pre>
     </tr>
     <tr>
         <td id="ffmpeg-package">ffmpeg</td>
-        <td id="ffmpeg-version">1.1.1</td>
+        <td id="ffmpeg-version">1.1.2</td>
         <td id="ffmpeg-website"><a href="http://www.ffmpeg.org/">ffmpeg</a></td>
     </tr>
     <tr>
@@ -1202,12 +1209,12 @@ aptitude -t squeeze-backports install cmake</pre>
     </tr>
     <tr>
         <td id="gmp-package">gmp</td>
-        <td id="gmp-version">5.1.0</td>
+        <td id="gmp-version">5.1.1</td>
         <td id="gmp-website"><a href="http://www.gmplib.org/">GMP</a></td>
     </tr>
     <tr>
         <td id="gnutls-package">gnutls</td>
-        <td id="gnutls-version">3.1.7</td>
+        <td id="gnutls-version">3.1.8</td>
         <td id="gnutls-website"><a href="http://www.gnu.org/software/gnutls/">GnuTLS</a></td>
     </tr>
     <tr>
@@ -1782,13 +1789,18 @@ aptitude -t squeeze-backports install cmake</pre>
     </tr>
     <tr>
         <td id="openscenegraph-package">openscenegraph</td>
-        <td id="openscenegraph-version">3.0.1</td>
+        <td id="openscenegraph-version">feeb13d</td>
         <td id="openscenegraph-website"><a href="http://www.openscenegraph.org/">OpenSceneGraph</a></td>
     </tr>
     <tr>
         <td id="openssl-package">openssl</td>
-        <td id="openssl-version">1.0.1d</td>
+        <td id="openssl-version">1.0.1e</td>
         <td id="openssl-website"><a href="http://www.openssl.org/">openssl</a></td>
+    </tr>
+    <tr>
+        <td id="opus-package">opus</td>
+        <td id="opus-version">1.0.2</td>
+        <td id="opus-website"><a href="http://opus-codec.org/">opus</a></td>
     </tr>
     <tr>
         <td id="pango-package">pango</td>
@@ -1815,6 +1827,12 @@ aptitude -t squeeze-backports install cmake</pre>
         <td id="pdcurses-version">3.4</td>
         <td id="pdcurses-website"><a href="http://pdcurses.sourceforge.net/">PDcurses</a></td>
     </tr>
+     <tr>
+        <td id="plib-package">plib</td>
+        <td id="plib-version">1.8.5-rc1</td>
+        <td id="plib-website"><a href="http://plib.sourceforge.net/">Plib</a></td>
+    </tr>
+
     <tr>
         <td id="plibc-package">plibc</td>
         <td id="plibc-version">0.1.7</td>
@@ -1862,7 +1880,7 @@ aptitude -t squeeze-backports install cmake</pre>
     </tr>
     <tr>
         <td id="poppler-package">poppler</td>
-        <td id="poppler-version">0.22.0</td>
+        <td id="poppler-version">0.22.1</td>
         <td id="poppler-website"><a href="http://poppler.freedesktop.org/">poppler</a></td>
     </tr>
     <tr>
@@ -1887,7 +1905,7 @@ aptitude -t squeeze-backports install cmake</pre>
     </tr>
     <tr>
         <td id="postgresql-package">postgresql</td>
-        <td id="postgresql-version">9.2.2</td>
+        <td id="postgresql-version">9.2.3</td>
         <td id="postgresql-website"><a href="http://www.postgresql.org/">PostgreSQL</a></td>
     </tr>
     <tr>
