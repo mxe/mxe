@@ -3,7 +3,7 @@
 
 PKG             := hdf5
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 867a91b75ee0bbd1f1b13aecd52e883be1507a2c
+$(PKG)_CHECKSUM := 458cb91496e313debd55d52a7f89459a5469cceb
 $(PKG)_SUBDIR   := hdf5-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf5-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF5/current/src/$($(PKG)_FILE)
