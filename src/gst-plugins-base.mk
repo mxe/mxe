@@ -3,7 +3,7 @@
 
 PKG             := gst-plugins-base
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 6d4174e5f08c178c02acb1135b7b7fdd17bde848
+$(PKG)_CHECKSUM := 86fd7d5db88cdb7e089adf0822f4bdca86881530
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
@@ -33,4 +33,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =

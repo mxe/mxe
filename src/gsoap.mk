@@ -3,7 +3,7 @@
 
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 6ff652dbee1b28a21c11ddcca64128fd647a992e
+$(PKG)_CHECKSUM := 4bb2f8c0bbb3be0267aaf51a7dc76817b18c5e0a
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FILE)
@@ -59,4 +59,4 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/gsoap/'*.c '$(1)/gsoap/'*.cpp '$(PREFIX)/$(TARGET)/share/gsoap'
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =

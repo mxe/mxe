@@ -8,15 +8,6 @@ http://lists.nongnu.org/archive/html/mingw-cross-env-list/2012-11/msg00009.html
 diff -uNr a/CMakeLists.txt b/CMakeLists.txt
 --- a/CMakeLists.txt	2011-07-31 09:50:34.000000000 +0200
 +++ b/CMakeLists.txt	2012-11-26 09:41:12.199384455 +0100
-@@ -466,7 +466,7 @@
-     FIND_PACKAGE(LibVNCServer)
-     FIND_PACKAGE(OurDCMTK)
-     FIND_PACKAGE(OpenAL)
--    FIND_PACKAGE(FFmpeg)
-+    #FIND_PACKAGE(FFmpeg)
-     FIND_PACKAGE(DirectShow)
-     FIND_PACKAGE(SDL)
-     FIND_PACKAGE(Poppler-glib)
 @@ -530,7 +530,7 @@
  # can use Quicktime.
  IF(NOT ANDROID)

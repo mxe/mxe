@@ -3,7 +3,7 @@
 
 PKG             := postgresql
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := edadf238bcf51bd6e92dfe2f8afb3665510297a6
+$(PKG)_CHECKSUM := fe46685c36f6a7a04edd67be5695b4f5acebedff
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -75,4 +75,4 @@ define $(PKG)_BUILD
     ln -sf '$(PREFIX)/$(TARGET)/bin/pg_config' '$(PREFIX)/bin/$(TARGET)-pg_config'
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =

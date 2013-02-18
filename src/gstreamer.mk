@@ -3,7 +3,7 @@
 
 PKG             := gstreamer
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2b426321520dfefcd69eeb40e5b68911c31f5287
+$(PKG)_CHECKSUM := 195fea857b103701495570a361128634ce6c02b4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
@@ -33,4 +33,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =

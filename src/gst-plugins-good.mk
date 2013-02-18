@@ -3,7 +3,7 @@
 
 PKG             := gst-plugins-good
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 4afaa6be62cb271b8f086e64aa1dc9d21b807782
+$(PKG)_CHECKSUM := 530acc892c51a59378c11c23615d4920ef09a605
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
@@ -37,4 +37,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install CFLAGS='-DWAVE_FORMAT_DOLBY_AC3_SPDIF=0x0092'
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =

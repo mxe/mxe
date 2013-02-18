@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_CHECKSUM := 3c4d9fc40305895079676a6ebb01d87da810cd8d
+$(PKG)_CHECKSUM := ad9c281fc6d5d8d5af9a2d8225baf9ec556e2723
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1//$($(PKG)_FILE)
@@ -28,8 +28,10 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         $(LINK_STYLE) \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-rpath \
         --disable-nls \
         --disable-guile \
+        --disable-docs \
         --with-included-libtasn1 \
         --with-libregex='$(PREFIX)/$(TARGET)' \
         --with-regex-header=pcreposix.h \

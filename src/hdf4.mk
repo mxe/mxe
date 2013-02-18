@@ -3,7 +3,7 @@
 
 PKG             := hdf4
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9d4ab457ccb8e582c265ca3f5f2ec90614d89da4
+$(PKG)_CHECKSUM := c2251642e29c7acada37d5e599e68d270088e56d
 $(PKG)_SUBDIR   := hdf-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/$($(PKG)_FILE)
@@ -32,4 +32,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'/mfhdf/libsrc -j 1 install
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =

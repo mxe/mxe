@@ -9,7 +9,7 @@ diff --git a/configure.ac b/configure.ac
  #
   
 -AC_PREREQ(2.69)
-+AC_PREREQ(2.68)
++AC_PREREQ(2.67)
  AC_INIT(magick/magick.h)
  
  # Specify directory where m4 macros may be found.

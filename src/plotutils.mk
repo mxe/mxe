@@ -27,5 +27,5 @@ define $(PKG)_BUILD
         --with-png \
         --without-x \
         CFLAGS='-DNO_SYSTEM_GAMMA'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= INFO_DEPS=
+    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= INFO_DEPS=
 endef

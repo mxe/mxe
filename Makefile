@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 JOBS               := 1
-MXE_TARGETS        := i686-pc-mingw32 x86_64-static-mingw32
+MXE_TARGETS        := i686-pc-mingw32
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
@@ -34,10 +34,6 @@ MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* id="\([^"]*\)-package">.*$$/\1/p' '$(TOP_DIR)/index.html')
 PATH       := $(PREFIX)/bin:$(PATH)
-
-LINK_STYLE  = $(if $(findstring dynamic,$(1)), \
-                  --disable-static --enable-shared , \
-                  --enable-static --disable-shared )
 
 # unexport any environment variables that might cause trouble
 unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
@@ -92,9 +88,8 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '#JOBS := $(JOBS)'; \
-        echo '#MXE_TARGETS := i686-pc-mingw32 x86_64-static-mingw32'; \
+        echo '#MXE_TARGETS := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
-        echo '#REMOVE_LOG := $(REMOVE_LOG)'; \
         echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
         echo '#.DEFAULT local-pkg-list:'; \
         echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
@@ -218,8 +213,8 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    $(if $(findstring undefined,$(origin $(1)_BUILD_$(3))),
 	        @echo '[no-op]    $(1)',
 	        @echo '[exclude]  $(1)'
-	    )
-	)
+	     )
+	 )
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@[ $(words $(MXE_TARGETS)) == 1 ] || ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
@@ -236,10 +231,9 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	@echo '[done]     $(1)'
 
 .PHONY: build-only-$(1)_$(3)
-build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): PKG = $(1)
-build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe.cmake
-build-only-$(1)_$(3): LINK_STYLE = $(4)
+build-only-$(1)_$(3): TARGET = $(3)
+build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3):
 	$(if $(or $(value $(1)_BUILD_$(3)),\
 	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
@@ -258,7 +252,7 @@ build-only-$(1)_$(3):
 endef
 $(foreach TARGET,$(MXE_TARGETS), \
     $(foreach PKG,$(PKGS), \
-        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET),$(call LINK_STYLE,$(TARGET))))))
+        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET)))))
 
 .PHONY: clean
 clean:

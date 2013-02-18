@@ -7,9 +7,9 @@ diff --git a/configure.ac b/configure.ac
 @@ -17,7 +17,7 @@
  ## Initialize configure.
  ##
- AC_REVISION($Id: configure.ac 22979 2012-10-27 00:14:40Z acheng $)
+ AC_REVISION($Id: configure.ac 23143 2013-01-08 03:47:01Z derobins $)
 -AC_PREREQ([2.69])
-+AC_PREREQ([2.68])
++AC_PREREQ([2.67])
  
  ## AC_INIT takes the name of the package, the version number, and an
  ## email address to report bugs. AC_CONFIG_SRCDIR takes a unique file

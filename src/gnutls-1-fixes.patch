@@ -3,86 +3,41 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 887091de2615a1c4dc366240c6b196a0f26210cf Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 28 Oct 2011 09:23:41 +0200
-Subject: [PATCH 1/6] add missing static library linking
-
-
-diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index c45f8f3..57d0dbb 100644
---- a/lib/gnutls.pc.in
-+++ b/lib/gnutls.pc.in
-@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
- URL: http://www.gnu.org/software/gnutls/
- Version: @VERSION@
- Libs: -L${libdir} -lgnutls
--Libs.private: @LTLIBNETTLE@
-+Libs.private: @LTLIBNETTLE@ @LIBS@
- @GNUTLS_REQUIRES_PRIVATE@
- Cflags: -I${includedir}
--- 
-1.7.10.4
-
-
-From 8473646fd0cd2727fc807dd82ebdd720d2bfc2ae Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 24 Nov 2011 15:06:06 +0100
-Subject: [PATCH 2/6] disable doc and test (mingw-cross-env specific)
-
-
-diff --git a/Makefile.am b/Makefile.am
-index c4a4bfa..78943a7 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -23,7 +23,7 @@ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --disable-valgrind-tests
- 
- SUBDIRS = gl lib extra libdane po
- 
--SUBDIRS += src doc tests
-+SUBDIRS += src
- 
- if HAVE_GUILE
- SUBDIRS += guile
--- 
-1.7.10.4
-
-
-From ca3da89b7439af0d3e27db03c8a8a5c4675b6eab Mon Sep 17 00:00:00 2001
+From 0d7d131f630e9b83447168d5075c6b153d75b17f Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
-Subject: [PATCH 3/6] Revert "make dist will also make lzip compressed
+Subject: [PATCH 1/5] Revert "make dist will also make lzip compressed
  tarball"
 
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
 
 diff --git a/configure.ac b/configure.ac
-index a9fe3c1..c5c0fa4 100644
+index 6921f64..e9aa0a5 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.5], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.8], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
 -AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz dist-lzip -Wall -Werror -Wno-override])
 +AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
- AM_CONFIG_HEADER(config.h)
+ AC_CONFIG_HEADERS([config.h])
  
 -- 
 1.7.10.4
 
 
-From 9938080f06e10dc1159344599fb5fb64e024b4a5 Mon Sep 17 00:00:00 2001
+From 4fcb5bad47662b04c758d8bf7ba6111e1914ffde Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 Jun 2012 09:57:24 +0200
-Subject: [PATCH 4/6] AM_PROG_AR for automake 1.12 compatibility
+Subject: [PATCH 2/5] AM_PROG_AR for automake 1.12 compatibility
 
 Taken from
 http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
 
 diff --git a/configure.ac b/configure.ac
-index c5c0fa4..c6cb8d3 100644
+index e9aa0a5..dc73e0c 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -37,6 +37,7 @@ dnl Checks for programs.
@@ -97,47 +52,70 @@ index c5c0fa4..c6cb8d3 100644
 1.7.10.4
 
 
-From f4e75cb77ca027fc4433f095e82690521262c485 Mon Sep 17 00:00:00 2001
+From b6dc5712432a3cb03b9155e5862968157688c93f Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 16 Aug 2012 11:13:47 +0200
-Subject: [PATCH 5/6] allow automake warnings not to be errors
+Subject: [PATCH 3/5] allow automake warnings not to be errors
 
 
 diff --git a/configure.ac b/configure.ac
-index c6cb8d3..9e03936 100644
+index dc73e0c..b9a460c 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.5], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.8], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
 -AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
 +AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Wno-override])
  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
- AM_CONFIG_HEADER(config.h)
+ AC_CONFIG_HEADERS([config.h])
  
 -- 
 1.7.10.4
 
 
-From 70c8cd64f1b4b3cf6d02d3d3f833bf5181db4fe4 Mon Sep 17 00:00:00 2001
+From 4733e2dc6a083a3c97f1b2fcfbee5b8137769516 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 20 Sep 2012 12:59:19 +0200
-Subject: [PATCH 6/6] add missing libs to Libs.private
+Date: Mon, 4 Feb 2013 16:11:12 +0100
+Subject: [PATCH 4/5] add missing private lib to pc file
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index 57d0dbb..b94179a 100644
+index 5e2ae11..1b9952a 100644
 --- a/lib/gnutls.pc.in
 +++ b/lib/gnutls.pc.in
 @@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
  URL: http://www.gnu.org/software/gnutls/
  Version: @VERSION@
  Libs: -L${libdir} -lgnutls
--Libs.private: @LTLIBNETTLE@ @LIBS@
-+Libs.private: @LTLIBNETTLE@ @LIBS@ -liconv -lcrypt32 -lws2_32
+-Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @LIB_CLOCK_GETTIME@
++Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @LIB_CLOCK_GETTIME@ -lcrypt32
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
+-- 
+1.7.10.4
+
+
+From ef1f80e2946990bb87072fac5f01fa10c9cdc973 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 6 Feb 2013 08:43:43 +0100
+Subject: [PATCH 5/5] relax automake version check
+
+
+diff --git a/configure.ac b/configure.ac
+index b9a460c..4d4f166 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.8], [bug-gnutls@gnu.org])
+ AC_CONFIG_AUX_DIR([build-aux])
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+-AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Wno-override])
++AM_INIT_AUTOMAKE([1.11.1 no-dist-gzip dist-xz -Wall -Wno-override])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ AC_CONFIG_HEADERS([config.h])
+ 
 -- 
 1.7.10.4
 

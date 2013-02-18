@@ -458,6 +458,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>git clone -b master https://github.com/mxe/mxe.git</pre>
 
     <p>
+    <strong>N.B.</strong> when using the development version,
+    ensure you use the local documentation (index.html) -
+    the website reflects the stable branch.
+    </p>
+
+    <p>
     To retrieve updates, run:
     </p>
 
@@ -618,6 +624,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="http://sourceware.org/libffi/">libffi</td>
+        <td>≥ 3.0.0</td>
+    </tr>
+    <tr>
         <td><a href="http://www.gnu.org/software/libtool/">Libtool</a></td>
         <td>≥ 2.2</td>
     </tr>
@@ -677,6 +687,17 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     On 64-bit Debian, install also:
     </p>
     <pre>aptitude install -R g++-multilib libc6-dev-i386</pre>
+
+    <p>
+    On Debian Squeeze, you'll need some packages from
+    <a href="http://backports-master.debian.org/Instructions/">backports</a>. Add this line:
+    </p>
+    <pre>deb http://backports.debian.org/debian-backports squeeze-backports main</pre>
+    <p>
+    to your sources.list (or add a new file with the ".list" extension to /etc/apt/sources.list.d/)
+    </p>
+    <pre>apt-get update
+aptitude -t squeeze-backports install cmake yasm</pre>
 
     <h3 id="requirements-fedora">Fedora</h3>
 
@@ -928,7 +949,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="armadillo-package">armadillo</td>
-        <td id="armadillo-version">3.6.1</td>
+        <td id="armadillo-version">3.6.2</td>
         <td id="armadillo-website"><a href="http://armadillo.sf.net/">Armadillo C++ linear algebra library</a></td>
     </tr>
     <tr>
@@ -963,7 +984,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="boost-package">boost</td>
-        <td id="boost-version">1.52.0</td>
+        <td id="boost-version">1.53.0</td>
         <td id="boost-website"><a href="http://www.boost.org/">Boost C++ Library</a></td>
     </tr>
     <tr>
@@ -973,7 +994,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="cairo-package">cairo</td>
-        <td id="cairo-version">1.12.8</td>
+        <td id="cairo-version">1.12.14</td>
         <td id="cairo-website"><a href="http://cairographics.org/">cairo</a></td>
     </tr>
     <tr>
@@ -1008,7 +1029,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="curl-package">curl</td>
-        <td id="curl-version">7.28.1</td>
+        <td id="curl-version">7.29.0</td>
         <td id="curl-website"><a href="http://curl.haxx.se/libcurl/">cURL</a></td>
     </tr>
     <tr>
@@ -1048,7 +1069,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="ffmpeg-package">ffmpeg</td>
-        <td id="ffmpeg-version">1.1</td>
+        <td id="ffmpeg-version">1.1.2</td>
         <td id="ffmpeg-website"><a href="http://www.ffmpeg.org/">ffmpeg</a></td>
     </tr>
     <tr>
@@ -1123,7 +1144,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="gcc-gmp-package">gcc-gmp</td>
-        <td id="gcc-gmp-version">5.1.0</td>
+        <td id="gcc-gmp-version">5.1.1</td>
         <td id="gcc-gmp-website"><a href="http://www.gmplib.org/">GMP for GCC</a></td>
     </tr>
     <tr>
@@ -1158,7 +1179,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="geos-package">geos</td>
-        <td id="geos-version">3.3.6</td>
+        <td id="geos-version">3.3.7</td>
         <td id="geos-website"><a href="http://trac.osgeo.org/geos/">GEOS</a></td>
     </tr>
     <tr>
@@ -1188,12 +1209,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="gmp-package">gmp</td>
-        <td id="gmp-version">5.1.0</td>
+        <td id="gmp-version">5.1.1</td>
         <td id="gmp-website"><a href="http://www.gmplib.org/">GMP</a></td>
     </tr>
     <tr>
         <td id="gnutls-package">gnutls</td>
-        <td id="gnutls-version">3.1.6</td>
+        <td id="gnutls-version">3.1.8</td>
         <td id="gnutls-website"><a href="http://www.gnu.org/software/gnutls/">GnuTLS</a></td>
     </tr>
     <tr>
@@ -1208,22 +1229,22 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="gsoap-package">gsoap</td>
-        <td id="gsoap-version">2.8.12</td>
+        <td id="gsoap-version">2.8.14</td>
         <td id="gsoap-website"><a href="http://gsoap2.sourceforge.net/">gSOAP</a></td>
     </tr>
     <tr>
         <td id="gst-plugins-base-package">gst-plugins-base</td>
-        <td id="gst-plugins-base-version">1.0.4</td>
+        <td id="gst-plugins-base-version">1.0.5</td>
         <td id="gst-plugins-base-website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-base</a></td>
     </tr>
     <tr>
         <td id="gst-plugins-good-package">gst-plugins-good</td>
-        <td id="gst-plugins-good-version">1.0.4</td>
+        <td id="gst-plugins-good-version">1.0.5</td>
         <td id="gst-plugins-good-website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-good</a></td>
     </tr>
     <tr>
         <td id="gstreamer-package">gstreamer</td>
-        <td id="gstreamer-version">1.0.4</td>
+        <td id="gstreamer-version">1.0.5</td>
         <td id="gstreamer-website"><a href="http://gstreamer.freedesktop.org/">gstreamer</a></td>
     </tr>
     <tr>
@@ -1273,17 +1294,17 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="harfbuzz-package">harfbuzz</td>
-        <td id="harfbuzz-version">0.9.11</td>
+        <td id="harfbuzz-version">0.9.12</td>
         <td id="harfbuzz-website"><a href="http://harfbuzz.sourceforge.net/">HarfBuzz</a></td>
     </tr>
     <tr>
         <td id="hdf4-package">hdf4</td>
-        <td id="hdf4-version">4.2.8</td>
+        <td id="hdf4-version">4.2.9</td>
         <td id="hdf4-website"><a href="http://www.hdfgroup.org/products/hdf4/">HDF4</a></td>
     </tr>
     <tr>
         <td id="hdf5-package">hdf5</td>
-        <td id="hdf5-version">1.8.10</td>
+        <td id="hdf5-version">1.8.10-patch1</td>
         <td id="hdf5-website"><a href="http://www.hdfgroup.org/products/hdf5/">HDF5</a></td>
     </tr>
     <tr>
@@ -1533,7 +1554,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="libpng-package">libpng</td>
-        <td id="libpng-version">1.5.13</td>
+        <td id="libpng-version">1.6.0</td>
         <td id="libpng-website"><a href="http://www.libpng.org/">libpng</a></td>
     </tr>
     <tr>
@@ -1633,7 +1654,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="matio-package">matio</td>
-        <td id="matio-version">1.3.4</td>
+        <td id="matio-version">1.5.0</td>
         <td id="matio-website"><a href="http://sourceforge.net/projects/matio/">matio</a></td>
     </tr>
     <tr>
@@ -1693,7 +1714,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="nettle-package">nettle</td>
-        <td id="nettle-version">2.5</td>
+        <td id="nettle-version">2.6</td>
         <td id="nettle-website"><a href="http://www.lysator.liu.se/~nisse/nettle/">nettle</a></td>
     </tr>
     <tr>
@@ -1783,17 +1804,22 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="openscenegraph-package">openscenegraph</td>
-        <td id="openscenegraph-version">3.0.1</td>
+        <td id="openscenegraph-version">feeb13d</td>
         <td id="openscenegraph-website"><a href="http://www.openscenegraph.org/">OpenSceneGraph</a></td>
     </tr>
     <tr>
         <td id="openssl-package">openssl</td>
-        <td id="openssl-version">1.0.1c</td>
+        <td id="openssl-version">1.0.1e</td>
         <td id="openssl-website"><a href="http://www.openssl.org/">openssl</a></td>
     </tr>
     <tr>
+        <td id="opus-package">opus</td>
+        <td id="opus-version">1.0.2</td>
+        <td id="opus-website"><a href="http://opus-codec.org/">opus</a></td>
+    </tr>
+    <tr>
         <td id="pango-package">pango</td>
-        <td id="pango-version">1.32.6</td>
+        <td id="pango-version">1.33.7</td>
         <td id="pango-website"><a href="http://www.pango.org/">Pango</a></td>
     </tr>
     <tr>
@@ -1816,6 +1842,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td id="pdcurses-version">3.4</td>
         <td id="pdcurses-website"><a href="http://pdcurses.sourceforge.net/">PDcurses</a></td>
     </tr>
+     <tr>
+        <td id="plib-package">plib</td>
+        <td id="plib-version">1.8.5-rc1</td>
+        <td id="plib-website"><a href="http://plib.sourceforge.net/">Plib</a></td>
+    </tr>
+
     <tr>
         <td id="plibc-package">plibc</td>
         <td id="plibc-version">0.1.7</td>
@@ -1843,7 +1875,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="pixman-package">pixman</td>
-        <td id="pixman-version">0.27.4</td>
+        <td id="pixman-version">0.29.2</td>
         <td id="pixman-website"><a href="http://cairographics.org/">pixman</a></td>
     </tr>
     <tr>
@@ -1863,7 +1895,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="poppler-package">poppler</td>
-        <td id="poppler-version">0.22.0</td>
+        <td id="poppler-version">0.22.1</td>
         <td id="poppler-website"><a href="http://poppler.freedesktop.org/">poppler</a></td>
     </tr>
     <tr>
@@ -1882,8 +1914,13 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td id="portaudio-website"><a href="http://www.portaudio.com/">portaudio</a></td>
     </tr>
     <tr>
+        <td id="portmidi-package">portmidi</td>
+        <td id="portmidi-version">217</td>
+        <td id="portmidi-website"><a href="http://portmedia.sourceforge.net/portmidi/">portmidi</a></td>
+    </tr>
+    <tr>
         <td id="postgresql-package">postgresql</td>
-        <td id="postgresql-version">9.2.2</td>
+        <td id="postgresql-version">9.2.3</td>
         <td id="postgresql-website"><a href="http://www.postgresql.org/">PostgreSQL</a></td>
     </tr>
     <tr>
@@ -1898,8 +1935,13 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="pthreads-package">pthreads</td>
-        <td id="pthreads-version">2-9-1</td>
-        <td id="pthreads-website"><a href="http://sourceware.org/pthreads-win32/">Pthreads-w32</a></td>
+        <td id="pthreads-version">POSIX 1003.1-2001</td>
+        <td id="pthreads-website"><a href="http://en.wikipedia.org/wiki/POSIX_Threads">POSIX Threads</a></td>
+    </tr>
+    <tr>
+        <td id="pthreads-w32-package">pthreads-w32</td>
+        <td id="pthreads-w32-version">2-9-1</td>
+        <td id="pthreads-w32-website"><a href="http://sourceware.org/pthreads-win32/">Pthreads-w32</a></td>
     </tr>
     <tr>
         <td id="pthreads-w32-package">pthreads-w32</td>
@@ -1923,67 +1965,67 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="qtactiveqt-package">qtactiveqt</td>
-        <td id="qtactiveqt-version">5.0.0</td>
+        <td id="qtactiveqt-version">5.0.1</td>
         <td id="qtactiveqt-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtbase-package">qtbase</td>
-        <td id="qtbase-version">5.0.0</td>
+        <td id="qtbase-version">5.0.1</td>
         <td id="qtbase-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtdeclarative-package">qtdeclarative</td>
-        <td id="qtdeclarative-version">5.0.0</td>
+        <td id="qtdeclarative-version">5.0.1</td>
         <td id="qtdeclarative-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtgraphicaleffects-package">qtgraphicaleffects</td>
-        <td id="qtgraphicaleffects-version">5.0.0</td>
+        <td id="qtgraphicaleffects-version">5.0.1</td>
         <td id="qtgraphicaleffects-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtimageformats-package">qtimageformats</td>
-        <td id="qtimageformats-version">5.0.0</td>
+        <td id="qtimageformats-version">5.0.1</td>
         <td id="qtimageformats-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtjsbackend-package">qtjsbackend</td>
-        <td id="qtjsbackend-version">5.0.0</td>
+        <td id="qtjsbackend-version">5.0.1</td>
         <td id="qtjsbackend-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtmultimedia-package">qtmultimedia</td>
-        <td id="qtmultimedia-version">5.0.0</td>
+        <td id="qtmultimedia-version">5.0.1</td>
         <td id="qtmultimedia-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtquick1-package">qtquick1</td>
-        <td id="qtquick1-version">5.0.0</td>
+        <td id="qtquick1-version">5.0.1</td>
         <td id="qtquick1-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtscript-package">qtscript</td>
-        <td id="qtscript-version">5.0.0</td>
+        <td id="qtscript-version">5.0.1</td>
         <td id="qtscript-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtsvg-package">qtsvg</td>
-        <td id="qtsvg-version">5.0.0</td>
+        <td id="qtsvg-version">5.0.1</td>
         <td id="qtsvg-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qttools-package">qttools</td>
-        <td id="qttools-version">5.0.0</td>
+        <td id="qttools-version">5.0.1</td>
         <td id="qttools-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qttranslations-package">qttranslations</td>
-        <td id="qttranslations-version">5.0.0</td>
+        <td id="qttranslations-version">5.0.1</td>
         <td id="qttranslations-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtxmlpatterns-package">qtxmlpatterns</td>
-        <td id="qtxmlpatterns-version">5.0.0</td>
+        <td id="qtxmlpatterns-version">5.0.1</td>
         <td id="qtxmlpatterns-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
@@ -2048,7 +2090,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="sox-package">sox</td>
-        <td id="sox-version">14.4.0</td>
+        <td id="sox-version">14.4.1</td>
         <td id="sox-website"><a href="http://sox.sourceforge.net/">SoX</a></td>
     </tr>
     <tr>
@@ -2083,7 +2125,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="teem-package">teem</td>
-        <td id="teem-version">1.10.0</td>
+        <td id="teem-version">1.11.0</td>
         <td id="teem-website"><a href="http://teem.sourceforge.net/">Teem</a></td>
     </tr>
     <tr>
@@ -2113,7 +2155,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="vmime-package">vmime</td>
-        <td id="vmime-version">3ac625e</td>
+        <td id="vmime-version">c2474f2</td>
         <td id="vmime-website"><a href="http://www.vmime.org/">VMime</a></td>
     </tr>
     <tr>
@@ -2143,7 +2185,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td id="winpthreads-package">winpthreads</td>
-        <td id="winpthreads-version">4960</td>
+        <td id="winpthreads-version">ff38d21</td>
         <td id="winpthreads-website"><a href="http://mingw-w64.sourceforge.net/">MinGW w64 pthreads</a></td>
     </tr>
     <tr>

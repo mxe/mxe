@@ -3,12 +3,12 @@
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a006d8833dd7a03dd5b7823671995640322177fe
+$(PKG)_CHECKSUM := 1fb1c2019ff13440b3670dc83846c654b245c4c9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://launchpad.net/ffmpeg/main/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 lame libvpx opencore-amr sdl speex theora vorbis x264 xvidcore zlib
+$(PKG)_DEPS     := gcc bzip2 lame libvpx opencore-amr opus sdl speex theora vorbis x264 xvidcore zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.ffmpeg.org/download.html' | \
@@ -44,14 +44,10 @@ define $(PKG)_BUILD
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libx264 \
-        --enable-libvpx
+        --enable-libvpx \
+        --enable-libopus
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
 
-
-define $(PKG)_BUILD_x86_64-static-mingw32
-    $(subst enable-libmp3lame,disable-libmp3lame,\
-    $(subst enable-libxvid,disable-libxvid,\
-    $($(PKG)_BUILD)))
-endef
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst enable-libxvid,disable-libxvid,$($(PKG)_BUILD))

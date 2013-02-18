@@ -3,7 +3,7 @@
 
 PKG             := openssl
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 91b684de947cb021ac61b8c51027cc4b63d894ce
+$(PKG)_CHECKSUM := 3f1b1223c9e8189bfe4e186d86449775bd903460
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.openssl.org/source/$($(PKG)_FILE)
@@ -31,4 +31,4 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar rcu'
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  = $(subst mingw ,mingw64 ,$($(PKG)_BUILD))
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mingw ,mingw64 ,$($(PKG)_BUILD))

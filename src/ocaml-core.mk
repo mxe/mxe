@@ -125,4 +125,4 @@ define $(PKG)_BUILD
     cd '$(1)/tmp' && $(TARGET)-ocamlbuild test.native
 endef
 
-$(PKG)_BUILD_x86_64-static-mingw32  =
+$(PKG)_BUILD_x86_64-w64-mingw32 =

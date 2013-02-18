@@ -125,3 +125,4 @@ define $(PKG)_BUILD
         `'$(TARGET)-wx-config' --cflags --libs`
 endef
 
+$(PKG)_BUILD_i686-w64-mingw32 =
