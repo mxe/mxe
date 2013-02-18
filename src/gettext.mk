@@ -19,7 +19,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)/gettext-runtime' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads=win32 \
         --without-libexpat-prefix \

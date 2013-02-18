@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./buildconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-openssl \
         --with-libgcrypt \

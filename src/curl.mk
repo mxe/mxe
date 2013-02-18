@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-gnutls \
         --with-libidn \
@@ -33,5 +33,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-curl.exe' \
         `'$(TARGET)-pkg-config' libcurl --cflags --libs`
 endef
-
-$(PKG)_BUILD_x86_64-static-mingw32  = $(subst with-libssh2,without-libssh2,$($(PKG)_BUILD))

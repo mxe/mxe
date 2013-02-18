@@ -21,7 +21,8 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --disable-shared \
+        --enable-static \
         --without-pgsql \
         --without-sqlite2 \
         --without-sqlite3 \

@@ -23,7 +23,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --without-x \
         --with-gdktarget=win32 \
         --disable-gtk-doc \
@@ -42,5 +42,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtkglext.exe' \
         `'$(TARGET)-pkg-config' gtkglext-1.0 --cflags --libs`
 endef
-
-$(PKG)_BUILD_x86_64-static-mingw32  =

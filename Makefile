@@ -26,7 +26,6 @@ REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
-REMOVE_LOG := true
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
@@ -222,9 +221,9 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
-	    tail -n 10 '$(LOG_DIR)/$(1)_$(3)' | $(SED) -n '/./p'; \
+	    tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p'; \
 	    echo '------------------------------------------------------------'; \
-	    echo '[log]      $(LOG_DIR)/$(1)_$(3)'; \
+	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
 	    exit 1; \
 	fi
@@ -256,7 +255,7 @@ $(foreach TARGET,$(MXE_TARGETS), \
 
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX)/* $(if $(value REMOVE_LOG),$(LOG_DIR))
+	rm -rf $(call TMP_DIR,*) $(PREFIX)/*
 
 .PHONY: clean-pkg
 clean-pkg:
@@ -303,24 +302,3 @@ cleanup-style:
             rm -f $(TOP_DIR)/tmp-cleanup-style; \
         )
 
-define SHOW_DEPENDENCIES
-.PHONY: show-dependencies-$(1)
-show-dependencies-$(1): $(TOP_DIR)/tmp-dependencies/$(1)
-$(TOP_DIR)/tmp-dependencies/$(1): $(addprefix $(TOP_DIR)/tmp-dependencies/,$($(1)_DEPS))
-	@echo '$(1)'
-	$(if $(value CREATE_DEPENDENCIES),
-	@[ -d '$(TOP_DIR)/tmp-dependencies' ] || mkdir -p '$(TOP_DIR)/tmp-dependencies'
-	@touch $(TOP_DIR)/tmp-dependencies/$(1))
-endef
-$(foreach PKG,$(PKGS),$(eval $(call SHOW_DEPENDENCIES,$(PKG))))
-
-.PHONY: show-dependencies
-show-dependencies: $(addprefix show-dependencies-,$(PKGS))
-
-show-dependents-%:
-	@rm -rf '$(TOP_DIR)/tmp-dependencies'
-	@mkdir -p '$(TOP_DIR)/tmp-dependencies'
-	@touch $(addprefix $(TOP_DIR)/tmp-dependencies/,$(PKGS))
-	@rm -f '$(TOP_DIR)/tmp-dependencies/$*'
-	@$(MAKE) -f '$(MAKEFILE)' show-dependencies CREATE_DEPENDENCIES=true
-	@rm -rf '$(TOP_DIR)/tmp-dependencies'

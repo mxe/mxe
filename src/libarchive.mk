@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --disable-bsdtar \
         --disable-bsdcpio \
         XML2_CONFIG='$(PREFIX)/$(TARGET)'/bin/xml2-config

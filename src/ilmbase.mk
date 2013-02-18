@@ -28,7 +28,7 @@ define $(PKG)_BUILD
     cd '$(1)' && $(SHELL) ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-threading \
         CONFIG_SHELL=$(SHELL) \

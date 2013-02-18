@@ -20,7 +20,7 @@ define $(PKG)_BUILD
         --target='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-install-libbfd \
-        $(LINK_STYLE)
+        --disable-shared
     $(MAKE) -C '$(1)/bfd' -j '$(JOBS)'
     $(MAKE) -C '$(1)/bfd' -j 1 install
 endef

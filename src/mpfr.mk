@@ -20,7 +20,8 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --enable-static \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads=win32 \
         --with-gmp-include='$(PREFIX)/$(TARGET)/include/'
