@@ -21,7 +21,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --with-x=no \
         --without-zlib \
         --disable-largefile \

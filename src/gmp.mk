@@ -23,7 +23,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --enable-cxx \
         --without-readline
     $(MAKE) -C '$(1)' -j '$(JOBS)'

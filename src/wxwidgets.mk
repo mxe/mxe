@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-compat24 \
         --enable-compat26 \
@@ -70,7 +70,7 @@ define $(PKG)_BUILD
     cd '$(1)/$(wxwidgets_SUBDIR)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-compat24 \
         --enable-compat26 \

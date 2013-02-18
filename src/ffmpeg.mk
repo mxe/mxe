@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         --arch=$(patsubst -%,,$(TARGET)) \
         --target-os=mingw32 \
         --prefix='$(PREFIX)/$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --disable-debug \
         --disable-doc \
         --enable-memalign-hack \

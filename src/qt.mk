@@ -17,7 +17,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,i686-pc-mingw32,$(TARGET),g' '$(1)/mkspecs/unsupported/win32-g++-cross/qmake.conf'
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \

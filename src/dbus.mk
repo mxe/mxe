@@ -25,8 +25,9 @@ define $(PKG)_BUILD
         --disable-tests \
         --disable-verbose-mode \
         --disable-asserts \
-        $(LINK_STYLE) \
+        --disable-shared \
         --disable-maintainer-mode \
+        --enable-static \
         --disable-silent-rules
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

@@ -27,7 +27,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' install -j 1 \
         CC='$(TARGET)-gcc' \
         RANLIB='$(TARGET)-ranlib' \
-        CROSS_COMPILE='$(TARGET)-' \
         AR='$(TARGET)-ar rcu'
 endef
 

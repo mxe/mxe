@@ -26,7 +26,8 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --enable-static \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-rpath \
         --disable-nls \

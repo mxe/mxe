@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     echo 'Requires.private: freetype2' >> '$(1)/SDL_ttf.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \

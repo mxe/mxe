@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && GNUMAKE=$(MAKE) ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

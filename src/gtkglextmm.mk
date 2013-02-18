@@ -22,7 +22,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        $(LINK_STYLE)
+        --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install \
         bin_PROGRAMS= \
         sbin_PROGRAMS= \
@@ -34,5 +34,3 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-gtkglextmm.exe' \
         `'$(TARGET)-pkg-config' gtkglextmm-1.2 --cflags --libs`
 endef
-
-$(PKG)_BUILD_x86_64-static-mingw32  =

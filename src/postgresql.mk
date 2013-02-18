@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --disable-shared \
         --disable-rpath \
         --without-tcl \
         --without-perl \
