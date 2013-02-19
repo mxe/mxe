@@ -3,7 +3,7 @@
 
 PKG             := gstreamer
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2b426321520dfefcd69eeb40e5b68911c31f5287
+$(PKG)_CHECKSUM := 195fea857b103701495570a361128634ce6c02b4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
@@ -22,7 +22,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --disable-debug \
         --disable-check \
         --disable-tests \

@@ -29,7 +29,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,png12,png15,g' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-freetype='$(PREFIX)/$(TARGET)' \
         --without-x \

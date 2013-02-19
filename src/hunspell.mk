@@ -19,7 +19,8 @@ define $(PKG)_BUILD
     # Note: the configure file doesn't pick up pdcurses, so "ui" is disabled
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --enable-static \
+        --disable-shared \
         --with-warnings \
         --without-ui \
         --with-readline \

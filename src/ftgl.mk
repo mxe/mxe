@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-x \
         --disable-freetypetest \
@@ -36,5 +36,3 @@ define $(PKG)_BUILD
         -lftgl -lm -lstdc++ \
         `'$(TARGET)-pkg-config' freetype2 gl glu --cflags --libs --static`
 endef
-
-$(PKG)_BUILD_x86_64-static-mingw32  =

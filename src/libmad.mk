@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     $(SED) -i '/-fforce-mem/d' '$(1)'/configure
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

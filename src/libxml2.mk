@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --disable-shared \
         --without-debug \
         --prefix='$(PREFIX)/$(TARGET)' \
         --without-python \

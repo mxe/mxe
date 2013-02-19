@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         STRIP='$(TARGET)-strip' \
         ./configure \
-            $(LINK_STYLE) \
+            --disable-shared \
             --prefix='$(PREFIX)/$(TARGET)' \
             --libdir='$(PREFIX)/$(TARGET)/lib' \
             --disable-esd

@@ -13,7 +13,7 @@
 int main(int argc, char *argv[])
 {
     gdImagePtr im;
-    FILE *fp;
+    FILE *fp, *fj, *fg;
     int cor_rad;
 
     (void)argc;
@@ -34,6 +34,28 @@ int main(int argc, char *argv[])
     fclose(fp);
 
     fprintf(stdout, "test-gd.png created\n");
+
+    fj = fopen("test-gd.jpg", "wb");
+    if (!fj) {
+        fprintf(stderr, "Can't save jpeg image.\n");
+        gdImageDestroy(im);
+        return 1;
+    }
+    gdImageJpeg(im, fj, 50);
+    fclose(fj);
+
+    fprintf(stdout, "test-gd.jpg created\n");
+
+    fg = fopen("test-gd.gif", "wb");
+    if (!fg) {
+        fprintf(stderr, "Can't save gif image.\n");
+        gdImageDestroy(im);
+        return 1;
+    }
+    gdImageGif(im, fg);
+    fclose(fg);
+
+    fprintf(stdout, "test-gd.gif created\n");
     gdImageDestroy(im);
     return 0;
 }

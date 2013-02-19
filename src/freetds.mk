@@ -28,7 +28,8 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-rpath \
         --disable-dependency-tracking \
-        $(LINK_STYLE) \
+        --disable-shared \
+        --enable-static \
         --enable-libiconv \
         --enable-msdblib \
         --enable-sspi \

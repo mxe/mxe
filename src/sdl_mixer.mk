@@ -25,7 +25,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,for path in /usr/local; do,for path in; do,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
@@ -48,5 +48,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_mixer.exe' \
         `'$(TARGET)-pkg-config' SDL_mixer --cflags --libs`
 endef
-
-$(PKG)_BUILD_x86_64-static-mingw32  =

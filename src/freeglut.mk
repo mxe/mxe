@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./autogen.sh
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-replace-glut \
         --disable-debug \

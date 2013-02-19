@@ -20,7 +20,8 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
+        --enable-static \
         --with-apr='$(PREFIX)/$(TARGET)' \
         --with-apr-util='$(PREFIX)/$(TARGET)' \
         CFLAGS=-D_WIN32_WINNT=0x0500 \

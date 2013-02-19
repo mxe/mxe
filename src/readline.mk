@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,^ *case SIGTSTP:.*,,' '$(1)/signals.c'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-multibyte \
         --without-purify \

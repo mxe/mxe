@@ -25,7 +25,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
-        $(LINK_STYLE) \
+        --disable-shared \
         --with-jpeg='$(PREFIX)/$(TARGET)'/lib \
         --with-tiff='$(PREFIX)/$(TARGET)'/lib \
         --with-png='$(PREFIX)/$(TARGET)'/lib \
