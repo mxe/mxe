@@ -290,6 +290,13 @@ exit</pre>
     </p>
 
     <p>
+    If you have trouble here, you can try different versions from the
+    <a href="#download">download section</a>. Also, please feel free to
+    contact the mxe team through the
+    <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">project mailing list</a>.
+    </p>
+
+    <p>
     After you're done it just needs a little post-installation.
     </p>
 
@@ -949,7 +956,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="armadillo-package">armadillo</td>
-        <td id="armadillo-version">3.6.2</td>
+        <td id="armadillo-version">3.6.3</td>
         <td id="armadillo-website"><a href="http://armadillo.sf.net/">Armadillo C++ linear algebra library</a></td>
     </tr>
     <tr>
@@ -1034,7 +1041,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="dbus-package">dbus</td>
-        <td id="dbus-version">1.6.8</td>
+        <td id="dbus-version">1.7.0</td>
         <td id="dbus-website"><a href="http://dbus.freedesktop.org/">dbus</a></td>
     </tr>
     <tr>
@@ -1509,7 +1516,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="libmikmod-package">libmikmod</td>
-        <td id="libmikmod-version">3.2.0-beta2</td>
+        <td id="libmikmod-version">3.2.0</td>
         <td id="libmikmod-website"><a href="http://mikmod.raphnet.net/">libMikMod</a></td>
     </tr>
     <tr>
@@ -1719,7 +1726,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="netpbm-package">netpbm</td>
-        <td id="netpbm-version">10.35.87</td>
+        <td id="netpbm-version">10.35.88</td>
         <td id="netpbm-website"><a href="http://netpbm.sourceforge.net/">Netpbm</a></td>
     </tr>
     <tr>
@@ -1814,7 +1821,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="openscenegraph-package">openscenegraph</td>
-        <td id="openscenegraph-version">feeb13d</td>
+        <td id="openscenegraph-version">800b103</td>
         <td id="openscenegraph-website"><a href="http://www.openscenegraph.org/">OpenSceneGraph</a></td>
     </tr>
     <tr>
@@ -2165,7 +2172,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="vmime-package">vmime</td>
-        <td id="vmime-version">c2474f2</td>
+        <td id="vmime-version">a17cb75</td>
         <td id="vmime-website"><a href="http://www.vmime.org/">VMime</a></td>
     </tr>
     <tr>
@@ -2316,6 +2323,11 @@ aptitude -t squeeze-backports install cmake yasm</pre>
         Adjust the comments,
         fill in the <code>$(PKG)_*</code> fields.
         </p>
+
+        <p>
+        To fill the <code>$(PKG)_CHECKSUM</code> field, use a command such as (for file gettext.mk):
+        </p>
+        <pre>make update-checksum-gettext</pre>
 
         <p>
         Be especially careful with the <code>$(PKG)_DEPS</code> section.

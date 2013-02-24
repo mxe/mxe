@@ -3,15 +3,14 @@
 
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3e1b13d17cea0c729389ce440e73ff9d8962e0ae
-$(PKG)_SUBDIR   := tonytheodore-$(PKG)-$($(PKG)_VERSION)
+$(PKG)_CHECKSUM := bcadb821dd962eb38c9998eadddd836d029610f0
+$(PKG)_SUBDIR   := openscenegraph-osg-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/tonytheodore/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/$(PKG)/osg/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost curl dcmtk ffmpeg freetype gdal giflib jasper jpeg libpng openal openexr poppler qt tiff xine-lib zlib
 
 define $(PKG)_UPDATE
-    echo 'info: sync latest with git svn rebase; git push origin master' >&2;
-    $(WGET) -q -O- 'https://github.com/tonytheodore/$(PKG)/commits/master' | \
+    $(WGET) -q -O- 'https://github.com/$(PKG)/osg/commits/master' | \
     $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
     head -1
 endef
