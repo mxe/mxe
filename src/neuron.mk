@@ -7,7 +7,8 @@ $(PKG)_CHECKSUM := 29e4ba0d6c3e11f99350f4c7eb97847772c492c4
 $(PKG)_SUBDIR   := nrn-$($(PKG)_VERSION)
 $(PKG)_FILE     := nrn-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.neuron.yale.edu/ftp/neuron/versions/v$($(PKG)_VERSION)/nrn-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc libdnet libz termcap readline nrniv
+$(PKG)_DEPS     := gcc libdnet zlib libiberty readline nrniv
+#$(PKG)_DEPS     := gcc libdnet zlib libiberty termcap readline nrniv
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.neuron.yale.edu/neuron/download/getstd' | \
@@ -17,14 +18,16 @@ endef
 
 define $(PKG)_BUILD
 
-    #	--with-iv='$(PREFIX)/$(TARGET)' \
+    -sed '/^#include <gnu\/option-groups.h>/ d' /usr/include/regex.h >'$(1)'/src/e_editor/regex.h
 
     #cd '$(1)' && autoconf
 
-    CC=$(TARGET)-gcc CXX=$(TARGET)-g++ LD=$(TARGET)-ld PKG_CONFIG=$(TARGET)-pkg_config \
+    CC=$(TARGET)-gcc CXX=$(TARGET)-g++ AR=$(TARGET)-ar LD=$(TARGET)-ld PKG_CONFIG=$(TARGET)-pkg_config \
     cd '$(1)' &&  ./configure \
 	--without-iv \
+	--without-x \
 	--without-memacs \
+        --disable-cygwin \
         --prefix='$(PREFIX)/$(TARGET)' \
         --build="`config.guess`" \
         --host='$(TARGET)' \
@@ -32,10 +35,10 @@ define $(PKG)_BUILD
         --enable-static 
 
 	#--with-gnu-ld   
-
 	#--enable-termcap \
 	#--disable-cygwin \
  	#--with-readline='$(PREFIX)/$(TARGET)' 
+        #--with-iv='$(PREFIX)/$(TARGET)' \
 
     $(MAKE) -C '$(1)' 
     $(MAKE) -C '$(1)' install 
