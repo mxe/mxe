@@ -3,12 +3,15 @@
 
 PKG             := neuron
 $(PKG)_IGNORE   := 
-$(PKG)_CHECKSUM := 29e4ba0d6c3e11f99350f4c7eb97847772c492c4
-$(PKG)_SUBDIR   := nrn-$($(PKG)_VERSION)
-$(PKG)_FILE     := nrn-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.neuron.yale.edu/ftp/neuron/versions/v$($(PKG)_VERSION)/nrn-$($(PKG)_VERSION).tar.gz
+$(PKG)_CHECKSUM := 27d0fe0f4eddabb93a41fe45b81c38b362eb3aac
+$(PKG)_SUBDIR   := nrn-7.3
+$(PKG)_FILE     := nrn-$($(PKG)_VERSION)-755.tar.gz
+$(PKG)_URL      := http://www.neuron.yale.edu/ftp/neuron/versions/alpha/$($(PKG)_FILE)
+#                  http://www.neuron.yale.edu/ftp/neuron/versions/alpha/nrn-$($(PKG)_VERSION)-755.tar.gz
 $(PKG)_DEPS     := gcc libdnet zlib libiberty readline nrniv
 #$(PKG)_DEPS     := gcc libdnet zlib libiberty termcap readline nrniv
+
+PATH_TO_HOST_NEURON := $(PREFIX)/share/$($(PKG)_SUBDIR)
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://www.neuron.yale.edu/neuron/download/getstd' | \
@@ -16,32 +19,38 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+
 define $(PKG)_BUILD
 
-    -sed '/^#include <gnu\/option-groups.h>/ d' /usr/include/regex.h >'$(1)'/src/e_editor/regex.h
+	### This is neeeded because nmodl/nocmodl needs to run on host
+	if [[ ! -d $(PATH_TO_HOST_NEURON) ]] ; then \
+		echo "Built host neuron and nocmodl in $(PATH_TO_HOST_NEURON)";  \
+		( cd $$(dirname $(PATH_TO_HOST_NEURON)) && tar xf $(PWD)/pkg/$($(PKG)_FILE) ); \
+		( cd $(PATH_TO_HOST_NEURON) && \
+			./configure && \
+			$(MAKE) 			) ; \
+	fi
 
-    #cd '$(1)' && autoconf
-
-    CC=$(TARGET)-gcc CXX=$(TARGET)-g++ AR=$(TARGET)-ar LD=$(TARGET)-ld PKG_CONFIG=$(TARGET)-pkg_config \
-    cd '$(1)' &&  ./configure \
-	--without-iv \
+        cd '$(1)' &&  ./configure \
 	--without-x \
 	--without-memacs \
         --disable-cygwin \
         --prefix='$(PREFIX)/$(TARGET)' \
         --build="`config.guess`" \
         --host='$(TARGET)' \
+        --with-iv='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --enable-static 
 
 	#--with-gnu-ld   
 	#--enable-termcap \
-	#--disable-cygwin \
  	#--with-readline='$(PREFIX)/$(TARGET)' 
-        #--with-iv='$(PREFIX)/$(TARGET)' \
 
-    $(MAKE) -C '$(1)' 
-    $(MAKE) -C '$(1)' install 
+	### nocmodl of host (not the target one) ### 	
+    	$(SED) -i 's#^NMODL = ../nmodl/nocmodl#NMODL = $(PATH_TO_HOST_NEURON)/src/nmodl/nocmodl#' '$(1)'/src/nrnoc/Makefile 
+
+	$(MAKE) -C '$(1)' 
+	$(MAKE) -C '$(1)' install 
 
 endef
 
