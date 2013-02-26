@@ -1,0 +1,42 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 4dae4ea7e5ea96e2342ff9707d04046d11ed2f7d Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 7 May 2012 12:38:00 -0500
+Subject: [PATCH] Script to update qtconf after relocating MXE tree
+
+
+diff --git a/update-qtconf.sh b/update-qtconf.sh
+new file mode 100755
+index 0000000..f029965
+--- /dev/null
++++ b/update-qtconf.sh
+@@ -0,0 +1,22 @@
++#!/bin/sh
++# In case of a moved MXE tree, this script can be run to
++# generate a qt.conf file that will replace qmake's built-in
++# paths and prefix with the new location.
++#
++# Script maintained at https://gist.github.com/gists/2501032
++#
++# Ryan Pavlik <rpavlik@iastate.edu> <abiryan@ryand.net>
++
++bindir=$(cd $(dirname ${0}) && pwd)
++mxedir=$(cd ${bindir} && cd .. && pwd)
++target=$(cd ${bindir} && ls *-qmake | sed s/-qmake//)
++cat > ${bindir}/qt.conf <<EOS
++[Paths]
++Prefix = ${mxedir}/${target}
++EOS
++
++(
++  cd ${mxedir}/${target}/mkspecs
++  rm -rf default
++  ln -s unsupported/win32-g++-4.6-cross/ default
++)
+-- 
+1.7.10
+
