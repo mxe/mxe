@@ -372,8 +372,12 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <a href="http://qt-project.org/">Qt</a> application,
     all you have to do is:
     </p>
-    <pre>i686-pc-mingw32-qmake
+    <pre>/where MXE is installed/usr/i686-pc-mingw32/qt/bin/qmake
 make</pre>
+    <p>
+    Note that Qt 4 is in the "qt" subdirectory. Qt 5 is in the "qt5" subdirectory
+    and its qmake can be invoked similarly.
+    </p>
     <p>
     If you are using Qt plugins
     such as the svg or ico image handlers,
