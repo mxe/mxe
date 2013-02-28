@@ -1,9 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-Contains ad hoc patches for cross building.
-
-From 0d7d131f630e9b83447168d5075c6b153d75b17f Mon Sep 17 00:00:00 2001
+From 81a36bff51494db29ed5dfc15152d16c6f34189c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
 Subject: [PATCH 1/5] Revert "make dist will also make lzip compressed
@@ -12,10 +10,10 @@ Subject: [PATCH 1/5] Revert "make dist will also make lzip compressed
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
 
 diff --git a/configure.ac b/configure.ac
-index 6921f64..e9aa0a5 100644
+index 03f937d..179fadf 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.8], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.9], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
@@ -28,7 +26,7 @@ index 6921f64..e9aa0a5 100644
 1.7.10.4
 
 
-From 4fcb5bad47662b04c758d8bf7ba6111e1914ffde Mon Sep 17 00:00:00 2001
+From c981e29d30cdcbe9d96ff9bce2eaf9ba1d1d0d13 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 Jun 2012 09:57:24 +0200
 Subject: [PATCH 2/5] AM_PROG_AR for automake 1.12 compatibility
@@ -37,7 +35,7 @@ Taken from
 http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
 
 diff --git a/configure.ac b/configure.ac
-index e9aa0a5..dc73e0c 100644
+index 179fadf..4fce4e4 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -37,6 +37,7 @@ dnl Checks for programs.
@@ -52,17 +50,17 @@ index e9aa0a5..dc73e0c 100644
 1.7.10.4
 
 
-From b6dc5712432a3cb03b9155e5862968157688c93f Mon Sep 17 00:00:00 2001
+From ae33d9073ef0e92d8174aa3e76186be09e047bb7 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 16 Aug 2012 11:13:47 +0200
 Subject: [PATCH 3/5] allow automake warnings not to be errors
 
 
 diff --git a/configure.ac b/configure.ac
-index dc73e0c..b9a460c 100644
+index 4fce4e4..ab69f04 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.8], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.9], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
@@ -75,7 +73,7 @@ index dc73e0c..b9a460c 100644
 1.7.10.4
 
 
-From 4733e2dc6a083a3c97f1b2fcfbee5b8137769516 Mon Sep 17 00:00:00 2001
+From b7f781c39f0e2ae5bff43f04b84c1684ddbb6203 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 4 Feb 2013 16:11:12 +0100
 Subject: [PATCH 4/5] add missing private lib to pc file
@@ -97,17 +95,17 @@ index 5e2ae11..1b9952a 100644
 1.7.10.4
 
 
-From ef1f80e2946990bb87072fac5f01fa10c9cdc973 Mon Sep 17 00:00:00 2001
+From 6a9d0070cbd203a9abfd662120498c900cc06c65 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 6 Feb 2013 08:43:43 +0100
 Subject: [PATCH 5/5] relax automake version check
 
 
 diff --git a/configure.ac b/configure.ac
-index b9a460c..4d4f166 100644
+index ab69f04..6d8cc35 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.8], [bug-gnutls@gnu.org])
+@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.9], [bug-gnutls@gnu.org])
  AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
  
