@@ -3,7 +3,7 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := b63908a12d10b4532a0b13fb32ded0f7f75d4cd8
+$(PKG)_CHECKSUM := 8cea33126bd0d1bb3f365d76706d858d4fffaf1c
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$(PKG)_FILE
@@ -22,6 +22,8 @@ define $(PKG)_BUILD
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
         -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=False \
         -DCMAKE_CXX_FLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
+        -DVMIME_BUILD_STATIC_LIBRARY=ON \
+        -DVMIME_BUILD_SHARED_LIBRARY=OFF \
         .
 
     # Disable VMIME_HAVE_MLANG_H
