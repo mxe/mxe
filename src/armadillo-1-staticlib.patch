@@ -4,7 +4,7 @@ See index.html for further information.
 diff -urN a/CMakeLists.txt b/CMakeLists.txt
 --- a/CMakeLists.txt	2012-09-14 16:43:20.000000000 +0200
 +++ b/CMakeLists.txt	2012-09-20 20:39:05.073039124 +0200
-@@ -40,7 +40,7 @@
+@@ -37,7 +37,7 @@
  set(ARMA_USE_ATLAS   false)
  set(ARMA_USE_BOOST   false)
  set(ARMA_USE_HDF5    false)
@@ -13,7 +13,7 @@ diff -urN a/CMakeLists.txt b/CMakeLists.txt
  
  
  if(WIN32)
-@@ -271,7 +271,7 @@
+@@ -268,7 +268,7 @@
  #set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
  
  
