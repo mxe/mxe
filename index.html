@@ -290,6 +290,13 @@ exit</pre>
     </p>
 
     <p>
+    If you have trouble here, you can try different versions from the
+    <a href="#download">download section</a>. Also, please feel free to
+    contact the mxe team through the
+    <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">project mailing list</a>.
+    </p>
+
+    <p>
     After you're done it just needs a little post-installation.
     </p>
 
@@ -362,16 +369,20 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
 
     <p>
     If you have a
-    <a href="http://qt.nokia.com/">Qt</a> application,
+    <a href="http://qt-project.org/">Qt</a> application,
     all you have to do is:
     </p>
-    <pre>i686-pc-mingw32-qmake
+    <pre>/where MXE is installed/usr/i686-pc-mingw32/qt/bin/qmake
 make</pre>
+    <p>
+    Note that Qt 4 is in the "qt" subdirectory. Qt 5 is in the "qt5" subdirectory
+    and its qmake can be invoked similarly.
+    </p>
     <p>
     If you are using Qt plugins
     such as the svg or ico image handlers,
     you should also have a look at the
-    <a href="http://qt.nokia.com/doc/plugins-howto.html#static-plugins">Qt documentation about static plugins</a>.
+    <a href="https://qt-project.org/doc/qt-4.8/plugins-howto.html#static-plugins">Qt documentation about static plugins</a>.
     </p>
     <p>
     Note the sql drivers (-qt-sql-*)
@@ -949,7 +960,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="armadillo-package">armadillo</td>
-        <td id="armadillo-version">3.6.2</td>
+        <td id="armadillo-version">3.800.0</td>
         <td id="armadillo-website"><a href="http://armadillo.sf.net/">Armadillo C++ linear algebra library</a></td>
     </tr>
     <tr>
@@ -1034,7 +1045,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="dbus-package">dbus</td>
-        <td id="dbus-version">1.6.8</td>
+        <td id="dbus-version">1.7.0</td>
         <td id="dbus-website"><a href="http://dbus.freedesktop.org/">dbus</a></td>
     </tr>
     <tr>
@@ -1069,7 +1080,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="ffmpeg-package">ffmpeg</td>
-        <td id="ffmpeg-version">1.1.2</td>
+        <td id="ffmpeg-version">1.1.3</td>
         <td id="ffmpeg-website"><a href="http://www.ffmpeg.org/">ffmpeg</a></td>
     </tr>
     <tr>
@@ -1214,7 +1225,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="gnutls-package">gnutls</td>
-        <td id="gnutls-version">3.1.8</td>
+        <td id="gnutls-version">3.1.9</td>
         <td id="gnutls-website"><a href="http://www.gnu.org/software/gnutls/">GnuTLS</a></td>
     </tr>
     <tr>
@@ -1294,7 +1305,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="harfbuzz-package">harfbuzz</td>
-        <td id="harfbuzz-version">0.9.12</td>
+        <td id="harfbuzz-version">0.9.13</td>
         <td id="harfbuzz-website"><a href="http://harfbuzz.sourceforge.net/">HarfBuzz</a></td>
     </tr>
     <tr>
@@ -1449,7 +1460,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="libgpg_error-package">libgpg_error</td>
-        <td id="libgpg_error-version">1.10</td>
+        <td id="libgpg_error-version">1.11</td>
         <td id="libgpg_error-website"><a href="ftp://ftp.gnupg.org/gcrypt/libgpg-error/">libgpg-error</a></td>
     </tr>
     <tr>
@@ -1504,7 +1515,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="libmikmod-package">libmikmod</td>
-        <td id="libmikmod-version">3.2.0-beta2</td>
+        <td id="libmikmod-version">3.2.0</td>
         <td id="libmikmod-website"><a href="http://mikmod.raphnet.net/">libMikMod</a></td>
     </tr>
     <tr>
@@ -1699,7 +1710,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="netpbm-package">netpbm</td>
-        <td id="netpbm-version">10.35.87</td>
+        <td id="netpbm-version">10.35.88</td>
         <td id="netpbm-website"><a href="http://netpbm.sourceforge.net/">Netpbm</a></td>
     </tr>
     <tr>
@@ -1789,7 +1800,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="openscenegraph-package">openscenegraph</td>
-        <td id="openscenegraph-version">feeb13d</td>
+        <td id="openscenegraph-version">800b103</td>
         <td id="openscenegraph-website"><a href="http://www.openscenegraph.org/">OpenSceneGraph</a></td>
     </tr>
     <tr>
@@ -2130,7 +2141,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="vmime-package">vmime</td>
-        <td id="vmime-version">c2474f2</td>
+        <td id="vmime-version">18846c3</td>
         <td id="vmime-website"><a href="http://www.vmime.org/">VMime</a></td>
     </tr>
     <tr>
@@ -2276,6 +2287,11 @@ aptitude -t squeeze-backports install cmake yasm</pre>
         Adjust the comments,
         fill in the <code>$(PKG)_*</code> fields.
         </p>
+
+        <p>
+        To fill the <code>$(PKG)_CHECKSUM</code> field, use a command such as (for file gettext.mk):
+        </p>
+        <pre>make update-checksum-gettext</pre>
 
         <p>
         Be especially careful with the <code>$(PKG)_DEPS</code> section.

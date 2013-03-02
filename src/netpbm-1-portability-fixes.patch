@@ -31,22 +31,3 @@ See index.html for further information.
  	echo '#endif' >>$@ || $(DELETEIT)
  
  
---- a/urt/rle_open_f.c	2012-12-06 11:19:45.850521658 +0100
-+++ b/urt/rle_open_f.c	2012-12-06 11:19:57.794521308 +0100
-@@ -15,14 +15,14 @@
- #include <unistd.h>
- #include <fcntl.h>
- 
-+#include "rle.h"
-+
- #ifndef NO_OPEN_PIPES
- /* Need to have a SIGCLD signal catcher. */
- #include <signal.h>
- #include <sys/wait.h>
- #include <errno.h>
- 
--#include "rle.h"
--
- /* Count outstanding children.  Assume no more than 100 possible. */
- #define MAX_CHILDREN 100
- static int catching_children = 0;

@@ -3,14 +3,14 @@
 
 PKG             := libmikmod
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f16fc09ee643af295a8642f578bda97a81aaf744
+$(PKG)_CHECKSUM := 6d30f59019872699bdcc9bcf6893eea9d6b12c13
 $(PKG)_SUBDIR   := libmikmod-$($(PKG)_VERSION)
-$(PKG)_FILE     := libmikmod-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://mikmod.raphnet.net/files/$($(PKG)_FILE)
+$(PKG)_FILE     := libmikmod-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://mikmod.shlomifish.org/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://mikmod.raphnet.net/' | \
+    $(WGET) -q -O- 'http://mikmod.shlomifish.org/' | \
     $(SED) -n 's,.*libmikmod-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
@@ -18,16 +18,11 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,-Dunix,,' '$(1)/libmikmod/Makefile.in'
     $(SED) -i 's,`uname`,MinGW,g' '$(1)/configure'
-    cd '$(1)' && \
-        CC='$(TARGET)-gcc' \
-        NM='$(TARGET)-nm' \
-        RANLIB='$(TARGET)-ranlib' \
-        STRIP='$(TARGET)-strip' \
-        ./configure \
-            --disable-shared \
-            --prefix='$(PREFIX)/$(TARGET)' \
-            --libdir='$(PREFIX)/$(TARGET)/lib' \
-            --disable-esd
+    cd '$(1)' && ./configure \
+        --host='$(TARGET)' \
+        --disable-shared \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        CFLAGS='-msse2'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \

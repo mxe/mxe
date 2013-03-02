@@ -381,33 +381,30 @@ index 386078d..c7daf80 100644
 1.7.10.4
 
 
-From 0c73ae07d764e5b6471c76e77a3affb3cc6af220 Mon Sep 17 00:00:00 2001
+From a3e569cc2483f647b71e8bd35035ebeb662d0549 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 24 Sep 2012 19:53:55 +0200
+Date: Tue, 26 Feb 2013 13:23:33 +0100
 Subject: [PATCH 7/8] use pkg-config for freetype
 
-Change-Id: Id0b048b44bcebf066c21efeb89f9c1781023a593
+Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
-diff --git a/src/plugins/platforms/windows/windows.pro b/src/plugins/platforms/windows/windows.pro
-index 7f73465..1de1d74 100644
---- a/src/plugins/platforms/windows/windows.pro
-+++ b/src/plugins/platforms/windows/windows.pro
-@@ -169,6 +169,10 @@ contains(QT_CONFIG, freetype) {
-                qwindowsfontdatabase_ft.h
-     SOURCES += \
-                qwindowsfontdatabase_ft.cpp
-+    static {
-+        CONFIG += link_pkgconfig
-+        PKGCONFIG += freetype2
-+    }
+diff --git a/src/platformsupport/fontdatabases/basic/basic.pri b/src/platformsupport/fontdatabases/basic/basic.pri
+index 6b5f6d0..d21f4e3 100644
+--- a/src/platformsupport/fontdatabases/basic/basic.pri
++++ b/src/platformsupport/fontdatabases/basic/basic.pri
+@@ -83,5 +83,7 @@ contains(QT_CONFIG, freetype) {
+ } else:contains(QT_CONFIG, system-freetype) {
+     # pull in the proper freetype2 include directory
+     include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
++    CONFIG += link_pkgconfig
++    PKGCONFIG += freetype2
  }
  
- OTHER_FILES += windows.json
 -- 
 1.7.10.4
 
 
-From f1d081df9d8e48955e66edb0a40c6f942aedadd0 Mon Sep 17 00:00:00 2001
+From f1943915d6179b39418d1d051e316f2862249fac Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 22 Dec 2012 17:45:34 +0100
 Subject: [PATCH 8/8] WIP: qmake writeFile(): work around concurrent
