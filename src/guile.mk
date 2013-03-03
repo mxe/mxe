@@ -35,6 +35,6 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-guile.exe' \
-        `'$(TARGET)-pkg-config' guile-1.8 --cflags --libs` \
-        -DGUILE_MAJOR_MINOR=$(call SHORT_PKG_VERSION,$(PKG))
+        `'$(TARGET)-pkg-config' guile-$(call SHORT_PKG_VERSION,$(PKG)) --cflags --libs` \
+        -DGUILE_MAJOR_MINOR=\"$(call SHORT_PKG_VERSION,$(PKG))\"
 endef

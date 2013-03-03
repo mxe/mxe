@@ -11,9 +11,6 @@
 int putenv (char *);
 # endif
 
-#define xstr(s) str(s)
-#define str(s) #s
-
 static void inner_main(void *data, int argc, char *argv[])
 {
     (void)data;
@@ -26,7 +23,7 @@ int main(int argc, char *argv[])
 {
     char guile_load_path[40];
     snprintf(guile_load_path, sizeof guile_load_path, \
-        "GUILE_LOAD_PATH=..\\share\\guile\\%s", xstr(GUILE_MAJOR_MINOR));
+        "GUILE_LOAD_PATH=..\\share\\guile\\%s", GUILE_MAJOR_MINOR);
     putenv(guile_load_path);
     scm_boot_guile(argc, argv, inner_main, NULL);
     return 0;
