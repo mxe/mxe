@@ -8,8 +8,8 @@ $(PKG)_SUBDIR   := nrn-7.3
 $(PKG)_FILE     := nrn-$($(PKG)_VERSION)-755.tar.gz
 $(PKG)_URL      := http://www.neuron.yale.edu/ftp/neuron/versions/alpha/$($(PKG)_FILE)
 #                  http://www.neuron.yale.edu/ftp/neuron/versions/alpha/nrn-$($(PKG)_VERSION)-755.tar.gz
-$(PKG)_DEPS     := gcc libdnet zlib libiberty readline nrniv
-#$(PKG)_DEPS     := gcc libdnet zlib libiberty termcap readline nrniv
+$(PKG)_DEPS     := gcc libdnet zlib libiberty readline nrniv pthreads termcap
+
 
 PATH_TO_HOST_NEURON := $(PREFIX)/share/$($(PKG)_SUBDIR)
 
@@ -28,26 +28,23 @@ define $(PKG)_BUILD
 		( cd $$(dirname $(PATH_TO_HOST_NEURON)) && tar xf $(PWD)/pkg/$($(PKG)_FILE) ); \
 		( cd $(PATH_TO_HOST_NEURON) && \
 			./configure && \
-			$(MAKE) 			) ; \
+			$(MAKE)                         ) ; \
 	fi
 
-        cd '$(1)' &&  ./configure \
-	--without-x \
-	--without-memacs \
-        --disable-cygwin \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --build="`config.guess`" \
-        --host='$(TARGET)' \
-        --with-iv='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
-        --enable-static 
+        cd '$(1)' && ./configure \
+		--without-memacs \
+		--disable-cygwin \
+		--prefix='$(PREFIX)/$(TARGET)' \
+		--build="`config.guess`" \
+		--host='$(TARGET)' \
+		--with-iv='$(PREFIX)/$(TARGET)' \
+		--disable-shared \
+		--enable-static
 
-	#--with-gnu-ld   
-	#--enable-termcap \
- 	#--with-readline='$(PREFIX)/$(TARGET)' 
-
-	### nocmodl of host (not the target one) ### 	
-    	$(SED) -i 's#^NMODL = ../nmodl/nocmodl#NMODL = $(PATH_TO_HOST_NEURON)/src/nmodl/nocmodl#' '$(1)'/src/nrnoc/Makefile 
+	### nocmodl of host (not the target one) ###
+	$(SED) -i 's#^NMODL = ../nmodl/nocmodl#NMODL = $(PATH_TO_HOST_NEURON)/src/nmodl/nocmodl#' '$(1)'/src/nrnoc/Makefile 
+	#$(SED) -i '/^am_ivoc_OBJECTS/ s#\\$$# ivocwin.$$\(OBJEXT\) \\#' '$(1)'/src/ivoc/Makefile
+	$(SED) -i  's#^\tg++ #\t$$\(CXX\) #g' '$(1)'/src/nrniv/Makefile
 
 	$(MAKE) -C '$(1)' 
 	$(MAKE) -C '$(1)' install 

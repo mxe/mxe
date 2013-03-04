@@ -21,16 +21,14 @@ define $(PKG)_BUILD
 	## http://stackoverflow.com/questions/5212454/allegro-question-how-can-i-get-rid-of-the-cmd-window
 	## ‐Wl,‐‐subsystem,windows
 
-    cd '$(1)' && ./configure \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --enable-static \
+	cd '$(1)' && ./configure \
+		--prefix='$(PREFIX)/$(TARGET)' \
+		--host='$(TARGET)' \
+		--build="`config.guess`" \
+		--disable-shared \
+		--enable-static
 
-    $(MAKE) -C '$(1)' 
-    $(MAKE) -C '$(1)' install 
-
+	$(MAKE) -C '$(1)'
+	$(MAKE) -C '$(1)' install
 
 endef
-
