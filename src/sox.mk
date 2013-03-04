@@ -61,5 +61,5 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' sox --cflags --libs`
 endef
 
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst --with-flac,--without-flac,$($(PKG)_BUILD))
+$(PKG)_BUILD_i686-w64-mingw32 = $(subst --with-flac,--without-flac,$($(PKG)_BUILD))
