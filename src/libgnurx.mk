@@ -23,6 +23,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -f Makefile.mxe -j '$(JOBS)' TARGET=$(TARGET) bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= install-static
+    ln -sf '$(PREFIX)/$(TARGET)/lib/libgnurx.a' '$(PREFIX)/$(TARGET)/lib/libregex.a'
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =
