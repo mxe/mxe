@@ -3,7 +3,7 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 8cea33126bd0d1bb3f365d76706d858d4fffaf1c
+$(PKG)_CHECKSUM := 92cd1364c51b608bd85ed6d642f24663bbf847fa
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$(PKG)_FILE
@@ -26,13 +26,8 @@ define $(PKG)_BUILD
         -DVMIME_BUILD_SHARED_LIBRARY=OFF \
         .
 
-    # Disable VMIME_HAVE_MLANG_H
-    # We have the header, but there is no implementation for IMultiLanguage in MinGW
-    $(SED) -i 's,^#define VMIME_HAVE_MLANG_H 1$$,,' '$(1)/vmime/config.hpp'
-
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' install
-    $(INSTALL) -m644 '$(1)/vmime/config.hpp' '$(PREFIX)/$(TARGET)/include/vmime/'
 
     $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
     $(TARGET)-g++ -s -o '$(1)/examples/test-vmime.exe' \
