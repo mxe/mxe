@@ -27,12 +27,14 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared --enable-static \
+        --disable-shared \
+        --enable-static \
         --disable-debug \
         --without-magic \
         --without-png \
         --without-ladspa \
-        --without-amrwb --without-amrnb \
+        --without-amrwb \
+        --without-amrnb \
         --without-ffmpeg \
         --with-flac \
         --with-oggvorbis \
@@ -41,8 +43,14 @@ define $(PKG)_BUILD
         --with-mad \
         --without-id3tag \
         --with-lame \
-        --with-waveaudio --without-alsa --without-ao --without-coreaudio \
-        --without-oss --without-pulseaudio --without-sndio --without-sunaudio
+        --with-waveaudio \
+        --without-alsa \
+        --without-ao \
+        --without-coreaudio \
+        --without-oss \
+        --without-pulseaudio \
+        --without-sndio \
+        --without-sunaudio
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= EXTRA_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install
