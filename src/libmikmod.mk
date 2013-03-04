@@ -23,6 +23,9 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         CFLAGS='-msse2'
+
+    find '$(1)' -name Makefile -exec $(SED) -i 's|^LIBTOOL=[ ]*$$(SHELL) |LIBTOOL=|g' {} \;
+
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
