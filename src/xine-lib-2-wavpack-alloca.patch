@@ -1,0 +1,23 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+https://bugs.xine-project.org/show_bug.cgi?id=494
+
+diff -urN xine-lib-1.1.21-orig/src/combined/decoder_wavpack.c xine-lib-1.1.21/src/combined/decoder_wavpack.c
+--- xine-lib-1.1.21-orig/src/combined/decoder_wavpack.c	2010-03-09 23:17:05.000000000 +0100
++++ xine-lib-1.1.21/src/combined/decoder_wavpack.c	2013-03-03 17:43:00.000000000 +0100
+@@ -27,6 +27,13 @@
+ #define LOG_MODULE "decode_wavpack"
+ #define LOG_VERBOSE
+ 
++#ifdef HAVE_ALLOCA_H
++#include <alloca.h>
++#endif
++#ifdef HAVE_MALLOC_H
++#include <malloc.h>
++#endif
++
+ #include "xine_internal.h"
+ #include "attributes.h"
+ #include "bswap.h"

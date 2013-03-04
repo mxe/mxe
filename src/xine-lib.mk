@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 0adf20ef55d24f2a1b4a8974e57ad1be5133b236
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xine/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc faad2 ffmpeg flac fontconfig freetype graphicsmagick libiconv libmng pthreads sdl speex theora vorbis zlib
+$(PKG)_DEPS     := gcc faad2 ffmpeg flac fontconfig freetype graphicsmagick libiconv libmng pthreads sdl speex theora vorbis wavpack zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://hg.debian.org/hg/xine-lib/xine-lib/tags' | \
@@ -51,7 +51,7 @@ define $(PKG)_BUILD
         --with-internal-vcdlibs \
         --with-external-libfaad \
         --without-external-libdts \
-        --without-wavpack \
+        --with-wavpack \
         CFLAGS='-I$(1)/win32/include' \
         PTHREAD_LIBS='-lpthread -lws2_32' \
         LIBS="`$(TARGET)-pkg-config --libs libmng`"
