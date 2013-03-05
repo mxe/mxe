@@ -63,7 +63,7 @@ endef
 
 # to enable flac with mingw-w64, use the following sed replacement
 # it works but needs more investigation
-# $(SED) -i 's,\(#if defined(__MINGW32__)\),\1 \&\& !defined\(__MINGW64_VERSION_MAJOR,' $(1)/src/flac.c
+# $(SED) -i 's,\(#if defined(__MINGW32__)\),\1 \&\& !defined\(__MINGW64_VERSION_MAJOR\),' $(1)/src/flac.c
 
 $(PKG)_BUILD_x86_64-w64-mingw32 = $(subst --with-flac,--without-flac,$($(PKG)_BUILD))
 $(PKG)_BUILD_i686-w64-mingw32 = $(subst --with-flac,--without-flac,$($(PKG)_BUILD))
