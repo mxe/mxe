@@ -7,8 +7,7 @@ $(PKG)_CHECKSUM := 27d0fe0f4eddabb93a41fe45b81c38b362eb3aac
 $(PKG)_SUBDIR   := nrn-7.3
 $(PKG)_FILE     := nrn-$($(PKG)_VERSION)-755.tar.gz
 $(PKG)_URL      := http://www.neuron.yale.edu/ftp/neuron/versions/alpha/$($(PKG)_FILE)
-#                  http://www.neuron.yale.edu/ftp/neuron/versions/alpha/nrn-$($(PKG)_VERSION)-755.tar.gz
-$(PKG)_DEPS     := gcc libdnet zlib libiberty readline nrniv pthreads termcap
+$(PKG)_DEPS     := gcc readline nrniv pthreads termcap
 
 
 PATH_TO_HOST_NEURON := $(PREFIX)/share/$($(PKG)_SUBDIR)
