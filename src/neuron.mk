@@ -27,7 +27,7 @@ define $(PKG)_BUILD
 		echo "Built host neuron and nocmodl in $(PATH_TO_HOST_NEURON)";  \
 		( cd $$(dirname $(PATH_TO_HOST_NEURON)) && tar xf $(PWD)/pkg/$($(PKG)_FILE) ); \
 		( cd $(PATH_TO_HOST_NEURON) && \
-			./configure && \
+			./configure --with-nmodl-only --without-x && \
 			$(MAKE)                         ) ; \
 	fi
 
