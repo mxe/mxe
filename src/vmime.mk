@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         .
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(SED) -i 's,^\(Libs.private:.* \)$(PREFIX)/$(TARGET)/lib/libiconv\.a,\1-liconv,g' $(1)/libvmime.pc
     $(MAKE) -C '$(1)' install
 
     $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
