@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 71f05afc51e3d9b03376b2f98fd452d3a274d595
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc flac lame libgomp libmad libsndfile vorbis wavpack
+$(PKG)_DEPS     := gcc flac lame libgomp libmad libsndfile twolame vorbis wavpack
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/sox/files/sox/' | \
@@ -43,6 +43,7 @@ define $(PKG)_BUILD
         --with-mad \
         --without-id3tag \
         --with-lame \
+        --with-twolame \
         --with-waveaudio \
         --without-alsa \
         --without-ao \

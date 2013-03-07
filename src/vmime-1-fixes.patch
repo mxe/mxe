@@ -1,24 +1,106 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 4273540b3b893d0c9a8b7d21ebb9147acc7d1477 Mon Sep 17 00:00:00 2001
+From 156f87098b2f799b7b8a0448e46e0c89d7ab1314 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 12 Nov 2012 13:58:12 +0100
-Subject: [PATCH] add private dependencies to .pc file (MXE-specific)
+Date: Fri, 1 Mar 2013 13:27:47 +0100
+Subject: [PATCH 1/4] fix duplicate info in .pc files
 
 
-diff --git a/libvmime.pc.in b/libvmime.pc.in
-index 5745c52..d9e153f 100644
---- a/libvmime.pc.in
-+++ b/libvmime.pc.in
-@@ -7,6 +7,8 @@ Name: @VMIME_LIBRARY_NAME@
- Description: @VMIME_PACKAGE_DESCRIPTION@
- Version: @VMIME_PACKAGE_VERSION@
- Requires: @VMIME_PKGCONFIG_REQUIRES@
-+Requires.private: gnutls libgsasl
- Libs: -L${libdir} -lvmime @VMIME_PKGCONFIG_LIBS@
-+Libs.private: -liconv -lws2_32
- Cflags: -I${includedir}/ @VMIME_PKGCONFIG_CFLAGS@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 507cf3a..c7fa6b2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -481,8 +481,6 @@ IF(VMIME_HAVE_SASL_SUPPORT)
+ 		)
+ 	ENDIF()
+ 
+-	SET(VMIME_PKGCONFIG_LIBS "${VMIME_PKGCONFIG_LIBS} ${GSASL_LIBRARIES}")
+-	SET(VMIME_PKGCONFIG_CFLAGS "${VMIME_PKGCONFIG_CFLAGS} -I${GSASL_INCLUDE_DIR}")
+ 	SET(VMIME_PKGCONFIG_REQUIRES "${VMIME_PKGCONFIG_REQUIRES} libgsasl")
+ 
+ ENDIF()
+@@ -538,8 +536,6 @@ IF(VMIME_HAVE_TLS_SUPPORT)
+ 			)
+ 		ENDIF()
+ 
+-		SET(VMIME_PKGCONFIG_LIBS "${VMIME_PKGCONFIG_LIBS} ${GNUTLS_LIBRARY_DIRS} ${GNUTLS_LIBRARY}")
+-		SET(VMIME_PKGCONFIG_CFLAGS "${VMIME_PKGCONFIG_CFLAGS} -I${GNUTLS_INCLUDE_DIR}")
+ 		SET(VMIME_PKGCONFIG_REQUIRES "${VMIME_PKGCONFIG_REQUIRES} gnutls")
+ 
+ 	ELSEIF(VMIME_TLS_SUPPORT_LIB_IS_OPENSSL)
+-- 
+1.7.10.4
+
+
+From eda515be0addb9f2b9f1caa3d6ea43eb42667346 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 1 Mar 2013 13:44:43 +0100
+Subject: [PATCH 2/4] bin is no lib
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c7fa6b2..947cb61 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -299,9 +299,6 @@ SET(VMIME_PKGCONFIG_REQUIRES "")
+ IF(${UNIX})
+ 	SET(libdir ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+ ENDIF(${UNIX})
+-IF(${WIN32})
+-	SET(libdir ${CMAKE_INSTALL_PREFIX}/bin)
+-ENDIF(${WIN32})
+ 
+ 
+ ##############################################################################
+-- 
+1.7.10.4
+
+
+From f9209c0f50b0a094dd5a0167fd4e7c0954b43ee1 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 7 Mar 2013 00:00:13 +0100
+Subject: [PATCH 3/4] libdir for mingw too
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 947cb61..ba13324 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -296,9 +296,9 @@ SET(VMIME_PKGCONFIG_LIBS     "")
+ SET(VMIME_PKGCONFIG_CFLAGS   "")
+ SET(VMIME_PKGCONFIG_REQUIRES "")
+ 
+-IF(${UNIX})
++IF (UNIX OR MINGW)
+ 	SET(libdir ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+-ENDIF(${UNIX})
++ENDIF(UNIX OR MINGW)
+ 
+ 
+ ##############################################################################
+-- 
+1.7.10.4
+
+
+From a2b35277901059271ea22dd360d394ad61cdc81e Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 7 Mar 2013 00:26:12 +0100
+Subject: [PATCH 4/4] link winsock for static builds
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ba13324..bd268c1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -623,6 +623,8 @@ IF(WIN32)
+ 				${TARGET_LINK_LIBRARIES}
+ 				"ws2_32"
+ 			)
++		ELSE()
++			SET(VMIME_PKGCONFIG_LIBS "${VMIME_PKGCONFIG_LIBS} -lws2_32")
+ 		ENDIF()
+ 	ENDIF()
  
 -- 
 1.7.10.4
