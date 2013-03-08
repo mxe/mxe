@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 71f05afc51e3d9b03376b2f98fd452d3a274d595
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ffmpeg flac lame libgomp libmad libsndfile vorbis
+$(PKG)_DEPS     := gcc flac lame libgomp libmad libsndfile twolame vorbis wavpack
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/sox/files/sox/' | \
@@ -27,7 +27,31 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared
+        --disable-shared \
+        --enable-static \
+        --disable-debug \
+        --without-magic \
+        --without-png \
+        --without-ladspa \
+        --without-amrwb \
+        --without-amrnb \
+        --without-ffmpeg \
+        --with-flac \
+        --with-oggvorbis \
+        --with-sndfile \
+        --with-wavpack \
+        --with-mad \
+        --without-id3tag \
+        --with-lame \
+        --with-twolame \
+        --with-waveaudio \
+        --without-alsa \
+        --without-ao \
+        --without-coreaudio \
+        --without-oss \
+        --without-pulseaudio \
+        --without-sndio \
+        --without-sunaudio
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= EXTRA_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install
