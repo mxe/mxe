@@ -17,7 +17,9 @@ endef
 
 define $(PKG)_BUILD
 
-    cd '$(1)' &&  ./configure \
+    cd '$(1)' && autoconf
+
+    cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
