@@ -22,3 +22,13 @@ define $(PKG)_BUILD
         --static
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
+
+define $(PKG)_BUILD_i686-dynamic-mingw32
+    cd '$(1)' && $(MAKE) -f '$(1)/win32/Makefile.gcc' -j '$(JOBS)' install \
+        SHARED_MODE=1 \
+        PREFIX=$(TARGET)- \
+        prefix='$(PREFIX)/$(TARGET)' \
+        INCLUDE_PATH='$(PREFIX)/$(TARGET)/include' \
+        LIBRARY_PATH='$(PREFIX)/$(TARGET)/lib' \
+        BINARY_PATH='$(PREFIX)/$(TARGET)/bin'
+endef
