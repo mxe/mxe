@@ -3,15 +3,15 @@
 
 PKG             := json-c
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f90f643c8455da21d57b3e8866868a944a93c596
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/downloads/$(PKG)/$(PKG)/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := d78d38037dd6d9d19388770b5ebe33a8531b32ba
+$(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)-20120530
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-20120530.tar.gz
+$(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/json-c/json-c/downloads' | \
-    $(SED) -n 's,.*href="/downloads/json-c/json-c/json-c-\([0-9.]*\).tar.gz.*,\1,p' | \
+    $(WGET) -q -O- 'https://github.com/json-c/json-c/tags' | \
+    $(SED) -n 's,.*href="/json-c/json-c/archive/json-c-\([0-9.]*\)-\([0-9]*\).tar.gz.*,\1,p' | \
     head -1
 endef
 
