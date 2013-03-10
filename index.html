@@ -684,10 +684,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     </table>
 
-    <h3 id="requirements-debian">Debian (GNU/kFreeBSD &amp; GNU/Linux)</h3>
+    <h3 id="requirements-debian">Debian and derivatives</h3>
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
-    <pre>aptitude install -R autoconf automake bash bison bzip2 \
+    <pre>apt-get install autoconf automake bash bison bzip2 \
                     cmake flex gettext git g++ intltool \
                     libffi-dev libtool libltdl-dev openssl libssl-dev \
                     libxml-parser-perl make patch perl \
@@ -697,7 +697,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     On 64-bit Debian, install also:
     </p>
-    <pre>aptitude install -R g++-multilib libc6-dev-i386</pre>
+    <pre>apt-get install g++-multilib libc6-dev-i386</pre>
 
     <p>
     On Debian Squeeze, you'll need some packages from
