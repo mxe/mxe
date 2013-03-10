@@ -1,0 +1,24 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -urN sox-14.4.1.orig/configure sox-14.4.1/configure
+--- sox-14.4.1.orig/configure	2013-02-02 03:02:52.000000000 +0100
++++ sox-14.4.1/configure	2013-03-10 08:48:41.000000000 +0100
+@@ -13240,7 +13240,7 @@
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lmagic  $LIBS"
++LIBS="-lmagic -lshlwapi -lgnurx $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -13271,7 +13271,7 @@
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_magic_magic_open" >&5
+ $as_echo "$ac_cv_lib_magic_magic_open" >&6; }
+ if test "x$ac_cv_lib_magic_magic_open" = xyes; then :
+-  MAGIC_LIBS="-lmagic"
++  MAGIC_LIBS="-lmagic -lshlwapi -lgnurx"
+ else
+   using_magic=no
+ fi

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 71f05afc51e3d9b03376b2f98fd452d3a274d595
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc flac lame libgomp libmad libpng libsndfile libtool opencore-amr twolame vorbis wavpack
+$(PKG)_DEPS     := gcc file flac lame libgomp libmad libpng libsndfile libtool opencore-amr twolame vorbis wavpack
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/sox/files/sox/' | \
@@ -20,8 +20,9 @@ define $(PKG)_BUILD
     # set pkg-config cflags and libs
     $(SED) -i 's,^\(Cflags:.*\),\1 -fopenmp,' '$(1)/sox.pc.in'
     $(SED) -i '/Libs.private/d'               '$(1)/sox.pc.in'
-    echo Libs.private: `grep sox_LDADD '$(1)/src/optional-fmts.am' | \
-    $(SED) 's, sox_LDADD += ,,g' | tr -d '\n'` >>'$(1)/sox.pc.in'
+    echo Libs.private: @MAGIC_LIBS@ \
+        `grep sox_LDADD '$(1)/src/optional-fmts.am' | \
+         $(SED) 's, sox_LDADD += ,,g' | tr -d '\n'` >>'$(1)/sox.pc.in'
 
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
@@ -31,7 +32,7 @@ define $(PKG)_BUILD
         --enable-static \
         --disable-debug \
         --with-libltdl \
-        --without-magic \
+        --with-magic \
         --with-png \
         --with-ladspa \
         --with-amrwb \
