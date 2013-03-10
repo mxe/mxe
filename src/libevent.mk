@@ -3,10 +3,10 @@
 
 PKG             := libevent
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3e6674772eb77de24908c6267c698146420ab699
-$(PKG)_SUBDIR   := libevent-$($(PKG)_VERSION)-stable
-$(PKG)_FILE     := libevent-$($(PKG)_VERSION)-stable.tar.gz
-$(PKG)_URL      := https://github.com/downloads/$(PKG)/$(PKG)/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := 8a8813b2173b374cb64260245d7094fa81176854
+$(PKG)_SUBDIR   := libevent-release-$($(PKG)_VERSION)-stable
+$(PKG)_FILE     := release-$($(PKG)_VERSION)-stable.tar.gz
+$(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(1)' && ./autogen.sh && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
