@@ -1,0 +1,66 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+http://git.xiph.org/?p=opusfile.git;a=patch;h=d75915786f465892f5eadcd93444f51a32b9ad1c
+
+From d75915786f465892f5eadcd93444f51a32b9ad1c Mon Sep 17 00:00:00 2001
+From: Timothy B. Terriberry <tterribe@xiph.org>
+Date: Tue, 8 Jan 2013 05:04:41 -0800
+Subject: [PATCH] Use fseeko64/ftello64 for mingw32.
+
+It turns out i686-pc-mingw32 does define these functions, and they
+ are always available (unlike _fseeki64/_ftelli64).
+This means we can build and link without requiring
+ i686-w64-mingw32.
+The resulting binary still doesn't run in wine for me, but that may
+ be a personal problem.
+---
+ src/stream.c |   22 ++++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
+
+diff --git a/src/stream.c b/src/stream.c
+index caa82f1..1c7266b 100644
+--- a/src/stream.c
++++ b/src/stream.c
+@@ -56,7 +56,18 @@ static int op_fread(void *_stream,unsigned char *_ptr,int _buf_size){
+ static int op_fseek(void *_stream,opus_int64 _offset,int _whence){
+ #if defined(_MSC_VER)
+   return _fseeki64((FILE *)_stream,_offset,_whence);
++#elif defined(__MINGW32__)
++  /*i686-pc-mingw32 does not have fseeko() and requires
++     __MSVCRT_VERSION__>=0x800 for _fseeki64(), which screws up linking with
++     other libraries (that don't use MSVCRT80 from MSVC 2005 by default).
++    i686-w64-mingw32 does have fseeko() and respects _FILE_OFFSET_BITS, but I
++     don't know how to detect that at compile time.
++    We don't need to use fopen64(), as this just dispatches to fopen() in
++     mingw32.*/
++  return fseeko64((FILE *)_stream,(off64_t)_offset,_whence);
+ #else
++  /*This function actually conforms to the SUSv2 and POSIX.1-2001, so we prefer
++     it except in the two special-cases above.*/
+   return fseeko((FILE *)_stream,(off_t)_offset,_whence);
+ #endif
+ }
+@@ -64,7 +75,18 @@ static int op_fseek(void *_stream,opus_int64 _offset,int _whence){
+ static opus_int64 op_ftell(void *_stream){
+ #if defined(_MSC_VER)
+   return _ftelli64((FILE *)_stream);
++#elif defined(__MINGW32__)
++  /*i686-pc-mingw32 does not have ftello() and requires
++     __MSVCRT_VERSION__>=0x800 for _ftelli64(), which screws up linking with
++     other libraries (that don't use MSVCRT80 from MSVC 2005 by default).
++    i686-w64-mingw32 does have ftello() and respects _FILE_OFFSET_BITS, but I
++     don't know how to detect that at compile time.
++    We don't need to use fopen64(), as this just dispatches to fopen() in
++     mingw32.*/
++  return ftello64((FILE *)_stream);
+ #else
++  /*This function actually conforms to the SUSv2 and POSIX.1-2001, so we prefer
++     it except in the two special-cases above.*/
+   return ftello((FILE *)_stream);
+ #endif
+ }
+-- 
+1.7.2.5
+
