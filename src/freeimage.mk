@@ -29,8 +29,17 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/Source/FreeImage.h' '$(PREFIX)/$(TARGET)/include/'
 
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: freeimage'; \
+     echo 'Version: $(freeimage_VERSION)'; \
+     echo 'Description: FreeImage'; \
+     echo 'Cflags: -DFREEIMAGE_LIB'; \
+     echo 'Libs: -lfreeimage';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/freeimage.pc'
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-freeimage.exe' \
-        -lfreeimage -DFREEIMAGE_LIB
+        `'$(TARGET)-pkg-config' freeimage --cflags --libs`
 endef
