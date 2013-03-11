@@ -16,19 +16,21 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,install ,$(INSTALL) ,' '$(1)'/Makefile.gnu
-
-    $(MAKE) -C '$(1)' -j '$(JOBS)' -f Makefile.gnu \
+    $(MAKE) -C '$(1)' -j '$(JOBS)' -f Makefile.mingw \
         CXX='$(TARGET)-g++' \
         CC='$(TARGET)-gcc' \
         AR='$(TARGET)-ar' \
-        INCDIR='$(PREFIX)/$(TARGET)/include' \
-        INSTALLDIR='$(PREFIX)/$(TARGET)/lib'
+        RC='$(TARGET)-windres' \
+        FREEIMAGE_LIBRARY_TYPE=STATIC \
+        TARGET=freeimage
 
-    $(MAKE) -C '$(1)' -j '$(JOBS)' -f Makefile.gnu install \
-        CXX='$(TARGET)-g++' \
-        CC='$(TARGET)-gcc' \
-        AR='$(TARGET)-ar' \
-        INCDIR='$(PREFIX)/$(TARGET)/include' \
-        INSTALLDIR='$(PREFIX)/$(TARGET)/lib'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
+    $(INSTALL) -m644 '$(1)/libfreeimage.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -m644 '$(1)/Source/FreeImage.h' '$(PREFIX)/$(TARGET)/include/'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        -lfreeimage -DFREEIMAGE_LIB
 endef
