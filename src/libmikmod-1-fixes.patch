@@ -25,3 +25,23 @@ index 8698715..c788c8a 100644
 -- 
 1.7.9.2
 
+diff --git a/libmikmod/Makefile.in b/libmikmod/Makefile.in
+--- a/libmikmod/Makefile.in
++++ b/libmikmod/Makefile.in
+@@ -23,13 +23,15 @@
+ LIBOBJS=@LIBOBJS@
+ LIBRARY_LIB=@LIBRARY_LIB@
+ 
++SHELL=@SHELL@
++
+ CC=@CC@
+ INSTALL=@INSTALL@
+ LIBTOOL=@LIBTOOL@
+ MKINSTALLDIRS=${top_srcdir}/mkinstalldirs
+ 
+ DEFS=@DEFS@
+-CFLAGS=@CFLAGS@ -Dunix
++CFLAGS=@CFLAGS@ 
+ COMPILE=$(LIBTOOL) --silent --mode=compile $(CC) $(DEFS) $(CFLAGS) -I$(top_srcdir)/include -I$(top_builddir) -I$(top_builddir)/include -DMIKMOD_H=$(top_srcdir)/include/mikmod.h
+ 
+ LIB = libmikmod.la
