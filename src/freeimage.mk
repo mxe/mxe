@@ -35,7 +35,7 @@ define $(PKG)_BUILD
      echo 'Version: $(freeimage_VERSION)'; \
      echo 'Description: FreeImage'; \
      echo 'Cflags: -DFREEIMAGE_LIB'; \
-     echo 'Libs: -lfreeimage';) \
+     echo 'Libs: -lfreeimage -lws2_32';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/freeimage.pc'
 
     '$(TARGET)-gcc' \
