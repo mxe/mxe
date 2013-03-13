@@ -16,12 +16,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,-Dunix,,' '$(1)/libmikmod/Makefile.in'
     $(SED) -i 's,`uname`,MinGW,g' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        CONFIG_SHELL='$(SHELL)' \
         CFLAGS='-msse2'
 
     find '$(1)' -name Makefile -exec $(SED) -i 's|^LIBTOOL=[ ]*$$(SHELL) |LIBTOOL=|g' {} \;

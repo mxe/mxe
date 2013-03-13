@@ -59,7 +59,7 @@ define $(PKG)_SYMLINK
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./autogen.sh
+    cd '$(1)' && NOCONFIGURE=true ./autogen.sh
     rm -f '$(PREFIX)/$(TARGET)/bin/glib-*'
     $(if $(findstring y,\
             $(shell [ -x "`which glib-genmarshal`" ] && \
