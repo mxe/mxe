@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         --disable-ogre-renderer \
         --disable-irrlicht-renderer \
         --disable-directfb-renderer \
+        --enable-null-renderer \
         --enable-samples \
         --disable-lua-module \
         --disable-python-module \
