@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 3cc9366b6dbbd336eaf90fe70ad16e63705d82c4
 $(PKG)_SUBDIR   := octave-$($(PKG)_VERSION)
 $(PKG)_FILE     := octave-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc readline lapack suitesparse hdf5 libgomp pthreads pcre curl
+$(PKG)_DEPS     := gcc readline lapack suitesparse hdf5 libgomp pthreads pcre curl freetype
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/octave/?C=M;O=D' | \
@@ -18,22 +18,23 @@ endef
 
 define $(PKG)_BUILD
 
+    ### make sure pcre-config of host is used
+    $(SED) -i 's,pcre-config,$(PREFIX)/$(TARGET)/bin/pcre-config,g' '$(1)'/configure
+
     # configure
     cd    '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --includedir='$(PREFIX)/$(TARGET)/include' \
-        --libdir='$(PREFIX)/$(TARGET)/include' \
         --enable-static \
 	--enable-openmp
 
     # make
     $(MAKE) -C '$(1)'	
-  
 
     # install 
     $(MAKE) -C '$(1)' install	
 
 endef
 
+$(PKG)_BUILD_x86_64-w64-mingw32 =
