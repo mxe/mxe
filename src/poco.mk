@@ -3,7 +3,7 @@
 
 PKG             := poco
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := fd19d6d25504f9cdaf345880ddf64aa688dea170
+$(PKG)_CHECKSUM := c89833d208cc6a3b54a239a776dcb611e7cd4b02
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/sources/$(PKG)-$(word 1,$(subst p, ,$($(PKG)_VERSION)))/$($(PKG)_FILE)

@@ -1,10 +1,12 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 9cca5b7a1274f4e263441944b906f054118b8387 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+Contains ad hoc patches for cross building.
+
+From ab12cbdf40141b62d2c01943811a65a65cf5e657 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Sun, 2 Sep 2012 00:55:28 +0200
-Subject: [PATCH] include gpg-error with gcrypt for static linking
+Subject: [PATCH 1/2] include gpg-error with gcrypt for static linking
  (mxe-specific)
 
 
@@ -21,5 +23,29 @@ index dfc6988..748dd21 100644
  
  AC_SUBST(LIBSREQUIRED)
 -- 
-1.7.10.4
+1.8.0.3
+
+
+From 246a5f965ad348a6de921689a031ffa481f733e7 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 23 Mar 2013 18:41:25 +1100
+Subject: [PATCH 2/2] replace deprectaed AM_CONFIG_HEADER with
+ AC_CONFIG_HEADERS
+
+
+diff --git a/configure.ac b/configure.ac
+index 748dd21..d190a2a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2,7 +2,7 @@
+ AC_INIT(libssh2, [-], libssh2-devel@cool.haxx.se)
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_CONFIG_SRCDIR([src])
+-AM_CONFIG_HEADER([src/libssh2_config.h example/libssh2_config.h])
++AC_CONFIG_HEADERS([src/libssh2_config.h example/libssh2_config.h])
+ AM_MAINTAINER_MODE
+ 
+ dnl SED is needed by some of the tools
+-- 
+1.8.0.3
 

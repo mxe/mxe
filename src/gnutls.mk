@@ -2,15 +2,16 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_CHECKSUM := f51085d8a15bc2ebe8d449fc2c9b526d1957d149
+$(PKG)_CHECKSUM := 1097644b0e58754217c4f9edbdf68e9f7aa7e08d
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1//$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext nettle pcre zlib
 
 define $(PKG)_UPDATE
-    $(WGET) wget -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/ | \
-    $(SED) -n 's,.*gnutls-\([1-9]\.[0-9].[0-9]\)\..*,\1,p' | \
+    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/ | \
+    $(SED) -n 's,.*gnutls-\([1-9]\+\.[0-9]\+.[0-9]\+\)\..*,\1,p' | \
+    $(SORT) -V | \
     tail -1
 endef
 

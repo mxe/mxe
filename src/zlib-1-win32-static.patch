@@ -3,17 +3,24 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From dfe5701faf3683be7ea53885c58d4bd3499c4d1c Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sun, 29 Jan 2012 21:51:03 +0100
-Subject: [PATCH] workarounds for MXE
-
-
-diff --git a/Makefile.in b/Makefile.in
-index ea430bf..f2573e7 100644
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -190,11 +190,11 @@ install-libs: $(LIBS)
+diff -urN a/configure b/configure
+--- a/configure	2013-03-24 06:30:09.000000000 +0100
++++ b/configure	2013-04-29 12:19:25.526304670 +0200
+@@ -191,10 +191,7 @@
+   CYGWIN* | Cygwin* | cygwin* | OS/2*)
+         EXE='.exe' ;;
+   MINGW* | mingw*)
+-# temporary bypass
+         rm -f $test.[co] $test $test$shared_ext
+-        echo "Please use win32/Makefile.gcc instead." | tee -a configure.log
+-        leave 1
+         LDSHARED=${LDSHARED-"$cc -shared"}
+         LDSHAREDLIBC=""
+         EXE='.exe' ;;
+diff -urN a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2013-04-29 00:57:11.000000000 +0200
++++ b/Makefile.in	2013-04-29 12:16:08.631379491 +0200
+@@ -190,11 +190,11 @@
  	-@if [ ! -d $(DESTDIR)$(sharedlibdir) ]; then mkdir -p $(DESTDIR)$(sharedlibdir); fi
  	-@if [ ! -d $(DESTDIR)$(man3dir)      ]; then mkdir -p $(DESTDIR)$(man3dir); fi
  	-@if [ ! -d $(DESTDIR)$(pkgconfigdir) ]; then mkdir -p $(DESTDIR)$(pkgconfigdir); fi
@@ -27,21 +34,3 @@ index ea430bf..f2573e7 100644
  	  echo "cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)"; \
  	  chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV); \
  	  echo "chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV)"; \
-diff --git a/configure b/configure
-index 780317c..6e6a033 100755
---- a/configure
-+++ b/configure
-@@ -205,10 +205,7 @@ if test "$gcc" -eq 1 && ($cc -c $cflags $test.c) >> configure.log 2>&1; then
-   CYGWIN* | Cygwin* | cygwin* | OS/2*)
-         EXE='.exe' ;;
-   MINGW* | mingw*)
--# temporary bypass
-         rm -f $test.[co] $test $test$shared_ext
--        echo "Please use win32/Makefile.gcc instead." | tee -a configure.log
--        exit 1
-         LDSHARED=${LDSHARED-"$cc -shared"}
-         LDSHAREDLIBC=""
-         EXE='.exe' ;;
--- 
-1.7.8.3
-

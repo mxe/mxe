@@ -2,23 +2,23 @@ This file is part of MXE.
 See index.html for further information.
 
 diff -urN a/CMakeLists.txt b/CMakeLists.txt
---- a/CMakeLists.txt	2012-09-14 16:43:20.000000000 +0200
-+++ b/CMakeLists.txt	2012-09-20 20:39:05.073039124 +0200
-@@ -37,7 +37,7 @@
+--- a/CMakeLists.txt	2013-04-26 08:48:11.000000000 +0200
++++ b/CMakeLists.txt	2013-04-27 18:49:46.454530270 +0200
+@@ -32,7 +32,7 @@
  set(ARMA_USE_ATLAS   false)
  set(ARMA_USE_BOOST   false)
  set(ARMA_USE_HDF5    false)
--set(ARMA_USE_WRAPPER true )  # set this to false if you prefer to directly link with LAPACK and/or BLAS (eg. -llapack -lblas) instead of -larmadillo
-+set(ARMA_USE_WRAPPER false )  # set this to false if you prefer to directly link with LAPACK and/or BLAS (eg. -llapack -lblas) instead of -larmadillo
+-set(ARMA_USE_WRAPPER true )
++set(ARMA_USE_WRAPPER false)
  
- 
- if(WIN32)
-@@ -268,7 +268,7 @@
- #set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
- 
+ # NOTE:
+ # Set ARMA_USE_WRAPPER to false if you're getting linking errors when compiling your programs,
+@@ -289,7 +289,7 @@
+   message(STATUS "CMAKE_SHARED_LINKER_FLAGS = ${CMAKE_SHARED_LINKER_FLAGS}")
+ endif()
  
 -add_library( armadillo SHARED src/wrap_libs )
 +add_library( armadillo STATIC src/wrap_libs )
  target_link_libraries( armadillo ${ARMA_LIBS} )
+ set_target_properties(armadillo PROPERTIES VERSION ${ARMA_MAJOR}.${ARMA_MINOR_ALT}.${ARMA_PATCH} SOVERSION ${ARMA_MAJOR})
  
- set_target_properties(armadillo PROPERTIES VERSION ${ARMA_MAJOR}.${ARMA_MINOR}.${ARMA_PATCH} SOVERSION 3)

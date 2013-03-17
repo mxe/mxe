@@ -3,9 +3,9 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 87a791a05687c7737d1c50381a0de30ba1acf96e Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Mon, 24 Oct 2011 09:40:10 +0200
+From dc54ddf47055db70aeb19c618a70bd5448cff836 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 11 Apr 2013 08:50:44 +0200
 Subject: [PATCH] add pkg-config support
 
 based on
@@ -13,12 +13,6 @@ http://old.nabble.com/-PATCH--Add-pkgconfig-file-td23312302.html
 
 proposed to upstream
 https://sourceforge.net/tracker/?func=detail&aid=3511842&group_id=1032&atid=101032
----
- Makefile.am  |    3 +++
- configure.ac |    1 +
- glut.pc.in   |   12 ++++++++++++
- 3 files changed, 16 insertions(+), 0 deletions(-)
- create mode 100644 glut.pc.in
 
 diff --git a/Makefile.am b/Makefile.am
 index 39c5628..b504bc6 100644
@@ -32,10 +26,10 @@ index 39c5628..b504bc6 100644
 +pkgconfigdir = $(libdir)/pkgconfig
 +pkgconfig_DATA = glut.pc
 diff --git a/configure.ac b/configure.ac
-index 15dc997..2f25bcb 100644
+index 4f194d9..71e696d 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -119,5 +119,6 @@ AC_CONFIG_FILES([
+@@ -125,5 +125,6 @@ AC_CONFIG_FILES([
  	progs/demos/spaceball/Makefile
  	progs/demos/subwin/Makefile
  	src/Makefile
@@ -61,5 +55,5 @@ index 0000000..ea57c4a
 +Cflags: -DFREEGLUT_STATIC -I${includedir}
 +
 -- 
-1.7.8
+1.8.1.4
 

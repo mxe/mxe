@@ -10,8 +10,10 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- "http://sourceforge.net/projects/plib/files/plib/" | \
+    grep 'plib/files/plib' | \
+    $(SED) -n 's,.*plib/\([0-9][^>]*\)/.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

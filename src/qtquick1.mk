@@ -3,10 +3,10 @@
 
 PKG             := qtquick1
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 29e15b22ae843cb3c32b0487d3b216f4e60203b4
+$(PKG)_CHECKSUM := 92c8515273b449d325077e881b189eb2523b4386
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules_tar/$($(PKG)_FILE)
+$(PKG)_URL      := http://origin.releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase qtscript qtsvg qttools qtxmlpatterns
 
 define $(PKG)_UPDATE

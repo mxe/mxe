@@ -15,6 +15,7 @@ LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
 PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
+SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
 WGET       := wget --no-check-certificate \
                    --user-agent=$(shell wget --version | \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
@@ -22,7 +23,7 @@ WGET       := wget --no-check-certificate \
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 gcc intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
-                scons $(SED) unzip wget xz yasm
+                scons $(SED) $(SORT) unzip wget xz yasm
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
@@ -67,19 +68,21 @@ ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
 DOWNLOAD_PKG_ARCHIVE = \
-    mkdir -p '$(PKG_DIR)' && \
-    $(if $($(1)_URL_2), \
-        ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-          $(WGET) -O- '$($(1)_URL_2)' || \
-          $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-          $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
-        ( $(WGET) -O- '$($(1)_URL)' || \
-          $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-          $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
-    $(if $($(1)_FIX_GZIP), \
-        | gzip -d | gzip -9n, \
-        ) \
-    > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)'
+    $(if $(value $(1)_URL), \
+        mkdir -p '$(PKG_DIR)' && \
+        $(if $($(1)_URL_2), \
+            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
+              $(WGET) -O- '$($(1)_URL_2)' || \
+              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
+            ( $(WGET) -O- '$($(1)_URL)' || \
+              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
+        $(if $($(1)_FIX_GZIP), \
+            | gzip -d | gzip -9n, \
+            ) \
+        > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)', \
+    $(error URL not specified for package $(1)))
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
@@ -229,22 +232,27 @@ define UPDATE
     $(if $(2),
         $(if $(filter $(2),$($(1)_IGNORE)),
             $(info IGNORED  $(1)  $(2)),
-            $(if $(filter $(2),$($(1)_VERSION)),
-                $(info .        $(1)  $(2)),
+            $(if $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1)),
+                $(if $(filter $(2),$($(1)_VERSION)),
+                    $(info .        $(1)  $(2)),
+                    $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
                 $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$(2)/' '$(TOP_DIR)/index.html'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
                     || { $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$($(1)_VERSION)/' '$(TOP_DIR)/index.html'; \
                          exit 1; })),
-        $(error Unable to update version number of package $(1)))
+        $(info Unable to update version number of package $(1) \
+            $(newline)$(newline)$($(1)_UPDATE)$(newline)))
 
 endef
 update:
 	$(foreach PKG,$(PKGS),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
 
 update-checksum-%:
-	$(call DOWNLOAD_PKG_ARCHIVE,$*)
-	$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk'
+	$(if $(findstring $*~,$(addsuffix ~,$(PKGS))), \
+		$(call DOWNLOAD_PKG_ARCHIVE,$*) && \
+		$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
+	$(error package $* not found in index.html))
 
 cleanup-style:
 	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\

@@ -17,6 +17,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # native build of terminfo compiler
+    cp -Rp '$(1)' '$(1).native'
+    cd '$(1).native' && ./configure
+    $(MAKE) -C '$(1).native/include' -j '$(JOBS)'
+    $(MAKE) -C '$(1).native/progs'   -j '$(JOBS)' tic
+
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
@@ -31,5 +37,6 @@ define $(PKG)_BUILD
         --enable-pc-files \
         --with-normal \
         --without-shared
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j 1 install TIC_PATH='$(1).native/progs/tic'
 endef
