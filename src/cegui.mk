@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := f0a8616bcb37843ad2f83c88745b9313906cb8e9
 $(PKG)_SUBDIR   := CEGUI-$($(PKG)_VERSION)
 $(PKG)_FILE     := CEGUI-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/crayzedsgui/CEGUI%20Mk-2/$($(PKG)_VERSION)/$($(PKG)_FILE)?download
-$(PKG)_DEPS     := gcc freeglut freeimage freetype pcre xerces libxml2 expat
+$(PKG)_DEPS     := gcc freeglut freeimage freetype pcre libxml2 expat
 
 define $(PKG)_UPDATE
 endef
@@ -19,7 +19,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-freetype \
         --enable-pcre \
-        --enable-xerces \
+        --disable-xerces \
         --enable-libxml2 \
         --enable-expat \
         --disable-corona \
