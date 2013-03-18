@@ -214,3 +214,24 @@ diff --git a/modules/highgui/CMakeLists.txt b/modules/highgui/CMakeLists.txt
  endif()
  
  if(WITH_JPEG)
+@@ -262,7 +267,7 @@
+ ocv_add_precompiled_headers(${the_module})
+ ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated-declarations)
+ 
+-if(WIN32 AND WITH_FFMPEG)
++if(WIN32 AND WITH_FFMPEG AND BUILD_SHARED_LIBS)
+   #copy ffmpeg dll to the output folder
+   if(MSVC64 OR MINGW64)
+     set(FFMPEG_SUFFIX _64)
+diff --git a/cmake/OpenCVGenConfig.cmake b/cmake/OpenCVGenConfig.cmake
+--- a/cmake/OpenCVGenConfig.cmake
++++ b/cmake/OpenCVGenConfig.cmake
+@@ -177,6 +177,6 @@
+   exec_program(mkdir ARGS "-p \"${CMAKE_BINARY_DIR}/win-install/\"" OUTPUT_VARIABLE RET_VAL)
+   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" IMMEDIATE @ONLY)
+   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig-version.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" IMMEDIATE @ONLY)
+-  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
+-  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
++  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
++  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
+ endif()
