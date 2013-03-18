@@ -8,11 +8,13 @@ http://sourceforge.net/tracker/?func=detail&atid=302435&aid=3011968&group_id=243
 diff -urN a/gcc/ginclude/float.h b/gcc/ginclude/float.h
 --- a/gcc/ginclude/float.h	2009-04-09 17:00:19.000000000 +0200
 +++ b/gcc/ginclude/float.h	2010-06-05 12:03:41.887724045 +0200
-@@ -275,3 +275,7 @@
+@@ -275,3 +275,9 @@
  #endif /* __STDC_WANT_DEC_FP__ */
  
  #endif /* _FLOAT_H___ */
 +
 +#ifdef __MINGW32__
++#ifndef _MINGW_FLOAT_H_
 +#include_next<float.h>
++#endif
 +#endif
