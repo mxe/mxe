@@ -19,8 +19,8 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-freetype \
         --enable-pcre \
-        --disable-xerces \
-        --enable-libxml2 \
+        --disable-xerces-c \
+        --enable-libxml \
         --enable-expat \
         --disable-corona \
         --disable-devil \
