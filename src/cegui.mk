@@ -36,7 +36,10 @@ define $(PKG)_BUILD
         --enable-samples \
         --disable-lua-module \
         --disable-python-module \
-        PKG_CONFIG='$(TARGET)-pkg-config'
+        PKG_CONFIG='$(TARGET)-pkg-config' \
+        CFLAGS="`$(TARGET)-pkg-config --cflags glut freeimage`" \
+        CXXFLAGS="`$(TARGET)-pkg-config --cflags glut freeimage`" \
+        LDFLAGS="`$(TARGET)-pkg-config --libs glut`"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(SED) -i 's/Cflags:\(.*\)/Cflags: \1 -DCEGUI-STATIC/' '$(1)/cegui/CEGUI.pc'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
