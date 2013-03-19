@@ -1,0 +1,147 @@
+--- a/config/mingw/Makefile	2012-11-30 16:52:35.622821917 -0500
++++ b/config/mingw/Makefile	2012-11-30 16:52:23.071255685 -0500
+@@ -27,7 +27,7 @@
+ 
+ # Use more modern HTML help instead of no longer supported Windows help system
+ # Please update the HHWPATH below if necessary.
+-HTML_HELP=1
++#HTML_HELP=1
+ 
+ # GIF, PNG, JPEG device drivers
+ # Requires gd library. There are two possibilities how to configure these
+@@ -127,29 +127,29 @@
+ # -mpentiumpro means optimize for Pentium II and Pro procesors
+ #CFLAGS +=
+ 
+-ifdef HTML_HELP
+-
+-# To compile the .chm file you need the Microsoft HTML Help 1.4 SDK
+-# It can be obtained here:
+-# http://go.microsoft.com/fwlink/?LinkId=154968
+-# We need to explicitly set the correct path here since we also need
+-# adjust the include and linrary paths.
+-HHWPATH = "$(PROGRAMFILES)/HTML Help Workshop/"
+-HHC = $(HHWPATH)hhc
++# ifdef HTML_HELP
+ 
+-else
++# # To compile the .chm file you need the Microsoft HTML Help 1.4 SDK
++# # It can be obtained here:
++# # http://go.microsoft.com/fwlink/?LinkId=154968
++# # We need to explicitly set the correct path here since we also need
++# # adjust the include and linrary paths.
++# HHWPATH = "$(PROGRAMFILES)/HTML Help Workshop/"
++# HHC = $(HHWPATH)hhc
++
++# else
++
++# # To compile the .hlp file you need hcw either out of Microsoft SDK or MS Help
++# # Workshop. The latter can be obtained from either of
++# # ftp://ftp.microsoft.com/softlib/mslfiles/hcwsetup.exe
++# # http://www.microsoft.com/downloads/details.aspx?displaylang=en&FamilyID=34D35502-4DE9-4676-952C-34CC7F64F098
++# # Put the path to hcw here unless it is already in PATH:
++# HCWPATH = "$(PROGRAMFILES)/Help\ Workshop/"
++# HCW = $(HCWPATH)hcw
++# # Switches are for HCW 4.03:
++# HCWFLAG =
+ 
+-# To compile the .hlp file you need hcw either out of Microsoft SDK or MS Help
+-# Workshop. The latter can be obtained from either of
+-# ftp://ftp.microsoft.com/softlib/mslfiles/hcwsetup.exe
+-# http://www.microsoft.com/downloads/details.aspx?displaylang=en&FamilyID=34D35502-4DE9-4676-952C-34CC7F64F098
+-# Put the path to hcw here unless it is already in PATH:
+-HCWPATH = "$(PROGRAMFILES)/Help\ Workshop/"
+-HCW = $(HCWPATH)hcw
+-# Switches are for HCW 4.03:
+-HCWFLAG =
+-
+-endif
++# endif
+ 
+ # Choose which windres/rc do you want to use (GNU windres or MS RC):
+ GNU_RC = 1
+@@ -397,7 +397,7 @@
+   RES2COFF = res2coff -i wgnuplot.res -o wgplt_res.$(O)
+ endif
+ 
+-default: $(TARGET) $(MENUFILE) support
++default: $(TARGET) $(MENUFILE) # support
+ 
+ console:
+ 	$(MAKE) TARGET=gnuplot.exe gnuplot.exe
+@@ -433,7 +433,7 @@
+ 	$(W)/winmain.c $(W)/wmenu.c $(W)/wpause.c $(W)/wprinter.c \
+ 	$(W)/wresourc.h $(W)/wtext.c $(W)/wtext.h $(W)/geticon.c \
+ 	$(W)/screenbuf.c $(W)/screenbuf.h $(W)/wgdiplus.cpp $(W)/wgdiplus.h \
+-	$(D)doc2rtf.c $(T)win.trm $(W)/grpicon.ico $(W)/texticon.ico
++	$(D)doc2rtf.c $(T)win.trm $(W)/GRPICON.ico $(W)/TEXTICON.ico
+ 
+ ifdef HTML_HELP
+ WINDOWS +=	$(D)windows/doc2html.c
+@@ -453,7 +453,7 @@
+   LDFLAGS2 += -L$(HHWPATH)lib
+ endif
+ 
+-$(TARGET): $(OBJS) $(WINOBJS) wgplt_res.$(O) texticon.ico grpicon.ico
++$(TARGET): $(OBJS) $(WINOBJS) wgplt_res.$(O) TEXTICON.ico GRPICON.ico
+ 	$(LDX) $(LDFLAGS) $(LDFLAGS2) -o $@ $(OBJS) $(WINOBJS) wgplt_res.$(O) $(LDLIBS)\
+ 	$(TERMLIBS) $(WX_LIBS) $(PANGOCAIRO_LIBS)
+ 
+@@ -462,7 +462,7 @@
+ 
+ # rules
+ 
+-wgplt_res.$(O) :  $(W)/wgnuplot.rc $(W)/wgnuplib.rc $(W)/wresourc.h texticon.ico grpicon.ico
++wgplt_res.$(O) :  $(W)/wgnuplot.rc $(W)/wgnuplib.rc $(W)/wresourc.h TEXTICON.ico GRPICON.ico
+ 	$(RC) $(RCFLAGS) $< $(RCOUT)
+ 	$(RES2COFF)
+ 
+@@ -521,13 +521,13 @@
+ 	$(CC) -c $(CFLAGS) -o $@ $<
+ 
+ # extract icons from wgnuplot.rc
+-texticon.ico: grpicon.ico
++TEXTICON.ico: GRPICON.ico
+ 
+-grpicon.ico: geticon.exe $(W)/wgnuplot.rc
++GRPICON.ico: geticon $(W)/wgnuplot.rc
+ 	./geticon $(W)/wgnuplot.rc
+ 
+-geticon.exe: $(W)/geticon.c
+-	$(LD) $(LDFLAGS) -o $@ $<
++geticon: $(W)/geticon.c
++	gcc -o $@ $<
+ 
+ ifdef HTML_HELP
+ # convert gnuplot.doc to windows/wgnuplot.html
+@@ -730,7 +730,7 @@
+ 	$(RM) config.h wgnuplot.map wgnuplot.res $(W)/gnuplot.rtf
+ 	$(RM) *.$(O) *.po *.o *.co
+ 	$(RM) doc2*.exe $(W)/wgnuplib.res wgnuplib.map wgnuplot.lib
+-	$(RM) $(M)bf_test.exe *.ico geticon.exe allterm.h allterm.c
++	$(RM) $(M)bf_test.exe *.ico geticon allterm.h allterm.c
+ 	$(RM) *.aux *.log *.dvi *.toc
+ 	$(RM) gnuplot.tex gnuplot-figures.tex pdffigures.tex figure_*.pdf
+ 	$(RM) titlepag.tex toc_entr.sty VERSION
+@@ -829,7 +829,7 @@
+ 
+ installer:
+ 	$(MAKE) DESTDIR=./dist install
+-	cp -p grpicon.ico ./dist/bin/
++	cp -p GRPICON.ico ./dist/bin/
+ 	cp -p $(TOP)/win/*.iss ./dist
+ 	(cd ./dist; $(ISCC) gnuplot.iss)
+ 	mv ./dist/gp*-setup.exe .
+--- a/src/win/wgnuplot.rc	2011-05-13 14:32:22.000000000 -0400
++++ b/src/win/wgnuplot.rc	2012-11-30 16:53:59.407926642 -0500
+@@ -15,8 +15,8 @@
+    * rc -30 -k -dMSRC win\wgnuplot.rc wgnuplot.exe
+    */
+ 
+-GRPICON ICON "grpicon.ico"
+-TEXTICON ICON  "texticon.ico"
++GRPICON ICON "GRPICON.ico"
++TEXTICON ICON  "TEXTICON.ico"
+ 
+ #else
+ /* using Borland BRC.EXE */
