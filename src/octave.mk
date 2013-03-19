@@ -7,7 +7,8 @@ $(PKG)_CHECKSUM := 3cc9366b6dbbd336eaf90fe70ad16e63705d82c4
 $(PKG)_SUBDIR   := octave-$($(PKG)_VERSION)
 $(PKG)_FILE     := octave-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc readline lapack suitesparse hdf5 libgomp pthreads pcre curl freetype
+$(PKG)_DEPS     := blas curl fftw fltk freetype gcc glpk gnuplot graphicsmagick hdf5 lapack libgomp pcre pthreads qhull qrupdate qt readline suitesparse texinfo zlib
+## arpack fontconfig pstoedit qscintilla ### FIXME: these are dependencies for Octave, but do not build yet
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/octave/?C=M;O=D' | \
