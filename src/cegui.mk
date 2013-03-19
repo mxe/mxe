@@ -39,7 +39,7 @@ define $(PKG)_BUILD
         PKG_CONFIG='$(TARGET)-pkg-config' \
         CFLAGS="`$(TARGET)-pkg-config --cflags glut freeimage`" \
         CXXFLAGS="`$(TARGET)-pkg-config --cflags glut freeimage`" \
-        LDFLAGS="`$(TARGET)-pkg-config --libs glut`"
+        LDFLAGS="`$(TARGET)-pkg-config --libs glut freeimage`"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(SED) -i 's/Cflags:\(.*\)/Cflags: \1 -DCEGUI-STATIC/' '$(1)/cegui/CEGUI.pc'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
