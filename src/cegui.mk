@@ -41,6 +41,6 @@ define $(PKG)_BUILD
         CXXFLAGS="`$(TARGET)-pkg-config --cflags glut freeimage`" \
         LDFLAGS="`$(TARGET)-pkg-config --libs glut freeimage`"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(SED) -i 's/Cflags:\(.*\)/Cflags: \1 -DCEGUI-STATIC/' '$(1)/cegui/CEGUI.pc'
+    $(SED) -i 's/Cflags:\(.*\)/Cflags: \1 -DCEGUI_STATIC/' '$(1)/cegui/CEGUI.pc'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
