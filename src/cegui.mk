@@ -37,5 +37,7 @@ define $(PKG)_BUILD
         --disable-lua-module \
         --disable-python-module \
         PKG_CONFIG='$(TARGET)-pkg-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(SED) -i 's/Cflags:\(.*\)/Cflags: \1 -DCEGUI-STATIC/' '$(1)/cegui/CEGUI.pc'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
