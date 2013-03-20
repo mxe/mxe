@@ -3,15 +3,16 @@
 
 PKG             := json-c
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d78d38037dd6d9d19388770b5ebe33a8531b32ba
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)-20120530
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-20120530.tar.gz
-$(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/archive/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := f495481641a3a014decc58f935b112d07347fb05
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-nodoc.tar.gz
+$(PKG)_URL      := https://s3.amazonaws.com/$(PKG)_releases/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/json-c/json-c/tags' | \
-    $(SED) -n 's,.*href="/json-c/json-c/archive/json-c-\([0-9.]*\)-\([0-9]*\).tar.gz.*,\1,p' | \
+    $(WGET) -q -O- 'https://s3.amazonaws.com/json-c_releases' | \
+    $(SED) -r 's,<Key>,\n<Key>,g' | \
+    $(SED) -n 's,.*releases/json-c-\([0-9.]*\).tar.gz.*,\1,p' | \
     head -1
 endef
 
