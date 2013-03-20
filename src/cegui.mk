@@ -10,6 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/crayzedsgui/CEGUI%20Mk-2
 $(PKG)_DEPS     := gcc freeglut freeimage freetype pcre libxml2 expat
 
 define $(PKG)_UPDATE
+    echo 'TODO: Updates for package cegui need to be written.' >&2; echo $(cegui_VERSION)
 endef
 
 define $(PKG)_BUILD
