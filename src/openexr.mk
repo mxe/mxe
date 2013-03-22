@@ -21,6 +21,8 @@ define $(PKG)_BUILD
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,ilmbase)
     $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/ilmbase-*.patch)),
         (cd '$(1)/$(ilmbase_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
+    $(SED) -i '228,234 s,^inline void,#if 0\ninline void,g' '$(1)/$(ilmbase_SUBDIR)/IexMath/IexMathFpu.cpp'
+    $(SED) -i '235,241 s,^#if 0,,g' '$(1)/$(ilmbase_SUBDIR)/IexMath/IexMathFpu.cpp'
     echo 'echo $1' > '$(1)/$(ilmbase_SUBDIR)/config.sub'
     cd '$(1)/$(ilmbase_SUBDIR)' && $(SHELL) ./configure \
         --build="`config.guess`" \
