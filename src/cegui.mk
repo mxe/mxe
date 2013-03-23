@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := f0a8616bcb37843ad2f83c88745b9313906cb8e9
 $(PKG)_SUBDIR   := CEGUI-$($(PKG)_VERSION)
 $(PKG)_FILE     := CEGUI-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/crayzedsgui/CEGUI%20Mk-2/$($(PKG)_VERSION)/$($(PKG)_FILE)?download
-$(PKG)_DEPS     := gcc pthreads pcre freeglut freeimage freetype libxml2 expat xerces
+$(PKG)_DEPS     := gcc pcre freeglut freeimage freetype libxml2 expat xerces
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package cegui need to be written.' >&2; echo $(cegui_VERSION)
