@@ -10,6 +10,8 @@ $(PKG)_URL      := http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$($(PKG)_F
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
+    echo 'TODO: Updates for package cfitsio need to be fixed.' >&2;
+    echo $(cfitsio_VERSION)
 endef
 
 define $(PKG)_BUILD
