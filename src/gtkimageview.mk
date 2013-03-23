@@ -13,6 +13,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's,-Werror,,g' $(1)/configure
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
@@ -22,4 +23,9 @@ define $(PKG)_BUILD
         GLIB_MKENUMS='$(PREFIX)/$(TARGET)/bin/glib-mkenums'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtkimageview.exe' \
+        `'$(TARGET)-pkg-config' gtkimageview --cflags --libs`
 endef
