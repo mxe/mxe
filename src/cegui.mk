@@ -34,7 +34,7 @@ define $(PKG)_BUILD
         --disable-irrlicht-renderer \
         --disable-directfb-renderer \
         --enable-null-renderer \
-        --enable-samples \
+        --disable-samples \
         --disable-lua-module \
         --disable-python-module \
         PKG_CONFIG='$(TARGET)-pkg-config' \
@@ -44,4 +44,11 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(SED) -i 's/Cflags:\(.*\)/Cflags: \1 -DCEGUI_STATIC/' '$(1)/cegui/CEGUI.pc'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+
+    '$(TARGET)-g++' \
+        -W -Wall -ansi -pedantic \
+         '$(2).cpp' \
+         `'$(TARGET)-pkg-config' --cflags --libs CEGUI CEGUI-OPENGL glut freetype2 libpcre` -lCEGUIFreeImageImageCodec \
+         `'$(TARGET)-pkg-config' --libs --cflags freeimage` -lCEGUITinyXMLParser -lCEGUIFalagardWRBase \
+         -o '$(PREFIX)/$(TARGET)/bin/test-cegui.exe'
 endef
