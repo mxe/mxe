@@ -10,10 +10,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "http://plib.sourceforge.net/download.html" | \
-    grep -i '<a href=.*tar' | \
-    $(SED) -n 's,.*plib-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep -v 'rc' | \
+    $(WGET) -q -O- "http://sourceforge.net/projects/plib/files/plib/" | \
+    grep 'plib/files/plib' | \
+    $(SED) -n 's,.*plib/\([0-9][^>]*\)/.*,\1,p' | \
     head -1
 endef
 
