@@ -22,10 +22,10 @@ define $(PKG)_BUILD
     cd '$(1).build' && cmake \
       -DWITH_QT=ON \
       -DWITH_OPENGL=ON \
-      -DWITH_GSTREAMER=ON \
-      -DWITH_GTK=ON \
+      -DWITH_GSTREAMER=OFF \
+      -DWITH_GTK=OFF \
       -DWITH_VIDEOINPUT=ON \
-      -DWITH_XINE=ON \
+      -DWITH_XINE=OFF \
       -DBUILD_SHARED_LIBS=OFF \
       -DBUILD_opencv_apps=OFF \
       -DBUILD_DOCS=OFF \
