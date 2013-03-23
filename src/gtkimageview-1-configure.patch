@@ -1,0 +1,14 @@
+This file is part of MXE.
+See index.html for further information.
+
+--- gtkimageview-1.6.4.orig/configure	2009-04-05 22:04:32.000000000 +0200
++++ gtkimageview-1.6.4/configure	2013-03-23 13:59:25.017941993 +0100
+@@ -20740,7 +20740,7 @@
+ ######################################################################
+ ##### Twiddle CFLAGS #################################################
+ ######################################################################
+-CFLAGS="${CFLAGS} -Wall -Werror -std=c99 -Wmissing-prototypes"
++CFLAGS="${CFLAGS} -Wall -Werror -Wno-error=unused-local-typedefs -std=c99 -Wmissing-prototypes"
+ 
+ 
+ ######################################################################

@@ -17,7 +17,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,-Werror,,g' $(1)/configure
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
