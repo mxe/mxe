@@ -10,6 +10,10 @@ $(PKG)_URL      := http://trac.bjourne.webfactional.com/chrome/common/releases/$
 $(PKG)_DEPS     := gcc gtk2
 
 define $(PKG)_UPDATE
+    $(WGET) -q -O- "http://trac.bjourne.webfactional.com/chrome/common/releases/?C=M;O=D" | \
+    grep -i '<a href="gtkimageview.*tar' | \
+    $(SED) -n 's,.*gtkimageview-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
