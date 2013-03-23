@@ -10,8 +10,10 @@ $(PKG)_URL      := http://people.redhat.com/~rjones/portablexdr/files/$($(PKG)_F
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- "http://people.redhat.com/~rjones/portablexdr/files/?C=M;O=D" | \
+    grep -i '<a href=.*tar' | \
+    $(SED) -n 's,.*portablexdr-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
