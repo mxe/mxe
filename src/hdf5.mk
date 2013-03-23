@@ -17,6 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # automake 1.13 needs this directory to exist
+    [ -d '$(1)/m4' ] || mkdir '$(1)/m4'
     cd '$(1)' && autoreconf --force --install && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
