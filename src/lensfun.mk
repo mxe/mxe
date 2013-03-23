@@ -23,6 +23,19 @@ define $(PKG)_BUILD
         --mode=release \
         --vectorization= \
         --staticlibs=YES
-    $(MAKE) -C '$(1)' -j '$(JOBS)' libs bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' libs
+    $(MAKE) -C '$(1)' -j 1 install
+
+    #pkg-config file
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $(PKG)'; \
+     echo 'Requires: glib-2.0'; \
+     echo 'Libs: -l$(PKG) -lstdc++ -lregex';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lensfun.exe' \
+        `'$(TARGET)-pkg-config' lensfun --cflags --libs`
 endef
