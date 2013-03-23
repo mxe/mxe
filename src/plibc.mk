@@ -10,8 +10,10 @@ $(PKG)_URL      := http://sourceforge.net/projects/plibc/files/plibc/$($(PKG)_VE
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package plibc  need to be fixed.' >&2;
-    echo $(plibc_VERSION)
+    $(WGET) -q -O- "http://sourceforge.net/projects/plibc/files/plibc/" | \
+    grep 'plibc/files/plibc' | \
+    $(SED) -n 's,.*plibc/\([0-9][^>]*\)/.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
