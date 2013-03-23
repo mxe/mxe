@@ -48,3 +48,8 @@ define $(PKG)_BUILD
     # install
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef
+
+# float.h issues https://bugzilla.redhat.com/show_bug.cgi?id=843436
+$(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =
+
