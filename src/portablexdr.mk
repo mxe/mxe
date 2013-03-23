@@ -3,7 +3,7 @@
 
 PKG             := portablexdr
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 1fb556185ca68d9ba07ad2be0576b166375a75bb
+$(PKG)_CHECKSUM := 2844eeb384e532e50364133fb42b47dcb140397e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://people.redhat.com/~rjones/portablexdr/files/$($(PKG)_FILE)
