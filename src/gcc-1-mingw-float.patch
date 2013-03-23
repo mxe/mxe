@@ -3,16 +3,26 @@ See index.html for further information.
 
 This patch has been taken from:
 http://gcc.gnu.org/ml/gcc-patches/2010-06/msg00387.html
-http://sourceforge.net/tracker/?func=detail&atid=302435&aid=3011968&group_id=2435
+http://sourceforge.net/p/mingw/bugs/1809
 
 diff -urN a/gcc/ginclude/float.h b/gcc/ginclude/float.h
 --- a/gcc/ginclude/float.h	2009-04-09 17:00:19.000000000 +0200
 +++ b/gcc/ginclude/float.h	2010-06-05 12:03:41.887724045 +0200
-@@ -275,3 +275,7 @@
+@@ -275,3 +275,17 @@
  #endif /* __STDC_WANT_DEC_FP__ */
  
  #endif /* _FLOAT_H___ */
 +
 +#ifdef __MINGW32__
-+#include_next<float.h>
++ /*
++  * the MinGW-supplied header, which is guarded by the
++  * _MINGW_FLOAT_H_ macro, may be found first, thus...
++  */
++#ifndef _MINGW_FLOAT_H_
++ /*
++  * ...when we didn't find the MinGW-supplied header first, we
++  * want to pull it in now; include_next should achieve this
++  */
++# include_next <float.h>
++#endif
 +#endif
