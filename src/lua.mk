@@ -30,8 +30,15 @@ define $(PKG)_BUILD
         INSTALL='$(INSTALL)' \
         install
 
+    #pkg-config file
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $(PKG)'; \
+     echo 'Libs: -l$(PKG)';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lua.exe' \
-        -llua
+        `$(TARGET)-pkg-config --libs lua`
 endef

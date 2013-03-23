@@ -1,0 +1,237 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+diff --git a/cmake/OpenCVFindLCMS.cmake b/cmake/OpenCVFindLCMS.cmake
+--- a/cmake/OpenCVFindLCMS.cmake
++++ b/cmake/OpenCVFindLCMS.cmake
+@@ -0,0 +1,71 @@
++# - Find LCMS
++# Find the LCMS includes and library
++# This module defines
++#  LCMS_INCLUDE_DIR, where to find lcms.h
++#  LCMS_LIBRARIES, the libraries needed to use LCMS.
++#  LCMS_VERSION, The value of LCMS_VERSION defined in lcms.h
++#  LCMS_FOUND, If false, do not try to use LCMS.
++
++
++# Copyright (c) 2008, Adrian Page, <adrian@pagenet.plus.com>
++# Copyright (c) 2009, Cyrille Berger, <cberger@cberger.net>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
++
++
++# use pkg-config to get the directories and then use these values
++# in the FIND_PATH() and FIND_LIBRARY() calls
++if(NOT WIN32)
++   find_package(PkgConfig)
++   pkg_check_modules(PC_LCMS lcms)
++   set(LCMS_DEFINITIONS ${PC_LCMS_CFLAGS_OTHER})
++endif(NOT WIN32)
++
++find_path(LCMS_INCLUDE_DIR lcms.h
++   PATHS
++   ${PC_LCMS_INCLUDEDIR}
++   ${PC_LCMS_INCLUDE_DIRS}
++   PATH_SUFFIXES lcms liblcms
++)
++
++find_library(LCMS_LIBRARIES NAMES lcms liblcms lcms-1 liblcms-1
++   PATHS     
++   ${PC_LCMS_LIBDIR}
++   ${PC_LCMS_LIBRARY_DIRS}
++   PATH_SUFFIXES lcms
++)
++
++if(LCMS_INCLUDE_DIR AND LCMS_LIBRARIES)
++   set(LCMS_FOUND TRUE)
++else(LCMS_INCLUDE_DIR AND LCMS_LIBRARIES)
++   set(LCMS_FOUND FALSE)
++endif(LCMS_INCLUDE_DIR AND LCMS_LIBRARIES)
++
++if(LCMS_FOUND)
++   file(READ ${LCMS_INCLUDE_DIR}/lcms.h LCMS_VERSION_CONTENT)
++   string(REGEX MATCH "#define LCMS_VERSION[ ]*[0-9]*\n" LCMS_VERSION_MATCH ${LCMS_VERSION_CONTENT})
++   if(LCMS_VERSION_MATCH)
++      string(REGEX REPLACE "#define LCMS_VERSION[ ]*([0-9]*)\n" "\\1" LCMS_VERSION ${LCMS_VERSION_MATCH})
++      if(NOT LCMS_FIND_QUIETLY)
++         string(SUBSTRING ${LCMS_VERSION} 0 1 LCMS_MAJOR_VERSION)
++         string(SUBSTRING ${LCMS_VERSION} 1 2 LCMS_MINOR_VERSION)
++         message(STATUS "Found lcms version ${LCMS_MAJOR_VERSION}.${LCMS_MINOR_VERSION}, ${LCMS_LIBRARIES}")
++      endif(NOT LCMS_FIND_QUIETLY)
++   else(LCMS_VERSION_MATCH)
++      if(NOT LCMS_FIND_QUIETLY)
++         message(STATUS "Found lcms but failed to find version ${LCMS_LIBRARIES}")
++      endif(NOT LCMS_FIND_QUIETLY)
++      set(LCMS_VERSION NOTFOUND)
++   endif(LCMS_VERSION_MATCH)
++else(LCMS_FOUND)
++   if(NOT LCMS_FIND_QUIETLY)
++      if(LCMS_FIND_REQUIRED)
++         message(FATAL_ERROR "Required package lcms NOT found")
++      else(LCMS_FIND_REQUIRED)
++         message(STATUS "lcms NOT found")
++      endif(LCMS_FIND_REQUIRED)
++   endif(NOT LCMS_FIND_QUIETLY)
++endif(LCMS_FOUND)
++
++mark_as_advanced(LCMS_INCLUDE_DIR LCMS_LIBRARIES LCMS_VERSION)
+diff --git a/cmake/OpenCVFindLZMA.cmake b/cmake/OpenCVFindLZMA.cmake
+--- a/cmake/OpenCVFindLZMA.cmake
++++ b/cmake/OpenCVFindLZMA.cmake
+@@ -0,0 +1,48 @@
++# - Find lzma and lzmadec
++# Find the native LZMA includes and library
++#
++#  LZMA_INCLUDE_DIR    - where to find lzma.h, etc.
++#  LZMA_LIBRARIES      - List of libraries when using liblzma.
++#  LZMA_FOUND          - True if liblzma found.
++#  LZMADEC_INCLUDE_DIR - where to find lzmadec.h, etc.
++#  LZMADEC_LIBRARIES   - List of libraries when using liblzmadec.
++#  LZMADEC_FOUND       - True if liblzmadec found.
++
++IF (LZMA_INCLUDE_DIR)
++  # Already in cache, be silent
++  SET(LZMA_FIND_QUIETLY TRUE)
++ENDIF (LZMA_INCLUDE_DIR)
++
++FIND_PATH(LZMA_INCLUDE_DIR lzma.h)
++FIND_LIBRARY(LZMA_LIBRARY NAMES lzma liblzma)
++
++# handle the QUIETLY and REQUIRED arguments and set LZMA_FOUND to TRUE if 
++# all listed variables are TRUE
++INCLUDE(FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(LZMA DEFAULT_MSG LZMA_LIBRARY LZMA_INCLUDE_DIR)
++
++IF(LZMA_FOUND)
++  SET( LZMA_LIBRARIES ${LZMA_LIBRARY} )
++ELSE(LZMA_FOUND)
++  SET( LZMA_LIBRARIES )
++
++  IF (LZMADEC_INCLUDE_DIR)
++    # Already in cache, be silent
++    SET(LZMADEC_FIND_QUIETLY TRUE)
++  ENDIF (LZMADEC_INCLUDE_DIR)
++
++  FIND_PATH(LZMADEC_INCLUDE_DIR lzmadec.h)
++  FIND_LIBRARY(LZMADEC_LIBRARY NAMES lzmadec )
++
++  # handle the QUIETLY and REQUIRED arguments and set LZMADEC_FOUND to TRUE if 
++  # all listed variables are TRUE
++  INCLUDE(FindPackageHandleStandardArgs)
++  FIND_PACKAGE_HANDLE_STANDARD_ARGS(LZMADEC DEFAULT_MSG LZMADEC_LIBRARY
++    LZMADEC_INCLUDE_DIR)
++
++  IF(LZMADEC_FOUND)
++    SET( LZMADEC_LIBRARIES ${LZMADEC_LIBRARY} )
++  ELSE(LZMADEC_FOUND)
++    SET( LZMADEC_LIBRARIES )
++  ENDIF(LZMADEC_FOUND)
++ENDIF(LZMA_FOUND)
+diff --git a/cmake/OpenCVFindLibsGrfmt.cmake b/cmake/OpenCVFindLibsGrfmt.cmake
+--- a/cmake/OpenCVFindLibsGrfmt.cmake
++++ b/cmake/OpenCVFindLibsGrfmt.cmake
+@@ -2,6 +2,11 @@
+ #  Detect 3rd-party image IO libraries
+ # ----------------------------------------------------------------------------
+ 
++# --- lzma (required by apps, examples, perf, tests) ---
++if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
++  include(cmake/OpenCVFindLZMA.cmake)
++endif()
++
+ # --- zlib (required) ---
+ if(BUILD_ZLIB)
+   ocv_clear_vars(ZLIB_FOUND)
+@@ -26,6 +31,11 @@
+   ocv_parse_header2(ZLIB "${${ZLIB_LIBRARY}_SOURCE_DIR}/zlib.h" ZLIB_VERSION)
+ endif()
+ 
++# --- lcms (required by apps, examples, perf, tests) ---
++if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
++  include(cmake/OpenCVFindLCMS.cmake)
++endif()
++
+ # --- libtiff (optional, should be searched after zlib) ---
+ if(WITH_TIFF)
+   if(BUILD_TIFF)
+@@ -114,6 +124,7 @@
+   if(BUILD_PNG)
+     ocv_clear_vars(PNG_FOUND)
+   else()
++    include(CheckIncludeFile)
+     include(FindPNG)
+     if(PNG_FOUND)
+       check_include_file("${PNG_PNG_INCLUDE_DIR}/png.h"        HAVE_PNG_H)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,7 +38,7 @@
+   #Android: set output folder to ${CMAKE_BINARY_DIR}
+   set( LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_BINARY_DIR} CACHE PATH "root for library output, set this to change where android libs are compiled to" )
+   # any crosscompiling
+-  set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
++  #set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
+ endif(NOT CMAKE_TOOLCHAIN_FILE)
+ 
+ # --------------------------------------------------------------
+diff --git a/modules/core/CMakeLists.txt b/modules/core/CMakeLists.txt
+--- a/modules/core/CMakeLists.txt
++++ b/modules/core/CMakeLists.txt
+@@ -1,6 +1,12 @@
+ set(the_description "The Core Functionality")
+-ocv_add_module(core ${ZLIB_LIBRARIES})
+-ocv_module_include_directories(${ZLIB_INCLUDE_DIR})
++
++if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
++  ocv_add_module(core ${ZLIB_LIBRARIES} ${LZMA_LIBRARIES} ${LCMS_LIBRARIES})
++  ocv_module_include_directories(${ZLIB_INCLUDE_DIR} ${LZMA_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
++else()
++  ocv_add_module(core ${ZLIB_LIBRARIES})
++  ocv_module_include_directories(${ZLIB_INCLUDE_DIR})
++endif()
+ 
+ if(HAVE_CUDA)
+   ocv_source_group("Src\\Cuda" GLOB "src/cuda/*.cu")
+diff --git a/modules/highgui/CMakeLists.txt b/modules/highgui/CMakeLists.txt
+--- a/modules/highgui/CMakeLists.txt
++++ b/modules/highgui/CMakeLists.txt
+@@ -10,8 +10,13 @@
+ ocv_clear_vars(GRFMT_LIBS)
+ 
+ if(WITH_PNG OR WITH_TIFF OR WITH_OPENEXR)
+-  ocv_include_directories(${ZLIB_INCLUDE_DIR})
+-  list(APPEND GRFMT_LIBS ${ZLIB_LIBRARIES})
++  if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
++    ocv_include_directories(${ZLIB_INCLUDE_DIR} ${LZMA_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
++    list(APPEND GRFMT_LIBS ${ZLIB_LIBRARIES} ${LZMA_LIBRARIES} ${LCMS_LIBRARIES})
++  else()
++    ocv_include_directories(${ZLIB_INCLUDE_DIR})
++    list(APPEND GRFMT_LIBS ${ZLIB_LIBRARIES})
++  endif()
+ endif()
+ 
+ if(WITH_JPEG)
+@@ -262,7 +267,7 @@
+ ocv_add_precompiled_headers(${the_module})
+ ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated-declarations)
+ 
+-if(WIN32 AND WITH_FFMPEG)
++if(WIN32 AND WITH_FFMPEG AND BUILD_SHARED_LIBS)
+   #copy ffmpeg dll to the output folder
+   if(MSVC64 OR MINGW64)
+     set(FFMPEG_SUFFIX _64)
+diff --git a/cmake/OpenCVGenConfig.cmake b/cmake/OpenCVGenConfig.cmake
+--- a/cmake/OpenCVGenConfig.cmake
++++ b/cmake/OpenCVGenConfig.cmake
+@@ -177,6 +177,6 @@
+   exec_program(mkdir ARGS "-p \"${CMAKE_BINARY_DIR}/win-install/\"" OUTPUT_VARIABLE RET_VAL)
+   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" IMMEDIATE @ONLY)
+   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig-version.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" IMMEDIATE @ONLY)
+-  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
+-  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
++  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
++  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
+ endif()
