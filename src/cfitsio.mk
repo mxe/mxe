@@ -15,7 +15,13 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        --prefix='$(PREFIX)/$(TARGET)' \
+        FC='$(TARGET)-gfortran'
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j 1 install
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-cfitsio.exe' \
+        `'$(TARGET)-pkg-config' cfitsio --cflags --libs`
 endef
