@@ -10,8 +10,10 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/lensfun.berlios/$($(PKG)
 $(PKG)_DEPS     := gcc libpng glib
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package lensfun need to be fixed.' >&2;
-    echo $(lensfun_VERSION)
+    $(WGET) -q -O- "http://developer.berlios.de/project/showfiles.php?group_id=9034" | \
+    grep -i 'lensfun.*tar' | \
+    $(SED) -n 's,.*lensfun-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

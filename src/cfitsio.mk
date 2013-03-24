@@ -10,8 +10,10 @@ $(PKG)_URL      := http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$($(PKG)_F
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package cfitsio need to be fixed.' >&2;
-    echo $(cfitsio_VERSION)
+    $(WGET) -q -O- "http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/?C=M;O=D" | \
+    grep -i '<a href="cfitsio.*tar' | \
+    $(SED) -n 's,.*cfitsio\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
