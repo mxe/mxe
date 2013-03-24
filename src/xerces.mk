@@ -8,7 +8,7 @@ $(PKG)_SUBDIR   := xerces-c-$($(PKG)_VERSION)
 $(PKG)_FILE     := xerces-c-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://apache.linux-mirror.org/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv curl
+$(PKG)_DEPS     := gcc libiconv curl pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.apache.org/dist/xerces/c/3/sources/?C=M;O=D' | \
@@ -25,7 +25,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-libtool-lock \
         --disable-pretty-make \
-        --disable-threads \
+        --enable-threads \
         --enable-network \
         --enable-netaccessor-curl \
         --disable-netaccessor-socket \

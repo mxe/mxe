@@ -10,8 +10,10 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc zlib bzip2 pthreads levmar libpng
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- "http://sourceforge.net/projects/teem/files/teem/" | \
+    grep 'teem/files/teem' | \
+    $(SED) -n 's,.*teem/\([0-9][^>]*\)/.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

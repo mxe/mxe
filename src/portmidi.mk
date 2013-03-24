@@ -10,8 +10,10 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/portmedia/$(PKG)/$($(PKG
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package portmidi need to be fixed.' >&2;
-    echo $(portmidi_VERSION)
+    $(WGET) -q -O- "http://sourceforge.net/projects/portmedia/files/portmidi/" | \
+    grep -i 'portmedia/files/portmidi' | \
+    $(SED) -n 's,.*portmidi/\([0-9]*\)/.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
