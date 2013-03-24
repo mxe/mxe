@@ -34,6 +34,7 @@ define $(PKG)_CONFIGURE
         --target='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)' \
+        --with-sysroot='$(PREFIX)' \
         --libdir='$(PREFIX)/lib' \
         --enable-languages='c,c++,objc,fortran' \
         --enable-version-specific-runtime-libs \
@@ -112,7 +113,7 @@ define $(PKG)_BUILD_mingw-w64
     # build standalone gcc
     $($(PKG)_PRE_CONFIGURE) \
     $($(PKG)_CONFIGURE) \
-        --enable-sjlj-exceptions
+        --enable-languages='c,c++,objc,obj-c++,fortran'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' all-gcc
     $(MAKE) -C '$(1).build' -j 1 install-gcc
 
@@ -121,7 +122,8 @@ define $(PKG)_BUILD_mingw-w64
     mkdir '$(1).crt-build'
     cd '$(1).crt-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
         --host='$(TARGET)' \
-        --prefix='$(PREFIX)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --with-sysroot='$(PREFIX)' \
         mxe-config-opts
     $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
     $(MAKE) -C '$(1).crt-build' -j 1 install
