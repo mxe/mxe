@@ -13,12 +13,12 @@ diff -urN a/CMakeLists.txt b/CMakeLists.txt
  
  
  if(WIN32)
-@@ -268,7 +268,7 @@
- #set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
- 
+@@ -279,7 +279,7 @@
+   set(ARMA_MINOR_ALT ${ARMA_MINOR})
+ endif()
  
 -add_library( armadillo SHARED src/wrap_libs )
 +add_library( armadillo STATIC src/wrap_libs )
  target_link_libraries( armadillo ${ARMA_LIBS} )
+ set_target_properties(armadillo PROPERTIES VERSION ${ARMA_MAJOR}.${ARMA_MINOR_ALT}.${ARMA_PATCH} SOVERSION ${ARMA_MAJOR})
  
- set_target_properties(armadillo PROPERTIES VERSION ${ARMA_MAJOR}.${ARMA_MINOR}.${ARMA_PATCH} SOVERSION 3)
