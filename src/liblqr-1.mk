@@ -10,6 +10,9 @@ $(PKG)_URL      := http://liblqr.wdfiles.com/local--files/en:download-page/$($(P
 $(PKG)_DEPS     := gcc glib
 
 define $(PKG)_UPDATE
+    $(WGET) -q -O- 'http://liblqr.wikidot.com/en:download-page' | \
+    $(SED) -n 's,.*liblqr-1-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
