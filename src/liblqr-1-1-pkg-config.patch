@@ -1,0 +1,14 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -u liblqr-1-0.4.2.orig/lqr-1.pc.in liblqr-1-0.4.2/lqr-1.pc.in
+--- liblqr-1-0.4.2.orig/lqr-1.pc.in	2008-04-06 23:05:19.000000000 +0200
++++ liblqr-1-0.4.2/lqr-1.pc.in	2013-03-25 03:40:34.092174135 +0100
+@@ -7,5 +7,5 @@
+ Description: LiquidRescale seam-carving library
+ Requires: glib-2.0
+ Version: @PACKAGE_VERSION@
+-Libs: -l@LIBRARY_SNAME@
++Libs: -l@LIBRARY_SNAME@ -lglib-2.0
+ Cflags: -I${includedir}/@LIBRARY_SNAME@
+Common subdirectories: liblqr-1-0.4.2.orig/man and liblqr-1-0.4.2/man
