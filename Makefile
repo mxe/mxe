@@ -236,7 +236,7 @@ define UPDATE
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
                     || { $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$($(1)_VERSION)/' '$(TOP_DIR)/index.html'; \
                          exit 1; })),
-        $(error Unable to update version number of package $(1)))
+        $(info Unable to update version number of package $(1)))
 
 endef
 update:
