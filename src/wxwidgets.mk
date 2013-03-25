@@ -11,7 +11,7 @@ $(PKG)_DEPS     := gcc libiconv libpng jpeg tiff sdl zlib expat
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/wxwindows/files/' | \
-    $(SED) -n 's,.*/\([0-9][^"9]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 
