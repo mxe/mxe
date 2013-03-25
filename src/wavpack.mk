@@ -13,7 +13,7 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.wavpack.com/downloads.html' | \
     grep '<a href="wavpack-.*\.tar\.bz2">' | \
     head -n 1 | \
-    $(SED) -e 's/^.*<a href="wavpack-\([0-9.]*\)\.tar\.bz2">.*$/\1/'
+    $(SED) -e 's/^.*<a href="wavpack-\([0-9.]*\)\.tar\.bz2">.*$$/\1/'
 endef
 
 define $(PKG)_BUILD

@@ -11,7 +11,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/$(PKG)/files/$(PKG)/' | \
-    $(SED) -n 's,^.*twolame/\([0-9][^"]*\)/".*$,\1,p' | \
+    $(SED) -n 's,^.*twolame/\([0-9][^"]*\)/".*$$,\1,p' | \
     head -n 1
 endef
 
