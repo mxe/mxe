@@ -9,7 +9,7 @@ $(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1//$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext nettle pcre zlib
 
 define $(PKG)_UPDATE
-    $(WGET) wget -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/ | \
+    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/ | \
     $(SED) -n 's,.*gnutls-\([1-9]\.[0-9].[0-9]\)\..*,\1,p' | \
     tail -1
 endef
