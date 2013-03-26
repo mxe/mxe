@@ -10,7 +10,8 @@ $(PKG)_DEPS     := gcc gettext nettle pcre zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/ | \
-    $(SED) -n 's,.*gnutls-\([1-9]\.[0-9].[0-9]\)\..*,\1,p' | \
+    $(SED) -n 's,.*gnutls-\([1-9]\+\.[0-9]\+.[0-9]\+\)\..*,\1,p' | \
+    $(SORT) -V | \
     tail -1
 endef
 
