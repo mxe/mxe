@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 61d3cbf049468b6a714acc5a6f451945c9d3f0a8
 $(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)
 $(PKG)_FILE     := stimfit-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://stimfit.googlecode.com/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libbiosig wxwidgets hdf5 boost fftw
+$(PKG)_DEPS     := gcc biosig wxwidgets hdf5 boost fftw
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://code.google.com/p/stimfit/downloads/list' | \

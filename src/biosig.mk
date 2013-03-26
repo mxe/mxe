@@ -1,9 +1,9 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := libbiosig
+PKG             := biosig
 $(PKG)_IGNORE   := 
-$(PKG)_CHECKSUM := f44cd207201bb7ae6afbf647812cacc4f1bc1814
+$(PKG)_CHECKSUM := a9dcbec64a85004899d0407e645f3346458ff1bc
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
