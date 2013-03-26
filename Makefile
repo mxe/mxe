@@ -230,14 +230,15 @@ define UPDATE
     $(if $(2),
         $(if $(filter $(2),$($(1)_IGNORE)),
             $(info IGNORED  $(1)  $(2)),
-            $(if $(filter $(2),$($(1)_VERSION)),
-                $(info .        $(1)  $(2)),
+            $(if $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1)),
+                $(info .        $(1)  $($(1)_VERSION)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
                 $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$(2)/' '$(TOP_DIR)/index.html'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
                     || { $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$($(1)_VERSION)/' '$(TOP_DIR)/index.html'; \
                          exit 1; })),
-        $(info Unable to update version number of package $(1)))
+        $(info Unable to update version number of package $(1) \
+            $(newline)$(newline)$($(1)_UPDATE)$(newline)))
 
 endef
 update:
