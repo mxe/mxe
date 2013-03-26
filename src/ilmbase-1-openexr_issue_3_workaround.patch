@@ -1,0 +1,24 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains workaround patch for openexr issue #3,
+see https://github.com/openexr/openexr/issues/3
+
+diff -u a/IexMath/IexMathFpu.cpp b/IexMath/IexMathFpu.cpp
+--- a/IexMath/IexMathFpu.cpp
++++ b/IexMath/IexMathFpu.cpp
+@@ -228,12 +228,14 @@
+ const uint16_t cwRestoreMask = ~((3 << 10) | (3 << 8));
+ const uint16_t cwRestoreVal = (0 << 10) | (3 << 8);
+ 
++#ifndef unix
+ inline void
+ restoreControlRegs (const ucontext_t & ucon, bool clearExceptions)
+ {
+     setCw ((ucon.uc_mcontext.fpregs->cwd & cwRestoreMask) | cwRestoreVal);
+     setMxcsr (ucon.uc_mcontext.fpregs->mxcsr, clearExceptions);
+ }
++#endif
+ 
+ #if 0
+ 
