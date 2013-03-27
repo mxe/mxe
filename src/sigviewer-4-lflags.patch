@@ -1,0 +1,13 @@
+Index: src/src.pro
+===================================================================
+--- a/src/src.pro	(Revision 557)
++++ b/src/src.pro	(Arbeitskopie)
+@@ -33,7 +33,7 @@
+ INCLUDEPATH += $$_PRO_FILE_PWD_/../extern/include \
+                $$_PRO_FILE_PWD_/.
+ LIBS += -L$$_PRO_FILE_PWD_/../extern/lib \
+-    -lbiosig# \
++    -lbiosig -lcholmod -lz -liberty -lssp \
+     #-lGDF
+ 
+ macx:INCLUDEPATH += /opt/local/include
