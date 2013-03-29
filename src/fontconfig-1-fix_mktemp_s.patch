@@ -1,22 +1,30 @@
 This file is part of MXE.
 See index.html for further information.
 
-diff -ur fontconfig-2.10.91.orig/configure.ac fontconfig-2.10.91/configure.ac
---- fontconfig-2.10.91.orig/configure.ac	2013-01-10 19:57:12.000000000 +1100
-+++ fontconfig-2.10.91/configure.ac	2013-01-13 14:40:45.000000000 +1100
-@@ -141,7 +141,7 @@
+From 09b8eb942f77c1073a5f5c1ea0e6193487418f59 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 29 Mar 2013 10:21:29 +0100
+Subject: [PATCH] fix mktemp_s
+
+
+diff --git a/configure.ac b/configure.ac
+index 7919372..6a8822b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -145,7 +145,7 @@ AC_TYPE_PID_T
  # Checks for library functions.
  AC_FUNC_VPRINTF
  AC_FUNC_MMAP
--AC_CHECK_FUNCS([geteuid getuid link memmove memset mkstemp mkostemp _mktemp_s strchr strrchr strtol getopt getopt_long sysconf ftruncate chsize rand random lrand48 random_r rand_r regcomp regerror regexec regfree fstatvfs fstatfs lstat])
-+AC_CHECK_FUNCS([geteuid getuid link memmove memset mkstemp mkostemp _mktemp strchr strrchr strtol getopt getopt_long sysconf ftruncate chsize rand random lrand48 random_r rand_r regcomp regerror regexec regfree fstatvfs fstatfs lstat])
+-AC_CHECK_FUNCS([link mkstemp mkostemp _mktemp_s getopt getopt_long getprogname getexecname rand random lrand48 random_r rand_r regcomp regerror regexec regfree fstatvfs fstatfs lstat])
++AC_CHECK_FUNCS([link mkstemp mkostemp _mktemp getopt getopt_long getprogname getexecname rand random lrand48 random_r rand_r regcomp regerror regexec regfree fstatvfs fstatfs lstat])
  
  dnl AC_CHECK_FUNCS doesn't check for header files.
  dnl posix_fadvise() may be not available in older libc.
-diff -ur fontconfig-2.10.91.orig/src/fccompat.c fontconfig-2.10.91/src/fccompat.c
---- fontconfig-2.10.91.orig/src/fccompat.c	2013-01-08 18:21:19.000000000 +1100
-+++ fontconfig-2.10.91/src/fccompat.c	2013-01-13 14:41:13.000000000 +1100
-@@ -95,8 +95,8 @@
+diff --git a/src/fccompat.c b/src/fccompat.c
+index a217160..fb383d4 100644
+--- a/src/fccompat.c
++++ b/src/fccompat.c
+@@ -156,8 +156,8 @@ FcMakeTempfile (char *template)
  	fcntl(fd, F_SETFD, fcntl(fd, F_GETFD) | FD_CLOEXEC);
      }
  #  endif
@@ -26,4 +34,7 @@ diff -ur fontconfig-2.10.91.orig/src/fccompat.c fontconfig-2.10.91/src/fccompat.
 +   if (_mktemp(template) != 0)
         return -1;
     fd = FcOpen(template, O_RDWR | O_EXCL | O_CREAT, 0600);
- #else
+ #endif
+-- 
+1.8.1.4
+
