@@ -3,10 +3,10 @@
 
 PKG             := picomodel
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := dda03a87ec16ce7fa08be8342490e26bd25c101b
-$(PKG)_SUBDIR   := picomodel-$($(PKG)_VERSION)
-$(PKG)_FILE     := picomodel-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://picomodel.googlecode.com/files/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := b82b16ee69edaefe751b678b577b90c1971ce4db
+$(PKG)_SUBDIR   := ufoai-$(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/ufoai/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(1)' && ./autogen.sh && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
