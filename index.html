@@ -635,7 +635,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://sourceware.org/libffi/">libffi</td>
+        <td><a href="http://sourceware.org/libffi/">libffi</a></td>
         <td>≥ 3.0.0</td>
     </tr>
     <tr>
@@ -787,9 +787,8 @@ aptitude -t squeeze-backports install cmake yasm</pre>
                   flex gettext git-core glib2 gsed intltool libffi \
                   libtool openssl p5-xml-parser pkgconfig scons \
                   wget xz yasm</pre>
-    <p>Use the llvm based gcc:
+    <p>Use the llvm based gcc:</p>
     <pre>sudo port select gcc llvm-gcc42</pre>
-    </p>
     <p>
     Mac OS X versions ≤ 10.6 are no longer supported.
     </p>
@@ -1952,7 +1951,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     <tr>
         <td id="protobuf-package">protobuf</td>
         <td id="protobuf-version">2.4.1</td>
-        <td id="protobuf-website"><a href="http://code.google.com/p/protobuf"/>protobuf</a></td>
+        <td id="protobuf-website"><a href="http://code.google.com/p/protobuf/">protobuf</a></td>
     </tr>
     <tr>
         <td id="pthreads-package">pthreads</td>
@@ -2432,10 +2431,12 @@ https://...</pre>
         You could also try to provide a <code>$(PKG)_UPDATE</code> section.
         However, that requires some experience and "feeling" for it.
         So it is perfectly okay if you leave a placeholder:
+        </p>
         <pre>define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
+    echo 'TODO: write update script for $(PKG).' &gt;&amp;2;
     echo $($(PKG)_VERSION)
 endef</pre>
+        <p>
         We'll fill that in for you.
         It's a funny exercise.
         </p>
