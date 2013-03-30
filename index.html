@@ -615,7 +615,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td>≥ 1.7</td>
     </tr>
     <tr>
-        <td><a href="http://www.gnu.org/s/gettext/">GNU Gettext</a></td>
+        <td><a href="http://www.gnu.org/software/coreutils/">GNU Coreutils</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.gnu.org/software/gettext/">GNU Gettext</a></td>
         <td></td>
     </tr>
     <tr>
@@ -635,7 +639,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://sourceware.org/libffi/">libffi</td>
+        <td><a href="http://sourceware.org/libffi/">libffi</a></td>
         <td>≥ 3.0.0</td>
     </tr>
     <tr>
@@ -787,9 +791,8 @@ aptitude -t squeeze-backports install cmake yasm</pre>
                   flex gettext git-core glib2 gsed intltool libffi \
                   libtool openssl p5-xml-parser pkgconfig scons \
                   wget xz yasm</pre>
-    <p>Use the llvm based gcc:
+    <p>Use the llvm based gcc:</p>
     <pre>sudo port select gcc llvm-gcc42</pre>
-    </p>
     <p>
     Mac OS X versions ≤ 10.6 are no longer supported.
     </p>
@@ -985,7 +988,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="binutils-package">binutils</td>
-        <td id="binutils-version">2.23.2</td>
+        <td id="binutils-version">2.23.2</td> <!-- bfd and libiberty use the same source, set them to the same version! -->
         <td id="binutils-website"><a href="http://www.gnu.org/software/binutils/">GNU Binutils</a></td>
     </tr>
     <tr>
@@ -1155,7 +1158,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="gcc-package">gcc</td>
-        <td id="gcc-version">4.8.0</td>
+        <td id="gcc-version">4.8.0</td> <!-- libgomp uses the same source, set it to the same version! -->
         <td id="gcc-website"><a href="http://gcc.gnu.org/">GCC</a></td>
     </tr>
     <tr>
@@ -1225,7 +1228,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="gmp-package">gmp</td>
-        <td id="gmp-version">5.1.1</td>
+        <td id="gmp-version">5.1.1</td> <!-- gcc-gmp uses the same source, set it to the same version! -->
         <td id="gmp-website"><a href="http://www.gmplib.org/">GMP</a></td>
     </tr>
     <tr>
@@ -1700,7 +1703,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="mpfr-package">mpfr</td>
-        <td id="mpfr-version">3.1.2</td>
+        <td id="mpfr-version">3.1.2</td> <!-- gcc-mpfr uses the same source, set it to the same version! -->
         <td id="mpfr-website"><a href="http://www.mpfr.org/">mpfr</a></td>
     </tr>
     <tr>
@@ -1952,7 +1955,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     <tr>
         <td id="protobuf-package">protobuf</td>
         <td id="protobuf-version">2.4.1</td>
-        <td id="protobuf-website"><a href="http://code.google.com/p/protobuf"/>protobuf</a></td>
+        <td id="protobuf-website"><a href="http://code.google.com/p/protobuf/">protobuf</a></td>
     </tr>
     <tr>
         <td id="pthreads-package">pthreads</td>
@@ -2111,7 +2114,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="sqlite-package">sqlite</td>
-        <td id="sqlite-version">3071600</td>
+        <td id="sqlite-version">3071601</td>
         <td id="sqlite-website"><a href="http://www.sqlite.org/">SQLite</a></td>
     </tr>
     <tr>
@@ -2432,10 +2435,12 @@ https://...</pre>
         You could also try to provide a <code>$(PKG)_UPDATE</code> section.
         However, that requires some experience and "feeling" for it.
         So it is perfectly okay if you leave a placeholder:
+        </p>
         <pre>define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
+    echo 'TODO: write update script for $(PKG).' &gt;&amp;2;
     echo $($(PKG)_VERSION)
 endef</pre>
+        <p>
         We'll fill that in for you.
         It's a funny exercise.
         </p>
