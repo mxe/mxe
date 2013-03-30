@@ -1,14 +1,38 @@
 This file is part of MXE.
 See index.html for further information.
 
-diff -u liblqr-1-0.4.2.orig/lqr-1.pc.in liblqr-1-0.4.2/lqr-1.pc.in
---- liblqr-1-0.4.2.orig/lqr-1.pc.in	2008-04-06 23:05:19.000000000 +0200
-+++ liblqr-1-0.4.2/lqr-1.pc.in	2013-03-25 03:40:34.092174135 +0100
-@@ -7,5 +7,5 @@
- Description: LiquidRescale seam-carving library
+Contains ad hoc patches for cross building.
+
+From 359e279bcaa185972ff82fd4e7469bb71c3a6b93 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 30 Mar 2013 17:07:15 +1100
+Subject: [PATCH] add extra cflags for static build in pkg-config file
+
+
+diff --git a/configure.ac b/configure.ac
+index eaaa3ae..9b761cc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -141,7 +141,8 @@ AC_ARG_ENABLE([declspec],
+ 	  )],
+      [declspec=true])
+ AS_IF([test "x$declspec" = "xfalse"],
+-      [AC_DEFINE([LQR_DISABLE_DECLSPEC],[],[Disable __declspec directives])],
++      [AC_DEFINE([LQR_DISABLE_DECLSPEC],[],[Disable __declspec directives])]
++      [AC_SUBST(EXTRA_CFLAGS,-DLQR_DISABLE_DECLSPEC)],
+       [:]
+       )
+ 
+diff --git a/lqr-1.pc.in b/lqr-1.pc.in
+index 5ced291..3babc99 100644
+--- a/lqr-1.pc.in
++++ b/lqr-1.pc.in
+@@ -8,4 +8,4 @@ Description: LiquidRescale seam-carving library
  Requires: glib-2.0
  Version: @PACKAGE_VERSION@
--Libs: -l@LIBRARY_SNAME@
-+Libs: -l@LIBRARY_SNAME@ -lglib-2.0
- Cflags: -I${includedir}/@LIBRARY_SNAME@
-Common subdirectories: liblqr-1-0.4.2.orig/man and liblqr-1-0.4.2/man
+ Libs: -l@LIBRARY_SNAME@
+-Cflags: -I${includedir}/@LIBRARY_SNAME@
++Cflags: -I${includedir}/@LIBRARY_SNAME@ @EXTRA_CFLAGS@
+-- 
+1.8.0.3
+
