@@ -231,7 +231,9 @@ define UPDATE
         $(if $(filter $(2),$($(1)_IGNORE)),
             $(info IGNORED  $(1)  $(2)),
             $(if $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1)),
-                $(info .        $(1)  $($(1)_VERSION)),
+                $(if $(filter $(2),$($(1)_VERSION)),
+                    $(info .        $(1)  $(2)),
+                    $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
                 $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$(2)/' '$(TOP_DIR)/index.html'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
