@@ -7,16 +7,17 @@ includes the MemoryBarrier() macro.
 diff -ur harfbuzz-0.9.14.orig/src/hb-atomic-private.hh harfbuzz-0.9.14/src/hb-atomic-private.hh
 --- harfbuzz-0.9.14.orig/src/hb-atomic-private.hh	2013-03-19 12:04:53.000000000 +0100
 +++ harfbuzz-0.9.14/src/hb-atomic-private.hh	2013-03-27 05:32:38.407335037 +0100
-@@ -44,6 +44,12 @@
+@@ -44,6 +44,14 @@
  
  #elif !defined(HB_NO_MT) && (defined(_WIN32) || defined(__CYGWIN__))
  
++#ifndef __MINGW64_VERSION_MAJOR
 +static inline void MemoryBarrier(void)
 +{
 +  long Barrier = 0;
 +  __asm__ __volatile__ ("xchgl %%eax,%0 " : "=r" (Barrier));
 +}
++#endif
 +
  #define WIN32_LEAN_AND_MEAN
  #include <windows.h>
- 
