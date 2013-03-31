@@ -1,90 +1,42 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 81a36bff51494db29ed5dfc15152d16c6f34189c Mon Sep 17 00:00:00 2001
+From 9af5a5cc2769f717f8817fd741fabb7b9b1a7434 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
-Subject: [PATCH 1/5] Revert "make dist will also make lzip compressed
- tarball"
+Subject: [PATCH 1/3] Revert "make dist will also make lzip compressed tarball"
 
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
 
 diff --git a/configure.ac b/configure.ac
-index 03f937d..179fadf 100644
+index bab5c1b..d3305d4 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.9], [bug-gnutls@gnu.org])
- AC_CONFIG_AUX_DIR([build-aux])
+@@ -26,7 +26,7 @@ AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
+ AC_CANONICAL_HOST
  
--AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz dist-lzip -Wall -Werror -Wno-override])
-+AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
- m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
- AC_CONFIG_HEADERS([config.h])
- 
--- 
-1.7.10.4
-
-
-From c981e29d30cdcbe9d96ff9bce2eaf9ba1d1d0d13 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 6 Jun 2012 09:57:24 +0200
-Subject: [PATCH 2/5] AM_PROG_AR for automake 1.12 compatibility
-
-Taken from
-http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
-
-diff --git a/configure.ac b/configure.ac
-index 179fadf..4fce4e4 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -37,6 +37,7 @@ dnl Checks for programs.
- AC_PROG_CC
- AM_PROG_AS
- AC_PROG_CXX
-+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
- gl_EARLY
- 
- # For includes/gnutls/gnutls.h.in.
--- 
-1.7.10.4
-
-
-From ae33d9073ef0e92d8174aa3e76186be09e047bb7 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 16 Aug 2012 11:13:47 +0200
-Subject: [PATCH 3/5] allow automake warnings not to be errors
-
-
-diff --git a/configure.ac b/configure.ac
-index 4fce4e4..ab69f04 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.9], [bug-gnutls@gnu.org])
- AC_CONFIG_AUX_DIR([build-aux])
- AC_CONFIG_MACRO_DIR([m4])
- 
--AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Werror -Wno-override])
+-AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz dist-lzip -Wall -Wno-override])
 +AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Wno-override])
  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
  AC_CONFIG_HEADERS([config.h])
  
 -- 
-1.7.10.4
+1.8.1.4
 
 
-From b7f781c39f0e2ae5bff43f04b84c1684ddbb6203 Mon Sep 17 00:00:00 2001
+From a315adaf266e4392620994f8a39d2b294580314e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 4 Feb 2013 16:11:12 +0100
-Subject: [PATCH 4/5] add missing private lib to pc file
+Subject: [PATCH 2/3] add missing private lib to pc file
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index 5e2ae11..1b9952a 100644
+index 2e610aa..3b68a23 100644
 --- a/lib/gnutls.pc.in
 +++ b/lib/gnutls.pc.in
 @@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
- URL: http://www.gnu.org/software/gnutls/
+ URL: http://www.gnutls.org/
  Version: @VERSION@
  Libs: -L${libdir} -lgnutls
 -Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @LIB_CLOCK_GETTIME@
@@ -92,22 +44,22 @@ index 5e2ae11..1b9952a 100644
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
 -- 
-1.7.10.4
+1.8.1.4
 
 
-From 6a9d0070cbd203a9abfd662120498c900cc06c65 Mon Sep 17 00:00:00 2001
+From e347b80ddc5511b7c4d276a092b172a7c052dab4 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 6 Feb 2013 08:43:43 +0100
-Subject: [PATCH 5/5] relax automake version check
+Subject: [PATCH 3/3] relax automake version check
 
 
 diff --git a/configure.ac b/configure.ac
-index ab69f04..6d8cc35 100644
+index d3305d4..8cad8b6 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -25,7 +25,7 @@ AC_INIT([GnuTLS], [3.1.9], [bug-gnutls@gnu.org])
- AC_CONFIG_AUX_DIR([build-aux])
+@@ -26,7 +26,7 @@ AC_CONFIG_AUX_DIR([build-aux])
  AC_CONFIG_MACRO_DIR([m4])
+ AC_CANONICAL_HOST
  
 -AM_INIT_AUTOMAKE([1.11.3 no-dist-gzip dist-xz -Wall -Wno-override])
 +AM_INIT_AUTOMAKE([1.11.1 no-dist-gzip dist-xz -Wall -Wno-override])
@@ -115,5 +67,5 @@ index ab69f04..6d8cc35 100644
  AC_CONFIG_HEADERS([config.h])
  
 -- 
-1.7.10.4
+1.8.1.4
 

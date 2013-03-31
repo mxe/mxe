@@ -1,0 +1,141 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 6b0f024e4fa9e227a2c2da41f189add55f3225a9 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 26 Feb 2013 13:23:33 +0100
+Subject: [PATCH 1/4] use pkg-config for freetype
+
+Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
+
+diff --git a/src/platformsupport/fontdatabases/basic/basic.pri b/src/platformsupport/fontdatabases/basic/basic.pri
+index 6b5f6d0..d21f4e3 100644
+--- a/src/platformsupport/fontdatabases/basic/basic.pri
++++ b/src/platformsupport/fontdatabases/basic/basic.pri
+@@ -83,5 +83,7 @@ contains(QT_CONFIG, freetype) {
+ } else:contains(QT_CONFIG, system-freetype) {
+     # pull in the proper freetype2 include directory
+     include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
++    CONFIG += link_pkgconfig
++    PKGCONFIG += freetype2
+ }
+ 
+-- 
+1.8.1.4
+
+
+From 4928a5d5d09199996567595a91498aa151df9773 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 22 Dec 2012 17:45:34 +0100
+Subject: [PATCH 2/4] WIP: qmake writeFile(): work around concurrent
+ QDir::mkpath() failure
+
+This actually happened when building qtimageformats with make -j4.
+Failure in mkspecs/features/qt_plugin.prf:
+    write_file($$MODULE_PRI, MODULE_PRI_CONT)|error("Aborting.") with make -j4.
+
+Change-Id: Ibc685f613d721e178e6aff408905d77b0ce1740a
+
+diff --git a/qmake/library/qmakebuiltins.cpp b/qmake/library/qmakebuiltins.cpp
+index f46d66b..4632cf7 100644
+--- a/qmake/library/qmakebuiltins.cpp
++++ b/qmake/library/qmakebuiltins.cpp
+@@ -310,9 +310,17 @@ QMakeEvaluator::writeFile(const QString &ctx, const QString &fn, QIODevice::Open
+ {
+     QFileInfo qfi(fn);
+     if (!QDir::current().mkpath(qfi.path())) {
+-        evalError(fL1S("Cannot create %1directory %2.")
+-                  .arg(ctx, QDir::toNativeSeparators(qfi.path())));
+-        return ReturnFalse;
++        // could have failed due to concurrent mkpath attempt
++#ifdef Q_OS_WIN
++       Sleep(1000);
++#else
++       sleep(1);
++#endif
++        if (!qfi.dir().exists()) {
++            evalError(fL1S("Cannot create %1directory %2.")
++                      .arg(ctx, QDir::toNativeSeparators(qfi.path())));
++            return ReturnFalse;
++        }
+     }
+     QString errStr;
+     if (!doWriteFile(qfi.filePath(), mode, contents, &errStr)) {
+-- 
+1.8.1.4
+
+
+From cfbe1ce777abb153d1b03b23c777b773498e2a3c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?David=20E=2E=20Narv=C3=A1ez?= <david.narvaez@computer.org>
+Date: Sat, 23 Feb 2013 23:14:50 -0500
+Subject: [PATCH 3/4] Rename qAbs Function for timeval
+
+This decouples it from qAbs which is declared as a constexpr under
+certain compilation flags and enables for qtbase to be compiled with
+GCC 4.8
+
+Change-Id: I78e02256ffc8b460ca74ae5241e77dfac4e09ba9
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+(cherry picked from commit d9ff510f02bba63dabe7a081a68296056a89ae4c)
+
+diff --git a/src/corelib/kernel/qtimerinfo_unix.cpp b/src/corelib/kernel/qtimerinfo_unix.cpp
+index 0eee425..7a29247 100644
+--- a/src/corelib/kernel/qtimerinfo_unix.cpp
++++ b/src/corelib/kernel/qtimerinfo_unix.cpp
+@@ -94,8 +94,7 @@ timeval QTimerInfoList::updateCurrentTime()
+ 
+ #if ((_POSIX_MONOTONIC_CLOCK-0 <= 0) && !defined(Q_OS_MAC) && !defined(Q_OS_INTEGRITY)) || defined(QT_BOOTSTRAPPED)
+ 
+-template <>
+-timeval qAbs(const timeval &t)
++timeval qAbsTimeval(const timeval &t)
+ {
+     timeval tmp = t;
+     if (tmp.tv_sec < 0) {
+@@ -144,7 +143,7 @@ bool QTimerInfoList::timeChanged(timeval *delta)
+     timeval tickGranularity;
+     tickGranularity.tv_sec = 0;
+     tickGranularity.tv_usec = msPerTick * 1000;
+-    return elapsedTimeTicks < ((qAbs(*delta) - tickGranularity) * 10);
++    return elapsedTimeTicks < ((qAbsTimeval(*delta) - tickGranularity) * 10);
+ }
+ 
+ /*
+-- 
+1.8.1.4
+
+
+From dad4c7019a14eeee37ec168501b883c1ebfaeff6 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 27 Mar 2013 22:40:39 +0100
+Subject: [PATCH 4/4] fix QT_NO_ACCESSIBILITY build
+
+Follow-up to ad05af534dc61b0c07b2c676d8f1ff040d9fbf7b
+
+Change-Id: I561b0b0b1a098556f9de909241b448307a271985
+
+diff --git a/src/widgets/styles/qwindowsvistastyle.cpp b/src/widgets/styles/qwindowsvistastyle.cpp
+index 48d2027..93c2065 100644
+--- a/src/widgets/styles/qwindowsvistastyle.cpp
++++ b/src/widgets/styles/qwindowsvistastyle.cpp
+@@ -520,6 +520,7 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
+         }
+         break;
+     case PE_Frame: {
++#ifndef QT_NO_ACCESSIBILITY
+         if (QStyleHelper::isInstanceOf(option->styleObject, QAccessible::EditableText)) {
+             painter->save();
+             int stateId = ETS_NORMAL;
+@@ -545,6 +546,9 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
+             d->drawBackground(theme);
+             painter->restore();
+         } else {
++#else
++        {
++#endif
+             QWindowsXPStyle::drawPrimitive(element, option, painter, widget);
+         }
+     }
+-- 
+1.8.1.4
+

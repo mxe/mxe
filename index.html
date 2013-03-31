@@ -615,7 +615,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td>≥ 1.7</td>
     </tr>
     <tr>
-        <td><a href="http://www.gnu.org/s/gettext/">GNU Gettext</a></td>
+        <td><a href="http://www.gnu.org/software/coreutils/">GNU Coreutils</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.gnu.org/software/gettext/">GNU Gettext</a></td>
         <td></td>
     </tr>
     <tr>
@@ -635,7 +639,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://sourceware.org/libffi/">libffi</td>
+        <td><a href="http://sourceware.org/libffi/">libffi</a></td>
         <td>≥ 3.0.0</td>
     </tr>
     <tr>
@@ -727,8 +731,8 @@ aptitude -t squeeze-backports install cmake yasm</pre>
 
     <!-- http://www.freshports.org/ -->
     <pre>pkg_add -r automake111 autoconf268 bash bison cmake \
-           flex gettext git gmake gsed intltool libffi libtool \
-           openssl patch perl p5-XML-Parser pkg-config \
+           coreutils flex gettext git gmake gsed intltool libffi \
+           libtool openssl patch perl p5-XML-Parser pkg-config \
            scons unzip wget yasm</pre>
 
     <p>
@@ -783,13 +787,12 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     then run:
     </p>
     <!-- http://www.macports.org/ports.php -->
-    <pre>sudo port install autoconf automake bison cmake flex \
-                  gettext git-core glib2 gsed intltool libffi \
+    <pre>sudo port install autoconf automake bison cmake coreutils \
+                  flex gettext git-core glib2 gsed intltool libffi \
                   libtool openssl p5-xml-parser pkgconfig scons \
                   wget xz yasm</pre>
-    <p>Use the llvm based gcc:
+    <p>Use the llvm based gcc:</p>
     <pre>sudo port select gcc llvm-gcc42</pre>
-    </p>
     <p>
     Mac OS X versions ≤ 10.6 are no longer supported.
     </p>
@@ -960,12 +963,12 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="armadillo-package">armadillo</td>
-        <td id="armadillo-version">3.800.1</td>
+        <td id="armadillo-version">3.800.2</td>
         <td id="armadillo-website"><a href="http://armadillo.sf.net/">Armadillo C++ linear algebra library</a></td>
     </tr>
     <tr>
         <td id="atk-package">atk</td>
-        <td id="atk-version">2.6.0</td>
+        <td id="atk-version">2.8.0</td>
         <td id="atk-website"><a href="http://www.gtk.org/">ATK</a></td>
     </tr>
     <tr>
@@ -980,12 +983,12 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="bfd-package">bfd</td>
-        <td id="bfd-version">2.23.1</td>
+        <td id="bfd-version">2.23.2</td>
         <td id="bfd-website"><a href="http://www.gnu.org/software/binutils/">Binary File Descriptor library</a></td>
     </tr>
     <tr>
         <td id="binutils-package">binutils</td>
-        <td id="binutils-version">2.23.1</td>
+        <td id="binutils-version">2.23.2</td> <!-- bfd and libiberty use the same source, set them to the same version! -->
         <td id="binutils-website"><a href="http://www.gnu.org/software/binutils/">GNU Binutils</a></td>
     </tr>
     <tr>
@@ -1085,7 +1088,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="ffmpeg-package">ffmpeg</td>
-        <td id="ffmpeg-version">1.1.3</td>
+        <td id="ffmpeg-version">1.2</td>
         <td id="ffmpeg-website"><a href="http://www.ffmpeg.org/">ffmpeg</a></td>
     </tr>
     <tr>
@@ -1115,7 +1118,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="fontconfig-package">fontconfig</td>
-        <td id="fontconfig-version">2.10.91</td>
+        <td id="fontconfig-version">2.10.92</td>
         <td id="fontconfig-website"><a href="http://fontconfig.org/">fontconfig</a></td>
     </tr>
     <tr>
@@ -1155,7 +1158,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="gcc-package">gcc</td>
-        <td id="gcc-version">4.8.0</td>
+        <td id="gcc-version">4.8.0</td> <!-- libgomp uses the same source, set it to the same version! -->
         <td id="gcc-website"><a href="http://gcc.gnu.org/">GCC</a></td>
     </tr>
     <tr>
@@ -1190,7 +1193,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="gdk-pixbuf-package">gdk-pixbuf</td>
-        <td id="gdk-pixbuf-version">2.26.5</td>
+        <td id="gdk-pixbuf-version">2.28.0</td>
         <td id="gdk-pixbuf-website"><a href="http://www.gdk-pixbuf.org/">GDK-pixbuf</a></td>
     </tr>
     <tr>
@@ -1225,22 +1228,22 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="gmp-package">gmp</td>
-        <td id="gmp-version">5.1.1</td>
+        <td id="gmp-version">5.1.1</td> <!-- gcc-gmp uses the same source, set it to the same version! -->
         <td id="gmp-website"><a href="http://www.gmplib.org/">GMP</a></td>
     </tr>
     <tr>
         <td id="gnutls-package">gnutls</td>
-        <td id="gnutls-version">3.1.9</td>
+        <td id="gnutls-version">3.1.10</td>
         <td id="gnutls-website"><a href="http://www.gnu.org/software/gnutls/">GnuTLS</a></td>
     </tr>
     <tr>
         <td id="graphicsmagick-package">graphicsmagick</td>
-        <td id="graphicsmagick-version">1.3.17</td>
+        <td id="graphicsmagick-version">1.3.18</td>
         <td id="graphicsmagick-website"><a href="http://www.graphicsmagick.org/">GraphicsMagick</a></td>
     </tr>
     <tr>
         <td id="gsl-package">gsl</td>
-        <td id="gsl-version">1.14</td>
+        <td id="gsl-version">1.15</td>
         <td id="gsl-website"><a href="http://www.gnu.org/software/gsl/">GSL</a></td>
     </tr>
     <tr>
@@ -1250,17 +1253,17 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="gst-plugins-base-package">gst-plugins-base</td>
-        <td id="gst-plugins-base-version">1.0.5</td>
+        <td id="gst-plugins-base-version">1.0.6</td>
         <td id="gst-plugins-base-website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-base</a></td>
     </tr>
     <tr>
         <td id="gst-plugins-good-package">gst-plugins-good</td>
-        <td id="gst-plugins-good-version">1.0.5</td>
+        <td id="gst-plugins-good-version">1.0.6</td>
         <td id="gst-plugins-good-website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-good</a></td>
     </tr>
     <tr>
         <td id="gstreamer-package">gstreamer</td>
-        <td id="gstreamer-version">1.0.5</td>
+        <td id="gstreamer-version">1.0.6</td>
         <td id="gstreamer-website"><a href="http://gstreamer.freedesktop.org/">gstreamer</a></td>
     </tr>
     <tr>
@@ -1270,7 +1273,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="gtk2-package">gtk2</td>
-        <td id="gtk2-version">2.24.13</td>
+        <td id="gtk2-version">2.24.17</td>
         <td id="gtk2-website"><a href="http://www.gtk.org/">GTK+</a></td>
     </tr>
     <tr>
@@ -1315,7 +1318,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="harfbuzz-package">harfbuzz</td>
-        <td id="harfbuzz-version">0.9.13</td>
+        <td id="harfbuzz-version">0.9.14</td>
         <td id="harfbuzz-website"><a href="http://harfbuzz.sourceforge.net/">HarfBuzz</a></td>
     </tr>
     <tr>
@@ -1425,7 +1428,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="libffi-package">libffi</td>
-        <td id="libffi-version">3.0.11</td>
+        <td id="libffi-version">3.0.13</td>
         <td id="libffi-website"><a href="http://sourceware.org/libffi/">libffi</a></td>
     </tr>
     <tr>
@@ -1470,7 +1473,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="libgomp-package">libgomp</td>
-        <td id="libgomp-version">4.7.2</td>
+        <td id="libgomp-version">4.8.0</td>
         <td id="libgomp-website"><a href="http://gcc.gnu.org/projects/gomp/">GCC-libgomp</a></td>
     </tr>
     <tr>
@@ -1485,7 +1488,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="libgsf-package">libgsf</td>
-        <td id="libgsf-version">1.14.25</td>
+        <td id="libgsf-version">1.14.26</td>
         <td id="libgsf-website"><a href="http://projects.gnome.org/libgsf/">libgsf</a></td>
     </tr>
     <tr>
@@ -1495,7 +1498,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="libiberty-package">libiberty</td>
-        <td id="libiberty-version">2.23.1</td>
+        <td id="libiberty-version">2.23.2</td>
         <td id="libiberty-website"><a href="http://gcc.gnu.org/onlinedocs/libiberty/">libiberty</a></td>
     </tr>
     <tr>
@@ -1522,6 +1525,11 @@ aptitude -t squeeze-backports install cmake yasm</pre>
         <td id="liblo-package">liblo</td>
         <td id="liblo-version">0.26</td>
         <td id="liblo-website"><a href="http://liblo.sourceforge.net/">liblo</a></td>
+    </tr>
+    <tr>
+        <td id="liblqr-1-package">liblqr-1</td>
+        <td id="liblqr-1-version">0.4.2</td>
+        <td id="liblqr-1-website"><a href="http://liblqr.wikidot.com/">liblqr-1</a></td>
     </tr>
     <tr>
         <td id="libmad-package">libmad</td>
@@ -1575,7 +1583,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="libpng-package">libpng</td>
-        <td id="libpng-version">1.6.0</td>
+        <td id="libpng-version">1.6.1</td>
         <td id="libpng-website"><a href="http://www.libpng.org/">libpng</a></td>
     </tr>
     <tr>
@@ -1665,7 +1673,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="lua-package">lua</td>
-        <td id="lua-version">5.2.1</td>
+        <td id="lua-version">5.2.2</td>
         <td id="lua-website"><a href="http://www.lua.org/">Lua</a></td>
     </tr>
     <tr>
@@ -1675,7 +1683,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="matio-package">matio</td>
-        <td id="matio-version">1.5.0</td>
+        <td id="matio-version">1.5.1</td>
         <td id="matio-website"><a href="http://sourceforge.net/projects/matio/">matio</a></td>
     </tr>
     <tr>
@@ -1700,7 +1708,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="mpfr-package">mpfr</td>
-        <td id="mpfr-version">3.1.2</td>
+        <td id="mpfr-version">3.1.2</td> <!-- gcc-mpfr uses the same source, set it to the same version! -->
         <td id="mpfr-website"><a href="http://www.mpfr.org/">mpfr</a></td>
     </tr>
     <tr>
@@ -1840,7 +1848,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="pango-package">pango</td>
-        <td id="pango-version">1.33.9</td>
+        <td id="pango-version">1.34.0</td>
         <td id="pango-website"><a href="http://www.pango.org/">Pango</a></td>
     </tr>
     <tr>
@@ -1891,7 +1899,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="picomodel-package">picomodel</td>
-        <td id="picomodel-version">0.8.20</td>
+        <td id="picomodel-version">1142ad8</td>
         <td id="picomodel-website"><a href="http://code.google.com/p/picomodel/">picomodel</a></td>
     </tr>
     <tr>
@@ -1952,7 +1960,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     <tr>
         <td id="protobuf-package">protobuf</td>
         <td id="protobuf-version">2.4.1</td>
-        <td id="protobuf-website"><a href="http://code.google.com/p/protobuf"/>protobuf</a></td>
+        <td id="protobuf-website"><a href="http://code.google.com/p/protobuf/">protobuf</a></td>
     </tr>
     <tr>
         <td id="pthreads-package">pthreads</td>
@@ -1981,67 +1989,67 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="qtactiveqt-package">qtactiveqt</td>
-        <td id="qtactiveqt-version">5.0.1</td>
+        <td id="qtactiveqt-version">5.0.2</td>
         <td id="qtactiveqt-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtbase-package">qtbase</td>
-        <td id="qtbase-version">5.0.1</td>
+        <td id="qtbase-version">5.0.2</td>
         <td id="qtbase-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtdeclarative-package">qtdeclarative</td>
-        <td id="qtdeclarative-version">5.0.1</td>
+        <td id="qtdeclarative-version">5.0.2</td>
         <td id="qtdeclarative-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtgraphicaleffects-package">qtgraphicaleffects</td>
-        <td id="qtgraphicaleffects-version">5.0.1</td>
+        <td id="qtgraphicaleffects-version">5.0.2</td>
         <td id="qtgraphicaleffects-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtimageformats-package">qtimageformats</td>
-        <td id="qtimageformats-version">5.0.1</td>
+        <td id="qtimageformats-version">5.0.2</td>
         <td id="qtimageformats-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtjsbackend-package">qtjsbackend</td>
-        <td id="qtjsbackend-version">5.0.1</td>
+        <td id="qtjsbackend-version">5.0.2</td>
         <td id="qtjsbackend-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtmultimedia-package">qtmultimedia</td>
-        <td id="qtmultimedia-version">5.0.1</td>
+        <td id="qtmultimedia-version">5.0.2</td>
         <td id="qtmultimedia-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtquick1-package">qtquick1</td>
-        <td id="qtquick1-version">5.0.1</td>
+        <td id="qtquick1-version">5.0.2</td>
         <td id="qtquick1-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtscript-package">qtscript</td>
-        <td id="qtscript-version">5.0.1</td>
+        <td id="qtscript-version">5.0.2</td>
         <td id="qtscript-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtsvg-package">qtsvg</td>
-        <td id="qtsvg-version">5.0.1</td>
+        <td id="qtsvg-version">5.0.2</td>
         <td id="qtsvg-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qttools-package">qttools</td>
-        <td id="qttools-version">5.0.1</td>
+        <td id="qttools-version">5.0.2</td>
         <td id="qttools-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qttranslations-package">qttranslations</td>
-        <td id="qttranslations-version">5.0.1</td>
+        <td id="qttranslations-version">5.0.2</td>
         <td id="qttranslations-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
         <td id="qtxmlpatterns-package">qtxmlpatterns</td>
-        <td id="qtxmlpatterns-version">5.0.1</td>
+        <td id="qtxmlpatterns-version">5.0.2</td>
         <td id="qtxmlpatterns-website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
@@ -2116,7 +2124,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="sqlite-package">sqlite</td>
-        <td id="sqlite-version">3071600</td>
+        <td id="sqlite-version">3071601</td>
         <td id="sqlite-website"><a href="http://www.sqlite.org/">SQLite</a></td>
     </tr>
     <tr>
@@ -2171,7 +2179,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="vmime-package">vmime</td>
-        <td id="vmime-version">f381654</td>
+        <td id="vmime-version">54b5fe1</td>
         <td id="vmime-website"><a href="http://www.vmime.org/">VMime</a></td>
     </tr>
     <tr>
@@ -2226,7 +2234,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="xapian-core-package">xapian-core</td>
-        <td id="xapian-core-version">1.2.13</td>
+        <td id="xapian-core-version">1.2.14</td>
         <td id="xapian-core-website"><a href="http://xapian.org/">Xapian-Core</a></td>
     </tr>
     <tr>
@@ -2442,10 +2450,12 @@ https://...</pre>
         You could also try to provide a <code>$(PKG)_UPDATE</code> section.
         However, that requires some experience and "feeling" for it.
         So it is perfectly okay if you leave a placeholder:
+        </p>
         <pre>define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
+    echo 'TODO: write update script for $(PKG).' &gt;&amp;2;
     echo $($(PKG)_VERSION)
 endef</pre>
+        <p>
         We'll fill that in for you.
         It's a funny exercise.
         </p>
@@ -2480,6 +2490,7 @@ endef</pre>
             <tr><td><code>make</code></td>      <td>&rarr;</td><td><code>$(MAKE)</code></td></tr>
             <tr><td><code>patch</code></td>     <td>&rarr;</td><td><code>$(PATCH)</code></td></tr>
             <tr><td><code>sed</code></td>       <td>&rarr;</td><td><code>$(SED)</code></td></tr>
+            <tr><td><code>sort</code></td>      <td>&rarr;</td><td><code>$(SORT)</code></td></tr>
             <tr><td><code>wget</code></td>      <td>&rarr;</td><td><code>$(WGET)</code></td></tr>
         </table>
     </li>
