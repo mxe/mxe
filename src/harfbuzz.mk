@@ -22,6 +22,7 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
-        --enable-static
+        --enable-static \
+        ac_cv_path_icu_config=/bin/false
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
