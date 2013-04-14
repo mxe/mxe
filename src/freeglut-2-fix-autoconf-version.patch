@@ -1,0 +1,15 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff --git a/configure.ac b/configure.ac
+--- a/configure.ac	2013-02-08 23:55:11.000000000 +0100
++++ b/configure.ac	2013-04-12 15:23:57.161451656 +0200
+@@ -2,7 +2,7 @@
+ 
+ AC_INIT([freeglut library],[2.8.1],[freeglut-bugs@lists.sourceforge.net],[freeglut])
+ AM_INIT_AUTOMAKE
+-AC_PREREQ([2.69])
++AC_PREREQ([2.67])
+ AC_CONFIG_SRCDIR([AUTHORS])
+ AC_CONFIG_HEADERS([config.h])
+ 

@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && cmake \
         -DCGAL_INSTALL_CMAKE_DIR:STRING="lib/CGAL" \
         -DCGAL_INSTALL_INC_DIR:STRING="include" \
-        -DCGAL_INSTALL_DOC_DIR:STRING="share/doc/CGAL-3.9" \
+        -DCGAL_INSTALL_DOC_DIR:STRING="share/doc/CGAL-$($(PKG)_VERSION)" \
         -DCGAL_INSTALL_BIN_DIR:STRING="bin" \
         -DBOOST_LIB_DIAGNOSTIC_DEFINITIONS:STRING="-DBOOST_LIB_DIAGNOSTIC" \
         -DWITH_CGAL_Qt3:BOOL="0" \
