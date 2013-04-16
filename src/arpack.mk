@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := f5453e2d576f131890ca023e1d853e18920f9c3c
 $(PKG)_SUBDIR   := $(PKG)-ng_$($(PKG)_VERSION)
 $(PKG)_FILE     := arpack-ng_$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/$($(PKG)_FILE)
-$(PKG)_DEPS     := blas lapack
+$(PKG)_DEPS     := lapack blas
 
 define $(PKG)_UPDATE
     echo 'Warning: Updates are temporarily disabled for package arpack.' >&2;
@@ -21,7 +21,8 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --enable-static --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)/.build' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/.build' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/.build' install
 
     if [ $(BUILD_SHARED) = yes ]; then \
       $(MAKE_SHARED_FROM_STATIC) --ar '$(TARGET)-ar' --ld '$(TARGET)-gfortran' '$(PREFIX)/$(TARGET)/lib/libarpack.a' -llapack -lblas; \
