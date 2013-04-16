@@ -25,3 +25,5 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/config/mingw/wgnuplot.mnu' '$(PREFIX)/$(TARGET)/bin/'
 
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =
