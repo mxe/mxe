@@ -7,8 +7,8 @@ $(PKG)_CHECKSUM := 3cc9366b6dbbd336eaf90fe70ad16e63705d82c4
 $(PKG)_SUBDIR   := octave-$($(PKG)_VERSION)
 $(PKG)_FILE     := octave-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := arpack blas curl fftw fltk fontconfig freetype gcc glpk gnuplot graphicsmagick hdf5 lapack libgomp pcre pthreads qrupdate readline suitesparse texinfo zlib
-## pstoedit qhull qscintilla qt ### FIXME: these are dependencies for Octave, but do not build yet
+$(PKG)_DEPS     := arpack blas curl fftw fltk fontconfig freetype gcc glpk gnuplot graphicsmagick hdf5 lapack libgomp ncurses pcre pthreads qhull qrupdate readline suitesparse termcap texinfo zlib
+## pstoedit qscintilla qt ### FIXME: these are dependencies for Octave, but do not build yet
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/octave/?C=M;O=D' | \
@@ -33,6 +33,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,pcre-config,$(PREFIX)/$(TARGET)/bin/pcre-config,g' '$(1)/configure'
 
     # configure
+    LD=$(TARGET)-g++ \
     cd '$(1)/.build' && '../configure' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
