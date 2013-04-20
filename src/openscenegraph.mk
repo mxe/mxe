@@ -3,7 +3,7 @@
 
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := bcadb821dd962eb38c9998eadddd836d029610f0
+$(PKG)_CHECKSUM := e0768e7026be239e1089f65ee0655bdda8b5949f
 $(PKG)_SUBDIR   := openscenegraph-osg-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/$(PKG)/osg/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
