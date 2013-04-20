@@ -24,6 +24,6 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-armadillo.exe' \
-        -larmadillo -llapack -lblas -lgfortran
+        -larmadillo -llapack -lblas -lgfortran \
         -lboost_serialization-mt -lboost_thread_win32-mt -lboost_system-mt
 endef
