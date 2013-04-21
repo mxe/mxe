@@ -3,10 +3,10 @@
 
 PKG             := neuron
 $(PKG)_IGNORE   := 
-$(PKG)_CHECKSUM := 27d0fe0f4eddabb93a41fe45b81c38b362eb3aac
+$(PKG)_CHECKSUM := d79124f228135775769e661e1d57303476740ef6
 $(PKG)_SUBDIR   := nrn-7.3
-$(PKG)_FILE     := nrn-$($(PKG)_VERSION)-755.tar.gz
-$(PKG)_URL      := http://www.neuron.yale.edu/ftp/neuron/versions/alpha/$($(PKG)_FILE)
+$(PKG)_FILE     := nrn-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://www.neuron.yale.edu/ftp/neuron/versions/v7.3/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc readline nrniv pthreads termcap
 
 

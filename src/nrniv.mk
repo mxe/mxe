@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := d5bea5d6eeb02a30ceb1af1f3d354729b00bc774
 $(PKG)_SUBDIR   := iv-18
 $(PKG)_FILE     := iv-18.tar.gz
-$(PKG)_URL      := http://www.neuron.yale.edu/ftp/neuron/versions/alpha/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.neuron.yale.edu/ftp/neuron/versions/v7.3/$($(PKG)_FILE)
 #                  http://www.neuron.yale.edu/ftp/neuron/versions/v$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc 
 
