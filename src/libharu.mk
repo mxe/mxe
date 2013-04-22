@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := libharu
-$(PKG)_IGNORE   := 2.2.0
+$(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := b75ec6052b8d72aa7f23d67adcdf9df4847b64ca
 $(PKG)_SUBDIR   := libharu-$($(PKG)_VERSION)
 $(PKG)_FILE     := libharu-$($(PKG)_VERSION).tar.gz
