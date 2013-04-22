@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     cd '$(1)' && cmake . -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 
@@ -24,6 +24,6 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-armadillo.exe' \
-        -larmadillo -llapack -lblas -lgfortran
+        -larmadillo -llapack -lblas -lgfortran \
         -lboost_serialization-mt -lboost_thread_win32-mt -lboost_system-mt
 endef

@@ -3,7 +3,7 @@
 
 PKG             := gdk-pixbuf
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := c1e2b5e7ca5281543f327d805e0b5d5d0c08a6db
+$(PKG)_CHECKSUM := 26494f76708a1ce9e040737fa0c490be8e8e5f7d
 $(PKG)_SUBDIR   := gdk-pixbuf-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdk-pixbuf-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

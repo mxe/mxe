@@ -3,7 +3,7 @@
 
 PKG             := xapian-core
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 0199483021b7e8704ddbc9c27c3d1531566a847a
+$(PKG)_CHECKSUM := 3d2ea66e9930451dcac4b96f321284f3dee98d51
 $(PKG)_SUBDIR   := xapian-core-$($(PKG)_VERSION)
 $(PKG)_FILE     := xapian-core-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://oligarchy.co.uk/xapian/$($(PKG)_VERSION)/xapian-core-$($(PKG)_VERSION).tar.gz

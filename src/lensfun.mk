@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := f26121093dfee85d6371c2c79dae22e6d1b8d0d6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/lensfun.berlios/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libpng glib
+$(PKG)_DEPS     := gcc libpng glib libgnurx
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "http://developer.berlios.de/project/showfiles.php?group_id=9034" | \

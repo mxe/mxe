@@ -3,11 +3,11 @@
 
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := bcadb821dd962eb38c9998eadddd836d029610f0
+$(PKG)_CHECKSUM := e0768e7026be239e1089f65ee0655bdda8b5949f
 $(PKG)_SUBDIR   := openscenegraph-osg-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/$(PKG)/osg/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost curl dcmtk ffmpeg freetype gdal giflib jasper jpeg libpng openal openexr poppler qt tiff xine-lib zlib
+$(PKG)_DEPS     := gcc boost curl dcmtk ffmpeg freetype gdal giflib gta jasper jpeg libpng openal openexr poppler qt tiff xine-lib zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/$(PKG)/osg/commits/master' | \
