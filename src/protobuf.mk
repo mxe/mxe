@@ -3,7 +3,7 @@
 
 PKG             := protobuf
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := df5867e37a4b51fb69f53a8baf5b994938691d6d
+$(PKG)_CHECKSUM := 62c10dcdac4b69cc8c6bb19f73db40c264cb2726
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://protobuf.googlecode.com/files/$($(PKG)_FILE)
