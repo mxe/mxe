@@ -3,14 +3,14 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From eacb3702acc44de8e5a3c9a324cb9a81333e3737 Mon Sep 17 00:00:00 2001
-From: "a@mxe.cc" <a@mxe.cc>
+From 55d5dab8f12c55064b48da8a4a42bfe8fa97f8f9 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Thu, 23 Sep 2010 21:41:51 +0200
-Subject: [PATCH 1/8] optional gettext
+Subject: [PATCH 1/9] optional gettext
 
 
 diff --git a/configure.ac b/configure.ac
-index 054485f..9321fbc 100644
+index ac9ca88..662fd1d 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -482,8 +482,8 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
@@ -42,13 +42,13 @@ index c710046..269bfdf 100644
  
  #define  _(String) gettext (String)
 -- 
-1.7.10.4
+1.8.2.1
 
 
-From c88a15fbac3076f772894ebcd2003786b37603d4 Mon Sep 17 00:00:00 2001
-From: "a@mxe.cc" <a@mxe.cc>
+From 4dee17aeb7c45a84a44e3fe2dcca4d8bfd1916a3 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Thu, 23 Sep 2010 21:42:46 +0200
-Subject: [PATCH 2/8] fix tool paths
+Subject: [PATCH 2/9] fix tool paths
 
 
 diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
@@ -69,13 +69,13 @@ index 4a8898e..5164bae 100644
  Name: GLib
  Description: C Utility Library
 -- 
-1.7.10.4
+1.8.2.1
 
 
-From fdf03eb9fff0532fa6dea660a5665242f6ccac9e Mon Sep 17 00:00:00 2001
-From: Hans Petter Jansson <hpj@cl.no>
+From 981260cfec055fbd58986d9e1b7ef27cdc036e30 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 15 Jun 2012 15:25:01 +0200
-Subject: [PATCH 3/8] Avoid DllMain symbol conflict when linking statically
+Subject: [PATCH 3/9] Avoid DllMain symbol conflict when linking statically
 
 
 diff --git a/gio/giomodule.c b/gio/giomodule.c
@@ -121,17 +121,17 @@ index f4edd5c..02bf678 100644
    switch (fdwReason)
      {
 -- 
-1.7.10.4
+1.8.2.1
 
 
-From 64c337b9654441cc1b90ed3ac86f928073ec208e Mon Sep 17 00:00:00 2001
-From: Hans Petter Jansson <hpj@cl.no>
+From 1b51f3ef3e38d5db3c15cde0fe4429dab1f7a6d0 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 15 Jun 2012 15:27:22 +0200
-Subject: [PATCH 4/8] Allow building without inotify support
+Subject: [PATCH 4/9] Allow building without inotify support
 
 
 diff --git a/configure.ac b/configure.ac
-index 9321fbc..5c6bb3e 100644
+index 662fd1d..b0c9fe7 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -1712,11 +1712,18 @@ dnl *****************************
@@ -157,18 +157,18 @@ index 9321fbc..5c6bb3e 100644
  AM_CONDITIONAL(HAVE_INOTIFY, [test "$inotify_support" = "yes"])
  
 -- 
-1.7.10.4
+1.8.2.1
 
 
-From c80c435bd8d92857eeb54273024ca8782fa089c6 Mon Sep 17 00:00:00 2001
-From: Hans Petter Jansson <hpj@cl.no>
+From 5ec5d101cb75c096f39228da85d2caba52b9002f Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 15 Jun 2012 15:28:14 +0200
-Subject: [PATCH 5/8] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
+Subject: [PATCH 5/9] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
  Backported from upstream
 
 
 diff --git a/configure.ac b/configure.ac
-index 5c6bb3e..8754c21 100644
+index b0c9fe7..923a5dd 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -455,6 +455,8 @@ fi
@@ -181,13 +181,13 @@ index 5c6bb3e..8754c21 100644
  dnl
  dnl zlib support
 -- 
-1.7.10.4
+1.8.2.1
 
 
-From e7e2c1c881813a2a17bfec7b63c673eb979b3833 Mon Sep 17 00:00:00 2001
-From: Hans Petter Jansson <hpj@cl.no>
+From d5c7bf3b57ced0c6dfb416cf7b439fba210d2a8b Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 15 Jun 2012 15:29:06 +0200
-Subject: [PATCH 6/8] Link with dnsapi
+Subject: [PATCH 6/9] Link with dnsapi
 
 
 diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
@@ -203,13 +203,13 @@ index 9f7123f..b0d5779 100644
  Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@
  Cflags:
 -- 
-1.7.10.4
+1.8.2.1
 
 
-From c1f83b6ae587c99fefd482d0b1bfbe1d962320d4 Mon Sep 17 00:00:00 2001
-From: Hans Petter Jansson <hpj@cl.no>
+From e0338b4fdd95e8273c84ba1daeea660c589d152a Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 15 Jun 2012 15:29:38 +0200
-Subject: [PATCH 7/8] Ensure globals are initialized even when DllMain is not
+Subject: [PATCH 7/9] Ensure globals are initialized even when DllMain is not
  being run
 
 
@@ -583,13 +583,13 @@ index 5a9ac97..e4d1d48 100644
      g_thread_xp_init ();
  
 -- 
-1.7.10.4
+1.8.2.1
 
 
-From f7b3f3f390131d41855da11622eb18870aec0731 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+From ce0f7354ac995f3b21cccabec880413d37f02fb6 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Mon, 18 Jun 2012 16:02:12 +0200
-Subject: [PATCH 8/8] kill docs and gtk-doc dependence (mxe-specific)
+Subject: [PATCH 8/9] kill docs and gtk-doc dependence (mxe-specific)
 
 
 diff --git a/Makefile.am b/Makefile.am
@@ -639,7 +639,7 @@ index 4bbc00d..bc0ab0b 100755
  if test -z $AUTORECONF; then
          echo "*** No autoreconf found, please install it ***"
 diff --git a/configure.ac b/configure.ac
-index 8754c21..4936f3c 100644
+index 923a5dd..661635c 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -2605,13 +2605,6 @@ AS_IF([ test $cross_compiling = yes && test x$enable_modular_tests = xyes], [
@@ -1185,5 +1185,27 @@ index 48d88f8..0000000
 -gobject-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
 -- 
-1.7.10.4
+1.8.2.1
+
+
+From 71740fc6c7f38c025207b9d98bf78a3c570411c6 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 24 Apr 2013 15:09:13 +1000
+Subject: [PATCH 9/9] remove obsolete AM_PROG_CC_STDC
+
+
+diff --git a/configure.ac b/configure.ac
+index 661635c..d5557f7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -291,7 +291,6 @@ AC_TRY_COMPILE(,[class a { int b; } c;], ,CXX=)
+ AM_CONDITIONAL(HAVE_CXX, [test "$CXX" != ""])
+ AC_LANG_RESTORE
+ 
+-AM_PROG_CC_STDC
+ AM_PROG_CC_C_O
+ AC_PROG_INSTALL
+ 
+-- 
+1.8.2.1
 
