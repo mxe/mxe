@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := w32api
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 4.0
 $(PKG)_CHECKSUM := 1eb60b0cd546bf3efdc3fb89a4118df11da2314a
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-2-mingw32-dev.tar.lzma
