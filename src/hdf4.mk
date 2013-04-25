@@ -18,7 +18,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && $(LIBTOOLIZE) --force
-    cd '$(1)' && autoreconf && ./configure \
+    cd '$(1)' && autoreconf --install
+    cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
