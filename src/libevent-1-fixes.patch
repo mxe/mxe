@@ -1,0 +1,27 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From fc5f64897226199f64eeaa91836939ebff38d86a Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 25 Apr 2013 18:17:52 +1000
+Subject: [PATCH] fix obsolete AM_CONFIG_HEADER
+
+
+diff --git a/configure.in b/configure.in
+index 18165f3..524d343 100644
+--- a/configure.in
++++ b/configure.in
+@@ -12,7 +12,7 @@ AC_INIT(event.c)
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+ AM_INIT_AUTOMAKE(libevent,2.0.21-stable)
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS(config.h)
+ AC_DEFINE(NUMERIC_VERSION, 0x02001500, [Numeric representation of the version])
+ 
+ dnl Initialize prefix.
+-- 
+1.8.2.1
+
