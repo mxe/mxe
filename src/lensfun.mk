@@ -30,3 +30,7 @@ define $(PKG)_BUILD
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-lensfun.exe' \
         `'$(TARGET)-pkg-config' lensfun glib-2.0 --cflags --libs`
 endef
+
+#depends on libgnurx
+$(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =
