@@ -1,0 +1,23 @@
+This file is part of MXE.
+See index.html for further information.
+
+Make sure WINVER is set (in gdkprivate-win32.h) before we include windows.h.
+
+diff -urN gtk+-2.24.17.orig/gdk/win32/gdkwindow-win32.c gtk+-2.24.17/gdk/win32/gdkwindow-win32.c
+--- gtk+-2.24.17.orig/gdk/win32/gdkwindow-win32.c	2012-12-05 11:36:04.000000000 +0100
++++ gtk+-2.24.17/gdk/win32/gdkwindow-win32.c	2013-03-24 15:34:32.875836426 +0100
+@@ -29,13 +29,13 @@
+ 
+ #include "config.h"
+ #include <stdlib.h>
+-#include <windows.h>
+ 
+ #include "gdk.h"
+ #include "gdkwindowimpl.h"
+ #include "gdkprivate-win32.h"
+ #include "gdkinput-win32.h"
+ #include "gdkenumtypes.h"
++#include <windows.h>
+ 
+ static GdkColormap* gdk_window_impl_win32_get_colormap (GdkDrawable *drawable);
+ static void         gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,

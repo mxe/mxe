@@ -3,15 +3,15 @@
 
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := bcadb821dd962eb38c9998eadddd836d029610f0
-$(PKG)_SUBDIR   := openscenegraph-osg-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/$(PKG)/osg/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost curl dcmtk ffmpeg freetype gdal giflib jasper jpeg libpng openal openexr poppler qt tiff xine-lib zlib
+$(PKG)_CHECKSUM := e1b80206572d681fe624b4c8076674aa5efd6b29
+$(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
+$(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).zip
+$(PKG)_URL      := http://www.openscenegraph.org/downloads/developer_releases/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc boost curl dcmtk ffmpeg freetype gdal giflib gta jasper jpeg libpng openal openexr poppler qt tiff xine-lib zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/$(PKG)/osg/commits/master' | \
-    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
+    $(WGET) -q -O- 'http://www.openscenegraph.org/downloads/developer_releases/?C=M;O=D' | \
+    $(SED) -n 's,.*OpenSceneGraph-\([0-9][^<]*\)\.zip.*,\1,p' | \
     head -1
 endef
 

@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := mingwrt
-$(PKG)_IGNORE   := 3.20
+$(PKG)_IGNORE   := 4.0
 $(PKG)_CHECKSUM := cc6c1f841ab255e52e60f9c967cea6acf29354db
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-mingw32-dev.tar.lzma

@@ -1,0 +1,14 @@
+This file is part of MXE.
+See index.html for further information.
+
+--- armadillo-3.800.2/CMakeLists.txt.patched	2013-04-22 17:15:39.000000000 +0200
++++ armadillo-3.800.2/CMakeLists.txt	2013-04-22 17:31:43.000000000 +0200
+@@ -363,7 +363,7 @@
+ 
+ # Export the package for use from the build-tree
+ # (this registers the build-tree with a global CMake-registry)
+-if(CMAKE_VERSION VERSION_GREATER "2.7")
++if(CMAKE_VERSION VERSION_GREATER "2.7" AND NOT (MINGW AND CMAKE_TOOLCHAIN_FILE))
+  export(PACKAGE armadillo)
+ endif()
+ 

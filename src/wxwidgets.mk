@@ -11,7 +11,7 @@ $(PKG)_DEPS     := gcc libiconv libpng jpeg tiff sdl zlib expat
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/wxwindows/files/' | \
-    $(SED) -n 's,.*/\([0-9][^"9]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 
@@ -120,7 +120,7 @@ define $(PKG)_BUILD
 
     # build test program
     '$(TARGET)-g++' \
-        -W -Wall -Werror -pedantic -std=gnu++0x \
+        -W -Wall -Werror -Wno-error=unused-local-typedefs -pedantic -std=gnu++0x \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-wxwidgets.exe' \
         `'$(TARGET)-wx-config' --cflags --libs`
 endef

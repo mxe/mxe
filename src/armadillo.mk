@@ -4,7 +4,7 @@
 # armadillo
 PKG             := armadillo
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 513b4193c64fecefe55557903669be5d763da760
+$(PKG)_CHECKSUM := 9e2b33574ff577b1870dc8fdfff7d4ec88648576
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
@@ -24,6 +24,6 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-armadillo.exe' \
-        -larmadillo -llapack -lblas -lgfortran
+        -larmadillo -llapack -lblas -lgfortran \
         -lboost_serialization-mt -lboost_thread_win32-mt -lboost_system-mt
 endef

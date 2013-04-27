@@ -1,0 +1,14 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -ur lensfun-0.2.7.orig/libs/auxfun/image.cpp lensfun-0.2.7/libs/auxfun/image.cpp
+--- lensfun-0.2.7.orig/libs/auxfun/image.cpp	2013-03-24 05:01:02.000000000 +1100
++++ lensfun-0.2.7/libs/auxfun/image.cpp	2013-03-24 05:01:27.000000000 +1100
+@@ -7,6 +7,7 @@
+ #include <zlib.h>
+ #include <png.h>
+ #include <stdlib.h>
++#include <string.h>
+ #ifdef _MSC_VER
+ #define _USE_MATH_DEFINES 1
+ #include <math.h>

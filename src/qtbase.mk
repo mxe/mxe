@@ -3,10 +3,10 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 0bf71dc3a7ac13b7795801aa66673077749082c9
+$(PKG)_CHECKSUM := 1220c88ad7f50bf1c08208e1eb05ee5d56635361
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules_tar/$($(PKG)_FILE)
+$(PKG)_URL      := http://origin.releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype dbus
 
 define $(PKG)_UPDATE

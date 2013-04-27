@@ -10,8 +10,10 @@ $(PKG)_URL      := http://www.pointclouds.org/assets/files/$($(PKG)_VERSION)/$($
 $(PKG)_DEPS     := gcc libgomp boost eigen flann vtk
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- "http://www.pointclouds.org/downloads/" | \
+    grep '<a href=.*tar' | \
+    $(SED) -n 's,.*PCL-\([0-9][^>]*\)-Source.*,\1,p' | \
+    head -1
 endef
 
 # There is a strange problem where including <cfloat> leads to an error

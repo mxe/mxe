@@ -3,7 +3,7 @@
 
 PKG             := harfbuzz
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := c1a0dc10bfa99104e5fe2e1bdcb85072150abf8b
+$(PKG)_CHECKSUM := 2f33c388a0be3d07fda58201890d8a9f54a9e7ee
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.freedesktop.org/software/$(PKG)/release/$($(PKG)_FILE)
@@ -22,6 +22,7 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
-        --enable-static
+        --enable-static \
+        ICU_CONFIG=/bin/false
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

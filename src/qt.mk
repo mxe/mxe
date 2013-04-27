@@ -67,10 +67,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt'
     $(MAKE) -C '$(1)' -j 1 install
-    ln -fs '$(PREFIX)/$(TARGET)/qt/bin/moc' '$(PREFIX)/bin/$(TARGET)-moc'
-    ln -fs '$(PREFIX)/$(TARGET)/qt/bin/rcc' '$(PREFIX)/bin/$(TARGET)-roc'
-    ln -fs '$(PREFIX)/$(TARGET)/qt/bin/uic' '$(PREFIX)/bin/$(TARGET)-uic'
-    ln -fs '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PREFIX)/bin/$(TARGET)-qmake'
 
     cd '$(1)/tools/assistant' && '$(1)/bin/qmake' assistant.pro
     $(MAKE) -C '$(1)/tools/assistant' -j '$(JOBS)' install
@@ -83,7 +79,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/tools/qdbus' -j '$(JOBS)' install
 
     mkdir            '$(1)/test-qt'
-    cd               '$(1)/test-qt' && '$(TARGET)-qmake' '$(PWD)/$(2).pro'
+    cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PWD)/$(2).pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef

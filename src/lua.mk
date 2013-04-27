@@ -3,7 +3,7 @@
 
 PKG             := lua
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 6bb1b0a39b6a5484b71a83323c690154f86b2021
+$(PKG)_CHECKSUM := 0857e41e5579726a4cb96732e80d7aa47165eaf5
 $(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)
 $(PKG)_FILE     := lua-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.lua.org/ftp/$($(PKG)_FILE)
@@ -30,8 +30,15 @@ define $(PKG)_BUILD
         INSTALL='$(INSTALL)' \
         install
 
+    #pkg-config file
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $(PKG)'; \
+     echo 'Libs: -l$(PKG)';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lua.exe' \
-        -llua
+        `$(TARGET)-pkg-config --libs lua`
 endef

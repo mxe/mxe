@@ -12,7 +12,8 @@ $(PKG)_DEPS     := gcc zlib
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://icculus.org/physfs/downloads/?M=D' | \
     $(SED) -n 's,.*<a href="physfs-\([0-9][^"]*\)\.tar.*,\1,pI' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
