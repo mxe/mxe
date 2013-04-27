@@ -6,11 +6,11 @@ $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := a3bdcab48307794c297e790435bcce7becb9edae
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://ftp.easysw.com/pub/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.msweet.org/files/project3/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ftp.easysw.com/pub/mxml/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://www.msweet.org/downloads.php?L+Z3' | \
     $(SED) -n 's,.*<a href="\([0-9][^"]*\)/.*,\1,p' | \
     head -1
 endef
