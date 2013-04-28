@@ -3,10 +3,10 @@
 
 PKG             := qttranslations
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := c24dba6d0cb1cf8af2369863ee7e8340b7a798fd
+$(PKG)_CHECKSUM := 3f31c4ebeb0ff4fc610088499aa162733c653af4
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules_tar/$($(PKG)_FILE)
+$(PKG)_URL      := http://origin.releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase qttools
 
 define $(PKG)_UPDATE

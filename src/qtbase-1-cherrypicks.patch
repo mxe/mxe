@@ -1,0 +1,350 @@
+This file is part of MXE.
+See index.html for further information.
+
+From d04c8e88266737b6fb7ed29780905b54ee68eb5e Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 26 Feb 2013 13:23:33 +0100
+Subject: [PATCH 1/8] use pkg-config for freetype
+
+Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
+
+diff --git a/src/platformsupport/fontdatabases/basic/basic.pri b/src/platformsupport/fontdatabases/basic/basic.pri
+index 6b5f6d0..d21f4e3 100644
+--- a/src/platformsupport/fontdatabases/basic/basic.pri
++++ b/src/platformsupport/fontdatabases/basic/basic.pri
+@@ -83,5 +83,7 @@ contains(QT_CONFIG, freetype) {
+ } else:contains(QT_CONFIG, system-freetype) {
+     # pull in the proper freetype2 include directory
+     include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
++    CONFIG += link_pkgconfig
++    PKGCONFIG += freetype2
+ }
+ 
+-- 
+1.8.1.4
+
+
+From b96f92ed207c7039d753e0ba8fffda4d676c3f38 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 22 Dec 2012 17:45:34 +0100
+Subject: [PATCH 2/8] WIP: qmake writeFile(): work around concurrent
+ QDir::mkpath() failure
+
+This actually happened when building qtimageformats with make -j4.
+Failure in mkspecs/features/qt_plugin.prf:
+    write_file($$MODULE_PRI, MODULE_PRI_CONT)|error("Aborting.") with make -j4.
+
+Change-Id: Ibc685f613d721e178e6aff408905d77b0ce1740a
+
+diff --git a/qmake/library/qmakebuiltins.cpp b/qmake/library/qmakebuiltins.cpp
+index f46d66b..4632cf7 100644
+--- a/qmake/library/qmakebuiltins.cpp
++++ b/qmake/library/qmakebuiltins.cpp
+@@ -310,9 +310,17 @@ QMakeEvaluator::writeFile(const QString &ctx, const QString &fn, QIODevice::Open
+ {
+     QFileInfo qfi(fn);
+     if (!QDir::current().mkpath(qfi.path())) {
+-        evalError(fL1S("Cannot create %1directory %2.")
+-                  .arg(ctx, QDir::toNativeSeparators(qfi.path())));
+-        return ReturnFalse;
++        // could have failed due to concurrent mkpath attempt
++#ifdef Q_OS_WIN
++       Sleep(1000);
++#else
++       sleep(1);
++#endif
++        if (!qfi.dir().exists()) {
++            evalError(fL1S("Cannot create %1directory %2.")
++                      .arg(ctx, QDir::toNativeSeparators(qfi.path())));
++            return ReturnFalse;
++        }
+     }
+     QString errStr;
+     if (!doWriteFile(qfi.filePath(), mode, contents, &errStr)) {
+-- 
+1.8.1.4
+
+
+From 63f1f49850ac741eb604d6cae959546d73ea9a7d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?David=20E=2E=20Narv=C3=A1ez?= <david.narvaez@computer.org>
+Date: Sat, 23 Feb 2013 23:14:50 -0500
+Subject: [PATCH 3/8] Rename qAbs Function for timeval
+
+This decouples it from qAbs which is declared as a constexpr under
+certain compilation flags and enables for qtbase to be compiled with
+GCC 4.8
+
+Change-Id: I78e02256ffc8b460ca74ae5241e77dfac4e09ba9
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+(cherry picked from commit d9ff510f02bba63dabe7a081a68296056a89ae4c)
+
+diff --git a/src/corelib/kernel/qtimerinfo_unix.cpp b/src/corelib/kernel/qtimerinfo_unix.cpp
+index 0eee425..7a29247 100644
+--- a/src/corelib/kernel/qtimerinfo_unix.cpp
++++ b/src/corelib/kernel/qtimerinfo_unix.cpp
+@@ -94,8 +94,7 @@ timeval QTimerInfoList::updateCurrentTime()
+ 
+ #if ((_POSIX_MONOTONIC_CLOCK-0 <= 0) && !defined(Q_OS_MAC) && !defined(Q_OS_INTEGRITY)) || defined(QT_BOOTSTRAPPED)
+ 
+-template <>
+-timeval qAbs(const timeval &t)
++timeval qAbsTimeval(const timeval &t)
+ {
+     timeval tmp = t;
+     if (tmp.tv_sec < 0) {
+@@ -144,7 +143,7 @@ bool QTimerInfoList::timeChanged(timeval *delta)
+     timeval tickGranularity;
+     tickGranularity.tv_sec = 0;
+     tickGranularity.tv_usec = msPerTick * 1000;
+-    return elapsedTimeTicks < ((qAbs(*delta) - tickGranularity) * 10);
++    return elapsedTimeTicks < ((qAbsTimeval(*delta) - tickGranularity) * 10);
+ }
+ 
+ /*
+-- 
+1.8.1.4
+
+
+From 1b78b16a6544a5002ce2dbc10c87c6195d7a0a01 Mon Sep 17 00:00:00 2001
+From: Israel Lins <israelins85@yahoo.com.br>
+Date: Mon, 11 Feb 2013 16:13:24 -0300
+Subject: [PATCH 4/8] ODBC: fix loss of milliseconds when binding QDateTime
+
+Caused by operator precedence error.
+
+Follow-up to commit b8b79a0f37ec74fd5b4ad829e522a384ba3622ae
+
+Task-number: QTBUG-2192
+Change-Id: I17decd18c469b48a0bc938ae05c16cced8042219
+Reviewed-by: Mark Brand <mabrand@mabrand.nl>
+(cherry picked from commit 36b6d4afc970a328cced87af3d39b70d327eb3ad)
+
+diff --git a/src/sql/drivers/odbc/qsql_odbc.cpp b/src/sql/drivers/odbc/qsql_odbc.cpp
+index 9517d95..5fa4779 100644
+--- a/src/sql/drivers/odbc/qsql_odbc.cpp
++++ b/src/sql/drivers/odbc/qsql_odbc.cpp
+@@ -1407,7 +1407,7 @@ bool QODBCResult::exec()
+ 
+                     // (How many leading digits do we want to keep?  With SQL Server 2005, this should be 3: 123000000)
+                     int keep = (int)qPow(10.0, 9 - qMin(9, precision));
+-                    dt->fraction /= keep * keep;
++                    dt->fraction = (dt->fraction / keep) * keep;
+                 }
+ 
+                 r = SQLBindParameter(d->hStmt,
+diff --git a/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp b/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp
+index 1d2a605..951d6d7 100644
+--- a/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp
++++ b/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp
+@@ -3419,14 +3419,19 @@ void tst_QSqlQuery::QTBUG_2192()
+         QSqlQuery q(db);
+         QVERIFY_SQL(q, exec(QString("CREATE TABLE " + tableName + " (dt %1)").arg(tst_Databases::dateTimeTypeName(db))));
+ 
++        QDateTime dt = QDateTime(QDate(2012, 7, 4), QTime(23, 59, 59, 999));
+         QVERIFY_SQL(q, prepare("INSERT INTO " + tableName + " (dt) VALUES (?)"));
+-        q.bindValue(0, QVariant(QDateTime(QDate(2012, 7, 4), QTime(23, 59, 59, 999))));
++        q.bindValue(0, dt);
+         QVERIFY_SQL(q, exec());
+ 
+-        // Check if value was stored with at least second precision.
+         QVERIFY_SQL(q, exec("SELECT dt FROM " + tableName));
+         QVERIFY_SQL(q, next());
+-        QVERIFY(q.value(0).toDateTime().msecsTo(QDateTime(QDate(2012, 7, 4), QTime(23, 59, 59, 999))) < 1000 );
++
++        // Check if retrieved value preserves reported precision
++        int precision = qMax(0, q.record().field("dt").precision());
++        int diff = qAbs(q.value(0).toDateTime().msecsTo(dt));
++        int keep = qMin(1000, (int)qPow(10.0, precision));
++        QVERIFY(diff <= 1000 - keep);
+     }
+ }
+ 
+-- 
+1.8.1.4
+
+
+From c80f315f5e21d1550140e8ac6dd682fcdf50889c Mon Sep 17 00:00:00 2001
+From: Israel Lins <israelins85@yahoo.com.br>
+Date: Sun, 17 Mar 2013 23:23:15 -0300
+Subject: [PATCH 5/8] ODBC: fixed consistence of return of QODBCResult::exec()
+
+The QODBCResult::exec() returns false when query is an delete
+with no data do delete caused by SQLExecute function returning
+SQL_NO_DATA, but the false return means error on execution.
+
+Task-number:  QTBUG-10569
+Change-Id: I6c7ebadcf62ab404b60c7bcccdab6a10bf16a923
+Reviewed-by: Mark Brand <mabrand@mabrand.nl>
+(cherry picked from commit 0646d1131b4bc65cdd9af29f4ce00fdd2398a3df)
+
+diff --git a/src/sql/drivers/odbc/qsql_odbc.cpp b/src/sql/drivers/odbc/qsql_odbc.cpp
+index 5fa4779..c6fd49d 100644
+--- a/src/sql/drivers/odbc/qsql_odbc.cpp
++++ b/src/sql/drivers/odbc/qsql_odbc.cpp
+@@ -1592,7 +1592,7 @@ bool QODBCResult::exec()
+         }
+     }
+     r = SQLExecute(d->hStmt);
+-    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
++    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO && r != SQL_NO_DATA) {
+         qWarning() << "QODBCResult::exec: Unable to execute statement:" << qODBCWarn(d);
+         setLastError(qMakeError(QCoreApplication::translate("QODBCResult",
+                      "Unable to execute statement"), QSqlError::StatementError, d));
+diff --git a/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp b/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp
+index 951d6d7..eb5c309 100644
+--- a/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp
++++ b/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp
+@@ -1027,6 +1027,10 @@ void tst_QSqlQuery::isActive()
+     QVERIFY_SQL( q, exec( "delete from " + qtest + " where id = 42" ) );
+ 
+     QVERIFY( q.isActive() );
++
++    QVERIFY_SQL( q, exec( "delete from " + qtest + " where id = 42" ) );
++
++    QVERIFY( q.isActive() );
+ }
+ 
+ void tst_QSqlQuery::numRowsAffected()
+-- 
+1.8.1.4
+
+
+From c31329e0d735e1c36c1762d0a05764c9e4a52ca2 Mon Sep 17 00:00:00 2001
+From: Israel Lins <israelins85@yahoo.com.br>
+Date: Sun, 17 Mar 2013 23:20:55 -0300
+Subject: [PATCH 6/8] ODBC: lost info about column metadata on SQL_NO_DATA
+
+In reset() if SqlExecDirect returns SQL_NO_DATA the column metadata
+is ignored.
+
+Change-Id: I0501fa47c42754bba42b3531da59e66c696eac53
+Reviewed-by: Mark Brand <mabrand@mabrand.nl>
+(cherry picked from commit f9d856b3f5a4ceaeb8a5ac88aad2ad6b9e540abf)
+
+diff --git a/src/sql/drivers/odbc/qsql_odbc.cpp b/src/sql/drivers/odbc/qsql_odbc.cpp
+index c6fd49d..5932b57 100644
+--- a/src/sql/drivers/odbc/qsql_odbc.cpp
++++ b/src/sql/drivers/odbc/qsql_odbc.cpp
+@@ -960,11 +960,6 @@ bool QODBCResult::reset (const QString& query)
+         return false;
+     }
+ 
+-    if(r == SQL_NO_DATA) {
+-        setSelect(false);
+-        return true;
+-    }
+-
+     SQLINTEGER bufferLength;
+     SQLULEN isScrollable;
+     r = SQLGetStmtAttr(d->hStmt, SQL_ATTR_CURSOR_SCROLLABLE, &isScrollable, SQL_IS_INTEGER, &bufferLength);
+-- 
+1.8.1.4
+
+
+From 8f8677970ed5ca7e333095ab48a9b2bccbfd3eb5 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 23 Apr 2013 22:46:43 +0200
+Subject: [PATCH 7/8] qsql_odbc:  fix SQLGetStmtAtt usage
+
+Failure to initialize the variable can cause spurious non-zero
+values.
+
+http://msdn.microsoft.com/en-us/library/windows/desktop/ms715438(v=vs.85).aspx
+
+"..value can either be a SQLULEN value or a null-terminated character
+string. If the value is a SQLULEN value, some drivers may only write the
+lower 32-bit or 16-bit of a buffer and leave the higher-order
+bit unchanged. Therefore, applications should use a buffer of SQLULEN
+and initialize the value to 0 before calling this function. Also, the
+BufferLength and StringLengthPtr arguments are not used."
+
+Follow-up to 1509316a37fb2d365230d020d1dfc251c830fd56
+
+Change-Id: I2e92eb845a2590bea0849c52bde8902adff1b419
+Reviewed-by: Andy Shaw <andy.shaw@digia.com>
+(cherry picked from commit af35ee291a1bbbc8627f9a17f7e104898d49b138)
+
+diff --git a/src/sql/drivers/odbc/qsql_odbc.cpp b/src/sql/drivers/odbc/qsql_odbc.cpp
+index 5932b57..b05cd4d 100644
+--- a/src/sql/drivers/odbc/qsql_odbc.cpp
++++ b/src/sql/drivers/odbc/qsql_odbc.cpp
+@@ -960,9 +960,8 @@ bool QODBCResult::reset (const QString& query)
+         return false;
+     }
+ 
+-    SQLINTEGER bufferLength;
+-    SQLULEN isScrollable;
+-    r = SQLGetStmtAttr(d->hStmt, SQL_ATTR_CURSOR_SCROLLABLE, &isScrollable, SQL_IS_INTEGER, &bufferLength);
++    SQLULEN isScrollable = 0;
++    r = SQLGetStmtAttr(d->hStmt, SQL_ATTR_CURSOR_SCROLLABLE, &isScrollable, SQL_IS_INTEGER, 0);
+     if(r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO)
+         QSqlResult::setForwardOnly(isScrollable==SQL_NONSCROLLABLE);
+ 
+@@ -1108,7 +1107,7 @@ bool QODBCResult::fetchLast()
+                 "Unable to fetch last"), QSqlError::ConnectionError, d));
+         return false;
+     }
+-    SQLINTEGER currRow;
++    SQLULEN currRow = 0;
+     r = SQLGetStmtAttr(d->hStmt,
+                         SQL_ROW_NUMBER,
+                         &currRow,
+@@ -1594,9 +1593,8 @@ bool QODBCResult::exec()
+         return false;
+     }
+ 
+-    SQLINTEGER bufferLength;
+-    SQLULEN isScrollable;
+-    r = SQLGetStmtAttr(d->hStmt, SQL_ATTR_CURSOR_SCROLLABLE, &isScrollable, SQL_IS_INTEGER, &bufferLength);
++    SQLULEN isScrollable = 0;
++    r = SQLGetStmtAttr(d->hStmt, SQL_ATTR_CURSOR_SCROLLABLE, &isScrollable, SQL_IS_INTEGER, 0);
+     if(r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO)
+         QSqlResult::setForwardOnly(isScrollable==SQL_NONSCROLLABLE);
+ 
+-- 
+1.8.1.4
+
+
+From 4f46ba28ffdb15a18c2ec77ed8bd81e90883c972 Mon Sep 17 00:00:00 2001
+From: Matt Fischer <matt.fischer@garmin.com>
+Date: Thu, 28 Feb 2013 10:52:12 -0600
+Subject: [PATCH 8/8] Fixed -dbus-linked when cross-compiling from Windows
+
+Since Windows doesn't have pkg-config, it doesn't get -ldbus-1
+added to the command line automatically like Linux does.  Code
+was present to deal with this case, however it was only configured
+to work when native-compiling Qt.  The flag was not added when
+cross-compiling, meaning that -dbus-linked did not work correctly
+in that case.  This patch changes the code to add the flag properly
+in both cases.
+
+Change-Id: I67881643bd658161f4929f3932859ccf636ca7a9
+Task-number: QTBUG-29984
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+(cherry picked from commit c82b0815ec80b3750a110d47c68142bb448ddf56)
+
+diff --git a/src/dbus/dbus.pro b/src/dbus/dbus.pro
+index 5ad77dd..2e4119b 100644
+--- a/src/dbus/dbus.pro
++++ b/src/dbus/dbus.pro
+@@ -6,6 +6,8 @@ MODULE_CONFIG = dbusadaptors dbusinterfaces
+ !isEmpty(DBUS_PATH) {
+     INCLUDEPATH += $$DBUS_PATH/include
+     QMAKE_LIBDIR += $$DBUS_PATH/lib
++    win32:CONFIG(debug, debug|release):QT_LIBS_DBUS += -ldbus-1d
++    else:QT_LIBS_DBUS += -ldbus-1
+ }
+ 
+ DEFINES += DBUS_API_SUBJECT_TO_CHANGE
+@@ -21,8 +23,6 @@ win32 {
+         -ladvapi32 \
+         -lnetapi32 \
+         -luser32
+-    CONFIG(debug, debug|release):LIBS_PRIVATE += -ldbus-1d
+-    else:LIBS_PRIVATE += -ldbus-1
+ }
+ 
+ QMAKE_DOCS = $$PWD/doc/qtdbus.qdocconf
+-- 
+1.8.1.4
+

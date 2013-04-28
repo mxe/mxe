@@ -3,7 +3,7 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3ebc7def72e05efcb3cd4c8338ad6fc2c5f8d815
+$(PKG)_CHECKSUM := b6190648acdb831eb861627310da4a8bc7057099
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$(PKG)_FILE
@@ -27,12 +27,12 @@ define $(PKG)_BUILD
         .
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(SED) -i 's,^\(Libs.private:.* \)$(PREFIX)/$(TARGET)/lib/libiconv\.a,\1-liconv,g' $(1)/libvmime.pc
+    $(SED) -i 's,^\(Libs.private:.* \)$(PREFIX)/$(TARGET)/lib/libiconv\.a,\1-liconv,g' $(1)/vmime.pc
     $(MAKE) -C '$(1)' install
 
     $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
     $(TARGET)-g++ -s -o '$(1)/examples/test-vmime.exe' \
         '$(1)/examples/example6.cpp' \
-        `'$(TARGET)-pkg-config' libvmime --cflags --libs`
+        `'$(TARGET)-pkg-config' vmime --cflags --libs`
     $(INSTALL) -m755 '$(1)/examples/test-vmime.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef

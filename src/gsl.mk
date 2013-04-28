@@ -3,17 +3,17 @@
 
 PKG             := gsl
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := e1a600e4fe359692e6f0e28b7e12a96681efbe52
+$(PKG)_CHECKSUM := d914f84b39a5274b0a589d9b83a66f44cd17ca8e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=$(PKG).git;a=tags' | \
-    grep '<a class="list subject"' | \
-    $(SED) -n 's,.*<a[^>]*>[^0-9>]*\([0-9][^<]*\)<.*,\1,p' | \
-    head -1
+    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/$(PKG)/' | \
+    $(SED) -n 's,.*<a href="gsl-\([0-9.]\+\).tar.gz".*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

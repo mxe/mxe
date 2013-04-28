@@ -43,11 +43,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 coreboot
     $(MAKE) -C '$(1)' -j 1 all
     # install ocamldoc and camlp4 (non cross versions)
-    $(MAKE) -C '$(1)/ocamldoc' -j 1 install
-    cd '$(1)' && BINDIR=$(PREFIX)/$(TARGET)/bin \
-                 LIBDIR=$(PREFIX)/$(TARGET)/lib/ocaml \
-                 PREFIX=$(PREFIX)/$(TARGET) \
-                 ./build/partial-install.sh
 
     ####### patch mingw include
     # Now patch utils/clflags.ml to hardcode mingw-specific include.
@@ -112,15 +107,14 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 installopt
     # Rename all the binaries to target-binary
     for f in ocamlc ocamlcp ocamlrun ocamldep ocamlmklib ocamlmktop ocamlopt \
-      ocamlprof camlp4prof camlp4boot camlp4 camlp4oof camlp4of camlp4o \
-      camlp4rf camlp4r camlp4orf ocamldoc ocamllex ocamlyacc; do \
+      ocamlprof; do \
         cp -f $(PREFIX)/$(TARGET)/bin/$$f $(PREFIX)/bin/$(TARGET)-$$f; \
     done
 
     # test ocamlopt
     cp '$(2).ml' '$(1)/test.ml'
     cd '$(1)' && '$(TARGET)-ocamlopt' test.ml
-    # test ocamlbuild
+    # test ocamlbuild from package ocaml-native, now that ocamlopt works
     mkdir '$(1)/tmp' && cp '$(2).ml' '$(1)/tmp/test.ml'
     cd '$(1)/tmp' && $(TARGET)-ocamlbuild test.native
 endef

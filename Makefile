@@ -15,6 +15,7 @@ LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
 PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
+SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
 WGET       := wget --no-check-certificate \
                    --user-agent=$(shell wget --version | \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
@@ -22,7 +23,7 @@ WGET       := wget --no-check-certificate \
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 gcc intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
-                scons $(SED) unzip wget xz yasm
+                scons $(SED) $(SORT) unzip wget xz yasm
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
@@ -229,14 +230,17 @@ define UPDATE
     $(if $(2),
         $(if $(filter $(2),$($(1)_IGNORE)),
             $(info IGNORED  $(1)  $(2)),
-            $(if $(filter $(2),$($(1)_VERSION)),
-                $(info .        $(1)  $(2)),
+            $(if $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1)),
+                $(if $(filter $(2),$($(1)_VERSION)),
+                    $(info .        $(1)  $(2)),
+                    $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
                 $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$(2)/' '$(TOP_DIR)/index.html'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
                     || { $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$($(1)_VERSION)/' '$(TOP_DIR)/index.html'; \
                          exit 1; })),
-        $(error Unable to update version number of package $(1)))
+        $(info Unable to update version number of package $(1) \
+            $(newline)$(newline)$($(1)_UPDATE)$(newline)))
 
 endef
 update:

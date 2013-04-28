@@ -17,6 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    find '$(1)' -name 'Makefile.in' \
+        -exec $(SED) -i 's,make ,$(MAKE) ,g' {} \;
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \

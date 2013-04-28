@@ -3,7 +3,7 @@
 
 PKG             := libxml2
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a43d7c0a8e463ac5a7846254f2a732a9af146fab
+$(PKG)_CHECKSUM := eb3e2146c6d68aea5c2a4422ed76fe196f933c21
 $(PKG)_SUBDIR   := libxml2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)

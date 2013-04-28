@@ -3,8 +3,8 @@
 
 PKG             := eigen
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := b788877a4d4b1685ee2a5d738a65b04b6a21ff3d
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-5097c01bcdc4
+$(PKG)_CHECKSUM := 07e248deaaa5d2a8822a0581a606151127fce450
+$(PKG)_SUBDIR   := $(PKG)-$(PKG)-2249f9c22fe8
 $(PKG)_FILE     := $($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc

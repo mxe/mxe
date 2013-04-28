@@ -16,7 +16,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # patched ocaml source to get ocamlbuild use $(TARGET)-ocamlc, $(TARGET)-ocamlfind, ...
+    # the following script would require ocamlbuild with an option '-ocamlfind'
+    # to work:
+    #(echo '#!/bin/sh'; \
+    # echo 'exec $(PREFIX)/bin/ocamlbuild -use-ocamlfind -ocamlfind $(TARGET)-ocamlfind "$$@"') \
+    # > '$(PREFIX)/bin/$(TARGET)-ocamlbuild'
+    # chmod 0755 '$(PREFIX)/bin/$(TARGET)-ocamlbuild'
+    # As it is not the case, we patche ocaml source to get ocamlbuild use $(TARGET)-ocamlc, $(TARGET)-ocamlfind, ...
     cd '$(1)' && ./configure \
         -prefix '$(PREFIX)/$(TARGET)' \
         -bindir '$(PREFIX)/$(TARGET)/bin/ocaml-native' \
@@ -30,10 +36,10 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' ocamlbuild.native
     cp -f '$(1)/_build/ocamlbuild/ocamlbuild.native' $(PREFIX)/bin/$(TARGET)-ocamlbuild
     $(MAKE) -C '$(1)' install
-    # the following script requires ocamlbuild with option -ocamlfind to work
-    #(echo '#!/bin/sh'; \
-    # echo 'exec $(PREFIX)/bin/ocamlbuild -use-ocamlfind -ocamlfind $(TARGET)-ocamlfind "$$@"') \
-    # > '$(PREFIX)/bin/$(TARGET)-ocamlbuild'
-    #chmod 0755 '$(PREFIX)/bin/$(TARGET)-ocamlbuild'
-    # test will be done once cross ocamlopt is built
+    # Rename all the binaries to target-binary
+    for f in camlp4 camlp4oof camlp4of camlp4o camlp4rf camlp4r camlp4orf \
+      ocamldoc ocamllex ocamlyacc; do \
+        cp -f $(PREFIX)/$(TARGET)/bin/ocaml-native/$$f $(PREFIX)/bin/$(TARGET)-$$f; \
+    done
+    # test will be done once cross ocamlopt is built in package ocaml-core
 endef

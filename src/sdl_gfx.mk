@@ -10,9 +10,9 @@ $(PKG)_URL      := http://www.ferzkopp.net/Software/SDL_gfx-2.0/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl
 
 define $(PKG)_UPDATE
-# thanks debian/watch for the inspiration!
     $(WGET) -q -O- 'http://www.ferzkopp.net/joomla/content/view/19/14/' | \
-    $(SED) -n 's,.*/joomla/\.\./Software/SDL_gfx\-2\.0/SDL_gfx-\([0-9][^"]*\)\.tar.*,\1,p'
+    grep 'href.*tar\.' | \
+    $(SED) -n 's,.*SDL_gfx-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
