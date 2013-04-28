@@ -4,7 +4,7 @@ See index.html for further information.
 From d04c8e88266737b6fb7ed29780905b54ee68eb5e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 1/7] use pkg-config for freetype
+Subject: [PATCH 1/8] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -27,7 +27,7 @@ index 6b5f6d0..d21f4e3 100644
 From b96f92ed207c7039d753e0ba8fffda4d676c3f38 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 22 Dec 2012 17:45:34 +0100
-Subject: [PATCH 2/7] WIP: qmake writeFile(): work around concurrent
+Subject: [PATCH 2/8] WIP: qmake writeFile(): work around concurrent
  QDir::mkpath() failure
 
 This actually happened when building qtimageformats with make -j4.
@@ -68,7 +68,7 @@ index f46d66b..4632cf7 100644
 From 63f1f49850ac741eb604d6cae959546d73ea9a7d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?David=20E=2E=20Narv=C3=A1ez?= <david.narvaez@computer.org>
 Date: Sat, 23 Feb 2013 23:14:50 -0500
-Subject: [PATCH 3/7] Rename qAbs Function for timeval
+Subject: [PATCH 3/8] Rename qAbs Function for timeval
 
 This decouples it from qAbs which is declared as a constexpr under
 certain compilation flags and enables for qtbase to be compiled with
@@ -108,7 +108,7 @@ index 0eee425..7a29247 100644
 From 1b78b16a6544a5002ce2dbc10c87c6195d7a0a01 Mon Sep 17 00:00:00 2001
 From: Israel Lins <israelins85@yahoo.com.br>
 Date: Mon, 11 Feb 2013 16:13:24 -0300
-Subject: [PATCH 4/7] ODBC: fix loss of milliseconds when binding QDateTime
+Subject: [PATCH 4/8] ODBC: fix loss of milliseconds when binding QDateTime
 
 Caused by operator precedence error.
 
@@ -166,7 +166,7 @@ index 1d2a605..951d6d7 100644
 From c80f315f5e21d1550140e8ac6dd682fcdf50889c Mon Sep 17 00:00:00 2001
 From: Israel Lins <israelins85@yahoo.com.br>
 Date: Sun, 17 Mar 2013 23:23:15 -0300
-Subject: [PATCH 5/7] ODBC: fixed consistence of return of QODBCResult::exec()
+Subject: [PATCH 5/8] ODBC: fixed consistence of return of QODBCResult::exec()
 
 The QODBCResult::exec() returns false when query is an delete
 with no data do delete caused by SQLExecute function returning
@@ -212,7 +212,7 @@ index 951d6d7..eb5c309 100644
 From c31329e0d735e1c36c1762d0a05764c9e4a52ca2 Mon Sep 17 00:00:00 2001
 From: Israel Lins <israelins85@yahoo.com.br>
 Date: Sun, 17 Mar 2013 23:20:55 -0300
-Subject: [PATCH 6/7] ODBC: lost info about column metadata on SQL_NO_DATA
+Subject: [PATCH 6/8] ODBC: lost info about column metadata on SQL_NO_DATA
 
 In reset() if SqlExecDirect returns SQL_NO_DATA the column metadata
 is ignored.
@@ -244,7 +244,7 @@ index c6fd49d..5932b57 100644
 From 8f8677970ed5ca7e333095ab48a9b2bccbfd3eb5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 23 Apr 2013 22:46:43 +0200
-Subject: [PATCH 7/7] qsql_odbc:  fix SQLGetStmtAtt usage
+Subject: [PATCH 7/8] qsql_odbc:  fix SQLGetStmtAtt usage
 
 Failure to initialize the variable can cause spurious non-zero
 values.
@@ -301,6 +301,50 @@ index 5932b57..b05cd4d 100644
      if(r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO)
          QSqlResult::setForwardOnly(isScrollable==SQL_NONSCROLLABLE);
  
+-- 
+1.8.1.4
+
+
+From 4f46ba28ffdb15a18c2ec77ed8bd81e90883c972 Mon Sep 17 00:00:00 2001
+From: Matt Fischer <matt.fischer@garmin.com>
+Date: Thu, 28 Feb 2013 10:52:12 -0600
+Subject: [PATCH 8/8] Fixed -dbus-linked when cross-compiling from Windows
+
+Since Windows doesn't have pkg-config, it doesn't get -ldbus-1
+added to the command line automatically like Linux does.  Code
+was present to deal with this case, however it was only configured
+to work when native-compiling Qt.  The flag was not added when
+cross-compiling, meaning that -dbus-linked did not work correctly
+in that case.  This patch changes the code to add the flag properly
+in both cases.
+
+Change-Id: I67881643bd658161f4929f3932859ccf636ca7a9
+Task-number: QTBUG-29984
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+(cherry picked from commit c82b0815ec80b3750a110d47c68142bb448ddf56)
+
+diff --git a/src/dbus/dbus.pro b/src/dbus/dbus.pro
+index 5ad77dd..2e4119b 100644
+--- a/src/dbus/dbus.pro
++++ b/src/dbus/dbus.pro
+@@ -6,6 +6,8 @@ MODULE_CONFIG = dbusadaptors dbusinterfaces
+ !isEmpty(DBUS_PATH) {
+     INCLUDEPATH += $$DBUS_PATH/include
+     QMAKE_LIBDIR += $$DBUS_PATH/lib
++    win32:CONFIG(debug, debug|release):QT_LIBS_DBUS += -ldbus-1d
++    else:QT_LIBS_DBUS += -ldbus-1
+ }
+ 
+ DEFINES += DBUS_API_SUBJECT_TO_CHANGE
+@@ -21,8 +23,6 @@ win32 {
+         -ladvapi32 \
+         -lnetapi32 \
+         -luser32
+-    CONFIG(debug, debug|release):LIBS_PRIVATE += -ldbus-1d
+-    else:LIBS_PRIVATE += -ldbus-1
+ }
+ 
+ QMAKE_DOCS = $$PWD/doc/qtdbus.qdocconf
 -- 
 1.8.1.4
 
