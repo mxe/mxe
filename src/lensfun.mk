@@ -17,6 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's,/usr/bin/python,/usr/bin/env python,' '$(1)/configure'
+    $(SED) -i 's,make ,$(MAKE) ,'                      '$(1)/configure'
     cd '$(1)' && \
         TKP='$(TARGET)-' \
         ./configure \

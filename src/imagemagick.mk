@@ -3,7 +3,7 @@
 
 PKG             := imagemagick
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 8d5529f35f624b83ad925958c977a381ab30c0f7
+$(PKG)_CHECKSUM := 84be2c2fa42cefdf1d7e6cb3a6c73163e2007653
 $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://www.imagemagick.org/download/$($(PKG)_FILE)
