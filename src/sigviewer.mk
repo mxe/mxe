@@ -17,15 +17,11 @@ endef
 
 define $(PKG)_BUILD
 
-	#cp -r pkg/sigviewer '$(1)'
-
-	cd '$(1)'/src/ && CFLAGS=-fstack-protector CXXFLAGS=-fstack-protector $(TARGET)-qmake 
+	cd '$(1)'/src/ && CFLAGS=-fstack-protector CXXFLAGS=-fstack-protector $(PREFIX)/$(TARGET)/qt/bin/qmake
 
 	$(MAKE) -C '$(1)'/src/  
 
 	$(INSTALL) '$(1)'/bin/release/sigviewer.exe $(PREFIX)/$(TARGET)/bin/
-
-	#$(INSTALL) '$(1)'/bin/release/sigviewer.exe /fs/group/jonasgrp/Software/SigViewer/sigviewer.$(shell date +%Y%m%d).$(TARGET).exe
 
 endef
 
