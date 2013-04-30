@@ -17,7 +17,7 @@ endef
 
 define $(PKG)_BUILD
 
-	$(SED) 's|^ac_add_options --target=.*|ac_add_options --target=$(TARGET)|g' .mozconfig >'$(1)'/.mozconfig
+	$(SED) -i 's|^ac_add_options --target=.*|ac_add_options --target=$(TARGET)|g' '$(1)'/.mozconfig
 
   	make -C '$(1)' -f client.mk build
 
