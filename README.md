@@ -12,16 +12,21 @@ make check-requirements
 
 This is just a quick sanity check of your system and also creates a `settings.mk` file. Change the MXE_TARGETS variable in that file and run:
 
+On an 8-core machine
 ```
-make gcc JOBS=[num cores]
-#or a list of packages required for your project, dependencies will be built automatiaclly
-make qt pkg-x pkg-y JOBS=[num cores] -j[num cores/2]
+make gcc JOBS=8
+```
+
+Or a list of packages required for your project, dependencies will be built automatiaclly, optionally in parallel with the -j option (half number of cores is reasoanble)
+```
+make qt pkg-foo pkg-bar JOBS=8 -j4
 ```
 
 Targets can also be specified on the command line:
 
-`make MXE_TARGETS=x86_64-w64-mingw32 JOBS=[num cores] gcc`
-
-`make MXE_TARGETS='x86_64-w64-mingw32 i686-w64-mingw32 i686-pc-mingw32' JOBS=[num cores] gcc`
+```
+make MXE_TARGETS=x86_64-w64-mingw32 ...
+make MXE_TARGETS='x86_64-w64-mingw32 i686-w64-mingw32 i686-pc-mingw32' ...
+```
 
 That will take some time, so review `index.html` while it runs - usage is the same as for mxe, just replace instances of i686-pc-mingw32 as appropriate.
