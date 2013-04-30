@@ -30,6 +30,10 @@ define $(PKG)_BUILD
         -DBOOST_USE_STATIC_LIBS=1 \
         -DBUILD_SHARED_LIBS=0 \
         -C TryRunResults.cgal.cmake .
+
+    # this should be done by cmake somehow
+    $(SED) -i '1s,^,#ifdef __MINGW64__\n#include <windows.h>\n#endif,' '$(1)/src/ImageIO/all_files.cpp'
+
     $(MAKE) -C '$(1)' -j $(JOBS)
     cd '$(1)/examples/AABB_tree' && cmake \
         -DBOOST_LIB_DIAGNOSTIC_DEFINITIONS:STRING="-DBOOST_LIB_DIAGNOSTIC" \
@@ -45,5 +49,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j $(JOBS) install
     $(INSTALL) '$(1)/examples/AABB_tree/AABB_polyhedron_edge_example.exe' '$(PREFIX)/$(TARGET)/bin/test-cgal.exe'
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
