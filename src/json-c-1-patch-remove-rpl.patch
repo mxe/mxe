@@ -11,6 +11,6 @@ see http://lists.fedoraproject.org/pipermail/mingw/2009-May/001567.html
  AC_FUNC_MEMCMP
 -AC_FUNC_MALLOC
 -AC_FUNC_REALLOC
- AC_CHECK_FUNCS(strndup strerror vsnprintf vasprintf open vsyslog strncasecmp)
- 
- AM_PROG_LIBTOOL
+ AC_CHECK_FUNCS(strcasecmp strdup strndup strerror snprintf vsnprintf vasprintf open vsyslog strncasecmp setlocale)
+
+ #check if .section.gnu.warning accepts long strings (for __warn_references)

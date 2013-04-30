@@ -3,7 +3,7 @@
 
 PKG             := json-c
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f495481641a3a014decc58f935b112d07347fb05
+$(PKG)_CHECKSUM := 4bae2468bfd73a2b2eec7419c75c262b5833f567
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-nodoc.tar.gz
 $(PKG)_URL      := https://s3.amazonaws.com/$(PKG)_releases/releases/$($(PKG)_FILE)
@@ -13,7 +13,8 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://s3.amazonaws.com/json-c_releases' | \
     $(SED) -r 's,<Key>,\n<Key>,g' | \
     $(SED) -n 's,.*releases/json-c-\([0-9.]*\).tar.gz.*,\1,p' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
