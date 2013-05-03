@@ -33,6 +33,7 @@ define $(PKG)_BUILD
 
     # this should be done by cmake somehow
     $(SED) -i '1s,^,#ifdef __MINGW64__\n#include <windows.h>\n#endif\n,' '$(1)/src/ImageIO/all_files.cpp'
+    $(SED) -i '1s,^,#ifdef __MINGW64__\n#include <windows.h>\n#endif\n,' '$(1)/src/Qt4/all_files.cpp'
 
     $(MAKE) -C '$(1)' -j $(JOBS)
     cd '$(1)/examples/AABB_tree' && cmake \
