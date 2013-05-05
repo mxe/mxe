@@ -18,9 +18,10 @@ endef
 
 define $(PKG)_BUILD_mingw-w64
     cd '$(1)' && ./configure \
-        $(LINK_STYLE) \
         --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --enable-static \
+        --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     $(PTHREADS_TEST)

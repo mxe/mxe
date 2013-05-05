@@ -21,7 +21,8 @@ define $(PKG)_CONFIGURE
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        $(LINK_STYLE) \
+        --enable-static \
+        --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-bsb \
         --with-grib \
