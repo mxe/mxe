@@ -69,19 +69,19 @@ ESCAPE_PKG = \
 
 DOWNLOAD_PKG_ARCHIVE = \
     $(if $(value $(1)_URL), \
-    mkdir -p '$(PKG_DIR)' && \
-    $(if $($(1)_URL_2), \
-        ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-          $(WGET) -O- '$($(1)_URL_2)' || \
-          $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-          $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
-        ( $(WGET) -O- '$($(1)_URL)' || \
-          $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-          $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
-    $(if $($(1)_FIX_GZIP), \
-        | gzip -d | gzip -9n, \
-        ) \
-    > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)' \
+        mkdir -p '$(PKG_DIR)' && \
+        $(if $($(1)_URL_2), \
+            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
+              $(WGET) -O- '$($(1)_URL_2)' || \
+              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
+            ( $(WGET) -O- '$($(1)_URL)' || \
+              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
+        $(if $($(1)_FIX_GZIP), \
+            | gzip -d | gzip -9n, \
+            ) \
+        > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)' \
     ,$(error URL not specified for package $(1)))
 
 ifeq ($(IGNORE_SETTINGS),yes)
