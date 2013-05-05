@@ -12,12 +12,12 @@ make check-requirements
 
 This is just a quick sanity check of your system and also creates a `settings.mk` file. Change the MXE_TARGETS variable in that file and run:
 
-On an 8-core machine
+On an 8-processor machine
 ```
 make gcc JOBS=8
 ```
 
-Or a list of packages required for your project, dependencies will be built automatiaclly, optionally in parallel with the -j option (half number of cores is reasoanble)
+Or a list of packages required for your project, dependencies will be built automatiaclly, optionally in parallel with the -j option (half number of processors is reasoanble)
 ```
 make qt pkg-foo pkg-bar JOBS=8 -j4
 ```
