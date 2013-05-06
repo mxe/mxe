@@ -1,10 +1,12 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 1cc3dd0dfd47bab82e06be916f9e57ef783406f9 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+Contains ad hoc patches for cross building.
+
+From a2aff1c5e0febc993545ecd8379135ec7b53358b Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Sun, 12 Aug 2012 12:33:26 +0200
-Subject: [PATCH 1/2] explicit mingw cross prefix
+Subject: [PATCH 1/3] explicit mingw cross prefix
 
 This patch has been taken from:
 http://sourceforge.net/tracker/index.php?func=detail&aid=3305366&group_id=22049&atid=373085
@@ -45,13 +47,13 @@ index 80872bc..4f113dd 100755
  Export('defenv')
  
 -- 
-1.7.10.4
+1.8.2.1
 
 
-From 7df0fa80a65279ee7d99da8ec6abdddff7e040b0 Mon Sep 17 00:00:00 2001
-From: freeman <free.man.uu@gmail.com>
+From d48abdf87538c76261cc447501e0abd755b88c4b Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Sun, 12 Aug 2012 12:36:39 +0200
-Subject: [PATCH 2/2] add missing header
+Subject: [PATCH 2/3] add missing header
 
 
 diff --git a/Source/util.h b/Source/util.h
@@ -67,5 +69,520 @@ index 4259a6a..664923e 100755
  
  
 -- 
-1.7.10.4
+1.8.2.1
+
+
+From ed27d84aa1de6aee0a2ba788e90a6d0857d2d535 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Fri, 3 May 2013 17:28:44 +1000
+Subject: [PATCH 3/3] Enable native 64-bit build
+
+Taken from:
+http://anonscm.debian.org/gitweb/?p=collab-maint/nsis.git;a=blob;f=debian/patches/makensis_native_64bit.patch;h=2256a0e193db894dd99507ac0de66f8ae060b46b;hb=HEAD
+
+diff --git a/SCons/Config/gnu b/SCons/Config/gnu
+index a1f917f..adfcbd1 100755
+--- a/SCons/Config/gnu
++++ b/SCons/Config/gnu
+@@ -95,8 +95,6 @@ makensis_env.Append(CXXFLAGS = ['-Wno-non-virtual-dtor']) # ignore virtual dtor
+ makensis_env.Append(CXXFLAGS = ['-Wall'])                 # all warnings
+ 
+ conf = FlagsConfigure(makensis_env)
+-conf.CheckCompileFlag('-m32')                     #
+-conf.CheckLinkFlag('-m32')                        #
+ conf.CheckLinkFlag('$MAP_FLAG')                   # generate map file
+ if not defenv['DEBUG'] and defenv['STRIP'] and defenv['STRIP_CP']:
+ 	TestStrip(conf)                                 # strip
+@@ -149,8 +147,6 @@ conf.Finish()
+ ### cross-platform util environment adjustments
+ 
+ conf = FlagsConfigure(cp_util_env)
+-conf.CheckCompileFlag('-m32')
+-conf.CheckLinkFlag('-m32')
+ if not defenv['DEBUG'] and defenv['STRIP'] and defenv['STRIP_CP']:
+ 	TestStrip(conf)                                 # strip
+ conf.Finish()
+@@ -160,8 +156,6 @@ conf.Finish()
+ test_env = defenv.Clone()
+ test_env.Append(CPPPATH = ['#$BUILD_CONFIG'])
+ conf = FlagsConfigure(test_env)
+-conf.CheckCompileFlag('-m32')
+-conf.CheckLinkFlag('-m32')
+ conf.Finish()
+ 
+ ### weird GCC requirements
+diff --git a/Source/DialogTemplate.cpp b/Source/DialogTemplate.cpp
+index 109a1d7..f821a05 100755
+--- a/Source/DialogTemplate.cpp
++++ b/Source/DialogTemplate.cpp
+@@ -74,7 +74,7 @@ void ReadVarLenArr(LPBYTE &seeker, WCHAR* &readInto, unsigned int uCodePage) {
+     if (IS_INTRESOURCE(x)) { \
+       *(WORD*)seeker = 0xFFFF; \
+       seeker += sizeof(WORD); \
+-      *(WORD*)seeker = ConvertEndianness(WORD(DWORD(x))); \
++      *(WORD*)seeker = ConvertEndianness(WORD((ULONG_PTR)(x))); \
+       seeker += sizeof(WORD); \
+     } \
+     else { \
+@@ -444,7 +444,7 @@ void CDialogTemplate::ConvertToRTL() {
+       szClass = winchar_toansi(m_vItems[i]->szClass);
+ 
+     // Button
+-    if (long(m_vItems[i]->szClass) == 0x80) {
++    if ((ULONG_PTR)(m_vItems[i]->szClass) == 0x80) {
+       m_vItems[i]->dwStyle ^= BS_LEFTTEXT;
+       m_vItems[i]->dwStyle ^= BS_RIGHT;
+       m_vItems[i]->dwStyle ^= BS_LEFT;
+@@ -458,13 +458,13 @@ void CDialogTemplate::ConvertToRTL() {
+       }
+     }
+     // Edit
+-    else if (long(m_vItems[i]->szClass) == 0x81) {
++    else if ((ULONG_PTR)(m_vItems[i]->szClass) == 0x81) {
+       if ((m_vItems[i]->dwStyle & ES_CENTER) == 0) {
+         m_vItems[i]->dwStyle ^= ES_RIGHT;
+       }
+     }
+     // Static
+-    else if (long(m_vItems[i]->szClass) == 0x82) {
++    else if ((ULONG_PTR)(m_vItems[i]->szClass) == 0x82) {
+       if ((m_vItems[i]->dwStyle & SS_TYPEMASK) == SS_LEFT || (m_vItems[i]->dwStyle & SS_TYPEMASK) == SS_LEFTNOWORDWRAP)
+       {
+         m_vItems[i]->dwStyle &= ~SS_TYPEMASK;
+@@ -571,7 +571,7 @@ BYTE* CDialogTemplate::Save(DWORD& dwSize) {
+   // Write all of the items
+   for (unsigned int i = 0; i < m_vItems.size(); i++) {
+     // DLGITEMTEMPLATE[EX]s must be aligned on DWORD boundary
+-    if (DWORD(seeker - pbDlg) % sizeof(DWORD))
++    if ((seeker - pbDlg) % sizeof(DWORD))
+       seeker += sizeof(WORD);
+ 
+     if (m_bExtended) {
+@@ -622,7 +622,7 @@ BYTE* CDialogTemplate::Save(DWORD& dwSize) {
+     }
+   }
+ 
+-  assert((DWORD) seeker - (DWORD) pbDlg == dwSize);
++  assert((DWORD)(seeker - pbDlg) == dwSize);
+ 
+   // DONE!
+   return pbDlg;
+diff --git a/Source/Platform.h b/Source/Platform.h
+index 52eb9bc..3cdfe32 100755
+--- a/Source/Platform.h
++++ b/Source/Platform.h
+@@ -53,6 +53,7 @@ typedef unsigned char UCHAR;
+ typedef const char *LPCCH, *PCSTR, *LPCSTR;
+ typedef unsigned short WCHAR, OLECHAR, *PWCHAR, *LPWCH, *PWCH, *NWPSTR, *LPWSTR, *PWSTR, *BSTR;
+ typedef const unsigned short *LPCWCH, *PCWCH, *LPCWSTR, *PCWSTR, *LPCOLESTR;
++typedef int INT_PTR;
+ typedef unsigned int UINT_PTR;
+ // basic stuff
+ typedef void * HANDLE;
+@@ -60,8 +61,8 @@ typedef HANDLE HWND;
+ typedef HANDLE HMODULE;
+ typedef unsigned long HKEY;
+ // some gdi
+-typedef unsigned long COLORREF;
+-typedef unsigned long HBRUSH;
++typedef DWORD COLORREF;
++typedef UINT32 HBRUSH;
+ // bool
+ #  define FALSE 0
+ #  define TRUE 1
+@@ -166,7 +167,7 @@ typedef DWORDLONG ULONGLONG,*PULONGLONG;
+ #    define MAKEINTRESOURCE MAKEINTRESOURCEA
+ #  endif
+ #  ifndef IMAGE_FIRST_SECTION
+-#    define IMAGE_FIRST_SECTION(h) ( PIMAGE_SECTION_HEADER( (DWORD) h + \
++#    define IMAGE_FIRST_SECTION(h) ( PIMAGE_SECTION_HEADER( (ULONG_PTR) h + \
+                                      FIELD_OFFSET(IMAGE_NT_HEADERS, OptionalHeader) + \
+                                      FIX_ENDIAN_INT16(PIMAGE_NT_HEADERS(h)->FileHeader.SizeOfOptionalHeader) ) )
+ #  endif
+@@ -174,7 +175,7 @@ typedef DWORDLONG ULONGLONG,*PULONGLONG;
+ #    define RGB(r,g,b) ((DWORD)(((BYTE)(r)|((WORD)(g)<<8))|(((DWORD)(BYTE)(b))<<16)))
+ #  endif
+ #  ifndef MAKELONG
+-#    define MAKELONG(a,b) ((LONG)(((WORD)(a))|(((DWORD)((WORD)(b)))<<16)))
++#    define MAKELONG(a,b) ((DWORD)(((WORD)(a))|(((DWORD)((WORD)(b)))<<16)))
+ #  endif
+ #endif
+ #ifndef IS_INTRESOURCE
+@@ -197,8 +198,10 @@ typedef DWORDLONG ULONGLONG,*PULONGLONG;
+ #  define FOF_NOERRORUI 0x0400
+ #endif
+ 
+-#ifndef ULONG_PTR
+-#  define ULONG_PTR DWORD
++// mingw32 and w64-mingw32 do not define ULONG_PTR
++// but rather declare ULONG_PTR via typedef (see basetsd.h)
++#if !defined(__MINGW32__) && !defined(ULONG_PTR)
++#  define ULONG_PTR unsigned long
+ #endif
+ 
+ #ifndef IDC_HAND
+@@ -238,7 +241,7 @@ typedef DWORDLONG ULONGLONG,*PULONGLONG;
+ #  undef INVALID_FILE_ATTRIBUTES
+ #endif
+ #ifndef INVALID_FILE_ATTRIBUTES
+-#  define INVALID_FILE_ATTRIBUTES ((unsigned long) -1)
++#  define INVALID_FILE_ATTRIBUTES ((DWORD) -1)
+ #endif
+ 
+ // shell folders
+diff --git a/Source/Plugins.cpp b/Source/Plugins.cpp
+index 6872b28..90ad393 100755
+--- a/Source/Plugins.cpp
++++ b/Source/Plugins.cpp
+@@ -29,7 +29,7 @@
+ #include "dirreader.h"
+ 
+ #ifdef _WIN32
+-#  include <WinNT.h>
++#  include <winnt.h>
+ #else
+ #  include <sys/stat.h>
+ #endif
+@@ -136,8 +136,8 @@ void Plugins::GetExports(const string &pathToDll, bool displayInfo)
+         DWORD prd = FIX_ENDIAN_INT32(sections[i].PointerToRawData);
+         PIMAGE_EXPORT_DIRECTORY exports = PIMAGE_EXPORT_DIRECTORY(&dlldata[0] + prd + ExportDirVA - va);
+         DWORD na = FIX_ENDIAN_INT32(exports->AddressOfNames);
+-        unsigned long *names = (unsigned long*)((unsigned long) exports + (char *) na - ExportDirVA);
+-        for (unsigned long j = 0; j < FIX_ENDIAN_INT32(exports->NumberOfNames); j++)
++        LPDWORD names = (LPDWORD)((ULONG_PTR)exports + na - ExportDirVA);
++        for (DWORD j = 0; j < FIX_ENDIAN_INT32(exports->NumberOfNames); j++)
+         {
+           const string name = string((char*)exports + FIX_ENDIAN_INT32(names[j]) - ExportDirVA);
+           const string signature = dllName + "::" + name;
+diff --git a/Source/ResourceEditor.cpp b/Source/ResourceEditor.cpp
+index 8509414..b819f4e 100755
+--- a/Source/ResourceEditor.cpp
++++ b/Source/ResourceEditor.cpp
+@@ -27,20 +27,10 @@ using namespace std;
+ #define ALIGN(dwToAlign, dwAlignOn) dwToAlign = (dwToAlign%dwAlignOn == 0) ? dwToAlign : dwToAlign - (dwToAlign%dwAlignOn) + dwAlignOn
+ #define RALIGN(dwToAlign, dwAlignOn) ((dwToAlign%dwAlignOn == 0) ? dwToAlign : dwToAlign - (dwToAlign%dwAlignOn) + dwAlignOn)
+ 
+-#ifndef _WIN32
+-static inline ULONG ConvertEndianness(ULONG u) {
+-  return FIX_ENDIAN_INT32(u);
+-}
+-#endif
+-
+ static inline DWORD ConvertEndianness(DWORD d) {
+   return FIX_ENDIAN_INT32(d);
+ }
+ 
+-static inline LONG ConvertEndianness(LONG l) {
+-  return FIX_ENDIAN_INT32(l);
+-}
+-
+ static inline WORD ConvertEndianness(WORD w) {
+   return FIX_ENDIAN_INT16(w);
+ }
+@@ -52,7 +42,7 @@ PIMAGE_NT_HEADERS CResourceEditor::GetNTHeaders(BYTE* pbPE) {
+     throw runtime_error("PE file contains invalid DOS header");
+ 
+   // Get NT headers
+-  PIMAGE_NT_HEADERS ntHeaders = (PIMAGE_NT_HEADERS)(pbPE + ConvertEndianness(dosHeader->e_lfanew));
++  PIMAGE_NT_HEADERS ntHeaders = (PIMAGE_NT_HEADERS)(pbPE + ConvertEndianness((DWORD)dosHeader->e_lfanew));
+   if (ntHeaders->Signature != IMAGE_NT_SIGNATURE)
+     throw runtime_error("PE file missing NT signature");
+ 
+@@ -684,7 +674,7 @@ void CResourceEditor::WriteRsrcSec(BYTE* pbRsrcSec) {
+     rdDir.NumberOfIdEntries = ConvertEndianness(rdDir.NumberOfIdEntries);
+ 
+     CopyMemory(seeker, &rdDir, sizeof(IMAGE_RESOURCE_DIRECTORY));
+-    crd->m_dwWrittenAt = DWORD(seeker);
++    crd->m_ulWrittenAt = (ULONG_PTR)(seeker);
+     seeker += sizeof(IMAGE_RESOURCE_DIRECTORY);
+ 
+     for (int i = 0; i < crd->CountEntries(); i++) {
+@@ -705,7 +695,7 @@ void CResourceEditor::WriteRsrcSec(BYTE* pbRsrcSec) {
+       rDirE.UName.NameString.NameIsString = (crd->GetEntry(i)->HasName()) ? 1 : 0;
+ 
+       CopyMemory(seeker, &rDirE, sizeof(MY_IMAGE_RESOURCE_DIRECTORY_ENTRY));
+-      crd->GetEntry(i)->m_dwWrittenAt = DWORD(seeker);
++      crd->GetEntry(i)->m_ulWrittenAt = (ULONG_PTR)(seeker);
+       seeker += sizeof(MY_IMAGE_RESOURCE_DIRECTORY_ENTRY);
+     }
+     qDirs.pop();
+@@ -721,7 +711,7 @@ void CResourceEditor::WriteRsrcSec(BYTE* pbRsrcSec) {
+     rDataE.Size = ConvertEndianness(cRDataE->GetSize());
+ 
+     CopyMemory(seeker, &rDataE, sizeof(IMAGE_RESOURCE_DATA_ENTRY));
+-    cRDataE->m_dwWrittenAt = DWORD(seeker);
++    cRDataE->m_ulWrittenAt = (ULONG_PTR)(seeker);
+     seeker += sizeof(IMAGE_RESOURCE_DATA_ENTRY);
+ 
+     qDataEntries.pop();
+@@ -733,7 +723,7 @@ void CResourceEditor::WriteRsrcSec(BYTE* pbRsrcSec) {
+   while (!qStrings.empty()) {
+     CResourceDirectoryEntry* cRDirE = qStrings.front();
+ 
+-    PMY_IMAGE_RESOURCE_DIRECTORY_ENTRY(cRDirE->m_dwWrittenAt)->UName.NameString.NameOffset = ConvertEndianness(DWORD(seeker) - DWORD(pbRsrcSec));
++    PMY_IMAGE_RESOURCE_DIRECTORY_ENTRY(cRDirE->m_ulWrittenAt)->UName.NameString.NameOffset = ConvertEndianness((DWORD) (seeker - pbRsrcSec));
+ 
+     WCHAR* szName = cRDirE->GetName();
+     WORD iLen = winchar_strlen(szName) + 1;
+@@ -754,7 +744,7 @@ void CResourceEditor::WriteRsrcSec(BYTE* pbRsrcSec) {
+   while (!qDataEntries2.empty()) {
+     CResourceDataEntry* cRDataE = qDataEntries2.front();
+     CopyMemory(seeker, cRDataE->GetData(), cRDataE->GetSize());
+-    PIMAGE_RESOURCE_DATA_ENTRY(cRDataE->m_dwWrittenAt)->OffsetToData = ConvertEndianness(seeker - pbRsrcSec + m_dwResourceSectionVA);
++    PIMAGE_RESOURCE_DATA_ENTRY(cRDataE->m_ulWrittenAt)->OffsetToData = ConvertEndianness((DWORD)(seeker - pbRsrcSec) + m_dwResourceSectionVA);
+ 
+     seeker += RALIGN(cRDataE->GetSize(), 8);
+ 
+@@ -764,21 +754,21 @@ void CResourceEditor::WriteRsrcSec(BYTE* pbRsrcSec) {
+   /*
+    * Set all of the directory entries offsets.
+    */
+-  SetOffsets(m_cResDir, DWORD(pbRsrcSec));
++  SetOffsets(m_cResDir, (ULONG_PTR)(pbRsrcSec));
+ }
+ 
+ // Sets the offsets in directory entries
+-void CResourceEditor::SetOffsets(CResourceDirectory* resDir, DWORD newResDirAt) {
++void CResourceEditor::SetOffsets(CResourceDirectory* resDir, ULONG_PTR newResDirAt) {
+   for (int i = 0; i < resDir->CountEntries(); i++) {
+-    PMY_IMAGE_RESOURCE_DIRECTORY_ENTRY rde = PMY_IMAGE_RESOURCE_DIRECTORY_ENTRY(resDir->GetEntry(i)->m_dwWrittenAt);
++    PMY_IMAGE_RESOURCE_DIRECTORY_ENTRY rde = PMY_IMAGE_RESOURCE_DIRECTORY_ENTRY(resDir->GetEntry(i)->m_ulWrittenAt);
+     if (resDir->GetEntry(i)->IsDataDirectory()) {
+       rde->UOffset.DirectoryOffset.DataIsDirectory = 1;
+-      rde->UOffset.DirectoryOffset.OffsetToDirectory = resDir->GetEntry(i)->GetSubDirectory()->m_dwWrittenAt - newResDirAt;
++      rde->UOffset.DirectoryOffset.OffsetToDirectory = resDir->GetEntry(i)->GetSubDirectory()->m_ulWrittenAt - newResDirAt;
+       rde->UOffset.OffsetToData = ConvertEndianness(rde->UOffset.OffsetToData);
+       SetOffsets(resDir->GetEntry(i)->GetSubDirectory(), newResDirAt);
+     }
+     else {
+-      rde->UOffset.OffsetToData = ConvertEndianness(resDir->GetEntry(i)->GetDataEntry()->m_dwWrittenAt - newResDirAt);
++      rde->UOffset.OffsetToData = ConvertEndianness((DWORD)(resDir->GetEntry(i)->GetDataEntry()->m_ulWrittenAt - newResDirAt));
+     }
+   }
+ }
+@@ -887,7 +877,7 @@ int CResourceDirectory::CountEntries() {
+ // Returns -1 if can not be found
+ int CResourceDirectory::Find(WCHAR* szName) {
+   if (IS_INTRESOURCE(szName))
+-    return Find((WORD) (DWORD) szName);
++    return Find((WORD) (ULONG_PTR) szName);
+   else
+     if (szName[0] == '#')
+       return Find(WORD(winchar_stoi(szName + 1)));
+@@ -965,7 +955,7 @@ CResourceDirectoryEntry::CResourceDirectoryEntry(WCHAR* szName, CResourceDirecto
+   if (IS_INTRESOURCE(szName)) {
+     m_bHasName = false;
+     m_szName = 0;
+-    m_wId = (WORD) (DWORD) szName;
++    m_wId = (WORD) (ULONG_PTR) szName;
+   }
+   else {
+     m_bHasName = true;
+@@ -979,7 +969,7 @@ CResourceDirectoryEntry::CResourceDirectoryEntry(WCHAR* szName, CResourceDataEnt
+   if (IS_INTRESOURCE(szName)) {
+     m_bHasName = false;
+     m_szName = 0;
+-    m_wId = (WORD) (DWORD) szName;
++    m_wId = (WORD) (ULONG_PTR) szName;
+   }
+   else {
+     m_bHasName = true;
+diff --git a/Source/ResourceEditor.h b/Source/ResourceEditor.h
+index 59def2e..d25be31 100755
+--- a/Source/ResourceEditor.h
++++ b/Source/ResourceEditor.h
+@@ -27,7 +27,7 @@
+ 
+ #include "Platform.h"
+ #ifdef _WIN32
+-#  include <WinNT.h>
++#  include <winnt.h>
+ #else
+ // all definitions for non Win32 platforms were taken from MinGW's free Win32 library
+ #  define IMAGE_DIRECTORY_ENTRY_RESOURCE  2
+@@ -156,7 +156,7 @@ private:
+   CResourceDirectory* ScanDirectory(PRESOURCE_DIRECTORY rdRoot, PRESOURCE_DIRECTORY rdToScan);
+ 
+   void WriteRsrcSec(BYTE* pbRsrcSec);
+-  void SetOffsets(CResourceDirectory* resDir, DWORD newResDirAt);
++  void SetOffsets(CResourceDirectory* resDir, ULONG_PTR newResDirAt);
+ 
+   DWORD AdjustVA(DWORD dwVirtualAddress, DWORD dwAdjustment);
+   DWORD AlignVA(DWORD dwVirtualAddress);
+@@ -180,7 +180,7 @@ public:
+ 
+   void Destroy();
+ 
+-  DWORD m_dwWrittenAt;
++  ULONG_PTR m_ulWrittenAt;
+ 
+ private:
+   IMAGE_RESOURCE_DIRECTORY m_rdDir;
+@@ -204,7 +204,7 @@ public:
+ 
+   CResourceDataEntry* GetDataEntry();
+ 
+-  DWORD m_dwWrittenAt;
++  ULONG_PTR m_ulWrittenAt;
+ 
+ private:
+   bool m_bHasName;
+@@ -232,7 +232,7 @@ public:
+   DWORD GetCodePage();
+   DWORD GetOffset();
+ 
+-  DWORD m_dwWrittenAt;
++  ULONG_PTR m_ulWrittenAt;
+ 
+ private:
+   BYTE* m_pbData;
+diff --git a/Source/ResourceVersionInfo.cpp b/Source/ResourceVersionInfo.cpp
+index 71df19e..7ed0ccf 100755
+--- a/Source/ResourceVersionInfo.cpp
++++ b/Source/ResourceVersionInfo.cpp
+@@ -146,7 +146,7 @@ int GetVersionHeader (LPSTR &p, WORD &wLength, WORD &wValueLength, WORD &wType)
+     p += sizeof(WORD);
+     szKey = (WCHAR*)p;
+     p += (winchar_strlen(szKey) + 1) * sizeof (WCHAR);
+-    while ( ((long)p % 4) != 0 )
++    while ( ((ULONG_PTR)p % 4) != 0 )
+         p++;
+     return p - baseP;    
+ }
+diff --git a/Source/fileform.cpp b/Source/fileform.cpp
+index 72296ba..e879ad5 100755
+--- a/Source/fileform.cpp
++++ b/Source/fileform.cpp
+@@ -149,7 +149,7 @@ void ctlcolors_writer::write(const ctlcolors *data)
+   m_sink->write_int(data->text);
+   m_sink->write_int(data->bkc);
+   m_sink->write_int(data->lbStyle);
+-  m_sink->write_int((int) data->bkb);
++  m_sink->write_int((INT_PTR) data->bkb);
+   m_sink->write_int(data->bkmode);
+   m_sink->write_int(data->flags);
+ }
+diff --git a/Source/mmap.cpp b/Source/mmap.cpp
+index 1e0be7a..562a7ed 100755
+--- a/Source/mmap.cpp
++++ b/Source/mmap.cpp
+@@ -322,7 +322,7 @@ void MMapFile::release(void *pView, int size)
+   if (!pView)
+     return;
+ 
+-  unsigned int alignment = ((unsigned int)pView) % m_iAllocationGranularity;
++  unsigned int alignment = ((ULONG_PTR)pView) % m_iAllocationGranularity;
+   pView = (char *)pView - alignment;
+   size += alignment;
+ #ifdef _WIN32
+diff --git a/Source/script.cpp b/Source/script.cpp
+index a492051..2951d98 100755
+--- a/Source/script.cpp
++++ b/Source/script.cpp
+@@ -2129,7 +2129,7 @@ int CEXEBuild::doCommand(int which_token, LineParser &line)
+         int k=line.gettoken_enum(1,rootkeys[0]);
+         if (k == -1) k=line.gettoken_enum(1,rootkeys[1]);
+         if (k == -1) PRINTHELP()
+-        build_header.install_reg_rootkey=(int)rootkey_tab[k];
++        build_header.install_reg_rootkey=(INT_PTR)rootkey_tab[k];
+         if (!build_header.install_reg_rootkey) PRINTHELP() // SHCTX is invalid here
+         build_header.install_reg_key_ptr = add_string(line.gettoken_str(2),0);
+         if (line.gettoken_str(2)[0] == '\\')
+@@ -5184,7 +5184,7 @@ int CEXEBuild::doCommand(int which_token, LineParser &line)
+         int k=line.gettoken_enum(2,rootkeys[0]);
+         if (k == -1) k=line.gettoken_enum(2,rootkeys[1]);
+         if (ent.offsets[0] == -1 || k == -1) PRINTHELP()
+-        ent.offsets[1]=(int)rootkey_tab[k];
++        ent.offsets[1]=(INT_PTR)rootkey_tab[k];
+         ent.offsets[2]=add_string(line.gettoken_str(3));
+         ent.offsets[3]=add_string(line.gettoken_str(4));
+         if (which_token == TOK_READREGDWORD) ent.offsets[4]=1;
+@@ -5216,7 +5216,7 @@ int CEXEBuild::doCommand(int which_token, LineParser &line)
+         if (k == -1) k=line.gettoken_enum(a,rootkeys[1]);
+         if (k == -1) PRINTHELP()
+         ent.which=EW_DELREG;
+-        ent.offsets[1]=(int)rootkey_tab[k];
++        ent.offsets[1]=(INT_PTR)rootkey_tab[k];
+         ent.offsets[2]=add_string(line.gettoken_str(a+1));
+         ent.offsets[3]=(which_token==TOK_DELETEREGKEY)?0:add_string(line.gettoken_str(a+2));
+         if (line.gettoken_str(a+1)[0] == '\\')
+@@ -5236,7 +5236,7 @@ int CEXEBuild::doCommand(int which_token, LineParser &line)
+         if (k == -1) k=line.gettoken_enum(1,rootkeys[1]);
+         if (k == -1) PRINTHELP()
+         ent.which=EW_WRITEREG;
+-        ent.offsets[0]=(int)rootkey_tab[k];
++        ent.offsets[0]=(INT_PTR)rootkey_tab[k];
+         ent.offsets[1]=add_string(line.gettoken_str(2));
+         if (line.gettoken_str(2)[0] == '\\')
+           warning_fl("%s: registry path name begins with \'\\\', may cause problems",line.gettoken_str(0));
+@@ -5305,7 +5305,7 @@ int CEXEBuild::doCommand(int which_token, LineParser &line)
+         int k=line.gettoken_enum(2,rootkeys[0]);
+         if (k == -1) k=line.gettoken_enum(2,rootkeys[1]);
+         if (ent.offsets[0] == -1 || k == -1) PRINTHELP()
+-        ent.offsets[1]=(int)rootkey_tab[k];
++        ent.offsets[1]=(INT_PTR)rootkey_tab[k];
+         ent.offsets[2]=add_string(line.gettoken_str(3));
+         ent.offsets[3]=add_string(line.gettoken_str(4));
+         ent.offsets[4]=which_token == TOK_ENUMREGKEY;
+diff --git a/Source/util.cpp b/Source/util.cpp
+index 2c0b07f..18c31a2 100755
+--- a/Source/util.cpp
++++ b/Source/util.cpp
+@@ -77,9 +77,9 @@ int update_bitmap(CResourceEditor* re, WORD id, const char* filename, int width/
+   }
+ 
+   if (width != 0) {
+-    LONG biWidth;
++    INT32 biWidth;
+     fseek(f, 18, SEEK_SET); // Seek to the width member of the header
+-    fread(&biWidth, sizeof(LONG), 1, f);
++    fread(&biWidth, sizeof(INT32), 1, f);
+     FIX_ENDIAN_INT32_INPLACE(biWidth);
+     if (width != biWidth) {
+       fclose(f);
+@@ -88,9 +88,9 @@ int update_bitmap(CResourceEditor* re, WORD id, const char* filename, int width/
+   }
+ 
+   if (height != 0) {
+-    LONG biHeight;
++    INT32 biHeight;
+     fseek(f, 22, SEEK_SET); // Seek to the height member of the header
+-    fread(&biHeight, sizeof(LONG), 1, f);
++    fread(&biHeight, sizeof(INT32), 1, f);
+     FIX_ENDIAN_INT32_INPLACE(biHeight);
+     // Bitmap height can be negative too...
+     if (height != abs(biHeight)) {
+@@ -689,8 +689,8 @@ static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
+   }
+ 
+   // Find the beginning of the NT header at offset e_lfanew.
+-  pNtExeHdr = (PIMAGE_NT_HEADERS) ( (DWORD) pView
+-       + (DWORD) pDosExeHdr->e_lfanew );
++  pNtExeHdr = (PIMAGE_NT_HEADERS) ( (ULONG_PTR) pView
++       + pDosExeHdr->e_lfanew );
+ 
+   // Check to make sure the file is a VxD.
+   if ( (DWORD) pNtExeHdr->Signature != IMAGE_VXD_SIGNATURE ) 
+@@ -728,8 +728,8 @@ static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
+   }
+ 
+   // e32_winresoff contains the offset of the resource in the VxD.
+-  pVerRes = (VXD_VERSION_RESOURCE *) ( (DWORD) pView
+-       + (DWORD) pLEHdr->e32_winresoff );
++  pVerRes = (VXD_VERSION_RESOURCE *) ( (ULONG_PTR) pView
++       + pLEHdr->e32_winresoff );
+   dwSize = pVerRes->dwResSize;
+   pRawRes = &(pVerRes->bVerData);
+ 
+@@ -780,7 +780,7 @@ static DWORD GetVxdVersionInfoSize( LPCSTR szFile )
+ 
+     // GetVxdVersion() will fail with ERROR_INSUFFICIENT_BUFFER and
+     // the required buffer size will be returned in dwResult.
+-    if ( GetLastError() == ERROR_INSUFFICIENT_BUFFER ) 
++    if ( dwError == ERROR_INSUFFICIENT_BUFFER ) 
+     {
+       SetLastError( 0 );
+       return dwResult;
+-- 
+1.8.2.1
 

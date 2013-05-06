@@ -68,19 +68,21 @@ ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
 DOWNLOAD_PKG_ARCHIVE = \
-    mkdir -p '$(PKG_DIR)' && \
-    $(if $($(1)_URL_2), \
-        ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-          $(WGET) -O- '$($(1)_URL_2)' || \
-          $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-          $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
-        ( $(WGET) -O- '$($(1)_URL)' || \
-          $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-          $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
-    $(if $($(1)_FIX_GZIP), \
-        | gzip -d | gzip -9n, \
-        ) \
-    > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)'
+    $(if $(value $(1)_URL), \
+        mkdir -p '$(PKG_DIR)' && \
+        $(if $($(1)_URL_2), \
+            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
+              $(WGET) -O- '$($(1)_URL_2)' || \
+              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
+            ( $(WGET) -O- '$($(1)_URL)' || \
+              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
+        $(if $($(1)_FIX_GZIP), \
+            | gzip -d | gzip -9n, \
+            ) \
+        > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)', \
+    $(error URL not specified for package $(1)))
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
@@ -247,8 +249,10 @@ update:
 	$(foreach PKG,$(PKGS),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
 
 update-checksum-%:
-	$(call DOWNLOAD_PKG_ARCHIVE,$*)
-	$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk'
+	$(if $(findstring $*~,$(addsuffix ~,$(PKGS))), \
+		$(call DOWNLOAD_PKG_ARCHIVE,$*) && \
+		$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
+	$(error package $* not found in index.html))
 
 cleanup-style:
 	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\

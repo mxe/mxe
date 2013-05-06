@@ -699,11 +699,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
                     xz-utils yasm</pre>
 
     <p>
-    On 64-bit Debian, install also:
-    </p>
-    <pre>apt-get install g++-multilib libc6-dev-i386</pre>
-
-    <p>
     On Debian Squeeze, you'll need some packages from
     <a href="http://backports-master.debian.org/Instructions/">backports</a>. Add this line:
     </p>
@@ -721,11 +716,6 @@ aptitude -t squeeze-backports install cmake yasm</pre>
             flex gcc-c++ gettext git intltool make sed \
             libffi-devel libtool openssl-devel patch perl pkgconfig \
             scons yasm unzip wget xz</pre>
-
-    <p>
-    On 64-bit Fedora,
-    there are <a href="#open-issue-nsis">open issues with the NSIS package</a>.
-    </p>
 
     <h3 id="requirements-freebsd">FreeBSD</h3>
 
@@ -746,10 +736,6 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     For Bourne shells, edit .profile
     </p>
     <pre>export PATH = /usr/local/bin:$PATH</pre>
-    <p>
-    On 64-bit FreeBSD,
-    there are <a href="#open-issue-nsis">open issues with the NSIS package</a>.
-    </p>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
 
@@ -758,11 +744,6 @@ aptitude -t squeeze-backports install cmake yasm</pre>
              flex gcc gettext git intltool make sed libffi libtool \
              openssl patch perl perl-xml-parser pkgconfig \
              scons unzip wget xz xz-lzma yasm</pre>
-
-    <p>
-    On 64-bit Frugalware,
-    there are <a href="#open-issue-nsis">open issues with the NSIS package</a>.
-    </p>
 
     <h3 id="requirements-gentoo">Gentoo</h3>
 
@@ -805,28 +786,6 @@ aptitude -t squeeze-backports install cmake yasm</pre>
                   perl-XML-Parser pkg-config scons \
                   sed unzip wget xz yasm</pre>
 
-    <p>
-    On 64-bit openSUSE, install also:
-    </p>
-    <pre>zypper install -R gcc-32bit glibc-devel-32bit \
-                  libgcc46-32bit libgomp46-32bit \
-                  libstdc++46-devel-32bit</pre>
-
-    <h3 id="open-issue-nsis">Open Issues with NSIS</h3>
-
-    <p>
-    The NSIS package contains some native tools that are
-    currently 32-bit only. In order to build these on a
-    64-bit system, multi-lib support must be enabled in the
-    compiler toolchain. However, not all operating systems
-    support this.
-    </p>
-    <p>
-    Since no other packages depend on it, the remainder of
-    MXE can be successfully built by simply specifying
-    an empty build rule:
-    </p>
-    <pre>make nsis_BUILD=</pre>
 </div>
 
 <div class="section">
@@ -948,6 +907,11 @@ aptitude -t squeeze-backports install cmake yasm</pre>
         <td id="agg-package">agg</td>
         <td id="agg-version">2.5</td>
         <td id="agg-website"><a href="http://www.antigrain.com/">Anti-Grain Geometry</a></td>
+    </tr>
+    <tr>
+        <td id="alure-package">alure</td>
+        <td id="alure-version">1.2</td>
+        <td id="alure-website"><a href="ihttp://kcat.strangesoft.net/alure.html">alure</a></td>
     </tr>
     <tr>
         <td id="apr-util-package">apr-util</td>
@@ -1186,7 +1150,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="gdal-package">gdal</td>
-        <td id="gdal-version">1.9.2</td>
+        <td id="gdal-version">1.10.0</td>
         <td id="gdal-website"><a href="http://www.gdal.org/">GDAL</a></td>
     </tr>
     <tr>
@@ -1351,7 +1315,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="imagemagick-package">imagemagick</td>
-        <td id="imagemagick-version">6.8.5-3</td>
+        <td id="imagemagick-version">6.8.5-4</td>
         <td id="imagemagick-website"><a href="http://www.imagemagick.org/">ImageMagick</a></td>
     </tr>
     <tr>
@@ -1726,12 +1690,12 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="netcdf-package">netcdf</td>
-        <td id="netcdf-version">4.2.1.1</td>
+        <td id="netcdf-version">4.3.0</td>
         <td id="netcdf-website"><a href="http://www.unidata.ucar.edu/software/netcdf/">NetCDF</a></td>
     </tr>
     <tr>
         <td id="netpbm-package">netpbm</td>
-        <td id="netpbm-version">10.35.88</td>
+        <td id="netpbm-version">10.35.89</td>
         <td id="netpbm-website"><a href="http://netpbm.sourceforge.net/">Netpbm</a></td>
     </tr>
     <tr>
@@ -1771,7 +1735,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="ocaml-flexdll-package">ocaml-flexdll</td>
-        <td id="ocaml-flexdll-version">0.30</td>
+        <td id="ocaml-flexdll-version">0.31</td>
         <td id="ocaml-flexdll-website"><a href="http://alain.frisch.fr/">flexdll</a></td>
     </tr>
     <tr>
@@ -1902,7 +1866,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="pixman-package">pixman</td>
-        <td id="pixman-version">0.29.2</td>
+        <td id="pixman-version">0.29.4</td>
         <td id="pixman-website"><a href="http://cairographics.org/">pixman</a></td>
     </tr>
     <tr>
@@ -2252,7 +2216,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </tr>
     <tr>
         <td id="zlib-package">zlib</td>
-        <td id="zlib-version">1.2.7</td>
+        <td id="zlib-version">1.2.8</td>
         <td id="zlib-website"><a href="http://zlib.net/">zlib</a></td>
     </tr>
     <tr>
