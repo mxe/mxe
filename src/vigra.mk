@@ -38,3 +38,5 @@ define $(PKG)_BUILD
         -DVIGRA_STATIC_LIB \
         -lvigraimpex `'$(TARGET)-pkg-config' OpenEXR libtiff-4 libpng --cflags --libs` -ljpeg
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =
