@@ -3,7 +3,7 @@
 
 PKG             := ocaml-flexdll
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 585f066f890c7dca95be7541b4647128335f7df9
+$(PKG)_CHECKSUM := 7ca63bf8d6c731fd95e0d434a8cfbcc718b99d62
 $(PKG)_SUBDIR   := flexdll
 $(PKG)_FILE     := flexdll-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://alain.frisch.fr/flexdll/$($(PKG)_FILE)

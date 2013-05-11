@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i '27s,^,#ifdef __MINGW64__\n#include <windows.h>\n#endif\n,' '$(1)/include/CGAL/FPU.h'
     cd '$(1)' && cmake \
         -DCGAL_INSTALL_CMAKE_DIR:STRING="lib/CGAL" \
         -DCGAL_INSTALL_INC_DIR:STRING="include" \
@@ -30,6 +31,7 @@ define $(PKG)_BUILD
         -DBOOST_USE_STATIC_LIBS=1 \
         -DBUILD_SHARED_LIBS=0 \
         -C TryRunResults.cgal.cmake .
+
     $(MAKE) -C '$(1)' -j $(JOBS)
     cd '$(1)/examples/AABB_tree' && cmake \
         -DBOOST_LIB_DIAGNOSTIC_DEFINITIONS:STRING="-DBOOST_LIB_DIAGNOSTIC" \
@@ -45,5 +47,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j $(JOBS) install
     $(INSTALL) '$(1)/examples/AABB_tree/AABB_polyhedron_edge_example.exe' '$(PREFIX)/$(TARGET)/bin/test-cgal.exe'
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
