@@ -699,6 +699,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
                     xz-utils yasm</pre>
 
     <p>
+    On 64-bit Debian, install also:
+    </p>
+    <pre>apt-get install g++-multilib libc6-dev-i386</pre>
+
+    <p>
     On Debian Squeeze, you'll need some packages from
     <a href="http://backports-master.debian.org/Instructions/">backports</a>. Add this line:
     </p>
@@ -716,6 +721,11 @@ aptitude -t squeeze-backports install cmake yasm</pre>
             flex gcc-c++ gettext git intltool make sed \
             libffi-devel libtool openssl-devel patch perl pkgconfig \
             scons yasm unzip wget xz</pre>
+
+    <p>
+    On 64-bit Fedora,
+    there are <a href="#issue-non-multilib">issues without a 32-bit compiler</a>.
+    </p>
 
     <h3 id="requirements-freebsd">FreeBSD</h3>
 
@@ -736,6 +746,10 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     For Bourne shells, edit .profile
     </p>
     <pre>export PATH = /usr/local/bin:$PATH</pre>
+    <p>
+    On 64-bit FreeBSD,
+    there are <a href="#issue-non-multilib">issues without a 32-bit compiler</a>.
+    </p>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
 
@@ -744,6 +758,11 @@ aptitude -t squeeze-backports install cmake yasm</pre>
              flex gcc gettext git intltool make sed libffi libtool \
              openssl patch perl perl-xml-parser pkgconfig \
              scons unzip wget xz xz-lzma yasm</pre>
+
+    <p>
+    On 64-bit Frugalware,
+    there are <a href="#issue-non-multilib">issues without a 32-bit compiler</a>.
+    </p>
 
     <h3 id="requirements-gentoo">Gentoo</h3>
 
@@ -786,6 +805,36 @@ aptitude -t squeeze-backports install cmake yasm</pre>
                   perl-XML-Parser pkg-config scons \
                   sed unzip wget xz yasm</pre>
 
+    <p>
+    On 64-bit openSUSE, install also:
+    </p>
+    <pre>zypper install -R gcc-32bit glibc-devel-32bit \
+                  libgcc46-32bit libgomp46-32bit \
+                  libstdc++46-devel-32bit</pre>
+
+    <h3 id="issue-non-multilib">Issues without a 32-bit compiler</h3>
+
+    <p>
+    Certain packages contain native tools that are
+    currently 32-bit only. In order to build these on a
+    64-bit system, multi-lib support must be enabled in the
+    compiler toolchain. However, not all operating systems
+    support this.
+    </p>
+    <p>
+    To build the remainder of MXE specify empty build rules
+    for the affected packages:
+    </p>
+    <pre>make \
+            ocaml-cairo_BUILD= \
+            ocaml-findlib_BUILD= \
+            ocaml-lablgtk2_BUILD= \
+            ocaml-camlimages_BUILD= \
+            ocaml-flexdll_BUILD= \
+            ocaml-native_BUILD= \
+            ocaml-core_BUILD= \
+            ocaml-lablgl_BUILD= \
+            ocaml-xml-light_BUILD=</pre>
 </div>
 
 <div class="section">
