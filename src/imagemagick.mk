@@ -3,7 +3,7 @@
 
 PKG             := imagemagick
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 84be2c2fa42cefdf1d7e6cb3a6c73163e2007653
+$(PKG)_CHECKSUM := 50ceead50e640546a114f45e3d94a05c9298d4ce
 $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://www.imagemagick.org/download/$($(PKG)_FILE)
@@ -37,3 +37,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-imagemagick.exe' \
         `'$(TARGET)-pkg-config' ImageMagick++ --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =
