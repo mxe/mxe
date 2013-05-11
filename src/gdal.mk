@@ -3,11 +3,11 @@
 
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 7eda6a4d735b8d6903740e0acdd702b43515e351
+$(PKG)_CHECKSUM := e522b95056905e4c41047fdb42c0ca172ef3ad25
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.osgeo.org/gdal/CURRENT/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/CURRENT/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf4 hdf5 netcdf
 
 define $(PKG)_UPDATE
