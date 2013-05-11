@@ -6,9 +6,6 @@
 /*************************************************
  * CEGUI demo program. This creates an OpenGL window
  * and makes CEGUI draw an "in-game" window into it.
- * Note you have to run this from the "src" folder of
- * MXE due to the relative paths referencing the CEGUI
- * resource files.
  ************************************************/
 
 #include <GL/freeglut.h>
@@ -37,14 +34,14 @@ int main(int argc, char* argv[])
 
   // Tell CEGUI where to find its resources
   DefaultResourceProvider* p_provider = static_cast<DefaultResourceProvider*>(System::getSingleton().getResourceProvider());
-  p_provider->setResourceGroupDirectory("schemes", "../usr/i686-pc-mingw32/share/CEGUI/schemes");
-  p_provider->setResourceGroupDirectory("imagesets", "../usr/i686-pc-mingw32/share/CEGUI/imagesets");
-  p_provider->setResourceGroupDirectory("fonts", "../usr/i686-pc-mingw32/share/CEGUI/fonts");
-  p_provider->setResourceGroupDirectory("layouts", "../usr/i686-pc-mingw32/share/CEGUI/layouts");
-  p_provider->setResourceGroupDirectory("looknfeels", "../usr/i686-pc-mingw32/share/CEGUI/looknfeel");
-  p_provider->setResourceGroupDirectory("lua_scripts", "../usr/i686-pc-mingw32/share/CEGUI/lua_scripts");
-  p_provider->setResourceGroupDirectory("schemas", "../usr/i686-pc-mingw32/share/CEGUI/xml_schemas");
-  p_provider->setResourceGroupDirectory("animations", "../usr/i686-pc-mingw32/share/CEGUI/animations");
+  p_provider->setResourceGroupDirectory("schemes", "../share/CEGUI/schemes");
+  p_provider->setResourceGroupDirectory("imagesets", "../share/CEGUI/imagesets");
+  p_provider->setResourceGroupDirectory("fonts", "../share/CEGUI/fonts");
+  p_provider->setResourceGroupDirectory("layouts", "../share/CEGUI/layouts");
+  p_provider->setResourceGroupDirectory("looknfeels", "../share/CEGUI/looknfeel");
+  p_provider->setResourceGroupDirectory("lua_scripts", "../share/CEGUI/lua_scripts");
+  p_provider->setResourceGroupDirectory("schemas", "../share/CEGUI/xml_schemas");
+  p_provider->setResourceGroupDirectory("animations", "../share/CEGUI/animations");
 
   // Map the resource request to our provider
   Imageset::setDefaultResourceGroup("imagesets");
