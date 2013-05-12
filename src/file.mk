@@ -3,7 +3,7 @@
 
 PKG             := file
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 782db8a2b37ff8ceada9d19c416eaf6c5b8297d4
+$(PKG)_CHECKSUM := 064c8f17a5f7ae1e336a9285131e046d3b2d04d7
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
@@ -30,7 +30,8 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        CFLAGS=-DHAVE_PREAD
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= FILE_COMPILE='$(1).native/src/file'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
 
