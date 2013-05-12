@@ -49,8 +49,9 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -ansi -pedantic \
          '$(2).cpp' \
-         `'$(TARGET)-pkg-config' --cflags --libs CEGUI CEGUI-OPENGL glut freetype2 libpcre` -lCEGUIFreeImageImageCodec \
-         `'$(TARGET)-pkg-config' --libs --cflags freeimage` -lCEGUITinyXMLParser -lCEGUIFalagardWRBase \
+         `'$(TARGET)-pkg-config' --cflags --libs CEGUI-OPENGL glut freetype2 libpcre` \
+         -lCEGUIFreeImageImageCodec -lCEGUIXercesParser -lCEGUIFalagardWRBase \
+         `'$(TARGET)-pkg-config' --libs --cflags freeimage xerces-c` \
          -o '$(PREFIX)/$(TARGET)/bin/test-cegui.exe'
 endef
 
