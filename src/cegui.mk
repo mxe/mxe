@@ -53,3 +53,5 @@ define $(PKG)_BUILD
          `'$(TARGET)-pkg-config' --libs --cflags freeimage` -lCEGUITinyXMLParser -lCEGUIFalagardWRBase \
          -o '$(PREFIX)/$(TARGET)/bin/test-cegui.exe'
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =
