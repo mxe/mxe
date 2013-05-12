@@ -28,6 +28,7 @@ define $(PKG)_BUILD
         --enable-freeimage \
         --disable-silly \
         --enable-tga \
+        --disable-tinyxml \
         --enable-stb \
         --enable-opengl-renderer \
         --disable-ogre-renderer \
