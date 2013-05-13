@@ -3,8 +3,29 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
+From c5cbee4c3334d5216af64ac17045c79baaeeb023 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 12 May 2013 18:07:47 +1000
+Subject: [PATCH 1/3] add hoc patches for cross building
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 579312d..53e4132 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,7 +38,7 @@ else(NOT CMAKE_TOOLCHAIN_FILE)
+   #Android: set output folder to ${CMAKE_BINARY_DIR}
+   set( LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_BINARY_DIR} CACHE PATH "root for library output, set this to change where android libs are compiled to" )
+   # any crosscompiling
+-  set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
++  #set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
+ endif(NOT CMAKE_TOOLCHAIN_FILE)
+ 
+ # --------------------------------------------------------------
 diff --git a/cmake/OpenCVFindLCMS.cmake b/cmake/OpenCVFindLCMS.cmake
---- a/cmake/OpenCVFindLCMS.cmake
+new file mode 100644
+index 0000000..426bbae
+--- /dev/null
 +++ b/cmake/OpenCVFindLCMS.cmake
 @@ -0,0 +1,71 @@
 +# - Find LCMS
@@ -79,7 +100,9 @@ diff --git a/cmake/OpenCVFindLCMS.cmake b/cmake/OpenCVFindLCMS.cmake
 +
 +mark_as_advanced(LCMS_INCLUDE_DIR LCMS_LIBRARIES LCMS_VERSION)
 diff --git a/cmake/OpenCVFindLZMA.cmake b/cmake/OpenCVFindLZMA.cmake
---- a/cmake/OpenCVFindLZMA.cmake
+new file mode 100644
+index 0000000..0b46b2c
+--- /dev/null
 +++ b/cmake/OpenCVFindLZMA.cmake
 @@ -0,0 +1,48 @@
 +# - Find lzma and lzmadec
@@ -131,6 +154,7 @@ diff --git a/cmake/OpenCVFindLZMA.cmake b/cmake/OpenCVFindLZMA.cmake
 +  ENDIF(LZMADEC_FOUND)
 +ENDIF(LZMA_FOUND)
 diff --git a/cmake/OpenCVFindLibsGrfmt.cmake b/cmake/OpenCVFindLibsGrfmt.cmake
+index 5988169..738e1f3 100644
 --- a/cmake/OpenCVFindLibsGrfmt.cmake
 +++ b/cmake/OpenCVFindLibsGrfmt.cmake
 @@ -2,6 +2,11 @@
@@ -145,7 +169,7 @@ diff --git a/cmake/OpenCVFindLibsGrfmt.cmake b/cmake/OpenCVFindLibsGrfmt.cmake
  # --- zlib (required) ---
  if(BUILD_ZLIB)
    ocv_clear_vars(ZLIB_FOUND)
-@@ -26,6 +31,11 @@
+@@ -26,6 +31,11 @@ if(NOT ZLIB_FOUND)
    ocv_parse_header2(ZLIB "${${ZLIB_LIBRARY}_SOURCE_DIR}/zlib.h" ZLIB_VERSION)
  endif()
  
@@ -157,7 +181,7 @@ diff --git a/cmake/OpenCVFindLibsGrfmt.cmake b/cmake/OpenCVFindLibsGrfmt.cmake
  # --- libtiff (optional, should be searched after zlib) ---
  if(WITH_TIFF)
    if(BUILD_TIFF)
-@@ -114,6 +124,7 @@
+@@ -114,6 +124,7 @@ if(WITH_PNG)
    if(BUILD_PNG)
      ocv_clear_vars(PNG_FOUND)
    else()
@@ -165,19 +189,21 @@ diff --git a/cmake/OpenCVFindLibsGrfmt.cmake b/cmake/OpenCVFindLibsGrfmt.cmake
      include(FindPNG)
      if(PNG_FOUND)
        check_include_file("${PNG_PNG_INCLUDE_DIR}/png.h"        HAVE_PNG_H)
-diff --git a/CMakeLists.txt b/CMakeLists.txt
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -38,7 +38,7 @@
-   #Android: set output folder to ${CMAKE_BINARY_DIR}
-   set( LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_BINARY_DIR} CACHE PATH "root for library output, set this to change where android libs are compiled to" )
-   # any crosscompiling
--  set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
-+  #set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
- endif(NOT CMAKE_TOOLCHAIN_FILE)
- 
- # --------------------------------------------------------------
+diff --git a/cmake/OpenCVGenConfig.cmake b/cmake/OpenCVGenConfig.cmake
+index 705ccc8..fe9b01b 100644
+--- a/cmake/OpenCVGenConfig.cmake
++++ b/cmake/OpenCVGenConfig.cmake
+@@ -177,6 +177,6 @@ if(WIN32)
+   exec_program(mkdir ARGS "-p \"${CMAKE_BINARY_DIR}/win-install/\"" OUTPUT_VARIABLE RET_VAL)
+   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" IMMEDIATE @ONLY)
+   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig-version.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" IMMEDIATE @ONLY)
+-  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
+-  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
++  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
++  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
+ endif()
 diff --git a/modules/core/CMakeLists.txt b/modules/core/CMakeLists.txt
+index 4c5112e..7411f32 100644
 --- a/modules/core/CMakeLists.txt
 +++ b/modules/core/CMakeLists.txt
 @@ -1,6 +1,12 @@
@@ -196,9 +222,10 @@ diff --git a/modules/core/CMakeLists.txt b/modules/core/CMakeLists.txt
  if(HAVE_CUDA)
    ocv_source_group("Src\\Cuda" GLOB "src/cuda/*.cu")
 diff --git a/modules/highgui/CMakeLists.txt b/modules/highgui/CMakeLists.txt
+index 7e5fae3..d4e4ed0 100644
 --- a/modules/highgui/CMakeLists.txt
 +++ b/modules/highgui/CMakeLists.txt
-@@ -10,8 +10,13 @@
+@@ -10,8 +10,13 @@ ocv_add_module(highgui opencv_imgproc OPTIONAL opencv_androidcamera)
  ocv_clear_vars(GRFMT_LIBS)
  
  if(WITH_PNG OR WITH_TIFF OR WITH_OPENEXR)
@@ -214,7 +241,7 @@ diff --git a/modules/highgui/CMakeLists.txt b/modules/highgui/CMakeLists.txt
  endif()
  
  if(WITH_JPEG)
-@@ -262,7 +267,7 @@
+@@ -262,7 +267,7 @@ set_target_properties(${the_module} PROPERTIES LINK_INTERFACE_LIBRARIES "")
  ocv_add_precompiled_headers(${the_module})
  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated-declarations)
  
@@ -223,15 +250,71 @@ diff --git a/modules/highgui/CMakeLists.txt b/modules/highgui/CMakeLists.txt
    #copy ffmpeg dll to the output folder
    if(MSVC64 OR MINGW64)
      set(FFMPEG_SUFFIX _64)
-diff --git a/cmake/OpenCVGenConfig.cmake b/cmake/OpenCVGenConfig.cmake
---- a/cmake/OpenCVGenConfig.cmake
-+++ b/cmake/OpenCVGenConfig.cmake
-@@ -177,6 +177,6 @@
-   exec_program(mkdir ARGS "-p \"${CMAKE_BINARY_DIR}/win-install/\"" OUTPUT_VARIABLE RET_VAL)
-   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" IMMEDIATE @ONLY)
-   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig-version.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" IMMEDIATE @ONLY)
--  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
--  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
-+  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
-+  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
- endif()
+diff --git a/modules/highgui/src/window_w32.cpp b/modules/highgui/src/window_w32.cpp
+index 0948197..f32718f 100644
+--- a/modules/highgui/src/window_w32.cpp
++++ b/modules/highgui/src/window_w32.cpp
+@@ -76,7 +76,7 @@
+ #include <vector>
+ #include <functional>
+ #include "opencv2/highgui/highgui.hpp"
+-#include <GL\gl.h>
++#include <GL/gl.h>
+ #endif
+ 
+ static const char* trackbar_text =
+-- 
+1.8.2.2
+
+
+From c135e32015f138223765c631e14dc81904d11775 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 12 May 2013 18:41:21 +1000
+Subject: [PATCH 2/3] fix lib names
+
+
+diff --git a/cmake/OpenCVFindLibsVideo.cmake b/cmake/OpenCVFindLibsVideo.cmake
+index 4149185..84cceff 100644
+--- a/cmake/OpenCVFindLibsVideo.cmake
++++ b/cmake/OpenCVFindLibsVideo.cmake
+@@ -183,11 +183,11 @@ endif(WITH_VIDEOINPUT)
+ 
+ # --- Extra HighGUI libs on Windows ---
+ if(WIN32)
+-  list(APPEND HIGHGUI_LIBRARIES comctl32 gdi32 ole32 vfw32)
++  list(APPEND HIGHGUI_LIBRARIES -lcomctl32 -lgdi32 -lole32 -lvfw32)
+   if(MINGW64)
+-    list(APPEND HIGHGUI_LIBRARIES avifil32 avicap32 winmm msvfw32)
+-    list(REMOVE_ITEM HIGHGUI_LIBRARIES vfw32)
++    list(APPEND HIGHGUI_LIBRARIES -lavifil32 -lavicap32 -lwinmm -lmsvfw32)
++    list(REMOVE_ITEM HIGHGUI_LIBRARIES -lvfw32)
+   elseif(MINGW)
+-    list(APPEND HIGHGUI_LIBRARIES winmm)
++    list(APPEND HIGHGUI_LIBRARIES -lwinmm)
+   endif()
+ endif(WIN32)
+-- 
+1.8.2.2
+
+
+From 297635f66f80a794721292a0d91a61deac2774de Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 12 May 2013 19:08:25 +1000
+Subject: [PATCH 3/3] pkgconfig static fixes
+
+
+diff --git a/cmake/templates/opencv-XXX.pc.cmake.in b/cmake/templates/opencv-XXX.pc.cmake.in
+index 4f6415c..ea1ed15 100644
+--- a/cmake/templates/opencv-XXX.pc.cmake.in
++++ b/cmake/templates/opencv-XXX.pc.cmake.in
+@@ -9,5 +9,7 @@ includedir_new=@includedir@
+ Name: OpenCV
+ Description: Open Source Computer Vision Library
+ Version: @VERSION@
++Requires: OpenEXR libtiff-4
+ Libs: @OpenCV_LIB_COMPONENTS@
++Libs.private: -luuid -loleaut32
+ Cflags: -I${includedir_old} -I${includedir_new}
+-- 
+1.8.2.2
+
