@@ -3,26 +3,26 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 132b5b5d092d73faaafbdc5225bf7da1c7bca7f1 Mon Sep 17 00:00:00 2001
+From b350997144cc77caf3644bbf188815844b1f1a07 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 23 Oct 2011 21:36:53 +0200
-Subject: [PATCH 1/3] support static linking to ntlm
+Subject: [PATCH 1/2] support static linking to ntlm
 
 
 diff --git a/configure b/configure
-index ee860c3..916d009 100755
+index c4598a4..c7a46d2 100755
 --- a/configure
 +++ b/configure
-@@ -4822,7 +4822,7 @@ case "${host}" in
+@@ -4823,7 +4823,7 @@ case "${host}" in
  			;;
  	*-*-cygwin*)	platform=CYGWIN ;;
  	*-*-mingw*)	platform=MINGW
 -			SAMPLE_EXTRA_LIBS="-lws2_32 -lkernel32 -luser32 -lgdi32 -lm"
 +			SAMPLE_EXTRA_LIBS="-lntlm -lws2_32 -lkernel32 -luser32 -lgdi32 -lm"
+ 			WSDL2H_EXTRA_LIBS="-lssl -lcrypto -lws2_32 -lkernel32 -luser32 -lgdi32 -lm"
  			;;
          *-*-freebsd*)   platform=FREEBSD ;;
-         *-*-openbsd*)   platform=OPENBSD ;;
-@@ -7336,7 +7336,7 @@ echo $ECHO_N "checking for enable gnutls in library... $ECHO_C" >&6; }
+@@ -7340,7 +7340,7 @@ echo $ECHO_N "checking for enable gnutls in library... $ECHO_C" >&6; }
      { echo "$as_me:$LINENO: result: yes" >&5
  echo "${ECHO_T}yes" >&6; }
      WSDL2H_EXTRA_FLAGS="-DWITH_GNUTLS -DWITH_GZIP"
@@ -32,13 +32,13 @@ index ee860c3..916d009 100755
      WSDL2H_SOAP_CPP_LIB="libgsoapssl++.a"
    else
 -- 
-1.7.10.4
+1.8.1.4
 
 
-From dd5f823a0c846d0705c7502b796d5e077d1ba8e5 Mon Sep 17 00:00:00 2001
+From 1952599768ece5bab20406ac4cffde4316449168 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 24 Oct 2011 11:17:13 +0200
-Subject: [PATCH 2/3] ntlm support in .pc files
+Subject: [PATCH 2/2] ntlm support in .pc files
 
 
 diff --git a/gsoap++.pc.in b/gsoap++.pc.in
@@ -102,37 +102,5 @@ index 365274b..82af331 100644
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
 -- 
-1.7.10.4
-
-
-From 80e9efe3c7edef979840ff6526e06efb3d5ebf22 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 20 Aug 2012 13:12:49 +0200
-Subject: [PATCH 3/3] fix MINGW compatibility
-
-taken from
-https://sourceforge.net/tracker/?func=detail&aid=3559816&group_id=52781&atid=468023
-
-diff --git a/gsoap/stdsoap2.h b/gsoap/stdsoap2.h
-index 7e50e95..b93e12c 100644
---- a/gsoap/stdsoap2.h
-+++ b/gsoap/stdsoap2.h
-@@ -2244,13 +2244,13 @@ soap_wchar soap_get1(struct soap*);
-  SOAP_FMAC1 unsigned long SOAP_FMAC2 soap_strtoul(const char *s, char **t, int b);
- #endif
- 
--#ifdef WIN32
-+#if defined(WIN32) && !defined(__MINGW32__)
- # define soap_strtoll _strtoi64
- #else
- # define soap_strtoll strtoll
- #endif
- 
--#ifdef WIN32
-+#if defined(WIN32) && !defined(__MINGW32__)
- # define soap_strtoull _strtoui64
- #else
- # define soap_strtoull strtoull
--- 
-1.7.10.4
+1.8.1.4
 
