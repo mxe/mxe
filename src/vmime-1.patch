@@ -1,0 +1,23 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 01e591d33435cbd027be6a85bac521138e45c19f Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 14 May 2013 09:21:46 +0200
+Subject: [PATCH] predefine VMIME_STATIC for convenience
+
+
+diff --git a/vmime.pc.in b/vmime.pc.in
+index fc1103e..11dd0ea 100644
+--- a/vmime.pc.in
++++ b/vmime.pc.in
+@@ -9,5 +9,5 @@ Version: @VMIME_PACKAGE_VERSION@
+ Requires.private: @VMIME_PKGCONFIG_REQUIRES@
+ Libs: -L${libdir} -l@VMIME_LIBRARY_NAME@
+ Libs.private: @VMIME_PKGCONFIG_LIBS@
+-Cflags: -I${includedir}/ @VMIME_PKGCONFIG_CFLAGS@
++Cflags: -I${includedir}/ @VMIME_PKGCONFIG_CFLAGS@ -DVMIME_STATIC
+ 
+-- 
+1.8.1.4
+
