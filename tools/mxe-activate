@@ -17,25 +17,25 @@ _mxe()
     tgts="i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32"
 
     case "${cur}" in
-	build-only-*_*)
-	    local base=`echo ${cur} | $SED -n 's,\(.*_\).*,\1,p'`
-	    local _tgts=$( for x in ${tgts}; do echo $base${x} ; done )
-	    COMPREPLY=( $(compgen -W "${_tgts}" -- ${cur}) )
+    build-only-*_*)
+        local base=`echo ${cur} | $SED -n 's,\(.*_\).*,\1,p'`
+        local _tgts=$( for x in ${tgts}; do echo $base${x} ; done )
+        COMPREPLY=( $(compgen -W "${_tgts}" -- ${cur}) )
         return 0
         ;;
-	build-only-*)
-	    local _pkgs=$( for x in ${pkgs}; do echo build-only-${x} ; done )
-	    COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+    build-only-*)
+        local _pkgs=$( for x in ${pkgs}; do echo build-only-${x} ; done )
+        COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
         return 0
         ;;
-	download-*)
-	    local _pkgs=$( for x in ${pkgs}; do echo download-${x} ; done )
-	    COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+    download-*)
+        local _pkgs=$( for x in ${pkgs}; do echo download-${x} ; done )
+        COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
         return 0
         ;;
-	update-checksum-*)
-	    local _pkgs=$( for x in ${pkgs}; do echo update-checksum-${x} ; done )
-	    COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+    update-checksum-*)
+        local _pkgs=$( for x in ${pkgs}; do echo update-checksum-${x} ; done )
+        COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
         return 0
         ;;
     [!-]*)

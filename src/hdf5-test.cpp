@@ -86,10 +86,10 @@ typedef struct rt {
         perror("Exception while writing description in stfio::exportHDF5File");
         H5Fclose(file_id);
         H5close();
-        exit(-1);	
+        exit(-1);
     }
 
-    H5Fclose(file_id); 
+    H5Fclose(file_id);
 
     return(0);
 }
