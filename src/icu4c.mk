@@ -29,4 +29,5 @@ define $(PKG)_BUILD
         SHELL=bash
 
     $(MAKE) -C '$(1).cross' -j '$(JOBS)' install LIBPREFIX=lib
+    ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
 endef
