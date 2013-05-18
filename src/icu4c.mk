@@ -30,4 +30,8 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1).cross' -j '$(JOBS)' install LIBPREFIX=lib
     ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
+
+    # Static libs are prefixed with an `s` but the config script
+    # doesn't detect it properly, despite the STATIC_PREFIX="s" line
+    $(SED) -i 's,ICUPREFIX="icu",ICUPREFIX="sicu",' '$(PREFIX)/$(TARGET)/bin/icu-config'
 endef
