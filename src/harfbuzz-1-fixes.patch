@@ -191,11 +191,12 @@ diff --git a/harfbuzz.pc.in b/harfbuzz.pc.in
 index e92319e..2a49f2e 100644
 --- a/harfbuzz.pc.in
 +++ b/harfbuzz.pc.in
-@@ -8,4 +8,5 @@ Description: Text shaping library
+@@ -8,4 +8,6 @@ Description: Text shaping library
  Version: @VERSION@
  
  Libs: -L${libdir} -lharfbuzz
 +Libs.private: -lusp10 -lgdi32
++Requires.private: icu-le cairo-ft glib-2.0
  Cflags: -I${includedir}/harfbuzz
 -- 
 1.8.2.2

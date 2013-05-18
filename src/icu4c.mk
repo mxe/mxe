@@ -18,6 +18,7 @@ define $(PKG)_BUILD
     mkdir '$(1).native' && cd '$(1).native' && '$(1)/source/configure'
     $(MAKE) -C '$(1).native' -j '$(JOBS)'
 
+    $(SED) -i 's,\(baselibs.*\),\1 -lstdc++,' '$(1)/source/config/icu.pc.in'
     mkdir '$(1).cross' && cd '$(1).cross' && '$(1)/source/configure' \
         --host='$(TARGET)' \
         --build="`config.guess`" \

@@ -27,7 +27,6 @@ define $(PKG)_BUILD
         --enable-explicit-deps \
         --with-included-modules \
         --without-dynamic-modules \
-        CXX='$(TARGET)-g++' \
-        LIBS='-lstdc++'
+        CXX='$(TARGET)-g++'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
