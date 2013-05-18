@@ -22,11 +22,7 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
-        --enable-static
-    $(MAKE) -C '$(1)/src'      -j '$(JOBS)'
-    # some of these tests want to be linked with g++
-    # but there's no easy way to bypass the am__v_CCLD... logic
-    $(MAKE) -C '$(1)/test/api' -j '$(JOBS)' test-blob.exe test-buffer.exe test-common.exe test-ot-tag.exe test-set.exe test-version.exe
-    $(MAKE) -C '$(1)/test/api' -j '$(JOBS)' || $(MAKE) -C '$(1)/test/api' -j '$(JOBS)' CC=$(TARGET)-g++
-    $(MAKE) -C '$(1)' install
+        --enable-static \
+        LIBS='-lstdc++'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
