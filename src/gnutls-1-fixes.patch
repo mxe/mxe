@@ -49,14 +49,15 @@ index 3da1992..ca5537e 100644
 1.8.1.4
 
 
-From 7490c9ab312141fd060564b06fd9d52356c5053e Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 4 Feb 2013 16:11:12 +0100
-Subject: [PATCH 3/6] add missing private lib to pc file
+From aa1ee06f67ac6e54e7ce18d5943ad1d9715c7ef7 Mon Sep 17 00:00:00 2001
+From: Nikos Mavrogiannopoulos <nmav@gnutls.org>
+Date: Sun, 19 May 2013 11:10:20 +0200
+Subject: [PATCH 3/6] removed undefined variable (cherry picked from commit
+ 863d07ef48b5b4f6d2e206e37bece4656c44ef92)
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index 2e610aa..3b68a23 100644
+index 2e610aa..7305fb1 100644
 --- a/lib/gnutls.pc.in
 +++ b/lib/gnutls.pc.in
 @@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
@@ -64,17 +65,39 @@ index 2e610aa..3b68a23 100644
  Version: @VERSION@
  Libs: -L${libdir} -lgnutls
 -Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @LIB_CLOCK_GETTIME@
-+Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @LIB_CLOCK_GETTIME@ -lcrypt32
++Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
 -- 
 1.8.1.4
 
 
-From 022bd77a895b700a1313d8be86670b806fcb77a8 Mon Sep 17 00:00:00 2001
+From 6106c8d35fb93376c7a93d9e0e1a72bfc2985344 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 4 Feb 2013 16:11:12 +0100
+Subject: [PATCH 4/6] add missing private lib to pc file
+
+
+diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
+index 7305fb1..e457e3a 100644
+--- a/lib/gnutls.pc.in
++++ b/lib/gnutls.pc.in
+@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
+ URL: http://www.gnutls.org/
+ Version: @VERSION@
+ Libs: -L${libdir} -lgnutls
+-Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@
++Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ -lcrypt32
+ @GNUTLS_REQUIRES_PRIVATE@
+ Cflags: -I${includedir}
+-- 
+1.8.1.4
+
+
+From 3ffeb882a7b55956da6baff62b6114ada99fd48c Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 6 Feb 2013 08:43:43 +0100
-Subject: [PATCH 4/6] relax automake version check
+Subject: [PATCH 5/6] relax automake version check
 
 
 diff --git a/configure.ac b/configure.ac
@@ -94,10 +117,10 @@ index ca5537e..3c59f0c 100644
 1.8.1.4
 
 
-From 89c3ec63c58cb0f07166ae4e41308a1d21449477 Mon Sep 17 00:00:00 2001
+From f397b69011f83db38a00737c315dca0fb033631b Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 21 May 2013 13:18:22 +0200
-Subject: [PATCH 5/6] don't require sys/mman.h or sys/wait.h
+Subject: [PATCH 6/6] don't require sys/mman.h or sys/wait.h
 
 See https://lists.gnu.org/archive/html/bug-gnulib/2013-04/msg00026.html
 
@@ -114,28 +137,6 @@ index 9d0c6de..1c33afa 100644
             string errno stdlib memory setjmp
    do eval as_ac_var=\${ac_cv_header_${f}_h}
       test "X${as_ac_var}" = Xyes || {
--- 
-1.8.1.4
-
-
-From 11b287f81195f3945941aa8bac9ddab5eb31cb7c Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 21 May 2013 13:30:36 +0200
-Subject: [PATCH 6/6] remove uninstantiated var from .pc file
-
-
-diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index 3b68a23..e457e3a 100644
---- a/lib/gnutls.pc.in
-+++ b/lib/gnutls.pc.in
-@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
- URL: http://www.gnutls.org/
- Version: @VERSION@
- Libs: -L${libdir} -lgnutls
--Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @LIB_CLOCK_GETTIME@ -lcrypt32
-+Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ -lcrypt32
- @GNUTLS_REQUIRES_PRIVATE@
- Cflags: -I${includedir}
 -- 
 1.8.1.4
 
