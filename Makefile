@@ -80,7 +80,7 @@ DOWNLOAD_PKG_ARCHIVE = \
             | gzip -d | gzip -9n, \
             ) \
         > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)', \
-    $(error URL not specified for package $(1)))
+    )
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
