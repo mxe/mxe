@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 1220c88ad7f50bf1c08208e1eb05ee5d56635361
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://origin.releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype dbus
+$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype dbus icu4c
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://origin.releases.qt-project.org/qt5/ | \
@@ -31,6 +31,7 @@ define $(PKG)_BUILD
             -release \
             -static \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
+            -icu \
             -opengl desktop \
             -no-glib \
             -accessibility \

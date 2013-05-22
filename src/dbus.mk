@@ -12,8 +12,8 @@ $(PKG)_DEPS     := gcc expat
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
-    grep -v '^1\.[01234]\.' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

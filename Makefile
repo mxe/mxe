@@ -270,7 +270,7 @@ clean-pkg:
 .PHONY: update
 define UPDATE
     $(if $(2),
-        $(if $(filter $(2),$($(1)_IGNORE)),
+        $(if $(filter $($(1)_IGNORE),$(2)),
             $(info IGNORED  $(1)  $(2)),
             $(if $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1)),
                 $(if $(filter $(2),$($(1)_VERSION)),
