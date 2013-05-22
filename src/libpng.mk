@@ -16,8 +16,8 @@ define $(PKG)_UPDATE
     grep -v alpha | \
     grep -v beta | \
     grep -v rc | \
-    grep -v '^1\.[0-4]\.' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

@@ -14,8 +14,8 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.gmplib.org/' | \
     grep '<a href="' | \
     $(SED) -n 's,.*gmp-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep -v '^4\.' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
