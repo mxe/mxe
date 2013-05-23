@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_i686-pc-mingw32
     # native build
     cp -Rp '$(1)' '$(1).native'
     cd '$(1).native' && ./configure \
