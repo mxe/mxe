@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         -DBOOST_USE_STATIC_LIBS=1 \
         -DBUILD_SHARED_LIBS=0 \
         -C TryRunResults.cgal.cmake .
+
     $(MAKE) -C '$(1)' -j $(JOBS)
     cd '$(1)/examples/AABB_tree' && cmake \
         -DBOOST_LIB_DIAGNOSTIC_DEFINITIONS:STRING="-DBOOST_LIB_DIAGNOSTIC" \

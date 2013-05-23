@@ -21,6 +21,9 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' MXE_CFLAGS=
     $(MAKE) -C '$(1)' -j 1 install
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst MXE_CFLAGS=,CFLAGS="-DFORCEINLINE=inline",$($(PKG)_BUILD))
+$(PKG)_BUILD_i686-w64-mingw32 = $(subst MXE_CFLAGS=,CFLAGS="-DFORCEINLINE=inline",$($(PKG)_BUILD))
