@@ -74,3 +74,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native'/src/bin/pg_config -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/pg_config' '$(PREFIX)/bin/$(TARGET)-pg_config'
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =
