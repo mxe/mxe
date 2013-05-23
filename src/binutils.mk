@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         --target='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)' \
+        --disable-multilib \
         --with-gcc \
         --with-gnu-ld \
         --with-gnu-as \

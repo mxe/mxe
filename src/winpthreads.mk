@@ -2,27 +2,24 @@
 # See index.html for further information.
 
 PKG             := winpthreads
-$(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d86e21b33eea05ff2c27b428eaab679d7ab3b08e
-$(PKG)_SUBDIR   := tonytheodore-$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/tonytheodore/$(PKG)/tarball/$($(PKG)_VERSION)/$(PKG)_FILE
-$(PKG)_DEPS     := gcc
+$(PKG)_IGNORE    = $(mingw-w64_IGNORE)
+$(PKG)_CHECKSUM  = $(mingw-w64_CHECKSUM)
+$(PKG)_SUBDIR    = $(mingw-w64_SUBDIR)
+$(PKG)_FILE      = $(mingw-w64_FILE)
+$(PKG)_URL       = $(mingw-w64_URL)
+$(PKG)_DEPS     := gcc mingw-w64
 
 define $(PKG)_UPDATE
-    echo 'info: sync latest winpthreads with git svn rebase; git push origin master' >&2;
-    $(WGET) -q -O- 'https://github.com/tonytheodore/$(PKG)/commits/master' | \
-    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
-    head -1
+    echo $(mingw-w64_VERSION)
 endef
 
 define $(PKG)_BUILD_mingw-w64
-    cd '$(1)' && ./configure \
+    cd '$(1)/mingw-w64-libraries/winpthreads' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-static \
         --disable-shared
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/mingw-w64-libraries/winpthreads' -j '$(JOBS)' install
 
     $(PTHREADS_TEST)
 endef
