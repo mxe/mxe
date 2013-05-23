@@ -17,7 +17,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i '27s,^,#ifdef __MINGW64__\n#include <windows.h>\n#endif\n,' '$(1)/include/CGAL/FPU.h'
     cd '$(1)' && cmake \
         -DCGAL_INSTALL_CMAKE_DIR:STRING="lib/CGAL" \
         -DCGAL_INSTALL_INC_DIR:STRING="include" \
