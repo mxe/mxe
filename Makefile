@@ -66,7 +66,6 @@ ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
 DOWNLOAD_PKG_ARCHIVE = \
-    $(if $(value $(1)_URL), \
         mkdir -p '$(PKG_DIR)' && \
         $(if $($(1)_URL_2), \
             ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
@@ -79,8 +78,7 @@ DOWNLOAD_PKG_ARCHIVE = \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
-        > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)', \
-    $(error URL not specified for package $(1)))
+        > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)'
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
