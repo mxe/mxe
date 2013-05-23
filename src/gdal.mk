@@ -16,11 +16,12 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_CONFIGURE
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
+        --enable-static \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-bsb \
@@ -42,9 +43,7 @@ define $(PKG)_BUILD
         --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
         --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
-        --with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
-        --with-netcdf='$(PREFIX)/$(TARGET)' \
         --without-odbc \
         --without-static-proj4 \
         --without-xerces \
@@ -72,8 +71,10 @@ define $(PKG)_BUILD
         --without-perl \
         --without-php \
         --without-ruby \
-        --without-python \
-        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+        --without-python
+endef
+
+define $(PKG)_MAKE
     $(MAKE) -C '$(1)'       -j 1 lib-target
     $(MAKE) -C '$(1)'       -j 1 install-lib
     $(MAKE) -C '$(1)/port'  -j 1 install
@@ -83,4 +84,27 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/ogr'   -j 1 install OGR_ENABLED=
     $(MAKE) -C '$(1)/apps'  -j 1 install BIN_LIST=
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
+endef
+
+define $(PKG)_BUILD
+    $($(PKG)_CONFIGURE)\
+        --with-hdf4='$(PREFIX)/$(TARGET)' \
+        --with-netcdf='$(PREFIX)/$(TARGET)' \
+        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
+        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+    $($(PKG)_MAKE)
+endef
+
+define $(PKG)_BUILD_x86_64-w64-mingw32
+    $($(PKG)_CONFIGURE)\
+        --without-pg \
+        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+    $($(PKG)_MAKE)
+endef
+
+define $(PKG)_BUILD_i686-w64-mingw32
+    $($(PKG)_CONFIGURE)\
+        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
+        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+    $($(PKG)_MAKE)
 endef
