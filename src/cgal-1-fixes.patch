@@ -1,10 +1,12 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 036e8f90ce7f2f1302a2603b89ae7661211c090d Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+Contains ad hoc patches for cross building.
+
+From 06377a4e5c08eee03cb2ab244454a24499fc7231 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 21 Oct 2011 23:08:52 +0200
-Subject: [PATCH 1/4] adjustments for mingw-cross-env
+Subject: [PATCH 1/5] adjustments for mingw-cross-env
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -269,13 +271,13 @@ index c89e7f7..57a5d40 100644
   
    if (os == ON_ORIENTED_BOUNDARY && is_infinite(fh)) {
 -- 
-1.7.10.4
+1.8.2.2
 
 
-From a455aa3d21f432831ccafcffc90bc7baf766ce6b Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+From fc63de416f0922286a4d381124ea99e067cccf08 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 18 Nov 2011 00:08:25 +0100
-Subject: [PATCH 2/4] prevent Qt's moc from choking on BOOST_JOIN
+Subject: [PATCH 2/5] prevent Qt's moc from choking on BOOST_JOIN
 
 Taken from:
 https://lists-sop.inria.fr/sympa/arc/cgal-discuss/2011-11/msg00087.html
@@ -298,13 +300,13 @@ index 62d0485..852fcc9 100644
          else()
          
 -- 
-1.7.10.4
+1.8.2.2
 
 
-From 7225ba1e69c3e4501706e73e2f1e61e3d1313bfa Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+From 34f21d7bc2d213b0fb326e5214d19179f9ff8261 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Fri, 6 Jul 2012 09:27:49 +0200
-Subject: [PATCH 3/4] update "detected" Qt version
+Subject: [PATCH 3/5] update "detected" Qt version
 
 
 diff --git a/TryRunResults.cgal.cmake b/TryRunResults.cgal.cmake
@@ -322,13 +324,13 @@ index 299de90..f11ddc6 100644
 -     CACHE STRING "version=4.8.0" FORCE)
 +     CACHE STRING "version=4.8.2" FORCE)
 -- 
-1.7.10.4
+1.8.2.2
 
 
-From c6a34b69b8c538456fa23d07f2914aef6395bcf7 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+From 79a8541a6782e3909573a50b25b34f999b14ca18 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Wed, 18 Jul 2012 00:43:17 +0200
-Subject: [PATCH 4/4] boost 1.50 compatibility
+Subject: [PATCH 4/5] boost 1.50 compatibility
 
 
 diff --git a/cmake/modules/CGAL_SetupBoost.cmake b/cmake/modules/CGAL_SetupBoost.cmake
@@ -345,5 +347,29 @@ index fc3dc11..d72074fd 100644
    message( STATUS "Boost include:     ${Boost_INCLUDE_DIRS}" )
    message( STATUS "Boost libraries:   ${Boost_LIBRARIES}" )
 -- 
-1.7.10.4
+1.8.2.2
+
+
+From b242f346ec427d3d1d9fac5e65ab8c1842993a5c Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 23 May 2013 21:18:27 +1000
+Subject: [PATCH 5/5] fix for mingw-w64 include
+
+
+diff --git a/include/CGAL/FPU.h b/include/CGAL/FPU.h
+index 688216f..3b28451 100644
+--- a/include/CGAL/FPU.h
++++ b/include/CGAL/FPU.h
+@@ -24,6 +24,9 @@
+ 
+ #ifndef CGAL_FPU_H
+ #define CGAL_FPU_H
++#ifdef __MINGW64__
++#include <windows.h>
++#endif
+ 
+ #include <CGAL/number_type_basic.h>
+ 
+-- 
+1.8.2.2
 

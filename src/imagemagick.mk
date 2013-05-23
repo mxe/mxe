@@ -37,3 +37,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-imagemagick.exe' \
         `'$(TARGET)-pkg-config' ImageMagick++ --cflags --libs`
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =

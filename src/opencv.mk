@@ -58,3 +58,8 @@ define $(PKG)_BUILD
         '$(1)/samples/c/fback_c.c' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
         `'$(TARGET)-pkg-config' opencv --cflags --libs`
 endef
+
+# float.h issues https://bugzilla.redhat.com/show_bug.cgi?id=843436
+$(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =
+

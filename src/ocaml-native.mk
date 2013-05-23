@@ -43,3 +43,5 @@ define $(PKG)_BUILD
     done
     # test will be done once cross ocamlopt is built in package ocaml-core
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =
