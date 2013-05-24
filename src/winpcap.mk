@@ -3,7 +3,7 @@
 
 PKG             := winpcap
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9155687ab23dbb2348e7cf93caf8a84f51e94795
+$(PKG)_CHECKSUM := 81b1dd70a7c75080033eab2d30811e737df9fa5b
 $(PKG)_SUBDIR   := winpcap
 $(PKG)_FILE     := WpcapSrc_$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://www.winpcap.org/install/bin/$($(PKG)_FILE)
