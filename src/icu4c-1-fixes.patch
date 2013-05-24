@@ -1,0 +1,51 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From a091ad517752ea98dd9ae471997c15d61b0f8559 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Fri, 24 May 2013 23:44:41 +1000
+Subject: [PATCH] fixes for static cross-build
+
+
+diff --git a/source/config/icu.pc.in b/source/config/icu.pc.in
+index 406b196..cc53055 100644
+--- a/source/config/icu.pc.in
++++ b/source/config/icu.pc.in
+@@ -5,7 +5,7 @@ exec_prefix = @exec_prefix@
+ #bindir = @bindir@
+ libdir = @libdir@
+ includedir = @includedir@
+-baselibs = @LIBS@
++baselibs = @LIBS@ -lstdc++
+ #datarootdir = @datarootdir@
+ #datadir = @datadir@
+ #sbindir = @sbindir@
+diff --git a/source/config/mh-mingw b/source/config/mh-mingw
+index eb25c8a..11ea464 100644
+--- a/source/config/mh-mingw
++++ b/source/config/mh-mingw
+@@ -72,7 +72,6 @@ A = a
+ ## An import library is needed for z/OS and MSVC
+ IMPORT_LIB_EXT = .lib
+ 
+-LIBPREFIX=
+ 
+ # Change the stubnames so that poorly working FAT disks and installation programs can work.
+ # This is also for backwards compatibility.
+diff --git a/source/config/mh-mingw64 b/source/config/mh-mingw64
+index 1b37f29..3c7ae7f 100644
+--- a/source/config/mh-mingw64
++++ b/source/config/mh-mingw64
+@@ -72,7 +72,6 @@ A = a
+ ## An import library is needed for z/OS and MSVC
+ IMPORT_LIB_EXT = .lib
+ 
+-LIBPREFIX=
+ 
+ # Change the stubnames so that poorly working FAT disks and installation programs can work.
+ # This is also for backwards compatibility.
+-- 
+1.8.2.2
+
