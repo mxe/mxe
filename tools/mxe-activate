@@ -46,4 +46,4 @@ _mxe()
     esac
 
 }
-complete -o nospace -o default -F _mxe mxe make
+complete -o nospace -o default -F _mxe mxe make gmake

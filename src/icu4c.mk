@@ -19,7 +19,6 @@ define $(PKG)_BUILD
         CC=gcc CXX=g++
     $(MAKE) -C '$(1).native' -j '$(JOBS)'
 
-    $(SED) -i 's,\(baselibs.*\),\1 -lstdc++,' '$(1)/source/config/icu.pc.in'
     mkdir '$(1).cross' && cd '$(1).cross' && '$(1)/source/configure' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
@@ -30,7 +29,7 @@ define $(PKG)_BUILD
         CFLAGS=-DU_USING_ICU_NAMESPACE=0 \
         SHELL=bash
 
-    $(MAKE) -C '$(1).cross' -j '$(JOBS)' install LIBPREFIX=lib
+    $(MAKE) -C '$(1).cross' -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
 
     # Static libs are prefixed with an `s` but the config script
