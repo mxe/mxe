@@ -3,7 +3,7 @@
 
 PKG             := xmlwrapp
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 7bd66ecc1204b296580a499fd929d77b79e6e85a
+$(PKG)_CHECKSUM := 2a9c1db86977515863b41099b94af1152c2d0374
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
