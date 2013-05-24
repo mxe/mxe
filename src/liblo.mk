@@ -3,7 +3,7 @@
 
 PKG             := liblo
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 21942c8f19e9829b5842cb85352f98c49dfbc823
+$(PKG)_CHECKSUM := bbd92eb9ab7316ee3f75b6b887b6f853b848c1e5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
