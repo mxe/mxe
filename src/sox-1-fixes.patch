@@ -1,0 +1,58 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 72c87a290b580df8f5b40e6f07ecf135723bbdec Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 25 May 2013 19:25:04 +1000
+Subject: [PATCH] cross build fixes
+
+
+diff --git a/configure b/configure
+index bfebd34..cb2d2b9 100755
+--- a/configure
++++ b/configure
+@@ -13240,7 +13240,7 @@ if ${ac_cv_lib_magic_magic_open+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lmagic  $LIBS"
++LIBS="-lmagic -lshlwapi -lgnurx $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -13271,7 +13271,7 @@ fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_magic_magic_open" >&5
+ $as_echo "$ac_cv_lib_magic_magic_open" >&6; }
+ if test "x$ac_cv_lib_magic_magic_open" = xyes; then :
+-  MAGIC_LIBS="-lmagic"
++  MAGIC_LIBS="-lmagic -lshlwapi -lgnurx"
+ else
+   using_magic=no
+ fi
+diff --git a/src/flac.c b/src/flac.c
+index eff2ae4..6cbd88d 100644
+--- a/src/flac.c
++++ b/src/flac.c
+@@ -55,7 +55,7 @@ typedef struct {
+ } priv_t;
+ 
+ 
+-#if defined(__MINGW32__)
++#if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
+ /* Provide a local definition of ntohl so we don't need to load wsock32.dll. */
+ unsigned long __stdcall ntohl(unsigned long val)
+ {
+@@ -213,7 +213,7 @@ static size_t read_samples(sox_format_t * const ft, sox_sample_t * sampleBuffer,
+   size_t prev_requested;
+ 
+   if (p->seek_pending) {
+-    p->seek_pending = sox_false; 
++    p->seek_pending = sox_false;
+ 
+     /* discard leftover decoded data */
+     free(p->leftover_buf);
+-- 
+1.8.2.3
+

@@ -1,0 +1,39 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from https://bug697550.bugzilla-attachments.gnome.org/attachment.cgi?id=240941
+
+From 5ccb0f4589e04aaf711b44b77cf609333e1b40bd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A0=D1=83=D1=81=D0=BB=D0=B0=D0=BD=20=D0=98=D0=B6=D0=B1=D1?=
+ =?UTF-8?q?=83=D0=BB=D0=B0=D1=82=D0=BE=D0=B2?= <lrn1986@gmail.com>
+Date: Mon, 8 Apr 2013 13:14:35 +0400
+Subject: [PATCH 1/3] Also check for clock_gettime in libpthread
+
+  libwinpthreads provides POSIX time API.
+  It also provides libpthread alias for itself, for compatibility, so that
+is what we will link with.
+
+Fixes #697550
+---
+ configure.ac | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index 1063828..34b7448 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -458,6 +458,11 @@ AC_CHECK_FUNCS(clock_gettime, [], [
+   AC_CHECK_LIB(rt, clock_gettime, [
+     AC_DEFINE(HAVE_CLOCK_GETTIME, 1)
+     LIBS="$LIBS -lrt"
++  ], [
++    AC_CHECK_LIB(pthread, clock_gettime, [
++      AC_DEFINE(HAVE_CLOCK_GETTIME, 1)
++      LIBS="$LIBS -lpthread"
++    ])
+   ])
+ ])
+ 
+-- 
+1.8.0
+
