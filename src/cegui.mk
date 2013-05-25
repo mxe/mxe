@@ -11,7 +11,7 @@ $(PKG)_DEPS     := gcc pcre freeglut freeimage freetype libxml2 expat xerces
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/downloads' | \
-    $(SED) -n 's,.*href=.*get/v\([0-9-]-[0-9]-[0-9]\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*href=.*get/v\([0-9]*-[0-9]*-[0-9]*\)\.tar.*,\1,p' | \
     $(SED) 's,-,.,g' | \
     $(SORT) -V | \
     tail -1
