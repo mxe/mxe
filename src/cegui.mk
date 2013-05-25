@@ -10,7 +10,11 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/crayzedsgui/CEGUI%20Mk-2
 $(PKG)_DEPS     := gcc pcre freeglut freeimage freetype libxml2 expat xerces
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package cegui need to be written.' >&2; echo $(cegui_VERSION)
+    $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/downloads' | \
+    $(SED) -n 's,.*href=.*get/v\([0-9-]-[0-9]-[0-9]\)\.tar.*,\1,p' | \
+    $(SED) 's,-,.,g' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
