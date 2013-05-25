@@ -90,21 +90,18 @@ define $(PKG)_BUILD
     $($(PKG)_CONFIGURE)\
         --with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-netcdf='$(PREFIX)/$(TARGET)' \
-        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $($(PKG)_MAKE)
 endef
 
 define $(PKG)_BUILD_x86_64-w64-mingw32
-    $($(PKG)_CONFIGURE)\
-        --without-pg \
+    $($(PKG)_CONFIGURE) \
         LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $($(PKG)_MAKE)
 endef
 
 define $(PKG)_BUILD_i686-w64-mingw32
-    $($(PKG)_CONFIGURE)\
-        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
-        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+    $($(PKG)_CONFIGURE) \
+        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $($(PKG)_MAKE)
 endef
