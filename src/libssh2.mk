@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := c27ca83e1ffeeac03be98b6eef54448701e044b0
 $(PKG)_SUBDIR   := libssh2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.libssh2.org/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgcrypt zlib openssl
+$(PKG)_DEPS     := gcc libgcrypt zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.libssh2.org/download/?C=M;O=D' | \
@@ -32,8 +32,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libssh2.exe' \
         `'$(TARGET)-pkg-config' --cflags --libs libssh2`
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 = \
-    $(subst --without-openssl ,--with-openssl ,\
-    $(subst --with-libgcrypt ,--without-libgcrypt ,\
-    $($(PKG)_BUILD)))
