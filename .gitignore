@@ -1,6 +1,6 @@
 /settings.mk
 /usr/
-/log/
+/log*/
 /pkg
 /wip/
 /tmp-*
