@@ -83,5 +83,3 @@ define $(PKG)_BUILD
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst -qt-sql-psql ,-no-sql-psql ,$($(PKG)_BUILD))
