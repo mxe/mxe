@@ -3,7 +3,7 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_CHECKSUM := 61d3cbf049468b6a714acc5a6f451945c9d3f0a8
+$(PKG)_CHECKSUM := 2cc90e1437fe0e6e4556c101be446b91a32182e2
 $(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)
 $(PKG)_FILE     := stimfit-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://stimfit.googlecode.com/files/$($(PKG)_FILE)
