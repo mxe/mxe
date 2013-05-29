@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         --disable-jpg-shared \
         --disable-png-shared \
         --disable-tif-shared \
+        WINDRES='$(TARGET)-windres' \
         LIBS='-lz'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
