@@ -3,7 +3,7 @@
 
 PKG             := imagemagick
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f393612e9797a6129f2cac7f83df337bb54ecf76
+$(PKG)_CHECKSUM := 4d961c8cf86611eb88ba8be616229101ceb3e7ff
 $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://www.imagemagick.org/download/$($(PKG)_FILE)
@@ -12,7 +12,7 @@ $(PKG)_DEPS     := gcc bzip2 ffmpeg fftw freetype jasper jpeg lcms liblqr-1 libp
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.imagemagick.org/' | \
-    $(SED) -n 's,.*<p>The current release is ImageMagick \([0-9][^<]*\).</p>.*,\1,p' | \
+    $(SED) -n 's,.*<p>The current release is ImageMagick \([0-9][0-9.-]*\).*,\1,p' | \
     head -1
 endef
 
