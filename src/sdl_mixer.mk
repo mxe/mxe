@@ -40,6 +40,7 @@ define $(PKG)_BUILD
         --disable-music-mp3-shared \
         --disable-smpegtest \
         --with-smpeg-prefix='$(PREFIX)/$(TARGET)' \
+        WINDRES='$(TARGET)-windres' \
         LIBS='-lvorbis -logg'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
