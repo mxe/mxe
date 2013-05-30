@@ -3,7 +3,7 @@
 
 # Qwt - Qt widgets for technical applications
 PKG             := qwt
-$(PKG)_CHECKSUM := 6d33a52367f7a82498ba27812bec4e15de005534
+$(PKG)_CHECKSUM := 2d95abf1fc4578684e141e0c76df266f9dae080a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_WEBSITE  := http://qwt.sourceforge.net/
