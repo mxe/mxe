@@ -8,7 +8,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_WEBSITE  := http://qwt.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc qt
+$(PKG)_DEPS     := gcc qtbase qtsvg
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/qwt/files/qwt/' | \
@@ -18,7 +18,7 @@ endef
 
 define $(PKG)_BUILD
     # build
-    cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt/bin/qmake
+    cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt5/bin/qmake
     $(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
 
     #build sinusplot example to test linkage
