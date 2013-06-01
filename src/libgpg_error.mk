@@ -21,6 +21,7 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --disable-nls \
         --disable-languages
     $(MAKE) -C '$(1)/src' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
