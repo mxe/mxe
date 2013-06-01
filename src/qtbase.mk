@@ -48,7 +48,7 @@ define $(PKG)_BUILD
             -system-pcre \
             -openssl-linked \
             -dbus-linked \
-            $(shell ([ `uname` == 'Darwin' ] || [ '$(TARGET)' == 'i686-w64-mingw32' ]) && echo -no-c++11) \
+            $(shell [ `uname` == 'Darwin' ] && echo -no-c++11) \
             -v
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
