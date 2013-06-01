@@ -33,7 +33,7 @@ define $(PKG)_BUILD
         --disable-rpath \
         --disable-nls \
         --disable-guile \
-        --disable-docs \
+        --disable-doc \
         --with-included-libtasn1 \
         --with-libregex='$(PREFIX)/$(TARGET)' \
         --with-regex-header=pcreposix.h \
