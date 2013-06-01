@@ -43,7 +43,8 @@ define $(PKG)_BUILD
         --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null \
-        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl --libs`"
+        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl --libs`" \
+        ac_cv_func_getaddrinfo=no
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/port             -j '$(JOBS)'         haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install haslibarule= shlib=
@@ -74,3 +75,4 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native'/src/bin/pg_config -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/pg_config' '$(PREFIX)/bin/$(TARGET)-pg_config'
 endef
+

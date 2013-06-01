@@ -29,3 +29,5 @@ define $(PKG)_BUILD
         html_DATA= \
         AR='$(TARGET)-ar'
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =
