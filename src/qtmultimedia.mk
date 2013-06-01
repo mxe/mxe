@@ -3,10 +3,10 @@
 
 PKG             := qtmultimedia
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 1bf371d724bffe5e586ac01d279afabb8771bd73
+$(PKG)_CHECKSUM := 3d88a961c7d1967ecfe6b67171fcd73877ac4ad4
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://origin.releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/5.1/$($(PKG)_VERSION)/backups/2013-05-31-45/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE

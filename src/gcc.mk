@@ -3,7 +3,7 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := b4ee6e9bdebc65223f95067d0cc1a634b59dad72
+$(PKG)_CHECKSUM := 4e655032cda30e1928fcc3f00962f4238b502169
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
