@@ -58,3 +58,5 @@ define $(PKG)_BUILD
          `'$(TARGET)-pkg-config' --libs --cflags freeimage xerces-c` \
          -o '$(PREFIX)/$(TARGET)/bin/test-cegui.exe'
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =

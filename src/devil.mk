@@ -39,3 +39,5 @@ define $(PKG)_BUILD
         --without-examples
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= INFO_DEPS=
 endef
+
+$(PKG)_BUILD_x86_64-w64-mingw32 =

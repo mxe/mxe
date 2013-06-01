@@ -16,13 +16,16 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_CONFIGURE
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-gpg-error-prefix='$(PREFIX)/$(TARGET)'
+endef
+
+define $(PKG)_MAKE
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     ln -sf '$(PREFIX)/$(TARGET)/bin/libgcrypt-config' '$(PREFIX)/bin/$(TARGET)-libgcrypt-config'
 
@@ -30,4 +33,15 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgcrypt.exe' \
         `$(TARGET)-libgcrypt-config --cflags --libs`
+endef
+
+define $(PKG)_BUILD
+    $($(PKG)_CONFIGURE)
+    $($(PKG)_MAKE)
+endef
+
+define $(PKG)_BUILD_x86_64-w64-mingw32
+    $($(PKG)_CONFIGURE) \
+        ac_cv_sys_symbol_underscore=no
+    $($(PKG)_MAKE)
 endef

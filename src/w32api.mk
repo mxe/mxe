@@ -15,20 +15,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_i686-pc-mingw32
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     cp -rpv '$(1)/include' '$(1)/lib' '$(PREFIX)/$(TARGET)'
-
-    # create pkg-config files
-    (echo 'Name: gl'; \
-     echo 'Version: 0'; \
-     echo 'Description: OpenGL'; \
-     echo 'Libs: -lopengl32';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/gl.pc'
-
-    (echo 'Name: glu'; \
-     echo 'Version: 0'; \
-     echo 'Description: OpenGL'; \
-     echo 'Libs: -lglu32';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/glu.pc'
 endef
