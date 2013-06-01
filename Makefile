@@ -1,6 +1,8 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+$(error This branch has been merged into mxe/master and is not maintained)
+
 MXE_TARGETS        := i686-pc-mingw32
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
