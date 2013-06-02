@@ -1,0 +1,19 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -urN a/doc/texi2pod.pl b/doc/texi2pod.pl
+--- a/doc/texi2pod.pl	2012-06-09 11:37:53.000000000 +0100
++++ b/doc/texi2pod.pl	2013-06-02 22:36:16.641048831 +0100
+@@ -291,10 +291,10 @@
+ 	if (defined $1) {
+             my $thing = $1;
+             if ($ic =~ /\@asis/) {
+-                $_ = "\n=item $thing\n";
++                $_ = "\n=item * $thing\n";
+             } else {
+                 # Entity escapes prevent munging by the <> processing below.
+-                $_ = "\n=item $ic\&LT;$thing\&GT;\n";
++                $_ = "\n=item * $ic\&LT;$thing\&GT;\n";
+             }
+ 	} else {
+ 	    $_ = "\n=item $ic\n";
