@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_CHECKSUM := 4ee8e524d8e3faac20c6dee6525a6ec940c3c850
+$(PKG)_CHECKSUM := 477118eaffb8f16bd7fd511069c2c5d618f6e400
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2//$($(PKG)_FILE)
@@ -30,10 +30,11 @@ define $(PKG)_BUILD
         --enable-static \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --disable-rpath \
         --disable-nls \
         --disable-guile \
-        --disable-docs \
+        --disable-doc \
         --with-included-libtasn1 \
         --with-libregex='$(PREFIX)/$(TARGET)' \
         --with-regex-header=pcreposix.h \

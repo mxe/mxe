@@ -22,6 +22,7 @@ define $(PKG)_CONFIGURE
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --with-gpg-error-prefix='$(PREFIX)/$(TARGET)'
 endef
 

@@ -21,6 +21,7 @@ define $(PKG)_BUILD
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
         -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=False \
+        -DVMIME_HAVE_MLANG_H=False \
         -DCMAKE_CXX_FLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
         -DVMIME_BUILD_STATIC_LIBRARY=ON \
         -DVMIME_BUILD_SHARED_LIBRARY=OFF \
@@ -36,6 +37,3 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' vmime --cflags --libs`
     $(INSTALL) -m755 '$(1)/examples/test-vmime.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =

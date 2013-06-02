@@ -1,15 +1,15 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 768be9f6a6b572b4d2ee62c9de51ff56c2e2777b Mon Sep 17 00:00:00 2001
+From 331c9b1a946f83deae950e0722b37688600e8073 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
-Subject: [PATCH 1/6] Revert "make dist will also make lzip compressed tarball"
+Subject: [PATCH 1/5] Revert "make dist will also make lzip compressed tarball"
 
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
 
 diff --git a/configure.ac b/configure.ac
-index c49e4e2..3da1992 100644
+index 064905e..d727500 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -26,7 +26,7 @@ AC_CONFIG_AUX_DIR([build-aux])
@@ -25,16 +25,16 @@ index c49e4e2..3da1992 100644
 1.8.1.4
 
 
-From 4b18d822b3177449489f99408e8fb237b7d365e3 Mon Sep 17 00:00:00 2001
+From 41e7bdf61b95973ebf021184ea3952d1a9349d4c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 Jun 2012 09:57:24 +0200
-Subject: [PATCH 2/6] AM_PROG_AR for automake 1.12 compatibility
+Subject: [PATCH 2/5] AM_PROG_AR for automake 1.12 compatibility
 
 Taken from
 http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
 
 diff --git a/configure.ac b/configure.ac
-index 3da1992..ca5537e 100644
+index d727500..0f4cd70 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -40,6 +40,7 @@ gl_EARLY
@@ -49,59 +49,36 @@ index 3da1992..ca5537e 100644
 1.8.1.4
 
 
-From aa1ee06f67ac6e54e7ce18d5943ad1d9715c7ef7 Mon Sep 17 00:00:00 2001
-From: Nikos Mavrogiannopoulos <nmav@gnutls.org>
-Date: Sun, 19 May 2013 11:10:20 +0200
-Subject: [PATCH 3/6] removed undefined variable (cherry picked from commit
- 863d07ef48b5b4f6d2e206e37bece4656c44ef92)
-
-
-diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index 2e610aa..7305fb1 100644
---- a/lib/gnutls.pc.in
-+++ b/lib/gnutls.pc.in
-@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
- URL: http://www.gnutls.org/
- Version: @VERSION@
- Libs: -L${libdir} -lgnutls
--Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @LIB_CLOCK_GETTIME@
-+Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@
- @GNUTLS_REQUIRES_PRIVATE@
- Cflags: -I${includedir}
--- 
-1.8.1.4
-
-
-From 6106c8d35fb93376c7a93d9e0e1a72bfc2985344 Mon Sep 17 00:00:00 2001
+From 42dd30f85578ddf957b1bfd2b0cf0752dd4ca8e7 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 4 Feb 2013 16:11:12 +0100
-Subject: [PATCH 4/6] add missing private lib to pc file
+Subject: [PATCH 3/5] add missing private lib to pc file
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index 7305fb1..e457e3a 100644
+index 13f2d3b..926c30c 100644
 --- a/lib/gnutls.pc.in
 +++ b/lib/gnutls.pc.in
 @@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
  URL: http://www.gnutls.org/
  Version: @VERSION@
  Libs: -L${libdir} -lgnutls
--Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@
-+Libs.private: @LTLIBNETTLE@ @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ -lcrypt32
+-Libs.private: @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@
++Libs.private: @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBPTHREAD@ @LTLIBICONV@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ -lcrypt32
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
 -- 
 1.8.1.4
 
 
-From 3ffeb882a7b55956da6baff62b6114ada99fd48c Mon Sep 17 00:00:00 2001
+From 7acc157b266701671f5a047e227ea4f91290d698 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 6 Feb 2013 08:43:43 +0100
-Subject: [PATCH 5/6] relax automake version check
+Subject: [PATCH 4/5] relax automake version check
 
 
 diff --git a/configure.ac b/configure.ac
-index ca5537e..3c59f0c 100644
+index 0f4cd70..a8c7a7c 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -26,7 +26,7 @@ AC_CONFIG_AUX_DIR([build-aux])
@@ -117,26 +94,28 @@ index ca5537e..3c59f0c 100644
 1.8.1.4
 
 
-From f397b69011f83db38a00737c315dca0fb033631b Mon Sep 17 00:00:00 2001
+From 06f1cb7ad830199bcab7da030827dba09fce9325 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 21 May 2013 13:18:22 +0200
-Subject: [PATCH 6/6] don't require sys/mman.h or sys/wait.h
+Date: Sat, 1 Jun 2013 18:06:37 +0200
+Subject: [PATCH 5/5] mingw compatibility fix
 
-See https://lists.gnu.org/archive/html/bug-gnulib/2013-04/msg00026.html
+Follow-up to f1cd31cfb0d80d8681d107591c87725445768529
+taken from https://gitorious.org/gnutls/gnutls/merge_requests/3
 
-diff --git a/src/libopts/m4/libopts.m4 b/src/libopts/m4/libopts.m4
-index 9d0c6de..1c33afa 100644
---- a/src/libopts/m4/libopts.m4
-+++ b/src/libopts/m4/libopts.m4
-@@ -72,7 +72,7 @@ AC_DEFUN([INVOKE_LIBOPTS_MACROS_FIRST],[
-   ${lo_have_typ_hdr} || \
-     ]AC_MSG_ERROR([you must have inttypes.h or stdint.h on your system])[
+diff --git a/src/cli.c b/src/cli.c
+index a7da6a4..3ff7417 100644
+--- a/src/cli.c
++++ b/src/cli.c
+@@ -853,7 +853,9 @@ main (int argc, char **argv)
+   int user_term = 0, retval = 0;
+   socket_st hd;
+   ssize_t bytes;
++#ifndef _WIN32
+   struct sigaction new_action, old_action;
++#endif
  
--  for f in sys_types sys_mman sys_param sys_stat sys_wait \
-+  for f in sys_types sys_param sys_stat \
-            string errno stdlib memory setjmp
-   do eval as_ac_var=\${ac_cv_header_${f}_h}
-      test "X${as_ac_var}" = Xyes || {
+   set_program_name (argv[0]);
+   cmd_parser (argc, argv);
 -- 
 1.8.1.4
 

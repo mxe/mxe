@@ -23,6 +23,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --disable-csharp \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --with-libiconv-prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
