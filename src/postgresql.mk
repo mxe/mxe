@@ -24,7 +24,6 @@ define $(PKG)_BUILD
     # Since we build only client libary, use bogus tzdata to satisfy configure.
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \

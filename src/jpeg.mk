@@ -18,7 +18,6 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --host='$(TARGET)' \
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=

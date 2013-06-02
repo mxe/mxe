@@ -22,7 +22,6 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --disable-nls \
         --with-libgcrypt \
         --with-libiconv-prefix='$(PREFIX)/$(TARGET)' \

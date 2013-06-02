@@ -25,8 +25,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib'
+        --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \

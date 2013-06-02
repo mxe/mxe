@@ -21,7 +21,6 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --disable-readline \
         --disable-threadsafe
     $(MAKE) -C '$(1)' -j '$(JOBS)' install

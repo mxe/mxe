@@ -20,7 +20,6 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --disable-shared \
         --disable-threads \
         --disable-nls

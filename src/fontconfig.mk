@@ -22,7 +22,6 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --with-arch='$(TARGET)' \
         --with-expat='$(PREFIX)/$(TARGET)' \
         --disable-docs

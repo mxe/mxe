@@ -19,7 +19,6 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
