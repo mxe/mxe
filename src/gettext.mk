@@ -21,6 +21,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --enable-threads=win32 \
         --without-libexpat-prefix \
         --without-libxml2-prefix \

@@ -21,6 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --disable-shared \
         --disable-nls
     $(MAKE) -C '$(1)/libcharset' -j '$(JOBS)' install

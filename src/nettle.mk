@@ -22,7 +22,8 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib'
     $(MAKE) -C '$(1)' -j '$(JOBS)' getopt.o getopt1.o
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
