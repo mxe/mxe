@@ -23,6 +23,7 @@ define $(PKG)_BUILD
     touch '$(1)/config.h.in'
     cd '$(1)' && ./configure \
       --prefix='$(PREFIX)/$(TARGET)' \
+      --libdir='$(PREFIX)/$(TARGET)/lib' \
       --host='$(TARGET)' \
       --disable-shared \
       --without-tests \
