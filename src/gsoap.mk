@@ -40,7 +40,7 @@ define $(PKG)_BUILD
     # http://groups.google.com/group/ikarus-users/browse_thread/thread/fd1d101eac32633f
     cd '$(1)' && ac_cv_func_malloc_0_nonnull=yes ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)\lib' \
+        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --enable-gnutls \
