@@ -13,8 +13,8 @@ $(PKG)_DEPS     := gcc zlib libgcrypt
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.openssl.org/source/' | \
     $(SED) -n 's,.*openssl-\([0-9][0-9a-z.]*\)\.tar.*,\1,p' | \
-    grep -v '^0\.9\.' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

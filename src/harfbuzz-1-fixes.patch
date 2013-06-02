@@ -1,11 +1,20 @@
 This file is part of MXE.
 See index.html for further information.
 
+Contains ad hoc patches for cross building.
+
+From a4f3f1b3f70d3f186c2f91a439637cc440653a29 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 12 May 2013 13:12:02 +1000
+Subject: [PATCH 1/2] winxp ugly
+
 This patch has been taken from:
 https://bugs.freedesktop.org/show_bug.cgi?id=55494
 
---- harfbuzz-0.9.6/src/hb-uniscribe.cc	2012-08-18 17:59:46 +0000
-+++ harfbuzz-0.9.6/src/hb-uniscribe.cc	2012-10-01 12:19:53 +0000
+diff --git a/src/hb-uniscribe.cc b/src/hb-uniscribe.cc
+index 2f01c28..1c2e06d 100644
+--- a/src/hb-uniscribe.cc
++++ b/src/hb-uniscribe.cc
 @@ -312,161 +312,16 @@ retry:
    bidi_state.uBidiLevel = HB_DIRECTION_IS_FORWARD (buffer->props.direction) ? 0 : 1;
    bidi_state.fOverrideDirection = 1;
@@ -168,3 +177,27 @@ https://bugs.freedesktop.org/show_bug.cgi?id=55494
  
    /* Wow, done! */
    return true;
+-- 
+1.8.2.2
+
+
+From 037957b837680df02fc0776f19e8b4d9bdc8b876 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 12 May 2013 13:17:30 +1000
+Subject: [PATCH 2/2] add libs for static linking
+
+
+diff --git a/harfbuzz.pc.in b/harfbuzz.pc.in
+index e92319e..2a49f2e 100644
+--- a/harfbuzz.pc.in
++++ b/harfbuzz.pc.in
+@@ -8,4 +8,6 @@ Description: Text shaping library
+ Version: @VERSION@
+ 
+ Libs: -L${libdir} -lharfbuzz
++Libs.private: -lusp10 -lgdi32
++Requires.private: icu-le cairo-ft glib-2.0
+ Cflags: -I${includedir}/harfbuzz
+-- 
+1.8.2.2
+

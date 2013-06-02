@@ -3,14 +3,14 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 1220c88ad7f50bf1c08208e1eb05ee5d56635361
+$(PKG)_CHECKSUM := 6970f7c2cb8475abc14aba1f23478949d0ebd294
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://origin.releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype dbus
+$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/5.1/$($(PKG)_VERSION)/backups/2013-05-31-45/submodules/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype dbus icu4c
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- http://origin.releases.qt-project.org/qt5/ | \
+    $(WGET) -q -O- http://download.qt-project.org/snapshots/qt/5.1/ | \
     $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     tail -1
@@ -31,6 +31,7 @@ define $(PKG)_BUILD
             -release \
             -static \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
+            -icu \
             -opengl desktop \
             -no-glib \
             -accessibility \
@@ -47,7 +48,6 @@ define $(PKG)_BUILD
             -system-pcre \
             -openssl-linked \
             -dbus-linked \
-            $(shell [ `uname` == 'Darwin' ] && echo -no-c++11) \
             -v
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
@@ -59,5 +59,3 @@ define $(PKG)_BUILD
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst -qt-sql-psql ,-no-sql-psql ,$($(PKG)_BUILD))

@@ -1,13 +1,12 @@
 This file is part of MXE.
 See index.html for further information.
 
-diff --git a/configure.ac b/configure.ac
---- a/configure.ac	2012-12-11 00:17:32.377025807 -0300
-+++ b/configure.ac	2012-12-11 00:17:57.589024754 -0300
+--- a/configure.ac	2013-05-08 08:34:56.000000000 +0200
++++ b/configure.ac	2013-05-23 17:00:12.917415891 +0200
 @@ -17,7 +17,7 @@
  ## Initialize configure.
  ##
- AC_REVISION($Id: configure.ac 23143 2013-01-08 03:47:01Z derobins $)
+ AC_REVISION($Id: configure.ac 23659 2013-04-30 21:50:05Z acheng $)
 -AC_PREREQ([2.69])
 +AC_PREREQ([2.67])
  

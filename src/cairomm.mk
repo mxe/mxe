@@ -12,8 +12,8 @@ $(PKG)_DEPS     := gcc cairo libsigc++
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://cairographics.org/releases/?C=M;O=D' | \
     $(SED) -n 's,.*"cairomm-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    grep -v '^1\.8\.' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

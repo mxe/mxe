@@ -14,8 +14,8 @@ define $(PKG)_UPDATE
     grep 'refs/tags/REL9[0-9_]*"' | \
     $(SED) 's,.*refs/tags/REL\(.*\)".*,\1,g;' | \
     $(SED) 's,_,.,g' | \
-    grep -v '^9\.[01]' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
@@ -43,7 +43,8 @@ define $(PKG)_BUILD
         --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null \
-        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl --libs`"
+        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl --libs`" \
+        ac_cv_func_getaddrinfo=no
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/port             -j '$(JOBS)'         haslibarule= shlib=
     $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install haslibarule= shlib=
@@ -75,4 +76,3 @@ define $(PKG)_BUILD
     ln -sf '$(PREFIX)/$(TARGET)/bin/pg_config' '$(PREFIX)/bin/$(TARGET)-pg_config'
 endef
 
-$(PKG)_BUILD_x86_64-w64-mingw32 =

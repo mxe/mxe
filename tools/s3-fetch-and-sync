@@ -5,4 +5,5 @@
 
 cd ~/mxe && git pull
 cd ~/mxe && make download
+cd ~/mxe && make clean-pkg
 s3cmd sync --acl-public ~/mxe/pkg/* s3://mxe-pkg/

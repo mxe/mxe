@@ -3,7 +3,7 @@
 
 PKG             := gmp
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 21d037f7fb32ae305a2e4157cff0c8caab06fe84
+$(PKG)_CHECKSUM := 2cb498322b9be4713829d94dee944259c017d615
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gmplib.org/pub/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -14,8 +14,8 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.gmplib.org/' | \
     grep '<a href="' | \
     $(SED) -n 's,.*gmp-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep -v '^4\.' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

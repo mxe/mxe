@@ -3,7 +3,7 @@
 
 PKG             := nettle
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 401f982a0b365e04c8c38c4da42afdd7d2d51d80
+$(PKG)_CHECKSUM := e17de3678b987841e88a724b7d2f6856d97ab139
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.lysator.liu.se/~nisse/archive/$($(PKG)_FILE)
@@ -13,6 +13,7 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.lysator.liu.se/~nisse/archive/' | \
     $(SED) -n 's,.*nettle-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'pre' | \
+    grep -v 'rc' | \
     tail -1
 endef
 
