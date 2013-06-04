@@ -21,7 +21,7 @@ WGET       := wget --no-check-certificate \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
-                gcc intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
+                gcc g++ intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
                 scons $(SED) $(SORT) unzip wget xz yasm
 
