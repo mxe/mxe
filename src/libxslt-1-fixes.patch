@@ -1,0 +1,27 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 5cdef88cc0bd288b4814509062234b72d27dc176 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 4 Jun 2013 17:28:16 +1000
+Subject: [PATCH] fix for deprecated mkdir
+
+
+diff --git a/libxslt/security.c b/libxslt/security.c
+index 965175f..be36f4b 100644
+--- a/libxslt/security.c
++++ b/libxslt/security.c
+@@ -343,7 +343,7 @@ xsltCheckWritePath(xsltSecurityPrefsPtr sec,
+ 	    }
+ 	    ret = xsltCheckWritePath(sec, ctxt, directory);
+ 	    if (ret == 1)
+-		ret = mkdir(directory, 0755);
++		ret = _mkdir(directory, 0755);
+ 	}
+ 	xmlFree(directory);
+ 	if (ret < 0)
+-- 
+1.8.2.3
+
