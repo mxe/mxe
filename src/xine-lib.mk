@@ -10,10 +10,11 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xine/$(PKG)/$($(PKG)_VER
 $(PKG)_DEPS     := gcc faad2 ffmpeg flac fontconfig freetype graphicsmagick libiconv libmng pthreads sdl speex theora vorbis wavpack zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://hg.debian.org/hg/xine-lib/xine-lib/tags' | \
-    $(SED) -n 's,>,\n,gp' | \
-    $(SED) -n 's,^\([0-9][^< ]*\)<.*,\1,p' | \
-    head -1
+    $(WGET) -q -O- 'http://www.xine-project.org/releases' | \
+    $(SED) -e 's,<a,\n<a,g' | \
+    $(SED) -n 's,.*xine-lib-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
