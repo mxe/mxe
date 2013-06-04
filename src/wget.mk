@@ -22,9 +22,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --with-ssl=gnutls
+        --with-ssl=gnutls \
+        CFLAGS='-DIN6_ARE_ADDR_EQUAL=IN6_ADDR_EQUAL'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
