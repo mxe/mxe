@@ -3,10 +3,10 @@
 
 PKG             := qtgraphicaleffects
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 82c26f3d7f6f329cf7231d0609fbea55170a0c24
+$(PKG)_CHECKSUM := 8e787f82d52e6099c93a2ab0e307bbbd40e366cd
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/5.1/$($(PKG)_VERSION)/backups/2013-05-31-45/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/5.1/$($(PKG)_VERSION)/backups/2013-06-14-57/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase qtdeclarative
 
 define $(PKG)_UPDATE

@@ -3,10 +3,10 @@
 
 PKG             := qtserialport
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := bb4a267ec01ff67205abf939584689ececd99520
+$(PKG)_CHECKSUM := 83a44eba06b2f9d2f6287d2b0f155766ef81eeed
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/5.1/$($(PKG)_VERSION)/backups/2013-05-31-45/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/5.1/$($(PKG)_VERSION)/backups/2013-06-14-57/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE
