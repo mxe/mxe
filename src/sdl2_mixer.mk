@@ -1,0 +1,48 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+PKG             := sdl2_mixer
+$(PKG)_IGNORE   :=
+$(PKG)_CHECKSUM := 7317e033989fee058bf8466ba9a4676f04391870
+$(PKG)_SUBDIR   := SDL2_mixer-$($(PKG)_VERSION)
+$(PKG)_FILE     := SDL2_mixer-$($(PKG)_VERSION).tar.gz
+#$(PKG)_URL      := http://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.libsdl.org/tmp/SDL_mixer/release/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc sdl2 libmodplug ogg vorbis smpeg2
+
+define $(PKG)_UPDATE
+    $(WGET) -q -O- 'http://hg.libsdl.org/SDL_mixer/tags' | \
+    $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
+    head -1
+endef
+
+define $(PKG)_BUILD
+    $(SED) -i 's,^\(Requires:.*\),\1 vorbisfile,' '$(1)/SDL2_mixer.pc.in'
+    echo \
+        'Libs.private:' \
+        "`$(TARGET)-pkg-config libmodplug --libs`" \
+        >> '$(1)/SDL2_mixer.pc.in'
+    $(SED) -i 's,for path in /usr/local; do,for path in; do,' '$(1)/configure'
+    cd '$(1)' && ./configure \
+        --host='$(TARGET)' \
+        --disable-shared \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
+        --disable-sdltest \
+        --disable-music-mod \
+        --enable-music-mod-modplug \
+        --enable-music-ogg \
+        --disable-music-flac \
+        --enable-music-mp3 \
+        --disable-music-ogg-shared \
+        --disable-music-flac-shared \
+        --disable-smpegtest
+        WINDRES='$(TARGET)-windres' \
+        LIBS='-lvorbis -logg'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+#    '$(TARGET)-gcc' \
+#        -W -Wall -Werror -ansi -pedantic \
+#        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl2_mixer.exe' \
+#        `'$(TARGET)-pkg-config' SDL2_mixer --cflags --libs`
+endef
