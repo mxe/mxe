@@ -3,10 +3,10 @@
 
 PKG             := qttools
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d59380d16d6e28ae790826bfc20907c9d90ce230
+$(PKG)_CHECKSUM := 66be67a39e01c7252b8e9030642d4e4e5696547a
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/5.1/$($(PKG)_VERSION)/backups/2013-06-14-57/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase qtactiveqt qtdeclarative
 
 define $(PKG)_UPDATE

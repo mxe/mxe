@@ -3,14 +3,14 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 40a421c838f418fb7b1d0ffe8034fbf1bc81fd9f
+$(PKG)_CHECKSUM := dcf9c4bc8dc0a26c9dda74c60e99218854f45fe0
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/5.1/$($(PKG)_VERSION)/backups/2013-06-14-57/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype dbus icu4c
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- http://download.qt-project.org/snapshots/qt/5.1/ | \
+    $(WGET) -q -O- http://download.qt-project.org/development_releases/qt/5.1/ | \
     $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     tail -1

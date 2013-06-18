@@ -3,10 +3,10 @@
 
 PKG             := qtquickcontrols
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ba3ee14cfc68ee368a18505bf315fa30e52c78ad
+$(PKG)_CHECKSUM := 22ed35fe453490960be862842a8f7d783385ac28
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/5.1/$($(PKG)_VERSION)/backups/2013-06-14-57/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtdeclarative
 
 define $(PKG)_UPDATE
