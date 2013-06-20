@@ -3,11 +3,10 @@
 
 PKG             := smpeg2
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 7317e033989fee058bf8466ba9a4676f04391870
-$(PKG)_SUBDIR   := SDL2_mixer-$($(PKG)_VERSION)/external/smpeg2-2.0.0
-$(PKG)_FILE     := SDL2_mixer-$($(PKG)_VERSION).tar.gz
-#$(PKG)_URL      := http://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
-$(PKG)_URL      := http://www.libsdl.org/tmp/SDL_mixer/release/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := d0455466f61a8e55f83f4d7fd82f1c305bce6832
+$(PKG)_SUBDIR   := smpeg2-$($(PKG)_VERSION)
+$(PKG)_FILE     := smpeg2-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://www.libsdl.org/projects/smpeg/release/smpeg2-2.0.0.tar.gz
 $(PKG)_DEPS     := gcc sdl2
 
 define $(PKG)_UPDATE
