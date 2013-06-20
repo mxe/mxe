@@ -3,16 +3,17 @@
 
 PKG             := freetype
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 54b4541d56c0b344aad533230e59bb63cc871727
+$(PKG)_CHECKSUM := 4bbd8357b4b723e1ff38414a9eaf50bf99dacb84
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/2.5.0/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 libpng zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/freetype/files/freetype2/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
