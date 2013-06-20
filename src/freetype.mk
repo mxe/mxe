@@ -3,7 +3,7 @@
 
 PKG             := freetype
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 382479336faefbc77e4b63c9ce4a96cf5d2c3585
+$(PKG)_CHECKSUM := 54b4541d56c0b344aad533230e59bb63cc871727
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$($(PKG)_VERSION)/$($(PKG)_FILE)
