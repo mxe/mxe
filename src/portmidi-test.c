@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     /* list device information */
     default_in = Pm_GetDefaultInputDeviceID();
     default_out = Pm_GetDefaultOutputDeviceID();
-    printf("number of devices: %s", Pm_CountDevices());
+    printf("number of devices: %d", Pm_CountDevices());
     for (i = 0; i < Pm_CountDevices(); i++) {
         char *deflt;
         const PmDeviceInfo *info = Pm_GetDeviceInfo(i);

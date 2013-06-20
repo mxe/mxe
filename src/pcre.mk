@@ -24,7 +24,6 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --enable-pcre16 \
         --enable-utf \
         --enable-unicode-properties \

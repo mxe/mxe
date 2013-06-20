@@ -20,6 +20,8 @@ define $(PKG)_NATIVE_BUILD
 
     # native build of libiconv (used by glib-genmarshal)
     cd '$(1).native' && $(call UNPACK_PKG_ARCHIVE,libiconv)
+    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/libiconv-*.patch)),
+        (cd '$(1).native/$(libiconv_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
     cd '$(1).native/$(libiconv_SUBDIR)' && ./configure \
         --disable-shared \
         --disable-nls

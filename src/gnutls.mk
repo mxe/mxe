@@ -30,7 +30,6 @@ define $(PKG)_BUILD
         --enable-static \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
         --disable-rpath \
         --disable-nls \
         --disable-guile \
