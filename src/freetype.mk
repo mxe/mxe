@@ -22,8 +22,9 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        LIBPNG_CFLAGS="`$(PREFIX)/$(TARGET)/bin/libpng-config --cflags`" \
-        LIBPNG_LDFLAGS="`$(PREFIX)/$(TARGET)/bin/libpng-config --ldflags`"
+        LIBPNG_CFLAGS="`$(TARGET)-pkg-config libpng --cflags`" \
+        LIBPNG_LDFLAGS="`$(TARGET)-pkg-config libpng --libs`" \
+        FT2_EXTRA_LIBS="`$(TARGET)-pkg-config libpng --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
