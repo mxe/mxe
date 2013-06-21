@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 4bbd8357b4b723e1ff38414a9eaf50bf99dacb84
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/2.5.0/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(shell echo '$($(PKG)_VERSION)' | cut -d . -f 1,2,3)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 libpng zlib
 
 define $(PKG)_UPDATE
