@@ -4,26 +4,23 @@
 # Mingw-w64
 PKG             := mingw-w64
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 55f74b8b87c9b081844a1ba46e97b1db696f6e00
-$(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://downloads.sourceforge.net/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := bc48803ff15a777adad8890519bd3ebec90acab9
+$(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)/trunk
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/' | \
-    $(SED) -n 's,.*mingw-w64-v\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep -v [a-zA-Z] | \
-    sort | \
-    tail -1
+    $(WGET) -q -O- 'https://github.com/mirror/$(PKG)/commits/master' | \
+    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD_mingw-w64
     mkdir '$(1).headers-build'
     cd '$(1).headers-build' && '$(1)/mingw-w64-headers/configure' \
         --host='$(TARGET)' \
-        --prefix='$(PREFIX)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
         --enable-sdk=all
     $(MAKE) -C '$(1).headers-build' install
 endef

@@ -3,10 +3,10 @@
 
 PKG             := qtactiveqt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 04587ae9cf2a56b06f0acbfb2633745b4734b1e4
+$(PKG)_CHECKSUM := c2970a654de18a8a3539d1b8e9e57f7ea9b8f3e3
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://origin.releases.qt-project.org/qt5/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE

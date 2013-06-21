@@ -3,7 +3,7 @@
 
 PKG             := libidn
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := b1cb40646a96dadbfc41d060d23dfb382eec1128
+$(PKG)_CHECKSUM := 67364d0cc331f2ea93f09a1b436dc606db16ad4d
 $(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
 $(PKG)_FILE     := libidn-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)

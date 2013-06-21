@@ -13,8 +13,8 @@ $(PKG)_DEPS     :=
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/binutils/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="binutils-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    grep -v '^2\.1' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         --target='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)' \
+        --disable-multilib \
         --with-gcc \
         --with-gnu-ld \
         --with-gnu-as \

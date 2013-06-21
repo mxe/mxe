@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 7454a10238d663e048aec1e1a1871a76da646345 Mon Sep 17 00:00:00 2001
+From f6906f5cb744554a985f6ecbb55a49dd2883d531 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 3 Nov 2011 14:11:02 +0100
 Subject: [PATCH 1/2] add pkg-config support for libtiff-4
@@ -9,23 +9,23 @@ Subject: [PATCH 1/2] add pkg-config support for libtiff-4
 Change-Id: I387517e04fed7729e5acf28bacdfc289fb2d17bd
 
 diff --git a/config.tests/libtiff/libtiff.pro b/config.tests/libtiff/libtiff.pro
-index 60ba7d1..0544f55 100644
+index 47a8437..bd2c6b0 100644
 --- a/config.tests/libtiff/libtiff.pro
 +++ b/config.tests/libtiff/libtiff.pro
-@@ -1,4 +1,7 @@
- SOURCES = libtiff.cpp
+@@ -2,5 +2,7 @@ SOURCES = libtiff.cpp
  CONFIG -= qt dylib
  mac:CONFIG -= app_bundle
--LIBS += -ltiff
+ win32:CONFIG += console
+-unix|win32-g++*: LIBS += -ltiff
 +CONFIG += link_pkgconfig
 +packagesExist(libtiff-4):PKGCONFIG += libtiff-4
 +else:if(unix|win32-g++*): LIBS += -ltiff
-+else:win32: LIBS += libtiff.lib
+ else:win32: LIBS += libtiff.lib
 diff --git a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/tiff/tiff.pro
-index 66eea8c..8582740 100644
+index 353e3f3..fa22141 100644
 --- a/src/plugins/imageformats/tiff/tiff.pro
 +++ b/src/plugins/imageformats/tiff/tiff.pro
-@@ -9,7 +9,9 @@ SOURCES += main.cpp qtiffhandler.cpp
+@@ -10,7 +10,9 @@ wince*: SOURCES += qfunctions_wince.cpp
  OTHER_FILES += tiff.json
  
  config_libtiff {
@@ -37,10 +37,10 @@ index 66eea8c..8582740 100644
  } else {
      include($$PWD/../../../3rdparty/libtiff.pri)
 -- 
-1.7.10.4
+1.8.1.4
 
 
-From 4356a1b1d7dfd3391688ab08ba667465121e34b3 Mon Sep 17 00:00:00 2001
+From 3c300d849fbe41368aedbf8d9c8052a170dfd108 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 19 Dec 2012 23:29:52 +0100
 Subject: [PATCH 2/2] add pkg-config support for libmng (mxe-specific)
@@ -48,25 +48,25 @@ Subject: [PATCH 2/2] add pkg-config support for libmng (mxe-specific)
 Change-Id: I1216f35a01a974321efa2463b687c121baa22667
 
 diff --git a/config.tests/libmng/libmng.pro b/config.tests/libmng/libmng.pro
-index ee57ecd..4c2d305 100644
+index 7a45825..a20a0a0 100644
 --- a/config.tests/libmng/libmng.pro
 +++ b/config.tests/libmng/libmng.pro
-@@ -1,4 +1,7 @@
- SOURCES = libmng.cpp
+@@ -2,5 +2,7 @@ SOURCES = libmng.cpp
  CONFIG -= qt dylib
  mac:CONFIG -= app_bundle
--LIBS += -lmng
+ win32:CONFIG += console
+-unix|win32-g++*: LIBS += -lmng
 +CONFIG += link_pkgconfig
 +packagesExist(libmng):PKGCONFIG += libmng
 +else:if(unix|win32-g++*): LIBS += -lmng
-+else:win32: LIBS += libmng.lib
-diff --git a/src/plugins/imageformats/mng/mng.pro b/src/plugins/imageformats/mng/mng.pro
-index 9890c11..7cfcff0 100644
---- a/src/plugins/imageformats/mng/mng.pro
-+++ b/src/plugins/imageformats/mng/mng.pro
-@@ -8,7 +8,9 @@ HEADERS += qmnghandler_p.h
- SOURCES += qmnghandler.cpp
- OTHER_FILES += mng.json
+ else:win32: LIBS += libmng.lib
+diff --git a/src/plugins/imageformats/mng/qmnghandler.pri b/src/plugins/imageformats/mng/qmnghandler.pri
+index cdf17c5..00cd0b3 100644
+--- a/src/plugins/imageformats/mng/qmnghandler.pri
++++ b/src/plugins/imageformats/mng/qmnghandler.pri
+@@ -3,7 +3,9 @@ INCLUDEPATH *= $$PWD
+ HEADERS += $$PWD/qmnghandler_p.h
+ SOURCES += $$PWD/qmnghandler.cpp
  config_libmng {
 -    unix|win32-g++*: LIBS += -lmng
 +    CONFIG += link_pkgconfig
@@ -76,5 +76,5 @@ index 9890c11..7cfcff0 100644
  } else {
      include($$PWD/../../../3rdparty/libmng.pri)
 -- 
-1.7.10.4
+1.8.1.4
 

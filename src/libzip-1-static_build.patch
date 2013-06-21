@@ -6,16 +6,17 @@ This is a quick&dirty fix.
 The bug is being discussed at
 http://www.nih.at/listarchive/libzip-discuss/msg00304.html
 
---- a/lib/zip.h	2012-03-15 10:28:05.000000000 +0100
-+++ b/lib/zip.h	2012-12-18 02:05:31.416621709 +0100
-@@ -37,8 +37,8 @@
+--- a/lib/zip.h	2013-03-19 11:09:51.000000000 +0100
++++ b/lib/zip.h	2013-05-23 16:50:53.881403133 +0200
+@@ -37,9 +37,9 @@
  
  
  #ifndef ZIP_EXTERN
 -#ifdef _WIN32
--#define ZIP_EXTERN __declspec(dllimport)
 +#ifdef _MSC_VER
-+#define ZIP_EXTERN __declspec(dllexport)
+ #define ZIP_EXTERN __declspec(dllimport)
+-#elif defined(__GNUC__) && __GNUC__ >= 4
++#elif (defined(__GNUC__) && __GNUC__ >= 4) && !defined(_WIN32)
+ #define ZIP_EXTERN __attribute__ ((visibility ("default")))
  #else
  #define ZIP_EXTERN
- #endif

@@ -1,0 +1,16 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -ur xmlwrapp-0.7.0.orig/src/libxml/schema.cxx xmlwrapp-0.7.0/src/libxml/schema.cxx
+--- xmlwrapp-0.7.0.orig/src/libxml/schema.cxx	2013-03-16 12:29:12.000000000 +0100
++++ xmlwrapp-0.7.0/src/libxml/schema.cxx	2013-05-23 17:57:49.821494768 +0200
+@@ -30,6 +30,9 @@
+  * SUCH DAMAGE.
+  */
+ 
++// for va_list
++#include <stdarg.h>
++
+ // xmlwrapp includes
+ #include "xmlwrapp/schema.h"
+ #include "xmlwrapp/document.h"

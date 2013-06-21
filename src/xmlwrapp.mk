@@ -3,7 +3,7 @@
 
 PKG             := xmlwrapp
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 7bd66ecc1204b296580a499fd929d77b79e6e85a
+$(PKG)_CHECKSUM := 2a9c1db86977515863b41099b94af1152c2d0374
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -23,6 +23,3 @@ define $(PKG)_BUILD
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =

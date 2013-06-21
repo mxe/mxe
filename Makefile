@@ -2,13 +2,15 @@
 # See index.html for further information.
 
 MXE_TARGETS        := i686-pc-mingw32
+DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 
 PWD        := $(shell pwd)
 SHELL      := bash
-JOBS       := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+JOBS       := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
 
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
@@ -21,7 +23,7 @@ WGET       := wget --no-check-certificate \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
-                gcc intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
+                gcc g++ intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
                 scons $(SED) $(SORT) unzip wget xz yasm
 
@@ -40,6 +42,7 @@ unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
 unexport CPPFLAGS CROSS CXX CXXCPP CXXFLAGS EXEEXT EXTRA_CFLAGS
 unexport EXTRA_LDFLAGS LD LDFLAGS LIBRARY_PATH LIBS NM
 unexport OBJC_INCLUDE_PATH PKG_CONFIG QMAKESPEC RANLIB STRIP
+unexport CONFIG_SITE
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
@@ -66,7 +69,6 @@ ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
 DOWNLOAD_PKG_ARCHIVE = \
-    $(if $(value $(1)_URL), \
         mkdir -p '$(PKG_DIR)' && \
         $(if $($(1)_URL_2), \
             ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
@@ -79,8 +81,7 @@ DOWNLOAD_PKG_ARCHIVE = \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
-        > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)', \
-    $(error URL not specified for package $(1)))
+        > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)'
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
@@ -270,7 +271,7 @@ clean-pkg:
 .PHONY: update
 define UPDATE
     $(if $(2),
-        $(if $(filter $(2),$($(1)_IGNORE)),
+        $(if $(filter $($(1)_IGNORE),$(2)),
             $(info IGNORED  $(1)  $(2)),
             $(if $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1)),
                 $(if $(filter $(2),$($(1)_VERSION)),

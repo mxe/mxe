@@ -3,7 +3,7 @@
 
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := e1b80206572d681fe624b4c8076674aa5efd6b29
+$(PKG)_CHECKSUM := 91a89891b761e97aa0bad9e76bf43dd66617e612
 $(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
 $(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://www.openscenegraph.org/downloads/developer_releases/$($(PKG)_FILE)
@@ -12,7 +12,8 @@ $(PKG)_DEPS     := gcc boost curl dcmtk ffmpeg freetype gdal giflib gta jasper j
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.openscenegraph.org/downloads/developer_releases/?C=M;O=D' | \
     $(SED) -n 's,.*OpenSceneGraph-\([0-9][^<]*\)\.zip.*,\1,p' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

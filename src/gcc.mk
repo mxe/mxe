@@ -3,7 +3,7 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a464ba0f26eef24c29bcd1e7489421117fb9ee35
+$(PKG)_CHECKSUM := 4e655032cda30e1928fcc3f00962f4238b502169
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -13,8 +13,8 @@ $(PKG)_DEPS     := mingwrt w32api mingw-w64 binutils gcc-gmp gcc-mpc gcc-mpfr
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
-    grep -v '^4\.[543]\.' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_PRE_CONFIGURE
@@ -111,8 +111,7 @@ endef
 define $(PKG)_BUILD_mingw-w64
     # build standalone gcc
     $($(PKG)_PRE_CONFIGURE) \
-    $($(PKG)_CONFIGURE) \
-        --enable-sjlj-exceptions
+    $($(PKG)_CONFIGURE)
     $(MAKE) -C '$(1).build' -j '$(JOBS)' all-gcc
     $(MAKE) -C '$(1).build' -j 1 install-gcc
 
@@ -121,7 +120,7 @@ define $(PKG)_BUILD_mingw-w64
     mkdir '$(1).crt-build'
     cd '$(1).crt-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
         --host='$(TARGET)' \
-        --prefix='$(PREFIX)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
         mxe-config-opts
     $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
     $(MAKE) -C '$(1).crt-build' -j 1 install

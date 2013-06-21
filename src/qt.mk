@@ -3,10 +3,10 @@
 
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f5880f11c139d7d8d01ecb8d874535f7d9553198
+$(PKG)_CHECKSUM := 101d950b65f4954a120b07de91a618f4677a839b
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://releases.qt-project.org/qt4/source/$($(PKG)_FILE)
+$(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)-RC2.tar.gz
+$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/4.8/4.8.5-rc2/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
 
 define $(PKG)_UPDATE
@@ -83,5 +83,3 @@ define $(PKG)_BUILD
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst -qt-sql-psql ,-no-sql-psql ,$($(PKG)_BUILD))

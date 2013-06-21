@@ -3,12 +3,12 @@
 
 # Qwt - Qt widgets for technical applications
 PKG             := qwt
-$(PKG)_CHECKSUM := 6d33a52367f7a82498ba27812bec4e15de005534
+$(PKG)_CHECKSUM := 2d95abf1fc4578684e141e0c76df266f9dae080a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_WEBSITE  := http://qwt.sourceforge.net/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc qt
+$(PKG)_DEPS     := gcc qtbase qtsvg
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/qwt/files/qwt/' | \
@@ -18,11 +18,11 @@ endef
 
 define $(PKG)_BUILD
     # build
-    cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt/bin/qmake
+    cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt5/bin/qmake
     $(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
 
     #build sinusplot example to test linkage
-    cd '$(1)/examples/sinusplot' && $(PREFIX)/$(TARGET)/qt/bin/qmake
+    cd '$(1)/examples/sinusplot' && $(PREFIX)/$(TARGET)/qt5/bin/qmake
     $(MAKE) -C '$(1)/examples/sinusplot' -f 'Makefile.Release' -j '$(JOBS)'
 
     # install

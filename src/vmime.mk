@@ -3,7 +3,7 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := b6190648acdb831eb861627310da4a8bc7057099
+$(PKG)_CHECKSUM := 2adbfbd29bc1e74b4140b7866ac6849b3e32c1be
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$(PKG)_FILE
@@ -21,6 +21,7 @@ define $(PKG)_BUILD
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
         -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=False \
+        -DVMIME_HAVE_MLANG_H=False \
         -DCMAKE_CXX_FLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
         -DVMIME_BUILD_STATIC_LIBRARY=ON \
         -DVMIME_BUILD_SHARED_LIBRARY=OFF \
@@ -36,6 +37,3 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' vmime --cflags --libs`
     $(INSTALL) -m755 '$(1)/examples/test-vmime.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =

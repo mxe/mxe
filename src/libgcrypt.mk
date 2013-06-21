@@ -12,17 +12,20 @@ $(PKG)_DEPS     := gcc libgpg_error
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgcrypt/' | \
     $(SED) -n 's,.*libgcrypt-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep -v '^1\.4\.' | \
+    $(SORT) -V | \
     tail -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_CONFIGURE
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-gpg-error-prefix='$(PREFIX)/$(TARGET)'
+endef
+
+define $(PKG)_MAKE
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     ln -sf '$(PREFIX)/$(TARGET)/bin/libgcrypt-config' '$(PREFIX)/bin/$(TARGET)-libgcrypt-config'
 
@@ -32,4 +35,13 @@ define $(PKG)_BUILD
         `$(TARGET)-libgcrypt-config --cflags --libs`
 endef
 
-$(PKG)_BUILD_x86_64-w64-mingw32 =
+define $(PKG)_BUILD
+    $($(PKG)_CONFIGURE)
+    $($(PKG)_MAKE)
+endef
+
+define $(PKG)_BUILD_x86_64-w64-mingw32
+    $($(PKG)_CONFIGURE) \
+        ac_cv_sys_symbol_underscore=no
+    $($(PKG)_MAKE)
+endef

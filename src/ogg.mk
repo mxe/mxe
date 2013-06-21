@@ -3,7 +3,7 @@
 
 PKG             := ogg
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a900af21b6d7db1c7aa74eb0c39589ed9db991b8
+$(PKG)_CHECKSUM := 270685c2a3d9dc6c98372627af99868aa4b4db53
 $(PKG)_SUBDIR   := libogg-$($(PKG)_VERSION)
 $(PKG)_FILE     := libogg-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.xiph.org/releases/ogg/$($(PKG)_FILE)

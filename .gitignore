@@ -1,6 +1,7 @@
 /settings.mk
 /usr/
-/log/
+/gits/
+/log*/
 /pkg
 /wip/
 /tmp-*

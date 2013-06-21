@@ -3,11 +3,11 @@
 
 PKG             := freetype
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 382479336faefbc77e4b63c9ce4a96cf5d2c3585
+$(PKG)_CHECKSUM := 54b4541d56c0b344aad533230e59bb63cc871727
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib bzip2
+$(PKG)_DEPS     := gcc bzip2 libpng zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/freetype/files/freetype2/' | \
@@ -20,7 +20,9 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        LIBPNG_CFLAGS="`$(PREFIX)/$(TARGET)/bin/libpng-config --cflags`" \
+        LIBPNG_LDFLAGS="`$(PREFIX)/$(TARGET)/bin/libpng-config --ldflags`"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef

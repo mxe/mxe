@@ -3,7 +3,7 @@
 
 PKG             := poppler
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 92fd3d2f56cf74bb76e4856a8ac606330343ba8d
+$(PKG)_CHECKSUM := 26586bcd41a01adca00bf5929e11c49419bd21fa
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://poppler.freedesktop.org/$($(PKG)_FILE)
