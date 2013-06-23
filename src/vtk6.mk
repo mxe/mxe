@@ -3,15 +3,19 @@
 
 PKG             := vtk6
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 6d62715dee16d34d7d9bd9a3edc4d32a39d7c2d0
+$(PKG)_CHECKSUM := 51dd3b4a779d5442dd74375363f0f0c2d6eaf3fa
 $(PKG)_SUBDIR   := VTK$($(PKG)_VERSION)
 $(PKG)_FILE     := vtk-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc hdf5 qt
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package vtk6 need to be written.' >&2;
-    echo $(vtk6_VERSION)
+    $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
+    grep 'refs/tags/v[0-9.]*"' | \
+    $(SED) 's,.*refs/tags/v\(.*\)".*,\1,g;' | \
+    grep -v rc | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
