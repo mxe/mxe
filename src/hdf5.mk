@@ -28,6 +28,19 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         CPPFLAGS="-DH5_HAVE_WIN32_API -DH5_HAVE_MINGW -DH5_BUILT_AS_STATIC_LIB" \
         AR='$(TARGET)-ar'
+
+    # These programs need to be executed on host to create
+    # H5lib_settings.c and H5Tinit.c
+    for f in H5detect.exe H5make_libsettings.exe libhdf5.settings; do \
+        $(MAKE)       -C '$(1)'/src $$f && \
+        $(INSTALL) -m755 '$(1)'/src/$$f '$(PREFIX)/$(TARGET)/bin/'; \
+    done
+    (echo 'mkdir $(TARGET)'; \
+     echo 'H5detect.exe > $(TARGET)\H5Tinit.c'; \
+     echo 'H5make_libsettings.exe > $(TARGET)\H5lib_settings.c';) \
+     > '$(PREFIX)/$(TARGET)/bin/hdf5-create-settings.bat'
+    cp '$(1)/mxe-generated-sources/$(TARGET)/'*.c '$(1)/src/'
+
     $(MAKE) -C '$(1)'/src -j '$(JOBS)'
     $(MAKE) -C '$(1)'/src -j 1 install
     $(MAKE) -C '$(1)'/c++/src -j '$(JOBS)'
