@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := vtk
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 5.10%
 $(PKG)_CHECKSUM := ece52f4fa92811fe927581e60ecb39a8a5f68cd9
 $(PKG)_SUBDIR   := VTK
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
@@ -11,7 +11,7 @@ $(PKG)_DEPS     := gcc qt expat freetype hdf5 jpeg libxml2 libpng tiff zlib libo
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
-    grep 'refs/tags/v[0-9.]*"' | \
+    grep 'refs/tags/v5[0-9.]*"' | \
     $(SED) 's,.*refs/tags/v\(.*\)".*,\1,g;' | \
     head -1
 endef
