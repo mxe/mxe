@@ -1,6 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+MXE_TARGET_LIST    := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
 MXE_TARGETS        := i686-pc-mingw32
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
@@ -91,7 +92,7 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '#JOBS := $(JOBS)'; \
-        echo '#MXE_TARGETS := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32'; \
+        echo '#MXE_TARGETS := $(MXE_TARGET_LIST)'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
         echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
         echo '#.DEFAULT local-pkg-list:'; \
