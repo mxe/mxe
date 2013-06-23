@@ -4,7 +4,7 @@
 # armadillo
 PKG             := armadillo
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 7a6797ff784e5e3ae501ba8581ce3b85cecb4660
+$(PKG)_CHECKSUM := 80eb4e6e56a6949532b4ac946a933ad64c203e40
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
