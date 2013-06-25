@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-threads \
         --enable-directx
+    $(SED) -i 's,defined(__MINGW64_VERSION_MAJOR),defined(__MINGW64_VERSION_MAJOR) \&\& defined(_WIN64),' '$(1)/include/SDL_cpuinfo.h'
     $(SED) -i 's,-XCClinker,,' '$(1)/sdl2.pc'
     $(SED) -i 's,-XCClinker,,' '$(1)/sdl2-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
