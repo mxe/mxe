@@ -10,7 +10,7 @@ $(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/snapshots/$(
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    date -d yesterday +%Y%m%d-2245
+    $(DATE) -d yesterday +%Y%m%d-2245
 endef
 
 define $(PKG)_BUILD
