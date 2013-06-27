@@ -3,7 +3,7 @@
 
 PKG             := ocaml-findlib
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 5d1a52b77145348ded29fefe13736694aabb1868
+$(PKG)_CHECKSUM := 07048076758e4ca892f06ff535d7cab033833bde
 $(PKG)_SUBDIR   := findlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := findlib-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.camlcity.org/download/$($(PKG)_FILE)
