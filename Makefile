@@ -13,6 +13,7 @@ SHELL      := bash
 NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
 JOBS       := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
 
+DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
