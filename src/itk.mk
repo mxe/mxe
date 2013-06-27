@@ -11,7 +11,7 @@ $(PKG)_DEPS     := gcc hdf5
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package ITK need to be written.' >&2;
-    echo $(vtk6_VERSION)
+    echo $(itk_VERSION)
 endef
 
 define $(PKG)_BUILD
@@ -22,7 +22,8 @@ define $(PKG)_BUILD
         -DBUILD_SHARED_LIBS=FALSE \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
         -DBUILD_TESTING=FALSE \
-		-DITK_USE_SYSTEM_HDF5=TRUE \
+        -DBUILD_EXAMPLES=FALSE \
+        -DITK_USE_SYSTEM_HDF5=TRUE \
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef
