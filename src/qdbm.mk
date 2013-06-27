@@ -19,7 +19,9 @@ endef
 define $(PKG)_BUILD
     find '$(1)' -name 'Makefile.in' \
         -exec $(SED) -i 's,make ,$(MAKE) ,g' {} \;
-    cd '$(1)' && ./configure \
+    $(SED) -i 's,LD=`which ld`,LD=$(TARGET)-ld,' '$(1)/configure'
+    $(SED) -i 's,AR=`which ar`,AR=$(TARGET)-ar,' '$(1)/configure'
+    cd '$(1)' && CC='$(PREFIX)/bin/$(TARGET)-gcc' ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-lzo \
