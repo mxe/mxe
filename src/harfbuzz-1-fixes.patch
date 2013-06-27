@@ -3,23 +3,26 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 037957b837680df02fc0776f19e8b4d9bdc8b876 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sun, 12 May 2013 13:17:30 +1000
-Subject: [PATCH] add libs for static linking
-
-
-diff --git a/harfbuzz.pc.in b/harfbuzz.pc.in
-index e92319e..2a49f2e 100644
---- a/src/harfbuzz.pc.in
-+++ b/src/harfbuzz.pc.in
-@@ -8,4 +8,6 @@ Description: Text shaping library
- Version: @VERSION@
+diff -ur a/src/harfbuzz-icu.pc.in b/src/harfbuzz-icu.pc.in
+--- a/src/harfbuzz-icu.pc.in	2013-05-28 23:16:58.000000000 +0200
++++ b/src/harfbuzz-icu.pc.in	2013-06-26 04:14:39.078153528 +0200
+@@ -8,6 +8,7 @@
+ Version: %VERSION%
  
+ Requires: harfbuzz
+-Requires.private: icu-uc
++Requires.private: icu-uc cairo-ft glib-2.0
+ Libs: -L${libdir} -lharfbuzz-icu
++Libs.private: -lusp10 -lgdi32
+ Cflags: -I${includedir}/harfbuzz
+diff -ur a/src/harfbuzz.pc.in b/src/harfbuzz.pc.in
+--- a/src/harfbuzz.pc.in	2013-05-28 23:15:43.000000000 +0200
++++ b/src/harfbuzz.pc.in	2013-06-26 04:15:16.842154388 +0200
+@@ -7,5 +7,7 @@
+ Description: HarfBuzz text shaping library
+ Version: %VERSION%
+ 
++Requires.private: cairo-ft glib-2.0
  Libs: -L${libdir} -lharfbuzz
 +Libs.private: -lusp10 -lgdi32
-+Requires.private: icu-le cairo-ft glib-2.0
  Cflags: -I${includedir}/harfbuzz
--- 
-1.8.2.2
-
