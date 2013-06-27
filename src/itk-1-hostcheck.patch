@@ -1,0 +1,11 @@
+--- InsightToolkit-4.3.2/CMakeLists.txt	2013-04-23 13:35:23.000000000 +0200
++++ InsightToolkit-4.3.2/CMakeLists.txt.new	2013-06-26 18:42:27.360004957 +0200
+@@ -12,7 +12,7 @@
+ 
+ project(ITK)
+ 
+-if( WIN32 )
++if( CMAKE_HOST_WIN32 )
+ 
+   string( LENGTH "${CMAKE_CURRENT_SOURCE_DIR}" n )
+   if( n GREATER 50 )
