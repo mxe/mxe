@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 51dd3b4a779d5442dd74375363f0f0c2d6eaf3fa
 $(PKG)_SUBDIR   := VTK$($(PKG)_VERSION)
 $(PKG)_FILE     := vtk-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc hdf5 qt
+$(PKG)_DEPS     := gcc qt expat freetype hdf5 jpeg libxml2 theora libpng tiff zlib 
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
@@ -34,15 +34,23 @@ define $(PKG)_BUILD
     # now the cross compilation
     mkdir '$(1).cross_build'
     cd '$(1).cross_build' && cmake \
-        -C '$(1)/TryRunResults.cmake' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -C '$(1)/TryRunResults.cmake'\
         -DVTKCompileTools_DIR='$(1).native_build' \
         -DBUILD_SHARED_LIBS=FALSE \
         -DModule_vtkGUISupportQt=TRUE \
         -DModule_vtkGUISupportQtOpenGL=TRUE \
         -DQT_QMAKE_EXECUTABLE=$(PREFIX)/$(TARGET)/qt/bin/qmake \
+        -DVTK_USE_SYSTEM_EXPAT=TRUE \
+        -DVTK_USE_SYSTEM_FREETYPE=TRUE \
         -DVTK_USE_SYSTEM_HDF5=TRUE \
-        -DBUILD_EXAMPLES=OFF \
+        -DVTK_USE_SYSTEM_JPEG=TRUE \
+        -DVTK_USE_SYSTEM_LIBXML2=TRUE \
+        -DVTK_USE_SYSTEM_OGGTHEORA=TRUE \
+        -DVTK_USE_SYSTEM_PNG=TRUE \
+        -DVTK_USE_SYSTEM_TIFF=TRUE \
+        -DVTK_USE_SYSTEM_ZLIB=TRUE \
+        -DBUILD_EXAMPLES=FALSE \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
         -DBUILD_TESTING=FALSE \
         '$(1)'
