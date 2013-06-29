@@ -3,7 +3,7 @@
 
 PKG             := glibmm
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := cdc60b03da8fab8ce3fb720b778b5789bb2cb215
+$(PKG)_CHECKSUM := 399b6acd3756879fa61b185ab50abecf9652d15f
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

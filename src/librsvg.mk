@@ -28,7 +28,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
-        -mwindows -W -Wall -Werror -std=c99 -pedantic \
+        -mwindows -W -Wall -Werror -Wno-error=deprecated-declarations \
+        -std=c99 -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-librsvg.exe' \
         `'$(TARGET)-pkg-config' librsvg-2.0 --cflags --libs`
 endef

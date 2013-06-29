@@ -6,7 +6,7 @@ Contains an ad hoc patch for cross building.
 From 1ff5a73bee660f1d61f9cdd7c8d7aff29e959c4c Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Mon, 27 Sep 2010 12:00:52 +0200
-Subject: [PATCH 1/2] fix .pc requirements
+Subject: [PATCH] fix .pc requirements
 
 
 diff --git a/librsvg.pc.in b/librsvg.pc.in
