@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 8c2ab938c2dad8067c29b0aa93efc6389f0e7076
 $(PKG)_SUBDIR   := qdbm-$($(PKG)_VERSION)
 $(PKG)_FILE     := qdbm-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://fallabs.com/qdbm/qdbm-1.8.78.tar.gz
+$(PKG)_URL      := http://fallabs.com/qdbm/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 libiconv lzo zlib
 
 define $(PKG)_UPDATE
