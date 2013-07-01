@@ -3,7 +3,7 @@
 
 PKG             := qtactiveqt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := c2970a654de18a8a3539d1b8e9e57f7ea9b8f3e3
+$(PKG)_CHECKSUM := e9cc965b287ff9cafe456697e5266b28f1d7d7fe
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)

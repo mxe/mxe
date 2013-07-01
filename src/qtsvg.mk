@@ -3,7 +3,7 @@
 
 PKG             := qtsvg
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := fc9686fb2aa2eccc850389912758592c2b83a530
+$(PKG)_CHECKSUM := 280aa5bf614548d2d22fbf136430c17da4bce5b1
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)

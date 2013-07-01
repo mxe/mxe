@@ -3,7 +3,7 @@
 
 PKG             := qtimageformats
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d84ec1118ae2bdbdf5d32ab372c7ca4459dbf045
+$(PKG)_CHECKSUM := fb897d09b31a34cb5ac4aed8044c7f9a356cbc02
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
