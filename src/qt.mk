@@ -3,10 +3,10 @@
 
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 101d950b65f4954a120b07de91a618f4677a839b
+$(PKG)_CHECKSUM := 745f9ebf091696c0d5403ce691dc28c039d77b9e
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)-RC2.tar.gz
-$(PKG)_URL      := http://download.qt-project.org/snapshots/qt/4.8/4.8.5-rc2/$($(PKG)_FILE)
+$(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
 
 define $(PKG)_UPDATE
