@@ -3,7 +3,7 @@
 
 PKG             := biosig
 $(PKG)_IGNORE   := 
-$(PKG)_CHECKSUM := a9dcbec64a85004899d0407e645f3346458ff1bc
+$(PKG)_CHECKSUM := c04bc773b2a190fd2a9248ac70c143f6007d71ea
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
