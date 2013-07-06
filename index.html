@@ -693,8 +693,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install autoconf automake bash bison bzip2 \
                     cmake flex gettext git g++ intltool \
-                    libffi-dev libtool libltdl-dev openssl libssl-dev \
-                    libxml-parser-perl make patch perl \
+                    libffi-dev libtool libltdl-dev libssl-dev \
+                    libxml-parser-perl make openssl patch perl \
                     pkg-config scons sed unzip wget \
                     xz-utils yasm</pre>
 
@@ -704,15 +704,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>apt-get install g++-multilib libc6-dev-i386</pre>
 
     <p>
-    On Debian Squeeze, you'll need some packages from
-    <a href="http://backports-master.debian.org/Instructions/">backports</a>. Add this line:
+    Only the latest Debian stable series is supported (Wheezy 7.x)
     </p>
-    <pre>deb http://backports.debian.org/debian-backports squeeze-backports main</pre>
-    <p>
-    to your sources.list (or add a new file with the ".list" extension to /etc/apt/sources.list.d/)
-    </p>
-    <pre>apt-get update
-aptitude -t squeeze-backports install cmake yasm</pre>
 
     <h3 id="requirements-fedora">Fedora</h3>
 
