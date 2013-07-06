@@ -3,10 +3,10 @@
 
 PKG             := qtimageformats
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := fb897d09b31a34cb5ac4aed8044c7f9a356cbc02
+$(PKG)_CHECKSUM := 2ea432cfd0f94d809db31ae6c83cb65cbf8db9b8
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase libmng tiff
 
 define $(PKG)_UPDATE

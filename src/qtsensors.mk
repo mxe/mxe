@@ -3,10 +3,10 @@
 
 PKG             := qtsensors
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 50c1b112a50abc53f7d3327da37a2a423d6497d9
+$(PKG)_CHECKSUM := 0399e4d8402b7931e482b951363d153d1426b209
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE
