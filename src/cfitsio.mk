@@ -3,7 +3,7 @@
 
 PKG             := cfitsio
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ce39f428557d418d72dd6241c9626ea76109ba08
+$(PKG)_CHECKSUM := 20b62cecb9dc92138a53493bee329c68f03dc99f
 $(PKG)_SUBDIR   := cfitsio
 $(PKG)_FILE     := cfitsio$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$($(PKG)_FILE)
