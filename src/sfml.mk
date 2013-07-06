@@ -22,13 +22,12 @@ define $(PKG)_BUILD
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
 
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
-	
+
     '$(TARGET)-g++' \
         -W -Wall -Werror \
-		-DSFML_STATIC -DAL_LIBTYPE_STATIC \
+        -DSFML_STATIC -DAL_LIBTYPE_STATIC \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-sfml.exe' \
-		-lsfml-audio-s -lsfml-network-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s \
-		-lGLEW -lopengl32 -lgdi32 -lOpenAL32 -lwinmm -luuid -lole32 -ljpeg \
-		-lsndfile -lws2_32 -lfreetype -lFLAC -lvorbisenc -lvorbis -logg -lm -lpng -lz -lbz2
-		
+        -lsfml-audio-s -lsfml-network-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s \
+        `$(TARGET)-pkg-config --cflags --libs freetype2 glew openal sndfile vorbisenc` \
+        -ljpeg -lws2_32 -lgdi32
 endef
