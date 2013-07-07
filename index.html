@@ -184,6 +184,38 @@
         <a href="#used-by">used by several projects</a>
     </li>
     </ul>
+
+    <h3>Supported Toolchains</h3>
+
+    <table id="supported-toolchains">
+    <tr>
+        <th>Runtime</th>
+        <th>Host Triplet</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><a href="http://www.mingw.org/">MinGW 3x</a></td>
+        <td>i686-pc-mingw32</td>
+        <td>Fully Supported</td>
+    </tr>
+    <tr>
+        <td><a href="http://www.mingw.org/">MinGW 4x</a></td>
+        <td></td>
+        <td><a href="https://github.com/mxe/mxe/issues/203">Pilot</a></td>
+    </tr>
+    <tr>
+        <td rowspan="2"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64</a></td>
+        <td>i686-w64-mingw32</td>
+        <td>94% (258/275)</td>
+    </tr>
+    <tr>
+        <td>x86_64-w64-mingw32</td>
+        <td>86% (238/275)</td>
+    </tr>
+    <tr>
+    </tr>
+    </table>
+
 </div>
 
 <div class="section">
@@ -286,13 +318,23 @@ exit</pre>
     </p>
     <pre>make gtk lua libidn</pre>
     <p>
+    Targets can also be specified on the command line.
+    By default, only i686-pc-mingw32 is built, but you can
+    build your toolchain(s) of choice with:
+    </p>
+    <pre>make MXE_TARGETS='x86_64-w64-mingw32 i686-w64-mingw32'</pre>
+    <p>
+    or by adjusting the <code>MXE_TARGETS</code> variable
+    in <code>settings.mk</code>.
+    </p>
+    <p>
     You'll always end up with a consistent cross compiling environment.
     </p>
 
     <p>
-    If you have trouble here, you can try different versions from the
-    <a href="#download">download section</a>. Also, please feel free to
+    If you have trouble here, please feel free to
     contact the mxe team through the
+    <a href="https://github.com/mxe/mxe/issues">github issue tracker</a> or
     <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">project mailing list</a>.
     </p>
 
