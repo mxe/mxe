@@ -2384,6 +2384,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         To fill the <code>$(PKG)_CHECKSUM</code> field, use a command such as (for file gettext.mk):
         </p>
         <pre>make update-checksum-gettext</pre>
+        <p>or:</p>
+        <pre>openssl sha1 pkg/gettext-x.y.z.tar.gz</pre>
+        <p>
+        if you have already downloaded the package
+        </p>
 
         <p>
         Be especially careful with the <code>$(PKG)_DEPS</code> section.
