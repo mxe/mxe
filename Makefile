@@ -231,6 +231,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
+	    (echo; find '$(2)' -name 'config.log' -print -exec cat {} \;) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
 	    exit 1; \
 	fi
 	@echo '[done]     $(1)'
@@ -242,6 +243,9 @@ build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf
 build-only-$(1)_$(3):
 	$(if $(or $(value $(1)_BUILD_$(3)),\
 	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
+	    uname -a
+	    git show-branch --list --reflog=1
+	    lsb_release -a 2>/dev/null || true
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
