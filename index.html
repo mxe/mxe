@@ -2528,6 +2528,14 @@ endef</pre>
         </p>
 
         <p>
+        When patching sources with crlf line endings, the patch
+        file itself should also have the same eol style. Use the
+        convention of naming the file as <code>*crlf.patch</code>
+        to instruct git not to normalise the line endings (defined
+        in <code>.gitattributes</code>).
+        <p/>
+
+        <p>
         Finally, in your <code>$(PKG)_BUILD</code> section,
         please check that you use our portability variables:
         </p>
