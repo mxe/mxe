@@ -14,16 +14,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # native build of yasm
-    mkdir '$(1).native'
-    cd '$(1).native' && $(call UNPACK_PKG_ARCHIVE,yasm)
-    cd '$(1).native/$(yasm_SUBDIR)' && './configure' \
-        --disable-nls \
-        --disable-python
-    $(MAKE) -C '$(1).native/$(yasm_SUBDIR)' -j '$(JOBS)' yasm
-
-    # cross build with newly compiled yasm
-    $(SED) -i 's,yasm,$(1).native/$(yasm_SUBDIR)/yasm,g' '$(1)/configure'
+    $(SED) -i 's,yasm,$(TARGET)-yasm,g' '$(1)/configure'
     cd '$(1)' && ./configure \
         --cross-prefix='$(TARGET)'- \
         --host='$(TARGET)' \

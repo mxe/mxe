@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 356af5f770c50cd021c60863203d8f30164f6021
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://webm.googlecode.com/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_DEPS     := gcc pthreads yasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://code.google.com/p/webm/downloads/list?sort=-uploaded' | \
@@ -16,13 +16,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's,yasm[ $$],$(TARGET)-yasm ,g' '$(1)/build/make/configure.sh'
     cd '$(1)' && \
         CROSS='$(TARGET)-' \
         ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --target=libvpx-target \
         --disable-examples \
-        --disable-install-docs
+        --disable-install-docs \
+        --as=$(TARGET)-yasm
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
     $(TARGET)-ranlib $(PREFIX)/$(TARGET)/lib/libvpx.a
