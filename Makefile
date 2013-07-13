@@ -27,7 +27,7 @@ WGET       := wget --no-check-certificate \
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 gcc g++ intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
-                scons $(SED) $(SORT) unzip wget xz yasm
+                scons $(SED) $(SORT) unzip wget xz
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log

@@ -724,10 +724,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td><a href="http://tukaani.org/xz/">XZ Utils</a></td>
         <td></td>
     </tr>
-    <tr>
-        <td><a href="http://www.tortall.net/projects/yasm/">Yasm</a></td>
-        <td>≥ 1.2.0</td>
-    </tr>
     </table>
 
     <h3 id="requirements-debian">Debian and derivatives</h3>
@@ -737,8 +733,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
                     cmake flex gettext git g++ intltool \
                     libffi-dev libtool libltdl-dev libssl-dev \
                     libxml-parser-perl make openssl patch perl \
-                    pkg-config scons sed unzip wget \
-                    xz-utils yasm</pre>
+                    pkg-config scons sed unzip wget xz-utils</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -755,7 +750,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>yum install autoconf automake bash bison bzip2 cmake \
             flex gcc-c++ gettext git intltool make sed \
             libffi-devel libtool openssl-devel patch perl pkgconfig \
-            scons yasm unzip wget xz</pre>
+            scons unzip wget xz</pre>
 
     <p>
     On 64-bit Fedora,
@@ -768,7 +763,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>pkg_add -r automake autoconf bash bison cmake coreutils\
            flex gettext git glib20 gmake gsed intltool libffi \
            libtool openssl patch perl p5-XML-Parser pkgconf \
-           scons unzip wget yasm</pre>
+           scons unzip wget</pre>
 
     <p>
     Ensure that /usr/local/bin precedes /usr/bin in your $PATH:
@@ -792,7 +787,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
              flex gcc gettext git intltool make sed libffi libtool \
              openssl patch perl perl-xml-parser pkgconfig \
-             scons unzip wget xz xz-lzma yasm</pre>
+             scons unzip wget xz xz-lzma</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -810,7 +805,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
        dev-libs/libffi sys-devel/libtool dev-libs/openssl sys-devel/patch \
        dev-lang/perl dev-perl/XML-Parser \
        dev-util/pkgconfig dev-util/scons app-arch/unzip \
-       net-misc/wget app-arch/xz-utils dev-lang/yasm</pre>
+       net-misc/wget app-arch/xz-utils</pre>
 
     <h3 id="requirements-macos">Mac OS X</h3>
 
@@ -825,7 +820,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>sudo port install autoconf automake bison cmake coreutils \
                   flex gettext git-core glib2 gsed intltool libffi \
                   libtool openssl p5-xml-parser pkgconfig scons \
-                  wget xz yasm</pre>
+                  wget xz</pre>
     <p>
     Mac OS X versions ≤ 10.7 are no longer supported.
     </p>
@@ -838,7 +833,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
                   intltool libffi-devel libtool make openssl \
                   libopenssl-devel patch perl \
                   perl-XML-Parser pkg-config scons \
-                  sed unzip wget xz yasm</pre>
+                  sed unzip wget xz</pre>
 
     <p>
     On 64-bit openSUSE, install also:
