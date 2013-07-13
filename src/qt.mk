@@ -53,6 +53,7 @@ define $(PKG)_BUILD
         -qt-sql-sqlite \
         -qt-sql-odbc \
         -qt-sql-psql \
+        -no-sql-mysql \
         -qt-sql-tds -D Q_USE_SYBASE \
         -system-zlib \
         -system-libpng \
