@@ -15,6 +15,16 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # native build of yasm - will the same for all targets
+    # but we don't want to conflict with an un-prefixed version
+    mkdir '$(1).native'
+    cd '$(1).native' && '$(1)/configure' \
+        --prefix='$(PREFIX)' \
+        --program-prefix='$(TARGET)-' \
+        --disable-nls \
+        --disable-python
+    $(MAKE) -C '$(1).native' -j '$(JOBS)' install
+
     # yasm is always static
     cd '$(1)' && '$(1)/configure' \
         --host='$(TARGET)' \
