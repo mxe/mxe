@@ -4,6 +4,8 @@
 # runtimes can/will have different implementations
 # but the pre-requisite package and test are the same
 PKG             := pthreads
+$(PKG)_CHECKSUM  = $(pthreads-w32_CHECKSUM)
+$(PKG)_FILE      = $(pthreads-w32_FILE)
 $(PKG)_DEPS     := pthreads-w32 winpthreads
 
 define $(PKG)_UPDATE
