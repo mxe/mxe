@@ -245,7 +245,7 @@ build-only-$(1)_$(3):
 	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
 	    uname -a
 	    git show-branch --list --reflog=1
-	    lsb_release -a 2>/dev/null || true
+	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
