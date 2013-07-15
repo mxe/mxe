@@ -1,4 +1,5 @@
 gmake \
+gtksourceviewmm2_BUILD_x86_64-w64-mingw32= \
 graphicsmagick_BUILD= \
 openexr_BUILD= \
 opencv_BUILD= \
