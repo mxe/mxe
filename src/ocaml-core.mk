@@ -2,17 +2,17 @@
 # See index.html for further information.
 
 PKG             := ocaml-core
-$(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 5abf04cd4fccfcc980e8592995b9159014f23f53
-$(PKG)_SUBDIR   := $(ocaml-native_SUBDIR)
-$(PKG)_FILE     := $(ocaml-native_FILE)
-$(PKG)_URL      := $(ocaml-native_URL)
+$(PKG)_IGNORE    = $(ocaml-native_IGNORE)
+$(PKG)_CHECKSUM  = $(ocaml-native_CHECKSUM)
+$(PKG)_SUBDIR    = $(ocaml-native_SUBDIR)
+$(PKG)_FILE      = $(ocaml-native_FILE)
+$(PKG)_URL       = $(ocaml-native_URL)
+$(PKG)_URL_2     = $(ocaml-native_URL_2)
 $(PKG)_DEPS     := gcc bfd ocaml-flexdll ocaml-native
 
 define $(PKG)_UPDATE
-    $(call ocaml-native_UPDATE)
+    echo $(ocaml-native_VERSION)
 endef
-
 
 OTHER_LIBS := win32unix str num dynlink bigarray systhreads win32graph
 
