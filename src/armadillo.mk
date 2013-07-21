@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# armadillo
 PKG             := armadillo
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := d9ad6af0ea9440cfd78eacba990c0512bd17f19c

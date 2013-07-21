@@ -1,5 +1,5 @@
 # This file is part of MXE.
-# See index.html for further information
+# See index.html for further information.
 
 PKG             := alure
 $(PKG)_IGNORE   :=

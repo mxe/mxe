@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# Qwt - Qt widgets for technical applications
 PKG             := qwt
 $(PKG)_CHECKSUM := 2d95abf1fc4578684e141e0c76df266f9dae080a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)

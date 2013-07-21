@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# ncurses
 PKG             := ncurses
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 3e042e5f2c7223bffdaac9646a533b8c758b65b5

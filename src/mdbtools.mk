@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# mdbtools
 PKG             := mdbtools
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 62fe0703fd8691e4536e1012317406bdb72594cf

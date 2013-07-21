@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# LibGDA
 PKG             := libgda
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := 61d0b498202b780750633cc2e957c40325d6c705

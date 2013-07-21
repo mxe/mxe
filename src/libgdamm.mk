@@ -1,7 +1,6 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libgdamm
 PKG             := libgdamm
 $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := f6126d7b46720e3ea4f3d49e03add2e52da233be
