@@ -3,6 +3,7 @@
 
 PKG             := twolame
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.3.13
 $(PKG)_CHECKSUM := 3ca460472c2f6eeedad70291d8e37da88b64eb8b
 $(PKG)_SUBDIR   := twolame-$($(PKG)_VERSION)
 $(PKG)_FILE     := twolame-$($(PKG)_VERSION).tar.gz

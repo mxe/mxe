@@ -3,6 +3,7 @@
 
 PKG             := freeglut
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.8.1
 $(PKG)_CHECKSUM := 7330b622481e2226c0c9f6d2e72febe96b03f9c4
 $(PKG)_SUBDIR   := freeglut-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := freeglut-$($(PKG)_VERSION).tar.gz

@@ -3,6 +3,7 @@
 
 PKG             := librtmp
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.4
 $(PKG)_CHECKSUM := b65ce7708ae79adb51d1f43dd0b6d987076d7c42
 $(PKG)_SUBDIR   := rtmpdump-2.3
 $(PKG)_FILE     := rtmpdump-2.3.tgz

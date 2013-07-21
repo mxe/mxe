@@ -3,6 +3,7 @@
 
 PKG             := plotutils
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.6
 $(PKG)_CHECKSUM := 7921301d9dfe8991e3df2829bd733df6b2a70838
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

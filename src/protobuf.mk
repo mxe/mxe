@@ -3,6 +3,7 @@
 
 PKG             := protobuf
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.5.0
 $(PKG)_CHECKSUM := 62c10dcdac4b69cc8c6bb19f73db40c264cb2726
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2

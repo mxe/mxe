@@ -3,6 +3,7 @@
 
 PKG             := qtserialport
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 5.1.0
 $(PKG)_CHECKSUM := 5e3e9fb88ba2cf7b84fad34c6f9424aa8dc5e97c
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz

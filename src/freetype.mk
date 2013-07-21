@@ -3,6 +3,7 @@
 
 PKG             := freetype
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.5.0.1
 $(PKG)_CHECKSUM := 4bbd8357b4b723e1ff38414a9eaf50bf99dacb84
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2

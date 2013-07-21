@@ -3,6 +3,7 @@
 
 PKG             := lua
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 5.2.2
 $(PKG)_CHECKSUM := 0857e41e5579726a4cb96732e80d7aa47165eaf5
 $(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)
 $(PKG)_FILE     := lua-$($(PKG)_VERSION).tar.gz

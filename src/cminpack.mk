@@ -3,6 +3,7 @@
 
 PKG             := cminpack
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.3.0
 $(PKG)_CHECKSUM := 8bf19ce37b486707c402a046c33d823c9e359410
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

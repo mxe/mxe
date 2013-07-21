@@ -3,6 +3,7 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 5.1.0
 $(PKG)_CHECKSUM := 1fe45064daade31db01fe95f076b500a3d43fd24
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz

@@ -3,6 +3,7 @@
 
 PKG             := hdf4
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.2.9
 $(PKG)_CHECKSUM := c2251642e29c7acada37d5e599e68d270088e56d
 $(PKG)_SUBDIR   := hdf-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf-$($(PKG)_VERSION).tar.bz2

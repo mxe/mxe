@@ -3,6 +3,7 @@
 
 PKG             := autoconf
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.69
 $(PKG)_CHECKSUM := e891c3193029775e83e0534ac0ee0c4c711f6d23
 $(PKG)_SUBDIR   := autoconf-$($(PKG)_VERSION)
 $(PKG)_FILE     := autoconf-$($(PKG)_VERSION).tar.xz

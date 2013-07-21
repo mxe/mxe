@@ -3,6 +3,7 @@
 
 PKG             := atk
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.8.0
 $(PKG)_CHECKSUM := e8a9dacd22b31a6cb733ce66fb1c220cc6720970
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.xz

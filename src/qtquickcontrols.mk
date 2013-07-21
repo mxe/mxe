@@ -3,6 +3,7 @@
 
 PKG             := qtquickcontrols
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 5.1.0
 $(PKG)_CHECKSUM := e7d178b8927dc0356023ae1fca3909dd509757f0
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz

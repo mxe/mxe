@@ -3,6 +3,7 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.8.1
 $(PKG)_CHECKSUM := 4e655032cda30e1928fcc3f00962f4238b502169
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2

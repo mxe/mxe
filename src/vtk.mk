@@ -3,6 +3,7 @@
 
 PKG             := vtk
 $(PKG)_IGNORE   := 5.10%
+$(PKG)_VERSION  := 5.8.0
 $(PKG)_CHECKSUM := ece52f4fa92811fe927581e60ecb39a8a5f68cd9
 $(PKG)_SUBDIR   := VTK
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

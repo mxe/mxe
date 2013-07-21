@@ -3,6 +3,7 @@
 
 PKG             := flann
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.7.1
 $(PKG)_CHECKSUM := 61b9858620528919ea60a2a4b085ccc2b3c2d138
 $(PKG)_SUBDIR   := flann-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := flann-$($(PKG)_VERSION)-src.zip

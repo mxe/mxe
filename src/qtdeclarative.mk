@@ -3,6 +3,7 @@
 
 PKG             := qtdeclarative
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 5.1.0
 $(PKG)_CHECKSUM := 6b81191fb2e38146159681af5d51206855fc4fbb
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz

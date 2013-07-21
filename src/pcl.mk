@@ -3,6 +3,7 @@
 
 PKG             := pcl
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.6.0
 $(PKG)_CHECKSUM := 45a2e155d7faf5901abe609fd40d5f1659015e9e
 $(PKG)_SUBDIR   := PCL-$($(PKG)_VERSION)-Source
 $(PKG)_FILE     := PCL-$($(PKG)_VERSION)-Source.tar.bz2

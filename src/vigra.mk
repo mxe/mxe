@@ -3,6 +3,7 @@
 
 PKG             := vigra
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.9.0
 $(PKG)_CHECKSUM := 6e4981f4ce75932ec62df6523f577c327f885ba0
 $(PKG)_SUBDIR   := vigra-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := vigra-$($(PKG)_VERSION)-src.tar.gz

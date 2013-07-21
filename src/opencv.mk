@@ -3,6 +3,7 @@
 
 PKG             := opencv
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.4.4
 $(PKG)_CHECKSUM := 6e518c0274a8392c0c98d18ef0ef754b9c596aca
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := OpenCV-$($(PKG)_VERSION)a.tar.bz2

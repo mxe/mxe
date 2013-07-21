@@ -3,6 +3,7 @@
 
 PKG             := taglib
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.7.2
 $(PKG)_CHECKSUM := e657384ccf3284db2daba32dccece74534286012
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

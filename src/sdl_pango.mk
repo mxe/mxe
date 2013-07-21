@@ -3,6 +3,7 @@
 
 PKG             := sdl_pango
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.1.2
 $(PKG)_CHECKSUM := c30f2941d476d9362850a150d29cb4a93730af68
 $(PKG)_SUBDIR   := SDL_Pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_Pango-$($(PKG)_VERSION).tar.gz

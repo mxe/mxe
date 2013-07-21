@@ -3,6 +3,7 @@
 
 PKG             := tre
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.8.0
 $(PKG)_CHECKSUM := 8818058785923c32f5e1f48feeb2851507c0e61c
 $(PKG)_SUBDIR   := tre-$($(PKG)_VERSION)
 $(PKG)_FILE     := tre-$($(PKG)_VERSION).tar.gz

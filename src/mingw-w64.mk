@@ -3,6 +3,7 @@
 
 PKG             := mingw-w64
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := c28722c
 $(PKG)_CHECKSUM := bc48803ff15a777adad8890519bd3ebec90acab9
 $(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)/trunk
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

@@ -3,6 +3,7 @@
 
 PKG             := teem
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.11.0
 $(PKG)_CHECKSUM := faafa0362abad37591bc1d01441730af462212f9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-src.tar.gz

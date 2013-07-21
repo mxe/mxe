@@ -3,6 +3,7 @@
 
 PKG             := harfbuzz
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.9.18
 $(PKG)_CHECKSUM := 621943fa0cadbc5514d8c8cdf985b7158baebc2d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2

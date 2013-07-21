@@ -3,6 +3,7 @@
 
 PKG             := sfml
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.0
 $(PKG)_CHECKSUM := ff8cf290f49e1a1d8517a4a344e9214139da462f
 $(PKG)_SUBDIR   := SFML-$($(PKG)_VERSION)
 $(PKG)_FILE     := SFML-$($(PKG)_VERSION)-sources.zip

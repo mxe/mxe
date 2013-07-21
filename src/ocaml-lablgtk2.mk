@@ -3,6 +3,7 @@
 
 PKG             := ocaml-lablgtk2
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.16.0
 $(PKG)_CHECKSUM := 3dec411a410fbb38d6e2e5a43a4ebfb2e407e7e6
 $(PKG)_SUBDIR   := lablgtk-$($(PKG)_VERSION)
 $(PKG)_FILE     := lablgtk-$($(PKG)_VERSION).tar.gz

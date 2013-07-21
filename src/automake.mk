@@ -3,6 +3,7 @@
 
 PKG             := automake
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.13.2
 $(PKG)_CHECKSUM := 72ee9fcd180c54fd7c067155d85fa071a99c3ea3
 $(PKG)_SUBDIR   := automake-$($(PKG)_VERSION)
 $(PKG)_FILE     := automake-$($(PKG)_VERSION).tar.gz

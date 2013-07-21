@@ -3,6 +3,7 @@
 
 PKG             := libevent
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.0.21
 $(PKG)_CHECKSUM := 8a8813b2173b374cb64260245d7094fa81176854
 $(PKG)_SUBDIR   := libevent-release-$($(PKG)_VERSION)-stable
 $(PKG)_FILE     := release-$($(PKG)_VERSION)-stable.tar.gz

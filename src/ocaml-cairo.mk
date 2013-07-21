@@ -3,6 +3,7 @@
 
 PKG             := ocaml-cairo
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := d5835620bea005d5d5239f889b10a922fda2520b
 $(PKG)_SUBDIR   := cairo-ocaml-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-ocaml_$($(PKG)_VERSION).orig.tar.gz

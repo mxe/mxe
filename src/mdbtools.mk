@@ -3,6 +3,7 @@
 
 PKG             := mdbtools
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.7
 $(PKG)_CHECKSUM := 62fe0703fd8691e4536e1012317406bdb72594cf
 $(PKG)_SUBDIR   := brianb-mdbtools-004cc9f
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

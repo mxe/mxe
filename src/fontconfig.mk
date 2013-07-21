@@ -3,6 +3,7 @@
 
 PKG             := fontconfig
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.10.93
 $(PKG)_CHECKSUM := 78a87be2a59b0c803bfd69cdafc85cbc31381d3a
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
 $(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.bz2

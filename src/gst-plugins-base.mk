@@ -3,6 +3,7 @@
 
 PKG             := gst-plugins-base
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.1.1
 $(PKG)_CHECKSUM := 373a3af5ff301da8f8b9b3cebd3f588250affcb0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz

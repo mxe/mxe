@@ -3,6 +3,7 @@
 
 PKG             := wxwidgets
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.9.4
 $(PKG)_CHECKSUM := 5a34ddf19d37c741f74652ee847df9568a8b81e1
 $(PKG)_SUBDIR   := wxWidgets-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxWidgets-$($(PKG)_VERSION).tar.bz2

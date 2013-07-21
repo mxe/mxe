@@ -3,6 +3,7 @@
 
 PKG             := fltk
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.3.2
 $(PKG)_CHECKSUM := 25071d6bb81cc136a449825bfd574094b48f07fb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR)-source.tar.gz

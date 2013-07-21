@@ -3,6 +3,7 @@
 
 PKG             := pfstools
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.8.5
 $(PKG)_CHECKSUM := dc595438f0fd8b40a05d9f9c498892363a1b3f05
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

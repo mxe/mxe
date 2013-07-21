@@ -3,6 +3,7 @@
 
 PKG             := cegui
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.7.9
 $(PKG)_CHECKSUM := f0a8616bcb37843ad2f83c88745b9313906cb8e9
 $(PKG)_SUBDIR   := CEGUI-$($(PKG)_VERSION)
 $(PKG)_FILE     := CEGUI-$($(PKG)_VERSION).tar.gz

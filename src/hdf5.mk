@@ -3,6 +3,7 @@
 
 PKG             := hdf5
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.8.11
 $(PKG)_CHECKSUM := 87ded0894b104cf23a4b965f4ac0a567f8612e5e
 $(PKG)_SUBDIR   := hdf5-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf5-$($(PKG)_VERSION).tar.bz2

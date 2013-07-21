@@ -3,6 +3,7 @@
 
 PKG             := qwtplot3d
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.2.7
 $(PKG)_CHECKSUM := 4463fafb8420a91825e165da7a296aaabd70abea
 $(PKG)_SUBDIR   := $(PKG)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz

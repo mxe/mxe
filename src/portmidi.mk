@@ -3,6 +3,7 @@
 
 PKG             := portmidi
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 217
 $(PKG)_CHECKSUM := f45bf4e247c0d7617deacd6a65d23d9fddae6117
 $(PKG)_SUBDIR   := portmidi
 $(PKG)_FILE     := $(PKG)-src-$($(PKG)_VERSION).zip

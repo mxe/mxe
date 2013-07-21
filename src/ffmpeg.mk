@@ -3,6 +3,7 @@
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.2.1
 $(PKG)_CHECKSUM := 930e5612d75d04fdf7c0579f4d85d47e31e38945
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2

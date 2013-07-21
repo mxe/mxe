@@ -3,6 +3,7 @@
 
 PKG             := qtjsbackend
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 5.1.0
 $(PKG)_CHECKSUM := df1cd292b2fce26308c3e85b99def8264891607c
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz

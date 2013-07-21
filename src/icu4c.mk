@@ -3,6 +3,7 @@
 
 PKG             := icu4c
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 51.1
 $(PKG)_CHECKSUM := 7905632335e3dcd6667224da0fa087b49f9095e9
 $(PKG)_SUBDIR   := icu
 $(PKG)_FILE     := $(PKG)-$(subst .,_,$($(PKG)_VERSION))-src.tgz

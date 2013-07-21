@@ -3,6 +3,7 @@
 
 PKG             := gdk-pixbuf
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.28.2
 $(PKG)_CHECKSUM := 9876d0a20f592f8fb2a52d4a86ec43d607661beb
 $(PKG)_SUBDIR   := gdk-pixbuf-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdk-pixbuf-$($(PKG)_VERSION).tar.xz

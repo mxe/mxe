@@ -3,6 +3,7 @@
 
 PKG             := tiff
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.0.3
 $(PKG)_CHECKSUM := 652e97b78f1444237a82cbcfe014310e776eb6f0
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz

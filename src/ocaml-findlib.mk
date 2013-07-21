@@ -3,6 +3,7 @@
 
 PKG             := ocaml-findlib
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.4
 $(PKG)_CHECKSUM := 07048076758e4ca892f06ff535d7cab033833bde
 $(PKG)_SUBDIR   := findlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := findlib-$($(PKG)_VERSION).tar.gz

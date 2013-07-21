@@ -3,6 +3,7 @@
 
 PKG             := libgsasl
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.8.0
 $(PKG)_CHECKSUM := 08fd5dfdd3d88154cf06cb0759a732790c47b4f7
 $(PKG)_SUBDIR   := libgsasl-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgsasl-$($(PKG)_VERSION).tar.gz

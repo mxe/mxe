@@ -3,6 +3,7 @@
 
 PKG             := gd
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.0.35
 $(PKG)_CHECKSUM := ccf34a610abff2dbf133a20c4d2a4aa94939018a
 $(PKG)_SUBDIR   := gd-$($(PKG)_VERSION)
 $(PKG)_FILE     := gd-$($(PKG)_VERSION).tar.bz2

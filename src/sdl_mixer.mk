@@ -3,6 +3,7 @@
 
 PKG             := sdl_mixer
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.2.12
 $(PKG)_CHECKSUM := a20fa96470ad9e1052f1957b77ffa68fb090b384
 $(PKG)_SUBDIR   := SDL_mixer-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_mixer-$($(PKG)_VERSION).tar.gz

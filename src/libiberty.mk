@@ -3,6 +3,7 @@
 
 PKG             := libiberty
 $(PKG)_IGNORE    = $(binutils_IGNORE)
+$(PKG)_VERSION   = $(binutils_VERSION)
 $(PKG)_CHECKSUM  = $(binutils_CHECKSUM)
 $(PKG)_SUBDIR    = $(binutils_SUBDIR)/libiberty
 $(PKG)_FILE      = $(binutils_FILE)

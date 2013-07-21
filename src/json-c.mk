@@ -3,6 +3,7 @@
 
 PKG             := json-c
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.11
 $(PKG)_CHECKSUM := 4bae2468bfd73a2b2eec7419c75c262b5833f567
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-nodoc.tar.gz

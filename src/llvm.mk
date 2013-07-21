@@ -3,6 +3,7 @@
 
 PKG             := llvm
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 3.3
 $(PKG)_CHECKSUM := c6c22d5593419e3cb47cbcf16d967640e5cce133
 $(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION).src
 $(PKG)_FILE     := llvm-$($(PKG)_VERSION).src.tar.gz

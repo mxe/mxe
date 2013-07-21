@@ -3,6 +3,7 @@
 
 PKG             := gmp
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 5.1.2
 $(PKG)_CHECKSUM := 2cb498322b9be4713829d94dee944259c017d615
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2

@@ -3,6 +3,7 @@
 
 PKG             := qt5
 $(PKG)_IGNORE    = $(qtbase_IGNORE)
+$(PKG)_VERSION   = $(qtbase_VERSION)
 $(PKG)_CHECKSUM  = $(qtbase_CHECKSUM)
 $(PKG)_SUBDIR    = $(qtbase_SUBDIR)
 $(PKG)_FILE      = $(qtbase_FILE)

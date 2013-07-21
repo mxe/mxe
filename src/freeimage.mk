@@ -3,6 +3,7 @@
 
 PKG             := freeimage
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 3.15.4
 $(PKG)_CHECKSUM := 1d30057a127b2016cf9b4f0f8f2ba92547670f96
 $(PKG)_SUBDIR   := FreeImage
 $(PKG)_FILE     := FreeImage$(subst .,,$($(PKG)_VERSION)).zip

@@ -3,6 +3,7 @@
 
 PKG             := ocaml-core
 $(PKG)_IGNORE    = $(ocaml-native_IGNORE)
+$(PKG)_VERSION   = $(ocaml-native_VERSION)
 $(PKG)_CHECKSUM  = $(ocaml-native_CHECKSUM)
 $(PKG)_SUBDIR    = $(ocaml-native_SUBDIR)
 $(PKG)_FILE      = $(ocaml-native_FILE)

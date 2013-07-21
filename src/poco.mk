@@ -3,6 +3,7 @@
 
 PKG             := poco
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.4.6p1
 $(PKG)_CHECKSUM := c89833d208cc6a3b54a239a776dcb611e7cd4b02
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz

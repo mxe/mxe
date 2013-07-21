@@ -3,6 +3,7 @@
 
 PKG             := poppler
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.22.5
 $(PKG)_CHECKSUM := 9491bb33788d7f0ee67da572dc4798004f98323a
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.gz

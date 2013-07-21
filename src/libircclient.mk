@@ -5,6 +5,7 @@
 
 PKG             := libircclient
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.6
 $(PKG)_CHECKSUM := 10fb7a2478f6d668dce2d7fb5cd5a35ea8f53ed4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

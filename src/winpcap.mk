@@ -3,6 +3,7 @@
 
 PKG             := winpcap
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4_1_3
 $(PKG)_CHECKSUM := 81b1dd70a7c75080033eab2d30811e737df9fa5b
 $(PKG)_SUBDIR   := winpcap
 $(PKG)_FILE     := WpcapSrc_$($(PKG)_VERSION).zip

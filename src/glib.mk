@@ -3,6 +3,7 @@
 
 PKG             := glib
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.36.3
 $(PKG)_CHECKSUM := aafba69934b9ba77cc8cb0e5d8105aa1d8463eba
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz

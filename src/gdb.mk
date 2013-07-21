@@ -2,6 +2,7 @@
 # See index.html for further information.
 
 PKG             := gdb
+$(PKG)_VERSION  := 7.6
 $(PKG)_CHECKSUM := b64095579a20e011beeaa5b264fe23a9606ee40f
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.bz2

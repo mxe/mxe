@@ -3,6 +3,7 @@
 
 PKG             := librsvg
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.37.0
 $(PKG)_CHECKSUM := 92ac16f1210e2324011039284407e17d3fda6e88
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz

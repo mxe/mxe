@@ -3,6 +3,7 @@
 
 PKG             := gta
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.0.4
 $(PKG)_CHECKSUM := 867614e47edcae96fa5d89b2fd154539d8be644a
 $(PKG)_SUBDIR   := libgta-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgta-$($(PKG)_VERSION).tar.xz

@@ -3,6 +3,7 @@
 
 PKG             := vorbis
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.3.3
 $(PKG)_CHECKSUM := 8dae60349292ed76db0e490dc5ee51088a84518b
 $(PKG)_SUBDIR   := libvorbis-$($(PKG)_VERSION)
 $(PKG)_FILE     := libvorbis-$($(PKG)_VERSION).tar.gz

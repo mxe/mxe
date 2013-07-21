@@ -3,6 +3,7 @@
 
 PKG             := log4cxx
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.10.0
 $(PKG)_CHECKSUM := d79c053e8ac90f66c5e873b712bb359fd42b648d
 $(PKG)_SUBDIR   := apache-log4cxx-$($(PKG)_VERSION)
 $(PKG)_FILE     := apache-log4cxx-$($(PKG)_VERSION).tar.gz

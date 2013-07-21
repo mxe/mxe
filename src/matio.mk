@@ -3,6 +3,7 @@
 
 PKG             := matio
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.5.1
 $(PKG)_CHECKSUM := 12b8ed59688b2f41903ddc3e7975f21f10fe42bb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2

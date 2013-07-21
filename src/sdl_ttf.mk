@@ -3,6 +3,7 @@
 
 PKG             := sdl_ttf
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.0.11
 $(PKG)_CHECKSUM := 0ccf7c70e26b7801d83f4847766e09f09db15cc6
 $(PKG)_SUBDIR   := SDL_ttf-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_ttf-$($(PKG)_VERSION).tar.gz

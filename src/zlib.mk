@@ -3,6 +3,7 @@
 
 PKG             := zlib
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.2.8
 $(PKG)_CHECKSUM := b598beb7acc96347cbd1020b71aef7871d374677
 $(PKG)_SUBDIR   := zlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := zlib-$($(PKG)_VERSION).tar.xz

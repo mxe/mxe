@@ -3,6 +3,7 @@
 
 PKG             := libffi
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 3.0.13
 $(PKG)_CHECKSUM := f5230890dc0be42fb5c58fbf793da253155de106
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

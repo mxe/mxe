@@ -3,6 +3,7 @@
 
 PKG             := glibmm
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.36.2
 $(PKG)_CHECKSUM := 399b6acd3756879fa61b185ab50abecf9652d15f
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.xz

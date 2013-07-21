@@ -3,6 +3,7 @@
 
 PKG             := libntlm
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.3
 $(PKG)_CHECKSUM := 5dd798d5fb9a75656225052aa88ceb9befbbd4a0
 $(PKG)_SUBDIR   := libntlm-$($(PKG)_VERSION)
 $(PKG)_FILE     := libntlm-$($(PKG)_VERSION).tar.gz

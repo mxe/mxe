@@ -3,6 +3,7 @@
 
 PKG             := xine-lib
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.1.21
 $(PKG)_CHECKSUM := 0adf20ef55d24f2a1b4a8974e57ad1be5133b236
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz

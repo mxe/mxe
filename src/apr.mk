@@ -3,6 +3,7 @@
 
 PKG             := apr
 $(PKG)_IGNORE   := 1.4%
+$(PKG)_VERSION  := 1.4.2
 $(PKG)_CHECKSUM := d48324efb0280749a5d7ccbb053d68545c568b4b
 $(PKG)_SUBDIR   := apr-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-$($(PKG)_VERSION).tar.gz

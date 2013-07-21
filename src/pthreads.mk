@@ -5,6 +5,7 @@
 # but the pre-requisite package and test are the same.
 
 PKG             := pthreads
+$(PKG)_VERSION  := POSIX 1003.1-2001
 $(PKG)_CHECKSUM  = $(pthreads-w32_CHECKSUM)
 $(PKG)_FILE      = $(pthreads-w32_FILE)
 $(PKG)_DEPS     := pthreads-w32 winpthreads

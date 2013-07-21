@@ -3,6 +3,7 @@
 
 PKG             := libzip
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.11.1
 $(PKG)_CHECKSUM := 3c82cdc0de51f06d5e1c60f098d3d9cc0d48f8a7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz

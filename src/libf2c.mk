@@ -3,6 +3,7 @@
 
 PKG             := libf2c
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1
 $(PKG)_CHECKSUM := f71066b41695738dec2261de71eaf02a1aaffe8b
 $(PKG)_SUBDIR   :=
 $(PKG)_FILE     := $(PKG).zip

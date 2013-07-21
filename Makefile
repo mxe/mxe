@@ -142,11 +142,6 @@ define newline
 
 
 endef
-$(eval $(subst #,$(newline),$(shell \
-    $(SED) -n \
-        's/^.* id="\([A-Za-z0-9_+-]*\)-version">\([^<]*\)<.*$$/\1_VERSION := \2#/p' \
-        '$(TOP_DIR)/index.html' \
-)))
 
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
@@ -284,9 +279,9 @@ define UPDATE
                     $(info .        $(1)  $(2)),
                     $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
-                $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$(2)/' '$(TOP_DIR)/index.html'
+                $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                    || { $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$($(1)_VERSION)/' '$(TOP_DIR)/index.html'; \
+                    || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
                          exit 1; })),
         $(info Unable to update version number of package $(1) \
             $(newline)$(newline)$($(1)_UPDATE)$(newline)))

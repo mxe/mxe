@@ -2,6 +2,7 @@
 # See index.html for further information.
 
 PKG             := qwt
+$(PKG)_VERSION  := 6.1.0
 $(PKG)_CHECKSUM := 2d95abf1fc4578684e141e0c76df266f9dae080a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip

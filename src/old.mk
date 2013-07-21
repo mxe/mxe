@@ -3,6 +3,7 @@
 
 PKG             := old
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.17
 $(PKG)_CHECKSUM := d519a8282b0774c344ffeb1b4899f8be53d6d7b3
 $(PKG)_SUBDIR   := old-$($(PKG)_VERSION)
 $(PKG)_FILE     := old-$($(PKG)_VERSION).tar.bz2

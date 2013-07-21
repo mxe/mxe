@@ -3,6 +3,7 @@
 
 PKG             := postgresql
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 9.2.4
 $(PKG)_CHECKSUM := 75b53c884cb10ed9404747b51677358f12082152
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2

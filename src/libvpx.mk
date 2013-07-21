@@ -3,6 +3,7 @@
 
 PKG             := libvpx
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.1.0
 $(PKG)_CHECKSUM := 356af5f770c50cd021c60863203d8f30164f6021
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2

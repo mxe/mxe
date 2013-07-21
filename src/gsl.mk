@@ -3,6 +3,7 @@
 
 PKG             := gsl
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.15
 $(PKG)_CHECKSUM := d914f84b39a5274b0a589d9b83a66f44cd17ca8e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

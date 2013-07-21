@@ -3,6 +3,7 @@
 
 PKG             := atkmm
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.22.7
 $(PKG)_CHECKSUM := c3273aa7b84fb163b0ad5bd3ee26b9d1cd4976bb
 $(PKG)_SUBDIR   := atkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := atkmm-$($(PKG)_VERSION).tar.xz

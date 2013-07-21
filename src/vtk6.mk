@@ -3,6 +3,7 @@
 
 PKG             := vtk6
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 6.0.0
 $(PKG)_CHECKSUM := 51dd3b4a779d5442dd74375363f0f0c2d6eaf3fa
 $(PKG)_SUBDIR   := VTK$($(PKG)_VERSION)
 $(PKG)_FILE     := vtk-$($(PKG)_VERSION).tar.gz

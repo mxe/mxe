@@ -3,6 +3,7 @@
 
 PKG             := qt
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.8.5
 $(PKG)_CHECKSUM := 745f9ebf091696c0d5403ce691dc28c039d77b9e
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz

@@ -3,6 +3,7 @@
 
 PKG             := libftdi
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.20
 $(PKG)_CHECKSUM := 4bc6ce70c98a170ada303fbd00b8428d8a2c1aa2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

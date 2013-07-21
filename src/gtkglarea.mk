@@ -3,6 +3,7 @@
 
 PKG             := gtkglarea
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.0.1
 $(PKG)_CHECKSUM := db12f2bb9a3d28d69834832e2e04a255acfd8a6d
 $(PKG)_SUBDIR   := gtkglarea-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglarea-$($(PKG)_VERSION).tar.gz
