@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 86f0a63
 $(PKG)_CHECKSUM := 3e36800f6772371b37a2e4f38072342e6335c96a
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$(PKG)_FILE
+$(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads zlib
 
 define $(PKG)_UPDATE
