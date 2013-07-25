@@ -51,6 +51,10 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'/hl/c++/src -j '$(JOBS)'
     $(MAKE) -C '$(1)'/hl/c++/src -j 1 install
 
+    # install prefixed wrapper scripts
+    $(INSTALL) -m755 '$(1)'/tools/misc/h5cc '$(PREFIX)/bin/$(TARGET)-h5cc'
+    $(INSTALL) -m755 '$(1)'/c++/src/h5c++   '$(PREFIX)/bin/$(TARGET)-h5c++'
+
     ## test hdf5
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
