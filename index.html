@@ -234,7 +234,7 @@
 <div class="section">
 <h2 id="tutorial">Tutorial</h2>
 
-    <h3>Step 1: Requirements and Download</h3>
+    <h3 id="tutorial-1">Step 1: Requirements and Download</h3>
 
     <p>
     First, you should ensure that your system meets
@@ -254,7 +254,7 @@
     just skip the following step and go straight to step 3.
     </p>
 
-    <h3>Step 2: System-wide Installation (optional)</h3>
+    <h3 id="tutorial-2">Step 2: System-wide Installation (optional)</h3>
 
     <p>
     Now you should save any previous installation
@@ -282,7 +282,7 @@ exit</pre>
     </p>
     <pre>cd /opt/mxe</pre>
 
-    <h3>Step 3: Build MXE</h3>
+    <h3 id="tutorial-3">Step 3: Build MXE</h3>
 
     <p>
     Enter the directory where you've downloaded the MXE.
@@ -340,7 +340,7 @@ exit</pre>
     After you're done it just needs a little post-installation.
     </p>
 
-    <h3>Step 4: Environment Variables</h3>
+    <h3 id="tutorial-4">Step 4: Environment Variables</h3>
 
     <p>
     Edit your .bashrc script in order to change $PATH:
@@ -371,7 +371,7 @@ exit</pre>
     You're ready to cross compile anything you like.
     </p>
 
-    <h3>Step 5a: Cross compile your Project (Autotools)</h3>
+    <h3 id="tutorial-5a">Step 5a: Cross compile your Project (Autotools)</h3>
 
     <p>
     If you use the
@@ -396,7 +396,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     Everything will be just fine.
     </p>
 
-    <h3>Step 5b: Cross compile your Project (CMake)</h3>
+    <h3 id="tutorial-5b">Step 5b: Cross compile your Project (CMake)</h3>
 
     <p>
     If you have a
@@ -405,7 +405,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     </p>
     <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/i686-pc-mingw32/share/cmake/mxe-conf.cmake</pre>
 
-    <h3>Step 5c: Cross compile your Project (Qt)</h3>
+    <h3 id="tutorial-5c">Step 5c: Cross compile your Project (Qt)</h3>
 
     <p>
     If you have a
@@ -430,7 +430,7 @@ make</pre>
     are built-in, <em>not</em> plugins.
     </p>
 
-    <h3>Step 5d: Cross compile your Project (Makefile)</h3>
+    <h3 id="tutorial-5d">Step 5d: Cross compile your Project (Makefile)</h3>
 
     <p>
     If you have a handwritten Makefile,
@@ -452,7 +452,7 @@ PKG_CONFIG=$(CROSS)pkg-config</pre>
     That's it!
     </p>
 
-    <h3>Step 5e: Cross compile your Project (OSG)</h3>
+    <h3 id="tutorial-5e">Step 5e: Cross compile your Project (OSG)</h3>
 
     <p>
     Using static OpenSceneGraph libraries requires a few changes to your source.
@@ -2534,6 +2534,12 @@ endef</pre>
         <p>
         Added support for <a href="#supported-toolchains">mingw-w64 based toolchains</a>
         targeting 32 &amp; 64-bit architectures.
+        </p>
+
+        <p>
+        With the addition of Qt5, there is no longer a prefixed version of
+        qmake, see the <a href="#tutorial-5c">Qt section of the tutorial</a>
+        for the new way to invoke qmake.
         </p>
     </dd>
 
