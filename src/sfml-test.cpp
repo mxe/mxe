@@ -13,17 +13,17 @@ int main()
 {
     // Create the main window
     RenderWindow window(VideoMode(800, 600), "SFML window");
-    
+
     Music music;
     Texture texture;
     Font font;
     Text text;
     TcpSocket socket;
-    
+
     CircleShape shape(200);
     shape.setPosition(200, 100);
     shape.setFillColor(Color::Red);
-    
+
     while (window.isOpen())
     {
         // Process events
@@ -41,6 +41,6 @@ int main()
         // Update the window
         window.display();
     }
-    
+
     return 0;
 }
