@@ -1,0 +1,23 @@
+- Ensure that your Git repository is configured correctly:
+    http://mxe.cc/#committers
+- Ensure all stable commits have been merged to master
+- run `make cleanup-style`
+- check html with http://validator.w3.org/
+- get list of new packages:
+    git diff --name-status stable..master | grep 'A.*.mk$' | gsed -n 's,A.*src/\(.*\)\.mk,\1\,,p' | tr '\n' ' '
+- call for testers:
+    github issue
+    MXE mailing list
+    use the following to check for new/changed requirements:
+        http://htmlpreview.github.io/?https://raw.github.com/mxe/mxe/master/index.html
+...
+
+- Fast-forward the stable branch to master:
+    git checkout stable
+    git merge --ff-only master
+    git push
+- Announce in mailing lists, forums, etc.
+    MXE mailing list
+    Freecode.com (formerly Freshmeat.net)
+    MinGW mailing list
+    Hacker News (news.ycombinator.com)
