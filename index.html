@@ -2511,6 +2511,13 @@ endef</pre>
         </p>
 
         <p>
+        Current users are <strong>strongly</strong> encouraged to
+        start with a clean tree as the toolchain has been
+        updated and requires a full rebuild:
+        </p>
+        <pre>git pull && make clean && make</pre>
+
+        <p>
         Most packages were updated to their latest version.
         </p>
 
@@ -2540,6 +2547,11 @@ endef</pre>
         With the addition of Qt5, there is no longer a prefixed version of
         qmake, see the <a href="#tutorial-5c">Qt section of the tutorial</a>
         for the new way to invoke qmake.
+        </p>
+
+        <p>
+        <a href="#requirements-freebsd">FreeBSD</a> is no longer fully supported.
+        Qt5, ocaml*, and 8 other packages are excluded from the build.
         </p>
     </dd>
 
