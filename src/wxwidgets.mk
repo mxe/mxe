@@ -3,8 +3,8 @@
 
 PKG             := wxwidgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.9.5
-$(PKG)_CHECKSUM := 0bab57ecd6d065a3672ec5fbb09d287456727ea4
+$(PKG)_VERSION  := 2.9.4
+$(PKG)_CHECKSUM := 5a34ddf19d37c741f74652ee847df9568a8b81e1
 $(PKG)_SUBDIR   := wxWidgets-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxWidgets-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -24,6 +24,8 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --enable-compat24 \
+        --enable-compat26 \
         --enable-gui \
         --enable-stl \
         --enable-threads \
@@ -71,6 +73,8 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --enable-compat24 \
+        --enable-compat26 \
         --enable-gui \
         --enable-stl \
         --enable-threads \
