@@ -2,12 +2,12 @@
 # See index.html for further information.
 
 PKG             := qwt-qt4
-$(PKG)_VERSION  := 6.1.0
-$(PKG)_CHECKSUM := 2d95abf1fc4578684e141e0c76df266f9dae080a
-$(PKG)_SUBDIR   := qwt-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).zip
-$(PKG)_WEBSITE  := http://qwt.sourceforge.net/
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/qwt/qwt/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := $(qwt_VERSION)
+$(PKG)_CHECKSUM := $(qwt_CHECKSUM)
+$(PKG)_SUBDIR   := $(qwt_SUBDIR)
+$(PKG)_FILE     := $(qwt_FILE)
+$(PKG)_WEBSITE  := $(qwt_WEBSITE)
+$(PKG)_URL      := $(qwt_URL)
 $(PKG)_DEPS     := gcc qt
 
 define $(PKG)_UPDATE
