@@ -19,7 +19,8 @@ setupEnv() {
   # John Doe <John Doe@acme.org>
   export author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
 
-  export pkg_version=$(sed -n "s/^.* id=\"${pkg}-version\">\([^<]*\)<.*$/\1/p" "${mxedir}/index.html")
+  export pkg_version=`grep '^$(PKG)_VERSION' $mxedir/src/$pkg.mk  | \
+    sed 's/.*:= \(.*\)/\1/'`
 
   export pkg_short_version=`echo $pkg_version | sed s/'\(.*\)\.[^.]*$'/'\1'/`
 
