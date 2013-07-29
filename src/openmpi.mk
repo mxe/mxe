@@ -2,6 +2,7 @@
 # See index.html for further information.
 
 PKG             := openmpi
+$(PKG)_VERSION  := 1.6
 $(PKG)_CHECKSUM := 38095d3453519177272f488d5058a98f7ebdbf10
 $(PKG)_SUBDIR   := openmpi-$($(PKG)_VERSION)
 $(PKG)_FILE     := openmpi-$($(PKG)_VERSION).tar.bz2

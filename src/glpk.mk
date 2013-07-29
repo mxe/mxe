@@ -3,6 +3,7 @@
 
 PKG             := glpk
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.47
 $(PKG)_CHECKSUM := 35e16d3167389b6bc75eb51b4b48590db59f789c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := glpk-$($(PKG)_VERSION).tar.gz

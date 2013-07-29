@@ -3,6 +3,7 @@
 
 PKG             := qhull
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2009.1
 $(PKG)_CHECKSUM := 108d59efa60b2ebaf94b121414c8f8b7b76a7409
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := qhull-$($(PKG)_VERSION).tar.gz

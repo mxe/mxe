@@ -3,6 +3,7 @@
 
 PKG             := edfbrowser
 $(PKG)_IGNORE   := 
+$(PKG)_VERSION  := 1.51
 $(PKG)_CHECKSUM := 90d625a8529a4815dc949f3d7fe4408627482c90
 $(PKG)_SUBDIR   := edfbrowser_151_source
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz

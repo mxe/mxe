@@ -3,6 +3,7 @@
 
 PKG             := sigviewer
 $(PKG)_IGNORE   := 
+$(PKG)_VERSION  := 0.5.1
 $(PKG)_CHECKSUM := b667d7f8d0f7d1c1b21a517eaea529520156f2fb
 $(PKG)_SUBDIR   := sigviewer-0.5.1-r553-src
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip

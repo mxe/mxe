@@ -3,6 +3,7 @@
 
 PKG             := gnuplot
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.6.1
 $(PKG)_CHECKSUM := 1ea21a628223159b0297ae65fe8293afd5aab3c0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnuplot-$($(PKG)_VERSION).tar.gz

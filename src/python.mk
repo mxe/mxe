@@ -3,11 +3,12 @@
 
 PKG             := python
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 3.3.0
 $(PKG)_CHECKSUM := 3e1464bc2c1dfa74287bc58da81168f50b0ae5c7
 $(PKG)_SUBDIR   := Python-$($(PKG)_VERSION)
 $(PKG)_FILE     := Python-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://python.org/ftp/python/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv
+$(PKG)_DEPS     := gcc libiconv zlib
 
 PATH_TO_HOST_PYTHON := $(PREFIX)/share/$($(PKG)_SUBDIR)
 
@@ -49,7 +50,7 @@ define $(PKG)_BUILD
 		ac_cv_have_long_long_format=yes \
 		./configure  \
 		--without-threads \
-		--with-libs='-lmsvcrt -liconv' \
+		--with-libs='-lmsvcrt -liconv -lz' \
 	       	--host='$(TARGET)' \
 		--build="`config.guess`" \
 	       	--prefix='$(PREFIX)/$(TARGET)/$($(PKG)_SUBDIR)' 

@@ -3,6 +3,7 @@
 
 PKG             := nrniv
 $(PKG)_IGNORE   := 
+$(PKG)_VERSION  := 7.3
 $(PKG)_CHECKSUM := d5bea5d6eeb02a30ceb1af1f3d354729b00bc774
 $(PKG)_SUBDIR   := iv-18
 $(PKG)_FILE     := iv-18.tar.gz

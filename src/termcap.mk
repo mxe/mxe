@@ -3,6 +3,7 @@
 
 PKG             := termcap
 $(PKG)_IGNORE   := 
+$(PKG)_VERSION  := 1.3.1
 $(PKG)_CHECKSUM := 42dd1e6beee04f336c884f96314f0c96cc2578be
 $(PKG)_SUBDIR   := termcap-$($(PKG)_VERSION)
 $(PKG)_FILE     := termcap-$($(PKG)_VERSION).tar.gz

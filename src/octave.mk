@@ -1,8 +1,10 @@
+
 # This file is part of MXE.
 # See index.html for further information.
 
 PKG             := octave
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 3.6.4
 $(PKG)_CHECKSUM := 3cc9366b6dbbd336eaf90fe70ad16e63705d82c4
 $(PKG)_SUBDIR   := octave-$($(PKG)_VERSION)
 $(PKG)_FILE     := octave-$($(PKG)_VERSION).tar.bz2

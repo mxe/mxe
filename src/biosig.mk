@@ -3,6 +3,7 @@
 
 PKG             := biosig
 $(PKG)_IGNORE   := 
+$(PKG)_VERSION  := 1.5.5
 $(PKG)_CHECKSUM := c04bc773b2a190fd2a9248ac70c143f6007d71ea
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz

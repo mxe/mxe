@@ -3,6 +3,7 @@
 
 PKG             := neuron
 $(PKG)_IGNORE   := 
+$(PKG)_VERSION  := 7.3
 $(PKG)_CHECKSUM := d79124f228135775769e661e1d57303476740ef6
 $(PKG)_SUBDIR   := nrn-7.3
 $(PKG)_FILE     := nrn-$($(PKG)_VERSION).tar.gz

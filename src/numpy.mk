@@ -3,6 +3,7 @@
 
 PKG             := numpy
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.6.2
 $(PKG)_CHECKSUM := c36c471f44cf914abdf37137d158bf3ffa460141
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

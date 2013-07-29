@@ -3,11 +3,12 @@
 
 PKG             := thunderbird
 $(PKG)_IGNORE   := 
+$(PKG)_VERSION  := 19.0b1
 $(PKG)_CHECKSUM := 7c2cab436f35fcf91978f3e3757edf1f40ec4704
 $(PKG)_SUBDIR   := comm-beta
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).source.tar.bz2
 $(PKG)_URL      := ftp://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/19.0b1/source/thunderbird-19.0b1.source.tar.bz2
-$(PKG)_DEPS     := gcc 
+$(PKG)_DEPS     := gcc python
 
 define $(PKG)_UPDATE
 #    wget -q -O- 'http://biosig.sourceforge.net/download.html' | \
