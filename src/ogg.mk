@@ -3,6 +3,7 @@
 
 PKG             := ogg
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.3.1
 $(PKG)_CHECKSUM := 270685c2a3d9dc6c98372627af99868aa4b4db53
 $(PKG)_SUBDIR   := libogg-$($(PKG)_VERSION)
 $(PKG)_FILE     := libogg-$($(PKG)_VERSION).tar.gz

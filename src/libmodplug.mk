@@ -1,9 +1,9 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# libmodplug
 PKG             := libmodplug
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.8.8.4
 $(PKG)_CHECKSUM := df4deffe542b501070ccb0aee37d875ebb0c9e22
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

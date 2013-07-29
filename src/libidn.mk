@@ -3,6 +3,7 @@
 
 PKG             := libidn
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.27
 $(PKG)_CHECKSUM := 67364d0cc331f2ea93f09a1b436dc606db16ad4d
 $(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
 $(PKG)_FILE     := libidn-$($(PKG)_VERSION).tar.gz

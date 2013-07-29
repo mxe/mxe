@@ -3,6 +3,7 @@
 
 PKG             := libiconv
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.14
 $(PKG)_CHECKSUM := be7d67e50d72ff067b2c0291311bc283add36965
 $(PKG)_SUBDIR   := libiconv-$($(PKG)_VERSION)
 $(PKG)_FILE     := libiconv-$($(PKG)_VERSION).tar.gz

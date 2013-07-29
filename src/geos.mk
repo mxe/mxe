@@ -3,6 +3,7 @@
 
 PKG             := geos
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 3.3.8
 $(PKG)_CHECKSUM := 1743e09f37eb75d85283a684a5765c4f44d035fa
 $(PKG)_SUBDIR   := geos-$($(PKG)_VERSION)
 $(PKG)_FILE     := geos-$($(PKG)_VERSION).tar.bz2

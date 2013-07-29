@@ -1,6 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+MXE_TARGET_LIST    := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
 MXE_TARGETS        := i686-pc-mingw32
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
@@ -12,6 +13,7 @@ SHELL      := bash
 NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
 JOBS       := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
 
+DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
@@ -25,7 +27,7 @@ WGET       := wget --no-check-certificate \
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
                 gcc g++ intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
-                scons $(SED) $(SORT) unzip wget xz yasm
+                scons $(SED) $(SORT) unzip wget xz
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
@@ -34,7 +36,7 @@ PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
 MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
-PKGS       := $(shell $(SED) -n 's/^.* id="\([^"]*\)-package">.*$$/\1/p' '$(TOP_DIR)/index.html')
+PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
 PATH       := $(PREFIX)/bin:$(PATH)
 
 # unexport any environment variables that might cause trouble
@@ -91,7 +93,7 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '#JOBS := $(JOBS)'; \
-        echo '#MXE_TARGETS := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32'; \
+        echo '#MXE_TARGETS := $(MXE_TARGET_LIST)'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
         echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
         echo '#.DEFAULT local-pkg-list:'; \
@@ -140,11 +142,6 @@ define newline
 
 
 endef
-$(eval $(subst #,$(newline),$(shell \
-    $(SED) -n \
-        's/^.* id="\([A-Za-z0-9_+-]*\)-version">\([^<]*\)<.*$$/\1_VERSION := \2#/p' \
-        '$(TOP_DIR)/index.html' \
-)))
 
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
@@ -229,6 +226,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
+	    (echo; find '$(2)' -name 'config.log' -print -exec cat {} \;) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
 	    exit 1; \
 	fi
 	@echo '[done]     $(1)'
@@ -240,6 +238,9 @@ build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf
 build-only-$(1)_$(3):
 	$(if $(or $(value $(1)_BUILD_$(3)),\
 	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
+	    uname -a
+	    git show-branch --list --reflog=1
+	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
@@ -278,9 +279,9 @@ define UPDATE
                     $(info .        $(1)  $(2)),
                     $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
-                $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$(2)/' '$(TOP_DIR)/index.html'
+                $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
                 $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                    || { $(SED) -i 's/\( id="$(1)-version"\)>[^<]*/\1>$($(1)_VERSION)/' '$(TOP_DIR)/index.html'; \
+                    || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
                          exit 1; })),
         $(info Unable to update version number of package $(1) \
             $(newline)$(newline)$($(1)_UPDATE)$(newline)))

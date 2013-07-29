@@ -3,6 +3,7 @@
 
 PKG             := portablexdr
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.9.1
 $(PKG)_CHECKSUM := 2844eeb384e532e50364133fb42b47dcb140397e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

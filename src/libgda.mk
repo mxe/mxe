@@ -1,9 +1,9 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# LibGDA
 PKG             := libgda
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.2.13
 $(PKG)_CHECKSUM := 61d0b498202b780750633cc2e957c40325d6c705
 $(PKG)_SUBDIR   := libgda-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgda-$($(PKG)_VERSION).tar.xz

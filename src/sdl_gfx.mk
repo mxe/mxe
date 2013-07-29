@@ -3,6 +3,7 @@
 
 PKG             := sdl_gfx
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.0.24
 $(PKG)_CHECKSUM := 34e8963188e4845557468a496066a8fa60d5f563
 $(PKG)_SUBDIR   := SDL_gfx-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_gfx-$($(PKG)_VERSION).tar.gz

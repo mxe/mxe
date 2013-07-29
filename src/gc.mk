@@ -3,6 +3,7 @@
 
 PKG             := gc
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 7.2d
 $(PKG)_CHECKSUM := b43573800e27361da78f05a2e98394521cfa04fc
 $(PKG)_SUBDIR   := $(PKG)-7.2
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

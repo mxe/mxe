@@ -3,6 +3,7 @@
 
 PKG             := wavpack
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.60.1
 $(PKG)_CHECKSUM := 003c65cb4e29c55011cf8e7b10d69120df5e7f30
 $(PKG)_SUBDIR   := wavpack-$($(PKG)_VERSION)
 $(PKG)_FILE     := wavpack-$($(PKG)_VERSION).tar.bz2

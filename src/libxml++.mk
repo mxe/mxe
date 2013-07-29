@@ -3,6 +3,7 @@
 
 PKG             := libxml++
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.36.0
 $(PKG)_CHECKSUM := 446714be0becb1d1bca914a9a545af96a24de26e
 $(PKG)_SUBDIR   := libxml++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml++-$($(PKG)_VERSION).tar.xz

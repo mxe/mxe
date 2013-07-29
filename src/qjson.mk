@@ -3,6 +3,7 @@
 
 PKG             := qjson
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.8.1
 $(PKG)_CHECKSUM := 197ccfd533f17bcf40428e68a82e6622047ed4ab
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2

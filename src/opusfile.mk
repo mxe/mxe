@@ -3,6 +3,7 @@
 
 PKG             := opusfile
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.2
 $(PKG)_CHECKSUM := db020e25178b501929a11b0e0f469890f4f4e6fa
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

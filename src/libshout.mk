@@ -3,6 +3,7 @@
 
 PKG             := libshout
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.3.1
 $(PKG)_CHECKSUM := 147c5670939727420d0e2ad6a20468e2c2db1e20
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

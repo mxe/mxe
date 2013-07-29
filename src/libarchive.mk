@@ -3,6 +3,7 @@
 
 PKG             := libarchive
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 3.0.3
 $(PKG)_CHECKSUM := b774e2675e5c1abafbd4d667402e8c3e72313944
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

@@ -3,6 +3,7 @@
 
 PKG             := openal
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.15.1
 $(PKG)_CHECKSUM := a0e73a46740c52ccbde38a3912c5b0fd72679ec8
 $(PKG)_SUBDIR   := openal-soft-$($(PKG)_VERSION)
 $(PKG)_FILE     := openal-soft-$($(PKG)_VERSION).tar.bz2

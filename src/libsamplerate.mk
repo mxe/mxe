@@ -3,6 +3,7 @@
 
 PKG             := libsamplerate
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.1.8
 $(PKG)_CHECKSUM := e5fe82c4786be2fa33ca6bd4897db4868347fe70
 $(PKG)_SUBDIR   := libsamplerate-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsamplerate-$($(PKG)_VERSION).tar.gz

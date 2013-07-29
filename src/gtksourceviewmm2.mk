@@ -3,6 +3,7 @@
 
 PKG             := gtksourceviewmm2
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.10.3
 $(PKG)_CHECKSUM := 17d5daf33d2b6bc21c48c5c730abaae70e027566
 $(PKG)_SUBDIR   := gtksourceviewmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz

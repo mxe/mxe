@@ -3,6 +3,7 @@
 
 PKG             := t4k_common
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.1.1
 $(PKG)_CHECKSUM := 626eddedee86059ccab593a226c8d98571018b46
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz

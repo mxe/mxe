@@ -3,6 +3,7 @@
 
 PKG             := zziplib
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.13.59
 $(PKG)_CHECKSUM := ddbce25cb36c3b4c2b892e2c8a88fa4a0be29a71
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2

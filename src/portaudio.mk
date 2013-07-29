@@ -3,6 +3,7 @@
 
 PKG             := portaudio
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 19_20111121
 $(PKG)_CHECKSUM := f07716c470603729a55b70f5af68f4a6807097eb
 $(PKG)_SUBDIR   := portaudio
 $(PKG)_FILE     := pa_stable_v$($(PKG)_VERSION).tgz

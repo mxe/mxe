@@ -3,6 +3,7 @@
 
 PKG             := xmlwrapp
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.7.0
 $(PKG)_CHECKSUM := 2a9c1db86977515863b41099b94af1152c2d0374
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

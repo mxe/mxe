@@ -3,6 +3,7 @@
 
 PKG             := libpaper
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.1.24+nmu2
 $(PKG)_CHECKSUM := 40f16453d7752bf5e3c9e74515650eb37edbb3fe
 $(PKG)_SUBDIR   := libpaper-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpaper_$($(PKG)_VERSION).tar.gz

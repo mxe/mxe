@@ -3,6 +3,7 @@
 
 PKG             := libxslt
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.1.28
 $(PKG)_CHECKSUM := 4df177de629b2653db322bfb891afa3c0d1fa221
 $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.gz

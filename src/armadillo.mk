@@ -1,10 +1,10 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# armadillo
 PKG             := armadillo
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 7a6797ff784e5e3ae501ba8581ce3b85cecb4660
+$(PKG)_VERSION  := 3.900.6
+$(PKG)_CHECKSUM := d9ad6af0ea9440cfd78eacba990c0512bd17f19c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)

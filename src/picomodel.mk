@@ -3,6 +3,7 @@
 
 PKG             := picomodel
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1142ad8
 $(PKG)_CHECKSUM := b82b16ee69edaefe751b678b577b90c1971ce4db
 $(PKG)_SUBDIR   := ufoai-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

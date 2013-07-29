@@ -3,10 +3,11 @@
 
 PKG             := qtjsbackend
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := e11ab3021664a75dcecdd3741a7abd576acca558
+$(PKG)_VERSION  := 5.1.0
+$(PKG)_CHECKSUM := df1cd292b2fce26308c3e85b99def8264891607c
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE

@@ -2,7 +2,8 @@
 # See index.html for further information.
 
 PKG             := apr-util
-$(PKG)_IGNORE   := 1.5.2
+$(PKG)_IGNORE   := 1.5%
+$(PKG)_VERSION  := 1.4.1
 $(PKG)_CHECKSUM := ca4db631d186ea13526fd087aebc06799d4c5415
 $(PKG)_SUBDIR   := apr-util-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-util-$($(PKG)_VERSION).tar.gz

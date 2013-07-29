@@ -3,6 +3,7 @@
 
 PKG             := libgcrypt
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.5.2
 $(PKG)_CHECKSUM := c9998383532ba3e8bcaf690f2f0d65e814b48d2f
 $(PKG)_SUBDIR   := libgcrypt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgcrypt-$($(PKG)_VERSION).tar.bz2

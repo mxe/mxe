@@ -3,6 +3,7 @@
 
 PKG             := libglade
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.6.4
 $(PKG)_CHECKSUM := 3cc65ed13c10025780488935313329170baa33c6
 $(PKG)_SUBDIR   := libglade-$($(PKG)_VERSION)
 $(PKG)_FILE     := libglade-$($(PKG)_VERSION).tar.gz

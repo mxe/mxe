@@ -2,7 +2,8 @@
 # See index.html for further information.
 
 PKG             := gcc-gmp
-#$(PKG)_IGNORE    = $(gmp_IGNORE)
+$(PKG)_IGNORE    = $(gmp_IGNORE)
+$(PKG)_VERSION   = $(gmp_VERSION)
 $(PKG)_CHECKSUM  = $(gmp_CHECKSUM)
 $(PKG)_SUBDIR    = $(gmp_SUBDIR)
 $(PKG)_FILE      = $(gmp_FILE)

@@ -3,6 +3,7 @@
 
 PKG             := speex
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.2rc1
 $(PKG)_CHECKSUM := 52daa72572e844e5165315e208da539b2a55c5eb
 $(PKG)_SUBDIR   := speex-$($(PKG)_VERSION)
 $(PKG)_FILE     := speex-$($(PKG)_VERSION).tar.gz

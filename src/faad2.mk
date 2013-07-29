@@ -3,6 +3,7 @@
 
 PKG             := faad2
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.7
 $(PKG)_CHECKSUM := 80eaaa5cc576c35dd28863767b795c50cbcc0511
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

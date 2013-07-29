@@ -3,6 +3,7 @@
 
 PKG             := ocaml-camlimages
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.0.1
 $(PKG)_CHECKSUM := 3ff44142386970003d3cff1446ad351b36759a8e
 $(PKG)_SUBDIR   := camlspotter-camlimages-c803efa9d5d3
 $(PKG)_FILE     := v$($(PKG)_VERSION).tar.gz

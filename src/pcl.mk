@@ -3,6 +3,7 @@
 
 PKG             := pcl
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.6.0
 $(PKG)_CHECKSUM := 45a2e155d7faf5901abe609fd40d5f1659015e9e
 $(PKG)_SUBDIR   := PCL-$($(PKG)_VERSION)-Source
 $(PKG)_FILE     := PCL-$($(PKG)_VERSION)-Source.tar.bz2
@@ -27,6 +28,7 @@ define $(PKG)_BUILD
         CXXFLAGS="-D__FLOAT_H -DFLT_MAX=__FLT_MAX__ -DFLT_MIN=__FLT_MIN__ -DDBL_MAX=__DBL_MAX__ -DDBL_MIN=__DBL_MIN__" \
         cmake . \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DVTK_DIR='$(PREFIX)/$(TARGET)/lib/vtk-5.8' \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_RELEASE_POSTFIX='' \
         -DBoost_THREADAPI=win32 \

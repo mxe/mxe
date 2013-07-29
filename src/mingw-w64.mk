@@ -1,9 +1,9 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# Mingw-w64
 PKG             := mingw-w64
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := c28722c
 $(PKG)_CHECKSUM := bc48803ff15a777adad8890519bd3ebec90acab9
 $(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)/trunk
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

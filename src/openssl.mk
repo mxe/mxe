@@ -3,6 +3,7 @@
 
 PKG             := openssl
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.0.1e
 $(PKG)_CHECKSUM := 3f1b1223c9e8189bfe4e186d86449775bd903460
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz

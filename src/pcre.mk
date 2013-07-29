@@ -3,6 +3,7 @@
 
 PKG             := pcre
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 8.33
 $(PKG)_CHECKSUM := c4dd6aa1ffeca7bea1bc45b214c8e862bfdacc3c
 $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2

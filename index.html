@@ -180,10 +180,45 @@
         whenever possible
     </li>
     <li>
-        is already
-        <a href="#used-by">used by several projects</a>
+        integrates well with <a href="#tutorial-5a">autotools</a>,
+        <a href="#tutorial-5b">cmake</a>, <a href="#tutorial-5c">qmake</a>,
+        and <a href="#tutorial-5d">hand-written makefiles</a>.
+    </li>
+    <li>
+        has been in continuous development <a href="#history">since 2007</a>
+        and is <a href="#used-by">used by several projects</a>
     </li>
     </ul>
+
+    <h3>Supported Toolchains</h3>
+
+    <table id="supported-toolchains">
+    <tr>
+        <th>Runtime</th>
+        <th>Host Triplet</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><a href="http://www.mingw.org/">MinGW 3x</a></td>
+        <td>i686-pc-mingw32</td>
+        <td>Fully Supported</td>
+    </tr>
+    <tr>
+        <td><a href="http://www.mingw.org/">MinGW 4x</a></td>
+        <td></td>
+        <td><a href="https://github.com/mxe/mxe/issues/203">Pilot</a></td>
+    </tr>
+    <tr>
+        <td rowspan="2"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64</a></td>
+        <td>i686-w64-mingw32</td>
+        <td>94% (258/275)</td>
+    </tr>
+    <tr>
+        <td>x86_64-w64-mingw32</td>
+        <td>86% (238/275)</td>
+    </tr>
+    </table>
+
 </div>
 
 <div class="section">
@@ -204,7 +239,7 @@
 <div class="section">
 <h2 id="tutorial">Tutorial</h2>
 
-    <h3>Step 1: Requirements and Download</h3>
+    <h3 id="tutorial-1">Step 1: Requirements and Download</h3>
 
     <p>
     First, you should ensure that your system meets
@@ -224,7 +259,7 @@
     just skip the following step and go straight to step 3.
     </p>
 
-    <h3>Step 2: System-wide Installation (optional)</h3>
+    <h3 id="tutorial-2">Step 2: System-wide Installation (optional)</h3>
 
     <p>
     Now you should save any previous installation
@@ -252,7 +287,7 @@ exit</pre>
     </p>
     <pre>cd /opt/mxe</pre>
 
-    <h3>Step 3: Build MXE</h3>
+    <h3 id="tutorial-3">Step 3: Build MXE</h3>
 
     <p>
     Enter the directory where you've downloaded the MXE.
@@ -286,13 +321,23 @@ exit</pre>
     </p>
     <pre>make gtk lua libidn</pre>
     <p>
+    Targets can also be specified on the command line.
+    By default, only i686-pc-mingw32 is built, but you can
+    build your toolchain(s) of choice with:
+    </p>
+    <pre>make MXE_TARGETS='x86_64-w64-mingw32 i686-w64-mingw32'</pre>
+    <p>
+    or by adjusting the <code>MXE_TARGETS</code> variable
+    in <code>settings.mk</code>.
+    </p>
+    <p>
     You'll always end up with a consistent cross compiling environment.
     </p>
 
     <p>
-    If you have trouble here, you can try different versions from the
-    <a href="#download">download section</a>. Also, please feel free to
+    If you have trouble here, please feel free to
     contact the mxe team through the
+    <a href="https://github.com/mxe/mxe/issues">github issue tracker</a> or
     <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">project mailing list</a>.
     </p>
 
@@ -300,7 +345,7 @@ exit</pre>
     After you're done it just needs a little post-installation.
     </p>
 
-    <h3>Step 4: Environment Variables</h3>
+    <h3 id="tutorial-4">Step 4: Environment Variables</h3>
 
     <p>
     Edit your .bashrc script in order to change $PATH:
@@ -331,7 +376,7 @@ exit</pre>
     You're ready to cross compile anything you like.
     </p>
 
-    <h3>Step 5a: Cross compile your Project (Autotools)</h3>
+    <h3 id="tutorial-5a">Step 5a: Cross compile your Project (Autotools)</h3>
 
     <p>
     If you use the
@@ -356,7 +401,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     Everything will be just fine.
     </p>
 
-    <h3>Step 5b: Cross compile your Project (CMake)</h3>
+    <h3 id="tutorial-5b">Step 5b: Cross compile your Project (CMake)</h3>
 
     <p>
     If you have a
@@ -365,7 +410,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     </p>
     <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/i686-pc-mingw32/share/cmake/mxe-conf.cmake</pre>
 
-    <h3>Step 5c: Cross compile your Project (Qt)</h3>
+    <h3 id="tutorial-5c">Step 5c: Cross compile your Project (Qt)</h3>
 
     <p>
     If you have a
@@ -390,7 +435,7 @@ make</pre>
     are built-in, <em>not</em> plugins.
     </p>
 
-    <h3>Step 5d: Cross compile your Project (Makefile)</h3>
+    <h3 id="tutorial-5d">Step 5d: Cross compile your Project (Makefile)</h3>
 
     <p>
     If you have a handwritten Makefile,
@@ -412,7 +457,7 @@ PKG_CONFIG=$(CROSS)pkg-config</pre>
     That's it!
     </p>
 
-    <h3>Step 5e: Cross compile your Project (OSG)</h3>
+    <h3 id="tutorial-5e">Step 5e: Cross compile your Project (OSG)</h3>
 
     <p>
     Using static OpenSceneGraph libraries requires a few changes to your source.
@@ -515,7 +560,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         remote = origin
         merge = refs/heads/stable</pre>
 
-    <h3>Branch Concept</h3>
+    <h3 id="branches">Branch Concept</h3>
 
     <p>
     For the sake of simplicity, there are just two
@@ -550,9 +595,21 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <li>
             When in doubt, "master" is used rather than "stable".
         </li>
+    </ul>
+
+    <p>
+    And this is how the branches relete to each other:
+    </p>
+
+    <ul class="compact-list">
         <li>
-            After a successful testing phase, the whole "master"
-            branch will be merged into "stable" (fast-forward).
+            Every change to the "stable" branch
+            will be merged into "master".
+        </li>
+        <li>
+            After a successful testing phase,
+            the "stable" branch
+            will be fast-forwarded to "master".
         </li>
     </ul>
 </div>
@@ -682,10 +739,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td><a href="http://tukaani.org/xz/">XZ Utils</a></td>
         <td></td>
     </tr>
-    <tr>
-        <td><a href="http://www.tortall.net/projects/yasm/">Yasm</a></td>
-        <td>≥ 1.2.0</td>
-    </tr>
     </table>
 
     <h3 id="requirements-debian">Debian and derivatives</h3>
@@ -693,10 +746,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install autoconf automake bash bison bzip2 \
                     cmake flex gettext git g++ intltool \
-                    libffi-dev libtool libltdl-dev openssl libssl-dev \
-                    libxml-parser-perl make patch perl \
-                    pkg-config scons sed unzip wget \
-                    xz-utils yasm</pre>
+                    libffi-dev libtool libltdl-dev libssl-dev \
+                    libxml-parser-perl make openssl patch perl \
+                    pkg-config scons sed unzip wget xz-utils</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -704,15 +756,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>apt-get install g++-multilib libc6-dev-i386</pre>
 
     <p>
-    On Debian Squeeze, you'll need some packages from
-    <a href="http://backports-master.debian.org/Instructions/">backports</a>. Add this line:
+    Only the latest Debian stable series is supported (Wheezy 7.x)
     </p>
-    <pre>deb http://backports.debian.org/debian-backports squeeze-backports main</pre>
-    <p>
-    to your sources.list (or add a new file with the ".list" extension to /etc/apt/sources.list.d/)
-    </p>
-    <pre>apt-get update
-aptitude -t squeeze-backports install cmake yasm</pre>
 
     <h3 id="requirements-fedora">Fedora</h3>
 
@@ -720,7 +765,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     <pre>yum install autoconf automake bash bison bzip2 cmake \
             flex gcc-c++ gettext git intltool make sed \
             libffi-devel libtool openssl-devel patch perl pkgconfig \
-            scons yasm unzip wget xz</pre>
+            scons unzip wget xz</pre>
 
     <p>
     On 64-bit Fedora,
@@ -733,7 +778,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     <pre>pkg_add -r automake autoconf bash bison cmake coreutils\
            flex gettext git glib20 gmake gsed intltool libffi \
            libtool openssl patch perl p5-XML-Parser pkgconf \
-           scons unzip wget yasm</pre>
+           scons unzip wget</pre>
 
     <p>
     Ensure that /usr/local/bin precedes /usr/bin in your $PATH:
@@ -750,6 +795,16 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     On 64-bit FreeBSD,
     there are <a href="#issue-non-multilib">issues without a 32-bit compiler</a>.
     </p>
+    <p>
+    <strong>N.B. FreeBSD is no longer fully supported</strong>
+    </p>
+    <p>
+    to build the remainder of MXE, run:
+    </p>
+    <pre>./tools/freebsd-excludes</pre>
+    <p>
+    and review that file for the list of packages that are excluded.
+    </p>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
 
@@ -757,7 +812,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
              flex gcc gettext git intltool make sed libffi libtool \
              openssl patch perl perl-xml-parser pkgconfig \
-             scons unzip wget xz xz-lzma yasm</pre>
+             scons unzip wget xz xz-lzma</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -775,7 +830,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
        dev-libs/libffi sys-devel/libtool dev-libs/openssl sys-devel/patch \
        dev-lang/perl dev-perl/XML-Parser \
        dev-util/pkgconfig dev-util/scons app-arch/unzip \
-       net-misc/wget app-arch/xz-utils dev-lang/yasm</pre>
+       net-misc/wget app-arch/xz-utils</pre>
 
     <h3 id="requirements-macos">Mac OS X</h3>
 
@@ -790,7 +845,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     <pre>sudo port install autoconf automake bison cmake coreutils \
                   flex gettext git-core glib2 gsed intltool libffi \
                   libtool openssl p5-xml-parser pkgconfig scons \
-                  wget xz yasm</pre>
+                  wget xz</pre>
     <p>
     Mac OS X versions ≤ 10.7 are no longer supported.
     </p>
@@ -803,7 +858,7 @@ aptitude -t squeeze-backports install cmake yasm</pre>
                   intltool libffi-devel libtool make openssl \
                   libopenssl-devel patch perl \
                   perl-XML-Parser pkg-config scons \
-                  sed unzip wget xz yasm</pre>
+                  sed unzip wget xz</pre>
 
     <p>
     On 64-bit openSUSE, install also:
@@ -953,1487 +1008,1184 @@ aptitude -t squeeze-backports install cmake yasm</pre>
     </p>
     <table id="package-list">
     <tr>
-        <td id="agg-package">agg</td>
-        <td id="agg-version">2.5</td>
-        <td id="agg-website"><a href="http://www.antigrain.com/">Anti-Grain Geometry</a></td>
+        <td class="package">agg</td>
+        <td class="website"><a href="http://www.antigrain.com/">Anti-Grain Geometry</a></td>
     </tr>
     <tr>
-        <td id="alure-package">alure</td>
-        <td id="alure-version">1.2</td>
-        <td id="alure-website"><a href="http://kcat.strangesoft.net/alure.html">alure</a></td>
+        <td class="package">alure</td>
+        <td class="website"><a href="http://kcat.strangesoft.net/alure.html">alure</a></td>
     </tr>
     <tr>
-        <td id="apr-util-package">apr-util</td>
-        <td id="apr-util-version">1.4.1</td>
-        <td id="apr-util-website"><a href="http://apr.apache.org/">APR-util</a></td>
+        <td class="package">apr</td>
+        <td class="website"><a href="http://apr.apache.org/">APR</a></td>
     </tr>
     <tr>
-        <td id="apr-package">apr</td>
-        <td id="apr-version">1.4.2</td>
-        <td id="apr-website"><a href="http://apr.apache.org/">APR</a></td>
+        <td class="package">apr-util</td>
+        <td class="website"><a href="http://apr.apache.org/">APR-util</a></td>
     </tr>
     <tr>
-        <td id="armadillo-package">armadillo</td>
-        <td id="armadillo-version">3.820.1</td>
-        <td id="armadillo-website"><a href="http://arma.sourceforge.net/">Armadillo C++ linear algebra library</a></td>
+        <td class="package">armadillo</td>
+        <td class="website"><a href="http://arma.sourceforge.net/">Armadillo C++ linear algebra library</a></td>
     </tr>
     <tr>
-        <td id="arpack-package">arpack</td>
-        <td id="arpack-version">3.1.2</td>
-        <td id="arpack-website"><a href="http://forge.scilab.org/index.php/p/arpack-ng/">ARPACK</a></td>
+        <td class="package">atk</td>
+        <td class="website"><a href="http://www.gtk.org/">ATK</a></td>
     </tr>
     <tr>
-        <td id="atk-package">atk</td>
-        <td id="atk-version">2.8.0</td>
-        <td id="atk-website"><a href="http://www.gtk.org/">ATK</a></td>
+        <td class="package">atkmm</td>
+        <td class="website"><a href="http://www.gtkmm.org/">ATKmm</a></td>
     </tr>
     <tr>
-        <td id="atkmm-package">atkmm</td>
-        <td id="atkmm-version">2.22.6</td>
-        <td id="atkmm-website"><a href="http://www.gtkmm.org/">ATKmm</a></td>
+        <td class="package">aubio</td>
+        <td class="website"><a href="http://www.aubio.org/">aubio</a></td>
     </tr>
     <tr>
-        <td id="aubio-package">aubio</td>
-        <td id="aubio-version">0.3.2</td>
-        <td id="aubio-website"><a href="http://www.aubio.org/">aubio</a></td>
+        <td class="package">bfd</td>
+        <td class="website"><a href="http://www.gnu.org/software/binutils/">Binary File Descriptor library</a></td>
     </tr>
     <tr>
-        <td id="bfd-package">bfd</td>
-        <td id="bfd-version">2.23.2</td>
-        <td id="bfd-website"><a href="http://www.gnu.org/software/binutils/">Binary File Descriptor library</a></td>
+        <td class="package">binutils</td>
+        <td class="website"><a href="http://www.gnu.org/software/binutils/">GNU Binutils</a></td>
     </tr>
     <tr>
-        <td id="binutils-package">binutils</td>
-        <td id="binutils-version">2.23.2</td> <!-- bfd and libiberty use the same source, set them to the same version! -->
-        <td id="binutils-website"><a href="http://www.gnu.org/software/binutils/">GNU Binutils</a></td>
+        <td class="package">blas</td>
+        <td class="website"><a href="http://www.netlib.org/blas/">blas</a></td>
     </tr>
     <tr>
-        <td id="biosig-package">biosig</td>
-        <td id="biosig-version">1.5.5</td>
-        <td id="biosig-website"><a href="http://biosig.sf.net/">biosig</a></td>
+        <td class="package">boost</td>
+        <td class="website"><a href="http://www.boost.org/">Boost C++ Library</a></td>
     </tr>
     <tr>
-        <td id="blas-package">blas</td>
-        <td id="blas-version">1</td>
-        <td id="blas-website"><a href="http://www.netlib.org/blas/">blas</a></td>
+        <td class="package">bzip2</td>
+        <td class="website"><a href="http://www.bzip.org/">bzip2</a></td>
     </tr>
     <tr>
-        <td id="boost-package">boost</td>
-        <td id="boost-version">1.53.0</td>
-        <td id="boost-website"><a href="http://www.boost.org/">Boost C++ Library</a></td>
+        <td class="package">cairo</td>
+        <td class="website"><a href="http://cairographics.org/">cairo</a></td>
     </tr>
     <tr>
-        <td id="bzip2-package">bzip2</td>
-        <td id="bzip2-version">1.0.6</td>
-        <td id="bzip2-website"><a href="http://www.bzip.org/">bzip2</a></td>
+        <td class="package">cairomm</td>
+        <td class="website"><a href="http://cairographics.org/cairomm/">cairomm</a></td>
     </tr>
     <tr>
-        <td id="cairo-package">cairo</td>
-        <td id="cairo-version">1.12.14</td>
-        <td id="cairo-website"><a href="http://cairographics.org/">cairo</a></td>
+        <td class="package">cblas</td>
+        <td class="website"><a href="http://www.netlib.org/blas/">cblas</a></td>
     </tr>
     <tr>
-        <td id="cairomm-package">cairomm</td>
-        <td id="cairomm-version">1.10.0</td>
-        <td id="cairomm-website"><a href="http://cairographics.org/cairomm/">cairomm</a></td>
+        <td class="package">cegui</td>
+        <td class="website"><a href="http://cegui.org.uk/">Crazy Eddie’s GUI System (CEGUI)</a></td>
     </tr>
     <tr>
-        <td id="cblas-package">cblas</td>
-        <td id="cblas-version">1</td>
-        <td id="cblas-website"><a href="http://www.netlib.org/blas/">cblas</a></td>
+        <td class="package">cfitsio</td>
+        <td class="website"><a href="http://heasarc.gsfc.nasa.gov/fitsio/">cfitsio</a></td>
     </tr>
     <tr>
-        <td id="cegui-package">cegui</td>
-        <td id="cegui-version">0.7.9</td>
-        <td id="cegui-website"><a href="http://cegui.org.uk/">Crazy Eddie’s GUI System (CEGUI)</a></td>
+        <td class="package">cgal</td>
+        <td class="website"><a href="http://www.cgal.org/">cgal</a></td>
     </tr>
     <tr>
-        <td id="cfitsio-package">cfitsio</td>
-        <td id="cfitsio-version">3340</td>
-        <td id="cfitsio-website"><a href="http://heasarc.gsfc.nasa.gov/fitsio/">cfitsio</a></td>
+        <td class="package">cminpack</td>
+        <td class="website"><a href="http://devernay.free.fr/hacks/cminpack/cminpack.html">cminpack</a></td>
     </tr>
     <tr>
-        <td id="cgal-package">cgal</td>
-        <td id="cgal-version">4.0.2</td>
-        <td id="cgal-website"><a href="http://www.cgal.org/">cgal</a></td>
+        <td class="package">cppunit</td>
+        <td class="website"><a href="http://apps.sourceforge.net/mediawiki/cppunit/">CppUnit</a></td>
     </tr>
     <tr>
-        <td id="cminpack-package">cminpack</td>
-        <td id="cminpack-version">1.3.0</td>
-        <td id="cminpack-website"><a href="http://devernay.free.fr/hacks/cminpack/cminpack.html">cminpack</a></td>
+        <td class="package">cunit</td>
+        <td class="website"><a href="http://cunit.sourceforge.net/">cunit</a></td>
     </tr>
     <tr>
-        <td id="cppunit-package">cppunit</td>
-        <td id="cppunit-version">1.12.1</td>
-        <td id="cppunit-website"><a href="http://apps.sourceforge.net/mediawiki/cppunit/">CppUnit</a></td>
+        <td class="package">curl</td>
+        <td class="website"><a href="http://curl.haxx.se/libcurl/">cURL</a></td>
     </tr>
     <tr>
-        <td id="cunit-package">cunit</td>
-        <td id="cunit-version">2.1-2</td>
-        <td id="cunit-website"><a href="http://cunit.sourceforge.net/">cunit</a></td>
+        <td class="package">dbus</td>
+        <td class="website"><a href="http://dbus.freedesktop.org/">dbus</a></td>
     </tr>
     <tr>
-        <td id="curl-package">curl</td>
-        <td id="curl-version">7.30.0</td>
-        <td id="curl-website"><a href="http://curl.haxx.se/libcurl/">cURL</a></td>
+        <td class="package">dcmtk</td>
+        <td class="website"><a href="http://dicom.offis.de/dcmtk.php.en">DCMTK</a></td>
     </tr>
     <tr>
-        <td id="dbus-package">dbus</td>
-        <td id="dbus-version">1.7.2</td>
-        <td id="dbus-website"><a href="http://dbus.freedesktop.org/">dbus</a></td>
+        <td class="package">devil</td>
+        <td class="website"><a href="http://openil.sourceforge.net/">DevIL</a></td>
     </tr>
     <tr>
-        <td id="dcmtk-package">dcmtk</td>
-        <td id="dcmtk-version">3.6.0</td>
-        <td id="dcmtk-website"><a href="http://dicom.offis.de/dcmtk.php.en">DCMTK</a></td>
+        <td class="package">eigen</td>
+        <td class="website"><a href="http://eigen.tuxfamily.org/">eigen</a></td>
     </tr>
     <tr>
-        <td id="devil-package">devil</td>
-        <td id="devil-version">1.7.8</td>
-        <td id="devil-website"><a href="http://openil.sourceforge.net/">DevIL</a></td>
+        <td class="package">exiv2</td>
+        <td class="website"><a href="http://www.exiv2.org/">Exiv2</a></td>
     </tr>
     <tr>
-        <td id="edfbrowser-package">edfbrowser</td>
-        <td id="edfbrowser-version">1.51</td>
-        <td id="edfbrowser-website"><a href="http://www.teuniz.net/edfbrowser/">edfbrowser</a></td>
+        <td class="package">expat</td>
+        <td class="website"><a href="http://expat.sourceforge.net/">Expat XML Parser</a></td>
     </tr>
     <tr>
-        <td id="eigen-package">eigen</td>
-        <td id="eigen-version">3.1.3</td>
-        <td id="eigen-website"><a href="http://eigen.tuxfamily.org/">eigen</a></td>
+        <td class="package">faad2</td>
+        <td class="website"><a href="http://www.audiocoding.com/">faad2</a></td>
     </tr>
     <tr>
-        <td id="exiv2-package">exiv2</td>
-        <td id="exiv2-version">0.23</td>
-        <td id="exiv2-website"><a href="http://www.exiv2.org/">Exiv2</a></td>
+        <td class="package">ffmpeg</td>
+        <td class="website"><a href="http://www.ffmpeg.org/">ffmpeg</a></td>
     </tr>
     <tr>
-        <td id="expat-package">expat</td>
-        <td id="expat-version">2.1.0</td>
-        <td id="expat-website"><a href="http://expat.sourceforge.net/">Expat XML Parser</a></td>
+        <td class="package">fftw</td>
+        <td class="website"><a href="http://www.fftw.org/">fftw</a></td>
     </tr>
     <tr>
-        <td id="faad2-package">faad2</td>
-        <td id="faad2-version">2.7</td>
-        <td id="faad2-website"><a href="http://www.audiocoding.com/">faad2</a></td>
+        <td class="package">file</td>
+        <td class="website"><a href="http://www.darwinsys.com/file/">file</a></td>
     </tr>
     <tr>
-        <td id="ffmpeg-package">ffmpeg</td>
-        <td id="ffmpeg-version">1.2.1</td>
-        <td id="ffmpeg-website"><a href="http://www.ffmpeg.org/">ffmpeg</a></td>
+        <td class="package">flac</td>
+        <td class="website"><a href="http://www.xiph.org/flac/">FLAC</a></td>
     </tr>
     <tr>
-        <td id="fftw-package">fftw</td>
-        <td id="fftw-version">3.3.3</td>
-        <td id="fftw-website"><a href="http://www.fftw.org/">fftw</a></td>
+        <td class="package">flann</td>
+        <td class="website"><a href="http://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN">FLANN</a></td>
     </tr>
     <tr>
-        <td id="file-package">file</td>
-        <td id="file-version">5.14</td>
-        <td id="file-website"><a href="http://www.darwinsys.com/file/">file</a></td>
+        <td class="package">fltk</td>
+        <td class="website"><a href="http://www.fltk.org/">FLTK</a></td>
     </tr>
     <tr>
-        <td id="flac-package">flac</td>
-        <td id="flac-version">1.3.0</td>
-        <td id="flac-website"><a href="http://www.xiph.org/flac/">FLAC</a></td>
+        <td class="package">fontconfig</td>
+        <td class="website"><a href="http://fontconfig.org/">fontconfig</a></td>
     </tr>
     <tr>
-        <td id="flann-package">flann</td>
-        <td id="flann-version">1.7.1</td>
-        <td id="flann-website"><a href="http://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN">FLANN</a></td>
+        <td class="package">freeglut</td>
+        <td class="website"><a href="http://freeglut.sourceforge.net/">freeglut</a></td>
     </tr>
     <tr>
-        <td id="fltk-package">fltk</td>
-        <td id="fltk-version">1.3.2</td>
-        <td id="fltk-website"><a href="http://www.fltk.org/">FLTK</a></td>
+        <td class="package">freeimage</td>
+        <td class="website"><a href="http://freeimage.sourceforge.net/">FreeImage</a></td>
     </tr>
     <tr>
-        <td id="fontconfig-package">fontconfig</td>
-        <td id="fontconfig-version">2.10.93</td>
-        <td id="fontconfig-website"><a href="http://fontconfig.org/">fontconfig</a></td>
+        <td class="package">freetds</td>
+        <td class="website"><a href="http://www.freetds.org/">FreeTDS</a></td>
     </tr>
     <tr>
-        <td id="freeglut-package">freeglut</td>
-        <td id="freeglut-version">2.8.1</td>
-        <td id="freeglut-website"><a href="http://freeglut.sourceforge.net/">freeglut</a></td>
+        <td class="package">freetype</td>
+        <td class="website"><a href="http://www.freetype.org/">freetype</a></td>
     </tr>
     <tr>
-        <td id="freeimage-package">freeimage</td>
-        <td id="freeimage-version">3.15.4</td>
-        <td id="freeimage-website"><a href="http://freeimage.sourceforge.net/">FreeImage</a></td>
+        <td class="package">fribidi</td>
+        <td class="website"><a href="http://fribidi.org/">FriBidi</a></td>
     </tr>
     <tr>
-        <td id="freetds-package">freetds</td>
-        <td id="freetds-version">0.91</td>
-        <td id="freetds-website"><a href="http://www.freetds.org/">FreeTDS</a></td>
+        <td class="package">ftgl</td>
+        <td class="website"><a href="http://sourceforge.net/projects/ftgl/">ftgl</a></td>
     </tr>
     <tr>
-        <td id="freetype-package">freetype</td>
-        <td id="freetype-version">2.5.0</td>
-        <td id="freetype-website"><a href="http://freetype.sourceforge.net/">freetype</a></td>
+        <td class="package">gc</td>
+        <td class="website"><a href="http://www.hpl.hp.com/personal/Hans_Boehm/gc/">gc</a></td>
     </tr>
     <tr>
-        <td id="fribidi-package">fribidi</td>
-        <td id="fribidi-version">0.19.5</td>
-        <td id="fribidi-website"><a href="http://fribidi.org/">FriBidi</a></td>
+        <td class="package">gcc</td>
+        <td class="website"><a href="http://gcc.gnu.org/">GCC</a></td>
     </tr>
     <tr>
-        <td id="ftgl-package">ftgl</td>
-        <td id="ftgl-version">2.1.3~rc5</td>
-        <td id="ftgl-website"><a href="http://sourceforge.net/projects/ftgl/">ftgl</a></td>
+        <td class="package">gcc-gmp</td>
+        <td class="website"><a href="http://www.gmplib.org/">GMP for GCC</a></td>
     </tr>
     <tr>
-        <td id="gc-package">gc</td>
-        <td id="gc-version">7.2d</td>
-        <td id="gc-website"><a href="http://www.hpl.hp.com/personal/Hans_Boehm/gc/">gc</a></td>
+        <td class="package">gcc-mpc</td>
+        <td class="website"><a href="http://www.multiprecision.org/">MPC for GCC</a></td>
     </tr>
     <tr>
-        <td id="gcc-package">gcc</td>
-        <td id="gcc-version">4.8.1</td> <!-- libgomp uses the same source, set it to the same version! -->
-        <td id="gcc-website"><a href="http://gcc.gnu.org/">GCC</a></td>
+        <td class="package">gcc-mpfr</td>
+        <td class="website"><a href="http://www.mpfr.org/">MPFR for GCC</a></td>
     </tr>
     <tr>
-        <td id="gcc-gmp-package">gcc-gmp</td>
-        <td id="gcc-gmp-version">5.1.2</td>
-        <td id="gcc-gmp-website"><a href="http://www.gmplib.org/">GMP for GCC</a></td>
+        <td class="package">gd</td>
+        <td class="website"><a href="http://www.libgd.org/">GD  (without support for xpm)</a></td>
     </tr>
     <tr>
-        <td id="gcc-mpc-package">gcc-mpc</td>
-        <td id="gcc-mpc-version">1.0.1</td>
-        <td id="gcc-mpc-website"><a href="http://www.multiprecision.org/">MPC for GCC</a></td>
+        <td class="package">gdal</td>
+        <td class="website"><a href="http://www.gdal.org/">GDAL</a></td>
     </tr>
     <tr>
-        <td id="gcc-mpfr-package">gcc-mpfr</td>
-        <td id="gcc-mpfr-version">3.1.2</td>
-        <td id="gcc-mpfr-website"><a href="http://www.mpfr.org/">MPFR for GCC</a></td>
+        <td class="package">gdb</td>
+        <td class="website"><a href="http://www.gnu.org/software/gdb/">gdb</a></td>
     </tr>
     <tr>
-        <td id="gd-package">gd</td>
-        <td id="gd-version">2.0.35</td>
-        <td id="gd-website"><a href="http://www.libgd.org/">GD  (without support for xpm)</a></td>
+        <td class="package">gdk-pixbuf</td>
+        <td class="website"><a href="http://www.gdk-pixbuf.org/">GDK-pixbuf</a></td>
     </tr>
     <tr>
-        <td id="gdal-package">gdal</td>
-        <td id="gdal-version">1.10.0</td>
-        <td id="gdal-website"><a href="http://www.gdal.org/">GDAL</a></td>
+        <td class="package">geos</td>
+        <td class="website"><a href="http://trac.osgeo.org/geos/">GEOS</a></td>
     </tr>
     <tr>
-        <td id="gdb-package">gdb</td>
-        <td id="gdb-version">7.6</td>
-        <td id="gdb-website"><a href="http://www.gnu.org/software/gdb/">gdb</a></td>
+        <td class="package">gettext</td>
+        <td class="website"><a href="http://www.gnu.org/software/gettext/">gettext</a></td>
     </tr>
     <tr>
-        <td id="gdk-pixbuf-package">gdk-pixbuf</td>
-        <td id="gdk-pixbuf-version">2.28.1</td>
-        <td id="gdk-pixbuf-website"><a href="http://www.gdk-pixbuf.org/">GDK-pixbuf</a></td>
+        <td class="package">giflib</td>
+        <td class="website"><a href="http://sourceforge.net/projects/libungif/">giflib</a></td>
     </tr>
     <tr>
-        <td id="geos-package">geos</td>
-        <td id="geos-version">3.3.8</td>
-        <td id="geos-website"><a href="http://trac.osgeo.org/geos/">GEOS</a></td>
+        <td class="package">glew</td>
+        <td class="website"><a href="http://glew.sourceforge.net/">GLEW</a></td>
     </tr>
     <tr>
-        <td id="gettext-package">gettext</td>
-        <td id="gettext-version">0.18.2</td>
-        <td id="gettext-website"><a href="http://www.gnu.org/software/gettext/">gettext</a></td>
+        <td class="package">glib</td>
+        <td class="website"><a href="http://www.gtk.org/">GLib</a></td>
     </tr>
     <tr>
-        <td id="giflib-package">giflib</td>
-        <td id="giflib-version">5.0.4</td>
-        <td id="giflib-website"><a href="http://sourceforge.net/projects/libungif/">giflib</a></td>
+        <td class="package">glibmm</td>
+        <td class="website"><a href="http://www.gtkmm.org/">GLibmm</a></td>
     </tr>
     <tr>
-        <td id="glew-package">glew</td>
-        <td id="glew-version">1.9.0</td>
-        <td id="glew-website"><a href="http://glew.sourceforge.net/">GLEW</a></td>
+        <td class="package">gmp</td>
+        <td class="website"><a href="http://www.gmplib.org/">GMP</a></td>
     </tr>
     <tr>
-        <td id="glib-package">glib</td>
-        <td id="glib-version">2.34.3</td>
-        <td id="glib-website"><a href="http://www.gtk.org/">GLib</a></td>
+        <td class="package">gnutls</td>
+        <td class="website"><a href="http://www.gnu.org/software/gnutls/">GnuTLS</a></td>
     </tr>
     <tr>
-        <td id="glibmm-package">glibmm</td>
-        <td id="glibmm-version">2.32.1</td>
-        <td id="glibmm-website"><a href="http://www.gtkmm.org/">GLibmm</a></td>
+        <td class="package">graphicsmagick</td>
+        <td class="website"><a href="http://www.graphicsmagick.org/">GraphicsMagick</a></td>
     </tr>
     <tr>
-        <td id="glpk-package">glpk</td>
-        <td id="glpk-version">4.47</td>
-        <td id="glpk-website"><a href="http://www.gnu.org/software/glpk/">GLPK</a></td>
+        <td class="package">gsl</td>
+        <td class="website"><a href="http://www.gnu.org/software/gsl/">GSL</a></td>
     </tr>
     <tr>
-        <td id="gmp-package">gmp</td>
-        <td id="gmp-version">5.1.2</td> <!-- gcc-gmp uses the same source, set it to the same version! -->
-        <td id="gmp-website"><a href="http://www.gmplib.org/">GMP</a></td>
+        <td class="package">gsoap</td>
+        <td class="website"><a href="http://gsoap2.sourceforge.net/">gSOAP</a></td>
     </tr>
     <tr>
-        <td id="gnuplot-package">gnuplot</td>
-        <td id="gnuplot-version">4.6.1</td>
-        <td id="gnuplot-website"><a href="http://www.gnuplot.info/">gnuplot</a></td>
+        <td class="package">gst-plugins-base</td>
+        <td class="website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-base</a></td>
     </tr>
     <tr>
-        <td id="gnutls-package">gnutls</td>
-        <td id="gnutls-version">3.2.1</td>
-        <td id="gnutls-website"><a href="http://www.gnu.org/software/gnutls/">GnuTLS</a></td>
+        <td class="package">gst-plugins-good</td>
+        <td class="website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-good</a></td>
     </tr>
     <tr>
-        <td id="graphicsmagick-package">graphicsmagick</td>
-        <td id="graphicsmagick-version">1.3.18</td>
-        <td id="graphicsmagick-website"><a href="http://www.graphicsmagick.org/">GraphicsMagick</a></td>
+        <td class="package">gstreamer</td>
+        <td class="website"><a href="http://gstreamer.freedesktop.org/">gstreamer</a></td>
     </tr>
     <tr>
-        <td id="gsl-package">gsl</td>
-        <td id="gsl-version">1.15</td>
-        <td id="gsl-website"><a href="http://www.gnu.org/software/gsl/">GSL</a></td>
+        <td class="package">gta</td>
+        <td class="website"><a href="http://gta.nongnu.org/">gta</a></td>
     </tr>
     <tr>
-        <td id="gsoap-package">gsoap</td>
-        <td id="gsoap-version">2.8.15</td>
-        <td id="gsoap-website"><a href="http://gsoap2.sourceforge.net/">gSOAP</a></td>
+        <td class="package">gtk2</td>
+        <td class="website"><a href="http://www.gtk.org/">GTK+</a></td>
     </tr>
     <tr>
-        <td id="gst-plugins-base-package">gst-plugins-base</td>
-        <td id="gst-plugins-base-version">1.0.7</td>
-        <td id="gst-plugins-base-website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-base</a></td>
+        <td class="package">gtkglarea</td>
+        <td class="website"><a href="http://www.mono-project.com/GtkGLArea/">GtkGLArea</a></td>
     </tr>
     <tr>
-        <td id="gst-plugins-good-package">gst-plugins-good</td>
-        <td id="gst-plugins-good-version">1.0.7</td>
-        <td id="gst-plugins-good-website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-good</a></td>
+        <td class="package">gtkglext</td>
+        <td class="website"><a href="http://gtkglext.sourceforge.net/">GtkGLExt</a></td>
     </tr>
     <tr>
-        <td id="gstreamer-package">gstreamer</td>
-        <td id="gstreamer-version">1.0.7</td>
-        <td id="gstreamer-website"><a href="http://gstreamer.freedesktop.org/">gstreamer</a></td>
+        <td class="package">gtkglextmm</td>
+        <td class="website"><a href="http://gtkglext.sourceforge.net/">GtkGLExtmm</a></td>
     </tr>
     <tr>
-        <td id="gta-package">gta</td>
-        <td id="gta-version">1.0.4</td>
-        <td id="gta-website"><a href="http://gta.nongnu.org/">gta</a></td>
+        <td class="package">gtkimageview</td>
+        <td class="website"><a href="http://trac.bjourne.webfactional.com/">GtkImageView</a></td>
     </tr>
     <tr>
-        <td id="gtk2-package">gtk2</td>
-        <td id="gtk2-version">2.24.18</td>
-        <td id="gtk2-website"><a href="http://www.gtk.org/">GTK+</a></td>
+        <td class="package">gtkmm2</td>
+        <td class="website"><a href="http://www.gtkmm.org/">GTKMM</a></td>
     </tr>
     <tr>
-        <td id="gtkglarea-package">gtkGLArea</td>
-        <td id="gtkglarea-version">2.0.1</td>
-        <td id="gtkglarea-website"><a href="http://www.mono-project.com/GtkGLArea/">GtkGLArea</a></td>
+        <td class="package">gtksourceview</td>
+        <td class="website"><a href="http://projects.gnome.org/gtksourceview/">GTKSourceView</a></td>
     </tr>
     <tr>
-        <td id="gtkglext-package">gtkglext</td>
-        <td id="gtkglext-version">1.2.0</td>
-        <td id="gtkglext-website"><a href="http://gtkglext.sourceforge.net/">GtkGLExt</a></td>
+        <td class="package">gtksourceviewmm2</td>
+        <td class="website"><a href="http://projects.gnome.org/gtksourceviewmm/">GtkSourceViewmm</a></td>
     </tr>
     <tr>
-        <td id="gtkglextmm-package">gtkglextmm</td>
-        <td id="gtkglextmm-version">1.2.0</td>
-        <td id="gtkglextmm-website"><a href="http://gtkglext.sourceforge.net/">GtkGLExtmm</a></td>
+        <td class="package">guile</td>
+        <td class="website"><a href="http://www.gnu.org/software/guile/">GNU Guile</a></td>
     </tr>
     <tr>
-        <td id="gtkimageview-package">gtkimageview</td>
-        <td id="gtkimageview-version">1.6.4</td>
-        <td id="gtkimageview-website"><a href="http://trac.bjourne.webfactional.com/">GtkImageView</a></td>
+        <td class="package">harfbuzz</td>
+        <td class="website"><a href="http://harfbuzz.sourceforge.net/">HarfBuzz</a></td>
     </tr>
     <tr>
-        <td id="gtkmm2-package">gtkmm2</td>
-        <td id="gtkmm2-version">2.24.2</td>
-        <td id="gtkmm2-website"><a href="http://www.gtkmm.org/">GTKMM</a></td>
+        <td class="package">hdf4</td>
+        <td class="website"><a href="http://www.hdfgroup.org/products/hdf4/">HDF4</a></td>
     </tr>
     <tr>
-        <td id="gtksourceview-package">gtksourceview</td>
-        <td id="gtksourceview-version">2.10.5</td>
-        <td id="gtksourceview-website"><a href="http://projects.gnome.org/gtksourceview/">GTKSourceView</a></td>
+        <td class="package">hdf5</td>
+        <td class="website"><a href="http://www.hdfgroup.org/products/hdf5/">HDF5</a></td>
     </tr>
     <tr>
-        <td id="gtksourceviewmm2-package">gtksourceviewmm2</td>
-        <td id="gtksourceviewmm2-version">2.10.3</td>
-        <td id="gtksourceviewmm2-website"><a href="http://projects.gnome.org/gtksourceviewmm/">GtkSourceViewmm</a></td>
+        <td class="package">hunspell</td>
+        <td class="website"><a href="http://hunspell.sourceforge.net/">Hunspell</a></td>
     </tr>
     <tr>
-        <td id="guile-package">guile</td>
-        <td id="guile-version">1.8.7</td>
-        <td id="guile-website"><a href="http://www.gnu.org/software/guile/">GNU Guile</a></td>
+        <td class="package">icu4c</td>
+        <td class="website"><a href="http://site.icu-project.org/">ICU4C</a></td>
     </tr>
     <tr>
-        <td id="harfbuzz-package">harfbuzz</td>
-        <td id="harfbuzz-version">0.9.17</td>
-        <td id="harfbuzz-website"><a href="http://harfbuzz.sourceforge.net/">HarfBuzz</a></td>
+        <td class="package">id3lib</td>
+        <td class="website"><a href="http://id3lib.sourceforge.net/">id3lib</a></td>
     </tr>
     <tr>
-        <td id="hdf4-package">hdf4</td>
-        <td id="hdf4-version">4.2.9</td>
-        <td id="hdf4-website"><a href="http://www.hdfgroup.org/products/hdf4/">HDF4</a></td>
+        <td class="package">ilmbase</td>
+        <td class="website"><a href="http://www.openexr.com/">IlmBase</a></td>
     </tr>
     <tr>
-        <td id="hdf5-package">hdf5</td>
-        <td id="hdf5-version">1.8.11</td>
-        <td id="hdf5-website"><a href="http://www.hdfgroup.org/products/hdf5/">HDF5</a></td>
+        <td class="package">imagemagick</td>
+        <td class="website"><a href="http://www.imagemagick.org/">ImageMagick</a></td>
     </tr>
     <tr>
-        <td id="hunspell-package">hunspell</td>
-        <td id="hunspell-version">1.3.2</td>
-        <td id="hunspell-website"><a href="http://hunspell.sourceforge.net/">Hunspell</a></td>
+        <td class="package">itk</td>
+        <td class="website"><a href="http://www.itk.org/">ITK</a></td>
     </tr>
     <tr>
-        <td id="icu4c-package">icu4c</td>
-        <td id="icu4c-version">51.1</td>
-        <td id="icu4c-website"><a href="http://site.icu-project.org/">ICU4C</a></td>
+        <td class="package">jasper</td>
+        <td class="website"><a href="http://www.ece.uvic.ca/~mdadams/jasper/">JasPer</a></td>
     </tr>
     <tr>
-        <td id="id3lib-package">id3lib</td>
-        <td id="id3lib-version">3.8.3</td>
-        <td id="id3lib-website"><a href="http://id3lib.sourceforge.net/">id3lib</a></td>
+        <td class="package">jpeg</td>
+        <td class="website"><a href="http://www.ijg.org/">jpeg</a></td>
     </tr>
     <tr>
-        <td id="ilmbase-package">ilmbase</td>
-        <td id="ilmbase-version">2.0.0</td>
-        <td id="ilmbase-website"><a href="http://www.openexr.com/">IlmBase</a></td>
+        <td class="package">json-c</td>
+        <td class="website"><a href="https://github.com/json-c/json-c/wiki">json-c</a></td>
     </tr>
     <tr>
-        <td id="imagemagick-package">imagemagick</td>
-        <td id="imagemagick-version">6.8.5-8</td>
-        <td id="imagemagick-website"><a href="http://www.imagemagick.org/">ImageMagick</a></td>
+        <td class="package">lame</td>
+        <td class="website"><a href="http://lame.sourceforge.net/">lame</a></td>
     </tr>
     <tr>
-        <td id="jasper-package">jasper</td>
-        <td id="jasper-version">1.900.1</td>
-        <td id="jasper-website"><a href="http://www.ece.uvic.ca/~mdadams/jasper/">JasPer</a></td>
+        <td class="package">lapack</td>
+        <td class="website"><a href="http://www.netlib.org/lapack/">lapack</a></td>
     </tr>
     <tr>
-        <td id="jpeg-package">jpeg</td>
-        <td id="jpeg-version">9</td>
-        <td id="jpeg-website"><a href="http://www.ijg.org/">jpeg</a></td>
+        <td class="package">lcms</td>
+        <td class="website"><a href="http://www.littlecms.com/">lcms</a></td>
     </tr>
     <tr>
-        <td id="json-c-package">json-c</td>
-        <td id="json-c-version">0.11</td>
-        <td id="json-c-website"><a href="https://github.com/json-c/json-c/wiki">json-c</a></td>
+        <td class="package">lcms1</td>
+        <td class="website"><a href="http://www.littlecms.com/">lcms1</a></td>
     </tr>
     <tr>
-        <td id="lame-package">lame</td>
-        <td id="lame-version">3.99</td>
-        <td id="lame-website"><a href="http://lame.sourceforge.net/">lame</a></td>
+        <td class="package">lensfun</td>
+        <td class="website"><a href="http://lensfun.berlios.de/">lensfun</a></td>
     </tr>
     <tr>
-        <td id="lapack-package">lapack</td>
-        <td id="lapack-version">3.4.2</td>
-        <td id="lapack-website"><a href="http://www.netlib.org/lapack/">lapack</a></td>
+        <td class="package">levmar</td>
+        <td class="website"><a href="http://www.ics.forth.gr/~lourakis/levmar">levmar</a></td>
     </tr>
     <tr>
-        <td id="lcms-package">lcms</td>
-        <td id="lcms-version">2.4</td>
-        <td id="lcms-website"><a href="http://www.littlecms.com/">lcms</a></td>
+        <td class="package">libarchive</td>
+        <td class="website"><a href="http://code.google.com/p/libarchive/">Libarchive</a></td>
     </tr>
     <tr>
-        <td id="lcms1-package">lcms1</td>
-        <td id="lcms1-version">1.19</td>
-        <td id="lcms1-website"><a href="http://www.littlecms.com/">lcms1</a></td>
+        <td class="package">libass</td>
+        <td class="website"><a href="http://code.google.com/p/libass/">libass</a></td>
     </tr>
     <tr>
-        <td id="lensfun-package">lensfun</td>
-        <td id="lensfun-version">0.2.7</td>
-        <td id="lensfun-website"><a href="http://lensfun.berlios.de/">lensfun</a></td>
+        <td class="package">libcroco</td>
+        <td class="website"><a href="http://www.freespiders.org/projects/libcroco/">Libcroco</a></td>
     </tr>
     <tr>
-        <td id="levmar-package">levmar</td>
-        <td id="levmar-version">2.6</td>
-        <td id="levmar-website"><a href="http://www.ics.forth.gr/~lourakis/levmar">levmar</a></td>
+        <td class="package">libdnet</td>
+        <td class="website"><a href="http://libdnet.sourceforge.net/">libdnet</a></td>
     </tr>
     <tr>
-        <td id="libarchive-package">libarchive</td>
-        <td id="libarchive-version">3.0.3</td>
-        <td id="libarchive-website"><a href="http://code.google.com/p/libarchive/">Libarchive</a></td>
+        <td class="package">libevent</td>
+        <td class="website"><a href="http://libevent.org/">libevent</a></td>
     </tr>
     <tr>
-        <td id="libass-package">libass</td>
-        <td id="libass-version">0.10.1</td>
-        <td id="libass-website"><a href="http://code.google.com/p/libass/">libass</a></td>
+        <td class="package">libf2c</td>
+        <td class="website"><a href="http://www.netlib.org/f2c/">libf2c</a></td>
     </tr>
     <tr>
-        <td id="libcroco-package">libcroco</td>
-        <td id="libcroco-version">0.6.2</td>
-        <td id="libcroco-website"><a href="http://www.freespiders.org/projects/libcroco/">Libcroco</a></td>
+        <td class="package">libffi</td>
+        <td class="website"><a href="http://sourceware.org/libffi/">libffi</a></td>
     </tr>
     <tr>
-        <td id="libdnet-package">libdnet</td>
-        <td id="libdnet-version">1.11</td>
-        <td id="libdnet-website"><a href="http://libdnet.sourceforge.net/">libdnet</a></td>
+        <td class="package">libftdi</td>
+        <td class="website"><a href="http://www.intra2net.com/en/developer/libftdi/index.php">LibFTDI</a></td>
     </tr>
     <tr>
-        <td id="libemf-package">libemf</td>
-        <td id="libemf-version">1.0.7</td>
-        <td id="libemf-website"><a href="http://libemf.sourceforge.net/">libemf</a></td>
+        <td class="package">libgcrypt</td>
+        <td class="website"><a href="ftp://ftp.gnupg.org/gcrypt/libgcrypt/">libgcrypt</a></td>
     </tr>
     <tr>
-        <td id="libevent-package">libevent</td>
-        <td id="libevent-version">2.0.21</td>
-        <td id="libevent-website"><a href="http://libevent.org/">libevent</a></td>
+        <td class="package">libgda</td>
+        <td class="website"><a href="http://www.gnome-db.org/">libgda</a></td>
     </tr>
     <tr>
-        <td id="libf2c-package">libf2c</td>
-        <td id="libf2c-version">1</td>
-        <td id="libf2c-website"><a href="http://www.netlib.org/f2c/">libf2c</a></td>
+        <td class="package">libgdamm</td>
+        <td class="website"><a href="https://launchpad.net/libgdamm">libgdamm</a></td>
     </tr>
     <tr>
-        <td id="libffi-package">libffi</td>
-        <td id="libffi-version">3.0.13</td>
-        <td id="libffi-website"><a href="http://sourceware.org/libffi/">libffi</a></td>
+        <td class="package">libgee</td>
+        <td class="website"><a href="http://live.gnome.org/Libgee">libgee</a></td>
     </tr>
     <tr>
-        <td id="libftdi-package">libftdi</td>
-        <td id="libftdi-version">0.20</td>
-        <td id="libftdi-website"><a href="http://www.intra2net.com/en/developer/libftdi/index.php">LibFTDI</a></td>
+        <td class="package">libgeotiff</td>
+        <td class="website"><a href="http://trac.osgeo.org/geotiff/">GeoTiff</a></td>
     </tr>
     <tr>
-        <td id="libgcrypt-package">libgcrypt</td>
-        <td id="libgcrypt-version">1.5.2</td>
-        <td id="libgcrypt-website"><a href="ftp://ftp.gnupg.org/gcrypt/libgcrypt/">libgcrypt</a></td>
+        <td class="package">libglade</td>
+        <td class="website"><a href="http://glade.gnome.org/">glade</a></td>
     </tr>
     <tr>
-        <td id="libgda-package">libgda</td>
-        <td id="libgda-version">4.2.13</td>
-        <td id="libgda-website"><a href="http://www.gnome-db.org/">libgda</a></td>
+        <td class="package">libgnurx</td>
+        <td class="website"><a href="http://sourceforge.net/projects/mingw/files/UserContributed/regex/">libgnurx</a></td>
     </tr>
     <tr>
-        <td id="libgdamm-package">libgdamm</td>
-        <td id="libgdamm-version">4.1.3</td>
-        <td id="libgdamm-website"><a href="https://launchpad.net/libgdamm">libgdamm</a></td>
+        <td class="package">libgomp</td>
+        <td class="website"><a href="http://gcc.gnu.org/projects/gomp/">GCC-libgomp</a></td>
     </tr>
     <tr>
-        <td id="libgee-package">libgee</td>
-        <td id="libgee-version">0.5.0</td>
-        <td id="libgee-website"><a href="http://live.gnome.org/Libgee">libgee</a></td>
+        <td class="package">libgpg_error</td>
+        <td class="website"><a href="ftp://ftp.gnupg.org/gcrypt/libgpg-error/">libgpg-error</a></td>
     </tr>
     <tr>
-        <td id="libgeotiff-package">libgeotiff</td>
-        <td id="libgeotiff-version">1.4.0</td>
-        <td id="libgeotiff-website"><a href="http://trac.osgeo.org/geotiff/">GeoTiff</a></td>
+        <td class="package">libgsasl</td>
+        <td class="website"><a href="http://www.gnu.org/software/gsasl/">Libgsasl</a></td>
     </tr>
     <tr>
-        <td id="libglade-package">libglade</td>
-        <td id="libglade-version">2.6.4</td>
-        <td id="libglade-website"><a href="http://glade.gnome.org/">glade</a></td>
+        <td class="package">libgsf</td>
+        <td class="website"><a href="http://projects.gnome.org/libgsf/">libgsf</a></td>
     </tr>
     <tr>
-        <td id="libgnurx-package">libgnurx</td>
-        <td id="libgnurx-version">2.5.1</td>
-        <td id="libgnurx-website"><a href="http://sourceforge.net/projects/mingw/files/UserContributed/regex/">libgnurx</a></td>
+        <td class="package">libharu</td>
+        <td class="website"><a href="http://libharu.org/">libharu</a></td>
     </tr>
     <tr>
-        <td id="libgomp-package">libgomp</td>
-        <td id="libgomp-version">4.8.1</td>
-        <td id="libgomp-website"><a href="http://gcc.gnu.org/projects/gomp/">GCC-libgomp</a></td>
+        <td class="package">libiberty</td>
+        <td class="website"><a href="http://gcc.gnu.org/onlinedocs/libiberty/">libiberty</a></td>
     </tr>
     <tr>
-        <td id="libgpg_error-package">libgpg_error</td>
-        <td id="libgpg_error-version">1.11</td>
-        <td id="libgpg_error-website"><a href="ftp://ftp.gnupg.org/gcrypt/libgpg-error/">libgpg-error</a></td>
+        <td class="package">libical</td>
+        <td class="website"><a href="http://freeassociation.sourceforge.net/">libical</a></td>
     </tr>
     <tr>
-        <td id="libgsasl-package">libgsasl</td>
-        <td id="libgsasl-version">1.8.0</td>
-        <td id="libgsasl-website"><a href="http://www.gnu.org/software/gsasl/">Libgsasl</a></td>
+        <td class="package">libiconv</td>
+        <td class="website"><a href="http://www.gnu.org/software/libiconv/">libiconv</a></td>
     </tr>
     <tr>
-        <td id="libgsf-package">libgsf</td>
-        <td id="libgsf-version">1.14.26</td>
-        <td id="libgsf-website"><a href="http://projects.gnome.org/libgsf/">libgsf</a></td>
+        <td class="package">libidn</td>
+        <td class="website"><a href="http://www.gnu.org/software/libidn/">Libidn</a></td>
     </tr>
     <tr>
-        <td id="libharu-package">libharu</td>
-        <td id="libharu-version">2.2.1</td>
-        <td id="libharu-website"><a href="http://libharu.org/">libharu</a></td>
+        <td class="package">libircclient</td>
+        <td class="website"><a href="http://sourceforge.net/projects/libircclient/">libircclient</a></td>
     </tr>
     <tr>
-        <td id="libiberty-package">libiberty</td>
-        <td id="libiberty-version">2.23.2</td>
-        <td id="libiberty-website"><a href="http://gcc.gnu.org/onlinedocs/libiberty/">libiberty</a></td>
+        <td class="package">liblo</td>
+        <td class="website"><a href="http://liblo.sourceforge.net/">liblo</a></td>
     </tr>
     <tr>
-        <td id="libical-package">libical</td>
-        <td id="libical-version">1.0</td>
-        <td id="libical-website"><a href="http://freeassociation.sourceforge.net/">libical</a></td>
+        <td class="package">liblqr-1</td>
+        <td class="website"><a href="http://liblqr.wikidot.com/">liblqr-1</a></td>
     </tr>
     <tr>
-        <td id="libiconv-package">libiconv</td>
-        <td id="libiconv-version">1.14</td>
-        <td id="libiconv-website"><a href="http://www.gnu.org/software/libiconv/">libiconv</a></td>
+        <td class="package">libmad</td>
+        <td class="website"><a href="http://www.underbit.com/products/mad/">libmad</a></td>
     </tr>
     <tr>
-        <td id="libidn-package">libidn</td>
-        <td id="libidn-version">1.27</td>
-        <td id="libidn-website"><a href="http://www.gnu.org/software/libidn/">Libidn</a></td>
+        <td class="package">libmikmod</td>
+        <td class="website"><a href="http://mikmod.raphnet.net/">libMikMod</a></td>
     </tr>
     <tr>
-        <td id="libircclient-package">libircclient</td>
-        <td id="libircclient-version">1.6</td>
-        <td id="libircclient-website"><a href="http://sourceforge.net/projects/libircclient/">libircclient</a></td>
+        <td class="package">libmng</td>
+        <td class="website"><a href="http://www.libmng.com/">libmng</a></td>
     </tr>
     <tr>
-        <td id="liblo-package">liblo</td>
-        <td id="liblo-version">0.27</td>
-        <td id="liblo-website"><a href="http://liblo.sourceforge.net/">liblo</a></td>
+        <td class="package">libmodplug</td>
+        <td class="website"><a href="http://modplug-xmms.sourceforge.net/">libmodplug</a></td>
     </tr>
     <tr>
-        <td id="liblqr-1-package">liblqr-1</td>
-        <td id="liblqr-1-version">0.4.2</td>
-        <td id="liblqr-1-website"><a href="http://liblqr.wikidot.com/">liblqr-1</a></td>
+        <td class="package">libntlm</td>
+        <td class="website"><a href="http://www.nongnu.org/libntlm/">Libntlm</a></td>
     </tr>
     <tr>
-        <td id="libmad-package">libmad</td>
-        <td id="libmad-version">0.15.1b</td>
-        <td id="libmad-website"><a href="http://www.underbit.com/products/mad/">libmad</a></td>
+        <td class="package">liboauth</td>
+        <td class="website"><a href="http://liboauth.sourceforge.net/">liboauth</a></td>
     </tr>
     <tr>
-        <td id="libmikmod-package">libmikmod</td>
-        <td id="libmikmod-version">3.2.0</td>
-        <td id="libmikmod-website"><a href="http://mikmod.raphnet.net/">libMikMod</a></td>
+        <td class="package">libodbc++</td>
+        <td class="website"><a href="http://libodbcxx.sourceforge.net/">libodbc++</a></td>
     </tr>
     <tr>
-        <td id="libmng-package">libmng</td>
-        <td id="libmng-version">1.0.10</td>
-        <td id="libmng-website"><a href="http://www.libmng.com/">libmng</a></td>
+        <td class="package">liboil</td>
+        <td class="website"><a href="http://liboil.freedesktop.org/">liboil</a></td>
     </tr>
     <tr>
-        <td id="libmodplug-package">libmodplug</td>
-        <td id="libmodplug-version">0.8.8.4</td>
-        <td id="libmodplug-website"><a href="http://modplug-xmms.sourceforge.net/">libmodplug</a></td>
+        <td class="package">libpano13</td>
+        <td class="website"><a href="http://panotools.sourceforge.net/">libpano13</a></td>
     </tr>
     <tr>
-        <td id="libntlm-package">libntlm</td>
-        <td id="libntlm-version">1.3</td>
-        <td id="libntlm-website"><a href="http://www.nongnu.org/libntlm/">Libntlm</a></td>
+        <td class="package">libpaper</td>
+        <td class="website"><a href="http://packages.debian.org/unstable/libpaper1">libpaper</a></td>
     </tr>
     <tr>
-        <td id="liboauth-package">liboauth</td>
-        <td id="liboauth-version">1.0.1</td>
-        <td id="liboauth-website"><a href="http://liboauth.sourceforge.net/">liboauth</a></td>
+        <td class="package">libpng</td>
+        <td class="website"><a href="http://www.libpng.org/">libpng</a></td>
     </tr>
     <tr>
-        <td id="libodbc++-package">libodbc++</td>
-        <td id="libodbc++-version">0.2.5</td>
-        <td id="libodbc++-website"><a href="http://libodbcxx.sourceforge.net/">libodbc++</a></td>
+        <td class="package">librsvg</td>
+        <td class="website"><a href="http://librsvg.sourceforge.net/">librsvg</a></td>
     </tr>
     <tr>
-        <td id="liboil-package">liboil</td>
-        <td id="liboil-version">0.3.17</td>
-        <td id="liboil-website"><a href="http://liboil.freedesktop.org/">liboil</a></td>
+        <td class="package">librtmp</td>
+        <td class="website"><a href="http://rtmpdump.mplayerhq.hu/">librtmp</a></td>
     </tr>
     <tr>
-        <td id="libpano13-package">libpano13</td>
-        <td id="libpano13-version">2.9.18_rc2</td>
-        <td id="libpano13-website"><a href="http://panotools.sourceforge.net/">libpano13</a></td>
+        <td class="package">libsamplerate</td>
+        <td class="website"><a href="http://www.mega-nerd.com/SRC/">libsamplerate</a></td>
     </tr>
     <tr>
-        <td id="libpaper-package">libpaper</td>
-        <td id="libpaper-version">1.1.24+nmu2</td>
-        <td id="libpaper-website"><a href="http://packages.debian.org/unstable/libpaper1">libpaper</a></td>
+        <td class="package">libshout</td>
+        <td class="website"><a href="http://www.icecast.org/">libshout</a></td>
     </tr>
     <tr>
-        <td id="libpng-package">libpng</td>
-        <td id="libpng-version">1.6.1</td>
-        <td id="libpng-website"><a href="http://www.libpng.org/">libpng</a></td>
+        <td class="package">libsigc++</td>
+        <td class="website"><a href="http://libsigc.sourceforge.net/">libsigc++</a></td>
     </tr>
     <tr>
-        <td id="librsvg-package">librsvg</td>
-        <td id="librsvg-version">2.37.0</td>
-        <td id="librsvg-website"><a href="http://librsvg.sourceforge.net/">librsvg</a></td>
+        <td class="package">libsndfile</td>
+        <td class="website"><a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a></td>
     </tr>
     <tr>
-        <td id="librtmp-package">librtmp</td>
-        <td id="librtmp-version">2.4</td>
-        <td id="librtmp-website"><a href="http://rtmpdump.mplayerhq.hu/">librtmp</a></td>
+        <td class="package">libssh2</td>
+        <td class="website"><a href="http://www.libssh2.org">libssh2</a></td>
     </tr>
     <tr>
-        <td id="libsamplerate-package">libsamplerate</td>
-        <td id="libsamplerate-version">0.1.8</td>
-        <td id="libsamplerate-website"><a href="http://www.mega-nerd.com/SRC/">libsamplerate</a></td>
+        <td class="package">libtool</td>
+        <td class="website"><a href="http://www.gnu.org/software/libtool/">GNU Libtool</a></td>
     </tr>
     <tr>
-        <td id="libshout-package">libshout</td>
-        <td id="libshout-version">2.3.1</td>
-        <td id="libshout-website"><a href="http://www.icecast.org/">libshout</a></td>
+        <td class="package">libunistring</td>
+        <td class="website"><a href="http://www.gnu.org/software/libunistring/">libunistring</a></td>
     </tr>
     <tr>
-        <td id="libsigc++-package">libsigc++</td>
-        <td id="libsigc++-version">2.3.1</td>
-        <td id="libsigc++-website"><a href="http://libsigc.sourceforge.net/">libsigc++</a></td>
+        <td class="package">libusb</td>
+        <td class="website"><a href="http://libusb-win32.sourceforge.net/">LibUsb</a></td>
     </tr>
     <tr>
-        <td id="libsndfile-package">libsndfile</td>
-        <td id="libsndfile-version">1.0.25</td>
-        <td id="libsndfile-website"><a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a></td>
+        <td class="package">libvpx</td>
+        <td class="website"><a href="http://code.google.com/p/webm/">vpx</a></td>
     </tr>
     <tr>
-        <td id="libssh2-package">libssh2</td>
-        <td id="libssh2-version">1.4.3</td>
-        <td id="libssh2-website"><a href="http://www.libssh2.org">libssh2</a></td>
+        <td class="package">libxml++</td>
+        <td class="website"><a href="http://libxmlplusplus.sourceforge.net/">libxml2</a></td>
     </tr>
     <tr>
-        <td id="libtool-package">libtool</td>
-        <td id="libtool-version">2.4.2</td>
-        <td id="libtool-website"><a href="http://www.gnu.org/software/libtool/">GNU Libtool</a></td>
+        <td class="package">libxml2</td>
+        <td class="website"><a href="http://www.xmlsoft.org/">libxml2</a></td>
     </tr>
     <tr>
-        <td id="libunistring-package">libunistring</td>
-        <td id="libunistring-version">0.9.3</td>
-        <td id="libunistring-website"><a href="http://www.gnu.org/software/libunistring/">libunistring</a></td>
+        <td class="package">libxslt</td>
+        <td class="website"><a href="http://xmlsoft.org/XSLT/">libxslt</a></td>
     </tr>
     <tr>
-        <td id="libusb-package">libusb</td>
-        <td id="libusb-version">1.2.6.0</td>
-        <td id="libusb-website"><a href="http://libusb-win32.sourceforge.net/">LibUsb</a></td>
+        <td class="package">libzip</td>
+        <td class="website"><a href="http://www.nih.at/libzip/">libzip</a></td>
     </tr>
     <tr>
-        <td id="libvpx-package">libvpx</td>
-        <td id="libvpx-version">1.1.0</td>
-        <td id="libvpx-website"><a href="http://code.google.com/p/webm/">vpx</a></td>
+        <td class="package">llvm</td>
+        <td class="website"><a href="http://llvm.org/">llvm</a></td>
     </tr>
     <tr>
-        <td id="libxml++-package">libxml++</td>
-        <td id="libxml++-version">2.36.0</td>
-        <td id="libxml++-website"><a href="http://libxmlplusplus.sourceforge.net/">libxml2</a></td>
+        <td class="package">log4cxx</td>
+        <td class="website"><a href="http://logging.apache.org/log4cxx/">log4cxx</a></td>
     </tr>
     <tr>
-        <td id="libxml2-package">libxml2</td>
-        <td id="libxml2-version">2.9.1</td>
-        <td id="libxml2-website"><a href="http://www.xmlsoft.org/">libxml2</a></td>
+        <td class="package">lua</td>
+        <td class="website"><a href="http://www.lua.org/">Lua</a></td>
     </tr>
     <tr>
-        <td id="libxslt-package">libxslt</td>
-        <td id="libxslt-version">1.1.28</td>
-        <td id="libxslt-website"><a href="http://xmlsoft.org/XSLT/">libxslt</a></td>
+        <td class="package">lzo</td>
+        <td class="website"><a href="http://www.oberhumer.com/opensource/lzo/">lzo</a></td>
     </tr>
     <tr>
-        <td id="libzip-package">libzip</td>
-        <td id="libzip-version">0.11.1</td>
-        <td id="libzip-website"><a href="http://www.nih.at/libzip/">libzip</a></td>
+        <td class="package">matio</td>
+        <td class="website"><a href="http://sourceforge.net/projects/matio/">matio</a></td>
     </tr>
     <tr>
-        <td id="llvm-package">llvm</td>
-        <td id="llvm-version">3.2</td>
-        <td id="llvm-website"><a href="http://llvm.org/">llvm</a></td>
+        <td class="package">mdbtools</td>
+        <td class="website"><a href="http://sourceforge.net/projects/mdbtools/">mdbtools</a></td>
     </tr>
     <tr>
-        <td id="log4cxx-package">log4cxx</td>
-        <td id="log4cxx-version">0.10.0</td>
-        <td id="log4cxx-website"><a href="http://logging.apache.org/log4cxx/">log4cxx</a></td>
+        <td class="package">mingw-utils</td>
+        <td class="website"><a href="http://www.mingw.org/">MinGW Utilities</a></td>
     </tr>
     <tr>
-        <td id="lua-package">lua</td>
-        <td id="lua-version">5.2.2</td>
-        <td id="lua-website"><a href="http://www.lua.org/">Lua</a></td>
+        <td class="package">mingw-w64</td>
+        <td class="website"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64 Runtime</a></td>
     </tr>
     <tr>
-        <td id="lzo-package">lzo</td>
-        <td id="lzo-version">2.06</td>
-        <td id="lzo-website"><a href="http://www.oberhumer.com/opensource/lzo/">lzo</a></td>
+        <td class="package">mingwrt</td>
+        <td class="website"><a href="http://www.mingw.org/">MinGW Runtime</a></td>
     </tr>
     <tr>
-        <td id="matio-package">matio</td>
-        <td id="matio-version">1.5.1</td>
-        <td id="matio-website"><a href="http://sourceforge.net/projects/matio/">matio</a></td>
+        <td class="package">mpfr</td>
+        <td class="website"><a href="http://www.mpfr.org/">mpfr</a></td>
     </tr>
     <tr>
-        <td id="matplotlib-package">matplotlib</td>
-        <td id="matplotlib-version">1.2.0</td>
-        <td id="matplotlib-website"><a href="http://matplotlib.org/">matplotlib</a></td>
+        <td class="package">muparser</td>
+        <td class="website"><a href="http://muparser.sourceforge.net/">muParser</a></td>
     </tr>
     <tr>
-        <td id="mdbtools-package">mdbtools</td>
-        <td id="mdbtools-version">0.7</td>
-        <td id="mdbtools-website"><a href="http://sourceforge.net/projects/mdbtools/">mdbtools</a></td>
+        <td class="package">mxml</td>
+        <td class="website"><a href="http://www.msweet.org/projects.php?Z3">Mini-XML</a></td>
     </tr>
     <tr>
-        <td id="libming-package">libming</td>
-        <td id="libming-version">0.4.4</td>
-        <td id="libming-website"><a href="http://www.libming.org/">Libming</a></td>
+        <td class="package">ncurses</td>
+        <td class="website"><a href="http://www.gnu.org/software/ncurses/">Ncurses</a></td>
     </tr>
     <tr>
-        <td id="mingw-utils-package">mingw-utils</td>
-        <td id="mingw-utils-version">0.4-1</td>
-        <td id="mingw-utils-website"><a href="http://www.mingw.org/">MinGW Utilities</a></td>
+        <td class="package">netcdf</td>
+        <td class="website"><a href="http://www.unidata.ucar.edu/software/netcdf/">NetCDF</a></td>
     </tr>
     <tr>
-        <td id="mingw-w64-package">mingw-w64</td>
-        <td id="mingw-w64-version">c28722c</td>
-        <td id="mingw-w64-website"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64 Runtime</a></td>
+        <td class="package">netpbm</td>
+        <td class="website"><a href="http://netpbm.sourceforge.net/">Netpbm</a></td>
     </tr>
     <tr>
-        <td id="mingwrt-package">mingwrt</td>
-        <td id="mingwrt-version">3.20-2</td>
-        <td id="mingwrt-website"><a href="http://www.mingw.org/">MinGW Runtime</a></td>
+        <td class="package">nettle</td>
+        <td class="website"><a href="http://www.lysator.liu.se/~nisse/nettle/">nettle</a></td>
     </tr>
     <tr>
-        <td id="minitube-package">minitube</td>
-        <td id="minitube-version">2.0</td>
-        <td id="minitube-website"><a href="http://flavio.tordini.org/">minitube</a></td>
+        <td class="package">nsis</td>
+        <td class="website"><a href="http://nsis.sourceforge.net/">NSIS</a></td>
     </tr>
     <tr>
-        <td id="mpfr-package">mpfr</td>
-        <td id="mpfr-version">3.1.2</td> <!-- gcc-mpfr uses the same source, set it to the same version! -->
-        <td id="mpfr-website"><a href="http://www.mpfr.org/">mpfr</a></td>
+        <td class="package">ocaml-cairo</td>
+        <td class="website"><a href="http://cairographics.org/cairo-ocaml/">cairo-ocaml</a></td>
     </tr>
     <tr>
-        <td id="muparser-package">muparser</td>
-        <td id="muparser-version">2.2.3</td>
-        <td id="muparser-website"><a href="http://muparser.sourceforge.net/">muParser</a></td>
+        <td class="package">ocaml-camlimages</td>
+        <td class="website"><a href="http://gallium.inria.fr/camlimages">camlimages</a></td>
     </tr>
     <tr>
-        <td id="mxml-package">mxml</td>
-        <td id="mxml-version">2.7</td>
-        <td id="mxml-website"><a href="http://www.msweet.org/projects.php?Z3">Mini-XML</a></td>
+        <td class="package">ocaml-core</td>
+        <td class="website"><a href="http://caml.inria.fr/">ocaml</a></td>
     </tr>
     <tr>
-        <td id="ncurses-package">ncurses</td>
-        <td id="ncurses-version">5.9</td>
-        <td id="ncurses-website"><a href="http://www.gnu.org/software/ncurses/">Ncurses</a></td>
+        <td class="package">ocaml-findlib</td>
+        <td class="website"><a href="http://download.camlcity.org/">findlib</a></td>
     </tr>
     <tr>
-        <td id="neuron-package">neuron</td>
-        <td id="neuron-version">7.3</td>
-        <td id="neuron-website"><a href="http://www.neuron.yale.edu/neuron/">Neuron</a></td>
+        <td class="package">ocaml-flexdll</td>
+        <td class="website"><a href="http://alain.frisch.fr/">flexdll</a></td>
     </tr>
     <tr>
-        <td id="netcdf-package">netcdf</td>
-        <td id="netcdf-version">4.3.0</td>
-        <td id="netcdf-website"><a href="http://www.unidata.ucar.edu/software/netcdf/">NetCDF</a></td>
+        <td class="package">ocaml-lablgl</td>
+        <td class="website"><a href="http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html">lablgl</a></td>
     </tr>
     <tr>
-        <td id="netpbm-package">netpbm</td>
-        <td id="netpbm-version">10.35.89</td>
-        <td id="netpbm-website"><a href="http://netpbm.sourceforge.net/">Netpbm</a></td>
+        <td class="package">ocaml-lablgtk2</td>
+        <td class="website"><a href="http://forge.ocamlcore.org/">lablgtk2</a></td>
     </tr>
     <tr>
-        <td id="nettle-package">nettle</td>
-        <td id="nettle-version">2.7</td>
-        <td id="nettle-website"><a href="http://www.lysator.liu.se/~nisse/nettle/">nettle</a></td>
+        <td class="package">ocaml-native</td>
+        <td class="website"><a href="http://caml.inria.fr/">ocaml</a></td>
     </tr>
     <tr>
-        <td id="nrniv-package">nrniv</td>
-        <td id="nrniv-version">7.3</td>
-        <td id="nrniv-website"><a href="http://www.neuron.yale.edu/neuron/">NeuronInterView</a></td>
+        <td class="package">ocaml-xml-light</td>
+        <td class="website"><a href="http://tech.motion-twin.com/xmllight.html">xml-light</a></td>
     </tr>
     <tr>
-        <td id="nsis-package">nsis</td>
-        <td id="nsis-version">2.46</td>
-        <td id="nsis-website"><a href="http://nsis.sourceforge.net/">NSIS</a></td>
+        <td class="package">ogg</td>
+        <td class="website"><a href="http://www.xiph.org/ogg/">OGG</a></td>
     </tr>
     <tr>
-        <td id="numpy-package">numpy</td>
-        <td id="numpy-version">1.6.2</td>
-        <td id="numpy-website"><a href="http://scipy.org/">numpy</a></td>
+        <td class="package">old</td>
+        <td class="website"><a href="http://blitiri.com.ar/p/old/">old</a></td>
     </tr>
     <tr>
-        <td id="ocaml-native-package">ocaml</td>
-        <td id="ocaml-native-version">4.00.1</td>
-        <td id="ocaml-native-website"><a href="http://caml.inria.fr/">ocaml</a></td>
+        <td class="package">openal</td>
+        <td class="website"><a href="http://kcat.strangesoft.net/openal.html">openal</a></td>
     </tr>
     <tr>
-        <td id="ocaml-cairo-package">cairo-ocaml</td>
-        <td id="ocaml-cairo-version">1.2.0</td>
-        <td id="ocaml-cairo-website"><a href="http://cairographics.org/cairo-ocaml/">cairo-ocaml</a></td>
+        <td class="package">opencore-amr</td>
+        <td class="website"><a href="http://opencore-amr.sourceforge.net/">opencore-amr</a></td>
     </tr>
     <tr>
-        <td id="ocaml-camlimages-package">camlimages</td>
-        <td id="ocaml-camlimages-version">4.0.1</td>
-        <td id="ocaml-camlimages-website"><a href="http://gallium.inria.fr/camlimages">camlimages</a></td>
+        <td class="package">opencsg</td>
+        <td class="website"><a href="http://www.opencsg.org/">opencsg</a></td>
     </tr>
     <tr>
-        <td id="ocaml-core-package">ocaml</td>
-        <td id="ocaml-core-version">4.00.1</td>
-        <td id="ocaml-core-website"><a href="http://caml.inria.fr/">ocaml</a></td>
+        <td class="package">opencv</td>
+        <td class="website"><a href="http://opencv.org/">OpenCV</a></td>
     </tr>
     <tr>
-        <td id="ocaml-findlib-package">ocaml-findlib</td>
-        <td id="ocaml-findlib-version">1.3.3</td>
-        <td id="ocaml-findlib-website"><a href="http://download.camlcity.org/">findlib</a></td>
+        <td class="package">openexr</td>
+        <td class="website"><a href="http://www.openexr.com/">OpenEXR</a></td>
     </tr>
     <tr>
-        <td id="ocaml-flexdll-package">ocaml-flexdll</td>
-        <td id="ocaml-flexdll-version">0.31</td>
-        <td id="ocaml-flexdll-website"><a href="http://alain.frisch.fr/">flexdll</a></td>
+        <td class="package">openscenegraph</td>
+        <td class="website"><a href="http://www.openscenegraph.org/">OpenSceneGraph</a></td>
     </tr>
     <tr>
-        <td id="ocaml-lablgl-package">ocaml-lablgl</td>
-        <td id="ocaml-lablgl-version">20120306</td>
-        <td id="ocaml-lablgl-website"><a href="http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html">lablgl</a></td>
+        <td class="package">openssl</td>
+        <td class="website"><a href="http://www.openssl.org/">openssl</a></td>
     </tr>
     <tr>
-        <td id="ocaml-lablgtk2-package">ocaml-lablgtk2</td>
-        <td id="ocaml-lablgtk2-version">2.16.0</td>
-        <td id="ocaml-lablgtk2-website"><a href="http://forge.ocamlcore.org/">lablgtk2</a></td>
+        <td class="package">opus</td>
+        <td class="website"><a href="http://opus-codec.org/">opus</a></td>
     </tr>
     <tr>
-        <td id="ocaml-xml-light-package">ocaml-xml-light</td>
-        <td id="ocaml-xml-light-version">2.2</td>
-        <td id="ocaml-xml-light-website"><a href="http://tech.motion-twin.com/xmllight.html">xml-light</a></td>
+        <td class="package">opusfile</td>
+        <td class="website"><a href="http://opus-codec.org/">opusfile</a></td>
     </tr>
     <tr>
-        <td id="octave-package">octave</td>
-        <td id="octave-version">3.6.4</td>
-        <td id="octave-website"><a href="https://www.gnu.org/software/octave/">Octave</a></td>
+        <td class="package">pango</td>
+        <td class="website"><a href="http://www.pango.org/">Pango</a></td>
     </tr>
     <tr>
-        <td id="ogg-package">ogg</td>
-        <td id="ogg-version">1.3.1</td>
-        <td id="ogg-website"><a href="http://www.xiph.org/ogg/">OGG</a></td>
+        <td class="package">pangomm</td>
+        <td class="website"><a href="http://www.pango.org/">Pangomm</a></td>
     </tr>
     <tr>
-        <td id="old-package">old</td>
-        <td id="old-version">0.17</td>
-        <td id="old-website"><a href="http://blitiri.com.ar/p/old/">old</a></td>
+        <td class="package">pcl</td>
+        <td class="website"><a href="http://www.pointclouds.org/">PCL (Point Cloud Library)</a></td>
     </tr>
     <tr>
-        <td id="openal-package">openal</td>
-        <td id="openal-version">1.15.1</td>
-        <td id="openal-website"><a href="http://kcat.strangesoft.net/openal.html">openal</a></td>
+        <td class="package">pcre</td>
+        <td class="website"><a href="http://www.pcre.org/">PCRE</a></td>
     </tr>
     <tr>
-        <td id="opencore-amr-package">opencore-amr</td>
-        <td id="opencore-amr-version">0.1.2</td>
-        <td id="opencore-amr-website"><a href="http://opencore-amr.sourceforge.net/">opencore-amr</a></td>
+        <td class="package">pdcurses</td>
+        <td class="website"><a href="http://pdcurses.sourceforge.net/">PDcurses</a></td>
     </tr>
     <tr>
-        <td id="opencsg-package">opencsg</td>
-        <td id="opencsg-version">1.3.2</td>
-        <td id="opencsg-website"><a href="http://www.opencsg.org/">opencsg</a></td>
+        <td class="package">pdflib_lite</td>
+        <td class="website"><a href="http://www.pdflib.com/download/free-software/pdflib-lite-7/">PDFlib Lite</a></td>
     </tr>
     <tr>
-        <td id="opencv-package">opencv</td>
-        <td id="opencv-version">2.4.4</td>
-        <td id="opencv-website"><a href="http://opencv.org/">OpenCV</a></td>
+        <td class="package">pfstools</td>
+        <td class="website"><a href="http://pfstools.sourceforge.net/">pfstools</a></td>
     </tr>
     <tr>
-        <td id="openexr-package">openexr</td>
-        <td id="openexr-version">2.0.0</td>
-        <td id="openexr-website"><a href="http://www.openexr.com/">OpenEXR</a></td>
+        <td class="package">physfs</td>
+        <td class="website"><a href="http://icculus.org/physfs/">physfs</a></td>
     </tr>
     <tr>
-        <td id="openscenegraph-package">openscenegraph</td>
-        <td id="openscenegraph-version">3.1.7</td>
-        <td id="openscenegraph-website"><a href="http://www.openscenegraph.org/">OpenSceneGraph</a></td>
+        <td class="package">picomodel</td>
+        <td class="website"><a href="http://code.google.com/p/picomodel/">picomodel</a></td>
     </tr>
     <tr>
-        <td id="openssl-package">openssl</td>
-        <td id="openssl-version">1.0.1e</td>
-        <td id="openssl-website"><a href="http://www.openssl.org/">openssl</a></td>
+        <td class="package">pixman</td>
+        <td class="website"><a href="http://cairographics.org/">pixman</a></td>
     </tr>
     <tr>
-        <td id="opus-package">opus</td>
-        <td id="opus-version">1.0.2</td>
-        <td id="opus-website"><a href="http://opus-codec.org/">opus</a></td>
+        <td class="package">plib</td>
+        <td class="website"><a href="http://plib.sourceforge.net/">Plib</a></td>
     </tr>
     <tr>
-        <td id="opusfile-package">opusfile</td>
-        <td id="opusfile-version">0.2</td>
-        <td id="opusfile-website"><a href="http://opus-codec.org/">opusfile</a></td>
+        <td class="package">plibc</td>
+        <td class="website"><a href="http://plibc.sourceforge.net/">Plibc</a></td>
     </tr>
     <tr>
-        <td id="pango-package">pango</td>
-        <td id="pango-version">1.34.1</td>
-        <td id="pango-website"><a href="http://www.pango.org/">Pango</a></td>
+        <td class="package">plotmm</td>
+        <td class="website"><a href="http://plotmm.sourceforge.net/">PlotMM</a></td>
     </tr>
     <tr>
-        <td id="pangomm-package">pangomm</td>
-        <td id="pangomm-version">2.28.4</td>
-        <td id="pangomm-website"><a href="http://www.pango.org/">Pangomm</a></td>
+        <td class="package">plotutils</td>
+        <td class="website"><a href="http://www.gnu.org/software/plotutils/">plotutils</a></td>
     </tr>
     <tr>
-        <td id="pcl-package">pcl</td>
-        <td id="pcl-version">1.6.0</td>
-        <td id="pcl-website"><a href="http://www.pointclouds.org/">PCL (Point Cloud Library)</a></td>
+        <td class="package">poco</td>
+        <td class="website"><a href="http://pocoproject.org/">POCO C++ Libraries</a></td>
     </tr>
     <tr>
-        <td id="pcre-package">pcre</td>
-        <td id="pcre-version">8.33</td>
-        <td id="pcre-website"><a href="http://www.pcre.org/">PCRE</a></td>
+        <td class="package">poppler</td>
+        <td class="website"><a href="http://poppler.freedesktop.org/">poppler</a></td>
     </tr>
     <tr>
-        <td id="pdcurses-package">pdcurses</td>
-        <td id="pdcurses-version">3.4</td>
-        <td id="pdcurses-website"><a href="http://pdcurses.sourceforge.net/">PDcurses</a></td>
+        <td class="package">popt</td>
+        <td class="website"><a href="http://freshmeat.net/projects/popt/">popt</a></td>
     </tr>
-     <tr>
-        <td id="plib-package">plib</td>
-        <td id="plib-version">1.8.5-rc1</td>
-        <td id="plib-website"><a href="http://plib.sourceforge.net/">Plib</a></td>
-    </tr>
-
-    <tr>
-        <td id="plibc-package">plibc</td>
-        <td id="plibc-version">0.1.7</td>
-        <td id="plibc-website"><a href="http://plibc.sourceforge.net/">Plibc</a></td>
-    </tr>
-    <tr>
-        <td id="pdflib_lite-package">pdflib_lite</td>
-        <td id="pdflib_lite-version">7.0.5p3</td>
-        <td id="pdflib_lite-website"><a href="http://www.pdflib.com/download/free-software/pdflib-lite-7/">PDFlib Lite</a></td>
-    </tr>
-    <tr>
-        <td id="pfstools-package">pfstools</td>
-        <td id="pfstools-version">1.8.5</td>
-        <td id="pfstools-website"><a href="http://pfstools.sourceforge.net/">pfstools</a></td>
-    </tr>
-    <tr>
-        <td id="physfs-package">physfs</td>
-        <td id="physfs-version">2.0.3</td>
-        <td id="physfs-website"><a href="http://icculus.org/physfs/">physfs</a></td>
-    </tr>
-    <tr>
-        <td id="picomodel-package">picomodel</td>
-        <td id="picomodel-version">1142ad8</td>
-        <td id="picomodel-website"><a href="http://code.google.com/p/picomodel/">picomodel</a></td>
-    </tr>
-    <tr>
-        <td id="pixman-package">pixman</td>
-        <td id="pixman-version">0.29.4</td>
-        <td id="pixman-website"><a href="http://cairographics.org/">pixman</a></td>
-    </tr>
-    <tr>
-        <td id="plotmm-package">plotmm</td>
-        <td id="plotmm-version">0.1.2</td>
-        <td id="plotmm-website"><a href="http://plotmm.sourceforge.net/">PlotMM</a></td>
-    </tr>
-    <tr>
-        <td id="plotutils-package">plotutils</td>
-        <td id="plotutils-version">2.6</td>
-        <td id="plotutils-website"><a href="http://www.gnu.org/software/plotutils/">plotutils</a></td>
-    </tr>
-    <tr>
-        <td id="poco-package">poco</td>
-        <td id="poco-version">1.4.6p1</td>
-        <td id="poco-website"><a href="http://pocoproject.org/">POCO C++ Libraries</a></td>
-    </tr>
-    <tr>
-        <td id="poppler-package">poppler</td>
-        <td id="poppler-version">0.22.4</td>
-        <td id="poppler-website"><a href="http://poppler.freedesktop.org/">poppler</a></td>
-    </tr>
-    <tr>
-        <td id="popt-package">popt</td>
-        <td id="popt-version">1.16</td>
-        <td id="popt-website"><a href="http://freshmeat.net/projects/popt/">popt</a></td>
-    </tr>
-    <tr>
-        <td id="portablexdr-package">portablexdr</td>
-        <td id="portablexdr-version">4.9.1</td>
-        <td id="portablexdr-website"><a href="http://people.redhat.com/~rjones/portablexdr/">PortableXDR</a></td>
-    </tr>
-    <tr>
-        <td id="portaudio-package">portaudio</td>
-        <td id="portaudio-version">19_20111121</td>
-        <td id="portaudio-website"><a href="http://www.portaudio.com/">portaudio</a></td>
-    </tr>
-    <tr>
-        <td id="portmidi-package">portmidi</td>
-        <td id="portmidi-version">217</td>
-        <td id="portmidi-website"><a href="http://portmedia.sourceforge.net/portmidi/">portmidi</a></td>
-    </tr>
-    <tr>
-        <td id="postgresql-package">postgresql</td>
-        <td id="postgresql-version">9.2.4</td>
-        <td id="postgresql-website"><a href="http://www.postgresql.org/">PostgreSQL</a></td>
-    </tr>
-    <tr>
-        <td id="proj-package">proj</td>
-        <td id="proj-version">4.8.0</td>
-        <td id="proj-website"><a href="http://trac.osgeo.org/proj/">proj</a></td>
-    </tr>
-    <tr>
-        <td id="protobuf-package">protobuf</td>
-        <td id="protobuf-version">2.5.0</td>
-        <td id="protobuf-website"><a href="http://code.google.com/p/protobuf/">protobuf</a></td>
-    </tr>
-    <tr>
-        <td id="pstoedit-package">pstoedit</td>
-        <td id="pstoedit-version">3.61</td>
-        <td id="pstoedit-website"><a href="http://www.pstoedit.net">pstoedit</a></td>
-    </tr>
-    <tr>
-        <td id="pthreads-package">pthreads</td>
-        <td id="pthreads-version">POSIX 1003.1-2001</td>
-        <td id="pthreads-website"><a href="http://en.wikipedia.org/wiki/POSIX_Threads">POSIX Threads</a></td>
-    </tr>
     <tr>
-        <td id="pthreads-w32-package">pthreads-w32</td>
-        <td id="pthreads-w32-version">2-9-1</td>
-        <td id="pthreads-w32-website"><a href="http://sourceware.org/pthreads-win32/">Pthreads-w32</a></td>
+        <td class="package">portablexdr</td>
+        <td class="website"><a href="http://people.redhat.com/~rjones/portablexdr/">PortableXDR</a></td>
     </tr>
     <tr>
-        <td id="python-package">python</td>
-        <td id="python-version">3.3.0</td>
-        <td id="python-website"><a href="http://python.org/">Python</a></td>
+        <td class="package">portaudio</td>
+        <td class="website"><a href="http://www.portaudio.com/">portaudio</a></td>
     </tr>
     <tr>
-        <td id="qdbm-package">qdbm</td>
-        <td id="qdbm-version">1.8.78</td>
-        <td id="qdbm-website"><a href="http://fallabs.com/qdbm/">QDBM</a></td>
+        <td class="package">portmidi</td>
+        <td class="website"><a href="http://portmedia.sourceforge.net/portmidi/">portmidi</a></td>
     </tr>
     <tr>
-        <td id="qhull-package">qhull</td>
-        <td id="qhull-version">2009.1</td>
-        <td id="qhull-website"><a href="http://www.qhull.org/">Qhull</a></td>
+        <td class="package">postgresql</td>
+        <td class="website"><a href="http://www.postgresql.org/">PostgreSQL</a></td>
     </tr>
     <tr>
-        <td id="qjson-package">qjson</td>
-        <td id="qjson-version">0.8.1</td>
-        <td id="qjson-website"><a href="http://qjson.sourceforge.net/">QJson</a></td>
+        <td class="package">proj</td>
+        <td class="website"><a href="http://trac.osgeo.org/proj/">proj</a></td>
     </tr>
     <tr>
-        <td id="qrupdate-package">qrupdate</td>
-        <td id="qrupdate-version">1.1.2</td>
-        <td id="qrupdate-website"><a href="http://sourceforge.net/projects/qrupdate/">qrupdate</a></td>
+        <td class="package">protobuf</td>
+        <td class="website"><a href="http://code.google.com/p/protobuf/">protobuf</a></td>
     </tr>
     <tr>
-        <td id="qscintilla-package">qscintilla</td>
-        <td id="qscintilla-version">2.7</td>
-        <td id="qscintilla-website"><a href="http://www.riverbankcomputing.com/software/qscintilla/intro">QScintilla</a></td>
+        <td class="package">pthreads</td>
+        <td class="website"><a href="http://en.wikipedia.org/wiki/POSIX_Threads">POSIX Threads</a></td>
     </tr>
     <tr>
-        <td id="qt-package">qt</td>
-        <td id="qt-version">4.8.5</td>
-        <td id="qt-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">pthreads-w32</td>
+        <td class="website"><a href="http://sourceware.org/pthreads-win32/">Pthreads-w32</a></td>
     </tr>
     <tr>
-        <td id="qt5-package">qt5</td>
-        <td id="qt5-version">5.1.0-rc1</td>
-        <td id="qt5-website"><a href="http://qt-project.org/">Qt5</a></td>
+        <td class="package">qdbm</td>
+        <td class="website"><a href="http://fallabs.com/qdbm/">QDBM</a></td>
     </tr>
     <tr>
-        <td id="qtactiveqt-package">qtactiveqt</td>
-        <td id="qtactiveqt-version">5.1.0-rc1</td>
-        <td id="qtactiveqt-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qjson</td>
+        <td class="website"><a href="http://qjson.sourceforge.net/">QJson</a></td>
     </tr>
     <tr>
-        <td id="qtbase-package">qtbase</td>
-        <td id="qtbase-version">5.1.0-rc1</td>
-        <td id="qtbase-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qt</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtdeclarative-package">qtdeclarative</td>
-        <td id="qtdeclarative-version">5.1.0-rc1</td>
-        <td id="qtdeclarative-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qt5</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtgraphicaleffects-package">qtgraphicaleffects</td>
-        <td id="qtgraphicaleffects-version">5.1.0-rc1</td>
-        <td id="qtgraphicaleffects-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtactiveqt</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtimageformats-package">qtimageformats</td>
-        <td id="qtimageformats-version">5.1.0-rc1</td>
-        <td id="qtimageformats-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtbase</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtjsbackend-package">qtjsbackend</td>
-        <td id="qtjsbackend-version">5.1.0-rc1</td>
-        <td id="qtjsbackend-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtdeclarative</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtmultimedia-package">qtmultimedia</td>
-        <td id="qtmultimedia-version">5.1.0-rc1</td>
-        <td id="qtmultimedia-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtgraphicaleffects</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtquick1-package">qtquick1</td>
-        <td id="qtquick1-version">5.1.0-rc1</td>
-        <td id="qtquick1-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtimageformats</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtquickcontrols-package">qtquickcontrols</td>
-        <td id="qtquickcontrols-version">5.1.0-rc1</td>
-        <td id="qtquickcontrols-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtjsbackend</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtscript-package">qtscript</td>
-        <td id="qtscript-version">5.1.0-rc1</td>
-        <td id="qtscript-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtmultimedia</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtsensors-package">qtsensors</td>
-        <td id="qtsensors-version">5.1.0-rc1</td>
-        <td id="qtsensors-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtquick1</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtserialport-package">qtserialport</td>
-        <td id="qtserialport-version">5.1.0-rc1</td>
-        <td id="qtserialport-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtquickcontrols</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtsvg-package">qtsvg</td>
-        <td id="qtsvg-version">5.1.0-rc1</td>
-        <td id="qtsvg-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtscript</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qttools-package">qttools</td>
-        <td id="qttools-version">5.1.0-rc1</td>
-        <td id="qttools-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtsensors</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qttranslations-package">qttranslations</td>
-        <td id="qttranslations-version">5.1.0-rc1</td>
-        <td id="qttranslations-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtserialport</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qtxmlpatterns-package">qtxmlpatterns</td>
-        <td id="qtxmlpatterns-version">5.1.0-rc1</td>
-        <td id="qtxmlpatterns-website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtsvg</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qwt-package">qwt</td>
-        <td id="qwt-version">6.1.0</td>
-        <td id="qwt-website"><a href="http://qwt.sourceforge.net/">Qwt</a></td>
+        <td class="package">qttools</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="qwtplot3d-package">qwtplot3d</td>
-        <td id="qwtplot3d-version">0.2.7</td>
-        <td id="qwtplot3d-website"><a href="http://qwtplot3d.sourceforge.net/">QwtPlot3D</a></td>
+        <td class="package">qttranslations</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="readline-package">readline</td>
-        <td id="readline-version">6.2</td>
-        <td id="readline-website"><a href="http://tiswww.case.edu/php/chet/readline/rltop.html">Readline</a></td>
+        <td class="package">qtxmlpatterns</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td id="sdl-package">sdl</td>
-        <td id="sdl-version">1.2.15</td>
-        <td id="sdl-website"><a href="http://www.libsdl.org/">SDL</a></td>
+        <td class="package">qwt</td>
+        <td class="website"><a href="http://qwt.sourceforge.net/">Qwt</a></td>
     </tr>
     <tr>
-        <td id="sdl_gfx-package">sdl_gfx</td>
-        <td id="sdl_gfx-version">2.0.24</td>
-        <td id="sdl_gfx-website"><a href="http://www.ferzkopp.net/joomla/content/view/19/14/">SDL_gfx</a></td>
+        <td class="package">qwtplot3d</td>
+        <td class="website"><a href="http://qwtplot3d.sourceforge.net/">QwtPlot3D</a></td>
     </tr>
     <tr>
-        <td id="sdl_image-package">sdl_image</td>
-        <td id="sdl_image-version">1.2.12</td>
-        <td id="sdl_image-website"><a href="http://www.libsdl.org/projects/SDL_image/">SDL_image</a></td>
+        <td class="package">readline</td>
+        <td class="website"><a href="http://tiswww.case.edu/php/chet/readline/rltop.html">Readline</a></td>
     </tr>
     <tr>
-        <td id="sdl_mixer-package">sdl_mixer</td>
-        <td id="sdl_mixer-version">1.2.12</td>
-        <td id="sdl_mixer-website"><a href="http://www.libsdl.org/projects/SDL_mixer/">SDL_mixer</a></td>
+        <td class="package">sdl</td>
+        <td class="website"><a href="http://www.libsdl.org/">SDL</a></td>
     </tr>
     <tr>
-        <td id="sdl_net-package">sdl_net</td>
-        <td id="sdl_net-version">1.2.8</td>
-        <td id="sdl_net-website"><a href="http://www.libsdl.org/projects/SDL_net/">SDL_net</a></td>
+        <td class="package">sdl_gfx</td>
+        <td class="website"><a href="http://www.ferzkopp.net/joomla/content/view/19/14/">SDL_gfx</a></td>
     </tr>
     <tr>
-        <td id="sdl_pango-package">sdl_pango</td>
-        <td id="sdl_pango-version">0.1.2</td>
-        <td id="sdl_pango-website"><a href="http://sdlpango.sourceforge.net/">SDL_Pango</a></td>
+        <td class="package">sdl_image</td>
+        <td class="website"><a href="http://www.libsdl.org/projects/SDL_image/">SDL_image</a></td>
     </tr>
     <tr>
-        <td id="sdl_sound-package">sdl_sound</td>
-        <td id="sdl_sound-version">1.0.3</td>
-        <td id="sdl_sound-website"><a href="http://icculus.org/SDL_sound/">SDL_sound</a></td>
+        <td class="package">sdl_mixer</td>
+        <td class="website"><a href="http://www.libsdl.org/projects/SDL_mixer/">SDL_mixer</a></td>
     </tr>
     <tr>
-        <td id="sdl_ttf-package">sdl_ttf</td>
-        <td id="sdl_ttf-version">2.0.11</td>
-        <td id="sdl_ttf-website"><a href="http://www.libsdl.org/projects/SDL_ttf/">SDL_ttf</a></td>
+        <td class="package">sdl_net</td>
+        <td class="website"><a href="http://www.libsdl.org/projects/SDL_net/">SDL_net</a></td>
     </tr>
     <tr>
-        <td id="sigviewer-package">sigviewer</td>
-        <td id="sigviewer-version">0.5.1</td>
-        <td id="sigviewer-website"><a href="http://sigviewer.sf.net/">SigViewer</a></td>
+        <td class="package">sdl_pango</td>
+        <td class="website"><a href="http://sdlpango.sourceforge.net/">SDL_Pango</a></td>
     </tr>
     <tr>
-        <td id="smpeg-package">smpeg</td>
-        <td id="smpeg-version">0.4.5+cvs20030824</td>
-        <td id="smpeg-website"><a href="http://icculus.org/smpeg/">smpeg</a></td>
+        <td class="package">sdl_sound</td>
+        <td class="website"><a href="http://icculus.org/SDL_sound/">SDL_sound</a></td>
     </tr>
     <tr>
-        <td id="sox-package">sox</td>
-        <td id="sox-version">14.4.1</td>
-        <td id="sox-website"><a href="http://sox.sourceforge.net/">SoX</a></td>
+        <td class="package">sdl_ttf</td>
+        <td class="website"><a href="http://www.libsdl.org/projects/SDL_ttf/">SDL_ttf</a></td>
     </tr>
     <tr>
-        <td id="speex-package">speex</td>
-        <td id="speex-version">1.2rc1</td>
-        <td id="speex-website"><a href="http://www.speex.org/">Speex</a></td>
+        <td class="package">sfml</td>
+        <td class="website"><a href="http://www.sfml-dev.org/">SFML</a></td>
     </tr>
     <tr>
-        <td id="sqlite-package">sqlite</td>
-        <td id="sqlite-version">3071700</td>
-        <td id="sqlite-website"><a href="http://www.sqlite.org/">SQLite</a></td>
+        <td class="package">smpeg</td>
+        <td class="website"><a href="http://icculus.org/smpeg/">smpeg</a></td>
     </tr>
     <tr>
-        <td id="stimfit-package">stimfit</td>
-        <td id="stimfit-version">0.12.4</td>
-        <td id="stimfit-website"><a href="http://code.google.com/p/stimfit/">S
+        <td class="package">sox</td>
+        <td class="website"><a href="http://sox.sourceforge.net/">SoX</a></td>
     </tr>
     <tr>
-        <td id="suitesparse-package">suitesparse</td>
-        <td id="suitesparse-version">4.2.1</td>
-        <td id="suitesparse-website"><a href="http://www.cise.ufl.edu/research/sparse/SuiteSparse/">SuiteSparse</a></td>
+        <td class="package">speex</td>
+        <td class="website"><a href="http://www.speex.org/">Speex</a></td>
     </tr>
     <tr>
-        <td id="t4k_common-package">t4k_common</td>
-        <td id="t4k_common-version">0.1.1</td>
-        <td id="t4k_common-website"><a href="http://tux4kids.alioth.debian.org/">t4k_common</a></td>
+        <td class="package">sqlite</td>
+        <td class="website"><a href="http://www.sqlite.org/">SQLite</a></td>
     </tr>
     <tr>
-        <td id="taglib-package">taglib</td>
-        <td id="taglib-version">1.7.2</td>
-        <td id="taglib-website"><a href="http://developer.kde.org/~wheeler/taglib.html">TagLib</a></td>
+        <td class="package">suitesparse</td>
+        <td class="website"><a href="http://www.cise.ufl.edu/research/sparse/SuiteSparse/">SuiteSparse</a></td>
     </tr>
     <tr>
-        <td id="teem-package">teem</td>
-        <td id="teem-version">1.11.0</td>
-        <td id="teem-website"><a href="http://teem.sourceforge.net/">Teem</a></td>
+        <td class="package">t4k_common</td>
+        <td class="website"><a href="http://tux4kids.alioth.debian.org/">t4k_common</a></td>
     </tr>
     <tr>
-        <td id="termcap-package">termcap</td>
-        <td id="termcap-version">1.3.1</td>
-        <td id="termcap-website"><a href="ftp://ftp.gnu.org/gnu/termcap/">Termcap</a></td>
+        <td class="package">taglib</td>
+        <td class="website"><a href="http://developer.kde.org/~wheeler/taglib.html">TagLib</a></td>
     </tr>
     <tr>
-        <td id="texinfo-package">texinfo</td>
-        <td id="texinfo-version">4.13a</td>
-        <td id="texinfo-website"><a href="http://www.gnu.org/software/texinfo/">GNU Texinfo</a></td>
+        <td class="package">teem</td>
+        <td class="website"><a href="http://teem.sourceforge.net/">Teem</a></td>
     </tr>
     <tr>
-        <td id="theora-package">theora</td>
-        <td id="theora-version">1.1.1</td>
-        <td id="theora-website"><a href="http://theora.org/">Theora</a></td>
+        <td class="package">theora</td>
+        <td class="website"><a href="http://theora.org/">Theora</a></td>
     </tr>
     <tr>
-        <td id="tiff-package">tiff</td>
-        <td id="tiff-version">4.0.3</td>
-        <td id="tiff-website"><a href="http://www.remotesensing.org/libtiff/">LibTIFF</a></td>
+        <td class="package">tiff</td>
+        <td class="website"><a href="http://www.remotesensing.org/libtiff/">LibTIFF</a></td>
     </tr>
     <tr>
-        <td id="tinyxml-package">tinyxml</td>
-        <td id="tinyxml-version">2.6.2</td>
-        <td id="tinyxml-website"><a href="http://sourceforge.net/projects/tinyxml/">tinyxml</a></td>
+        <td class="package">tinyxml</td>
+        <td class="website"><a href="http://sourceforge.net/projects/tinyxml/">tinyxml</a></td>
     </tr>
     <tr>
-        <td id="thunderbird-package">thunderbird</td>
-        <td id="thunderbird-version">19.0b1</td>
-        <td id="thunderbird-website"><a href="https://developer.mozilla.org/en-US/docs/Developer_Guide/Source_Code/Downloading_Source_Archives">Thunderbird</a></td>
+        <td class="package">tre</td>
+        <td class="website"><a href="http://laurikari.net/tre/">TRE</a></td>
     </tr>
     <tr>
-        <td id="tre-package">tre</td>
-        <td id="tre-version">0.8.0</td>
-        <td id="tre-website"><a href="http://laurikari.net/tre/">TRE</a></td>
+        <td class="package">twolame</td>
+        <td class="website"><a href="http://www.twolame.org/">TwoLAME</a></td>
     </tr>
     <tr>
-        <td id="twolame-package">twolame</td>
-        <td id="twolame-version">0.3.13</td>
-        <td id="twolame-website"><a href="http://www.twolame.org/">TwoLAME</a></td>
+        <td class="package">vigra</td>
+        <td class="website"><a href="http://hci.iwr.uni-heidelberg.de/vigra">vigra</a></td>
     </tr>
     <tr>
-        <td id="vigra-package">vigra</td>
-        <td id="vigra-version">1.9.0</td>
-        <td id="vigra-website"><a href="http://hci.iwr.uni-heidelberg.de/vigra">vigra</a></td>
+        <td class="package">vmime</td>
+        <td class="website"><a href="http://www.vmime.org/">VMime</a></td>
     </tr>
     <tr>
-        <td id="vmime-package">vmime</td>
-        <td id="vmime-version">2e5574b</td>
-        <td id="vmime-website"><a href="http://www.vmime.org/">VMime</a></td>
+        <td class="package">vorbis</td>
+        <td class="website"><a href="http://www.vorbis.com/">Vorbis</a></td>
     </tr>
     <tr>
-        <td id="vorbis-package">vorbis</td>
-        <td id="vorbis-version">1.3.3</td>
-        <td id="vorbis-website"><a href="http://www.vorbis.com/">Vorbis</a></td>
+        <td class="package">vtk</td>
+        <td class="website"><a href="http://www.vtk.org/">vtk</a></td>
     </tr>
     <tr>
-        <td id="vtk-package">vtk</td>
-        <td id="vtk-version">5.8.0</td>
-        <td id="vtk-website"><a href="http://www.vtk.org/">vtk</a></td>
+        <td class="package">vtk6</td>
+        <td class="website"><a href="http://www.vtk.org/">VTK6</a></td>
     </tr>
     <tr>
-        <td id="w32api-package">w32api</td>
-        <td id="w32api-version">3.17</td>
-        <td id="w32api-website"><a href="http://www.mingw.org/">MinGW Windows API</a></td>
+        <td class="package">w32api</td>
+        <td class="website"><a href="http://www.mingw.org/">MinGW Windows API</a></td>
     </tr>
     <tr>
-        <td id="wavpack-package">wavpack</td>
-        <td id="wavpack-version">4.60.1</td>
-        <td id="wavpack-website"><a href="http://www.wavpack.com/">WavPack</a></td>
+        <td class="package">wavpack</td>
+        <td class="website"><a href="http://www.wavpack.com/">WavPack</a></td>
     </tr>
     <tr>
-        <td id="wget-package">wget</td>
-        <td id="wget-version">1.14</td>
-        <td id="wget-website"><a href="http://www.gnu.org/software/wget/">wget</a></td>
+        <td class="package">wget</td>
+        <td class="website"><a href="http://www.gnu.org/software/wget/">wget</a></td>
     </tr>
     <tr>
-        <td id="winpcap-package">winpcap</td>
-        <td id="winpcap-version">4_1_3</td>
-        <td id="winpcap-website"><a href="http://www.winpcap.org/">WinPcap</a></td>
+        <td class="package">winpcap</td>
+        <td class="website"><a href="http://www.winpcap.org/">WinPcap</a></td>
     </tr>
     <tr>
-        <td id="winpthreads-package">winpthreads</td>
-        <td id="winpthreads-version">c28722c</td>
-        <td id="winpthreads-website"><a href="http://mingw-w64.sourceforge.net/">MinGW w64 pthreads</a></td>
+        <td class="package">winpthreads</td>
+        <td class="website"><a href="http://mingw-w64.sourceforge.net/">MinGW w64 pthreads</a></td>
     </tr>
     <tr>
-        <td id="wt-package">wt</td>
-        <td id="wt-version">3.3.0</td>
-        <td id="wt-website"><a href="http://witty.sourceforge.net/">Wt</a></td>
+        <td class="package">wt</td>
+        <td class="website"><a href="http://witty.sourceforge.net/">Wt</a></td>
     </tr>
     <tr>
-        <td id="wxpython-package">wxpython</td>
-        <td id="wxpython-version">2.9.4.0</td>
-        <td id="wxpython-website"><a href="http://www.wxpython.org/">wxPython</a></td>
+        <td class="package">wxwidgets</td>
+        <td class="website"><a href="http://www.wxwidgets.org/">wxWidgets</a></td>
     </tr>
     <tr>
-        <td id="wxwidgets-package">wxwidgets</td>
-        <td id="wxwidgets-version">2.9.4</td>
-        <td id="wxwidgets-website"><a href="http://www.wxwidgets.org/">wxWidgets</a></td>
+        <td class="package">x264</td>
+        <td class="website"><a href="http://www.videolan.org/developers/x264.html">x264</a></td>
     </tr>
     <tr>
-        <td id="x264-package">x264</td>
-        <td id="x264-version">20130527-2245</td>
-        <td id="x264-website"><a href="http://www.videolan.org/developers/x264.html">x264</a></td>
+        <td class="package">xapian-core</td>
+        <td class="website"><a href="http://xapian.org/">Xapian-Core</a></td>
     </tr>
     <tr>
-        <td id="xapian-core-package">xapian-core</td>
-        <td id="xapian-core-version">1.2.15</td>
-        <td id="xapian-core-website"><a href="http://xapian.org/">Xapian-Core</a></td>
+        <td class="package">xerces</td>
+        <td class="website"><a href="http://xerces.apache.org/xerces-c/">Xerces-C++</a></td>
     </tr>
     <tr>
-        <td id="xerces-package">xerces</td>
-        <td id="xerces-version">3.1.1</td>
-        <td id="xerces-website"><a href="http://xerces.apache.org/xerces-c/">Xerces-C++</a></td>
+        <td class="package">xine-lib</td>
+        <td class="website"><a href="http://www.xine-project.org/">xine-lib</a></td>
     </tr>
     <tr>
-        <td id="xine-lib-package">xine-lib</td>
-        <td id="xine-lib-version">1.1.21</td>
-        <td id="xine-lib-website"><a href="http://www.xine-project.org/">xine-lib</a></td>
+        <td class="package">xmlwrapp</td>
+        <td class="website"><a href="http://sourceforge.net/projects/xmlwrapp/">xmlwrapp</a></td>
     </tr>
     <tr>
-        <td id="xmlwrapp-package">xmlwrapp</td>
-        <td id="xmlwrapp-version">0.7.0</td>
-        <td id="xmlwrapp-website"><a href="http://sourceforge.net/projects/xmlwrapp/">xmlwrapp</a></td>
+        <td class="package">xvidcore</td>
+        <td class="website"><a href="http://www.xvid.org/">xvidcore</a></td>
     </tr>
     <tr>
-        <td id="xvidcore-package">xvidcore</td>
-        <td id="xvidcore-version">1.3.2</td>
-        <td id="xvidcore-website"><a href="http://www.xvid.org/">xvidcore</a></td>
+        <td class="package">xz</td>
+        <td class="website"><a href="http://tukaani.org/xz/">XZ</a></td>
     </tr>
     <tr>
-        <td id="xz-package">xz</td>
-        <td id="xz-version">5.0.4</td>
-        <td id="xz-website"><a href="http://tukaani.org/xz/">XZ</a></td>
+        <td class="package">yasm</td>
+        <td class="website"><a href="http://yasm.tortall.net//">Yasm</a></td>
     </tr>
     <tr>
-        <td id="zlib-package">zlib</td>
-        <td id="zlib-version">1.2.8</td>
-        <td id="zlib-website"><a href="http://zlib.net/">zlib</a></td>
+        <td class="package">zlib</td>
+        <td class="website"><a href="http://zlib.net/">zlib</a></td>
     </tr>
     <tr>
-        <td id="zziplib-package">zziplib</td>
-        <td id="zziplib-version">0.13.59</td>
-        <td id="zziplib-website"><a href="http://zziplib.sourceforge.net/">ZZIPlib</a></td>
+        <td class="package">zziplib</td>
+        <td class="website"><a href="http://zziplib.sourceforge.net/">ZZIPlib</a></td>
     </tr>
     </table>
+
+    <script>
+        var getPackageElements = function() {
+            var packageElements = {};
+            var elements = document.getElementById('package-list').getElementsByTagName('td');
+            for (var i = 0; i < elements.length; i++) {
+                var element = elements[i];
+                if (element.className === 'package') {
+                    var package = element.textContent;
+                    packageElements[package] = element;
+                }
+            }
+            return packageElements;
+        }
+        var parseVersion = function(mkfile) {
+            var matchResult = mkfile.match(/^\$\(PKG\)_VERSION\s*:?=\s*(.+)\s*$/m);
+            return matchResult[1];
+        }
+        var loadVersions = function(packageElements, doneCallback) {
+            var versions = {};
+            var packageCount = 0;
+            for (var package in packageElements) {
+                packageCount++;
+            }
+            var loadCount = 0;
+            for (var packageIndex in packageElements) {
+                (function(){
+                    var package = packageIndex;
+                    var request = new XMLHttpRequest();
+                    request.open('GET', 'src/' + package + '.mk', true);
+                    request.onreadystatechange = function() {
+                        if (request.readyState === 4) {
+                            versions[package] = parseVersion(request.responseText);
+                            loadCount++;
+                            if (loadCount === packageCount) {
+                                doneCallback(versions);
+                            }
+                        }
+                    }
+                    request.send();
+                })();
+            }
+        }
+        var resolveVersions = function(versions) {
+            var resolvedVersions = {};
+            for (var package in versions) {
+                var version = versions[package];
+                var matchResult = version.match(/^\$\((.+)_VERSION\)$/);
+                if (matchResult) {
+                    resolvedVersions[package] = versions[matchResult[1]];
+                } else {
+                    resolvedVersions[package] = versions[package];
+                }
+            }
+            return resolvedVersions;
+        }
+        var showVersions = function(packageElements, resolvedVersions) {
+            for (package in packageElements) {
+                var element = packageElements[package];
+                var version = resolvedVersions[package];
+                var versionEscaped = version.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+                var versionHtml = '<td class="version">' + versionEscaped + '</td>';
+                element.insertAdjacentHTML('afterend', versionHtml);
+            }
+        }
+        var main = function() {
+            var packageElements = getPackageElements();
+            loadVersions(packageElements, function(versions) {
+                var resolvedVersions = resolveVersions(versions);
+                showVersions(packageElements, resolvedVersions);
+            });
+        }
+        main();
+    </script>
 </div>
 
 <div class="section">
@@ -2496,6 +2248,11 @@ aptitude -t squeeze-backports install cmake yasm</pre>
         To fill the <code>$(PKG)_CHECKSUM</code> field, use a command such as (for file gettext.mk):
         </p>
         <pre>make update-checksum-gettext</pre>
+        <p>or:</p>
+        <pre>openssl sha1 pkg/gettext-x.y.z.tar.gz</pre>
+        <p>
+        if you have already downloaded the package
+        </p>
 
         <p>
         Be especially careful with the <code>$(PKG)_DEPS</code> section.
@@ -2517,16 +2274,14 @@ aptitude -t squeeze-backports install cmake yasm</pre>
             Add your package to the <a href="#packages">list of packages</a>.
         </p>
         <p>
-            Each package gets its own table row element with table cells having IDs
-            specifying your .mk file, package version and website:
+            Each package gets its own table row element with table cells
+            specifying your package name, official name and website:
         </p>
         <pre>
 &lt;tr&gt;
-    &lt;td id="gettext-package"&gt;gettext&lt;/td&gt;
-    &lt;td id="gettext-version"&gt;0.18.1.1&lt;/td&gt;
-    &lt;td id="gettext-website"&gt;&lt;a href="http://www.gnu.org/software/gettext/"&gt;gettext&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-        </pre>
+    &lt;td class="package"&gt;gettext&lt;/td&gt;
+    &lt;td class="website"&gt;&lt;a href="http://www.gnu.org/software/gettext/"&gt;gettext&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;</pre>
     </li>
 
     <li>
@@ -2640,11 +2395,20 @@ endef</pre>
         </p>
 
         <p>
+        When patching sources with crlf line endings, the patch
+        file itself should also have the same eol style. Use the
+        convention of naming the file as <code>*crlf.patch</code>
+        to instruct git not to normalise the line endings (defined
+        in <code>.gitattributes</code>).
+        </p>
+
+        <p>
         Finally, in your <code>$(PKG)_BUILD</code> section,
         please check that you use our portability variables:
         </p>
         <table class="translation">
             <tr><td><code>bash</code></td>      <td>&rarr;</td><td><code>$(SHELL)</code></td></tr>
+            <tr><td><code>date</code></td>      <td>&rarr;</td><td><code>$(DATE)</code></td></tr>
             <tr><td><code>install</code></td>   <td>&rarr;</td><td><code>$(INSTALL)</code></td></tr>
             <tr><td><code>libtool</code></td>   <td>&rarr;</td><td><code>$(LIBTOOL)</code></td></tr>
             <tr><td><code>libtoolize</code></td><td>&rarr;</td><td><code>$(LIBTOOLIZE)</code></td></tr>
@@ -2731,11 +2495,64 @@ endef</pre>
 
     <dl>
 
-    <dt>2012-04-12 &ndash; Release <span id="latest-version">2.22</span></dt>
+    <dt>2013-07-27 &ndash; Release <span id="latest-version">2.23</span></dt>
     <dd>
         <p>
-        <a href="http://mxe.cc/#download">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.22">Changelog</a>
+        The <a href="#download">stable branch</a> was updated
+        to the current development version after a thorough
+        <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2013-07/msg00021.html">testing phase</a>.
+        </p>
+
+        <p>
+        Current users are <strong>strongly</strong> encouraged to
+        start with a clean tree as the toolchain has been
+        updated and requires a full rebuild:
+        </p>
+        <pre>git pull && make clean && make</pre>
+
+        <p>
+        Most packages were updated to their latest version.
+        </p>
+
+        <p>
+        Many new packages are supported:
+        alure, apr-util, apr, armadillo, cegui, cfitsio, cminpack,
+        flann, gtkglarea, gtkimageview, harfbuzz, hdf4, hdf5, hunspell,
+        icu4c, itk, lensfun, levmar, libf2c, libftdi, libgda, libgdamm,
+        libglade, liblqr-1, libmodplug, librtmp, libzip, log4cxx, mdbtools,
+        ncurses, netcdf, netpbm, ocaml-cairo, ocaml-camlimages, ocaml-core,
+        ocaml-findlib, ocaml-flexdll, ocaml-lablgl, ocaml-lablgtk2,
+        ocaml-native, ocaml-xml-light, opencv, opus, opusfile, pcl,
+        picomodel, plib, plibc, poppler, portablexdr, portmidi, protobuf,
+        qdbm, qt5, qtactiveqt, qtbase, qtdeclarative, qtgraphicaleffects,
+        qtimageformats, qtjsbackend, qtmultimedia, qtquick1, qtquickcontrols,
+        qtscript, qtsensors, qtserialport, qtsvg, qttools, qttranslations,
+        qtxmlpatterns, qwt, sdl_gfx, sfml, sox, teem, twolame, vtk6, wavpack,
+        wget, winpthreads, xapian-core, yasm
+        </p>
+
+        <p>
+        Added support for <a href="#supported-toolchains">mingw-w64 based toolchains</a>
+        targeting 32 &amp; 64-bit architectures.
+        </p>
+
+        <p>
+        With the addition of Qt5, there is no longer a prefixed version of
+        qmake, see the <a href="#tutorial-5c">Qt section of the tutorial</a>
+        for the new way to invoke qmake.
+        </p>
+
+        <p>
+        <a href="#requirements-freebsd">FreeBSD</a> is no longer fully supported.
+        Qt5, ocaml*, and 8 other packages are excluded from the build.
+        </p>
+    </dd>
+
+    <dt>2012-04-12 &ndash; Release 2.22</dt>
+    <dd>
+        <p>
+        The release tarballs have been replaced with a <a href="#download">stable branch</a>
+        that conforms to the new <a href="#branches">branch concept</a>.
         </p>
 
         <p>
@@ -2745,10 +2562,6 @@ endef</pre>
         mingw-cross-env (MinGW cross compiling environment)
         to
         MXE (M&nbsp;cross&nbsp;environment).
-        </p>
-
-        <p>
-        The release tarballs have been replaced with a <a href="#download">Git checkout</a>.
         </p>
 
         <p>
@@ -3424,7 +3237,7 @@ endef</pre>
 
     <ul class="compact-list">
     <li>
-        <a href="http://mxe.cc/">Website</a>
+        <a href="http://mxe.cc">Website</a>
     </li>
     <li>
         <a href="https://github.com/mxe/mxe">Entry on GitHub</a>
@@ -3604,6 +3417,9 @@ endef</pre>
     </li>
     <li>
         <a href="http://spek-project.org/">Spek</a>
+    </li>
+    <li>
+        <a href="http://biosig.sourceforge.net/index.html">BioSig</a>
     </li>
     </ul>
 </div>

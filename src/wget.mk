@@ -2,6 +2,7 @@
 # See index.html for further information.
 
 PKG             := wget
+$(PKG)_VERSION  := 1.14
 $(PKG)_CHECKSUM := cfa0906e6f72c1c902c29b52d140c22ecdcd617e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz

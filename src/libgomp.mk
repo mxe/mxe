@@ -3,6 +3,7 @@
 
 PKG             := libgomp
 $(PKG)_IGNORE    = $(gcc_IGNORE)
+$(PKG)_VERSION   = $(gcc_VERSION)
 $(PKG)_CHECKSUM  = $(gcc_CHECKSUM)
 $(PKG)_SUBDIR    = $(gcc_SUBDIR)
 $(PKG)_FILE      = $(gcc_FILE)

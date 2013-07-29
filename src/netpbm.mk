@@ -3,6 +3,7 @@
 
 PKG             := netpbm
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 10.35.89
 $(PKG)_CHECKSUM := f9d07c0b82f5feed66a5e995b077492093aa24b5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz

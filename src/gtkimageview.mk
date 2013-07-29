@@ -3,6 +3,7 @@
 
 PKG             := gtkimageview
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.6.4
 $(PKG)_CHECKSUM := dc0067e72889285ddd667aba700f1de928142fba
 $(PKG)_SUBDIR   := gtkimageview-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkimageview-$($(PKG)_VERSION).tar.gz

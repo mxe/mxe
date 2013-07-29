@@ -3,6 +3,7 @@
 
 PKG             := boost
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.53.0
 $(PKG)_CHECKSUM := e6dd1b62ceed0a51add3dda6f3fc3ce0f636a7f3
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2

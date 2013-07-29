@@ -3,6 +3,7 @@
 
 PKG             := levmar
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.6
 $(PKG)_CHECKSUM := 118bd20b55ab828d875f1b752cb5e1238258950b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz

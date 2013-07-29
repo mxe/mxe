@@ -3,6 +3,7 @@
 
 PKG             := libgee
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.5.0
 $(PKG)_CHECKSUM := 78d7fbd0668d01bc23e9772211b4885ae7e479cd
 $(PKG)_SUBDIR   := libgee-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgee-$($(PKG)_VERSION).tar.bz2

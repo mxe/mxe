@@ -3,6 +3,7 @@
 
 PKG             := expat
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.1.0
 $(PKG)_CHECKSUM := b08197d146930a5543a7b99e871cba3da614f6f0
 $(PKG)_SUBDIR   := expat-$($(PKG)_VERSION)
 $(PKG)_FILE     := expat-$($(PKG)_VERSION).tar.gz

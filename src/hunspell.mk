@@ -3,6 +3,7 @@
 
 PKG             := hunspell
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.3.2
 $(PKG)_CHECKSUM := 902c76d2b55a22610e2227abc4fd26cbe606a51c
 $(PKG)_SUBDIR   := hunspell-$($(PKG)_VERSION)
 $(PKG)_FILE     := hunspell-$($(PKG)_VERSION).tar.gz

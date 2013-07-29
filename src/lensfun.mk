@@ -3,6 +3,7 @@
 
 PKG             := lensfun
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.2.7
 $(PKG)_CHECKSUM := f26121093dfee85d6371c2c79dae22e6d1b8d0d6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2

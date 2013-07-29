@@ -3,6 +3,7 @@
 
 PKG             := liboil
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.3.17
 $(PKG)_CHECKSUM := f9d7103a3a4a4089f56197f81871ae9129d229ed
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

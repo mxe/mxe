@@ -3,6 +3,7 @@
 
 PKG             := libodbc++
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.2.5
 $(PKG)_CHECKSUM := 8a77921b21c23926042c413f4a7a187a3656025b
 $(PKG)_SUBDIR   := libodbc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libodbc++-$($(PKG)_VERSION).tar.bz2

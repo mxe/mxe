@@ -3,6 +3,7 @@
 
 PKG             := exiv2
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.23
 $(PKG)_CHECKSUM := 5f342bf642477526f41add11d6ee7787cdcd639f
 $(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)
 $(PKG)_FILE     := exiv2-$($(PKG)_VERSION).tar.gz

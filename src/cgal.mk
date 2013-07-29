@@ -3,6 +3,7 @@
 
 PKG             := cgal
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.0.2
 $(PKG)_CHECKSUM := 20c58ebc021754e8be35237bcda43b0084f60617
 $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
 $(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.xz

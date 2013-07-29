@@ -2,16 +2,17 @@
 # See index.html for further information.
 
 PKG             := vtk
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 5.10%
+$(PKG)_VERSION  := 5.8.0
 $(PKG)_CHECKSUM := ece52f4fa92811fe927581e60ecb39a8a5f68cd9
 $(PKG)_SUBDIR   := VTK
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc qt expat freetype jpeg libxml2 libpng tiff zlib libodbc++ postgresql
+$(PKG)_DEPS     := gcc qt expat freetype hdf5 jpeg libxml2 libpng tiff zlib libodbc++ postgresql
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
-    grep 'refs/tags/v[0-9.]*"' | \
+    grep 'refs/tags/v5[0-9.]*"' | \
     $(SED) 's,.*refs/tags/v\(.*\)".*,\1,g;' | \
     head -1
 endef
@@ -41,6 +42,7 @@ define $(PKG)_BUILD
         -DVTKCompileTools_DIR='$(1)/native_build'\
         -DVTK_USE_SYSTEM_EXPAT=TRUE\
         -DVTK_USE_SYSTEM_FREETYPE=TRUE\
+        -DVTK_USE_SYSTEM_HDF5=TRUE \
         -DVTK_USE_SYSTEM_JPEG=TRUE\
         -DVTK_USE_SYSTEM_LIBXML2=TRUE\
         -DVTK_USE_SYSTEM_PNG=TRUE\
@@ -52,6 +54,3 @@ define $(PKG)_BUILD
         ..
     $(MAKE) -C '$(1)/cross_build' -j '$(JOBS)' install VERBOSE=1
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =

@@ -3,6 +3,7 @@
 
 PKG             := libmad
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.15.1b
 $(PKG)_CHECKSUM := cac19cd00e1a907f3150cc040ccc077783496d76
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

@@ -1,8 +1,9 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
 PKG             := ocaml-lablgl
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 20120306
 $(PKG)_CHECKSUM := 996f0aba788f5fa1531587fb06d667b94237cc92
 $(PKG)_SUBDIR   := lablGL
 $(PKG)_FILE     := lablgl-$($(PKG)_VERSION).tar.gz

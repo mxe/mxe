@@ -3,6 +3,7 @@
 
 PKG             := libmikmod
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 3.2.0
 $(PKG)_CHECKSUM := 6d30f59019872699bdcc9bcf6893eea9d6b12c13
 $(PKG)_SUBDIR   := libmikmod-$($(PKG)_VERSION)
 $(PKG)_FILE     := libmikmod-$($(PKG)_VERSION).tar.gz

@@ -3,17 +3,19 @@
 
 PKG             := x264
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 20130527-2245
 $(PKG)_CHECKSUM := 768008db411c03afbd74ea808da5a1f57a77fed4
 $(PKG)_SUBDIR   := $(PKG)-snapshot-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-snapshot-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/snapshots/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc yasm
 
 define $(PKG)_UPDATE
-    date -d yesterday +%Y%m%d-2245
+    $(DATE) -d yesterday +%Y%m%d-2245
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's,yasm,$(TARGET)-yasm,g' '$(1)/configure'
     cd '$(1)' && ./configure \
         --cross-prefix='$(TARGET)'- \
         --host='$(TARGET)' \

@@ -3,6 +3,7 @@
 
 PKG             := plibc
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.1.7
 $(PKG)_CHECKSUM := b545c602dc5b381fcea9d096910dede95168fbeb
 $(PKG)_SUBDIR   := PlibC-$($(PKG)_VERSION)
 $(PKG)_FILE     := plibc-$($(PKG)_VERSION)-src.tar.gz

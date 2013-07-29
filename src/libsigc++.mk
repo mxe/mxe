@@ -3,6 +3,7 @@
 
 PKG             := libsigc++
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.3.1
 $(PKG)_CHECKSUM := 6d23b44ab37b4f908c850c3d9898e42da54a0d8d
 $(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsigc++-$($(PKG)_VERSION).tar.xz

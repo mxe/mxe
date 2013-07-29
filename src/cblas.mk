@@ -3,6 +3,7 @@
 
 PKG             := cblas
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1
 $(PKG)_CHECKSUM := d6970cf52592ef67674a61c78bbd055a4e9d4680
 $(PKG)_SUBDIR   := CBLAS
 $(PKG)_FILE     := $(PKG).tgz

@@ -3,6 +3,7 @@
 
 PKG             := libpng
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.6.1
 $(PKG)_CHECKSUM := 1abe4e377b3e7863bb0d642330bdd83f4c704cc2
 $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.xz

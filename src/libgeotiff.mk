@@ -3,6 +3,7 @@
 
 PKG             := libgeotiff
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.4.0
 $(PKG)_CHECKSUM := 4c6f405869826bb7d9f35f1d69167e3b44a57ef0
 $(PKG)_SUBDIR   := libgeotiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgeotiff-$($(PKG)_VERSION).tar.gz

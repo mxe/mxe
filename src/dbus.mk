@@ -3,6 +3,7 @@
 
 PKG             := dbus
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.7.2
 $(PKG)_CHECKSUM := 6e1828dded661183cd5e852d2f50d1e45c23dcff
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

@@ -3,6 +3,7 @@
 
 PKG             := gtkglext
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := db9ce38ee555fd14f55083ec7f4ae30e5338d5cc
 $(PKG)_SUBDIR   := gtkglext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglext-$($(PKG)_VERSION).tar.gz

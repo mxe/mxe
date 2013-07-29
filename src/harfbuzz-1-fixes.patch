@@ -3,201 +3,26 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From a4f3f1b3f70d3f186c2f91a439637cc440653a29 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sun, 12 May 2013 13:12:02 +1000
-Subject: [PATCH 1/2] winxp ugly
-
-This patch has been taken from:
-https://bugs.freedesktop.org/show_bug.cgi?id=55494
-
-diff --git a/src/hb-uniscribe.cc b/src/hb-uniscribe.cc
-index 2f01c28..1c2e06d 100644
---- a/src/hb-uniscribe.cc
-+++ b/src/hb-uniscribe.cc
-@@ -312,161 +312,16 @@ retry:
-   bidi_state.uBidiLevel = HB_DIRECTION_IS_FORWARD (buffer->props.direction) ? 0 : 1;
-   bidi_state.fOverrideDirection = 1;
+diff -ur a/src/harfbuzz-icu.pc.in b/src/harfbuzz-icu.pc.in
+--- a/src/harfbuzz-icu.pc.in	2013-05-28 23:16:58.000000000 +0200
++++ b/src/harfbuzz-icu.pc.in	2013-06-26 04:14:39.078153528 +0200
+@@ -8,6 +8,7 @@
+ Version: %VERSION%
  
--  hr = ScriptItemizeOpenType (wchars,
--			      chars_len,
--			      MAX_ITEMS,
--			      &bidi_control,
--			      &bidi_state,
--			      items,
--			      script_tags,
--			      &item_count);
--  if (unlikely (FAILED (hr)))
-     FAIL ("ScriptItemizeOpenType() failed: 0x%08xL", hr);
+ Requires: harfbuzz
+-Requires.private: icu-uc
++Requires.private: icu-uc cairo-ft glib-2.0
+ Libs: -L${libdir} -lharfbuzz-icu
++Libs.private: -lusp10 -lgdi32
+ Cflags: -I${includedir}/harfbuzz
+diff -ur a/src/harfbuzz.pc.in b/src/harfbuzz.pc.in
+--- a/src/harfbuzz.pc.in	2013-05-28 23:15:43.000000000 +0200
++++ b/src/harfbuzz.pc.in	2013-06-26 04:15:16.842154388 +0200
+@@ -7,5 +7,7 @@
+ Description: HarfBuzz text shaping library
+ Version: %VERSION%
  
- #undef MAX_ITEMS
- 
--  int *range_char_counts = NULL;
--  TEXTRANGE_PROPERTIES **range_properties = NULL;
--  int range_count = 0;
--  if (num_features) {
--    /* TODO setup ranges */
--  }
--
--  OPENTYPE_TAG language_tag = hb_uint32_swap (hb_ot_tag_from_language (buffer->props.language));
--
--  unsigned int glyphs_offset = 0;
--  unsigned int glyphs_len;
--  bool backward = HB_DIRECTION_IS_BACKWARD (buffer->props.direction);
--  for (unsigned int j = 0; j < item_count; j++)
--  {
--    unsigned int i = backward ? item_count - 1 - j : j;
--    unsigned int chars_offset = items[i].iCharPos;
--    unsigned int item_chars_len = items[i + 1].iCharPos - chars_offset;
--
--  retry_shape:
--    hr = ScriptShapeOpenType (font_data->hdc,
--			      &font_data->script_cache,
--			      &items[i].a,
--			      script_tags[i],
--			      language_tag,
--			      range_char_counts,
--			      range_properties,
--			      range_count,
--			      wchars + chars_offset,
--			      item_chars_len,
--			      glyphs_size - glyphs_offset,
--			      /* out */
--			      log_clusters + chars_offset,
--			      char_props + chars_offset,
--			      glyphs + glyphs_offset,
--			      glyph_props + glyphs_offset,
--			      (int *) &glyphs_len);
--
--    if (unlikely (items[i].a.fNoGlyphIndex))
--      FAIL ("ScriptShapeOpenType() set fNoGlyphIndex");
--    if (unlikely (hr == E_OUTOFMEMORY))
--    {
--      buffer->ensure (buffer->allocated * 2);
--      if (buffer->in_error)
--	FAIL ("Buffer resize failed");
--      goto retry;
--    }
--    if (unlikely (hr == USP_E_SCRIPT_NOT_IN_FONT))
--    {
--      if (items[i].a.eScript == SCRIPT_UNDEFINED)
--	FAIL ("ScriptShapeOpenType() failed: Font doesn't support script");
--      items[i].a.eScript = SCRIPT_UNDEFINED;
--      goto retry_shape;
--    }
--    if (unlikely (FAILED (hr)))
--    {
--      FAIL ("ScriptShapeOpenType() failed: 0x%08xL", hr);
--    }
--
--    for (unsigned int j = chars_offset; j < chars_offset + item_chars_len; j++)
--      log_clusters[j] += glyphs_offset;
--
--    hr = ScriptPlaceOpenType (font_data->hdc,
--			      &font_data->script_cache,
--			      &items[i].a,
--			      script_tags[i],
--			      language_tag,
--			      range_char_counts,
--			      range_properties,
--			      range_count,
--			      wchars + chars_offset,
--			      log_clusters + chars_offset,
--			      char_props + chars_offset,
--			      item_chars_len,
--			      glyphs + glyphs_offset,
--			      glyph_props + glyphs_offset,
--			      glyphs_len,
--			      /* out */
--			      advances + glyphs_offset,
--			      offsets + glyphs_offset,
--			      NULL);
--    if (unlikely (FAILED (hr)))
--      FAIL ("ScriptPlaceOpenType() failed: 0x%08xL", hr);
--
--    glyphs_offset += glyphs_len;
--  }
--  glyphs_len = glyphs_offset;
--
--  /* Ok, we've got everything we need, now compose output buffer,
--   * very, *very*, carefully! */
--
--  /* Calculate visual-clusters.  That's what we ship. */
--  for (unsigned int i = 0; i < glyphs_len; i++)
--    vis_clusters[i] = -1;
--  for (unsigned int i = 0; i < buffer->len; i++) {
--    uint32_t *p = &vis_clusters[log_clusters[buffer->info[i].utf16_index()]];
--    *p = MIN (*p, buffer->info[i].cluster);
--  }
--  if (!backward) {
--    for (unsigned int i = 1; i < glyphs_len; i++)
--      if (vis_clusters[i] == -1)
--	vis_clusters[i] = vis_clusters[i - 1];
--  } else {
--    for (int i = glyphs_len - 2; i >= 0; i--)
--      if (vis_clusters[i] == -1)
--	vis_clusters[i] = vis_clusters[i + 1];
--  }
- 
- #undef utf16_index
- 
--  buffer->ensure (glyphs_len);
--  if (buffer->in_error)
--    FAIL ("Buffer in error");
- 
- #undef FAIL
- 
--  /* Set glyph infos */
--  buffer->len = 0;
--  for (unsigned int i = 0; i < glyphs_len; i++)
--  {
--    hb_glyph_info_t *info = &buffer->info[buffer->len++];
--
--    info->codepoint = glyphs[i];
--    info->cluster = vis_clusters[i];
--
--    /* The rest is crap.  Let's store position info there for now. */
--    info->mask = advances[i];
--    info->var1.u32 = offsets[i].du;
--    info->var2.u32 = offsets[i].dv;
--  }
--
--  /* Set glyph positions */
--  buffer->clear_positions ();
--  for (unsigned int i = 0; i < glyphs_len; i++)
--  {
--    hb_glyph_info_t *info = &buffer->info[i];
--    hb_glyph_position_t *pos = &buffer->pos[i];
--
--    /* TODO vertical */
--    pos->x_advance = info->mask;
--    pos->x_offset = info->var1.u32;
--    pos->y_offset = info->var2.u32;
--  }
- 
-   /* Wow, done! */
-   return true;
--- 
-1.8.2.2
-
-
-From 037957b837680df02fc0776f19e8b4d9bdc8b876 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sun, 12 May 2013 13:17:30 +1000
-Subject: [PATCH 2/2] add libs for static linking
-
-
-diff --git a/harfbuzz.pc.in b/harfbuzz.pc.in
-index e92319e..2a49f2e 100644
---- a/harfbuzz.pc.in
-+++ b/harfbuzz.pc.in
-@@ -8,4 +8,6 @@ Description: Text shaping library
- Version: @VERSION@
- 
++Requires.private: cairo-ft glib-2.0
  Libs: -L${libdir} -lharfbuzz
 +Libs.private: -lusp10 -lgdi32
-+Requires.private: icu-le cairo-ft glib-2.0
  Cflags: -I${includedir}/harfbuzz
--- 
-1.8.2.2
-

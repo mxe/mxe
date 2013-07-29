@@ -3,6 +3,7 @@
 
 PKG             := nsis
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.46
 $(PKG)_CHECKSUM := 2cc9bff130031a0b1d76b01ec0a9136cdf5992ce
 $(PKG)_SUBDIR   := nsis-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := nsis-$($(PKG)_VERSION)-src.tar.bz2

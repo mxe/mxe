@@ -3,6 +3,7 @@
 
 PKG             := plib
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.8.5-rc1
 $(PKG)_CHECKSUM := d014009343e2194a30aaba650e8cecf1bf54bd53
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

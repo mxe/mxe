@@ -3,9 +3,10 @@
 
 PKG             := pangomm
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ee83497485e180708dffbf2e68d633ae8d5a36b4
+$(PKG)_VERSION  := 2.34.0
+$(PKG)_CHECKSUM := 15d89717a390a0c78c01871190c8febd29dad684
 $(PKG)_SUBDIR   := pangomm-$($(PKG)_VERSION)
-$(PKG)_FILE     := pangomm-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := pangomm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pangomm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc cairomm glibmm pango
 

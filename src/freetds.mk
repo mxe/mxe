@@ -3,6 +3,7 @@
 
 PKG             := freetds
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.91
 $(PKG)_CHECKSUM := 3ab06c8e208e82197dc25d09ae353d9f3be7db52
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

@@ -3,6 +3,7 @@
 
 PKG             := netcdf
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.3.0
 $(PKG)_CHECKSUM := 31b4b3b17146cc8c14a8c7be3fe5f28e5a8a5deb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

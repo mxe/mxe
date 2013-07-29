@@ -3,6 +3,7 @@
 
 PKG             := physfs
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.0.3
 $(PKG)_CHECKSUM := 327308c777009a41bbabb9159b18c4c0ac069537
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2

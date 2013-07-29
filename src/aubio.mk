@@ -3,6 +3,7 @@
 
 PKG             := aubio
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 0.3.2
 $(PKG)_CHECKSUM := 8ef7ccbf18a4fa6db712a9192acafc9c8d080978
 $(PKG)_SUBDIR   := aubio-$($(PKG)_VERSION)
 $(PKG)_FILE     := aubio-$($(PKG)_VERSION).tar.gz

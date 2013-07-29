@@ -1,8 +1,9 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
 PKG             := ocaml-xml-light
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.2
 $(PKG)_CHECKSUM := e524aa20c34bf45a839363b61bb2cbbf8fcdc6bc
 $(PKG)_SUBDIR   := xml-light
 $(PKG)_FILE     := xml-light-$($(PKG)_VERSION).zip

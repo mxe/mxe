@@ -3,10 +3,11 @@
 
 PKG             := qtsvg
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := fc9686fb2aa2eccc850389912758592c2b83a530
+$(PKG)_VERSION  := 5.1.0
+$(PKG)_CHECKSUM := 572550aad16a666781cc78d0fecffadf4ba088f3
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/development_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE

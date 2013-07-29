@@ -1,0 +1,166 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 64c45ad98ec46b721a7ba91952d621d5ae709355 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 6 Jul 2013 17:53:14 +1000
+Subject: [PATCH 1/3] disable merge libs
+
+
+diff --git a/cmake/Macros.cmake b/cmake/Macros.cmake
+index 072fe75..ee9a849 100755
+--- a/cmake/Macros.cmake
++++ b/cmake/Macros.cmake
+@@ -11,25 +11,6 @@
+ #   out-of-the-box (CMake forwards the dependencies automatically)
+ macro(sfml_static_add_libraries target)
+     if(WINDOWS AND COMPILER_GCC)
+-        # Windows - gcc
+-        foreach(lib ${ARGN})
+-            if(NOT ${lib} MATCHES ".*/.*")
+-                string(REGEX REPLACE "(.*)/bin/.*\\.exe" "\\1" STANDARD_LIBS_PATH "${CMAKE_CXX_COMPILER}")
+-                if(COMPILER_GCC_W64)
+-                    set(lib "${STANDARD_LIBS_PATH}/${GCC_MACHINE}/lib/lib${lib}.a")
+-                else()
+-                    set(lib "${STANDARD_LIBS_PATH}/lib/lib${lib}.a")
+-                endif()
+-            endif()
+-            string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
+-            get_target_property(TARGET_FILENAME ${target} ${BUILD_TYPE}_LOCATION)
+-            add_custom_command(TARGET ${target}
+-                               POST_BUILD
+-                               COMMAND ${CMAKE_AR} x ${lib}
+-                               COMMAND ${CMAKE_AR} rcs ${TARGET_FILENAME} *.o
+-                               COMMAND del *.o /f /q
+-                               VERBATIM)
+-        endforeach()
+     elseif(MSVC)
+         # Visual C++
+         set(LIBRARIES "")
+@@ -164,17 +145,17 @@ macro(sfml_add_library target)
+     if(MACOSX AND BUILD_SHARED_LIBS)
+         if(SFML_BUILD_FRAMEWORKS)
+             # adapt target to build frameworks instead of dylibs
+-            set_target_properties(${target} PROPERTIES 
++            set_target_properties(${target} PROPERTIES
+                                   FRAMEWORK TRUE
+                                   FRAMEWORK_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+                                   MACOSX_FRAMEWORK_IDENTIFIER org.sfml-dev.${target}
+                                   MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+                                   MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+         endif()
+-        
++
+         # adapt install directory to allow distributing dylibs/frameworks in user’s frameworks/application bundle
+-        set_target_properties(${target} PROPERTIES 
+-                              BUILD_WITH_INSTALL_RPATH 1 
++        set_target_properties(${target} PROPERTIES
++                              BUILD_WITH_INSTALL_RPATH 1
+                               INSTALL_NAME_DIR "@executable_path/../Frameworks")
+     endif()
+ 
+@@ -193,7 +174,7 @@ macro(sfml_add_library target)
+     # add the install rule
+     install(TARGETS ${target}
+             RUNTIME DESTINATION bin COMPONENT bin
+-            LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin 
++            LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
+             ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
+             FRAMEWORK DESTINATION ${CMAKE_INSTALL_FRAMEWORK_PREFIX} COMPONENT bin)
+ 
+-- 
+1.8.2.3
+
+
+From 797385b22ae2586bcab47f866bfa50f6cbe4b261 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 6 Jul 2013 17:54:02 +1000
+Subject: [PATCH 2/3] static openal
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 959a403..bf5a805 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -40,7 +40,7 @@ sfml_set_option(SFML_BUILD_DOC FALSE BOOL "TRUE to generate the API documentatio
+ if(MACOSX)
+     # add an option to build frameworks instead of dylibs (release only)
+     sfml_set_option(SFML_BUILD_FRAMEWORKS FALSE BOOL "TRUE to build SFML as frameworks libraries (release only), FALSE to build according to BUILD_SHARED_LIBS")
+-    
++
+     # add an option to let the user specify a custom directory for frameworks installation (SFML, sndfile, ...)
+     sfml_set_option(CMAKE_INSTALL_FRAMEWORK_PREFIX "/Library/Frameworks" STRING "Frameworks installation directory")
+ 
+@@ -51,6 +51,7 @@ endif()
+ # define SFML_STATIC if the build type is not set to 'shared'
+ if(NOT BUILD_SHARED_LIBS)
+     add_definitions(-DSFML_STATIC)
++    add_definitions(-DAL_LIBTYPE_STATIC)
+ endif()
+ 
+ # remove SL security warnings with Visual C++
+@@ -161,7 +162,7 @@ else()
+     add_library(SFML ${SFML_SOURCES})
+ 
+     # edit target properties
+-    set_target_properties(SFML PROPERTIES 
++    set_target_properties(SFML PROPERTIES
+                           FRAMEWORK TRUE
+                           FRAMEWORK_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+                           MACOSX_FRAMEWORK_IDENTIFIER org.sfml-dev.SFML
+@@ -170,14 +171,14 @@ else()
+                           PUBLIC_HEADER "${SFML_HEADERS}")
+ 
+     # add the remaining headers
+-    add_custom_command(TARGET SFML 
++    add_custom_command(TARGET SFML
+                        POST_BUILD
+                        COMMAND cp -r ${PROJECT_SOURCE_DIR}/include/SFML/* SFML.framework/Versions/${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}/Headers)
+ 
+     # adapt install directory to allow distributing dylibs/frameworks in user’s frameworks/application bundle
+     # NOTE : it's not required to link agains SFML.framework
+-    set_target_properties(SFML PROPERTIES 
+-                          BUILD_WITH_INSTALL_RPATH 1 
++    set_target_properties(SFML PROPERTIES
++                          BUILD_WITH_INSTALL_RPATH 1
+                           INSTALL_NAME_DIR "@executable_path/../Frameworks")
+ 
+     # install rule
+-- 
+1.8.2.3
+
+
+From 4e522133482f3f37ee8f498a35294eb31738e307 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 6 Jul 2013 17:55:39 +1000
+Subject: [PATCH 3/3] dont install dlls
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bf5a805..78e5630 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -187,18 +187,7 @@ else()
+             COMPONENT devel)
+ endif()
+ 
+-install(FILES cmake/Modules/FindSFML.cmake DESTINATION ${INSTALL_MISC_DIR}/cmake/Modules)
+-install(FILES license.txt DESTINATION ${INSTALL_MISC_DIR})
+-install(FILES readme.txt DESTINATION ${INSTALL_MISC_DIR})
+-
+ if(WINDOWS)
+-    if(ARCH_32BITS)
+-        install(FILES extlibs/bin/x86/libsndfile-1.dll DESTINATION bin)
+-        install(FILES extlibs/bin/x86/openal32.dll DESTINATION bin)
+-    elseif(ARCH_64BITS)
+-        install(FILES extlibs/bin/x64/libsndfile-1.dll DESTINATION bin)
+-        install(FILES extlibs/bin/x64/openal32.dll DESTINATION bin)
+-    endif()
+ elseif(MACOSX)
+     install(DIRECTORY extlibs/libs-osx/Frameworks/sndfile.framework DESTINATION ${CMAKE_INSTALL_FRAMEWORK_PREFIX})
+     install(DIRECTORY extlibs/libs-osx/Frameworks/freetype.framework DESTINATION ${CMAKE_INSTALL_FRAMEWORK_PREFIX})
+-- 
+1.8.2.3
+

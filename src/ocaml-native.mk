@@ -1,8 +1,9 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
 PKG             := ocaml-native
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 4.00.1
 $(PKG)_CHECKSUM := 5abf04cd4fccfcc980e8592995b9159014f23f53
 $(PKG)_SUBDIR   := ocaml-$($(PKG)_VERSION)
 $(PKG)_FILE     := ocaml-$($(PKG)_VERSION).tar.gz

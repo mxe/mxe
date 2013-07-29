@@ -3,6 +3,7 @@
 
 PKG             := glew
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.9.0
 $(PKG)_CHECKSUM := 9291f5c5afefd482c7f3e91ffb3cd4716c6c9ffe
 $(PKG)_SUBDIR   := glew-$($(PKG)_VERSION)
 $(PKG)_FILE     := glew-$($(PKG)_VERSION).tgz
@@ -11,7 +12,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/glew/files/glew/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/\([0-9][^A-Za-z"]*\)/".*,\1,p' | \
     head -1
 endef
 
