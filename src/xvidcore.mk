@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 56e065d331545ade04c63c91153b9624b51d6e1b
 $(PKG)_SUBDIR   := xvidcore/build/generic
 $(PKG)_FILE     := xvidcore-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.xvid.org/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_DEPS     := gcc pthreads yasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.xvid.org/' | \
@@ -28,4 +28,9 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/build/xvidcore.a' '$(PREFIX)/$(TARGET)/lib/'
     ln -sf '$(PREFIX)/$(TARGET)/lib/xvidcore.a' '$(PREFIX)/$(TARGET)/lib/libxvidcore.a'
+endef
+
+define $(PKG)_BUILD_x86_64-w64-mingw32
+    $(SED) -i 's,yasm_prog="yasm",yasm_prog="$(TARGET)-yasm -DNO_PREFIX",' '$(1)/configure.in'
+    $($(PKG)_BUILD)
 endef
