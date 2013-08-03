@@ -4,7 +4,7 @@
 PKG             := sdl2_image
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := a24b1dd95e1274ffc84f5f1b95d9cb6e6f13f6e8
+$(PKG)_CHECKSUM := 10bb4c0e751835703bcbb0fdf064bb636e307673
 $(PKG)_SUBDIR   := SDL2_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2_image-$($(PKG)_VERSION).tar.gz
 #$(PKG)_URL      := http://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
