@@ -1,7 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := qwt-qt4
+PKG             := qwt_qt4
 $(PKG)_VERSION   = $(qwt_VERSION)
 $(PKG)_CHECKSUM  = $(qwt_CHECKSUM)
 $(PKG)_SUBDIR    = $(qwt_SUBDIR)
