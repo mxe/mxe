@@ -3,13 +3,11 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-[master 4380599] new version
- 3 files changed, 11130 insertions(+), 3 deletions(-)
- create mode 100644 src/glext.h
-From 43805990b921d3aa32ec3772ecb35de55c1f852d Mon Sep 17 00:00:00 2001
+From 29ddb2d1493f45ac281bbaa6cae80b3767201c9b Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Thu, 10 May 2012 20:07:55 +0200
-Subject: [PATCH] small modification of Makefile for cross-compilation ; includes external glext.h
+Subject: [PATCH 1/2] small modification of Makefile for cross-compilation ;
+ includes external glext.h
 
 
 diff --git a/src/Makefile b/src/Makefile
@@ -11176,5 +11174,28 @@ index e10cbce..e337d9b 100644
  
  #include <caml/misc.h>
 -- 
-1.7.5.4
+1.8.1.2
+
+
+From 3693a79d1c425d88b20be62f8ca2064bd82bf2c7 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 4 Aug 2013 21:35:28 +0200
+Subject: [PATCH 2/2] ml_gl.c : refer to new glext.h
+
+
+diff --git a/src/ml_gl.c b/src/ml_gl.c
+index c9b04ad..3ccedaa 100644
+--- a/src/ml_gl.c
++++ b/src/ml_gl.c
+@@ -10,7 +10,7 @@
+ #include <GL/gl.h>
+ #endif
+ #ifdef HAS_GLEXT_H
+-#include <GL/glext.h>
++#include "glext.h"
+ #undef GL_VERSION_1_3
+ #endif
+ #include <caml/misc.h>
+-- 
+1.8.1.2
 
