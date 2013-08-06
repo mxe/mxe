@@ -10,6 +10,8 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/numpy/files/NumPy/$($(PKG)_VERSION)/$($(PKG)_FILE)/download
 $(PKG)_DEPS     := gcc python 
 
+PATH_TO_HOST_PYTHON := $(PREFIX)/share/$($(PKG)_SUBDIR)
+
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://sourceforge.net/projects/numpy/files/NumPy/' | \
@@ -21,7 +23,8 @@ define $(PKG)_BUILD
 
 	cd '$(1)'
 
-	exit -1 
+
+
 
 endef
 
