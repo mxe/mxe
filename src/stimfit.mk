@@ -18,10 +18,9 @@ endef
 
 define $(PKG)_BUILD
 
-    ## The patch did not apply cleanly, so -DWITH_HDF4 needs to be defined	
     WXCONF='$(PREFIX)/bin/$(TARGET)-wx-config' $(MAKE) -C '$(1)' -f Makefile.static -j '$(JOBS)'
 
-    $(INSTALL) -m644 '$(1)/stimfit.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) '$(1)/stimfit.exe' '$(PREFIX)/$(TARGET)/bin/'
 
 endef
 
