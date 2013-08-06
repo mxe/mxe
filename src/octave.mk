@@ -35,7 +35,6 @@ define $(PKG)_BUILD
     $(SED) -i 's,pcre-config,$(PREFIX)/$(TARGET)/bin/pcre-config,g' '$(1)/configure'
 
     # configure
-    LD=$(TARGET)-g++ \
     cd '$(1)/.build' && '../configure' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
@@ -44,13 +43,18 @@ define $(PKG)_BUILD
         --disable-shared \
         --enable-openmp \
         FLTK_CONFIG="$(PREFIX)/bin/$(TARGET)-fltk-config" \
+        PKG_CONFIG="$(TARGET)-pkg-config" \
+        LIBS='-lsuitesparseconfig -lumfpack -lamd' \
+        BUILD_CC=g++ \
         gl_cv_func_gettimeofday_clobber=no
 
+        #BUILD_CXX="g++" \
 
     ## We want both of these install steps so that we install in the
     ## location set by the configure --prefix option, and the other
     ## in a directory tree that will have just Octave files.
-    $(MAKE) -C '$(1)/.build' -j '$(JOBS)' install
+    $(MAKE_SHARED_FROM_STATIC) --ar '$(TARGET)-ar' --ld '$(TARGET)-g++' -C '$(1)/.build' -j '$(JOBS)' install
+
     $(MAKE) -C '$(1)/.build' -j '$(JOBS)' DESTDIR=$(PREFIX)/../octave install
 
 endef
