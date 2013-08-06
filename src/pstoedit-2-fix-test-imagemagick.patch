@@ -1,0 +1,11 @@
+--- pstoedit-3.61/configure.ac	2012-08-28 12:46:41.000000000 +0200
++++ pstoedit-3.61/configure.ac	2013-04-18 22:56:10.000000000 +0200
+@@ -235,7 +235,7 @@
+ else
+       if test -n "$PKG_CONFIG"; then
+         AC_MSG_CHECKING(ImageMagick flags through pkg-config)
+-	PKG_CHECK_MODULES(LIBMAGICK, ImageMagick++, 
++	PKG_CHECK_MODULES(LIBMAGICK, ImageMagick, 
+ 		HAVE_LIBMAGICK=yes 
+ 		LIBMAGICK_CFLAGS="-DHAVE_MAGIC $LIBMAGICK_CFLAGS" 
+ 		LIBMAGICK_LDFLAGS="$LIBMAGICK_LIBS" , 
