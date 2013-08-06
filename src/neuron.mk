@@ -31,9 +31,9 @@ define $(PKG)_BUILD
 			$(MAKE)                         ) ; \
 	fi
 
-        cd '$(1)' && ./configure \
-		--without-memacs \
-		--disable-cygwin \
+	## http://stackoverflow.com/questions/5212454/allegro-question-how-can-i-get-rid-of-the-cmd-window
+	## ‐Wl,‐‐subsystem,windows
+	cd '$(1)' CXXFLAGS=-mwindows LDFLAGS=‐‐subsystem=windows && ./configure \
 		--prefix='$(PREFIX)/$(TARGET)' \
 		--build="`config.guess`" \
 		--host='$(TARGET)' \
