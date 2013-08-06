@@ -19,11 +19,15 @@ define $(PKG)_BUILD
     #$(SED) -i 's,aclocal,aclocal -I $(PREFIX)/$(TARGET)/share/aclocal,' '$(1)/autogen.sh'
     #$(SED) -i 's,libtoolize,$(LIBTOOLIZE),'                             '$(1)/autogen.sh'
 
-    cd '$(1)' &&  ./configure \
+    #cd '$(1)' &&  ./autogen.sh
+
+    cd '$(1)' && CPPAS=$(TARGET)-gcc ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+	--disable-mpi-f77 \
+	--disable-mpi-f90
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
