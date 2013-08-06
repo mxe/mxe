@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
@@ -24,5 +25,5 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install-exec
+    $(MAKE) -C '$(1)' -j 1 install
 endef

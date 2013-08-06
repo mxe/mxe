@@ -1,20 +1,19 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := mpfr
+PKG             := mpc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.2
-$(PKG)_CHECKSUM := 03e593cc6e26639ef5e60be1af8dc527209e5172
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gmp
+$(PKG)_VERSION  := 1.0.1
+$(PKG)_CHECKSUM := 8c7e19ad0dd9b3b5cc652273403423d6cf0c5edf
+$(PKG)_SUBDIR   := mpc-$($(PKG)_VERSION)
+$(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://www.multiprecision.org/mpc/download/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/m/mpclib/mpclib_$($(PKG)_VERSION).orig.tar.gz
+$(PKG)_DEPS     := gcc gmp mpfr
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.mpfr.org/mpfr-current/#download' | \
-    grep 'mpfr-' | \
-    $(SED) -n 's,.*mpfr-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- 'https://gforge.inria.fr/scm/viewvc.php/tags/?root=mpc&sortby=date' | \
+    $(SED) -n 's,.*<a name="\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef
 
@@ -24,9 +23,8 @@ define $(PKG)_BUILD
         --enable-static \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-threads=win32 \
-        --with-gmp-include='$(PREFIX)/$(TARGET)/include/'
-        --with-gmp-lib='$(PREFIX)/$(TARGET)/lib/'
+        --with-gmp='$(PREFIX)/$(TARGET)/' \
+        --with-mpfr='$(PREFIX)/$(TARGET)/'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 

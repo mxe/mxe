@@ -3,8 +3,8 @@
 
 PKG             := openexr
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := 774ae69ac01bbe4443b6fa0a9b12e276d0af44f5
+$(PKG)_VERSION  := 2.0.1
+$(PKG)_CHECKSUM := 22589e11d090a01b5c3117e7e0b7bbb8301184b6
 $(PKG)_SUBDIR   := openexr-$($(PKG)_VERSION)
 $(PKG)_FILE     := openexr-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
