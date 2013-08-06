@@ -18,18 +18,19 @@ endef
 
 define $(PKG)_BUILD
 
-    #rm -rf '$(1)/include/libEMF/wine/basetsd.h'
+    rm -rf '$(1)/include/libEMF' '$(1)'/include/libEMF/Makefile*
 	
     # configure
-    cd '$(1)' && autoconf && './configure' \
+    cd '$(1)' && autoreconf && './configure' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-static 
+        --enable-static --disable-shared
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
 
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)' install
 
 endef
 
+$(PKG)_BUILD_x86_64-w64-mingw32 =
