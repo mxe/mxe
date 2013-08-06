@@ -1,0 +1,11 @@
+--- libEMF-1.0.7/configure.ac	2012-11-07 12:21:39.000000000 +0100
++++ libEMF-1.0.7/configure.ac	2013-04-16 10:35:17.000000000 +0200
+@@ -91,7 +91,7 @@
+ AM_CONDITIONAL(HAVE_THREADS, test $have_threads = yes)
+ AM_CONDITIONAL(ENABLE_EDITING, test $enable_editing = no)
+ 
+-AC_CONFIG_FILES([Makefile include/Makefile include/libEMF/Makefile libemf/Makefile \
++AC_CONFIG_FILES([Makefile include/Makefile libemf/Makefile \
+ src/Makefile doc/Makefile tests/Makefile])
+ 
+ AC_OUTPUT
