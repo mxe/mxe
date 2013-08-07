@@ -34,4 +34,5 @@ define $(PKG)_BUILD
         --disable-pcretest-libreadline
     rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/pcre16*.3
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    ln -sf '$(PREFIX)/$(TARGET)/bin/pcre-config' '$(PREFIX)/bin/$(TARGET)-pcre-config'
 endef
