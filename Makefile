@@ -226,7 +226,12 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
-	    (echo; find '$(2)' -name 'config.log' -print -exec cat {} \;) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
+	    (echo; \
+	     find '$(2)' -name 'config.log' -print -exec cat {} \; \
+	     echo; \
+	     echo 'settings.mk'; \
+	     cat '$(TOP_DIR)/settings.mk'; \
+	     ) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
 	    exit 1; \
 	fi
 	@echo '[done]     $(1)'
