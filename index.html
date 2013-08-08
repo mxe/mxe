@@ -11,6 +11,9 @@
             font-size: 11pt;
             margin-top: 0em;
         }
+        code {
+            background-color: #f5f5f5;
+        }
         h1, h2, h3 {
             font-family: sans-serif;
         }
@@ -899,7 +902,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     All build commands also download the packages if necessary.
     </p>
     <p>
-    In a BSD userland, substitute "make" with "gmake".
+    In a BSD userland, substitute "make" with "gmake"
+    as all commands are based on
+    <a href="http://www.gnu.org/software/make/manual/make.html">GNU Make</a>.
     </p>
     <dl class="usage">
 
@@ -926,12 +931,49 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         non-parallel
         </dd>
 
-    <dt>make foo bar -j 4 JOBS=2</dt>
+        <dd>
+        the package list can also be set in
+        <code>settings.mk</code>
+        <pre>LOCAL_PKG_LIST := foo bar
+.DEFAULT local-pkg-list:
+local-pkg-list: $(LOCAL_PKG_LIST)</pre>
+        </dd>
+        <dd>
+        so a call to <code>make</code> will only build those packages (and their
+        dependencies, of course)
+        </dd>
+
+    <dt>make foo bar --touch</dt>
+
+        <dd>
+        mark packages "foo" and "bar" as up-to-date after
+        a trivial change in one of their dependencies
+        (short option "-t")
+        </dd>
+
+    <dt>make foo bar --jobs=4 JOBS=2</dt>
 
         <dd>
         build packages "foo", "bar" and their dependencies,
-        where up to 4 packages are build in parallel,
+        where up to 4 packages are built in parallel
+        (short option "-j 4"),
         each with up to 2 compiler processes running in parallel
+        </dd>
+        <dd>
+        the JOBS variable can also be defined in
+        <code>settings.mk</code> and defaults to the number
+        of CPUs up to a max of 6 to prevent runaway system
+        load with diminishing returns - see the
+        <a href="http://www.gnu.org/software/make/manual/make.html#Parallel">GNU Make manual</a>
+        for more details on parallel execution
+        </dd>
+
+    <dt>make --jobs=4 --keep-going</dt>
+
+        <dd>
+        build all packages with 4 inter-package parallel
+        jobs and continue as much as possible after an error
+        (short option "-j 4 -k")
         </dd>
 
     <dt>make check-requirements</dt>
