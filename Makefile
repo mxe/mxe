@@ -129,13 +129,14 @@ define CHECK_REQUIREMENT_VERSION
     fi
 
 endef
+$(shell [ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed')
+
 check-requirements: $(PREFIX)/installed/check-requirements
 $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	@echo '[check requirements]'
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[4-9]\|2\.[7-9][0-9])
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.[1-9][0-9]\(\.[0-9]\+\)\?)
-	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
 	@touch '$@'
 
 define newline
@@ -256,10 +257,10 @@ build-only-$(1)_$(3):
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
-	[ -d '$(PREFIX)/$(3)/installed' ] || mkdir -p '$(PREFIX)/$(3)/installed'
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
 $(foreach TARGET,$(MXE_TARGETS), \
+    $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$(PKGS), \
         $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET)))))
 
