@@ -3,13 +3,13 @@
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.1
-$(PKG)_CHECKSUM := 930e5612d75d04fdf7c0579f4d85d47e31e38945
+$(PKG)_VERSION  := 1.2.2
+$(PKG)_CHECKSUM := 5ccf4067f43853e5d63218aba13bc571b1108b5a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://launchpad.net/ffmpeg/main/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 lame libvpx opencore-amr opus sdl speex theora vorbis x264 xvidcore zlib
+$(PKG)_DEPS     := gcc bzip2 lame libass libvpx opencore-amr opus sdl speex theora vorbis x264 xvidcore zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.ffmpeg.org/download.html' | \
@@ -36,6 +36,7 @@ define $(PKG)_BUILD
         --disable-pthreads \
         --enable-w32threads \
         --enable-avisynth \
+        --enable-libass \
         --enable-libspeex \
         --enable-libtheora \
         --enable-libvorbis \
