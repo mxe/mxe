@@ -27,27 +27,27 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --disable-debug \
-        --disable-doc \
         --enable-memalign-hack \
+        --disable-pthreads \
+        --enable-w32threads \
+        --disable-doc \
         --enable-gpl \
         --enable-version3 \
         --disable-nonfree \
-        --enable-postproc \
-        --disable-pthreads \
-        --enable-w32threads \
         --enable-avisynth \
         --enable-libass \
+        --disable-libfaac \
+        --enable-libmp3lame \
+        --enable-libopencore-amrnb \
+        --enable-libopencore-amrwb \
+        --enable-libopus \
         --enable-libspeex \
         --enable-libtheora \
         --enable-libvorbis \
-        --enable-libmp3lame \
-        --enable-libxvid \
-        --disable-libfaac \
-        --enable-libopencore-amrnb \
-        --enable-libopencore-amrwb \
-        --enable-libx264 \
         --enable-libvpx \
-        --enable-libopus
+        --enable-libx264 \
+        --enable-libxvid \
+        --enable-postproc
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
