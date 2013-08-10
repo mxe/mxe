@@ -1,6 +1,6 @@
 export MXE_DIR=`pwd`
 export PATH=$MXE_DIR/usr/bin:$PATH
-alias mxe='make -C $MXE_DIR'
+alias mxe='env -i PATH=$PATH make -C $MXE_DIR'
 
 SED=`gsed --help >/dev/null 2>&1 && echo g`sed
 
