@@ -1,10 +1,11 @@
 export MXE_DIR=`pwd`
 export PATH=$MXE_DIR/usr/bin:$PATH
-alias mxe='env -i PATH=$PATH make -C $MXE_DIR'
-
+MAKE=`gmake --help >/dev/null 2>&1 && echo g`make
 SED=`gsed --help >/dev/null 2>&1 && echo g`sed
 
-unset `grep '^unexport' Makefile | $SED -n 's,unexport,,p' | tr '\n' ' '`
+alias mxe='$MAKE -C $MXE_DIR --no-print-directory'
+
+unset `env | grep -v '^HOME=\|^LANG=\|MXE\|^PATH=\|^PS1=\|^TERM=' | $SED -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`
 
 _mxe()
 {
