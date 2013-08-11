@@ -356,6 +356,13 @@ exit</pre>
     <pre>export PATH=/<em>where MXE is installed</em>/usr/bin:$PATH</pre>
 
     <p>
+    You may be tempted to also add <code>$(TARGET)/bin</code>
+    to your path. You <strong>never</strong> want to do this,
+    the executables and scripts in there will cause conflicts
+    with your native toolchain.
+    </p>
+
+    <p>
     In case you are using custom $PKG_CONFIG_PATH entries,
     you can add separate entries for cross builds:
     </p>
@@ -373,6 +380,13 @@ exit</pre>
     may spoil your compiling pleasure,
     so be sure to delete or disable those.
     </p>
+    <p>
+    For the most isolated and repeatable environment,
+    use a white-list approach:
+    </p>
+    <pre>unset `env | \
+    grep -v '^HOME=\|^LANG=\|^PATH=\|PKG_CONFIG\|^PS1=\|^TERM=' | \
+    sed -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`</pre>
 
     <p>
     Congratulations!
