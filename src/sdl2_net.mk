@@ -4,11 +4,10 @@
 PKG             := sdl2_net
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := b0418fe63c13c511c8788316267f02aa7cf5675a
+$(PKG)_CHECKSUM := c7cf473b3adada23171df9f92b3117052eac69fa
 $(PKG)_SUBDIR   := SDL2_net-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2_net-$($(PKG)_VERSION).tar.gz
-#$(PKG)_URL      := http://www.libsdl.org/projects/SDL_net/release/$($(PKG)_FILE)
-$(PKG)_URL      := http://www.libsdl.org/tmp/SDL_net/release/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.libsdl.org/projects/SDL_net/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl2
 
 define $(PKG)_UPDATE

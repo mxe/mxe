@@ -4,11 +4,10 @@
 PKG             := sdl2_mixer
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := 632eb2a40c3b53d53f89047a1e3cfc601bacb69b
+$(PKG)_CHECKSUM := 9ed975587f09a1776ba9776dcc74a58e695aba6e
 $(PKG)_SUBDIR   := SDL2_mixer-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2_mixer-$($(PKG)_VERSION).tar.gz
-#$(PKG)_URL      := http://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
-$(PKG)_URL      := http://www.libsdl.org/tmp/SDL_mixer/release/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl2 libmodplug ogg vorbis smpeg2
 
 define $(PKG)_UPDATE

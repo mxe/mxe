@@ -4,11 +4,10 @@
 PKG             := sdl2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := 00865d99e0860d0e471f17eba571c3752da085df
+$(PKG)_CHECKSUM := a907eb5203abad6649c1eae0120d96c0a1931350
 $(PKG)_SUBDIR   := SDL2-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2-$($(PKG)_VERSION).tar.gz
-#$(PKG)_URL      := http://www.libsdl.org/release/$($(PKG)_FILE)
-$(PKG)_URL      := http://www.libsdl.org/tmp/release/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.libsdl.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
