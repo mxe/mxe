@@ -39,12 +39,9 @@ TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
 PATH       := $(PREFIX)/bin:$(PATH)
 
-# unexport any environment variables that might cause trouble
-unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
-unexport CPPFLAGS CROSS CXX CXXCPP CXXFLAGS EXEEXT EXTRA_CFLAGS
-unexport EXTRA_LDFLAGS LD LDFLAGS LIBRARY_PATH LIBS NM
-unexport OBJC_INCLUDE_PATH PKG_CONFIG QMAKESPEC RANLIB STRIP
-unexport CONFIG_SITE ALL_TARGETS TARGET TARGETS
+# use a minimal whitelist of safe environment variables
+ENV_WHITELIST := PATH LANG MXE%
+unexport $(filter-out $(ENV_WHITELIST),$(shell env | $(SED) -n 's,\(.*\)=.*,\1,p'))
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
