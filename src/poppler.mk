@@ -21,7 +21,9 @@ define $(PKG)_BUILD
     #       pick up libtiff (otherwise linking a minimal test program fails not
     #       because libtiff is not found, but because some references are
     #       undefined)
-    cd '$(1)' && ./configure \
+    cd '$(1)' \
+        && PATH='$(PREFIX)/$(TARGET)/qt/bin:$(PATH)' \
+        ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -51,7 +53,8 @@ define $(PKG)_BUILD
         --with-font-configuration=win32 \
         PKG_CONFIG_PATH_$(subst -,_,$(TARGET))='$(PREFIX)/$(TARGET)/qt/lib/pkgconfig' \
         LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    PATH='$(PREFIX)/$(TARGET)/qt/bin:$(PATH)' \
+        $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # Test program
