@@ -24,11 +24,19 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
 
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: sfml'; \
+     echo 'Version: 0'; \
+     echo 'Description: sfml'; \
+     echo 'Requires: freetype2 glew openal sndfile vorbisenc'; \
+     echo 'Cflags: -DSFML_STATIC'; \
+     echo 'Libs: -lsfml-audio-s -lsfml-network-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s'; \
+     echo 'Libs.private: -ljpeg -lws2_32 -lgdi32';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/sfml.pc'
+
     '$(TARGET)-g++' \
-        -W -Wall -Werror \
-        -DSFML_STATIC -DAL_LIBTYPE_STATIC \
+        -W -Wall -Werror -ansi -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-sfml.exe' \
-        -lsfml-audio-s -lsfml-network-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s \
-        `$(TARGET)-pkg-config --cflags --libs freetype2 glew openal sndfile vorbisenc` \
-        -ljpeg -lws2_32 -lgdi32
+        `$(TARGET)-pkg-config --cflags --libs sfml`
 endef
