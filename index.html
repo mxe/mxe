@@ -762,11 +762,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3 id="requirements-debian">Debian and derivatives</h3>
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
-    <pre>apt-get install autoconf automake bash bison bzip2 \
-                    cmake flex gettext git g++ intltool \
-                    libffi-dev libtool libltdl-dev libssl-dev \
-                    libxml-parser-perl make openssl patch perl \
-                    pkg-config scons sed unzip wget xz-utils</pre>
+    <pre>apt-get install \
+    autoconf automake bash bison bzip2 cmake flex gettext \
+    git g++ intltool libffi-dev libtool libltdl-dev \
+    libssl-dev libxml-parser-perl make openssl patch perl \
+    pkg-config scons sed unzip wget xz-utils</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -780,10 +780,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3 id="requirements-fedora">Fedora</h3>
 
     <!-- https://admin.fedoraproject.org/pkgdb/ -->
-    <pre>yum install autoconf automake bash bison bzip2 cmake \
-            flex gcc-c++ gettext git intltool make sed \
-            libffi-devel libtool openssl-devel patch perl pkgconfig \
-            scons unzip wget xz</pre>
+    <pre>yum install \
+    autoconf automake bash bison bzip2 cmake flex gcc-c++ \
+    gettext git intltool make sed libffi-devel libtool \
+    openssl-devel patch perl pkgconfig scons unzip wget xz</pre>
 
     <p>
     On 64-bit Fedora,
@@ -793,10 +793,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3 id="requirements-freebsd">FreeBSD</h3>
 
     <!-- http://www.freshports.org/ -->
-    <pre>pkg_add -r automake autoconf bash bison cmake coreutils\
-           flex gettext git glib20 gmake gsed intltool libffi \
-           libtool openssl patch perl p5-XML-Parser pkgconf \
-           scons unzip wget</pre>
+    <pre>pkg_add -r \
+    automake autoconf bash bison cmake coreutils flex \
+    gettext git glib20 gmake gsed intltool libffi \
+    libtool openssl patch perl p5-XML-Parser pkgconf \
+    scons unzip wget</pre>
 
     <p>
     Ensure that /usr/local/bin precedes /usr/bin in your $PATH:
@@ -827,10 +828,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3 id="requirements-frugalware">Frugalware</h3>
 
     <!-- http://www.frugalware.org/packages -->
-    <pre>pacman-g2 -S autoconf automake bash bzip2 bison cmake \
-             flex gcc gettext git intltool make sed libffi libtool \
-             openssl patch perl perl-xml-parser pkgconfig \
-             scons unzip wget xz xz-lzma</pre>
+    <pre>pacman-g2 -S \
+    autoconf automake bash bzip2 bison cmake flex gcc \
+    gettext git intltool make sed libffi libtool openssl \
+    patch perl perl-xml-parser pkgconfig scons unzip wget \
+    xz xz-lzma</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -840,15 +842,16 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3 id="requirements-gentoo">Gentoo</h3>
 
     <!-- http://packages.gentoo.org/ -->
-    <pre>emerge sys-devel/autoconf sys-devel/automake \
-       app-shells/bash sys-devel/bison app-arch/bzip2 \
-       dev-util/cmake sys-devel/flex sys-devel/gcc \
-       sys-devel/gettext dev-vcs/git \
-       dev-util/intltool sys-devel/make sys-apps/sed \
-       dev-libs/libffi sys-devel/libtool dev-libs/openssl sys-devel/patch \
-       dev-lang/perl dev-perl/XML-Parser \
-       dev-util/pkgconfig dev-util/scons app-arch/unzip \
-       net-misc/wget app-arch/xz-utils</pre>
+    <pre>emerge \
+    sys-devel/autoconf sys-devel/automake app-shells/bash \
+    sys-devel/bison app-arch/bzip2 dev-util/cmake \
+    sys-devel/flex sys-devel/gcc sys-devel/gettext \
+    dev-vcs/git dev-util/intltool sys-devel/make \
+    sys-apps/sed dev-libs/libffi sys-devel/libtool \
+    dev-libs/openssl sys-devel/patch dev-lang/perl \
+    dev-perl/XML-Parser dev-util/pkgconfig \
+    dev-util/scons app-arch/unzip net-misc/wget \
+    app-arch/xz-utils</pre>
 
     <h3 id="requirements-macos">Mac OS X</h3>
 
@@ -860,10 +863,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     then run:
     </p>
     <!-- http://www.macports.org/ports.php -->
-    <pre>sudo port install autoconf automake bison cmake coreutils \
-                  flex gettext git-core glib2 gsed intltool libffi \
-                  libtool openssl p5-xml-parser pkgconfig scons \
-                  wget xz</pre>
+    <pre>sudo port install \
+    autoconf automake bison cmake coreutils flex gettext \
+    git-core glib2 gsed intltool libffi libtool openssl \
+    p5-xml-parser pkgconfig scons wget xz</pre>
     <p>
     Mac OS X versions ≤ 10.7 are no longer supported.
     </p>
@@ -871,19 +874,18 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3 id="requirements-opensuse">openSUSE</h3>
 
     <!-- http://software.opensuse.org/113/en -->
-    <pre>zypper install -R autoconf automake bash bison bzip2 \
-                  cmake flex gcc-c++ gettext-tools git \
-                  intltool libffi-devel libtool make openssl \
-                  libopenssl-devel patch perl \
-                  perl-XML-Parser pkg-config scons \
-                  sed unzip wget xz</pre>
+    <pre>zypper install -R \
+    autoconf automake bash bison bzip2 cmake flex gcc-c++ \
+    gettext-tools git intltool libffi-devel libtool make \
+    openssl libopenssl-devel patch perl perl-XML-Parser \
+    pkg-config scons sed unzip wget xz</pre>
 
     <p>
     On 64-bit openSUSE, install also:
     </p>
-    <pre>zypper install -R gcc-32bit glibc-devel-32bit \
-                  libgcc46-32bit libgomp46-32bit \
-                  libstdc++46-devel-32bit</pre>
+    <pre>zypper install -R \
+    gcc-32bit glibc-devel-32bit libgcc46-32bit \
+    libgomp46-32bit libstdc++46-devel-32bit</pre>
 
     <h3 id="issue-non-multilib">Issues without a 32-bit compiler</h3>
 
