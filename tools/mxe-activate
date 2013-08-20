@@ -1,10 +1,12 @@
 export MXE_DIR=`pwd`
 export PATH=$MXE_DIR/usr/bin:$PATH
-alias mxe='make -C $MXE_DIR'
-
+MAKE=`gmake --help >/dev/null 2>&1 && echo g`make
 SED=`gsed --help >/dev/null 2>&1 && echo g`sed
+MXE_TARGET_LIST="`grep 'MXE_TARGET_LIST.*:=' Makefile | $SED -n 's,^.*:= \(.*\)$,\1,p'`"
 
-unset `grep '^unexport' Makefile | $SED -n 's,unexport,,p' | tr '\n' ' '`
+alias mxe='$MAKE -C $MXE_DIR --no-print-directory'
+
+unset `env | grep -v '^HOME=\|^LANG=\|MXE\|^PATH=\|^PS1=\|^TERM=' | $SED -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`
 
 _mxe()
 {
@@ -14,7 +16,7 @@ _mxe()
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     pkgs=$( for x in `ls -l $MXE_DIR/src/*.mk | $SED -n 's,.*src/\(.*\)\.mk,\1,p'`; do echo ${x} ; done )
-    tgts="i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32"
+    tgts=$MXE_TARGET_LIST
 
     case "${cur}" in
     build-only-*_*)

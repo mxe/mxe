@@ -3,10 +3,11 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 93d5a514d545567b194af9b9fba0954bb82565e3 Mon Sep 17 00:00:00 2001
+From 3a3ddccba8fa90a42551fb4d529c921c0aac4f63 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Wed, 3 Oct 2012 09:25:11 +0200
-Subject: [PATCH 1/2] findlib.ml
+Subject: [PATCH] ocamlbuild : support for prefixed
+ ocaml{c,opt,mklib,mktop,find} tools
 
 
 diff --git a/ocamlbuild/findlib.ml b/ocamlbuild/findlib.ml
@@ -22,19 +23,8 @@ index b5ef878..77454ed 100644
  
  type package = {
    name: string;
--- 
-1.7.9.5
-
-
-From b2ce063eee6dca5b3cd67bdb59d2a11ed2043995 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Wed, 3 Oct 2012 09:31:13 +0200
-Subject: [PATCH 2/2] options : support for prefixed ocaml-tools with
- ocamlfind
-
-
 diff --git a/ocamlbuild/options.ml b/ocamlbuild/options.ml
-index 1be4b63..48f6648 100644
+index 1be4b63..e7313de 100644
 --- a/ocamlbuild/options.ml
 +++ b/ocamlbuild/options.ml
 @@ -39,16 +39,17 @@ let use_menhir = ref false
@@ -68,7 +58,7 @@ index 1be4b63..48f6648 100644
 -    "ocamlyacc"; "menhir"; "ocamllex"; "ocamlmklib"; "ocamlmktop"; "ocamlfind"]
 +  mk_virtual_solvers "@target@-" 
 +	["ocamlc"; "ocamlopt"; "ocamldep"; "ocamlmklib"; "ocamlmktop"; "ocamlfind"];
-+  mk_virtual_solvers "" ["ocamldoc"; "ocamlyacc"; "menhir"; "ocamllex"; "ocamlfind"]
++  mk_virtual_solvers "" ["ocamldoc"; "ocamlyacc"; "menhir"; "ocamllex"]
  let ocamlc = ref (V"OCAMLC")
  let ocamlopt = ref (V"OCAMLOPT")
  let ocamldep = ref (V"OCAMLDEP")
@@ -107,5 +97,5 @@ index 1be4b63..48f6648 100644
  
    let reorder x y = x := !x @ (List.concat (List.rev !y)) in
 -- 
-1.7.9.5
+1.8.1.2
 

@@ -4,11 +4,10 @@
 PKG             := sdl2_image
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := 10bb4c0e751835703bcbb0fdf064bb636e307673
+$(PKG)_CHECKSUM := 20b1b0db9dd540d6d5e40c7da8a39c6a81248865
 $(PKG)_SUBDIR   := SDL2_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2_image-$($(PKG)_VERSION).tar.gz
-#$(PKG)_URL      := http://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
-$(PKG)_URL      := http://www.libsdl.org/tmp/SDL_image/release/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl2 jpeg libpng tiff
 
 define $(PKG)_UPDATE

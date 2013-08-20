@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 9491bb33788d7f0ee67da572dc4798004f98323a
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://poppler.freedesktop.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib cairo libpng lcms1 jpeg tiff freetype zlib curl qt
+$(PKG)_DEPS     := gcc glib cairo libpng lcms jpeg tiff freetype zlib curl qt
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://poppler.freedesktop.org/' | \
@@ -21,7 +21,9 @@ define $(PKG)_BUILD
     #       pick up libtiff (otherwise linking a minimal test program fails not
     #       because libtiff is not found, but because some references are
     #       undefined)
-    cd '$(1)' && ./configure \
+    cd '$(1)' \
+        && PATH='$(PREFIX)/$(TARGET)/qt/bin:$(PATH)' \
+        ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -31,7 +33,7 @@ define $(PKG)_BUILD
         --enable-xpdf-headers \
         --enable-poppler-qt4 \
         --enable-zlib \
-        --enable-cms=lcms1 \
+        --enable-cms=lcms2 \
         --enable-libcurl \
         --enable-libtiff \
         --enable-libjpeg \
@@ -51,7 +53,8 @@ define $(PKG)_BUILD
         --with-font-configuration=win32 \
         PKG_CONFIG_PATH_$(subst -,_,$(TARGET))='$(PREFIX)/$(TARGET)/qt/lib/pkgconfig' \
         LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    PATH='$(PREFIX)/$(TARGET)/qt/bin:$(PATH)' \
+        $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # Test program

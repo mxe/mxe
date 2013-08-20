@@ -39,12 +39,9 @@ TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
 PATH       := $(PREFIX)/bin:$(PATH)
 
-# unexport any environment variables that might cause trouble
-unexport AR CC CFLAGS C_INCLUDE_PATH CPATH CPLUS_INCLUDE_PATH CPP
-unexport CPPFLAGS CROSS CXX CXXCPP CXXFLAGS EXEEXT EXTRA_CFLAGS
-unexport EXTRA_LDFLAGS LD LDFLAGS LIBRARY_PATH LIBS NM
-unexport OBJC_INCLUDE_PATH PKG_CONFIG QMAKESPEC RANLIB STRIP
-unexport CONFIG_SITE
+# use a minimal whitelist of safe environment variables
+ENV_WHITELIST := PATH LANG MXE%
+unexport $(filter-out $(ENV_WHITELIST),$(shell env | $(SED) -n 's,\(.*\)=.*,\1,p'))
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
@@ -129,13 +126,14 @@ define CHECK_REQUIREMENT_VERSION
     fi
 
 endef
+$(shell [ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed')
+
 check-requirements: $(PREFIX)/installed/check-requirements
 $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	@echo '[check requirements]'
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[4-9]\|2\.[7-9][0-9])
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.[1-9][0-9]\(\.[0-9]\+\)\?)
-	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
 	@touch '$@'
 
 define newline
@@ -178,7 +176,7 @@ $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1):: $(addprefix download-,$($(1)_DEPS))
+download-$(1):: $(addprefix download-,$($(1)_DEPS) $($(1)_DEPS_$(3)))
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
@@ -189,7 +187,7 @@ $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
-                          $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS)) \
+                          $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS) $($(1)_DEPS_$(3))) \
                           | check-requirements $(3)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -226,7 +224,12 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
-	    (echo; find '$(2)' -name 'config.log' -print -exec cat {} \;) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
+	    (echo; \
+	     find '$(2)' -name 'config.log' -print -exec cat {} \;; \
+	     echo; \
+	     echo 'settings.mk'; \
+	     cat '$(TOP_DIR)/settings.mk'; \
+	     ) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
 	    exit 1; \
 	fi
 	@echo '[done]     $(1)'
@@ -251,10 +254,10 @@ build-only-$(1)_$(3):
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
-	[ -d '$(PREFIX)/$(3)/installed' ] || mkdir -p '$(PREFIX)/$(3)/installed'
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
 $(foreach TARGET,$(MXE_TARGETS), \
+    $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$(PKGS), \
         $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET)))))
 

@@ -28,4 +28,5 @@ define $(PKG)_BUILD
         FT2_EXTRA_LIBS="`$(TARGET)-pkg-config libpng --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
+    ln -sf '$(PREFIX)/$(TARGET)/bin/freetype-config' '$(PREFIX)/bin/$(TARGET)-freetype-config'
 endef
