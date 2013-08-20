@@ -819,10 +819,14 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     to build the remainder of MXE, run:
     </p>
-    <pre>./tools/freebsd-excludes</pre>
+    <pre>make EXCLUDE_PKGS='graphicsmagick gtksourceviewmm2\
+                   ocaml% openexr pcl qtbase vtk6'</pre>
     <p>
-    and review that file for the list of packages that are excluded.
+    to see a list of all dependent downstream packages that
+    will be excluded, run:
     </p>
+    <pre>make show-downstream-deps-'graphicsmagick gtksourceviewmm2\
+                           ocaml% openexr pcl qtbase vtk6'</pre>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
 
@@ -895,19 +899,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     support this.
     </p>
     <p>
-    To build the remainder of MXE, specify empty build rules
-    for the affected packages:
+    To build the remainder of MXE, specify the affected
+    packages to exclude:
     </p>
-    <pre>make \
-            ocaml-cairo_BUILD= \
-            ocaml-findlib_BUILD= \
-            ocaml-lablgtk2_BUILD= \
-            ocaml-camlimages_BUILD= \
-            ocaml-flexdll_BUILD= \
-            ocaml-native_BUILD= \
-            ocaml-core_BUILD= \
-            ocaml-lablgl_BUILD= \
-            ocaml-xml-light_BUILD=</pre>
+    <pre>make EXCLUDE_PKGS='ocaml%'</pre>
 </div>
 
 <div class="section">
@@ -991,6 +986,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         (short option "-j 4 -k")
         </dd>
 
+    <dt>make EXCLUDE_PKGS='foo bar'</dt>
+
+        <dd>
+        build all packages excluding foo, bar, and all downstream
+        packages that depend on them - mostly used when there are
+        <a href="#issue-non-multilib">known issues</a>
+        </dd>
+
     <dt>make check-requirements</dt>
 
         <dd>
@@ -1035,6 +1038,27 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <dd>
         remove all unused package files,
         handy after a successful update
+        </dd>
+
+    <dt>make show-deps-foo</dt>
+
+        <dd>
+        print a list of upstream dependencies
+        and downstream dependents
+        </dd>
+
+    <dt>make show-downstream-deps-foo</dt>
+
+        <dd>
+        print a list of downstream dependents
+        suitable for usage in shell scripts
+        </dd>
+
+    <dt>make show-upstream-deps-foo</dt>
+
+        <dd>
+        print a list of upstream dependencies
+        suitable for usage in shell scripts
         </dd>
 
     <dt>make update</dt>
