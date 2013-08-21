@@ -13,7 +13,7 @@ $(PKG)_DEPS     :=
 $(PKG)_MAKE_OPTS := PREFIX=$(PREFIX)/$(TARGET) DYNAMIC_ARCH=1 NO_LAPACK=1
 
 ifneq ($(MXE_NATIVE_BUILD),yes)
-  $(PKG)_MAKE_OPTS += NO_CBLAS=1 USE_THREAD=0 CC=$(CC) FC=$(F77) HOSTCC=gcc HOSTFC=gfortran CROSS=1
+  $(PKG)_MAKE_OPTS += NO_CBLAS=1 USE_THREAD=0 CC=$(CC) FC=$(F77) HOSTCC=$(TARGET)-gcc HOSTFC=$(TARGET)-gfortran CROSS=1
 endif
 
 ifeq ($(ENABLE_64),yes)
@@ -35,3 +35,7 @@ define $(PKG)_BUILD
       $(INSTALL) $(HOST_LIBDIR)/libopenblas.dll $(HOST_BINDIR)/; \
     fi
 endef
+
+$(PKG)_BUILD_i686-pc-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =
+$(PKG)_BUILD_x86_64-w64-mingw32 =
