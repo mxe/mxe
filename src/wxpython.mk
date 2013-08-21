@@ -3,6 +3,7 @@
 
 PKG             := wxpython
 $(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.9.4.0
 $(PKG)_CHECKSUM := c292cd45b51e29c558c4d9cacf93c4616ed738b9
 $(PKG)_SUBDIR   := wxPython-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxPython-src-$($(PKG)_VERSION).tar.bz2
@@ -42,3 +43,6 @@ define $(PKG)_BUILD
 
 endef
 
+$(PKG)_BUILD_i686-pc-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =
+$(PKG)_BUILD_x86_64-w64-mingw32 =
