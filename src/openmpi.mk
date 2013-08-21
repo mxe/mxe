@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := openmpi
-$(PKG)_VERSION  := 1.6
-$(PKG)_CHECKSUM := 38095d3453519177272f488d5058a98f7ebdbf10
+$(PKG)_VERSION  := 1.6.5
+$(PKG)_CHECKSUM := 93859d515b33dd9a0ee6081db285a2d1dffe21ce
 $(PKG)_SUBDIR   := openmpi-$($(PKG)_VERSION)
 $(PKG)_FILE     := openmpi-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.open-mpi.org/software/ompi/v1.6/downloads/$($(PKG)_FILE)
@@ -11,7 +11,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.open-mpi.org/software/ompi/' | \
-    $(SED)  -n 's,.*downloads/openmpi-([0-9]\.[0-9\.]*).tar.bz2">.*,\1,p' | \
+    $(SED)  -n 's,.*<TITLE>Open MPI: Version \([0-9\.]{1-6}\)</TITLE>.*,\1,p' | \
     head -1 | echo 
 endef
 
@@ -33,4 +33,6 @@ define $(PKG)_BUILD
 
 endef
 
-#$(PKG)_BUILD_x86_64-w64-mingw32 =
+$(PKG)_BUILD_i686-pc-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =
+$(PKG)_BUILD_x86_64-w64-mingw32 =
