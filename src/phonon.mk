@@ -4,11 +4,11 @@
 # Qwt - Qt widgets for technical applications
 PKG             := phonon
 $(PKG)_VERSION  := 4.6.0
-$(PKG)_CHECKSUM := 6d33a52367f7a82498ba27812bec4e15de005534
-$(PKG)_SUBDIR   := $(PKG)
-$(PKG)_FILE     := $(PKG).tar.gz
-$(PKG)_WEBSITE  := http://flavio.tordini.org/
-$(PKG)_URL      := http://flavio.tordini.org/files/$(PKG)/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := d8dbc188b58c6dd9c6a73d3742a25291e647bb95
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
+$(PKG)_WEBSITE  := http://www.kde.org/
+$(PKG)_URL      := http://download.kde.org/stable/phonon/$($(PKG)_VERSION)/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib automoc4
 
 define $(PKG)_UPDATE
@@ -20,10 +20,18 @@ endef
 
 define $(PKG)_BUILD
 
-    cd '$(1)' && $(PREFIX)/bin/$(TARGET)-qmake
+	mkdir '$(1)/build'
+	
+	cd '$(1)' && cmake ./cmake -DCMAKE_INSTALL_PREFIX=$(PREFIX)/$(TARGET)/qt \
+	      -DPHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT=TRUE \
+	      -DDBUS_INTERFACES_INSTALL_DIR=$(PREFIX)/$(TARGET)/share/dbus-1/interfaces 
 
-    $(MAKE) -C '$(1)'  -j '$(JOBS)'
-
-    $(MAKE) -C '$(1)'  -j '$(JOBS)' install
+    	$(MAKE) -C '$(1)'  -j '$(JOBS)'
+	
+    	$(MAKE) -C '$(1)'  -j '$(JOBS)' install
 
 endef
+
+$(PKG)_BUILD_i686-pc-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 =
+$(PKG)_BUILD_x86_64-w64-mingw32 =
