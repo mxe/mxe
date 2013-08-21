@@ -386,7 +386,7 @@ exit</pre>
     use a white-list approach:
     </p>
     <pre>unset `env | \
-    grep -v '^EDITOR=\|^HOME=\|^LANG=\|^PATH=\|PKG_CONFIG\|^PS1=\|^TERM=' | \
+    grep -v '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=\|PKG_CONFIG\|^PS1=\|^TERM=' | \
     sed -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`</pre>
 
     <p>
