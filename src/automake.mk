@@ -10,8 +10,7 @@ $(PKG)_FILE     := automake-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
-# depends on autoconf, but we can assume it's available
-# for this temporary case of 1.14 issues.
+$(PKG)_DEPS_NATIVE := autoconf
 
 define $(PKG)_UPDATE
     echo 'Warning: Updates are temporarily disabled for package $(PKG).' >&2;
