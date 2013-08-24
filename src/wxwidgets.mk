@@ -27,7 +27,7 @@ define $(PKG)_CONFIGURE_OPTS
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-gui \
-        --enable-stl \
+        --disable-stl \
         --enable-threads \
         --disable-universal \
         --with-themes=all \
