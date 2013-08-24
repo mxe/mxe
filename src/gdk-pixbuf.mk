@@ -19,6 +19,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && aclocal
+    cd '$(1)' && automake --add-missing
     cd '$(1)' && autoreconf -I'$(PREFIX)/$(TARGET)/share/aclocal'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
