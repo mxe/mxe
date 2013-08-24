@@ -3,8 +3,8 @@
 
 PKG             := pkgconf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := da179fd
-$(PKG)_CHECKSUM := 1e7b5ffe35ca4580a9b801307c3bc919fd77a4fd
+$(PKG)_VERSION  := 36827a3
+$(PKG)_CHECKSUM := 51b6f1a5630414c4a76fca34d4029ea855644071
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://github.com/$(PKG)/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
