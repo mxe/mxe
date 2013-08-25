@@ -2,25 +2,25 @@
 # See index.html for further information.
 
 PKG             := automake
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 1.14%
 $(PKG)_VERSION  := 1.13.2
 $(PKG)_CHECKSUM := 72ee9fcd180c54fd7c067155d85fa071a99c3ea3
-$(PKG)_SUBDIR   := automake-$($(PKG)_VERSION)
-$(PKG)_FILE     := automake-$($(PKG)_VERSION).tar.gz
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)
-$(PKG)_DEPS     :=
-
-$(PKG)_DEPS_NATIVE := autoconf
+$(PKG)_DEPS     := autoconf
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/automake/?C=M;O=D' | \
+    $(SED) -n 's,.*<a href="automake-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
-define $(PKG)_BUILD_NATIVE
+define $(PKG)_BUILD_$(BUILD)
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
-        --prefix='$(PREFIX)'
+        --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 endef

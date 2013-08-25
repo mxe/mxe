@@ -11,14 +11,16 @@ $(PKG)_URL      := http://prdownloads.sourceforge.net/flex/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- 'http://flex.sourceforge.net/' | \
+    $(SED) -n 's,.*flex-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
-define $(PKG)_BUILD_NATIVE
+define $(PKG)_BUILD_NONE
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
-        --prefix='$(PREFIX)'
+        --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 endef

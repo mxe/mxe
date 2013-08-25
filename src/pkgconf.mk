@@ -16,11 +16,11 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD_NATIVE
+define $(PKG)_BUILD_$(BUILD)
     cd '$(1)' && ./autogen.sh
     cd '$(1)' && ./configure \
-        --prefix='$(PREFIX)'
+        --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
-    ln -sf '$(PREFIX)/bin/pkgconf' '$(PREFIX)/bin/pkg-config'
+    ln -sf '$(PREFIX)/$(TARGET)/bin/pkgconf' '$(PREFIX)/$(TARGET)/bin/pkg-config'
 endef
