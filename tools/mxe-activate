@@ -40,8 +40,14 @@ _mxe()
         COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
         return 0
         ;;
+    show-*deps-*)
+        local base=`echo ${cur} | $SED -n 's,\(show.*deps-\).*,\1,p'`
+        local _pkgs=$( for x in ${pkgs}; do echo $base${x} ; done )
+        COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+        return 0
+        ;;
     [!-]*)
-        pkgs+=" build-only- check-requirements clean clean-pkg download download- update-checksum-"
+        pkgs+=" build-only- check-requirements clean clean-pkg download download- update-checksum- show-deps- show-downstream-deps- show-upstream-deps-"
         COMPREPLY=( $(compgen -W "${pkgs}" -- ${cur}) )
         return 0
         ;;
