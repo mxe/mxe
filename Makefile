@@ -322,7 +322,7 @@ show-downstream-deps-%:
 	@echo -n
 
 show-upstream-deps-%:
-	$(call SET_CLEAR,PKGS_VISITED)\
+	$(call SET_CLEAR,PKGS_VISITED)
 	$(info $(call WALK_UPSTREAM,$*))
 	@echo -n
 
