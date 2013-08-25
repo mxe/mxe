@@ -37,7 +37,8 @@ TMP_DIR     = $(PWD)/tmp-$(1)
 MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
-PATH       := $(PREFIX)/bin:$(PATH)
+BUILD       = $(shell '$(TOP_DIR)/tools/config.guess')
+PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MXE%
@@ -145,6 +146,9 @@ include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
+
+# all cross targets depend on build requirements
+MXE_TARGETS += $(BUILD)
 
 define TARGET_DEPS
 $(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
