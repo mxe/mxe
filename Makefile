@@ -147,9 +147,6 @@ include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
 
-# all cross targets depend on build requirements
-MXE_TARGETS += $(BUILD)
-
 define TARGET_DEPS
 $(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
                      $(SED) -n 's,.*$(1)\(.*\),\1,p' | \
