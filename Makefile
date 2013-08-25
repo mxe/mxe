@@ -37,11 +37,12 @@ TMP_DIR     = $(PWD)/tmp-$(1)
 MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
-BUILD       = $(shell '$(TOP_DIR)/tools/config.guess')
+BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
+BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
 # use a minimal whitelist of safe environment variables
-ENV_WHITELIST := PATH LANG MXE%
+ENV_WHITELIST := PATH LANG MAKE% MXE%
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | $(SED) -n 's,\(.*\)=.*,\1,p'))
 
 SHORT_PKG_VERSION = \
@@ -146,6 +147,10 @@ include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
+
+.PHONY: build-requirements
+build-requirements:
+	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD)
 
 define TARGET_DEPS
 $(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
