@@ -51,7 +51,9 @@ define $(PKG)_BUILD
             -dbus-linked \
             -v
 
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    # invoke qmake with removed debug options as a workaround for
+    # https://bugreports.qt-project.org/browse/QTBUG-30898
+    $(MAKE) -C '$(1)' -j '$(JOBS)' QMAKE="$(1)/bin/qmake CONFIG-='debug debug_and_release'"
     rm -rf '$(PREFIX)/$(TARGET)/qt5'
     $(MAKE) -C '$(1)' -j 1 install
 
@@ -59,4 +61,16 @@ define $(PKG)_BUILD
     cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qt-test.pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
+
+    # copy pkg-config files to standard directory
+    cp '$(PREFIX)/$(TARGET)'/qt5/lib/pkgconfig/* '$(PREFIX)/$(TARGET)'/lib/pkgconfig/
+
+    # build test the manual way
+    mkdir '$(1)/test-$(PKG)-pkgconfig'
+    '$(PREFIX)/$(TARGET)/qt5/bin/uic' -o '$(1)/test-$(PKG)-pkgconfig/ui_qt-test.h' '$(TOP_DIR)/src/qt-test.ui'
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -std=c++0x -pedantic \
+        '$(TOP_DIR)/src/qt-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
+        -I'$(1)/test-$(PKG)-pkgconfig' \
+        `'$(TARGET)-pkg-config' Qt5Widgets --cflags --libs`
 endef
