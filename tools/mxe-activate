@@ -1,5 +1,6 @@
 export MXE_DIR=`pwd`
-export PATH=$MXE_DIR/usr/bin:$PATH
+export BUILD=`$MXE_DIR/tools/config.guess`
+export PATH=$MXE_DIR/usr/$BUILD/bin:$MXE_DIR/usr/bin:$PATH
 MAKE=`gmake --help >/dev/null 2>&1 && echo g`make
 SED=`gsed --help >/dev/null 2>&1 && echo g`sed
 MXE_TARGET_LIST="`grep 'MXE_TARGET_LIST.*:=' Makefile | $SED -n 's,^.*:= \(.*\)$,\1,p'`"
