@@ -22,7 +22,7 @@ index c4598a4..c7a46d2 100755
  			WSDL2H_EXTRA_LIBS="-lssl -lcrypto -lws2_32 -lkernel32 -luser32 -lgdi32 -lm"
  			;;
          *-*-freebsd*)   platform=FREEBSD ;;
-@@ -7340,7 +7340,7 @@ echo $ECHO_N "checking for enable gnutls in library... $ECHO_C" >&6; }
+@@ -7560,7 +7560,7 @@ echo $ECHO_N "checking for enable gnutls in library... $ECHO_C" >&6; }
      { echo "$as_me:$LINENO: result: yes" >&5
  echo "${ECHO_T}yes" >&6; }
      WSDL2H_EXTRA_FLAGS="-DWITH_GNUTLS -DWITH_GZIP"
