@@ -1,0 +1,25 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+diff -ur VTK6.0.0/Charts/Core/module.cmake VTK6.0.0.new/Charts/Core/module.cmake
+--- VTK6.0.0/Charts/Core/module.cmake	2013-06-13 05:47:10.000000000 +1000
++++ VTK6.0.0.new/Charts/Core/module.cmake	2013-08-27 23:35:08.000000000 +1000
+@@ -1,6 +1,6 @@
+ vtk_module(vtkChartsCore
+   GROUPS
+-    StandAlone
++    Rendering
+   DEPENDS
+     vtkCommonColor
+     vtkRenderingContext2D
+diff -ur VTK6.0.0/IO/Export/module.cmake VTK6.0.0.new/IO/Export/module.cmake
+--- VTK6.0.0/IO/Export/module.cmake	2013-06-13 05:47:10.000000000 +1000
++++ VTK6.0.0.new/IO/Export/module.cmake	2013-08-27 23:34:58.000000000 +1000
+@@ -1,6 +1,6 @@
+ vtk_module(vtkIOExport
+   GROUPS
+-    StandAlone
++    Rendering
+   DEPENDS
+     vtkCommonCore
+     vtkRenderingContext2D
