@@ -37,10 +37,12 @@ TMP_DIR     = $(PWD)/tmp-$(1)
 MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
-PATH       := $(PREFIX)/bin:$(PATH)
+BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
+BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
+PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
 # use a minimal whitelist of safe environment variables
-ENV_WHITELIST := PATH LANG MXE%
+ENV_WHITELIST := PATH LANG MAKE% MXE%
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | $(SED) -n 's,\(.*\)=.*,\1,p'))
 
 SHORT_PKG_VERSION = \
@@ -99,7 +101,7 @@ else
 endif
 
 .PHONY: all
-all: $(PKGS)
+all: all-filtered
 
 .PHONY: check-requirements
 define CHECK_REQUIREMENT
@@ -145,6 +147,10 @@ include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
+
+.PHONY: build-requirements
+build-requirements:
+	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD)
 
 define TARGET_DEPS
 $(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
@@ -260,6 +266,65 @@ $(foreach TARGET,$(MXE_TARGETS), \
     $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$(PKGS), \
         $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET)))))
+
+# convenience set-like functions for unique lists
+SET_APPEND = \
+    $(eval $(1) := $(sort $($(1)) $(2)))
+
+SET_CLEAR = \
+    $(eval $(1) := )
+
+# WALK functions accept a list of pkgs and/or wildcards
+WALK_UPSTREAM = \
+    $(strip \
+        $(foreach PKG,$(filter $(1),$(PKGS)),\
+            $(foreach DEP,$($(PKG)_DEPS) $(foreach TARGET,$(MXE_TARGETS),$($(PKG)_DEPS_$(TARGET))),\
+                $(if $(filter-out $(PKGS_VISITED),$(DEP)),\
+                    $(call SET_APPEND,PKGS_VISITED,$(DEP))\
+                    $(call WALK_UPSTREAM,$(DEP))\
+                    $(DEP)))))
+
+# not really walking downstream - that seems to be quadratic, so take
+# a linear approach and filter the fully expanded upstream for each pkg
+WALK_DOWNSTREAM = \
+    $(strip \
+        $(foreach PKG,$(PKGS),\
+            $(call SET_CLEAR,PKGS_VISITED)\
+            $(eval $(PKG)_DEPS_ALL := $(call WALK_UPSTREAM,$(PKG))))\
+        $(foreach PKG,$(PKGS),\
+            $(if $(filter $(1),$($(PKG)_DEPS_ALL)),$(PKG))))
+
+# EXCLUDE_PKGS can be a list of pkgs and/or wildcards
+RECURSIVELY_EXCLUDED_PKGS = \
+    $(sort \
+        $(filter $(EXCLUDE_PKGS),$(PKGS))\
+        $(call SET_CLEAR,PKGS_VISITED)\
+        $(call WALK_DOWNSTREAM,$(EXCLUDE_PKGS)))
+
+.PHONY: all-filtered
+all-filtered: $(filter-out $(call RECURSIVELY_EXCLUDED_PKGS),$(PKGS))
+
+# print a list of upstream dependencies and downstream dependents
+show-deps-%:
+	$(call SET_CLEAR,PKGS_VISITED)
+	$(info $* upstream dependencies:$(newline)\
+	    $(call WALK_UPSTREAM,$*)\
+	    $(newline)$(newline)$* downstream dependents:$(newline)\
+	    $(call WALK_DOWNSTREAM,$*))
+	@echo
+
+# show upstream dependencies and downstream dependents separately
+# suitable for usage in shell with: `make show-downstream-deps-foo`
+# @echo -n suppresses the "Nothing to be done" without an eol
+show-downstream-deps-%:
+	$(call SET_CLEAR,PKGS_VISITED)
+	$(info $(call WALK_DOWNSTREAM,$*))
+	@echo -n
+
+show-upstream-deps-%:
+	$(call SET_CLEAR,PKGS_VISITED)
+	$(info $(call WALK_UPSTREAM,$*))
+	@echo -n
 
 .PHONY: clean
 clean:

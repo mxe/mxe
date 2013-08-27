@@ -386,7 +386,7 @@ exit</pre>
     use a white-list approach:
     </p>
     <pre>unset `env | \
-    grep -v '^HOME=\|^LANG=\|^PATH=\|PKG_CONFIG\|^PS1=\|^TERM=' | \
+    grep -v '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=\|PKG_CONFIG\|^PS1=\|^TERM=' | \
     sed -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`</pre>
 
     <p>
@@ -820,10 +820,14 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     to build the remainder of MXE, run:
     </p>
-    <pre>./tools/freebsd-excludes</pre>
+    <pre>gmake EXCLUDE_PKGS='graphicsmagick gtksourceviewmm2\
+                   ocaml% openexr pcl qtbase vtk6'</pre>
     <p>
-    and review that file for the list of packages that are excluded.
+    to see a list of all dependent downstream packages that
+    will be excluded, run:
     </p>
+    <pre>gmake show-downstream-deps-'graphicsmagick gtksourceviewmm2\
+                           ocaml% openexr pcl qtbase vtk6'</pre>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
 
@@ -897,19 +901,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     support this.
     </p>
     <p>
-    To build the remainder of MXE, specify empty build rules
-    for the affected packages:
+    To build the remainder of MXE, specify the affected
+    packages to exclude:
     </p>
-    <pre>make \
-            ocaml-cairo_BUILD= \
-            ocaml-findlib_BUILD= \
-            ocaml-lablgtk2_BUILD= \
-            ocaml-camlimages_BUILD= \
-            ocaml-flexdll_BUILD= \
-            ocaml-native_BUILD= \
-            ocaml-core_BUILD= \
-            ocaml-lablgl_BUILD= \
-            ocaml-xml-light_BUILD=</pre>
+    <pre>make EXCLUDE_PKGS='ocaml%'</pre>
 </div>
 
 <div class="section">
@@ -993,6 +988,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         (short option "-j 4 -k")
         </dd>
 
+    <dt>make EXCLUDE_PKGS='foo bar'</dt>
+
+        <dd>
+        build all packages excluding foo, bar, and all downstream
+        packages that depend on them - mostly used when there are
+        <a href="#issue-non-multilib">known issues</a>
+        </dd>
+
     <dt>make check-requirements</dt>
 
         <dd>
@@ -1037,6 +1040,27 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <dd>
         remove all unused package files,
         handy after a successful update
+        </dd>
+
+    <dt>make show-deps-foo</dt>
+
+        <dd>
+        print a list of upstream dependencies
+        and downstream dependents
+        </dd>
+
+    <dt>make show-downstream-deps-foo</dt>
+
+        <dd>
+        print a list of downstream dependents
+        suitable for usage in shell scripts
+        </dd>
+
+    <dt>make show-upstream-deps-foo</dt>
+
+        <dd>
+        print a list of upstream dependencies
+        suitable for usage in shell scripts
         </dd>
 
     <dt>make update</dt>
@@ -1107,6 +1131,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.aubio.org/">automoc4</a></td>
     </tr>
     <tr>
+        <td class="package">autoconf</td>
+        <td class="website"><a href="http://www.gnu.org/software/autoconf/">autoconf</a></td>
+    </tr>
+    <tr>
+        <td class="package">automake</td>
+        <td class="website"><a href="http://www.gnu.org/software/automake/">automake</a></td>
+    </tr>
+    <tr>
         <td class="package">bfd</td>
         <td class="website"><a href="http://www.gnu.org/software/binutils/">Binary File Descriptor library</a></td>
     </tr>
@@ -1117,6 +1149,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">biosig</td>
         <td class="website"><a href="http://biosig.sf.net/">biosig</a></td>
+    </tr>
+    <tr>
+        <td class="package">bison</td>
+        <td class="website"><a href="http://www.gnu.org/software/bison/">bison</a></td>
     </tr>
     <tr>
         <td class="package">blas</td>
@@ -1153,6 +1189,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">cgal</td>
         <td class="website"><a href="http://www.cgal.org/">cgal</a></td>
+    </tr>
+    <tr>
+        <td class="package">cmake</td>
+        <td class="website"><a href="http://www.cmake.org/">cmake</a></td>
     </tr>
     <tr>
         <td class="package">cminpack</td>
@@ -1221,6 +1261,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">flann</td>
         <td class="website"><a href="http://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN">FLANN</a></td>
+    </tr>
+    <tr>
+        <td class="package">flex</td>
+        <td class="website"><a href="http://flex.sourceforge.net/">flex</a></td>
     </tr>
     <tr>
         <td class="package">fltk</td>
@@ -1523,6 +1567,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.intra2net.com/en/developer/libftdi/index.php">LibFTDI</a></td>
     </tr>
     <tr>
+        <td class="package">libftdi1</td>
+        <td class="website"><a href="http://www.intra2net.com/en/developer/libftdi/index.php">LibFTDI1</a></td>
+    </tr>
+    <tr>
         <td class="package">libgcrypt</td>
         <td class="website"><a href="ftp://ftp.gnupg.org/gcrypt/libgcrypt/">libgcrypt</a></td>
     </tr>
@@ -1601,6 +1649,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">liblqr-1</td>
         <td class="website"><a href="http://liblqr.wikidot.com/">liblqr-1</a></td>
+    </tr>
+    <tr>
+        <td class="package">libltdl</td>
+        <td class="website"><a href="http://www.gnu.org/software/libtool/manual/html_node/Using-libltdl.html#Using-libltdl">GNU Libtool Library (libltdl)</a></td>
     </tr>
     <tr>
         <td class="package">libmad</td>
@@ -1687,6 +1739,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://libusb-win32.sourceforge.net/">LibUsb</a></td>
     </tr>
     <tr>
+        <td class="package">libusb1</td>
+        <td class="website"><a href="http://libusb.org/">LibUsb-1.0</a></td>
+    </tr>
+    <tr>
         <td class="package">libvpx</td>
         <td class="website"><a href="http://code.google.com/p/webm/">vpx</a></td>
     </tr>
@@ -1721,6 +1777,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">lzo</td>
         <td class="website"><a href="http://www.oberhumer.com/opensource/lzo/">lzo</a></td>
+    </tr>
+    <tr>
+        <td class="package">m4</td>
+        <td class="website"><a href="http://www.gnu.org/software/m4/">GNU M4</a></td>
     </tr>
     <tr>
         <td class="package">matio</td>
@@ -1925,6 +1985,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">pixman</td>
         <td class="website"><a href="http://cairographics.org/">pixman</a></td>
+    </tr>
+    <tr>
+        <td class="package">pkgconf</td>
+        <td class="website"><a href="https://github.com/pkgconf/pkgconf">pkgconf</a></td>
     </tr>
     <tr>
         <td class="package">plib</td>

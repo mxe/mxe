@@ -1,12 +1,13 @@
 export MXE_DIR=`pwd`
-export PATH=$MXE_DIR/usr/bin:$PATH
+export BUILD=`$MXE_DIR/tools/config.guess`
+export PATH=$MXE_DIR/usr/$BUILD/bin:$MXE_DIR/usr/bin:$PATH
 MAKE=`gmake --help >/dev/null 2>&1 && echo g`make
 SED=`gsed --help >/dev/null 2>&1 && echo g`sed
 MXE_TARGET_LIST="`grep 'MXE_TARGET_LIST.*:=' Makefile | $SED -n 's,^.*:= \(.*\)$,\1,p'`"
 
 alias mxe='$MAKE -C $MXE_DIR --no-print-directory'
 
-unset `env | grep -v '^HOME=\|^LANG=\|MXE\|^PATH=\|^PS1=\|^TERM=' | $SED -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`
+unset `env | grep -v '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=\|^PS1=\|^TERM=' | $SED -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`
 
 _mxe()
 {
@@ -40,8 +41,14 @@ _mxe()
         COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
         return 0
         ;;
+    show-*deps-*)
+        local base=`echo ${cur} | $SED -n 's,\(show.*deps-\).*,\1,p'`
+        local _pkgs=$( for x in ${pkgs}; do echo $base${x} ; done )
+        COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+        return 0
+        ;;
     [!-]*)
-        pkgs+=" build-only- check-requirements clean clean-pkg download download- update-checksum-"
+        pkgs+=" build-only- check-requirements clean clean-pkg download download- update-checksum- show-deps- show-downstream-deps- show-upstream-deps-"
         COMPREPLY=( $(compgen -W "${pkgs}" -- ${cur}) )
         return 0
         ;;

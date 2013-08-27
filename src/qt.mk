@@ -84,4 +84,16 @@ define $(PKG)_BUILD
     cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PWD)/$(2).pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
+
+    # copy pkg-config files to standard directory
+    cp '$(PREFIX)/$(TARGET)'/qt/lib/pkgconfig/* '$(PREFIX)/$(TARGET)'/lib/pkgconfig/
+
+    # build test the manual way
+    mkdir '$(1)/test-$(PKG)-pkgconfig'
+    '$(PREFIX)/$(TARGET)/qt/bin/uic' -o '$(1)/test-$(PKG)-pkgconfig/ui_qt-test.h' '$(TOP_DIR)/src/qt-test.ui'
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -std=c++0x -pedantic \
+        '$(TOP_DIR)/src/qt-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
+        -I'$(1)/test-$(PKG)-pkgconfig' \
+        `'$(TARGET)-pkg-config' QtGui --cflags --libs`
 endef

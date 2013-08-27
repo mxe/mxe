@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 085c23666adcf88585119cb6aea7efe5c58481d4
 $(PKG)_SUBDIR   := GraphicsMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := GraphicsMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads libtool zlib bzip2 jpeg jasper lcms libpng tiff freetype libxml2
+$(PKG)_DEPS     := gcc pthreads libltdl zlib bzip2 jpeg jasper lcms libpng tiff freetype libxml2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/' | \
@@ -52,5 +52,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -pedantic -std=gnu++0x \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-graphicsmagick.exe' \
-        `'$(TARGET)-pkg-config' GraphicsMagick++ --cflags --libs`
+        `'$(TARGET)-pkg-config' GraphicsMagick++ --cflags --libs` -llzma
 endef
