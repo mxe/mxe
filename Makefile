@@ -82,7 +82,8 @@ DOWNLOAD_PKG_ARCHIVE = \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
-        > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)'
+        > '$(PKG_DIR)/$($(1)_FILE)' || \
+        ( echo 'Download failed!'; rm -f '$(PKG_DIR)/$($(1)_FILE)'; exit 1; )
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
@@ -202,7 +203,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
 	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	        echo; \
-	        echo 'Wrong checksum of package $(1)!'; \
+	        echo 'Download failed or wrong checksum of package $(1)!'; \
 	        echo '------------------------------------------------------------'; \
 	        tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p'; \
 	        echo '------------------------------------------------------------'; \
