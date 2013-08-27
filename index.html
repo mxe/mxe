@@ -386,9 +386,10 @@ exit</pre>
     use a white-list approach:
     </p>
     <pre>unset `env | \
-    grep -v '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=\|PKG_CONFIG\|^PS1=\|^TERM=' | \
-    sed -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`</pre>
-
+    grep -vi '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=' | \
+    grep -vi 'PKG_CONFIG\|PROXY\|^PS1=\|^TERM=' | \
+    cut -d '=' -f1 | tr '\n' ' '`</pre>
+    <!-- update mxe-activate also -->
     <p>
     Congratulations!
     You're ready to cross compile anything you like.
