@@ -145,7 +145,7 @@ $(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mxe-config-opts,--disable-lib32,$($(PK
 $(PKG)_BUILD_i686-w64-mingw32   = $(subst mxe-config-opts,--disable-lib64,$($(PKG)_BUILD_mingw-w64))
 
 define $(PKG)_BUILD_$(BUILD)
-    for f in c++ cpp g++ gcov; do \
+    for f in c++ cpp g++ gcc gcov; do \
         ln -sf "`which $$f`" '$(PREFIX)/bin/$(TARGET)'-$$f ; \
     done
     $($(PKG)_POST_BUILD)
