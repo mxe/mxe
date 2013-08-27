@@ -42,7 +42,8 @@ BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
 # use a minimal whitelist of safe environment variables
-ENV_WHITELIST := PATH LANG MAKE% MXE%
+# http_proxy for wget
+ENV_WHITELIST := PATH LANG MAKE% MXE% http_proxy
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | $(SED) -n 's,\(.*\)=.*,\1,p'))
 
 SHORT_PKG_VERSION = \
@@ -202,7 +203,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
 	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	        echo; \
-	        echo 'Wrong checksum of package $(1)!'; \
+	        echo 'Wrong checksum of package $(1) or package not found!'; \
 	        echo '------------------------------------------------------------'; \
 	        tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p'; \
 	        echo '------------------------------------------------------------'; \
