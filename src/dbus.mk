@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         --disable-maintainer-mode \
         --enable-static \
         --disable-silent-rules \
+        --disable-launchd \
         CFLAGS='-DPROCESS_QUERY_LIMITED_INFORMATION=0x1000'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
