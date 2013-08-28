@@ -12,3 +12,36 @@
  endif()
  
  # FIXME: The TDx support needs some refactoring before we can build it in a
+@@ -136,7 +136,7 @@
+ 
+ if(VTK_USE_OSMESA)
+   find_package(OpenGL)
+-else()
++elseif(VTK_USE_X)
+   find_package(OpenGL REQUIRED)
+ endif()
+ 
+--- VTK6.0.0/ThirdParty/gl2ps/vtkgl2ps/CMakeLists.txt	2013-06-12 21:47:10.000000000 +0200
++++ VTK6.0.0/ThirdParty/gl2ps/vtkgl2ps/CMakeLists.txt	2013-08-28 13:45:16.297181334 +0200
+@@ -4,16 +4,16 @@
+ include_regular_expression(".*")
+ 
+ # Depend on OpenGL
+-if(NOT VTK_OPENGL_HAS_OSMESA)
+-  find_package(OpenGL REQUIRED)
+-  set(GL2PS_GL_LIBRARIES ${OPENGL_LIBRARIES})
+-  set(GL2PS_GL_INCLUDE_DIR ${OPENGL_INCLUDE_DIR})
+-else()
++if(VTK_OPENGL_HAS_OSMESA)
+   set(GL2PS_GL_LIBRARIES ${OSMESA_LIBRARY})
+   set(GL2PS_GL_INCLUDE_DIR ${OSMESA_INCLUDE_DIR})
+   if(OPENGL_gl_LIBRARY)
+     list(APPEND GL2PS_GL_LIBRARIES ${OPENGL_gl_LIBRARY})
+   endif()
++elseif(VTK_USE_X)
++  find_package(OpenGL REQUIRED)
++  set(GL2PS_GL_LIBRARIES ${OPENGL_LIBRARIES})
++  set(GL2PS_GL_INCLUDE_DIR ${OPENGL_INCLUDE_DIR})
+ endif()
+ 
+ # Need math on UNIX
