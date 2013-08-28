@@ -25,8 +25,11 @@ define $(PKG)_BUILD
     mkdir '$(1).native_build'
     cd '$(1).native_build' && cmake \
         -DBUILD_TESTING=FALSE \
+        -DVTK_USE_RENDERING=FALSE \
+        -DVTK_USE_X=FALSE \
         -DVTK_Group_Rendering=FALSE \
         -DCMAKE_BUILD_TYPE="Release" \
+        -DVTK_USE_OSMESA=FALSE \
         '$(1)'
     $(MAKE) -C '$(1).native_build' -j '$(JOBS)' VERBOSE=1 vtkCompileTools
 

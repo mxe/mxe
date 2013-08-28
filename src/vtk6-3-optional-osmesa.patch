@@ -1,0 +1,14 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+--- VTK6.0.0/Rendering/OpenGL/CMakeLists.txt	2013-06-12 21:47:10.000000000 +0200
++++ VTK6.0.0/Rendering/OpenGL/CMakeLists.txt	2013-08-27 13:15:06.770690266 +0200
+@@ -29,7 +29,7 @@
+ if(VTK_USE_X OR VTK_USE_CARBON OR VTK_USE_COCOA OR WIN32)
+   set(VTK_USE_OSMESA FALSE)
+ else()
+-  set(VTK_USE_OSMESA TRUE)
++  option(VTK_USE_OSMESA "Use OSMesa for VTK render windows" ON)
+ endif()
+ 
+ # FIXME: The TDx support needs some refactoring before we can build it in a
