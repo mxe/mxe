@@ -33,9 +33,6 @@ define $(PKG)_BUILD
     # DirectX is detected on Mac OSX but we use OpenGL
     $(SED) -i 's,d3d9,nod3d9,g' '$(1)/CMake/FindDirectX.cmake'
 
-    # reverse the fix-standalone patch as it upsets the cross build
-    cd '$(1)' && patch -p1 -u -R < '$(PWD)/src/vtk6-3-fix-standalone.patch'
-
     # now the cross compilation
     mkdir '$(1).cross_build'
     cd '$(1).cross_build' && cmake \
