@@ -3,8 +3,8 @@
 
 PKG             := qtserialport
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.0
-$(PKG)_CHECKSUM := 5e3e9fb88ba2cf7b84fad34c6f9424aa8dc5e97c
+$(PKG)_VERSION  := 5.1.1
+$(PKG)_CHECKSUM := a1a02801662c441d25299615bd5188473a67e7de
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)

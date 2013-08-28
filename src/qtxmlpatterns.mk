@@ -3,8 +3,8 @@
 
 PKG             := qtxmlpatterns
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.0
-$(PKG)_CHECKSUM := b108adc53e337640f3e4430c5e60b7bb8af7d18a
+$(PKG)_VERSION  := 5.1.1
+$(PKG)_CHECKSUM := 69f7f46f0072a35e67e820a3561b852b497a9d8f
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)

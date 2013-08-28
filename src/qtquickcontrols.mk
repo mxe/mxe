@@ -3,8 +3,8 @@
 
 PKG             := qtquickcontrols
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.0
-$(PKG)_CHECKSUM := e7d178b8927dc0356023ae1fca3909dd509757f0
+$(PKG)_VERSION  := 5.1.1
+$(PKG)_CHECKSUM := e92d5a505dcb1ba699bc53358246bdd52873e164
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
