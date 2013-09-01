@@ -69,15 +69,6 @@
  
  console:
  	$(MAKE) TARGET=gnuplot.exe gnuplot.exe
-@@ -433,7 +433,7 @@
- 	$(W)/winmain.c $(W)/wmenu.c $(W)/wpause.c $(W)/wprinter.c \
- 	$(W)/wresourc.h $(W)/wtext.c $(W)/wtext.h $(W)/geticon.c \
- 	$(W)/screenbuf.c $(W)/screenbuf.h $(W)/wgdiplus.cpp $(W)/wgdiplus.h \
--	$(D)doc2rtf.c $(T)win.trm $(W)/grpicon.ico $(W)/texticon.ico
-+	$(D)doc2rtf.c $(T)win.trm $(W)/GRPICON.ico $(W)/TEXTICON.ico
- 
- ifdef HTML_HELP
- WINDOWS +=	$(D)windows/doc2html.c
 @@ -453,7 +453,7 @@
    LDFLAGS2 += -L$(HHWPATH)lib
  endif
@@ -91,8 +82,8 @@
  
  # rules
  
--wgplt_res.$(O) :  $(W)/wgnuplot.rc $(W)/wgnuplib.rc $(W)/wresourc.h texticon.ico grpicon.ico
-+wgplt_res.$(O) :  $(W)/wgnuplot.rc $(W)/wgnuplib.rc $(W)/wresourc.h TEXTICON.ico GRPICON.ico
+-wgplt_res.$(O): $(W)/wgnuplot.rc $(W)/wgnuplib.rc $(W)/wresourc.h texticon.ico grpicon.ico
++wgplt_res.$(O): $(W)/wgnuplot.rc $(W)/wgnuplib.rc $(W)/wresourc.h TEXTICON.ico GRPICON.ico
  	$(RC) $(RCFLAGS) $< $(RCOUT)
  	$(RES2COFF)
  

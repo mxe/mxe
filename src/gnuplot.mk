@@ -3,16 +3,17 @@
 
 PKG             := gnuplot
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.6.1
-$(PKG)_CHECKSUM := 1ea21a628223159b0297ae65fe8293afd5aab3c0
+$(PKG)_VERSION  := 4.6.3
+$(PKG)_CHECKSUM := f01e417dc9504a05fd5cc2595b05ccb58bcea5b2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := gnuplot-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://sourceforge.net/projects/gnuplot/files/gnuplot/4.6.1/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://sourceforge.net/projects/gnuplot/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package gnuplot.' >&2;
-    echo $(gnuplot_VERSION)
+    $(WGET) -q -O- http://www.gnuplot.info/index.html | \
+    $(SED) -n 's_.*Release.*announce[_\.]([0-9]\.[0-9].\[0-9]).*gnuplot.*_\1_ip' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
@@ -23,7 +24,7 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin'
     $(INSTALL) -m755 '$(1)/config/mingw/gnuplot.exe' '$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m755 '$(1)/config/mingw/wgnuplot.exe' '$(PREFIX)/$(TARGET)/bin/'
-    $(INSTALL) -m644 '$(1)/config/mingw/wgnuplot.mnu' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/src/win/wgnuplot.mnu' '$(PREFIX)/$(TARGET)/bin/'
 
 endef
 
