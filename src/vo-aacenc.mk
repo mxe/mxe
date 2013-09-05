@@ -1,18 +1,18 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := opencore-amr
+PKG             := vo-aacenc
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.3
-$(PKG)_CHECKSUM := 737f00e97a237f4ae701ea55913bb38dc5513501
+$(PKG)_CHECKSUM := 6f8eea8e13f369e3568d9cb33d78e0ac28b7eaee
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/opencore-amr/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/opencore-amr/files/opencore-amr/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/opencore-amr/files/$(PKG)/' | \
+    $(SED) -n 's,.*vo-aacenc-\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 
