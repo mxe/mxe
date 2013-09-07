@@ -83,7 +83,10 @@ DOWNLOAD_PKG_ARCHIVE = \
             | gzip -d | gzip -9n, \
             ) \
         > '$(PKG_DIR)/$($(1)_FILE)' || \
-        ( echo 'Download failed!'; rm -f '$(PKG_DIR)/$($(1)_FILE)'; exit 1; )
+        ( echo; \
+          echo 'Download failed!'; \
+          echo; \
+          rm -f '$(PKG_DIR)/$($(1)_FILE)'; )
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
