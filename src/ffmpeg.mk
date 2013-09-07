@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := ffmpeg
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 2%
 $(PKG)_VERSION  := 1.2.2
 $(PKG)_CHECKSUM := 5ccf4067f43853e5d63218aba13bc571b1108b5a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
