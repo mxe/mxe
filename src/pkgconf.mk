@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 1e7b5ffe35ca4580a9b801307c3bc919fd77a4fd
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://github.com/$(PKG)/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     :=
+$(PKG)_DEPS     := automake
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/pkgconf/pkgconf/commits/master' | \
