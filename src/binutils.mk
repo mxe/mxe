@@ -19,10 +19,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # install config.guess for general use
-    $(INSTALL) -d '$(PREFIX)/bin'
-    $(INSTALL) -m755 '$(1)/config.guess' '$(PREFIX)/bin/'
-
     # install target-specific autotools config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/share'
     echo "ac_cv_build=`$(1)/config.guess`" > '$(PREFIX)/$(TARGET)/share/config.site'

@@ -41,6 +41,10 @@ BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
 BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
+# install config.guess for general use
+$(INSTALL) -d '$(PREFIX)/bin'
+$(INSTALL) -m755 '$(TOP_DIR)/tools/config.guess' '$(PREFIX)/bin/'
+
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
