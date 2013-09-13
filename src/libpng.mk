@@ -3,16 +3,15 @@
 
 PKG             := libpng
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.3
-$(PKG)_CHECKSUM := adc60a2c117a0929e18bf357e0a1e6115a9e3b76
+$(PKG)_VERSION  := 1.6.4
+$(PKG)_CHECKSUM := 32a1302a9358928e00dbaa50fd753a30439ddec5
 $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.simplesystems.org/pub/$(PKG)/png/src/libpng16/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://libpng.git.sourceforge.net/git/gitweb.cgi?p=libpng/libpng;a=tags' | \
-    grep '<a class="list name"' | \
+    $(WGET) -q -O- 'http://sourceforge.net/p/libpng/code/ref/master/tags/' | \
     $(SED) -n 's,.*<a[^>]*>v\([0-9][^<]*\)<.*,\1,p' | \
     grep -v alpha | \
     grep -v beta | \
