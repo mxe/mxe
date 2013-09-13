@@ -19,6 +19,8 @@ define $(PKG)_BUILD
     cp '$(1)/Makefile.LINUX' '$(1)/Makefile.MINGW32'
     $(SED) -i 's,CBDIR =.*,CBDIR = $(1),g'         '$(1)/Makefile.MINGW32'
     $(SED) -i 's,FC =.*,FC = $(TARGET)-gfortran,g' '$(1)/Makefile.MINGW32'
+    $(SED) -i 's,CC =.*,CC = $(TARGET)-gcc,g' '$(1)/Makefile.MINGW32'
+    $(SED) -i 's,ARCH =.*,ARCH = $(TARGET)-ar,g' '$(1)/Makefile.MINGW32'
     $(SED) -i 's, make , $(MAKE) ,g'               '$(1)/Makefile'
     rm '$(1)/Makefile.in'
     ln -sf '$(1)/Makefile.MINGW32' '$(1)/Makefile.in'
