@@ -3,8 +3,8 @@
 
 PKG             := qtjsbackend
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.0
-$(PKG)_CHECKSUM := df1cd292b2fce26308c3e85b99def8264891607c
+$(PKG)_VERSION  := 5.1.1
+$(PKG)_CHECKSUM := e13a5ef112bdbe2fb1691d21c52b287a21da614a
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)

@@ -386,9 +386,10 @@ exit</pre>
     use a white-list approach:
     </p>
     <pre>unset `env | \
-    grep -v '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=\|PKG_CONFIG\|^PS1=\|^TERM=' | \
-    sed -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`</pre>
-
+    grep -vi '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=' | \
+    grep -vi 'PKG_CONFIG\|PROXY\|^PS1=\|^TERM=' | \
+    cut -d '=' -f1 | tr '\n' ' '`</pre>
+    <!-- update mxe-activate also -->
     <p>
     Congratulations!
     You're ready to cross compile anything you like.
@@ -820,14 +821,13 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     to build the remainder of MXE, run:
     </p>
-    <pre>gmake EXCLUDE_PKGS='graphicsmagick gtksourceviewmm2\
-                   ocaml% openexr pcl qtbase vtk6'</pre>
+    <pre>gmake EXCLUDE_PKGS='gtksourceviewmm2 ocaml% openexr pcl qtbase'</pre>
     <p>
     to see a list of all dependent downstream packages that
     will be excluded, run:
     </p>
-    <pre>gmake show-downstream-deps-'graphicsmagick gtksourceviewmm2\
-                           ocaml% openexr pcl qtbase vtk6'</pre>
+    <pre>gmake show-downstream-deps-'gtksourceviewmm2 ocaml% openexr \
+                            pcl qtbase'</pre>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
 
@@ -2139,6 +2139,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
+        <td class="package">qtservice</td>
+        <td class="website"><a href="https://qt.gitorious.org/qt-solutions/">Qt Solutions</a></td>
+    </tr>
+    <tr>
         <td class="package">qtsvg</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
@@ -2325,6 +2329,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">vmime</td>
         <td class="website"><a href="http://www.vmime.org/">VMime</a></td>
+    </tr>
+    <tr>
+        <td class="package">vo-aacenc</td>
+        <td class="website"><a href="https://github.com/mstorsjo/vo-aacenc">VO-AACENC</a></td>
+    </tr>
+    <tr>
+        <td class="package">vo-amrwbenc</td>
+        <td class="website"><a href="https://github.com/mstorsjo/vo-amrwbenc">VO-AMRWBENC</a></td>
     </tr>
     <tr>
         <td class="package">vorbis</td>

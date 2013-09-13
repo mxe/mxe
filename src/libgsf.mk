@@ -3,8 +3,8 @@
 
 PKG             := libgsf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.14.27
-$(PKG)_CHECKSUM := b6082b71bf9d6e1cdafde9628cae58fcedc4a8fd
+$(PKG)_VERSION  := 1.14.28
+$(PKG)_CHECKSUM := 6e361410a8922bd5970add23398868abab47608f
 $(PKG)_SUBDIR   := libgsf-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgsf-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgsf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

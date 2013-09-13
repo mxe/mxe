@@ -41,9 +41,13 @@ BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
 BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
+# install config.guess for general use
+$(shell $(INSTALL) -d '$(PREFIX)/bin')
+$(shell $(INSTALL) -m755 '$(TOP_DIR)/tools/config.guess' '$(PREFIX)/bin/')
+
 # use a minimal whitelist of safe environment variables
-ENV_WHITELIST := PATH LANG MAKE% MXE%
-unexport $(filter-out $(ENV_WHITELIST),$(shell env | $(SED) -n 's,\(.*\)=.*,\1,p'))
+ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
+unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
@@ -82,7 +86,11 @@ DOWNLOAD_PKG_ARCHIVE = \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
-        > '$(PKG_DIR)/$($(1)_FILE)' || rm -f '$(PKG_DIR)/$($(1)_FILE)'
+        > '$(PKG_DIR)/$($(1)_FILE)' || \
+        ( echo; \
+          echo 'Download failed!'; \
+          echo; \
+          rm -f '$(PKG_DIR)/$($(1)_FILE)'; )
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
@@ -202,7 +210,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
 	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	        echo; \
-	        echo 'Wrong checksum of package $(1)!'; \
+	        echo 'Download failed or wrong checksum of package $(1)!'; \
 	        echo '------------------------------------------------------------'; \
 	        tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p'; \
 	        echo '------------------------------------------------------------'; \

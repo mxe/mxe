@@ -3,8 +3,8 @@
 
 PKG             := qtsensors
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.0
-$(PKG)_CHECKSUM := 0399e4d8402b7931e482b951363d153d1426b209
+$(PKG)_VERSION  := 5.1.1
+$(PKG)_CHECKSUM := 7750d4f9220dcf042ba578971c0312de1e71ad7c
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)

@@ -3,8 +3,8 @@
 
 PKG             := opus
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.2
-$(PKG)_CHECKSUM := 37dd3d69b10612cd513ccf26675ef6d61eda24b4
+$(PKG)_VERSION  := 1.0.3
+$(PKG)_CHECKSUM := 5781bdd009943deb55a742ac99db20a0d4e89c1e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
@@ -14,6 +14,8 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://downloads.xiph.org/releases/opus/?C=M;O=D' | \
     $(SED) -n 's,.*opus-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'alpha' | \
+    grep -v 'beta' | \
+    $(SORT) -Vr | \
     head -1
 endef
 

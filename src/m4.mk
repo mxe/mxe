@@ -18,6 +18,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_$(BUILD)
+    # gets has been removed from recent glibc
+    $(SED) -i -e '/gets is a/d' '$(1)/lib/stdio.in.h'
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
         --prefix='$(PREFIX)/$(TARGET)'

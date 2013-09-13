@@ -7,7 +7,10 @@ MXE_TARGET_LIST="`grep 'MXE_TARGET_LIST.*:=' Makefile | $SED -n 's,^.*:= \(.*\)$
 
 alias mxe='$MAKE -C $MXE_DIR --no-print-directory'
 
-unset `env | grep -v '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=\|^PS1=\|^TERM=' | $SED -n 's,\(.*\)=.*$,\1,p' | tr '\n' ' '`
+unset `env | \
+    grep -vi '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=' | \
+    grep -vi 'PKG_CONFIG\|PROXY\|^PS1=\|^TERM=' | \
+    cut -d '=' -f1 | tr '\n' ' '`
 
 _mxe()
 {
