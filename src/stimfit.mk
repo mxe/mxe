@@ -3,11 +3,11 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.12.9
-$(PKG)_CHECKSUM := 2bb590aa4632055689e07652b6cc6a254d21aaa0
-$(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)
-$(PKG)_FILE     := stimfit-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://stimfit.googlecode.com/files/$($(PKG)_FILE)
+$(PKG)_VERSION  := 0.13.2linux
+$(PKG)_CHECKSUM := 7232b9bfc8462df2cedad7d99dfa4a8c5fcd8a93
+$(PKG)_SUBDIR   := stimfit-efab850f4f2d
+$(PKG)_FILE     := $($(PKG)_VERSION).zip
+$(PKG)_URL      := http://stimfit.googlecode.com/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc biosig wxwidgets hdf5 boost fftw
 
 define $(PKG)_UPDATE
