@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 745f9ebf091696c0d5403ce691dc28c039d77b9e
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.qt-project.org/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libodbc++ postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
+$(PKG)_DEPS     := gcc postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
