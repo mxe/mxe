@@ -22,7 +22,9 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \
         --enable-static \
-        --enable-win32thread
+        --enable-win32thread \
+        --disable-lavf \    # Avoid circular dependency with ffmpeg. Remove if undesired.
+        --disable-swscale   # Avoid circular dependency with ffmpeg. Remove if undesired.
     $(MAKE) -C '$(1)' -j 1 uninstall
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
