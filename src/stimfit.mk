@@ -4,7 +4,7 @@
 PKG             := stimfit
 $(PKG)_IGNORE   := 
 $(PKG)_VERSION  := 0.13.2linux
-$(PKG)_CHECKSUM := 7232b9bfc8462df2cedad7d99dfa4a8c5fcd8a93
+$(PKG)_CHECKSUM := 21a4e45a68a2d296c6ca8ee22fc53a92c0ee1531
 $(PKG)_SUBDIR   := stimfit-efab850f4f2d
 $(PKG)_FILE     := $($(PKG)_VERSION).zip
 $(PKG)_URL      := http://stimfit.googlecode.com/archive/$($(PKG)_FILE)
