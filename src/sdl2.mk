@@ -18,7 +18,7 @@ endef
 
 define $(PKG)_BUILD
     $(SED) -i 's,-mwindows,-lwinmm -mwindows,' '$(1)/configure'
-    cd '$(1)' && ./configure \
+    cd '$(1)' && aclocal -I acinclude && autoconf && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -31,5 +31,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     ln -sf '$(PREFIX)/$(TARGET)/bin/sdl2-config' '$(PREFIX)/bin/$(TARGET)-sdl2-config'
 endef
-
-$(PKG)_BUILD_i686-pc-mingw32 =

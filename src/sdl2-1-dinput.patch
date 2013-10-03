@@ -1,0 +1,17 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+https://bugzilla.libsdl.org/show_bug.cgi?id=1739
+
+--- a/configure.in	Sat Sep 14 11:25:52 2013 -0700
++++ b/configure.in	Fri Sep 27 15:03:58 2013 +1000
+@@ -2127,7 +2127,7 @@
+         # FIXME: latest Cygwin finds dinput headers, but we die on other win32 headers.
+         # FIXME:  ...so force it off for now.
+         case "$host" in
+-            *-*-cygwin*)
++            *-*-cygwin* | *-pc-mingw32*)
+             have_dinput=false
+             ;;
+         esac
