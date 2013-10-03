@@ -18,7 +18,7 @@ endef
 
 ## hack: because download from googlecode/archive/*.zip has varying checksums 
 ##    so we use the file size as a poor man's check
-define CHECK_PKG_ARCHIVE
+define $(PKG)_CHECK_PKG_ARCHIVE
      [[ `du -b pkg/$($(PKG)_FILE) | cut -f 1` = 14401795 ]]
 endef
 
