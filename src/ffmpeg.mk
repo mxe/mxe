@@ -38,6 +38,7 @@ define $(PKG)_BUILD
         --enable-libass \
         --disable-libfaac \
         --enable-libmp3lame \
+        --enable-libnut \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libopus \
