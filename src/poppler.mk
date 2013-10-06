@@ -3,8 +3,8 @@
 
 PKG             := poppler
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.22.5
-$(PKG)_CHECKSUM := 9491bb33788d7f0ee67da572dc4798004f98323a
+$(PKG)_VERSION  := 0.24.2
+$(PKG)_CHECKSUM := a8a08cf3fb8b35c9b9718d0c9db9f3360e033a03
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://poppler.freedesktop.org/$($(PKG)_FILE)
@@ -52,6 +52,7 @@ define $(PKG)_BUILD
         --disable-gtk-doc-pdf \
         --with-font-configuration=win32 \
         PKG_CONFIG_PATH_$(subst -,_,$(TARGET))='$(PREFIX)/$(TARGET)/qt/lib/pkgconfig' \
+        CXXFLAGS=-D_WIN32_WINNT=0x0500 \
         LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
     PATH='$(PREFIX)/$(TARGET)/qt/bin:$(PATH)' \
         $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
