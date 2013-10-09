@@ -13,7 +13,7 @@ diff -urN a/CMakeLists.txt b/CMakeLists.txt
  
  # NOTE:
  # Set ARMA_USE_WRAPPER to false if you're getting linking errors when compiling your programs,
-@@ -289,7 +289,7 @@
+@@ -320,7 +320,7 @@
    message(STATUS "CMAKE_SHARED_LINKER_FLAGS = ${CMAKE_SHARED_LINKER_FLAGS}")
  endif()
  
