@@ -100,9 +100,9 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '#JOBS := $(JOBS)'; \
-        echo '#MXE_TARGETS := $(MXE_TARGET_LIST)'; \
+        echo 'MXE_TARGETS := $(MXE_TARGET_LIST)'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
-        echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
+        echo 'LOCAL_PKG_LIST := biosig stimfit sigviewer edfbrowser dcmtk'; \
         echo '#.DEFAULT local-pkg-list:'; \
         echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
