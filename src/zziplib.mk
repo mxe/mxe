@@ -23,9 +23,9 @@ define $(PKG)_BUILD
     (echo '# DISABLED'; echo 'all:'; echo 'install:') > '$(1)/docs/Makefile.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-mmap \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
+        CFLAGS="-O -ggdb" \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
