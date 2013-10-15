@@ -1,6 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+include $(TOP_DIR)/src/ocaml-native.mk
 PKG             := ocaml-core
 $(PKG)_IGNORE    = $(ocaml-native_IGNORE)
 $(PKG)_VERSION   = $(ocaml-native_VERSION)

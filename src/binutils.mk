@@ -2,6 +2,7 @@
 # See index.html for further information.
 
 PKG             := binutils
+ifndef $(PKG)_FILE
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.23.2
 $(PKG)_CHECKSUM := 042c51073205ebaf88c272d6168f9deb71984b56
@@ -39,3 +40,4 @@ define $(PKG)_BUILD
 endef
 
 $(PKG)_BUILD_$(BUILD) :=
+endif
