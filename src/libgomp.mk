@@ -1,6 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+include $(TOP_DIR)/src/gcc.mk
 PKG             := libgomp
 $(PKG)_IGNORE    = $(gcc_IGNORE)
 $(PKG)_VERSION   = $(gcc_VERSION)

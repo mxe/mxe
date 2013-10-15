@@ -2,6 +2,7 @@
 # See index.html for further information.
 
 PKG             := libtool
+ifndef $(PKG)_FILE
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4.2
 $(PKG)_CHECKSUM := 22b71a8b5ce3ad86e1094e7285981cae10e6ff88
@@ -23,3 +24,4 @@ define $(PKG)_BUILD_$(BUILD)
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 endef
+endif

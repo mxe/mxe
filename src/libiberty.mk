@@ -1,6 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+include $(TOP_DIR)/src/binutils.mk
 PKG             := libiberty
 $(PKG)_IGNORE    = $(binutils_IGNORE)
 $(PKG)_VERSION   = $(binutils_VERSION)

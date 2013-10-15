@@ -2,6 +2,7 @@
 # See index.html for further information.
 
 PKG             := ocaml-native
+ifndef $(PKG)_FILE
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.00.1
 $(PKG)_CHECKSUM := 5abf04cd4fccfcc980e8592995b9159014f23f53
@@ -46,3 +47,4 @@ define $(PKG)_BUILD
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =
+endif

@@ -1,6 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+include $(TOP_DIR)/src/libtool.mk
 PKG             := libltdl
 $(PKG)_IGNORE    = $(libtool_IGNORE)
 $(PKG)_VERSION   = $(libtool_VERSION)
