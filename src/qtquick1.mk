@@ -3,11 +3,11 @@
 
 PKG             := qtquick1
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.1
+$(PKG)_VERSION   = $(qtbase_VERSION)
 $(PKG)_CHECKSUM := 75e07675a9edf5bb096953e1f7646ff1af405dad
-$(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_SUBDIR    = $(subst qtbase,qtquick1,$(qtbase_SUBDIR))
+$(PKG)_FILE      = $(subst qtbase,qtquick1,$(qtbase_FILE))
+$(PKG)_URL       = $(subst qtbase,qtquick1,$(qtbase_URL))
 $(PKG)_DEPS     := gcc qtbase qtscript qtsvg qttools qtxmlpatterns
 
 define $(PKG)_UPDATE
