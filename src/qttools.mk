@@ -3,11 +3,11 @@
 
 PKG             := qttools
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.1
+$(PKG)_VERSION   = $(qtbase_VERSION)
 $(PKG)_CHECKSUM := 36ec1deb86c1669043349056d7c3e44b9424ce7a
-$(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_SUBDIR    = $(subst qtbase,qttools,$(qtbase_SUBDIR))
+$(PKG)_FILE      = $(subst qtbase,qttools,$(qtbase_FILE))
+$(PKG)_URL       = $(subst qtbase,qttools,$(qtbase_URL))
 $(PKG)_DEPS     := gcc qtbase qtactiveqt qtdeclarative
 
 define $(PKG)_UPDATE
