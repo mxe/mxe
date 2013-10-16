@@ -3,8 +3,8 @@
 
 PKG             := libass
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.10.1
-$(PKG)_CHECKSUM := 6ebc6c4762c95c5abb96db33289b81780a4fbda6
+$(PKG)_VERSION  := 0.10.2
+$(PKG)_CHECKSUM := 72a153364e838d3b561bae3653f1515169d479c4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := http://libass.googlecode.com/files/$($(PKG)_FILE)
