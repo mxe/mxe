@@ -41,10 +41,6 @@ BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
 BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
-# install config.guess for general use
-$(shell $(INSTALL) -d '$(PREFIX)/bin')
-$(shell $(INSTALL) -m755 '$(TOP_DIR)/tools/config.guess' '$(PREFIX)/bin/')
-
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
@@ -252,6 +248,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
+build-only-$(1)_$(3): $(PREFIX)/bin/config.guess
 build-only-$(1)_$(3):
 	$(if $(or $(value $(1)_BUILD_$(3)),\
 	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
@@ -270,6 +267,12 @@ build-only-$(1)_$(3):
 	    ,)
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
+
+# install config.guess for general use
+$(PREFIX)/bin/config.guess: $(TOP_DIR)/tools/config.guess
+	$(shell $(INSTALL) -d '$(PREFIX)/bin')
+	$(shell $(INSTALL) -m755 '$(TOP_DIR)/tools/config.guess' '$(PREFIX)/bin/')
+
 $(foreach TARGET,$(MXE_TARGETS), \
     $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$(PKGS), \
