@@ -1,0 +1,362 @@
+--- /dev/null	2013-10-15 08:50:08.249876994 +0200
++++ a/Makefile.static	2013-10-17 14:57:44.000000000 +0200
+@@ -0,0 +1,234 @@
++########################################################################
++# Makefile for static compilation Stimfit 
++# no auto-tools (autoconf, automake, libtool, shave etc.) are needed. 
++#
++# No global installation (sudo make install) is needed, but 
++# stimfit can be started immediately after compilation. 
++#
++# This is most useful for debugging, when several instances of stimfit
++# should be available. 
++#
++# Usage:
++#   cd ~/src/stimfit/         # change into stimfit's root directory
++#   make -f Makefile.static   # build stimfit 
++#   make -B -f Makefile.static   # rebuild everything
++#
++#   WXCONF=/usr/bin/wx-config make -f Makefile.static   
++#                             # build built with non-default WX
++#
++#   ./stimfit                 # start stimfit 
++#
++#   win32 built
++#	WXCONF=i686-pc-mingw32-wx-config   make -f Makefile.static 
++#   win64 built
++#	WXCONF=x86_64-static-mingw32-wx-config make -f Makefile.static
++#
++# Limitations: 
++#    - no support for ASCII, SON format
++#    - PYTHON shell, matplotlib (print) are not supported
++#    - configure not supported
++#
++# Copyright (C) 2012,2013 Alois Schloegl 
++# This is part of the stimfit project http://code.google.com/p/stimfit/
++#
++########################################################################
++
++ifeq (,$(WXCONF))
++  # default wx-config      
++  WXCONF    = $(shell which wx-config)
++endif
++
++DEFINES += -DWITH_BIOSIG
++DEFINES += -DHAVE_LAPACK
++DEFINES += -DWITH_PSLOPE
++#DEFINES += -DTEST_MINIMAL
++#DEFINES += -DPYTHON -DWITH_PYTHON
++
++
++WXVERSION = $(basename $(shell $(WXCONF) --version))
++WXDIR     = $(dir $(WXCONF))../include/wx-$(WXVERSION)/
++DEFINES  += -I$(WXDIR)
++
++
++PY_VERSION := 2.6
++
++
++##############################################################
++###  SOURCES
++##############################################################
++
++vpath %.cpp ./src/stimfit:./src/stimfit/gui:./src/stimfit/gui/dlgs:./src/stimfit/gui/usrdlg:./src/stimfit/math:./src/libstfio/:./src/libstfio/cfs/:./src/libstfio/atf/:./src/libstfio/abf/:./src/libstfio/abf/axon2:./src/libstfio/abf/axon/Common:./src/libstfio/abf/axon/AxAbfFio32:./src/libstfio/abf/axon/AxAtfFio32/:./src/libstfio/biosig/:./src/libstfio/hdf5/:./src/libstfio/heka/:./src/libstfio/igor:./src/libstfio/ascii/:./src/libstfio/axg/
++
++vpath %.c ./src/stimfit/math/levmar/:./src/libstfio/igor/:./src/libstfio/cfs/
++vpath %.cpp ./src/stimfit/math/:./src/stimfit/math/levmar/:./src/stimfit/gui/:./src/stimfit/gui/dlgs/:./src/libstfio/:./src/libstfio/biosig/:./src/libstfio/igor/:./src/libstfio/cfs/
++
++SOURCES = ./src/stimfit/stf.cpp \
++	./src/stimfit/math/stfmath.cpp \
++	./src/stimfit/math/funclib.cpp \
++	./src/stimfit/math/measure.cpp \
++	./src/stimfit/math/fit.cpp \
++	./src/stimfit/gui/doc.cpp \
++	./src/stimfit/gui/zoom.cpp \
++	./src/stimfit/gui/childframe.cpp \
++	./src/stimfit/gui/app.cpp \
++	./src/stimfit/gui/parentframe.cpp \
++	./src/stimfit/gui/dlgs/cursorsdlg.cpp \
++	./src/stimfit/gui/dlgs/eventdlg.cpp \
++	./src/stimfit/gui/dlgs/smalldlgs.cpp \
++	./src/stimfit/gui/dlgs/fitseldlg.cpp \
++	./src/stimfit/gui/copygrid.cpp \
++	./src/stimfit/gui/usrdlg/usrdlg.cpp \
++	./src/stimfit/gui/graph.cpp \
++	./src/stimfit/gui/unopt.cpp \
++	./src/stimfit/gui/view.cpp \
++	./src/stimfit/gui/table.cpp \
++	./src/stimfit/gui/printout.cpp \
++	./src/stimfit/gui/main.cpp \
++	./src/stimfit/gui/stfcheckbox.cpp \
++	./src/libstfio/igor/igorlib.cpp \
++	./src/libstfio/cfs/cfslib.cpp \
++	./src/libstfio/section.cpp \
++	./src/libstfio/recording.cpp \
++	./src/libstfio/hdf5/hdf5lib.cpp \
++	./src/libstfio/channel.cpp \
++	./src/libstfio/stfio.cpp \
++	./src/libstfio/axg/axglib.cpp \
++	./src/libstfio/axg/AxoGraph_ReadWrite.cpp \
++	./src/libstfio/axg/fileUtils.cpp \
++	./src/libstfio/axg/stringUtils.cpp \
++	./src/libstfio/axg/byteswap.cpp \
++	./src/stimfit/math/levmar/lm.c \
++	./src/stimfit/math/levmar/Axb.c \
++	./src/stimfit/math/levmar/misc.c \
++	./src/stimfit/math/levmar/lmbc.c \
++	./src/stimfit/math/levmar/lmlec.c \
++	./src/libstfio/igor/WriteWave.c \
++	./src/libstfio/igor/CrossPlatformFileIO.c \
++	./src/libstfio/cfs/cfs.c 
++
++SOURCES_OPTIONAL = \
++	./src/libstfio/heka/hekalib.cpp \
++
++SOURCES_ABF = ./src/libstfio/atf/atflib.cpp \
++	./src/libstfio/abf/abflib.cpp \
++	./src/libstfio/abf/axon2/ProtocolReaderABF2.cpp \
++	./src/libstfio/abf/axon2/abf2headr.cpp \
++	./src/libstfio/abf/axon2/SimpleStringCache.cpp \
++	./src/libstfio/abf/axon/Common/FileReadCache.cpp \
++	./src/libstfio/abf/axon/Common/unix.cpp \
++	./src/libstfio/abf/axon/Common/FileIO.cpp \
++	./src/libstfio/abf/axon/AxAtfFio32/axatffio32.cpp \
++	./src/libstfio/abf/axon/AxAtfFio32/fileio2.cpp \
++	./src/libstfio/abf/axon/AxAbfFio32/abferror.cpp \
++	./src/libstfio/abf/axon/AxAbfFio32/abfheadr.cpp \
++	./src/libstfio/abf/axon/AxAbfFio32/filedesc.cpp \
++	./src/libstfio/abf/axon/AxAbfFio32/msbincvt.cpp \
++	./src/libstfio/abf/axon/AxAbfFio32/abfutil.cpp \
++	./src/libstfio/abf/axon/AxAbfFio32/abffiles.cpp \
++	./src/libstfio/abf/axon/AxAbfFio32/Oldheadr.cpp \
++	./src/libstfio/abf/axon/AxAbfFio32/abfhwave.cpp \
++	./src/libstfio/abf/axon/AxAbfFio32/csynch.cpp 
++
++EXCLUDED = ./src/libstfio/ascii/asciilib.cpp \
++	./src/libstfio/abf/axon/AxAtfFio32/fileio2.cpp \
++	./src/stimfit/math/levmar/lmbc_core.c \
++	./src/stimfit/math/levmar/lmlec_core.c \
++	./src/stimfit/math/levmar/misc_core.c \
++	./src/stimfit/math/levmar/lm_core.c \
++	./src/stimfit/math/levmar/Axb_core.c \
++	./src/stimfit/gui/dclatex.cpp \
++
++TESTSRC = ./src/test/section.cpp \
++	./src/test/recording.cpp \
++	./src/test/measure.cpp \
++	./src/test/channel.cpp \
++	./src/test/gtest/src/gtest.cc \
++	./src/test/gtest/src/gtest-port.cc \
++	./src/test/gtest/src/gtest-test-part.cc \
++	./src/test/gtest/src/gtest-typed-test.cc \
++	./src/test/gtest/src/gtest.cc \
++	./src/test/gtest/src/gtest-printers.cc \
++	./src/test/gtest/src/gtest-death-test.cc \
++	./src/test/gtest/src/gtest-all.cc \
++	./src/test/gtest/src/gtest_main.cc \
++	./src/test/gtest/src/gtest-filepath.cc 
++
++
++### DEPENDENCIES ###
++ifneq (,$(findstring HAVE_LAPACK, $(DEFINES)))
++  LIBS   += -llapack -lblas
++endif
++
++SOURCES += $(SOURCES_ABF)
++ifeq (,$(findstring mingw, $(WXCONF)))
++  TARGET   = stimfit 
++  OBJEXT   = o
++else
++  ### MINGW ### 
++  TARGET   = stimfit.exe 
++  OBJEXT   = obj
++endif
++
++ifeq (,$(findstring TEST_MINIMAL, $(DEFINES)))
++  SOURCES += $(SOURCES_OPTIONAL)
++endif
++
++ifneq (,$(findstring WITH_PYTHON, $(DEFINES)))
++  SOURCES += ./src/stimfit/py/pystf.cxx ./src/stimfit/py/pystf_wrap.cxx ./src/pystfio/pystfio.cxx
++  DEFINES += -I/usr/include/python$(PY_VERSION)
++  DEFINES += -I/usr/lib/pymodules/python$(PY_VERSION)/numpy/core/include
++  LDFLAGS += -L/usr/lib/python$(PY_VERSION)/
++  LIBS    += -lpython$(PY_VERSION) 
++endif
++
++
++CC        = $(shell $(WXCONF) --cc)
++CXX       = $(shell $(WXCONF) --cxx)
++CFLAGS    = $(DEFINES) $(shell $(WXCONF) --cflags) -fstack-protector
++CXXFLAGS  = $(DEFINES) $(shell $(WXCONF) --cxxflags) -fstack-protector
++LIBS     += $(shell $(WXCONF) --libs net,adv,aui,core,base)
++LIBS     += -lhdf5_hl -lhdf5
++ifneq (,$(findstring WITH_BIOSIG2, $(DEFINES)))
++  SOURCES += ./src/libstfio/biosig/biosiglib.cpp
++  LIBS   += -lbiosig2  -lcholmod
++else 
++  ifneq (,$(findstring WITH_BIOSIG, $(DEFINES)))
++    SOURCES += ./src/libstfio/biosig/biosiglib.cpp
++    LIBS += -lbiosig -lcholmod
++  endif
++endif
++LIBS     += -lfftw3 -lz -lpthread
++
++ifeq (mingw,$(findstring mingw, $(WXCONF)))
++  LIBS   += -lgfortran -liberty
++endif
++
++
++##############################################################
++###  BUILT
++##############################################################
++
++OBJECTS  = $(addsuffix .$(OBJEXT), $(basename $(SOURCES)))
++
++$(TARGET): $(OBJECTS)
++	 $(CXX) $(OBJECTS) $(CXXFLAGS) $(LDFLAGS) $(LIBS) -o "$@"
++
++%.c: %.h
++
++%.cpp: %.h
++
++%.$(OBJEXT): %.c 
++	$(CC) -c $(CFLAGS) -c -o "$@" "$<"
++
++%.$(OBJEXT): %.cpp
++	$(CXX) -c $(CXXFLAGS) -c -o "$@" "$<"
++
++%.$(OBJEXT): %.cc
++	$(CXX) -c $(CXXFLAGS) -c -o "$@" "$<"
++
++%.$(OBJEXT): %.cxx
++	$(CXX) -c $(CXXFLAGS) -c -o "$@" "$<"
++
++clean:
++	find src -name "*.$(OBJEXT)" -exec rm {} \;
++
+--- /dev/null	2013-10-15 08:50:08.249876994 +0200
++++ a/stfconf.h	2013-10-17 13:40:14.000000000 +0200
+@@ -0,0 +1,63 @@
++/* stfconf.h.  Generated from stfconf.h.in by configure.  */
++/* stfconf.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#define HAVE_DLFCN_H 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#define HAVE_INTTYPES_H 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#define HAVE_STDINT_H 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#define LT_OBJDIR ".libs/"
++
++/* Name of package */
++#define PACKAGE "stimfit"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT ""
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "stimfit"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "stimfit 0.13.3"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "stimfit"
++
++/* Define to the home page for this package. */
++#define PACKAGE_URL ""
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "0.13.3"
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Version number of package */
++#define VERSION "0.13.3"
+--- /dev/null	2013-10-15 08:50:08.249876994 +0200
++++ a/src/stimfit/res/slope.xpm	2013-09-06 16:07:30.000000000 +0200
+@@ -0,0 +1,56 @@
++/* XPM */
++static const char *slope[] = {
++"16 16 37 1",
++" 	c None",
++".	c #5297DA",
++"+	c #3E678F",
++"@	c #2A80D3",
++"#	c #6D9BC8",
++"$	c #2981D5",
++"%	c #2485E1",
++"&	c #3176B8",
++"*	c #318AE0",
++"=	c #2C7DCB",
++"-	c #2A7ED0",
++";	c #5998D5",
++">	c #2A7ECF",
++",	c #5897D5",
++"'	c #6099D1",
++")	c #6F9BC6",
++"!	c #287FD3",
++"~	c #1E90FF",
++"{	c #2C7BC8",
++"]	c #2783DA",
++"^	c #5F99D0",
++"/	c #2581D8",
++"(	c #5196D8",
++"_	c #2E7BC6",
++":	c #2C8AE5",
++"<	c #2F7AC3",
++"[	c #328AE0",
++"}	c #2782DA",
++"|	c #3488DB",
++"1	c #2882D7",
++"2	c #348ADD",
++"3	c #2B7FCF",
++"4	c #2980D4",
++"5	c #2486E4",
++"6	c #1F8DF7",
++"7	c #3E94E8",
++"8	c #4B85BC",
++"                ",
++"                ",
++"    .+@         ",
++"   #$%&#        ",
++"   *=#@-;       ",
++"   @;@#>,@      ",
++"   @'@@)!~@     ",
++"   @'@ @){~@    ",
++"   @'@  @]^~@   ",
++"   @'@   #/(@@  ",
++"   @'@    _:~@@ ",
++"   @'@     <[~@@",
++"   @'@      }|@@",
++"@@@1'@       =2@",
++"34567@        @8",
++"                "};

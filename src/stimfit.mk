@@ -3,11 +3,11 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.13.2linux
-$(PKG)_CHECKSUM := 21a4e45a68a2d296c6ca8ee22fc53a92c0ee1531
-$(PKG)_SUBDIR   := stimfit-efab850f4f2d
-$(PKG)_FILE     := $($(PKG)_VERSION).zip
-$(PKG)_URL      := https://stimfit.googlecode.com/archive/$($(PKG)_FILE)
+$(PKG)_VERSION  := 0.13.2
+$(PKG)_CHECKSUM := b7c69cee1068d55fa745cf34a2e603f4626c4129
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://stimfit.googlecode.com/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc biosig wxwidgets hdf5 boost fftw
 
 define $(PKG)_UPDATE
@@ -16,13 +16,9 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-## hack: because download from googlecode/archive/*.zip has varying checksums 
-##    so we use the file size as a poor man's check
-define $(PKG)_CHECK_PKG_ARCHIVE
-     [[ `du -b pkg/$($(PKG)_FILE) | cut -f 1` = 14401795 ]]
-endef
-
 define $(PKG)_BUILD
+
+    cd '$(1)' && ./configure --enable-python --with-biosig --with-pslope
 
     WXCONF='$(PREFIX)/bin/$(TARGET)-wx-config' $(MAKE) -C '$(1)' -f Makefile.static -j '$(JOBS)'
 
