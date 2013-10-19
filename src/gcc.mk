@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := binutils gcc-gmp gcc-mpc gcc-mpfr
+$(PKG)_DEPS     := binutils gcc-cloog gcc-gmp gcc-isl gcc-mpc gcc-mpfr
 
 $(PKG)_DEPS_i686-pc-mingw32    := mingwrt w32api
 $(PKG)_DEPS_i686-w64-mingw32   := mingw-w64
@@ -43,7 +43,9 @@ define $(PKG)_CONFIGURE
         --enable-threads=win32 \
         --disable-libgomp \
         --disable-libmudflap \
+        --with-cloog='$(PREFIX)' \
         --with-gmp='$(PREFIX)' \
+        --with-isl='$(PREFIX)' \
         --with-mpc='$(PREFIX)' \
         --with-mpfr='$(PREFIX)' \
         $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
