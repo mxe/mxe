@@ -1,0 +1,37 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+X-Git-Url: http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blobdiff_plain;f=lib%2Fmsvc-inval.c;h=1873e23be4c9d46d95a8b7bea7ea5a07db430829;hp=ef2b8609446ec45000d5f08731400111e4f28d16;hb=86725346a1b116f3c2da26c124288f5f4495bf69;hpb=2845ecc459a4ad03de8397a2c942c2e91d2d3ed5
+
+diff --git a/lib/msvc-inval.c b/lib/msvc-inval.c
+index ef2b860..1873e23 100644
+--- a/lib/msvc-inval.c
++++ b/lib/msvc-inval.c
+@@ -28,7 +28,7 @@
+ 
+ # if MSVC_INVALID_PARAMETER_HANDLING == DEFAULT_HANDLING
+ 
+-static void cdecl
++static void __cdecl
+ gl_msvc_invalid_parameter_handler (const wchar_t *expression,
+                                    const wchar_t *function,
+                                    const wchar_t *file,
+@@ -45,7 +45,7 @@ gl_msvc_invalid_parameter_handler (const wchar_t *expression,
+ 
+ #  if defined _MSC_VER
+ 
+-static void cdecl
++static void __cdecl
+ gl_msvc_invalid_parameter_handler (const wchar_t *expression,
+                                    const wchar_t *function,
+                                    const wchar_t *file,
+@@ -94,7 +94,7 @@ gl_msvc_inval_current (void)
+     }
+ }
+ 
+-static void cdecl
++static void __cdecl
+ gl_msvc_invalid_parameter_handler (const wchar_t *expression,
+                                    const wchar_t *function,
+                                    const wchar_t *file,
