@@ -3,8 +3,8 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 9a9cddb350a2c30b74896349302a356fe1926007 Mon Sep 17 00:00:00 2001
-From: MXE
+From 4274f3853fb812a168965a5addfb5413d06eef05 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
 Subject: [PATCH 1/6] use pkg-config for freetype
 
@@ -23,11 +23,11 @@ index 88be809..8fc19d2 100644
  }
  
 -- 
-1.8.4
+1.8.1.4
 
 
-From 566cf5d38c036d3954ed77d01eb5ec9d6f6277ed Mon Sep 17 00:00:00 2001
-From: MXE
+From e73795bab32ae951f673be654d44e4b69d731998 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 22 Dec 2012 17:45:34 +0100
 Subject: [PATCH 2/6] WIP: qmake writeFile(): work around concurrent
  QDir::mkpath() failure
@@ -64,11 +64,11 @@ index be0d8ea..6306235 100644
      QString errStr;
      if (!doWriteFile(qfi.filePath(), mode, contents, &errStr)) {
 -- 
-1.8.4
+1.8.1.4
 
 
-From cdd456596ff22352dccbbf8b27efd339f1f56a2e Mon Sep 17 00:00:00 2001
-From: MXE
+From dbb51e399120e7c4023e8ac760d971050ff43f33 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
 Subject: [PATCH 3/6] use pkgconfig for icu detection (MXE specific)
 
@@ -86,13 +86,40 @@ index 8e58334..1d66c16 100644
 +CONFIG += link_pkgconfig
 +PKGCONFIG += icu-i18n
 -- 
-1.8.4
+1.8.1.4
 
 
-From 27bb0332cb606b196cb50e756c0fab51ae2fb92b Mon Sep 17 00:00:00 2001
-From: MXE
+From ebb2503ccdcd9ab24216444b312d079b2c9cb298 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 19 Sep 2013 08:53:30 +0200
+Subject: [PATCH 4/6] fix off-by-one error in NTLM proxy authentication
+
+Change-Id: Icee3fc939d81c726f8e4ed484a0c8685cf1f271c
+Task-number: QTBUG-27555
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+(cherry picked from commit c97e369e70c9b17b3ac00f43ccdc191df2183da1)
+
+diff --git a/src/network/kernel/qauthenticator.cpp b/src/network/kernel/qauthenticator.cpp
+index 73991ab..0ea97f2 100644
+--- a/src/network/kernel/qauthenticator.cpp
++++ b/src/network/kernel/qauthenticator.cpp
+@@ -1392,7 +1392,7 @@ static bool qNtlmDecodePhase2(const QByteArray& data, QNtlmPhase2Block& ch)
+     ds >> ch.targetInfo;
+ 
+     if (ch.targetName.len > 0) {
+-        if (ch.targetName.len + ch.targetName.offset >= (unsigned)data.size())
++        if (ch.targetName.len + ch.targetName.offset > (unsigned)data.size())
+             return false;
+ 
+         ch.targetNameStr = qStringFromUcs2Le(data.mid(ch.targetName.offset, ch.targetName.len));
+-- 
+1.8.1.4
+
+
+From 8966a716ba09eba506c6d75201d86e5f3c51ff56 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 19 Oct 2013 22:12:13 +1100
-Subject: [PATCH 4/6] Fix FTBFS against latest mingw-w64
+Subject: [PATCH 5/6] Fix FTBFS against latest mingw-w64
 
 https://codereview.qt-project.org/#change,63747
 0001-Windows-Fix-compilation-with-MinGW-64-gcc-4.8.1.patch
@@ -126,13 +153,13 @@ index e8904b0..57231b5 100644
      }
      return result;
 -- 
-1.8.4
+1.8.1.4
 
 
-From 6da724324874f2e716f909917ff6093f2744d9de Mon Sep 17 00:00:00 2001
-From: MXE
+From 2252f72f676c6cd4562f294561603e30661600b3 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 19 Oct 2013 22:16:50 +1100
-Subject: [PATCH 5/6] Fix IEnumShellItems defined when
+Subject: [PATCH 6/6] Fix IEnumShellItems defined when
  __IShellEnumItems_INTERFACE_DEFINED__ not defined
 
 mingw-w64 FTBFS fix
@@ -174,33 +201,5 @@ index 33bed61..299de76 100644
  #else
  typedef PIDLIST_ABSOLUTE qt_LpItemIdList;
 -- 
-1.8.4
-
-
-From e80f3a6c5108e3e9b051557d5818a2332030f385 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sat, 19 Oct 2013 22:18:26 +1100
-Subject: [PATCH 6/6] Fix FTBFS in Qt 5.1.1
-
-https://codereview.qt-project.org/#change,64330
-qt5-set-win32-winnt-to-enable-winvista-structures.patch
-from https://aur.archlinux.org/packages/mi/mingw-w64-qt5-base/PKGBUILD
-
-diff --git a/src/plugins/platforms/windows/qwindowstheme.cpp b/src/plugins/platforms/windows/qwindowstheme.cpp
-index 844e46e..3a26fb1 100644
---- a/src/plugins/platforms/windows/qwindowstheme.cpp
-+++ b/src/plugins/platforms/windows/qwindowstheme.cpp
-@@ -39,6 +39,10 @@
- **
- ****************************************************************************/
- 
-+/* The structure SHSTOCKICONINFO which is used in
-+ * this file is only available as of Windows Vista */
-+#define _WIN32_WINNT 0x0600
-+
- #include "qwindowstheme.h"
- #include "qwindowsdialoghelpers.h"
- #include "qwindowscontext.h"
--- 
-1.8.4
+1.8.1.4
 
