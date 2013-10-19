@@ -1,10 +1,12 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 0fea27fabd57150874b80deacdf9f12c4a1d5172 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+Contains ad hoc patches for cross building.
+
+From 9a9cddb350a2c30b74896349302a356fe1926007 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 1/3] use pkg-config for freetype
+Subject: [PATCH 1/6] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -21,13 +23,13 @@ index 88be809..8fc19d2 100644
  }
  
 -- 
-1.8.1.4
+1.8.4
 
 
-From 7d17dc925a6d038be6689f2bd01dfe6a5af2f91d Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+From 566cf5d38c036d3954ed77d01eb5ec9d6f6277ed Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Sat, 22 Dec 2012 17:45:34 +0100
-Subject: [PATCH 2/3] WIP: qmake writeFile(): work around concurrent
+Subject: [PATCH 2/6] WIP: qmake writeFile(): work around concurrent
  QDir::mkpath() failure
 
 This actually happened when building qtimageformats with make -j4.
@@ -62,13 +64,13 @@ index be0d8ea..6306235 100644
      QString errStr;
      if (!doWriteFile(qfi.filePath(), mode, contents, &errStr)) {
 -- 
-1.8.1.4
+1.8.4
 
 
-From f758fbacac30a7c4b5e44fb6d5cbe16383d5d269 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+From cdd456596ff22352dccbbf8b27efd339f1f56a2e Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 3/3] use pkgconfig for icu detection (MXE specific)
+Subject: [PATCH 3/6] use pkgconfig for icu detection (MXE specific)
 
 Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
 
@@ -84,5 +86,121 @@ index 8e58334..1d66c16 100644
 +CONFIG += link_pkgconfig
 +PKGCONFIG += icu-i18n
 -- 
-1.8.1.4
+1.8.4
+
+
+From 27bb0332cb606b196cb50e756c0fab51ae2fb92b Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 19 Oct 2013 22:12:13 +1100
+Subject: [PATCH 4/6] Fix FTBFS against latest mingw-w64
+
+https://codereview.qt-project.org/#change,63747
+0001-Windows-Fix-compilation-with-MinGW-64-gcc-4.8.1.patch
+taken from https://aur.archlinux.org/packages/mi/mingw-w64-qt5-base
+
+diff --git a/src/corelib/io/qfilesystemengine_win.cpp b/src/corelib/io/qfilesystemengine_win.cpp
+index e8904b0..57231b5 100644
+--- a/src/corelib/io/qfilesystemengine_win.cpp
++++ b/src/corelib/io/qfilesystemengine_win.cpp
+@@ -573,9 +573,12 @@ typedef enum { Q_FileIdInfo = 18 } Q_FILE_INFO_BY_HANDLE_CLASS;
+ 
+ #  if defined(Q_CC_MINGW) || (defined(Q_CC_MSVC) && _MSC_VER < 1700)
+ 
++// MinGW-64 defines FILE_ID_128 as of gcc-4.8.1 along with FILE_SUPPORTS_INTEGRITY_STREAMS
++#    if !(defined(Q_CC_MINGW) && defined(FILE_SUPPORTS_INTEGRITY_STREAMS))
+ typedef struct _FILE_ID_128 {
+     BYTE  Identifier[16];
+ } FILE_ID_128, *PFILE_ID_128;
++#    endif // !(Q_CC_MINGW && FILE_SUPPORTS_INTEGRITY_STREAMS)
+ 
+ typedef struct _FILE_ID_INFO {
+     ULONGLONG VolumeSerialNumber;
+@@ -614,7 +617,8 @@ QByteArray fileIdWin8(HANDLE handle)
+                                          &infoEx, sizeof(FILE_ID_INFO))) {
+             result = QByteArray::number(infoEx.VolumeSerialNumber, 16);
+             result += ':';
+-            result += QByteArray((char *)infoEx.FileId.Identifier, sizeof(infoEx.FileId.Identifier)).toHex();
++            // Note: MinGW-64's definition of FILE_ID_128 differs from the MSVC one.
++            result += QByteArray((char *)&infoEx.FileId, sizeof(infoEx.FileId)).toHex();
+         }
+     }
+     return result;
+-- 
+1.8.4
+
+
+From 6da724324874f2e716f909917ff6093f2744d9de Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 19 Oct 2013 22:16:50 +1100
+Subject: [PATCH 5/6] Fix IEnumShellItems defined when
+ __IShellEnumItems_INTERFACE_DEFINED__ not defined
+
+mingw-w64 FTBFS fix
+qt5-mingw-w64-trunk-compatibility.patch
+from https://aur.archlinux.org/packages/mi/mingw-w64-qt5-base/PKGBUILD
+
+diff --git a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
+index 33bed61..299de76 100644
+--- a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
++++ b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
+@@ -39,6 +39,9 @@
+ **
+ ****************************************************************************/
+ 
++/* The structure FDAP which is used in this file is only available as of Windows Vista */
++#define _WIN32_WINNT 0x0600
++
+ #include "qwindowsdialoghelpers.h"
+ 
+ #include "qwindowscontext.h"
+@@ -232,7 +235,7 @@ DECLARE_INTERFACE_(IShellItemFilter, IUnknown)
+ };
+ #endif
+ 
+-#ifndef __IShellEnumItems_INTERFACE_DEFINED__
++#if !defined(__IShellEnumItems_INTERFACE_DEFINED__) && !defined(__IEnumShellItems_INTERFACE_DEFINED__)
+ DECLARE_INTERFACE_(IEnumShellItems, IUnknown)
+ {
+     STDMETHOD(Next)(THIS_ ULONG celt, IShellItem **rgelt, ULONG *pceltFetched) PURE;
+@@ -1710,7 +1713,9 @@ static int CALLBACK xpFileDialogGetExistingDirCallbackProc(HWND hwnd, UINT uMsg,
+     return dialog->existingDirCallback(hwnd, uMsg, lParam);
+ }
+ 
+-#ifdef Q_CC_MINGW
++/* The correct declaration of the SHGetPathFromIDList symbol is
++ * being used in mingw-w64 as of r6215 (which is a v3 snapshot) */
++#if defined(Q_CC_MINGW) && __MINGW64_VERSION_MAJOR < 3
+ typedef ITEMIDLIST *qt_LpItemIdList;
+ #else
+ typedef PIDLIST_ABSOLUTE qt_LpItemIdList;
+-- 
+1.8.4
+
+
+From e80f3a6c5108e3e9b051557d5818a2332030f385 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 19 Oct 2013 22:18:26 +1100
+Subject: [PATCH 6/6] Fix FTBFS in Qt 5.1.1
+
+https://codereview.qt-project.org/#change,64330
+qt5-set-win32-winnt-to-enable-winvista-structures.patch
+from https://aur.archlinux.org/packages/mi/mingw-w64-qt5-base/PKGBUILD
+
+diff --git a/src/plugins/platforms/windows/qwindowstheme.cpp b/src/plugins/platforms/windows/qwindowstheme.cpp
+index 844e46e..3a26fb1 100644
+--- a/src/plugins/platforms/windows/qwindowstheme.cpp
++++ b/src/plugins/platforms/windows/qwindowstheme.cpp
+@@ -39,6 +39,10 @@
+ **
+ ****************************************************************************/
+ 
++/* The structure SHSTOCKICONINFO which is used in
++ * this file is only available as of Windows Vista */
++#define _WIN32_WINNT 0x0600
++
+ #include "qwindowstheme.h"
+ #include "qwindowsdialoghelpers.h"
+ #include "qwindowscontext.h"
+-- 
+1.8.4
 
