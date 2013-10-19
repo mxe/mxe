@@ -22,18 +22,8 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_PRE_CONFIGURE
-    # unpack support libraries
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-gmp)
-    mv '$(1)/$(gcc-gmp_SUBDIR)' '$(1)/gmp'
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-mpc)
-    mv '$(1)/$(gcc-mpc_SUBDIR)' '$(1)/mpc'
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-mpfr)
-    mv '$(1)/$(gcc-mpfr_SUBDIR)' '$(1)/mpfr'
-endef
-
 define $(PKG)_CONFIGURE
-    # configure gcc and support libraries
+    # configure gcc
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
         --target='$(TARGET)' \
@@ -53,8 +43,9 @@ define $(PKG)_CONFIGURE
         --enable-threads=win32 \
         --disable-libgomp \
         --disable-libmudflap \
-        --with-mpfr-include='$(1)/mpfr/src' \
-        --with-mpfr-lib='$(1).build/mpfr/src/.libs' \
+        --with-gmp='$(PREFIX)' \
+        --with-mpc='$(PREFIX)' \
+        --with-mpfr='$(PREFIX)' \
         $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
 endef
 
@@ -106,7 +97,6 @@ endef
 
 define $(PKG)_BUILD_i686-pc-mingw32
     # build full cross gcc
-    $($(PKG)_PRE_CONFIGURE) \
     $($(PKG)_CONFIGURE) \
         --disable-sjlj-exceptions
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
@@ -117,7 +107,6 @@ endef
 
 define $(PKG)_BUILD_mingw-w64
     # build standalone gcc
-    $($(PKG)_PRE_CONFIGURE) \
     $($(PKG)_CONFIGURE)
     $(MAKE) -C '$(1).build' -j '$(JOBS)' all-gcc
     $(MAKE) -C '$(1).build' -j 1 install-gcc
