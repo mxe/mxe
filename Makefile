@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 MXE_TARGET_LIST    := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
-MXE_TARGETS        := i686-pc-mingw32
+MXE_TARGETS        := i686-pc-mingw32.shared i686-pc-mingw32.static
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
@@ -40,6 +40,14 @@ PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(T
 BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
 BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
+
+MXE_CONFIGURE_OPTS = \
+    --host='$(TARGET)' \
+    --build='$(BUILD)' \
+    --prefix='$(PREFIX)/$(TARGET)' \
+    $(if $(findstring static,$(TARGET)), \
+        --enable-static --disable-shared , \
+        --disable-static --enable-shared )
 
 # install config.guess for general use
 $(shell $(INSTALL) -d '$(PREFIX)/bin')
@@ -201,7 +209,7 @@ $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
-                          $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS) $($(1)_DEPS_$(3))) \
+                          $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS) $($(1)_DEPS_$(3)) $($(1)_DEPS_$(4)) $($(1)_DEPS_$(5))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) $(3)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -220,9 +228,20 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    fi; \
 	fi
 	$(if $(or $(value $(1)_BUILD_$(3)),\
-	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
+	          $(and $(value $(1)_BUILD_$(4)),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(3)))),\
+	          $(and $(value $(1)_BUILD_$(5)),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(3))),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(4)))),\
+	          $(and $(value $(1)_BUILD),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(3))),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(4))),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(5))))),
 	    @echo '[build]    $(1)',
-	    $(if $(findstring undefined,$(origin $(1)_BUILD_$(3))),
+	    $(if $(and $(findstring undefined,$(origin $(1)_BUILD_$(3))),\
+	               $(findstring undefined,$(origin $(1)_BUILD_$(4))),\
+	               $(findstring undefined,$(origin $(1)_BUILD_$(5))),\
+	               $(findstring undefined,$(origin $(1)_BUILD))),
 	        @echo '[no-op]    $(1)',
 	        @echo '[exclude]  $(1)'
 	     )
@@ -254,7 +273,15 @@ build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3):
 	$(if $(or $(value $(1)_BUILD_$(3)),\
-	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
+	          $(and $(value $(1)_BUILD_$(4)),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(3)))),\
+	          $(and $(value $(1)_BUILD_$(5)),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(3))),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(4)))),\
+	          $(and $(value $(1)_BUILD),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(3))),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(4))),\
+	                $(findstring undefined,$(origin $(1)_BUILD_$(5))))),
 	    uname -a
 	    git show-branch --list --reflog=1
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
@@ -264,7 +291,13 @@ build-only-$(1)_$(3):
 	    cd '$(2)/$($(1)_SUBDIR)'
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
-	    $$(call $(if $(value $(1)_BUILD_$(3)),$(1)_BUILD_$(3),$(1)_BUILD),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    $$(call $(if $(value $(1)_BUILD_$(3)),\
+	                $(1)_BUILD_$(3),\
+	            $(if $(value $(1)_BUILD_$(4)),\
+	                $(1)_BUILD_$(4),\
+	            $(if $(value $(1)_BUILD_$(5)),\
+	                $(1)_BUILD_$(5),\
+	            $(1)_BUILD))),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
@@ -273,7 +306,7 @@ endef
 $(foreach TARGET,$(MXE_TARGETS), \
     $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$(PKGS), \
-        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET)))))
+        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET),$(shell echo '$(TARGET)' | cut -d '.' -f1),$(shell echo '$(TARGET)' | cut -d '.' -f2)))))
 
 # convenience set-like functions for unique lists
 SET_APPEND = \
