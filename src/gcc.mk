@@ -118,7 +118,7 @@ define $(PKG)_BUILD_mingw-w64
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         mxe-config-opts
-    $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).crt-build' -j '$(JOBS)' || $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
     $(MAKE) -C '$(1).crt-build' -j 1 install
 
     # build rest of gcc
