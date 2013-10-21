@@ -19,6 +19,7 @@ define $(PKG)_BUILD
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
         --prefix='$(PREFIX)' \
+        --disable-shared \
         --with-gmp='$(PREFIX)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
