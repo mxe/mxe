@@ -24,7 +24,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
 
-define $(PKG)_BUILD_shared
+define $(PKG)_BUILD_SHARED
     $(MAKE) -C '$(1)' -f win32/Makefile.gcc \
         SHARED_MODE=1 \
         STATICLIB= \

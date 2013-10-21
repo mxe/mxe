@@ -45,7 +45,7 @@ MXE_CONFIGURE_OPTS = \
     --host='$(TARGET)' \
     --build='$(BUILD)' \
     --prefix='$(PREFIX)/$(TARGET)' \
-    $(if $(findstring static,$(TARGET)), \
+    $(if $(BUILD_STATIC), \
         --enable-static --disable-shared , \
         --disable-static --enable-shared )
 
@@ -270,6 +270,9 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 .PHONY: build-only-$(1)_$(3)
 build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
+build-only-$(1)_$(3): TRIPLET = $(4)
+build-only-$(1)_$(3): LIB_TYPE = $(5)
+build-only-$(1)_$(3): BUILD_$(if $(findstring STATIC,$(5)),STATIC,SHARED) = TRUE
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3):
 	$(if $(or $(value $(1)_BUILD_$(3)),\
@@ -306,7 +309,7 @@ endef
 $(foreach TARGET,$(MXE_TARGETS), \
     $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$(PKGS), \
-        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET),$(shell echo '$(TARGET)' | cut -d '.' -f1),$(shell echo '$(TARGET)' | cut -d '.' -f2)))))
+        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET),$(shell echo '$(TARGET)' | cut -d '.' -f1),$(shell echo '$(TARGET)' | cut -d '.' -f2 | tr '[:lower:]' '[:upper:]')))))
 
 # convenience set-like functions for unique lists
 SET_APPEND = \

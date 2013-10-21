@@ -21,10 +21,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-cxx \
         --without-readline
     $(MAKE) -C '$(1)' -j '$(JOBS)'

@@ -18,13 +18,19 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --host='$(TARGET)' \
-        --disable-shared
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
+
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: jpeg'; \
+     echo 'Version: 0'; \
+     echo 'Description: jpeg'; \
+     echo 'Libs: -ljpeg';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/jpeg.pc'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-jpeg.exe' \
-        -ljpeg
+        `'$(TARGET)-pkg-config' jpeg --libs`
 endef

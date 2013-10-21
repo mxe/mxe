@@ -18,7 +18,7 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_BUILD_shared
+define $(PKG)_BUILD_SHARED
     mkdir '$(1).native' && cd '$(1).native' && '$(1)/source/configure' \
         CC=gcc CXX=g++
     $(MAKE) -C '$(1).native' -j '$(JOBS)'
@@ -34,8 +34,8 @@ define $(PKG)_BUILD_shared
     ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
 endef
 
-define $(PKG)_BUILD_static
-    $($(PKG)_BUILD_shared)
+define $(PKG)_BUILD_STATIC
+    $($(PKG)_BUILD_SHARED)
 
     # Static libs are prefixed with an `s` but the config script
     # doesn't detect it properly, despite the STATIC_PREFIX="s" line
