@@ -23,7 +23,8 @@ define $(PKG)_BUILD_i686-pc-mingw32
     cp -Rp '$(1)' '$(1).native'
     cd '$(1).native' && ./configure \
         --disable-shared \
-        --prefix='$(PREFIX)'
+        --prefix='$(PREFIX)' \
+        CFLAGS='-Wno-error=return-type'
     $(MAKE) -C '$(1).native/reimp' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1).native/reimp/reimp' '$(PREFIX)/bin/$(TARGET)-reimp'
 
