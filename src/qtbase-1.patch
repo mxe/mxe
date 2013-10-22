@@ -1,236 +1,1021 @@
 This file is part of MXE.
 See index.html for further information.
 
-Contains ad hoc patches for cross building.
+From e903b5cddaaa606300292ad2cf26c2b6ee111cdd Mon Sep 17 00:00:00 2001
+From: Simon Hausmann <simon.hausmann@digia.com>
+Date: Tue, 26 Nov 2013 10:45:53 +0100
+Subject: [PATCH 01/17] Fix for co-existence of QtDeclarative and QtQml
 
-From 99dd0c414f1eb7142993febca7b722f6f8b43b8f Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 19 Sep 2013 08:53:30 +0200
-Subject: [PATCH 01/11] fix off-by-one error in NTLM proxy authentication
+As a follow-up to commit 2f87fde9bb4bad6787101c0d135419b350b201a5, we also need
+to change "hack" in the QGraphicsItem and QWidget destructor for early item
+destruction to support the _qml1 variant of the QObject destroyed callback.
 
-Change-Id: Icee3fc939d81c726f8e4ed484a0c8685cf1f271c
-Task-number: QTBUG-27555
-Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
-(cherry picked from commit c97e369e70c9b17b3ac00f43ccdc191df2183da1)
+Task-number: QTBUG-35006
 
-diff --git a/src/network/kernel/qauthenticator.cpp b/src/network/kernel/qauthenticator.cpp
-index 73991ab..0ea97f2 100644
---- a/src/network/kernel/qauthenticator.cpp
-+++ b/src/network/kernel/qauthenticator.cpp
-@@ -1392,7 +1392,7 @@ static bool qNtlmDecodePhase2(const QByteArray& data, QNtlmPhase2Block& ch)
-     ds >> ch.targetInfo;
- 
-     if (ch.targetName.len > 0) {
--        if (ch.targetName.len + ch.targetName.offset >= (unsigned)data.size())
-+        if (ch.targetName.len + ch.targetName.offset > (unsigned)data.size())
-             return false;
- 
-         ch.targetNameStr = qStringFromUcs2Le(data.mid(ch.targetName.offset, ch.targetName.len));
--- 
-1.8.1.4
+Change-Id: I65e37b1e9ddd8d14267aaba024408611b8cd3d77
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
 
-
-From 09609302a0e34b1185ce8456c99196a75a85d5a4 Mon Sep 17 00:00:00 2001
-From: Friedemann Kleint <Friedemann.Kleint@digia.com>
-Date: Mon, 26 Aug 2013 11:52:47 +0200
-Subject: [PATCH 02/11] Windows: Fix compilation with MinGW-64, gcc 4.8.1
-
-A definition for FILE_ID_128 was added.
-
-Change-Id: Ifdfe5da1b15a90afdf5cf09d92838a04b1cf5c19
-Reviewed-by: Kai Koehne <kai.koehne@digia.com>
-(cherry picked from commit e59a5f9fdcec5df2f54e88d75a75fcb4a2fe577b)
-
-diff --git a/src/corelib/io/qfilesystemengine_win.cpp b/src/corelib/io/qfilesystemengine_win.cpp
-index e8904b0..57231b5 100644
---- a/src/corelib/io/qfilesystemengine_win.cpp
-+++ b/src/corelib/io/qfilesystemengine_win.cpp
-@@ -573,9 +573,12 @@ typedef enum { Q_FileIdInfo = 18 } Q_FILE_INFO_BY_HANDLE_CLASS;
- 
- #  if defined(Q_CC_MINGW) || (defined(Q_CC_MSVC) && _MSC_VER < 1700)
- 
-+// MinGW-64 defines FILE_ID_128 as of gcc-4.8.1 along with FILE_SUPPORTS_INTEGRITY_STREAMS
-+#    if !(defined(Q_CC_MINGW) && defined(FILE_SUPPORTS_INTEGRITY_STREAMS))
- typedef struct _FILE_ID_128 {
-     BYTE  Identifier[16];
- } FILE_ID_128, *PFILE_ID_128;
-+#    endif // !(Q_CC_MINGW && FILE_SUPPORTS_INTEGRITY_STREAMS)
- 
- typedef struct _FILE_ID_INFO {
-     ULONGLONG VolumeSerialNumber;
-@@ -614,7 +617,8 @@ QByteArray fileIdWin8(HANDLE handle)
-                                          &infoEx, sizeof(FILE_ID_INFO))) {
-             result = QByteArray::number(infoEx.VolumeSerialNumber, 16);
-             result += ':';
--            result += QByteArray((char *)infoEx.FileId.Identifier, sizeof(infoEx.FileId.Identifier)).toHex();
-+            // Note: MinGW-64's definition of FILE_ID_128 differs from the MSVC one.
-+            result += QByteArray((char *)&infoEx.FileId, sizeof(infoEx.FileId)).toHex();
+diff --git a/src/widgets/graphicsview/qgraphicsitem.cpp b/src/widgets/graphicsview/qgraphicsitem.cpp
+index 7cab132..fffc805 100644
+--- a/src/widgets/graphicsview/qgraphicsitem.cpp
++++ b/src/widgets/graphicsview/qgraphicsitem.cpp
+@@ -1414,7 +1414,10 @@ QGraphicsItem::~QGraphicsItem()
+         QObjectPrivate *p = QObjectPrivate::get(o);
+         p->wasDeleted = true;
+         if (p->declarativeData) {
+-            QAbstractDeclarativeData::destroyed(p->declarativeData, o);
++            if (QAbstractDeclarativeData::destroyed)
++                QAbstractDeclarativeData::destroyed(p->declarativeData, o);
++            if (QAbstractDeclarativeData::destroyed_qml1)
++                QAbstractDeclarativeData::destroyed_qml1(p->declarativeData, o);
+             p->declarativeData = 0;
          }
      }
-     return result;
--- 
-1.8.1.4
-
-
-From e82966dbb4222149a40da45ad8816d622a0a949c Mon Sep 17 00:00:00 2001
-From: Kai Koehne <kai.koehne@digia.com>
-Date: Mon, 2 Sep 2013 10:20:37 +0200
-Subject: [PATCH 03/11] Fix compilation with latest Mingw-w64 headers
-
-Fix compilation with e.g. mingw-builds 4.8.1-rev4 package. The Mingw-W64
-headers define SHSTOCKICONINFO only for vista and newer.
-
-Task-number: QTBUG-33225
-Change-Id: I30a62c642ae017c7eafb99b1efb06578fd61a12e
-Reviewed-by: Friedemann Kleint <Friedemann.Kleint@digia.com>
-(cherry picked from commit 0ed30cbf09db591b46370888fa2f687310bf5cff)
-
-diff --git a/src/plugins/platforms/windows/qwindowstheme.cpp b/src/plugins/platforms/windows/qwindowstheme.cpp
-index 844e46e..d2bd0be 100644
---- a/src/plugins/platforms/windows/qwindowstheme.cpp
-+++ b/src/plugins/platforms/windows/qwindowstheme.cpp
-@@ -39,6 +39,12 @@
- **
- ****************************************************************************/
+diff --git a/src/widgets/kernel/qwidget.cpp b/src/widgets/kernel/qwidget.cpp
+index 1da0be9..421ce57 100644
+--- a/src/widgets/kernel/qwidget.cpp
++++ b/src/widgets/kernel/qwidget.cpp
+@@ -1464,7 +1464,10 @@ QWidget::~QWidget()
+     }
  
-+// SHSTOCKICONINFO is only available since Vista
-+#if _WIN32_WINNT < 0x0600
-+#  undef _WIN32_WINNT
-+#  define _WIN32_WINNT 0x0600
-+#endif
-+
- #include "qwindowstheme.h"
- #include "qwindowsdialoghelpers.h"
- #include "qwindowscontext.h"
--- 
-1.8.1.4
-
-
-From 562b005aaf1d6a1cd3f2ab4e1cae3a977b942c3f Mon Sep 17 00:00:00 2001
-From: Kai Koehne <kai.koehne@digia.com>
-Date: Thu, 19 Sep 2013 15:17:45 +0200
-Subject: [PATCH 04/11] Fix typo in define guards
-
-Needed to fix compilation with latest Mingw-w64 headers (version 3)
-
-Change-Id: I70c7ff3d833e15e99a915a2df83f04d03a968300
-Reviewed-by: Friedemann Kleint <Friedemann.Kleint@digia.com>
-(cherry picked from commit 409526b8a6addd7344d4efd5a1464aaf40cf260f)
-
-diff --git a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-index 33bed61..b91e3ee 100644
---- a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-+++ b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-@@ -232,7 +232,7 @@ DECLARE_INTERFACE_(IShellItemFilter, IUnknown)
- };
- #endif
+     if (d->declarativeData) {
+-        QAbstractDeclarativeData::destroyed(d->declarativeData, this);
++        if (QAbstractDeclarativeData::destroyed)
++            QAbstractDeclarativeData::destroyed(d->declarativeData, this);
++        if (QAbstractDeclarativeData::destroyed_qml1)
++            QAbstractDeclarativeData::destroyed_qml1(d->declarativeData, this);
+         d->declarativeData = 0;                 // don't activate again in ~QObject
+     }
  
--#ifndef __IShellEnumItems_INTERFACE_DEFINED__
-+#ifndef __IEnumShellItems_INTERFACE_DEFINED__
- DECLARE_INTERFACE_(IEnumShellItems, IUnknown)
- {
-     STDMETHOD(Next)(THIS_ ULONG celt, IShellItem **rgelt, ULONG *pceltFetched) PURE;
 -- 
-1.8.1.4
+1.8.4
 
 
-From 28285c1c123f6673e433b5bc03ef2001f3bbbf0a Mon Sep 17 00:00:00 2001
-From: Kai Koehne <kai.koehne@digia.com>
-Date: Thu, 19 Sep 2013 15:18:41 +0200
-Subject: [PATCH 05/11] Require Windows Vista
+From 939a001c3ac33ebf801d2594ac9073da28d09a46 Mon Sep 17 00:00:00 2001
+From: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@digia.com>
+Date: Tue, 26 Nov 2013 10:13:04 +0100
+Subject: [PATCH 02/17] Android: Remove invalid error message
 
-The structure FDAP is only available as Windows Vista, and MinGW-w64
-do not actually define it if _WIN32_WINNT isn't set.
+All usage of context menus prints out an error message because
+onContextMenuClosed() is called more than once. We just return
+silently instead if the method is called after the menu has
+already been closed.
 
-Needed to fix compilation with latest MinGW-w64 headers (version 3).
+Change-Id: Ifa27ed42d188fdf670f09c4b1450b9fec0d5941f
+Reviewed-by: BogDan Vatra <bogdan@kde.org>
 
-Change-Id: I566ea6bd4c3d8d5a495b644aedffb7de42a6d6e4
-Reviewed-by: Friedemann Kleint <Friedemann.Kleint@digia.com>
-(cherry picked from commit 8a383c585f337320a203e26c505b594c949d59e5)
-
-Conflicts:
-	src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-
-diff --git a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-index b91e3ee..4180b90 100644
---- a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-+++ b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-@@ -39,6 +39,8 @@
- **
- ****************************************************************************/
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java b/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
+index 3dcffeb..3bcd6ea 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
+@@ -858,10 +858,8 @@ public class QtActivityDelegate
  
-+#define _WIN32_WINNT 0x0600
-+
- #include "qwindowsdialoghelpers.h"
- 
- #include "qwindowscontext.h"
+     public void onContextMenuClosed(Menu menu)
+     {
+-        if (!m_contextMenuVisible) {
+-            Log.e(QtNative.QtTAG, "invalid onContextMenuClosed call");
++        if (!m_contextMenuVisible)
+             return;
+-        }
+         m_contextMenuVisible = false;
+         QtNative.onContextMenuClosed(menu);
+     }
 -- 
-1.8.1.4
+1.8.4
 
 
-From e50ce8fe6bf48be165a51c2f5f5b7638d0528593 Mon Sep 17 00:00:00 2001
-From: Kai Koehne <kai.koehne@digia.com>
-Date: Mon, 21 Oct 2013 12:54:45 +0200
-Subject: [PATCH 06/11] Fix compilation with latest MinGW-w64 (release 3)
+From 08f3177fdfc9aefbd4232dcd1529b537b2ca9402 Mon Sep 17 00:00:00 2001
+From: Gabriel de Dietrich <gabriel.dedietrich@digia.com>
+Date: Mon, 25 Nov 2013 13:41:49 +0100
+Subject: [PATCH 03/17] CoreWLan: Fix potential unhandled exception assert
 
-Now that MinGW-w64 fixed the headers the old hack actually break stuff.
+-[QNSListener notificationHandler:] was declared as not taking any parameter,
+but used as taking a single NSNotification. This would lead to an 'unrecognized
+selector' exception raised by Cocoa.
 
-Change-Id: I1f60b9176982f6c07e01f3960bc1d7e70d7f9481
-Reviewed-by: Friedemann Kleint <Friedemann.Kleint@digia.com>
-(cherry picked from commit 9b187bcd6a256b53cc2fb8550da64b30b0cc5760)
+Task-number: QTBUG-26844
+Change-Id: I56d03a7738c2a1b9dcf3cdecc696b01e65d7b233
+Reviewed-by: Liang Qi <liang.qi@digia.com>
 
-diff --git a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-index 4180b90..3b64edc 100644
---- a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-+++ b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-@@ -1712,7 +1712,9 @@ static int CALLBACK xpFileDialogGetExistingDirCallbackProc(HWND hwnd, UINT uMsg,
-     return dialog->existingDirCallback(hwnd, uMsg, lParam);
+diff --git a/src/plugins/bearer/corewlan/qcorewlanengine.mm b/src/plugins/bearer/corewlan/qcorewlanengine.mm
+index b0ed407..dc29203 100644
+--- a/src/plugins/bearer/corewlan/qcorewlanengine.mm
++++ b/src/plugins/bearer/corewlan/qcorewlanengine.mm
+@@ -71,7 +71,7 @@ extern "C" { // Otherwise it won't find CWKeychain* symbols at link time
+     QCoreWlanEngine *engine;
+     NSLock *locker;
+ }
+-- (void)notificationHandler;//:(NSNotification *)notification;
++- (void)notificationHandler:(NSNotification *)notification;
+ - (void)remove;
+ - (void)setEngine:(QCoreWlanEngine *)coreEngine;
+ - (QCoreWlanEngine *)engine;
+@@ -120,8 +120,9 @@ extern "C" { // Otherwise it won't find CWKeychain* symbols at link time
+     [locker unlock];
  }
  
--#ifdef Q_CC_MINGW
-+/* The correct declaration of the SHGetPathFromIDList symbol is
-+ * being used in mingw-w64 as of r6215, which is a v3 snapshot.  */
-+#if defined(Q_CC_MINGW) && (!defined(__MINGW64_VERSION_MAJOR) || _MINGW64_VERSION_MAJOR < 3)
- typedef ITEMIDLIST *qt_LpItemIdList;
- #else
- typedef PIDLIST_ABSOLUTE qt_LpItemIdList;
--- 
-1.8.1.4
-
-
-From c730e0a1c9087fd1e0ae8c08e5f92d55eec79d25 Mon Sep 17 00:00:00 2001
-From: Kai Koehne <kai.koehne@digia.com>
-Date: Wed, 23 Oct 2013 15:25:11 +0200
-Subject: [PATCH 07/11] Fix typo in check for MINGW_W64 version
-
-Got introduced in 9b187bcd6a256b53cc2fb85500
-
-Change-Id: I1d713f8309d3d8568ea836cc1d29f9dca685ac01
-Reviewed-by: Jonathan Liu <net147@gmail.com>
-Reviewed-by: Friedemann Kleint <Friedemann.Kleint@digia.com>
-(cherry picked from commit 17809b41a6232220b1b19052cd9ebf48899c476a)
-
-diff --git a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-index 3b64edc..246f67a 100644
---- a/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-+++ b/src/plugins/platforms/windows/qwindowsdialoghelpers.cpp
-@@ -1714,7 +1714,7 @@ static int CALLBACK xpFileDialogGetExistingDirCallbackProc(HWND hwnd, UINT uMsg,
+-- (void)notificationHandler//:(NSNotification *)notification
++- (void)notificationHandler:(NSNotification *)notification
+ {
++    Q_UNUSED(notification);
+     engine->requestUpdate();
+ }
+ @end
+diff --git a/src/plugins/bearer/corewlan/qcorewlanengine_10_6.mm b/src/plugins/bearer/corewlan/qcorewlanengine_10_6.mm
+index 1b95ae2..7044e96 100644
+--- a/src/plugins/bearer/corewlan/qcorewlanengine_10_6.mm
++++ b/src/plugins/bearer/corewlan/qcorewlanengine_10_6.mm
+@@ -48,7 +48,7 @@
+     QCoreWlanEngine *engine;
+     NSLock *locker;
+ }
+-- (void)notificationHandler;//:(NSNotification *)notification;
++- (void)notificationHandler:(NSNotification *)notification;
+ - (void)remove;
+ - (void)setEngine:(QCoreWlanEngine *)coreEngine;
+ - (QCoreWlanEngine *)engine;
+@@ -97,8 +97,9 @@
+     [locker unlock];
+ }
  
- /* The correct declaration of the SHGetPathFromIDList symbol is
-  * being used in mingw-w64 as of r6215, which is a v3 snapshot.  */
--#if defined(Q_CC_MINGW) && (!defined(__MINGW64_VERSION_MAJOR) || _MINGW64_VERSION_MAJOR < 3)
-+#if defined(Q_CC_MINGW) && (!defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 3)
- typedef ITEMIDLIST *qt_LpItemIdList;
- #else
- typedef PIDLIST_ABSOLUTE qt_LpItemIdList;
+-- (void)notificationHandler//:(NSNotification *)notification
++- (void)notificationHandler:(NSNotification *)notification
+ {
++    Q_UNUSED(notification);
+     engine->requestUpdate();
+ }
+ @end
 -- 
-1.8.1.4
+1.8.4
 
 
-From 5ac54731a9590161e7b00c38d100232a03ecf260 Mon Sep 17 00:00:00 2001
+From f03fd0d82a50361c0b89165b3f8d98d66b0a4e16 Mon Sep 17 00:00:00 2001
+From: Stephen Kelly <stephen.kelly@kdab.com>
+Date: Tue, 26 Nov 2013 15:06:20 +0100
+Subject: [PATCH 04/17] Remove leading '/' from target paths.
+
+This is inappropriate on Windows, and breaks non-prefix builds there.
+
+This is only needed when we calculate a relative path from a sysroot,
+so only add it in that case.
+
+Task-number: QTBUG-34880
+Change-Id: I0e3b3d977a7b56649e4ba0077ac574aabf1dc915
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+Reviewed-by: Stephen Kelly <stephen.kelly@kdab.com>
+
+diff --git a/mkspecs/features/cmake_functions.prf b/mkspecs/features/cmake_functions.prf
+index a9b0c86..1e6b05c 100644
+--- a/mkspecs/features/cmake_functions.prf
++++ b/mkspecs/features/cmake_functions.prf
+@@ -27,9 +27,9 @@ defineReplace(cmakeModuleList) {
+ 
+ defineReplace(cmakeTargetPath) {
+     SYSR = $$[QT_SYSROOT]
+-    !isEmpty(SYSR): path = $$relative_path($$1, $$[QT_SYSROOT])
++    !isEmpty(SYSR): path = /$$relative_path($$1, $$[QT_SYSROOT])
+     else: path = $$1
+-    return($$clean_path(/$$path))
++    return($$clean_path($$path))
+ }
+ 
+ defineReplace(cmakeTargetPaths) {
+-- 
+1.8.4
+
+
+From 94c17dce04c7726afbdd6ac67c569eedc629a81a Mon Sep 17 00:00:00 2001
+From: Frank Osterfeld <frank.osterfeld.qnx@kdab.com>
+Date: Fri, 22 Nov 2013 10:43:49 +0100
+Subject: [PATCH 05/17] QNX: Fix retrieving the window group name
+
+The code assumes that there is a root window, and crashed
+otherwise.
+
+Task-number: QTBUG-35121
+Change-Id: Idbf0e0bfc03cd427f0aab81db88b34fe94228c81
+Reviewed-by: Rafael Roquetto <rafael.roquetto@kdab.com>
+
+diff --git a/src/plugins/platforms/qnx/qqnxnativeinterface.cpp b/src/plugins/platforms/qnx/qqnxnativeinterface.cpp
+index 8958a5c..24af5c2 100644
+--- a/src/plugins/platforms/qnx/qqnxnativeinterface.cpp
++++ b/src/plugins/platforms/qnx/qqnxnativeinterface.cpp
+@@ -52,11 +52,13 @@ QT_BEGIN_NAMESPACE
+ void *QQnxNativeInterface::nativeResourceForWindow(const QByteArray &resource, QWindow *window)
+ {
+     if (resource == "windowGroup" && window && window->screen()) {
+-        const QQnxScreen * const screen = static_cast<QQnxScreen *>(window->screen()->handle());
++        QQnxScreen * const screen = static_cast<QQnxScreen *>(window->screen()->handle());
+         if (screen) {
++            screen_window_t screenWindow = reinterpret_cast<screen_window_t>(window->winId());
++            QQnxWindow *qnxWindow = screen->findWindow(screenWindow);
+             // We can't just call data() instead of constData() here, since that would detach
+             // and the lifetime of the char * would not be long enough. Therefore the const_cast.
+-            return const_cast<char *>(screen->rootWindow()->groupName().constData());
++            return qnxWindow ? const_cast<char *>(qnxWindow->groupName().constData()) : 0;
+         }
+     }
+ 
+-- 
+1.8.4
+
+
+From 4fbe50e77a8d24d42581cdeabd1e93cb993b0d8d Mon Sep 17 00:00:00 2001
+From: Yoann Lopes <yoann.lopes@digia.com>
+Date: Fri, 22 Nov 2013 18:45:49 +0100
+Subject: [PATCH 06/17] Revert "Store the font's scalability in QFontEngine."
+
+This reverts commit 65b12fbdb13d34c61bcadd5cc8fd6ee28a8dfafd.
+
+QFontEngine is not always loaded from QFontDatabase, resulting in
+the flag not being set.
+
+Change-Id: I39bc5bd4a8dea153d191cfc55f4324195f75f64c
+Reviewed-by: Konstantin Ritt <ritt.ks@gmail.com>
+Reviewed-by: Mitch Curtis <mitch.curtis@digia.com>
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
+
+diff --git a/src/gui/text/qfontdatabase_qpa.cpp b/src/gui/text/qfontdatabase_qpa.cpp
+index fddbb11..6c0be95 100644
+--- a/src/gui/text/qfontdatabase_qpa.cpp
++++ b/src/gui/text/qfontdatabase_qpa.cpp
+@@ -184,7 +184,6 @@ QFontEngine *loadSingleEngine(int script,
+     if (!engine) {
+         engine = pfdb->fontEngine(def, QChar::Script(script), size->handle);
+         if (engine) {
+-            engine->smoothScalable = style->smoothScalable;
+             QFontCache::Key key(def,script);
+             QFontCache::instance()->instance()->insertEngine(key,engine);
+         }
+diff --git a/src/gui/text/qfontengine.cpp b/src/gui/text/qfontengine.cpp
+index 7d1afbb..303c85c 100644
+--- a/src/gui/text/qfontengine.cpp
++++ b/src/gui/text/qfontengine.cpp
+@@ -208,8 +208,7 @@ Q_AUTOTEST_EXPORT QList<QFontEngine *> QFontEngine_stopCollectingEngines()
+ QFontEngine::QFontEngine()
+     : ref(0),
+       font_(0), font_destroy_func(0),
+-      face_(0), face_destroy_func(0),
+-      smoothScalable(false)
++      face_(0), face_destroy_func(0)
+ {
+     cache_cost = 0;
+     fsType = 0;
+diff --git a/src/gui/text/qfontengine_p.h b/src/gui/text/qfontengine_p.h
+index 07be498..c181d61 100644
+--- a/src/gui/text/qfontengine_p.h
++++ b/src/gui/text/qfontengine_p.h
+@@ -302,8 +302,6 @@ public:
+ 
+     inline QVariant userData() const { return m_userData; }
+ 
+-    bool smoothScalable;
+-
+ protected:
+     QFixed lastRightBearing(const QGlyphLayout &glyphs, bool round = false);
+ 
+-- 
+1.8.4
+
+
+From 82a2d28d841c7f59fa76fae6a67e1712a5fb4740 Mon Sep 17 00:00:00 2001
+From: Stephen Kelly <stephen.kelly@kdab.com>
+Date: Wed, 27 Nov 2013 12:22:54 +0100
+Subject: [PATCH 07/17] CMake: Parse the output of new CMake versions.
+
+As of CMake 3.0, the output of `cmake --version` now has a second line
+showing that it is maintained by Kitware. Change the version parsing to
+look only at the first line of output.
+
+Change-Id: I347de4c376e0bde25a43a38d59587d9b63f6b43a
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+
+diff --git a/mkspecs/features/ctest_testcase_common.prf b/mkspecs/features/ctest_testcase_common.prf
+index 118eed1..a9461eb 100644
+--- a/mkspecs/features/ctest_testcase_common.prf
++++ b/mkspecs/features/ctest_testcase_common.prf
+@@ -1,10 +1,11 @@
+ 
+ win32 {
+-    CMAKE_VERSION = $$system(cmake --version 2>NUL)
++    CMAKE_VERSION = $$system(cmake --version 2>NUL, lines)
+ } else {
+-    CMAKE_VERSION = $$system(cmake --version 2>/dev/null)
++    CMAKE_VERSION = $$system(cmake --version 2>/dev/null, lines)
+ }
+ 
++CMAKE_VERSION = $$member(CMAKE_VERSION, 0, 0)
+ 
+ check.commands =
+ QMAKE_EXTRA_TARGETS *= check
+-- 
+1.8.4
+
+
+From 7c029e83a3e5058f7b82efd0235e766952357ffd Mon Sep 17 00:00:00 2001
+From: Simon Hausmann <simon.hausmann@digia.com>
+Date: Thu, 28 Nov 2013 11:00:15 +0100
+Subject: [PATCH 08/17] Fix invalid memory read when shutting down QML
+ applications
+
+As the last line in the QObject destructor, we call setParentHelper(0) to
+remove ourselves from the parent. In the process of that we also initiate the
+QML parentChanged callback. The first thing that parentChanged callback used to
+do (but now does it too late, after 26350b5ceafa0ade1328037f6234a7d288eb8f48 in
+qtdeclarative) is to check if the object was deleted and then return. We could
+re-introduce the check there, but I think it's cleaner to not bother calling
+the callback on a dead object in the first place.
+
+Change-Id: Ia4d43b65a9b3744a451b4c312a2d6f9c0e3b67dc
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
+
+diff --git a/src/corelib/kernel/qobject.cpp b/src/corelib/kernel/qobject.cpp
+index e062a38..f8664ba 100644
+--- a/src/corelib/kernel/qobject.cpp
++++ b/src/corelib/kernel/qobject.cpp
+@@ -1876,7 +1876,7 @@ void QObjectPrivate::setParent_helper(QObject *o)
+             }
+         }
+     }
+-    if (!isDeletingChildren && declarativeData && QAbstractDeclarativeData::parentChanged)
++    if (!wasDeleted && !isDeletingChildren && declarativeData && QAbstractDeclarativeData::parentChanged)
+         QAbstractDeclarativeData::parentChanged(declarativeData, q, o);
+ }
+ 
+diff --git a/tests/auto/corelib/kernel/qobject/tst_qobject.cpp b/tests/auto/corelib/kernel/qobject/tst_qobject.cpp
+index ece88d4..f1e0451 100644
+--- a/tests/auto/corelib/kernel/qobject/tst_qobject.cpp
++++ b/tests/auto/corelib/kernel/qobject/tst_qobject.cpp
+@@ -152,6 +152,7 @@ private slots:
+     void connectBase();
+     void qmlConnect();
+     void exceptions();
++    void noDeclarativeParentChangedOnDestruction();
+ };
+ 
+ struct QObjectCreatedOnShutdown
+@@ -6233,6 +6234,43 @@ void tst_QObject::exceptions()
+ #endif
+ }
+ 
++#ifdef QT_BUILD_INTERNAL
++static bool parentChangeCalled = false;
++
++static void testParentChanged(QAbstractDeclarativeData *, QObject *, QObject *)
++{
++    parentChangeCalled = true;
++}
++#endif
++
++void tst_QObject::noDeclarativeParentChangedOnDestruction()
++{
++#ifdef QT_BUILD_INTERNAL
++    typedef void (*ParentChangedCallback)(QAbstractDeclarativeData *, QObject *, QObject *);
++    QScopedValueRollback<ParentChangedCallback> rollback(QAbstractDeclarativeData::parentChanged);
++    QAbstractDeclarativeData::parentChanged = testParentChanged;
++
++    QObject *parent = new QObject;
++    QObject *child = new QObject;
++
++    QAbstractDeclarativeData dummy;
++    QObjectPrivate::get(child)->declarativeData = &dummy;
++
++    parentChangeCalled = false;
++    child->setParent(parent);
++
++    QVERIFY(parentChangeCalled);
++    parentChangeCalled = false;
++
++    delete child;
++    QVERIFY(!parentChangeCalled);
++
++    delete parent;
++#else
++    QSKIP("Needs QT_BUILD_INTERNAL");
++#endif
++}
++
+ // Test for QtPrivate::HasQ_OBJECT_Macro
+ Q_STATIC_ASSERT(QtPrivate::HasQ_OBJECT_Macro<tst_QObject>::Value);
+ Q_STATIC_ASSERT(!QtPrivate::HasQ_OBJECT_Macro<SiblingDeleter>::Value);
+-- 
+1.8.4
+
+
+From bedc5a3ae268594100b5e0eb8f35c0ce2b95ee96 Mon Sep 17 00:00:00 2001
+From: Marc Mutz <marc.mutz@kdab.com>
+Date: Tue, 26 Nov 2013 12:27:45 +0100
+Subject: [PATCH 09/17] Update ChangeLog for 5.2.0 [QtWidgets II]
+
+Second batch of changes.
+
+Change-Id: I5b3add1df19bcad195f8b9286337de9fe926337c
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+
+diff --git a/dist/changes-5.2.0 b/dist/changes-5.2.0
+index f513d64..30cd288 100644
+--- a/dist/changes-5.2.0
++++ b/dist/changes-5.2.0
+@@ -48,6 +48,10 @@ information about a particular change.
+    * QUrl now normalizes the path given in setPath, removing ./ and ../ and
+      duplicate slashes.
+ 
++ - QWheelEvent has gained a "phase" attribute and may now be sent with
++   zero delta() in order to indicate beginning and end of transient
++   scrolling.
++
+ ****************************************************************************
+ *                          Library                                         *
+ ****************************************************************************
+@@ -353,12 +357,24 @@ Changes in Qt 5.2.0
+ QtWidgets
+ ---------
+ 
++ - Added class QKeySequenceEdit.
++ - Added QMaxCocoaViewContainer and QMacNativeWidget classes.
++ - [QTBUG-1016] Added API to control tool tip timing via:
++   * new QToolTip::showTip() overload
++   * QWidget::toolTipDuration() property.
++   * QStyle::SH_ToolTip_WakeUpDelay and SH_ToolTip_FallAsleepDelay
++     style hints.
+  - [QTBUG-30255] Fixed a bug where spans across empty cells in a grid
+    layout got broken.
++ - [QTBUG-31569] WA_QuitOnClose now works even if there are other
++   windows that don't have it set.
+  - [QTBUG-32788] Properly handles Qt::WidgetWithChildrenShortcut
+    shortcuts in MDI subwindows now.
+  - [QTBUG-33078] QWidget::setWindowOpacity() now works when called
+    before QWidget::show().
++ - [QTBUG-33104] Fixed a bug where layout items with a Preferred size
++   policy would be treated as fixed size, if mixed with Expanding
++   items having maximumSize set.
+  - [QTBUG-33247] Changed accessible trees and tables to always expose
+    hidden headers, instead of only exposing the visible headers.
+  - [QTBUG-34007] Fixed a crash in tablet support.
+@@ -384,18 +400,26 @@ QtWidgets
+      overriding viewportSizeHint() needs to be recompiled against 5.2 for
+      this feature to work correctly.
+ 
++ - QButtonGroup:
++   * [QTBUG-14857] Added buttonToggled() signals.
++
+  - QColorDialog:
+    * Added a web color QLineEdit.
+    * [QTBUG-14332] Added a screen color picker button.
+    * [QTBUG-31998] Does no longer create widgets when using the
+      platform dialog.
++   * [QTBUG-32054] Fixed a bug with keyboard navigation.
+ 
+  - QComboBox:
++   * [QTBUG-31146] Fixed selection of items with identical text in
++     popup completion.
+    * Added currentData() convenience function which allows to retrieve
+      the user data set for the current item.
+ 
+  - QCompleter:
+    * [QTBUG-3414] Added filterMode property.
++   * The activated() signal now passes invalid indexes instead of
++     random bogus ones when falling back to the completion prefix.
+ 
+  - QDesktopWidget:
+    * [QTBUG-32567] Fixed emission of workAreaResized() signal.
+@@ -434,10 +458,16 @@ QtWidgets
+    * [QTBUG-33039] Does no longer create widgets when using the
+      platform dialog.
+ 
++ - QFontComboBox:
++   * [QTBUG-1573] Made QFontComboBox locale-sensitive.
++
+  - QFontDialog:
+    * Now has finer-grained control over the types of fonts listed,
+      similar to what QFontComboBox already had.
+ 
++ - QGestureManager
++   * Now supports Mac OS X native gestures.
++
+  - QGraphicsView etc
+    * Fixed a crash in QGraphicsProxyWidget.
+    * [QTBUG-8061] Allow handling of mouseDoubleClickEvent in
+@@ -446,16 +476,30 @@ QtWidgets
+      Qt::{Contains,Intersets}ItemBoundingRect with items that contain
+      the point in the bounding rectangle, but not their (custom)
+      shape.
++   * [QTBUG-29945] Fixed drop-shadow and blur effects when using a
++     QGLWidget viewport.
++
++ - QGroupBox:
++   * [QTBUG-33610] The check indicator of a checkable group box is no
++     longer clipped when using a small title font.
+ 
+  - QHeaderView:
++   * Reduced memory usage by 33%.
+    * [QTBUG-4346] A maximumSize for sections has been introduced. The
+      maximum section size is by default the largest possible section
+      size which in Qt 5.2 has been limited to 1048575 pixels.
++   * [QTBUG-32203] Fixed a painting bug involving hidden and reordered
++     sections.
+ 
+  - QInputDialog:
+    * Added getMultiLineText static method.
+ 
++ - QLayout:
++   * Added replaceWidget() function.
++
+  - QLineEdit:
++   * [QTBUG-32061] The cursor is now positioned correctly in an empty
++     line edit with placeholder text.
+    * Keep placeholderText visible when focused, until text is added.
+    * Context-menu actions now have icons.
+    * Made it possible to add side widgets.
+@@ -467,28 +511,59 @@ QtWidgets
+      no longer loses the icon. Also fixed a bug where under certain
+      conditions code overriding QAbstractItemView::viewOptions() would
+      not be called.
++   * [QTBUG-21433] Fixed content size calculation when either
++     horizontal or vertical scroll bar policy is always off.
++
++ - QMacStyle:
++   * [QTBUG-31668] Fixed a case where multiple auto-default button
++     animations were running in parallel on OS X
++
++ - QMainWindow:
++   * Added takeCentalWidget() function.
++
++ - QMenu:
++   * Added QMenu::toNSMenu() conversion function (Mac only)
++   * Added QMenu::setAsDockMenu() and qt_mac_set_doc_menu(QMenu *menu)
++     functions (Mac only).
++   * [QTBUG-31664] Moving the mouse over a menu separator now closes
++     any open sub menus.
+ 
+  - QMenuBar:
+    * [QTBUG-32807] Menus now close again on second click.
++   * Added QMenuBar::toNSMenu() conversion function (Mac only)
+ 
+  - QMessageBox:
+    * May use native message boxes on some platforms now.
++   * setDetailedText() now works after show().
++   * [QTBUG-2450] Added setCheckBox() function.
+    * [QTBUG-6731] It is now possible to select some or all text from a
+      QMessageBox and copy it to the clipboard.
+ 
++ - QScrollBar:
++   * Transient scrollbars are now properly shown when starting
++     two-finger scrolling on OS X.
++
+  - QSizePolicy:
+    * Added a retainSizeWhenHidden attribute.
+ 
+  - QSpinBox:
+    * Values can now be displayed in different bases
+      (cf. displayIntegerBase property)
+-   * [QTBUG-31602] Size calculation will now be fixed when stylesheets
+-     are used.
++   * [QTBUG-31602][QTBUG-34305] Fixed size calculation when
++     stylesheets are used.
++
++ - QSplashScreen:
++   * Added message(), a getter for the currently displayed message.
+ 
+  - QSplitter:
+    * Now gets the default value of opaqueResize property from (new)
+      QStyle::SH_Splitter_OpaqueResize styleHint.
+ 
++ - QStyle:
++   * Added SH_ToolTip_WakeUpDelay and SH_ToolTip_FallAsleepDelay.
++   * Fixed SH_ItemView_ActivateItemOnSingleClick not being retrieved
++     correctly from the platform theme.
++
+  - QSystemTrayIcon:
+    * [QTBUG-31762] Fixed position of system tray icon on Linux/X11
+      (except Unity).
+@@ -505,14 +580,26 @@ QtWidgets
+    * Added placeholderText akin to QLineEdit.
+    * Context-menu actions now have icons.
+ 
++ - QToolTip:
++   * Added new showText() overload taking a duration.
++
+  - QTreeView:
+-   * QTreeView now has setTreePosition to allow the treestructure to
+-     show data from other columns than logicalindex zero.
++   * Added setTreePosition() function.
++
++ - QWidget:
++   * Added window{Title,Icon,IconText}Changed() signals.
++   * Added toolTipDuration property.
+ 
+  - QWindowContainer:
+    * [QTBUG-32177] Sets active window correctly now.
++   * [QTBUG-34138] Will not create native child widgets any more.
++
++ - QWindowsVistaStyle:
++   * [QTBUG-26503] Does no longer draw inapplicable scroll bar
++     grippers on Windows 8.
+ 
+  - QWizard:
++   * [QTBUG-26722] The default background pixmap works again on OS X.
+    * [QTBUG-29924] Gave all buttons an objectName().
+ 
+ ****************************************************************************
+@@ -537,6 +624,7 @@ Android
+ OS X
+ ----
+ 
++ - Added QMaxCocoaViewContainer and QMacNativeWidget classes.
+  - Qt for OS X is now identified by the macro Q_OS_OSX. This complements the
+    existing Q_OS_DARWIN macro (which identifies the open source kernel and
+    could identify non-Apple products) and Q_OS_MAC, which is defined for
+@@ -547,6 +635,17 @@ OS X
+    supported until official announcement by the Qt Project.
+  - Added a number of functions to QtCore to convert to and from
+    CFString/NSString and QString, CFURL/NSURL and QUrl.
++ - QGestureManager now supports Mac OS X native gestures.
++ - Added QMenu::setAsDockMenu(), QMenu(Bar)::toNSMenu(),
++   qt_mac_set_doc_menu() functions.
++ - [QTBUG-26722] The QWizard default background pixmap works again.
++
++BlackBerry
++----------
++
++ - Cover windows (aka active frames) are now supported. Cover windows must
++   have the Qt::CoverWindow flag set. They are shown when the application
++   is minimized.
+ 
+ Windows
+ -------
+-- 
+1.8.4
+
+
+From c5b19f252188a01dd7b12090f4776420e3714000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
+Date: Thu, 28 Nov 2013 15:33:06 +0100
+Subject: [PATCH 10/17] iOS: Forward [UIApplicationDelegate handleOpenURL:] to
+ QDesktopServices
+
+The user may use QDesktopServices::setUrlHandler() in combination with
+the appropriate Info.plist keys (CFBundleURLTypes, CFBundleURLSchemes)
+to react to URL requests from other applications.
+
+This is among other things useful for handling OAuth authentication from
+applications such as Dropbox. See:
+
+  https://www.dropbox.com/developers/core/start/ios
+
+We protect against recursive URL opening, but an application may still
+redirect a request to open a URL by opening another URL, eg a website.
+
+Task-number: QTBUG-35201
+Change-Id: I9f1d246206c5594b1b65bb11fa98c6bcdefc443e
+Reviewed-by: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qiosapplicationdelegate.mm b/src/plugins/platforms/ios/qiosapplicationdelegate.mm
+index cf702c8..9cf1047 100644
+--- a/src/plugins/platforms/ios/qiosapplicationdelegate.mm
++++ b/src/plugins/platforms/ios/qiosapplicationdelegate.mm
+@@ -41,9 +41,14 @@
+ 
+ #include "qiosapplicationdelegate.h"
+ 
++#include "qiosintegration.h"
++#include "qiosservices.h"
+ #include "qiosviewcontroller.h"
+ #include "qioswindow.h"
+ 
++#include <QtGui/private/qguiapplication_p.h>
++#include <qpa/qplatformintegration.h>
++
+ #include <QtCore/QtCore>
+ 
+ @implementation QIOSApplicationDelegate
+@@ -82,6 +87,21 @@
+     return YES;
+ }
+ 
++- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
++{
++    Q_UNUSED(application);
++    Q_UNUSED(sourceApplication);
++    Q_UNUSED(annotation);
++
++    if (!QGuiApplication::instance())
++        return NO;
++
++    QIOSIntegration *iosIntegration = static_cast<QIOSIntegration *>(QGuiApplicationPrivate::platformIntegration());
++    QIOSServices *iosServices = static_cast<QIOSServices *>(iosIntegration->services());
++
++    return iosServices->handleUrl(QUrl::fromNSURL(url));
++}
++
+ - (void)dealloc
+ {
+     [window release];
+diff --git a/src/plugins/platforms/ios/qiosservices.h b/src/plugins/platforms/ios/qiosservices.h
+index 692b3a0b..aa39fbb 100644
+--- a/src/plugins/platforms/ios/qiosservices.h
++++ b/src/plugins/platforms/ios/qiosservices.h
+@@ -41,6 +41,8 @@
+ 
+ #ifndef QIOSSERVICES_H
+ #define QIOSSERVICES_H
++
++#include <qurl.h>
+ #include <qpa/qplatformservices.h>
+ 
+ QT_BEGIN_NAMESPACE
+@@ -50,6 +52,11 @@ class QIOSServices : public QPlatformServices
+ public:
+     bool openUrl(const QUrl &url);
+     bool openDocument(const QUrl &url);
++
++    bool handleUrl(const QUrl &url);
++
++private:
++    QUrl m_handlingUrl;
+ };
+ 
+ QT_END_NAMESPACE
+diff --git a/src/plugins/platforms/ios/qiosservices.mm b/src/plugins/platforms/ios/qiosservices.mm
+index 32203ae..0ac6c59 100644
+--- a/src/plugins/platforms/ios/qiosservices.mm
++++ b/src/plugins/platforms/ios/qiosservices.mm
+@@ -42,6 +42,7 @@
+ #include "qiosservices.h"
+ 
+ #include <QtCore/qurl.h>
++#include <QtGui/qdesktopservices.h>
+ 
+ #import <UIKit/UIApplication.h>
+ 
+@@ -49,6 +50,9 @@ QT_BEGIN_NAMESPACE
+ 
+ bool QIOSServices::openUrl(const QUrl &url)
+ {
++    if (url == m_handlingUrl)
++        return false;
++
+     if (url.scheme().isEmpty())
+         return openDocument(url);
+ 
+@@ -66,4 +70,19 @@ bool QIOSServices::openDocument(const QUrl &url)
+     return QPlatformServices::openDocument(url);
+ }
+ 
++/* Callback from iOS that the application should handle a URL */
++bool QIOSServices::handleUrl(const QUrl &url)
++{
++    QUrl previouslyHandling = m_handlingUrl;
++    m_handlingUrl = url;
++
++    // FIXME: Add platform services callback from QDesktopServices::setUrlHandler
++    // so that we can warn the user if calling setUrlHandler without also setting
++    // up the matching keys in the Info.plist file (CFBundleURLTypes and friends).
++    bool couldHandle = QDesktopServices::openUrl(url);
++
++    m_handlingUrl = previouslyHandling;
++    return couldHandle;
++}
++
+ QT_END_NAMESPACE
+-- 
+1.8.4
+
+
+From 9b782dca45331c0e0246b8439d5cf007a440afc8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
+Date: Wed, 27 Nov 2013 18:20:10 +0100
+Subject: [PATCH 11/17] iOS: Update screen properties when we trigger statusbar
+ changes on iOS7
+
+Ideally we'd have a callback from iOS when this happens, so we can also
+react to changes done outside of Qt, but willChangeStatusBarFrame and
+friends do not seem to give us what we want.
+
+Change-Id: I686ce7950395a83c4257372363c773a95c3935ed
+Reviewed-by: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qiosscreen.mm b/src/plugins/platforms/ios/qiosscreen.mm
+index 57522cb..9641095 100644
+--- a/src/plugins/platforms/ios/qiosscreen.mm
++++ b/src/plugins/platforms/ios/qiosscreen.mm
+@@ -189,6 +189,9 @@ void QIOSScreen::updateProperties()
+ 
+ void QIOSScreen::updateStatusBarVisibility()
+ {
++    if (!isQtApplication())
++        return;
++
+     QWindow *focusWindow = QGuiApplication::focusWindow();
+ 
+     // If we don't have a focus window we leave the status
+@@ -199,20 +202,26 @@ void QIOSScreen::updateStatusBarVisibility()
+         return;
+ 
+     UIView *view = reinterpret_cast<UIView *>(focusWindow->handle()->winId());
++    QIOSViewController *viewController = static_cast<QIOSViewController *>(view.viewController);
++
++    bool currentStatusBarVisibility = [UIApplication sharedApplication].statusBarHidden;
++    if (viewController.prefersStatusBarHidden == currentStatusBarVisibility)
++        return;
++
+ #if QT_IOS_PLATFORM_SDK_EQUAL_OR_ABOVE(__IPHONE_7_0)
+     if (QSysInfo::MacintoshVersion >= QSysInfo::MV_IOS_7_0) {
+-        [view.viewController setNeedsStatusBarAppearanceUpdate];
++        [viewController setNeedsStatusBarAppearanceUpdate];
++        dispatch_async(dispatch_get_main_queue(), ^{
++            updateProperties();
++        });
+     } else
+ #endif
+     {
+-        bool wasHidden = [UIApplication sharedApplication].statusBarHidden;
+-        QIOSViewController *viewController = static_cast<QIOSViewController *>(view.viewController);
+         [[UIApplication sharedApplication]
+             setStatusBarHidden:[viewController prefersStatusBarHidden]
+             withAnimation:UIStatusBarAnimationNone];
+ 
+-        if ([UIApplication sharedApplication].statusBarHidden != wasHidden)
+-            updateProperties();
++        updateProperties();
+     }
+ }
+ 
+-- 
+1.8.4
+
+
+From 7016ea797a4ceefc8df8a6e13971045a215c5e4c Mon Sep 17 00:00:00 2001
+From: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@digia.com>
+Date: Wed, 27 Nov 2013 09:12:08 +0100
+Subject: [PATCH 13/17] Add a few notes to changes-5.2.0
+
+Mostly changes for Android. One change in Qt Gui.
+
+Change-Id: Ifce627b6688702b3a3ae1634bd344eb8331f6caf
+Reviewed-by: Paul Olav Tvete <paul.tvete@digia.com>
+Reviewed-by: BogDan Vatra <bogdan@kde.org>
+
+diff --git a/dist/changes-5.2.0 b/dist/changes-5.2.0
+index 30cd288..a51cc91 100644
+--- a/dist/changes-5.2.0
++++ b/dist/changes-5.2.0
+@@ -294,6 +294,9 @@ QtGui
+  - [QTBUG-27349] Reintroduced command line argument for positioning
+    windows (-geometry on X11, -qwindowgeometry on other platforms)
+ 
++ - [QTBUG-28832] Fixed regression from Qt 4 when using
++   QTextOption::ShowLineAndParagraphSeparators.
++
+ QtNetwork
+ ---------
+ 
+@@ -620,6 +623,40 @@ Android
+    show the status bar (QWindow::showMaximized()). Use
+    QWindow::showFullScreen() to hide it.
+  - Implemented support for accessibility on Android.
++ - Implemented support for native action bar backend for menu bars in
++   Qt Quick Controls and Qt Widgets.
++ - Implemented support for native popup menus and comboboxes in Qt Quick
++   Controls.
++ - Implemented support for native message boxes in Qt Widgets.
++ - Several improvements to handling dialogs and multiple top-level
++   windows in Qt Widgets.
++ - Implemented automatic inclusion of necessary permissions in manifest
++   when linking against Qt Multimedia.
++ - Fixed crash on startup when running on Android 4.4.
++ - Add requirement for Android SDK version 13 or higher for building
++   Qt application. Note that this is for building only. The application
++   can still be targeted for devices with SDK versions 9 and up.
++ - Default to target SDK version 14 to disable overflow button in
++   system navigation.
++ - New module: Qt Android Extras. Contains convenience APIs for using
++   JNI, and will in the future include support for Android-specific
++   features which do not fit in a cross-platform API.
++ - Implemented support for thread-affinity in qrand() functions.
++ - Fixed several problems with predictive text in soft keyboard.
++ - Made several improvements to stability.
++ - Implemented support for camera and low-latency audio in Qt Multimedia.
++ - Fixed driver-specific bugs in text rendering in Qt Quick 2.
++ - Added preference in default manifest for installing applications to
++   external storage if possible.
++ - Fixed delivery of key press event for the Back key.
++ - Fixed race condition when showing a window in full screen which would
++   cause it to not be maximized.
++ - Fixed input method hints.
++ - Made font point sizes compatible with the interpretation of point
++   sizes on iOS to ease sharing code between the two platforms.
++ - Added support for QAmbientTemperatureSensor, QPressureSensor
++   and QProximitySensor to Qt Sensors.
++ - Removed dependency on Qt Widgets in default build of Qt Quick Controls.
+ 
+ OS X
+ ----
+-- 
+1.8.4
+
+
+From 6c3adb5f966e349f0488c194462e48cc8ddf248e Mon Sep 17 00:00:00 2001
+From: Nico Vertriest <nico.vertriest@digia.com>
+Date: Wed, 27 Nov 2013 14:47:26 +0100
+Subject: [PATCH 14/17] Doc: corrected invalid ref. to output iterators
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Task-number: QTBUG-34749
+Change-Id: I7abd504b6081e84a8e67c7957e13d402999e9d38
+Reviewed-by: Martin Smith <martin.smith@digia.com>
+Reviewed-by: Topi Reiniö <topi.reinio@digia.com>
+
+diff --git a/src/corelib/tools/qalgorithms.qdoc b/src/corelib/tools/qalgorithms.qdoc
+index cd38947..412b9cf 100644
+--- a/src/corelib/tools/qalgorithms.qdoc
++++ b/src/corelib/tools/qalgorithms.qdoc
+@@ -49,9 +49,9 @@
+     iterators they accept. For example, qFill() accepts two
+     \l {forward iterators}. The iterator types required are specified
+     for each algorithm. If an iterator of the wrong type is passed (for
+-    example, if QList::ConstIterator is passed as an \l {output
+-    iterator}), you will always get a compiler error, although not
+-    necessarily a very informative one.
++    example, if QList::ConstIterator is passed as an
++    \l {Output Iterators}{output iterator}), you will always get a
++    compiler error, although not necessarily a very informative one.
+ 
+     Some algorithms have special requirements on the value type
+     stored in the containers. For example,
+@@ -99,7 +99,7 @@
+ 
+     \section2 Output Iterators
+ 
+-    An \e{output iterator} is an iterator that can be used for
++    An output iterator is an iterator that can be used for
+     writing data sequentially to a container or to some output
+     stream. It must provide the following operators: unary \c{*} for
+     writing a value (i.e., \c{*it = val}) and prefix \c{++} for
+-- 
+1.8.4
+
+
+From 7d5448d9e2ae4d2d10c0cff867cf34b315336feb Mon Sep 17 00:00:00 2001
+From: J-P Nurmi <jpnurmi@digia.com>
+Date: Wed, 27 Nov 2013 13:24:59 +0100
+Subject: [PATCH 15/17] Docs: add important QWheelEvent::phase() related notes
+
+Change-Id: I4901b96b44b7c1179e678689af5962cb4570d50d
+Reviewed-by: Jens Bache-Wiig <jens.bache-wiig@digia.com>
+Reviewed-by: Gabriel de Dietrich <gabriel.dedietrich@digia.com>
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
+
+diff --git a/src/gui/kernel/qevent.cpp b/src/gui/kernel/qevent.cpp
+index 2866608..88f132b 100644
+--- a/src/gui/kernel/qevent.cpp
++++ b/src/gui/kernel/qevent.cpp
+@@ -709,6 +709,12 @@ QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF& globalPos,
+     Example:
+ 
+     \snippet code/src_gui_kernel_qevent.cpp 0
++
++    \note On platforms that support scrolling \l{phase()}{phases}, the delta may be null when:
++    \list
++    \li scrolling is about to begin, but the distance did not yet change (Qt::ScrollBegin),
++    \li or scrolling has ended and the distance did not change anymore (Qt::ScrollEnd).
++    \endlist
+ */
+ 
+ /*!
+@@ -731,6 +737,12 @@ QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF& globalPos,
+     Example:
+ 
+     \snippet code/src_gui_kernel_qevent.cpp 0
++
++    \note On platforms that support scrolling \l{phase()}{phases}, the delta may be null when:
++    \list
++    \li scrolling is about to begin, but the distance did not yet change (Qt::ScrollBegin),
++    \li or scrolling has ended and the distance did not change anymore (Qt::ScrollEnd).
++    \endlist
+ */
+ 
+ /*!
+@@ -830,6 +842,9 @@ QWheelEvent::QWheelEvent(const QPointF &pos, const QPointF& globalPos,
+     \since 5.2
+ 
+     Returns the scrolling phase of this wheel event.
++
++    \note The Qt::ScrollBegin and Qt::ScrollEnd phases are currently
++    supported only on Mac OS X.
+ */
+ 
+ 
+-- 
+1.8.4
+
+
+From 7483cd9fe3ce4b1bd99fa789ee076b23a5520545 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 08/11] use pkg-config for freetype
+Subject: [PATCH 16/17] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -247,114 +1032,39 @@ index 88be809..8fc19d2 100644
  }
  
 -- 
-1.8.1.4
+1.8.4
 
 
-From 78af990867b4f6653839e59702f25a0d7871aaf0 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sat, 22 Dec 2012 17:45:34 +0100
-Subject: [PATCH 09/11] WIP: qmake writeFile(): work around concurrent
- QDir::mkpath() failure
-
-This actually happened when building qtimageformats with make -j4.
-Failure in mkspecs/features/qt_plugin.prf:
-    write_file($$MODULE_PRI, MODULE_PRI_CONT)|error("Aborting.") with make -j4.
-
-Change-Id: Ibc685f613d721e178e6aff408905d77b0ce1740a
-
-diff --git a/qmake/library/qmakebuiltins.cpp b/qmake/library/qmakebuiltins.cpp
-index be0d8ea..6306235 100644
---- a/qmake/library/qmakebuiltins.cpp
-+++ b/qmake/library/qmakebuiltins.cpp
-@@ -310,9 +310,17 @@ QMakeEvaluator::writeFile(const QString &ctx, const QString &fn, QIODevice::Open
- {
-     QFileInfo qfi(fn);
-     if (!QDir::current().mkpath(qfi.path())) {
--        evalError(fL1S("Cannot create %1directory %2.")
--                  .arg(ctx, QDir::toNativeSeparators(qfi.path())));
--        return ReturnFalse;
-+        // could have failed due to concurrent mkpath attempt
-+#ifdef Q_OS_WIN
-+       Sleep(1000);
-+#else
-+       sleep(1);
-+#endif
-+        if (!qfi.dir().exists()) {
-+            evalError(fL1S("Cannot create %1directory %2.")
-+                      .arg(ctx, QDir::toNativeSeparators(qfi.path())));
-+            return ReturnFalse;
-+        }
-     }
-     QString errStr;
-     if (!doWriteFile(qfi.filePath(), mode, contents, &errStr)) {
--- 
-1.8.1.4
-
-
-From 70a865104329d4c874d4fd287b5ccd5563c0098a Mon Sep 17 00:00:00 2001
+From 12e80060cd06ac79016357cfbfcf56b3786d8c4a Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 10/11] use pkgconfig for icu detection (MXE specific)
+Subject: [PATCH 17/17] use pkgconfig for icu detection (MXE specific)
 
 Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
 
 diff --git a/config.tests/unix/icu/icu.pro b/config.tests/unix/icu/icu.pro
-index 8e58334..1d66c16 100644
+index 2c1b431..e29798b 100644
 --- a/config.tests/unix/icu/icu.pro
 +++ b/config.tests/unix/icu/icu.pro
-@@ -1,4 +1,4 @@
+@@ -1,16 +1,5 @@
  SOURCES = icu.cpp
- CONFIG -= qt dylib app_bundle
--unix:LIBS += -licuuc -licui18n
--win32:LIBS += -licuin
+ CONFIG += console
+ CONFIG -= qt dylib
+-win32 {
+-    CONFIG(static, static|shared) {
+-        CONFIG(debug, debug|release) {
+-            LIBS += -lsicuind -lsicuucd -lsicudtd
+-        } else {
+-            LIBS += -lsicuin -lsicuuc -lsicudt
+-        }
+-    } else {
+-        LIBS += -licuin -licuuc
+-    }
+-} else {
+-    LIBS += -licui18n -licuuc
+-}
 +CONFIG += link_pkgconfig
 +PKGCONFIG += icu-i18n
 -- 
-1.8.1.4
-
-
-From 3f7f2278f14f4f3eb9d414cd2e86631d48f418aa Mon Sep 17 00:00:00 2001
-From: Tobias Koenig <tobias.koenig@kdab.com>
-Date: Mon, 28 Oct 2013 09:25:11 +0100
-Subject: [PATCH 11/11] Add QSQLITE_OPEN_URI database connection flag
-
-This flag enables the URI mode for database names in the SQLite
-backend. Without this flag, it's not possible to use URIs like
-    'file:somedb?mode=memory&cache=shared'
-to create shared, in-memory databases.
-
-Change-Id: I2938184dad1f27c7af454385ca305bd4f6ed1a5e
-Reviewed-by: Mark Brand <mabrand@mabrand.nl>
-(cherry picked from commit 1f6dfa774959830a915f3e2a7b0561ca29b8c485)
-
-Conflicts:
-	dist/changes-5.2.0
-
-diff --git a/src/sql/drivers/sqlite/qsql_sqlite.cpp b/src/sql/drivers/sqlite/qsql_sqlite.cpp
-index ffeb792..0a8b71a 100644
---- a/src/sql/drivers/sqlite/qsql_sqlite.cpp
-+++ b/src/sql/drivers/sqlite/qsql_sqlite.cpp
-@@ -596,6 +596,8 @@ bool QSQLiteDriver::open(const QString & db, const QString &, const QString &, c
-         }
-         if (option == QLatin1String("QSQLITE_OPEN_READONLY"))
-             openMode = SQLITE_OPEN_READONLY;
-+        if (option == QLatin1String("QSQLITE_OPEN_URI"))
-+            openMode |= SQLITE_OPEN_URI;
-         if (option == QLatin1String("QSQLITE_ENABLE_SHARED_CACHE"))
-             sharedCache = true;
-     }
-diff --git a/src/sql/kernel/qsqldatabase.cpp b/src/sql/kernel/qsqldatabase.cpp
-index 0ca79fd..520d697 100644
---- a/src/sql/kernel/qsqldatabase.cpp
-+++ b/src/sql/kernel/qsqldatabase.cpp
-@@ -1264,6 +1264,7 @@ QSqlRecord QSqlDatabase::record(const QString& tablename) const
-     \list
-     \li QSQLITE_BUSY_TIMEOUT
-     \li QSQLITE_OPEN_READONLY
-+    \li QSQLITE_OPEN_URI
-     \li QSQLITE_ENABLE_SHARED_CACHE
-     \endlist
- 
--- 
-1.8.1.4
+1.8.4
 

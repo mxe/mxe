@@ -1,22 +1,24 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 910b5fc6c65e2a4508077821a1d31e080d738766 Mon Sep 17 00:00:00 2001
+From ec1bf00708e5aa804d392678bae5b32921ae0c2a Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 17:03:55 +0200
 Subject: [PATCH] mingw build fix: _fileno
 
 
 diff --git a/tools/xmlpatterns/xmlpatterns.pro b/tools/xmlpatterns/xmlpatterns.pro
-index d349a91..13a70ae 100644
+index 1fad197..2bbf5b5 100644
 --- a/tools/xmlpatterns/xmlpatterns.pro
 +++ b/tools/xmlpatterns/xmlpatterns.pro
-@@ -11,4 +11,5 @@ HEADERS = main.h                            \
+@@ -11,6 +11,7 @@ HEADERS = main.h                            \
            qapplicationargument.cpp          \
            qapplicationargumentparser.cpp    
  
 +win32-g++*:QMAKE_CXXFLAGS += -U__STRICT_ANSI__
  load(qt_tool)
+ 
+ # with c++11 / __STRICT_ANSI__ mingw.org stdio.h doesn't declare e.g. _fileno
 -- 
-1.8.1.4
+1.8.4
 

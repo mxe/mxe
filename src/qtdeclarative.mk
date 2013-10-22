@@ -4,11 +4,11 @@
 PKG             := qtdeclarative
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 52108058b7fb61c20ef3fa7aab81c19381e714a0
+$(PKG)_CHECKSUM := 465187e014512761d13a314afc463817823456fd
 $(PKG)_SUBDIR    = $(subst qtbase,qtdeclarative,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtdeclarative,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtdeclarative,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase qtjsbackend qtsvg qtxmlpatterns
+$(PKG)_DEPS     := gcc qtbase qtsvg qtxmlpatterns
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

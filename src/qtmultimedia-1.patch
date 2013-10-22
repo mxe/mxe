@@ -1,14 +1,14 @@
 This file is part of MXE.
 See index.html for further information.
 
-From af295c0f78cfc8e54601048d5da66f6e81f6661e Mon Sep 17 00:00:00 2001
+From 24d6489d5e485663afc15adc3e969d0da42fd571 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 13 Dec 2012 20:23:48 +0100
 Subject: [PATCH] remove duplicate defs (mxe-specific)
 
 
 diff --git a/src/multimedia/audio/qaudiodeviceinfo_win32_p.cpp b/src/multimedia/audio/qaudiodeviceinfo_win32_p.cpp
-index 3c66d05..10e8037 100644
+index e9503d4..b92aa98 100644
 --- a/src/multimedia/audio/qaudiodeviceinfo_win32_p.cpp
 +++ b/src/multimedia/audio/qaudiodeviceinfo_win32_p.cpp
 @@ -67,19 +67,19 @@ typedef struct _DDPIXELFORMAT* LPDDPIXELFORMAT;
@@ -41,5 +41,5 @@ index 3c66d05..10e8037 100644
  #endif //  __ICreateDevEnum_INTERFACE_DEFINED__
  
 -- 
-1.7.10.4
+1.8.4
 

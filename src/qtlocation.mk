@@ -1,14 +1,14 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := qtjsbackend
+PKG             := qtlocation
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := e13a5ef112bdbe2fb1691d21c52b287a21da614a
-$(PKG)_SUBDIR    = $(subst qtbase,qtjsbackend,$(qtbase_SUBDIR))
-$(PKG)_FILE      = $(subst qtbase,qtjsbackend,$(qtbase_FILE))
-$(PKG)_URL       = $(subst qtbase,qtjsbackend,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase
+$(PKG)_CHECKSUM := d1951d132820e21c0eacfbf29d1149aa78f4e27a
+$(PKG)_SUBDIR    = $(subst qtbase,qtlocation,$(qtbase_SUBDIR))
+$(PKG)_FILE      = $(subst qtbase,qtlocation,$(qtbase_FILE))
+$(PKG)_URL       = $(subst qtbase,qtlocation,$(qtbase_URL))
+$(PKG)_DEPS     := gcc qtbase qtdeclarative qtmultimedia
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
