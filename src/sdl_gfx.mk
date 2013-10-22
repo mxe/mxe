@@ -17,14 +17,11 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-# --disable-mmx: the GCC ASM never worked properly (segfaults), and
-#   doesn't compile on 64bit.  This is fixed for the future SDL2_gfx:
-#   http://sourceforge.net/p/sdl2gfx/code/HEAD/tree/trunk/SDL2_imageFilter.c
-#   No plans for SDL(1)_gfx, but see https://gitorious.org/sdlgfx/asm/
 define $(PKG)_BUILD
+    # autoreconf because we patch configure.in:
+    cd '$(1)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-mmx \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)'
