@@ -26,7 +26,6 @@ define $(PKG)_BUILD
             -opensource \
             -confirm-license \
             -xplatform win32-g++ \
-            -D_WIN32_WINNT=0x0600 \
             -device-option CROSS_COMPILE=${TARGET}- \
             -device-option PKG_CONFIG='${TARGET}-pkg-config' \
             -force-pkg-config \
