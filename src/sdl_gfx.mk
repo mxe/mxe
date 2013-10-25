@@ -18,7 +18,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # autoreconf because we patch configure.in:
+    # SDL_gfx 2.0.24 ships with 'configure.in' more recent than
+    # 'configure', which triggers a build-time autoreconf but without
+    # MXE's aclocal, which fails.  So let's autoreconf beforehand.
+    # Also we patch configure.in in the current build.
     cd '$(1)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
