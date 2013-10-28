@@ -3,8 +3,8 @@
 
 PKG             := sdl_gfx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.24
-$(PKG)_CHECKSUM := 34e8963188e4845557468a496066a8fa60d5f563
+$(PKG)_VERSION  := 2.0.25
+$(PKG)_CHECKSUM := 20a89d0b71b7b790b830c70f17ed2c44100bc0f4
 $(PKG)_SUBDIR   := SDL_gfx-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_gfx-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.ferzkopp.net/Software/SDL_gfx-2.0/$($(PKG)_FILE)
@@ -18,11 +18,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # SDL_gfx 2.0.24 ships with 'configure.in' more recent than
-    # 'configure', which triggers a build-time autoreconf but without
-    # MXE's aclocal, which fails.  So let's autoreconf beforehand.
-    # Also we patch configure.in in the current build.
-    cd '$(1)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
