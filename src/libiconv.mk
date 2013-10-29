@@ -17,14 +17,6 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD_$(BUILD)
-    mkdir '$(1).build'
-    cd    '$(1).build' && '$(1)/configure' \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
-endef
-
 define $(PKG)_BUILD
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/windows/windres-options'
     cd '$(1)' && ./configure \

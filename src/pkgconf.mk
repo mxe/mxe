@@ -10,10 +10,15 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://github.com/$(PKG)/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := automake
 
-define $(PKG)_UPDATE
+define $(PKG)_UPDATE_
     $(WGET) -q -O- 'https://github.com/pkgconf/pkgconf/commits/master' | \
     $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
     head -1
+endef
+
+define $(PKG)_UPDATE
+    echo 'Warning: Updates are temporarily disabled for package pkgconf.' >&2;
+    echo $(pkgconf_VERSION)
 endef
 
 define $(PKG)_BUILD_$(BUILD)

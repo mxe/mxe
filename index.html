@@ -1091,6 +1091,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </p>
     <table id="package-list">
     <tr>
+        <td class="package">a52dec</td>
+        <td class="website"><a href="http://liba52.sourceforge.net/">a52dec (aka. liba52)</a></td>
+    </tr>
+    <tr>
         <td class="package">agg</td>
         <td class="website"><a href="http://www.antigrain.com/">Anti-Grain Geometry</a></td>
     </tr>
@@ -1189,6 +1193,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">cgal</td>
         <td class="website"><a href="http://www.cgal.org/">cgal</a></td>
+    </tr>
+    <tr>
+        <td class="package">cloog</td>
+        <td class="website"><a href="http://www.cloog.org/">CLooG Code Generator</a></td>
     </tr>
     <tr>
         <td class="package">cmake</td>
@@ -1315,8 +1323,16 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://gcc.gnu.org/">GCC</a></td>
     </tr>
     <tr>
+        <td class="package">gcc-cloog</td>
+        <td class="website"><a href="http://www.cloog.org/">CLooG for GCC</a></td>
+    </tr>
+    <tr>
         <td class="package">gcc-gmp</td>
         <td class="website"><a href="http://www.gmplib.org/">GMP for GCC</a></td>
+    </tr>
+    <tr>
+        <td class="package">gcc-isl</td>
+        <td class="website"><a href="http://isl.gforge.inria.fr/">ISL for GCC</a></td>
     </tr>
     <tr>
         <td class="package">gcc-mpc</td>
@@ -1489,6 +1505,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">intltool</td>
         <td class="website"><a href="https://launchpad.net/intltool/+download">intltool</a></td>
+    </tr>
+    <tr>
+        <td class="package">isl</td>
+        <td class="website"><a href="http://isl.gforge.inria.fr/">Integer Set Library</a></td>
     </tr>
     <tr>
         <td class="package">itk</td>
@@ -3584,9 +3604,14 @@ endef</pre>
 
     <ul>
     <li>
-        <a href="http://download.opensuse.org/repositories/windows:/mingw:/win32/SLE_11/noarch/">openSUSE MinGW packages</a>
+        <a href="https://aur.archlinux.org/packages/mingw-w64-crt">Arch Linux mingw-w64 packages</a>
         <br>
-        win32 cross compiling packages by openSUSE
+        win32 cross compiling packages by Arch Linux
+    </li>
+    <li>
+        <a href="http://packages.debian.org/stable/devel/mingw32">Debian mingw32 package</a>
+        <br>
+        bare win32 cross compiler
     </li>
     <li>
         <a href="https://admin.fedoraproject.org/pkgdb/acls/list/**mingw**">Fedora MinGW packages</a>
@@ -3594,19 +3619,14 @@ endef</pre>
         win32 cross compiling packages by Fedora
     </li>
     <li>
-        <a href="http://www.sandroid.org/imcross/">IMCROSS</a>
-        <br>
-        another project with similar goal
-    </li>
-    <li>
-        <a href="http://packages.debian.org/stable/devel/mingw32">mingw32 Debian package</a>
-        <br>
-        bare win32 cross compiler
-    </li>
-    <li>
         <a href="http://gnuwin32.sourceforge.net/">GnuWin32</a>
         <br>
         win32 ports of many free software packages
+    </li>
+    <li>
+        <a href="http://www.sandroid.org/imcross/">IMCROSS</a>
+        <br>
+        another project with similar goal
     </li>
     <li>
         <a href="http://www.libsdl.org/extras/win32/cross/README.txt">MinGW cross-compiler build script</a>
@@ -3619,6 +3639,16 @@ endef</pre>
         <br>
         fork of MXE specialized on building
         <a href="https://www.gnu.org/software/octave/">GNU Octave</a>
+    </li>
+    <li>
+        <a href="http://download.opensuse.org/repositories/windows:/mingw:/win32/SLE_11/noarch/">openSUSE MinGW packages</a>
+        <br>
+        win32 cross compiling packages by openSUSE
+    </li>
+    <li>
+        <a href="http://win-builds.org/">Win-builds</a>
+        <br>
+        creates binary packages, runs on both Linux and Windows
     </li>
     </ul>
 
@@ -3743,6 +3773,9 @@ endef</pre>
     </li>
     <li>
         <a href="http://biosig.sourceforge.net/index.html">BioSig</a>
+    </li>
+    <li>
+        <a href="http://www.gnu.org/software/freedink/">GNU FreeDink</a>
     </li>
     </ul>
 </div>

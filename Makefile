@@ -158,7 +158,7 @@ download: $(addprefix download-,$(PKGS))
 
 .PHONY: build-requirements
 build-requirements:
-	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD)
+	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD) DONT_CHECK_REQUIREMENTS=true
 
 define TARGET_DEPS
 $(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
@@ -202,7 +202,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS) $($(1)_DEPS_$(3))) \
-                          | check-requirements $(3)
+                          | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) $(3)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \

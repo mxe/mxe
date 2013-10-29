@@ -3,17 +3,20 @@
 
 PKG             := lame
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.99
-$(PKG)_CHECKSUM := 91dfd25bedc02759051a6b3af05e61337a575028
+$(PKG)_VERSION  := 3.99.5
+$(PKG)_CHECKSUM := 03a0bfa85713adcc6b3383c12e2cc68a9cfbf4c4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/lame/files/lame/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
+    $(WGET) -q -O- 'http://lame.cvs.sourceforge.net/viewvc/lame/lame/' | \
+    grep RELEASE_ | \
+    $(SED) -n 's,.*RELEASE__\([0-9_][^<]*\)<.*,\1,p' | \
+    tr '_' '.' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
@@ -25,6 +28,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' MXE_CFLAGS=
     $(MAKE) -C '$(1)' -j 1 install
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst MXE_CFLAGS=,CFLAGS="-DFORCEINLINE=inline",$($(PKG)_BUILD))
-$(PKG)_BUILD_i686-w64-mingw32 = $(subst MXE_CFLAGS=,CFLAGS="-DFORCEINLINE=inline",$($(PKG)_BUILD))

@@ -12,8 +12,9 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/opencore-amr/files/$(PKG)/' | \
-    $(SED) -n 's,.*vo-aacenc-\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
+    $(SED) -n 's,.*aacenc-\([0-9.]*\)\.tar.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

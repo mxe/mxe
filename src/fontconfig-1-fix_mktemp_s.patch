@@ -11,7 +11,7 @@ diff --git a/configure.ac b/configure.ac
 index 7919372..6a8822b 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -145,7 +145,7 @@ AC_TYPE_PID_T
+@@ -148,7 +148,7 @@ AC_TYPE_PID_T
  # Checks for library functions.
  AC_FUNC_VPRINTF
  AC_FUNC_MMAP
@@ -24,7 +24,7 @@ diff --git a/src/fccompat.c b/src/fccompat.c
 index a217160..fb383d4 100644
 --- a/src/fccompat.c
 +++ b/src/fccompat.c
-@@ -156,8 +156,8 @@ FcMakeTempfile (char *template)
+@@ -152,8 +152,8 @@ FcMakeTempfile (char *template)
  	fcntl(fd, F_SETFD, fcntl(fd, F_GETFD) | FD_CLOEXEC);
      }
  #  endif

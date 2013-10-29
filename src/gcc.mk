@@ -3,13 +3,13 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.8.1
-$(PKG)_CHECKSUM := 4e655032cda30e1928fcc3f00962f4238b502169
+$(PKG)_VERSION  := 4.8.2
+$(PKG)_CHECKSUM := 810fb70bd721e1d9f446b6503afe0a9088b62986
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := binutils gcc-gmp gcc-mpc gcc-mpfr
+$(PKG)_DEPS     := binutils gcc-cloog gcc-gmp gcc-isl gcc-mpc gcc-mpfr
 
 $(PKG)_DEPS_i686-pc-mingw32    := mingwrt w32api
 $(PKG)_DEPS_i686-w64-mingw32   := mingw-w64
@@ -22,18 +22,8 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_PRE_CONFIGURE
-    # unpack support libraries
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-gmp)
-    mv '$(1)/$(gcc-gmp_SUBDIR)' '$(1)/gmp'
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-mpc)
-    mv '$(1)/$(gcc-mpc_SUBDIR)' '$(1)/mpc'
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,gcc-mpfr)
-    mv '$(1)/$(gcc-mpfr_SUBDIR)' '$(1)/mpfr'
-endef
-
 define $(PKG)_CONFIGURE
-    # configure gcc and support libraries
+    # configure gcc
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
         --target='$(TARGET)' \
@@ -53,8 +43,11 @@ define $(PKG)_CONFIGURE
         --enable-threads=win32 \
         --disable-libgomp \
         --disable-libmudflap \
-        --with-mpfr-include='$(1)/mpfr/src' \
-        --with-mpfr-lib='$(1).build/mpfr/src/.libs' \
+        --with-cloog='$(PREFIX)' \
+        --with-gmp='$(PREFIX)' \
+        --with-isl='$(PREFIX)' \
+        --with-mpc='$(PREFIX)' \
+        --with-mpfr='$(PREFIX)' \
         $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
 endef
 
@@ -106,7 +99,6 @@ endef
 
 define $(PKG)_BUILD_i686-pc-mingw32
     # build full cross gcc
-    $($(PKG)_PRE_CONFIGURE) \
     $($(PKG)_CONFIGURE) \
         --disable-sjlj-exceptions
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
@@ -117,7 +109,6 @@ endef
 
 define $(PKG)_BUILD_mingw-w64
     # build standalone gcc
-    $($(PKG)_PRE_CONFIGURE) \
     $($(PKG)_CONFIGURE)
     $(MAKE) -C '$(1).build' -j '$(JOBS)' all-gcc
     $(MAKE) -C '$(1).build' -j 1 install-gcc
@@ -129,7 +120,7 @@ define $(PKG)_BUILD_mingw-w64
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         mxe-config-opts
-    $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).crt-build' -j '$(JOBS)' || $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
     $(MAKE) -C '$(1).crt-build' -j 1 install
 
     # build rest of gcc

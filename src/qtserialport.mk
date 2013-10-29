@@ -3,11 +3,11 @@
 
 PKG             := qtserialport
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.1
+$(PKG)_VERSION   = $(qtbase_VERSION)
 $(PKG)_CHECKSUM := a1a02801662c441d25299615bd5188473a67e7de
-$(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.1/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_SUBDIR    = $(subst qtbase,qtserialport,$(qtbase_SUBDIR))
+$(PKG)_FILE      = $(subst qtbase,qtserialport,$(qtbase_FILE))
+$(PKG)_URL       = $(subst qtbase,qtserialport,$(qtbase_URL))
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE

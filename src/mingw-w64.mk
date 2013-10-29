@@ -3,17 +3,18 @@
 
 PKG             := mingw-w64
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := c28722c
-$(PKG)_CHECKSUM := bc48803ff15a777adad8890519bd3ebec90acab9
-$(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)/trunk
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := 3.0.0
+$(PKG)_CHECKSUM := e2684886442a338d48d02c56ef70eb07039878c3
+$(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/mirror/$(PKG)/commits/master' | \
-    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
-    head -1
+    $(WGET) -q -O- 'http://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/' | \
+    $(SED) -n 's,.*mingw-w64-v\([0-9.]*\)\.tar.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD_mingw-w64

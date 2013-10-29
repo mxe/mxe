@@ -11,8 +11,11 @@ $(PKG)_URL      := http://download.icu-project.org/files/$(PKG)/$($(PKG)_VERSION
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package icu4c need to be written.' >&2;
-    echo $(icu4c_VERSION)
+    $(WGET) -q -O- 'http://bugs.icu-project.org/trac/browser/icu/tags' | \
+    $(SED) -n 's,.*release-\([0-9-]*\)<.*,\1,p' | \
+    tr '-' '.' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
