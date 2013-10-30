@@ -70,26 +70,6 @@ define $(PKG)_BUILD_UNICODE
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/bin/$(TARGET)-wx-config'
 endef
 
-define $(PKG)_BUILD_ANSI
-    # build the wxWidgets variant without unicode support
-    mkdir '$(1).ansi'
-    cd    '$(1).ansi' && '$(1)/configure' \
-        $($(PKG)_CONFIGURE_OPTS) \
-        --disable-unicode
-    $(MAKE) -C '$(1).ansi' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-
-    # backup of the unicode wx-config script
-    # such that "make install" won't overwrite it
-    mv '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/$(TARGET)/bin/wx-config-backup'
-
-    $(MAKE) -C '$(1).ansi' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= __install_wxrc___depname=
-    mv '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/$(TARGET)/bin/wx-config-nounicode'
-    $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config-nounicode' '$(PREFIX)/bin/$(TARGET)-wx-config-nounicode'
-
-    # restore the unicode wx-config script
-    mv '$(PREFIX)/$(TARGET)/bin/wx-config-backup' '$(PREFIX)/$(TARGET)/bin/wx-config'
-endef
-
 define $(PKG)_TEST
     # build test program
     '$(TARGET)-g++' \
@@ -101,15 +81,6 @@ endef
 define $(PKG)_BUILD
     $($(PKG)_PRE_CONFIGURE)
     $($(PKG)_BUILD_UNICODE)
-    $($(PKG)_BUILD_ANSI)
     $($(PKG)_TEST)
 endef
 
-define $(PKG)_BUILD_UNICODE_ONLY
-    $($(PKG)_PRE_CONFIGURE)
-    $($(PKG)_BUILD_UNICODE)
-    $($(PKG)_TEST)
-endef
-
-$(PKG)_BUILD_i686-w64-mingw32   = $($(PKG)_BUILD_UNICODE_ONLY)
-$(PKG)_BUILD_x86_64-w64-mingw32 = $($(PKG)_BUILD_UNICODE_ONLY)
