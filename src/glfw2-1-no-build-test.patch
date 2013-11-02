@@ -1,0 +1,25 @@
+This file is part of MXE.
+See index.html for further information.
+
+Do not waste time building examples and tests. We use our test
+
+--- a/Makefile
++++ b/Makefile
+@@ -128,13 +128,13 @@
+ 
+ cross-mgw:
+ 	cd lib/win32 && $(MAKE) -f Makefile.win32.cross-mgw
+-	cd examples  && $(MAKE) -f Makefile.win32.cross-mgw 
+-	cd tests     && $(MAKE) -f Makefile.win32.cross-mgw
++	#cd examples  && $(MAKE) -f Makefile.win32.cross-mgw 
++	#cd tests     && $(MAKE) -f Makefile.win32.cross-mgw
+ 
+ cross-mgw-clean:
+ 	cd lib/win32 && $(MAKE) -f Makefile.win32.cross-mgw clean 
+-	cd examples  && $(MAKE) -f Makefile.win32.cross-mgw clean
+-	cd tests     && $(MAKE) -f Makefile.win32.cross-mgw clean
++	#cd examples  && $(MAKE) -f Makefile.win32.cross-mgw clean
++	#cd tests     && $(MAKE) -f Makefile.win32.cross-mgw clean
+ 
+ 
+ ###########################################################################
