@@ -6,7 +6,7 @@ Contains ad hoc patches for cross building.
 From 99dd0c414f1eb7142993febca7b722f6f8b43b8f Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 19 Sep 2013 08:53:30 +0200
-Subject: [PATCH 01/10] fix off-by-one error in NTLM proxy authentication
+Subject: [PATCH 01/11] fix off-by-one error in NTLM proxy authentication
 
 Change-Id: Icee3fc939d81c726f8e4ed484a0c8685cf1f271c
 Task-number: QTBUG-27555
@@ -33,7 +33,7 @@ index 73991ab..0ea97f2 100644
 From 09609302a0e34b1185ce8456c99196a75a85d5a4 Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@digia.com>
 Date: Mon, 26 Aug 2013 11:52:47 +0200
-Subject: [PATCH 02/10] Windows: Fix compilation with MinGW-64, gcc 4.8.1
+Subject: [PATCH 02/11] Windows: Fix compilation with MinGW-64, gcc 4.8.1
 
 A definition for FILE_ID_128 was added.
 
@@ -75,7 +75,7 @@ index e8904b0..57231b5 100644
 From e82966dbb4222149a40da45ad8816d622a0a949c Mon Sep 17 00:00:00 2001
 From: Kai Koehne <kai.koehne@digia.com>
 Date: Mon, 2 Sep 2013 10:20:37 +0200
-Subject: [PATCH 03/10] Fix compilation with latest Mingw-w64 headers
+Subject: [PATCH 03/11] Fix compilation with latest Mingw-w64 headers
 
 Fix compilation with e.g. mingw-builds 4.8.1-rev4 package. The Mingw-W64
 headers define SHSTOCKICONINFO only for vista and newer.
@@ -109,7 +109,7 @@ index 844e46e..d2bd0be 100644
 From 562b005aaf1d6a1cd3f2ab4e1cae3a977b942c3f Mon Sep 17 00:00:00 2001
 From: Kai Koehne <kai.koehne@digia.com>
 Date: Thu, 19 Sep 2013 15:17:45 +0200
-Subject: [PATCH 04/10] Fix typo in define guards
+Subject: [PATCH 04/11] Fix typo in define guards
 
 Needed to fix compilation with latest Mingw-w64 headers (version 3)
 
@@ -137,7 +137,7 @@ index 33bed61..b91e3ee 100644
 From 28285c1c123f6673e433b5bc03ef2001f3bbbf0a Mon Sep 17 00:00:00 2001
 From: Kai Koehne <kai.koehne@digia.com>
 Date: Thu, 19 Sep 2013 15:18:41 +0200
-Subject: [PATCH 05/10] Require Windows Vista
+Subject: [PATCH 05/11] Require Windows Vista
 
 The structure FDAP is only available as Windows Vista, and MinGW-w64
 do not actually define it if _WIN32_WINNT isn't set.
@@ -171,7 +171,7 @@ index b91e3ee..4180b90 100644
 From e50ce8fe6bf48be165a51c2f5f5b7638d0528593 Mon Sep 17 00:00:00 2001
 From: Kai Koehne <kai.koehne@digia.com>
 Date: Mon, 21 Oct 2013 12:54:45 +0200
-Subject: [PATCH 06/10] Fix compilation with latest MinGW-w64 (release 3)
+Subject: [PATCH 06/11] Fix compilation with latest MinGW-w64 (release 3)
 
 Now that MinGW-w64 fixed the headers the old hack actually break stuff.
 
@@ -201,7 +201,7 @@ index 4180b90..3b64edc 100644
 From c730e0a1c9087fd1e0ae8c08e5f92d55eec79d25 Mon Sep 17 00:00:00 2001
 From: Kai Koehne <kai.koehne@digia.com>
 Date: Wed, 23 Oct 2013 15:25:11 +0200
-Subject: [PATCH 07/10] Fix typo in check for MINGW_W64 version
+Subject: [PATCH 07/11] Fix typo in check for MINGW_W64 version
 
 Got introduced in 9b187bcd6a256b53cc2fb85500
 
@@ -230,7 +230,7 @@ index 3b64edc..246f67a 100644
 From 5ac54731a9590161e7b00c38d100232a03ecf260 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 08/10] use pkg-config for freetype
+Subject: [PATCH 08/11] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -253,7 +253,7 @@ index 88be809..8fc19d2 100644
 From 78af990867b4f6653839e59702f25a0d7871aaf0 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 22 Dec 2012 17:45:34 +0100
-Subject: [PATCH 09/10] WIP: qmake writeFile(): work around concurrent
+Subject: [PATCH 09/11] WIP: qmake writeFile(): work around concurrent
  QDir::mkpath() failure
 
 This actually happened when building qtimageformats with make -j4.
@@ -294,7 +294,7 @@ index be0d8ea..6306235 100644
 From 70a865104329d4c874d4fd287b5ccd5563c0098a Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 10/10] use pkgconfig for icu detection (MXE specific)
+Subject: [PATCH 10/11] use pkgconfig for icu detection (MXE specific)
 
 Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
 
@@ -309,6 +309,52 @@ index 8e58334..1d66c16 100644
 -win32:LIBS += -licuin
 +CONFIG += link_pkgconfig
 +PKGCONFIG += icu-i18n
+-- 
+1.8.1.4
+
+
+From 3f7f2278f14f4f3eb9d414cd2e86631d48f418aa Mon Sep 17 00:00:00 2001
+From: Tobias Koenig <tobias.koenig@kdab.com>
+Date: Mon, 28 Oct 2013 09:25:11 +0100
+Subject: [PATCH 11/11] Add QSQLITE_OPEN_URI database connection flag
+
+This flag enables the URI mode for database names in the SQLite
+backend. Without this flag, it's not possible to use URIs like
+    'file:somedb?mode=memory&cache=shared'
+to create shared, in-memory databases.
+
+Change-Id: I2938184dad1f27c7af454385ca305bd4f6ed1a5e
+Reviewed-by: Mark Brand <mabrand@mabrand.nl>
+(cherry picked from commit 1f6dfa774959830a915f3e2a7b0561ca29b8c485)
+
+Conflicts:
+	dist/changes-5.2.0
+
+diff --git a/src/sql/drivers/sqlite/qsql_sqlite.cpp b/src/sql/drivers/sqlite/qsql_sqlite.cpp
+index ffeb792..0a8b71a 100644
+--- a/src/sql/drivers/sqlite/qsql_sqlite.cpp
++++ b/src/sql/drivers/sqlite/qsql_sqlite.cpp
+@@ -596,6 +596,8 @@ bool QSQLiteDriver::open(const QString & db, const QString &, const QString &, c
+         }
+         if (option == QLatin1String("QSQLITE_OPEN_READONLY"))
+             openMode = SQLITE_OPEN_READONLY;
++        if (option == QLatin1String("QSQLITE_OPEN_URI"))
++            openMode |= SQLITE_OPEN_URI;
+         if (option == QLatin1String("QSQLITE_ENABLE_SHARED_CACHE"))
+             sharedCache = true;
+     }
+diff --git a/src/sql/kernel/qsqldatabase.cpp b/src/sql/kernel/qsqldatabase.cpp
+index 0ca79fd..520d697 100644
+--- a/src/sql/kernel/qsqldatabase.cpp
++++ b/src/sql/kernel/qsqldatabase.cpp
+@@ -1264,6 +1264,7 @@ QSqlRecord QSqlDatabase::record(const QString& tablename) const
+     \list
+     \li QSQLITE_BUSY_TIMEOUT
+     \li QSQLITE_OPEN_READONLY
++    \li QSQLITE_OPEN_URI
+     \li QSQLITE_ENABLE_SHARED_CACHE
+     \endlist
+ 
 -- 
 1.8.1.4
 
