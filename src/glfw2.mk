@@ -11,13 +11,16 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/glfw/glfw/$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- 'http://sourceforge.net/projects/glfw/files/glfw/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    grep '^2\.' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' cross-mgw-install TARGET=$(TARGET)- PREFIX='$(PREFIX)/$(TARGET)'
-    
+
     #Test
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
