@@ -189,7 +189,7 @@ diff -ur a/gio-2.0.pc.in b/gio-2.0.pc.in
  Requires: glib-2.0 gobject-2.0
  Requires.private: gmodule-no-export-2.0
 -Libs: -L${libdir} -lgio-2.0
-+Libs: -L${libdir} -lgio-2.0 -ldnsapi
++Libs: -L${libdir} -lgio-2.0 -ldnsapi -liphlpapi
  Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@
  Cflags:
 
