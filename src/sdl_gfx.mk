@@ -3,8 +3,8 @@
 
 PKG             := sdl_gfx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.24
-$(PKG)_CHECKSUM := 34e8963188e4845557468a496066a8fa60d5f563
+$(PKG)_VERSION  := 2.0.25
+$(PKG)_CHECKSUM := 20a89d0b71b7b790b830c70f17ed2c44100bc0f4
 $(PKG)_SUBDIR   := SDL_gfx-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_gfx-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.ferzkopp.net/Software/SDL_gfx-2.0/$($(PKG)_FILE)
@@ -17,14 +17,9 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-# --disable-mmx: the GCC ASM never worked properly (segfaults), and
-#   doesn't compile on 64bit.  This is fixed for the future SDL2_gfx:
-#   http://sourceforge.net/p/sdl2gfx/code/HEAD/tree/trunk/SDL2_imageFilter.c
-#   No plans for SDL(1)_gfx, but see https://gitorious.org/sdlgfx/asm/
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-mmx \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)'
