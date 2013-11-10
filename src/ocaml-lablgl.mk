@@ -8,6 +8,7 @@ $(PKG)_CHECKSUM := 6451294c1591e17db38874e654f319f8ecf401c9
 $(PKG)_SUBDIR   := lablgl-$($(PKG)_VERSION)
 $(PKG)_FILE     := lablgl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://wwwfun.kurims.kyoto-u.ac.jp/soft/olabl/dist/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://forge.ocamlcore.org/frs/download.php/1254/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ocaml-findlib gtkglarea
 
 define $(PKG)_UPDATE
