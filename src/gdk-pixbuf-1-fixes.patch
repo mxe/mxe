@@ -6,7 +6,7 @@ Contains ad hoc patches for cross building.
 From 38f4e914e458de6963a3fddbb57dbf8cd0fb83b4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 24 Sep 2010 23:31:24 +0200
-Subject: [PATCH 1/3] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 1/4] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
@@ -35,7 +35,7 @@ index 411ceb6..64db155 100644
 From 0903d316c228bf2a6ba9fe11188851a357cde43e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 12 Oct 2012 12:24:51 +0200
-Subject: [PATCH 2/3] add libtiff to required.private in .pc
+Subject: [PATCH 2/4] add libtiff to required.private in .pc
 
 
 diff --git a/gdk-pixbuf-2.0.pc.in b/gdk-pixbuf-2.0.pc.in
@@ -58,7 +58,7 @@ index 7addefc..a07a46f 100644
 From 1e76ff73dcd6f191584bb05c8ccc9b0a16394a0d Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 12 Oct 2012 12:25:27 +0200
-Subject: [PATCH 3/3] allow static
+Subject: [PATCH 3/4] allow static
 
 
 diff --git a/configure.ac b/configure.ac
@@ -95,3 +95,36 @@ index a5224f8..a1fc2d0 100644
 -- 
 1.7.10.4
 
+
+[PATCH 4/4] pixbuf-randomly-modified.c includes sys/resource.h which does not
+exist in MXE.
+
+
+diff -ur a/tests/pixbuf-randomly-modified.c b/tests/pixbuf-randomly-modified.c
+--- a/tests/pixbuf-randomly-modified.c	2013-09-23 15:06:17.000000000 +0200
++++ b/tests/pixbuf-randomly-modified.c	2013-11-09 09:57:29.838931133 +0100
+@@ -26,7 +26,9 @@
+ #include <time.h>
+ #include <string.h>
+ #include <sys/time.h>
++#ifndef __MINGW32__
+ #include <sys/resource.h>
++#endif
+ 
+ static void
+ disaster (const char *what)
+@@ -104,12 +106,14 @@
+   gboolean got_seed = FALSE;
+   GPtrArray *files = g_ptr_array_new ();
+   int l, iterations;
++#ifndef __MINGW32__
+   struct rlimit max_mem_size;
+ 
+   max_mem_size.rlim_cur = 100 * 1024 * 1024; /* 100M */
+   max_mem_size.rlim_max = max_mem_size.rlim_cur;
+   setrlimit (RLIMIT_DATA, &max_mem_size);
+   setrlimit (RLIMIT_AS, &max_mem_size);
++#endif
+ 
+   g_test_init (&argc, &argv, NULL);
+ 

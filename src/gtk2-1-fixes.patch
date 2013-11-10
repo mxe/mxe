@@ -6,7 +6,7 @@ Contains ad hoc patches for cross building.
 From 374c56944944128d57b33b3b5c1be978a02d3dbb Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 14:43:43 +0200
-Subject: [PATCH 01/11] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 01/10] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
@@ -42,7 +42,7 @@ index 56c92db..655f575 100644
 From 8e08b42e368166814289abf32958c979d8d480c6 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 14:46:20 +0200
-Subject: [PATCH 02/11] s,__declspec(dllimport),,
+Subject: [PATCH 02/10] s,__declspec(dllimport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
@@ -104,7 +104,7 @@ index c624aea..b792ea5 100644
 From 59408e4752be8277c26f9ae458a086874844ab2b Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 15:03:28 +0200
-Subject: [PATCH 03/11] s,__declspec(dllexport),,
+Subject: [PATCH 03/10] s,__declspec(dllexport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
@@ -166,7 +166,7 @@ index b792ea5..f382a64 100644
 From 15527e24127117bbaf24dec513daa6fb67a00a8c Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 14:17:22 +0200
-Subject: [PATCH 04/11] fix gtk+-2.0.pc.in
+Subject: [PATCH 04/10] fix gtk+-2.0.pc.in
 
 
 diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
@@ -187,7 +187,7 @@ index 46853e1..7f3eb22 100644
 From 165597a3bbe73e830d79dbd2d109e3b075ea2985 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 14:48:31 +0200
-Subject: [PATCH 05/11] disable gtkbuiltincache
+Subject: [PATCH 05/10] disable gtkbuiltincache
 
 
 diff --git a/gtk/Makefile.in b/gtk/Makefile.in
@@ -210,7 +210,7 @@ index 54200e7..e984933 100644
 From 465171f3b0ebba7760719c0ee86a0d0f216fe51e Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 14:49:50 +0200
-Subject: [PATCH 06/11] disable test-inline-pixbufs.h
+Subject: [PATCH 06/10] disable test-inline-pixbufs.h
 
 
 diff --git a/demos/Makefile.in b/demos/Makefile.in
@@ -233,7 +233,7 @@ index 97e9536..abf0f14 100644
 From 417065a8b000250f6553c2801a26eae4491041dd Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 14:51:04 +0200
-Subject: [PATCH 07/11] permit static building
+Subject: [PATCH 07/10] permit static building
 
 
 diff --git a/configure b/configure
@@ -334,7 +334,7 @@ index c61e096..34a116d 100755
 From 907f9831f56004a322d785f34417e99735de3109 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 14:53:18 +0200
-Subject: [PATCH 08/11] no -Wl
+Subject: [PATCH 08/10] no -Wl
 
 
 diff --git a/configure b/configure
@@ -357,7 +357,7 @@ index 34a116d..3c12234 100755
 From 1e02f2e984433a899bc642af5622bea971a06a3a Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 14:54:15 +0200
-Subject: [PATCH 09/11] gio not gio-unix
+Subject: [PATCH 09/10] gio not gio-unix
 
 
 diff --git a/configure b/configure
@@ -383,7 +383,7 @@ index 3c12234..ce40ad1 100755
 From b9bd33ba09c0297b874b7e6955864e6a76b83364 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Fri, 24 Sep 2010 15:30:49 +0200
-Subject: [PATCH 10/11] removed duplicate _gtk_marshal_OBJECT__VOID()
+Subject: [PATCH 10/10] removed duplicate _gtk_marshal_OBJECT__VOID()
 
 
 diff --git a/perf/marshalers.c b/perf/marshalers.c
@@ -434,32 +434,6 @@ index 9a8c715..14f5ab1 100644
  /* VOID:ENUM,OBJECT,DOUBLE (./marshalers.list:2) */
  void
  _gtk_marshal_VOID__ENUM_OBJECT_DOUBLE (GClosure     *closure,
--- 
-1.8.2.2
-
-
-From e232e6602e7476fbc72521892a69c636b63a6f14 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Thu, 23 May 2013 20:53:44 +1000
-Subject: [PATCH 11/11] fix for mingw-w64 uuid
-
-
-diff --git a/gdk/win32/gdkdnd-win32.c b/gdk/win32/gdkdnd-win32.c
-index a41a0e7..05c60b8 100644
---- a/gdk/win32/gdkdnd-win32.c
-+++ b/gdk/win32/gdkdnd-win32.c
-@@ -69,8 +69,10 @@
-  * the current Windows code page. See gdkim-win32.c for more info on that.
-  *
-  */
-- 
-+
-+#ifndef __MINGW64_VERSION_MAJOR
- #define INITGUID
-+#endif
- 
- #include "gdkdnd.h"
- #include "gdkproperty.h"
 -- 
 1.8.2.2
 

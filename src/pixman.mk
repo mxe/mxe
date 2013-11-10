@@ -3,8 +3,8 @@
 
 PKG             := pixman
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.29.4
-$(PKG)_CHECKSUM := de11c690f2aa0ffb4d98db9d8735888a72a510d2
+$(PKG)_VERSION  := 0.31.2
+$(PKG)_CHECKSUM := 0246796a1220a52e8e98110dd1460b64e7f2476c
 $(PKG)_SUBDIR   := pixman-$($(PKG)_VERSION)
 $(PKG)_FILE     := pixman-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://cairographics.org/snapshots/$($(PKG)_FILE)
