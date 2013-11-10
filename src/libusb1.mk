@@ -3,8 +3,8 @@
 
 PKG             := libusb1
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.16
-$(PKG)_CHECKSUM := ec164f02e6732c373e5a24be6b33a59142435615
+$(PKG)_VERSION  := 1.0.17
+$(PKG)_CHECKSUM := a491054e7f4f3f52b12bd567335180586a54ae16
 $(PKG)_SUBDIR   := libusbx-$($(PKG)_VERSION)
 $(PKG)_FILE     := libusbx-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusbx/releases/$($(PKG)_VERSION)/source/$($(PKG)_FILE)

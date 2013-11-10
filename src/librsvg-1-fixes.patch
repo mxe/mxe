@@ -6,7 +6,7 @@ Contains an ad hoc patch for cross building.
 From 1ff5a73bee660f1d61f9cdd7c8d7aff29e959c4c Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Mon, 27 Sep 2010 12:00:52 +0200
-Subject: [PATCH] fix .pc requirements
+Subject: [PATCH 1/2] fix .pc requirements
 
 
 diff --git a/librsvg.pc.in b/librsvg.pc.in
@@ -24,3 +24,35 @@ index 372f199..b6ee7a9 100644
  Cflags: -I${includedir}/librsvg-@RSVG_API_VERSION@
 -- 
 1.7.1
+
+
+[PATCH 2/2] Work around use of canonicalize_file_name()
+
+
+diff -ur librsvg-2.40.0.orig/rsvg-base.c librsvg-2.40.0/rsvg-base.c
+--- librsvg-2.40.0.orig/rsvg-base.c	2013-05-11 11:19:07.000000000 +0200
++++ librsvg-2.40.0/rsvg-base.c	2013-11-09 15:24:47.865999754 +0100
+@@ -2191,7 +2191,11 @@
+     g_object_unref (base);
+ 
+     /* FIXME portability */
++#ifndef __MINGW32__
+     cdir = canonicalize_file_name (dir);
++#else
++    cdir = dir;
++#endif
+     g_free (dir);
+     if (cdir == NULL)
+         goto deny;
+@@ -2201,7 +2205,11 @@
+         goto deny;
+ 
+     /* FIXME portability */
++#ifndef __MINGW32__
+     cpath = canonicalize_file_name (path);
++#else
++    cpath = path;
++#endif
+     g_free (path);
+ 
+     if (cpath == NULL)
