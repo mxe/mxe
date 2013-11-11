@@ -19,7 +19,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' cross-mgw-install TARGET=$(TARGET)- PREFIX='$(PREFIX)/$(TARGET)'
+    cd '$(1)/lib/win32' && $(MAKE) -f Makefile.win32.cross-mgw \
+        TARGET=$(TARGET)- \
+        PREFIX='$(PREFIX)/$(TARGET)' \
+        install -j '$(JOBS)'
 
     #Test
     '$(TARGET)-gcc' \
