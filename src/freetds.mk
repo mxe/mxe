@@ -24,13 +24,9 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-rpath \
         --disable-dependency-tracking \
-        --disable-shared \
-        --enable-static \
         --enable-libiconv \
         --enable-msdblib \
         --enable-sspi \

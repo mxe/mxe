@@ -22,13 +22,14 @@ define $(PKG)_BUILD
     cd '$(1)' && CC='$(TARGET)-gcc' ./Configure \
         mingw \
         zlib \
-        no-shared \
+        $(if $(BUILD_STATIC),no-,)shared \
         no-capieng \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' install -j 1 \
         CC='$(TARGET)-gcc' \
         RANLIB='$(TARGET)-ranlib' \
-        AR='$(TARGET)-ar rcu'
+        AR='$(TARGET)-ar rcu' \
+        CROSS_COMPILE='$(TARGET)-'
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mingw ,mingw64 ,$($(PKG)_BUILD))

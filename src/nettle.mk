@@ -20,10 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' getopt.o getopt1.o
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $(if $(BUILD_STATIC),getopt.o getopt1.o,) SUBDIRS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install SUBDIRS=
 endef

@@ -66,13 +66,24 @@ define $(PKG)_BUILD
         -dbus-linked \
         -v
 
+    # one of the demos is missing an include path
+    echo 'INCLUDEPATH += $(1)/demos/browser' >> '$(1)/demos/browser/browser.pro'
+
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt'
     $(MAKE) -C '$(1)' -j 1 install
 
     cd '$(1)/tools/assistant' && '$(1)/bin/qmake' assistant.pro
+    # can't figure out where -lQtCLucene comes from
+    $(MAKE) -C '$(1)/tools/assistant' sub-lib-qmake_all
+    $(SED) -i 's,-lQtCLucene$$,-lQtCLucene4,' '$(1)/tools/assistant/lib/Makefile.Release'
     $(MAKE) -C '$(1)/tools/assistant' -j '$(JOBS)' install
 
+    # likewise for these two
+    cd '$(1)/tools/designer/src/designer' && '$(1)/bin/qmake' designer.pro
+    $(if $(BUILD_SHARED),\
+        $(SED) -i 's/-lQtDesignerComponents /-lQtDesignerComponents4 /' '$(1)/tools/designer/src/designer/Makefile.Release' && \
+        $(SED) -i 's/-lQtDesigner /-lQtDesigner4 /'                     '$(1)/tools/designer/src/designer/Makefile.Release',)
     cd '$(1)/tools/designer' && '$(1)/bin/qmake' designer.pro
     $(MAKE) -C '$(1)/tools/designer' -j '$(JOBS)' install
 
@@ -97,3 +108,9 @@ define $(PKG)_BUILD
         -I'$(1)/test-$(PKG)-pkgconfig' \
         `'$(TARGET)-pkg-config' QtGui --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED = $(subst -static,-shared,\
+                      $(subst -no-webkit,-webkit,\
+                      $(subst -qt-sql,-plugin-sql,\
+                      $(subst -nomake demos,-make demos,\
+                      $($(PKG)_BUILD)))))

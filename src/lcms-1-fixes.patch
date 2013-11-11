@@ -23,7 +23,7 @@ index b715f59..4a8fdb3 100644
 -Libs.private: @LIB_MATH@ 
 +Libs.private: -ljpeg @LIB_MATH@ 
  Cflags: -I${includedir}
-+Requires.private: libtiff-4
++Requires: libtiff-4
 -- 
 1.7.8
 
