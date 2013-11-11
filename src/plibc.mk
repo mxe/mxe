@@ -27,6 +27,21 @@ define $(PKG)_BUILD
         --enable-static \
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: PlibC'; \
+     echo 'Cflags: -I''$(PREFIX)/$(TARGET)/include/plibc'' -DWINDOWS'; \
+     echo 'Libs: -lplibc'; \
+     echo 'Libs.private: -lws2_32 -lole32';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/plibc.pc'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -std=c99 -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-plibc.exe' \
+        `'$(TARGET)-pkg-config' --cflags --libs plibc`
 endef
 
 $(PKG)_BUILD_i686-w64-mingw32 =
