@@ -1,0 +1,27 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 3c2f96d5bbadcff5724523612e5cf0e2d6a9ac51 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 12 Nov 2013 02:49:49 +1100
+Subject: [PATCH] remove _chsize redefinition
+
+
+diff --git a/plugins/elements/gstfilesink.c b/plugins/elements/gstfilesink.c
+index 470ad5e..eb8dbe8 100644
+--- a/plugins/elements/gstfilesink.c
++++ b/plugins/elements/gstfilesink.c
+@@ -56,8 +56,6 @@
+ #define lseek _lseeki64
+ #undef off_t
+ #define off_t guint64
+-#undef ftruncate
+-#define ftruncate _chsize
+ #ifdef _MSC_VER                 /* Check if we are using MSVC, fileno is deprecated in favour */
+ #define fileno _fileno          /* of _fileno */
+ #endif
+-- 
+1.8.4
+
