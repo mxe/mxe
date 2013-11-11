@@ -1,0 +1,27 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From e4d4a423ea51d159b7a214b2aa2f6f36ab49df70 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 12 Nov 2013 00:45:28 +1100
+Subject: [PATCH] add requirements to pkg-config file
+
+
+diff --git a/libmicrohttpd.pc.in b/libmicrohttpd.pc.in
+index 54ce379..5cb9321 100644
+--- a/libmicrohttpd.pc.in
++++ b/libmicrohttpd.pc.in
+@@ -6,7 +6,7 @@ includedir=@includedir@
+ Name: libmicrohttpd
+ Description: A library for creating an embedded HTTP server
+ Version: @VERSION@
+-Requires:
++Requires: pthreads plibc
+ Conflicts:
+ Libs: -L${libdir} -lmicrohttpd
+ Libs.private: @MHD_LIBDEPS@
+-- 
+1.8.4
+
