@@ -856,16 +856,18 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     Install
-    <a href="http://developer.apple.com/xcode/">Xcode 4</a>
+    <a href="http://developer.apple.com/xcode/">Xcode 5</a>
     and
     <a href="http://www.macports.org/">MacPorts</a>,
     then run:
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
-    autoconf automake bison cmake coreutils flex gettext \
-    git-core glib2 gsed intltool libffi libtool openssl \
-    p5-xml-parser pkgconfig scons wget xz</pre>
+    coreutils glib2 gsed intltool p5-xml-parser scons wget xz</pre>
+    <p>
+    and from within the mxe directory:
+    </p>
+    <pre>make build-requirements</pre>
     <p>
     Mac OS X versions ≤ 10.7 are no longer supported.
     </p>
