@@ -13,7 +13,9 @@ $(PKG)_DEPS     := gcc sdl libmodplug ogg vorbis smpeg
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://hg.libsdl.org/SDL_mixer/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
-    head -1
+    grep '^1\.' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

@@ -189,7 +189,7 @@ diff -ur a/gio-2.0.pc.in b/gio-2.0.pc.in
  Requires: glib-2.0 gobject-2.0
  Requires.private: gmodule-no-export-2.0
 -Libs: -L${libdir} -lgio-2.0
-+Libs: -L${libdir} -lgio-2.0 -ldnsapi
++Libs: -L${libdir} -lgio-2.0 -ldnsapi -liphlpapi
  Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@
  Cflags:
 
@@ -578,8 +578,8 @@ Subject: [PATCH 8/8] kill docs and gtk-doc dependence (mxe-specific)
 
 
 diff -urN a/autogen.sh b/autogen.sh
---- a/autogen.sh	2012-08-18 19:32:04.000000000 +0200
-+++ b/autogen.sh	2013-06-29 05:50:43.972750651 +0200
+--- a/autogen.sh	2013-05-07 20:26:07.000000000 +0200
++++ b/autogen.sh	2013-11-09 06:17:50.014630402 +0100
 @@ -7,18 +7,6 @@
  olddir=`pwd`
  cd "$srcdir"
@@ -600,9 +600,9 @@ diff -urN a/autogen.sh b/autogen.sh
  if test -z $AUTORECONF; then
          echo "*** No autoreconf found, please install it ***"
 diff -urN a/configure.ac b/configure.ac
---- a/configure.ac	2013-06-10 00:53:13.000000000 +0200
-+++ b/configure.ac	2013-06-29 05:52:05.224754174 +0200
-@@ -2645,13 +2645,6 @@
+--- a/configure.ac	2013-10-15 21:14:26.000000000 +0200
++++ b/configure.ac	2013-11-09 06:18:17.274631022 +0100
+@@ -2710,13 +2710,6 @@
  dnl **************************
  dnl *** Checks for gtk-doc ***
  dnl **************************
@@ -617,25 +617,25 @@ diff -urN a/configure.ac b/configure.ac
  AC_ARG_ENABLE(man,
                [AS_HELP_STRING([--enable-man],
 diff -urN a/docs/Makefile.am b/docs/Makefile.am
---- a/docs/Makefile.am	2013-06-10 00:03:17.000000000 +0200
+--- a/docs/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,11 +0,0 @@
+@@ -1,12 +0,0 @@
 -## Process this file with automake to produce Makefile.in
--include $(top_srcdir)/Makefile.decl
 -
 -SUBDIRS = reference
 -
--EXTRA_DIST += debugging.txt macros.txt
+-EXTRA_DIST = debugging.txt macros.txt
 -
 -files:
 -	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
 -	  echo $$p; \
 -	done
+-
+-.PHONY: test test-report perf-report full-report
 diff -urN a/docs/reference/gio/gdbus-object-manager-example/Makefile.am b/docs/reference/gio/gdbus-object-manager-example/Makefile.am
---- a/docs/reference/gio/gdbus-object-manager-example/Makefile.am	2013-06-10 00:03:17.000000000 +0200
+--- a/docs/reference/gio/gdbus-object-manager-example/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/reference/gio/gdbus-object-manager-example/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,68 +0,0 @@
--include $(top_srcdir)/Makefile.decl
+@@ -1,67 +0,0 @@
 -NULL =
 -
 -# The name of the module.
@@ -704,10 +704,9 @@ diff -urN a/docs/reference/gio/gdbus-object-manager-example/Makefile.am b/docs/r
 -install-data-hook :
 -	rm -rf $(DESTDIR)$(datadir)/gtk-doc/html/gdbus-object-manager-example
 diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
---- a/docs/reference/gio/Makefile.am	2013-06-10 00:03:17.000000000 +0200
+--- a/docs/reference/gio/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/reference/gio/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,179 +0,0 @@
--include $(top_srcdir)/Makefile.decl
+@@ -1,178 +0,0 @@
 -NULL =
 -
 -SUBDIRS = gdbus-object-manager-example
@@ -887,11 +886,10 @@ diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 -gio-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
 diff -urN a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
---- a/docs/reference/glib/Makefile.am	2013-06-10 00:03:17.000000000 +0200
+--- a/docs/reference/glib/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/reference/glib/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,128 +0,0 @@
+@@ -1,127 +0,0 @@
 -## Process this file with automake to produce Makefile.in
--include $(top_srcdir)/Makefile.decl
 -
 -AUTOMAKE_OPTIONS = 1.6
 -
@@ -1019,11 +1017,10 @@ diff -urN a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
 -glib-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
 diff -urN a/docs/reference/gobject/Makefile.am b/docs/reference/gobject/Makefile.am
---- a/docs/reference/gobject/Makefile.am	2013-06-10 00:03:17.000000000 +0200
+--- a/docs/reference/gobject/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/reference/gobject/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,104 +0,0 @@
+@@ -1,103 +0,0 @@
 -## Process this file with automake to produce Makefile.in
--include $(top_srcdir)/Makefile.decl
 -
 -AUTOMAKE_OPTIONS = 1.6
 -
@@ -1127,31 +1124,43 @@ diff -urN a/docs/reference/gobject/Makefile.am b/docs/reference/gobject/Makefile
 -gobject-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
 diff -urN a/docs/reference/Makefile.am b/docs/reference/Makefile.am
---- a/docs/reference/Makefile.am	2013-06-10 00:03:17.000000000 +0200
+--- a/docs/reference/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/reference/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,3 +0,0 @@
--include $(top_srcdir)/Makefile.decl
--
+@@ -1 +0,0 @@
 -SUBDIRS = glib gobject gio
+diff -urN a/gio/tests/gdbus-object-manager-example/Makefile.am b/gio/tests/gdbus-object-manager-example/Makefile.am
+--- a/gio/tests/gdbus-object-manager-example/Makefile.am	2013-08-08 12:00:40.000000000 +0200
++++ b/gio/tests/gdbus-object-manager-example/Makefile.am	2013-11-09 06:20:32.858634115 +0100
+@@ -25,12 +25,6 @@
+ 
+ test_ltlibraries = libgdbus-example-objectmanager.la
+ 
+-if ENABLE_GTK_DOC
+-# The docs pull these in, so we need them even if not doing 'make check'
+-BUILT_SOURCES += $(GDBUS_GENERATED)
+-noinst_LTLIBRARIES += libgdbus-example-objectmanager.la
+-endif
+-
+ nodist_libgdbus_example_objectmanager_la_SOURCES = \
+ 	gdbus-example-objectmanager-generated.h		\
+ 	gdbus-example-objectmanager-generated.c
 diff -urN a/Makefile.am b/Makefile.am
---- a/Makefile.am	2013-06-10 00:03:17.000000000 +0200
-+++ b/Makefile.am	2013-06-29 05:50:18.224749533 +0200
+--- a/Makefile.am	2013-09-17 20:47:14.000000000 +0200
++++ b/Makefile.am	2013-11-09 06:16:23.310628423 +0100
 @@ -6,7 +6,7 @@
  
  ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
  
--SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
-+SUBDIRS = . m4macros glib gmodule gthread gobject gio po
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests
++SUBDIRS = . m4macros glib gmodule gthread gobject gio po tests
  DIST_SUBDIRS = $(SUBDIRS) build
- if BUILD_MODULAR_TESTS
- SUBDIRS += tests 
-@@ -71,8 +71,7 @@
- 	README			\
- 	INSTALL			\
- 	ChangeLog		\
--	config.h.win32		\
--	gtk-doc.make
-+	config.h.win32
  
- CONFIGURE_DEPENDENCIES = acglib.m4
+ bin_SCRIPTS = glib-gettextize
+@@ -61,7 +61,6 @@
+ 	gio-unix-2.0.pc.in	\
+ 	gio-windows-2.0.pc.in	\
+ 	check-abis.sh		\
+-	gtk-doc.make		\
+ 	$(NULL)
+ 
  

@@ -3,8 +3,8 @@
 
 PKG             := icu4c
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 51.1
-$(PKG)_CHECKSUM := 7905632335e3dcd6667224da0fa087b49f9095e9
+$(PKG)_VERSION  := 52.1
+$(PKG)_CHECKSUM := 6de440b71668f1a65a9344cdaf7a437291416781
 $(PKG)_SUBDIR   := icu
 $(PKG)_FILE     := $(PKG)-$(subst .,_,$($(PKG)_VERSION))-src.tgz
 $(PKG)_URL      := http://download.icu-project.org/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -31,6 +31,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --with-cross-build='$(1).native' \
         CFLAGS=-DU_USING_ICU_NAMESPACE=0 \
+        CXXFLAGS='--std=gnu++0x' \
         SHELL=bash
 
     $(MAKE) -C '$(1).cross' -j '$(JOBS)' install

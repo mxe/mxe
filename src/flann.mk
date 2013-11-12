@@ -18,7 +18,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake . \
+    # workaround for strange "too many sections" error
+    # setting CXXFLAGS='-O3' seems to fix it
+    # similar to http://www.mail-archive.com/mingw-w64-public@lists.sourceforge.net/msg06329.html
+    cd '$(1)' && CXXFLAGS='-O3' cmake . \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_CUDA_LIB=OFF \

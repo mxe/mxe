@@ -3,8 +3,8 @@
 
 PKG             := m4
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.16
-$(PKG)_CHECKSUM := d8688d1d84e058366134301e018e57bbbdc33463
+$(PKG)_VERSION  := 1.4.17
+$(PKG)_CHECKSUM := 74ad71fa100ec8c13bc715082757eb9ab1e4bbb0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/m4/$($(PKG)_FILE)

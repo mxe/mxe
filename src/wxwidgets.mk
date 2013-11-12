@@ -16,11 +16,6 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_PRE_CONFIGURE
-    $(SED) -i 's,png_check_sig,png_sig_cmp,g'                       '$(1)/configure'
-    $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/configure'
-endef
-
 define $(PKG)_CONFIGURE_OPTS
         --host='$(TARGET)' \
         --build="`config.guess`" \
@@ -79,7 +74,6 @@ define $(PKG)_TEST
 endef
 
 define $(PKG)_BUILD
-    $($(PKG)_PRE_CONFIGURE)
     $($(PKG)_BUILD_UNICODE)
     $($(PKG)_TEST)
 endef

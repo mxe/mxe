@@ -3,8 +3,8 @@
 
 PKG             := cminpack
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := be9a9e3ef4ffa776d9f7d57356e5c52ccec00406
+$(PKG)_VERSION  := 1.3.2
+$(PKG)_CHECKSUM := f88374f014ca74a56691314cad070789bde62729
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://devernay.free.fr/hacks/cminpack/$($(PKG)_FILE)

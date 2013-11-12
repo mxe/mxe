@@ -1,0 +1,20 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -Naur a/src/libbluray/bdnav/meta_parse.c b/src/libbluray/bdnav/meta_parse.c
+--- a/src/libbluray/bdnav/meta_parse.c	2013-04-26 13:42:38.000000000 -0700
++++ b/src/libbluray/bdnav/meta_parse.c	2013-11-09 15:41:29.000000000 -0800
+@@ -29,6 +29,13 @@
+ #include "meta_parse.h"
+ #include "libbluray/register.h"
+ 
++#if (defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR))
++#define strncasecmp _strnicmp
++#ifdef __STRICT_ANSI__
++#undef __STRICT_ANSI__
++#endif
++#endif
++
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>

@@ -200,26 +200,21 @@
     <tr>
         <th>Runtime</th>
         <th>Host Triplet</th>
-        <th>Status</th>
+        <th>Packages</th>
     </tr>
     <tr>
         <td><a href="http://www.mingw.org/">MinGW 3x</a></td>
         <td>i686-pc-mingw32</td>
-        <td>Fully Supported</td>
-    </tr>
-    <tr>
-        <td><a href="http://www.mingw.org/">MinGW 4x</a></td>
-        <td></td>
-        <td><a href="https://github.com/mxe/mxe/issues/203">Pilot</a></td>
+        <td style='text-align:center'>301</td>
     </tr>
     <tr>
         <td rowspan="2"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64</a></td>
         <td>i686-w64-mingw32</td>
-        <td>94% (258/275)</td>
+        <td style='text-align:center'>288</td>
     </tr>
     <tr>
         <td>x86_64-w64-mingw32</td>
-        <td>86% (238/275)</td>
+        <td style='text-align:center'>266</td>
     </tr>
     </table>
 
@@ -861,16 +856,18 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     Install
-    <a href="http://developer.apple.com/xcode/">Xcode 4</a>
+    <a href="http://developer.apple.com/xcode/">Xcode 5</a>
     and
     <a href="http://www.macports.org/">MacPorts</a>,
     then run:
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
-    autoconf automake bison cmake coreutils flex gettext \
-    git-core glib2 gsed intltool libffi libtool openssl \
-    p5-xml-parser pkgconfig scons wget xz</pre>
+    coreutils glib2 gsed intltool p5-xml-parser scons wget xz</pre>
+    <p>
+    and from within the mxe directory:
+    </p>
+    <pre>make build-requirements</pre>
     <p>
     Mac OS X versions ≤ 10.7 are no longer supported.
     </p>
@@ -1387,6 +1384,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://glew.sourceforge.net/">GLEW</a></td>
     </tr>
     <tr>
+        <td class="package">glfw2</td>
+        <td class="website"><a href="http://www.glfw.org/">GLFW 2.x</a></td>
+    </tr>
+    <tr>
+        <td class="package">glfw3</td>
+        <td class="website"><a href="http://www.glfw.org/">GLFW 3.x</a></td>
+    </tr>
+    <tr>
         <td class="package">glib</td>
         <td class="website"><a href="http://www.gtk.org/">GLib</a></td>
     </tr>
@@ -1571,12 +1576,20 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://code.google.com/p/libass/">libass</a></td>
     </tr>
     <tr>
+        <td class="package">libbluray</td>
+        <td class="website"><a href="http://www.videolan.org/developers/libbluray.html">libbluray</a></td>
+    </tr>
+    <tr>
         <td class="package">libcroco</td>
         <td class="website"><a href="http://www.freespiders.org/projects/libcroco/">Libcroco</a></td>
     </tr>
     <tr>
         <td class="package">libdnet</td>
         <td class="website"><a href="http://libdnet.sourceforge.net/">libdnet</a></td>
+    </tr>
+    <tr>
+        <td class="package">libdvdcss</td>
+        <td class="website"><a href="http://www.videolan.org/developers/libdvdcss.html">libdvdcss</a></td>
     </tr>
     <tr>
         <td class="package">libevent</td>
@@ -1685,6 +1698,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">libmad</td>
         <td class="website"><a href="http://www.underbit.com/products/mad/">libmad</a></td>
+    </tr>
+    <tr>
+        <td class="package">libmicrohttpd</td>
+        <td class="website"><a href="http://www.gnu.org/software/libmicrohttpd/">GNU Libmicrohttpd</a></td>
     </tr>
     <tr>
         <td class="package">libmikmod</td>

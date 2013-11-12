@@ -22,30 +22,4 @@ index 406b196..cc53055 100644
  #datarootdir = @datarootdir@
  #datadir = @datadir@
  #sbindir = @sbindir@
-diff --git a/source/config/mh-mingw b/source/config/mh-mingw
-index eb25c8a..11ea464 100644
---- a/source/config/mh-mingw
-+++ b/source/config/mh-mingw
-@@ -72,7 +72,6 @@ A = a
- ## An import library is needed for z/OS and MSVC
- IMPORT_LIB_EXT = .lib
- 
--LIBPREFIX=
- 
- # Change the stubnames so that poorly working FAT disks and installation programs can work.
- # This is also for backwards compatibility.
-diff --git a/source/config/mh-mingw64 b/source/config/mh-mingw64
-index 1b37f29..3c7ae7f 100644
---- a/source/config/mh-mingw64
-+++ b/source/config/mh-mingw64
-@@ -72,7 +72,6 @@ A = a
- ## An import library is needed for z/OS and MSVC
- IMPORT_LIB_EXT = .lib
- 
--LIBPREFIX=
- 
- # Change the stubnames so that poorly working FAT disks and installation programs can work.
- # This is also for backwards compatibility.
--- 
-1.8.2.2
 
