@@ -3,8 +3,8 @@
 
 PKG             := wxwidgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.9.5
-$(PKG)_CHECKSUM := 0bab57ecd6d065a3672ec5fbb09d287456727ea4
+$(PKG)_VERSION  := 3.0.0
+$(PKG)_CHECKSUM := 756a9c54d1f411e262f03bacb78ccef085a9880a
 $(PKG)_SUBDIR   := wxWidgets-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxWidgets-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -14,11 +14,6 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/wxwindows/files/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
-endef
-
-define $(PKG)_PRE_CONFIGURE
-    $(SED) -i 's,png_check_sig,png_sig_cmp,g'                       '$(1)/configure'
-    $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/configure'
 endef
 
 define $(PKG)_CONFIGURE_OPTS
@@ -70,6 +65,8 @@ define $(PKG)_BUILD_UNICODE
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/bin/$(TARGET)-wx-config'
 endef
 
+# ansi build has been long deprecated
+# so don't build it by default
 define $(PKG)_BUILD_ANSI
     # build the wxWidgets variant without unicode support
     mkdir '$(1).ansi'
@@ -99,17 +96,6 @@ define $(PKG)_TEST
 endef
 
 define $(PKG)_BUILD
-    $($(PKG)_PRE_CONFIGURE)
-    $($(PKG)_BUILD_UNICODE)
-    $($(PKG)_BUILD_ANSI)
-    $($(PKG)_TEST)
-endef
-
-define $(PKG)_BUILD_UNICODE_ONLY
-    $($(PKG)_PRE_CONFIGURE)
     $($(PKG)_BUILD_UNICODE)
     $($(PKG)_TEST)
 endef
-
-$(PKG)_BUILD_i686-w64-mingw32   = $($(PKG)_BUILD_UNICODE_ONLY)
-$(PKG)_BUILD_x86_64-w64-mingw32 = $($(PKG)_BUILD_UNICODE_ONLY)
