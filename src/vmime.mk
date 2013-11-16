@@ -30,6 +30,8 @@ define $(PKG)_BUILD
         -DVMIME_BUILD_DOCUMENTATION=OFF \
         -DCMAKE_MODULE_PATH='$(1)/cmake' \
         -DICU_LIBRARIES="`'$(TARGET)-pkg-config' --libs-only-l icu-i18n`" \
+        -DVMIME_CHARSETCONV_LIB_IS_ICONV=ON \
+        -DVMIME_CHARSETCONV_LIB_IS_ICU=OFF \
         .
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
