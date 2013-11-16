@@ -29,7 +29,7 @@ define $(PKG)_BUILD
         -DVMIME_BUILD_SAMPLES=OFF \
         -DVMIME_BUILD_DOCUMENTATION=OFF \
         -DCMAKE_MODULE_PATH='$(1)/cmake' \
-        -DICU_LIBRARIES="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
+        -DICU_LIBRARIES="`'$(TARGET)-pkg-config' --libs-only-l icu-i18n`" \
         .
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
