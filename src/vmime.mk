@@ -3,8 +3,8 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := c406d45
-$(PKG)_CHECKSUM := dc5c68f18f2123ededa7ea98c86ee0b234a3d4fc
+$(PKG)_VERSION  := 7209863
+$(PKG)_CHECKSUM := 8e34f2f5ac9b7bd24db5d3aa933b6883c291c756
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -26,6 +26,10 @@ define $(PKG)_BUILD
         -DCMAKE_CXX_FLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
         -DVMIME_BUILD_STATIC_LIBRARY=ON \
         -DVMIME_BUILD_SHARED_LIBRARY=OFF \
+        -DVMIME_BUILD_SAMPLES=OFF \
+        -DVMIME_BUILD_DOCUMENTATION=OFF \
+        -DCMAKE_MODULE_PATH='$(1)/cmake' \
+        -DICU_LIBRARIES="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         .
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
