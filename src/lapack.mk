@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := lapack
-$(PKG)_VERSION  := 3.4.2
-$(PKG)_CHECKSUM := 93a6e4e6639aaf00571d53a580ddc415416e868b
+$(PKG)_VERSION  := 3.5.0
+$(PKG)_CHECKSUM := 1ab3c64bf9e79ff6d4e98eac8dc72d2bddedabe3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
