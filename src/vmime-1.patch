@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 01e591d33435cbd027be6a85bac521138e45c19f Mon Sep 17 00:00:00 2001
+From 96e55516b44e03bb5c2882ef436bdd89757ed287 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 14 May 2013 09:21:46 +0200
 Subject: [PATCH] predefine VMIME_STATIC for convenience
@@ -19,5 +19,5 @@ index fc1103e..11dd0ea 100644
 +Cflags: -I${includedir}/ @VMIME_PKGCONFIG_CFLAGS@ -DVMIME_STATIC
  
 -- 
-1.8.1.4
+1.8.4
 
