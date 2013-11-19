@@ -36,36 +36,6 @@ index 76697fc..9bc0fa1 100644
  ELSE(WIN32)
    FIND_LIBRARY(GM_LIB
      NAMES
-diff --git a/cmake/WtFindHaru.txt b/cmake/WtFindHaru.txt
-index 4dba35f..642bd58 100644
---- a/cmake/WtFindHaru.txt
-+++ b/cmake/WtFindHaru.txt
-@@ -44,6 +44,7 @@ IF(WIN32)
-   FIND_LIBRARY(Z_LIB
-     NAMES
-       zlib
-+      libz
-     PATHS
-       ${HARU_PREFIX}/lib
-       ${USERLIB_PREFIX}/lib
-@@ -58,6 +59,17 @@ IF(WIN32)
-       SET(HARU_SUPPORT_LIBS ${HARU_SUPPORT_LIBS} ${Z_LIB})
-     ENDIF(Z_LIB)
-   ENDIF(HARU_LIB_RELEASE AND HARU_LIB_DEBUG)
-+
-+  IF(HARU_LIB_RELEASE)
-+    SET(HARU_LIB optimized ${HARU_LIB_RELEASE})
-+    IF(PNG_LIB_RELEASE)
-+      SET(HARU_SUPPORT_LIBS ${HARU_SUPPORT_LIBS} optimized ${PNG_LIB_RELEASE})
-+    ENDIF(PNG_LIB_RELEASE)
-+    IF(Z_LIB)
-+      SET(HARU_SUPPORT_LIBS ${HARU_SUPPORT_LIBS} optimized ${Z_LIB})
-+    ENDIF(Z_LIB)
-+  ENDIF(HARU_LIB_RELEASE)  
-+
-   SET(HARU_SUPPORT_LIBS_FOUND TRUE)
- ELSE(WIN32)
-   FIND_LIBRARY(HARU_LIB
 diff --git a/cmake/WtFindPangoFt2.txt b/cmake/WtFindPangoFt2.txt
 index cd1e640..b1bbe3d 100644
 --- a/cmake/WtFindPangoFt2.txt
