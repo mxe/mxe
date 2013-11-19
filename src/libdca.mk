@@ -11,8 +11,8 @@ $(PKG)_URL      := http://download.videolan.org/pub/videolan/libdca/$($(PKG)_VER
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    echo 'TODO: write update script for libdca.' >&2;
+    echo $(libdca_VERSION)
 endef
 
 define $(PKG)_BUILD
