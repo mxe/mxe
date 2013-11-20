@@ -12,7 +12,8 @@ $(PKG)_DEPS     := gcc boost curl dcmtk ffmpeg freetype gdal giflib gta jasper j
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.openscenegraph.org/downloads/developer_releases/?C=M;O=D' | \
-    $(SED) -n 's,.*OpenSceneGraph-\([0-9][^<]*\)\.zip.*,\1,p' | \
+    $(SED) -n 's,.*OpenSceneGraph-\([0-9]*\.[0-9]*[02468]\.[^<]*\)\.zip.*,\1,p' | \
+    grep -v rc | \
     $(SORT) -V | \
     tail -1
 endef

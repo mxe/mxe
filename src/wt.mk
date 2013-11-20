@@ -3,8 +3,8 @@
 
 PKG             := wt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.0
-$(PKG)_CHECKSUM := da3ad190e51d4e2bd2851141b27dd70b272cbb2c
+$(PKG)_VERSION  := 3.3.1
+$(PKG)_CHECKSUM := 0ae889c1411864d783962d4878b90efbce7f3382
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/witty/$($(PKG)_FILE)

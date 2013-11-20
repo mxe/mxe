@@ -13,7 +13,8 @@ $(PKG)_URL         := https://launchpad.net/$(PKG)/trunk/$($(PKG)_VERSIONREV)/+d
 $(PKG)_DEPS        := gcc
 
 define $(PKG)_UPDATE
-    echo "TODO: libnut-UPDATE"
+    echo 'TODO: Updates for package libnut need to be written.' >&2;
+    echo $(libnut_VERSION)
 endef
 
 define $(PKG)_BUILD
