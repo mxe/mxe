@@ -3,8 +3,8 @@
 
 PKG             := librsvg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.40.0
-$(PKG)_CHECKSUM := eb915c9d963326e74be2e92fba4c4e9fbb06eefe
+$(PKG)_VERSION  := 2.40.1
+$(PKG)_CHECKSUM := abbfed10433b26e88f18fe62a9b84d48fc00b9e1
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
