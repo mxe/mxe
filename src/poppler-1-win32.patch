@@ -14,7 +14,7 @@ diff --git a/poppler/GlobalParamsWin.cc b/poppler/GlobalParamsWin.cc
 index 527f08e..0739946 100644
 --- a/poppler/GlobalParamsWin.cc
 +++ b/poppler/GlobalParamsWin.cc
-@@ -424,7 +424,7 @@ void GlobalParams::setupBaseFonts(char * dir)
+@@ -423,7 +423,7 @@ void GlobalParams::setupBaseFonts(char * dir)
          if (fontFiles->lookup(fontName))
              continue;
  
