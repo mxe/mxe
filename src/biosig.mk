@@ -18,8 +18,8 @@ endef
 
 define $(PKG)_BUILD
 
-    rm -rf '$(1)'
-    cp -rL ~/src/biosig-code/biosig4c++ '$(1)'
+    #rm -rf '$(1)'
+    #cp -rL ~/src/biosig-code/biosig4c++ '$(1)'
 
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|^#*||g' '$(1)'/Makefile
