@@ -4,7 +4,7 @@ See index.html for further information.
 From e903b5cddaaa606300292ad2cf26c2b6ee111cdd Mon Sep 17 00:00:00 2001
 From: Simon Hausmann <simon.hausmann@digia.com>
 Date: Tue, 26 Nov 2013 10:45:53 +0100
-Subject: [PATCH 01/17] Fix for co-existence of QtDeclarative and QtQml
+Subject: [PATCH 01/31] Fix for co-existence of QtDeclarative and QtQml
 
 As a follow-up to commit 2f87fde9bb4bad6787101c0d135419b350b201a5, we also need
 to change "hack" in the QGraphicsItem and QWidget destructor for early item
@@ -54,7 +54,7 @@ index 1da0be9..421ce57 100644
 From 939a001c3ac33ebf801d2594ac9073da28d09a46 Mon Sep 17 00:00:00 2001
 From: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@digia.com>
 Date: Tue, 26 Nov 2013 10:13:04 +0100
-Subject: [PATCH 02/17] Android: Remove invalid error message
+Subject: [PATCH 02/31] Android: Remove invalid error message
 
 All usage of context menus prints out an error message because
 onContextMenuClosed() is called more than once. We just return
@@ -87,7 +87,7 @@ index 3dcffeb..3bcd6ea 100644
 From 08f3177fdfc9aefbd4232dcd1529b537b2ca9402 Mon Sep 17 00:00:00 2001
 From: Gabriel de Dietrich <gabriel.dedietrich@digia.com>
 Date: Mon, 25 Nov 2013 13:41:49 +0100
-Subject: [PATCH 03/17] CoreWLan: Fix potential unhandled exception assert
+Subject: [PATCH 03/31] CoreWLan: Fix potential unhandled exception assert
 
 -[QNSListener notificationHandler:] was declared as not taking any parameter,
 but used as taking a single NSNotification. This would lead to an 'unrecognized
@@ -152,7 +152,7 @@ index 1b95ae2..7044e96 100644
 From f03fd0d82a50361c0b89165b3f8d98d66b0a4e16 Mon Sep 17 00:00:00 2001
 From: Stephen Kelly <stephen.kelly@kdab.com>
 Date: Tue, 26 Nov 2013 15:06:20 +0100
-Subject: [PATCH 04/17] Remove leading '/' from target paths.
+Subject: [PATCH 04/31] Remove leading '/' from target paths.
 
 This is inappropriate on Windows, and breaks non-prefix builds there.
 
@@ -187,7 +187,7 @@ index a9b0c86..1e6b05c 100644
 From 94c17dce04c7726afbdd6ac67c569eedc629a81a Mon Sep 17 00:00:00 2001
 From: Frank Osterfeld <frank.osterfeld.qnx@kdab.com>
 Date: Fri, 22 Nov 2013 10:43:49 +0100
-Subject: [PATCH 05/17] QNX: Fix retrieving the window group name
+Subject: [PATCH 05/31] QNX: Fix retrieving the window group name
 
 The code assumes that there is a root window, and crashed
 otherwise.
@@ -223,7 +223,7 @@ index 8958a5c..24af5c2 100644
 From 4fbe50e77a8d24d42581cdeabd1e93cb993b0d8d Mon Sep 17 00:00:00 2001
 From: Yoann Lopes <yoann.lopes@digia.com>
 Date: Fri, 22 Nov 2013 18:45:49 +0100
-Subject: [PATCH 06/17] Revert "Store the font's scalability in QFontEngine."
+Subject: [PATCH 06/31] Revert "Store the font's scalability in QFontEngine."
 
 This reverts commit 65b12fbdb13d34c61bcadd5cc8fd6ee28a8dfafd.
 
@@ -281,7 +281,7 @@ index 07be498..c181d61 100644
 From 82a2d28d841c7f59fa76fae6a67e1712a5fb4740 Mon Sep 17 00:00:00 2001
 From: Stephen Kelly <stephen.kelly@kdab.com>
 Date: Wed, 27 Nov 2013 12:22:54 +0100
-Subject: [PATCH 07/17] CMake: Parse the output of new CMake versions.
+Subject: [PATCH 07/31] CMake: Parse the output of new CMake versions.
 
 As of CMake 3.0, the output of `cmake --version` now has a second line
 showing that it is maintained by Kitware. Change the version parsing to
@@ -315,7 +315,7 @@ index 118eed1..a9461eb 100644
 From 7c029e83a3e5058f7b82efd0235e766952357ffd Mon Sep 17 00:00:00 2001
 From: Simon Hausmann <simon.hausmann@digia.com>
 Date: Thu, 28 Nov 2013 11:00:15 +0100
-Subject: [PATCH 08/17] Fix invalid memory read when shutting down QML
+Subject: [PATCH 08/31] Fix invalid memory read when shutting down QML
  applications
 
 As the last line in the QObject destructor, we call setParentHelper(0) to
@@ -405,7 +405,7 @@ index ece88d4..f1e0451 100644
 From bedc5a3ae268594100b5e0eb8f35c0ce2b95ee96 Mon Sep 17 00:00:00 2001
 From: Marc Mutz <marc.mutz@kdab.com>
 Date: Tue, 26 Nov 2013 12:27:45 +0100
-Subject: [PATCH 09/17] Update ChangeLog for 5.2.0 [QtWidgets II]
+Subject: [PATCH 09/31] Update ChangeLog for 5.2.0 [QtWidgets II]
 
 Second batch of changes.
 
@@ -651,7 +651,7 @@ index f513d64..30cd288 100644
 From c5b19f252188a01dd7b12090f4776420e3714000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Thu, 28 Nov 2013 15:33:06 +0100
-Subject: [PATCH 10/17] iOS: Forward [UIApplicationDelegate handleOpenURL:] to
+Subject: [PATCH 10/31] iOS: Forward [UIApplicationDelegate handleOpenURL:] to
  QDesktopServices
 
 The user may use QDesktopServices::setUrlHandler() in combination with
@@ -785,7 +785,7 @@ index 32203ae..0ac6c59 100644
 From 9b782dca45331c0e0246b8439d5cf007a440afc8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Wed, 27 Nov 2013 18:20:10 +0100
-Subject: [PATCH 11/17] iOS: Update screen properties when we trigger statusbar
+Subject: [PATCH 11/31] iOS: Update screen properties when we trigger statusbar
  changes on iOS7
 
 Ideally we'd have a callback from iOS when this happens, so we can also
@@ -848,7 +848,7 @@ index 57522cb..9641095 100644
 From 7016ea797a4ceefc8df8a6e13971045a215c5e4c Mon Sep 17 00:00:00 2001
 From: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@digia.com>
 Date: Wed, 27 Nov 2013 09:12:08 +0100
-Subject: [PATCH 13/17] Add a few notes to changes-5.2.0
+Subject: [PATCH 13/31] Add a few notes to changes-5.2.0
 
 Mostly changes for Android. One change in Qt Gui.
 
@@ -918,7 +918,7 @@ index 30cd288..a51cc91 100644
 From 6c3adb5f966e349f0488c194462e48cc8ddf248e Mon Sep 17 00:00:00 2001
 From: Nico Vertriest <nico.vertriest@digia.com>
 Date: Wed, 27 Nov 2013 14:47:26 +0100
-Subject: [PATCH 14/17] Doc: corrected invalid ref. to output iterators
+Subject: [PATCH 14/31] Doc: corrected invalid ref. to output iterators
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -961,7 +961,7 @@ index cd38947..412b9cf 100644
 From 7d5448d9e2ae4d2d10c0cff867cf34b315336feb Mon Sep 17 00:00:00 2001
 From: J-P Nurmi <jpnurmi@digia.com>
 Date: Wed, 27 Nov 2013 13:24:59 +0100
-Subject: [PATCH 15/17] Docs: add important QWheelEvent::phase() related notes
+Subject: [PATCH 15/31] Docs: add important QWheelEvent::phase() related notes
 
 Change-Id: I4901b96b44b7c1179e678689af5962cb4570d50d
 Reviewed-by: Jens Bache-Wiig <jens.bache-wiig@digia.com>
@@ -1012,10 +1012,760 @@ index 2866608..88f132b 100644
 1.8.4
 
 
-From 7483cd9fe3ce4b1bd99fa789ee076b23a5520545 Mon Sep 17 00:00:00 2001
+From b8ccacbb03cb8d265209970c4443218dac33fc81 Mon Sep 17 00:00:00 2001
+From: BogDan Vatra <bogdan@kde.org>
+Date: Mon, 2 Dec 2013 16:48:18 +0200
+Subject: [PATCH 16/31] Default to 5.2 source repository for Qt 5.2.x
+
+We can't use latest anymore because the qreal change
+is not back compatible and all the apps that used latest
+will stop to run when Ministro will upgrade the libs.
+
+Change-Id: I5286e72eccf86b4dead773a637aa28e29d120605
+Reviewed-by: Paul Olav Tvete <paul.tvete@digia.com>
+
+diff --git a/src/android/java/res/values/libs.xml b/src/android/java/res/values/libs.xml
+index 231406d..797e6bb 100644
+--- a/src/android/java/res/values/libs.xml
++++ b/src/android/java/res/values/libs.xml
+@@ -1,7 +1,7 @@
+ <?xml version='1.0' encoding='utf-8'?>
+ <resources>
+     <array name="qt_sources">
+-        <item>https://download.qt-project.org/ministro/android/qt5/latest</item>
++        <item>https://download.qt-project.org/ministro/android/qt5/qt-5.2</item>
+     </array>
+ 
+     <!-- The following is handled automatically by the deployment tool. It should
+diff --git a/src/android/java/src/org/qtproject/qt5/android/bindings/QtActivity.java b/src/android/java/src/org/qtproject/qt5/android/bindings/QtActivity.java
+index 7c741ed..a10e58b 100644
+--- a/src/android/java/src/org/qtproject/qt5/android/bindings/QtActivity.java
++++ b/src/android/java/src/org/qtproject/qt5/android/bindings/QtActivity.java
+@@ -150,7 +150,7 @@ public class QtActivity extends Activity
+ 
+     private ActivityInfo m_activityInfo = null; // activity info object, used to access the libs and the strings
+     private DexClassLoader m_classLoader = null; // loader object
+-    private String[] m_sources = {"https://download.qt-project.org/ministro/android/qt5/latest"}; // Make sure you are using ONLY secure locations
++    private String[] m_sources = {"https://download.qt-project.org/ministro/android/qt5/qt-5.2"}; // Make sure you are using ONLY secure locations
+     private String m_repository = "default"; // Overwrites the default Ministro repository
+                                                         // Possible values:
+                                                         // * default - Ministro default repository set with "Ministro configuration tool".
+-- 
+1.8.4
+
+
+From 923d498029be406a684f8953afc68f10c07e2789 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
+Date: Tue, 26 Nov 2013 14:48:02 +0100
+Subject: [PATCH 17/31] Add PBXCopyFilesBuildPhases to main target, not
+ preprocessing step
+
+Otherwise the 'Wrapper' destination of the PBXCopyFilesBuildPhase
+will be empty, and the files end up outside of the application
+bundle.
+
+Task-number: QTBUG-34457
+
+Change-Id: I799db28185a6c5d3d940602914fd8ba14c538bf2
+Reviewed-by: Caroline Chao <caroline.chao@digia.com>
+Reviewed-by: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+
+diff --git a/qmake/generators/mac/pbuilder_pbx.cpp b/qmake/generators/mac/pbuilder_pbx.cpp
+index 5ea1ff1..e50df93 100644
+--- a/qmake/generators/mac/pbuilder_pbx.cpp
++++ b/qmake/generators/mac/pbuilder_pbx.cpp
+@@ -1140,7 +1140,7 @@ ProjectBuilderMakefileGenerator::writeMakeParts(QTextStream &t)
+                     //###
+                 }
+ 
+-                project->values("QMAKE_PBX_PRESCRIPT_BUILDPHASES").append(phase_key);
++                project->values("QMAKE_PBX_BUILDPHASES").append(phase_key);
+                 t << "\t\t" << phase_key << " = {\n"
+                   << "\t\t\t" << writeSettings("name", "Copy '" + bundle_data[i] + "' Files to Bundle") << ";\n"
+                   << "\t\t\t" << writeSettings("buildActionMask", "2147483647", SettingsNoQuote) << ";\n"
+-- 
+1.8.4
+
+
+From 5361513ec812c545ca2cedea6c8a30c362cb8e5d Mon Sep 17 00:00:00 2001
+From: Christoph Schleifenbaum <christoph.schleifenbaum@kdab.com>
+Date: Mon, 25 Nov 2013 19:45:06 +0100
+Subject: [PATCH 18/31] Cocoa: Mouse enter events on window activation.
+
+This patch tells the window system that it should create a mouse enter
+event if a window was activated when the mouse was inside. This wasn't
+working and was a regression.
+
+Task-number: QTBUG-35109
+
+[ChangeLog][Cocoa] Fix enterEvent not being called on activate.
+
+Change-Id: I4e4662b4a4c58dafa8d0a2c09458ab88f678d243
+Reviewed-by: Liang Qi <liang.qi@digia.com>
+
+diff --git a/src/plugins/platforms/cocoa/qnsview.h b/src/plugins/platforms/cocoa/qnsview.h
+index ca2a15a..403f8dc 100644
+--- a/src/plugins/platforms/cocoa/qnsview.h
++++ b/src/plugins/platforms/cocoa/qnsview.h
+@@ -93,6 +93,8 @@ QT_END_NAMESPACE
+ - (BOOL)hasMask;
+ - (BOOL)isOpaque;
+ 
++- (void)convertFromScreen:(NSPoint)mouseLocation toWindowPoint:(QPointF *)qtWindowPoint andScreenPoint:(QPointF *)qtScreenPoint;
++
+ - (void)resetMouseButtons;
+ 
+ - (void)handleMouseEvent:(NSEvent *)theEvent;
+diff --git a/src/plugins/platforms/cocoa/qnswindowdelegate.h b/src/plugins/platforms/cocoa/qnswindowdelegate.h
+index 06e11ff..5717551 100644
+--- a/src/plugins/platforms/cocoa/qnswindowdelegate.h
++++ b/src/plugins/platforms/cocoa/qnswindowdelegate.h
+@@ -53,6 +53,7 @@
+ 
+ - (id)initWithQCocoaWindow: (QCocoaWindow *) cocoaWindow;
+ 
++- (void)windowDidBecomeKey:(NSNotification *)notification;
+ - (void)windowDidResize:(NSNotification *)notification;
+ - (void)windowDidMove:(NSNotification *)notification;
+ - (void)windowWillMove:(NSNotification *)notification;
+diff --git a/src/plugins/platforms/cocoa/qnswindowdelegate.mm b/src/plugins/platforms/cocoa/qnswindowdelegate.mm
+index 10536bd..c9b3d69 100644
+--- a/src/plugins/platforms/cocoa/qnswindowdelegate.mm
++++ b/src/plugins/platforms/cocoa/qnswindowdelegate.mm
+@@ -56,6 +56,17 @@
+     return self;
+ }
+ 
++- (void)windowDidBecomeKey:(NSNotification *)notification
++{
++    Q_UNUSED(notification);
++    if (m_cocoaWindow->m_windowUnderMouse) {
++        QPointF windowPoint;
++        QPointF screenPoint;
++        [m_cocoaWindow->m_qtView convertFromScreen:[NSEvent mouseLocation] toWindowPoint:&windowPoint andScreenPoint:&screenPoint];
++        QWindowSystemInterface::handleEnterEvent(m_cocoaWindow->m_enterLeaveTargetWindow, windowPoint, screenPoint);
++    }
++}
++
+ - (void)windowDidResize:(NSNotification *)notification
+ {
+     Q_UNUSED(notification);
+-- 
+1.8.4
+
+
+From d1f9f2125e6cbba236dc50309a4aee2dc16a6345 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@digia.com>
+Date: Tue, 3 Dec 2013 09:01:50 +0100
+Subject: [PATCH 19/31] Stabilize tst_QColumnView::dynamicModelChanges().
+
+Use QTest::qWaitForWindowExposed() and QTRY_COMPARE() instead of
+hardcoded timeout.
+
+Task-number: QTBUG-35308
+Change-Id: I27eee9932dd3b6087db4ad13b1a4fb184a487f57
+Reviewed-by: Stephen Kelly <stephen.kelly@kdab.com>
+
+diff --git a/tests/auto/widgets/itemviews/qcolumnview/tst_qcolumnview.cpp b/tests/auto/widgets/itemviews/qcolumnview/tst_qcolumnview.cpp
+index 6c04e5b..e2b2fb9 100644
+--- a/tests/auto/widgets/itemviews/qcolumnview/tst_qcolumnview.cpp
++++ b/tests/auto/widgets/itemviews/qcolumnview/tst_qcolumnview.cpp
+@@ -1043,13 +1043,14 @@ void tst_QColumnView::dynamicModelChanges()
+     ColumnView view;
+     view.setModel(&model);
+     view.setItemDelegate(&delegate);
++    centerOnScreen(&view);
+     view.show();
+ 
+     QStandardItem *item = new QStandardItem(QLatin1String("item"));
+     model.appendRow(item);
+ 
+-    QTest::qWait(200); //let the time for painting to occur
+-    QCOMPARE(delegate.paintedIndexes.count(), 1);
++    QVERIFY(QTest::qWaitForWindowExposed(&view)); //let the time for painting to occur
++    QTRY_COMPARE(delegate.paintedIndexes.count(), 1);
+     QCOMPARE(*delegate.paintedIndexes.begin(), model.index(0,0));
+ 
+ 
+-- 
+1.8.4
+
+
+From 789b556ef1241dd3169c6040944fff44b88d9be6 Mon Sep 17 00:00:00 2001
+From: Topi Reinio <topi.reinio@digia.com>
+Date: Fri, 29 Nov 2013 15:51:12 +0100
+Subject: [PATCH 20/31] Use Q_QDOC for Qt namespace declaration in Qt Gui
+
+This is a workaround for letting qdoc to successfully
+generate documentation for the Qt namespace. qdoc
+doesn't properly handle multiple declarations for the
+same namespace spread across multiple modules.
+
+Task-number: QTBUG-35230
+Change-Id: I449b17e1171d1a4481b9cf07cd48c803feed5be9
+Reviewed-by: Martin Smith <martin.smith@digia.com>
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
+
+diff --git a/src/gui/text/qtextdocument.h b/src/gui/text/qtextdocument.h
+index a85e9c8..d8f52e9 100644
+--- a/src/gui/text/qtextdocument.h
++++ b/src/gui/text/qtextdocument.h
+@@ -71,6 +71,7 @@ class QTextCursor;
+ 
+ template<typename T> class QVector;
+ 
++#ifndef Q_QDOC // Workaround for QTBUG-35230
+ namespace Qt
+ {
+     Q_GUI_EXPORT bool mightBeRichText(const QString&);
+@@ -80,6 +81,7 @@ namespace Qt
+     Q_GUI_EXPORT QTextCodec *codecForHtml(const QByteArray &ba);
+ #endif
+ }
++#endif // Q_QDOC
+ 
+ class Q_GUI_EXPORT QAbstractUndoItem
+ {
+-- 
+1.8.4
+
+
+From edd51e44869c9774071355f32830ea510eafde04 Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+Date: Wed, 13 Nov 2013 19:14:45 +0100
+Subject: [PATCH 21/31] Revert "configure: Abort if Xlib isn't present when
+ building for XCB."
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+the change is wrong for multiple reasons:
+- it is possible to build qt (the offscreen plugin) with xlib but
+  without xcb, which was impossible after the change
+- the check was built in a way that if xcb is auto-detected but xlib is
+  missing, configure would abort (instead of disabling xcb), which is
+  unreasonable (cf. linked task)
+- it should be possible to build the xcb plugin without xlib - it's
+  testing for xcb-xlib and should have the correct #ifdefs. if these are
+  broken, they should be fixed. if this is unrealistic, the build system
+  should be adjusted to this fact ... differently.
+
+This reverts commit 683451e7c74d23abb0268a187d28cf7dc7afd032.
+
+Task-number: QTBUG-34382
+Change-Id: I1c5811e2fb1f09b084b6aeb7350e5f376e1b9b82
+Reviewed-by: Nicolás Alvarez <nicolas.alvarez@gmail.com>
+Reviewed-by: Jørgen Lind <jorgen.lind@digia.com>
+
+diff --git a/configure b/configure
+index d0b0ed8..a330dd6 100755
+--- a/configure
++++ b/configure
+@@ -5080,6 +5080,11 @@ if [ "$CFG_TSLIB" != "no" ]; then
+     fi
+ fi
+ 
++# Check we actually have X11 :-)
++if compileTest x11/xlib "XLib"; then
++    QT_CONFIG="$QT_CONFIG xlib"
++fi
++
+ if [ "$CFG_XCB" != "no" ]; then
+     if [ -n "$PKG_CONFIG" ] && $PKG_CONFIG --exists "xcb >= 1.5" 2>/dev/null; then
+         QMAKE_CFLAGS_XCB="`$PKG_CONFIG --cflags xcb 2>/dev/null`"
+@@ -5125,17 +5130,6 @@ if [ "$CFG_XCB" != "no" ]; then
+             fi
+         fi
+ 
+-        # Check for X11. Eventually we should port everything to XCB,
+-        # but for now the port is incomplete and Xlib is a requirement.
+-        if compileTest x11/xlib "XLib"; then
+-            QT_CONFIG="$QT_CONFIG xlib"
+-        else
+-            echo "The test for linking against Xlib failed!"
+-            echo " You might need to install dependency packages."
+-            echo " See src/plugins/platforms/xcb/README."
+-            exit 1
+-        fi
+-
+         if compileTest qpa/xcb-xlib "xcb-xlib" $QMAKE_CFLAGS_XCB $QMAKE_LIBS_XCB; then
+             QT_CONFIG="$QT_CONFIG xcb-xlib"
+         fi
+-- 
+1.8.4
+
+
+From c70750f5363999640cc99278ccf90679fb27c84d Mon Sep 17 00:00:00 2001
+From: Marc Mutz <marc.mutz@kdab.com>
+Date: Fri, 29 Nov 2013 10:06:20 +0100
+Subject: [PATCH 23/31] Stabilize tst_QGraphicsItem
+
+The cursor() test was missing a QTest::moveMouse() before sending of the
+mouse event (as all the following subtests do). When run on a desktop with
+the panel on the left side of the screen, the mouse pointer would land over
+the left item instead of in between them, as assumed by the subtest, and
+the following QCOMPARE failed.
+
+Change-Id: Ib74fdf0cfbfbc8ecb79a906610a2da5cb50c89d0
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@digia.com>
+
+diff --git a/tests/auto/widgets/graphicsview/qgraphicsitem/tst_qgraphicsitem.cpp b/tests/auto/widgets/graphicsview/qgraphicsitem/tst_qgraphicsitem.cpp
+index 6c26ddb..fc1d0e3 100644
+--- a/tests/auto/widgets/graphicsview/qgraphicsitem/tst_qgraphicsitem.cpp
++++ b/tests/auto/widgets/graphicsview/qgraphicsitem/tst_qgraphicsitem.cpp
+@@ -4221,6 +4221,7 @@ void tst_QGraphicsItem::cursor()
+     QCursor cursor = view.viewport()->cursor();
+ 
+     {
++        QTest::mouseMove(view.viewport(), QPoint(100, 50));
+         QMouseEvent event(QEvent::MouseMove, QPoint(100, 50), Qt::NoButton, 0, 0);
+         QApplication::sendEvent(view.viewport(), &event);
+     }
+-- 
+1.8.4
+
+
+From 9302169bd5ad8380ebe95f50986d2b32eb486901 Mon Sep 17 00:00:00 2001
+From: Nikolai Kosjar <nikolai.kosjar@digia.com>
+Date: Fri, 29 Nov 2013 14:06:50 +0100
+Subject: [PATCH 24/31] QtConcurrent: Workaround GCC bug 58800 in median
+ calculation
+
+1) Revert 880b614 for libstdc++ <= 4.7.3 || (4.8.0 >= ... <= 4.8.2)
+2) Fix off-by-one error in reverted code for Median::_bufferSize <= 2.
+
+Task-number: QTBUG-35058
+Change-Id: I9d226c2806c1cf06c3d5b9c9f371262d2d69bf2b
+Reviewed-by: Olivier Goffart <ogoffart@woboq.com>
+Reviewed-by: Marc Mutz <marc.mutz@kdab.com>
+
+diff --git a/src/concurrent/qtconcurrentmedian.h b/src/concurrent/qtconcurrentmedian.h
+index b39b3ed..ce2afb9 100644
+--- a/src/concurrent/qtconcurrentmedian.h
++++ b/src/concurrent/qtconcurrentmedian.h
+@@ -102,10 +102,19 @@ public:
+     {
+         if (dirty) {
+             dirty = false;
++
++// This is a workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58800
++// Avoid using std::nth_element for stdlibc++ <= 4.7.3 || (>= 4.8.0 && <= 4.8.2)
++#if defined(__GLIBCXX__) && (__GLIBCXX__ <= 20130411 || (__GLIBCXX__ >= 20130322 && __GLIBCXX__ <= 20131016))
++            QVector<T> sorted = values;
++            std::sort(sorted.begin(), sorted.end());
++            currentMedian = sorted.at(bufferSize / 2);
++#else
+             QVector<T> copy = values;
+             typename QVector<T>::iterator begin = copy.begin(), mid = copy.begin() + bufferSize/2, end = copy.end();
+             std::nth_element(begin, mid, end);
+             currentMedian = *mid;
++#endif
+         }
+         return currentMedian;
+     }
+diff --git a/tests/auto/concurrent/concurrent.pro b/tests/auto/concurrent/concurrent.pro
+index 20bad24..e67c51a 100644
+--- a/tests/auto/concurrent/concurrent.pro
++++ b/tests/auto/concurrent/concurrent.pro
+@@ -3,6 +3,7 @@ SUBDIRS=\
+    qtconcurrentfilter \
+    qtconcurrentiteratekernel \
+    qtconcurrentmap \
++   qtconcurrentmedian \
+    qtconcurrentrun \
+    qtconcurrentthreadengine
+ 
+diff --git a/tests/auto/concurrent/qtconcurrentmedian/qtconcurrentmedian.pro b/tests/auto/concurrent/qtconcurrentmedian/qtconcurrentmedian.pro
+new file mode 100644
+index 0000000..1eb27d8
+--- /dev/null
++++ b/tests/auto/concurrent/qtconcurrentmedian/qtconcurrentmedian.pro
+@@ -0,0 +1,5 @@
++CONFIG += testcase parallel_test
++TARGET = tst_qtconcurrentmedian
++QT = core testlib concurrent
++SOURCES = tst_qtconcurrentmedian.cpp
++DEFINES += QT_STRICT_ITERATORS
+diff --git a/tests/auto/concurrent/qtconcurrentmedian/tst_qtconcurrentmedian.cpp b/tests/auto/concurrent/qtconcurrentmedian/tst_qtconcurrentmedian.cpp
+new file mode 100644
+index 0000000..c9fbc79
+--- /dev/null
++++ b/tests/auto/concurrent/qtconcurrentmedian/tst_qtconcurrentmedian.cpp
+@@ -0,0 +1,87 @@
++/****************************************************************************
++**
++** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
++** Contact: http://www.qt-project.org/legal
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and Digia.  For licensing terms and
++** conditions see http://qt.digia.com/licensing.  For further information
++** use the contact form at http://qt.digia.com/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 2.1 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU Lesser General Public License version 2.1 requirements
++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
++**
++** In addition, as a special exception, Digia gives you certain additional
++** rights.  These rights are described in the Digia Qt LGPL Exception
++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3.0 as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL included in the
++** packaging of this file.  Please review the following information to
++** ensure the GNU General Public License version 3.0 requirements will be
++** met: http://www.gnu.org/copyleft/gpl.html.
++**
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++#include <qtconcurrentmedian.h>
++
++#include <QtTest/QtTest>
++
++class tst_QtConcurrentMedian: public QObject
++{
++    Q_OBJECT
++private slots:
++    void median_data();
++    void median();
++};
++
++void tst_QtConcurrentMedian::median_data()
++{
++    QTest::addColumn<QList<int> >("values");
++    QTest::addColumn<int>("expectedMedian");
++
++    QTest::newRow("size=1")
++        << (QList<int>() << 1)
++        << 1;
++
++    QTest::newRow("size=2")
++        << (QList<int>() << 3 << 2)
++        << 3;
++
++    QTest::newRow("size=3")
++        << (QList<int>() << 3 << 1 << 2)
++        << 2;
++
++    QTest::newRow("gcc bug 58800 (nth_element)")
++        << (QList<int>() << 207089 << 202585 << 180067 << 157549 << 211592 << 216096 << 207089)
++        << 207089;
++}
++
++void tst_QtConcurrentMedian::median()
++{
++    QFETCH(QList<int> , values);
++    QFETCH(int, expectedMedian);
++
++    QtConcurrent::Median<int> m(values.size());
++    foreach (int value, values)
++        m.addValue(value);
++    QCOMPARE(m.median(), expectedMedian);
++}
++
++QTEST_MAIN(tst_QtConcurrentMedian)
++#include "tst_qtconcurrentmedian.moc"
+-- 
+1.8.4
+
+
+From 119ea0f2dbaa4cdea6929e542c59f99b2dfd0ef9 Mon Sep 17 00:00:00 2001
+From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+Date: Mon, 2 Dec 2013 22:34:26 +0100
+Subject: [PATCH 25/31] iOS: fix application hangs when opening keyboard
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+QIOSInputContext controls QUIViews first responder status
+based on whether or not the keyboard should be open.
+But since QGuiApplication updates focusObject before
+focusWindow (when e.g a popup closes), we sometimes ended up
+activating the old window upon a call to becomeFirstResponder.
+This in turn led the application to hang because of
+recursive dependencies in qioscontext when the focus window
+changed.
+
+So the solution for now is to avoid activating the window
+when the view becomes first responder. This should be
+fine since we now activate the window from
+QIOSWindow::requestActivateWindow (ref: 6272a816d1)
+
+Task-number: QTBUG-35340
+Change-Id: I3068c14fec18d84d4b0b348a043c4c054e366c75
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qioswindow.mm b/src/plugins/platforms/ios/qioswindow.mm
+index 0dd810b..43f36e3 100644
+--- a/src/plugins/platforms/ios/qioswindow.mm
++++ b/src/plugins/platforms/ios/qioswindow.mm
+@@ -330,13 +330,9 @@
+ 
+ - (BOOL)becomeFirstResponder
+ {
+-    // On iOS, a QWindow should only have input focus when the input panel is
+-    // open. This is to stop cursors and focus rects from being drawn when the
+-    // user cannot type. And since the keyboard will open when a view becomes
+-    // the first responder, it's now a good time to inform QPA that the QWindow
+-    // this view backs became active:
++    // Note: QIOSInputContext controls our first responder status based on
++    // whether or not the keyboard should be open or closed.
+     [self updateTextInputTraits];
+-    QWindowSystemInterface::handleWindowActivated(m_qioswindow->window());
+     return [super becomeFirstResponder];
+ }
+ 
+-- 
+1.8.4
+
+
+From 1fc28716e67cb9a4384c99c39e8a283ca344e771 Mon Sep 17 00:00:00 2001
+From: Martin Smith <martin.smith@digia.com>
+Date: Mon, 2 Dec 2013 10:46:21 +0100
+Subject: [PATCH 26/31] qdoc: Replaced hard-coded href with computed href
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+For enum types that have QFlags versions, qdoc was
+outputting the documentation with a hard-coded link
+to qflags.html, which only workjed in the single
+directory mode. When qdoc outputs modular documentation,
+the href for the link should be "../qtcore/qflags.html" .
+Now qdoc computes this href correctly before it writes
+the docs. The href is no longer hard-coded.
+
+Task-number: QTBUG-35209
+Change-Id: Ibdf5b11dbd063726eb77048de78f8874c65752ca
+Reviewed-by: Topi Reiniö <topi.reinio@digia.com>
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
+
+diff --git a/src/tools/qdoc/htmlgenerator.cpp b/src/tools/qdoc/htmlgenerator.cpp
+index 986b4ae..511dc32 100644
+--- a/src/tools/qdoc/htmlgenerator.cpp
++++ b/src/tools/qdoc/htmlgenerator.cpp
+@@ -269,6 +269,9 @@ QString HtmlGenerator::format()
+ void HtmlGenerator::generateTree()
+ {
+     qdb_->buildCollections();
++    Node* qflags = qdb_->findNodeByNameAndType(QStringList("QFlags"), Node::Class, Node::NoSubType);
++    if (qflags)
++        qflagsHref_ = linkForNode(qflags,0);
+     if (!runPrepareOnly()) {
+         Generator::generateTree();
+         generateCollisionPages();
+@@ -3660,7 +3663,7 @@ void HtmlGenerator::generateDetailedMember(const Node *node,
+         if (enume->flagsType()) {
+             out() << "<p>The " << protectEnc(enume->flagsType()->name())
+                   << " type is a typedef for "
+-                  << "<a href=\"qflags.html\">QFlags</a>&lt;"
++                  << "<a href=\"" << qflagsHref_ << "\">QFlags</a>&lt;"
+                   << protectEnc(enume->name())
+                   << "&gt;. It stores an OR combination of "
+                   << protectEnc(enume->name())
+diff --git a/src/tools/qdoc/htmlgenerator.h b/src/tools/qdoc/htmlgenerator.h
+index f252532..ae16f3c 100644
+--- a/src/tools/qdoc/htmlgenerator.h
++++ b/src/tools/qdoc/htmlgenerator.h
+@@ -262,6 +262,7 @@ private:
+     QString cppclassespage;
+     QString qmltypespage;
+     QString buildversion;
++    QString qflagsHref_;
+ 
+ public:
+     static bool debugging_on;
+-- 
+1.8.4
+
+
+From ef61bf6eff48aaccebadf8aedad4e87b50df9e04 Mon Sep 17 00:00:00 2001
+From: Tobias Koenig <tobias.koenig.qnx@kdab.com>
+Date: Wed, 27 Nov 2013 13:11:01 +0100
+Subject: [PATCH 27/31] Fix sub-second handling in SQLite driver
+
+Use explicit format string, that contains milliseconds, when
+converting an QDateTime/QTime to a SQLite field content.
+
+Task-number: QTBUG-24200
+[ChangeLog][QtSql][QSQLITE] Fix sub-second handling
+Change-Id: Ib89152b7c3dd780b57a8826beff8b6b118e9d3d6
+Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
+Reviewed-by: Mark Brand <mabrand@mabrand.nl>
+
+(cherry picked from commit 9e64fc9e1cebf1e11694c4f536881128f5aee288)
+
+diff --git a/src/sql/drivers/sqlite/qsql_sqlite.cpp b/src/sql/drivers/sqlite/qsql_sqlite.cpp
+index 0a8b71a..27bc80e 100644
+--- a/src/sql/drivers/sqlite/qsql_sqlite.cpp
++++ b/src/sql/drivers/sqlite/qsql_sqlite.cpp
+@@ -42,6 +42,7 @@
+ #include "qsql_sqlite_p.h"
+ 
+ #include <qcoreapplication.h>
++#include <qdatetime.h>
+ #include <qvariant.h>
+ #include <qsqlerror.h>
+ #include <qsqlfield.h>
+@@ -447,6 +448,20 @@ bool QSQLiteResult::exec()
+                 case QVariant::LongLong:
+                     res = sqlite3_bind_int64(d->stmt, i + 1, value.toLongLong());
+                     break;
++                case QVariant::DateTime: {
++                    const QDateTime dateTime = value.toDateTime();
++                    const QString str = dateTime.toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz"));
++                    res = sqlite3_bind_text16(d->stmt, i + 1, str.utf16(),
++                                              str.size() * sizeof(ushort), SQLITE_TRANSIENT);
++                    break;
++                }
++                case QVariant::Time: {
++                    const QTime time = value.toTime();
++                    const QString str = time.toString(QStringLiteral("hh:mm:ss.zzz"));
++                    res = sqlite3_bind_text16(d->stmt, i + 1, str.utf16(),
++                                              str.size() * sizeof(ushort), SQLITE_TRANSIENT);
++                    break;
++                }
+                 case QVariant::String: {
+                     // lifetime of string == lifetime of its qvariant
+                     const QString *str = static_cast<const QString*>(value.constData());
+-- 
+1.8.4
+
+
+From 6b466682f5e843c393b58644252ec32457df8123 Mon Sep 17 00:00:00 2001
+From: Tobias Koenig <tobias.koenig.qnx@kdab.com>
+Date: Sat, 30 Nov 2013 14:40:11 +0100
+Subject: [PATCH 28/31] Fix evaluation of SQLite driver options
+
+Ensure that the options, which are passed to the SQLite driver, are
+evaluated in the correct order and do not overwrite each other.
+According to http://www.sqlite.org/c3ref/open.html the
+SQLITE_OPEN_READONLY and (SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE) are
+mutual exclusive, but SQLITE_OPEN_URI can be combined with both of them.
+
+Task-number: QTBUG-35186
+[ChangeLog][QtSql][QSQLITE] Fixed evaluation of driver options
+Change-Id: I8e74fe1ce43b9118b15f7b13fc71670bdcd73f68
+Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
+Reviewed-by: Mark Brand <mabrand@mabrand.nl>
+
+(cherry picked from commit 4f28464ab7dfe9f18cd72fc022257e66a8e2b279)
+
+diff --git a/src/sql/drivers/sqlite/qsql_sqlite.cpp b/src/sql/drivers/sqlite/qsql_sqlite.cpp
+index 27bc80e..c98d643 100644
+--- a/src/sql/drivers/sqlite/qsql_sqlite.cpp
++++ b/src/sql/drivers/sqlite/qsql_sqlite.cpp
+@@ -599,24 +599,32 @@ bool QSQLiteDriver::open(const QString & db, const QString &, const QString &, c
+ 
+     if (db.isEmpty())
+         return false;
++
++    int timeOut = 5000;
+     bool sharedCache = false;
+-    int openMode = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, timeOut=5000;
+-    QStringList opts=QString(conOpts).remove(QLatin1Char(' ')).split(QLatin1Char(';'));
+-    foreach(const QString &option, opts) {
++    bool openReadOnlyOption = false;
++    bool openUriOption = false;
++
++    const QStringList opts = QString(conOpts).remove(QLatin1Char(' ')).split(QLatin1Char(';'));
++    foreach (const QString &option, opts) {
+         if (option.startsWith(QLatin1String("QSQLITE_BUSY_TIMEOUT="))) {
+             bool ok;
+-            int nt = option.mid(21).toInt(&ok);
++            const int nt = option.mid(21).toInt(&ok);
+             if (ok)
+                 timeOut = nt;
+-        }
+-        if (option == QLatin1String("QSQLITE_OPEN_READONLY"))
+-            openMode = SQLITE_OPEN_READONLY;
+-        if (option == QLatin1String("QSQLITE_OPEN_URI"))
+-            openMode |= SQLITE_OPEN_URI;
+-        if (option == QLatin1String("QSQLITE_ENABLE_SHARED_CACHE"))
++        } else if (option == QLatin1String("QSQLITE_OPEN_READONLY")) {
++            openReadOnlyOption = true;
++        } else if (option == QLatin1String("QSQLITE_OPEN_URI")) {
++            openUriOption = true;
++        } else if (option == QLatin1String("QSQLITE_ENABLE_SHARED_CACHE")) {
+             sharedCache = true;
++        }
+     }
+ 
++    int openMode = (openReadOnlyOption ? SQLITE_OPEN_READONLY : (SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE));
++    if (openUriOption)
++        openMode |= SQLITE_OPEN_URI;
++
+     sqlite3_enable_shared_cache(sharedCache);
+ 
+     if (sqlite3_open_v2(db.toUtf8().constData(), &d->access, openMode, NULL) == SQLITE_OK) {
+-- 
+1.8.4
+
+
+From 8a1cbc506eaa6816676898517c1c4a22309739ca Mon Sep 17 00:00:00 2001
+From: Nicolas Cornu <ncornu@aldebaran-robotics.com>
+Date: Thu, 28 Nov 2013 00:06:41 +0100
+Subject: [PATCH 29/31] Allow temporary databases in sqlite driver
+
+http://www3.sqlite.org/inmemorydb.html#temp_db
+[ChangeLog][QtSql][QSQLITE] Enable creating temporary databases
+
+Change-Id: I9972fba5c91eca55cfc5a84f94cff03d19992324
+Reviewed-by: Tobias Koenig <tobias.koenig.qnx@kdab.com>
+Reviewed-by: Mark Brand <mabrand@mabrand.nl>
+(cherry picked from commit 9de879c8a43a012254036d7f08b55793fa325cb2)
+
+diff --git a/src/sql/doc/src/sql-driver.qdoc b/src/sql/doc/src/sql-driver.qdoc
+index d8d1058..82dfa27 100644
+--- a/src/sql/doc/src/sql-driver.qdoc
++++ b/src/sql/doc/src/sql-driver.qdoc
+@@ -599,8 +599,8 @@
+     is not necessary to have a database server. SQLite operates on a
+     single file, which must be set as the database name when opening
+     a connection. If the file does not exist, SQLite will try to
+-    create it. SQLite also supports in-memory databases, simply pass
+-    ":memory:" as the database name.
++    create it. SQLite also supports in-memory and temporary databases. Simply
++    pass respectively ":memory:" or an empty string as the database name.
+ 
+     SQLite has some restrictions regarding multiple users and
+     multiple transactions. If you try to read/write on a resource from different
+diff --git a/src/sql/drivers/sqlite/qsql_sqlite.cpp b/src/sql/drivers/sqlite/qsql_sqlite.cpp
+index c98d643..55ef092 100644
+--- a/src/sql/drivers/sqlite/qsql_sqlite.cpp
++++ b/src/sql/drivers/sqlite/qsql_sqlite.cpp
+@@ -597,9 +597,6 @@ bool QSQLiteDriver::open(const QString & db, const QString &, const QString &, c
+     if (isOpen())
+         close();
+ 
+-    if (db.isEmpty())
+-        return false;
+-
+     int timeOut = 5000;
+     bool sharedCache = false;
+     bool openReadOnlyOption = false;
+-- 
+1.8.4
+
+
+From af3276b7217497e82256d031bcc4b3b0bf7209f3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 16/17] use pkg-config for freetype
+Subject: [PATCH 30/31] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -1035,10 +1785,10 @@ index 88be809..8fc19d2 100644
 1.8.4
 
 
-From 12e80060cd06ac79016357cfbfcf56b3786d8c4a Mon Sep 17 00:00:00 2001
+From 44adac2c8b0223c0cf12494d4dfb44ff5431a716 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 17/17] use pkgconfig for icu detection (MXE specific)
+Subject: [PATCH 31/31] use pkgconfig for icu detection (MXE specific)
 
 Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
 
