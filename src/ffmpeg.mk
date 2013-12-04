@@ -14,7 +14,8 @@ $(PKG)_DEPS     := gcc bzip2 lame libass libnut libvpx opencore-amr opus sdl spe
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.ffmpeg.org/download.html' | \
     $(SED) -n 's,.*ffmpeg-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep 1.2.* | sort -Vr | \
+    grep 1.2.* | \
+    $(SORT) -Vr | \
     head -1
 endef
 
