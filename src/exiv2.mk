@@ -3,8 +3,8 @@
 
 PKG             := exiv2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.23
-$(PKG)_CHECKSUM := 5f342bf642477526f41add11d6ee7787cdcd639f
+$(PKG)_VERSION  := 0.24
+$(PKG)_CHECKSUM := 2f19538e54f8c21c180fa96d17677b7cff7dc1bb
 $(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)
 $(PKG)_FILE     := exiv2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.exiv2.org/$($(PKG)_FILE)
