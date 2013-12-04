@@ -4,7 +4,7 @@ See index.html for further information.
 From e903b5cddaaa606300292ad2cf26c2b6ee111cdd Mon Sep 17 00:00:00 2001
 From: Simon Hausmann <simon.hausmann@digia.com>
 Date: Tue, 26 Nov 2013 10:45:53 +0100
-Subject: [PATCH 01/31] Fix for co-existence of QtDeclarative and QtQml
+Subject: [PATCH 01/54] Fix for co-existence of QtDeclarative and QtQml
 
 As a follow-up to commit 2f87fde9bb4bad6787101c0d135419b350b201a5, we also need
 to change "hack" in the QGraphicsItem and QWidget destructor for early item
@@ -54,7 +54,7 @@ index 1da0be9..421ce57 100644
 From 939a001c3ac33ebf801d2594ac9073da28d09a46 Mon Sep 17 00:00:00 2001
 From: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@digia.com>
 Date: Tue, 26 Nov 2013 10:13:04 +0100
-Subject: [PATCH 02/31] Android: Remove invalid error message
+Subject: [PATCH 02/54] Android: Remove invalid error message
 
 All usage of context menus prints out an error message because
 onContextMenuClosed() is called more than once. We just return
@@ -87,7 +87,7 @@ index 3dcffeb..3bcd6ea 100644
 From 08f3177fdfc9aefbd4232dcd1529b537b2ca9402 Mon Sep 17 00:00:00 2001
 From: Gabriel de Dietrich <gabriel.dedietrich@digia.com>
 Date: Mon, 25 Nov 2013 13:41:49 +0100
-Subject: [PATCH 03/31] CoreWLan: Fix potential unhandled exception assert
+Subject: [PATCH 03/54] CoreWLan: Fix potential unhandled exception assert
 
 -[QNSListener notificationHandler:] was declared as not taking any parameter,
 but used as taking a single NSNotification. This would lead to an 'unrecognized
@@ -152,7 +152,7 @@ index 1b95ae2..7044e96 100644
 From f03fd0d82a50361c0b89165b3f8d98d66b0a4e16 Mon Sep 17 00:00:00 2001
 From: Stephen Kelly <stephen.kelly@kdab.com>
 Date: Tue, 26 Nov 2013 15:06:20 +0100
-Subject: [PATCH 04/31] Remove leading '/' from target paths.
+Subject: [PATCH 04/54] Remove leading '/' from target paths.
 
 This is inappropriate on Windows, and breaks non-prefix builds there.
 
@@ -187,7 +187,7 @@ index a9b0c86..1e6b05c 100644
 From 94c17dce04c7726afbdd6ac67c569eedc629a81a Mon Sep 17 00:00:00 2001
 From: Frank Osterfeld <frank.osterfeld.qnx@kdab.com>
 Date: Fri, 22 Nov 2013 10:43:49 +0100
-Subject: [PATCH 05/31] QNX: Fix retrieving the window group name
+Subject: [PATCH 05/54] QNX: Fix retrieving the window group name
 
 The code assumes that there is a root window, and crashed
 otherwise.
@@ -223,7 +223,7 @@ index 8958a5c..24af5c2 100644
 From 4fbe50e77a8d24d42581cdeabd1e93cb993b0d8d Mon Sep 17 00:00:00 2001
 From: Yoann Lopes <yoann.lopes@digia.com>
 Date: Fri, 22 Nov 2013 18:45:49 +0100
-Subject: [PATCH 06/31] Revert "Store the font's scalability in QFontEngine."
+Subject: [PATCH 06/54] Revert "Store the font's scalability in QFontEngine."
 
 This reverts commit 65b12fbdb13d34c61bcadd5cc8fd6ee28a8dfafd.
 
@@ -281,7 +281,7 @@ index 07be498..c181d61 100644
 From 82a2d28d841c7f59fa76fae6a67e1712a5fb4740 Mon Sep 17 00:00:00 2001
 From: Stephen Kelly <stephen.kelly@kdab.com>
 Date: Wed, 27 Nov 2013 12:22:54 +0100
-Subject: [PATCH 07/31] CMake: Parse the output of new CMake versions.
+Subject: [PATCH 07/54] CMake: Parse the output of new CMake versions.
 
 As of CMake 3.0, the output of `cmake --version` now has a second line
 showing that it is maintained by Kitware. Change the version parsing to
@@ -315,7 +315,7 @@ index 118eed1..a9461eb 100644
 From 7c029e83a3e5058f7b82efd0235e766952357ffd Mon Sep 17 00:00:00 2001
 From: Simon Hausmann <simon.hausmann@digia.com>
 Date: Thu, 28 Nov 2013 11:00:15 +0100
-Subject: [PATCH 08/31] Fix invalid memory read when shutting down QML
+Subject: [PATCH 08/54] Fix invalid memory read when shutting down QML
  applications
 
 As the last line in the QObject destructor, we call setParentHelper(0) to
@@ -405,7 +405,7 @@ index ece88d4..f1e0451 100644
 From bedc5a3ae268594100b5e0eb8f35c0ce2b95ee96 Mon Sep 17 00:00:00 2001
 From: Marc Mutz <marc.mutz@kdab.com>
 Date: Tue, 26 Nov 2013 12:27:45 +0100
-Subject: [PATCH 09/31] Update ChangeLog for 5.2.0 [QtWidgets II]
+Subject: [PATCH 09/54] Update ChangeLog for 5.2.0 [QtWidgets II]
 
 Second batch of changes.
 
@@ -651,7 +651,7 @@ index f513d64..30cd288 100644
 From c5b19f252188a01dd7b12090f4776420e3714000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Thu, 28 Nov 2013 15:33:06 +0100
-Subject: [PATCH 10/31] iOS: Forward [UIApplicationDelegate handleOpenURL:] to
+Subject: [PATCH 10/54] iOS: Forward [UIApplicationDelegate handleOpenURL:] to
  QDesktopServices
 
 The user may use QDesktopServices::setUrlHandler() in combination with
@@ -785,7 +785,7 @@ index 32203ae..0ac6c59 100644
 From 9b782dca45331c0e0246b8439d5cf007a440afc8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Wed, 27 Nov 2013 18:20:10 +0100
-Subject: [PATCH 11/31] iOS: Update screen properties when we trigger statusbar
+Subject: [PATCH 11/54] iOS: Update screen properties when we trigger statusbar
  changes on iOS7
 
 Ideally we'd have a callback from iOS when this happens, so we can also
@@ -918,7 +918,7 @@ index 30cd288..a51cc91 100644
 From 6c3adb5f966e349f0488c194462e48cc8ddf248e Mon Sep 17 00:00:00 2001
 From: Nico Vertriest <nico.vertriest@digia.com>
 Date: Wed, 27 Nov 2013 14:47:26 +0100
-Subject: [PATCH 14/31] Doc: corrected invalid ref. to output iterators
+Subject: [PATCH 14/54] Doc: corrected invalid ref. to output iterators
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -961,7 +961,7 @@ index cd38947..412b9cf 100644
 From 7d5448d9e2ae4d2d10c0cff867cf34b315336feb Mon Sep 17 00:00:00 2001
 From: J-P Nurmi <jpnurmi@digia.com>
 Date: Wed, 27 Nov 2013 13:24:59 +0100
-Subject: [PATCH 15/31] Docs: add important QWheelEvent::phase() related notes
+Subject: [PATCH 15/54] Docs: add important QWheelEvent::phase() related notes
 
 Change-Id: I4901b96b44b7c1179e678689af5962cb4570d50d
 Reviewed-by: Jens Bache-Wiig <jens.bache-wiig@digia.com>
@@ -1015,7 +1015,7 @@ index 2866608..88f132b 100644
 From b8ccacbb03cb8d265209970c4443218dac33fc81 Mon Sep 17 00:00:00 2001
 From: BogDan Vatra <bogdan@kde.org>
 Date: Mon, 2 Dec 2013 16:48:18 +0200
-Subject: [PATCH 16/31] Default to 5.2 source repository for Qt 5.2.x
+Subject: [PATCH 16/54] Default to 5.2 source repository for Qt 5.2.x
 
 We can't use latest anymore because the qreal change
 is not back compatible and all the apps that used latest
@@ -1057,7 +1057,7 @@ index 7c741ed..a10e58b 100644
 From 923d498029be406a684f8953afc68f10c07e2789 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Tue, 26 Nov 2013 14:48:02 +0100
-Subject: [PATCH 17/31] Add PBXCopyFilesBuildPhases to main target, not
+Subject: [PATCH 17/54] Add PBXCopyFilesBuildPhases to main target, not
  preprocessing step
 
 Otherwise the 'Wrapper' destination of the PBXCopyFilesBuildPhase
@@ -1090,7 +1090,7 @@ index 5ea1ff1..e50df93 100644
 From 5361513ec812c545ca2cedea6c8a30c362cb8e5d Mon Sep 17 00:00:00 2001
 From: Christoph Schleifenbaum <christoph.schleifenbaum@kdab.com>
 Date: Mon, 25 Nov 2013 19:45:06 +0100
-Subject: [PATCH 18/31] Cocoa: Mouse enter events on window activation.
+Subject: [PATCH 18/54] Cocoa: Mouse enter events on window activation.
 
 This patch tells the window system that it should create a mouse enter
 event if a window was activated when the mouse was inside. This wasn't
@@ -1157,7 +1157,7 @@ index 10536bd..c9b3d69 100644
 From d1f9f2125e6cbba236dc50309a4aee2dc16a6345 Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@digia.com>
 Date: Tue, 3 Dec 2013 09:01:50 +0100
-Subject: [PATCH 19/31] Stabilize tst_QColumnView::dynamicModelChanges().
+Subject: [PATCH 19/54] Stabilize tst_QColumnView::dynamicModelChanges().
 
 Use QTest::qWaitForWindowExposed() and QTRY_COMPARE() instead of
 hardcoded timeout.
@@ -1194,7 +1194,7 @@ index 6c04e5b..e2b2fb9 100644
 From 789b556ef1241dd3169c6040944fff44b88d9be6 Mon Sep 17 00:00:00 2001
 From: Topi Reinio <topi.reinio@digia.com>
 Date: Fri, 29 Nov 2013 15:51:12 +0100
-Subject: [PATCH 20/31] Use Q_QDOC for Qt namespace declaration in Qt Gui
+Subject: [PATCH 20/54] Use Q_QDOC for Qt namespace declaration in Qt Gui
 
 This is a workaround for letting qdoc to successfully
 generate documentation for the Qt namespace. qdoc
@@ -1233,7 +1233,7 @@ index a85e9c8..d8f52e9 100644
 From edd51e44869c9774071355f32830ea510eafde04 Mon Sep 17 00:00:00 2001
 From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
 Date: Wed, 13 Nov 2013 19:14:45 +0100
-Subject: [PATCH 21/31] Revert "configure: Abort if Xlib isn't present when
+Subject: [PATCH 21/54] Revert "configure: Abort if Xlib isn't present when
  building for XCB."
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -1298,7 +1298,7 @@ index d0b0ed8..a330dd6 100755
 From c70750f5363999640cc99278ccf90679fb27c84d Mon Sep 17 00:00:00 2001
 From: Marc Mutz <marc.mutz@kdab.com>
 Date: Fri, 29 Nov 2013 10:06:20 +0100
-Subject: [PATCH 23/31] Stabilize tst_QGraphicsItem
+Subject: [PATCH 23/54] Stabilize tst_QGraphicsItem
 
 The cursor() test was missing a QTest::moveMouse() before sending of the
 mouse event (as all the following subtests do). When run on a desktop with
@@ -1328,7 +1328,7 @@ index 6c26ddb..fc1d0e3 100644
 From 9302169bd5ad8380ebe95f50986d2b32eb486901 Mon Sep 17 00:00:00 2001
 From: Nikolai Kosjar <nikolai.kosjar@digia.com>
 Date: Fri, 29 Nov 2013 14:06:50 +0100
-Subject: [PATCH 24/31] QtConcurrent: Workaround GCC bug 58800 in median
+Subject: [PATCH 24/54] QtConcurrent: Workaround GCC bug 58800 in median
  calculation
 
 1) Revert 880b614 for libstdc++ <= 4.7.3 || (4.8.0 >= ... <= 4.8.2)
@@ -1486,7 +1486,7 @@ index 0000000..c9fbc79
 From 119ea0f2dbaa4cdea6929e542c59f99b2dfd0ef9 Mon Sep 17 00:00:00 2001
 From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
 Date: Mon, 2 Dec 2013 22:34:26 +0100
-Subject: [PATCH 25/31] iOS: fix application hangs when opening keyboard
+Subject: [PATCH 25/54] iOS: fix application hangs when opening keyboard
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -1536,7 +1536,7 @@ index 0dd810b..43f36e3 100644
 From 1fc28716e67cb9a4384c99c39e8a283ca344e771 Mon Sep 17 00:00:00 2001
 From: Martin Smith <martin.smith@digia.com>
 Date: Mon, 2 Dec 2013 10:46:21 +0100
-Subject: [PATCH 26/31] qdoc: Replaced hard-coded href with computed href
+Subject: [PATCH 26/54] qdoc: Replaced hard-coded href with computed href
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -1593,10 +1593,1275 @@ index f252532..ae16f3c 100644
 1.8.4
 
 
-From ef61bf6eff48aaccebadf8aedad4e87b50df9e04 Mon Sep 17 00:00:00 2001
+From ac54abfb07579c747612c0d9e53089fe5cd32caf Mon Sep 17 00:00:00 2001
+From: J-P Nurmi <jpnurmi@digia.com>
+Date: Mon, 2 Dec 2013 22:23:11 +0100
+Subject: [PATCH 27/54] Fix style animations to stop when the animation target
+ is hidden
+
+QStyleAnimation automatically stopped for hidden QWidgets, but didn't
+know anything about QQuickItems and kept animating regardless of their
+visibility. This change ensures that style animations stop as soon as
+the animation target no longer accepts the animation update eg. it has
+become hidden or the window was minimized.
+
+Task-number: QTBUG-35319
+Change-Id: Ie48191fd918c626c0d9afe2e7d2390c495efb071
+Reviewed-by: Gunnar Sletta <gunnar.sletta@digia.com>
+
+diff --git a/src/widgets/graphicsview/qgraphicsitem.cpp b/src/widgets/graphicsview/qgraphicsitem.cpp
+index fffc805..0ba0889 100644
+--- a/src/widgets/graphicsview/qgraphicsitem.cpp
++++ b/src/widgets/graphicsview/qgraphicsitem.cpp
+@@ -7634,7 +7634,10 @@ QGraphicsObject::~QGraphicsObject()
+ bool QGraphicsObject::event(QEvent *ev)
+ {
+     if (ev->type() == QEvent::StyleAnimationUpdate) {
+-        update();
++        if (isVisible()) {
++            ev->accept();
++            update();
++        }
+         return true;
+     }
+     return QObject::event(ev);
+diff --git a/src/widgets/graphicsview/qgraphicswidget.cpp b/src/widgets/graphicsview/qgraphicswidget.cpp
+index 4abb5e3..ccc5112 100644
+--- a/src/widgets/graphicsview/qgraphicswidget.cpp
++++ b/src/widgets/graphicsview/qgraphicswidget.cpp
+@@ -1409,9 +1409,14 @@ bool QGraphicsWidget::event(QEvent *event)
+         break;
+     case QEvent::WindowActivate:
+     case QEvent::WindowDeactivate:
+-    case QEvent::StyleAnimationUpdate:
+         update();
+         break;
++    case QEvent::StyleAnimationUpdate:
++        if (isVisible()) {
++            event->accept();
++            update();
++        }
++        break;
+         // Taken from QWidget::event
+     case QEvent::ActivationChange:
+     case QEvent::EnabledChange:
+diff --git a/src/widgets/kernel/qwidget.cpp b/src/widgets/kernel/qwidget.cpp
+index 421ce57..ab9e536 100644
+--- a/src/widgets/kernel/qwidget.cpp
++++ b/src/widgets/kernel/qwidget.cpp
+@@ -8243,7 +8243,10 @@ bool QWidget::event(QEvent *event)
+         update(static_cast<QUpdateLaterEvent*>(event)->region());
+         break;
+     case QEvent::StyleAnimationUpdate:
+-        update();
++        if (isVisible() && !window()->isMinimized()) {
++            event->accept();
++            update();
++        }
+         break;
+ 
+     case QEvent::WindowBlocked:
+diff --git a/src/widgets/styles/qstyleanimation.cpp b/src/widgets/styles/qstyleanimation.cpp
+index 4fb67d9..90fb371 100644
+--- a/src/widgets/styles/qstyleanimation.cpp
++++ b/src/widgets/styles/qstyleanimation.cpp
+@@ -93,7 +93,10 @@ void QStyleAnimation::setStartTime(const QTime &time)
+ void QStyleAnimation::updateTarget()
+ {
+     QEvent event(QEvent::StyleAnimationUpdate);
++    event.setAccepted(false);
+     QCoreApplication::sendEvent(target(), &event);
++    if (!event.isAccepted())
++        stop();
+ }
+ 
+ bool QStyleAnimation::isUpdateNeeded() const
+@@ -103,16 +106,8 @@ bool QStyleAnimation::isUpdateNeeded() const
+ 
+ void QStyleAnimation::updateCurrentTime(int)
+ {
+-    if (QObject *tgt = target()) {
+-        if (tgt->isWidgetType()) {
+-            QWidget *widget = static_cast<QWidget *>(tgt);
+-            if (!widget->isVisible() || widget->window()->isMinimized())
+-                stop();
+-        }
+-
+-        if (isUpdateNeeded())
+-            updateTarget();
+-    }
++    if (target() && isUpdateNeeded())
++        updateTarget();
+ }
+ 
+ QProgressStyleAnimation::QProgressStyleAnimation(int speed, QObject *target) :
+-- 
+1.8.4
+
+
+From dd97932a04c1ef27d0e4d73b701acc2aad411b07 Mon Sep 17 00:00:00 2001
+From: Topi Reinio <topi.reinio@digia.com>
+Date: Tue, 3 Dec 2013 14:42:40 +0100
+Subject: [PATCH 28/54] qdoc: Fix output filenames for QML basic type
+ documentation
+
+qdoc intends to prepend all html files related to QML with
+a 'qml-' prefix. This doesn't work for basic QML types, as
+those nodes do not have valid qml module name information.
+
+This change fixes the issue by removing the requirement
+for a qml module name, thereby always using the qml
+prefix for a qml (basic) type.
+
+Task-number: QTBUG-35229
+Change-Id: If61572b2dc8a39be08140c37aa59646b88e99b29
+Reviewed-by: Martin Smith <martin.smith@digia.com>
+Reviewed-by: Jerome Pasion <jerome.pasion@digia.com>
+
+diff --git a/src/tools/qdoc/generator.cpp b/src/tools/qdoc/generator.cpp
+index 97a980a..3cbba78 100644
+--- a/src/tools/qdoc/generator.cpp
++++ b/src/tools/qdoc/generator.cpp
+@@ -334,14 +334,14 @@ QString Generator::fileBase(const Node *node) const
+         if (node->isQmlNode()) {
+             if (!node->qmlModuleName().isEmpty()) {
+                 base.prepend(node->qmlModuleName() + QLatin1Char('-'));
+-                /*
+-                  To avoid file name conflicts in the html directory,
+-                  we prepend a prefix (by default, "qml-") to the file name of QML
+-                  element doc files.
+-                */
+-                if ((node->subType() == Node::QmlClass) || (node->subType() == Node::QmlBasicType)) {
+-                    base.prepend(outputPrefix(QLatin1String("QML")));
+-                }
++            }
++            /*
++              To avoid file name conflicts in the html directory,
++              we prepend a prefix (by default, "qml-") to the file name of QML
++              element doc files.
++            */
++            if ((node->subType() == Node::QmlClass) || (node->subType() == Node::QmlBasicType)) {
++                base.prepend(outputPrefix(QLatin1String("QML")));
+             }
+         }
+         else if (node->subType() == Node::QmlModule) {
+-- 
+1.8.4
+
+
+From 32f71db1bdcf93c8a03a9ef11ff4044479afa369 Mon Sep 17 00:00:00 2001
+From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+Date: Tue, 3 Dec 2013 13:55:20 +0100
+Subject: [PATCH 29/54] iOS: fix crash when application quits
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+An application will sometimes crash if the keyboard
+is told to hide while the application is about to
+quit. This patch will ensure that we set m_qioswindow
+(and [UIView qwindow]) to 0 when the window is destroyed.
+We also check this pointer before telling QUIView to
+resign first responder when closing the keyboard. The
+latter will fix the crash.
+
+Task-number: QTBUG-35356
+
+Change-Id: I934088beb7e877c5b33d96225cb215a8ffd4dbb2
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qioswindow.mm b/src/plugins/platforms/ios/qioswindow.mm
+index 43f36e3..7b217e0 100644
+--- a/src/plugins/platforms/ios/qioswindow.mm
++++ b/src/plugins/platforms/ios/qioswindow.mm
+@@ -341,7 +341,8 @@
+     // Resigning first responed status means that the virtual keyboard was closed, or
+     // some other view became first responder. In either case we clear the focus object to
+     // avoid blinking cursors in line edits etc:
+-    static_cast<QWindowPrivate *>(QObjectPrivate::get(m_qioswindow->window()))->clearFocusObject();
++    if (m_qioswindow)
++        static_cast<QWindowPrivate *>(QObjectPrivate::get(m_qioswindow->window()))->clearFocusObject();
+     return [super resignFirstResponder];
+ }
+ 
+@@ -423,8 +424,10 @@
+ 
+ - (QWindow *)qwindow
+ {
+-    if ([self isKindOfClass:[QUIView class]])
+-        return static_cast<QUIView *>(self)->m_qioswindow->window();
++    if ([self isKindOfClass:[QUIView class]]) {
++        if (QIOSWindow *w = static_cast<QUIView *>(self)->m_qioswindow)
++            return w->window();
++    }
+     return nil;
+ }
+ 
+@@ -461,6 +464,7 @@ QIOSWindow::~QIOSWindow()
+     // cancellation of all touch events.
+     [m_view touchesCancelled:0 withEvent:0];
+ 
++    m_view->m_qioswindow = 0;
+     [m_view removeFromSuperview];
+     [m_view release];
+ }
+-- 
+1.8.4
+
+
+From bd9cf0b7b96ea5836d18259b073870f8b145b46d Mon Sep 17 00:00:00 2001
+From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+Date: Mon, 2 Dec 2013 22:32:13 +0100
+Subject: [PATCH 30/54] iOS: fix crash when focusWindow changes while keyboard
+ is open
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It turns out we cannot rely on QGuiApplication::focusWindow() to
+be non-zero at all times (e.g when pop-ups are closing etc).
+So instead use m_focusView.qwindow which points to a
+valid QWindow. This window is the same as QGuiApplication::focusWindow
+most of the time, except when a focus window closes.
+For those cases we get a new call to scrollRootView immediately
+after with m_focusView updated to reflect the new focusWindow.
+
+Task-number: QTBUG-35339
+
+Change-Id: Icb3a8d3140af1f1904495a9289c8c26ab79e70f6
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qiosinputcontext.mm b/src/plugins/platforms/ios/qiosinputcontext.mm
+index 0e43429..ea6a0bd 100644
+--- a/src/plugins/platforms/ios/qiosinputcontext.mm
++++ b/src/plugins/platforms/ios/qiosinputcontext.mm
+@@ -270,7 +270,7 @@ void QIOSInputContext::scrollRootView()
+             && m_keyboardListener->m_keyboardVisibleAndDocked
+             && m_focusView.window == view.window) {
+         QRectF cursorRect = qGuiApp->inputMethod()->cursorRectangle();
+-        cursorRect.translate(qGuiApp->focusWindow()->geometry().topLeft());
++        cursorRect.translate(m_focusView.qwindow->geometry().topLeft());
+         qreal keyboardY = m_keyboardListener->m_keyboardEndRect.y();
+         int statusBarY = qGuiApp->primaryScreen()->availableGeometry().y();
+         const int margin = 20;
+-- 
+1.8.4
+
+
+From 41dedabb0115da186583c49f7fc93882f3e8abde Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+Date: Mon, 2 Dec 2013 22:22:54 +0100
+Subject: [PATCH 31/54] added buildsystem/qmake changelog
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Change-Id: Ic1549b97fd4f71ac41f66432d40ff12bfa9d6897
+Reviewed-by: Joerg Bornemann <joerg.bornemann@digia.com>
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@digia.com>
+
+diff --git a/dist/changes-5.2.0 b/dist/changes-5.2.0
+index a51cc91..659bb21 100644
+--- a/dist/changes-5.2.0
++++ b/dist/changes-5.2.0
+@@ -52,6 +52,10 @@ information about a particular change.
+    zero delta() in order to indicate beginning and end of transient
+    scrolling.
+ 
++ - Mac OS X framework builds of Qt no longer contain a Unix-like include/
++   directory; all headers are located in the frameworks. This may affect
++   3rd party build systems not based on qmake or cmake.
++
+ ****************************************************************************
+ *                          Library                                         *
+ ****************************************************************************
+@@ -700,3 +704,44 @@ X11
+  - [QTBUG-31762] Fix position of system tray icon (except Unity)
+  - [QTBUG-27349] Reintroduced command line argument for positioning
+    windows (-geometry)
++
++****************************************************************************
++*                          Tools                                           *
++****************************************************************************
++
++- configure
++
++ * Added option to disable the QtMultimedia WMF backend
++ * [Unix] Added option to build with gcov support
++ * Added -extprefix option to support Qt installing into a different
++   location than the on-device -prefix within the -sysroot.
++ * [QTBUG-33584][Unix] Fixed parsing of -device-option with equal signs.
++
++- cmake config files
++
++ * [QTBUG-33145] Fixed usage of non-QtBase modules with Qt compiled from
++   source tarballs.
++ * [QTBUG-33223] Fixed header file location on multi-arch systems.
++ * Added support for automatic packaging of Qt plugins with cpack.
++
++- qmake
++
++ * [QTBUG-491] Added saner approach to debug/release path rewriting.
++ * Added the parseJson() function.
++ * Added "osx" scope as an alias for "macx". Note that matching on the
++   makespec is generally deprecated - use "linux", "gcc", etc.
++ * Added support for .qmake.stash files which are really *just* caches.
++ * [Xcode] Added support for QMAKE_PRE_LINK and QMAKE_POST_LINK.
++ * [QTBUG-31129] Added installation of PDB files for dlltarget.
++ * [QTBUG-28102] Added support for querying disabled Qt features.
++ * Removed macx-clang-libc++* makespecs. libc++ is now handled automatically.
++ * [QTBUG-32912][MSVS] Fixed moc not being run in case of DBUS_ADAPTORS or
++   DBUS_INTERFACES being present.
++ * [QTBUG-30644] Fixed unsatisfied requires() breaking recursive targets.
++ * [QTBUG-31204] Fixed extra compilers not finding their inputs.
++ * [QTBUG-32885][MSVS] Made it possible to disable debug information.
++ * [QTBUG-33446][MSVS] Fixed generation of VS2010+ solution files.
++ * [QTBUG-32375][MSVS] Fixed output directory of nested projects.
++ * [QTBUG-34392][MSVS] Fixed /SAFESEH:NO with VS2010+.
++ * [QTBUG-34357][MSVS] Fixed breakage with multiple VS versions in PATH.
++ * [MSVS] Fixed sub-project dependency generation.
+-- 
+1.8.4
+
+
+From 1983bc9c374fc8b83f608ecc1e6ce6ef4f54e572 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@digia.com>
+Date: Mon, 2 Dec 2013 23:18:00 +0100
+Subject: [PATCH 32/54] Make layoutDirection pass with new expose behavior
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+A QMenu with no actions gets a size of (0, 0) on OS X.
+With the new stricter expose event behavior this
+is considered invalid geometry and the platform plugin
+won't send an expose event, causing the qWaitForWindowExposed
+test to fail.
+
+Add a menu entry since the layoutDirection test is
+not really interested in testing the special case of
+empty menus.
+
+Change-Id: I5221dc3f0472ac13edf821df08bacc3a4eb5cd9d
+Reviewed-by: Simo Fält <simo.falt@digia.com>
+Reviewed-by: Gunnar Sletta <gunnar.sletta@digia.com>
+
+diff --git a/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp b/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp
+index 7c1bb95..ece9026 100644
+--- a/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp
++++ b/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp
+@@ -570,6 +570,7 @@ void tst_QMenu::layoutDirection()
+     win.setLayoutDirection(Qt::RightToLeft);
+ 
+     QMenu menu(&win);
++    menu.addAction("foo");
+     menu.show();
+     QVERIFY(QTest::qWaitForWindowExposed(&menu));
+     QCOMPARE(menu.layoutDirection(), Qt::RightToLeft);
+-- 
+1.8.4
+
+
+From c6874106850f64c9d1b38238988110bdd4198336 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@digia.com>
+Date: Mon, 25 Nov 2013 09:03:42 +0100
+Subject: [PATCH 33/54] Improve expose event handling.
+
+Prevent the cocoa platform plugin from sending expose
+events for windows that are off-screen or has invalid
+geometry.
+
+Differentiate between initial exposes and geometry
+update exposes, in order that e.g. geometry updates
+that happen before setVisible() don't trigger expose
+events. After the initial expose geometry updates
+to and from invalid geometry will trigger obscure
+and expose events.
+
+Task-number: QTBUG-35143
+Task-number: QTBUG-35091
+Change-Id: Ibbff20c69974f098ea7635e9ca38620597840a05
+Reviewed-by: Gunnar Sletta <gunnar.sletta@digia.com>
+
+diff --git a/src/plugins/platforms/cocoa/qcocoawindow.h b/src/plugins/platforms/cocoa/qcocoawindow.h
+index 4f5a208..c7ec315 100644
+--- a/src/plugins/platforms/cocoa/qcocoawindow.h
++++ b/src/plugins/platforms/cocoa/qcocoawindow.h
+@@ -159,8 +159,10 @@ public:
+     void registerTouch(bool enable);
+ 
+     qreal devicePixelRatio() const;
++    bool isWindowExposable();
+     void exposeWindow();
+     void obscureWindow();
++    void updateExposedGeometry();
+     QWindow *childWindowAt(QPoint windowPoint);
+ protected:
+     // NSWindow handling. The QCocoaWindow/QNSView can either be displayed
+@@ -202,7 +204,9 @@ public: // for QNSView
+ 
+     bool m_hasModalSession;
+     bool m_frameStrutEventsEnabled;
++    bool m_geometryUpdateExposeAllowed;
+     bool m_isExposed;
++    QRect m_exposedGeometry;
+     int m_registerTouchCount;
+     bool m_resizableTransientParent;
+     bool m_overrideBecomeKey;
+diff --git a/src/plugins/platforms/cocoa/qcocoawindow.mm b/src/plugins/platforms/cocoa/qcocoawindow.mm
+index 4da47f4..de99ecf 100644
+--- a/src/plugins/platforms/cocoa/qcocoawindow.mm
++++ b/src/plugins/platforms/cocoa/qcocoawindow.mm
+@@ -213,6 +213,7 @@ QCocoaWindow::QCocoaWindow(QWindow *tlw)
+     , m_windowCursor(0)
+     , m_hasModalSession(false)
+     , m_frameStrutEventsEnabled(false)
++    , m_geometryUpdateExposeAllowed(false)
+     , m_isExposed(false)
+     , m_registerTouchCount(0)
+     , m_resizableTransientParent(false)
+@@ -1078,22 +1079,61 @@ qreal QCocoaWindow::devicePixelRatio() const
+     }
+ }
+ 
++// Returns whether the window can be expose, which it can
++// if it is on screen and has a valid geometry.
++bool QCocoaWindow::isWindowExposable()
++{
++    QSize size = geometry().size();
++    bool validGeometry = (size.width() > 0 && size.height() > 0);
++    bool validScreen = ([[m_contentView window] screen] != 0);
++    bool nonHiddenSuperView = ![[m_contentView superview] isHidden];
++    return (validGeometry && validScreen && nonHiddenSuperView);
++}
++
++// Exposes the window by posting an expose event to QWindowSystemInterface
+ void QCocoaWindow::exposeWindow()
+ {
+-    if (!m_isExposed && ![[m_contentView superview] isHidden]) {
++    m_geometryUpdateExposeAllowed = true;
++
++    if (!isWindowExposable())
++        return;
++
++    if (!m_isExposed) {
+         m_isExposed = true;
++        m_exposedGeometry = geometry();
+         QWindowSystemInterface::handleExposeEvent(window(), QRegion(geometry()));
+     }
+ }
+ 
++// Obscures the window by posting an empty expose event to QWindowSystemInterface
+ void QCocoaWindow::obscureWindow()
+ {
+     if (m_isExposed) {
++        m_geometryUpdateExposeAllowed = false;
+         m_isExposed = false;
+         QWindowSystemInterface::handleExposeEvent(window(), QRegion());
+     }
+ }
+ 
++// Updates window geometry by posting an expose event to QWindowSystemInterface
++void QCocoaWindow::updateExposedGeometry()
++{
++    // updateExposedGeometry is not allowed to send the initial expose. If you want
++    // that call exposeWindow();
++    if (!m_geometryUpdateExposeAllowed)
++        return;
++
++    if (!isWindowExposable())
++        return;
++
++    if (m_exposedGeometry == geometry())
++        return;
++
++    m_isExposed = true;
++    m_exposedGeometry = geometry();
++    QWindowSystemInterface::handleExposeEvent(window(), QRegion(geometry()));
++}
++
+ QWindow *QCocoaWindow::childWindowAt(QPoint windowPoint)
+ {
+     QWindow *targetWindow = window();
+diff --git a/src/plugins/platforms/cocoa/qnsview.mm b/src/plugins/platforms/cocoa/qnsview.mm
+index 71c4de3..1c15c3b 100644
+--- a/src/plugins/platforms/cocoa/qnsview.mm
++++ b/src/plugins/platforms/cocoa/qnsview.mm
+@@ -175,7 +175,7 @@ static QTouchDevice *touchDevice = 0;
+ - (void) globalFrameChanged:(NSNotification*)notification
+ {
+     Q_UNUSED(notification);
+-    QWindowSystemInterface::handleExposeEvent(m_window, m_window->geometry());
++    m_platformWindow->updateExposedGeometry();
+ }
+ 
+ - (void)viewDidMoveToSuperview
+@@ -186,7 +186,7 @@ static QTouchDevice *touchDevice = 0;
+     if ([self superview]) {
+         m_platformWindow->m_contentViewIsEmbedded = true;
+         QWindowSystemInterface::handleGeometryChange(m_window, m_platformWindow->geometry());
+-        QWindowSystemInterface::handleExposeEvent(m_window, m_platformWindow->geometry());
++        m_platformWindow->updateExposedGeometry();
+         QWindowSystemInterface::flushWindowSystemEvents();
+     } else {
+         m_platformWindow->m_contentViewIsEmbedded = false;
+@@ -261,7 +261,7 @@ static QTouchDevice *touchDevice = 0;
+     // Send a geometry change event to Qt, if it's ready to handle events
+     if (!m_platformWindow->m_inConstructor) {
+         QWindowSystemInterface::handleGeometryChange(m_window, geometry);
+-        QWindowSystemInterface::handleExposeEvent(m_window, geometry);
++        m_platformWindow->updateExposedGeometry();
+         QWindowSystemInterface::flushWindowSystemEvents();
+     }
+ }
+-- 
+1.8.4
+
+
+From 520eee8570c8ddf4014d896ae3f121c315274000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
+Date: Tue, 3 Dec 2013 15:37:49 +0100
+Subject: [PATCH 34/54] iOS: Disable drag and drop completely instead of
+ enabling simple d'n'd
+
+The drag and drop event filters do not play nicely with touch events
+or virtual keyboards.
+
+Task-number: QTBUG-35348
+Change-Id: Id4d079ae72882f48750d394f13e10700d60e4532
+Reviewed-by: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qiosintegration.h b/src/plugins/platforms/ios/qiosintegration.h
+index c655d8d..fdecf70 100644
+--- a/src/plugins/platforms/ios/qiosintegration.h
++++ b/src/plugins/platforms/ios/qiosintegration.h
+@@ -74,6 +74,8 @@ public:
+     QStringList themeNames() const;
+     QPlatformTheme *createPlatformTheme(const QString &name) const;
+ 
++    QPlatformDrag *drag() const Q_DECL_OVERRIDE { return 0; }
++
+     QAbstractEventDispatcher *createEventDispatcher() const;
+     QPlatformNativeInterface *nativeInterface() const;
+ 
+-- 
+1.8.4
+
+
+From b05b940185450af70791befd47b2dd47eb0acfd5 Mon Sep 17 00:00:00 2001
+From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+Date: Wed, 4 Dec 2013 13:24:21 +0100
+Subject: [PATCH 35/54] iOS: fix assert when using QOffscreenSurface
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Qt defaults to creating a QWindow as offscreen surface
+if QPlatformIntegration::createPlatformOffscreenSurface
+returns 0. Using an offscreen surface is often done
+in a background thread, which is problematic, since then
+a QIOSWindow will also be created in a background thread.
+According to Apple docs, working with a UIView from other
+threads than the main thread should not be done. In our
+case, we instead hit an assert in QApplication that
+checks for the same.
+
+As a quick fix for Qt 5.2, we remove the offending call that
+causes the assert, since we anyway will call the same function
+lazily when becoming first responder.
+
+Task-number: QTBUG-35378
+
+Change-Id: Id35462f99783a9748c688b163f6497de9bfff73e
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qioswindow.mm b/src/plugins/platforms/ios/qioswindow.mm
+index 7b217e0..5374bc5 100644
+--- a/src/plugins/platforms/ios/qioswindow.mm
++++ b/src/plugins/platforms/ios/qioswindow.mm
+@@ -108,8 +108,6 @@
+             [NSNumber numberWithBool:YES], kEAGLDrawablePropertyRetainedBacking,
+             kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+ 
+-        [self updateTextInputTraits];
+-
+         if (isQtApplication())
+             self.hidden = YES;
+ 
+-- 
+1.8.4
+
+
+From 63aa431999881d034d412bd74c0ddcb539684782 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@digia.com>
+Date: Thu, 28 Nov 2013 23:47:29 +0100
+Subject: [PATCH 36/54] Revert "Cocoa (OpenGL): If no view is attached,
+ makeCurrent() should return false"
+
+This reverts commit 2eb1e28a90eaf82f4405dc65584021f16415014b,
+which makes several of the OpenGL examples crash on startup.
+(textures, hellogl_es2)
+
+Change-Id: Id47d2df6f57b2396c333e478b3c062f4cb4becb5
+Reviewed-by: Gunnar Sletta <gunnar.sletta@digia.com>
+Reviewed-by: Gabriel de Dietrich <gabriel.dedietrich@digia.com>
+
+diff --git a/src/plugins/platforms/cocoa/qcocoaglcontext.mm b/src/plugins/platforms/cocoa/qcocoaglcontext.mm
+index 1441443..0f45386 100644
+--- a/src/plugins/platforms/cocoa/qcocoaglcontext.mm
++++ b/src/plugins/platforms/cocoa/qcocoaglcontext.mm
+@@ -182,8 +182,6 @@ bool QCocoaGLContext::makeCurrent(QPlatformSurface *surface)
+     QWindow *window = static_cast<QCocoaWindow *>(surface)->window();
+     setActiveWindow(window);
+ 
+-    if (![m_context view])
+-        return false;
+     [m_context makeCurrentContext];
+     update();
+     return true;
+-- 
+1.8.4
+
+
+From 04ccc2b255633deb6dd1bfd8ff56efdbff58a543 Mon Sep 17 00:00:00 2001
+From: hjk <hjk121@nokiamail.com>
+Date: Thu, 28 Nov 2013 16:08:53 +0100
+Subject: [PATCH 37/54] Doc: Adjust description of the qreal typedef
+
+Change-Id: I038df8034ee00868eeee18b1ed09f7a70e3dd77a
+Reviewed-by: Jerome Pasion <jerome.pasion@digia.com>
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
+
+diff --git a/src/corelib/global/qglobal.cpp b/src/corelib/global/qglobal.cpp
+index 0c72bd7..279ba20 100644
+--- a/src/corelib/global/qglobal.cpp
++++ b/src/corelib/global/qglobal.cpp
+@@ -556,10 +556,8 @@ Q_STATIC_ASSERT_X(UCHAR_MAX == 255, "Qt assumes that char is 8 bits");
+     \typedef qreal
+     \relates <QtGlobal>
+ 
+-    Typedef for \c double on all platforms except for those using CPUs with
+-    ARM architectures.
+-    On ARM-based platforms, \c qreal is a typedef for \c float for performance
+-    reasons.
++    Typedef for \c double unless Qt is configured with the
++    \c{-qreal float} option.
+ */
+ 
+ /*! \typedef uchar
+-- 
+1.8.4
+
+
+From 996d78d4c94a0116eecec160caf605ea3629f36c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
+Date: Thu, 28 Nov 2013 13:09:44 +0100
+Subject: [PATCH 38/54] iOS: Handle statusbar changes to child windows
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Going through the platform window failed when the parent wasn't created
+yet. We can still get the window state of an yet-to-be-created top level
+window.
+
+Change-Id: Iaa61ddc50df037ac0bd2fd0884884c2bfce1dd9a
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qiosviewcontroller.mm b/src/plugins/platforms/ios/qiosviewcontroller.mm
+index 2e7e44d..9a9fba5 100644
+--- a/src/plugins/platforms/ios/qiosviewcontroller.mm
++++ b/src/plugins/platforms/ios/qiosviewcontroller.mm
+@@ -102,11 +102,11 @@
+ - (BOOL)prefersStatusBarHidden
+ {
+     QWindow *focusWindow = QGuiApplication::focusWindow();
+-    if (!focusWindow)
++    if (!focusWindow || !focusWindow->handle())
+         return [UIApplication sharedApplication].statusBarHidden;
+ 
+-    QIOSWindow *topLevel = static_cast<QIOSWindow *>(focusWindow->handle())->topLevelWindow();
+-    return topLevel->window()->windowState() == Qt::WindowFullScreen;
++    QWindow *topLevel = static_cast<QIOSWindow *>(focusWindow->handle())->topLevelWindow();
++    return topLevel->windowState() == Qt::WindowFullScreen;
+ }
+ 
+ @end
+diff --git a/src/plugins/platforms/ios/qioswindow.h b/src/plugins/platforms/ios/qioswindow.h
+index a5e122b..01a8286 100644
+--- a/src/plugins/platforms/ios/qioswindow.h
++++ b/src/plugins/platforms/ios/qioswindow.h
+@@ -85,7 +85,7 @@ public:
+ 
+     WId winId() const { return WId(m_view); };
+ 
+-    QIOSWindow *topLevelWindow() const;
++    QWindow *topLevelWindow() const;
+ 
+ private:
+     void applyGeometry(const QRect &rect);
+diff --git a/src/plugins/platforms/ios/qioswindow.mm b/src/plugins/platforms/ios/qioswindow.mm
+index 5374bc5..d62d542 100644
+--- a/src/plugins/platforms/ios/qioswindow.mm
++++ b/src/plugins/platforms/ios/qioswindow.mm
+@@ -622,7 +622,7 @@ void QIOSWindow::setParent(const QPlatformWindow *parentWindow)
+     }
+ }
+ 
+-QIOSWindow *QIOSWindow::topLevelWindow() const
++QWindow *QIOSWindow::topLevelWindow() const
+ {
+     QWindow *window = this->window();
+     while (window) {
+@@ -636,7 +636,7 @@ QIOSWindow *QIOSWindow::topLevelWindow() const
+         window = parent;
+     }
+ 
+-    return static_cast<QIOSWindow *>(window->handle());
++    return window;
+ }
+ 
+ void QIOSWindow::requestActivateWindow()
+-- 
+1.8.4
+
+
+From 2e132854460e11a1ade516f61477723202d56a93 Mon Sep 17 00:00:00 2001
+From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+Date: Tue, 26 Nov 2013 11:13:56 +0100
+Subject: [PATCH 39/54] iOS: don't show statusbar if hidden from Info.plist
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Currently there is no way to always hide the statusbar
+on iOS other than showing a window in fullscreen. This
+patch will check if the statusbar is (initially) hidden
+from the Info.plist, and respect that in the application.
+
+SubAttack is an example of an app that (because
+of styling issues with MainWindow margins) manually
+sets the geometry larger than fullsreen, and calls
+showNormal(). In that case we still want the statusbar to be
+hidden.
+
+Change-Id: Ia365d14971978360d0b39621ff0f8f82f74b57e2
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qiosviewcontroller.mm b/src/plugins/platforms/ios/qiosviewcontroller.mm
+index 9a9fba5..0a6a00b 100644
+--- a/src/plugins/platforms/ios/qiosviewcontroller.mm
++++ b/src/plugins/platforms/ios/qiosviewcontroller.mm
+@@ -101,6 +101,9 @@
+ 
+ - (BOOL)prefersStatusBarHidden
+ {
++    static bool hiddenFromPlist = infoPlistValue(@"UIStatusBarHidden", false);
++    if (hiddenFromPlist)
++        return YES;
+     QWindow *focusWindow = QGuiApplication::focusWindow();
+     if (!focusWindow || !focusWindow->handle())
+         return [UIApplication sharedApplication].statusBarHidden;
+-- 
+1.8.4
+
+
+From 6c5febd20331b58f0e55f137af6200d701b03b0e Mon Sep 17 00:00:00 2001
+From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
+Date: Tue, 26 Nov 2013 10:38:21 +0100
+Subject: [PATCH 40/54] iOS: move infoPlistValue to qiosglobal
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Change-Id: If237f08683290105413dc47923e23a496765bb22
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@digia.com>
+
+diff --git a/src/plugins/platforms/ios/qioseventdispatcher.mm b/src/plugins/platforms/ios/qioseventdispatcher.mm
+index 51eb10d..f93c6cc 100644
+--- a/src/plugins/platforms/ios/qioseventdispatcher.mm
++++ b/src/plugins/platforms/ios/qioseventdispatcher.mm
+@@ -206,13 +206,6 @@ namespace
+     bool debugStackUsage = false;
+ }
+ 
+-static int infoPlistValue(NSString* key, int defaultValue)
+-{
+-    static NSBundle *bundle = [NSBundle mainBundle];
+-    NSNumber* value = [bundle objectForInfoDictionaryKey:key];
+-    return value ? [value intValue] : defaultValue;
+-}
+-
+ extern "C" int __attribute__((weak)) main(int argc, char *argv[])
+ {
+     @autoreleasepool {
+diff --git a/src/plugins/platforms/ios/qiosglobal.h b/src/plugins/platforms/ios/qiosglobal.h
+index 1c76d29..17184dc 100644
+--- a/src/plugins/platforms/ios/qiosglobal.h
++++ b/src/plugins/platforms/ios/qiosglobal.h
+@@ -61,6 +61,7 @@ QPointF fromCGPoint(const CGPoint &point);
+ Qt::ScreenOrientation toQtScreenOrientation(UIDeviceOrientation uiDeviceOrientation);
+ UIDeviceOrientation fromQtScreenOrientation(Qt::ScreenOrientation qtOrientation);
+ QRect fromPortraitToPrimary(const QRect &rect, QPlatformScreen *screen);
++int infoPlistValue(NSString* key, int defaultValue);
+ 
+ QT_END_NAMESPACE
+ 
+diff --git a/src/plugins/platforms/ios/qiosglobal.mm b/src/plugins/platforms/ios/qiosglobal.mm
+index d749b8f..8dd690f 100644
+--- a/src/plugins/platforms/ios/qiosglobal.mm
++++ b/src/plugins/platforms/ios/qiosglobal.mm
+@@ -134,5 +134,12 @@ QRect fromPortraitToPrimary(const QRect &rect, QPlatformScreen *screen)
+         : QRect(rect.y(), geometry.height() - rect.width() - rect.x(), rect.height(), rect.width());
+ }
+ 
++int infoPlistValue(NSString* key, int defaultValue)
++{
++    static NSBundle *bundle = [NSBundle mainBundle];
++    NSNumber* value = [bundle objectForInfoDictionaryKey:key];
++    return value ? [value intValue] : defaultValue;
++}
++
+ QT_END_NAMESPACE
+ 
+-- 
+1.8.4
+
+
+From 483806f35f0d7f55689addf0abe308b7757741fc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Christian=20Str=C3=B8mme?= <christian.stromme@digia.com>
+Date: Mon, 2 Dec 2013 14:56:50 +0100
+Subject: [PATCH 41/54] Android: Fix crash caused by QJNIs classLoader code.
+
+In some cases the classLoader is not able to resolve fully-qualified
+names that contains forward slashes. Unlike FindClass() which expects
+the fully-qualified name to contain slashes, the classLoader expects
+the binary name, i.e., with '.' as separator.
+
+This caused a crash in QtMultimedia when accessing a nested class.
+
+Task-number: QTBUG-35298
+Change-Id: I77728352fbab930ae1914bc1cb2189e458e179e2
+Reviewed-by: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@digia.com>
+Reviewed-by: BogDan Vatra <bogdan@kde.org>
+
+diff --git a/src/corelib/kernel/qjni.cpp b/src/corelib/kernel/qjni.cpp
+index 4e06d12..aaa75c0 100644
+--- a/src/corelib/kernel/qjni.cpp
++++ b/src/corelib/kernel/qjni.cpp
+@@ -74,7 +74,8 @@ static jclass getCachedClass(JNIEnv *env, const char *className)
+         if (!classLoader.isValid())
+             return 0;
+ 
+-        QJNIObjectPrivate stringName = QJNIObjectPrivate::fromString(QLatin1String(className));
++        QJNIObjectPrivate stringName = QJNIObjectPrivate::fromString(QString::fromLatin1(className).replace(QLatin1Char('/'),
++                                                                                                            QLatin1Char('.')));
+         QJNIObjectPrivate classObject = classLoader.callObjectMethod("loadClass",
+                                                                      "(Ljava/lang/String;)Ljava/lang/Class;",
+                                                                      stringName.object());
+-- 
+1.8.4
+
+
+From 6ebaad14ccd266326186ab338e0153eef580c755 Mon Sep 17 00:00:00 2001
+From: Eike Ziller <eike.ziller@digia.com>
+Date: Wed, 27 Nov 2013 17:22:56 +0100
+Subject: [PATCH 42/54] QStyle: Fix painting of pixmaps with non-integer
+ devicePixelRatio
+
+For example QIcon can return pixmaps with non-integer devicePixelRatio,
+if there is no pixmap that exactly matches the requested size.
+
+Task-number: QTBUG-35125
+Change-Id: I76bfa2766979a454c24b1abcf9e18930f5671c1e
+Reviewed-by: Gabriel de Dietrich <gabriel.dedietrich@digia.com>
+Reviewed-by: Jens Bache-Wiig <jens.bache-wiig@digia.com>
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
+
+diff --git a/src/widgets/styles/qstyle.cpp b/src/widgets/styles/qstyle.cpp
+index 77f869f..da9b5da 100644
+--- a/src/widgets/styles/qstyle.cpp
++++ b/src/widgets/styles/qstyle.cpp
+@@ -619,7 +619,7 @@ void QStyle::drawItemText(QPainter *painter, const QRect &rect, int alignment, c
+ void QStyle::drawItemPixmap(QPainter *painter, const QRect &rect, int alignment,
+                             const QPixmap &pixmap) const
+ {
+-    int scale = pixmap.devicePixelRatio();
++    qreal scale = pixmap.devicePixelRatio();
+     QRect aligned = alignedRect(QApplication::layoutDirection(), QFlag(alignment), pixmap.size() / scale, rect);
+     QRect inter = aligned.intersected(rect);
+ 
+-- 
+1.8.4
+
+
+From 7529d38d836d0d781c2a813d0a973b3ee152611d Mon Sep 17 00:00:00 2001
+From: Gabriel de Dietrich <gabriel.dedietrich@digia.com>
+Date: Tue, 26 Nov 2013 19:42:50 +0100
+Subject: [PATCH 43/54] QComboBox: Don't do anything if wheel event delta is
+ zero
+
+This is a consequence of us wanting to show the OS X transient scrollbars
+as soon as the user touches the trackpad with two fingers.
+
+Task-number: QTBUG-35120
+Change-Id: Icf63b0ec8c32ac66108822804bb06a0762547ef1
+Reviewed-by: Jens Bache-Wiig <jens.bache-wiig@digia.com>
+Reviewed-by: J-P Nurmi <jpnurmi@digia.com>
+
+diff --git a/src/widgets/widgets/qcombobox.cpp b/src/widgets/widgets/qcombobox.cpp
+index 37a14d3..2c09f5a 100644
+--- a/src/widgets/widgets/qcombobox.cpp
++++ b/src/widgets/widgets/qcombobox.cpp
+@@ -3073,7 +3073,7 @@ void QComboBox::wheelEvent(QWheelEvent *e)
+             newIndex--;
+             while ((newIndex >= 0) && !(d->model->flags(d->model->index(newIndex,d->modelColumn,d->root)) & Qt::ItemIsEnabled))
+                 newIndex--;
+-        } else {
++        } else if (e->delta() < 0) {
+             newIndex++;
+             while ((newIndex < count()) && !(d->model->flags(d->model->index(newIndex,d->modelColumn,d->root)) & Qt::ItemIsEnabled))
+                 newIndex++;
+-- 
+1.8.4
+
+
+From de816219eebf0b42df4bcd9089ae4691e9ca3095 Mon Sep 17 00:00:00 2001
+From: Olivier Goffart <ogoffart@woboq.com>
+Date: Thu, 21 Nov 2013 10:08:45 +0100
+Subject: [PATCH 44/54] Document that disconnectNotify may be called with a
+ mutex locked
+
+And that connectNotify and disconnectNotify might be called from
+another thread
+
+Task-number: QTBUG-34829
+
+Change-Id: Id118b97b92e9aa085a1d4368282294f90cfb1706
+Reviewed-by: Alan Alpert <aalpert@blackberry.com>
+
+diff --git a/src/corelib/kernel/qobject.cpp b/src/corelib/kernel/qobject.cpp
+index f8664ba..3fbeaa8 100644
+--- a/src/corelib/kernel/qobject.cpp
++++ b/src/corelib/kernel/qobject.cpp
+@@ -2996,6 +2996,10 @@ bool QObject::disconnect(const QObject *sender, const QMetaMethod &signal,
+     expensive initialization only if something is connected to a
+     signal.
+ 
++    \warning This function is called from the thread which performs the
++    connection, which may be a different thread from the thread in
++    which this object lives.
++
+     \sa connect(), disconnectNotify()
+ */
+ 
+@@ -3022,6 +3026,15 @@ void QObject::connectNotify(const QMetaMethod &signal)
+     modularity. However, it might be useful for optimizing access to
+     expensive resources.
+ 
++    \warning This function is called from the thread which performs the
++    disconnection, which may be a different thread from the thread in
++    which this object lives. This function may also be called with a QObject
++    internal mutex locked. It is therefore not allowed to re-enter any
++    of any QObject functions from your reimplementation and if you lock
++    a mutex in your reimplementation, make sure that you don't call QObject
++    functions with that mutex held in other places or it will result in
++    a deadlock.
++
+     \sa disconnect(), connectNotify()
+ */
+ 
+-- 
+1.8.4
+
+
+From b825a87d54b7ecdd8478216efaf4de7cb514ad64 Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+Date: Tue, 26 Nov 2013 17:02:59 +0100
+Subject: [PATCH 45/54] don't install modules-inst dir
+
+for in-source builds, we end up attempting to install the modules-inst
+dir in case we re-run qmake after some modules have been built.
+
+Change-Id: I50d4d394bfd6f48b9a5f5faa584919710a03dea9
+Reviewed-by: Robin Burchell <robin+qt@viroteck.net>
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+
+diff --git a/qtbase.pro b/qtbase.pro
+index 8da34c5..7576db7 100644
+--- a/qtbase.pro
++++ b/qtbase.pro
+@@ -181,7 +181,7 @@ mkspecs.path = $$[QT_HOST_DATA]/mkspecs
+ mkspecs.files = \
+     $$OUT_PWD/mkspecs/qconfig.pri $$OUT_PWD/mkspecs/qmodule.pri $$OUT_PWD/mkspecs/qdevice.pri \
+     $$files($$PWD/mkspecs/*)
+-mkspecs.files -= $$PWD/mkspecs/modules
++mkspecs.files -= $$PWD/mkspecs/modules $$PWD/mkspecs/modules-inst
+ INSTALLS += mkspecs
+ 
+ global_docs.files = $$PWD/doc/global
+-- 
+1.8.4
+
+
+From 39baff5847e23cbfdc86055b98dcced55342908a Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+Date: Wed, 20 Nov 2013 14:12:15 +0100
+Subject: [PATCH 46/54] support s///i option in built-in sed
+
+Change-Id: I7521699a9b833c8b1d640a843b82f213952bba5a
+Reviewed-by: Joerg Bornemann <joerg.bornemann@digia.com>
+
+diff --git a/qmake/main.cpp b/qmake/main.cpp
+index 79e3739..f5116ba 100644
+--- a/qmake/main.cpp
++++ b/qmake/main.cpp
+@@ -85,6 +85,7 @@ static int doSed(int argc, char **argv)
+                     return 3;
+                 }
+                 QChar sep = ++j < cmd.length() ? cmd.at(j) : QChar();
++                Qt::CaseSensitivity matchcase = Qt::CaseSensitive;
+                 bool escaped = false;
+                 int phase = 1;
+                 QStringList phases;
+@@ -126,12 +127,16 @@ static int doSed(int argc, char **argv)
+                     fprintf(stderr, "Error: sed s command requires three arguments (%d, %c, %s)\n", phase, sep.toLatin1(), qPrintable(curr));
+                     return 3;
+                 }
++                if (curr.contains(QLatin1Char('i'))) {
++                    curr.remove(QLatin1Char('i'));
++                    matchcase = Qt::CaseInsensitive;
++                }
+                 if (curr != QLatin1String("g")) {
+-                    fprintf(stderr, "Error: sed s command must be used with the g option (only)\n");
++                    fprintf(stderr, "Error: sed s command supports only g & i options; g is required\n");
+                     return 3;
+                 }
+                 SedSubst subst;
+-                subst.from = QRegExp(phases.at(0));
++                subst.from = QRegExp(phases.at(0), matchcase);
+                 subst.to = phases.at(1);
+                 subst.to.replace("\\\\", "\\"); // QString::replace(rx, sub) groks \1, but not \\.
+                 substs << subst;
+-- 
+1.8.4
+
+
+From 53f48a4ba2a527735fd67968a211052a8eda00dc Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+Date: Wed, 20 Nov 2013 15:14:52 +0100
+Subject: [PATCH 47/54] properly replace windows paths in installed meta files
+
+it's bogus in the first place that the meta files contain windows paths,
+but straightening that out is a prohibitive effort. so instead generate
+additional s/// commands which take care of these paths.
+
+fwiw, the generated s///i command is a gnu extension. but as we are
+doing this on windows only where we are using our built-in sed command
+anyway, this should be fine.
+
+Task-number: QTBUG-33794
+Change-Id: I46fcc598db12816ee56b5371ab184f6277eb3a22
+Reviewed-by: Joerg Bornemann <joerg.bornemann@digia.com>
+
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index 5068f70..84882cc 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -146,8 +146,10 @@ unix|win32-g++* {
+       rplbase = $$MODULE_BASE_OUTDIR
+    include_replace.match = $$rplbase/include
+    include_replace.replace = $$[QT_INSTALL_HEADERS/raw]
++   include_replace.CONFIG = path
+    lib_replace.match = $$rplbase/lib
+    lib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
++   lib_replace.CONFIG = path
+    QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace
+    QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
+ }
+diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
+index d88c6e4..d40c065 100644
+--- a/qmake/generators/makefile.cpp
++++ b/qmake/generators/makefile.cpp
+@@ -3336,6 +3336,13 @@ MakefileGenerator::writePkgConfigFile()
+     t << endl;
+ }
+ 
++static QString windowsifyPath(const QString &str)
++{
++    // The paths are escaped in prl files, so every slash needs to turn into two backslashes.
++    // Then each backslash needs to be escaped for sed. And another level for C quoting here.
++    return QString(str).replace('/', "\\\\\\\\");
++}
++
+ QString MakefileGenerator::installMetaFile(const ProKey &replace_rule, const QString &src, const QString &dst)
+ {
+     QString ret;
+@@ -3348,8 +3355,12 @@ QString MakefileGenerator::installMetaFile(const ProKey &replace_rule, const QSt
+         for (int r = 0; r < replace_rules.size(); ++r) {
+             const ProString match = project->first(ProKey(replace_rules.at(r) + ".match")),
+                         replace = project->first(ProKey(replace_rules.at(r) + ".replace"));
+-            if (!match.isEmpty() /*&& match != replace*/)
++            if (!match.isEmpty() /*&& match != replace*/) {
+                 ret += " -e " + shellQuote("s," + match + "," + replace + ",g");
++                if (isWindowsShell() && project->first(ProKey(replace_rules.at(r) + ".CONFIG")).contains("path"))
++                    ret += " -e " + shellQuote("s," + windowsifyPath(match.toQString())
++                                               + "," + windowsifyPath(replace.toQString()) + ",gi");
++            }
+         }
+         ret += " \"" + src + "\" >\"" + dst + "\"";
+     }
+diff --git a/src/winmain/winmain.pro b/src/winmain/winmain.pro
+index 4303c3b..62f8b3a 100644
+--- a/src/winmain/winmain.pro
++++ b/src/winmain/winmain.pro
+@@ -34,5 +34,6 @@ wince*:QMAKE_POST_LINK =
+ unix|win32-g++* {
+     lib_replace.match = $$[QT_INSTALL_LIBS/get]
+     lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
++    lib_replace.CONFIG = path
+     QMAKE_PRL_INSTALL_REPLACE += lib_replace
+ }
+-- 
+1.8.4
+
+
+From 08a2d8df4943453a0df8c02a88cfb29f210d0a10 Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+Date: Mon, 25 Nov 2013 17:52:37 +0100
+Subject: [PATCH 48/54] enable path replacement in installed prl files on all
+ platforms
+
+Task-number: QTBUG-33794
+Change-Id: Id0d38715673b8a1c0c034e9c15783eb255c4315b
+Reviewed-by: Joerg Bornemann <joerg.bornemann@digia.com>
+
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index 84882cc..11509ee 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -131,32 +131,33 @@ android: CONFIG += qt_android_deps
+ #install directives
+ load(qt_installs)
+ 
++!isEmpty(_QMAKE_SUPER_CACHE_): \
++    rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
++else: \
++    rplbase = $$MODULE_BASE_OUTDIR
++include_replace.match = $$rplbase/include
++include_replace.replace = $$[QT_INSTALL_HEADERS/raw]
++include_replace.CONFIG = path
++lib_replace.match = $$rplbase/lib
++host_build: \
++    lib_replace.replace = $$[QT_HOST_LIBS]
++else: \
++    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
++lib_replace.CONFIG = path
++QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
++
+ unix|win32-g++* {
+    CONFIG += create_pc
+-   host_build: \
+-       QMAKE_PKGCONFIG_LIBDIR = $$[QT_HOST_LIBS]
+-   else: \
+-       QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
+-   QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
++   QMAKE_PKGCONFIG_LIBDIR = $$lib_replace.replace
++   QMAKE_PKGCONFIG_INCDIR = $$include_replace.replace
+    QMAKE_PKGCONFIG_CFLAGS = -I${includedir}/$$MODULE_INCNAME
+    QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+-   !isEmpty(_QMAKE_SUPER_CACHE_): \
+-      rplbase = $$dirname(_QMAKE_SUPER_CACHE_)/[^/][^/]*
+-   else: \
+-      rplbase = $$MODULE_BASE_OUTDIR
+-   include_replace.match = $$rplbase/include
+-   include_replace.replace = $$[QT_INSTALL_HEADERS/raw]
+-   include_replace.CONFIG = path
+-   lib_replace.match = $$rplbase/lib
+-   lib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
+-   lib_replace.CONFIG = path
+    QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace
+-   QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
+ }
+ 
+ unix {
+    CONFIG += create_libtool explicitlib
+-   QMAKE_LIBTOOL_LIBDIR = $$QMAKE_PKGCONFIG_LIBDIR
++   QMAKE_LIBTOOL_LIBDIR = $$lib_replace.replace
+    QMAKE_LIBTOOL_INSTALL_REPLACE += include_replace lib_replace
+ }
+ 
+diff --git a/src/winmain/winmain.pro b/src/winmain/winmain.pro
+index 62f8b3a..b0771ca 100644
+--- a/src/winmain/winmain.pro
++++ b/src/winmain/winmain.pro
+@@ -31,9 +31,7 @@ load(qt_targets)
+ 
+ wince*:QMAKE_POST_LINK =
+ 
+-unix|win32-g++* {
+-    lib_replace.match = $$[QT_INSTALL_LIBS/get]
+-    lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
+-    lib_replace.CONFIG = path
+-    QMAKE_PRL_INSTALL_REPLACE += lib_replace
+-}
++lib_replace.match = $$[QT_INSTALL_LIBS/get]
++lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
++lib_replace.CONFIG = path
++QMAKE_PRL_INSTALL_REPLACE += lib_replace
+-- 
+1.8.4
+
+
+From 835b8213905b315645bc60ff5f2ab99340d075a2 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Mon, 2 Dec 2013 17:58:25 -0800
+Subject: [PATCH 49/54] Announce the deprecation of platforms still using
+ qoldbasicatomic.h
+
+Change-Id: I480e182c2923754142bc54ff44f798b13bbe71e4
+Reviewed-by: Tuukka Turunen <tuukka.turunen@digia.com>
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+
+diff --git a/dist/changes-5.2.0 b/dist/changes-5.2.0
+index 659bb21..4dd1604 100644
+--- a/dist/changes-5.2.0
++++ b/dist/changes-5.2.0
+@@ -57,6 +57,25 @@ information about a particular change.
+    3rd party build systems not based on qmake or cmake.
+ 
+ ****************************************************************************
++*                   Platform deprecation notice                            *
++****************************************************************************
++
++ - The support for the old implementation of QAtomicInt and
++   QAtomicPointer is deprecated in Qt 5.2 and will be removed in Qt
++   5.3. Building with the following compilers or environments will not
++   be possible in Qt 5.3 or the build will suffer greatly in
++   performance, unless support is revived by writing new atomics code.
++    * Green Hills compiler for INTEGRITY
++    * Sun Studio compiler suite for Solaris
++    * IBM Visual Age compiler suite for AIX
++    * Kernel-mode VxWorks
++
++   Developers interested in picking up support should contact the
++   development mailing list at development@qt-project.org for more
++   information. Note that those platforms are currently not tested. Most
++   likely, they have further problems than just the atomics code.
++
++****************************************************************************
+ *                          Library                                         *
+ ****************************************************************************
+ 
+-- 
+1.8.4
+
+
+From 11899f65bdfef7780f0cff8f223a95c19fb50c53 Mon Sep 17 00:00:00 2001
 From: Tobias Koenig <tobias.koenig.qnx@kdab.com>
 Date: Wed, 27 Nov 2013 13:11:01 +0100
-Subject: [PATCH 27/31] Fix sub-second handling in SQLite driver
+Subject: [PATCH 50/54] Fix sub-second handling in SQLite driver
 
 Use explicit format string, that contains milliseconds, when
 converting an QDateTime/QTime to a SQLite field content.
@@ -1646,10 +2911,10 @@ index 0a8b71a..27bc80e 100644
 1.8.4
 
 
-From 6b466682f5e843c393b58644252ec32457df8123 Mon Sep 17 00:00:00 2001
+From 2a806362606a9a9aca24edcbf13fb9b82c86abb6 Mon Sep 17 00:00:00 2001
 From: Tobias Koenig <tobias.koenig.qnx@kdab.com>
 Date: Sat, 30 Nov 2013 14:40:11 +0100
-Subject: [PATCH 28/31] Fix evaluation of SQLite driver options
+Subject: [PATCH 51/54] Fix evaluation of SQLite driver options
 
 Ensure that the options, which are passed to the SQLite driver, are
 evaluated in the correct order and do not overwrite each other.
@@ -1716,10 +2981,10 @@ index 27bc80e..c98d643 100644
 1.8.4
 
 
-From 8a1cbc506eaa6816676898517c1c4a22309739ca Mon Sep 17 00:00:00 2001
+From f87966e9d7b86230dcbc8f939c502d67ebc88f6a Mon Sep 17 00:00:00 2001
 From: Nicolas Cornu <ncornu@aldebaran-robotics.com>
 Date: Thu, 28 Nov 2013 00:06:41 +0100
-Subject: [PATCH 29/31] Allow temporary databases in sqlite driver
+Subject: [PATCH 52/54] Allow temporary databases in sqlite driver
 
 http://www3.sqlite.org/inmemorydb.html#temp_db
 [ChangeLog][QtSql][QSQLITE] Enable creating temporary databases
@@ -1762,10 +3027,10 @@ index c98d643..55ef092 100644
 1.8.4
 
 
-From af3276b7217497e82256d031bcc4b3b0bf7209f3 Mon Sep 17 00:00:00 2001
+From 0fa177b23588181bc9eaa0e0c39fe26db4d37147 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 30/31] use pkg-config for freetype
+Subject: [PATCH 53/54] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -1785,10 +3050,10 @@ index 88be809..8fc19d2 100644
 1.8.4
 
 
-From 44adac2c8b0223c0cf12494d4dfb44ff5431a716 Mon Sep 17 00:00:00 2001
+From 04d19551a7b47594480b9f0033b9ec4c8546e1ff Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 31/31] use pkgconfig for icu detection (MXE specific)
+Subject: [PATCH 54/54] use pkgconfig for icu detection (MXE specific)
 
 Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
 
