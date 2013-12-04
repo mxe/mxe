@@ -4,7 +4,7 @@
 PKG             := netcdf
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.3.0
-$(PKG)_CHECKSUM := 31b4b3b17146cc8c14a8c7be3fe5f28e5a8a5deb
+$(PKG)_CHECKSUM := 246e4963e66e1c175563cc9a714e9da0a19b8b07
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.unidata.ucar.edu/downloads/netcdf/ftp/$($(PKG)_FILE)
