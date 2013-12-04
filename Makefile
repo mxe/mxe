@@ -366,6 +366,11 @@ endef
 update:
 	$(foreach PKG,$(PKGS),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
 
+update-package-%:
+	$(if $(findstring $*~,$(addsuffix ~,$(PKGS))), \
+	     $(call UPDATE,$*,$(shell $($*_UPDATE))), \
+	     $(error package $* not found in index.html))
+
 update-checksum-%:
 	$(if $(findstring $*~,$(addsuffix ~,$(PKGS))), \
 		$(call DOWNLOAD_PKG_ARCHIVE,$*) && \
