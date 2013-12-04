@@ -15,6 +15,7 @@ define $(PKG)_UPDATE
     $(SED) -n 's,.*opus-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'alpha' | \
     grep -v 'beta' | \
+    grep -v 'rc' | \
     $(SORT) -Vr | \
     head -1
 endef
