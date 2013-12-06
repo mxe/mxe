@@ -4,7 +4,7 @@ See index.html for further information.
 From e903b5cddaaa606300292ad2cf26c2b6ee111cdd Mon Sep 17 00:00:00 2001
 From: Simon Hausmann <simon.hausmann@digia.com>
 Date: Tue, 26 Nov 2013 10:45:53 +0100
-Subject: [PATCH 01/54] Fix for co-existence of QtDeclarative and QtQml
+Subject: [PATCH 01/57] Fix for co-existence of QtDeclarative and QtQml
 
 As a follow-up to commit 2f87fde9bb4bad6787101c0d135419b350b201a5, we also need
 to change "hack" in the QGraphicsItem and QWidget destructor for early item
@@ -54,7 +54,7 @@ index 1da0be9..421ce57 100644
 From 939a001c3ac33ebf801d2594ac9073da28d09a46 Mon Sep 17 00:00:00 2001
 From: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@digia.com>
 Date: Tue, 26 Nov 2013 10:13:04 +0100
-Subject: [PATCH 02/54] Android: Remove invalid error message
+Subject: [PATCH 02/57] Android: Remove invalid error message
 
 All usage of context menus prints out an error message because
 onContextMenuClosed() is called more than once. We just return
@@ -87,7 +87,7 @@ index 3dcffeb..3bcd6ea 100644
 From 08f3177fdfc9aefbd4232dcd1529b537b2ca9402 Mon Sep 17 00:00:00 2001
 From: Gabriel de Dietrich <gabriel.dedietrich@digia.com>
 Date: Mon, 25 Nov 2013 13:41:49 +0100
-Subject: [PATCH 03/54] CoreWLan: Fix potential unhandled exception assert
+Subject: [PATCH 03/57] CoreWLan: Fix potential unhandled exception assert
 
 -[QNSListener notificationHandler:] was declared as not taking any parameter,
 but used as taking a single NSNotification. This would lead to an 'unrecognized
@@ -152,7 +152,7 @@ index 1b95ae2..7044e96 100644
 From f03fd0d82a50361c0b89165b3f8d98d66b0a4e16 Mon Sep 17 00:00:00 2001
 From: Stephen Kelly <stephen.kelly@kdab.com>
 Date: Tue, 26 Nov 2013 15:06:20 +0100
-Subject: [PATCH 04/54] Remove leading '/' from target paths.
+Subject: [PATCH 04/57] Remove leading '/' from target paths.
 
 This is inappropriate on Windows, and breaks non-prefix builds there.
 
@@ -187,7 +187,7 @@ index a9b0c86..1e6b05c 100644
 From 94c17dce04c7726afbdd6ac67c569eedc629a81a Mon Sep 17 00:00:00 2001
 From: Frank Osterfeld <frank.osterfeld.qnx@kdab.com>
 Date: Fri, 22 Nov 2013 10:43:49 +0100
-Subject: [PATCH 05/54] QNX: Fix retrieving the window group name
+Subject: [PATCH 05/57] QNX: Fix retrieving the window group name
 
 The code assumes that there is a root window, and crashed
 otherwise.
@@ -223,7 +223,7 @@ index 8958a5c..24af5c2 100644
 From 4fbe50e77a8d24d42581cdeabd1e93cb993b0d8d Mon Sep 17 00:00:00 2001
 From: Yoann Lopes <yoann.lopes@digia.com>
 Date: Fri, 22 Nov 2013 18:45:49 +0100
-Subject: [PATCH 06/54] Revert "Store the font's scalability in QFontEngine."
+Subject: [PATCH 06/57] Revert "Store the font's scalability in QFontEngine."
 
 This reverts commit 65b12fbdb13d34c61bcadd5cc8fd6ee28a8dfafd.
 
@@ -281,7 +281,7 @@ index 07be498..c181d61 100644
 From 82a2d28d841c7f59fa76fae6a67e1712a5fb4740 Mon Sep 17 00:00:00 2001
 From: Stephen Kelly <stephen.kelly@kdab.com>
 Date: Wed, 27 Nov 2013 12:22:54 +0100
-Subject: [PATCH 07/54] CMake: Parse the output of new CMake versions.
+Subject: [PATCH 07/57] CMake: Parse the output of new CMake versions.
 
 As of CMake 3.0, the output of `cmake --version` now has a second line
 showing that it is maintained by Kitware. Change the version parsing to
@@ -315,7 +315,7 @@ index 118eed1..a9461eb 100644
 From 7c029e83a3e5058f7b82efd0235e766952357ffd Mon Sep 17 00:00:00 2001
 From: Simon Hausmann <simon.hausmann@digia.com>
 Date: Thu, 28 Nov 2013 11:00:15 +0100
-Subject: [PATCH 08/54] Fix invalid memory read when shutting down QML
+Subject: [PATCH 08/57] Fix invalid memory read when shutting down QML
  applications
 
 As the last line in the QObject destructor, we call setParentHelper(0) to
@@ -405,7 +405,7 @@ index ece88d4..f1e0451 100644
 From bedc5a3ae268594100b5e0eb8f35c0ce2b95ee96 Mon Sep 17 00:00:00 2001
 From: Marc Mutz <marc.mutz@kdab.com>
 Date: Tue, 26 Nov 2013 12:27:45 +0100
-Subject: [PATCH 09/54] Update ChangeLog for 5.2.0 [QtWidgets II]
+Subject: [PATCH 09/57] Update ChangeLog for 5.2.0 [QtWidgets II]
 
 Second batch of changes.
 
@@ -651,7 +651,7 @@ index f513d64..30cd288 100644
 From c5b19f252188a01dd7b12090f4776420e3714000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Thu, 28 Nov 2013 15:33:06 +0100
-Subject: [PATCH 10/54] iOS: Forward [UIApplicationDelegate handleOpenURL:] to
+Subject: [PATCH 10/57] iOS: Forward [UIApplicationDelegate handleOpenURL:] to
  QDesktopServices
 
 The user may use QDesktopServices::setUrlHandler() in combination with
@@ -785,7 +785,7 @@ index 32203ae..0ac6c59 100644
 From 9b782dca45331c0e0246b8439d5cf007a440afc8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Wed, 27 Nov 2013 18:20:10 +0100
-Subject: [PATCH 11/54] iOS: Update screen properties when we trigger statusbar
+Subject: [PATCH 11/57] iOS: Update screen properties when we trigger statusbar
  changes on iOS7
 
 Ideally we'd have a callback from iOS when this happens, so we can also
@@ -918,7 +918,7 @@ index 30cd288..a51cc91 100644
 From 6c3adb5f966e349f0488c194462e48cc8ddf248e Mon Sep 17 00:00:00 2001
 From: Nico Vertriest <nico.vertriest@digia.com>
 Date: Wed, 27 Nov 2013 14:47:26 +0100
-Subject: [PATCH 14/54] Doc: corrected invalid ref. to output iterators
+Subject: [PATCH 14/57] Doc: corrected invalid ref. to output iterators
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -961,7 +961,7 @@ index cd38947..412b9cf 100644
 From 7d5448d9e2ae4d2d10c0cff867cf34b315336feb Mon Sep 17 00:00:00 2001
 From: J-P Nurmi <jpnurmi@digia.com>
 Date: Wed, 27 Nov 2013 13:24:59 +0100
-Subject: [PATCH 15/54] Docs: add important QWheelEvent::phase() related notes
+Subject: [PATCH 15/57] Docs: add important QWheelEvent::phase() related notes
 
 Change-Id: I4901b96b44b7c1179e678689af5962cb4570d50d
 Reviewed-by: Jens Bache-Wiig <jens.bache-wiig@digia.com>
@@ -1015,7 +1015,7 @@ index 2866608..88f132b 100644
 From b8ccacbb03cb8d265209970c4443218dac33fc81 Mon Sep 17 00:00:00 2001
 From: BogDan Vatra <bogdan@kde.org>
 Date: Mon, 2 Dec 2013 16:48:18 +0200
-Subject: [PATCH 16/54] Default to 5.2 source repository for Qt 5.2.x
+Subject: [PATCH 16/57] Default to 5.2 source repository for Qt 5.2.x
 
 We can't use latest anymore because the qreal change
 is not back compatible and all the apps that used latest
@@ -1057,7 +1057,7 @@ index 7c741ed..a10e58b 100644
 From 923d498029be406a684f8953afc68f10c07e2789 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Tue, 26 Nov 2013 14:48:02 +0100
-Subject: [PATCH 17/54] Add PBXCopyFilesBuildPhases to main target, not
+Subject: [PATCH 17/57] Add PBXCopyFilesBuildPhases to main target, not
  preprocessing step
 
 Otherwise the 'Wrapper' destination of the PBXCopyFilesBuildPhase
@@ -1090,7 +1090,7 @@ index 5ea1ff1..e50df93 100644
 From 5361513ec812c545ca2cedea6c8a30c362cb8e5d Mon Sep 17 00:00:00 2001
 From: Christoph Schleifenbaum <christoph.schleifenbaum@kdab.com>
 Date: Mon, 25 Nov 2013 19:45:06 +0100
-Subject: [PATCH 18/54] Cocoa: Mouse enter events on window activation.
+Subject: [PATCH 18/57] Cocoa: Mouse enter events on window activation.
 
 This patch tells the window system that it should create a mouse enter
 event if a window was activated when the mouse was inside. This wasn't
@@ -1157,7 +1157,7 @@ index 10536bd..c9b3d69 100644
 From d1f9f2125e6cbba236dc50309a4aee2dc16a6345 Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@digia.com>
 Date: Tue, 3 Dec 2013 09:01:50 +0100
-Subject: [PATCH 19/54] Stabilize tst_QColumnView::dynamicModelChanges().
+Subject: [PATCH 19/57] Stabilize tst_QColumnView::dynamicModelChanges().
 
 Use QTest::qWaitForWindowExposed() and QTRY_COMPARE() instead of
 hardcoded timeout.
@@ -1194,7 +1194,7 @@ index 6c04e5b..e2b2fb9 100644
 From 789b556ef1241dd3169c6040944fff44b88d9be6 Mon Sep 17 00:00:00 2001
 From: Topi Reinio <topi.reinio@digia.com>
 Date: Fri, 29 Nov 2013 15:51:12 +0100
-Subject: [PATCH 20/54] Use Q_QDOC for Qt namespace declaration in Qt Gui
+Subject: [PATCH 20/57] Use Q_QDOC for Qt namespace declaration in Qt Gui
 
 This is a workaround for letting qdoc to successfully
 generate documentation for the Qt namespace. qdoc
@@ -1233,7 +1233,7 @@ index a85e9c8..d8f52e9 100644
 From edd51e44869c9774071355f32830ea510eafde04 Mon Sep 17 00:00:00 2001
 From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
 Date: Wed, 13 Nov 2013 19:14:45 +0100
-Subject: [PATCH 21/54] Revert "configure: Abort if Xlib isn't present when
+Subject: [PATCH 21/57] Revert "configure: Abort if Xlib isn't present when
  building for XCB."
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -1328,7 +1328,7 @@ index 6c26ddb..fc1d0e3 100644
 From 9302169bd5ad8380ebe95f50986d2b32eb486901 Mon Sep 17 00:00:00 2001
 From: Nikolai Kosjar <nikolai.kosjar@digia.com>
 Date: Fri, 29 Nov 2013 14:06:50 +0100
-Subject: [PATCH 24/54] QtConcurrent: Workaround GCC bug 58800 in median
+Subject: [PATCH 24/57] QtConcurrent: Workaround GCC bug 58800 in median
  calculation
 
 1) Revert 880b614 for libstdc++ <= 4.7.3 || (4.8.0 >= ... <= 4.8.2)
@@ -1486,7 +1486,7 @@ index 0000000..c9fbc79
 From 119ea0f2dbaa4cdea6929e542c59f99b2dfd0ef9 Mon Sep 17 00:00:00 2001
 From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
 Date: Mon, 2 Dec 2013 22:34:26 +0100
-Subject: [PATCH 25/54] iOS: fix application hangs when opening keyboard
+Subject: [PATCH 25/57] iOS: fix application hangs when opening keyboard
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -1536,7 +1536,7 @@ index 0dd810b..43f36e3 100644
 From 1fc28716e67cb9a4384c99c39e8a283ca344e771 Mon Sep 17 00:00:00 2001
 From: Martin Smith <martin.smith@digia.com>
 Date: Mon, 2 Dec 2013 10:46:21 +0100
-Subject: [PATCH 26/54] qdoc: Replaced hard-coded href with computed href
+Subject: [PATCH 26/57] qdoc: Replaced hard-coded href with computed href
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -1596,7 +1596,7 @@ index f252532..ae16f3c 100644
 From ac54abfb07579c747612c0d9e53089fe5cd32caf Mon Sep 17 00:00:00 2001
 From: J-P Nurmi <jpnurmi@digia.com>
 Date: Mon, 2 Dec 2013 22:23:11 +0100
-Subject: [PATCH 27/54] Fix style animations to stop when the animation target
+Subject: [PATCH 27/57] Fix style animations to stop when the animation target
  is hidden
 
 QStyleAnimation automatically stopped for hidden QWidgets, but didn't
@@ -1702,7 +1702,7 @@ index 4fb67d9..90fb371 100644
 From dd97932a04c1ef27d0e4d73b701acc2aad411b07 Mon Sep 17 00:00:00 2001
 From: Topi Reinio <topi.reinio@digia.com>
 Date: Tue, 3 Dec 2013 14:42:40 +0100
-Subject: [PATCH 28/54] qdoc: Fix output filenames for QML basic type
+Subject: [PATCH 28/57] qdoc: Fix output filenames for QML basic type
  documentation
 
 qdoc intends to prepend all html files related to QML with
@@ -1752,7 +1752,7 @@ index 97a980a..3cbba78 100644
 From 32f71db1bdcf93c8a03a9ef11ff4044479afa369 Mon Sep 17 00:00:00 2001
 From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
 Date: Tue, 3 Dec 2013 13:55:20 +0100
-Subject: [PATCH 29/54] iOS: fix crash when application quits
+Subject: [PATCH 29/57] iOS: fix crash when application quits
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -1812,7 +1812,7 @@ index 43f36e3..7b217e0 100644
 From bd9cf0b7b96ea5836d18259b073870f8b145b46d Mon Sep 17 00:00:00 2001
 From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
 Date: Mon, 2 Dec 2013 22:32:13 +0100
-Subject: [PATCH 30/54] iOS: fix crash when focusWindow changes while keyboard
+Subject: [PATCH 30/57] iOS: fix crash when focusWindow changes while keyboard
  is open
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -1851,7 +1851,7 @@ index 0e43429..ea6a0bd 100644
 From 41dedabb0115da186583c49f7fc93882f3e8abde Mon Sep 17 00:00:00 2001
 From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
 Date: Mon, 2 Dec 2013 22:22:54 +0100
-Subject: [PATCH 31/54] added buildsystem/qmake changelog
+Subject: [PATCH 31/57] added buildsystem/qmake changelog
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -1927,7 +1927,7 @@ index a51cc91..659bb21 100644
 From 1983bc9c374fc8b83f608ecc1e6ce6ef4f54e572 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@digia.com>
 Date: Mon, 2 Dec 2013 23:18:00 +0100
-Subject: [PATCH 32/54] Make layoutDirection pass with new expose behavior
+Subject: [PATCH 32/57] Make layoutDirection pass with new expose behavior
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -1965,7 +1965,7 @@ index 7c1bb95..ece9026 100644
 From c6874106850f64c9d1b38238988110bdd4198336 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@digia.com>
 Date: Mon, 25 Nov 2013 09:03:42 +0100
-Subject: [PATCH 33/54] Improve expose event handling.
+Subject: [PATCH 33/57] Improve expose event handling.
 
 Prevent the cocoa platform plugin from sending expose
 events for windows that are off-screen or has invalid
@@ -2121,7 +2121,7 @@ index 71c4de3..1c15c3b 100644
 From 520eee8570c8ddf4014d896ae3f121c315274000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Tue, 3 Dec 2013 15:37:49 +0100
-Subject: [PATCH 34/54] iOS: Disable drag and drop completely instead of
+Subject: [PATCH 34/57] iOS: Disable drag and drop completely instead of
  enabling simple d'n'd
 
 The drag and drop event filters do not play nicely with touch events
@@ -2151,7 +2151,7 @@ index c655d8d..fdecf70 100644
 From b05b940185450af70791befd47b2dd47eb0acfd5 Mon Sep 17 00:00:00 2001
 From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
 Date: Wed, 4 Dec 2013 13:24:21 +0100
-Subject: [PATCH 35/54] iOS: fix assert when using QOffscreenSurface
+Subject: [PATCH 35/57] iOS: fix assert when using QOffscreenSurface
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -2195,7 +2195,7 @@ index 7b217e0..5374bc5 100644
 From 63aa431999881d034d412bd74c0ddcb539684782 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@digia.com>
 Date: Thu, 28 Nov 2013 23:47:29 +0100
-Subject: [PATCH 36/54] Revert "Cocoa (OpenGL): If no view is attached,
+Subject: [PATCH 36/57] Revert "Cocoa (OpenGL): If no view is attached,
  makeCurrent() should return false"
 
 This reverts commit 2eb1e28a90eaf82f4405dc65584021f16415014b,
@@ -2226,7 +2226,7 @@ index 1441443..0f45386 100644
 From 04ccc2b255633deb6dd1bfd8ff56efdbff58a543 Mon Sep 17 00:00:00 2001
 From: hjk <hjk121@nokiamail.com>
 Date: Thu, 28 Nov 2013 16:08:53 +0100
-Subject: [PATCH 37/54] Doc: Adjust description of the qreal typedef
+Subject: [PATCH 37/57] Doc: Adjust description of the qreal typedef
 
 Change-Id: I038df8034ee00868eeee18b1ed09f7a70e3dd77a
 Reviewed-by: Jerome Pasion <jerome.pasion@digia.com>
@@ -2256,7 +2256,7 @@ index 0c72bd7..279ba20 100644
 From 996d78d4c94a0116eecec160caf605ea3629f36c Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tor=20Arne=20Vestb=C3=B8?= <tor.arne.vestbo@digia.com>
 Date: Thu, 28 Nov 2013 13:09:44 +0100
-Subject: [PATCH 38/54] iOS: Handle statusbar changes to child windows
+Subject: [PATCH 38/57] iOS: Handle statusbar changes to child windows
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -2329,7 +2329,7 @@ index 5374bc5..d62d542 100644
 From 2e132854460e11a1ade516f61477723202d56a93 Mon Sep 17 00:00:00 2001
 From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
 Date: Tue, 26 Nov 2013 11:13:56 +0100
-Subject: [PATCH 39/54] iOS: don't show statusbar if hidden from Info.plist
+Subject: [PATCH 39/57] iOS: don't show statusbar if hidden from Info.plist
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -2369,7 +2369,7 @@ index 9a9fba5..0a6a00b 100644
 From 6c5febd20331b58f0e55f137af6200d701b03b0e Mon Sep 17 00:00:00 2001
 From: Richard Moe Gustavsen <richard.gustavsen@digia.com>
 Date: Tue, 26 Nov 2013 10:38:21 +0100
-Subject: [PATCH 40/54] iOS: move infoPlistValue to qiosglobal
+Subject: [PATCH 40/57] iOS: move infoPlistValue to qiosglobal
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -2431,7 +2431,7 @@ index d749b8f..8dd690f 100644
 From 483806f35f0d7f55689addf0abe308b7757741fc Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Christian=20Str=C3=B8mme?= <christian.stromme@digia.com>
 Date: Mon, 2 Dec 2013 14:56:50 +0100
-Subject: [PATCH 41/54] Android: Fix crash caused by QJNIs classLoader code.
+Subject: [PATCH 41/57] Android: Fix crash caused by QJNIs classLoader code.
 
 In some cases the classLoader is not able to resolve fully-qualified
 names that contains forward slashes. Unlike FindClass() which expects
@@ -2466,7 +2466,7 @@ index 4e06d12..aaa75c0 100644
 From 6ebaad14ccd266326186ab338e0153eef580c755 Mon Sep 17 00:00:00 2001
 From: Eike Ziller <eike.ziller@digia.com>
 Date: Wed, 27 Nov 2013 17:22:56 +0100
-Subject: [PATCH 42/54] QStyle: Fix painting of pixmaps with non-integer
+Subject: [PATCH 42/57] QStyle: Fix painting of pixmaps with non-integer
  devicePixelRatio
 
 For example QIcon can return pixmaps with non-integer devicePixelRatio,
@@ -2498,7 +2498,7 @@ index 77f869f..da9b5da 100644
 From 7529d38d836d0d781c2a813d0a973b3ee152611d Mon Sep 17 00:00:00 2001
 From: Gabriel de Dietrich <gabriel.dedietrich@digia.com>
 Date: Tue, 26 Nov 2013 19:42:50 +0100
-Subject: [PATCH 43/54] QComboBox: Don't do anything if wheel event delta is
+Subject: [PATCH 43/57] QComboBox: Don't do anything if wheel event delta is
  zero
 
 This is a consequence of us wanting to show the OS X transient scrollbars
@@ -2529,7 +2529,7 @@ index 37a14d3..2c09f5a 100644
 From de816219eebf0b42df4bcd9089ae4691e9ca3095 Mon Sep 17 00:00:00 2001
 From: Olivier Goffart <ogoffart@woboq.com>
 Date: Thu, 21 Nov 2013 10:08:45 +0100
-Subject: [PATCH 44/54] Document that disconnectNotify may be called with a
+Subject: [PATCH 44/57] Document that disconnectNotify may be called with a
  mutex locked
 
 And that connectNotify and disconnectNotify might be called from
@@ -2578,7 +2578,7 @@ index f8664ba..3fbeaa8 100644
 From b825a87d54b7ecdd8478216efaf4de7cb514ad64 Mon Sep 17 00:00:00 2001
 From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
 Date: Tue, 26 Nov 2013 17:02:59 +0100
-Subject: [PATCH 45/54] don't install modules-inst dir
+Subject: [PATCH 45/57] don't install modules-inst dir
 
 for in-source builds, we end up attempting to install the modules-inst
 dir in case we re-run qmake after some modules have been built.
@@ -2608,7 +2608,7 @@ index 8da34c5..7576db7 100644
 From 39baff5847e23cbfdc86055b98dcced55342908a Mon Sep 17 00:00:00 2001
 From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
 Date: Wed, 20 Nov 2013 14:12:15 +0100
-Subject: [PATCH 46/54] support s///i option in built-in sed
+Subject: [PATCH 46/57] support s///i option in built-in sed
 
 Change-Id: I7521699a9b833c8b1d640a843b82f213952bba5a
 Reviewed-by: Joerg Bornemann <joerg.bornemann@digia.com>
@@ -2651,7 +2651,7 @@ index 79e3739..f5116ba 100644
 From 53f48a4ba2a527735fd67968a211052a8eda00dc Mon Sep 17 00:00:00 2001
 From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
 Date: Wed, 20 Nov 2013 15:14:52 +0100
-Subject: [PATCH 47/54] properly replace windows paths in installed meta files
+Subject: [PATCH 47/57] properly replace windows paths in installed meta files
 
 it's bogus in the first place that the meta files contain windows paths,
 but straightening that out is a prohibitive effort. so instead generate
@@ -2730,7 +2730,7 @@ index 4303c3b..62f8b3a 100644
 From 08a2d8df4943453a0df8c02a88cfb29f210d0a10 Mon Sep 17 00:00:00 2001
 From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
 Date: Mon, 25 Nov 2013 17:52:37 +0100
-Subject: [PATCH 48/54] enable path replacement in installed prl files on all
+Subject: [PATCH 48/57] enable path replacement in installed prl files on all
  platforms
 
 Task-number: QTBUG-33794
@@ -2817,7 +2817,7 @@ index 62f8b3a..b0771ca 100644
 From 835b8213905b315645bc60ff5f2ab99340d075a2 Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Mon, 2 Dec 2013 17:58:25 -0800
-Subject: [PATCH 49/54] Announce the deprecation of platforms still using
+Subject: [PATCH 49/57] Announce the deprecation of platforms still using
  qoldbasicatomic.h
 
 Change-Id: I480e182c2923754142bc54ff44f798b13bbe71e4
@@ -2858,10 +2858,161 @@ index 659bb21..4dd1604 100644
 1.8.4
 
 
-From 11899f65bdfef7780f0cff8f223a95c19fb50c53 Mon Sep 17 00:00:00 2001
+From 7cfe7c198224babeb06eac583e419bbd82c7217e Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@digia.com>
+Date: Fri, 6 Dec 2013 10:17:05 +0200
+Subject: [PATCH 50/57] Windows command line parsing: Do escape backslash.
+
+This will break network paths passed as command line arguments.
+
+Introduced by 4ff6951550cb6e39c3b31895c3af57037e90c9ac .
+
+Task-number: QTBUG-35432
+Task-number: QTBUG-30628
+
+Change-Id: Ice9ce15275ef69e9e9e82daf5a303e7c56294368
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
+
+diff --git a/src/corelib/kernel/qcorecmdlineargs_p.h b/src/corelib/kernel/qcorecmdlineargs_p.h
+index d1cfa2d..bbbee7d 100644
+--- a/src/corelib/kernel/qcorecmdlineargs_p.h
++++ b/src/corelib/kernel/qcorecmdlineargs_p.h
+@@ -101,8 +101,8 @@ static QVector<Char*> qWinCmdLine(Char *cmdParam, int length, int &argc)
+                     }
+                 }
+                 if (*p == '\\') {                // escape char?
+-                    // testing by looking at argc, argv shows that it only escapes quotes and backslashes
+-                    if (p < p_end && (*(p+1) == Char('\"') || *(p+1) == Char('\\')))
++                    // testing by looking at argc, argv shows that it only escapes quotes
++                    if (p < p_end && (*(p+1) == Char('\"')))
+                         p++;
+                 } else {
+                     if (!quote && (*p == Char('\"'))) {
+diff --git a/tests/auto/corelib/tools/qcommandlineparser/tst_qcommandlineparser.cpp b/tests/auto/corelib/tools/qcommandlineparser/tst_qcommandlineparser.cpp
+index d8965de..06234ad 100644
+--- a/tests/auto/corelib/tools/qcommandlineparser/tst_qcommandlineparser.cpp
++++ b/tests/auto/corelib/tools/qcommandlineparser/tst_qcommandlineparser.cpp
+@@ -550,15 +550,16 @@ void tst_QCommandLineParser::testQuoteEscaping()
+     QProcess process;
+     process.start("testhelper/qcommandlineparser_test_helper", QStringList() <<
+             QString::number(QCommandLineParser::ParseAsCompactedShortOptions) <<
+-            "-DKEY1=\"VALUE1\"" << "-DKEY2=\\\"VALUE2\\\"" <<
++            "\\\\server\\path" <<
++            "-DKEY1=\"VALUE1\""
+             "-DQTBUG-15379=C:\\path\\'file.ext" <<
+             "-DQTBUG-30628=C:\\temp\\'file'.ext");
+     QVERIFY(process.waitForFinished(5000));
+     QCOMPARE(process.exitStatus(), QProcess::NormalExit);
+     QString output = process.readAll();
+     QVERIFY2(!output.contains("ERROR"), qPrintable(output));
++    QVERIFY2(output.contains("\\\\server\\path"), qPrintable(output));
+     QVERIFY2(output.contains("KEY1=\"VALUE1\""), qPrintable(output));
+-    QVERIFY2(output.contains("KEY2=\\\"VALUE2\\\""), qPrintable(output));
+     QVERIFY2(output.contains("QTBUG-15379=C:\\path\\'file.ext"), qPrintable(output));
+     QVERIFY2(output.contains("QTBUG-30628=C:\\temp\\'file'.ext"), qPrintable(output));
+ }
+-- 
+1.8.4
+
+
+From 7972553aca51587eb1dda80509ec66766e0743c2 Mon Sep 17 00:00:00 2001
+From: Allan Sandfeld Jensen <allan.jensen@digia.com>
+Date: Tue, 26 Nov 2013 10:24:17 +0100
+Subject: [PATCH 51/57] Update ChangeLog with new QImage formats
+
+Change-Id: I4023edc29e81a8c29c3259c6024a5a20eda1aeec
+Reviewed-by: Jani Heikkinen <jani.heikkinen@digia.com>
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+
+diff --git a/dist/changes-5.2.0 b/dist/changes-5.2.0
+index 4dd1604..0e3f189 100644
+--- a/dist/changes-5.2.0
++++ b/dist/changes-5.2.0
+@@ -314,6 +314,10 @@ QtGui
+    * When a QVariant holds a QPolygonF() then it will be correctly seen as
+      a null QVariant.
+ 
++ - QImage:
++   * Added three byte-ordered RGBA8888 format that simplifies interaction
++     with OpenGL and other technologies that internally using RGBA formats.
++
+  - [QTBUG-27349] Reintroduced command line argument for positioning
+    windows (-geometry on X11, -qwindowgeometry on other platforms)
+ 
+-- 
+1.8.4
+
+
+From 313a74cc4a9a5d200b2059d3d8767fe1a274c50d Mon Sep 17 00:00:00 2001
+From: Simon Hausmann <simon.hausmann@digia.com>
+Date: Fri, 6 Dec 2013 16:19:08 +0100
+Subject: [PATCH 52/57] Fix QtDeclarative and QtQml co-existence part three ;(
+
+Unfortunately the QObject destroyed callbacks for QtQml and QtDeclarative can't
+be called in sequence, because if the QQmlData has the ownsMemory bit set, then
+the destroyed callback will delete the QQmlData, and the sub-sequent call to
+the destroyed callback of qml1 will try to dereference the QQmlData's first bit
+(ownedByQml1), which is already destroyed.
+
+This patch fixes that by simply sharing the assumption of the first bit
+indicating module ownership (QtQml vs. QtDeclarative) also to qtbase and using
+it to distinguish between which destroyed callback function to call.
+
+Task-number: QTCREATORBUG-10273
+
+Change-Id: I2773a31a3e9b3a1c22d1c1f33b2f29f3296cb3cf
+Reviewed-by: Olivier Goffart <ogoffart@woboq.com>
+Reviewed-by: Lars Knoll <lars.knoll@digia.com>
+
+diff --git a/src/corelib/kernel/qobject.cpp b/src/corelib/kernel/qobject.cpp
+index 3fbeaa8..7e06e2c 100644
+--- a/src/corelib/kernel/qobject.cpp
++++ b/src/corelib/kernel/qobject.cpp
+@@ -808,10 +808,13 @@ QObject::~QObject()
+     }
+ 
+     if (d->declarativeData) {
+-        if (QAbstractDeclarativeData::destroyed)
+-            QAbstractDeclarativeData::destroyed(d->declarativeData, this);
+-        if (QAbstractDeclarativeData::destroyed_qml1)
+-            QAbstractDeclarativeData::destroyed_qml1(d->declarativeData, this);
++        if (static_cast<QAbstractDeclarativeDataImpl*>(d->declarativeData)->ownedByQml1) {
++            if (QAbstractDeclarativeData::destroyed_qml1)
++                QAbstractDeclarativeData::destroyed_qml1(d->declarativeData, this);
++        } else {
++            if (QAbstractDeclarativeData::destroyed)
++                QAbstractDeclarativeData::destroyed(d->declarativeData, this);
++        }
+     }
+ 
+     // set ref to zero to indicate that this object has been deleted
+diff --git a/src/corelib/kernel/qobject_p.h b/src/corelib/kernel/qobject_p.h
+index cd2d592..011e140 100644
+--- a/src/corelib/kernel/qobject_p.h
++++ b/src/corelib/kernel/qobject_p.h
+@@ -97,6 +97,14 @@ public:
+     static bool (*isSignalConnected)(QAbstractDeclarativeData *, const QObject *, int);
+ };
+ 
++// This is an implementation of QAbstractDeclarativeData that is identical with
++// the implementation in QtDeclarative and QtQml for the first bit
++struct QAbstractDeclarativeDataImpl : public QAbstractDeclarativeData
++{
++    quint32 ownedByQml1:1;
++    quint32 unused: 31;
++};
++
+ class Q_CORE_EXPORT QObjectPrivate : public QObjectData
+ {
+     Q_DECLARE_PUBLIC(QObject)
+-- 
+1.8.4
+
+
+From e5939294f82e7e337f517fead6d4d14ecde5ee24 Mon Sep 17 00:00:00 2001
 From: Tobias Koenig <tobias.koenig.qnx@kdab.com>
 Date: Wed, 27 Nov 2013 13:11:01 +0100
-Subject: [PATCH 50/54] Fix sub-second handling in SQLite driver
+Subject: [PATCH 53/57] Fix sub-second handling in SQLite driver
 
 Use explicit format string, that contains milliseconds, when
 converting an QDateTime/QTime to a SQLite field content.
@@ -2911,10 +3062,10 @@ index 0a8b71a..27bc80e 100644
 1.8.4
 
 
-From 2a806362606a9a9aca24edcbf13fb9b82c86abb6 Mon Sep 17 00:00:00 2001
+From 0c5dcbce26413ee17e052d79f348c35b4f963842 Mon Sep 17 00:00:00 2001
 From: Tobias Koenig <tobias.koenig.qnx@kdab.com>
 Date: Sat, 30 Nov 2013 14:40:11 +0100
-Subject: [PATCH 51/54] Fix evaluation of SQLite driver options
+Subject: [PATCH 54/57] Fix evaluation of SQLite driver options
 
 Ensure that the options, which are passed to the SQLite driver, are
 evaluated in the correct order and do not overwrite each other.
@@ -2981,10 +3132,10 @@ index 27bc80e..c98d643 100644
 1.8.4
 
 
-From f87966e9d7b86230dcbc8f939c502d67ebc88f6a Mon Sep 17 00:00:00 2001
+From 4f829b92caae3ff877215b118b6c733714a74ab6 Mon Sep 17 00:00:00 2001
 From: Nicolas Cornu <ncornu@aldebaran-robotics.com>
 Date: Thu, 28 Nov 2013 00:06:41 +0100
-Subject: [PATCH 52/54] Allow temporary databases in sqlite driver
+Subject: [PATCH 55/57] Allow temporary databases in sqlite driver
 
 http://www3.sqlite.org/inmemorydb.html#temp_db
 [ChangeLog][QtSql][QSQLITE] Enable creating temporary databases
@@ -3027,10 +3178,10 @@ index c98d643..55ef092 100644
 1.8.4
 
 
-From 0fa177b23588181bc9eaa0e0c39fe26db4d37147 Mon Sep 17 00:00:00 2001
+From 4222a7935ba386e296a0c24a56777de11b74bd75 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 53/54] use pkg-config for freetype
+Subject: [PATCH 56/57] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -3050,10 +3201,10 @@ index 88be809..8fc19d2 100644
 1.8.4
 
 
-From 04d19551a7b47594480b9f0033b9ec4c8546e1ff Mon Sep 17 00:00:00 2001
+From a9ed072cf46c2f23de4c7c4b7d706ea335b6a775 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 54/54] use pkgconfig for icu detection (MXE specific)
+Subject: [PATCH 57/57] use pkgconfig for icu detection (MXE specific)
 
 Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
 
