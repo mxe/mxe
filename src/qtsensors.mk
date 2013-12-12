@@ -4,7 +4,7 @@
 PKG             := qtsensors
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 0b1f51b4aebe39727e241aad5ceea8752cfee4a9
+$(PKG)_CHECKSUM := 65baf9623452f787c4526ff462feb94ff5d3104f
 $(PKG)_SUBDIR    = $(subst qtbase,qtsensors,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtsensors,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtsensors,$(qtbase_URL))
