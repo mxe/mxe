@@ -23,6 +23,6 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-readline \
-        --disable-threadsafe
+        --enable-threadsafe
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
