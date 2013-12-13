@@ -1,11 +1,10 @@
 --- a/mainwindow.cpp	2013-04-20 14:48:51.000000000 +0200
 +++ b/mainwindow.cpp	2013-04-30 08:24:15.000000000 +0200
-@@ -5802,7 +5802,7 @@
+@@ -5802,7 +5802,6 @@
    strcpy(cfg_path, specialFolder(CSIDL_APPDATA).toLocal8Bit().data());
    strcat(cfg_path, "\\");
    strcat(cfg_path, PROGRAM_NAME);
 -  _mkdir(cfg_path);
-+  mkdir(cfg_path);
    strcat(cfg_path, "\\settings.xml");
  #endif
  

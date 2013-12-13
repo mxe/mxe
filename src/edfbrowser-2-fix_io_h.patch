@@ -1,0 +1,11 @@
+--- a/mainwindow.h	2013-12-10 19:11:36.000000000 +0100
++++ b/mainwindow.h	2013-12-13 21:43:56.000000000 +0100
+@@ -59,7 +59,7 @@
+ 
+ #ifdef Q_WS_WIN
+   #include <windows.h>
+-  #include <io.h>
++//  #include <io.h>
+   #ifndef CSIDL_COMMON_APPDATA
+     #define CSIDL_COMMON_APPDATA 0x0023 // All Users\Application Data
+   #endif
