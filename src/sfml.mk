@@ -19,7 +19,8 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DFREETYPE_INCLUDE_DIRS='$(PREFIX)/$(TARGET)/include/freetype2'
 
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
 
