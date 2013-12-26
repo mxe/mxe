@@ -1,0 +1,41 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch is adapted from the Exiv2 svn trunk revision 3210.
+
+diff -ur a/config/exiv2.pc.in b/config/exiv2.pc.in
+--- a/config/exiv2.pc.in	2011-07-29 14:11:16.000000000 +0200
++++ b/config/exiv2.pc.in	2013-12-20 06:44:37.265187475 +0100
+@@ -7,5 +7,5 @@
+ Description: Image metadata library and tools
+ Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} -lexiv2 @EXV_LIB_STATIC@
+-Libs.private: @EXPAT_LDFLAGS@ @LTLIBINTL@ @LTLIBICONV@ @LIBS@ @EXPAT_LIBS@
++Libs.private: @EXPAT_LDFLAGS@ @LTLIBINTL@ @LTLIBICONV@ @LIBS@ @EXPAT_LIBS@ @EXV_LIBPSAPI@
+ Cflags: -I${includedir}
+diff -ur a/configure b/configure
+--- a/configure	2013-12-01 13:29:47.000000000 +0100
++++ b/configure	2013-12-20 06:44:37.273191477 +0100
+@@ -774,6 +774,7 @@
+ ac_header_list=
+ ac_subst_vars='LTLIBOBJS
+ LIBOBJS
++EXV_LIBPSAPI
+ EXV_LIB_STATIC
+ ENABLE_XMP
+ EXPAT_LIBS
+@@ -17068,11 +17069,14 @@
+ # version.cpp requires link to psapi/Windows and dl/Unix builds
+ case "$host_os" in
+ *mingw* | *cygwin*)
++    EXV_LIBPSAPI="-lpsapi"
+     LDFLAGS="$LDFLAGS -no-undefined -lpsapi" ;;
+ *)
++    EXV_LIBPSAPI=
+     LDFLAGS="$LDFLAGS -ldl" ;;
+ esac
+ 
++
+ # ---------------------------------------------------------------------------
+ # Create output files.
+ # ---------------------------------------------------------------------------
