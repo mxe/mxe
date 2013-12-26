@@ -1,0 +1,13 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+diff -ur a/config/exiv2.pc.in b/config/exiv2.pc.in
+--- a/config/exiv2.pc.in	2011-07-29 14:11:16.000000000 +0200
++++ b/config/exiv2.pc.in	2013-12-07 07:45:22.094144853 +0100
+@@ -7,5 +7,5 @@
+ Description: Image metadata library and tools
+ Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} -lexiv2 @EXV_LIB_STATIC@
+-Libs.private: @EXPAT_LDFLAGS@ @LTLIBINTL@ @LTLIBICONV@ @LIBS@ @EXPAT_LIBS@
++Libs.private: @EXPAT_LDFLAGS@ @LTLIBINTL@ @LTLIBICONV@ @LIBS@ @EXPAT_LIBS@ -lpsapi
+ Cflags: -I${includedir}
