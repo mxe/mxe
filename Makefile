@@ -134,7 +134,7 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	@echo '[check requirements]'
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[4-9]\|2\.[7-9][0-9])
-	$(call CHECK_REQUIREMENT_VERSION,automake,1\.[1-9][2-9]\(\.[0-9]\+\)\?)
+	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
 	@[ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed'
 	@touch '$@'
 
