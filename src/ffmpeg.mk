@@ -52,7 +52,8 @@ define $(PKG)_BUILD
         --enable-libvpx \
         --enable-libx264 \
         --enable-libxvid \
-        --enable-postproc
+        --enable-postproc \
+        --enable-avresample
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
