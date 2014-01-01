@@ -1,0 +1,51 @@
+diff -urN vamp-plugin-sdk-2.5/Makefile.in vamp-plugin-sdk-2.5-patch/Makefile.in
+--- vamp-plugin-sdk-2.5/Makefile.in	2013-05-08 12:36:02.000000000 +0300
++++ vamp-plugin-sdk-2.5-patch/Makefile.in	2013-12-14 20:29:07.249385554 +0200
+@@ -53,8 +53,8 @@
+ 
+ # File extension for a dynamically loadable object
+ #
+-PLUGIN_EXT	= .so
+-#PLUGIN_EXT	= .dll
++#PLUGIN_EXT	= .so
++PLUGIN_EXT	= .dll
+ #PLUGIN_EXT	= .dylib
+ 
+ # Libraries required for the host.
+@@ -77,15 +77,15 @@
+ INSTALL_PLUGINS		  = $(INSTALL_PREFIX)/lib/vamp
+ INSTALL_BINARIES	  = $(INSTALL_PREFIX)/bin 
+ 
+-INSTALL_SDK_LIBNAME	  = libvamp-sdk.so.2.5.0
+-INSTALL_SDK_LINK_ABI	  = libvamp-sdk.so.2
+-INSTALL_SDK_LINK_DEV	  = libvamp-sdk.so
++INSTALL_SDK_LIBNAME	  = libvamp-sdk.dll
++INSTALL_SDK_LINK_ABI	  = libvamp-sdk.dll
++INSTALL_SDK_LINK_DEV	  = libvamp-sdk.dll
+ INSTALL_SDK_STATIC        = libvamp-sdk.a
+ INSTALL_SDK_LA            = libvamp-sdk.la
+ 
+-INSTALL_HOSTSDK_LIBNAME   = libvamp-hostsdk.so.3.5.0
+-INSTALL_HOSTSDK_LINK_ABI  = libvamp-hostsdk.so.3
+-INSTALL_HOSTSDK_LINK_DEV  = libvamp-hostsdk.so
++INSTALL_HOSTSDK_LIBNAME   = libvamp-hostsdk.dll
++INSTALL_HOSTSDK_LINK_ABI  = libvamp-hostsdk.dll
++INSTALL_HOSTSDK_LINK_DEV  = libvamp-hostsdk.dll
+ INSTALL_HOSTSDK_STATIC    = libvamp-hostsdk.a
+ INSTALL_HOSTSDK_LA        = libvamp-hostsdk.la
+ 
+@@ -280,14 +280,6 @@
+ 		cp $(HOSTSDK_STATIC) $(DESTDIR)$(INSTALL_SDK_LIBS)
+ 		cp $(SDK_DYNAMIC) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LIBNAME)
+ 		cp $(HOSTSDK_DYNAMIC) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LIBNAME)
+-		rm -f $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LINK_ABI)
+-		ln -s $(INSTALL_SDK_LIBNAME) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LINK_ABI)
+-		rm -f $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LINK_ABI)
+-		ln -s $(INSTALL_HOSTSDK_LIBNAME) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LINK_ABI)
+-		rm -f $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LINK_DEV)
+-		ln -s $(INSTALL_SDK_LIBNAME) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LINK_DEV)
+-		rm -f $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LINK_DEV)
+-		ln -s $(INSTALL_HOSTSDK_LIBNAME) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LINK_DEV)
+ 		sed "s,%PREFIX%,$(INSTALL_PREFIX)," $(PCDIR)/vamp.pc.in \
+ 		> $(DESTDIR)$(INSTALL_PKGCONFIG)/vamp.pc
+ 		sed "s,%PREFIX%,$(INSTALL_PREFIX)," $(PCDIR)/vamp-sdk.pc.in \
