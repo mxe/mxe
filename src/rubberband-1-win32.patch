@@ -1,6 +1,6 @@
 diff -urN rubberband-1.8.1/configure.ac rubberband-1.8.1-patch/configure.ac
 --- rubberband-1.8.1/configure.ac	2012-10-28 12:30:09.000000000 +0200
-+++ rubberband-1.8.1-patch/configure.ac	2013-12-14 20:06:55.101438415 +0200
++++ rubberband-1.8.1-patch/configure.ac	2014-01-02 09:46:54.000000000 +0200
 @@ -18,7 +18,6 @@
  AC_SUBST(FFTW_CFLAGS)
  AC_SUBST(FFTW_LIBS)
@@ -11,8 +11,8 @@ diff -urN rubberband-1.8.1/configure.ac rubberband-1.8.1-patch/configure.ac
  PKG_CHECK_MODULES([Vamp],[vamp-sdk])
 diff -urN rubberband-1.8.1/Makefile.in rubberband-1.8.1-patch/Makefile.in
 --- rubberband-1.8.1/Makefile.in	2012-10-28 12:30:09.000000000 +0200
-+++ rubberband-1.8.1-patch/Makefile.in	2013-12-14 20:23:47.038398261 +0200
-@@ -12,9 +12,9 @@
++++ rubberband-1.8.1-patch/Makefile.in	2014-01-02 10:00:14.094909425 +0200
+@@ -12,15 +12,15 @@
  MKDIR			:= mkdir
  AR			:= ar
  
@@ -25,6 +25,13 @@ diff -urN rubberband-1.8.1/Makefile.in rubberband-1.8.1-patch/Makefile.in
  DYNAMIC_LIBNAME		:= librubberband$(DYNAMIC_EXTENSION)
  DYNAMIC_LDFLAGS		:= -shared -Wl,-Bsymbolic -Wl,-soname=$(DYNAMIC_LIBNAME)$(DYNAMIC_ABI_VERSION)
  VAMP_LDFLAGS		:= -shared -Wl,-Bsymbolic -Wl,--version-script=vamp/vamp-plugin.map
+ LADSPA_LDFLAGS		:= -shared -Wl,-Bsymbolic -Wl,--version-script=ladspa/ladspa-plugin.map
+ 
+-PROGRAM_TARGET 		:= bin/rubberband
++PROGRAM_TARGET 		:= bin/rubberband.exe
+ STATIC_TARGET  		:= lib/librubberband.a
+ DYNAMIC_TARGET 		:= lib/$(DYNAMIC_LIBNAME)
+ VAMP_TARGET    		:= lib/vamp-rubberband$(DYNAMIC_EXTENSION)
 @@ -34,7 +34,7 @@
  INSTALL_LRDFDIR		:= @prefix@/share/ladspa/rdf
  INSTALL_PKGDIR		:= @prefix@/lib/pkgconfig
@@ -34,7 +41,13 @@ diff -urN rubberband-1.8.1/Makefile.in rubberband-1.8.1-patch/Makefile.in
  
  static:		$(STATIC_TARGET)
  dynamic:	$(DYNAMIC_TARGET)
-@@ -142,7 +142,6 @@
+@@ -137,27 +137,21 @@
+ lib:
+ 	$(MKDIR) $@
+ 
+-install:	all
++install:	bin lib static program
+ 	$(MKDIR) -p $(DESTDIR)$(INSTALL_BINDIR)
  	$(MKDIR) -p $(DESTDIR)$(INSTALL_INCDIR)
  	$(MKDIR) -p $(DESTDIR)$(INSTALL_LIBDIR)
  	$(MKDIR) -p $(DESTDIR)$(INSTALL_VAMPDIR)
@@ -42,17 +55,23 @@ diff -urN rubberband-1.8.1/Makefile.in rubberband-1.8.1-patch/Makefile.in
  	$(MKDIR) -p $(DESTDIR)$(INSTALL_LRDFDIR)
  	$(MKDIR) -p $(DESTDIR)$(INSTALL_PKGDIR)
  	cp $(PROGRAM_TARGET) $(DESTDIR)$(INSTALL_BINDIR)
-@@ -151,13 +150,8 @@
- 	rm -f $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)$(DYNAMIC_ABI_VERSION)
- 	rm -f $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)
- 	cp $(DYNAMIC_TARGET) $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)$(DYNAMIC_FULL_VERSION)
+ 	cp $(PUBLIC_INCLUDES) $(DESTDIR)$(INSTALL_INCDIR)
+ 	cp $(STATIC_TARGET) $(DESTDIR)$(INSTALL_LIBDIR)
+-	rm -f $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)$(DYNAMIC_ABI_VERSION)
+-	rm -f $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)
+-	cp $(DYNAMIC_TARGET) $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)$(DYNAMIC_FULL_VERSION)
 -	test -n "$(DYNAMIC_FULL_VERSION)" && ln -s $(DYNAMIC_LIBNAME)$(DYNAMIC_FULL_VERSION) $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)$(DYNAMIC_ABI_VERSION)
 -	test -n "$(DYNAMIC_FULL_VERSION)" && ln -s $(DYNAMIC_LIBNAME)$(DYNAMIC_FULL_VERSION) $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)
- 	cp $(VAMP_TARGET) $(DESTDIR)$(INSTALL_VAMPDIR)
- 	cp vamp/vamp-rubberband.cat $(DESTDIR)$(INSTALL_VAMPDIR)
+-	cp $(VAMP_TARGET) $(DESTDIR)$(INSTALL_VAMPDIR)
+-	cp vamp/vamp-rubberband.cat $(DESTDIR)$(INSTALL_VAMPDIR)
 -	cp $(LADSPA_TARGET) $(DESTDIR)$(INSTALL_LADSPADIR)
 -	cp ladspa/ladspa-rubberband.cat $(DESTDIR)$(INSTALL_LADSPADIR)
 -	cp ladspa/ladspa-rubberband.rdf $(DESTDIR)$(INSTALL_LRDFDIR)
++	# rm -f $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)$(DYNAMIC_ABI_VERSION)
++	# rm -f $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)
++	# cp $(DYNAMIC_TARGET) $(DESTDIR)$(INSTALL_LIBDIR)/$(DYNAMIC_LIBNAME)$(DYNAMIC_FULL_VERSION)
++	# cp $(VAMP_TARGET) $(DESTDIR)$(INSTALL_VAMPDIR)
++	# cp vamp/vamp-rubberband.cat $(DESTDIR)$(INSTALL_VAMPDIR)
  	sed "s,%PREFIX%,@prefix@," rubberband.pc.in \
  	  > $(DESTDIR)$(INSTALL_PKGDIR)/rubberband.pc
  
