@@ -212,7 +212,11 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	        echo; \
 	        echo 'Download failed or wrong checksum of package $(1)!'; \
 	        echo '------------------------------------------------------------'; \
+ifndef MXE_VERBOSE
 	        tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p'; \
+else
+	        $(SED) -n '/./p' '$(LOG_DIR)/$(1)-download'; \
+endif
 	        echo '------------------------------------------------------------'; \
 	        echo '[log]      $(LOG_DIR)/$(1)-download'; \
 	        echo; \
@@ -234,7 +238,11 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
+ifndef MXE_VERBOSE
 	    tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p'; \
+else
+	    $(SED) -n '/./p' '$(LOG_DIR)/$(1)'; \
+endif
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
