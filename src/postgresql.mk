@@ -51,6 +51,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install haslibarule= shlib=
     $(INSTALL) -m644 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/src/include/postgres_ext.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -d    '$(PREFIX)/$(TARGET)/include/libpq'
+    $(INSTALL) -m644 '$(1)'/src/include/libpq/*        '$(PREFIX)/$(TARGET)/include/libpq/'
     # Build a native pg_config.
     $(SED) -i 's,-DVAL_,-D_DISABLED_VAL_,g' '$(1).native'/src/bin/pg_config/Makefile
     cd '$(1).native' && ./configure \

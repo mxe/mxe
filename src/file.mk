@@ -3,8 +3,8 @@
 
 PKG             := file
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.15
-$(PKG)_CHECKSUM := de1a060aa5fe61c1a6f0359fb526e824b4244323
+$(PKG)_VERSION  := 5.16
+$(PKG)_CHECKSUM := 12fd8ca35705bb24b00135ee65cb7de2d53aa69a
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)

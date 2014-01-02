@@ -1,13 +1,13 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := qtquickcontrols
+PKG             := qtconnectivity
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := c0ed05af06a89074f330814c397815a0acaf8042
-$(PKG)_SUBDIR    = $(subst qtbase,qtquickcontrols,$(qtbase_SUBDIR))
-$(PKG)_FILE      = $(subst qtbase,qtquickcontrols,$(qtbase_FILE))
-$(PKG)_URL       = $(subst qtbase,qtquickcontrols,$(qtbase_URL))
+$(PKG)_CHECKSUM := fddd0996d14149a482830cbb7e8aaa2d3d32456f
+$(PKG)_SUBDIR    = $(subst qtbase,qtconnectivity,$(qtbase_SUBDIR))
+$(PKG)_FILE      = $(subst qtbase,qtconnectivity,$(qtbase_FILE))
+$(PKG)_URL       = $(subst qtbase,qtconnectivity,$(qtbase_URL))
 $(PKG)_DEPS     := gcc qtbase qtdeclarative
 
 define $(PKG)_UPDATE

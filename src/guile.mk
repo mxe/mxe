@@ -3,17 +3,19 @@
 
 PKG             := guile
 $(PKG)_IGNORE   := 2%
-$(PKG)_VERSION  := 1.8.7
-$(PKG)_CHECKSUM := 24cd2f06439c76d41d982a7384fe8a0fe5313b54
+$(PKG)_VERSION  := 1.8.8
+$(PKG)_CHECKSUM := 548d6927aeda332b117f8fc5e4e82c39a05704f9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libltdl gmp libiconv gettext libunistring gc libffi readline libgnurx
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=$(PKG).git;a=tags' | \
+    $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=guile.git;a=tags' | \
     grep '<a class="list subject"' | \
     $(SED) -n 's,.*<a[^>]*>[^0-9>]*\([0-9][^< ]*\)\.<.*,\1,p' | \
+    grep -v 2.* | \
+    $(SORT) -Vr | \
     head -1
 endef
 
@@ -28,7 +30,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --without-threads \
         scm_cv_struct_timespec=no \
-        LIBS='-lunistring -lintl -liconv' \
+        LIBS='-lunistring -lintl -liconv -ldl' \
         CFLAGS='-Wno-unused-but-set-variable'
     $(MAKE) -C '$(1)' -j '$(JOBS)' schemelib_DATA=
     $(MAKE) -C '$(1)' -j 1 install schemelib_DATA=

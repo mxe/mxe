@@ -1,0 +1,25 @@
+This file is part of MXE.
+See index.html for further information.
+
+From bb7d4141f14dfd22365df4991a066e9b760b088d Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 24 Oct 2013 22:29:51 +0200
+Subject: [PATCH] Fix MinGW-w64 GCC 4.8.2 compilation
+
+
+diff --git a/src/winextras/winshobjidl_p.h b/src/winextras/winshobjidl_p.h
+index 91faed5..352c405 100644
+--- a/src/winextras/winshobjidl_p.h
++++ b/src/winextras/winshobjidl_p.h
+@@ -222,7 +222,7 @@ public:
+ 
+ #if (defined _MSC_VER && _MSC_VER < 1600) || defined(Q_CC_MINGW)
+ 
+-#   if !defined(__MINGW64_VERSION_MAJOR) || !defined(__MINGW64_VERSION_MINOR) || __MINGW64_VERSION_MAJOR * 100 + __MINGW64_VERSION_MINOR < 301
++#   if !defined(__MINGW64_VERSION_MAJOR) || !defined(__MINGW64_VERSION_MINOR) || __MINGW64_VERSION_MAJOR * 100 + __MINGW64_VERSION_MINOR < 300
+ 
+ typedef struct SHARDAPPIDINFOLINK
+ {
+-- 
+1.8.4
+
