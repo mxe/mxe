@@ -20,9 +20,8 @@ endef
 
 define $(PKG)_BUILD
     # rebuild configure script as one of the patches modifies configure.ac
-    cd '$(1)' && aclocal -I m4
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && $(LIBTOOLIZE)
-    cd '$(1)' && automake && autoconf
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
