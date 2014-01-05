@@ -1,0 +1,105 @@
+diff -urN vamp-plugin-sdk-2.5/Makefile.in vamp-plugin-sdk-2.5-patch/Makefile.in
+--- vamp-plugin-sdk-2.5/Makefile.in	2013-05-08 12:36:02.000000000 +0300
++++ vamp-plugin-sdk-2.5-patch/Makefile.in	2014-01-02 11:41:48.649667589 +0200
+@@ -53,8 +53,8 @@
+ 
+ # File extension for a dynamically loadable object
+ #
+-PLUGIN_EXT	= .so
+-#PLUGIN_EXT	= .dll
++#PLUGIN_EXT	= .so
++PLUGIN_EXT	= .dll
+ #PLUGIN_EXT	= .dylib
+ 
+ # Libraries required for the host.
+@@ -77,15 +77,15 @@
+ INSTALL_PLUGINS		  = $(INSTALL_PREFIX)/lib/vamp
+ INSTALL_BINARIES	  = $(INSTALL_PREFIX)/bin 
+ 
+-INSTALL_SDK_LIBNAME	  = libvamp-sdk.so.2.5.0
+-INSTALL_SDK_LINK_ABI	  = libvamp-sdk.so.2
+-INSTALL_SDK_LINK_DEV	  = libvamp-sdk.so
++INSTALL_SDK_LIBNAME	  = libvamp-sdk.dll
++INSTALL_SDK_LINK_ABI	  = libvamp-sdk.dll
++INSTALL_SDK_LINK_DEV	  = libvamp-sdk.dll
+ INSTALL_SDK_STATIC        = libvamp-sdk.a
+ INSTALL_SDK_LA            = libvamp-sdk.la
+ 
+-INSTALL_HOSTSDK_LIBNAME   = libvamp-hostsdk.so.3.5.0
+-INSTALL_HOSTSDK_LINK_ABI  = libvamp-hostsdk.so.3
+-INSTALL_HOSTSDK_LINK_DEV  = libvamp-hostsdk.so
++INSTALL_HOSTSDK_LIBNAME   = libvamp-hostsdk.dll
++INSTALL_HOSTSDK_LINK_ABI  = libvamp-hostsdk.dll
++INSTALL_HOSTSDK_LINK_DEV  = libvamp-hostsdk.dll
+ INSTALL_HOSTSDK_STATIC    = libvamp-hostsdk.a
+ INSTALL_HOSTSDK_LA        = libvamp-hostsdk.la
+ 
+@@ -260,7 +260,7 @@
+ 		rm -f $(SDK_STATIC) $(SDK_DYNAMIC) $(HOSTSDK_STATIC) $(HOSTSDK_DYNAMIC) $(PLUGIN_TARGET) $(HOST_TARGET) $(RDFGEN_TARGET) *~ */*~
+ 		rm -f config.log config.status Makefile
+ 
+-install:	$(SDK_STATIC) $(SDK_DYNAMIC) $(HOSTSDK_STATIC) $(HOSTSDK_DYNAMIC) $(PLUGIN_TARGET) $(HOST_TARGET) $(RDFGEN_TARGET)
++install:	$(SDK_STATIC) $(HOSTSDK_STATIC) $(HOST_TARGET) $(RDFGEN_TARGET)
+ 		mkdir -p $(DESTDIR)$(INSTALL_API_HEADERS)
+ 		mkdir -p $(DESTDIR)$(INSTALL_SDK_HEADERS)
+ 		mkdir -p $(DESTDIR)$(INSTALL_HOSTSDK_HEADERS)
+@@ -270,42 +270,34 @@
+ 		mkdir -p $(DESTDIR)$(INSTALL_PLUGINS)
+ 		cp $(HOST_TARGET) $(DESTDIR)$(INSTALL_BINARIES)
+ 		cp $(RDFGEN_TARGET) $(DESTDIR)$(INSTALL_BINARIES)
+-		cp $(PLUGIN_TARGET) $(DESTDIR)$(INSTALL_PLUGINS)
+-		cp $(PLUGIN_CAT) $(DESTDIR)$(INSTALL_PLUGINS)
+-		cp $(PLUGIN_TTL) $(DESTDIR)$(INSTALL_PLUGINS)
++		# cp $(PLUGIN_TARGET) $(DESTDIR)$(INSTALL_PLUGINS)
++		# cp $(PLUGIN_CAT) $(DESTDIR)$(INSTALL_PLUGINS)
++		# cp $(PLUGIN_TTL) $(DESTDIR)$(INSTALL_PLUGINS)
+ 		cp $(API_HEADERS) $(DESTDIR)$(INSTALL_API_HEADERS)
+ 		cp $(SDK_HEADERS) $(DESTDIR)$(INSTALL_SDK_HEADERS)
+ 		cp $(HOSTSDK_HEADERS) $(DESTDIR)$(INSTALL_HOSTSDK_HEADERS)
+ 		cp $(SDK_STATIC) $(DESTDIR)$(INSTALL_SDK_LIBS)
+ 		cp $(HOSTSDK_STATIC) $(DESTDIR)$(INSTALL_SDK_LIBS)
+-		cp $(SDK_DYNAMIC) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LIBNAME)
+-		cp $(HOSTSDK_DYNAMIC) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LIBNAME)
+-		rm -f $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LINK_ABI)
+-		ln -s $(INSTALL_SDK_LIBNAME) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LINK_ABI)
+-		rm -f $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LINK_ABI)
+-		ln -s $(INSTALL_HOSTSDK_LIBNAME) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LINK_ABI)
+-		rm -f $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LINK_DEV)
+-		ln -s $(INSTALL_SDK_LIBNAME) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LINK_DEV)
+-		rm -f $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LINK_DEV)
+-		ln -s $(INSTALL_HOSTSDK_LIBNAME) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LINK_DEV)
++		# cp $(SDK_DYNAMIC) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LIBNAME)
++		# cp $(HOSTSDK_DYNAMIC) $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LIBNAME)
+ 		sed "s,%PREFIX%,$(INSTALL_PREFIX)," $(PCDIR)/vamp.pc.in \
+ 		> $(DESTDIR)$(INSTALL_PKGCONFIG)/vamp.pc
+ 		sed "s,%PREFIX%,$(INSTALL_PREFIX)," $(PCDIR)/vamp-sdk.pc.in \
+ 		> $(DESTDIR)$(INSTALL_PKGCONFIG)/vamp-sdk.pc
+ 		sed "s,%PREFIX%,$(INSTALL_PREFIX)," $(PCDIR)/vamp-hostsdk.pc.in \
+ 		> $(DESTDIR)$(INSTALL_PKGCONFIG)/vamp-hostsdk.pc
+-		sed -e "s,%LIBNAME%,$(INSTALL_SDK_LIBNAME),g" \
+-		    -e "s,%LINK_ABI%,$(INSTALL_SDK_LINK_ABI),g" \
+-		    -e "s,%LINK_DEV%,$(INSTALL_SDK_LINK_DEV),g" \
+-		    -e "s,%STATIC%,$(INSTALL_SDK_STATIC),g" \
+-		    -e "s,%LIBS%,$(INSTALL_SDK_LIBS),g" $(SDK_LA).in \
+-		> $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LA)
+-		sed -e "s,%LIBNAME%,$(INSTALL_HOSTSDK_LIBNAME),g" \
+-		    -e "s,%LINK_ABI%,$(INSTALL_HOSTSDK_LINK_ABI),g" \
+-		    -e "s,%LINK_DEV%,$(INSTALL_HOSTSDK_LINK_DEV),g" \
+-		    -e "s,%STATIC%,$(INSTALL_HOSTSDK_STATIC),g" \
+-		    -e "s,%LIBS%,$(INSTALL_SDK_LIBS),g" $(HOSTSDK_LA).in \
+-		> $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LA)
++		# sed -e "s,%LIBNAME%,$(INSTALL_SDK_LIBNAME),g" \
++		#     -e "s,%LINK_ABI%,$(INSTALL_SDK_LINK_ABI),g" \
++		#     -e "s,%LINK_DEV%,$(INSTALL_SDK_LINK_DEV),g" \
++		#     -e "s,%STATIC%,$(INSTALL_SDK_STATIC),g" \
++		#     -e "s,%LIBS%,$(INSTALL_SDK_LIBS),g" $(SDK_LA).in \
++		# > $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_SDK_LA)
++		# sed -e "s,%LIBNAME%,$(INSTALL_HOSTSDK_LIBNAME),g" \
++		#     -e "s,%LINK_ABI%,$(INSTALL_HOSTSDK_LINK_ABI),g" \
++		#     -e "s,%LINK_DEV%,$(INSTALL_HOSTSDK_LINK_DEV),g" \
++		#     -e "s,%STATIC%,$(INSTALL_HOSTSDK_STATIC),g" \
++		#     -e "s,%LIBS%,$(INSTALL_SDK_LIBS),g" $(HOSTSDK_LA).in \
++		# > $(DESTDIR)$(INSTALL_SDK_LIBS)/$(INSTALL_HOSTSDK_LA)
+ 
+ depend:
+ 		makedepend -Y. */*.cpp */*/*.cpp */*/*/*.cpp
