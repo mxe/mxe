@@ -3,8 +3,8 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 043c3d2
-$(PKG)_CHECKSUM := e5df22a860c8f2173667dada53eb1c997c16b401
+$(PKG)_VERSION  := 4cf7e02
+$(PKG)_CHECKSUM := 62054750162b4691498c97353c113e9d1de40cec
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -32,6 +32,10 @@ define $(PKG)_BUILD
         -DICU_LIBRARIES="`'$(TARGET)-pkg-config' --libs-only-l icu-i18n`" \
         -DVMIME_CHARSETCONV_LIB_IS_ICONV=ON \
         -DVMIME_CHARSETCONV_LIB_IS_ICU=OFF \
+        -DVMIME_CHARSETCONV_LIB_IS_WIN=OFF \
+        -DVMIME_SHARED_PTR_USE_CXX=ON \
+        -DCXX11_COMPILER_FLAGS=ON \
+        -C../../src/vmime-TryRunResults.cmake \
         .
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
@@ -39,7 +43,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' install
 
     $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
-    $(TARGET)-g++ -s -o '$(1)/examples/test-vmime.exe' \
+    $(TARGET)-g++ -s -std=c++0x -o '$(1)/examples/test-vmime.exe' \
         '$(1)/examples/example6.cpp' \
         `'$(TARGET)-pkg-config' vmime --cflags --libs`
     $(INSTALL) -m755 '$(1)/examples/test-vmime.exe' '$(PREFIX)/$(TARGET)/bin/'

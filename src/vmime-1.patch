@@ -1,10 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 96e55516b44e03bb5c2882ef436bdd89757ed287 Mon Sep 17 00:00:00 2001
+From 80a6fbf5170509f5eab94dd36f64ad8a0406e928 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 14 May 2013 09:21:46 +0200
-Subject: [PATCH] predefine VMIME_STATIC for convenience
+Subject: [PATCH 1/3] predefine VMIME_STATIC for convenience
 
 
 diff --git a/vmime.pc.in b/vmime.pc.in
@@ -19,5 +19,54 @@ index fc1103e..11dd0ea 100644
 +Cflags: -I${includedir}/ @VMIME_PKGCONFIG_CFLAGS@ -DVMIME_STATIC
  
 -- 
-1.8.4
+1.8.4.5
+
+
+From f5b2e83eb4b96c6cd061bcca9249dc40d1ec3fb2 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 10 Jan 2014 03:20:11 +0100
+Subject: [PATCH 2/3] remove -ansi because it interferes with -std=c++11
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index aac379c..9aa0283 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1020,7 +1020,7 @@ ELSE()
+ 
+ 		SET(
+ 			CMAKE_CXX_FLAGS
+-			"${CMAKE_CXX_FLAGS} -D_REENTRANT=1 -W -Wall -ansi -pedantic -Wpointer-arith -Wold-style-cast -Wconversion -Wcast-align -Wno-long-long"
++			"${CMAKE_CXX_FLAGS} -D_REENTRANT=1 -W -Wall -pedantic -Wpointer-arith -Wold-style-cast -Wconversion -Wcast-align -Wno-long-long"
+ 			CACHE STRING
+ 			"g++ Compiler Flags"
+ 			FORCE
+-- 
+1.8.4.5
+
+
+From 64daad47a33daaf9f5120941a9255be9d40391f0 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 26 Mar 2014 23:45:05 +0100
+Subject: [PATCH 3/3] workaround for stricmp decl problem on mingw32
+ (mingw.org)
+
+
+diff --git a/src/vmime/platforms/windows/windowsCodepages.hpp b/src/vmime/platforms/windows/windowsCodepages.hpp
+index dfd6afd..f01bc47 100644
+--- a/src/vmime/platforms/windows/windowsCodepages.hpp
++++ b/src/vmime/platforms/windows/windowsCodepages.hpp
+@@ -32,6 +32,10 @@
+ 
+ 
+ #include <string.h>
++#define stricmp _stricmp
++extern "C" {
++_CRTIMP int __cdecl __MINGW_NOTHROW     _stricmp (const char*, const char*);
++}
+ 
+ 
+ namespace vmime {
+-- 
+1.8.4.5
 
