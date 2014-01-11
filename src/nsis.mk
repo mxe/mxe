@@ -11,10 +11,10 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/nsis/NSIS 2/$($(PKG)_VER
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://nsis.svn.sourceforge.net/viewvc/nsis/NSIS/tags/?sortby=date' | \
-    grep '<a name="' | \
-    $(SED) -n 's,.*<a name="v\([0-9]\)\([^"]*\)".*,\1.\2,p' | \
-    head -1
+    $(WGET) -q -O- 'http://sourceforge.net/p/nsis/code/HEAD/tree/NSIS/tags/' | \
+    grep '<a href="' | \
+    $(SED) -n 's,.*<a href="v\([0-9]\)\([^"]*\)".*,\1.\2,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
