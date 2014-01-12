@@ -3,8 +3,8 @@
 
 PKG             := libzip
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.11.1
-$(PKG)_CHECKSUM := 3c82cdc0de51f06d5e1c60f098d3d9cc0d48f8a7
+$(PKG)_VERSION  := 0.11.2
+$(PKG)_CHECKSUM := da86a7b4bb2b7ab7c8c5fb773f8a48a5adc7a405
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://www.nih.at/libzip/$($(PKG)_FILE)
