@@ -1,3 +1,6 @@
+# This file is part of MXE.
+# See index.html for further information.
+
 PKG             := db
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.8.30
