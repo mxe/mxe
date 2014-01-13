@@ -3,8 +3,8 @@
 
 PKG             := biosig
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 1.5.9
-$(PKG)_CHECKSUM := 9488f8bfe18c1c2c98bcf9ef80ceae4e8ee10b59
+$(PKG)_VERSION  := 1.5.10
+$(PKG)_CHECKSUM := 3f4062426ff8e260c20c2726d6bd6e6cb9547498
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
@@ -18,8 +18,8 @@ endef
 
 define $(PKG)_BUILD_PRE
 
-    #rm -rf '$(1)'
-    #cp -rL ~/src/biosig-code/biosig4c++ '$(1)'
+    rm -rf '$(1)'
+    cp -rL ~/src/biosig-code/biosig4c++ '$(1)'
 
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|^#*||g' '$(1)'/Makefile
@@ -43,6 +43,7 @@ define $(PKG)_BUILD_POST
     $(INSTALL)       '$(1)'/save2gdf            '$(PREFIX)/$(TARGET)/bin/save2gdf.exe'
 
     $(INSTALL) -m644 '$(1)/biosig.h'             '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/gdftime.h'             '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/biosig-dev.h'         '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/libbiosig.a'          '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libbiosig.def' 	 '$(PREFIX)/$(TARGET)/lib/'
