@@ -72,7 +72,7 @@ define $(PKG)_BUILD_POST
     ### make release file
     rm -f $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip
     cd $(PREFIX)/$(TARGET) && zip $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip \
-		include/biosig.h include/biosig-dev.h include/biosig2.h gdftime.h include/io.h \
+		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h include/io.h \
 		lib/libbiosig.a lib/libbiosig.def lib/libbiosig.dll lib/libbiosig.dll.a \
 		lib/libbiosig2.a lib/libbiosig2.def lib/libbiosig2.dll lib/libbiosig2.dll.a \
 		lib/libgdf.a lib/libgdf.def lib/libgdf.dll lib/libgdf.dll.a \
@@ -84,7 +84,7 @@ define $(PKG)_BUILD_POST
 
     mkdir -p $(PREFIX)/release/$(TARGET)/include/
     cd $(PREFIX)/$(TARGET) && cp -r \
-		include/biosig.h include/biosig-dev.h include/biosig2.h gdftime.h include/io.h \
+		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h include/io.h \
 		include/libiberty include/iconv.h \
 		include/physicalunits.h \
 		$(PREFIX)/release/$(TARGET)/include/
