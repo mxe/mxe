@@ -1,0 +1,36 @@
+language: c
+
+env:
+  - MXE_TARGETS=i686-pc-mingw32
+  - MXE_TARGETS=x86_64-w64-mingw32
+  - MXE_TARGETS=i686-w64-mingw32
+
+compiler:
+  - gcc
+
+#branches:
+#  only:
+#    - master
+#    - stable
+
+before_install:
+  - sudo apt-get update  -qq
+  - sudo apt-get install -qq autoconf automake bash bison bzip2 cmake flex gettext git g++ intltool libffi-dev libtool libltdl-dev libssl-dev libxml-parser-perl make openssl patch perl pkg-config scons sed unzip wget xz-utils g++-multilib libc6-dev-i386
+
+# What to enable is still an Request-For-Comment
+script: make gcc JOBS=4 MXE_TARGETS=$MXE_TARGETS
+
+cache:
+  apt: true
+  directories:
+    - pkg
+
+notifications:
+  email:
+    recipients:
+      - mingw-cross-env-list@nongnu.org
+#   Enable these when Travis CI building is stable enough
+    on_success: never
+    on_failure: never
+#    on_success: change
+#    on_failure: always
