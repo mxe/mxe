@@ -25,5 +25,7 @@ define $(PKG)_BUILD
 	PKG_CONFIG='$(TARGET)-pkg-config' \
 	LDFLAGS="`$(TARGET)-pkg-config --libs libpcre`"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    ln -sf "`which ccache`" '$(PREFIX)/bin/$(TARGET)'-ccache
 endef
 
