@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 8414ca0e6ff7d08e423955960d641ec5f309a55f
 $(PKG)_SUBDIR   := hdf5-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf5-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF5/current/src/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib pthreads
+$(PKG)_DEPS     := gcc zlib pthreads szip
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.hdfgroup.org/ftp/HDF5/current/src/' | \
@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         --enable-cxx \
         --disable-direct-vfd \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --with-szlib='$(PREFIX)/$(TARGET)' \
         CPPFLAGS="-DH5_HAVE_WIN32_API -DH5_HAVE_MINGW -DH5_BUILT_AS_STATIC_LIB" \
         AR='$(TARGET)-ar'
 
@@ -59,5 +60,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hdf5.exe' \
-        -lhdf5_hl -lhdf5 -lz
+        -lhdf5_hl -lhdf5 -lz -lsz
 endef

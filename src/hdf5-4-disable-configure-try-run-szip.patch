@@ -1,0 +1,22 @@
+--- a/configure.ac	2014-01-20 20:47:19.575840988 -0500
++++ b/configure.ac	2014-01-20 20:54:10.439848869 -0500
+@@ -1803,18 +1803,7 @@
+   AC_SUBST([LL_PATH]) LL_PATH="$LD_LIBRARY_PATH"
+ 
+   AC_CACHE_VAL([hdf5_cv_szlib_can_encode],
+-        [AC_TRY_RUN([
+-        #include <szlib.h>
+-        
+-        int main(void)
+-        {       
+-                /* SZ_encoder_enabled returns 1 if encoder is present */
+-            if(SZ_encoder_enabled() == 1)
+-                exit(0);
+-            else
+-                exit(1);
+-        }
+-        ], [hdf5_cv_szlib_can_encode=yes], [hdf5_cv_szlib_can_encode=no],)])
++               [hdf5_cv_szlib_can_encode=yes])
+     
+   AC_DEFINE([HAVE_FILTER_SZIP], [1], 
+             [Define if support for szip filter is enabled])
