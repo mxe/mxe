@@ -1,0 +1,11 @@
+--- a/Makefile.static	2014-01-17 20:52:54.000000000 +0100
++++ b/Makefile.static	2014-01-25 22:32:25.590437552 +0100
+@@ -197,7 +197,7 @@
+     LIBS += -lbiosig -lcholmod
+   endif
+ endif
+-LIBS     += -lfftw3 -lz -lpthread
++LIBS     += -lfftw3 -lz -lpthread -liconv
+ 
+ ifeq (mingw,$(findstring mingw, $(WXCONF)))
+   LIBS   += -lgfortran -liberty
