@@ -7,7 +7,7 @@ Index: src/src.pro
                 $$_PRO_FILE_PWD_/.
  LIBS += -L$$_PRO_FILE_PWD_/../extern/lib \
 -    -lbiosig# \
-+    -lbiosig -lcholmod -lz -liberty -lssp \
++    -lbiosig -lcholmod -lz -liberty -liconv -lssp \
      #-lGDF
  
  macx:INCLUDEPATH += /opt/local/include
