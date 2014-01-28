@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 39984aae77efde2e0917ed7e183ebf612813d7f3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := ftp://ftp.videolan.org/pub/videolan/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := freetype gcc libxml2
+$(PKG)_DEPS     := gcc freetype libxml2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'ftp://ftp.videolan.org/pub/videolan/libbluray/last/' | \
