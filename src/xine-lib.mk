@@ -52,6 +52,7 @@ define $(PKG)_BUILD
         CFLAGS='-I$(1)/win32/include' \
         PTHREAD_LIBS='-lpthread -lws2_32' \
         LIBS="`$(TARGET)-pkg-config --libs libmng` -logg"
+    $(SED) -i 's,[\s^]*sed , $(SED) ,g' '$(1)/src/combined/ffmpeg/Makefile'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
