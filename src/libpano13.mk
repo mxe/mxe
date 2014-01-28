@@ -3,7 +3,7 @@
 
 PKG             := libpano13
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.9.18_rc2
+$(PKG)_VERSION  := 2.9.18
 $(PKG)_CHECKSUM := 23849bdbdfc9176a2b53d157e58bd24aa0e7276e
 $(PKG)_SUBDIR   := $(PKG)-$(word 1,$(subst _, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
@@ -13,6 +13,8 @@ $(PKG)_DEPS     := gcc jpeg tiff libpng zlib
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/api/file/index/project-id/96188/rss?path=/libpano13' | \
     $(SED) -n 's,.*libpano13-\([0-9].*\)\.tar.*,\1,p' | \
+    grep -v beta | \
+    grep -v rc | \
     tail -1
 endef
 
