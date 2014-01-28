@@ -11,7 +11,8 @@ $(PKG)_URL      := http://ftp.gnu.org/gnu/vcdimager/$(PKG)-$($(PKG)_VERSION).tar
 $(PKG)_DEPS     := gcc popt libxml2
 
 define $(PKG)_UPDATE
-    echo $($(PKG)_VERSION)
+    echo 'TODO: Updates for package vcdimager need to be written.' >&2;
+    echo $(vcdimager_VERSION)
 endef
 
 define $(PKG)_BUILD

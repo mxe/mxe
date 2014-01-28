@@ -11,7 +11,8 @@ $(PKG)_URL      := http://ftp.gnu.org/gnu/libcdio/$(PKG)-$($(PKG)_VERSION).tar.b
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo $($(PKG)_VERSION)
+    echo 'TODO: Updates for package libcdio need to be written.' >&2;
+    echo $(libcdio_VERSION)
 endef
 
 define $(PKG)_BUILD
