@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := eb5a404d297e8ee2f344bcd9cdeea86fe8977287
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2//$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext nettle pcre zlib
+$(PKG)_DEPS     := gcc gettext gmp nettle pcre zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/ | \
