@@ -6,9 +6,9 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0
 $(PKG)_VERBUILD := 3.0.1270
 $(PKG)_CHECKSUM := e80a3a4326b649ed6585c0ce312ed6dd68942834
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_SUBDIR   := $(PKG)--$($(PKG)_VERBUILD)-source-only
 $(PKG)_FILE     := $(PKG)--$($(PKG)_VERBUILD)-source-only.zip
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost
 
 define $(PKG)_UPDATE
