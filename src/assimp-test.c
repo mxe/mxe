@@ -11,14 +11,14 @@ int main(int argc, char *argv[])
 {
     const struct aiScene* scene = NULL;
 
-    (void)argc;
-    (void)argv;
-
-    // NFF file for a single spere with radius 5 at pos 0x0x0
+    /* NFF file for a single spere with radius 5 at pos 0x0x0 */
     const char* buf =
         "--- begin of file\n"
         "s 0 0 0 5\n"
         "--- end of file\n";
+
+    (void)argc;
+    (void)argv;
 
     scene = aiImportFileFromMemory(buf, strlen(buf), aiProcessPreset_TargetRealtime_MaxQuality, "nff");
     (void)scene;
