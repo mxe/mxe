@@ -11,6 +11,9 @@ int main(int argc, char *argv[])
 {
     const struct aiScene* scene = NULL;
 
+    (void)argc;
+    (void)argv;
+
     // NFF file for a single spere with radius 5 at pos 0x0x0
     const char* buf =
         "--- begin of file\n"
