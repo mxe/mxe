@@ -21,9 +21,9 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && cmake . \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DBUILD_ASSIMP_TOOLS=OFF -DBUILD_ASSIMP_SAMPLES=OFF
+        -DBUILD_ASSIMP_TOOLS=OFF \
+        -DBUILD_ASSIMP_SAMPLES=OFF
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
-    
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-assimp.exe' \
