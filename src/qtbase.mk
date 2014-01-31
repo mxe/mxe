@@ -63,9 +63,6 @@ define $(PKG)_BUILD
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
 
-    # copy pkg-config files to standard directory
-    cp '$(PREFIX)/$(TARGET)'/qt5/lib/pkgconfig/* '$(PREFIX)/$(TARGET)'/lib/pkgconfig/
-
     # build test the manual way
     mkdir '$(1)/test-$(PKG)-pkgconfig'
     '$(PREFIX)/$(TARGET)/qt5/bin/uic' -o '$(1)/test-$(PKG)-pkgconfig/ui_qt-test.h' '$(TOP_DIR)/src/qt-test.ui'
