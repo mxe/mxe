@@ -3,8 +3,8 @@
 
 PKG             := gdk-pixbuf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.30.1
-$(PKG)_CHECKSUM := c3494a68f1bd72c3eaaeaf5e5c638e4051a31075
+$(PKG)_VERSION  := 2.30.3
+$(PKG)_CHECKSUM := 22d1e53be4ccecd49290d8f1ba188cc51dc4fe88
 $(PKG)_SUBDIR   := gdk-pixbuf-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdk-pixbuf-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -I'$(PREFIX)/$(TARGET)/share/aclocal'
+    cd '$(1)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \

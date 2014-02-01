@@ -69,6 +69,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt'
     $(MAKE) -C '$(1)' -j 1 install
+    ln -sf '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt4
 
     cd '$(1)/tools/assistant' && '$(1)/bin/qmake' assistant.pro
     $(MAKE) -C '$(1)/tools/assistant' -j '$(JOBS)' install

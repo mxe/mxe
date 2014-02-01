@@ -2,9 +2,9 @@
 # See index.html for further information.
 
 PKG             := ffmpeg
-$(PKG)_IGNORE   := 2%
-$(PKG)_VERSION  := 1.2.4
-$(PKG)_CHECKSUM := ee73a05bde209fc23441c7e49767c1b7a4b6f124
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.1.1
+$(PKG)_CHECKSUM := e7a5b2d7f702c4e9ca69e23c6d3527f93de0d1bd
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc bzip2 lame libass libvpx opencore-amr opus sdl speex theo
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.ffmpeg.org/download.html' | \
     $(SED) -n 's,.*ffmpeg-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep 1.2.* | \
+    grep 2.* | \
     $(SORT) -Vr | \
     head -1
 endef

@@ -3,8 +3,8 @@
 
 PKG             := mpc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.1
-$(PKG)_CHECKSUM := 8c7e19ad0dd9b3b5cc652273403423d6cf0c5edf
+$(PKG)_VERSION  := 1.0.2
+$(PKG)_CHECKSUM := 5072d82ab50ec36cc8c0e320b5c377adb48abe70
 $(PKG)_SUBDIR   := mpc-$($(PKG)_VERSION)
 $(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.multiprecision.org/mpc/download/$($(PKG)_FILE)
