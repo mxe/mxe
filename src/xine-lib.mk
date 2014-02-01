@@ -3,12 +3,12 @@
 
 PKG             := xine-lib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.21
-$(PKG)_CHECKSUM := 0adf20ef55d24f2a1b4a8974e57ad1be5133b236
+$(PKG)_VERSION  := 1.2.4
+$(PKG)_CHECKSUM := 32267c5fcaa1439a5fbf7606d27dc4fafba9e504
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xine/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc faad2 ffmpeg flac fontconfig freetype graphicsmagick libiconv libmng pthreads sdl speex theora vorbis wavpack zlib
+$(PKG)_DEPS     := gcc faad2 ffmpeg flac fontconfig freetype graphicsmagick libiconv libmng pthreads sdl speex theora vorbis wavpack zlib libmpcdec libcdio vcdimager mman-win32 libmad a52dec libmodplug
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.xine-project.org/releases' | \
@@ -20,10 +20,8 @@ endef
 
 define $(PKG)_BUILD
     # rebuild configure script as one of the patches modifies configure.ac
-    cd '$(1)' && aclocal -I m4
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && $(LIBTOOLIZE)
-    cd '$(1)' && autoconf
-
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -41,9 +39,6 @@ define $(PKG)_BUILD
         --with-theora \
         --with-speex \
         --with-libflac \
-        --without-external-a52dec \
-        --without-external-libmad \
-        --without-external-libmpcdec \
         --with-freetype \
         --with-fontconfig \
         --without-alsa \
@@ -56,10 +51,11 @@ define $(PKG)_BUILD
         --with-wavpack \
         CFLAGS='-I$(1)/win32/include' \
         PTHREAD_LIBS='-lpthread -lws2_32' \
-        LIBS="`$(TARGET)-pkg-config --libs libmng`"
+        LIBS="`$(TARGET)-pkg-config --libs libmng` -logg"
+    $(SED) -i 's,[\s^]*sed , $(SED) ,g' '$(1)/src/combined/ffmpeg/Makefile'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
 
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
+# $(PKG)_BUILD_x86_64-w64-mingw32 =
+# $(PKG)_BUILD_i686-w64-mingw32 =

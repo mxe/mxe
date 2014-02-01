@@ -12,7 +12,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://liba52.sourceforge.net/downloads.html' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/"\.tar.*,\1,p' | \
+    $(SED) -n 's,.*files/a52dec-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

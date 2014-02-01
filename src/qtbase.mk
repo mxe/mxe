@@ -56,14 +56,12 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' QMAKE="$(1)/bin/qmake CONFIG-='debug debug_and_release'"
     rm -rf '$(PREFIX)/$(TARGET)/qt5'
     $(MAKE) -C '$(1)' -j 1 install
+    ln -sf '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt5
 
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qt-test.pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
-
-    # copy pkg-config files to standard directory
-    cp '$(PREFIX)/$(TARGET)'/qt5/lib/pkgconfig/* '$(PREFIX)/$(TARGET)'/lib/pkgconfig/
 
     # build test the manual way
     mkdir '$(1)/test-$(PKG)-pkgconfig'

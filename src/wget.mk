@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := wget
-$(PKG)_VERSION  := 1.14
-$(PKG)_CHECKSUM := cfa0906e6f72c1c902c29b52d140c22ecdcd617e
+$(PKG)_VERSION  := 1.15
+$(PKG)_CHECKSUM := e9fb1d25fa04f9c69e74e656a3174dca02700ba1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-ssl=gnutls \
-        CFLAGS='-DIN6_ARE_ADDR_EQUAL=IN6_ADDR_EQUAL'
+        CFLAGS='-DIN6_ARE_ADDR_EQUAL=IN6_ADDR_EQUAL' \
+        LIBS='-lpthread'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
