@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
 $(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/binutils/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/binutils/$($(PKG)_FILE)
-$(PKG)_DEPS     :=
+$(PKG)_DEPS     := pkgconf
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/binutils/?C=M;O=D' | \
@@ -19,13 +19,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # install target-specific autotools config file
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/share'
-    echo "ac_cv_build=`$(1)/config.guess`" > '$(PREFIX)/$(TARGET)/share/config.site'
-
     cd '$(1)' && ./configure \
         --target='$(TARGET)' \
-        --build="`config.guess`" \
+        --build='$(BUILD)' \
         --prefix='$(PREFIX)' \
         --disable-multilib \
         --with-gcc \
