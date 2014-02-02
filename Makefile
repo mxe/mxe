@@ -151,10 +151,14 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
 	@touch '$@'
 
+# define some whitespace variables
 define newline
 
 
 endef
+
+null  :=
+space := $(null) $(null)
 
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
@@ -193,9 +197,19 @@ $(1): | $(if $(value $(1)_DEPS), \
 endef
 $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
+# finds a package build rule or deps by truncating the target elements
+# $(call LOOKUP_PKG_RULE, package, [BUILD|DEPS], target)
+# returns variable name for use with $(value)
+LOOKUP_PKG_RULE = $(strip \
+    $(if $(findstring undefined, $(flavor $(1)_$(2)_$(3))),\
+        $(if $(3),\
+            $(call LOOKUP_PKG_RULE,$(1),$(2),$(call merge,.,$(call chop,$(call split,.,$(3))))),\
+            $(1)_$(2)),\
+        $(1)_$(2)_$(3)))
+
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1):: $(addprefix download-,$($(1)_DEPS) $($(1)_DEPS_$(3)))
+download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3))))
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
@@ -206,7 +220,7 @@ $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
-                          $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS) $($(1)_DEPS_$(3))) \
+                          $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) $(3)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -224,14 +238,9 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	        exit 1; \
 	    fi; \
 	fi
-	$(if $(or $(value $(1)_BUILD_$(3)),\
-	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
+	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    @echo '[build]    $(1)',
-	    $(if $(findstring undefined,$(origin $(1)_BUILD_$(3))),
-	        @echo '[no-op]    $(1)',
-	        @echo '[exclude]  $(1)'
-	     )
-	 )
+	    @echo '[no-build] $(1)')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@[ $(words $(MXE_TARGETS)) == 1 ] || ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
@@ -251,15 +260,15 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	     ) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
 	    exit 1; \
 	fi
-	@echo '[done]     $(1)'
+	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
+	    @echo '[done]     $(1)')
 
 .PHONY: build-only-$(1)_$(3)
 build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3):
-	$(if $(or $(value $(1)_BUILD_$(3)),\
-	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
+	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    uname -a
 	    git show-branch --list --reflog=1
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
@@ -269,7 +278,7 @@ build-only-$(1)_$(3):
 	    cd '$(2)/$($(1)_SUBDIR)'
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
-	    $$(call $(if $(value $(1)_BUILD_$(3)),$(1)_BUILD_$(3),$(1)_BUILD),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
