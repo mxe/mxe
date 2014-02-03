@@ -8,8 +8,12 @@ TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
 # See doc/gmsl.html for further information
 include $(TOP_DIR)/tools/gmsl
 
-MXE_TARGET_LIST    := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
-MXE_TARGETS        := i686-pc-mingw32
+MXE_TRIPLETS       := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
+MXE_LIB_TYPES      := static shared
+MXE_TARGET_LIST    := $(foreach LIB_TYPE,$(MXE_LIB_TYPES),\
+                          $(addsuffix .$(LIB_TYPE),$(MXE_TRIPLETS)))
+MXE_TARGETS        := i686-pc-mingw32.static
+
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
@@ -45,6 +49,14 @@ PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(T
 BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
 BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
+
+MXE_CONFIGURE_OPTS = \
+    --host='$(TARGET)' \
+    --build='$(BUILD)' \
+    --prefix='$(PREFIX)/$(TARGET)' \
+    $(if $(BUILD_STATIC), \
+        --enable-static --disable-shared , \
+        --disable-static --enable-shared )
 
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
@@ -190,6 +202,15 @@ $(1): | $(if $(value $(1)_DEPS), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 		$($(1)_DEPS)
 	@echo '[target]   $(1) $(call TARGET_HEADER)'
+	$(if $(findstring 1,$(words $(subst ., ,$(1)))),
+	    @echo
+	    @echo '------------------------------------------------------------'
+	    @echo 'Warning: Deprecated target name $(1) specified'
+	    @echo
+	    @echo 'Please use $(1).[$(subst $(space),|,$(MXE_LIB_TYPES))] instead'
+	    @echo 'See index.html for further information'
+	    @echo '------------------------------------------------------------'
+	    @echo)
 endef
 $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
@@ -199,8 +220,10 @@ $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 LOOKUP_PKG_RULE = $(strip \
     $(if $(findstring undefined, $(flavor $(1)_$(2)_$(3))),\
         $(if $(3),\
-            $(call LOOKUP_PKG_RULE,$(1),$(2),$(call merge,.,$(call chop,$(call split,.,$(3))))),\
-            $(1)_$(2)),\
+            $(call LOOKUP_PKG_RULE,$(1),$(2),$(call merge,.,$(call chop,$(call split,.,$(3)))),$(or $(4),$(call uc,$(word 2,$(subst ., ,$(3)))))),\
+            $(if $(4),\
+                $(call LOOKUP_PKG_RULE,$(1),$(2),$(4)),\
+                $(1)_$(2))),\
         $(1)_$(2)_$(3)))
 
 define PKG_RULE
@@ -262,6 +285,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 .PHONY: build-only-$(1)_$(3)
 build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
+build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3):
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),

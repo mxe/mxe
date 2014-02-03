@@ -321,10 +321,10 @@ exit</pre>
     <pre>make gtk lua libidn</pre>
     <p>
     Targets can also be specified on the command line.
-    By default, only i686-pc-mingw32 is built, but you can
+    By default, only i686-pc-mingw32.static is built, but you can
     build your toolchain(s) of choice with:
     </p>
-    <pre>make MXE_TARGETS='x86_64-w64-mingw32 i686-w64-mingw32'</pre>
+    <pre>make MXE_TARGETS='x86_64-w64-mingw32.static i686-w64-mingw32.static'</pre>
     <p>
     or by adjusting the <code>MXE_TARGETS</code> variable
     in <code>settings.mk</code>.
@@ -363,9 +363,9 @@ exit</pre>
     you can add separate entries for cross builds:
     </p>
     <pre>export PKG_CONFIG_PATH="<em>entries for native builds</em>"</pre>
-    <pre>export PKG_CONFIG_PATH_i686_pc_mingw32="<em>entries for MXE builds</em>"</pre>
+    <pre>export PKG_CONFIG_PATH_i686_pc_mingw32_static="<em>entries for MXE builds</em>"</pre>
     <p>
-    Remember to use i686-pc-mingw32-pkg-config
+    Remember to use i686-pc-mingw32.static-pkg-config
     instead of pkg-config for cross builds.
     The Autotools do that automatically for you.
     </p>
@@ -397,13 +397,13 @@ exit</pre>
     <a href="https://www.lrde.epita.fr/~adl/autotools.html">Autotools</a>,
     all you have to do is:
     </p>
-    <pre>./configure --host=i686-pc-mingw32
+    <pre>./configure --host=i686-pc-mingw32.static
 make</pre>
 
     <p>
     If you build a library, you might also want to enforce a static build:
     </p>
-    <pre>./configure --host=i686-pc-mingw32 --enable-static --disable-shared
+    <pre>./configure --host=i686-pc-mingw32.static --enable-static --disable-shared
 make</pre>
 
     <p>
@@ -422,7 +422,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <a href="http://www.cmake.org/">CMake</a> project,
     you can use the provided toolchain file:
     </p>
-    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/i686-pc-mingw32/share/cmake/mxe-conf.cmake</pre>
+    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/i686-pc-mingw32.static/share/cmake/mxe-conf.cmake</pre>
 
     <h3 id="tutorial-5c">Step 5c: Cross compile your Project (Qt)</h3>
 
@@ -431,7 +431,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <a href="https://qt-project.org/">Qt</a> application,
     all you have to do is:
     </p>
-    <pre>/where MXE is installed/usr/i686-pc-mingw32/qt/bin/qmake
+    <pre>/where MXE is installed/usr/i686-pc-mingw32.static/qt/bin/qmake
 make</pre>
     <p>
     Note that Qt 4 is in the "qt" subdirectory. Qt 5 is in the "qt5" subdirectory
@@ -466,7 +466,7 @@ PKG_CONFIG=$(CROSS)pkg-config</pre>
     <p>
     Then, all you have to do is:
     </p>
-    <pre>make CROSS=i686-pc-mingw32-</pre>
+    <pre>make CROSS=i686-pc-mingw32.static-</pre>
     <p>
     That's it!
     </p>
@@ -489,12 +489,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     OpenSceneGraph source distribution for an example. This example can be
     compiled with the following command:
     </p>
-    <pre>i686-pc-mingw32-g++ \
+    <pre>i686-pc-mingw32.static-g++ \
     -o osgstaticviewer.exe examples/osgstaticviewer/osgstaticviewer.cpp \
-    `i686-pc-mingw32-pkg-config --cflags openscenegraph-osgViewer openscenegraph-osgPlugins` \
-    `i686-pc-mingw32-pkg-config --libs openscenegraph-osgViewer openscenegraph-osgPlugins`</pre>
+    `i686-pc-mingw32.static-pkg-config --cflags openscenegraph-osgViewer openscenegraph-osgPlugins` \
+    `i686-pc-mingw32.static-pkg-config --libs openscenegraph-osgViewer openscenegraph-osgPlugins`</pre>
     <p>
-    The <code>i686-pc-mingw32-pkg-config</code> command from MXE will
+    The <code>i686-pc-mingw32.static-pkg-config</code> command from MXE will
     automatically add <code>-DOSG_LIBRARY_STATIC</code> to your compiler flags.
     </p>
 
