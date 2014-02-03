@@ -16,11 +16,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
+
+    mkdir '$(1)/build'
+
+echo '$(PREFIX)/$(TARGET)/bin/ar'        > build/MinGW32.dat
+echo '$(PREFIX)/$(TARGET)/bin/ranlib'   >> build/MinGW32.dat
+echo '$(PREFIX)/$(TARGET)/bin/gcc'      >> build/MinGW32.dat
+echo '$(PREFIX)/$(TARGET)/bin/gfortran' >> build/MinGW32.dat
+
+    cd '$(1)/build' && ./configure \
+        -b 32 \
+        -Si nocygwin 1 \
         --shared \
-        --help
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
