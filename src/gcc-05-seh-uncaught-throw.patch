@@ -1,0 +1,23 @@
+--- gcc/config/i386/i386.c      (Revision 197118)
++++ gcc/config/i386/i386.c      (Arbeitskopie)
+@@ -3941,6 +3941,20 @@
+   register_pass (&insert_vzeroupper_info);
+ }
+
++/* Implement TARGET_CANNOT_MODIFY_JUMPS_P.  */
++static bool
++ix86_cannot_modify_jumps_p (void)
++{
++  if (TARGET_SEH && reload_completed
++      && cfun && cfun->eh
++      && cfun->eh->region_tree)
++    return true;
++  return false;
++}
++
++#undef  TARGET_CANNOT_MODIFY_JUMPS_P
++#define TARGET_CANNOT_MODIFY_JUMPS_P ix86_cannot_modify_jumps_p
++
+ /* Update register usage after having seen the compiler flags.  */
+
+ static void
