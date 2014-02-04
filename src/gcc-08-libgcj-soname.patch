@@ -1,5 +1,11 @@
---- mingw64-x86_64-gcc-4.8-20130310-1/origsrc/gcc-4.8-20130310/gcc/config/i386/mingw32.h	2013-01-10 14:38:27.000000000 -0600
-+++ mingw64-x86_64-gcc-4.8-20130310-1/src/gcc-4.8-20130310/gcc/config/i386/mingw32.h	2013-03-14 03:45:34.220060900 -0500
+# This file is part of MXE.
+# See index.html for further information.
+
+This patch has been taken from:
+git clone git://git.code.sf.net/p/cygwin-ports/mingw64-x86_64-gcc
+
+--- a/gcc/config/i386/mingw32.h	2013-01-10 14:38:27.000000000 -0600
++++ b/gcc/config/i386/mingw32.h	2013-03-14 03:45:34.220060900 -0500
 @@ -245,4 +245,4 @@ do {						         \
  #define LIBGCC_SONAME "libgcc_s" LIBGCC_EH_EXTN "-1.dll"
  

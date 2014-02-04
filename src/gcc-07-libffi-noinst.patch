@@ -1,8 +1,14 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+This patch has been taken from:
+git clone git://git.code.sf.net/p/cygwin-ports/mingw64-x86_64-gcc
+
 Only the convenience library is used in libjava, and the bundled version
 is usually a few releases behind the standalone version.
 
---- origsrc/gcc-4.7.2/Makefile.in	2012-08-06 09:34:27.000000000 -0500
-+++ src/gcc-4.7.2/Makefile.in	2013-03-10 21:27:05.825568600 -0500
+--- a/Makefile.in	2012-08-06 09:34:27.000000000 -0500
++++ b/Makefile.in	2013-03-10 21:27:05.825568600 -0500
 @@ -1573,7 +1573,6 @@ install-info-target: maybe-install-info-
  install-info-target: maybe-install-info-target-libtermcap
  install-info-target: maybe-install-info-target-winsup

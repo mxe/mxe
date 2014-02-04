@@ -1,5 +1,11 @@
---- origsrc/gcc-4.8-20130310/config/dfp.m4	2012-11-04 17:08:42.000000000 -0600
-+++ src/gcc-4.8-20130310/config/dfp.m4	2013-03-17 03:26:22.331093900 -0500
+# This file is part of MXE.
+# See index.html for further information.
+
+This patch has been taken from:
+git clone git://git.code.sf.net/p/cygwin-ports/mingw64-x86_64-gcc
+
+--- a/config/dfp.m4	2012-11-04 17:08:42.000000000 -0600
++++ b/config/dfp.m4	2013-03-17 03:26:22.331093900 -0500
 @@ -23,7 +23,7 @@ Valid choices are 'yes', 'bid', 'dpd', a
      powerpc*-*-linux* | i?86*-*-linux* | x86_64*-*-linux* | s390*-*-linux* | \
      i?86*-*-gnu* | \
@@ -9,8 +15,8 @@
        enable_decimal_float=yes
        ;;
      *)
---- origsrc/gcc-4.8-20130310/gcc/configure	2013-03-17 03:47:51.178944300 -0500
-+++ src/gcc-4.8-20130310/gcc/configure	2013-03-17 11:46:33.192417700 -0500
+--- a/gcc/configure	2013-03-17 03:47:51.178944300 -0500
++++ b/gcc/configure	2013-03-17 11:46:33.192417700 -0500
 @@ -7079,7 +7079,7 @@ else
      powerpc*-*-linux* | i?86*-*-linux* | x86_64*-*-linux* | s390*-*-linux* | \
      i?86*-*-gnu* | \
@@ -20,8 +26,8 @@
        enable_decimal_float=yes
        ;;
      *)
---- origsrc/gcc-4.8-20130310/libdecnumber/configure	2012-11-04 17:08:42.000000000 -0600
-+++ src/gcc-4.8-20130310/libdecnumber/configure	2013-03-17 03:27:08.161157200 -0500
+--- a/libdecnumber/configure	2012-11-04 17:08:42.000000000 -0600
++++ b/libdecnumber/configure	2013-03-17 03:27:08.161157200 -0500
 @@ -4613,7 +4613,7 @@ else
      powerpc*-*-linux* | i?86*-*-linux* | x86_64*-*-linux* | s390*-*-linux* | \
      i?86*-*-gnu* | \
@@ -31,8 +37,8 @@
        enable_decimal_float=yes
        ;;
      *)
---- origsrc/gcc-4.8-20130310/libgcc/configure	2012-11-04 17:08:42.000000000 -0600
-+++ src/gcc-4.8-20130310/libgcc/configure	2013-03-17 03:32:46.693679700 -0500
+--- a/libgcc/configure	2012-11-04 17:08:42.000000000 -0600
++++ b/libgcc/configure	2013-03-17 03:32:46.693679700 -0500
 @@ -4078,7 +4078,7 @@ else
      powerpc*-*-linux* | i?86*-*-linux* | x86_64*-*-linux* | s390*-*-linux* | \
      i?86*-*-gnu* | \

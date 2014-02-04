@@ -1,5 +1,12 @@
---- gcc/config/i386/xmmintrin.h.orig	2013-01-18 14:57:27.762645582 +0100
-+++ gcc/config/i386/xmmintrin.h	2013-01-18 14:58:27.604561940 +0100
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+http://pkgs.fedoraproject.org/cgit/mingw-gcc.git/plain/gcc-make-xmmintrin-header-cplusplus-compatible.patch?h=f19
+
+diff -urN a/gcc/config/i386/xmmintrin.h b/gcc/config/i386/xmmintrin.h
+--- a/gcc/config/i386/xmmintrin.h	2013-01-18 14:57:27.762645582 +0100
++++ b/gcc/config/i386/xmmintrin.h	2013-01-18 14:58:27.604561940 +0100
 @@ -37,6 +37,10 @@
  /* Get _mm_malloc () and _mm_free ().  */
  #include <mm_malloc.h>

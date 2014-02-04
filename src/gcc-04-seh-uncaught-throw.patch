@@ -1,5 +1,11 @@
---- gcc/config/i386/i386.c      (Revision 197118)
-+++ gcc/config/i386/i386.c      (Arbeitskopie)
+# This file is part of MXE.
+# See index.html for further information.
+
+This patch has been taken from:
+http://gcc.gnu.org/bugzilla/show_bug.cgi?id=56742
+
+--- a/gcc/config/i386/i386.c      (Revision 197118)
++++ b/gcc/config/i386/i386.c      (Arbeitskopie)
 @@ -3941,6 +3941,20 @@
    register_pass (&insert_vzeroupper_info);
  }

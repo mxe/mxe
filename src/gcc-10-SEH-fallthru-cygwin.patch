@@ -1,3 +1,9 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+This patch has been taken from:
+git clone git://git.code.sf.net/p/cygwin-ports/mingw64-x86_64-gcc
+
 --- a/gcc/config/i386/i386.c	
 +++ a/gcc/config/i386/i386.c	
 @@ -35564,6 +35564,46 @@ ix86_pad_short_function (void)

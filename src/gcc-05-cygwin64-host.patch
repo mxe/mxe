@@ -1,5 +1,11 @@
---- gcc/config.build	(revision 196430)
-+++ gcc/config.build	(working copy)
+# This file is part of MXE.
+# See index.html for further information.
+
+This patch has been taken from:
+git clone git://git.code.sf.net/p/cygwin-ports/mingw64-x86_64-gcc
+
+--- a/gcc/config.build	(revision 196430)
++++ b/gcc/config.build	(working copy)
 @@ -60,7 +60,7 @@
      # IBM 360/370/390 Architecture
      build_xm_defines='FATAL_EXIT_CODE=12'
@@ -9,8 +15,8 @@
      build_xm_file=i386/xm-cygwin.h
      build_exeext=.exe
      ;;
---- gcc/config.host	(revision 196430)
-+++ gcc/config.host	(working copy)
+--- a/gcc/config.host	(revision 196430)
++++ b/gcc/config.host	(working copy)
 @@ -214,7 +214,7 @@
          ;;
      esac
