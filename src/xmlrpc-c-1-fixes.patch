@@ -1,0 +1,77 @@
+This file is part of MXE.
+See index.html for further information.
+
+Index: stable/lib/curl_transport/curltransaction.c
+===================================================================
+--- stable/lib/curl_transport/curltransaction.c	(revision 2571)
++++ stable/lib/curl_transport/curltransaction.c	(working copy)
+@@ -2,8 +2,6 @@
+     curlTransaction
+ =============================================================================*/
+ 
+-#define _XOPEN_SOURCE 600  /* Make sure strdup() is in <string.h> */
+-
+ #include <assert.h>
+ #include <string.h>
+ #include <stdlib.h>
+Index: stable/src/cpp/packetsocket.cpp
+===================================================================
+--- stable/src/cpp/packetsocket.cpp	(revision 2571)
++++ stable/src/cpp/packetsocket.cpp	(working copy)
+@@ -45,7 +45,7 @@
+   example, an unplugged TCP/IP network cable.  It's probably better
+   to use the TCP keepalive facility for that.
+ ============================================================================*/
+-#include "xmlrpc_config.h"
++#define MSVCRT 1
+ 
+ #include <cassert>
+ #include <string>
+Index: stable/src/cpp/server_abyss.cpp
+===================================================================
+--- stable/src/cpp/server_abyss.cpp	(revision 2571)
++++ stable/src/cpp/server_abyss.cpp	(working copy)
+@@ -1,4 +1,4 @@
+-#include "xmlrpc_config.h"
++#define MSVCRT 1
+ #define WIN32_LEAN_AND_MEAN  /* required by xmlrpc-c/abyss.h */
+ #include <cstdlib>
+ #include <string>
+Index: stable/src/cpp/server_cgi.cpp
+===================================================================
+--- stable/src/cpp/server_cgi.cpp	(revision 2571)
++++ stable/src/cpp/server_cgi.cpp	(working copy)
+@@ -12,7 +12,7 @@
+    Contributed to the public domain by its author.
+ =============================================================================*/
+ 
+-#include "xmlrpc_config.h"
++#define MSVCRT 1
+ #if MSVCRT
+ #ifndef _CRT_SECURE_NO_WARNINGS
+ #define _CRT_SECURE_NO_WARNINGS
+Index: stable/src/cpp/server_pstream.cpp
+===================================================================
+--- stable/src/cpp/server_pstream.cpp	(revision 2571)
++++ stable/src/cpp/server_pstream.cpp	(working copy)
+@@ -14,7 +14,7 @@
+    Contributed to the public domain by its author.
+ =============================================================================*/
+ 
+-#include "xmlrpc_config.h"
++#define MSVCRT 1
+ #if MSVCRT
+ #ifndef _CRT_SECURE_NO_WARNINGS
+ #define _CRT_SECURE_NO_WARNINGS
+Index: stable/src/xmlrpc_datetime.c
+===================================================================
+--- stable/src/xmlrpc_datetime.c	(revision 2571)
++++ stable/src/xmlrpc_datetime.c	(working copy)
+@@ -1,7 +1,5 @@
+ #include "xmlrpc_config.h"
+ 
+-#define _XOPEN_SOURCE 600  /* Make sure strdup() is in <string.h> */
+-
+ #include <time.h>
+ #include <stdlib.h>
+ #include <string.h>
