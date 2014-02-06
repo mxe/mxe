@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From b3ca574eaada965dbd20a90f89c3eb524627321a Mon Sep 17 00:00:00 2001
+From 678830f6f5e3e9c8112a40983be7f9fefc3e91b3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 13 Dec 2012 20:23:48 +0100
 Subject: [PATCH] remove duplicate defs (mxe-specific)
@@ -41,5 +41,5 @@ index e9503d4..b92aa98 100644
  #endif //  __ICreateDevEnum_INTERFACE_DEFINED__
  
 -- 
-1.8.4
+1.8.4.5
 

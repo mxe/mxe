@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From ec1bf00708e5aa804d392678bae5b32921ae0c2a Mon Sep 17 00:00:00 2001
+From 58ae17b18cea09c1fd3f8ec6912913e147f1f8f5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 17:03:55 +0200
 Subject: [PATCH] mingw build fix: _fileno
@@ -20,5 +20,5 @@ index 1fad197..2bbf5b5 100644
  
  # with c++11 / __STRICT_ANSI__ mingw.org stdio.h doesn't declare e.g. _fileno
 -- 
-1.8.4
+1.8.4.5
 

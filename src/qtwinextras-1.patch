@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From bb7d4141f14dfd22365df4991a066e9b760b088d Mon Sep 17 00:00:00 2001
+From 45d94cc9d6d7a9e2e1349e826c44fa342149a867 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 24 Oct 2013 22:29:51 +0200
 Subject: [PATCH] Fix MinGW-w64 GCC 4.8.2 compilation
@@ -21,5 +21,5 @@ index 91faed5..352c405 100644
  typedef struct SHARDAPPIDINFOLINK
  {
 -- 
-1.8.4
+1.8.4.5
 
