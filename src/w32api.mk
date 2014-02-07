@@ -2,11 +2,10 @@
 # See index.html for further information.
 
 PKG             := w32api
-$(PKG)_IGNORE   := 4%
-$(PKG)_VERSION  := 3.17
-$(PKG)_CHECKSUM := 1eb60b0cd546bf3efdc3fb89a4118df11da2314a
+$(PKG)_VERSION  := 4.0.3
+$(PKG)_CHECKSUM := 1cb75a35b6baf52e58facc97c56a7e22cd125887
 $(PKG)_SUBDIR   := .
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-2-mingw32-dev.tar.lzma
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-1-mingw32-dev.tar.lzma
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/Base/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
