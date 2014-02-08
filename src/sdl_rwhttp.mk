@@ -10,9 +10,9 @@ $(PKG)_FILE     := SDL_rwhttp-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mgerhardy/SDL_rwhttp/releases/download/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc curl
 
-$(PKG)_DEPS_i686-pc-mingw32    := sdl sdl_net
-$(PKG)_DEPS_i686-w64-mingw32   := sdl2 sdl2_net
-$(PKG)_DEPS_x86_64-w64-mingw32 := sdl2 sdl2_net
+$(PKG)_DEPS_i686-pc-mingw32    := $($(PKG)_DEPS) sdl sdl_net
+$(PKG)_DEPS_i686-w64-mingw32   := $($(PKG)_DEPS) sdl2 sdl2_net
+$(PKG)_DEPS_x86_64-w64-mingw32 := $($(PKG)_DEPS) sdl2 sdl2_net
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://github.com/mgerhardy/SDL_rwhttp/tags' | \
