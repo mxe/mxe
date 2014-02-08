@@ -1,6 +1,13 @@
 # This file is part of MXE.
 # See index.html for further information.
 
+MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
+
+# GNU Make Standard Library (http://gmsl.sourceforge.net/)
+# See doc/gmsl.html for further information
+include $(TOP_DIR)/tools/gmsl
+
 MXE_TARGET_LIST    := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
 MXE_TARGETS        := i686-pc-mingw32
 DEFAULT_MAX_JOBS   := 6
@@ -34,8 +41,6 @@ LOG_DIR    := $(PWD)/log
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
-MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
-TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
 BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
 BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
