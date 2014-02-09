@@ -3,10 +3,11 @@
 
 MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
+EXT_DIR  := $(TOP_DIR)/ext
 
 # GNU Make Standard Library (http://gmsl.sourceforge.net/)
 # See doc/gmsl.html for further information
-include $(TOP_DIR)/tools/gmsl
+include $(EXT_DIR)/gmsl
 
 MXE_TRIPLETS       := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
 MXE_LIB_TYPES      := static shared
@@ -46,7 +47,7 @@ TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
-BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
+BUILD      := $(shell '$(EXT_DIR)/config.guess')
 BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 

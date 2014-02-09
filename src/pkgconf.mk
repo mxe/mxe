@@ -37,7 +37,7 @@ define $(PKG)_BUILD_COMMON
 
     # install config.guess for general use
     $(INSTALL) -d '$(PREFIX)/bin'
-    $(INSTALL) -m755 '$(TOP_DIR)/tools/config.guess' '$(PREFIX)/bin/'
+    $(INSTALL) -m755 '$(EXT_DIR)/config.guess' '$(PREFIX)/bin/'
 
     # create pkg-config script
     (echo '#!/bin/sh'; \
