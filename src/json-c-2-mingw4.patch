@@ -1,0 +1,22 @@
+From 3550c99083684269b194a03ffe486439120fbec1 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 9 Feb 2014 10:25:43 +0100
+Subject: [PATCH] workaround for failed strncasecmp detection on MinGW 4
+
+
+diff --git a/json_tokener.c b/json_tokener.c
+index b2b47f9..9567dd5 100644
+--- a/json_tokener.c
++++ b/json_tokener.c
+@@ -46,7 +46,7 @@
+   /* MSC has the version as _strnicmp */
+ # define strncasecmp _strnicmp
+ #elif !HAVE_STRNCASECMP
+-# error You do not have strncasecmp on your system.
++// No strncasecmp detected, but if this is MinGW 4 it should be there nevertheless.
+ #endif /* HAVE_STRNCASECMP */
+ 
+ static const char* json_null_str = "null";
+-- 
+1.8.4.5
+
