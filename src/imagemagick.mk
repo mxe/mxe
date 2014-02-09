@@ -39,4 +39,5 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' ImageMagick++ --cflags --libs`
 endef
 
+$(PKG)_BUILD_i686-pc-mingw32 =
 $(PKG)_BUILD_x86_64-w64-mingw32 =
