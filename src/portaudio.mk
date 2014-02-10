@@ -18,6 +18,10 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && autoconf
+    # libtool looks for a pei* format when linking shared libs
+    # apparently there's no real difference b/w pei and pe
+    # so we set the libtool cache variables
+    # https://sourceware.org/cgi-bin/cvsweb.cgi/src/bfd/libpei.h?annotate=1.25&cvsroot=src
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-host_os=mingw \
