@@ -19,14 +19,15 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-host_os=mingw \
-        --with-winapi=wmme,directx,wasapi,wdmks \
+        --with-winapi=portaudio-winapi \
         --with-dxdir=$(PREFIX)/$(TARGET) \
-        ac_cv_path_AR=$(TARGET)-ar
-    $(MAKE) -C '$(1)' -j '$(JOBS)' SHARED_FLAGS= TESTS=
+        ac_cv_path_AR=$(TARGET)-ar \
+        $(if $(BUILD_SHARED),\
+            lt_cv_deplibs_check_method='file_magic file format (pe-i386|pe-x86-64)' \
+            lt_cv_file_magic_cmd='$$OBJDUMP -f')
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $(if $(BUILD_STATIC),SHARED_FLAGS=) TESTS=
     $(MAKE) -C '$(1)' -j 1 install
 
     '$(TARGET)-gcc' \
@@ -35,5 +36,9 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' portaudio-2.0 --cflags --libs`
 endef
 
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
+$(PKG)_WINAPI_MINGW_ORG = wmme,directx,wasapi,wdmks
+$(PKG)_WINAPI_MINGW_W64 = wmme,directx
+
+$(PKG)_BUILD_i686-pc-mingw32    = $(subst portaudio-winapi,$($(PKG)_WINAPI_MINGW_ORG),$($(PKG)_BUILD))
+$(PKG)_BUILD_i686-w64-mingw32   = $(subst portaudio-winapi,$($(PKG)_WINAPI_MINGW_W64),$($(PKG)_BUILD))
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst portaudio-winapi,$($(PKG)_WINAPI_MINGW_W64),$($(PKG)_BUILD))
