@@ -41,7 +41,7 @@ new file mode 100644
 index 0000000..ea57c4a
 --- /dev/null
 +++ b/glut.pc.in
-@@ -0,0 +1,12 @@
+@@ -0,0 +1,13 @@
 +prefix=@prefix@
 +exec_prefix=@exec_prefix@
 +libdir=@libdir@
@@ -52,7 +52,8 @@ index 0000000..ea57c4a
 +Version: @VERSION@
 +Libs: -L${libdir} -lglut
 +Libs.private: -lglu32 -lopengl32 -lwinmm -lgdi32 -mwindows
-+Cflags: -DFREEGLUT_STATIC -I${includedir}
++Cflags: -I${includedir}
++Cflags.private: -DFREEGLUT_STATIC
 +
 -- 
 1.8.1.4

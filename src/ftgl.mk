@@ -22,9 +22,7 @@ define $(PKG)_BUILD
     cd '$(1)' && automake --gnu
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --without-x \
         --disable-freetypetest \
         --with-ft-prefix='$(PREFIX)/$(TARGET)'
@@ -35,5 +33,5 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         -lftgl -lm -lstdc++ \
-        `'$(TARGET)-pkg-config' freetype2 gl glu --cflags --libs --static`
+        `'$(TARGET)-pkg-config' freetype2 gl glu --cflags --libs`
 endef
