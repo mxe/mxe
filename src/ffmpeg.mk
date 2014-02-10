@@ -27,7 +27,9 @@ define $(PKG)_BUILD
         --arch=$(patsubst -%,,$(TARGET)) \
         --target-os=mingw32 \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(if $(BUILD_STATIC), \
+            --enable-static --disable-shared , \
+            --disable-static --enable-shared ) \
         --disable-debug \
         --enable-memalign-hack \
         --disable-pthreads \

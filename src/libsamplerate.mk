@@ -11,7 +11,7 @@ $(PKG)_URL      := http://www.mega-nerd.com/SRC/$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.mega-nerd.com/SRC/$(PKG)-$($(PKG)_VERSION)' | \
+    $(WGET) -q -O- 'http://www.mega-nerd.com/SRC/download.html' | \
     $(SED) -n 's,.*$(PKG)-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'alpha' | \
     grep -v 'beta' | \
@@ -21,6 +21,6 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-    $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j 1 install LDFLAGS="-no-undefined"
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)' -j 1 install LDFLAGS='-no-undefined'
 endef

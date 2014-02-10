@@ -19,12 +19,10 @@ define $(PKG)_BUILD
     cd '$(1)' && chmod +x configure
     cd '$(1)' && ./configure \
         --cross-prefix='$(TARGET)'- \
-        --enable-static \
+        $(if $(BUILD_STATIC),--enable-static ) \
         --prefix='$(PREFIX)/$(TARGET)' \
         --libdir='$(PREFIX)/$(TARGET)/lib' \
         --incdir='$(PREFIX)/$(TARGET)/include/sys'
     $(MAKE) -C '$(1)' -j 1
     $(MAKE) -C '$(1)' -j 1 install
 endef
-
-

@@ -20,7 +20,9 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --cross-prefix='$(TARGET)-' \
-        --disable-shared
+        $(if $(BUILD_STATIC), \
+            --enable-static --disable-shared , \
+            --disable-static --enable-shared )
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 

@@ -17,7 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,__declspec(dllimport),,' '$(1)/lib/fribidi-common.h'
+    $(if $(BUILD_STATIC),\
+        $(SED) -i 's/__declspec(dllimport)//' '$(1)/lib/fribidi-common.h')
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-debug \

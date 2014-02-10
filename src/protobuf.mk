@@ -26,9 +26,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 distclean
 # Second step: Build for target system.
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --with-zlib \
         --with-protoc=src/protoc_host
     $(MAKE) -C '$(1)' -j '$(JOBS)'
