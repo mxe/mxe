@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     rm -r '$(1)/libs/context'
     # old version appears to interfere
     rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
-    echo 'using gcc : : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar ;' > '$(1)/user-config.jam'
+    echo 'using gcc : : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
     # compile boost jam
     cd '$(1)/tools/build/v2/engine' && ./build.sh
     cd '$(1)' && tools/build/v2/engine/bin.*/bjam \
