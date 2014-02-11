@@ -32,6 +32,8 @@ define $(PKG)_BUILD
         --disable-werror
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
+
+    rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, ar as dlltool ld ld.bfd nm objcopy objdump ranlib strip)
 endef
 
 $(PKG)_BUILD_$(BUILD) :=

@@ -48,6 +48,9 @@ define $(PKG)_CONFIGURE
         --with-isl='$(PREFIX)' \
         --with-mpc='$(PREFIX)' \
         --with-mpfr='$(PREFIX)' \
+        --with-as='$(PREFIX)/bin/$(TARGET)-as' \
+        --with-ld='$(PREFIX)/bin/$(TARGET)-ld' \
+        --with-nm='$(PREFIX)/bin/$(TARGET)-nm' \
         $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
 endef
 
@@ -57,6 +60,8 @@ define $(PKG)_BUILD_i686-pc-mingw32
         --disable-sjlj-exceptions
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
+
+    rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, c++ g++ gcc gfortran)
 endef
 
 define $(PKG)_BUILD_mingw-w64
@@ -79,6 +84,8 @@ define $(PKG)_BUILD_mingw-w64
     cd '$(1).build'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
+
+    rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, c++ g++ gcc gfortran)
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mxe-config-opts,--disable-lib32,$($(PKG)_BUILD_mingw-w64))
