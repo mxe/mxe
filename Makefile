@@ -264,7 +264,9 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	        echo; \
 	        echo 'Download failed or wrong checksum of package $(1)!'; \
 	        echo '------------------------------------------------------------'; \
-	        tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p'; \
+	        $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
+	            tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p';, \
+	            $(SED) -n '/./p' '$(LOG_DIR)/$(1)-download';) \
 	        echo '------------------------------------------------------------'; \
 	        echo '[log]      $(LOG_DIR)/$(1)-download'; \
 	        echo; \
@@ -281,7 +283,9 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
-	    tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p'; \
+	    $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
+	        tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p';, \
+	        $(SED) -n '/./p' '$(LOG_DIR)/$(1)';) \
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
