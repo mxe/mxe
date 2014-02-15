@@ -4,7 +4,7 @@
 PKG             := qtsvg
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := c57a83786f6509b1e8bbd3514727f1d63f32a214
+$(PKG)_CHECKSUM := 8ffaafb48566699386546b4316afce83025f4090
 $(PKG)_SUBDIR    = $(subst qtbase,qtsvg,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtsvg,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtsvg,$(qtbase_URL))

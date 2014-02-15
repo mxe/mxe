@@ -20,11 +20,8 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,`uname`,MinGW,g' '$(1)/xml2-config.in'
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --without-debug \
-        --prefix='$(PREFIX)/$(TARGET)' \
         --without-python \
         --without-threads
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=

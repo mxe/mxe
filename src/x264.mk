@@ -17,13 +17,10 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,yasm,$(TARGET)-yasm,g' '$(1)/configure'
     cd '$(1)' && ./configure \
+        $(MXE_CONFIGURE_OPTS) \
         --cross-prefix='$(TARGET)'- \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
-        --enable-static \
         --enable-win32thread \
-        --disable-lavf \    # Avoid circular dependency with ffmpeg. Remove if undesired.
+        --disable-lavf \
         --disable-swscale   # Avoid circular dependency with ffmpeg. Remove if undesired.
     $(MAKE) -C '$(1)' -j 1 uninstall
     $(MAKE) -C '$(1)' -j '$(JOBS)'

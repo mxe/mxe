@@ -20,10 +20,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,libpng12,libpng,g'                          '$(1)/configure'
     $(SED) -i 's,^\(Libs:.*\),\1 @CAIRO_NONPKGCONFIG_LIBS@,' '$(1)/src/cairo.pc.in'
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-gtk-doc \
         --disable-test-surfaces \
         --disable-gcov \
@@ -45,7 +42,7 @@ define $(PKG)_BUILD
         --enable-pdf \
         --enable-svg \
         --disable-pthread \
-        CFLAGS="$(CFLAGS) -DCAIRO_WIN32_STATIC_BUILD" \
+        CFLAGS="$(CFLAGS) $(if $(BUILD_STATIC),-DCAIRO_WIN32_STATIC_BUILD)" \
         LIBS="-lmsimg32 -lgdi32 `$(TARGET)-pkg-config pixman-1 --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

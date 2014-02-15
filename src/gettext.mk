@@ -19,9 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)/gettext-runtime' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-threads=win32 \
         --without-libexpat-prefix \
         --without-libxml2-prefix \

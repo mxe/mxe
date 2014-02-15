@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 8c245555c3e21dcbc3d4dbb2ecca74f609545424
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/vcdimager/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc popt libxml2
+$(PKG)_DEPS     := gcc libcdio libxml2 popt
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package vcdimager need to be written.' >&2;
@@ -18,8 +18,6 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j 1 install
 endef

@@ -72,8 +72,17 @@ define $(PKG)_BUILD
     ln -sf '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt4
 
     cd '$(1)/tools/assistant' && '$(1)/bin/qmake' assistant.pro
+    # can't figure out where -lQtCLucene comes from so use
+    # sed on the output instead of patching the input
+    $(MAKE) -C '$(1)/tools/assistant' sub-lib-qmake_all
+    $(SED) -i 's,-lQtCLucene$$,-lQtCLucene4,' '$(1)/tools/assistant/lib/Makefile.Release'
     $(MAKE) -C '$(1)/tools/assistant' -j '$(JOBS)' install
 
+    # likewise for these two
+    cd '$(1)/tools/designer/src/designer' && '$(1)/bin/qmake' designer.pro
+    $(if $(BUILD_SHARED),\
+        $(SED) -i 's/-lQtDesignerComponents /-lQtDesignerComponents4 /' '$(1)/tools/designer/src/designer/Makefile.Release' && \
+        $(SED) -i 's/-lQtDesigner /-lQtDesigner4 /'                     '$(1)/tools/designer/src/designer/Makefile.Release',)
     cd '$(1)/tools/designer' && '$(1)/bin/qmake' designer.pro
     $(MAKE) -C '$(1)/tools/designer' -j '$(JOBS)' install
 
@@ -98,3 +107,8 @@ define $(PKG)_BUILD
         -I'$(1)/test-$(PKG)-pkgconfig' \
         `'$(TARGET)-pkg-config' QtGui --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\
+                      $(subst -no-webkit ,-webkit ,\
+                      $(subst -qt-sql-,-plugin-sql-,\
+                      $($(PKG)_BUILD))))

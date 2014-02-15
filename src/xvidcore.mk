@@ -19,15 +19,13 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j 1 BUILD_DIR='build' SHARED_LIB=
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)' -j 1 BUILD_DIR='build' $(if $(BUILD_STATIC),SHARED,STATIC)_LIB=
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/../../src/xvid.h' '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/build/xvidcore.a' '$(PREFIX)/$(TARGET)/lib/'
-    ln -sf '$(PREFIX)/$(TARGET)/lib/xvidcore.a' '$(PREFIX)/$(TARGET)/lib/libxvidcore.a'
+    $(INSTALL) -m644 '$(1)/build/xvidcore.$(LIB_SUFFIX)' '$(PREFIX)/$(TARGET)/lib/'
+    ln -sf '$(PREFIX)/$(TARGET)/lib/xvidcore.$(LIB_SUFFIX)' '$(PREFIX)/$(TARGET)/lib/libxvidcore.$(LIB_SUFFIX)'
 endef
 
 define $(PKG)_BUILD_x86_64-w64-mingw32

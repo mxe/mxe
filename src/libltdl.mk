@@ -16,9 +16,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)/libltdl' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-ltdl-install
     $(MAKE) -C '$(1)/libltdl' -j '$(JOBS)'
     $(MAKE) -C '$(1)/libltdl' -j 1 install

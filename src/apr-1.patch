@@ -1,0 +1,33 @@
+From d221ed3c7576a3456a8f5623246b46d355a4db83 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 9 Feb 2014 02:48:38 +0100
+Subject: [PATCH] winsock2.h must precede windows.h
+
+MinGW 4 is particular about this.
+
+diff --git a/include/apr.h.in b/include/apr.h.in
+index 9f1fb6f..f1741c1 100644
+--- a/include/apr.h.in
++++ b/include/apr.h.in
+@@ -115,14 +115,14 @@
+  * or the extern "C" namespace 
+  */
+ 
+-#if APR_HAVE_WINDOWS_H
+-#include <windows.h>
+-#endif
+-
+ #if APR_HAVE_WINSOCK2_H
+ #include <winsock2.h>
+ #endif
+ 
++#if APR_HAVE_WINDOWS_H
++#include <windows.h>
++#endif
++
+ #if APR_HAVE_SYS_TYPES_H
+ #include <sys/types.h>
+ #endif
+-- 
+1.8.4.5
+

@@ -20,10 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --enable-static \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-threads=win32 \
         --with-gmp-include='$(PREFIX)/$(TARGET)/include/'
         --with-gmp-lib='$(PREFIX)/$(TARGET)/lib/'
@@ -36,6 +33,7 @@ define $(PKG)_BUILD
     cp -R '$(1)/tests' '$(PREFIX)/$(TARGET)/bin/$(PKG)-tests'
     (printf 'date /t >  all-tests-$(PKG)-$($(PKG)_VERSION).txt\r\n'; \
      printf 'time /t >> all-tests-$(PKG)-$($(PKG)_VERSION).txt\r\n'; \
+     printf 'set PATH=..\\;%%PATH%%\r\n'; \
      printf 'for /R %%%%f in (*.exe) do %%%%f || echo %%%%f fail >> all-tests-$(PKG)-$($(PKG)_VERSION).txt\r\n';) \
      > '$(PREFIX)/$(TARGET)/bin/$(PKG)-tests/all-tests-$(PKG)-$($(PKG)_VERSION).bat'
 endef

@@ -3,8 +3,8 @@
 
 PKG             := libpng
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.8
-$(PKG)_CHECKSUM := acdb0a45d80c90b39b56a41075003d4726f3558c
+$(PKG)_VERSION  := 1.6.9
+$(PKG)_CHECKSUM := fe5b37a01a2a056a26f1a6661dc45e026ad86c88
 $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.simplesystems.org/pub/$(PKG)/png/src/libpng16/$($(PKG)_FILE)
@@ -22,10 +22,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     ln -sf '$(PREFIX)/$(TARGET)/bin/libpng-config' '$(PREFIX)/bin/$(TARGET)-libpng-config'
 

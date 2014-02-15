@@ -4,7 +4,7 @@
 PKG             := qtdeclarative
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 2768fab8f3d81cfb67e101e94194cb4f90d4efa4
+$(PKG)_CHECKSUM := 1875e93665255ee4ef1694d946cd20c0861ac60d
 $(PKG)_SUBDIR    = $(subst qtbase,qtdeclarative,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtdeclarative,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtdeclarative,$(qtbase_URL))
@@ -19,3 +19,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
+
+$(PKG)_BUILD_i686-pc-mingw32 =

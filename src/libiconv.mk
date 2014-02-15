@@ -20,9 +20,7 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/windows/windres-options'
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-nls
     $(MAKE) -C '$(1)/libcharset' -j '$(JOBS)' install
     $(MAKE) -C '$(1)/lib'        -j '$(JOBS)' install

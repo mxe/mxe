@@ -21,10 +21,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-cxx \
         --without-readline
     $(MAKE) -C '$(1)' -j '$(JOBS)'
@@ -36,6 +33,7 @@ define $(PKG)_BUILD
     cp -R '$(1)/tests' '$(PREFIX)/$(TARGET)/bin/$(PKG)-tests'
     (printf 'date /t >  all-tests-$(PKG)-$($(PKG)_VERSION).txt\r\n'; \
      printf 'time /t >> all-tests-$(PKG)-$($(PKG)_VERSION).txt\r\n'; \
+     printf 'set PATH=..\\;%%PATH%%\r\n'; \
      printf 'for /R %%%%f in (*.exe) do %%%%f || echo %%%%f fail >> all-tests-$(PKG)-$($(PKG)_VERSION).txt\r\n';) \
      > '$(PREFIX)/$(TARGET)/bin/$(PKG)-tests/all-tests-$(PKG)-$($(PKG)_VERSION).bat'
 endef

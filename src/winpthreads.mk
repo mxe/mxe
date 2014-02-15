@@ -19,10 +19,7 @@ endef
 
 define $(PKG)_BUILD_mingw-w64
     cd '$(1)/mingw-w64-libraries/winpthreads' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-static \
-        --disable-shared
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)/mingw-w64-libraries/winpthreads' -j '$(JOBS)' install
 
     $(PTHREADS_TEST)

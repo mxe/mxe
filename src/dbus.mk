@@ -19,16 +19,12 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-xml=expat \
         --disable-tests \
         --disable-verbose-mode \
         --disable-asserts \
-        --disable-shared \
         --disable-maintainer-mode \
-        --enable-static \
         --disable-silent-rules \
         --disable-launchd \
         --disable-doxygen-docs \
