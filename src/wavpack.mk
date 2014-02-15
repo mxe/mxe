@@ -19,9 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+         $(MXE_CONFIGURE_OPTS) \
         --without-iconv \
         CFLAGS="-DWIN32"
     $(MAKE) -C '$(1)' -j '$(JOBS)' SUBDIRS="src include"

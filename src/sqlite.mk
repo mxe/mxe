@@ -3,11 +3,11 @@
 
 PKG             := sqlite
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3080200
-$(PKG)_CHECKSUM := 6033ef603ce221d367c665477514d972ef1dc90e
+$(PKG)_VERSION  := 3080301
+$(PKG)_CHECKSUM := a9b0a3d66fb5c2ae51ad2d8a512ca827adc7d59c
 $(PKG)_SUBDIR   := $(PKG)-autoconf-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-autoconf-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.sqlite.org/2013/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.sqlite.org/2014/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
@@ -18,10 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-readline \
         --enable-threadsafe
     $(MAKE) -C '$(1)' -j '$(JOBS)' install

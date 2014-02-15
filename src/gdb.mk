@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := gdb
-$(PKG)_VERSION  := 7.6.2
-$(PKG)_CHECKSUM := 08821f7b74238c07f99b5c975d7b4783c23081a5
+$(PKG)_VERSION  := 7.7
+$(PKG)_CHECKSUM := eefda18270b2efc8d8051ed992d91ba4e0d7207f
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)

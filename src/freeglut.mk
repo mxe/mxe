@@ -19,14 +19,11 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./autogen.sh
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-replace-glut \
         --disable-debug \
         --without-x
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= EXPORT_FLAGS='-DFREEGLUT_STATIC'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= $(if $(BUILD_STATIC),EXPORT_FLAGS='-DFREEGLUT_STATIC')
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \

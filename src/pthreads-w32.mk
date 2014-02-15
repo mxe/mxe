@@ -18,9 +18,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_i686-pc-mingw32
-    $(MAKE) -C '$(1)' -j 1 GC-static CROSS='$(TARGET)-'
+    $(MAKE) -C '$(1)' -j 1 \
+        $(if $(BUILD_STATIC),GC-static,GC-inlined) \
+        CROSS='$(TARGET)-'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
+    $(if $(BUILD_STATIC), \
+        $(INSTALL) -m644 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a',\
+        $(INSTALL) -m644 '$(1)/pthreadGC2.dll'  '$(PREFIX)/$(TARGET)/lib/pthread.dll')
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/pthread.h'   '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/sched.h'     '$(PREFIX)/$(TARGET)/include/'

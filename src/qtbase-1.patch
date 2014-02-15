@@ -1,133 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From e5939294f82e7e337f517fead6d4d14ecde5ee24 Mon Sep 17 00:00:00 2001
-From: Tobias Koenig <tobias.koenig.qnx@kdab.com>
-Date: Wed, 27 Nov 2013 13:11:01 +0100
-Subject: [PATCH 1/5] Fix sub-second handling in SQLite driver
-
-Use explicit format string, that contains milliseconds, when
-converting an QDateTime/QTime to a SQLite field content.
-
-Task-number: QTBUG-24200
-[ChangeLog][QtSql][QSQLITE] Fix sub-second handling
-Change-Id: Ib89152b7c3dd780b57a8826beff8b6b118e9d3d6
-Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
-Reviewed-by: Mark Brand <mabrand@mabrand.nl>
-
-(cherry picked from commit 9e64fc9e1cebf1e11694c4f536881128f5aee288)
-
-diff --git a/src/sql/drivers/sqlite/qsql_sqlite.cpp b/src/sql/drivers/sqlite/qsql_sqlite.cpp
-index 0a8b71a..27bc80e 100644
---- a/src/sql/drivers/sqlite/qsql_sqlite.cpp
-+++ b/src/sql/drivers/sqlite/qsql_sqlite.cpp
-@@ -42,6 +42,7 @@
- #include "qsql_sqlite_p.h"
- 
- #include <qcoreapplication.h>
-+#include <qdatetime.h>
- #include <qvariant.h>
- #include <qsqlerror.h>
- #include <qsqlfield.h>
-@@ -447,6 +448,20 @@ bool QSQLiteResult::exec()
-                 case QVariant::LongLong:
-                     res = sqlite3_bind_int64(d->stmt, i + 1, value.toLongLong());
-                     break;
-+                case QVariant::DateTime: {
-+                    const QDateTime dateTime = value.toDateTime();
-+                    const QString str = dateTime.toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz"));
-+                    res = sqlite3_bind_text16(d->stmt, i + 1, str.utf16(),
-+                                              str.size() * sizeof(ushort), SQLITE_TRANSIENT);
-+                    break;
-+                }
-+                case QVariant::Time: {
-+                    const QTime time = value.toTime();
-+                    const QString str = time.toString(QStringLiteral("hh:mm:ss.zzz"));
-+                    res = sqlite3_bind_text16(d->stmt, i + 1, str.utf16(),
-+                                              str.size() * sizeof(ushort), SQLITE_TRANSIENT);
-+                    break;
-+                }
-                 case QVariant::String: {
-                     // lifetime of string == lifetime of its qvariant
-                     const QString *str = static_cast<const QString*>(value.constData());
--- 
-1.8.4
-
-
-From 0c5dcbce26413ee17e052d79f348c35b4f963842 Mon Sep 17 00:00:00 2001
-From: Tobias Koenig <tobias.koenig.qnx@kdab.com>
-Date: Sat, 30 Nov 2013 14:40:11 +0100
-Subject: [PATCH 2/5] Fix evaluation of SQLite driver options
-
-Ensure that the options, which are passed to the SQLite driver, are
-evaluated in the correct order and do not overwrite each other.
-According to http://www.sqlite.org/c3ref/open.html the
-SQLITE_OPEN_READONLY and (SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE) are
-mutual exclusive, but SQLITE_OPEN_URI can be combined with both of them.
-
-Task-number: QTBUG-35186
-[ChangeLog][QtSql][QSQLITE] Fixed evaluation of driver options
-Change-Id: I8e74fe1ce43b9118b15f7b13fc71670bdcd73f68
-Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
-Reviewed-by: Mark Brand <mabrand@mabrand.nl>
-
-(cherry picked from commit 4f28464ab7dfe9f18cd72fc022257e66a8e2b279)
-
-diff --git a/src/sql/drivers/sqlite/qsql_sqlite.cpp b/src/sql/drivers/sqlite/qsql_sqlite.cpp
-index 27bc80e..c98d643 100644
---- a/src/sql/drivers/sqlite/qsql_sqlite.cpp
-+++ b/src/sql/drivers/sqlite/qsql_sqlite.cpp
-@@ -599,24 +599,32 @@ bool QSQLiteDriver::open(const QString & db, const QString &, const QString &, c
- 
-     if (db.isEmpty())
-         return false;
-+
-+    int timeOut = 5000;
-     bool sharedCache = false;
--    int openMode = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, timeOut=5000;
--    QStringList opts=QString(conOpts).remove(QLatin1Char(' ')).split(QLatin1Char(';'));
--    foreach(const QString &option, opts) {
-+    bool openReadOnlyOption = false;
-+    bool openUriOption = false;
-+
-+    const QStringList opts = QString(conOpts).remove(QLatin1Char(' ')).split(QLatin1Char(';'));
-+    foreach (const QString &option, opts) {
-         if (option.startsWith(QLatin1String("QSQLITE_BUSY_TIMEOUT="))) {
-             bool ok;
--            int nt = option.mid(21).toInt(&ok);
-+            const int nt = option.mid(21).toInt(&ok);
-             if (ok)
-                 timeOut = nt;
--        }
--        if (option == QLatin1String("QSQLITE_OPEN_READONLY"))
--            openMode = SQLITE_OPEN_READONLY;
--        if (option == QLatin1String("QSQLITE_OPEN_URI"))
--            openMode |= SQLITE_OPEN_URI;
--        if (option == QLatin1String("QSQLITE_ENABLE_SHARED_CACHE"))
-+        } else if (option == QLatin1String("QSQLITE_OPEN_READONLY")) {
-+            openReadOnlyOption = true;
-+        } else if (option == QLatin1String("QSQLITE_OPEN_URI")) {
-+            openUriOption = true;
-+        } else if (option == QLatin1String("QSQLITE_ENABLE_SHARED_CACHE")) {
-             sharedCache = true;
-+        }
-     }
- 
-+    int openMode = (openReadOnlyOption ? SQLITE_OPEN_READONLY : (SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE));
-+    if (openUriOption)
-+        openMode |= SQLITE_OPEN_URI;
-+
-     sqlite3_enable_shared_cache(sharedCache);
- 
-     if (sqlite3_open_v2(db.toUtf8().constData(), &d->access, openMode, NULL) == SQLITE_OK) {
--- 
-1.8.4
-
-
-From 4f829b92caae3ff877215b118b6c733714a74ab6 Mon Sep 17 00:00:00 2001
+From ce5c490ce4d6612a20cbfa2ed85e493af9513268 Mon Sep 17 00:00:00 2001
 From: Nicolas Cornu <ncornu@aldebaran-robotics.com>
 Date: Thu, 28 Nov 2013 00:06:41 +0100
-Subject: [PATCH 3/5] Allow temporary databases in sqlite driver
+Subject: [PATCH 1/3] Allow temporary databases in sqlite driver
 
 http://www3.sqlite.org/inmemorydb.html#temp_db
 [ChangeLog][QtSql][QSQLITE] Enable creating temporary databases
@@ -138,10 +15,10 @@ Reviewed-by: Mark Brand <mabrand@mabrand.nl>
 (cherry picked from commit 9de879c8a43a012254036d7f08b55793fa325cb2)
 
 diff --git a/src/sql/doc/src/sql-driver.qdoc b/src/sql/doc/src/sql-driver.qdoc
-index d8d1058..82dfa27 100644
+index f1fd2f6..9858e30 100644
 --- a/src/sql/doc/src/sql-driver.qdoc
 +++ b/src/sql/doc/src/sql-driver.qdoc
-@@ -599,8 +599,8 @@
+@@ -531,8 +531,8 @@
      is not necessary to have a database server. SQLite operates on a
      single file, which must be set as the database name when opening
      a connection. If the file does not exist, SQLite will try to
@@ -167,13 +44,13 @@ index c98d643..55ef092 100644
      bool sharedCache = false;
      bool openReadOnlyOption = false;
 -- 
-1.8.4
+1.8.4.5
 
 
-From 4222a7935ba386e296a0c24a56777de11b74bd75 Mon Sep 17 00:00:00 2001
+From 428f22caa4b1f0283821f25d4df639a674a075e3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 4/5] use pkg-config for freetype
+Subject: [PATCH 2/3] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -190,13 +67,13 @@ index 88be809..8fc19d2 100644
  }
  
 -- 
-1.8.4
+1.8.4.5
 
 
-From a9ed072cf46c2f23de4c7c4b7d706ea335b6a775 Mon Sep 17 00:00:00 2001
+From 802941a977d99c1942bfca13d4fee6fc11c31fee Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 5/5] use pkgconfig for icu detection (MXE specific)
+Subject: [PATCH 3/3] use pkgconfig for icu detection (MXE specific)
 
 Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
 
@@ -224,5 +101,5 @@ index 2c1b431..e29798b 100644
 +CONFIG += link_pkgconfig
 +PKGCONFIG += icu-i18n
 -- 
-1.8.4
+1.8.4.5
 

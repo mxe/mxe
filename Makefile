@@ -1,8 +1,20 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-MXE_TARGET_LIST    := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
-MXE_TARGETS        := i686-pc-mingw32
+MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
+EXT_DIR  := $(TOP_DIR)/ext
+
+# GNU Make Standard Library (http://gmsl.sourceforge.net/)
+# See doc/gmsl.html for further information
+include $(EXT_DIR)/gmsl
+
+MXE_TRIPLETS       := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
+MXE_LIB_TYPES      := static shared
+MXE_TARGET_LIST    := $(foreach LIB_TYPE,$(MXE_LIB_TYPES),\
+                          $(addsuffix .$(LIB_TYPE),$(MXE_TRIPLETS)))
+MXE_TARGETS        := i686-pc-mingw32.static
+
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
@@ -34,16 +46,18 @@ LOG_DIR    := $(PWD)/log
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
-MAKEFILE   := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
-TOP_DIR    := $(patsubst %/,%,$(dir $(MAKEFILE)))
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
-BUILD      := $(shell '$(TOP_DIR)/tools/config.guess')
+BUILD      := $(shell '$(EXT_DIR)/config.guess')
 BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
-# install config.guess for general use
-$(shell $(INSTALL) -d '$(PREFIX)/bin')
-$(shell $(INSTALL) -m755 '$(TOP_DIR)/tools/config.guess' '$(PREFIX)/bin/')
+MXE_CONFIGURE_OPTS = \
+    --host='$(TARGET)' \
+    --build='$(BUILD)' \
+    --prefix='$(PREFIX)/$(TARGET)' \
+    $(if $(BUILD_STATIC), \
+        --enable-static --disable-shared , \
+        --disable-static --enable-shared )
 
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
@@ -146,10 +160,14 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
 	@touch '$@'
 
+# define some whitespace variables
 define newline
 
 
 endef
+
+null  :=
+space := $(null) $(null)
 
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
@@ -185,12 +203,46 @@ $(1): | $(if $(value $(1)_DEPS), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 		$($(1)_DEPS)
 	@echo '[target]   $(1) $(call TARGET_HEADER)'
+	$(if $(findstring 1,$(words $(subst ., ,$(1)))),
+	    @echo
+	    @echo '------------------------------------------------------------'
+	    @echo 'Warning: Deprecated target name $(1) specified'
+	    @echo
+	    @echo 'Please use $(1).[$(subst $(space),|,$(MXE_LIB_TYPES))] instead'
+	    @echo 'See index.html for further information'
+	    @echo '------------------------------------------------------------'
+	    @echo)
 endef
 $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
+# cache some target string manipulation functions
+# `memoize` and `uc` from gmsl
+_CHOP_TARGET = $(call merge,.,$(call chop,$(call split,.,$(1))))
+CHOP_TARGET  = $(call memoize,_CHOP_TARGET,$(1))
+_UC_LIB_TYPE = $(call uc,$(word 2,$(subst ., ,$(1))))
+UC_LIB_TYPE  = $(call memoize,_UC_LIB_TYPE,$(1))
+
+# finds a package build rule or deps by truncating the target elements
+# $(call LOOKUP_PKG_RULE, package, rule type ie. BUILD|DEPS|FILE, target,[lib type, original target to cache])
+# returns variable name for use with $(value)
+#
+# caches result with gmsl associative arrays (`get` and `set` functions)
+# since `memoize` only works with single argument
+LOOKUP_PKG_RULE = $(strip \
+    $(or $(call get,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3))),\
+    $(if $(findstring undefined, $(flavor $(1)_$(2)_$(3))),\
+        $(if $(3),\
+            $(call LOOKUP_PKG_RULE,$(1),$(2),$(call CHOP_TARGET,$(3)),$(or $(4),$(call UC_LIB_TYPE,$(3))),$(or $(5),$(3))),\
+            $(if $(4),\
+                $(call LOOKUP_PKG_RULE,$(1),$(2),$(4),,$(5)),\
+                $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(5),$(1)_$(2))\
+                $(1)_$(2))),\
+        $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3)),$(1)_$(2)_$(3))\
+        $(1)_$(2)_$(3))))
+
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1):: $(addprefix download-,$($(1)_DEPS) $($(1)_DEPS_$(3)))
+download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3))))
 	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
 	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
@@ -201,7 +253,7 @@ $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
-                          $(addprefix $(PREFIX)/$(3)/installed/,$($(1)_DEPS) $($(1)_DEPS_$(3))) \
+                          $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) $(3)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -212,21 +264,18 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	        echo; \
 	        echo 'Download failed or wrong checksum of package $(1)!'; \
 	        echo '------------------------------------------------------------'; \
-	        tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p'; \
+	        $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
+	            tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p';, \
+	            $(SED) -n '/./p' '$(LOG_DIR)/$(1)-download';) \
 	        echo '------------------------------------------------------------'; \
 	        echo '[log]      $(LOG_DIR)/$(1)-download'; \
 	        echo; \
 	        exit 1; \
 	    fi; \
 	fi
-	$(if $(or $(value $(1)_BUILD_$(3)),\
-	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
+	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    @echo '[build]    $(1)',
-	    $(if $(findstring undefined,$(origin $(1)_BUILD_$(3))),
-	        @echo '[no-op]    $(1)',
-	        @echo '[exclude]  $(1)'
-	     )
-	 )
+	    @echo '[no-build] $(1)')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@[ $(words $(MXE_TARGETS)) == 1 ] || ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
@@ -234,7 +283,9 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo; \
 	    echo 'Failed to build package $(1)!'; \
 	    echo '------------------------------------------------------------'; \
-	    tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p'; \
+	    $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
+	        tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p';, \
+	        $(SED) -n '/./p' '$(LOG_DIR)/$(1)';) \
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
@@ -246,15 +297,17 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	     ) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
 	    exit 1; \
 	fi
-	@echo '[done]     $(1)'
+	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
+	    @echo '[done]     $(1)')
 
 .PHONY: build-only-$(1)_$(3)
 build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
+build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
+build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3):
-	$(if $(or $(value $(1)_BUILD_$(3)),\
-	          $(and $(value $(1)_BUILD),$(findstring undefined,$(origin $(1)_BUILD_$(3))))),
+	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    uname -a
 	    git show-branch --list --reflog=1
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
@@ -264,7 +317,7 @@ build-only-$(1)_$(3):
 	    cd '$(2)/$($(1)_SUBDIR)'
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
-	    $$(call $(if $(value $(1)_BUILD_$(3)),$(1)_BUILD_$(3),$(1)_BUILD),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
