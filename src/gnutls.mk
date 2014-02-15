@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.2.10
-$(PKG)_CHECKSUM := 043d496770322b8d3af3ac4b94642a4770bd5a87
+$(PKG)_VERSION  := 3.2.11
+$(PKG)_CHECKSUM := 7204edeffc06ff4d60b181b65ea6ada5f4d31b24
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2//$($(PKG)_FILE)
@@ -26,11 +26,7 @@ define $(PKG)_BUILD
     # AI_ADDRCONFIG referenced by src/serv.c but not provided by mingw.
     # Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms737530%28v=vs.85%29.aspx
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --enable-static \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-rpath \
         --disable-nls \
         --disable-guile \
@@ -52,3 +48,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gnutls.exe' \
         `'$(TARGET)-pkg-config' gnutls --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

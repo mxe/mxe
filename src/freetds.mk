@@ -24,19 +24,15 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-rpath \
         --disable-dependency-tracking \
-        --disable-shared \
-        --enable-static \
         --enable-libiconv \
         --enable-msdblib \
         --enable-sspi \
         --disable-threadsafe \
         --with-tdsver=7.2 \
-        --with-gnutls \
+        --with$(if $(BUILD_SHARED),out)-gnutls \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install man_MANS=
 endef

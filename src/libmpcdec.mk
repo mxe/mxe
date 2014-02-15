@@ -24,8 +24,6 @@ define $(PKG)_BUILD
     cd '$(1)' && libtoolize
     cd '$(1)' && autoreconf
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j 1 install
 endef

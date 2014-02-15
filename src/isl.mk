@@ -3,8 +3,8 @@
 
 PKG             := isl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.11.1
-$(PKG)_CHECKSUM := d7936929c3937e03f09b64c3c54e49422fa8ddb3
+$(PKG)_VERSION  := 0.12.2
+$(PKG)_CHECKSUM := ca98a91e35fb3ded10d080342065919764d6f928
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)

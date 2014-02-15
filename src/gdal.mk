@@ -28,7 +28,6 @@ define $(PKG)_CONFIGURE
         --with-bsb \
         --with-grib \
         --with-ogr \
-        --with-vfk \
         --with-pam \
         --without-threads \
         --with-static-proj4 \

@@ -72,10 +72,7 @@ define $(PKG)_BUILD
         $($(PKG)_NATIVE_BUILD))
     # cross build
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-threads=win32 \
         --with-pcre=system \
         --with-libiconv=gnu \
