@@ -71,4 +71,15 @@ define $(PKG)_BUILD
         '$(TOP_DIR)/src/qt-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
         `'$(TARGET)-pkg-config' Qt5Widgets --cflags --libs`
+
+    # batch file to run test programs
+    (printf 'set PATH=..\\lib;..\\qt5\\bin;..\\qt5\\lib;%%PATH%%\r\n'; \
+     printf 'set QT_QPA_PLATFORM_PLUGIN_PATH=..\\qt5\\plugins\r\n'; \
+     printf 'test-qt5.exe\r\n'; \
+     printf 'test-qtbase-pkgconfig.exe\r\n';) \
+     > '$(PREFIX)/$(TARGET)/bin/test-qt5.bat'
 endef
+
+$(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\
+                      $(subst -qt-sql-,-plugin-sql-,\
+                      $($(PKG)_BUILD)))
