@@ -48,5 +48,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gnutls.exe' \
         `'$(TARGET)-pkg-config' gnutls --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =

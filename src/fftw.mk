@@ -21,14 +21,12 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --build="`config.guess`" \
         --enable-threads
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --build="`config.guess`" \
         --enable-threads \
         --enable-long-double
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
@@ -36,7 +34,6 @@ define $(PKG)_BUILD
 
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --build="`config.guess`" \
         --enable-threads \
         --enable-float
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=

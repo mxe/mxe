@@ -20,9 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./buildconf
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --without-openssl \
         --with-libgcrypt \
         PKG_CONFIG='$(TARGET)-pkg-config'
