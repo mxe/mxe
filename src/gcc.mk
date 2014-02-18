@@ -83,7 +83,7 @@ define $(PKG)_BUILD_mingw-w64
     cd '$(1).crt-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        mxe-config-opts
+        @gcc-crt-config-opts@
     $(MAKE) -C '$(1).crt-build' -j '$(JOBS)' || $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
     $(MAKE) -C '$(1).crt-build' -j 1 install
 
@@ -95,8 +95,8 @@ define $(PKG)_BUILD_mingw-w64
     $($(PKG)_POST_BUILD)
 endef
 
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mxe-config-opts,--disable-lib32,$($(PKG)_BUILD_mingw-w64))
-$(PKG)_BUILD_i686-w64-mingw32   = $(subst mxe-config-opts,--disable-lib64,$($(PKG)_BUILD_mingw-w64))
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @gcc-crt-config-opts@,--disable-lib32,$($(PKG)_BUILD_mingw-w64))
+$(PKG)_BUILD_i686-w64-mingw32   = $(subst @gcc-crt-config-opts@,--disable-lib64,$($(PKG)_BUILD_mingw-w64))
 
 define $(PKG)_BUILD_$(BUILD)
     for f in c++ cpp g++ gcc gcov; do \
