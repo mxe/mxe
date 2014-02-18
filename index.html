@@ -129,6 +129,7 @@
         <li><a href="#packages"         >List of Packages</a></li>
         <li><a href="#creating-packages">Creating Packages</a></li>
         <li><a href="#copyright"        >Copyright</a></li>
+        <li><a href="#legal"            >Legal</a></li>
         <li><a href="#history"          >History</a></li>
     </ul>
     <ul>
@@ -2135,6 +2136,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
+        <td class="package">qtwebkit</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
         <td class="package">qtwinextras</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
@@ -2457,7 +2462,8 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <a href="https://www.gnu.org/philosophy/free-sw.html">free</a>
         <a href="http://www.debian.org/social_contract#guidelines">software</a>
         <a href="http://www.opensource.org/osd.html">library</a>
-        that is really used by one of your applications.
+        that is really used by one of your applications. Please also review our
+        <a href="#legal">legal notes</a>.
         </p>
 
         <p>
@@ -2755,6 +2761,166 @@ endef</pre>
     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    </p>
+</div>
+
+<div class="section">
+<h2 id="legal">Legal</h2>
+
+    <h3>Disclaimer - it's all code...</h3>
+
+    <p>
+    Modern legal systems are like any other large, complex, and evolving body
+    of code you're likely to encounter.
+    </p>
+
+    <p>
+    They have their own language with quirky parsers, compilers, and
+    interpreters (though these tend to be human). Their issue trackers are
+    a backlog of court cases. They have bugs. They have traps for the
+    uninitiated that may potentially do more than waste your time.
+    </p>
+
+    <p>
+    We currently limit ourselves to:
+    </p>
+    <pre>--enable-languages='c,c++,objc,fortran'</pre>
+    <p>
+    so nothing mentioned here or on the mailing list should be taken as
+    legal advice. :-)
+    </p>
+
+    <h3>Choosing the right compiler</h3>
+
+    <p>
+    The best starting point for any legal questions would be the
+    </p>
+    <p>
+    <a href="http://fsfe.org/projects/ftf/">FTF (Freedom Task Force of the FSFE (Free Software Foundation Europe)).</a>
+    </p>
+    <p>
+    They have been very helpful in the past, and maintain an
+    <a href="http://fsfe.org/projects/ftf/network.en.html">extensive network</a>
+    of legal contacts, both within and outside Europe.
+    </p>
+
+    <p>Your local jurisdiction may be a signatory to various
+    <a href="http://en.wikipedia.org/wiki/List_of_parties_to_international_copyright_agreements">international agreements,</a>
+    so be sure to mention where you are in any correspondence (much like any
+    detailed bug report really).
+    </p>
+
+    <p>Additionally, you should also do some background reading from the
+    <a href="http://www.gnu.org/licenses/gpl-faq.html#GPLIncompatibleLibs">FSF (Free Software Foundation)</a>
+    and
+    <a href="http://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License">Wikipedia</a>
+    to familiarise yourself with some of the potential issues (and experience
+    some context-switching overhead).
+    </p>
+
+    <h3 id="contributions">Contributions</h3>
+
+    <p>
+    Contributions are always welcome!
+    </p>
+
+    <p>
+    Ownership of all contributions (bug fixes, new packages, doc updates, etc.)
+    remain with the author. All we require is a real name (no l33t handles,
+    please), and that you release your work under
+    <a href="#copyright">our licence</a>.
+    </p>
+
+    <p>If you prefer not to be credited with a contribution, please notify
+    the committer.
+    </p>
+
+    <h3 id="package-licenses">Package Licences</h3>
+
+    <p>
+    Each package is individually licensed under terms specified by the
+    authors of that package. Please see the respective source tarball
+    and/or project website for details.
+    </p>
+
+    <p>
+    Packages that are
+    <a href="http://www.audiocoding.com/faac.html">non-free</a>
+    or
+    <a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/faq#distribute">ambiguous</a>
+    will be
+    <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-12/msg00049.html">removed</a>
+    or
+    <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-09/msg00063.html">rejected</a>.
+    </p>
+
+    <p>
+    The definition of free must be one of:
+    <ul>
+    <li><a href="http://www.gnu.org/philosophy/free-sw.html">The Free Software Definition</a></li>
+    <li><a href="http://www.debian.org/social_contract#guidelines">The Debian Free Software Guidelines (DFSG)</a></li>
+    <li><a href="http://www.opensource.org/osd.html">The Open Source Definition</a></li>
+    </ul>
+    </p>
+
+    <p>
+    Please contact the
+    <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">mailing list</a>
+    if you notice a package that doesn't meet these guidlines.
+    </p>
+
+    <h3 id="other-legal-considerations">Other Considerations</h3>
+
+    <p>
+    In addition to the usual considerations (copyrights, patents,
+    trademarks, export regulations etc.), building
+    <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-12/msg00025.html">statically linked</a>
+    libraries
+    <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2011-02/msg00018.html">for Windows</a>
+    exposes some edge cases that you may not have encountered before.
+    </p>
+
+    <p>
+    According to
+    <a href="http://www.gnu.org/philosophy/free-sw.html">freedom 0</a> and our
+    <a href="#copyright">own licence</a>,
+    you can use mxe in countless different
+    environments, each with it's own special legal considerations. The
+    configuration options of certain packages (e.g ffmpeg) allow the use of
+    non-free software and/or combinations that cause license violations.
+    </p>
+
+    <p>
+    For these packages, we will provide sensible defaults aimed
+    at achieving the following goals:
+    <ol>
+        <li>avoid causing inherent licensing issues with conflicting options</li>
+        <li>make the package as feature complete as possible</li>
+    </ol>
+    </p>
+
+    <p>
+    Note that this does not prevent downstream violations, or affect any
+    further obligations a licence may impose on you.
+    </p>
+
+    <h3 id="potential-legal-issues">Potential Issues - Non Exhaustive List</h3>
+
+    <h4>LGPL and Static Linking</h4>
+
+    <p>
+    Review the
+    <a href="http://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License#Differences_from_the_GPL">Differences from the GPL</a>
+    section of the Wikipedia article mentioned above.
+    </p>
+
+    <h4>GPL and OpenSSL</h4>
+
+    <p>
+    See conflicting accounts from the
+    <a href="http://www.gnu.org/licenses/license-list.html#OpenSSL">FSF</a>
+    and the
+    <a href="http://www.openssl.org/support/faq.html#LEGAL2">OpenSSL project</a>.
     </p>
 </div>
 

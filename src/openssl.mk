@@ -20,7 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && CC='$(TARGET)-gcc' ./Configure \
-        mingw \
+        @openssl-target@ \
         zlib \
         $(if $(BUILD_STATIC),no-,)shared \
         no-capieng \
@@ -32,4 +32,6 @@ define $(PKG)_BUILD
         CROSS_COMPILE='$(TARGET)-'
 endef
 
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mingw ,mingw64 ,$($(PKG)_BUILD))
+$(PKG)_BUILD_i686-pc-mingw32    = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))
+$(PKG)_BUILD_i686-w64-mingw32   = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @openssl-target@,mingw64,$($(PKG)_BUILD))

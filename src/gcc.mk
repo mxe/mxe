@@ -36,7 +36,7 @@ define $(PKG)_CONFIGURE
         --with-gnu-ld \
         --with-gnu-as \
         --disable-nls \
-        --disable-shared \
+        $(if $(BUILD_STATIC),--disable-shared) \
         --disable-multilib \
         --without-x \
         --disable-win32-registry \
@@ -54,6 +54,13 @@ define $(PKG)_CONFIGURE
         $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
 endef
 
+define $(PKG)_POST_BUILD
+    # TODO: find a way to configure the installation of these correctly
+    rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, c++ g++ gcc gfortran)
+    -mv '$(PREFIX)/lib/gcc/$(TARGET)/lib/'* '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
+    -mv '$(PREFIX)/lib/gcc/$(TARGET)/'*.dll '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
+endef
+
 define $(PKG)_BUILD_i686-pc-mingw32
     # build full cross gcc
     $($(PKG)_CONFIGURE) \
@@ -61,7 +68,7 @@ define $(PKG)_BUILD_i686-pc-mingw32
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 
-    rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, c++ g++ gcc gfortran)
+    $($(PKG)_POST_BUILD)
 endef
 
 define $(PKG)_BUILD_mingw-w64
@@ -76,7 +83,7 @@ define $(PKG)_BUILD_mingw-w64
     cd '$(1).crt-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        mxe-config-opts
+        @gcc-crt-config-opts@
     $(MAKE) -C '$(1).crt-build' -j '$(JOBS)' || $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
     $(MAKE) -C '$(1).crt-build' -j 1 install
 
@@ -85,11 +92,11 @@ define $(PKG)_BUILD_mingw-w64
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 
-    rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, c++ g++ gcc gfortran)
+    $($(PKG)_POST_BUILD)
 endef
 
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mxe-config-opts,--disable-lib32,$($(PKG)_BUILD_mingw-w64))
-$(PKG)_BUILD_i686-w64-mingw32   = $(subst mxe-config-opts,--disable-lib64,$($(PKG)_BUILD_mingw-w64))
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @gcc-crt-config-opts@,--disable-lib32,$($(PKG)_BUILD_mingw-w64))
+$(PKG)_BUILD_i686-w64-mingw32   = $(subst @gcc-crt-config-opts@,--disable-lib64,$($(PKG)_BUILD_mingw-w64))
 
 define $(PKG)_BUILD_$(BUILD)
     for f in c++ cpp g++ gcc gcov; do \

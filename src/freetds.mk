@@ -32,7 +32,7 @@ define $(PKG)_BUILD
         --enable-sspi \
         --disable-threadsafe \
         --with-tdsver=7.2 \
-        --with$(if $(BUILD_SHARED),out)-gnutls \
+        --with-gnutls \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install man_MANS=
 endef

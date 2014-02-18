@@ -21,10 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && autoconf
     $(SED) -i 's,\$$uname,MINGW,g' '$(1)/configure'
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-threads \
         LIBS='-lws2_32'
     # enable exceptions, because disabling them doesn't make any sense on PCs
@@ -35,5 +32,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -pedantic -ansi \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-fltk.exe' \
-        `$(TARGET)-fltk-config --cxxflags --ldstaticflags`
+        `$(TARGET)-fltk-config --cxxflags --ld$(if $(BUILD_STATIC),static)flags`
 endef

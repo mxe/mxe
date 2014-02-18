@@ -19,11 +19,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-csharp \
-        --prefix='$(PREFIX)/$(TARGET)' \
         --with-libiconv-prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
