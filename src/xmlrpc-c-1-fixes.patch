@@ -14,6 +14,38 @@ Index: stable/lib/curl_transport/curltransaction.c
  #include <assert.h>
  #include <string.h>
  #include <stdlib.h>
+Index: stable/lib/expat/xmlparse/xmlparse.c
+===================================================================
+--- stable/lib/expat/xmlparse/xmlparse.c	(revision 2571)
++++ stable/lib/expat/xmlparse/xmlparse.c	(working copy)
+@@ -4547,14 +4547,6 @@
+ 
+ 
+ int
+-XML_SetHashSalt(XML_Parser parser,
+-                unsigned long hash_salt)
+-{
+-  hash_secret_salt = hash_salt;
+-  return 1;
+-}
+-
+-int
+ xmlrpc_XML_Parse(XML_Parser   const xmlParserP,
+                  const char * const s,
+                  size_t       const len,
+Index: stable/lib/expat/xmlparse/xmlparse.h
+===================================================================
+--- stable/lib/expat/xmlparse/xmlparse.h	(revision 2571)
++++ stable/lib/expat/xmlparse/xmlparse.h	(working copy)
+@@ -491,8 +491,6 @@
+    function behavior. This must be called before parsing is started.
+    Returns 1 if successful, 0 when called after parsing has started.
+ */
+-int
+-XML_SetHashSalt(XML_Parser parser, unsigned long hash_salt);
+ 
+ enum XML_Error {
+   XML_ERROR_NONE,
 Index: stable/src/cpp/packetsocket.cpp
 ===================================================================
 --- stable/src/cpp/packetsocket.cpp	(revision 2571)
