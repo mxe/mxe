@@ -38,6 +38,7 @@ define $(PKG)_BUILD
             -accessibility \
             -nomake examples \
             -nomake tests \
+            -no-sql-mysql \
             -qt-sql-sqlite \
             -qt-sql-odbc \
             -qt-sql-psql \
