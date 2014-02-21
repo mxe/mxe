@@ -11,13 +11,25 @@ $(PKG)_URL      := http://code.soundsoftware.ac.uk/attachments/download/690/$(PK
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    echo $($(PKG)_VERSION)
+    echo 'TODO: Updates for package vamp-plugin-sdk need to be written.' >&2;
+    echo $(vamp-plugin-sdk_VERSION)
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j 1 install
+    cd '$(1)' && $(MAKE) -f build/Makefile.mingw32 \
+        CXX='$(TARGET)-g++' \
+        CC='$(TARGET)-gcc' \
+        LD='$(TARGET)-ld' \
+        AR='$(TARGET)-ar' \
+        RANLIB='$(TARGET)-ranlib' \
+        DYNAMIC_LDFLAGS='-static-libgcc -shared -Wl,-Bsymbolic' \
+        sdk$(if $(BUILD_STATIC),static)
+
+    for f in vamp vamp-sdk vamp-hostsdk; do \
+        $(SED) 's,%PREFIX%,$(PREFIX)/$(TARGET),' "$(1)/pkgconfig/$$f.pc.in" \
+		> "$(PREFIX)/$(TARGET)/lib/pkgconfig/$$f.pc"; \
+    done
+
+    cp -rv '$(1)/vamp' '$(1)/vamp-hostsdk' '$(1)/vamp-sdk' '$(PREFIX)/$(TARGET)/include/'
+    cp -rv '$(1)/'libvamp-*.$(LIB_SUFFIX) '$(PREFIX)/$(TARGET)/lib'
 endef
