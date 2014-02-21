@@ -1,9 +1,12 @@
 export MXE_DIR=`pwd`
-export BUILD=`$MXE_DIR/tools/config.guess`
+export BUILD=`$MXE_DIR/ext/config.guess`
 export PATH=$MXE_DIR/usr/$BUILD/bin:$MXE_DIR/usr/bin:$PATH
 MAKE=`gmake --help >/dev/null 2>&1 && echo g`make
 SED=`gsed --help >/dev/null 2>&1 && echo g`sed
-MXE_TARGET_LIST="`grep 'MXE_TARGET_LIST.*:=' Makefile | $SED -n 's,^.*:= \(.*\)$,\1,p'`"
+
+MXE_TRIPLETS=`grep ^MXE_TRIPLETS Makefile | cut -d '=' -f2 | cut -d ' ' -f2- | tr ' ' ','`
+MXE_LIB_TYPES=`grep ^MXE_LIB_TYPES Makefile | cut -d '=' -f2 | cut -d ' ' -f2- | tr ' ' ','`
+MXE_TARGET_LIST=`eval "echo {$MXE_TRIPLETS}.{$MXE_LIB_TYPES}"`
 
 alias mxe='$MAKE -C $MXE_DIR --no-print-directory'
 
