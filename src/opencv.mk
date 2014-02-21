@@ -3,10 +3,10 @@
 
 PKG             := opencv
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4.4
-$(PKG)_CHECKSUM := 6e518c0274a8392c0c98d18ef0ef754b9c596aca
+$(PKG)_VERSION  := 2.4.8
+$(PKG)_CHECKSUM := 7878a8c375ab3e292c8de7cb102bb3358056e01e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := OpenCV-$($(PKG)_VERSION)a.tar.bz2
+$(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc eigen ffmpeg jasper jpeg lcms1 libpng openexr tiff xz zlib
 
@@ -50,7 +50,6 @@ define $(PKG)_BUILD
 
     # fixup and install pkg-config file
     # can't figure out where these unprefixed libs are coming from
-    $(SED) -i 's,\(opengl32\|glu32\|stdc++\),-l\1,g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-g++' \
@@ -61,5 +60,5 @@ endef
 
 # float.h issues https://bugzilla.redhat.com/show_bug.cgi?id=843436
 $(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
+#$(PKG)_BUILD_i686-w64-mingw32 =
 
