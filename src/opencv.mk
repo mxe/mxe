@@ -43,13 +43,18 @@ define $(PKG)_BUILD
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
       -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+      -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500' \
       '$(1)'
 
     # install
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 
     # fixup and install pkg-config file
-    # can't figure out where these unprefixed libs are coming from
+    # openexr isn't available on x86_64-w64-mingw32
+    # opencv builds it's own libIlmImf.a
+    $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
+        $(SED) -i 's/OpenEXR//' '$(1).build/unix-install/opencv.pc')
+    $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-g++' \
@@ -57,8 +62,3 @@ define $(PKG)_BUILD
         '$(1)/samples/c/fback_c.c' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
         `'$(TARGET)-pkg-config' opencv --cflags --libs`
 endef
-
-# float.h issues https://bugzilla.redhat.com/show_bug.cgi?id=843436
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-#$(PKG)_BUILD_i686-w64-mingw32 =
-
