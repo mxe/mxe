@@ -8,17 +8,31 @@ $(PKG)_CHECKSUM := ae1faaef211d612db745d66d77266cf6789fd4ee
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://code.breakfastquay.com/attachments/download/34/$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_DEPS     := gcc libsamplerate libsndfile vamp-plugin-sdk pthreads fftw
+$(PKG)_DEPS     := gcc fftw libsamplerate libsndfile pthreads vamp-plugin-sdk
 
 define $(PKG)_UPDATE
-     echo $($(PKG)_VERSION) 
+    echo 'TODO: Updates for package rubberband need to be written.' >&2;
+    echo $(rubberband_VERSION)
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -f -i
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -j $(JOBS) -C '$(1)' -j 1 install
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -j $(JOBS) -C '$(1)' -j '$(JOBS)' \
+        AR='$(TARGET)-ar' \
+        RANLIB='$(TARGET)-ranlib' \
+        DYNAMIC_EXTENSION='.dll' \
+        DYNAMIC_FULL_VERSION= \
+        DYNAMIC_ABI_VERSION= \
+        lib vamp \
+        $(if $(BUILD_STATIC),static,dynamic)
+
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/$(PKG)'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/vamp'
+    $(INSTALL) -m644 '$(1)/$(PKG)/'* '$(PREFIX)/$(TARGET)/include/$(PKG)'
+    $(INSTALL) -m644 '$(1)/lib/lib$(PKG).$(LIB_SUFFIX)' '$(PREFIX)/$(TARGET)/lib'
+    $(INSTALL) -m644 '$(1)/lib/vamp-'*.dll '$(PREFIX)/$(TARGET)/lib/vamp'
+    $(INSTALL) -m644 '$(1)/vamp/vamp-rubberband.cat' '$(PREFIX)/$(TARGET)/lib/vamp'
+    $(SED) 's,%PREFIX%,$(PREFIX)/$(TARGET),' '$(1)/$(PKG).pc.in' \
+	  > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 endef
