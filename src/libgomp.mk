@@ -16,8 +16,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir -p '$(1)/build/$(TARGET)/libgomp'
-    cd       '$(1)/build/$(TARGET)/libgomp' && '$(1)/libgomp/configure' \
+    mkdir -p '$(1).build'
+    cd       '$(1).build' && '$(1)/libgomp/configure' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --target='$(TARGET)' \
@@ -25,8 +25,9 @@ define $(PKG)_BUILD
         --enable-version-specific-runtime-libs \
         --with-gnu-ld \
         --disable-shared \
-        LIBS='-lws2_32'
-    $(MAKE) -C '$(1)/build/$(TARGET)/libgomp' -j '$(JOBS)' install
+        LIBS='-lws2_32' \
+        ac_cv_prog_FC='$(TARGET)-gfortran'
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
