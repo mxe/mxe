@@ -35,12 +35,11 @@ define $(PKG)_BUILD
         --disable-pthreads \
         --enable-w32threads \
         --disable-doc \
+        --enable-avresample \
         --enable-gpl \
         --enable-version3 \
-        --disable-nonfree \
         --enable-avisynth \
         --enable-libass \
-        --disable-libfaac \
         --enable-libmp3lame \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
@@ -52,9 +51,7 @@ define $(PKG)_BUILD
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libx264 \
-        --enable-libxvid \
-        --enable-postproc \
-        --enable-avresample
+        --enable-libxvid
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
