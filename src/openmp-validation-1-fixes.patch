@@ -1,0 +1,43 @@
+diff -u OpenMP3.1_Validation/Makefile OpenMP3.1_Validation.new/Makefile
+--- OpenMP3.1_Validation/Makefile	2013-07-18 00:19:20.000000000 +1000
++++ OpenMP3.1_Validation.new/Makefile	2014-02-22 16:23:37.000000000 +1100
+@@ -185,14 +185,21 @@
+ .c.o: omp_testsuite omp_my_sleep
+ 	$(CC) $(CFLAGS) -c $<
+ 
++# Overwrite built-in rules to allow .exe suffix
++%: %.c
++	$(LINK.c) $^ $(LOADLIBES) $(LDLIBS) -o $@$(EXE_SUFFIX)
++
++%: %.f
++	$(LINK.f) $^ $(LOADLIBES) $(LDLIBS) -o $@$(EXE_SUFFIX)
++
+ ctest: omp_my_sleep omp_testsuite
+-	./runtest.pl --lang=c testlist-c.txt
++	./runtest.pl $(RUNTEST_OPTIONS) --lang=c testlist-c.txt
+ 
+ ftest:
+ 	mkdir -p bin/fortran
+ 	cp omp_testsuite.f bin/fortran
+ 	cp omp_my_sleep.f bin/fortran
+-	./runtest.pl --lang=fortran testlist-f.txt
++	./runtest.pl $(RUNTEST_OPTIONS) --lang=fortran testlist-f.txt
+ 
+ print_compile_options:
+ 	@echo "-------------------"
+Only in OpenMP3.1_Validation.new: bin
+Common subdirectories: OpenMP3.1_Validation/c and OpenMP3.1_Validation.new/c
+Common subdirectories: OpenMP3.1_Validation/fortran and OpenMP3.1_Validation.new/fortran
+diff -u OpenMP3.1_Validation/omp_my_sleep.h OpenMP3.1_Validation.new/omp_my_sleep.h
+--- OpenMP3.1_Validation/omp_my_sleep.h	2013-07-18 00:19:04.000000000 +1000
++++ OpenMP3.1_Validation.new/omp_my_sleep.h	2014-02-22 15:07:33.000000000 +1100
+@@ -5,7 +5,6 @@
+ #include<stdlib.h>
+ #include<unistd.h>
+ 
+-#include <sys/times.h> 
+ #include <sys/time.h>
+ #include <time.h>
+ #include <errno.h>
+Only in OpenMP3.1_Validation.new: ompts.log
+Only in OpenMP3.1_Validation.new: results.txt
