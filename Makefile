@@ -252,9 +252,23 @@ LOOKUP_PKG_RULE = $(strip \
 define PKG_RULE
 .PHONY: download-$(1)
 download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3))))
-	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
-	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
-	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
+	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
+	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
+	    echo '[download] $(1)'; \
+	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
+	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
+	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
+	        echo; \
+	        echo 'Download failed or wrong checksum of package $(1)!'; \
+	        echo '------------------------------------------------------------'; \
+	        $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
+	            tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p';, \
+	            $(SED) -n '/./p' '$(LOG_DIR)/$(1)-download';) \
+	        echo '------------------------------------------------------------'; \
+	        echo '[log]      $(LOG_DIR)/$(1)-download'; \
+	        echo; \
+	        exit 1; \
+	    fi; \
 	fi
 
 .PHONY: $(1)
