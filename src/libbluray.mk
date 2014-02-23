@@ -3,15 +3,15 @@
 
 PKG             := libbluray
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.4.0
-$(PKG)_CHECKSUM := 39984aae77efde2e0917ed7e183ebf612813d7f3
+$(PKG)_VERSION  := 0.5.0
+$(PKG)_CHECKSUM := 1a9c61daefc31438f9165e7681c563d0524b2d3e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := ftp://ftp.videolan.org/pub/videolan/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype libxml2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'ftp://ftp.videolan.org/pub/videolan/libbluray/last/' | \
+    $(WGET) -q -O- 'http://www.videolan.org/developers/libbluray.html' | \
     $(SED) -n 's,.*libbluray-\([0-9][^<]*\)\.tar.*,\1,p' | \
     head -1
 endef
