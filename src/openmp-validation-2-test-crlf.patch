@@ -1,0 +1,44 @@
+diff -urN OpenMP3.1_Validation.orig/all-tests-openmp-validation.bat OpenMP3.1_Validation/all-tests-openmp-validation.bat
+--- OpenMP3.1_Validation.orig/all-tests-openmp-validation.bat	1970-01-01 10:00:00.000000000 +1000
++++ OpenMP3.1_Validation/all-tests-openmp-validation.bat	2014-02-23 04:35:51.000000000 +1100
+@@ -0,0 +1,40 @@
++setlocal enableextensions enabledelayedexpansion
++set /a TEST_COUNT=0
++set /a FAIL_COUNT=0
++set /a PASS_COUNT=0
++set LOG_FILE=%~n0.log
++set BLANK=
++for /l %%I in (1,1,79) do set SPACER=%BLANK% %BLANK%!SPACER!
++date /t >  %LOG_FILE%
++time /t >> %LOG_FILE%
++echo. >> %LOG_FILE%
++echo L=Language (c=c, n=fortran) >> %LOG_FILE%
++echo Pass 0=Y >> %LOG_FILE%
++echo. >> %LOG_FILE%
++echo L Test Name %SPACER:~0,50% Pass  Certainty%%>> %LOG_FILE%
++echo %SPACER: =-%>> %LOG_FILE%
++for /r %%F in (test*.exe) do (
++	set /a TEST_COUNT += 1
++	%%F
++	set ERR=!errorlevel!
++	if !ERR! neq 0 (set /a FAIL_COUNT += 1) else set /a PASS_COUNT += 1
++	set TEST_LANG=%%~pF
++	set TEST_NAME=%%~nF%SPACER%
++	set ERR_SPC=!ERR!%SPACER%
++	set /p "=!TEST_LANG:~-2,-1! !TEST_NAME:~0,60! !ERR_SPC:~0,5! " < nul >> %LOG_FILE%
++	%%~dpFc%%~nxF
++	echo !errorlevel!%% >> %LOG_FILE%
++	if exist %%~dpForph_%%~nxF (
++		set /a TEST_COUNT += 1
++		%%~dpForph_%%~nxF
++		set ERR=!errorlevel!
++		if !ERR! neq 0 (set /a FAIL_COUNT += 1) else set /a PASS_COUNT += 1
++		set TEST_NAME=orph_%%~nF%SPACER%
++		set ERR_SPC=!ERR!%SPACER%
++		set /p "=!TEST_LANG:~-2,-1! !TEST_NAME:~0,60! !ERR_SPC:~0,5! " < nul >> %LOG_FILE%
++		%%~dpForph_c%%~nxF
++		echo !errorlevel!%% >> %LOG_FILE%
++	)
++)
++echo. >> %LOG_FILE%
++echo Total tests: !TEST_COUNT!  Total Failed: !FAIL_COUNT! Total Passed: !PASS_COUNT!>> %LOG_FILE%

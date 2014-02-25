@@ -1,0 +1,22 @@
+This file is part of MXE.
+See index.html for further information.
+
+--- a/CMakeLists.txt	Sat Sep 14 11:25:52 2013 -0700
++++ b/CMakeLists.txt	Fri Sep 27 15:03:58 2013 +1000
+@@ -402,14 +402,14 @@
+ 	## the following are directories where stuff will be installed to
+ 	SET(INCLUDE_INSTALL_DIR      "${CMAKE_INSTALL_PREFIX}/include/bullet/" CACHE PATH "The subdirectory to the header prefix")
+ 	SET(PKGCONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/pkgconfig/" CACHE STRING "Base directory for pkgconfig files")
+-	IF(NOT WIN32)
++	
+ 	  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/bullet.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/bullet.pc @ONLY)
+   	INSTALL(
+ 	    FILES
+     	${CMAKE_CURRENT_BINARY_DIR}/bullet.pc
+     	DESTINATION
+     	${PKGCONFIG_INSTALL_PREFIX})
+-	ENDIF(NOT WIN32)
++	
+ ENDIF(INSTALL_LIBS)
+ 
+ #INSTALL of other files requires CMake 2.6
