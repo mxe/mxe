@@ -16,9 +16,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,$$(FORTRAN),$(TARGET)-gfortran,g' '$(1)/Makefile'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    cd '$(1)' && $(TARGET)-ar cr libblas.a *.o
+    $(MAKE) -C '$(1)' -j '$(JOBS)' \
+        FORTRAN='$(TARGET)-gfortran' \
+        RANLIB='$(TARGET)-ranlib' \
+        ARCH='$(TARGET)-ar' \
+        BLASLIB='libblas.a' \
+        OPTS=$(if $(findstring x86_64,$(TARGET)),-fdefault-integer-8)
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libblas.a' '$(PREFIX)/$(TARGET)/lib/'
