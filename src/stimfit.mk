@@ -3,11 +3,11 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.13.10windows
-$(PKG)_CHECKSUM := caf318ea945ee55daf79ba49ecdb39caf2e52c5c
+$(PKG)_VERSION  := 0.13.14windows
+$(PKG)_CHECKSUM := fac8002dfc7524239450e5be9cb432d01775bbe1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/$($(PKG)_FILE).tar.gz
 $(PKG)_DEPS     := gcc biosig wxwidgets hdf5 boost fftw
 
 define $(PKG)_UPDATE
