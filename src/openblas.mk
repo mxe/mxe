@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := d012ebc2b8dcd3e95f667dff08318a81479a47c3
 $(PKG)_SUBDIR   := OpenBLAS-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://github.com/xianyi/OpenBLAS/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc libgomp
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/xianyi/OpenBLAS/releases' | \
@@ -28,11 +28,16 @@ $(PKG)_MAKE_OPTS = \
         CROSS=1 \
         NO_CBLAS=1 \
         NO_LAPACK=1 \
-        USE_THREAD=0 \
+        USE_THREAD=1 \
+        USE_OPENMP=1 \
         TARGET=CORE2 \
         DYNAMIC_ARCH=1 \
-        BINARY=$(if $(findstring x86_64,$(TARGET)),64,32) \
-        $(if $(BUILD_STATIC),NO_SHARED=1)
+        ARCH=$(strip \
+             $(if $(findstring x86_64,$(TARGET)),x86_64,\
+             $(if $(findstring i686,$(TARGET)),x86)) \
+        BINARY=$(if $(findstring x86_64,$(TARGET)),64,32)) \
+        $(if $(BUILD_STATIC),NO_SHARED=1) \
+        EXTRALIB="`'$(TARGET)-pkg-config' --libs pthreads` -fopenmp"
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' $($(PKG)_MAKE_OPTS)
