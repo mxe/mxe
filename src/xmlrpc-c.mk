@@ -3,35 +3,45 @@
 
 PKG             := xmlrpc-c
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.33.7
-$(PKG)_CHECKSUM := 2f1b1ac796247d412ebdbfa5d0a91dc286da6820
-$(PKG)_SUBDIR   := xmlrpc-c-$($(PKG)_VERSION)
-$(PKG)_FILE     := xmlrpc-c-$($(PKG)_VERSION).tgz
-# there is no .tgz for the "stable" branch on sourceforge.net so I have created one myself and put it on my server.
-# is there a way to pull from the sourceforge.net svn instead ? 
-$(PKG)_URL      := http://doido.aline.nu/~lars/src/$($(PKG)_FILE)
-$(PKG)_DEPS     := curl pthreads
+$(PKG)_VERSION  := d4364f4
+$(PKG)_CHECKSUM := 3f0cb2a5967832fa5463bd85740eb04911488da9
+$(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)/advanced
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc curl pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/p/xmlrpc-c/svn/HEAD/tree/release_number/' | \
-    grep '<a href="' | \
-    $(SED) -n 's,.*<a href="release-\([0-9][^"]*\)".*,\1,p' | \
-    tail -1
+    $(WGET) -q -O- 'https://github.com/mirror/xmlrpc-c/commits/master' | \
+    grep 'title="Release' | \
+    $(SED) -n 's,.*/mirror/xmlrpc-c/commit/\([^"]\{7\}\)[^"]\{33\}".*Release \([0-9]*\),\1 \2,p' | \
+    $(SORT) -V -k 2 | \
+    tail -1 | \
+    cut -d ' ' -f1
 endef
 
-TMP_BIN_DIR := $(realpath .)/tmp-$(PKG)/curl-bin
+$(PKG)_MAKE_OPTS = \
+    BUILDTOOL_CC=gcc \
+    BUILDTOOL_CCLD=gcc \
+    SHARED_LIB_TYPE=@xmlrpc-c-shared-lib-type@ \
+    MUST_BUILD_SHLIB=@xmlrpc-c-must-build-shlib@
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_COMMON
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-curl-client \
-        --enable-abyss-server \
-        --enable-cgi-server \
+        --enable-abyss-server=no \
+        --enable-cgi-server=no \
         --enable-cplusplus \
-        --enable-abyss-threads
-
-    mkdir $(TMP_BIN_DIR); cd $(TMP_BIN_DIR); ln -s $(PREFIX)/$(TARGET)/bin/curl-config
-    PATH=$(TMP_BIN_DIR):$(PATH) $(MAKE) -C '$(1)' -j '$(JOBS)' BUILDTOOL_CC=gcc BUILDTOOL_CCLD=gcc
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+        --enable-curl-client \
+        CURL_CONFIG='$(PREFIX)/$(TARGET)/bin/curl-config'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $($(PKG)_MAKE_OPTS)
+    $(MAKE) -C '$(1)' -j 1 install $($(PKG)_MAKE_OPTS)
 endef
+
+$(PKG)_BUILD_STATIC=$(subst @xmlrpc-c-shared-lib-type@,NONE,\
+                    $(subst @xmlrpc-c-must-build-shlib@,N,\
+                    $($(PKG)_BUILD_COMMON)))
+
+$(PKG)_BUILD_SHARED=$(subst @xmlrpc-c-shared-lib-type@,dll,\
+                    $(subst @xmlrpc-c-must-build-shlib@,Y,\
+                    $($(PKG)_BUILD_COMMON)))
