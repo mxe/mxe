@@ -19,6 +19,7 @@ define $(PKG)_BUILD
     mkdir -p '$(1).build'
     cd       '$(1).build' && '$(1)/libgomp/configure' \
         $(MXE_CONFIGURE_OPTS) \
+        --prefix='$(PREFIX)' \
         --enable-version-specific-runtime-libs \
         --with-gnu-ld \
         LIBS='-lws2_32' \
