@@ -12,7 +12,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://code.google.com/p/bullet/downloads/list?sort=-uploaded' | \
-    $(SED) -n 's,.*bullet-\([0-9][^<]*\)\.tgz,\1,p' | \
+    $(SED) -n 's,.*bullet-\([0-9][^<]*\)\.tgz.*,\1,p' | \
     head -1
 endef
 
