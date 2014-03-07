@@ -19,10 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --with-jpeg \
         --with-tiff \
         --with-zlib
