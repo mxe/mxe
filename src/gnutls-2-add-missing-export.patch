@@ -1,0 +1,16 @@
+This file is part of MXE.
+See index.html for further information.
+
+This adds a missing export to the main libgnutls so libgnutls-xssl compiles.
+
+diff -Naur gnutls-3.2.12/lib/libgnutls.map gnutls-3.2.12.fixed/lib/libgnutls.map
+--- gnutls-3.2.12/lib/libgnutls.map	2014-01-28 21:19:11.000000000 +0100
++++ gnutls-3.2.12.fixed/lib/libgnutls.map	2014-03-07 16:04:57.826105998 +0100
+@@ -955,6 +955,7 @@
+ 
+     # Internal symbols needed by xssl:
+     gnutls_realloc_fast;
++    _gnutls_vasprintf;
+ 
+     # Internal symbols needed by gnutls-cli-debug:
+     _gnutls_rsa_pms_set_version;
