@@ -3,8 +3,8 @@
 
 PKG             := libpng
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.9
-$(PKG)_CHECKSUM := fe5b37a01a2a056a26f1a6661dc45e026ad86c88
+$(PKG)_VERSION  := 1.6.10
+$(PKG)_CHECKSUM := adb44c93795446eaa4170bf9305b6f771eb368bc
 $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.simplesystems.org/pub/$(PKG)/png/src/libpng16/$($(PKG)_FILE)
