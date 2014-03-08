@@ -21,10 +21,7 @@ define $(PKG)_BUILD
     rm '$(1)'/docs/Makefile.am
     cd '$(1)' && NOCONFIGURE=1 ./autogen.sh
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-explicit-deps \
         --with-included-modules \
         --without-dynamic-modules \
