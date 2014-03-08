@@ -20,11 +20,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    '$(SED)' -i "s^[-]lvpx^`'$(TARGET)'-pkg-config --libs-only-l vpx`^g;" $(1)/configure
     cd '$(1)' && ./configure \
         --cross-prefix='$(TARGET)'- \
         --enable-cross-compile \
-        --arch=$(patsubst -%,,$(TARGET)) \
+        --arch=$(firstword $(subst -, ,$(TARGET))) \
         --target-os=mingw32 \
         --prefix='$(PREFIX)/$(TARGET)' \
         $(if $(BUILD_STATIC), \
