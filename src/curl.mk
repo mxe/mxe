@@ -25,6 +25,7 @@ define $(PKG)_BUILD
         --enable-ipv6 \
         --with-libssh2
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    ln -sf '$(PREFIX)/$(TARGET)/bin/curl-config' '$(PREFIX)/bin/$(TARGET)-curl-config'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
