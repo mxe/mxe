@@ -27,5 +27,12 @@ define $(PKG)_BUILD
         --with-libxml2 \
         --disable-bdjava
     $(MAKE) -C '$(1)' -j '$(JOBS)'
+
+    # Since libbluray doesn't export its symbols, we can't create a shared
+    # build on Windows. So we mangle the pkg-config to fool ffmpegs detection
+    # to work... In a static build, this fixes transitive dependencies of xml2
+    # and freetype...
+    $(SED) -i '/Libs:/ s,$$, -lxml2 -lfreetype,; s,^Libs.private:.*$$,Requires.private: libxml-2.0 freetype2,' '$(1)/src/libbluray.pc'
+
     $(MAKE) -C '$(1)' -j 1 install
 endef
