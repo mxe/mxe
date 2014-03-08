@@ -26,6 +26,8 @@ $(PKG)_MAKE_OPTS = \
     MUST_BUILD_SHLIB=@xmlrpc-c-must-build-shlib@
 
 define $(PKG)_BUILD_COMMON
+    $(SED) -i 's,curl-config,$(TARGET)-curl-config,g' '$(1)/lib/curl_transport/Makefile'
+    $(SED) -i 's,curl-config,$(TARGET)-curl-config,g' '$(1)/src/Makefile'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -36,6 +38,12 @@ define $(PKG)_BUILD_COMMON
         CURL_CONFIG='$(PREFIX)/$(TARGET)/bin/curl-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' $($(PKG)_MAKE_OPTS)
     $(MAKE) -C '$(1)' -j 1 install $($(PKG)_MAKE_OPTS)
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(1)/examples/cpp/asynch_client.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-xmlrpc-c.exe' \
+        `'$(PREFIX)/$(TARGET)/bin/xmlrpc-c-config' c++2 client --libs` \
+        `'$(TARGET)-pkg-config' libcurl --cflags --libs`
 endef
 
 $(PKG)_BUILD_STATIC=$(subst @xmlrpc-c-shared-lib-type@,NONE,\
