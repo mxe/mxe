@@ -33,9 +33,6 @@ define $(PKG)_BUILD
                   -DHAVE_WINDOWS_PATH \
                   -DH5_BUILT_AS_$(if $(BUILD_STATIC),STATIC,DYNAMIC)_LIB'
 
-    # libtool is somehow created to effectively disallow shared builds
-    $(SED) -i 's,allow_undefined_flag="unsupported",allow_undefined_flag="",g' '$(1)/libtool'
-
     # These programs need to be executed on host to create
     # H5lib_settings.c and H5Tinit.c
     for f in H5detect.exe H5make_libsettings.exe libhdf5.settings; do \
