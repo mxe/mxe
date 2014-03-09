@@ -18,21 +18,16 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-examples \
         --with-freetype \
         --with-libxml2 \
         --disable-bdjava
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-
-    # Since libbluray doesn't export its symbols, we can't create a shared
-    # build on Windows. So we mangle the pkg-config to fool ffmpegs detection
-    # to work... In a static build, this fixes transitive dependencies of xml2
-    # and freetype...
-    $(SED) -i '/Libs:/ s,$$, -lxml2 -lfreetype,; s,^Libs.private:.*$$,Requires.private: libxml-2.0 freetype2,' '$(1)/src/libbluray.pc'
-
+    $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS='-no-undefined'
     $(MAKE) -C '$(1)' -j 1 install
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(1)/src/examples/sound_dump.c' -o '$(PREFIX)/$(TARGET)/bin/test-libbluray.exe' \
+        `'$(TARGET)-pkg-config' libbluray --cflags --libs`
 endef
