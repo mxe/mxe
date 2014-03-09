@@ -1,0 +1,15 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -ur atk-2.10.0.orig/atk/Makefile.in atk-2.10.0/atk/Makefile.in
+--- atk-2.10.0.orig/atk/Makefile.in	2014-03-09 14:57:06.000000000 +1100
++++ atk-2.10.0/atk/Makefile.in	2014-03-09 14:58:26.000000000 +1100
+@@ -919,7 +919,7 @@
+ @MS_LIB_AVAILABLE_FALSE@uninstall-ms-lib:
+ 
+ atk.def: atk.symbols
+-	(echo -e EXPORTS; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES - <$(srcdir)/atk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > atk.def
++	(`echo -e EXPORTS`; $(CPP) -P -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES - <$(srcdir)/atk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > atk.def
+ 
+ atk-$(ATK_API_VERSION).lib: libatk-$(ATK_API_VERSION).la atk.def
+ 	lib -machine:$(LIB_EXE_MACHINE_FLAG) -name:libatk-$(ATK_API_VERSION)-$(LT_CURRENT_MINUS_AGE).dll -def:atk.def -out:$@
