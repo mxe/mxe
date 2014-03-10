@@ -24,5 +24,8 @@ define $(PKG)_BUILD
         OPTS=$(if $(findstring x86_64,$(TARGET)),-fdefault-integer-8)
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/libblas.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(if $(BUILD_STATIC), \
+        $(INSTALL) -m644 '$(1)/libblas.a' '$(PREFIX)/$(TARGET)/lib/', \
+        $(MAKE_SHARED_FROM_STATIC) '$(1)/libblas.a' --ld '$(TARGET)-gfortran' \
+    )
 endef
