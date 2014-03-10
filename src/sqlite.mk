@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-readline \
-        --enable-threadsafe
+        --enable-threadsafe \
+        CFLAGS="-Os"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
