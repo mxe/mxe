@@ -31,6 +31,7 @@ define $(PKG)_BUILD
         --disable-nls \
         --disable-guile \
         --disable-doc \
+        --enable-local-libopts \
         --with-included-libtasn1 \
         --with-libregex='$(PREFIX)/$(TARGET)' \
         --with-regex-header=pcreposix.h \
