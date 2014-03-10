@@ -25,10 +25,15 @@ define $(PKG)_BUILD
         PDCURSES_SRCDIR=. \
         WIDE=Y \
         UTF8=Y
-    $(TARGET)-ranlib '$(1)/pdcurses.a' '$(1)/panel.a'
+    mv '$(1)/pdcurses.a' '$(1)/libcurses.a'
+    mv '$(1)/panel.a'    '$(1)/libpanel.a'
+    $(TARGET)-ranlib '$(1)/libcurses.a' '$(1)/libpanel.a'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/curses.h' '$(1)/panel.h' '$(1)/term.h' '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/pdcurses.a' '$(PREFIX)/$(TARGET)/lib/libpdcurses.a'
-    $(INSTALL) -m644 '$(1)/panel.a'    '$(PREFIX)/$(TARGET)/lib/libpanel.a'
+    $(if $(BUILD_STATIC), \
+        $(INSTALL) -m644 '$(1)/libcurses.a' '$(1)/libpanel.a' '$(PREFIX)/$(TARGET)/lib/', \
+        $(MAKE_SHARED_FROM_STATIC) '$(1)/libcurses.a' && \
+        $(MAKE_SHARED_FROM_STATIC) '$(1)/libpanel.a' \
+    )
 endef
