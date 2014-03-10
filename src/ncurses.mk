@@ -27,6 +27,8 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix=$(PREFIX)/$(TARGET) \
+        --with-build-cc=gcc \
+        --with-build-cpp=cpp \
         --disable-home-terminfo \
         --enable-sp-funcs \
         --enable-term-driver \
@@ -34,9 +36,14 @@ define $(PKG)_BUILD
         --without-debug \
         --without-ada \
         --without-manpages \
+        --without-progs \
+        --without-tests \
         --enable-pc-files \
+        PKG_CONFIG_LIBDIR='$(PREFIX)/$(TARGET)/lib/pkgconfig' \
         --with-normal \
         --without-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install TIC_PATH='$(1).native/progs/tic'
 endef
+
+$(PKG)_BUILD_SHARED =
