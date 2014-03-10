@@ -22,6 +22,7 @@ define $(PKG)_BUILD
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
         -DLAPACKE=ON \
+        -DCMAKE_Fortran_FLAGS=$(if $(findstring x86_64,$(TARGET)),-fdefault-integer-8) \
         .
     cp '$(1)/lapacke/include/lapacke_mangling_with_flags.h' '$(1)/lapacke/include/lapacke_mangling.h'
     $(MAKE) -C '$(1)/SRC'     -j '$(JOBS)' install
