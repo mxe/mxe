@@ -59,6 +59,15 @@ MXE_CONFIGURE_OPTS = \
         --enable-static --disable-shared , \
         --disable-static --enable-shared )
 
+MAKE_SHARED_FROM_STATIC = \
+	'$(TOP_DIR)/tools/make-shared-from-static' \
+	$(if $(findstring mingw,$(TARGET)),--windowsdll) \
+	--ar '$(TARGET)-ar' \
+	--ld '$(TARGET)-gcc' \
+	--install '$(INSTALL)' \
+	--libdir '$(PREFIX)/$(TARGET)/lib' \
+	--bindir '$(PREFIX)/$(TARGET)/bin'
+
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
