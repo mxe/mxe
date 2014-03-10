@@ -34,5 +34,5 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/lib/vamp-'*.dll '$(PREFIX)/$(TARGET)/lib/vamp'
     $(INSTALL) -m644 '$(1)/vamp/vamp-rubberband.cat' '$(PREFIX)/$(TARGET)/lib/vamp'
     $(SED) 's,%PREFIX%,$(PREFIX)/$(TARGET),' '$(1)/$(PKG).pc.in' \
-	  > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+        > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 endef

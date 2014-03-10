@@ -27,7 +27,7 @@ define $(PKG)_BUILD
 
     for f in vamp vamp-sdk vamp-hostsdk; do \
         $(SED) 's,%PREFIX%,$(PREFIX)/$(TARGET),' "$(1)/pkgconfig/$$f.pc.in" \
-		> "$(PREFIX)/$(TARGET)/lib/pkgconfig/$$f.pc"; \
+            > "$(PREFIX)/$(TARGET)/lib/pkgconfig/$$f.pc"; \
     done
 
     cp -rv '$(1)/vamp' '$(1)/vamp-hostsdk' '$(1)/vamp-sdk' '$(PREFIX)/$(TARGET)/include/'
