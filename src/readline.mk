@@ -25,6 +25,6 @@ define $(PKG)_BUILD
         --enable-multibyte \
         --without-purify \
         --with-curses \
-        LIBS='-lpdcurses'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(if $(BUILD_STATIC),SHARED_LIBS=,SHLIB_LIBS='-lpdcurses')
+        LIBS='-lcurses'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(if $(BUILD_STATIC),SHARED_LIBS=,SHLIB_LIBS='-lcurses')
 endef
