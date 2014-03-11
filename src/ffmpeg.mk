@@ -12,9 +12,9 @@ $(PKG)_URL_2    := http://launchpad.net/ffmpeg/main/$($(PKG)_VERSION)/+download/
 $(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libvpx opencore-amr opus sdl speex theora vo-aacenc vo-amrwbenc vorbis x264 xvidcore yasm zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.ffmpeg.org/download.html' | \
+    $(WGET) -q -O- 'http://ffmpeg.org/releases/' | \
     $(SED) -n 's,.*ffmpeg-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep 2.* | \
+    grep -v 'alpha\|beta\|rc\|git' | \
     $(SORT) -Vr | \
     head -1
 endef
