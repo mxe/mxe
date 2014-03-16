@@ -349,7 +349,7 @@ endef
 $(foreach TARGET,$(MXE_TARGETS), \
     $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$(PKGS), \
-        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET)))))
+        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)-$(TARGET)),$(TARGET)))))
 
 # convenience set-like functions for unique lists
 SET_APPEND = \
