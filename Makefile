@@ -469,3 +469,6 @@ cleanup-style:
             rm -f $(TOP_DIR)/tmp-cleanup-style; \
         )
 
+build-matrix:
+	@tools/create-build-matrix $(PKGS) > build-matrix.html
+	@echo "Created build-matrix.html"
