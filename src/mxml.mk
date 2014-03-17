@@ -3,8 +3,8 @@
 
 PKG             := mxml
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.7
-$(PKG)_CHECKSUM := a3bdcab48307794c297e790435bcce7becb9edae
+$(PKG)_VERSION  := 2.8
+$(PKG)_CHECKSUM := 09d88f1720f69b64b76910dfe2a5c5fa24a8b361
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.msweet.org/files/project3/$($(PKG)_FILE)
