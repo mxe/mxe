@@ -1,0 +1,19 @@
+diff --git a/src/qml/qml/qqmlengine.cpp b/src/qml/qml/qqmlengine.cpp
+index 91faed5..352c405 100644
+--- a/src/qml/qml/qqmlengine.cpp
++++ b/src/qml/qml/qqmlengine.cpp
+@@ -2294,10 +2294,13 @@
+ // is disabled (see 8dot3name options of fsutil.exe).
+ static inline QString shellNormalizeFileName(const QString &name)
+ {
++#ifndef PIDLIST_ABSOLUTE
++#define PIDLIST_ABSOLUTE ITEMIDLIST*
++#endif
+     const QString nativeSeparatorName(QDir::toNativeSeparators(name));
+     const LPCTSTR nameC = reinterpret_cast<LPCTSTR>(nativeSeparatorName.utf16());
+     PIDLIST_ABSOLUTE file;
+-    if (FAILED(SHParseDisplayName(nameC, NULL, &file, 0, NULL)))
++    if (FAILED(SHParseDisplayName(nameC, NULL, file, 0, NULL)))
+         return name;
+     TCHAR buffer[MAX_PATH];
+     if (!SHGetPathFromIDList(file, buffer))
