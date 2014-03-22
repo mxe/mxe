@@ -3,11 +3,11 @@
 
 PKG             := cppunit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.12.1
-$(PKG)_CHECKSUM := f1ab8986af7a1ffa6760f4bacf5622924639bf4a
+$(PKG)_VERSION  := 1.13.2
+$(PKG)_CHECKSUM := 0eaf8bb1dcf4d16b12bec30d0732370390d35e6f
 $(PKG)_SUBDIR   := cppunit-$($(PKG)_VERSION)
 $(PKG)_FILE     := cppunit-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://dev-www.libreoffice.org/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
