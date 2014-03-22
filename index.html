@@ -1888,6 +1888,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.lysator.liu.se/~nisse/nettle/">nettle</a></td>
     </tr>
     <tr>
+        <td class="package">nlopt</td>
+        <td class="website"><a href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a></td>
+    </tr>
+    <tr>
         <td class="package">nsis</td>
         <td class="website"><a href="http://nsis.sourceforge.net/">NSIS</a></td>
     </tr>
@@ -2042,6 +2046,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">poco</td>
         <td class="website"><a href="http://pocoproject.org/">POCO C++ Libraries</a></td>
+    </tr>
+    <tr>
+        <td class="package">polarssl</td>
+        <td class="website"><a href="https://polarssl.org/">Polar SSL Library</a></td>
     </tr>
     <tr>
         <td class="package">poppler</td>
@@ -2702,7 +2710,11 @@ endef</pre>
     <li>
         <p>
         Check that you don't have "dirty stuff" in your <code>*.mk</code> files,
-        such as TAB characters or trailing spaces at lines endings.
+        such as TAB characters or trailing spaces at lines endings. Run:
+        </p>
+        <pre>make cleanup-style</pre>
+        <p>
+        to remove these.
         Have a look at random <code>*.mk</code> files
         to get a feeling for the coding style.
         </p>

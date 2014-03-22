@@ -22,10 +22,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,^\(Requires:.*\),\1 gio-2.0,' '$(1)'/libgsf-1.pc.in
     echo 'Libs.private: -lz -lbz2'          >> '$(1)'/libgsf-1.pc.in
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-nls \
         --disable-gtk-doc \
         --without-python \
