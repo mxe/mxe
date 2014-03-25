@@ -3,8 +3,8 @@
 
 PKG             := gmp
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.3
-$(PKG)_CHECKSUM := b35928e2927b272711fdfbf71b7cfd5f86a6b165
+$(PKG)_VERSION  := 6.0.0
+$(PKG)_CHECKSUM := c4976716a277b1d3b595171143f52f8c1a788284
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gmplib.org/pub/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
