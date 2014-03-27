@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 62054750162b4691498c97353c113e9d1de40cec
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads zlib
+$(PKG)_DEPS     := gcc gnutls libgsasl pthreads zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/kisli/vmime/commits/master' | \
@@ -30,9 +30,9 @@ define $(PKG)_BUILD
         -DVMIME_BUILD_DOCUMENTATION=OFF \
         -DCMAKE_MODULE_PATH='$(1)/cmake' \
         -DICU_LIBRARIES="`'$(TARGET)-pkg-config' --libs-only-l icu-i18n`" \
-        -DVMIME_CHARSETCONV_LIB_IS_ICONV=ON \
+        -DVMIME_CHARSETCONV_LIB_IS_ICONV=OFF \
         -DVMIME_CHARSETCONV_LIB_IS_ICU=OFF \
-        -DVMIME_CHARSETCONV_LIB_IS_WIN=OFF \
+        -DVMIME_CHARSETCONV_LIB_IS_WIN=ON \
         -DVMIME_SHARED_PTR_USE_CXX=ON \
         -DCXX11_COMPILER_FLAGS=ON \
         -C../../src/vmime-TryRunResults.cmake \
