@@ -421,6 +421,10 @@ clean-pkg:
                       $(foreach PKG,$(PKGS),$(PKG_DIR)/$($(PKG)_FILE)), \
                       $(wildcard $(PKG_DIR)/*)))
 
+.PHONY: clean-junk
+clean-junk: clean-pkg
+	rm -rf $(LOG_DIR) $(call TMP_DIR,*)
+
 .PHONY: update
 define UPDATE
     $(if $(2),
