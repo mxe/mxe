@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+# Create an HTML build matrix from current source dir...
+
+PKGS="$@"
+
+MXE_TRIPLETS=`grep ^MXE_TRIPLETS Makefile | cut -d '=' -f2 | cut -d ' ' -f2-`
+MXE_LIB_TYPES=`grep ^MXE_LIB_TYPES Makefile | cut -d '=' -f2 | cut -d ' ' -f2-`
+MXE_TARGET_LIST=`eval "echo {${MXE_TRIPLETS// /,}}.{${MXE_LIB_TYPES// /,}}"`
+
+cat <<END
+<!DOCTYPE html>
+<html>
+<head><title>MXE Build Matrix</title>
+<style type="text/css">
+table {
+    width:95%;
+    border-collapse:collapse;
+}
+
+td, th {
+    border:1px solid black;
+    padding: 3px;
+}
+
+th {
+    background-color:#33f;
+    color:#fff;
+    text-align:left;
+}
+
+td.ok {
+    background-color: #090;
+}
+td.fail {
+    background-color: #c00;
+}
+td.off {
+    background-color: #ccc;
+    font-size: small;
+}
+</style>
+</head>
+<body>
+<table>
+<thead>
+<tr>
+<td rowspan="2">Package</td>
+END
+
+set -- $MXE_LIB_TYPES
+colspan=$#
+for trip in ${MXE_TRIPLETS}
+do
+    echo "<th colspan=\"$colspan\">$trip</th>"
+done
+
+echo -e "</tr>\n<tr>"
+
+for trip in $MXE_TRIPLETS
+do
+    for ty in $MXE_LIB_TYPES
+    do
+        echo "<th>$ty</th>"
+    done
+done
+
+echo -e "</tr>\n</thead>\n<tbody>"
+
+for pkg in $PKGS
+do
+    echo -e "<tr>\n<th>$pkg</th>"
+    for target in $MXE_TARGET_LIST
+    do
+        state=
+        if [[ ! -d usr/$target ]]
+        then
+            state=off
+        elif [[ -f usr/$target/installed/$pkg ]]
+        then
+            state=ok
+        elif [[ -f log/${pkg}_$target ]]
+        then
+            state=fail
+        fi
+        case $state in
+            ok)   echo '<td class="ok">OK</td>' ;;
+            fail) echo '<td class="fail">FAIL</td>' ;;
+            off)  echo '<td class="off">OFF</td>' ;;
+            *)    echo '<td class="unknown">?</td>' ;;
+        esac
+    done
+    echo "</tr>"
+done
+
+cat <<END
+</tbody>
+</table>
+</body>
+END
