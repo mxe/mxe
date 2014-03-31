@@ -24,8 +24,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 BUILD_DIR='build' $(if $(BUILD_STATIC),SHARED,STATIC)_LIB=
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/../../src/xvid.h' '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/build/xvidcore.$(LIB_SUFFIX)' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib' '$(PREFIX)/$(TARGET)/bin'
+    $(INSTALL) -m644 '$(1)/build/xvidcore.$(LIB_SUFFIX)' '$(PREFIX)/$(TARGET)/$(if $(BUILD_STATIC),lib,bin)/'
     $(if $(BUILD_STATIC), \
         ln -sf '$(PREFIX)/$(TARGET)/lib/xvidcore.$(LIB_SUFFIX)' '$(PREFIX)/$(TARGET)/lib/libxvidcore.$(LIB_SUFFIX)', \
         mv '$(1)/build/xvidcore.dll.a' '$(1)/build/libxvidcore.dll.a' && \
