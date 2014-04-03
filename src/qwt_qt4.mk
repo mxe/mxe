@@ -15,6 +15,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(if $(BUILD_STATIC),\
+        echo "QWT_CONFIG -= QwtDll" >> '$(1)/qwtconfig.pri')
+
     # build
     cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt/bin/qmake
     $(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
