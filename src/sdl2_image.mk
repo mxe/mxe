@@ -17,17 +17,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,^\(Requires:.*\),\1 libtiff-4 libpng,' '$(1)/SDL2_image.pc.in'
+    $(SED) -i 's,^\(Requires:.*\),\1\nRequires.private: libtiff-4 libpng,' '$(1)/SDL2_image.pc.in'
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
         --disable-jpg-shared \
         --disable-webp-shared \
         --disable-png-shared \
-        --disable-tif-shared \
-        LIBS='-lz'
+        --disable-tif-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
+
+# Disable until sdl2 can be built on MinGW32
+$(PKG)_BUILD_i686-pc-mingw32 =
