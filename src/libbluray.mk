@@ -31,3 +31,5 @@ define $(PKG)_BUILD
         '$(1)/src/examples/sound_dump.c' -o '$(PREFIX)/$(TARGET)/bin/test-libbluray.exe' \
         `'$(TARGET)-pkg-config' libbluray --cflags --libs`
 endef
+
+$(PKG)_BUILD_i686-pc-mingw32 =

@@ -1,0 +1,132 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 7eacfe653ffb8f35978fc985422c8496b23ef40a Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 8 Feb 2014 22:49:52 +0100
+Subject: [PATCH 1/2] c99 requires _off_t, not off_t
+
+
+diff --git a/include/io.h b/include/io.h
+index 271d928..e7dd4a7 100644
+--- a/include/io.h
++++ b/include/io.h
+@@ -298,8 +298,8 @@ __CRT_MAYBE_INLINE __cdecl __MINGW_NOTHROW intptr_t _findnext64i32(intptr_t _fp,
+ }
+ 
+ #ifndef __NO_MINGW_LFS
+-__CRT_INLINE off64_t lseek64 (int, off64_t, int);
+-__CRT_INLINE off64_t lseek64 (int fd, off64_t offset, int whence) {
++__CRT_INLINE _off64_t lseek64 (int, _off64_t, int);
++__CRT_INLINE _off64_t lseek64 (int fd, _off64_t offset, int whence) {
+   return _lseeki64(fd, (__int64) offset, whence);
+ }
+ #endif
+diff --git a/include/unistd.h b/include/unistd.h
+index f8efc4b..a635406 100644
+--- a/include/unistd.h
++++ b/include/unistd.h
+@@ -62,9 +62,9 @@ int __cdecl __MINGW_NOTHROW usleep(useconds_t useconds);
+ 
+ /* This is defined as a real library function to allow autoconf
+    to verify its existence. */
+-int ftruncate(int, off_t);
++int ftruncate(int, _off_t);
+ #ifndef __NO_INLINE__
+-__CRT_INLINE int ftruncate(int __fd, off_t __length)
++__CRT_INLINE int ftruncate(int __fd, _off_t __length)
+ {
+   return _chsize (__fd, __length);
+ }
+diff --git a/mingw32/include/io.h b/mingw32/include/io.h
+index 271d928..e7dd4a7 100644
+--- a/mingw32/include/io.h
++++ b/mingw32/include/io.h
+@@ -298,8 +298,8 @@ __CRT_MAYBE_INLINE __cdecl __MINGW_NOTHROW intptr_t _findnext64i32(intptr_t _fp,
+ }
+ 
+ #ifndef __NO_MINGW_LFS
+-__CRT_INLINE off64_t lseek64 (int, off64_t, int);
+-__CRT_INLINE off64_t lseek64 (int fd, off64_t offset, int whence) {
++__CRT_INLINE _off64_t lseek64 (int, _off64_t, int);
++__CRT_INLINE _off64_t lseek64 (int fd, _off64_t offset, int whence) {
+   return _lseeki64(fd, (__int64) offset, whence);
+ }
+ #endif
+diff --git a/mingw32/include/unistd.h b/mingw32/include/unistd.h
+index f8efc4b..a635406 100644
+--- a/mingw32/include/unistd.h
++++ b/mingw32/include/unistd.h
+@@ -62,9 +62,9 @@ int __cdecl __MINGW_NOTHROW usleep(useconds_t useconds);
+ 
+ /* This is defined as a real library function to allow autoconf
+    to verify its existence. */
+-int ftruncate(int, off_t);
++int ftruncate(int, _off_t);
+ #ifndef __NO_INLINE__
+-__CRT_INLINE int ftruncate(int __fd, off_t __length)
++__CRT_INLINE int ftruncate(int __fd, _off_t __length)
+ {
+   return _chsize (__fd, __length);
+ }
+-- 
+1.8.4.5
+
+
+From ca401cda2b84dbf02d3576436e43658299effad4 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 14 Feb 2014 17:41:11 +0100
+Subject: [PATCH 2/2] define off_t and off64_t even in strict ansi mode
+
+Even if this is not correct, we do this for convenience since many
+packages reference off_it and use gcc -std=c99.
+
+diff --git a/include/sys/types.h b/include/sys/types.h
+index 9c7fcf9..f2b9a0b 100644
+--- a/include/sys/types.h
++++ b/include/sys/types.h
+@@ -66,17 +66,13 @@ typedef	__time64_t time_t;
+ #ifndef	_OFF_T_
+ #define	_OFF_T_
+ typedef long _off_t;
+-#ifndef __STRICT_ANSI__
+-typedef _off_t	off_t;
+-#endif /* __STRICT_ANSI__ */
++typedef long off_t;
+ #endif	/* Not _OFF_T_ */
+ 
+ #ifndef _OFF64_T_
+ #define _OFF64_T_
+ typedef __int64 _off64_t;
+-#ifndef __STRICT_ANSI__
+ typedef __int64 off64_t;
+-#endif /* __STRICT_ANSI__ */
+ #endif /* ndef _OFF64_T */
+ 
+ #ifndef _DEV_T_
+diff --git a/mingw32/include/sys/types.h b/mingw32/include/sys/types.h
+index 9c7fcf9..f2b9a0b 100644
+--- a/mingw32/include/sys/types.h
++++ b/mingw32/include/sys/types.h
+@@ -66,17 +66,13 @@ typedef	__time64_t time_t;
+ #ifndef	_OFF_T_
+ #define	_OFF_T_
+ typedef long _off_t;
+-#ifndef __STRICT_ANSI__
+-typedef _off_t	off_t;
+-#endif /* __STRICT_ANSI__ */
++typedef long off_t;
+ #endif	/* Not _OFF_T_ */
+ 
+ #ifndef _OFF64_T_
+ #define _OFF64_T_
+ typedef __int64 _off64_t;
+-#ifndef __STRICT_ANSI__
+ typedef __int64 off64_t;
+-#endif /* __STRICT_ANSI__ */
+ #endif /* ndef _OFF64_T */
+ 
+ #ifndef _DEV_T_
+-- 
+1.8.4.5
+

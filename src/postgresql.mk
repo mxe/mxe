@@ -41,6 +41,7 @@ define $(PKG)_BUILD
         --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null \
+        CPPFLAGS='-DUNSAFE_STAT_OK' \
         LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl --libs`" \
         ac_cv_func_getaddrinfo=no
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install $(if $(BUILD_STATIC),haslibarule= shlib=)

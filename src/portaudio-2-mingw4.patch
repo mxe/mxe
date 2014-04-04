@@ -1,0 +1,22 @@
+From 2fddfb2648c1b73ae088b7652c4e0647b9fb16df Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 8 Feb 2014 22:35:21 +0100
+Subject: [PATCH] MinGW 4 compatibility
+
+
+diff --git a/src/hostapi/wasapi/pa_win_wasapi.c b/src/hostapi/wasapi/pa_win_wasapi.c
+index aecdd63..b166234 100644
+--- a/src/hostapi/wasapi/pa_win_wasapi.c
++++ b/src/hostapi/wasapi/pa_win_wasapi.c
+@@ -77,7 +77,7 @@
+ 
+ #include "pa_win_coinitialize.h"
+ 
+-#ifndef NTDDI_VERSION
++#if !defined(NTDDI_VERSION) || __MINGW_MAJOR_VERSION==4
+  
+     #undef WINVER
+     #undef _WIN32_WINNT
+-- 
+1.8.4.5
+

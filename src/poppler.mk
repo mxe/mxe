@@ -65,3 +65,4 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' poppler poppler-cpp --cflags --libs`
 endef
 
+$(PKG)_BUILD_i686-pc-mingw32 =

@@ -41,7 +41,8 @@ define $(PKG)_BUILD
         --enable-pc-files \
         PKG_CONFIG_LIBDIR='$(PREFIX)/$(TARGET)/lib/pkgconfig' \
         --with-normal \
-        --without-shared
+        --without-shared \
+        CFLAGS='-DWINVER=0x0501 -D_WIN32_WINNT=0x0501'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install TIC_PATH='$(1).native/progs/tic'
 endef

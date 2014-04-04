@@ -2,12 +2,11 @@
 # See index.html for further information.
 
 PKG             := mingwrt
-$(PKG)_IGNORE   := 4%
-$(PKG)_VERSION  := 3.20-2
-$(PKG)_CHECKSUM := cc6c1f841ab255e52e60f9c967cea6acf29354db
+$(PKG)_VERSION  := 4.0.3
+$(PKG)_CHECKSUM := fb78aca24b9b5ec9c43a8e0f23c0d251ba9b2b14
 $(PKG)_SUBDIR   := .
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-mingw32-dev.tar.lzma
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/Base/mingw-rt/mingwrt-3.20/$($(PKG)_FILE)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-1-mingw32-dev.tar.lzma
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/Base/mingw-rt/mingwrt-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE

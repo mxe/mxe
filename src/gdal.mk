@@ -71,7 +71,8 @@ define $(PKG)_CONFIGURE
         --without-perl \
         --without-php \
         --without-ruby \
-        --without-python
+        --without-python \
+        CPPFLAGS='-D_WIN32_WINNT=0x0501'
 endef
 
 define $(PKG)_MAKE

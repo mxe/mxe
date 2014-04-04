@@ -29,6 +29,7 @@ define $(PKG)_BUILD
             -device-option CROSS_COMPILE=${TARGET}- \
             -device-option PKG_CONFIG='${TARGET}-pkg-config' \
             -force-pkg-config \
+            -D WINVER=0x0600 -D _WIN32_WINNT=0x0600 \
             -release \
             -static \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
