@@ -34,6 +34,7 @@ define $(PKG)_BUILD
         link=$(if $(BUILD_STATIC),static,shared) \
         threadapi=win32 \
         --layout=tagged \
+        --disable-icu \
         --without-mpi \
         --without-python \
         --prefix='$(PREFIX)/$(TARGET)' \
