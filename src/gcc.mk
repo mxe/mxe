@@ -58,6 +58,7 @@ define $(PKG)_POST_BUILD
     # TODO: find a way to configure the installation of these correctly
     rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, c++ g++ gcc gfortran)
     -mv '$(PREFIX)/lib/gcc/$(TARGET)/lib/'* '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
+    -cp '$(PREFIX)/lib/gcc/$(TARGET)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
     -mv '$(PREFIX)/lib/gcc/$(TARGET)/'*.dll '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
 endef
 
