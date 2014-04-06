@@ -30,3 +30,5 @@ define $(PKG)_BUILD
       --disable-dependency-tracking
     $(MAKE) -C '$(1)' -j '$(JOBS)' install doxygen= progref_dist_files=
 endef
+
+$(PKG)_BUILD_SHARED =

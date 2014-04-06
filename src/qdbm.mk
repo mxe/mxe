@@ -47,3 +47,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-qdbm.exe' \
         `'$(TARGET)-pkg-config' qdbm --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

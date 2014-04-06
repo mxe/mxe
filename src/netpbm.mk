@@ -44,3 +44,5 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/mxe-pkgdir/link/libnetpbm.a' '$(PREFIX)/$(TARGET)/lib/'
 endef
+
+$(PKG)_BUILD_SHARED =

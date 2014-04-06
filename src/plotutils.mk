@@ -30,3 +30,5 @@ define $(PKG)_BUILD
         CFLAGS='-DNO_SYSTEM_GAMMA'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= INFO_DEPS=
 endef
+
+$(PKG)_BUILD_SHARED =

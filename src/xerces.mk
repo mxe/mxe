@@ -50,3 +50,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-xerces.exe' \
         `'$(TARGET)-pkg-config' xerces-c --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

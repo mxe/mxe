@@ -40,3 +40,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-sfml.exe' \
         `$(TARGET)-pkg-config --cflags --libs sfml`
 endef
+
+$(PKG)_BUILD_SHARED =

@@ -29,3 +29,5 @@ define $(PKG)_BUILD
         --without-plugins
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
+
+$(PKG)_BUILD_SHARED =

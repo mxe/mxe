@@ -28,3 +28,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libzip.exe' \
         `'$(TARGET)-pkg-config' libzip --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

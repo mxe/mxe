@@ -30,3 +30,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_gfx.exe' \
         `'$(TARGET)-pkg-config' SDL_gfx --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

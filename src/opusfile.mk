@@ -30,3 +30,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install noinst_PROGRAMS=
 endef
+
+$(PKG)_BUILD_SHARED =

@@ -62,3 +62,5 @@ define $(PKG)_BUILD
         '$(1)/samples/c/fback_c.c' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
         `'$(TARGET)-pkg-config' opencv --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

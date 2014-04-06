@@ -52,3 +52,5 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' vmime --cflags --libs`
     $(INSTALL) -m755 '$(1)/examples/test-vmime.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
+
+$(PKG)_BUILD_SHARED =

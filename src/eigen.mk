@@ -25,3 +25,5 @@ define $(PKG)_BUILD
         -Drun_res=1 -Drun_res__TRYRUN_OUTPUT=""
     $(MAKE) -C '$(1)'/build -j '$(JOBS)' install VERBOSE=1
 endef
+
+$(PKG)_BUILD_SHARED =

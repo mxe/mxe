@@ -34,3 +34,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hunspell.exe' \
         `'$(TARGET)-pkg-config' hunspell --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

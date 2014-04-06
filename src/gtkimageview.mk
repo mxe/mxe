@@ -33,3 +33,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtkimageview.exe' \
         `'$(TARGET)-pkg-config' gtkimageview --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

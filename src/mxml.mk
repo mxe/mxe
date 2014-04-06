@@ -34,3 +34,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-mxml.exe' \
         `'$(TARGET)-pkg-config' mxml --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

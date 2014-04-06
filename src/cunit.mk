@@ -23,3 +23,5 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
 endef
+
+$(PKG)_BUILD_SHARED =

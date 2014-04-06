@@ -32,3 +32,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
     ln -sf '$(PREFIX)/$(TARGET)/bin/apr-1-config' '$(PREFIX)/bin/$(TARGET)-apr-1-config'
 endef
+
+$(PKG)_BUILD_SHARED =

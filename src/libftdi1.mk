@@ -23,3 +23,5 @@ define $(PKG)_BUILD
         -DLIBUSB_INCLUDE_DIR=$(PREFIX)/$(TARGET)/include/libusb-1.0
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 endef
+
+$(PKG)_BUILD_SHARED =

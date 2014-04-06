@@ -35,3 +35,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-gtkglextmm.exe' \
         `'$(TARGET)-pkg-config' gtkglextmm-1.2 --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

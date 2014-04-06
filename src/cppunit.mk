@@ -27,3 +27,5 @@ define $(PKG)_BUILD
         --disable-latex-docs
     $(MAKE) -C '$(1)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= defexec_DATA=
 endef
+
+$(PKG)_BUILD_SHARED =

@@ -26,3 +26,5 @@ define $(PKG)_BUILD
     $(INSTALL) -d                         '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/cminpack.h'    '$(PREFIX)/$(TARGET)/include/'
 endef
+
+$(PKG)_BUILD_SHARED =

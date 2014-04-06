@@ -34,3 +34,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libarchive.exe' \
         `'$(TARGET)-pkg-config' --libs-only-l libarchive`
 endef
+
+$(PKG)_BUILD_SHARED =

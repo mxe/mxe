@@ -29,3 +29,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libdca.exe' \
         `'$(TARGET)-pkg-config' libdca --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

@@ -36,3 +36,5 @@ define $(PKG)_BUILD
         LIBS="`'$(TARGET)-pkg-config' --libs libtiff-4`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
 endef
+
+$(PKG)_BUILD_SHARED =

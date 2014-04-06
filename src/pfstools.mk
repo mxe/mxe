@@ -34,3 +34,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)'/src/pfs -j '$(JOBS)'
     $(MAKE) -C '$(1)'/src/pfs -j 1 install
 endef
+
+$(PKG)_BUILD_SHARED =

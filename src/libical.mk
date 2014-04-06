@@ -31,3 +31,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libical.exe' \
         `'$(TARGET)-pkg-config' libical --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

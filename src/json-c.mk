@@ -33,3 +33,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-json-c.exe' \
         `'$(TARGET)-pkg-config' json --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

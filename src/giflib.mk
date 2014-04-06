@@ -27,3 +27,5 @@ define $(PKG)_BUILD
     echo 'all:' > '$(1)/doc/Makefile'
     $(MAKE) -C '$(1)/lib' -j '$(JOBS)' install
 endef
+
+$(PKG)_BUILD_SHARED =

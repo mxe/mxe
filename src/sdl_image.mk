@@ -38,3 +38,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_image.exe' \
         `'$(TARGET)-pkg-config' SDL_image --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

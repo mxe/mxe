@@ -29,3 +29,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/xmpsdk/src' -j '$(JOBS)'
     $(MAKE) -C '$(1)/src'        -j '$(JOBS)' install-lib
 endef
+
+$(PKG)_BUILD_SHARED =

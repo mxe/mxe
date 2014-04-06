@@ -25,3 +25,5 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/qwtplot3d'
     $(INSTALL) -m644 '$(1)/include'/*.h  '$(PREFIX)/$(TARGET)/include/qwtplot3d/'
 endef
+
+$(PKG)_BUILD_SHARED =

@@ -99,3 +99,5 @@ define $(PKG)_BUILD
     $($(PKG)_BUILD_UNICODE)
     $($(PKG)_TEST)
 endef
+
+$(PKG)_BUILD_SHARED =

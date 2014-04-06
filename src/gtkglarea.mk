@@ -26,3 +26,5 @@ define $(PKG)_BUILD
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
+
+$(PKG)_BUILD_SHARED =

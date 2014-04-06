@@ -32,3 +32,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gta.exe' \
         `'$(TARGET)-pkg-config' gta --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

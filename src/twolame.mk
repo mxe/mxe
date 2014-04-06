@@ -26,3 +26,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' SUBDIRS=libtwolame
     $(MAKE) -C '$(1)' -j 1 install SUBDIRS=libtwolame
 endef
+
+$(PKG)_BUILD_SHARED =

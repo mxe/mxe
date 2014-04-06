@@ -25,3 +25,5 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
+
+$(PKG)_BUILD_SHARED =

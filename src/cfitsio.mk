@@ -30,3 +30,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-cfitsio.exe' \
         `'$(TARGET)-pkg-config' cfitsio --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

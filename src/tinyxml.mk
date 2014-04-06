@@ -30,3 +30,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-tinyxml.exe' \
         -ltinyxml
 endef
+
+$(PKG)_BUILD_SHARED =

@@ -25,3 +25,5 @@ define $(PKG)_BUILD
         LIB_GNUTLS="`$(TARGET)-pkg-config --libs-only-l gnutls`" \
         -j '$(JOBS)' install
 endef
+
+$(PKG)_BUILD_SHARED =
