@@ -421,6 +421,19 @@ clean-pkg:
                       $(foreach PKG,$(PKGS),$(PKG_DIR)/$($(PKG)_FILE)), \
                       $(wildcard $(PKG_DIR)/*)))
 
+define DUMMY_RULE
+.PHONY: dummy-$(1)
+dummy-$(1):
+	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(2))),
+	    @echo '[build]    $(1)',
+	    @echo '[no-build] $(1)')
+endef
+$(foreach PKG,$(PKGS), \
+    $(eval $(call DUMMY_RULE,$(PKG),$(TARGET))))
+
+.PHONY: dummy
+dummy: $(foreach PKG,$(PKGS), dummy-$(PKG))
+
 .PHONY: update
 define UPDATE
     $(if $(2),
