@@ -24,5 +24,6 @@ define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/build/library' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/build/include' -j '$(JOBS)' install
 endef
