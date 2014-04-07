@@ -37,3 +37,12 @@ define $(PKG)_BUILD
      printf 'for /R %%%%f in (*.exe) do %%%%f || echo %%%%f fail >> all-tests-$(PKG)-$($(PKG)_VERSION).txt\r\n';) \
      > '$(PREFIX)/$(TARGET)/bin/$(PKG)-tests/all-tests-$(PKG)-$($(PKG)_VERSION).bat'
 endef
+
+define $(PKG)_BUILD_$(BUILD)
+    mkdir '$(1).build'
+    cd    '$(1).build' && '$(1)/configure' \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-shared
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' man1_MANS=
+    $(MAKE) -C '$(1).build' -j 1 install man1_MANS=
+endef
