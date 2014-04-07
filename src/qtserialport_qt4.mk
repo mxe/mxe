@@ -14,7 +14,7 @@ define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_SHARED
     cd '$(1)' && '$(PREFIX)/$(TARGET)/qt/bin/qmake'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
