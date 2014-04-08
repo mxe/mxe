@@ -51,7 +51,8 @@ define $(PKG)_BUILD
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
         -DBUILD_TESTING=FALSE \
         '$(1)'
-    $(MAKE) -C '$(1).cross_build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(1).cross_build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).cross_build' -j 1 VERBOSE=1
+    $(MAKE) -C '$(1).cross_build' -j 1 install VERBOSE=1
 endef
 
 $(PKG)_BUILD_SHARED =

@@ -52,7 +52,8 @@ define $(PKG)_BUILD
         -DVTK_USE_POSTGRES=TRUE\
         -DVTK_USE_ODBC=TRUE\
         ..
-    $(MAKE) -C '$(1)/cross_build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(1)/cross_build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)/cross_build' -j 1 VERBOSE=1
+    $(MAKE) -C '$(1)/cross_build' -j 1 install VERBOSE=1
 endef
 
 $(PKG)_BUILD_SHARED =
