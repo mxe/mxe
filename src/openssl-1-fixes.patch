@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From fa1d94198fa75abfdb2e3fdbe071d37677347375 Mon Sep 17 00:00:00 2001
+From bcc4a04e2289162279398e83567807fb1c63d2aa Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 8 Jan 2014 02:19:10 +0100
 Subject: [PATCH 1/2] winsock2
@@ -10,10 +10,10 @@ Subject: [PATCH 1/2] winsock2
 -http://rt.openssl.org/Ticket/Display.html?id=2285&user=guest&pass=guest
 
 diff --git a/e_os.h b/e_os.h
-index 79c1392..efe345f 100644
+index 6a0aad1..4928713 100644
 --- a/e_os.h
 +++ b/e_os.h
-@@ -492,7 +492,7 @@ static unsigned int _strlen31(const char *str)
+@@ -499,7 +499,7 @@ static unsigned int _strlen31(const char *str)
  #      endif
  #      if !defined(IPPROTO_IP)
           /* winsock[2].h was included already? */
@@ -49,10 +49,10 @@ index 4f80be8..af5f1be 100644
  #include OPENSSL_UNISTD
  #endif
 -- 
-1.8.4
+1.8.4.5
 
 
-From ea68b7956d716fe09d7b47764e32127f5c1d0f10 Mon Sep 17 00:00:00 2001
+From 9c0520aa6090f3734b34ccbfc55c3dabe0a61dc7 Mon Sep 17 00:00:00 2001
 From: Tom Molesworth <tom@entitymodel.com>
 Date: Wed, 8 Jan 2014 02:20:21 +0100
 Subject: [PATCH 2/2] Patch OpenSSL POD docs for perl-5.16+
@@ -63,7 +63,7 @@ stage fails without these applied.
 Should be harmless for earlier versions of perl.
 
 diff --git a/doc/apps/cms.pod b/doc/apps/cms.pod
-index a09588a..a8301c7 100644
+index a09588a..104b01f 100644
 --- a/doc/apps/cms.pod
 +++ b/doc/apps/cms.pod
 @@ -450,28 +450,28 @@ remains DER.
@@ -76,7 +76,7 @@ index a09588a..a8301c7 100644
  the operation was completely successfully.
  
 -=item 1 
-+=item * 1 
++=item * 1
  
  an error occurred parsing the command options.
  
@@ -102,7 +102,7 @@ index a09588a..a8301c7 100644
  the message was verified correctly but an error occurred writing out
  the signers certificates.
 diff --git a/doc/apps/smime.pod b/doc/apps/smime.pod
-index e4e89af..617343f 100644
+index e4e89af..0267358 100644
 --- a/doc/apps/smime.pod
 +++ b/doc/apps/smime.pod
 @@ -308,28 +308,28 @@ remains DER.
@@ -115,7 +115,7 @@ index e4e89af..617343f 100644
  the operation was completely successfully.
  
 -=item 1 
-+=item * 1 
++=item * 1
  
  an error occurred parsing the command options.
  
@@ -141,63 +141,60 @@ index e4e89af..617343f 100644
  the message was verified correctly but an error occurred writing out
  the signers certificates.
 diff --git a/doc/crypto/rand.pod b/doc/crypto/rand.pod
-index 1c068c8..801ef88 100644
+index 1c068c8..8477fda 100644
 --- a/doc/crypto/rand.pod
 +++ b/doc/crypto/rand.pod
-@@ -74,17 +74,14 @@ First up I will state the things I believe I need for a good RNG.
+@@ -74,16 +74,16 @@ First up I will state the things I believe I need for a good RNG.
  
  =over 4
  
 -=item 1
--
 +=item * 1
+ 
  A good hashing algorithm to mix things up and to convert the RNG 'state'
  to random numbers.
  
 -=item 2
--
 +=item * 2
+ 
  An initial source of random 'state'.
  
 -=item 3
--
 +=item * 3
+ 
  The state should be very large.  If the RNG is being used to generate
  4096 bit RSA keys, 2 2048 bit random strings are required (at a minimum).
- If your RNG state only has 128 bits, you are obviously limiting the
-@@ -93,14 +90,12 @@ carried away on this last point but it does indicate that it may not be
+@@ -93,13 +93,13 @@ carried away on this last point but it does indicate that it may not be
  a bad idea to keep quite a lot of RNG state.  It should be easier to
  break a cipher than guess the RNG seed data.
  
 -=item 4
--
 +=item * 4
+ 
  Any RNG seed data should influence all subsequent random numbers
  generated.  This implies that any random seed data entered will have
  an influence on all subsequent random numbers generated.
  
 -=item 5
--
 +=item * 5
+ 
  When using data to seed the RNG state, the data used should not be
  extractable from the RNG state.  I believe this should be a
- requirement because one possible source of 'secret' semi random
-@@ -108,13 +103,11 @@ data would be a private key or a password.  This data must
+@@ -108,12 +108,12 @@ data would be a private key or a password.  This data must
  not be disclosed by either subsequent random numbers or a
  'core' dump left by a program crash.
  
 -=item 6
--
 +=item * 6
+ 
  Given the same initial 'state', 2 systems should deviate in their RNG state
  (and hence the random numbers generated) over time if at all possible.
  
 -=item 7
--
 +=item * 7
+ 
  Given the random number output stream, it should not be possible to determine
  the RNG state or the next random number.
- 
 diff --git a/doc/ssl/SSL_COMP_add_compression_method.pod b/doc/ssl/SSL_COMP_add_compression_method.pod
 index 42fa66b..d531299 100644
 --- a/doc/ssl/SSL_COMP_add_compression_method.pod
@@ -217,30 +214,24 @@ index 42fa66b..d531299 100644
  The operation failed. Check the error queue to find out the reason.
  
 diff --git a/doc/ssl/SSL_CTX_add_session.pod b/doc/ssl/SSL_CTX_add_session.pod
-index 82676b2..ca89dcc 100644
+index 82676b2..88ee952 100644
 --- a/doc/ssl/SSL_CTX_add_session.pod
 +++ b/doc/ssl/SSL_CTX_add_session.pod
-@@ -52,15 +52,15 @@ The following values are returned by all functions:
+@@ -52,13 +52,13 @@ The following values are returned by all functions:
  
  =over 4
  
 -=item 0
 +=item * 0
  
-- The operation failed. In case of the add operation, it was tried to add
-- the same (identical) session twice. In case of the remove operation, the
-- session was not found in the cache.
-+The operation failed. In case of the add operation, it was tried to add
-+the same (identical) session twice. In case of the remove operation, the
-+session was not found in the cache.
+  The operation failed. In case of the add operation, it was tried to add
+  the same (identical) session twice. In case of the remove operation, the
+  session was not found in the cache.
  
 -=item 1
 +=item * 1
   
-- The operation succeeded.
-+The operation succeeded.
- 
- =back
+  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_CTX_load_verify_locations.pod b/doc/ssl/SSL_CTX_load_verify_locations.pod
 index 84a799f..66031d4 100644
@@ -283,45 +274,43 @@ index 5e66133..2874fb8 100644
  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_CTX_set_session_id_context.pod b/doc/ssl/SSL_CTX_set_session_id_context.pod
-index 58fc685..b3306aa 100644
+index 58fc685..a2a8932 100644
 --- a/doc/ssl/SSL_CTX_set_session_id_context.pod
 +++ b/doc/ssl/SSL_CTX_set_session_id_context.pod
-@@ -64,14 +64,12 @@ return the following values:
+@@ -64,13 +64,13 @@ return the following values:
  
  =over 4
  
 -=item 0
--
 +=item * 0
+ 
  The length B<sid_ctx_len> of the session id context B<sid_ctx> exceeded
  the maximum allowed length of B<SSL_MAX_SSL_SESSION_ID_LENGTH>. The error
  is logged to the error stack.
  
 -=item 1
--
 +=item * 1
+ 
  The operation succeeded.
  
- =back
 diff --git a/doc/ssl/SSL_CTX_set_ssl_version.pod b/doc/ssl/SSL_CTX_set_ssl_version.pod
-index 254f2b4..21df5a2 100644
+index 254f2b4..4714cfd 100644
 --- a/doc/ssl/SSL_CTX_set_ssl_version.pod
 +++ b/doc/ssl/SSL_CTX_set_ssl_version.pod
-@@ -42,12 +42,10 @@ and SSL_set_ssl_method():
+@@ -42,11 +42,11 @@ and SSL_set_ssl_method():
  
  =over 4
  
 -=item 0
--
 +=item * 0
+ 
  The new choice failed, check the error stack to find out the reason.
  
 -=item 1
--
 +=item * 1
+ 
  The operation succeeded.
  
- =back
 diff --git a/doc/ssl/SSL_CTX_use_psk_identity_hint.pod b/doc/ssl/SSL_CTX_use_psk_identity_hint.pod
 index 7e60df5..77e2139 100644
 --- a/doc/ssl/SSL_CTX_use_psk_identity_hint.pod
@@ -371,25 +360,24 @@ index b1c34d1..b8a2c17 100644
  The TLS/SSL handshake was not successful because a fatal error occurred either
  at the protocol level or a connection failure occurred. The shutdown was
 diff --git a/doc/ssl/SSL_clear.pod b/doc/ssl/SSL_clear.pod
-index d4df1bf..c6416cf 100644
+index d4df1bf..d2830ad 100644
 --- a/doc/ssl/SSL_clear.pod
 +++ b/doc/ssl/SSL_clear.pod
-@@ -56,13 +56,11 @@ The following return values can occur:
+@@ -56,12 +56,12 @@ The following return values can occur:
  
  =over 4
  
 -=item 0
--
 +=item * 0
+ 
  The SSL_clear() operation could not be performed. Check the error stack to
  find out the reason.
  
 -=item 1
--
 +=item * 1
+ 
  The SSL_clear() operation was successful.
  
- =back
 diff --git a/doc/ssl/SSL_connect.pod b/doc/ssl/SSL_connect.pod
 index 946ca89..792821e 100644
 --- a/doc/ssl/SSL_connect.pod
@@ -480,10 +468,10 @@ index 89260b5..1207658 100644
  The file descriptor linked to B<ssl>.
  
 diff --git a/doc/ssl/SSL_read.pod b/doc/ssl/SSL_read.pod
-index 7038cd2..de52b49 100644
+index 7038cd2..2f5a638 100644
 --- a/doc/ssl/SSL_read.pod
 +++ b/doc/ssl/SSL_read.pod
-@@ -81,13 +81,12 @@ The following return values can occur:
+@@ -81,12 +81,12 @@ The following return values can occur:
  
  =over 4
  
@@ -494,12 +482,11 @@ index 7038cd2..de52b49 100644
  bytes actually read from the TLS/SSL connection.
  
 -=item 0
--
 +=item * 0
+ 
  The read operation was not successful. The reason may either be a clean
  shutdown due to a "close notify" alert sent by the peer (in which case
- the SSL_RECEIVED_SHUTDOWN flag in the ssl shutdown state is set
-@@ -103,7 +102,7 @@ only be detected, whether the underlying connection was closed. It cannot
+@@ -103,7 +103,7 @@ only be detected, whether the underlying connection was closed. It cannot
  be checked, whether the closure was initiated by the peer or by something
  else.
  
@@ -509,72 +496,69 @@ index 7038cd2..de52b49 100644
  The read operation was not successful, because either an error occurred
  or action must be taken by the calling process. Call SSL_get_error() with the
 diff --git a/doc/ssl/SSL_session_reused.pod b/doc/ssl/SSL_session_reused.pod
-index da7d062..e55c958 100644
+index da7d062..e124630 100644
 --- a/doc/ssl/SSL_session_reused.pod
 +++ b/doc/ssl/SSL_session_reused.pod
-@@ -27,12 +27,10 @@ The following return values can occur:
+@@ -27,11 +27,11 @@ The following return values can occur:
  
  =over 4
  
 -=item 0
--
 +=item * 0
+ 
  A new session was negotiated.
  
 -=item 1
--
 +=item * 1
+ 
  A session was reused.
  
- =back
 diff --git a/doc/ssl/SSL_set_fd.pod b/doc/ssl/SSL_set_fd.pod
-index 7029112..42bfa1a 100644
+index 7029112..0baafed 100644
 --- a/doc/ssl/SSL_set_fd.pod
 +++ b/doc/ssl/SSL_set_fd.pod
-@@ -35,12 +35,10 @@ The following return values can occur:
+@@ -35,11 +35,11 @@ The following return values can occur:
  
  =over 4
  
 -=item 0
--
 +=item * 0
+ 
  The operation failed. Check the error stack to find out why.
  
 -=item 1
--
 +=item * 1
+ 
  The operation succeeded.
  
- =back
 diff --git a/doc/ssl/SSL_set_session.pod b/doc/ssl/SSL_set_session.pod
-index 5f54714..1aeee12 100644
+index 5f54714..3b2d850 100644
 --- a/doc/ssl/SSL_set_session.pod
 +++ b/doc/ssl/SSL_set_session.pod
-@@ -37,12 +37,10 @@ The following return values can occur:
+@@ -37,11 +37,11 @@ The following return values can occur:
  
  =over 4
  
 -=item 0
--
 +=item * 0
+ 
  The operation failed; check the error stack to find out the reason.
  
 -=item 1
--
 +=item * 1
+ 
  The operation succeeded.
  
- =back
 diff --git a/doc/ssl/SSL_set_shutdown.pod b/doc/ssl/SSL_set_shutdown.pod
-index 011a022..6f3e03e 100644
+index fe01308..879a33a 100644
 --- a/doc/ssl/SSL_set_shutdown.pod
 +++ b/doc/ssl/SSL_set_shutdown.pod
 @@ -24,16 +24,16 @@ The shutdown state of an ssl connection is a bitmask of:
  
  =over 4
  
--=item 0
-+=item * 0
+-=item Z<>0
++=item * Z<>0
  
  No shutdown setting, yet.
  
@@ -617,10 +601,10 @@ index 42a89b7..2853e65 100644
  The shutdown was not successful because a fatal error occurred either
  at the protocol level or a connection failure occurred. It can also occur if
 diff --git a/doc/ssl/SSL_write.pod b/doc/ssl/SSL_write.pod
-index e013c12..b2934b8 100644
+index e013c12..a10e46f 100644
 --- a/doc/ssl/SSL_write.pod
 +++ b/doc/ssl/SSL_write.pod
-@@ -74,13 +74,12 @@ The following return values can occur:
+@@ -74,12 +74,12 @@ The following return values can occur:
  
  =over 4
  
@@ -631,12 +615,11 @@ index e013c12..b2934b8 100644
  bytes actually written to the TLS/SSL connection.
  
 -=item 0
--
 +=item * 0
+ 
  The write operation was not successful. Probably the underlying connection
  was closed. Call SSL_get_error() with the return value B<ret> to find out,
- whether an error occurred or the connection was shut down cleanly
-@@ -90,7 +89,7 @@ SSLv2 (deprecated) does not support a shutdown alert protocol, so it can
+@@ -90,7 +90,7 @@ SSLv2 (deprecated) does not support a shutdown alert protocol, so it can
  only be detected, whether the underlying connection was closed. It cannot
  be checked, why the closure happened.
  
@@ -646,5 +629,5 @@ index e013c12..b2934b8 100644
  The write operation was not successful, because either an error occurred
  or action must be taken by the calling process. Call SSL_get_error() with the
 -- 
-1.8.4
+1.8.4.5
 
