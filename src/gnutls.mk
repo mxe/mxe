@@ -2,10 +2,10 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.2.12
-$(PKG)_CHECKSUM := 5ad26522ec18d6b54a17ff8d1d5b69bf2cd5c7ce
+$(PKG)_VERSION  := 3.2.13
+$(PKG)_CHECKSUM := c4a95902bb67df46e9b2c08d4c10523db94e2736
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
-$(PKG)_FILE     := gnutls-$($(PKG)_VERSION).1.tar.xz
+$(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2//$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext gmp nettle pcre zlib
 
