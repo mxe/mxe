@@ -56,6 +56,10 @@
         background-color: #f2f2f2;
         text-align: center;
     }
+    th.row {
+        background: #ececec;
+        vertical-align: middle;
+    }
     pre {
         font-size: 8pt;
         border: thin dotted #ccc;
