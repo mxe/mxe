@@ -1,0 +1,102 @@
+/* This file is part of MXE.
+ * See index.html for further information. */
+    body {
+        font-size: 11pt;
+        margin-top: 0em;
+    }
+    code {
+        background-color: #f5f5f5;
+    }
+    h1, h2, h3 {
+        font-family: sans-serif;
+    }
+    h2 {
+        font-size: 14pt;
+    }
+    h3 {
+        font-size: 11pt;
+        background-color: #eee;
+    }
+    ul {
+        padding-left: 2em;
+    }
+    li, dt {
+        margin-bottom: 0.8em;
+    }
+    .compact-list li {
+        margin-bottom: 0em;
+    }
+    .usage dt {
+        font-family: monospace;
+    }
+    dd {
+        margin-bottom: 1em;
+    }
+    table {
+        border-collapse: separate;
+        border-spacing: 1px;
+    }
+    table.translation td {
+        padding-left:  0.5em;
+        padding-right: 0.5em;
+    }
+    td, dt {
+        background-color: #eee;
+    }
+    pre {
+        font-size: 8pt;
+        border: thin dotted #ccc;
+        padding: 2pt;
+    }
+    img {
+        border: thin solid #000;
+    }
+    #navigation a {
+        text-decoration: none;
+        color: #00f;
+    }
+    #navigation a:visited {
+        text-decoration: none;
+        color: #009;
+    }
+    #navigation ul {
+        padding-left: 0em;
+        margin-left: 0em;
+        margin-top: 1.5em;
+        margin-bottom: 0em;
+        list-style-type: none;
+    }
+    #navigation li {
+        margin-bottom: 0.2em;
+    }
+@media screen, handheld {
+    h1 {
+        font-size: 12pt;
+        margin-top: 0em;
+    }
+    h2 {
+        margin-top: 0em;
+        padding-top: 1em;
+    }
+    #navigation {
+        position: fixed;
+        float: left; /* hack for ancient browsers
+                        which don't support "position: fixed;" */
+        margin-top:  1em;
+        margin-left: 1em;
+        padding-left:   1em;
+        padding-right:  1em;
+        padding-top:    1em;
+        padding-bottom: 1em;
+        width: 14em;
+        background-color: #afa;
+    }
+    .section {
+        width: 30em;
+        margin-left: 19em;
+        margin-bottom: 100%;
+    }
+    #package-list {
+        width: 40em;
+    }
+}
