@@ -29,7 +29,6 @@ define $(PKG)_BUILD_COMMON
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
-    ln -sf '$(PREFIX)/$(TARGET)/bin/pkgconf' '$(PREFIX)/$(TARGET)/bin/pkg-config'
 
     # install target-specific autotools config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/share'
@@ -41,7 +40,7 @@ define $(PKG)_BUILD_COMMON
 
     # create pkg-config script
     (echo '#!/bin/sh'; \
-     echo 'PKG_CONFIG_PATH="$(PREFIX)/$(TARGET)/qt5/lib/pkgconfig":"$$PKG_CONFIG_PATH_$(subst .,_,$(subst -,_,$(TARGET)))" PKG_CONFIG_LIBDIR='\''$(PREFIX)/$(TARGET)/lib/pkgconfig'\'' exec '$(PREFIX)/$(TARGET)/bin/pkg-config' $(if $(BUILD_STATIC),--static) "$$@"') \
+     echo 'PKG_CONFIG_PATH="$(PREFIX)/$(TARGET)/qt5/lib/pkgconfig":"$$PKG_CONFIG_PATH_$(subst .,_,$(subst -,_,$(TARGET)))" PKG_CONFIG_LIBDIR='\''$(PREFIX)/$(TARGET)/lib/pkgconfig'\'' exec '$(PREFIX)/$(TARGET)/bin/pkgconf' $(if $(BUILD_STATIC),--static) "$$@"') \
              > '$(PREFIX)/bin/$(TARGET)-pkg-config'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-pkg-config'
 
