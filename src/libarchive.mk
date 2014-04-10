@@ -3,17 +3,18 @@
 
 PKG             := libarchive
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.3
-$(PKG)_CHECKSUM := b774e2675e5c1abafbd4d667402e8c3e72313944
+$(PKG)_VERSION  := 3.1.2
+$(PKG)_CHECKSUM := 6a991777ecb0f890be931cec4aec856d1a195489
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://libarchive.googlecode.com/files/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.libarchive.org/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 libiconv libxml2 openssl xz zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://code.google.com/p/libarchive/downloads/list?sort=-uploaded' | \
+    $(WGET) -q -O- 'http://www.libarchive.org/downloads/' | \
     $(SED) -n 's,.*libarchive-\([0-9][^<]*\)\.tar.*,\1,p' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
@@ -25,6 +26,7 @@ define $(PKG)_BUILD
         --disable-shared \
         --disable-bsdtar \
         --disable-bsdcpio \
+        --disable-bsdcat \
         XML2_CONFIG='$(PREFIX)/$(TARGET)'/bin/xml2-config
     $(MAKE) -C '$(1)' -j '$(JOBS)' man_MANS=
     $(MAKE) -C '$(1)' -j 1 install man_MANS=
