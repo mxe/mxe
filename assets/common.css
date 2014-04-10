@@ -33,15 +33,32 @@
         margin-bottom: 1em;
     }
     table {
+        border-collapse: collapse;
+    }
+    table.old {
         border-collapse: separate;
-        border-spacing: 1px;
     }
     table.translation td {
         padding-left:  0.5em;
         padding-right: 0.5em;
     }
-    td, dt {
+    td, th {
+        background-color: #f9f9f9;
+        border: 1px solid #aaa;
+        padding: 0.2em;
+    }
+    dt, .old td {
         background-color: #eee;
+        padding: 0.2em;
+        border: 0px;
+    }
+    th {
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+    th.row {
+        background: #ececec;
+        vertical-align: middle;
     }
     pre {
         font-size: 8pt;
