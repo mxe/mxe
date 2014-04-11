@@ -122,9 +122,22 @@ else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
 else
     $(info [create settings.mk])
     $(shell { \
+        echo '# This is a template of configuration file for MXE. See'; \
+        echo '# index.html for more extensive documentations.'; \
+        echo; \
+        echo '# This variable controls the number of compilation processes'; \
+        echo '# within one package ("intra-package parallelism").'; \
         echo '#JOBS := $(JOBS)'; \
+        echo; \
+        echo '# This variable controls the targets that will build.'; \
         echo '#MXE_TARGETS := $(MXE_TARGET_LIST)'; \
+        echo; \
+        echo '# This variable controls the download mirror for SourceForge,'; \
+        echo '# when it is used. Enabling the value below means auto.'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
+        echo; \
+        echo '# The three lines below makes `make` build these "local'; \
+        echo '# packages" instead of all packages.'; \
         echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
         echo '#.DEFAULT local-pkg-list:'; \
         echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
