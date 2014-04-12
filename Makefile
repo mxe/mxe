@@ -198,7 +198,7 @@ download: $(addprefix download-,$(PKGS))
 
 .PHONY: build-requirements
 build-requirements:
-	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD) DONT_CHECK_REQUIREMENTS=true
+	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD).static DONT_CHECK_REQUIREMENTS=true
 
 define TARGET_DEPS
 $(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
