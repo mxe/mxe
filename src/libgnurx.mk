@@ -23,8 +23,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -f Makefile.mxe -j '$(JOBS)' TARGET=$(TARGET) bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= install-static
-    ln -sf '$(PREFIX)/$(TARGET)/lib/libgnurx.a' '$(PREFIX)/$(TARGET)/lib/libregex.a'
+    $(MAKE) -C '$(1)' -f Makefile.mxe -j '$(JOBS)' \
+        $(if $(BUILD_STATIC),install-static,install-shared) \
+        TARGET=$(TARGET) bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
-
-$(PKG)_BUILD_SHARED =
