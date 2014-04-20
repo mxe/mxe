@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && mkdir build
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DSTATIC_LIBRARY=true \
+        -DSTATIC_LIBRARY=$(if $(BUILD_STATIC),true,false) \
         -DHAVE_PTHREAD_H=false \
         -DCMAKE_HAVE_PTHREAD_H=false
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' ical-header
@@ -31,5 +31,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libical.exe' \
         `'$(TARGET)-pkg-config' libical --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
