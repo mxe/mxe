@@ -1,0 +1,15 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -ur icu.orig/source/acinclude.m4 icu/source/acinclude.m4
+--- icu.orig/source/acinclude.m4	2014-04-20 22:05:23.000000000 +1000
++++ icu/source/acinclude.m4	2014-04-20 22:06:17.000000000 +1000
+@@ -32,7 +32,7 @@
+ 		icu_cv_host_frag=mh-linux-va
+ 	fi ;;
+ *-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
+-*-*-cygwin|*-*-mingw32|*-*-mingw64)
++*-*-cygwin|*-*-mingw*)
+ 	if test "$GCC" = yes; then
+ 		AC_TRY_COMPILE([
+ #ifndef __MINGW32__

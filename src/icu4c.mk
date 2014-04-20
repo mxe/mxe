@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_SHARED
+    cd '$(1)/source' && autoreconf -fi
     mkdir '$(1).native' && cd '$(1).native' && '$(1)/source/configure' \
         CC=gcc CXX=g++
     $(MAKE) -C '$(1).native' -j '$(JOBS)'
@@ -26,7 +27,6 @@ define $(PKG)_BUILD_SHARED
     mkdir '$(1).cross' && cd '$(1).cross' && '$(1)/source/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --with-cross-build='$(1).native' \
-        icu_cv_host_frag=mh-mingw \
         CFLAGS=-DU_USING_ICU_NAMESPACE=0 \
         CXXFLAGS='--std=gnu++0x' \
         SHELL=bash
