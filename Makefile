@@ -37,9 +37,9 @@ WGET       := wget --no-check-certificate \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
-                gcc g++ intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
+                gcc g++ gperf intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
-                scons $(SED) $(SORT) unzip wget xz
+                python ruby scons $(SED) $(SORT) unzip wget xz
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
