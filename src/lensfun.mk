@@ -43,8 +43,8 @@ define $(PKG)_BUILD
         --mode=release \
         --vectorization= \
         --staticlibs=$(if $(BUILD_STATIC),YES,NO)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' libs
-    $(MAKE) -C '$(1)' -j 1 install-lensdb install-lensfun-pc install-lensfun
+    $(MAKE) -C '$(1)' -j '$(JOBS)' libs V=1
+    $(MAKE) -C '$(1)' -j 1 install-lensdb install-lensfun-pc install-lensfun V=1
     $(if $(BUILD_SHARED),$($(PKG)_INSTALL_SHARED),)
 
     '$(TARGET)-gcc' \
