@@ -198,7 +198,7 @@ download: $(addprefix download-,$(PKGS))
 
 .PHONY: build-requirements
 build-requirements:
-	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD).static DONT_CHECK_REQUIREMENTS=true
+	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD) DONT_CHECK_REQUIREMENTS=true
 
 define TARGET_DEPS
 $(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
@@ -225,7 +225,7 @@ $(1): | $(if $(value $(1)_DEPS), \
 					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 		$($(1)_DEPS)
 	@echo '[target]   $(1) $(call TARGET_HEADER)'
-	$(if $(findstring 1,$(words $(subst ., ,$(1)))),
+	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),
 	    @echo
 	    @echo '------------------------------------------------------------'
 	    @echo 'Warning: Deprecated target name $(1) specified'
