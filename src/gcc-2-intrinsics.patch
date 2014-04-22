@@ -4,9 +4,10 @@
 This patch has been taken from:
 http://gcc.gnu.org/bugzilla/show_bug.cgi?id=56038
 
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/adxintrin.h gcc-4.8.0/gcc/config/i386/adxintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/adxintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/adxintrin.h	2013-03-25 20:56:28.799283008 +1100
+diff --git a/gcc/config/i386/adxintrin.h b/gcc/config/i386/adxintrin.h
+index 6118900..a83410d 100644
+--- a/gcc/config/i386/adxintrin.h
++++ b/gcc/config/i386/adxintrin.h
 @@ -28,6 +28,10 @@
  #ifndef _ADXINTRIN_H_INCLUDED
  #define _ADXINTRIN_H_INCLUDED
@@ -18,7 +19,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/adxintrin.h gcc-4.8.0/gcc/config/i386/a
  extern __inline unsigned char
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _addcarryx_u32 (unsigned char __CF, unsigned int __X,
-@@ -46,4 +50,8 @@
+@@ -46,4 +50,8 @@ _addcarryx_u64 (unsigned char __CF, unsigned long __X,
  }
  #endif
  
@@ -27,12 +28,13 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/adxintrin.h gcc-4.8.0/gcc/config/i386/a
 +#endif
 +
  #endif /* _ADXINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/ammintrin.h gcc-4.8.0/gcc/config/i386/ammintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/ammintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/ammintrin.h	2013-03-25 20:57:25.809281634 +1100
-@@ -34,6 +34,10 @@
- /* We need definitions from the SSE3, SSE2 and SSE header files*/
- #include <pmmintrin.h>
+diff --git a/gcc/config/i386/ammintrin.h b/gcc/config/i386/ammintrin.h
+index a89b204..a370eb0 100644
+--- a/gcc/config/i386/ammintrin.h
++++ b/gcc/config/i386/ammintrin.h
+@@ -36,6 +36,10 @@
+ #define __DISABLE_SSE4A__
+ #endif /* __SSE4A__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -41,7 +43,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/ammintrin.h gcc-4.8.0/gcc/config/i386/a
  extern __inline void __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _mm_stream_sd (double * __P, __m128d __Y)
  {
-@@ -83,6 +87,10 @@
+@@ -85,6 +89,10 @@ _mm_inserti_si64(__m128i __X, __m128i __Y, unsigned const int __I, unsigned cons
  				      (unsigned int)(I), (unsigned int)(L)))
  #endif
  
@@ -49,15 +51,16 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/ammintrin.h gcc-4.8.0/gcc/config/i386/a
 +}
 +#endif
 +
- #endif /* __SSE4A__ */
- 
- #endif /* _AMMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/avx2intrin.h gcc-4.8.0/gcc/config/i386/avx2intrin.h
---- gcc-4.8.0.orig/gcc/config/i386/avx2intrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/avx2intrin.h	2013-03-25 20:58:19.069280351 +1100
-@@ -25,6 +25,10 @@
- # error "Never use <avx2intrin.h> directly; include <immintrin.h> instead."
- #endif
+ #ifdef __DISABLE_SSE4A__
+ #undef __DISABLE_SSE4A__
+ #pragma GCC pop_options
+diff --git a/gcc/config/i386/avx2intrin.h b/gcc/config/i386/avx2intrin.h
+index d04c972..9302273 100644
+--- a/gcc/config/i386/avx2intrin.h
++++ b/gcc/config/i386/avx2intrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_AVX2__
+ #endif /* __AVX2__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -66,20 +69,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/avx2intrin.h gcc-4.8.0/gcc/config/i386/
  /* Sum absolute 8-bit integer difference of adjacent groups of 4
     byte integers in the first 2 operands.  Starting offsets within
     operands are determined by the 3rd mask operand.  */
-@@ -1871,3 +1875,7 @@
- 					   (__v4si)(__m128i)MASK,  \
- 					   (int)SCALE)
- #endif  /* __OPTIMIZE__ */
+@@ -1887,3 +1891,8 @@ _mm256_mask_i64gather_epi32 (__m128i src, int const *base,
+ #endif /* __DISABLE_AVX2__ */
+ 
+ #endif /* _AVX2INTRIN_H_INCLUDED */
 +
 +#ifdef __cplusplus
 +}
 +#endif
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/avxintrin.h gcc-4.8.0/gcc/config/i386/avxintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/avxintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/avxintrin.h	2013-03-25 21:27:20.819238377 +1100
-@@ -28,6 +28,10 @@
- # error "Never use <avxintrin.h> directly; include <immintrin.h> instead."
- #endif
++
+diff --git a/gcc/config/i386/avxintrin.h b/gcc/config/i386/avxintrin.h
+index 2ea327c..32591da 100644
+--- a/gcc/config/i386/avxintrin.h
++++ b/gcc/config/i386/avxintrin.h
+@@ -37,6 +37,10 @@
+ #define __DISABLE_AVX__
+ #endif /* __AVX__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -88,20 +93,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/avxintrin.h gcc-4.8.0/gcc/config/i386/a
  /* Internal data types for implementing the intrinsics.  */
  typedef double __v4df __attribute__ ((__vector_size__ (32)));
  typedef float __v8sf __attribute__ ((__vector_size__ (32)));
-@@ -1424,3 +1428,7 @@
- {
-   return (__m256i) __builtin_ia32_si256_si ((__v4si)__A);
- }
+@@ -1461,3 +1465,8 @@ _mm256_castsi128_si256 (__m128i __A)
+ #endif /* __DISABLE_AVX__ */
+ 
+ #endif /* _AVXINTRIN_H_INCLUDED */
 +
 +#ifdef __cplusplus
 +}
 +#endif
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/bmi2intrin.h gcc-4.8.0/gcc/config/i386/bmi2intrin.h
---- gcc-4.8.0.orig/gcc/config/i386/bmi2intrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/bmi2intrin.h	2013-03-25 20:58:50.845946252 +1100
-@@ -32,6 +32,10 @@
- #ifndef _BMI2INTRIN_H_INCLUDED
- #define _BMI2INTRIN_H_INCLUDED
++
+diff --git a/gcc/config/i386/bmi2intrin.h b/gcc/config/i386/bmi2intrin.h
+index ff96296..b01e1e1 100644
+--- a/gcc/config/i386/bmi2intrin.h
++++ b/gcc/config/i386/bmi2intrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_BMI2__
+ #endif /* __BMI2__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -110,21 +117,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/bmi2intrin.h gcc-4.8.0/gcc/config/i386/
  extern __inline unsigned int
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _bzhi_u32 (unsigned int __X, unsigned int __Y)
-@@ -99,4 +103,8 @@
- 
- #endif /* !__x86_64__  */
+@@ -106,4 +110,8 @@ _mulx_u32 (unsigned int __X, unsigned int __Y, unsigned int *__P)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_BMI2__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _BMI2INTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/bmiintrin.h gcc-4.8.0/gcc/config/i386/bmiintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/bmiintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/bmiintrin.h	2013-03-25 20:59:19.032612239 +1100
-@@ -32,6 +32,10 @@
- #ifndef _BMIINTRIN_H_INCLUDED
- #define _BMIINTRIN_H_INCLUDED
+diff --git a/gcc/config/i386/bmiintrin.h b/gcc/config/i386/bmiintrin.h
+index b2d7c60..c8ad38a 100644
+--- a/gcc/config/i386/bmiintrin.h
++++ b/gcc/config/i386/bmiintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_BMI__
+ #endif /* __BMI__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -133,18 +141,19 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/bmiintrin.h gcc-4.8.0/gcc/config/i386/b
  extern __inline unsigned short __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  __tzcnt_u16 (unsigned short __X)
  {
-@@ -116,4 +120,8 @@
- 
- #endif /* __x86_64__  */
+@@ -181,4 +185,8 @@ _tzcnt_u64 (unsigned long long __X)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_BMI__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _BMIINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/cpuid.h gcc-4.8.0/gcc/config/i386/cpuid.h
---- gcc-4.8.0.orig/gcc/config/i386/cpuid.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/cpuid.h	2013-03-25 19:28:56.476076250 +1100
+diff --git a/gcc/config/i386/cpuid.h b/gcc/config/i386/cpuid.h
+index 8c323ae..52047e3 100644
+--- a/gcc/config/i386/cpuid.h
++++ b/gcc/config/i386/cpuid.h
 @@ -21,6 +21,10 @@
   * <http://www.gnu.org/licenses/>.
   */
@@ -156,7 +165,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/cpuid.h gcc-4.8.0/gcc/config/i386/cpuid
  /* %ecx */
  #define bit_SSE3	(1 << 0)
  #define bit_PCLMUL	(1 << 1)
-@@ -266,3 +270,8 @@
+@@ -275,3 +279,8 @@ __get_cpuid (unsigned int __level,
    __cpuid (__level, *__eax, *__ebx, *__ecx, *__edx);
    return 1;
  }
@@ -165,12 +174,13 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/cpuid.h gcc-4.8.0/gcc/config/i386/cpuid
 +}
 +#endif
 +
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/emmintrin.h gcc-4.8.0/gcc/config/i386/emmintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/emmintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/emmintrin.h	2013-03-25 19:28:56.476076250 +1100
-@@ -34,6 +34,10 @@
- /* We need definitions from the SSE header files*/
- #include <xmmintrin.h>
+diff --git a/gcc/config/i386/emmintrin.h b/gcc/config/i386/emmintrin.h
+index a2bdf0e..2c4af53 100644
+--- a/gcc/config/i386/emmintrin.h
++++ b/gcc/config/i386/emmintrin.h
+@@ -36,6 +36,10 @@
+ #define __DISABLE_SSE2__
+ #endif /* __SSE2__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -179,7 +189,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/emmintrin.h gcc-4.8.0/gcc/config/i386/e
  /* SSE2 */
  typedef double __v2df __attribute__ ((__vector_size__ (16)));
  typedef long long __v2di __attribute__ ((__vector_size__ (16)));
-@@ -1515,6 +1519,10 @@
+@@ -1515,6 +1519,10 @@ _mm_castps_pd(__m128 __A)
    return (__m128d) __A;
  }
  
@@ -187,15 +197,16 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/emmintrin.h gcc-4.8.0/gcc/config/i386/e
 +}
 +#endif
 +
- #endif /* __SSE2__  */
- 
- #endif /* _EMMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/f16cintrin.h gcc-4.8.0/gcc/config/i386/f16cintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/f16cintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/f16cintrin.h	2013-03-25 21:00:27.905943912 +1100
-@@ -32,6 +32,10 @@
- #ifndef _F16CINTRIN_H_INCLUDED
- #define _F16CINTRIN_H_INCLUDED
+ extern __inline __m128i __attribute__((__gnu_inline__, __always_inline__, __artificial__))
+ _mm_castps_si128(__m128 __A)
+ {
+diff --git a/gcc/config/i386/f16cintrin.h b/gcc/config/i386/f16cintrin.h
+index 1181f8b..5cc37dd 100644
+--- a/gcc/config/i386/f16cintrin.h
++++ b/gcc/config/i386/f16cintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_F16C__
+ #endif /* __F16C__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -204,22 +215,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/f16cintrin.h gcc-4.8.0/gcc/config/i386/
  extern __inline float __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _cvtsh_ss (unsigned short __S)
  {
-@@ -88,5 +92,9 @@
-   ((__m128i) __builtin_ia32_vcvtps2ph256 ((__v8sf)(__m256) A, (int) (I)))
- #endif /* __OPTIMIZE */
+@@ -95,4 +99,8 @@ _mm256_cvtps_ph (__m256 __A, const int __I)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_F16C__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _F16CINTRIN_H_INCLUDED */
- #endif /* __F16C__ */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/fma4intrin.h gcc-4.8.0/gcc/config/i386/fma4intrin.h
---- gcc-4.8.0.orig/gcc/config/i386/fma4intrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/fma4intrin.h	2013-03-25 19:28:56.479409583 +1100
-@@ -35,6 +35,10 @@
- /* We need definitions from the SSE4A, SSE3, SSE2 and SSE header files.  */
- #include <ammintrin.h>
+diff --git a/gcc/config/i386/fma4intrin.h b/gcc/config/i386/fma4intrin.h
+index e1bdef7..0ee2bf8 100644
+--- a/gcc/config/i386/fma4intrin.h
++++ b/gcc/config/i386/fma4intrin.h
+@@ -37,6 +37,10 @@
+ #define __DISABLE_FMA4__
+ #endif /* __FMA4__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -228,7 +239,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/fma4intrin.h gcc-4.8.0/gcc/config/i386/
  /* 128b Floating point multiply/add type instructions.  */
  extern __inline __m128 __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _mm_macc_ps (__m128 __A, __m128 __B, __m128 __C)
-@@ -231,6 +235,10 @@
+@@ -233,6 +237,10 @@ _mm256_msubadd_pd (__m256d __A, __m256d __B, __m256d __C)
    return (__m256d) __builtin_ia32_vfmaddsubpd256 ((__v4df)__A, (__v4df)__B, -(__v4df)__C);
  }
  
@@ -236,15 +247,16 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/fma4intrin.h gcc-4.8.0/gcc/config/i386/
 +}
 +#endif
 +
- #endif
- 
- #endif
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/fmaintrin.h gcc-4.8.0/gcc/config/i386/fmaintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/fmaintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/fmaintrin.h	2013-03-25 21:01:36.072608935 +1100
-@@ -32,6 +32,10 @@
- # error "FMA instruction set not enabled"
- #else
+ #ifdef __DISABLE_FMA4__
+ #undef __DISABLE_FMA4__
+ #pragma GCC pop_options
+diff --git a/gcc/config/i386/fmaintrin.h b/gcc/config/i386/fmaintrin.h
+index bfbb75d..806ff8e 100644
+--- a/gcc/config/i386/fmaintrin.h
++++ b/gcc/config/i386/fmaintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_FMA__
+ #endif /* __FMA__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -253,7 +265,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/fmaintrin.h gcc-4.8.0/gcc/config/i386/f
  extern __inline __m128d
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _mm_fmadd_pd (__m128d __A, __m128d __B, __m128d __C)
-@@ -292,6 +296,10 @@
+@@ -294,6 +298,10 @@ _mm256_fmsubadd_ps (__m256 __A, __m256 __B, __m256 __C)
                                                  -(__v8sf)__C);
  }
  
@@ -261,15 +273,16 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/fmaintrin.h gcc-4.8.0/gcc/config/i386/f
 +}
 +#endif
 +
- #endif
- 
- #endif
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/fxsrintrin.h gcc-4.8.0/gcc/config/i386/fxsrintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/fxsrintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/fxsrintrin.h	2013-03-25 21:02:02.299274971 +1100
-@@ -28,6 +28,10 @@
- #ifndef _FXSRINTRIN_H_INCLUDED
- #define _FXSRINTRIN_H_INCLUDED
+ #ifdef __DISABLE_FMA__
+ #undef __DISABLE_FMA__
+ #pragma GCC pop_options
+diff --git a/gcc/config/i386/fxsrintrin.h b/gcc/config/i386/fxsrintrin.h
+index 98e73ee..34cc3cb 100644
+--- a/gcc/config/i386/fxsrintrin.h
++++ b/gcc/config/i386/fxsrintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_FXSR__
+ #endif /* __FXSR__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -278,18 +291,19 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/fxsrintrin.h gcc-4.8.0/gcc/config/i386/
  extern __inline void
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _fxsave (void *__P)
-@@ -58,4 +62,8 @@
- }
- #endif
+@@ -70,4 +74,8 @@ _fxrstor64 (void *__P)
+ #endif /* __DISABLE_FXSR__ */
+ 
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _FXSRINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/gmm_malloc.h gcc-4.8.0/gcc/config/i386/gmm_malloc.h
---- gcc-4.8.0.orig/gcc/config/i386/gmm_malloc.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/gmm_malloc.h	2013-03-25 19:28:56.479409583 +1100
+diff --git a/gcc/config/i386/gmm_malloc.h b/gcc/config/i386/gmm_malloc.h
+index 516b13b..c55db44 100644
+--- a/gcc/config/i386/gmm_malloc.h
++++ b/gcc/config/i386/gmm_malloc.h
 @@ -27,6 +27,10 @@
  #include <stdlib.h>
  #include <errno.h>
@@ -301,7 +315,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/gmm_malloc.h gcc-4.8.0/gcc/config/i386/
  static __inline__ void* 
  _mm_malloc (size_t size, size_t align)
  {
-@@ -71,4 +75,8 @@
+@@ -71,4 +75,8 @@ _mm_free (void * aligned_ptr)
      free (((void **) aligned_ptr) [-1]);
  }
  
@@ -310,9 +324,10 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/gmm_malloc.h gcc-4.8.0/gcc/config/i386/
 +#endif
 +
  #endif /* _MM_MALLOC_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/ia32intrin.h gcc-4.8.0/gcc/config/i386/ia32intrin.h
---- gcc-4.8.0.orig/gcc/config/i386/ia32intrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/ia32intrin.h	2013-03-25 21:30:01.905901162 +1100
+diff --git a/gcc/config/i386/ia32intrin.h b/gcc/config/i386/ia32intrin.h
+index 5e7c893..a7fa538 100644
+--- a/gcc/config/i386/ia32intrin.h
++++ b/gcc/config/i386/ia32intrin.h
 @@ -25,6 +25,10 @@
  # error "Never use <ia32intrin.h> directly; include <x86intrin.h> instead."
  #endif
@@ -324,7 +339,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/ia32intrin.h gcc-4.8.0/gcc/config/i386/
  /* 32bit bsf */
  extern __inline int
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
-@@ -240,3 +244,7 @@
+@@ -291,3 +295,7 @@ __writeeflags (unsigned int X)
  #define _rotwr(a,b)		__rorw((a), (b))
  #define _rotl(a,b)		__rold((a), (b))
  #define _rotr(a,b)		__rord((a), (b))
@@ -332,22 +347,23 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/ia32intrin.h gcc-4.8.0/gcc/config/i386/
 +#ifdef __cplusplus
 +}
 +#endif
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/immintrin.h gcc-4.8.0/gcc/config/i386/immintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/immintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/immintrin.h	2013-03-25 21:11:37.879261100 +1100
-@@ -88,6 +88,10 @@
- #include <xtestintrin.h>
- #endif
+diff --git a/gcc/config/i386/immintrin.h b/gcc/config/i386/immintrin.h
+index 73b4859..49a03e4 100644
+--- a/gcc/config/i386/immintrin.h
++++ b/gcc/config/i386/immintrin.h
+@@ -78,6 +78,10 @@ _rdrand16_step (unsigned short *__P)
+   return __builtin_ia32_rdrand16_step (__P);
+ }
  
 +#ifdef __cplusplus
 +extern "C" {
 +#endif
 +
- #ifdef __RDRND__
  extern __inline int
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
-@@ -173,4 +177,8 @@
- #endif /* __RDRND__ */
+ _rdrand32_step (unsigned int *__P)
+@@ -174,4 +178,8 @@ _rdrand64_step (unsigned long long *__P)
+ 
  #endif /* __x86_64__  */
  
 +#ifdef __cplusplus
@@ -355,12 +371,13 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/immintrin.h gcc-4.8.0/gcc/config/i386/i
 +#endif
 +
  #endif /* _IMMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/lwpintrin.h gcc-4.8.0/gcc/config/i386/lwpintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/lwpintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/lwpintrin.h	2013-03-25 19:28:56.479409583 +1100
-@@ -32,6 +32,10 @@
- # error "LWP instruction set not enabled"
- #else
+diff --git a/gcc/config/i386/lwpintrin.h b/gcc/config/i386/lwpintrin.h
+index 1cd046a..26d65f1 100644
+--- a/gcc/config/i386/lwpintrin.h
++++ b/gcc/config/i386/lwpintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_LWP__
+ #endif /* __LWP__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -369,23 +386,23 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/lwpintrin.h gcc-4.8.0/gcc/config/i386/l
  extern __inline void __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  __llwpcb (void *pcbAddress)
  {
-@@ -95,6 +99,10 @@
+@@ -71,6 +75,9 @@ __lwpval64 (unsigned long long data2, unsigned int data1, unsigned int flags)
  #endif
  #endif
  
 +#ifdef __cplusplus
 +}
 +#endif
-+
- #endif /* __LWP__ */
  
- #endif /* _LWPINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/lzcntintrin.h gcc-4.8.0/gcc/config/i386/lzcntintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/lzcntintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/lzcntintrin.h	2013-03-25 21:12:40.285926264 +1100
-@@ -32,6 +32,10 @@
- #ifndef _LZCNTINTRIN_H_INCLUDED
- #define _LZCNTINTRIN_H_INCLUDED
+ #ifdef __OPTIMIZE__
+ extern __inline unsigned char __attribute__((__gnu_inline__, __always_inline__, __artificial__))
+diff --git a/gcc/config/i386/lzcntintrin.h b/gcc/config/i386/lzcntintrin.h
+index b680a35..d292f24 100644
+--- a/gcc/config/i386/lzcntintrin.h
++++ b/gcc/config/i386/lzcntintrin.h
+@@ -35,6 +35,10 @@
+ #define __DISABLE_LZCNT__
+ #endif /* __LZCNT__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -394,21 +411,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/lzcntintrin.h gcc-4.8.0/gcc/config/i386
  extern __inline unsigned short __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  __lzcnt16 (unsigned short __X)
  {
-@@ -64,4 +68,8 @@
- }
- #endif
+@@ -72,4 +76,8 @@ _lzcnt_u64 (unsigned long long __X)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_LZCNT__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _LZCNTINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/mm3dnow.h gcc-4.8.0/gcc/config/i386/mm3dnow.h
---- gcc-4.8.0.orig/gcc/config/i386/mm3dnow.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/mm3dnow.h	2013-03-25 19:28:56.482742915 +1100
-@@ -32,6 +32,10 @@
- #include <mmintrin.h>
- #include <prfchwintrin.h>
+diff --git a/gcc/config/i386/mm3dnow.h b/gcc/config/i386/mm3dnow.h
+index bf847f9..464e98f 100644
+--- a/gcc/config/i386/mm3dnow.h
++++ b/gcc/config/i386/mm3dnow.h
+@@ -36,6 +36,10 @@
+ #define __DISABLE_3dNOW__
+ #endif /* __3dNOW__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -417,26 +435,25 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/mm3dnow.h gcc-4.8.0/gcc/config/i386/mm3
  extern __inline void __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _m_femms (void)
  {
-@@ -205,6 +209,11 @@
- }
+@@ -210,6 +214,10 @@ _m_pswapd (__m64 __A)
  
  #endif /* __3dNOW_A__ */
-+
+ 
 +#ifdef __cplusplus
 +}
 +#endif
 +
- #endif /* __3dNOW__ */
+ #ifdef __DISABLE_3dNOW__
+ #undef __DISABLE_3dNOW__
+ #pragma GCC pop_options
+diff --git a/gcc/config/i386/mmintrin.h b/gcc/config/i386/mmintrin.h
+index b351200..eaee690 100644
+--- a/gcc/config/i386/mmintrin.h
++++ b/gcc/config/i386/mmintrin.h
+@@ -33,6 +33,10 @@
+ #define __DISABLE_MMX__
+ #endif /* __MMX__ */
  
- #endif /* _MM3DNOW_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/mmintrin.h gcc-4.8.0/gcc/config/i386/mmintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/mmintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/mmintrin.h	2013-03-25 19:28:56.482742915 +1100
-@@ -30,6 +30,11 @@
- #ifndef __MMX__
- # error "MMX instruction set not enabled"
- #else
-+
 +#ifdef __cplusplus
 +extern "C" {
 +#endif
@@ -444,20 +461,20 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/mmintrin.h gcc-4.8.0/gcc/config/i386/mm
  /* The Intel API is flexible enough that we must allow aliasing with other
     vector types, and their scalar components.  */
  typedef int __m64 __attribute__ ((__vector_size__ (8), __may_alias__));
-@@ -916,5 +921,9 @@
-   return _mm_set_pi8 (__b, __b, __b, __b, __b, __b, __b, __b);
- }
+@@ -939,4 +943,8 @@ _mm_set1_pi8 (char __b)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_MMX__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
- #endif /* __MMX__ */
  #endif /* _MMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/pmm_malloc.h gcc-4.8.0/gcc/config/i386/pmm_malloc.h
---- gcc-4.8.0.orig/gcc/config/i386/pmm_malloc.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/pmm_malloc.h	2013-03-25 19:28:56.482742915 +1100
-@@ -34,6 +34,10 @@
+diff --git a/gcc/config/i386/pmm_malloc.h b/gcc/config/i386/pmm_malloc.h
+index 3be2f35..f8c99c7 100644
+--- a/gcc/config/i386/pmm_malloc.h
++++ b/gcc/config/i386/pmm_malloc.h
+@@ -34,6 +34,10 @@ extern int posix_memalign (void **, size_t, size_t);
  extern "C" int posix_memalign (void **, size_t, size_t) throw ();
  #endif
  
@@ -468,7 +485,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/pmm_malloc.h gcc-4.8.0/gcc/config/i386/
  static __inline void *
  _mm_malloc (size_t size, size_t alignment)
  {
-@@ -54,4 +58,8 @@
+@@ -54,4 +58,8 @@ _mm_free (void * ptr)
    free (ptr);
  }
  
@@ -477,12 +494,13 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/pmm_malloc.h gcc-4.8.0/gcc/config/i386/
 +#endif
 +
  #endif /* _MM_MALLOC_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/pmmintrin.h gcc-4.8.0/gcc/config/i386/pmmintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/pmmintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/pmmintrin.h	2013-03-25 19:28:56.482742915 +1100
-@@ -34,6 +34,10 @@
- /* We need definitions from the SSE2 and SSE header files*/
- #include <emmintrin.h>
+diff --git a/gcc/config/i386/pmmintrin.h b/gcc/config/i386/pmmintrin.h
+index 6a79500..2c98a85 100644
+--- a/gcc/config/i386/pmmintrin.h
++++ b/gcc/config/i386/pmmintrin.h
+@@ -36,6 +36,10 @@
+ #define __DISABLE_SSE3__
+ #endif /* __SSE3__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -491,7 +509,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/pmmintrin.h gcc-4.8.0/gcc/config/i386/p
  /* Additional bits in the MXCSR.  */
  #define _MM_DENORMALS_ZERO_MASK		0x0040
  #define _MM_DENORMALS_ZERO_ON		0x0040
-@@ -122,6 +126,10 @@
+@@ -124,6 +128,10 @@ _mm_mwait (unsigned int __E, unsigned int __H)
    __builtin_ia32_mwait (__E, __H);
  }
  
@@ -499,15 +517,16 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/pmmintrin.h gcc-4.8.0/gcc/config/i386/p
 +}
 +#endif
 +
- #endif /* __SSE3__ */
- 
- #endif /* _PMMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/popcntintrin.h gcc-4.8.0/gcc/config/i386/popcntintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/popcntintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/popcntintrin.h	2013-03-25 19:28:56.482742915 +1100
-@@ -28,6 +28,10 @@
- #ifndef _POPCNTINTRIN_H_INCLUDED
- #define _POPCNTINTRIN_H_INCLUDED
+ #ifdef __DISABLE_SSE3__
+ #undef __DISABLE_SSE3__
+ #pragma GCC pop_options
+diff --git a/gcc/config/i386/popcntintrin.h b/gcc/config/i386/popcntintrin.h
+index 41845d8..285e96a 100644
+--- a/gcc/config/i386/popcntintrin.h
++++ b/gcc/config/i386/popcntintrin.h
+@@ -30,6 +30,10 @@
+ #define __DISABLE_POPCNT__
+ #endif /* __POPCNT__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -516,19 +535,20 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/popcntintrin.h gcc-4.8.0/gcc/config/i38
  /* Calculate a number of bits set to 1.  */
  extern __inline int __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _mm_popcnt_u32 (unsigned int __X)
-@@ -43,4 +47,8 @@
- }
- #endif
+@@ -50,4 +54,8 @@ _mm_popcnt_u64 (unsigned long long __X)
+ #pragma GCC pop_options
+ #endif  /* __DISABLE_POPCNT__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _POPCNTINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/prfchwintrin.h gcc-4.8.0/gcc/config/i386/prfchwintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/prfchwintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/prfchwintrin.h	2013-03-25 21:13:57.149257744 +1100
-@@ -33,10 +33,18 @@
+diff --git a/gcc/config/i386/prfchwintrin.h b/gcc/config/i386/prfchwintrin.h
+index b2f5772..f779a28 100644
+--- a/gcc/config/i386/prfchwintrin.h
++++ b/gcc/config/i386/prfchwintrin.h
+@@ -28,10 +28,18 @@
  #ifndef _PRFCHWINTRIN_H_INCLUDED
  #define _PRFCHWINTRIN_H_INCLUDED
  
@@ -547,12 +567,13 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/prfchwintrin.h gcc-4.8.0/gcc/config/i38
 +#endif
 +
  #endif /* _PRFCHWINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/rdseedintrin.h gcc-4.8.0/gcc/config/i386/rdseedintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/rdseedintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/rdseedintrin.h	2013-03-25 21:14:16.099257288 +1100
-@@ -32,6 +32,10 @@
- #ifndef _RDSEEDINTRIN_H_INCLUDED
- #define _RDSEEDINTRIN_H_INCLUDED
+diff --git a/gcc/config/i386/rdseedintrin.h b/gcc/config/i386/rdseedintrin.h
+index 0ab18e5..98eb318 100644
+--- a/gcc/config/i386/rdseedintrin.h
++++ b/gcc/config/i386/rdseedintrin.h
+@@ -35,6 +35,10 @@
+ #endif /* __RDSEED__ */
+ 
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -561,21 +582,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/rdseedintrin.h gcc-4.8.0/gcc/config/i38
  extern __inline int
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _rdseed16_step (unsigned short *p)
-@@ -55,4 +59,8 @@
- }
- #endif
+@@ -63,4 +67,8 @@ _rdseed64_step (unsigned long long *p)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_RDSEED__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _RDSEEDINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/rtmintrin.h gcc-4.8.0/gcc/config/i386/rtmintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/rtmintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/rtmintrin.h	2013-03-25 21:23:20.389244172 +1100
-@@ -32,6 +32,10 @@
- #ifndef _RTMINTRIN_H_INCLUDED
- #define _RTMINTRIN_H_INCLUDED
+diff --git a/gcc/config/i386/rtmintrin.h b/gcc/config/i386/rtmintrin.h
+index ac40d22..3aa8246 100644
+--- a/gcc/config/i386/rtmintrin.h
++++ b/gcc/config/i386/rtmintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_RTM__
+ #endif /* __RTM__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -584,21 +606,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/rtmintrin.h gcc-4.8.0/gcc/config/i386/r
  #define _XBEGIN_STARTED		(~0u)
  #define _XABORT_EXPLICIT	(1 << 0)
  #define _XABORT_RETRY		(1 << 1)
-@@ -74,4 +78,8 @@
- #define _xabort(N)  __builtin_ia32_xabort (N)
- #endif /* __OPTIMIZE__ */
+@@ -81,4 +85,8 @@ _xabort (const unsigned int imm)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_RTM__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _RTMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/smmintrin.h gcc-4.8.0/gcc/config/i386/smmintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/smmintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/smmintrin.h	2013-03-25 19:28:56.486076248 +1100
-@@ -35,6 +35,10 @@
-    files.  */
- #include <tmmintrin.h>
+diff --git a/gcc/config/i386/smmintrin.h b/gcc/config/i386/smmintrin.h
+index 886ace4..168b903 100644
+--- a/gcc/config/i386/smmintrin.h
++++ b/gcc/config/i386/smmintrin.h
+@@ -37,6 +37,10 @@
+ #define __DISABLE_SSE4_1__
+ #endif /* __SSE4_1__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -607,23 +630,25 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/smmintrin.h gcc-4.8.0/gcc/config/i386/s
  /* Rounding mode macros. */
  #define _MM_FROUND_TO_NEAREST_INT	0x00
  #define _MM_FROUND_TO_NEG_INF		0x01
-@@ -825,6 +829,10 @@
- 
- #endif /* __SSE4_2__ */
- 
+@@ -820,6 +824,11 @@ _mm_cmpgt_epi64 (__m128i __X, __m128i __Y)
+ #pragma GCC push_options
+ #pragma GCC target("sse4.2")
+ #define __DISABLE_SSE4_2__
++
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* __SSE4_1__ */
  
- #endif /* _SMMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/tbmintrin.h gcc-4.8.0/gcc/config/i386/tbmintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/tbmintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/tbmintrin.h	2013-03-25 21:24:08.535909678 +1100
-@@ -32,6 +32,10 @@
- #ifndef _TBMINTRIN_H_INCLUDED
- #define _TBMINTRIN_H_INCLUDED
+ /* Accumulate CRC32 (polynomial 0x11EDC6F41) value.  */
+diff --git a/gcc/config/i386/tbmintrin.h b/gcc/config/i386/tbmintrin.h
+index 871f532..744b9ca 100644
+--- a/gcc/config/i386/tbmintrin.h
++++ b/gcc/config/i386/tbmintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_TBM__
+ #endif /* __TBM__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -632,22 +657,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/tbmintrin.h gcc-4.8.0/gcc/config/i386/t
  #ifdef __OPTIMIZE__
  extern __inline unsigned int __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  __bextri_u32 (unsigned int __X, const unsigned int __I)
-@@ -169,4 +173,9 @@
+@@ -177,4 +181,8 @@ __tzmsk_u64 (unsigned long long __X)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_TBM__ */
  
- 
- #endif /* __x86_64__  */
-+
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _TBMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/tmmintrin.h gcc-4.8.0/gcc/config/i386/tmmintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/tmmintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/tmmintrin.h	2013-03-25 19:28:56.486076248 +1100
-@@ -34,6 +34,10 @@
- /* We need definitions from the SSE3, SSE2 and SSE header files*/
- #include <pmmintrin.h>
+diff --git a/gcc/config/i386/tmmintrin.h b/gcc/config/i386/tmmintrin.h
+index 89556d2..f89e33c 100644
+--- a/gcc/config/i386/tmmintrin.h
++++ b/gcc/config/i386/tmmintrin.h
+@@ -36,6 +36,10 @@
+ #define __DISABLE_SSSE3__
+ #endif /* __SSSE3__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -656,7 +681,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/tmmintrin.h gcc-4.8.0/gcc/config/i386/t
  extern __inline __m128i __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _mm_hadd_epi16 (__m128i __X, __m128i __Y)
  {
-@@ -239,6 +243,10 @@
+@@ -241,6 +245,10 @@ _mm_abs_pi32 (__m64 __X)
    return (__m64) __builtin_ia32_pabsd ((__v2si)__X);
  }
  
@@ -664,15 +689,16 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/tmmintrin.h gcc-4.8.0/gcc/config/i386/t
 +}
 +#endif
 +
- #endif /* __SSSE3__ */
- 
- #endif /* _TMMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/wmmintrin.h gcc-4.8.0/gcc/config/i386/wmmintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/wmmintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/wmmintrin.h	2013-03-25 21:34:25.419228145 +1100
-@@ -34,6 +34,10 @@
- # error "AES/PCLMUL instructions not enabled"
- #else
+ #ifdef __DISABLE_SSSE3__
+ #undef __DISABLE_SSSE3__
+ #pragma GCC pop_options
+diff --git a/gcc/config/i386/wmmintrin.h b/gcc/config/i386/wmmintrin.h
+index 2002375..a22bb07 100644
+--- a/gcc/config/i386/wmmintrin.h
++++ b/gcc/config/i386/wmmintrin.h
+@@ -30,6 +30,10 @@
+ /* We need definitions from the SSE2 header file.  */
+ #include <emmintrin.h>
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -680,24 +706,25 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/wmmintrin.h gcc-4.8.0/gcc/config/i386/w
 +
  /* AES */
  
- #ifdef __AES__
-@@ -115,6 +119,10 @@
+ #ifndef __AES__
+@@ -124,6 +128,10 @@ _mm_clmulepi64_si128 (__m128i __X, __m128i __Y, const int __I)
+ 					  (__v2di)(__m128i)(Y), (int)(I)))
  #endif
- #endif  /* __PCLMUL__  */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
- #endif /* __AES__/__PCLMUL__ */
- 
- #endif /* _WMMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/xmmintrin.h gcc-4.8.0/gcc/config/i386/xmmintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/xmmintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/xmmintrin.h	2013-03-25 19:28:56.486076248 +1100
-@@ -37,6 +37,10 @@
- /* Get _mm_malloc () and _mm_free ().  */
- #include <mm_malloc.h>
+ #ifdef __DISABLE_PCLMUL__
+ #undef __DISABLE_PCLMUL__
+ #pragma GCC pop_options
+diff --git a/gcc/config/i386/xmmintrin.h b/gcc/config/i386/xmmintrin.h
+index a3824e7..ee1a1fc 100644
+--- a/gcc/config/i386/xmmintrin.h
++++ b/gcc/config/i386/xmmintrin.h
+@@ -64,6 +64,10 @@ _mm_prefetch (const void *__P, enum _mm_hint __I)
+ #define __DISABLE_SSE__
+ #endif /* __SSE__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -706,7 +733,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/xmmintrin.h gcc-4.8.0/gcc/config/i386/x
  /* The Intel API is flexible enough that we must allow aliasing with other
     vector types, and their scalar components.  */
  typedef float __m128 __attribute__ ((__vector_size__ (16), __may_alias__));
-@@ -1241,6 +1245,10 @@
+@@ -1254,6 +1258,10 @@ do {									\
    (row3) = __builtin_ia32_movhlps (__t3, __t2);				\
  } while (0)
  
@@ -715,14 +742,15 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/xmmintrin.h gcc-4.8.0/gcc/config/i386/x
 +#endif
 +
  /* For backward source compatibility.  */
- #ifdef __SSE2__
  # include <emmintrin.h>
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/xopintrin.h gcc-4.8.0/gcc/config/i386/xopintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/xopintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/xopintrin.h	2013-03-25 19:28:56.489409581 +1100
-@@ -34,6 +34,10 @@
  
- #include <fma4intrin.h>
+diff --git a/gcc/config/i386/xopintrin.h b/gcc/config/i386/xopintrin.h
+index cc82bc5..d567a98 100644
+--- a/gcc/config/i386/xopintrin.h
++++ b/gcc/config/i386/xopintrin.h
+@@ -36,6 +36,10 @@
+ #define __DISABLE_XOP__
+ #endif /* __XOP__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -731,7 +759,7 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/xopintrin.h gcc-4.8.0/gcc/config/i386/x
  /* Integer multiply/add intructions. */
  extern __inline __m128i __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _mm_maccs_epi16(__m128i __A, __m128i __B, __m128i __C)
-@@ -830,6 +834,10 @@
+@@ -836,6 +840,10 @@ _mm256_permute2_ps (__m256 __X, __m256 __Y, __m256i __C, const int __I)
   					  (int)(I)))
  #endif /* __OPTIMIZE__ */
  
@@ -739,15 +767,16 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/xopintrin.h gcc-4.8.0/gcc/config/i386/x
 +}
 +#endif
 +
- #endif /* __XOP__ */
- 
- #endif /* _XOPMMINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/xsaveintrin.h gcc-4.8.0/gcc/config/i386/xsaveintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/xsaveintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/xsaveintrin.h	2013-03-25 21:24:35.619242359 +1100
-@@ -28,6 +28,10 @@
- #ifndef _XSAVEINTRIN_H_INCLUDED
- #define _XSAVEINTRIN_H_INCLUDED
+ #ifdef __DISABLE_XOP__
+ #undef __DISABLE_XOP__
+ #pragma GCC pop_options
+diff --git a/gcc/config/i386/xsaveintrin.h b/gcc/config/i386/xsaveintrin.h
+index 47be25f..be2caea 100644
+--- a/gcc/config/i386/xsaveintrin.h
++++ b/gcc/config/i386/xsaveintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_XSAVE__
+ #endif /* __XSAVE__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -756,21 +785,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/xsaveintrin.h gcc-4.8.0/gcc/config/i386
  extern __inline void
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _xsave (void *__P, long long __M)
-@@ -58,4 +62,8 @@
- }
- #endif
+@@ -69,4 +73,8 @@ _xrstor64 (void *__P, long long __M)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_XSAVE__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _XSAVEINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/xsaveoptintrin.h gcc-4.8.0/gcc/config/i386/xsaveoptintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/xsaveoptintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/xsaveoptintrin.h	2013-03-25 21:24:56.469241856 +1100
-@@ -28,6 +28,10 @@
- #ifndef _XSAVEOPTINTRIN_H_INCLUDED
- #define _XSAVEOPTINTRIN_H_INCLUDED
+diff --git a/gcc/config/i386/xsaveoptintrin.h b/gcc/config/i386/xsaveoptintrin.h
+index d7534b4..90eeb45 100644
+--- a/gcc/config/i386/xsaveoptintrin.h
++++ b/gcc/config/i386/xsaveoptintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_XSAVEOPT__
+ #endif /* __XSAVEOPT__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -779,21 +809,22 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/xsaveoptintrin.h gcc-4.8.0/gcc/config/i
  extern __inline void
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _xsaveopt (void *__P, long long __M)
-@@ -44,4 +48,8 @@
- }
- #endif
+@@ -55,4 +59,8 @@ _xsaveopt64 (void *__P, long long __M)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_XSAVEOPT__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _XSAVEOPTINTRIN_H_INCLUDED */
-diff -Nur gcc-4.8.0.orig/gcc/config/i386/xtestintrin.h gcc-4.8.0/gcc/config/i386/xtestintrin.h
---- gcc-4.8.0.orig/gcc/config/i386/xtestintrin.h	2013-01-11 07:38:27.000000000 +1100
-+++ gcc-4.8.0/gcc/config/i386/xtestintrin.h	2013-03-25 21:25:26.389241134 +1100
-@@ -32,6 +32,10 @@
- #ifndef _XTESTINTRIN_H_INCLUDED
- #define _XTESTINTRIN_H_INCLUDED
+diff --git a/gcc/config/i386/xtestintrin.h b/gcc/config/i386/xtestintrin.h
+index ba79e5c..864b727 100644
+--- a/gcc/config/i386/xtestintrin.h
++++ b/gcc/config/i386/xtestintrin.h
+@@ -34,6 +34,10 @@
+ #define __DISABLE_RTM__
+ #endif /* __RTM__ */
  
 +#ifdef __cplusplus
 +extern "C" {
@@ -802,12 +833,15 @@ diff -Nur gcc-4.8.0.orig/gcc/config/i386/xtestintrin.h gcc-4.8.0/gcc/config/i386
  /* Return non-zero if the instruction executes inside an RTM or HLE code
     region.  Return zero otherwise.   */
  extern __inline int
-@@ -41,4 +45,8 @@
-   return __builtin_ia32_xtest ();
- }
+@@ -48,4 +52,8 @@ _xtest (void)
+ #pragma GCC pop_options
+ #endif /* __DISABLE_RTM__ */
  
 +#ifdef __cplusplus
 +}
 +#endif
 +
  #endif /* _XTESTINTRIN_H_INCLUDED */
+-- 
+1.8.4.5
+
