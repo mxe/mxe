@@ -17,6 +17,19 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
+define $(PKG)_INSTALL_SHARED
+    # lensfun's shared lib installation is a little bit non-MinGW-friendly:
+    # * its DLL is installed to usr/TARGET/lib
+    # * it doesn't install import lib
+    # This macro fixes that.
+    rm '$(PREFIX)/$(TARGET)/lib/lensfun.dll'
+    cd '$(1)' && \
+        $(INSTALL) -m 0755 'out/windows.x86/release/lensfun.dll' \
+            '$(PREFIX)/$(TARGET)/bin/lensfun.dll' && \
+        $(INSTALL) -m 0644 'out/windows.x86/release/lensfun.dll.a' \
+            '$(PREFIX)/$(TARGET)/lib/lensfun.dll.a'
+endef
+
 define $(PKG)_BUILD
     $(SED) -i 's,/usr/bin/python,/usr/bin/env python,' '$(1)/configure'
     $(SED) -i 's,make ,$(MAKE) ,'                      '$(1)/configure'
@@ -29,22 +42,13 @@ define $(PKG)_BUILD
         --target=windows.x86 \
         --mode=release \
         --vectorization= \
-        --staticlibs=YES
+        --staticlibs=$(if $(BUILD_STATIC),YES,NO)
     $(MAKE) -C '$(1)' -j '$(JOBS)' libs
-    $(MAKE) -C '$(1)' -j 1 install
-
-    #pkg-config file
-    (echo 'Name: $(PKG)'; \
-     echo 'Version: $($(PKG)_VERSION)'; \
-     echo 'Description: $(PKG)'; \
-     echo 'Requires: glib-2.0'; \
-     echo 'Libs: -l$(PKG) -lstdc++ -lregex';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+    $(MAKE) -C '$(1)' -j 1 install-lensdb install-lensfun-pc install-lensfun
+    $(if $(BUILD_SHARED),$($(PKG)_INSTALL_SHARED),)
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lensfun.exe' \
         `'$(TARGET)-pkg-config' lensfun --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =

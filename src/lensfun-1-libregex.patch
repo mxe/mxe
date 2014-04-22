@@ -1,0 +1,70 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 9d90674798a5f26f364893d38c9bf5abf980c586 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sun, 20 Apr 2014 07:55:35 -0700
+Subject: [PATCH 1/3] Split libregex and regex.h detection
+
+On some systems like Windows there might be a regex.h but you need to
+explicitly link to it.
+
+Only applies to tibs-based build system as that's what MXE uses.
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+---
+ configure                  | 6 ++++++
+ libs/lensfun/lensfun.mak   | 4 ++--
+ libs/lensfun/lensfun.pc.in | 2 +-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/configure b/configure
+index 0ac4bf7..6f55ec2 100755
+--- a/configure
++++ b/configure
+@@ -74,6 +74,12 @@ if tibs.pkgconfig_check_library ("libpng", "1.0"):
+ # One day we'll switch to regex library from GLib
+ if not tibs.check_header ("regex.h"):
+     tibs.add_config_mak ("NEED_REGEX")
++    tibs.add_config_mak ("NEED_LIB_REGEX", "regex")
++elif tibs.TARGET [0] == "windows":
++    # FIXME: make this a real check instead of a special case
++    # On some systems if regex.h is there we still need to link to libregex as
++    # it is not in libc.
++    tibs.add_config_mak ("NEED_LIB_REGEX", "regex")
+ 
+ # Check for CPU vectorization feature enable flags
+ if tibs.VECTORIZATION.strip ().upper () == "YES":
+diff --git a/libs/lensfun/lensfun.mak b/libs/lensfun/lensfun.mak
+index 9adc56a..a45f0f2 100644
+--- a/libs/lensfun/lensfun.mak
++++ b/libs/lensfun/lensfun.mak
+@@ -4,7 +4,7 @@ DIR.INCLUDE.C += :include/lensfun
+ TARGETS.lensfun = lensfun$L
+ SRC.lensfun$L := $(wildcard libs/lensfun/*.cpp libs/lensfun/$(TARGET)/*.cpp)
+ SHARED.lensfun$L = $(if $(SHAREDLIBS),$(CONF_LIB_VERSION))
+-LIBS.lensfun = $(TARGETS.regex)
++LIBS.lensfun = $(if $(NEED_REGEX),$(TARGETS.regex),$(NEED_LIB_REGEX))
+ SYSLIBS.lensfun = GLIB_20
+ INSTALL.TARGETS += lensfun
+ INSTALL.INCLUDE.lensfun$L = include/lensfun/lensfun.h
+@@ -22,4 +22,4 @@ TOOLKIT.lensfun-pc = PKGCONFIG
+ TARGETS.lensfun-pc = lensfun.pc
+ SRC.lensfun.pc := $(wildcard libs/lensfun/*.pc.in) config.mak
+ INSTALL.TARGETS += lensfun-pc
+-PKGCONFIG.SED.lensfun-pc = -e "s,@NEED_REGEX@,$(if $(NEED_REGEX),-lregex,),g" -e "s,@CONF_LENSFUN_STATIC@,$(if $(SHAREDLIBS),,-DCONF_LENSFUN_STATIC),g"
++PKGCONFIG.SED.lensfun-pc = -e "s,@NEED_LIB_REGEX@,$(if $(NEED_LIB_REGEX),-l$(NEED_LIB_REGEX),),g" -e "s,@CONF_LENSFUN_STATIC@,$(if $(SHAREDLIBS),,-DCONF_LENSFUN_STATIC),g"
+diff --git a/libs/lensfun/lensfun.pc.in b/libs/lensfun/lensfun.pc.in
+index 801a556..f61af62 100644
+--- a/libs/lensfun/lensfun.pc.in
++++ b/libs/lensfun/lensfun.pc.in
+@@ -2,5 +2,5 @@ Name: lensfun
+ Description: A photographic lens database and access library
+ Version: @CONF_VERSION@
+ Requires: glib-2.0
+-Libs: -L@CONF_LIBDIR@ -llensfun @NEED_REGEX@
++Libs: -L@CONF_LIBDIR@ -llensfun @NEED_LIB_REGEX@
+ Cflags: -I@CONF_INCLUDEDIR@ @CONF_LENSFUN_STATIC@
+-- 
+1.8.3.2
+
