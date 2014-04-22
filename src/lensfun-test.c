@@ -8,7 +8,7 @@
     A simple example of library usage from plain C
 */
 
-#include "lensfun.h"
+#include <lensfun.h>
 #include <stdio.h>
 #include <locale.h>
 #include <glib.h>
@@ -29,7 +29,7 @@ int main ()
     if (!ldb)
     {
         fprintf (stderr, "Failed to create database\n");
-        return -1;
+        return 1;
     }
 
     g_print ("HomeDataDir: %s\n", ldb->HomeDataDir);
