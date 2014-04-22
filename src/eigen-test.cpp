@@ -3,7 +3,6 @@
  * See index.html for further information.
  */
 
-#include <iostream>
 #include <Eigen/Dense>
 
 using Eigen::MatrixXd;
