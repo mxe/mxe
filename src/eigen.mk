@@ -3,9 +3,9 @@
 
 PKG             := eigen
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.4
-$(PKG)_CHECKSUM := a5cbe0a5676ea2105c8b0c4569c204bf58fc009a
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-36bf2ceaf8f5
+$(PKG)_VERSION  := 3.2.1
+$(PKG)_CHECKSUM := 17aca570d647b25cb3d9dac54b480cfecf402ed9
+$(PKG)_SUBDIR   := $(PKG)-$(PKG)-6b38706d90a9
 $(PKG)_FILE     := $($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
