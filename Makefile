@@ -48,7 +48,6 @@ PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
-BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
 # define some whitespace variables
@@ -217,6 +216,12 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	@touch '$@'
 
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
+
+BUILD_PKGS := $(call set_create, \
+    $(foreach PKG, \
+        $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | \
+            $(SED) -n 's,.*src/\(.*\)\.mk,\1,p'), \
+        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD))), $(PKG))))
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
