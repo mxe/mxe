@@ -16,6 +16,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(PREFIX)/$(TARGET)/include/libcrystalhd'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/libcrystalhd'
     cd '$(1)' && cp *.h '$(PREFIX)/$(TARGET)/include/libcrystalhd'
 endef
