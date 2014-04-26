@@ -51,6 +51,15 @@ BUILD      := $(shell '$(EXT_DIR)/config.guess')
 BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
+# define some whitespace variables
+define newline
+
+
+endef
+
+null  :=
+space := $(null) $(null)
+
 MXE_CONFIGURE_OPTS = \
     --host='$(TARGET)' \
     --build='$(BUILD)' \
@@ -181,15 +190,6 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[4-9]\|2\.[7-9][0-9])
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
 	@touch '$@'
-
-# define some whitespace variables
-define newline
-
-
-endef
-
-null  :=
-space := $(null) $(null)
 
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
