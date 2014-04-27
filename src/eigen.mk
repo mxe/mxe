@@ -24,6 +24,10 @@ define $(PKG)_BUILD
         -DEIGEN_BUILD_PKGCONFIG=ON \
         -Drun_res=1 -Drun_res__TRYRUN_OUTPUT=""
     $(MAKE) -C '$(1)'/build -j '$(JOBS)' install VERBOSE=1
+
+    '$(TARGET)-g++' -W -Wall '$(2).cpp' -o \
+        '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' --cflags --lib eigen3`
 endef
 
 $(PKG)_BUILD_SHARED =
