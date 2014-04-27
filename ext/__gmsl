@@ -5,7 +5,7 @@
 # A library of functions to be used with GNU Make's $(call) that
 # provides functionality not available in standard GNU Make.
 #
-# Copyright (c) 2005-2013 John Graham-Cumming
+# Copyright (c) 2005-2014 John Graham-Cumming
 #
 # This file is part of GMSL
 #
@@ -42,21 +42,24 @@
 # This is the GNU Make Standard Library version number as a list with
 # three items: major, minor, revision
 
-gmsl_version := 1 1 3
+gmsl_version := 1 1 5
+
+__gmsl_name := GNU Make Standard Library
 
 # Used to output warnings and error from the library, it's possible to
 # disable any warnings or errors by overriding these definitions
 # manually or by setting GMSL_NO_WARNINGS or GMSL_NO_ERRORS
 
-__gmsl_name := GNU Make Standard Library
-__gmsl_warning = $(warning $(__gmsl_name): $1)
-__gmsl_error = $(error $(__gmsl_name): $1)
-
 ifdef GMSL_NO_WARNINGS
 __gmsl_warning :=
+else
+__gmsl_warning = $(if $1,$(warning $(__gmsl_name): $1))
 endif
+
 ifdef GMSL_NO_ERRORS
 __gmsl_error :=
+else
+ __gmsl_error = $(if $1,$(error $(__gmsl_name): $1))
 endif
 
 # If GMSL_TRACE is enabled then calls to the library functions are
@@ -118,6 +121,7 @@ endif
 __gmsl_dollar := $$
 __gmsl_hash := \#
 
+# ----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------
 # Function:  gmsl_compatible
 # Arguments: List containing the desired library version number (maj min rev)
@@ -412,7 +416,7 @@ __gmsl_tab :=	#
 # Note:      The string in $1 must not contain a §
 # ----------------------------------------------------------------------------
 
-substr = $(__gmsl_tr3)$(call assert_no_dollar,$0,$1$2$3)$(strip $(eval __temp := $$(subst $$(__gmsl_space),§ ,$$1))$(foreach a,$(__gmsl_characters),$(eval __temp := $$(subst $$a,$$a$$(__gmsl_space),$(__temp))))$(eval __temp := $(wordlist $2,$3,$(__temp))))$(subst §,$(__gmsl_space),$(subst $(__gmsl_space),,$(__temp)))
+substr = $(if $2,$(__gmsl_tr3)$(call assert_no_dollar,$0,$1$2$3)$(strip $(eval __temp := $$(subst $$(__gmsl_space),§ ,$$1))$(foreach a,$(__gmsl_characters),$(eval __temp := $$(subst $$a,$$a$$(__gmsl_space),$(__temp))))$(eval __temp := $(wordlist $2,$3,$(__temp))))$(subst §,$(__gmsl_space),$(subst $(__gmsl_space),,$(__temp))))
 
 endif # __gmsl_have_eval
 
@@ -495,15 +499,7 @@ set_equal = $(__gmsl_tr2)$(call seq,$1,$2)
 # ###########################################################################
 
 # Integers a represented by lists with the equivalent number of x's.
-# For example the number 4 is x x x x.  The maximum integer that the
-# library can handle as _input_ is __gmsl_input_int which is defined
-# here as 65536
-
-__gmsl_sixteen := x x x x x x x x x x x x x x x x
-__gmsl_input_int := $(foreach a,$(__gmsl_sixteen),         \
-                        $(foreach b,$(__gmsl_sixteen),     \
-                            $(foreach c,$(__gmsl_sixteen), \
-                                $(__gmsl_sixteen)))))
+# For example the number 4 is x x x x. 
 
 # ----------------------------------------------------------------------------
 # Function:  int_decode
@@ -518,7 +514,8 @@ int_decode = $(__gmsl_tr1)$(words $1)
 # Arguments: 1: A number in human-readable integer form
 # Returns:   Returns the integer encoded as a string of x's
 # ----------------------------------------------------------------------------
-int_encode = $(__gmsl_tr1)$(wordlist 1,$1,$(__gmsl_input_int))
+__int_encode = $(if $1,$(if $(call seq,$(words $(wordlist 1,$1,$2)),$1),$(wordlist 1,$1,$2),$(call __int_encode,$1,$(if $2,$2 $2,x))))
+int_encode = $(__gmsl_tr1)$(call __int_encode,$1)
 
 # The arithmetic library functions come in two forms: one form of each
 # function takes integers as arguments and the other form takes the
@@ -600,10 +597,10 @@ multiply = $(__gmsl_tr2)$(call __gmsl_int_wrap,int_multiply,$1,$2)
 # Returns:   Returns the result of integer division of argument 1 divided
 #            by argument 2 in x's representation
 # ----------------------------------------------------------------------------
-int_divide = $(__gmsl_tr2)$(strip $(if $2,                                 \
+int_divide = $(__gmsl_tr2)$(strip $(if $1,$(if $2,                         \
                  $(if $(call int_gte,$1,$2),                               \
                      x $(call int_divide,$(call int_subtract,$1,$2),$2),), \
-                 $(call __gmsl_error,Division by zero)))
+                 $(call __gmsl_error,Division by zero))))
 
 # ----------------------------------------------------------------------------
 # Function:  divide (wrapped version of int_divide)
@@ -701,9 +698,9 @@ inc = $(__gmsl_tr1)$(call __gmsl_int_wrap1,int_inc,$1)
 # Arguments: 1: A number in x's representation
 # Returns:   The number decremented by 1 in x's representation
 # ----------------------------------------------------------------------------
-int_dec = $(__gmsl_tr1)$(strip $(if $(call sne,0,$(words $1)), \
-              $(wordlist 2,$(words $1),$1),                    \
-              $(call __gmsl_warning,Decrement underflow)))
+int_dec = $(__gmsl_tr1)$(strip                        \
+          $(if $(call sne,0,$(words $1)),             \
+          $(wordlist 2,$(words $1),$1)))
 
 # ----------------------------------------------------------------------------
 # Function:  dec
@@ -756,6 +753,26 @@ sequence = $(__gmsl_tr2)$(strip $(if $(call lte,$1,$2),          \
 
 __gmsl_sequence_up = $(if $(call seq,$1,$2),$1,$1 $(call __gmsl_sequence_up,$(call inc,$1),$2))
 __gmsl_sequence_dn = $(if $(call seq,$1,$2),$1,$2 $(call __gmsl_sequence_dn,$1,$(call dec,$2)))
+
+# ----------------------------------------------------------------------------
+# Function:  dec2hex, dec2bin, dec2oct
+# Arguments: 1: An integer
+# Returns:   The decimal argument converted to hexadecimal, binary or
+#            octal
+# ----------------------------------------------------------------------------
+
+__gmsl_digit = $(subst 15,f,$(subst 14,e,$(subst 13,d,$(subst 12,c,$(subst 11,b,$(subst 10,a,$1))))))
+
+dec2hex = $(call __gmsl_dec2base,$(call int_encode,$1),$(call int_encode,16))
+dec2bin = $(call __gmsl_dec2base,$(call int_encode,$1),$(call int_encode,2))
+dec2oct = $(call __gmsl_dec2base,$(call int_encode,$1),$(call int_encode,8))
+
+__gmsl_base_divide = $(subst $2,X ,$1)
+__gmsl_q = $(strip $(filter X,$1))
+__gmsl_r = $(words $(filter x,$1))
+
+__gmsl_dec2base = $(eval __gmsl_temp := $(call __gmsl_base_divide,$1,$2))$(call __gmsl_dec2base_,$(call __gmsl_q,$(__gmsl_temp)),$(call __gmsl_r,$(__gmsl_temp)),$2)
+__gmsl_dec2base_ = $(if $1,$(call __gmsl_dec2base,$(subst X,x,$1),$3))$(call __gmsl_digit,$2)
 
 ifdef __gmsl_have_eval
 # ###########################################################################
@@ -888,7 +905,7 @@ gmsl-print-%: ; @echo $* = $($*)
 #            2: The message to print with the assertion
 # Returns:   None
 # ----------------------------------------------------------------------------
-assert = $(if $1,,$(call __gmsl_error,Assertion failure: $2))
+assert = $(if $2,$(if $1,,$(call __gmsl_error,Assertion failure: $2)))
 
 # ----------------------------------------------------------------------------
 # Function:  assert_exists
@@ -896,7 +913,7 @@ assert = $(if $1,,$(call __gmsl_error,Assertion failure: $2))
 #               will be generated
 # Returns:   None
 # ----------------------------------------------------------------------------
-assert_exists = $(call assert,$(wildcard $1),file '$1' missing)
+assert_exists = $(if $0,$(call assert,$(wildcard $1),file '$1' missing))
 
 # ----------------------------------------------------------------------------
 # Function:  assert_no_dollar
