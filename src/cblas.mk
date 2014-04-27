@@ -35,10 +35,10 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(1)/examples/cblas_example1.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        -lcblas -lblas -lgfortran
+        -lcblas -lblas -lgfortran -lquadmath
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(1)/examples/cblas_example2.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-F77.exe' \
-        -lcblas -lblas -lgfortran -DADD_
+        -lcblas -lblas -lgfortran -lquadmath -DADD_
 endef
