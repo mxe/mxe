@@ -30,7 +30,7 @@ index b0c477d..d8d8ccc 100644
  Version: @VERSION@
  Libs: -L${libdir} -lgsasl
  Libs.private: @LTLIBGCRYPT@ @LTLIBIDN@ @LTLIBNTLM@
-+Requires.private: nettle
++Requires: nettle
  Cflags: -I${includedir}
 -- 
 1.7.7

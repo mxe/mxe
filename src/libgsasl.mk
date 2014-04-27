@@ -19,15 +19,13 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && touch src/libgsasl-7.def && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-nls \
         --with-libgcrypt \
         --with-libiconv-prefix='$(PREFIX)/$(TARGET)' \
         --with-libidn-prefix='$(PREFIX)/$(TARGET)' \
-        --with-libntlm-prefix='$(PREFIX)/$(TARGET)'
+        --with-libntlm-prefix='$(PREFIX)/$(TARGET)' \
+        LIBS="`$(TARGET)-pkg-config --libs-only-l nettle`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
@@ -35,5 +33,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgsasl.exe' \
         `'$(TARGET)-pkg-config' libgsasl --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
