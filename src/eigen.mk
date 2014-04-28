@@ -27,7 +27,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' -W -Wall '$(2).cpp' -o \
         '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' --cflags --lib eigen3`
+        `'$(TARGET)-pkg-config' --cflags --libs eigen3`
 endef
 
 $(PKG)_BUILD_SHARED =
