@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-gnutls \
+        --without-ssl \
         --with-libidn \
         --enable-sspi \
         --enable-ipv6 \
