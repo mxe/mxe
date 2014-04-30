@@ -494,7 +494,11 @@ cleanup-style:
 build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	$(foreach TARGET,$(MXE_TARGET_LIST),$(eval $(TARGET)_PKGCOUNT := 0))
 	$(eval BUILD_PKGCOUNT := 0)
+<<<<<<< HEAD
 	$(eval VIRTUAL_PKGCOUNT := 0)
+=======
+	$(eval PKGINDEX := 0)
+>>>>>>> Show the headings per 25 packages again
 	@echo '<!DOCTYPE html>'                  > $@
 	@echo '<html>'                          >> $@
 	@echo '<head>'                          >> $@
@@ -534,6 +538,20 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '<tbody>'                         >> $@
 	@$(foreach PKG,$(PKGS),                      \
 	    $(eval $(PKG)_VIRTUAL := $(true))        \
+	    $(eval PKGINDEX := $(call inc,$(PKGINDEX)))            \
+	    if [ `expr $(PKGINDEX) % 25` -eq 0 ]; then             \
+	        echo '<tr>' >> $@;                   \
+	        echo '<th rowspan="2">Package</th>'  >> $@;        \
+	        $(foreach TRIPLET,$(MXE_TRIPLETS),                 \
+	            echo '<th colspan="$(words $(MXE_LIB_TYPES))">$(TRIPLET)</th>' >> $@;) \
+	        echo '<th rowspan="2">Native</th>'     >> $@;      \
+	        echo '</tr>' >> $@;                  \
+	        echo '<tr>' >> $@;                   \
+	        $(foreach TRIPLET,$(MXE_TRIPLETS),                 \
+	            $(foreach LIB, $(MXE_LIB_TYPES),               \
+	                echo '<th>$(LIB)</th>'          >> $@;))   \
+	        echo '</tr>' >> $@;                  \
+	    fi;                                      \
 	    echo '<tr>'                         >> $@; \
 	    echo '<th class="row">$(PKG)</th>'  >> $@; \
 	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
