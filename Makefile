@@ -48,7 +48,6 @@ PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
 PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
-BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
 # define some whitespace variables
@@ -153,6 +152,31 @@ else
     } >'$(PWD)/settings.mk')
 endif
 
+# cache some target string manipulation functions
+# `memoize` and `uc` from gmsl
+_CHOP_TARGET = $(call merge,.,$(call chop,$(call split,.,$(1))))
+CHOP_TARGET  = $(call memoize,_CHOP_TARGET,$(1))
+_UC_LIB_TYPE = $(call uc,$(word 2,$(subst ., ,$(1))))
+UC_LIB_TYPE  = $(call memoize,_UC_LIB_TYPE,$(1))
+
+# finds a package build rule or deps by truncating the target elements
+# $(call LOOKUP_PKG_RULE, package, rule type ie. BUILD|DEPS|FILE, target,[lib type, original target to cache])
+# returns variable name for use with $(value)
+#
+# caches result with gmsl associative arrays (`get` and `set` functions)
+# since `memoize` only works with single argument
+LOOKUP_PKG_RULE = $(strip \
+    $(or $(call get,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3))),\
+    $(if $(findstring undefined, $(flavor $(1)_$(2)_$(3))),\
+        $(if $(3),\
+            $(call LOOKUP_PKG_RULE,$(1),$(2),$(call CHOP_TARGET,$(3)),$(or $(4),$(call UC_LIB_TYPE,$(3))),$(or $(5),$(3))),\
+            $(if $(4),\
+                $(call LOOKUP_PKG_RULE,$(1),$(2),$(4),,$(5)),\
+                $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(5),$(1)_$(2))\
+                $(1)_$(2))),\
+        $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3)),$(1)_$(2)_$(3))\
+        $(1)_$(2)_$(3))))
+
 .PHONY: all
 all: all-filtered
 
@@ -192,6 +216,12 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	@touch '$@'
 
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
+
+BUILD_PKGS := $(call set_create, \
+    $(foreach PKG, \
+        $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | \
+            $(SED) -n 's,.*src/\(.*\)\.mk,\1,p'), \
+        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD))), $(PKG))))
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
@@ -236,31 +266,6 @@ $(1): | $(if $(value $(1)_DEPS), \
 	    @echo)
 endef
 $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
-
-# cache some target string manipulation functions
-# `memoize` and `uc` from gmsl
-_CHOP_TARGET = $(call merge,.,$(call chop,$(call split,.,$(1))))
-CHOP_TARGET  = $(call memoize,_CHOP_TARGET,$(1))
-_UC_LIB_TYPE = $(call uc,$(word 2,$(subst ., ,$(1))))
-UC_LIB_TYPE  = $(call memoize,_UC_LIB_TYPE,$(1))
-
-# finds a package build rule or deps by truncating the target elements
-# $(call LOOKUP_PKG_RULE, package, rule type ie. BUILD|DEPS|FILE, target,[lib type, original target to cache])
-# returns variable name for use with $(value)
-#
-# caches result with gmsl associative arrays (`get` and `set` functions)
-# since `memoize` only works with single argument
-LOOKUP_PKG_RULE = $(strip \
-    $(or $(call get,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3))),\
-    $(if $(findstring undefined, $(flavor $(1)_$(2)_$(3))),\
-        $(if $(3),\
-            $(call LOOKUP_PKG_RULE,$(1),$(2),$(call CHOP_TARGET,$(3)),$(or $(4),$(call UC_LIB_TYPE,$(3))),$(or $(5),$(3))),\
-            $(if $(4),\
-                $(call LOOKUP_PKG_RULE,$(1),$(2),$(4),,$(5)),\
-                $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(5),$(1)_$(2))\
-                $(1)_$(2))),\
-        $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3)),$(1)_$(2)_$(3))\
-        $(1)_$(2)_$(3))))
 
 define PKG_RULE
 .PHONY: download-$(1)
@@ -425,7 +430,7 @@ show-upstream-deps-%:
 
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX)/*
+	rm -rf $(call TMP_DIR,*) $(PREFIX)/* build-matrix.html
 
 .PHONY: clean-pkg
 clean-pkg:
@@ -485,4 +490,56 @@ cleanup-style:
                      cp $(TOP_DIR)/tmp-cleanup-style $(FILE); }; \
             rm -f $(TOP_DIR)/tmp-cleanup-style; \
         )
+
+build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
+	@echo '<!DOCTYPE html>'                  > $@
+	@echo '<html>'                          >> $@
+	@echo '<head>'                          >> $@
+	@echo '<meta http-equiv="content-type" content="text/html; charset=utf-8">' >> $@
+	@echo '<title>MXE Build Matrix</title>' >> $@
+	@echo '<link rel="stylesheet" href="assets/common.css">'       >> $@
+	@echo '<link rel="stylesheet" href="assets/build-matrix.css">' >> $@
+	@echo '</head>'                         >> $@
+	@echo '<body>'                          >> $@
+	@echo '<h2>MXE Build Matrix</h2>'       >> $@
+	@echo '<p>'                             >> $@
+	@echo 'This is a table of all supported package/target'        >> $@
+	@echo 'matrix. Being supported means that this specific'       >> $@
+	@echo 'combination is working to the best of our knowledge,'   >> $@
+	@echo 'but does not mean that it is tested daily.'             >> $@
+	@echo '</p>'                            >> $@
+	@echo '<p>'                             >> $@
+	@echo 'If you found that some package is not working properly,'>> $@
+	@echo 'please file a ticket on GitHub. If you figured out a'   >> $@
+	@echo 'way to make the package work for unsupported targets,'  >> $@
+	@echo 'feel free to submit a pull request.'                    >> $@
+	@echo '</p>'                            >> $@
+	@echo '<table class="fullscreen">'      >> $@
+	@echo '<thead>'                         >> $@
+	@echo '<tr>'                            >> $@
+	@echo '<th rowspan="2">Package</th>'    >> $@
+	@$(foreach TRIPLET,$(MXE_TRIPLETS),          \
+	    echo '<th colspan="$(words $(MXE_LIB_TYPES))">$(TRIPLET)</th>' >> $@;)
+	@echo '<th rowspan="2">Native</th>'     >> $@
+	@echo '</tr>'                           >> $@
+	@echo '<tr>'                            >> $@
+	@$(foreach TRIPLET,$(MXE_TRIPLETS),          \
+	    $(foreach LIB, $(MXE_LIB_TYPES),         \
+	        echo '<th>$(LIB)</th>'          >> $@;))
+	@echo '</tr>'                           >> $@
+	@echo '</thead>'                        >> $@
+	@echo '<tbody>'                         >> $@
+	@$(foreach PKG,$(PKGS),                      \
+	    echo '<tr>'                         >> $@; \
+	    echo '<th class="row">$(PKG)</th>'  >> $@; \
+	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
+	        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
+	            echo '<td class="supported">Y</td>'   >> $@;,   \
+	            echo '<td class="unsupported">N</td>' >> $@;))  \
+	    $(if $(call set_is_member,$(PKG),$(BUILD_PKGS)),        \
+	        echo '<td class="supported">Y</td>'   >> $@;,       \
+	        echo '<td class="unsupported">N</td>' >> $@;))
+	@echo '</tbody>'                        >> $@
+	@echo '</table>'                        >> $@
+	@echo '</body>'                         >> $@
 
