@@ -492,6 +492,8 @@ cleanup-style:
         )
 
 build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
+	$(foreach TARGET,$(MXE_TARGET_LIST),$(eval $(TARGET)_PKGCOUNT := 0))
+	$(eval BUILD_PKGCOUNT := 0)
 	@echo '<!DOCTYPE html>'                  > $@
 	@echo '<html>'                          >> $@
 	@echo '<head>'                          >> $@
@@ -534,11 +536,19 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	    echo '<th class="row">$(PKG)</th>'  >> $@; \
 	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
 	        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
+	            $(eval $(TARGET)_PKGCOUNT := $(call inc,$($(TARGET)_PKGCOUNT))) \
 	            echo '<td class="supported">Y</td>'   >> $@;,   \
 	            echo '<td class="unsupported">N</td>' >> $@;))  \
 	    $(if $(call set_is_member,$(PKG),$(BUILD_PKGS)),        \
+	        $(eval BUILD_PKGCOUNT := $(call inc,$(BUILD_PKGCOUNT))) \
 	        echo '<td class="supported">Y</td>'   >> $@;,       \
 	        echo '<td class="unsupported">N</td>' >> $@;))
+	@echo '<tr>'                            >> $@
+	@echo '<th class="row">Total: $(words $(PKGS))' >> $@
+	@$(foreach TARGET,$(MXE_TARGET_LIST),         \
+	    echo '<th>$($(TARGET)_PKGCOUNT)</th>' >> $@;)
+	@echo '<th>$(BUILD_PKGCOUNT)</th>'  >> $@
+	@echo '</tr>'                           >> $@
 	@echo '</tbody>'                        >> $@
 	@echo '</table>'                        >> $@
 	@echo '</body>'                         >> $@
