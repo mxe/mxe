@@ -36,7 +36,8 @@ define $(PKG)_BUILD
         --enable-music-mp3 \
         --disable-music-ogg-shared \
         --disable-music-flac-shared \
-        --disable-smpegtest
+        --disable-smpegtest \
+        SMPEG_CONFIG='$(PREFIX)/$(TARGET)/bin/smpeg2-config' \
         WINDRES='$(TARGET)-windres' \
         LIBS='-lvorbis -logg'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
