@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
-TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
+TOP_DIR  := $(abspath $(patsubst %/,%,$(dir $(MAKEFILE))))
 EXT_DIR  := $(TOP_DIR)/ext
 
 # GNU Make Standard Library (http://gmsl.sourceforge.net/)
