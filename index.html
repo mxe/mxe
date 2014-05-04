@@ -98,25 +98,41 @@
 
     <table id="supported-toolchains">
     <tr>
-        <th>Runtime</th>
-        <th>Host Triplet</th>
-        <th>Packages</th>
+        <th rowspan="2">Runtime</th>
+        <th rowspan="2">Host Triplet</th>
+        <th colspan="2">Packages</th>
+    </tr>
+    <tr>
+        <th>Static</th>
+        <th>Shared*</th>
     </tr>
     <tr>
         <td><a href="http://www.mingw.org/">MinGW 3.x</a></td>
         <td>i686-pc-mingw32</td>
-        <td style='text-align:center'>301</td>
+        <td style='text-align:center'>97% (314/323)</td>
+        <td style='text-align:center'>50% (162/323)</td>
     </tr>
     <tr>
         <td rowspan="2"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64</a></td>
         <td>i686-w64-mingw32</td>
-        <td style='text-align:center'>288</td>
+        <td style='text-align:center'>95% (308/323)</td>
+        <td style='text-align:center'>52% (167/323)</td>
     </tr>
     <tr>
         <td>x86_64-w64-mingw32</td>
-        <td style='text-align:center'>266</td>
+        <td style='text-align:center'>89% (286/323)</td>
+        <td style='text-align:center'>51% (165/323)</td>
     </tr>
     </table>
+    <p>
+        These numbers are last updated on May 4, 2014. You can see the current
+        status by executing <code>make build-matrix.html</code> in the MXE
+        directory.
+    </p>
+    <p><small>
+        * Shared support in MXE was just added in early February, 2014. These
+        numbers are expected to rise significantly.
+    </small></p>
 
 </div>
 
