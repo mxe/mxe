@@ -21,14 +21,9 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-doc \
         --disable-http
     $(MAKE) -C '$(1)' -j '$(JOBS)' noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install noinst_PROGRAMS=
 endef
-
-$(PKG)_BUILD_SHARED =
