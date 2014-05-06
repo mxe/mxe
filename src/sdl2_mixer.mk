@@ -49,3 +49,5 @@ define $(PKG)_BUILD
 endef
 
 $(PKG)_BUILD_i686-pc-mingw32 =
+
+$(PKG)_BUILD_SHARED =
