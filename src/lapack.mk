@@ -36,5 +36,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lapacke.exe' \
-        -llapacke -llapack -lcblas -lblas -lgfortran
+        -llapacke -llapack -lcblas -lblas -lgfortran -lquadmath
 endef
