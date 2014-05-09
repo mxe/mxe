@@ -11,8 +11,8 @@ $(PKG)_URL      := http://downloads.xvid.org/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads yasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.xvid.org/' | \
-    $(SED) -n 's,.*Xvid \([0-9][^ ]*\) .*,\1,p' | \
+    $(WGET) -q -O- 'https://labs.xvid.com/source/' | \
+    $(SED) -n 's,.*xvidcore-\([0-9][^ ]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
