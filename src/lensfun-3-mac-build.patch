@@ -1,0 +1,15 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -ur lensfun-0.2.8.orig/build/tibs/compiler/pkgconfig.mak lensfun-0.2.8/build/tibs/compiler/pkgconfig.mak
+--- lensfun-0.2.8.orig/build/tibs/compiler/pkgconfig.mak	2014-05-10 03:07:49.000000000 +1000
++++ lensfun-0.2.8/build/tibs/compiler/pkgconfig.mak	2014-05-10 03:08:38.000000000 +1000
+@@ -4,7 +4,7 @@
+ # Try to guess here if target supports pkgconfig
+ # - Any POSIX platform
+ # - Cross-compiling on a POSIX target for WINDOWS (mingw32)
+-ifneq ($(findstring /posix/,/$(TARGET)/)$(findstring /posix-windows/,/$(HOST)-$(TARGET)/),)
++ifneq ($(findstring /posix/,/$(TARGET)/)$(findstring /posix-windows/,/$(HOST)-$(TARGET)/)$(findstring /mac-windows/,/$(HOST)-$(TARGET)/),)
+ 
+ XFNAME.PKGCONFIG = $(addprefix $$(OUT),$1)
+ MKDEPS.PKGCONFIG = $1
