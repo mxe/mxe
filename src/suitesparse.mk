@@ -28,7 +28,7 @@ define $(PKG)_BUILD
         F77='$(TARGET)-gfortran' \
         AR='$(TARGET)-ar' \
         RANLIB='$(TARGET)-ranlib' \
-        BLAS='-lblas -lgfortran -lgfortranbegin' \
+        BLAS='-lblas -lgfortran -lgfortranbegin -lquadmath' \
         CHOLMOD_CONFIG='-DNPARTITION'
 
     # install library files
