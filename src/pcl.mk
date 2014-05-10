@@ -3,17 +3,17 @@
 
 PKG             := pcl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.0
-$(PKG)_CHECKSUM := 45a2e155d7faf5901abe609fd40d5f1659015e9e
-$(PKG)_SUBDIR   := PCL-$($(PKG)_VERSION)-Source
-$(PKG)_FILE     := PCL-$($(PKG)_VERSION)-Source.tar.bz2
-$(PKG)_URL      := http://www.pointclouds.org/assets/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := 1.7.1
+$(PKG)_CHECKSUM := 784bce606141260423ea04f37b093f59d4c94c6a
+$(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/PointCloudLibrary/pcl/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgomp boost eigen flann vtk
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "http://www.pointclouds.org/downloads/" | \
+    $(WGET) -q -O- "https://github.com/PointCloudLibrary/pcl/releases" | \
     grep '<a href=.*tar' | \
-    $(SED) -n 's,.*PCL-\([0-9][^>]*\)-Source.*,\1,p' | \
+    $(SED) -n 's,.*pcl-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
@@ -24,9 +24,10 @@ endef
 # that PCL wants to use.
 
 define $(PKG)_BUILD
-    cd '$(1)' && \
-        CXXFLAGS="-D__FLOAT_H -DFLT_MAX=__FLT_MAX__ -DFLT_MIN=__FLT_MIN__ -DDBL_MAX=__DBL_MAX__ -DDBL_MIN=__DBL_MIN__" \
-        cmake . \
+    mkdir '$(1).build'
+    cd '$(1).build' && \
+        CXXFLAGS="-D__FLOAT_H -DFLT_MAX=__FLT_MAX__ -DFLT_MIN=__FLT_MIN__ -DDBL_MAX=__DBL_MAX__ -DDBL_MIN=__DBL_MIN__ -DDBL_EPSILON=__DBL_EPSILON__" \
+        cmake '$(1)' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DVTK_DIR='$(PREFIX)/$(TARGET)/lib/vtk-5.8' \
         -DCMAKE_BUILD_TYPE=Release \
@@ -37,11 +38,14 @@ define $(PKG)_BUILD
         -DBUILD_apps=OFF \
         -DBUILD_examples=OFF \
         -DBUILD_global_tests=OFF \
-        -DBUILD_tools=OFF
-    $(MAKE) -C '$(1)' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)' -j 1 VERBOSE=1
-    $(MAKE) -C '$(1)' -j 1 install VERBOSE=1
+        -DBUILD_tools=OFF \
+        -DHAVE_MM_MALLOC_EXITCODE=0 \
+        -DHAVE_SSE4_1_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE2_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE_EXTENSIONS_EXITCODE=0
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)' -j 1 VERBOSE=1
+    $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
 
 $(PKG)_BUILD_SHARED =

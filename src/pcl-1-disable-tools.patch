@@ -1,0 +1,16 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -ur pcl-pcl-1.7.1.orig/visualization/CMakeLists.txt pcl-pcl-1.7.1/visualization/CMakeLists.txt
+--- pcl-pcl-1.7.1.orig/visualization/CMakeLists.txt	2014-05-09 20:37:41.000000000 +1000
++++ pcl-pcl-1.7.1/visualization/CMakeLists.txt	2014-05-09 20:48:58.000000000 +1000
+@@ -171,6 +171,8 @@
+         add_subdirectory(test)
+     endif(BUILD_TESTS)
+ 
+-    add_subdirectory(tools)
++    if(BUILD_tools)
++        add_subdirectory(tools)
++    endif(BUILD_tools)
+ 
+ endif(build)
