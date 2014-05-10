@@ -417,7 +417,7 @@ show-deps-%:
 	        $(newline)$(newline)$* downstream dependents:$(newline)\
 	        $(call WALK_DOWNSTREAM,$*))\
 	    @echo,\
-	    $(error package $* not found in index.html))
+	    $(error Package $* not found in index.html))
 
 # show upstream dependencies and downstream dependents separately
 # suitable for usage in shell with: `make show-downstream-deps-foo`
@@ -427,14 +427,14 @@ show-downstream-deps-%:
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $(call WALK_DOWNSTREAM,$*))\
 	    @echo -n,\
-	    $(error package $* not found in index.html))
+	    $(error Package $* not found in index.html))
 
 show-upstream-deps-%:
 	$(if $(call set_is_member,$*,$(PKGS)),\
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $(call WALK_UPSTREAM,$*))\
 	    @echo -n,\
-	    $(error package $* not found in index.html))
+	    $(error Package $* not found in index.html))
 
 .PHONY: clean
 clean:
@@ -474,30 +474,30 @@ update:
 
 update-package-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
-	     $(call UPDATE,$*,$(shell $($*_UPDATE))), \
-	     $(error package $* not found in index.html))
+	    $(call UPDATE,$*,$(shell $($*_UPDATE))), \
+	    $(error Package $* not found in index.html))
 
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 		$(call DOWNLOAD_PKG_ARCHIVE,$*) && \
 		$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
-	$(error package $* not found in index.html))
+	    $(error Package $* not found in index.html))
 
 cleanup-style:
 	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\
-            $(SED) ' \
-                s/\r//g; \
-                s/[ \t]\+$$//; \
-                s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
-                $(if $(filter %Makefile,$(FILE)),,\
-                    s/\t/    /g; \
-                ) \
-            ' < $(FILE) > $(TOP_DIR)/tmp-cleanup-style; \
-            diff -u $(FILE) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
-                || { echo '[cleanup] $(FILE)'; \
-                     cp $(TOP_DIR)/tmp-cleanup-style $(FILE); }; \
-            rm -f $(TOP_DIR)/tmp-cleanup-style; \
-        )
+        $(SED) ' \
+            s/\r//g; \
+            s/[ \t]\+$$//; \
+            s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
+            $(if $(filter %Makefile,$(FILE)),,\
+                s/\t/    /g; \
+            ) \
+        ' < $(FILE) > $(TOP_DIR)/tmp-cleanup-style; \
+        diff -u $(FILE) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
+            || { echo '[cleanup] $(FILE)'; \
+                 cp $(TOP_DIR)/tmp-cleanup-style $(FILE); }; \
+        rm -f $(TOP_DIR)/tmp-cleanup-style; \
+    )
 
 build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	$(foreach TARGET,$(MXE_TARGET_LIST),$(eval $(TARGET)_PKGCOUNT := 0))
@@ -563,7 +563,11 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	    $(if $($(PKG)_BUILD_ONLY),               \
 	        $(eval BUILD_ONLY_PKGCOUNT := $(call inc,$(BUILD_ONLY_PKGCOUNT)))))
 	@echo '<tr>'                            >> $@
-	$(eval TOTAL_PKGCOUNT := $(call subtract,$(call subtract,$(words $(PKGS)),$(VIRTUAL_PKGCOUNT)),$(BUILD_ONLY_PKGCOUNT)))
+	# TOTAL_PKGCOUNT = ( PKGS - VIRTUAL ) - BUILD_ONLY
+	$(eval TOTAL_PKGCOUNT :=                     \
+	    $(call subtract,                         \
+	        $(call subtract,$(words $(PKGS)),$(VIRTUAL_PKGCOUNT)),\
+	        $(BUILD_ONLY_PKGCOUNT)))
 	@echo '<th class="row">'                >> $@
 	@echo 'Total: $(TOTAL_PKGCOUNT)<br>(+$(VIRTUAL_PKGCOUNT) virtual +$(BUILD_ONLY_PKGCOUNT) native-only)' >> $@
 	@echo '</th>'                           >> $@
