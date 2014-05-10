@@ -380,11 +380,12 @@ SET_CLEAR = \
 WALK_UPSTREAM = \
     $(strip \
         $(foreach PKG,$(filter $(1),$(PKGS)),\
-            $(foreach DEP,$($(PKG)_DEPS) $(foreach TARGET,$(MXE_TARGETS),$($(PKG)_DEPS_$(TARGET))),\
-                $(if $(filter-out $(PKGS_VISITED),$(DEP)),\
-                    $(call SET_APPEND,PKGS_VISITED,$(DEP))\
-                    $(call WALK_UPSTREAM,$(DEP))\
-                    $(DEP)))))
+            $(foreach DEP,$($(PKG)_DEPS) $(foreach TARGET,$(MXE_TARGETS),\
+                $(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET)))),\
+                    $(if $(filter-out $(PKGS_VISITED),$(DEP)),\
+                        $(call SET_APPEND,PKGS_VISITED,$(DEP))\
+                        $(call WALK_UPSTREAM,$(DEP))\
+                        $(DEP)))))
 
 # not really walking downstream - that seems to be quadratic, so take
 # a linear approach and filter the fully expanded upstream for each pkg
