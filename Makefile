@@ -46,7 +46,8 @@ LOG_DIR    := $(PWD)/log
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
-PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
+PKGS       := $(call set_create,\
+    $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html'))
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
@@ -466,12 +467,12 @@ update:
 	$(foreach PKG,$(PKGS),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
 
 update-package-%:
-	$(if $(findstring $*~,$(addsuffix ~,$(PKGS))), \
+	$(if $(call set_is_member,$*,$(PKGS)), \
 	     $(call UPDATE,$*,$(shell $($*_UPDATE))), \
 	     $(error package $* not found in index.html))
 
 update-checksum-%:
-	$(if $(findstring $*~,$(addsuffix ~,$(PKGS))), \
+	$(if $(call set_is_member,$*,$(PKGS)), \
 		$(call DOWNLOAD_PKG_ARCHIVE,$*) && \
 		$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
 	$(error package $* not found in index.html))
