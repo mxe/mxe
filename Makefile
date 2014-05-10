@@ -410,25 +410,31 @@ all-filtered: $(filter-out $(call RECURSIVELY_EXCLUDED_PKGS),$(PKGS))
 
 # print a list of upstream dependencies and downstream dependents
 show-deps-%:
-	$(call SET_CLEAR,PKGS_VISITED)
-	$(info $* upstream dependencies:$(newline)\
-	    $(call WALK_UPSTREAM,$*)\
-	    $(newline)$(newline)$* downstream dependents:$(newline)\
-	    $(call WALK_DOWNSTREAM,$*))
-	@echo
+	$(if $(call set_is_member,$*,$(PKGS)),\
+	    $(call SET_CLEAR,PKGS_VISITED)\
+	    $(info $* upstream dependencies:$(newline)\
+	        $(call WALK_UPSTREAM,$*)\
+	        $(newline)$(newline)$* downstream dependents:$(newline)\
+	        $(call WALK_DOWNSTREAM,$*))\
+	    @echo,\
+	    $(error package $* not found in index.html))
 
 # show upstream dependencies and downstream dependents separately
 # suitable for usage in shell with: `make show-downstream-deps-foo`
 # @echo -n suppresses the "Nothing to be done" without an eol
 show-downstream-deps-%:
-	$(call SET_CLEAR,PKGS_VISITED)
-	$(info $(call WALK_DOWNSTREAM,$*))
-	@echo -n
+	$(if $(call set_is_member,$*,$(PKGS)),\
+	    $(call SET_CLEAR,PKGS_VISITED)\
+	    $(info $(call WALK_DOWNSTREAM,$*))\
+	    @echo -n,\
+	    $(error package $* not found in index.html))
 
 show-upstream-deps-%:
-	$(call SET_CLEAR,PKGS_VISITED)
-	$(info $(call WALK_UPSTREAM,$*))
-	@echo -n
+	$(if $(call set_is_member,$*,$(PKGS)),\
+	    $(call SET_CLEAR,PKGS_VISITED)\
+	    $(info $(call WALK_UPSTREAM,$*))\
+	    @echo -n,\
+	    $(error package $* not found in index.html))
 
 .PHONY: clean
 clean:
