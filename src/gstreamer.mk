@@ -3,8 +3,8 @@
 
 PKG             := gstreamer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := 1fedc2a0db8b9a7d5fa044810e947263100f3cbf
+$(PKG)_VERSION  := 1.2.2
+$(PKG)_CHECKSUM := f57418b6de15fe2ed2e0b42209b3e1e0f7add70f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
