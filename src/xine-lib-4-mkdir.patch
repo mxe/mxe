@@ -1,3 +1,6 @@
+This file is part of MXE.
+See index.html for further information.
+
 diff -urN xine-lib-1.2.4/lib/os_internal.h xine-lib-1.2.4-patch/lib/os_internal.h
 --- xine-lib-1.2.4/lib/os_internal.h	2012-02-05 21:17:00.000000000 +0200
 +++ xine-lib-1.2.4-patch/lib/os_internal.h	2014-01-03 19:05:56.643793781 +0200

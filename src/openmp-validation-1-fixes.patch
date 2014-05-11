@@ -1,3 +1,6 @@
+This file is part of MXE.
+See index.html for further information.
+
 diff -u OpenMP3.1_Validation/Makefile OpenMP3.1_Validation.new/Makefile
 --- OpenMP3.1_Validation/Makefile	2013-07-18 00:19:20.000000000 +1000
 +++ OpenMP3.1_Validation.new/Makefile	2014-02-22 16:23:37.000000000 +1100

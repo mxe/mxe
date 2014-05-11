@@ -1,3 +1,6 @@
+This file is part of MXE.
+See index.html for further information.
+
 diff -urN vcdimager-0.7.24/configure.ac vcdimager-0.7.24-patch/configure.ac
 --- vcdimager-0.7.24/configure.ac	2011-03-18 01:43:53.000000000 +0200
 +++ vcdimager-0.7.24-patch/configure.ac	2013-12-18 10:58:39.175296932 +0200

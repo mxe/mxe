@@ -1,3 +1,6 @@
+This file is part of MXE.
+See index.html for further information.
+
 diff -urN xine-lib-1.2.4/contrib/libdha/irq.c xine-lib-1.2.4-patch/contrib/libdha/irq.c
 --- xine-lib-1.2.4/contrib/libdha/irq.c	2012-02-05 21:16:59.000000000 +0200
 +++ xine-lib-1.2.4-patch/contrib/libdha/irq.c	2014-01-05 14:30:37.000000000 +0200

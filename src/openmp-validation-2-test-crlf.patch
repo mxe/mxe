@@ -1,3 +1,6 @@
+This file is part of MXE.
+See index.html for further information.
+
 diff -urN OpenMP3.1_Validation.orig/all-tests-openmp-validation.bat OpenMP3.1_Validation/all-tests-openmp-validation.bat
 --- OpenMP3.1_Validation.orig/all-tests-openmp-validation.bat	1970-01-01 10:00:00.000000000 +1000
 +++ OpenMP3.1_Validation/all-tests-openmp-validation.bat	2014-02-23 04:35:51.000000000 +1100

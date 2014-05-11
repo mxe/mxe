@@ -1,3 +1,6 @@
+This file is part of MXE.
+See index.html for further information.
+
 diff -urN libmpcdec-1.2.6/configure.ac libmpcdec-1.2.6-patch/configure.ac
 --- libmpcdec-1.2.6/configure.ac	2007-04-17 22:05:32.000000000 +0300
 +++ libmpcdec-1.2.6-patch/configure.ac	2013-12-17 15:45:49.892190871 +0200

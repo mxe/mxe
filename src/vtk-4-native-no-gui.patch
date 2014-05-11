@@ -1,5 +1,5 @@
-# This file is part of MXE.
-# See index.html for further information.
+This file is part of MXE.
+See index.html for further information.
 
 diff -r 26cf498f1dac Utilities/CMakeLists.txt
 --- a/Utilities/CMakeLists.txt	Tue Nov 22 18:02:40 2011 +1100
