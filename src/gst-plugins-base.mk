@@ -3,18 +3,14 @@
 
 PKG             := gst-plugins-base
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.2
-$(PKG)_CHECKSUM := cce95c868bdfccb8bcd37ccaa543af5c464240e1
+$(PKG)_VERSION  := 1.2.4
+$(PKG)_CHECKSUM := 036ce9eb723470cd8cc522057a59ad9468b3d489
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2 gstreamer liboil pango ogg vorbis theora
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://cgit.freedesktop.org/gstreamer/gst-plugins-base/refs/tags' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
-    head -1
-endef
+$(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-base/refs,$(gstreamer_UPDATE))
 
 define $(PKG)_BUILD
     find '$(1)' -name Makefile.in \

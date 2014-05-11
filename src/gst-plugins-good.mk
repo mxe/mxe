@@ -3,18 +3,14 @@
 
 PKG             := gst-plugins-good
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.2
-$(PKG)_CHECKSUM := d8c52f7883e98ffb35cd4b86cbd27420573ca864
+$(PKG)_VERSION  := 1.2.4
+$(PKG)_CHECKSUM := 4af2e2e091e306d69f36b5bbf722a557acb8d66e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libxml2 gstreamer gst-plugins-base liboil libshout cairo flac gtk2 jpeg libpng speex taglib wavpack
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://cgit.freedesktop.org/gstreamer/gst-plugins-good/refs/tags' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
-    head -1
-endef
+$(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-good/refs,$(gstreamer_UPDATE))
 
 define $(PKG)_BUILD
     find '$(1)' -name Makefile.in \

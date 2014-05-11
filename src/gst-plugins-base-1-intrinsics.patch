@@ -10,14 +10,14 @@ Needed with gcc 4.9. This will break non-x86 compilation -- I know.
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 ---
- gst/audioresample/Makefile.am | 3 ++-
+ gst/audioresample/Makefile.in | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/gst/audioresample/Makefile.am b/gst/audioresample/Makefile.am
+diff --git a/gst/audioresample/Makefile.in b/gst/audioresample/Makefile.in
 index 607115d..ae0056d 100644
---- a/gst/audioresample/Makefile.am
-+++ b/gst/audioresample/Makefile.am
-@@ -17,7 +17,8 @@ libgstaudioresample_la_CFLAGS = \
+--- a/gst/audioresample/Makefile.in
++++ b/gst/audioresample/Makefile.in
+@@ -538,7 +538,8 @@ libgstaudioresample_la_CFLAGS = \
  	$(GST_PLUGINS_BASE_CFLAGS) \
  	$(GST_BASE_CFLAGS) \
  	$(GST_CFLAGS) \
