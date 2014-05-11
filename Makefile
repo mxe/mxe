@@ -241,20 +241,20 @@ $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_DEPS,$(TARGET))))
 TARGET_HEADER = \
     $(strip with \
 	$(if $(value MAKECMDGOALS),\
-		$(words $(MAKECMDGOALS)) goal$(shell [ $(words $(MAKECMDGOALS)) == 1 ] || echo s) from command line,\
+	    $(words $(MAKECMDGOALS)) goal$(shell [ $(words $(MAKECMDGOALS)) == 1 ] || echo s) from command line,\
 	$(if $(value LOCAL_PKG_LIST),\
-		$(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words $(LOCAL_PKG_LIST)) == 1 ] || echo s) from settings.mk,\
-		$(words $(PKGS)) goal$(shell [ $(words $(PKGS)) == 1 ] || echo s) from src/*.mk)))
+	    $(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words $(LOCAL_PKG_LIST)) == 1 ] || echo s) from settings.mk,\
+	    $(words $(PKGS)) goal$(shell [ $(words $(PKGS)) == 1 ] || echo s) from src/*.mk)))
 
 define TARGET_RULE
 .PHONY: $(1)
 $(1): | $(if $(value $(1)_DEPS), \
-			$(if $(value MAKECMDGOALS),\
-				$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MAKECMDGOALS)), \
-				$(if $(value LOCAL_PKG_LIST),\
-					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
-					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
-		$($(1)_DEPS)
+	        $(if $(value MAKECMDGOALS),\
+	            $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MAKECMDGOALS)), \
+	            $(if $(value LOCAL_PKG_LIST),\
+	                $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
+	                $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
+	    $($(1)_DEPS)
 	@echo '[target]   $(1) $(call TARGET_HEADER)'
 	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),
 	    @echo
@@ -479,8 +479,8 @@ update-package-%:
 
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
-		$(call DOWNLOAD_PKG_ARCHIVE,$*) && \
-		$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
+	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
+	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
 	    $(error Package $* not found in index.html))
 
 cleanup-style:
