@@ -3,8 +3,8 @@
 
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.10.1
-$(PKG)_CHECKSUM := b4df76e2c0854625d2bedce70cc1eaf4205594ae
+$(PKG)_VERSION  := 1.11.0
+$(PKG)_CHECKSUM := 25efd2bffdea2e841377ca8c1fd49d89d02ac87e
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/CURRENT/$($(PKG)_FILE)
@@ -75,14 +75,14 @@ define $(PKG)_CONFIGURE
 endef
 
 define $(PKG)_MAKE
-    $(MAKE) -C '$(1)'       -j 1 lib-target
-    $(MAKE) -C '$(1)'       -j 1 install-lib
-    $(MAKE) -C '$(1)/port'  -j 1 install
-    $(MAKE) -C '$(1)/gcore' -j 1 install
-    $(MAKE) -C '$(1)/frmts' -j 1 install
-    $(MAKE) -C '$(1)/alg'   -j 1 install
-    $(MAKE) -C '$(1)/ogr'   -j 1 install OGR_ENABLED=
-    $(MAKE) -C '$(1)/apps'  -j 1 install BIN_LIST=
+    $(MAKE) -C '$(1)'       -j '$(JOBS)' lib-target
+    $(MAKE) -C '$(1)'       -j '$(JOBS)' install-lib
+    $(MAKE) -C '$(1)/port'  -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/gcore' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/frmts' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/alg'   -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/ogr'   -j '$(JOBS)' install OGR_ENABLED=
+    $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install BIN_LIST=
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef
 
