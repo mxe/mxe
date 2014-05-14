@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 #ec2-174-129-78-72.compute-1.amazonaws.com
 #http://s3tools.org/s3cmd
