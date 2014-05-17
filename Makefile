@@ -206,9 +206,9 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
 	@if [ -e check-requirements-failed ]; then \
 	    echo; \
-        echo 'Please have a look at "index.html" to ensure'; \
-        echo 'that your system meets all requirements.'; \
-        echo; \
+	    echo 'Please have a look at "index.html" to ensure'; \
+	    echo 'that your system meets all requirements.'; \
+	    echo; \
 	    rm check-requirements-failed; \
 	    exit 1; \
 	fi
