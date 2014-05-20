@@ -1,56 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From ce5c490ce4d6612a20cbfa2ed85e493af9513268 Mon Sep 17 00:00:00 2001
-From: Nicolas Cornu <ncornu@aldebaran-robotics.com>
-Date: Thu, 28 Nov 2013 00:06:41 +0100
-Subject: [PATCH 1/3] Allow temporary databases in sqlite driver
-
-http://www3.sqlite.org/inmemorydb.html#temp_db
-[ChangeLog][QtSql][QSQLITE] Enable creating temporary databases
-
-Change-Id: I9972fba5c91eca55cfc5a84f94cff03d19992324
-Reviewed-by: Tobias Koenig <tobias.koenig.qnx@kdab.com>
-Reviewed-by: Mark Brand <mabrand@mabrand.nl>
-(cherry picked from commit 9de879c8a43a012254036d7f08b55793fa325cb2)
-
-diff --git a/src/sql/doc/src/sql-driver.qdoc b/src/sql/doc/src/sql-driver.qdoc
-index f1fd2f6..9858e30 100644
---- a/src/sql/doc/src/sql-driver.qdoc
-+++ b/src/sql/doc/src/sql-driver.qdoc
-@@ -531,8 +531,8 @@
-     is not necessary to have a database server. SQLite operates on a
-     single file, which must be set as the database name when opening
-     a connection. If the file does not exist, SQLite will try to
--    create it. SQLite also supports in-memory databases, simply pass
--    ":memory:" as the database name.
-+    create it. SQLite also supports in-memory and temporary databases. Simply
-+    pass respectively ":memory:" or an empty string as the database name.
- 
-     SQLite has some restrictions regarding multiple users and
-     multiple transactions. If you try to read/write on a resource from different
-diff --git a/src/sql/drivers/sqlite/qsql_sqlite.cpp b/src/sql/drivers/sqlite/qsql_sqlite.cpp
-index c98d643..55ef092 100644
---- a/src/sql/drivers/sqlite/qsql_sqlite.cpp
-+++ b/src/sql/drivers/sqlite/qsql_sqlite.cpp
-@@ -597,9 +597,6 @@ bool QSQLiteDriver::open(const QString & db, const QString &, const QString &, c
-     if (isOpen())
-         close();
- 
--    if (db.isEmpty())
--        return false;
--
-     int timeOut = 5000;
-     bool sharedCache = false;
-     bool openReadOnlyOption = false;
--- 
-1.8.4.5
-
-
-From 428f22caa4b1f0283821f25d4df639a674a075e3 Mon Sep 17 00:00:00 2001
+From 6999f62177783a39628b0916750fa4870543c24c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 2/3] use pkg-config for freetype
+Subject: [PATCH 1/3] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -70,10 +24,10 @@ index 88be809..8fc19d2 100644
 1.8.4.5
 
 
-From 802941a977d99c1942bfca13d4fee6fc11c31fee Mon Sep 17 00:00:00 2001
+From cbb4f962f9744c4488b67b2ea28619ac1c990117 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 3/3] use pkgconfig for icu detection (MXE specific)
+Subject: [PATCH 2/3] use pkgconfig for icu detection (MXE specific)
 
 Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
 
@@ -100,6 +54,29 @@ index 2c1b431..e29798b 100644
 -}
 +CONFIG += link_pkgconfig
 +PKGCONFIG += icu-i18n
+-- 
+1.8.4.5
+
+
+From 6a595942f1eb699a3d694e674f39bb7e9b0cf4f3 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 8 Feb 2014 02:09:25 +0100
+Subject: [PATCH 3/3] extra windows.h for mingw4 compatibility
+
+Change-Id: I0dcf3b45f3eba31309525f14aee569afa5e1fd0a
+
+diff --git a/src/plugins/bearer/nativewifi/platformdefs.h b/src/plugins/bearer/nativewifi/platformdefs.h
+index 4e0f6d5..7855462 100644
+--- a/src/plugins/bearer/nativewifi/platformdefs.h
++++ b/src/plugins/bearer/nativewifi/platformdefs.h
+@@ -42,6 +42,7 @@
+ #ifndef PLATFORMDEFS_H
+ #define PLATFORMDEFS_H
+ 
++#include <windows.h>
+ #include <wtypes.h>
+ #undef interface
+ 
 -- 
 1.8.4.5
 

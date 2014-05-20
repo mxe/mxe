@@ -1,23 +1,25 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 7779365c9bd2741e28f16f99e2df19e4597e1c69 Mon Sep 17 00:00:00 2001
+From 470bf2340d0c275d9e02492f11e4103e081d1f93 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Sat, 18 May 2013 15:28:33 +0200
+Date: Wed, 21 May 2014 08:59:53 +0200
 Subject: [PATCH] Revert "idc is a host tool"
 
 This reverts commit a52db1a707f84eae74ce1cc3d1058f026e81ac13.
 
+Conflicts:
+	src/tools/idc/idc.pro
+
 diff --git a/src/tools/idc/idc.pro b/src/tools/idc/idc.pro
-index b9d8dee..05a592a 100644
+index 1898ed5..524ee2e 100644
 --- a/src/tools/idc/idc.pro
 +++ b/src/tools/idc/idc.pro
-@@ -1,5 +1,3 @@
+@@ -1,4 +1,3 @@
 -option(host_build)
--
- QT = core
- 
+ CONFIG += force_bootstrap
  SOURCES = main.cpp
+ 
 -- 
 1.8.4.5
 
