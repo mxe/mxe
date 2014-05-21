@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 5c83d44152cc0496cc0847a2495f659502a30e40
 $(PKG)_SUBDIR   := tcl$($(PKG)_VERSION)
 $(PKG)_FILE     := tcl$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tcl/Tcl/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := sqlite
+$(PKG)_DEPS     := gcc sqlite
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/tcl/files/Tcl/' | \
@@ -18,12 +18,9 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)/win' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --enable-static \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-threads \
-        --enable-64bit \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --exec-prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)/win' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+	$(if $(findstring 64,$(TARGET)), --enable-64bit) \
+	CFLAGS=-D__MINGW_EXCPT_DEFINE_PSDK
+    $(MAKE) -C '$(1)/win' install install-private-headers bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
