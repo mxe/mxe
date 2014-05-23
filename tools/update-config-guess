@@ -1,0 +1,43 @@
+#!/bin/sh
+# This file is part of MXE.
+# See index.html for further information.
+#
+# Script to automatically update GNU Make Standard Library
+# (http://gmsl.sourceforge.net/)
+
+clean(){
+    rm -rf tmp-config-guess
+}
+
+# Ported from main Makefile
+SED='sed'
+SORT='sort'
+if [ gsed --help >/dev/null 2>&1 ]; then
+    SED='gsed'
+fi
+if [ gsort --help >/dev/null 2>&1 ]; then
+    SED='gsort'
+fi
+WGET="wget --no-check-certificate
+         --user-agent=$(wget --version |
+         $SED -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')"
+
+# Current config.guess timestamp.
+current_version=$(grep 'timestamp.*=' 'ext/config.guess' 2>/dev/null | \
+                  head -1 | cut -d'=' -f2 | $SED -e 's/^ //' -e 's/ *$//' )
+
+clean
+# Fetch latest config.guess from Savannah Git
+$WGET -q -O tmp-config-guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
+# Latest config.guess timestamp
+latest_version=$(grep 'timestamp.*=' 'tmp-config-guess' | head -1 | \
+                 head -1 | cut -d'=' -f2 | $SED -e 's/^ //' -e 's/ *$//')
+if [ "$current_version" != "$latest_version" ]; then
+    echo "New version found: $current_version --> $latest_version"
+    rm -f ext/config.guess
+    cp -a tmp-config-guess ext/config.guess
+    chmod +x ext/config.guess
+    clean
+else
+    echo "No new version available: $current_version"
+fi
