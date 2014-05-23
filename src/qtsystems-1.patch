@@ -1,0 +1,81 @@
+From bc3b0fcc85eefedf4c9a1e2e0275147031a51b76 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 23 May 2014 11:56:29 +0200
+Subject: [PATCH 1/2] fix private include
+
+Change-Id: I99639f5941e8695718e67e7b6871dd796585868f
+
+diff --git a/src/serviceframework/ipc/instancemanager_p.h b/src/serviceframework/ipc/instancemanager_p.h
+index 50f6858..49b55ab 100644
+--- a/src/serviceframework/ipc/instancemanager_p.h
++++ b/src/serviceframework/ipc/instancemanager_p.h
+@@ -45,7 +45,7 @@
+ #include <qserviceframeworkglobal.h>
+ #include "qremoteserviceregister.h"
+ #include "qremoteserviceregisterentry_p.h"
+-#include <private/qserviceclientcredentials_p.h>
++#include "qserviceclientcredentials_p.h"
+ #include <QHash>
+ #include <QMutexLocker>
+ #include <QMetaObject>
+-- 
+1.8.4.5
+
+
+From b52a3abe8049a4c29c45d507c30c158aca41f18c Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 23 May 2014 12:04:12 +0200
+Subject: [PATCH 2/2] fix filename case
+
+Make it possible to cross compile on case sensitive system.
+
+Change-Id: Ie6f255eeb4d71b40926d1d27aad52af4246f5602
+
+diff --git a/src/systeminfo/windows/qbatteryinfo_win.cpp b/src/systeminfo/windows/qbatteryinfo_win.cpp
+index 19ddfc3..8e41ac6 100644
+--- a/src/systeminfo/windows/qbatteryinfo_win.cpp
++++ b/src/systeminfo/windows/qbatteryinfo_win.cpp
+@@ -48,7 +48,7 @@
+ #include <setupapi.h>
+ 
+ #if !defined (Q_CC_MINGW) || defined(__MINGW64_VERSION_MAJOR)
+-#  include <BatClass.h>
++#  include <batclass.h>
+ #endif
+ 
+ #include <QtCore/qmetaobject.h>
+diff --git a/src/systeminfo/windows/qdeviceinfo_win.cpp b/src/systeminfo/windows/qdeviceinfo_win.cpp
+index 257a4f4..408881c 100644
+--- a/src/systeminfo/windows/qdeviceinfo_win.cpp
++++ b/src/systeminfo/windows/qdeviceinfo_win.cpp
+@@ -50,8 +50,8 @@
+ #include <vfw.h>
+ #if !defined(Q_CC_MINGW) || defined(__MINGW64_VERSION_MAJOR)
+ #  include <ws2bth.h>
+-#  include <Bthsdpdef.h>
+-#  include <BluetoothAPIs.h>
++#  include <bthsdpdef.h>
++#  include <bluetoothapis.h>
+ #endif
+ 
+ QT_BEGIN_NAMESPACE
+diff --git a/src/systeminfo/windows/qwmihelper_win.cpp b/src/systeminfo/windows/qwmihelper_win.cpp
+index ce1e83a..4b0f9bd 100644
+--- a/src/systeminfo/windows/qwmihelper_win.cpp
++++ b/src/systeminfo/windows/qwmihelper_win.cpp
+@@ -46,9 +46,9 @@
+ #include "qwmihelper_win_p.h"
+ 
+ #include <QDebug>
+-#include <ObjBase.h>
+-#include <Wbemidl.h>
+-#include <Oleauto.h>
++#include <objbase.h>
++#include <wbemidl.h>
++#include <oleauto.h>
+ #include <QStringList>
+ #include <QUuid>
+ #include <comutil.h>
+-- 
+1.8.4.5
+
