@@ -18,16 +18,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # libtool looks for a pei* format when linking shared libs
+    # apparently there's no real difference b/w pei and pe
+    # so we set the libtool cache variables
+    # https://sourceware.org/cgi-bin/cvsweb.cgi/src/bfd/libpei.h?annotate=1.25&cvsroot=src
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-visibility \
         --disable-nls \
-        --with-expat
+        --with-expat \
+        $(if $(BUILD_SHARED),\
+            lt_cv_deplibs_check_method='file_magic file format (pe-i386|pe-x86-64)' \
+            lt_cv_file_magic_cmd='$$OBJDUMP -f')
     $(MAKE) -C '$(1)/xmpsdk/src' -j '$(JOBS)'
     $(MAKE) -C '$(1)/src'        -j '$(JOBS)' install-lib
 endef
-
-$(PKG)_BUILD_SHARED =
