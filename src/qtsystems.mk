@@ -2,8 +2,8 @@
 # See index.html for further information.
 PKG             := qtsystems
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2bbccf8ca1a4ba7e39413982986bc02d55e936be
-$(PKG)_CHECKSUM := d351adbd503008f1981e48f7f3cd7651778ebd48
+$(PKG)_VERSION  := 341352b4bb1e729f384a3af1ca966ebd123f16e3
+$(PKG)_CHECKSUM := f46c1a96363d7194b186d5fec7f6261ad64f9eea
 $(PKG)_SUBDIR   := qt-$(PKG)
 $(PKG)_FILE     := $($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://qt.gitorious.org/qt/qtsystems/archive/$($(PKG)_FILE)
