@@ -109,10 +109,10 @@ DOWNLOAD_PKG_ARCHIVE = \
         mkdir -p '$(PKG_DIR)' && \
         $(if $($(1)_URL_2), \
             ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-              $(WGET) -O- '$($(1)_URL_2)' || \
+              $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)' || \
               $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
               $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
-            ( $(WGET) -O- '$($(1)_URL)' || \
+            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
               $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
               $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
         $(if $($(1)_FIX_GZIP), \
