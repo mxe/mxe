@@ -22,4 +22,13 @@ define $(PKG)_BUILD
     cd '$(1)/Qt4Qt5' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' qscintilla.pro
     $(MAKE) -C '$(1)/Qt4Qt5' -j '$(JOBS)'
     $(MAKE) -C '$(1)/Qt4Qt5' -j '$(JOBS)' install
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -std=c++0x -pedantic \
+	-I'$(PREFIX)/$(TARGET)/qt5/include' \
+	-I'$(PREFIX)/$(TARGET)/qt5/include/QtCore' \
+	-I'$(PREFIX)/$(TARGET)/qt5/include/QtWidgets' \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-qscintilla2.exe' \
+	-lqscintilla2 \
+	$(shell grep QMAKE_PRL_LIBS "$(PREFIX)/$(TARGET)/qt5/lib/Qt5OpenGL.prl" | sed -e 's/.*=//')
 endef
