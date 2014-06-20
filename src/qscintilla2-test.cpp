@@ -9,7 +9,7 @@
 
 int main(int, char **)
 {
-	QsciScintilla *scintilla = new QsciScintilla();
-	scintilla->setText("Test Text");
-	return QString("Test Text").compare(scintilla->text()) != 0;
+    QsciScintilla *scintilla = new QsciScintilla();
+    scintilla->setText("Test Text");
+    return QString("Test Text").compare(scintilla->text()) != 0;
 }

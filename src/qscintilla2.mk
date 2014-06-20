@@ -12,10 +12,10 @@ $(PKG)_URL      := http://downloads.sourceforge.net/project/pyqt/QScintilla2/QSc
 $(PKG)_DEPS     := gcc qt5
 
 define $(PKG)_UPDATE
-	$(WGET) -q -O- 'http://www.riverbankcomputing.com/software/qscintilla/download' | \
-	grep QScintilla-gpl | \
-	head -n 1 | \
-	$(SED) -n 's,.*QScintilla-gpl-\([0-9][^>]*\)\.zip.*,\1,p'
+    $(WGET) -q -O- 'http://www.riverbankcomputing.com/software/qscintilla/download' | \
+        grep QScintilla-gpl | \
+        head -n 1 | \
+        $(SED) -n 's,.*QScintilla-gpl-\([0-9][^>]*\)\.zip.*,\1,p'
 endef
 
 define $(PKG)_BUILD
@@ -25,10 +25,10 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -pedantic \
-	-I'$(PREFIX)/$(TARGET)/qt5/include' \
-	-I'$(PREFIX)/$(TARGET)/qt5/include/QtCore' \
-	-I'$(PREFIX)/$(TARGET)/qt5/include/QtWidgets' \
+        -I'$(PREFIX)/$(TARGET)/qt5/include' \
+        -I'$(PREFIX)/$(TARGET)/qt5/include/QtCore' \
+        -I'$(PREFIX)/$(TARGET)/qt5/include/QtWidgets' \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-qscintilla2.exe' \
-	-lqscintilla2 \
-	$(shell grep QMAKE_PRL_LIBS "$(PREFIX)/$(TARGET)/qt5/lib/Qt5OpenGL.prl" | sed -e 's/.*=//')
+        -lqscintilla2 \
+        $(shell grep QMAKE_PRL_LIBS "$(PREFIX)/$(TARGET)/qt5/lib/Qt5OpenGL.prl" | sed -e 's/.*=//')
 endef
