@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := QScintilla-gpl-$($(PKG)_VERSION)
 $(PKG)_FILE     := QScintilla-gpl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.sourceforge.net/project/pyqt/QScintilla2/QScintilla-$($(PKG)_VERSION)/$($(PKG)_FILE)?r=http%3A%2F%2Fwww.riverbankcomputing.com%2Fsoftware%2Fqscintilla%2Fdownload&ts=1402598406&use_mirror=freefr 
 
-$(PKG)_DEPS     := gcc qt5
+$(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.riverbankcomputing.com/software/qscintilla/download' | \
