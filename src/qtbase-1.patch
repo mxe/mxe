@@ -58,46 +58,24 @@ index 2c1b431..e29798b 100644
 1.8.4.5
 
 
-From 377ebc9636652d5ba46bcf71b60c6bfe91f46008 Mon Sep 17 00:00:00 2001
+From ab88cc720914a7d472553b98259c9f1b7f26adcc Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 18 Jun 2014 16:37:08 +0200
-Subject: [PATCH 3/3] workaround harfbuzz/freetype static linking circularity
- (MXE-specific)
+Date: Sat, 21 Jun 2014 13:12:49 +0200
+Subject: [PATCH 3/3] use pkg-config for harfbuzz (MXE specific)
 
-Pkg-config provides the -lfreetype needed by -lharfbuzz.
-Fontconfig also introduces -lfreetype.
-Manually add -lharfbuzz_too needed after these -lfreetype occurrences.
+Change-Id: Id4e4c37d68b63c9f480d72a561d95d4d2a5ded50
 
-This assumes that the libharfbuzz_too.a exists and is a symbolic
-link (or copy of) libharfbuzz.a. If we were to simply add an
-extra -lharfbuzz, qmake would remove the duplicate.
-
-Change-Id: Ia6a1d1d58cfc58ee470aab4830309596085d52a2
-
-diff --git a/configure b/configure
-index 601d84a..24ea55e 100755
---- a/configure
-+++ b/configure
-@@ -4812,6 +4812,7 @@ if [ "$CFG_FONTCONFIG" != "no" ]; then
-         QT_CFLAGS_FONTCONFIG=
-         QT_LIBS_FONTCONFIG="-lfreetype -lfontconfig"
-     fi
-+    [ "$XPLATFORM_MINGW" = "yes" ] && [ "$CFG_SHARED" = "no" ] && QT_LIBS_FONTCONFIG="$QT_LIBS_FONTCONFIG -lharfbuzz_too"
-     if compileTest unix/fontconfig "FontConfig" $QT_CFLAGS_FONTCONFIG $QT_LIBS_FONTCONFIG; then
-         QT_CONFIG="$QT_CONFIG fontconfig"
-         QMakeVar set QMAKE_CFLAGS_FONTCONFIG "$QT_CFLAGS_FONTCONFIG"
 diff --git a/src/3rdparty/harfbuzzng.pri b/src/3rdparty/harfbuzzng.pri
-index 7443368..466135e 100644
+index 7443368..c24e684 100644
 --- a/src/3rdparty/harfbuzzng.pri
 +++ b/src/3rdparty/harfbuzzng.pri
-@@ -2,5 +2,7 @@ contains(QT_CONFIG, harfbuzz) {
+@@ -2,5 +2,6 @@ contains(QT_CONFIG, harfbuzz) {
      INCLUDEPATH += $$PWD/harfbuzz-ng/include
      LIBS_PRIVATE += -L$$QT_BUILD_TREE/lib -lqtharfbuzzng$$qtPlatformTargetSuffix()
  } else:contains(QT_CONFIG, system-harfbuzz) {
 -    LIBS_PRIVATE += -lharfbuzz
-+    isEmpty(PKG_CONFIG):PKG_CONFIG = pkg-config
-+    LIBS_PRIVATE += $$system($$PKG_CONFIG --static --libs harfbuzz)
-+    mingw:static:contains(LIBS_PRIVATE, -lfreetype):LIBS_PRIVATE += -lharfbuzz_too
++    CONFIG += link_pkgconfig
++    PKGCONFIG += harfbuzz
  }
 -- 
 1.8.4.5

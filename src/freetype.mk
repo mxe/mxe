@@ -18,11 +18,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # alias harfbuzz to handle linking circularity
+    $(if $(BUILD_STATIC),\
+        ln -sf libharfbuzz.a '$(PREFIX)/$(TARGET)/lib/libharfbuzz_too.a',)
     cd '$(1)' && GNUMAKE=$(MAKE) ./configure \
         $(MXE_CONFIGURE_OPTS) \
         LIBPNG_CFLAGS="`$(TARGET)-pkg-config libpng --cflags`" \
         LIBPNG_LDFLAGS="`$(TARGET)-pkg-config libpng --libs`" \
-        FT2_EXTRA_LIBS="`$(TARGET)-pkg-config libpng --libs`"
+        FT2_EXTRA_LIBS="`$(TARGET)-pkg-config libpng --libs`" \
+        $(if $(BUILD_STATIC),HARFBUZZ_LIBS="`$(TARGET)-pkg-config harfbuzz --libs` -lharfbuzz_too",)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/bin/freetype-config' '$(PREFIX)/bin/$(TARGET)-freetype-config'

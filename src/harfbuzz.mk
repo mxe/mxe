@@ -22,6 +22,4 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         LIBS='-lstdc++'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
-    # alias for this library will help qmake deal with the freetype/harfbuzz linking circularity
-    ln -sf libharfbuzz.a '$(PREFIX)/$(TARGET)/lib/libharfbuzz_too.a'
 endef
