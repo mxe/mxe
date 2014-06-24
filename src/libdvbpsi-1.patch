@@ -1,0 +1,69 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff --git a/src/descriptor.h b/src/descriptor.h
+--- a/src/descriptor.h
++++ b/src/descriptor.h
+@@ -41,6 +41,7 @@
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
++#include <sys/types.h>
+ 
+ /*****************************************************************************
+  * common definitions
+
+diff --git a/configure b/configure
+--- a/configure
++++ b/configure
+@@ -11864,7 +11864,7 @@ 
+
+ CFLAGS_save="${CFLAGS}"
+ 
+-CFLAGS_dist="-Wall -Werror --std=gnu99 -D_GNU_SOURCE"
++CFLAGS_dist="-Wall -Werror --std=gnu99"
+ CFLAGS_dist="${CFLAGS_dist} -Wpointer-arith -Wcast-align -Wcast-qual -Wstrict-prototypes -Wshadow -Waggregate-return -Wmissing-prototypes -Wnested-externs -Wsign-compare"
+ 
+ case "${target_os}" in
+
+diff --git a/src/dvbpsi.c b/src/dvbpsi.c
+--- a/src/dvbpsi.c
++++ b/src/dvbpsi.c
+@@ -531,12 +531,12 @@
+             va_end(ap);
+             return;
+         }
+-        if (snprintf(&msg, DVBPSI_MSG_SIZE, DVBPSI_MSG_FORMAT, ap) < 0) {
++        if (snprintf(msg, DVBPSI_MSG_SIZE, DVBPSI_MSG_FORMAT, ap) < 0) {
+             va_end(ap);
+             free(msg);
+             return;
+         }
+-        int err = vsnprintf(&msg, DVBPSI_MSG_SIZE, fmt, ap);
++        int err = vsnprintf(msg, DVBPSI_MSG_SIZE, fmt, ap);
+ #endif
+         va_end(ap);
+         if (err > DVBPSI_MSG_NONE) {
+@@ -575,7 +575,7 @@
+         free(msg);                                              \
+     } while(0);
+ #   else
+-#       define DVBPSI_MSG_COMMON                                \
++#       define DVBPSI_MSG_COMMON(level)                         \
+     do {                                                        \
+         va_list ap;                                             \
+         va_start(ap, fmt);                                      \
+@@ -584,11 +584,11 @@
+             va_end(ap);                                         \
+             return;                                             \
+         }                                                       \
+-        if (snprintf(&msg, DVBPSI_MSG_SIZE, DVBPSI_MSG_FORMAT, src) < 0) { \
++        if (snprintf(msg, DVBPSI_MSG_SIZE, DVBPSI_MSG_FORMAT, "?", src) < 0) { \
+             va_end(ap);                                         \
+             return;                                             \
+         }                                                       \
+-        int err = vsnprintf(&msg, DVBPSI_MSG_SIZE, fmt, ap);    \
++        int err = vsnprintf(msg, DVBPSI_MSG_SIZE, fmt, ap);     \
+         va_end(ap);                                             \
+         if (err > 0) {                                          \
+             if (dvbpsi->pf_message)                             \
