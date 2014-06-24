@@ -22,8 +22,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && aclocal
     cd '$(1)' && libtoolize
-    cd '$(1)' && automake --add-missing
-    cd '$(1)' && autoreconf
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j 1 install
