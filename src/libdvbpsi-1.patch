@@ -4,14 +4,14 @@ See index.html for further information.
 diff --git a/src/descriptor.h b/src/descriptor.h
 --- a/src/descriptor.h
 +++ b/src/descriptor.h
-@@ -37,6 +37,7 @@
- #ifndef _DVBPSI_DESCRIPTOR_H_
- #define _DVBPSI_DESCRIPTOR_H_
- 
-+#include <sys/types.h>
+@@ -41,6 +41,7 @@
  #ifdef __cplusplus
  extern "C" {
  #endif
++#include <sys/types.h>
+ 
+ /*****************************************************************************
+  * common definitions
 
 diff --git a/configure b/configure
 --- a/configure
@@ -67,4 +67,3 @@ diff --git a/src/dvbpsi.c b/src/dvbpsi.c
          va_end(ap);                                             \
          if (err > 0) {                                          \
              if (dvbpsi->pf_message)                             \
-
