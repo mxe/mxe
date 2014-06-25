@@ -1,14 +1,14 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-From 5598f4297656326fd8a50fad2323fd5fe7e48653 Mon Sep 17 00:00:00 2001
+From 18cd79f0f377dff53720742a946123ea9800b164 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 21 May 2014 11:31:45 +0200
 Subject: [PATCH] disable windeployqt (MXE specific)
 
 
 diff --git a/src/src.pro b/src/src.pro
-index a07a3bb..bfbf722 100644
+index a486d65..34416c9 100644
 --- a/src/src.pro
 +++ b/src/src.pro
 @@ -27,7 +27,7 @@ android {
@@ -18,8 +18,8 @@ index a07a3bb..bfbf722 100644
 -win32|winrt:SUBDIRS += windeployqt
 +#win32|winrt:SUBDIRS += windeployqt
  winrt:SUBDIRS += winrtrunner qtd3dservice
+ qtHaveModule(gui):!android:!ios:!qnx:!wince*:!winrt*:SUBDIRS += qtdiag
  
- qtNomakeTools( \
 -- 
 1.8.4.5
 
