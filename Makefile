@@ -436,7 +436,7 @@ show-upstream-deps-%:
 
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX)/* build-matrix.html
+	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html
 
 .PHONY: clean-pkg
 clean-pkg:
