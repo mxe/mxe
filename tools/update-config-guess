@@ -37,7 +37,7 @@ if [ "$current_version" != "$latest_version" ]; then
     rm -f ext/config.guess
     cp -a tmp-config-guess ext/config.guess
     chmod +x ext/config.guess
-    clean
 else
     echo "No new version available: $current_version"
 fi
+clean
