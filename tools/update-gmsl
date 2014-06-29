@@ -42,4 +42,6 @@ if [ $current_version != $latest_version ]; then
     cp -a gmsl-${latest_version}/__gmsl ext/
     cp -a gmsl-${latest_version}/index.html doc/gmsl.html
     clean
+else
+    echo "No new version available: $current_version"
 fi
