@@ -32,28 +32,3 @@ index 2f8bb3d..441b42b 100644
 -- 
 1.8.1.4
 
-
-From 48f27fc5b79373e696cd8db2a5195d9efc084c13 Mon Sep 17 00:00:00 2001
-From: "a@a.org" <a@a.org>
-Date: Mon, 24 Oct 2011 14:09:38 +0200
-Subject: [PATCH 2/2] do not check autoconf version
-
-
-diff --git a/configure.in b/configure.in
-index 441b42b..1257071 100644
---- a/configure.in
-+++ b/configure.in
-@@ -19,10 +19,6 @@ m4_pattern_forbid(^PGAC_)dnl to catch undefined macros
- 
- AC_INIT([PostgreSQL], [9.2.4], [pgsql-bugs@postgresql.org])
- 
--m4_if(m4_defn([m4_PACKAGE_VERSION]), [2.63], [], [m4_fatal([Autoconf version 2.63 is required.
--Untested combinations of 'autoconf' and PostgreSQL versions are not
--recommended.  You can remove the check from 'configure.in' but it is then
--your responsibility whether the result works or not.])])
- AC_COPYRIGHT([Copyright (c) 1996-2012, PostgreSQL Global Development Group])
- AC_CONFIG_SRCDIR([src/backend/access/common/heaptuple.c])
- AC_CONFIG_AUX_DIR(config)
--- 
-1.8.1.4
-
