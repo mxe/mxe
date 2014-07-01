@@ -43,9 +43,9 @@ define $(PKG)_BUILD
         --with-system-tzdata=/dev/null \
         LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl --libs`" \
         ac_cv_func_getaddrinfo=no
-    $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install $(if $(BUILD_STATIC),haslibarule= shlib=)
-    $(MAKE) -C '$(1)'/src/port             -j '$(JOBS)'         $(if $(BUILD_STATIC),haslibarule= shlib=)
-    $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install $(if $(BUILD_STATIC),haslibarule= shlib=)
+    $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install
+    $(MAKE) -C '$(1)'/src/port             -j '$(JOBS)'
+    $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install
     $(INSTALL) -m644 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/src/include/postgres_ext.h' '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -d    '$(PREFIX)/$(TARGET)/include/libpq'
