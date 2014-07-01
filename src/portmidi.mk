@@ -26,8 +26,13 @@ define $(PKG)_BUILD
 
     # install library files
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/build/libportmidi$(if $(BUILD_STATIC),_s).$(LIB_SUFFIX)' \
-                     '$(PREFIX)/$(TARGET)/lib/libportmidi.$(LIB_SUFFIX)'
+    $(if $(BUILD_STATIC),                                             \
+        $(INSTALL) -m644 '$(1)/build/libportmidi_s.a'                 \
+                         '$(PREFIX)/$(TARGET)/lib/libportmidi.a',     \
+        $(INSTALL) -m755 '$(1)/build/libportmidi.dll'                 \
+                         '$(PREFIX)/$(TARGET)/bin/libportmidi.dll' && \
+        $(INSTALL) -m644 '$(1)/build/libportmidi.dll.a'               \
+                         '$(PREFIX)/$(TARGET)/lib/libportmidi.dll.a')
 
     # install include files
     $(INSTALL) -d                                '$(PREFIX)/$(TARGET)/include'
