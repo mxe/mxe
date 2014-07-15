@@ -71,6 +71,10 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt4
 
+    # lrelease (from linguist) needed to prepare translation files
+    $(MAKE) -C '$(1)/tools/linguist/lrelease' -j '$(JOBS)' install
+    ln -fs '$(PREFIX)/$(TARGET)/bin/lrelease' '$(PREFIX)/bin/$(TARGET)-lrelease'
+
     cd '$(1)/tools/assistant' && '$(1)/bin/qmake' assistant.pro
     # can't figure out where -lQtCLucene comes from so use
     # sed on the output instead of patching the input
