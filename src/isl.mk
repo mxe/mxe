@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 0.12.2
 $(PKG)_CHECKSUM := ca98a91e35fb3ded10d080342065919764d6f928
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := ftp://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
+$(PKG)_URL      := http://isl.gforge.inria.fr/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gmp
 
 # stick to tested versions from gcc

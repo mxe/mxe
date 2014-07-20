@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 1.28
 $(PKG)_CHECKSUM := 725587211b229c156e29fa2ad116b0ef71a7ca17
 $(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
 $(PKG)_FILE     := libidn-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := ftp://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext libiconv
 
 define $(PKG)_UPDATE
