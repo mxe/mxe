@@ -1,0 +1,3 @@
+#!/bin/sh 
+rm -f /home/otbtesting/win-sources/mxe/usr/i686-pc-mingw32.shared/qt/lib/libQ*
+#rm -f /home/otbtesting/win-sources/mxe/usr/i686-pc-mingw32.shared/qt/lib/
