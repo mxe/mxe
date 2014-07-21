@@ -1,0 +1,16 @@
+diff -burN OpenThreads-3.2/TryRunResults.cmake OpenThreads-3.2-new/TryRunResults.cmake
+--- OpenThreads-3.2/TryRunResults.cmake	1970-01-01 01:00:00.000000000 +0100
++++ OpenThreads-3.2-new/TryRunResults.cmake	2014-07-21 09:49:26.011023281 +0200
+@@ -0,0 +1,12 @@
++SET( _OPENTHREADS_ATOMIC_USE_GCC_BUILTINS
++     "1"
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( _OPENTHREADS_ATOMIC_USE_MIPOSPRO_BUILTINS
++     "0"
++     CACHE STRING "Output from TRY_RUN" FORCE)
++SET( _OPENTHREADS_ATOMIC_USE_SUN
++     "0"
++     CACHE STRING "Output from TRY_RUN" FORCE)
++SET(_OPENTHREADS_ATOMIC_USE_WIN32_INTERLOCKED
++     "0"
++     CACHE STRING "Output from TRY_RUN" FORCE)
