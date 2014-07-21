@@ -19,10 +19,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+      $(MXE_CONFIGURE_OPTS) \
+CXXFLAGS='-DGEOS_INLINE=1'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
@@ -31,4 +29,4 @@ define $(PKG)_BUILD
         -lgeos_c `'$(PREFIX)/$(TARGET)/bin/geos-config' --cflags --libs` -lstdc++
 endef
 
-$(PKG)_BUILD_SHARED =
+##$(PKG)_BUILD_SHARED =

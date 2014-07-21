@@ -22,16 +22,18 @@ define $(PKG)_BUILD
     mkdir '$(1).build'
     cd    '$(1).build' && cmake '$(1)' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DGLFW_BUILD_EXAMPLES=FALSE \
-        -DGLFW_BUILD_TESTS=FALSE \
-        -DGLFW_INSTALL_PKG_CONFIG=TRUE \
-        -DGLFW_PKG_LIBS='-lopengl32 -lgdi32'
+	-DBUILD_SHARED_LIBS=ON \
+        -DGLFW_BUILD_EXAMPLES=OFF \
+        -DGLFW_BUILD_TESTS=OFF \
+        -DGLFW_INSTALL_PKG_CONFIG=ON \
+        -DGLFW_LIBRARIES='-lopengl32 -lgdi32'
         $(MAKE) -C '$(1).build' -j '$(JOBS)' install
+
+#remove static; ugly hack; getting undefined refs
+	rm -f '$(PREFIX)/$(TARGET)/lib/libglfw3.a'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-glfw3.exe' \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-glfw3.exe -lopengl32 ' \
         `'$(TARGET)-pkg-config' glfw3 --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
