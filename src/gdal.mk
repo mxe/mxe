@@ -22,8 +22,8 @@ define $(PKG)_CONFIGURE
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --enable-static \
-        --disable-shared \
+        --enable-shared \
+        --disable-static \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-bsb \
         --with-grib \
@@ -88,9 +88,7 @@ endef
 
 define $(PKG)_BUILD
     $($(PKG)_CONFIGURE)\
-        --with-hdf4='$(PREFIX)/$(TARGET)' \
-        --with-netcdf='$(PREFIX)/$(TARGET)' \
-        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+##        LIBS="-ljpeg `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $($(PKG)_MAKE)
 endef
 
@@ -106,6 +104,6 @@ define $(PKG)_BUILD_i686-w64-mingw32
     $($(PKG)_MAKE)
 endef
 
-$(PKG)_BUILD_i686-pc-mingw32.shared =
+#$(PKG)_BUILD_i686-pc-mingw32.shared =
 $(PKG)_BUILD_i686-w64-mingw32.shared =
 $(PKG)_BUILD_x86_64-w64-mingw32.shared =

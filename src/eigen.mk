@@ -30,4 +30,4 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' --cflags --libs eigen3`
 endef
 
-$(PKG)_BUILD_SHARED =
+#$(PKG)_BUILD_SHARED =

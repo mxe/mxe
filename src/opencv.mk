@@ -26,7 +26,7 @@ define $(PKG)_BUILD
       -DWITH_GTK=OFF \
       -DWITH_VIDEOINPUT=ON \
       -DWITH_XINE=OFF \
-      -DBUILD_SHARED_LIBS=OFF \
+      -DBUILD_SHARED_LIBS=ON \
       -DBUILD_opencv_apps=OFF \
       -DBUILD_DOCS=OFF \
       -DBUILD_EXAMPLES=OFF \
@@ -41,13 +41,12 @@ define $(PKG)_BUILD
       -DBUILD_JPEG=OFF \
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
-      -DCMAKE_VERBOSE=ON \
       -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
       -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500' \
       '$(1)'
 
     # install
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install ##VERBOSE=1
 
     # fixup and install pkg-config file
     # openexr isn't available on x86_64-w64-mingw32
@@ -55,6 +54,7 @@ define $(PKG)_BUILD
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
         $(SED) -i 's/OpenEXR//' '$(1).build/unix-install/opencv.pc')
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(1).build/unix-install/opencv.pc'
+    $(SED) -i 's/dll/dll.a/g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-g++' \
@@ -62,5 +62,3 @@ define $(PKG)_BUILD
         '$(1)/samples/c/fback_c.c' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
         `'$(TARGET)-pkg-config' opencv --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =

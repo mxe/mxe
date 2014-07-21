@@ -18,15 +18,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,/usr/local,@prefix@,' '$(1)/bin/Makefile.in'
-    touch '$(1)/configure'
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        LIBS="`'$(TARGET)-pkg-config' --libs libtiff-4` -ljpeg -lz"
-    $(MAKE) -C '$(1)' -j 1 all install EXEEXT=.remove-me MAKE='$(MAKE)'
-    rm -fv '$(PREFIX)/$(TARGET)'/bin/*.remove-me
+    mkdir '$(1).build'
+    cd '$(1).build' && cmake \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DBUILD_SHARED_LIBS=ON \
+	-DGEOTIFF_BIN_SUBDIR='$(PREFIX)/$(TARGET)/bin' \
+	-DGEOTIFF_CSV_DATA_DIR='$(1)/csv' \
+	-DWITH_JPEG=ON \
+	-DWITH_PROJ=ON \
+	-DWITH_ZLIB=ON \
+	-DWITH_TIFF=ON \
+	-DCMAKE_VERBOSE_MAKEFILE=OFF \
+        '$(1)'
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install
 endef
-
-$(PKG)_BUILD_SHARED =
