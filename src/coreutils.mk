@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 8.22
 $(PKG)_CHECKSUM := cc7fe47b21eb49dd2ee4cdb707570f42fb2c8cc6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gettext gmp libiconv libtool
 
 define $(PKG)_UPDATE

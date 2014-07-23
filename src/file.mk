@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 5.19
 $(PKG)_CHECKSUM := 0dff09eb44fde1998be79e8d312e9be4456d31ee
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.cross-lfs.org/pub/clfs/conglomeration/file/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgnurx
 
 define $(PKG)_UPDATE

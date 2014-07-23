@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 0.9.33
 $(PKG)_CHECKSUM := 75f53089ba86b5aa4e4eeb2579c47fed6ca63c72
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/libmicrohttpd/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/libmicrohttpd/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/libmicrohttpd/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc plibc pthreads
 
 define $(PKG)_UPDATE
