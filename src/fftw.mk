@@ -3,8 +3,8 @@
 
 PKG             := fftw
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.3
-$(PKG)_CHECKSUM := 11487180928d05746d431ebe7a176b52fe205cf9
+$(PKG)_VERSION  := 3.3.4
+$(PKG)_CHECKSUM := fd508bac8ac13b3a46152c54b7ac885b69734262
 $(PKG)_SUBDIR   := fftw-$($(PKG)_VERSION)
 $(PKG)_FILE     := fftw-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.fftw.org/$($(PKG)_FILE)
