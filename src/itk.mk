@@ -3,11 +3,11 @@
 
 PKG             := itk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3d95bcf
-$(PKG)_CHECKSUM := 564f93955b856d019864ae25a14de68c0ac53577
-$(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := http://localhost/tmp-win-sources/$($(PKG)_FILE)
+$(PKG)_VERSION  := 4.7
+$(PKG)_CHECKSUM := 2e296335c437617c2a4eee50f87e1638f3d5a477
+$(PKG)_SUBDIR   := a226067aaca0c8be89b49fee3ba03a04c60f0e16
+$(PKG)_FILE     := $($(PKG)_SUBDIR).zip
+$(PKG)_URL      := https://github.com/InsightSoftwareConsortium/ITK/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc hdf5 libpng tiff jpeg expat
 
 define $(PKG)_UPDATE
@@ -29,6 +29,5 @@ define $(PKG)_BUILD
         -DITK_USE_SYSTEM_JPEG=ON \
         -DITK_USE_SYSTEM_EXPAT=ON \
         '$(1)'
-    $(MAKE) -C '$(1).build' install
-###    $(MAKE) -C '$(1).build' -j '$(JOBS)' install
+   $(MAKE) -C '$(1).build' -j '$(JOBS)' install
 endef
