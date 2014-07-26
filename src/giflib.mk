@@ -19,13 +19,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         CPPFLAGS='-D_OPEN_BINARY'
     echo 'all:' > '$(1)/doc/Makefile'
     $(MAKE) -C '$(1)/lib' -j '$(JOBS)' install
 endef
-
-$(PKG)_BUILD_SHARED =
