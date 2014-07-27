@@ -42,7 +42,7 @@
 # This is the GNU Make Standard Library version number as a list with
 # three items: major, minor, revision
 
-gmsl_version := 1 1 5
+gmsl_version := 1 1 6
 
 __gmsl_name := GNU Make Standard Library
 
@@ -515,7 +515,8 @@ int_decode = $(__gmsl_tr1)$(words $1)
 # Returns:   Returns the integer encoded as a string of x's
 # ----------------------------------------------------------------------------
 __int_encode = $(if $1,$(if $(call seq,$(words $(wordlist 1,$1,$2)),$1),$(wordlist 1,$1,$2),$(call __int_encode,$1,$(if $2,$2 $2,x))))
-int_encode = $(__gmsl_tr1)$(call __int_encode,$1)
+__strip_leading_zero = $(if $1,$(if $(call seq,$(patsubst 0%,%,$1),$1),$1,$(call __strip_leading_zero,$(patsubst 0%,%,$1))),0)
+int_encode = $(__gmsl_tr1)$(call __int_encode,$(call __strip_leading_zero,$1))
 
 # The arithmetic library functions come in two forms: one form of each
 # function takes integers as arguments and the other form takes the
