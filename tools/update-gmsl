@@ -34,6 +34,7 @@ latest_version=$(
 
 clean
 if [ $current_version != $latest_version ]; then
+    echo "New version found: $current_version --> $latest_version"
     $WGET -q -O tmp-gmsl.tar.gz \
         "http://downloads.sourceforge.net/project/gmsl/GNU%20Make%20Standard%20Library/v${latest_version}/gmsl-${latest_version}.tar.gz"
     tar xzf tmp-gmsl.tar.gz
