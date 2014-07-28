@@ -3,11 +3,11 @@
 
 PKG             := itk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.6
+$(PKG)_VERSION  := 4.6.0
 $(PKG)_CHECKSUM := 490d221bd7441ef1d151092a72082998c597308e
 $(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).0.tar.xz
-$(PKG)_URL      := http://sourceforge.net/projects/$(PKG)/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
+$(PKG)_URL      := http://sourceforge.net/projects/$(PKG)/files/$(PKG)/4.6/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc hdf5 libpng tiff jpeg expat
 
 #git commit 3d95bcf
