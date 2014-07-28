@@ -5,9 +5,15 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2
 $(PKG)_CHECKSUM := a45e117992f68075acfab8967e896f52495d4de0
 $(PKG)_SUBDIR   := OpenThreads-$($(PKG)_VERSION)
-$(PKG)_FILE     := OpenThreads-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://localhost/tmp-win-sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc 
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_URL      := http://sourceforge.net/projects/mxedeps/files/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
+
+define $(PKG)_UPDATE
+    echo 'TODO: Updates for package OpenThreads need to be written.' >&2;
+    echo $(itk_VERSION)
+endef
+
 
 define $(PKG)_BUILD
     mkdir '$(1).build'

@@ -4,10 +4,15 @@ PKG             := ossim
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.18
 $(PKG)_CHECKSUM := 64a1018148d3ea4e53b47940e24aba2bff3c9185
-$(PKG)_SUBDIR   := ossim-$($(PKG)_VERSION)
-$(PKG)_FILE     := ossim-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://localhost/tmp-win-sources/$($(PKG)_FILE)
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := http://sourceforge.net/projects/mxedeps/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg tiff proj libpng geos openthreads
+
+define $(PKG)_UPDATE
+    echo 'TODO: Updates for package OSSIM need to be written.' >&2;
+    echo $(itk_VERSION)
+endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
