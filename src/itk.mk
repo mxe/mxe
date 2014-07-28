@@ -3,16 +3,18 @@
 
 PKG             := itk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3d95bcf
-$(PKG)_CHECKSUM := 564f93955b856d019864ae25a14de68c0ac53577
+$(PKG)_VERSION  := 4.6
+$(PKG)_CHECKSUM := 490d221bd7441ef1d151092a72082998c597308e
 $(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := http://localhost/tmp-win-sources/$($(PKG)_FILE)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).0.tar.xz
+$(PKG)_URL      := http://sourceforge.net/projects/$(PKG)/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc hdf5 libpng tiff jpeg expat
 
+#git commit 3d95bcf
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package ITK need to be written.' >&2;
-    echo $(itk_VERSION)
+    $(WGET) -q -O- 'https://sourceforge.net/projects/itk/files/itk/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
