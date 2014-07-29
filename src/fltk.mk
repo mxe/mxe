@@ -19,7 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && autoconf
-    $(SED) -i 's,\$$uname,MINGW,g' '$(1)/configure'
+    $(SED) -i '' 's,\$$uname,MINGW,g' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
@@ -28,7 +28,7 @@ define $(PKG)_BUILD
         --enable-threads \
         LIBS='-lws2_32'
     # enable exceptions, because disabling them doesn't make any sense on PCs
-    $(SED) -i 's,-fno-exceptions,,' '$(1)/makeinclude'
+    $(SED) -i '' 's,-fno-exceptions,,' '$(1)/makeinclude'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install DIRS=src LIBCOMMAND='$(TARGET)-ar cr'
     ln -sf '$(PREFIX)/$(TARGET)/bin/fltk-config' '$(PREFIX)/bin/$(TARGET)-fltk-config'
 

@@ -17,8 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,png_check_sig,png_sig_cmp,g'                       '$(1)/configure'
-    $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/configure'
+    $(SED) -i '' 's,png_check_sig,png_sig_cmp,g'                       '$(1)/configure'
+    $(SED) -i '' 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
@@ -66,8 +66,8 @@ define $(PKG)_BUILD
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,wxwidgets)
     $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/wxwidgets-*.patch)),
     (cd '$(1)/$(wxwidgets_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
-    $(SED) -i 's,png_check_sig,png_sig_cmp,g'                       '$(1)/$(wxwidgets_SUBDIR)/configure'
-    $(SED) -i 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/$(wxwidgets_SUBDIR)/configure'
+    $(SED) -i '' 's,png_check_sig,png_sig_cmp,g'                       '$(1)/$(wxwidgets_SUBDIR)/configure'
+    $(SED) -i '' 's,wx_cv_cflags_mthread=yes,wx_cv_cflags_mthread=no,' '$(1)/$(wxwidgets_SUBDIR)/configure'
     cd '$(1)/$(wxwidgets_SUBDIR)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \

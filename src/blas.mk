@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,$$(FORTRAN),$(TARGET)-gfortran,g' '$(1)/Makefile'
+    $(SED) -i '' 's,$$(FORTRAN),$(TARGET)-gfortran,g' '$(1)/Makefile'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     cd '$(1)' && $(TARGET)-ar cr libblas.a *.o
 

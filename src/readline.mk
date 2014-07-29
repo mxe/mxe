@@ -18,8 +18,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,^ *case SIGQUIT:.*,,' '$(1)/signals.c'
-    $(SED) -i 's,^ *case SIGTSTP:.*,,' '$(1)/signals.c'
+    $(SED) -i '' 's,^ *case SIGQUIT:.*,,' '$(1)/signals.c'
+    $(SED) -i '' 's,^ *case SIGTSTP:.*,,' '$(1)/signals.c'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

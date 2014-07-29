@@ -17,8 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,aclocal,aclocal -I $(PREFIX)/$(TARGET)/share/aclocal,' '$(1)/autogen.sh'
-    $(SED) -i 's,libtoolize,$(LIBTOOLIZE),'                             '$(1)/autogen.sh'
+    $(SED) -i '' 's,aclocal,aclocal -I $(PREFIX)/$(TARGET)/share/aclocal,' '$(1)/autogen.sh'
+    $(SED) -i '' 's,libtoolize,$(LIBTOOLIZE),'                             '$(1)/autogen.sh'
     cd '$(1)' && $(SHELL) ./autogen.sh \
         --host='$(TARGET)' \
         --build="`config.guess`" \

@@ -34,7 +34,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' clean
 
     # fix hard-coded gnutls dependencies
-    $(SED) -i "s/-lgnutls/`'$(TARGET)-pkg-config' --libs-only-l gnutls`/g;" '$(1)/configure'
+    $(SED) -i '' "s/-lgnutls/`'$(TARGET)-pkg-config' --libs-only-l gnutls`/g;" '$(1)/configure'
 
     # Build for mingw. Static by default.
     # Prevent undefined reference to _rpl_malloc.

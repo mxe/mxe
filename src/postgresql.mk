@@ -52,7 +52,7 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/src/include/postgres_ext.h' '$(PREFIX)/$(TARGET)/include/'
     # Build a native pg_config.
-    $(SED) -i 's,-DVAL_,-D_DISABLED_VAL_,g' '$(1).native'/src/bin/pg_config/Makefile
+    $(SED) -i '' 's,-DVAL_,-D_DISABLED_VAL_,g' '$(1).native'/src/bin/pg_config/Makefile
     cd '$(1).native' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared \

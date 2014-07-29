@@ -18,8 +18,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,__declspec(dllimport),,' '$(1)/pcre.h.in'
-    $(SED) -i 's,__declspec(dllimport),,' '$(1)/pcreposix.h'
+    $(SED) -i '' 's,__declspec(dllimport),,' '$(1)/pcre.h.in'
+    $(SED) -i '' 's,__declspec(dllimport),,' '$(1)/pcreposix.h'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \

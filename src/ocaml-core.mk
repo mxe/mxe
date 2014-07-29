@@ -47,7 +47,7 @@ define $(PKG)_BUILD
 
     ####### patch mingw include
     # Now patch utils/clflags.ml to hardcode mingw-specific include.
-    $(SED) -i "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" \
+    $(SED) -i '' "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" \
         $(1)/hardcode_mingw_include.patch
     cd '$(1)' && patch -p2 < hardcode_mingw_include.patch
 
@@ -63,14 +63,14 @@ define $(PKG)_BUILD
       -e "s,@toolpref@,$(TARGET),g" \
       -e "s,@otherlibraries@,$(OTHER_LIBS),g" \
       < $(1)/Makefile-mingw.in > $(1)/config/Makefile
-    $(SED) -i "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" $(1)/otherlibs/Makefile.shared
+    $(SED) -i '' "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" $(1)/otherlibs/Makefile.shared
     # We're going to build in otherlibs/win32unix and otherlibs/win32graph
     # directories, but since they would normally only be built under
     # Windows, they only have the Makefile.nt files.  Just symlink
     # Makefile -> Makefile.nt for these cases.
-    $(SED) -i "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" $(1)/otherlibs/win32unix/Makefile.nt
-    $(SED) -i "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" $(1)/otherlibs/win32graph/Makefile.nt
-    $(SED) -i "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" $(1)/otherlibs/systhreads/Makefile.nt
+    $(SED) -i '' "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" $(1)/otherlibs/win32unix/Makefile.nt
+    $(SED) -i '' "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" $(1)/otherlibs/win32graph/Makefile.nt
+    $(SED) -i '' "s,@libdir@,$(PREFIX)/$(TARGET)/lib,g" $(1)/otherlibs/systhreads/Makefile.nt
     for d in $(1)/otherlibs/win32unix \
              $(1)/otherlibs/win32graph \
              $(1)/otherlibs/bigarray \

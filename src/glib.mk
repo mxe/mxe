@@ -43,7 +43,7 @@ define $(PKG)_NATIVE_BUILD
         --with-pcre=internal \
         CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include' \
         LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs'
-    $(SED) -i 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
+    $(SED) -i '' 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gmodule' -j '$(JOBS)'
