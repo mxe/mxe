@@ -33,7 +33,7 @@ define $(PKG)_BUILD
         --enable-cxx \
         --enable-large-files \
         CFLAGS='-D_IOB_ENTRIES=20'
-    $(SED) -i 's,-DPDF_PLATFORM=[^ ]* ,,' '$(1)/config/mkcommon.inc'
+    $(SED) -i '' 's,-DPDF_PLATFORM=[^ ]* ,,' '$(1)/config/mkcommon.inc'
     $(MAKE) -C '$(1)/libs' -j '$(JOBS)'
     $(MAKE) -C '$(1)/libs' -j 1 install
 endef

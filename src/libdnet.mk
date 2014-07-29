@@ -17,16 +17,16 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,CYGWIN=no,CYGWIN=yes,g'                     '$(1)/configure'
-    $(SED) -i 's,cat /proc/sys/kernel/ostype,,g'             '$(1)/configure'
-    $(SED) -i 's,test -d /usr/include/mingw,true,'           '$(1)/configure'
-    $(SED) -i 's,Iphlpapi,iphlpapi,g'                        '$(1)/configure'
-    $(SED) -i 's,packet32\.h,Packet32.h,g'                   '$(1)/configure'
-    $(SED) -i 's,packet\.lib,libpacket.a,'                   '$(1)/configure'
-    $(SED) -i 's,-lpacket,-lpacket -lws2_32,g'               '$(1)/configure'
-    $(SED) -i 's,/usr/include,$(PREFIX)/$(TARGET)/include,g' '$(1)/configure'
-    $(SED) -i 's,#include <Ntddndis.h>,#include <ddk/ntddndis.h>,' '$(1)/src/eth-win32.c'
-    $(SED) -i 's,-mno-cygwin,,' '$(1)/configure'
+    $(SED) -i '' 's,CYGWIN=no,CYGWIN=yes,g'                     '$(1)/configure'
+    $(SED) -i '' 's,cat /proc/sys/kernel/ostype,,g'             '$(1)/configure'
+    $(SED) -i '' 's,test -d /usr/include/mingw,true,'           '$(1)/configure'
+    $(SED) -i '' 's,Iphlpapi,iphlpapi,g'                        '$(1)/configure'
+    $(SED) -i '' 's,packet32\.h,Packet32.h,g'                   '$(1)/configure'
+    $(SED) -i '' 's,packet\.lib,libpacket.a,'                   '$(1)/configure'
+    $(SED) -i '' 's,-lpacket,-lpacket -lws2_32,g'               '$(1)/configure'
+    $(SED) -i '' 's,/usr/include,$(PREFIX)/$(TARGET)/include,g' '$(1)/configure'
+    $(SED) -i '' 's,#include <Ntddndis.h>,#include <ddk/ntddndis.h>,' '$(1)/src/eth-win32.c'
+    $(SED) -i '' 's,-mno-cygwin,,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \

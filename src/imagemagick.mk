@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         --disable-largefile \
         --without-threads \
         --with-freetype='$(PREFIX)/$(TARGET)/bin/freetype-config'
-    $(SED) -i 's/#define MAGICKCORE_HAVE_PTHREAD 1//g' '$(1)/magick/magick-baseconfig.h'
-    $(SED) -i 's/#define MAGICKCORE_ZLIB_DELEGATE 1//g' '$(1)/magick/magick-config.h'
+    $(SED) -i '' 's/#define MAGICKCORE_HAVE_PTHREAD 1//g' '$(1)/magick/magick-baseconfig.h'
+    $(SED) -i '' 's/#define MAGICKCORE_ZLIB_DELEGATE 1//g' '$(1)/magick/magick-config.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=
 

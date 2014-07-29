@@ -21,9 +21,9 @@ endef
 define $(PKG)_BUILD
     # Make sure the package gets built statically
     # NB: we're not actually building vigranumpy, but preparing it in case we ever will won't hurt
-    $(SED) -i 's,\bSHARED\b,STATIC,' '$(1)/src/impex/CMakeLists.txt'
-    $(SED) -i 's,\bSHARED\b,STATIC,' '$(1)/config/VIGRA_ADD_NUMPY_MODULE.cmake'
-    $(SED) -i 's,\bSHARED\b,STATIC,' '$(1)/vigranumpy/test/CMakeLists.txt'
+    $(SED) -i '' 's,\bSHARED\b,STATIC,' '$(1)/src/impex/CMakeLists.txt'
+    $(SED) -i '' 's,\bSHARED\b,STATIC,' '$(1)/config/VIGRA_ADD_NUMPY_MODULE.cmake'
+    $(SED) -i '' 's,\bSHARED\b,STATIC,' '$(1)/vigranumpy/test/CMakeLists.txt'
     mkdir '$(1)/build'
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \

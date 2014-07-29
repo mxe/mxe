@@ -3,8 +3,8 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.8.1
-$(PKG)_CHECKSUM := 4e655032cda30e1928fcc3f00962f4238b502169
+$(PKG)_VERSION  := 4.8.2
+$(PKG)_CHECKSUM := 810fb70bd721e1d9f446b6503afe0a9088b62986
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -36,7 +36,7 @@ define $(PKG)_CONFIGURE
         --build="`config.guess`" \
         --prefix='$(PREFIX)' \
         --libdir='$(PREFIX)/lib' \
-        --enable-languages='c,c++,objc,fortran' \
+        --enable-languages='c,c++,objc' \
         --enable-version-specific-runtime-libs \
         --with-gcc \
         --with-gnu-ld \
@@ -46,7 +46,7 @@ define $(PKG)_CONFIGURE
         --disable-multilib \
         --without-x \
         --disable-win32-registry \
-        --enable-threads=win32 \
+        --enable-threads=posix \
         --disable-libgomp \
         --disable-libmudflap \
         --with-mpfr-include='$(1)/mpfr/src' \

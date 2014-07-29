@@ -26,8 +26,8 @@ define $(PKG)_BUILD
         --host $(TARGET) \
         --disable-bytecode-library \
         --disable-shared
-    $(SED) -i 's,sed,$(SED),g' $(1)/Makefile
-    $(SED) -i 's,sed,$(SED),g' $(1)/src/Makefile
+    $(SED) -i '' 's,sed,$(SED),g' $(1)/Makefile
+    $(SED) -i '' 's,sed,$(SED),g' $(1)/src/Makefile
     $(MAKE) -C '$(1)' -j 1 install
 
     # test

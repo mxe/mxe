@@ -35,5 +35,5 @@ define $(PKG)_BUILD
 
     # Static libs are prefixed with an `s` but the config script
     # doesn't detect it properly, despite the STATIC_PREFIX="s" line
-    $(SED) -i 's,ICUPREFIX="icu",ICUPREFIX="sicu",' '$(PREFIX)/$(TARGET)/bin/icu-config'
+    $(SED) -i '' 's,ICUPREFIX="icu",ICUPREFIX="sicu",' '$(PREFIX)/$(TARGET)/bin/icu-config'
 endef

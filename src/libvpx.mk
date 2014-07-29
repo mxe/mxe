@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,yasm[ $$],$(TARGET)-yasm ,g' '$(1)/build/make/configure.sh'
+    $(SED) -i '' 's,yasm[ $$],$(TARGET)-yasm ,g' '$(1)/build/make/configure.sh'
     cd '$(1)' && \
         CROSS='$(TARGET)-' \
         ./configure \
