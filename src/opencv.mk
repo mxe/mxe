@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 7878a8c375ab3e292c8de7cb102bb3358056e01e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc eigen ffmpeg jasper jpeg lcms1 libpng openexr tiff xz zlib
+$(PKG)_DEPS     := gcc eigen jasper jpeg lcms1 libpng tiff xz zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/' | \
@@ -56,6 +56,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(1).build/unix-install/opencv.pc'
     $(SED) -i 's/dll/dll.a/g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    $(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/OpenCVConfig.cmake'
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
