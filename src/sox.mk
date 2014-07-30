@@ -18,7 +18,7 @@ endef
 
 define $(PKG)_BUILD
     # set pkg-config cflags and libs
-    $(SED) -i 's,^\(Cflags:.*\),\1 -fopenmp,' '$(1)/sox.pc.in'
+    $(SED) -i '' 's,^\(Cflags:.*\),\1 -fopenmp,' '$(1)/sox.pc.in'
     $(SED) -i '/Libs.private/d'               '$(1)/sox.pc.in'
     echo Libs.private: @MAGIC_LIBS@ \
         `grep sox_LDADD '$(1)/src/optional-fmts.am' | \

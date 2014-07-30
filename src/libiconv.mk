@@ -18,7 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's, sed , $(SED) ,g' '$(1)/windows/windres-options'
+    $(SED) -i '' 's, sed , $(SED) ,g' '$(1)/windows/windres-options'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \

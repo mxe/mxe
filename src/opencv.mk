@@ -50,7 +50,7 @@ define $(PKG)_BUILD
 
     # fixup and install pkg-config file
     # can't figure out where these unprefixed libs are coming from
-    $(SED) -i 's,\(opengl32\|glu32\|stdc++\),-l\1,g' '$(1).build/unix-install/opencv.pc'
+    $(SED) -i '' 's,\(opengl32\|glu32\|stdc++\),-l\1,g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-g++' \

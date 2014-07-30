@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,yasm,$(TARGET)-yasm,g' '$(1)/configure'
+    $(SED) -i '' 's,yasm,$(TARGET)-yasm,g' '$(1)/configure'
     cd '$(1)' && ./configure \
         --cross-prefix='$(TARGET)'- \
         --host='$(TARGET)' \

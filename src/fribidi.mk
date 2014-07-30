@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,__declspec(dllimport),,' '$(1)/lib/fribidi-common.h'
+    $(SED) -i '' 's,__declspec(dllimport),,' '$(1)/lib/fribidi-common.h'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \

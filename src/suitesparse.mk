@@ -19,7 +19,7 @@ endef
 define $(PKG)_BUILD
     # exclude demos
     find '$(1)' -name 'Makefile' \
-        -exec $(SED) -i 's,( cd Demo,#( cd Demo,' {} \;
+        -exec $(SED) -i '' 's,( cd Demo,#( cd Demo,' {} \;
 
     # build all
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
