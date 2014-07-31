@@ -25,7 +25,7 @@ WGET       := wget --no-check-certificate \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
 REQUIREMENTS := autoconf automake bash bison bzip2 cmake flex \
-                gcc g++ intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
+                gcc g++ $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
                 scons $(SED) $(SORT) unzip wget xz
 
@@ -106,7 +106,7 @@ all: $(PKGS)
 
 .PHONY: check-requirements
 define CHECK_REQUIREMENT
-    @if ! $(1) --help &>/dev/null; then \
+    @if ! command -v $(1) >/dev/null 2>&1; then \
         echo; \
         echo 'Missing requirement: $(1)'; \
         echo; \
