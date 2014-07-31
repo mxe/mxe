@@ -49,6 +49,7 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/libglew32s.a'
+    $(INSTALL) -m644 '$(1)/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/libglew32.a'
     $(INSTALL) -m644 '$(1)/libGLEWmx.a' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     $(INSTALL) -m644 '$(1)/glew.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
