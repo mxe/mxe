@@ -3,8 +3,8 @@
 
 PKG             := libdvdnav
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := d0449a9
-$(PKG)_CHECKSUM := ca5f7ef018a428af8f558cbc23af750cf6b322fc
+$(PKG)_VERSION  := b945868
+$(PKG)_CHECKSUM := 5d55e5f2c1d9872742b6e2907722097c62bf40d6
 $(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
