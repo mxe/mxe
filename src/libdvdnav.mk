@@ -17,11 +17,7 @@ $(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$(
 # $(PKG)_URL      := https://dvdnav.mplayerhq.hu/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libdvdread
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/mirror/libdvdnav/commits/master' | \
-    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
-    head -1
-endef
+$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, mirror/libdvdnav, master)
 
 define $(PKG)_UPDATE_RELEASE
     $(WGET) -q -O- 'https://dvdnav.mplayerhq.hu/releases/' | \

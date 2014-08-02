@@ -77,6 +77,12 @@ MAKE_SHARED_FROM_STATIC = \
 	--libdir '$(PREFIX)/$(TARGET)/lib' \
 	--bindir '$(PREFIX)/$(TARGET)/bin'
 
+define MXE_GET_GITHUB_SHA
+    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' | \
+    $(SED) -n 's#.*"sha": "\([^<]\{7\}\)[^<]\{3\}.*#\1#p' | \
+    head -1
+endef
+
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))

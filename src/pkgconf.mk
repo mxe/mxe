@@ -12,11 +12,7 @@ $(PKG)_DEPS     :=
 
 $(PKG)_DEPS_$(BUILD) := automake
 
-define $(PKG)_UPDATE_
-    $(WGET) -q -O- 'https://github.com/pkgconf/pkgconf/commits/master' | \
-    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
-    head -1
-endef
+$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, pkgconf/pkgconf, master)
 
 define $(PKG)_UPDATE
     echo 'Warning: Updates are temporarily disabled for package pkgconf.' >&2;
