@@ -18,7 +18,7 @@ $(PKG)_URL      := https://dvdnav.mplayerhq.hu/releases/$($(PKG)_FILE)
 # directly linking to libdvdcss. We directly links to the library here.
 $(PKG)_DEPS     := gcc libdvdcss
 
-$(PKG)_UPDATE = $(call MXE_GET_GITHUB_SHA, mirror/libdvdread, master)
+$(PKG)_UPDATE_GIT = $(call MXE_GET_GITHUB_SHA, mirror/libdvdread, master)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://dvdnav.mplayerhq.hu/releases/' | \
