@@ -32,3 +32,6 @@ define $(PKG)_BUILD
 endef
 
 $(PKG)_BUILD_SHARED =
+
+# sdl2 is disabled on i686-pc-mingw32.
+$(PKG)_BUILD_i686-pc-mingw32 =
