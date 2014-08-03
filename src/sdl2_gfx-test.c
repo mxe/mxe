@@ -4,8 +4,8 @@
  */
 
 #include <SDL.h>
-#include <SDL_rotozoom.h>
-#include <SDL_framerate.h>
+#include <SDL2_rotozoom.h>
+#include <SDL2_framerate.h>
 
 int main(int argc, char* argv[])
 {
