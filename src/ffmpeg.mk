@@ -3,13 +3,13 @@
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3
-$(PKG)_CHECKSUM := 0006580ef3409aaace1c4c35ed6d77aa326ae17c
+$(PKG)_VERSION  := 2.3.1
+$(PKG)_CHECKSUM := 69f73fdc36b2663d9abe714a1767d5b841f70cd0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://launchpad.net/ffmpeg/main/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libvpx opencore-amr opus sdl speex theora vo-aacenc vo-amrwbenc vorbis x264 xvidcore yasm zlib
+$(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libcaca libvpx opencore-amr opus sdl speex theora vo-aacenc vo-amrwbenc vorbis x264 xvidcore yasm zlib
 
 # DO NOT ADD fdk-aac OR openssl SUPPORT.
 # Although they are free softwares, their licenses are not compatible with
@@ -47,6 +47,7 @@ define $(PKG)_BUILD
         --enable-gnutls \
         --enable-libass \
         --enable-libbluray \
+        --enable-libcaca \
         --enable-libmp3lame \
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
