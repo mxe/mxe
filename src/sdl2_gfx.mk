@@ -19,10 +19,10 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --with-sdl-prefix='$(PREFIX)/$(TARGET)'
+        $(MXE_CONFIGURE_OPTS) \
+        --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
+        SDL_LIBS=$($(TARGET)-pkg-config --libs sdl2 | sed -e 's/-lmingw32//' -e 's/-lSDL2main//') \
+        SDL_CFLAGS=$($(TARGET)-pkg-config --cflags sdl2 | sed 's/-Dmain=SDL_main//'))
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
@@ -30,8 +30,6 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl2_gfx.exe' \
         `'$(TARGET)-pkg-config' SDL2_gfx --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
 
 # sdl2 is disabled on i686-pc-mingw32.
 $(PKG)_BUILD_i686-pc-mingw32 =
