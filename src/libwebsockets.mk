@@ -15,10 +15,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/build' && cmake .. \
+    cd '$(1)' && cmake . \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DLWS_WITHOUT_TESTAPPS=ON \
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+        -DLWS_WITHOUT_TESTAPPS=ON
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
     
 endef
 
