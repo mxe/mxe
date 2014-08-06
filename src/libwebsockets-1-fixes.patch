@@ -1,0 +1,164 @@
+This file is part of MXE.
+See index.html for further information.
+
+From e34eaa834b15533c6280b67d93d505432bd2fa94 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 4 Aug 2014 18:28:33 -0700
+Subject: [PATCH] Remove the special _shared lib
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ff9a24e..962df28 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -372,43 +372,41 @@ source_group("Sources"          FILES ${SOURCES})
+ #
+ # Create the lib.
+ #
+-add_library(websockets STATIC
+-			${HDR_PRIVATE}
+-			${HDR_PUBLIC}
+-			${SOURCES})
+-add_library(websockets_shared SHARED
++add_library(websockets
+ 			${HDR_PRIVATE}
+ 			${HDR_PUBLIC}
+ 			${SOURCES})
+ 
+ if (WIN32)
+-	# On Windows libs have the same file ending (.lib)
+-	# for both static and shared libraries, so we
+-	# need a unique name for the static one.
+-	set_target_properties(websockets 
+-		PROPERTIES
+-		OUTPUT_NAME websockets_static)
+-
+-	# Compile as DLL (export function declarations)
+-	set_property(
+-		TARGET websockets_shared
+-		PROPERTY COMPILE_DEFINITIONS 
+-		LWS_DLL
+-		LWS_INTERNAL
+-		)
++# 	# On Windows libs have the same file ending (.lib)
++# 	# for both static and shared libraries, so we
++# 	# need a unique name for the static one.
++# 	set_target_properties(websockets
++# 		PROPERTIES
++# 		OUTPUT_NAME websockets_static)
++
++	if (BUILD_SHARED_LIBS)
++		# Compile as DLL (export function declarations)
++		set_property(
++			TARGET websockets
++			PROPERTY COMPILE_DEFINITIONS
++			LWS_DLL
++			LWS_INTERNAL
++			)
++	endif (BUILD_SHARED_LIBS)
+ endif(WIN32)
+ 
+ # We want the shared lib to be named "libwebsockets"
+ # not "libwebsocket_shared".
+-set_target_properties(websockets_shared
+-		PROPERTIES 
+-		OUTPUT_NAME websockets)
++# set_target_properties(websockets_shared
++# 		PROPERTIES
++# 		OUTPUT_NAME websockets)
+ 
+ # Set the so version of the lib.
+ # Equivalent to LDFLAGS=-version-info x:x:x
+ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+-	foreach(lib websockets websockets_shared)
+-		set_target_properties(${lib} 
++	foreach(lib websockets)
++		set_target_properties(${lib}
+ 			PROPERTIES
+ 			SOVERSION ${SOVERSION})
+ 	endforeach()
+@@ -460,7 +458,7 @@ if (NOT LWS_WITHOUT_EXTENSIONS)
+ 	endif()
+ 
+ 	# Make sure ZLib is compiled before the libs.
+-	foreach (lib websockets websockets_shared)
++	foreach (lib websockets)
+ 		add_dependencies(${lib} ZLIB)
+ 	endforeach()
+ 
+@@ -524,7 +522,7 @@ if (UNIX)
+ endif()
+ 
+ # Setup the linking for all libs.
+-foreach (lib websockets websockets_shared)
++foreach (lib websockets)
+ 	target_link_libraries(${lib} ${LIB_LIST})
+ endforeach()
+ 
+@@ -557,11 +555,8 @@ if (NOT LWS_WITHOUT_TESTAPPS)
+ 		source_group("Headers Private"   FILES ${TEST_HDR})
+ 		source_group("Sources"   FILES ${TEST_SRCS})
+ 		add_executable(${TEST_NAME} ${TEST_SRCS} ${TEST_HDR})
+-		
+-		if (LWS_LINK_TESTAPPS_DYNAMIC)
+-			target_link_libraries(${TEST_NAME} websockets_shared)
+-			add_dependencies(${TEST_NAME} websockets_shared)
+-		else(LWS_LINK_TESTAPPS_DYNAMIC)
++
++		if (NOT LWS_LINK_TESTAPPS_DYNAMIC)
+ 			target_link_libraries(${TEST_NAME} websockets)
+ 			add_dependencies(${TEST_NAME} websockets)
+ 		endif(LWS_LINK_TESTAPPS_DYNAMIC)
+@@ -793,7 +788,7 @@ endif()
+ set(LWS_INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
+ 
+ # Export targets (This is used for other CMake projects to easily find the libraries and include files).
+-export(TARGETS websockets websockets_shared
++export(TARGETS websockets
+         FILE "${PROJECT_BINARY_DIR}/LibwebsocketsTargets.cmake")
+ export(PACKAGE libwebsockets)
+ 
+@@ -829,7 +824,7 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/LibwebsocketsConfigVersion.cmake.in
+                 ${PROJECT_BINARY_DIR}/LibwebsocketsConfigVersion.cmake 
+                 @ONLY)
+ 
+-set_target_properties(websockets websockets_shared 
++set_target_properties(websockets
+ 					PROPERTIES PUBLIC_HEADER "${HDR_PUBLIC}")
+ 
+ #
+@@ -837,7 +832,7 @@ set_target_properties(websockets websockets_shared
+ #
+ 
+ # Install libs and headers.
+-install(TARGETS websockets websockets_shared
++install(TARGETS websockets
+ 		EXPORT LibwebsocketsTargets
+ 		LIBRARY DESTINATION "${LWS_INSTALL_LIB_DIR}${LIB_SUFFIX}" COMPONENT libraries
+ 		ARCHIVE DESTINATION "${LWS_INSTALL_LIB_DIR}${LIB_SUFFIX}" COMPONENT libraries
+@@ -906,9 +901,8 @@ message(" LWS_WITH_HTTP2 = ${LWS_WITH_HTTP2}")
+ message("---------------------------------------------------------------------")
+ 
+ # These will be available to parent projects including libwebsockets using add_subdirectory()
+-set(LIBWEBSOCKETS_LIBRARIES websocket websockets_shared CACHE STRING "Libwebsocket libraries")
++set(LIBWEBSOCKETS_LIBRARIES websocket CACHE STRING "Libwebsocket libraries")
+ set(LIBWEBSOCKETS_LIBRARIES_STATIC websocket CACHE STRING "Libwebsocket static library")
+-set(LIBWEBSOCKETS_LIBRARIES_SHARED websockets_shared CACHE STRING "Libwebsocket shared library")
+ 
+ # This must always be last!
+ include(CPack)
+diff --git a/cmake/LibwebsocketsConfig.cmake.in b/cmake/LibwebsocketsConfig.cmake.in
+index bea82b5..6973fbf 100644
+--- a/cmake/LibwebsocketsConfig.cmake.in
++++ b/cmake/LibwebsocketsConfig.cmake.in
+@@ -13,5 +13,5 @@ set(LIBWEBSOCKETS_INCLUDE_DIRS "@LWS__INCLUDE_DIRS@")
+ include(${LWS_CMAKE_DIR}/LibwebsocketsTargets.cmake)
+ 
+ # IMPORTED targets from LibwebsocketsTargets.cmake
+-set(LIBWEBSOCKETS_LIBRARIES websockets websockets_shared)
++set(LIBWEBSOCKETS_LIBRARIES websockets)
+ 
+-- 
+1.9.1
+
