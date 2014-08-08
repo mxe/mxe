@@ -93,11 +93,13 @@ SHORT_PKG_VERSION = \
 UNPACK_ARCHIVE = \
     $(if $(filter %.tgz,     $(1)),tar xzf '$(1)', \
     $(if $(filter %.tar.gz,  $(1)),tar xzf '$(1)', \
+    $(if $(filter %.tbz2,    $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.bz2, $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
-    $(if $(filter %.tar.xz,$(1)),xz -dc '$(1)' | tar xf -, \
+    $(if $(filter %.txz,     $(1)),xz -dc '$(1)' | tar xf -, \
+    $(if $(filter %.tar.xz,  $(1)),xz -dc '$(1)' | tar xf -, \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
-    $(error Unknown archive format: $(1))))))))
+    $(error Unknown archive format: $(1))))))))))
 
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
