@@ -42,7 +42,6 @@ define $(PKG)_CONFIGURE
         --disable-win32-registry \
         --enable-threads=win32 \
         --disable-libgomp \
-        --disable-libmudflap \
         --with-cloog='$(PREFIX)' \
         --with-gmp='$(PREFIX)' \
         --with-isl='$(PREFIX)' \
