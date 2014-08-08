@@ -38,7 +38,7 @@ endef
 define $(PKG)_BUILD_SHARED
     $($(PKG)_BUILD_COMMON)
     # icu4c installs its DLLs to lib/. Move them to bin/.
-    mv -fv $(wildcard $(PREFIX)/$(TARGET)/lib/icu*.dll) '$(PREFIX)/$(TARGET)/bin/'
+    mv -fv $(PREFIX)/$(TARGET)/lib/icu*.dll '$(PREFIX)/$(TARGET)/bin/'
 endef
 
 define $(PKG)_BUILD
