@@ -18,7 +18,7 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_BUILD_SHARED
+define $(PKG)_BUILD_COMMON
     cd '$(1)/source' && autoreconf -fi
     mkdir '$(1).native' && cd '$(1).native' && '$(1)/source/configure' \
         CC=gcc CXX=g++
@@ -35,8 +35,14 @@ define $(PKG)_BUILD_SHARED
     ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
 endef
 
+define $(PKG)_BUILD_SHARED
+    $($(PKG)_BUILD_COMMON)
+    # icu4c installs its DLLs to lib/. Move them to bin/.
+    mv -fv $(wildcard $(PREFIX)/$(TARGET)/lib/icu*.dll) '$(PREFIX)/$(TARGET)/bin/'
+endef
+
 define $(PKG)_BUILD
-    $($(PKG)_BUILD_SHARED)
+    $($(PKG)_BUILD_COMMON)
     # Static libs are prefixed with an `s` but the config script
     # doesn't detect it properly, despite the STATIC_PREFIX="s" line
     $(SED) -i 's,ICUPREFIX="icu",ICUPREFIX="sicu",' '$(PREFIX)/$(TARGET)/bin/icu-config'
