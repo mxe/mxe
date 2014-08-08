@@ -3,7 +3,7 @@
 PKG             := qtservice
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := fd22bee22274975c56f1c10d87ee9fd2c0818f83
-$(PKG)_CHECKSUM := ecf7563a56c3ac7a812950c6e28d214e4b01b7b2
+$(PKG)_CHECKSUM := c4a119ee7150361f342c7b431d6b136b6813e714
 $(PKG)_SUBDIR   := qt-solutions-qt-solutions
 $(PKG)_FILE     := $($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://qt.gitorious.org/qt-solutions/qt-solutions/archive/$($(PKG)_FILE)
