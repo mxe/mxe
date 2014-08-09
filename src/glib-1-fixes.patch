@@ -131,27 +131,22 @@ Subject: [PATCH 4/8] Allow building without inotify support
 diff -ur a/configure.ac b/configure.ac
 --- a/configure.ac	2013-06-10 00:53:13.000000000 +0200
 +++ b/configure.ac	2013-06-29 05:23:45.264680443 +0200
-@@ -1726,11 +1726,17 @@
+@@ -1672,9 +1672,15 @@
  dnl ** Check for inotify (GIO) **
  dnl *****************************
  inotify_support=no
--AC_CHECK_HEADERS([sys/inotify.h],
--[
-+AC_ARG_ENABLE(inotify,
-+              AC_HELP_STRING([--disable-inotify],
-+                             [build without inotify support]))
++ AC_ARG_ENABLE(inotify,
++               AC_HELP_STRING([--disable-inotify],
++                              [build without inotify support]))
 +
-+if test "x$enable_inotify" != "xno"; then
-+  AC_CHECK_HEADERS([sys/inotify.h],
-+  [
- 	inotify_support=yes
- 	AC_CHECK_FUNCS(inotify_init1)
--])
-+  ])
++ if test "x$enable_inotify" != "xno"; then
+ AC_CHECK_HEADERS([sys/inotify.h],
+ [
+   AC_CHECK_FUNCS(inotify_init1, [inotify_support=yes], [inotify_support=no])
+ ])
 +fi
  
  AM_CONDITIONAL(HAVE_INOTIFY, [test "$inotify_support" = "yes"])
- 
 
 
 From 5ec5d101cb75c096f39228da85d2caba52b9002f Mon Sep 17 00:00:00 2001
@@ -184,13 +179,13 @@ Subject: [PATCH 6/8] Link with dnsapi
 diff -ur a/gio-2.0.pc.in b/gio-2.0.pc.in
 --- a/gio-2.0.pc.in	2013-01-20 20:48:44.000000000 +0100
 +++ b/gio-2.0.pc.in	2013-06-29 05:25:16.328684390 +0200
-@@ -13,6 +13,6 @@
+@@ -16,6 +16,6 @@
  Version: @VERSION@
  Requires: glib-2.0 gobject-2.0
  Requires.private: gmodule-no-export-2.0
 -Libs: -L${libdir} -lgio-2.0
 +Libs: -L${libdir} -lgio-2.0 -ldnsapi -liphlpapi
- Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@
+ Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@ @SELINUX_LIBS@ @COCOA_LIBS@ @CARBON_LIBS@
  Cflags:
 
 
@@ -602,24 +597,24 @@ diff -urN a/autogen.sh b/autogen.sh
 diff -urN a/configure.ac b/configure.ac
 --- a/configure.ac	2013-10-15 21:14:26.000000000 +0200
 +++ b/configure.ac	2013-11-09 06:18:17.274631022 +0100
-@@ -2710,13 +2710,6 @@
+@@ -2579,13 +2579,6 @@
  dnl **************************
  dnl *** Checks for gtk-doc ***
  dnl **************************
 -# gtkdocize greps for ^GTK_DOC_CHECK and parses it, so you need to have
 -# it on it's own line.
 -m4_ifdef([GTK_DOC_CHECK], [
--GTK_DOC_CHECK([1.15], [--flavour no-tmpl])
+-GTK_DOC_CHECK([1.20], [--flavour no-tmpl])
 -],[
 -AM_CONDITIONAL([ENABLE_GTK_DOC],[false])
 -])
  
  AC_ARG_ENABLE(man,
-               [AS_HELP_STRING([--enable-man],
+              [AS_HELP_STRING([--enable-man],
 diff -urN a/docs/Makefile.am b/docs/Makefile.am
 --- a/docs/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,12 +0,0 @@
+@@ -1,11 +0,0 @@
 -## Process this file with automake to produce Makefile.in
 -
 -SUBDIRS = reference
@@ -631,7 +626,6 @@ diff -urN a/docs/Makefile.am b/docs/Makefile.am
 -	  echo $$p; \
 -	done
 -
--.PHONY: test test-report perf-report full-report
 diff -urN a/docs/reference/gio/gdbus-object-manager-example/Makefile.am b/docs/reference/gio/gdbus-object-manager-example/Makefile.am
 --- a/docs/reference/gio/gdbus-object-manager-example/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/reference/gio/gdbus-object-manager-example/Makefile.am	1970-01-01 01:00:00.000000000 +0100
@@ -706,7 +700,7 @@ diff -urN a/docs/reference/gio/gdbus-object-manager-example/Makefile.am b/docs/r
 diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 --- a/docs/reference/gio/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/reference/gio/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,178 +0,0 @@
+@@ -1,184 +0,0 @@
 -NULL =
 -
 -SUBDIRS = gdbus-object-manager-example
@@ -768,6 +762,8 @@ diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 -	gnetworkingprivate.h		\
 -	gnetworkmonitorbase.h		\
 -	gnetworkmonitornetlink.h	\
+-	gnotificationbackend.h		\
+-	gnotification-private.h		\
 -	gpollfilemonitor.h		\
 -	gregistrysettingsbackend.h	\
 -	gsettingsbackendinternal.h	\
@@ -778,6 +774,7 @@ diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 -	gsocks4aproxy.h			\
 -	gsocks4proxy.h			\
 -	gsocks5proxy.h			\
+-	gsubprocesslauncher-private.h	\
 -	gthreadedresolver.h		\
 -	gunionvolumemonitor.h		\
 -	gunixmount.h			\
@@ -787,7 +784,8 @@ diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 -	gwin32appinfo.h			\
 -	gwin32mount.h			\
 -	gwin32resolver.h		\
--	gwin32volumemonitor.h
+-	gwin32volumemonitor.h		\
+-	thumbnail-verify.h
 -
 -
 -# CFLAGS and LDFLAGS for compiling scan program. Only needed
@@ -804,7 +802,7 @@ diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 -	$(NULL)
 -
 -# Extra options to supply to gtkdoc-mkdb
--MKDB_OPTIONS = --output-format=xml --sgml-mode --name-space=g \
+-MKDB_OPTIONS = --output-format=xml --name-space=g \
 -	--ignore-files='libasyncns tests'
 -
 -# Images to copy into HTML directory
@@ -823,6 +821,7 @@ diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 -	gio-querymodules.xml	\
 -	glib-compile-schemas.xml\
 -	glib-compile-resources.xml	\
+-	gapplication.xml	\
 -	gsettings.xml		\
 -	gresource.xml		\
 -	gdbus.xml		\
@@ -855,6 +854,7 @@ diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 -if ENABLE_MAN
 -
 -man_MANS +=			\
+-	gapplication.1		\
 -	gio-querymodules.1	\
 -	glib-compile-schemas.1	\
 -	glib-compile-resources.1	\
@@ -888,7 +888,7 @@ diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 diff -urN a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
 --- a/docs/reference/glib/Makefile.am	2013-08-08 12:00:40.000000000 +0200
 +++ b/docs/reference/glib/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,127 +0,0 @@
+@@ -1,135 +0,0 @@
 -## Process this file with automake to produce Makefile.in
 -
 -AUTOMAKE_OPTIONS = 1.6
@@ -906,7 +906,7 @@ diff -urN a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
 -SCAN_OPTIONS=--deprecated-guards="G_DISABLE_DEPRECATED" --ignore-decorators="GLIB_VAR|G_GNUC_WARN_UNUSED_RESULT"
 -
 -# Extra options to supply to gtkdoc-mkdb
--MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=g
+-MKDB_OPTIONS=--output-format=xml --name-space=g
 -
 -# Used for dependencies
 -HFILE_GLOB=$(top_srcdir)/glib/*.h $(top_srcdir)/gmodule/*.h
@@ -944,9 +944,13 @@ diff -urN a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
 -	gwakeup.h
 -
 -# Images to copy into HTML directory
--HTML_IMAGES =  				\
--	file-name-encodings.png		\
--	mainloop-states.gif
+-HTML_IMAGES =  						\
+-	file-name-encodings.png				\
+-	mainloop-states.gif				\
+-	Sorted_binary_tree_breadth-first_traversal.svg 	\
+-	Sorted_binary_tree_inorder.svg 			\
+-	Sorted_binary_tree_postorder.svg 		\
+-	Sorted_binary_tree_preorder.svg
 -
 -# Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 -content_files =				\
@@ -981,6 +985,10 @@ diff -urN a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
 -	mainloop-states.fig		\
 -	mainloop-states.png		\
 -	mainloop-states.eps		\
+-	Sorted_binary_tree_breadth-first_traversal.svg 	\
+-	Sorted_binary_tree_inorder.svg 			\
+-	Sorted_binary_tree_postorder.svg 		\
+-	Sorted_binary_tree_preorder.svg			\
 -	version.xml.in
 -
 -########################################################################
@@ -1038,7 +1046,7 @@ diff -urN a/docs/reference/gobject/Makefile.am b/docs/reference/gobject/Makefile
 -             --ignore-decorators="G_GNUC_INTERNAL|G_GNUC_WARN_UNUSED_RESULT"
 -
 -# Extra options to supply to gtkdoc-mkdb
--MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=g
+-MKDB_OPTIONS=--output-format=xml --name-space=g
 -
 -# Used for dependencies
 -HFILE_GLOB=$(top_srcdir)/gobject/*.h
