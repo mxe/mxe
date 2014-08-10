@@ -4,6 +4,7 @@
 PKG             := icu4c
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 53.1
+$(PKG)_MAJOR    := $(word 1,$(subst ., ,$($(PKG)_VERSION)))
 $(PKG)_CHECKSUM := 7eca017fdd101e676d425caaf28ef862d3655e0f
 $(PKG)_SUBDIR   := icu
 $(PKG)_FILE     := $(PKG)-$(subst .,_,$($(PKG)_VERSION))-src.tgz
@@ -39,6 +40,11 @@ define $(PKG)_BUILD_SHARED
     $($(PKG)_BUILD_COMMON)
     # icu4c installs its DLLs to lib/. Move them to bin/.
     mv -fv $(PREFIX)/$(TARGET)/lib/icu*.dll '$(PREFIX)/$(TARGET)/bin/'
+    # add symlinks icu*<version>.dll.a to icu*.dll.a
+    for lib in `ls '$(PREFIX)/$(TARGET)/lib/' | grep 'icu.*\.dll\.a' | cut -d '.' -f 1 | tr '\n' ' '`; \
+    do \
+        ln -fs "$(PREFIX)/$(TARGET)/lib/$${lib}.dll.a" "$(PREFIX)/$(TARGET)/lib/$${lib}$($(PKG)_MAJOR).dll.a"; \
+    done
 endef
 
 define $(PKG)_BUILD
