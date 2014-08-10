@@ -30,4 +30,16 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' openal --cflags --libs`
 endef
 
-$(PKG)_BUILD_SHARED =
+define $(PKG)_BUILD_SHARED
+    cd '$(1)/build' && cmake .. \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DLIBTYPE=SHARED \
+        -DEXAMPLES=FALSE
+    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-openal.exe' \
+        `'$(TARGET)-pkg-config' openal --cflags --libs`
+endef
+
