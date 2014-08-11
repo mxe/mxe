@@ -45,7 +45,8 @@ define $(PKG)_BUILD
         -sEXPAT_LIBPATH='$(PREFIX)/$(TARGET)/lib' \
         stage install
 
-    mv -fv $(PREFIX)/$(TARGET)/lib/libboost_*.dll '$(PREFIX)/$(TARGET)/bin/'
+    $(if $(BUILD_SHARED), \
+        mv -fv $(PREFIX)/$(TARGET)/lib/libboost_*.dll '$(PREFIX)/$(TARGET)/bin/')
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \
