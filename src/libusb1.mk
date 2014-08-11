@@ -3,8 +3,8 @@
 
 PKG             := libusb1
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.18
-$(PKG)_CHECKSUM := 5f7bbf42a4d6e6b88d5e7666958c80f8455ee915
+$(PKG)_VERSION  := 1.0.19
+$(PKG)_CHECKSUM := c5d14ced155233ceeb5107c7eb3b94b16649ae05
 $(PKG)_SUBDIR   := libusb-$($(PKG)_VERSION)
 $(PKG)_FILE     := libusb-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libusb-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -18,6 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
+        $(MXE_CONFIGURE_OPTS) \
+        CFLAGS=-D_WIN32_WINNT=0x0500
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
