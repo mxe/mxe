@@ -12,9 +12,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)-$($(PKG)_V
 $(PKG)_DEPS     := gcc boost
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "http://sourceforge.net/projects/assimp/files/assimp/" | \
-    grep 'assimp/files/assimp' | \
-    $(SED) -n 's,.*assimp/\([0-9][^>]*\)/.*,\1,p' | \
+    $(WGET) -q -O- "http://sourceforge.net/projects/assimp/files/" | \
+    grep 'assimp/files' | \
+    $(SED) -n 's,.*assimp-\([0-9][^>]*\)/.*,\1,p' | \
     head -1
 endef
 
