@@ -1,0 +1,216 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From fd5ab57afe6608de707ccdf3bc4eefa9a07117cf Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 10 Aug 2014 19:35:55 -0700
+Subject: [PATCH 1/2] Disable targets
+
+Disable examples, test, and documentation in the CMakeLists.txt file.
+(The file unfortunately does not provide switches for this purpose.)
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 350eb8f..6ab370c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -143,9 +143,9 @@ endif(WIN32)
+ 
+ add_subdirectory( cmake )
+ add_subdirectory( src )
+-add_subdirectory( examples )
+-add_subdirectory( test )
+-add_subdirectory( doc )
++#add_subdirectory( examples )
++#add_subdirectory( test )
++#add_subdirectory( doc )
+ 
+ 
+ # CPACK options
+-- 
+1.9.1
+
+
+From 9081c609e07642e9316bd7ba846a619539030e17 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 10 Aug 2014 19:43:25 -0700
+Subject: [PATCH 2/2] Use BUILD_SHARED_LIBS to control which kind of libs to
+ build
+
+Also removes the Linux-only --whole-archive trick.
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
+index 0e9c544..333fb89 100644
+--- a/src/cpp/CMakeLists.txt
++++ b/src/cpp/CMakeLists.txt
+@@ -8,40 +8,20 @@ file(GLOB_RECURSE C_SOURCES flann.cpp)
+ file(GLOB_RECURSE CPP_SOURCES flann_cpp.cpp)
+ file(GLOB_RECURSE CU_SOURCES *.cu)
+ 
+-add_library(flann_cpp_s STATIC ${CPP_SOURCES})
+-if(CMAKE_COMPILER_IS_GNUCC)
+-    set_target_properties(flann_cpp_s PROPERTIES COMPILE_FLAGS -fPIC)
+-endif()
+-set_property(TARGET flann_cpp_s PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
+-
+ if (BUILD_CUDA_LIB)
+     if(CMAKE_COMPILER_IS_GNUCC)
+ 		set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-Xcompiler;-fPIC;-arch=sm_13;--compiler-bindir=${NVCC_COMPILER_BINDIR}" )
+     else()
+ 	    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-arch=sm_13" )
+     endif()
+-    cuda_add_library(flann_cuda_s STATIC ${CU_SOURCES})
+-    set_property(TARGET flann_cuda_s PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
+ endif()
+ 
+-if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
+-    add_library(flann_cpp SHARED "")
+-    set_target_properties(flann_cpp PROPERTIES LINKER_LANGUAGE CXX)
+-    target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
+-
++    add_library(flann_cpp ${CPP_SOURCES})
+     if (BUILD_CUDA_LIB)
+-	    cuda_add_library(flann_cuda SHARED "")
+-        set_target_properties(flann_cuda PROPERTIES LINKER_LANGUAGE CXX)
+-        target_link_libraries(flann_cuda -Wl,-whole-archive flann_cuda_s -Wl,-no-whole-archive)
+-    # 	target_link_libraries(flann_cuda cudpp_x86_64)
++		cuda_add_library(flann_cuda ${CPP_SOURCES})
+     endif()
+-else()
+-    add_library(flann_cpp SHARED ${CPP_SOURCES})
+-    if (BUILD_CUDA_LIB)
+-		cuda_add_library(flann_cuda SHARED ${CPP_SOURCES})
+-    endif()
+-endif()
+ 
++if (BUILD_SHARED_LIBS)
+ set_target_properties(flann_cpp PROPERTIES
+    VERSION ${FLANN_VERSION}
+    SOVERSION ${FLANN_SOVERSION}
+@@ -55,18 +35,25 @@ if (BUILD_CUDA_LIB)
+        DEFINE_SYMBOL FLANN_EXPORTS
+     ) 
+ endif()
++else()
++    set_property(TARGET flann_cpp PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
++    if (BUILD_CUDA_LIB)
++        set_property(TARGET flann_cuda PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
++    endif()
++endif()
+ 
+ 
+ #debug libraries
+-add_library(flann_cpp-gd SHARED ${CPP_SOURCES})
++add_library(flann_cpp-gd ${CPP_SOURCES})
++if (BUILD_SHARED_LIBS)
+ set_target_properties(flann_cpp-gd PROPERTIES 
+     COMPILE_FLAGS ${CMAKE_CXX_FLAGS_DEBUG}
+     DEFINE_SYMBOL FLANN_EXPORTS
+ )
+-
+-add_library(flann_cpp_s-gd STATIC ${CPP_SOURCES})
+-set_target_properties(flann_cpp_s-gd PROPERTIES COMPILE_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
+-set_property(TARGET flann_cpp_s-gd PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
++else()
++set_target_properties(flann_cpp-gd PROPERTIES COMPILE_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
++set_property(TARGET flann_cpp-gd PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
++endif()
+ 
+ 
+ 
+@@ -90,37 +77,29 @@ if (HDF5_FOUND)
+ endif()
+ 
+ if (BUILD_CUDA_LIB)
+-    add_library(flann_cuda-gd SHARED ${CPP_SOURCES})
++    add_library(flann_cuda-gd ${CPP_SOURCES})
++    if (BUILD_SHARED_LIBS)
+     set_target_properties(flann_cuda-gd PROPERTIES 
+         COMPILE_FLAGS ${CMAKE_CXX_FLAGS_DEBUG}
+         DEFINE_SYMBOL FLANN_EXPORTS
+     )
+-
+-    add_library(flann_cuda_s-gd STATIC ${CPP_SOURCES})
+-    set_target_properties(flann_cuda_s-gd PROPERTIES COMPILE_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
+-    set_property(TARGET flann_cuda_s-gd PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
++    else()
++    set_target_properties(flann_cuda-gd PROPERTIES COMPILE_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
++    set_property(TARGET flann_cuda-gd PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
++    endif()
+ endif()
+ 
+ if (BUILD_C_BINDINGS)
+-    add_library(flann_s STATIC ${C_SOURCES})
+-    if(CMAKE_COMPILER_IS_GNUCC)
+-        set_target_properties(flann_s PROPERTIES COMPILE_FLAGS -fPIC)
+-    endif()
+-    set_property(TARGET flann_s PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
+-
+-    if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
+-        add_library(flann SHARED "")
+-        set_target_properties(flann PROPERTIES LINKER_LANGUAGE CXX)
+-        target_link_libraries(flann -Wl,-whole-archive flann_s -Wl,-no-whole-archive)
++    add_library(flann ${C_SOURCES})
++    if (NOT BUILD_SHARED_LIBS)
++    set_property(TARGET flann PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
+     else()
+-        add_library(flann SHARED ${C_SOURCES})
+-    endif()
+-
+     set_target_properties(flann PROPERTIES
+        VERSION ${FLANN_VERSION}
+        SOVERSION ${FLANN_SOVERSION}
+        DEFINE_SYMBOL FLANN_EXPORTS
+     ) 
++    endif()
+ endif()
+ 
+ 
+@@ -129,13 +108,15 @@ if (BUILD_C_BINDINGS)
+     install (
+         TARGETS flann
+         RUNTIME DESTINATION share/flann/matlab
++        LIBRARY DESTINATION ${FLANN_LIB_INSTALL_DIR}
++        ARCHIVE DESTINATION ${FLANN_LIB_INSTALL_DIR}
+     )
+ endif()
+ endif(WIN32)
+ 
+ 
+ install (
+-    TARGETS flann_cpp flann_cpp_s flann_cpp-gd flann_cpp_s-gd
++    TARGETS flann_cpp flann_cpp-gd
+     RUNTIME DESTINATION bin
+     LIBRARY DESTINATION ${FLANN_LIB_INSTALL_DIR}
+     ARCHIVE DESTINATION ${FLANN_LIB_INSTALL_DIR}
+@@ -143,7 +124,7 @@ install (
+  
+ if (BUILD_CUDA_LIB)
+     install (
+-        TARGETS flann_cuda flann_cuda_s flann_cuda-gd flann_cuda_s-gd
++        TARGETS flann_cuda flann_cuda-gd
+         RUNTIME DESTINATION bin
+         LIBRARY DESTINATION ${FLANN_LIB_INSTALL_DIR}
+         ARCHIVE DESTINATION ${FLANN_LIB_INSTALL_DIR}
+@@ -152,7 +133,7 @@ endif()
+ 
+ if (BUILD_C_BINDINGS)
+     install (
+-        TARGETS flann flann_s
++        TARGETS flann
+         RUNTIME DESTINATION bin
+         LIBRARY DESTINATION ${FLANN_LIB_INSTALL_DIR}
+         ARCHIVE DESTINATION ${FLANN_LIB_INSTALL_DIR}
+@@ -164,3 +145,4 @@ install (
+     DESTINATION include
+     FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+ )
++
+-- 
+1.9.1
+

@@ -29,5 +29,3 @@ define $(PKG)_BUILD
         -DBUILD_PYTHON_BINDINGS=OFF
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 endef
-
-$(PKG)_BUILD_SHARED =
