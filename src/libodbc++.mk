@@ -11,9 +11,9 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libodbcxx/libodbc++/$($(
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://libodbcxx.svn.sourceforge.net/viewvc/libodbcxx/tags/?sortby=date' | \
-    grep '<a name="' | \
-    $(SED) -n 's,.*<a name="libodbc++-\([0-9][^"]*\)".*,\1,p' | \
+    $(WGET) -q -O- "http://sourceforge.net/projects/libodbcxx/files/libodbc%2B%2B" | \
+    grep 'libodbcxx/files/libodbc%2B%2B/' | \
+    $(SED) -n 's,.*/\([0-9][^>]*\)/.*,\1,p' | \
     head -1
 endef
 
