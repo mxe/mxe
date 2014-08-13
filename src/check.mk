@@ -3,8 +3,8 @@
 
 PKG             := check
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.11
-$(PKG)_CHECKSUM := 84b5af72dd49df4ac837645d117ce9126535d549
+$(PKG)_VERSION  := 0.9.14
+$(PKG)_CHECKSUM := 4b79e2d485d014ddb438e322b64235347d57b0ff
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
