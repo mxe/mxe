@@ -22,6 +22,11 @@ define $(PKG)_BUILD
         -DCMAKE_BUILD_TYPE=Release \
         -DLIBUSB_INCLUDE_DIR=$(PREFIX)/$(TARGET)/include/libusb-1.0
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Wextra -Werror \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libftdi1.exe' \
+        `'$(TARGET)-pkg-config' libftdi1 --cflags --libs`
 endef
 
 $(PKG)_BUILD_SHARED =
