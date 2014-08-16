@@ -38,7 +38,7 @@ define $(PKG)_BUILD
         CC='$(TARGET)-gcc' \
         AR='$(TARGET)-ar rcu' \
         RANLIB='$(TARGET)-ranlib' \
-        a
+        all
     $(MAKE) -C '$(1)' -j 1 \
         INSTALL_TOP='$(PREFIX)/$(TARGET)' \
         INSTALL_BIN='$(1)/noinstall' \
@@ -56,7 +56,7 @@ define $(PKG)_BUILD_SHARED
         RANLIB='echo skipped ranlib' \
         SYSCFLAGS='-DLUA_BUILD_AS_DLL' \
         LUA_A=lua$($(PKG)_SOVERS).dll \
-        a
+        all
     $(MAKE) -C '$(1)' -j 1 \
         INSTALL_TOP='$(PREFIX)/$(TARGET)' \
         INSTALL_MAN='$(1)/noinstall' \
