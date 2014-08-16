@@ -20,6 +20,7 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.am'
     cd '$(1)' && aclocal -I m4 -I gl/m4 -I src/libopts/m4 --install
+    cd '$(1)' && autoreconf -f -i
     cd '$(1)' && autoconf
     cd '$(1)' && automake --add-missing
     # skip the run test for libregex support since we are cross compiling
