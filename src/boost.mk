@@ -46,7 +46,7 @@ define $(PKG)_BUILD
         stage install
 
     $(if $(BUILD_SHARED), \
-        mv -fv $(PREFIX)/$(TARGET)/lib/libboost_*.dll '$(PREFIX)/$(TARGET)/bin/')
+        mv -fv '$(PREFIX)/$(TARGET)/lib/'libboost_*.dll '$(PREFIX)/$(TARGET)/bin/')
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \
