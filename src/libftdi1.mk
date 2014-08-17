@@ -20,6 +20,8 @@ define $(PKG)_BUILD
     cd '$(1)' && cmake . \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_BUILD_TYPE=Release \
+        -DSHAREDLIBS=$(if $(BUILD_SHARED),yes,no) \
+        -DSTATICLIBS=$(if $(BUILD_SHARED),no,yes) \
         -DLIBUSB_INCLUDE_DIR=$(PREFIX)/$(TARGET)/include/libusb-1.0 \
         -DDOCUMENTATION=no \
         -DEXAMPLES=no \
@@ -33,5 +35,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libftdi1.exe' \
         `'$(TARGET)-pkg-config' libftdi1 --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
