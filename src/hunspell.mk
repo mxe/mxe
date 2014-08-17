@@ -19,13 +19,10 @@ endef
 define $(PKG)_BUILD
     # Note: the configure file doesn't pick up pdcurses, so "ui" is disabled
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --enable-static \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --with-warnings \
         --without-ui \
-        --with-readline \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --with-readline
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # Test
@@ -34,5 +31,3 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hunspell.exe' \
         `'$(TARGET)-pkg-config' hunspell --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
