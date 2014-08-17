@@ -22,4 +22,9 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         CFLAGS=-D_WIN32_WINNT=0x0500
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Wextra -Werror \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libusb1.exe' \
+        `'$(TARGET)-pkg-config' libusb-1.0 --cflags --libs`
 endef
