@@ -25,7 +25,7 @@ define $(PKG)_BUILD
         $(if $(BUILD_STATIC),no-,)shared \
         no-capieng \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' install -j 1 \
+    $(MAKE) -C '$(1)' all install_sw -j 1 \
         CC='$(TARGET)-gcc' \
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar rcu' \
