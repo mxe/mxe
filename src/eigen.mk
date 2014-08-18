@@ -6,8 +6,8 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2.1
 $(PKG)_CHECKSUM := 17aca570d647b25cb3d9dac54b480cfecf402ed9
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-6b38706d90a9
-$(PKG)_FILE     := $($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_FILE)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
