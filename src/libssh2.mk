@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         --without-openssl \
         --with-libgcrypt \
         PKG_CONFIG='$(TARGET)-pkg-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install noinst_PROGRAMS= dist_man_MANS=
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
