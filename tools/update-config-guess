@@ -3,7 +3,7 @@
 # See index.html for further information.
 #
 # Script to automatically update config.guess
-# (http://gmsl.sourceforge.net/)
+# (http://savannah.gnu.org/projects/config)
 
 clean(){
     rm -rf tmp-config-guess
