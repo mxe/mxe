@@ -28,7 +28,7 @@ define $(PKG)_NATIVE_BUILD
         --disable-nls
     $(MAKE) -C '$(1).native/$(libiconv_SUBDIR)' -j '$(JOBS)'
 
-    # native build for glib-genmarshal, without pkg-config, gettext and zlib
+    # native build for glib-genmarshal, without gettext and zlib
     cd '$(1).native' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
