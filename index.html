@@ -801,15 +801,28 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     Install
     <a href="http://developer.apple.com/xcode/">Xcode 5</a>
-    and
-    <a href="http://www.macports.org/">MacPorts</a>,
+    </p>
+    <h4 id="requirements-macos-method-1">Method 1 - MacPorts</h3>
+    <p>
+    Install <a href="http://www.macports.org/">MacPorts</a>,
     then run:
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
     glib2 intltool p5-xml-parser gpatch scons wget xz</pre>
+    <h4 id="requirements-macos-method-2">Method 2 - Rudix</h3>
     <p>
-    and from within the mxe directory:
+    Install <a href="http://rudix.org/">Rudix</a> you can make it with following command
+    </p>
+    <pre>curl -s https://raw.githubusercontent.com/rudix-mac/rpm/2014.6/rudix.py \
+    | sudo python - install rudix</pre>
+    <p>
+    then run:
+    </p>
+    <pre>sudo rudix install wget xz glib pkg-config scons</pre>
+    <h4 id="requirements-macos-method-2">Step 2</h3>
+    <p>
+    after installing pre-requirement run from within the mxe directory:
     </p>
     <pre>make build-requirements</pre>
     <p>
