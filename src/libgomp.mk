@@ -27,7 +27,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install
 
     # TODO: find a way to fix this in configure stage
-    $(if BUILD_SHARED, \
+    $(if $(BUILD_SHARED), \
         mv '$(PREFIX)/bin/'libgomp*.dll '$(PREFIX)/$(TARGET)/bin/')
 
     '$(TARGET)-gcc' \
