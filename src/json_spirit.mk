@@ -1,35 +1,30 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := pcl
+PKG             := json_spirit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.1
-$(PKG)_CHECKSUM := 784bce606141260423ea04f37b093f59d4c94c6a
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/PointCloudLibrary/pcl/archive/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgomp boost eigen flann vtk
+$(PKG)_VERSION  := 4.08
+$(PKG)_CHECKSUM := d46a896991b7eb736bff2628909645d3bbaaf5cf
+$(PKG)_SUBDIR   := $(PKG)_v$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)_v$($(PKG)_VERSION).zip
+
+# The original source of this file at
+# http://www.codeproject.com/KB/recipes/JSON_Spirit/json_spirit_v4.08.zip
+# is behind a login screen, so I have offered to host this from my
+# website
+$(PKG)_URL      := http://www.hpcoders.com.au/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc boost
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://github.com/PointCloudLibrary/pcl/releases" | \
-    grep '<a href=.*tar' | \
-    $(SED) -n 's,.*pcl-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    echo 'TODO: write update script for $(PKG).' >&2;
+    echo $($(PKG)_VERSION)
 endef
-
-# There is a strange problem where including <cfloat> leads to an error
-# in some of the #include_next magic with float.h.
-# We work around this by avoiding an #include_next in MinGW's float.h
-# (by defining __FLOAT_H) and then manually defining the MIN/MAX macros
-# that PCL wants to use.
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
     cd '$(1).build' && \
-        CXXFLAGS="-D__FLOAT_H -DFLT_MAX=__FLT_MAX__ -DFLT_MIN=__FLT_MIN__ -DDBL_MAX=__DBL_MAX__ -DDBL_MIN=__DBL_MIN__ -DDBL_EPSILON=__DBL_EPSILON__" \
         cmake '$(1)' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DVTK_DIR='$(PREFIX)/$(TARGET)/lib/vtk-5.8' \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_RELEASE_POSTFIX='' \
         -DBoost_THREADAPI=win32 \
