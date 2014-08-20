@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DLIBTYPE=$(if BUILD_SHARED,SHARED,STATIC) \
+        -DLIBTYPE=$(if $(BUILD_SHARED),SHARED,STATIC) \
         -DEXAMPLES=FALSE
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 
@@ -29,4 +29,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-openal.exe' \
         `'$(TARGET)-pkg-config' openal --cflags --libs`
 endef
-
