@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         --without-openssl \
         --with-libgcrypt \
         PKG_CONFIG='$(TARGET)-pkg-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install noinst_PROGRAMS= dist_man_MANS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
