@@ -1036,6 +1036,13 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         where up to 4 packages are downloaded in parallel
         </dd>
 
+    <dt>make download-only-foo download-only-bar</dt>
+
+        <dd>
+        download packages "foo", "bar", without their dependencies,
+        non-parallel
+        </dd>
+
     <dt>make clean</dt>
 
         <dd>
