@@ -68,6 +68,48 @@ MXE_CONFIGURE_OPTS = \
         --enable-static --disable-shared , \
         --disable-static --enable-shared )
 
+# Append these to the "make" and "make install" steps of autotools packages
+# in order to neither build nor install unwanted binaries, manpages,
+# infopages and API documentation (reduces build time and disk space usage).
+# NOTE: We don't include bin_SCRIPTS (and variations), since many packages
+# install files such as pcre-config (which we do want to be installed).
+
+MXE_DISABLE_PROGRAMS = \
+    bin_PROGRAMS= \
+    sbin_PROGRAMS= \
+    noinst_PROGRAMS= \
+    check_PROGRAMS=
+
+MXE_DISABLE_DOCS = \
+    man_MANS= \
+    man1_MANS= \
+    man2_MANS= \
+    man3_MANS= \
+    man4_MANS= \
+    man5_MANS= \
+    man6_MANS= \
+    man7_MANS= \
+    man8_MANS= \
+    man9_MANS= \
+    dist_man_MANS= \
+    dist_man1_MANS= \
+    dist_man2_MANS= \
+    dist_man3_MANS= \
+    dist_man4_MANS= \
+    dist_man5_MANS= \
+    dist_man6_MANS= \
+    dist_man7_MANS= \
+    dist_man8_MANS= \
+    dist_man9_MANS= \
+    notrans_dist_man_MANS= \
+    info_TEXINFOS= \
+    doc_DATA= \
+    dist_doc_DATA= \
+    html_DATA= \
+    dist_html_DATA=
+
+MXE_DISABLE_CRUFT = $(MXE_DISABLE_PROGRAMS) $(MXE_DISABLE_DOCS)
+
 MAKE_SHARED_FROM_STATIC = \
 	'$(TOP_DIR)/tools/make-shared-from-static' \
 	$(if $(findstring mingw,$(TARGET)),--windowsdll) \

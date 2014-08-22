@@ -27,8 +27,9 @@ define $(PKG)_BUILD_SHARED
         --disable-pcregrep-libz \
         --disable-pcregrep-libbz2 \
         --disable-pcretest-libreadline
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
     rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/pcre16*.3
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/pcre32*.3
     ln -sf '$(PREFIX)/$(TARGET)/bin/pcre-config' '$(PREFIX)/bin/$(TARGET)-pcre-config'
 endef
 
