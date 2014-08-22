@@ -23,6 +23,12 @@ define $(PKG)_BUILD
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
+
+    # all programs using luabind should define LUA_COMPAT_ALL
+    '$(TARGET)-g++' \
+        -W -Wall -DLUA_COMPAT_ALL \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-luabind.exe' \
+        -llua -lluabind
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =
