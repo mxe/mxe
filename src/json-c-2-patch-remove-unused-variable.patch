@@ -1,0 +1,20 @@
+This file is part of MXE.
+See index.html for further information.
+
+Fixes unused variables warnings, see https://github.com/json-c/json-c/commit/259c5c0b5fe87c2db41e7a989cc0ab5865170d81
+
+--- a/json_tokener.c	2014-04-11 02:41:08.000000000 +0200
++++ b/json_tokener.c	2014-08-21 23:41:45.000419963 +0200
+@@ -352,12 +352,10 @@
+ 
+     case json_tokener_state_inf: /* aka starts with 'i' */
+       {
+-	int size;
+ 	int size_inf;
+ 	int is_negative = 0;
+ 
+ 	printbuf_memappend_fast(tok->pb, &c, 1);
+-	size = json_min(tok->st_pos+1, json_null_str_len);
+ 	size_inf = json_min(tok->st_pos+1, json_inf_str_len);
+ 	char *infbuf = tok->pb->buf;
+ 	if (*infbuf == '-')
