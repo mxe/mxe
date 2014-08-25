@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.2.15
-$(PKG)_CHECKSUM := 31f289b48b0bf054f5f8c16d3b878615d0ae06fc
+$(PKG)_VERSION  := 3.2.17
+$(PKG)_CHECKSUM := c48b02912c5dc77b627f1f17dcc05c2be1d59b0f
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.2/$($(PKG)_FILE)
