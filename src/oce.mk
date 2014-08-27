@@ -11,6 +11,8 @@ $(PKG)_URL      := https://codeload.github.com/tpaviot/$(PKG)/tar.gz/OCE-$($(PKG
 $(PKG)_DEPS     := gcc freetype
 
 define $(PKG)_UPDATE
+  echo 'TODO: write update script for $(PKG)' >&2;
+  echo $($(PKG)_VERSION)
 endef
 
 define $(PKG)_BUILD
@@ -21,10 +23,10 @@ define $(PKG)_BUILD
         -DOCE_INSTALL_BIN_DIR=$(PREFIX)/$(TARGET)/bin \
         -DOCE_INSTALL_LIB_DIR=$(PREFIX)/$(TARGET)/lib \
         -DOCE_INSTALL_CMAKE_DATA_DIR=$(PREFIX)/$(TARGET)/lib/cmake/OCE \
-        -DOCE_DISABLE_X11=TRUE
+        -DFREETYPE_INCLUDE_DIRS=$(PREFIX)/$(TARGET)/include/freetype2
+        
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
     
     cd '$(1)/examples/find_package_oce' && cmake . -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
     $(MAKE) -C '$(1)/examples/find_package_oce'
-    #computeSurface.exe test-jpeg.exe
 endef
