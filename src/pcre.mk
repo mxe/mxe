@@ -30,8 +30,6 @@ define $(PKG)_BUILD_SHARED
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_PROGRAMS) dist_html_DATA= dist_doc_DATA=
     rm -f '$(PREFIX)/$(TARGET)'/share/man/man1/pcre*.1
     rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/pcre*.3
-    rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/pcre16*.3
-    rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/pcre32*.3
     ln -sf '$(PREFIX)/$(TARGET)/bin/pcre-config' '$(PREFIX)/bin/$(TARGET)-pcre-config'
 endef
 
