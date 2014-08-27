@@ -1,0 +1,44 @@
+This file is part of MXE.
+See index.html for further information.
+
+commit 9b4639e25442a3b6d0337d8e602a8332ec0e26e0
+Author: Boris Nagaev <bnagaev@gmail.com>
+Date:   Fri Aug 22 15:17:21 2014 +0400
+
+    CMakeLists.txt
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..acc47ae
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,29 @@
++cmake_minimum_required(VERSION 2.6)
++project(luabind)
++
++include(FindBoost)
++FIND_PACKAGE(Boost 1.34 REQUIRED)
++include_directories(${Boost_INCLUDE_DIRS})
++
++include(FindLua51)
++find_package(Lua51 REQUIRED)
++include_directories(${LUA_INCLUDE_DIR})
++
++include_directories(${PROJECT_SOURCE_DIR})
++
++file(GLOB sources "src/*.cpp")
++
++add_library(luabind STATIC ${sources})
++
++set(luabind_cxx_flags "-ftemplate-depth-128 -finline-functions")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${luabind_cxx_flags}")
++
++add_definitions(-DLUA_COMPAT_ALL)
++
++target_link_libraries(luabind ${LUA_LIBRARIES} luabind)
++
++install(TARGETS luabind DESTINATION
++        ${CMAKE_INSTALL_PREFIX}/lib)
++install(DIRECTORY luabind DESTINATION
++        ${CMAKE_INSTALL_PREFIX}/include)
++

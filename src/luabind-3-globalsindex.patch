@@ -1,0 +1,205 @@
+This file is part of MXE.
+See index.html for further information.
+
+commit 7325c469a8eb443cd2d46c9860f278cd2672dace
+Author: Boris Nagaev <bnagaev@gmail.com>
+Date:   Fri Aug 22 15:27:11 2014 +0400
+
+    LUA_GLOBALSINDEX
+
+diff --git a/luabind/detail/call_function.hpp b/luabind/detail/call_function.hpp
+index 8f5afff..cb56dc0 100644
+--- a/luabind/detail/call_function.hpp
++++ b/luabind/detail/call_function.hpp
+@@ -347,8 +347,7 @@ namespace luabind
+ 			, luabind::detail::proxy_function_void_caller<boost::tuples::tuple<BOOST_PP_ENUM(BOOST_PP_ITERATION(), LUABIND_TUPLE_PARAMS, _)> >
+ 			, luabind::detail::proxy_function_caller<Ret, boost::tuples::tuple<BOOST_PP_ENUM(BOOST_PP_ITERATION(), LUABIND_TUPLE_PARAMS, _)> > >::type proxy_type;
+ 
+-		lua_pushstring(L, name);
+-		lua_gettable(L, LUA_GLOBALSINDEX);
++		lua_getglobal(L, name);
+ 
+ 		return proxy_type(L, 1, &detail::pcall, args);
+ 	}
+@@ -390,8 +389,7 @@ namespace luabind
+ 			, luabind::detail::proxy_function_void_caller<boost::tuples::tuple<BOOST_PP_ENUM(BOOST_PP_ITERATION(), LUABIND_TUPLE_PARAMS, _)> >
+ 			, luabind::detail::proxy_function_caller<Ret, boost::tuples::tuple<BOOST_PP_ENUM(BOOST_PP_ITERATION(), LUABIND_TUPLE_PARAMS, _)> > >::type proxy_type;
+ 
+-		lua_pushstring(L, name);
+-		lua_gettable(L, LUA_GLOBALSINDEX);
++		lua_getglobal(L, name);
+ 
+ 		return proxy_type(L, 1, &detail::resume_impl, args);
+ 	}
+diff --git a/luabind/detail/object_funs.hpp b/luabind/detail/object_funs.hpp
+index 2600238..f826d7a 100644
+--- a/luabind/detail/object_funs.hpp
++++ b/luabind/detail/object_funs.hpp
+@@ -184,7 +184,11 @@ namespace luabind
+ 
+ 	inline object get_globals(lua_State* L)
+ 	{
++#ifdef LUA_GLOBALSINDEX
+ 		lua_pushvalue(L, LUA_GLOBALSINDEX);
++#else
++		lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS);
++#endif
+ 		detail::lua_reference ref;
+ 		ref.set(L);
+ 		return object(L, ref, true/*object::reference()*/);
+diff --git a/luabind/object.hpp b/luabind/object.hpp
+index f7b7ca5..b288171 100644
+--- a/luabind/object.hpp
++++ b/luabind/object.hpp
+@@ -1207,7 +1207,12 @@ inline object newtable(lua_State* interpreter)
+ // this could be optimized by returning a proxy
+ inline object globals(lua_State* interpreter)
+ {
++#ifdef LUA_GLOBALSINDEX
+     lua_pushvalue(interpreter, LUA_GLOBALSINDEX);
++#else
++    lua_rawgeti(interpreter, LUA_REGISTRYINDEX,
++            LUA_RIDX_GLOBALS);
++#endif
+     detail::stack_pop pop(interpreter, 1);
+     return object(from_stack(interpreter, -1));
+ }
+diff --git a/src/class_rep.cpp b/src/class_rep.cpp
+index 70bb623..912df95 100755
+--- a/src/class_rep.cpp
++++ b/src/class_rep.cpp
+@@ -146,11 +146,10 @@ int luabind::detail::class_rep::constructor_dispatcher(lua_State* L)
+         && cls->get_class_type() == class_rep::lua_class
+         && !cls->bases().empty())
+     {
+-        lua_pushstring(L, "super");
+         lua_pushvalue(L, 1);
+         lua_pushvalue(L, -3);
+         lua_pushcclosure(L, super_callback, 2);
+-        lua_settable(L, LUA_GLOBALSINDEX);
++        lua_setglobal(L, "super");
+     }
+ 
+     lua_pushvalue(L, -1);
+@@ -169,9 +168,8 @@ int luabind::detail::class_rep::constructor_dispatcher(lua_State* L)
+ 
+     if (super_deprecation_disabled)
+     {
+-        lua_pushstring(L, "super");
+         lua_pushnil(L);
+-        lua_settable(L, LUA_GLOBALSINDEX);
++        lua_setglobal(L, "super");
+     }
+ 
+     return 1;
+@@ -214,17 +212,15 @@ int luabind::detail::class_rep::super_callback(lua_State* L)
+ 
+ 	if (base->bases().empty())
+ 	{
+-		lua_pushstring(L, "super");
+ 		lua_pushnil(L);
+-		lua_settable(L, LUA_GLOBALSINDEX);
++		lua_setglobal(L, "super");
+ 	}
+ 	else
+ 	{
+-		lua_pushstring(L, "super");
+ 		lua_pushlightuserdata(L, base);
+ 		lua_pushvalue(L, lua_upvalueindex(2));
+ 		lua_pushcclosure(L, super_callback, 2);
+-		lua_settable(L, LUA_GLOBALSINDEX);
++		lua_setglobal(L, "super");
+ 	}
+ 
+ 	base->get_table(L);
+@@ -241,9 +237,8 @@ int luabind::detail::class_rep::super_callback(lua_State* L)
+ 	// TODO: instead of clearing the global variable "super"
+ 	// store it temporarily in the registry. maybe we should
+ 	// have some kind of warning if the super global is used?
+-	lua_pushstring(L, "super");
+ 	lua_pushnil(L);
+-	lua_settable(L, LUA_GLOBALSINDEX);
++	lua_setglobal(L, "super");
+ 
+ 	return 0;
+ }
+diff --git a/src/create_class.cpp b/src/create_class.cpp
+index c0eb719..47251ef 100755
+--- a/src/create_class.cpp
++++ b/src/create_class.cpp
+@@ -126,9 +126,8 @@ namespace luabind { namespace detail
+ 		new(c) class_rep(L, name);
+ 
+ 		// make the class globally available
+-		lua_pushstring(L, name);
+-		lua_pushvalue(L, -2);
+-		lua_settable(L, LUA_GLOBALSINDEX);
++		lua_pushvalue(L, -1);
++		lua_setglobal(L, name);
+ 
+ 		// also add it to the closure as return value
+ 		lua_pushcclosure(L, &stage2, 1);
+diff --git a/src/open.cpp b/src/open.cpp
+index f20dcfc..ec8e4ff 100755
+--- a/src/open.cpp
++++ b/src/open.cpp
+@@ -178,21 +178,18 @@ namespace
+         lua_settable(L, LUA_REGISTRYINDEX);
+ 
+         // add functions (class, cast etc...)
+-        lua_pushstring(L, "class");
+         lua_pushcclosure(L, detail::create_class::stage1, 0);
+-        lua_settable(L, LUA_GLOBALSINDEX);
++        lua_setglobal(L, "class");
+ 
+-        lua_pushstring(L, "property");
+         lua_pushcclosure(L, &make_property, 0);
+-        lua_settable(L, LUA_GLOBALSINDEX);
++        lua_setglobal(L, "property");
+ 
+         lua_pushlightuserdata(L, &main_thread_tag);
+         lua_pushlightuserdata(L, L);
+         lua_rawset(L, LUA_REGISTRYINDEX);
+ 
+-        lua_pushstring(L, "super");
+         lua_pushcclosure(L, &deprecated_super, 0);
+-        lua_settable(L, LUA_GLOBALSINDEX);
++        lua_setglobal(L, "super");
+     }
+ 
+ } // namespace luabind
+diff --git a/src/scope.cpp b/src/scope.cpp
+index 6495687..d4d1f24 100755
+--- a/src/scope.cpp
++++ b/src/scope.cpp
+@@ -136,22 +136,25 @@ namespace luabind {
+     {
+         if (m_name)
+         {
+-            lua_pushstring(m_state, m_name);
+-            lua_gettable(m_state, LUA_GLOBALSINDEX);
++            lua_getglobal(m_state, m_name);
+ 
+             if (!lua_istable(m_state, -1))
+             {
+                 lua_pop(m_state, 1);
+ 
+                 lua_newtable(m_state);
+-                lua_pushstring(m_state, m_name);
+-                lua_pushvalue(m_state, -2);
+-                lua_settable(m_state, LUA_GLOBALSINDEX);
++                lua_pushvalue(m_state, -1);
++                lua_setglobal(m_state, m_name);
+             }
+         }
+         else
+         {
++#ifdef LUA_GLOBALSINDEX
+             lua_pushvalue(m_state, LUA_GLOBALSINDEX);
++#else
++            lua_rawgeti(m_state, LUA_REGISTRYINDEX,
++                    LUA_RIDX_GLOBALS);
++#endif
+         }
+ 
+         lua_pop_stack guard(m_state);

@@ -1,0 +1,32 @@
+This file is part of MXE.
+See index.html for further information.
+
+commit 61587d1b0ffa1d08874154fcdaf0644f8b5b2461
+Author: Boris Nagaev <bnagaev@gmail.com>
+Date:   Fri Aug 22 16:46:35 2014 +0400
+
+    lua_resume
+
+diff --git a/src/pcall.cpp b/src/pcall.cpp
+index 66dbeaa..7a5d0c2 100755
+--- a/src/pcall.cpp
++++ b/src/pcall.cpp
+@@ -47,6 +47,10 @@ namespace luabind { namespace detail
+ 
+ 	int resume_impl(lua_State *L, int nargs, int)
+ 	{
++#if LUA_VERSION_NUM >= 502
++		int res = lua_resume(L, NULL, nargs);
++		return (res == LUA_YIELD) ? 0 : res;
++#else
+ #if LUA_VERSION_NUM >= 501
+ 		// Lua 5.1 added  LUA_YIELD as a possible return value,
+ 		// this was causing crashes, because the caller expects 0 on success.
+@@ -55,6 +59,7 @@ namespace luabind { namespace detail
+ #else
+ 		return lua_resume(L, nargs);
+ #endif
++#endif
+ 	}
+ 
+ }}
