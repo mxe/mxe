@@ -8,6 +8,7 @@ $(PKG)_CHECKSUM := 6e518c0274a8392c0c98d18ef0ef754b9c596aca
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := OpenCV-$($(PKG)_VERSION)a.tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://distfiles.macports.org/opencv/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc eigen ffmpeg jasper jpeg lcms1 libpng openexr tiff xz zlib
 
 define $(PKG)_UPDATE
