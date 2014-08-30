@@ -4,10 +4,10 @@
 PKG             := pcl
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.0
-$(PKG)_CHECKSUM := 45a2e155d7faf5901abe609fd40d5f1659015e9e
-$(PKG)_SUBDIR   := PCL-$($(PKG)_VERSION)-Source
-$(PKG)_FILE     := PCL-$($(PKG)_VERSION)-Source.tar.bz2
-$(PKG)_URL      := http://www.pointclouds.org/assets/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := 6e45e45dc711821236a79c6a777d045c0a2baf93
+$(PKG)_SUBDIR   := pcl-pcl-$($(PKG)_VERSION)
+$(PKG)_FILE     := pcl-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/PointCloudLibrary/pcl/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgomp boost eigen flann vtk
 
 define $(PKG)_UPDATE
