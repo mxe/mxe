@@ -7,8 +7,8 @@ $(PKG)_VERSION  := 6.8.6-3
 $(PKG)_CHECKSUM := fff85a0b7fa1c8d6307908e4cc58d2576c79ff11
 $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://www.imagemagick.org/download/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://ftp.nluug.nl/ImageMagick/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.imagemagick.org/download/releases/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 ffmpeg fftw freetype jasper jpeg lcms liblqr-1 libpng libtool openexr pthreads tiff
 
 define $(PKG)_UPDATE
