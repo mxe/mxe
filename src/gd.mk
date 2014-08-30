@@ -8,6 +8,7 @@ $(PKG)_CHECKSUM := ccf34a610abff2dbf133a20c4d2a4aa94939018a
 $(PKG)_SUBDIR   := gd-$($(PKG)_VERSION)
 $(PKG)_FILE     := gd-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.libgd.org/releases/$($(PKG)_FILE)
+$(PKG)_URL_2     := http://ring.u-toyama.ac.jp/archives/graphics/gd/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype libpng jpeg libxml2 pthreads
 
 define $(PKG)_UPDATE
