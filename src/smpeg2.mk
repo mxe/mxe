@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 2.0.0
 $(PKG)_CHECKSUM := d0455466f61a8e55f83f4d7fd82f1c305bce6832
 $(PKG)_SUBDIR   := smpeg2-$($(PKG)_VERSION)
 $(PKG)_FILE     := smpeg2-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.libsdl.org/projects/smpeg/release/$(PKG)_FILE
+$(PKG)_URL      := http://www.libsdl.org/projects/smpeg/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc sdl2
 
 define $(PKG)_UPDATE
