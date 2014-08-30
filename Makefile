@@ -155,16 +155,18 @@ CHECK_PKG_ARCHIVE = \
 ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
+BACKUP_DOWNLOAD = \
+    $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`
+
 DOWNLOAD_PKG_ARCHIVE = \
-        mkdir -p '$(PKG_DIR)' && \
-        $(if $($(1)_URL_2), \
-            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-              $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)' || \
-              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
-            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
+        mkdir -p '$(PKG_DIR)' && ( \
+            $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' \
+            $(if $($(1)_URL_2), \
+                || $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)') \
+            $(if $(MXE_NO_BACKUP_DL),, \
+                || $(BACKUP_DOWNLOAD)) \
+        ) \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
