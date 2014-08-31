@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cat <<EOF >$1
+Download failure: `date -u`
+
+See `cat ~/mxe/tmp-url`?log.
+EOF
