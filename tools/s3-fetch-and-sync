@@ -21,8 +21,7 @@ if ! ( \
         >~/mxe/tmp-url
 
     # Use a fake "editor" to format the issue
-    EDITOR=~/mxe/tools/fake-editor ghi open -- TimothyGu/tmp
-    # EDITOR=~/mxe/tools/fake-editor ghi open -- mxe/mxe
+    EDITOR=~/mxe/tools/fake-editor ghi open -- mxe/mxe
 fi
 
 cd ~/mxe && make clean-junk
