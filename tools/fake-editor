@@ -1,4 +1,9 @@
 #!/bin/sh
+# This file is part of MXE.
+# See index.html for further information.
+
+# Fake "editor" to format output for GitHub issue.
+# See tools/s3-fetch-and-sync for more info.
 
 cat <<EOF >$1
 Download failure: `date -u`
