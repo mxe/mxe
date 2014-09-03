@@ -3,9 +3,9 @@
 
 PKG             := mingw-w64
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.0
-$(PKG)_CHECKSUM := c167b1dc114a13c465fe6adcce9dc65c509baf75
-$(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
+$(PKG)_VERSION  := 3.2.0
+$(PKG)_CHECKSUM := 0581cc71d3f5826ed68a615773370acd20c5826c
+$(PKG)_SUBDIR   := 
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
