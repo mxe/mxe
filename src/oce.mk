@@ -11,8 +11,8 @@ $(PKG)_URL      := https://codeload.github.com/tpaviot/$(PKG)/tar.gz/OCE-$($(PKG
 $(PKG)_DEPS     := gcc freetype
 
 define $(PKG)_UPDATE
-  echo 'TODO: write update script for oce' >&2;
-  echo $(oce_VERSION)
+    echo 'TODO: write update script for oce' >&2;
+    echo $(oce_VERSION)
 endef
 
 define $(PKG)_BUILD
