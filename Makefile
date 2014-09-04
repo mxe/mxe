@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
-TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
+TOP_DIR  := $(abspath $(patsubst %/,%,$(dir $(MAKEFILE))))
 EXT_DIR  := $(TOP_DIR)/ext
 
 # GNU Make Standard Library (http://gmsl.sourceforge.net/)
@@ -636,4 +636,36 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</tbody>'                        >> $@
 	@echo '</table>'                        >> $@
 	@echo '</body>'                         >> $@
+
+# The meat of git-init-% target.
+# argument 1: package name
+# argument 2: temporary directory used to contain the Git repo
+define GIT_INIT
+    rm -rf '$(2)'
+    mkdir -p '$(2)'
+    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
+    cd '$(2)/$($(1)_SUBDIR)'                 && \
+    git init                                 && \
+    git config user.email "mxe@mxe.cc"       && \
+    git config user.name  "MXE"              && \
+    git add *                                && \
+    git commit -qm'Inititalize from tarball' && \
+    git branch tarball
+    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)), \
+        (cd '$(2)/$($(1)_SUBDIR)'                 && \
+            (git am < $(TOP_DIR)/$(PKG_PATCH)                || \
+            (rm -rf .git/rebase-apply             && \
+                $(PATCH) -p1 -u < $(TOP_DIR)/$(PKG_PATCH)    && \
+                git add *                         && \
+                git commit -m'Patch $(PKG_PATCH)'))))
+	cd '$(2)/$($(1)_SUBDIR)'                 && \
+	git branch current                       && \
+    git config --unset user.email            && \
+    git config --unset user.name
+endef
+
+git-init-%:
+	$(if $(findstring $*~,$(addsuffix ~,$(PKGS))), \
+		$(call GIT_INIT,$*,$(call TMP_DIR,git-$*)),    \
+	$(error package $* not found in index.html))
 
