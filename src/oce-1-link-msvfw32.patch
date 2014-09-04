@@ -19,7 +19,7 @@ index f355c09..6587958 100644
  endif (OPENCL_FOUND AND OCE_WITH_OPENCL)
  if(WIN32)
 -    list(APPEND TOOLKIT_LIBS vfw32)
-+	list(APPEND TOOLKIT_LIBS msvfw32)
++    list(APPEND TOOLKIT_LIBS msvfw32)
  endif()
  
  include(../BuildToolkit.cmake)
