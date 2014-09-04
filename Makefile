@@ -176,6 +176,10 @@ DOWNLOAD_PKG_ARCHIVE = \
           echo; \
           rm -f '$(PKG_DIR)/$($(1)_FILE)'; )
 
+ifneq ($(words $(PWD)),1)
+    $(error GNU Make chokes on paths with spaces)
+endif
+
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
 else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
