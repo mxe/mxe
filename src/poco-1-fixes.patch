@@ -1,0 +1,24 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 329b3a3ebbcd2ee03e3f0e21cd929dd54fffcac3 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 8 Sep 2014 16:52:55 -0700
+Subject: [PATCH] configure: Define POCO_STATIC when --static is requested
+
+
+diff --git a/configure b/configure
+index 1d93337..87f189e 100755
+--- a/configure
++++ b/configure
+@@ -189,6 +189,7 @@ while [ "$1" != "" ] ; do
+ 
+ 	if [ "$1" = "--static" ] ; then
+ 		static=1
++		flags="$flags -DPOCO_STATIC"
+ 	fi
+ 	
+ 	if [ "$1" = "--shared" ] ; then
+-- 
+1.8.3.2
+
