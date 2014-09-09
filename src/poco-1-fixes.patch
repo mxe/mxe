@@ -49,3 +49,48 @@ index c4c5b83..8d29273 100644
 -- 
 1.8.3.2
 
+From b14d120b8cb65cc348b884e4d418531356dfc9b0 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 8 Sep 2014 16:27:42 -0700
+Subject: [PATCH] Types.h: Fix Win64 on MinGW
+
+---
+ Foundation/include/Poco/Types.h | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/Foundation/include/Poco/Types.h b/Foundation/include/Poco/Types.h
+index 1b076d5..23321d9 100644
+--- a/Foundation/include/Poco/Types.h
++++ b/Foundation/include/Poco/Types.h
+@@ -57,16 +57,24 @@ namespace Poco {
+ 	typedef unsigned short         UInt16;
+ 	typedef signed int             Int32;
+ 	typedef unsigned int           UInt32;
+-	typedef signed long            IntPtr;
+-	typedef unsigned long          UIntPtr;
+-	#if defined(__LP64__)
++	#if defined(_WIN64)
+ 		#define POCO_PTR_IS_64_BIT 1
+-		#define POCO_LONG_IS_64_BIT 1
+-		typedef signed long        Int64;
+-		typedef unsigned long      UInt64;
+-	#else
++		typedef signed long long   IntPtr;
++		typedef unsigned long long UIntPtr;
+ 		typedef signed long long   Int64;
+ 		typedef unsigned long long UInt64;
++	#else
++		typedef signed long        IntPtr;
++		typedef unsigned long      UIntPtr;
++		#if defined(__LP64__)
++			#define POCO_PTR_IS_64_BIT 1
++			#define POCO_LONG_IS_64_BIT 1
++			typedef signed long        Int64;
++			typedef unsigned long      UInt64;
++		#else
++			typedef signed long long   Int64;
++			typedef unsigned long long UInt64;
++		#endif
+ 	#endif
+ 	#define POCO_HAVE_INT64 1
+ #elif defined(__DECCXX)
