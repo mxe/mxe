@@ -21,7 +21,7 @@ define $(PKG)_CONFIGURE
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --build="`config.guess`" \
+        --build='$(BUILD)' \
         --enable-static \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
