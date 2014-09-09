@@ -11,8 +11,10 @@ $(PKG)_URL      := https://github.com/tpaviot/oce/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for oce' >&2;
-    echo $(oce_VERSION)
+    $(WGET) -q -O- 'https://github.com/tpaviot/oce/releases' | \
+    $(SED) -n 's,.*oce/archive/OCE-\([0-9][^"]*\)\.tar\.gz.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
