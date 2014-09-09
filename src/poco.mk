@@ -22,6 +22,9 @@ define $(PKG)_BUILD
         --static \
         --unbundled \
         --prefix='$(PREFIX)/$(TARGET)'
+    $(if $(BUILD_STATIC), \
+        $(SED) -i 's:// #define POCO_STATIC:#define POCO_STATIC:' \
+            '$(1)/Foundation/include/Poco/Config.h')
     $(MAKE) -C '$(1)' -j '$(JOBS)' install CROSSENV=$(TARGET)
 
     '$(TARGET)-g++' \

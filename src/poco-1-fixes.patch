@@ -22,3 +22,30 @@ index 1d93337..87f189e 100755
 -- 
 1.8.3.2
 
+From 0b88c734bfae5cc4ac65de7cb903124cca62b8a5 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 8 Sep 2014 17:09:19 -0700
+Subject: [PATCH] Config.h: Add prototype for POCO_STATIC
+
+---
+ Foundation/include/Poco/Config.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Foundation/include/Poco/Config.h b/Foundation/include/Poco/Config.h
+index c4c5b83..8d29273 100644
+--- a/Foundation/include/Poco/Config.h
++++ b/Foundation/include/Poco/Config.h
+@@ -48,6 +48,10 @@
+ // #define POCO_NO_AUTOMATIC_LIBS
+ 
+ 
++// Define on Windows for static linking
++// #define POCO_STATIC
++
++
+ // Define to disable FPEnvironment support
+ // #define POCO_NO_FPENVIRONMENT
+ 
+-- 
+1.8.3.2
+
