@@ -21,7 +21,7 @@ define $(PKG)_CONFIGURE
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --build="`config.guess`" \
+        --build='$(shell config.guess)' \
         --enable-static \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -45,6 +45,7 @@ define $(PKG)_CONFIGURE
         --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
+        --with-libjson-c='$(PREFIX)/$(TARGET)' \
         --without-odbc \
         --without-xerces \
         --without-grass \
@@ -90,19 +91,19 @@ define $(PKG)_BUILD
     $($(PKG)_CONFIGURE)\
         --with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-netcdf='$(PREFIX)/$(TARGET)' \
-        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+        LIBS="-ljpeg -lsecur32 -lportablexdr $(shell '$(TARGET)-pkg-config' --libs openssl libtiff-4)"
     $($(PKG)_MAKE)
 endef
 
 define $(PKG)_BUILD_x86_64-w64-mingw32
     $($(PKG)_CONFIGURE) \
-        LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+        LIBS="-ljpeg -lsecur32 $(shell '$(TARGET)-pkg-config' --libs openssl libtiff-4)"
     $($(PKG)_MAKE)
 endef
 
 define $(PKG)_BUILD_i686-w64-mingw32
     $($(PKG)_CONFIGURE) \
-        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
+        LIBS="-ljpeg -lsecur32 -lportablexdr $(shell '$(TARGET)-pkg-config' --libs openssl libtiff-4)"
     $($(PKG)_MAKE)
 endef
 
