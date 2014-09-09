@@ -6,8 +6,8 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.16
 $(PKG)_CHECKSUM := c3882249e1afc3c6a170e8e31a45e25d4be3e3b2
 $(PKG)_SUBDIR   := $(PKG)-OCE-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := https://codeload.github.com/tpaviot/$(PKG)/tar.gz/OCE-$($(PKG)_VERSION)
+$(PKG)_FILE     := OCE-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/tpaviot/oce/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype
 
 define $(PKG)_UPDATE
