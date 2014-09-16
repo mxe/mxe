@@ -3,8 +3,8 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.3.1
-$(PKG)_CHECKSUM := 4496edb8377e303f09145a1215f79e62e3a7ba11
+$(PKG)_VERSION  := 5.3.2
+$(PKG)_CHECKSUM := faf4f33aa7e8dabcdcdf5f10824263beebbccd96
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.3/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
