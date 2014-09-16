@@ -21,9 +21,8 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC), \
         $(SED) -i 's!defined(MIKMOD_STATIC)!1!g' '$(1)/include/mikmod.h')
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-doc
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 
     '$(TARGET)-gcc' \
@@ -31,5 +30,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libmikmod.exe' \
         `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
