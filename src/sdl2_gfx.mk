@@ -21,8 +21,8 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
-        SDL_LIBS=$($(TARGET)-pkg-config --libs sdl2 | sed -e 's/-lmingw32//' -e 's/-lSDL2main//') \
-        SDL_CFLAGS=$($(TARGET)-pkg-config --cflags sdl2 | sed 's/-Dmain=SDL_main//'))
+        SDL_LIBS="`$(TARGET)-pkg-config --libs sdl2 | $(SED) -e 's/-lmingw32//' -e 's/-lSDL2main//'`" \
+        SDL_CFLAGS="`$(TARGET)-pkg-config --cflags sdl2 | $(SED) 's/-Dmain=SDL_main//'`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
