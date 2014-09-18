@@ -29,3 +29,5 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-qscintilla2.exe' -lqscintilla2 \
 	`'$(TARGET)-pkg-config' Qt5Widgets --libs`
 endef
+
+$(PKG)_BUILD_i686-pc-mingw32 =
