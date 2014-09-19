@@ -24,3 +24,7 @@ define $(PKG)_BUILD
 	CFLAGS=-D__MINGW_EXCPT_DEFINE_PSDK
     $(MAKE) -C '$(1)/win' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
+
+# tcl doesn't compile on i686-pc-mingw32. See
+# https://github.com/mxe/mxe/issues/508
+$(PKG)_BUILD_i686-pc-mingw32 :=

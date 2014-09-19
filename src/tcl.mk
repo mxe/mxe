@@ -20,7 +20,11 @@ define $(PKG)_BUILD
     cd '$(1)/win' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-threads \
-	$(if $(findstring 64,$(TARGET)), --enable-64bit) \
-	CFLAGS=-D__MINGW_EXCPT_DEFINE_PSDK
-    $(MAKE) -C '$(1)/win' install install-private-headers bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        $(if $(findstring 64,$(TARGET)), --enable-64bit) \
+        CFLAGS='-D__MINGW_EXCPT_DEFINE_PSDK'
+    $(MAKE) -C '$(1)/win' install install-private-headers $(MXE_DISABLE_PROGRAMS)
 endef
+
+# tcl doesn't compile on i686-pc-mingw32. See
+# https://github.com/mxe/mxe/issues/508
+$(PKG)_BUILD_i686-pc-mingw32 :=
