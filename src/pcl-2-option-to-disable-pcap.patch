@@ -1,0 +1,34 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 8db0a5e0d8e859fc503a95bca8ae471c84a661f0 Mon Sep 17 00:00:00 2001
+From: v4hn <me@v4hn.de>
+Date: Fri, 19 Sep 2014 14:46:45 -0700
+Subject: [PATCH] add cmake options to enable/disable optional pcap
+
+Taken from https://github.com/PointCloudLibrary/pcl/commit/15442dce767881c60612cf70f9a7726d3fccc486
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+---
+ CMakeLists.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f2196da..2d9a919 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -321,7 +321,10 @@ if(DOXYGEN_FOUND)
+   find_package(HTMLHelp)
+ endif(DOXYGEN_FOUND)
+ #Find PCAP
+-find_package(Pcap)
++option(WITH_PCAP "pcap file capabilities in Velodyne HDL driver" TRUE)
++if(WITH_PCAP)
++  find_package(Pcap)
++endif(WITH_PCAP)
+ 
+ ### ---[ Create the config.h file
+ set(pcl_config_h_in "${CMAKE_CURRENT_SOURCE_DIR}/pcl_config.h.in")
+-- 
+1.8.3.2
+
