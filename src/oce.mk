@@ -32,3 +32,5 @@ define $(PKG)_BUILD
     cd '$(1)/examples/find_package_oce' && cmake . -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
     $(MAKE) -C '$(1)/examples/find_package_oce'
 endef
+
+$(PKG)_BUILD_i686-pc-mingw32 :=
