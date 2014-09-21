@@ -1,0 +1,57 @@
+This file is part of MXE.
+See index.html for further information.
+
+No Windows crypt functions available in MXE (for now).
+This may weaken randomisation of linkhash seeds, but I do not see a 
+big problem, because this should be good enough (TM) to avoid hash
+collisions. Feel free to blame me (Residuum on github):
+
+return (int)time(NULL) * 433494437;
+
+See:
+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-6371
+https://github.com/json-c/json-c/commit/64e36901a0614bf64a19bc3396469c66dcd0b015
+
+--- a/random_seed.c	2014-04-11 02:41:08.000000000 +0200
++++ b/random_seed.c	2014-08-21 23:52:31.062411233 +0200
+@@ -174,40 +174,6 @@
+ #endif
+ 
+ 
+-/* get_cryptgenrandom_seed */
+-
+-#ifdef WIN32
+-
+-#define HAVE_CRYPTGENRANDOM 1
+-
+-#include <windows.h>
+-#pragma comment(lib, "advapi32.lib")
+-
+-static int get_cryptgenrandom_seed()
+-{
+-    DEBUG_SEED("get_cryptgenrandom_seed");
+-    
+-    HCRYPTPROV hProvider = 0;
+-    int r;
+-    
+-    if (!CryptAcquireContextW(&hProvider, 0, 0, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT | CRYPT_SILENT)) {
+-        fprintf(stderr, "error CryptAcquireContextW");
+-        exit(1);
+-    }
+-    
+-    if (!CryptGenRandom(hProvider, sizeof(r), (BYTE*)&r)) {
+-        fprintf(stderr, "error CryptGenRandom");
+-        exit(1);
+-    }
+-    
+-    CryptReleaseContext(hProvider, 0);
+-    
+-    return r;
+-}
+-
+-#endif
+-
+-
+ /* get_time_seed */
+ 
+ #include <time.h>
