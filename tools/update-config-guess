@@ -9,18 +9,7 @@ clean(){
     rm -rf tmp-config-guess
 }
 
-# Ported from main Makefile
-SED='sed'
-SORT='sort'
-if [ gsed --help >/dev/null 2>&1 ]; then
-    SED='gsed'
-fi
-if [ gsort --help >/dev/null 2>&1 ]; then
-    SED='gsort'
-fi
-WGET="wget --no-check-certificate
-         --user-agent=$(wget --version |
-         $SED -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')"
+. tools/compat-init.sh
 
 # Current config.guess timestamp.
 current_version=$(grep 'timestamp.*=' 'ext/config.guess' 2>/dev/null | \

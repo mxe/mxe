@@ -2,6 +2,8 @@
 
 set -e
 
+. tools/compat-init.sh
+
 LD=
 AR=
 INSTALL=
@@ -131,14 +133,14 @@ if [ -n "$infile" ]; then
   base_infile=$(basename $infile)
   if $windowsdll; then
     if $msvc; then
-      base_name=`echo $base_infile | sed -n -e 's/^lib\(.*\)\.a$/\1/p'`
+      base_name=`echo $base_infile | $SED -n -e 's/^lib\(.*\)\.a$/\1/p'`
       outfile="${libprefix}${base_name}${libsuffix}.dll"
       implibfile="$base_name.lib"
       # Modern libtool won't create .a files, but will create directly .lib files.
       # If the .a file does not exist, check for an existing .lib file.
       if [ ! -f "$infile" ]; then
-        msvc_infiles="`echo $infile | sed -e 's/\.a$/.lib/'` \
-`dirname \"$infile\"`/`echo $base_infile | sed -e 's/\.a$/.lib/' -e 's/^lib//'`"
+        msvc_infiles="`echo $infile | $SED -e 's/\.a$/.lib/'` \
+`dirname \"$infile\"`/`echo $base_infile | $SED -e 's/\.a$/.lib/' -e 's/^lib//'`"
         for msvc_infile in $msvc_infiles; do
           if [ -f "$msvc_infile" ]; then
             infile="$msvc_infile"
@@ -148,11 +150,11 @@ if [ -n "$infile" ]; then
         done
       fi
     else
-      outfile=$(echo $base_infile | sed 's/\.a$/.dll/')
+      outfile=$(echo $base_infile | $SED 's/\.a$/.dll/')
       implibfile="$outfile.a"
     fi
   else
-    outfile=$(echo $base_infile | sed 's/\.a$/.so/')
+    outfile=$(echo $base_infile | $SED 's/\.a$/.so/')
   fi
 else
   echo "make-shared-from-static: no input file specified" 1>&2
@@ -160,8 +162,7 @@ else
 fi
 
 NM=nm
-SED=sed
-global_symbol_pipe="sed -n -e 's/^.*[     ]\\([ABCDGIRSTW][ABCDGIRSTW]*\\)[     ][     ]*_\\([_A-Za-z][_A-iZa-z0-9]*\\)\\{0,1\\}\$/\\1 _\\2 \\2/p' | sed '/ __gnu_lto/d'"
+global_symbol_pipe="$SED -n -e 's/^.*[     ]\\([ABCDGIRSTW][ABCDGIRSTW]*\\)[     ][     ]*_\\([_A-Za-z][_A-iZa-z0-9]*\\)\\{0,1\\}\$/\\1 _\\2 \\2/p' | $SED '/ __gnu_lto/d'"
 # Ignore DATA symbols for now. They should be be properly exported from
 # the source code using dllexport. They can't be re-exported manually like
 # this using MSVC.
