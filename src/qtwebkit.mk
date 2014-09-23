@@ -20,6 +20,8 @@ define $(PKG)_BUILD_SHARED
     cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' FLEX=flex
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
+
+    $(qt5_FIX_CMAKE_FILE)
 endef
 
 $(PKG)_BUILD_i686-pc-mingw32 =

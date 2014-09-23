@@ -62,6 +62,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt5
 
+    $(qt5_FIX_CMAKE_FILE)
+
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qt-test.pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'

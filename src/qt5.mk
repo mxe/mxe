@@ -16,3 +16,9 @@ $(PKG)_DEPS     := $(patsubst $(TOP_DIR)/src/%.mk,%,\
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
 endef
+
+define $(PKG)_FIX_CMAKE_FILE
+    $(if $(BUILD_STATIC), \
+        find $(PREFIX)/$(TARGET)/qt5/lib/cmake/ -name '*\.cmake' | \
+        xargs $(SED) -i 's!/\(.*\)\.lib!/lib\1\.a!g')
+endef
