@@ -18,8 +18,6 @@ define $(PKG)_BUILD
     cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
-
-    $(qt5_FIX_CMAKE_FILE)
 endef
 
 $(PKG)_BUILD_i686-pc-mingw32 =
