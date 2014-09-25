@@ -22,7 +22,9 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC),                                         \
     	$(SED) -i 's/__declspec(dllimport)//' '$(1)/caca/caca.h'; \
         $(SED) -i 's/__declspec(dllimport)//' '$(1)/caca/caca0.h')
-    cd '$(1)' && ./configure \
+    # Somehow glut *requires* -lopengl32 etc. even if it's built as shared
+    cd '$(1)' && PKG_CONFIG='i686-w64-mingw32.shared-pkg-config --static' \
+        ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-csharp \
         --disable-java \
