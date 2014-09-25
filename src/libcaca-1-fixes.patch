@@ -149,7 +149,7 @@ index 641dd17..3ce7057 100644
 +  dnl Also checking for glutCloseFunc(), but that is not mandatory.
 +
 +  AC_CHECK_HEADERS([OpenGL/gl.h GL/gl.h], [
-+   PKG_CHECK_MODULES([GL], [glut], [
++   PKG_CHECK_MODULES([GL], [glut glu gl], [
 +    CFLAGS="${CFLAGS} ${GL_CFLAGS}"
 +    LIBS="${LIBS} ${GL_LIBS}"
 +    AC_MSG_CHECKING([for glutCloseFunc()])
