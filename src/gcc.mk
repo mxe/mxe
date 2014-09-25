@@ -59,6 +59,7 @@ define $(PKG)_POST_BUILD
     -mv '$(PREFIX)/lib/gcc/$(TARGET)/lib/'* '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
     -mv '$(PREFIX)/lib/gcc/$(TARGET)/'*.dll '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
     -cp '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+    -cp '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll.a '$(PREFIX)/$(TARGET)/lib/'
 endef
 
 define $(PKG)_BUILD_i686-pc-mingw32
