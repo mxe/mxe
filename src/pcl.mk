@@ -39,6 +39,7 @@ define $(PKG)_BUILD
         -DBUILD_examples=OFF \
         -DBUILD_global_tests=OFF \
         -DBUILD_tools=OFF \
+        -DWITH_PCAP=OFF \
         -DHAVE_MM_MALLOC_EXITCODE=0 \
         -DHAVE_SSE4_1_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \

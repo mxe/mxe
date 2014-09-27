@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc proj zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf4 hdf5 netcdf
+$(PKG)_DEPS     := gcc proj zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf4 hdf5 json-c netcdf
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
@@ -45,6 +45,7 @@ define $(PKG)_CONFIGURE
         --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
+        --with-libjson-c='$(PREFIX)/$(TARGET)' \
         --without-odbc \
         --without-xerces \
         --without-grass \

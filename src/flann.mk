@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_SHARED
     # workaround for strange "too many sections" error
     # setting CXXFLAGS='-O3' seems to fix it
     # similar to http://www.mail-archive.com/mingw-w64-public@lists.sourceforge.net/msg06329.html
@@ -29,4 +29,12 @@ define $(PKG)_BUILD
         -DBUILD_PYTHON_BINDINGS=OFF  \
         -DUSE_OPENMP=ON
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
+endef
+
+define $(PKG)_BUILD
+    $($(PKG)_BUILD_SHARED)
+    for l in flann flann_cpp; do \
+        ln -sf '$(PREFIX)/$(TARGET)'/lib/lib$$l.a \
+            '$(PREFIX)/$(TARGET)'/lib/lib$${l}_s.a ; \
+    done
 endef

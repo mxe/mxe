@@ -69,15 +69,14 @@ index d04c972..9302273 100644
  /* Sum absolute 8-bit integer difference of adjacent groups of 4
     byte integers in the first 2 operands.  Starting offsets within
     operands are determined by the 3rd mask operand.  */
-@@ -1887,3 +1891,8 @@ _mm256_mask_i64gather_epi32 (__m128i src, int const *base,
+@@ -1887,3 +1891,7 @@ _mm256_mask_i64gather_epi32 (__m128i src, int const *base,
  #endif /* __DISABLE_AVX2__ */
  
- #endif /* _AVX2INTRIN_H_INCLUDED */
-+
 +#ifdef __cplusplus
 +}
 +#endif
 +
+ #endif /* _AVX2INTRIN_H_INCLUDED */
 diff --git a/gcc/config/i386/avxintrin.h b/gcc/config/i386/avxintrin.h
 index 2ea327c..32591da 100644
 --- a/gcc/config/i386/avxintrin.h
@@ -93,15 +92,14 @@ index 2ea327c..32591da 100644
  /* Internal data types for implementing the intrinsics.  */
  typedef double __v4df __attribute__ ((__vector_size__ (32)));
  typedef float __v8sf __attribute__ ((__vector_size__ (32)));
-@@ -1461,3 +1465,8 @@ _mm256_castsi128_si256 (__m128i __A)
+@@ -1461,3 +1465,7 @@ _mm256_castsi128_si256 (__m128i __A)
  #endif /* __DISABLE_AVX__ */
  
- #endif /* _AVXINTRIN_H_INCLUDED */
-+
 +#ifdef __cplusplus
 +}
 +#endif
 +
+ #endif /* _AVXINTRIN_H_INCLUDED */
 diff --git a/gcc/config/i386/bmi2intrin.h b/gcc/config/i386/bmi2intrin.h
 index ff96296..b01e1e1 100644
 --- a/gcc/config/i386/bmi2intrin.h
@@ -630,18 +628,17 @@ index 886ace4..168b903 100644
  /* Rounding mode macros. */
  #define _MM_FROUND_TO_NEAREST_INT	0x00
  #define _MM_FROUND_TO_NEG_INF		0x01
-@@ -820,6 +824,11 @@ _mm_cmpgt_epi64 (__m128i __X, __m128i __Y)
- #pragma GCC push_options
- #pragma GCC target("sse4.2")
+@@ -822,6 +826,10 @@ _mm_cmpgt_epi64 (__m128i __X, __m128i __Y)
  #define __DISABLE_SSE4_2__
-+
+ #endif /* __SSE4_1__ */
+ 
 +#ifdef __cplusplus
 +}
 +#endif
 +
- #endif /* __SSE4_1__ */
- 
  /* Accumulate CRC32 (polynomial 0x11EDC6F41) value.  */
+ extern __inline unsigned int __attribute__((__gnu_inline__, __always_inline__, 
+ _mm_crc32_u8 (unsigned int __C, unsigned char __V)
 diff --git a/gcc/config/i386/tbmintrin.h b/gcc/config/i386/tbmintrin.h
 index 871f532..744b9ca 100644
 --- a/gcc/config/i386/tbmintrin.h
