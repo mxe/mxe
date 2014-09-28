@@ -81,7 +81,7 @@ index 7443368..c24e684 100644
 1.8.4.5
 
 
-From 5e07aa747ff142b6332878248eee6c4a06b12306 Mon Sep 17 00:00:00 2001
+From e7f53a64b5345e8389683ded15e396cbf0b94218 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 23 Sep 2014 09:36:28 -0700
 Subject: [PATCH 4/4] create_cmake: Fix mingw plugin path
@@ -92,29 +92,27 @@ Change-Id: I899adca8ec0b1c8430f5b6c4f18ad0ea1dc6d398
 taken from: https://codereview.qt-project.org/95617
 
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
-index 2533b7b..4147fe9 100644
+index 2533b7b..e874957 100644
 --- a/mkspecs/features/create_cmake.prf
 +++ b/mkspecs/features/create_cmake.prf
-@@ -133,11 +133,19 @@ contains(CONFIG, plugin) {
+@@ -133,11 +133,16 @@ contains(CONFIG, plugin) {
      CMAKE_PLUGIN_NAME = $$PLUGIN_CLASS_NAME
  
      win32 {
 -        isEmpty(CMAKE_STATIC_TYPE): CMAKE_PlUGIN_EXT = .dll
 -        else: CMAKE_PlUGIN_EXT = .lib
-+        mingw {
-+            isEmpty(CMAKE_STATIC_TYPE): CMAKE_PlUGIN_EXT = .dll
-+            else: CMAKE_PlUGIN_EXT = .a
- 
+-
 -        CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${TARGET}$${CMAKE_PlUGIN_EXT}
 -        CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${TARGET}d$${CMAKE_PlUGIN_EXT}
-+            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${TARGET}$${CMAKE_PlUGIN_EXT}
-+            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${TARGET}d$${CMAKE_PlUGIN_EXT}
-+        } else {
-+            isEmpty(CMAKE_STATIC_TYPE): CMAKE_PlUGIN_EXT = .dll
-+            else: CMAKE_PlUGIN_EXT = .lib
-+
-+            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${TARGET}$${CMAKE_PlUGIN_EXT}
-+            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${TARGET}d$${CMAKE_PlUGIN_EXT}
++        isEmpty(CMAKE_STATIC_TYPE) {
++            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${TARGET}.dll
++            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${TARGET}d.dll
++        } else:mingw {
++            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${TARGET}.a
++            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${TARGET}d.a
++        } else {                         # MSVC static
++            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${TARGET}.lib
++            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${TARGET}d.lib
 +        }
      } else {
          mac {
