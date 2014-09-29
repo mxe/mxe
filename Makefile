@@ -621,7 +621,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	    $(if $($(PKG)_BUILD_ONLY),               \
 	        $(eval BUILD_ONLY_PKGCOUNT := $(call inc,$(BUILD_ONLY_PKGCOUNT)))))
 	@echo '<tr>'                            >> $@
-	# TOTAL_PKGCOUNT = ( PKGS - VIRTUAL ) - BUILD_ONLY
+	@# TOTAL_PKGCOUNT = ( PKGS - VIRTUAL ) - BUILD_ONLY
 	$(eval TOTAL_PKGCOUNT :=                     \
 	    $(call subtract,                         \
 	        $(call subtract,$(words $(PKGS)),$(VIRTUAL_PKGCOUNT)),\
