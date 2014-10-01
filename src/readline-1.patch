@@ -7,24 +7,10 @@ Date: Tue, 30 Sep 2014 10:32:33 -0700
 Subject: [PATCH 1/2] signals: safeguard the remaining usage of frequently
  missing signals
 
----
- input.c   | 14 +++++++++++---
- signals.c |  6 ++++++
- 2 files changed, 17 insertions(+), 3 deletions(-)
-
 diff --git a/input.c b/input.c
 index 117dfe8..465f0b9 100644
 --- a/input.c
 +++ b/input.c
-@@ -52,7 +52,7 @@
- #if defined (FIONREAD_IN_SYS_IOCTL)
- #  include <sys/ioctl.h>
- #endif
--
-+ 
- #include <stdio.h>
- #include <errno.h>
- 
 @@ -532,9 +532,17 @@ rl_getc (stream)
  	 Otherwise (not EINTR), some error occurred, also signifying EOF. */
        if (errno != EINTR)
@@ -87,12 +73,6 @@ From 6896ffa4fc85bf0dfae58e69a860d2076c1d9fd2 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 30 Sep 2014 17:16:32 -0700
 Subject: [PATCH 2/2] Handle missing S_IS* macros more gracefully
-
----
- colors.c    | 14 ++++++++++++--
- colors.h    |  2 +-
- posixstat.h | 16 ++++++++++++++++
- 3 files changed, 29 insertions(+), 3 deletions(-)
 
 diff --git a/colors.c b/colors.c
 index 89d9035..ec19844 100644
