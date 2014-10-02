@@ -3,8 +3,8 @@
 
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.0
-$(PKG)_CHECKSUM := c20891862b5876983d180fc4a3d3cfb2b4a3375c
+$(PKG)_VERSION  := 3.2.1
+$(PKG)_CHECKSUM := 5c666531f7d487075fd692d89f1e05036306192a
 $(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
 $(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://www.openscenegraph.org/downloads/developer_releases/$($(PKG)_FILE)
@@ -19,7 +19,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake . \
+    mkdir '$(1).build'
+    cd '$(1).build' && cmake '$(1)' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_CXX_FLAGS=-D__STDC_CONSTANT_MACROS \
         -DCMAKE_HAVE_PTHREAD_H=OFF \
@@ -28,11 +29,9 @@ define $(PKG)_BUILD
         -DDYNAMIC_OPENSCENEGRAPH=OFF \
         -DBUILD_OSG_APPLICATIONS=OFF \
         -DPOPPLER_HAS_CAIRO_EXITCODE=0 \
-        -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
+        -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1 \
+        -D_OPENTHREADS_ATOMIC_USE_WIN32_INTERLOCKED=1
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
 
 $(PKG)_BUILD_SHARED =
