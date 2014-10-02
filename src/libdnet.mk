@@ -25,7 +25,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,packet\.lib,libpacket.a,'                   '$(1)/configure'
     $(SED) -i 's,-lpacket,-lpacket -lws2_32,g'               '$(1)/configure'
     $(SED) -i 's,/usr/include,$(PREFIX)/$(TARGET)/include,g' '$(1)/configure'
-    $(SED) -i 's,#include <Ntddndis.h>,#include <ddk/ntddndis.h>,' '$(1)/src/eth-win32.c'
+    $(SED) -i 's,#include <Ntddndis.h>,#include <ntddndis.h>,' '$(1)/src/eth-win32.c'
     $(SED) -i 's,-mno-cygwin,,' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
@@ -33,8 +33,5 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
 
 $(PKG)_BUILD_SHARED =

@@ -15,7 +15,7 @@ index c12c7b2..9e8bdd2 100644
    typedef u_short	uint16_t;
    typedef u_int		uint32_t;
  # ifndef __CYGWIN__
-+# ifndef _SSIZE_T_
++# if !defined( _SSIZE_T_) && !defined(__MINGW64_VERSION_MAJOR)
    typedef long		ssize_t;
  # endif
 +# endif
