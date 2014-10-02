@@ -24,3 +24,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 endef
+
+CMAKE = $(PREFIX)/$(TARGET)/bin/cmake \
+            -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
