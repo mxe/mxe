@@ -13,7 +13,7 @@ MXE_TRIPLETS       := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
 MXE_LIB_TYPES      := static shared
 MXE_TARGET_LIST    := $(foreach TRIPLET,$(MXE_TRIPLETS),\
                           $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES)))
-MXE_TARGETS        := i686-pc-mingw32.static
+MXE_TARGETS        := i686-w64-mingw32.static
 
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
