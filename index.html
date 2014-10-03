@@ -3087,9 +3087,10 @@ endef</pre>
     <dt>2014-xx-xx &ndash; Release <span id="latest-version">2.23</span></dt>
     <dd>
         <p>
-        The <a href="#download">stable branch</a> was updated
-        to the current development version after a thorough
-        <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2013-07/msg00021.html">testing phase</a>.
+        The <a href="#download">stable branch</a> was updated to the 
+        current development version after a thorough <a 
+        href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/FIXME">testing 
+        phase</a>.
         </p>
 
         <p>
@@ -3109,7 +3110,44 @@ endef</pre>
         </p>
 
         <p>
-        Added support for <a href="#supported-toolchains">shared toolchains</a>.
+        Added support for <a href="#supported-toolchains">shared toolchains</a> for over 50% of all the packages.
+        </p>
+
+        <p>
+        Unfortunately, a number of factors have forced us to drop support 
+        for MinGW 3 (i.e. "<a href="http://mingw.org/">MinGW.org</a>"), 
+        in favor of the MinGW-w64 toolchain. This decision was made in a 
+        large part because of the dropping of support for MinGW by <a 
+        href="https://github.com/mxe/mxe/pull/453#issuecomment-51703048"> 
+        GLib</a> and <a 
+        href="https://github.com/mxe/mxe/issues/492#issue-41366666">Qt5</a>, 
+        which arguably are two of the most important packages in MXE. 
+        Other considerations have also been taken, like the <a 
+        href="https://github.com/mxe/mxe/pull/323#issuecomment-39463810">lack 
+        of maintainership in MinGW</a> and <a 
+        href="https://github.com/mxe/mxe/issues/400">potential legal 
+        challenges</a> that comes with using supplemental DirectX 
+        headers in MinGW in order to support Qt4. Worse yet, having to 
+        support the unsupported MinGW toolchain impedes adding or 
+        updating packages, as shown in the <a 
+        href"https://github.com/mxe/mxe/pull/453#issuecomment-51703048">pull 
+        request of updating GLib</a>.
+        </p>
+
+        <p>
+        Please note that dropping support for MinGW <strong>DOES NOT 
+        MEAN</strong> dropping support for the 32-bit architecture. MinGW-w64
+        also supports 32-bit target through i686-w64-mingw32.
+        </p>
+
+        <p>
+        To ease migration to the supported MinGW-w64 target, we have
+        finished porting all packages that were MinGW-only to at least
+        i686-w64-mingw32 (32-bit target of MinGW-w64). Hence your existing
+        commands should work out-of-the-box assuming the
+        <code>MXE_TARGETS</code> environmental variable is set correctly.
+        </p>
+
     </dd>
 -->
 
