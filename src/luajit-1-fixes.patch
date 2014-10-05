@@ -1,0 +1,38 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 7f9e517a6ffb86e2392f2f6ab60fc530aacd71db Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 6 Oct 2014 00:15:00 +1100
+Subject: [PATCH] detect if host cc accepts -malign-double
+
+This patch has been taken from:
+
+http://www.freelists.org/post/luajit/detect-if-host-cc-accepts-maligndouble
+
+diff --git a/src/Makefile b/src/Makefile
+index 9551781..682260e 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -167,6 +167,7 @@ CCOPTIONS= $(CCDEBUG) $(CCOPT) $(CCWARN) $(XCFLAGS) $(CFLAGS)
+ LDOPTIONS= $(CCDEBUG) $(LDFLAGS)
+ 
+ HOST_CC= $(CC)
++HOST_CC_MALIGN_DOUBLE= $(shell $(HOST_CC) -malign-double -v > /dev/null 2>&1 && echo -malign-double)
+ HOST_RM= rm -f
+ # If left blank, minilua is built and used. You can supply an installed
+ # copy of (plain) Lua 5.1 or 5.2, plus Lua BitOp. E.g. with: HOST_LUA=lua
+@@ -333,7 +334,7 @@ endif
+ 
+ ifneq ($(HOST_SYS),$(TARGET_SYS))
+   ifeq (Windows,$(TARGET_SYS))
+-    HOST_XCFLAGS+= -malign-double -DLUAJIT_OS=LUAJIT_OS_WINDOWS
++    HOST_XCFLAGS+= $(HOST_CC_MALIGN_DOUBLE) -DLUAJIT_OS=LUAJIT_OS_WINDOWS
+   else
+   ifeq (Linux,$(TARGET_SYS))
+     HOST_XCFLAGS+= -DLUAJIT_OS=LUAJIT_OS_LINUX
+-- 
+1.9.3 (Apple Git-50)
+
