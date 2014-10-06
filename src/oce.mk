@@ -25,10 +25,11 @@ define $(PKG)_BUILD
         -DOCE_INSTALL_BIN_DIR=$(PREFIX)/$(TARGET)/bin \
         -DOCE_INSTALL_LIB_DIR=$(PREFIX)/$(TARGET)/lib \
         -DOCE_INSTALL_CMAKE_DATA_DIR=$(PREFIX)/$(TARGET)/lib/cmake/OCE \
-        -DFREETYPE_INCLUDE_DIRS=$(PREFIX)/$(TARGET)/include/freetype2
-        
+        -DFREETYPE_INCLUDE_DIRS=$(PREFIX)/$(TARGET)/include/freetype2 \
+        -DFREETYPE_LIBRARY:STRING="`$(TARGET)-pkg-config --libs freetype2`"
+
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
-    
+
     cd '$(1)/examples/find_package_oce' && cmake . -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
     $(MAKE) -C '$(1)/examples/find_package_oce'
 endef
