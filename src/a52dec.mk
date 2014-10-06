@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi # The autotools files came with a52dec is _ancient_
+    cd '$(1)' && autoreconf -fi # The autotools files came with a52dec are _ancient_
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=

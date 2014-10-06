@@ -3,8 +3,8 @@
 
 PKG             := curl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.37.0
-$(PKG)_CHECKSUM := 0bcd1bd7901ee1d7059189d2b3807fdb6a271bc6
+$(PKG)_VERSION  := 7.38.0
+$(PKG)_CHECKSUM := c512754a185e2f30624ba88fc390a376a4385a76
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.lzma
 $(PKG)_URL      := http://curl.haxx.se/download/$($(PKG)_FILE)
@@ -25,7 +25,7 @@ define $(PKG)_BUILD
         --enable-sspi \
         --enable-ipv6 \
         --with-libssh2
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_DOCS)
     ln -sf '$(PREFIX)/$(TARGET)/bin/curl-config' '$(PREFIX)/bin/$(TARGET)-curl-config'
 
     '$(TARGET)-gcc' \

@@ -14,7 +14,7 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/mingw/files/Other/UserContributed/regex/' | \
     grep 'mingw-regex-' | \
     $(SED) -n 's,.*mingw-regex-\([0-9\.]*\).*,\1,p' | \
-    sort | \
+    $(SORT) | \
     uniq | \
     tail -1
 endef

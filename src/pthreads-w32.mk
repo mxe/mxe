@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 2-9-1
 $(PKG)_CHECKSUM := 24d40e89c2e66a765733e8c98d6f94500343da86
 $(PKG)_SUBDIR   := pthreads-w32-$($(PKG)_VERSION)-release
 $(PKG)_FILE     := pthreads-w32-$($(PKG)_VERSION)-release.tar.gz
-$(PKG)_URL      := ftp://sourceware.org/pub/pthreads-win32/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.videolan.org/contrib/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://sourceware.org/pub/pthreads-win32/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 $(PKG)_DEPS_i686-pc-mingw32 := gcc

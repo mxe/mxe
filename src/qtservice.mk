@@ -2,11 +2,11 @@
 # See index.html for further information.
 PKG             := qtservice
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := fd22bee22274975c56f1c10d87ee9fd2c0818f83
-$(PKG)_CHECKSUM := ecf7563a56c3ac7a812950c6e28d214e4b01b7b2
-$(PKG)_SUBDIR   := qt-solutions-qt-solutions
-$(PKG)_FILE     := $($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://qt.gitorious.org/qt-solutions/qt-solutions/archive/$($(PKG)_FILE)
+$(PKG)_VERSION  := fd22bee
+$(PKG)_CHECKSUM := 0d83dc54d692da3557213144140e74a63a6f4911
+$(PKG)_SUBDIR   := qtproject-qt-solutions-$($(PKG)_VERSION)
+$(PKG)_FILE     := qt-solutions-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/qtproject/qt-solutions/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE
@@ -19,3 +19,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/qtservice/buildlib' -j '$(JOBS)'
     $(MAKE) -C '$(1)/qtservice/buildlib' -j 1 install
 endef
+
+$(PKG)_BUILD_i686-pc-mingw32 =

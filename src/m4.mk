@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 1.4.17
 $(PKG)_CHECKSUM := 74ad71fa100ec8c13bc715082757eb9ab1e4bbb0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/m4/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/m4/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/m4/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE

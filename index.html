@@ -109,25 +109,25 @@
     <tr>
         <td><a href="http://www.mingw.org/">MinGW 3.x</a></td>
         <td>i686-pc-mingw32</td>
-        <td style='text-align:center'>97% (314/323)</td>
-        <td style='text-align:center'>50% (162/323)</td>
+        <td style='text-align:center'>90% (306/341)</td>
+        <td style='text-align:center'>50% (169/341)</td>
     </tr>
     <tr>
         <td rowspan="2"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64</a></td>
         <td>i686-w64-mingw32</td>
-        <td style='text-align:center'>95% (308/323)</td>
-        <td style='text-align:center'>52% (167/323)</td>
+        <td style='text-align:center'>98% (334/341)</td>
+        <td style='text-align:center'>58% (198/341)</td>
     </tr>
     <tr>
         <td>x86_64-w64-mingw32</td>
-        <td style='text-align:center'>89% (286/323)</td>
-        <td style='text-align:center'>51% (165/323)</td>
+        <td style='text-align:center'>90% (306/341)</td>
+        <td style='text-align:center'>59% (200/341)</td>
     </tr>
     </table>
     <p>
-        These numbers are last updated on May 4, 2014. You can see the current
-        status by executing <code>make build-matrix.html</code> in the MXE
-        directory.
+        These numbers were last updated on October 2, 2014. You can see the
+        current status by executing <code>make build-matrix.html</code> in the
+        MXE directory.
     </p>
     <p><small>
         * Shared support in MXE was just added in early February, 2014. These
@@ -182,6 +182,11 @@
     MXE builds and installs everything under the same
     top-level directory and is not relocatable after
     the first packages are built.
+    </p>
+
+    <p>
+    Due to limitations of GNU Make, the path of MXE is not allowed
+    to contain any whitespace characters.
     </p>
 
     <h3 id="tutorial-2">Step 2: System-wide Installation (optional)</h3>
@@ -702,7 +707,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install \
-    autoconf automake bash bison bzip2 cmake flex gettext \
+    autoconf automake autopoint bash bison bzip2 cmake flex gettext \
     git g++ gperf intltool libffi-dev libtool libltdl-dev \
     libssl-dev libxml-parser-perl make openssl patch perl \
     pkg-config python ruby scons sed unzip wget xz-utils</pre>
@@ -801,15 +806,29 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     Install
     <a href="http://developer.apple.com/xcode/">Xcode 5</a>
-    and
-    <a href="http://www.macports.org/">MacPorts</a>,
+    </p>
+    <h4 id="requirements-macos-step-1">Step 1</h4>
+    <h5 id="requirements-macos-method-1">Method 1 - MacPorts</h5>
+    <p>
+    Install <a href="http://www.macports.org/">MacPorts</a>,
     then run:
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
     glib2 intltool p5-xml-parser gpatch scons wget xz</pre>
+    <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
     <p>
-    and from within the mxe directory:
+    Install <a href="http://rudix.org/">Rudix</a> you can make it with following command
+    </p>
+    <pre>curl -s https://raw.githubusercontent.com/rudix-mac/rpm/2014.6/rudix.py \
+    | sudo python - install rudix</pre>
+    <p>
+    then run:
+    </p>
+    <pre>sudo rudix install glib pkg-config scons wget xz</pre>
+    <h4 id="requirements-macos-step-2">Step 2</h4>
+    <p>
+    After installing pre-requirement run from within the mxe directory:
     </p>
     <pre>make build-requirements</pre>
     <p>
@@ -971,6 +990,13 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <dd>
         download packages "foo", "bar" and their dependencies,
         where up to 4 packages are downloaded in parallel
+        </dd>
+
+    <dt>make download-only-foo download-only-bar</dt>
+
+        <dd>
+        download packages "foo", "bar", without their dependencies,
+        non-parallel
         </dd>
 
     <dt>make clean</dt>
@@ -1153,6 +1179,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">cblas</td>
         <td class="website"><a href="http://www.netlib.org/blas/">cblas</a></td>
+    </tr>
+    <tr>
+        <td class="package">chipmunk</td>
+        <td class="website"><a href="https://chipmunk-physics.net/">Chipmunk Physics</a></td>
     </tr>
     <tr>
         <td class="package">chromaprint</td>
@@ -1494,6 +1524,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.imagemagick.org/">ImageMagick</a></td>
     </tr>
     <tr>
+        <td class="package">intltool</td>
+        <td class="website"><a href="http://freedesktop.org/wiki/Software/intltool/">Intltool</a></td>
+    </tr>
+    <tr>
         <td class="package">isl</td>
         <td class="website"><a href="http://isl.gforge.inria.fr/">Integer Set Library</a></td>
     </tr>
@@ -1548,6 +1582,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">libbluray</td>
         <td class="website"><a href="http://www.videolan.org/developers/libbluray.html">libbluray</a></td>
+    </tr>
+    <tr>
+        <td class="package">libbs2b</td>
+        <td class="website"><a href="http://bs2b.sourceforge.net/">Bauer Stereophonic-to-Binaural library</a></td>
+    </tr>
+    <tr>
+        <td class="package">libcaca</td>
+        <td class="website"><a href="http://caca.zoy.org/wiki/libcaca">libcaca</a></td>
     </tr>
     <tr>
         <td class="package">libcdio</td>
@@ -1782,6 +1824,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://code.google.com/p/webm/">vpx</a></td>
     </tr>
     <tr>
+        <td class="package">libwebp</td>
+        <td class="website"><a href="https://developers.google.com/speed/webp/">libwebp</a></td>
+    </tr>
+    <tr>
+        <td class="package">libwebsockets</td>
+        <td class="website"><a href="http://libwebsockets.org/">libwebsockets</a></td>
+    </tr>
+    <tr>
         <td class="package">libxml++</td>
         <td class="website"><a href="http://libxmlplusplus.sourceforge.net/">libxml2</a></td>
     </tr>
@@ -1808,6 +1858,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">lua</td>
         <td class="website"><a href="http://www.lua.org/">Lua</a></td>
+    </tr>
+    <tr>
+        <td class="package">luabind</td>
+        <td class="website"><a href="http://www.rasterbar.com/products/luabind.html">Luabind</a></td>
+    </tr>
+    <tr>
+        <td class="package">luajit</td>
+        <td class="website"><a href="http://luajit.org/luajit.html">LuaJIT</a></td>
     </tr>
     <tr>
         <td class="package">lzo</td>
@@ -1920,6 +1978,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">ocaml-xml-light</td>
         <td class="website"><a href="http://tech.motion-twin.com/xmllight.html">xml-light</a></td>
+    </tr>
+    <tr>
+        <td class="package">oce</td>
+        <td class="website"><a href="https://github.com/tpaviot/oce">Open CASCADE Community Edition</a></td>
     </tr>
     <tr>
         <td class="package">ogg</td>
@@ -2066,6 +2128,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.postgresql.org/">PostgreSQL</a></td>
     </tr>
     <tr>
+        <td class="package">primesieve</td>
+        <td class="website"><a href="http://primesieve.org/">Primesieve</a></td>
+    </tr>
+    <tr>
         <td class="package">proj</td>
         <td class="website"><a href="http://trac.osgeo.org/proj/">proj</a></td>
     </tr>
@@ -2088,6 +2154,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">qjson</td>
         <td class="website"><a href="http://qjson.sourceforge.net/">QJson</a></td>
+    </tr>
+    <tr>
+        <td class="package">qscintilla2</td>
+        <td class="website"><a href="http://www.riverbankcomputing.com/software/qscintilla/intro">QScintilla2</a></td>
     </tr>
     <tr>
         <td class="package">qt</td>
@@ -2254,6 +2324,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.libsdl.org/">SDL2</a></td>
     </tr>
     <tr>
+        <td class="package">sdl2_gfx</td>
+        <td class="website"><a href="http://www.ferzkopp.net/joomla/content/view/19/14/">SDL2_gfx</a></td>
+    </tr>
+    <tr>
         <td class="package">sdl2_image</td>
         <td class="website"><a href="http://www.libsdl.org/">SDL2_image</a></td>
     </tr>
@@ -2310,10 +2384,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://developer.kde.org/~wheeler/taglib.html">TagLib</a></td>
     </tr>
     <tr>
-        <td class="package">tcl</td>
-        <td class="website"><a href="http://tcl.tk">Tcl/Tk</a></td>
-    </tr>
-    <tr>
         <td class="package">teem</td>
         <td class="website"><a href="http://teem.sourceforge.net/">Teem</a></td>
     </tr>
@@ -2330,10 +2400,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://sourceforge.net/projects/tinyxml/">tinyxml</a></td>
     </tr>
     <tr>
-        <td class="package">tk</td>
-        <td class="website"><a href="http://tcl.tk">Tcl/Tk</a></td>
-    </tr>
-    <tr>
         <td class="package">tre</td>
         <td class="website"><a href="http://laurikari.net/tre/">TRE</a></td>
     </tr>
@@ -2348,6 +2414,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">vcdimager</td>
         <td class="website"><a href="https://www.gnu.org/software/vcdimager/">vcdimager</a></td>
+    </tr>
+    <tr>
+        <td class="package">vidstab</td>
+        <td class="website"><a href="http://public.hronopik.de/vid.stab/features.php?lang=en">vid.stab video stablizer</a></td>
     </tr>
     <tr>
         <td class="package">vigra</td>
@@ -2388,6 +2458,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">wget</td>
         <td class="website"><a href="https://www.gnu.org/software/wget/">wget</a></td>
+    </tr>
+    <tr>
+        <td class="package">widl</td>
+        <td class="website"><a href="https://www.winehq.org/docs/widl/">Wine IDL Compiler</a></td>
     </tr>
     <tr>
         <td class="package">winpcap</td>
@@ -2645,7 +2719,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <p>
         You might also have to provide a patch for it.
         In that case, have a look at other patches such as
-        <a href="https://github.com/mxe/mxe/blob/master/src/sdl-2-fix-dinput.patch">sdl-2-fix-dinput.patch</a>.
+        <a href="https://github.com/mxe/mxe/blob/master/src/sdl2-2-libtool.patch">sdl2-2-libtool.patch</a>.
         In particular, each patch file should be named as:
         </p>
         <pre>PACKAGE-PATCHNUMBER-DESCRIPTION.patch</pre>
@@ -2803,7 +2877,7 @@ endef</pre>
 </div>
 
 <div class="section">
-<h2 id="copyright">Copyright © <span class="years">2007–2013</span></h2>
+<h2 id="copyright">Copyright © <span class="years">2007–2014</span></h2>
 
     <ul id="authors-list" class="compact-list">
     <li>Volker Grabsch</li>
@@ -3016,6 +3090,74 @@ endef</pre>
 <h2 id="history">History</h2>
 
     <dl>
+
+<!--
+    <dt>2014-xx-xx &ndash; Release <span id="latest-version">2.23</span></dt>
+    <dd>
+        <p>
+        The <a href="#download">stable branch</a> was updated to the 
+        current development version after a thorough <a 
+        href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/FIXME">testing 
+        phase</a>.
+        </p>
+
+        <p>
+        Current users are <strong>strongly</strong> encouraged to
+        start with a clean tree as the toolchain has been
+        updated and requires a full rebuild:
+        </p>
+        <pre>git pull && make clean && make</pre>
+
+        <p>
+        Most packages were updated to their latest version.
+        </p>
+
+        <p>
+        Many new packages are supported:
+        ...
+        </p>
+
+        <p>
+        Added support for <a href="#supported-toolchains">shared toolchains</a> for over 50% of all the packages.
+        </p>
+
+        <p>
+        Unfortunately, a number of factors have forced us to drop support 
+        for MinGW 3 (i.e. "<a href="http://mingw.org/">MinGW.org</a>"), 
+        in favor of the MinGW-w64 toolchain. This decision was made in a 
+        large part because of the dropping of support for MinGW by <a 
+        href="https://github.com/mxe/mxe/pull/453#issuecomment-51703048"> 
+        GLib</a> and <a 
+        href="https://github.com/mxe/mxe/issues/492#issue-41366666">Qt5</a>, 
+        which arguably are two of the most important packages in MXE. 
+        Other considerations have also been taken, like the <a 
+        href="https://github.com/mxe/mxe/pull/323#issuecomment-39463810">lack 
+        of maintainership in MinGW</a> and <a 
+        href="https://github.com/mxe/mxe/issues/400">potential legal 
+        challenges</a> that comes with using supplemental DirectX 
+        headers in MinGW in order to support Qt4. Worse yet, having to 
+        support the unsupported MinGW toolchain impedes adding or 
+        updating packages, as shown in the <a 
+        href"https://github.com/mxe/mxe/pull/453#issuecomment-51703048">pull 
+        request of updating GLib</a>.
+        </p>
+
+        <p>
+        Please note that dropping support for MinGW <strong>DOES NOT 
+        MEAN</strong> dropping support for the 32-bit architecture. MinGW-w64
+        also supports 32-bit target through i686-w64-mingw32.
+        </p>
+
+        <p>
+        To ease migration to the supported MinGW-w64 target, we have
+        finished porting all packages that were MinGW-only to at least
+        i686-w64-mingw32 (32-bit target of MinGW-w64). Hence your existing
+        commands should work out-of-the-box assuming the
+        <code>MXE_TARGETS</code> environmental variable is set correctly.
+        </p>
+
+    </dd>
+-->
 
     <dt>2013-07-27 &ndash; Release <span id="latest-version">2.23</span></dt>
     <dd>

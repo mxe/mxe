@@ -10,11 +10,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/plibc/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/mirror/plibc/commits/master' | \
-    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
-    head -1
-endef
+$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, mirror/plibc, master)
 
 define $(PKG)_BUILD
     cd '$(1)' && autoreconf -fi
@@ -43,7 +39,6 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' --cflags --libs plibc`
 endef
 
-$(PKG)_BUILD_i686-w64-mingw32 =
 $(PKG)_BUILD_x86_64-w64-mingw32 =
 
 $(PKG)_BUILD_SHARED =

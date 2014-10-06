@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && $(SED) -i 's/-lm/-lm -lstdc++/' ftgl.pc.in
     cd '$(1)' && aclocal -I m4
     cd '$(1)' && $(LIBTOOLIZE)
     cd '$(1)' && automake --gnu
@@ -28,10 +29,11 @@ define $(PKG)_BUILD
         --with-ft-prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)/src' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/src' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    $(INSTALL) -m644 '$(1)/ftgl.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        -lftgl -lm -lstdc++ \
-        `'$(TARGET)-pkg-config' freetype2 gl glu --cflags --libs`
+        `'$(TARGET)-pkg-config' ftgl --cflags --libs`
 endef

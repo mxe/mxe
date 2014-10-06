@@ -20,15 +20,6 @@ See index.html for further information.
    DEPENDS
      vtksys
    EXCLUDE_FROM_WRAPPING
---- VTK6.0.0/Utilities/MaterialLibrary/module.cmake	2013-06-12 21:47:10.000000000 +0200
-+++ VTK6.0.0/Utilities/MaterialLibrary/module.cmake	2013-08-29 09:58:54.939480759 +0200
-@@ -1,4 +1,6 @@
- vtk_module(vtkUtilitiesMaterialLibrary
-+  GROUPS
-+    CompileTools
-   DEPENDS
-     vtksys
-   EXCLUDE_FROM_WRAPPING
 --- VTK6.0.0/Utilities/ParseOGLExt/module.cmake	2013-06-12 21:47:10.000000000 +0200
 +++ VTK6.0.0/Utilities/ParseOGLExt/module.cmake	2013-08-29 09:58:54.939480759 +0200
 @@ -1,4 +1,6 @@

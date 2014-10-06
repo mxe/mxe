@@ -39,10 +39,14 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar rcu' \
         RANLIB='$(TARGET)-ranlib' \
         a
+
+    # lua.h is installed to noinstall/ to avoid error when executing an empty
+    # 'install' command.
     $(MAKE) -C '$(1)' -j 1 \
         INSTALL_TOP='$(PREFIX)/$(TARGET)' \
         INSTALL_BIN='$(1)/noinstall' \
         INSTALL_MAN='$(1)/noinstall' \
+        TO_BIN='lua.h' \
         INSTALL='$(INSTALL)' \
         install
     $($(PKG)_BUILD_COMMON)

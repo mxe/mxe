@@ -32,10 +32,10 @@ define $(PKG)_BUILD
         --disable-music-mod \
         --enable-music-mod-modplug \
         --enable-music-ogg \
-        --disable-music-flac \
-        --enable-music-mp3 \
         --disable-music-ogg-shared \
+        --disable-music-flac \
         --disable-music-flac-shared \
+        --enable-music-mp3 \
         --disable-smpegtest \
         SMPEG_CONFIG='$(PREFIX)/$(TARGET)/bin/smpeg2-config' \
         WINDRES='$(TARGET)-windres' \

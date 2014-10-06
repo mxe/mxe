@@ -3,11 +3,12 @@
 
 PKG             := file
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.16
-$(PKG)_CHECKSUM := 12fd8ca35705bb24b00135ee65cb7de2d53aa69a
+$(PKG)_VERSION  := 5.19
+$(PKG)_CHECKSUM := 0dff09eb44fde1998be79e8d312e9be4456d31ee
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.cross-lfs.org/pub/clfs/conglomeration/file/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgnurx
 
 define $(PKG)_UPDATE
@@ -28,10 +29,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/src' -j '$(JOBS)' file
 
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         CFLAGS=-DHAVE_PREAD
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= FILE_COMPILE='$(1).native/src/file'
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
@@ -41,5 +39,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-file.exe' \
         -lmagic -lgnurx -lshlwapi
 endef
-
-$(PKG)_BUILD_SHARED =

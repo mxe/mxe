@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 2.69
 $(PKG)_CHECKSUM := e891c3193029775e83e0534ac0ee0c4c711f6d23
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/autoconf/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/autoconf/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/autoconf/$($(PKG)_FILE)
 $(PKG)_DEPS     := m4
 
 define $(PKG)_UPDATE

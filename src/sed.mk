@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 4.2.2
 $(PKG)_CHECKSUM := f17ab6b1a7bcb2ad4ed125ef78948092d070de8f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gettext libiconv
 
 define $(PKG)_UPDATE

@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 0.91
 $(PKG)_CHECKSUM := 3ab06c8e208e82197dc25d09ae353d9f3be7db52
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.mirrorservice.org/sites/distfiles.finkmirrors.net/sha1/$($(PKG)_CHECKSUM)/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv gnutls
 
 define $(PKG)_UPDATE

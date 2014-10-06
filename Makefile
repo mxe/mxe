@@ -13,10 +13,10 @@ MXE_TRIPLETS       := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
 MXE_LIB_TYPES      := static shared
 MXE_TARGET_LIST    := $(foreach TRIPLET,$(MXE_TRIPLETS),\
                           $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES)))
-MXE_TARGETS        := i686-pc-mingw32.static
+MXE_TARGETS        := i686-w64-mingw32.static
 
 DEFAULT_MAX_JOBS   := 6
-SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
+SOURCEFORGE_MIRROR := downloads.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 
@@ -68,6 +68,48 @@ MXE_CONFIGURE_OPTS = \
         --enable-static --disable-shared , \
         --disable-static --enable-shared )
 
+# Append these to the "make" and "make install" steps of autotools packages
+# in order to neither build nor install unwanted binaries, manpages,
+# infopages and API documentation (reduces build time and disk space usage).
+# NOTE: We don't include bin_SCRIPTS (and variations), since many packages
+# install files such as pcre-config (which we do want to be installed).
+
+MXE_DISABLE_PROGRAMS = \
+    bin_PROGRAMS= \
+    sbin_PROGRAMS= \
+    noinst_PROGRAMS= \
+    check_PROGRAMS=
+
+MXE_DISABLE_DOCS = \
+    man_MANS= \
+    man1_MANS= \
+    man2_MANS= \
+    man3_MANS= \
+    man4_MANS= \
+    man5_MANS= \
+    man6_MANS= \
+    man7_MANS= \
+    man8_MANS= \
+    man9_MANS= \
+    dist_man_MANS= \
+    dist_man1_MANS= \
+    dist_man2_MANS= \
+    dist_man3_MANS= \
+    dist_man4_MANS= \
+    dist_man5_MANS= \
+    dist_man6_MANS= \
+    dist_man7_MANS= \
+    dist_man8_MANS= \
+    dist_man9_MANS= \
+    notrans_dist_man_MANS= \
+    info_TEXINFOS= \
+    doc_DATA= \
+    dist_doc_DATA= \
+    html_DATA= \
+    dist_html_DATA=
+
+MXE_DISABLE_CRUFT = $(MXE_DISABLE_PROGRAMS) $(MXE_DISABLE_DOCS)
+
 MAKE_SHARED_FROM_STATIC = \
 	'$(TOP_DIR)/tools/make-shared-from-static' \
 	$(if $(findstring mingw,$(TARGET)),--windowsdll) \
@@ -76,6 +118,12 @@ MAKE_SHARED_FROM_STATIC = \
 	--install '$(INSTALL)' \
 	--libdir '$(PREFIX)/$(TARGET)/lib' \
 	--bindir '$(PREFIX)/$(TARGET)/bin'
+
+define MXE_GET_GITHUB_SHA
+    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' | \
+    $(SED) -n 's#.*"sha": "\([^<]\{7\}\)[^<]\{3\}.*#\1#p' | \
+    head -1
+endef
 
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
@@ -87,11 +135,13 @@ SHORT_PKG_VERSION = \
 UNPACK_ARCHIVE = \
     $(if $(filter %.tgz,     $(1)),tar xzf '$(1)', \
     $(if $(filter %.tar.gz,  $(1)),tar xzf '$(1)', \
+    $(if $(filter %.tbz2,    $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.bz2, $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
-    $(if $(filter %.tar.xz,$(1)),xz -dc '$(1)' | tar xf -, \
+    $(if $(filter %.txz,     $(1)),xz -dc '$(1)' | tar xf -, \
+    $(if $(filter %.tar.xz,  $(1)),xz -dc '$(1)' | tar xf -, \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
-    $(error Unknown archive format: $(1))))))))
+    $(error Unknown archive format: $(1))))))))))
 
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
@@ -105,16 +155,18 @@ CHECK_PKG_ARCHIVE = \
 ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
+BACKUP_DOWNLOAD = \
+    $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`
+
 DOWNLOAD_PKG_ARCHIVE = \
-        mkdir -p '$(PKG_DIR)' && \
-        $(if $($(1)_URL_2), \
-            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-              $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)' || \
-              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
-            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
+        mkdir -p '$(PKG_DIR)' && ( \
+            $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' \
+            $(if $($(1)_URL_2), \
+                || $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)') \
+            $(if $(MXE_NO_BACKUP_DL),, \
+                || $(BACKUP_DOWNLOAD)) \
+        ) \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
@@ -123,6 +175,10 @@ DOWNLOAD_PKG_ARCHIVE = \
           echo 'Download failed!'; \
           echo; \
           rm -f '$(PKG_DIR)/$($(1)_FILE)'; )
+
+ifneq ($(words $(PWD)),1)
+    $(error GNU Make chokes on paths with spaces)
+endif
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
@@ -268,7 +324,11 @@ $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3))))
+download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
+                download-only-$(1)
+
+.PHONY: download-only-$(1)
+download-only-$(1)::
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
@@ -561,7 +621,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	    $(if $($(PKG)_BUILD_ONLY),               \
 	        $(eval BUILD_ONLY_PKGCOUNT := $(call inc,$(BUILD_ONLY_PKGCOUNT)))))
 	@echo '<tr>'                            >> $@
-	# TOTAL_PKGCOUNT = ( PKGS - VIRTUAL ) - BUILD_ONLY
+	@# TOTAL_PKGCOUNT = ( PKGS - VIRTUAL ) - BUILD_ONLY
 	$(eval TOTAL_PKGCOUNT :=                     \
 	    $(call subtract,                         \
 	        $(call subtract,$(words $(PKGS)),$(VIRTUAL_PKGCOUNT)),\

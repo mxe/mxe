@@ -41,10 +41,12 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC),
         $(INSTALL) -m644 '$(1)/lib/libGLEW.a' '$(1)/lib/libGLEWmx.a' '$(PREFIX)/$(TARGET)/lib/'
         $(INSTALL) -m644 '$(1)/lib/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/libglew32s.a'
+        $(INSTALL) -m644 '$(1)/lib/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/libglew32.a'
     ,
         $(INSTALL) -m644 '$(1)/lib/GLEW.dll' '$(1)/lib/GLEWmx.dll' '$(PREFIX)/$(TARGET)/bin/'
         $(INSTALL) -m644 '$(1)/lib/libGLEW.dll.a' '$(1)/lib/libGLEWmx.dll.a' '$(PREFIX)/$(TARGET)/lib/'
         $(INSTALL) -m644 '$(1)/lib/libGLEW.dll.a' '$(PREFIX)/$(TARGET)/lib/libglew32s.dll.a'
+        $(INSTALL) -m644 '$(1)/lib/libGLEW.dll.a' '$(PREFIX)/$(TARGET)/lib/libglew32.dll.a'
     )
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     $(INSTALL) -m644 '$(1)/glew.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/'

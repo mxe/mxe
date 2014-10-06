@@ -26,6 +26,14 @@ define $(PKG)_BUILD
         ac_cv_prog_FC='$(TARGET)-gfortran'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install
 
+    # TODO: find a way to fix this in configure stage
+    $(if $(BUILD_SHARED), \
+        mv '$(PREFIX)/bin/'libgomp*.dll '$(PREFIX)/$(TARGET)/bin/'; \
+        cp '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'libgomp.dll.a \
+            '$(PREFIX)/$(TARGET)/lib/'; \
+        cp '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'libgomp.la \
+            '$(PREFIX)/$(TARGET)/lib/')
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgomp.exe' \

@@ -7,9 +7,15 @@ $(PKG)_VERSION  := 1.11.0
 $(PKG)_CHECKSUM := 25efd2bffdea2e841377ca8c1fd49d89d02ac87e
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
+<<<<<<< HEAD
 $(PKG)_URL      := http://download.osgeo.org/gdal/CURRENT/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/CURRENT/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc proj zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf5
+=======
+$(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc proj zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf4 hdf5 json-c netcdf
+>>>>>>> upstream/master
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
@@ -21,9 +27,15 @@ define $(PKG)_CONFIGURE
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+<<<<<<< HEAD
         --build="`config.guess`" \
         --enable-shared \
         --disable-static \
+=======
+        --build='$(BUILD)' \
+        --enable-static \
+        --disable-shared \
+>>>>>>> upstream/master
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-bsb \
         --with-grib \
@@ -45,6 +57,7 @@ define $(PKG)_CONFIGURE
         --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
+        --with-libjson-c='$(PREFIX)/$(TARGET)' \
         --without-odbc \
         --without-xerces \
         --without-grass \
@@ -100,6 +113,7 @@ endef
 
 define $(PKG)_BUILD_i686-w64-mingw32
     $($(PKG)_CONFIGURE) \
+        --with-netcdf='$(PREFIX)/$(TARGET)' \
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $($(PKG)_MAKE)
 endef

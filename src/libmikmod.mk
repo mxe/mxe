@@ -3,36 +3,30 @@
 
 PKG             := libmikmod
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.0
-$(PKG)_CHECKSUM := 6d30f59019872699bdcc9bcf6893eea9d6b12c13
+$(PKG)_VERSION  := 3.3.7
+$(PKG)_CHECKSUM := f936d92ed9752d9f47a3340bdafc78159a270ca9
 $(PKG)_SUBDIR   := libmikmod-$($(PKG)_VERSION)
 $(PKG)_FILE     := libmikmod-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://mikmod.shlomifish.org/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_URL      := http://$(SOURCEFOREGE_MIRROR)/project/mikmod/libmikmod/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://mikmod.shlomifish.org/' | \
-    $(SED) -n 's,.*libmikmod-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/mikmod/files/libmikmod/' | \
+    $(SED) -n 's,.*<a href="/projects/mikmod/files/libmikmod/\([0-9][^>]*\)/".*,\1,p' | \
+    $(SORT) -Vr | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,`uname`,MinGW,g' '$(1)/configure'
+    $(if $(BUILD_STATIC), \
+        $(SED) -i 's!defined(MIKMOD_STATIC)!1!g' '$(1)/include/mikmod.h')
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        CONFIG_SHELL='$(SHELL)' \
-        CFLAGS='-msse2'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-doc
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -std=c99 -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libmikmod.exe' \
         `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --cflags --libs`
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
-
-$(PKG)_BUILD_SHARED =

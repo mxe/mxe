@@ -8,7 +8,12 @@ $(PKG)_CHECKSUM := 7878a8c375ab3e292c8de7cb102bb3358056e01e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
+<<<<<<< HEAD
 $(PKG)_DEPS     := gcc eigen jasper jpeg lcms1 libpng tiff xz zlib
+=======
+$(PKG)_URL_2    := http://distfiles.macports.org/opencv/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc eigen ffmpeg jasper jpeg lcms1 libpng openexr tiff xz zlib
+>>>>>>> upstream/master
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/' | \

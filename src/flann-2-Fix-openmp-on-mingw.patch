@@ -1,0 +1,33 @@
+This file is part of MXE.
+See index.html for further information.
+
+From ce062a2d900aa215c301d327084a6d04da283005 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 11 Aug 2014 10:45:43 -0700
+Subject: [PATCH] Fix OpenMP on MinGW
+
+Based on patch by https://github.com/mariusmuja/flann/pull/104
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+---
+ src/cpp/CMakeLists.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
+index 7e6e353..0218f50 100644
+--- a/src/cpp/CMakeLists.txt
++++ b/src/cpp/CMakeLists.txt
+@@ -68,6 +68,10 @@ if (BUILD_C_BINDINGS)
+             RUNTIME DESTINATION share/flann/matlab
+         )
+     endif(WIN32 AND BUILD_SHARED_LIBS)
++
++    if(MINGW AND USE_OPENMP)
++        target_link_libraries(flann -lgomp)
++    endif(MINGW AND USE_OPENMP)
+ endif()
+ 
+ install (
+-- 
+1.9.1
+

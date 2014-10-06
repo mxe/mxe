@@ -3,18 +3,14 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0863f50
-$(PKG)_CHECKSUM := 4ea261f3d632ee9ab19b56f5e23c8e615abd6a70
+$(PKG)_VERSION  := a32bb6c
+$(PKG)_CHECKSUM := f1253f08e582434456a5d546d8c2fa328c1f7151
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libgsasl pthreads zlib
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/kisli/vmime/commits/master' | \
-    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
-    head -1
-endef
+$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, kisli/vmime, master)
 
 define $(PKG)_BUILD
     # The following hint is probably needed for ICU:

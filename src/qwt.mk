@@ -31,3 +31,5 @@ define $(PKG)_BUILD
     # install
     $(INSTALL) -m755 '$(1)/examples/bin/sinusplot.exe' '$(PREFIX)/$(TARGET)/bin/test-qwt.exe'
 endef
+
+$(PKG)_BUILD_i686-pc-mingw32 :=

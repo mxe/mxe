@@ -2,11 +2,11 @@
 # See index.html for further information.
 PKG             := qtsystems
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 341352b4bb1e729f384a3af1ca966ebd123f16e3
-$(PKG)_CHECKSUM := f46c1a96363d7194b186d5fec7f6261ad64f9eea
-$(PKG)_SUBDIR   := qt-$(PKG)
-$(PKG)_FILE     := $($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://qt.gitorious.org/qt/qtsystems/archive/$($(PKG)_FILE)
+$(PKG)_VERSION  := 341352b
+$(PKG)_CHECKSUM := b649b50eff33e00da264c18ae6d643f784f283be
+$(PKG)_SUBDIR   := qtproject-$(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/qtproject/qtsystems/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase qtdeclarative qtxmlpatterns
 
 define $(PKG)_UPDATE
@@ -20,3 +20,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
+
+$(PKG)_BUILD_i686-pc-mingw32 :=

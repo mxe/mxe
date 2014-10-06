@@ -1,0 +1,29 @@
+This file is part of MXE.
+See index.html for further information.
+
+commit eb4c3507be8a468da07d6ad9f8019c90fbd31b76
+Author: Boris Nagaev <bnagaev@gmail.com>
+Date:   Fri Aug 22 16:24:28 2014 +0400
+
+    lua_getfenv/lua_setfenv
+
+diff --git a/src/object_rep.cpp b/src/object_rep.cpp
+index 6977bee..bd322e1 100755
+--- a/src/object_rep.cpp
++++ b/src/object_rep.cpp
+@@ -25,6 +25,15 @@
+ #include <luabind/detail/object_rep.hpp>
+ #include <luabind/detail/class_rep.hpp>
+ 
++// http://lua-users.org/lists/lua-l/2010-01/msg00516.html
++
++#ifndef LUA_ENVIRONINDEX
++
++#define lua_getfenv lua_getuservalue
++#define lua_setfenv lua_setuservalue
++
++#endif
++
+ namespace luabind { namespace detail
+ {
+ 

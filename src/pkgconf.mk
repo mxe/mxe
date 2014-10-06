@@ -12,11 +12,7 @@ $(PKG)_DEPS     :=
 
 $(PKG)_DEPS_$(BUILD) := automake
 
-define $(PKG)_UPDATE_
-    $(WGET) -q -O- 'https://github.com/pkgconf/pkgconf/commits/master' | \
-    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
-    head -1
-endef
+$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, pkgconf/pkgconf, master)
 
 define $(PKG)_UPDATE
     echo 'Warning: Updates are temporarily disabled for package pkgconf.' >&2;
@@ -64,7 +60,8 @@ define $(PKG)_BUILD_COMMON
      echo 'set(PKG_CONFIG_EXECUTABLE $(PREFIX)/bin/$(TARGET)-pkg-config)'; \
      echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)'; \
      echo 'set(CMAKE_INSTALL_PREFIX $(PREFIX)/$(TARGET) CACHE PATH "Installation Prefix")'; \
-     echo 'set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel")') \
+     echo 'set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel")'; \
+     echo 'set(CMAKE_CROSS_COMPILING ON) # Workaround for http://www.cmake.org/Bug/view.php?id=14075') \
      > '$(CMAKE_TOOLCHAIN_FILE)'
 endef
 

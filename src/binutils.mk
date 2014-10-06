@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 2.24
 $(PKG)_CHECKSUM := 7ac75404ddb3c4910c7594b51ddfc76d4693debb
 $(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
 $(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/binutils/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/binutils/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/binutils/$($(PKG)_FILE)
 $(PKG)_DEPS     := pkgconf
 

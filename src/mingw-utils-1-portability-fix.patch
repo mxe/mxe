@@ -53,6 +53,15 @@ diff -r 62cf992c82c9 reimp/reimp.c
  {
    struct ar_hdr ar_hdr;
    struct imp_hdr imp_hdr;
+@@ -410,7 +410,7 @@
+           extract_member (get_ar_name (&ar_hdr),
+                           strtol (ar_hdr.ar_size, NULL, 10), f);
+         }
+-      return;
++      return 0;
+     }
+ 
+   sym = buf = xmalloc (imp_hdr.size);
 diff -r 62cf992c82c9 reimp/reimp.h
 --- a/reimp/reimp.h	Fri Nov 26 19:02:28 2010 +0100
 +++ b/reimp/reimp.h	Fri Nov 26 19:14:59 2010 +0100

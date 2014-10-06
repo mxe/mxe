@@ -3,8 +3,8 @@
 
 PKG             := hunspell
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.2
-$(PKG)_CHECKSUM := 902c76d2b55a22610e2227abc4fd26cbe606a51c
+$(PKG)_VERSION  := 1.3.3
+$(PKG)_CHECKSUM := 219b20f305d6690f666ff3864a16e4674908a553
 $(PKG)_SUBDIR   := hunspell-$($(PKG)_VERSION)
 $(PKG)_FILE     := hunspell-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/hunspell/Hunspell/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -19,13 +19,10 @@ endef
 define $(PKG)_BUILD
     # Note: the configure file doesn't pick up pdcurses, so "ui" is disabled
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --enable-static \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --with-warnings \
         --without-ui \
-        --with-readline \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --with-readline
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # Test
@@ -34,5 +31,3 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hunspell.exe' \
         `'$(TARGET)-pkg-config' hunspell --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =

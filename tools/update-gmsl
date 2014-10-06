@@ -9,18 +9,7 @@ clean(){
     rm -rf tmp-gmsl.tar.gz gmsl-*
 }
 
-# Ported from main Makefile
-SED='sed'
-SORT='sort'
-if [ gsed --help >/dev/null 2>&1 ]; then
-    SED='gsed'
-fi
-if [ gsort --help >/dev/null 2>&1 ]; then
-    SED='gsort'
-fi
-WGET="wget --no-check-certificate
-         --user-agent=$(wget --version |
-         $SED -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')"
+. tools/compat-init.sh
 
 # Current GMSL version. E.g. '1.1.5'
 current_version=$(grep 'gmsl_version.*=' 'ext/__gmsl' | \
@@ -34,6 +23,7 @@ latest_version=$(
 
 clean
 if [ $current_version != $latest_version ]; then
+    echo "New version found: $current_version --> $latest_version"
     $WGET -q -O tmp-gmsl.tar.gz \
         "http://downloads.sourceforge.net/project/gmsl/GNU%20Make%20Standard%20Library/v${latest_version}/gmsl-${latest_version}.tar.gz"
     tar xzf tmp-gmsl.tar.gz

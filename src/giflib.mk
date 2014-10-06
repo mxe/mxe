@@ -19,6 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
+<<<<<<< HEAD
       $(MXE_CONFIGURE_OPTS) \
         CPPFLAGS='-D_OPEN_BINARY'
     echo 'all:' > '$(1)/doc/Makefile'
@@ -26,3 +27,10 @@ define $(PKG)_BUILD
 endef
 
 ##$(PKG)_BUILD_SHARED =
+=======
+        $(MXE_CONFIGURE_OPTS) \
+        CPPFLAGS='-D_OPEN_BINARY'
+    echo 'all:' > '$(1)/doc/Makefile'
+    $(MAKE) -C '$(1)/lib' -j '$(JOBS)' install
+endef
+>>>>>>> upstream/master

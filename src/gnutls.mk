@@ -2,11 +2,12 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.2.15
-$(PKG)_CHECKSUM := 31f289b48b0bf054f5f8c16d3b878615d0ae06fc
+$(PKG)_VERSION  := 3.2.18
+$(PKG)_CHECKSUM := 3351c72658c974ad5e61ffde98caef0ae7e184e3
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2//$($(PKG)_FILE)
+$(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.2/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2//$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext gmp nettle pcre zlib
 
 define $(PKG)_UPDATE
@@ -18,9 +19,7 @@ endef
 
 define $(PKG)_BUILD
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.am'
-    cd '$(1)' && aclocal -I m4 -I gl/m4 -I src/libopts/m4 --install
-    cd '$(1)' && autoconf
-    cd '$(1)' && automake --add-missing
+    cd '$(1)' && autoreconf -fi -I m4 -I gl/m4 -I src/libopts/m4
     # skip the run test for libregex support since we are cross compiling
     $(SED) -i 's/libopts_cv_with_libregex=no/libopts_cv_with_libregex=yes/g;' '$(1)/configure'
     # AI_ADDRCONFIG referenced by src/serv.c but not provided by mingw.

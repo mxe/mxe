@@ -1,0 +1,96 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 329b3a3ebbcd2ee03e3f0e21cd929dd54fffcac3 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 8 Sep 2014 16:52:55 -0700
+Subject: [PATCH] configure: Define POCO_STATIC when --static is requested
+
+
+diff --git a/configure b/configure
+index 1d93337..87f189e 100755
+--- a/configure
++++ b/configure
+@@ -189,6 +189,7 @@ while [ "$1" != "" ] ; do
+ 
+ 	if [ "$1" = "--static" ] ; then
+ 		static=1
++		flags="$flags -DPOCO_STATIC"
+ 	fi
+ 	
+ 	if [ "$1" = "--shared" ] ; then
+-- 
+1.8.3.2
+
+From 0b88c734bfae5cc4ac65de7cb903124cca62b8a5 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 8 Sep 2014 17:09:19 -0700
+Subject: [PATCH] Config.h: Add prototype for POCO_STATIC
+
+---
+ Foundation/include/Poco/Config.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Foundation/include/Poco/Config.h b/Foundation/include/Poco/Config.h
+index c4c5b83..8d29273 100644
+--- a/Foundation/include/Poco/Config.h
++++ b/Foundation/include/Poco/Config.h
+@@ -48,6 +48,10 @@
+ // #define POCO_NO_AUTOMATIC_LIBS
+ 
+ 
++// Define on Windows for static linking
++// #define POCO_STATIC
++
++
+ // Define to disable FPEnvironment support
+ // #define POCO_NO_FPENVIRONMENT
+ 
+-- 
+1.8.3.2
+
+From b14d120b8cb65cc348b884e4d418531356dfc9b0 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 8 Sep 2014 16:27:42 -0700
+Subject: [PATCH] Types.h: Fix Win64 on MinGW
+
+---
+ Foundation/include/Poco/Types.h | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/Foundation/include/Poco/Types.h b/Foundation/include/Poco/Types.h
+index 1b076d5..23321d9 100644
+--- a/Foundation/include/Poco/Types.h
++++ b/Foundation/include/Poco/Types.h
+@@ -57,16 +57,24 @@ namespace Poco {
+ 	typedef unsigned short         UInt16;
+ 	typedef signed int             Int32;
+ 	typedef unsigned int           UInt32;
+-	typedef signed long            IntPtr;
+-	typedef unsigned long          UIntPtr;
+-	#if defined(__LP64__)
++	#if defined(_WIN64)
+ 		#define POCO_PTR_IS_64_BIT 1
+-		#define POCO_LONG_IS_64_BIT 1
+-		typedef signed long        Int64;
+-		typedef unsigned long      UInt64;
+-	#else
++		typedef signed long long   IntPtr;
++		typedef unsigned long long UIntPtr;
+ 		typedef signed long long   Int64;
+ 		typedef unsigned long long UInt64;
++	#else
++		typedef signed long        IntPtr;
++		typedef unsigned long      UIntPtr;
++		#if defined(__LP64__)
++			#define POCO_PTR_IS_64_BIT 1
++			#define POCO_LONG_IS_64_BIT 1
++			typedef signed long        Int64;
++			typedef unsigned long      UInt64;
++		#else
++			typedef signed long long   Int64;
++			typedef unsigned long long UInt64;
++		#endif
+ 	#endif
+ 	#define POCO_HAVE_INT64 1
+ #elif defined(__DECCXX)
