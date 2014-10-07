@@ -11,7 +11,6 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package OpenThreads need to be written.' >&2;
-    echo $(itk_VERSION)
 endef
 
 
