@@ -1,0 +1,208 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 579312d..53e4132 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,7 +38,7 @@ else(NOT CMAKE_TOOLCHAIN_FILE)
+   #Android: set output folder to ${CMAKE_BINARY_DIR}
+   set( LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_BINARY_DIR} CACHE PATH "root for library output, set this to change where android libs are compiled to" )
+   # any crosscompiling
+-  set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
++  #set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
+ endif(NOT CMAKE_TOOLCHAIN_FILE)
+ 
+ # --------------------------------------------------------------
+diff -ur a/modules/core/src/lapack.cpp b/modules/core/src/lapack.cpp
+--- a/modules/core/src/lapack.cpp	2013-12-28 04:09:18.000000000 +1100
++++ b/modules/core/src/lapack.cpp	2014-01-05 21:14:52.869649685 +1100
+@@ -716,7 +716,7 @@
+ 
+ static void JacobiSVD(double* At, size_t astep, double* W, double* Vt, size_t vstep, int m, int n, int n1=-1)
+ {
+-    JacobiSVDImpl_(At, astep, W, Vt, vstep, m, n, !Vt ? 0 : n1 < 0 ? n : n1, DBL_MIN, DBL_EPSILON*10);
++    JacobiSVDImpl_(At, astep, W, Vt, vstep, m, n, !Vt ? 0 : n1 < 0 ? n : n1, DBL_MIN, DBL_EPSILON*10L);
+ }
+ 
+ /* y[0:m,0:n] += diag(a[0:1,0:m]) * x[0:m,0:n] */
+diff -ur a/modules/core/src/precomp.hpp b/modules/core/src/precomp.hpp
+--- a/modules/core/src/precomp.hpp	2013-12-28 04:09:18.000000000 +1100
++++ b/modules/core/src/precomp.hpp	2014-01-05 21:05:08.968467624 +1100
+@@ -51,7 +51,7 @@
+ 
+ #include <assert.h>
+ #include <ctype.h>
+-#include <float.h>
++#include <cfloat>
+ #include <limits.h>
+ #include <math.h>
+ #include <stdio.h>
+diff -ur a/modules/highgui/src/window_w32.cpp b/modules/highgui/src/window_w32.cpp
+--- a/modules/highgui/src/window_w32.cpp	2013-12-28 04:09:18.000000000 +1100
++++ b/modules/highgui/src/window_w32.cpp	2014-01-05 21:23:48.318950096 +1100
+@@ -75,7 +75,7 @@
+ #include <vector>
+ #include <functional>
+ #include "opencv2/highgui/highgui.hpp"
+-#include <GL\gl.h>
++#include <GL/gl.h>
+ #endif
+ 
+ static const char* trackbar_text =
+
+diff -ur a/cmake/OpenCVFindLibsVideo.cmake b/cmake/OpenCVFindLibsVideo.cmake
+--- a/cmake/OpenCVFindLibsVideo.cmake	2013-12-28 04:09:18.000000000 +1100
++++ b/cmake/OpenCVFindLibsVideo.cmake	2014-01-07 22:34:22.291927941 +1100
+@@ -228,12 +228,12 @@
+ 
+ # --- Extra HighGUI libs on Windows ---
+ if(WIN32)
+-  list(APPEND HIGHGUI_LIBRARIES comctl32 gdi32 ole32 setupapi ws2_32 vfw32)
++  list(APPEND HIGHGUI_LIBRARIES -lcomctl32 -lgdi32 -lole32 -lsetupapi -lws2_32 -lvfw32 -lstrmiids -loleaut32 -luuid)
+   if(MINGW64)
+-    list(APPEND HIGHGUI_LIBRARIES avifil32 avicap32 winmm msvfw32)
+-    list(REMOVE_ITEM HIGHGUI_LIBRARIES vfw32)
++    list(APPEND HIGHGUI_LIBRARIES -lavifil32 -lavicap32 -lwinmm -lmsvfw32)
++    list(REMOVE_ITEM HIGHGUI_LIBRARIES -lvfw32)
+   elseif(MINGW)
+-    list(APPEND HIGHGUI_LIBRARIES winmm)
++    list(APPEND HIGHGUI_LIBRARIES -lwinmm)
+   endif()
+ endif(WIN32)
+ 
+--- a/modules/highgui/CMakeLists.txt
++++ b/modules/highgui/CMakeLists.txt
+@@ -262,7 +267,7 @@ set_target_properties(${the_module} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+ ocv_add_precompiled_headers(${the_module})
+ ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated-declarations)
+ 
+-if(WIN32 AND WITH_FFMPEG)
++if(WIN32 AND WITH_FFMPEG AND BUILD_SHARED_LIBS)
+   #copy ffmpeg dll to the output folder
+   if(MSVC64 OR MINGW64)
+     set(FFMPEG_SUFFIX _64)
+diff --git a/cmake/OpenCVFindLZMA.cmake b/cmake/OpenCVFindLZMA.cmake
+new file mode 100644
+index 0000000..0b46b2c
+--- /dev/null
++++ b/cmake/OpenCVFindLZMA.cmake
+@@ -0,0 +1,48 @@
++# - Find lzma and lzmadec
++# Find the native LZMA includes and library
++#
++#  LZMA_INCLUDE_DIR    - where to find lzma.h, etc.
++#  LZMA_LIBRARIES      - List of libraries when using liblzma.
++#  LZMA_FOUND          - True if liblzma found.
++#  LZMADEC_INCLUDE_DIR - where to find lzmadec.h, etc.
++#  LZMADEC_LIBRARIES   - List of libraries when using liblzmadec.
++#  LZMADEC_FOUND       - True if liblzmadec found.
++
++IF (LZMA_INCLUDE_DIR)
++  # Already in cache, be silent
++  SET(LZMA_FIND_QUIETLY TRUE)
++ENDIF (LZMA_INCLUDE_DIR)
++
++FIND_PATH(LZMA_INCLUDE_DIR lzma.h)
++FIND_LIBRARY(LZMA_LIBRARY NAMES lzma liblzma)
++
++# handle the QUIETLY and REQUIRED arguments and set LZMA_FOUND to TRUE if 
++# all listed variables are TRUE
++INCLUDE(FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(LZMA DEFAULT_MSG LZMA_LIBRARY LZMA_INCLUDE_DIR)
++
++IF(LZMA_FOUND)
++  SET( LZMA_LIBRARIES ${LZMA_LIBRARY} )
++ELSE(LZMA_FOUND)
++  SET( LZMA_LIBRARIES )
++
++  IF (LZMADEC_INCLUDE_DIR)
++    # Already in cache, be silent
++    SET(LZMADEC_FIND_QUIETLY TRUE)
++  ENDIF (LZMADEC_INCLUDE_DIR)
++
++  FIND_PATH(LZMADEC_INCLUDE_DIR lzmadec.h)
++  FIND_LIBRARY(LZMADEC_LIBRARY NAMES lzmadec )
++
++  # handle the QUIETLY and REQUIRED arguments and set LZMADEC_FOUND to TRUE if 
++  # all listed variables are TRUE
++  INCLUDE(FindPackageHandleStandardArgs)
++  FIND_PACKAGE_HANDLE_STANDARD_ARGS(LZMADEC DEFAULT_MSG LZMADEC_LIBRARY
++    LZMADEC_INCLUDE_DIR)
++
++  IF(LZMADEC_FOUND)
++    SET( LZMADEC_LIBRARIES ${LZMADEC_LIBRARY} )
++  ELSE(LZMADEC_FOUND)
++    SET( LZMADEC_LIBRARIES )
++  ENDIF(LZMADEC_FOUND)
++ENDIF(LZMA_FOUND)
+diff --git a/cmake/OpenCVFindLibsGrfmt.cmake b/cmake/OpenCVFindLibsGrfmt.cmake
+index 5988169..738e1f3 100644
+--- a/cmake/OpenCVFindLibsGrfmt.cmake
++++ b/cmake/OpenCVFindLibsGrfmt.cmake
+@@ -2,6 +2,11 @@
+ #  Detect 3rd-party image IO libraries
+ # ----------------------------------------------------------------------------
+ 
++# --- lzma (required by apps, examples, perf, tests) ---
++if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
++  include(cmake/OpenCVFindLZMA.cmake)
++endif()
++
+ # --- zlib (required) ---
+ if(BUILD_ZLIB)
+   ocv_clear_vars(ZLIB_FOUND)
+@@ -26,6 +31,11 @@ if(NOT ZLIB_FOUND)
+   ocv_parse_header2(ZLIB "${${ZLIB_LIBRARY}_SOURCE_DIR}/zlib.h" ZLIB_VERSION)
+ endif()
+ 
++# --- lcms (required by apps, examples, perf, tests) ---
++if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
++  include(cmake/OpenCVFindLCMS.cmake)
++endif()
++
+ # --- libtiff (optional, should be searched after zlib) ---
+ if(WITH_TIFF)
+   if(BUILD_TIFF)
+@@ -114,6 +124,7 @@ if(WITH_PNG)
+   if(BUILD_PNG)
+     ocv_clear_vars(PNG_FOUND)
+   else()
++    include(CheckIncludeFile)
+     include(FindPNG)
+     if(PNG_FOUND)
+       check_include_file("${PNG_PNG_INCLUDE_DIR}/png.h"        HAVE_PNG_H)
+diff --git a/modules/core/CMakeLists.txt b/modules/core/CMakeLists.txt
+index 4c5112e..7411f32 100644
+--- a/modules/core/CMakeLists.txt
++++ b/modules/core/CMakeLists.txt
+@@ -1,12 +1,12 @@
+ set(the_description "The Core Functionality")
+ 
+ if (NOT HAVE_CUDA OR ENABLE_DYNAMIC_CUDA)
+-  ocv_add_module(core PRIVATE_REQUIRED ${ZLIB_LIBRARIES})
++  ocv_add_module(core PRIVATE_REQUIRED ${ZLIB_LIBRARIES} ${LZMA_LIBRARIES} ${LCMS_LIBRARIES})
+ else()
+-  ocv_add_module(core PRIVATE_REQUIRED ${ZLIB_LIBRARIES} ${CUDA_LIBRARIES} ${CUDA_npp_LIBRARY})
++  ocv_add_module(core PRIVATE_REQUIRED ${ZLIB_LIBRARIES} ${CUDA_LIBRARIES} ${CUDA_npp_LIBRARY} ${LZMA_LIBRARIES} ${LCMS_LIBRARIES})
+ endif()
+ 
+-ocv_module_include_directories("${OpenCV_SOURCE_DIR}/modules/dynamicuda/include/" ${ZLIB_INCLUDE_DIR})
++ocv_module_include_directories("${OpenCV_SOURCE_DIR}/modules/dynamicuda/include/" ${ZLIB_INCLUDE_DIR} ${LZMA_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
+ 
+ if(HAVE_WINRT_CX)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /ZW")
+
+diff --git a/cmake/templates/opencv-XXX.pc.cmake.in b/cmake/templates/opencv-XXX.pc.cmake.in
+index 4f6415c..ea1ed15 100644
+--- a/cmake/templates/opencv-XXX.pc.in
++++ b/cmake/templates/opencv-XXX.pc.in
+@@ -9,5 +9,7 @@
+ Name: OpenCV
+ Description: Open Source Computer Vision Library
+ Version: @OPENCV_VERSION@
++Requires: OpenEXR libtiff-4
+ Libs: @OpenCV_LIB_COMPONENTS@
++Libs.private: -luuid -loleaut32
+ Cflags: -I${includedir_old} -I${includedir_new}
+
