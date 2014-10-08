@@ -2,16 +2,16 @@
 # See index.html for further information.
 
 PKG             := qwt_qt4
-$(PKG)_VERSION   = $(qwt_VERSION)
-$(PKG)_CHECKSUM  = $(qwt_CHECKSUM)
-$(PKG)_SUBDIR    = $(qwt_SUBDIR)
-$(PKG)_FILE      = $(qwt_FILE)
-$(PKG)_WEBSITE   = $(qwt_WEBSITE)
-$(PKG)_URL       = $(qwt_URL)
+$(PKG)_VERSION  := 5.2
+$(PKG)_CHECKSUM := 01a40259134864bc36a335807c1d2f1157347d36
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_WEBSITE  := http://qwt.sourceforge.net/
+$(PKG)_URL      := http://sourceforge.net/projects/mxedeps/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qt
 
 define $(PKG)_UPDATE
-    echo $(qwt_VERSION)
+    echo 'TODO: Updates for package qwt_qt4 need to be written.' >&2;
 endef
 
 define $(PKG)_BUILD
