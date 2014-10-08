@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://distfiles.macports.org/opencv/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc eigen ffmpeg jasper jpeg lcms1 libpng openexr tiff xz zlib
+$(PKG)_DEPS     := gcc eigen jasper jpeg lcms1 libpng openexr tiff xz zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/' | \
@@ -25,7 +25,7 @@ define $(PKG)_BUILD
       -DWITH_OPENGL=ON \
       -DWITH_GSTREAMER=OFF \
       -DWITH_GTK=OFF \
-      -DWITH_VIDEOINPUT=ON \
+      -DWITH_VIDEOINPUT=OFF \
       -DWITH_XINE=OFF \
       -DBUILD_SHARED_LIBS=ON \
       -DBUILD_opencv_apps=OFF \
@@ -44,6 +44,7 @@ define $(PKG)_BUILD
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
       -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500' \
+      -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)' \
       '$(1)'
 
     # install
@@ -57,7 +58,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(1).build/unix-install/opencv.pc'
     $(SED) -i 's/dll/dll.a/g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    $(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/OpenCVConfig.cmake'
+    $(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x86/mingw/lib/OpenCVConfig.cmake'
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
