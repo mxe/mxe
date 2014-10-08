@@ -37,47 +37,7 @@ Date: Thu, 5 Sep 2013 14:28:28 -0700
 Subject: [PATCH 2/2] Fix /bin/bash
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
----
- build/make/armlink_adapter.sh | 2 +-
- build/make/configure.sh       | 2 +-
- build/make/gen_asm_deps.sh    | 2 +-
- build/make/gen_msvs_def.sh    | 2 +-
- build/make/gen_msvs_proj.sh   | 2 +-
- build/make/gen_msvs_sln.sh    | 2 +-
- build/make/version.sh         | 2 +-
- configure                     | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/build/make/armlink_adapter.sh b/build/make/armlink_adapter.sh
-index b53669c..71cf7e9 100755
---- a/build/make/armlink_adapter.sh
-+++ b/build/make/armlink_adapter.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/usr/bin/env bash
- ##
- ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
- ##
-diff --git a/build/make/configure.sh b/build/make/configure.sh
-index c99a01c..9023dee 100755
---- a/build/make/configure.sh
-+++ b/build/make/configure.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/usr/bin/env bash
- ##
- ##  configure.sh
- ##
-diff --git a/build/make/gen_asm_deps.sh b/build/make/gen_asm_deps.sh
-index 0b4e3aa..158ec34 100755
---- a/build/make/gen_asm_deps.sh
-+++ b/build/make/gen_asm_deps.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/usr/bin/env bash
- ##
- ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
- ##
 diff --git a/build/make/gen_msvs_def.sh b/build/make/gen_msvs_def.sh
 index 4defcc2..12e3573 100755
 --- a/build/make/gen_msvs_def.sh
@@ -107,26 +67,6 @@ index 240678b..2089f68 100755
 +#!/usr/bin/env bash
  ##
  ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
- ##
-diff --git a/build/make/version.sh b/build/make/version.sh
-index 3efb956..b3a9c23 100755
---- a/build/make/version.sh
-+++ b/build/make/version.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/usr/bin/env bash
- ##
- ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
- ##
-diff --git a/configure b/configure
-index 987b2e9..d581cf2 100755
---- a/configure
-+++ b/configure
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/usr/bin/env bash
- ##
- ##  configure
  ##
 -- 
 1.8.1.2
