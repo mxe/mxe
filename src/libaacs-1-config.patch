@@ -1,0 +1,35 @@
+This file is part of MXE.
+See index.html for further information.
+
+From c4e50ffd858342b65beaffb4027be75ca7f10b05 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 7 Oct 2014 18:48:57 -0700
+Subject: [PATCH] Look for prefixed config scripts
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/configure.ac b/configure.ac
+index 155acad..8cb7e79 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -126,7 +126,7 @@ if test x$libgcrypt_config_prefix != x ; then
+    fi
+ fi
+ 
+-AC_PATH_PROG(LIBGCRYPT_CONFIG, libgcrypt-config, no)
++AC_PATH_TOOL(LIBGCRYPT_CONFIG, libgcrypt-config, no)
+ if test x"$LIBGCRYPT_CONFIG" = xno; then
+   AC_MSG_ERROR([libgcrypt not found on system])
+ else
+@@ -149,7 +149,7 @@ if test x$gpg_error_config_prefix != x ; then
+    fi
+ fi
+ 
+-AC_PATH_PROG(GPG_ERROR_CONFIG, gpg-error-config, no)
++AC_PATH_TOOL(GPG_ERROR_CONFIG, gpg-error-config, no)
+ if test x"$GPG_ERROR_CONFIG" = xno; then
+   AC_MSG_ERROR([gpg-error not found on system])
+ else
+-- 
+1.8.3.2
+

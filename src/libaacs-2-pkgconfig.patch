@@ -1,0 +1,24 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 461de1dc2a6c611fc1e95678f765c7ff2648ee08 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 7 Oct 2014 19:41:43 -0700
+Subject: [PATCH] pkgconfig: Take libgpg-error and libgcrypt into account for
+ static builds
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/src/libaacs.pc.in b/src/libaacs.pc.in
+index 598f206..4334d8c 100644
+--- a/src/libaacs.pc.in
++++ b/src/libaacs.pc.in
+@@ -7,4 +7,5 @@ Name: libaacs
+ Description: AACS support library for Blu-ray playback
+ Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} -laacs
++Libs.private: @LIBGCRYPT_LIBS@ @GPG_ERROR_LIBS@
+ Cflags: -I${includedir}
+-- 
+1.8.3.2
+
