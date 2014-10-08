@@ -15,10 +15,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i '/\INSTALLBASE /s%\INSTALLBASE .*%INSTALLBASE=$(PREFIX)/$(TARGET)/qwt-$(qwt_VERSION)%g' '$(1)/qwtconfig.pri'
+    $(SED) -i '/\INSTALLBASE /s%\INSTALLBASE .*%INSTALLBASE=$(PREFIX)/$(TARGET)/qwt%g' '$(1)/qwtconfig.pri'
     $(if $(BUILD_STATIC),\
         echo "QWT_CONFIG -= QwtDll" >> '$(1)/qwtconfig.pri')
-    # build
+ # build
     cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt/bin/qmake
     $(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
 endef
