@@ -7,9 +7,11 @@ $(PKG)_VERSION  := 5.0.0
 $(PKG)_CHECKSUM := f1fadbf19fd8d3a9a63ff610ec8ce9021ebc6947
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+
 # Later releases seem to be hosted on VideoLAN's server
 # $(PKG)_URL      := https://dvdnav.mplayerhq.hu/releases/$($(PKG)_FILE)
 $(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+
 # libdvdread supports libdvdcss either by dynamic loading (dlfcn-win32) or
 # directly linking to libdvdcss. We directly links to the library here.
 $(PKG)_DEPS     := gcc libdvdcss
