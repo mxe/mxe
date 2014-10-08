@@ -3,8 +3,8 @@
 
 PKG             := cmake
 $(PKG)_IGNORE   := %
-$(PKG)_VERSION  := 2.8.12.1
-$(PKG)_CHECKSUM := 5661a607acbce7c16bb5f15ff2895fa5ca53a4da
+$(PKG)_VERSION  := 3.0.2
+$(PKG)_CHECKSUM := 379472e3578902a1d6f8b68a9987773151d6f21a
 $(PKG)_SUBDIR   := cmake-$($(PKG)_VERSION)
 $(PKG)_FILE     := cmake-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.cmake.org/files/v$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -17,10 +17,13 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_BUILD_$(BUILD)
+define $(PKG)_BUILD
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 endef
+
+CMAKE = $(PREFIX)/$(TARGET)/bin/cmake \
+            -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
