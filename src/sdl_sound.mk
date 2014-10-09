@@ -51,7 +51,7 @@ define $(PKG)_BUILD
      echo 'Requires: sdl vorbisfile flac speex'; \
      echo 'Libs: -lSDL_sound'; \
      echo "Libs.private: `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --libs`";) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/SDL_sound.pc'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -std=c99 -pedantic \
