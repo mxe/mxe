@@ -38,7 +38,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=710163
 
 Taken from: https://bug710163.bugzilla-attachments.gnome.org/attachment.cgi?id=283702
 
-Signed-off-by: Timothy Gu <timothygu@gmail.com>
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/rsvg-base.c b/rsvg-base.c
 index 683d607..c40669a 100644
