@@ -3,9 +3,9 @@
 
 PKG             := eigen
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.1
-$(PKG)_CHECKSUM := 17aca570d647b25cb3d9dac54b480cfecf402ed9
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-6b38706d90a9
+$(PKG)_VERSION  := 3.2.2
+$(PKG)_CHECKSUM := 1e1a85681777314805003db5469d1a00785c58df
+$(PKG)_SUBDIR   := $(PKG)-$(PKG)-1306d75b4a21
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := gcc
@@ -30,4 +30,3 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' --cflags --libs eigen3`
 endef
 
-$(PKG)_BUILD_SHARED =
