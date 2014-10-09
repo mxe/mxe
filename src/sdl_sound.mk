@@ -43,12 +43,20 @@ define $(PKG)_BUILD
         LIBS="`'$(TARGET)-pkg-config' vorbisfile flac speex --libs` `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $(PKG)'; \
+     echo 'Requires: sdl vorbisfile flac speex'; \
+     echo 'Libs: -lSDL_sound'; \
+     echo "Libs.private: `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --libs`";) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -std=c99 -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_sound.exe' \
-        -lSDL_sound \
-        `'$(TARGET)-pkg-config' sdl vorbisfile flac speex --cflags --libs` \
-        `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --cflags --libs`
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
 
 $(PKG)_BUILD_SHARED =
