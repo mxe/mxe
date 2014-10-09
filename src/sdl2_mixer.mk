@@ -21,6 +21,7 @@ define $(PKG)_BUILD
     echo \
         'Libs.private:' \
         "`$(TARGET)-pkg-config libmodplug --libs`" \
+        "`$(PREFIX)/$(TARGET)/bin/smpeg2-config --libs`" \
         >> '$(1)/SDL2_mixer.pc.in'
     $(SED) -i 's,for path in /usr/local; do,for path in; do,' '$(1)/configure'
     cd '$(1)' && ./configure \
