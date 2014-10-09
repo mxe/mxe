@@ -38,6 +38,13 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_image.exe' \
         `'$(TARGET)-pkg-config' SDL_image --cflags --libs`
+    
+    mkdir -p '$(1)/cmake-build-test'
+    cp '$(2)-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
+    cp '$(2).c' '$(1)/cmake-build-test/'
+    cd '$(1)/cmake-build-test' && cmake . \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
+    $(MAKE) -C '$(1)/cmake-build-test' -j '$(JOBS)'
 endef
 
 $(PKG)_BUILD_SHARED =

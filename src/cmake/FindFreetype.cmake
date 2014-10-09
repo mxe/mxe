@@ -1,4 +1,6 @@
-find_package(PkgConfig REQUIRED)
+if(NOT PKG_CONFIG_FOUND)
+  find_package(PkgConfig REQUIRED)
+endif()
 
 pkg_check_modules(FREETYPE freetype2)
 
