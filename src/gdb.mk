@@ -21,11 +21,11 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        --disable-shared \
+        --enable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
 
-$(PKG)_BUILD_SHARED =
+#$(PKG)_BUILD_SHARED =

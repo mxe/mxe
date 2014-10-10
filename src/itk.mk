@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         -C '$(1)/TryRunResults.cmake'\
         -DBUILD_SHARED_LIBS=ON \
         -DBUILD_TESTING=OFF \
+        -DCMAKE_VERBOSE_MAKEFILE=OFF \
         -DBUILD_EXAMPLES=OFF \
         -DITK_USE_SYSTEM_HDF5=ON \
         -DITK_USE_SYSTEM_TIFF=ON \
