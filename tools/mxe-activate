@@ -54,7 +54,9 @@ _mxe()
         return 0
         ;;
     [!-]*)
-        pkgs+=" build-only- check-requirements clean clean-pkg download download- update-checksum- show-deps- show-downstream-deps- show-upstream-deps-"
+        pkgs+=" build-only- build-matrix.html check-requirements \
+                clean clean-pkg download download- update-checksum- \
+                show-deps- show-downstream-deps- show-upstream-deps-"
         COMPREPLY=( $(compgen -W "${pkgs}" -- ${cur}) )
         return 0
         ;;
