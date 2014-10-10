@@ -47,8 +47,8 @@ define $(PKG)_BUILD
       -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)' \
       '$(1)'
 
-    # install
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install ##VERBOSE=1
+    # make install
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install
 
     # fixup and install pkg-config file
     # openexr isn't available on x86_64-w64-mingw32
@@ -58,7 +58,12 @@ define $(PKG)_BUILD
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(1).build/unix-install/opencv.pc'
     $(SED) -i 's/dll/dll.a/g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    $(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x86/mingw/lib/OpenCVConfig.cmake'
+    $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
+	$(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x64/mingw/lib/OpenCVConfig.cmake')
+    $(if $(findstring i686-pc-mingw32,$(TARGET)),\
+	$(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x86/mingw/lib/OpenCVConfig.cmake')
+
+	$(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/OpenCVConfig.cmake'
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
