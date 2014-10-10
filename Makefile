@@ -604,20 +604,20 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@$(foreach PKG,$(PKGS),                      \
 	    $(eval $(PKG)_VIRTUAL := $(true))        \
 	    $(eval $(PKG)_BUILD_ONLY := $(true))     \
-	    echo '<tr>'                         >> $@; \
-	    echo '<th class="row">$(PKG)</th>'  >> $@; \
+	    echo '<tr>'                         >> $@ $(newline) \
+	    echo '<th class="row">$(PKG)</th>'  >> $@ $(newline) \
 	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
 	        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
 	            $(eval $(TARGET)_PKGCOUNT := $(call inc,$($(TARGET)_PKGCOUNT))) \
 	            $(eval $(PKG)_VIRTUAL := $(false)) \
 	            $(eval $(PKG)_BUILD_ONLY := $(false)) \
-	            echo '<td class="supported">&#x2713;</td>'   >> $@;,   \
-	            echo '<td class="unsupported">&#x2717;</td>' >> $@;))  \
+	            echo '<td class="supported">&#x2713;</td>'   >> $@ $(newline),   \
+	            echo '<td class="unsupported">&#x2717;</td>' >> $@ $(newline)))  \
 	    $(if $(call set_is_member,$(PKG),$(BUILD_PKGS)),        \
 	        $(eval BUILD_PKGCOUNT := $(call inc,$(BUILD_PKGCOUNT))) \
 	        $(eval $(PKG)_VIRTUAL := $(false))   \
-	        echo '<td class="supported">&#x2713;</td>'   >> $@;,       \
-	        echo '<td class="unsupported">&#x2717;</td>' >> $@;)       \
+	        echo '<td class="supported">&#x2713;</td>'   >> $@ $(newline),       \
+	        echo '<td class="unsupported">&#x2717;</td>' >> $@ $(newline))       \
 	    $(if $($(PKG)_VIRTUAL),                  \
 	        $(eval VIRTUAL_PKGCOUNT := $(call inc,$(VIRTUAL_PKGCOUNT)))) \
 	    $(if $($(PKG)_BUILD_ONLY),               \
@@ -632,7 +632,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo 'Total: $(TOTAL_PKGCOUNT)<br>(+$(VIRTUAL_PKGCOUNT) virtual +$(BUILD_ONLY_PKGCOUNT) native-only)' >> $@
 	@echo '</th>'                           >> $@
 	@$(foreach TARGET,$(MXE_TARGET_LIST),        \
-	    echo '<th>$($(TARGET)_PKGCOUNT)</th>' >> $@;)
+	    echo '<th>$($(TARGET)_PKGCOUNT)</th>' >> $@ $(newline))
 	@echo '<th>$(BUILD_PKGCOUNT)</th>'      >> $@
 	@echo '</tr>'                           >> $@
 	@echo '</tbody>'                        >> $@
