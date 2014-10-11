@@ -1,3 +1,6 @@
+# This file is part of MXE.
+# See index.html for further information.
+
 if(NOT PKG_CONFIG_FOUND)
   find_package(PkgConfig REQUIRED)
 endif()
