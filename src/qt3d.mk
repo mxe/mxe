@@ -7,14 +7,14 @@ $(PKG)_CHECKSUM := c9c36e6a04553bf4fb360c7c3d54282ebd4041b5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := qt-$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/qtproject/qt3d/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc qtbase qtdeclarative 
+$(PKG)_DEPS     := gcc qtbase qtdeclarative
 
 define $(PKG)_UPDATE
     echo $(qt3d_VERSION)
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' CONFIG+=git_build 
+    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' CONFIG+=git_build
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
