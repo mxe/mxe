@@ -1,7 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-project(18)
+project(SDL_image_test)
 cmake_minimum_required(VERSION 2.8)
 
 find_package(SDL REQUIRED)
