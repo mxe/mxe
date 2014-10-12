@@ -13,3 +13,6 @@ td.unsupported {
     background-color: #f99;
     text-align: center;
 }
+th.row {
+    text-align: left;
+}
