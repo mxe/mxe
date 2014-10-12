@@ -590,6 +590,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '<thead>'                         >> $@
 	@echo '<tr>'                            >> $@
 	@echo '<th rowspan="2">Package</th>'    >> $@
+	@echo '<th rowspan="2">Version</th>'    >> $@
 	@$(foreach TRIPLET,$(MXE_TRIPLETS),          \
 	    echo '<th colspan="$(words $(MXE_LIB_TYPES))">$(TRIPLET)</th>' >> $@;)
 	@echo '<th rowspan="2">Native</th>'     >> $@
@@ -606,6 +607,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	    $(eval $(PKG)_BUILD_ONLY := $(true))     \
 	    echo '<tr>                               \
 	        <th class="row">$(PKG)</th>          \
+	        <td>$(call substr,$($(PKG)_VERSION),1,12)$(if $(call gt,$(call strlen,$($(PKG)_VERSION)),12),&hellip;)</td> \
 	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
 	        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
 	            $(eval $(TARGET)_PKGCOUNT := $(call inc,$($(TARGET)_PKGCOUNT))) \
@@ -629,7 +631,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	    $(call subtract,                         \
 	        $(call subtract,$(words $(PKGS)),$(VIRTUAL_PKGCOUNT)),\
 	        $(BUILD_ONLY_PKGCOUNT)))
-	@echo '<th class="row">'                >> $@
+	@echo '<th class="row" colspan="2">'    >> $@
 	@echo 'Total: $(TOTAL_PKGCOUNT)<br>(+$(VIRTUAL_PKGCOUNT) virtual +$(BUILD_ONLY_PKGCOUNT) native-only)' >> $@
 	@echo '</th>'                           >> $@
 	@$(foreach TARGET,$(MXE_TARGET_LIST),        \
