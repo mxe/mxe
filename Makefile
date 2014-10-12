@@ -601,7 +601,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</tr>'                           >> $@
 	@echo '</thead>'                        >> $@
 	@echo '<tbody>'                         >> $@
-	@{ $(foreach PKG,$(PKGS),                    \
+	@$(foreach PKG,$(PKGS),                      \
 	    $(eval $(PKG)_VIRTUAL := $(true))        \
 	    $(eval $(PKG)_BUILD_ONLY := $(true))     \
 	    echo '<tr>                               \
@@ -618,12 +618,11 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	        $(eval $(PKG)_VIRTUAL := $(false))   \
 	        <td class="supported">&#x2713;</td>, \
 	        <td class="unsupported">&#x2717;</td>) \
-	        </tr>';                              \
+	        </tr>' >> $@ $(newline)              \
 	    $(if $($(PKG)_VIRTUAL),                  \
 	        $(eval VIRTUAL_PKGCOUNT := $(call inc,$(VIRTUAL_PKGCOUNT)))) \
 	    $(if $($(PKG)_BUILD_ONLY),               \
-	        $(eval BUILD_ONLY_PKGCOUNT := $(call inc,$(BUILD_ONLY_PKGCOUNT))))) \
-	} >> $@
+	        $(eval BUILD_ONLY_PKGCOUNT := $(call inc,$(BUILD_ONLY_PKGCOUNT)))))
 	@echo '<tr>'                            >> $@
 	@# TOTAL_PKGCOUNT = ( PKGS - VIRTUAL ) - BUILD_ONLY
 	$(eval TOTAL_PKGCOUNT :=                     \
