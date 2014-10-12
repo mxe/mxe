@@ -9,9 +9,7 @@ $(PKG)_FILE     := qt-$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/qtproject/qt3d/archive/$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc qtbase qtdeclarative
 
-define $(PKG)_UPDATE
-    echo $(qt3d_VERSION)
-endef
+$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, qtproject/qt3d, master)
 
 define $(PKG)_BUILD
     cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' CONFIG+=git_build
