@@ -22,7 +22,23 @@ define $(PKG)_BUILD
     cd '$(1)/lib/win32' && $(MAKE) -f Makefile.win32.cross-mgw \
         TARGET=$(TARGET)- \
         PREFIX='$(PREFIX)/$(TARGET)' \
-        install -j '$(JOBS)'
+        $(if $(BUILD_STATIC),libglfw.a,glfw.dll) libglfw.pc -j '$(JOBS)'
+
+    # Install manually to split static and shared
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
+    $(if $(BUILD_STATIC), \
+        $(INSTALL) -c -m 644 '$(1)/lib/win32/libglfw.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/libglfw.pc'
+        $(INSTALL) -c -m 644 '$(1)/lib/win32/libglfw.a' '$(PREFIX)/$(TARGET)/lib/libglfw.a', \
+        $(SED) -e "s|Cflags:|Cflags: -DGLFW_DLL|g" '$(1)/lib/win32/libglfw.pc' > \
+            '$(PREFIX)/$(TARGET)/lib/pkgconfig/libglfw.pc'; \
+        $(INSTALL) -c '$(1)/lib/win32/glfw.dll' '$(PREFIX)/$(TARGET)/bin/glfw.dll'; \
+        $(INSTALL) -c '$(1)/lib/win32/libglfwdll.a' '$(PREFIX)/$(TARGET)/lib/libglfw.dll.a')
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/GL'
+    $(INSTALL) -c -m 644 $(1)/include/GL/glfw.h '$(PREFIX)/$(TARGET)/include/GL/glfw.h'
+
+
 
     #Test
     '$(TARGET)-gcc' \
@@ -31,4 +47,3 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' libglfw --cflags --libs`
 endef
 
-$(PKG)_BUILD_SHARED =
