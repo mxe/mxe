@@ -7,8 +7,10 @@
 
 # This also acts as a CI to file issue on GitHub if download fails.
 
-# DigitalOcean server IP: 162.243.7.196
-# Old Amazon EC2 server: ec2-174-129-78-72.compute-1.amazonaws.com
+# DigitalOcean server IP: 104.131.71.203
+# Admins: https://api.github.com/orgs/mxe/members
+# Keys: https://github.com/<user>.keys or https://api.github.com/users/<user>/keys
+#
 # The script uses s3cmd to sync package tarballs:
 # http://s3tools.org/s3cmd
 
