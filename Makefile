@@ -605,22 +605,22 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@$(foreach PKG,$(PKGS),                      \
 	    $(eval $(PKG)_VIRTUAL := $(true))        \
 	    $(eval $(PKG)_BUILD_ONLY := $(true))     \
-	    echo '<tr>                               \
-	        <th class="row">$(PKG)</th>          \
-	        <td>$(call substr,$($(PKG)_VERSION),1,12)$(if $(call gt,$(call strlen,$($(PKG)_VERSION)),12),&hellip;)</td> \
+	    echo -e '<tr>\n                          \
+	        <th class="row">$(PKG)</th>\n        \
+	        <td>$(call substr,$($(PKG)_VERSION),1,12)$(if $(call gt,$(call strlen,$($(PKG)_VERSION)),12),&hellip;)</td>\n\
 	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
 	        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
 	            $(eval $(TARGET)_PKGCOUNT := $(call inc,$($(TARGET)_PKGCOUNT))) \
 	            $(eval $(PKG)_VIRTUAL := $(false)) \
 	            $(eval $(PKG)_BUILD_ONLY := $(false)) \
 	            <td class="supported">&#x2713;</td>,            \
-	            <td class="unsupported">&#x2717;</td>))         \
+	            <td class="unsupported">&#x2717;</td>)\n)       \
 	    $(if $(call set_is_member,$(PKG),$(BUILD_PKGS)),        \
 	        $(eval BUILD_PKGCOUNT := $(call inc,$(BUILD_PKGCOUNT))) \
 	        $(eval $(PKG)_VIRTUAL := $(false))   \
 	        <td class="supported">&#x2713;</td>, \
-	        <td class="unsupported">&#x2717;</td>) \
-	        </tr>' >> $@ $(newline)              \
+	        <td class="unsupported">&#x2717;</td>)\n \
+	        </tr>\n' >> $@ $(newline)            \
 	    $(if $($(PKG)_VIRTUAL),                  \
 	        $(eval VIRTUAL_PKGCOUNT := $(call inc,$(VIRTUAL_PKGCOUNT)))) \
 	    $(if $($(PKG)_BUILD_ONLY),               \
