@@ -641,4 +641,5 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</tbody>'                        >> $@
 	@echo '</table>'                        >> $@
 	@echo '</body>'                         >> $@
+	@echo '</html>'                         >> $@
 
