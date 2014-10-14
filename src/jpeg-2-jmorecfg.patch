@@ -1,0 +1,33 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 6673c05939cc5ccda94b7706bbc81fd9b38aed0a Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 13 Oct 2014 23:11:10 -0400
+Subject: [PATCH] jmorecfg: Always include basetsd.h on Windows
+
+If you include the two files in the other order:
+
+    #include <jmorecfg.h>
+    #include <basetsd.h>
+
+The definition of INT32 will clash.
+
+diff --git a/jmorecfg.h b/jmorecfg.h
+index 679d68b..ae6d3c2 100644
+--- a/jmorecfg.h
++++ b/jmorecfg.h
+@@ -181,6 +181,10 @@ typedef char JOCTET;
+  * typedefs live at a different point on the speed/space tradeoff curve.)
+  */
+ 
++#ifdef _WIN32
++#include <basetsd.h>
++#endif
++
+ /* UINT8 must hold at least the values 0..255. */
+ 
+ #ifdef HAVE_UNSIGNED_CHAR
+-- 
+1.9.1
+
