@@ -621,7 +621,8 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	        <td class="unsupported">&#x2717;</td>)\n \
 	        </tr>\n' >> $@ $(newline)            \
 	    $(if $($(PKG)_VIRTUAL),                  \
-	        $(eval VIRTUAL_PKGCOUNT := $(call inc,$(VIRTUAL_PKGCOUNT)))) \
+	        $(eval VIRTUAL_PKGCOUNT := $(call inc,$(VIRTUAL_PKGCOUNT))) \
+	        $(eval $(PKG)_BUILD_ONLY := $(false))) \
 	    $(if $($(PKG)_BUILD_ONLY),               \
 	        $(eval BUILD_ONLY_PKGCOUNT := $(call inc,$(BUILD_ONLY_PKGCOUNT)))))
 	@echo '<tr>'                            >> $@
