@@ -25,7 +25,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-host_os=mingw \
-        --with-winapi=@portaudio-winapi@ \
+        --with-winapi=wmme,directx \
         --with-dxdir=$(PREFIX)/$(TARGET) \
         ac_cv_path_AR=$(TARGET)-ar \
         $(if $(BUILD_SHARED),\
@@ -39,10 +39,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-portaudio.exe' \
         `'$(TARGET)-pkg-config' portaudio-2.0 --cflags --libs`
 endef
-
-$(PKG)_WINAPI_MINGW_ORG = wmme,directx,wasapi,wdmks
-$(PKG)_WINAPI_MINGW_W64 = wmme,directx
-
-$(PKG)_BUILD_i686-pc-mingw32    = $(subst @portaudio-winapi@,$($(PKG)_WINAPI_MINGW_ORG),$($(PKG)_BUILD))
-$(PKG)_BUILD_i686-w64-mingw32   = $(subst @portaudio-winapi@,$($(PKG)_WINAPI_MINGW_W64),$($(PKG)_BUILD))
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @portaudio-winapi@,$($(PKG)_WINAPI_MINGW_W64),$($(PKG)_BUILD))

@@ -9,11 +9,7 @@ $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := binutils gcc-cloog gcc-gmp gcc-isl gcc-mpc gcc-mpfr
-
-$(PKG)_DEPS_i686-pc-mingw32    := $($(PKG)_DEPS) mingwrt w32api
-$(PKG)_DEPS_i686-w64-mingw32   := $($(PKG)_DEPS) mingw-w64
-$(PKG)_DEPS_x86_64-w64-mingw32 := $($(PKG)_DEPS) mingw-w64
+$(PKG)_DEPS     := binutils gcc-cloog gcc-gmp gcc-isl gcc-mpc gcc-mpfr mingw-w64
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
@@ -60,16 +56,6 @@ define $(PKG)_POST_BUILD
     -mv '$(PREFIX)/lib/gcc/$(TARGET)/'*.dll '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
     -cp '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
     -cp '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll.a '$(PREFIX)/$(TARGET)/lib/'
-endef
-
-define $(PKG)_BUILD_i686-pc-mingw32
-    # build full cross gcc
-    $($(PKG)_CONFIGURE) \
-        --disable-sjlj-exceptions
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
-
-    $($(PKG)_POST_BUILD)
 endef
 
 define $(PKG)_BUILD_mingw-w64

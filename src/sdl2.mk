@@ -28,6 +28,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/bin/sdl2-config' '$(PREFIX)/bin/$(TARGET)-sdl2-config'
 endef
-
-# MinGW32 does not have dxgi.h...
-$(PKG)_BUILD_i686-pc-mingw32 =
