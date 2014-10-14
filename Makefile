@@ -310,6 +310,9 @@ $(1): | $(if $(value $(1)_DEPS), \
 	                $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 	    $($(1)_DEPS)
 	@echo '[target]   $(1) $(call TARGET_HEADER)'
+	$(if $(findstring i686-pc-mingw32,$(1)),
+	    $(error Deprecated target specified: "$(1)". Please use \
+	            i686-w64-mingw32.[$(subst $(space),|,$(MXE_LIB_TYPES))] instead))
 	$(if $(filter $(1),$(MXE_TARGET_LIST) $(BUILD) $(MXE_TRIPLETS)),,
 	    $(error Invalid target specified: "$(1)"))
 	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),
