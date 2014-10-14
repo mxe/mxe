@@ -560,10 +560,6 @@ cleanup-style:
     )
 
 build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
-	$(foreach TARGET,$(MXE_TARGET_LIST),$(eval $(TARGET)_PKGCOUNT := 0))
-	$(eval BUILD_PKGCOUNT := 0)
-	$(eval BUILD_ONLY_PKGCOUNT := 0)
-	$(eval VIRTUAL_PKGCOUNT := 0)
 	@echo '<!DOCTYPE html>'                  > $@
 	@echo '<html>'                          >> $@
 	@echo '<head>'                          >> $@
@@ -602,6 +598,17 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</tr>'                           >> $@
 	@echo '</thead>'                        >> $@
 	@echo '<tbody>'                         >> $@
+# It is important to remember that the PKGCOUNT variables
+# are expressed in unary terms. So, after 5 virtual packages,
+# the content of $(VIRTUAL_PKGCOUNT) would be "x x x x x" and not "5".
+# Therefore, when using the PKGCOUNT, you have to use
+#     $(words $(VIRTUAL_PKGCOUNT))
+
+# The same operations are included in GMSL "Integer Arithmetic Functions."
+# I chose not to use most of them because their names are too long.
+#     $(eval $(VIRTUAL_PKGCOUNT += x))
+# vs
+#     $(eval $(VIRTUAL_PKGCOUNT := $(call int_inc,$(VIRTUAL_PKGCOUNT))))
 	@$(foreach PKG,$(PKGS),                      \
 	    $(eval $(PKG)_VIRTUAL := $(true))        \
 	    $(eval $(PKG)_BUILD_ONLY := $(true))     \
@@ -610,7 +617,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	        <td>$(call substr,$($(PKG)_VERSION),1,12)$(if $(call gt,$(call strlen,$($(PKG)_VERSION)),12),&hellip;)</td>\n\
 	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
 	        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
-	            $(eval $(TARGET)_PKGCOUNT := $(call inc,$($(TARGET)_PKGCOUNT))) \
+	            $(eval $(TARGET)_PKGCOUNT += x) \
 	            $(eval $(PKG)_VIRTUAL := $(false)) \
 	            $(eval $(PKG)_BUILD_ONLY := $(false)) \
 	            <td class="supported">&#x2713;</td>,            \
@@ -621,21 +628,22 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	        <td class="unsupported">&#x2717;</td>)\n \
 	        </tr>\n' >> $@ $(newline)            \
 	    $(if $($(PKG)_VIRTUAL),                  \
-	        $(eval VIRTUAL_PKGCOUNT := $(call inc,$(VIRTUAL_PKGCOUNT))) \
+	       $(eval VIRTUAL_PKGCOUNT += x) \
 	        $(eval $(PKG)_BUILD_ONLY := $(false))) \
 	    $(if $($(PKG)_BUILD_ONLY),               \
-	        $(eval BUILD_ONLY_PKGCOUNT := $(call inc,$(BUILD_ONLY_PKGCOUNT)))))
+	        $(eval BUILD_ONLY_PKGCOUNT += x)))
 	@echo '<tr>'                            >> $@
-	@# TOTAL_PKGCOUNT = ( PKGS - VIRTUAL ) - BUILD_ONLY
-	$(eval TOTAL_PKGCOUNT :=                     \
-	    $(call subtract,                         \
-	        $(call subtract,$(words $(PKGS)),$(VIRTUAL_PKGCOUNT)),\
-	        $(BUILD_ONLY_PKGCOUNT)))
 	@echo '<th class="row" colspan="2">'    >> $@
-	@echo 'Total: $(TOTAL_PKGCOUNT)<br>(+$(VIRTUAL_PKGCOUNT) virtual +$(BUILD_ONLY_PKGCOUNT) native-only)' >> $@
+# TOTAL_PKGCOUNT = PKGS - (VIRTUAL + BUILD_ONLY)
+	@echo 'Total: $(call subtract,               \
+	                  $(words $(PKGS)),          \
+	                  $(words $(VIRTUAL_PKGCOUNT) $(BUILD_ONLY_PKGCOUNT)))'\
+	                                        >> $@
+	@echo '<br>(+$(words $(VIRTUAL_PKGCOUNT)) virtual' >> $@
+	@echo '+$(words $(BUILD_ONLY_PKGCOUNT)) native-only)' >> $@
 	@echo '</th>'                           >> $@
 	@$(foreach TARGET,$(MXE_TARGET_LIST),        \
-	    echo '<th>$($(TARGET)_PKGCOUNT)</th>' >> $@;)
+	    echo '<th>$(words $($(TARGET)_PKGCOUNT))</th>' >> $@;)
 	@echo '<th>$(words $(BUILD_PKGS))</th>' >> $@
 	@echo '</tr>'                           >> $@
 	@echo '</tbody>'                        >> $@
