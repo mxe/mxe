@@ -310,7 +310,7 @@ $(1): | $(if $(value $(1)_DEPS), \
 	                $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 	    $($(1)_DEPS)
 	@echo '[target]   $(1) $(call TARGET_HEADER)'
-	$(if $(findstring 0,$(words $(findstring $(1),$(MXE_TARGET_LIST) $(BUILD)))),
+	$(if $(filter $(1),$(MXE_TARGET_LIST) $(BUILD) $(MXE_TRIPLETS)),,
 	    $(error Invalid target specified: "$(1)"))
 	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),
 	    @echo
