@@ -9,7 +9,7 @@ EXT_DIR  := $(TOP_DIR)/ext
 # See doc/gmsl.html for further information
 include $(EXT_DIR)/gmsl
 
-MXE_TRIPLETS       := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
+MXE_TRIPLETS       := i686-w64-mingw32 x86_64-w64-mingw32
 MXE_LIB_TYPES      := static shared
 MXE_TARGET_LIST    := $(foreach TRIPLET,$(MXE_TRIPLETS),\
                           $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES)))
