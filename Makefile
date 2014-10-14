@@ -616,7 +616,6 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	            <td class="supported">&#x2713;</td>,            \
 	            <td class="unsupported">&#x2717;</td>)\n)       \
 	    $(if $(call set_is_member,$(PKG),$(BUILD_PKGS)),        \
-	        $(eval BUILD_PKGCOUNT := $(call inc,$(BUILD_PKGCOUNT))) \
 	        $(eval $(PKG)_VIRTUAL := $(false))   \
 	        <td class="supported">&#x2713;</td>, \
 	        <td class="unsupported">&#x2717;</td>)\n \
@@ -636,7 +635,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</th>'                           >> $@
 	@$(foreach TARGET,$(MXE_TARGET_LIST),        \
 	    echo '<th>$($(TARGET)_PKGCOUNT)</th>' >> $@;)
-	@echo '<th>$(BUILD_PKGCOUNT)</th>'      >> $@
+	@echo '<th>$(words $(BUILD_PKGS))</th>' >> $@
 	@echo '</tr>'                           >> $@
 	@echo '</tbody>'                        >> $@
 	@echo '</table>'                        >> $@
