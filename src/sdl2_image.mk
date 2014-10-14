@@ -28,6 +28,3 @@ define $(PKG)_BUILD
         --disable-tif-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
-
-# Disable until sdl2 can be built on MinGW32
-$(PKG)_BUILD_i686-pc-mingw32 =

@@ -23,6 +23,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j $(JOBS)
     $(MAKE) -C '$(1)' install
 endef
-
-# MinGW 32 lacks mstcpip.h
-$(PKG)_BUILD_i686-pc-mingw32 =

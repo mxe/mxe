@@ -36,4 +36,3 @@ define $(PKG)_BUILD
         `'$(PREFIX)/$(TARGET)/bin/smpeg2-config' --cflags --libs`
 endef
 
-$(PKG)_BUILD_i686-pc-mingw32 =

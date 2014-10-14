@@ -47,5 +47,4 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' SDL2_mixer --cflags --libs`
 endef
 
-$(PKG)_BUILD_i686-pc-mingw32 =
 

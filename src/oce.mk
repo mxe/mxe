@@ -32,4 +32,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/examples/find_package_oce'
 endef
 
-$(PKG)_BUILD_i686-pc-mingw32 :=

@@ -84,7 +84,6 @@ define $(PKG)_BUILD
      > '$(PREFIX)/$(TARGET)/bin/test-qt5.bat'
 endef
 
-$(PKG)_BUILD_i686-pc-mingw32 =
 
 $(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\
                       $(subst -qt-sql-,-plugin-sql-,\

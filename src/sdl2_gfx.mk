@@ -30,6 +30,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl2_gfx.exe' \
         `'$(TARGET)-pkg-config' SDL2_gfx --cflags --libs`
 endef
-
-# sdl2 is disabled on i686-pc-mingw32.
-$(PKG)_BUILD_i686-pc-mingw32 =
