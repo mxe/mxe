@@ -24,12 +24,12 @@ import sys
 
 def is_pe_file(file):
     f = open(file, 'rb')
-    if f.read(2) != 'MZ':
+    if f.read(2) != b'MZ': 
         return False  # DOS magic number not present
     f.seek(60)
     peoffset = struct.unpack('<L', f.read(4))[0]
     f.seek(peoffset)
-    if f.read(4) != 'PE\0\0':
+    if f.read(4) != b'PE\0\0':
         return False  # PE magic number not present
     return True
 
@@ -63,7 +63,7 @@ def get_imports(file):
             if s['min'] <= rva and rva < s['max']:
                 f.seek(rva - s['min'] + s['offset'])
                 return
-        raise(ValueError, 'Could not find section for RVA.')
+        raise ValueError('Could not find section for RVA.')
 
     # Walk the import table and get RVAs to the null-terminated names of DLLs this file uses.
     # The table is terminated by an all-zero entry.
@@ -71,7 +71,7 @@ def get_imports(file):
     dll_rvas = []
     while True:
         import_descriptor = f.read(20)
-        if import_descriptor == '\0' * 20:
+        if import_descriptor == b'\0' * 20:
             break
         dll_rvas.append(struct.unpack('<L', import_descriptor[12:16])[0])
 
@@ -79,13 +79,13 @@ def get_imports(file):
     dll_names = []
     for rva in dll_rvas:
         seek_to_rva(rva)
-        name = ''
+        name = b''
         while True:
             c = f.read(1)
-            if c == '\0':
+            if c == b'\0':
                 break
             name += c
-        dll_names.append(name)
+        dll_names.append(name.decode("ascii"))
 
     return dll_names
 
@@ -116,12 +116,13 @@ if __name__ == "__main__":
                         dest='libdirs')
     args = parser.parse_args()
 
-    from sets import Set
+    if sys.version_info < (3, 0):
+        from sets import Set as set
 
     available_dlls = dict() #map from shortname ('qtcore4.dll') to full path (eg. '/.../mxe/i686-w64-mingw32.shared/qt/bin/QtCore4.dll')
-    copied_dlls    = Set() #remember already copied DLLs (eg 'qtcore4.dll', 'qtgui4.dll')
-    dlls_to_copy    = Set() #remember which DLLs must still be checked (eg 'qtnetwork4.dll', 'qtgui4.dll')
-    not_found_dlls  = Set()
+    copied_dlls    = set()  #remember already copied DLLs (eg 'qtcore4.dll', 'qtgui4.dll')
+    dlls_to_copy   = set()  #remember which DLLs must still be checked (eg 'qtnetwork4.dll', 'qtgui4.dll')
+    not_found_dlls = set()
 
     #create a list of all available .dll files in the libdir directories
     for libdir in [item for sublist in args.libdirs for item in sublist]: #flatten list: http://stackoverflow.com/questions/952914
@@ -154,4 +155,4 @@ if __name__ == "__main__":
             else:
                 not_found_dlls.add(dll_to_copy)
             dlls_to_copy.remove(dll_to_copy)
-    print("NOT FOUND Dlls:", not_found_dlls)
+    print("missing dll files: " + ", ".join(not_found_dlls))
