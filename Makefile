@@ -524,10 +524,11 @@ define UPDATE
                     $(info .        $(1)  $(2)),
                     $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
-                $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
-                $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                    || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
-                         exit 1; })),
+                $(if $(findstring undefined, $(origin UPDATE_DRYRUN)),
+                    $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
+                    $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
+                        || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
+                             exit 1; }))),
         $(info Unable to update version number of package $(1) \
             $(newline)$(newline)$($(1)_UPDATE)$(newline)))
 
