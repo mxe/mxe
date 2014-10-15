@@ -91,67 +91,67 @@ def get_imports(file):
 
 
 if __name__ == "__main__":
-  import argparse
-  parser = argparse.ArgumentParser(description='Recursive copy of DLL dependencies')
-  parser.add_argument('targetdir',
-                      type=str,
-                      help='target directory where to place the DLLs')
-  parser.add_argument('-C',
-                      '--checkdir',
-                      type=str,
-                      action='append',
-                      nargs='+',
-                      default=[],
-                      required=True,
-                      help='directories whose depencies must be fulfilled. All PE files will be checked (mostly .exe and .dll files)',
-                      dest='checkdirs')
-  parser.add_argument('-L',
-                      '--libdir',
-                      type=str,
-                      action='append',
-                      nargs='+',
-                      default=[],
-                      required=True,
-                      help='include directories to search for DLL dependencies (only .dll files will be used from here)',
-                      dest='libdirs')
-  args = parser.parse_args()
+    import argparse
+    parser = argparse.ArgumentParser(description='Recursive copy of DLL dependencies')
+    parser.add_argument('targetdir',
+                        type=str,
+                        help='target directory where to place the DLLs')
+    parser.add_argument('-C',
+                        '--checkdir',
+                        type=str,
+                        action='append',
+                        nargs='+',
+                        default=[],
+                        required=True,
+                        help='directories whose depencies must be fulfilled. All PE files will be checked (mostly .exe and .dll files)',
+                        dest='checkdirs')
+    parser.add_argument('-L',
+                        '--libdir',
+                        type=str,
+                        action='append',
+                        nargs='+',
+                        default=[],
+                        required=True,
+                        help='include directories to search for DLL dependencies (only .dll files will be used from here)',
+                        dest='libdirs')
+    args = parser.parse_args()
 
-  from sets import Set
+    from sets import Set
 
-  availableDlls = dict() #map from shortname ('qtcore4.dll') to full path (eg. '/.../mxe/i686-w64-mingw32.shared/qt/bin/QtCore4.dll')
-  copiedDlls    = Set() #remember already copied DLLs (eg 'qtcore4.dll', 'qtgui4.dll')
-  dllsToCopy    = Set() #remember which DLLs must still be checked (eg 'qtnetwork4.dll', 'qtgui4.dll')
-  notFoundDlls  = Set()
+    available_dlls = dict() #map from shortname ('qtcore4.dll') to full path (eg. '/.../mxe/i686-w64-mingw32.shared/qt/bin/QtCore4.dll')
+    copied_dlls    = Set() #remember already copied DLLs (eg 'qtcore4.dll', 'qtgui4.dll')
+    dlls_to_copy    = Set() #remember which DLLs must still be checked (eg 'qtnetwork4.dll', 'qtgui4.dll')
+    not_found_dlls  = Set()
 
-  #create a list of all available .dll files in the libdir directories
-  for libdir in [item for sublist in args.libdirs for item in sublist]: #flatten list: http://stackoverflow.com/questions/952914
-    for dll_filename in os.listdir(libdir):
-      dll_filename_full = os.path.join(libdir, dll_filename)
-      if dll_filename.endswith('.dll') and is_pe_file(dll_filename_full):
-        availableDlls[dll_filename.lower()] = dll_filename_full
+    #create a list of all available .dll files in the libdir directories
+    for libdir in [item for sublist in args.libdirs for item in sublist]: #flatten list: http://stackoverflow.com/questions/952914
+        for dll_filename in os.listdir(libdir):
+            dll_filename_full = os.path.join(libdir, dll_filename)
+            if dll_filename.endswith('.dll') and is_pe_file(dll_filename_full):
+                available_dlls[dll_filename.lower()] = dll_filename_full
 
-  #create a list of initial dependencies (dllsToCopy) and already copied DLLs (copiedDlls) from the checkdir arguments
-  for checkdir in [item for sublist in args.checkdirs for item in sublist]: #flatten list: http://stackoverflow.com/questions/952914
-    for pe_filename in os.listdir(checkdir):
-      pe_filename_full = os.path.join(checkdir, pe_filename)
-      if is_pe_file(pe_filename_full):
-        for dependencyDll in get_imports(pe_filename_full):
-          dllsToCopy.add(dependencyDll.lower())
-        if pe_filename.endswith('.dll'):
-          copiedDlls.add(pe_filename.lower())
+    #create a list of initial dependencies (dlls_to_copy) and already copied DLLs (copied_dlls) from the checkdir arguments
+    for checkdir in [item for sublist in args.checkdirs for item in sublist]: #flatten list: http://stackoverflow.com/questions/952914
+        for pe_filename in os.listdir(checkdir):
+            pe_filename_full = os.path.join(checkdir, pe_filename)
+            if is_pe_file(pe_filename_full):
+                for dependency_dll in get_imports(pe_filename_full):
+                    dlls_to_copy.add(dependency_dll.lower())
+                if pe_filename.endswith('.dll'):
+                    copied_dlls.add(pe_filename.lower())
 
-  while len(dllsToCopy):
-    for dllToCopy in dllsToCopy.copy(): #we may not change the set during iteration
-      if dllToCopy in copiedDlls:
-        None
-      elif dllToCopy in notFoundDlls:
-        None
-      elif dllToCopy in availableDlls:
-        shutil.copyfile(availableDlls[dllToCopy], os.path.join( args.targetdir, os.path.basename(availableDlls[dllToCopy]) ) )
-        copiedDlls.add(dllToCopy.lower())
-        for dependencyDll in get_imports(availableDlls[dllToCopy]):
-          dllsToCopy.add(dependencyDll.lower())
-      else:
-        notFoundDlls.add(dllToCopy)
-      dllsToCopy.remove(dllToCopy)
-  print("NOT FOUND Dlls:", notFoundDlls)
+    while len(dlls_to_copy):
+        for dll_to_copy in dlls_to_copy.copy(): #we may not change the set during iteration
+            if dll_to_copy in copied_dlls:
+                None
+            elif dll_to_copy in not_found_dlls:
+                None
+            elif dll_to_copy in available_dlls:
+                shutil.copyfile(available_dlls[dll_to_copy], os.path.join( args.targetdir, os.path.basename(available_dlls[dll_to_copy]) ) )
+                copied_dlls.add(dll_to_copy.lower())
+                for dependency_dll in get_imports(available_dlls[dll_to_copy]):
+                    dlls_to_copy.add(dependency_dll.lower())
+            else:
+                not_found_dlls.add(dll_to_copy)
+            dlls_to_copy.remove(dll_to_copy)
+    print("NOT FOUND Dlls:", not_found_dlls)
