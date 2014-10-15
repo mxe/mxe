@@ -1,0 +1,65 @@
+This file is part of MXE.
+See index.html for further information.
+
+Taken from https://github.com/assimp/assimp/pull/405.
+
+From 060f3c33d9966dc55901e4d039ca30f6bff85de0 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 14 Oct 2014 22:28:14 -0700
+Subject: Correctly set Libs.private field in pkgconfig file
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 97d4b68..b1c1f26 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -90,10 +90,6 @@ ELSE ( ASSIMP_BUILD_STATIC_LIB )
+     option ( BUILD_SHARED_LIBS "Build a shared version of the library" ON )
+ ENDIF ( ASSIMP_BUILD_STATIC_LIB )
+ 
+-# Generate a pkg-config .pc for the Assimp library.
+-CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/assimp.pc.in" "${PROJECT_BINARY_DIR}/assimp.pc" @ONLY )
+-INSTALL( FILES "${PROJECT_BINARY_DIR}/assimp.pc" DESTINATION ${ASSIMP_LIB_INSTALL_DIR}/pkgconfig/ COMPONENT ${LIBASSIMP-DEV_COMPONENT})
+-
+ # Only generate this target if no higher-level project already has
+ IF (NOT TARGET uninstall)
+ 	# add make uninstall capability
+@@ -136,6 +132,10 @@ option ( ASSIMP_NO_EXPORT
+ 	OFF
+ )
+ 
++if( CMAKE_COMPILER_IS_GNUCXX )
++  set(LIBSTDC++_LIBRARIES -lstdc++)
++endif( CMAKE_COMPILER_IS_GNUCXX )
++
+ # Search for external dependencies, and build them from source if not found
+ # Search for zlib
+ find_package(ZLIB)
+@@ -151,6 +151,7 @@ if( NOT ZLIB_FOUND )
+   set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/contrib/zlib ${CMAKE_CURRENT_BINARY_DIR}/contrib/zlib)
+ else(NOT ZLIB_FOUND)
+   ADD_DEFINITIONS(-DASSIMP_BUILD_NO_OWN_ZLIB)
++  set(ZLIB_LIBRARIES_LINKED -lz)
+ endif(NOT ZLIB_FOUND)
+ INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
+ 
+@@ -228,6 +229,10 @@ IF(MSVC)
+ 	)
+ ENDIF(MSVC)
+ 
++# Generate a pkg-config .pc for the Assimp library.
++CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/assimp.pc.in" "${PROJECT_BINARY_DIR}/assimp.pc" @ONLY )
++INSTALL( FILES "${PROJECT_BINARY_DIR}/assimp.pc" DESTINATION ${ASSIMP_LIB_INSTALL_DIR}/pkgconfig/ COMPONENT ${LIBASSIMP-DEV_COMPONENT})
++
+ if(CMAKE_CPACK_COMMAND AND UNIX AND ASSIMP_OPT_BUILD_PACKAGES)
+   # Packing information
+   set(CPACK_PACKAGE_NAME                    "assimp{ASSIMP_VERSION_MAJOR}")
+diff --git a/assimp.pc.in b/assimp.pc.in
+index 1d3d995..ecb7074 100644
+--- a/assimp.pc.in
++++ b/assimp.pc.in
+@@ -7,4 +7,5 @@ Name: @CMAKE_PROJECT_NAME@
+ Description: Import various well-known 3D model formats in an uniform manner.
+ Version: @PROJECT_VERSION@
+ Libs: -L${libdir} -lassimp@ASSIMP_LIBRARY_SUFFIX@
++Libs.private: @LIBSTDC++_LIBRARIES@ @ZLIB_LIBRARIES_LINKED@
+ Cflags: -I${includedir}
