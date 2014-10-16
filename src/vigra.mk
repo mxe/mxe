@@ -11,11 +11,12 @@ $(PKG)_URL      := http://hci.iwr.uni-heidelberg.de/vigra-old-versions/$($(PKG)_
 $(PKG)_DEPS     := gcc jpeg tiff libpng openexr
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://hci.iwr.uni-heidelberg.de/vigra/' | \
-    grep 'Sources' | \
-    grep '<a href="vigra' | \
-    $(SED) -n 's,.*"vigra-\([0-9][^"]*\)-src.*,\1,p' | \
-    head
+    $(WGET) -q -O- "https://api.github.com/repos/ukoethe/vigra/releases" | \
+    grep 'tag_name' | \
+    $(SED) -n 's,.*tag_name": "Version-\([0-9][^>]*\)".*,\1,p' | \
+    tr '-' '.' | \
+    $(SORT) -Vr | \
+    head -1
 endef
 
 define $(PKG)_BUILD
