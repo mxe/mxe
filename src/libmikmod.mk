@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 3.3.7
 $(PKG)_CHECKSUM := f936d92ed9752d9f47a3340bdafc78159a270ca9
 $(PKG)_SUBDIR   := libmikmod-$($(PKG)_VERSION)
 $(PKG)_FILE     := libmikmod-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFOREGE_MIRROR)/project/mikmod/libmikmod/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mikmod/libmikmod/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
