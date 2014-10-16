@@ -4,17 +4,24 @@
 PKG             := gtkimageview
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.4
-$(PKG)_CHECKSUM := dc0067e72889285ddd667aba700f1de928142fba
+$(PKG)_CHECKSUM := a6c78744ba98441bca28c9d27bf89245517940db
 $(PKG)_SUBDIR   := gtkimageview-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkimageview-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://trac.bjourne.webfactional.com/chrome/common/releases/$($(PKG)_FILE)
+# gtkimageview download server is dead.
+# $(PKG)_URL    := http://trac.bjourne.webfactional.com/chrome/common/releases/$($(PKG)_FILE)
+$(PKG)_URL      := https://distfiles.macports.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gtk2
 
-define $(PKG)_UPDATE
+define $(PKG)_UPDATE_DISABLED
     $(WGET) -q -O- "http://trac.bjourne.webfactional.com/chrome/common/releases/?C=M;O=D" | \
     grep -i '<a href="gtkimageview.*tar' | \
     $(SED) -n 's,.*gtkimageview-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
+endef
+
+define $(PKG)_UPDATE
+    echo 'TODO: gtkimageview is dead' >&2;
+    echo '$(gtkimageview_VERSION)'
 endef
 
 define $(PKG)_BUILD
