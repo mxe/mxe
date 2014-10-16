@@ -4,7 +4,7 @@
 PKG             := assimp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.1
-$(PKG)_CHECKSUM := 16a565683c8945b1ee131452f2649d2ba3a3ff49
+$(PKG)_CHECKSUM := 16a565683c8945b1ee131452f2649d2ba3a3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
