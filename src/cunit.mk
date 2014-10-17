@@ -3,10 +3,10 @@
 
 PKG             := cunit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1-2
-$(PKG)_CHECKSUM := 6c2d0627eb64c09c7140726d6bf814cf531a3ce0
+$(PKG)_VERSION  := 2.1-3
+$(PKG)_CHECKSUM := eac0c71167aa3fab83483ae1313b78163f0f7238
 $(PKG)_SUBDIR   := CUnit-$($(PKG)_VERSION)
-$(PKG)_FILE     := CUnit-$($(PKG)_VERSION)-src.tar.bz2
+$(PKG)_FILE     := CUnit-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/cunit/CUnit/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
