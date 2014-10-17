@@ -3,8 +3,8 @@
 
 PKG             := atk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.10.0
-$(PKG)_CHECKSUM := 9b7f09a31f3781d5af4eb02ec0e2b289cf077a49
+$(PKG)_VERSION  := 2.14.0
+$(PKG)_CHECKSUM := b803d055c8e2f786782803b7d21e413718321db7
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -20,9 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-glibtest \
-        --disable-gtk-doc
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= SHELL=bash
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) SUBDIRS='atk po' SHELL=bash
+    $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT) SUBDIRS='atk po'
 endef
