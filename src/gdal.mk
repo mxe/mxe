@@ -3,8 +3,8 @@
 
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.11.0
-$(PKG)_CHECKSUM := 25efd2bffdea2e841377ca8c1fd49d89d02ac87e
+$(PKG)_VERSION  := 1.11.1
+$(PKG)_CHECKSUM := e2c67481932ec9fb6ec3c0faadc004f715c4eef4
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -40,8 +40,8 @@ define $(PKG)_CONFIGURE
         --with-gif='$(PREFIX)/$(TARGET)' \
         --with-expat='$(PREFIX)/$(TARGET)' \
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
-        --with-curl='$(PREFIX)/$(TARGET)/bin/curl-config' \
-        --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
+        --with-curl='$(PREFIX)/bin/$(TARGET)-curl-config' \
+        --with-geos='$(PREFIX)/bin/$(TARGET)-geos-config' \
         --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
