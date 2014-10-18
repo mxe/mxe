@@ -9,7 +9,9 @@ $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc proj zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf4 hdf5 json-c netcdf
+$(PKG)_DEPS     := gcc proj zlib libpng libxml2 tiff libgeotiff jpeg jasper \
+                   giflib expat sqlite curl geos postgresql gta hdf4 hdf5 \
+                   json-c netcdf
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
@@ -18,6 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_CONFIGURE
+    cd '$(1)' && autoreconf -fi
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
@@ -40,9 +43,6 @@ define $(PKG)_CONFIGURE
         --with-gif='$(PREFIX)/$(TARGET)' \
         --with-expat='$(PREFIX)/$(TARGET)' \
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
-        --with-curl='$(PREFIX)/bin/$(TARGET)-curl-config' \
-        --with-geos='$(PREFIX)/bin/$(TARGET)-geos-config' \
-        --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
         --with-libjson-c='$(PREFIX)/$(TARGET)' \
