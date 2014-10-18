@@ -20,7 +20,11 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-cxx
+        --with-cxx \
+        --without-guile \
+        --without-matlab \
+        --without-octave \
+        --without-python
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
