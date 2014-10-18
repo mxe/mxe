@@ -87,14 +87,6 @@ define $(PKG)_MAKE
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef
 
-define $(PKG)_BUILD
-    $($(PKG)_CONFIGURE)\
-        --with-hdf4='$(PREFIX)/$(TARGET)' \
-        --with-netcdf='$(PREFIX)/$(TARGET)' \
-        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
-    $($(PKG)_MAKE)
-endef
-
 define $(PKG)_BUILD_x86_64-w64-mingw32
     $($(PKG)_CONFIGURE) \
         LIBS="-ljpeg -lsecur32 `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
@@ -108,5 +100,4 @@ define $(PKG)_BUILD_i686-w64-mingw32
     $($(PKG)_MAKE)
 endef
 
-$(PKG)_BUILD_i686-w64-mingw32.shared =
-$(PKG)_BUILD_x86_64-w64-mingw32.shared =
+$(PKG)_BUILD_SHARED =
