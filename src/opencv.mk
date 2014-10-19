@@ -27,7 +27,7 @@ define $(PKG)_BUILD
       -DWITH_GTK=OFF \
       -DWITH_VIDEOINPUT=ON \
       -DWITH_XINE=OFF \
-      -DBUILD_SHARED_LIBS=OFF \
+      -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
       -DBUILD_opencv_apps=OFF \
       -DBUILD_DOCS=OFF \
       -DBUILD_EXAMPLES=OFF \
@@ -63,5 +63,3 @@ define $(PKG)_BUILD
         '$(1)/samples/c/fback_c.c' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
         `'$(TARGET)-pkg-config' opencv --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
