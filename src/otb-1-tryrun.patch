@@ -1,0 +1,10 @@
+diff -burN OTB.orig/TryRunResults-OTB.cmake OTB/TryRunResults-OTB.cmake
+--- OTB.orig/TryRunResults-OTB.cmake	1970-01-01 05:30:00.000000000 +0530
++++ OTB/TryRunResults-OTB.cmake	2014-10-08 13:56:21.745005429 +0530
+@@ -0,0 +1,6 @@
++SET( CHECK_HDF4OPEN_SYMBOL
++     "1"
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( CHECK_HDF4OPEN_SYMBOL_EXITCODE
++     "0"
++     CACHE STRING "Output from TRY_RUN" FORCE)
