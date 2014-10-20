@@ -23,6 +23,8 @@ import struct
 import sys
 
 def is_pe_file(file):
+    if not os.path.isfile(file): # Skip directories
+        return False
     f = open(file, 'rb')
     if f.read(2) != b'MZ': 
         return False  # DOS magic number not present
