@@ -3,8 +3,8 @@
 
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.38.2
-$(PKG)_CHECKSUM := 685c5a4215b776b83dd5330ab9084c5dcb0a51b8
+$(PKG)_VERSION  := 2.42.0
+$(PKG)_CHECKSUM := f5168a7adffad3620ff3f1b3d6ff6d0ad3f0752e
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -13,6 +13,7 @@ $(PKG)_DEPS     := gcc gettext pcre libiconv zlib libffi dbus
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
     $(SED) -n "s,.*tag/?id=\([0-9]\+\.[0-9]*[02468]\.[^']*\).*,\1,p" | \
+    $(SORT) -Vr | \
     head -1
 endef
 
