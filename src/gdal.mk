@@ -100,4 +100,7 @@ define $(PKG)_BUILD_i686-w64-mingw32
     $($(PKG)_MAKE)
 endef
 
-$(PKG)_BUILD_SHARED =
+# Can't use $(PKG)_BUILD_SHARED here as $(PKG)_BUILD_i686-w64-mingw32 has a
+# higher precedence.
+$(PKG)_BUILD_i686-w64-mingw32.shared =
+$(PKG)_BUILD_x86_64-w64-mingw32.shared =
