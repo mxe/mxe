@@ -32,8 +32,8 @@ define $(PKG)_BUILD
         scm_cv_struct_timespec=no \
         LIBS='-lunistring -lintl -liconv -ldl' \
         CFLAGS='-Wno-unused-but-set-variable -Wno-unused-value'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' schemelib_DATA=
-    $(MAKE) -C '$(1)' -j 1 install schemelib_DATA=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) schemelib_DATA=
+    $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT) schemelib_DATA=
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
