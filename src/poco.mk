@@ -25,7 +25,8 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC), \
         $(SED) -i 's:// #define POCO_STATIC:#define POCO_STATIC:' \
             '$(1)/Foundation/include/Poco/Config.h')
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install CROSSENV=$(TARGET)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' CROSSENV=$(TARGET) || $(MAKE) -C '$(1)' -j 1 CROSSENV=$(TARGET)
+    $(MAKE) -C '$(1)' -j 1 install CROSSENV=$(TARGET)
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic -DPOCO_STATIC=1 \
