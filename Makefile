@@ -22,13 +22,6 @@ PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 
 PWD        := $(shell pwd)
 SHELL      := bash
-NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
-JOBS_AUTO  := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
-JOBS       := $(strip $(if $(findstring undefined,$(origin JOBS)),\
-                   $(info [using autodetected $(JOBS_AUTO) job(s)]) \
-                   $(JOBS_AUTO)\
-              ,\
-                   $(JOBS)))
 
 DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
@@ -213,6 +206,14 @@ else
         echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
 endif
+
+NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+JOBS_AUTO  := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
+JOBS       := $(strip $(if $(findstring undefined,$(origin JOBS)),\
+                   $(info [using autodetected $(JOBS_AUTO) job(s)]) \
+                   $(JOBS_AUTO)\
+              ,\
+                   $(JOBS)))
 
 # cache some target string manipulation functions
 # `memoize` and `uc` from gmsl
