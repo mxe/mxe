@@ -3,12 +3,12 @@
 
 PKG             := lensfun
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.2.8
-$(PKG)_CHECKSUM := 0e85eb7692620668d27e2303687492ad68c90eb4
+$(PKG)_VERSION  := 0.3.0
+$(PKG)_CHECKSUM := 60e2bf3a6a2f495076db1d88778a00d358cf0b69
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/lensfun/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libpng glib libgnurx
+$(PKG)_DEPS     := gcc glib libgnurx libpng
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/lensfun/files/' | \
@@ -17,38 +17,17 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_INSTALL_SHARED
-    # lensfun's shared lib installation is a little bit non-MinGW-friendly:
-    # * its DLL is installed to usr/TARGET/lib
-    # * it doesn't install import lib
-    # This macro fixes that.
-    rm '$(PREFIX)/$(TARGET)/lib/lensfun.dll'
-    cd '$(1)' && \
-        $(INSTALL) -m 0755 'out/windows.x86/release/lensfun.dll' \
-            '$(PREFIX)/$(TARGET)/bin/lensfun.dll' && \
-        $(INSTALL) -m 0644 'out/windows.x86/release/lensfun.dll.a' \
-            '$(PREFIX)/$(TARGET)/lib/lensfun.dll.a'
-endef
-
 define $(PKG)_BUILD
-    $(SED) -i 's,/usr/bin/python,/usr/bin/env python,' '$(1)/configure'
-    $(SED) -i 's,make ,$(MAKE) ,'                      '$(1)/configure'
-    cd '$(1)' && \
-        TKP='$(TARGET)-' \
-        ./configure \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --sdkdir='$(PREFIX)/$(TARGET)' \
-        --compiler=gcc \
-        --target=windows.x86 \
-        --mode=release \
-        --vectorization= \
-        --staticlibs=$(if $(BUILD_STATIC),YES,NO)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' libs V=1
-    $(MAKE) -C '$(1)' -j 1 install-lensdb install-lensfun-pc install-lensfun V=1
-    $(if $(BUILD_SHARED),$($(PKG)_INSTALL_SHARED),)
+    mkdir '$(1)/building'
+    cd '$(1)/building' && cmake .. \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DBUILD_STATIC=$(if $(BUILD_STATIC),TRUE,FALSE) \
+        -DINSTALL_IN_TREE=NO
+    $(MAKE) -C '$(1)/building' -j '$(JOBS)' install VERBOSE=1
 
+    # Don't use `-ansi`, as lensfun uses C++-style `//` comments.
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi \
+        -W -Wall -Werror \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lensfun.exe' \
-        `'$(TARGET)-pkg-config' lensfun --cflags --libs`
+        `'$(TARGET)-pkg-config' lensfun glib-2.0 --cflags --libs`
 endef
