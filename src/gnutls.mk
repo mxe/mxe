@@ -8,7 +8,7 @@ $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.2/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2//$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext gmp nettle pcre zlib
+$(PKG)_DEPS     := gcc gettext gmp libgnurx nettle zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/ | \
@@ -32,10 +32,7 @@ define $(PKG)_BUILD
         --disable-doc \
         --enable-local-libopts \
         --with-included-libtasn1 \
-        --with-libregex='$(PREFIX)/$(TARGET)' \
-        --with-regex-header=pcreposix.h \
-        --with-libregex-cflags="`'$(TARGET)-pkg-config' libpcreposix --cflags`" \
-        --with-libregex-libs="`'$(TARGET)-pkg-config' libpcreposix --libs`" \
+        --with-libregex-libs="-lgnurx" \
         --without-p11-kit \
         --disable-silent-rules \
         CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \

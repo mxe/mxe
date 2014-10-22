@@ -19,15 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-	$(MXE_CONFIGURE_OPTS) \
-        AR='$(TARGET)-ar'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
-endef
-
-define $(PKG)_BUILD_x86_64-w64-mingw32
-    cd '$(1)' && ./configure \
-	$(MXE_CONFIGURE_OPTS) \
+        $(MXE_CONFIGURE_OPTS) \
         AR='$(TARGET)-ar' \
         CFLAGS='-Wno-error=pointer-to-int-cast'
     $(MAKE) -C '$(1)' -j '$(JOBS)'

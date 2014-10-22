@@ -3,8 +3,8 @@
 
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.17
-$(PKG)_CHECKSUM := d6c483ea2eabade138d71d005300be909be9a274
+$(PKG)_VERSION  := 2.8.18
+$(PKG)_CHECKSUM := 672d81f1b15eb64f2b55f2ba3217be43ae3b197a
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FILE)
@@ -35,6 +35,9 @@ define $(PKG)_BUILD
 
     # fix hard-coded gnutls dependencies
     $(SED) -i "s/-lgnutls/`'$(TARGET)-pkg-config' --libs-only-l gnutls`/g;" '$(1)/configure'
+
+    # the cross build will need soapcpp2, not soapcpp2.exe
+    $(SED) -i "s,^\(SOAP = \$$(top_builddir)/gsoap/src/soapcpp2\)\$$(EXEEXT)$$,\1,;" '$(1)/gsoap/wsdl/Makefile.in'
 
     # Build for mingw. Static by default.
     # Prevent undefined reference to _rpl_malloc.

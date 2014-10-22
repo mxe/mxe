@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 4.2.9
 $(PKG)_CHECKSUM := c2251642e29c7acada37d5e599e68d270088e56d
 $(PKG)_SUBDIR   := hdf-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF/prev-releases/HDF$($(PKG)_VERSION)/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg portablexdr
 
 define $(PKG)_UPDATE

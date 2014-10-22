@@ -18,18 +18,16 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd '$(1).build' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-	-DGEOTIFF_BIN_SUBDIR='$(PREFIX)/$(TARGET)/bin' \
-	-DGEOTIFF_CSV_DATA_DIR='$(1)/csv' \
-	-DWITH_JPEG=TRUE \
-	-DWITH_PROJ4=TRUE \
-	-DWITH_ZLIB=TRUE \
-	-DWITH_TIFF=TRUE \
-        '$(1)'
-	$(MAKE) -C '$(1).build' -j '$(JOBS)' install
-
-	$(if $(BUILD_SHARED),\
-	   rm -f '$(PREFIX)/$(TARGET)/lib/libgeotiff.a')
+    $(SED) -i 's,/usr/local,@prefix@,' '$(1)/bin/Makefile.in'
+    touch '$(1)/configure'
+    cd '$(1)' && ./configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --with-jpeg \
+        --with-zlib \
+        LIBS="`'$(TARGET)-pkg-config' --libs libtiff-4` -ljpeg -lz"
+    $(MAKE) -C '$(1)' -j 1 all install \
+        LDFLAGS=-no-undefined \
+        EXEEXT=.remove-me \
+        MAKE='$(MAKE)'
+    rm -fv '$(PREFIX)/$(TARGET)'/bin/*.remove-me
 endef
