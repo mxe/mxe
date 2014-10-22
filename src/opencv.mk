@@ -3,8 +3,8 @@
 
 PKG             := opencv
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4.8
-$(PKG)_CHECKSUM := 7878a8c375ab3e292c8de7cb102bb3358056e01e
+$(PKG)_VERSION  := 2.4.9
+$(PKG)_CHECKSUM := 4f5166e2bd22bd6167cb56dd04f2c6ed68148b2c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -48,7 +48,7 @@ define $(PKG)_BUILD
       '$(1)'
 
     # install
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install #VERBOSE=1
 
     # fixup and install pkg-config file
     # openexr isn't available on x86_64-w64-mingw32
@@ -56,7 +56,13 @@ define $(PKG)_BUILD
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
         $(SED) -i 's/OpenEXR//' '$(1).build/unix-install/opencv.pc')
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(1).build/unix-install/opencv.pc'
+    $(SED) -i 's/dll/dll.a/g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+
+    $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
+	$(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x64/mingw/lib/OpenCVConfig.cmake')
+    $(if $(findstring i686-pc-mingw32,$(TARGET)),\
+	$(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x86/mingw/lib/OpenCVConfig.cmake')
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
