@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc proj zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf5 openjpeg libxml2
+$(PKG)_DEPS     := gcc proj zlib libpng tiff libgeotiff jpeg jasper giflib expat sqlite curl geos postgresql gta hdf5 openjpeg libxml2 netcdf
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
@@ -40,6 +40,7 @@ define $(PKG)_CONFIGURE
         --with-pg='$(PREFIX)/bin/$(TARGET)-pg_config' \
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
+        --with-netcdf='$(PREFIX)/$(TARGET)' \
 	--with-openjpeg='$(PREFIX)/$(TARGET)' \
 	--with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
 	--without-odbc \
@@ -80,7 +81,7 @@ define $(PKG)_MAKE
     $(MAKE) -C '$(1)/alg'   -j '$(JOBS)' install
     $(MAKE) -C '$(1)/ogr'   -j '$(JOBS)' install #OGR_ENABLED=
     $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install
-    $(MAKE) -C '$(1)'       -j '$(JOBS)' install
+    $(MAKE) -C '$(1)'       -j '$(JOBS)' install #make install on each dir is required?
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef
 
@@ -97,11 +98,7 @@ define $(PKG)_BUILD_x86_64-w64-mingw32
 endef
 
 define $(PKG)_BUILD_i686-w64-mingw32
-#for i686-w64-mingw32.shared target netcdf and portablexdr must be disabled.
     $($(PKG)_CONFIGURE) \
-	$(if $(BUILD_STATIC), --with-netcdf='$(PREFIX)/$(TARGET)' \
-        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`")
-	$(if $(BUILD_SHARED),\
-        LIBS="-ljpeg -lsecur32`'$(TARGET)-pkg-config' --libs openssl libtiff-4`")
+        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $($(PKG)_MAKE)
 endef
