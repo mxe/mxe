@@ -1,12 +1,14 @@
-diff -bur qwt_qt4-5.2.orig/qwtconfig.pri qwt_qt4-5.2/qwtconfig.pri
---- qwt_qt4-5.2.orig/qwtconfig.pri	2014-10-19 17:31:33.062678436 +0530
-+++ qwt_qt4-5.2/qwtconfig.pri	2014-10-19 17:31:57.842995454 +0530
-@@ -12,7 +12,7 @@
+This file is part of MXE.
+See index.html for further information.
+
+--- qwt-6.0.1/qwtconfig.pri	2011-08-01 16:34:05.000000000 +0200
++++ qwt-6.0.1/qwtconfig.pri	2011-12-03 10:14:53.371757822 +0100
+@@ -23,7 +23,7 @@
  }
  
  win32 {
--    INSTALLBASE    = C:/Qwt-$$VERSION-svn
-+    INSTALLBASE    = C:/qwt-$$VERSION-svn
+-    QWT_INSTALL_PREFIX    = C:/Qwt-$$QWT_VERSION
++#    QWT_INSTALL_PREFIX    = C:/Qwt-$$QWT_VERSION
  }
  
- target.path    = $$INSTALLBASE/lib
+ QWT_INSTALL_DOCS      = $${QWT_INSTALL_PREFIX}/doc
