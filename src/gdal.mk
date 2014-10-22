@@ -10,7 +10,7 @@ $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc proj zlib libpng libxml2 tiff libgeotiff jpeg jasper \
-                   giflib expat sqlite curl geos postgresql gta hdf4 hdf5 \
+                   giflib expat sqlite curl openjpeg geos postgresql gta hdf4 hdf5 \
                    json-c netcdf
 
 define $(PKG)_UPDATE
