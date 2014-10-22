@@ -30,9 +30,19 @@ define $(PKG)_BUILD
         -DITK_USE_SYSTEM_PNG=TRUE \
         -DITK_USE_SYSTEM_JPEG=TRUE \
         -DITK_USE_SYSTEM_EXPAT=TRUE \
-	-DVCL_CHAR_IS_SIGNED=1 \
+        -DVCL_CHAR_IS_SIGNED=1 \
+        -DVCL_HAS_SLICED_DESTRUCTOR_BUG=1 \
+        -DVCL_HAS_WORKING_STRINGSTREAM=1 \
+        -DVCL_HAS_LFS=1 \
+        -DVCL_COMPLEX_POW_WORKS=1 \
+        -DVCL_NUMERIC_LIMITS_HAS_INFINITY=1 \
+        -DVCL_PROCESSOR_HAS_INFINITY=1 \
+        -DVXL_HAS_SSE2_HARDWARE_SUPPORT=1 \
+        -DVXL_SSE2_HARDWARE_SUPPORT_POSSIBLE=1 \
+        -DKWSYS_CHAR_IS_SIGNED=1 \
+        -DKWSYS_LFS_WORKS=1 \
         '$(1)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install #VERBOSE=1
 
     # install
     $(INSTALL) -m755 '$(1).build/bin/itkTestDriver.exe' '$(PREFIX)/$(TARGET)/bin/test-itk.exe'

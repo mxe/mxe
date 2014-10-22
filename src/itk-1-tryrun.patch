@@ -41,7 +41,7 @@
 +     ""
 +     CACHE STRING "Output from TRY_RUN" FORCE)
 +SET( VCL_CHAR_IS_SIGNED
-+     "1"
++     "0"
 +     CACHE INTERNAL "Performing Test VCL_CHAR_IS_SIGNED" FORCE)
 +SET( VCL_CHAR_IS_SIGNED__TRYRUN_OUTPUT
 +     ""
