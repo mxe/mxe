@@ -17,5 +17,7 @@ endef
 
 define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/libcrystalhd'
-    cd '$(1)' && cp *.h '$(PREFIX)/$(TARGET)/include/libcrystalhd'
+    for f in "$(1)/*.h"; do
+        $(INSTALL) -m0644 $$f '$(PREFIX)/$(TARGET)/include/libcrystalhd/'
+    done
 endef
