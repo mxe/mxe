@@ -99,8 +99,7 @@ endef
 define $(PKG)_BUILD_i686-w64-mingw32
 #for i686-w64-mingw32.shared target netcdf and portablexdr must be disabled.
     $($(PKG)_CONFIGURE) \
-	$(if $(BUILD_STATIC),\
-	 --with-netcdf='$(PREFIX)/$(TARGET)' \
+	$(if $(BUILD_STATIC), --with-netcdf='$(PREFIX)/$(TARGET)' \
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`")
 	$(if $(BUILD_SHARED),\
         LIBS="-ljpeg -lsecur32`'$(TARGET)-pkg-config' --libs openssl libtiff-4`")
