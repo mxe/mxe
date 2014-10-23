@@ -1,0 +1,12 @@
+diff -bur libgeotiff-1.4.0.orig/ltmain.sh libgeotiff-1.4.0/ltmain.sh
+--- libgeotiff-1.4.0.orig/ltmain.sh	2014-10-24 01:20:03.172985419 +0530
++++ libgeotiff-1.4.0/ltmain.sh	2014-10-24 01:58:50.983491081 +0530
+@@ -2560,7 +2560,7 @@
+     ;;
+   *ar\ archive*) # could be an import, or static
+     if eval $OBJDUMP -f $1 | $SED -e '10q' 2>/dev/null |
+-       $EGREP 'file format pe-i386(.*architecture: i386)?' >/dev/null ; then
++       $EGREP 'file format pe-i386(.*architecture: i386)?|pe-x86-64' >/dev/null ; then
+       win32_nmres=`eval $NM -f posix -A $1 |
+ 	$SED -n -e '
+ 	    1,100{
