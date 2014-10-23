@@ -43,6 +43,7 @@ define $(PKG)_CONFIGURE
         --with-netcdf='$(PREFIX)/$(TARGET)' \
 	--with-openjpeg='$(PREFIX)/$(TARGET)' \
 	--with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
+        --with-libjson-c='$(PREFIX)/$(TARGET)' \
 	--without-odbc \
         --without-xerces \
         --without-grass \
