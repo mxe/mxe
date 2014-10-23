@@ -17,10 +17,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i '/\INSTALLBASE /s%\INSTALLBASE .*%INSTALLBASE=$(PREFIX)/$(TARGET)/qwt%g' '$(1)/qwtconfig.pri'
+    $(SED) -i '/\INSTALLBASE /s%\INSTALLBASE .*%INSTALLBASE=$(PREFIX)/$(TARGET)/qt%g' '$(1)/qwtconfig.pri'
     $(if $(BUILD_STATIC),\
         echo "QWT_CONFIG -= QwtDll" >> '$(1)/qwtconfig.pri')
  # build
     cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt/bin/qmake
     $(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
+
+    #build sinusplot example to test linkage
+    cd '$(1)/examples/simple_plot' && $(PREFIX)/$(TARGET)/qt/bin/qmake
+    $(MAKE) -C '$(1)/examples/simple_plot' -f 'Makefile.Release' -j '$(JOBS)'
+
+    # install
+    $(INSTALL) -m755 '$(1)/examples/bin/simple.exe' '$(PREFIX)/$(TARGET)/bin/test-qwt5.exe'
+
 endef
