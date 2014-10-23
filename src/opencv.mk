@@ -64,6 +64,8 @@ define $(PKG)_BUILD
     $(if $(findstring i686-pc-mingw32,$(TARGET)),\
 	$(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x86/mingw/lib/OpenCVConfig.cmake')
 
+	$(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/OpenCVConfig.cmake'
+
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
         '$(1)/samples/c/fback_c.c' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
