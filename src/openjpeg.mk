@@ -12,7 +12,7 @@ $(PKG)_DEPS     := gcc tiff libpng zlib lcms
 
 #git commit 3d95bcf
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/openjpeg.mirror/files/2.0.1/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/openjpeg.mirror/files/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
