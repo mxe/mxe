@@ -38,13 +38,14 @@ define $(PKG)_BUILD
         -DVCL_NUMERIC_LIMITS_HAS_INFINITY=1 \
         -DVCL_PROCESSOR_HAS_INFINITY=1 \
         -DVXL_HAS_SSE2_HARDWARE_SUPPORT=1 \
-        -DVXL_SSE2_HARDWARE_SUPPORT_POSSIBLE=1 \
         -DKWSYS_CHAR_IS_SIGNED=1 \
         -DKWSYS_LFS_WORKS=1 \
         '$(1)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install #VERBOSE=1
-
+    # make
+    $(MAKE) -C '$(1).build' -j '$(JOBS)'
     # install
+    $(MAKE) -C '$(1).build' -j 1 install #VERBOSE=1
+    # install test
     $(INSTALL) -m755 '$(1).build/bin/itkTestDriver.exe' '$(PREFIX)/$(TARGET)/bin/test-itk.exe'
 
 endef

@@ -1,0 +1,142 @@
+diff -bur b/InsightToolkit-4.6.0/Modules/ThirdParty/VNL/src/vxl/config/cmake/config/vxl_config_macros.cmake InsightToolkit-4.6.0/Modules/ThirdParty/VNL/src/vxl/config/cmake/config/vxl_config_macros.cmake
+--- b/InsightToolkit-4.6.0/Modules/ThirdParty/VNL/src/vxl/config/cmake/config/vxl_config_macros.cmake	2014-07-22 20:26:26.000000000 +0530
++++ InsightToolkit-4.6.0/Modules/ThirdParty/VNL/src/vxl/config/cmake/config/vxl_config_macros.cmake	2014-10-24 14:42:54.841054305 +0530
+@@ -10,9 +10,9 @@
+ 
+ MACRO(PERFORM_CMAKE_TEST FILE TEST)
+   IF( VXL_UPDATE_CONFIGURATION )
+-    SET( ${TEST} "${TEST}" )
++    UNSET( ${TEST} )
+   ENDIF( VXL_UPDATE_CONFIGURATION )
+-  IF("${TEST}" MATCHES "^${TEST}$")
++  IF(NOT DEFINED "${TEST}")
+     # Perform test
+     SET(MACRO_CHECK_FUNCTION_DEFINITIONS
+         "-D${TEST} ${CMAKE_REQUIRED_FLAGS}")
+@@ -38,12 +38,12 @@
+                  "Performing Test ${TEST} failed with the following output:\n"
+                  "${OUTPUT}\n")
+     ENDIF(${TEST})
+-  ELSE("${TEST}" MATCHES "^${TEST}$")
++  ELSE()
+     # Have result
+     #FOREACH(tst ${TEST})
+     #  MESSAGE("Test ${TEST} resulted in ${${tst}}")
+     #ENDFOREACH(tst ${TEST})
+-  ENDIF("${TEST}" MATCHES "^${TEST}$")
++  ENDIF()
+ ENDMACRO(PERFORM_CMAKE_TEST FILE TEST)
+ 
+ #
+@@ -57,9 +57,9 @@
+ 
+ MACRO(PERFORM_CMAKE_TEST_CUSTOM DIR TEST)
+   IF( VXL_UPDATE_CONFIGURATION )
+-    SET( ${TEST} "${TEST}" )
++    UNSET( ${TEST} )
+   ENDIF( VXL_UPDATE_CONFIGURATION )
+-  IF("${TEST}" MATCHES "^${TEST}$")
++  IF(NOT DEFINED "${TEST}")
+     # Perform test
+     SET(MACRO_CHECK_FUNCTION_DEFINITIONS
+         "-D${TEST} ${CMAKE_REQUIRED_FLAGS}")
+@@ -88,7 +88,7 @@
+                  "Performing Test ${TEST} failed with the following output:\n"
+                  "${OUTPUT}\n")
+     ENDIF(${TEST})
+-  ENDIF("${TEST}" MATCHES "^${TEST}$")
++  ENDIF()
+   FILE(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/config/${DIR})
+ ENDMACRO(PERFORM_CMAKE_TEST_CUSTOM DIR TEST)
+ 
+@@ -101,9 +101,9 @@
+ 
+ MACRO(PERFORM_CMAKE_TEST_RUN FILE TEST)
+   IF( VXL_UPDATE_CONFIGURATION )
+-    SET( ${TEST} "${TEST}" )
++    UNSET( ${TEST} )
+   ENDIF( VXL_UPDATE_CONFIGURATION )
+-  IF("${TEST}" MATCHES "^${TEST}$")
++  IF(NOT DEFINED "${TEST}")
+     # Perform test
+     SET(MACRO_CHECK_FUNCTION_DEFINITIONS
+         "-D${TEST} ${CMAKE_REQUIRED_FLAGS}")
+@@ -140,12 +140,12 @@
+                  "Performing Try-Run Test ${TEST} failed to compile with the following output:\n"
+                  "${OUTPUT}\n")
+     ENDIF(${TEST}_COMPILED)
+-  ELSE("${TEST}" MATCHES "^${TEST}$")
++  ELSE()
+     # Have result
+     #FOREACH(tst ${TEST})
+     #  MESSAGE("Test ${TEST} resulted in ${${tst}}")
+     #ENDFOREACH(tst ${TEST})
+-  ENDIF("${TEST}" MATCHES "^${TEST}$")
++  ENDIF()
+ ENDMACRO(PERFORM_CMAKE_TEST_RUN FILE TEST)
+ 
+ #
+@@ -154,12 +154,12 @@
+ 
+ MACRO(PERFORM_CHECK_HEADER FILE VARIABLE)
+   IF( VXL_UPDATE_CONFIGURATION )
+-    SET( ${VARIABLE} ${VARIABLE} )
++    UNSET(${VARIABLE})
+   ENDIF( VXL_UPDATE_CONFIGURATION )
+   CHECK_INCLUDE_FILE_CXX(${FILE} ${VARIABLE})
+-  IF("${VARIABLE}" MATCHES "^$")
++  IF("x${${VARIABLE}}" STREQUAL "x")
+     SET(${VARIABLE} 0)
+-  ENDIF("${VARIABLE}" MATCHES "^$")
++  ENDIF()
+ ENDMACRO(PERFORM_CHECK_HEADER FILE VARIABLE)
+ 
+ #
+@@ -195,9 +195,9 @@
+ 
+ MACRO(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
+   IF( VXL_UPDATE_CONFIGURATION )
+-    SET( ${VARIABLE} "${VARIABLE}" )
++    UNSET(${VARIABLE})
+   ENDIF( VXL_UPDATE_CONFIGURATION )
+-  IF("${VARIABLE}" MATCHES "^${VARIABLE}$")
++  IF(NOT DEFINED "${VARIABLE}")
+     SET(CHECK_TYPE_EXISTS_CONTENT "/* */\n")
+     SET(MACRO_CHECK_TYPE_EXISTS_FLAGS ${CMAKE_REQUIRED_FLAGS})
+     IF(CMAKE_REQUIRED_LIBRARIES)
+@@ -239,7 +239,7 @@
+            "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.c:\n"
+            "${CHECK_TYPE_EXISTS_CONTENT}\n")
+     ENDIF(${VARIABLE})
+-  ENDIF("${VARIABLE}" MATCHES "^${VARIABLE}$")
++  ENDIF()
+ ENDMACRO(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
+ 
+ #
+@@ -248,7 +248,7 @@
+ 
+ MACRO(CHECK_TYPE_EXISTS_ZERO SYMBOL FILES VARIABLE)
+   IF( VXL_UPDATE_CONFIGURATION )
+-    SET( ${VARIABLE} )
++    UNSET( ${VARIABLE} )
+   ENDIF( VXL_UPDATE_CONFIGURATION )
+   CHECK_TYPE_EXISTS("${SYMBOL}" "${FILES}" "${VARIABLE}")
+   IF(NOT ${VARIABLE})
+@@ -262,7 +262,7 @@
+ 
+ MACRO(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
+   IF( VXL_UPDATE_CONFIGURATION )
+-    SET( ${VARIABLE} ${VARIABLE} )
++    UNSET(${VARIABLE})
+   ENDIF( VXL_UPDATE_CONFIGURATION )
+   CHECK_FUNCTION_EXISTS("${FUNCTION}" "${VARIABLE}")
+   IF(NOT ${VARIABLE})
+@@ -330,7 +330,7 @@
+ 
+ MACRO(PERFORM_C_CHECK_FUNCTION SYMBOL FILE VARIABLE)
+   IF( VXL_UPDATE_CONFIGURATION )
+-    SET( ${VARIABLE} ${VARIABLE} )
++    UNSET(${VARIABLE})
+   ENDIF( VXL_UPDATE_CONFIGURATION )
+   CHECK_SYMBOL_EXISTS(${SYMBOL} ${FILE} ${VARIABLE})
+   IF(${VARIABLE})
