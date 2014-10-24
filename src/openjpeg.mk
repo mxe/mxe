@@ -3,8 +3,8 @@
 
 PKG             := openjpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.1
-$(PKG)_CHECKSUM := b2f917acd01b6e6fdc397cf5ef0c0e50e2ab7d19
+$(PKG)_VERSION  := 2.1.0
+$(PKG)_CHECKSUM := c2a255f6b51ca96dc85cd6e85c89d300018cb1cb
 $(PKG)_SUBDIR   := openjpeg-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/openjpeg.mirror/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
