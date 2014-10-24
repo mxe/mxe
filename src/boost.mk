@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         target-os=windows \
         threading=multi \
         link=$(if $(BUILD_STATIC),static,shared) \
+        variant=release \
         threadapi=win32 \
         --layout=tagged \
         --disable-icu \
