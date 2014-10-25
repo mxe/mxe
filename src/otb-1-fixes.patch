@@ -67,7 +67,7 @@ diff -burN OTB-4.2.1.orig/otb.conf OTB-4.2.1/otb.conf
 +
 diff -burN OTB-4.2.1.orig/TryRunResults.cmake OTB-4.2.1/TryRunResults.cmake
 --- OTB-4.2.1.orig/TryRunResults.cmake	1970-01-01 05:30:00.000000000 +0530
-+++ OTB-4.2.1/TryRunResults.cmake	2014-10-24 14:10:09.734912197 +0530
++++ OTB-4.2.1/TryRunResults.cmake	2014-10-24 18:42:13.948063988 +0530
 @@ -0,0 +1,6 @@
 +SET( HAS_SSE2_EXTENSIONS_EXITCODE
 +     "0"
@@ -76,6 +76,19 @@ diff -burN OTB-4.2.1.orig/TryRunResults.cmake OTB-4.2.1/TryRunResults.cmake
 +     "0"
 +     CACHE STRING "Result from TRY_RUN" FORCE)
 \ No newline at end of file
+diff -burN OTB-4.2.1.orig/TryRunResults_x86_64.cmake OTB-4.2.1/TryRunResults_x86_64.cmake
+--- OTB-4.2.1.orig/TryRunResults_x86_64.cmake	1970-01-01 05:30:00.000000000 +0530
++++ OTB-4.2.1/TryRunResults_x86_64.cmake	2014-10-24 18:42:22.085184325 +0530
+@@ -0,0 +1,9 @@
++SET( HAS_SSE2_EXTENSIONS_EXITCODE
++     "0"
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( HAS_SSE_EXTENSIONS_EXITCODE
++     "0"
++     CACHE STRING "Result from TRY_RUN" FORCE)
++SET( IS_X86_64_EXITCODE 
++     "0"
++     CACHE STRING "Result from TRY_RUN" FORCE)
 diff -burN OTB-4.2.1.orig/Utilities/otbsiftfast/libsiftfast.cpp OTB-4.2.1/Utilities/otbsiftfast/libsiftfast.cpp
 --- OTB-4.2.1.orig/Utilities/otbsiftfast/libsiftfast.cpp	2014-10-24 11:54:05.540152797 +0530
 +++ OTB-4.2.1/Utilities/otbsiftfast/libsiftfast.cpp	2014-10-24 14:06:11.555639775 +0530

@@ -44,8 +44,10 @@ define $(PKG)_BUILD
 	-DOTB_WRAP_PYTHON=FALSE \
 	-DOTB_WRAP_QT=TRUE \
 	-DOTB_USE_SIFTFAST=TRUE \
-	-C '$(1)/TryRunResults.cmake' \
+	-C$(if $(findstring x86_64,$(TARGET)),'$(1)/TryRunResults_x86_64.cmake', \
+          $(if $(findstring i686,$(TARGET)),'$(1)/TryRunResults.cmake'))  \
         '$(1)'
+
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     #install
     $(MAKE) -C '$(1).build' -j 1 install
