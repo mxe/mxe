@@ -86,7 +86,7 @@ diff -burN OTB-4.2.1.orig/TryRunResults_x86_64.cmake OTB-4.2.1/TryRunResults_x86
 +SET( HAS_SSE_EXTENSIONS_EXITCODE
 +     "0"
 +     CACHE STRING "Result from TRY_RUN" FORCE)
-+SET( IS_X86_64_EXITCODE 
++SET( IS_X86_64_EXITCODE
 +     "0"
 +     CACHE STRING "Result from TRY_RUN" FORCE)
 diff -burN OTB-4.2.1.orig/Utilities/otbsiftfast/libsiftfast.cpp OTB-4.2.1/Utilities/otbsiftfast/libsiftfast.cpp
