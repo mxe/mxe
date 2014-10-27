@@ -3,16 +3,17 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 55d5dab8f12c55064b48da8a4a42bfe8fa97f8f9 Mon Sep 17 00:00:00 2001
-From: MXE
+From f02df804c59584aac5cfb164b4ddad898b156883 Mon Sep 17 00:00:00 2001
+From: "a@mxe.org" <a@mxe.org>
 Date: Thu, 23 Sep 2010 21:41:51 +0200
 Subject: [PATCH 1/8] optional gettext
 
 
-diff -ur a/configure.ac b/configure.ac
---- a/configure.ac	2013-06-10 00:53:13.000000000 +0200
-+++ b/configure.ac	2013-06-29 05:15:59.920660258 +0200
-@@ -483,8 +483,8 @@
+diff --git a/configure.ac b/configure.ac
+index a0237cb..7739b89 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -455,8 +455,8 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
  GLIB_GNU_GETTEXT
  
  if test "$gt_cv_have_gettext" != "yes" ; then
@@ -23,10 +24,11 @@ diff -ur a/configure.ac b/configure.ac
  *** GNU gettext library. (http://www.gnu.org/software/gettext/gettext.html
  ])
  fi
-diff -ur a/glib/gi18n.h b/glib/gi18n.h
---- a/glib/gi18n.h	2011-08-16 02:51:30.000000000 +0200
-+++ b/glib/gi18n.h	2013-06-29 05:17:17.620663625 +0200
-@@ -22,7 +22,12 @@
+diff --git a/glib/gi18n.h b/glib/gi18n.h
+index f765c3d..a1e5e1f 100644
+--- a/glib/gi18n.h
++++ b/glib/gi18n.h
+@@ -20,7 +20,12 @@
  
  #include <glib.h>
  
@@ -39,18 +41,21 @@ diff -ur a/glib/gi18n.h b/glib/gi18n.h
  #include <string.h>
  
  #define  _(String) gettext (String)
+-- 
+1.8.4.5
 
 
-From 4dee17aeb7c45a84a44e3fe2dcca4d8bfd1916a3 Mon Sep 17 00:00:00 2001
-From: MXE
+From cea8581fa1d9e6eb39114d11f02bb9c17f366f41 Mon Sep 17 00:00:00 2001
+From: "a@mxe.org" <a@mxe.org>
 Date: Thu, 23 Sep 2010 21:42:46 +0200
 Subject: [PATCH 2/8] fix tool paths
 
 
-diff -ur a/glib-2.0.pc.in b/glib-2.0.pc.in
---- a/glib-2.0.pc.in	2012-03-12 01:42:41.000000000 +0100
-+++ b/glib-2.0.pc.in	2013-06-29 05:18:02.624665578 +0200
-@@ -3,9 +3,9 @@
+diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
+index 275fc01..ac09887 100644
+--- a/glib-2.0.pc.in
++++ b/glib-2.0.pc.in
+@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
  libdir=@libdir@
  includedir=@includedir@
  
@@ -63,18 +68,21 @@ diff -ur a/glib-2.0.pc.in b/glib-2.0.pc.in
  
  Name: GLib
  Description: C Utility Library
+-- 
+1.8.4.5
 
 
-From 981260cfec055fbd58986d9e1b7ef27cdc036e30 Mon Sep 17 00:00:00 2001
-From: MXE
+From cc66017373a478c6954728dff0468e48b749c0f9 Mon Sep 17 00:00:00 2001
+From: "a@mxe.org" <a@mxe.org>
 Date: Fri, 15 Jun 2012 15:25:01 +0200
 Subject: [PATCH 3/8] Avoid DllMain symbol conflict when linking statically
 
 
-diff -ur a/gio/giomodule.c b/gio/giomodule.c
---- a/gio/giomodule.c	2013-06-03 01:20:49.000000000 +0200
-+++ b/gio/giomodule.c	2013-06-29 05:19:55.560670478 +0200
-@@ -900,14 +900,12 @@
+diff --git a/gio/giomodule.c b/gio/giomodule.c
+index 510f652..f66ca9b 100644
+--- a/gio/giomodule.c
++++ b/gio/giomodule.c
+@@ -904,14 +904,12 @@ extern GType g_gtk_notification_backend_get_type (void);
  
  static HMODULE gio_dll = NULL;
  
@@ -91,7 +99,7 @@ diff -ur a/gio/giomodule.c b/gio/giomodule.c
  	 DWORD     fdwReason,
  	 LPVOID    lpvReserved)
  {
-@@ -917,8 +915,6 @@
+@@ -921,8 +919,6 @@ DllMain (HINSTANCE hinstDLL,
    return TRUE;
  }
  
@@ -100,10 +108,11 @@ diff -ur a/gio/giomodule.c b/gio/giomodule.c
  void *
  _g_io_win32_get_module (void)
  {
-diff -ur a/glib/glib-init.c b/glib/glib-init.c
---- a/glib/glib-init.c	2013-06-10 00:03:17.000000000 +0200
-+++ b/glib/glib-init.c	2013-06-29 05:20:43.480672556 +0200
-@@ -223,14 +223,14 @@
+diff --git a/glib/glib-init.c b/glib/glib-init.c
+index 24efe9d..6fb9e25 100644
+--- a/glib/glib-init.c
++++ b/glib/glib-init.c
+@@ -237,14 +237,14 @@ glib_init (void)
  
  #if defined (G_OS_WIN32)
  
@@ -120,18 +129,21 @@ diff -ur a/glib/glib-init.c b/glib/glib-init.c
           DWORD     fdwReason,
           LPVOID    lpvReserved)
  {
+-- 
+1.8.4.5
 
 
-From 1b51f3ef3e38d5db3c15cde0fe4429dab1f7a6d0 Mon Sep 17 00:00:00 2001
-From: MXE
+From 1e1ac2fa65a14491f3092355ae71ce304020b7f7 Mon Sep 17 00:00:00 2001
+From: "a@mxe.org" <a@mxe.org>
 Date: Fri, 15 Jun 2012 15:27:22 +0200
 Subject: [PATCH 4/8] Allow building without inotify support
 
 
-diff -ur a/configure.ac b/configure.ac
---- a/configure.ac	2013-06-10 00:53:13.000000000 +0200
-+++ b/configure.ac	2013-06-29 05:23:45.264680443 +0200
-@@ -1672,9 +1672,15 @@
+diff --git a/configure.ac b/configure.ac
+index 7739b89..5ec0ccd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1669,10 +1669,16 @@ dnl *****************************
  dnl ** Check for inotify (GIO) **
  dnl *****************************
  inotify_support=no
@@ -147,39 +159,46 @@ diff -ur a/configure.ac b/configure.ac
 +fi
  
  AM_CONDITIONAL(HAVE_INOTIFY, [test "$inotify_support" = "yes"])
+ 
+-- 
+1.8.4.5
 
 
-From 5ec5d101cb75c096f39228da85d2caba52b9002f Mon Sep 17 00:00:00 2001
-From: MXE
+From 4e9c897df8226916c31d47022e4c6b45f4450070 Mon Sep 17 00:00:00 2001
+From: "a@mxe.org" <a@mxe.org>
 Date: Fri, 15 Jun 2012 15:28:14 +0200
 Subject: [PATCH 5/8] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
  Backported from upstream
 
 
-diff -ur a/configure.ac b/configure.ac
---- a/configure.ac	2013-06-10 00:53:13.000000000 +0200
-+++ b/configure.ac	2013-06-29 05:24:29.720682366 +0200
-@@ -456,6 +456,8 @@
- 
- AC_MSG_RESULT($enable_iconv_cache)
+diff --git a/configure.ac b/configure.ac
+index 5ec0ccd..174c27f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -499,6 +499,8 @@ LT_INIT([disable-static win32-dll])
+ dnl when using libtool 2.x create libtool early, because it's used in configure
+ m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
  
 +# Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF
 +AS_IF([false], [AC_CHECK_HEADER([stdint.h])])
  
- dnl
- dnl zlib support
+ AS_IF([test "$glib_native_win32" = "yes"], [
+   if test x$enable_static = xyes -a x$enable_shared = xyes; then
+-- 
+1.8.4.5
 
 
-From d5c7bf3b57ced0c6dfb416cf7b439fba210d2a8b Mon Sep 17 00:00:00 2001
-From: MXE
+From d1e9341c08021818122fb60d1d7e6cd6deb3e8c7 Mon Sep 17 00:00:00 2001
+From: "a@mxe.org" <a@mxe.org>
 Date: Fri, 15 Jun 2012 15:29:06 +0200
 Subject: [PATCH 6/8] Link with dnsapi
 
 
-diff -ur a/gio-2.0.pc.in b/gio-2.0.pc.in
---- a/gio-2.0.pc.in	2013-01-20 20:48:44.000000000 +0100
-+++ b/gio-2.0.pc.in	2013-06-29 05:25:16.328684390 +0200
-@@ -16,6 +16,6 @@
+diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
+index 899af0c..b8308f8 100644
+--- a/gio-2.0.pc.in
++++ b/gio-2.0.pc.in
+@@ -13,6 +13,6 @@ Description: glib I/O library
  Version: @VERSION@
  Requires: glib-2.0 gobject-2.0
  Requires.private: gmodule-no-export-2.0
@@ -187,21 +206,23 @@ diff -ur a/gio-2.0.pc.in b/gio-2.0.pc.in
 +Libs: -L${libdir} -lgio-2.0 -ldnsapi -liphlpapi
  Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@ @SELINUX_LIBS@ @COCOA_LIBS@ @CARBON_LIBS@
  Cflags:
+-- 
+1.8.4.5
 
 
-
-From e0338b4fdd95e8273c84ba1daeea660c589d152a Mon Sep 17 00:00:00 2001
-From: MXE
+From aa921eb646aac5cd48f669ebfcbc44a065dbf9ec Mon Sep 17 00:00:00 2001
+From: "a@mxe.org" <a@mxe.org>
 Date: Fri, 15 Jun 2012 15:29:38 +0200
 Subject: [PATCH 7/8] Ensure globals are initialized even when DllMain is not
  being run
 
 
-diff -ur a/glib/gmain.c b/glib/gmain.c
---- a/glib/gmain.c	2013-06-10 00:03:18.000000000 +0200
-+++ b/glib/gmain.c	2013-06-29 05:33:10.568704963 +0200
-@@ -2490,12 +2490,15 @@
- #ifdef G_OS_WIN32
+diff --git a/glib/gmain.c b/glib/gmain.c
+index 30fac70..736cb57 100644
+--- a/glib/gmain.c
++++ b/glib/gmain.c
+@@ -2566,12 +2566,15 @@ g_get_real_time (void)
+ #if defined (G_OS_WIN32)
  static ULONGLONG (*g_GetTickCount64) (void) = NULL;
  static guint32 g_win32_tick_epoch = 0;
 +static gboolean g_win32_clock_is_initialized;
@@ -216,7 +237,7 @@ diff -ur a/glib/gmain.c b/glib/gmain.c
    g_GetTickCount64 = NULL;
    kernel32 = GetModuleHandle ("KERNEL32.DLL");
    if (kernel32 != NULL)
-@@ -2614,6 +2617,9 @@
+@@ -2630,6 +2633,9 @@ g_get_monotonic_time (void)
     *    timeBeginPeriod() to increase it as much as they want
     */
  
@@ -226,10 +247,11 @@ diff -ur a/glib/gmain.c b/glib/gmain.c
    if (g_GetTickCount64 != NULL)
      {
        guint32 ticks_as_32bit;
-diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
---- a/glib/gthread-win32.c	2013-06-03 01:20:49.000000000 +0200
-+++ b/glib/gthread-win32.c	2013-06-29 05:49:13.580746730 +0200
-@@ -118,18 +118,28 @@
+diff --git a/glib/gthread-win32.c b/glib/gthread-win32.c
+index 275ecc6..8285187 100644
+--- a/glib/gthread-win32.c
++++ b/glib/gthread-win32.c
+@@ -116,18 +116,28 @@ typedef struct
    void     (__stdcall * WakeConditionVariable)       (gpointer cond);
  } GThreadImplVtable;
  
@@ -258,7 +280,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    if (g_thread_impl_vtable.DeleteSRWLock != NULL)
      g_thread_impl_vtable.DeleteSRWLock (mutex);
  }
-@@ -137,18 +147,27 @@
+@@ -135,18 +145,27 @@ g_mutex_clear (GMutex *mutex)
  void
  g_mutex_lock (GMutex *mutex)
  {
@@ -286,7 +308,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    g_thread_impl_vtable.ReleaseSRWLockExclusive (mutex);
  }
  
-@@ -159,6 +178,9 @@
+@@ -157,6 +176,9 @@ g_rec_mutex_impl_new (void)
  {
    CRITICAL_SECTION *cs;
  
@@ -296,7 +318,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    cs = g_slice_new (CRITICAL_SECTION);
    InitializeCriticalSection (cs);
  
-@@ -169,6 +191,10 @@
+@@ -167,6 +189,10 @@ static void
  g_rec_mutex_impl_free (CRITICAL_SECTION *cs)
  {
    DeleteCriticalSection (cs);
@@ -307,7 +329,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    g_slice_free (CRITICAL_SECTION, cs);
  }
  
-@@ -177,6 +203,9 @@
+@@ -175,6 +201,9 @@ g_rec_mutex_get_impl (GRecMutex *mutex)
  {
    CRITICAL_SECTION *impl = mutex->p;
  
@@ -317,7 +339,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    if G_UNLIKELY (mutex->p == NULL)
      {
        impl = g_rec_mutex_impl_new ();
-@@ -191,30 +220,45 @@
+@@ -189,30 +218,45 @@ g_rec_mutex_get_impl (GRecMutex *mutex)
  void
  g_rec_mutex_init (GRecMutex *mutex)
  {
@@ -363,7 +385,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    return TryEnterCriticalSection (g_rec_mutex_get_impl (mutex));
  }
  
-@@ -223,12 +267,18 @@
+@@ -221,12 +265,18 @@ g_rec_mutex_trylock (GRecMutex *mutex)
  void
  g_rw_lock_init (GRWLock *lock)
  {
@@ -382,7 +404,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    if (g_thread_impl_vtable.DeleteSRWLock != NULL)
      g_thread_impl_vtable.DeleteSRWLock (lock);
  }
-@@ -236,36 +286,54 @@
+@@ -234,36 +284,54 @@ g_rw_lock_clear (GRWLock *lock)
  void
  g_rw_lock_writer_lock (GRWLock *lock)
  {
@@ -437,7 +459,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    g_thread_impl_vtable.ReleaseSRWLockShared (lock);
  }
  
-@@ -273,12 +341,18 @@
+@@ -271,12 +339,18 @@ g_rw_lock_reader_unlock (GRWLock *lock)
  void
  g_cond_init (GCond *cond)
  {
@@ -456,7 +478,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    if (g_thread_impl_vtable.DeleteConditionVariable)
      g_thread_impl_vtable.DeleteConditionVariable (cond);
  }
-@@ -286,12 +360,18 @@
+@@ -284,12 +358,18 @@ g_cond_clear (GCond *cond)
  void
  g_cond_signal (GCond *cond)
  {
@@ -475,7 +497,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    g_thread_impl_vtable.WakeAllConditionVariable (cond);
  }
  
-@@ -299,6 +379,9 @@
+@@ -297,6 +377,9 @@ void
  g_cond_wait (GCond  *cond,
               GMutex *entered_mutex)
  {
@@ -485,7 +507,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    g_thread_impl_vtable.SleepConditionVariableSRW (cond, entered_mutex, INFINITE, 0);
  }
  
-@@ -309,6 +392,9 @@
+@@ -307,6 +390,9 @@ g_cond_wait_until (GCond  *cond,
  {
    gint64 span;
  
@@ -495,7 +517,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    span = end_time - g_get_monotonic_time ();
  
    if G_UNLIKELY (span < 0)
-@@ -341,6 +427,9 @@
+@@ -339,6 +425,9 @@ g_private_get_impl (GPrivate *key)
  
    if G_UNLIKELY (impl == 0)
      {
@@ -505,7 +527,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
        EnterCriticalSection (&g_private_lock);
        impl = (DWORD) key->p;
        if (impl == 0)
-@@ -434,6 +523,9 @@
+@@ -432,6 +521,9 @@ g_system_thread_free (GRealThread *thread)
  {
    GThreadWin32 *wt = (GThreadWin32 *) thread;
  
@@ -515,7 +537,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    win32_check_for_error (CloseHandle (wt->handle));
    g_slice_free (GThreadWin32, wt);
  }
-@@ -441,6 +533,9 @@
+@@ -439,6 +531,9 @@ g_system_thread_free (GRealThread *thread)
  void
  g_system_thread_exit (void)
  {
@@ -525,7 +547,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    _endthreadex (0);
  }
  
-@@ -449,6 +544,9 @@
+@@ -447,6 +542,9 @@ g_thread_win32_proxy (gpointer data)
  {
    GThreadWin32 *self = data;
  
@@ -535,7 +557,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    self->proxy (self);
  
    g_system_thread_exit ();
-@@ -466,6 +564,9 @@
+@@ -464,6 +562,9 @@ g_system_thread_new (GThreadFunc   func,
    GThreadWin32 *thread;
    guint ignore;
  
@@ -545,7 +567,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    thread = g_slice_new0 (GThreadWin32);
    thread->proxy = func;
  
-@@ -495,6 +596,9 @@
+@@ -493,6 +594,9 @@ g_system_thread_wait (GRealThread *thread)
  {
    GThreadWin32 *wt = (GThreadWin32 *) thread;
  
@@ -555,7 +577,7 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    win32_check_for_error (WAIT_FAILED != WaitForSingleObject (wt->handle, INFINITE));
  }
  
-@@ -986,6 +1090,8 @@
+@@ -984,6 +1088,8 @@ g_thread_lookup_native_funcs (void)
  void
  g_thread_win32_init (void)
  {
@@ -564,18 +586,42 @@ diff -ur a/glib/gthread-win32.c b/glib/gthread-win32.c
    if (!g_thread_lookup_native_funcs ())
      g_thread_xp_init ();
  
+-- 
+1.8.4.5
 
 
-From ce0f7354ac995f3b21cccabec880413d37f02fb6 Mon Sep 17 00:00:00 2001
-From: MXE
+From 596b53566e1f667321fbdec72b4c490afe000f4d Mon Sep 17 00:00:00 2001
+From: "a@mxe.org" <a@mxe.org>
 Date: Mon, 18 Jun 2012 16:02:12 +0200
 Subject: [PATCH 8/8] kill docs and gtk-doc dependence (mxe-specific)
 
 
-diff -urN a/autogen.sh b/autogen.sh
---- a/autogen.sh	2013-05-07 20:26:07.000000000 +0200
-+++ b/autogen.sh	2013-11-09 06:17:50.014630402 +0100
-@@ -7,18 +7,6 @@
+diff --git a/Makefile.am b/Makefile.am
+index a1c9c33..d81491c 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -6,7 +6,7 @@ include $(top_srcdir)/glib.mk
+ 
+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
+ 
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests
++SUBDIRS = . m4macros glib gmodule gthread gobject gio po tests
+ DIST_SUBDIRS = $(SUBDIRS) build
+ 
+ bin_SCRIPTS = glib-gettextize
+@@ -63,7 +63,6 @@ EXTRA_DIST += 			\
+ 	gio-unix-2.0.pc.in	\
+ 	gio-windows-2.0.pc.in	\
+ 	check-abis.sh		\
+-	gtk-doc.make		\
+ 	$(NULL)
+ 
+ 
+diff --git a/autogen.sh b/autogen.sh
+index 4bbc00d..bc0ab0b 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -7,18 +7,6 @@ test -n "$srcdir" || srcdir=.
  olddir=`pwd`
  cd "$srcdir"
  
@@ -594,10 +640,11 @@ diff -urN a/autogen.sh b/autogen.sh
  AUTORECONF=`which autoreconf`
  if test -z $AUTORECONF; then
          echo "*** No autoreconf found, please install it ***"
-diff -urN a/configure.ac b/configure.ac
---- a/configure.ac	2013-10-15 21:14:26.000000000 +0200
-+++ b/configure.ac	2013-11-09 06:18:17.274631022 +0100
-@@ -2579,13 +2579,6 @@
+diff --git a/configure.ac b/configure.ac
+index 174c27f..5f033ab 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2579,13 +2579,6 @@ AS_IF([ test $cross_compiling = yes ], [
  dnl **************************
  dnl *** Checks for gtk-doc ***
  dnl **************************
@@ -610,10 +657,12 @@ diff -urN a/configure.ac b/configure.ac
 -])
  
  AC_ARG_ENABLE(man,
-              [AS_HELP_STRING([--enable-man],
-diff -urN a/docs/Makefile.am b/docs/Makefile.am
---- a/docs/Makefile.am	2013-08-08 12:00:40.000000000 +0200
-+++ b/docs/Makefile.am	1970-01-01 01:00:00.000000000 +0100
+               [AS_HELP_STRING([--enable-man],
+diff --git a/docs/Makefile.am b/docs/Makefile.am
+deleted file mode 100644
+index f956360..0000000
+--- a/docs/Makefile.am
++++ /dev/null
 @@ -1,11 +0,0 @@
 -## Process this file with automake to produce Makefile.in
 -
@@ -626,80 +675,18 @@ diff -urN a/docs/Makefile.am b/docs/Makefile.am
 -	  echo $$p; \
 -	done
 -
-diff -urN a/docs/reference/gio/gdbus-object-manager-example/Makefile.am b/docs/reference/gio/gdbus-object-manager-example/Makefile.am
---- a/docs/reference/gio/gdbus-object-manager-example/Makefile.am	2013-08-08 12:00:40.000000000 +0200
-+++ b/docs/reference/gio/gdbus-object-manager-example/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1,67 +0,0 @@
--NULL =
--
--# The name of the module.
--DOC_MODULE=gdbus-object-manager-example
--
--# The top-level SGML file.
--DOC_MAIN_SGML_FILE=gdbus-object-manager-example-docs.xml
--
--# Extra options to supply to gtkdoc-scan
--SCAN_OPTIONS=--deprecated-guards="G_DISABLE_DEPRECATED"
--
--# The directory containing the source code. Relative to $(srcdir)
--DOC_SOURCE_DIR=$(top_builddir)/gio/tests/gdbus-object-manager-example
--
--HFILE_GLOB=$(top_builddir)/gio/tests/gdbus-object-manager-example/*.h
--CFILE_GLOB=$(top_builddir)/gio/tests/gdbus-object-manager-example/*.c
--
--# Headers to ignore
--IGNORE_HFILES =				\
--	$(NULL)
--
--# CFLAGS and LDFLAGS for compiling scan program. Only needed
--# if $(DOC_MODULE).types is non-empty.
--AM_CPPFLAGS = 				\
--	$(gio_INCLUDES)			\
--	$(GLIB_DEBUG_FLAGS)
--
--GTKDOC_LIBS = 						\
--	$(top_builddir)/glib/libglib-2.0.la		\
--	$(top_builddir)/gobject/libgobject-2.0.la	\
--	$(top_builddir)/gmodule/libgmodule-2.0.la	\
--	$(top_builddir)/gio/libgio-2.0.la		\
--	$(top_builddir)/gio/tests/gdbus-object-manager-example/libgdbus-example-objectmanager.la \
--	$(NULL)
--
--# Extra options to supply to gtkdoc-mkdb
--MKDB_OPTIONS = --output-format=xml --sgml-mode --name-space=g \
--	$(NULL)
--
--# Images to copy into HTML directory
--HTML_IMAGES =			\
--	$(NULL)
--
--content_files =			\
--	$(NULL)
--
--expand_content_files =		\
--	$(NULL)
--
--extra_files =			\
--	$(NULL)
--
--include $(top_srcdir)/gtk-doc.make
--
--EXTRA_DIST +=			\
--	$(NULL)
--
--MAINTAINERCLEANFILES = $(BUILT_SOURCES)
--
--dist-hook-local: all-local
--
--gdbus-object-manager-example-docs-clean: clean
--	cd $(srcdir) && rm -rf xml html
--
--# Nuke installed docs (don't know how to avoid installing them)
--install-data-hook :
--	rm -rf $(DESTDIR)$(datadir)/gtk-doc/html/gdbus-object-manager-example
-diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
---- a/docs/reference/gio/Makefile.am	2013-08-08 12:00:40.000000000 +0200
-+++ b/docs/reference/gio/Makefile.am	1970-01-01 01:00:00.000000000 +0100
+diff --git a/docs/reference/Makefile.am b/docs/reference/Makefile.am
+deleted file mode 100644
+index 178aad1..0000000
+--- a/docs/reference/Makefile.am
++++ /dev/null
+@@ -1 +0,0 @@
+-SUBDIRS = glib gobject gio
+diff --git a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
+deleted file mode 100644
+index 47fdd38..0000000
+--- a/docs/reference/gio/Makefile.am
++++ /dev/null
 @@ -1,184 +0,0 @@
 -NULL =
 -
@@ -885,9 +872,84 @@ diff -urN a/docs/reference/gio/Makefile.am b/docs/reference/gio/Makefile.am
 -
 -gio-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
-diff -urN a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
---- a/docs/reference/glib/Makefile.am	2013-08-08 12:00:40.000000000 +0200
-+++ b/docs/reference/glib/Makefile.am	1970-01-01 01:00:00.000000000 +0100
+diff --git a/docs/reference/gio/gdbus-object-manager-example/Makefile.am b/docs/reference/gio/gdbus-object-manager-example/Makefile.am
+deleted file mode 100644
+index 50b0f19..0000000
+--- a/docs/reference/gio/gdbus-object-manager-example/Makefile.am
++++ /dev/null
+@@ -1,67 +0,0 @@
+-NULL =
+-
+-# The name of the module.
+-DOC_MODULE=gdbus-object-manager-example
+-
+-# The top-level SGML file.
+-DOC_MAIN_SGML_FILE=gdbus-object-manager-example-docs.xml
+-
+-# Extra options to supply to gtkdoc-scan
+-SCAN_OPTIONS=--deprecated-guards="G_DISABLE_DEPRECATED"
+-
+-# The directory containing the source code. Relative to $(srcdir)
+-DOC_SOURCE_DIR=$(top_builddir)/gio/tests/gdbus-object-manager-example
+-
+-HFILE_GLOB=$(top_builddir)/gio/tests/gdbus-object-manager-example/*.h
+-CFILE_GLOB=$(top_builddir)/gio/tests/gdbus-object-manager-example/*.c
+-
+-# Headers to ignore
+-IGNORE_HFILES =				\
+-	$(NULL)
+-
+-# CFLAGS and LDFLAGS for compiling scan program. Only needed
+-# if $(DOC_MODULE).types is non-empty.
+-AM_CPPFLAGS = 				\
+-	$(gio_INCLUDES)			\
+-	$(GLIB_DEBUG_FLAGS)
+-
+-GTKDOC_LIBS = 						\
+-	$(top_builddir)/glib/libglib-2.0.la		\
+-	$(top_builddir)/gobject/libgobject-2.0.la	\
+-	$(top_builddir)/gmodule/libgmodule-2.0.la	\
+-	$(top_builddir)/gio/libgio-2.0.la		\
+-	$(top_builddir)/gio/tests/gdbus-object-manager-example/libgdbus-example-objectmanager.la \
+-	$(NULL)
+-
+-# Extra options to supply to gtkdoc-mkdb
+-MKDB_OPTIONS = --output-format=xml --sgml-mode --name-space=g \
+-	$(NULL)
+-
+-# Images to copy into HTML directory
+-HTML_IMAGES =			\
+-	$(NULL)
+-
+-content_files =			\
+-	$(NULL)
+-
+-expand_content_files =		\
+-	$(NULL)
+-
+-extra_files =			\
+-	$(NULL)
+-
+-include $(top_srcdir)/gtk-doc.make
+-
+-EXTRA_DIST +=			\
+-	$(NULL)
+-
+-MAINTAINERCLEANFILES = $(BUILT_SOURCES)
+-
+-dist-hook-local: all-local
+-
+-gdbus-object-manager-example-docs-clean: clean
+-	cd $(srcdir) && rm -rf xml html
+-
+-# Nuke installed docs (don't know how to avoid installing them)
+-install-data-hook :
+-	rm -rf $(DESTDIR)$(datadir)/gtk-doc/html/gdbus-object-manager-example
+diff --git a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
+deleted file mode 100644
+index a25a7c8..0000000
+--- a/docs/reference/glib/Makefile.am
++++ /dev/null
 @@ -1,135 +0,0 @@
 -## Process this file with automake to produce Makefile.in
 -
@@ -1024,9 +1086,11 @@ diff -urN a/docs/reference/glib/Makefile.am b/docs/reference/glib/Makefile.am
 -
 -glib-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
-diff -urN a/docs/reference/gobject/Makefile.am b/docs/reference/gobject/Makefile.am
---- a/docs/reference/gobject/Makefile.am	2013-08-08 12:00:40.000000000 +0200
-+++ b/docs/reference/gobject/Makefile.am	1970-01-01 01:00:00.000000000 +0100
+diff --git a/docs/reference/gobject/Makefile.am b/docs/reference/gobject/Makefile.am
+deleted file mode 100644
+index beff782..0000000
+--- a/docs/reference/gobject/Makefile.am
++++ /dev/null
 @@ -1,103 +0,0 @@
 -## Process this file with automake to produce Makefile.in
 -
@@ -1131,15 +1195,11 @@ diff -urN a/docs/reference/gobject/Makefile.am b/docs/reference/gobject/Makefile
 -
 -gobject-docs-clean: clean
 -	cd $(srcdir) && rm -rf xml html
-diff -urN a/docs/reference/Makefile.am b/docs/reference/Makefile.am
---- a/docs/reference/Makefile.am	2013-08-08 12:00:40.000000000 +0200
-+++ b/docs/reference/Makefile.am	1970-01-01 01:00:00.000000000 +0100
-@@ -1 +0,0 @@
--SUBDIRS = glib gobject gio
-diff -urN a/gio/tests/gdbus-object-manager-example/Makefile.am b/gio/tests/gdbus-object-manager-example/Makefile.am
---- a/gio/tests/gdbus-object-manager-example/Makefile.am	2013-08-08 12:00:40.000000000 +0200
-+++ b/gio/tests/gdbus-object-manager-example/Makefile.am	2013-11-09 06:20:32.858634115 +0100
-@@ -25,12 +25,6 @@
+diff --git a/gio/tests/gdbus-object-manager-example/Makefile.am b/gio/tests/gdbus-object-manager-example/Makefile.am
+index d6d1412..79141ec 100644
+--- a/gio/tests/gdbus-object-manager-example/Makefile.am
++++ b/gio/tests/gdbus-object-manager-example/Makefile.am
+@@ -25,12 +25,6 @@ $(GDBUS_GENERATED) : gdbus-example-objectmanager.xml Makefile $(top_builddir)/gi
  
  test_ltlibraries = libgdbus-example-objectmanager.la
  
@@ -1152,23 +1212,6 @@ diff -urN a/gio/tests/gdbus-object-manager-example/Makefile.am b/gio/tests/gdbus
  nodist_libgdbus_example_objectmanager_la_SOURCES = \
  	gdbus-example-objectmanager-generated.h		\
  	gdbus-example-objectmanager-generated.c
-diff -urN a/Makefile.am b/Makefile.am
---- a/Makefile.am	2013-09-17 20:47:14.000000000 +0200
-+++ b/Makefile.am	2013-11-09 06:16:23.310628423 +0100
-@@ -6,7 +6,7 @@
- 
- ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
- 
--SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests
-+SUBDIRS = . m4macros glib gmodule gthread gobject gio po tests
- DIST_SUBDIRS = $(SUBDIRS) build
- 
- bin_SCRIPTS = glib-gettextize
-@@ -61,7 +61,6 @@
- 	gio-unix-2.0.pc.in	\
- 	gio-windows-2.0.pc.in	\
- 	check-abis.sh		\
--	gtk-doc.make		\
- 	$(NULL)
- 
- 
+-- 
+1.8.4.5
+
