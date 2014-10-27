@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 4.2.9
 $(PKG)_CHECKSUM := c2251642e29c7acada37d5e599e68d270088e56d
 $(PKG)_SUBDIR   := hdf-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF/prev-releases/HDF$($(PKG)_VERSION)/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib jpeg portablexdr
 
 define $(PKG)_UPDATE
@@ -27,7 +27,7 @@ define $(PKG)_BUILD
         --disable-fortran \
         --disable-netcdf \
         --prefix='$(PREFIX)/$(TARGET)' \
-        CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME"
+        CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1"
     $(MAKE) -C '$(1)'/hdf/src -j '$(JOBS)'
     $(MAKE) -C '$(1)'/hdf/src -j 1 install
     $(MAKE) -C '$(1)'/mfhdf/libsrc -j '$(JOBS)'
@@ -35,6 +35,5 @@ define $(PKG)_BUILD
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
 
 $(PKG)_BUILD_SHARED =

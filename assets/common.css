@@ -59,6 +59,7 @@
     th.row {
         background: #ececec;
         vertical-align: middle;
+        text-align: left;
     }
     pre {
         font-size: 8pt;

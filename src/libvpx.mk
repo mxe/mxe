@@ -3,8 +3,8 @@
 
 PKG             := libvpx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.0
-$(PKG)_CHECKSUM := 214d9a215af1a3278d9fcba4cac89566e321e4cf
+$(PKG)_VERSION  := 1.3.0
+$(PKG)_CHECKSUM := 191b95817aede8c136cc3f3745fb1b8c50e6d5dc
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://webm.googlecode.com/files/$($(PKG)_FILE)
@@ -31,6 +31,5 @@ define $(PKG)_BUILD
     $(TARGET)-ranlib $(PREFIX)/$(TARGET)/lib/libvpx.a
 endef
 
-$(PKG)_BUILD_i686-pc-mingw32    = $(subst @libvpx-target@,x86-win32-gcc,$($(PKG)_BUILD))
 $(PKG)_BUILD_i686-w64-mingw32   = $(subst @libvpx-target@,x86-win32-gcc,$($(PKG)_BUILD))
 $(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @libvpx-target@,x86_64-win64-gcc,$($(PKG)_BUILD))

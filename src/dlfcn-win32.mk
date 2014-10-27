@@ -3,16 +3,16 @@
 
 PKG             := dlfcn-win32
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 19
-$(PKG)_CHECKSUM := a0033e37a547c52059d0bf8664a96ecdeeb66419
-$(PKG)_SUBDIR   := $(PKG)-r$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
-$(PKG)_URL      := http://$(PKG).googlecode.com/files/$($(PKG)_FILE)
+$(PKG)_VERSION  := 1.0.0
+$(PKG)_CHECKSUM := 2e02ffff3cd3a6871bce03d485394bd309d8eaa4
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://code.google.com/p/dlfcn-win32/downloads/list?sort=-uploaded' | \
-    $(SED) -n 's,.*dlfcn-win32-r\([0-9][^<]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- 'https://github.com/dlfcn-win32/dlfcn-win32/releases' | \
+    $(SED) -n 's,.*<a href="/dlfcn-win32/dlfcn-win32/archive/v\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

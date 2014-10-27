@@ -3,8 +3,8 @@
 
 PKG             := glibmm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.38.1
-$(PKG)_CHECKSUM := d543b32b32514bfbcad9242e1636af9a53283e3a
+$(PKG)_VERSION  := 2.42.0
+$(PKG)_CHECKSUM := 8f316a4dfdaf49366028087085f04c0ba29cb5c2
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -14,6 +14,7 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/glibmm/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
+    $(SORT) -Vr | \
     head -1
 endef
 

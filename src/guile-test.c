@@ -7,10 +7,6 @@
 #include <stdio.h>
 #include <libguile.h>
 
-# ifdef __STRICT_ANSI__
-int putenv (char *);
-# endif
-
 static void inner_main(void *data, int argc, char *argv[])
 {
     (void)data;

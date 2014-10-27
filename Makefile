@@ -9,21 +9,19 @@ EXT_DIR  := $(TOP_DIR)/ext
 # See doc/gmsl.html for further information
 include $(EXT_DIR)/gmsl
 
-MXE_TRIPLETS       := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
+MXE_TRIPLETS       := i686-w64-mingw32 x86_64-w64-mingw32
 MXE_LIB_TYPES      := static shared
 MXE_TARGET_LIST    := $(foreach TRIPLET,$(MXE_TRIPLETS),\
                           $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES)))
-MXE_TARGETS        := i686-pc-mingw32.static
+MXE_TARGETS        := i686-w64-mingw32.static
 
 DEFAULT_MAX_JOBS   := 6
-SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
+SOURCEFORGE_MIRROR := downloads.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 
 PWD        := $(shell pwd)
 SHELL      := bash
-NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
-JOBS       := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
 
 DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
@@ -67,6 +65,48 @@ MXE_CONFIGURE_OPTS = \
     $(if $(BUILD_STATIC), \
         --enable-static --disable-shared , \
         --disable-static --enable-shared )
+
+# Append these to the "make" and "make install" steps of autotools packages
+# in order to neither build nor install unwanted binaries, manpages,
+# infopages and API documentation (reduces build time and disk space usage).
+# NOTE: We don't include bin_SCRIPTS (and variations), since many packages
+# install files such as pcre-config (which we do want to be installed).
+
+MXE_DISABLE_PROGRAMS = \
+    bin_PROGRAMS= \
+    sbin_PROGRAMS= \
+    noinst_PROGRAMS= \
+    check_PROGRAMS=
+
+MXE_DISABLE_DOCS = \
+    man_MANS= \
+    man1_MANS= \
+    man2_MANS= \
+    man3_MANS= \
+    man4_MANS= \
+    man5_MANS= \
+    man6_MANS= \
+    man7_MANS= \
+    man8_MANS= \
+    man9_MANS= \
+    dist_man_MANS= \
+    dist_man1_MANS= \
+    dist_man2_MANS= \
+    dist_man3_MANS= \
+    dist_man4_MANS= \
+    dist_man5_MANS= \
+    dist_man6_MANS= \
+    dist_man7_MANS= \
+    dist_man8_MANS= \
+    dist_man9_MANS= \
+    notrans_dist_man_MANS= \
+    info_TEXINFOS= \
+    doc_DATA= \
+    dist_doc_DATA= \
+    html_DATA= \
+    dist_html_DATA=
+
+MXE_DISABLE_CRUFT = $(MXE_DISABLE_PROGRAMS) $(MXE_DISABLE_DOCS)
 
 MAKE_SHARED_FROM_STATIC = \
 	'$(TOP_DIR)/tools/make-shared-from-static' \
@@ -113,16 +153,18 @@ CHECK_PKG_ARCHIVE = \
 ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
+BACKUP_DOWNLOAD = \
+    $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`
+
 DOWNLOAD_PKG_ARCHIVE = \
-        mkdir -p '$(PKG_DIR)' && \
-        $(if $($(1)_URL_2), \
-            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-              $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)' || \
-              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
-            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
+        mkdir -p '$(PKG_DIR)' && ( \
+            $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' \
+            $(if $($(1)_URL_2), \
+                || $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)') \
+            $(if $(MXE_NO_BACKUP_DL),, \
+                || $(BACKUP_DOWNLOAD)) \
+        ) \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
@@ -131,6 +173,10 @@ DOWNLOAD_PKG_ARCHIVE = \
           echo 'Download failed!'; \
           echo; \
           rm -f '$(PKG_DIR)/$($(1)_FILE)'; )
+
+ifneq ($(words $(PWD)),1)
+    $(error GNU Make chokes on paths with spaces)
+endif
 
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
@@ -160,6 +206,14 @@ else
         echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
 endif
+
+NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+JOBS_AUTO  := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
+JOBS       := $(strip $(if $(findstring undefined,$(origin JOBS)),\
+                   $(info [using autodetected $(JOBS_AUTO) job(s)]) \
+                   $(JOBS_AUTO)\
+              ,\
+                   $(JOBS)))
 
 # cache some target string manipulation functions
 # `memoize` and `uc` from gmsl
@@ -262,6 +316,11 @@ $(1): | $(if $(value $(1)_DEPS), \
 	                $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
 	    $($(1)_DEPS)
 	@echo '[target]   $(1) $(call TARGET_HEADER)'
+	$(if $(findstring i686-pc-mingw32,$(1)),
+	    $(error Deprecated target specified: "$(1)". Please use \
+	            i686-w64-mingw32.[$(subst $(space),|,$(MXE_LIB_TYPES))] instead))
+	$(if $(filter $(1),$(MXE_TARGET_LIST) $(BUILD) $(MXE_TRIPLETS)),,
+	    $(error Invalid target specified: "$(1)"))
 	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),
 	    @echo
 	    @echo '------------------------------------------------------------'
@@ -276,7 +335,11 @@ $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3))))
+download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
+                download-only-$(1)
+
+.PHONY: download-only-$(1)
+download-only-$(1)::
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    echo '[download] $(1)'; \
@@ -467,10 +530,11 @@ define UPDATE
                     $(info .        $(1)  $(2)),
                     $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
-                $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
-                $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                    || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
-                         exit 1; })),
+                $(if $(findstring undefined, $(origin UPDATE_DRYRUN)),
+                    $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
+                    $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
+                        || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
+                             exit 1; }))),
         $(info Unable to update version number of package $(1) \
             $(newline)$(newline)$($(1)_UPDATE)$(newline)))
 
@@ -506,10 +570,6 @@ cleanup-style:
     )
 
 build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
-	$(foreach TARGET,$(MXE_TARGET_LIST),$(eval $(TARGET)_PKGCOUNT := 0))
-	$(eval BUILD_PKGCOUNT := 0)
-	$(eval BUILD_ONLY_PKGCOUNT := 0)
-	$(eval VIRTUAL_PKGCOUNT := 0)
 	@echo '<!DOCTYPE html>'                  > $@
 	@echo '<html>'                          >> $@
 	@echo '<head>'                          >> $@
@@ -536,6 +596,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '<thead>'                         >> $@
 	@echo '<tr>'                            >> $@
 	@echo '<th rowspan="2">Package</th>'    >> $@
+	@echo '<th rowspan="2">Version</th>'    >> $@
 	@$(foreach TRIPLET,$(MXE_TRIPLETS),          \
 	    echo '<th colspan="$(words $(MXE_LIB_TYPES))">$(TRIPLET)</th>' >> $@;)
 	@echo '<th rowspan="2">Native</th>'     >> $@
@@ -547,41 +608,56 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</tr>'                           >> $@
 	@echo '</thead>'                        >> $@
 	@echo '<tbody>'                         >> $@
+# It is important to remember that the PKGCOUNT variables
+# are expressed in unary terms. So, after 5 virtual packages,
+# the content of $(VIRTUAL_PKGCOUNT) would be "x x x x x" and not "5".
+# Therefore, when using the PKGCOUNT, you have to use
+#     $(words $(VIRTUAL_PKGCOUNT))
+
+# The same operations are included in GMSL "Integer Arithmetic Functions."
+# I chose not to use most of them because their names are too long.
+#     $(eval $(VIRTUAL_PKGCOUNT += x))
+# vs
+#     $(eval $(VIRTUAL_PKGCOUNT := $(call int_inc,$(VIRTUAL_PKGCOUNT))))
 	@$(foreach PKG,$(PKGS),                      \
 	    $(eval $(PKG)_VIRTUAL := $(true))        \
 	    $(eval $(PKG)_BUILD_ONLY := $(true))     \
-	    echo '<tr>'                         >> $@; \
-	    echo '<th class="row">$(PKG)</th>'  >> $@; \
+	    echo -e '<tr>\n                          \
+	        <th class="row">$(PKG)</th>\n        \
+	        <td>$(call substr,$($(PKG)_VERSION),1,12)$(if $(call gt,$(call strlen,$($(PKG)_VERSION)),12),&hellip;)</td>\n\
 	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
 	        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
-	            $(eval $(TARGET)_PKGCOUNT := $(call inc,$($(TARGET)_PKGCOUNT))) \
+	            $(eval $(TARGET)_PKGCOUNT += x) \
 	            $(eval $(PKG)_VIRTUAL := $(false)) \
 	            $(eval $(PKG)_BUILD_ONLY := $(false)) \
-	            echo '<td class="supported">Y</td>'   >> $@;,   \
-	            echo '<td class="unsupported">N</td>' >> $@;))  \
+	            <td class="supported">&#x2713;</td>,            \
+	            <td class="unsupported">&#x2717;</td>)\n)       \
 	    $(if $(call set_is_member,$(PKG),$(BUILD_PKGS)),        \
-	        $(eval BUILD_PKGCOUNT := $(call inc,$(BUILD_PKGCOUNT))) \
 	        $(eval $(PKG)_VIRTUAL := $(false))   \
-	        echo '<td class="supported">Y</td>'   >> $@;,       \
-	        echo '<td class="unsupported">N</td>' >> $@;)       \
+	        <td class="supported">&#x2713;</td>, \
+	        <td class="unsupported">&#x2717;</td>)\n \
+	        </tr>\n' >> $@ $(newline)            \
 	    $(if $($(PKG)_VIRTUAL),                  \
-	        $(eval VIRTUAL_PKGCOUNT := $(call inc,$(VIRTUAL_PKGCOUNT)))) \
+	       $(eval VIRTUAL_PKGCOUNT += x) \
+	        $(eval $(PKG)_BUILD_ONLY := $(false))) \
 	    $(if $($(PKG)_BUILD_ONLY),               \
-	        $(eval BUILD_ONLY_PKGCOUNT := $(call inc,$(BUILD_ONLY_PKGCOUNT)))))
+	        $(eval BUILD_ONLY_PKGCOUNT += x)))
 	@echo '<tr>'                            >> $@
-	# TOTAL_PKGCOUNT = ( PKGS - VIRTUAL ) - BUILD_ONLY
-	$(eval TOTAL_PKGCOUNT :=                     \
-	    $(call subtract,                         \
-	        $(call subtract,$(words $(PKGS)),$(VIRTUAL_PKGCOUNT)),\
-	        $(BUILD_ONLY_PKGCOUNT)))
-	@echo '<th class="row">'                >> $@
-	@echo 'Total: $(TOTAL_PKGCOUNT)<br>(+$(VIRTUAL_PKGCOUNT) virtual +$(BUILD_ONLY_PKGCOUNT) native-only)' >> $@
+	@echo '<th class="row" colspan="2">'    >> $@
+# TOTAL_PKGCOUNT = PKGS - (VIRTUAL + BUILD_ONLY)
+	@echo 'Total: $(call subtract,               \
+	                  $(words $(PKGS)),          \
+	                  $(words $(VIRTUAL_PKGCOUNT) $(BUILD_ONLY_PKGCOUNT)))'\
+	                                        >> $@
+	@echo '<br>(+$(words $(VIRTUAL_PKGCOUNT)) virtual' >> $@
+	@echo '+$(words $(BUILD_ONLY_PKGCOUNT)) native-only)' >> $@
 	@echo '</th>'                           >> $@
 	@$(foreach TARGET,$(MXE_TARGET_LIST),        \
-	    echo '<th>$($(TARGET)_PKGCOUNT)</th>' >> $@;)
-	@echo '<th>$(BUILD_PKGCOUNT)</th>'      >> $@
+	    echo '<th>$(words $($(TARGET)_PKGCOUNT))</th>' >> $@;)
+	@echo '<th>$(words $(BUILD_PKGS))</th>' >> $@
 	@echo '</tr>'                           >> $@
 	@echo '</tbody>'                        >> $@
 	@echo '</table>'                        >> $@
 	@echo '</body>'                         >> $@
+	@echo '</html>'                         >> $@
 

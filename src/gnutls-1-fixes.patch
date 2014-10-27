@@ -1,15 +1,15 @@
 This file is part of MXE.
 See index.html for further information.
 
-From dbae911f9d1b79fde473c1ca23e5535c7d1db39c Mon Sep 17 00:00:00 2001
+From b4e25d3d5b94f99a3eb754fadd271eb881e03515 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 3 Apr 2012 13:58:42 +0200
-Subject: [PATCH 1/5] Revert "make dist will also make lzip compressed tarball"
+Subject: [PATCH 1/4] Revert "make dist will also make lzip compressed tarball"
 
 This reverts commit 97ac1bc58274f651338444693bd75441ba12f46f.
 
 diff --git a/configure.ac b/configure.ac
-index a81d85f..44fe48a 100644
+index b082047..02a6d5f 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -26,7 +26,7 @@ AC_CONFIG_AUX_DIR([build-aux])
@@ -25,16 +25,16 @@ index a81d85f..44fe48a 100644
 1.8.4.5
 
 
-From 951caab5f444f0c90cb43b5937c7273963e443d8 Mon Sep 17 00:00:00 2001
+From 7031296f8bbb2fe4bea63616045862bc234ad9c7 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 Jun 2012 09:57:24 +0200
-Subject: [PATCH 2/5] AM_PROG_AR for automake 1.12 compatibility
+Subject: [PATCH 2/4] AM_PROG_AR for automake 1.12 compatibility
 
 Taken from
 http://lists.gnu.org/archive/html/automake/2012-05/msg00014.html
 
 diff --git a/configure.ac b/configure.ac
-index 44fe48a..1e80e23 100644
+index 02a6d5f..789db75 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -41,6 +41,7 @@ ggl_EARLY
@@ -49,10 +49,10 @@ index 44fe48a..1e80e23 100644
 1.8.4.5
 
 
-From ade9bae0c0af5b6eec402c228c8d048e8a7b5ce6 Mon Sep 17 00:00:00 2001
+From 14a3e086bb17c031c650775d89550b184dd564e5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 4 Feb 2013 16:11:12 +0100
-Subject: [PATCH 3/5] add missing private lib to pc file
+Subject: [PATCH 3/4] add missing private lib to pc file
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
@@ -71,14 +71,14 @@ index a25fcdf..3860c68 100644
 1.8.4.5
 
 
-From 36afa9bd2427b6c71c49c832d8a06686920ac8c9 Mon Sep 17 00:00:00 2001
+From e0b47757e468049c0c30dfc54f6b6003fe036add Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 6 Feb 2013 08:43:43 +0100
-Subject: [PATCH 4/5] relax automake version check
+Subject: [PATCH 4/4] relax automake version check
 
 
 diff --git a/configure.ac b/configure.ac
-index 1e80e23..0415ead 100644
+index 789db75..54f2232 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -26,7 +26,7 @@ AC_CONFIG_AUX_DIR([build-aux])
@@ -89,47 +89,6 @@ index 1e80e23..0415ead 100644
 +AM_INIT_AUTOMAKE([1.11.1 subdir-objects no-dist-gzip dist-xz -Wall -Wno-override])
  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
  AC_CONFIG_HEADERS([config.h])
- 
--- 
-1.8.4.5
-
-
-From fc0b1030e357d2de86417a1a442d5ef3643e6fc0 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 5 Feb 2014 09:42:41 +0100
-Subject: [PATCH 5/5] gnulib fix-ups for error, setenv, unsetenv
-
-
-diff --git a/src/gl/Makefile.am b/src/gl/Makefile.am
-index c25328d..14d592b 100644
---- a/src/gl/Makefile.am
-+++ b/src/gl/Makefile.am
-@@ -121,7 +121,7 @@ EXTRA_DIST += errno.in.h
- 
- EXTRA_DIST += error.c error.h
- 
--EXTRA_libgnu_gpl_la_SOURCES += error.c
-+libgnu_gpl_la_SOURCES += error.c
- 
- ## end   gnulib module error
- 
-@@ -230,7 +230,7 @@ libgnu_gpl_la_SOURCES += progname.h progname.c
- 
- EXTRA_DIST += setenv.c
- 
--EXTRA_libgnu_gpl_la_SOURCES += setenv.c
-+libgnu_gpl_la_SOURCES += setenv.c
- 
- ## end   gnulib module setenv
- 
-@@ -914,7 +914,7 @@ EXTRA_DIST += unistd.in.h
- 
- EXTRA_DIST += unsetenv.c
- 
--EXTRA_libgnu_gpl_la_SOURCES += unsetenv.c
-+libgnu_gpl_la_SOURCES += unsetenv.c
- 
- ## end   gnulib module unsetenv
  
 -- 
 1.8.4.5

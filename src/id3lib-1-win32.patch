@@ -56,26 +56,3 @@ diff -ru id3lib-3.8.3-orig/include/id3/globals.h id3lib-3.8.3/include/id3/global
  
  #define ID3_C_VAR extern
  
-diff -ru id3lib-3.8.3-orig/include/id3/id3lib_strings.h id3lib-3.8.3/include/id3/id3lib_strings.h
---- id3lib-3.8.3-orig/include/id3/id3lib_strings.h	2003-03-02 01:23:00.000000000 +0100
-+++ id3lib-3.8.3/include/id3/id3lib_strings.h	2010-01-23 14:15:24.000000000 +0100
-@@ -30,6 +30,7 @@
- #define _ID3LIB_STRINGS_H_
- 
- #include <string>
-+#include <cstring>
- 
- #if (defined(__GNUC__) && (__GNUC__ >= 3) || (defined(_MSC_VER) && _MSC_VER > 1000))
- namespace std
-diff -ru id3lib-3.8.3-orig/include/id3/writers.h id3lib-3.8.3/include/id3/writers.h
---- id3lib-3.8.3-orig/include/id3/writers.h	2003-03-02 01:23:00.000000000 +0100
-+++ id3lib-3.8.3/include/id3/writers.h	2010-01-23 14:15:24.000000000 +0100
-@@ -30,7 +30,7 @@
- 
- #include "id3/writer.h"
- #include "id3/id3lib_streams.h"
--//#include <string.h>
-+#include <cstring>
- 
- class ID3_CPP_EXPORT ID3_OStreamWriter : public ID3_Writer
- {

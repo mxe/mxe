@@ -3,8 +3,8 @@
 
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.38.2
-$(PKG)_CHECKSUM := 685c5a4215b776b83dd5330ab9084c5dcb0a51b8
+$(PKG)_VERSION  := 2.42.0
+$(PKG)_CHECKSUM := f5168a7adffad3620ff3f1b3d6ff6d0ad3f0752e
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -13,6 +13,7 @@ $(PKG)_DEPS     := gcc gettext pcre libiconv zlib libffi dbus
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
     $(SED) -n "s,.*tag/?id=\([0-9]\+\.[0-9]*[02468]\.[^']*\).*,\1,p" | \
+    $(SORT) -Vr | \
     head -1
 endef
 
@@ -28,7 +29,7 @@ define $(PKG)_NATIVE_BUILD
         --disable-nls
     $(MAKE) -C '$(1).native/$(libiconv_SUBDIR)' -j '$(JOBS)'
 
-    # native build for glib-genmarshal, without pkg-config, gettext and zlib
+    # native build for glib-genmarshal, without gettext and zlib
     cd '$(1).native' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -64,12 +65,19 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && NOCONFIGURE=true ./autogen.sh
     rm -f '$(PREFIX)/$(TARGET)/bin/glib-*'
+
+    # Detecting if these GLib tools are already available on host machine,
+    # either because of a host package installation or from an earlier MXE
+    # installation of GLib.
+	# If it is installed, we symlink it into the MXE bin/.
+	# If not, we build it.
     $(if $(findstring y,\
             $(shell [ -x "`which glib-genmarshal`" ] && \
                     [ -x "`which glib-compile-schemas`" ] && \
                     [ -x "`which glib-compile-resources`" ] && echo y)), \
         $($(PKG)_SYMLINK), \
         $($(PKG)_NATIVE_BUILD))
+
     # cross build
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
@@ -81,7 +89,8 @@ define $(PKG)_BUILD
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
         GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
-        GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources'
+        GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources' \
+        $(if $(findstring w64-mingw32,$(TARGET)),  CFLAGS="-DHAVE_IF_NAMETOINDEX=1")
     $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=

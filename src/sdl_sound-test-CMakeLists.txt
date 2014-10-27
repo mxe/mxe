@@ -1,0 +1,13 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+project(SDL_sound_test)
+cmake_minimum_required(VERSION 2.8)
+
+find_package(SDL_sound REQUIRED)
+
+include_directories(${SDL_SOUND_INCLUDE_DIRS})
+add_executable(sdl_sound_test
+  sdl_sound-test.c
+  )
+target_link_libraries(sdl_sound_test ${SDL_SOUND_LIBRARIES})

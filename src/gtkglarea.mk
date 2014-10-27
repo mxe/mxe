@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc gtk2 freeglut
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'mirrors.ircam.fr/pub/GNOME/sources/gtkglarea/2.0' | \
     $(SED) -n 's,.*gtkglarea-\(2[^>]*\)\.tar.*,\1,ip' | \
-    sort | \
+    $(SORT) | \
     tail -1
 endef
 

@@ -3,8 +3,8 @@
 
 PKG             := libsigc++
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3.1
-$(PKG)_CHECKSUM := 6d23b44ab37b4f908c850c3d9898e42da54a0d8d
+$(PKG)_VERSION  := 2.4.0
+$(PKG)_CHECKSUM := 74f992ce5714e9f9d63ab698b48d79a65c0cd5be
 $(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsigc++-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libsigc++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -23,5 +23,5 @@ define $(PKG)_BUILD
         CXX='$(TARGET)-g++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         MAKE=$(MAKE)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 endef

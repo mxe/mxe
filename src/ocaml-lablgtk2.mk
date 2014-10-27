@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc ocaml-findlib libglade gtkglarea ocaml-lablgl gtk2 gtksou
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://forge.ocamlcore.org/frs/?group_id=220' | \
     $(SED) -n 's,.*lablgtk-\(2[^>]*\)\.tar.*,\1,ip' | \
-    sort | \
+    $(SORT) | \
     tail -1
 endef
 

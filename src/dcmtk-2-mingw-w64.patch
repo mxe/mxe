@@ -1,0 +1,162 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 2d08af9a15089c354b436282e4d23f462a81ce8f Mon Sep 17 00:00:00 2001
+From: MXE <mxe@mxe.cc>
+Date: Tue, 7 Oct 2014 21:50:59 -0700
+Subject: [PATCH] Fix i686-w64-mingw32
+
+Cherry-picked from
+http://git.dcmtk.org/web?p=dcmtk.git;a=commitdiff;h=b8a53c5f7fd12e9479f830680ef84f93805fd004
+
+diff --git a/config/configure.in b/config/configure.in
+index e343ce1..a305114 100644
+--- a/config/configure.in
++++ b/config/configure.in
+@@ -199,6 +199,10 @@ AC_CHECK_TYPES(longlong)
+ AC_CHECK_TYPES(ulonglong)
+ CHECK_VLA
+ 
++dnl File access stuff
++AC_CHECK_TYPES(fpos64_t)
++AC_CHECK_TYPES(off64_t)
++
+ dnl stdbool.h and stdint.h are only defined in ANSI C, not in C++
+ AC_CHECK_HEADERS(stdbool.h)
+ AC_CHECK_HEADERS(stdint.h)
+@@ -232,6 +236,7 @@ AC_CHECK_FUNCS(sleep fork)
+ AC_CHECK_FUNCS(_findfirst)
+ AC_CHECK_FUNCS(strlcpy strlcat)
+ AC_CHECK_FUNCS(vsnprintf)
++AC_CHECK_FUNCS(popen pclose)
+ AC_FUNC_FSEEKO
+ 
+ 
+diff --git a/config/include/dcmtk/config/cfunix.h.in b/config/include/dcmtk/config/cfunix.h.in
+index 3a6cd69..ed211ca 100644
+--- a/config/include/dcmtk/config/cfunix.h.in
++++ b/config/include/dcmtk/config/cfunix.h.in
+@@ -157,6 +157,9 @@
+ /* Define to 1 if you have the `fork' function. */
+ #undef HAVE_FORK
+ 
++/* Define to 1 if the system has the type `fpos64_t'. */
++#undef HAVE_FPOS64_T
++
+ /* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
+ #undef HAVE_FSEEKO
+ 
+@@ -424,14 +427,23 @@ typedef unsigned short ushort;
+ /* Define to 1 if you have the `ntohs' function. */
+ #undef HAVE_NTOHS
+ 
++/* Define to 1 if the system has the type `off64_t'. */
++#undef HAVE_OFF64_T
++
+ /* Define if your system supports readdir_r with the obsolete Posix 1.c draft
+    6 declaration (2 arguments) instead of the Posix 1.c declaration with 3
+    arguments. */
+ #undef HAVE_OLD_READDIR_R
+ 
++/* Define to 1 if you have the `pclose' function. */
++#undef HAVE_PCLOSE
++
+ /* Define if pthread_t is a pointer type on your system */
+ #undef HAVE_POINTER_TYPE_PTHREAD_T
+ 
++/* Define to 1 if you have the `popen' function. */
++#undef HAVE_POPEN
++
+ /* Define if your system has a prototype for accept in sys/types.h
+    sys/socket.h */
+ #undef HAVE_PROTOTYPE_ACCEPT
+diff --git a/ofstd/include/dcmtk/ofstd/offile.h b/ofstd/include/dcmtk/ofstd/offile.h
+index 0f5d454..3f5a677 100644
+--- a/ofstd/include/dcmtk/ofstd/offile.h
++++ b/ofstd/include/dcmtk/ofstd/offile.h
+@@ -75,26 +75,36 @@ END_EXTERN_C
+   #endif
+ #endif
+ 
+-#if defined(_WIN32) && !defined(__MINGW32__)
+-  // On Win32 systems except MinGW (where Posix definitions are available)
+-  // we use Win32 specific definitions
+-  typedef __int64 offile_off_t;
+-  typedef fpos_t offile_fpos_t;
++// Explicit LFS (LFS64) and Windows need 64 bit types
++#if defined(EXPLICIT_LFS_64) || defined(_WIN32)
++
++// Use POSIX 64 bit file position type when available
++#ifdef HAVE_FPOS64_T
++typedef fpos64_t offile_fpos_t;
++#else // Otherwise this should be sufficient
++typedef fpos_t offile_fpos_t;
++#endif
++
++// Use POSIX 64 bit file offset type when available
++#ifdef HAVE_OFF64_T
++typedef off64_t offile_off_t;
++#elif !defined(OF_NO_SINT64) // Otherwise use a 64 bit integer
++typedef Sint64 offile_off_t;
++#else // Cry when 64 LFS is required but no 64 bit integer exists
++#error \
++  Could not find a suitable offset-type for LFS64 support.
++#endif
++
++#else // Implicit LFS or no LFS
++
++#ifdef HAVE_FSEEKO
++typedef off_t offile_off_t;
+ #else
+-  #ifdef EXPLICIT_LFS_64
+-    // Explicit LFS (LFS64)
+-    typedef fpos64_t offile_fpos_t;
+-    typedef off64_t offile_off_t;
+-  #else
+-    // Implicit LFS or no LFS
+-    #ifdef HAVE_FSEEKO
+-      typedef off_t offile_off_t;
+-    #else
+-      typedef long offile_off_t;
+-    #endif
+-    typedef fpos_t offile_fpos_t;
+-  #endif
++typedef long offile_off_t;
+ #endif
++typedef fpos_t offile_fpos_t;
++
++#endif // basic type definitions
+ 
+ // the type we use to store the last error.
+ typedef int offile_errno_t;
+@@ -196,10 +206,10 @@ public:
+   OFBool popen(const char *command, const char *modes)
+   {
+     if (file_) fclose();
+-#ifdef _WIN32
+-    file_ = _popen(command, modes);
+-#else
++#ifdef HAVE_POPEN
+     file_ = :: popen(command, modes);
++#else
++    file_ = _popen(command, modes);
+ #endif
+     if (file_) popened_ = OFTrue; else storeLastError();
+     return (file_ != NULL);
+@@ -258,10 +268,10 @@ public:
+     {
+       if (popened_)
+       {
+-#ifdef _WIN32
+-        result = _pclose(file_);
+-#else
++#ifdef HAVE_PCLOSE
+         result = :: pclose(file_);
++#else
++        result = _pclose(file_);
+ #endif
+       }
+       else
+-- 
+1.8.3.2
+

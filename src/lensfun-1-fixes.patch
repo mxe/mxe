@@ -1,0 +1,231 @@
+This file is part of MXE.
+See index.html for further information.
+
+From fd0f1a46e5220cb13c5b445b9447f2fbc26ff7eb Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 21 Oct 2014 18:24:56 -0700
+Subject: [PATCH 1/3] build system: Detect POSIX regex lib more properly
+
+Previously, if the regex lib has to be linked separately, as in the case
+of MinGW/libgnurx, it is not detected properly, and build fails for shared
+lib.
+
+The imported FindRegex.cmake file is from
+https://raw.githubusercontent.com/dubourg/openturns/master/cmake/FindRegex.cmake
+and is licensed under the LGPL 3, same as this library.
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8416fe6..bbdf75a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,16 +16,18 @@ SET(VERSION_BUGFIX 0)
+ 
+ # check if some include are available
+ INCLUDE(CheckIncludeFiles)
+-CHECK_INCLUDE_FILES(regex.h HAVE_REGEX_H)
++FIND_PACKAGE(Regex)
+ CHECK_INCLUDE_FILES(endian.h HAVE_ENDIAN_H)
+ 
+ # set include directories
+ INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
+ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include/lensfun)
+ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include/auxfun)
+-IF(NOT HAVE_REGEX_H)
++IF(NOT REGEX_FOUND)
+   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include/regex)
+   INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/libs/regex)
++ELSE()
++  INCLUDE_DIRECTORIES(${REGEX_INCLUDE_DIR})
+ ENDIF()
+ 
+ # options controlling the build process
+@@ -153,7 +155,7 @@ ENDIF()
+ 
+ # install include files
+ INSTALL(FILES ${CMAKE_BINARY_DIR}/lensfun.h DESTINATION ${INCLUDEDIR}/lensfun)
+-IF(NOT HAVE_REGEX_H)
++IF(NOT REGEX_FOUND)
+   INSTALL(FILES include/regex/regex.h DESTINATION ${INCLUDEDIR}/regex)
+ ENDIF()
+ IF(BUILD_AUXFUN)
+diff --git a/build/CMakeModules/FindRegex.cmake b/build/CMakeModules/FindRegex.cmake
+new file mode 100644
+index 0000000..cae186f
+--- /dev/null
++++ b/build/CMakeModules/FindRegex.cmake
+@@ -0,0 +1,64 @@
++#                                               -*- cmake -*-
++#
++#  FindRegex.cmake: Try to find Regex
++#
++#  Copyright (C) 2005-2014 Airbus-EDF-Phimeca
++#
++#  This library is free software: you can redistribute it and/or modify
++#  it under the terms of the GNU Lesser General Public License as published by
++#  the Free Software Foundation, either version 3 of the License, or
++#  (at your option) any later version.
++#
++#  This library is distributed in the hope that it will be useful,
++#  but WITHOUT ANY WARRANTY; without even the implied warranty of
++#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++#  GNU Lesser General Public License for more details.
++#
++#  You should have received a copy of the GNU Lesser General Public
++#  along with this library.  If not, see <http://www.gnu.org/licenses/>.
++#
++#  @author dutka
++#  @date   2010-02-04 16:44:49 +0100 (Thu, 04 Feb 2010)
++#
++#
++# - Try to find Regex
++# Once done this will define
++#
++#  REGEX_FOUND - System has Regex
++#  REGEX_INCLUDE_DIR - The Regex include directory
++#  REGEX_LIBRARIES - The libraries needed to use Regex
++#  REGEX_DEFINITIONS - Compiler switches required for using Regex
++
++IF (REGEX_INCLUDE_DIR AND REGEX_LIBRARIES)
++   # in cache already
++   SET(Regex_FIND_QUIETLY TRUE)
++ENDIF (REGEX_INCLUDE_DIR AND REGEX_LIBRARIES)
++
++#IF (NOT WIN32)
++#   # use pkg-config to get the directories and then use these values
++#   # in the FIND_PATH() and FIND_LIBRARY() calls
++#   FIND_PACKAGE(PkgConfig)
++#   PKG_CHECK_MODULES(PC_REGEX regex)
++#   SET(REGEX_DEFINITIONS ${PC_REGEX_CFLAGS_OTHER})
++#ENDIF (NOT WIN32)
++
++FIND_PATH(REGEX_INCLUDE_DIR regex.h
++   HINTS
++   ${REGEX_INCLUDEDIR}
++   ${PC_LIBXML_INCLUDE_DIRS}
++   PATH_SUFFIXES regex
++   )
++
++FIND_LIBRARY(REGEX_LIBRARIES NAMES gnurx c regex
++   HINTS
++   ${PC_REGEX_LIBDIR}
++   ${PC_REGEX_LIBRARY_DIRS}
++   )
++
++INCLUDE(FindPackageHandleStandardArgs)
++
++# handle the QUIETLY and REQUIRED arguments and set REGEX_FOUND to TRUE if 
++# all listed variables are TRUE
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(Regex DEFAULT_MSG REGEX_LIBRARIES REGEX_INCLUDE_DIR)
++
++MARK_AS_ADVANCED(REGEX_INCLUDE_DIR REGEX_LIBRARIES)
+diff --git a/libs/CMakeLists.txt b/libs/CMakeLists.txt
+index 9e210f3..ab6ce9a 100644
+--- a/libs/CMakeLists.txt
++++ b/libs/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-IF(NOT HAVE_REGEX_H)
++IF(NOT REGEX_FOUND)
+   ADD_SUBDIRECTORY(regex)
+ ENDIF()
+ 
+diff --git a/libs/lensfun/CMakeLists.txt b/libs/lensfun/CMakeLists.txt
+index 7eaadcc..23262f5 100644
+--- a/libs/lensfun/CMakeLists.txt
++++ b/libs/lensfun/CMakeLists.txt
+@@ -17,8 +17,10 @@ ELSE()
+ ENDIF()
+ SET_TARGET_PROPERTIES(lensfun PROPERTIES SOVERSION "${VERSION_MAJOR}" VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}")  
+ 
+-IF(NOT HAVE_REGEX_H)
++IF(NOT REGEX_FOUND)
+   TARGET_LINK_LIBRARIES(lensfun tre_regex)
++ELSE()
++  TARGET_LINK_LIBRARIES(lensfun ${REGEX_LIBRARIES})
+ ENDIF()
+ TARGET_LINK_LIBRARIES(lensfun ${GLIB2_LIBRARIES})
+ 
+diff --git a/libs/lensfun/lensfun.pc.cmake b/libs/lensfun/lensfun.pc.cmake
+index 6d14b12..5f91d44 100644
+--- a/libs/lensfun/lensfun.pc.cmake
++++ b/libs/lensfun/lensfun.pc.cmake
+@@ -10,4 +10,5 @@ Description: A photographic lens database and access library
+ Version: @VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_MICRO@.@VERSION_BUGFIX@
+ Requires.private: glib-2.0
+ Libs: -L${libdir} -llensfun
++Libs.private: @REGEX_LIBRARIES@
+ Cflags: -I${includedir} -I${includedir}/lensfun
+diff --git a/libs/regex/CMakeLists.txt b/libs/regex/CMakeLists.txt
+index 27bc6c6..bcddcf0 100644
+--- a/libs/regex/CMakeLists.txt
++++ b/libs/regex/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ # build regex library
+-IF(NOT HAVE_REGEX_H)
++IF(NOT REGEX_FOUND)
+ FILE(GLOB REGEX_SRC *.c *.h)
+ LIST(APPEND REGEX_SRC ../../include/regex/regex.h)
+ ADD_LIBRARY(tre_regex STATIC ${REGEX_SRC})
+-- 
+1.9.1
+
+
+From bed1d4d5ed265083b340aed398403cbaba46e340 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 21 Oct 2014 18:36:15 -0700
+Subject: [PATCH 2/3] Only install glib DLL on MSVC
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bbdf75a..7690630 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -172,7 +172,7 @@ IF(BUILD_DOC)
+   ADD_SUBDIRECTORY(docs)
+ ENDIF()
+ 
+-IF(WIN32 AND NOT BUILD_STATIC)
++IF(MSVC AND NOT BUILD_STATIC)
+   FIND_FILE(GLIB2_DLL 
+             NAMES glib-2.dll glib-2-vs9.dll
+             PATHS "${GLIB2_BASE_DIR}/bin"
+-- 
+1.9.1
+
+
+From ccdd4f111b4c45bd654531650e4cdb25fdd38b6c Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 21 Oct 2014 18:41:09 -0700
+Subject: [PATCH 3/3] Add option whether or not to install into source tree on
+ WIN32
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7690630..ef8cf65 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,6 +38,9 @@ OPTION(BUILD_FOR_SSE "Build with support for SSE" ON)
+ OPTION(BUILD_FOR_SSE2 "Build with support for SSE2" ON)
+ OPTION(BUILD_DOC "Build documentation with doxygen" OFF)
+ OPTION(INSTALL_HELPER_SCRIPTS "Install various helper scripts" ON)
++IF(WIN32)
++  OPTION(INSTALL_IN_TREE "Install into source tree" ON)
++ENDIF()
+ 
+ IF(NOT CMAKE_BUILD_TYPE)
+   set(CMAKE_BUILD_TYPE Debug CACHE STRING
+@@ -102,7 +105,7 @@ IF(BUILD_DOC)
+   SET(DOCDIR share/doc/lensfun-${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}.${VERSION_BUGFIX} CACHE PATH "Directory to put library documentation in")
+ ENDIF(BUILD_DOC)
+ 
+-IF(WIN32)
++IF(WIN32 AND INSTALL_IN_TREE)
+   # install into place in build-dir  
+   SET(LENSFUN_INSTALL_PREFIX "${SOURCE_BASE_DIR}/lensfun" CACHE PATH "Install prefix for lensfun")    
+ ELSE()
+-- 
+1.9.1
+

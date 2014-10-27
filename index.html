@@ -107,27 +107,21 @@
         <th>Shared*</th>
     </tr>
     <tr>
-        <td><a href="http://www.mingw.org/">MinGW 3.x</a></td>
-        <td>i686-pc-mingw32</td>
-        <td style='text-align:center'>97% (314/323)</td>
-        <td style='text-align:center'>50% (162/323)</td>
-    </tr>
-    <tr>
-        <td rowspan="2"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64</a></td>
+        <td rowspan="2">MinGW-w64</td>
         <td>i686-w64-mingw32</td>
-        <td style='text-align:center'>95% (308/323)</td>
-        <td style='text-align:center'>52% (167/323)</td>
+        <td style='text-align:center'>99% (339/341)</td>
+        <td style='text-align:center'>62% (211/341)</td>
     </tr>
     <tr>
         <td>x86_64-w64-mingw32</td>
-        <td style='text-align:center'>89% (286/323)</td>
-        <td style='text-align:center'>51% (165/323)</td>
+        <td style='text-align:center'>91% (311/341)</td>
+        <td style='text-align:center'>61% (209/341)</td>
     </tr>
     </table>
     <p>
-        These numbers are last updated on May 4, 2014. You can see the current
-        status by executing <code>make build-matrix.html</code> in the MXE
-        directory.
+        These numbers were last updated on October 13, 2014. You can see the
+        current status by executing <code>make build-matrix.html</code> in the
+        MXE directory.
     </p>
     <p><small>
         * Shared support in MXE was just added in early February, 2014. These
@@ -182,6 +176,11 @@
     MXE builds and installs everything under the same
     top-level directory and is not relocatable after
     the first packages are built.
+    </p>
+
+    <p>
+    Due to limitations of GNU Make, the path of MXE is not allowed
+    to contain any whitespace characters.
     </p>
 
     <h3 id="tutorial-2">Step 2: System-wide Installation (optional)</h3>
@@ -247,7 +246,7 @@ exit</pre>
     <pre>make gtk lua libidn</pre>
     <p>
     Targets can also be specified on the command line.
-    By default, only i686-pc-mingw32.static is built, but you can
+    By default, only i686-w64-mingw32.static is built, but you can
     build your toolchain(s) of choice with:
     </p>
     <pre>make MXE_TARGETS='x86_64-w64-mingw32.static i686-w64-mingw32.static'</pre>
@@ -289,9 +288,9 @@ exit</pre>
     you can add separate entries for cross builds:
     </p>
     <pre>export PKG_CONFIG_PATH="<em>entries for native builds</em>"</pre>
-    <pre>export PKG_CONFIG_PATH_i686_pc_mingw32_static="<em>entries for MXE builds</em>"</pre>
+    <pre>export PKG_CONFIG_PATH_i686_w64_mingw32_static="<em>entries for MXE builds</em>"</pre>
     <p>
-    Remember to use i686-pc-mingw32.static-pkg-config
+    Remember to use i686-w64-mingw32.static-pkg-config
     instead of pkg-config for cross builds.
     The Autotools do that automatically for you.
     </p>
@@ -323,13 +322,13 @@ exit</pre>
     <a href="https://www.lrde.epita.fr/~adl/autotools.html">Autotools</a>,
     all you have to do is:
     </p>
-    <pre>./configure --host=i686-pc-mingw32.static
+    <pre>./configure --host=i686-w64-mingw32.static
 make</pre>
 
     <p>
     If you build a library, you might also want to enforce a static build:
     </p>
-    <pre>./configure --host=i686-pc-mingw32.static --enable-static --disable-shared
+    <pre>./configure --host=i686-w64-mingw32.static --enable-static --disable-shared
 make</pre>
 
     <p>
@@ -348,7 +347,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <a href="http://www.cmake.org/">CMake</a> project,
     you can use the provided toolchain file:
     </p>
-    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/i686-pc-mingw32.static/share/cmake/mxe-conf.cmake</pre>
+    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake</pre>
 
     <h3 id="tutorial-5c">Step 5c: Cross compile your Project (Qt)</h3>
 
@@ -357,7 +356,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <a href="https://qt-project.org/">Qt</a> application,
     all you have to do is:
     </p>
-    <pre>/where MXE is installed/usr/i686-pc-mingw32.static/qt/bin/qmake
+    <pre>/where MXE is installed/usr/i686-w64-mingw32.static/qt/bin/qmake
 make</pre>
     <p>
     Note that Qt 4 is in the "qt" subdirectory. Qt 5 is in the "qt5" subdirectory
@@ -392,7 +391,7 @@ PKG_CONFIG=$(CROSS)pkg-config</pre>
     <p>
     Then, all you have to do is:
     </p>
-    <pre>make CROSS=i686-pc-mingw32.static-</pre>
+    <pre>make CROSS=i686-w64-mingw32.static-</pre>
     <p>
     That's it!
     </p>
@@ -415,12 +414,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     OpenSceneGraph source distribution for an example. This example can be
     compiled with the following command:
     </p>
-    <pre>i686-pc-mingw32.static-g++ \
+    <pre>i686-w64-mingw32.static-g++ \
     -o osgstaticviewer.exe examples/osgstaticviewer/osgstaticviewer.cpp \
-    `i686-pc-mingw32.static-pkg-config --cflags openscenegraph-osgViewer openscenegraph-osgPlugins` \
-    `i686-pc-mingw32.static-pkg-config --libs openscenegraph-osgViewer openscenegraph-osgPlugins`</pre>
+    `i686-w64-mingw32.static-pkg-config --cflags openscenegraph-osgViewer openscenegraph-osgPlugins` \
+    `i686-w64-mingw32.static-pkg-config --libs openscenegraph-osgViewer openscenegraph-osgPlugins`</pre>
     <p>
-    The <code>i686-pc-mingw32.static-pkg-config</code> command from MXE will
+    The <code>i686-w64-mingw32.static-pkg-config</code> command from MXE will
     automatically add <code>-DOSG_LIBRARY_STATIC</code> to your compiler flags.
     </p>
 
@@ -560,7 +559,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     MXE requires a recent Unix system where
     all components as stated in the table below
-    are installed. It also needs roughly 4 GB of
+    are installed. It also needs roughly 2 GiB of
     RAM to link gcc and at least 700 MB of disk
     space per target (counted with only gcc
     built).
@@ -801,15 +800,29 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     Install
     <a href="http://developer.apple.com/xcode/">Xcode 5</a>
-    and
-    <a href="http://www.macports.org/">MacPorts</a>,
+    </p>
+    <h4 id="requirements-macos-step-1">Step 1</h4>
+    <h5 id="requirements-macos-method-1">Method 1 - MacPorts</h5>
+    <p>
+    Install <a href="http://www.macports.org/">MacPorts</a>,
     then run:
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
     glib2 intltool p5-xml-parser gpatch scons wget xz</pre>
+    <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
     <p>
-    and from within the mxe directory:
+    Install <a href="http://rudix.org/">Rudix</a> you can make it with following command
+    </p>
+    <pre>curl -s https://raw.githubusercontent.com/rudix-mac/rpm/2014.6/rudix.py \
+    | sudo python - install rudix</pre>
+    <p>
+    then run:
+    </p>
+    <pre>sudo rudix install glib pkg-config scons wget xz</pre>
+    <h4 id="requirements-macos-step-2">Step 2</h4>
+    <p>
+    After installing pre-requirement run from within the mxe directory:
     </p>
     <pre>make build-requirements</pre>
     <p>
@@ -971,6 +984,13 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <dd>
         download packages "foo", "bar" and their dependencies,
         where up to 4 packages are downloaded in parallel
+        </dd>
+
+    <dt>make download-only-foo download-only-bar</dt>
+
+        <dd>
+        download packages "foo", "bar", without their dependencies,
+        non-parallel
         </dd>
 
     <dt>make clean</dt>
@@ -1153,6 +1173,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">cblas</td>
         <td class="website"><a href="http://www.netlib.org/blas/">cblas</a></td>
+    </tr>
+    <tr>
+        <td class="package">chipmunk</td>
+        <td class="website"><a href="https://chipmunk-physics.net/">Chipmunk Physics</a></td>
     </tr>
     <tr>
         <td class="package">chromaprint</td>
@@ -1542,12 +1566,20 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.libarchive.org/">Libarchive</a></td>
     </tr>
     <tr>
+        <td class="package">libaacs</td>
+        <td class="website"><a href="http://www.videolan.org/developers/libaacs.html">libaacs</a></td>
+    </tr>
+    <tr>
         <td class="package">libass</td>
         <td class="website"><a href="http://code.google.com/p/libass/">libass</a></td>
     </tr>
     <tr>
         <td class="package">libbluray</td>
         <td class="website"><a href="http://www.videolan.org/developers/libbluray.html">libbluray</a></td>
+    </tr>
+    <tr>
+        <td class="package">libbs2b</td>
+        <td class="website"><a href="http://bs2b.sourceforge.net/">Bauer Stereophonic-to-Binaural library</a></td>
     </tr>
     <tr>
         <td class="package">libcaca</td>
@@ -1822,6 +1854,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.lua.org/">Lua</a></td>
     </tr>
     <tr>
+        <td class="package">luabind</td>
+        <td class="website"><a href="http://www.rasterbar.com/products/luabind.html">Luabind</a></td>
+    </tr>
+    <tr>
+        <td class="package">luajit</td>
+        <td class="website"><a href="http://luajit.org/luajit.html">LuaJIT</a></td>
+    </tr>
+    <tr>
         <td class="package">lzo</td>
         <td class="website"><a href="http://www.oberhumer.com/opensource/lzo/">lzo</a></td>
     </tr>
@@ -1842,16 +1882,8 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://sourceforge.net/projects/mdbtools/">mdbtools</a></td>
     </tr>
     <tr>
-        <td class="package">mingw-utils</td>
-        <td class="website"><a href="http://www.mingw.org/">MinGW Utilities</a></td>
-    </tr>
-    <tr>
         <td class="package">mingw-w64</td>
         <td class="website"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64 Runtime</a></td>
-    </tr>
-    <tr>
-        <td class="package">mingwrt</td>
-        <td class="website"><a href="http://www.mingw.org/">MinGW Runtime</a></td>
     </tr>
     <tr>
         <td class="package">mpc</td>
@@ -1932,6 +1964,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">ocaml-xml-light</td>
         <td class="website"><a href="http://tech.motion-twin.com/xmllight.html">xml-light</a></td>
+    </tr>
+    <tr>
+        <td class="package">oce</td>
+        <td class="website"><a href="https://github.com/tpaviot/oce">Open CASCADE Community Edition</a></td>
     </tr>
     <tr>
         <td class="package">ogg</td>
@@ -2094,10 +2130,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://en.wikipedia.org/wiki/POSIX_Threads">POSIX Threads</a></td>
     </tr>
     <tr>
-        <td class="package">pthreads-w32</td>
-        <td class="website"><a href="https://sourceware.org/pthreads-win32/">Pthreads-w32</a></td>
-    </tr>
-    <tr>
         <td class="package">qdbm</td>
         <td class="website"><a href="http://fallabs.com/qdbm/">QDBM</a></td>
     </tr>
@@ -2117,6 +2149,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="package">qt5</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
+    <tr>
+        <td class="package">qt3d</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr> 
     <tr>
         <td class="package">qtactiveqt</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
@@ -2334,10 +2370,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://developer.kde.org/~wheeler/taglib.html">TagLib</a></td>
     </tr>
     <tr>
-        <td class="package">tcl</td>
-        <td class="website"><a href="http://tcl.tk">Tcl/Tk</a></td>
-    </tr>
-    <tr>
         <td class="package">teem</td>
         <td class="website"><a href="http://teem.sourceforge.net/">Teem</a></td>
     </tr>
@@ -2352,10 +2384,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">tinyxml</td>
         <td class="website"><a href="http://sourceforge.net/projects/tinyxml/">tinyxml</a></td>
-    </tr>
-    <tr>
-        <td class="package">tk</td>
-        <td class="website"><a href="http://tcl.tk">Tcl/Tk</a></td>
     </tr>
     <tr>
         <td class="package">tre</td>
@@ -2404,10 +2432,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">vtk6</td>
         <td class="website"><a href="http://www.vtk.org/">VTK6</a></td>
-    </tr>
-    <tr>
-        <td class="package">w32api</td>
-        <td class="website"><a href="http://www.mingw.org/">MinGW Windows API</a></td>
     </tr>
     <tr>
         <td class="package">wavpack</td>
@@ -2677,7 +2701,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <p>
         You might also have to provide a patch for it.
         In that case, have a look at other patches such as
-        <a href="https://github.com/mxe/mxe/blob/master/src/sdl-2-fix-dinput.patch">sdl-2-fix-dinput.patch</a>.
+        <a href="https://github.com/mxe/mxe/blob/master/src/sdl2-2-libtool.patch">sdl2-2-libtool.patch</a>.
         In particular, each patch file should be named as:
         </p>
         <pre>PACKAGE-PATCHNUMBER-DESCRIPTION.patch</pre>
@@ -3053,9 +3077,10 @@ endef</pre>
     <dt>2014-xx-xx &ndash; Release <span id="latest-version">2.23</span></dt>
     <dd>
         <p>
-        The <a href="#download">stable branch</a> was updated
-        to the current development version after a thorough
-        <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2013-07/msg00021.html">testing phase</a>.
+        The <a href="#download">stable branch</a> was updated to the 
+        current development version after a thorough <a 
+        href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/FIXME">testing 
+        phase</a>.
         </p>
 
         <p>
@@ -3075,7 +3100,44 @@ endef</pre>
         </p>
 
         <p>
-        Added support for <a href="#supported-toolchains">shared toolchains</a>.
+        Added support for <a href="#supported-toolchains">shared toolchains</a> for over 50% of all the packages.
+        </p>
+
+        <p>
+        Unfortunately, a number of factors have forced us to drop support 
+        for MinGW 3 (i.e. "<a href="http://mingw.org/">MinGW.org</a>"), 
+        in favor of the MinGW-w64 toolchain. This decision was made in a 
+        large part because of the dropping of support for MinGW by <a 
+        href="https://github.com/mxe/mxe/pull/453#issuecomment-51703048"> 
+        GLib</a> and <a 
+        href="https://github.com/mxe/mxe/issues/492#issue-41366666">Qt5</a>, 
+        which arguably are two of the most important packages in MXE. 
+        Other considerations have also been taken, like the <a 
+        href="https://github.com/mxe/mxe/pull/323#issuecomment-39463810">lack 
+        of maintainership in MinGW</a> and <a 
+        href="https://github.com/mxe/mxe/issues/400">potential legal 
+        challenges</a> that comes with using supplemental DirectX 
+        headers in MinGW in order to support Qt4. Worse yet, having to 
+        support the unsupported MinGW toolchain impedes adding or 
+        updating packages, as shown in the <a 
+        href"https://github.com/mxe/mxe/pull/453#issuecomment-51703048">pull 
+        request of updating GLib</a>.
+        </p>
+
+        <p>
+        Please note that dropping support for MinGW <strong>DOES NOT 
+        MEAN</strong> dropping support for the 32-bit architecture. MinGW-w64
+        also supports 32-bit target through i686-w64-mingw32.
+        </p>
+
+        <p>
+        To ease migration to the supported MinGW-w64 target, we have
+        finished porting all packages that were MinGW-only to at least
+        i686-w64-mingw32 (32-bit target of MinGW-w64). Hence your existing
+        commands should work out-of-the-box assuming the
+        <code>MXE_TARGETS</code> environmental variable is set correctly.
+        </p>
+
     </dd>
 -->
 

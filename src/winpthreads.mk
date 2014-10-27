@@ -8,10 +8,7 @@ $(PKG)_CHECKSUM  = $(mingw-w64_CHECKSUM)
 $(PKG)_SUBDIR    = $(mingw-w64_SUBDIR)
 $(PKG)_FILE      = $(mingw-w64_FILE)
 $(PKG)_URL       = $(mingw-w64_URL)
-$(PKG)_DEPS     :=
-
-$(PKG)_DEPS_i686-w64-mingw32   := gcc
-$(PKG)_DEPS_x86_64-w64-mingw32 := gcc
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     echo $(mingw-w64_VERSION)

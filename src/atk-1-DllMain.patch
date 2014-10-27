@@ -1,15 +1,15 @@
 This file is part of MXE.
 See index.html for further information.
 
-diff -uNr atk-2.2.0-orig/atk/atkobject.c atk-2.2.0/atk/atkobject.c
---- atk-2.2.0-orig/atk/atkobject.c	2011-09-19 19:06:54.000000000 +0200
-+++ atk-2.2.0/atk/atkobject.c	2012-04-14 20:26:12.763814596 +0200
-@@ -366,7 +366,7 @@
+diff -uNr a/atk/atkprivate.c b/atk/atkprivate.c
+--- a/atk/atkprivate.c
++++ b/atk/atkprivate.c
+@@ -39,7 +39,7 @@
  static HMODULE atk_dll;
  
  BOOL WINAPI
 -DllMain (HINSTANCE hinstDLL,
 +atk_DllMain (HINSTANCE hinstDLL,
- 	 DWORD     fdwReason,
- 	 LPVOID    lpvReserved)
+          DWORD     fdwReason,
+          LPVOID    lpvReserved)
  {

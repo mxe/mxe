@@ -3,8 +3,8 @@
 
 PKG             := pcre
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8.35
-$(PKG)_CHECKSUM := a10e0040475644bfc97f7d0c0556988acfc52c6f
+$(PKG)_VERSION  := 8.36
+$(PKG)_CHECKSUM := 9a074e9cbf3eb9f05213fd9ca5bc188644845ccc
 $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/pcre/pcre/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -27,8 +27,9 @@ define $(PKG)_BUILD_SHARED
         --disable-pcregrep-libz \
         --disable-pcregrep-libbz2 \
         --disable-pcretest-libreadline
-    rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/pcre16*.3
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_PROGRAMS) dist_html_DATA= dist_doc_DATA=
+    rm -f '$(PREFIX)/$(TARGET)'/share/man/man1/pcre*.1
+    rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/pcre*.3
     ln -sf '$(PREFIX)/$(TARGET)/bin/pcre-config' '$(PREFIX)/bin/$(TARGET)-pcre-config'
 endef
 

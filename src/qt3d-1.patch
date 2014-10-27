@@ -1,0 +1,38 @@
+This file is part of MXE.
+See index.html for further information.
+
+From f38bd703f75e6cdf234ed8e99560bd65e4f775ea Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 17 Oct 2014 22:30:46 +0200
+Subject: [PATCH] fix static linking
+
+
+diff --git a/src/quick3d/quick3d.pro b/src/quick3d/quick3d.pro
+index 03cdd28..5b8e2ef 100644
+--- a/src/quick3d/quick3d.pro
++++ b/src/quick3d/quick3d.pro
+@@ -9,7 +9,7 @@ gcov {
+     CONFIG += static
+     QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage
+     QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage
+-} else {
++} else:!static {
+     CONFIG += dll
+ }
+ 
+diff --git a/src/threed/threed.pro b/src/threed/threed.pro
+index cb5f1d1..8d2be9b 100644
+--- a/src/threed/threed.pro
++++ b/src/threed/threed.pro
+@@ -11,7 +11,7 @@ gcov {
+     CONFIG += static
+     QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage
+     QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage
+-} else {
++} else:!static {
+     CONFIG += dll
+ }
+ 
+-- 
+1.8.4.5
+

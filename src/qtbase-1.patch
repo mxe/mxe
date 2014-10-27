@@ -1,10 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From bb7faded84765ec9b86542a14d150af221dbd022 Mon Sep 17 00:00:00 2001
+From 50ecfaeb34eddff6507644c27223d1c495efa44a Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 1/3] use pkg-config for freetype
+Subject: [PATCH 1/4] use pkg-config for freetype
 
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
@@ -24,10 +24,10 @@ index 88be809..8fc19d2 100644
 1.8.4.5
 
 
-From f80e3d3941d742449b558ba3ecbd44053ea4debd Mon Sep 17 00:00:00 2001
+From add48748a4d10e19a7b8e5878868e4150b3585cc Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 2/3] use pkgconfig for icu detection (MXE specific)
+Subject: [PATCH 2/4] use pkgconfig for icu detection (MXE specific)
 
 Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
 
@@ -58,10 +58,10 @@ index 16267ff..dd9fb6c 100644
 1.8.4.5
 
 
-From 91eac8ada1efdbe642f39a253a7438fd783faad2 Mon Sep 17 00:00:00 2001
+From 118e7e4f591defa8062f731adad88198783a5bce Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 21 Jun 2014 13:12:49 +0200
-Subject: [PATCH 3/3] use pkg-config for harfbuzz (MXE specific)
+Subject: [PATCH 3/4] use pkg-config for harfbuzz (MXE specific)
 
 Change-Id: Id4e4c37d68b63c9f480d72a561d95d4d2a5ded50
 
@@ -77,6 +77,46 @@ index 7443368..c24e684 100644
 +    CONFIG += link_pkgconfig
 +    PKGCONFIG += harfbuzz
  }
+-- 
+1.8.4.5
+
+
+From e7f53a64b5345e8389683ded15e396cbf0b94218 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 23 Sep 2014 09:36:28 -0700
+Subject: [PATCH 4/4] create_cmake: Fix mingw plugin path
+
+MinGW static libs use libfoo.a format, and not foo.lib.
+
+Change-Id: I899adca8ec0b1c8430f5b6c4f18ad0ea1dc6d398
+taken from: https://codereview.qt-project.org/95617
+
+diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
+index 2533b7b..e874957 100644
+--- a/mkspecs/features/create_cmake.prf
++++ b/mkspecs/features/create_cmake.prf
+@@ -133,11 +133,16 @@ contains(CONFIG, plugin) {
+     CMAKE_PLUGIN_NAME = $$PLUGIN_CLASS_NAME
+ 
+     win32 {
+-        isEmpty(CMAKE_STATIC_TYPE): CMAKE_PlUGIN_EXT = .dll
+-        else: CMAKE_PlUGIN_EXT = .lib
+-
+-        CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${TARGET}$${CMAKE_PlUGIN_EXT}
+-        CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${TARGET}d$${CMAKE_PlUGIN_EXT}
++        isEmpty(CMAKE_STATIC_TYPE) {
++            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${TARGET}.dll
++            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${TARGET}d.dll
++        } else:mingw {
++            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${TARGET}.a
++            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${TARGET}d.a
++        } else {                         # MSVC static
++            CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${TARGET}.lib
++            CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${TARGET}d.lib
++        }
+     } else {
+         mac {
+             isEmpty(CMAKE_STATIC_TYPE): CMAKE_PlUGIN_EXT = .dylib
 -- 
 1.8.4.5
 

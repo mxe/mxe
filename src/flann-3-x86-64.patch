@@ -1,0 +1,21 @@
+This file is part of MXE.
+See index.html for further information.
+
+Taken from: https://github.com/mariusmuja/flann/commit/895f31624f58ed56f29b24b9abcaa52688dea100
+
+From 895f31624f58ed56f29b24b9abcaa52688dea100 Mon Sep 17 00:00:00 2001
+From: xantares <xantares09@hotmail.com>
+Date: Fri, 29 Aug 2014 16:14:28 +0200
+Subject: [PATCH] fix mingw x86_64 build
+
+diff --git a/src/cpp/flann/util/serialization.h b/src/cpp/flann/util/serialization.h
+--- a/src/cpp/flann/util/serialization.h
++++ b/src/cpp/flann/util/serialization.h
+@@ -86,6 +86,7 @@
+ BASIC_TYPE_SERIALIZER(unsigned int);
+ BASIC_TYPE_SERIALIZER(long);
+ BASIC_TYPE_SERIALIZER(unsigned long);
++BASIC_TYPE_SERIALIZER(unsigned long long);
+ BASIC_TYPE_SERIALIZER(float);
+ BASIC_TYPE_SERIALIZER(double);
+ BASIC_TYPE_SERIALIZER(bool);
