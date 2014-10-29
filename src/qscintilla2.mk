@@ -25,8 +25,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -pedantic \
-    `'$(TARGET)-pkg-config' Qt5Widgets --cflags` \
+        `'$(TARGET)-pkg-config' Qt5Widgets --cflags` \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-qscintilla2.exe' -lqscintilla2 \
-    `'$(TARGET)-pkg-config' Qt5Widgets --libs`
+        `'$(TARGET)-pkg-config' Qt5Widgets --libs`
 endef
-
