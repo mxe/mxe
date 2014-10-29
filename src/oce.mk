@@ -25,7 +25,7 @@ define $(PKG)_BUILD
         -DOCE_INSTALL_BIN_DIR=$(PREFIX)/$(TARGET)/bin \
         -DOCE_INSTALL_LIB_DIR=$(PREFIX)/$(TARGET)/lib \
         -DOCE_INSTALL_CMAKE_DATA_DIR=$(PREFIX)/$(TARGET)/lib/cmake/OCE
-        
+
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 
     cd '$(1)/examples/find_package_oce' && cmake . -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'

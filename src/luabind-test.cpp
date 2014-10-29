@@ -23,7 +23,7 @@ extern "C" int init(lua_State* L)
 
 int main()
 {
-	lua_State* L = luaL_newstate();
-	init(L);
-	luaL_dostring(L, "greet()");
+    lua_State* L = luaL_newstate();
+    init(L);
+    luaL_dostring(L, "greet()");
 }

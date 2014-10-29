@@ -57,7 +57,7 @@ define $(PKG)_BUILD
         -W -Wall -Werror -std=c99 -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_sound.exe' \
         `'$(TARGET)-pkg-config' SDL_sound --cflags --libs`
-        
+
     mkdir -p '$(1)/cmake-build-test'
     cp '$(2)-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
     cp '$(2).c' '$(1)/cmake-build-test/'

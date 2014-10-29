@@ -69,8 +69,8 @@ define $(PKG)_BUILD
     # Detecting if these GLib tools are already available on host machine,
     # either because of a host package installation or from an earlier MXE
     # installation of GLib.
-	# If it is installed, we symlink it into the MXE bin/.
-	# If not, we build it.
+    # If it is installed, we symlink it into the MXE bin/.
+    # If not, we build it.
     $(if $(findstring y,\
             $(shell [ -x "`which glib-genmarshal`" ] && \
                     [ -x "`which glib-compile-schemas`" ] && \
