@@ -17,7 +17,7 @@ endef
 
 define $(PKG)_BUILD
     # avoid conflict with base64_encode from gnutls
-    $(SED) -i 's/^base64_encode /wget_base64_encode /;' '$(1)/src/utils.c'
+    $(if $(BUILD_STATIC), $(SED) -i 's/^base64_encode /wget_base64_encode /;' '$(1)/src/utils.c')
     $(SED) -i 's/-lidn/`$(TARGET)-pkg-config --libs libidn`/g;' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
@@ -29,4 +29,4 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
 
-$(PKG)_BUILD_SHARED =
+#$(PKG)_BUILD_SHARED =
