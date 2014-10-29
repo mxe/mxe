@@ -36,8 +36,8 @@ WGET       := wget --no-check-certificate \
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
                 gcc g++ gperf intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
-                $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
-                python ruby scons $(SED) $(SORT) unzip wget xz
+                $(MAKE) openssl $(PATCH) $(PERL) python ruby scons \
+                $(SED) $(SORT) unzip wget xz
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
