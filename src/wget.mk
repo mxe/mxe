@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := wget
-$(PKG)_VERSION  := 1.15
-$(PKG)_CHECKSUM := e9fb1d25fa04f9c69e74e656a3174dca02700ba1
+$(PKG)_VERSION  := 1.16
+$(PKG)_CHECKSUM := 08d991acc80726abe57043a278f9da469c454503
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
