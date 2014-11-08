@@ -15,8 +15,15 @@ $(PKG)_URL       = $(PKG_MIRROR)/$(shell $(call ESCAPE_PKG,json_spirit))
 $(PKG)_DEPS     := gcc boost
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    echo 'TODO: json_spirit automatic update explicitly disabled. Please ' >&2;
+    echo '      manually check and update.' >&2;
+    echo 'Latest:' >&2;
+    $(WGET) -q -O- 'http://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented' | \
+    $(SED) -n 's,.*/JSON_Spirit/json_spirit_v\([0-9.]*\)[.]zip.*".*,\1,p' | \
+    head -1 >&2;
+    echo 'Current:' >&2;
+    echo $(json_spirit_VERSION) >&2;
+    echo $(json_spirit_VERSION)
 endef
 
 define $(PKG)_BUILD
