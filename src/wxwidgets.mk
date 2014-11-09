@@ -61,10 +61,14 @@ define $(PKG)_BUILD_UNICODE
     cd    '$(1).unicode' && '$(1)/configure' \
         $($(PKG)_CONFIGURE_OPTS) \
         --enable-unicode
-    $(MAKE) -C '$(1).unicode' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    -$(MAKE) -C '$(1).unicode/locale' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= allmo
-    $(MAKE) -C '$(1).unicode' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= __install_wxrc___depname=
-    $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/bin/$(TARGET)-wx-config'
+    $(MAKE) -C '$(1).unicode' -j '$(JOBS)' \
+        $(MXE_DISABLE_CRUFT)
+    -$(MAKE) -C '$(1).unicode/locale' -j '$(JOBS)' allmo \
+        $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(1).unicode' -j 1 install \
+        $(MXE_DISABLE_CRUFT) __install_wxrc___depname=
+    $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' \
+                     '$(PREFIX)/bin/$(TARGET)-wx-config'
 endef
 
 # ansi build has been long deprecated
@@ -75,13 +79,13 @@ define $(PKG)_BUILD_ANSI
     cd    '$(1).ansi' && '$(1)/configure' \
         $($(PKG)_CONFIGURE_OPTS) \
         --disable-unicode
-    $(MAKE) -C '$(1).ansi' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1).ansi' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
 
     # backup of the unicode wx-config script
     # such that "make install" won't overwrite it
     mv '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/$(TARGET)/bin/wx-config-backup'
 
-    $(MAKE) -C '$(1).ansi' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= __install_wxrc___depname=
+    $(MAKE) -C '$(1).ansi' -j 1 install $(MXE_DISABLE_CRUFT) __install_wxrc___depname=
     mv '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/$(TARGET)/bin/wx-config-nounicode'
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config-nounicode' '$(PREFIX)/bin/$(TARGET)-wx-config-nounicode'
 
