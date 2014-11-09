@@ -33,7 +33,17 @@ define $(PKG)_BUILD
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_RELEASE_POSTFIX='' \
-        -DBoost_THREADAPI=win32
+        -DBoost_THREADAPI=win32 \
+        -DBUILD_TESTS=OFF \
+        -DBUILD_apps=OFF \
+        -DBUILD_examples=OFF \
+        -DBUILD_global_tests=OFF \
+        -DBUILD_tools=OFF \
+        -DHAVE_MM_MALLOC_EXITCODE=0 \
+        -DHAVE_SSE4_1_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE2_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE_EXTENSIONS_EXITCODE=0
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)' -j 1 VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
 endef
