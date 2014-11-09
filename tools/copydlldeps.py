@@ -57,7 +57,8 @@ def get_imports(file):
     sections = []
     for i in range(number_of_sections):
         section_descriptor_data = f.read(40)
-        name, size, va, rawsize, offset = struct.unpack('<8sLLLL', section_descriptor_data[:24])
+        name, size, va, rawsize, offset = \
+            struct.unpack('<8sLLLL', section_descriptor_data[:24])
         sections.append({'min': va, 'max': va+rawsize, 'offset': offset})
 
     def seek_to_rva(rva):
@@ -67,8 +68,8 @@ def get_imports(file):
                 return
         raise ValueError('Could not find section for RVA.')
 
-    # Walk the import table and get RVAs to the null-terminated names of DLLs this file uses.
-    # The table is terminated by an all-zero entry.
+    # Walk the import table and get RVAs to the null-terminated names of DLLs
+    # this file uses. The table is terminated by an all-zero entry.
     seek_to_rva(rva_of_import_table)
     dll_rvas = []
     while True:
@@ -94,7 +95,8 @@ def get_imports(file):
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description='Recursive copy of DLL dependencies')
+    parser = argparse.ArgumentParser(
+        description='Recursive copy of DLL dependencies')
     parser.add_argument('targetdir',
                         type=str,
                         help='target directory where to place the DLLs')
@@ -105,7 +107,9 @@ if __name__ == "__main__":
                         nargs='+',
                         default=[],
                         required=True,
-                        help='directories whose dependencies must be fulfilled. All PE files will be checked (mostly .exe and .dll files)',
+                        help='directories whose dependencies must be ' +
+                             'fulfilled. All PE files will be checked ' +
+                             '(mostly .exe and .dll files)',
                         dest='checkdirs')
     parser.add_argument('-L',
                         '--libdir',
@@ -114,27 +118,37 @@ if __name__ == "__main__":
                         nargs='+',
                         default=[],
                         required=True,
-                        help='include directories to search for DLL dependencies (only .dll files will be used from here)',
+                        help='include directories to search for DLL ' +
+                             'dependencies (only .dll files will be used ' +
+                             'from here)',
                         dest='libdirs')
     args = parser.parse_args()
 
     if sys.version_info < (3, 0):
         from sets import Set as set
 
-    available_dlls = dict() #map from shortname ('qtcore4.dll') to full path (eg. '/.../mxe/i686-w64-mingw32.shared/qt/bin/QtCore4.dll')
-    copied_dlls    = set()  #remember already copied DLLs (eg 'qtcore4.dll', 'qtgui4.dll')
-    dlls_to_copy   = set()  #remember which DLLs must still be checked (eg 'qtnetwork4.dll', 'qtgui4.dll')
+    # Map from shortname ('qtcore4.dll') to full path (eg.
+    # '/.../mxe/i686-w64-mingw32.shared/qt/bin/QtCore4.dll')
+    available_dlls = dict()
+    # Remember already copied DLLs (eg 'qtcore4.dll', 'qtgui4.dll')
+    copied_dlls    = set()
+    # Remember which DLLs must still be checked (eg 'qtnetwork4.dll',
+    # 'qtgui4.dll')
+    dlls_to_copy   = set()
     not_found_dlls = set()
 
-    #create a list of all available .dll files in the libdir directories
-    for libdir in [item for sublist in args.libdirs for item in sublist]: #flatten list: http://stackoverflow.com/questions/952914
+    # Create a list of all available .dll files in the libdir directories
+    # Flattening list: http://stackoverflow.com/questions/952914
+    for libdir in [item for sublist in args.libdirs for item in sublist]:
         for dll_filename in os.listdir(libdir):
             dll_filename_full = os.path.join(libdir, dll_filename)
             if dll_filename.endswith('.dll') and is_pe_file(dll_filename_full):
                 available_dlls[dll_filename.lower()] = dll_filename_full
 
-    #create a list of initial dependencies (dlls_to_copy) and already copied DLLs (copied_dlls) from the checkdir arguments
-    for checkdir in [item for sublist in args.checkdirs for item in sublist]: #flatten list: http://stackoverflow.com/questions/952914
+    # Create a list of initial dependencies (dlls_to_copy) and already copied
+    # DLLs (copied_dlls) from the checkdir arguments.
+    # Flattening list: http://stackoverflow.com/questions/952914
+    for checkdir in [item for sublist in args.checkdirs for item in sublist]:
         for pe_filename in os.listdir(checkdir):
             pe_filename_full = os.path.join(checkdir, pe_filename)
             if is_pe_file(pe_filename_full):
@@ -144,17 +158,20 @@ if __name__ == "__main__":
                     copied_dlls.add(pe_filename.lower())
 
     while len(dlls_to_copy):
-        for dll_to_copy in dlls_to_copy.copy(): #we may not change the set during iteration
+        # We may not change the set during iteration
+        for dll_to_copy in dlls_to_copy.copy():
             if dll_to_copy in copied_dlls:
                 None
             elif dll_to_copy in not_found_dlls:
                 None
             elif dll_to_copy in available_dlls:
-                shutil.copyfile(available_dlls[dll_to_copy], os.path.join( args.targetdir, os.path.basename(available_dlls[dll_to_copy]) ) )
+                shutil.copyfile(available_dlls[dll_to_copy],
+                                os.path.join(args.targetdir,
+                                os.path.basename(available_dlls[dll_to_copy])))
                 copied_dlls.add(dll_to_copy.lower())
                 for dependency_dll in get_imports(available_dlls[dll_to_copy]):
                     dlls_to_copy.add(dependency_dll.lower())
             else:
                 not_found_dlls.add(dll_to_copy)
             dlls_to_copy.remove(dll_to_copy)
-    print("missing dll files: " + ", ".join(not_found_dlls))
+    print("Missing dll files: " + ", ".join(not_found_dlls))
