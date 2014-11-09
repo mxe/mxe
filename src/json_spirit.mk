@@ -36,4 +36,8 @@ define $(PKG)_BUILD
         -DBoost_THREADAPI=win32
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)' -j 1 VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
+
+    $(TARGET)-g++ \
+        '$(1)/json_demo/json_demo.cpp' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-json_spirit.exe' -ljson_spirit
 endef
