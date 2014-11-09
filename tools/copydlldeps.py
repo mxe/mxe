@@ -105,7 +105,7 @@ if __name__ == "__main__":
                         nargs='+',
                         default=[],
                         required=True,
-                        help='directories whose depencies must be fulfilled. All PE files will be checked (mostly .exe and .dll files)',
+                        help='directories whose dependencies must be fulfilled. All PE files will be checked (mostly .exe and .dll files)',
                         dest='checkdirs')
     parser.add_argument('-L',
                         '--libdir',
