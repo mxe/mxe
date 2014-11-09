@@ -55,7 +55,7 @@ define $(PKG)_CONFIGURE_OPTS
         CXXCPP='$(TARGET)-g++ -E -std=gnu++11'
 endef
 
-define $(PKG)_BUILD_UNICODE
+define $(PKG)_BUILD
     # build the wxWidgets variant with unicode support
     mkdir '$(1).unicode'
     cd    '$(1).unicode' && '$(1)/configure' \
@@ -69,41 +69,12 @@ define $(PKG)_BUILD_UNICODE
         $(MXE_DISABLE_CRUFT) __install_wxrc___depname=
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' \
                      '$(PREFIX)/bin/$(TARGET)-wx-config'
-endef
 
-# ansi build has been long deprecated
-# so don't build it by default
-define $(PKG)_BUILD_ANSI
-    # build the wxWidgets variant without unicode support
-    mkdir '$(1).ansi'
-    cd    '$(1).ansi' && '$(1)/configure' \
-        $($(PKG)_CONFIGURE_OPTS) \
-        --disable-unicode
-    $(MAKE) -C '$(1).ansi' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
-
-    # backup of the unicode wx-config script
-    # such that "make install" won't overwrite it
-    mv '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/$(TARGET)/bin/wx-config-backup'
-
-    $(MAKE) -C '$(1).ansi' -j 1 install $(MXE_DISABLE_CRUFT) __install_wxrc___depname=
-    mv '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/$(TARGET)/bin/wx-config-nounicode'
-    $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config-nounicode' '$(PREFIX)/bin/$(TARGET)-wx-config-nounicode'
-
-    # restore the unicode wx-config script
-    mv '$(PREFIX)/$(TARGET)/bin/wx-config-backup' '$(PREFIX)/$(TARGET)/bin/wx-config'
-endef
-
-define $(PKG)_TEST
     # build test program
     '$(TARGET)-g++' \
         -W -Wall -Werror -Wno-error=unused-local-typedefs -pedantic -std=gnu++0x \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-wxwidgets.exe' \
         `'$(TARGET)-wx-config' --cflags --libs`
-endef
-
-define $(PKG)_BUILD
-    $($(PKG)_BUILD_UNICODE)
-    $($(PKG)_TEST)
 endef
 
 $(PKG)_BUILD_SHARED =
