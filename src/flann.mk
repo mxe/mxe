@@ -7,11 +7,11 @@ $(PKG)_VERSION  := 1.8.4
 $(PKG)_CHECKSUM := e03d9d458757f70f6af1d330ff453e3621550a4f
 $(PKG)_SUBDIR   := flann-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := flann-$($(PKG)_VERSION)-src.zip
-$(PKG)_URL      := http://people.cs.ubc.ca/~mariusm/uploads/FLANN/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.cs.ubc.ca/research/flann/uploads/FLANN/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgomp
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://people.cs.ubc.ca/~mariusm/index.php/FLANN/Changelog' | \
+    $(WGET) -q -O- 'http://www.cs.ubc.ca/research/flann/index.php/FLANN/Changelog' | \
     grep 'Version' | \
     $(SED) -n 's,.*Version.\([0-9.]*\).*,\1,p' | \
     head -1
