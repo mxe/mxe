@@ -2,13 +2,13 @@
 # See index.html for further information.
 
 PKG             := apr-util
-$(PKG)_IGNORE   := 1.5%
-$(PKG)_VERSION  := 1.4.1
-$(PKG)_CHECKSUM := ca4db631d186ea13526fd087aebc06799d4c5415
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.5.4
+$(PKG)_CHECKSUM := 72cc3ac693b52fb831063d5c0de18723bc8e0095
 $(PKG)_SUBDIR   := apr-util-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-util-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://mirror.apache-kr.org/apr/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://archive.apache.org/dist/apr/$($(PKG)_FILE)
+$(PKG)_URL      := http://archive.apache.org/dist/apr/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://mirror.apache-kr.org/apr/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc apr expat libiconv
 
 define $(PKG)_UPDATE
