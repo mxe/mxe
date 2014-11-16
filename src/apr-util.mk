@@ -23,6 +23,7 @@ define $(PKG)_BUILD
         --without-pgsql \
         --without-sqlite2 \
         --without-sqlite3 \
+        --without-freetds \
         --with-apr='$(PREFIX)/$(TARGET)' \
         CFLAGS=-D_WIN32_WINNT=0x0500
     $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) LDFLAGS=-no-undefined
