@@ -21,7 +21,9 @@ define $(PKG)_BUILD
         --config=MinGW-CrossEnv \
         --static \
         --unbundled \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --no-tests \
+        --no-samples
     $(if $(BUILD_STATIC), \
         $(SED) -i 's:// #define POCO_STATIC:#define POCO_STATIC:' \
             '$(1)/Foundation/include/Poco/Config.h')
