@@ -25,7 +25,13 @@ define $(PKG)_BUILD
             --with-target-platform='win$(BITS)'   \
             --prefix='$(PREFIX)/$(TARGET)'        \
             --enable-fftw3f                       \
-            --enable-static --disable-shared
-endef
+            $(if $(BUILD_STATIC),                 \
+                --enable-static --disable-shared, \
+                --disable-static --enable-shared)
 
-$(PKG)_BUILD_SHARED =
+    # It is not trivial to adjust the installation path for the DLL in the
+    # waf-based build system. Adjust it here.
+    $(if $(BUILD_SHARED),                         \
+        mv '$(PREFIX)/$(TARGET)/lib/libaubio-4.dll' '$(PREFIX)/$(TARGET)/bin')
+
+endef
