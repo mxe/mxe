@@ -34,4 +34,8 @@ define $(PKG)_BUILD
     $(if $(BUILD_SHARED),                         \
         mv '$(PREFIX)/$(TARGET)/lib/libaubio-4.dll' '$(PREFIX)/$(TARGET)/bin')
 
+    '$(TARGET)-gcc'                               \
+        -W -Wall -Werror -ansi -pedantic          \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-aubio.exe' \
+        `'$(TARGET)-pkg-config' aubio --cflags --libs`
 endef
