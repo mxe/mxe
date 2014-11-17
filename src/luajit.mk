@@ -12,7 +12,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
-        HOST_CC='gcc -m32' CROSS='$(TARGET)-' \
+        HOST_CC='gcc -m$(BITS)' CROSS='$(TARGET)-' \
         TARGET_SYS=Windows BUILDMODE=static \
         PREFIX='$(PREFIX)/$(TARGET)' \
         FILE_T=luajit.exe \
@@ -20,10 +20,7 @@ define $(PKG)_BUILD
 endef
 
 # gcc -m64 is only available on 64-bit machines
-ifneq (,$(findstring 64,$(BUILD)))
-    $(PKG)_BUILD_x86_64-w64-mingw32 = \
-        $(subst 'gcc -m32','gcc -m64',$($(PKG)_BUILD))
-else
+ifeq (,$(findstring 64,$(BUILD)))
     $(PKG)_BUILD_x86_64-w64-mingw32 =
 endif
 

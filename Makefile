@@ -416,6 +416,7 @@ build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
+build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3):
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
