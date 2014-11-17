@@ -3,12 +3,12 @@
 
 PKG             := aubio
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.3.2
-$(PKG)_CHECKSUM := 8ef7ccbf18a4fa6db712a9192acafc9c8d080978
+$(PKG)_VERSION  := 0.4.1
+$(PKG)_CHECKSUM := 338ec9f633e82c371a370b9727d6f0b86b0ba376
 $(PKG)_SUBDIR   := aubio-$($(PKG)_VERSION)
-$(PKG)_FILE     := aubio-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := aubio-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.aubio.org/pub/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc fftw libsamplerate libsndfile
+$(PKG)_DEPS     := gcc ffmpeg fftw libsamplerate libsndfile
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.aubio.org/download' | \
@@ -17,15 +17,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoconf
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --disable-jack \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        PYTHON='no'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    cd '$(1)' &&                                  \
+        CC='$(TARGET)-gcc'                        \
+        PKGCONFIG='$(TARGET)-pkg-config'          \
+        ./waf configure build install             \
+            -j '$(JOBS)'                          \
+            --with-target-platform='win$(BITS)'   \
+            --prefix='$(PREFIX)/$(TARGET)'        \
+            --enable-fftw3f                       \
+            --enable-static --disable-shared
 endef
 
 $(PKG)_BUILD_SHARED =
