@@ -18,7 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi
+    cd '$(1)' && autoreconf -fi -IM4
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-sqlite \
