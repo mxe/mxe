@@ -29,7 +29,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) LDFLAGS=-no-undefined
     $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT)
     $(if $(BUILD_STATIC), \
-        sed -i '1i #define APU_DECLARE_STATIC 1' \
+        $(SED) -i '1i #define APU_DECLARE_STATIC 1' \
             '$(PREFIX)/$(TARGET)/include/apr-1/apu.h')
     ln -sf '$(PREFIX)/$(TARGET)/bin/apu-1-config' '$(PREFIX)/bin/$(TARGET)-apu-1-config'
 endef
