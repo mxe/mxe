@@ -15,13 +15,17 @@ define $(PKG)_UPDATE
     echo 1
 endef
 
-define $(PKG)_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' -f makefile.u \
+$(PKG)_MAKE_OPTS = \
+        -f makefile.u \
         CC=$(TARGET)-gcc \
         AR=$(TARGET)-ar \
         LD=$(TARGET)-ld \
         RANLIB=$(TARGET)-ranlib \
         CFLAGS='-O -DUSE_CLOCK'
+
+define $(PKG)_BUILD
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $($(PKG)_MAKE_OPTS) || $(MAKE) -C '$(1)' -j 1 $($(PKG)_MAKE_OPTS)
+
     $(INSTALL) -m644 '$(1)/libf2c.a' '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/f2c.h'    '$(PREFIX)/$(TARGET)/include'
 endef
