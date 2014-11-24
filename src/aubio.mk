@@ -18,6 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' &&                                  \
+        AR='$(TARGET)-ar'                         \
         CC='$(TARGET)-gcc'                        \
         PKGCONFIG='$(TARGET)-pkg-config'          \
         ./waf configure build install             \
