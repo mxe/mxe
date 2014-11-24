@@ -2,16 +2,16 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.2.20
-$(PKG)_CHECKSUM := 6b104f737330ff2f6833b8c5d80e1cd2c3fcfb66
+$(PKG)_VERSION  := 3.3.10
+$(PKG)_CHECKSUM := b47af4ee116ba2099a24ff7a8e686079f80ec23a
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.2/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2//$($(PKG)_FILE)
+$(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.3/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3//$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext gmp libgnurx nettle zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/ | \
+    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/ | \
     $(SED) -n 's,.*gnutls-\([1-9]\+\.[0-9]\+.[0-9]\+\)\..*,\1,p' | \
     $(SORT) -V | \
     tail -1
