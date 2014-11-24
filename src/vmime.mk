@@ -42,6 +42,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,^\(Libs.private:.* \)$(PREFIX)/$(TARGET)/lib/libiconv\.a,\1-liconv,g' $(1)/vmime.pc
     $(if $(BUILD_STATIC),$(SED) -i 's/^\(Cflags:.* \)/\1 -DVMIME_STATIC/g' $(1)/vmime.pc)
     $(MAKE) -C '$(1)' install
+    $(if $(BUILD_SHARED),$(INSTALL) -m644 '$(1)/build/bin/libvmime.dll' '$(PREFIX)/$(TARGET)/bin/')
 
     $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
     $(TARGET)-g++ -s -std=c++0x -o '$(1)/examples/test-vmime.exe' \
