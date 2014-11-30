@@ -18,7 +18,8 @@ define $(PKG)_BUILD
         prefix='$(PREFIX)/$(TARGET)' \
         SYS=mingw \
         CRYPTO=GNUTLS \
-        $(if $(BUILD_STATIC),SHARED=no,) \
-        LIB_GNUTLS="`$(TARGET)-pkg-config --libs-only-l gnutls --static`" \
+        $(if $(BUILD_STATIC),\
+            SHARED=no \
+            LIB_GNUTLS="`$(TARGET)-pkg-config --libs-only-l gnutls`",) \
         -j '$(JOBS)' install
 endef
