@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     cp -Rp '$(1)' '$(1).native'
     cd '$(1).native' && ./configure
-    cd '$(1).native' && make tools/gen_test_char \
+    cd '$(1).native' && $(MAKE) tools/gen_test_char \
         CFLAGS='-DNEED_ENHANCED_ESCAPES'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \

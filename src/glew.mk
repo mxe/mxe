@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     echo 'mxe: lib $(if $(BUILD_STATIC), lib/$$(LIB.STATIC) lib/$$(LIB.STATIC.MX), lib/$$(LIB.SHARED) lib/$$(LIB.SHARED.MX))' >> '$(1)/Makefile'
 
     # GCC 4.8.2 seems to miscompile the shared DLL with -O2
-    make -C '$(1)' \
+    $(MAKE) -C '$(1)' \
         GLEW_DEST=$(PREFIX)/$(TARGET) \
         SYSTEM=linux-mingw32 \
         CC=$(TARGET)-gcc \
