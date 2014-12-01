@@ -3,8 +3,8 @@
 
 PKG             := pcl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.1
-$(PKG)_CHECKSUM := 784bce606141260423ea04f37b093f59d4c94c6a
+$(PKG)_VERSION  := 1.7.2
+$(PKG)_CHECKSUM := 7a59e9348a81f42725db1f8b1194c9c3313372ae
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/PointCloudLibrary/pcl/archive/$($(PKG)_FILE)
