@@ -3,8 +3,8 @@
 
 PKG             := libgcrypt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.3
-$(PKG)_CHECKSUM := 2c6553cc17f2a1616d512d6870fe95edf6b0e26e
+$(PKG)_VERSION  := 1.6.2
+$(PKG)_CHECKSUM := cc31aca87e4a3769cb86884a3f5982b2cc8eb7ec
 $(PKG)_SUBDIR   := libgcrypt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgcrypt-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://mirrors.dotsrc.org/gcrypt/libgcrypt/$($(PKG)_FILE)
