@@ -3,8 +3,8 @@
 
 PKG             := boost
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.53.0
-$(PKG)_CHECKSUM := e6dd1b62ceed0a51add3dda6f3fc3ce0f636a7f3
+$(PKG)_VERSION  := 1.57.0
+$(PKG)_CHECKSUM := e151557ae47afd1b43dc3fac46f8b04a8fe51c12
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -18,25 +18,28 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # context switched library introduced in boost 1.51.0 does not build
-    rm -r '$(1)/libs/context'
     # old version appears to interfere
     rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
     echo 'using gcc : : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
     # compile boost jam
-    cd '$(1)/tools/build/v2/engine' && ./build.sh
-    cd '$(1)' && tools/build/v2/engine/bin.*/bjam \
+    cd '$(1)/tools/build/' && ./bootstrap.sh
+    $(SED) -i 's, as , $(TARGET)-as ,g'   '$(1)/libs/context/build/Jamfile.v2'
+    $(SED) -i 's, cpp , $(TARGET)-cpp ,g' '$(1)/libs/context/build/Jamfile.v2'
+    cd '$(1)' && ./tools/build/b2 \
         -j '$(JOBS)' \
         --ignore-site-config \
         --user-config=user-config.jam \
+        toolset=gcc \
         target-os=windows \
         threading=multi \
         link=$(if $(BUILD_STATIC),static,shared) \
         threadapi=win32 \
         --layout=tagged \
         --disable-icu \
+        --without-context \
         --without-mpi \
         --without-python \
+        --build-dir='$(1).build' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --exec-prefix='$(PREFIX)/$(TARGET)/bin' \
         --libdir='$(PREFIX)/$(TARGET)/lib' \
