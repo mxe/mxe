@@ -3,8 +3,8 @@
 
 PKG             := poco
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.7
-$(PKG)_CHECKSUM := 7cd3122662afe31ea9eccab002aefd96c6de91c4
+$(PKG)_VERSION  := 1.4.7p1
+$(PKG)_CHECKSUM := 8f0c65a0e477f0d623ebc589069357ef7e69217c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://pocoproject.org/releases/$(PKG)-$(word 1,$(subst p, ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
