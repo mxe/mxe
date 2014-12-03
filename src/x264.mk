@@ -11,7 +11,10 @@ $(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/snapshots/$(
 $(PKG)_DEPS     := gcc yasm
 
 define $(PKG)_UPDATE
-    $(DATE) -d yesterday +%Y%m%d-2245
+    $(WGET) -q -O- 'http://git.videolan.org/?p=x264.git;a=shortlog' | \
+    $(SED) -n 's,.*\([0-9]\{4\}\)-\([0-9]\{2\}\)-\([0-9]\{2\}\).*,\1\2\3-2245,p' | \
+    sort | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
