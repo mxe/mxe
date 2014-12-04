@@ -40,7 +40,9 @@ define $(PKG)_BUILD
 endef
 
 define $(PKG)_BUILD_x86_64-w64-mingw32
+    cd '$(1)' && autoreconf -fi
     $($(PKG)_CONFIGURE) \
-        ac_cv_sys_symbol_underscore=no
+        ac_cv_sys_symbol_underscore=no \
+        --disable-padlock-support
     $($(PKG)_MAKE)
 endef
