@@ -20,33 +20,43 @@ endef
 define $(PKG)_BUILD
     # old version appears to interfere
     rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
-    echo 'using gcc : : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
-    # compile boost jam
+    rm -f "$(PREFIX)/$(TARGET)/lib/libboost*"
+
+    # create user-config
+    echo 'using gcc : mxe : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
+
+    # compile boost build (b2)
     cd '$(1)/tools/build/' && ./bootstrap.sh
-    $(SED) -i 's, as , $(TARGET)-as ,g'   '$(1)/libs/context/build/Jamfile.v2'
-    $(SED) -i 's, cpp , $(TARGET)-cpp ,g' '$(1)/libs/context/build/Jamfile.v2'
+
+    # cross-build, see b2 options at:
+    # http://www.boost.org/build/doc/html/bbv2/overview/invocation.html
     cd '$(1)' && ./tools/build/b2 \
+        -a \
+        -q \
         -j '$(JOBS)' \
         --ignore-site-config \
         --user-config=user-config.jam \
-        toolset=gcc \
-        target-os=windows \
-        threading=multi \
+        address-model=$(BITS) \
+        architecture=x86 \
+        binary-format=pe \
         link=$(if $(BUILD_STATIC),static,shared) \
+        runtime-link=$(if $(BUILD_STATIC),static,shared) \
+        target-os=windows \
         threadapi=win32 \
+        threading=multi \
+        toolset=gcc-mxe \
         --layout=tagged \
         --disable-icu \
-        --without-context \
         --without-mpi \
         --without-python \
-        --build-dir='$(1).build' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --exec-prefix='$(PREFIX)/$(TARGET)/bin' \
         --libdir='$(PREFIX)/$(TARGET)/lib' \
         --includedir='$(PREFIX)/$(TARGET)/include' \
         -sEXPAT_INCLUDE='$(PREFIX)/$(TARGET)/include' \
         -sEXPAT_LIBPATH='$(PREFIX)/$(TARGET)/lib' \
-        stage install
+        cxxflags='-std=c++11' \
+        install
 
     $(if $(BUILD_SHARED), \
         mv -fv '$(PREFIX)/$(TARGET)/lib/'libboost_*.dll '$(PREFIX)/$(TARGET)/bin/')
