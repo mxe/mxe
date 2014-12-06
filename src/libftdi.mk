@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         --disable-libftdipp \
         --disable-python-binding \
         --without-examples \
-        --without-docs
+        --without-docs \
         HAVELIBUSB=true
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
