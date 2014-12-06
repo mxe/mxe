@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 
@@ -44,6 +45,19 @@ int main()
 {
     lua_State* L = luaL_newstate();
     init(L);
+    // hello world
     luaL_dostring(L, "greet()");
+    // class
     luaL_dostring(L, "t = Test('123'); assert(t:name() == '123'");
+    // iterate Lua table in C++
+    luaL_dostring(L, "list123 = {1, 2, 3}");
+    int sum = 0;
+    lua_getglobal(L, "list123");
+    luabind::object list123(luabind::from_stack(L, -1));
+    lua_pop(L, 1);
+    for (luabind::iterator it(list123), end; it != end; ++it) {
+        luabind::object item = *it;
+        sum += luabind::object_cast<int>(item);
+    }
+    assert(sum == 6);
 }
