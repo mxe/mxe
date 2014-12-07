@@ -3,8 +3,8 @@
 
 PKG             := gsoap
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.20
-$(PKG)_CHECKSUM := 8492b3590da0d2a1ed43108d601c20ef7350e753
+$(PKG)_VERSION  := 2.8.21
+$(PKG)_CHECKSUM := a464cc7dee6847544faf84466968a739028bf3cb
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FILE)
