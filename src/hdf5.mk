@@ -59,6 +59,12 @@ define $(PKG)_BUILD
     $(INSTALL) -m755 '$(1)'/tools/misc/h5cc '$(PREFIX)/bin/$(TARGET)-h5cc'
     $(INSTALL) -m755 '$(1)'/c++/src/h5c++   '$(PREFIX)/bin/$(TARGET)-h5c++'
 
+    # setup cmake toolchain
+    $(SED) -i '/HDF5/d' '$(CMAKE_TOOLCHAIN_FILE)'
+    (echo 'set(HDF5_C_COMPILER_EXECUTABLE $(PREFIX)/bin/$(TARGET)-h5cc)'; \
+     echo 'set(HDF5_CXX_COMPILER_EXECUTABLE $(PREFIX)/bin/$(TARGET)-h5c++)'; \
+     ) >> '$(CMAKE_TOOLCHAIN_FILE)'
+
     ## test hdf5
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
