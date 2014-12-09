@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     # old version appears to interfere
     rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
-    rm -f "$(PREFIX)/$(TARGET)/lib/libboost*"
+    rm -f "$(PREFIX)/$(TARGET)/lib/libboost"*
 
     # create user-config
     echo 'using gcc : mxe : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
@@ -40,7 +40,6 @@ define $(PKG)_BUILD
         architecture=x86 \
         binary-format=pe \
         link=$(if $(BUILD_STATIC),static,shared) \
-        runtime-link=$(if $(BUILD_STATIC),static,shared) \
         target-os=windows \
         threadapi=win32 \
         threading=multi \
