@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     # old version appears to interfere
     rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
-    rm -f "$(PREFIX)/$(TARGET)/lib/libboost"*
+    rm -f "$(PREFIX)/$(TARGET)/lib/libboost*"
 
     # create user-config
     echo 'using gcc : mxe : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
@@ -39,8 +39,8 @@ define $(PKG)_BUILD
         address-model=$(BITS) \
         architecture=x86 \
         binary-format=pe \
-        link=@boost-link@ \
-        runtime-link=@boost-link@ \
+        link=$(if $(BUILD_STATIC),static,shared) \
+        runtime-link=$(if $(BUILD_STATIC),static,shared) \
         target-os=windows \
         threadapi=win32 \
         threading=multi \
@@ -69,13 +69,8 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-boost.exe' \
         -DBOOST_THREAD_USE_LIB \
-        -lboost_serialization@boost-lib-suffix@ \
-        -lboost_thread_win32@boost-lib-suffix@ \
-        -lboost_system@boost-lib-suffix@ \
-        -lboost_chrono@boost-lib-suffix@
+        -lboost_serialization-mt \
+        -lboost_thread_win32-mt \
+        -lboost_system-mt \
+        -lboost_chrono-mt
 endef
-
-$(PKG)_BUILD_STATIC = $(subst @boost-link@,static,\
-                      $(subst @boost-lib-suffix@,-mt-s,$($(PKG)_BUILD)))
-$(PKG)_BUILD_SHARED = $(subst @boost-link@,shared,\
-                      $(subst @boost-lib-suffix@,-mt,$($(PKG)_BUILD)))
