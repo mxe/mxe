@@ -39,10 +39,10 @@ define $(PKG)_BUILD
             -nomake examples \
             -nomake tests \
             -no-sql-mysql \
-            -qt-sql-sqlite \
-            -qt-sql-odbc \
-            -qt-sql-psql \
-            -qt-sql-tds -D Q_USE_SYBASE \
+            -plugin-sql-sqlite \
+            -plugin-sql-odbc \
+            -plugin-sql-psql \
+            -plugin-sql-tds -D Q_USE_SYBASE \
             -system-zlib \
             -system-libpng \
             -system-libjpeg \
@@ -86,5 +86,4 @@ endef
 
 
 $(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\
-                      $(subst -qt-sql-,-plugin-sql-,\
                       $($(PKG)_BUILD)))
