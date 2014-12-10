@@ -4,7 +4,7 @@
 PKG             := qtxmlpatterns
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 004b778055a96dda163fe060dde631edcd72aba7
+$(PKG)_CHECKSUM := e6d08bca4186b8c10e669836e5f6133ad59c9cce
 $(PKG)_SUBDIR    = $(subst qtbase,qtxmlpatterns,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtxmlpatterns,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtxmlpatterns,$(qtbase_URL))
