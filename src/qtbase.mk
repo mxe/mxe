@@ -86,4 +86,4 @@ endef
 
 
 $(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\
-                      $($(PKG)_BUILD)))
+                      $($(PKG)_BUILD))
