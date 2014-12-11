@@ -18,8 +18,9 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-	--with-cfitsio='$(PREFIX)/$(TARGET)'
-        FC='$(TARGET)-gfortran'
+        --with-cfitsio='$(PREFIX)/$(TARGET)'
+        
+    FC='$(TARGET)-gfortran'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
