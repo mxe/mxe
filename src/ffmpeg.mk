@@ -3,8 +3,8 @@
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4.4
-$(PKG)_CHECKSUM := c0a0829fbb4cf423eed77f39d3661d1a34ac7c35
+$(PKG)_VERSION  := 2.5
+$(PKG)_CHECKSUM := ec0111e8298bdb2291d82e3b4f67354ba48fab19
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
@@ -45,6 +45,7 @@ define $(PKG)_BUILD
         --enable-avresample \
         --enable-gpl \
         --enable-version3 \
+        --extra-libs='-mconsole' \
         --enable-avisynth \
         --enable-gnutls \
         --enable-libass \
