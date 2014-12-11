@@ -20,7 +20,6 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --with-cfitsio='$(PREFIX)/$(TARGET)'
         
-    FC='$(TARGET)-gfortran'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
