@@ -11,8 +11,10 @@ $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/fitsio/CCfits/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc cfitsio
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- "http://heasarc.gsfc.nasa.gov/docs/software/fitsio/ccfits/" | \
+    grep -i '<a href="CCfits.*tar' | \
+    $(SED) -n 's,.*CCfits-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
