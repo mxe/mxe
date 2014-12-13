@@ -2536,7 +2536,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </table>
 
     <script>
-        var getPackageElements = function() {
+        function getPackageElements() {
             var packageElements = {};
             var elements = document.getElementById('package-list').getElementsByTagName('td');
             for (var i = 0; i < elements.length; i++) {
@@ -2548,11 +2548,11 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             }
             return packageElements;
         }
-        var parseVersion = function(mkfile) {
+        function parseVersion(mkfile) {
             var matchResult = mkfile.match(/^\$\(PKG\)_VERSION\s*:?=\s*(.+)\s*$/m);
             return matchResult[1];
         }
-        var loadVersions = function(packageElements, doneCallback) {
+        function loadVersions(packageElements, doneCallback) {
             var versions = {};
             var packageCount = 0;
             for (var package in packageElements) {
@@ -2560,11 +2560,11 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             }
             var loadCount = 0;
             for (var packageIndex in packageElements) {
-                (function(){
+                (function handlePackage(){
                     var package = packageIndex;
                     var request = new XMLHttpRequest();
                     request.open('GET', 'src/' + package + '.mk', true);
-                    request.onreadystatechange = function() {
+                    request.onreadystatechange = function reqCallback() {
                         if (request.readyState === 4) {
                             versions[package] = parseVersion(request.responseText);
                             loadCount++;
@@ -2577,7 +2577,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
                 })();
             }
         }
-        var resolveVersions = function(versions) {
+        function resolveVersions(versions) {
             var resolvedVersions = {};
             for (var package in versions) {
                 var version = versions[package];
@@ -2590,7 +2590,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             }
             return resolvedVersions;
         }
-        var showVersions = function(packageElements, resolvedVersions) {
+        function showVersions(packageElements, resolvedVersions) {
             for (package in packageElements) {
                 var element = packageElements[package];
                 var version = resolvedVersions[package];
@@ -2599,14 +2599,13 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
                 element.insertAdjacentHTML('afterend', versionHtml);
             }
         }
-        var main = function() {
+        (function main() {
             var packageElements = getPackageElements();
-            loadVersions(packageElements, function(versions) {
+            loadVersions(packageElements, function doneCallback(versions) {
                 var resolvedVersions = resolveVersions(versions);
                 showVersions(packageElements, resolvedVersions);
             });
-        }
-        main();
+        })();
     </script>
 </div>
 
