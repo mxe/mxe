@@ -431,7 +431,7 @@ build-only-$(1)_$(3):
 	    @cat '$(TOP_DIR)/settings.mk'
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
-	    ,)
+	    )
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
 $(foreach TARGET,$(MXE_TARGETS), \
