@@ -400,12 +400,6 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
-	    (echo; \
-	     find '$(2)' -name 'config.log' -print -exec cat {} \;; \
-	     echo; \
-	     echo 'settings.mk'; \
-	     cat '$(TOP_DIR)/settings.mk'; \
-	     ) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
 	    exit 1; \
 	fi
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
@@ -430,6 +424,11 @@ build-only-$(1)_$(3):
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    @echo
+	    @find '$(2)' -name 'config.log' -print -exec cat {} \;
+	    @echo
+	    @echo 'settings.mk'
+	    @cat '$(TOP_DIR)/settings.mk'
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    ,)
