@@ -65,3 +65,5 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' poppler poppler-cpp --cflags --libs`
 endef
 
+$(PKG)_BUILD_SHARED =
+

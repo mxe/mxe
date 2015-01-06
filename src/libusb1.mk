@@ -3,21 +3,28 @@
 
 PKG             := libusb1
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.17
-$(PKG)_CHECKSUM := a491054e7f4f3f52b12bd567335180586a54ae16
-$(PKG)_SUBDIR   := libusbx-$($(PKG)_VERSION)
-$(PKG)_FILE     := libusbx-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusbx/releases/$($(PKG)_VERSION)/source/$($(PKG)_FILE)
+$(PKG)_VERSION  := 1.0.19
+$(PKG)_CHECKSUM := c5d14ced155233ceeb5107c7eb3b94b16649ae05
+$(PKG)_SUBDIR   := libusb-$($(PKG)_VERSION)
+$(PKG)_FILE     := libusb-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libusb-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/libusbx/files/releases/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/libusb/files/libusb-1.0/' | \
+    grep -i 'libusb/files/libusb-1.0' | \
+    $(SED) -n 's,.*/libusb-1.0/libusb-\([0-9\.]*\)/.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
+        $(MXE_CONFIGURE_OPTS) \
+        CFLAGS=-D_WIN32_WINNT=0x0500
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Wextra -Werror \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libusb1.exe' \
+        `'$(TARGET)-pkg-config' libusb-1.0 --cflags --libs`
 endef

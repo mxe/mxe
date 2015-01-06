@@ -32,11 +32,12 @@ define $(PKG)_BUILD
         --disable-music-mod \
         --enable-music-mod-modplug \
         --enable-music-ogg \
-        --disable-music-flac \
-        --enable-music-mp3 \
         --disable-music-ogg-shared \
+        --disable-music-flac \
         --disable-music-flac-shared \
-        --disable-smpegtest
+        --enable-music-mp3 \
+        --disable-smpegtest \
+        SMPEG_CONFIG='$(PREFIX)/$(TARGET)/bin/smpeg2-config' \
         WINDRES='$(TARGET)-windres' \
         LIBS='-lvorbis -logg'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
@@ -48,3 +49,5 @@ define $(PKG)_BUILD
 endef
 
 $(PKG)_BUILD_i686-pc-mingw32 =
+
+$(PKG)_BUILD_SHARED =

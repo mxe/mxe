@@ -3,10 +3,10 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 35d61378829a8cd151084184ebd55de1b074b324 Mon Sep 17 00:00:00 2001
+From a92f8ef8826f38edfe010752badc5c280f5b9605 Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:02:33 +0200
-Subject: [PATCH 1/2] use unix style names for openssl on mingw-cross-env
+Subject: [PATCH 1/4] use unix style names for openssl on mingw-cross-env
 
 
 diff --git a/configure.in b/configure.in
@@ -30,13 +30,13 @@ index 2f8bb3d..441b42b 100644
  
  if test "$with_pam" = yes ; then
 -- 
-1.8.1.4
+1.9.1
 
 
-From 48f27fc5b79373e696cd8db2a5195d9efc084c13 Mon Sep 17 00:00:00 2001
+From 6bbf26ce1f6c0bbd6fc53db1152b1132795b2850 Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:09:38 +0200
-Subject: [PATCH 2/2] do not check autoconf version
+Subject: [PATCH 2/4] do not check autoconf version
 
 
 diff --git a/configure.in b/configure.in
@@ -55,5 +55,96 @@ index 441b42b..1257071 100644
  AC_CONFIG_SRCDIR([src/backend/access/common/heaptuple.c])
  AC_CONFIG_AUX_DIR(config)
 -- 
-1.8.1.4
+1.9.1
+
+
+From e7cdd570742aa958d5b45c6971253d9a0ac8ecf4 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 1 Jul 2014 14:27:21 -0700
+Subject: [PATCH 3/4] Fix shared lib install location
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/src/Makefile.shlib b/src/Makefile.shlib
+index 294d10f..3acdd81 100644
+--- a/src/Makefile.shlib
++++ b/src/Makefile.shlib
+@@ -293,6 +293,7 @@ endif
+ ifeq ($(PORTNAME), win32)
+   ifdef SO_MAJOR_VERSION
+     shlib		= lib$(NAME)$(DLSUFFIX)
++    stlib		= lib$(NAME)$(DLSUFFIX).a
+   endif
+   haslibarule   = yes
+ endif
+@@ -447,14 +448,16 @@ ifeq ($(PORTNAME), darwin)
+ endif
+ 
+ ifeq ($(enable_shared), yes)
+-install-lib-shared: $(shlib) installdirs-lib
++install-lib-shared: $(shlib)
++ifeq (, $(filter $(PORTNAME), win32 cygwin))
++install-lib-shared: installdirs-lib
++endif # not win32 or cygwin
+ ifdef soname
+ # we don't install $(shlib) on AIX
+ # (see http://archives.postgresql.org/message-id/52EF20B2E3209443BC37736D00C3C1380A6E79FE@EXADV1.host.magwien.gv.at)
+ ifneq ($(PORTNAME), aix)
++ifeq (, $(filter $(PORTNAME), win32 cygwin))
+ 	$(INSTALL_SHLIB) $< '$(DESTDIR)$(libdir)/$(shlib)'
+-ifneq ($(PORTNAME), cygwin)
+-ifneq ($(PORTNAME), win32)
+ ifneq ($(shlib), $(shlib_major))
+ 	cd '$(DESTDIR)$(libdir)' && \
+ 	rm -f $(shlib_major) && \
+@@ -465,8 +468,9 @@ ifneq ($(shlib), $(shlib_bare))
+ 	rm -f $(shlib_bare) && \
+ 	$(LN_S) $(shlib) $(shlib_bare)
+ endif
+-endif # not win32
+-endif # not cygwin
++else  # win32 or cygwin
++	$(INSTALL_SHLIB) $< '$(DESTDIR)$(bindir)/$(shlib)'
++endif # not win32 or cygwin
+ endif # not aix
+ else # no soname
+ 	$(INSTALL_SHLIB) $< '$(DESTDIR)$(pkglibdir)/$(shlib)'
+-- 
+1.9.1
+
+
+From 49f1ebdd0a4523f77b889b7dfbd5d34c2e11dab1 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 1 Jul 2014 14:41:44 -0700
+Subject: [PATCH 4/4] Don't build shared lib on win32 if --disable-shared is
+ set
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/src/Makefile.shlib b/src/Makefile.shlib
+index 3acdd81..68084cd 100644
+--- a/src/Makefile.shlib
++++ b/src/Makefile.shlib
+@@ -291,11 +291,15 @@ ifeq ($(PORTNAME), cygwin)
+ endif
+ 
+ ifeq ($(PORTNAME), win32)
+-  ifdef SO_MAJOR_VERSION
+-    shlib		= lib$(NAME)$(DLSUFFIX)
+-    stlib		= lib$(NAME)$(DLSUFFIX).a
++  ifeq ($(enable_shared), yes)
++    ifdef SO_MAJOR_VERSION
++      shlib		= lib$(NAME)$(DLSUFFIX)
++      stlib		= lib$(NAME)$(DLSUFFIX).a
++    endif
++    haslibarule   = yes
++  else
++    shlib		=
+   endif
+-  haslibarule   = yes
+ endif
+ 
+ 
+-- 
+1.9.1
 

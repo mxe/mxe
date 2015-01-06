@@ -32,3 +32,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gsl.exe' \
         -lgsl
 endef
+
+$(PKG)_BUILD_SHARED =

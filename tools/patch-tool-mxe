@@ -64,9 +64,12 @@ function init_git {
   fi
 
   echo "Unpacking archive..."
-  echo $pkg_file | grep "\.tar\.gz"  >> /dev/null && tar xf $mxedir/pkg/$pkg_file
-  echo $pkg_file | grep "\.tar\.bz2" >> /dev/null && tar xf $mxedir/pkg/$pkg_file
-  echo $pkg_file | grep "\.tar\.xz"  >> /dev/null && xz -dc $mxedir/pkg/$pkg_file | tar xf -
+  (echo $pkg_file | grep "\.tar\.gz")  || (echo $pkg_file | grep "\.tgz") \
+    >> /dev/null && tar xf $mxedir/pkg/$pkg_file
+  (echo $pkg_file | grep "\.tar\.bz2") || (echo $pkg_file | grep "\.tbz2") \
+    >> /dev/null && tar xf $mxedir/pkg/$pkg_file
+  (echo $pkg_file | grep "\.tar\.xz")  || (echo $pkg_file | grep "\.txz") \
+    >> /dev/null && xz -dc $mxedir/pkg/$pkg_file | tar xf -
   echo $pkg_file | grep "\.zip"      >> /dev/null && unzip  $mxedir/pkg/$pkg_file >> /dev/null
 
   echo "Initializing repo and adding all as first commit"

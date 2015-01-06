@@ -3,8 +3,8 @@
 
 PKG             := liboauth
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.1
-$(PKG)_CHECKSUM := 2631b489c150187adcca264fe813d58b2c22bf8a
+$(PKG)_VERSION  := 1.0.3
+$(PKG)_CHECKSUM := 791dbb4166b5d2c843c8ff48ac17284cc0884af2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://liboauth.sourceforge.net/pool/$($(PKG)_FILE)
@@ -18,11 +18,9 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-curl
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS='-no-undefined'
     $(MAKE) -C '$(1)' -j 1 install
 
     '$(TARGET)-gcc' \

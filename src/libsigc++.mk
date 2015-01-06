@@ -19,11 +19,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        CXX='$(TARGET)-c++' \
+        $(MXE_CONFIGURE_OPTS) \
+        CXX='$(TARGET)-g++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         MAKE=$(MAKE)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=

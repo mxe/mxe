@@ -1,10 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 96e55516b44e03bb5c2882ef436bdd89757ed287 Mon Sep 17 00:00:00 2001
+From aec914bd8b868924f4b49d861c1e01c61113db48 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 14 May 2013 09:21:46 +0200
-Subject: [PATCH] predefine VMIME_STATIC for convenience
+Subject: [PATCH 1/2] predefine VMIME_STATIC for convenience
 
 
 diff --git a/vmime.pc.in b/vmime.pc.in
@@ -19,5 +19,31 @@ index fc1103e..11dd0ea 100644
 +Cflags: -I${includedir}/ @VMIME_PKGCONFIG_CFLAGS@ -DVMIME_STATIC
  
 -- 
-1.8.4
+1.8.4.5
+
+
+From 344e0d7bc62adda4e1437b49350a29089d7ce3af Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 26 Mar 2014 23:45:05 +0100
+Subject: [PATCH 2/2] workaround for stricmp decl problem on mingw32
+ (mingw.org)
+
+
+diff --git a/src/vmime/platforms/windows/windowsCodepages.hpp b/src/vmime/platforms/windows/windowsCodepages.hpp
+index dfd6afd..f01bc47 100644
+--- a/src/vmime/platforms/windows/windowsCodepages.hpp
++++ b/src/vmime/platforms/windows/windowsCodepages.hpp
+@@ -32,6 +32,10 @@
+ 
+ 
+ #include <string.h>
++#define stricmp _stricmp
++extern "C" {
++_CRTIMP int __cdecl __MINGW_NOTHROW     _stricmp (const char*, const char*);
++}
+ 
+ 
+ namespace vmime {
+-- 
+1.8.4.5
 

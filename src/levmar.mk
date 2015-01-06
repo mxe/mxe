@@ -24,3 +24,5 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/levmar.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/liblevmar.a' '$(PREFIX)/$(TARGET)/lib/'
 endef
+
+$(PKG)_BUILD_SHARED =

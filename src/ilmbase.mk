@@ -26,10 +26,7 @@ define $(PKG)_BUILD
     # Because of the previous changes, '--disable-threading' will not disable
     # threading. It will just disable the unwanted check for pthread.
     cd '$(1)' && $(SHELL) ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-threading \
         CONFIG_SHELL=$(SHELL) \
         SHELL=$(SHELL)

@@ -5,10 +5,11 @@ This patch has been taken from:
 http://gcc.gnu.org/ml/gcc-patches/2010-06/msg00387.html
 http://sourceforge.net/p/mingw/bugs/1809
 
-diff -urN a/gcc/ginclude/float.h b/gcc/ginclude/float.h
---- a/gcc/ginclude/float.h	2009-04-09 17:00:19.000000000 +0200
-+++ b/gcc/ginclude/float.h	2010-06-05 12:03:41.887724045 +0200
-@@ -275,3 +275,17 @@
+diff --git a/gcc/ginclude/float.h b/gcc/ginclude/float.h
+index a8e05bf..23fbb3d 100644
+--- a/gcc/ginclude/float.h
++++ b/gcc/ginclude/float.h
+@@ -275,3 +275,17 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
  #endif /* __STDC_WANT_DEC_FP__ */
  
  #endif /* _FLOAT_H___ */
@@ -26,3 +27,6 @@ diff -urN a/gcc/ginclude/float.h b/gcc/ginclude/float.h
 +# include_next <float.h>
 +#endif
 +#endif
+-- 
+1.8.4.5
+

@@ -32,3 +32,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gd.exe' \
         `'$(PREFIX)/$(TARGET)/bin/gdlib-config' --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

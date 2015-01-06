@@ -37,3 +37,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/libs' -j '$(JOBS)'
     $(MAKE) -C '$(1)/libs' -j 1 install
 endef
+
+$(PKG)_BUILD_SHARED =

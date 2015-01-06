@@ -37,3 +37,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-smpeg.exe' \
         `'$(PREFIX)/$(TARGET)/bin/smpeg-config' --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

@@ -28,3 +28,5 @@ define $(PKG)_BUILD
     rm -f '$(PREFIX)/$(TARGET)'/include/projects.h
     $(MAKE) -C '$(1)' -j 1 install
 endef
+
+$(PKG)_BUILD_SHARED =

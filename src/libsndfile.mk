@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         --enable-external-libs \
         --disable-octave \
         --disable-alsa \
-        --disable-shave
+        --disable-shave \
+        LIBS="`$(TARGET)-pkg-config --libs vorbis ogg`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= html_DATA=
 endef

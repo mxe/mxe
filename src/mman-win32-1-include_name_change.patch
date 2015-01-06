@@ -1,3 +1,6 @@
+This file is part of MXE.
+See index.html for further information.
+
 diff -urN mman-win32-master/Makefile mman-win32-master-patch/Makefile
 --- mman-win32-master/Makefile	2013-04-23 07:36:23.000000000 +0300
 +++ mman-win32-master-patch/Makefile	2014-01-05 14:24:31.793744239 +0200

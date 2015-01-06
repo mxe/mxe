@@ -11,10 +11,10 @@ $(PKG)_URL      := http://prdownloads.sourceforge.net/flex/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://flex.sourceforge.net/' | \
-    $(SED) -n 's,.*flex-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    $(SORT) -V | \
-    tail -1
+    $(WGET) -q -O- 'http://sourceforge.net/projects/flex/files/' | \
+    grep -i 'flex/files/' | \
+    $(SED) -n 's,.*/flex-\([0-9\.]*\)\.tar.*/.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD_$(BUILD)

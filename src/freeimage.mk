@@ -44,3 +44,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-freeimage.exe' \
         `'$(TARGET)-pkg-config' freeimage --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

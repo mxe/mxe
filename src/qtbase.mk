@@ -3,12 +3,12 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.2.1
-$(PKG)_CHECKSUM := 32cfec62138a478361711cb5f6c8d1c60a3d8c08
+$(PKG)_VERSION  := 5.3.1
+$(PKG)_CHECKSUM := 4496edb8377e303f09145a1215f79e62e3a7ba11
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.2/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc postgresql freetds openssl zlib libpng jpeg sqlite pcre fontconfig freetype dbus icu4c
+$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.3/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc postgresql freetds openssl harfbuzz zlib libpng jpeg sqlite pcre fontconfig freetype dbus icu4c
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.1/ | \
@@ -38,6 +38,7 @@ define $(PKG)_BUILD
             -accessibility \
             -nomake examples \
             -nomake tests \
+            -no-sql-mysql \
             -qt-sql-sqlite \
             -qt-sql-odbc \
             -qt-sql-psql \
@@ -46,6 +47,9 @@ define $(PKG)_BUILD
             -system-libpng \
             -system-libjpeg \
             -system-sqlite \
+            -fontconfig \
+            -system-freetype \
+            -system-harfbuzz \
             -system-pcre \
             -openssl-linked \
             -dbus-linked \
@@ -71,4 +75,15 @@ define $(PKG)_BUILD
         '$(TOP_DIR)/src/qt-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
         `'$(TARGET)-pkg-config' Qt5Widgets --cflags --libs`
+
+    # batch file to run test programs
+    (printf 'set PATH=..\\lib;..\\qt5\\bin;..\\qt5\\lib;%%PATH%%\r\n'; \
+     printf 'set QT_QPA_PLATFORM_PLUGIN_PATH=..\\qt5\\plugins\r\n'; \
+     printf 'test-qt5.exe\r\n'; \
+     printf 'test-qtbase-pkgconfig.exe\r\n';) \
+     > '$(PREFIX)/$(TARGET)/bin/test-qt5.bat'
 endef
+
+$(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\
+                      $(subst -qt-sql-,-plugin-sql-,\
+                      $($(PKG)_BUILD)))

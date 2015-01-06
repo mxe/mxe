@@ -1,0 +1,187 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 28a0c250320661a3fe15d3f0373ace044cccd8e5 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Fri, 22 Aug 2014 10:02:58 -0700
+Subject: [PATCH 1/2] Add more [v]snprintf() fallback
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+---
+ caca/driver/ncurses.c | 4 ++++
+ caca/driver/slang.c   | 4 ++++
+ caca/driver/x11.c     | 4 ++++
+ caca/prof.c           | 4 ++++
+ 4 files changed, 16 insertions(+)
+
+diff --git a/caca/driver/ncurses.c b/caca/driver/ncurses.c
+index 8161c0f..53c76c1 100644
+--- a/caca/driver/ncurses.c
++++ b/caca/driver/ncurses.c
+@@ -634,7 +634,11 @@ static void ncurses_uninstall_terminal(caca_display_t *dp)
+     if(!dp->drv.p->term)
+         return;
+ 
++#if defined(HAVE_SNPRINTF)
+     snprintf(termenv, 1023, "TERM=%s", dp->drv.p->term);
++#else
++    sprintf(termenv, "TERM=%s", dp->drv.p->term);
++#endif
+     free(dp->drv.p->term);
+     (void)putenv(termenv);
+ }
+diff --git a/caca/driver/slang.c b/caca/driver/slang.c
+index 4dd9fb6..cf38ecf 100644
+--- a/caca/driver/slang.c
++++ b/caca/driver/slang.c
+@@ -576,7 +576,11 @@ static void slang_uninstall_terminal(caca_display_t *dp)
+     if(!dp->drv.p->term)
+         return;
+ 
++#if defined(HAVE_SNPRINTF)
+     snprintf(termenv, 1023, "TERM=%s", dp->drv.p->term);
++#else
++    sprintf(termenv, "TERM=%s", dp->drv.p->term);
++#endif
+     free(dp->drv.p->term);
+     (void)putenv(termenv);
+ }
+diff --git a/caca/driver/x11.c b/caca/driver/x11.c
+index 6bd04cf..24bcdbf 100644
+--- a/caca/driver/x11.c
++++ b/caca/driver/x11.c
+@@ -155,7 +155,11 @@ static int x11_init_graphics(caca_display_t *dp)
+ 
+             if (dp->drv.p->font_set)
+                 XFreeFontSet(dp->drv.p->dpy, dp->drv.p->font_set);
++#if defined(HAVE_SNPRINTF)
+             snprintf(buf, BUFSIZ - 1, "%s,*", *parser);
++#else
++            sprintf(buf, "%s,*", *parser);
++#endif
+             dp->drv.p->font_set = XCreateFontSet(dp->drv.p->dpy, buf,
+                                                  &missing_charset_list,
+                                                  &missing_charset_count,
+diff --git a/caca/prof.c b/caca/prof.c
+index 4581aaf..6aaa295 100644
+--- a/caca/prof.c
++++ b/caca/prof.c
+@@ -59,7 +59,11 @@ void _caca_init_stat(struct caca_stat *s, const char *format, ...)
+     s->name = malloc(128 * sizeof(char));
+     va_list args;
+     va_start(args, format);
++#if defined(HAVE_VSNPRINTF)
+     vsnprintf(s->name, 128, format, args);
++#else
++    vsprintf(s->name, format, args);
++#endif
+     s->name[127] = '\0';
+     va_end(args);
+ 
+-- 
+1.9.1
+
+
+From 2d9f0f378261d19b56a66f9f0f0508f11f31e56c Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Fri, 22 Aug 2014 10:04:06 -0700
+Subject: [PATCH 2/2] string: remove broken vsnprintf[_s] implementation
+
+This interferes mingw-w64, which as a proper vsnprintf definition.
+
+The usage of vsnprintf in the file is guarded with HAVE_VSNPRINF
+with appropriate fallback, so removing it should not break anything.
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+---
+ caca/figfont.c | 26 --------------------------
+ caca/string.c  | 22 ----------------------
+ 2 files changed, 48 deletions(-)
+
+diff --git a/caca/figfont.c b/caca/figfont.c
+index caa44d5..4e10186 100644
+--- a/caca/figfont.c
++++ b/caca/figfont.c
+@@ -29,11 +29,6 @@
+ #include "caca.h"
+ #include "caca_internals.h"
+ 
+-#if defined _WIN32 && defined __GNUC__ && __GNUC__ >= 3
+-int sprintf_s(char *s, size_t n, const char *fmt, ...) CACA_WEAK;
+-int vsnprintf(char *s, size_t n, const char *fmt, va_list ap) CACA_WEAK;
+-#endif
+-
+ struct caca_charfont
+ {
+     int term_width;
+@@ -633,27 +628,6 @@ static uint32_t hsmush(uint32_t ch1, uint32_t ch2, int rule)
+ }
+ 
+ /*
+- * Functions for the mingw32 runtime
+- */
+-
+-#if defined _WIN32 && defined __GNUC__ && __GNUC__ >= 3
+-int sprintf_s(char *s, size_t n, const char *fmt, ...)
+-{
+-    va_list args;
+-    int ret;
+-    va_start(args, fmt);
+-    ret = vsnprintf(s, n, fmt, args);
+-    va_end(args);
+-    return ret;
+-}
+-
+-int vsnprintf(char *s, size_t n, const char *fmt, va_list ap)
+-{
+-    return 0;
+-}
+-#endif
+-
+-/*
+  * XXX: The following functions are aliases.
+  */
+ 
+diff --git a/caca/string.c b/caca/string.c
+index 22e0af2..db79e30 100644
+--- a/caca/string.c
++++ b/caca/string.c
+@@ -36,12 +36,6 @@
+ #include "caca.h"
+ #include "caca_internals.h"
+ 
+-#if defined _WIN32 && defined __GNUC__ && __GNUC__ >= 3
+-int vsnprintf_s(char *s, size_t n, size_t c,
+-                const char *fmt, va_list ap) CACA_WEAK;
+-int vsnprintf(char *s, size_t n, const char *fmt, va_list ap) CACA_WEAK;
+-#endif
+-
+ /** \brief Set cursor position.
+  *
+  *  Put the cursor at the given coordinates. Functions making use of the
+@@ -607,22 +601,6 @@ int caca_set_canvas_boundaries(caca_canvas_t *cv, int x, int y, int w, int h)
+ }
+ 
+ /*
+- * Functions for the mingw32 runtime
+- */
+-
+-#if defined _WIN32 && defined __GNUC__ && __GNUC__ >= 3
+-int vsnprintf_s(char *s, size_t n, size_t c, const char *fmt, va_list ap)
+-{
+-    return vsnprintf(s, n, fmt, ap);
+-}
+-
+-int vsnprintf(char *s, size_t n, const char *fmt, va_list ap)
+-{
+-    return 0;
+-}
+-#endif
+-
+-/*
+  * XXX: The following functions are aliases.
+  */
+ 
+-- 
+1.9.1
+

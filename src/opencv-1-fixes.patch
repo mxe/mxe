@@ -1,14 +1,6 @@
 This file is part of MXE.
 See index.html for further information.
 
-Contains ad hoc patches for cross building.
-
-From c5cbee4c3334d5216af64ac17045c79baaeeb023 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sun, 12 May 2013 18:07:47 +1000
-Subject: [PATCH 1/3] add hoc patches for cross building
-
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 579312d..53e4132 100644
 --- a/CMakeLists.txt
@@ -22,83 +14,74 @@ index 579312d..53e4132 100644
  endif(NOT CMAKE_TOOLCHAIN_FILE)
  
  # --------------------------------------------------------------
-diff --git a/cmake/OpenCVFindLCMS.cmake b/cmake/OpenCVFindLCMS.cmake
-new file mode 100644
-index 0000000..426bbae
---- /dev/null
-+++ b/cmake/OpenCVFindLCMS.cmake
-@@ -0,0 +1,71 @@
-+# - Find LCMS
-+# Find the LCMS includes and library
-+# This module defines
-+#  LCMS_INCLUDE_DIR, where to find lcms.h
-+#  LCMS_LIBRARIES, the libraries needed to use LCMS.
-+#  LCMS_VERSION, The value of LCMS_VERSION defined in lcms.h
-+#  LCMS_FOUND, If false, do not try to use LCMS.
-+
-+
-+# Copyright (c) 2008, Adrian Page, <adrian@pagenet.plus.com>
-+# Copyright (c) 2009, Cyrille Berger, <cberger@cberger.net>
-+#
-+# Redistribution and use is allowed according to the terms of the BSD license.
-+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-+
-+
-+# use pkg-config to get the directories and then use these values
-+# in the FIND_PATH() and FIND_LIBRARY() calls
-+if(NOT WIN32)
-+   find_package(PkgConfig)
-+   pkg_check_modules(PC_LCMS lcms)
-+   set(LCMS_DEFINITIONS ${PC_LCMS_CFLAGS_OTHER})
-+endif(NOT WIN32)
-+
-+find_path(LCMS_INCLUDE_DIR lcms.h
-+   PATHS
-+   ${PC_LCMS_INCLUDEDIR}
-+   ${PC_LCMS_INCLUDE_DIRS}
-+   PATH_SUFFIXES lcms liblcms
-+)
-+
-+find_library(LCMS_LIBRARIES NAMES lcms liblcms lcms-1 liblcms-1
-+   PATHS     
-+   ${PC_LCMS_LIBDIR}
-+   ${PC_LCMS_LIBRARY_DIRS}
-+   PATH_SUFFIXES lcms
-+)
-+
-+if(LCMS_INCLUDE_DIR AND LCMS_LIBRARIES)
-+   set(LCMS_FOUND TRUE)
-+else(LCMS_INCLUDE_DIR AND LCMS_LIBRARIES)
-+   set(LCMS_FOUND FALSE)
-+endif(LCMS_INCLUDE_DIR AND LCMS_LIBRARIES)
-+
-+if(LCMS_FOUND)
-+   file(READ ${LCMS_INCLUDE_DIR}/lcms.h LCMS_VERSION_CONTENT)
-+   string(REGEX MATCH "#define LCMS_VERSION[ ]*[0-9]*\n" LCMS_VERSION_MATCH ${LCMS_VERSION_CONTENT})
-+   if(LCMS_VERSION_MATCH)
-+      string(REGEX REPLACE "#define LCMS_VERSION[ ]*([0-9]*)\n" "\\1" LCMS_VERSION ${LCMS_VERSION_MATCH})
-+      if(NOT LCMS_FIND_QUIETLY)
-+         string(SUBSTRING ${LCMS_VERSION} 0 1 LCMS_MAJOR_VERSION)
-+         string(SUBSTRING ${LCMS_VERSION} 1 2 LCMS_MINOR_VERSION)
-+         message(STATUS "Found lcms version ${LCMS_MAJOR_VERSION}.${LCMS_MINOR_VERSION}, ${LCMS_LIBRARIES}")
-+      endif(NOT LCMS_FIND_QUIETLY)
-+   else(LCMS_VERSION_MATCH)
-+      if(NOT LCMS_FIND_QUIETLY)
-+         message(STATUS "Found lcms but failed to find version ${LCMS_LIBRARIES}")
-+      endif(NOT LCMS_FIND_QUIETLY)
-+      set(LCMS_VERSION NOTFOUND)
-+   endif(LCMS_VERSION_MATCH)
-+else(LCMS_FOUND)
-+   if(NOT LCMS_FIND_QUIETLY)
-+      if(LCMS_FIND_REQUIRED)
-+         message(FATAL_ERROR "Required package lcms NOT found")
-+      else(LCMS_FIND_REQUIRED)
-+         message(STATUS "lcms NOT found")
-+      endif(LCMS_FIND_REQUIRED)
-+   endif(NOT LCMS_FIND_QUIETLY)
-+endif(LCMS_FOUND)
-+
-+mark_as_advanced(LCMS_INCLUDE_DIR LCMS_LIBRARIES LCMS_VERSION)
+diff -ur a/modules/core/src/lapack.cpp b/modules/core/src/lapack.cpp
+--- a/modules/core/src/lapack.cpp	2013-12-28 04:09:18.000000000 +1100
++++ b/modules/core/src/lapack.cpp	2014-01-05 21:14:52.869649685 +1100
+@@ -716,7 +716,7 @@
+ 
+ static void JacobiSVD(double* At, size_t astep, double* W, double* Vt, size_t vstep, int m, int n, int n1=-1)
+ {
+-    JacobiSVDImpl_(At, astep, W, Vt, vstep, m, n, !Vt ? 0 : n1 < 0 ? n : n1, DBL_MIN, DBL_EPSILON*10);
++    JacobiSVDImpl_(At, astep, W, Vt, vstep, m, n, !Vt ? 0 : n1 < 0 ? n : n1, DBL_MIN, DBL_EPSILON*10L);
+ }
+ 
+ /* y[0:m,0:n] += diag(a[0:1,0:m]) * x[0:m,0:n] */
+diff -ur a/modules/core/src/precomp.hpp b/modules/core/src/precomp.hpp
+--- a/modules/core/src/precomp.hpp	2013-12-28 04:09:18.000000000 +1100
++++ b/modules/core/src/precomp.hpp	2014-01-05 21:05:08.968467624 +1100
+@@ -51,7 +51,7 @@
+ 
+ #include <assert.h>
+ #include <ctype.h>
+-#include <float.h>
++#include <cfloat>
+ #include <limits.h>
+ #include <math.h>
+ #include <stdio.h>
+diff -ur a/modules/highgui/src/window_w32.cpp b/modules/highgui/src/window_w32.cpp
+--- a/modules/highgui/src/window_w32.cpp	2013-12-28 04:09:18.000000000 +1100
++++ b/modules/highgui/src/window_w32.cpp	2014-01-05 21:23:48.318950096 +1100
+@@ -75,7 +75,7 @@
+ #include <vector>
+ #include <functional>
+ #include "opencv2/highgui/highgui.hpp"
+-#include <GL\gl.h>
++#include <GL/gl.h>
+ #endif
+ 
+ static const char* trackbar_text =
+
+diff -ur a/cmake/OpenCVFindLibsVideo.cmake b/cmake/OpenCVFindLibsVideo.cmake
+--- a/cmake/OpenCVFindLibsVideo.cmake	2013-12-28 04:09:18.000000000 +1100
++++ b/cmake/OpenCVFindLibsVideo.cmake	2014-01-07 22:34:22.291927941 +1100
+@@ -228,12 +228,12 @@
+ 
+ # --- Extra HighGUI libs on Windows ---
+ if(WIN32)
+-  list(APPEND HIGHGUI_LIBRARIES comctl32 gdi32 ole32 setupapi ws2_32 vfw32)
++  list(APPEND HIGHGUI_LIBRARIES -lcomctl32 -lgdi32 -lole32 -lsetupapi -lws2_32 -lvfw32 -lstrmiids -loleaut32 -luuid)
+   if(MINGW64)
+-    list(APPEND HIGHGUI_LIBRARIES avifil32 avicap32 winmm msvfw32)
+-    list(REMOVE_ITEM HIGHGUI_LIBRARIES vfw32)
++    list(APPEND HIGHGUI_LIBRARIES -lavifil32 -lavicap32 -lwinmm -lmsvfw32)
++    list(REMOVE_ITEM HIGHGUI_LIBRARIES -lvfw32)
+   elseif(MINGW)
+-    list(APPEND HIGHGUI_LIBRARIES winmm)
++    list(APPEND HIGHGUI_LIBRARIES -lwinmm)
+   endif()
+ endif(WIN32)
+ 
+--- a/modules/highgui/CMakeLists.txt
++++ b/modules/highgui/CMakeLists.txt
+@@ -262,7 +267,7 @@ set_target_properties(${the_module} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+ ocv_add_precompiled_headers(${the_module})
+ ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated-declarations)
+ 
+-if(WIN32 AND WITH_FFMPEG)
++if(WIN32 AND WITH_FFMPEG AND BUILD_SHARED_LIBS)
+   #copy ffmpeg dll to the output folder
+   if(MSVC64 OR MINGW64)
+     set(FFMPEG_SUFFIX _64)
 diff --git a/cmake/OpenCVFindLZMA.cmake b/cmake/OpenCVFindLZMA.cmake
 new file mode 100644
 index 0000000..0b46b2c
@@ -189,132 +172,37 @@ index 5988169..738e1f3 100644
      include(FindPNG)
      if(PNG_FOUND)
        check_include_file("${PNG_PNG_INCLUDE_DIR}/png.h"        HAVE_PNG_H)
-diff --git a/cmake/OpenCVGenConfig.cmake b/cmake/OpenCVGenConfig.cmake
-index 705ccc8..fe9b01b 100644
---- a/cmake/OpenCVGenConfig.cmake
-+++ b/cmake/OpenCVGenConfig.cmake
-@@ -177,6 +177,6 @@ if(WIN32)
-   exec_program(mkdir ARGS "-p \"${CMAKE_BINARY_DIR}/win-install/\"" OUTPUT_VARIABLE RET_VAL)
-   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" IMMEDIATE @ONLY)
-   configure_file("${OpenCV_SOURCE_DIR}/cmake/templates/OpenCVConfig-version.cmake.in" "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" IMMEDIATE @ONLY)
--  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
--  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/")
-+  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
-+  install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake/")
- endif()
 diff --git a/modules/core/CMakeLists.txt b/modules/core/CMakeLists.txt
 index 4c5112e..7411f32 100644
 --- a/modules/core/CMakeLists.txt
 +++ b/modules/core/CMakeLists.txt
-@@ -1,6 +1,12 @@
+@@ -1,12 +1,12 @@
  set(the_description "The Core Functionality")
--ocv_add_module(core ${ZLIB_LIBRARIES})
--ocv_module_include_directories(${ZLIB_INCLUDE_DIR})
-+
-+if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
-+  ocv_add_module(core ${ZLIB_LIBRARIES} ${LZMA_LIBRARIES} ${LCMS_LIBRARIES})
-+  ocv_module_include_directories(${ZLIB_INCLUDE_DIR} ${LZMA_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
-+else()
-+  ocv_add_module(core ${ZLIB_LIBRARIES})
-+  ocv_module_include_directories(${ZLIB_INCLUDE_DIR})
-+endif()
  
- if(HAVE_CUDA)
-   ocv_source_group("Src\\Cuda" GLOB "src/cuda/*.cu")
-diff --git a/modules/highgui/CMakeLists.txt b/modules/highgui/CMakeLists.txt
-index 7e5fae3..d4e4ed0 100644
---- a/modules/highgui/CMakeLists.txt
-+++ b/modules/highgui/CMakeLists.txt
-@@ -10,8 +10,13 @@ ocv_add_module(highgui opencv_imgproc OPTIONAL opencv_androidcamera)
- ocv_clear_vars(GRFMT_LIBS)
- 
- if(WITH_PNG OR WITH_TIFF OR WITH_OPENEXR)
--  ocv_include_directories(${ZLIB_INCLUDE_DIR})
--  list(APPEND GRFMT_LIBS ${ZLIB_LIBRARIES})
-+  if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
-+    ocv_include_directories(${ZLIB_INCLUDE_DIR} ${LZMA_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
-+    list(APPEND GRFMT_LIBS ${ZLIB_LIBRARIES} ${LZMA_LIBRARIES} ${LCMS_LIBRARIES})
-+  else()
-+    ocv_include_directories(${ZLIB_INCLUDE_DIR})
-+    list(APPEND GRFMT_LIBS ${ZLIB_LIBRARIES})
-+  endif()
+ if (NOT HAVE_CUDA OR ENABLE_DYNAMIC_CUDA)
+-  ocv_add_module(core PRIVATE_REQUIRED ${ZLIB_LIBRARIES})
++  ocv_add_module(core PRIVATE_REQUIRED ${ZLIB_LIBRARIES} ${LZMA_LIBRARIES} ${LCMS_LIBRARIES})
+ else()
+-  ocv_add_module(core PRIVATE_REQUIRED ${ZLIB_LIBRARIES} ${CUDA_LIBRARIES} ${CUDA_npp_LIBRARY})
++  ocv_add_module(core PRIVATE_REQUIRED ${ZLIB_LIBRARIES} ${CUDA_LIBRARIES} ${CUDA_npp_LIBRARY} ${LZMA_LIBRARIES} ${LCMS_LIBRARIES})
  endif()
  
- if(WITH_JPEG)
-@@ -262,7 +267,7 @@ set_target_properties(${the_module} PROPERTIES LINK_INTERFACE_LIBRARIES "")
- ocv_add_precompiled_headers(${the_module})
- ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated-declarations)
+-ocv_module_include_directories("${OpenCV_SOURCE_DIR}/modules/dynamicuda/include/" ${ZLIB_INCLUDE_DIR})
++ocv_module_include_directories("${OpenCV_SOURCE_DIR}/modules/dynamicuda/include/" ${ZLIB_INCLUDE_DIR} ${LZMA_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
  
--if(WIN32 AND WITH_FFMPEG)
-+if(WIN32 AND WITH_FFMPEG AND BUILD_SHARED_LIBS)
-   #copy ffmpeg dll to the output folder
-   if(MSVC64 OR MINGW64)
-     set(FFMPEG_SUFFIX _64)
-diff --git a/modules/highgui/src/window_w32.cpp b/modules/highgui/src/window_w32.cpp
-index 0948197..f32718f 100644
---- a/modules/highgui/src/window_w32.cpp
-+++ b/modules/highgui/src/window_w32.cpp
-@@ -76,7 +76,7 @@
- #include <vector>
- #include <functional>
- #include "opencv2/highgui/highgui.hpp"
--#include <GL\gl.h>
-+#include <GL/gl.h>
- #endif
- 
- static const char* trackbar_text =
--- 
-1.8.2.2
-
-
-From c135e32015f138223765c631e14dc81904d11775 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sun, 12 May 2013 18:41:21 +1000
-Subject: [PATCH 2/3] fix lib names
-
-
-diff --git a/cmake/OpenCVFindLibsVideo.cmake b/cmake/OpenCVFindLibsVideo.cmake
-index 4149185..84cceff 100644
---- a/cmake/OpenCVFindLibsVideo.cmake
-+++ b/cmake/OpenCVFindLibsVideo.cmake
-@@ -183,11 +183,11 @@ endif(WITH_VIDEOINPUT)
- 
- # --- Extra HighGUI libs on Windows ---
- if(WIN32)
--  list(APPEND HIGHGUI_LIBRARIES comctl32 gdi32 ole32 vfw32)
-+  list(APPEND HIGHGUI_LIBRARIES -lcomctl32 -lgdi32 -lole32 -lvfw32)
-   if(MINGW64)
--    list(APPEND HIGHGUI_LIBRARIES avifil32 avicap32 winmm msvfw32)
--    list(REMOVE_ITEM HIGHGUI_LIBRARIES vfw32)
-+    list(APPEND HIGHGUI_LIBRARIES -lavifil32 -lavicap32 -lwinmm -lmsvfw32)
-+    list(REMOVE_ITEM HIGHGUI_LIBRARIES -lvfw32)
-   elseif(MINGW)
--    list(APPEND HIGHGUI_LIBRARIES winmm)
-+    list(APPEND HIGHGUI_LIBRARIES -lwinmm)
-   endif()
- endif(WIN32)
--- 
-1.8.2.2
-
-
-From 297635f66f80a794721292a0d91a61deac2774de Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sun, 12 May 2013 19:08:25 +1000
-Subject: [PATCH 3/3] pkgconfig static fixes
-
+ if(HAVE_WINRT_CX)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /ZW")
 
 diff --git a/cmake/templates/opencv-XXX.pc.cmake.in b/cmake/templates/opencv-XXX.pc.cmake.in
 index 4f6415c..ea1ed15 100644
---- a/cmake/templates/opencv-XXX.pc.cmake.in
-+++ b/cmake/templates/opencv-XXX.pc.cmake.in
-@@ -9,5 +9,7 @@ includedir_new=@includedir@
+--- a/cmake/templates/opencv-XXX.pc.in
++++ b/cmake/templates/opencv-XXX.pc.in
+@@ -9,5 +9,7 @@
  Name: OpenCV
  Description: Open Source Computer Vision Library
- Version: @VERSION@
+ Version: @OPENCV_VERSION@
 +Requires: OpenEXR libtiff-4
  Libs: @OpenCV_LIB_COMPONENTS@
 +Libs.private: -luuid -loleaut32
  Cflags: -I${includedir_old} -I${includedir_new}
--- 
-1.8.2.2
 

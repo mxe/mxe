@@ -4,7 +4,7 @@
 PKG             := qtserialport
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 929b27f7d67a44cd7f9fc138f0c1300145d7e517
+$(PKG)_CHECKSUM := 0161bc052a16c06aed4d539bfdef74d2f43b728c
 $(PKG)_SUBDIR    = $(subst qtbase,qtserialport,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtserialport,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtserialport,$(qtbase_URL))

@@ -1,0 +1,218 @@
+#!/usr/bin/env bash
+
+set -e
+
+LD=
+AR=
+INSTALL=
+infile=
+outfile=
+libdir=
+bindir=
+install=false
+windowsdll=false
+msvc=false
+msvclibmode=false
+libprefix=
+libsuffix=
+LIBS=
+
+topdir=$(pwd)
+tmpdir=$topdir/make-shared-from-static.$$
+
+#trap "cd $topdir; rm -rf $tmpdir" 1 2 15
+
+for arg
+do
+  case "$1" in
+    --install)
+      install=true
+      shift
+      if [ $# -gt 0 ]; then
+        INSTALL="$1"
+        shift
+      else
+        echo "make-shared-from-static: expecting argument for --install option" 1>&2
+        exit 1
+      fi
+    ;;
+    --windowsdll)
+      shift
+      windowsdll=true
+    ;;
+    --msvc)
+      shift
+      msvc=true
+    ;;
+    --bindir)
+      shift
+      if [ $# -gt 0 ]; then
+        bindir="$1"
+        shift
+      else
+        echo "make-shared-from-static: expecting argument for --bindir option" 1>&2
+        exit 1
+      fi
+    ;;
+    --libdir)
+      shift
+      if [ $# -gt 0 ]; then
+        libdir="$1"
+        shift
+      else
+        echo "make-shared-from-static: expecting argument for --libdir option" 1>&2
+        exit 1
+      fi
+    ;;
+    --ld)
+      shift
+      if [ $# -gt 0 ]; then
+        LD="$1"
+        shift
+      else
+        echo "make-shared-from-static: expecting argument for --ld option" 1>&2
+        exit 1
+      fi
+    ;;
+    --ar)
+      shift
+      if [ $# -gt 0 ]; then
+        AR="$1"
+        shift
+      else
+        echo "make-shared-from-static: expecting argument for --ar option" 1>&2
+        exit 1
+      fi
+    ;;
+    --libprefix)
+      shift
+      if [ $# -gt 0 ]; then
+        libprefix="$1"
+        shift
+      else
+        echo "make-shared-from-static: expecting argument for --libprefix option" 1>&2
+        exit 1
+      fi
+    ;;
+    --libsuffix)
+      shift
+      if [ $# -gt 0 ]; then
+        libsuffix="$1"
+        shift
+      else
+        echo "make-shared-from-static: expecting argument for --libsuffix option" 1>&2
+        exit 1
+      fi
+    ;;
+    -l*)
+      LIBS="$LIBS $1"
+      shift
+    ;;
+    *.a)
+      if [ -z "$infile" ]; then
+        case "$1" in
+          /*)
+            infile="$1"
+          ;;
+          *)
+            infile=$(pwd)/$1
+          ;;
+        esac
+        shift
+      else
+        echo "make-shared-from-static: only one input file allowed" 1>&2
+        exit 1
+      fi
+    ;;
+  esac
+done
+
+if [ -n "$infile" ]; then
+  base_infile=$(basename $infile)
+  if $windowsdll; then
+    if $msvc; then
+      base_name=`echo $base_infile | sed -n -e 's/^lib\(.*\)\.a$/\1/p'`
+      outfile="${libprefix}${base_name}${libsuffix}.dll"
+      implibfile="$base_name.lib"
+      # Modern libtool won't create .a files, but will create directly .lib files.
+      # If the .a file does not exist, check for an existing .lib file.
+      if [ ! -f "$infile" ]; then
+        msvc_infiles="`echo $infile | sed -e 's/\.a$/.lib/'` \
+`dirname \"$infile\"`/`echo $base_infile | sed -e 's/\.a$/.lib/' -e 's/^lib//'`"
+        for msvc_infile in $msvc_infiles; do
+          if [ -f "$msvc_infile" ]; then
+            infile="$msvc_infile"
+            msvclibmode=true
+            break
+          fi
+        done
+      fi
+    else
+      outfile=$(echo $base_infile | sed 's/\.a$/.dll/')
+      implibfile="$outfile.a"
+    fi
+  else
+    outfile=$(echo $base_infile | sed 's/\.a$/.so/')
+  fi
+else
+  echo "make-shared-from-static: no input file specified" 1>&2
+  exit 1
+fi
+
+NM=nm
+SED=sed
+global_symbol_pipe="sed -n -e 's/^.*[     ]\\([ABCDGIRSTW][ABCDGIRSTW]*\\)[     ][     ]*_\\([_A-Za-z][_A-iZa-z0-9]*\\)\\{0,1\\}\$/\\1 _\\2 \\2/p' | sed '/ __gnu_lto/d'"
+# Ignore DATA symbols for now. They should be be properly exported from
+# the source code using dllexport. They can't be re-exported manually like
+# this using MSVC.
+#export_symbols_cmds="\$NM \$libobjs \$convenience | \$global_symbol_pipe | \$SED -e '/^[BCDGRS][ ]/s/.*[ ]\\\\([^ ]*\\\\)/\\\\1,DATA/' | \$SED -e '/^[AITW][ ]/s/.*[ ]//' | sort | uniq >> \$export_symbols"
+export_symbols_cmds="\$NM \$libobjs \$convenience | \$global_symbol_pipe | \$SED -e '/^[BCDGRS][ ]/d' | \$SED -e '/^[AITW][ ]/s/.*[ ]//' | sort | uniq >> \$export_symbols"
+
+mkdir $tmpdir
+
+(
+  cd $tmpdir
+
+  $msvclibmode || $AR x $infile
+
+  LIBDIR_ARGS=
+  if [ -n "$libdir" ]; then
+    LIBDIR_ARGS="-L$libdir"
+  fi
+
+  if $windowsdll; then
+    if $msvc; then
+      export_symbols="$base_name.def"
+      echo EXPORTS > $export_symbols
+      if $msvclibmode; then
+        libobjs="$infile"
+      else
+        libobjs="*.o"
+      fi
+      convenience=
+      eval cmd=\"$export_symbols_cmds\"
+      eval "$cmd"
+      link_args="-Wl,-def:$export_symbols $libobjs"
+    else
+      link_args="-Wl,--export-all-symbols -Wl,--enable-auto-import -Wl,--enable-auto-image-base *.o"
+    fi
+    set -x
+    $LD -shared $link_args -Wl,--out-implib="$implibfile" -o "$outfile" $LIBDIR_ARGS $LIBS
+  else
+    $LD -shared -o $outfile *.o $LIBDIR_ARGS $LIBS
+  fi
+
+  if $install; then
+    if $windowsdll; then
+      $INSTALL -d "$libdir"
+      $INSTALL -d "$bindir"
+      $INSTALL -m755 "$implibfile" "$libdir/$implibfile"
+      $INSTALL -m755 "$outfile" "$bindir/$outfile"
+    else
+      $INSTALL -d "$libdir"
+      $INSTALL -m755 "$outfile" "$libdir/$outfile"
+    fi
+  fi
+)
+
+rm -rf $tmpdir

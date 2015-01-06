@@ -21,10 +21,12 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-shared
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT) SUBDIRS=lib
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libzip.exe' \
         `'$(TARGET)-pkg-config' libzip --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

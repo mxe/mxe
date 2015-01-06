@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 2-9-1
 $(PKG)_CHECKSUM := 24d40e89c2e66a765733e8c98d6f94500343da86
 $(PKG)_SUBDIR   := pthreads-w32-$($(PKG)_VERSION)-release
 $(PKG)_FILE     := pthreads-w32-$($(PKG)_VERSION)-release.tar.gz
-$(PKG)_URL      := ftp://sourceware.org/pub/pthreads-win32/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.videolan.org/contrib/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://sourceware.org/pub/pthreads-win32/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 $(PKG)_DEPS_i686-pc-mingw32 := gcc
@@ -22,9 +23,11 @@ define $(PKG)_BUILD_i686-pc-mingw32
         $(if $(BUILD_STATIC),GC-static,GC-inlined) \
         CROSS='$(TARGET)-'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
+    # This is the DLL include lib on a shared build
+    $(INSTALL) -m644 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a'
     $(if $(BUILD_STATIC), \
-        $(INSTALL) -m644 '$(1)/libpthreadGC2.a' '$(PREFIX)/$(TARGET)/lib/libpthread.a',\
-        $(INSTALL) -m644 '$(1)/pthreadGC2.dll'  '$(PREFIX)/$(TARGET)/lib/pthread.dll')
+        $(SED) -i 's/defined(PTW32_STATIC_LIB)/1/' '$(1)/pthread.h' '$(1)/sched.h' '$(1)/semaphore.h',
+        $(INSTALL) -m644 '$(1)/pthreadGC2.dll'  '$(PREFIX)/$(TARGET)/bin/pthread.dll')
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/pthread.h'   '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/sched.h'     '$(PREFIX)/$(TARGET)/include/'

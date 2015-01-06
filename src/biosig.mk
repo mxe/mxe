@@ -18,9 +18,9 @@ endef
 
 define $(PKG)_BUILD_PRE
 
-    #rm -rf '$(1)'
-    #cp -rL ~/src/biosig-code/biosig4c++ '$(1)'
-    #make -C '$(1)' clean
+    rm -rf '$(1)'
+    cp -rL ~/src/biosig-code/biosig4c++ '$(1)'
+    make -C '$(1)' clean
 
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|^#*||g' '$(1)'/Makefile

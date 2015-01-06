@@ -47,3 +47,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j $(JOBS) install
     $(INSTALL) '$(1)/examples/AABB_tree/AABB_polyhedron_edge_example.exe' '$(PREFIX)/$(TARGET)/bin/test-cgal.exe'
 endef
+
+$(PKG)_BUILD_SHARED =

@@ -3,11 +3,11 @@
 
 PKG             := eigen
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.4
-$(PKG)_CHECKSUM := a5cbe0a5676ea2105c8b0c4569c204bf58fc009a
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-36bf2ceaf8f5
-$(PKG)_FILE     := $($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_FILE)
+$(PKG)_VERSION  := 3.2.1
+$(PKG)_CHECKSUM := 17aca570d647b25cb3d9dac54b480cfecf402ed9
+$(PKG)_SUBDIR   := $(PKG)-$(PKG)-6b38706d90a9
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
@@ -24,4 +24,10 @@ define $(PKG)_BUILD
         -DEIGEN_BUILD_PKGCONFIG=ON \
         -Drun_res=1 -Drun_res__TRYRUN_OUTPUT=""
     $(MAKE) -C '$(1)'/build -j '$(JOBS)' install VERBOSE=1
+
+    '$(TARGET)-g++' -W -Wall '$(2).cpp' -o \
+        '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' --cflags --libs eigen3`
 endef
+
+$(PKG)_BUILD_SHARED =

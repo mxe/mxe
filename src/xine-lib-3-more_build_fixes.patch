@@ -1,3 +1,6 @@
+This file is part of MXE.
+See index.html for further information.
+
 diff -urN xine-lib-1.2.4/src/combined/wavpack_decoder.c xine-lib-1.2.4-patch/src/combined/wavpack_decoder.c
 --- xine-lib-1.2.4/src/combined/wavpack_decoder.c	2013-09-18 13:04:54.000000000 +0300
 +++ xine-lib-1.2.4-patch/src/combined/wavpack_decoder.c	2014-01-01 12:45:31.120873116 +0200

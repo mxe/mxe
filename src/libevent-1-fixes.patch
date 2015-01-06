@@ -1,8 +1,6 @@
 This file is part of MXE.
 See index.html for further information.
 
-Contains ad hoc patches for cross building.
-
 From cf3aef0903fef54aa0ae4bdf997c4bafb7128bb5 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Thu, 25 Apr 2013 18:17:52 +1000

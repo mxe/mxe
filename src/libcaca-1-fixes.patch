@@ -1,0 +1,158 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 9505769c24c5339b98b7a858e51104335a2534ec Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sat, 2 Aug 2014 15:12:50 -0700
+Subject: [PATCH 1/3] Fix Windows build for ncurses and slang
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/caca/driver/ncurses.c b/caca/driver/ncurses.c
+index 7171e91..8161c0f 100644
+--- a/caca/driver/ncurses.c
++++ b/caca/driver/ncurses.c
+@@ -187,7 +187,7 @@
+  * Local functions
+  */
+ 
+-#if defined HAVE_SIGNAL
++#if defined HAVE_SIGNAL && defined SIGWINCH
+ static RETSIGTYPE sigwinch_handler(int);
+ static caca_display_t *sigwinch_d; /* FIXME: we ought to get rid of this */
+ #endif
+@@ -237,7 +237,7 @@ static int ncurses_init_graphics(caca_display_t *dp)
+     ncurses_install_terminal(dp);
+ #endif
+ 
+-#if defined HAVE_SIGNAL
++#if defined HAVE_SIGNAL && defined SIGWINCH
+     sigwinch_d = dp;
+     signal(SIGWINCH, sigwinch_handler);
+ #endif
+@@ -392,9 +392,9 @@ static void ncurses_display(caca_display_t *dp)
+ 
+ static void ncurses_handle_resize(caca_display_t *dp)
+ {
++#if defined HAVE_SYS_IOCTL_H
+     struct winsize size;
+ 
+-#if defined HAVE_SYS_IOCTL_H
+     if(ioctl(fileno(stdout), TIOCGWINSZ, &size) == 0)
+     {
+         dp->resize.w = size.ws_col;
+@@ -587,7 +587,7 @@ static void ncurses_set_cursor(caca_display_t *dp, int flags)
+  * XXX: following functions are local
+  */
+ 
+-#if defined HAVE_SIGNAL
++#if defined HAVE_SIGNAL && defined SIGWINCH
+ static RETSIGTYPE sigwinch_handler(int sig)
+ {
+     sigwinch_d->resize.resized = 1;
+diff --git a/caca/driver/slang.c b/caca/driver/slang.c
+index 9714956..4dd9fb6 100644
+--- a/caca/driver/slang.c
++++ b/caca/driver/slang.c
+@@ -131,7 +131,7 @@ static int slang_init_graphics(caca_display_t *dp)
+     slang_install_terminal(dp);
+ #endif
+ 
+-#if defined(HAVE_SIGNAL)
++#if defined(HAVE_SIGNAL) && defined(SIGWINCH)
+     sigwinch_d = dp;
+     signal(SIGWINCH, sigwinch_handler);
+ #endif
+@@ -534,7 +534,7 @@ static void slang_write_utf32(uint32_t ch)
+ #endif
+ }
+ 
+-#if defined(HAVE_SIGNAL)
++#if defined(HAVE_SIGNAL) && defined(SIGWINCH)
+ static RETSIGTYPE sigwinch_handler(int sig)
+ {
+     sigwinch_d->resize.resized = 1;
+-- 
+1.9.1
+
+
+From e40499aa522996a94e48d3ac2bfce8166398b7a9 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 3 Aug 2014 10:56:02 -0700
+Subject: [PATCH 2/3] Fix pkg-config file and caca-config script
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/caca-config.in b/caca-config.in
+index a54e6e1..f48d9de 100644
+--- a/caca-config.in
++++ b/caca-config.in
+@@ -67,7 +67,7 @@ do
+       echo_libs=yes
+       ;;
+     caca)
+-      libs="$libs -lcaca"
++      libs="$libs -lcaca @ZLIB_LIBS@ @CACA_LIBS@"
+       ;;
+     *)
+       usage 1 1>&2
+diff --git a/caca/caca.pc.in b/caca/caca.pc.in
+index fa683fb..6e50668 100644
+--- a/caca/caca.pc.in
++++ b/caca/caca.pc.in
+@@ -9,5 +9,5 @@ Version: @VERSION@
+ Requires: 
+ Conflicts: 
+ Libs: -L${libdir} -lcaca
+-Libs.private: @ZLIB_LIBS@
++Libs.private: @ZLIB_LIBS@ @CACA_LIBS@
+ Cflags: -I${includedir}
+-- 
+1.9.1
+
+
+From 6a1ecc57ffb222c58c0a618dd0bca72296b16202 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 3 Aug 2014 11:13:23 -0700
+Subject: [PATCH 3/3] Fix freeglut detection on Windows
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/configure.ac b/configure.ac
+index 641dd17..94e5bc5 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -232,19 +232,19 @@ fi
+ 
+ if test "${enable_gl}" != "no"; then
+   ac_cv_my_have_gl="no"
+-  AC_CHECK_HEADERS(GL/gl.h OpenGL/gl.h,
+-   [AC_CHECK_HEADERS(GL/glut.h,
+-     [AC_CHECK_LIB(glut, glutCloseFunc,
+-       [AC_DEFINE(HAVE_GLUTCLOSEFUNC, 1, Define to 1 if you have the ‘glutCloseFunc’ function.)])
+-      AC_CHECK_LIB(glut, glutMainLoopEvent,
+-       [ac_cv_my_have_gl="yes"])
+-      AC_CHECK_LIB(glut, glutCheckLoop,
+-       [ac_cv_my_have_gl="yes"
+-        AC_DEFINE(HAVE_GLUTCHECKLOOP, 1, Define to 1 if you have the ‘glutCheckLoop’ function.)])])
+-      break])
++  PKG_CHECK_MODULES([GL], [glut], [
++   CFLAGS="${CFLAGS} ${GL_CFLAGS}"
++   LIBS="${LIBS} ${GL_LIBS}"
++   AC_CHECK_LIB(glut, glutCloseFunc,
++    [AC_DEFINE(HAVE_GLUTCLOSEFUNC, 1, Define to 1 if you have the ‘glutCloseFunc’ function.)])
++   AC_CHECK_LIB(glut, glutMainLoopEvent,
++    [ac_cv_my_have_gl="yes"])
++   AC_CHECK_LIB(glut, glutCheckLoop,
++    [ac_cv_my_have_gl="yes"
++     AC_DEFINE(HAVE_GLUTCHECKLOOP, 1, Define to 1 if you have the ‘glutCheckLoop’ function.)])
++  ])
+   if test "${ac_cv_my_have_gl}" = "yes"; then
+     AC_DEFINE(USE_GL, 1, Define to 1 to activate the OpenGL backend driver)
+-    GL_LIBS="${GL_LIBS} -lGL -lGLU -lglut"
+     CACA_DRIVERS="${CACA_DRIVERS} gl"
+   elif test "${enable_gl}" = "yes"; then
+     AC_MSG_ERROR([cannot find OpenGL+FreeGLUT development files])
+-- 
+1.9.1
+

@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 #ec2-174-129-78-72.compute-1.amazonaws.com
 #http://s3tools.org/s3cmd
 
 cd ~/mxe && git pull
 cd ~/mxe && make download
-cd ~/mxe && make clean-pkg
+cd ~/mxe && make clean-junk
 s3cmd sync --acl-public ~/mxe/pkg/* s3://mxe-pkg/

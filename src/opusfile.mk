@@ -3,8 +3,8 @@
 
 PKG             := opusfile
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.4
-$(PKG)_CHECKSUM := d514e57ffc051e4359b9bc13d6fc8805a26cdd3b
+$(PKG)_VERSION  := 0.5
+$(PKG)_CHECKSUM := 1ba9dabbbaa35034af8167661a918df6c003317e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.xiph.org/releases/opus/$($(PKG)_FILE)
@@ -21,10 +21,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-doc \
         --disable-http
     $(MAKE) -C '$(1)' -j '$(JOBS)' noinst_PROGRAMS=

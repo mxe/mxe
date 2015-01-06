@@ -23,3 +23,5 @@ define $(PKG)_BUILD
         -DENABLE_STATIC=ON
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 endef
+
+$(PKG)_BUILD_SHARED =

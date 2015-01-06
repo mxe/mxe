@@ -36,3 +36,5 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/libusb.a'  '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libusbd.a' '$(PREFIX)/$(TARGET)/lib/'
 endef
+
+$(PKG)_BUILD_SHARED =

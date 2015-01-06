@@ -4,7 +4,7 @@
 PKG             := qtquickcontrols
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 9fc54633504a593eb31b3bd71ed0a016fd5ddc65
+$(PKG)_CHECKSUM := ac5915fada5828ce51e1f3123264135cb7ae3803
 $(PKG)_SUBDIR    = $(subst qtbase,qtquickcontrols,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtquickcontrols,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtquickcontrols,$(qtbase_URL))

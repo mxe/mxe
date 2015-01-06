@@ -30,3 +30,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-glfw2.exe' \
         `'$(TARGET)-pkg-config' libglfw --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

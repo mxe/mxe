@@ -23,6 +23,9 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT)
+    rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/opus_*.3
+    rm -f '$(PREFIX)/$(TARGET)'/share/man/man3/opus.h.3
+    rm -rf '$(PREFIX)/$(TARGET)'/share/doc/opus/html
 endef

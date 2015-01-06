@@ -21,10 +21,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-explicit-deps \
         --disable-glibtest \
         --disable-modules \
@@ -39,5 +36,7 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtk2.exe' \
-        `'$(TARGET)-pkg-config' gtk+-2.0 --cflags --libs`
+        `'$(TARGET)-pkg-config' gtk+-2.0 gmodule-2.0 --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

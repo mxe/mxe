@@ -2,27 +2,24 @@
 # See index.html for further information.
 
 PKG             := intltool
-$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.50.2
 $(PKG)_CHECKSUM := 7fddbd8e1bf94adbf1bc947cbf3b8ddc2453f8ad
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://launchpad.net/$(PKG)/trunk/$($(PKG)_VERSION)/+download/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     :=
+$(PKG)_URL      := https://launchpad.net/intltool/trunk/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
+$(PKG)_DEPS     := 
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package intltool.' >&2;
-    echo $(intltool_VERSION)
+    $(WGET) -q -O- 'https://launchpad.net/intltool/+download' | \
+    $(SED) -n 's,.*https://launchpad.net/intltool/trunk/\([0-9][^"]*\)\/+download/intltool-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
-define $(PKG)_BUILD
-    cd '$(1)' && '$(1)/configure' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --enable-static
-
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+define $(PKG)_BUILD_$(BUILD)
+    mkdir '$(1).build'
+    cd    '$(1).build' && '$(1)/configure' \
+        --prefix='$(PREFIX)/$(TARGET)'
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' man1_MANS=
+    $(MAKE) -C '$(1).build' -j 1 install man1_MANS=
 endef

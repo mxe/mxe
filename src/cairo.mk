@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 4f6e337d5d3edd7ea79d1426f575331552b003ec
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib libpng fontconfig freetype pixman
+$(PKG)_DEPS     := gcc fontconfig freetype-bootstrap libpng lzo pixman zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://cairographics.org/releases/?C=M;O=D' | \
@@ -21,6 +21,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,^\(Libs:.*\),\1 @CAIRO_NONPKGCONFIG_LIBS@,' '$(1)/src/cairo.pc.in'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
+        --disable-lto \
         --disable-gtk-doc \
         --disable-test-surfaces \
         --disable-gcov \

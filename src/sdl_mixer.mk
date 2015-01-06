@@ -52,3 +52,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_mixer.exe' \
         `'$(TARGET)-pkg-config' SDL_mixer --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

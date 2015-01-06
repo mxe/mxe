@@ -28,3 +28,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/build' -j $(JOBS) install
     ln -sf '$(PREFIX)/$(TARGET)/bin/llvm-config' '$(PREFIX)/bin/$(TARGET)-llvm-config'
 endef
+
+$(PKG)_BUILD_SHARED =

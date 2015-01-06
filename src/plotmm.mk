@@ -27,3 +27,5 @@ define $(PKG)_BUILD
         noinst_PROGRAMS= \
         INFO_DEPS=
 endef
+
+$(PKG)_BUILD_SHARED =

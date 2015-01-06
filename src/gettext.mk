@@ -3,11 +3,12 @@
 
 PKG             := gettext
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.18.3.1
-$(PKG)_CHECKSUM := a32c19a6e39450748f6e56d2ac6b8b0966a5ab05
+$(PKG)_VERSION  := 0.19.2
+$(PKG)_CHECKSUM := 3a8e0627290216d695661a748261eacda5cec8aa
 $(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
@@ -25,4 +26,12 @@ define $(PKG)_BUILD
         --without-libxml2-prefix \
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' install
+endef
+
+define $(PKG)_BUILD_$(BUILD)
+    mkdir '$(1).build'
+    cd    '$(1).build' && '$(1)/configure' \
+        --prefix='$(PREFIX)/$(TARGET)'
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' man1_MANS=
+    $(MAKE) -C '$(1).build' -j 1 install man1_MANS=
 endef

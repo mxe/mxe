@@ -3,8 +3,8 @@
 
 PKG             := openssl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.1f
-$(PKG)_CHECKSUM := 9ef09e97dfc9f14ac2c042f3b7e301098794fc0f
+$(PKG)_VERSION  := 1.0.1i
+$(PKG)_CHECKSUM := 74eed314fa2c93006df8d26cd9fc630a101abd76
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.openssl.org/source/$($(PKG)_FILE)
@@ -20,16 +20,18 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && CC='$(TARGET)-gcc' ./Configure \
-        mingw \
+        @openssl-target@ \
         zlib \
         $(if $(BUILD_STATIC),no-,)shared \
         no-capieng \
         --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' install -j 1 \
+    $(MAKE) -C '$(1)' all install_sw -j 1 \
         CC='$(TARGET)-gcc' \
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar rcu' \
         CROSS_COMPILE='$(TARGET)-'
 endef
 
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst mingw ,mingw64 ,$($(PKG)_BUILD))
+$(PKG)_BUILD_i686-pc-mingw32    = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))
+$(PKG)_BUILD_i686-w64-mingw32   = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))
+$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @openssl-target@,mingw64,$($(PKG)_BUILD))

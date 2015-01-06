@@ -1,19 +1,19 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 58ae17b18cea09c1fd3f8ec6912913e147f1f8f5 Mon Sep 17 00:00:00 2001
+From 5a2c60539f7cf6626bbeef3cca44aa172a64cc23 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 17:03:55 +0200
 Subject: [PATCH] mingw build fix: _fileno
 
 
 diff --git a/tools/xmlpatterns/xmlpatterns.pro b/tools/xmlpatterns/xmlpatterns.pro
-index 1fad197..2bbf5b5 100644
+index 0f1ee4f..2fdebb1 100644
 --- a/tools/xmlpatterns/xmlpatterns.pro
 +++ b/tools/xmlpatterns/xmlpatterns.pro
 @@ -11,6 +11,7 @@ HEADERS = main.h                            \
            qapplicationargument.cpp          \
-           qapplicationargumentparser.cpp    
+           qapplicationargumentparser.cpp
  
 +win32-g++*:QMAKE_CXXFLAGS += -U__STRICT_ANSI__
  load(qt_tool)

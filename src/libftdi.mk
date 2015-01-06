@@ -27,3 +27,5 @@ define $(PKG)_BUILD
         HAVELIBUSB=true
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
+
+$(PKG)_BUILD_SHARED =

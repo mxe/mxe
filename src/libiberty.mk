@@ -30,3 +30,5 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libiberty.exe' \
         -I$(PREFIX)/$(TARGET)/include/libiberty -liberty
 endef
+
+$(PKG)_BUILD_SHARED =

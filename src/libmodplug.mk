@@ -18,10 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --enable-static \
-        --prefix='$(PREFIX)/$(TARGET)'
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \

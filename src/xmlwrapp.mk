@@ -24,3 +24,5 @@ define $(PKG)_BUILD
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
 endef
+
+$(PKG)_BUILD_SHARED =

@@ -1,0 +1,27 @@
+This file is part of MXE.
+See index.html for further information.
+
+From a104558efebdc4db05a6c79b5f0aa364d4036366 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sun, 20 Apr 2014 07:57:41 -0700
+Subject: [PATCH 2/3] Add -lstdc++ to pkg-config file
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+---
+ libs/lensfun/lensfun.pc.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libs/lensfun/lensfun.pc.in b/libs/lensfun/lensfun.pc.in
+index f61af62..294212b 100644
+--- a/libs/lensfun/lensfun.pc.in
++++ b/libs/lensfun/lensfun.pc.in
+@@ -2,5 +2,5 @@ Name: lensfun
+ Description: A photographic lens database and access library
+ Version: @CONF_VERSION@
+ Requires: glib-2.0
+-Libs: -L@CONF_LIBDIR@ -llensfun @NEED_LIB_REGEX@
++Libs: -L@CONF_LIBDIR@ -llensfun -lstdc++ @NEED_LIB_REGEX@
+ Cflags: -I@CONF_INCLUDEDIR@ @CONF_LENSFUN_STATIC@
+-- 
+1.8.3.2
+

@@ -34,10 +34,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/$(ilmbase_SUBDIR)' -j '$(JOBS)' install \
         bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-threading \
         --disable-posix-sem \
         --disable-ilmbasetest \

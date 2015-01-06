@@ -3,12 +3,12 @@
 
 PKG             := harfbuzz
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.26
-$(PKG)_CHECKSUM := 0963768b8ee1f575c5a20828eefb101be6eaae6f
+$(PKG)_VERSION  := 0.9.34
+$(PKG)_CHECKSUM := 8a8cdbeaf1622459864180fbf453e3ab7343f338
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.freedesktop.org/software/$(PKG)/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib cairo freetype icu4c
+$(PKG)_DEPS     := gcc glib cairo freetype-bootstrap icu4c
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://cgit.freedesktop.org/harfbuzz/refs/tags' | \

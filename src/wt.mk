@@ -36,7 +36,10 @@ define $(PKG)_BUILD
         -DWT_CMAKE_FINDER_INSTALL_DIR='/lib/wt' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         '$(1)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
+    $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =
+
+$(PKG)_BUILD_SHARED =

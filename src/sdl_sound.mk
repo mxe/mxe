@@ -50,3 +50,5 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' sdl vorbisfile flac speex --cflags --libs` \
         `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =

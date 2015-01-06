@@ -23,3 +23,5 @@ define $(PKG)_BUILD
         -DQNANHIBIT_VALUE=1 -DQNANHIBIT_VALUE__TRYRUN_OUTPUT=1
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 endef
+
+$(PKG)_BUILD_SHARED =

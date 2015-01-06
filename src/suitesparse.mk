@@ -28,7 +28,7 @@ define $(PKG)_BUILD
         F77='$(TARGET)-gfortran' \
         AR='$(TARGET)-ar' \
         RANLIB='$(TARGET)-ranlib' \
-        BLAS='-lblas -lgfortran -lgfortranbegin' \
+        BLAS='-lblas -lgfortran -lgfortranbegin -lquadmath' \
         CHOLMOD_CONFIG='-DNPARTITION'
 
     # install library files
@@ -52,3 +52,5 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/SPQR/Include/'*       '$(PREFIX)/$(TARGET)/include/suitesparse/'
     $(INSTALL) -m644 '$(1)/UMFPACK/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
 endef
+
+$(PKG)_BUILD_SHARED =

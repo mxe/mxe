@@ -20,8 +20,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' MXE_CFLAGS=
+    cd '$(1)' && autoreconf -i && ./configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-frontend
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef

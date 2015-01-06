@@ -9,21 +9,19 @@ EXT_DIR  := $(TOP_DIR)/ext
 # See doc/gmsl.html for further information
 include $(EXT_DIR)/gmsl
 
-MXE_TRIPLETS       := i686-pc-mingw32 x86_64-w64-mingw32 i686-w64-mingw32
+MXE_TRIPLETS       := i686-w64-mingw32 x86_64-w64-mingw32
 MXE_LIB_TYPES      := static shared
-MXE_TARGET_LIST    := $(foreach LIB_TYPE,$(MXE_LIB_TYPES),\
-                          $(addsuffix .$(LIB_TYPE),$(MXE_TRIPLETS)))
-MXE_TARGETS        := i686-pc-mingw32.static
+MXE_TARGET_LIST    := $(foreach TRIPLET,$(MXE_TRIPLETS),\
+                          $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES)))
+MXE_TARGETS        := i686-w64-mingw32.static
 
 DEFAULT_MAX_JOBS   := 6
-SOURCEFORGE_MIRROR := freefr.dl.sourceforge.net
+SOURCEFORGE_MIRROR := downloads.sourceforge.net
 PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
 PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 
 PWD        := $(shell pwd)
 SHELL      := bash
-NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
-JOBS       := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
 
 DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
@@ -37,19 +35,28 @@ WGET       := wget --no-check-certificate \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
-                gcc g++ intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
-                $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
-                scons $(SED) $(SORT) unzip wget xz
+                gcc g++ gperf intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
+                $(MAKE) openssl $(PATCH) $(PERL) python ruby scons \
+                $(SED) $(SORT) unzip wget xz
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(PWD)/tmp-$(1)
-PKGS       := $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html')
+PKGS       := $(call set_create,\
+    $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html'))
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
-BUILD_PKGS := $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | $(SED) -n 's,.*src/\(.*\)\.mk,\1,p')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
+
+# define some whitespace variables
+define newline
+
+
+endef
+
+null  :=
+space := $(null) $(null)
 
 MXE_CONFIGURE_OPTS = \
     --host='$(TARGET)' \
@@ -58,6 +65,63 @@ MXE_CONFIGURE_OPTS = \
     $(if $(BUILD_STATIC), \
         --enable-static --disable-shared , \
         --disable-static --enable-shared )
+
+# Append these to the "make" and "make install" steps of autotools packages
+# in order to neither build nor install unwanted binaries, manpages,
+# infopages and API documentation (reduces build time and disk space usage).
+# NOTE: We don't include bin_SCRIPTS (and variations), since many packages
+# install files such as pcre-config (which we do want to be installed).
+
+MXE_DISABLE_PROGRAMS = \
+    bin_PROGRAMS= \
+    sbin_PROGRAMS= \
+    noinst_PROGRAMS= \
+    check_PROGRAMS=
+
+MXE_DISABLE_DOCS = \
+    man_MANS= \
+    man1_MANS= \
+    man2_MANS= \
+    man3_MANS= \
+    man4_MANS= \
+    man5_MANS= \
+    man6_MANS= \
+    man7_MANS= \
+    man8_MANS= \
+    man9_MANS= \
+    dist_man_MANS= \
+    dist_man1_MANS= \
+    dist_man2_MANS= \
+    dist_man3_MANS= \
+    dist_man4_MANS= \
+    dist_man5_MANS= \
+    dist_man6_MANS= \
+    dist_man7_MANS= \
+    dist_man8_MANS= \
+    dist_man9_MANS= \
+    notrans_dist_man_MANS= \
+    info_TEXINFOS= \
+    doc_DATA= \
+    dist_doc_DATA= \
+    html_DATA= \
+    dist_html_DATA=
+
+MXE_DISABLE_CRUFT = $(MXE_DISABLE_PROGRAMS) $(MXE_DISABLE_DOCS)
+
+MAKE_SHARED_FROM_STATIC = \
+	'$(TOP_DIR)/tools/make-shared-from-static' \
+	$(if $(findstring mingw,$(TARGET)),--windowsdll) \
+	--ar '$(TARGET)-ar' \
+	--ld '$(TARGET)-gcc' \
+	--install '$(INSTALL)' \
+	--libdir '$(PREFIX)/$(TARGET)/lib' \
+	--bindir '$(PREFIX)/$(TARGET)/bin'
+
+define MXE_GET_GITHUB_SHA
+    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' | \
+    $(SED) -n 's#.*"sha": "\([^<]\{7\}\)[^<]\{3\}.*#\1#p' | \
+    head -1
+endef
 
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
@@ -69,11 +133,13 @@ SHORT_PKG_VERSION = \
 UNPACK_ARCHIVE = \
     $(if $(filter %.tgz,     $(1)),tar xzf '$(1)', \
     $(if $(filter %.tar.gz,  $(1)),tar xzf '$(1)', \
+    $(if $(filter %.tbz2,    $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.bz2, $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
-    $(if $(filter %.tar.xz,$(1)),xz -dc '$(1)' | tar xf -, \
+    $(if $(filter %.txz,     $(1)),xz -dc '$(1)' | tar xf -, \
+    $(if $(filter %.tar.xz,  $(1)),xz -dc '$(1)' | tar xf -, \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
-    $(error Unknown archive format: $(1))))))))
+    $(error Unknown archive format: $(1))))))))))
 
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
@@ -87,16 +153,18 @@ CHECK_PKG_ARCHIVE = \
 ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
+BACKUP_DOWNLOAD = \
+    $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`
+
 DOWNLOAD_PKG_ARCHIVE = \
-        mkdir -p '$(PKG_DIR)' && \
-        $(if $($(1)_URL_2), \
-            ( $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' || \
-              $(WGET) -O- '$($(1)_URL_2)' || \
-              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` ), \
-            ( $(WGET) -O- '$($(1)_URL)' || \
-              $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-              $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` )) \
+        mkdir -p '$(PKG_DIR)' && ( \
+            $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' \
+            $(if $($(1)_URL_2), \
+                || $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)') \
+            $(if $(MXE_NO_BACKUP_DL),, \
+                || $(BACKUP_DOWNLOAD)) \
+        ) \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
@@ -106,6 +174,10 @@ DOWNLOAD_PKG_ARCHIVE = \
           echo; \
           rm -f '$(PKG_DIR)/$($(1)_FILE)'; )
 
+ifneq ($(words $(PWD)),1)
+    $(error GNU Make chokes on paths with spaces)
+endif
+
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
 else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
@@ -113,107 +185,35 @@ else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
 else
     $(info [create settings.mk])
     $(shell { \
+        echo '# This is a template of configuration file for MXE. See'; \
+        echo '# index.html for more extensive documentations.'; \
+        echo; \
+        echo '# This variable controls the number of compilation processes'; \
+        echo '# within one package ("intra-package parallelism").'; \
         echo '#JOBS := $(JOBS)'; \
-        echo 'MXE_TARGETS := $(MXE_TARGET_LIST)'; \
+        echo; \
+        echo '# This variable controls the targets that will build.'; \
+        echo '#MXE_TARGETS := $(MXE_TARGET_LIST)'; \
+        echo; \
+        echo '# This variable controls the download mirror for SourceForge,'; \
+        echo '# when it is used. Enabling the value below means auto.'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
-        echo 'LOCAL_PKG_LIST := biosig stimfit sigviewer edfbrowser dcmtk'; \
+        echo; \
+        echo '# The three lines below makes `make` build these "local'; \
+        echo '# packages" instead of all packages.'; \
+        echo '#LOCAL_PKG_LIST := biosig stimfit sigviewer edfbrowser dcmtk opencv pthreads wxwidgets'; \
         echo '#.DEFAULT local-pkg-list:'; \
         echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
 endif
 
-.PHONY: all
-all: all-filtered
-
-.PHONY: check-requirements
-define CHECK_REQUIREMENT
-    @if ! $(1) --help &>/dev/null; then \
-        echo; \
-        echo 'Missing requirement: $(1)'; \
-        echo; \
-        echo 'Please have a look at "index.html" to ensure'; \
-        echo 'that your system meets all requirements.'; \
-        echo; \
-        exit 1; \
-    fi
-
-endef
-define CHECK_REQUIREMENT_VERSION
-    @if ! $(1) --version | head -1 | grep ' \($(2)\)$$' >/dev/null; then \
-        echo; \
-        echo 'Wrong version of requirement: $(1)'; \
-        echo; \
-        echo 'Please have a look at "index.html" to ensure'; \
-        echo 'that your system meets all requirements.'; \
-        echo; \
-        exit 1; \
-    fi
-
-endef
-$(shell [ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed')
-
-check-requirements: $(PREFIX)/installed/check-requirements
-$(PREFIX)/installed/check-requirements: $(MAKEFILE)
-	@echo '[check requirements]'
-	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
-	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[4-9]\|2\.[7-9][0-9])
-	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
-	@touch '$@'
-
-# define some whitespace variables
-define newline
-
-
-endef
-
-null  :=
-space := $(null) $(null)
-
-include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
-
-.PHONY: download
-download: $(addprefix download-,$(PKGS))
-
-.PHONY: build-requirements
-build-requirements:
-	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD) DONT_CHECK_REQUIREMENTS=true
-
-define TARGET_DEPS
-$(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
-                     $(SED) -n 's,.*$(1)\(.*\),\1,p' | \
-                     awk '{print $$1}')
-endef
-$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_DEPS,$(TARGET))))
-
-TARGET_HEADER = \
-    $(strip with \
-	$(if $(value MAKECMDGOALS),\
-		$(words $(MAKECMDGOALS)) goal$(shell [ $(words $(MAKECMDGOALS)) == 1 ] || echo s) from command line,\
-	$(if $(value LOCAL_PKG_LIST),\
-		$(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words $(LOCAL_PKG_LIST)) == 1 ] || echo s) from settings.mk,\
-		$(words $(PKGS)) goal$(shell [ $(words $(PKGS)) == 1 ] || echo s) from src/*.mk)))
-
-define TARGET_RULE
-.PHONY: $(1)
-$(1): | $(if $(value $(1)_DEPS), \
-			$(if $(value MAKECMDGOALS),\
-				$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MAKECMDGOALS)), \
-				$(if $(value LOCAL_PKG_LIST),\
-					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
-					$(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
-		$($(1)_DEPS)
-	@echo '[target]   $(1) $(call TARGET_HEADER)'
-	$(if $(findstring 1,$(words $(subst ., ,$(1)))),
-	    @echo
-	    @echo '------------------------------------------------------------'
-	    @echo 'Warning: Deprecated target name $(1) specified'
-	    @echo
-	    @echo 'Please use $(1).[$(subst $(space),|,$(MXE_LIB_TYPES))] instead'
-	    @echo 'See index.html for further information'
-	    @echo '------------------------------------------------------------'
-	    @echo)
-endef
-$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
+NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+JOBS_AUTO  := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
+JOBS       := $(strip $(if $(findstring undefined,$(origin JOBS)),\
+                   $(info [using autodetected $(JOBS_AUTO) job(s)]) \
+                   $(JOBS_AUTO)\
+              ,\
+                   $(JOBS)))
 
 # cache some target string manipulation functions
 # `memoize` and `uc` from gmsl
@@ -240,12 +240,123 @@ LOOKUP_PKG_RULE = $(strip \
         $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3)),$(1)_$(2)_$(3))\
         $(1)_$(2)_$(3))))
 
+.PHONY: all
+all: all-filtered
+
+.PHONY: check-requirements
+define CHECK_REQUIREMENT
+    @if ! $(1) --help &>/dev/null; then \
+        echo 'Missing requirement: $(1)'; \
+        touch check-requirements-failed; \
+    fi
+
+endef
+define CHECK_REQUIREMENT_VERSION
+    @if ! $(1) --version | head -1 | grep ' \($(2)\)$$' >/dev/null; then \
+        echo 'Wrong version of requirement: $(1)'; \
+        touch check-requirements-failed; \
+    fi
+
+endef
+$(shell [ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed')
+
+check-requirements: $(PREFIX)/installed/check-requirements
+$(PREFIX)/installed/check-requirements: $(MAKEFILE)
+	@echo '[check requirements]'
+	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
+	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[7-9]\|2\.[7-9][0-9])
+	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
+	@if [ -e check-requirements-failed ]; then \
+	    echo; \
+	    echo 'Please have a look at "index.html" to ensure'; \
+	    echo 'that your system meets all requirements.'; \
+	    echo; \
+	    rm check-requirements-failed; \
+	    exit 1; \
+	fi
+	@touch '$@'
+
+include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
+
+BUILD_PKGS := $(call set_create, \
+    $(foreach PKG, \
+        $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | \
+            $(SED) -n 's,.*src/\(.*\)\.mk,\1,p'), \
+        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD))), $(PKG))))
+
+.PHONY: download
+download: $(addprefix download-,$(PKGS))
+
+.PHONY: build-requirements
+build-requirements:
+	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD) DONT_CHECK_REQUIREMENTS=true
+
+define TARGET_DEPS
+$(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
+                     $(SED) -n 's,.*$(1)\(.*\),\1,p' | \
+                     awk '{print $$1}')
+endef
+$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_DEPS,$(TARGET))))
+
+TARGET_HEADER = \
+    $(strip with \
+	$(if $(value MAKECMDGOALS),\
+	    $(words $(MAKECMDGOALS)) goal$(shell [ $(words $(MAKECMDGOALS)) == 1 ] || echo s) from command line,\
+	$(if $(value LOCAL_PKG_LIST),\
+	    $(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words $(LOCAL_PKG_LIST)) == 1 ] || echo s) from settings.mk,\
+	    $(words $(PKGS)) goal$(shell [ $(words $(PKGS)) == 1 ] || echo s) from src/*.mk)))
+
+define TARGET_RULE
+.PHONY: $(1)
+$(1): | $(if $(value $(1)_DEPS), \
+	        $(if $(value MAKECMDGOALS),\
+	            $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MAKECMDGOALS)), \
+	            $(if $(value LOCAL_PKG_LIST),\
+	                $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
+	                $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
+	    $($(1)_DEPS)
+	@echo '[target]   $(1) $(call TARGET_HEADER)'
+	$(if $(findstring i686-pc-mingw32,$(1)),
+	    $(error Deprecated target specified: "$(1)". Please use \
+	            i686-w64-mingw32.[$(subst $(space),|,$(MXE_LIB_TYPES))] instead))
+	$(if $(filter $(1),$(MXE_TARGET_LIST) $(BUILD) $(MXE_TRIPLETS)),,
+	    $(error Invalid target specified: "$(1)"))
+	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),
+	    @echo
+	    @echo '------------------------------------------------------------'
+	    @echo 'Warning: Deprecated target name $(1) specified'
+	    @echo
+	    @echo 'Please use $(1).[$(subst $(space),|,$(MXE_LIB_TYPES))] instead'
+	    @echo 'See index.html for further information'
+	    @echo '------------------------------------------------------------'
+	    @echo)
+endef
+$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
+
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3))))
-	if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
-	    $(call DOWNLOAD_PKG_ARCHIVE,$(1)); \
-	    $(call CHECK_PKG_ARCHIVE,$(1)) || { echo 'Wrong checksum!'; exit 1; }; \
+download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
+                download-only-$(1)
+
+.PHONY: download-only-$(1)
+download-only-$(1)::
+	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
+	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
+	    echo '[download] $(1)'; \
+	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
+	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
+	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
+	        echo; \
+	        echo 'Download failed or wrong checksum of package $(1)!'; \
+	        echo '------------------------------------------------------------'; \
+	        $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
+	            tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p';, \
+	            $(SED) -n '/./p' '$(LOG_DIR)/$(1)-download';) \
+	        echo '------------------------------------------------------------'; \
+	        echo '[log]      $(LOG_DIR)/$(1)-download'; \
+	        echo; \
+	        exit 1; \
+	    fi; \
 	fi
 
 .PHONY: $(1)
@@ -277,7 +388,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    @echo '[build]    $(1)',
 	    @echo '[no-build] $(1)')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
-	@[ $(words $(MXE_TARGETS)) == 1 ] || ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
+	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
 	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
@@ -289,12 +400,6 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
-	    (echo; \
-	     find '$(2)' -name 'config.log' -print -exec cat {} \;; \
-	     echo; \
-	     echo 'settings.mk'; \
-	     cat '$(TOP_DIR)/settings.mk'; \
-	     ) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
 	    exit 1; \
 	fi
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
@@ -305,6 +410,7 @@ build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
+build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3):
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
@@ -318,15 +424,20 @@ build-only-$(1)_$(3):
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    @echo
+	    @find '$(2)' -name 'config.log' -print -exec cat {} \;
+	    @echo
+	    @echo 'settings.mk'
+	    @cat '$(TOP_DIR)/settings.mk'
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
-	    ,)
+	    )
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
 $(foreach TARGET,$(MXE_TARGETS), \
     $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$(PKGS), \
-        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)),$(TARGET)))))
+        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)-$(TARGET)),$(TARGET)))))
 
 # convenience set-like functions for unique lists
 SET_APPEND = \
@@ -339,11 +450,12 @@ SET_CLEAR = \
 WALK_UPSTREAM = \
     $(strip \
         $(foreach PKG,$(filter $(1),$(PKGS)),\
-            $(foreach DEP,$($(PKG)_DEPS) $(foreach TARGET,$(MXE_TARGETS),$($(PKG)_DEPS_$(TARGET))),\
-                $(if $(filter-out $(PKGS_VISITED),$(DEP)),\
-                    $(call SET_APPEND,PKGS_VISITED,$(DEP))\
-                    $(call WALK_UPSTREAM,$(DEP))\
-                    $(DEP)))))
+            $(foreach DEP,$($(PKG)_DEPS) $(foreach TARGET,$(MXE_TARGETS),\
+                $(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET)))),\
+                    $(if $(filter-out $(PKGS_VISITED),$(DEP)),\
+                        $(call SET_APPEND,PKGS_VISITED,$(DEP))\
+                        $(call WALK_UPSTREAM,$(DEP))\
+                        $(DEP)))))
 
 # not really walking downstream - that seems to be quadratic, so take
 # a linear approach and filter the fully expanded upstream for each pkg
@@ -367,29 +479,35 @@ all-filtered: $(filter-out $(call RECURSIVELY_EXCLUDED_PKGS),$(PKGS))
 
 # print a list of upstream dependencies and downstream dependents
 show-deps-%:
-	$(call SET_CLEAR,PKGS_VISITED)
-	$(info $* upstream dependencies:$(newline)\
-	    $(call WALK_UPSTREAM,$*)\
-	    $(newline)$(newline)$* downstream dependents:$(newline)\
-	    $(call WALK_DOWNSTREAM,$*))
-	@echo
+	$(if $(call set_is_member,$*,$(PKGS)),\
+	    $(call SET_CLEAR,PKGS_VISITED)\
+	    $(info $* upstream dependencies:$(newline)\
+	        $(call WALK_UPSTREAM,$*)\
+	        $(newline)$(newline)$* downstream dependents:$(newline)\
+	        $(call WALK_DOWNSTREAM,$*))\
+	    @echo,\
+	    $(error Package $* not found in index.html))
 
 # show upstream dependencies and downstream dependents separately
 # suitable for usage in shell with: `make show-downstream-deps-foo`
 # @echo -n suppresses the "Nothing to be done" without an eol
 show-downstream-deps-%:
-	$(call SET_CLEAR,PKGS_VISITED)
-	$(info $(call WALK_DOWNSTREAM,$*))
-	@echo -n
+	$(if $(call set_is_member,$*,$(PKGS)),\
+	    $(call SET_CLEAR,PKGS_VISITED)\
+	    $(info $(call WALK_DOWNSTREAM,$*))\
+	    @echo -n,\
+	    $(error Package $* not found in index.html))
 
 show-upstream-deps-%:
-	$(call SET_CLEAR,PKGS_VISITED)
-	$(info $(call WALK_UPSTREAM,$*))
-	@echo -n
+	$(if $(call set_is_member,$*,$(PKGS)),\
+	    $(call SET_CLEAR,PKGS_VISITED)\
+	    $(info $(call WALK_UPSTREAM,$*))\
+	    @echo -n,\
+	    $(error Package $* not found in index.html))
 
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX)/*
+	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html
 
 .PHONY: clean-pkg
 clean-pkg:
@@ -397,6 +515,10 @@ clean-pkg:
                   $(filter-out \
                       $(foreach PKG,$(PKGS),$(PKG_DIR)/$($(PKG)_FILE)), \
                       $(wildcard $(PKG_DIR)/*)))
+
+.PHONY: clean-junk
+clean-junk: clean-pkg
+	rm -rf $(LOG_DIR) $(call TMP_DIR,*)
 
 .PHONY: update
 define UPDATE
@@ -408,10 +530,11 @@ define UPDATE
                     $(info .        $(1)  $(2)),
                     $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
-                $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
-                $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                    || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
-                         exit 1; })),
+                $(if $(findstring undefined, $(origin UPDATE_DRYRUN)),
+                    $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
+                    $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
+                        || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
+                             exit 1; }))),
         $(info Unable to update version number of package $(1) \
             $(newline)$(newline)$($(1)_UPDATE)$(newline)))
 
@@ -420,29 +543,121 @@ update:
 	$(foreach PKG,$(PKGS),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
 
 update-package-%:
-	$(if $(findstring $*~,$(addsuffix ~,$(PKGS))), \
-	     $(call UPDATE,$*,$(shell $($*_UPDATE))), \
-	     $(error package $* not found in index.html))
+	$(if $(call set_is_member,$*,$(PKGS)), \
+	    $(call UPDATE,$*,$(shell $($*_UPDATE))), \
+	    $(error Package $* not found in index.html))
 
 update-checksum-%:
-	$(if $(findstring $*~,$(addsuffix ~,$(PKGS))), \
-		$(call DOWNLOAD_PKG_ARCHIVE,$*) && \
-		$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
-	$(error package $* not found in index.html))
+	$(if $(call set_is_member,$*,$(PKGS)), \
+	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
+	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
+	    $(error Package $* not found in index.html))
 
 cleanup-style:
 	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\
-            $(SED) ' \
-                s/\r//g; \
-                s/[ \t]\+$$//; \
-                s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
-                $(if $(filter %Makefile,$(FILE)),,\
-                    s/\t/    /g; \
-                ) \
-            ' < $(FILE) > $(TOP_DIR)/tmp-cleanup-style; \
-            diff -u $(FILE) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
-                || { echo '[cleanup] $(FILE)'; \
-                     cp $(TOP_DIR)/tmp-cleanup-style $(FILE); }; \
-            rm -f $(TOP_DIR)/tmp-cleanup-style; \
-        )
+        $(SED) ' \
+            s/\r//g; \
+            s/[ \t]\+$$//; \
+            s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
+            $(if $(filter %Makefile,$(FILE)),,\
+                s/\t/    /g; \
+            ) \
+        ' < $(FILE) > $(TOP_DIR)/tmp-cleanup-style; \
+        diff -u $(FILE) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
+            || { echo '[cleanup] $(FILE)'; \
+                 cp $(TOP_DIR)/tmp-cleanup-style $(FILE); }; \
+        rm -f $(TOP_DIR)/tmp-cleanup-style; \
+    )
+
+build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
+	@echo '<!DOCTYPE html>'                  > $@
+	@echo '<html>'                          >> $@
+	@echo '<head>'                          >> $@
+	@echo '<meta http-equiv="content-type" content="text/html; charset=utf-8">' >> $@
+	@echo '<title>MXE Build Matrix</title>' >> $@
+	@echo '<link rel="stylesheet" href="assets/common.css">'       >> $@
+	@echo '<link rel="stylesheet" href="assets/build-matrix.css">' >> $@
+	@echo '</head>'                         >> $@
+	@echo '<body>'                          >> $@
+	@echo '<h2>MXE Build Matrix</h2>'       >> $@
+	@echo '<p>'                             >> $@
+	@echo 'This is a table of all supported package/target'        >> $@
+	@echo 'matrix. Being supported means that this specific'       >> $@
+	@echo 'combination is working to the best of our knowledge,'   >> $@
+	@echo 'but does not mean that it is tested daily.'             >> $@
+	@echo '</p>'                            >> $@
+	@echo '<p>'                             >> $@
+	@echo 'If you found that some package is not working properly,'>> $@
+	@echo 'please file a ticket on GitHub. If you figured out a'   >> $@
+	@echo 'way to make the package work for unsupported targets,'  >> $@
+	@echo 'feel free to submit a pull request.'                    >> $@
+	@echo '</p>'                            >> $@
+	@echo '<table class="fullscreen">'      >> $@
+	@echo '<thead>'                         >> $@
+	@echo '<tr>'                            >> $@
+	@echo '<th rowspan="2">Package</th>'    >> $@
+	@echo '<th rowspan="2">Version</th>'    >> $@
+	@$(foreach TRIPLET,$(MXE_TRIPLETS),          \
+	    echo '<th colspan="$(words $(MXE_LIB_TYPES))">$(TRIPLET)</th>' >> $@;)
+	@echo '<th rowspan="2">Native</th>'     >> $@
+	@echo '</tr>'                           >> $@
+	@echo '<tr>'                            >> $@
+	@$(foreach TRIPLET,$(MXE_TRIPLETS),          \
+	    $(foreach LIB, $(MXE_LIB_TYPES),         \
+	        echo '<th>$(LIB)</th>'          >> $@;))
+	@echo '</tr>'                           >> $@
+	@echo '</thead>'                        >> $@
+	@echo '<tbody>'                         >> $@
+# It is important to remember that the PKGCOUNT variables
+# are expressed in unary terms. So, after 5 virtual packages,
+# the content of $(VIRTUAL_PKGCOUNT) would be "x x x x x" and not "5".
+# Therefore, when using the PKGCOUNT, you have to use
+#     $(words $(VIRTUAL_PKGCOUNT))
+
+# The same operations are included in GMSL "Integer Arithmetic Functions."
+# I chose not to use most of them because their names are too long.
+#     $(eval $(VIRTUAL_PKGCOUNT += x))
+# vs
+#     $(eval $(VIRTUAL_PKGCOUNT := $(call int_inc,$(VIRTUAL_PKGCOUNT))))
+	@$(foreach PKG,$(PKGS),                      \
+	    $(eval $(PKG)_VIRTUAL := $(true))        \
+	    $(eval $(PKG)_BUILD_ONLY := $(true))     \
+	    echo -e '<tr>\n                          \
+	        <th class="row">$(PKG)</th>\n        \
+	        <td>$(call substr,$($(PKG)_VERSION),1,12)$(if $(call gt,$(call strlen,$($(PKG)_VERSION)),12),&hellip;)</td>\n\
+	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
+	        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
+	            $(eval $(TARGET)_PKGCOUNT += x) \
+	            $(eval $(PKG)_VIRTUAL := $(false)) \
+	            $(eval $(PKG)_BUILD_ONLY := $(false)) \
+	            <td class="supported">&#x2713;</td>,            \
+	            <td class="unsupported">&#x2717;</td>)\n)       \
+	    $(if $(call set_is_member,$(PKG),$(BUILD_PKGS)),        \
+	        $(eval $(PKG)_VIRTUAL := $(false))   \
+	        <td class="supported">&#x2713;</td>, \
+	        <td class="unsupported">&#x2717;</td>)\n \
+	        </tr>\n' >> $@ $(newline)            \
+	    $(if $($(PKG)_VIRTUAL),                  \
+	       $(eval VIRTUAL_PKGCOUNT += x) \
+	        $(eval $(PKG)_BUILD_ONLY := $(false))) \
+	    $(if $($(PKG)_BUILD_ONLY),               \
+	        $(eval BUILD_ONLY_PKGCOUNT += x)))
+	@echo '<tr>'                            >> $@
+	@echo '<th class="row" colspan="2">'    >> $@
+# TOTAL_PKGCOUNT = PKGS - (VIRTUAL + BUILD_ONLY)
+	@echo 'Total: $(call subtract,               \
+	                  $(words $(PKGS)),          \
+	                  $(words $(VIRTUAL_PKGCOUNT) $(BUILD_ONLY_PKGCOUNT)))'\
+	                                        >> $@
+	@echo '<br>(+$(words $(VIRTUAL_PKGCOUNT)) virtual' >> $@
+	@echo '+$(words $(BUILD_ONLY_PKGCOUNT)) native-only)' >> $@
+	@echo '</th>'                           >> $@
+	@$(foreach TARGET,$(MXE_TARGET_LIST),        \
+	    echo '<th>$(words $($(TARGET)_PKGCOUNT))</th>' >> $@;)
+	@echo '<th>$(words $(BUILD_PKGS))</th>' >> $@
+	@echo '</tr>'                           >> $@
+	@echo '</tbody>'                        >> $@
+	@echo '</table>'                        >> $@
+	@echo '</body>'                         >> $@
+	@echo '</html>'                         >> $@
 

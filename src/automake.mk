@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 1.13.2
 $(PKG)_CHECKSUM := 72ee9fcd180c54fd7c067155d85fa071a99c3ea3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)
+$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)
 $(PKG)_DEPS     := autoconf
 
 define $(PKG)_UPDATE

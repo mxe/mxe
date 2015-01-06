@@ -3,8 +3,8 @@
 
 PKG             := lzo
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.06
-$(PKG)_CHECKSUM := a11768b8a168ec607750842bbef406f11547b904
+$(PKG)_VERSION  := 2.08
+$(PKG)_CHECKSUM := 64c3e44843a44ffc4533aa89e41516f42bfefa76
 $(PKG)_SUBDIR   := lzo-$($(PKG)_VERSION)
 $(PKG)_FILE     := lzo-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.oberhumer.com/opensource/lzo/download/$($(PKG)_FILE)
@@ -20,8 +20,6 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= LDFLAGS=-no-undefined
 endef
