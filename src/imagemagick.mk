@@ -3,12 +3,12 @@
 
 PKG             := imagemagick
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.8.8-3
-$(PKG)_CHECKSUM := 8e69b64ee1fc9f9131abbc4bf38d9c27ab60ebce
+$(PKG)_VERSION  := 6.9.0-0
+$(PKG)_CHECKSUM := 6bf4263ceaeea61e00fe15a95db320d49bcc48c4
 $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://www.imagemagick.org/download/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://ftp.nluug.nl/ImageMagick/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.imagemagick.org/download/releases/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 ffmpeg fftw freetype jasper jpeg lcms liblqr-1 libpng libltdl openexr pthreads tiff
 
 define $(PKG)_UPDATE
@@ -26,9 +26,9 @@ define $(PKG)_BUILD
         --with-x=no \
         --without-zlib \
         --disable-largefile \
-        --with-freetype='$(PREFIX)/$(TARGET)/bin/freetype-config' \
-        ac_cv_prog_freetype_config='$(PREFIX)/$(TARGET)/bin/freetype-config'
-
+        --without-threads \
+        --with-freetype='$(PREFIX)/$(TARGET)/bin/freetype-config'
+    $(SED) -i 's/#define MAGICKCORE_HAVE_PTHREAD 1//g' '$(1)/magick/magick-baseconfig.h'
     $(SED) -i 's/#define MAGICKCORE_ZLIB_DELEGATE 1//g' '$(1)/magick/magick-config.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=

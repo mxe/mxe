@@ -21,12 +21,13 @@ define $(PKG)_BUILD
     $(SED) -i 's,/usr/local,@prefix@,' '$(1)/bin/Makefile.in'
     touch '$(1)/configure'
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
+        --with-jpeg \
+        --with-zlib \
         LIBS="`'$(TARGET)-pkg-config' --libs libtiff-4` -ljpeg -lz"
-    $(MAKE) -C '$(1)' -j 1 all install EXEEXT=.remove-me MAKE='$(MAKE)'
+    $(MAKE) -C '$(1)' -j 1 all install \
+        LDFLAGS=-no-undefined \
+        EXEEXT=.remove-me \
+        MAKE='$(MAKE)'
     rm -fv '$(PREFIX)/$(TARGET)'/bin/*.remove-me
 endef
-
-$(PKG)_BUILD_SHARED =

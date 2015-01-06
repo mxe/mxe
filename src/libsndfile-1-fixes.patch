@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+Taken from https://github.com/erikd/libsndfile/pull/76
+
+From 9ce0175df1fcb3db7a63ba8a72712b4676a3af86 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 1 Sep 2014 11:05:13 -0700
+Subject: [PATCH] configure.ac: Fix detection of MinGW
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/configure.ac b/configure.ac
+index 20ba55a..d25201c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -168,7 +168,7 @@ unset ac_cv_sizeof_off_t
+ AC_CHECK_SIZEOF(off_t,1)	# Fake default value.
+ 
+ case "$host_os" in
+-	mingw32msvc | mingw32)
++	mingw32*)
+ 		TYPEOF_SF_COUNT_T="__int64"
+ 		SF_COUNT_MAX="0x7FFFFFFFFFFFFFFFLL"
+ 		SIZEOF_SF_COUNT_T=8
+-- 
+1.9.1
+

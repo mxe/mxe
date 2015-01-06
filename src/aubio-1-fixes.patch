@@ -1,0 +1,192 @@
+From a34301d5fcdb6187dceb508bab341727ec57d0b4 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Fri, 14 Nov 2014 16:37:52 -0500
+Subject: [PATCH 1/4] Add options for enabling shared and/or static libraries
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/src/wscript_build b/src/wscript_build
+index 94b2062..1a72e4a 100644
+--- a/src/wscript_build
++++ b/src/wscript_build
+@@ -18,13 +18,11 @@ ctx(features = 'c',
+         lib = 'm',
+         target = 'lib_objects')
+ 
+-# build libaubio.so (cshlib) and/or libaubio.a (cstlib)
+-if ctx.env['DEST_OS'] in ['ios', 'iosimulator']:
+-    build_features = ['cstlib']
+-elif ctx.env['DEST_OS'] in ['win32', 'win64']:
+-    build_features = ['cshlib']
+-else: #linux, darwin, android, mingw, ...
+-    build_features = ['cshlib', 'cstlib']
++build_features = []
++if ctx.options.enable_shared:
++    build_features += ['cshlib']
++if ctx.options.enable_static:
++    build_features += ['cstlib']
+ 
+ for target in build_features:
+     ctx(features = 'c ' + target,
+diff --git a/wscript b/wscript
+index 83ad7b8..7013f12 100644
+--- a/wscript
++++ b/wscript
+@@ -73,6 +73,13 @@ def options(ctx):
+             help_str = 'compile in double precision mode',
+             help_disable_str = 'compile in single precision mode (default)')
+ 
++    add_option_enable_disable(ctx, 'shared', default = True,
++            help_str = 'compile shared libraries (defaut)',
++            help_disable_str = 'do not compile shared library')
++    add_option_enable_disable(ctx, 'static', default = True,
++            help_str = 'compile static libraries (default)',
++            help_disable_str = 'do not compile static library')
++
+     ctx.add_option('--with-target-platform', type='string',
+             help='set target platform for cross-compilation', dest='target_platform')
+ 
+-- 
+1.9.1
+
+
+From e133535438a965b3f6f7f0cac5cb5c062c07829f Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Fri, 14 Nov 2014 16:39:51 -0500
+Subject: [PATCH 2/4] fftw3 support requires -pthread
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/wscript b/wscript
+index 7013f12..052fb27 100644
+--- a/wscript
++++ b/wscript
+@@ -197,8 +197,10 @@ def configure(ctx):
+     # fftw not enabled, use vDSP or ooura
+     if 'HAVE_FFTW3F' in ctx.env.define_key:
+         ctx.msg('Checking for FFT implementation', 'fftw3f')
++        ctx.env.LINKFLAGS += ['-pthread']
+     elif 'HAVE_FFTW3' in ctx.env.define_key:
+         ctx.msg('Checking for FFT implementation', 'fftw3')
++        ctx.env.LINKFLAGS += ['-pthread']
+     elif 'HAVE_ACCELERATE' in ctx.env.define_key:
+         ctx.msg('Checking for FFT implementation', 'vDSP')
+     else:
+-- 
+1.9.1
+
+
+From 16fda40e02065b670b63e193a453357051ca9c33 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Fri, 14 Nov 2014 16:40:53 -0500
+Subject: [PATCH 3/4] Add static deps to pkgconfig file
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/aubio.pc.in b/aubio.pc.in
+index 301a1b5..0cd2281 100644
+--- a/aubio.pc.in
++++ b/aubio.pc.in
+@@ -6,5 +6,7 @@ includedir=@includedir@
+ Name: aubio
+ Description: a library for audio labelling
+ Version: @VERSION@
++Require.private: @PCREQUIRES@
+ Libs: -L${libdir} -laubio
++Libs.private: @PCLIBS@
+ Cflags: -I${includedir} 
+diff --git a/wscript b/wscript
+index 052fb27..424bcf8 100644
+--- a/wscript
++++ b/wscript
+@@ -176,6 +176,8 @@ def configure(ctx):
+     if (ctx.options.enable_complex == True):
+         ctx.check(header_name='complex.h')
+ 
++    pcrequires = []
++    pclibs = []
+     # check for fftw3
+     if (ctx.options.enable_fftw3 != False or ctx.options.enable_fftw3f != False):
+         # one of fftwf or fftw3f
+@@ -197,9 +199,13 @@ def configure(ctx):
+     # fftw not enabled, use vDSP or ooura
+     if 'HAVE_FFTW3F' in ctx.env.define_key:
+         ctx.msg('Checking for FFT implementation', 'fftw3f')
++        pcrequires += ['fftw3f >= 3.0.0']
++        pclibs += ['-lpthread']
+         ctx.env.LINKFLAGS += ['-pthread']
+     elif 'HAVE_FFTW3' in ctx.env.define_key:
+         ctx.msg('Checking for FFT implementation', 'fftw3')
++        pcrequires += ['fftw3 >= 3.0.0']
++        pclibs += ['-lpthread']
+         ctx.env.LINKFLAGS += ['-pthread']
+     elif 'HAVE_ACCELERATE' in ctx.env.define_key:
+         ctx.msg('Checking for FFT implementation', 'vDSP')
+@@ -210,16 +216,22 @@ def configure(ctx):
+     if (ctx.options.enable_sndfile != False):
+         ctx.check_cfg(package = 'sndfile', atleast_version = '1.0.4',
+                 args = '--cflags --libs', mandatory = False)
++    if 'HAVE_SNDFILE' in ctx.env.define_key:
++        pcrequires += ['sndfile >= 1.0.4']
+ 
+     # check for libsamplerate
+     if (ctx.options.enable_samplerate != False):
+         ctx.check_cfg(package = 'samplerate', atleast_version = '0.0.15',
+                 args = '--cflags --libs', mandatory = False)
++    if 'HAVE_SAMPLERATE' in ctx.env.define_key:
++        pcrequires += ['samplerate >= 0.0.15']
+ 
+     # check for jack
+     if (ctx.options.enable_jack != False):
+         ctx.check_cfg(package = 'jack',
+                 args = '--cflags --libs', mandatory = False)
++    if 'HAVE_JACK' in ctx.env.define_key:
++        pcrequires += ['jack']
+ 
+     # check for libav
+     if (ctx.options.enable_avcodec != False):
+@@ -235,9 +247,13 @@ def configure(ctx):
+                 for i in ['AVCODEC', 'AVFORMAT', 'AVUTIL', 'AVRESAMPLE'] ):
+             ctx.define('HAVE_LIBAV', 1)
+             ctx.msg('Checking for all libav libraries', 'yes')
++            pcrequires += ['libavcodec >= 54.35.0', 'libavformat >= 52.3.0',
++                           'libavutil >= 52.3.0', 'libavresample >= 1.0.1']
+         else:
+             ctx.msg('Checking for all libav libraries', 'not found', color = 'YELLOW')
+ 
++    ctx.env.PCREQUIRES = ', '.join(pcrequires)
++    ctx.env.PCLIBS = ', '.join(pclibs)
+     ctx.define('HAVE_WAVREAD', 1)
+     ctx.define('HAVE_WAVWRITE', 1)
+ 
+-- 
+1.9.1
+
+
+From 407863716f05ffca5b2241d7dcedb3d1c1ae87ad Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Fri, 14 Nov 2014 16:45:04 -0500
+Subject: [PATCH 4/4] [MXE] disable tests and examples
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/wscript b/wscript
+index 424bcf8..7f135b5 100644
+--- a/wscript
++++ b/wscript
+@@ -290,9 +290,9 @@ def build(bld):
+     bld.recurse('src')
+     if bld.env['DEST_OS'] not in ['ios', 'iosimulator']:
+         pass
+-    if bld.env['DEST_OS'] not in ['ios', 'iosimulator', 'android']:
+-        bld.recurse('examples')
+-        bld.recurse('tests')
++    #if bld.env['DEST_OS'] not in ['ios', 'iosimulator', 'android']:
++        #bld.recurse('examples')
++        #bld.recurse('tests')
+ 
+     bld( source = 'aubio.pc.in' )
+ 
+-- 
+1.9.1
+

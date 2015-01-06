@@ -3,8 +3,8 @@
 
 PKG             := readline
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.2
-$(PKG)_CHECKSUM := a9761cd9c3da485eb354175fcc2fe35856bc43ac
+$(PKG)_VERSION  := 6.3
+$(PKG)_CHECKSUM := 017b92dc7fd4e636a2b5c9265a77ccc05798c9e1
 $(PKG)_SUBDIR   := readline-$($(PKG)_VERSION)
 $(PKG)_FILE     := readline-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/readline/$($(PKG)_FILE)
@@ -18,9 +18,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,^ *case SIGQUIT:.*,,' '$(1)/signals.c'
-    $(SED) -i 's,^ *case SIGTSTP:.*,,' '$(1)/signals.c'
-    cd '$(1)' && ./configure \
+    cd '$(1)' && bash_cv_wcwidth_broken=no \
+        ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-multibyte \
         --without-purify \

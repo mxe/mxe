@@ -2,16 +2,16 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.2.15
-$(PKG)_CHECKSUM := 31f289b48b0bf054f5f8c16d3b878615d0ae06fc
+$(PKG)_VERSION  := 3.3.11
+$(PKG)_CHECKSUM := 82db10dc9b10d03cacbb86b567ef692401f34add
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.2/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2//$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext gmp nettle pcre zlib
+$(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.3/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3//$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc gettext gmp libgnurx nettle zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/ | \
+    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/ | \
     $(SED) -n 's,.*gnutls-\([1-9]\+\.[0-9]\+.[0-9]\+\)\..*,\1,p' | \
     $(SORT) -V | \
     tail -1
@@ -32,10 +32,7 @@ define $(PKG)_BUILD
         --disable-doc \
         --enable-local-libopts \
         --with-included-libtasn1 \
-        --with-libregex='$(PREFIX)/$(TARGET)' \
-        --with-regex-header=pcreposix.h \
-        --with-libregex-cflags="`'$(TARGET)-pkg-config' libpcreposix --cflags`" \
-        --with-libregex-libs="`'$(TARGET)-pkg-config' libpcreposix --libs`" \
+        --with-libregex-libs="-lgnurx" \
         --without-p11-kit \
         --disable-silent-rules \
         CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \

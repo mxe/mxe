@@ -3,8 +3,8 @@
 
 PKG             := pcl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.1
-$(PKG)_CHECKSUM := 784bce606141260423ea04f37b093f59d4c94c6a
+$(PKG)_VERSION  := 1.7.2
+$(PKG)_CHECKSUM := 7a59e9348a81f42725db1f8b1194c9c3313372ae
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/PointCloudLibrary/pcl/archive/$($(PKG)_FILE)
@@ -39,12 +39,14 @@ define $(PKG)_BUILD
         -DBUILD_examples=OFF \
         -DBUILD_global_tests=OFF \
         -DBUILD_tools=OFF \
+        -DWITH_PCAP=OFF \
         -DHAVE_MM_MALLOC_EXITCODE=0 \
+        -DHAVE_SSE4_2_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE4_1_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE2_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE_EXTENSIONS_EXITCODE=0
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)' -j 1 VERBOSE=1
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
 endef
 

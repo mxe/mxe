@@ -1,36 +1,78 @@
 This file is part of MXE.
 See index.html for further information.
 
-From d221ed3c7576a3456a8f5623246b46d355a4db83 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sun, 9 Feb 2014 02:48:38 +0100
-Subject: [PATCH] winsock2.h must precede windows.h
+From 1e244993f497ca7167361dfb29a2fe43232a7661 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Thu, 13 Nov 2014 00:17:19 -0500
+Subject: [PATCH] Include windows.h after winsock2.h
 
-MinGW 4 is particular about this.
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+---
+ include/apr.h.in | 2 +-
+ include/apr.hw   | 2 +-
+ include/apr.hwc  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/include/apr.h.in b/include/apr.h.in
-index 9f1fb6f..f1741c1 100644
+index 0ad7a91..0d70142 100644
 --- a/include/apr.h.in
 +++ b/include/apr.h.in
-@@ -115,14 +115,14 @@
-  * or the extern "C" namespace 
-  */
+@@ -142,7 +142,6 @@
+ #define NOIME
+ #endif
  
--#if APR_HAVE_WINDOWS_H
 -#include <windows.h>
--#endif
--
- #if APR_HAVE_WINSOCK2_H
- #include <winsock2.h>
+ /* 
+  * Add a _very_few_ declarations missing from the restricted set of headers
+  * (If this list becomes extensive, re-enable the required headers above!)
+@@ -156,6 +155,7 @@
+ #else
+ #include <winsock.h>
  #endif
- 
-+#if APR_HAVE_WINDOWS_H
 +#include <windows.h>
-+#endif
-+
- #if APR_HAVE_SYS_TYPES_H
- #include <sys/types.h>
+ 
+ #endif /* ndef _WINDOWS_ */
+ #endif /* APR_HAVE_WINDOWS_H */
+diff --git a/include/apr.hw b/include/apr.hw
+index a75bc60..caa933c 100644
+--- a/include/apr.hw
++++ b/include/apr.hw
+@@ -95,7 +95,6 @@
+ #ifndef NOIME
+ #define NOIME
  #endif
+-#include <windows.h>
+ /* 
+  * Add a _very_few_ declarations missing from the restricted set of headers
+  * (If this list becomes extensive, re-enable the required headers above!)
+@@ -109,6 +108,7 @@
+ #else
+ #include <winsock.h>
+ #endif
++#include <windows.h>
+ #endif /* !_WINDOWS_ */
+ 
+ /**
+diff --git a/include/apr.hwc b/include/apr.hwc
+index 0579962..b171d48 100644
+--- a/include/apr.hwc
++++ b/include/apr.hwc
+@@ -92,7 +92,6 @@
+ #ifndef NOIME
+ #define NOIME
+ #endif
+-#include <windows.h>
+ /* 
+  * Add a _very_few_ declarations missing from the restricted set of headers
+  * (If this list becomes extensive, re-enable the required headers above!)
+@@ -106,6 +105,7 @@
+ #else
+ #include <winsock.h>
+ #endif
++#include <windows.h>
+ #endif /* !_WINDOWS_ */
+ 
+ /**
 -- 
-1.8.4.5
+1.9.1
 

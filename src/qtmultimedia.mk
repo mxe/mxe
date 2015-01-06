@@ -4,7 +4,7 @@
 PKG             := qtmultimedia
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 61a9b5c3234db0291c86d51ca0d182047c5d517c
+$(PKG)_CHECKSUM := a66fe5538f554957f60fc160121a3b0e7e72753b
 $(PKG)_SUBDIR    = $(subst qtbase,qtmultimedia,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtmultimedia,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtmultimedia,$(qtbase_URL))
@@ -20,4 +20,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install
 endef
 
-$(PKG)_BUILD_i686-pc-mingw32 =

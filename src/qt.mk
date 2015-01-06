@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 4.8.6
 $(PKG)_CHECKSUM := ddf9c20ca8309a116e0466c42984238009525da6
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/archive/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
 
 define $(PKG)_UPDATE
@@ -110,6 +110,11 @@ define $(PKG)_BUILD
         '$(TOP_DIR)/src/qt-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
         `'$(TARGET)-pkg-config' QtGui --cflags --libs`
+
+    # setup cmake toolchain
+    $(SED) -i '/QT_QMAKE_EXECUTABLE/d' '$(CMAKE_TOOLCHAIN_FILE)'
+    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' >> '$(CMAKE_TOOLCHAIN_FILE)'
+
 endef
 
 $(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\

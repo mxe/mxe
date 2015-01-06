@@ -5,6 +5,10 @@
 
 cmd=$1
 pkg=$2
+patch_name=$3
+if [ -z "$patch_name" ]; then
+    patch_name=1-fixes
+fi
 
 setupEnv() {
   # MXE directory
@@ -98,8 +102,8 @@ function export_patch {
     echo ''
     git format-patch -p --stdout dist..HEAD | \
     sed 's/^From: .*/From: MXE/g;'
-  ) > $mxedir/src/$pkg-1-fixes.patch && \
-  echo "Generated $mxedir/src/$pkg-1-fixes.patch"
+  ) > $mxedir/src/${pkg}-${patch_name}.patch && \
+  echo "Generated ${mxedir}/src/${pkg}-${patch_name}.patch"
 }
 
 function import_patch {
@@ -109,15 +113,16 @@ function import_patch {
     exit 1
   fi
 
-  if [ -f $mxedir/src/$pkg-1-fixes.patch ]; then
+  if [ -f ${mxedir}/src/${pkg}-${patch_name}.patch ]; then
     cd $gitsdir/$pkg_subdir && \
-    cat $mxedir/src/$pkg-1-fixes.patch | \
+    cat ${mxedir}/src/${pkg}-${patch_name}.patch | \
     sed '/^From/,$  !d' | \
     sed s/'^From: .*'/"From: $author"/'g;' | \
     git am --keep-cr && \
-    echo "Imported $mxedir/src/$pkg-1-fixes.patch"
+    echo "Imported ${mxedir}/src/${pkg}-${patch_name}.patch"
   else
-    echo "patch-tool managed file $mxedir/src/$pkg-1-fixes.patch not found. Cancelling import." >&2
+    echo "patch file ${mxedir}/src/${pkg}-${patch_name}.patch not found."
+    echo "Cancelling import." >&2
     exit 1
   fi
 }
@@ -135,11 +140,13 @@ case "$cmd" in
   *)
     echo "Unrecognized command '${cmd}'" >&2
     cat <<EOS
-    Usage: $0 COMMAND PACKAGENAME
+    Usage: $0 COMMAND PACKAGENAME [PATCHNAME]
     where COMMAND is one of:
       init - create a git directory for the package with the raw source
-      import - apply the "pkgname-1-fixes.patch" patch commits
-      export - create/replace the "pkgname-1-fixes.patch" patch with a patch of all commits since init.
+      import - apply the "pkgname-PATCHNAME.patch" patch commits
+      export - create/replace the "pkgname-PATCHNAME.patch" patch with a patch of all commits since init.
+
+    If PATCHNAME is not set, it is default to "1-fixes".
 EOS
     exit 1
     ;;

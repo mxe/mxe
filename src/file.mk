@@ -3,8 +3,8 @@
 
 PKG             := file
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.19
-$(PKG)_CHECKSUM := 0dff09eb44fde1998be79e8d312e9be4456d31ee
+$(PKG)_VERSION  := 5.20
+$(PKG)_CHECKSUM := 4e93e9ae915f1812b05cc6012ae968fdb6416f8f
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.cross-lfs.org/pub/clfs/conglomeration/file/$($(PKG)_FILE)
@@ -24,6 +24,7 @@ define $(PKG)_BUILD
     # version. Therefore we build a native one ourselves first.
 
     cp -Rp '$(1)' '$(1).native'
+    cd '$(1).native' && autoreconf -fi
     cd '$(1).native' && ./configure \
         --disable-shared
     $(MAKE) -C '$(1).native/src' -j '$(JOBS)' file

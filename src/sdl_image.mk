@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 5e3e393d4e366638048bbb10d6a269ea3f4e4cf2
 $(PKG)_SUBDIR   := SDL_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_image-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl jpeg libpng tiff
+$(PKG)_DEPS     := gcc sdl jpeg libpng libwebp tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://hg.libsdl.org/SDL_image/tags' | \
@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,^\(Requires:.*\),\1 libtiff-4 libpng,' '$(1)/SDL_image.pc.in'
+    $(SED) -i 's,^\(Requires:.*\),\1 libtiff-4 libpng libwebp,' '$(1)/SDL_image.pc.in'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
@@ -29,6 +29,7 @@ define $(PKG)_BUILD
         --disable-jpg-shared \
         --disable-png-shared \
         --disable-tif-shared \
+        --disable-webp-shared \
         WINDRES='$(TARGET)-windres' \
         LIBS='-lz'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
@@ -37,6 +38,13 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_image.exe' \
         `'$(TARGET)-pkg-config' SDL_image --cflags --libs`
+
+    mkdir -p '$(1)/cmake-build-test'
+    cp '$(2)-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
+    cp '$(2).c' '$(1)/cmake-build-test/'
+    cd '$(1)/cmake-build-test' && cmake . \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
+    $(MAKE) -C '$(1)/cmake-build-test' -j '$(JOBS)'
 endef
 
 $(PKG)_BUILD_SHARED =

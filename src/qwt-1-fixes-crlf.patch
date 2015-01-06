@@ -1,0 +1,71 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 254b0588efb05c757b29b392bb8d147f35c836a7 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 9 Dec 2014 20:10:47 +1100
+Subject: [PATCH 1/2] fix install prefix
+
+
+diff --git a/qwtconfig.pri b/qwtconfig.pri
+index 6c7ed0a..fcc91da 100644
+--- a/qwtconfig.pri
++++ b/qwtconfig.pri
+@@ -23,7 +23,7 @@ unix {
+ }
+ 
+ win32 {
+-    QWT_INSTALL_PREFIX    = C:/Qwt-$$QWT_VERSION
++#    QWT_INSTALL_PREFIX    = C:/Qwt-$$QWT_VERSION
+ }
+ 
+ QWT_INSTALL_DOCS      = $${QWT_INSTALL_PREFIX}/doc
+-- 
+1.9.3 (Apple Git-50)
+
+
+From c2481957edc8346d17d9157137bfb61c7db5fdaa Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 9 Dec 2014 20:15:24 +1100
+Subject: [PATCH 2/2] fix for deprecated QT_STATIC_CONST* macros
+
+taken from:
+http://sourceforge.net/p/qwt/code/2063/
+
+diff --git a/src/qwt_transform.cpp b/src/qwt_transform.cpp
+index d42b046..5e7fa1d 100644
+--- a/src/qwt_transform.cpp
++++ b/src/qwt_transform.cpp
+@@ -15,10 +15,10 @@
+ #endif
+ 
+ //! Smallest allowed value for logarithmic scales: 1.0e-150
+-QT_STATIC_CONST_IMPL double QwtLogTransform::LogMin = 1.0e-150;
++const double QwtLogTransform::LogMin = 1.0e-150;
+ 
+ //! Largest allowed value for logarithmic scales: 1.0e150
+-QT_STATIC_CONST_IMPL double QwtLogTransform::LogMax = 1.0e150;
++const double QwtLogTransform::LogMax = 1.0e150;
+ 
+ //! Constructor
+ QwtTransform::QwtTransform()
+diff --git a/src/qwt_transform.h b/src/qwt_transform.h
+index 13eeef2..ae28ac4 100644
+--- a/src/qwt_transform.h
++++ b/src/qwt_transform.h
+@@ -107,8 +107,8 @@ public:
+ 
+     virtual QwtTransform *copy() const;
+ 
+-    QT_STATIC_CONST double LogMin;
+-    QT_STATIC_CONST double LogMax;
++    static const double LogMin;
++    static const double LogMax;
+ };
+ 
+ /*!
+-- 
+1.9.3 (Apple Git-50)
+

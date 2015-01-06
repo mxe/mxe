@@ -23,7 +23,10 @@ define $(PKG)_BUILD
         --disable-shared \
         --enable-static \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-libftdipp \
+        --disable-python-binding \
         --without-examples \
+        --without-docs \
         HAVELIBUSB=true
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

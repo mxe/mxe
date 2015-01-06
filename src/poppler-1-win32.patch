@@ -1,17 +1,20 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 0cdf3c0c6d2740fa3542d7030878eaffdd4cf7a4 Mon Sep 17 00:00:00 2001
+From 2904b3daa0e5bacabfc45b194447310a9a02fdaf Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
-Date: Sat, 21 Apr 2012 09:34:46 +0200
-Subject: [PATCH 1/2] Only check for Type1 fonts in custom directory if path
- is non-NULL
+Date: Mon, 15 Sep 2014 19:53:04 -0700
+Subject: [PATCH 1/2] Only check for Type1 fonts in custom directory if path is
+ non-NULL
 
 Otherwise, programs using poppler may crash
 Proposed upstream at https://bugs.freedesktop.org/show_bug.cgi?id=49037
+---
+ poppler/GlobalParamsWin.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/poppler/GlobalParamsWin.cc b/poppler/GlobalParamsWin.cc
-index 527f08e..0739946 100644
+index 084b49b..9bd7dac 100644
 --- a/poppler/GlobalParamsWin.cc
 +++ b/poppler/GlobalParamsWin.cc
 @@ -423,7 +423,7 @@ void GlobalParams::setupBaseFonts(char * dir)
@@ -24,16 +27,23 @@ index 527f08e..0739946 100644
              if (FileExists(fontPath->getCString()) ||
                  FileExists(replaceSuffix(fontPath, ".pfb", ".pfa")->getCString())) {
 -- 
-1.7.10.4
+1.8.3.2
 
 
-From fe1720718e224b0138f3f95c5aa0c72ac85e06b8 Mon Sep 17 00:00:00 2001
+From a684e7b8ed36b716a1a51b0b7ba136505c719e35 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
-Date: Sat, 21 Apr 2012 13:19:54 +0200
+Date: Mon, 15 Sep 2014 20:01:22 -0700
 Subject: [PATCH 2/2] Don't use dllimport/dllexport
 
 Otherwise static linking fails
-MXE workaround for https://bugs.freedesktop.org/show_bug.cgi?id=49038 (presumably would break shared linking!)
+
+MXE workaround for https://bugs.freedesktop.org/show_bug.cgi?id=49038
+(presumably would break shared linking!)
+---
+ cpp/poppler-global.h     |  5 -----
+ poppler/XpdfPluginAPI.h  | 18 ------------------
+ qt4/src/poppler-export.h |  5 +----
+ 3 files changed, 1 insertion(+), 27 deletions(-)
 
 diff --git a/cpp/poppler-global.h b/cpp/poppler-global.h
 index 5650182..6c3e01b 100644
@@ -54,10 +64,10 @@ index 5650182..6c3e01b 100644
  #if defined(poppler_cpp_EXPORTS)
  #  define POPPLER_CPP_EXPORT LIB_EXPORT
 diff --git a/poppler/XpdfPluginAPI.h b/poppler/XpdfPluginAPI.h
-index b0165c0..5a10595 100644
+index 6ed890a..8b7222b 100644
 --- a/poppler/XpdfPluginAPI.h
 +++ b/poppler/XpdfPluginAPI.h
-@@ -42,19 +42,11 @@ extern "C" {
+@@ -47,19 +47,11 @@ extern "C" {
   */
  #define xpdfPluginAPIVersion 1
  
@@ -77,7 +87,7 @@ index b0165c0..5a10595 100644
  
  /*------------------------------------------------------------------------
   * Plugin setup/cleanup
-@@ -281,22 +273,12 @@ void (*_xpdfRegisterSecurityHandler)(XpdfSecurityHandler *handler);
+@@ -286,22 +278,12 @@ void (*_xpdfRegisterSecurityHandler)(XpdfSecurityHandler *handler);
  
  } XpdfPluginVecTable;
  
@@ -101,23 +111,21 @@ index b0165c0..5a10595 100644
  #define xpdfGetInfoDict (*xpdfPluginVecTable._xpdfGetInfoDict)
  #define xpdfGetCatalog (*xpdfPluginVecTable._xpdfGetCatalog)
 diff --git a/qt4/src/poppler-export.h b/qt4/src/poppler-export.h
-index 7661fe9..ebb1e18 100644
+index 2e2f6ff..e625564 100644
 --- a/qt4/src/poppler-export.h
 +++ b/qt4/src/poppler-export.h
-@@ -2,13 +2,8 @@
+@@ -2,10 +2,7 @@
  * This file is used to set the poppler_qt4_EXPORT macros right.
  * This is needed for setting the visibility on windows, it will have no effect on other platforms.
  */
 -#if defined(_WIN32)
--# define LIB_EXPORT __declspec(dllexport)
--# define LIB_IMPORT __declspec(dllimport)
--#else
- # define LIB_EXPORT
- # define LIB_IMPORT
--#endif
- 
- #ifdef poppler_qt4_EXPORTS
- # define POPPLER_QT4_EXPORT LIB_EXPORT
+-# define _POPPLER_QT4_LIB_EXPORT __declspec(dllexport)
+-# define _POPPLER_QT4_LIB_IMPORT __declspec(dllimport)
+-#elif defined(__GNUC__)
++#if defined(__GNUC__)
+ # define _POPPLER_QT4_LIB_EXPORT __attribute__((visibility("default")))
+ # define _POPPLER_QT4_LIB_IMPORT
+ #else
 -- 
-1.7.10.4
+1.8.3.2
 

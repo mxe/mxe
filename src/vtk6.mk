@@ -3,10 +3,10 @@
 
 PKG             := vtk6
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.0.0
-$(PKG)_CHECKSUM := 51dd3b4a779d5442dd74375363f0f0c2d6eaf3fa
-$(PKG)_SUBDIR   := VTK$($(PKG)_VERSION)
-$(PKG)_FILE     := vtk-$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 6.1.0
+$(PKG)_CHECKSUM := 91d1303558c7276f031f8ffeb47b4233f2fd2cd9
+$(PKG)_SUBDIR   := VTK-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc hdf5 qt
 
@@ -42,7 +42,7 @@ define $(PKG)_BUILD
         -C '$(1)/TryRunResults.cmake' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DVTKCompileTools_DIR='$(1).native_build' \
-        -DBUILD_SHARED_LIBS=FALSE \
+        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
         -DModule_vtkGUISupportQt=TRUE \
         -DModule_vtkGUISupportQtOpenGL=TRUE \
         -DQT_QMAKE_EXECUTABLE=$(PREFIX)/$(TARGET)/qt/bin/qmake \
@@ -54,5 +54,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).cross_build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).cross_build' -j 1 VERBOSE=1
     $(MAKE) -C '$(1).cross_build' -j 1 install VERBOSE=1
 endef
-
-$(PKG)_BUILD_SHARED =

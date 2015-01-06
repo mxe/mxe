@@ -3,8 +3,8 @@
 
 PKG             := polarssl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.8
-$(PKG)_CHECKSUM := 82ed8ebcf3dd53621da5395b796fc0917083691d
+$(PKG)_VERSION  := 1.3.9
+$(PKG)_CHECKSUM := 3462b4455e1443ac1a1007fbd69861ebfb5c5506
 $(PKG)_SUBDIR   := polarssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := polarssl-$($(PKG)_VERSION)-gpl.tgz
 $(PKG)_URL      := https://polarssl.org/download/$($(PKG)_FILE)

@@ -1,36 +1,14 @@
 This file is part of MXE.
 See index.html for further information.
 
-From aec914bd8b868924f4b49d861c1e01c61113db48 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 14 May 2013 09:21:46 +0200
-Subject: [PATCH 1/2] predefine VMIME_STATIC for convenience
-
-
-diff --git a/vmime.pc.in b/vmime.pc.in
-index fc1103e..11dd0ea 100644
---- a/vmime.pc.in
-+++ b/vmime.pc.in
-@@ -9,5 +9,5 @@ Version: @VMIME_PACKAGE_VERSION@
- Requires.private: @VMIME_PKGCONFIG_REQUIRES@
- Libs: -L${libdir} -l@VMIME_LIBRARY_NAME@
- Libs.private: @VMIME_PKGCONFIG_LIBS@
--Cflags: -I${includedir}/ @VMIME_PKGCONFIG_CFLAGS@
-+Cflags: -I${includedir}/ @VMIME_PKGCONFIG_CFLAGS@ -DVMIME_STATIC
- 
--- 
-1.8.4.5
-
-
-From 344e0d7bc62adda4e1437b49350a29089d7ce3af Mon Sep 17 00:00:00 2001
+From bc98fcbc262514378bbb9a5a011cdaf7aef5e744 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 26 Mar 2014 23:45:05 +0100
-Subject: [PATCH 2/2] workaround for stricmp decl problem on mingw32
- (mingw.org)
+Subject: [PATCH] workaround for stricmp decl problem on mingw32 (mingw.org)
 
 
 diff --git a/src/vmime/platforms/windows/windowsCodepages.hpp b/src/vmime/platforms/windows/windowsCodepages.hpp
-index dfd6afd..f01bc47 100644
+index e66b230..211db5e 100644
 --- a/src/vmime/platforms/windows/windowsCodepages.hpp
 +++ b/src/vmime/platforms/windows/windowsCodepages.hpp
 @@ -32,6 +32,10 @@
@@ -45,5 +23,5 @@ index dfd6afd..f01bc47 100644
  
  namespace vmime {
 -- 
-1.8.4.5
+2.1.2
 

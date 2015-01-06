@@ -19,11 +19,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --disable-reference \
-        --prefix='$(PREFIX)/$(TARGET)'
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-reference
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install dist_doc_DATA=
 
@@ -33,4 +30,3 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' gta --cflags --libs`
 endef
 
-$(PKG)_BUILD_SHARED =

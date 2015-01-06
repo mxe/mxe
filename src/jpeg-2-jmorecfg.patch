@@ -1,0 +1,67 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 76b68a405c4e597d04564a0fb1fbe061aaeac2c6 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 13 Oct 2014 23:11:10 -0400
+Subject: [PATCH] jmorecfg: Always include basetsd.h on Windows
+
+If you include the two files in the other order:
+
+    #include <jmorecfg.h>
+    #include <basetsd.h>
+
+The definition of INT32 etc. will clash.
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/jmorecfg.h b/jmorecfg.h
+index 679d68b..e143e90 100644
+--- a/jmorecfg.h
++++ b/jmorecfg.h
+@@ -181,8 +181,14 @@ typedef char JOCTET;
+  * typedefs live at a different point on the speed/space tradeoff curve.)
+  */
+ 
++#ifdef _WIN32
++#include <basetsd.h>
++#endif
++
+ /* UINT8 must hold at least the values 0..255. */
+ 
++/* Microsoft and MinGW defines it in basetsd.h */
++#if !defined(_BASETSD_H_) && !defined(_BASETSD_H)
+ #ifdef HAVE_UNSIGNED_CHAR
+ typedef unsigned char UINT8;
+ #else /* not HAVE_UNSIGNED_CHAR */
+@@ -192,20 +198,27 @@ typedef char UINT8;
+ typedef short UINT8;
+ #endif /* CHAR_IS_UNSIGNED */
+ #endif /* HAVE_UNSIGNED_CHAR */
++#endif /* not _BASETSD_H */
+ 
+ /* UINT16 must hold at least the values 0..65535. */
+ 
++/* Microsoft and MinGW defines it in basetsd.h */
++#if !defined(_BASETSD_H_) && !defined(_BASETSD_H)
+ #ifdef HAVE_UNSIGNED_SHORT
+ typedef unsigned short UINT16;
+ #else /* not HAVE_UNSIGNED_SHORT */
+ typedef unsigned int UINT16;
+ #endif /* HAVE_UNSIGNED_SHORT */
++#endif /* not _BASETSD_H */
+ 
+ /* INT16 must hold at least the values -32768..32767. */
+ 
++/* Microsoft and MinGW defines it in basetsd.h */
++#if !defined(_BASETSD_H_) && !defined(_BASETSD_H)
+ #ifndef XMD_H			/* X11/xmd.h correctly defines INT16 */
+ typedef short INT16;
+ #endif
++#endif /* not _BASETSD_H */
+ 
+ /* INT32 must hold at least signed 32-bit values. */
+ 
+-- 
+1.9.1
+

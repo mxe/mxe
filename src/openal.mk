@@ -3,8 +3,8 @@
 
 PKG             := openal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.15.1
-$(PKG)_CHECKSUM := a0e73a46740c52ccbde38a3912c5b0fd72679ec8
+$(PKG)_VERSION  := 1.16.0
+$(PKG)_CHECKSUM := f70892fc075ae726320478c0179f7011fea0d157
 $(PKG)_SUBDIR   := openal-soft-$($(PKG)_VERSION)
 $(PKG)_FILE     := openal-soft-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://kcat.strangesoft.net/openal-releases/$($(PKG)_FILE)
@@ -21,7 +21,8 @@ define $(PKG)_BUILD
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DLIBTYPE=$(if $(BUILD_SHARED),SHARED,STATIC) \
-        -DEXAMPLES=FALSE
+        -DEXAMPLES=FALSE \
+        -DALSOFT_UTILS=FALSE
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \

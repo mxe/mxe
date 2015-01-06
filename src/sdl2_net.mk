@@ -31,4 +31,3 @@ define $(PKG)_BUILD
         -lws2_32 -liphlpapi
 endef
 
-$(PKG)_BUILD_i686-pc-mingw32 =

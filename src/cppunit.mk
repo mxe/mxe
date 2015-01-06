@@ -11,8 +11,9 @@ $(PKG)_URL      := http://dev-www.libreoffice.org/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/cppunit/files/cppunit/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(WGET) -q -O- 'http://dev-www.libreoffice.org/src/' | \
+    $(SED) -n 's,.*href="cppunit-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    $(SORT) -Vr | \
     head -1
 endef
 

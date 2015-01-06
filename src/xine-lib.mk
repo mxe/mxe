@@ -3,8 +3,8 @@
 
 PKG             := xine-lib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.4
-$(PKG)_CHECKSUM := 32267c5fcaa1439a5fbf7606d27dc4fafba9e504
+$(PKG)_VERSION  := 1.2.6
+$(PKG)_CHECKSUM := ac929eef2b7bf5c27699bbed612b953a01fccba5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xine/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -21,7 +21,7 @@ endef
 define $(PKG)_BUILD
     # rebuild configure script as one of the patches modifies configure.ac
     cd '$(1)' && autoreconf -fi
-    cd '$(1)' && $(LIBTOOLIZE)
+
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \

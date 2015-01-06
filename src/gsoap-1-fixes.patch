@@ -3,82 +3,82 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From b350997144cc77caf3644bbf188815844b1f1a07 Mon Sep 17 00:00:00 2001
+From 186d8a982336f627bafc9b8a3f1487ab124e220b Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 23 Oct 2011 21:36:53 +0200
 Subject: [PATCH 1/2] support static linking to ntlm
 
 
 diff --git a/configure b/configure
-index c4598a4..c7a46d2 100755
+index df6419e..7085c88 100755
 --- a/configure
 +++ b/configure
-@@ -4823,7 +4823,7 @@ case "${host}" in
+@@ -5023,7 +5023,7 @@ case "${host}" in
  			;;
  	*-*-cygwin*)	platform=CYGWIN ;;
  	*-*-mingw*)	platform=MINGW
 -			SAMPLE_EXTRA_LIBS="-lws2_32 -lkernel32 -luser32 -lgdi32 -lm"
 +			SAMPLE_EXTRA_LIBS="-lntlm -lws2_32 -lkernel32 -luser32 -lgdi32 -lm"
- 			WSDL2H_EXTRA_LIBS="-lssl -lcrypto -lws2_32 -lkernel32 -luser32 -lgdi32 -lm"
+ 			WSDL2H_EXTRA_LIBS="-lws2_32 -lkernel32 -luser32 -lgdi32 -lm"
  			;;
          *-*-freebsd*)   platform=FREEBSD ;;
-@@ -7560,7 +7560,7 @@ echo $ECHO_N "checking for enable gnutls in library... $ECHO_C" >&6; }
-     { echo "$as_me:$LINENO: result: yes" >&5
- echo "${ECHO_T}yes" >&6; }
+@@ -6186,7 +6186,7 @@ $as_echo_n "checking for enable gnutls in library... " >&6; }
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
      WSDL2H_EXTRA_FLAGS="-DWITH_GNUTLS -DWITH_GZIP"
--    WSDL2H_EXTRA_LIBS="-lgnutls -lgcrypt -lgpg-error -lz"
-+    WSDL2H_EXTRA_LIBS="-lntlm -lgnutls -lgcrypt -lgpg-error -lz"
+-    WSDL2H_EXTRA_LIBS="${WSDL2H_EXTRA_LIBS} -lgnutls -lgcrypt -lgpg-error -lz"
++    WSDL2H_EXTRA_LIBS="${WSDL2H_EXTRA_LIBS} -lntlm -lgnutls -lgcrypt -lgpg-error -lz"
+     SAMPLE_INCLUDES=
      SAMPLE_SSL_LIBS="-lgnutls -lgcrypt -lgpg-error -lz"
      WSDL2H_SOAP_CPP_LIB="libgsoapssl++.a"
-   else
 -- 
-1.8.1.4
+1.8.4.5
 
 
-From 1952599768ece5bab20406ac4cffde4316449168 Mon Sep 17 00:00:00 2001
+From 38b02f235f09e907867bf9bc660bbada315d1094 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 24 Oct 2011 11:17:13 +0200
 Subject: [PATCH 2/2] ntlm support in .pc files
 
 
 diff --git a/gsoap++.pc.in b/gsoap++.pc.in
-index 035afd9..3411d55 100644
+index e22c7e4..cefef8c 100644
 --- a/gsoap++.pc.in
 +++ b/gsoap++.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services
- Version: @VERSION@
+@@ -9,4 +9,4 @@ Version: @VERSION@
  Requires:
- Libs: -L${libdir} -lgsoap++ @SAMPLE_EXTRA_LIBS@
+ Libs: -L${libdir} -lgsoap++
+ Libs.private: @SAMPLE_EXTRA_LIBS@
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
 diff --git a/gsoap.pc.in b/gsoap.pc.in
-index e2607aa..96a54b9 100644
+index d5e1860..810dea1 100644
 --- a/gsoap.pc.in
 +++ b/gsoap.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C Web Services
- Version: @VERSION@
+@@ -9,4 +9,4 @@ Version: @VERSION@
  Requires:
- Libs: -L${libdir} -lgsoap @SAMPLE_EXTRA_LIBS@
+ Libs: -L${libdir} -lgsoap
+ Libs.private: @SAMPLE_EXTRA_LIBS@
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
 diff --git a/gsoapck++.pc.in b/gsoapck++.pc.in
-index cb03e2f..b349049 100644
+index 9699198..7d023b2 100644
 --- a/gsoapck++.pc.in
 +++ b/gsoapck++.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C++ Web Services with Cookies Enabled
- Version: @VERSION@
+@@ -9,4 +9,4 @@ Version: @VERSION@
  Requires:
- Libs: -L${libdir} -lgsoapck++ @SAMPLE_EXTRA_LIBS@
+ Libs: -L${libdir} -lgsoapck++
+ Libs.private: @SAMPLE_EXTRA_LIBS@
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
 diff --git a/gsoapck.pc.in b/gsoapck.pc.in
-index 859a922..e5ce5eb 100644
+index 96b94ee..3e01ef6 100644
 --- a/gsoapck.pc.in
 +++ b/gsoapck.pc.in
-@@ -8,4 +8,4 @@ Description: SOAP C Web Services with Cookies Enabled
- Version: @VERSION@
+@@ -9,4 +9,4 @@ Version: @VERSION@
  Requires:
- Libs: -L${libdir} -lgsoapck @SAMPLE_EXTRA_LIBS@
+ Libs: -L${libdir} -lgsoapck
+ Libs.private: @SAMPLE_EXTRA_LIBS@
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
 diff --git a/gsoapssl++.pc.in b/gsoapssl++.pc.in
@@ -102,5 +102,5 @@ index 365274b..82af331 100644
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
 -- 
-1.8.1.4
+1.8.4.5
 

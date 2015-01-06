@@ -3,8 +3,8 @@
 
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.38.2
-$(PKG)_CHECKSUM := 685c5a4215b776b83dd5330ab9084c5dcb0a51b8
+$(PKG)_VERSION  := 2.42.1
+$(PKG)_CHECKSUM := b5158fd434f01e84259155c04ff93026a090e586
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -13,6 +13,7 @@ $(PKG)_DEPS     := gcc gettext pcre libiconv zlib libffi dbus
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
     $(SED) -n "s,.*tag/?id=\([0-9]\+\.[0-9]*[02468]\.[^']*\).*,\1,p" | \
+    $(SORT) -Vr | \
     head -1
 endef
 
@@ -68,8 +69,8 @@ define $(PKG)_BUILD
     # Detecting if these GLib tools are already available on host machine,
     # either because of a host package installation or from an earlier MXE
     # installation of GLib.
-	# If it is installed, we symlink it into the MXE bin/.
-	# If not, we build it.
+    # If it is installed, we symlink it into the MXE bin/.
+    # If not, we build it.
     $(if $(findstring y,\
             $(shell [ -x "`which glib-genmarshal`" ] && \
                     [ -x "`which glib-compile-schemas`" ] && \
@@ -88,7 +89,8 @@ define $(PKG)_BUILD
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
         GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
-        GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources'
+        GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources' \
+        $(if $(findstring w64-mingw32,$(TARGET)),  CFLAGS="-DHAVE_IF_NAMETOINDEX=1")
     $(MAKE) -C '$(1)/glib'    -j '$(JOBS)' install sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=

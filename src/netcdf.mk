@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 246e4963e66e1c175563cc9a714e9da0a19b8b07
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.unidata.ucar.edu/downloads/netcdf/ftp/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc curl zlib hdf4 hdf5
+$(PKG)_DEPS     := gcc curl hdf4 hdf5 portablexdr zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.unidata.ucar.edu/downloads/netcdf/index.jsp' | \
@@ -39,6 +39,7 @@ define $(PKG)_BUILD
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 =
+$(PKG)_BUILD_i686-w64-mingw32 = $(subst --enable-hdf4, --disable-hdf4,\
+                                $(subst -lmfhdf -ldf,,$($(PKG)_BUILD)))
 
 $(PKG)_BUILD_SHARED =

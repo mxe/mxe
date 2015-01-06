@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 9505769c24c5339b98b7a858e51104335a2534ec Mon Sep 17 00:00:00 2001
+From b9f723cf31e007004ccc748a0e16c594fa7fdf35 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Sat, 2 Aug 2014 15:12:50 -0700
 Subject: [PATCH 1/3] Fix Windows build for ncurses and slang
@@ -73,11 +73,11 @@ index 9714956..4dd9fb6 100644
  {
      sigwinch_d->resize.resized = 1;
 -- 
-1.9.1
+1.8.3.2
 
 
-From e40499aa522996a94e48d3ac2bfce8166398b7a9 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0313fb009eca09481d216938db989db9f50672ee Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
 Date: Sun, 3 Aug 2014 10:56:02 -0700
 Subject: [PATCH 2/3] Fix pkg-config file and caca-config script
 
@@ -108,21 +108,21 @@ index fa683fb..6e50668 100644
 +Libs.private: @ZLIB_LIBS@ @CACA_LIBS@
  Cflags: -I${includedir}
 -- 
-1.9.1
+1.8.3.2
 
 
-From 6a1ecc57ffb222c58c0a618dd0bca72296b16202 Mon Sep 17 00:00:00 2001
-From: MXE
+From 50e5c99690c593cc974a49ae21af8fca288bc854 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
 Date: Sun, 3 Aug 2014 11:13:23 -0700
 Subject: [PATCH 3/3] Fix freeglut detection on Windows
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/configure.ac b/configure.ac
-index 641dd17..94e5bc5 100644
+index 641dd17..3ce7057 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -232,19 +232,19 @@ fi
+@@ -232,22 +232,83 @@ fi
  
  if test "${enable_gl}" != "no"; then
    ac_cv_my_have_gl="no"
@@ -136,23 +136,89 @@ index 641dd17..94e5bc5 100644
 -       [ac_cv_my_have_gl="yes"
 -        AC_DEFINE(HAVE_GLUTCHECKLOOP, 1, Define to 1 if you have the ‘glutCheckLoop’ function.)])])
 -      break])
-+  PKG_CHECK_MODULES([GL], [glut], [
-+   CFLAGS="${CFLAGS} ${GL_CFLAGS}"
-+   LIBS="${LIBS} ${GL_LIBS}"
-+   AC_CHECK_LIB(glut, glutCloseFunc,
-+    [AC_DEFINE(HAVE_GLUTCLOSEFUNC, 1, Define to 1 if you have the ‘glutCloseFunc’ function.)])
-+   AC_CHECK_LIB(glut, glutMainLoopEvent,
-+    [ac_cv_my_have_gl="yes"])
-+   AC_CHECK_LIB(glut, glutCheckLoop,
-+    [ac_cv_my_have_gl="yes"
-+     AC_DEFINE(HAVE_GLUTCHECKLOOP, 1, Define to 1 if you have the ‘glutCheckLoop’ function.)])
++
++  dnl GLUT is usable if (by order of checking):
++  dnl 1. OpenGL/gl.h (OS X) or GL/gl.h (others) is available.
++  dnl    The former implies that GLUT header is GLUT/glut.h.
++  dnl    The latter implies that GLUT headers are GL/glut.h and
++  dnl    GL/freeglut_ext.h.
++  dnl 2. pkg-config can find it.
++  dnl 3. glutMainLoopEvent() or glutCheckLoop()'s declarations is in the GLUT
++  dnl    header(s), and it can be linked.
++
++  dnl Also checking for glutCloseFunc(), but that is not mandatory.
++
++  AC_CHECK_HEADERS([OpenGL/gl.h GL/gl.h], [
++   PKG_CHECK_MODULES([GL], [glut glu gl], [
++    CFLAGS="${CFLAGS} ${GL_CFLAGS}"
++    LIBS="${LIBS} ${GL_LIBS}"
++    AC_MSG_CHECKING([for glutCloseFunc()])
++    AC_LINK_IFELSE([
++     AC_LANG_PROGRAM(
++      [[#ifdef HAVE_OPENGL_GL_H
++        # include <OpenGL/gl.h>
++        # include <GLUT/glut.h>
++        #else
++        # include <GL/gl.h>
++        # include <GL/glut.h>   
++        # include <GL/freeglut_ext.h>
++        #endif
++      ]], [[glutCloseFunc(NULL);]])],
++     [AC_DEFINE(HAVE_GLUTCLOSEFUNC, 1,
++                [Define to 1 if you have the ‘glutCloseFunc’ function.])
++      AC_MSG_RESULT(yes)],
++     [AC_MSG_RESULT(no)])
++    AC_MSG_CHECKING([for glutMainLoopEvent()])
++    AC_LINK_IFELSE([
++     AC_LANG_PROGRAM(
++      [[#ifdef HAVE_OPENGL_GL_H
++        # include <OpenGL/gl.h>
++        # include <GLUT/glut.h>
++        #else
++        # include <GL/gl.h>
++        # include <GL/glut.h>   
++        # include <GL/freeglut_ext.h>
++        #endif
++      ]], [[glutMainLoopEvent();]])],
++     [ac_cv_my_have_gl="yes"
++      AC_MSG_RESULT(yes)],
++     [AC_MSG_RESULT(no)])
++    AC_MSG_CHECKING([for glutCheckLoop()])
++    AC_LINK_IFELSE([
++     AC_LANG_PROGRAM(
++      [[#ifdef HAVE_OPENGL_GL_H
++        # include <OpenGL/gl.h>
++        # include <GLUT/glut.h>
++        #else
++        # include <GL/gl.h>
++        # include <GL/glut.h>   
++        # include <GL/freeglut_ext.h>
++        #endif
++      ]], [[glutCheckLoop();]])],
++     [ac_cv_my_have_gl="yes"
++      AC_DEFINE(HAVE_GLUTCHECKLOOP, 1,
++                [Define to 1 if you have the ‘glutCheckLoop’ function.])
++      AC_MSG_RESULT(yes)],
++     [AC_MSG_RESULT(no)])
++   ])
++   break
 +  ])
++  AC_MSG_CHECKING([if GLUT is usable])
    if test "${ac_cv_my_have_gl}" = "yes"; then
      AC_DEFINE(USE_GL, 1, Define to 1 to activate the OpenGL backend driver)
 -    GL_LIBS="${GL_LIBS} -lGL -lGLU -lglut"
      CACA_DRIVERS="${CACA_DRIVERS} gl"
-   elif test "${enable_gl}" = "yes"; then
-     AC_MSG_ERROR([cannot find OpenGL+FreeGLUT development files])
+-  elif test "${enable_gl}" = "yes"; then
+-    AC_MSG_ERROR([cannot find OpenGL+FreeGLUT development files])
++    AC_MSG_RESULT([yes])
++  else
++    AC_MSG_RESULT([no])
++    if test "${enable_gl}" = "yes"; then
++      AC_MSG_ERROR([cannot find OpenGL+FreeGLUT development files])
++    fi
+   fi
+   PKG_CHECK_MODULES(FTGL, ftgl >= 2.1.3, [FTGL="yes"], [FTGL="no"])
+ fi
 -- 
-1.9.1
+1.8.3.2
 

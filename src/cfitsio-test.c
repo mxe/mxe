@@ -5,7 +5,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#include "fitsio.h"
+#include <fitsio.h>
 
 int main(int argc, char *argv[])
 {

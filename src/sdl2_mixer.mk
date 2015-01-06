@@ -21,12 +21,11 @@ define $(PKG)_BUILD
     echo \
         'Libs.private:' \
         "`$(TARGET)-pkg-config libmodplug --libs`" \
+        "`$(PREFIX)/$(TARGET)/bin/smpeg2-config --libs`" \
         >> '$(1)/SDL2_mixer.pc.in'
     $(SED) -i 's,for path in /usr/local; do,for path in; do,' '$(1)/configure'
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
         --disable-music-mod \
@@ -40,14 +39,12 @@ define $(PKG)_BUILD
         SMPEG_CONFIG='$(PREFIX)/$(TARGET)/bin/smpeg2-config' \
         WINDRES='$(TARGET)-windres' \
         LIBS='-lvorbis -logg'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 
-#    '$(TARGET)-gcc' \
-#        -W -Wall -Werror -ansi -pedantic \
-#        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl2_mixer.exe' \
-#        `'$(TARGET)-pkg-config' SDL2_mixer --cflags --libs`
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(TOP_DIR)/src/sdl_mixer-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl2_mixer.exe' \
+        `'$(TARGET)-pkg-config' SDL2_mixer --cflags --libs`
 endef
 
-$(PKG)_BUILD_i686-pc-mingw32 =
 
-$(PKG)_BUILD_SHARED =
