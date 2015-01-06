@@ -2,27 +2,25 @@
 # See index.html for further information.
 
 PKG             := libical
-$(PKG)_VERSION  := 1.0
-$(PKG)_CHECKSUM := 25c75f6f947edb6347404a958b1444cceeb9f117
+$(PKG)_VERSION  := 1.0.1
+$(PKG)_CHECKSUM := 904b2c2b5c2b30f0a508f9d56eaf316dd42fc923
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeassociation/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/releases/download/v$($(PKG)_VERSION)//$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc icu4c
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/freeassociation/files/$(PKG)/' | \
-    $(SED) -n 's,.*/$(PKG)-\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
+    echo 'TODO: Updates for package libical need to be written.' >&2;
+    echo $(libical_VERSION)
 endef
 
 define $(PKG)_BUILD
     cd '$(1)' && mkdir build
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DSTATIC_LIBRARY=$(if $(BUILD_STATIC),true,false) \
-        -DHAVE_PTHREAD_H=false \
-        -DCMAKE_HAVE_PTHREAD_H=false
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' ical-header
+        -DUSE_BUILTIN_TZDATA=true \
+        -DSTATIC_ONLY=$(if $(BUILD_STATIC),true,false) \
+        -DSHARED_ONLY=$(if $(BUILD_STATIC),false,true)
     $(MAKE) -C '$(1)/build' -j '$(JOBS)'
     $(MAKE) -C '$(1)/build' -j 1 install
 
