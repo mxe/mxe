@@ -1,0 +1,38 @@
+diff -uNr openexr-2.1.0.orig/IlmImf/ImfSystemSpecific.h openexr-2.1.0/IlmImf/ImfSystemSpecific.h
+--- openexr-2.1.0.orig/IlmImf/ImfSystemSpecific.h	2013-10-21 21:02:22.000000000 +0200
++++ openexr-2.1.0/IlmImf/ImfSystemSpecific.h	2015-01-07 15:31:25.851288890 +0100
+@@ -58,6 +58,20 @@
+ #define EXR_FORCEINLINE inline
+ #define EXR_RESTRICT __restrict
+ 
++#ifdef __MINGW32__
++
++static void* EXRAllocAligned(size_t size, size_t alignment)
++{
++    return _aligned_malloc(size, alignment);
++}
++
++static void EXRFreeAligned(void* ptr)
++{
++    return _aligned_free(ptr);
++}
++
++#else
++
+ static void* EXRAllocAligned(size_t size, size_t alignment)
+ {
+     void* ptr = 0;
+@@ -65,12 +79,12 @@
+     return ptr;
+ }
+ 
+-
+ static void EXRFreeAligned(void* ptr)
+ {
+     free(ptr);
+ }
+ 
++#endif
+ #elif defined _MSC_VER
+ 
+ #define EXR_FORCEINLINE __forceinline
