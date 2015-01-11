@@ -316,4 +316,3 @@ cleanup-style:
                      cp $(TOP_DIR)/tmp-cleanup-style $(FILE); }; \
             rm -f $(TOP_DIR)/tmp-cleanup-style; \
         )
-
