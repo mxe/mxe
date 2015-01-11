@@ -309,11 +309,11 @@ define CLEANUP_STYLE
         $(if $(filter %Makefile,$(1)),,\
             s/\t/    /g; \
         ) \
-    ' < $(1) > $(TOP_DIR)/tmp-cleanup-style; \
-    diff -u $(1) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
+    ' < $(1) > $(TOP_DIR)/tmp-cleanup-style
+    @diff -u $(1) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
         || { echo '[cleanup] $(1)'; \
-             cp $(TOP_DIR)/tmp-cleanup-style $(1); }; \
-    rm -f $(TOP_DIR)/tmp-cleanup-style
+             cp $(TOP_DIR)/tmp-cleanup-style $(1); }
+    @rm -f $(TOP_DIR)/tmp-cleanup-style
 
 endef
 cleanup-style:
