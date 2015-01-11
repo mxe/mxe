@@ -26,7 +26,7 @@ def is_pe_file(file):
     if not os.path.isfile(file): # Skip directories
         return False
     f = open(file, 'rb')
-    if f.read(2) != b'MZ': 
+    if f.read(2) != b'MZ':
         return False  # DOS magic number not present
     f.seek(60)
     peoffset = struct.unpack('<L', f.read(4))[0]
