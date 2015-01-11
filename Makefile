@@ -300,6 +300,7 @@ update-checksum-%:
 		$(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
 	$(error package $* not found in index.html))
 
+.PHONY: cleanup-style
 cleanup-style:
 	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\
             $(SED) ' \
