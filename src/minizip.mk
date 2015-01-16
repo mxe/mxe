@@ -11,7 +11,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_COMMIT).zip
 $(PKG)_URL      := https://github.com/nmoinvaz/minizip/archive/$($(PKG)_COMMIT).zip
 $(PKG)_DEPS     := gcc zlib
 
-define $(PKG)_UPDATE 
+define $(PKG)_UPDATE
     echo 'TODO: write update script for $(PKG).' >&2;
     echo $($(PKG)_VERSION)
 endef

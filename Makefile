@@ -553,21 +553,24 @@ update-checksum-%:
 	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
 	    $(error Package $* not found in index.html))
 
+.PHONY: cleanup-style
+define CLEANUP_STYLE
+    @$(SED) ' \
+        s/\r//g; \
+        s/[ \t]\+$$//; \
+        s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
+        $(if $(filter %Makefile,$(1)),,\
+            s/\t/    /g; \
+        ) \
+    ' < $(1) > $(TOP_DIR)/tmp-cleanup-style
+    @diff -u $(1) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
+        || { echo '[cleanup] $(1)'; \
+             cp $(TOP_DIR)/tmp-cleanup-style $(1); }
+    @rm -f $(TOP_DIR)/tmp-cleanup-style
+
+endef
 cleanup-style:
-	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\
-        $(SED) ' \
-            s/\r//g; \
-            s/[ \t]\+$$//; \
-            s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
-            $(if $(filter %Makefile,$(FILE)),,\
-                s/\t/    /g; \
-            ) \
-        ' < $(FILE) > $(TOP_DIR)/tmp-cleanup-style; \
-        diff -u $(FILE) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
-            || { echo '[cleanup] $(FILE)'; \
-                 cp $(TOP_DIR)/tmp-cleanup-style $(FILE); }; \
-        rm -f $(TOP_DIR)/tmp-cleanup-style; \
-    )
+	$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),$(call CLEANUP_STYLE,$(FILE)))
 
 build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '<!DOCTYPE html>'                  > $@
@@ -660,4 +663,3 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</table>'                        >> $@
 	@echo '</body>'                         >> $@
 	@echo '</html>'                         >> $@
-
