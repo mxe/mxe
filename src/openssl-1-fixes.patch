@@ -13,7 +13,7 @@ diff --git a/e_os.h b/e_os.h
 index 6a0aad1..4928713 100644
 --- a/e_os.h
 +++ b/e_os.h
-@@ -499,7 +499,7 @@ static unsigned int _strlen31(const char *str)
+@@ -501,7 +501,7 @@ static unsigned int _strlen31(const char *str)
  #      endif
  #      if !defined(IPPROTO_IP)
           /* winsock[2].h was included already? */
