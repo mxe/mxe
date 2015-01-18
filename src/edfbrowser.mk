@@ -3,9 +3,9 @@
 
 PKG             := edfbrowser
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 1.53
-$(PKG)_CHECKSUM := 8a901b148288be9b2acb55dfebd34a8f780c2e90
-$(PKG)_SUBDIR   := edfbrowser_153_source
+$(PKG)_VERSION  := 1.54
+$(PKG)_CHECKSUM := 9b6e2159ebb0278a50b764dd243d354aa202d8b5
+$(PKG)_SUBDIR   := edfbrowser_154_source
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://www.teuniz.net/edfbrowser/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qt
