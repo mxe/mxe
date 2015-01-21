@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 017b92dc7fd4e636a2b5c9265a77ccc05798c9e1
 $(PKG)_SUBDIR   := readline-$($(PKG)_VERSION)
 $(PKG)_FILE     := readline-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/readline/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pdcurses
+$(PKG)_DEPS     := gcc termcap
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://tiswww.case.edu/php/chet/readline/rltop.html' | \
@@ -23,7 +23,6 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --enable-multibyte \
         --without-purify \
-        --with-curses \
-        LIBS='-lcurses'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(if $(BUILD_STATIC),SHARED_LIBS=,SHLIB_LIBS='-lcurses')
+        --without-curses
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
