@@ -3,8 +3,8 @@
 
 PKG             := harfbuzz
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.37
-$(PKG)_CHECKSUM := f06ed431edbb3a6cf996e8bfc5a289def68b5fa1
+$(PKG)_VERSION  := 0.9.38
+$(PKG)_CHECKSUM := 00c24a228206a5646166630e02b542d7d3fb4544
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.freedesktop.org/software/$(PKG)/release/$($(PKG)_FILE)
