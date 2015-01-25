@@ -20,7 +20,7 @@ define $(PKG)_BUILD
 
     rm -rf '$(1)'
     cp -r ~/src/stimfit '$(1)'
-    #WXCONF='$(PREFIX)/bin/$(TARGET)-wx-config' $(MAKE) -C '$(1)' -f Makefile.static clean
+    -WXCONF='$(PREFIX)/bin/$(TARGET)-wx-config' $(MAKE) -C '$(1)' -f Makefile.static clean
 
     cd '$(1)' && ./autogen.sh && ./configure --enable-python --with-biosig --with-pslope
     WXCONF='$(PREFIX)/bin/$(TARGET)-wx-config' $(MAKE) -C '$(1)' -f Makefile.static -j '$(JOBS)'
@@ -30,7 +30,7 @@ define $(PKG)_BUILD
     -$(INSTALL) '$(1)/stimfit.exe' /fs3/group/jonasgrp/Software/Stimfit/stimfit.$(TARGET).$(shell date +%Y%m%d).exe
     -(cd /fs3/group/jonasgrp/Software/Stimfit && ln -sf stimfit.$(TARGET).$(shell date +%Y%m%d).exe stimfit.$(TARGET).LATEST.exe)
 
-    -cd /fs3/group/jonasgrp/Software/Stimfit && ln -sf stimfit.$(TARGET).$(shell date +%Y%m%d).exe stimfit.$(shell date +%Y%m%d).exe
+    #-cd /fs3/group/jonasgrp/Software/Stimfit && ln -sf stimfit.$(TARGET).$(shell date +%Y%m%d).exe stimfit.$(shell date +%Y%m%d).exe
 
 
 endef
