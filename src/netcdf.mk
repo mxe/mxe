@@ -32,14 +32,10 @@ define $(PKG)_BUILD
         --enable-netcdf-4 \
         --enable-hdf4 \
         --prefix='$(PREFIX)/$(TARGET)' \
-        CPPFLAGS="-D_DLGS_H" \
+        CPPFLAGS="-DWIN32_LEAN_AND_MEAN" \
         LIBS="-lmfhdf -ldf -lportablexdr -lws2_32"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-$(PKG)_BUILD_i686-w64-mingw32 = $(subst --enable-hdf4, --disable-hdf4,\
-                                $(subst -lmfhdf -ldf,,$($(PKG)_BUILD)))
 
 $(PKG)_BUILD_SHARED =
