@@ -2,7 +2,6 @@
 # See index.html for further information.
 PKG             := qtservice
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := fd22bee
 $(PKG)_VERSION  := 38e79e3
 $(PKG)_CHECKSUM := 3d3e2ebb092f2e04b3bc1d75a4221465fdac29e8
 $(PKG)_SUBDIR   := qtproject-qt-solutions-$($(PKG)_VERSION)
