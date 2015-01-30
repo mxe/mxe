@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar rcu' \
         CROSS_COMPILE='$(TARGET)-'
+    $(INSTALL) -m644 '$(1)/FindOpenSSL.cmake' '$(PWD)/src/cmake/'
 endef
 
 $(PKG)_BUILD_i686-w64-mingw32   = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))
