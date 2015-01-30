@@ -31,6 +31,9 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar rcu' \
         CROSS_COMPILE='$(TARGET)-'
     $(INSTALL) -m644 '$(1)/FindOpenSSL.cmake' '$(PWD)/src/cmake/'
+    $(INSTALL) -m644 '$(1)/FindPackageHandleStandardArgs.cmake' '$(PWD)/src/cmake/'
+    $(INSTALL) -m644 '$(1)/CMakeParseArguments.cmake' '$(PWD)/src/cmake/'
+    $(INSTALL) -m644 '$(1)/FindPackageMessage.cmake' '$(PWD)/src/cmake/'
 endef
 
 $(PKG)_BUILD_i686-w64-mingw32   = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))
