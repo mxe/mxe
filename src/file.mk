@@ -19,12 +19,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoreconf -fi
+
     # "file" needs a runnable version of the "file" utility
     # itself. This must match the source code regarding its
     # version. Therefore we build a native one ourselves first.
 
     cp -Rp '$(1)' '$(1).native'
-    cd '$(1).native' && autoreconf -fi
     cd '$(1).native' && ./configure \
         --disable-shared
     $(MAKE) -C '$(1).native/src' -j '$(JOBS)' file
