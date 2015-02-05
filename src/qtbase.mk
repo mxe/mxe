@@ -29,6 +29,7 @@ define $(PKG)_BUILD
             -device-option CROSS_COMPILE=${TARGET}- \
             -device-option PKG_CONFIG='${TARGET}-pkg-config' \
             -force-pkg-config \
+            -no-use-gold-linker \
             -release \
             -static \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
