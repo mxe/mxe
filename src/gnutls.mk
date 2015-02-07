@@ -19,6 +19,7 @@ endef
 
 define $(PKG)_BUILD
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.am'
+    rm '$(1)/ltmain.sh'
     cd '$(1)' && autoreconf -fi -I m4 -I gl/m4 -I src/libopts/m4
     # skip the run test for libregex support since we are cross compiling
     $(SED) -i 's/libopts_cv_with_libregex=no/libopts_cv_with_libregex=yes/g;' '$(1)/configure'
