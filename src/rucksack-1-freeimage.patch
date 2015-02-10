@@ -1,0 +1,87 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dda183c..3c9aec6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -19,12 +19,10 @@ else(C99_FLAG_DETECTED)
+ endif(C99_FLAG_DETECTED)
+ 
+ # check for freeimage
+-find_package(FreeImage)
+-if(FreeImage_FOUND)
+-  set(STATUS_FREEIMG "OK")
+-else(FreeImage_FOUND)
+-  set(STATUS_FREEIMG "not found")
+-endif(FreeImage_FOUND)
++if(NOT PKG_CONFIG_FOUND)
++  find_package(PkgConfig REQUIRED)
++endif()
++pkg_check_modules(FREEIMAGE freeimage)
+ 
+ # check for laxjson
+ find_package(LaxJson)
+@@ -58,52 +56,26 @@ set(EXE_HEADERS
+   ${PROJECT_SOURCE_DIR}/src/stringlist.h
+   )
+ 
+-set(LIB_CFLAGS "${C99_C_FLAGS} -pedantic -Werror -Wall -Werror=strict-prototypes -Werror=old-style-definition -Werror=missing-prototypes -D_POSIX_C_SOURCE=200809L")
++set(LIB_CFLAGS "${C99_C_FLAGS} -pedantic -Werror -Wall -Werror=strict-prototypes -Werror=old-style-definition -Werror=missing-prototypes -D_POSIX_C_SOURCE=200809L ${FREEIMAGE_CFLAGS_OTHER}")
+ set(EXE_CFLAGS ${LIB_CFLAGS})
+ 
+-include_directories(${FreeImage_INCLUDE_DIRS})
++include_directories(${FREEIMAGE_INCLUDE_DIRS})
+ add_library(rucksack_static STATIC ${LIB_SOURCES} ${LIB_HEADERS})
+ set_target_properties(rucksack_static PROPERTIES
+   OUTPUT_NAME rucksack
+   COMPILE_FLAGS ${LIB_CFLAGS})
+ 
+-add_library(rucksack_shared SHARED ${LIB_SOURCES} ${LIB_HEADERS})
+-set_target_properties(rucksack_shared PROPERTIES
+-  OUTPUT_NAME rucksack
+-  SOVERSION ${VERSION_MAJOR}
+-  VERSION ${VERSION}
+-  COMPILE_FLAGS ${LIB_CFLAGS})
+-target_link_libraries(rucksack_shared ${FreeImage_LIBRARIES})
+-
+ add_executable(rucksack ${EXE_SOURCES} ${EXE_HEADERS})
+-target_link_libraries(rucksack rucksack_shared ${LAXJSON_LIBRARY})
++target_link_libraries(rucksack rucksack_static ${LAXJSON_LIBRARY} ${FREEIMAGE_LIBRARIES})
+ include_directories(${LAXJSON_INCLUDE_DIR})
+ set_target_properties(rucksack PROPERTIES
+   COMPILE_FLAGS ${EXE_CFLAGS})
+ 
+ install(TARGETS rucksack DESTINATION bin)
+-install(TARGETS rucksack_static rucksack_shared DESTINATION lib)
++install(TARGETS rucksack_static DESTINATION lib)
+ install(FILES "src/rucksack.h" DESTINATION include)
+ 
+ 
+-enable_testing()
+-include_directories("${PROJECT_SOURCE_DIR}/src")
+-add_executable(test_library test/test_library.c)
+-set_target_properties(test_library PROPERTIES
+-  COMPILE_FLAGS ${EXE_CFLAGS})
+-target_link_libraries(test_library rucksack_shared)
+-add_test(LibraryTests test_library)
+-
+-add_executable(test_path test/test_path.c src/path.c src/path.h)
+-set_target_properties(test_path PROPERTIES
+-  COMPILE_FLAGS ${EXE_CFLAGS})
+-add_test(PathUnitTests test_path)
+-
+-add_executable(test_stringlist test/test_stringlist.c src/stringlist.c src/stringlist.h)
+-set_target_properties(test_stringlist PROPERTIES
+-  COMPILE_FLAGS ${EXE_CFLAGS})
+-add_test(StringListTests test_stringlist)
+-
+ message("\n"
+ "Installation Summary\n"
+ "--------------------\n"
+@@ -114,7 +86,7 @@ message(
+ "Required Dependencies\n"
+ "------------------\n"
+ "* C99 Compiler                 : ${STATUS_C99}\n"
+-"* freeimage                    : ${STATUS_FREEIMG}\n"
++"* freeimage                    : patched\n"
+ "* laxjson                      : ${STATUS_LAXJSON}\n"
+ )
+ 
