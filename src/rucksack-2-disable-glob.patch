@@ -1,0 +1,71 @@
+diff --git a/src/main.c b/src/main.c
+index 220c355..87d576b 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -11,7 +11,6 @@
+ #include <time.h>
+ #include <unistd.h>
+ #include <assert.h>
+-#include <glob.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ 
+@@ -110,8 +109,6 @@ static enum State state;
+ static char parse_err_occurred = 0;
+ static char strbuf[4096];
+ static char strbuf2[4096];
+-static char strbuf3[4096];
+-static char strbuf4[4096];
+ 
+ // texture we will add to the bundle
+ static struct RuckSackTexture *texture = NULL;
+@@ -306,48 +303,7 @@ static int add_file_if_outdated(struct RuckSackBundle *bundle,
+ }
+ 
+ static int perform_glob(int (*match_callback)(char *key, int key_size, char *path)) {
+-    char *use_glob_str = glob_glob ? glob_glob : "*";
+-    char *use_glob_path = glob_path ? glob_path : "";
+-    char *use_glob_prefix = glob_prefix ? glob_prefix : "";
+-
+-    glob_t glob_result;
+-    path_join(path_prefix, use_glob_path, strbuf3);
+-    path_join(strbuf3, use_glob_str, strbuf2);
+-    int err = glob(strbuf2, GLOB_NOSORT, NULL, &glob_result);
+-
+-    switch (err) {
+-        case GLOB_NOSPACE:
+-            return parse_error("out of memory");
+-        case GLOB_ABORTED:
+-            return parse_error("read error while globbing");
+-        case GLOB_NOMATCH:
+-            return parse_error("no patterns matched");
+-    }
+-
+-    append_dep(*use_glob_path == '0' ? "." : use_glob_path);
+-
+-    for (unsigned int i = 0; i < glob_result.gl_pathc; i += 1) {
+-        struct stat s;
+-        char *path = glob_result.gl_pathv[i];
+-        if (stat(path, &s) != 0) {
+-            snprintf(strbuf4, sizeof(strbuf4), "unable to stat %s", path);
+-            return parse_error(strbuf4);
+-        }
+-
+-        if (S_ISDIR(s.st_mode))
+-            continue;
+-
+-        // compute a relative path so we can use it to build the key
+-        path_relative(strbuf3, path, strbuf2);
+-
+-        snprintf(strbuf4, sizeof(strbuf4), "%s%s", use_glob_prefix, strbuf2);
+-        err = match_callback(strbuf4, strlen(strbuf4), path);
+-        if (err) return err;
+-    }
+-
+-    globfree(&glob_result);
+-
+-    return 0;
++    return parse_error("glob not supported on windows");
+ }
+ 
+ static int add_glob_match_to_bundle(char *key, int key_size, char *path) {
