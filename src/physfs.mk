@@ -20,7 +20,10 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && cmake . \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DPHYSFS_BUILD_SHARED=FALSE \
+        $(if $(BUILD_SHARED), \
+            -DPHYSFS_BUILD_SHARED=TRUE \
+            -DPHYSFS_BUILD_STATIC=FALSE, \
+            -DPHYSFS_BUILD_SHARED=FALSE) \
         -DPHYSFS_INTERNAL_ZLIB=FALSE \
         -DPHYSFS_BUILD_TEST=FALSE \
         -DPHYSFS_BUILD_WX_TEST=FALSE
@@ -33,5 +36,3 @@ define $(PKG)_BUILD
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =
-
-$(PKG)_BUILD_SHARED =
