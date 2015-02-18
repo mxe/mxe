@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2db39e7d1264918c2266b0436c313fbd12da4ceb
 $(PKG)_SUBDIR   := LuaJIT-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://luajit.org/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc dlfcn-win32
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
