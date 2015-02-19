@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ed138f3717648692113145b99a80511178548010
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://caca.zoy.org/raw-attachment/wiki/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freeglut ncurses zlib
+$(PKG)_DEPS     := gcc freeglut zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://caca.zoy.org/wiki/libcaca' | \
@@ -28,6 +28,7 @@ define $(PKG)_BUILD
         --disable-java \
         --disable-python \
         --disable-ruby \
+        --disable-ncurses \
         --disable-doc
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
