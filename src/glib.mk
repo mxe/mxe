@@ -29,7 +29,13 @@ define $(PKG)_NATIVE_BUILD
         --disable-nls
     $(MAKE) -C '$(1).native/$(libiconv_SUBDIR)' -j '$(JOBS)'
 
-    # native build for glib-genmarshal, without gettext and zlib
+    # native build of zlib...
+    cd '$(1).native' && $(call UNPACK_PKG_ARCHIVE,zlib)
+    cd '$(1).native/$(zlib_SUBDIR)' && ./configure \
+        --static
+    $(MAKE) -C '$(1).native/$(zlib_SUBDIR)' -j '$(JOBS)'
+
+    # native build for glib-genmarshal, without gettext
     cd '$(1).native' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -42,8 +48,8 @@ define $(PKG)_NATIVE_BUILD
         --disable-dtrace \
         --with-libiconv=gnu \
         --with-pcre=internal \
-        CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include' \
-        LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs'
+        CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include -I$(1).native/$(zlib_SUBDIR)' \
+        LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs -L$(1).native/$(zlib_SUBDIR)'
     $(SED) -i 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
