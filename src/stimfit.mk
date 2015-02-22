@@ -18,8 +18,6 @@ endef
 
 define $(PKG)_BUILD
 
-    rm -rf '$(1)'
-    cp -r ~/src/stimfit '$(1)'
     -WXCONF='$(PREFIX)/bin/$(TARGET)-wx-config' $(MAKE) -C '$(1)' -f Makefile.static clean
 
     cd '$(1)' && ./autogen.sh && ./configure --enable-python --with-biosig --with-pslope
