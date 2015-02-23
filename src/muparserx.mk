@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)$(PKG)_$($(PKG)_VERSION).build' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
-	-DCMAKE_CXX_FLAGS='-std=c++11' \
+    -DCMAKE_CXX_FLAGS='-std=c++11' \
         '$(1)$(PKG)_$($(PKG)_VERSION)'
-	$(MAKE) -C '$(1)$(PKG)_$($(PKG)_VERSION).build' install
+    $(MAKE) -C '$(1)$(PKG)_$($(PKG)_VERSION).build' install
 endef
