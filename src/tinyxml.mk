@@ -17,18 +17,16 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && $(TARGET)-g++ -c -O3 -Wall -Wno-unknown-pragmas -Wno-format -D TIXML_USE_STL '$(1)'/*.cpp
-    cd '$(1)' && $(TARGET)-ar cr libtinyxml.a *.o
-    $(TARGET)-ranlib '$(1)/libtinyxml.a'
-    $(INSTALL) -d               '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)'/*.a '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -d               '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m644 '$(1)'/*.h '$(PREFIX)/$(TARGET)/include/'
+    mkdir '$(1).build'
+    cd '$(1).build' && cmake \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
+	-DCMAKE_CXX_FLAGS='-DTIXML_USE_STL' \
+        '$(1)'
+	$(MAKE) -C '$(1).build' install
 
     '$(TARGET)-g++' \
-        -W -Wall -D TIXML_USE_STL -Werror -ansi -pedantic \
+        -W -Wall -DTIXML_USE_STL -Werror -ansi -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-tinyxml.exe' \
         -ltinyxml
 endef
-
-$(PKG)_BUILD_SHARED =
