@@ -1,0 +1,18 @@
+diff -burN patch_test/muparserx_v3_0_3.orig/CMakeLists.txt patch_test/muparserx_v3_0_3/CMakeLists.txt
+--- patch_test/muparserx_v3_0_3.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ patch_test/muparserx_v3_0_3/CMakeLists.txt	2015-02-23 20:25:36.710543187 +0100
+@@ -0,0 +1,14 @@
++cmake_minimum_required(VERSION 2.8)
++file(GLOB MUPARSERX_SRCS "${CMAKE_SOURCE_DIR}/parser/*.cpp" )
++
++add_library(muparserx ${MUPARSERX_SRCS})
++
++install(TARGETS muparserx
++  RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
++  LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
++  ARCHIVE DESTINATION lib COMPONENT Development)
++
++file(GLOB MUPARSERX_HEADERS "${CMAKE_SOURCE_DIR}/*.h")
++install(FILES ${MUPARSERX_HEADERS}
++  DESTINATION include
++  COMPONENT Development)
