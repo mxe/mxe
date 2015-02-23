@@ -23,5 +23,5 @@ define $(PKG)_BUILD
     -DCMAKE_MODULE_PATH='$(1)/ossim_package_support/cmake/CMakeModules' \
     -DCMAKE_CXX_FLAGS='-DGEOS_INLINE=1' \
     '$(1)/ossim'
-  $(MAKE) -C '$(1).build' -j '$(JOBS)' install 
+  $(MAKE) -C '$(1).build' -j '$(JOBS)' install
 endef

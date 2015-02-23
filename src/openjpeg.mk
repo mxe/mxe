@@ -24,5 +24,5 @@ define $(PKG)_BUILD
         -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
         -DBUILD_TESTING=FALSE \
         '$(1)'
-	$(MAKE) -C '$(1).build' install
+    $(MAKE) -C '$(1).build' install
 endef

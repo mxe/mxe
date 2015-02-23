@@ -19,7 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-	$(MXE_CONFIGURE_OPTS) \
+    $(MXE_CONFIGURE_OPTS) \
         --with-mutex
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     # remove header which is not installed since 4.8.0
