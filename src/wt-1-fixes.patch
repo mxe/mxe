@@ -1,10 +1,12 @@
 This file is part of MXE.
 See index.html for further information.
 
-From e04e1c624c65e0acb0249aa3c4980d95e79f592c Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
+Contains ad hoc patches for cross building.
+
+From 91ffd2fb6f9c5ed3017af5363b3f14313a45ea9c Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Mon, 18 Jun 2012 13:23:21 +0200
-Subject: [PATCH] fixes for mxe
+Subject: [PATCH 1/2] fixes for mxe
 
 
 diff --git a/cmake/WtFindBoost-vintage.txt b/cmake/WtFindBoost-vintage.txt
@@ -62,10 +64,10 @@ index cd1e640..b1bbe3d 100644
  IF (PANGO_INCLUDE_DIR
      AND FT2_INCLUDE_DIR
 diff --git a/cmake/WtFindSsl.txt b/cmake/WtFindSsl.txt
-index fdbcb5f..578baf1 100644
+index 3cc42d1..ae64671 100644
 --- a/cmake/WtFindSsl.txt
 +++ b/cmake/WtFindSsl.txt
-@@ -81,6 +81,11 @@ IF(WIN32)
+@@ -94,6 +94,11 @@ IF(WIN32)
        AND SSL_LIB_DEBUG
        AND SSL_TOO_LIB_RELEASE
        AND SSL_TOO_LIB_DEBUG)
@@ -78,7 +80,7 @@ index fdbcb5f..578baf1 100644
    FIND_LIBRARY(SSL_LIB
      NAMES
 diff --git a/src/Wt/WRasterImage.C b/src/Wt/WRasterImage.C
-index 471edfa..95632be 100644
+index 415d27e..7f1ed17 100644
 --- a/src/Wt/WRasterImage.C
 +++ b/src/Wt/WRasterImage.C
 @@ -39,15 +39,6 @@
@@ -98,5 +100,66 @@ index 471edfa..95632be 100644
    static const double EPSILON = 1E-5;
  
 -- 
-1.7.10.4
+1.9.3 (Apple Git-50)
+
+
+From 0904c43ee23d0690d4a872efbbda22839b0ef686 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 1 Dec 2014 23:28:45 +1100
+Subject: [PATCH 2/2] fixes for boost
+
+taken from:
+http://redmine.emweb.be/issues/3551
+
+diff --git a/src/Wt/Dbo/SqlQueryParse.C b/src/Wt/Dbo/SqlQueryParse.C
+index abc2c5d..04c6d92 100644
+--- a/src/Wt/Dbo/SqlQueryParse.C
++++ b/src/Wt/Dbo/SqlQueryParse.C
+@@ -20,7 +20,7 @@
+ #include <boost/spirit/include/phoenix_core.hpp>
+ #include <boost/spirit/include/phoenix_operator.hpp>
+ #include <boost/spirit/include/phoenix_object.hpp>
+-#include <boost/spirit/home/phoenix/statement/throw.hpp>
++#include <boost/phoenix/statement/throw.hpp>
+ #include <boost/bind.hpp>
+ #include <iostream>
+ 
+diff --git a/src/Wt/Json/Parser.C b/src/Wt/Json/Parser.C
+index ea0d3ad..bcc1a34 100644
+--- a/src/Wt/Json/Parser.C
++++ b/src/Wt/Json/Parser.C
+@@ -24,7 +24,7 @@
+ #include <boost/spirit/include/phoenix_core.hpp>
+ #include <boost/spirit/include/phoenix_operator.hpp>
+ #include <boost/spirit/include/phoenix_object.hpp>
+-#include <boost/spirit/home/phoenix/statement/throw.hpp>
++#include <boost/phoenix/statement/throw.hpp>
+ #include <boost/bind.hpp>
+ 
+ #endif // JSON_PARSER
+diff --git a/src/Wt/Render/CssParser.C b/src/Wt/Render/CssParser.C
+index 4734d1d..48942bd 100644
+--- a/src/Wt/Render/CssParser.C
++++ b/src/Wt/Render/CssParser.C
+@@ -34,7 +34,7 @@ using namespace Wt::Render;
+ #include <boost/fusion/include/adapt_struct.hpp>
+ #include <boost/variant/recursive_variant.hpp>
+ #include <boost/spirit/home/support/context.hpp>
+-#include <boost/spirit/home/phoenix.hpp>
++#include <boost/phoenix.hpp>
+ #include <boost/spirit/include/classic_file_iterator.hpp>
+ 
+ #include <map>
+@@ -157,8 +157,7 @@ struct fs_error_tag {};
+ template< typename Iterator >
+ struct ErrorReporting
+ {
+-  template< typename, typename, typename, typename, typename > // Phoenix v2
+-  struct result { typedef void type;};
++  typedef void result_type;
+ 
+   ErrorReporting(CssGrammer< Iterator >* grammer)
+     : grammer_(grammer)
+-- 
+1.9.3 (Apple Git-50)
 

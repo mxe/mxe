@@ -3,8 +3,8 @@
 
 PKG             := xapian-core
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.16
-$(PKG)_CHECKSUM := c280ee15b14416043874f7754e0b054ac0624e7b
+$(PKG)_VERSION  := 1.2.19
+$(PKG)_CHECKSUM := a8679cd0f708e32f2ec76bcdc198cd9fa2e1d65e
 $(PKG)_SUBDIR   := xapian-core-$($(PKG)_VERSION)
 $(PKG)_FILE     := xapian-core-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://oligarchy.co.uk/xapian/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -18,11 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-static
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j 1 install
 endef
-
-$(PKG)_BUILD_SHARED =

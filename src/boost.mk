@@ -3,8 +3,8 @@
 
 PKG             := boost
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.53.0
-$(PKG)_CHECKSUM := e6dd1b62ceed0a51add3dda6f3fc3ce0f636a7f3
+$(PKG)_VERSION  := 1.57.0
+$(PKG)_CHECKSUM := e151557ae47afd1b43dc3fac46f8b04a8fe51c12
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -18,22 +18,33 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # context switched library introduced in boost 1.51.0 does not build
-    rm -r '$(1)/libs/context'
     # old version appears to interfere
     rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
-    echo 'using gcc : : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
-    # compile boost jam
-    cd '$(1)/tools/build/v2/engine' && ./build.sh
-    cd '$(1)' && tools/build/v2/engine/bin.*/bjam \
+    rm -f "$(PREFIX)/$(TARGET)/lib/libboost"*
+
+    # create user-config
+    echo 'using gcc : mxe : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
+
+    # compile boost build (b2)
+    cd '$(1)/tools/build/' && ./bootstrap.sh
+
+    # cross-build, see b2 options at:
+    # http://www.boost.org/build/doc/html/bbv2/overview/invocation.html
+    cd '$(1)' && ./tools/build/b2 \
+        -a \
+        -q \
         -j '$(JOBS)' \
         --ignore-site-config \
         --user-config=user-config.jam \
-        target-os=windows \
-        threading=multi \
+        address-model=$(BITS) \
+        architecture=x86 \
+        binary-format=pe \
         link=$(if $(BUILD_STATIC),static,shared) \
         variant=release \
+        target-os=windows \
         threadapi=win32 \
+        threading=multi \
+        toolset=gcc-mxe \
         --layout=tagged \
         --disable-icu \
         --without-mpi \
@@ -44,10 +55,15 @@ define $(PKG)_BUILD
         --includedir='$(PREFIX)/$(TARGET)/include' \
         -sEXPAT_INCLUDE='$(PREFIX)/$(TARGET)/include' \
         -sEXPAT_LIBPATH='$(PREFIX)/$(TARGET)/lib' \
-        stage install
+        cxxflags='-std=c++11' \
+        install
 
     $(if $(BUILD_SHARED), \
         mv -fv '$(PREFIX)/$(TARGET)/lib/'libboost_*.dll '$(PREFIX)/$(TARGET)/bin/')
+
+    # setup cmake toolchain
+    $(SED) -i '/Boost_THREADAPI/d' '$(CMAKE_TOOLCHAIN_FILE)'
+    echo 'set(Boost_THREADAPI "win32")' >> '$(CMAKE_TOOLCHAIN_FILE)'
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \

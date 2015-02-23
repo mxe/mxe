@@ -36,8 +36,8 @@ WGET       := wget --no-check-certificate \
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
                 gcc g++ gperf intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
-                $(MAKE) openssl $(PATCH) $(PERL) pkg-config \
-                python ruby scons $(SED) $(SORT) unzip wget xz
+                $(MAKE) openssl $(PATCH) $(PERL) python ruby scons \
+                $(SED) $(SORT) unzip wget xz
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
@@ -400,12 +400,6 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    echo '------------------------------------------------------------'; \
 	    echo '[log]      $(LOG_DIR)/$(1)'; \
 	    echo; \
-	    (echo; \
-	     find '$(2)' -name 'config.log' -print -exec cat {} \;; \
-	     echo; \
-	     echo 'settings.mk'; \
-	     cat '$(TOP_DIR)/settings.mk'; \
-	     ) >> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; \
 	    exit 1; \
 	fi
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
@@ -416,6 +410,7 @@ build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
+build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3):
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
@@ -429,9 +424,14 @@ build-only-$(1)_$(3):
 	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
 	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    @echo
+	    @find '$(2)' -name 'config.log' -print -exec cat {} \;
+	    @echo
+	    @echo 'settings.mk'
+	    @cat '$(TOP_DIR)/settings.mk'
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
-	    ,)
+	    )
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
 $(foreach TARGET,$(MXE_TARGETS), \
@@ -553,21 +553,24 @@ update-checksum-%:
 	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
 	    $(error Package $* not found in index.html))
 
+.PHONY: cleanup-style
+define CLEANUP_STYLE
+    @$(SED) ' \
+        s/\r//g; \
+        s/[ \t]\+$$//; \
+        s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
+        $(if $(filter %Makefile,$(1)),,\
+            s/\t/    /g; \
+        ) \
+    ' < $(1) > $(TOP_DIR)/tmp-cleanup-style
+    @diff -u $(1) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
+        || { echo '[cleanup] $(1)'; \
+             cp $(TOP_DIR)/tmp-cleanup-style $(1); }
+    @rm -f $(TOP_DIR)/tmp-cleanup-style
+
+endef
 cleanup-style:
-	@$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),\
-        $(SED) ' \
-            s/\r//g; \
-            s/[ \t]\+$$//; \
-            s,^#!/bin/bash$$,#!/usr/bin/env bash,; \
-            $(if $(filter %Makefile,$(FILE)),,\
-                s/\t/    /g; \
-            ) \
-        ' < $(FILE) > $(TOP_DIR)/tmp-cleanup-style; \
-        diff -u $(FILE) $(TOP_DIR)/tmp-cleanup-style >/dev/null \
-            || { echo '[cleanup] $(FILE)'; \
-                 cp $(TOP_DIR)/tmp-cleanup-style $(FILE); }; \
-        rm -f $(TOP_DIR)/tmp-cleanup-style; \
-    )
+	$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),$(call CLEANUP_STYLE,$(FILE)))
 
 build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '<!DOCTYPE html>'                  > $@
@@ -660,4 +663,3 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</table>'                        >> $@
 	@echo '</body>'                         >> $@
 	@echo '</html>'                         >> $@
-

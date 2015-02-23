@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := e95d9fca57f7ddace9f197071cbcfb92fa16748e
 $(PKG)_SUBDIR   := libsndfile-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsndfile-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.mega-nerd.com/libsndfile/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sqlite flac ogg vorbis
+$(PKG)_DEPS     := gcc flac ogg vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.mega-nerd.com/libsndfile/' | \
@@ -18,10 +18,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi
+    cd '$(1)' && autoreconf -fi -IM4
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-sqlite \
+        --disable-sqlite \
         --enable-external-libs \
         --disable-octave \
         --disable-alsa \

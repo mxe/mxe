@@ -1,0 +1,26 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 68e75d3818547ee17f1a67283d655bee51e59568 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Wed, 12 Nov 2014 23:44:05 -0500
+Subject: [PATCH] SDLnetsys: Fix winsocks2.h include on i686-w64-mingw32
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/SDLnetsys.h b/SDLnetsys.h
+index f5f4714..e2252d6 100644
+--- a/SDLnetsys.h
++++ b/SDLnetsys.h
+@@ -34,7 +34,7 @@
+ /* Include system network headers */
+ #if defined(__WIN32__) || defined(WIN32)
+ #define __USE_W32_SOCKETS
+-#ifdef _WIN64
++#if defined(_WIN64) || defined(__MINGW64_VERSION_MAJOR)
+ #include <winsock2.h>
+ #include <ws2tcpip.h>
+ #else
+-- 
+1.9.1
+

@@ -3,8 +3,8 @@
 
 PKG             := glib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.42.0
-$(PKG)_CHECKSUM := f5168a7adffad3620ff3f1b3d6ff6d0ad3f0752e
+$(PKG)_VERSION  := 2.42.1
+$(PKG)_CHECKSUM := b5158fd434f01e84259155c04ff93026a090e586
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -29,7 +29,13 @@ define $(PKG)_NATIVE_BUILD
         --disable-nls
     $(MAKE) -C '$(1).native/$(libiconv_SUBDIR)' -j '$(JOBS)'
 
-    # native build for glib-genmarshal, without gettext and zlib
+    # native build of zlib...
+    cd '$(1).native' && $(call UNPACK_PKG_ARCHIVE,zlib)
+    cd '$(1).native/$(zlib_SUBDIR)' && ./configure \
+        --static
+    $(MAKE) -C '$(1).native/$(zlib_SUBDIR)' -j '$(JOBS)'
+
+    # native build for glib-genmarshal, without gettext
     cd '$(1).native' && ./configure \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
@@ -42,8 +48,8 @@ define $(PKG)_NATIVE_BUILD
         --disable-dtrace \
         --with-libiconv=gnu \
         --with-pcre=internal \
-        CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include' \
-        LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs'
+        CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include -I$(1).native/$(zlib_SUBDIR)' \
+        LDFLAGS='-L$(1).native/$(libiconv_SUBDIR)/lib/.libs -L$(1).native/$(zlib_SUBDIR)'
     $(SED) -i 's,#define G_ATOMIC.*,,' '$(1).native/config.h'
     $(MAKE) -C '$(1).native/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(1).native/gthread' -j '$(JOBS)'
@@ -69,8 +75,8 @@ define $(PKG)_BUILD
     # Detecting if these GLib tools are already available on host machine,
     # either because of a host package installation or from an earlier MXE
     # installation of GLib.
-	# If it is installed, we symlink it into the MXE bin/.
-	# If not, we build it.
+    # If it is installed, we symlink it into the MXE bin/.
+    # If not, we build it.
     $(if $(findstring y,\
             $(shell [ -x "`which glib-genmarshal`" ] && \
                     [ -x "`which glib-compile-schemas`" ] && \

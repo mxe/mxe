@@ -3,8 +3,8 @@
 
 PKG             := wxwidgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.0
-$(PKG)_CHECKSUM := 756a9c54d1f411e262f03bacb78ccef085a9880a
+$(PKG)_VERSION  := 3.0.2
+$(PKG)_CHECKSUM := 6461eab4428c0a8b9e41781b8787510484dea800
 $(PKG)_SUBDIR   := wxWidgets-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxWidgets-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -50,54 +50,31 @@ define $(PKG)_CONFIGURE_OPTS
         --without-hildon \
         --without-dmalloc \
         --without-odbc \
-        LIBS=" `'$(TARGET)-pkg-config' --libs-only-l libtiff-4`"
+        LIBS=" `'$(TARGET)-pkg-config' --libs-only-l libtiff-4`" \
+        CXXFLAGS='-std=gnu++11' \
+        CXXCPP='$(TARGET)-g++ -E -std=gnu++11'
 endef
 
-define $(PKG)_BUILD_UNICODE
+define $(PKG)_BUILD
     # build the wxWidgets variant with unicode support
     mkdir '$(1).unicode'
     cd    '$(1).unicode' && '$(1)/configure' \
         $($(PKG)_CONFIGURE_OPTS) \
         --enable-unicode
-    $(MAKE) -C '$(1).unicode' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    -$(MAKE) -C '$(1).unicode/locale' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= allmo
-    $(MAKE) -C '$(1).unicode' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= __install_wxrc___depname=
-    $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/bin/$(TARGET)-wx-config'
-endef
+    $(MAKE) -C '$(1).unicode' -j '$(JOBS)' \
+        $(MXE_DISABLE_CRUFT)
+    -$(MAKE) -C '$(1).unicode/locale' -j '$(JOBS)' allmo \
+        $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(1).unicode' -j 1 install \
+        $(MXE_DISABLE_CRUFT) __install_wxrc___depname=
+    $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config' \
+                     '$(PREFIX)/bin/$(TARGET)-wx-config'
 
-# ansi build has been long deprecated
-# so don't build it by default
-define $(PKG)_BUILD_ANSI
-    # build the wxWidgets variant without unicode support
-    mkdir '$(1).ansi'
-    cd    '$(1).ansi' && '$(1)/configure' \
-        $($(PKG)_CONFIGURE_OPTS) \
-        --disable-unicode
-    $(MAKE) -C '$(1).ansi' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-
-    # backup of the unicode wx-config script
-    # such that "make install" won't overwrite it
-    mv '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/$(TARGET)/bin/wx-config-backup'
-
-    $(MAKE) -C '$(1).ansi' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= __install_wxrc___depname=
-    mv '$(PREFIX)/$(TARGET)/bin/wx-config' '$(PREFIX)/$(TARGET)/bin/wx-config-nounicode'
-    $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/wx-config-nounicode' '$(PREFIX)/bin/$(TARGET)-wx-config-nounicode'
-
-    # restore the unicode wx-config script
-    mv '$(PREFIX)/$(TARGET)/bin/wx-config-backup' '$(PREFIX)/$(TARGET)/bin/wx-config'
-endef
-
-define $(PKG)_TEST
     # build test program
     '$(TARGET)-g++' \
         -W -Wall -Werror -Wno-error=unused-local-typedefs -pedantic -std=gnu++0x \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-wxwidgets.exe' \
         `'$(TARGET)-wx-config' --cflags --libs`
-endef
-
-define $(PKG)_BUILD
-    $($(PKG)_BUILD_UNICODE)
-    $($(PKG)_TEST)
 endef
 
 $(PKG)_BUILD_SHARED =

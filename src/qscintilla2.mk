@@ -3,8 +3,8 @@
 
 PKG             := qscintilla2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.2
-$(PKG)_CHECKSUM := cfb24bfec54ea869bc3a326b9a935fc25aea7bec
+$(PKG)_VERSION  := 2.8.4
+$(PKG)_CHECKSUM := 7e15c261a7c1842f3a75e4878a880ab667224494
 $(PKG)_SUBDIR   := QScintilla-gpl-$($(PKG)_VERSION)
 $(PKG)_FILE     := QScintilla-gpl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/pyqt/QScintilla2/QScintilla-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -25,8 +25,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -pedantic \
-	`'$(TARGET)-pkg-config' Qt5Widgets --cflags` \
+        `'$(TARGET)-pkg-config' Qt5Widgets --cflags` \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-qscintilla2.exe' -lqscintilla2 \
-	`'$(TARGET)-pkg-config' Qt5Widgets --libs`
+        `'$(TARGET)-pkg-config' Qt5Widgets --libs`
 endef
-

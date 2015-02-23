@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := wget
-$(PKG)_VERSION  := 1.15
-$(PKG)_CHECKSUM := e9fb1d25fa04f9c69e74e656a3174dca02700ba1
+$(PKG)_VERSION  := 1.16
+$(PKG)_CHECKSUM := 08d991acc80726abe57043a278f9da469c454503
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
@@ -17,7 +17,7 @@ endef
 
 define $(PKG)_BUILD
     # avoid conflict with base64_encode from gnutls
-    $(SED) -i 's/^base64_encode /wget_base64_encode /;' '$(1)/src/utils.c'
+    $(if $(BUILD_STATIC), $(SED) -i 's/^base64_encode /wget_base64_encode /;' '$(1)/src/utils.c')
     $(SED) -i 's/-lidn/`$(TARGET)-pkg-config --libs libidn`/g;' '$(1)/configure'
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
@@ -28,5 +28,3 @@ define $(PKG)_BUILD
         LIBS='-lpthread'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
-
-$(PKG)_BUILD_SHARED =

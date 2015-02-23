@@ -3,27 +3,53 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From b5c7c4853307964f0b8e11e2c9edb5bf0f8511f7 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Tue, 3 Apr 2012 14:36:58 +0200
-Subject: [PATCH] add static private dependencies to pkg-config for cmake
-
----
- CMakeLists.txt |    1 +
- 1 file changed, 1 insertion(+)
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ef3d08d..88de1e5 100644
+index 0087edb..6887339 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -603,6 +603,7 @@ IF(DSOUND)
-                 SET(BACKENDS  "${BACKENDS} DirectSound \(linked\),")
-                 SET(EXTRA_LIBS dsound ${EXTRA_LIBS})
+@@ -846,6 +846,7 @@ IF(HAVE_WINDOWS_H)
+                 SET(BACKENDS  "${BACKENDS} WinMM,")
+                 SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/winmm.c)
+                 SET(EXTRA_LIBS winmm ${EXTRA_LIBS})
++                SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -lwinmm")
+             ENDIF()
+         ENDIF()
+     ENDIF()
+@@ -862,6 +863,7 @@ IF(HAVE_WINDOWS_H)
+             IF(CMAKE_VERSION VERSION_LESS "2.8.8")
+                 INCLUDE_DIRECTORIES(${DSOUND_INCLUDE_DIRS})
              ENDIF()
 +            SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -luuid -lole32")
          ENDIF()
      ENDIF()
+ 
+@@ -873,6 +875,7 @@ IF(HAVE_WINDOWS_H)
+             SET(HAVE_MMDEVAPI 1)
+             SET(BACKENDS  "${BACKENDS} MMDevApi,")
+             SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/mmdevapi.c)
++            SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -lole32")
+         ENDIF()
+     ENDIF()
  ENDIF()
--- 
-1.7.9.2
-
+@@ -1027,10 +1030,10 @@ CONFIGURE_FILE(
+     @ONLY)
+ 
+ # Build a common library with reusable helpers
+-ADD_LIBRARY(common STATIC ${COMMON_OBJS})
++#ADD_LIBRARY(common STATIC ${COMMON_OBJS})
+ 
+ # Build main library
+-ADD_LIBRARY(${LIBNAME} ${LIBTYPE} ${OPENAL_OBJS} ${ALC_OBJS})
++ADD_LIBRARY(${LIBNAME} ${LIBTYPE} ${COMMON_OBJS} ${OPENAL_OBJS} ${ALC_OBJS})
+ SET_PROPERTY(TARGET ${LIBNAME} APPEND PROPERTY COMPILE_DEFINITIONS AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES)
+ IF(WIN32 AND ALSOFT_NO_UID_DEFS)
+     SET_PROPERTY(TARGET ${LIBNAME} APPEND PROPERTY COMPILE_DEFINITIONS AL_NO_UID_DEFS)
+@@ -1091,7 +1094,7 @@ IF(WIN32 AND NOT LIBTYPE STREQUAL "STATIC")
+     ENDIF()
+ ENDIF()
+ 
+-TARGET_LINK_LIBRARIES(${LIBNAME} common ${EXTRA_LIBS})
++TARGET_LINK_LIBRARIES(${LIBNAME} ${EXTRA_LIBS})
+ 
+ # Add an install target here
+ INSTALL(TARGETS ${LIBNAME}

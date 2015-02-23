@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && autoreconf -fi
     $(if $(BUILD_STATIC),                                         \
-    	$(SED) -i 's/__declspec(dllimport)//' '$(1)/caca/caca.h'; \
+        $(SED) -i 's/__declspec(dllimport)//' '$(1)/caca/caca.h'; \
         $(SED) -i 's/__declspec(dllimport)//' '$(1)/caca/caca0.h')
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \

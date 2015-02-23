@@ -3,8 +3,8 @@
 
 PKG             := libtool
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4.2
-$(PKG)_CHECKSUM := 22b71a8b5ce3ad86e1094e7285981cae10e6ff88
+$(PKG)_VERSION  := 2.4.4
+$(PKG)_CHECKSUM := bba19e682d80941cfb7467689dda2ad9f8f50494
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)

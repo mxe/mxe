@@ -1,0 +1,229 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+From d2cf99c7f8018673fe22b58e98092a05592f2ff8 Mon Sep 17 00:00:00 2001
+From: Tom Molesworth <tom@entitymodel.com>
+Date: Mon, 20 Jan 2014 21:23:26 +0100
+Subject: [PATCH 1/3] Patch texi2pod.pl for perl-5.14+
+
+As described in #200. Similar to #198, this time just needed to
+add * bullets to the =item lines to avoid pod errors for the wget
+exit codes.
+
+diff --git a/doc/texi2pod.pl b/doc/texi2pod.pl
+index 9db6de1..f8f9544 100755
+--- a/doc/texi2pod.pl
++++ b/doc/texi2pod.pl
+@@ -294,7 +294,7 @@ while(<$inf>) {
+                 $_ = "\n=item C<$thing>\n";
+             } else {
+                 # Entity escapes prevent munging by the <> processing below.
+-                $_ = "\n=item $ic\&LT;$thing\&GT;\n";
++                $_ = "\n=item * $ic\&LT;$thing\&GT;\n";
+             }
+ 	} else {
+ 	    $_ = "\n=item $ic\n";
+-- 
+1.8.4.5
+
+
+From bc01f5c526c975b935376b56a453c59fb11223be Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 29 Oct 2014 17:40:08 +0100
+Subject: [PATCH 2/3] fix handling of SYSTEM_FNMATCH and HAVE_TERMIOS_H
+
+both of which are necessary for mingw-w64
+
+Partially reverts ffccc7d3be764adcc3e6113557c1e62a966b0e5d.
+
+diff --git a/src/sysdep.h b/src/sysdep.h
+index 3159c99..fa115bc 100644
+--- a/src/sysdep.h
++++ b/src/sysdep.h
+@@ -163,7 +163,23 @@ int vsnprintf (char *str, size_t count, const char *fmt, va_list arg);
+ # define SYSTEM_FNMATCH
+ #endif
+ 
+-#include <fnmatch.h>
++#ifdef SYSTEM_FNMATCH
++# include <fnmatch.h>
++#else  /* not SYSTEM_FNMATCH */
++/* Define fnmatch flags.  Undef them first to avoid warnings in case
++   an evil library include chose to include system fnmatch.h.  */
++# undef FNM_PATHNAME
++# undef FNM_NOESCAPE
++# undef FNM_PERIOD
++# undef FNM_NOMATCH
++
++# define FNM_PATHNAME   (1 << 0) /* No wildcard can ever match `/'.  */
++# define FNM_NOESCAPE   (1 << 1) /* Backslashes don't quote special chars.  */
++# define FNM_PERIOD     (1 << 2) /* Leading `.' is matched only explicitly.  */
++# define FNM_NOMATCH    1
++
++int fnmatch (const char *, const char *, int);
++#endif
+ 
+ /* Provide sig_atomic_t if the system doesn't.  */
+ #ifndef HAVE_SIG_ATOMIC_T
+diff --git a/src/utils.c b/src/utils.c
+index 78c282e..2ec814b 100644
+--- a/src/utils.c
++++ b/src/utils.c
+@@ -65,7 +65,9 @@ as that of the covered work.  */
+ 
+ /* For TIOCGWINSZ and friends: */
+ #include <sys/ioctl.h>
+-#include <termios.h>
++#ifdef HAVE_TERMIOS_H
++# include <termios.h>
++#endif
+ 
+ /* Needed for Unix version of run_with_timeout. */
+ #include <signal.h>
+-- 
+1.8.4.5
+
+
+From d5fa82e900020f98ecbdfbf83689315f6c088d81 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 29 Oct 2014 18:06:31 +0100
+Subject: [PATCH 3/3] revert broken commit on mingw-w64
+
+Reverts most of efe090df89eb5f3b831f1483ef4c33fbae4665a2.
+The macro version of cols_to_bytes looks like it wasn't quite
+finished.
+
+Files not reverted:
+    ChangeLog
+    bootstrap.conf
+
+diff --git a/src/progress.c b/src/progress.c
+index 5ba542d..e9182cc 100644
+--- a/src/progress.c
++++ b/src/progress.c
+@@ -37,7 +37,6 @@ as that of the covered work.  */
+ #include <unistd.h>
+ #include <signal.h>
+ #include <wchar.h>
+-#include <mbiter.h>
+ 
+ #include "progress.h"
+ #include "utils.h"
+@@ -813,37 +812,8 @@ count_cols (const char *mbs)
+     }
+   return cols;
+ }
+-
+-static int
+-cols_to_bytes (const char *mbs, const int cols, int *ncols)
+-{
+-  int p_cols = 0, bytes = 0;
+-  mbchar_t mbc;
+-  mbi_iterator_t iter;
+-  mbi_init (iter, mbs, strlen(mbs));
+-  while (p_cols < cols && mbi_avail (iter))
+-    {
+-      mbc = mbi_cur (iter);
+-      p_cols += mb_width (mbc);
+-      /* The multibyte character has exceeded the total number of columns we
+-       * have available. The remaining bytes will be padded with a space. */
+-      if (p_cols > cols)
+-        {
+-          p_cols -= mb_width (mbc);
+-          break;
+-        }
+-      bytes += mb_len (mbc);
+-      mbi_advance (iter);
+-    }
+-  *ncols = p_cols;
+-  return bytes;
+-}
+ #else
+ # define count_cols(mbs) ((int)(strlen(mbs)))
+-# define cols_to_bytes(mbs, cols, *ncols) do {  \
+-    *ncols = cols;                              \
+-    bytes = cols;                               \
+-}while (0)
+ #endif
+ 
+ static const char *
+@@ -903,7 +873,7 @@ get_eta (int *bcd)
+ static void
+ create_image (struct bar_progress *bp, double dl_total_time, bool done)
+ {
+-  const int MAX_FILENAME_COLS = bp->width / 4;
++  const int MAX_FILENAME_LEN = bp->width / 4;
+   char *p = bp->buffer;
+   wgint size = bp->initial_length + bp->count;
+ 
+@@ -914,7 +884,7 @@ create_image (struct bar_progress *bp, double dl_total_time, bool done)
+   int size_grouped_pad; /* Used to pad the field width for size_grouped. */
+ 
+   struct bar_progress_hist *hist = &bp->hist;
+-  int orig_filename_cols = count_cols (bp->f_download);
++  int orig_filename_len = strlen (bp->f_download);
+ 
+   /* The progress bar should look like this:
+      file xx% [=======>             ] nnn.nnK 12.34KB/s  eta 36m 51s
+@@ -926,7 +896,7 @@ create_image (struct bar_progress *bp, double dl_total_time, bool done)
+      It would be especially bad for the progress bar to be resized
+      randomly.
+ 
+-     "file "           - Downloaded filename      - MAX_FILENAME_COLS chars + 1
++     "file "           - Downloaded filename      - MAX_FILENAME_LEN chars + 1
+      "xx% " or "100%"  - percentage               - 4 chars
+      "[]"              - progress bar decorations - 2 chars
+      " nnn.nnK"        - downloaded bytes         - 7 chars + 1
+@@ -936,7 +906,7 @@ create_image (struct bar_progress *bp, double dl_total_time, bool done)
+      "=====>..."       - progress bar             - the rest
+   */
+ 
+-#define PROGRESS_FILENAME_LEN  MAX_FILENAME_COLS + 1
++#define PROGRESS_FILENAME_LEN  MAX_FILENAME_LEN + 1
+ #define PROGRESS_PERCENT_LEN   4
+ #define PROGRESS_DECORAT_LEN   2
+ #define PROGRESS_FILESIZE_LEN  7 + 1
+@@ -954,31 +924,24 @@ create_image (struct bar_progress *bp, double dl_total_time, bool done)
+   if (progress_size < 5)
+     progress_size = 0;
+ 
+-  if (orig_filename_cols <= MAX_FILENAME_COLS)
++  if (orig_filename_len <= MAX_FILENAME_LEN)
+     {
+-      int padding = MAX_FILENAME_COLS - orig_filename_cols;
++      int padding = MAX_FILENAME_LEN - orig_filename_len;
+       sprintf (p, "%s ", bp->f_download);
+-      p += orig_filename_cols + 1;
++      p += orig_filename_len + 1;
+       for (;padding;padding--)
+         *p++ = ' ';
+     }
+   else
+     {
+-      int offset_cols;
+-      int bytes_in_filename, offset_bytes, col;
+-      int *cols_ret = &col;
++      int offset;
+ 
+-      if (((orig_filename_cols > MAX_FILENAME_COLS) && !opt.noscroll) && !done)
+-        offset_cols = ((int) bp->tick) % (orig_filename_cols - MAX_FILENAME_COLS);
++      if (((orig_filename_len > MAX_FILENAME_LEN) && !opt.noscroll) && !done)
++        offset = ((int) bp->tick) % (orig_filename_len - MAX_FILENAME_LEN);
+       else
+-        offset_cols = 0;
+-      offset_bytes = cols_to_bytes (bp->f_download, offset_cols, cols_ret);
+-      bytes_in_filename = cols_to_bytes (bp->f_download + offset_bytes, MAX_FILENAME_COLS, cols_ret);
+-      memcpy (p, bp->f_download + offset_bytes, bytes_in_filename);
+-      p += bytes_in_filename;
+-      int padding = MAX_FILENAME_COLS - *cols_ret;
+-      for (;padding;padding--)
+-          *p++ = ' ';
++        offset = 0;
++      memcpy (p, bp->f_download + offset, MAX_FILENAME_LEN);
++      p += MAX_FILENAME_LEN;
+       *p++ = ' ';
+     }
+ 
+-- 
+1.8.4.5
+

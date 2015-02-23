@@ -5,8 +5,8 @@
 
 PKG             := libircclient
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7
-$(PKG)_CHECKSUM := 02f1502d486c89ca26a59d6ba2cc5a4f92be95b1
+$(PKG)_VERSION  := 1.8
+$(PKG)_CHECKSUM := dda7df9fd9239542d295759033d7b518f0b3efd9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)

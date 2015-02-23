@@ -1,68 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 7ad6f136fb1efe7e85e65a1b90061f6963fac075 Mon Sep 17 00:00:00 2001
-From: Samuel Gaist <samuel.gaist@edeltech.ch>
-Date: Sat, 27 Sep 2014 15:39:57 -0700
-Subject: [PATCH 1/2] Make tst_qtserialport build with Qt 4
-
-The newly moved twoStageSynchronousLoopback fails to compile since
-there's no qCompare available for int and long long with Qt 4. This
-patch allows to build it again with Qt 4
-
-Change-Id: Ib3764b125f371ae70864bd578c7ccda39d08ae22
-Reviewed-by: Denis Shienkov <denis.shienkov@gmail.com>
-
-Taken from https://qt.gitorious.org/qt/qtserialport/commit/f1761c1236edce428278f7a9e8aa1091097eaa57
-
-Signed-off-by: Timothy Gu <timothygu99@gmail.com>
----
- tests/auto/qserialport/tst_qserialport.cpp | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/tests/auto/qserialport/tst_qserialport.cpp b/tests/auto/qserialport/tst_qserialport.cpp
-index 6fcb941..af767dd 100644
---- a/tests/auto/qserialport/tst_qserialport.cpp
-+++ b/tests/auto/qserialport/tst_qserialport.cpp
-@@ -470,12 +470,13 @@ void tst_QSerialPort::twoStageSynchronousLoopback()
-     senderPort.waitForBytesWritten(waitMsecs);
-     QTest::qSleep(waitMsecs);
-     receiverPort.waitForReadyRead(waitMsecs);
--    QCOMPARE(newlineArray.size(), receiverPort.bytesAvailable());
-+    QCOMPARE(qint64(newlineArray.size()), receiverPort.bytesAvailable());
-+
-     receiverPort.write(receiverPort.readAll());
-     receiverPort.waitForBytesWritten(waitMsecs);
-     QTest::qSleep(waitMsecs);
-     senderPort.waitForReadyRead(waitMsecs);
--    QCOMPARE(newlineArray.size(), senderPort.bytesAvailable());
-+    QCOMPARE(qint64(newlineArray.size()), receiverPort.bytesAvailable());
-     QCOMPARE(newlineArray, senderPort.readAll());
- 
-     // second stage
-@@ -483,12 +484,12 @@ void tst_QSerialPort::twoStageSynchronousLoopback()
-     senderPort.waitForBytesWritten(waitMsecs);
-     QTest::qSleep(waitMsecs);
-     receiverPort.waitForReadyRead(waitMsecs);
--    QCOMPARE(newlineArray.size(), receiverPort.bytesAvailable());
-+    QCOMPARE(qint64(newlineArray.size()), receiverPort.bytesAvailable());
-     receiverPort.write(receiverPort.readAll());
-     receiverPort.waitForBytesWritten(waitMsecs);
-     QTest::qSleep(waitMsecs);
-     senderPort.waitForReadyRead(waitMsecs);
--    QCOMPARE(newlineArray.size(), senderPort.bytesAvailable());
-+    QCOMPARE(qint64(newlineArray.size()), receiverPort.bytesAvailable());
-     QCOMPARE(newlineArray, senderPort.readAll());
- }
- 
--- 
-1.8.3.2
-
-
 From c68b55c600c04a42bdd31e869b1a28d90868c2aa Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Sat, 27 Sep 2014 15:46:52 -0700
-Subject: [PATCH 2/2] Work-around qmake bundled with Qt 4 not supporting macro
+Subject: [PATCH] Work-around qmake bundled with Qt 4 not supporting macro
  expansion
 
 ---

@@ -1,0 +1,48 @@
+diff -urN boost_1_57_0.orig/boost/interprocess/detail/win32_api.hpp boost_1_57_0/boost/interprocess/detail/win32_api.hpp
+--- boost_1_57_0.orig/boost/interprocess/detail/win32_api.hpp	2014-10-18 19:58:22.000000000 +0400
++++ boost_1_57_0/boost/interprocess/detail/win32_api.hpp	2014-12-27 21:48:50.726444568 +0300
+@@ -28,11 +28,18 @@
+ #include <vector>
+ #include <memory>
+ 
++#if defined (BOOST_INTERPROCESS_WINDOWS)
++#  include <cstdarg>
++#  include <boost/detail/interlocked.hpp>
++#else
++# error "This file can only be included in Windows OS"
++#endif
++
+ #ifdef BOOST_USE_WINDOWS_H
+ #include <windows.h>
+-#include <Wbemidl.h>
+-#include <Objbase.h>
+-#include <Shlobj.h>
++#include <wbemidl.h>
++#include <objbase.h>
++#include <shlobj.h>
+ #endif
+ 
+ #if defined(_MSC_VER)
+@@ -44,13 +51,6 @@
+ #  pragma comment( lib, "Shell32.lib" )   //SHGetSpecialFolderPathA
+ #endif
+ 
+-#if defined (BOOST_INTERPROCESS_WINDOWS)
+-#  include <cstdarg>
+-#  include <boost/detail/interlocked.hpp>
+-#else
+-# error "This file can only be included in Windows OS"
+-#endif
+-
+ //////////////////////////////////////////////////////////////////////////////
+ //
+ // Declaration of Windows structures or typedefs if BOOST_USE_WINDOWS_H is used
+@@ -2252,7 +2252,7 @@
+                // Print the contents of each record in the buffer.
+                if(find_record_in_buffer(heap_deleter.get(), dwBytesRead, provider_name, event_id, pTypedRecord)){
+                   char stamp_str[sizeof(unsigned long)*3+1];
+-                  std::sprintf(&stamp_str[0], "%u", ((unsigned int)pTypedRecord->TimeGenerated));
++                  sprintf(&stamp_str[0], "%u", ((unsigned int)pTypedRecord->TimeGenerated));
+                   stamp = stamp_str;
+                   break;
+                }

@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 2904b3daa0e5bacabfc45b194447310a9a02fdaf Mon Sep 17 00:00:00 2001
+From 19910ebb3242f3089ac7ba2cc83ad21c11a29b31 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
 Date: Mon, 15 Sep 2014 19:53:04 -0700
 Subject: [PATCH 1/2] Only check for Type1 fonts in custom directory if path is
@@ -9,9 +9,6 @@ Subject: [PATCH 1/2] Only check for Type1 fonts in custom directory if path is
 
 Otherwise, programs using poppler may crash
 Proposed upstream at https://bugs.freedesktop.org/show_bug.cgi?id=49037
----
- poppler/GlobalParamsWin.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/poppler/GlobalParamsWin.cc b/poppler/GlobalParamsWin.cc
 index 084b49b..9bd7dac 100644
@@ -27,10 +24,10 @@ index 084b49b..9bd7dac 100644
              if (FileExists(fontPath->getCString()) ||
                  FileExists(replaceSuffix(fontPath, ".pfb", ".pfa")->getCString())) {
 -- 
-1.8.3.2
+2.1.2
 
 
-From a684e7b8ed36b716a1a51b0b7ba136505c719e35 Mon Sep 17 00:00:00 2001
+From 346680cd02223d6be57c4eecb983505db13b2acf Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
 Date: Mon, 15 Sep 2014 20:01:22 -0700
 Subject: [PATCH 2/2] Don't use dllimport/dllexport
@@ -39,17 +36,12 @@ Otherwise static linking fails
 
 MXE workaround for https://bugs.freedesktop.org/show_bug.cgi?id=49038
 (presumably would break shared linking!)
----
- cpp/poppler-global.h     |  5 -----
- poppler/XpdfPluginAPI.h  | 18 ------------------
- qt4/src/poppler-export.h |  5 +----
- 3 files changed, 1 insertion(+), 27 deletions(-)
 
 diff --git a/cpp/poppler-global.h b/cpp/poppler-global.h
-index 5650182..6c3e01b 100644
+index eb7ec24..dd13e02 100644
 --- a/cpp/poppler-global.h
 +++ b/cpp/poppler-global.h
-@@ -20,13 +20,8 @@
+@@ -21,13 +21,8 @@
  #ifndef POPPLER_GLOBAL_H
  #define POPPLER_GLOBAL_H
  
@@ -127,5 +119,5 @@ index 2e2f6ff..e625564 100644
  # define _POPPLER_QT4_LIB_IMPORT
  #else
 -- 
-1.8.3.2
+2.1.2
 

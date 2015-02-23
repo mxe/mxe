@@ -3,8 +3,8 @@
 
 PKG             := opencv
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4.9
-$(PKG)_CHECKSUM := 4f5166e2bd22bd6167cb56dd04f2c6ed68148b2c
+$(PKG)_VERSION  := 2.4.10
+$(PKG)_CHECKSUM := 0b185f5e332d5feef91722a6ed68c36a6d33909e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)

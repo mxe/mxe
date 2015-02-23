@@ -3,8 +3,8 @@
 
 PKG             := poco
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.6p2
-$(PKG)_CHECKSUM := 90042349faf1790b5167bad0e84e1713bfd46046
+$(PKG)_VERSION  := 1.4.7p1
+$(PKG)_CHECKSUM := 8f0c65a0e477f0d623ebc589069357ef7e69217c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://pocoproject.org/releases/$(PKG)-$(word 1,$(subst p, ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
@@ -21,11 +21,13 @@ define $(PKG)_BUILD
         --config=MinGW-CrossEnv \
         --static \
         --unbundled \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --no-tests \
+        --no-samples
     $(if $(BUILD_STATIC), \
         $(SED) -i 's:// #define POCO_STATIC:#define POCO_STATIC:' \
             '$(1)/Foundation/include/Poco/Config.h')
-    $(MAKE) -C '$(1)' -j '$(JOBS)' CROSSENV=$(TARGET) || $(MAKE) -C '$(1)' -j 1 CROSSENV=$(TARGET)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' -k CROSSENV=$(TARGET) || $(MAKE) -C '$(1)' -j 1 CROSSENV=$(TARGET)
     $(MAKE) -C '$(1)' -j 1 install CROSSENV=$(TARGET)
 
     '$(TARGET)-g++' \

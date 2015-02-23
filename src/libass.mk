@@ -3,11 +3,11 @@
 
 PKG             := libass
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.10.2
-$(PKG)_CHECKSUM := 72a153364e838d3b561bae3653f1515169d479c4
+$(PKG)_VERSION  := 0.12.1
+$(PKG)_CHECKSUM := 1b890101276bddc3a5a55c158d212269246516c3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
-$(PKG)_URL      := http://libass.googlecode.com/files/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/libass/libass/releases/download/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype fontconfig fribidi harfbuzz
 
 define $(PKG)_UPDATE

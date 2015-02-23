@@ -1,0 +1,32 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 72ceb6351c8519ed48b21233246fc87f5dc8ee18 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Thu, 13 Nov 2014 01:10:29 -0500
+Subject: [PATCH] Make it possible to use another tools/gen_test_char
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+---
+ Makefile.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 6f99733..db08a1f 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -137,9 +137,10 @@ tools/gen_test_char.lo: make_tools_dir
+ tools/gen_test_char@EXEEXT@: $(OBJECTS_gen_test_char)
+ 	$(LINK_PROG) $(OBJECTS_gen_test_char) $(ALL_LIBS)
+ 
++GEN_TEST_CHAR ?= tools/gen_test_char@EXEEXT@
+ include/private/apr_escape_test_char.h: tools/gen_test_char@EXEEXT@
+ 	$(APR_MKDIR) include/private
+-	tools/gen_test_char@EXEEXT@ > $@
++	$(GEN_TEST_CHAR) > $@
+ 
+ LINK_PROG = $(LIBTOOL) $(LTFLAGS) --mode=link $(COMPILE) $(LT_LDFLAGS) \
+ 	    @LT_NO_INSTALL@ $(ALL_LDFLAGS) -o $@
+-- 
+1.9.1
+

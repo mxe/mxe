@@ -3,11 +3,11 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.3.2
-$(PKG)_CHECKSUM := faf4f33aa7e8dabcdcdf5f10824263beebbccd96
+$(PKG)_VERSION  := 5.4.0
+$(PKG)_CHECKSUM := 2e3d32f32e36a92782ca66c260940824746900bd
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.3/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.4/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc postgresql freetds openssl harfbuzz zlib libpng jpeg sqlite pcre fontconfig freetype dbus icu4c
 
 define $(PKG)_UPDATE
@@ -29,6 +29,7 @@ define $(PKG)_BUILD
             -device-option CROSS_COMPILE=${TARGET}- \
             -device-option PKG_CONFIG='${TARGET}-pkg-config' \
             -force-pkg-config \
+            -no-use-gold-linker \
             -release \
             -static \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
@@ -39,10 +40,10 @@ define $(PKG)_BUILD
             -nomake examples \
             -nomake tests \
             -no-sql-mysql \
-            -qt-sql-sqlite \
-            -qt-sql-odbc \
-            -qt-sql-psql \
-            -qt-sql-tds -D Q_USE_SYBASE \
+            -plugin-sql-sqlite \
+            -plugin-sql-odbc \
+            -plugin-sql-psql \
+            -plugin-sql-tds -D Q_USE_SYBASE \
             -system-zlib \
             -system-libpng \
             -system-libjpeg \
@@ -86,5 +87,4 @@ endef
 
 
 $(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\
-                      $(subst -qt-sql-,-plugin-sql-,\
-                      $($(PKG)_BUILD)))
+                      $($(PKG)_BUILD))

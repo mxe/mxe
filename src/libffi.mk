@@ -3,8 +3,8 @@
 
 PKG             := libffi
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.13
-$(PKG)_CHECKSUM := f5230890dc0be42fb5c58fbf793da253155de106
+$(PKG)_VERSION  := 3.2.1
+$(PKG)_CHECKSUM := 280c265b789e041c02e5c97815793dfc283fb1e6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.mirrorservice.org/sites/sourceware.org/pub/$(PKG)/$($(PKG)_FILE)
