@@ -15,17 +15,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(if $(BUILD_STATIC),\
-        echo "QWT_CONFIG -= QwtDll" >> '$(1)/qwtconfig.pri')
+	$(if $(BUILD_STATIC),\
+		echo "QWT_CONFIG -= QwtDll" >> '$(1)/qwtconfig.pri')
 
-    # build
-    cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt/bin/qmake
-    $(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
+# build
+	cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt/bin/qmake
+	$(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
 
-    #build sinusplot example to test linkage
-    cd '$(1)/examples/sinusplot' && $(PREFIX)/$(TARGET)/qt/bin/qmake
-    $(MAKE) -C '$(1)/examples/sinusplot' -f 'Makefile.Release' -j '$(JOBS)'
+#build sinusplot example to test linkage
+	cd '$(1)/examples/sinusplot' && $(PREFIX)/$(TARGET)/qt/bin/qmake
+	$(MAKE) -C '$(1)/examples/sinusplot' -f 'Makefile.Release' -j '$(JOBS)'
 
-    # install
-    $(INSTALL) -m755 '$(1)/examples/bin/sinusplot.exe' '$(PREFIX)/$(TARGET)/bin/test-qwt-qt4.exe'
+# install
+	$(INSTALL) -m755 '$(1)/examples/bin/sinusplot.exe' '$(PREFIX)/$(TARGET)/bin/test-qwt-qt4.exe'
+
 endef

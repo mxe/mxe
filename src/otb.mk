@@ -17,13 +17,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
+	mkdir '$(1).build'
 #copy otb.conf to build directory.
-    cp '$(1)/otb.conf' '$(1).build/otb.conf'
-    cd '$(1).build' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-    $(if $(BUILD_SHARED),\
-        -DBUILD_SHARED_LIBS=TRUE ) \
+	cp '$(1)/otb.conf' '$(1).build/otb.conf'
+	cd '$(1).build' && cmake \
+		-DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+	$(if $(BUILD_SHARED),\
+		-DBUILD_SHARED_LIBS=TRUE ) \
+	$(if $(BUILD_STATIC),\
+		-DBUILD_SHARED_LIBS=FALSE ) \
     -DBUILD_TESTING=FALSE \
     -DBUILD_EXAMPLES=FALSE \
     -DBUILD_APPLICATIONS=TRUE \
@@ -49,9 +51,9 @@ define $(PKG)_BUILD
         '$(1)'
 
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    #install
+#install
     $(MAKE) -C '$(1).build' -j 1 install
-    # install test
+# install test
     $(INSTALL) -m755 '$(1).build/bin/otbTestDriver.exe' '$(PREFIX)/$(TARGET)/bin/test-otb.exe'
 
 endef
