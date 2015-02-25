@@ -5,7 +5,7 @@ diff -burN ITK.original/Modules/ThirdParty/KWSys/src/KWSys/SharedForward.h.in IT
    /* Invoke the child process.  */
  #if defined(_MSC_VER)
    _execvp(cmd, argv);
-+#elif defined(__MINGW64__) || defined(__MINGW32__)
++#elif defined(__MINGW32__)
 +  execvp(cmd, (char* const*)argv);
  #elif defined(__MINGW32__)
    execvp(cmd, argv);
