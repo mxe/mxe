@@ -41,10 +41,10 @@ define $(PKG)_BUILD
         -DKWSYS_CHAR_IS_SIGNED=1 \
         -DKWSYS_LFS_WORKS=1 \
         '$(1)'
-    # make
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    # install
-    $(MAKE) -C '$(1).build' -j 1 install #VERBOSE=1
+
+    # make and install
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install
+
     # install test
     $(INSTALL) -m755 '$(1).build/bin/itkTestDriver.exe' '$(PREFIX)/$(TARGET)/bin/test-itk.exe'
 
