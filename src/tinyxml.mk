@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1).build' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
-		-DCMAKE_CXX_FLAGS='-DTIXML_USE_STL' \
+        -DCMAKE_CXX_FLAGS='-DTIXML_USE_STL' \
         '$(1)'
     $(MAKE) -C '$(1).build' -j $(JOBS) install
 

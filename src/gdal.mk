@@ -23,7 +23,7 @@ define $(PKG)_CONFIGURE
     cd '$(1)' && autoreconf -fi
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
-	    $(MXE_CONFIGURE_OPTS) \
+        $(MXE_CONFIGURE_OPTS) \
         --with-bsb \
         --with-grib \
         --with-ogr \
@@ -41,10 +41,10 @@ define $(PKG)_CONFIGURE
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
         --with-netcdf='$(PREFIX)/$(TARGET)' \
-		--with-openjpeg='$(PREFIX)/$(TARGET)' \
-		--with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
+        --with-openjpeg='$(PREFIX)/$(TARGET)' \
+        --with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
         --with-libjson-c='$(PREFIX)/$(TARGET)' \
-	    --without-odbc \
+        --without-odbc \
         --without-xerces \
         --without-grass \
         --without-libgrass \

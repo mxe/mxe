@@ -63,9 +63,9 @@ define $(PKG)_BUILD
     $(INSTALL) -m 644 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
-	    $(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x64/mingw/lib/OpenCVConfig.cmake')
+        $(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x64/mingw/lib/OpenCVConfig.cmake')
     $(if $(findstring i686-pc-mingw32,$(TARGET)),\
-		$(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x86/mingw/lib/OpenCVConfig.cmake')
+        $(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/x86/mingw/lib/OpenCVConfig.cmake')
 
     $(SED) -i 's/CMAKE_OPENCV_GCC_TARGET_MACHINE/OPENCV_GCC_TARGET_MACHINE/g' '$(PREFIX)/$(TARGET)/OpenCVConfig.cmake'
 
