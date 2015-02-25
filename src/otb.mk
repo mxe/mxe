@@ -22,33 +22,30 @@ define $(PKG)_BUILD
     cp '$(1)/otb.conf' '$(1).build/otb.conf'
     cd '$(1).build' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-    $(if $(BUILD_SHARED),\
-        -DBUILD_SHARED_LIBS=TRUE ) \
-    $(if $(BUILD_STATIC),\
-        -DBUILD_SHARED_LIBS=FALSE ) \
-    -DBUILD_TESTING=FALSE \
-    -DBUILD_EXAMPLES=FALSE \
-    -DBUILD_APPLICATIONS=TRUE \
-    -DCMAKE_USE_PTHREADS=FALSE \
-    -DCMAKE_USE_WIN32_THREADS=FALSE \
-    -DGDAL_CONFIG='$(PREFIX)/$(TARGET)/bin/gdal-config' \
-    -DOSSIM_LIBRARY='$(PREFIX)/$(TARGET)/lib/libossim.dll.a;$(PREFIX)/$(TARGET)/lib/libOpenThreads.dll.a' \
-    -DOTB_COMPILE_WITH_FULL_WARNING=FALSE \
-    -DOTB_USE_PATENTED=FALSE \
-    -DOTB_USE_CURL=TRUE \
-    -DOTB_USE_EXTERNAL_BOOST=TRUE \
-    -DOTB_USE_EXTERNAL_EXPAT=TRUE \
-    -DOTB_USE_EXTERNAL_ITK=TRUE \
-    -DOTB_USE_EXTERNAL_OSSIM=TRUE \
-    -DOTB_USE_MAPNIK=FALSE \
-    -DOTB_USE_OPENCV=TRUE \
-    -DOTB_WRAP_JAVA=FALSE \
-    -DOTB_WRAP_PYTHON=FALSE \
-    -DOTB_WRAP_QT=TRUE \
-    -DOTB_USE_SIFTFAST=TRUE \
-    -C$(if $(findstring x86_64,$(TARGET)),'$(1)/TryRunResults_x86_64.cmake', \
-          $(if $(findstring i686,$(TARGET)),'$(1)/TryRunResults.cmake'))  \
-        '$(1)'
+		$(if $(BUILD_SHARED), -DBUILD_SHARED_LIBS=TRUE ) \
+		$(if $(BUILD_STATIC), -DBUILD_SHARED_LIBS=FALSE ) \
+	    -DBUILD_TESTING=FALSE \
+		-DBUILD_EXAMPLES=FALSE \
+		-DBUILD_APPLICATIONS=TRUE \
+		-DCMAKE_USE_WIN32_THREADS=TRUE \
+		-DGDAL_CONFIG='$(PREFIX)/$(TARGET)/bin/gdal-config' \
+		-DOSSIM_LIBRARY='$(PREFIX)/$(TARGET)/lib/libossim.dll.a;$(PREFIX)/$(TARGET)/lib/libOpenThreads.dll.a' \
+		-DOTB_COMPILE_WITH_FULL_WARNING=FALSE \
+		-DOTB_USE_PATENTED=TRUE \
+		-DOTB_USE_CURL=TRUE \
+		-DOTB_USE_EXTERNAL_BOOST=TRUE \
+	    -DOTB_USE_EXTERNAL_EXPAT=TRUE \
+	    -DOTB_USE_EXTERNAL_ITK=TRUE \
+		-DOTB_USE_EXTERNAL_OSSIM=TRUE \
+		-DOTB_USE_MAPNIK=FALSE \
+		-DOTB_USE_OPENCV=TRUE \
+		-DOTB_WRAP_JAVA=FALSE \
+		-DOTB_WRAP_PYTHON=FALSE \
+		-DOTB_WRAP_QT=TRUE \
+		-DOTB_USE_SIFTFAST=TRUE \
+		-C$(if $(findstring x86_64,$(TARGET)),'$(1)/TryRunResults_x86_64.cmake', \
+			$(if $(findstring i686,$(TARGET)),'$(1)/TryRunResults.cmake'))  \
+		'$(1)'
 
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
 #install
