@@ -82,7 +82,7 @@ diff -bur gdal-1.11.1.orig/configure gdal-1.11.1/configure
      EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
 +  elif test -r $with_openjpeg/include/openjpeg-2.1/openjpeg.h ; then
 +    OPENJPEG_VERSION=20100
-+    EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
++    EXTRA_INCLUDES="-I'$with_openjpeg/include' $EXTRA_INCLUDES"
    else
 -    as_fn_error $? "openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0" "$LINENO" 5
 +    as_fn_error $? "openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.1" "$LINENO" 5
