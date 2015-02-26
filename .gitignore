@@ -4,5 +4,6 @@
 /gits/
 /log*/
 /pkg
+/versions.json
 /wip/
 /tmp-*
