@@ -2601,6 +2601,21 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
                 })();
             }
         }
+        function loadVersionCache(doneCallback, errCallback) {
+            var request = new XMLHttpRequest();
+            request.open('GET', 'versions.json', true);
+            request.onreadystatechange = function reqCallback() {
+                if (request.readyState === 4) {
+                    if (request.status === 200) {
+                        var versions = JSON.parse(request.responseText);
+                        doneCallback(versions);
+                    } else {
+                        errCallback();
+                    }
+                }
+            }
+            request.send();
+        }
         function resolveVersions(versions) {
             var resolvedVersions = {};
             for (var package in versions) {
@@ -2625,9 +2640,13 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         }
         (function main() {
             var packageElements = getPackageElements();
-            loadVersions(packageElements, function doneCallback(versions) {
-                var resolvedVersions = resolveVersions(versions);
-                showVersions(packageElements, resolvedVersions);
+            loadVersionCache(function doneCallback(versions) {
+                showVersions(packageElements, versions);
+            }, function errCallback() {
+                loadVersions(packageElements, function doneCallback(versions) {
+                    var resolvedVersions = resolveVersions(versions);
+                    showVersions(packageElements, resolvedVersions);
+                });
             });
         })();
     </script>
