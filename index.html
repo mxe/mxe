@@ -2633,7 +2633,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             for (package in packageElements) {
                 var element = packageElements[package];
                 var version = resolvedVersions[package];
+                var shorten = version.length > 12;
+                if (shorten) {
+                    version = version.substring(0, 12);
+                }
                 var versionEscaped = version.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+                if (shorten) {
+                    versionEscaped += '&hellip;';
+                }
                 var versionHtml = '<td class="version">' + versionEscaped + '</td>';
                 element.insertAdjacentHTML('afterend', versionHtml);
             }
