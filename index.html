@@ -2607,8 +2607,12 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             request.onreadystatechange = function reqCallback() {
                 if (request.readyState === 4) {
                     if (request.status === 200) {
-                        var versions = JSON.parse(request.responseText);
-                        doneCallback(versions);
+                        try {
+                            var versions = JSON.parse(request.responseText);
+                            doneCallback(versions);
+                        } catch (e) {
+                            errCallback();
+                        }
                     } else {
                         errCallback();
                     }
