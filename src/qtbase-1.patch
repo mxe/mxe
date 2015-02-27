@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From a94aaf9332ef7f049e785ed8bc391539b66da69a Mon Sep 17 00:00:00 2001
+From 01ab4dd7d61a047c93164b8d8511ddb31d5740f1 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 26 Feb 2013 13:23:33 +0100
 Subject: [PATCH 1/4] use pkg-config for freetype
@@ -9,10 +9,10 @@ Subject: [PATCH 1/4] use pkg-config for freetype
 Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
 
 diff --git a/src/platformsupport/fontdatabases/basic/basic.pri b/src/platformsupport/fontdatabases/basic/basic.pri
-index 88be809..8fc19d2 100644
+index c2b882e..3834d83 100644
 --- a/src/platformsupport/fontdatabases/basic/basic.pri
 +++ b/src/platformsupport/fontdatabases/basic/basic.pri
-@@ -82,5 +82,7 @@ contains(QT_CONFIG, freetype) {
+@@ -83,5 +83,7 @@ contains(QT_CONFIG, freetype) {
  } else:contains(QT_CONFIG, system-freetype) {
      # pull in the proper freetype2 include directory
      include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
@@ -21,10 +21,10 @@ index 88be809..8fc19d2 100644
  }
  
 -- 
-2.1.2
+2.1.0
 
 
-From 3ba546637346cdbcfe0224dfebdbfb429d293bf5 Mon Sep 17 00:00:00 2001
+From a6a467a7d8e6aaec6197c77887cae7c06f3c8659 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 May 2013 23:07:46 +0200
 Subject: [PATCH 2/4] use pkgconfig for icu detection (MXE specific)
@@ -55,10 +55,10 @@ index 16267ff..dd9fb6c 100644
 +CONFIG += link_pkgconfig
 +PKGCONFIG += icu-i18n
 -- 
-2.1.2
+2.1.0
 
 
-From ac8761c959279f151f4fcfdf0ac08ceacbab9cc7 Mon Sep 17 00:00:00 2001
+From eed2ebcf407f7e674447917f9657a689d0d2233f Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 21 Jun 2014 13:12:49 +0200
 Subject: [PATCH 3/4] use pkg-config for harfbuzz (MXE specific)
@@ -88,10 +88,10 @@ index 7443368..c24e684 100644
 +    PKGCONFIG += harfbuzz
  }
 -- 
-2.1.2
+2.1.0
 
 
-From e7cfc640b13a73b2f4097714e1863e02affb2088 Mon Sep 17 00:00:00 2001
+From 315a827326804cd76b43aa01597dc761bb75268e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 8 Dec 2014 14:15:12 +0100
 Subject: [PATCH 4/4] fix oci config test on windows
@@ -108,5 +108,5 @@ index 3ffda1d..39b6f3759 100644
 -LIBS += -lclntsh
 +!win32:LIBS += -lclntsh
 -- 
-2.1.2
+2.1.0
 
