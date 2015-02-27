@@ -1,15 +1,19 @@
 This file is part of MXE.
 See index.html for further information.
 
-diff -ur gdb-7.5.1_old/gdb/windows-termcap.c gdb-7.5.1/gdb/windows-termcap.c
---- gdb-7.5.1_old/gdb/windows-termcap.c	2012-12-13 13:28:37.527194089 -0300
-+++ gdb-7.5.1/gdb/windows-termcap.c	2012-12-13 13:29:54.823190855 -0300
-@@ -18,7 +18,15 @@
- 
+diff --git a/gdb/windows-termcap.c b/gdb/windows-termcap.c
+index caafc47..809ae6d 100644
+--- a/gdb/windows-termcap.c
++++ b/gdb/windows-termcap.c
+@@ -19,9 +19,16 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-+#include "config.h"
  
+-
+ #include "defs.h"
+-
++#include "config.h"
++
 +#if defined (HAVE_NCURSES_TERM_H)
 +#elif defined (HAVE_TERM_H)
 +#else
@@ -20,7 +24,7 @@ diff -ur gdb-7.5.1_old/gdb/windows-termcap.c gdb-7.5.1/gdb/windows-termcap.c
  #include <stdlib.h>
  
  /* -Wmissing-prototypes */
-@@ -71,3 +79,4 @@
+@@ -74,3 +81,4 @@ tgoto (const char *cap, int col, int row)
  {
    return NULL;
  }
