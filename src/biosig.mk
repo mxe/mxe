@@ -3,8 +3,8 @@
 
 PKG             := biosig
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 1.6.2
-$(PKG)_CHECKSUM := a90d1a003abbf172db7df353b90de8c5c1a5529c
+$(PKG)_VERSION  := 1.6.3
+$(PKG)_CHECKSUM := 641792b102c15a9eadcdaa58c15038bee8211369
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
@@ -20,6 +20,7 @@ define $(PKG)_BUILD_PRE
 
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|^#*||g' '$(1)'/Makefile
+    $(SED) -i '/NDEBUG/ s| -L\. ||g' '$(1)'/Makefile
 
     #$(SED) -i 's| -fstack-protector | |g' '$(1)'/Makefile
     #$(SED) -i 's| -D_FORTIFY_SOURCE=2 | |g' '$(1)'/Makefile
