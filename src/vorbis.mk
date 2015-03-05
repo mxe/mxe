@@ -3,8 +3,8 @@
 
 PKG             := vorbis
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.4
-$(PKG)_CHECKSUM := 1602716c187593ffe4302124535240cec2079df3
+$(PKG)_VERSION  := 1.3.5
+$(PKG)_CHECKSUM := 10c7fee173178d72855aa7593dfe49d9b3d6c804
 $(PKG)_SUBDIR   := libvorbis-$($(PKG)_VERSION)
 $(PKG)_FILE     := libvorbis-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.xiph.org/releases/vorbis/$($(PKG)_FILE)
