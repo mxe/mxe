@@ -3,8 +3,8 @@
 
 PKG             := libcdio
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.92
-$(PKG)_CHECKSUM := 37f0b746181c9a3c2ff14e21147885addf357b5f
+$(PKG)_VERSION  := 0.93
+$(PKG)_CHECKSUM := ac6ef86c578a7c2a601456139b288443a4f289f5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/gnu/libcdio/$(PKG)-$($(PKG)_VERSION).tar.bz2
