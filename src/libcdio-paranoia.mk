@@ -1,18 +1,18 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := libcdio
+PKG             := libcdio-paranoia
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.93
-$(PKG)_CHECKSUM := ac6ef86c578a7c2a601456139b288443a4f289f5
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_VERSION  := 10.2+0.93+1
+$(PKG)_CHECKSUM := 9c40cf6a706e881a52dc417686669d500ddd3115
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_URL      := http://ftp.gnu.org/gnu/libcdio/$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc libcdio
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package libcdio need to be written.' >&2;
-    echo $(libcdio_VERSION)
+    echo 'TODO: Updates for package libcdio-paranoia need to be written.' >&2;
+    echo $(libcdio-paranoia_VERSION)
 endef
 
 define $(PKG)_BUILD
