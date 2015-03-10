@@ -3,17 +3,14 @@
 
 PKG             := jansson
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.7
-$(PKG)_CHECKSUM := 51cd3b57f152132de686bb8c1f4471cc9ca7970e
+$(PKG)_VERSION  := 19da8ce0b6b018e6b02d0b893c1ced0e713aadb2
+$(PKG)_CHECKSUM := 0f0f818af0bfa5e07c4ddcc7a4e0ded9c4e62caf
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.digip.org/$(PKG)/releases/$($(PKG)_FILE)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/akheron/jansson/archive/$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc autoconf automake libtool
 
-define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
-endef
+$(PKG)_UPDATE = $(call MXE_GET_GITHUB_TAG_SHA, akheron/jansson)
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
