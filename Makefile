@@ -119,7 +119,7 @@ MAKE_SHARED_FROM_STATIC = \
 
 define MXE_GET_GITHUB_SHA
     $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' | \
-    $(SED) -n 's#.*"sha": "\([^<]\{7\}\)[^<]\{3\}.*#\1#p' | \
+    $(SED) -n 's#.*"sha": "\([^"]\{10\}\).*#\1#p' | \
     head -1
 endef
 
