@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 51cd3b57f152132de686bb8c1f4471cc9ca7970e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.digip.org/$(PKG)/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc autoconf automake libtool
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.digip.org/jansson/' | \
@@ -17,9 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd    '$(1).build' && '$(1)/configure' \
-        --prefix '$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+    cd '$(1)' && ./configure \
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j 1 install
 endef
