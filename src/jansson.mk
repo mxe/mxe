@@ -11,8 +11,9 @@ $(PKG)_URL      := http://www.digip.org/$(PKG)/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc autoconf automake libtool
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- 'http://www.digip.org/jansson/' | \
+    $(SED) -n 's,.*/jansson-\([0-9][^>]*\)\.tar\.bz2.*,\1,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
