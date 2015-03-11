@@ -1,7 +1,7 @@
 diff --git a/biosig4c++/t210/sopen_heka_read.c b/biosig4c++/t210/sopen_heka_read.c
 index 61e8da7..1cb23d8 100644
---- a/biosig4c++/t210/sopen_heka_read.c
-+++ b/biosig4c++/t210/sopen_heka_read.c
+--- a/t210/sopen_heka_read.c
++++ b/t210/sopen_heka_read.c
 @@ -574,10 +577,10 @@ if (VERBOSE_LEVEL>6) fprintf(stdout,"HEKA L5 @%i= #%i,%i, %s %g/%g %g/%g \n",(in
  
  
