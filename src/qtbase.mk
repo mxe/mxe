@@ -3,8 +3,8 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.4.0
-$(PKG)_CHECKSUM := 2e3d32f32e36a92782ca66c260940824746900bd
+$(PKG)_VERSION  := 5.4.1
+$(PKG)_CHECKSUM := 134ec03371722cc31e2041a82c255cec708ca848
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.4/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
@@ -29,6 +29,7 @@ define $(PKG)_BUILD
             -device-option CROSS_COMPILE=${TARGET}- \
             -device-option PKG_CONFIG='${TARGET}-pkg-config' \
             -force-pkg-config \
+            -no-use-gold-linker \
             -release \
             -static \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \

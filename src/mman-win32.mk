@@ -3,17 +3,14 @@
 
 PKG             := mman-win32
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3421c28e753c38d24a2e27c111b1c9b4601ebe7d
-$(PKG)_CHECKSUM := c33e84043d49d0e33bc434bda3a16ce60432e789
+$(PKG)_VERSION  := 378ed6b69bb7220511dd9cd0973c22b3f6773ce7
+$(PKG)_CHECKSUM := f2e54393f530b35d1736fa98a5a29d7d3a0ce76b
 $(PKG)_SUBDIR   := mman-win32-master
 $(PKG)_FILE     := mman-win32-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/witwall/mman-win32/archive/master.tar.gz
+$(PKG)_URL      := https://github.com/witwall/mman-win32/archive/$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    echo 'TODO: Updates for package mman-win32 need to be written.' >&2;
-    echo $(mman-win32_VERSION)
-endef
+$(PKG)_UPDATE = $(call MXE_GET_GITHUB_SHA, witwall/mman-win32, master)
 
 define $(PKG)_BUILD
     cd '$(1)' && chmod +x configure

@@ -4,7 +4,7 @@
 PKG             := qtenginio
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := ec754e21ee461f9a41d66343fb24dcaa358a4a05
+$(PKG)_CHECKSUM := 35da0343762a6aa7ded2c62aa4b36e77152a9240
 $(PKG)_SUBDIR    = $(subst qtbase,qtenginio,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtenginio,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtenginio,$(qtbase_URL))
