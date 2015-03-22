@@ -35,6 +35,7 @@ define $(PKG)_BUILD
         $(SED) -i -e "s|Cflags:|Cflags: -DGLEW_STATIC|g" '$(1)'/glew.pc '$(1)'/glewmx.pc
         $(SED) -i -e "s|Requires:|Requires: gl|g"        '$(1)'/glew.pc '$(1)'/glewmx.pc
     )
+    $(SED) -i -e "s|prefix=/usr|prefix=$(PREFIX)/$(TARGET)|g" '$(1)'/glew.pc '$(1)'/glewmx.pc
 
     # Install
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
@@ -58,10 +59,12 @@ define $(PKG)_BUILD
     # Test
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
+        `'$(TARGET)-pkg-config' glew --cflags` \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-glew.exe' \
-        `'$(TARGET)-pkg-config' glew --cflags --libs`
+        `'$(TARGET)-pkg-config' glew --libs`
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
+        `'$(TARGET)-pkg-config' glewmx --cflags` \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-glewmx.exe' \
-        `'$(TARGET)-pkg-config' glewmx --cflags --libs`
+        `'$(TARGET)-pkg-config' glewmx --libs`
 endef
