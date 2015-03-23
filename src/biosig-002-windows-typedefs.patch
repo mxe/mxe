@@ -19,10 +19,10 @@
 +#if defined(_MSC_VER) && (_MSC_VER < 1600)
 +#if defined(_WIN64)
 +    typedef __int64		ssize_t;
-+    typedef umsigned __int64	size_t;
++    typedef unsigned __int64	size_t;
 +#else
 +    typedef __int32		ssize_t;
-+    typedef umsigned __int32	size_t;
++    typedef unsigned __int32	size_t;
 +#endif
      typedef unsigned __int64	uint64_t;
      typedef __int64		int64_t;
