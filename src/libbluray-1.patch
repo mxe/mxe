@@ -1,0 +1,54 @@
+This file is part of MXE.
+See index.html for further information.
+
+From ff299bd94040b27db9fb119cfd6ffd2635033ec9 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 28 Mar 2015 10:57:00 +0100
+Subject: [PATCH 1/2] fix strncasecmp
+
+
+diff --git a/src/libbluray/bdnav/meta_parse.c b/src/libbluray/bdnav/meta_parse.c
+index 3cd9abd..bcb5814 100644
+--- a/src/libbluray/bdnav/meta_parse.c
++++ b/src/libbluray/bdnav/meta_parse.c
+@@ -29,6 +29,13 @@
+ #include "meta_parse.h"
+ #include "libbluray/register.h"
+ 
++#if (defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR))
++#define strncasecmp _strnicmp
++#ifdef __STRICT_ANSI__
++#undef __STRICT_ANSI__
++#endif
++#endif
++
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
+-- 
+2.1.0
+
+
+From 6f58d5eb267e1b183b82f6bd1fec4433cc24946e Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 28 Mar 2015 10:58:04 +0100
+Subject: [PATCH 2/2] fix include order
+
+
+diff --git a/src/file/dirs_win32.c b/src/file/dirs_win32.c
+index e800611..e14ab28 100644
+--- a/src/file/dirs_win32.c
++++ b/src/file/dirs_win32.c
+@@ -29,8 +29,8 @@
+ #include <stdio.h>
+ #include <string.h>
+ 
+-#include <shlobj.h>
+ #include <windows.h>
++#include <shlobj.h>
+ #include <limits.h>
+ #include <direct.h>
+ 
+-- 
+2.1.0
+
