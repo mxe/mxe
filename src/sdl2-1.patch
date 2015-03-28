@@ -1,0 +1,595 @@
+This file is part of MXE.
+See index.html for further information.
+
+From b729ad357e09a18d1019aec3d23090de3ffae2bb Mon Sep 17 00:00:00 2001
+From: Robert Norris <rob@eatenbyagrue.org>
+Date: Sat, 28 Mar 2015 21:47:00 +0100
+Subject: [PATCH 1/4] disable DirectInput because of missing wbemcli.h
+
+This patch has been taken from:
+https://bugzilla.libsdl.org/show_bug.cgi?id=1739
+
+diff --git a/configure.in b/configure.in
+index 3d8a2de..7afa09e 100644
+--- a/configure.in
++++ b/configure.in
+@@ -2406,7 +2406,7 @@ AC_HELP_STRING([--enable-directx], [use DirectX for Windows audio/video [[defaul
+         # FIXME: latest Cygwin finds dinput headers, but we die on other win32 headers.
+         # FIXME:  ...so force it off for now.
+         case "$host" in
+-            *-*-cygwin*)
++            *-*-cygwin* | *-pc-mingw32*)
+             have_dinput=false
+             ;;
+         esac
+-- 
+2.1.0
+
+
+From a811c6b407ec6b1437c08a940fc3c738d7560fe6 Mon Sep 17 00:00:00 2001
+From: Tobias Gruetzmacher <tobias-git@23.gs>
+Date: Sat, 28 Mar 2015 21:47:32 +0100
+Subject: [PATCH 2/4] fix shared build, libtool
+
+This patch is a combination of 2 patches from:
+https://bugzilla.libsdl.org/show_bug.cgi?id=1431
+
+-  Use libtool everywhere (by john)
+-  MingW fixes for "Use libtool everywhere" (by Daniel Scharrer)
+
+These fix compiles in a strictly shared build (with --disable-static) by always
+building libSDL2main.a and libSDL2_test.a staticly
+
+diff --git a/Makefile.in b/Makefile.in
+index da42661..688847a 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -33,10 +33,10 @@ TARGET  = libSDL2.la
+ OBJECTS = @OBJECTS@
+ VERSION_OBJECTS = @VERSION_OBJECTS@
+ 
+-SDLMAIN_TARGET = libSDL2main.a
++SDLMAIN_TARGET = libSDL2main.la
+ SDLMAIN_OBJECTS = @SDLMAIN_OBJECTS@
+ 
+-SDLTEST_TARGET = libSDL2_test.a
++SDLTEST_TARGET = libSDL2_test.la
+ SDLTEST_OBJECTS = @SDLTEST_OBJECTS@
+ 
+ SRC_DIST = *.txt acinclude Android.mk autogen.sh android-project build-scripts cmake configure configure.in debian include Makefile.* sdl2-config.in sdl2.m4 sdl2.pc.in SDL2.spec.in src test VisualC.html VisualC Xcode Xcode-iOS
+@@ -123,15 +123,13 @@ update-revision:
+ .PHONY: all update-revision install install-bin install-hdrs install-lib install-data uninstall uninstall-bin uninstall-hdrs uninstall-lib uninstall-data clean distclean dist $(OBJECTS:.lo=.d)
+ 
+ $(objects)/$(TARGET): $(OBJECTS) $(VERSION_OBJECTS)
+-	$(LIBTOOL) --mode=link $(CC) -o $@ $(OBJECTS) $(VERSION_OBJECTS) $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS)
++	$(LIBTOOL) --mode=link $(CC) -o $@ $^ $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS)
+ 
+ $(objects)/$(SDLMAIN_TARGET): $(SDLMAIN_OBJECTS)
+-	$(AR) cru $@ $(SDLMAIN_OBJECTS)
+-	$(RANLIB) $@
++	$(LIBTOOL) --mode=link $(CC) -o $@ $^ $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS) -all-static
+ 
+ $(objects)/$(SDLTEST_TARGET): $(SDLTEST_OBJECTS)
+-	$(AR) cru $@ $(SDLTEST_OBJECTS)
+-	$(RANLIB) $@
++	$(LIBTOOL) --mode=link $(CC) -o $@ $^ $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS) -all-static
+ 
+ install: all install-bin install-hdrs install-lib install-data
+ install-bin:
+@@ -152,10 +150,8 @@ install-hdrs: update-revision
+ install-lib: $(objects) $(objects)/$(TARGET) $(objects)/$(SDLMAIN_TARGET) $(objects)/$(SDLTEST_TARGET)
+ 	$(SHELL) $(auxdir)/mkinstalldirs $(DESTDIR)$(libdir)
+ 	$(LIBTOOL) --mode=install $(INSTALL) $(objects)/$(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+-	$(INSTALL) -m 644 $(objects)/$(SDLMAIN_TARGET) $(DESTDIR)$(libdir)/$(SDLMAIN_TARGET)
+-	$(RANLIB) $(DESTDIR)$(libdir)/$(SDLMAIN_TARGET)
+-	$(INSTALL) -m 644 $(objects)/$(SDLTEST_TARGET) $(DESTDIR)$(libdir)/$(SDLTEST_TARGET)
+-	$(RANLIB) $(DESTDIR)$(libdir)/$(SDLTEST_TARGET)
++	$(LIBTOOL) --mode=install $(INSTALL) -m 644 $(objects)/$(SDLMAIN_TARGET) $(DESTDIR)$(libdir)/$(SDLMAIN_TARGET)
++	$(LIBTOOL) --mode=install $(INSTALL) -m 644 $(objects)/$(SDLTEST_TARGET) $(DESTDIR)$(libdir)/$(SDLTEST_TARGET)
+ install-data:
+ 	$(SHELL) $(auxdir)/mkinstalldirs $(DESTDIR)$(datadir)/aclocal
+ 	$(INSTALL) -m 644 $(srcdir)/sdl2.m4 $(DESTDIR)$(datadir)/aclocal/sdl2.m4
+diff --git a/configure.in b/configure.in
+index 7afa09e..34efcb0 100644
+--- a/configure.in
++++ b/configure.in
+@@ -3136,23 +3136,23 @@ done
+ 
+ VERSION_OBJECTS=`echo $VERSION_SOURCES`
+ VERSION_DEPENDS=`echo $VERSION_SOURCES`
+-VERSION_OBJECTS=`echo "$VERSION_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.rc,$(objects)/\1.o,g'`
++VERSION_OBJECTS=`echo "$VERSION_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.rc,$(objects)/\1.lo,g'`
+ VERSION_DEPENDS=`echo "$VERSION_DEPENDS" | sed "s,\\([[^ ]]*\\)/\\([[^ ]]*\\)\\.rc,\\\\
+-\\$(objects)/\\2.o: \\1/\\2.rc\\\\
+-	\\$(WINDRES) \\$< \\$@,g"`
++\\$(objects)/\\2.lo: \\1/\\2.rc\\\\
++	\\$(LIBTOOL) --mode=compile --tag=RC \\$(WINDRES) -i \\$< -o \\$@,g"`
+ 
+ SDLMAIN_OBJECTS=`echo $SDLMAIN_SOURCES`
+ SDLMAIN_DEPENDS=`echo $SDLMAIN_SOURCES`
+-SDLMAIN_OBJECTS=`echo "$SDLMAIN_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.o,g'`
++SDLMAIN_OBJECTS=`echo "$SDLMAIN_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.lo,g'`
+ SDLMAIN_DEPENDS=`echo "$SDLMAIN_DEPENDS" | sed "s,\\([[^ ]]*\\)/\\([[^ ]]*\\)\\.c,\\\\
+-\\$(objects)/\\2.o: \\1/\\2.c\\\\
++\\$(objects)/\\2.lo: \\1/\\2.c\\\\
+ 	\\$(LIBTOOL) --mode=compile \\$(CC) \\$(CFLAGS) \\$(EXTRA_CFLAGS) $DEPENDENCY_TRACKING_OPTIONS -c \\$< -o \\$@,g"`
+ 
+ SDLTEST_OBJECTS=`echo $SDLTEST_SOURCES`
+ SDLTEST_DEPENDS=`echo $SDLTEST_SOURCES`
+-SDLTEST_OBJECTS=`echo "$SDLTEST_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.o,g'`
++SDLTEST_OBJECTS=`echo "$SDLTEST_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.lo,g'`
+ SDLTEST_DEPENDS=`echo "$SDLTEST_DEPENDS" | sed "s,\\([[^ ]]*\\)/\\([[^ ]]*\\)\\.c,\\\\
+-\\$(objects)/\\2.o: \\1/\\2.c\\\\
++\\$(objects)/\\2.lo: \\1/\\2.c\\\\
+ 	\\$(LIBTOOL) --mode=compile \\$(CC) \\$(CFLAGS) \\$(EXTRA_CFLAGS) $DEPENDENCY_TRACKING_OPTIONS -c \\$< -o \\$@,g"`
+ 
+ # Set runtime shared library paths as needed
+-- 
+2.1.0
+
+
+From 92a70a74906e8561010e431eda55ec6231f40872 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 28 Mar 2015 21:52:26 +0100
+Subject: [PATCH 3/4] suppress redeclarations
+
+
+diff --git a/src/render/direct3d11/SDL_render_d3d11.c b/src/render/direct3d11/SDL_render_d3d11.c
+index dbffd50..d7376d8 100644
+--- a/src/render/direct3d11/SDL_render_d3d11.c
++++ b/src/render/direct3d11/SDL_render_d3d11.c
+@@ -131,6 +131,7 @@ typedef struct
+ } D3D11_RenderData;
+ 
+ 
++#if 0 // not for mingw-w64 4.0.1
+ /* Defined here so we don't have to include uuid.lib */
+ static const GUID IID_IDXGIFactory2 = { 0x50c83a1c, 0xe072, 0x4c48, { 0x87, 0xb0, 0x36, 0x30, 0xfa, 0x36, 0xa6, 0xd0 } };
+ static const GUID IID_IDXGIDevice1 = { 0x77db970f, 0x6276, 0x48ba, { 0xba, 0x28, 0x07, 0x01, 0x43, 0xb4, 0x39, 0x2c } };
+@@ -138,6 +139,7 @@ static const GUID IID_ID3D11Texture2D = { 0x6f15aaf2, 0xd208, 0x4e89, { 0x9a, 0x
+ static const GUID IID_ID3D11Device1 = { 0xa04bfb29, 0x08ef, 0x43d6, { 0xa4, 0x9c, 0xa9, 0xbd, 0xbd, 0xcb, 0xe6, 0x86 } };
+ static const GUID IID_ID3D11DeviceContext1 = { 0xbb2c6faa, 0xb5fb, 0x4082, { 0x8e, 0x6b, 0x38, 0x8b, 0x8c, 0xfa, 0x90, 0xe1 } };
+ static const GUID IID_ID3D11Debug = { 0x79cf2233, 0x7536, 0x4948, { 0x9d, 0x36, 0x1e, 0x46, 0x92, 0xdc, 0x57, 0x60 } };
++#endif
+ 
+ /* Direct3D 11.x shaders
+ 
+-- 
+2.1.0
+
+
+From a41006786258b97b16d42cff1f50c521a96b7a68 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 28 Mar 2015 23:39:37 +0100
+Subject: [PATCH 4/4] __FUNCTION__ cannot be concatenated because it is not a
+ macro
+
+
+diff --git a/src/render/direct3d11/SDL_render_d3d11.c b/src/render/direct3d11/SDL_render_d3d11.c
+index d7376d8..59272ae 100644
+--- a/src/render/direct3d11/SDL_render_d3d11.c
++++ b/src/render/direct3d11/SDL_render_d3d11.c
+@@ -886,6 +886,14 @@ D3D11_DestroyRenderer(SDL_Renderer * renderer)
+     SDL_free(renderer);
+ }
+ 
++void wrapper_SetErrorFromHRESULT(const char *context, const char *funct, HRESULT res)
++{
++    char buf[1024];
++    strcpy(buf, context);
++    strcat(buf, funct);
++    WIN_SetErrorFromHRESULT(buf, res);
++}
++
+ static HRESULT
+ D3D11_CreateBlendMode(SDL_Renderer * renderer,
+                       BOOL enableBlending,
+@@ -912,7 +920,7 @@ D3D11_CreateBlendMode(SDL_Renderer * renderer,
+     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+     result = ID3D11Device_CreateBlendState(data->d3dDevice, &blendDesc, blendStateOutput);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateBlendState", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateBlendState", result);
+         return result;
+     }
+ 
+@@ -994,14 +1002,14 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+ 
+     result = CreateDXGIFactoryFunc(&IID_IDXGIFactory2, &data->dxgiFactory);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", CreateDXGIFactory", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "CreateDXGIFactory", result);
+         goto done;
+     }
+ 
+     /* FIXME: Should we use the default adapter? */
+     result = IDXGIFactory2_EnumAdapters(data->dxgiFactory, 0, &data->dxgiAdapter);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", D3D11CreateDevice", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "D3D11CreateDevice", result);
+         goto done;
+     }
+ 
+@@ -1030,25 +1038,25 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+         &d3dContext /* Returns the device immediate context. */
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", D3D11CreateDevice", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "D3D11CreateDevice", result);
+         goto done;
+     }
+ 
+     result = ID3D11Device_QueryInterface(d3dDevice, &IID_ID3D11Device1, &data->d3dDevice);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device to ID3D11Device1", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device to ID3D11Device1", result);
+         goto done;
+     }
+ 
+     result = ID3D11DeviceContext_QueryInterface(d3dContext, &IID_ID3D11DeviceContext1, &data->d3dContext);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11DeviceContext to ID3D11DeviceContext1", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11DeviceContext to ID3D11DeviceContext1", result);
+         goto done;
+     }
+ 
+     result = ID3D11Device_QueryInterface(d3dDevice, &IID_IDXGIDevice1, &dxgiDevice);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device to IDXGIDevice1", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device to IDXGIDevice1", result);
+         goto done;
+     }
+ 
+@@ -1057,7 +1065,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+      */
+     result = IDXGIDevice1_SetMaximumFrameLatency(dxgiDevice, 1);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGIDevice1::SetMaximumFrameLatency", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "IDXGIDevice1::SetMaximumFrameLatency", result);
+         goto done;
+     }
+ 
+@@ -1086,7 +1094,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+             break;
+ 
+         default:
+-            SDL_SetError(__FUNCTION__ ", Unexpected feature level: %d", data->featureLevel);
++            SDL_SetError("D3D11_CreateDeviceResources, Unexpected feature level: %d", data->featureLevel);
+             result = E_FAIL;
+             goto done;
+     }
+@@ -1099,7 +1107,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+         &data->vertexShader
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateVertexShader", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateVertexShader", result);
+         goto done;
+     }
+ 
+@@ -1112,7 +1120,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+         &data->inputLayout
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateInputLayout", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateInputLayout", result);
+         goto done;
+     }
+ 
+@@ -1124,7 +1132,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+         &data->colorPixelShader
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreatePixelShader ['color' shader]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreatePixelShader ['color' shader]", result);
+         goto done;
+     }
+ 
+@@ -1135,7 +1143,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+         &data->texturePixelShader
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreatePixelShader ['textures' shader]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreatePixelShader ['textures' shader]", result);
+         goto done;
+     }
+ 
+@@ -1146,7 +1154,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+         &data->yuvPixelShader
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreatePixelShader ['yuv' shader]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreatePixelShader ['yuv' shader]", result);
+         goto done;
+     }
+ 
+@@ -1161,7 +1169,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+         &data->vertexShaderConstants
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateBuffer [vertex shader constants]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateBuffer [vertex shader constants]", result);
+         goto done;
+     }
+ 
+@@ -1181,7 +1189,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+         &data->nearestPixelSampler
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateSamplerState [nearest-pixel filter]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateSamplerState [nearest-pixel filter]", result);
+         goto done;
+     }
+ 
+@@ -1191,7 +1199,7 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+         &data->linearSampler
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateSamplerState [linear filter]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateSamplerState [linear filter]", result);
+         goto done;
+     }
+ 
+@@ -1209,14 +1217,14 @@ D3D11_CreateDeviceResources(SDL_Renderer * renderer)
+     rasterDesc.SlopeScaledDepthBias = 0.0f;
+     result = ID3D11Device_CreateRasterizerState(data->d3dDevice, &rasterDesc, &data->mainRasterizer);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateRasterizerState [main rasterizer]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateRasterizerState [main rasterizer]", result);
+         goto done;
+     }
+ 
+     rasterDesc.ScissorEnable = TRUE;
+     result = ID3D11Device_CreateRasterizerState(data->d3dDevice, &rasterDesc, &data->clippedRasterizer);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateRasterizerState [clipped rasterizer]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateRasterizerState [clipped rasterizer]", result);
+         goto done;
+     }
+ 
+@@ -1376,7 +1384,7 @@ D3D11_CreateSwapChain(SDL_Renderer * renderer, int w, int h)
+             &data->swapChain
+             );
+         if (FAILED(result)) {
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGIFactory2::CreateSwapChainForCoreWindow", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "IDXGIFactory2::CreateSwapChainForCoreWindow", result);
+             goto done;
+         }
+     } else if (usingXAML) {
+@@ -1386,18 +1394,18 @@ D3D11_CreateSwapChain(SDL_Renderer * renderer, int w, int h)
+             NULL,
+             &data->swapChain);
+         if (FAILED(result)) {
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGIFactory2::CreateSwapChainForComposition", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "IDXGIFactory2::CreateSwapChainForComposition", result);
+             goto done;
+         }
+ 
+ #if WINAPI_FAMILY == WINAPI_FAMILY_APP
+         result = ISwapChainBackgroundPanelNative_SetSwapChain(WINRT_GlobalSwapChainBackgroundPanelNative, (IDXGISwapChain *) data->swapChain);
+         if (FAILED(result)) {
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", ISwapChainBackgroundPanelNative::SetSwapChain", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "ISwapChainBackgroundPanelNative::SetSwapChain", result);
+             goto done;
+         }
+ #else
+-        SDL_SetError(__FUNCTION__ ", XAML support is not yet available for Windows Phone");
++        SDL_SetError("D3D11_CreateSwapChain, XAML support is not yet available for Windows Phone");
+         result = E_FAIL;
+         goto done;
+ #endif
+@@ -1416,11 +1424,11 @@ D3D11_CreateSwapChain(SDL_Renderer * renderer, int w, int h)
+             &data->swapChain
+             );
+         if (FAILED(result)) {
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGIFactory2::CreateSwapChainForHwnd", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "IDXGIFactory2::CreateSwapChainForHwnd", result);
+             goto done;
+         }
+ #else
+-        SDL_SetError(__FUNCTION__", Unable to find something to attach a swap chain to");
++        SDL_SetError("D3D11_CreateSwapChain, Unable to find something to attach a swap chain to");
+         goto done;
+ #endif  /* ifdef __WIN32__ / else */
+     }
+@@ -1466,7 +1474,7 @@ D3D11_CreateWindowSizeDependentResources(SDL_Renderer * renderer)
+             0
+             );
+         if (FAILED(result)) {
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGISwapChain::ResizeBuffers", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "IDXGISwapChain::ResizeBuffers", result);
+             goto done;
+         }
+ #endif
+@@ -1487,7 +1495,7 @@ D3D11_CreateWindowSizeDependentResources(SDL_Renderer * renderer)
+     if (data->swapEffect == DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL) {
+         result = IDXGISwapChain1_SetRotation(data->swapChain, data->rotation);
+         if (FAILED(result)) {
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGISwapChain1::SetRotation", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "IDXGISwapChain1::SetRotation", result);
+             goto done;
+         }
+     }
+@@ -1499,7 +1507,7 @@ D3D11_CreateWindowSizeDependentResources(SDL_Renderer * renderer)
+         &backBuffer
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGISwapChain::GetBuffer [back-buffer]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "IDXGISwapChain::GetBuffer [back-buffer]", result);
+         goto done;
+     }
+ 
+@@ -1510,7 +1518,7 @@ D3D11_CreateWindowSizeDependentResources(SDL_Renderer * renderer)
+         &data->mainRenderTargetView
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device::CreateRenderTargetView", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device::CreateRenderTargetView", result);
+         goto done;
+     }
+ 
+@@ -1630,7 +1638,7 @@ D3D11_CreateTexture(SDL_Renderer * renderer, SDL_Texture * texture)
+         );
+     if (FAILED(result)) {
+         D3D11_DestroyTexture(renderer, texture);
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateTexture2D", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateTexture2D", result);
+         return -1;
+     }
+ 
+@@ -1648,7 +1656,7 @@ D3D11_CreateTexture(SDL_Renderer * renderer, SDL_Texture * texture)
+             );
+         if (FAILED(result)) {
+             D3D11_DestroyTexture(renderer, texture);
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateTexture2D", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateTexture2D", result);
+             return -1;
+         }
+ 
+@@ -1659,7 +1667,7 @@ D3D11_CreateTexture(SDL_Renderer * renderer, SDL_Texture * texture)
+             );
+         if (FAILED(result)) {
+             D3D11_DestroyTexture(renderer, texture);
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateTexture2D", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateTexture2D", result);
+             return -1;
+         }
+     }
+@@ -1675,7 +1683,7 @@ D3D11_CreateTexture(SDL_Renderer * renderer, SDL_Texture * texture)
+         );
+     if (FAILED(result)) {
+         D3D11_DestroyTexture(renderer, texture);
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ "ID3D11Device1::CreateShaderResourceView", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateShaderResourceView", result);
+         return -1;
+     }
+ 
+@@ -1687,7 +1695,7 @@ D3D11_CreateTexture(SDL_Renderer * renderer, SDL_Texture * texture)
+             );
+         if (FAILED(result)) {
+             D3D11_DestroyTexture(renderer, texture);
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ "ID3D11Device1::CreateShaderResourceView", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateShaderResourceView", result);
+             return -1;
+         }
+         result = ID3D11Device_CreateShaderResourceView(rendererData->d3dDevice,
+@@ -1697,7 +1705,7 @@ D3D11_CreateTexture(SDL_Renderer * renderer, SDL_Texture * texture)
+             );
+         if (FAILED(result)) {
+             D3D11_DestroyTexture(renderer, texture);
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ "ID3D11Device1::CreateShaderResourceView", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateShaderResourceView", result);
+             return -1;
+         }
+     }
+@@ -1714,7 +1722,7 @@ D3D11_CreateTexture(SDL_Renderer * renderer, SDL_Texture * texture)
+             &textureData->mainTextureRenderTargetView);
+         if (FAILED(result)) {
+             D3D11_DestroyTexture(renderer, texture);
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateRenderTargetView", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateRenderTargetView", result);
+             return -1;
+         }
+     }
+@@ -1770,7 +1778,7 @@ D3D11_UpdateTextureInternal(D3D11_RenderData *rendererData, ID3D11Texture2D *tex
+         NULL,
+         &stagingTexture);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateTexture2D [create staging texture]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateTexture2D [create staging texture]", result);
+         return -1;
+     }
+ 
+@@ -1783,7 +1791,7 @@ D3D11_UpdateTextureInternal(D3D11_RenderData *rendererData, ID3D11Texture2D *tex
+         &textureMemory
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11DeviceContext1::Map [map staging texture]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11DeviceContext1::Map [map staging texture]", result);
+         SAFE_RELEASE(stagingTexture);
+         return -1;
+     }
+@@ -1945,7 +1953,7 @@ D3D11_LockTexture(SDL_Renderer * renderer, SDL_Texture * texture,
+         NULL,
+         &textureData->stagingTexture);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateTexture2D [create staging texture]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateTexture2D [create staging texture]", result);
+         return -1;
+     }
+ 
+@@ -1958,7 +1966,7 @@ D3D11_LockTexture(SDL_Renderer * renderer, SDL_Texture * texture,
+         &textureMemory
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11DeviceContext1::Map [map staging texture]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11DeviceContext1::Map [map staging texture]", result);
+         SAFE_RELEASE(textureData->stagingTexture);
+         return -1;
+     }
+@@ -2240,7 +2248,7 @@ D3D11_UpdateVertexBuffer(SDL_Renderer *renderer,
+             &mappedResource
+             );
+         if (FAILED(result)) {
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11DeviceContext1::Map [vertex buffer]", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11DeviceContext1::Map [vertex buffer]", result);
+             return -1;
+         }
+         SDL_memcpy(mappedResource.pData, vertexData, dataSizeInBytes);
+@@ -2264,7 +2272,7 @@ D3D11_UpdateVertexBuffer(SDL_Renderer *renderer,
+             &rendererData->vertexBuffer
+             );
+         if (FAILED(result)) {
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateBuffer [vertex buffer]", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateBuffer [vertex buffer]", result);
+             return -1;
+         }
+ 
+@@ -2734,7 +2742,7 @@ D3D11_RenderReadPixels(SDL_Renderer * renderer, const SDL_Rect * rect,
+         &backBuffer
+         );
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGISwapChain1::GetBuffer [get back buffer]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "IDXGISwapChain1::GetBuffer [get back buffer]", result);
+         goto done;
+     }
+ 
+@@ -2751,7 +2759,7 @@ D3D11_RenderReadPixels(SDL_Renderer * renderer, const SDL_Rect * rect,
+         NULL,
+         &stagingTexture);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device1::CreateTexture2D [create staging texture]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11Device1::CreateTexture2D [create staging texture]", result);
+         goto done;
+     }
+ 
+@@ -2783,7 +2791,7 @@ D3D11_RenderReadPixels(SDL_Renderer * renderer, const SDL_Rect * rect,
+         0,
+         &textureMemory);
+     if (FAILED(result)) {
+-        WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11DeviceContext1::Map [map staging texture]", result);
++        wrapper_SetErrorFromHRESULT(__FUNCTION__, "ID3D11DeviceContext1::Map [map staging texture]", result);
+         goto done;
+     }
+ 
+@@ -2802,7 +2810,7 @@ D3D11_RenderReadPixels(SDL_Renderer * renderer, const SDL_Rect * rect,
+          * Get the error message, and attach some extra data to it.
+          */
+         char errorMessage[1024];
+-        SDL_snprintf(errorMessage, sizeof(errorMessage), __FUNCTION__ ", Convert Pixels failed: %s", SDL_GetError());
++        SDL_snprintf(errorMessage, sizeof(errorMessage), "D3D11_RenderReadPixels, Convert Pixels failed: %s", SDL_GetError());
+         SDL_SetError(errorMessage);
+         goto done;
+     }
+@@ -2871,7 +2879,7 @@ D3D11_RenderPresent(SDL_Renderer * renderer)
+             /* We probably went through a fullscreen <-> windowed transition */
+             D3D11_CreateWindowSizeDependentResources(renderer);
+         } else {
+-            WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGISwapChain::Present", result);
++            wrapper_SetErrorFromHRESULT(__FUNCTION__, "IDXGISwapChain::Present", result);
+         }
+     }
+ }
+-- 
+2.1.0
+
