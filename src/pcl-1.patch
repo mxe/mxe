@@ -1,0 +1,40 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 85e9dfc67e95d8494372a8e23bca3c217b7b0599 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 29 Mar 2015 00:44:55 +0100
+Subject: [PATCH] add missing includes
+
+
+diff --git a/io/include/pcl/io/hdl_grabber.h b/io/include/pcl/io/hdl_grabber.h
+index d86eda2..374ad2f 100644
+--- a/io/include/pcl/io/hdl_grabber.h
++++ b/io/include/pcl/io/hdl_grabber.h
+@@ -44,6 +44,9 @@
+ #include <pcl/io/impl/synchronized_queue.hpp>
+ #include <pcl/point_types.h>
+ #include <pcl/point_cloud.h>
++#ifdef WIN32
++#include <winsock2.h>
++#endif
+ #include <boost/asio.hpp>
+ #include <string>
+ 
+diff --git a/io/include/pcl/io/robot_eye_grabber.h b/io/include/pcl/io/robot_eye_grabber.h
+index 6045bfd..8593326 100644
+--- a/io/include/pcl/io/robot_eye_grabber.h
++++ b/io/include/pcl/io/robot_eye_grabber.h
+@@ -44,6 +44,9 @@
+ #include <pcl/io/impl/synchronized_queue.hpp>
+ #include <pcl/point_types.h>
+ #include <pcl/point_cloud.h>
++#ifdef WIN32
++#include <winsock2.h>
++#endif
+ #include <boost/asio.hpp>
+ #include <boost/thread/thread.hpp>
+ 
+-- 
+2.1.0
+
