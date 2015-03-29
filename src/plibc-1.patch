@@ -1,0 +1,32 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 5decce3a7834e7cdb8830e2733421029d74da009 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 29 Mar 2015 09:13:18 +0200
+Subject: [PATCH] build fix for mingw-w64 4.0.1
+
+
+diff --git a/src/include/plibc.h b/src/include/plibc.h
+index ca293fd..8106da1 100644
+--- a/src/include/plibc.h
++++ b/src/include/plibc.h
+@@ -467,6 +467,7 @@ typedef struct
+                             blocking */
+ #define LOCK_UN  8       /* remove lock */
+ 
++#ifndef S_IRGRP
+ /* Not supported under MinGW */
+ #define S_IRGRP 0
+ #define S_IWGRP 0
+@@ -479,6 +480,7 @@ typedef struct
+ #define S_ISVTX 0
+ #define S_IRWXG 0
+ #define S_IRWXO 0
++#endif
+ 
+ #define SHUT_WR SD_SEND
+ #define SHUT_RD SD_RECEIVE
+-- 
+2.1.0
+
