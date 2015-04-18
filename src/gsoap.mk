@@ -47,7 +47,7 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --enable-gnutls \
-        CPPFLAGS='-DWITH_NTLM'
+        CPPFLAGS='-DWITH_NTLM -DSOAP_SSLv3=0x40'
 
     # Building for mingw requires native soapcpp2
     ln -sf '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)/gsoap/src/soapcpp2'
