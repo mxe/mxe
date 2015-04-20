@@ -8,11 +8,11 @@ diff -burN patch_test/muparserx_v3_0_3.orig/CMakeLists.txt patch_test/muparserx_
 +add_library(muparserx ${MUPARSERX_SRCS})
 +
 +install(TARGETS muparserx
-+  RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-+  LIBRARY DESTINATION lib COMPONENT RuntimeLibraries
-+  ARCHIVE DESTINATION lib COMPONENT Development)
++  RUNTIME DESTINATION bin
++  LIBRARY DESTINATION lib
++  ARCHIVE DESTINATION lib)
 +
 +file(GLOB MUPARSERX_HEADERS "${CMAKE_SOURCE_DIR}/*.h")
 +install(FILES ${MUPARSERX_HEADERS}
 +  DESTINATION include
-+  COMPONENT Development)
++  )
