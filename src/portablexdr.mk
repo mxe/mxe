@@ -20,8 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        AR='$(TARGET)-ar' \
-        CFLAGS='-Wno-error=pointer-to-int-cast'
+        AR='$(TARGET)-ar' 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
