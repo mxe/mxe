@@ -3,13 +3,13 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.9.2
-$(PKG)_CHECKSUM := 79dbcb09f44232822460d80b033c962c0237c6d8
+$(PKG)_VERSION  := 5.1.0
+$(PKG)_CHECKSUM := b6c947b09adf780fe02065d0c48bfd7b4bdddfa3
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := binutils gcc-cloog gcc-gmp gcc-isl gcc-mpc gcc-mpfr mingw-w64
+$(PKG)_DEPS     := binutils gcc-gmp gcc-isl gcc-mpc gcc-mpfr mingw-w64
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
@@ -38,7 +38,6 @@ define $(PKG)_CONFIGURE
         --disable-win32-registry \
         --enable-threads=win32 \
         --disable-libgomp \
-        --with-cloog='$(PREFIX)' \
         --with-gmp='$(PREFIX)' \
         --with-isl='$(PREFIX)' \
         --with-mpc='$(PREFIX)' \
