@@ -3,8 +3,8 @@
 
 PKG             := graphicsmagick
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.20
-$(PKG)_CHECKSUM := 73042eee48e17d074f68f6f70fc81b221481255a
+$(PKG)_VERSION  := 1.3.21
+$(PKG)_CHECKSUM := bd3c543520b810999348e52d4abad6b59069f78b
 $(PKG)_SUBDIR   := GraphicsMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := GraphicsMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -42,7 +42,8 @@ define $(PKG)_BUILD
         --with-zlib \
         --without-x \
         ac_cv_prog_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config' \
-        ac_cv_path_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config'
+        ac_cv_path_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config' \
+        LIBS='-lgomp -fopenmp'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=
 
