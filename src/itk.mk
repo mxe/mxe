@@ -16,6 +16,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's^#  error "Dunno about this gcc"^#  warning "Dunno about this gcc"^;' \
+        '$(1)/Modules/ThirdParty/VNL/src/vxl/vcl/vcl_compiler.h'
     mkdir '$(1).build'
     cd '$(1).build' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
@@ -25,6 +27,7 @@ define $(PKG)_BUILD
         -DBUILD_TESTING=FALSE \
         -DBUILD_EXAMPLES=FALSE \
         -DITK_USE_SYSTEM_HDF5=TRUE \
+        -DCMAKE_C_FLAGS='-std=gnu89' \
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef
