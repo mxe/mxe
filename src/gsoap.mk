@@ -35,6 +35,7 @@ define $(PKG)_BUILD
 
     # fix hard-coded gnutls dependencies
     $(SED) -i "s/-lgnutls/`'$(TARGET)-pkg-config' --libs-only-l gnutls`/g;" '$(1)/configure'
+    $(SED) -i "s^-lgpg-error^`'$(TARGET)-gpg-error-config' --libs`^g;" '$(1)/configure'
 
     # the cross build will need soapcpp2, not soapcpp2.exe
     $(SED) -i "s,^\(SOAP = \$$(top_builddir)/gsoap/src/soapcpp2\)\$$(EXEEXT)$$,\1,;" '$(1)/gsoap/wsdl/Makefile.in'
