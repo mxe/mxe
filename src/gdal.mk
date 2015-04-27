@@ -41,6 +41,7 @@ define $(PKG)_CONFIGURE
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
         --with-hdf4='$(PREFIX)/$(TARGET)' \
+        --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
         --with-netcdf='$(PREFIX)/$(TARGET)' \
         --with-openjpeg='$(PREFIX)/$(TARGET)' \
         --with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
