@@ -24,9 +24,12 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar' \
         RANLIB='$(TARGET)-ranlib' \
         DLLWRAP='$(TARGET)-dllwrap' \
-        init libminiupnpc.a
+        init libminiupnpc.a miniupnpc.dll
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libminiupnpc.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/miniupnpc.lib' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin'
+    $(INSTALL) -m755 '$(1)/miniupnpc.dll' '$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/miniupnpc'
     $(INSTALL) -m644 '$(1)/bsdqueue.h' '$(PREFIX)/$(TARGET)/include/'
