@@ -1,0 +1,28 @@
+--- ./Makefile.mingw	2014-01-31 14:18:56.000000000 +0100
++++ ./Makefile.mingw.new	2015-04-27 15:44:59.548000000 +0200
+@@ -37,7 +37,7 @@
+ 	$(PYTHON) setupmingw32.py install --skip-build
+ 
+ miniupnpc.dll:	libminiupnpc.a $(OBJSDLL)
+-	dllwrap -k --driver-name gcc \
++	$(DLLWRAP) -k --driver-name $(CC) \
+ 	--def miniupnpc.def \
+ 	--output-def miniupnpc.dll.def \
+ 	--implib miniupnpc.lib -o $@ \
+@@ -71,13 +71,13 @@
+ miniupnpcstrings.h: miniupnpcstrings.h.in wingenminiupnpcstrings
+ 	wingenminiupnpcstrings $< $@
+ 
+-minixml.o:	minixml.c minixml.h miniupnpcstrings.h
++minixml.o:	minixml.c minixml.h
+ 
+ upnpc.o:	upnpc.c miniwget.h minisoap.h miniupnpc.h igd_desc_parse.h upnpreplyparse.h upnpcommands.h upnperrors.h
+ 
+-miniwget.o:	miniwget.c miniwget.h miniupnpcstrings.h connecthostport.h
++miniwget.o:	miniwget.c miniwget.h connecthostport.h
+ 
+-minisoap.o:	minisoap.c minisoap.h miniupnpcstrings.h
++minisoap.o:	minisoap.c minisoap.h
+ 
+ miniupnpc.o:	miniupnpc.c miniupnpc.h minisoap.h miniwget.h minixml.h
+ 
