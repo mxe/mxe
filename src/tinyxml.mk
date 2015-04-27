@@ -28,5 +28,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -DTIXML_USE_STL -Werror -ansi -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-tinyxml.exe' \
-        -ltinyXML
+        -ltinyxml
 endef
