@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+https://bitbucket.org/breakfastquay/rubberband/issue/15/rubberbandpcin-missing-lstdc-lfftw3
+
+# HG changeset patch
+# User Avi Halachmi <avihpit@yahoo.com>
+# Date 1425560463 -7200
+#      Thu Mar 05 15:01:03 2015 +0200
+# Node ID ca54364d1ad5e990a44f30ab5f653c407bf69ed5
+# Parent  c4b75fd8211614ff8376d7410f58c4b4dc87bd11
+pkg-config: add missing deps for MXE
+
+diff --git a/rubberband.pc.in b/rubberband.pc.in
+--- a/rubberband.pc.in
++++ b/rubberband.pc.in
+@@ -2,9 +2,10 @@ prefix=%PREFIX%
+ exec_prefix=${prefix}
+ libdir=${exec_prefix}/lib
+ includedir=${prefix}/include
+ 
+ Name: rubberband
+ Version: 1.8.1
+ Description: 
+ Libs: -L${libdir} -lrubberband
++Libs.private: -lstdc++ -lfftw3 -lsamplerate
+ Cflags: -I${includedir} 

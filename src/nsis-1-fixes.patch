@@ -1,10 +1,8 @@
 This file is part of MXE.
 See index.html for further information.
 
-Contains ad hoc patches for cross building.
-
-From d143dbb2e06d8597dfea89d4b9f55f44ddc6e7f1 Mon Sep 17 00:00:00 2001
-From: MXE
+From 1cc3dd0dfd47bab82e06be916f9e57ef783406f9 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 12 Aug 2012 12:33:26 +0200
 Subject: [PATCH 1/4] explicit mingw cross prefix
 
@@ -47,11 +45,11 @@ index 80872bc..4f113dd 100755
  Export('defenv')
  
 -- 
-1.8.2.2
+2.1.0
 
 
-From 2c32b56851aa15ad8460ed3dd0944ecb78b43ea9 Mon Sep 17 00:00:00 2001
-From: MXE
+From 7df0fa80a65279ee7d99da8ec6abdddff7e040b0 Mon Sep 17 00:00:00 2001
+From: freeman <free.man.uu@gmail.com>
 Date: Sun, 12 Aug 2012 12:36:39 +0200
 Subject: [PATCH 2/4] add missing header
 
@@ -69,11 +67,11 @@ index 4259a6a..664923e 100755
  
  
 -- 
-1.8.2.2
+2.1.0
 
 
-From ad29c1f6af0eba959e3bcb96992d1a709ba58aca Mon Sep 17 00:00:00 2001
-From: MXE
+From 9a40694c9177db6fa5db3f28d7d68c042d0a6144 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 3 May 2013 17:28:44 +1000
 Subject: [PATCH 3/4] Enable native 64-bit build
 
@@ -584,11 +582,11 @@ index 2c0b07f..18c31a2 100755
        SetLastError( 0 );
        return dwResult;
 -- 
-1.8.2.2
+2.1.0
 
 
-From 055b07791400ae22bde948f60d71e3311e25f452 Mon Sep 17 00:00:00 2001
-From: MXE
+From eb6e12dd7173f4c259fd31c9074b0c95bc567487 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 9 May 2013 13:08:59 +1000
 Subject: [PATCH 4/4] i686-w64-mingw32 fixes
 
@@ -774,5 +772,6 @@ index 18c31a2..fc9443f 100755
    return GetVxdVersion( szFile, &dwLen, lpData );
  }
 -- 
-1.8.2.2
+2.1.0
+
 

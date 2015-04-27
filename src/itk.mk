@@ -17,6 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's^#  error "Dunno about this gcc"^#  warning "Dunno about this gcc"^;' \
+        '$(1)/Modules/ThirdParty/VNL/src/vxl/vcl/vcl_compiler.h'
     mkdir '$(1).build'
     cd '$(1).build' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
@@ -40,6 +42,7 @@ define $(PKG)_BUILD
         -DVXL_HAS_SSE2_HARDWARE_SUPPORT=1 \
         -DKWSYS_CHAR_IS_SIGNED=1 \
         -DKWSYS_LFS_WORKS=1 \
+        -DCMAKE_C_FLAGS='-std=gnu89' \
         '$(1)'
 
     # make and install

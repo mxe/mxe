@@ -3,8 +3,8 @@
 
 PKG             := ncurses
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := c6f5464
-$(PKG)_CHECKSUM := 5a40e0906139f877be083976f80bf0262dc95ad2
+$(PKG)_VERSION  := e14300b
+$(PKG)_CHECKSUM := fcc1997439560b6cb7f9bf2f73f6245310f06c64
 # $(PKG)_VERSION  := 5.9
 # $(PKG)_SUBDIR   := ncurses-$($(PKG)_VERSION)
 # $(PKG)_FILE     := ncurses-$($(PKG)_VERSION).tar.gz
@@ -52,3 +52,4 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install TIC_PATH='$(1).native/progs/tic'
 endef
+

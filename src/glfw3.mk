@@ -3,8 +3,8 @@
 
 PKG             := glfw3
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.4
-$(PKG)_CHECKSUM := 9b04309418ccbc74b2115d11198b7912669814ee
+$(PKG)_VERSION  := 3.1
+$(PKG)_CHECKSUM := 32f2dcc188694fb5823e24cc65c8f69f32f58bb1
 $(PKG)_SUBDIR   := glfw-$($(PKG)_VERSION)
 $(PKG)_FILE     := glfw-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/glfw/glfw/$($(PKG)_VERSION)/$($(PKG)_FILE)
