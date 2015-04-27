@@ -3,8 +3,8 @@
 
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.11.1
-$(PKG)_CHECKSUM := e2c67481932ec9fb6ec3c0faadc004f715c4eef4
+$(PKG)_VERSION  := 1.11.2
+$(PKG)_CHECKSUM := 6f3ccbe5643805784812072a33c25be0bbff00db
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -40,6 +40,7 @@ define $(PKG)_CONFIGURE
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
+        --with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-netcdf='$(PREFIX)/$(TARGET)' \
         --with-openjpeg='$(PREFIX)/$(TARGET)' \
         --with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
