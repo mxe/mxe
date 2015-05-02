@@ -3,8 +3,8 @@
 
 PKG             := openblas
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.2.10
-$(PKG)_CHECKSUM := c4a5ca4cb9876a90193f81a0c38f4abccdf2944d
+$(PKG)_VERSION  := 0.2.12
+$(PKG)_CHECKSUM := 2bdedca65e29186d1ecaaed45cb6c9b1f3f1c868
 $(PKG)_SUBDIR   := OpenBLAS-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://github.com/xianyi/OpenBLAS/archive/v$($(PKG)_VERSION).tar.gz
@@ -34,8 +34,8 @@ $(PKG)_MAKE_OPTS = \
         DYNAMIC_ARCH=1 \
         ARCH=$(strip \
              $(if $(findstring x86_64,$(TARGET)),x86_64,\
-             $(if $(findstring i686,$(TARGET)),x86)) \
-        BINARY=$(if $(findstring x86_64,$(TARGET)),64,32)) \
+             $(if $(findstring i686,$(TARGET)),x86))) \
+        BINARY=$(BITS) \
         $(if $(BUILD_STATIC),NO_SHARED=1) \
         $(if $(BUILD_SHARED),NO_STATIC=1) \
         EXTRALIB="`'$(TARGET)-pkg-config' --libs pthreads` -fopenmp"

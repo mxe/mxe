@@ -3,8 +3,8 @@
 
 PKG             := libxml++
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.37.1
-$(PKG)_CHECKSUM := 12717f0ec25aa656334db7e0baf8bb1d58820e47
+$(PKG)_VERSION  := 2.37.2
+$(PKG)_CHECKSUM := 2b7c5d7ca419c68fad349bc40031bdd7d2e699ca
 $(PKG)_SUBDIR   := libxml++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml++-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/libxml++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

@@ -50,6 +50,6 @@ $(PKG)_BUILD_STATIC=$(subst @xmlrpc-c-shared-lib-type@,NONE,\
                     $(subst @xmlrpc-c-must-build-shlib@,N,\
                     $($(PKG)_BUILD_COMMON)))
 
-$(PKG)_BUILD_SHARED=$(subst @xmlrpc-c-shared-lib-type@,dll,\
-                    $(subst @xmlrpc-c-must-build-shlib@,Y,\
-                    $($(PKG)_BUILD_COMMON)))
+#$(PKG)_BUILD_SHARED=$(subst @xmlrpc-c-shared-lib-type@,dll,\
+#                    $(subst @xmlrpc-c-must-build-shlib@,Y,\
+#                    $($(PKG)_BUILD_COMMON)))

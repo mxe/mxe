@@ -1,0 +1,29 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+PKG             := ccfits
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 2.4
+$(PKG)_CHECKSUM := 3de2a6379bc1024300befae95cfdf33645a7b64a
+$(PKG)_SUBDIR   := CCfits
+$(PKG)_FILE     := CCfits-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://heasarc.gsfc.nasa.gov/fitsio/CCfits/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc cfitsio
+
+define $(PKG)_UPDATE
+    $(WGET) -q -O- "http://heasarc.gsfc.nasa.gov/docs/software/fitsio/ccfits/" | \
+    grep -i '<a href="CCfits.*tar' | \
+    $(SED) -n 's,.*CCfits-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
+endef
+
+define $(PKG)_BUILD
+    cd '$(1)' && ./configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --with-cfitsio='$(PREFIX)/$(TARGET)'
+
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j 1 install
+endef
+
+$(PKG)_BUILD_SHARED =

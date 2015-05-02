@@ -55,7 +55,7 @@ index a89b204..a370eb0 100644
  #undef __DISABLE_SSE4A__
  #pragma GCC pop_options
 diff --git a/gcc/config/i386/avx2intrin.h b/gcc/config/i386/avx2intrin.h
-index d04c972..9302273 100644
+index d04c972..2c0d6e7 100644
 --- a/gcc/config/i386/avx2intrin.h
 +++ b/gcc/config/i386/avx2intrin.h
 @@ -34,6 +34,10 @@
@@ -69,7 +69,8 @@ index d04c972..9302273 100644
  /* Sum absolute 8-bit integer difference of adjacent groups of 4
     byte integers in the first 2 operands.  Starting offsets within
     operands are determined by the 3rd mask operand.  */
-@@ -1887,3 +1891,7 @@ _mm256_mask_i64gather_epi32 (__m128i src, int const *base,
+@@ -1886,4 +1890,8 @@ _mm256_mask_i64gather_epi32 (__m128i src, int const *base,
+ #pragma GCC pop_options
  #endif /* __DISABLE_AVX2__ */
  
 +#ifdef __cplusplus
@@ -78,7 +79,7 @@ index d04c972..9302273 100644
 +
  #endif /* _AVX2INTRIN_H_INCLUDED */
 diff --git a/gcc/config/i386/avxintrin.h b/gcc/config/i386/avxintrin.h
-index 2ea327c..32591da 100644
+index 2ea327c..f61d850 100644
 --- a/gcc/config/i386/avxintrin.h
 +++ b/gcc/config/i386/avxintrin.h
 @@ -37,6 +37,10 @@
@@ -92,7 +93,8 @@ index 2ea327c..32591da 100644
  /* Internal data types for implementing the intrinsics.  */
  typedef double __v4df __attribute__ ((__vector_size__ (32)));
  typedef float __v8sf __attribute__ ((__vector_size__ (32)));
-@@ -1461,3 +1465,7 @@ _mm256_castsi128_si256 (__m128i __A)
+@@ -1460,4 +1464,8 @@ _mm256_castsi128_si256 (__m128i __A)
+ #pragma GCC pop_options
  #endif /* __DISABLE_AVX__ */
  
 +#ifdef __cplusplus
@@ -323,7 +325,7 @@ index 516b13b..c55db44 100644
 +
  #endif /* _MM_MALLOC_H_INCLUDED */
 diff --git a/gcc/config/i386/ia32intrin.h b/gcc/config/i386/ia32intrin.h
-index 5e7c893..a7fa538 100644
+index 614b0fa..d8e474e 100644
 --- a/gcc/config/i386/ia32intrin.h
 +++ b/gcc/config/i386/ia32intrin.h
 @@ -25,6 +25,10 @@
@@ -337,7 +339,7 @@ index 5e7c893..a7fa538 100644
  /* 32bit bsf */
  extern __inline int
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
-@@ -291,3 +295,7 @@ __writeeflags (unsigned int X)
+@@ -297,3 +301,7 @@ __writeeflags (unsigned int X)
  #define _rotwr(a,b)		__rorw((a), (b))
  #define _rotl(a,b)		__rold((a), (b))
  #define _rotr(a,b)		__rord((a), (b))
@@ -614,7 +616,7 @@ index ac40d22..3aa8246 100644
 +
  #endif /* _RTMINTRIN_H_INCLUDED */
 diff --git a/gcc/config/i386/smmintrin.h b/gcc/config/i386/smmintrin.h
-index 886ace4..168b903 100644
+index 886ace4..0922b45 100644
 --- a/gcc/config/i386/smmintrin.h
 +++ b/gcc/config/i386/smmintrin.h
 @@ -37,6 +37,10 @@
@@ -637,7 +639,7 @@ index 886ace4..168b903 100644
 +#endif
 +
  /* Accumulate CRC32 (polynomial 0x11EDC6F41) value.  */
- extern __inline unsigned int __attribute__((__gnu_inline__, __always_inline__, 
+ extern __inline unsigned int __attribute__((__gnu_inline__, __always_inline__, __artificial__))
  _mm_crc32_u8 (unsigned int __C, unsigned char __V)
 diff --git a/gcc/config/i386/tbmintrin.h b/gcc/config/i386/tbmintrin.h
 index 871f532..744b9ca 100644

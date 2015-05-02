@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
     if (vsMotionDetectInit(&md, &conf, &fi) != VS_OK)
         return 1;
-    
+
     vsMotionDetectionCleanup(&md);
 
     return 0;

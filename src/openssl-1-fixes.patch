@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 27c7c56780a801db21ba49139239ecafd0e8fb88 Mon Sep 17 00:00:00 2001
+From 1ac04c802cf192e09bcfad270a39030fb23bcdb1 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 8 Jan 2014 02:19:10 +0100
 Subject: [PATCH 1/2] winsock2
@@ -9,50 +9,37 @@ Subject: [PATCH 1/2] winsock2
 -This patch has been taken from:
 -http://rt.openssl.org/Ticket/Display.html?id=2285&user=guest&pass=guest
 
-diff --git a/e_os.h b/e_os.h
-index 6a0aad1..4928713 100644
---- a/e_os.h
-+++ b/e_os.h
-@@ -499,7 +499,7 @@ static unsigned int _strlen31(const char *str)
- #      endif
- #      if !defined(IPPROTO_IP)
-          /* winsock[2].h was included already? */
--#        include <winsock.h>
-+#        include <winsock2.h>
- #      endif
- #      ifdef getservbyname
- #        undef getservbyname
 diff --git a/ssl/dtls1.h b/ssl/dtls1.h
-index e65d501..7762089 100644
+index 4af7e4a..48a3714 100644
 --- a/ssl/dtls1.h
 +++ b/ssl/dtls1.h
 @@ -68,7 +68,7 @@
- #endif
- #ifdef OPENSSL_SYS_WIN32
+ # endif
+ # ifdef OPENSSL_SYS_WIN32
  /* Needed for struct timeval */
--#include <winsock.h>
-+#include <winsock2.h>
- #elif defined(OPENSSL_SYS_NETWARE) && !defined(_WINSOCK2API_)
- #include <sys/timeval.h>
- #else
+-#  include <winsock.h>
++#  include <winsock2.h>
+ # elif defined(OPENSSL_SYS_NETWARE) && !defined(_WINSOCK2API_)
+ #  include <sys/timeval.h>
+ # else
 diff --git a/ssl/ssltest.c b/ssl/ssltest.c
-index 4f80be8..af5f1be 100644
+index 0113b65..53114fd 100644
 --- a/ssl/ssltest.c
 +++ b/ssl/ssltest.c
-@@ -193,7 +193,7 @@
- 				  */
+@@ -197,7 +197,7 @@
+ #define _XOPEN_SOURCE_EXTENDED  1
  
  #ifdef OPENSSL_SYS_WINDOWS
--#include <winsock.h>
-+#include <winsock2.h>
+-# include <winsock.h>
++# include <winsock2.h>
  #else
- #include OPENSSL_UNISTD
+ # include OPENSSL_UNISTD
  #endif
 -- 
-1.8.4.5
+2.1.2
 
 
-From 8f930a5f4b18990cf24383fde0e493afbb240c8b Mon Sep 17 00:00:00 2001
+From 564e3c9850584b3dd57b9ffba85574dbfcf6910b Mon Sep 17 00:00:00 2001
 From: Tom Molesworth <tom@entitymodel.com>
 Date: Wed, 8 Jan 2014 02:20:21 +0100
 Subject: [PATCH 2/2] Patch OpenSSL POD docs for perl-5.16+
@@ -63,10 +50,10 @@ stage fails without these applied.
 Should be harmless for earlier versions of perl.
 
 diff --git a/doc/apps/cms.pod b/doc/apps/cms.pod
-index a76b3e0..9a05fa4 100644
+index 76dbf2c..7f2e678 100644
 --- a/doc/apps/cms.pod
 +++ b/doc/apps/cms.pod
-@@ -465,28 +465,28 @@ with caution. For a fuller description see L<CMS_decrypt(3)|CMS_decrypt(3)>).
+@@ -478,28 +478,28 @@ with caution. For a fuller description see L<CMS_decrypt(3)|CMS_decrypt(3)>).
  
  =over 4
  
@@ -141,7 +128,7 @@ index d39a59a..1a5cfa6 100644
  the message was verified correctly but an error occurred writing out
  the signers certificates.
 diff --git a/doc/crypto/rand.pod b/doc/crypto/rand.pod
-index 1c068c8..8477fda 100644
+index d102df2..f422bb0 100644
 --- a/doc/crypto/rand.pod
 +++ b/doc/crypto/rand.pod
 @@ -74,16 +74,16 @@ First up I will state the things I believe I need for a good RNG.
@@ -214,7 +201,7 @@ index f4d191c..5f2a3f1 100644
  The operation failed. Check the error queue to find out the reason.
  
 diff --git a/doc/ssl/SSL_CTX_add_session.pod b/doc/ssl/SSL_CTX_add_session.pod
-index 8e0abd3..f5a487c 100644
+index c660a18..86c720c 100644
 --- a/doc/ssl/SSL_CTX_add_session.pod
 +++ b/doc/ssl/SSL_CTX_add_session.pod
 @@ -52,13 +52,13 @@ The following values are returned by all functions:
@@ -254,7 +241,7 @@ index d1d8977..449c8c9 100644
  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_CTX_set_client_CA_list.pod b/doc/ssl/SSL_CTX_set_client_CA_list.pod
-index 5e97392..6b04440 100644
+index 4965385..02aa22e 100644
 --- a/doc/ssl/SSL_CTX_set_client_CA_list.pod
 +++ b/doc/ssl/SSL_CTX_set_client_CA_list.pod
 @@ -66,13 +66,13 @@ values:
@@ -312,21 +299,12 @@ index e254f96..c15f86e 100644
  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_CTX_use_psk_identity_hint.pod b/doc/ssl/SSL_CTX_use_psk_identity_hint.pod
-index 9da7201..a60d041 100644
+index 12db0da..f7b6ca3 100644
 --- a/doc/ssl/SSL_CTX_use_psk_identity_hint.pod
 +++ b/doc/ssl/SSL_CTX_use_psk_identity_hint.pod
 @@ -83,7 +83,7 @@ Return values from the server callback are interpreted as follows:
  
  =over 4
- 
--=item > 0
-+=item * > 0
- 
- PSK identity was found and the server callback has provided the PSK
- successfully in parameter B<psk>. Return value is the length of
-@@ -96,7 +96,7 @@ data to B<psk> and return the length of the random data, so the
- connection will fail with decryption_error before it will be finished
- completely.
  
 -=item Z<>0
 +=item * Z<>0
@@ -334,10 +312,10 @@ index 9da7201..a60d041 100644
  PSK identity was not found. An "unknown_psk_identity" alert message
  will be sent and the connection setup fails.
 diff --git a/doc/ssl/SSL_accept.pod b/doc/ssl/SSL_accept.pod
-index 2239444..5e032e6 100644
+index 89ad6bd..d7f3034 100644
 --- a/doc/ssl/SSL_accept.pod
 +++ b/doc/ssl/SSL_accept.pod
-@@ -44,18 +44,18 @@ The following return values can occur:
+@@ -41,18 +41,18 @@ The following return values can occur:
  
  =over 4
  
@@ -405,10 +383,10 @@ index 68e2b82..52c4aa9 100644
  The TLS/SSL handshake was not successful, because a fatal error occurred either
  at the protocol level or a connection failure occurred. The shutdown was
 diff --git a/doc/ssl/SSL_do_handshake.pod b/doc/ssl/SSL_do_handshake.pod
-index b35ddf5..871f15c 100644
+index 8b590c9..1ba1827 100644
 --- a/doc/ssl/SSL_do_handshake.pod
 +++ b/doc/ssl/SSL_do_handshake.pod
-@@ -45,18 +45,18 @@ The following return values can occur:
+@@ -42,18 +42,18 @@ The following return values can occur:
  
  =over 4
  
@@ -574,7 +552,7 @@ index fe01308..879a33a 100644
  A shutdown alert was received form the peer, either a normal "close notify"
  or a fatal error.
 diff --git a/doc/ssl/SSL_shutdown.pod b/doc/ssl/SSL_shutdown.pod
-index 85d4a64..9fe029b 100644
+index efbff5a..56c48b2 100644
 --- a/doc/ssl/SSL_shutdown.pod
 +++ b/doc/ssl/SSL_shutdown.pod
 @@ -92,19 +92,19 @@ The following return values can occur:
@@ -595,8 +573,8 @@ index 85d4a64..9fe029b 100644
  The shutdown was successfully completed. The "close notify" alert was sent
  and the peer's "close notify" alert was received.
  
--=item -1
-+=item * -1
+-=item E<lt>0
++=item * E<lt>0
  
  The shutdown was not successful because a fatal error occurred either
  at the protocol level or a connection failure occurred. It can also occur if
@@ -629,5 +607,5 @@ index a57617f..70c1630 100644
  The write operation was not successful, because either an error occurred
  or action must be taken by the calling process. Call SSL_get_error() with the
 -- 
-1.8.4.5
+2.1.2
 

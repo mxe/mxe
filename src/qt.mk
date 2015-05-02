@@ -110,6 +110,11 @@ define $(PKG)_BUILD
         '$(TOP_DIR)/src/qt-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
         `'$(TARGET)-pkg-config' QtGui --cflags --libs`
+
+    # setup cmake toolchain
+    $(SED) -i '/QT_QMAKE_EXECUTABLE/d' '$(CMAKE_TOOLCHAIN_FILE)'
+    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' >> '$(CMAKE_TOOLCHAIN_FILE)'
+
 endef
 
 $(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\

@@ -2,9 +2,9 @@
 # See index.html for further information.
 
 PKG             := automake
-$(PKG)_IGNORE   := 1.14%
-$(PKG)_VERSION  := 1.13.2
-$(PKG)_CHECKSUM := 72ee9fcd180c54fd7c067155d85fa071a99c3ea3
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 1.14.1
+$(PKG)_CHECKSUM := 0bb1714b78d70cab9907d2013082978a28f48a46
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)

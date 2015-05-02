@@ -1,0 +1,42 @@
+From 1351ac4833d49f49250c9f1e386b97a92b40c9fa Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sat, 8 Nov 2014 20:02:08 -0500
+Subject: [PATCH] Use BUILD_SHARED_LIBS to determine the type of library to be
+ built
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0b9ef30..2a54cc8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,9 +18,4 @@ INSTALL(
+   ${CMAKE_SOURCE_DIR}/json_spirit/json_spirit_writer_options.h
+   DESTINATION include)
+ 
+-INSTALL(
+-  FILES
+-  ${CMAKE_BINARY_DIR}/json_spirit/libjson_spirit.a
+-  DESTINATION lib)
+-
+ INCLUDE(CPack)
+diff --git a/json_spirit/CMakeLists.txt b/json_spirit/CMakeLists.txt
+index 04330f5..9b54790 100644
+--- a/json_spirit/CMakeLists.txt
++++ b/json_spirit/CMakeLists.txt
+@@ -13,5 +13,11 @@ json_spirit_writer_template.h )
+ FIND_PACKAGE(Boost 1.34 REQUIRED)
+ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+ 
+-ADD_LIBRARY(json_spirit STATIC ${JSON_SPIRIT_SRCS})
++ADD_LIBRARY(json_spirit ${JSON_SPIRIT_SRCS})
++
++INSTALL(
++  TARGETS json_spirit
++  RUNTIME DESTINATION bin
++  LIBRARY DESTINATION lib
++  ARCHIVE DESTINATION lib)
+ 
+-- 
+1.9.1
+

@@ -3,10 +3,10 @@
 
 PKG             := pfstools
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.5
-$(PKG)_CHECKSUM := dc595438f0fd8b40a05d9f9c498892363a1b3f05
+$(PKG)_VERSION  := 2.0.0
+$(PKG)_CHECKSUM := 1501b58d0014a9e92e6e2b7b8829b3f015204b29
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
@@ -16,23 +16,30 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+# Note: all the external dependencies are used for the tools, but we
+# only want the library so we don't need them.
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
-        --disable-netpbm \
-        --disable-openexr \
-        --disable-tiff \
-        --disable-qt \
-        --disable-jpeghdr \
-        --disable-imagemagick \
-        --disable-octave \
-        --disable-opengl \
-        --disable-matlab \
-        --disable-gdal
-    $(MAKE) -C '$(1)'/src/pfs -j '$(JOBS)'
-    $(MAKE) -C '$(1)'/src/pfs -j 1 install
+    mkdir '$(1).build'
+    cd '$(1).build' && cmake '$(1)' \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+        -DWITH_OpenEXR=false \
+        -DWITH_ImageMagick=false \
+        -DWITH_NetPBM=false \
+        -DWITH_TIFF=false \
+        -DWITH_QT=false \
+        -DWITH_pfsglview=false \
+        -DWITH_MATLAB=false \
+        -DWITH_Octave=false \
+        -DWITH_FFTW=false \
+        -DWITH_GSL=false \
+        -DWITH_OpenCV=false
+    $(MAKE) -C '$(1).build/src/pfs' -j '$(JOBS)' install VERBOSE=1
+
+    '$(TARGET)-g++' \
+        -Wall -Wextra -Werror \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-pfstools.exe' \
+        `'$(TARGET)-pkg-config' pfs --cflags --libs`
 endef
 
 $(PKG)_BUILD_SHARED =

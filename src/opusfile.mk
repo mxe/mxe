@@ -3,8 +3,8 @@
 
 PKG             := opusfile
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.5
-$(PKG)_CHECKSUM := 1ba9dabbbaa35034af8167661a918df6c003317e
+$(PKG)_VERSION  := 0.6
+$(PKG)_CHECKSUM := 2422e3c7bf6105a832226850b19053ec5ac41293
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.xiph.org/releases/opus/$($(PKG)_FILE)

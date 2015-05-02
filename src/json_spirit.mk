@@ -4,20 +4,26 @@
 PKG             := json_spirit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.08
-$(PKG)_CHECKSUM := d46a896991b7eb736bff2628909645d3bbaaf5cf
+$(PKG)_CHECKSUM := 65e942dc5ed209cf7d653a721aaf907c7196d978
 $(PKG)_SUBDIR   := $(PKG)_v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)_v$($(PKG)_VERSION).zip
 
 # The original source of this file at
 # http://www.codeproject.com/KB/recipes/JSON_Spirit/json_spirit_v4.08.zip
-# is behind a login screen, so I have offered to host this from my
-# website
-$(PKG)_URL      := http://www.hpcoders.com.au/$($(PKG)_FILE)
+# is behind a login screen. Use manually downloaded cache on the S3 bucket.
+$(PKG)_URL       = $(PKG_MIRROR)/$(shell $(call ESCAPE_PKG,json_spirit))
 $(PKG)_DEPS     := gcc boost
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    echo 'TODO: json_spirit automatic update explicitly disabled. Please ' >&2;
+    echo '      manually check and update.' >&2;
+    echo 'Latest:' >&2;
+    $(WGET) -q -O- 'http://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented' | \
+    $(SED) -n 's,.*/JSON_Spirit/json_spirit_v\([0-9.]*\)[.]zip.*".*,\1,p' | \
+    head -1 >&2;
+    echo 'Current:' >&2;
+    echo $(json_spirit_VERSION) >&2;
+    echo $(json_spirit_VERSION)
 endef
 
 define $(PKG)_BUILD
@@ -27,20 +33,11 @@ define $(PKG)_BUILD
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_RELEASE_POSTFIX='' \
-        -DBoost_THREADAPI=win32 \
-        -DPCL_SHARED_LIBS=OFF \
-        -DBUILD_TESTS=OFF \
-        -DBUILD_apps=OFF \
-        -DBUILD_examples=OFF \
-        -DBUILD_global_tests=OFF \
-        -DBUILD_tools=OFF \
-        -DHAVE_MM_MALLOC_EXITCODE=0 \
-        -DHAVE_SSE4_1_EXTENSIONS_EXITCODE=0 \
-        -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \
-        -DHAVE_SSE2_EXTENSIONS_EXITCODE=0 \
-        -DHAVE_SSE_EXTENSIONS_EXITCODE=0
+        -DBoost_THREADAPI=win32
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)' -j 1 VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
-endef
 
-$(PKG)_BUILD_SHARED =
+    $(TARGET)-g++ \
+        '$(1)/json_demo/json_demo.cpp' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-json_spirit.exe' -ljson_spirit
+endef

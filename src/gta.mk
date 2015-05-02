@@ -3,8 +3,8 @@
 
 PKG             := gta
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.5
-$(PKG)_CHECKSUM := 7fdca4a37c6f1617952c69b5aac370fed2f00e41
+$(PKG)_VERSION  := 1.0.7
+$(PKG)_CHECKSUM := e0feb2a9cce6c9658fd9e92870d83d1275435800
 $(PKG)_SUBDIR   := libgta-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgta-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.savannah.gnu.org/releases/gta/$($(PKG)_FILE)

@@ -3,8 +3,8 @@
 
 PKG             := primesieve
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.4
-$(PKG)_CHECKSUM := 1309e444bde3822cdc3e953757b46750d384cc00
+$(PKG)_VERSION  := 5.4.1
+$(PKG)_CHECKSUM := 553c808aac8d006451e12403cd42e95649e46dea
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://dl.bintray.com/kimwalisch/$(PKG)/$($(PKG)_FILE)

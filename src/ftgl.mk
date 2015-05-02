@@ -32,8 +32,13 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     $(INSTALL) -m644 '$(1)/ftgl.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
 
+    # On case-insensitive filesystems, freetype2/ftglyph.h conflicts
+    # with FTGL/FTGlyph.h. Call pkg-config separately as a workaround
+    # to re-order include paths.
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' freetype2 --cflags --libs` \
         `'$(TARGET)-pkg-config' ftgl --cflags --libs`
 endef

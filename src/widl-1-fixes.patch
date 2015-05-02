@@ -1,0 +1,16 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -ur mingw-w64-v3.3.0.orig/mingw-w64-tools/widl/include/windef.h mingw-w64-v3.3.0/mingw-w64-tools/widl/include/windef.h
+--- mingw-w64-v3.3.0.orig/mingw-w64-tools/widl/include/windef.h	2014-10-29 20:53:30.000000000 +1100
++++ mingw-w64-v3.3.0/mingw-w64-tools/widl/include/windef.h	2014-10-29 20:54:09.000000000 +1100
+@@ -85,7 +85,7 @@
+ #endif /* __cdecl */
+ 
+ #ifndef __ms_va_list
+-# if defined(__x86_64__) && defined (__GNUC__)
++# if defined(__x86_64__) && defined (__GNUC__) && defined(__builtin_ms_va_list)
+ #  define __ms_va_list __builtin_ms_va_list
+ #  define __ms_va_start(list,arg) __builtin_ms_va_start(list,arg)
+ #  define __ms_va_end(list) __builtin_ms_va_end(list)
+ 
