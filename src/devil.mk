@@ -19,7 +19,7 @@ endef
 
 define $(PKG)_BUILD
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/include/IL/il.h'
-    cd '$(1)' && ./configure \
+    cd '$(1)' && env CPPFLAGS=-Drestrict ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --disable-shared \
