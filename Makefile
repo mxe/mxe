@@ -34,6 +34,10 @@ WGET       := wget --no-check-certificate \
                    --user-agent=$(shell wget --version | \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
+# Lua implementation used as dependency of other packages
+# e.g. luabind (possible values: lua or luajit)
+LUA        := lua
+
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
                 gcc g++ gperf intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) python ruby scons \

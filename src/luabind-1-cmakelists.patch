@@ -3,16 +3,16 @@ See index.html for further information.
 
 commit 9b4639e25442a3b6d0337d8e602a8332ec0e26e0
 Author: Boris Nagaev <bnagaev@gmail.com>
-Date:   Fri Aug 22 15:17:21 2014 +0400
+Date:   Mon Dec  8 00:28:20 2014 +0300
 
     CMakeLists.txt
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..acc47ae
+index 0000000..c0d2627
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,29 @@
+@@ -0,0 +1,41 @@
 +cmake_minimum_required(VERSION 2.6)
 +project(luabind)
 +
@@ -20,9 +20,21 @@ index 0000000..acc47ae
 +FIND_PACKAGE(Boost 1.34 REQUIRED)
 +include_directories(${Boost_INCLUDE_DIRS})
 +
-+include(FindLua51)
-+find_package(Lua51 REQUIRED)
-+include_directories(${LUA_INCLUDE_DIR})
++option(USE_LUAJIT "Use LuaJIT instead of standard Lua" OFF)
++
++if (USE_LUAJIT)
++    find_path(LUAJIT_INCLUDE_DIR luajit.h
++        PATH_SUFFIXES include/luajit-2.0)
++    find_library(LUAJIT_LIBRARY
++        NAMES luajit luajit-5.1 luajit-5.2)
++    include_directories(${LUAJIT_INCLUDE_DIR})
++    set(LUA_LIB ${LUAJIT_LIBRARY})
++else ()
++    include(FindLua51)
++    find_package(Lua51 REQUIRED)
++    include_directories(${LUA_INCLUDE_DIR})
++    set(LUA_LIB ${LUA_LIBRARIES})
++endif ()
 +
 +include_directories(${PROJECT_SOURCE_DIR})
 +
@@ -35,7 +47,7 @@ index 0000000..acc47ae
 +
 +add_definitions(-DLUA_COMPAT_ALL)
 +
-+target_link_libraries(luabind ${LUA_LIBRARIES} luabind)
++target_link_libraries(luabind ${LUA_LIB})
 +
 +install(TARGETS luabind DESTINATION
 +        ${CMAKE_INSTALL_PREFIX}/lib)
