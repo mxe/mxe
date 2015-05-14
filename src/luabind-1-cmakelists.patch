@@ -12,7 +12,7 @@ new file mode 100644
 index 0000000..acc47ae
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,29 @@
+@@ -0,0 +1,27 @@
 +cmake_minimum_required(VERSION 2.6)
 +project(luabind)
 +
@@ -32,8 +32,6 @@ index 0000000..acc47ae
 +
 +set(luabind_cxx_flags "-ftemplate-depth-128 -finline-functions")
 +set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${luabind_cxx_flags}")
-+
-+add_definitions(-DLUA_COMPAT_ALL)
 +
 +target_link_libraries(luabind ${LUA_LIBRARIES} luabind)
 +
