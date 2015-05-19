@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From ba27492b5ffea8c7cdbd54b2337ca9537576ec18 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 19 May 2015 12:38:30 +0300
+Subject: [PATCH] fix Devil compilation, see:
+ http://lists.nongnu.org/archive/html/mingw-cross-env-list/2015-04/msg00028.html
+
+
+diff --git a/include/IL/il.h b/include/IL/il.h
+index 540a56e..21fd6b2 100644
+--- a/include/IL/il.h
++++ b/include/IL/il.h
+@@ -63,7 +63,7 @@ extern "C" {
+ 	#endif
+ #endif
+ 
+-#ifdef RESTRICT_KEYWORD
++#if defined(RESTRICT_KEYWORD) && !defined(__cplusplus)
+ #define RESTRICT restrict
+ #define CONST_RESTRICT const restrict
+ #else
+-- 
+1.9.1
+
