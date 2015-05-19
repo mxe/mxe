@@ -44,6 +44,7 @@ define $(PKG)_CONFIGURE
         --with-expat='$(PREFIX)/$(TARGET)' \
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
         --with-gta='$(PREFIX)/$(TARGET)' \
+	--with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
         --with-libjson-c='$(PREFIX)/$(TARGET)' \
         --without-odbc \
