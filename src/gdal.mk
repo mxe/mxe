@@ -23,17 +23,12 @@ define $(PKG)_CONFIGURE
     cd '$(1)' && autoreconf -fi
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build='$(BUILD)' \
-        --enable-static \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-bsb \
         --with-grib \
         --with-ogr \
         --with-pam \
         --without-threads \
-        --with-static-proj4 \
         --with-libz='$(PREFIX)/$(TARGET)' \
         --with-png='$(PREFIX)/$(TARGET)' \
         --with-libtiff='$(PREFIX)/$(TARGET)' \
@@ -83,8 +78,8 @@ define $(PKG)_MAKE
     $(MAKE) -C '$(1)/gcore' -j '$(JOBS)' install
     $(MAKE) -C '$(1)/frmts' -j '$(JOBS)' install
     $(MAKE) -C '$(1)/alg'   -j '$(JOBS)' install
-    $(MAKE) -C '$(1)/ogr'   -j '$(JOBS)' install OGR_ENABLED=
-    $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install BIN_LIST=
+    $(MAKE) -C '$(1)/ogr'   -j '$(JOBS)' install #OGR_ENABLED=
+    $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef
 
@@ -103,5 +98,3 @@ endef
 
 # Can't use $(PKG)_BUILD_SHARED here as $(PKG)_BUILD_i686-w64-mingw32 has a
 # higher precedence.
-$(PKG)_BUILD_i686-w64-mingw32.shared =
-$(PKG)_BUILD_x86_64-w64-mingw32.shared =
