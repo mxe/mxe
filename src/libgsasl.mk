@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 08fd5dfdd3d88154cf06cb0759a732790c47b4f7
 $(PKG)_SUBDIR   := libgsasl-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgsasl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/gsasl/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv libidn libntlm libgcrypt nettle
+$(PKG)_DEPS     := gcc libiconv libidn libntlm libgcrypt
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gsasl.git;a=tags' | \
@@ -24,8 +24,7 @@ define $(PKG)_BUILD
         --with-libgcrypt \
         --with-libiconv-prefix='$(PREFIX)/$(TARGET)' \
         --with-libidn-prefix='$(PREFIX)/$(TARGET)' \
-        --with-libntlm-prefix='$(PREFIX)/$(TARGET)' \
-        LIBS="`$(TARGET)-pkg-config --libs-only-l nettle`"
+        --with-libntlm-prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
