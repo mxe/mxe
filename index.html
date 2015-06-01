@@ -163,9 +163,9 @@
 
     <p>
     When everything is fine, download the
-    <a href="#download">current stable version</a>:
+    <a href="#download">current version</a>:
     </p>
-    <pre>git clone -b stable https://github.com/mxe/mxe.git</pre>
+    <pre>git clone https://github.com/mxe/mxe.git</pre>
 
     <p>
     If you don't mind installing it in your home directory,
@@ -437,26 +437,15 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
 <div class="section">
 <div id="latest-release"></div>
+<div id="latest-version"></div>
 <div id="development"></div>
 <h2 id="download">Download</h2>
 
     <p>
-    To obtain the current stable version, run:
+    To obtain the current version, run:
     </p>
 
-    <pre>git clone -b stable https://github.com/mxe/mxe.git</pre>
-
-    <p>
-    The development version can be obtained by:
-    </p>
-
-    <pre>git clone -b master https://github.com/mxe/mxe.git</pre>
-
-    <p>
-    <strong>N.B.</strong> when using the development version,
-    ensure you use the local documentation (index.html) -
-    the website reflects the stable branch.
-    </p>
+    <pre>git clone https://github.com/mxe/mxe.git</pre>
 
     <p>
     To retrieve updates, run:
@@ -480,77 +469,19 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     The following <code>.git/config</code> settings ensure
-    that the stable branch will always be pushed to the
-    <code><a href="https://help.github.com/pages/">gh-pages</a></code>
-    branch in addition to the
-    <code>stable</code> branch,
+    that the master branch will always be pushed to the
+    <code><a href="https://help.github.com/categories/github-pages-basics/">gh-pages</a></code>
+    branch,
     thus ensuring the website will always stay in sync:
     </p>
     <pre>[remote "origin"]
         url = git@github.com:mxe/mxe.git
         fetch = +refs/heads/*:refs/remotes/origin/*
         push = refs/heads/master:refs/heads/master
-        push = refs/heads/stable:refs/heads/stable
-        push = refs/heads/stable:refs/heads/gh-pages
+        push = refs/heads/master:refs/heads/gh-pages
 [branch "master"]
         remote = origin
-        merge = refs/heads/master
-[branch "stable"]
-        remote = origin
-        merge = refs/heads/stable</pre>
-
-    <h3 id="branches">Branch Concept</h3>
-
-    <p>
-    For the sake of simplicity, there are just two
-    branches, "master" and "stable". Although it might
-    seem obvious, here's an overview of the types of
-    changes that go into each branch:
-    </p>
-
-    <ul class="compact-list">
-        <li>
-            Any change of a build script goes into "master".
-        </li>
-        <li>
-            Any package upgrade goes into "master".
-        </li>
-        <li>
-            Any documentation upgrade that refers to a feature
-            not present in stable goes into "master".
-        </li>
-        <li>
-            Anything else that doesn't affect the build goes
-            into "stable".
-        </li>
-        <li>
-            Any non-critical improvement to the main Makefile
-            goes into "stable".
-        </li>
-        <li>
-            Any improvement in the package download URLs or
-            package version recognition goes into "stable".
-        </li>
-        <li>
-            When in doubt, "master" is used rather than "stable".
-        </li>
-    </ul>
-
-    <p>
-    And this is how the branches relete to each other:
-    </p>
-
-    <ul class="compact-list">
-        <li>
-            Every change to the "stable" branch
-            will be merged into "master".
-        </li>
-        <li>
-            After a successful testing phase,
-            the "stable" branch
-            will be fast-forwarded to "master".
-        </li>
-    </ul>
+        merge = refs/heads/master</pre>
 </div>
 
 <div class="section">
@@ -712,7 +643,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>apt-get install g++-multilib libc6-dev-i386</pre>
 
     <p>
-    Only the latest Debian stable series is supported (Wheezy 7.x)
+    Only the <a href="https://www.debian.org/releases/stable/">latest Debian stable series</a> is supported.
     </p>
 
     <h3 id="requirements-fedora">Fedora</h3>
@@ -1223,10 +1154,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://acoustid.org/chromaprint">Chromaprint</a></td>
     </tr>
     <tr>
-        <td class="package">cloog</td>
-        <td class="website"><a href="http://www.cloog.org/">CLooG Code Generator</a></td>
-    </tr>
-    <tr>
         <td class="package">cmake</td>
         <td class="website"><a href="http://www.cmake.org/">cmake</a></td>
     </tr>
@@ -1377,10 +1304,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">gcc</td>
         <td class="website"><a href="http://gcc.gnu.org/">GCC</a></td>
-    </tr>
-    <tr>
-        <td class="package">gcc-cloog</td>
-        <td class="website"><a href="http://www.cloog.org/">CLooG for GCC</a></td>
     </tr>
     <tr>
         <td class="package">gcc-gmp</td>
@@ -2410,6 +2333,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
+        <td class="package">qtxlsxwriter</td>
+        <td class="website"><a href="https://github.com/dbzhang800/QtXlsxWriter/">QtXlsxWriter</a></td>
+    </tr>
+    <tr>
         <td class="package">qtxmlpatterns</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
@@ -2571,7 +2498,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </tr>
     <tr>
         <td class="package">tinyxml2</td>
-        <td class="website"><a href="http://grinninglizard.com/tinyxml2/index.html">tinyxml2</a></td>
+        <td class="website"><a href="http://grinninglizard.com/tinyxml2/">tinyxml2</a></td>
     </tr>
     <tr>
         <td class="package">tre</td>
@@ -3280,30 +3207,20 @@ endef</pre>
 
     <dl>
 
-<!--
-    <dt>2014-xx-xx &ndash; Release <span id="latest-version">2.23</span></dt>
+    <dt>2015-05-04 &ndash; Retired the stable branch</dt>
     <dd>
         <p>
-        The <a href="#download">stable branch</a> was updated to the
-        current development version after a thorough <a
-        href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/FIXME">testing
-        phase</a>.
-        </p>
-
-        <p>
-        Current users are <strong>strongly</strong> encouraged to
-        start with a clean tree as the toolchain has been
-        updated and requires a full rebuild:
-        </p>
-        <pre>git pull && make clean && make</pre>
-
-        <p>
-        Most packages were updated to their latest version.
-        </p>
-
-        <p>
-        Many new packages are supported:
-        ...
+        The stable branch
+        <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2015-05/msg00004.html">was retired</a>
+        as it
+        <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2015-03/msg00002.html">did more harm than good</a>.
+        Everybody is using the master branch,
+        because it is always recent and well enough tested.
+        For historical reference, the last commit to the stable branch was
+        <a href="https://github.com/mxe/mxe/commits/0c6cc9c91cf94e445ec471a5beebb7199483cb9d" title="0c6cc9c91cf94e445ec471a5beebb7199483cb9d">0c6cc9c</a>,
+        which was
+        <a href="https://github.com/mxe/mxe/commits/eaac1a873f37bdc4f91e1b649e28b118acedc436" title="eaac1a873f37bdc4f91e1b649e28b118acedc436">fully merged into master</a>
+        as usual.
         </p>
 
         <p>
@@ -3344,14 +3261,12 @@ endef</pre>
         commands should work out-of-the-box assuming the
         <code>MXE_TARGETS</code> environmental variable is set correctly.
         </p>
-
     </dd>
--->
 
-    <dt>2013-07-27 &ndash; Release <span id="latest-version">2.23</span></dt>
+    <dt>2013-07-27 &ndash; Release 2.23</dt>
     <dd>
         <p>
-        The <a href="#download">stable branch</a> was updated
+        The stable branch was updated
         to the current development version after a thorough
         <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2013-07/msg00021.html">testing phase</a>.
         </p>
@@ -3401,12 +3316,49 @@ endef</pre>
         </p>
     </dd>
 
-    <dt>2012-04-12 &ndash; Release 2.22</dt>
+    <dt id="branches">2012-04-12 &ndash; Release 2.22</dt>
     <dd>
         <p>
-        The release tarballs have been replaced with a <a href="#download">stable branch</a>
-        that conforms to the new <a href="#branches">branch concept</a>.
+        The release tarballs have been replaced with a stable branch
+        that conforms to the new branch concept:
         </p>
+
+        <ul class="compact-list">
+            <li>
+                Any change of a build script goes into "master".
+            </li>
+            <li>
+                Any package upgrade goes into "master".
+            </li>
+            <li>
+                Any documentation upgrade that refers to a feature
+                not present in stable goes into "master".
+            </li>
+            <li>
+                Anything else that doesn't affect the build goes
+                into "stable".
+            </li>
+            <li>
+                Any non-critical improvement to the main Makefile
+                goes into "stable".
+            </li>
+            <li>
+                Any improvement in the package download URLs or
+                package version recognition goes into "stable".
+            </li>
+            <li>
+                When in doubt, "master" is used rather than "stable".
+            </li>
+            <li>
+                Every change to the "stable" branch
+                will be merged into "master".
+            </li>
+            <li>
+                After a successful testing phase,
+                the "stable" branch
+                will be fast-forwarded to "master".
+            </li>
+        </ul>
 
         <p>
         The project has been
@@ -4284,7 +4236,7 @@ endef</pre>
         <a href="http://spek-project.org/">Spek</a>
     </li>
     <li>
-        <a href="http://biosig.sourceforge.net/index.html">BioSig</a>
+        <a href="http://biosig.sourceforge.net/">BioSig</a>
     </li>
     <li>
         <a href="https://www.gnu.org/software/freedink/">GNU FreeDink</a>

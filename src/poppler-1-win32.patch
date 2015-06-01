@@ -24,7 +24,7 @@ index 084b49b..9bd7dac 100644
              if (FileExists(fontPath->getCString()) ||
                  FileExists(replaceSuffix(fontPath, ".pfb", ".pfa")->getCString())) {
 -- 
-2.1.2
+2.1.0
 
 
 From 346680cd02223d6be57c4eecb983505db13b2acf Mon Sep 17 00:00:00 2001
@@ -119,5 +119,6 @@ index 2e2f6ff..e625564 100644
  # define _POPPLER_QT4_LIB_IMPORT
  #else
 -- 
-2.1.2
+2.1.0
+
 

@@ -25,7 +25,8 @@ define $(PKG)_BUILD
         --target=@libvpx-target@ \
         --disable-examples \
         --disable-install-docs \
-        --as=$(TARGET)-yasm
+        --as=$(TARGET)-yasm \
+        --extra-cflags='-std=gnu89'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
     $(TARGET)-ranlib $(PREFIX)/$(TARGET)/lib/libvpx.a

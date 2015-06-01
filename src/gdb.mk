@@ -23,6 +23,6 @@ define $(PKG)_BUILD
         --with-system-readline \
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(1)' -j 1 install MAKEINFO=true
 endef
 

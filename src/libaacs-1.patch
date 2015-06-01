@@ -1,0 +1,55 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 5ebe4419738fd337f5c2f8e2849dd8e7c1f55d01 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sat, 28 Mar 2015 21:06:26 +0100
+Subject: [PATCH 1/2] fix configure
+
+
+diff --git a/configure.ac b/configure.ac
+index 155acad..8cb7e79 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -126,7 +126,7 @@ if test x$libgcrypt_config_prefix != x ; then
+    fi
+ fi
+ 
+-AC_PATH_PROG(LIBGCRYPT_CONFIG, libgcrypt-config, no)
++AC_PATH_TOOL(LIBGCRYPT_CONFIG, libgcrypt-config, no)
+ if test x"$LIBGCRYPT_CONFIG" = xno; then
+   AC_MSG_ERROR([libgcrypt not found on system])
+ else
+@@ -149,7 +149,7 @@ if test x$gpg_error_config_prefix != x ; then
+    fi
+ fi
+ 
+-AC_PATH_PROG(GPG_ERROR_CONFIG, gpg-error-config, no)
++AC_PATH_TOOL(GPG_ERROR_CONFIG, gpg-error-config, no)
+ if test x"$GPG_ERROR_CONFIG" = xno; then
+   AC_MSG_ERROR([gpg-error not found on system])
+ else
+-- 
+2.1.0
+
+
+From c807305d0df68e88aa04fabd3275aff4f34d4368 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sat, 28 Mar 2015 21:06:56 +0100
+Subject: [PATCH 2/2] fix pkgconfig
+
+
+diff --git a/src/libaacs.pc.in b/src/libaacs.pc.in
+index 598f206..4334d8c 100644
+--- a/src/libaacs.pc.in
++++ b/src/libaacs.pc.in
+@@ -7,4 +7,5 @@ Name: libaacs
+ Description: AACS support library for Blu-ray playback
+ Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} -laacs
++Libs.private: @LIBGCRYPT_LIBS@ @GPG_ERROR_LIBS@
+ Cflags: -I${includedir}
+-- 
+2.1.0
+
+
