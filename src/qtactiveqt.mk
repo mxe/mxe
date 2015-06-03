@@ -4,7 +4,7 @@
 PKG             := qtactiveqt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 5f37fd5316ebf8df45ff870b56320ff5be689ab0
+$(PKG)_CHECKSUM := ff020cb348fd392209c1c7d87bdbf43cb4622a0b
 $(PKG)_SUBDIR    = $(subst qtbase,qtactiveqt,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtactiveqt,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtactiveqt,$(qtbase_URL))

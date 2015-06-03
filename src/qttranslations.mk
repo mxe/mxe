@@ -4,7 +4,7 @@
 PKG             := qttranslations
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := a66b5f6d81dddd82a6f328310a3ed3b1e513d948
+$(PKG)_CHECKSUM := a7825e593526108e70bceaa274f184105a2bd465
 $(PKG)_SUBDIR    = $(subst qtbase,qttranslations,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qttranslations,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qttranslations,$(qtbase_URL))

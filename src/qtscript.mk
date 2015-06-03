@@ -4,7 +4,7 @@
 PKG             := qtscript
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 1b9ede97f3120c95c2dce322b6140eeb20416044
+$(PKG)_CHECKSUM := 91ca6d9c6a017ed47d9c731867a03c5be1f3ea88
 $(PKG)_SUBDIR    = $(subst qtbase,qtscript,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtscript,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtscript,$(qtbase_URL))

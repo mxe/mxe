@@ -4,7 +4,7 @@
 PKG             := qtquick1
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := f89cccdeac4c31157ac8b97fa96d426b5bb18630
+$(PKG)_CHECKSUM := d47f8488f24e5de8328a844725afa6bd541a1699
 $(PKG)_SUBDIR    = $(subst qtbase,qtquick1,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtquick1,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtquick1,$(qtbase_URL))

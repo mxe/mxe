@@ -4,7 +4,7 @@
 PKG             := qtwebsockets
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 3fb9be047b67673f40d272faab5ba0c8055e7717
+$(PKG)_CHECKSUM := 726523b736d252f7ef2247456858e27ca92697b9
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebsockets,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebsockets,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebsockets,$(qtbase_URL))
