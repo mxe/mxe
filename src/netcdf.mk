@@ -26,11 +26,11 @@ define $(PKG)_BUILD
     cd '$(1)' && \
         $(SED) -i -e 's/#ifdef IGNORE/#if 0/' libsrc4/nc4hdf.c libsrc4/ncfunc.c libsrc/attr.c ncgen/cvt.c && \
         ./configure \
-	$(MXE_CONFIGURE_OPTS) \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-netcdf-4 \
         --enable-hdf4 \
- 	--disable-testsets \
- 	--disable-examples \
+        --disable-testsets \
+        --disable-examples \
         CPPFLAGS="-D_DLGS_H -DWIN32_LEAN_AND_MEAN" \
         LIBS="-lmfhdf -ldf -lportablexdr -lws2_32"
 
