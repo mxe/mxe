@@ -29,8 +29,6 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --enable-netcdf-4 \
         --enable-hdf4 \
-        --disable-testsets \
-        --disable-examples \
         CPPFLAGS="-D_DLGS_H -DWIN32_LEAN_AND_MEAN" \
         LIBS="-lmfhdf -ldf -lportablexdr -lws2_32"
 
