@@ -19,7 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && $(LIBTOOLIZE) --force
-    cd '$(1)' && autoreconf --install
+    cd '$(1)' && autoreconf --force --install
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
@@ -27,13 +27,12 @@ define $(PKG)_BUILD
         --disable-fortran \
         --disable-netcdf \
         --prefix='$(PREFIX)/$(TARGET)' \
-        CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1"
+        CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME"
+    echo '#define H4_BUILT_AS_STATIC_LIB 1' >> '$(1)'/hdf/src/h4config.h
     $(MAKE) -C '$(1)'/hdf/src -j '$(JOBS)'
     $(MAKE) -C '$(1)'/hdf/src -j 1 install
     $(MAKE) -C '$(1)'/mfhdf/libsrc -j '$(JOBS)'
     $(MAKE) -C '$(1)'/mfhdf/libsrc -j 1 install
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
 
 $(PKG)_BUILD_SHARED =

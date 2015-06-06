@@ -21,8 +21,6 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         AR='$(TARGET)-ar'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' libportablexdr_la_CFLAGS="-Wall -fno-strict-aliasing"
     $(MAKE) -C '$(1)' -j 1 install
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
