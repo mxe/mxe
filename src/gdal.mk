@@ -95,6 +95,3 @@ define $(PKG)_BUILD_i686-w64-mingw32
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
     $($(PKG)_MAKE)
 endef
-
-# Can't use $(PKG)_BUILD_SHARED here as $(PKG)_BUILD_i686-w64-mingw32 has a
-# higher precedence.
