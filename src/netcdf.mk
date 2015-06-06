@@ -33,7 +33,7 @@ define $(PKG)_BUILD
         LIBS="-lmfhdf -ldf -lportablexdr -lws2_32"
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
-    LDFLAGS=-no-undefined
+        LDFLAGS=-no-undefined
 
     $(MAKE) -C '$(1)' -j 1 install
 endef

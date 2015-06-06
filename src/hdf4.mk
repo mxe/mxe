@@ -21,14 +21,13 @@ define $(PKG)_BUILD
     cd '$(1)' && $(LIBTOOLIZE) --force
     cd '$(1)' && autoreconf --install
     cd '$(1)' && ./configure \
-    $(MXE_CONFIGURE_OPTS) \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-fortran \
         --disable-netcdf \
-    $(if $(BUILD_STATIC), \
-        CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1") \
-    AR='$(TARGET)-ar' \
-    $(if $(BUILD_SHARED), \
-        LIBS="-lportablexdr -lws2_32" CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_DYNAMIC_LIB=1 -DBIG_LONGS")
+        AR='$(TARGET)-ar' \
+        $(if $(BUILD_STATIC), \
+            CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1", \
+            LIBS="-lportablexdr -lws2_32" CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_DYNAMIC_LIB=1 -DBIG_LONGS")
 
     $(MAKE) -C '$(1)'/mfhdf/xdr -j '$(JOBS)' \
     LDFLAGS=-no-undefined
