@@ -3,16 +3,17 @@
 
 PKG             := itk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.4.1
-$(PKG)_CHECKSUM := 9272a15323e9c1d44f598fca02d2bb0c16478bb5
+$(PKG)_VERSION  := 4.7.1
+$(PKG)_CHECKSUM := b8ff13b4d96527270fc435222240906c9fe85a9a
 $(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc hdf5
+$(PKG)_DEPS     := gcc hdf5 libpng tiff jpeg expat
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package ITK need to be written.' >&2;
-    echo $(itk_VERSION)
+    $(WGET) -q -O- 'https://sourceforge.net/projects/itk/files/itk/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
@@ -22,14 +23,32 @@ define $(PKG)_BUILD
     cd '$(1).build' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -C '$(1)/TryRunResults.cmake'\
-        -DBUILD_SHARED_LIBS=FALSE \
-        -DCMAKE_VERBOSE_MAKEFILE=TRUE \
+    $(if $(BUILD_SHARED),\
+        -DBUILD_SHARED_LIBS=TRUE ) \
         -DBUILD_TESTING=FALSE \
         -DBUILD_EXAMPLES=FALSE \
         -DITK_USE_SYSTEM_HDF5=TRUE \
+        -DITK_USE_SYSTEM_TIFF=TRUE \
+        -DITK_USE_SYSTEM_PNG=TRUE \
+        -DITK_USE_SYSTEM_JPEG=TRUE \
+        -DITK_USE_SYSTEM_EXPAT=TRUE \
+        -DVCL_CHAR_IS_SIGNED=1 \
+        -DVCL_HAS_SLICED_DESTRUCTOR_BUG=1 \
+        -DVCL_HAS_WORKING_STRINGSTREAM=1 \
+        -DVCL_HAS_LFS=1 \
+        -DVCL_COMPLEX_POW_WORKS=1 \
+        -DVCL_NUMERIC_LIMITS_HAS_INFINITY=1 \
+        -DVCL_PROCESSOR_HAS_INFINITY=1 \
+        -DVXL_HAS_SSE2_HARDWARE_SUPPORT=1 \
+        -DKWSYS_CHAR_IS_SIGNED=1 \
+        -DKWSYS_LFS_WORKS=1 \
         -DCMAKE_C_FLAGS='-std=gnu89' \
         '$(1)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
-endef
 
-$(PKG)_BUILD_SHARED =
+    # make and install
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install
+
+    # install test
+    $(INSTALL) -m755 '$(1).build/bin/itkTestDriver.exe' '$(PREFIX)/$(TARGET)/bin/test-itk.exe'
+
+endef

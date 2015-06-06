@@ -1,0 +1,161 @@
+diff -burN muparser_v2_2_3.orig/include/muParserBase.h muparser_v2_2_3/include/muParserBase.h
+--- muparser_v2_2_3.orig/include/muParserBase.h	2015-04-27 14:34:08.489392134 +0200
++++ muparser_v2_2_3/include/muParserBase.h	2015-04-27 15:41:29.402019065 +0200
+@@ -40,7 +40,7 @@
+ #include "muParserBytecode.h"
+ #include "muParserError.h"
+ 
+-
++#include "muParserDLL.h"
+ namespace mu
+ {
+ /** \file
+@@ -58,7 +58,7 @@
+   Complementary to a set of internally implemented functions the parser is able to handle 
+   user defined functions and variables. 
+ */
+-class ParserBase 
++class MUPARSER_DLL_EXPORT ParserBase
+ {
+ friend class ParserTokenReader;
+ 
+@@ -308,4 +308,3 @@
+ } // namespace mu
+ 
+ #endif
+-
+diff -burN muparser_v2_2_3.orig/include/muParserCallback.h muparser_v2_2_3/include/muParserCallback.h
+--- muparser_v2_2_3.orig/include/muParserCallback.h	2015-04-27 14:34:08.488392139 +0200
++++ muparser_v2_2_3/include/muParserCallback.h	2015-04-27 15:41:25.584035779 +0200
+@@ -31,6 +31,7 @@
+ /** \file
+     \brief Definition of the parser callback class.
+ */
++#include "muParserDLL.h"
+ 
+ namespace mu
+ {
+@@ -47,7 +48,7 @@
+ 
+     \author (C) 2004-2011 Ingo Berg
+ */
+-class ParserCallback
++class MUPARSER_DLL_EXPORT ParserCallback
+ {
+ public:
+     ParserCallback(fun_type0  a_pFun, bool a_bAllowOpti);
+@@ -115,4 +116,3 @@
+ } // namespace mu
+ 
+ #endif
+-
+diff -burN muparser_v2_2_3.orig/include/muParserDLL.h muparser_v2_2_3/include/muParserDLL.h
+--- muparser_v2_2_3.orig/include/muParserDLL.h	2015-04-27 14:34:08.488392139 +0200
++++ muparser_v2_2_3/include/muParserDLL.h	2015-04-27 15:45:52.000869508 +0200
+@@ -26,6 +26,13 @@
+ #define MU_PARSER_DLL_H
+ 
+ #if defined(WIN32) || defined(_WIN32)
++#ifdef MUPARSER_DLL
++#define MUPARSER_DLL_EXPORT __declspec(dllexport)
++#define MUPARSER_DLL_IMPORT __declspec(dllimport)
++#else
++#define MUPARSER_DLL_EXPORT
++#endif
++
+     #ifdef MUPARSERLIB_EXPORTS
+         #define API_EXPORT(TYPE) __declspec(dllexport) TYPE __cdecl
+     #else
+@@ -33,6 +40,7 @@
+     #endif
+ #else
+     #define API_EXPORT(TYPE) TYPE
++    #define MUPARSER_DLL_EXPORT
+ #endif
+ 
+ 
+diff -burN muparser_v2_2_3.orig/include/muParserError.h muparser_v2_2_3/include/muParserError.h
+--- muparser_v2_2_3.orig/include/muParserError.h	2015-04-27 14:34:08.488392139 +0200
++++ muparser_v2_2_3/include/muParserError.h	2015-04-27 15:45:34.304946969 +0200
+@@ -34,6 +34,7 @@
+ #include <memory>
+ 
+ #include "muParserDef.h"
++#include "muParserDLL.h"
+ 
+ /** \file 
+     \brief This file defines the error class used by the parser.
+@@ -98,7 +99,7 @@
+ //---------------------------------------------------------------------------
+ /** \brief A class that handles the error messages.
+ */
+-class ParserErrorMsg
++class MUPARSER_DLL_EXPORT ParserErrorMsg
+ {
+ public:
+     typedef ParserErrorMsg self_type;
+@@ -123,7 +124,7 @@
+ 
+   Part of the math parser package.
+ */
+-class ParserError
++class MUPARSER_DLL_EXPORT ParserError
+ {
+ private:
+ 
+@@ -171,4 +172,3 @@
+ } // namespace mu
+ 
+ #endif
+-
+diff -burN muparser_v2_2_3.orig/include/muParser.h muparser_v2_2_3/include/muParser.h
+--- muparser_v2_2_3.orig/include/muParser.h	2015-04-27 14:34:08.488392139 +0200
++++ muparser_v2_2_3/include/muParser.h	2015-04-27 15:41:32.993003345 +0200
+@@ -32,6 +32,7 @@
+ #include "muParserBase.h"
+ #include "muParserTemplateMagic.h"
+ 
++#include "muParserDLL.h"
+ /** \file
+     \brief Definition of the standard floating point parser.
+ */
+@@ -48,7 +49,7 @@
+     muparser(at)gmx.de
+     </small>
+   */
+-  /* final */ class Parser : public ParserBase
++  /* final */ class MUPARSER_DLL_EXPORT Parser : public ParserBase
+   {
+   public:
+ 
+@@ -111,4 +112,3 @@
+ } // namespace mu
+ 
+ #endif
+-
+diff -burN muparser_v2_2_3.orig/include/muParserTokenReader.h muparser_v2_2_3/include/muParserTokenReader.h
+--- muparser_v2_2_3.orig/include/muParserTokenReader.h	2015-04-27 14:34:08.489392134 +0200
++++ muparser_v2_2_3/include/muParserTokenReader.h	2015-04-27 15:41:54.136910786 +0200
+@@ -37,6 +37,7 @@
+ 
+ #include "muParserDef.h"
+ #include "muParserToken.h"
++#include "muParserDLL.h"
+ 
+ /** \file
+     \brief This file contains the parser token reader definition.
+@@ -51,7 +52,7 @@
+   /** \brief Token reader for the ParserBase class.
+ 
+   */
+-  class ParserTokenReader 
++  class MUPARSER_DLL_EXPORT ParserTokenReader
+   {
+   private:
+ 
+@@ -157,5 +158,3 @@
+ } // namespace mu
+ 
+ #endif
+-
+-

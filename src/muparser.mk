@@ -17,13 +17,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
-        --disable-samples \
+    cd '$(1)' &&  ./configure \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-debug
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
-endef
 
-$(PKG)_BUILD_SHARED =
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+
+endef

@@ -18,14 +18,15 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC),\
         echo "QWT_CONFIG -= QwtDll" >> '$(1)/qwtconfig.pri')
 
-    # build
+# build
     cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt/bin/qmake
     $(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
 
-    #build sinusplot example to test linkage
+#build sinusplot example to test linkage
     cd '$(1)/examples/sinusplot' && $(PREFIX)/$(TARGET)/qt/bin/qmake
     $(MAKE) -C '$(1)/examples/sinusplot' -f 'Makefile.Release' -j '$(JOBS)'
 
-    # install
+# install
     $(INSTALL) -m755 '$(1)/examples/bin/sinusplot.exe' '$(PREFIX)/$(TARGET)/bin/test-qwt-qt4.exe'
+
 endef

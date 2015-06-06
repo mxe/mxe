@@ -1,0 +1,14 @@
+diff -bur libgeotiff-1.4.0.orig/CMakeLists.txt libgeotiff-1.4.0/CMakeLists.txt
+--- libgeotiff-1.4.0.orig/CMakeLists.txt	2014-10-15 01:01:33.863174388 +0530
++++ libgeotiff-1.4.0/CMakeLists.txt	2014-10-15 01:02:18.241794969 +0530
+@@ -168,8 +168,8 @@
+         ADD_DEFINITIONS(-DHAVE_LIBPROJ=1)
+         INCLUDE_DIRECTORIES(${PROJ4_INCLUDE_DIR})
+ 
+-        IF(EXISTS "${PROJ4_INCLUDE_DIR}/projects.h")
+-            MESSAGE(STATUS "Looking for projects.h header from PROJ.4 library - found")
++        IF(EXISTS "${PROJ4_INCLUDE_DIR}/proj_api.h")
++            MESSAGE(STATUS "Looking for proj_api.h header from PROJ.4 library - found")
+             ADD_DEFINITIONS(-DHAVE_PROJECTS_H=1)
+             INCLUDE_DIRECTORIES(${PROJ4_INCLUDE_DIR_2})
+         ELSE()

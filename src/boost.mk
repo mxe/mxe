@@ -40,6 +40,7 @@ define $(PKG)_BUILD
         architecture=x86 \
         binary-format=pe \
         link=$(if $(BUILD_STATIC),static,shared) \
+        variant=release \
         target-os=windows \
         threadapi=win32 \
         threading=multi \
