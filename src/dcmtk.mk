@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         --with-zlib \
         --without-libwrap \
         CXX='$(TARGET)-g++' \
+        CXXFLAGS="-fpermissive" \
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar' \
         ARFLAGS=cru \
@@ -37,7 +38,5 @@ define $(PKG)_BUILD
         ac_cv_my_c_rightshift_unsigned=no
     $(MAKE) -C '$(1)' -j '$(JOBS)' install-lib
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
 
 $(PKG)_BUILD_SHARED =
