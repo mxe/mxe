@@ -3,33 +3,41 @@
 
 PKG             := itk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.4.1
-$(PKG)_CHECKSUM := 9272a15323e9c1d44f598fca02d2bb0c16478bb5
+$(PKG)_VERSION  := 4.7.2
+$(PKG)_CHECKSUM := 75348e8845db498ef3d29dfbe7aba6cc172da308
 $(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc hdf5
+$(PKG)_DEPS     := gcc hdf5 expat libpng tiff jpeg zlib
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package ITK need to be written.' >&2;
-    echo $(itk_VERSION)
+    $(WGET) -q -O- 'https://sourceforge.net/projects/itk/files/itk/' | \
+    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's^#  error "Dunno about this gcc"^#  warning "Dunno about this gcc"^;' \
-        '$(1)/Modules/ThirdParty/VNL/src/vxl/vcl/vcl_compiler.h'
     mkdir '$(1).build'
     cd '$(1).build' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -C '$(1)/TryRunResults.cmake'\
-        -DBUILD_SHARED_LIBS=FALSE \
+    $(if $(BUILD_SHARED),\
+        -DBUILD_SHARED_LIBS=TRUE ) \
+    $(if $(BUILD_STATIC),\
+        -DBUILD_SHARED_LIBS=FALSE ) \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
         -DBUILD_TESTING=FALSE \
         -DBUILD_EXAMPLES=FALSE \
+        -DITK_USE_SYSTEM_EXPAT=TRUE \
+        -DITK_USE_SYSTEM_TIFF=TRUE \
+        -DITK_USE_SYSTEM_PNG=TRUE \
+        -DITK_USE_SYSTEM_JPEG=TRUE \
+        -DITK_USE_SYSTEM_ZLIB=TRUE \
         -DITK_USE_SYSTEM_HDF5=TRUE \
-        -DCMAKE_C_FLAGS='-std=gnu89' \
         '$(1)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
-endef
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install
 
-$(PKG)_BUILD_SHARED =
+    # install test
+    $(INSTALL) -m755 '$(1).build/bin/itkTestDriver.exe' '$(PREFIX)/$(TARGET)/bin/test-itk.exe'
+
+endef
