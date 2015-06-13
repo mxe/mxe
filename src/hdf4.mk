@@ -21,24 +21,21 @@ define $(PKG)_BUILD
     cd '$(1)' && $(LIBTOOLIZE) --force
     cd '$(1)' && autoreconf --install
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
+    $(MXE_CONFIGURE_OPTS) \
         --disable-fortran \
         --disable-netcdf \
         AR='$(TARGET)-ar' \
-        $(if $(BUILD_STATIC), \
-            CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1", \
-            LIBS="-lportablexdr -lws2_32" CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_DYNAMIC_LIB=1 -DBIG_LONGS")
-
+	    $(if $(BUILD_SHARED), \
+	        LIBS="-lportablexdr -lws2_32" CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_DYNAMIC_LIB=1 -DBIG_LONGS", \
+	        CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1")
     $(MAKE) -C '$(1)'/mfhdf/xdr -j '$(JOBS)' \
-    LDFLAGS=-no-undefined
+	    LDFLAGS=-no-undefined
 
     $(MAKE) -C '$(1)'/hdf/src -j '$(JOBS)' \
-    LDFLAGS=-no-undefined
+	    LDFLAGS=-no-undefined
     $(MAKE) -C '$(1)'/hdf/src -j 1 install
 
     $(MAKE) -C '$(1)'/mfhdf/libsrc -j '$(JOBS)' \
-    LDFLAGS="-no-undefined -ldf"
+	    LDFLAGS="-no-undefined -ldf"
     $(MAKE) -C '$(1)'/mfhdf/libsrc -j 1 install
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =

@@ -26,14 +26,15 @@ define $(PKG)_BUILD
     cd '$(1)' && \
         $(SED) -i -e 's/#ifdef IGNORE/#if 0/' libsrc4/nc4hdf.c libsrc4/ncfunc.c libsrc/attr.c ncgen/cvt.c && \
         ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --enable-netcdf-4 \
-        --enable-hdf4 \
-        CPPFLAGS="-D_DLGS_H -DWIN32_LEAN_AND_MEAN" \
-        LIBS="-lmfhdf -ldf -lportablexdr -lws2_32"
+            $(MXE_CONFIGURE_OPTS) \
+            --enable-netcdf-4 \
+            --enable-hdf4 \
+            --disable-testsets \
+            --disable-examples \
+            CPPFLAGS="-D_DLGS_H -DWIN32_LEAN_AND_MEAN" \
+            LIBS="-lmfhdf -ldf -lportablexdr -lws2_32"
 
-    $(MAKE) -C '$(1)' -j '$(JOBS)' \
-        LDFLAGS=-no-undefined
+    $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS=-no-undefined
 
     $(MAKE) -C '$(1)' -j 1 install
 endef
