@@ -1,0 +1,40 @@
+# This file is part of MXE.
+# See index.html for further information.
+#patch copied from git commit - http://itk.org/gitweb?p=ITK.git;a=commit;h=7f54e86422092a01a7ce2c836b44d7e583c9b370
+
+diff -burN InsightToolkit-4.7.2.orig/Modules/ThirdParty/VNL/src/vxl/vcl/tests/test_preprocessor.cxx InsightToolkit-4.7.2/Modules/ThirdParty/VNL/src/vxl/vcl/tests/test_preprocessor.cxx
+--- InsightToolkit-4.7.2.orig/Modules/ThirdParty/VNL/src/vxl/vcl/tests/test_preprocessor.cxx	2015-06-09 02:07:03.973889618 +0200
++++ InsightToolkit-4.7.2/Modules/ThirdParty/VNL/src/vxl/vcl/tests/test_preprocessor.cxx	2015-06-09 02:08:49.304764328 +0200
+@@ -101,6 +101,15 @@
+   ++minor_count;
+ #endif
+ 
++#ifdef VCL_GCC_5
++  ++major_count;
++#endif
++#ifdef VCL_GCC_50
++  ++minor_count;
++#endif
++#ifdef VCL_GCC_51
++  ++minor_count;
++#endif  
+ 
+ #ifdef VCL_VC
+   ++compiler_count;
+diff -burN InsightToolkit-4.7.2.orig/Modules/ThirdParty/VNL/src/vxl/vcl/vcl_compiler.h InsightToolkit-4.7.2/Modules/ThirdParty/VNL/src/vxl/vcl/vcl_compiler.h
+--- InsightToolkit-4.7.2.orig/Modules/ThirdParty/VNL/src/vxl/vcl/vcl_compiler.h	2015-06-09 02:07:03.964889629 +0200
++++ InsightToolkit-4.7.2/Modules/ThirdParty/VNL/src/vxl/vcl/vcl_compiler.h	2015-06-09 02:08:26.770791132 +0200
+@@ -126,6 +126,13 @@
+ #  else
+ #   define VCL_GCC_40
+ #  endif
++# elif (__GNUC__==5)
++#  define VCL_GCC_5
++#  if (__GNUC_MINOR__ > 0 )
++#   define VCL_GCC_51
++#  else
++#   define VCL_GCC_50
++#  endif
+ # else
+ #  error "Dunno about this gcc"
+ # endif
