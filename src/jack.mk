@@ -24,8 +24,5 @@ define $(PKG)_BUILD
         ./waf configure build install             \
             -j '$(JOBS)'                          \
             --prefix='$(PREFIX)/$(TARGET)'        \
-            --dist-target=mingw                   \
-
-    # It is not trivial to adjust the installation path for the DLL in the
-    # waf-based build system. Adjust it here. See aubio.mk.
+            --dist-target=mingw
 endef
