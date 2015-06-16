@@ -30,7 +30,6 @@ define $(PKG)_BUILD
         --with-zlib \
         --without-libwrap \
         CXX='$(TARGET)-g++' \
-        CXXFLAGS="-fpermissive" \
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar' \
         ARFLAGS=cru \
