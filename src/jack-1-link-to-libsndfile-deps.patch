@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+????
+
+--- jack-1.9.10/example-clients/wscript.orig	2015-06-16 15:34:56.407346962 +0300
++++ jack-1.9.10/example-clients/wscript	2015-06-16 21:15:40.923117183 +0300
+@@ -41,6 +41,10 @@
+  
+     if conf.is_defined('HAVE_SNDFILE'):
+         conf.env['LIB_SNDFILE'] = ['sndfile']
++        conf.env['LIB_FLAC'] = ['FLAC']
++        conf.env['LIB_VORBIS'] = ['vorbis']
++        conf.env['LIB_VORBISENC'] = ['vorbisenc']
++        conf.env['LIB_OGG'] = ['ogg']
+ 
+     conf.check_cfg(package='celt', atleast_version='0.5.0', args='--cflags --libs', mandatory=False)
+ 
+@@ -124,7 +128,7 @@
+         if bld.env['IS_SUN']:
+             prog.use += ['RT', 'SNDFILE']
+         if bld.env['IS_WINDOWS']:
+-            prog.uselib = ['SNDFILE']
++            prog.uselib = ['SNDFILE', 'FLAC', 'VORBIS', 'VORBISENC', 'OGG']
+         prog.target = 'jack_rec'
+ 
+     if bld.env['IS_LINUX'] or bld.env['IS_MACOSX']:

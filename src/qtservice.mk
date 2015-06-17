@@ -3,7 +3,8 @@
 PKG             := qtservice
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 38e79e3
-$(PKG)_CHECKSUM := 3d3e2ebb092f2e04b3bc1d75a4221465fdac29e8
+$(PKG)_VERSION  := 25e2cbb
+$(PKG)_CHECKSUM := b23cac6e92991424c4813b9900241f13715fdb7a
 $(PKG)_SUBDIR   := qtproject-qt-solutions-$($(PKG)_VERSION)
 $(PKG)_FILE     := qt-solutions-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/qtproject/qt-solutions/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)

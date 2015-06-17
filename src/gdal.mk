@@ -23,8 +23,8 @@ define $(PKG)_CONFIGURE
     cd '$(1)' && autoreconf -fi
     # The option '--without-threads' means native win32 threading without pthread.
     cd '$(1)' && ./configure \
-    $(MXE_CONFIGURE_OPTS) \
-    --with-bsb \
+        $(MXE_CONFIGURE_OPTS) \
+        --with-bsb \
         --with-grib \
         --with-ogr \
         --with-pam \
@@ -40,6 +40,7 @@ define $(PKG)_CONFIGURE
         --with-expat='$(PREFIX)/$(TARGET)' \
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
         --with-gta='$(PREFIX)/$(TARGET)' \
+        --with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
         --with-libjson-c='$(PREFIX)/$(TARGET)' \
         --with-netcdf='$(PREFIX)/$(TARGET)' \
@@ -83,7 +84,7 @@ define $(PKG)_MAKE
     $(MAKE) -C '$(1)/frmts' -j '$(JOBS)' install
     $(MAKE) -C '$(1)/alg'   -j '$(JOBS)' install
     $(MAKE) -C '$(1)/ogr'   -j '$(JOBS)' install OGR_ENABLED=
-    $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install BIN_LIST=
+    $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef
 

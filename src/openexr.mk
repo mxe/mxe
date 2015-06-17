@@ -38,7 +38,8 @@ define $(PKG)_BUILD
         --disable-threading \
         --disable-posix-sem \
         --disable-ilmbasetest \
-        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
+        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+        CXXFLAGS="-fpermissive"
     # build the code generator manually
     cd '$(1)/IlmImf' && g++ \
         -I'$(1)/ilmbase/include/OpenEXR' \
@@ -54,5 +55,3 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-openexr.exe' \
         `'$(TARGET)-pkg-config' OpenEXR --cflags --libs`
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
