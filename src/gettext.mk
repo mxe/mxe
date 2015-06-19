@@ -12,9 +12,10 @@ $(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.gnu.org/software/gettext/' | \
+    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gettext/' | \
     grep 'gettext-' | \
     $(SED) -n 's,.*gettext-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SORT) -Vr | \
     head -1
 endef
 
