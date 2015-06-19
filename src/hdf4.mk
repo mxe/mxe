@@ -25,9 +25,10 @@ define $(PKG)_BUILD
         --disable-fortran \
         --disable-netcdf \
         AR='$(TARGET)-ar' \
+        LIBS="-lportablexdr -lws2_32" \
         $(if $(BUILD_SHARED), \
-            LIBS="-lportablexdr -lws2_32" CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_DYNAMIC_LIB=1 -DBIG_LONGS", \
-            LIBS="-lportablexdr -lws2_32" CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1")
+            CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_DYNAMIC_LIB=1 -DBIG_LONGS", \
+            CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1")
     $(MAKE) -C '$(1)'/mfhdf/xdr -j '$(JOBS)' \
         LDFLAGS=-no-undefined
 
