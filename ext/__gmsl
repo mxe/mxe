@@ -42,7 +42,7 @@
 # This is the GNU Make Standard Library version number as a list with
 # three items: major, minor, revision
 
-gmsl_version := 1 1 6
+gmsl_version := 1 1 7
 
 __gmsl_name := GNU Make Standard Library
 
@@ -383,6 +383,11 @@ lc = $(__gmsl_tr1)$(call assert_no_dollar,$0,$1)$(call tr,$([A-Z]),$([a-z]),$1)
 # Arguments: 1: A string
 # Returns:   Returns the length of the string
 # ----------------------------------------------------------------------------
+
+# This results in __gmsl_tab containing a tab
+
+__gmsl_tab :=	#
+
 __gmsl_characters := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
 __gmsl_characters += a b c d e f g h i j k l m n o p q r s t u v w x y z
 __gmsl_characters += 0 1 2 3 4 5 6 7 8 9
@@ -402,10 +407,6 @@ define __gmsl_newline
 
 
 endef
-
-# This results in __gmsl_tab containing a tab
-
-__gmsl_tab :=	#
 
 # ----------------------------------------------------------------------------
 # Function:  substr
@@ -455,12 +456,14 @@ set_insert = $(__gmsl_tr2)$(sort $1 $2)
 set_remove = $(__gmsl_tr2)$(filter-out $1,$2)
 
 # ----------------------------------------------------------------------------
-# Function:  set_is_member
+# Function:  set_is_member, set_is_not_member
 # Arguments: 1: A single element 
 #            2: A set
-# Returns:   Returns $(true) if the element is in the set
+# Returns:   (set_is_member) Returns $(true) if the element is in the set
+#            (set_is_not_member) Returns $(false) if the element is in the set
 # ----------------------------------------------------------------------------
 set_is_member = $(__gmsl_tr2)$(if $(filter $1,$2),$(true),$(false))
+set_is_not_member = $(__gmsl_tr2)$(if $(filter $1,$2),$(false),$(true))
 
 # ----------------------------------------------------------------------------
 # Function:  set_union
