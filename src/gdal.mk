@@ -3,15 +3,15 @@
 
 PKG             := gdal
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.11.1
-$(PKG)_CHECKSUM := e2c67481932ec9fb6ec3c0faadc004f715c4eef4
+$(PKG)_VERSION  := 1.11.2
+$(PKG)_CHECKSUM := 6f3ccbe5643805784812072a33c25be0bbff00db
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc proj zlib libpng libxml2 tiff libgeotiff jpeg jasper \
+$(PKG)_DEPS     := gcc proj zlib libpng libxml2 tiff libgeotiff jpeg openjpeg \
                    giflib expat sqlite curl geos postgresql gta hdf4 hdf5 \
-                   json-c netcdf
+                   json-c netcdf armadillo
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
@@ -29,12 +29,13 @@ define $(PKG)_CONFIGURE
         --with-ogr \
         --with-pam \
         --without-threads \
+        --with-armadillo='$(PREFIX)/$(TARGET)' \
         --with-libz='$(PREFIX)/$(TARGET)' \
         --with-png='$(PREFIX)/$(TARGET)' \
         --with-libtiff='$(PREFIX)/$(TARGET)' \
         --with-geotiff='$(PREFIX)/$(TARGET)' \
         --with-jpeg='$(PREFIX)/$(TARGET)' \
-        --with-jasper='$(PREFIX)/$(TARGET)' \
+        --with-openjpeg='$(PREFIX)/$(TARGET)' \
         --with-gif='$(PREFIX)/$(TARGET)' \
         --with-expat='$(PREFIX)/$(TARGET)' \
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
@@ -42,6 +43,10 @@ define $(PKG)_CONFIGURE
         --with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
         --with-libjson-c='$(PREFIX)/$(TARGET)' \
+        --with-netcdf='$(PREFIX)/$(TARGET)' \
+        --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
+        --with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
+        --without-jasper \
         --without-odbc \
         --without-xerces \
         --without-grass \
