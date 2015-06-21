@@ -17,25 +17,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-   cd '$(1)' && $(TARGET)-g++ -c -O3 -Wall -Wno-unknown-pragmas -Wno-format -D TIXML_USE_STL tiny*.cpp
-    $(if $(BUILD_STATIC),
-    $(TARGET)-ar cr libtinyxml.a *.o
-    $(TARGET)-ranlib '$(1)/libtinyxml.a'
-,
-cd '$(1)' && $(TARGET)-g++ -shared -Wl,-soname,libtinyxml.so -o libtinyxml.so  *.o
-)
-
-    $(INSTALL) -d               '$(PREFIX)/$(TARGET)/lib'
-    $(if $(BUILD_STATIC),
-    $(INSTALL) -m644 '$(1)'/*.a '$(PREFIX)/$(TARGET)/lib/'
-,
-    $(INSTALL) -m644 '$(1)'/*.so '$(PREFIX)/$(TARGET)/lib/'
-)
-    $(INSTALL) -d               '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m644 '$(1)'/*.h '$(PREFIX)/$(TARGET)/include/'
+    mkdir '$(1).build'
+    cd '$(1).build' && cmake \
+    -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
+    '$(1)'
+    $(MAKE) -C '$(1).build' install
 
     '$(TARGET)-g++' \
-        -W -Wall -D TIXML_USE_STL -ansi -pedantic \
+        -Wall -DTIXML_USE_STL -ansi -pedantic \
         '$(1)/xmltest.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-tinyxml.exe' \
         -ltinyxml
 endef
