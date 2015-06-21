@@ -17,18 +17,30 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && $(TARGET)-g++ -c -O3 -Wall -Wno-unknown-pragmas -Wno-format -D TIXML_USE_STL '$(1)'/*.cpp
-    cd '$(1)' && $(TARGET)-ar cr libtinyxml.a *.o
+   cd '$(1)' && $(TARGET)-g++ -c -O3 -Wall -Wno-unknown-pragmas -Wno-format -D TIXML_USE_STL tiny*.cpp
+    $(if $(BUILD_STATIC),
+    $(TARGET)-ar cr libtinyxml.a *.o
     $(TARGET)-ranlib '$(1)/libtinyxml.a'
+,
+cd '$(1)' && $(TARGET)-g++ -shared -Wl,-soname,libtinyxml.so -o libtinyxml.so  *.o
+)
+
     $(INSTALL) -d               '$(PREFIX)/$(TARGET)/lib'
+    $(if $(BUILD_STATIC),
     $(INSTALL) -m644 '$(1)'/*.a '$(PREFIX)/$(TARGET)/lib/'
+,
+    $(INSTALL) -m644 '$(1)'/*.so '$(PREFIX)/$(TARGET)/lib/'
+)
     $(INSTALL) -d               '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)'/*.h '$(PREFIX)/$(TARGET)/include/'
 
     '$(TARGET)-g++' \
-        -W -Wall -D TIXML_USE_STL -Werror -ansi -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-tinyxml.exe' \
+        -W -Wall -D TIXML_USE_STL -ansi -pedantic \
+        '$(1)/xmltest.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-tinyxml.exe' \
         -ltinyxml
 endef
 
-$(PKG)_BUILD_SHARED =
+
+
+$(PKG)_BUILD_SHARED = $(subst .a , .so ,\
+                      $($(PKG)_BUILD))
