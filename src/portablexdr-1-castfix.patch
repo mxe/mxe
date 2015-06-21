@@ -45,7 +45,7 @@ diff -burN portablexdr-4.9.1.orig/xdr_rec.c portablexdr-4.9.1/xdr_rec.c
 -	register u_long len = (u_long)(rstrm->out_finger) - 
 -		(u_long)(rstrm->frag_header) - sizeof(u_long);
 +	register u_long len = (uintptr_t)(rstrm->out_finger) - 
-+	  (uintptr_t)(rstrm->frag_header) - sizeof(u_long);
++               (uintptr_t)(rstrm->frag_header) - sizeof(u_long);
  
  	*(rstrm->frag_header) = htonl(len | eormask);
 -	len = (u_long)(rstrm->out_finger) - (u_long)(rstrm->out_base);

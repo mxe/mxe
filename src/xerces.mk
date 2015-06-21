@@ -3,8 +3,8 @@
 
 PKG             := xerces
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.1
-$(PKG)_CHECKSUM := 177ec838c5119df57ec77eddec9a29f7e754c8b2
+$(PKG)_VERSION  := 3.1.2
+$(PKG)_CHECKSUM := 3f9ecc4956df069c1d95b885fc687eb4e474a4ad
 $(PKG)_SUBDIR   := xerces-c-$($(PKG)_VERSION)
 $(PKG)_FILE     := xerces-c-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)

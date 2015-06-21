@@ -11,7 +11,7 @@ $(PKG)_URL      := http://download.qt.io/official_releases/qt/5.4/$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc postgresql freetds openssl harfbuzz zlib libpng jpeg sqlite pcre fontconfig freetype dbus icu4c
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.1/ | \
+    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.4/ | \
     $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     tail -1

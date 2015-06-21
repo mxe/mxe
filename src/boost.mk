@@ -43,6 +43,7 @@ define $(PKG)_BUILD
         target-os=windows \
         threadapi=win32 \
         threading=multi \
+        variant=release \
         toolset=gcc-mxe \
         --layout=tagged \
         --disable-icu \
@@ -54,7 +55,6 @@ define $(PKG)_BUILD
         --includedir='$(PREFIX)/$(TARGET)/include' \
         -sEXPAT_INCLUDE='$(PREFIX)/$(TARGET)/include' \
         -sEXPAT_LIBPATH='$(PREFIX)/$(TARGET)/lib' \
-        cxxflags='-std=c++11' \
         install
 
     $(if $(BUILD_SHARED), \
