@@ -21,6 +21,8 @@ define $(PKG)_BUILD
     cd '$(1).build' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DCMAKE_MODULE_PATH='$(1)/ossim_package_support/cmake/CMakeModules' \
+        -DCMAKE_CXX_FLAGS:STRING='-DGEOS_INLINE=1' \
+        -DBUILD_OSSIM_FREETYPE_SUPPORT:BOOL=OFF \
         '$(1)/ossim'
 
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
