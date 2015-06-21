@@ -39,8 +39,3 @@ cd '$(1)' && $(TARGET)-g++ -shared -Wl,-soname,libtinyxml.so -o libtinyxml.so  *
         '$(1)/xmltest.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-tinyxml.exe' \
         -ltinyxml
 endef
-
-
-
-$(PKG)_BUILD_SHARED = $(subst .a , .so ,\
-                      $($(PKG)_BUILD))
