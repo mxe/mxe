@@ -3,8 +3,8 @@
 
 PKG             := freetds
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.95.5
-$(PKG)_CHECKSUM := 1447956cca8ca28eb5ebc891faa608f70c6a23d2
+$(PKG)_VERSION  := 0.95.8
+$(PKG)_CHECKSUM := 085ced804cd07b8a588098822483b827138f88e0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.mirrorservice.org/sites/distfiles.finkmirrors.net/sha1/$($(PKG)_CHECKSUM)/$($(PKG)_FILE)
