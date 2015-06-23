@@ -3,8 +3,8 @@
 
 PKG             := gd
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1.0
-$(PKG)_CHECKSUM := 66c56fc07246b66ba649c83e996fd2085ea2f9e2
+$(PKG)_VERSION  := 2.1.1
+$(PKG)_CHECKSUM := 9038ed488b577d16aa8c32b6c10b4a70b10f7fa1
 $(PKG)_SUBDIR   := libgd-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgd-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://bitbucket.org/libgd/gd-libgd/downloads/$($(PKG)_FILE)
