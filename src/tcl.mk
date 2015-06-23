@@ -26,6 +26,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/win' install install-private-headers $(MXE_DISABLE_PROGRAMS)
 endef
 
-# tcl doesn't compile on i686-pc-mingw32. See
-# https://github.com/mxe/mxe/issues/508
-#$(PKG)_BUILD_i686-pc-mingw32 :=
