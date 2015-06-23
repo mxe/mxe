@@ -18,5 +18,5 @@ diff -burN tinyxml.orig/CMakeLists.txt tinyxml/CMakeLists.txt
 +
 +file(GLOB HEADERS "${CMAKE_SOURCE_DIR}/*.h")
 +install(FILES ${HEADERS}
-+  DESTINATION include
-+)
++  DESTINATION include)
++
