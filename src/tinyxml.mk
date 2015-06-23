@@ -25,7 +25,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' install
 
     '$(TARGET)-g++' \
-        -Wall -DTIXML_USE_STL -ansi -pedantic \
-        '$(1)/xmltest.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-tinyxml.exe' \
-        -ltinyxml
+    -Wall -DTIXML_USE_STL -ansi -pedantic \
+    '$(1)/xmltest.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-tinyxml.exe' \
+    -ltinyxml
+
 endef
