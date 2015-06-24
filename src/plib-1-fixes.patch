@@ -1,0 +1,42 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 46f57c8b505104ceb1966dcc4a9b76447479a59f Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 22 Jun 2015 14:10:16 -0700
+Subject: [PATCH] Fix pointer-to-integer cast for 64-bit architecture.
+
+
+diff --git a/src/sl/slDSP.cxx b/src/sl/slDSP.cxx
+index 933e20b..1d46ddc 100644
+--- a/src/sl/slDSP.cxx
++++ b/src/sl/slDSP.cxx
+@@ -237,8 +237,8 @@ void slDSP::open ( const char *device, int _rate, int _stereo, int _bps )
+    // Now the hwaveouthandle "should" be valid 
+ 
+    if ( ( result = waveOutOpen( & hWaveOut, WAVE_MAPPER, 
+-         (WAVEFORMATEX *)& Format, (DWORD)waveOutProc, 
+-         (DWORD)this, CALLBACK_FUNCTION )) != MMSYSERR_NOERROR )
++         (WAVEFORMATEX *)& Format, (uintptr_t)waveOutProc, 
++         (uintptr_t)this, CALLBACK_FUNCTION )) != MMSYSERR_NOERROR )
+    {
+       wperror( result);
+ 
+diff --git a/src/ssg/ssgParser.cxx b/src/ssg/ssgParser.cxx
+index c006c27..cc1ea48 100644
+--- a/src/ssg/ssgParser.cxx
++++ b/src/ssg/ssgParser.cxx
+@@ -263,7 +263,7 @@ void _ssgParser::expectNextToken( const char* name )
+ // This is copied to a new buffer, so that I have the space to add the 0.
+ void _ssgParser::addOneCharToken ( char *ptr ) 
+ {
+-	assert( (long)onechartokenbuf_ptr- (long)onechartokenbuf < 4096 ) ; // Buffer overflow
++	assert( (uintptr_t)onechartokenbuf_ptr- (uintptr_t)onechartokenbuf < 4096 ) ; // Buffer overflow
+ 	
+ 	onechartokenbuf_ptr [ 0 ] = *ptr;
+ 	onechartokenbuf_ptr [ 1 ] = 0;
+-- 
+2.1.4
+
