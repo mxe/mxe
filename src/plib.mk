@@ -18,6 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         PKG_CONFIG='$(TARGET)-pkg-config'
@@ -26,5 +27,6 @@ define $(PKG)_BUILD
         sbin_PROGRAMS= \
         noinst_PROGRAMS= \
         html_DATA= \
+        LDFLAGS=-no-undefined
         AR='$(TARGET)-ar'
 endef
