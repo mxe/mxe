@@ -3,7 +3,7 @@
 -- This file is part of MXE.
 -- See index.html for further information.
 
--- mxedeb, Build DEB packages from MXE packages
+-- build-pkg, Build binary packages from MXE packages
 -- Instructions: http://mxe.redjohn.tk
 
 -- Requirements: MXE, lua, tsort, fakeroot, dpkg-deb.
@@ -70,7 +70,7 @@ SPACE:=$(NOTHING) $(NOTHING)
 NAME_WITH_UNDERSCORES:=$(subst $(SPACE),_,$(NAME))
 print-deps:
 	@$(foreach pkg,$(PKGS),echo \
-		for-mxedeb $(pkg) \
+		for-build-pkg $(pkg) \
 		$(subst $(SPACE),-,$($(pkg)_VERSION)) \
 		$($(pkg)_DEPS);)]]
     local deps_mk_file = io.open('deps.mk', 'w')
@@ -84,8 +84,8 @@ print-deps:
     local make = io.popen(cmd)
     for line in make:lines() do
         local deps = split(trim(line))
-        if deps[1] == 'for-mxedeb' then
-            -- first value is marker 'for-mxedeb'
+        if deps[1] == 'for-build-pkg' then
+            -- first value is marker 'for-build-pkg'
             table.remove(deps, 1)
             -- first value is name of package which depends on
             local pkg = table.remove(deps, 1)
