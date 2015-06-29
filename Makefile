@@ -37,7 +37,7 @@ WGET       := wget --no-check-certificate \
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
                 gcc g++ gperf intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) python ruby scons \
-                $(SED) $(SORT) unzip wget xz 7z
+                $(SED) $(SORT) unzip wget xz 7za
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
@@ -138,7 +138,7 @@ UNPACK_ARCHIVE = \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
     $(if $(filter %.txz,     $(1)),xz -dc '$(1)' | tar xf -, \
     $(if $(filter %.tar.xz,  $(1)),xz -dc '$(1)' | tar xf -, \
-    $(if $(filter %.7z,      $(1)),7z x '$(1)', \
+    $(if $(filter %.7z,      $(1)),7za x '$(1)', \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
     $(error Unknown archive format: $(1)))))))))))
 
