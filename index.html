@@ -587,6 +587,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="http://p7zip.sourceforge.net/">p7zip (7-Zip)</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="https://www.gnu.org/software/patch/">Patch</a></td>
         <td></td>
     </tr>
@@ -634,8 +638,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>apt-get install \
     autoconf automake autopoint bash bison bzip2 cmake flex gettext \
     git g++ gperf intltool libffi-dev libtool libltdl-dev \
-    libssl-dev libxml-parser-perl make openssl patch perl \
-    pkg-config python ruby scons sed unzip wget xz-utils</pre>
+    libssl-dev libxml-parser-perl make openssl p7zip-full patch \
+    perl pkg-config python ruby scons sed unzip wget xz-utils</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -652,8 +656,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>yum install \
     autoconf automake bash bison bzip2 cmake flex gcc-c++ \
     gettext git gperf intltool make sed libffi-devel \
-    libtool openssl-devel patch perl pkgconfig python \
-    ruby scons unzip wget xz</pre>
+    libtool openssl-devel p7zip patch perl pkgconfig \
+    python ruby scons unzip wget xz</pre>
 
     <p>
     On 64-bit Fedora,
@@ -666,8 +670,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>pkg_add -r \
     automake autoconf bash bison cmake coreutils flex \
     gettext git glib20 gmake gperf gsed intltool libffi \
-    libtool openssl patch perl p5-XML-Parser pkgconf \
-    python ruby scons unzip wget</pre>
+    libtool openssl p5-XML-Parser p7zip patch perl \
+    pkgconf python ruby scons unzip wget</pre>
 
     <p>
     Ensure that /usr/local/bin precedes /usr/bin in your $PATH:
@@ -721,10 +725,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     sys-devel/flex sys-devel/gcc sys-devel/gettext \
     dev-vcs/git dev-util/gperf dev-util/intltool \
     sys-devel/make sys-apps/sed dev-libs/libffi \
-    sys-devel/libtool dev-libs/openssl sys-devel/patch \
-    dev-lang/perl dev-perl/XML-Parser dev-util/pkgconfig \
-    dev-lang/python dev-lang/ruby dev-util/scons \
-    app-arch/unzip net-misc/wget app-arch/xz-utils</pre>
+    sys-devel/libtool dev-libs/openssl app-arch/p7zip \
+    sys-devel/patch dev-lang/perl dev-perl/XML-Parser \
+    dev-util/pkgconfig dev-lang/python dev-lang/ruby \
+    dev-util/scons app-arch/unzip net-misc/wget \
+    app-arch/xz-utils</pre>
 
     <h3 id="requirements-macos">Mac OS X</h3>
 
@@ -770,8 +775,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>zypper install -R \
     autoconf automake bash bison bzip2 cmake flex gcc-c++ \
     gettext-tools git gperf intltool libffi-devel libtool \
-    make openssl libopenssl-devel patch perl perl-XML-Parser \
-    pkg-config python ruby scons sed unzip wget xz</pre>
+    make openssl libopenssl-devel p7zip patch perl \
+    perl-XML-Parser pkg-config python ruby scons sed unzip \
+    wget xz</pre>
 
     <p>
     On 64-bit openSUSE, install also:
