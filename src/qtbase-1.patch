@@ -1,67 +1,32 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 90cd274c70f9532cfc58b1a741ccd480715f006d Mon Sep 17 00:00:00 2001
+From 2a005d22af074aff326d57b25e1cea1abda8ee6e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 26 Feb 2013 13:23:33 +0100
-Subject: [PATCH 1/4] use pkg-config for freetype
+Date: Thu, 6 Aug 2015 23:35:08 +0200
+Subject: [PATCH 1/4] fix qwindows plugin linking with system-freetype (MXE
+ specific)
 
-Change-Id: Id2f78ed9dbdcacd570eb25982cbd700d0437542a
+Change-Id: I8783e3ab2d19011b083dd3c471107298a17293c4
 
-diff --git a/src/platformsupport/fontdatabases/basic/basic.pri b/src/platformsupport/fontdatabases/basic/basic.pri
-index c2b882e..3834d83 100644
---- a/src/platformsupport/fontdatabases/basic/basic.pri
-+++ b/src/platformsupport/fontdatabases/basic/basic.pri
-@@ -83,5 +83,7 @@ contains(QT_CONFIG, freetype) {
+diff --git a/src/3rdparty/freetype_dependency.pri b/src/3rdparty/freetype_dependency.pri
+index 39280de..e152b0d 100644
+--- a/src/3rdparty/freetype_dependency.pri
++++ b/src/3rdparty/freetype_dependency.pri
+@@ -4,4 +4,5 @@ contains(QT_CONFIG, freetype) {
  } else:contains(QT_CONFIG, system-freetype) {
      # pull in the proper freetype2 include directory
      include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
-+    CONFIG += link_pkgconfig
-+    PKGCONFIG += freetype2
++    win32:shared:LIBS_PRIVATE += -lfreetype
  }
- 
 -- 
 2.1.4
 
 
-From f43e7ee33db38727c574cf14b42a1d377e91cfd1 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sat, 18 May 2013 23:07:46 +0200
-Subject: [PATCH 2/4] use pkgconfig for icu detection (MXE specific)
-
-Change-Id: I874171361fec812cb5a5a56e4d8d90a630be3bf3
-
-diff --git a/config.tests/unix/icu/icu.pro b/config.tests/unix/icu/icu.pro
-index 16267ff..dd9fb6c 100644
---- a/config.tests/unix/icu/icu.pro
-+++ b/config.tests/unix/icu/icu.pro
-@@ -2,16 +2,5 @@ SOURCES = icu.cpp
- CONFIG += console
- CONFIG -= qt dylib
- 
--win32 {
--    CONFIG(static, static|shared) {
--        CONFIG(debug, debug|release) {
--            LIBS += -lsicuind -lsicuucd -lsicudtd
--        } else {
--            LIBS += -lsicuin -lsicuuc -lsicudt
--        }
--    } else {
--        LIBS += -licuin -licuuc -licudt
--    }
--} else {
--    LIBS += -licui18n -licuuc -licudata
--}
-+CONFIG += link_pkgconfig
-+PKGCONFIG += icu-i18n
--- 
-2.1.4
-
-
-From 536262f746f5110edf5c50949a4ce1c94bd8b8e4 Mon Sep 17 00:00:00 2001
+From 2baad6771338e3c2361f515a4ba6bf0f26812a6b Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 21 Jun 2014 13:12:49 +0200
-Subject: [PATCH 3/4] use pkg-config for harfbuzz (MXE specific)
+Subject: [PATCH 2/4] use pkg-config for harfbuzz (MXE specific)
 
 Change-Id: Id4e4c37d68b63c9f480d72a561d95d4d2a5ded50
 
@@ -75,10 +40,10 @@ index 32edd6e..a7f2c28 100644
 -LIBS += -lharfbuzz
 +CONFIG += link_pkgconfig
 +PKGCONFIG += harfbuzz
-diff --git a/src/3rdparty/harfbuzzng.pri b/src/3rdparty/harfbuzzng.pri
+diff --git a/src/3rdparty/harfbuzz_dependency.pri b/src/3rdparty/harfbuzz_dependency.pri
 index 7443368..c24e684 100644
---- a/src/3rdparty/harfbuzzng.pri
-+++ b/src/3rdparty/harfbuzzng.pri
+--- a/src/3rdparty/harfbuzz_dependency.pri
++++ b/src/3rdparty/harfbuzz_dependency.pri
 @@ -2,5 +2,6 @@ contains(QT_CONFIG, harfbuzz) {
      INCLUDEPATH += $$PWD/harfbuzz-ng/include
      LIBS_PRIVATE += -L$$QT_BUILD_TREE/lib -lqtharfbuzzng$$qtPlatformTargetSuffix()
@@ -91,10 +56,10 @@ index 7443368..c24e684 100644
 2.1.4
 
 
-From 8f057f09c41b12133643a3080cca0076b9153d05 Mon Sep 17 00:00:00 2001
+From c526e9fc734f91d5174399ab539b75dd3de3f8a4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 8 Dec 2014 14:15:12 +0100
-Subject: [PATCH 4/4] fix oci config test on windows
+Subject: [PATCH 3/4] fix oci config test on windows
 
 Change-Id: If1ce2241682259ca495b0ba68bf18410f8548922
 
@@ -107,6 +72,30 @@ index 3ffda1d..39b6f3759 100644
  CONFIG -= qt dylib
 -LIBS += -lclntsh
 +!win32:LIBS += -lclntsh
+-- 
+2.1.4
+
+
+From 35759dbe5a613f9006190cd135cc8ec994cf71e5 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 6 Aug 2015 13:24:56 +0200
+Subject: [PATCH 4/4] configure: don't set QT_NO_SYSTEMSEMAPHORE for Windows
+
+Change-Id: I53c110ef40e3d14cc49fa23aa5d294611cac2ffa
+
+diff --git a/configure b/configure
+index 8a4c89e..eb432b5 100755
+--- a/configure
++++ b/configure
+@@ -4451,7 +4451,7 @@ fi
+ [ "$XPLATFORM_ANDROID" = "yes" ] && QMakeVar add styles "android"
+ 
+ # check IPC support
+-if ! compileTest unix/ipc_sysv "ipc_sysv" ; then
++if [ "$XPLATFORM_MINGW" = "no" ] && ! compileTest unix/ipc_sysv "ipc_sysv" ; then
+     # SYSV IPC is not supported - check POSIX IPC
+     if compileTest unix/ipc_posix "ipc_posix" ; then
+         QCONFIG_FLAGS="$QCONFIG_FLAGS QT_POSIX_IPC"
 -- 
 2.1.4
 

@@ -4,7 +4,7 @@
 PKG             := qtdeclarative
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 3d5f346e3dd377f66bf193316c259d21e3eccb8d
+$(PKG)_CHECKSUM := f41766db6f6bc8b9cefff05543891c271436043e
 $(PKG)_SUBDIR    = $(subst qtbase,qtdeclarative,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtdeclarative,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtdeclarative,$(qtbase_URL))
