@@ -2,7 +2,6 @@
 # See index.html for further information.
 PKG             := qtsystems
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 32e6573
 $(PKG)_VERSION  := 37b614a
 $(PKG)_CHECKSUM := eba4177015dc02fb438dd28a8d2b80650d805048
 $(PKG)_SUBDIR   := qtproject-$(PKG)-$($(PKG)_VERSION)
