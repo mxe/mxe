@@ -508,7 +508,7 @@ show-upstream-deps-%:
 
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html
+	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html versions.json
 
 .PHONY: clean-pkg
 clean-pkg:
@@ -664,3 +664,12 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</table>'                        >> $@
 	@echo '</body>'                         >> $@
 	@echo '</html>'                         >> $@
+
+
+versions.json: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
+	@echo '{'                         > $@
+	@{$(foreach PKG,$(PKGS),          \
+	    echo '    "$(PKG)":           \
+	        "$($(PKG)_VERSION)",';)} >> $@
+	@echo '    "": null'             >> $@
+	@echo '}'                        >> $@

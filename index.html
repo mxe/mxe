@@ -2565,6 +2565,25 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
                 })();
             }
         }
+        function loadVersionCache(doneCallback, errCallback) {
+            var request = new XMLHttpRequest();
+            request.open('GET', 'versions.json', true);
+            request.onreadystatechange = function reqCallback() {
+                if (request.readyState === 4) {
+                    if (request.status === 200) {
+                        try {
+                            var versions = JSON.parse(request.responseText);
+                            doneCallback(versions);
+                        } catch (e) {
+                            errCallback();
+                        }
+                    } else {
+                        errCallback();
+                    }
+                }
+            }
+            request.send();
+        }
         function resolveVersions(versions) {
             var resolvedVersions = {};
             for (var package in versions) {
@@ -2582,16 +2601,27 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             for (package in packageElements) {
                 var element = packageElements[package];
                 var version = resolvedVersions[package];
+                var shorten = version.length > 12;
+                if (shorten) {
+                    version = version.substring(0, 12);
+                }
                 var versionEscaped = version.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+                if (shorten) {
+                    versionEscaped += '&hellip;';
+                }
                 var versionHtml = '<td class="version">' + versionEscaped + '</td>';
                 element.insertAdjacentHTML('afterend', versionHtml);
             }
         }
         (function main() {
             var packageElements = getPackageElements();
-            loadVersions(packageElements, function doneCallback(versions) {
-                var resolvedVersions = resolveVersions(versions);
-                showVersions(packageElements, resolvedVersions);
+            loadVersionCache(function doneCallback(versions) {
+                showVersions(packageElements, versions);
+            }, function errCallback() {
+                loadVersions(packageElements, function doneCallback(versions) {
+                    var resolvedVersions = resolveVersions(versions);
+                    showVersions(packageElements, resolvedVersions);
+                });
             });
         })();
     </script>
