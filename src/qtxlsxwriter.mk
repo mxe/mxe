@@ -12,8 +12,9 @@ $(PKG)_DEPS     := gcc qtbase
 $(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, dbzhang800/QtXlsxWriter, master)
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake'
+    # invoke qmake with removed debug options as a workaround for
+    # https://bugreports.qt-project.org/browse/QTBUG-30898
+    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' CONFIG-='debug debug_and_release'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
-
