@@ -665,7 +665,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</body>'                         >> $@
 	@echo '</html>'                         >> $@
 
-
+.PHONY: versions.json
 versions.json: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '{'                         > $@
 	@{$(foreach PKG,$(PKGS),          \
