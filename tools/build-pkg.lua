@@ -11,6 +11,8 @@
 -- Packages are written to `*.tar.xz` files.
 -- Debian packages are written to `*.deb` files.
 
+-- You also need Debian Jessie or later to install these packages
+
 local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
 
 local MXE_DIR = '/usr/lib/mxe'
@@ -319,9 +321,9 @@ local function makeMxeRequirementsDeb(arch)
     local deps = {
         'autoconf', 'automake', 'autopoint', 'bash', 'bison',
         'bzip2', 'cmake', 'flex', 'gettext', 'git', 'g++',
-        'gperf', 'intltool', 'libffi-dev', 'libtool',
+        'gperf', 'intltool', 'libffi-dev', 'libtool', 'libtool-bin',
         'libltdl-dev', 'libssl-dev', 'libxml-parser-perl',
-        'make', 'openssl', 'patch', 'perl', 'pkg-config',
+        'make', 'openssl', 'patch', 'perl', 'p7zip-full', 'pkg-config',
         'python', 'ruby', 'scons', 'sed', 'unzip', 'wget',
         'xz-utils',
     }
