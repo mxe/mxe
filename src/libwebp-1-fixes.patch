@@ -1,0 +1,18 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+diff --git a/src/dec/webp.c b/src/dec/webp.c
+index 59e21a9..074f04c 100644
+--- a/src/dec/webp.c
++++ b/src/dec/webp.c
+@@ -451,7 +451,7 @@ void WebPResetDecParams(WebPDecParams* const params) {
+ // "Into" decoding variants
+ 
+ // Main flow
+-static VP8StatusCode DecodeInto(const uint8_t* const data, size_t data_size,
++__attribute__ ((force_align_arg_pointer)) static VP8StatusCode DecodeInto(const uint8_t* const data, size_t data_size,
+                                 WebPDecParams* const params) {
+   VP8StatusCode status;
+   VP8Io io;
