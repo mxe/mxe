@@ -321,11 +321,12 @@ local function makeMxeRequirementsDeb(arch)
     local deps = {
         'autoconf', 'automake', 'autopoint', 'bash', 'bison',
         'bzip2', 'cmake', 'flex', 'gettext', 'git', 'g++',
-        'gperf', 'intltool', 'libffi-dev', 'libtool', 'libtool-bin',
+        'gperf', 'intltool', 'libffi-dev', 'libtool',
+        'libtool-bin',
         'libltdl-dev', 'libssl-dev', 'libxml-parser-perl',
-        'make', 'openssl', 'patch', 'perl', 'p7zip-full', 'pkg-config',
-        'python', 'ruby', 'scons', 'sed', 'unzip', 'wget',
-        'xz-utils',
+        'make', 'openssl', 'patch', 'perl', 'p7zip-full',
+        'pkg-config', 'python', 'ruby', 'scons', 'sed',
+        'unzip', 'wget', 'xz-utils',
     }
     if arch == 'amd64' then
         table.insert(deps, 'g++-multilib')
