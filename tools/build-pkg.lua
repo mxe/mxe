@@ -11,8 +11,6 @@
 -- Packages are written to `*.tar.xz` files.
 -- Debian packages are written to `*.deb` files.
 
--- You also need Debian Jessie or later to install these packages
-
 local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
 
 local MXE_DIR = '/usr/lib/mxe'
@@ -314,7 +312,7 @@ Description: MXE requirements package
  Other MXE packages depend on this package.
 ]]
 
-local function makeMxeRequirementsDeb(arch)
+local function makeMxeRequirementsDeb(arch, release)
     local name = 'mxe-requirements'
     local ver = getMxeVersion()
     -- dependencies
@@ -322,7 +320,6 @@ local function makeMxeRequirementsDeb(arch)
         'autoconf', 'automake', 'autopoint', 'bash', 'bison',
         'bzip2', 'cmake', 'flex', 'gettext', 'git', 'g++',
         'gperf', 'intltool', 'libffi-dev', 'libtool',
-        'libtool-bin',
         'libltdl-dev', 'libssl-dev', 'libxml-parser-perl',
         'make', 'openssl', 'patch', 'perl', 'p7zip-full',
         'pkg-config', 'python', 'ruby', 'scons', 'sed',
@@ -332,9 +329,14 @@ local function makeMxeRequirementsDeb(arch)
         table.insert(deps, 'g++-multilib')
         table.insert(deps, 'libc6-dev-i386')
     end
+    if release ~= 'wheezy' then
+        -- Jessie+
+        table.insert(deps, 'libtool-bin')
+    end
     local deps_str = table.concat(deps, ', ')
     -- directory
-    local dirname = ('%s_%s_%s'):format(name, ver, arch)
+    local DIRNAME = '%s/%s_%s_%s'
+    local dirname = DIRNAME:format(release, name, ver, arch)
     -- make DEBIAN/control file
     os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
     local control_fname = dirname .. '/DEBIAN/control'
@@ -355,5 +357,7 @@ buildForTarget('i686-w64-mingw32.static')
 buildForTarget('x86_64-w64-mingw32.static')
 buildForTarget('i686-w64-mingw32.shared')
 buildForTarget('x86_64-w64-mingw32.shared')
-makeMxeRequirementsDeb('i386')
-makeMxeRequirementsDeb('amd64')
+makeMxeRequirementsDeb('i386', 'wheezy')
+makeMxeRequirementsDeb('i386', 'jessie')
+makeMxeRequirementsDeb('amd64', 'wheezy')
+makeMxeRequirementsDeb('amd64', 'jessie')
