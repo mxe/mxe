@@ -15,6 +15,11 @@ local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
 
 local MXE_DIR = '/usr/lib/mxe'
 
+local BLACKLIST = {
+    '^usr/installed/check-requirements$',
+    '^usr/share/',
+}
+
 local target -- used by many functions
 
 -- based on http://lua-users.org/wiki/SplitJoin
@@ -126,13 +131,24 @@ local function sortForBuild(pkgs, pkg2deps)
     return build_list
 end
 
+local function isBlacklisted(file)
+    for _, pattern in ipairs(BLACKLIST) do
+        if file:match(pattern) then
+            return true
+        end
+    end
+    return false
+end
+
 -- return set of all filepaths under ./usr/
 local function findFiles()
     local files = {}
     local find = io.popen('find usr -type f -or -type l', 'r')
     for line in find:lines() do
         local file = trim(line)
-        files[file] = true
+        if not isBlacklisted(file) then
+            files[file] = true
+        end
     end
     find:close()
     return files
