@@ -12,7 +12,7 @@ after_success:
   - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
   - git remote set-url origin 'https://github.com/mxe/mxe.git'
   - git commit -a -m 'Update versions.json'
-  - git push
+  - git push origin HEAD:master
 
 env:
   global:
