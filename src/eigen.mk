@@ -3,8 +3,8 @@
 
 PKG             := eigen
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.2
-$(PKG)_CHECKSUM := 1e1a85681777314805003db5469d1a00785c58df
+$(PKG)_VERSION  := 3.2.5
+$(PKG)_CHECKSUM := aa4667f0b134f5688c5dff5f03335d9a19aa9b3d
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-1306d75b4a21
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
