@@ -1,0 +1,42 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From c826142dda98398551e0df2f956e0995688595d8 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 4 Jul 2015 02:59:03 +0300
+Subject: [PATCH] fixes codecvt_byname exports for Mingw,
+ https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66030
+
+
+diff --git a/libstdc++-v3/config/abi/pre/gnu.ver b/libstdc++-v3/config/abi/pre/gnu.ver
+index 7b82ce8..120b133 100644
+--- a/libstdc++-v3/config/abi/pre/gnu.ver
++++ b/libstdc++-v3/config/abi/pre/gnu.ver
+@@ -543,6 +543,9 @@ GLIBCXX_3.4 {
+     # std::codecvt_byname
+     _ZNSt14codecvt_bynameI[cw]c11__mbstate_tEC[12]EPKc[jmy];
+     _ZNSt14codecvt_bynameI[cw]c11__mbstate_tED*;
++#if defined (_WIN32) && !defined (__CYGWIN__)
++    _ZNSt14codecvt_bynameI[cw]ciE[CD]*;
++#endif
+ 
+     # std::collate
+     _ZNSt7collateI[cw]*;
+@@ -1819,9 +1822,9 @@ GLIBCXX_3.4.21 {
+     _ZNKSt8time_getI[cw]St19istreambuf_iteratorI[cw]St11char_traitsI[cw]EEE6do_getES3_S3_RSt8ios_baseRSt12_Ios_IostateP2tmcc;
+ 
+     # codecvt<char16_t, char, mbstate_t>, codecvt<char32_t, char, mbstate_t>
+-    _ZNKSt7codecvtID[is]c11__mbstate_t*;
+-    _ZNSt7codecvtID[is]c11__mbstate_t*;
+-    _ZT[ISV]St7codecvtID[is]c11__mbstate_tE;
++    _ZNKSt7codecvtID[is]c*;
++    _ZNSt7codecvtID[is]c*;
++    _ZT[ISV]St7codecvtID[is]c*E;
+ 
+     extern "C++"
+     {
+-- 
+1.9.1
+
