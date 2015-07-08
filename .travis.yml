@@ -3,8 +3,6 @@ sudo: false
 
 script:
   - make versions.json
-
-after_success:
   - git config --global user.email 'mxebot@gmail.com'
   - git config --global user.name 'MXEBot as Travis CI'
   - git config --global push.default simple
@@ -13,6 +11,7 @@ after_success:
   - git remote set-url origin 'https://github.com/mxe/mxe.git'
   - git commit -a -m 'Update versions.json'
   - git push origin HEAD:master
+  - git push origin HEAD:gh-pages
 
 env:
   global:
