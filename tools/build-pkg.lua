@@ -22,6 +22,10 @@ local BLACKLIST = {
 
 local target -- used by many functions
 
+local function log(...)
+    print(target, ...)
+end
+
 -- based on http://lua-users.org/wiki/SplitJoin
 local function split(self, sep, nMax, plain)
     if not sep then
@@ -266,11 +270,11 @@ local function buildPackages(pkgs, pkg2deps)
             else
                 -- broken package
                 broken[pkg] = true
-                print('The package is broken: ' .. pkg)
+                log('The package is broken: ' .. pkg)
             end
         else
             local msg = 'Package %s depends on broken %s'
-            print(msg:format(pkg, brokenDep(pkg)))
+            log(msg:format(pkg, brokenDep(pkg)))
         end
     end
     return unbroken
