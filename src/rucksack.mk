@@ -29,3 +29,4 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' freeimage --cflags --libs`
 endef
 
+$(PKG)_BUILD_SHARED =
