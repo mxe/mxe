@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 363a149f644211462c45138a19674f38100036d3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc yasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/$(PKG)/files/' | \
@@ -17,8 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(SED) -i 's,yasm,$(TARGET)-yasm,g' '$(1)/configure'
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --without-simd
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
