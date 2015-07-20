@@ -270,6 +270,7 @@
     "protobuf": "2.5.0",
     "pthreads": "POSIX 1003.1-2001",
     "qdbm": "1.8.78",
+    "qhttpengine": "0.1.0",
     "qjson": "0.8.1",
     "qscintilla2": "2.8.4",
     "qt": "4.8.7",
