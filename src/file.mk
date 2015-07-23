@@ -3,8 +3,8 @@
 
 PKG             := file
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.20
-$(PKG)_CHECKSUM := 4e93e9ae915f1812b05cc6012ae968fdb6416f8f
+$(PKG)_VERSION  := 5.23
+$(PKG)_CHECKSUM := c817fb4c27f01934993ece3b013adbdc4deab67e
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.cross-lfs.org/pub/clfs/conglomeration/file/$($(PKG)_FILE)

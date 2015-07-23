@@ -37,7 +37,7 @@ WGET       := wget --no-check-certificate \
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
                 gcc g++ gperf intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
                 $(MAKE) openssl $(PATCH) $(PERL) python ruby scons \
-                $(SED) $(SORT) unzip wget xz
+                $(SED) $(SORT) unzip wget xz 7za
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
@@ -124,7 +124,7 @@ define MXE_GET_GITHUB_SHA
 endef
 
 # use a minimal whitelist of safe environment variables
-ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy
+ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH ACLOCAL_PATH
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
 SHORT_PKG_VERSION = \
@@ -138,8 +138,9 @@ UNPACK_ARCHIVE = \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
     $(if $(filter %.txz,     $(1)),xz -dc '$(1)' | tar xf -, \
     $(if $(filter %.tar.xz,  $(1)),xz -dc '$(1)' | tar xf -, \
+    $(if $(filter %.7z,      $(1)),7za x '$(1)', \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
-    $(error Unknown archive format: $(1))))))))))
+    $(error Unknown archive format: $(1)))))))))))
 
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
@@ -207,8 +208,12 @@ else
     } >'$(PWD)/settings.mk')
 endif
 
+# Numeric min and max list functions
+LIST_NMAX   = $(shell echo '$(strip $(1))' | tr ' ' '\n' | sort -n | tail -1)
+LIST_NMIN   = $(shell echo '$(strip $(1))' | tr ' ' '\n' | sort -n | head -1)
+
 NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
-JOBS_AUTO  := $(shell printf "$(DEFAULT_MAX_JOBS)\n$(NPROCS)" | sort -n | head -1)
+JOBS_AUTO  := $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 JOBS       := $(strip $(if $(findstring undefined,$(origin JOBS)),\
                    $(info [using autodetected $(JOBS_AUTO) job(s)]) \
                    $(JOBS_AUTO)\
@@ -284,6 +289,12 @@ BUILD_PKGS := $(call set_create, \
             $(SED) -n 's,.*src/\(.*\)\.mk,\1,p'), \
         $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD))), $(PKG))))
 
+# set column widths for build status messages
+PKG_COL_WIDTH    := $(call plus,2,$(call LIST_NMAX, $(sort $(call map, strlen, $(PKGS)))))
+MAX_TARGET_WIDTH := $(call LIST_NMAX, $(sort $(call map, strlen, $(MXE_TARGETS))))
+TARGET_COL_WIDTH := $(call subtract,100,$(call plus,$(PKG_COL_WIDTH),$(MAX_TARGET_WIDTH)))
+PRINTF_FMT       := printf '%-11s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
+
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
 
@@ -291,31 +302,7 @@ download: $(addprefix download-,$(PKGS))
 build-requirements:
 	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD) DONT_CHECK_REQUIREMENTS=true
 
-define TARGET_DEPS
-$(1)_DEPS := $(shell echo '$(MXE_TARGETS)' | \
-                     $(SED) -n 's,.*$(1)\(.*\),\1,p' | \
-                     awk '{print $$1}')
-endef
-$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_DEPS,$(TARGET))))
-
-TARGET_HEADER = \
-    $(strip with \
-	$(if $(value MAKECMDGOALS),\
-	    $(words $(MAKECMDGOALS)) goal$(shell [ $(words $(MAKECMDGOALS)) == 1 ] || echo s) from command line,\
-	$(if $(value LOCAL_PKG_LIST),\
-	    $(words $(LOCAL_PKG_LIST)) goal$(shell [ $(words $(LOCAL_PKG_LIST)) == 1 ] || echo s) from settings.mk,\
-	    $(words $(PKGS)) goal$(shell [ $(words $(PKGS)) == 1 ] || echo s) from src/*.mk)))
-
 define TARGET_RULE
-.PHONY: $(1)
-$(1): | $(if $(value $(1)_DEPS), \
-	        $(if $(value MAKECMDGOALS),\
-	            $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(MAKECMDGOALS)), \
-	            $(if $(value LOCAL_PKG_LIST),\
-	                $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(LOCAL_PKG_LIST)), \
-	                $(addprefix $(PREFIX)/$($(1)_DEPS)/installed/,$(PKGS))))) \
-	    $($(1)_DEPS)
-	@echo '[target]   $(1) $(call TARGET_HEADER)'
 	$(if $(findstring i686-pc-mingw32,$(1)),
 	    $(error Deprecated target specified: "$(1)". Please use \
 	            i686-w64-mingw32.[$(subst $(space),|,$(MXE_LIB_TYPES))] instead))
@@ -335,14 +322,14 @@ $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1):: $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
+download-$(1): $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
                 download-only-$(1)
 
 .PHONY: download-only-$(1)
-download-only-$(1)::
+download-only-$(1):
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
-	    echo '[download] $(1)'; \
+	    $(PRINTF_FMT) '[download]' '$(1)'; \
 	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
 	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -358,52 +345,40 @@ download-only-$(1)::
 	        exit 1; \
 	    fi; \
 	fi
+endef
+$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG))))
 
+define PKG_TARGET_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
-                          | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) $(3)
+                          | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
+                          download-only-$(1)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
-	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
-	    echo '[download] $(1)'; \
-	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
-	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
-	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
-	        echo; \
-	        echo 'Download failed or wrong checksum of package $(1)!'; \
-	        echo '------------------------------------------------------------'; \
-	        $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
-	            tail -n 10 '$(LOG_DIR)/$(1)-download' | $(SED) -n '/./p';, \
-	            $(SED) -n '/./p' '$(LOG_DIR)/$(1)-download';) \
-	        echo '------------------------------------------------------------'; \
-	        echo '[log]      $(LOG_DIR)/$(1)-download'; \
-	        echo; \
-	        exit 1; \
-	    fi; \
-	fi
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
-	    @echo '[build]    $(1)',
-	    @echo '[no-build] $(1)')
+	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)',
+	    @$(PRINTF_FMT) '[no-build]' '$(1)' '$(3)')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)'
 	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
-	    echo 'Failed to build package $(1)!'; \
+	    echo 'Failed to build package $(1) for target $(3)!'; \
 	    echo '------------------------------------------------------------'; \
 	    $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
-	        tail -n 10 '$(LOG_DIR)/$(1)' | $(SED) -n '/./p';, \
-	        $(SED) -n '/./p' '$(LOG_DIR)/$(1)';) \
+	        tail -n 10 '$(LOG_DIR)/$(1)_$(3)' | $(SED) -n '/./p';, \
+	        $(SED) -n '/./p' '$(LOG_DIR)/$(1)_$(3)';) \
 	    echo '------------------------------------------------------------'; \
-	    echo '[log]      $(LOG_DIR)/$(1)'; \
+	    echo '[log]      $(LOG_DIR)/$(1)_$(3)'; \
 	    echo; \
 	    exit 1; \
 	fi
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
-	    @echo '[done]     $(1)')
+	    @$(PRINTF_FMT) '[done]' '$(1)' '$(3)' "`grep -a '^du:.*KiB$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | cut -d ':' -f2`" \
+	                                          "`grep -a '^real.*m.*s$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | tr '\t' ' ' | cut -d ' ' -f2`")
+
 
 .PHONY: build-only-$(1)_$(3)
 build-only-$(1)_$(3): PKG = $(1)
@@ -437,7 +412,7 @@ endef
 $(foreach TARGET,$(MXE_TARGETS), \
     $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$(PKGS), \
-        $(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)-$(TARGET)),$(TARGET)))))
+        $(eval $(call PKG_TARGET_RULE,$(PKG),$(call TMP_DIR,$(PKG)-$(TARGET)),$(TARGET)))))
 
 # convenience set-like functions for unique lists
 SET_APPEND = \
@@ -507,7 +482,7 @@ show-upstream-deps-%:
 
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html
+	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html versions.json
 
 .PHONY: clean-pkg
 clean-pkg:
@@ -663,3 +638,12 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</table>'                        >> $@
 	@echo '</body>'                         >> $@
 	@echo '</html>'                         >> $@
+
+.PHONY: versions.json
+versions.json: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
+	@echo '{'                         > $@
+	@{$(foreach PKG,$(PKGS),          \
+	    echo '    "$(PKG)":           \
+	        "$($(PKG)_VERSION)",';)} >> $@
+	@echo '    "": null'             >> $@
+	@echo '}'                        >> $@

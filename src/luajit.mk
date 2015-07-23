@@ -3,8 +3,8 @@
 
 PKG             := luajit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.3
-$(PKG)_CHECKSUM := 2db39e7d1264918c2266b0436c313fbd12da4ceb
+$(PKG)_VERSION  := 2.0.4
+$(PKG)_CHECKSUM := 6e533675180300e85d12c4bbeea2d0e41ad21172
 $(PKG)_SUBDIR   := LuaJIT-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://luajit.org/download/$($(PKG)_FILE)

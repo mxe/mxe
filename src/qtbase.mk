@@ -3,21 +3,22 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.4.1
-$(PKG)_CHECKSUM := 134ec03371722cc31e2041a82c255cec708ca848
+$(PKG)_VERSION  := 5.4.2
+$(PKG)_CHECKSUM := 3703c6a584193e759f5b9cbf0ea6022d685ab827
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt-project.org/official_releases/qt/5.4/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt.io/official_releases/qt/5.4/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc postgresql freetds openssl harfbuzz zlib libpng jpeg sqlite pcre fontconfig freetype dbus icu4c
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.1/ | \
+    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.4/ | \
     $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     tail -1
 endef
 
 define $(PKG)_BUILD
+    # ICU is buggy. See #653. TODO: reenable it some time in the future.
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
@@ -33,7 +34,7 @@ define $(PKG)_BUILD
             -release \
             -static \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
-            -icu \
+            -no-icu \
             -opengl desktop \
             -no-glib \
             -accessibility \
@@ -76,6 +77,10 @@ define $(PKG)_BUILD
         '$(TOP_DIR)/src/qt-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
         `'$(TARGET)-pkg-config' Qt5Widgets --cflags --libs`
+
+    # setup cmake toolchain
+    $(SED) -i '/CMAKE_SYSTEM_PREFIX_PATH/d' '$(CMAKE_TOOLCHAIN_FILE)'
+    echo 'set(CMAKE_SYSTEM_PREFIX_PATH "$(PREFIX)/$(TARGET)/qt5" ${CMAKE_SYSTEM_PREFIX_PATH})' >> '$(CMAKE_TOOLCHAIN_FILE)'
 
     # batch file to run test programs
     (printf 'set PATH=..\\lib;..\\qt5\\bin;..\\qt5\\lib;%%PATH%%\r\n'; \

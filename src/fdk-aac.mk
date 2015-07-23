@@ -6,8 +6,8 @@
 
 PKG             := fdk-aac
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.1.3
-$(PKG)_CHECKSUM := fda64beee7f3b8e04ca209efcf9354cdae9afc33
+$(PKG)_VERSION  := 0.1.4
+$(PKG)_CHECKSUM := 9215d19bdd911954fd5bc879c707ab571716ba0d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/opencore-amr/$(PKG)/$($(PKG)_FILE)

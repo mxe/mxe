@@ -1,0 +1,37 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 808089f334f44ea125ec5263fb85c0f2c95fd190 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 6 Jun 2015 06:16:19 -0700
+Subject: [PATCH] Do not cast pointer to integer types. Instead, pass them in
+ as-is.
+
+
+diff --git a/dcmnet/libsrc/dul.cc b/dcmnet/libsrc/dul.cc
+index 48a267b..3a5eb18 100644
+--- a/dcmnet/libsrc/dul.cc
++++ b/dcmnet/libsrc/dul.cc
+@@ -1770,7 +1770,7 @@ receiveTransportConnectionTCP(PRIVATE_NETWORKKEY ** network,
+                 // send number of socket handle in child process over anonymous pipe
+                 DWORD bytesWritten;
+                 char buf[20];
+-                sprintf(buf, "%i", OFreinterpret_cast(int, childSocketHandle));
++                sprintf(buf, "%p", childSocketHandle);
+                 if (!WriteFile(hChildStdInWriteDup, buf, strlen(buf) + 1, &bytesWritten, NULL))
+                 {
+                     CloseHandle(hChildStdInWriteDup);
+@@ -1780,7 +1780,7 @@ receiveTransportConnectionTCP(PRIVATE_NETWORKKEY ** network,
+                 // return OF_ok status code DULC_FORKEDCHILD with descriptive text
+                 OFOStringStream stream;
+                 stream << "New child process started with pid " << OFstatic_cast(int, pi.dwProcessId)
+-                       << ", socketHandle " << OFreinterpret_cast(int, childSocketHandle) << OFStringStream_ends;
++                       << ", socketHandle " << childSocketHandle << OFStringStream_ends;
+                 OFSTRINGSTREAM_GETOFSTRING(stream, msg)
+                 return makeDcmnetCondition(DULC_FORKEDCHILD, OF_ok, msg.c_str());
+             }
+-- 
+2.1.4
+

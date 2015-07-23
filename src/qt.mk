@@ -3,17 +3,18 @@
 
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.8.6
-$(PKG)_CHECKSUM := ddf9c20ca8309a116e0466c42984238009525da6
+$(PKG)_VERSION  := 4.8.7
+$(PKG)_CHECKSUM := 76aef40335c0701e5be7bb3a9101df5d22fe3666
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://download.qt-project.org/archive/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
-    grep '<li><a href="/qt/qt/commit/' | \
-    $(SED) -n 's,.*<a[^>]*>v\([0-9][^<-]*\)<.*,\1,p' | \
+    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/4.8/ | \
+    $(SED) -n 's,.*href="\(4\.[0-9]\.[^/]*\)/".*,\1,p' | \
+    grep -iv -- '-rc' | \
+    $(SORT) -V | \
     tail -1
 endef
 

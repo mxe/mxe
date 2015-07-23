@@ -31,5 +31,3 @@ define $(PKG)_BUILD
         -larmadillo -llapack -lblas -lgfortran -lquadmath \
         -lboost_serialization-mt -lboost_thread_win32-mt -lboost_system-mt
 endef
-
-$(PKG)_BUILD_SHARED =

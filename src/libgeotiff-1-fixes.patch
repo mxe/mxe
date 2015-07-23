@@ -1,0 +1,12 @@
+diff -burN libgeotiff-1.4.0.orig/configure.ac libgeotiff-1.4.0/configure.ac
+--- libgeotiff-1.4.0.orig/configure.ac	2015-06-21 03:50:03.341076086 +0200
++++ libgeotiff-1.4.0/configure.ac	2015-06-21 03:50:39.741125191 +0200
+@@ -280,7 +280,7 @@
+   PROJ_INC=-I$PROJ_INC
+ 
+   AC_SUBST(PROJ_INC,$PROJ_INC)
+-  AC_DEFINE(HAVE_PROJECTS_H)
++  AC_DEFINE([HAVE_PROJECTS_H], [], [Description])
+   AC_DEFINE(HAVE_LIBPROJ)
+   AC_SUBST([HAVE_LIBPROJ])
+   PROJ_CONFIG="yes"

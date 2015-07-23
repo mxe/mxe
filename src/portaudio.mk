@@ -25,7 +25,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-host_os=mingw \
-        --with-winapi=wmme,directx \
+        --with-winapi=wmme,directx,wdmks,wasapi \
         --with-dxdir=$(PREFIX)/$(TARGET) \
         ac_cv_path_AR=$(TARGET)-ar \
         $(if $(BUILD_SHARED),\

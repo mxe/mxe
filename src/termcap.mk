@@ -11,7 +11,10 @@ $(PKG)_URL      := http://ftp.gnu.org/gnu/termcap/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    /bin/false
+    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/termcap/' | \
+    grep 'termcap-' | \
+    $(SED) -n 's,.*termcap-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

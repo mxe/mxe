@@ -1,0 +1,64 @@
+diff -burN portablexdr-4.9.1.orig/xdr_mem.c portablexdr-4.9.1/xdr_mem.c
+--- portablexdr-4.9.1.orig/xdr_mem.c	2015-06-06 15:07:31.234026991 +0200
++++ portablexdr-4.9.1/xdr_mem.c	2015-06-06 15:08:03.713081033 +0200
+@@ -169,7 +169,7 @@
+ 	register caddr_t newaddr = xdrs->x_base + pos;
+ 	register caddr_t lastaddr = xdrs->x_private + xdrs->x_handy;
+ 
+-	if ((long)newaddr > (long)lastaddr)
++	if ((intptr_t)newaddr > (intptr_t)lastaddr)	  
+ 		return (FALSE);
+ 	xdrs->x_private = newaddr;
+ 	xdrs->x_handy = lastaddr - newaddr;
+diff -burN portablexdr-4.9.1.orig/xdr_rec.c portablexdr-4.9.1/xdr_rec.c
+--- portablexdr-4.9.1.orig/xdr_rec.c	2015-06-06 15:07:31.239026999 +0200
++++ portablexdr-4.9.1/xdr_rec.c	2015-06-06 15:08:08.552089085 +0200
+@@ -173,7 +173,7 @@
+ 		return;
+ 	}
+ 	for (rstrm->out_base = rstrm->the_buffer;
+-	     (long) rstrm->out_base % BYTES_PER_XDR_UNIT != 0;
++	     (intptr_t) rstrm->out_base % BYTES_PER_XDR_UNIT != 0;
+ 		rstrm->out_base++);
+ 	rstrm->in_base = rstrm->out_base + sendsize;
+ 	/*
+@@ -472,12 +472,12 @@
+ 	register u_long len;  /* fragment length */
+ 
+ 	if (sendnow || rstrm->frag_sent ||
+-		((u_long)rstrm->out_finger + sizeof(u_long) >=
+-		(u_long)rstrm->out_boundry)) {
++		((uintptr_t)rstrm->out_finger + sizeof(u_long) >=
++		(uintptr_t)rstrm->out_boundry)) {
+ 		rstrm->frag_sent = FALSE;
+ 		return (flush_out(rstrm, TRUE));
+ 	}
+-	len = (u_long)(rstrm->out_finger) - (u_long)(rstrm->frag_header) -
++	len = (uintptr_t)(rstrm->out_finger) - (uintptr_t)(rstrm->frag_header) -
+ 	   sizeof(u_long);
+ 	*(rstrm->frag_header) = htonl((u_long)len | LAST_FRAG);
+ 	rstrm->frag_header = (u_long *)rstrm->out_finger;
+@@ -495,11 +495,11 @@
+ 	bool_t eor;
+ {
+ 	register u_long eormask = (eor == TRUE) ? LAST_FRAG : 0;
+-	register u_long len = (u_long)(rstrm->out_finger) - 
+-		(u_long)(rstrm->frag_header) - sizeof(u_long);
++	register u_long len = (uintptr_t)(rstrm->out_finger) - 
++               (uintptr_t)(rstrm->frag_header) - sizeof(u_long);
+ 
+ 	*(rstrm->frag_header) = htonl(len | eormask);
+-	len = (u_long)(rstrm->out_finger) - (u_long)(rstrm->out_base);
++	len = (uintptr_t)(rstrm->out_finger) - (uintptr_t)(rstrm->out_base);
+ 	if ((*(rstrm->writeit))(rstrm->tcp_handle, rstrm->out_base, (int)len)
+ 		!= (int)len)
+ 		return (FALSE);
+@@ -517,7 +517,7 @@
+ 	register int len;
+ 
+ 	where = rstrm->in_base;
+-	i = (long) rstrm->in_boundry % BYTES_PER_XDR_UNIT;
++	i = (intptr_t) rstrm->in_boundry % BYTES_PER_XDR_UNIT;
+ 	where += i;
+ 	len = rstrm->in_size - i;
+ 	if ((len = (*(rstrm->readit))(rstrm->tcp_handle, where, len)) == -1)

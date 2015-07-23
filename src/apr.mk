@@ -3,8 +3,8 @@
 
 PKG             := apr
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.1
-$(PKG)_CHECKSUM := 9caa83e3f50f3abc9fab7c4a3f2739a12b14c3a3
+$(PKG)_VERSION  := 1.5.2
+$(PKG)_CHECKSUM := 2ef2ac9a8de7f97f15ef32cddf1ed7325163d84c
 $(PKG)_SUBDIR   := apr-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://archive.apache.org/dist/apr/$($(PKG)_FILE)
