@@ -18,6 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+#    patch $(1)/include/tds_sysdep_public.h.in 
     cd '$(1)' && autogen.sh && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-rpath \
