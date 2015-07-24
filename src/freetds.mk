@@ -3,28 +3,22 @@
 
 PKG             := freetds
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.95.8
-$(PKG)_CHECKSUM := 085ced804cd07b8a588098822483b827138f88e0
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://ftp.mirrorservice.org/sites/distfiles.finkmirrors.net/sha1/$($(PKG)_CHECKSUM)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
+$(PKG)_VERSION  := 0_95
+$(PKG)_CHECKSUM := 217f57fb0a8cd4e8f105f860b763f6897aa71c5b
+$(PKG)_SUBDIR   := $(PKG)-R$($(PKG)_VERSION)
+$(PKG)_FILE     := R$($(PKG)_VERSION).tar.gz
+$(PKG)_URL    := https://github.com/FreeTDS/freetds/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv gnutls
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package freetds.' >&2;
-    echo $(freetds_VERSION)
-endef
-define $(PKG)_UPDATE_orig
-    $(WGET) -q -O- 'http://freetds.cvs.sourceforge.net/viewvc/freetds/freetds/' | \
-    grep '<option>R' | \
-    $(SED) -n 's,.*R\([0-9][0-9_]*\)<.*,\1,p' | \
-    $(SED) 's,_,.,g' | \
+    $(WGET) -q -O- 'https://github.com/FreeTDS/freetds/releases' | \
+    grep /FreeTDS/freetds/releases/tag|\
+    $(SED) -n 's,.*tag/R\([0-9][^">]*\)\">,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(1)' && autogen.sh && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-rpath \
         --disable-dependency-tracking \
