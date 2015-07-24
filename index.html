@@ -464,24 +464,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <a href="https://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">mailing list</a>
     and to <a href="#creating-packages">propose new packages</a>.
     </p>
-
-    <h3 id="committers">For Committers</h3>
-
-    <p>
-    The following <code>.git/config</code> settings ensure
-    that the master branch will always be pushed to the
-    <code><a href="https://help.github.com/categories/github-pages-basics/">gh-pages</a></code>
-    branch,
-    thus ensuring the website will always stay in sync:
-    </p>
-    <pre>[remote "origin"]
-        url = git@github.com:mxe/mxe.git
-        fetch = +refs/heads/*:refs/remotes/origin/*
-        push = refs/heads/master:refs/heads/master
-        push = refs/heads/master:refs/heads/gh-pages
-[branch "master"]
-        remote = origin
-        merge = refs/heads/master</pre>
 </div>
 
 <div class="section">
