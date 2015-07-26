@@ -1,0 +1,16 @@
+diff -burN libsvm-3.20.orig/CMakeLists.txt libsvm-3.20/CMakeLists.txt
+--- libsvm-3.20.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ libsvm-3.20/CMakeLists.txt	2015-06-21 18:53:14.006414310 +0200
+@@ -0,0 +1,12 @@
++cmake_minimum_required(VERSION 2.8)
++
++add_library(libsvm svm.cpp)
++
++install(TARGETS libsvm
++  RUNTIME DESTINATION bin
++  LIBRARY DESTINATION lib
++  ARCHIVE DESTINATION lib)
++
++install(FILES ${CMAKE_SOURCE_DIR}/svm.h
++  DESTINATION include)
++
