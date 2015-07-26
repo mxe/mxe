@@ -159,6 +159,7 @@
     "libiconv": "1.14",
     "libidn": "1.30",
     "libircclient": "1.8",
+    "libjpeg-turbo": "1.4.1",
     "liblaxjson": "1.0.3",
     "liblo": "0.28rc",
     "liblqr-1": "0.4.2",
