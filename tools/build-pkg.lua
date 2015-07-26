@@ -11,13 +11,20 @@
 -- Packages are written to `*.tar.xz` files.
 -- Debian packages are written to `*.deb` files.
 
--- You also need Debian Jessie or later to install these packages
-
 local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
 
 local MXE_DIR = '/usr/lib/mxe'
 
+local BLACKLIST = {
+    '^usr/installed/check-requirements$',
+    '^usr/share/',
+}
+
 local target -- used by many functions
+
+local function log(...)
+    print(target, ...)
+end
 
 -- based on http://lua-users.org/wiki/SplitJoin
 local function split(self, sep, nMax, plain)
@@ -128,13 +135,24 @@ local function sortForBuild(pkgs, pkg2deps)
     return build_list
 end
 
+local function isBlacklisted(file)
+    for _, pattern in ipairs(BLACKLIST) do
+        if file:match(pattern) then
+            return true
+        end
+    end
+    return false
+end
+
 -- return set of all filepaths under ./usr/
 local function findFiles()
     local files = {}
     local find = io.popen('find usr -type f -or -type l', 'r')
     for line in find:lines() do
         local file = trim(line)
-        files[file] = true
+        if not isBlacklisted(file) then
+            files[file] = true
+        end
     end
     find:close()
     return files
@@ -252,11 +270,11 @@ local function buildPackages(pkgs, pkg2deps)
             else
                 -- broken package
                 broken[pkg] = true
-                print('The package is broken: ' .. pkg)
+                log('The package is broken: ' .. pkg)
             end
         else
             local msg = 'Package %s depends on broken %s'
-            print(msg:format(pkg, brokenDep(pkg)))
+            log(msg:format(pkg, brokenDep(pkg)))
         end
     end
     return unbroken
@@ -314,26 +332,31 @@ Description: MXE requirements package
  Other MXE packages depend on this package.
 ]]
 
-local function makeMxeRequirementsDeb(arch)
+local function makeMxeRequirementsDeb(arch, release)
     local name = 'mxe-requirements'
     local ver = getMxeVersion()
     -- dependencies
     local deps = {
         'autoconf', 'automake', 'autopoint', 'bash', 'bison',
         'bzip2', 'cmake', 'flex', 'gettext', 'git', 'g++',
-        'gperf', 'intltool', 'libffi-dev', 'libtool', 'libtool-bin',
+        'gperf', 'intltool', 'libffi-dev', 'libtool',
         'libltdl-dev', 'libssl-dev', 'libxml-parser-perl',
-        'make', 'openssl', 'patch', 'perl', 'p7zip-full', 'pkg-config',
-        'python', 'ruby', 'scons', 'sed', 'unzip', 'wget',
-        'xz-utils',
+        'make', 'openssl', 'patch', 'perl', 'p7zip-full',
+        'pkg-config', 'python', 'ruby', 'scons', 'sed',
+        'unzip', 'wget', 'xz-utils',
     }
     if arch == 'amd64' then
         table.insert(deps, 'g++-multilib')
         table.insert(deps, 'libc6-dev-i386')
     end
+    if release ~= 'wheezy' then
+        -- Jessie+
+        table.insert(deps, 'libtool-bin')
+    end
     local deps_str = table.concat(deps, ', ')
     -- directory
-    local dirname = ('%s_%s_%s'):format(name, ver, arch)
+    local DIRNAME = '%s/%s_%s_%s'
+    local dirname = DIRNAME:format(release, name, ver, arch)
     -- make DEBIAN/control file
     os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
     local control_fname = dirname .. '/DEBIAN/control'
@@ -354,5 +377,7 @@ buildForTarget('i686-w64-mingw32.static')
 buildForTarget('x86_64-w64-mingw32.static')
 buildForTarget('i686-w64-mingw32.shared')
 buildForTarget('x86_64-w64-mingw32.shared')
-makeMxeRequirementsDeb('i386')
-makeMxeRequirementsDeb('amd64')
+makeMxeRequirementsDeb('i386', 'wheezy')
+makeMxeRequirementsDeb('i386', 'jessie')
+makeMxeRequirementsDeb('amd64', 'wheezy')
+makeMxeRequirementsDeb('amd64', 'jessie')
