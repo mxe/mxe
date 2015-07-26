@@ -184,6 +184,7 @@
     "libsigc++": "2.4.0",
     "libsndfile": "1.0.25",
     "libssh2": "1.6.0",
+    "libsvm": "3.20",
     "libtool": "2.4.4",
     "libunistring": "0.9.4",
     "libusb": "1.2.6.0",
