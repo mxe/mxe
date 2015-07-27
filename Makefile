@@ -376,8 +376,8 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    exit 1; \
 	fi
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
-	    @$(PRINTF_FMT) '[done]' '$(1)' '$(3)' "`grep -a '^du:.*KiB$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | cut -d ':' -f2`" \
-	                                          "`grep -a '^real.*m.*s$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | tr '\t' ' ' | cut -d ' ' -f2`")
+	    @$(PRINTF_FMT) '[done]' '$(1)' '$(3)' "`grep -a '^du:.*KiB$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | cut -d ':' -f2 | tail -1`" \
+	                                          "`grep -a '^real.*m.*s$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | tr '\t' ' ' | cut -d ' ' -f2 | tail -1`")
 
 
 .PHONY: build-only-$(1)_$(3)
