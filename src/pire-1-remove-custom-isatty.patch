@@ -1,0 +1,41 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 615d59e9c9afb76ccb8ece3a773bea13304ee1eb Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 25 Jul 2015 16:39:52 +0300
+Subject: [PATCH] remove custom isatty
+
+Fix the following problem:
+
+In file included from mxe/usr/i686-w64-mingw32.static/include/unistd.h:10:0,
+                 from inline.cpp:588:
+mxe/usr/i686-w64-mingw32.static/include/io.h:319:37: error: conflicting declaration of 'int isatty(int)' with 'C' linkage
+   int __cdecl isatty(int _FileHandle) __MINGW_ATTRIB_DEPRECATED_MSVC2005;
+                                     ^
+inline.lpp:40:12: note: previous declaration with 'C++' linkage
+ static int isatty(int) { return 0; }
+            ^
+make[5]: *** [inline.o] Error 1
+---
+ pire/inline.lpp | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/pire/inline.lpp b/pire/inline.lpp
+index e5f6b55..25ef388 100644
+--- a/pire/inline.lpp
++++ b/pire/inline.lpp
+@@ -36,10 +36,6 @@ ystring filename = "";
+ int line = 1;
+ yvector<ystring> args;
+ 
+-#ifdef _WIN32
+-static int isatty(int) { return 0; }
+-#endif
+-
+ class Die {
+ public:
+ 	Die() {
+-- 
+1.9.1
+
