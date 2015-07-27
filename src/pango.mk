@@ -20,6 +20,8 @@ endef
 define $(PKG)_BUILD
     rm '$(1)'/docs/Makefile.am
     cd '$(1)' && NOCONFIGURE=1 ./autogen.sh
+# we need to build against cairo 1.10.2 for Minsky ticket #435
+    $(SED) -i -e 's/cairo_required=1.12.10/cairo_required=1.10.2/' '$(1)/configure';
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-explicit-deps \
