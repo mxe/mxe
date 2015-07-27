@@ -20,6 +20,6 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        LIBS='-lstdc++'
+        LIBS="-lstdc++ `$(TARGET)-pkg-config --libs cairo`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

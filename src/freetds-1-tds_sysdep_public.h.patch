@@ -1,0 +1,23 @@
+--- freetds-R0_95/include/tds_sysdep_public.h.in.old	2015-07-24 15:17:55.159492870 +1000
++++ freetds-R0_95/include/tds_sysdep_public.h.in	2015-07-24 15:20:02.624125084 +1000
+@@ -22,11 +22,6 @@
+ 
+ /* $Id: tds_sysdep_public.h.in,v 1.15 2011-08-08 07:27:57 freddy77 Exp $ */
+ 
+-#ifdef __cplusplus
+-extern "C"
+-{
+-#endif
+-
+ /*
+ ** This is where platform-specific changes need to be made.
+ */
+@@ -78,8 +73,4 @@
+ #error MSDBLIB and SYBDBLIB cannot both be defined
+ #endif
+ 
+-#ifdef __cplusplus
+-}
+-#endif
+-
+ #endif				/* _tds_sysdep_public_h_ */

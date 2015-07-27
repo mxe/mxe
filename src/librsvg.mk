@@ -10,6 +10,8 @@ $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libgsf cairo pango gdk-pixbuf libcroco
 
+PKGCONFIG_DEPS :=gdk-pixbuf-2.0 glib-2.0 gio-2.0 libxml-2.0 cairo cairo-png libcroco-0.6 pango
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/librsvg/refs/tags' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9][^<]*\).*,\1,p' | \
@@ -21,7 +23,11 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --disable-pixbuf-loader \
         --disable-gtk-doc \
-        --enable-introspection=no
+        --enable-introspection=no \
+	LIBRSVG_CFLAGS="`$(TARGET)-pkg-config --cflags $(PKGCONFIG_DEPS)`"\
+	LIBRSVG_LIBS="`$(TARGET)-pkg-config --libs $(PKGCONFIG_DEPS)`" \
+	RSVG_CONVERT_CFLAGS="`$(TARGET)-pkg-config --cflags $(PKGCONFIG_DEPS)`"\
+	RSVG_CONVERT_LIBS="`$(TARGET)-pkg-config --libs $(PKGCONFIG_DEPS)`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \

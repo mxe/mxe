@@ -52,7 +52,6 @@ define $(PKG)_BUILD
         -nomake demos \
         -nomake docs \
         -nomake examples \
-        -qt-sql-sqlite \
         -qt-sql-odbc \
         -qt-sql-psql \
         -no-sql-mysql \
@@ -62,7 +61,6 @@ define $(PKG)_BUILD
         -system-libjpeg \
         -system-libtiff \
         -system-libmng \
-        -system-sqlite \
         -openssl-linked \
         -dbus-linked \
         -v

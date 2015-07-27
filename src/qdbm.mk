@@ -42,10 +42,10 @@ define $(PKG)_BUILD
     cd '$(1)' && $(INSTALL) -m644 depot.h curia.h relic.h hovel.h \
         cabin.h villa.h vista.h odeum.h '$(PREFIX)/$(TARGET)/include/'
 
-    '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-qdbm.exe' \
-        `'$(TARGET)-pkg-config' qdbm --cflags --libs`
+#    '$(TARGET)-gcc' \
+#        -W -Wall -Werror -ansi -pedantic \
+#        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-qdbm.exe' \
+#        `'$(TARGET)-pkg-config' qdbm --cflags --libs`
 endef
 
 $(PKG)_BUILD_SHARED =

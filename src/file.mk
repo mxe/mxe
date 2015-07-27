@@ -3,19 +3,18 @@
 
 PKG             := file
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.23
-$(PKG)_CHECKSUM := c817fb4c27f01934993ece3b013adbdc4deab67e
-$(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
-$(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://ftp.cross-lfs.org/pub/clfs/conglomeration/file/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
+$(PKG)_VERSION  := 5_24
+$(PKG)_CHECKSUM := fd9f1dea429a8f27a8ceddc97372d7add1bdbd84
+$(PKG)_SUBDIR   := file-FILE$($(PKG)_VERSION)
+$(PKG)_FILE     := FILE$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/file/file/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgnurx
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'ftp://ftp.astron.com/pub/file/' | \
-    grep 'file-' | \
-    $(SED) -n 's,.*file-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    $(WGET) -q -O- 'https://github.com/file/file/releases' | \
+    grep /file/file/releases/tag|\
+    $(SED) -n 's,.*tag/FILE\([0-9][^">]*\)\">,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
@@ -28,7 +27,7 @@ define $(PKG)_BUILD
     cp -Rp '$(1)' '$(1).native'
     cd '$(1).native' && ./configure \
         --disable-shared
-    $(MAKE) -C '$(1).native/src' -j '$(JOBS)' file
+    $(MAKE) -C '$(1).native' -j '$(JOBS)' 
 
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
