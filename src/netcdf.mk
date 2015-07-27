@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 4.3.0
 $(PKG)_CHECKSUM := 246e4963e66e1c175563cc9a714e9da0a19b8b07
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.unidata.ucar.edu/downloads/netcdf/ftp/$($(PKG)_FILE)
+$(PKG)_URL      := ftp://ftp.unidata.ucar.edu/pub/netcdf/old/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc curl hdf4 hdf5 portablexdr zlib
 
 define $(PKG)_UPDATE

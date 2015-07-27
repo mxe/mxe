@@ -11,7 +11,7 @@ $(PKG)_FILE     := $(PKG)_v$($(PKG)_VERSION).zip
 # The original source of this file at
 # http://www.codeproject.com/KB/recipes/JSON_Spirit/json_spirit_v4.08.zip
 # is behind a login screen. Use manually downloaded cache on the S3 bucket.
-$(PKG)_URL       = $(PKG_MIRROR)/$(shell $(call ESCAPE_PKG,json_spirit))
+$(PKG)_URL       = $(PKG_MIRROR)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost
 
 define $(PKG)_UPDATE
