@@ -18,8 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-win32-relocatable \
         --disable-nls
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
