@@ -129,6 +129,7 @@
     "libcaca": "0.99.beta19",
     "libcdio": "0.93",
     "libcdio-paranoia": "10.2+0.93+1",
+    "libcomm14cux": "2.0.1",
     "libcroco": "0.6.2",
     "libdca": "0.0.5",
     "libdnet": "1.11",
