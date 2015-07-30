@@ -3,8 +3,8 @@
 
 PKG             := gettext
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.19.4
-$(PKG)_CHECKSUM := c473f4f268501d971b913197fb07767e628644bb
+$(PKG)_VERSION  := 0.19.5.1
+$(PKG)_CHECKSUM := bec084bc9e2ecfb9a30ce17a68b71865449f6c12
 $(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
