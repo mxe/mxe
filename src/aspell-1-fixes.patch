@@ -1,0 +1,11 @@
+diff -Naur aspell-0.60.6.1.orig/common/file_util.cpp aspell-0.60.6.1/common/file_util.cpp
+--- aspell-0.60.6.1.orig/common/file_util.cpp	2011-07-03 01:09:08.000000000 +0400
++++ aspell-0.60.6.1/common/file_util.cpp	2015-07-28 18:01:01.435865252 +0300
+@@ -26,6 +26,7 @@
+ 
+ #ifdef WIN32
+ 
++#include "asc_ctype.hpp"
+ #  include <io.h>
+ #  define ACCESS _access
+ #  include <windows.h>
