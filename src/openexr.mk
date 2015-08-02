@@ -3,8 +3,8 @@
 
 PKG             := openexr
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1.0
-$(PKG)_CHECKSUM := 4a3db5ea527856145844556e0ee349f45ed4cbc7
+$(PKG)_VERSION  := 2.2.0
+$(PKG)_CHECKSUM := d09a68c4443b7a12a0484c073adaef348b44cb92
 $(PKG)_SUBDIR   := openexr-$($(PKG)_VERSION)
 $(PKG)_FILE     := openexr-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
@@ -18,6 +18,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # Update auto-stuff, except autoheader, because if fails...
+    cd '$(1)' && AUTOHEADER=true autoreconf -fi
     # unpack and build a native version of ilmbase
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,ilmbase)
     $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/ilmbase-*.patch)),
@@ -39,15 +41,23 @@ define $(PKG)_BUILD
         --disable-posix-sem \
         --disable-ilmbasetest \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        CXXFLAGS="-fpermissive"
+        CXXFLAGS="-g -O2 -fpermissive"
     # build the code generator manually
-    cd '$(1)/IlmImf' && g++ \
+    cd '$(1)/IlmImf' && g++ -O2 \
         -I'$(1)/ilmbase/include/OpenEXR' \
         -L'$(1)/ilmbase/lib' \
         b44ExpLogTable.cpp \
-        -lImath -lHalf -lIex -lIlmThread -lpthread \
+        -lHalf \
         -o b44ExpLogTable
     '$(1)/IlmImf/b44ExpLogTable' > '$(1)/IlmImf/b44ExpLogTable.h'
+    cd '$(1)/IlmImf' && g++ -O2 \
+        -I'$(1)/config' -I. \
+        -I'$(1)/ilmbase/include/OpenEXR' \
+        -L'$(1)/ilmbase/lib' \
+        dwaLookups.cpp \
+        -lHalf -lIlmThread -lIex -lpthread \
+        -o dwaLookups
+    '$(1)/IlmImf/dwaLookups' > '$(1)/IlmImf/dwaLookups.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-g++' \
