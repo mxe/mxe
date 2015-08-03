@@ -116,6 +116,7 @@
     "jpeg": "9a",
     "json-c": "0.12",
     "json_spirit": "4.08",
+    "jsoncpp": "1.6.5",
     "lame": "3.99.5",
     "lapack": "3.5.0",
     "lcms": "2.7",
