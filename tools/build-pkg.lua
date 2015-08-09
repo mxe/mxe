@@ -13,6 +13,8 @@
 
 local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
 
+local ARCH = 'amd64'
+
 local MXE_DIR = '/usr/lib/mxe'
 
 local BLACKLIST = {
@@ -234,7 +236,7 @@ local CONTROL = [[Package: %s
 Version: %s
 Section: devel
 Priority: optional
-Architecture: all
+Architecture: %s
 Depends: %s
 Maintainer: Boris Nagaev <bnagaev@gmail.com>
 Homepage: http://mxe.cc
@@ -274,7 +276,7 @@ local function makeDeb(pkg, list_path, deps, ver, add_common)
     local control_fname = dirname .. '/DEBIAN/control'
     local control = io.open(control_fname, 'w')
     control:write(CONTROL:format(deb_pkg, protectVersion(ver),
-        deb_deps_str, pkg, target, pkg))
+        ARCH, deb_deps_str, pkg, target, pkg))
     control:close()
     -- make .deb file
     local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
@@ -419,7 +421,7 @@ Description: MXE requirements package
  Other MXE packages depend on this package.
 ]]
 
-local function makeMxeRequirementsDeb(arch, release)
+local function makeMxeRequirementsDeb(release)
     local name = 'mxe-requirements'
     local ver = getMxeVersion()
     -- dependencies
@@ -431,11 +433,8 @@ local function makeMxeRequirementsDeb(arch, release)
         'make', 'openssl', 'patch', 'perl', 'p7zip-full',
         'pkg-config', 'python', 'ruby', 'scons', 'sed',
         'unzip', 'wget', 'xz-utils',
+        'g++-multilib', 'libc6-dev-i386',
     }
-    if arch == 'amd64' then
-        table.insert(deps, 'g++-multilib')
-        table.insert(deps, 'libc6-dev-i386')
-    end
     if release ~= 'wheezy' then
         -- Jessie+
         table.insert(deps, 'libtool-bin')
@@ -443,13 +442,13 @@ local function makeMxeRequirementsDeb(arch, release)
     local deps_str = table.concat(deps, ', ')
     -- directory
     local DIRNAME = '%s/%s_%s_%s'
-    local dirname = DIRNAME:format(release, name, ver, arch)
+    local dirname = DIRNAME:format(release, name, ver, ARCH)
     -- make DEBIAN/control file
     os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
     local control_fname = dirname .. '/DEBIAN/control'
     local control = io.open(control_fname, 'w')
     control:write(MXE_REQUIREMENTS_CONTROL:format(name,
-        ver, arch, deps_str))
+        ver, ARCH, deps_str))
     control:close()
     -- make .deb file
     local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
@@ -464,7 +463,5 @@ buildForTarget('i686-w64-mingw32.static')
 buildForTarget('x86_64-w64-mingw32.static')
 buildForTarget('i686-w64-mingw32.shared')
 buildForTarget('x86_64-w64-mingw32.shared')
-makeMxeRequirementsDeb('i386', 'wheezy')
-makeMxeRequirementsDeb('i386', 'jessie')
-makeMxeRequirementsDeb('amd64', 'wheezy')
-makeMxeRequirementsDeb('amd64', 'jessie')
+makeMxeRequirementsDeb('wheezy')
+makeMxeRequirementsDeb('jessie')
