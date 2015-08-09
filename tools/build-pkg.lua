@@ -16,7 +16,7 @@ local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
 local MXE_DIR = '/usr/lib/mxe'
 
 local BLACKLIST = {
-    '^usr/installed/check-requirements$',
+    '^usr/installed/check%-requirements$',
     '^usr/share/',
 }
 
