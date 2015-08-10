@@ -301,6 +301,17 @@ local function saveFileList(list_file, list)
     file:close()
 end
 
+local function isBuilt(pkg, files)
+    local INSTALLED = 'usr/%s/installed/%s'
+    local installed = INSTALLED:format(target, pkg)
+    for _, file in ipairs(files) do
+        if file == installed then
+            return true
+        end
+    end
+    return false
+end
+
 -- build all packages, save filelist to file #pkg.list
 local function buildPackages(pkgs, pkg2deps)
     local broken = {}
@@ -316,7 +327,7 @@ local function buildPackages(pkgs, pkg2deps)
     for _, pkg in ipairs(pkgs) do
         if not brokenDep(pkg) then
             local files = buildPackage(pkg)
-            if #files > 0 then
+            if isBuilt(pkg, files) then
                 saveFileList(pkg .. '.list', files)
                 table.insert(unbroken, pkg)
             else
