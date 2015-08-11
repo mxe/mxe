@@ -1,0 +1,42 @@
+This file is part of MXE.
+See index.html for further information.
+
+From e64e4a2b049ff472d6400d9650e295c1ebd6294b Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Wed, 12 Aug 2015 01:28:28 +0200
+Subject: [PATCH] bfd: disable subdir doc
+
+---
+ bfd/Makefile.am |    2 +-
+ bfd/Makefile.in |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/bfd/Makefile.am b/bfd/Makefile.am
+index 6f64f06..54f8747 100644
+--- a/bfd/Makefile.am
++++ b/bfd/Makefile.am
+@@ -23,7 +23,7 @@ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ INCDIR = $(srcdir)/../include
+ CSEARCH = -I. -I$(srcdir) -I$(INCDIR)
+ 
+-SUBDIRS = doc po
++SUBDIRS = po
+ 
+ bfddocdir = doc
+ 
+diff --git a/bfd/Makefile.in b/bfd/Makefile.in
+index 2c385d5..2f2a552 100644
+--- a/bfd/Makefile.in
++++ b/bfd/Makefile.in
+@@ -339,7 +339,7 @@ AUTOMAKE_OPTIONS = 1.11 no-dist foreign
+ ACLOCAL_AMFLAGS = -I . -I .. -I ../config
+ INCDIR = $(srcdir)/../include
+ CSEARCH = -I. -I$(srcdir) -I$(INCDIR)
+-SUBDIRS = doc po
++SUBDIRS = po
+ bfddocdir = doc
+ libbfd_la_LDFLAGS = $(am__append_1) -release `cat libtool-soversion` \
+ 	@SHARED_LDFLAGS@ $(am__empty)
+-- 
+1.7.10.4
+
