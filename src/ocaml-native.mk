@@ -3,8 +3,8 @@
 
 PKG             := ocaml-native
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.00.1
-$(PKG)_CHECKSUM := b48d5c7d3bf4a0cd6125f8fdfc1f654dd65586087399dc9f14716d7b9535e87a
+$(PKG)_VERSION  := 4.02.3
+$(PKG)_CHECKSUM := 928fb5f64f4e141980ba567ff57b62d8dc7b951b58be9590ffb1be2172887a72
 $(PKG)_SUBDIR   := ocaml-$($(PKG)_VERSION)
 $(PKG)_FILE     := ocaml-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://caml.inria.fr/pub/distrib/ocaml-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -28,14 +28,13 @@ define $(PKG)_BUILD
         -prefix '$(PREFIX)/$(TARGET)' \
         -bindir '$(PREFIX)/$(TARGET)/bin/ocaml-native' \
         -libdir '$(PREFIX)/$(TARGET)/lib/ocaml-native' \
-        -no-tk \
         -no-shared-libs \
         -verbose
     $(MAKE) -C '$(1)' -j 1 world opt
     $(SED) -i "s,@target@,$(TARGET),g" $(1)/ocamlbuild/options.ml
     $(SED) -i "s,@target@,$(TARGET),g" $(1)/ocamlbuild/findlib.ml
     $(MAKE) -C '$(1)' -j '$(JOBS)' ocamlbuild.native
-    cp -f '$(1)/_build/ocamlbuild/ocamlbuild.native' $(PREFIX)/bin/$(TARGET)-ocamlbuild
+    cp -f '$(1)/ocamlbuild/ocamlbuild.native' $(PREFIX)/bin/$(TARGET)-ocamlbuild
     $(MAKE) -C '$(1)' install
     # Rename all the binaries to target-binary
     for f in camlp4 camlp4oof camlp4of camlp4o camlp4rf camlp4r camlp4orf \

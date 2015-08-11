@@ -3,18 +3,17 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 3a3ddccba8fa90a42551fb4d529c921c0aac4f63 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Wed, 3 Oct 2012 09:25:11 +0200
-Subject: [PATCH] ocamlbuild : support for prefixed
- ocaml{c,opt,mklib,mktop,find} tools
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Wed, 12 Aug 2015 00:00:57 +0200
+Subject: [PATCH] ocamlbuild : support for prefixed ocaml tools
 
 
 diff --git a/ocamlbuild/findlib.ml b/ocamlbuild/findlib.ml
-index b5ef878..77454ed 100644
+index 1111111..2222222 100644
 --- a/ocamlbuild/findlib.ml
 +++ b/ocamlbuild/findlib.ml
-@@ -44,7 +44,7 @@ let report_error e =
+@@ -45,7 +45,7 @@ let report_error e =
    prerr_endline (string_of_error e);
    exit 2
  
@@ -24,78 +23,67 @@ index b5ef878..77454ed 100644
  type package = {
    name: string;
 diff --git a/ocamlbuild/options.ml b/ocamlbuild/options.ml
-index 1be4b63..e7313de 100644
+index 1111111..2222222 100644
 --- a/ocamlbuild/options.ml
 +++ b/ocamlbuild/options.ml
-@@ -39,16 +39,17 @@ let use_menhir = ref false
- let catch_errors = ref true
- let use_ocamlfind = ref false
+@@ -45,13 +45,14 @@ let use_ocamlfind = ref false
+    perhaps later we need something better *)
+ let is_core_tool = function "ocamlfind" | "menhir" -> false | _ -> true
+ 
+-let find_tool cmd =
++let find_tool cmd target =
+   let dir = Ocamlbuild_where.bindir in
+   let core_tool = is_core_tool cmd in
+-  let opt = cmd ^ ".opt" in
++  let target_cmd = target^cmd in
++  let opt = target_cmd ^ ".opt" in
+   let search_in_path = memo Command.search_in_path in
+   if sys_file_exists !dir then
+-    let long = filename_concat !dir cmd in
++    let long = filename_concat !dir target_cmd in
+     let long_opt = long ^ ".opt" in
+       (* This defines how the command will be found *)
+     let choices =
+@@ -73,17 +74,19 @@ let find_tool cmd =
+     try let _ = search_in_path opt in opt
+     with Not_found -> cmd
  
 -let mk_virtual_solvers =
 +let mk_virtual_solvers target =
-   let dir = Ocamlbuild_where.bindir in
    List.iter begin fun cmd ->
--    let opt = cmd ^ ".opt" in
-+	let target_cmd = target^cmd in
-+    let opt = target_cmd ^ ".opt" in
-     let a_opt = A opt in
--    let a_cmd = A cmd in
-+    let a_cmd = A target_cmd in
-     let search_in_path = memo Command.search_in_path in
      let solver () =
-       if sys_file_exists !dir then
--        let long = filename_concat !dir cmd in
-+        let long = filename_concat !dir target_cmd in
-         let long_opt = long ^ ".opt" in
-         if file_or_exe_exists long_opt then A long_opt
-         else if file_or_exe_exists long then A long
-@@ -61,9 +62,9 @@ let mk_virtual_solvers =
+-      A (find_tool cmd)
++      A (find_tool cmd target)
+     in Command.setup_virtual_command_solver (String.uppercase cmd) solver
    end
  
  let () =
 -  mk_virtual_solvers
 -    ["ocamlc"; "ocamlopt"; "ocamldep"; "ocamldoc";
 -    "ocamlyacc"; "menhir"; "ocamllex"; "ocamlmklib"; "ocamlmktop"; "ocamlfind"]
-+  mk_virtual_solvers "@target@-" 
-+	["ocamlc"; "ocamlopt"; "ocamldep"; "ocamlmklib"; "ocamlmktop"; "ocamlfind"];
-+  mk_virtual_solvers "" ["ocamldoc"; "ocamlyacc"; "menhir"; "ocamllex"]
++  mk_virtual_solvers "@target@-"
++    ["ocamlc"; "ocamlopt"; "ocamldep"; "ocamlmklib";
++    "ocamlmktop"; "ocamlfind"];
++  mk_virtual_solvers "" ["ocamldoc"; "ocamlyacc"; "menhir";
++    "ocamllex"]
  let ocamlc = ref (V"OCAMLC")
  let ocamlopt = ref (V"OCAMLOPT")
  let ocamldep = ref (V"OCAMLDEP")
-@@ -73,7 +74,7 @@ let ocamllex = ref (V"OCAMLLEX")
- let ocamlmklib = ref (V"OCAMLMKLIB")
+@@ -94,7 +97,7 @@ let ocamlmklib = ref (V"OCAMLMKLIB")
  let ocamlmktop = ref (V"OCAMLMKTOP")
  let ocamlrun = ref N
--let ocamlfind x = S[V"OCAMLFIND"; x]
-+let ocamlfind = (V"OCAMLFIND")
+ let ocamlfind_cmd = ref (V"OCAMLFIND")
+-let ocamlfind arg = S[!ocamlfind_cmd; arg]
++let ocamlfind _ = (V"OCAMLFIND")
  let program_to_execute = ref false
  let must_clean = ref false
  let show_documentation = ref false
-@@ -261,11 +262,19 @@ let init () =
-     (* TODO: warning message when using an option such as -ocamlc *)
-     (* Note that plugins can still modify these variables After_options.
-        This design decision can easily be changed. *)
--    ocamlc := ocamlfind & A"ocamlc";
--    ocamlopt := ocamlfind & A"ocamlopt";
--    ocamldep := ocamlfind & A"ocamldep";
--    ocamldoc := ocamlfind & A"ocamldoc";
--    ocamlmktop := ocamlfind & A"ocamlmktop";
-+	List.iter (fun (option,string) ->
-+	  (match !option with
-+	  | Sh s
-+	  | A s ->
-+		Log.eprintf "Warning : Command '-%s %s' overidden by option -use-ocamlfind" string s
-+	  | _ -> ()
-+	  );
-+	  option := S[ocamlfind; A string]
-+	) [(ocamlc,"ocamlc");
-+	   (ocamlopt,"ocamlopt");
-+	   (ocamldep,"ocamldep");
-+	   (ocamldoc,"ocamldoc");
-+	   (ocamlmktop,"ocamlmktop")]
-   end;
- 
-   let reorder x y = x := !x @ (List.concat (List.rev !y)) in
--- 
-1.8.1.2
-
+@@ -232,7 +235,7 @@ let spec = ref (
+    "-install-lib-dir", Set_string Ocamlbuild_where.libdir, "<path> Set the install library directory";
+    "-install-bin-dir", Set_string Ocamlbuild_where.bindir, "<path> Set the install binary directory";
+    "-where", Unit (fun () -> print_endline !Ocamlbuild_where.libdir; raise Exit_OK), " Display the install library directory";
+-   "-which", String (fun cmd -> print_endline (find_tool cmd); raise Exit_OK), "<command> Display path to the tool command";
++   "-which", String (fun cmd -> print_endline (find_tool cmd "FIXME"); raise Exit_OK), "<command> Display path to the tool command";
+    "-ocamlc", set_cmd ocamlc, "<command> Set the OCaml bytecode compiler";
+    "-ocamlopt", set_cmd ocamlopt, "<command> Set the OCaml native compiler";
+    "-ocamldep", set_cmd ocamldep, "<command> Set the OCaml dependency tool";
