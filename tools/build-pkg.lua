@@ -13,12 +13,50 @@
 
 local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
 
+local ARCH = 'amd64'
+
 local MXE_DIR = '/usr/lib/mxe'
 
 local BLACKLIST = {
-    '^usr/installed/check-requirements$',
+    '^usr/installed/check%-requirements$',
     '^usr/share/',
 }
+
+local COMMON_FILES = {
+    ['gcc-isl'] = {
+        '^usr/include/isl/',
+        '^usr/lib/libisl%.',
+        '^usr/lib/pkgconfig/isl.pc$',
+    },
+    ['gcc-mpc'] = {
+        '^usr/include/mpc.h$',
+        '^usr/lib/libmpc%.',
+    },
+    ['gcc-gmp'] = {
+        '^usr/include/gmp.h$',
+        '^usr/lib/libgmp%.',
+    },
+    ['gcc-mpfr'] = {
+        '^usr/include/mpf2mpfr.h$',
+        '^usr/include/mpfr.h$',
+        '^usr/lib/libmpfr%.',
+    },
+    ['gcc'] = {
+        '^usr/lib/libcc1%.',
+    },
+    ['yasm'] = {
+        '^usr/include/libyasm',
+        '^usr/lib/libyasm.a$',
+    },
+    ['ncurses'] = {
+        '^usr/lib/pkgconfig/',
+    },
+    ['pkgconf'] = {
+        '^usr/bin/config.guess$',
+    },
+}
+
+local ARCH_FOR_COMMON = 'i686-w64-mingw32.static'
 
 local target -- used by many functions
 
@@ -135,13 +173,17 @@ local function sortForBuild(pkgs, pkg2deps)
     return build_list
 end
 
-local function isBlacklisted(file)
-    for _, pattern in ipairs(BLACKLIST) do
+local function isListed(file, list)
+    for _, pattern in ipairs(list) do
         if file:match(pattern) then
             return true
         end
     end
     return false
+end
+
+local function isBlacklisted(file)
+    return isListed(file, BLACKLIST)
 end
 
 -- return set of all filepaths under ./usr/
@@ -173,9 +215,9 @@ local function buildPackage(pkg)
     return new_files
 end
 
-local function nameToDebian(pkg)
+local function nameToDebian(pkg, t)
     local name = 'mxe-%s-%s'
-    name = name:format(target, pkg)
+    name = name:format(t or target, pkg)
     name = name:gsub('_', '-')
     return name
 end
@@ -194,7 +236,7 @@ local CONTROL = [[Package: %s
 Version: %s
 Section: devel
 Priority: optional
-Architecture: all
+Architecture: %s
 Depends: %s
 Maintainer: Boris Nagaev <bnagaev@gmail.com>
 Homepage: http://mxe.cc
@@ -206,7 +248,7 @@ Description: MXE package %s for %s
  This package contains the files for MXE package %s.
 ]]
 
-local function makeDeb(pkg, list_path, deps, ver)
+local function makeDeb(pkg, list_path, deps, ver, add_common)
     local deb_pkg = nameToDebian(pkg)
     local dirname = ('%s_%s'):format(deb_pkg,
         protectVersion(ver))
@@ -225,13 +267,16 @@ local function makeDeb(pkg, list_path, deps, ver)
     for _, dep in ipairs(deps) do
         table.insert(deb_deps, nameToDebian(dep))
     end
+    if add_common then
+        table.insert(deb_deps, nameToDebian(pkg, 'common'))
+    end
     local deb_deps_str = table.concat(deb_deps, ', ')
     -- make DEBIAN/control file
     os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
     local control_fname = dirname .. '/DEBIAN/control'
     local control = io.open(control_fname, 'w')
     control:write(CONTROL:format(deb_pkg, protectVersion(ver),
-        deb_deps_str, pkg, target, pkg))
+        ARCH, deb_deps_str, pkg, target, pkg))
     control:close()
     -- make .deb file
     local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
@@ -240,13 +285,31 @@ local function makeDeb(pkg, list_path, deps, ver)
     os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
 end
 
-local function saveFileList(pkg, list)
-    local list_file = pkg .. '.list'
+local function readFileList(list_file)
+    local list = {}
+    for installed_file in io.lines(list_file) do
+        table.insert(list, installed_file)
+    end
+    return list
+end
+
+local function saveFileList(list_file, list)
     local file = io.open(list_file, 'w')
     for _, installed_file in ipairs(list) do
         file:write(installed_file .. '\n')
     end
     file:close()
+end
+
+local function isBuilt(pkg, files)
+    local INSTALLED = 'usr/%s/installed/%s'
+    local installed = INSTALLED:format(target, pkg)
+    for _, file in ipairs(files) do
+        if file == installed then
+            return true
+        end
+    end
+    return false
 end
 
 -- build all packages, save filelist to file #pkg.list
@@ -264,8 +327,8 @@ local function buildPackages(pkgs, pkg2deps)
     for _, pkg in ipairs(pkgs) do
         if not brokenDep(pkg) then
             local files = buildPackage(pkg)
-            if #files > 0 then
-                saveFileList(pkg, files)
+            if isBuilt(pkg, files) then
+                saveFileList(pkg .. '.list', files)
                 table.insert(unbroken, pkg)
             else
                 -- broken package
@@ -280,11 +343,48 @@ local function buildPackages(pkgs, pkg2deps)
     return unbroken
 end
 
+local function filterFiles(pkg, filter_common)
+    local list = readFileList(pkg .. '.list')
+    local list2 = {}
+    local common_list = COMMON_FILES[pkg]
+    for _, installed_file in ipairs(list) do
+        local listed = isListed(installed_file, common_list)
+        if listed == filter_common then
+            table.insert(list2, installed_file)
+        end
+    end
+    return list2
+end
+
+local function excludeCommon(pkg)
+    local noncommon_files = filterFiles(pkg, false)
+    saveFileList(pkg .. '.list', noncommon_files)
+end
+
+local function makeCommonDeb(pkg, ver)
+    local common_files = filterFiles(pkg, true)
+    local list_path = pkg .. '.common-list'
+    saveFileList(list_path, common_files)
+    local orig_target = target
+    target = 'common'
+    makeDeb(pkg, list_path, {}, ver)
+    target = orig_target
+end
+
 local function makeDebs(pkgs, pkg2deps, pkg2ver)
     for _, pkg in ipairs(pkgs) do
         local deps = assert(pkg2deps[pkg], pkg)
         local ver = assert(pkg2ver[pkg], pkg)
-        makeDeb(pkg, pkg .. '.list', deps, ver)
+        local list_path = pkg .. '.list'
+        local add_common = false
+        if COMMON_FILES[pkg] then
+            if target == ARCH_FOR_COMMON then
+                makeCommonDeb(pkg, ver)
+            end
+            add_common = true
+            excludeCommon(pkg)
+        end
+        makeDeb(pkg, list_path, deps, ver, add_common)
     end
 end
 
@@ -332,7 +432,7 @@ Description: MXE requirements package
  Other MXE packages depend on this package.
 ]]
 
-local function makeMxeRequirementsDeb(arch, release)
+local function makeMxeRequirementsDeb(release)
     local name = 'mxe-requirements'
     local ver = getMxeVersion()
     -- dependencies
@@ -344,11 +444,8 @@ local function makeMxeRequirementsDeb(arch, release)
         'make', 'openssl', 'patch', 'perl', 'p7zip-full',
         'pkg-config', 'python', 'ruby', 'scons', 'sed',
         'unzip', 'wget', 'xz-utils',
+        'g++-multilib', 'libc6-dev-i386',
     }
-    if arch == 'amd64' then
-        table.insert(deps, 'g++-multilib')
-        table.insert(deps, 'libc6-dev-i386')
-    end
     if release ~= 'wheezy' then
         -- Jessie+
         table.insert(deps, 'libtool-bin')
@@ -356,13 +453,13 @@ local function makeMxeRequirementsDeb(arch, release)
     local deps_str = table.concat(deps, ', ')
     -- directory
     local DIRNAME = '%s/%s_%s_%s'
-    local dirname = DIRNAME:format(release, name, ver, arch)
+    local dirname = DIRNAME:format(release, name, ver, ARCH)
     -- make DEBIAN/control file
     os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
     local control_fname = dirname .. '/DEBIAN/control'
     local control = io.open(control_fname, 'w')
     control:write(MXE_REQUIREMENTS_CONTROL:format(name,
-        ver, arch, deps_str))
+        ver, ARCH, deps_str))
     control:close()
     -- make .deb file
     local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
@@ -377,7 +474,5 @@ buildForTarget('i686-w64-mingw32.static')
 buildForTarget('x86_64-w64-mingw32.static')
 buildForTarget('i686-w64-mingw32.shared')
 buildForTarget('x86_64-w64-mingw32.shared')
-makeMxeRequirementsDeb('i386', 'wheezy')
-makeMxeRequirementsDeb('i386', 'jessie')
-makeMxeRequirementsDeb('amd64', 'wheezy')
-makeMxeRequirementsDeb('amd64', 'jessie')
+makeMxeRequirementsDeb('wheezy')
+makeMxeRequirementsDeb('jessie')
