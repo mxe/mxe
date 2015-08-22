@@ -1,0 +1,38 @@
+This file is part of MXE.
+See index.html for further information.
+
+From ea6e95e804cfff4d79cf1bee8275a30611e336b1 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 22 Aug 2015 10:58:38 +0200
+Subject: [PATCH] backport fix for severe LEFT JOIN bug
+
+Do not apply the WHERE-clause pushdown optimization to terms that
+originate in the ON or USING clause of a LEFT JOIN.
+
+taken from https://www.sqlite.org/src/info/351bc22fa9b5a2e5
+
+diff --git a/sqlite3.c b/sqlite3.c
+index 1344938..a8a1a83 100644
+--- a/sqlite3.c
++++ b/sqlite3.c
+@@ -111380,6 +111380,9 @@ static int flattenSubquery(
+ **       enforces this restriction since this routine does not have enough
+ **       information to know.)
+ **
++**   (5) The WHERE clause expression originates in the ON or USING clause
++**       of a LEFT JOIN.
++**
+ ** Return 0 if no changes are made and non-zero if one or more WHERE clause
+ ** terms are duplicated into the subquery.
+ */
+@@ -111402,6 +111405,7 @@ static int pushDownWhereTerms(
+     nChng += pushDownWhereTerms(db, pSubq, pWhere->pRight, iCursor);
+     pWhere = pWhere->pLeft;
+   }
++  if( ExprHasProperty(pWhere,EP_FromJoin) ) return 0; /* restriction 5 */
+   if( sqlite3ExprIsTableConstant(pWhere, iCursor) ){
+     nChng++;
+     while( pSubq ){
+-- 
+2.1.4
+
