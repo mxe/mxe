@@ -1,12 +1,17 @@
 This file is part of MXE.
 See index.html for further information.
 
-Contains ad hoc patches for cross building.
+From c26e8bf6eeba0d7ed230dbc659e7abd8ed8277a1 Mon Sep 17 00:00:00 2001
+From: Niels Kristian Bech Jensen <nkbj1970@hotmail.com>
+Date: Sat, 22 Aug 2015 11:25:36 +0200
+Subject: [PATCH] fix *.pc file for harfbuzz-icu
 
-diff -ur a/src/harfbuzz-icu.pc.in b/src/harfbuzz-icu.pc.in
---- a/src/harfbuzz-icu.pc.in	2013-05-28 23:16:58.000000000 +0200
-+++ b/src/harfbuzz-icu.pc.in	2013-06-26 04:14:39.078153528 +0200
-@@ -8,6 +8,7 @@
+
+diff --git a/src/harfbuzz-icu.pc.in b/src/harfbuzz-icu.pc.in
+index 949869a..59d8cbc 100644
+--- a/src/harfbuzz-icu.pc.in
++++ b/src/harfbuzz-icu.pc.in
+@@ -8,6 +8,7 @@ Description: HarfBuzz text shaping library ICU integration
  Version: %VERSION%
  
  Requires: harfbuzz
@@ -15,14 +20,20 @@ diff -ur a/src/harfbuzz-icu.pc.in b/src/harfbuzz-icu.pc.in
  Libs: -L${libdir} -lharfbuzz-icu
 +Libs.private: -lusp10 -lgdi32
  Cflags: -I${includedir}/harfbuzz
-diff -ur a/src/harfbuzz.pc.in b/src/harfbuzz.pc.in
---- a/src/harfbuzz.pc.in	2013-05-28 23:15:43.000000000 +0200
-+++ b/src/harfbuzz.pc.in	2013-06-26 04:15:16.842154388 +0200
-@@ -7,5 +7,7 @@
+diff --git a/src/harfbuzz.pc.in b/src/harfbuzz.pc.in
+index b3e124a..e74633a 100644
+--- a/src/harfbuzz.pc.in
++++ b/src/harfbuzz.pc.in
+@@ -7,7 +7,8 @@ Name: harfbuzz
  Description: HarfBuzz text shaping library
  Version: %VERSION%
  
 +Requires.private: cairo-ft glib-2.0
  Libs: -L${libdir} -lharfbuzz
-+Libs.private: -lusp10 -lgdi32
+-Libs.private: %libs_private%
++Libs.private: %libs_private% -lusp10 -lgdi32
+ Requires.private: %requires_private%
  Cflags: -I${includedir}/harfbuzz
+-- 
+2.1.4
+
