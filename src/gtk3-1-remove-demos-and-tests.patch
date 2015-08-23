@@ -1,0 +1,13 @@
+diff --git a/Makefile.in b/Makefile.in
+index ce66859..a13da47 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -553,7 +553,7 @@ XVFB_START = \
+ 	|| { echo "Gtk+Tests:ERROR: Failed to start Xvfb environment for X11 target tests."; exit 1; } \
+ 	&& DISPLAY=:$$XID && export DISPLAY
+ 
+-SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite examples
++SRC_SUBDIRS = gdk gtk libgail-util modules
+ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
+ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ MAINTAINERCLEANFILES = \
