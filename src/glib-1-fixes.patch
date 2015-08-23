@@ -3,48 +3,6 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From f02df804c59584aac5cfb164b4ddad898b156883 Mon Sep 17 00:00:00 2001
-From: "a@mxe.org" <a@mxe.org>
-Date: Thu, 23 Sep 2010 21:41:51 +0200
-Subject: [PATCH 1/8] optional gettext
-
-
-diff --git a/configure.ac b/configure.ac
-index a0237cb..7739b89 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -455,8 +455,8 @@ AC_SUBST([CONFIG_STATUS_DEPENDENCIES],['$(top_srcdir)/po/LINGUAS'])
- GLIB_GNU_GETTEXT
- 
- if test "$gt_cv_have_gettext" != "yes" ; then
--  AC_MSG_ERROR([
--*** You must have either have gettext support in your C library, or use the 
-+  AC_MSG_WARN([
-+*** You should have either have gettext support in your C library, or use the 
- *** GNU gettext library. (http://www.gnu.org/software/gettext/gettext.html
- ])
- fi
-diff --git a/glib/gi18n.h b/glib/gi18n.h
-index f765c3d..a1e5e1f 100644
---- a/glib/gi18n.h
-+++ b/glib/gi18n.h
-@@ -20,7 +20,12 @@
- 
- #include <glib.h>
- 
-+#ifdef ENABLE_NLS
- #include <libintl.h>
-+#else
-+#define gettext(String) (String)
-+#endif
-+
- #include <string.h>
- 
- #define  _(String) gettext (String)
--- 
-1.8.4.5
-
-
 From cea8581fa1d9e6eb39114d11f02bb9c17f366f41 Mon Sep 17 00:00:00 2001
 From: "a@mxe.org" <a@mxe.org>
 Date: Thu, 23 Sep 2010 21:42:46 +0200
