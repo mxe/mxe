@@ -57,31 +57,6 @@ Date: Fri, 15 Jun 2012 16:21:40 +0200
 Subject: [PATCH 3/4] do not force shared for win32
 
 
-diff --git a/configure.ac b/configure.ac
-index f11a5c8..ac62a89 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -142,20 +142,6 @@ AC_CHECK_HEADERS(unistd.h sys/mman.h)
- # Win32 stuff
- #
- 
--AC_LIBTOOL_WIN32_DLL
--AM_DISABLE_STATIC
--
--if test "$pango_os_win32" = "yes"; then
--  if test x$enable_static = xyes -o x$enable_static = x; then
--    AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
--    enable_static=no
--  fi
--  if test x$enable_shared = xno; then
--    AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
--  fi
--  enable_shared=yes
--fi
--
- AM_PROG_LIBTOOL
- dnl when using libtool 2.x create libtool early, because it's used in configure
- m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
 diff --git a/modules/Makefile.am b/modules/Makefile.am
 index 73b42f4..19c5a4f 100644
 --- a/modules/Makefile.am
