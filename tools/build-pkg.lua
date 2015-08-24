@@ -336,6 +336,7 @@ local function buildPackages(pkgs, pkg2deps)
                 log('The package is broken: ' .. pkg)
             end
         else
+            broken[pkg] = true
             local msg = 'Package %s depends on broken %s'
             log(msg:format(pkg, brokenDep(pkg)))
         end
