@@ -3,8 +3,8 @@
 
 PKG             := aubio
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.4.1
-$(PKG)_CHECKSUM := 338ec9f633e82c371a370b9727d6f0b86b0ba376
+$(PKG)_VERSION  := 0.4.2
+$(PKG)_CHECKSUM := aa0d31c58deb92ab03edfc417d903f50f78444d0
 $(PKG)_SUBDIR   := aubio-$($(PKG)_VERSION)
 $(PKG)_FILE     := aubio-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.aubio.org/pub/$($(PKG)_FILE)
