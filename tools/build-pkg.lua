@@ -435,7 +435,7 @@ Description: MXE requirements package
 
 local function makeMxeRequirementsDeb(release)
     local name = 'mxe-requirements'
-    local ver = getMxeVersion()
+    local ver = getMxeVersion() .. release
     -- dependencies
     local deps = {
         'autoconf', 'automake', 'autopoint', 'bash', 'bison',
