@@ -1,0 +1,92 @@
+This file is part of MXE.
+See index.html for further information.
+
+From f581b0bec9286cc9e2cb450a79a77e325f070fcb Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 02:02:39 +0200
+Subject: [PATCH 3/3] fix library list
+
+Replace library list hardcoded in qmake files with
+libraries found by autotools.
+---
+ configure         |    2 +-
+ winconf-mingw.pri |   15 ++-------------
+ winconf.pri       |   16 +---------------
+ 3 files changed, 4 insertions(+), 29 deletions(-)
+
+diff --git a/configure b/configure
+index a414bd6..7417654 100755
+--- a/configure
++++ b/configure
+@@ -8469,7 +8469,7 @@ fi
+ $as_echo "$as_me: Running qmake to generate the makefile..." >&6;}
+ CONFDIR="$( cd "$( dirname "$0" )" && pwd )"
+ 
+-$QT_QMAKE -r $CONFDIR/qbittorrent.pro
++$QT_QMAKE -r $CONFDIR/qbittorrent.pro "QMAKE_LRELEASE=$QMAKE_LRELEASE" "CONF_LIBS=$LIBS"
+ 
+ ret="$?"
+ 
+diff --git a/winconf-mingw.pri b/winconf-mingw.pri
+index 4507000..39d30dd 100644
+--- a/winconf-mingw.pri
++++ b/winconf-mingw.pri
+@@ -17,19 +17,8 @@ CONFIG(debug, debug|release) {
+ 
+ RC_FILE = qbittorrent_mingw.rc
+ 
+-# Adapt the lib names/versions accordingly
+-CONFIG(debug, debug|release) {
+-  LIBS += libtorrent \
+-          libboost_system-mgw45-mt-d-1_47 \
+-          libboost_filesystem-mgw45-mt-d-1_47 \
+-          libboost_thread-mgw45-mt-d-1_47
+-} else {
+-  LIBS += libtorrent \
+-          libboost_system-mgw45-mt-1_47 \
+-          libboost_filesystem-mgw45-mt-1_47 \
+-          libboost_thread-mgw45-mt-1_47
+-}
++LIBS += $$CONF_LIBS
+ 
+ LIBS += libadvapi32 libshell32 libuser32
+-LIBS += libcrypto.dll libssl.dll libwsock32 libws2_32 libz libiconv.dll
++LIBS += libcrypto libssl libwsock32 libws2_32 libz libiconv
+ LIBS += libpowrprof
+diff --git a/winconf.pri b/winconf.pri
+index 3818cca..ede8535 100644
+--- a/winconf.pri
++++ b/winconf.pri
+@@ -9,15 +9,6 @@ INCLUDEPATH += $$quote(C:/qBittorrent/Zlib/include)
+ # Point this to the openssl include folder
+ INCLUDEPATH += $$quote(C:/qBittorrent/openssl/include)
+ 
+-# Point this to the boost lib folder
+-LIBS += $$quote(-LC:/qBittorrent/boost_1_51_0/stage/lib)
+-# Point this to the libtorrent lib folder
+-LIBS += $$quote(-LC:/qBittorrent/RC_0_16/bin/<path-according-to-the-build-options-chosen>)
+-# Point this to the zlib lib folder
+-LIBS += $$quote(-LC:/qBittorrent/Zlib/lib)
+-# Point this to the openssl lib folder
+-LIBS += $$quote(-LC:/qBittorrent/openssl/lib)
+-
+ # LIBTORRENT DEFINES
+ DEFINES += BOOST_ALL_NO_LIB
+ DEFINES += BOOST_ASIO_HASH_MAP_BUCKETS=1021
+@@ -47,12 +38,7 @@ CONFIG(debug, debug|release) {
+ # Enable backtrace support
+ CONFIG += strace_win
+ 
+-win32-g++ {
+-    include(winconf-mingw.pri)
+-}
+-else {
+-    include(winconf-msvc.pri)
+-}
++include(winconf-mingw.pri)
+ 
+ DEFINES += WITH_GEOIP_EMBEDDED
+ message("On Windows, GeoIP database must be embedded.")
+-- 
+1.7.10.4
+
