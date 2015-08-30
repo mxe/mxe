@@ -40,4 +40,26 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
 endef
 
-$(PKG)_BUILD_SHARED =
+define $(PKG)_BUILD_SHARED
+    # build wt libraries
+    mkdir '$(1).build'
+    cd '$(1).build' && cmake \
+        -DCONFIGDIR='$(PREFIX)/$(TARGET)/etc/wt' \
+        -DBUILD_EXAMPLES=OFF \
+        -DBUILD_TESTS=OFF \
+        -DSHARED_LIBS=ON \
+        -DBOOST_DYNAMIC=ON \
+        -DBOOST_PREFIX='$(PREFIX)/$(TARGET)' \
+        -DBOOST_COMPILER=_win32 \
+        -DSSL_PREFIX='$(PREFIX)/$(TARGET)' \
+        -DOPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
+        -DGM_PREFIX='$(PREFIX)/$(TARGET)' \
+        -DGM_LIBS="`'$(TARGET)-pkg-config' --libs-only-l GraphicsMagick++`" \
+        -DPANGO_FT2_LIBS="`'$(TARGET)-pkg-config' --libs-only-l pangoft2`" \
+        -DENABLE_QT4=ON \
+        -DWT_CMAKE_FINDER_INSTALL_DIR='/lib/wt' \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        '$(1)'
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
+    $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
+endef
