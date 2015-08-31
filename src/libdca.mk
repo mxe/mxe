@@ -11,8 +11,9 @@ $(PKG)_URL      := http://download.videolan.org/pub/videolan/libdca/$($(PKG)_VER
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for libdca.' >&2;
-    echo $(libdca_VERSION)
+    $(WGET) -q -O- 'https://www.videolan.org/developers/libdca.html' | \
+    $(SED) -n 's,.*libdca-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
