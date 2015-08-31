@@ -11,8 +11,9 @@ $(PKG)_URL      := https://dl.dropboxusercontent.com/u/28869550/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libsamplerate libgnurx portaudio libsndfile winpthreads
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- 'http://jackaudio.org/downloads/' | \
+    $(SED) -n 's,.*jack-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
