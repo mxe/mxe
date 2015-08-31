@@ -232,6 +232,10 @@ local function protectVersion(ver)
     end
 end
 
+local function listFile(pkg)
+    return pkg .. '.list'
+end
+
 local CONTROL = [[Package: %s
 Version: %s
 Section: devel
@@ -328,7 +332,7 @@ local function buildPackages(pkgs, pkg2deps)
         if not brokenDep(pkg) then
             local files = buildPackage(pkg)
             if isBuilt(pkg, files) then
-                saveFileList(pkg .. '.list', files)
+                saveFileList(listFile(pkg), files)
                 table.insert(unbroken, pkg)
             else
                 -- broken package
@@ -345,7 +349,7 @@ local function buildPackages(pkgs, pkg2deps)
 end
 
 local function filterFiles(pkg, filter_common)
-    local list = readFileList(pkg .. '.list')
+    local list = readFileList(listFile(pkg))
     local list2 = {}
     local common_list = COMMON_FILES[pkg]
     for _, installed_file in ipairs(list) do
@@ -359,7 +363,7 @@ end
 
 local function excludeCommon(pkg)
     local noncommon_files = filterFiles(pkg, false)
-    saveFileList(pkg .. '.list', noncommon_files)
+    saveFileList(listFile(pkg), noncommon_files)
 end
 
 local function makeCommonDeb(pkg, ver)
@@ -376,7 +380,7 @@ local function makeDebs(pkgs, pkg2deps, pkg2ver)
     for _, pkg in ipairs(pkgs) do
         local deps = assert(pkg2deps[pkg], pkg)
         local ver = assert(pkg2ver[pkg], pkg)
-        local list_path = pkg .. '.list'
+        local list_path = listFile(pkg)
         local add_common = false
         if COMMON_FILES[pkg] then
             if target == ARCH_FOR_COMMON then
