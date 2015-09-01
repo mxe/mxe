@@ -1,0 +1,52 @@
+This file is part of MXE.
+See index.html for further information.
+
+From cd9319a5a5570aab7cfd6a51630a13e7f9db9658 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Tue, 1 Sep 2015 22:59:47 +0200
+Subject: [PATCH] link transport.c  -lreadline and -ltermcap
+
+Fixed error:
+
+src/jack-3-add-lreadline-to-linkflags-of-transport.patch:
+
+    example-clients/transport.c.28.o:transport.c:(.text+0x2e0): undefined reference to `rl_cleanup_after_signal'
+    example-clients/transport.c.28.o:transport.c:(.text+0xa27): undefined reference to `rl_readline_name'
+    example-clients/transport.c.28.o:transport.c:(.text+0xa2d): undefined reference to `rl_completion_entry_function'
+    example-clients/transport.c.28.o:transport.c:(.text+0xa3e): undefined reference to `readline'
+    example-clients/transport.c.28.o:transport.c:(.text+0xa82): undefined reference to `add_history'
+
+---
+ example-clients/wscript |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/example-clients/wscript b/example-clients/wscript
+index fbf8999..8d6dfb9 100644
+--- a/example-clients/wscript
++++ b/example-clients/wscript
+@@ -45,12 +45,13 @@ def configure(conf):
+     conf.check_cfg(package='celt', atleast_version='0.5.0', args='--cflags --libs', mandatory=False)
+ 
+     e = conf.check_cc(lib='readline', define_name="HAVE_READLINE", mandatory=False)
++    e = conf.check_cc(lib='termcap', define_name="HAVE_TERMCAP", mandatory=False)
+ 
+     # define_name="HAVE_READLINE" has no effect, LIB_READLINE is defined if readline is available
+     #if conf.is_defined('HAVE_READLINE'):
+     #    conf.env['LIB_READLINE'] = ['readline']
+ 
+-    conf.env['BUILD_EXAMPLE_CLIENT_TRANSPORT'] = bool(conf.env['LIB_READLINE'])
++    conf.env['BUILD_EXAMPLE_CLIENT_TRANSPORT'] = bool(conf.env['LIB_READLINE']) and bool(conf.env['LIB_TERMCAP'])
+ 
+     conf.env['BUILD_EXAMPLE_CLIENT_REC'] = conf.is_defined('HAVE_SNDFILE')
+ 
+@@ -108,6 +109,7 @@ def build(bld):
+         if bld.env['IS_MACOSX']:
+             prog.use += ['READLINE']
+         prog.target = 'jack_transport'
++        prog.use += ['READLINE', 'TERMCAP']
+ 
+     if bld.env['BUILD_EXAMPLE_CLIENT_REC']:
+         prog = bld(features = 'c cprogram')
+-- 
+1.7.10.4
+
