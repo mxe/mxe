@@ -12,7 +12,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package db need to be fixed.' >&2;
-    echo $($(PKG)_VERSION)
+    echo $(db_VERSION)
 endef
 
 define $(PKG)_BUILD
@@ -20,9 +20,10 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --enable-mingw \
         --enable-cxx \
-        --disable-shared \
         --disable-replication
 
     $(MAKE) -C '$(1)/build_unix' -j '$(JOBS)'
     $(MAKE) -C '$(1)/build_unix' -j 1 install $(MXE_DISABLE_DOCS)
 endef
+
+$(PKG)_BUILD_SHARED =
