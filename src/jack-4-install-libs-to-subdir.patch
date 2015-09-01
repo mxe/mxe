@@ -1,0 +1,80 @@
+This file is part of MXE.
+See index.html for further information.
+
+From f388514f8cba7102eec857aa4c2675d1024cd25c Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Tue, 1 Sep 2015 22:23:51 +0200
+Subject: [PATCH] install jack libs to lib/jack/ instead of lib/
+
+Some Jack library names collide with other libraries,
+namely portaudio.
+
+When Jack is installed first time, it adds libportaudio.dll.a to
+usr/i686-w64-mingw32.static/lib/. Portaudio has library
+usr/i686-w64-mingw32.static/lib/libportaudio.a. When Jack is compiled
+second time, it uses its own libportaudio.dll.a instead of
+libportaudio.a from portaudio.
+
+Removing usr/i686-w64-mingw32.static/lib/libportaudio.dll.a fixes build of Jack.
+
+For i686-w64-mingw32.shared, this can't be fixed by just removing
+libportaudio.dll.a before building jack, because both portaudio and
+jack have file usr/i686-w64-mingw32.shared/lib/libportaudio.dll.a.
+Two packages must not have same file.
+
+jack's libraries should be installed to subdir of usr/<target>/lib/.
+
+Jack uses waf build system, which unpacks itself from file "waf".
+Installation path for lib*.dll.a (PREFIX + /lib) is hardcoded in waf:
+
+waflib/Tools/ccroot.py:
+
+    self.implib_install_task=self.bld.install_as('${PREFIX}/lib/%s'%implib.name,implib,self.env)
+
+The least ugly way to change subdir I can find is changing
+function do_install in InstallContext class. Other approaches
+either do not work or require changing contents of waflib
+(which is unpacked from "waf" file in run-time).
+
+This patch replaces paths like "lib/libjack.dll.a" with
+"lib/jack/libjack.dll.a", but doesn't replace
+"/lib/pkgconfig/jack.pc".
+
+---
+ jack.pc.in |    2 +-
+ wscript    |    7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/jack.pc.in b/jack.pc.in
+index fbda3a4..c67772b 100644
+--- a/jack.pc.in
++++ b/jack.pc.in
+@@ -7,5 +7,5 @@ server_libs=-L@LIBDIR@ -l@SERVERLIB@
+ Name: jack
+ Description: the Jack Audio Connection Kit: a low-latency synchronous callback-based media server
+ Version: @JACK_VERSION@
+-Libs: -L@LIBDIR@ -ljack
++Libs: -L@LIBDIR@/jack -ljack
+ Cflags: -I@INCLUDEDIR@
+diff --git a/wscript b/wscript
+index aef4bd8..16507e7 100644
+--- a/wscript
++++ b/wscript
+@@ -378,8 +378,13 @@ def configure(conf):
+             print(Logs.colors.NORMAL, end=' ')
+     print()
+ 
++class MyInstallContext(InstallContext):
++    def do_install(self, src, tgt, *args, **kvargs):
++        tgt = str(tgt).replace('/lib/lib', '/lib/jack/lib')
++        InstallContext.do_install(self, src, tgt, *args, **kvargs)
++
+ def init(ctx):
+-    for y in (BuildContext, CleanContext, InstallContext, UninstallContext):
++    for y in (BuildContext, CleanContext, MyInstallContext, UninstallContext):
+         name = y.__name__.replace('Context','').lower()
+         class tmp(y):
+             cmd = name + '_' + lib32
+-- 
+1.7.10.4
+
