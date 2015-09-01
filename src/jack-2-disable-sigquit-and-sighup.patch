@@ -1,0 +1,45 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 2e1760b4bc62715f12e90c1396f839521506db85 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Mon, 31 Aug 2015 23:39:35 +0200
+Subject: [PATCH] disable SIGQUIT and SIGHUP
+
+Windows doesn't have them.
+
+Fixed error:
+
+    ../example-clients/transport.c: In function 'main':
+    ../example-clients/transport.c:462:9: error: 'SIGQUIT' undeclared (first use in this function)
+      signal(SIGQUIT, signal_handler);
+             ^
+    ../example-clients/transport.c:462:9: note: each undeclared identifier is reported only once for each function it appears in
+    ../example-clients/transport.c:464:9: error: 'SIGHUP' undeclared (first use in this function)
+      signal(SIGHUP, signal_handler);
+             ^
+---
+ example-clients/transport.c |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/example-clients/transport.c b/example-clients/transport.c
+index 76184df..f0e3924 100644
+--- a/example-clients/transport.c
++++ b/example-clients/transport.c
+@@ -460,9 +460,13 @@ int main(int argc, char *argv[])
+ 		return 1;
+ 	}
+ 
++#ifndef _WIN32
+ 	signal(SIGQUIT, signal_handler);
++#endif
+ 	signal(SIGTERM, signal_handler);
++#ifndef _WIN32
+ 	signal(SIGHUP, signal_handler);
++#endif
+ 	signal(SIGINT, signal_handler);
+ 
+ 	jack_on_shutdown(client, jack_shutdown, 0);
+-- 
+1.7.10.4
+
