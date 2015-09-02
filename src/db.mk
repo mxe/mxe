@@ -27,5 +27,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/build_unix' -j '$(JOBS)'
     $(MAKE) -C '$(1)/build_unix' -j 1 install $(MXE_DISABLE_DOCS)
 endef
-
-$(PKG)_BUILD_SHARED =
