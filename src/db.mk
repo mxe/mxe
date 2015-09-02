@@ -11,8 +11,9 @@ $(PKG)_URL      := http://download.oracle.com/berkeley-db/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package db need to be fixed.' >&2;
-    echo $(db_VERSION)
+    $(WGET) -q -O- 'http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/downloads/index.html' | \
+    $(SED) -n 's,.*/db-\([0-9\.]\+\)\.tar.gz.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
