@@ -1,0 +1,29 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 67a1bbc57a368efd2ebb81f771ef7ba794bac5a0 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Wed, 2 Sep 2015 20:18:30 +0300
+Subject: [PATCH] install executables with .exe
+
+---
+ dist/Makefile.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/dist/Makefile.in b/dist/Makefile.in
+index 8358e53..8839ea6 100644
+--- a/dist/Makefile.in
++++ b/dist/Makefile.in
+@@ -1150,8 +1150,7 @@ install_utilities:
+ 	    ($(MKDIR) -p $(DESTDIR)$(bindir) && \
+ 	    $(CHMOD) $(dmode) $(DESTDIR)$(bindir))
+ 	@for i in $(UTIL_PROGS); do \
+-		test -f $$i.exe && i=$$i.exe; \
+-		e=`echo $$i | $(SED) '$(transform)'`; \
++		e=$$i.exe; \
+ 		$(RM) $(DESTDIR)$(bindir)/$$e; \
+ 		$(INSTALLER) $$i $(DESTDIR)$(bindir)/$$e; \
+ 		$(STRIP) $(DESTDIR)$(bindir)/$$e; \
+-- 
+2.1.4
+
