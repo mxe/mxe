@@ -62,6 +62,13 @@ local COMMON_FILES = {
 
 local ARCH_FOR_COMMON = 'i686-w64-mingw32.static'
 
+local TARGETS = {
+    'i686-w64-mingw32.static',
+    'x86_64-w64-mingw32.static',
+    'i686-w64-mingw32.shared',
+    'x86_64-w64-mingw32.shared',
+}
+
 local target -- used by many functions
 
 local function log(fmt, ...)
@@ -498,9 +505,8 @@ end
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
 gitInit()
-buildForTarget('i686-w64-mingw32.static')
-buildForTarget('x86_64-w64-mingw32.static')
-buildForTarget('i686-w64-mingw32.shared')
-buildForTarget('x86_64-w64-mingw32.shared')
+for _, t in ipairs(TARGETS) do
+    buildForTarget(t)
+end
 makeMxeRequirementsDeb('wheezy')
 makeMxeRequirementsDeb('jessie')
