@@ -60,8 +60,8 @@ local ARCH_FOR_COMMON = 'i686-w64-mingw32.static'
 
 local target -- used by many functions
 
-local function log(...)
-    print(target, ...)
+local function log(fmt, ...)
+    print(target, fmt:format(...))
 end
 
 -- based on http://lua-users.org/wiki/SplitJoin
@@ -337,12 +337,12 @@ local function buildPackages(pkgs, pkg2deps)
             else
                 -- broken package
                 broken[pkg] = true
-                log('The package is broken: ' .. pkg)
+                log('The package is broken: %s', pkg)
             end
         else
             broken[pkg] = true
-            local msg = 'Package %s depends on broken %s'
-            log(msg:format(pkg, brokenDep(pkg)))
+            log('Package %s depends on broken %s',
+                pkg, brokenDep(pkg))
         end
     end
     return unbroken
