@@ -11,8 +11,9 @@ $(PKG)_URL      := http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/snaps
 $(PKG)_DEPS     := gcc openssl zlib
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for libwebsockets.' >&2;
-    echo $(libwebsockets_VERSION)
+    $(WGET) -q -O- 'http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/' | \
+    $(SED) -n 's,.*libwebsockets-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
