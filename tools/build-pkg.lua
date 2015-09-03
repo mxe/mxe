@@ -22,6 +22,8 @@ local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
 local BLACKLIST = {
     '^usr/installed/check%-requirements$',
     '^usr/share/',
+    '^usr/[^/]+/share/doc/',
+    '^usr/[^/]+/share/info/',
 }
 
 local COMMON_FILES = {
