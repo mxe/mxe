@@ -470,7 +470,7 @@ end
 
 local function makeCommonDeb(pkg, ver)
     local common_files = filterFiles(pkg, true)
-    local list_path = pkg .. '.common-list'
+    local list_path = ('common-%s.list'):format(pkg)
     saveFileList(list_path, common_files)
     local orig_target = target
     target = 'common'
