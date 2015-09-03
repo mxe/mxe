@@ -106,6 +106,15 @@ local function trim(str)
     return text
 end
 
+local function isInArray(element, array)
+    for _, item in ipairs(array) do
+        if item == element then
+            return true
+        end
+    end
+    return false
+end
+
 local function shell(cmd)
     local f = io.popen(cmd, 'r')
     local text = f:read('*all')
@@ -241,13 +250,70 @@ local function gitCommit(message)
     os.execute(cmd:format(message))
 end
 
+local function checkFile(file, pkg)
+    -- if it is PE32 file, it must have '.exe' in name
+    local ext = file:sub(-4):lower()
+    local file_type0 = trim(shell(('file %q'):format(file)))
+    local file_type = file_type0:match('^[^:]+: (.*)$')
+    if file_type then
+        local symlink = file_type:match('symbolic link')
+        if ext == '.bin' then
+            -- can be an executable or something else (font)
+        elseif ext == '.exe' then
+            if not file_type:match('PE32') and not symlink then
+                log('File %s (%s) is %q. Remove .exe',
+                    file, pkg, file_type)
+            end
+        elseif ext == '.dll' then
+            if not file_type:match('PE32.*DLL') and not symlink then
+                log('File %s (%s) is %q. Remove .dll',
+                    file, pkg, file_type)
+            end
+        else
+            if file_type:match('PE32') then
+                log('File %s (%s) is %q. Add exe or dll',
+                    file, pkg, file_type)
+            end
+        end
+    else
+        log("Can't get type of file %s (%s). file says %q",
+            file, pkg, file_type0)
+    end
+    for _, t in ipairs(TARGETS) do
+        if t ~= target and file:match(t) then
+            log('File %s (%s): other target %s in name',
+                file, pkg, t)
+        end
+    end
+end
+
 -- builds package, returns list of new files
-local function buildPackage(pkg)
+local function buildPackage(pkg, pkg2deps, file2pkg)
     local cmd = 'make %s MXE_TARGETS=%s --jobs=1'
     os.execute(cmd:format(pkg, target))
     gitAdd()
     local new_files, changed_files = gitStatus()
     gitCommit(("Build %s for target %s"):format(pkg, target))
+    for _, file in ipairs(new_files) do
+        checkFile(file, pkg)
+        file2pkg[file] = {pkg=pkg, target=target}
+    end
+    for _, file in ipairs(changed_files) do
+        checkFile(file, pkg)
+        -- add a dependency on a package created this file
+        local creator_pkg = assert(file2pkg[file]).pkg
+        local creator_target = assert(file2pkg[file]).target
+        local level = ''
+        if target == creator_target then
+            if not isInArray(creator_pkg, pkg2deps[pkg]) then
+                table.insert(pkg2deps[pkg], creator_pkg)
+            end
+        else
+            level = 'error'
+        end
+        log('Package %s changes %s, created by %s (%s) %s',
+            pkg, file, creator_pkg, creator_target, level)
+    end
     return new_files
 end
 
@@ -353,7 +419,7 @@ local function isBuilt(pkg, files)
 end
 
 -- build all packages, save filelist to file #pkg.list
-local function buildPackages(pkgs, pkg2deps)
+local function buildPackages(pkgs, pkg2deps, file2pkg)
     local broken = {}
     local unbroken = {}
     local function brokenDep(pkg)
@@ -366,7 +432,7 @@ local function buildPackages(pkgs, pkg2deps)
     end
     for _, pkg in ipairs(pkgs) do
         if not brokenDep(pkg) then
-            local files = buildPackage(pkg)
+            local files = buildPackage(pkg, pkg2deps, file2pkg)
             if isBuilt(pkg, files) then
                 saveFileList(listFile(pkg), files)
                 table.insert(unbroken, pkg)
@@ -429,7 +495,7 @@ local function makeDebs(pkgs, pkg2deps, pkg2ver)
     end
 end
 
-local function buildForTarget(mxe_target)
+local function buildForTarget(mxe_target, file2pkg)
     target = mxe_target
     local pkgs, pkg2deps, pkg2ver = getPkgs()
     local build_list = sortForBuild(pkgs, pkg2deps)
@@ -438,7 +504,7 @@ local function buildForTarget(mxe_target)
             table.remove(build_list)
         end
     end
-    local unbroken = buildPackages(build_list, pkg2deps)
+    local unbroken = buildPackages(build_list, pkg2deps, file2pkg)
     makeDebs(unbroken, pkg2deps, pkg2ver)
 end
 
@@ -505,8 +571,9 @@ end
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
 gitInit()
+local file2pkg = {}
 for _, t in ipairs(TARGETS) do
-    buildForTarget(t)
+    buildForTarget(t, file2pkg)
 end
 makeMxeRequirementsDeb('wheezy')
 makeMxeRequirementsDeb('jessie')
