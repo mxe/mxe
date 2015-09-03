@@ -29,7 +29,9 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/include' -j '$(JOBS)'
     $(MAKE) -C '$(1).native/progs'   -j '$(JOBS)' tic
 
-    cd '$(1)' && ./configure \
+    cd '$(1)' && \
+        TIC_PATH='$(1).native/progs/tic' \
+        ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix=$(PREFIX)/$(TARGET) \
@@ -50,6 +52,5 @@ define $(PKG)_BUILD
             --with-normal    --without-shared --with-static, \
             --without-normal --without-static --with-shared)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install TIC_PATH='$(1).native/progs/tic'
+    $(MAKE) -C '$(1)' -j 1 install
 endef
-
