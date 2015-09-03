@@ -23,8 +23,8 @@ define $(PKG)_BUILD
         -DCONFIGDIR='$(PREFIX)/$(TARGET)/etc/wt' \
         -DBUILD_EXAMPLES=OFF \
         -DBUILD_TESTS=OFF \
-        -DSHARED_LIBS=OFF \
-        -DBOOST_DYNAMIC=OFF \
+        -DSHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
+        -DBOOST_DYNAMIC=$(if $(BUILD_STATIC),OFF,ON) \
         -DBOOST_PREFIX='$(PREFIX)/$(TARGET)' \
         -DBOOST_COMPILER=_win32 \
         -DSSL_PREFIX='$(PREFIX)/$(TARGET)' \
@@ -39,7 +39,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-
-$(PKG)_BUILD_SHARED =

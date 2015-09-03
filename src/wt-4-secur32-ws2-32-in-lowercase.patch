@@ -1,0 +1,29 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 80e187872cc72153417ab1f2d9b6caa3c156eef1 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 22:28:48 +0200
+Subject: [PATCH] WtFindPostgresql: secur32 ws2_32 in lowercase
+
+Fix mingw64 build
+---
+ cmake/WtFindPostgresql.txt |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmake/WtFindPostgresql.txt b/cmake/WtFindPostgresql.txt
+index 68403ae..9a298cc 100644
+--- a/cmake/WtFindPostgresql.txt
++++ b/cmake/WtFindPostgresql.txt
+@@ -59,7 +59,7 @@ IF(POSTGRES_LIBRARIES AND POSTGRES_INCLUDE)
+   SET(POSTGRES_FOUND TRUE)
+   SET(POSTGRES_INCLUDE_DIRS ${POSTGRES_INCLUDE})
+   IF (WIN32)
+-    SET(POSTGRES_LIBRARIES Secur32.lib Ws2_32.lib ${POSTGRES_LIBRARIES})
++    SET(POSTGRES_LIBRARIES secur32.lib ws2_32.lib ${POSTGRES_LIBRARIES})
+   ENDIF (WIN32)
+ ENDIF(POSTGRES_LIBRARIES AND POSTGRES_INCLUDE)
+ 
+-- 
+1.7.10.4
+
