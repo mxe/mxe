@@ -61,7 +61,7 @@ local ARCH_FOR_COMMON = 'i686-w64-mingw32.static'
 local target -- used by many functions
 
 local function log(fmt, ...)
-    print(target, fmt:format(...))
+    print('[build-pkg]', target, fmt:format(...))
 end
 
 -- based on http://lua-users.org/wiki/SplitJoin
