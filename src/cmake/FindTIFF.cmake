@@ -1,13 +1,16 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-if(NOT PKG_CONFIG_FOUND)
-  find_package(PkgConfig REQUIRED)
-endif()
+FIND_PATH(TIFF_INCLUDE_DIR tiff.h)
 
-pkg_check_modules(TIFF libtiff-4)
+FIND_LIBRARY(TIFF_LIBRARY 
+             NAMES tiff libtiff_i libtiff tiff3 libtiff3 )
 
-# for backward compatiblity
-set(TIFF_LIBRARY ${SDL_LIBRARIES})
-set(TIFF_INCLUDE_DIR ${SDL_INCLUDE_DIRS})
-set(TIFF_VERSION_STRING ${SDL_VERSION})
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(TIFF  DEFAULT_MSG  TIFF_LIBRARY  TIFF_INCLUDE_DIR)
+
+IF(TIFF_FOUND)
+  SET( TIFF_LIBRARIES ${TIFF_LIBRARY} )
+ENDIF(TIFF_FOUND)
+
+MARK_AS_ADVANCED(TIFF_INCLUDE_DIR TIFF_LIBRARY)
