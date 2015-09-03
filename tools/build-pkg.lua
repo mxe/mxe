@@ -233,7 +233,7 @@ local function protectVersion(ver)
 end
 
 local function listFile(pkg)
-    return pkg .. '.list'
+    return ('%s-%s.list'):format(target, pkg)
 end
 
 local CONTROL = [[Package: %s
