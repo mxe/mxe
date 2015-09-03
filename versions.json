@@ -196,7 +196,7 @@
     "libusb1": "1.0.19",
     "libvpx": "1.4.0",
     "libwebp": "0.4.2",
-    "libwebsockets": "1.3-chrome37-firefox30",
+    "libwebsockets": "1.4-chrome43-firefox-36",
     "libxml++": "2.37.2",
     "libxml2": "2.9.2",
     "libxslt": "1.1.28",
