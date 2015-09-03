@@ -17,6 +17,8 @@ local ARCH = 'amd64'
 
 local MXE_DIR = '/usr/lib/mxe'
 
+local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
+
 local BLACKLIST = {
     '^usr/installed/check%-requirements$',
     '^usr/share/',
@@ -186,32 +188,57 @@ local function isBlacklisted(file)
     return isListed(file, BLACKLIST)
 end
 
--- return set of all filepaths under ./usr/
-local function findFiles()
-    local files = {}
-    local find = io.popen('find usr -type f -or -type l', 'r')
-    for line in find:lines() do
-        local file = trim(line)
+-- creates git repo in ./usr
+local function gitInit()
+    os.execute('mkdir -p ./usr')
+    os.execute(GIT .. 'init --quiet')
+end
+
+local function gitAdd()
+    os.execute(GIT .. 'add .')
+end
+
+-- return two lists of filepaths under ./usr/
+-- 1. new files
+-- 2. changed files
+local function gitStatus()
+    local new_files = {}
+    local changed_files = {}
+    local git_st = io.popen(GIT .. 'status --porcelain', 'r')
+    for line in git_st:lines() do
+        local status, file = line:match('(..) (.*)')
+        status = trim(status)
+        file = 'usr/' .. file
         if not isBlacklisted(file) then
-            files[file] = true
+            if status == 'A' then
+                table.insert(new_files, file)
+            elseif status == 'M' then
+                table.insert(changed_files, file)
+            else
+                log('Strange git status: %q of %q',
+                    status, file)
+            end
         end
     end
-    find:close()
-    return files
+    git_st:close()
+    return new_files, changed_files
+end
+
+-- git commits changes in ./usr
+local function gitCommit(message)
+    local cmd = GIT .. '-c user.name="build-pkg" ' ..
+        '-c user.email="build-pkg@mxe" ' ..
+        'commit -a -m %q --quiet'
+    os.execute(cmd:format(message))
 end
 
 -- builds package, returns list of new files
 local function buildPackage(pkg)
-    local files_before = findFiles()
     local cmd = 'make %s MXE_TARGETS=%s --jobs=1'
     os.execute(cmd:format(pkg, target))
-    local files_after = findFiles()
-    local new_files = {}
-    for file in pairs(files_after) do
-        if not files_before[file] then
-            table.insert(new_files, file)
-        end
-    end
+    gitAdd()
+    local new_files, changed_files = gitStatus()
+    gitCommit(("Build %s for target %s"):format(pkg, target))
     return new_files
 end
 
@@ -393,11 +420,6 @@ local function makeDebs(pkgs, pkg2deps, pkg2ver)
     end
 end
 
-local function clean()
-    local cmd = 'make clean MXE_TARGETS=%s'
-    os.execute(cmd:format(target))
-end
-
 local function buildForTarget(mxe_target)
     target = mxe_target
     local pkgs, pkg2deps, pkg2ver = getPkgs()
@@ -407,10 +429,8 @@ local function buildForTarget(mxe_target)
             table.remove(build_list)
         end
     end
-    clean()
     local unbroken = buildPackages(build_list, pkg2deps)
     makeDebs(unbroken, pkg2deps, pkg2ver)
-    clean()
 end
 
 local function getMxeVersion()
@@ -475,6 +495,7 @@ end
 
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
+gitInit()
 buildForTarget('i686-w64-mingw32.static')
 buildForTarget('x86_64-w64-mingw32.static')
 buildForTarget('i686-w64-mingw32.shared')
