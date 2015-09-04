@@ -1,0 +1,30 @@
+This file is part of MXE.
+See index.html for further information.
+
+From eddde6d65c1ec97ab473e40ce44cfef2a20e6bd6 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 29 Aug 2015 11:20:16 +0200
+Subject: [PATCH] ed25519/src/seed.cpp: fix includes
+
+---
+ ed25519/src/seed.cpp |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/ed25519/src/seed.cpp b/ed25519/src/seed.cpp
+index 7619c66..d9dd1c1 100644
+--- a/ed25519/src/seed.cpp
++++ b/ed25519/src/seed.cpp
+@@ -3,8 +3,8 @@
+ #ifndef ED25519_NO_SEED
+ 
+ #ifdef _WIN32
+-#include <Windows.h>
+-#include <Wincrypt.h>
++#include <windows.h>
++#include <wincrypt.h>
+ #else
+ #include <stdio.h>
+ #endif
+-- 
+1.7.10.4
+
