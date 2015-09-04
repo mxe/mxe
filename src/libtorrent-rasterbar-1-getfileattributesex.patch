@@ -1,0 +1,30 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 679ad4e2331484fda9da250cb269779daf703698 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 29 Aug 2015 10:28:59 +0200
+Subject: [PATCH] file.cpp: use defined GetFileAttributesEx
+
+This macro was defined as GetFileAttributesEx_ but used
+as GetFileAttributesEx. Strange.
+---
+ src/file.cpp |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/file.cpp b/src/file.cpp
+index a3219b0..0276033 100644
+--- a/src/file.cpp
++++ b/src/file.cpp
+@@ -208,7 +208,7 @@ namespace libtorrent
+ 		std::string f = convert_to_native(inf);
+ #endif
+ 		WIN32_FILE_ATTRIBUTE_DATA data;
+-		if (!GetFileAttributesEx(f.c_str(), GetFileExInfoStandard, &data))
++		if (!GetFileAttributesEx_(f.c_str(), GetFileExInfoStandard, &data))
+ 		{
+ 			ec.assign(GetLastError(), get_system_category());
+ 			return;
+-- 
+1.7.10.4
+
