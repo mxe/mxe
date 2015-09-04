@@ -23,7 +23,8 @@ define $(PKG)_BUILD
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         --with-boost-system=boost_system-mt \
         --disable-debug \
-        --enable-tests --enable-examples
+        --disable-tests \
+        --disable-examples
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
