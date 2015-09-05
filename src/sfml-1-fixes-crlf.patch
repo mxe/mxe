@@ -6,7 +6,7 @@ Contains ad hoc patches for cross building.
 From 4e522133482f3f37ee8f498a35294eb31738e307 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Sat, 6 Jul 2013 17:55:39 +1000
-Subject: dont install dlls and fix openal static
+Subject: fix openal static
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -21,30 +21,4 @@ index bf5a805..78e5630 100755
  endif()
  
  # remove SL security warnings with Visual C++
-
-@@ -248,22 +248,6 @@
- # install 3rd-party libraries and tools
- if(SFML_OS_WINDOWS)
- 
--    # install the binaries of SFML dependencies
--    if(ARCH_32BITS)
--        install(DIRECTORY extlibs/bin/x86/ DESTINATION bin)
--        if(SFML_COMPILER_MSVC)
--            install(DIRECTORY extlibs/libs-msvc/x86/ DESTINATION lib)
--        else()
--            install(DIRECTORY extlibs/libs-mingw/x86/ DESTINATION lib)
--        endif()
--    elseif(ARCH_64BITS)
--        install(DIRECTORY extlibs/bin/x64/ DESTINATION bin)
--        if(SFML_COMPILER_MSVC)
--            install(DIRECTORY extlibs/libs-msvc/x64/ DESTINATION lib)
--        else()
--            install(DIRECTORY extlibs/libs-mingw/x64/ DESTINATION lib)
--        endif()
--    endif()
- 
- elseif(SFML_OS_MACOSX)
- 
--- 
-1.8.2.3
 

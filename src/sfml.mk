@@ -3,8 +3,8 @@
 
 PKG             := sfml
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2
-$(PKG)_CHECKSUM := b21721a3dc221a790e4b81d6ba358c16cb1c1cd3
+$(PKG)_VERSION  := 2.3.1
+$(PKG)_CHECKSUM := d3dbcd92843be5c2a432f6ad17b6576a7613e7de
 $(PKG)_SUBDIR   := SFML-$($(PKG)_VERSION)
 $(PKG)_FILE     := SFML-$($(PKG)_VERSION)-sources.zip
 $(PKG)_URL      := http://sfml-dev.org/download/sfml/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -20,16 +20,20 @@ define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DFREETYPE_INCLUDE_DIRS='$(PREFIX)/$(TARGET)/include/freetype2'
+        -DSFML_BUILD_EXAMPLES=FALSE \
+        -DSFML_BUILD_DOC=FALSE
 
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
+    # build and install libs
+    $(MAKE) -C '$(1)/build/src/SFML' -j '$(JOBS)' install VERBOSE=1
+    # install headers
+    cmake -DCOMPONENT=devel -P '$(1)/build/cmake_install.cmake'
 
     # create pkg-config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: sfml'; \
      echo 'Version: 0'; \
      echo 'Description: sfml'; \
-     echo 'Requires: freetype2 glew openal sndfile vorbisenc'; \
+     echo 'Requires: freetype2 glew openal sndfile vorbisenc vorbisfile'; \
      echo 'Cflags: -DSFML_STATIC'; \
      echo 'Libs: -lsfml-audio-s -lsfml-network-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s'; \
      echo 'Libs.private: -ljpeg -lws2_32 -lgdi32';) \
