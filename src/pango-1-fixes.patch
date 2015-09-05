@@ -1,35 +1,6 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 745968578f3b0e7d270a14062c175fcebecdbd08 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 29 Sep 2010 00:52:59 +0200
-Subject: [PATCH 1/4] s,DllMain,static _disabled_DllMain,
-
-
-diff --git a/pango/pango-utils.c b/pango/pango-utils.c
-index 18ffa26..aac59ab 100644
---- a/pango/pango-utils.c
-+++ b/pango/pango-utils.c
-@@ -691,12 +691,12 @@ pango_config_key_get (const char *key)
- 
- #ifdef G_OS_WIN32
- 
--/* DllMain function needed to tuck away the DLL handle */
-+/* static _disabled_DllMain function needed to tuck away the DLL handle */
- 
- static HMODULE pango_dll; /* MT-safe */
- 
- BOOL WINAPI
--DllMain (HINSTANCE hinstDLL,
-+static _disabled_DllMain (HINSTANCE hinstDLL,
- 	 DWORD     fdwReason,
- 	 LPVOID    lpvReserved)
- {
--- 
-1.7.10.4
-
-
 From 525d3bc5b5f7e7d2c705c2b53cc8bf91d56e4641 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 29 Sep 2010 00:50:08 +0200
@@ -40,76 +11,12 @@ diff --git a/pango.pc.in b/pango.pc.in
 index 17a8b7a..16c5981 100644
 --- a/pango.pc.in
 +++ b/pango.pc.in
-@@ -10,5 +10,5 @@ Description: Internationalized text handling
+@@ -10,4 +10,4 @@ Description: Internationalized text handling
  Version: @VERSION@
  Requires: glib-2.0 gobject-2.0
- Requires.private: gmodule-no-export-2.0
--Libs: -L${libdir} -lpango-@PANGO_API_VERSION@ @PKGCONFIG_MATH_LIBS@
-+Libs: -L${libdir} -lpango-@PANGO_API_VERSION@ @PKGCONFIG_MATH_LIBS@ -lusp10
- Cflags: -I${includedir}/pango-1.0
--- 
-1.7.10.4
-
-
-From 27cdbbc3b9e514457c0f898a9e866ee785a1b4b6 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 15 Jun 2012 16:21:40 +0200
-Subject: [PATCH 3/4] do not force shared for win32
-
-
-diff --git a/configure.ac b/configure.ac
-index f11a5c8..ac62a89 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -142,20 +142,6 @@ AC_CHECK_HEADERS(unistd.h sys/mman.h)
- # Win32 stuff
- #
- 
--AC_LIBTOOL_WIN32_DLL
--AM_DISABLE_STATIC
--
--if test "$pango_os_win32" = "yes"; then
--  if test x$enable_static = xyes -o x$enable_static = x; then
--    AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
--    enable_static=no
--  fi
--  if test x$enable_shared = xno; then
--    AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
--  fi
--  enable_shared=yes
--fi
--
- AM_PROG_LIBTOOL
- dnl when using libtool 2.x create libtool early, because it's used in configure
- m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
-diff --git a/modules/Makefile.am b/modules/Makefile.am
-index 73b42f4..19c5a4f 100644
---- a/modules/Makefile.am
-+++ b/modules/Makefile.am
-@@ -21,22 +21,7 @@ RUN_QUERY_MODULES_TEST=true
- all-local: pango.modules
- endif
- 
--install-data-local: $(top_builddir)/pango/pango-querymodules$(EXEEXT)
--	@if $(RUN_QUERY_MODULES_TEST) && test -z "$(DESTDIR)" ; then 	\
--	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/pango \&\& 	\
--	  $(top_builddir)/pango/pango-querymodules$(EXEEXT) 		\
--		\> $(DESTDIR)$(sysconfdir)/pango/pango.modules ;	\
--	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/pango && 		\
--	  $(top_builddir)/pango/pango-querymodules$(EXEEXT) 		\
--		> $(DESTDIR)$(sysconfdir)/pango/pango.modules ;		\
--	else								\
--	  echo "***" ; 							\
--	  echo "*** Warning: $(sysconfdir)/pango/pango.modules" ; 	\
--	  echo "*** not created" ; 					\
--	  echo "*** Generate this file on the target system" ; 		\
--	  echo "*** using pango-querymodules" ; 			\
--	  echo "***" ; 							\
--	fi
-+install-data-local:
- 
- uninstall-local:
- 	$(RM) $(DESTDIR)$(sysconfdir)/pango/pango.modules
+-Libs: -L${libdir} -lpango-@PANGO_API_VERSION@
++Libs: -L${libdir} -lpango-@PANGO_API_VERSION@
+ Libs.private: -lm
 -- 
 1.7.10.4
 
@@ -127,8 +34,8 @@ index 1ac018a..1999723 100644
 @@ -1,6 +1,6 @@
  ## Process this file with automake to create Makefile.in.
  
--SUBDIRS= pango modules pango-view examples docs tools tests build
-+SUBDIRS= pango modules pango-view examples tools tests build
+-SUBDIRS= pango pango-view examples docs tools tests build
++SUBDIRS= pango pango-view examples tools tests build
  
  EXTRA_DIST = 			\
  	autogen.sh		\
