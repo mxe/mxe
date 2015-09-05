@@ -10,13 +10,20 @@ $(PKG)_FILE     := $(PKG)-win32-src-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)-win32/$(PKG)-win32-releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
+$(PKG)_MESSAGE  :=*** libusb is deprecated - please use libusb1 ***
+
 define $(PKG)_UPDATE
+    echo 'Warning: libusb is deprecated' >&2;
+    echo $(libusb_VERSION)
+endef
+
+define $(PKG)_UPDATE_DISABLED
     $(WGET) -q -O- 'http://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     # convert DOS line endings
     $(SED) -i 's,\r$$,,' '$(1)/Makefile'
 
