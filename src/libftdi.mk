@@ -10,13 +10,20 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.intra2net.com/en/developer/libftdi/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libusb
 
+$(PKG)_MESSAGE  :=*** libftdi is deprecated - please use libftdi1 ***
+
 define $(PKG)_UPDATE
+    echo 'Warning: libftdi is deprecated' >&2;
+    echo $(libftdi_VERSION)
+endef
+
+define $(PKG)_UPDATE_DISABLED
     $(WGET) -q -O- 'http://www.intra2net.com/en/developer/libftdi/download.php' | \
     $(SED) -n 's,.*libftdi-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
