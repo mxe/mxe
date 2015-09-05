@@ -10,6 +10,8 @@ $(PKG)_FILE      = $(subst qtbase,qtwebkit,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebkit,$(qtbase_URL))
 $(PKG)_DEPS     := gcc qtbase qtmultimedia qtquick1 sqlite
 
+$(PKG)_MESSAGE  :=*** qtwebkit is deprecated in Qt 5.5 ***
+
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
 endef
