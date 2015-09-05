@@ -17,9 +17,13 @@ local ARCH = 'amd64'
 
 local MXE_DIR = '/usr/lib/mxe'
 
+local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
+
 local BLACKLIST = {
     '^usr/installed/check%-requirements$',
     '^usr/share/',
+    '^usr/[^/]+/share/doc/',
+    '^usr/[^/]+/share/info/',
 }
 
 local COMMON_FILES = {
@@ -58,10 +62,17 @@ local COMMON_FILES = {
 
 local ARCH_FOR_COMMON = 'i686-w64-mingw32.static'
 
+local TARGETS = {
+    'i686-w64-mingw32.static',
+    'x86_64-w64-mingw32.static',
+    'i686-w64-mingw32.shared',
+    'x86_64-w64-mingw32.shared',
+}
+
 local target -- used by many functions
 
-local function log(...)
-    print(target, ...)
+local function log(fmt, ...)
+    print('[build-pkg]', target, fmt:format(...))
 end
 
 -- based on http://lua-users.org/wiki/SplitJoin
@@ -93,6 +104,15 @@ local function trim(str)
     local text = str:gsub("%s+$", "")
     text = text:gsub("^%s+", "")
     return text
+end
+
+local function isInArray(element, array)
+    for _, item in ipairs(array) do
+        if item == element then
+            return true
+        end
+    end
+    return false
 end
 
 local function shell(cmd)
@@ -186,31 +206,113 @@ local function isBlacklisted(file)
     return isListed(file, BLACKLIST)
 end
 
--- return set of all filepaths under ./usr/
-local function findFiles()
-    local files = {}
-    local find = io.popen('find usr -type f -or -type l', 'r')
-    for line in find:lines() do
-        local file = trim(line)
+-- creates git repo in ./usr
+local function gitInit()
+    os.execute('mkdir -p ./usr')
+    os.execute(GIT .. 'init --quiet')
+end
+
+local function gitAdd()
+    os.execute(GIT .. 'add .')
+end
+
+-- return two lists of filepaths under ./usr/
+-- 1. new files
+-- 2. changed files
+local function gitStatus()
+    local new_files = {}
+    local changed_files = {}
+    local git_st = io.popen(GIT .. 'status --porcelain', 'r')
+    for line in git_st:lines() do
+        local status, file = line:match('(..) (.*)')
+        status = trim(status)
+        file = 'usr/' .. file
         if not isBlacklisted(file) then
-            files[file] = true
+            if status == 'A' then
+                table.insert(new_files, file)
+            elseif status == 'M' then
+                table.insert(changed_files, file)
+            else
+                log('Strange git status: %q of %q',
+                    status, file)
+            end
         end
     end
-    find:close()
-    return files
+    git_st:close()
+    return new_files, changed_files
+end
+
+-- git commits changes in ./usr
+local function gitCommit(message)
+    local cmd = GIT .. '-c user.name="build-pkg" ' ..
+        '-c user.email="build-pkg@mxe" ' ..
+        'commit -a -m %q --quiet'
+    os.execute(cmd:format(message))
+end
+
+local function checkFile(file, pkg)
+    -- if it is PE32 file, it must have '.exe' in name
+    local ext = file:sub(-4):lower()
+    local file_type0 = trim(shell(('file %q'):format(file)))
+    local file_type = file_type0:match('^[^:]+: (.*)$')
+    if file_type then
+        local symlink = file_type:match('symbolic link')
+        if ext == '.bin' then
+            -- can be an executable or something else (font)
+        elseif ext == '.exe' then
+            if not file_type:match('PE32') and not symlink then
+                log('File %s (%s) is %q. Remove .exe',
+                    file, pkg, file_type)
+            end
+        elseif ext == '.dll' then
+            if not file_type:match('PE32.*DLL') and not symlink then
+                log('File %s (%s) is %q. Remove .dll',
+                    file, pkg, file_type)
+            end
+        else
+            if file_type:match('PE32') then
+                log('File %s (%s) is %q. Add exe or dll',
+                    file, pkg, file_type)
+            end
+        end
+    else
+        log("Can't get type of file %s (%s). file says %q",
+            file, pkg, file_type0)
+    end
+    for _, t in ipairs(TARGETS) do
+        if t ~= target and file:match(t) then
+            log('File %s (%s): other target %s in name',
+                file, pkg, t)
+        end
+    end
 end
 
 -- builds package, returns list of new files
-local function buildPackage(pkg)
-    local files_before = findFiles()
+local function buildPackage(pkg, pkg2deps, file2pkg)
     local cmd = 'make %s MXE_TARGETS=%s --jobs=1'
     os.execute(cmd:format(pkg, target))
-    local files_after = findFiles()
-    local new_files = {}
-    for file in pairs(files_after) do
-        if not files_before[file] then
-            table.insert(new_files, file)
+    gitAdd()
+    local new_files, changed_files = gitStatus()
+    gitCommit(("Build %s for target %s"):format(pkg, target))
+    for _, file in ipairs(new_files) do
+        checkFile(file, pkg)
+        file2pkg[file] = {pkg=pkg, target=target}
+    end
+    for _, file in ipairs(changed_files) do
+        checkFile(file, pkg)
+        -- add a dependency on a package created this file
+        local creator_pkg = assert(file2pkg[file]).pkg
+        local creator_target = assert(file2pkg[file]).target
+        local level = ''
+        if target == creator_target then
+            if not isInArray(creator_pkg, pkg2deps[pkg]) then
+                table.insert(pkg2deps[pkg], creator_pkg)
+            end
+        else
+            level = 'error'
         end
+        log('Package %s changes %s, created by %s (%s) %s',
+            pkg, file, creator_pkg, creator_target, level)
     end
     return new_files
 end
@@ -230,6 +332,10 @@ local function protectVersion(ver)
         -- version number does not start with digit
         return '0.' .. ver
     end
+end
+
+local function listFile(pkg)
+    return ('%s-%s.list'):format(target, pkg)
 end
 
 local CONTROL = [[Package: %s
@@ -313,7 +419,7 @@ local function isBuilt(pkg, files)
 end
 
 -- build all packages, save filelist to file #pkg.list
-local function buildPackages(pkgs, pkg2deps)
+local function buildPackages(pkgs, pkg2deps, file2pkg)
     local broken = {}
     local unbroken = {}
     local function brokenDep(pkg)
@@ -326,26 +432,26 @@ local function buildPackages(pkgs, pkg2deps)
     end
     for _, pkg in ipairs(pkgs) do
         if not brokenDep(pkg) then
-            local files = buildPackage(pkg)
+            local files = buildPackage(pkg, pkg2deps, file2pkg)
             if isBuilt(pkg, files) then
-                saveFileList(pkg .. '.list', files)
+                saveFileList(listFile(pkg), files)
                 table.insert(unbroken, pkg)
             else
                 -- broken package
                 broken[pkg] = true
-                log('The package is broken: ' .. pkg)
+                log('The package is broken: %s', pkg)
             end
         else
             broken[pkg] = true
-            local msg = 'Package %s depends on broken %s'
-            log(msg:format(pkg, brokenDep(pkg)))
+            log('Package %s depends on broken %s',
+                pkg, brokenDep(pkg))
         end
     end
     return unbroken
 end
 
 local function filterFiles(pkg, filter_common)
-    local list = readFileList(pkg .. '.list')
+    local list = readFileList(listFile(pkg))
     local list2 = {}
     local common_list = COMMON_FILES[pkg]
     for _, installed_file in ipairs(list) do
@@ -359,12 +465,12 @@ end
 
 local function excludeCommon(pkg)
     local noncommon_files = filterFiles(pkg, false)
-    saveFileList(pkg .. '.list', noncommon_files)
+    saveFileList(listFile(pkg), noncommon_files)
 end
 
 local function makeCommonDeb(pkg, ver)
     local common_files = filterFiles(pkg, true)
-    local list_path = pkg .. '.common-list'
+    local list_path = ('common-%s.list'):format(pkg)
     saveFileList(list_path, common_files)
     local orig_target = target
     target = 'common'
@@ -376,7 +482,7 @@ local function makeDebs(pkgs, pkg2deps, pkg2ver)
     for _, pkg in ipairs(pkgs) do
         local deps = assert(pkg2deps[pkg], pkg)
         local ver = assert(pkg2ver[pkg], pkg)
-        local list_path = pkg .. '.list'
+        local list_path = listFile(pkg)
         local add_common = false
         if COMMON_FILES[pkg] then
             if target == ARCH_FOR_COMMON then
@@ -389,12 +495,7 @@ local function makeDebs(pkgs, pkg2deps, pkg2ver)
     end
 end
 
-local function clean()
-    local cmd = 'make clean MXE_TARGETS=%s'
-    os.execute(cmd:format(target))
-end
-
-local function buildForTarget(mxe_target)
+local function buildForTarget(mxe_target, file2pkg)
     target = mxe_target
     local pkgs, pkg2deps, pkg2ver = getPkgs()
     local build_list = sortForBuild(pkgs, pkg2deps)
@@ -403,10 +504,8 @@ local function buildForTarget(mxe_target)
             table.remove(build_list)
         end
     end
-    clean()
-    local unbroken = buildPackages(build_list, pkg2deps)
+    local unbroken = buildPackages(build_list, pkg2deps, file2pkg)
     makeDebs(unbroken, pkg2deps, pkg2ver)
-    clean()
 end
 
 local function getMxeVersion()
@@ -435,7 +534,7 @@ Description: MXE requirements package
 
 local function makeMxeRequirementsDeb(release)
     local name = 'mxe-requirements'
-    local ver = getMxeVersion()
+    local ver = getMxeVersion() .. release
     -- dependencies
     local deps = {
         'autoconf', 'automake', 'autopoint', 'bash', 'bison',
@@ -471,9 +570,10 @@ end
 
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
-buildForTarget('i686-w64-mingw32.static')
-buildForTarget('x86_64-w64-mingw32.static')
-buildForTarget('i686-w64-mingw32.shared')
-buildForTarget('x86_64-w64-mingw32.shared')
+gitInit()
+local file2pkg = {}
+for _, t in ipairs(TARGETS) do
+    buildForTarget(t, file2pkg)
+end
 makeMxeRequirementsDeb('wheezy')
 makeMxeRequirementsDeb('jessie')
