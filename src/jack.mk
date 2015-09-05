@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 1177655ae0fbbd8c2229b398a79724115a392941
 $(PKG)_SUBDIR   := jack-$($(PKG)_VERSION)
 $(PKG)_FILE     := jack-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://dl.dropboxusercontent.com/u/28869550/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libsamplerate libgnurx portaudio libsndfile winpthreads
+$(PKG)_DEPS     := gcc libsamplerate libgnurx portaudio libsndfile winpthreads readline
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://jackaudio.org/downloads/' | \
