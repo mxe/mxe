@@ -282,31 +282,25 @@ end
 local function checkFile(file, pkg)
     -- if it is PE32 file, it must have '.exe' in name
     local ext = file:sub(-4):lower()
-    local cmd = 'file --dereference %q'
-    local file_type0 = trim(shell(cmd:format(file)))
-    local file_type = file_type0:match('^[^:]+: (.*)$')
-    if file_type then
-        if ext == '.bin' then
-            -- can be an executable or something else (font)
-        elseif ext == '.exe' then
-            if not file_type:match('PE32') then
-                log('File %s (%s) is %q. Remove .exe',
-                    file, pkg, file_type)
-            end
-        elseif ext == '.dll' then
-            if not file_type:match('PE32.*DLL') then
-                log('File %s (%s) is %q. Remove .dll',
-                    file, pkg, file_type)
-            end
-        else
-            if file_type:match('PE32') then
-                log('File %s (%s) is %q. Add exe or dll',
-                    file, pkg, file_type)
-            end
+    local cmd = 'file --dereference --brief %q'
+    local file_type = trim(shell(cmd:format(file)))
+    if ext == '.bin' then
+        -- can be an executable or something else (font)
+    elseif ext == '.exe' then
+        if not file_type:match('PE32') then
+            log('File %s (%s) is %q. Remove .exe',
+                file, pkg, file_type)
+        end
+    elseif ext == '.dll' then
+        if not file_type:match('PE32.*DLL') then
+            log('File %s (%s) is %q. Remove .dll',
+                file, pkg, file_type)
         end
     else
-        log("Can't get type of file %s (%s). file says %q",
-            file, pkg, file_type0)
+        if file_type:match('PE32') then
+            log('File %s (%s) is %q. Add exe or dll',
+                file, pkg, file_type)
+        end
     end
     for _, t in ipairs(TARGETS) do
         if t ~= target and file:match(t) then
