@@ -16,6 +16,8 @@ define $(PKG)_BUILD
         TARGET_SYS=Windows BUILDMODE=static \
         PREFIX='$(PREFIX)/$(TARGET)' \
         FILE_T=luajit.exe \
+        INSTALL_TNAME=luajit-$($(PKG)_VERSION).exe \
+        INSTALL_TSYMNAME=luajit.exe \
         install
 endef
 
