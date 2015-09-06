@@ -38,5 +38,3 @@ define $(PKG)_BUILD
         '$(TOP_DIR)/src/jpeg-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' jpeg-turbo --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
