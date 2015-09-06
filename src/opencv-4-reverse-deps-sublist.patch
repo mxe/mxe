@@ -1,0 +1,38 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 20cf852345e364f7e18c8721561d7c4d1ebd1d6e Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 6 Sep 2015 00:53:13 +0100
+Subject: [PATCH] reverse deps list before inserting to another list
+
+Order of items in ${m}_EXTRA_DEPS_${ocv_optkind} corresponds
+to the order in which a linker expects items to appear:
+a depender before a dependee.
+
+But the order of items of OpenCV_EXTRA_COMPONENTS is
+reversed (afterwards this list is unique'ed and reversed).
+That is why sub-lists must be inserted in reversed form.
+---
+ cmake/OpenCVGenPkgconfig.cmake | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/cmake/OpenCVGenPkgconfig.cmake b/cmake/OpenCVGenPkgconfig.cmake
+index 183c56d..180210d 100644
+--- a/cmake/OpenCVGenPkgconfig.cmake
++++ b/cmake/OpenCVGenPkgconfig.cmake
+@@ -19,9 +19,11 @@ endif()
+ set(OpenCV_LIB_COMPONENTS "")
+ set(OpenCV_EXTRA_COMPONENTS "")
+ foreach(m ${OPENCV_MODULES_PUBLIC})
+   list(INSERT OpenCV_LIB_COMPONENTS 0 ${${m}_MODULE_DEPS_${ocv_optkind}} ${m})
+   if(${m}_EXTRA_DEPS_${ocv_optkind})
++    ocv_list_reverse(${m}_EXTRA_DEPS_${ocv_optkind})
+     list(INSERT OpenCV_EXTRA_COMPONENTS 0 ${${m}_EXTRA_DEPS_${ocv_optkind}})
++    ocv_list_reverse(${m}_EXTRA_DEPS_${ocv_optkind})
+   endif()
+ endforeach()
+ 
+-- 
+2.1.4
+
