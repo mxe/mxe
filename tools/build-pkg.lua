@@ -282,19 +282,19 @@ end
 local function checkFile(file, pkg)
     -- if it is PE32 file, it must have '.exe' in name
     local ext = file:sub(-4):lower()
-    local file_type0 = trim(shell(('file %q'):format(file)))
+    local cmd = 'file --dereference %q'
+    local file_type0 = trim(shell(cmd:format(file)))
     local file_type = file_type0:match('^[^:]+: (.*)$')
     if file_type then
-        local symlink = file_type:match('symbolic link')
         if ext == '.bin' then
             -- can be an executable or something else (font)
         elseif ext == '.exe' then
-            if not file_type:match('PE32') and not symlink then
+            if not file_type:match('PE32') then
                 log('File %s (%s) is %q. Remove .exe',
                     file, pkg, file_type)
             end
         elseif ext == '.dll' then
-            if not file_type:match('PE32.*DLL') and not symlink then
+            if not file_type:match('PE32.*DLL') then
                 log('File %s (%s) is %q. Remove .dll',
                     file, pkg, file_type)
             end
