@@ -17,8 +17,26 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,yasm,$(TARGET)-yasm,g' '$(1)/configure'
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+        $(MXE_CONFIGURE_OPTS) \
+        --libdir='$(PREFIX)/$(TARGET)/lib/$(PKG)' \
+        --includedir='$(PREFIX)/$(TARGET)/include/$(PKG)' \
+        NASM=$(TARGET)-yasm
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
+
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: jpeg-turbo'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: jpeg-turbo'; \
+     echo 'Cflags: -I$(PREFIX)/$(TARGET)/include/$(PKG)'; \
+     echo 'Libs: -L$(PREFIX)/$(TARGET)/lib/$(PKG) -ljpeg';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/jpeg-turbo.pc'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(TOP_DIR)/src/jpeg-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' jpeg-turbo --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =
