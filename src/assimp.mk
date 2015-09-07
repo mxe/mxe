@@ -22,6 +22,7 @@ define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DASSIMP_ENABLE_BOOST_WORKAROUND=OFF \
         -DASSIMP_BUILD_ASSIMP_TOOLS=OFF \
         -DASSIMP_BUILD_SAMPLES=OFF      \
         -DASSIMP_BUILD_TESTS=OFF        \
