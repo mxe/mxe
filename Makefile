@@ -145,6 +145,13 @@ UNPACK_ARCHIVE = \
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
 
+define PREPARE_PKG_SOURCE
+    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
+    cd '$(2)/$($(1)_SUBDIR)'
+    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
+        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
+endef
+
 PKG_CHECKSUM = \
     openssl sha1 '$(PKG_DIR)/$($(1)_FILE)' 2>/dev/null | $(SED) -n 's,^.*\([0-9a-f]\{40\}\)$$,\1,p'
 
@@ -356,7 +363,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
-                          download-only-$(1)
+                          $(if $(value $(call LOOKUP_PKG_RULE,$(1),URL,$(3))),download-only-$(1))
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)',
@@ -398,10 +405,8 @@ build-only-$(1)_$(3):
 	    automake --version 2>/dev/null | head -1
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
-	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
-	    cd '$(2)/$($(1)_SUBDIR)'
-	    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
-	        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
+	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
+	        $$(call PREPARE_PKG_SOURCE,$(1),$(2)))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    @echo
 	    @find '$(2)' -name 'config.log' -print -exec cat {} \;
