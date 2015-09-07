@@ -1,0 +1,131 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 0d185ed2b345e57a5b07e7975650f7cef3977f27 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Mon, 7 Sep 2015 23:04:23 +0100
+Subject: [PATCH 5/5] macro NATIVE_WIN32 for stuff we don't have here
+
+Macro NATIVE_WIN32 is undefined in MXE. It is used instead of _WIN32
+in #ifdef's where working variant is Unix and not Win32:
+
+ * MXE has strtok_r, but not strtok_s
+ * MXE has sigset_t, mode_t timespec defined (do not redefine)
+ * MXE has Unix-like stacktrace reader
+---
+ include/m_string.h  |  2 +-
+ include/my_global.h | 13 +++++++++----
+ include/thr_cond.h  |  4 ++--
+ mysys/stacktrace.c  |  2 +-
+ 4 files changed, 13 insertions(+), 8 deletions(-)
+
+diff --git a/include/m_string.h b/include/m_string.h
+index e1576af..5417192 100644
+--- a/include/m_string.h
++++ b/include/m_string.h
+@@ -127,7 +127,7 @@ static inline ulonglong my_strtoull(const char *nptr, char **endptr, int base)
+ 
+ static inline char *my_strtok_r(char *str, const char *delim, char **saveptr)
+ {
+-#if defined _WIN32
++#if NATIVE_WIN32
+   return strtok_s(str, delim, saveptr);
+ #else
+   return strtok_r(str, delim, saveptr);
+diff --git a/include/my_global.h b/include/my_global.h
+index acadb44..c71b9c2 100644
+--- a/include/my_global.h
++++ b/include/my_global.h
+@@ -25,6 +25,8 @@
+ #define __STDC_FORMAT_MACROS	/* Enable C99 printf format macros */
+ #define _USE_MATH_DEFINES       /* Get access to M_PI, M_E, etc. in math.h */
+ 
++#define NATIVE_WIN32 (defined(_WIN32) && !defined(__MINGW32__))
++
+ #ifdef _WIN32
+ /* Include common headers.*/
+ # include <winsock2.h>
+@@ -205,7 +207,7 @@ C_MODE_START
+ typedef int	(*qsort_cmp)(const void *,const void *);
+ typedef int	(*qsort_cmp2)(const void*, const void *,const void *);
+ C_MODE_END
+-#ifdef _WIN32
++#if NATIVE_WIN32
+ typedef int       socket_len_t;
+ typedef int       sigset_t;
+ typedef int       mode_t;
+@@ -646,6 +648,9 @@ static inline struct tm *gmtime_r(const time_t *clock, struct tm *res)
+   return res;
+ }
+ 
++#endif
++
++#if NATIVE_WIN32
+ 
+ /*
+   Declare a union to make sure FILETIME is properly aligned
+@@ -671,7 +676,7 @@ C_MODE_END
+ 
+ static inline void set_timespec_nsec(struct timespec *abstime, ulonglong nsec)
+ {
+-#ifndef _WIN32
++#if !NATIVE_WIN32
+   ulonglong now= my_getsystime() + (nsec / 100);
+   abstime->tv_sec=   now / 10000000ULL;
+   abstime->tv_nsec= (now % 10000000ULL) * 100 + (nsec % 100);
+@@ -697,7 +702,7 @@ static inline void set_timespec(struct timespec *abstime, ulonglong sec)
+ */
+ static inline int cmp_timespec(struct timespec *ts1, struct timespec *ts2)
+ {
+-#ifndef _WIN32
++#if !NATIVE_WIN32
+   if (ts1->tv_sec > ts2->tv_sec ||
+       (ts1->tv_sec == ts2->tv_sec && ts1->tv_nsec > ts2->tv_nsec))
+     return 1;
+@@ -715,7 +720,7 @@ static inline int cmp_timespec(struct timespec *ts1, struct timespec *ts2)
+ 
+ static inline ulonglong diff_timespec(struct timespec *ts1, struct timespec *ts2)
+ {
+-#ifndef _WIN32
++#if !NATIVE_WIN32
+   return (ts1->tv_sec - ts2->tv_sec) * 1000000000ULL +
+     ts1->tv_nsec - ts2->tv_nsec;
+ #else
+diff --git a/include/thr_cond.h b/include/thr_cond.h
+index 480e936..bd8e394 100644
+--- a/include/thr_cond.h
++++ b/include/thr_cond.h
+@@ -39,7 +39,7 @@ typedef CONDITION_VARIABLE native_cond_t;
+ typedef pthread_cond_t native_cond_t;
+ #endif
+ 
+-#ifdef _WIN32
++#if NATIVE_WIN32
+ /**
+   Convert abstime to milliseconds
+ */
+@@ -104,7 +104,7 @@ static inline int native_cond_timedwait(native_cond_t *cond,
+                                         const struct timespec *abstime)
+ {
+ #ifdef _WIN32
+-  DWORD timeout= get_milliseconds(abstime);
++  DWORD timeout= abstime->tv_nsec / 1000000 + abstime->tv_sec * 1000;
+   if (!SleepConditionVariableCS(cond, mutex, timeout))
+     return ETIMEDOUT;
+   return 0;
+diff --git a/mysys/stacktrace.c b/mysys/stacktrace.c
+index 226d469..45d37b1 100644
+--- a/mysys/stacktrace.c
++++ b/mysys/stacktrace.c
+@@ -15,7 +15,7 @@
+ 
+ #include "my_stacktrace.h"
+ 
+-#ifndef _WIN32
++#if !NATIVE_WIN32
+ #include "my_pthread.h"
+ #include "m_string.h"
+ #include <signal.h>
+-- 
+2.1.4
+
