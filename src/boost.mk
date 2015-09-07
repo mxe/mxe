@@ -61,8 +61,7 @@ define $(PKG)_BUILD
         mv -fv '$(PREFIX)/$(TARGET)/lib/'libboost_*.dll '$(PREFIX)/$(TARGET)/bin/')
 
     # setup cmake toolchain
-    $(SED) -i '/Boost_THREADAPI/d' '$(CMAKE_TOOLCHAIN_FILE)'
-    echo 'set(Boost_THREADAPI "win32")' >> '$(CMAKE_TOOLCHAIN_FILE)'
+    echo 'set(Boost_THREADAPI "win32")' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \

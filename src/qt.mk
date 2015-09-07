@@ -113,8 +113,7 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' QtGui --cflags --libs`
 
     # setup cmake toolchain
-    $(SED) -i '/QT_QMAKE_EXECUTABLE/d' '$(CMAKE_TOOLCHAIN_FILE)'
-    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' >> '$(CMAKE_TOOLCHAIN_FILE)'
+    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
 endef
 
