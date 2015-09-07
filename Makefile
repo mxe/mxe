@@ -394,6 +394,8 @@ build-only-$(1)_$(3):
 	    uname -a
 	    git show-branch --list --reflog=1
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
+	    autoconf --version 2>/dev/null | head -1
+	    automake --version 2>/dev/null | head -1
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
