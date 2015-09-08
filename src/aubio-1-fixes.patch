@@ -91,7 +91,7 @@ index 301a1b5..0cd2281 100644
  Name: aubio
  Description: a library for audio labelling
  Version: @VERSION@
-+Require.private: @PCREQUIRES@
++Requires.private: @PCREQUIRES@
  Libs: -L${libdir} -laubio
 +Libs.private: @PCLIBS@
  Cflags: -I${includedir} 
