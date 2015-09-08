@@ -19,7 +19,7 @@ index a968835..6acc338 100644
  	  tdlname=$dlname
  	  case $host,$output,$installed,$module,$dlname in
 -	    *cygwin*,*lai,yes,no,*.dll | *mingw*,*lai,yes,no,*.dll) tdlname=../bin/$dlname ;;
-+	    *cygwin*,*lai,yes,no,*.dll | *mingw*,*lai,yes,no,*.dll) tdlname=../../bin/libjpeg-turbo/$dlname ;;
++	    *cygwin*,*lai,yes,no,*.dll | *mingw*,*lai,yes,no,*.dll) tdlname=../../bin/$dlname ;;
  	  esac
  	  $echo > $output "\
  # $outputname - a libtool library file
