@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := aa0d31c58deb92ab03edfc417d903f50f78444d0
 $(PKG)_SUBDIR   := aubio-$($(PKG)_VERSION)
 $(PKG)_FILE     := aubio-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.aubio.org/pub/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ffmpeg fftw libsamplerate libsndfile
+$(PKG)_DEPS     := gcc ffmpeg fftw jack libsamplerate libsndfile
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.aubio.org/download' | \
@@ -30,10 +30,9 @@ define $(PKG)_BUILD
                 --enable-static --disable-shared, \
                 --disable-static --enable-shared)
 
-    # It is not trivial to adjust the installation path for the DLL in the
-    # waf-based build system. Adjust it here.
-    $(if $(BUILD_SHARED),                         \
-        mv '$(PREFIX)/$(TARGET)/lib/libaubio-4.dll' '$(PREFIX)/$(TARGET)/bin')
+    # It is not trivial to adjust the installation in waf-based builds
+    $(if $(BUILD_STATIC),                         \
+        $(INSTALL) -m644 '$(1)/build/src/libaubio.a' '$(PREFIX)/$(TARGET)/lib')
 
     '$(TARGET)-gcc'                               \
         -W -Wall -Werror -ansi -pedantic          \
