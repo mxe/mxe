@@ -17,11 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && $(SED) -i 's/-lm/-lm -lstdc++/' ftgl.pc.in
-    cd '$(1)' && aclocal -I m4
-    cd '$(1)' && $(LIBTOOLIZE)
-    cd '$(1)' && automake --gnu
-    cd '$(1)' && autoconf
+    $(SED) -i 's/-lm/-lm -lstdc++/' '$(1)/ftgl.pc.in'
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --without-x \
