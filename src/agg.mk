@@ -22,13 +22,10 @@ define $(PKG)_UPDATE_OLD
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,aclocal,aclocal -I $(PREFIX)/$(TARGET)/share/aclocal,' '$(1)/autogen.sh'
-    $(SED) -i 's,libtoolize,$(LIBTOOLIZE),'                             '$(1)/autogen.sh'
-    cd '$(1)' && $(SHELL) ./autogen.sh \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+    $(foreach f,authors news readme, mv '$(1)/$f' '$(1)/$f_';mv '$(1)/$f_' '$(1)/$(call uc,$f)';)
+    cd '$(1)' && autoreconf -fi -I $(PREFIX)/$(TARGET)/share/aclocal
+    cd '$(1)' && $(SHELL) ./configure \
+        $(MXE_CONFIGURE_OPTS) \
         --without-x
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
