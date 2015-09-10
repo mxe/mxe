@@ -11,6 +11,11 @@
 -- Packages are written to `*.tar.xz` files.
 -- Debian packages are written to `*.deb` files.
 
+-- Build in directory /usr/lib/mxe
+-- This directory can not be changed in .deb packages
+-- To change this directory, set environment variable
+-- MXE_DIR to other directory.
+
 -- To prevent build-pkg from creating deb packages,
 -- set environment variable MXE_NO_DEBS to 1
 -- In this case fakeroot and dpkg-deb are not needed.
@@ -23,7 +28,7 @@ local no_debs = os.getenv('MXE_NO_DEBS')
 
 local ARCH = 'amd64'
 
-local MXE_DIR = '/usr/lib/mxe'
+local MXE_DIR = os.getenv('MXE_DIR') or '/usr/lib/mxe'
 
 local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
 
