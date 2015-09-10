@@ -11,7 +11,15 @@
 -- Packages are written to `*.tar.xz` files.
 -- Debian packages are written to `*.deb` files.
 
+-- To prevent build-pkg from creating deb packages,
+-- set environment variable MXE_NO_DEBS to 1
+-- In this case fakeroot and dpkg-deb are not needed.
+
+-- To limit number of packages being built to x,
+-- set environment variable MXE_MAX_PACKAGES to x,
+
 local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
+local no_debs = os.getenv('MXE_NO_DEBS')
 
 local ARCH = 'amd64'
 
@@ -366,7 +374,10 @@ local function makeDeb(pkg, list_path, deps, ver, add_common)
     local usr = dirname .. MXE_DIR
     os.execute(('mkdir -p %s'):format(usr))
     -- use tar to copy files with paths
-    local cmd = 'fakeroot -s deb.fakeroot tar -C %s -xf %s'
+    local cmd = 'tar -C %s -xf %s'
+    if not no_debs then
+        cmd = 'fakeroot -s deb.fakeroot ' .. cmd
+    end
     os.execute(cmd:format(usr, tar_name))
     -- prepare dependencies
     local deb_deps = {'mxe-requirements'}
@@ -384,9 +395,11 @@ local function makeDeb(pkg, list_path, deps, ver, add_common)
     control:write(CONTROL:format(deb_pkg, protectVersion(ver),
         ARCH, deb_deps_str, pkg, target, pkg))
     control:close()
-    -- make .deb file
-    local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
-    os.execute(cmd:format(dirname))
+    if not no_debs then
+        -- make .deb file
+        local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
+        os.execute(cmd:format(dirname))
+    end
     -- cleanup
     os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
 end
@@ -575,5 +588,7 @@ local file2pkg = {}
 for _, t in ipairs(TARGETS) do
     buildForTarget(t, file2pkg)
 end
-makeMxeRequirementsDeb('wheezy')
-makeMxeRequirementsDeb('jessie')
+if not no_debs then
+    makeMxeRequirementsDeb('wheezy')
+    makeMxeRequirementsDeb('jessie')
+end
