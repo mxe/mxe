@@ -47,7 +47,7 @@ define $(PKG)_BUILD
         --without-progs \
         --without-tests \
         --enable-pc-files \
-        PKG_CONFIG_LIBDIR='$(PREFIX)/$(TARGET)/lib/pkgconfig' \
+        --with-pkg-config-libdir='$(PREFIX)/$(TARGET)/lib/pkgconfig' \
         $(if $(BUILD_STATIC), \
             --with-normal    --without-shared --with-static, \
             --without-normal --without-static --with-shared)
