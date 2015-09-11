@@ -122,6 +122,16 @@ local function shell(cmd)
     return text
 end
 
+local function fileExists(name)
+    local f = io.open(name, "r")
+    if f ~= nil then
+        io.close(f)
+        return true
+    else
+        return false
+    end
+end
+
 -- return several tables describing packages
 -- * list of packages
 -- * map from package to list of deps
@@ -227,7 +237,9 @@ local function gitStatus()
         local status, file = line:match('(..) (.*)')
         status = trim(status)
         file = 'usr/' .. file
-        if not isBlacklisted(file) then
+        if not fileExists(file) then
+            log('Missing file: %q', file)
+        elseif not isBlacklisted(file) then
             if status == 'A' then
                 table.insert(new_files, file)
             elseif status == 'M' then
