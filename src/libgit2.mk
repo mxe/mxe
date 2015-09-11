@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2f8c066456bbc67c2b0209f0e3ef72eed585fb46
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/libgit2/libgit2/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc libssh2
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
