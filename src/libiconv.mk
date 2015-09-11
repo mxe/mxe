@@ -26,6 +26,9 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/lib'        -j '$(JOBS)' install
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/include/iconv.h.inst' '$(PREFIX)/$(TARGET)/include/iconv.h'
+
+    # charset.alias is redundant on mingw and modern glibc systems
+    rm -f '$(PREFIX)/$(TARGET)/lib/charset.alias'
 endef
 
 define $(PKG)_BUILD_$(BUILD)
