@@ -236,6 +236,10 @@ local function gitStatus()
     for line in git_st:lines() do
         local status, file = line:match('(..) (.*)')
         status = trim(status)
+        if file:sub(1, 1) == '"' then
+            -- filename with a space is quoted by git
+            file = file:sub(2, -2)
+        end
         file = 'usr/' .. file
         if not fileExists(file) then
             log('Missing file: %q', file)
