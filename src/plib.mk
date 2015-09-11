@@ -18,19 +18,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install \
         bin_PROGRAMS= \
         sbin_PROGRAMS= \
         noinst_PROGRAMS= \
         html_DATA= \
+        LDFLAGS=-no-undefined
         AR='$(TARGET)-ar'
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-
-$(PKG)_BUILD_SHARED =
