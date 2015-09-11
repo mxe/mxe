@@ -596,10 +596,10 @@ local function makeMxeRequirementsDeb(release)
         ver, ARCH, deps_str))
     control:close()
     -- make .deb file
-    local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
+    local cmd = 'dpkg-deb -b %s'
     os.execute(cmd:format(dirname))
     -- cleanup
-    os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
+    os.execute(('rm -fr %s'):format(dirname))
 end
 
 assert(trim(shell('pwd')) == MXE_DIR,
