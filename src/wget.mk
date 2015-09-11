@@ -26,7 +26,6 @@ define $(PKG)_BUILD
         --with-ssl=gnutls \
         CFLAGS='-DIN6_ARE_ADDR_EQUAL=IN6_ADDR_EQUAL' \
         LIBS='-lpthread'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_DOCS) ||  \
-        touch '$(1)/doc/wget.info' &&                              \
-        $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(1)/lib' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/src' -j '$(JOBS)' install-binPROGRAMS
 endef
