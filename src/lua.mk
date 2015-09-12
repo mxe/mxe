@@ -70,3 +70,14 @@ define $(PKG)_BUILD_SHARED
         install
     $($(PKG)_BUILD_COMMON)
 endef
+
+define $(PKG)_BUILD_$(BUILD)
+    $(MAKE) -C '$(1)/src' -j '$(JOBS)' \
+        INSTALL_TOP='$(PREFIX)/$(TARGET)' \
+        INSTALL='$(INSTALL)' \
+        PLAT=$(shell ([ `uname -s` == Darwin ] && echo "macosx") || echo `uname -s` | tr '[:upper:]' '[:lower:]')
+    $(MAKE) -C '$(1)' -j 1 \
+        INSTALL_TOP='$(PREFIX)/$(TARGET)' \
+        INSTALL='$(INSTALL)' \
+        install
+endef
