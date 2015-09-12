@@ -79,8 +79,7 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' Qt5Widgets --cflags --libs`
 
     # setup cmake toolchain
-    $(SED) -i '/CMAKE_SYSTEM_PREFIX_PATH/d' '$(CMAKE_TOOLCHAIN_FILE)'
-    echo 'set(CMAKE_SYSTEM_PREFIX_PATH "$(PREFIX)/$(TARGET)/qt5" ${CMAKE_SYSTEM_PREFIX_PATH})' >> '$(CMAKE_TOOLCHAIN_FILE)'
+    echo 'set(CMAKE_SYSTEM_PREFIX_PATH "$(PREFIX)/$(TARGET)/qt5" ${CMAKE_SYSTEM_PREFIX_PATH})' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
     # batch file to run test programs
     (printf 'set PATH=..\\lib;..\\qt5\\bin;..\\qt5\\lib;%%PATH%%\r\n'; \
