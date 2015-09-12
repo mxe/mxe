@@ -8,6 +8,7 @@ $(PKG)_UPDATE  := echo 1
 define $(PKG)_BUILD_COMMON
     # install target-specific autotools config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/share'
+    # setting ac_cv_build bypasses the config.guess check in every package
     echo "ac_cv_build=$(BUILD)" > '$(PREFIX)/$(TARGET)/share/config.site'
 
     # install config.guess for general use
