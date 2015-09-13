@@ -69,6 +69,18 @@ define $(PKG)_BUILD
      echo 'Description: OpenGL'; \
      echo 'Libs: -lglu32';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/glu.pc'
+
+    # fail early if autotools can't autoreconf
+    # 1. detect mismatches in installation locations
+    # 2. ???
+    (echo 'AC_INIT([mxe.cc], [1])'; \
+     $(foreach PROG, autoconf automake libtool, \
+         echo 'AC_PATH_PROG([$(call uc,$(PROG))], [$(PROG)])';) \
+     echo 'PKG_PROG_PKG_CONFIG(0.16)'; \
+     echo 'AC_OUTPUT') \
+     > '$(1)/configure.ac'
+    cd '$(1)' && autoreconf -fiv
+    cd '$(1)' && ./configure
 endef
 
 $(PKG)_BUILD_$(BUILD) = $($(PKG)_BUILD_COMMON)
