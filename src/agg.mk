@@ -24,7 +24,7 @@ endef
 define $(PKG)_BUILD
     $(foreach f,authors news readme, mv '$(1)/$f' '$(1)/$f_';mv '$(1)/$f_' '$(1)/$(call uc,$f)';)
     cd '$(1)' && autoreconf -fi -I $(PREFIX)/$(TARGET)/share/aclocal
-    cd '$(1)' && $(SHELL) ./configure \
+    cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --without-x
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
