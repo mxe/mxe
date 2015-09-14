@@ -18,7 +18,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # configure script is ancient and lacks cross-compiling support
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install oldincludedir=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' \
+        AR='$(TARGET)-ar' \
+        oldincludedir= \
+        install
 endef
