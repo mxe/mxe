@@ -3,8 +3,8 @@
 
 PKG             := atk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.14.0
-$(PKG)_CHECKSUM := b803d055c8e2f786782803b7d21e413718321db7
+$(PKG)_VERSION  := 2.16.0
+$(PKG)_CHECKSUM := d097c6cec71ffede77be9f13f4ceee9880c0a5d7
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
