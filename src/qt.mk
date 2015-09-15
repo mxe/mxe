@@ -114,6 +114,9 @@ define $(PKG)_BUILD
 
     # setup cmake toolchain
     echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
+    # fix static linking errors of QtGui to missing lcms2 and lzma 
+    # introduced by poor libmng linking
+    echo 'set(MNG_LIBRARY mng lcms2 lzma)' >> '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake' 
 
 endef
 
