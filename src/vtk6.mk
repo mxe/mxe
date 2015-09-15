@@ -45,6 +45,8 @@ define $(PKG)_BUILD
         -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
         -DModule_vtkGUISupportQt=TRUE \
         -DModule_vtkGUISupportQtOpenGL=TRUE \
+        -DModule_vtkViewsQt=TRUE \
+        -DModule_vtkRenderingQt=TRUE \
         -DQT_QMAKE_EXECUTABLE=$(PREFIX)/$(TARGET)/qt/bin/qmake \
         -DVTK_USE_SYSTEM_HDF5=TRUE \
         -DBUILD_EXAMPLES=OFF \
@@ -53,4 +55,11 @@ define $(PKG)_BUILD
         '$(1)'
     $(MAKE) -C '$(1).cross_build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).cross_build' -j 1 VERBOSE=1
     $(MAKE) -C '$(1).cross_build' -j 1 install VERBOSE=1
+    
+    #now build the GUI -> Qt -> SimpleView Example
+    mkdir '$(1).test'
+    cd '$(1).test' && cmake \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        '$(1)/Examples/GUI/Qt/SimpleView'
+    $(MAKE) -C '$(1).test' -j '$(JOBS)' VERBOSE=1
 endef
