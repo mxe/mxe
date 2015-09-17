@@ -314,6 +314,9 @@ local function checkFile(file, pkg)
                 file, pkg, t)
         end
     end
+    if file:match('/lib/.*%.dll$') then
+        log('File %s (%s): DLL in /lib/', file, pkg)
+    end
 end
 
 -- builds package, returns list of new files
