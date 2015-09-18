@@ -10,6 +10,11 @@ $(PKG)_FILE     := pire-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/yandex/pire/archive/release-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc
 
+define $(PKG)_UPDATE
+    $(call MXE_GET_GITHUB_TAGS, yandex/pire) | \
+    $(SED) 's,^release-,,g'
+endef
+
 define $(PKG)_BUILD
     cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
