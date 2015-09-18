@@ -623,6 +623,8 @@ end
 
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
+while not testCommand('make download -j 6 -k') do
+end
 gitInit()
 local file2pkg = {}
 for _, t in ipairs(TARGETS) do
