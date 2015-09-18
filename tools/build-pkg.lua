@@ -288,6 +288,11 @@ local function gitCommit(message)
     os.execute(cmd:format(message))
 end
 
+local function isValidBinary(file)
+    local cmd = './usr/bin/%s-objdump -t %s > /dev/null 2>&1'
+    return testCommand(cmd:format(target, file))
+end
+
 local function checkFile(file, pkg)
     -- if it is PE32 file, it must have '.exe' in name
     local ext = file:sub(-4):lower()
@@ -319,6 +324,14 @@ local function checkFile(file, pkg)
     end
     if file:match('/lib/.*%.dll$') then
         log('File %s (%s): DLL in /lib/', file, pkg)
+    end
+    if file:match('%.dll$') or file:match('%.a$') then
+        if file:find(target, 1, true) then -- not common
+            if not isValidBinary(file) then
+                log('File %s (%s): not recognized library',
+                    file, pkg)
+            end
+        end
     end
 end
 
