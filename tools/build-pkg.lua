@@ -135,6 +135,15 @@ local function shell(cmd)
     return text
 end
 
+local function testCommand(cmd)
+    if _VERSION == 'Lua 5.1' then
+        return os.execute(cmd) == 0
+    else
+        -- Lua >= 5.2
+        return os.execute(cmd)
+    end
+end
+
 local function fileExists(name)
     local f = io.open(name, "r")
     if f ~= nil then
