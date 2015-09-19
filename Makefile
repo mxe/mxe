@@ -168,14 +168,16 @@ ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
 BACKUP_DOWNLOAD = \
-    $(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-    $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`
+    (echo "MXE Warning! Downloading $(1) from backup." >&2 && \
+    ($(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`))
 
 DOWNLOAD_PKG_ARCHIVE = \
         mkdir -p '$(PKG_DIR)' && ( \
             $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' \
             $(if $($(1)_URL_2), \
-                || $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)') \
+                || (echo "MXE Warning! Downloading $(1) from second URL." >&2 && \
+                    $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)')) \
             $(if $(MXE_NO_BACKUP_DL),, \
                 || $(BACKUP_DOWNLOAD)) \
         ) \
@@ -344,6 +346,7 @@ download-only-$(1):
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(PRINTF_FMT) '[download]' '$(1)'; \
 	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
+	    grep 'MXE Warning' '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
 	    if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	        echo; \
