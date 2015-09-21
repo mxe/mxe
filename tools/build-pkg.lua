@@ -135,6 +135,15 @@ local function shell(cmd)
     return text
 end
 
+local function execute(cmd)
+    if _VERSION == 'Lua 5.1' then
+        return os.execute(cmd) == 0
+    else
+        -- Lua >= 5.2
+        return os.execute(cmd)
+    end
+end
+
 local function fileExists(name)
     local f = io.open(name, "r")
     if f ~= nil then
@@ -279,6 +288,11 @@ local function gitCommit(message)
     os.execute(cmd:format(message))
 end
 
+local function isValidBinary(file)
+    local cmd = './usr/bin/%s-objdump -t %s > /dev/null 2>&1'
+    return execute(cmd:format(target, file))
+end
+
 local function checkFile(file, pkg)
     -- if it is PE32 file, it must have '.exe' in name
     local ext = file:sub(-4):lower()
@@ -310,6 +324,14 @@ local function checkFile(file, pkg)
     end
     if file:match('/lib/.*%.dll$') then
         log('File %s (%s): DLL in /lib/', file, pkg)
+    end
+    if file:match('%.dll$') or file:match('%.a$') then
+        if file:find(target, 1, true) then -- not common
+            if not isValidBinary(file) then
+                log('File %s (%s): not recognized library',
+                    file, pkg)
+            end
+        end
     end
 end
 
@@ -601,6 +623,8 @@ end
 
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
+while not execute('make download -j 6 -k') do
+end
 gitInit()
 local file2pkg = {}
 for _, t in ipairs(TARGETS) do
