@@ -135,7 +135,7 @@ local function shell(cmd)
     return text
 end
 
-local function testCommand(cmd)
+local function execute(cmd)
     if _VERSION == 'Lua 5.1' then
         return os.execute(cmd) == 0
     else
@@ -290,7 +290,7 @@ end
 
 local function isValidBinary(file)
     local cmd = './usr/bin/%s-objdump -t %s > /dev/null 2>&1'
-    return testCommand(cmd:format(target, file))
+    return execute(cmd:format(target, file))
 end
 
 local function checkFile(file, pkg)
@@ -623,7 +623,7 @@ end
 
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
-while not testCommand('make download -j 6 -k') do
+while not execute('make download -j 6 -k') do
 end
 gitInit()
 local file2pkg = {}
