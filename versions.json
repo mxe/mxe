@@ -30,6 +30,7 @@
     "check": "0.9.14",
     "chipmunk": "6.2.2",
     "chromaprint": "1.1",
+    "cimg": "1.6.3",
     "cmake": "3.0.2",
     "cminpack": "1.3.4",
     "coreutils": "8.23",
