@@ -3,8 +3,8 @@
 
 PKG             := libepoxy
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2
-$(PKG)_CHECKSUM := e700520711b9e4fa07c286aa36e431d8ad4133f5
+$(PKG)_VERSION  := 1.3.1
+$(PKG)_CHECKSUM := 94d98d83a50d2f607ee9986b622a48df00d5926c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_GITHUB   := https://github.com/anholt/$(PKG)
@@ -18,7 +18,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal' \
-      && ./configure $(MXE_CONFIGURE_OPTS)
+    cd '$(1)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal'
+    cd '$(1)' && ./configure \
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 endef
