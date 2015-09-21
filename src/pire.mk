@@ -11,11 +11,16 @@ $(PKG)_URL      := https://github.com/yandex/pire/archive/release-$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal'
-    cd '$(1)' && ac_cv_func_malloc_0_nonnull=yes ./configure \
+    cd '$(1)' && autoreconf -fi
+    cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-extra \
-        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+        ac_cv_func_malloc_0_nonnull=yes
+    $(MAKE) -C '$(1)/pire' -j '$(JOBS)' bin_PROGRAMS= LDFLAGS='-no-undefined'
+    $(MAKE) -C '$(1)/pire' -j 1 install bin_PROGRAMS=
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror \
+        '$(1)/samples/pigrep/pigrep.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        -lpire
 endef
