@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 703326874bf235adb392b9748ff0a56a08991690 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 6 Sep 2015 17:45:40 +0100
+Subject: [PATCH] install DLL to bin/libjpeg-turbo not to lib/bin
+
+---
+ ltmain.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ltmain.sh b/ltmain.sh
+index a968835..6acc338 100644
+--- a/ltmain.sh
++++ b/ltmain.sh
+@@ -5229,7 +5229,7 @@ fi\
+ 	  # place dlname in correct position for cygwin
+ 	  tdlname=$dlname
+ 	  case $host,$output,$installed,$module,$dlname in
+-	    *cygwin*,*lai,yes,no,*.dll | *mingw*,*lai,yes,no,*.dll) tdlname=../bin/$dlname ;;
++	    *cygwin*,*lai,yes,no,*.dll | *mingw*,*lai,yes,no,*.dll) tdlname=../../bin/$dlname ;;
+ 	  esac
+ 	  $echo > $output "\
+ # $outputname - a libtool library file
+-- 
+2.1.4
+
