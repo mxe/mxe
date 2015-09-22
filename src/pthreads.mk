@@ -24,4 +24,8 @@ PTHREADS_TEST = \
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TOP_DIR)/src/pthreads-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-pthreads.exe' \
-        `'$(TARGET)-pkg-config' --libs pthreads`
+        `'$(TARGET)-pkg-config' --libs pthreads` && \
+    (echo 'SET( THREADS_PTHREAD_ARG '; \
+     echo '"PLEASE_FILL_OUT-FAILED_TO_RUN" '; \
+     echo 'CACHE STRING "Result from TRY_RUN" FORCE)';) \
+     > '$(CMAKE_TOOLCHAIN_DIR)/pthreads.cmake'
