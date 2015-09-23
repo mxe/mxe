@@ -4,7 +4,7 @@
 PKG             := atkmm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.22.7
-$(PKG)_CHECKSUM := 2a13d86936021969406b3dcafd4dd05abd70f91b
+$(PKG)_CHECKSUM := bfbf846b409b4c5eb3a52fa32a13d86936021969406b3dcafd4dd05abd70f91b
 $(PKG)_SUBDIR   := atkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := atkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/atkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := plib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.5-rc1
-$(PKG)_CHECKSUM := 87c74984ec57c12bc85f2dc2729de3ec4cdcdbe4
+$(PKG)_CHECKSUM := d421a3c84517b4bfc8c6402887c74984ec57c12bc85f2dc2729de3ec4cdcdbe4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)

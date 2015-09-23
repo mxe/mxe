@@ -4,7 +4,7 @@
 PKG             := gtkglarea
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.1
-$(PKG)_CHECKSUM := 3eff727bf2207c5c6714125155ca0cee0b177179
+$(PKG)_CHECKSUM := dffe1cc0512d20d3840d0a1f3eff727bf2207c5c6714125155ca0cee0b177179
 $(PKG)_SUBDIR   := gtkglarea-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglarea-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://mirrors.ircam.fr/pub/GNOME/sources/gtkglarea/2.0/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := qhttpengine
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.0
-$(PKG)_CHECKSUM := 2903c2991b398a0b89fb483dae7c24bdefa1eaf1
+$(PKG)_CHECKSUM := 6df0e2f303eb5fb80995e0322903c2991b398a0b89fb483dae7c24bdefa1eaf1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/nitroshare/qhttpengine/archive/$($(PKG)_VERSION).tar.gz

@@ -4,7 +4,7 @@
 PKG             := file
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.24
-$(PKG)_CHECKSUM := 2cd507a0f25458112752e398445cea102bc750ce
+$(PKG)_CHECKSUM := 802cb3de2e49e88ef97cdcb52cd507a0f25458112752e398445cea102bc750ce
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://distfiles.macports.org/file/$($(PKG)_FILE)

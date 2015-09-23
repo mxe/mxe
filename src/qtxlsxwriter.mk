@@ -3,7 +3,7 @@
 PKG             := qtxlsxwriter
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := ad90b6a2c21b300138ceb9fe9030a5917230f92d
-$(PKG)_CHECKSUM := 897ede5c74531495f28f2be66191fbdc3e1ce01f
+$(PKG)_CHECKSUM := bebf32dab284d4774bedc6dc897ede5c74531495f28f2be66191fbdc3e1ce01f
 $(PKG)_SUBDIR   := QtXlsxWriter-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/dbzhang800/QtXlsxWriter/archive/$($(PKG)_VERSION).tar.gz

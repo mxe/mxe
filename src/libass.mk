@@ -4,7 +4,7 @@
 PKG             := libass
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.12.3
-$(PKG)_CHECKSUM := 9ee6ab6adfe2e64ed9f9149db03dc863360ea38c
+$(PKG)_CHECKSUM := a67c54ebaf5ec19ae72e86259ee6ab6adfe2e64ed9f9149db03dc863360ea38c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := https://github.com/libass/libass/releases/download/$($(PKG)_VERSION)/$($(PKG)_FILE)

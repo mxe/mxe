@@ -4,7 +4,7 @@
 PKG             := xerces
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.2
-$(PKG)_CHECKSUM := 0d97031e0099fe2b7142cef03e0da16e282655a0
+$(PKG)_CHECKSUM := 743bd0a029bf8de56a587c270d97031e0099fe2b7142cef03e0da16e282655a0
 $(PKG)_SUBDIR   := xerces-c-$($(PKG)_VERSION)
 $(PKG)_FILE     := xerces-c-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)

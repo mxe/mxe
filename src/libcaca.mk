@@ -4,7 +4,7 @@
 PKG             := libcaca
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.99.beta19
-$(PKG)_CHECKSUM := 72a4e83049342cc8cc2f655f53a2d0ee9d3772f4
+$(PKG)_CHECKSUM := 128b467c4ed03264c187405172a4e83049342cc8cc2f655f53a2d0ee9d3772f4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://caca.zoy.org/raw-attachment/wiki/$(PKG)/$($(PKG)_FILE)

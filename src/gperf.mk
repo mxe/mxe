@@ -4,7 +4,7 @@
 PKG             := gperf
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0.4
-$(PKG)_CHECKSUM := 47cf839ed544f3cf5d0f0523aaa2508623aad63e
+$(PKG)_CHECKSUM := 767112a204407e62dbc3106647cf839ed544f3cf5d0f0523aaa2508623aad63e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)

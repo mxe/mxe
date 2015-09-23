@@ -4,7 +4,7 @@
 PKG             := gmp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.0.0
-$(PKG)_CHECKSUM := 207be838ece1219425d64e28cfa3e70d5c759aaf
+$(PKG)_CHECKSUM := 7f8e9a804b9c6d07164cf754207be838ece1219425d64e28cfa3e70d5c759aaf
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)a.tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)

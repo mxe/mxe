@@ -4,7 +4,7 @@
 PKG             := libftdi
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.20
-$(PKG)_CHECKSUM := 90a8bfe90941be501cc0a72118ce3d338d4b838e
+$(PKG)_CHECKSUM := 3176d5b5986438f33f5208e690a8bfe90941be501cc0a72118ce3d338d4b838e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.intra2net.com/en/developer/libftdi/download/$($(PKG)_FILE)

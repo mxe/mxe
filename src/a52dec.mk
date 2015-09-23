@@ -4,7 +4,7 @@
 PKG             := a52dec
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.7.4
-$(PKG)_CHECKSUM := 687df82c475b5dfb997513eef4c25de6c865ec33
+$(PKG)_CHECKSUM := a21d724ab3b3933330194353687df82c475b5dfb997513eef4c25de6c865ec33
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://liba52.sourceforge.net/files/$(PKG)-$($(PKG)_VERSION).tar.gz

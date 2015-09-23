@@ -4,7 +4,7 @@
 PKG             := nsis
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.46
-$(PKG)_CHECKSUM := e17871c1ed324c1f3cc7a753ef591f76c9e8a1ae
+$(PKG)_CHECKSUM := f5f9e5e22505e44b25aea14fe17871c1ed324c1f3cc7a753ef591f76c9e8a1ae
 $(PKG)_SUBDIR   := nsis-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := nsis-$($(PKG)_VERSION)-src.tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/nsis/NSIS 2/$($(PKG)_VERSION)/$($(PKG)_FILE)

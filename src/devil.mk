@@ -4,7 +4,7 @@
 PKG             := devil
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.7.8
-$(PKG)_CHECKSUM := e473c954bf3f4fb0f3ecac159c73db632d28a8fd
+$(PKG)_CHECKSUM := 682ffa3fc894686156337b8ce473c954bf3f4fb0f3ecac159c73db632d28a8fd
 $(PKG)_SUBDIR   := devil-$($(PKG)_VERSION)
 $(PKG)_FILE     := DevIL-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/openil/DevIL/$($(PKG)_VERSION)/$($(PKG)_FILE)

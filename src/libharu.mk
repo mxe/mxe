@@ -4,7 +4,7 @@
 PKG             := libharu
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.1
-$(PKG)_CHECKSUM := fc19eeb31b50c4b9edadf9d89dd5a7d9ae4865a7
+$(PKG)_CHECKSUM := 45fd57044042c0e290ad0f11fc19eeb31b50c4b9edadf9d89dd5a7d9ae4865a7
 $(PKG)_SUBDIR   := libharu-$($(PKG)_VERSION)
 $(PKG)_FILE     := libharu-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://libharu.org/files/$($(PKG)_FILE)

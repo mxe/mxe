@@ -4,7 +4,7 @@
 PKG             := xz
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.2.1
-$(PKG)_CHECKSUM := b5ee663df800049e187259faf5eb997a7b974681
+$(PKG)_CHECKSUM := b918b6648076e74f8d7ae19db5ee663df800049e187259faf5eb997a7b974681
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://tukaani.org/xz/$($(PKG)_FILE)

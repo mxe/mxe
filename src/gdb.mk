@@ -3,7 +3,7 @@
 
 PKG             := gdb
 $(PKG)_VERSION  := 7.9.1
-$(PKG)_CHECKSUM := 936034b68c2b5d6f10e0d51dc168c166c973ba40
+$(PKG)_CHECKSUM := cd9c543a411a05b2b647dd38936034b68c2b5d6f10e0d51dc168c166c973ba40
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)

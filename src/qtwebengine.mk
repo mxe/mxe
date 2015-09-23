@@ -4,7 +4,7 @@
 PKG             := qtwebengine
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := dd8708f2e01d3ed81f18aaadd713342033cbd65a
+$(PKG)_CHECKSUM := d703e60838744283f9a3419bdd8708f2e01d3ed81f18aaadd713342033cbd65a
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebengine,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebengine,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebengine,$(qtbase_URL))

@@ -4,7 +4,7 @@
 PKG             := qtgraphicaleffects
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 48635e1db3e15d13e326af4a6b355fecf0a147ee
+$(PKG)_CHECKSUM := f143514e7414797f264fea6348635e1db3e15d13e326af4a6b355fecf0a147ee
 $(PKG)_SUBDIR    = $(subst qtbase,qtgraphicaleffects,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtgraphicaleffects,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtgraphicaleffects,$(qtbase_URL))

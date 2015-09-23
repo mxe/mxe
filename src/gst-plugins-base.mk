@@ -4,7 +4,7 @@
 PKG             := gst-plugins-base
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4.5
-$(PKG)_CHECKSUM := ddf761a3b78560a2c2a80829d0815ca39cbd551d
+$(PKG)_CHECKSUM := 77bd8199e7a312d3d71de9b7ddf761a3b78560a2c2a80829d0815ca39cbd551d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)

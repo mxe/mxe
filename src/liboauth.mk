@@ -4,7 +4,7 @@
 PKG             := liboauth
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.3
-$(PKG)_CHECKSUM := bac59d6e8d4b464058cc55f9208d72e41156811f
+$(PKG)_CHECKSUM := 0df60157b052f0e774ade8a8bac59d6e8d4b464058cc55f9208d72e41156811f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$($(PKG)_FILE)

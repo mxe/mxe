@@ -4,7 +4,7 @@
 PKG             := xine-lib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.6
-$(PKG)_CHECKSUM := 0e5bda5a664a47e035135b5a449364f8c9b6a005
+$(PKG)_CHECKSUM := bd041d738817c7c0c6392a3c0e5bda5a664a47e035135b5a449364f8c9b6a005
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xine/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)

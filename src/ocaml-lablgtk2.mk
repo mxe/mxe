@@ -4,7 +4,7 @@
 PKG             := ocaml-lablgtk2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.16.0
-$(PKG)_CHECKSUM := 08fff339d4c34357802f02c63329dd41b777de2f
+$(PKG)_CHECKSUM := a0ea9752eb257dadcfc2914408fff339d4c34357802f02c63329dd41b777de2f
 $(PKG)_SUBDIR   := lablgtk-$($(PKG)_VERSION)
 $(PKG)_FILE     := lablgtk-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://forge.ocamlcore.org/frs/download.php/979/$($(PKG)_FILE)

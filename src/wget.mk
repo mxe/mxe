@@ -3,7 +3,7 @@
 
 PKG             := wget
 $(PKG)_VERSION  := 1.16.3
-$(PKG)_CHECKSUM := 53172786c001e153d545cfc85d82759c5c2ffb37
+$(PKG)_CHECKSUM := 67f7b7b0f5c14db633e3b18f53172786c001e153d545cfc85d82759c5c2ffb37
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)

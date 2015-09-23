@@ -4,7 +4,7 @@
 PKG             := qdbm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.78
-$(PKG)_CHECKSUM := f37b0fb955f2826ac456e70012785e012cdcb73e
+$(PKG)_CHECKSUM := b466fe730d751e4bfc5900d1f37b0fb955f2826ac456e70012785e012cdcb73e
 $(PKG)_SUBDIR   := qdbm-$($(PKG)_VERSION)
 $(PKG)_FILE     := qdbm-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://fallabs.com/qdbm/$($(PKG)_FILE)

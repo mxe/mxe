@@ -4,7 +4,7 @@
 PKG             := guile
 $(PKG)_IGNORE   := 2%
 $(PKG)_VERSION  := 1.8.8
-$(PKG)_CHECKSUM := aaf16369e8360283679bcf19800bc1b381024050
+$(PKG)_CHECKSUM := c3471fed2e72e5b04ad133bbaaf16369e8360283679bcf19800bc1b381024050
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := portablexdr
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.9.1
-$(PKG)_CHECKSUM := 5f451d0cfadc070b4b9a9ccfb64094b8f78de72c
+$(PKG)_CHECKSUM := 5cf4bdd153cf4d44eaf10b725f451d0cfadc070b4b9a9ccfb64094b8f78de72c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://people.redhat.com/~rjones/portablexdr/files/$($(PKG)_FILE)

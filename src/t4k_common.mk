@@ -4,7 +4,7 @@
 PKG             := t4k_common
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.1
-$(PKG)_CHECKSUM := 50edaa1ca84536530283d37859c4b91e82675110
+$(PKG)_CHECKSUM := 42c155816dae2c5dad560faa50edaa1ca84536530283d37859c4b91e82675110
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tuxmath/$(PKG)/$($(PKG)_FILE)

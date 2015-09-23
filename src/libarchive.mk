@@ -4,7 +4,7 @@
 PKG             := libarchive
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.2
-$(PKG)_CHECKSUM := 89813023ccc319c5e752b01fb6ad0cc7b2c53d5e
+$(PKG)_CHECKSUM := eb87eacd8fe49e8d90c8fdc189813023ccc319c5e752b01fb6ad0cc7b2c53d5e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.libarchive.org/downloads/$($(PKG)_FILE)

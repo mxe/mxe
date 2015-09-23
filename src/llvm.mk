@@ -4,7 +4,7 @@
 PKG             := llvm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4
-$(PKG)_CHECKSUM := 2b55f4870e447966d66c96d655241702d44a2628
+$(PKG)_CHECKSUM := 25a5612d692c48481b9b397e2b55f4870e447966d66c96d655241702d44a2628
 $(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION)
 $(PKG)_FILE     := llvm-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := http://llvm.org/releases/$($(PKG)_VERSION)/$($(PKG)_FILE)

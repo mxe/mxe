@@ -4,7 +4,7 @@
 PKG             := minizip
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0b46a2b
-$(PKG)_CHECKSUM := 7dfceb6fcb4a70a2b2704f59c6447b54da811a65
+$(PKG)_CHECKSUM := 2ecc8da9bcc3b3c42de915567dfceb6fcb4a70a2b2704f59c6447b54da811a65
 $(PKG)_SUBDIR   := nmoinvaz-minizip-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/nmoinvaz/minizip/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)

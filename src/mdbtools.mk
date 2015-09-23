@@ -4,7 +4,7 @@
 PKG             := mdbtools
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.7.1
-$(PKG)_CHECKSUM := a8e8ecc101b79afe75118ecc16852990472c4721
+$(PKG)_CHECKSUM := 4eac1bce55066a38d9ea6c52a8e8ecc101b79afe75118ecc16852990472c4721
 $(PKG)_SUBDIR   := brianb-mdbtools-f8ce1cc
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://github.com/brianb/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)

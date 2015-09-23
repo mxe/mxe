@@ -4,7 +4,7 @@
 PKG             := libpano13
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.9.18
-$(PKG)_CHECKSUM := 1c50c9503516e1b570d0ec0522f610a578caa172
+$(PKG)_CHECKSUM := de5d4e43f15c3430e95c0faa1c50c9503516e1b570d0ec0522f610a578caa172
 $(PKG)_SUBDIR   := $(PKG)-$(word 1,$(subst _, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/panotools/$(PKG)/$($(PKG)_SUBDIR)/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := qtmultimedia
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 86faa1cf008c8dba5f5a9cdea72eb0ce5f85355b
+$(PKG)_CHECKSUM := a8bf1bd59bad74bba2906e6a86faa1cf008c8dba5f5a9cdea72eb0ce5f85355b
 $(PKG)_SUBDIR    = $(subst qtbase,qtmultimedia,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtmultimedia,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtmultimedia,$(qtbase_URL))

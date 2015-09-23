@@ -4,7 +4,7 @@
 PKG             := cimg
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.3
-$(PKG)_CHECKSUM := 086cf96df82a3a13b839e9bf1cedcb014d921ce7
+$(PKG)_CHECKSUM := c2a3c62d05d1e322afa6afae086cf96df82a3a13b839e9bf1cedcb014d921ce7
 $(PKG)_SUBDIR   := CImg-$($(PKG)_VERSION)
 $(PKG)_FILE     := CImg_$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://cimg.eu/files/$($(PKG)_FILE)

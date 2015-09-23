@@ -4,7 +4,7 @@
 PKG             := sdl_pango
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.2
-$(PKG)_CHECKSUM := 424906204ebfa07660162de925173cdd0257eba4
+$(PKG)_CHECKSUM := 7f75d3b97acf707c696ea126424906204ebfa07660162de925173cdd0257eba4
 $(PKG)_SUBDIR   := SDL_Pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_Pango-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/sdlpango/SDL_Pango/$($(PKG)_VERSION)/$($(PKG)_FILE)

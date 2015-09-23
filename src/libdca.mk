@@ -4,7 +4,7 @@
 PKG             := libdca
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.0.5
-$(PKG)_CHECKSUM := 50917769ff27b64a7bba104bd38ced8de8510642
+$(PKG)_CHECKSUM := dba022e022109a5bacbe122d50917769ff27b64a7bba104bd38ced8de8510642
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := http://download.videolan.org/pub/videolan/libdca/$($(PKG)_VERSION)/$($(PKG)_FILE)

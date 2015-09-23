@@ -4,7 +4,7 @@
 PKG             := libcomm14cux
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.3
-$(PKG)_CHECKSUM := f26ffa36ea862d15904fde56005103703520abc9
+$(PKG)_CHECKSUM := 8344170fc900bbb1c04518bef26ffa36ea862d15904fde56005103703520abc9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/colinbourassa/libcomm14cux/archive/$($(PKG)_VERSION).tar.gz

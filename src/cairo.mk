@@ -4,7 +4,7 @@
 PKG             := cairo
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.14.2
-$(PKG)_CHECKSUM := 299ca2abd2079c7e13d224577895afa7005ecceb
+$(PKG)_CHECKSUM := c919d999ddb1bbbecd4bbe65299ca2abd2079c7e13d224577895afa7005ecceb
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)

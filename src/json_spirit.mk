@@ -4,7 +4,7 @@
 PKG             := json_spirit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.08
-$(PKG)_CHECKSUM := 2308f770cd9988c7a08b8ae3c345bf64fdad125f
+$(PKG)_CHECKSUM := 082798e46b3ee4c2b9613c212308f770cd9988c7a08b8ae3c345bf64fdad125f
 $(PKG)_SUBDIR   := $(PKG)_v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)_v$($(PKG)_VERSION).zip
 

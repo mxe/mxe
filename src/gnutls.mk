@@ -3,7 +3,7 @@
 
 PKG             := gnutls
 $(PKG)_VERSION  := 3.4.5
-$(PKG)_CHECKSUM := 4f7851a09b7f0959a93531b6f8d35658ef0f7aae
+$(PKG)_CHECKSUM := af88b8e0460728d034ff3f454f7851a09b7f0959a93531b6f8d35658ef0f7aae
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.4/$($(PKG)_FILE)

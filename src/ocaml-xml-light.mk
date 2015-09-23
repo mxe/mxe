@@ -4,7 +4,7 @@
 PKG             := ocaml-xml-light
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2
-$(PKG)_CHECKSUM := aea449b9a2de4000c5442487e7e74d79f1e2274a
+$(PKG)_CHECKSUM := fdb205e8b3a25922e46fca52aea449b9a2de4000c5442487e7e74d79f1e2274a
 $(PKG)_SUBDIR   := xml-light
 $(PKG)_FILE     := xml-light-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://tech.motion-twin.com/zip/$($(PKG)_FILE)

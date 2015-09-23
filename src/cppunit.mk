@@ -4,7 +4,7 @@
 PKG             := cppunit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.13.2
-$(PKG)_CHECKSUM := 82db3ad9ebd3fcbd2e8b732f946e0e3eeb9f429f
+$(PKG)_CHECKSUM := 3f47d246e3346f2ba4d7c9e882db3ad9ebd3fcbd2e8b732f946e0e3eeb9f429f
 $(PKG)_SUBDIR   := cppunit-$($(PKG)_VERSION)
 $(PKG)_FILE     := cppunit-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://dev-www.libreoffice.org/src/$($(PKG)_FILE)

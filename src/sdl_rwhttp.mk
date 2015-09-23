@@ -4,7 +4,7 @@
 PKG             := sdl_rwhttp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.0
-$(PKG)_CHECKSUM := 8a9124b3c363669142cdf0b3675ac72afe793ea1
+$(PKG)_CHECKSUM := 9341f427901b5d24d07fd74c8a9124b3c363669142cdf0b3675ac72afe793ea1
 $(PKG)_SUBDIR   := SDL_rwhttp-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_rwhttp-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mgerhardy/SDL_rwhttp/releases/download/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

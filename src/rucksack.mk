@@ -4,7 +4,7 @@
 PKG             := rucksack
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.0
-$(PKG)_CHECKSUM := 2c2de78d0b1e79f7a896bb1e76561216a4458e3b
+$(PKG)_CHECKSUM := dcdaab57b06fdeb9be63ed0f2c2de78d0b1e79f7a896bb1e76561216a4458e3b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/andrewrk/rucksack/archive/$($(PKG)_VERSION).tar.gz

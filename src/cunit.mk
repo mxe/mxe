@@ -4,7 +4,7 @@
 PKG             := cunit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.1-3
-$(PKG)_CHECKSUM := 84fdb728b4e58f1023e6f249a464efa49a40f214
+$(PKG)_CHECKSUM := f5b29137f845bb08b77ec60584fdb728b4e58f1023e6f249a464efa49a40f214
 $(PKG)_SUBDIR   := CUnit-$($(PKG)_VERSION)
 $(PKG)_FILE     := CUnit-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/cunit/CUnit/$($(PKG)_VERSION)/$($(PKG)_FILE)
