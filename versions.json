@@ -44,6 +44,7 @@
     "devil": "1.7.8",
     "dlfcn-win32": "1.0.0",
     "eigen": "3.2.5",
+    "enet": "5f476546edabdf37509cd3448d1a616f5eca535d",
     "exiv2": "0.24",
     "expat": "2.1.0",
     "faad2": "2.7",
