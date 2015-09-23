@@ -106,9 +106,17 @@ define $(PKG)_BUILD
     # build test the manual way
     mkdir '$(1)/test-$(PKG)-pkgconfig'
     '$(PREFIX)/$(TARGET)/qt/bin/uic' -o '$(1)/test-$(PKG)-pkgconfig/ui_qt-test.h' '$(TOP_DIR)/src/qt-test.ui'
+    '$(PREFIX)/$(TARGET)/qt/bin/moc' \
+        -o '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
+        -I'$(1)/test-$(PKG)-pkgconfig' \
+        '$(TOP_DIR)/src/qt-test.hpp'
+    '$(PREFIX)/$(TARGET)/qt/bin/rcc' -name qt-test -o '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' '$(TOP_DIR)/src/qt-test.qrc'
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -pedantic \
-        '$(TOP_DIR)/src/qt-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
+        '$(TOP_DIR)/src/qt-test.cpp' \
+        '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
+        '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
         `'$(TARGET)-pkg-config' QtGui --cflags --libs`
 
