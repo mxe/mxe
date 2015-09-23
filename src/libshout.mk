@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 24aa88ad4099a9945f7cb037ec06bcee7a23926e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.us.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc vorbis ogg theora speex
+$(PKG)_DEPS     := gcc ogg speex theora vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.icecast.org/download.php' | \

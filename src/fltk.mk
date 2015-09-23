@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 9e761adaf2f1ef8bb0c30eceb7beb4f2273d0d97
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR)-source.tar.gz
 $(PKG)_URL      := http://fltk.org/pub/fltk/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib jpeg libpng pthreads
+$(PKG)_DEPS     := gcc jpeg libpng pthreads zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.fltk.org/' | \

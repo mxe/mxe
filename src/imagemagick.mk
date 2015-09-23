@@ -9,7 +9,8 @@ $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://www.imagemagick.org/download/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 ffmpeg fftw freetype jasper jpeg lcms liblqr-1 libpng libltdl openexr pthreads tiff
+$(PKG)_DEPS     := gcc bzip2 ffmpeg fftw freetype jasper jpeg lcms \
+                   liblqr-1 libltdl libpng openexr pthreads tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.imagemagick.org/' | \

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := a37530336818c214f54bed2351bdd4ad0acebcbe
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc fontconfig freetype cairo glib harfbuzz
+$(PKG)_DEPS     := gcc cairo fontconfig freetype glib harfbuzz
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/pango/refs/tags' | \

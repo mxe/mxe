@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ced2f3c8235860d500c1fa2f347483775d4c8def
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib bzip2 pthreads levmar libpng
+$(PKG)_DEPS     := gcc bzip2 levmar libpng pthreads zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "http://sourceforge.net/projects/teem/files/teem/" | \

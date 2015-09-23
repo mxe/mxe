@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 0d97031e0099fe2b7142cef03e0da16e282655a0
 $(PKG)_SUBDIR   := xerces-c-$($(PKG)_VERSION)
 $(PKG)_FILE     := xerces-c-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv curl pthreads
+$(PKG)_DEPS     := gcc curl libiconv pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.apache.org/dist/xerces/c/3/sources/?C=M;O=D' | \

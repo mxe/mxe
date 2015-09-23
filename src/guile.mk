@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := aaf16369e8360283679bcf19800bc1b381024050
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libltdl gmp libiconv gettext libunistring gc libffi readline libgnurx
+$(PKG)_DEPS     := gcc gc gettext gmp libffi libgnurx libiconv libltdl libunistring readline
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=guile.git;a=tags' | \

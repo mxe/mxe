@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 1d1a23efc7b8fba8ace3869de375d668f99ede10
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/witty/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost openssl libharu graphicsmagick pango postgresql qt sqlite
+$(PKG)_DEPS     := gcc boost graphicsmagick libharu openssl pango postgresql qt sqlite
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/witty/files/wt/' | \

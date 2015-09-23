@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/libtiff/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/libtiff/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib jpeg xz
+$(PKG)_DEPS     := gcc jpeg xz zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.remotesensing.org/libtiff/' | \

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 6aafa85216a3f89163a3411830d6890507ffae93
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib openssl
+$(PKG)_DEPS     := gcc openssl zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \

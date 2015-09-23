@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 08fff339d4c34357802f02c63329dd41b777de2f
 $(PKG)_SUBDIR   := lablgtk-$($(PKG)_VERSION)
 $(PKG)_FILE     := lablgtk-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://forge.ocamlcore.org/frs/download.php/979/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ocaml-findlib libglade gtkglarea ocaml-lablgl gtk2 gtksourceview
+$(PKG)_DEPS     := gcc gtk2 gtkglarea gtksourceview libglade ocaml-findlib ocaml-lablgl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://forge.ocamlcore.org/frs/?group_id=220' | \

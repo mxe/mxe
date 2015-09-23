@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 13a173e525cbccd5c8bd43e7db1bdaf772af8955
 $(PKG)_SUBDIR    = $(subst qtbase,qtimageformats,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtimageformats,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtimageformats,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase libmng tiff
+$(PKG)_DEPS     := gcc libmng qtbase tiff
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

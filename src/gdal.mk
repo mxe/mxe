@@ -9,9 +9,9 @@ $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc proj zlib libpng libxml2 tiff libgeotiff jpeg openjpeg \
-                   giflib expat sqlite curl geos postgresql gta hdf4 hdf5 \
-                   json-c netcdf armadillo
+$(PKG)_DEPS     := gcc armadillo curl expat geos giflib gta hdf4 hdf5 \
+                   jpeg json-c libgeotiff libpng libxml2 netcdf openjpeg \
+                   postgresql proj sqlite tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \

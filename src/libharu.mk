@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := fc19eeb31b50c4b9edadf9d89dd5a7d9ae4865a7
 $(PKG)_SUBDIR   := libharu-$($(PKG)_VERSION)
 $(PKG)_FILE     := libharu-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://libharu.org/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib libpng
+$(PKG)_DEPS     := gcc libpng zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/libharu/libharu/tags' | \

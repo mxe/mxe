@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := f651ecb504a22e9d31c17ef5449b129ed711585d
 $(PKG)_SUBDIR   := wxWidgets-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxWidgets-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv libpng jpeg tiff sdl zlib expat
+$(PKG)_DEPS     := gcc expat jpeg libiconv libpng sdl tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/wxwindows/files/' | \

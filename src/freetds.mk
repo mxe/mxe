@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := eea1cb345dd304f1703a9accfb8835296786d2fb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv gnutls
+$(PKG)_DEPS     := gcc gnutls libiconv
 
 define $(PKG)_UPDATE
     echo 'Warning: Updates are temporarily disabled for package freetds.' >&2;

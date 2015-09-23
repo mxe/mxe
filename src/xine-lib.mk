@@ -8,7 +8,9 @@ $(PKG)_CHECKSUM := 0e5bda5a664a47e035135b5a449364f8c9b6a005
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/xine/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc faad2 ffmpeg flac fontconfig freetype graphicsmagick libiconv libmng pthreads sdl speex theora vorbis wavpack zlib libmpcdec libcdio vcdimager mman-win32 libmad a52dec libmodplug
+$(PKG)_DEPS     := gcc a52dec faad2 ffmpeg flac fontconfig freetype graphicsmagick \
+                   libcdio libiconv libmad libmng libmodplug libmpcdec mman-win32 \
+                   pthreads sdl speex theora vcdimager vorbis wavpack zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.xine-project.org/releases' | \

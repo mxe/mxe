@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := f76969a64c72c4c04af69b10ed57f949c2dfef8e
 $(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)
 $(PKG)_FILE     := exiv2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.exiv2.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext zlib expat
+$(PKG)_DEPS     := gcc expat gettext zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.exiv2.org/download.html' | \

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 9b17e64a5d8da55610e921a9f1a0ec171e911d45
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib hdf5
+$(PKG)_DEPS     := gcc hdf5 zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/matio/files/matio/' | \

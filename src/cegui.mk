@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := aba363e907479d924612436f3bd09da2e474bb8c
 $(PKG)_SUBDIR   := CEGUI-$($(PKG)_VERSION)
 $(PKG)_FILE     := CEGUI-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/crayzedsgui/CEGUI%20Mk-2/$($(PKG)_VERSION)/$($(PKG)_FILE)?download
-$(PKG)_DEPS     := gcc pcre freeglut freeimage freetype libxml2 expat xerces
+$(PKG)_DEPS     := gcc expat freeglut freeimage freetype libxml2 pcre xerces
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/downloads' | \

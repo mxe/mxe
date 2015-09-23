@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 0bfebb03de8559583a33abbe8c64ef3fc0a8ff03
 $(PKG)_SUBDIR   := openjpeg-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/openjpeg.mirror/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc tiff libpng zlib lcms
+$(PKG)_DEPS     := gcc lcms libpng tiff zlib
 
 #git commit 3d95bcf
 define $(PKG)_UPDATE

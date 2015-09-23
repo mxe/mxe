@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 086cf96df82a3a13b839e9bf1cedcb014d921ce7
 $(PKG)_SUBDIR   := CImg-$($(PKG)_VERSION)
 $(PKG)_FILE     := CImg_$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://cimg.eu/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc tiff openexr libpng jpeg zlib opencv imagemagick fftw
+$(PKG)_DEPS     := gcc fftw imagemagick jpeg libpng opencv openexr tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://cimg.eu/files/' | \

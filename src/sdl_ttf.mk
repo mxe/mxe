@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 892b72078bd92632a5d812111261cde248ebcdb7
 $(PKG)_SUBDIR   := SDL_ttf-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_ttf-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.libsdl.org/projects/SDL_ttf/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl freetype
+$(PKG)_DEPS     := gcc freetype sdl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://hg.libsdl.org/SDL_ttf/tags' | \

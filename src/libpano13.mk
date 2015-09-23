@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 1c50c9503516e1b570d0ec0522f610a578caa172
 $(PKG)_SUBDIR   := $(PKG)-$(word 1,$(subst _, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/panotools/$(PKG)/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc jpeg tiff libpng zlib
+$(PKG)_DEPS     := gcc jpeg libpng tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/api/file/index/project-id/96188/rss?path=/libpano13' | \

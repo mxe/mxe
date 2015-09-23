@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 296eb3996b3fa08eab94415546f46d61355747c4
 $(PKG)_SUBDIR   := camlspotter-camlimages-c803efa9d5d3
 $(PKG)_FILE     := v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://bitbucket.org/camlspotter/camlimages/get/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc ocaml-findlib freetype libpng giflib tiff ocaml-lablgtk2
+$(PKG)_DEPS     := gcc freetype giflib libpng ocaml-findlib ocaml-lablgtk2 tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://bitbucket.org/camlspotter/camlimages/downloads' | \

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 64308f497d93c9d7bc12cf6a68d5ebae930a5b70
 $(PKG)_SUBDIR   := libgsf-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgsf-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgsf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib bzip2 glib libxml2
+$(PKG)_DEPS     := gcc bzip2 glib libxml2 zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/libgsf/refs/tags' | \

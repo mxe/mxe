@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 41a95fef47e0a73a3f3cdf21b56990638f626ea0
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
+$(PKG)_DEPS     := gcc dbus freetds jpeg libmng libpng openssl postgresql sqlite tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/4.8/ | \

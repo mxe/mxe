@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2b06eef7ab862417f941d5f4558aea25c6bbc2d5
 $(PKG)_SUBDIR   := VTK
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc qt expat freetype hdf5 jpeg libxml2 libpng tiff zlib libodbc++ postgresql
+$(PKG)_DEPS     := gcc expat freetype hdf5 jpeg libodbc++ libpng libxml2 postgresql qt tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \

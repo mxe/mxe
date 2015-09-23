@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 9ee6ab6adfe2e64ed9f9149db03dc863360ea38c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := https://github.com/libass/libass/releases/download/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype fontconfig fribidi harfbuzz
+$(PKG)_DEPS     := gcc fontconfig freetype fribidi harfbuzz
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://code.google.com/p/libass/downloads/list?sort=-uploaded' | \

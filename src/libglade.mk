@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 8d6c14c183075d8b1d8077cb6dfb8b7c5097add3
 $(PKG)_SUBDIR   := libglade-$($(PKG)_VERSION)
 $(PKG)_FILE     := libglade-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libxml2 atk glib gtk2
+$(PKG)_DEPS     := gcc atk glib gtk2 libxml2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/' | \
