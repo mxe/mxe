@@ -612,6 +612,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td><a href="http://tukaani.org/xz/">XZ Utils</a></td>
         <td></td>
     </tr>
+    <tr>
+        <td><a href="http://www.gdk-pixbuf.org/">gdk-pixbuf</a></td>
+        <td></td>
+    </tr>
     </table>
 
     <h3 id="requirements-debian">Debian and derivatives</h3>
@@ -619,8 +623,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install \
     autoconf automake autopoint bash bison bzip2 cmake flex \
-    gettext git g++ gperf intltool libffi-dev libtool \
-    libltdl-dev libssl-dev libxml-parser-perl make openssl \
+    gettext git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
+    libtool libltdl-dev libssl-dev libxml-parser-perl make openssl \
     p7zip-full patch perl pkg-config python ruby scons sed \
     unzip wget xz-utils</pre>
 
@@ -644,7 +648,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- https://admin.fedoraproject.org/pkgdb/ -->
     <pre>yum install \
     autoconf automake bash bison bzip2 cmake flex gcc-c++ \
-    gettext git gperf intltool make sed libffi-devel \
+    gdk-pixbuf-devel gettext git gperf intltool make sed libffi-devel \
     libtool openssl-devel p7zip patch perl pkgconfig \
     python ruby scons unzip wget xz</pre>
 
@@ -658,7 +662,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.freshports.org/ -->
     <pre>pkg_add -r \
     automake autoconf bash bison cmake coreutils flex \
-    gettext git glib20 gmake gperf gsed intltool libffi \
+    gdk-pixbuf2 gettext git glib20 gmake gperf gsed intltool libffi \
     libtool openssl p5-XML-Parser p7zip patch perl \
     pkgconf python ruby scons unzip wget</pre>
 
@@ -696,7 +700,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S \
     autoconf automake bash bzip2 bison cmake flex gcc \
-    gettext git gperf intltool make sed libffi libtool \
+    gdk-pixbuf2 gettext git gperf intltool make sed libffi libtool \
     openssl patch perl perl-xml-parser pkgconfig python \
     ruby scons unzip wget xz xz-lzma</pre>
 
@@ -718,7 +722,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     sys-devel/patch dev-lang/perl dev-perl/XML-Parser \
     dev-util/pkgconfig dev-lang/python dev-lang/ruby \
     dev-util/scons app-arch/unzip net-misc/wget \
-    app-arch/xz-utils</pre>
+    app-arch/xz-utils x11-libs/gdk-pixbuf</pre>
 
     <h3 id="requirements-macos">Mac OS X</h3>
 
@@ -734,7 +738,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
-    glib2 intltool p5-xml-parser p7zip gpatch scons wget xz</pre>
+    gdk-pixbuf2 glib2 intltool p5-xml-parser p7zip gpatch scons wget xz</pre>
     <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
     <p>
     Install <a href="http://rudix.org/">Rudix</a> you can make it with following command
@@ -745,6 +749,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     then run:
     </p>
     <pre>sudo rudix install glib pkg-config scons wget xz</pre>
+    Note: <b>gdk-pixbuf2</b> is not installed in method 2,
+    so you can not build <b>gtk3</b>.
     <h4 id="requirements-macos-step-2">Step 2</h4>
     <p>
     After installing pre-requirement run from within the mxe directory:
@@ -763,7 +769,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://software.opensuse.org/131/en -->
     <pre>zypper install -R \
     autoconf automake bash bison bzip2 cmake flex gcc-c++ \
-    gettext-tools git gperf intltool libffi-devel libtool \
+    gdk-pixbuf-devel gettext-tools git gperf intltool libffi-devel libtool \
     make openssl libopenssl-devel p7zip patch perl \
     perl-XML-Parser pkg-config python ruby scons sed unzip \
     wget xz</pre>
@@ -1397,6 +1403,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.gtk.org/">GTK+</a></td>
     </tr>
     <tr>
+        <td class="package">gtk3</td>
+        <td class="website"><a href="http://www.gtk.org/">GTK+</a></td>
+    </tr>
+    <tr>
         <td class="package">gtkglarea</td>
         <td class="website"><a href="http://www.mono-project.com/GtkGLArea/">GtkGLArea</a></td>
     </tr>
@@ -1414,6 +1424,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </tr>
     <tr>
         <td class="package">gtkmm2</td>
+        <td class="website"><a href="http://www.gtkmm.org/">GTKMM</a></td>
+    </tr>
+    <tr>
+        <td class="package">gtkmm3</td>
         <td class="website"><a href="http://www.gtkmm.org/">GTKMM</a></td>
     </tr>
     <tr>
