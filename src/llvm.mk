@@ -21,11 +21,11 @@ define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DLIBTYPE=STATIC \
+        -DLIBTYPE=$(if $(BUILD_STATIC),STATIC,SHARED) \
+        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
         -DLLVM_BUILD_TOOLS=OFF
     $(MAKE) -C '$(1)/build' -j $(JOBS) llvm-tblgen
     $(MAKE) -C '$(1)/build' -j $(JOBS) intrinsics_gen
     $(MAKE) -C '$(1)/build' -j $(JOBS) install
+    cp '$(1)'/build/bin/*.dll '$(PREFIX)/$(TARGET)/bin/'
 endef
-
-$(PKG)_BUILD_SHARED =
