@@ -4,7 +4,7 @@
 PKG             := vamp-plugin-sdk
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.5
-$(PKG)_CHECKSUM := e87292c5d02f4c562e269188c43500958b0ea65a
+$(PKG)_CHECKSUM := 4c00469d3745aef4bca177f66faf3204f073139d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://code.soundsoftware.ac.uk/attachments/download/690/$(PKG)-$($(PKG)_VERSION).tar.gz

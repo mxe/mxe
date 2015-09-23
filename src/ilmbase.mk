@@ -4,7 +4,7 @@
 PKG             := ilmbase
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.0
-$(PKG)_CHECKSUM := 70d864bc704f276942cb10479f2cb98646ce6ad4
+$(PKG)_CHECKSUM := 9e84c7c9902f4e8faa6e8000d2f905b8b86cedc7
 $(PKG)_SUBDIR   := ilmbase-$($(PKG)_VERSION)
 $(PKG)_FILE     := ilmbase-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)

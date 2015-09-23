@@ -4,7 +4,7 @@
 PKG             := hunspell
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.3
-$(PKG)_CHECKSUM := 219b20f305d6690f666ff3864a16e4674908a553
+$(PKG)_CHECKSUM := ac8eb115029959b3ada9d80a81739fa19373246c
 $(PKG)_SUBDIR   := hunspell-$($(PKG)_VERSION)
 $(PKG)_FILE     := hunspell-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/hunspell/Hunspell/$($(PKG)_VERSION)/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := libepoxy
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := 94d98d83a50d2f607ee9986b622a48df00d5926c
+$(PKG)_CHECKSUM := e0be6fba67b678b19bf256e1b5efd3ea38cc2bb4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_GITHUB   := https://github.com/anholt/$(PKG)

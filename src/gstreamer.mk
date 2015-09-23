@@ -4,7 +4,7 @@
 PKG             := gstreamer
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4.5
-$(PKG)_CHECKSUM := 6c0fa50d42c039eb26c1f2eb5f8dd86ab35118e7
+$(PKG)_CHECKSUM := 94707ba42b8ab6f7d2206e56adbc4433155cb0ae
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)

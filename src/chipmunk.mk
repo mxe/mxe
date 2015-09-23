@@ -4,7 +4,7 @@
 PKG             := chipmunk
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.2.2
-$(PKG)_CHECKSUM := 45fee9759bb492201b1e05e191ea4a3b3c35caa7
+$(PKG)_CHECKSUM := 8bee40a871aaf7611a1b5ec546a7d2b9e1041f97
 $(PKG)_SUBDIR   := Chipmunk2D-Chipmunk-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/slembcke/Chipmunk2D/archive/Chipmunk-$($(PKG)_VERSION).tar.gz

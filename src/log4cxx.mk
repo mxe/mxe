@@ -4,7 +4,7 @@
 PKG             := log4cxx
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.10.0
-$(PKG)_CHECKSUM := d79c053e8ac90f66c5e873b712bb359fd42b648d
+$(PKG)_CHECKSUM := 6b39674cb40efd2176f52ad2c65486c99c920c8c
 $(PKG)_SUBDIR   := apache-log4cxx-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://www.eu.apache.org/dist/logging/log4cxx/$($(PKG)_VERSION)/$($(PKG)_FILE)

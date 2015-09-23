@@ -4,7 +4,7 @@
 PKG             := jsoncpp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.5
-$(PKG)_CHECKSUM := a8354732489a4e3bf95ba801a300032e731b5aa8
+$(PKG)_CHECKSUM := 7685821a908d0d87bc319329b04f91a6552c1ac2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/open-source-parsers/jsoncpp/archive/$($(PKG)_VERSION).tar.gz

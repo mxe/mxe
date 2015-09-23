@@ -4,7 +4,7 @@
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2.1
-$(PKG)_CHECKSUM := 5c666531f7d487075fd692d89f1e05036306192a
+$(PKG)_CHECKSUM := 93c586d489f119aca0499292acc09bb0fa0b3e6d
 $(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
 $(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://trac.openscenegraph.org/downloads/developer_releases/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := qtserialport_qt4
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5c3b6cc770
-$(PKG)_CHECKSUM := 355d6aaf36726c040d21dae4fc478f3af7af0268
+$(PKG)_CHECKSUM := aa7f5ed7d9e39a3da16e4cc6056ffd0a4baa1495
 $(PKG)_GH_USER  := qtproject
 $(PKG)_GH_REPO  := qtserialport
 $(PKG)_GH_TREE  := qt4-dev

@@ -4,7 +4,7 @@
 PKG             := sdl_sound
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.3
-$(PKG)_CHECKSUM := 1984bc20b2c756dc71107a5a0a8cebfe07e58cb1
+$(PKG)_CHECKSUM := 2f68b571cb84e380cc43387eadf778f64c79e6df
 $(PKG)_SUBDIR   := SDL_sound-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_sound-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://icculus.org/SDL_sound/downloads/$($(PKG)_FILE)

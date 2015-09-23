@@ -4,7 +4,7 @@
 PKG             := cegui
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.7.9
-$(PKG)_CHECKSUM := f0a8616bcb37843ad2f83c88745b9313906cb8e9
+$(PKG)_CHECKSUM := aba363e907479d924612436f3bd09da2e474bb8c
 $(PKG)_SUBDIR   := CEGUI-$($(PKG)_VERSION)
 $(PKG)_FILE     := CEGUI-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/crayzedsgui/CEGUI%20Mk-2/$($(PKG)_VERSION)/$($(PKG)_FILE)?download

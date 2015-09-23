@@ -4,7 +4,7 @@
 PKG             := vtk6
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.1.0
-$(PKG)_CHECKSUM := 91d1303558c7276f031f8ffeb47b4233f2fd2cd9
+$(PKG)_CHECKSUM := 466c44a2bdd11fd534c62ce0aa44fad91883fa34
 $(PKG)_SUBDIR   := VTK-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

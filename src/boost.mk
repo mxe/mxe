@@ -4,7 +4,7 @@
 PKG             := boost
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.57.0
-$(PKG)_CHECKSUM := e151557ae47afd1b43dc3fac46f8b04a8fe51c12
+$(PKG)_CHECKSUM := 5d4f14b466588dda94ba2124e78b8c57db264967
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)

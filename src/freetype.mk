@@ -4,7 +4,7 @@
 PKG             := freetype
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.6
-$(PKG)_CHECKSUM := cd2b144205dd2c61693e2d861069367aa3dde1bc
+$(PKG)_CHECKSUM := 7c31e132a2c5e51084ddce2a44ea32ee4ae8347e
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(shell echo '$($(PKG)_VERSION)' | cut -d . -f 1,2,3)/$($(PKG)_FILE)

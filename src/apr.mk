@@ -4,7 +4,7 @@
 PKG             := apr
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.5.2
-$(PKG)_CHECKSUM := 2ef2ac9a8de7f97f15ef32cddf1ed7325163d84c
+$(PKG)_CHECKSUM := 84af18355b65bb0d047be03ec7d659c746d6dbdb
 $(PKG)_SUBDIR   := apr-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://archive.apache.org/dist/apr/$($(PKG)_FILE)

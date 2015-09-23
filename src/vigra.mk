@@ -4,7 +4,7 @@
 PKG             := vigra
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.0
-$(PKG)_CHECKSUM := 6e4981f4ce75932ec62df6523f577c327f885ba0
+$(PKG)_CHECKSUM := 7b710fbc87d48f37bf81d404994936a31a31cf01
 $(PKG)_SUBDIR   := vigra-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := vigra-$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_URL      := http://hci.iwr.uni-heidelberg.de/vigra-old-versions/$($(PKG)_FILE)

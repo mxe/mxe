@@ -4,7 +4,7 @@
 PKG             := box2d
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.0
-$(PKG)_CHECKSUM := 1d3ea1f872b3cab3ef5130a2404d74f9ff66f265
+$(PKG)_CHECKSUM := 5af210f8c32ef62faf1e0d2414c653072fff403d
 $(PKG)_SUBDIR   := Box2D_v$($(PKG)_VERSION)/Box2D
 $(PKG)_FILE     := Box2D_v$($(PKG)_VERSION).7z
 $(PKG)_URL      := https://box2d.googlecode.com/files/$($(PKG)_FILE)

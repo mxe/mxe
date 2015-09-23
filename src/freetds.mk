@@ -4,7 +4,7 @@
 PKG             := freetds
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.95.8
-$(PKG)_CHECKSUM := 085ced804cd07b8a588098822483b827138f88e0
+$(PKG)_CHECKSUM := eea1cb345dd304f1703a9accfb8835296786d2fb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := agg
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.5
-$(PKG)_CHECKSUM := 08f23da64da40b90184a0414369f450115cdb328
+$(PKG)_CHECKSUM := d501eecd55fceeedf869b9354e7e13812289911f
 $(PKG)_SUBDIR   := agg-$($(PKG)_VERSION)
 $(PKG)_FILE     := agg-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.antigrain.com/$($(PKG)_FILE)

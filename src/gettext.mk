@@ -4,7 +4,7 @@
 PKG             := gettext
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.19.5.1
-$(PKG)_CHECKSUM := bec084bc9e2ecfb9a30ce17a68b71865449f6c12
+$(PKG)_CHECKSUM := b7e76b144e887c9ef5a685323e92cbc950227731
 $(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)

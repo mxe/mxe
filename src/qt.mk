@@ -4,7 +4,7 @@
 PKG             := qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.8.7
-$(PKG)_CHECKSUM := 76aef40335c0701e5be7bb3a9101df5d22fe3666
+$(PKG)_CHECKSUM := 41a95fef47e0a73a3f3cdf21b56990638f626ea0
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)

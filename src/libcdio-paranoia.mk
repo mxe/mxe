@@ -4,7 +4,7 @@
 PKG             := libcdio-paranoia
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 10.2+0.93+1
-$(PKG)_CHECKSUM := 9c40cf6a706e881a52dc417686669d500ddd3115
+$(PKG)_CHECKSUM := 7cc0a2b5ce5525f102bc4c15db1fac322559a493
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_URL      := http://ftp.gnu.org/gnu/libcdio/$(PKG)-$($(PKG)_VERSION).tar.bz2

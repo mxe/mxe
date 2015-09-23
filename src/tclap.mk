@@ -4,7 +4,7 @@
 PKG             := tclap
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.1
-$(PKG)_CHECKSUM := 4f124216dd6e6936f5af6372d921a6c51563f8fd
+$(PKG)_CHECKSUM := 0cf2d16620fba3db5b9610f9b51dd2cd033deebb
 $(PKG)_SUBDIR   := tclap-$($(PKG)_VERSION)
 $(PKG)_FILE     := tclap-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/tclap/$($(PKG)_FILE)

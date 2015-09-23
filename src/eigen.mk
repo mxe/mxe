@@ -4,7 +4,7 @@
 PKG             := eigen
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2.5
-$(PKG)_CHECKSUM := aa4667f0b134f5688c5dff5f03335d9a19aa9b3d
+$(PKG)_CHECKSUM := 19d7dab9b48ef493774ff834e568f4805d3dc2f9
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-bdd17ee3b1b3
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2

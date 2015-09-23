@@ -4,7 +4,7 @@
 PKG             := termcap
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := 42dd1e6beee04f336c884f96314f0c96cc2578be
+$(PKG)_CHECKSUM := 8edf1c51b930262fd466d5fda396dd9d26719100
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/termcap/$($(PKG)_FILE)

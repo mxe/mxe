@@ -4,7 +4,7 @@
 PKG             := xmlrpc-c
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := d4364f4
-$(PKG)_CHECKSUM := 3f0cb2a5967832fa5463bd85740eb04911488da9
+$(PKG)_CHECKSUM := f78873c0fd925f477a8705f415b9fee0d6d64b19
 $(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)/advanced
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)

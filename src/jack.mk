@@ -4,7 +4,7 @@
 PKG             := jack
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.10
-$(PKG)_CHECKSUM := 1177655ae0fbbd8c2229b398a79724115a392941
+$(PKG)_CHECKSUM := 5e2ba5d01b030589bbb2afae39579a59ef0f2f56
 $(PKG)_SUBDIR   := jack-$($(PKG)_VERSION)
 $(PKG)_FILE     := jack-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://dl.dropboxusercontent.com/u/28869550/$($(PKG)_FILE)

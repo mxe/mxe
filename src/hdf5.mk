@@ -4,7 +4,7 @@
 PKG             := hdf5
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.12
-$(PKG)_CHECKSUM := 8414ca0e6ff7d08e423955960d641ec5f309a55f
+$(PKG)_CHECKSUM := 9b571b2d5866581a2aa4434c398cd371c7063639
 $(PKG)_SUBDIR   := hdf5-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf5-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF5/releases/$($(PKG)_SUBDIR)/src/$($(PKG)_FILE)

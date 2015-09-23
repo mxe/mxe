@@ -4,7 +4,7 @@
 PKG             := libsvm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.20
-$(PKG)_CHECKSUM := 6902c22afadc70034c0d1c0e25455df10fb01eaf
+$(PKG)_CHECKSUM := 56f468c208e4e08c00771ec1b6dae2707fd945be
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.csie.ntu.edu.tw/~cjlin/$(PKG)/$($(PKG)_FILE)

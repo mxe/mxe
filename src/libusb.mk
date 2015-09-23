@@ -4,7 +4,7 @@
 PKG             := libusb
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.6.0
-$(PKG)_CHECKSUM := 6b90d083e4aee2fa0edbf18dec79d40afe9ded7d
+$(PKG)_CHECKSUM := 032feda2e71945f13f0ca3da58ca10dcb439bfee
 $(PKG)_SUBDIR   := $(PKG)-win32-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-win32-src-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)-win32/$(PKG)-win32-releases/$($(PKG)_VERSION)/$($(PKG)_FILE)

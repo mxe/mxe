@@ -4,7 +4,7 @@
 PKG             := gtkmm2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.24.4
-$(PKG)_CHECKSUM := e99866b0cb5a0d7387a7cef79253177310020b3d
+$(PKG)_CHECKSUM := 9000390c640a6d7fd19ad8816e6161053696f5ee
 $(PKG)_SUBDIR   := gtkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

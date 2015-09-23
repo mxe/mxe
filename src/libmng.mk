@@ -4,7 +4,7 @@
 PKG             := libmng
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.3
-$(PKG)_CHECKSUM := 0f141482ffcef6f8cd4413f945a59310ac2e49af
+$(PKG)_CHECKSUM := 06c8a18b62f8cc0042454323058e6da0dbb57dd3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)-devel/$($(PKG)_VERSION)/$($(PKG)_FILE)

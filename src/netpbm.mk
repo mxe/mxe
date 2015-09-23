@@ -4,7 +4,7 @@
 PKG             := netpbm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 10.35.96
-$(PKG)_CHECKSUM := 0dfd29b49fe97148acd4aecba40f10ec31096c46
+$(PKG)_CHECKSUM := 28e135efe026b41cd64be20e245b0c8124819eee
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/netpbm/super_stable/$($(PKG)_VERSION)/$($(PKG)_FILE)

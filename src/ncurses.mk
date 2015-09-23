@@ -4,7 +4,7 @@
 PKG             := ncurses
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := e14300b
-$(PKG)_CHECKSUM := fcc1997439560b6cb7f9bf2f73f6245310f06c64
+$(PKG)_CHECKSUM := b10d258c12769f8f6ee752f66038ba95a5e5f650
 # $(PKG)_VERSION  := 5.9
 # $(PKG)_SUBDIR   := ncurses-$($(PKG)_VERSION)
 # $(PKG)_FILE     := ncurses-$($(PKG)_VERSION).tar.gz

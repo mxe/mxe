@@ -4,7 +4,7 @@
 PKG             := db
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.1.26
-$(PKG)_CHECKSUM := 5ae05c6c4a1766270fd5cfb28539e2b7a19c33b2
+$(PKG)_CHECKSUM := 0986c3c60e2a7cfb5bfa25177ef7cadb2afb13a6
 $(PKG)_SUBDIR   := db-$($(PKG)_VERSION)
 $(PKG)_FILE     := db-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.oracle.com/berkeley-db/$($(PKG)_FILE)

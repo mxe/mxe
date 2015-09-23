@@ -4,7 +4,7 @@
 PKG             := ftgl
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.1.3~rc5
-$(PKG)_CHECKSUM := 8508f26c84001d7bc949246affa03744fa1fd22e
+$(PKG)_CHECKSUM := c223e2a6107a6a99a36afdc2ae634a973af70c59
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$(subst ~,-,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/FTGL Source/$($(PKG)_VERSION)/$($(PKG)_FILE)

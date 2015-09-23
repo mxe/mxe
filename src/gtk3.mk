@@ -4,7 +4,7 @@
 PKG             := gtk3
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.14.4
-$(PKG)_CHECKSUM := ff4a257226842d11eaaa6ca798ae72e8eaab8bbe
+$(PKG)_CHECKSUM := 66e3292af84c87d9198a30199051d23cfc7bef2f
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

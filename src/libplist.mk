@@ -4,7 +4,7 @@
 PKG             := libplist
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.12
-$(PKG)_CHECKSUM := 2d7bc731fd992a318a10195d43b11ff01b46bbb0
+$(PKG)_CHECKSUM := 252b2a7ed185df351f02c167147a8a602a0aa63e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/libimobiledevice/libplist/archive/$($(PKG)_VERSION).tar.gz

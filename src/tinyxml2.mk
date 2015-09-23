@@ -4,7 +4,7 @@
 PKG             := tinyxml2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0.0
-$(PKG)_CHECKSUM := 07acaae49f7dd3dab790da4fe72d0c7ef0d116d1
+$(PKG)_CHECKSUM := 1b651f45ce87bc207871f53fdcc8e7f9ec795747
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/leethomason/tinyxml2/archive/$($(PKG)_VERSION).tar.gz

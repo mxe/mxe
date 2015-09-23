@@ -4,7 +4,7 @@
 PKG             := dcmtk
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.6.0
-$(PKG)_CHECKSUM := 469e017cffc56f36e834aa19c8612111f964f757
+$(PKG)_CHECKSUM := 60e943c1548c7696b607dbb646c5a06f015ed33a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://dicom.offis.de/pub/dicom/offis/software/$(PKG)/$(PKG)$(subst .,,$($(PKG)_VERSION))/$($(PKG)_FILE)

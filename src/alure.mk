@@ -4,7 +4,7 @@
 PKG             := alure
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2
-$(PKG)_CHECKSUM := f033f0820c449ebff7b4b0254a7b1f26c0ba485b
+$(PKG)_CHECKSUM := 764662d64404e40c4c152d160e3a8838b1d70f71
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://kcat.strangesoft.net/alure-releases/$($(PKG)_FILE)

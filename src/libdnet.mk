@@ -4,7 +4,7 @@
 PKG             := libdnet
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.11
-$(PKG)_CHECKSUM := e2ae8c7f0ca95655ae9f77fd4a0e2235dc4716bf
+$(PKG)_CHECKSUM := 6e98473348d9c94852f796a226360c716cc7ca53
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)

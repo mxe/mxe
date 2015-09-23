@@ -4,7 +4,7 @@
 PKG             := fltk
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.3
-$(PKG)_CHECKSUM := 873aac49b277149e054b9740378e2ca87b0bd435
+$(PKG)_CHECKSUM := 9e761adaf2f1ef8bb0c30eceb7beb4f2273d0d97
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR)-source.tar.gz
 $(PKG)_URL      := http://fltk.org/pub/fltk/$($(PKG)_VERSION)/$($(PKG)_FILE)

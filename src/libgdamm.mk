@@ -4,7 +4,7 @@
 PKG             := libgdamm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.1.3
-$(PKG)_CHECKSUM := f6126d7b46720e3ea4f3d49e03add2e52da233be
+$(PKG)_CHECKSUM := 191ab863dff73abec0e569159f4aa640f6319881
 $(PKG)_SUBDIR   := libgdamm-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgdamm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgdamm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

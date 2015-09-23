@@ -4,7 +4,7 @@
 PKG             := popt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.16
-$(PKG)_CHECKSUM := cfe94a15a2404db85858a81ff8de27c8ff3e235e
+$(PKG)_CHECKSUM := 3c3d6b2dde3d9cad453422a10d6558616d304cc8
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://rpm5.org/files/popt/$($(PKG)_FILE)
