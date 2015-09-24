@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://llvm.org/releases/download.html' | \
     grep 'Download LLVM' | \
-    $(SED) -n 's,.*\([0-9]\.[0-9]\).*,\1,p' | \
+    $(SED) -n 's,.*LLVM \([0-9][^<]*\).*,\1,p' | \
     head -1
 endef
 
@@ -26,7 +26,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/build' -j $(JOBS) llvm-tblgen
     $(MAKE) -C '$(1)/build' -j $(JOBS) intrinsics_gen
     $(MAKE) -C '$(1)/build' -j $(JOBS) install
-    ln -sf '$(PREFIX)/$(TARGET)/bin/llvm-config' '$(PREFIX)/bin/$(TARGET)-llvm-config'
 endef
 
 $(PKG)_BUILD_SHARED =
