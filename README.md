@@ -34,4 +34,4 @@ various target platforms, which:
     - static
     - shared
 
-Shared support in MXE was just added in early February, 2014.
+Please see [mxe.cc](http://mxe.cc/) for further information and package support matrix.
