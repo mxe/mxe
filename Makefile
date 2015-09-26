@@ -124,9 +124,16 @@ MAKE_SHARED_FROM_STATIC = \
 	--bindir '$(PREFIX)/$(TARGET)/bin'
 
 define MXE_GET_GITHUB_SHA
-    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' | \
-    $(SED) -n 's#.*"sha": "\([^"]\{10\}\).*#\1#p' | \
-    head -1
+    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' \
+    | $(SED) -n 's#.*"sha": "\([^"]\{10\}\).*#\1#p' \
+    | head -1
+endef
+
+define MXE_GET_GITHUB_TAGS
+    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/tags/' \
+    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p' \
+    | $(SORT) -V \
+    | tail -1
 endef
 
 # use a minimal whitelist of safe environment variables
