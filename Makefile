@@ -136,6 +136,12 @@ define MXE_GET_GITHUB_TAGS
     | tail -1
 endef
 
+define MXE_GET_GITHUB_TAG_SHA
+    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/tags/' | \
+    $(SED) -n 's#.*"sha": "\([^"]\{10\}\).*#\1#p' | \
+    tail -1
+endef
+
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH ACLOCAL_PATH
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
