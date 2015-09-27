@@ -1,27 +1,29 @@
 #!/usr/bin/env lua
 
--- This file is part of MXE.
--- See index.html for further information.
+--[[
+This file is part of MXE.
+See index.html for further information.
 
--- build-pkg, Build binary packages from MXE packages
--- Instructions: http://mxe.redjohn.tk
+build-pkg, Build binary packages from MXE packages
+Instructions: http://mxe.redjohn.tk
 
--- Requirements: MXE, lua, tsort, fakeroot, dpkg-deb.
--- Usage: lua tools/build-pkg.lua
--- Packages are written to `*.tar.xz` files.
--- Debian packages are written to `*.deb` files.
+Requirements: MXE, lua, tsort, fakeroot, dpkg-deb.
+Usage: lua tools/build-pkg.lua
+Packages are written to `*.tar.xz` files.
+Debian packages are written to `*.deb` files.
 
--- Build in directory /usr/lib/mxe
--- This directory can not be changed in .deb packages
--- To change this directory, set environment variable
--- MXE_DIR to other directory.
+Build in directory /usr/lib/mxe
+This directory can not be changed in .deb packages
+To change this directory, set environment variable
+MXE_DIR to other directory.
 
--- To prevent build-pkg from creating deb packages,
--- set environment variable MXE_NO_DEBS to 1
--- In this case fakeroot and dpkg-deb are not needed.
+To prevent build-pkg from creating deb packages,
+set environment variable MXE_NO_DEBS to 1
+In this case fakeroot and dpkg-deb are not needed.
 
--- To limit number of packages being built to x,
--- set environment variable MXE_MAX_PACKAGES to x,
+To limit number of packages being built to x,
+set environment variable MXE_MAX_PACKAGES to x,
+]]
 
 local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
 local no_debs = os.getenv('MXE_NO_DEBS')
