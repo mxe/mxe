@@ -23,6 +23,13 @@ In this case fakeroot and dpkg-deb are not needed.
 
 To limit number of packages being built to x,
 set environment variable MXE_MAX_PACKAGES to x,
+
+The following error:
+> fakeroot, while creating message channels: Invalid argument
+> This may be due to a lack of SYSV IPC support.
+> fakeroot: error while starting the `faked' daemon.
+can be caused by leaked ipc resources originating in fakeroot.
+How to remove them: http://stackoverflow.com/a/4262545
 ]]
 
 local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
