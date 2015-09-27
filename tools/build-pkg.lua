@@ -180,7 +180,9 @@ print-deps:
 	@$(foreach pkg,$(PKGS),echo \
 		for-build-pkg $(pkg) \
 		$(subst $(SPACE),-,$($(pkg)_VERSION)) \
-		$($(pkg)_DEPS);)]]
+		$($(pkg)_DEPS) \
+		$(if $(call set_is_not_member,$(pkg),$(MXE_CONF_PKGS)), \
+		$(MXE_CONF_PKGS));)]]
     local deps_mk_file = io.open('deps.mk', 'w')
     deps_mk_file:write(deps_mk_content)
     deps_mk_file:close()
