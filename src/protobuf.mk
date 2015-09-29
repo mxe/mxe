@@ -22,13 +22,13 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    cp '$(1)/src/protoc' '$(1)/src/protoc_host'
+    cp '$(1)/src/protoc' '$(PREFIX)/bin/$(TARGET)-protoc'
     $(MAKE) -C '$(1)' -j 1 distclean
 # Second step: Build for target system.
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-zlib \
-        --with-protoc=src/protoc_host
+        --with-protoc='$(PREFIX)/bin/$(TARGET)-protoc'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 
