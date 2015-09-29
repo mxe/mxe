@@ -344,6 +344,7 @@
     "smpeg2": "2.0.0",
     "sox": "14.4.2",
     "speex": "1.2rc2",
+    "speexdsp": "1.2rc3",
     "sqlite": "3081101",
     "suitesparse": "4.2.1",
     "t4k_common": "0.1.1",
