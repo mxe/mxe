@@ -51,6 +51,9 @@ define $(PKG)_BUILD_COMMON
      echo 'exec cmake -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" "$$@"') \
              > '$(PREFIX)/bin/$(TARGET)-cmake'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-cmake'
+
+    #create readonly directory to force wine to fail
+    $(INSTALL) -m444 -d "$$WINEPREFIX"
 endef
 
 define $(PKG)_BUILD

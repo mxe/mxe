@@ -142,6 +142,8 @@ endef
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH ACLOCAL_PATH
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
+export WINEPREFIX=$(PREFIX)/readonly
+
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
 
