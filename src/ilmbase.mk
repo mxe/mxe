@@ -32,9 +32,9 @@ define $(PKG)_BUILD
         SHELL=$(SHELL)
     # do the first build step by hand, because programs are built that
     # generate source files
-    cd '$(1)/Half' && g++ eLut.cpp -o eLut
+    cd '$(1)/Half' && $(BUILD_CXX) eLut.cpp -o eLut
     '$(1)/Half/eLut' > '$(1)/eLut.h'
-    cd '$(1)/Half' && g++ toFloat.cpp -o toFloat
+    cd '$(1)/Half' && $(BUILD_CXX) toFloat.cpp -o toFloat
     '$(1)/Half/toFloat' > '$(1)/toFloat.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
