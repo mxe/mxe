@@ -23,8 +23,8 @@ PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 PWD        := $(shell pwd)
 SHELL      := bash
 
-CC_BUILD   := $(shell (gcc --help >/dev/null 2>&1 && echo gcc) || (clang --help >/dev/null 2>&1 && echo clang))
-CXX_BUILD  := $(shell (g++ --help >/dev/null 2>&1 && echo g++) || (clang++ --help >/dev/null 2>&1 && echo clang++))
+BUILD_CC   := $(shell (gcc --help >/dev/null 2>&1 && echo gcc) || (clang --help >/dev/null 2>&1 && echo clang))
+BUILD_CXX  := $(shell (g++ --help >/dev/null 2>&1 && echo g++) || (clang++ --help >/dev/null 2>&1 && echo clang++))
 DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
@@ -37,7 +37,7 @@ WGET       := wget --no-check-certificate \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
-                $(CC_BUILD) $(CXX_BUILD) gperf intltoolize $(LIBTOOL) \
+                $(BUILD_CC) $(BUILD_CXX) gperf intltoolize $(LIBTOOL) \
                 $(LIBTOOLIZE) $(MAKE) openssl $(PATCH) $(PERL) python \
                 ruby scons $(SED) $(SORT) unzip wget xz 7za
 
