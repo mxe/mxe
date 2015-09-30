@@ -23,7 +23,7 @@ define $(PKG)_BUILD
     # The setting "scm_cv_struct_timespec=no" ensures that Guile
     # won't try to use the "struct timespec" from <pthreads.h>,
     # which would fail because we tell Guile not to use Pthreads.
-    cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
+    cd '$(1)' && CC_FOR_BUILD=$(BUILD_CC) ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \

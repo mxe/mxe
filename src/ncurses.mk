@@ -35,8 +35,8 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix=$(PREFIX)/$(TARGET) \
-        --with-build-cc=gcc \
-        --with-build-cpp=cpp \
+        --with-build-cc=$(BUILD_CC) \
+        --with-build-cpp='$(BUILD_CC) -E' \
         --disable-home-terminfo \
         --enable-sp-funcs \
         --enable-term-driver \
