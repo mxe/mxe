@@ -142,6 +142,8 @@ endef
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH ACLOCAL_PATH
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
+# disable wine with readonly directory (created by mxe-conf)
+# see https://github.com/mxe/mxe/issues/841
 export WINEPREFIX=$(PREFIX)/readonly
 
 SHORT_PKG_VERSION = \
