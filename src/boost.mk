@@ -71,4 +71,17 @@ define $(PKG)_BUILD
         -lboost_thread_win32-mt \
         -lboost_system-mt \
         -lboost_chrono-mt
+
+    # test cmake
+    mkdir '$(1).test-cmake'
+    (echo 'cmake_minimum_required(VERSION 2.8.11)'; \
+     echo 'project(test-$(PKG)-cmake)'; \
+     echo 'find_package(Boost COMPONENTS chrono serialization system thread REQUIRED)'; \
+     echo 'add_executable(test-$(PKG)-cmake $(PREFIX)/../src/$(PKG)-test.cpp)'; \
+     echo 'target_link_libraries(test-$(PKG)-cmake $${Boost_LIBRARIES})'; \
+     echo 'install(TARGETS test-$(PKG)-cmake DESTINATION bin)'; \
+    ) > '$(1).test-cmake/CMakeLists.txt'
+
+    cd '$(1).test-cmake' && '$(TARGET)-cmake' .
+    $(MAKE) -C '$(1).test-cmake' -j 1 install
 endef
