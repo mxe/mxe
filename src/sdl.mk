@@ -33,4 +33,18 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl.exe' \
         `'$(TARGET)-pkg-config' sdl --cflags --libs`
+
+    # test cmake
+    mkdir '$(1).test-cmake'
+    (echo 'cmake_minimum_required(VERSION 2.8.11)'; \
+     echo 'project(test-$(PKG)-cmake)'; \
+     echo 'find_package(SDL REQUIRED)'; \
+     echo 'include_directories($${SDL_INCLUDE_DIRS})'; \
+     echo 'add_executable(test-$(PKG)-cmake $(PREFIX)/../src/$(PKG)-test.c)'; \
+     echo 'target_link_libraries(test-$(PKG)-cmake $${SDL_LIBRARIES})'; \
+     echo 'install(TARGETS test-$(PKG)-cmake DESTINATION bin)'; \
+    ) > '$(1).test-cmake/CMakeLists.txt'
+
+    cd '$(1).test-cmake' && '$(TARGET)-cmake' .
+    $(MAKE) -C '$(1).test-cmake' -j 1 install
 endef
