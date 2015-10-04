@@ -36,7 +36,7 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-message("** Custom MXE File: " ${CMAKE_CURRENT_LIST_FILE})
+message("== Custom MXE File: " ${CMAKE_CURRENT_LIST_FILE})
 
 if (UNIX)
   find_package(PkgConfig QUIET)

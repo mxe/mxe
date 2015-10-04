@@ -47,6 +47,7 @@ define $(PKG)_BUILD_COMMON
 
     #create prefixed cmake wrapper script
     (echo '#!/bin/sh'; \
+     echo 'echo "== Using MXE toolchain: $(CMAKE_TOOLCHAIN_FILE)"'; \
      echo 'exec cmake -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" "$$@"') \
              > '$(PREFIX)/bin/$(TARGET)-cmake'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-cmake'
