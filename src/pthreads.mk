@@ -6,8 +6,6 @@
 
 PKG             := pthreads
 $(PKG)_VERSION  := POSIX 1003.1-2001
-$(PKG)_CHECKSUM  = $(winpthreads_CHECKSUM)
-$(PKG)_FILE      = $(winpthreads_FILE)
 $(PKG)_DEPS     := winpthreads
 
 define $(PKG)_UPDATE
