@@ -71,7 +71,8 @@ define $(PKG)_BUILD_SHARED
     $($(PKG)_BUILD_COMMON)
 endef
 
-define $(PKG)_BUILD_$(BUILD)
+# disable native build temporarily
+define $(PKG)_BUILD_DISABLED
     $(MAKE) -C '$(1)/src' -j '$(JOBS)' \
         INSTALL_TOP='$(PREFIX)/$(TARGET)' \
         INSTALL='$(INSTALL)' \
