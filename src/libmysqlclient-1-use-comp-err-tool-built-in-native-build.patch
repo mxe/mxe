@@ -1,0 +1,50 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 69b0fe0b531fd93bd757f0df188a620aad2a5755 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 6 Sep 2015 22:34:47 +0100
+Subject: [PATCH 1/5] use comp_err tool built in native build
+
+See http://www.vtk.org/Wiki/CMake_Cross_Compiling#Using_executables_in_the_build_created_during_the_build
+---
+ extra/CMakeLists.txt | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/extra/CMakeLists.txt b/extra/CMakeLists.txt
+index ac28c62..b2cbb75 100644
+--- a/extra/CMakeLists.txt
++++ b/extra/CMakeLists.txt
+@@ -20,13 +20,29 @@ ${ZLIB_INCLUDE_DIR})
+ # Default install component for the files here
+ SET(MYSQL_INSTALL_COMPONENT Development)
+ 
++# See https://bugs.mysql.com/bug.php?id=61340
++# See http://www.vtk.org/Wiki/CMake_Cross_Compiling
++
++# when crosscompiling import the executable targets from a file
++IF(CMAKE_CROSSCOMPILING)
++  SET(IMPORT_COMP_ERR "IMPORTFILE-NOTFOUND"
++  CACHE FILEPATH "Point it to the export file from a native build")
++  INCLUDE(${IMPORT_COMP_ERR})
++ENDIF(CMAKE_CROSSCOMPILING)
++
++# only build the generator if not crosscompiling
++# export the generator target to a file, so it can be imported
++#  (see above) by another build
++# the IF() is not necessary, but makes the intention clearer
+ IF(NOT CMAKE_CROSSCOMPILING)
+  ADD_EXECUTABLE(comp_err comp_err.c)
+  TARGET_LINK_LIBRARIES(comp_err mysys mysys_ssl)
+  SET_TARGET_PROPERTIES(comp_err PROPERTIES LINKER_LANGUAGE CXX)
++ EXPORT(TARGETS comp_err FILE ${CMAKE_BINARY_DIR}/ImportCompErr.cmake)
+ ENDIF()
+ 
+ 
++# then use the target name as COMMAND, CMake >= 2.6 knows how to handle this
+ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_BINARY_DIR}/include/mysqld_error.h 
+                    ${PROJECT_BINARY_DIR}/sql/share/english/errmsg.sys
+                    COMMAND comp_err
+-- 
+2.1.4
+
