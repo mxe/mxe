@@ -6,7 +6,7 @@
 cmake_minimum_required(VERSION 2.8.11)
 
 # set languages in individual modules
-project(mxe LANGUAGES NONE)
+project(mxe NONE)
 
 # see cmake --help-policy <cmp> for details
 cmake_policy(SET CMP0017 NEW)
