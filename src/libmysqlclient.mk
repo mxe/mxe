@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         -DHAVE_GCC_ATOMIC_BUILTINS=1 \
         -DDISABLE_SHARED=1 \
         -DENABLE_DTRACE=OFF \
+        -DWITH_ZLIB=system \
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
