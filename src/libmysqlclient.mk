@@ -4,7 +4,7 @@
 PKG             := libmysqlclient
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.1.6
-$(PKG)_CHECKSUM := 2444586365c2c58e7ca2397d4617e5fe19f9f246
+$(PKG)_CHECKSUM := 2222433012c415871958b61bc4f3683e1ebe77e3389f698b267058c12533ea78
 $(PKG)_SUBDIR   := mysql-connector-c-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://dev.mysql.com/get/Downloads/Connector-C/$($(PKG)_FILE)
@@ -31,6 +31,7 @@ define $(PKG)_BUILD
         -DIMPORT_COMP_ERR='$(1).native/ImportCompErr.cmake' \
         -DHAVE_GCC_ATOMIC_BUILTINS=1 \
         -DDISABLE_SHARED=1 \
+        -DENABLE_DTRACE=OFF \
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
