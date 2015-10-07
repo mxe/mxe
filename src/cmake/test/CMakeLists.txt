@@ -1,9 +1,8 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# 2.8.11 is recommended as a minimum for Qt5
-# http://doc.qt.io/qt-5/cmake-manual.html
-cmake_minimum_required(VERSION 2.8.11)
+# 2.8.9 is Debian Wheezy version
+cmake_minimum_required(VERSION 2.8.9)
 
 # set languages in individual modules
 project(mxe NONE)
