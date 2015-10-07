@@ -19,6 +19,7 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,CYGWIN=no,CYGWIN=yes,g'                     '$(1)/configure'
     $(SED) -i 's,cat /proc/sys/kernel/ostype,,g'             '$(1)/configure'
+    $(SED) -i 's,/dev/tun0,false,g'                          '$(1)/configure'
     $(SED) -i 's,test -d /usr/include/mingw,true,'           '$(1)/configure'
     $(SED) -i 's,Iphlpapi,iphlpapi,g'                        '$(1)/configure'
     $(SED) -i 's,packet32\.h,Packet32.h,g'                   '$(1)/configure'
