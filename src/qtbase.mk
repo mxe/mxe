@@ -40,7 +40,7 @@ define $(PKG)_BUILD
             -accessibility \
             -nomake examples \
             -nomake tests \
-            $(if $(BUILD_STATIC), -plugin-sql-mysql, -no-sql-mysql) \
+            -plugin-sql-mysql \
             -plugin-sql-sqlite \
             -plugin-sql-odbc \
             -plugin-sql-psql \
