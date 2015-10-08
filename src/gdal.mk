@@ -10,8 +10,8 @@ $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc armadillo curl expat geos giflib gta hdf4 hdf5 \
-                   jpeg json-c libgeotiff libpng libxml2 netcdf openjpeg \
-                   postgresql proj sqlite tiff zlib
+                   jpeg json-c libgeotiff libmysqlclient libpng libxml2 \
+                   netcdf openjpeg postgresql proj sqlite tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
@@ -21,59 +21,61 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && autoreconf -fi -I ./m4
-    # The option '--without-threads' means native win32 threading without pthread.
+    # The option '--with-threads=no' means native win32 threading without pthread.
+    # mysql uses threading from Vista onwards - '-D_WIN32_WINNT=0x0600'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-bsb \
-        --with-grib \
-        --with-ogr \
-        --with-pam \
-        --without-threads \
         --with-armadillo='$(PREFIX)/$(TARGET)' \
-        --with-libz='$(PREFIX)/$(TARGET)' \
-        --with-png='$(PREFIX)/$(TARGET)' \
-        --with-libtiff='$(PREFIX)/$(TARGET)' \
-        --with-geotiff='$(PREFIX)/$(TARGET)' \
-        --with-jpeg='$(PREFIX)/$(TARGET)' \
-        --with-openjpeg='$(PREFIX)/$(TARGET)' \
-        --with-gif='$(PREFIX)/$(TARGET)' \
+        --with-bsb \
+        --with-cfitsio=no \
+        --with-dods-root=no \
+        --with-dwgdirect=no \
+        --with-ecw=no \
+        --with-epsilon=no \
         --with-expat='$(PREFIX)/$(TARGET)' \
-        --with-sqlite3='$(PREFIX)/$(TARGET)' \
+        --with-fme=no \
+        --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
+        --with-geotiff='$(PREFIX)/$(TARGET)' \
+        --with-gif='$(PREFIX)/$(TARGET)' \
+        --with-grass=no \
+        --with-grib \
         --with-gta='$(PREFIX)/$(TARGET)' \
         --with-hdf4='$(PREFIX)/$(TARGET)' \
         --with-hdf5='$(PREFIX)/$(TARGET)' \
+        --with-idb=no \
+        --with-ingres=no \
+        --with-jasper=no \
+        --with-jp2mrsid=no \
+        --with-jpeg='$(PREFIX)/$(TARGET)' \
+        --with-kakadu=no \
+        --with-libgrass=no \
         --with-libjson-c='$(PREFIX)/$(TARGET)' \
+        --with-libtiff='$(PREFIX)/$(TARGET)' \
+        --with-libz='$(PREFIX)/$(TARGET)' \
+        --with-mrsid=no \
+        --with-msg=no \
+        --with-mysql='$(PREFIX)/$(TARGET)/bin/mysql_config' \
         --with-netcdf='$(PREFIX)/$(TARGET)' \
-        --with-geos='$(PREFIX)/$(TARGET)/bin/geos-config' \
+        --with-oci=no \
+        --with-odbc=no \
+        --with-ogdi=no \
+        --with-ogr \
+        --with-openjpeg='$(PREFIX)/$(TARGET)' \
+        --with-pam \
+        --with-pcidsk=no \
+        --with-pcraster=no \
+        --with-perl=no \
+        --with-php=no \
+        --with-png='$(PREFIX)/$(TARGET)' \
+        --with-python=no \
+        --with-ruby=no \
+        --with-sde=no \
+        --with-spatialite=no \
+        --with-sqlite3='$(PREFIX)/$(TARGET)' \
+        --with-threads=no \
+        --with-xerces=no \
         --with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
-        --without-jasper \
-        --without-odbc \
-        --without-xerces \
-        --without-grass \
-        --without-libgrass \
-        --without-spatialite \
-        --without-cfitsio \
-        --without-pcraster \
-        --without-pcidsk \
-        --without-ogdi \
-        --without-fme \
-        --without-ecw \
-        --without-kakadu \
-        --without-mrsid \
-        --without-jp2mrsid \
-        --without-msg \
-        --without-oci \
-        --without-mysql \
-        --without-ingres \
-        --without-dods-root \
-        --without-dwgdirect \
-        --without-idb \
-        --without-sde \
-        --without-epsilon \
-        --without-perl \
-        --without-php \
-        --without-ruby \
-        --without-python \
+        CXXFLAGS='-D_WIN32_WINNT=0x0600' \
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
 
     $(MAKE) -C '$(1)'       -j '$(JOBS)' lib-target
