@@ -3,10 +3,10 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 71cfce45995b6480ce152e114f9b1200285aff25 Mon Sep 17 00:00:00 2001
+From fe2dc073c1944a148266731783ffbb44ca05dff0 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Sun, 6 Sep 2015 22:34:47 +0100
-Subject: [PATCH 1/5] use comp_err tool built in native build
+Subject: [PATCH 1/6] use comp_err tool built in native build
 
 See http://www.vtk.org/Wiki/CMake_Cross_Compiling#Using_executables_in_the_build_created_during_the_build
 
@@ -45,13 +45,13 @@ index ac28c62..b2cbb75 100644
                     ${PROJECT_BINARY_DIR}/sql/share/english/errmsg.sys
                     COMMAND comp_err
 -- 
-2.3.2 (Apple Git-55)
+2.3.8 (Apple Git-58)
 
 
-From 107ff4667803afbfa33802081b4684ccf546aaea Mon Sep 17 00:00:00 2001
+From 0016ad64182c792db3a73a088edd2fb8f0979bf4 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Sun, 6 Sep 2015 22:53:33 +0100
-Subject: [PATCH 2/5] fix extra qualification 'Handshake::'
+Subject: [PATCH 2/6] fix extra qualification 'Handshake::'
 
 Compilation error.
 
@@ -69,13 +69,13 @@ index 14b1386..395af36 100644
    bool virtual is_complete() const
    {
 -- 
-2.3.2 (Apple Git-55)
+2.3.8 (Apple Git-58)
 
 
-From 5f61b1e80ce1b059de333ae87f5e6477aab9db2e Mon Sep 17 00:00:00 2001
+From f8d00456e899c9f894c5ffd129492cd1a0071a1a Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Mon, 7 Sep 2015 22:59:18 +0100
-Subject: [PATCH 3/5] fix case in headers and libs (should be lowercase)
+Subject: [PATCH 3/6] fix case in headers and libs (should be lowercase)
 
 
 diff --git a/extra/yassl/src/yassl_int.cpp b/extra/yassl/src/yassl_int.cpp
@@ -131,13 +131,13 @@ index d25aae8..ecfee79 100644
  
  static int win_auth_client_plugin_init(char*, size_t, int, va_list)
 -- 
-2.3.2 (Apple Git-55)
+2.3.8 (Apple Git-58)
 
 
-From 0f25aa3b8c8a5b08b484806e462517d982099931 Mon Sep 17 00:00:00 2001
+From 92a89df619d80882178f73fc05ad78d2bb9cb44f Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Mon, 7 Sep 2015 23:01:35 +0100
-Subject: [PATCH 4/5] define missing types
+Subject: [PATCH 4/6] define missing types
 
 We do not use types CERT_NAME_BLOB and CRYPT_HASH_BLOB,
 though they are used in mprapi.h. And are not defined!
@@ -157,13 +157,13 @@ index 780c765..e2cd321 100644
  
  /*
 -- 
-2.3.2 (Apple Git-55)
+2.3.8 (Apple Git-58)
 
 
-From ac6210388d78e3459adc558d3aff5b2f734360e1 Mon Sep 17 00:00:00 2001
+From 9ae06886d2c38c9fef0a4f04e81c6fad71306482 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Mon, 7 Sep 2015 23:04:23 +0100
-Subject: [PATCH 5/5] macro NATIVE_WIN32 for stuff we don't have here
+Subject: [PATCH 5/6] macro NATIVE_WIN32 for stuff we don't have here
 
 Macro NATIVE_WIN32 is undefined in MXE. It is used instead of _WIN32
 in #ifdef's where working variant is Unix and not Win32:
@@ -271,5 +271,46 @@ index 226d469..db94096 100644
  #include "m_string.h"
  #include <signal.h>
 -- 
-2.3.2 (Apple Git-55)
+2.3.8 (Apple Git-58)
+
+
+From 2c02e9ed72db74f4a9c52a198e82d06293470ce7 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 8 Oct 2015 13:30:53 +1100
+Subject: [PATCH 6/6] fix shared lib names
+
+
+diff --git a/libmysql/CMakeLists.txt b/libmysql/CMakeLists.txt
+index 17c8c03..9e2980b 100644
+--- a/libmysql/CMakeLists.txt
++++ b/libmysql/CMakeLists.txt
+@@ -216,7 +216,7 @@ MACRO(GET_TARGET_NAME target out_name)
+   SET(${out_name} ${name})
+ ENDMACRO()
+ 
+-IF(UNIX)
++IF(UNIX OR MINGW)
+   MACRO(GET_VERSIONED_LIBNAME LIBNAME EXTENSION VERSION OUTNAME)
+     SET(DOT_VERSION ".${VERSION}")
+     IF(DOT_VERSION STREQUAL ".") 
+@@ -230,7 +230,7 @@ IF(UNIX)
+   ENDMACRO()
+ ENDIF()
+ 
+-IF(UNIX)
++IF(UNIX OR MINGW)
+   GET_TARGET_NAME(mysqlclient lib_name)
+   INSTALL_SYMLINK(mysqlclient
+     ${lib_name} ${CMAKE_STATIC_LIBRARY_PREFIX}mysqlclient_r.a
+@@ -252,7 +252,7 @@ IF(NOT DISABLE_SHARED)
+   MERGE_LIBRARIES(libmysql SHARED ${LIBS}
+     EXPORTS ${CLIENT_API_FUNCTIONS}
+     COMPONENT SharedLibraries)
+-  IF(UNIX)
++  IF(UNIX OR MINGW)
+     # libtool compatability
+     IF(CMAKE_SYSTEM_NAME MATCHES "FreeBSD" OR APPLE)
+       SET(OS_SHARED_LIB_VERSION "${SHARED_LIB_MAJOR_VERSION}")
+-- 
+2.3.8 (Apple Git-58)
 

@@ -30,12 +30,18 @@ define $(PKG)_BUILD
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DIMPORT_COMP_ERR='$(1).native/ImportCompErr.cmake' \
         -DHAVE_GCC_ATOMIC_BUILTINS=1 \
-        -DDISABLE_SHARED=1 \
+        -DDISABLE_SHARED=$(CMAKE_STATIC_BOOL) \
         -DENABLE_DTRACE=OFF \
         -DWITH_ZLIB=system \
         '$(1)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1
-    $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
-endef
 
-$(PKG)_BUILD_SHARED =
+    # def file created by cmake creates link errors
+    cp '$(PWD)/src/$(PKG).def' '$(1).build/libmysql/libmysql_exports.def'
+
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(1).build/include'  -j 1 install VERBOSE=1
+    $(MAKE) -C '$(1).build/libmysql' -j 1 install VERBOSE=1
+
+    # no easy way to configure location of dll
+    -mv '$(PREFIX)/$(TARGET)/lib/$(PKG).dll' '$(PREFIX)/$(TARGET)/bin/'
+endef
