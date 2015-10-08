@@ -3,10 +3,10 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From fe2dc073c1944a148266731783ffbb44ca05dff0 Mon Sep 17 00:00:00 2001
+From 93f3a29abe0397e5a6681c07c3223372b5451bb0 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Sun, 6 Sep 2015 22:34:47 +0100
-Subject: [PATCH 1/6] use comp_err tool built in native build
+Subject: [PATCH 1/7] use comp_err tool built in native build
 
 See http://www.vtk.org/Wiki/CMake_Cross_Compiling#Using_executables_in_the_build_created_during_the_build
 
@@ -48,10 +48,10 @@ index ac28c62..b2cbb75 100644
 2.3.8 (Apple Git-58)
 
 
-From 0016ad64182c792db3a73a088edd2fb8f0979bf4 Mon Sep 17 00:00:00 2001
+From e45e5c21360b12cb9f271a29bd1d4d183ed55060 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Sun, 6 Sep 2015 22:53:33 +0100
-Subject: [PATCH 2/6] fix extra qualification 'Handshake::'
+Subject: [PATCH 2/7] fix extra qualification 'Handshake::'
 
 Compilation error.
 
@@ -72,10 +72,10 @@ index 14b1386..395af36 100644
 2.3.8 (Apple Git-58)
 
 
-From f8d00456e899c9f894c5ffd129492cd1a0071a1a Mon Sep 17 00:00:00 2001
+From a2deca6cb6f87bb926d12149595c84f29ae00d0e Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Mon, 7 Sep 2015 22:59:18 +0100
-Subject: [PATCH 3/6] fix case in headers and libs (should be lowercase)
+Subject: [PATCH 3/7] fix case in headers and libs (should be lowercase)
 
 
 diff --git a/extra/yassl/src/yassl_int.cpp b/extra/yassl/src/yassl_int.cpp
@@ -134,10 +134,10 @@ index d25aae8..ecfee79 100644
 2.3.8 (Apple Git-58)
 
 
-From 92a89df619d80882178f73fc05ad78d2bb9cb44f Mon Sep 17 00:00:00 2001
+From 7517a9a4ce9b123470ff8cc040acfa1777acc832 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Mon, 7 Sep 2015 23:01:35 +0100
-Subject: [PATCH 4/6] define missing types
+Subject: [PATCH 4/7] define missing types
 
 We do not use types CERT_NAME_BLOB and CRYPT_HASH_BLOB,
 though they are used in mprapi.h. And are not defined!
@@ -160,10 +160,10 @@ index 780c765..e2cd321 100644
 2.3.8 (Apple Git-58)
 
 
-From 9ae06886d2c38c9fef0a4f04e81c6fad71306482 Mon Sep 17 00:00:00 2001
+From 12358baf55265ff6d2764771199645e811863853 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Mon, 7 Sep 2015 23:04:23 +0100
-Subject: [PATCH 5/6] macro NATIVE_WIN32 for stuff we don't have here
+Subject: [PATCH 5/7] macro NATIVE_WIN32 for stuff we don't have here
 
 Macro NATIVE_WIN32 is undefined in MXE. It is used instead of _WIN32
 in #ifdef's where working variant is Unix and not Win32:
@@ -274,10 +274,10 @@ index 226d469..db94096 100644
 2.3.8 (Apple Git-58)
 
 
-From 2c02e9ed72db74f4a9c52a198e82d06293470ce7 Mon Sep 17 00:00:00 2001
+From 4f6b41efba4a862d34de3d03980d283d60c57c28 Mon Sep 17 00:00:00 2001
 From: MXE
 Date: Thu, 8 Oct 2015 13:30:53 +1100
-Subject: [PATCH 6/6] fix shared lib names
+Subject: [PATCH 6/7] fix shared lib names
 
 
 diff --git a/libmysql/CMakeLists.txt b/libmysql/CMakeLists.txt
@@ -311,6 +311,29 @@ index 17c8c03..9e2980b 100644
      # libtool compatability
      IF(CMAKE_SYSTEM_NAME MATCHES "FreeBSD" OR APPLE)
        SET(OS_SHARED_LIB_VERSION "${SHARED_LIB_MAJOR_VERSION}")
+-- 
+2.3.8 (Apple Git-58)
+
+
+From d57fefef1a1eb15d14dc64d4c59267746f02369d Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 8 Oct 2015 19:36:35 +1100
+Subject: [PATCH 7/7] allow install of mysql_config
+
+
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index 69d19b8..738563b 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -92,7 +92,7 @@ ENDIF()
+ 
+ SET(mysql_config_COMPONENT COMPONENT Development)
+ 
+-IF(WIN32)
++IF(WIN32 AND NOT MINGW)
+   # On Windows, some .sh and some .pl.in files are configured 
+   # The resulting files will have .pl extension (those are perl scripts)
+ 
 -- 
 2.3.8 (Apple Git-58)
 

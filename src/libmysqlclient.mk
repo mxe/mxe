@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2222433012c415871958b61bc4f3683e1ebe77e3389f698b267058c12533e
 $(PKG)_SUBDIR   := mysql-connector-c-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://dev.mysql.com/get/Downloads/Connector-C/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads openssl zlib
+$(PKG)_DEPS     := gcc openssl zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://dev.mysql.com/downloads/connector/c/' | \
@@ -41,7 +41,11 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(1).build/include'  -j 1 install VERBOSE=1
     $(MAKE) -C '$(1).build/libmysql' -j 1 install VERBOSE=1
+    $(MAKE) -C '$(1).build/scripts'  -j 1 install VERBOSE=1
 
     # no easy way to configure location of dll
     -mv '$(PREFIX)/$(TARGET)/lib/$(PKG).dll' '$(PREFIX)/$(TARGET)/bin/'
+
+    # missing headers
+    $(INSTALL) -m644 '$(1)/include/'thr_* '$(1)/include/'my_thr* '$(PREFIX)/$(TARGET)/include'
 endef
