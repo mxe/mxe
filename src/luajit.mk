@@ -12,7 +12,7 @@ $(PKG)_DEPS     := gcc dlfcn-win32
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
-        HOST_CC='gcc -m$(BITS)' CROSS='$(TARGET)-' \
+        HOST_CC='$(BUILD_CC) -m$(BITS)' CROSS='$(TARGET)-' \
         TARGET_SYS=Windows BUILDMODE=static \
         PREFIX='$(PREFIX)/$(TARGET)' \
         FILE_T=luajit.exe \

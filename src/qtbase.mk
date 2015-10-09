@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 893f0691739c00d13ff85bf8d3fd14e1c7a62fbbbcffa44b0491da4d5e570
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt.io/official_releases/qt/5.5/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dbus fontconfig freetds freetype harfbuzz jpeg libpng openssl pcre postgresql sqlite zlib
+$(PKG)_DEPS     := gcc dbus fontconfig freetds freetype harfbuzz jpeg libpng libmysqlclient openssl pcre postgresql sqlite zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.4/ | \
@@ -40,7 +40,7 @@ define $(PKG)_BUILD
             -accessibility \
             -nomake examples \
             -nomake tests \
-            -no-sql-mysql \
+            -plugin-sql-mysql \
             -plugin-sql-sqlite \
             -plugin-sql-odbc \
             -plugin-sql-psql \

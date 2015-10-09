@@ -41,16 +41,16 @@ define $(PKG)_BUILD
         --disable-posix-sem \
         --disable-ilmbasetest \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        CXXFLAGS="-g -O2 -fpermissive"
+        CXXFLAGS="-g -O2"
     # build the code generator manually
-    cd '$(1)/IlmImf' && g++ -O2 \
+    cd '$(1)/IlmImf' && $(BUILD_CXX) -O2 \
         -I'$(1)/ilmbase/include/OpenEXR' \
         -L'$(1)/ilmbase/lib' \
         b44ExpLogTable.cpp \
         -lHalf \
         -o b44ExpLogTable
     '$(1)/IlmImf/b44ExpLogTable' > '$(1)/IlmImf/b44ExpLogTable.h'
-    cd '$(1)/IlmImf' && g++ -O2 \
+    cd '$(1)/IlmImf' && $(BUILD_CXX) -O2 \
         -I'$(1)/config' -I. \
         -I'$(1)/ilmbase/include/OpenEXR' \
         -L'$(1)/ilmbase/lib' \

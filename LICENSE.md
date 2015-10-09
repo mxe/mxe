@@ -8,6 +8,7 @@ Copyright (c) 2007-2015
   * Tony Theodore
   * Martin Gerhardy
   * Tiancheng "Timothy" Gu
+  * Boris Nagaev
   * ... and many other contributors
 
 (contact via the project mailing list)

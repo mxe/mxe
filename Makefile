@@ -23,6 +23,8 @@ PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 PWD        := $(shell pwd)
 SHELL      := bash
 
+BUILD_CC   := $(shell (gcc --help >/dev/null 2>&1 && echo gcc) || (clang --help >/dev/null 2>&1 && echo clang))
+BUILD_CXX  := $(shell (g++ --help >/dev/null 2>&1 && echo g++) || (clang++ --help >/dev/null 2>&1 && echo clang++))
 DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
@@ -35,9 +37,9 @@ WGET       := wget --no-check-certificate \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
-                gcc g++ gperf intltoolize $(LIBTOOL) $(LIBTOOLIZE) \
-                $(MAKE) openssl $(PATCH) $(PERL) python ruby scons \
-                $(SED) $(SORT) unzip wget xz 7za
+                $(BUILD_CC) $(BUILD_CXX) gperf intltoolize $(LIBTOOL) \
+                $(LIBTOOLIZE) $(MAKE) openssl $(PATCH) $(PERL) python \
+                ruby scons $(SED) $(SORT) unzip wget xz 7za
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
@@ -139,6 +141,10 @@ endef
 # use a minimal whitelist of safe environment variables
 ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH ACLOCAL_PATH
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
+
+# disable wine with readonly directory (created by mxe-conf)
+# see https://github.com/mxe/mxe/issues/841
+export WINEPREFIX=$(PREFIX)/readonly
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
@@ -344,11 +350,11 @@ $(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
 
 define PKG_RULE
 .PHONY: download-$(1)
-download-$(1): $(addprefix download-,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
-                download-only-$(1)
+download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
 
 .PHONY: download-only-$(1)
 download-only-$(1):
+	$(and $($(1)_URL),
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(PRINTF_FMT) '[download]' '$(1)'; \
@@ -367,7 +373,7 @@ download-only-$(1):
 	        echo; \
 	        exit 1; \
 	    fi; \
-	fi
+	fi)
 endef
 $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG))))
 

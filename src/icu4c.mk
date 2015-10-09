@@ -22,7 +22,7 @@ endef
 define $(PKG)_BUILD_COMMON
     cd '$(1)/source' && autoreconf -fi
     mkdir '$(1).native' && cd '$(1).native' && '$(1)/source/configure' \
-        CC=gcc CXX=g++
+        CC=$(BUILD_CC) CXX=$(BUILD_CXX)
     $(MAKE) -C '$(1).native' -j '$(JOBS)'
 
     mkdir '$(1).cross' && cd '$(1).cross' && '$(1)/source/configure' \

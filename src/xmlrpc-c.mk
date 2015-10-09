@@ -20,8 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 $(PKG)_MAKE_OPTS = \
-    BUILDTOOL_CC=gcc \
-    BUILDTOOL_CCLD=gcc \
+    BUILDTOOL_CC=$(BUILD_CC) \
+    BUILDTOOL_CCLD=$(BUILD_CC) \
     SHARED_LIB_TYPE=@xmlrpc-c-shared-lib-type@ \
     MUST_BUILD_SHLIB=@xmlrpc-c-must-build-shlib@
 

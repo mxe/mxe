@@ -6,8 +6,6 @@
 
 PKG             := pthreads
 $(PKG)_VERSION  := POSIX 1003.1-2001
-$(PKG)_CHECKSUM  = $(winpthreads_CHECKSUM)
-$(PKG)_FILE      = $(winpthreads_FILE)
 $(PKG)_DEPS     := winpthreads
 
 define $(PKG)_UPDATE
@@ -25,17 +23,14 @@ define PTHREADS_TEST
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(TOP_DIR)/src/pthreads-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-pthreads.exe' \
+        '$(TOP_DIR)/src/pthreads-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' --libs pthreads`
 
     # test cmake
-    mkdir '$(1).cmake'
-    (echo 'find_package(Threads REQUIRED)'; \
-     echo 'add_executable(test-pthreads-cmake $(PREFIX)/../src/pthreads-test.c)'; \
-     echo 'target_link_libraries(test-pthreads-cmake $${CMAKE_THREAD_LIBS_INIT})'; \
-     echo 'install(TARGETS test-pthreads-cmake DESTINATION bin)'; \
-    ) > '$(1).cmake/CMakeLists.txt'
-
-    cd '$(1).cmake' && '$(TARGET)-cmake' .
-    $(MAKE) -C '$(1).cmake' -j 1 install
+    $(and $(ENABLE_CMAKE_TESTS),
+    mkdir '$(1).test-cmake'
+    cd '$(1).test-cmake' && '$(TARGET)-cmake' \
+        -DPKG=$(PKG) \
+        '$(PWD)/src/cmake/test'
+    $(MAKE) -C '$(1).test-cmake' -j 1 install)
 endef

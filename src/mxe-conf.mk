@@ -23,7 +23,6 @@ define $(PKG)_BUILD_COMMON
      echo 'set(MSYS 1)'; \
      echo 'set(BUILD_SHARED_LIBS $(if $(BUILD_SHARED),ON,OFF))'; \
      echo 'set(LIBTYPE $(if $(BUILD_SHARED),SHARED,STATIC))'; \
-     echo 'set(CMAKE_BUILD_TYPE Release)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH $(PREFIX)/$(TARGET))'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)'; \
@@ -32,7 +31,7 @@ define $(PKG)_BUILD_COMMON
      echo 'set(CMAKE_CXX_COMPILER $(PREFIX)/bin/$(TARGET)-g++)'; \
      echo 'set(CMAKE_Fortran_COMPILER $(PREFIX)/bin/$(TARGET)-gfortran)'; \
      echo 'set(CMAKE_RC_COMPILER $(PREFIX)/bin/$(TARGET)-windres)'; \
-     echo 'set(CMAKE_MODULE_PATH "$(PWD)/src/cmake" $${CMAKE_MODULE_PATH}) # For mxe FindPackage scripts'; \
+     echo 'set(CMAKE_MODULE_PATH "$(PWD)/src/cmake/modules" $${CMAKE_MODULE_PATH}) # For mxe FindPackage scripts'; \
      echo 'set(CMAKE_INSTALL_PREFIX $(PREFIX)/$(TARGET) CACHE PATH "Installation Prefix")'; \
      echo 'set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel")'; \
      echo 'set(CMAKE_CROSS_COMPILING ON) # Workaround for http://www.cmake.org/Bug/view.php?id=14075'; \
@@ -48,9 +47,13 @@ define $(PKG)_BUILD_COMMON
 
     #create prefixed cmake wrapper script
     (echo '#!/bin/sh'; \
+     echo 'echo "== Using MXE toolchain: $(CMAKE_TOOLCHAIN_FILE)"'; \
      echo 'exec cmake -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" "$$@"') \
              > '$(PREFIX)/bin/$(TARGET)-cmake'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-cmake'
+
+    #create readonly directory to force wine to fail
+    $(INSTALL) -m444 -d "$$WINEPREFIX"
 endef
 
 define $(PKG)_BUILD

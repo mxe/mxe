@@ -1,27 +1,36 @@
 #!/usr/bin/env lua
 
--- This file is part of MXE.
--- See index.html for further information.
+--[[
+This file is part of MXE.
+See index.html for further information.
 
--- build-pkg, Build binary packages from MXE packages
--- Instructions: http://mxe.redjohn.tk
+build-pkg, Build binary packages from MXE packages
+Instructions: http://mxe.redjohn.tk
 
--- Requirements: MXE, lua, tsort, fakeroot, dpkg-deb.
--- Usage: lua tools/build-pkg.lua
--- Packages are written to `*.tar.xz` files.
--- Debian packages are written to `*.deb` files.
+Requirements: MXE, lua, tsort, fakeroot, dpkg-deb.
+Usage: lua tools/build-pkg.lua
+Packages are written to `*.tar.xz` files.
+Debian packages are written to `*.deb` files.
 
--- Build in directory /usr/lib/mxe
--- This directory can not be changed in .deb packages
--- To change this directory, set environment variable
--- MXE_DIR to other directory.
+Build in directory /usr/lib/mxe
+This directory can not be changed in .deb packages
+To change this directory, set environment variable
+MXE_DIR to other directory.
 
--- To prevent build-pkg from creating deb packages,
--- set environment variable MXE_NO_DEBS to 1
--- In this case fakeroot and dpkg-deb are not needed.
+To prevent build-pkg from creating deb packages,
+set environment variable MXE_NO_DEBS to 1
+In this case fakeroot and dpkg-deb are not needed.
 
--- To limit number of packages being built to x,
--- set environment variable MXE_MAX_PACKAGES to x,
+To limit number of packages being built to x,
+set environment variable MXE_MAX_PACKAGES to x,
+
+The following error:
+> fakeroot, while creating message channels: Invalid argument
+> This may be due to a lack of SYSV IPC support.
+> fakeroot: error while starting the `faked' daemon.
+can be caused by leaked ipc resources originating in fakeroot.
+How to remove them: http://stackoverflow.com/a/4262545
+]]
 
 local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
 local no_debs = os.getenv('MXE_NO_DEBS')
@@ -171,7 +180,9 @@ print-deps:
 	@$(foreach pkg,$(PKGS),echo \
 		for-build-pkg $(pkg) \
 		$(subst $(SPACE),-,$($(pkg)_VERSION)) \
-		$($(pkg)_DEPS);)]]
+		$($(pkg)_DEPS) \
+		$(if $(call set_is_not_member,$(pkg),$(MXE_CONF_PKGS)), \
+		$(MXE_CONF_PKGS));)]]
     local deps_mk_file = io.open('deps.mk', 'w')
     deps_mk_file:write(deps_mk_content)
     deps_mk_file:close()

@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
+    cd '$(1)' && CC_FOR_BUILD=$(BUILD_CC) ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-cxx \
         --without-readline
