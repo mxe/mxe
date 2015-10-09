@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # fontconfig is only required for legacy XP support
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-enca \
