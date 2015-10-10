@@ -38,7 +38,7 @@ define $(PKG)_BUILD
         CC='$(TARGET)-gcc' \
         AR='$(TARGET)-ar rcu' \
         RANLIB='$(TARGET)-ranlib' \
-        a
+        a lua
 
     # lua.h is installed to noinstall/ to avoid error when executing an empty
     # 'install' command.
@@ -49,6 +49,7 @@ define $(PKG)_BUILD
         TO_BIN='lua.h' \
         INSTALL='$(INSTALL)' \
         install
+    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
     $($(PKG)_BUILD_COMMON)
 endef
 
@@ -60,7 +61,7 @@ define $(PKG)_BUILD_SHARED
         RANLIB='echo skipped ranlib' \
         SYSCFLAGS='-DLUA_BUILD_AS_DLL' \
         LUA_A=lua$($(PKG)_SOVERS).dll \
-        a
+        a lua
     $(MAKE) -C '$(1)' -j 1 \
         INSTALL_TOP='$(PREFIX)/$(TARGET)' \
         INSTALL_MAN='$(1)/noinstall' \
@@ -68,6 +69,7 @@ define $(PKG)_BUILD_SHARED
         INSTALL='$(INSTALL)' \
         TO_LIB='liblua.dll.a' \
         install
+    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
     $($(PKG)_BUILD_COMMON)
 endef
 
