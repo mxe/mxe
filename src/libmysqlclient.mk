@@ -36,7 +36,8 @@ define $(PKG)_BUILD
         '$(1)'
 
     # def file created by cmake creates link errors
-    cp '$(PWD)/src/$(PKG).def' '$(1).build/libmysql/libmysql_exports.def'
+    $(if $(findstring i686-w64-mingw32.shared,$(TARGET)),
+        cp '$(PWD)/src/$(PKG).def' '$(1).build/libmysql/libmysql_exports.def')
 
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(1).build/include'  -j 1 install VERBOSE=1
@@ -48,4 +49,10 @@ define $(PKG)_BUILD
 
     # missing headers
     $(INSTALL) -m644 '$(1)/include/'thr_* '$(1)/include/'my_thr* '$(PREFIX)/$(TARGET)/include'
+
+    # build test with mysql_config
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(PREFIX)/$(TARGET)/bin/mysql_config' --cflags --libs`
 endef
