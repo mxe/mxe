@@ -10,7 +10,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libgsasl pthreads zlib
 
-$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, kisli/vmime, master)
+$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, kisli/vmime, master) | $(SED) 's/^\(.......\).*/\1/;'
 
 define $(PKG)_BUILD
     # The following hint is probably needed for ICU:
