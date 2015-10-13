@@ -253,7 +253,8 @@ LIST_NMIN   = $(shell echo '$(strip $(1))' | tr ' ' '\n' | sort -n | head -1)
 NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
 JOBS_AUTO  := $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 JOBS       := $(strip $(if $(findstring undefined,$(origin JOBS)),\
-                   $(info [using autodetected $(JOBS_AUTO) job(s)]) \
+                   $(if $(and $(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PKGS))), \
+                       $(info [using autodetected $(JOBS_AUTO) job(s)])) \
                    $(JOBS_AUTO)\
               ,\
                    $(JOBS)))
@@ -540,6 +541,18 @@ show-upstream-deps-%:
 	    $(info $(call WALK_UPSTREAM,$*))\
 	    @echo -n,\
 	    $(error Package $* not found in index.html))
+
+# print first level pkg deps for use in build-pkg.lua
+.PHONY: print-deps-for-build-pkg
+print-deps-for-build-pkg:
+	$(foreach TARGET,$(MXE_TARGETS), \
+	    $(foreach PKG,$(sort $($(TARGET)_PKGS)), \
+	        $(info for-build-pkg $(TARGET)~$(PKG) \
+	        $(subst $(space),-,$($(PKG)_VERSION)) \
+	        $(addprefix $(TARGET)~,$(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET)))) \
+	        $(addprefix $(TARGET)~,$(if $(call set_is_not_member,$(PKG),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS))) \
+	        $(and $($(TARGET)_DEPS),$(addprefix $($(TARGET)_DEPS)~,$($($(TARGET)_DEPS)_PKGS))))))
+	        @echo -n
 
 .PHONY: clean
 clean:
