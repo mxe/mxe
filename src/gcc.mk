@@ -55,8 +55,11 @@ define $(PKG)_POST_BUILD
     rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, c++ g++ gcc gfortran)
     -mv '$(PREFIX)/lib/gcc/$(TARGET)/lib/'* '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
     -mv '$(PREFIX)/lib/gcc/$(TARGET)/'*.dll '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
-    -cp '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+    -mv '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
     -cp '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll.a '$(PREFIX)/$(TARGET)/lib/'
+
+    # remove incorrectly installed libcc1
+    rm -f '$(PREFIX)/lib/'libcc1*
 endef
 
 define $(PKG)_BUILD_mingw-w64
@@ -78,6 +81,9 @@ define $(PKG)_BUILD_mingw-w64
     # build rest of gcc
     cd '$(1).build'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
+
+    # cc1libdir isn't passed to subdirs so install correctly and rm later
+    $(MAKE) -C '$(1).build/libcc1' -j 1 install cc1libdir='$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)'
     $(MAKE) -C '$(1).build' -j 1 install
 
     $($(PKG)_POST_BUILD)
