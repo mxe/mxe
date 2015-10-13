@@ -40,10 +40,10 @@ define $(PKG)_CONFIGURE
         --disable-win32-registry \
         --enable-threads=win32 \
         --disable-libgomp \
-        --with-gmp='$(PREFIX)' \
-        --with-isl='$(PREFIX)' \
-        --with-mpc='$(PREFIX)' \
-        --with-mpfr='$(PREFIX)' \
+        --with-gmp='$(PREFIX)/$(BUILD)' \
+        --with-isl='$(PREFIX)/$(BUILD)' \
+        --with-mpc='$(PREFIX)/$(BUILD)' \
+        --with-mpfr='$(PREFIX)/$(BUILD)' \
         --with-as='$(PREFIX)/bin/$(TARGET)-as' \
         --with-ld='$(PREFIX)/bin/$(TARGET)-ld' \
         --with-nm='$(PREFIX)/bin/$(TARGET)-nm' \
