@@ -164,10 +164,12 @@ UNPACK_ARCHIVE = \
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
 
+PATCHES = $(sort $(wildcard $(TOP_DIR)/src/$(1)-[0-9]*.patch))
+
 define PREPARE_PKG_SOURCE
     cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
     cd '$(2)/$($(1)_SUBDIR)'
-    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/$(1)-*.patch)),
+    $(foreach PKG_PATCH,$(PATCHES),
         (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
 endef
 
@@ -381,7 +383,7 @@ define PKG_TARGET_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
-                          $(wildcard $(TOP_DIR)/src/$(1)-*.patch) \
+                          $(PATCHES) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
