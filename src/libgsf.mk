@@ -21,6 +21,7 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,^\(Requires:.*\),\1 gio-2.0,' '$(1)'/libgsf-1.pc.in
     echo 'Libs.private: -lz -lbz2'          >> '$(1)'/libgsf-1.pc.in
+    $(SED) -i 's,\ssed\s, $(SED) ,g'           '$(1)'/gsf/Makefile.in
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-nls \
