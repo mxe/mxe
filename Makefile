@@ -23,6 +23,8 @@ PKG_CDN            := d1yihgixbnrglp.cloudfront.net
 PWD        := $(shell pwd)
 SHELL      := bash
 
+MXE_TMP := $(PWD)
+
 BUILD_CC   := $(shell (gcc --help >/dev/null 2>&1 && echo gcc) || (clang --help >/dev/null 2>&1 && echo clang))
 BUILD_CXX  := $(shell (g++ --help >/dev/null 2>&1 && echo g++) || (clang++ --help >/dev/null 2>&1 && echo clang++))
 DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
@@ -45,7 +47,7 @@ PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
-TMP_DIR     = $(PWD)/tmp-$(1)
+TMP_DIR     = $(MXE_TMP)/tmp-$(1)
 PKGS       := $(call set_create,\
     $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html'))
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
@@ -222,6 +224,12 @@ else
         echo '# This variable controls the number of compilation processes'; \
         echo '# within one package ("intra-package parallelism").'; \
         echo '#JOBS := $(JOBS)'; \
+        echo; \
+        echo '# This variable controls where intermediate files are created'; \
+        echo '# this is necessary when compiling inside a virtualbox shared'; \
+        echo '# directory. Some commands like strip fail in there with »Protocol error'; \
+        echo '# default is the current directory'; \
+        echo '#MXE_TMP := /tmp'; \
         echo; \
         echo '# This variable controls the targets that will build.'; \
         echo '#MXE_TARGETS := $(MXE_TARGET_LIST)'; \
