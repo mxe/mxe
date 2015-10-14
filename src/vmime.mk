@@ -35,7 +35,7 @@ define $(PKG)_BUILD
         -DVMIME_TLS_SUPPORT_LIB_IS_OPENSSL=OFF \
         -DVMIME_SHARED_PTR_USE_CXX=ON \
         -DCXX11_COMPILER_FLAGS=ON \
-        -C../../src/vmime-TryRunResults.cmake \
+        -C '$(PWD)/src/vmime-TryRunResults.cmake' \
         .
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
