@@ -3,12 +3,11 @@
 
 PKG             := blas
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1
-$(PKG)_CHECKSUM := ea87df6dc44829ee0a1733226d130c550b17a0bc51c8dbfcd662fb15520b23b5
-$(PKG)_SUBDIR   := BLAS
+$(PKG)_VERSION  := 3.5.0
+$(PKG)_CHECKSUM := ef7d775d380f255d1902bce374ff7c8a594846454fcaeae552292168af1aca24
+$(PKG)_SUBDIR   := BLAS-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG).tgz
 $(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.eq.uc.pt/pub/software/math/netlib/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
