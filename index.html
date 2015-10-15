@@ -732,9 +732,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     Install
-    <a href="http://developer.apple.com/xcode/">Xcode 5</a>
+    <a href="http://developer.apple.com/xcode/">the latest Xcode</a>
     </p>
-    <h4 id="requirements-macos-step-1">Step 1</h4>
     <h5 id="requirements-macos-method-1">Method 1 - MacPorts</h5>
     <p>
     Install <a href="http://www.macports.org/">MacPorts</a>,
@@ -742,31 +741,43 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
-    gdk-pixbuf2 glib2 intltool p5-xml-parser p7zip gpatch scons wget xz</pre>
+    autoconf automake bison cmake coreutils flex gettext \
+    gdk-pixbuf2 glib2 gsed intltool libffi libtool openssl \
+    p5-xml-parser p7zip scons wget xz</pre>
+
     <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
     <p>
-    Install <a href="http://rudix.org/">Rudix</a> you can make it with following command
-    </p>
-    <pre>curl -s https://raw.githubusercontent.com/rudix-mac/rpm/2014.6/rudix.py \
-    | sudo python - install rudix</pre>
-    <p>
+    Install <a href="http://rudix.org/">Rudix</a>,
     then run:
     </p>
-    <pre>sudo rudix install glib pkg-config scons wget xz</pre>
-    Note: <b>gdk-pixbuf2</b> is not installed in method 2,
-    so you can not build <b>gtk3</b>.
-    <h4 id="requirements-macos-step-2">Step 2</h4>
+    <!-- http://rudix.org/packages/index.html -->
+    <pre>sudo rudix install \
+    autoconf automake cmake coreutils gettext glib intltool \
+    libtool p7zip scons sed wget xz</pre>
     <p>
-    After installing pre-requirement run from within the mxe directory:
+    Note: <b>gdk-pixbuf2</b> is not installed in method 2,
+    so you can not build <b>gtk3</b>. Other packages may be
+    missing on Rudix - please open an issue if you find any.
     </p>
-    <pre>make build-requirements</pre>
     <p>
     You may be prompted to install a java runtime
     - this is not required.
     </p>
     <p>
-    Mac OS X versions ≤ 10.7 are no longer supported.
+    Mac OS X versions ≤ 10.9 are no longer tested.
     </p>
+    <p>
+    <h5>Certain packages have open issues on OS X</h5>
+    </p>
+    <p>
+    to build the remainder of MXE, run:
+    </p>
+    <pre>make EXCLUDE_PKGS='nsis ocaml%'</pre>
+    <p>
+    to see a list of all dependent downstream packages that
+    will be excluded, run:
+    </p>
+    <pre>make show-downstream-deps-'nsis ocaml%'</pre>
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
@@ -1075,14 +1086,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.aubio.org/">aubio</a></td>
     </tr>
     <tr>
-        <td class="package">autoconf</td>
-        <td class="website"><a href="http://www.gnu.org/software/autoconf/">autoconf</a></td>
-    </tr>
-    <tr>
-        <td class="package">automake</td>
-        <td class="website"><a href="http://www.gnu.org/software/automake/">automake</a></td>
-    </tr>
-    <tr>
         <td class="package">db</td>
         <td class="website"><a href="http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html">Oracle Berkeley DB</a></td>
     </tr>
@@ -1093,10 +1096,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">binutils</td>
         <td class="website"><a href="https://www.gnu.org/software/binutils/">GNU Binutils</a></td>
-    </tr>
-    <tr>
-        <td class="package">bison</td>
-        <td class="website"><a href="http://www.gnu.org/software/bison/">bison</a></td>
     </tr>
     <tr>
         <td class="package">blas</td>
@@ -1179,10 +1178,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://bitbucket.org/Coin3D/">Coin3D</a></td>
     </tr>
     <tr>
-        <td class="package">coreutils</td>
-        <td class="website"><a href="https://www.gnu.org/software/coreutils/">GNU Core Utilities</a></td>
-    </tr>
-    <tr>
         <td class="package">cppunit</td>
         <td class="website"><a href="http://www.freedesktop.org/wiki/Software/cppunit/">CppUnit</a></td>
     </tr>
@@ -1253,10 +1248,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">flann</td>
         <td class="website"><a href="http://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN">FLANN</a></td>
-    </tr>
-    <tr>
-        <td class="package">flex</td>
-        <td class="website"><a href="http://flex.sourceforge.net/">flex</a></td>
     </tr>
     <tr>
         <td class="package">fltk</td>
@@ -1363,10 +1354,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://www.gnu.org/software/gnutls/">GnuTLS</a></td>
     </tr>
     <tr>
-        <td class="package">gperf</td>
-        <td class="website"><a href="https://www.gnu.org/software/gperf/">GNU gperf</a></td>
-    </tr>
-    <tr>
         <td class="package">graphicsmagick</td>
         <td class="website"><a href="http://www.graphicsmagick.org/">GraphicsMagick</a></td>
     </tr>
@@ -1469,10 +1456,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">imagemagick</td>
         <td class="website"><a href="http://www.imagemagick.org/">ImageMagick</a></td>
-    </tr>
-    <tr>
-        <td class="package">intltool</td>
-        <td class="website"><a href="http://freedesktop.org/wiki/Software/intltool/">Intltool</a></td>
     </tr>
     <tr>
         <td class="package">isl</td>
@@ -1877,14 +1860,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">lzo</td>
         <td class="website"><a href="http://www.oberhumer.com/opensource/lzo/">lzo</a></td>
-    </tr>
-    <tr>
-        <td class="package">m4</td>
-        <td class="website"><a href="http://www.gnu.org/software/m4/">GNU M4</a></td>
-    </tr>
-    <tr>
-        <td class="package">make</td>
-        <td class="website"><a href="http://www.gnu.org/software/make/">GNU Make</a></td>
     </tr>
     <tr>
         <td class="package">matio</td>
@@ -2385,10 +2360,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">sdl2_ttf</td>
         <td class="website"><a href="http://www.libsdl.org/">SDL2_ttf</a></td>
-    </tr>
-    <tr>
-        <td class="package">sed</td>
-        <td class="website"><a href="https://www.gnu.org/software/sed/">GNU sed</a></td>
     </tr>
     <tr>
         <td class="package">sfml</td>

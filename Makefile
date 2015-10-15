@@ -326,11 +326,6 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
-BUILD_PKGS := $(call set_create, \
-    $(foreach PKG, \
-        $(shell grep -l 'BUILD_$$(BUILD)' '$(TOP_DIR)/src/'*.mk | \
-            $(SED) -n 's,.*src/\(.*\)\.mk,\1,p'), \
-        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD))), $(PKG))))
 
 # create target sets for PKG_TARGET_RULE loop to avoid creating empty rules
 # and having to explicitly disable $(BUILD) for most packages
@@ -355,10 +350,6 @@ PRINTF_FMT       := printf '%-11s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-1
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
-
-.PHONY: build-requirements
-build-requirements:
-	@$(MAKE) -f '$(MAKEFILE)' $(BUILD_PKGS) MXE_TARGETS=$(BUILD) DONT_CHECK_REQUIREMENTS=true
 
 define TARGET_RULE
 	$(if $(findstring i686-pc-mingw32,$(1)),
@@ -709,7 +700,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	            $(eval $(PKG)_BUILD_ONLY := $(false)) \
 	            <td class="supported">&#x2713;</td>,            \
 	            <td class="unsupported">&#x2717;</td>)\n)       \
-	    $(if $(call set_is_member,$(PKG),$(BUILD_PKGS)),        \
+	    $(if $(call set_is_member,$(PKG),$($(BUILD)_PKGS)),        \
 	        $(eval $(PKG)_VIRTUAL := $(false))   \
 	        <td class="supported">&#x2713;</td>, \
 	        <td class="unsupported">&#x2717;</td>)\n \
@@ -731,7 +722,7 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '</th>'                           >> $@
 	@$(foreach TARGET,$(MXE_TARGET_LIST),        \
 	    echo '<th>$(words $($(TARGET)_PKGCOUNT))</th>' >> $@;)
-	@echo '<th>$(words $(BUILD_PKGS))</th>' >> $@
+	@echo '<th>$(words $($(BUILD)_PKGS))</th>' >> $@
 	@echo '</tr>'                           >> $@
 	@echo '</tbody>'                        >> $@
 	@echo '</table>'                        >> $@
