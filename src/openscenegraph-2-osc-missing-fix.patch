@@ -1,0 +1,27 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From b4de5ab344db369a70e9bd41ee33a5351c50ec3b Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 27 May 2015 22:10:22 +0300
+Subject: [PATCH] fix CMakeLists type
+
+
+diff --git a/src/osgPlugins/osc/CMakeLists.txt b/src/osgPlugins/osc/CMakeLists.txt
+index 6bf6127..84fe715 100644
+--- a/src/osgPlugins/osc/CMakeLists.txt
++++ b/src/osgPlugins/osc/CMakeLists.txt
+@@ -35,7 +35,7 @@ if(WIN32 AND NOT ANDROID)
+         ip/win32/NetworkingUtils.cpp
+         ip/win32/UdpSocket.cpp
+     )
+-    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};Ws2_32.lib;winmm")
++    SET(TARGET_EXTERNAL_LIBRARIES ${TARGET_EXTERNAL_LIBRARIES} ws2_32 winmm)
+ ELSE()
+     SET(TARGET_SRC
+         ${TARGET_SRC}
+-- 
+1.9.1
+
