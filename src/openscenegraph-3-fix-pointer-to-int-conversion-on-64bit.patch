@@ -14,7 +14,7 @@ diff --git a/src/osgPlugins/osgjs/WriteVisitor.cpp b/src/osgPlugins/osgjs/WriteV
 index 9f2b3c7..98e0c19 100644
 --- a/src/osgPlugins/osgjs/WriteVisitor.cpp
 +++ b/src/osgPlugins/osgjs/WriteVisitor.cpp
-@@ -225,8 +225,7 @@ JSONObject* createImage(osg::Image* image, bool inlineImages, int maxTextureDime
+@@ -225,7 +225,7 @@ JSONObject* createImage(osg::Image* image, bool inlineImages, int maxTextureDime
              // no image file so use this inline name image and create a file
              std::stringstream ss;
              ss << osgDB::getFilePath(baseName) << osgDB::getNativePathSeparator();
