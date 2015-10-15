@@ -4,7 +4,7 @@
 PKG             := qtwinextras
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := b5efe26ea78028a251368c61a0bd01f3f3e5a2eac3b7c2487e0aa5fc18446e9e
+$(PKG)_CHECKSUM := cb00d2ac7a6039fe1119d458f16f319882cb9a250f4caea55657edcde38d851f
 $(PKG)_SUBDIR    = $(subst qtbase,qtwinextras,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwinextras,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwinextras,$(qtbase_URL))

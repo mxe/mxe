@@ -1,10 +1,10 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 6b7bd2f322cf0ff02c1954c7947216af829d4b15 Mon Sep 17 00:00:00 2001
+From 72357fef95ee2247f79032b2096b3c23938882d5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 21 May 2014 08:59:53 +0200
-Subject: [PATCH 1/2] Revert "idc is a host tool"
+Subject: [PATCH] Revert "idc is a host tool"
 
 This reverts commit a52db1a707f84eae74ce1cc3d1058f026e81ac13.
 
@@ -20,36 +20,6 @@ index 1898ed5..524ee2e 100644
  CONFIG += force_bootstrap
  SOURCES = main.cpp
  
--- 
-2.1.4
-
-
-From 31d513a1814e600433a213931c79fb4f9f875122 Mon Sep 17 00:00:00 2001
-From: Eric Lemanissier <eric.lemanissier@gmail.com>
-Date: Wed, 29 Jul 2015 16:11:59 +0200
-Subject: [PATCH 2/2] fix build with MinGW header version >= 4.0
-
-Commit 66e1ecc2 broke the compilation with MinGW64 4.0 and above.
-The work-around for mingw-w64 bug #464 must be applied to
-all MinGW versions that are affected.
-
-Change-Id: Ie6665d076dc1e38e459ae3c9cc51202b4a12e736
-Reviewed-by: Oliver Wolff <oliver.wolff@theqtcompany.com>
-(cherry picked from commit 46159b840cfcfeaea5b1c78d1d0e4fa40d679366)
-
-diff --git a/src/activeqt/container/qaxscript.cpp b/src/activeqt/container/qaxscript.cpp
-index 81bcb8f..1d1711b 100644
---- a/src/activeqt/container/qaxscript.cpp
-+++ b/src/activeqt/container/qaxscript.cpp
-@@ -41,7 +41,7 @@
- #include "qaxscript.h"
- #include "../shared/qaxutils_p.h"
- 
--#if defined(Q_CC_GNU) && __MINGW64_VERSION_MAJOR == 3 && __MINGW64_VERSION_MINOR > 0
-+#if defined(Q_CC_GNU) && (__MINGW64_VERSION_MAJOR == 3 && __MINGW64_VERSION_MINOR > 0 || __MINGW64_VERSION_MAJOR >= 4)
- // Workaround for mingw-w64 bug #464
- // See https://sourceforge.net/p/mingw-w64/bugs/464/
- # define _NO_SCRIPT_GUIDS
 -- 
 2.1.4
 
