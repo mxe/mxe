@@ -397,6 +397,21 @@ local function listFile(pkg)
     return ('%s-%s.list'):format(target, pkg)
 end
 
+local tar_tool
+local function tarTool()
+    if tar_tool then
+        return tar_tool
+    end
+    if execute("gtar --help > /dev/null 2>&1") then
+        tar_tool = 'gtar'
+    elseif execute("gnutar --help > /dev/null 2>&1") then
+        tar_tool = 'gnutar'
+    else
+        tar_tool = 'tar'
+    end
+    return tar_tool
+end
+
 local CONTROL = [[Package: %s
 Version: %s
 Section: devel
@@ -419,17 +434,17 @@ local function makeDeb(pkg, list_path, deps, ver, add_common)
         protectVersion(ver))
     -- make .tar.xz file
     local tar_name = dirname .. '.tar.xz'
-    local cmd = 'tar -T %s --owner=0 --group=0 -cJf %s'
-    os.execute(cmd:format(list_path, tar_name))
+    local cmd = '%s -T %s --owner=0 --group=0 -cJf %s'
+    os.execute(cmd:format(tarTool(), list_path, tar_name))
     -- unpack .tar.xz to the path for Debian
     local usr = dirname .. MXE_DIR
     os.execute(('mkdir -p %s'):format(usr))
     -- use tar to copy files with paths
-    local cmd = 'tar -C %s -xf %s'
+    local cmd = '%s -C %s -xf %s'
     if not no_debs then
         cmd = 'fakeroot -s deb.fakeroot ' .. cmd
     end
-    os.execute(cmd:format(usr, tar_name))
+    os.execute(cmd:format(tarTool(), usr, tar_name))
     -- prepare dependencies
     local deb_deps = {'mxe-requirements'}
     for _, dep in ipairs(deps) do
