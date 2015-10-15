@@ -170,12 +170,18 @@ UNPACK_ARCHIVE = \
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
 
-PATCHES = $(sort $(wildcard $(TOP_DIR)/src/$(1)-[0-9]*.patch))
+# some shortcuts for awareness of MXE_PLUGIN_DIRS
+# plugins will need to set their own $(PKG)_MAKEFILE for updates
+# all files for extension plugins will be considered for outdated checks
+PKG_MAKEFILE  = $(realpath $(or $($(1)_MAKEFILE),$(TOP_DIR)/src/$(1).mk))
+PKG_MAKEFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).mk, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
+PKG_TESTFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1)-test*, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
+PKG_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 
 define PREPARE_PKG_SOURCE
     cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
     cd '$(2)/$($(1)_SUBDIR)'
-    $(foreach PKG_PATCH,$(PATCHES),
+    $(foreach PKG_PATCH,$(PKG_PATCHES),
         (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
 endef
 
@@ -326,6 +332,11 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 
+# include files from MXE_PLUGIN_DIRS
+PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
+PLUGIN_PKGS  := $(basename $(notdir $(PLUGIN_FILES)))
+include $(PLUGIN_FILES)
+PKGS := $(sort $(PKGS) $(PLUGIN_PKGS))
 
 # create target sets for PKG_TARGET_RULE loop to avoid creating empty rules
 # and having to explicitly disable $(BUILD) for most packages
@@ -405,9 +416,9 @@ $(PREFIX)/lib/nonetwork.so: $(TOP_DIR)/tools/nonetwork.c
 define PKG_TARGET_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
-$(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
-                          $(PATCHES) \
-                          $(wildcard $(TOP_DIR)/src/$(1)-test*) \
+$(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
+                          $(PKG_PATCHES) \
+                          $(PKG_TESTFILES) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
                           $(and $($(3)_DEPS),$(addprefix $(PREFIX)/$($(3)_DEPS)/installed/,$(filter-out $(MXE_CONF_PKGS),$($($(3)_DEPS)_PKGS)))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
@@ -583,9 +594,9 @@ define UPDATE
                     $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
                 $(if $(findstring undefined, $(origin UPDATE_DRYRUN)),
-                    $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(TOP_DIR)/src/$(1).mk'
+                    $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(PKG_MAKEFILE)'
                     $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                        || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(TOP_DIR)/src/$(1).mk'; \
+                        || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(PKG_MAKEFILE)'; \
                              exit 1; }))),
         $(info Unable to update version number of package $(1) \
             $(newline)$(newline)$($(1)_UPDATE)$(newline)))
@@ -602,7 +613,7 @@ update-package-%:
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
-	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
+	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(call PKG_MAKEFILE,$*)', \
 	    $(error Package $* not found in index.html))
 
 .PHONY: cleanup-style
