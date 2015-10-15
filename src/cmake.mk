@@ -4,7 +4,7 @@
 PKG             := cmake
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0.2
-$(PKG)_CHECKSUM := 379472e3578902a1d6f8b68a9987773151d6f21a
+$(PKG)_CHECKSUM := 6b4ea61eadbbd9bec0ccb383c29d1f4496eacc121ef7acf37c7a24777805693e
 $(PKG)_SUBDIR   := cmake-$($(PKG)_VERSION)
 $(PKG)_FILE     := cmake-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.cmake.org/files/v$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

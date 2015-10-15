@@ -1,81 +1,104 @@
 This file is part of MXE.
 See index.html for further information.
 
-This patch has been taken from:
-https://github.com/file/file/commit/fc71117317bfe752a1adc2512530ec8e59c54a0c.patch
+From https://github.com/file/file/commit/d5f2c28536f1645e3da25fa3f8da5a0a45404dc4.
 
-From fc71117317bfe752a1adc2512530ec8e59c54a0c Mon Sep 17 00:00:00 2001
+From 4e654ecfd1ca6535540b7d33dcd66051b9b62def Mon Sep 17 00:00:00 2001
 From: Christos Zoulas <christos@zoulas.com>
-Date: Sat, 11 Oct 2014 15:03:16 +0000
-Subject: [PATCH] locale autoconf fixes
+Date: Mon, 27 Jul 2015 00:14:29 -0400
+Subject: [PATCH] PR/466: Windows fixes.
 
----
- ChangeLog    | 5 +++++
- configure.ac | 4 ++--
- src/file.c   | 4 +++-
- src/file.h   | 5 ++++-
- 4 files changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/ChangeLog b/ChangeLog
-index 2b1bad9..b42e3d7 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -1,3 +1,8 @@
-+2014-10-11  15:02  Christos Zoulas <christos@zoulas.com>
-+
-+	* fix autoconf glue for setlocale and locale_t; some OS's
-+	  have locale_t in xlocale.h
-+
- 2014-10-10  15:01  Christos Zoulas <christos@zoulas.com>
- 
- 	* release 5.20
-diff --git a/configure.ac b/configure.ac
-index 545c6bd..e0b1c39 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -82,7 +82,7 @@ AC_HEADER_MAJOR
- AC_HEADER_SYS_WAIT
- AC_CHECK_HEADERS(stdint.h fcntl.h locale.h stdint.h inttypes.h unistd.h)
- AC_CHECK_HEADERS(stddef.h utime.h wchar.h wctype.h limits.h)
--AC_CHECK_HEADERS(getopt.h err.h)
-+AC_CHECK_HEADERS(getopt.h err.h xlocale.h)
- AC_CHECK_HEADERS(sys/mman.h sys/stat.h sys/types.h sys/utime.h sys/time.h)
- AC_CHECK_HEADERS(zlib.h)
- 
-@@ -138,7 +138,7 @@ else
- fi])
- 
- dnl Checks for functions
--AC_CHECK_FUNCS(strerror strndup strtoul mkstemp mkostemp utimes utime wcwidth strtof newlocale uselocale freelocale)
-+AC_CHECK_FUNCS(strerror strndup strtoul mkstemp mkostemp utimes utime wcwidth strtof newlocale uselocale freelocale setlocale)
- 
- dnl Provide implementation of some required functions if necessary
- AC_REPLACE_FUNCS(getopt_long asprintf vasprintf strlcpy strlcat getline ctime_r asctime_r pread strcasestr fmtcheck)
-diff --git a/src/file.c b/src/file.c
-index 8720772..b6c2c38 100644
---- a/src/file.c
-+++ b/src/file.c
-@@ -142,7 +142,9 @@ main(int argc, char *argv[])
- 	const char *magicfile = NULL;		/* where the magic is	*/
- 
- 	/* makes islower etc work for other langs */
-+#ifdef HAVE_SETLOCALE
- 	(void)setlocale(LC_CTYPE, "");
-+#endif
- 
- #ifdef __EMX__
- 	/* sh-like wildcard expansion! Shouldn't hurt at least ... */
 diff --git a/src/file.h b/src/file.h
-index 85e3936..fdbc889 100644
+index 1b4ef6f..00d2abe 100644
 --- a/src/file.h
 +++ b/src/file.h
-@@ -474,6 +474,9 @@ protected int file_os2_apptype(struct magic_set *, const char *, const void *,
- #if defined(HAVE_LOCALE_H)
- #include <locale.h>
+@@ -44,9 +44,11 @@
+     #define SIZE_T_FORMAT ""
+   #endif
+   #define INT64_T_FORMAT "I64"
++  #define INTMAX_T_FORMAT "I64"
+ #else
+   #define SIZE_T_FORMAT "z"
+   #define INT64_T_FORMAT "ll"
++  #define INTMAX_T_FORMAT "j"
  #endif
-+#if defined(HAVE_XLOCALE_H)
-+#include <xlocale.h>
-+#endif
  
- typedef struct {
- 	const char *pat;
+ #include <stdio.h>	/* Include that here, to make sure __P gets defined */
+diff --git a/src/gmtime_r.c b/src/gmtime_r.c
+index 963dfee..7e27ed6 100644
+--- a/src/gmtime_r.c
++++ b/src/gmtime_r.c
+@@ -9,7 +9,7 @@ FILE_RCSID("@(#)$File: gmtime_r.c,v 1.1 2015/01/09 19:28:32 christos Exp $")
+ 
+ /* asctime_r is not thread-safe anyway */
+ struct tm *
+-gmtime_r(const time_t t, struct tm *tm)
++gmtime_r(const time_t *t, struct tm *tm)
+ {
+ 	struct tm *tmp = gmtime(t);
+ 	if (tmp == NULL)
+diff --git a/src/localtime_r.c b/src/localtime_r.c
+index 69d78d9..35c3b40 100644
+--- a/src/localtime_r.c
++++ b/src/localtime_r.c
+@@ -9,7 +9,7 @@ FILE_RCSID("@(#)$File: localtime_r.c,v 1.1 2015/01/09 19:28:32 christos Exp $")
+ 
+ /* asctime_r is not thread-safe anyway */
+ struct tm *
+-localtime_r(const time_t t, struct tm *tm)
++localtime_r(const time_t *t, struct tm *tm)
+ {
+ 	struct tm *tmp = localtime(t);
+ 	if (tmp == NULL)
+diff --git a/src/magic.c b/src/magic.c
+index bc8c344..59b7e45 100644
+--- a/src/magic.c
++++ b/src/magic.c
+@@ -137,6 +137,14 @@ _w32_get_magic_relative_to(char **hmagicpath, HINSTANCE module)
+ 
+ 	PathRemoveFileSpecA(dllpath);
+ 
++	if (module) {
++		char exepath[MAX_PATH];
++		GetModuleFileNameA(NULL, exepath, MAX_PATH);
++		PathRemoveFileSpecA(exepath);
++		if (stricmp(exepath, dllpath) == 0)
++			goto out;
++	}
++
+ 	sp = strlen(dllpath);
+ 	if (sp > 3 && stricmp(&dllpath[sp - 3], "bin") == 0) {
+ 		_w32_append_path(hmagicpath,
+diff --git a/src/readelf.c b/src/readelf.c
+index bc6e7f6..ab36d26 100644
+--- a/src/readelf.c
++++ b/src/readelf.c
+@@ -1054,9 +1054,11 @@ doshn(struct magic_set *ms, int clazz, int swap, int fd, off_t off, int num,
+ 		case SHT_NOTE:
+ 			if (xsh_size + xsh_offset > (uintmax_t)fsize)  {
+ 				if (file_printf(ms,
+-				    ", note offset/size 0x%jx+0x%jx exceeds"
+-				    " file size 0x%jx", (uintmax_t)xsh_offset,
+-				    (uintmax_t)xsh_size, (uintmax_t)fsize) == -1)
++				    ", note offset/size 0x%" INTMAX_T_FORMAT
++				    "x+0x%" INTMAX_T_FORMAT "x exceeds"
++				    " file size 0x%" INTMAX_T_FORMAT "x",
++				    (uintmax_t)xsh_offset, (uintmax_t)xsh_size,
++				    (uintmax_t)fsize) == -1)
+ 					return -1;
+ 				return 0; 
+ 			}
+@@ -1065,7 +1067,8 @@ doshn(struct magic_set *ms, int clazz, int swap, int fd, off_t off, int num,
+ 				    " for note");
+ 				return -1;
+ 			}
+-			if (pread(fd, nbuf, xsh_size, xsh_offset) < (ssize_t)xsh_size) {
++			if (pread(fd, nbuf, xsh_size, xsh_offset) <
++			    (ssize_t)xsh_size) {
+ 				file_badread(ms);
+ 				free(nbuf);
+ 				return -1;
+-- 
+1.9.1
+

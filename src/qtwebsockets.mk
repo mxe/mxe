@@ -4,7 +4,7 @@
 PKG             := qtwebsockets
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 3fb9be047b67673f40d272faab5ba0c8055e7717
+$(PKG)_CHECKSUM := cf4e834a867b90337188be504ef20184c52666370f721e704952988f8cb12deb
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebsockets,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebsockets,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebsockets,$(qtbase_URL))
@@ -15,8 +15,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake'
+    # invoke qmake with removed debug options as a workaround for
+    # https://bugreports.qt-project.org/browse/QTBUG-30898
+    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' CONFIG-='debug debug_and_release'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
-

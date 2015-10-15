@@ -1,0 +1,51 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c24e161..9867184 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -19,12 +19,15 @@ else(C99_FLAG_DETECTED)
+ endif(C99_FLAG_DETECTED)
+ 
+ # check for freeimage
+-find_package(FreeImage)
+-if(FreeImage_FOUND)
++if(NOT PKG_CONFIG_FOUND)
++  find_package(PkgConfig REQUIRED)
++endif()
++pkg_check_modules(FREEIMAGE freeimage)
++if(FREEIMAGE_FOUND)
+   set(STATUS_FREEIMG "OK")
+-else(FreeImage_FOUND)
++else(FREEIMAGE_FOUND)
+   set(STATUS_FREEIMG "not found")
+-endif(FreeImage_FOUND)
++endif(FREEIMAGE_FOUND)
+ 
+ # check for laxjson
+ find_package(LaxJson)
+@@ -76,7 +79,7 @@ set(EXE_HEADERS
+   ${PROJECT_SOURCE_DIR}/src/mkdirp.h
+   )
+ 
+-set(LIB_CFLAGS "${C99_C_FLAGS} -pedantic -Werror -Wall -Werror=strict-prototypes -Werror=old-style-definition -Werror=missing-prototypes -D_POSIX_C_SOURCE=200809L")
++set(LIB_CFLAGS "${C99_C_FLAGS} -pedantic -Werror -Wall -Werror=strict-prototypes -Werror=old-style-definition -Werror=missing-prototypes -D_POSIX_C_SOURCE=200809L ${FREEIMAGE_CFLAGS_OTHER}")
+ set(EXE_CFLAGS ${LIB_CFLAGS})
+ 
+ add_library(rucksack_static STATIC ${RUCKSACK_LIB_SOURCES} ${RUCKSACK_LIB_HEADERS})
+@@ -92,7 +95,7 @@ set_target_properties(rucksack_shared PROPERTIES
+   COMPILE_FLAGS ${LIB_CFLAGS})
+ 
+ 
+-include_directories(${FreeImage_INCLUDE_DIRS})
++include_directories(${FREEIMAGE_INCLUDE_DIRS})
+ add_library(rucksackspritesheet_static STATIC
+   ${RUCKSACK_SPRITESHEET_LIB_SOURCES} ${RUCKSACK_SPRITESHEET_LIB_HEADERS})
+ set_target_properties(rucksackspritesheet_static PROPERTIES
+@@ -106,7 +109,7 @@ set_target_properties(rucksackspritesheet_shared PROPERTIES
+   SOVERSION ${VERSION_MAJOR}
+   VERSION ${VERSION}
+   COMPILE_FLAGS ${LIB_CFLAGS})
+-target_link_libraries(rucksackspritesheet_shared rucksack_shared ${FreeImage_LIBRARIES})
++target_link_libraries(rucksackspritesheet_shared rucksack_shared ${FREEIMAGE_LIBRARIES})
+ 
+ 
+ 

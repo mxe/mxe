@@ -4,7 +4,7 @@
 PKG             := cgal
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.5
-$(PKG)_CHECKSUM := 97c60d3b12727b4fbbcce45a0965941bb1d60cbe
+$(PKG)_CHECKSUM := 799e8bb275033fbd6a7af015a178bc3371cb81b166e58669029ac0eb8b6e5003
 $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
 $(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gforge.inria.fr/frs/download.php/34139/$($(PKG)_FILE)

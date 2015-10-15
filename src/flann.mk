@@ -4,7 +4,7 @@
 PKG             := flann
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.4
-$(PKG)_CHECKSUM := e03d9d458757f70f6af1d330ff453e3621550a4f
+$(PKG)_CHECKSUM := dfbb9321b0d687626a644c70872a2c540b16200e7f4c7bd72f91ae032f445c08
 $(PKG)_SUBDIR   := flann-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := flann-$($(PKG)_VERSION)-src.zip
 $(PKG)_URL      := http://www.cs.ubc.ca/research/flann/uploads/FLANN/$($(PKG)_FILE)

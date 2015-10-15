@@ -4,7 +4,7 @@
 PKG             := qtquick1
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := f89cccdeac4c31157ac8b97fa96d426b5bb18630
+$(PKG)_CHECKSUM := c812a7e59a8b9f0a87693181059933e15fef04bc875b6486cd653be1b9b51f2c
 $(PKG)_SUBDIR    = $(subst qtbase,qtquick1,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtquick1,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtquick1,$(qtbase_URL))
@@ -15,8 +15,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake'
+    # invoke qmake with removed debug options as a workaround for
+    # https://bugreports.qt-project.org/browse/QTBUG-30898
+    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' CONFIG-='debug debug_and_release'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
-

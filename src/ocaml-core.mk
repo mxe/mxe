@@ -30,7 +30,7 @@ define $(PKG)_BUILD
       -bindir '$(PREFIX)/$(TARGET)/bin' \
       -libdir '$(PREFIX)/$(TARGET)/lib/ocaml' \
       -no-tk \
-      -cc "gcc -m32" \
+      -cc "$(BUILD_CC) -m32" \
       -no-shared-libs \
       -host '$(TARGET)' \
       -x11lib /usr/lib \

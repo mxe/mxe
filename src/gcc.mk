@@ -3,13 +3,15 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.0
-$(PKG)_CHECKSUM := b6c947b09adf780fe02065d0c48bfd7b4bdddfa3
+$(PKG)_VERSION  := 5.2.0
+$(PKG)_CHECKSUM := 5f835b04b5f7dd4f4d2dc96190ec1621b8d89f2dc6f638f9f8bc1b1014ba8cad
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := binutils gcc-gmp gcc-isl gcc-mpc gcc-mpfr mingw-w64
+
+$(PKG)_FILE_$(BUILD) :=
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \

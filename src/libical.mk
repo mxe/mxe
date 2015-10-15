@@ -3,7 +3,7 @@
 
 PKG             := libical
 $(PKG)_VERSION  := 1.0.1
-$(PKG)_CHECKSUM := 904b2c2b5c2b30f0a508f9d56eaf316dd42fc923
+$(PKG)_CHECKSUM := 089ce3c42d97fbd7a5d4b3c70adbdd82115dd306349c1f5c46a8fb3f8c949592
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/releases/download/v$($(PKG)_VERSION)//$($(PKG)_FILE)

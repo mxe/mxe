@@ -4,7 +4,7 @@
 PKG             := opus
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1
-$(PKG)_CHECKSUM := 35005f5549e2583f5770590135984dcfce6f3d58
+$(PKG)_CHECKSUM := b9727015a58affcf3db527322bf8c4d2fcf39f5f6b8f15dbceca20206cbe1d95
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.xiph.org/releases/$(PKG)/$($(PKG)_FILE)

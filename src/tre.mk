@@ -4,7 +4,7 @@
 PKG             := tre
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.8.0
-$(PKG)_CHECKSUM := 8818058785923c32f5e1f48feeb2851507c0e61c
+$(PKG)_CHECKSUM := be8670a55198bc57485a6a8ae4b497d7db98ea25f90968585b7eb07d94c6a7dd
 $(PKG)_SUBDIR   := tre-$($(PKG)_VERSION)
 $(PKG)_FILE     := tre-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://laurikari.net/tre/$($(PKG)_FILE)

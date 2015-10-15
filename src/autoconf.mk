@@ -4,7 +4,7 @@
 PKG             := autoconf
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.69
-$(PKG)_CHECKSUM := e891c3193029775e83e0534ac0ee0c4c711f6d23
+$(PKG)_CHECKSUM := 64ebcec9f8ac5b2487125a86a7760d2591ac9e1d3dbd59489633f9de62a57684
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/autoconf/$($(PKG)_FILE)

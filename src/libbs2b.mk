@@ -4,7 +4,7 @@
 PKG             := libbs2b
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.0
-$(PKG)_CHECKSUM := 353180e0f260b074508c6ddb34259b0d08a12dd7
+$(PKG)_CHECKSUM := 4799974becdeeedf0db00115bc63f60ea3fe4b25f1dfdb6903505839a720e46f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/bs2b/libbs2b/$($(PKG)_VERSION)/$($(PKG)_FILE)

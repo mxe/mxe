@@ -4,7 +4,7 @@
 PKG             := glfw2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7.9
-$(PKG)_CHECKSUM := b189922e9804062a0014a3799b4dc35431034623
+$(PKG)_CHECKSUM := b7276dcadc85a07077834d1043f11ffd6a3a379647bb94361b4abc3ffca75e7d
 $(PKG)_SUBDIR   := glfw-$($(PKG)_VERSION)
 $(PKG)_FILE     := glfw-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/glfw/glfw/$($(PKG)_VERSION)/$($(PKG)_FILE)

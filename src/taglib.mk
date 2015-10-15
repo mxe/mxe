@@ -4,7 +4,7 @@
 PKG             := taglib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.7.2
-$(PKG)_CHECKSUM := e657384ccf3284db2daba32dccece74534286012
+$(PKG)_CHECKSUM := 38f7e5283b594021b28426a61339cffbf2d503b450338b02f651fab1b0b42899
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://developer.kde.org/~wheeler/files/src/$($(PKG)_FILE)

@@ -3,8 +3,8 @@
 
 PKG             := mingw-w64
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0.2
-$(PKG)_CHECKSUM := b266b6d7393ee494612db49b0b54c5aaffaf042f
+$(PKG)_VERSION  := 4.0.4
+$(PKG)_CHECKSUM := 89356a0aa8cf9f8b9dc8d92bc8dd01a131d4750c3acb30c6350a406316c42199
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
@@ -22,7 +22,8 @@ define $(PKG)_BUILD_mingw-w64
     cd '$(1).headers-build' && '$(1)/mingw-w64-headers/configure' \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-sdk=all
+        --enable-sdk=all \
+        --enable-idl
     $(MAKE) -C '$(1).headers-build' install
 endef
 

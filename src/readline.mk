@@ -4,7 +4,7 @@
 PKG             := readline
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.3
-$(PKG)_CHECKSUM := 017b92dc7fd4e636a2b5c9265a77ccc05798c9e1
+$(PKG)_CHECKSUM := 56ba6071b9462f980c5a72ab0023893b65ba6debb4eeb475d7a563dc65cafd43
 $(PKG)_SUBDIR   := readline-$($(PKG)_VERSION)
 $(PKG)_FILE     := readline-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/readline/$($(PKG)_FILE)

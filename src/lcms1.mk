@@ -4,7 +4,7 @@
 PKG             := lcms1
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.19
-$(PKG)_CHECKSUM := d5b075ccffc0068015f74f78e4bc39138bcfe2d4
+$(PKG)_CHECKSUM := 80ae32cb9f568af4dc7ee4d3c05a4c31fc513fc3e31730fed0ce7378237273a9
 $(PKG)_SUBDIR   := lcms-$($(PKG)_VERSION)
 $(PKG)_FILE     := lcms-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/lcms/lcms/$($(PKG)_VERSION)/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := lensfun
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.3.0
-$(PKG)_CHECKSUM := 60e2bf3a6a2f495076db1d88778a00d358cf0b69
+$(PKG)_CHECKSUM := c2c3c03873cb549d49d42f118fcb0ffa95d1e45b9ff395e19facb63bf699bec1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/lensfun/$($(PKG)_VERSION)/$($(PKG)_FILE)

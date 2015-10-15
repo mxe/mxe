@@ -4,7 +4,7 @@
 PKG             := sed
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.2.2
-$(PKG)_CHECKSUM := f17ab6b1a7bcb2ad4ed125ef78948092d070de8f
+$(PKG)_CHECKSUM := f048d1838da284c8bc9753e4506b85a1e0cc1ea8999d36f6995bcb9460cddbd7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)

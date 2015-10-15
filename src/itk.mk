@@ -4,7 +4,7 @@
 PKG             := itk
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.4.1
-$(PKG)_CHECKSUM := 9272a15323e9c1d44f598fca02d2bb0c16478bb5
+$(PKG)_CHECKSUM := 7d6f5d50b4689daf710933ef99ec8764e4b1700f636e90b7fa94aeb9f99247fd
 $(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

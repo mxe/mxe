@@ -4,7 +4,7 @@
 PKG             := lame
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.99.5
-$(PKG)_CHECKSUM := 03a0bfa85713adcc6b3383c12e2cc68a9cfbf4c4
+$(PKG)_CHECKSUM := 24346b4158e4af3bd9f2e194bb23eb473c75fb7377011523353196b19b9a23ff
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

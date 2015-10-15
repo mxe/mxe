@@ -4,7 +4,7 @@
 PKG             := libgda
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.2.13
-$(PKG)_CHECKSUM := 61d0b498202b780750633cc2e957c40325d6c705
+$(PKG)_CHECKSUM := 25b75951f8f38fd58a403389566a0aae2f83b39d4225bc3acf5f2d68895ab4c3
 $(PKG)_SUBDIR   := libgda-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgda-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgda/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

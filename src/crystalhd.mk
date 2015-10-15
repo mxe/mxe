@@ -4,7 +4,7 @@
 PKG             := crystalhd
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1
-$(PKG)_CHECKSUM := 2ee046b1a20485abb750244d4c71f733673496f7
+$(PKG)_CHECKSUM := 818d72fdbebcfc0a449d9e39153370c80325f2490798f82f1ed98c6bb60bc18c
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := crystalhd_lgpl_includes_v$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://www.broadcom.com/docs/support/$(PKG)/$($(PKG)_FILE)

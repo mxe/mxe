@@ -4,11 +4,11 @@
 PKG             := poppler
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.30.0
-$(PKG)_CHECKSUM := 6040e46b5f27e2562227232ba956c815cc2878e2
+$(PKG)_CHECKSUM := b616ee869d0b1f8a7a2c71cf346f55c1bff624cce4badebe17f506ec8ce7ddf5
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://poppler.freedesktop.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib cairo libpng lcms jpeg tiff freetype zlib curl qt
+$(PKG)_DEPS     := gcc cairo curl freetype glib jpeg lcms libpng qt tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://poppler.freedesktop.org/' | \

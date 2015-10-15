@@ -4,7 +4,7 @@
 PKG             := automake
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.14.1
-$(PKG)_CHECKSUM := 0bb1714b78d70cab9907d2013082978a28f48a46
+$(PKG)_CHECKSUM := 814c2333f350ce00034a1fe718e0e4239998ceea7b0aff67e9fd273ed6dfc23b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)

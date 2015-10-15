@@ -4,7 +4,7 @@
 PKG             := coreutils
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 8.23
-$(PKG)_CHECKSUM := adead02839225218b85133fa57b4dba02af2291d
+$(PKG)_CHECKSUM := ec43ca5bcfc62242accb46b7f121f6b684ee21ecd7d075059bf650ff9e37b82d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)

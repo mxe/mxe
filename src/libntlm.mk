@@ -4,7 +4,7 @@
 PKG             := libntlm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4
-$(PKG)_CHECKSUM := b15c9ccbd3829154647b3f9d6594b1ffe4491b6f
+$(PKG)_CHECKSUM := 8415d75e31d3135dc7062787eaf4119b984d50f86f0d004b964cdc18a3182589
 $(PKG)_SUBDIR   := libntlm-$($(PKG)_VERSION)
 $(PKG)_FILE     := libntlm-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.nongnu.org/libntlm/releases/$($(PKG)_FILE)

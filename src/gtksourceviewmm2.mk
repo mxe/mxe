@@ -4,7 +4,7 @@
 PKG             := gtksourceviewmm2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.10.3
-$(PKG)_CHECKSUM := 17d5daf33d2b6bc21c48c5c730abaae70e027566
+$(PKG)_CHECKSUM := 0000df1b582d7be2e412020c5d748f21c0e6e5074c6b2ca8529985e70479375b
 $(PKG)_SUBDIR   := gtksourceviewmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtksourceviewmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

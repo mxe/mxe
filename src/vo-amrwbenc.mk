@@ -4,7 +4,7 @@
 PKG             := vo-amrwbenc
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.3
-$(PKG)_CHECKSUM := 427a147a378d258614d5d470f1f222e249535be7
+$(PKG)_CHECKSUM := 5652b391e0f0e296417b841b02987d3fd33e6c0af342c69542cbb016a71d9d4e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/opencore-amr/$(PKG)/$($(PKG)_FILE)

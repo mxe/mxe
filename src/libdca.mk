@@ -4,15 +4,16 @@
 PKG             := libdca
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.0.5
-$(PKG)_CHECKSUM := 3fa5188eaaa2fc83fb9c4196f6695a23cb17f3bc
+$(PKG)_CHECKSUM := dba022e022109a5bacbe122d50917769ff27b64a7bba104bd38ced8de8510642
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := http://download.videolan.org/pub/videolan/libdca/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for libdca.' >&2;
-    echo $(libdca_VERSION)
+    $(WGET) -q -O- 'https://www.videolan.org/developers/libdca.html' | \
+    $(SED) -n 's,.*libdca-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

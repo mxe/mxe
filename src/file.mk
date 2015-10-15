@@ -3,16 +3,17 @@
 
 PKG             := file
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.20
-$(PKG)_CHECKSUM := 4e93e9ae915f1812b05cc6012ae968fdb6416f8f
+$(PKG)_VERSION  := 5.24
+$(PKG)_CHECKSUM := 802cb3de2e49e88ef97cdcb52cd507a0f25458112752e398445cea102bc750ce
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://ftp.cross-lfs.org/pub/clfs/conglomeration/file/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
+$(PKG)_URL      := https://distfiles.macports.org/file/$($(PKG)_FILE)
+# astron.com is down
+# $(PKG)_URL_2    := ftp://ftp.astron.com/pub/file/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgnurx
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'ftp://ftp.astron.com/pub/file/' | \
+    $(WGET) -q -O- 'https://distfiles.macports.org/file/' | \
     grep 'file-' | \
     $(SED) -n 's,.*file-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1

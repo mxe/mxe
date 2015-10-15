@@ -4,7 +4,7 @@
 PKG             := vcdimager
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.7.24
-$(PKG)_CHECKSUM := 8c245555c3e21dcbc3d4dbb2ecca74f609545424
+$(PKG)_CHECKSUM := 075d7a67353ff3004745da781435698b6bc4a053838d0d4a3ce0516d7d974694
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/vcdimager/$(PKG)-$($(PKG)_VERSION).tar.gz

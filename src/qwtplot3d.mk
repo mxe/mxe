@@ -4,7 +4,7 @@
 PKG             := qwtplot3d
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.7
-$(PKG)_CHECKSUM := 4463fafb8420a91825e165da7a296aaabd70abea
+$(PKG)_CHECKSUM := 1208336b15e82e7a9d22cbc743e46f27e2fad716094a9c133138f259fa299a42
 $(PKG)_SUBDIR   := $(PKG)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := xmlrpc-c
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := d4364f4
-$(PKG)_CHECKSUM := 3f0cb2a5967832fa5463bd85740eb04911488da9
+$(PKG)_CHECKSUM := fbd79d86020a87ed61dfdf00f78873c0fd925f477a8705f415b9fee0d6d64b19
 $(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)/advanced
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -20,8 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 $(PKG)_MAKE_OPTS = \
-    BUILDTOOL_CC=gcc \
-    BUILDTOOL_CCLD=gcc \
+    BUILDTOOL_CC=$(BUILD_CC) \
+    BUILDTOOL_CCLD=$(BUILD_CC) \
     SHARED_LIB_TYPE=@xmlrpc-c-shared-lib-type@ \
     MUST_BUILD_SHLIB=@xmlrpc-c-must-build-shlib@
 

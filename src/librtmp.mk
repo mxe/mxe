@@ -4,7 +4,7 @@
 PKG             := librtmp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := a1900c3
-$(PKG)_CHECKSUM := ca1738708ce799226626326f46c416dbda346514
+$(PKG)_CHECKSUM := fa4edd83cb6ed19d97f89a6d83aef6231c1bd8079aea5d33c083f827459a9ab2
 $(PKG)_SUBDIR   := mirror-rtmpdump-$($(PKG)_VERSION)
 $(PKG)_FILE     := rtmpdump-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/rtmpdump/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)

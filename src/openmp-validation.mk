@@ -4,7 +4,7 @@
 PKG             := openmp-validation
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1
-$(PKG)_CHECKSUM := 98e33b0d80a4e572c995cd40f50cce2c124d9465
+$(PKG)_CHECKSUM := 9dbfe3cf49ab6187def83c85b57e133e11fbb667aa111f0fd70775166254dbff
 $(PKG)_SUBDIR   := OpenMP$($(PKG)_VERSION)_Validation
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://web.cs.uh.edu/~openuh/download/packages/$($(PKG)_FILE)

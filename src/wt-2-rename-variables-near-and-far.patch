@@ -1,0 +1,78 @@
+This file is part of MXE.
+See index.html for further information.
+
+From e81074f3819bd5b10b047132cfa473516a547afd Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 18:36:39 +0200
+Subject: [PATCH] WCartesian3DChart: rename variables near and far
+
+"near" and "far" are defined in minwindef.h (mingw-w64):
+
+    #define far
+    #define near
+
+Error message:
+
+    wt-3.3.4/src/Wt/Chart/WCartesian3DChart.C:330:16: error:
+    expected primary-expression before '(' token
+        WVector4 far(
+                    ^
+---
+ src/Wt/Chart/WCartesian3DChart.C |   26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/src/Wt/Chart/WCartesian3DChart.C b/src/Wt/Chart/WCartesian3DChart.C
+index f028d75..c5fc675 100644
+--- a/src/Wt/Chart/WCartesian3DChart.C
++++ b/src/Wt/Chart/WCartesian3DChart.C
+@@ -321,34 +321,34 @@ void WCartesian3DChart::createRay(double x, double y, WVector3 &eye, WVector3 &d
+   invTransform =
+ #endif
+     invTransform.inverted();
+-  WVector4 near(
++  WVector4 near_(
+       x / width().value() * 2 - 1,
+       y / height().value() * (-2) + 1,
+       -1.0,
+       1.0
+     );
+-   WVector4 far(
+-      near.x(),
+-      near.y(),
++   WVector4 far_(
++      near_.x(),
++      near_.y(),
+       1.0,
+       1.0
+     );
+-  near = invTransform * near;
+-  far =  invTransform * far;
+-  near = near / near.w();
+-  far = far / far.w();
+-  WVector4 ray = far - near;
++  near_ = invTransform * near_;
++  far_ =  invTransform * far_;
++  near_ = near_ / near_.w();
++  far_ = far_ / far_.w();
++  WVector4 ray = far_ - near_;
+   ray.normalize();
+ #ifndef WT_TARGET_JAVA
+   direction = WVector3(ray.x(), ray.z(), ray.y());
+-  eye = WVector3(near.x(), near.z(), near.y());
++  eye = WVector3(near_.x(), near_.z(), near_.y());
+ #else
+   direction.setElement(0, ray.x());
+   direction.setElement(1, ray.z());
+   direction.setElement(2, ray.y());
+-  eye.setElement(0, near.x());
+-  eye.setElement(1, near.z());
+-  eye.setElement(2, near.y());
++  eye.setElement(0, near_.x());
++  eye.setElement(1, near_.z());
++  eye.setElement(2, near_.y());
+ #endif
+ }
+ 
+-- 
+1.7.10.4
+

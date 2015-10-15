@@ -6,22 +6,31 @@
 
 PKG             := pthreads
 $(PKG)_VERSION  := POSIX 1003.1-2001
-$(PKG)_CHECKSUM  = $(winpthreads_CHECKSUM)
-$(PKG)_FILE      = $(winpthreads_FILE)
 $(PKG)_DEPS     := winpthreads
 
 define $(PKG)_UPDATE
     echo $(pthreads_VERSION)
 endef
 
-PTHREADS_TEST = \
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig' && \
+define PTHREADS_TEST
+    # install and test pkg-config
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: pthreads'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: Posix Threads ($(PKG))'; \
-     echo 'Libs: -lpthread -lws2_32';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/pthreads.pc' && \
+     echo 'Libs: -lpthread'; \
+    ) > '$(PREFIX)/$(TARGET)/lib/pkgconfig/pthreads.pc'
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(TOP_DIR)/src/pthreads-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-pthreads.exe' \
+        '$(TOP_DIR)/src/pthreads-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' --libs pthreads`
+
+    # test cmake
+    $(and $(ENABLE_CMAKE_TESTS),
+    mkdir '$(1).test-cmake'
+    cd '$(1).test-cmake' && '$(TARGET)-cmake' \
+        -DPKG=$(PKG) \
+        '$(PWD)/src/cmake/test'
+    $(MAKE) -C '$(1).test-cmake' -j 1 install)
+endef

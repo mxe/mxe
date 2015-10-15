@@ -107,19 +107,6 @@ index 898ca47..afd1a1f 100644
  
  
  /* Define stuff for longlong.h.  */
-diff --git a/random/rndw32.c b/random/rndw32.c
-index c495131..71cca03 100644
---- a/random/rndw32.c
-+++ b/random/rndw32.c
-@@ -888,7 +888,7 @@ _gcry_rndw32_gather_random_fast (void (*add)(const void*, size_t,
-   {
-     HANDLE handle;
-     FILETIME creationTime, exitTime, kernelTime, userTime;
--    DWORD minimumWorkingSetSize, maximumWorkingSetSize;
-+    SIZE_T minimumWorkingSetSize, maximumWorkingSetSize;
- 
-     handle = GetCurrentThread ();
-     GetThreadTimes (handle, &creationTime, &exitTime,
 diff --git a/src/libgcrypt.def b/src/libgcrypt.def
 index a90efce..b5f476d 100644
 --- a/src/libgcrypt.def

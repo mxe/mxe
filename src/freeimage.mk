@@ -4,7 +4,7 @@
 PKG             := freeimage
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.15.4
-$(PKG)_CHECKSUM := 1d30057a127b2016cf9b4f0f8f2ba92547670f96
+$(PKG)_CHECKSUM := eb6361519d33131690a0e726b085a05825e5adf9fb72c752d8d39100e48dc829
 $(PKG)_SUBDIR   := FreeImage
 $(PKG)_FILE     := FreeImage$(subst .,,$($(PKG)_VERSION)).zip
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeimage/Source Distribution/$($(PKG)_VERSION)/$($(PKG)_FILE)

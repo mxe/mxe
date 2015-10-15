@@ -4,7 +4,7 @@
 PKG             := pdcurses
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4
-$(PKG)_CHECKSUM := e36684442a6171cc3a5165c8c49c70f67db7288c
+$(PKG)_CHECKSUM := 46ad8fd439e71d44819ea884d775ccbf653b9f8b1f7a418a0cce3a510aa2e64b
 $(PKG)_SUBDIR   := PDCurses-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDCurses-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/pdcurses/pdcurses/$($(PKG)_VERSION)/$($(PKG)_FILE)

@@ -3,17 +3,16 @@
 
 PKG             := muparser
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.3
-$(PKG)_CHECKSUM := 3974898052dd9ef350df1860f8292755f78f59df
-$(PKG)_SUBDIR   := $(PKG)_v$(subst .,_,$($(PKG)_VERSION))
-$(PKG)_FILE     := $(PKG)_v$(subst .,_,$($(PKG)_VERSION)).zip
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/Version $($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := 2.2.5
+$(PKG)_CHECKSUM := 0666ef55da72c3e356ca85b6a0084d56b05dd740c3c21d26d372085aa2c6e708
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_URL      := https://github.com/beltoforion/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/muparser/files/muparser/' | \
-    $(SED) -n 's,.*Version%20\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
+    $(call MXE_GET_GITHUB_TAGS, beltoforion/muparser) | \
+    $(SED) 's,^v,,g'
 endef
 
 define $(PKG)_BUILD

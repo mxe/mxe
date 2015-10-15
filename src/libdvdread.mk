@@ -4,7 +4,7 @@
 PKG             := libdvdread
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.0.0
-$(PKG)_CHECKSUM := f1fadbf19fd8d3a9a63ff610ec8ce9021ebc6947
+$(PKG)_CHECKSUM := 66fb1a3a42aa0c56b02547f69c7eb0438c5beeaf21aee2ae2c6aa23ea8305f14
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 

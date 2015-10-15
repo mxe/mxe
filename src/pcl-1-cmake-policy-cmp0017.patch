@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 0a5d7e96ad3d5ce39284968258fe78f39fe5f4ca Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Thu, 27 Aug 2015 08:16:41 +0200
+Subject: [PATCH] cmake_policy CMP0017
+
+---
+ CMakeLists.txt |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f0a5600..ea9ebcf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,8 @@ if(POLICY CMP0048)
+   cmake_policy(SET CMP0048 OLD) # do not use VERSION option in project() command
+ endif()
+ 
++cmake_policy(SET CMP0017 NEW)
++
+ set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "possible configurations" FORCE)
+ 
+ # In case the user does not setup CMAKE_BUILD_TYPE, assume it's RelWithDebInfo
+-- 
+1.7.10.4
+

@@ -4,7 +4,7 @@
 PKG             := mman-win32
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 378ed6b69bb7220511dd9cd0973c22b3f6773ce7
-$(PKG)_CHECKSUM := 489969397e78c99e0ca89652e3c6f3981d676b79
+$(PKG)_CHECKSUM := 93a4afbcf9664b2a644b4d45f4145f68a8f51865e8c1270f606d528690ddec52
 $(PKG)_SUBDIR   := mman-win32-$($(PKG)_VERSION)
 $(PKG)_FILE     := mman-win32-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/witwall/mman-win32/archive/$($(PKG)_VERSION).tar.gz

@@ -1,0 +1,58 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 31fe54c6c787bc3b66dd22a17528aeaeb0544752 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Fri, 9 Oct 2015 11:13:12 +0200
+Subject: [PATCH] fix case in headers windows.h, winsock2.h
+
+---
+ examples/osghangglide/hat.cpp |    2 +-
+ src/osg/DisplaySettings.cpp   |    2 +-
+ src/osgPlugins/ply/typedefs.h |    4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/examples/osghangglide/hat.cpp b/examples/osghangglide/hat.cpp
+index 4ef9e79..2884770 100644
+--- a/examples/osghangglide/hat.cpp
++++ b/examples/osghangglide/hat.cpp
+@@ -17,7 +17,7 @@
+ */
+ 
+ #ifdef _MSC_VER
+-#include <Windows.h>
++#include <windows.h>
+ #pragma warning( disable : 4244 )
+ #endif
+ 
+diff --git a/src/osg/DisplaySettings.cpp b/src/osg/DisplaySettings.cpp
+index 8ebae0d..8731c10 100644
+--- a/src/osg/DisplaySettings.cpp
++++ b/src/osg/DisplaySettings.cpp
+@@ -24,7 +24,7 @@ using namespace osg;
+ using namespace std;
+ 
+ #if defined(WIN32) && !defined(__CYGWIN__)
+-#include<Windows.h>
++#include<windows.h>
+ extern "C" { OSG_EXPORT DWORD NvOptimusEnablement=0x00000001; }
+ #else
+ extern "C" { int NvOptimusEnablement=0x00000001; }
+diff --git a/src/osgPlugins/ply/typedefs.h b/src/osgPlugins/ply/typedefs.h
+index 4d6c833..7a1e334 100644
+--- a/src/osgPlugins/ply/typedefs.h
++++ b/src/osgPlugins/ply/typedefs.h
+@@ -13,8 +13,8 @@
+ #define MESH_TYPEDEFS_H
+ 
+ #   if defined(_MSC_VER)
+-#      include <Winsock2.h>
+-#      include <Windows.h>
++#      include <winsock2.h>
++#      include <windows.h>
+ #   endif
+ 
+ #   include <osg/Notify>
+-- 
+1.7.10.4
+

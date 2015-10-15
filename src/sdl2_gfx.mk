@@ -4,7 +4,7 @@
 PKG             := sdl2_gfx
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.1
-$(PKG)_CHECKSUM := a136873b71a8c00c0233db26e0c1dad9629b4209
+$(PKG)_CHECKSUM := d69bcbceb811b4e5712fbad3ede737166327f44b727f1388c32581dbbe8c599a
 $(PKG)_SUBDIR   := SDL2_gfx-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2_gfx-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.ferzkopp.net/Software/SDL2_gfx/$($(PKG)_FILE)

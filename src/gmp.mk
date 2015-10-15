@@ -4,7 +4,7 @@
 PKG             := gmp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.0.0
-$(PKG)_CHECKSUM := 360802e3541a3da08ab4b55268c80f799939fddc
+$(PKG)_CHECKSUM := 7f8e9a804b9c6d07164cf754207be838ece1219425d64e28cfa3e70d5c759aaf
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)a.tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
+    cd '$(1)' && CC_FOR_BUILD=$(BUILD_CC) ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-cxx \
         --without-readline

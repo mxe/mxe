@@ -3,8 +3,8 @@
 
 PKG             := speex
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2rc1
-$(PKG)_CHECKSUM := 52daa72572e844e5165315e208da539b2a55c5eb
+$(PKG)_VERSION  := 1.2rc2
+$(PKG)_CHECKSUM := caa27c7247ff15c8521c2ae0ea21987c9e9710a8f2d3448e8b79da9806bce891
 $(PKG)_SUBDIR   := speex-$($(PKG)_VERSION)
 $(PKG)_FILE     := speex-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.xiph.org/releases/speex/$($(PKG)_FILE)

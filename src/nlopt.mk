@@ -4,7 +4,7 @@
 PKG             := nlopt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4.2
-$(PKG)_CHECKSUM := 838c399d8fffd7aa56b20231e0d7bd3462ca0226
+$(PKG)_CHECKSUM := 8099633de9d71cbc06cd435da993eb424bbcdbded8f803cdaa9fb8c6e09c8e89
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ab-initio.mit.edu/$(PKG)/$($(PKG)_FILE)

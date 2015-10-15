@@ -1,0 +1,62 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 563abb90dd28a922b5da52c8adb9a296537bbf86 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sat, 25 Jul 2015 16:39:52 +0300
+Subject: [PATCH 1/2] remove custom isatty
+
+Fix the following problem:
+
+In file included from mxe/usr/i686-w64-mingw32.static/include/unistd.h:10:0,
+                 from inline.cpp:588:
+mxe/usr/i686-w64-mingw32.static/include/io.h:319:37: error: conflicting declaration of 'int isatty(int)' with 'C' linkage
+   int __cdecl isatty(int _FileHandle) __MINGW_ATTRIB_DEPRECATED_MSVC2005;
+                                     ^
+inline.lpp:40:12: note: previous declaration with 'C++' linkage
+ static int isatty(int) { return 0; }
+            ^
+make[5]: *** [inline.o] Error 1
+
+diff --git a/pire/inline.lpp b/pire/inline.lpp
+index e5f6b55..25ef388 100644
+--- a/pire/inline.lpp
++++ b/pire/inline.lpp
+@@ -36,10 +36,6 @@ ystring filename = "";
+ int line = 1;
+ yvector<ystring> args;
+ 
+-#ifdef _WIN32
+-static int isatty(int) { return 0; }
+-#endif
+-
+ class Die {
+ public:
+ 	Die() {
+-- 
+2.3.2 (Apple Git-55)
+
+
+From de14f09bb7d7a37220aefb877c378ec445837486 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 21 Sep 2015 18:41:12 +1000
+Subject: [PATCH 2/2] check for target AR
+
+
+diff --git a/configure.ac b/configure.ac
+index e185cb9..86c5c1e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -8,6 +8,7 @@ AC_CONFIG_MACRO_DIR([m4])
+ AC_LANG_CPLUSPLUS
+ 
+ # Require neccessary binaries to build ourselves
++AM_PROG_AR
+ AC_PROG_CXX
+ AC_PROG_CC
+ AC_PROG_LEX
+-- 
+2.3.2 (Apple Git-55)
+

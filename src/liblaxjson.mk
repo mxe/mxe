@@ -4,7 +4,7 @@
 PKG             := liblaxjson
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.3
-$(PKG)_CHECKSUM := 9e00362429d98d043c02ae726fd507abbc2ca9cc
+$(PKG)_CHECKSUM := 9d47f2d23cf4a8992e8ef015136c1ff5c540afaa912ed75ee830dea17736c5f2
 $(PKG)_SUBDIR   := liblaxjson-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/andrewrk/liblaxjson/archive/$($(PKG)_VERSION).tar.gz

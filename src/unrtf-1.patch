@@ -1,0 +1,70 @@
+This file is part of MXE.
+See index.html for further information.
+
+From f023435f7ba175b0b43b3cd9406199656ac6a707 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 24 Sep 2015 23:47:04 +0200
+Subject: [PATCH 1/2] don't include <arpa/inet.h> on WIN32
+
+
+diff --git a/src/output.c b/src/output.c
+index 86d8b5c..74c7426 100644
+--- a/src/output.c
++++ b/src/output.c
+@@ -58,7 +58,12 @@
+ #include <string.h>
+ #endif
+ 
++#ifndef WIN32
+ #include <arpa/inet.h>
++#else
++#include <winsock2.h>
++#include <stdint.h>
++#endif
+ 
+ #include "malloc.h"
+ #include "defs.h"
+-- 
+2.1.4
+
+
+From 74601257ca9a5a80a5097311951397976aa7c10b Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 26 Sep 2015 12:36:36 +0200
+Subject: [PATCH 2/2] use StrStrI instead of strcasestr on WIN32
+
+
+diff --git a/src/convert.c b/src/convert.c
+index c76d7d6..9382f7b 100644
+--- a/src/convert.c
++++ b/src/convert.c
+@@ -107,6 +107,11 @@
+ #include <string.h>
+ #endif
+ 
++#ifdef WIN32
++/* For StrStrI */
++#include <shlwapi.h>
++#endif
++
+ #include <errno.h>
+ 
+ #include "defs.h"
+@@ -602,7 +607,13 @@ process_font_table (Word *w)
+                 else {
+                     /* If there is "symbol" in the font name, use
+                      * symbol encoding, else no local encoding */
+-                    if (strcasestr(name, "symbol"))
++                    if (
++#ifdef WIN32
++                    StrStrI
++#else
++                    strcasestr
++#endif
++                              (name, "symbol"))
+                         font_table[total_fonts].encoding = "SYMBOL";
+                     else 
+                         font_table[total_fonts].encoding = 0;
+-- 
+2.1.4
+

@@ -3,8 +3,8 @@
 
 PKG             := mpfr
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.2
-$(PKG)_CHECKSUM := 03e593cc6e26639ef5e60be1af8dc527209e5172
+$(PKG)_VERSION  := 3.1.3
+$(PKG)_CHECKSUM := 6835a08bd992c8257641791e9a6a2b35b02336c8de26d0a8577953747e514a16
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)

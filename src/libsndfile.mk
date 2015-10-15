@@ -4,7 +4,7 @@
 PKG             := libsndfile
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.25
-$(PKG)_CHECKSUM := e95d9fca57f7ddace9f197071cbcfb92fa16748e
+$(PKG)_CHECKSUM := 59016dbd326abe7e2366ded5c344c853829bebfd1702ef26a07ef662d6aa4882
 $(PKG)_SUBDIR   := libsndfile-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsndfile-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.mega-nerd.com/libsndfile/files/$($(PKG)_FILE)

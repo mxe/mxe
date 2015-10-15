@@ -5,7 +5,7 @@ PKG             := icu4c
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 54.1
 $(PKG)_MAJOR    := $(word 1,$(subst ., ,$($(PKG)_VERSION)))
-$(PKG)_CHECKSUM := 8c752490bbf31cea26e20246430cee67d48abe34
+$(PKG)_CHECKSUM := d42bc9a8ca6a91c55eb0925c279f49e5b508d51ef26ac9850d9be55de5bb8ab3
 $(PKG)_SUBDIR   := icu
 $(PKG)_FILE     := $(PKG)-$(subst .,_,$($(PKG)_VERSION))-src.tgz
 $(PKG)_URL      := http://download.icu-project.org/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -22,7 +22,7 @@ endef
 define $(PKG)_BUILD_COMMON
     cd '$(1)/source' && autoreconf -fi
     mkdir '$(1).native' && cd '$(1).native' && '$(1)/source/configure' \
-        CC=gcc CXX=g++
+        CC=$(BUILD_CC) CXX=$(BUILD_CXX)
     $(MAKE) -C '$(1).native' -j '$(JOBS)'
 
     mkdir '$(1).cross' && cd '$(1).cross' && '$(1)/source/configure' \

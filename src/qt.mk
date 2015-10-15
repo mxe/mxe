@@ -3,17 +3,18 @@
 
 PKG             := qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.8.6
-$(PKG)_CHECKSUM := ddf9c20ca8309a116e0466c42984238009525da6
+$(PKG)_VERSION  := 4.8.7
+$(PKG)_CHECKSUM := e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626ea0
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://download.qt-project.org/archive/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc postgresql freetds openssl zlib libpng jpeg libmng tiff sqlite dbus
+$(PKG)_URL      := http://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc dbus freetds jpeg libmng libpng openssl postgresql sqlite tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://qt.gitorious.org/qt/qt/commits' | \
-    grep '<li><a href="/qt/qt/commit/' | \
-    $(SED) -n 's,.*<a[^>]*>v\([0-9][^<-]*\)<.*,\1,p' | \
+    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/4.8/ | \
+    $(SED) -n 's,.*href="\(4\.[0-9]\.[^/]*\)/".*,\1,p' | \
+    grep -iv -- '-rc' | \
+    $(SORT) -V | \
     tail -1
 endef
 
@@ -105,16 +106,34 @@ define $(PKG)_BUILD
     # build test the manual way
     mkdir '$(1)/test-$(PKG)-pkgconfig'
     '$(PREFIX)/$(TARGET)/qt/bin/uic' -o '$(1)/test-$(PKG)-pkgconfig/ui_qt-test.h' '$(TOP_DIR)/src/qt-test.ui'
+    '$(PREFIX)/$(TARGET)/qt/bin/moc' \
+        -o '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
+        -I'$(1)/test-$(PKG)-pkgconfig' \
+        '$(TOP_DIR)/src/qt-test.hpp'
+    '$(PREFIX)/$(TARGET)/qt/bin/rcc' -name qt-test -o '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' '$(TOP_DIR)/src/qt-test.qrc'
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -pedantic \
-        '$(TOP_DIR)/src/qt-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
+        '$(TOP_DIR)/src/qt-test.cpp' \
+        '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
+        '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
         `'$(TARGET)-pkg-config' QtGui --cflags --libs`
 
     # setup cmake toolchain
-    $(SED) -i '/QT_QMAKE_EXECUTABLE/d' '$(CMAKE_TOOLCHAIN_FILE)'
-    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' >> '$(CMAKE_TOOLCHAIN_FILE)'
+    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
+    # fix static linking errors of QtGui to missing lcms2 and lzma
+    # introduced by poor libmng linking
+    echo 'set(MNG_LIBRARY mng lcms2 lzma)' >> '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
+    # test cmake
+    $(and $(ENABLE_CMAKE_TESTS),
+    mkdir '$(1).test-cmake'
+    cd '$(1).test-cmake' && '$(TARGET)-cmake' \
+        -DPKG=$(PKG) \
+        -DPKG_VERSION=$($(PKG)_VERSION) \
+        '$(PWD)/src/cmake/test'
+    $(MAKE) -C '$(1).test-cmake' -j 1 install)
 endef
 
 $(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\

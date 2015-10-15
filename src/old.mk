@@ -4,7 +4,7 @@
 PKG             := old
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.17
-$(PKG)_CHECKSUM := d519a8282b0774c344ffeb1b4899f8be53d6d7b3
+$(PKG)_CHECKSUM := d24b0d28bbce308b68d62815df8edc2806af0b7b86129f9e8078bd9381dc5eb5
 $(PKG)_SUBDIR   := old-$($(PKG)_VERSION)
 $(PKG)_FILE     := old-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://blitiri.com.ar/p/old/files/$($(PKG)_VERSION)/$($(PKG)_FILE)

@@ -1,0 +1,339 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 93f3a29abe0397e5a6681c07c3223372b5451bb0 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 6 Sep 2015 22:34:47 +0100
+Subject: [PATCH 1/7] use comp_err tool built in native build
+
+See http://www.vtk.org/Wiki/CMake_Cross_Compiling#Using_executables_in_the_build_created_during_the_build
+
+diff --git a/extra/CMakeLists.txt b/extra/CMakeLists.txt
+index ac28c62..b2cbb75 100644
+--- a/extra/CMakeLists.txt
++++ b/extra/CMakeLists.txt
+@@ -20,13 +20,29 @@ ${ZLIB_INCLUDE_DIR})
+ # Default install component for the files here
+ SET(MYSQL_INSTALL_COMPONENT Development)
+ 
++# See https://bugs.mysql.com/bug.php?id=61340
++# See http://www.vtk.org/Wiki/CMake_Cross_Compiling
++
++# when crosscompiling import the executable targets from a file
++IF(CMAKE_CROSSCOMPILING)
++  SET(IMPORT_COMP_ERR "IMPORTFILE-NOTFOUND"
++  CACHE FILEPATH "Point it to the export file from a native build")
++  INCLUDE(${IMPORT_COMP_ERR})
++ENDIF(CMAKE_CROSSCOMPILING)
++
++# only build the generator if not crosscompiling
++# export the generator target to a file, so it can be imported
++#  (see above) by another build
++# the IF() is not necessary, but makes the intention clearer
+ IF(NOT CMAKE_CROSSCOMPILING)
+  ADD_EXECUTABLE(comp_err comp_err.c)
+  TARGET_LINK_LIBRARIES(comp_err mysys mysys_ssl)
+  SET_TARGET_PROPERTIES(comp_err PROPERTIES LINKER_LANGUAGE CXX)
++ EXPORT(TARGETS comp_err FILE ${CMAKE_BINARY_DIR}/ImportCompErr.cmake)
+ ENDIF()
+ 
+ 
++# then use the target name as COMMAND, CMake >= 2.6 knows how to handle this
+ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_BINARY_DIR}/include/mysqld_error.h 
+                    ${PROJECT_BINARY_DIR}/sql/share/english/errmsg.sys
+                    COMMAND comp_err
+-- 
+2.3.8 (Apple Git-58)
+
+
+From e45e5c21360b12cb9f271a29bd1d4d183ed55060 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 6 Sep 2015 22:53:33 +0100
+Subject: [PATCH 2/7] fix extra qualification 'Handshake::'
+
+Compilation error.
+
+diff --git a/libmysql/authentication_win/handshake.h b/libmysql/authentication_win/handshake.h
+index 14b1386..395af36 100644
+--- a/libmysql/authentication_win/handshake.h
++++ b/libmysql/authentication_win/handshake.h
+@@ -100,7 +100,7 @@ public:
+   Handshake(const char *ssp, side_t side);
+   virtual ~Handshake();
+ 
+-  int Handshake::packet_processing_loop();
++  int packet_processing_loop();
+ 
+   bool virtual is_complete() const
+   {
+-- 
+2.3.8 (Apple Git-58)
+
+
+From a2deca6cb6f87bb926d12149595c84f29ae00d0e Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 7 Sep 2015 22:59:18 +0100
+Subject: [PATCH 3/7] fix case in headers and libs (should be lowercase)
+
+
+diff --git a/extra/yassl/src/yassl_int.cpp b/extra/yassl/src/yassl_int.cpp
+index 2993a1a..04b1fda 100644
+--- a/extra/yassl/src/yassl_int.cpp
++++ b/extra/yassl/src/yassl_int.cpp
+@@ -20,7 +20,7 @@
+ // First include (the generated) my_config.h, to get correct platform defines.
+ #include "my_config.h"
+ #ifdef _WIN32
+-#include<Windows.h>
++#include<windows.h>
+ #else
+ #include <pthread.h>
+ #endif
+diff --git a/include/mysql/psi/mysql_socket.h b/include/mysql/psi/mysql_socket.h
+index 41a7cb4..5f6d91d 100644
+--- a/include/mysql/psi/mysql_socket.h
++++ b/include/mysql/psi/mysql_socket.h
+@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ #ifdef _WIN32
+   #include <ws2def.h>
+   #include <winsock2.h>
+-  #include <MSWSock.h>
++  #include <mswsock.h>
+   #define SOCKBUF_T char
+ #else
+   #include <netinet/in.h>
+diff --git a/libmysql/authentication_win/CMakeLists.txt b/libmysql/authentication_win/CMakeLists.txt
+index f2979fb..83e5441 100644
+--- a/libmysql/authentication_win/CMakeLists.txt
++++ b/libmysql/authentication_win/CMakeLists.txt
+@@ -26,7 +26,7 @@ SET(HEADERS common.h handshake.h)
+ SET(PLUGIN_SOURCES plugin_client.cc handshake_client.cc log_client.cc common.cc handshake.cc)
+ 
+ ADD_CONVENIENCE_LIBRARY(auth_win_client ${PLUGIN_SOURCES} ${HEADERS})
+-TARGET_LINK_LIBRARIES(auth_win_client Secur32)
++TARGET_LINK_LIBRARIES(auth_win_client secur32)
+ 
+ # In IDE, group headers in a separate folder.
+ 
+diff --git a/libmysql/authentication_win/plugin_client.cc b/libmysql/authentication_win/plugin_client.cc
+index d25aae8..ecfee79 100644
+--- a/libmysql/authentication_win/plugin_client.cc
++++ b/libmysql/authentication_win/plugin_client.cc
+@@ -26,7 +26,7 @@
+ */
+ 
+ #ifdef _MSC_VER
+-#pragma comment(lib, "Secur32")
++#pragma comment(lib, "secur32")
+ #endif
+ 
+ static int win_auth_client_plugin_init(char*, size_t, int, va_list)
+-- 
+2.3.8 (Apple Git-58)
+
+
+From 7517a9a4ce9b123470ff8cc040acfa1777acc832 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 7 Sep 2015 23:01:35 +0100
+Subject: [PATCH 4/7] define missing types
+
+We do not use types CERT_NAME_BLOB and CRYPT_HASH_BLOB,
+though they are used in mprapi.h. And are not defined!
+
+diff --git a/mysys/my_gethwaddr.c b/mysys/my_gethwaddr.c
+index 780c765..e2cd321 100644
+--- a/mysys/my_gethwaddr.c
++++ b/mysys/my_gethwaddr.c
+@@ -137,6 +137,9 @@ my_bool my_gethwaddr(uchar *to)
+ #define VOID void
+ #endif
+ 
++// mprapi.h uses these undefined types
++#define CERT_NAME_BLOB int
++#define CRYPT_HASH_BLOB int
+ #include <iphlpapi.h>
+ 
+ /*
+-- 
+2.3.8 (Apple Git-58)
+
+
+From 12358baf55265ff6d2764771199645e811863853 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 7 Sep 2015 23:04:23 +0100
+Subject: [PATCH 5/7] macro NATIVE_WIN32 for stuff we don't have here
+
+Macro NATIVE_WIN32 is undefined in MXE. It is used instead of _WIN32
+in #ifdef's where working variant is Unix and not Win32:
+
+ * MXE has strtok_r, but not strtok_s
+ * MXE has sigset_t, mode_t timespec defined (do not redefine)
+ * MXE has Unix-like stacktrace reader
+
+diff --git a/include/m_string.h b/include/m_string.h
+index e1576af..5417192 100644
+--- a/include/m_string.h
++++ b/include/m_string.h
+@@ -127,7 +127,7 @@ static inline ulonglong my_strtoull(const char *nptr, char **endptr, int base)
+ 
+ static inline char *my_strtok_r(char *str, const char *delim, char **saveptr)
+ {
+-#if defined _WIN32
++#if NATIVE_WIN32
+   return strtok_s(str, delim, saveptr);
+ #else
+   return strtok_r(str, delim, saveptr);
+diff --git a/include/my_global.h b/include/my_global.h
+index acadb44..8c3c3cd 100644
+--- a/include/my_global.h
++++ b/include/my_global.h
+@@ -205,7 +205,7 @@ C_MODE_START
+ typedef int	(*qsort_cmp)(const void *,const void *);
+ typedef int	(*qsort_cmp2)(const void*, const void *,const void *);
+ C_MODE_END
+-#ifdef _WIN32
++#ifdef _MSC_VER
+ typedef int       socket_len_t;
+ typedef int       sigset_t;
+ typedef int       mode_t;
+@@ -646,6 +646,9 @@ static inline struct tm *gmtime_r(const time_t *clock, struct tm *res)
+   return res;
+ }
+ 
++#endif
++
++#ifdef _MSC_VER
+ 
+ /*
+   Declare a union to make sure FILETIME is properly aligned
+@@ -671,7 +674,7 @@ C_MODE_END
+ 
+ static inline void set_timespec_nsec(struct timespec *abstime, ulonglong nsec)
+ {
+-#ifndef _WIN32
++#ifndef _MSC_VER
+   ulonglong now= my_getsystime() + (nsec / 100);
+   abstime->tv_sec=   now / 10000000ULL;
+   abstime->tv_nsec= (now % 10000000ULL) * 100 + (nsec % 100);
+@@ -697,7 +700,7 @@ static inline void set_timespec(struct timespec *abstime, ulonglong sec)
+ */
+ static inline int cmp_timespec(struct timespec *ts1, struct timespec *ts2)
+ {
+-#ifndef _WIN32
++#ifndef _MSC_VER
+   if (ts1->tv_sec > ts2->tv_sec ||
+       (ts1->tv_sec == ts2->tv_sec && ts1->tv_nsec > ts2->tv_nsec))
+     return 1;
+@@ -715,7 +718,7 @@ static inline int cmp_timespec(struct timespec *ts1, struct timespec *ts2)
+ 
+ static inline ulonglong diff_timespec(struct timespec *ts1, struct timespec *ts2)
+ {
+-#ifndef _WIN32
++#ifndef _MSC_VER
+   return (ts1->tv_sec - ts2->tv_sec) * 1000000000ULL +
+     ts1->tv_nsec - ts2->tv_nsec;
+ #else
+diff --git a/include/thr_cond.h b/include/thr_cond.h
+index 480e936..03fbc24 100644
+--- a/include/thr_cond.h
++++ b/include/thr_cond.h
+@@ -39,7 +39,7 @@ typedef CONDITION_VARIABLE native_cond_t;
+ typedef pthread_cond_t native_cond_t;
+ #endif
+ 
+-#ifdef _WIN32
++#ifdef _MSC_VER
+ /**
+   Convert abstime to milliseconds
+ */
+@@ -104,7 +104,7 @@ static inline int native_cond_timedwait(native_cond_t *cond,
+                                         const struct timespec *abstime)
+ {
+ #ifdef _WIN32
+-  DWORD timeout= get_milliseconds(abstime);
++  DWORD timeout= abstime->tv_nsec / 1000000 + abstime->tv_sec * 1000;
+   if (!SleepConditionVariableCS(cond, mutex, timeout))
+     return ETIMEDOUT;
+   return 0;
+diff --git a/mysys/stacktrace.c b/mysys/stacktrace.c
+index 226d469..db94096 100644
+--- a/mysys/stacktrace.c
++++ b/mysys/stacktrace.c
+@@ -15,7 +15,7 @@
+ 
+ #include "my_stacktrace.h"
+ 
+-#ifndef _WIN32
++#ifndef _MSC_VER
+ #include "my_pthread.h"
+ #include "m_string.h"
+ #include <signal.h>
+-- 
+2.3.8 (Apple Git-58)
+
+
+From 4f6b41efba4a862d34de3d03980d283d60c57c28 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 8 Oct 2015 13:30:53 +1100
+Subject: [PATCH 6/7] fix shared lib names
+
+
+diff --git a/libmysql/CMakeLists.txt b/libmysql/CMakeLists.txt
+index 17c8c03..9e2980b 100644
+--- a/libmysql/CMakeLists.txt
++++ b/libmysql/CMakeLists.txt
+@@ -216,7 +216,7 @@ MACRO(GET_TARGET_NAME target out_name)
+   SET(${out_name} ${name})
+ ENDMACRO()
+ 
+-IF(UNIX)
++IF(UNIX OR MINGW)
+   MACRO(GET_VERSIONED_LIBNAME LIBNAME EXTENSION VERSION OUTNAME)
+     SET(DOT_VERSION ".${VERSION}")
+     IF(DOT_VERSION STREQUAL ".") 
+@@ -230,7 +230,7 @@ IF(UNIX)
+   ENDMACRO()
+ ENDIF()
+ 
+-IF(UNIX)
++IF(UNIX OR MINGW)
+   GET_TARGET_NAME(mysqlclient lib_name)
+   INSTALL_SYMLINK(mysqlclient
+     ${lib_name} ${CMAKE_STATIC_LIBRARY_PREFIX}mysqlclient_r.a
+@@ -252,7 +252,7 @@ IF(NOT DISABLE_SHARED)
+   MERGE_LIBRARIES(libmysql SHARED ${LIBS}
+     EXPORTS ${CLIENT_API_FUNCTIONS}
+     COMPONENT SharedLibraries)
+-  IF(UNIX)
++  IF(UNIX OR MINGW)
+     # libtool compatability
+     IF(CMAKE_SYSTEM_NAME MATCHES "FreeBSD" OR APPLE)
+       SET(OS_SHARED_LIB_VERSION "${SHARED_LIB_MAJOR_VERSION}")
+-- 
+2.3.8 (Apple Git-58)
+
+
+From d57fefef1a1eb15d14dc64d4c59267746f02369d Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Thu, 8 Oct 2015 19:36:35 +1100
+Subject: [PATCH 7/7] allow install of mysql_config
+
+
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index 69d19b8..738563b 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -92,7 +92,7 @@ ENDIF()
+ 
+ SET(mysql_config_COMPONENT COMPONENT Development)
+ 
+-IF(WIN32)
++IF(WIN32 AND NOT MINGW)
+   # On Windows, some .sh and some .pl.in files are configured 
+   # The resulting files will have .pl extension (those are perl scripts)
+ 
+-- 
+2.3.8 (Apple Git-58)
+

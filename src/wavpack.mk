@@ -3,8 +3,8 @@
 
 PKG             := wavpack
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.70.0
-$(PKG)_CHECKSUM := 7bf2022c988c19067196ee1fdadc919baacf46d1
+$(PKG)_VERSION  := 4.75.0
+$(PKG)_CHECKSUM := c63e5c2106749dc6b2fb4302f2260f4803a93dd6cadf337764920dc836e3af2e
 $(PKG)_SUBDIR   := wavpack-$($(PKG)_VERSION)
 $(PKG)_FILE     := wavpack-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.wavpack.com/$($(PKG)_FILE)

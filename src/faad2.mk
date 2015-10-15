@@ -4,7 +4,7 @@
 PKG             := faad2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7
-$(PKG)_CHECKSUM := 80eaaa5cc576c35dd28863767b795c50cbcc0511
+$(PKG)_CHECKSUM := ee26ed1e177c0cd8fa8458a481b14a0b24ca0b51468c8b4c8b676fd3ceccd330
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/faac/$(PKG)-src/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)

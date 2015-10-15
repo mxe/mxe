@@ -4,14 +4,13 @@
  */
 
 #include <QApplication>
-#include "ui_qt-test.h"
+
+#include "qt-test.hpp"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QMainWindow w;
-    Ui::MainWindow u;
-    u.setupUi(&w);
+    MainWindow w;
     w.show();
     a.aboutQt();
     return a.exec();

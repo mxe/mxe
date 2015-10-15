@@ -4,7 +4,7 @@
 PKG             := ncurses
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := e14300b
-$(PKG)_CHECKSUM := fcc1997439560b6cb7f9bf2f73f6245310f06c64
+$(PKG)_CHECKSUM := 3564ffa540cc069854607a0fb10d258c12769f8f6ee752f66038ba95a5e5f650
 # $(PKG)_VERSION  := 5.9
 # $(PKG)_SUBDIR   := ncurses-$($(PKG)_VERSION)
 # $(PKG)_FILE     := ncurses-$($(PKG)_VERSION).tar.gz
@@ -29,12 +29,14 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native/include' -j '$(JOBS)'
     $(MAKE) -C '$(1).native/progs'   -j '$(JOBS)' tic
 
-    cd '$(1)' && ./configure \
+    cd '$(1)' && \
+        TIC_PATH='$(1).native/progs/tic' \
+        ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix=$(PREFIX)/$(TARGET) \
-        --with-build-cc=gcc \
-        --with-build-cpp=cpp \
+        --with-build-cc=$(BUILD_CC) \
+        --with-build-cpp='$(BUILD_CC) -E' \
         --disable-home-terminfo \
         --enable-sp-funcs \
         --enable-term-driver \
@@ -45,11 +47,10 @@ define $(PKG)_BUILD
         --without-progs \
         --without-tests \
         --enable-pc-files \
-        PKG_CONFIG_LIBDIR='$(PREFIX)/$(TARGET)/lib/pkgconfig' \
+        --with-pkg-config-libdir='$(PREFIX)/$(TARGET)/lib/pkgconfig' \
         $(if $(BUILD_STATIC), \
             --with-normal    --without-shared --with-static, \
             --without-normal --without-static --with-shared)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install TIC_PATH='$(1).native/progs/tic'
+    $(MAKE) -C '$(1)' -j 1 install
 endef
-

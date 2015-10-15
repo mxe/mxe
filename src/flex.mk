@@ -4,7 +4,7 @@
 PKG             := flex
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.5.39
-$(PKG)_CHECKSUM := 267794c709d5c50f2dcb48ff5d8dcbbfe40f953e
+$(PKG)_CHECKSUM := add2b55f3bc38cb512b48fad7d72f43b11ef244487ff25fc00aabec1e32b617f
 $(PKG)_SUBDIR   := flex-$($(PKG)_VERSION)
 $(PKG)_FILE     := flex-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/flex/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := ocaml-cairo
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.0
-$(PKG)_CHECKSUM := d5835620bea005d5d5239f889b10a922fda2520b
+$(PKG)_CHECKSUM := 4beae96acfc13dbb8b0a798a0664380429c6a94357e7dc5747d76599deabdfc7
 $(PKG)_SUBDIR   := cairo-ocaml-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-ocaml_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_URL      := http://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := plotutils
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.6
-$(PKG)_CHECKSUM := 7921301d9dfe8991e3df2829bd733df6b2a70838
+$(PKG)_CHECKSUM := 4f4222820f97ca08c7ea707e4c53e5a3556af4d8f1ab51e0da6ff1627ff433ab
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftpmirror.gnu.org/$(PKG)/$($(PKG)_FILE)

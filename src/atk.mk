@@ -3,12 +3,12 @@
 
 PKG             := atk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.14.0
-$(PKG)_CHECKSUM := b803d055c8e2f786782803b7d21e413718321db7
+$(PKG)_VERSION  := 2.16.0
+$(PKG)_CHECKSUM := 095f986060a6a0b22eb15eef84ae9f14a1cf8082488faa6886d94c37438ae562
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib gettext
+$(PKG)_DEPS     := gcc gettext glib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/atk/refs/tags' | \

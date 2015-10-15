@@ -4,7 +4,7 @@
 PKG             := pangomm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.34.0
-$(PKG)_CHECKSUM := 15d89717a390a0c78c01871190c8febd29dad684
+$(PKG)_CHECKSUM := 0e82bbff62f626692a00f3772d8b17169a1842b8cc54d5f2ddb1fec2cede9e41
 $(PKG)_SUBDIR   := pangomm-$($(PKG)_VERSION)
 $(PKG)_FILE     := pangomm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/pangomm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

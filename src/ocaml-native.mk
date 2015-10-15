@@ -4,7 +4,7 @@
 PKG             := ocaml-native
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.00.1
-$(PKG)_CHECKSUM := 5abf04cd4fccfcc980e8592995b9159014f23f53
+$(PKG)_CHECKSUM := b48d5c7d3bf4a0cd6125f8fdfc1f654dd65586087399dc9f14716d7b9535e87a
 $(PKG)_SUBDIR   := ocaml-$($(PKG)_VERSION)
 $(PKG)_FILE     := ocaml-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://caml.inria.fr/pub/distrib/ocaml-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

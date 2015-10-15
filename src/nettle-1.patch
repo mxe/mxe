@@ -1,0 +1,54 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 29cb19fb27ec834473d638fb13a947e0e004116d Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 12 Apr 2015 10:07:58 +0200
+Subject: [PATCH] Revert "Include private dependencies automatically in
+ pkg-config for non-shared builds"
+
+This reverts commit c8b1d2fafff16c57ec50d413c999796ec2085413.
+
+diff --git a/configure.ac b/configure.ac
+index 5a16151..e6cd467 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -803,10 +803,8 @@ fi
+ 
+ if test "x$enable_shared" = xyes ; then
+   IF_SHARED=''
+-  IF_NOT_SHARED='#'
+ else
+   IF_SHARED='#'
+-  IF_NOT_SHARED=''
+ fi
+ 
+ # Documentation tools
+@@ -840,7 +838,6 @@ fi
+ AC_SUBST(IF_HOGWEED)
+ AC_SUBST(IF_STATIC)
+ AC_SUBST(IF_SHARED)
+-AC_SUBST(IF_NOT_SHARED)
+ AC_SUBST(IF_DOCUMENTATION)
+ AC_SUBST(IF_DLL)
+ AC_SUBST(IF_MINI_GMP)
+diff --git a/hogweed.pc.in b/hogweed.pc.in
+index 97fb9d4..839f7d0 100644
+--- a/hogweed.pc.in
++++ b/hogweed.pc.in
+@@ -11,9 +11,8 @@ Name: Hogweed
+ Description: Nettle low-level cryptographic library (public-key algorithms)
+ URL: http://www.lysator.liu.se/~nisse/nettle
+ Version: @PACKAGE_VERSION@
+-Requires: @IF_NOT_SHARED@ nettle
+-Requires.private: @IF_SHARED@ nettle
+-Libs: -L${libdir} -lhogweed @IF_NOT_SHARED@ @LIBS@
+-Libs.private: @IF_SHARED@ @LIBS@
++Requires.private: nettle
++Libs: -L${libdir} -lhogweed
++Libs.private: @LIBS@
+ Cflags: -I${includedir}
+ 
+-- 
+2.1.4
+

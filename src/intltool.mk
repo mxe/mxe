@@ -3,7 +3,7 @@
 
 PKG             := intltool
 $(PKG)_VERSION  := 0.50.2
-$(PKG)_CHECKSUM := 7fddbd8e1bf94adbf1bc947cbf3b8ddc2453f8ad
+$(PKG)_CHECKSUM := 67f25c5c6fb71d095793a7f895b245e65e829e8bde68c6c8b4c912144ff34406
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://launchpad.net/intltool/trunk/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)

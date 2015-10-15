@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := gdb
-$(PKG)_VERSION  := 7.9
-$(PKG)_CHECKSUM := 1dabff2168bd8fe3cadf9386e47a47c527ea99ba
+$(PKG)_VERSION  := 7.9.1
+$(PKG)_CHECKSUM := cd9c543a411a05b2b647dd38936034b68c2b5d6f10e0d51dc168c166c973ba40
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
@@ -23,6 +23,8 @@ define $(PKG)_BUILD
         --with-system-readline \
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
-endef
 
+    # executables are always static and we don't the rest
+     $(INSTALL) -m755 '$(1)/gdb/gdb.exe'                 '$(PREFIX)/$(TARGET)/bin/'
+     $(INSTALL) -m755 '$(1)/gdb/gdbserver/gdbserver.exe' '$(PREFIX)/$(TARGET)/bin/'
+endef

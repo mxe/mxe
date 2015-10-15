@@ -4,7 +4,7 @@
 PKG             := zziplib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.13.62
-$(PKG)_CHECKSUM := cf8b642abd9db618324a1b98cc71492a007cd687
+$(PKG)_CHECKSUM := a1b8033f1a1fd6385f4820b01ee32d8eca818409235d22caf5119e0078c7525b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)$(word 2,$(subst ., ,$($(PKG)_VERSION)))/$($(PKG)_VERSION)/$($(PKG)_FILE)

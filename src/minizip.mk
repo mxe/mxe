@@ -3,18 +3,14 @@
 
 PKG             := minizip
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1
-$(PKG)_CHECKSUM := f0a47893d86e48c7336558aa7ec7b6742a1c102f
-$(PKG)_COMMIT   := 1f38dffc395c1e847eb26dbd921168e8cc2b6db2
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_COMMIT)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_COMMIT).zip
-$(PKG)_URL      := https://github.com/nmoinvaz/minizip/archive/$($(PKG)_COMMIT).zip
+$(PKG)_VERSION  := 0b46a2b
+$(PKG)_CHECKSUM := 2ecc8da9bcc3b3c42de915567dfceb6fcb4a70a2b2704f59c6447b54da811a65
+$(PKG)_SUBDIR   := nmoinvaz-minizip-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/nmoinvaz/minizip/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
-define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
-endef
+$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, nmoinvaz/minizip, master)
 
 define $(PKG)_BUILD
     cd '$(1)' && $(TARGET)-gcc -c -O '$(1)'/*.c

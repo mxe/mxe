@@ -4,17 +4,26 @@
 PKG             := termcap
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := 42dd1e6beee04f336c884f96314f0c96cc2578be
+$(PKG)_CHECKSUM := 91a0e22e5387ca4467b5bcb18edf1c51b930262fd466d5fda396dd9d26719100
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/termcap/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    /bin/false
+    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/termcap/' | \
+    grep 'termcap-' | \
+    $(SED) -n 's,.*termcap-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi && ./configure $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install oldincludedir=
+    # configure script is ancient and lacks cross-compiling support
+    cd '$(1)' && autoreconf -fi
+    cd '$(1)' && ./configure \
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' \
+        AR='$(TARGET)-ar' \
+        oldincludedir= \
+        install
 endef

@@ -4,7 +4,7 @@
 PKG             := libgee
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.5.0
-$(PKG)_CHECKSUM := 78d7fbd0668d01bc23e9772211b4885ae7e479cd
+$(PKG)_CHECKSUM := aa6a2563867d3e3d56921bd1f7a7869d24599e1b5beb70e83f55b718fdddff51
 $(PKG)_SUBDIR   := libgee-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgee-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgee/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

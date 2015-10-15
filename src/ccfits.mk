@@ -4,7 +4,7 @@
 PKG             := ccfits
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4
-$(PKG)_CHECKSUM := 3de2a6379bc1024300befae95cfdf33645a7b64a
+$(PKG)_CHECKSUM := ba6c5012b260adf7633f92581279ea582e331343d8c973981aa7de07242bd7f8
 $(PKG)_SUBDIR   := CCfits
 $(PKG)_FILE     := CCfits-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/fitsio/CCfits/$($(PKG)_FILE)

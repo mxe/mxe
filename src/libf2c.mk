@@ -4,7 +4,7 @@
 PKG             := libf2c
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1
-$(PKG)_CHECKSUM := e4a93aeee80c33525ffc87a5f802c30a7e6d1ea4
+$(PKG)_CHECKSUM := 5dff29c58b428fa00cd36b1220e2d71b9882a658fdec1aa094fb7e6e482d6765
 $(PKG)_SUBDIR   :=
 $(PKG)_FILE     := $(PKG).zip
 $(PKG)_URL      := http://www.netlib.org/f2c/$($(PKG)_FILE)

@@ -1,0 +1,36 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 456cad416f81c985b726fbf63fd7734e472c8b5f Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Thu, 14 May 2015 15:23:33 +0300
+Subject: [PATCH] compatibility Lua macro to config.hpp
+
+---
+ luabind/config.hpp |    11 +++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/luabind/config.hpp b/luabind/config.hpp
+index 609fb95..3535406 100644
+--- a/luabind/config.hpp
++++ b/luabind/config.hpp
+@@ -128,5 +128,16 @@ LUABIND_API void disable_super_deprecation();
+ 
+ } // namespace luabind
+ 
++#include <lua.hpp>
++
++#if LUA_VERSION_NUM > 501
++#define lua_objlen lua_rawlen
++#define lua_equal(L,idx1,idx2) lua_compare(L,(idx1),(idx2),LUA_OPEQ)
++#define lua_lessthan(L,idx1,idx2)       lua_compare(L,(idx1),(idx2),LUA_OPLT)
++#endif
++#if LUA_VERSION_NUM >= 501
++#define lua_strlen lua_objlen
++#endif
++
+ #endif // LUABIND_CONFIG_HPP_INCLUDED
+ 
+-- 
+1.7.10.4
+

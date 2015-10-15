@@ -4,11 +4,11 @@
 PKG             := levmar
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.6
-$(PKG)_CHECKSUM := 118bd20b55ab828d875f1b752cb5e1238258950b
+$(PKG)_CHECKSUM := 3bf4ef1ea4475ded5315e8d8fc992a725f2e7940a74ca3b0f9029d9e6e94bad7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://www.ics.forth.gr/~lourakis/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc lapack blas libf2c
+$(PKG)_DEPS     := gcc blas lapack libf2c
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "http://www.ics.forth.gr/~lourakis/levmar/"  | \

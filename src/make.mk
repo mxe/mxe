@@ -4,7 +4,7 @@
 PKG             := make
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.1
-$(PKG)_CHECKSUM := 0d701882fd6fd61a9652cb8d866ad7fc7de54d58
+$(PKG)_CHECKSUM := 0bc7613389650ee6a24554b52572a272f7356164fd2c4132b0bcf13123e4fca5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
