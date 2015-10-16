@@ -46,9 +46,21 @@ define $(PKG)_BUILD_COMMON
      ) > '$(CMAKE_TOOLCHAIN_FILE)'
 
     #create prefixed cmake wrapper script
-    (echo '#!/bin/sh'; \
-     echo 'echo "== Using MXE toolchain: $(CMAKE_TOOLCHAIN_FILE)"'; \
-     echo 'exec cmake -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" "$$@"') \
+    (echo '#!/usr/bin/env bash'; \
+     echo 'echo "== Using MXE wrapper: $(PREFIX)/bin/$(TARGET)-cmake"'; \
+     echo 'unset NO_MXE_TOOLCHAIN'; \
+     echo 'if echo -- "$$@" | grep -Ewq "(--build|-E|--system-information)" ; then'; \
+     echo '    NO_MXE_TOOLCHAIN=1'; \
+     echo 'fi'; \
+     echo 'if [[ "$$NO_MXE_TOOLCHAIN" == "1" ]]; then'; \
+     echo '    echo "== Skip using MXE toolchain: $(CMAKE_TOOLCHAIN_FILE)"'; \
+     echo '    # see https://github.com/mxe/mxe/issues/932'; \
+     echo '    exec cmake "$$@"'; \
+     echo 'else'; \
+     echo '    echo "== Using MXE toolchain: $(CMAKE_TOOLCHAIN_FILE)"'; \
+     echo '    exec cmake -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" "$$@"'; \
+     echo 'fi'; \
+    ) \
              > '$(PREFIX)/bin/$(TARGET)-cmake'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-cmake'
 
