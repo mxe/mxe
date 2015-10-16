@@ -153,6 +153,22 @@ local function execute(cmd)
     end
 end
 
+-- for tar, try gtar and gnutar first
+local tools = {}
+local function tool(name)
+    if tools[name] then
+        return tools[name]
+    end
+    if execute(("g%s --help > /dev/null 2>&1"):format(name)) then
+        tools[name] = 'g' .. name
+    elseif execute(("gnu%s --help > /dev/null 2>&1"):format(name)) then
+        tools[name] = 'gnu' .. name
+    else
+        tools[name] = name
+    end
+    return tools[name]
+end
+
 local function fileExists(name)
     local f = io.open(name, "r")
     if f ~= nil then
@@ -189,8 +205,8 @@ print-deps:
     local pkgs = {}
     local pkg2deps = {}
     local pkg2ver = {}
-    local cmd = 'make -f deps.mk print-deps MXE_TARGETS=%s'
-    cmd = cmd:format(target)
+    local cmd = '%s -f deps.mk print-deps MXE_TARGETS=%s'
+    cmd = cmd:format(tool 'make', target)
     local make = io.popen(cmd)
     for line in make:lines() do
         local deps = split(trim(line))
@@ -348,8 +364,8 @@ end
 
 -- builds package, returns list of new files
 local function buildPackage(pkg, pkg2deps, file2pkg)
-    local cmd = 'make %s MXE_TARGETS=%s --jobs=1'
-    os.execute(cmd:format(pkg, target))
+    local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
+    os.execute(cmd:format(tool 'make', pkg, target))
     gitAdd()
     local new_files, changed_files = gitStatus()
     gitCommit(("Build %s for target %s"):format(pkg, target))
@@ -419,17 +435,17 @@ local function makeDeb(pkg, list_path, deps, ver, add_common)
         protectVersion(ver))
     -- make .tar.xz file
     local tar_name = dirname .. '.tar.xz'
-    local cmd = 'tar -T %s --owner=0 --group=0 -cJf %s'
-    os.execute(cmd:format(list_path, tar_name))
+    local cmd = '%s -T %s --owner=root --group=root -cJf %s'
+    os.execute(cmd:format(tool 'tar', list_path, tar_name))
     -- unpack .tar.xz to the path for Debian
     local usr = dirname .. MXE_DIR
     os.execute(('mkdir -p %s'):format(usr))
     -- use tar to copy files with paths
-    local cmd = 'tar -C %s -xf %s'
+    local cmd = '%s -C %s -xf %s'
     if not no_debs then
         cmd = 'fakeroot -s deb.fakeroot ' .. cmd
     end
-    os.execute(cmd:format(usr, tar_name))
+    os.execute(cmd:format(tool 'tar', usr, tar_name))
     -- prepare dependencies
     local deb_deps = {'mxe-requirements'}
     for _, dep in ipairs(deps) do
@@ -634,7 +650,8 @@ end
 
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
-while not execute('make download -j 6 -k') do
+assert(execute(("%s check-requirements"):format(tool 'make')))
+while not execute(('%s download -j 6 -k'):format(tool 'make')) do
 end
 gitInit()
 local file2pkg = {}
