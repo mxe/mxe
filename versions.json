@@ -103,7 +103,7 @@
     "gtksourceview": "2.10.5",
     "gtksourceviewmm2": "2.10.3",
     "guile": "1.8.8",
-    "harfbuzz": "1.0.5",
+    "harfbuzz": "1.0.6",
     "hdf4": "4.2.10",
     "hdf5": "1.8.12",
     "hunspell": "1.3.3",
