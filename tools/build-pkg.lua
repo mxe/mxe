@@ -435,7 +435,7 @@ local function makeDeb(pkg, list_path, deps, ver, add_common)
         protectVersion(ver))
     -- make .tar.xz file
     local tar_name = dirname .. '.tar.xz'
-    local cmd = '%s -T %s --owner=0 --group=0 -cJf %s'
+    local cmd = '%s -T %s --owner=root --group=root -cJf %s'
     os.execute(cmd:format(tool 'tar', list_path, tar_name))
     -- unpack .tar.xz to the path for Debian
     local usr = dirname .. MXE_DIR
