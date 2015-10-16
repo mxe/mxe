@@ -41,6 +41,7 @@ define $(PKG)_BUILD
             -nomake examples \
             -nomake tests \
             -plugin-sql-mysql \
+            -mysql_config $(PREFIX)/$(TARGET)/bin/mysql_config \
             -plugin-sql-sqlite \
             -plugin-sql-odbc \
             -plugin-sql-psql \
