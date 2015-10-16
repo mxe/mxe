@@ -9,7 +9,9 @@ project(mxe NONE)
 
 # see cmake --help-policy <cmp> for details
 cmake_policy(SET CMP0017 NEW)
-cmake_policy(SET CMP0020 NEW)
+if (POLICY CMP0020)
+    cmake_policy(SET CMP0020 NEW)
+endif()
 
 # so we can find pkg-test.cmake files to include
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../.. ${CMAKE_MODULE_PATH})
