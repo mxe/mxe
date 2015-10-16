@@ -227,7 +227,7 @@ else
         echo; \
         echo '# This variable controls where intermediate files are created'; \
         echo '# this is necessary when compiling inside a virtualbox shared'; \
-        echo '# directory. Some commands like strip fail in there with »Protocol error'; \
+        echo '# directory. Some commands like strip fail in there with Protocol error'; \
         echo '# default is the current directory'; \
         echo '#MXE_TMP := /tmp'; \
         echo; \
