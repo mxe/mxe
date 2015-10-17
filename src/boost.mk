@@ -73,11 +73,10 @@ define $(PKG)_BUILD
         -lboost_chrono-mt
 
     # test cmake
-    $(and $(ENABLE_CMAKE_TESTS),
     mkdir '$(1).test-cmake'
     cd '$(1).test-cmake' && '$(TARGET)-cmake' \
         -DPKG=$(PKG) \
         -DPKG_VERSION=$($(PKG)_VERSION) \
         '$(PWD)/src/cmake/test'
-    $(MAKE) -C '$(1).test-cmake' -j 1 install)
+    $(MAKE) -C '$(1).test-cmake' -j 1 install
 endef
