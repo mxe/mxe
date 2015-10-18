@@ -187,6 +187,14 @@ local function getItems()
             table.insert(items, item)
             item2deps[item] = deps
             item2ver[item] = ver
+            local target, _ = parseItem(item)
+            for _, dep_item in ipairs(deps) do
+                local target2, _ = parseItem(dep_item)
+                if isCross(target2) and target2 ~= target then
+                    log("Cross-target dependency %s -> %s",
+                        target2, target)
+                end
+            end
         end
     end
     make:close()
