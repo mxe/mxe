@@ -101,8 +101,8 @@ local function trim(str)
 end
 
 local function isInArray(element, array)
-    for _, item in ipairs(array) do
-        if item == element then
+    for _, member in ipairs(array) do
+        if member == element then
             return true
         end
     end
