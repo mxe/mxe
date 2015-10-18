@@ -49,36 +49,8 @@ local BLACKLIST = {
 }
 
 local COMMON_FILES = {
-    ['gcc-isl'] = {
-        '^usr/include/isl/',
-        '^usr/lib/libisl%.',
-        '^usr/lib/pkgconfig/isl.pc$',
-    },
-    ['gcc-mpc'] = {
-        '^usr/include/mpc.h$',
-        '^usr/lib/libmpc%.',
-    },
-    ['gcc-gmp'] = {
-        '^usr/include/gmp.h$',
-        '^usr/lib/libgmp%.',
-    },
-    ['gcc-mpfr'] = {
-        '^usr/include/mpf2mpfr.h$',
-        '^usr/include/mpfr.h$',
-        '^usr/lib/libmpfr%.',
-    },
-    ['gcc'] = {
-        '^usr/lib/libcc1%.',
-    },
-    ['yasm'] = {
-        '^usr/include/libyasm',
-        '^usr/lib/libyasm.a$',
-    },
     ['ncurses'] = {
         '^usr/lib/pkgconfig/',
-    },
-    ['pkgconf'] = {
-        '^usr/bin/config.guess$',
     },
 }
 
