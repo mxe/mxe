@@ -22,7 +22,7 @@ set environment variable MXE_NO_DEBS to 1
 In this case fakeroot and dpkg-deb are not needed.
 
 To limit number of packages being built to x,
-set environment variable MXE_MAX_PACKAGES to x,
+set environment variable MXE_MAX_ITEMS to x,
 
 The following error:
 > fakeroot, while creating message channels: Invalid argument
@@ -32,7 +32,7 @@ can be caused by leaked ipc resources originating in fakeroot.
 How to remove them: http://stackoverflow.com/a/4262545
 ]]
 
-local max_packages = tonumber(os.getenv('MXE_MAX_PACKAGES'))
+local max_items = tonumber(os.getenv('MXE_MAX_ITEMS'))
 local no_debs = os.getenv('MXE_NO_DEBS')
 
 local ARCH = 'amd64'
@@ -48,14 +48,6 @@ local BLACKLIST = {
     '^usr/[^/]+/share/info/',
 }
 
-local COMMON_FILES = {
-    ['ncurses'] = {
-        '^usr/lib/pkgconfig/',
-    },
-}
-
-local ARCH_FOR_COMMON = 'i686-w64-mingw32.static'
-
 local TARGETS = {
     'i686-w64-mingw32.static',
     'x86_64-w64-mingw32.static',
@@ -63,10 +55,8 @@ local TARGETS = {
     'x86_64-w64-mingw32.shared',
 }
 
-local target -- used by many functions
-
 local function log(fmt, ...)
-    print('[build-pkg]', target, fmt:format(...))
+    print('[build-pkg]', fmt:format(...))
 end
 
 -- based on http://lua-users.org/wiki/SplitJoin
@@ -107,6 +97,15 @@ local function isInArray(element, array)
         end
     end
     return false
+end
+
+local function sliceArray(list, nelements)
+    nelements = nelements or #list
+    local new_list = {}
+    for i = 1, nelements do
+        new_list[i] = list[i]
+    end
+    return new_list
 end
 
 local function shell(cmd)
@@ -151,34 +150,22 @@ local function fileExists(name)
     end
 end
 
--- return several tables describing packages
--- * list of packages
--- * map from package to list of deps
--- * map from package to version of package
-local function getPkgs()
-    -- create file deps.mk showing deps
-    -- (make show-upstream-deps-% does not present in
-    -- stable MXE)
-    local deps_mk_content = [[
-include Makefile
-NOTHING:=
-SPACE:=$(NOTHING) $(NOTHING)
-NAME_WITH_UNDERSCORES:=$(subst $(SPACE),_,$(NAME))
-print-deps:
-	@$(foreach pkg,$(PKGS),echo \
-		for-build-pkg $(pkg) \
-		$(subst $(SPACE),-,$($(pkg)_VERSION)) \
-		$($(pkg)_DEPS) \
-		$(if $(call set_is_not_member,$(pkg),$(MXE_CONF_PKGS)), \
-		$(MXE_CONF_PKGS));)]]
-    local deps_mk_file = io.open('deps.mk', 'w')
-    deps_mk_file:write(deps_mk_content)
-    deps_mk_file:close()
-    local pkgs = {}
-    local pkg2deps = {}
-    local pkg2ver = {}
-    local cmd = '%s -f deps.mk print-deps MXE_TARGETS=%s'
-    cmd = cmd:format(tool 'make', target)
+-- return target and package from item name
+local function parseItem(item)
+    return item:match("([^~]+)~([^~]+)")
+end
+
+-- return several tables describing packages for all targets
+-- * list of items
+-- * map from item to list of deps (which are also items)
+-- * map from item to version
+-- Item is a string like "target~pkg"
+local function getItems()
+    local items = {}
+    local item2deps = {}
+    local item2ver = {}
+    local cmd = '%s print-deps-for-build-pkg MXE_TARGETS=%q'
+    cmd = cmd:format(tool 'make', table.concat(TARGETS, ' '))
     local make = io.popen(cmd)
     for line in make:lines() do
         local deps = split(trim(line))
@@ -186,29 +173,28 @@ print-deps:
             -- first value is marker 'for-build-pkg'
             table.remove(deps, 1)
             -- first value is name of package which depends on
-            local pkg = table.remove(deps, 1)
+            local item = table.remove(deps, 1)
             -- second value is version of package
             local ver = table.remove(deps, 1)
-            table.insert(pkgs, pkg)
-            pkg2deps[pkg] = deps
-            pkg2ver[pkg] = ver
+            table.insert(items, item)
+            item2deps[item] = deps
+            item2ver[item] = ver
         end
     end
     make:close()
-    os.remove('deps.mk')
-    return pkgs, pkg2deps, pkg2ver
+    return items, item2deps, item2ver
 end
 
--- return packages ordered in build order
--- this means, if pkg1 depends on pkg2, then
--- pkg2 preceeds pkg1 in the list
-local function sortForBuild(pkgs, pkg2deps)
+-- return items ordered in build order
+-- this means, if item depends on item2, then
+-- item2 preceeds item1 in the list
+local function sortForBuild(items, item2deps)
     -- use sommand tsort
     local tsort_input_fname = os.tmpname()
     local tsort_input = io.open(tsort_input_fname, 'w')
-    for _, pkg1 in ipairs(pkgs) do
-        for _, pkg2 in ipairs(pkg2deps[pkg1]) do
-            tsort_input:write(pkg2 .. ' ' .. pkg1 .. '\n')
+    for _, item1 in ipairs(items) do
+        for _, item2 in ipairs(item2deps[item1]) do
+            tsort_input:write(item2 .. ' ' .. item1 .. '\n')
         end
     end
     tsort_input:close()
@@ -216,8 +202,8 @@ local function sortForBuild(pkgs, pkg2deps)
     local build_list = {}
     local tsort = io.popen('tsort ' .. tsort_input_fname, 'r')
     for line in tsort:lines() do
-        local pkg = trim(line)
-        table.insert(build_list, pkg)
+        local item = trim(line)
+        table.insert(build_list, item)
     end
     tsort:close()
     os.remove(tsort_input_fname)
@@ -287,12 +273,13 @@ local function gitCommit(message)
     os.execute(cmd:format(message))
 end
 
-local function isValidBinary(file)
+local function isValidBinary(target, file)
     local cmd = './usr/bin/%s-objdump -t %s > /dev/null 2>&1'
     return execute(cmd:format(target, file))
 end
 
-local function checkFile(file, pkg)
+local function checkFile(file, item)
+    local target, _ = parseItem(item)
     -- if it is PE32 file, it must have '.exe' in name
     local ext = file:sub(-4):lower()
     local cmd = 'file --dereference --brief %q'
@@ -302,73 +289,66 @@ local function checkFile(file, pkg)
     elseif ext == '.exe' then
         if not file_type:match('PE32') then
             log('File %s (%s) is %q. Remove .exe',
-                file, pkg, file_type)
+                file, item, file_type)
         end
     elseif ext == '.dll' then
         if not file_type:match('PE32.*DLL') then
             log('File %s (%s) is %q. Remove .dll',
-                file, pkg, file_type)
+                file, item, file_type)
         end
     else
         if file_type:match('PE32') then
             log('File %s (%s) is %q. Add exe or dll',
-                file, pkg, file_type)
+                file, item, file_type)
         end
     end
     for _, t in ipairs(TARGETS) do
         if t ~= target and file:match(t) then
             log('File %s (%s): other target %s in name',
-                file, pkg, t)
+                file, item, t)
         end
     end
     if file:match('/lib/.*%.dll$') then
-        log('File %s (%s): DLL in /lib/', file, pkg)
+        log('File %s (%s): DLL in /lib/', file, item)
     end
     if file:match('%.dll$') or file:match('%.a$') then
-        if file:find(target, 1, true) then -- not common
-            if not isValidBinary(file) then
+        if file:find(target, 1, true) then -- cross-compiled
+            if not isValidBinary(target, file) then
                 log('File %s (%s): not recognized library',
-                    file, pkg)
+                    file, item)
             end
         end
     end
 end
 
 -- builds package, returns list of new files
-local function buildPackage(pkg, pkg2deps, file2pkg)
-    local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
-    os.execute(cmd:format(tool 'make', pkg, target))
+local function buildItem(item, item2deps, file2item)
+    local cmd = '%s %s --jobs=1'
+    os.execute(cmd:format(tool 'make', item))
     gitAdd()
     local new_files, changed_files = gitStatus()
-    gitCommit(("Build %s for target %s"):format(pkg, target))
+    gitCommit(("Build %s"):format(item))
     for _, file in ipairs(new_files) do
-        checkFile(file, pkg)
-        file2pkg[file] = {pkg=pkg, target=target}
+        checkFile(file, item)
+        file2item[file] = item
     end
     for _, file in ipairs(changed_files) do
-        checkFile(file, pkg)
+        checkFile(file, item)
         -- add a dependency on a package created this file
-        local creator_pkg = assert(file2pkg[file]).pkg
-        local creator_target = assert(file2pkg[file]).target
-        local level = ''
-        if target == creator_target then
-            if not isInArray(creator_pkg, pkg2deps[pkg]) then
-                table.insert(pkg2deps[pkg], creator_pkg)
-            end
-        else
-            level = 'error'
+        local creator_item = assert(file2item[file])
+        if not isInArray(creator_item, item2deps[item]) then
+            table.insert(item2deps[item], creator_item)
         end
-        log('Package %s changes %s, created by %s (%s) %s',
-            pkg, file, creator_pkg, creator_target, level)
+        log('Item %s changes %s, created by %s',
+            item, file, creator_item)
     end
     return new_files
 end
 
-local function nameToDebian(pkg, t)
-    local name = 'mxe-%s-%s'
-    name = name:format(t or target, pkg)
-    name = name:gsub('_', '-')
-    return name
+local function nameToDebian(item)
+    item = item:gsub('[~_]', '-')
+    local name = 'mxe-%s'
+    return name:format(item)
 end
 
 local function protectVersion(ver)
@@ -381,7 +361,8 @@ local function protectVersion(ver)
     end
 end
 
-local function listFile(pkg)
+local function listFile(item)
+    local target, pkg = parseItem(item)
     return ('%s-%s.list'):format(target, pkg)
 end
 
@@ -401,8 +382,9 @@ Description: MXE package %s for %s
  This package contains the files for MXE package %s.
 ]]
 
-local function makeDeb(pkg, list_path, deps, ver, add_common)
-    local deb_pkg = nameToDebian(pkg)
+local function makeDeb(item, list_path, deps, ver)
+    local target, pkg = parseItem(item)
+    local deb_pkg = nameToDebian(item)
     local dirname = ('%s_%s'):format(deb_pkg,
         protectVersion(ver))
     -- make .tar.xz file
@@ -423,9 +405,6 @@ local function makeDeb(pkg, list_path, deps, ver, add_common)
     for _, dep in ipairs(deps) do
         table.insert(deb_deps, nameToDebian(dep))
     end
-    if add_common then
-        table.insert(deb_deps, nameToDebian(pkg, 'common'))
-    end
     local deb_deps_str = table.concat(deb_deps, ', ')
     -- make DEBIAN/control file
     os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
@@ -443,14 +422,6 @@ local function makeDeb(pkg, list_path, deps, ver, add_common)
     os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
 end
 
-local function readFileList(list_file)
-    local list = {}
-    for installed_file in io.lines(list_file) do
-        table.insert(list, installed_file)
-    end
-    return list
-end
-
 local function saveFileList(list_file, list)
     local file = io.open(list_file, 'w')
     for _, installed_file in ipairs(list) do
@@ -459,7 +430,8 @@ local function saveFileList(list_file, list)
     file:close()
 end
 
-local function isBuilt(pkg, files)
+local function isBuilt(item, files)
+    local target, pkg = parseItem(item)
     local INSTALLED = 'usr/%s/installed/%s'
     local installed = INSTALLED:format(target, pkg)
     for _, file in ipairs(files) do
@@ -470,94 +442,46 @@ local function isBuilt(pkg, files)
     return false
 end
 
--- build all packages, save filelist to file #pkg.list
-local function buildPackages(pkgs, pkg2deps, file2pkg)
+-- build all packages, save filelist to list file
+local function buildPackages(items, item2deps)
     local broken = {}
     local unbroken = {}
-    local function brokenDep(pkg)
-        for _, dep in ipairs(pkg2deps[pkg]) do
+    local file2item = {}
+    local function brokenDep(item)
+        for _, dep in ipairs(item2deps[item]) do
             if broken[dep] then
                 return dep
             end
         end
         return false
     end
-    for _, pkg in ipairs(pkgs) do
-        if not brokenDep(pkg) then
-            local files = buildPackage(pkg, pkg2deps, file2pkg)
-            if isBuilt(pkg, files) then
-                saveFileList(listFile(pkg), files)
-                table.insert(unbroken, pkg)
+    for _, item in ipairs(items) do
+        if not brokenDep(item) then
+            local files = buildItem(item, item2deps, file2item)
+            if isBuilt(item, files) then
+                saveFileList(listFile(item), files)
+                table.insert(unbroken, item)
             else
                 -- broken package
-                broken[pkg] = true
-                log('The package is broken: %s', pkg)
+                broken[item] = true
+                log('Item is broken: %s', item)
             end
         else
-            broken[pkg] = true
-            log('Package %s depends on broken %s',
-                pkg, brokenDep(pkg))
+            broken[item] = true
+            log('Item %s depends on broken item %s',
+                item, brokenDep(item))
         end
     end
     return unbroken
 end
 
-local function filterFiles(pkg, filter_common)
-    local list = readFileList(listFile(pkg))
-    local list2 = {}
-    local common_list = COMMON_FILES[pkg]
-    for _, installed_file in ipairs(list) do
-        local listed = isListed(installed_file, common_list)
-        if listed == filter_common then
-            table.insert(list2, installed_file)
-        end
+local function makeDebs(items, item2deps, item2ver)
+    for _, item in ipairs(items) do
+        local deps = assert(item2deps[item], item)
+        local ver = assert(item2ver[item], item)
+        local list_path = listFile(item)
+        makeDeb(item, list_path, deps, ver)
     end
-    return list2
-end
-
-local function excludeCommon(pkg)
-    local noncommon_files = filterFiles(pkg, false)
-    saveFileList(listFile(pkg), noncommon_files)
-end
-
-local function makeCommonDeb(pkg, ver)
-    local common_files = filterFiles(pkg, true)
-    local list_path = ('common-%s.list'):format(pkg)
-    saveFileList(list_path, common_files)
-    local orig_target = target
-    target = 'common'
-    makeDeb(pkg, list_path, {}, ver)
-    target = orig_target
-end
-
-local function makeDebs(pkgs, pkg2deps, pkg2ver)
-    for _, pkg in ipairs(pkgs) do
-        local deps = assert(pkg2deps[pkg], pkg)
-        local ver = assert(pkg2ver[pkg], pkg)
-        local list_path = listFile(pkg)
-        local add_common = false
-        if COMMON_FILES[pkg] then
-            if target == ARCH_FOR_COMMON then
-                makeCommonDeb(pkg, ver)
-            end
-            add_common = true
-            excludeCommon(pkg)
-        end
-        makeDeb(pkg, list_path, deps, ver, add_common)
-    end
-end
-
-local function buildForTarget(mxe_target, file2pkg)
-    target = mxe_target
-    local pkgs, pkg2deps, pkg2ver = getPkgs()
-    local build_list = sortForBuild(pkgs, pkg2deps)
-    if max_packages then
-        while #build_list > max_packages do
-            table.remove(build_list)
-        end
-    end
-    local unbroken = buildPackages(build_list, pkg2deps, file2pkg)
-    makeDebs(unbroken, pkg2deps, pkg2ver)
 end
 
 local function getMxeVersion()
@@ -626,10 +550,11 @@ assert(execute(("%s check-requirements"):format(tool 'make')))
 while not execute(('%s download -j 6 -k'):format(tool 'make')) do
 end
 gitInit()
-local file2pkg = {}
-for _, t in ipairs(TARGETS) do
-    buildForTarget(t, file2pkg)
-end
+local items, item2deps, item2ver = getItems()
+local build_list = sortForBuild(items, item2deps)
+build_list = sliceArray(build_list, max_items)
+local unbroken = buildPackages(build_list, item2deps)
+makeDebs(unbroken, item2deps, item2ver)
 if not no_debs then
     makeMxeRequirementsDeb('wheezy')
     makeMxeRequirementsDeb('jessie')
