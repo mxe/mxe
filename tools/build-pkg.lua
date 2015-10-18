@@ -154,6 +154,10 @@ local function fileExists(name)
     end
 end
 
+local function isCross(target)
+    return not isInString('unknown', target)
+end
+
 -- return target and package from item name
 local function parseItem(item)
     return item:match("([^~]+)~([^~]+)")
@@ -316,7 +320,8 @@ local function checkFile(file, item)
         log('File %s (%s): DLL in /lib/', file, item)
     end
     if file:match('%.dll$') or file:match('%.a$') then
-        if isInString(target, file) then -- cross-compiled
+        if isInString(target, file) and isCross(target) then
+            -- cross-compiled
             if not isValidBinary(target, file) then
                 log('File %s (%s): not recognized library',
                     file, item)
