@@ -332,8 +332,9 @@ end
 
 -- builds package, returns list of new files
 local function buildItem(item, item2deps, file2item)
-    local cmd = '%s %s --jobs=1'
-    os.execute(cmd:format(tool 'make', item))
+    local target, pkg = parseItem(item)
+    local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
+    os.execute(cmd:format(tool 'make', pkg, target))
     gitAdd()
     local new_files, changed_files = gitStatus()
     gitCommit(("Build %s"):format(item))
