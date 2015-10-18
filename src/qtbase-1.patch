@@ -123,3 +123,36 @@ index 3cfb614..8b7063f 100644
 -- 
 2.1.4
 
+
+From 86c642254077b561ae7442c06cd8d1a3f87669f4 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 18 Oct 2015 13:43:29 +0200
+Subject: [PATCH] configure: fix log corruption with many zero bytes
+
+If tty=/dev/stderr, then "tee $tty" breaks log on some
+systems. Workaround is to use tty=some-file and cat that
+file afterwords. The file has the following variables:
+
+DEFAULT_INCDIRS=...
+DEFAULT_LIBDIRS=...
+
+see https://github.com/mxe/mxe/issues/938
+
+diff --git a/configure b/configure
+index eb432b5..0bd511e 100755
+--- a/configure
++++ b/configure
+@@ -3559,8 +3559,9 @@ END {
+ }'
+ 
+ unset tty
+-[ "$OPT_VERBOSE" = "yes" ] && tty=/dev/stderr
++[ "$OPT_VERBOSE" = "yes" ] && tty=awkoutput.tmp
+ eval "`LC_ALL=C $TEST_COMPILER $SYSROOT_FLAG $TEST_COMPILER_CXXFLAGS -xc++ -E -v - < /dev/null 2>&1 > /dev/null | $AWK "$awkprog" | tee $tty`"
++[ "$OPT_VERBOSE" = "yes" ] && cat awkoutput.tmp && rm awkoutput.tmp
+ unset tty
+ 
+ #setup the build parts
+-- 
+1.7.10.4
+
