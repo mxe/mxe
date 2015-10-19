@@ -436,6 +436,9 @@ local function makeDeb(item, list_path, deps, ver)
     control:write(CONTROL:format(deb_pkg, protectVersion(ver),
         ARCH, deb_deps_str, pkg, target, pkg))
     control:close()
+    -- keep a copy of control file
+    local cmd = 'cp %s %s.deb-control'
+    os.execute(cmd:format(control_fname, dirname))
     if not no_debs then
         -- make .deb file
         local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
