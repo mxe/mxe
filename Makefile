@@ -554,9 +554,12 @@ print-deps-for-build-pkg:
 	        $(and $($(TARGET)_DEPS),$(addprefix $($(TARGET)_DEPS)~,$($($(TARGET)_DEPS)_PKGS))))))
 	        @echo -n
 
+BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
+
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html
+	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html \
+	       $(addprefix $(TOP_DIR)/, $(BUILD_PKG_TMP_FILES))
 
 .PHONY: clean-pkg
 clean-pkg:
