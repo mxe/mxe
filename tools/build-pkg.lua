@@ -158,8 +158,9 @@ local function fileExists(name)
     end
 end
 
+local NATIVE_TARGET = trim(shell("ext/config.guess"))
 local function isCross(target)
-    return not isInString('unknown', target)
+    return target ~= NATIVE_TARGET
 end
 
 -- return target and package from item name
