@@ -3,8 +3,8 @@
 
 PKG             := liblaxjson
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.3
-$(PKG)_CHECKSUM := 9d47f2d23cf4a8992e8ef015136c1ff5c540afaa912ed75ee830dea17736c5f2
+$(PKG)_VERSION  := 1.0.5
+$(PKG)_CHECKSUM := ffc495b5837e703b13af3f5a5790365dc3a6794f12f0fa93fb8593b162b0b762
 $(PKG)_SUBDIR   := liblaxjson-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/andrewrk/liblaxjson/archive/$($(PKG)_VERSION).tar.gz
@@ -17,18 +17,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
+    mkdir '$(1).build'
+    cd '$(1).build' && '$(TARGET)-cmake' '$(1)'
 
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)'
+    '$(TARGET)-cmake' --build '$(1).build' -- -j '$(JOBS)'
 
-    $(INSTALL) -m644 '$(1)/include/laxjson.h' '$(PREFIX)/$(TARGET)/include'
-    $(if $(BUILD_STATIC),\
-         $(INSTALL) -m644 '$(1)/build/liblaxjson.a' '$(PREFIX)/$(TARGET)/lib'\
-    $(else),\
-         $(INSTALL) -m755 '$(1)/build/liblaxjson.dll'   '$(PREFIX)/$(TARGET)/bin';\
-         $(INSTALL) -m755 '$(1)/build/liblaxjson.dll.a' '$(PREFIX)/$(TARGET)/lib')
+    '$(TARGET)-cmake' \
+        -DCMAKE_INSTALL_COMPONENT=$(if $(BUILD_STATIC),static,shared)-lib \
+        -P '$(1).build/cmake_install.cmake'
+    '$(TARGET)-cmake' \
+        -DCMAKE_INSTALL_COMPONENT=header \
+        -P '$(1).build/cmake_install.cmake'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic -std=c99 \
