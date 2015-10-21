@@ -3,18 +3,16 @@
 
 PKG             := box2d
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3.0
-$(PKG)_CHECKSUM := 2ebdb30863b7f5478e99b4425af210f8c32ef62faf1e0d2414c653072fff403d
-$(PKG)_SUBDIR   := Box2D_v$($(PKG)_VERSION)/Box2D
-$(PKG)_FILE     := Box2D_v$($(PKG)_VERSION).7z
-$(PKG)_URL      := https://box2d.googlecode.com/files/$($(PKG)_FILE)
+$(PKG)_VERSION  := 2.3.1
+$(PKG)_CHECKSUM := 2c61505f03ef403b54cf0e510d83d6f567e37882ad79b5b2d486acbc7d5eedea
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)/Box2D
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/erincatto/Box2D/archive/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://code.google.com/b/box2d/downloads/list?sort=-uploaded' | \
-    $(SED) -n 's,.*Box2D_v\([0-9][^<]*\)\.7z.*,\1,p' | \
-    grep -v 'rc' | \
-    head -1
+    $(call MXE_GET_GITHUB_TAGS, erincatto/Box2D) | \
+    $(SED) 's,^v,,g'
 endef
 
 define $(PKG)_BUILD
@@ -23,10 +21,8 @@ define $(PKG)_BUILD
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DBOX2D_INSTALL=ON \
         -DBOX2D_BUILD_EXAMPLES=OFF \
-        $(if $(BUILD_SHARED), \
-            -DBOX2D_BUILD_SHARED=TRUE \
-            -DBOX2D_BUILD_STATIC=FALSE, \
-            -DBOX2D_BUILD_SHARED=FALSE) \
+        -DBOX2D_BUILD_STATIC=$(CMAKE_STATIC_BOOL) \
+        -DBOX2D_BUILD_SHARED=$(CMAKE_SHARED_BOOL) \
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef
