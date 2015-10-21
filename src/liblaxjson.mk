@@ -21,7 +21,14 @@ define $(PKG)_BUILD
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
 
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/build' -j '$(JOBS)'
+
+    $(INSTALL) -m644 '$(1)/include/laxjson.h' '$(PREFIX)/$(TARGET)/include'
+    $(if $(BUILD_STATIC),\
+         $(INSTALL) -m644 '$(1)/build/liblaxjson.a' '$(PREFIX)/$(TARGET)/lib'\
+    $(else),\
+         $(INSTALL) -m755 '$(1)/build/liblaxjson.dll'   '$(PREFIX)/$(TARGET)/bin';\
+         $(INSTALL) -m755 '$(1)/build/liblaxjson.dll.a' '$(PREFIX)/$(TARGET)/lib')
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic -std=c99 \
