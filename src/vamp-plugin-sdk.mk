@@ -22,8 +22,7 @@ define $(PKG)_BUILD
         LD='$(TARGET)-ld' \
         AR='$(TARGET)-ar' \
         RANLIB='$(TARGET)-ranlib' \
-        DYNAMIC_LDFLAGS='-static-libgcc -shared -Wl,-Bsymbolic' \
-        sdk$(if $(BUILD_STATIC),static)
+        sdkstatic
 
     for f in vamp vamp-sdk vamp-hostsdk; do \
         $(SED) 's,%PREFIX%,$(PREFIX)/$(TARGET),' "$(1)/pkgconfig/$$f.pc.in" \
@@ -31,5 +30,11 @@ define $(PKG)_BUILD
     done
 
     cp -rv '$(1)/vamp' '$(1)/vamp-hostsdk' '$(1)/vamp-sdk' '$(PREFIX)/$(TARGET)/include/'
-    cp -rv '$(1)/'libvamp-*.$(LIB_SUFFIX) '$(PREFIX)/$(TARGET)/lib'
+
+    $(if $(BUILD_STATIC), \
+        $(INSTALL) -m644 '$(1)/'libvamp-*.a '$(PREFIX)/$(TARGET)/lib/' \
+    $(else), \
+        $(foreach LIB, libvamp-hostsdk.a libvamp-sdk.a, \
+            $(MAKE_SHARED_FROM_STATIC) '$(1)/$(LIB)' --ld '$(TARGET)-g++' LIBS=-lz;) \
+    )
 endef
