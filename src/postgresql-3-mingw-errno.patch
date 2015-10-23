@@ -1,0 +1,152 @@
+--- postgresql-9.2.4/src/interfaces/libpq/fe-connect.c.orig	2013-08-15 09:08:59.850609595 -0500
++++ postgresql-9.2.4/src/interfaces/libpq/fe-connect.c	2013-08-15 09:42:59.001463906 -0500
+@@ -1778,10 +1778,16 @@
+ 					if (connect(conn->sock, addr_cur->ai_addr,
+ 								addr_cur->ai_addrlen) < 0)
+ 					{
++#ifndef WIN32
+ 						if (SOCK_ERRNO == EINPROGRESS ||
+ 							SOCK_ERRNO == EWOULDBLOCK ||
+ 							SOCK_ERRNO == EINTR ||
++#else
++						if (SOCK_ERRNO == WSAEINPROGRESS ||
++							SOCK_ERRNO == WSAEWOULDBLOCK ||
++							SOCK_ERRNO == WSAEINTR ||
+ 							SOCK_ERRNO == 0)
++#endif
+ 						{
+ 							/*
+ 							 * This is fine - we're in non-blocking mode, and
+--- postgresql-9.2.4/src/interfaces/libpq/fe-misc.c.orig	2013-04-01 13:20:36.000000000 -0500
++++ postgresql-9.2.4/src/interfaces/libpq/fe-misc.c	2013-08-15 10:08:03.190928760 -0500
+@@ -656,7 +656,11 @@
+ 						  conn->inBufSize - conn->inEnd);
+ 	if (nread < 0)
+ 	{
++#ifndef WIN32
+ 		if (SOCK_ERRNO == EINTR)
++#else
++		if (SOCK_ERRNO == WSAEINTR)
++#endif
+ 			goto retry3;
+ 		/* Some systems return EAGAIN/EWOULDBLOCK for no data */
+ #ifdef EAGAIN
+@@ -664,12 +668,20 @@
+ 			return someread;
+ #endif
+ #if defined(EWOULDBLOCK) && (!defined(EAGAIN) || (EWOULDBLOCK != EAGAIN))
++#ifndef WIN32
+ 		if (SOCK_ERRNO == EWOULDBLOCK)
++#else
++		if (SOCK_ERRNO == WSAEWOULDBLOCK)
++#endif
+ 			return someread;
+ #endif
+ 		/* We might get ECONNRESET here if using TCP and backend died */
+ #ifdef ECONNRESET
++#ifndef WIN32
+ 		if (SOCK_ERRNO == ECONNRESET)
++#else
++		if (SOCK_ERRNO == WSAECONNRESET)
++#endif
+ 			goto definitelyFailed;
+ #endif
+ 		/* pqsecure_read set the error message for us */
+@@ -749,7 +761,11 @@
+ 						  conn->inBufSize - conn->inEnd);
+ 	if (nread < 0)
+ 	{
++#ifndef WIN32
+ 		if (SOCK_ERRNO == EINTR)
++#else
++		if (SOCK_ERRNO == WSAEINTR)
++#endif
+ 			goto retry4;
+ 		/* Some systems return EAGAIN/EWOULDBLOCK for no data */
+ #ifdef EAGAIN
+@@ -757,12 +773,20 @@
+ 			return 0;
+ #endif
+ #if defined(EWOULDBLOCK) && (!defined(EAGAIN) || (EWOULDBLOCK != EAGAIN))
++#ifndef WIN32
+ 		if (SOCK_ERRNO == EWOULDBLOCK)
++#else
++		if (SOCK_ERRNO == WSAEWOULDBLOCK)
++#endif
+ 			return 0;
+ #endif
+ 		/* We might get ECONNRESET here if using TCP and backend died */
+ #ifdef ECONNRESET
++#ifndef WIN32
+ 		if (SOCK_ERRNO == ECONNRESET)
++#else
++		if (SOCK_ERRNO == WSAECONNRESET)
++#endif
+ 			goto definitelyFailed;
+ #endif
+ 		/* pqsecure_read set the error message for us */
+@@ -838,10 +862,18 @@
+ 					break;
+ #endif
+ #if defined(EWOULDBLOCK) && (!defined(EAGAIN) || (EWOULDBLOCK != EAGAIN))
++#ifndef WIN32
+ 				case EWOULDBLOCK:
++#else
++				case WSAEWOULDBLOCK:
++#endif
+ 					break;
+ #endif
++#ifndef WIN32
+ 				case EINTR:
++#else
++				case WSAEINTR:
++#endif
+ 					continue;
+ 
+ 				default:
+--- postgresql-9.2.4/src/interfaces/libpq/fe-secure.c.orig	2013-08-15 10:10:44.039355056 -0500
++++ postgresql-9.2.4/src/interfaces/libpq/fe-secure.c	2013-08-15 10:22:57.767650717 -0500
+@@ -433,12 +433,20 @@
+ #if defined(EWOULDBLOCK) && (!defined(EAGAIN) || (EWOULDBLOCK != EAGAIN))
+ 				case EWOULDBLOCK:
+ #endif
++#ifndef WIN32
+ 				case EINTR:
++#else
++				case WSAEWOULDBLOCK:
++				case WSAEINTR:
++#endif
+ 					/* no error message, caller is expected to retry */
+ 					break;
+ 
+ #ifdef ECONNRESET
+ 				case ECONNRESET:
++#ifdef WIN32
++				case WSAECONNRESET:
++#endif
+ 					printfPQExpBuffer(&conn->errorMessage,
+ 									  libpq_gettext(
+ 								"server closed the connection unexpectedly\n"
+@@ -617,7 +625,12 @@
+ #if defined(EWOULDBLOCK) && (!defined(EAGAIN) || (EWOULDBLOCK != EAGAIN))
+ 				case EWOULDBLOCK:
+ #endif
++#ifndef WIN32
+ 				case EINTR:
++#else
++				case WSAEWOULDBLOCK:
++				case WSAEINTR:
++#endif
+ 					/* no error message, caller is expected to retry */
+ 					break;
+ 
+@@ -629,6 +642,9 @@
+ #ifdef ECONNRESET
+ 				case ECONNRESET:
+ #endif
++#ifdef WIN32
++				case WSAECONNRESET:
++#endif
+ 					printfPQExpBuffer(&conn->errorMessage,
+ 									  libpq_gettext(
+ 								"server closed the connection unexpectedly\n"
