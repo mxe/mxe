@@ -1,7 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := box2d
+PKG             := Box2D
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.1
 $(PKG)_CHECKSUM := 2c61505f03ef403b54cf0e510d83d6f567e37882ad79b5b2d486acbc7d5eedea
