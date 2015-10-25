@@ -35,8 +35,6 @@ How to remove them: http://stackoverflow.com/a/4262545
 local max_items = tonumber(os.getenv('MXE_MAX_ITEMS'))
 local no_debs = os.getenv('MXE_NO_DEBS')
 
-local ARCH = 'amd64'
-
 local MXE_DIR = os.getenv('MXE_DIR') or '/usr/lib/mxe'
 
 local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
@@ -162,6 +160,9 @@ local NATIVE_TARGET = trim(shell("ext/config.guess"))
 local function isCross(target)
     return target ~= NATIVE_TARGET
 end
+
+local cmd = "dpkg-architecture -qDEB_BUILD_ARCH 2> /dev/null"
+local ARCH = trim(shell(cmd))
 
 -- return target and package from item name
 local function parseItem(item)
