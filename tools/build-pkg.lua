@@ -573,7 +573,9 @@ end
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
 assert(execute(("%s check-requirements"):format(tool 'make')))
-while not execute(('%s download -j 6 -k'):format(tool 'make')) do
+if not max_items then
+    local cmd = ('%s download -j 6 -k'):format(tool 'make')
+    while not execute(cmd) do end
 end
 gitInit()
 local items, item2deps, item2ver = getItems()
