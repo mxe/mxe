@@ -397,13 +397,28 @@ Architecture: %s
 Depends: %s
 Maintainer: Boris Nagaev <bnagaev@gmail.com>
 Homepage: http://mxe.cc
-Description: MXE package %s for %s
+Description: %s
  MXE (M cross environment) is a Makefile that compiles
  a cross compiler and cross compiles many free libraries
  such as SDL and Qt for various target platforms (MinGW).
  .
- This package contains the files for MXE package %s.
+ %s
 ]]
+
+local function debianControl(options)
+    local deb_deps_str = table.concat(options.deps, ', ')
+    return CONTROL:format(
+        options.package,
+        options.version,
+        options.arch,
+        deb_deps_str,
+        options.description1,
+        options.description2
+    )
+end
+
+local D1 = "MXE package %s for %s"
+local D2 = "This package contains the files for MXE package %s"
 
 local function makeDeb(item, list_path, deps, ver)
     local target, pkg = parseItem(item)
@@ -428,13 +443,18 @@ local function makeDeb(item, list_path, deps, ver)
     for _, dep in ipairs(deps) do
         table.insert(deb_deps, nameToDebian(dep))
     end
-    local deb_deps_str = table.concat(deb_deps, ', ')
     -- make DEBIAN/control file
     os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
     local control_fname = dirname .. '/DEBIAN/control'
     local control = io.open(control_fname, 'w')
-    control:write(CONTROL:format(deb_pkg, protectVersion(ver),
-        ARCH, deb_deps_str, pkg, target, pkg))
+    control:write(debianControl {
+        package = deb_pkg,
+        version = protectVersion(ver),
+        arch = ARCH,
+        deps = deb_deps,
+        description1 = D1:format(pkg, target),
+        description2 = D2:format(pkg),
+    })
     control:close()
     -- keep a copy of control file
     local cmd = 'cp %s %s.deb-control'
@@ -517,22 +537,9 @@ local function getMxeVersion()
     return text:match('Release ([^<]+)')
 end
 
-local MXE_REQUIREMENTS_CONTROL = [[Package: %s
-Version: %s
-Section: devel
-Priority: optional
-Architecture: %s
-Depends: %s
-Maintainer: Boris Nagaev <bnagaev@gmail.com>
-Homepage: http://mxe.cc
-Description: MXE requirements package
- MXE (M cross environment) is a Makefile that compiles
- a cross compiler and cross compiles many free libraries
- such as SDL and Qt for various target platforms (MinGW).
- .
- This package depends on all Debian dependencies of MXE.
- Other MXE packages depend on this package.
-]]
+local MXE_REQUIREMENTS_DESCRIPTION2 =
+[[This package depends on all Debian dependencies of MXE.
+ Other MXE packages depend on this package.]]
 
 local function makeMxeRequirementsDeb(release)
     local name = 'mxe-requirements'
@@ -552,7 +559,6 @@ local function makeMxeRequirementsDeb(release)
         -- Jessie+
         table.insert(deps, 'libtool-bin')
     end
-    local deps_str = table.concat(deps, ', ')
     -- directory
     local DIRNAME = '%s/%s_%s_%s'
     local dirname = DIRNAME:format(release, name, ver, ARCH)
@@ -560,8 +566,14 @@ local function makeMxeRequirementsDeb(release)
     os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
     local control_fname = dirname .. '/DEBIAN/control'
     local control = io.open(control_fname, 'w')
-    control:write(MXE_REQUIREMENTS_CONTROL:format(name,
-        ver, ARCH, deps_str))
+    control:write(debianControl {
+        package = name,
+        version = ver,
+        arch = ARCH,
+        deps = deps,
+        description1 = "MXE requirements package",
+        description2 = MXE_REQUIREMENTS_DESCRIPTION2,
+    })
     control:close()
     -- make .deb file
     local cmd = 'dpkg-deb -b %s'
