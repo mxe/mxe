@@ -253,7 +253,8 @@ LIST_NMIN   = $(shell echo '$(strip $(1))' | tr ' ' '\n' | sort -n | head -1)
 NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
 JOBS_AUTO  := $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 JOBS       := $(strip $(if $(findstring undefined,$(origin JOBS)),\
-                   $(info [using autodetected $(JOBS_AUTO) job(s)]) \
+                   $(if $(and $(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PKGS))), \
+                       $(info [using autodetected $(JOBS_AUTO) job(s)])) \
                    $(JOBS_AUTO)\
               ,\
                    $(JOBS)))
@@ -327,6 +328,21 @@ BUILD_PKGS := $(call set_create, \
             $(SED) -n 's,.*src/\(.*\)\.mk,\1,p'), \
         $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD))), $(PKG))))
 
+# create target sets for PKG_TARGET_RULE loop to avoid creating empty rules
+# and having to explicitly disable $(BUILD) for most packages
+CROSS_TARGETS := $(filter-out $(BUILD),$(MXE_TARGETS))
+$(foreach PKG,$(PKGS), \
+    $(foreach TARGET,$(or $(sort $($(PKG)_TARGETS)),$(CROSS_TARGETS)), \
+        $(eval $(TARGET)_PKGS += $(PKG)) \
+        $(eval FILTERED_PKGS  += $(PKG))))
+
+# cross targets depend on native target
+$(foreach TARGET,$(CROSS_TARGETS),\
+    $(eval $(TARGET)_DEPS = $(BUILD)))
+
+# always add $(BUILD) to our targets
+override MXE_TARGETS := $(CROSS_TARGETS) $(BUILD)
+
 # set column widths for build status messages
 PKG_COL_WIDTH    := $(call plus,2,$(call LIST_NMAX, $(sort $(call map, strlen, $(PKGS)))))
 MAX_TARGET_WIDTH := $(call LIST_NMAX, $(sort $(call map, strlen, $(MXE_TARGETS))))
@@ -394,6 +410,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(PATCHES) \
                           $(wildcard $(TOP_DIR)/src/$(1)-test*) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
+                          $(and $($(3)_DEPS),$(addprefix $(PREFIX)/$($(3)_DEPS)/installed/,$($($(3)_DEPS)_PKGS))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
                           $(if $(value $(call LOOKUP_PKG_RULE,$(1),URL,$(3))),download-only-$(1)) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(if $(call set_is_not_member,$(1),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS)))
@@ -456,7 +473,7 @@ build-only-$(1)_$(3):
 endef
 $(foreach TARGET,$(MXE_TARGETS), \
     $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
-    $(foreach PKG,$(PKGS), \
+    $(foreach PKG,$($(TARGET)_PKGS), \
         $(eval $(call PKG_TARGET_RULE,$(PKG),$(call TMP_DIR,$(PKG)-$(TARGET)),$(TARGET)))))
 
 # convenience set-like functions for unique lists
@@ -495,7 +512,7 @@ RECURSIVELY_EXCLUDED_PKGS = \
         $(call WALK_DOWNSTREAM,$(EXCLUDE_PKGS)))
 
 .PHONY: all-filtered
-all-filtered: $(filter-out $(call RECURSIVELY_EXCLUDED_PKGS),$(PKGS))
+all-filtered: $(filter-out $(call RECURSIVELY_EXCLUDED_PKGS),$(FILTERED_PKGS))
 
 # print a list of upstream dependencies and downstream dependents
 show-deps-%:
@@ -525,9 +542,24 @@ show-upstream-deps-%:
 	    @echo -n,\
 	    $(error Package $* not found in index.html))
 
+# print first level pkg deps for use in build-pkg.lua
+.PHONY: print-deps-for-build-pkg
+print-deps-for-build-pkg:
+	$(foreach TARGET,$(MXE_TARGETS), \
+	    $(foreach PKG,$(sort $($(TARGET)_PKGS)), \
+	        $(info for-build-pkg $(TARGET)~$(PKG) \
+	        $(subst $(space),-,$($(PKG)_VERSION)) \
+	        $(addprefix $(TARGET)~,$(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET)))) \
+	        $(addprefix $(TARGET)~,$(if $(call set_is_not_member,$(PKG),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS))) \
+	        $(and $($(TARGET)_DEPS),$(addprefix $($(TARGET)_DEPS)~,$($($(TARGET)_DEPS)_PKGS))))))
+	        @echo -n
+
+BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
+
 .PHONY: clean
 clean:
-	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html
+	rm -rf $(call TMP_DIR,*) $(PREFIX) build-matrix.html \
+	       $(addprefix $(TOP_DIR)/, $(BUILD_PKG_TMP_FILES))
 
 .PHONY: clean-pkg
 clean-pkg:

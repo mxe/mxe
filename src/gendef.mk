@@ -18,7 +18,7 @@ define $(PKG)_BUILD
     cd '$(1)/mingw-w64-tools/gendef' && ./configure \
         --host='$(BUILD)' \
         --build='$(BUILD)' \
-        --prefix='$(PREFIX)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
         --target='$(TARGET)'
     $(MAKE) -C '$(1)/mingw-w64-tools/gendef' -j '$(JOBS)' install
 endef

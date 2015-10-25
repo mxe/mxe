@@ -9,7 +9,10 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)a.tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc
+
+$(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.gmplib.org/' | \
@@ -41,8 +44,7 @@ endef
 define $(PKG)_BUILD_$(BUILD)
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1).build' -j '$(JOBS)' man1_MANS=
     $(MAKE) -C '$(1).build' -j 1 install man1_MANS=
 endef
