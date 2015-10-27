@@ -35,6 +35,8 @@ How to remove them: http://stackoverflow.com/a/4262545
 local max_items = tonumber(os.getenv('MXE_MAX_ITEMS'))
 local no_debs = os.getenv('MXE_NO_DEBS')
 
+local TODAY = os.date("%Y%m%d")
+
 local MXE_DIR = os.getenv('MXE_DIR') or '/usr/lib/mxe'
 
 local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
@@ -409,9 +411,10 @@ Description: %s
 
 local function debianControl(options)
     local deb_deps_str = table.concat(options.deps, ', ')
+    local version = options.version .. '-' .. TODAY
     return CONTROL:format(
         options.package,
-        options.version,
+        version,
         options.arch,
         deb_deps_str,
         options.description1,
