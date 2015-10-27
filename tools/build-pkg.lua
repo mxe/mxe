@@ -541,7 +541,7 @@ local MXE_REQUIREMENTS_DESCRIPTION2 =
 [[This package depends on all Debian dependencies of MXE.
  Other MXE packages depend on this package.]]
 
-local function makeMxeRequirementsDeb(release)
+local function makeMxeRequirementsPackage(release)
     os.execute(('mkdir -p %s'):format(release))
     local name = 'mxe-requirements'
     local ver = getMxeVersion() .. release
@@ -581,6 +581,6 @@ build_list = sliceArray(build_list, max_items)
 local unbroken, item2files = buildPackages(build_list, item2deps)
 makeDebs(unbroken, item2deps, item2ver, item2files)
 if not no_debs then
-    makeMxeRequirementsDeb('wheezy')
-    makeMxeRequirementsDeb('jessie')
+    makeMxeRequirementsPackage('wheezy')
+    makeMxeRequirementsPackage('jessie')
 end
