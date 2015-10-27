@@ -76,6 +76,9 @@ MXE_CONFIGURE_OPTS = \
         --enable-static --disable-shared , \
         --disable-static --enable-shared )
 
+MXE_GCC_THREADS = \
+    $(if $(findstring posix,$(TARGET)),posix,win32)
+
 # Append these to the "make" and "make install" steps of autotools packages
 # in order to neither build nor install unwanted binaries, manpages,
 # infopages and API documentation (reduces build time and disk space usage).
@@ -360,7 +363,7 @@ define TARGET_RULE
 	$(if $(findstring i686-pc-mingw32,$(1)),
 	    $(error Deprecated target specified: "$(1)". Please use \
 	            i686-w64-mingw32.[$(subst $(space),|,$(MXE_LIB_TYPES))] instead))
-	$(if $(filter $(1),$(MXE_TARGET_LIST) $(BUILD) $(MXE_TRIPLETS)),,
+	$(if $(filter $(addsuffix %,$(MXE_TARGET_LIST) $(BUILD) $(MXE_TRIPLETS)),$(1)),,
 	    $(error Invalid target specified: "$(1)"))
 	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),
 	    @echo

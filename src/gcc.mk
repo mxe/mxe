@@ -38,7 +38,7 @@ define $(PKG)_CONFIGURE
         --disable-multilib \
         --without-x \
         --disable-win32-registry \
-        --enable-threads=win32 \
+        --enable-threads=$(MXE_GCC_THREADS) \
         --enable-libgomp \
         --with-gmp='$(PREFIX)/$(BUILD)' \
         --with-isl='$(PREFIX)/$(BUILD)' \
