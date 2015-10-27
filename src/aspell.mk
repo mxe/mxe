@@ -20,6 +20,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-win32-relocatable \
+        --disable-curses \
         --disable-nls
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
