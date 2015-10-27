@@ -468,7 +468,7 @@ local function makeDeb(item, files, deps, ver)
     local deb_pkg = nameToDebian(item)
     local d1 = D1:format(pkg, target)
     local d2 = D2:format(pkg)
-    local deb_deps = {'mxe-requirements'}
+    local deb_deps = {'mxe-requirements', 'mxe-source'}
     for _, dep in ipairs(deps) do
         table.insert(deb_deps, nameToDebian(dep))
     end
@@ -567,6 +567,35 @@ local function makeMxeRequirementsPackage(release)
     makePackage(name, files, deps, ver, d1, d2, dst)
 end
 
+local MXE_SOURCE_DESCRIPTION2 =
+[[This package contains MXE source files.
+ Other MXE packages depend on this package.]]
+
+local function makeMxeSourcePackage()
+    local name = 'mxe-source'
+    local ver = getMxeVersion()
+    -- dependencies
+    local deps = {}
+    local files = {
+        'CNAME',
+        'LICENSE.md',
+        'Makefile',
+        'README.md',
+        'assets',
+        'doc',
+        'ext',
+        'index.html',
+        'settings.mk',
+        'src',
+        'tools',
+        'usr',
+        'versions.json',
+    }
+    local d1 = "MXE source"
+    local d2 = MXE_SOURCE_DESCRIPTION2
+    makePackage(name, files, deps, ver, d1, d2)
+end
+
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
 assert(execute(("%s check-requirements"):format(tool 'make')))
@@ -584,3 +613,4 @@ if not no_debs then
     makeMxeRequirementsPackage('wheezy')
     makeMxeRequirementsPackage('jessie')
 end
+makeMxeSourcePackage()
