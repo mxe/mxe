@@ -156,6 +156,12 @@ local function fileExists(name)
     end
 end
 
+local function writeFile(filename, data)
+    local file = io.open(filename, 'w')
+    file:write(data)
+    file:close()
+end
+
 local NATIVE_TARGET = trim(shell("ext/config.guess"))
 local function isCross(target)
     return target ~= NATIVE_TARGET
@@ -385,11 +391,6 @@ local function protectVersion(ver)
     end
 end
 
-local function listFile(item)
-    local target, pkg = parseItem(item)
-    return ('%s-%s.list'):format(target, pkg)
-end
-
 local CONTROL = [[Package: %s
 Version: %s
 Section: devel
@@ -418,63 +419,60 @@ local function debianControl(options)
     )
 end
 
-local D1 = "MXE package %s for %s"
-local D2 = "This package contains the files for MXE package %s"
-
-local function makeDeb(item, list_path, deps, ver)
-    local target, pkg = parseItem(item)
-    local deb_pkg = nameToDebian(item)
-    local dirname = ('%s_%s'):format(deb_pkg,
+local function makePackage(name, files, deps, ver, d1, d2, dst)
+    local dst = dst or '.'
+    local dirname = ('%s/%s_%s'):format(dst, name,
         protectVersion(ver))
+    -- make .list file
+    local list_path = ('%s/%s.list'):format(dst, name)
+    writeFile(list_path, table.concat(files, "\n"))
     -- make .tar.xz file
     local tar_name = dirname .. '.tar.xz'
     local cmd = '%s -T %s --owner=root --group=root -cJf %s'
     os.execute(cmd:format(tool 'tar', list_path, tar_name))
-    -- unpack .tar.xz to the path for Debian
-    local usr = dirname .. MXE_DIR
-    os.execute(('mkdir -p %s'):format(usr))
-    -- use tar to copy files with paths
-    local cmd = '%s -C %s -xf %s'
+    -- make DEBIAN/control file
+    local control_text = debianControl {
+        package = name,
+        version = protectVersion(ver),
+        arch = ARCH,
+        deps = deps,
+        description1 = d1,
+        description2 = d2,
+    }
+    writeFile(dirname .. ".deb-control", control_text)
     if not no_debs then
+        -- unpack .tar.xz to the path for Debian
+        local usr = dirname .. MXE_DIR
+        os.execute(('mkdir -p %s'):format(usr))
+        os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
+        -- use tar to copy files with paths
+        local cmd = '%s -C %s -xf %s'
         cmd = 'fakeroot -s deb.fakeroot ' .. cmd
+        os.execute(cmd:format(tool 'tar', usr, tar_name))
+        -- make DEBIAN/control file
+        local control_fname = dirname .. '/DEBIAN/control'
+        writeFile(control_fname, control_text)
+        -- make .deb file
+        local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
+        os.execute(cmd:format(dirname))
+        -- cleanup
+        os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
     end
-    os.execute(cmd:format(tool 'tar', usr, tar_name))
-    -- prepare dependencies
+end
+
+local D1 = "MXE package %s for %s"
+local D2 = "This package contains the files for MXE package %s"
+
+local function makeDeb(item, files, deps, ver)
+    local target, pkg = parseItem(item)
+    local deb_pkg = nameToDebian(item)
+    local d1 = D1:format(pkg, target)
+    local d2 = D2:format(pkg)
     local deb_deps = {'mxe-requirements'}
     for _, dep in ipairs(deps) do
         table.insert(deb_deps, nameToDebian(dep))
     end
-    -- make DEBIAN/control file
-    os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
-    local control_fname = dirname .. '/DEBIAN/control'
-    local control = io.open(control_fname, 'w')
-    control:write(debianControl {
-        package = deb_pkg,
-        version = protectVersion(ver),
-        arch = ARCH,
-        deps = deb_deps,
-        description1 = D1:format(pkg, target),
-        description2 = D2:format(pkg),
-    })
-    control:close()
-    -- keep a copy of control file
-    local cmd = 'cp %s %s.deb-control'
-    os.execute(cmd:format(control_fname, dirname))
-    if not no_debs then
-        -- make .deb file
-        local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
-        os.execute(cmd:format(dirname))
-    end
-    -- cleanup
-    os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
-end
-
-local function saveFileList(list_file, list)
-    local file = io.open(list_file, 'w')
-    for _, installed_file in ipairs(list) do
-        file:write(installed_file .. '\n')
-    end
-    file:close()
+    makePackage(deb_pkg, files, deb_deps, ver, d1, d2)
 end
 
 local function isBuilt(item, files)
@@ -494,6 +492,7 @@ local function buildPackages(items, item2deps)
     local broken = {}
     local unbroken = {}
     local file2item = {}
+    local item2files = {}
     local function brokenDep(item)
         for _, dep in ipairs(item2deps[item]) do
             if broken[dep] then
@@ -506,7 +505,7 @@ local function buildPackages(items, item2deps)
         if not brokenDep(item) then
             local files = buildItem(item, item2deps, file2item)
             if isBuilt(item, files) then
-                saveFileList(listFile(item), files)
+                item2files[item] = files
                 table.insert(unbroken, item)
             else
                 -- broken package
@@ -519,15 +518,15 @@ local function buildPackages(items, item2deps)
                 item, brokenDep(item))
         end
     end
-    return unbroken
+    return unbroken, item2files
 end
 
-local function makeDebs(items, item2deps, item2ver)
+local function makeDebs(items, item2deps, item2ver, item2files)
     for _, item in ipairs(items) do
         local deps = assert(item2deps[item], item)
         local ver = assert(item2ver[item], item)
-        local list_path = listFile(item)
-        makeDeb(item, list_path, deps, ver)
+        local files = assert(item2files[item], item)
+        makeDeb(item, files, deps, ver)
     end
 end
 
@@ -543,6 +542,7 @@ local MXE_REQUIREMENTS_DESCRIPTION2 =
  Other MXE packages depend on this package.]]
 
 local function makeMxeRequirementsDeb(release)
+    os.execute(('mkdir -p %s'):format(release))
     local name = 'mxe-requirements'
     local ver = getMxeVersion() .. release
     -- dependencies
@@ -560,27 +560,11 @@ local function makeMxeRequirementsDeb(release)
         -- Jessie+
         table.insert(deps, 'libtool-bin')
     end
-    -- directory
-    local DIRNAME = '%s/%s_%s_%s'
-    local dirname = DIRNAME:format(release, name, ver, ARCH)
-    -- make DEBIAN/control file
-    os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
-    local control_fname = dirname .. '/DEBIAN/control'
-    local control = io.open(control_fname, 'w')
-    control:write(debianControl {
-        package = name,
-        version = ver,
-        arch = ARCH,
-        deps = deps,
-        description1 = "MXE requirements package",
-        description2 = MXE_REQUIREMENTS_DESCRIPTION2,
-    })
-    control:close()
-    -- make .deb file
-    local cmd = 'dpkg-deb -b %s'
-    os.execute(cmd:format(dirname))
-    -- cleanup
-    os.execute(('rm -fr %s'):format(dirname))
+    local files = {}
+    local d1 = "MXE requirements package"
+    local d2 = MXE_REQUIREMENTS_DESCRIPTION2
+    local dst = release
+    makePackage(name, files, deps, ver, d1, d2, dst)
 end
 
 assert(trim(shell('pwd')) == MXE_DIR,
@@ -594,8 +578,8 @@ gitInit()
 local items, item2deps, item2ver = getItems()
 local build_list = sortForBuild(items, item2deps)
 build_list = sliceArray(build_list, max_items)
-local unbroken = buildPackages(build_list, item2deps)
-makeDebs(unbroken, item2deps, item2ver)
+local unbroken, item2files = buildPackages(build_list, item2deps)
+makeDebs(unbroken, item2deps, item2ver, item2files)
 if not no_debs then
     makeMxeRequirementsDeb('wheezy')
     makeMxeRequirementsDeb('jessie')
