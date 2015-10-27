@@ -382,7 +382,7 @@ local function nameToDebian(item)
 end
 
 local function protectVersion(ver)
-    ver = ver:gsub('_', '-')
+    ver = ver:gsub('_', '.')
     if ver:sub(1, 1):match('%d') then
         return ver
     else
