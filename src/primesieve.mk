@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := e6cb1eee915ff50dbd01ed9c6f13324cde16002c7ac49bf29feea07e0f348
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://dl.bintray.com/kimwalisch/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgomp
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://primesieve.org/downloads/' | \

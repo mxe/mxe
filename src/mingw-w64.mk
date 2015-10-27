@@ -16,16 +16,3 @@ define $(PKG)_UPDATE
     $(SORT) -V | \
     tail -1
 endef
-
-define $(PKG)_BUILD_mingw-w64
-    mkdir '$(1).headers-build'
-    cd '$(1).headers-build' && '$(1)/mingw-w64-headers/configure' \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-sdk=all \
-        --enable-idl
-    $(MAKE) -C '$(1).headers-build' install
-endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 = $($(PKG)_BUILD_mingw-w64)
-$(PKG)_BUILD_i686-w64-mingw32   = $($(PKG)_BUILD_mingw-w64)

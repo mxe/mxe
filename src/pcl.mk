@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 479f84f2c658a6319b78271111251b4c2d6cf07643421b66bbc351d9bed0a
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/PointCloudLibrary/pcl/archive/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost eigen flann libgomp vtk
+$(PKG)_DEPS     := gcc boost eigen flann vtk
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://github.com/PointCloudLibrary/pcl/releases" | \

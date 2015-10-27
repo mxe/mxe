@@ -39,7 +39,7 @@ define $(PKG)_CONFIGURE
         --without-x \
         --disable-win32-registry \
         --enable-threads=win32 \
-        --disable-libgomp \
+        --enable-libgomp \
         --with-gmp='$(PREFIX)/$(BUILD)' \
         --with-isl='$(PREFIX)/$(BUILD)' \
         --with-mpc='$(PREFIX)/$(BUILD)' \
@@ -63,13 +63,22 @@ define $(PKG)_POST_BUILD
 endef
 
 define $(PKG)_BUILD_mingw-w64
+    # install mingw-w64 headers
+    $(call PREPARE_PKG_SOURCE,mingw-w64,$(1))
+    mkdir '$(1).headers-build'
+    cd '$(1).headers-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-headers/configure' \
+        --host='$(TARGET)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --enable-sdk=all \
+        --enable-idl
+    $(MAKE) -C '$(1).headers-build' install
+
     # build standalone gcc
     $($(PKG)_CONFIGURE)
     $(MAKE) -C '$(1).build' -j '$(JOBS)' all-gcc
     $(MAKE) -C '$(1).build' -j 1 install-gcc
 
     # build mingw-w64-crt
-    cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,mingw-w64)
     mkdir '$(1).crt-build'
     cd '$(1).crt-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
         --host='$(TARGET)' \
@@ -77,6 +86,13 @@ define $(PKG)_BUILD_mingw-w64
         @gcc-crt-config-opts@
     $(MAKE) -C '$(1).crt-build' -j '$(JOBS)' || $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
     $(MAKE) -C '$(1).crt-build' -j 1 install
+
+    # build posix threads
+    mkdir '$(1).pthread-build'
+    cd '$(1).pthread-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-libraries/winpthreads/configure' \
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1).pthread-build' -j '$(JOBS)' || $(MAKE) -C '$(1).pthread-build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).pthread-build' -j 1 install
 
     # build rest of gcc
     cd '$(1).build'
