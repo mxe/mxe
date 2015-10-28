@@ -588,10 +588,8 @@ local function makeMxeSourcePackage()
         'doc',
         'ext',
         'index.html',
-        'settings.mk',
         'src',
         'tools',
-        'usr',
         'versions.json',
     }
     local d1 = "MXE source"
