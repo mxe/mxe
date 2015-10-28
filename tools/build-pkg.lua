@@ -35,7 +35,7 @@ How to remove them: http://stackoverflow.com/a/4262545
 local max_items = tonumber(os.getenv('MXE_MAX_ITEMS'))
 local no_debs = os.getenv('MXE_NO_DEBS')
 
-local ARCH = 'amd64'
+local TODAY = os.date("%Y%m%d")
 
 local MXE_DIR = os.getenv('MXE_DIR') or '/usr/lib/mxe'
 
@@ -158,10 +158,19 @@ local function fileExists(name)
     end
 end
 
+local function writeFile(filename, data)
+    local file = io.open(filename, 'w')
+    file:write(data)
+    file:close()
+end
+
 local NATIVE_TARGET = trim(shell("ext/config.guess"))
 local function isCross(target)
     return target ~= NATIVE_TARGET
 end
+
+local cmd = "dpkg-architecture -qDEB_BUILD_ARCH 2> /dev/null"
+local ARCH = trim(shell(cmd))
 
 -- return target and package from item name
 local function parseItem(item)
@@ -375,18 +384,13 @@ local function nameToDebian(item)
 end
 
 local function protectVersion(ver)
-    ver = ver:gsub('_', '-')
+    ver = ver:gsub('_', '.')
     if ver:sub(1, 1):match('%d') then
         return ver
     else
         -- version number does not start with digit
         return '0.' .. ver
     end
-end
-
-local function listFile(item)
-    local target, pkg = parseItem(item)
-    return ('%s-%s.list'):format(target, pkg)
 end
 
 local CONTROL = [[Package: %s
@@ -397,63 +401,81 @@ Architecture: %s
 Depends: %s
 Maintainer: Boris Nagaev <bnagaev@gmail.com>
 Homepage: http://mxe.cc
-Description: MXE package %s for %s
+Description: %s
  MXE (M cross environment) is a Makefile that compiles
  a cross compiler and cross compiles many free libraries
  such as SDL and Qt for various target platforms (MinGW).
  .
- This package contains the files for MXE package %s.
+ %s
 ]]
 
-local function makeDeb(item, list_path, deps, ver)
-    local target, pkg = parseItem(item)
-    local deb_pkg = nameToDebian(item)
-    local dirname = ('%s_%s'):format(deb_pkg,
+local function debianControl(options)
+    local deb_deps_str = table.concat(options.deps, ', ')
+    local version = options.version .. '-' .. TODAY
+    return CONTROL:format(
+        options.package,
+        version,
+        options.arch,
+        deb_deps_str,
+        options.description1,
+        options.description2
+    )
+end
+
+local function makePackage(name, files, deps, ver, d1, d2, dst)
+    local dst = dst or '.'
+    local dirname = ('%s/%s_%s'):format(dst, name,
         protectVersion(ver))
+    -- make .list file
+    local list_path = ('%s/%s.list'):format(dst, name)
+    writeFile(list_path, table.concat(files, "\n"))
     -- make .tar.xz file
     local tar_name = dirname .. '.tar.xz'
     local cmd = '%s -T %s --owner=root --group=root -cJf %s'
     os.execute(cmd:format(tool 'tar', list_path, tar_name))
-    -- unpack .tar.xz to the path for Debian
-    local usr = dirname .. MXE_DIR
-    os.execute(('mkdir -p %s'):format(usr))
-    -- use tar to copy files with paths
-    local cmd = '%s -C %s -xf %s'
-    if not no_debs then
-        cmd = 'fakeroot -s deb.fakeroot ' .. cmd
-    end
-    os.execute(cmd:format(tool 'tar', usr, tar_name))
-    -- prepare dependencies
-    local deb_deps = {'mxe-requirements'}
-    for _, dep in ipairs(deps) do
-        table.insert(deb_deps, nameToDebian(dep))
-    end
-    local deb_deps_str = table.concat(deb_deps, ', ')
     -- make DEBIAN/control file
-    os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
-    local control_fname = dirname .. '/DEBIAN/control'
-    local control = io.open(control_fname, 'w')
-    control:write(CONTROL:format(deb_pkg, protectVersion(ver),
-        ARCH, deb_deps_str, pkg, target, pkg))
-    control:close()
-    -- keep a copy of control file
-    local cmd = 'cp %s %s.deb-control'
-    os.execute(cmd:format(control_fname, dirname))
+    local control_text = debianControl {
+        package = name,
+        version = protectVersion(ver),
+        arch = ARCH,
+        deps = deps,
+        description1 = d1,
+        description2 = d2,
+    }
+    writeFile(dirname .. ".deb-control", control_text)
     if not no_debs then
+        -- unpack .tar.xz to the path for Debian
+        local usr = dirname .. MXE_DIR
+        os.execute(('mkdir -p %s'):format(usr))
+        os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
+        -- use tar to copy files with paths
+        local cmd = '%s -C %s -xf %s'
+        cmd = 'fakeroot -s deb.fakeroot ' .. cmd
+        os.execute(cmd:format(tool 'tar', usr, tar_name))
+        -- make DEBIAN/control file
+        local control_fname = dirname .. '/DEBIAN/control'
+        writeFile(control_fname, control_text)
         -- make .deb file
         local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
         os.execute(cmd:format(dirname))
+        -- cleanup
+        os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
     end
-    -- cleanup
-    os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
 end
 
-local function saveFileList(list_file, list)
-    local file = io.open(list_file, 'w')
-    for _, installed_file in ipairs(list) do
-        file:write(installed_file .. '\n')
+local D1 = "MXE package %s for %s"
+local D2 = "This package contains the files for MXE package %s"
+
+local function makeDeb(item, files, deps, ver)
+    local target, pkg = parseItem(item)
+    local deb_pkg = nameToDebian(item)
+    local d1 = D1:format(pkg, target)
+    local d2 = D2:format(pkg)
+    local deb_deps = {'mxe-requirements', 'mxe-source'}
+    for _, dep in ipairs(deps) do
+        table.insert(deb_deps, nameToDebian(dep))
     end
-    file:close()
+    makePackage(deb_pkg, files, deb_deps, ver, d1, d2)
 end
 
 local function isBuilt(item, files)
@@ -473,6 +495,7 @@ local function buildPackages(items, item2deps)
     local broken = {}
     local unbroken = {}
     local file2item = {}
+    local item2files = {}
     local function brokenDep(item)
         for _, dep in ipairs(item2deps[item]) do
             if broken[dep] then
@@ -485,7 +508,7 @@ local function buildPackages(items, item2deps)
         if not brokenDep(item) then
             local files = buildItem(item, item2deps, file2item)
             if isBuilt(item, files) then
-                saveFileList(listFile(item), files)
+                item2files[item] = files
                 table.insert(unbroken, item)
             else
                 -- broken package
@@ -498,15 +521,15 @@ local function buildPackages(items, item2deps)
                 item, brokenDep(item))
         end
     end
-    return unbroken
+    return unbroken, item2files
 end
 
-local function makeDebs(items, item2deps, item2ver)
+local function makeDebs(items, item2deps, item2ver, item2files)
     for _, item in ipairs(items) do
         local deps = assert(item2deps[item], item)
         local ver = assert(item2ver[item], item)
-        local list_path = listFile(item)
-        makeDeb(item, list_path, deps, ver)
+        local files = assert(item2files[item], item)
+        makeDeb(item, files, deps, ver)
     end
 end
 
@@ -517,24 +540,12 @@ local function getMxeVersion()
     return text:match('Release ([^<]+)')
 end
 
-local MXE_REQUIREMENTS_CONTROL = [[Package: %s
-Version: %s
-Section: devel
-Priority: optional
-Architecture: %s
-Depends: %s
-Maintainer: Boris Nagaev <bnagaev@gmail.com>
-Homepage: http://mxe.cc
-Description: MXE requirements package
- MXE (M cross environment) is a Makefile that compiles
- a cross compiler and cross compiles many free libraries
- such as SDL and Qt for various target platforms (MinGW).
- .
- This package depends on all Debian dependencies of MXE.
- Other MXE packages depend on this package.
-]]
+local MXE_REQUIREMENTS_DESCRIPTION2 =
+[[This package depends on all Debian dependencies of MXE.
+ Other MXE packages depend on this package.]]
 
-local function makeMxeRequirementsDeb(release)
+local function makeMxeRequirementsPackage(release)
+    os.execute(('mkdir -p %s'):format(release))
     local name = 'mxe-requirements'
     local ver = getMxeVersion() .. release
     -- dependencies
@@ -552,36 +563,55 @@ local function makeMxeRequirementsDeb(release)
         -- Jessie+
         table.insert(deps, 'libtool-bin')
     end
-    local deps_str = table.concat(deps, ', ')
-    -- directory
-    local DIRNAME = '%s/%s_%s_%s'
-    local dirname = DIRNAME:format(release, name, ver, ARCH)
-    -- make DEBIAN/control file
-    os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
-    local control_fname = dirname .. '/DEBIAN/control'
-    local control = io.open(control_fname, 'w')
-    control:write(MXE_REQUIREMENTS_CONTROL:format(name,
-        ver, ARCH, deps_str))
-    control:close()
-    -- make .deb file
-    local cmd = 'dpkg-deb -b %s'
-    os.execute(cmd:format(dirname))
-    -- cleanup
-    os.execute(('rm -fr %s'):format(dirname))
+    local files = {}
+    local d1 = "MXE requirements package"
+    local d2 = MXE_REQUIREMENTS_DESCRIPTION2
+    local dst = release
+    makePackage(name, files, deps, ver, d1, d2, dst)
+end
+
+local MXE_SOURCE_DESCRIPTION2 =
+[[This package contains MXE source files.
+ Other MXE packages depend on this package.]]
+
+local function makeMxeSourcePackage()
+    local name = 'mxe-source'
+    local ver = getMxeVersion()
+    -- dependencies
+    local deps = {}
+    local files = {
+        'CNAME',
+        'LICENSE.md',
+        'Makefile',
+        'README.md',
+        'assets',
+        'doc',
+        'ext',
+        'index.html',
+        'src',
+        'tools',
+        'versions.json',
+    }
+    local d1 = "MXE source"
+    local d2 = MXE_SOURCE_DESCRIPTION2
+    makePackage(name, files, deps, ver, d1, d2)
 end
 
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
 assert(execute(("%s check-requirements"):format(tool 'make')))
-while not execute(('%s download -j 6 -k'):format(tool 'make')) do
+if not max_items then
+    local cmd = ('%s download -j 6 -k'):format(tool 'make')
+    while not execute(cmd) do end
 end
 gitInit()
 local items, item2deps, item2ver = getItems()
 local build_list = sortForBuild(items, item2deps)
 build_list = sliceArray(build_list, max_items)
-local unbroken = buildPackages(build_list, item2deps)
-makeDebs(unbroken, item2deps, item2ver)
+local unbroken, item2files = buildPackages(build_list, item2deps)
+makeDebs(unbroken, item2deps, item2ver, item2files)
 if not no_debs then
-    makeMxeRequirementsDeb('wheezy')
-    makeMxeRequirementsDeb('jessie')
+    makeMxeRequirementsPackage('wheezy')
+    makeMxeRequirementsPackage('jessie')
 end
+makeMxeSourcePackage()
