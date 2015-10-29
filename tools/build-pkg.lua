@@ -508,7 +508,9 @@ local function buildPackages(items, item2deps)
         end
         return false
     end
-    for _, item in ipairs(items) do
+    local nitems = #items
+    local started_at = os.time()
+    for i, item in ipairs(items) do
         if not brokenDep(item) then
             local files = buildItem(item, item2deps, file2item)
             if isBuilt(item, files) then
@@ -524,6 +526,16 @@ local function buildPackages(items, item2deps)
             log('Item %s depends on broken item %s',
                 item, brokenDep(item))
         end
+        local now = os.time()
+        local spent = now - started_at
+        local predicted_duration = spent * nitems / i
+        local predicted_end = started_at + predicted_duration
+        local predicted_end_str = os.date("%c", predicted_end)
+        local predicted_wait = predicted_end - now
+        local predicted_wait_hours = predicted_wait / 3600.0
+        echo("[%3d/%d] The build is expected to complete " ..
+             "in %0.1f hours, on %s", i, nitems,
+             predicted_wait_hours, predicted_end_str)
     end
     return unbroken, item2files
 end
