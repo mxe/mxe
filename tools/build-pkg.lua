@@ -59,8 +59,12 @@ local TARGETS = {
     'x86_64-w64-mingw32.shared',
 }
 
+local function echo(fmt, ...)
+    print(fmt:format(...))
+end
+
 local function log(fmt, ...)
-    print('[build-pkg]', fmt:format(...))
+    echo('[build-pkg]\t' .. fmt, ...)
 end
 
 -- based on http://lua-users.org/wiki/SplitJoin
