@@ -44,6 +44,7 @@ define $(PKG)_CONFIGURE
         --with-isl='$(PREFIX)/$(BUILD)' \
         --with-mpc='$(PREFIX)/$(BUILD)' \
         --with-mpfr='$(PREFIX)/$(BUILD)' \
+        --with-cloog='$(PREFIX)/$(BUILD)' \
         --with-as='$(PREFIX)/bin/$(TARGET)-as' \
         --with-ld='$(PREFIX)/bin/$(TARGET)-ld' \
         --with-nm='$(PREFIX)/bin/$(TARGET)-nm' \
