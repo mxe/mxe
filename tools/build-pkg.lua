@@ -494,6 +494,31 @@ local function isBuilt(item, files)
     return false
 end
 
+local PROGRESS = "[%3d/%d] " ..
+    "The build is expected to complete in %0.1f hours, " ..
+    "on %s"
+local function progressPrinter(items)
+    local nitems = #items
+    local started_at = os.time()
+    local done = 0
+    local printer = {}
+    function printer:advance(i)
+        done = i
+    end
+    function printer:status()
+        local now = os.time()
+        local spent = now - started_at
+        local predicted_duration = spent * nitems / done
+        local predicted_end = started_at + predicted_duration
+        local predicted_end_str = os.date("%c", predicted_end)
+        local predicted_wait = predicted_end - now
+        local predicted_wait_hours = predicted_wait / 3600.0
+        return PROGRESS:format(done, nitems,
+             predicted_wait_hours, predicted_end_str)
+    end
+    return printer
+end
+
 -- build all packages, save filelist to list file
 local function buildPackages(items, item2deps)
     local broken = {}
@@ -508,8 +533,7 @@ local function buildPackages(items, item2deps)
         end
         return false
     end
-    local nitems = #items
-    local started_at = os.time()
+    local progress_printer = progressPrinter(items)
     for i, item in ipairs(items) do
         if not brokenDep(item) then
             local files = buildItem(item, item2deps, file2item)
@@ -526,16 +550,8 @@ local function buildPackages(items, item2deps)
             log('Item %s depends on broken item %s',
                 item, brokenDep(item))
         end
-        local now = os.time()
-        local spent = now - started_at
-        local predicted_duration = spent * nitems / i
-        local predicted_end = started_at + predicted_duration
-        local predicted_end_str = os.date("%c", predicted_end)
-        local predicted_wait = predicted_end - now
-        local predicted_wait_hours = predicted_wait / 3600.0
-        echo("[%3d/%d] The build is expected to complete " ..
-             "in %0.1f hours, on %s", i, nitems,
-             predicted_wait_hours, predicted_end_str)
+        progress_printer:advance(i)
+        echo(progress_printer:status())
     end
     return unbroken, item2files
 end
