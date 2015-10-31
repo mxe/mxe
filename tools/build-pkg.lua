@@ -494,26 +494,55 @@ local function isBuilt(item, files)
     return false
 end
 
+-- script building HUGE_TIMES from MXE main log
+-- https://gist.github.com/starius/3ea9d953b0c30df88aa7
+local HUGE_TIMES = {
+    [7] = {"ocaml-native", "ffmpeg", "boost"},
+    [9] = {"openssl", "qtdeclarative", "ossim", "wxwidgets"},
+    [12] = {"ocaml-core", "itk", "wt"},
+    [19] = {"gcc", "qtbase", "llvm"},
+    [24] = {"vtk", "vtk6", "openscenegraph"},
+    [36] = {"openblas", "pcl", "oce"},
+    [51] = {"qt"},
+}
+
 local PROGRESS = "[%3d/%d] " ..
     "The build is expected to complete in %0.1f hours, " ..
     "on %s"
+
 local function progressPrinter(items)
-    local nitems = #items
+    local pkg2time = {}
+    for time, pkgs in pairs(HUGE_TIMES) do
+        for _, pkg in ipairs(pkgs) do
+            pkg2time[pkg] = time
+        end
+    end
+    --
     local started_at = os.time()
-    local done = 0
+    local sums = {}
+    for i, item in ipairs(items) do
+        local target, pkg = parseItem(item)
+        local expected_time = pkg2time[pkg] or 1
+        sums[i] = (sums[i - 1] or 0) + expected_time
+    end
+    local total_time = sums[#sums]
+    local time_done = 0
+    local pkgs_done = 0
     local printer = {}
+    --
     function printer:advance(i)
-        done = i
+        pkgs_done = i
+        time_done = sums[i]
     end
     function printer:status()
         local now = os.time()
         local spent = now - started_at
-        local predicted_duration = spent * nitems / done
+        local predicted_duration = spent * total_time / time_done
         local predicted_end = started_at + predicted_duration
         local predicted_end_str = os.date("%c", predicted_end)
         local predicted_wait = predicted_end - now
         local predicted_wait_hours = predicted_wait / 3600.0
-        return PROGRESS:format(done, nitems,
+        return PROGRESS:format(pkgs_done, #items,
              predicted_wait_hours, predicted_end_str)
     end
     return printer
