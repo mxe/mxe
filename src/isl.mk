@@ -3,8 +3,8 @@
 
 PKG             := isl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.14
-$(PKG)_CHECKSUM := 7e3c02ff52f8540f6a85534f54158968417fd676001651c8289c705bd0228f36
+$(PKG)_VERSION  := 0.12.2
+$(PKG)_CHECKSUM := f4b3dbee9712850006e44f0db2103441ab3d13b406f77996d1df19ee89d11fb4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://isl.gforge.inria.fr/$($(PKG)_FILE)
