@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 9045304d991776b6a37e1b45b9b6ef152593ada0d49bc744263565617cbf3
 $(PKG)_SUBDIR   := GraphicsMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := GraphicsMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 freetype jasper jpeg lcms libgomp libltdl libpng libxml2 pthreads tiff zlib
+$(PKG)_DEPS     := gcc bzip2 freetype jasper jpeg lcms libltdl libpng libxml2 pthreads tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/' | \

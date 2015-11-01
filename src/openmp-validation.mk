@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := OpenMP$($(PKG)_VERSION)_Validation
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://web.cs.uh.edu/~openuh/download/packages/$($(PKG)_FILE)
 $(PKG)_URL_2    :=
-$(PKG)_DEPS     := gcc libgomp
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package openmp-validation need to be written.' >&2;
