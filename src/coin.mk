@@ -20,16 +20,16 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-	--disable-debug \
-	--disable-symbols \
-	--enable-compact \
-	--without-openal \
-	--without-fontconfig \
-	--without-spidermonkey \
-	--without-freetype \
-	--without-zlib \
-	--without-bzip2 \
-	--without-x
+        --disable-debug \
+        --disable-symbols \
+        --enable-compact \
+        --without-openal \
+        --without-fontconfig \
+        --without-spidermonkey \
+        --without-freetype \
+        --without-zlib \
+        --without-bzip2 \
+        --without-x
     $(MAKE) -C '$(1)' -j 1 uninstall
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
