@@ -33,6 +33,7 @@
     "cimg": "1.6.3",
     "cmake": "3.0.2",
     "cminpack": "1.3.4",
+    "coin": "3.1.3",
     "coreutils": "8.23",
     "cppunit": "1.13.2",
     "crystalhd": "1",
