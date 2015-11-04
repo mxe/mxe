@@ -565,6 +565,13 @@ local function makeDebs(items, item2deps, item2ver, item2files)
         local ver = assert(item2ver[item], item)
         local files = assert(item2files[item], item)
         if not isEmpty(item, files) then
+            for _, dep in ipairs(deps) do
+                local dep_files = assert(item2files[dep], dep)
+                if isEmpty(dep, dep_files) then
+                    log('Non-empty item %s depends on ' ..
+                        'empty item %s', item, dep)
+                end
+            end
             makeDeb(item, files, deps, ver)
         end
     end
