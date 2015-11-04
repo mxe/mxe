@@ -521,6 +521,10 @@ local function isBuilt(item, files)
     return false
 end
 
+local function isEmpty(item, files)
+    return #files == 1
+end
+
 -- build all packages, save filelist to list file
 local function buildPackages(items, item2deps)
     local broken = {}
@@ -560,7 +564,9 @@ local function makeDebs(items, item2deps, item2ver, item2files)
         local deps = assert(item2deps[item], item)
         local ver = assert(item2ver[item], item)
         local files = assert(item2files[item], item)
-        makeDeb(item, files, deps, ver)
+        if not isEmpty(item, files) then
+            makeDeb(item, files, deps, ver)
+        end
     end
 end
 
