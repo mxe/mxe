@@ -112,6 +112,16 @@ local function sliceArray(list, nelements)
     return new_list
 end
 
+local function concatArrays(...)
+    local result = {}
+    for _, array in ipairs({...}) do
+        for _, elem in ipairs(array) do
+            table.insert(result, elem)
+        end
+    end
+    return result
+end
+
 local function isInString(substring, string)
     return string:find(substring, 1, true)
 end
@@ -352,6 +362,26 @@ local function checkFile(file, item)
     end
 end
 
+local function checkFileList(files, item)
+    local target, _ = parseItem(item)
+    if target:match('shared') then
+        local has_a, has_dll
+        for _, file in ipairs(files) do
+            file = file:lower()
+            if file:match('%.a') then
+                has_a = true
+            end
+            if file:match('%.dll') then
+                has_dll = true
+            end
+        end
+        if has_a and not has_dll then
+            log('Shared item %s installs .a file ' ..
+                'but no .dll', item)
+        end
+    end
+end
+
 -- builds package, returns list of new files
 local function buildItem(item, item2deps, file2item)
     local target, pkg = parseItem(item)
@@ -374,6 +404,7 @@ local function buildItem(item, item2deps, file2item)
         log('Item %s changes %s, created by %s',
             item, file, creator_item)
     end
+    checkFileList(concatArrays(new_files, changed_files), item)
     return new_files
 end
 
