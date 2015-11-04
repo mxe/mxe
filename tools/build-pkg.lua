@@ -43,7 +43,7 @@ local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
 
 local BLACKLIST = {
     '^usr/installed/check%-requirements$',
-    -- usr/share/cmake if useful
+    -- usr/share/cmake is useful
     '^usr/share/doc/',
     '^usr/share/info/',
     '^usr/share/man/',
