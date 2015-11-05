@@ -3,12 +3,11 @@
 
 PKG             := gmp
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.0.0
-$(PKG)_CHECKSUM := 7f8e9a804b9c6d07164cf754207be838ece1219425d64e28cfa3e70d5c759aaf
+$(PKG)_VERSION  := 6.1.0
+$(PKG)_CHECKSUM := 68dadacce515b0f8a54f510edf07c1b636492bcdb8e8d54c56eb216225d16989
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)a.tar.bz2
-$(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
+$(PKG)_URL      := https://gmplib.org/download/$(PKG)/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc
 
