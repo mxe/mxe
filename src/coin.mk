@@ -35,5 +35,12 @@ define $(PKG)_BUILD
             --enable-static=no --enable-shared=yes)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
-    ln -sf '$(PREFIX)/$(TARGET)/bin/coin-config' '$(PREFIX)/bin/$(TARGET)-coin-config'
+    '$(TARGET)-g++' \
+        -W -Wall -pedantic '$(2).cpp' \
+	$(if $(BUILD_STATIC), \
+	    -DCOIN_NOT_DLL, \
+	    -DCOIN_DLL) \
+        -o '$(PREFIX)/$(TARGET)/bin/test-coin.exe' \
+        `'$(PREFIX)/$(TARGET)/bin/coin-config' --libs` \
+	-I`'$(PREFIX)/$(TARGET)/bin/coin-config' --includedir`
 endef
