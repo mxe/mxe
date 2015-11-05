@@ -29,8 +29,11 @@ define $(PKG)_BUILD
         --without-freetype \
         --without-zlib \
         --without-bzip2 \
-        --without-x
-    $(MAKE) -C '$(1)' -j 1 uninstall
+        --without-x \
+        $(if $(BUILD_STATIC), \
+            --enable-static=yes --enable-shared=no, \
+            --enable-static=no --enable-shared=yes)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
+    ln -sf '$(PREFIX)/$(TARGET)/bin/coin-config' '$(PREFIX)/bin/$(TARGET)-coin-config'
 endef
