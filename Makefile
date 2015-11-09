@@ -430,7 +430,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	@if ! (time LD_PRELOAD="$(PREFIX)/lib/nonetwork.so" $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	@if ! (time LD_PRELOAD="$(PREFIX)/lib/nonetwork.so" $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1) for target $(3)!'; \
 	    echo '------------------------------------------------------------'; \
