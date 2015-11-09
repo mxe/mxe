@@ -48,6 +48,7 @@ local BLACKLIST = {
     '^usr/share/info/',
     '^usr/share/man/',
     '^usr/share/gcc',
+    '^usr/lib/nonetwork.so',
     '^usr/[^/]+/share/doc/',
     '^usr/[^/]+/share/info/',
 }
