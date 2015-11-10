@@ -2765,6 +2765,28 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         Always list the dependency on <code>gcc</code> explicitly:
         </p>
         <pre>$(PKG)_DEPS     := gcc ...</pre>
+
+        <p>
+        Things not to do:
+        </p>
+        <ul>
+            <li>
+            <b>do not run target executables with Wine</b>, as Wine is
+            not guaranteed to be installed. Instead build the needed tool
+            natively or (if it is too huge to build one more time) add
+            to MXE's dependencies. This policy is forced by setting
+            WINEPREFIX to an empty directory, which breaks Wine;
+            </li>
+
+            <li>
+            <b>do not download anything while building</b>, as all files
+            downloaded should be verified by checksums. Instead create a
+            package which installs the needed file. This policy is forced
+            on Linux by <a href="https://github.com/starius/nonetwork/"
+            >LD_PRELOAD trick</a>, breaking network functions.
+            </li>
+        </ul>
+
     </li>
 
     <li>
