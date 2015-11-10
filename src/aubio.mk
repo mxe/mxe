@@ -21,7 +21,7 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar'                         \
         CC='$(TARGET)-gcc'                        \
         PKGCONFIG='$(TARGET)-pkg-config'          \
-        ./waf configure build install             \
+        ./waf configure                           \
             -j '$(JOBS)'                          \
             --with-target-platform='win$(BITS)'   \
             --prefix='$(PREFIX)/$(TARGET)'        \
@@ -29,6 +29,11 @@ define $(PKG)_BUILD
             $(if $(BUILD_STATIC),                 \
                 --enable-static --disable-shared, \
                 --disable-static --enable-shared)
+
+    # disable txt2man and doxygen
+    $(SED) -i '/\(TXT2MAN\|DOXYGEN\)/d' '$(1)/build/c4che/_cache.py'
+
+    cd '$(1)' && ./waf build install
 
     # It is not trivial to adjust the installation in waf-based builds
     $(if $(BUILD_STATIC),                         \
