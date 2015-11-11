@@ -432,7 +432,7 @@ local function makePackage(name, files, deps, ver, d1, d2, dst)
         protectVersion(ver))
     -- make .list file
     local list_path = ('%s/%s.list'):format(dst, name)
-    writeFile(list_path, table.concat(files, "\n"))
+    writeFile(list_path, table.concat(files, "\n") .. "\n")
     -- make .tar.xz file
     local tar_name = dirname .. '.tar.xz'
     local cmd = '%s -T %s --owner=root --group=root -cJf %s'
