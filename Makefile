@@ -144,7 +144,7 @@ define MXE_GET_GITHUB_TAGS
 endef
 
 # use a minimal whitelist of safe environment variables
-ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH ACLOCAL_PATH
+ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH LD_PRELOAD ACLOCAL_PATH
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
 # disable wine with readonly directory (created by mxe-conf)
@@ -406,6 +406,10 @@ download-only-$(1):
 endef
 $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG))))
 
+$(PREFIX)/lib/nonetwork.so: $(TOP_DIR)/tools/nonetwork.c
+	mkdir -p $(dir $@)
+	$(BUILD_CC) -shared -fPIC -o $@ $<
+
 define PKG_TARGET_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
@@ -416,7 +420,8 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
                           $(and $($(3)_DEPS),$(addprefix $(PREFIX)/$($(3)_DEPS)/installed/,$(filter-out $(MXE_CONF_PKGS),$($($(3)_DEPS)_PKGS)))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
                           $(if $(value $(call LOOKUP_PKG_RULE,$(1),URL,$(3))),download-only-$(1)) \
-                          $(addprefix $(PREFIX)/$(3)/installed/,$(if $(call set_is_not_member,$(1),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS)))
+                          $(addprefix $(PREFIX)/$(3)/installed/,$(if $(call set_is_not_member,$(1),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS))) \
+                          $(PREFIX)/lib/nonetwork.so
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)',
@@ -425,7 +430,7 @@ $(PREFIX)/$(3)/installed/$(1): $(TOP_DIR)/src/$(1).mk \
 	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	@if ! (time $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)') &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	@if ! (time LD_PRELOAD="$(PREFIX)/lib/nonetwork.so" $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1) for target $(3)!'; \
 	    echo '------------------------------------------------------------'; \
