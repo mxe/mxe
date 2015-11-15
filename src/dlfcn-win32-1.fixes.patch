@@ -1,0 +1,25 @@
+This file is part of MXE.
+See index.html for further information.
+
+From f46d92e319ba2ce4d5fe46e4293a7f7fbb67935e Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 15 Nov 2015 13:23:50 +0000
+Subject: [PATCH] configure: remove /tmp/test.dll /tmp/test.c
+
+
+diff --git a/configure b/configure
+index 91f7d07..e3473fe 100755
+--- a/configure
++++ b/configure
+@@ -160,7 +160,7 @@ void function(void)
+ { LoadLibrary(NULL); }
+ EOF
+ echo testing compiler: $cc -shared -o /tmp/test.dll /tmp/test.c
+-$cc -shared -o /tmp/test.dll /tmp/test.c
++$cc -shared -o /tmp/test.dll /tmp/test.c && rm /tmp/test.dll /tmp/test.c
+ 
+ test "$?" != 0 && {
+     echo "$cc could not create shared file with Windows API functions.";
+-- 
+2.1.4
+

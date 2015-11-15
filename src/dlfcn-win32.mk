@@ -25,6 +25,5 @@ define $(PKG)_BUILD
             --disable-static --enable-shared )
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
-
-    # No test avalable temprorarily because MXE doesn't support shared build yet
+    $(MAKE) -C '$(1)' -j '$(JOBS)' test.exe testdll.dll
 endef
