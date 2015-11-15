@@ -100,4 +100,12 @@ define $(PKG)_BUILD_$(BUILD)
 
     #create readonly directory to force wine to fail
     $(INSTALL) -m444 -d "$$WINEPREFIX"
+
+    #create script "wine" in a directory which is in PATH
+    mkdir -p '$(PREFIX)/$(BUILD)/bin/'
+    (echo '#!/usr/bin/env bash'; \
+     echo 'exit 1'; \
+    ) \
+             > '$(PREFIX)/$(BUILD)/bin/wine'
+    chmod 0755 '$(PREFIX)/$(BUILD)/bin/wine'
 endef
