@@ -11,8 +11,7 @@ $(PKG)_URL      := https://github.com/yandex/pire/archive/release-$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, yandex/pire) | \
-    $(SED) 's,^release-,,g'
+    $(call MXE_GET_GITHUB_TAGS, yandex/pire, release-)
 endef
 
 define $(PKG)_BUILD

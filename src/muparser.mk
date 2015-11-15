@@ -11,8 +11,7 @@ $(PKG)_URL      := https://github.com/beltoforion/$(PKG)/archive/v$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, beltoforion/muparser) | \
-    $(SED) 's,^v,,g'
+    $(call MXE_GET_GITHUB_TAGS, beltoforion/muparser, v)
 endef
 
 define $(PKG)_BUILD
