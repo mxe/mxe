@@ -407,8 +407,8 @@ endef
 $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG))))
 
 $(PREFIX)/lib/nonetwork.so: $(TOP_DIR)/tools/nonetwork.c
-	mkdir -p $(dir $@)
-	$(BUILD_CC) -shared -fPIC -o $@ $<
+	@mkdir -p $(dir $@)
+	@$(BUILD_CC) -shared -fPIC -o $@ $<
 
 define PKG_TARGET_RULE
 .PHONY: $(1)
