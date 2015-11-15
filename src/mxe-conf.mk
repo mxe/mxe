@@ -62,9 +62,6 @@ define $(PKG)_BUILD
              > '$(PREFIX)/bin/$(TARGET)-cmake'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-cmake'
 
-    #create readonly directory to force wine to fail
-    $(INSTALL) -m444 -d "$$WINEPREFIX"
-
     # create pkg-config files for OpenGL/GLU
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: gl'; \
@@ -100,4 +97,7 @@ define $(PKG)_BUILD_$(BUILD)
      > '$(1)/configure.ac'
     cd '$(1)' && autoreconf -fiv
     cd '$(1)' && ./configure
+
+    #create readonly directory to force wine to fail
+    $(INSTALL) -m444 -d "$$WINEPREFIX"
 endef
