@@ -72,7 +72,6 @@ define $(PKG)_BUILD
      echo 'Description: OpenGL'; \
      echo 'Libs: -lopengl32';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/gl.pc'
-
     (echo 'Name: glu'; \
      echo 'Version: 0'; \
      echo 'Description: OpenGL'; \
