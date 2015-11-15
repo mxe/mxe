@@ -62,9 +62,6 @@ define $(PKG)_BUILD
              > '$(PREFIX)/bin/$(TARGET)-cmake'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-cmake'
 
-    #create readonly directory to force wine to fail
-    $(INSTALL) -m444 -d "$$WINEPREFIX"
-
     # create pkg-config files for OpenGL/GLU
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: gl'; \
@@ -72,7 +69,6 @@ define $(PKG)_BUILD
      echo 'Description: OpenGL'; \
      echo 'Libs: -lopengl32';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/gl.pc'
-
     (echo 'Name: glu'; \
      echo 'Version: 0'; \
      echo 'Description: OpenGL'; \
@@ -101,4 +97,15 @@ define $(PKG)_BUILD_$(BUILD)
      > '$(1)/configure.ac'
     cd '$(1)' && autoreconf -fiv
     cd '$(1)' && ./configure
+
+    #create readonly directory to force wine to fail
+    $(INSTALL) -m444 -d "$$WINEPREFIX"
+
+    #create script "wine" in a directory which is in PATH
+    mkdir -p '$(PREFIX)/$(BUILD)/bin/'
+    (echo '#!/usr/bin/env bash'; \
+     echo 'exit 1'; \
+    ) \
+             > '$(PREFIX)/$(BUILD)/bin/wine'
+    chmod 0755 '$(PREFIX)/$(BUILD)/bin/wine'
 endef
