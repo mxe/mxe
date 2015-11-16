@@ -43,7 +43,7 @@ local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
 
 local BLACKLIST = {
     '^usr/installed/check%-requirements$',
-    -- usr/share/cmake if useful
+    -- usr/share/cmake is useful
     '^usr/share/doc/',
     '^usr/share/info/',
     '^usr/share/man/',
@@ -115,6 +115,16 @@ local function sliceArray(list, nelements)
         new_list[i] = list[i]
     end
     return new_list
+end
+
+local function concatArrays(...)
+    local result = {}
+    for _, array in ipairs({...}) do
+        for _, elem in ipairs(array) do
+            table.insert(result, elem)
+        end
+    end
+    return result
 end
 
 local function isInString(substring, string)
@@ -357,6 +367,26 @@ local function checkFile(file, item)
     end
 end
 
+local function checkFileList(files, item)
+    local target, _ = parseItem(item)
+    if target:match('shared') then
+        local has_a, has_dll
+        for _, file in ipairs(files) do
+            file = file:lower()
+            if file:match('%.a') then
+                has_a = true
+            end
+            if file:match('%.dll') then
+                has_dll = true
+            end
+        end
+        if has_a and not has_dll then
+            log('Shared item %s installs .a file ' ..
+                'but no .dll', item)
+        end
+    end
+end
+
 -- builds package, returns list of new files
 local function buildItem(item, item2deps, file2item)
     local target, pkg = parseItem(item)
@@ -379,6 +409,7 @@ local function buildItem(item, item2deps, file2item)
         log('Item %s changes %s, created by %s',
             item, file, creator_item)
     end
+    checkFileList(concatArrays(new_files, changed_files), item)
     return new_files
 end
 
@@ -549,6 +580,10 @@ local function progressPrinter(items)
     return printer
 end
 
+local function isEmpty(item, files)
+    return #files == 1
+end
+
 -- build all packages, save filelist to list file
 local function buildPackages(items, item2deps)
     local broken = {}
@@ -591,7 +626,16 @@ local function makeDebs(items, item2deps, item2ver, item2files)
         local deps = assert(item2deps[item], item)
         local ver = assert(item2ver[item], item)
         local files = assert(item2files[item], item)
-        makeDeb(item, files, deps, ver)
+        if not isEmpty(item, files) then
+            for _, dep in ipairs(deps) do
+                local dep_files = assert(item2files[dep], dep)
+                if isEmpty(dep, dep_files) then
+                    log('Non-empty item %s depends on ' ..
+                        'empty item %s', item, dep)
+                end
+            end
+            makeDeb(item, files, deps, ver)
+        end
     end
 end
 
