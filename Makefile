@@ -139,6 +139,7 @@ endef
 define MXE_GET_GITHUB_TAGS
     $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/tags/' \
     | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p' \
+    | $(SED) 's,^$(strip $(2)),,g' \
     | $(SORT) -V \
     | tail -1
 endef
