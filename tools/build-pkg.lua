@@ -571,7 +571,7 @@ local function progressPrinter(items)
         local spent = now - started_at
         local predicted_duration = spent * total_time / time_done
         local predicted_end = started_at + predicted_duration
-        local predicted_end_str = os.date("%c", predicted_end)
+        local predicted_end_str = os.date("%c", math.floor(predicted_end + 0.5))
         local predicted_wait = predicted_end - now
         local predicted_wait_hours = predicted_wait / 3600.0
         return PROGRESS:format(pkgs_done, #items,
