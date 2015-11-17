@@ -337,3 +337,37 @@ index 69d19b8..738563b 100644
 -- 
 2.3.8 (Apple Git-58)
 
+
+From eb38e04f41ac341b162cfa0e97aa3ee1ce783777 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Wed, 11 Nov 2015 07:44:44 +0000
+Subject: [PATCH] add 'static' to some inline functions
+
+Fix https://gist.github.com/starius/71d5f276d62e58f36d2f
+See also http://stackoverflow.com/a/8502046
+
+diff --git a/include/my_global.h b/include/my_global.h
+index 8c3c3cd..3cb24f6 100644
+--- a/include/my_global.h
++++ b/include/my_global.h
+@@ -340,7 +340,7 @@ typedef socket_len_t SOCKET_SIZE_TYPE; /* Used by NDB */
+ 
+ #if (_WIN32)
+ #if !defined(_WIN64)
+-inline double my_ulonglong2double(unsigned long long value)
++static inline double my_ulonglong2double(unsigned long long value)
+ {
+   long long nr=(long long) value;
+   if (nr >= 0)
+@@ -350,7 +350,7 @@ inline double my_ulonglong2double(unsigned long long value)
+ #define ulonglong2double my_ulonglong2double
+ #define my_off_t2double  my_ulonglong2double
+ #endif /* _WIN64 */
+-inline unsigned long long my_double2ulonglong(double d)
++static inline unsigned long long my_double2ulonglong(double d)
+ {
+   double t= d - (double) 0x8000000000000000ULL;
+ 
+-- 
+2.1.4
+

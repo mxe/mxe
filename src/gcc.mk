@@ -3,8 +3,8 @@
 
 PKG             := gcc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.2.0
-$(PKG)_CHECKSUM := 5f835b04b5f7dd4f4d2dc96190ec1621b8d89f2dc6f638f9f8bc1b1014ba8cad
+$(PKG)_VERSION  := 4.9.3
+$(PKG)_CHECKSUM := 2332b2a5a321b57508b9031354a8503af6fdfb868b8c1748d33028d100a8b67e
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -44,6 +44,7 @@ define $(PKG)_CONFIGURE
         --with-isl='$(PREFIX)/$(BUILD)' \
         --with-mpc='$(PREFIX)/$(BUILD)' \
         --with-mpfr='$(PREFIX)/$(BUILD)' \
+        --with-cloog='$(PREFIX)/$(BUILD)' \
         --with-as='$(PREFIX)/bin/$(TARGET)-as' \
         --with-ld='$(PREFIX)/bin/$(TARGET)-ld' \
         --with-nm='$(PREFIX)/bin/$(TARGET)-nm' \
@@ -52,14 +53,13 @@ endef
 
 define $(PKG)_POST_BUILD
     # TODO: find a way to configure the installation of these correctly
-    rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, c++ g++ gcc gfortran)
-    -mv '$(PREFIX)/lib/gcc/$(TARGET)/lib/'* '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
-    -mv '$(PREFIX)/lib/gcc/$(TARGET)/'*.dll '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'
-    -mv '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
-    -cp '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll.a '$(PREFIX)/$(TARGET)/lib/'
-
-    # remove incorrectly installed libcc1
-    rm -f '$(PREFIX)/lib/'libcc1*
+    # ignore rm failure as parallel build may have cleaned up, but
+    # don't wildcard all libs so future additions will be detected
+    $(and $(BUILD_SHARED),
+    mv  -v '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/gcc-$($(PKG)_VERSION)/'
+    -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/'libgcc_s*.dll
+    -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/lib/'libgcc_s*.a
+    -rmdir '$(PREFIX)/lib/gcc/$(TARGET)/lib/')
 endef
 
 define $(PKG)_BUILD_mingw-w64
@@ -97,10 +97,15 @@ define $(PKG)_BUILD_mingw-w64
     # build rest of gcc
     cd '$(1).build'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
-
-    # cc1libdir isn't passed to subdirs so install correctly and rm later
-    $(MAKE) -C '$(1).build/libcc1' -j 1 install cc1libdir='$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)'
     $(MAKE) -C '$(1).build' -j 1 install
+
+    # shared libgcc isn't installed to version-specific locations
+    # so install correctly to avoid clobbering with multiple versions
+    $(and $(BUILD_SHARED),
+    $(MAKE) -C '$(1).build/$(TARGET)/libgcc' -j 1 \
+        toolexecdir='$(PREFIX)/$(TARGET)/bin/gcc-$($(PKG)_VERSION)' \
+        SHLIB_SLIBDIR_QUAL= \
+        install-shared)
 
     $($(PKG)_POST_BUILD)
 endef
