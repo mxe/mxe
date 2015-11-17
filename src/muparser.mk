@@ -4,15 +4,13 @@
 PKG             := muparser
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.5
-$(PKG)_CHECKSUM := 0666ef55da72c3e356ca85b6a0084d56b05dd740c3c21d26d372085aa2c6e708
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := https://github.com/beltoforion/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
+$(PKG)_CHECKSUM := 3a7e1c94865abd11c8ade7824241eb9eacfc252f4d4214723a5f06d19563f5e0
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, beltoforion/muparser, v)
-endef
+$(PKG)_GH_REPO    := beltoforion/muparser
+$(PKG)_GH_TAG_PFX := v
+$(PKG)_GH_TAG_SHA := 57e7e28
+$(eval $(MXE_SETUP_GITHUB))
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
