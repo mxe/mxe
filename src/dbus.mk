@@ -3,8 +3,8 @@
 
 PKG             := dbus
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.10.2
-$(PKG)_CHECKSUM := aef3f49595df09b0824433ee993cda748ede93693a719a831562ae1616b6bb9e
+$(PKG)_VERSION  := 1.10.4
+$(PKG)_CHECKSUM := ad7dcad73ad9b0ff55819985d354eacfffe07e2eb8c763e155efc21d6001084b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
