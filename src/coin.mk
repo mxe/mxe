@@ -30,17 +30,16 @@ define $(PKG)_BUILD
         --without-zlib \
         --without-bzip2 \
         --without-x \
-        $(if $(BUILD_STATIC), \
-            --enable-static=yes --enable-shared=no, \
-            --enable-static=no --enable-shared=yes)
+        COIN_STATIC=$(if $(BUILD_STATIC),true,false)
+
+    # libtool misses some dependency libs and there's no lt_cv* etc. options
+    $(SED) -i 's,^postdeps="-,postdeps="-lopengl32 -lgdi32 -lwinmm -,g' '$(1)/libtool'
+
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
+
     '$(TARGET)-g++' \
-        -W -Wall -pedantic '$(2).cpp' \
-	$(if $(BUILD_STATIC), \
-	    -DCOIN_NOT_DLL, \
-	    -DCOIN_DLL) \
-        -o '$(PREFIX)/$(TARGET)/bin/test-coin.exe' \
-        `'$(PREFIX)/$(TARGET)/bin/coin-config' --libs` \
-	-I`'$(PREFIX)/$(TARGET)/bin/coin-config' --includedir`
+        -W -Wall -pedantic \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-coin.exe' \
+        `'$(TARGET)-pkg-config' Coin --cflags --libs`
 endef
