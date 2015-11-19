@@ -4,18 +4,13 @@
 PKG             := jsoncpp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.5
-$(PKG)_CHECKSUM := a2b121eaff56ec88cfd034d17685821a908d0d87bc319329b04f91a6552c1ac2
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/open-source-parsers/jsoncpp/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_CHECKSUM := ce0f245885fef62f2cbcbfbfe8a1267dc289b9c2d48fdbb90775c33d71fdc750
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/open-source-parsers/jsoncpp/archive/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/"\.tar.*,\1,p' | \
-    sort | uniq | \
-    head -1
-endef
+$(PKG)_GH_REPO    := open-source-parsers/$(PKG)
+$(PKG)_GH_TAG_PFX :=
+$(PKG)_GH_TAG_SHA := d84702c
+$(eval $(MXE_SETUP_GITHUB))
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'

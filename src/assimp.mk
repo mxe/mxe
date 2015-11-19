@@ -4,19 +4,13 @@
 PKG             := assimp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.1
-$(PKG)_CHECKSUM := 3b8d16eaf6c4b26479295f4f7436388bee1e42e8c0b11f6f695b7194985eb00e
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).zip
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := a8164e12389277951a0bc2e68b19c04031b0152f33e2a0e74ab55b2d449c3f4e
 $(PKG)_DEPS     := gcc boost
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://api.github.com/repos/assimp/assimp/releases" | \
-    grep 'tag_name' | \
-    $(SED) -n 's,.*tag_name": "v\([0-9][^>]*\)".*,\1,p' | \
-    $(SORT) -Vr | \
-    head -1
-endef
+$(PKG)_GH_REPO    := $(PKG)/$(PKG)
+$(PKG)_GH_TAG_PFX := v
+$(PKG)_GH_TAG_SHA := 1c4a8e9
+$(eval $(MXE_SETUP_GITHUB))
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'

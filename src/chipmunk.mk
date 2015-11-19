@@ -4,17 +4,13 @@
 PKG             := chipmunk
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.2.2
-$(PKG)_CHECKSUM := c51f0e3a30770f6b940de3228bee40a871aaf7611a1b5ec546a7d2b9e1041f97
-$(PKG)_SUBDIR   := Chipmunk2D-Chipmunk-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/slembcke/Chipmunk2D/archive/Chipmunk-$($(PKG)_VERSION).tar.gz
+$(PKG)_CHECKSUM := 961c9dd228199ed1f6e4a6260174bf31a16cc6dbb3785f513ee957437fecb200
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/slembcke/Chipmunk2D/releases' | \
-    $(SED) -n 's,.*/archive/Chipmunk-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
+$(PKG)_GH_REPO    := slembcke/Chipmunk2D
+$(PKG)_GH_TAG_PFX := Chipmunk-
+$(PKG)_GH_TAG_SHA := 9b0d57e
+$(eval $(MXE_SETUP_GITHUB))
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'
