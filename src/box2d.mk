@@ -4,16 +4,13 @@
 PKG             := box2d
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.1
-$(PKG)_CHECKSUM := 2c61505f03ef403b54cf0e510d83d6f567e37882ad79b5b2d486acbc7d5eedea
-$(PKG)_SUBDIR   := Box2D-$($(PKG)_VERSION)/Box2D
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/erincatto/Box2D/archive/v$($(PKG)_VERSION).tar.gz
+$(PKG)_CHECKSUM := d323141a9bb202e37f9860568ca0769be67e4758e6bbccb4f190fdf50cc7bf4e
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, erincatto/Box2D) | \
-    $(SED) 's,^v,,g'
-endef
+$(PKG)_GH_REPO    := erincatto/Box2D
+$(PKG)_GH_TAG_PFX := v
+$(PKG)_GH_TAG_SHA := b20eb82
+$(eval $(MXE_SETUP_GITHUB))
 
 define $(PKG)_BUILD
     mkdir '$(1).build'

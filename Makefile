@@ -130,9 +130,38 @@ MAKE_SHARED_FROM_STATIC = \
 	--libdir '$(PREFIX)/$(TARGET)/lib' \
 	--bindir '$(PREFIX)/$(TARGET)/bin'
 
+# convenience snippet to standardise github files and updates
+# uses the following package metadata:
+#   GH_REPO    - formatted as owner/repo
+#
+# form one - track branch:
+#   GH_BRANCH  - uses latest sha from branch for updates
+#
+# form two - track tags:
+#   GH_TAG_PFX - optional tag prefix to strip from tags for version sort
+#   GH_TAG_SHA - short sha used in SUBDIR (automatically updated)
+#
+# both forms are exclusive and fetch files based on sha as
+# conventions for tag and file naming vary considerably
+define MXE_SETUP_GITHUB
+    $$(if $$(and $$($$(PKG)_GH_BRANCH),$$($$(PKG)_GH_TAG_SHA)),\
+        $$(error $$(PKG) specifies both GH_BRANCH and GH_TAG_SHA))
+    $$(PKG)_SHA_REF := $$(or $$($$(PKG)_GH_TAG_SHA),$$($$(PKG)_VERSION))
+    $$(PKG)_SUBDIR  := $$(subst /,-,$$($$(PKG)_GH_REPO))-$$($$(PKG)_SHA_REF)
+    $$(PKG)_FILE    := $$(PKG)-$$($$(PKG)_VERSION).tar.gz
+    $$(PKG)_URL     := https://github.com/$$($$(PKG)_GH_REPO)/tarball/$$($$(PKG)_SHA_REF)/$$($$(PKG)_FILE)
+    $$(PKG)_UPDATE  := $$(if $$($$(PKG)_GH_BRANCH), \
+                           $$(call MXE_GET_GITHUB_SHA, $$($$(PKG)_GH_REPO),$$($$(PKG)_GH_BRANCH)) \
+                       $$(else), \
+                           $$(call MXE_GET_GITHUB_TAGS, $$($$(PKG)_GH_REPO),$$($$(PKG)_GH_TAG_PFX)))
+endef
+
+# github tarball download uses 7 character sha - shouldn't conflict intra repo
+GITHUB_SHA_LENGTH := 7
+
 define MXE_GET_GITHUB_SHA
     $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' \
-    | $(SED) -n 's#.*"sha": "\([^"]\{10\}\).*#\1#p' \
+    | $(SED) -n 's#.*"sha": "\([^"]\{$(GITHUB_SHA_LENGTH)\}\).*#\1#p' \
     | head -1
 endef
 
@@ -142,6 +171,12 @@ define MXE_GET_GITHUB_TAGS
     | $(SED) 's,^$(strip $(2)),,g' \
     | $(SORT) -V \
     | tail -1
+endef
+
+define MXE_GET_GITHUB_TAG_SHA
+    $(WGET) -q -O- 'https://api.github.com/repos/$($(1)_GH_REPO)/git/refs/tags/$($(1)_GH_TAG_PFX)$($(1)_VERSION)' \
+    | $(SED) -n 's#.*"sha": "\([^"]\{$(GITHUB_SHA_LENGTH)\}\).*#\1#p' \
+    | head -1
 endef
 
 # use a minimal whitelist of safe environment variables
@@ -610,8 +645,20 @@ update-package-%:
 
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
+	    $(MAKE) -f '$(MAKEFILE)' 'update-gh-tag-sha-$*' && \
+	    $(MAKE) -f '$(MAKEFILE)' 'update-pkg-checksum-$*', \
+	    $(error Package $* not found in index.html))
+
+update-pkg-checksum-%:
+	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
 	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(TOP_DIR)/src/$*.mk', \
+	    $(error Package $* not found in index.html))
+
+update-gh-tag-sha-%:
+	$(if $(call set_is_member,$*,$(PKGS)), \
+	    $(if $(findstring undefined, $(origin $*_GH_TAG_SHA)),, \
+	        $(SED) -i 's/^\([^ ]*_GH_TAG_SHA *:=\).*/\1 '"`$(call MXE_GET_GITHUB_TAG_SHA,$*)`"'/' '$(TOP_DIR)/src/$*.mk'), \
 	    $(error Package $* not found in index.html))
 
 .PHONY: cleanup-style

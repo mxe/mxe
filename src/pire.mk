@@ -4,15 +4,13 @@
 PKG             := pire
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.0.5
-$(PKG)_CHECKSUM := 85a9bd66fff568554826e4aff9b188ed6124e3ea0530cc561723b36aea2a58e3
-$(PKG)_SUBDIR   := pire-release-$($(PKG)_VERSION)
-$(PKG)_FILE     := pire-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/yandex/pire/archive/release-$($(PKG)_VERSION).tar.gz
+$(PKG)_CHECKSUM := 8cfe1c97e54539c5751dcbcddc3b15610cf43fd8458ed821450cac7b2ad6b2f9
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, yandex/pire, release-)
-endef
+$(PKG)_GH_REPO    := yandex/pire
+$(PKG)_GH_TAG_PFX := release-
+$(PKG)_GH_TAG_SHA := 012bedf
+$(eval $(MXE_SETUP_GITHUB))
 
 define $(PKG)_BUILD
     cd '$(1)' && autoreconf -fi
