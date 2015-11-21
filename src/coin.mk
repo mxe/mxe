@@ -23,12 +23,6 @@ define $(PKG)_BUILD
         --disable-debug \
         --disable-symbols \
         --enable-compact \
-        --without-openal \
-        --without-fontconfig \
-        --without-spidermonkey \
-        --without-freetype \
-        --without-zlib \
-        --without-bzip2 \
         --without-x \
         COIN_STATIC=$(if $(BUILD_STATIC),true,false)
 
