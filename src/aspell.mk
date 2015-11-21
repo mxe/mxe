@@ -22,5 +22,10 @@ define $(PKG)_BUILD
         --enable-win32-relocatable \
         --disable-curses \
         --disable-nls
+
+    # libtool misses some dependency libs and there's no lt_cv* etc. options
+    $(if $(BUILD_SHARED),\
+        $(SED) -i 's#^postdeps="-#postdeps="-lpthread -#g' '$(1)/libtool')
+
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
