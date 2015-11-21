@@ -222,6 +222,7 @@
     "mpfr": "3.1.3",
     "mpg123": "1.21.0",
     "muparser": "2.2.5",
+    "muparserx": "4.0.4",
     "mxml": "2.9",
     "ncurses": "e14300b",
     "netcdf": "4.3.0",
