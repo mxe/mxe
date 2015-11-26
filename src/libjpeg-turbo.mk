@@ -22,7 +22,8 @@ define $(PKG)_BUILD
         --libdir='$(PREFIX)/$(TARGET)/lib/$(PKG)' \
         --includedir='$(PREFIX)/$(TARGET)/include/$(PKG)' \
         NASM=$(TARGET)-yasm
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' || $(MAKE) -C '$(1)' -j 1
+    $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT)
 
     # create pkg-config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
