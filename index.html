@@ -759,6 +759,21 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     so you can not build <b>gtk3</b>. Other packages may be
     missing on Rudix - please open an issue if you find any.
     </p>
+
+    <h5 id="requirements-macos-method-3">Method 3 - Homebrew</h5>
+    <p>
+    Install <a href="http://brew.sh/">Homebrew</a>,
+    then run:
+    </p>
+    <!-- http://braumeister.org/ -->
+    <pre>brew install \
+    autoconf automake cmake coreutils gdk-pixbuf gettext \
+    gnu-sed intltool libtool p7zip wget xz</pre>
+    <p>
+    and:
+    </p>
+    <pre>export PATH=${PATH}:/usr/local/opt/gettext/bin</pre>
+
     <p>
     You may be prompted to install a java runtime
     - this is not required.
