@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := f52583a83a63633701c5f71db3dc40aab87b7f76b29723aeb27941eff42df
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc dlfcn-win32
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/aspell/' | \
@@ -24,8 +24,9 @@ define $(PKG)_BUILD
         --disable-nls
 
     # libtool misses some dependency libs and there's no lt_cv* etc. options
+    # can be removed after 0.60.6.1 if recent libtool et al. is used
     $(if $(BUILD_SHARED),\
-        $(SED) -i 's#^postdeps="-#postdeps="-lpthread -#g' '$(1)/libtool')
+        $(SED) -i 's#^postdeps="-#postdeps="-ldl -lpthread -#g' '$(1)/libtool')
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
