@@ -53,10 +53,10 @@ define $(PKG)_BUILD
      echo 'if [[ "$$NO_MXE_TOOLCHAIN" == "1" ]]; then'; \
      echo '    echo "== Skip using MXE toolchain: $(CMAKE_TOOLCHAIN_FILE)"'; \
      echo '    # see https://github.com/mxe/mxe/issues/932'; \
-     echo '    exec cmake "$$@"'; \
+     echo '    exec "$(PREFIX)/$(BUILD)/bin/cmake" "$$@"'; \
      echo 'else'; \
      echo '    echo "== Using MXE toolchain: $(CMAKE_TOOLCHAIN_FILE)"'; \
-     echo '    exec cmake -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" "$$@"'; \
+     echo '    exec "$(PREFIX)/$(BUILD)/bin/cmake" -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" "$$@"'; \
      echo 'fi'; \
     ) \
              > '$(PREFIX)/bin/$(TARGET)-cmake'
