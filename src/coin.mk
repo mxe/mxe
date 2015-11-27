@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         COIN_STATIC=$(if $(BUILD_STATIC),true,false)
 
     # libtool misses some dependency libs and there's no lt_cv* etc. options
+    # can be removed after 3.1.3 if recent libtool et al. is used
     $(SED) -i 's,^postdeps="-,postdeps="-ldl -lopengl32 -lgdi32 -lwinmm -,g' '$(1)/libtool'
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
