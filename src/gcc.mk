@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := gcc
-$(PKG)_IGNORE   :=
+$(PKG)_IGNORE   := 5%
 $(PKG)_VERSION  := 4.9.3
 $(PKG)_CHECKSUM := 2332b2a5a321b57508b9031354a8503af6fdfb868b8c1748d33028d100a8b67e
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
