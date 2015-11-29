@@ -20,9 +20,6 @@ setupEnv() {
   mkdir -p ${gitsdir}
 
 
-  # John Doe <John Doe@acme.org>
-  export author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
-
   export pkg_version=`grep '^$(PKG)_VERSION' $mxedir/src/$pkg.mk  | \
     sed 's/.*:= \(.*\)/\1/'`
 
@@ -100,8 +97,7 @@ function export_patch {
     echo ''
     echo 'Contains ad hoc patches for cross building.'
     echo ''
-    git format-patch -p --stdout dist..HEAD | \
-    sed 's/^From: .*/From: MXE/g;'
+    git format-patch -p --stdout dist..HEAD
   ) > $mxedir/src/${pkg}-${patch_name}.patch && \
   echo "Generated ${mxedir}/src/${pkg}-${patch_name}.patch"
 }
@@ -117,7 +113,7 @@ function import_patch {
     cd $gitsdir/$pkg_subdir && \
     cat ${mxedir}/src/${pkg}-${patch_name}.patch | \
     sed '/^From/,$  !d' | \
-    sed s/'^From: .*'/"From: $author"/'g;' | \
+    sed s/'^From: MXE'/"From: fix@me"/'g;' | \
     git am --keep-cr && \
     echo "Imported ${mxedir}/src/${pkg}-${patch_name}.patch"
   else
