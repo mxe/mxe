@@ -5,10 +5,7 @@
 
 cmd=$1
 pkg=$2
-patch_name=$3
-if [ -z "$patch_name" ]; then
-    patch_name=1-fixes
-fi
+patch_name=${3:-1-fixes}
 
 setupEnv() {
   # MXE directory
