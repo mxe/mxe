@@ -94,7 +94,7 @@ function export_patch {
     echo ''
     echo 'Contains ad hoc patches for cross building.'
     echo ''
-    git format-patch -p --stdout dist..HEAD
+    git format-patch --no-numbered -p --stdout dist..HEAD
   ) > $mxedir/src/${pkg}-${patch_name}.patch && \
   echo "Generated ${mxedir}/src/${pkg}-${patch_name}.patch"
 }
