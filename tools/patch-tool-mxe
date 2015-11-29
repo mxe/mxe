@@ -28,7 +28,7 @@ setupEnv() {
     sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
     sed s/'$(PKG)'/$pkg/;`
 
-  export pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
+  export pkg_file=`grep '^$(PKG)_FILE\>' $mxedir/src/$pkg.mk  | \
     sed 's/.*:= \(.*\)/\1/' | \
     sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
     sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
