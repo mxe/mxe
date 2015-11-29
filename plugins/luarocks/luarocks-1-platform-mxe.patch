@@ -1,0 +1,83 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 5cd28e7a8f0de2539322ede15616904835a4dbe3 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 10 Oct 2015 17:45:24 +0100
+Subject: [PATCH] platform MXE
+
+diff --git a/src/luarocks/build/builtin.lua b/src/luarocks/build/builtin.lua
+index 00fd09e..a4985e9 100644
+--- a/src/luarocks/build/builtin.lua
++++ b/src/luarocks/build/builtin.lua
+@@ -165,7 +165,7 @@ function builtin.run(rockspec)
+             add_flags(extras, "-Wl,-rpath,%s:", libdirs)
+          end
+          add_flags(extras, "-l%s", libraries)
+-         if cfg.is_platform("cygwin") then
++         if cfg.is_platform("cygwin") or cfg.is_platform("mxe") then
+             add_flags(extras, "-l%s", {"lua"})
+          end
+          return execute(variables.LD.." "..variables.LIBFLAG, "-o", library, "-L"..variables.LUA_LIBDIR, unpack(extras))
+diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
+index 99b4077..a17fbaa 100644
+--- a/src/luarocks/cfg.lua
++++ b/src/luarocks/cfg.lua
+@@ -118,6 +118,9 @@ elseif system and system:match("^Windows") then
+ elseif system and system:match("^MINGW") then
+    detected.windows = true
+    detected.mingw32 = true
++elseif system and system:match("^MXE") then
++   detected.unix = true
++   detected.mxe = true
+ else
+    detected.unix = true
+    -- Fall back to Unix in unknown systems.
+@@ -430,6 +433,44 @@ if detected.unix then
+    defaults.web_browser = "xdg-open"
+ end
+ 
++if detected.mxe then
++   local MXE_ROOT, MXE_TARGET =
++      assert(site_config.LUAROCKS_PREFIX:match('^(.*)/usr/([^/]+)$'))
++   defaults.lib_extension = "dll"
++   defaults.external_lib_extension = "dll"
++   defaults.obj_extension = "obj"
++   defaults.external_deps_dirs = { site_config.LUAROCKS_PREFIX }
++   defaults.arch = "mxe-" .. MXE_TARGET
++   defaults.platforms = {"unix", "mxe"}
++   -- LUA_INCDIR and LUA_LIBDIR are defined in site_config.lua
++   defaults.variables.LUA_BINDIR = site_config.LUAROCKS_PREFIX .. "/bin"
++   defaults.cmake_generator = "Unix Makefiles"
++   defaults.variables.MAKE = os.getenv("MAKE")
++   defaults.variables.CMAKE = MXE_ROOT .. "/usr/bin/" .. MXE_TARGET .. "-cmake"
++   defaults.variables.CC = MXE_ROOT .. "/usr/bin/" .. MXE_TARGET .. "-gcc"
++   defaults.variables.LD = defaults.variables.CC
++   defaults.variables.CFLAGS = "-O2"
++   defaults.variables.LIBFLAG = "-shared"
++   defaults.variables.LUALIB = "liblua.dll.a"
++
++   defaults.export_path = "SET PATH=%s"
++   defaults.export_path_separator = ";"
++   defaults.export_lua_path = "SET LUA_PATH=%s"
++   defaults.export_lua_cpath = "SET LUA_CPATH=%s"
++   defaults.wrapper_suffix = ".bat"
++
++   defaults.external_deps_patterns = {
++      bin = { "?.exe", "?.bat" },
++      lib = { "?.dll.a", "lib?.dll.a" },
++      include = { "?.h" }
++   }
++   defaults.runtime_external_deps_patterns = {
++      bin = { "?.exe", "?.bat" },
++      lib = { "?.dll", "lib?.dll" },
++      include = { "?.h" }
++   }
++end
++
+ if detected.cygwin then
+    defaults.lib_extension = "so" -- can be overridden in the config file for mingw builds
+    defaults.arch = "cygwin-"..proc
+-- 
+2.1.4
+
