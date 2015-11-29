@@ -99,7 +99,8 @@ function export_patch {
         -p \
         --no-signature \
         --stdout \
-        dist..HEAD
+        dist..HEAD | \
+    sed 's/^index .......\.\......../index 0000000..0000000/'
   ) > $mxedir/src/${pkg}-${patch_name}.patch && \
   echo "Generated ${mxedir}/src/${pkg}-${patch_name}.patch"
 }
