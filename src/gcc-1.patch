@@ -48,7 +48,7 @@ diff --git a/gcc/config/i386/adxintrin.h b/gcc/config/i386/adxintrin.h
 index dd2a26c..2e680b3 100644
 --- a/gcc/config/i386/adxintrin.h
 +++ b/gcc/config/i386/adxintrin.h
-@@ -28,6 +28,10 @@
+@@ -28,5 +28,9 @@
  #ifndef _ADXINTRIN_H_INCLUDED
  #define _ADXINTRIN_H_INCLUDED
  
@@ -58,7 +58,6 @@ index dd2a26c..2e680b3 100644
 +
  extern __inline unsigned char
  __attribute__((__gnu_inline__, __always_inline__, __artificial__))
- _subborrow_u32 (unsigned char __CF, unsigned int __X,
 @@ -78,4 +82,8 @@ _addcarryx_u64 (unsigned char __CF, unsigned long long __X,
  }
  #endif
