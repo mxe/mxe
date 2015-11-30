@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 71953379c5a6fab618cbda9ac6639d87b35cab0600a4450a7392bc08c930f
 $(PKG)_SUBDIR   := cpp-netlib-$($(PKG)_VERSION)-final
 $(PKG)_FILE     := cpp-netlib-$($(PKG)_VERSION)-final.tar.gz
 $(PKG)_URL      := http://downloads.cpp-netlib.org/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost
+$(PKG)_DEPS     := gcc boost openssl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://cpp-netlib.org/' | \
@@ -21,6 +21,7 @@ define $(PKG)_BUILD
    mkdir '$(1)/build'
    cd '$(1)/build' && cmake .. \
        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+       -DINSTALL_CMAKE_DIR='$(PREFIX)/$(TARGET)/cmake/$(PKG)' \
        -DCPP-NETLIB_BUILD_EXAMPLES=OFF \
        -DCPP-NETLIB_BUILD_TESTS=OFF
 
