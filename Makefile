@@ -603,11 +603,12 @@ define UPDATE
 
 endef
 update:
-	$(foreach PKG,$(PKGS),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE))))
+	$(foreach PKG,$(PKGS),\
+	    $(and $($(PKG)_UPDATE),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE)))))
 
 update-package-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
-	    $(call UPDATE,$*,$(shell $($*_UPDATE))), \
+	    $(and $($*_UPDATE),$(call UPDATE,$*,$(shell $($*_UPDATE)))), \
 	    $(error Package $* not found in index.html))
 
 update-checksum-%:
