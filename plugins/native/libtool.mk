@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG                  := libtool
-$(PKG)_TARGETS       += $(BUILD)
+$(PKG)_TARGETS       := $(BUILD)
 $(PKG)_DEPS_$(BUILD) := autoconf automake
 
 define $(PKG)_BUILD_$(BUILD)

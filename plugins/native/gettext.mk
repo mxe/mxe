@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG                  := gettext
-$(PKG)_TARGETS       += $(BUILD)
+$(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := libiconv
 
 define $(PKG)_BUILD_$(BUILD)
