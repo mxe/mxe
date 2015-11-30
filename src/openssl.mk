@@ -30,6 +30,11 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar rcu' \
         CROSS_COMPILE='$(TARGET)-'
+
+    # no way to configure engines subdir install
+    $(if $(BUILD_SHARED),
+        rm -rf '$(PREFIX)/$(TARGET)/bin/engines' && \
+        mv -vf '$(PREFIX)/$(TARGET)/lib/engines' '$(PREFIX)/$(TARGET)/bin/')
 endef
 
 $(PKG)_BUILD_i686-w64-mingw32   = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))
