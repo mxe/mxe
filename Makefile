@@ -428,7 +428,7 @@ endif
 $(shell [ -d '$(PREFIX)/$(BUILD)/lib' ] || mkdir -p '$(PREFIX)/$(BUILD)/lib')
 
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c
-	@mkdir -p $(dir $@)
+	@echo '[build nonetwork lib]'
 	@$(BUILD_CC) -shared -fPIC -o $@ $<
 
 define PKG_TARGET_RULE
