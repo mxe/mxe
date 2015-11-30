@@ -418,12 +418,14 @@ $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG))))
 
 # disable networking during build-only rules for reproducibility
 ifeq ($(findstring darwin,$(BUILD)),)
-    NONET_LIB := $(PREFIX)/lib/nonetwork.so
+    NONET_LIB := $(PREFIX)/$(BUILD)/lib/nonetwork.so
     PRELOAD   := LD_PRELOAD='$(NONET_LIB)'
 else
-    NONET_LIB := $(PREFIX)/lib/nonetwork.dylib
+    NONET_LIB := $(PREFIX)/$(BUILD)/lib/nonetwork.dylib
     PRELOAD   := DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES='$(NONET_LIB)'
 endif
+
+$(shell [ -d '$(PREFIX)/$(BUILD)/lib' ] || mkdir -p '$(PREFIX)/$(BUILD)/lib')
 
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c
 	@mkdir -p $(dir $@)
