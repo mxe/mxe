@@ -345,9 +345,13 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <p>
     If you have a
     <a href="http://www.cmake.org/">CMake</a> project,
-    you can use the provided toolchain file:
+    you can use the provided cmake wrapper:
     </p>
-    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake</pre>
+    <pre>i686-w64-mingw32.static-cmake ...</pre>
+    <p>
+    This will automatically use the MXE version of cmake
+    and locate the toolchain file.
+    </p>
 
     <h3 id="tutorial-5c">Step 5c: Cross compile your Project (Qt)</h3>
 
@@ -513,10 +517,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://www.cmake.org/">CMake</a></td>
-        <td>≥ 2.8.0</td>
-    </tr>
-    <tr>
         <td><a href="http://flex.sourceforge.net/">Flex</a></td>
         <td>≥ 2.5.31</td>
     </tr>
@@ -626,11 +626,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install \
-    autoconf automake autopoint bash bison bzip2 cmake flex \
-    gettext git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
-    libtool libltdl-dev libssl-dev libxml-parser-perl make openssl \
-    p7zip-full patch perl pkg-config python ruby scons sed \
-    unzip wget xz-utils</pre>
+    autoconf automake autopoint bash bison bzip2 flex gettext\
+    git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
+    libtool libltdl-dev libssl-dev libxml-parser-perl make \
+    openssl p7zip-full patch perl pkg-config python ruby scons \
+    sed unzip wget xz-utils</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -651,10 +651,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://admin.fedoraproject.org/pkgdb/ -->
     <pre>yum install \
-    autoconf automake bash bison bzip2 cmake flex gcc-c++ \
-    gdk-pixbuf2-devel gettext git gperf intltool make sed libffi-devel \
-    libtool openssl-devel p7zip patch perl pkgconfig \
-    python ruby scons unzip wget xz</pre>
+    autoconf automake bash bison bzip2 flex gcc-c++ \
+    gdk-pixbuf2-devel gettext git gperf intltool make \
+    sed libffi-devel libtool openssl-devel p7zip patch \
+    perl pkgconfig python ruby scons unzip wget xz</pre>
 
     <p>
     On 64-bit Fedora,
@@ -665,8 +665,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.freshports.org/ -->
     <pre>pkg_add -r \
-    automake autoconf bash bison cmake coreutils flex \
-    gdk-pixbuf2 gettext git glib20 gmake gperf gsed intltool libffi \
+    automake autoconf bash bison coreutils flex gdk-pixbuf2 \
+    gettext git glib20 gmake gperf gsed intltool libffi \
     libtool openssl p5-XML-Parser p7zip patch perl \
     pkgconf python ruby scons unzip wget</pre>
 
@@ -703,8 +703,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S \
-    autoconf automake bash bzip2 bison cmake flex gcc \
-    gdk-pixbuf2 gettext git gperf intltool make sed libffi libtool \
+    autoconf automake bash bzip2 bison flex gcc gdk-pixbuf2\
+    gettext git gperf intltool make sed libffi libtool \
     openssl patch perl perl-xml-parser pkgconfig python \
     ruby scons unzip wget xz xz-lzma</pre>
 
@@ -718,7 +718,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://packages.gentoo.org/ -->
     <pre>emerge \
     sys-devel/autoconf sys-devel/automake app-shells/bash \
-    sys-devel/bison app-arch/bzip2 dev-util/cmake \
+    sys-devel/bison app-arch/bzip2 \
     sys-devel/flex sys-devel/gcc sys-devel/gettext \
     dev-vcs/git dev-util/gperf dev-util/intltool \
     sys-devel/make sys-apps/sed dev-libs/libffi \
@@ -741,9 +741,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
-    autoconf automake bison cmake coreutils flex gettext \
-    gdk-pixbuf2 glib2 gsed intltool libffi libtool openssl \
-    p5-xml-parser p7zip scons wget xz</pre>
+    autoconf automake bison coreutils flex gettext \
+    gdk-pixbuf2 glib2 gsed intltool libffi libtool \
+    openssl p5-xml-parser p7zip scons wget xz</pre>
 
     <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
     <p>
@@ -752,7 +752,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://rudix.org/packages/index.html -->
     <pre>sudo rudix install \
-    autoconf automake cmake coreutils gettext glib intltool \
+    autoconf automake coreutils gettext glib intltool \
     libtool p7zip scons sed wget xz</pre>
     <p>
     Note: <b>gdk-pixbuf2</b> is not installed in method 2,
@@ -767,7 +767,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://braumeister.org/ -->
     <pre>brew install \
-    autoconf automake cmake coreutils gdk-pixbuf gettext \
+    autoconf automake coreutils gdk-pixbuf gettext \
     gnu-sed intltool libtool p7zip wget xz</pre>
     <p>
     Some formulae are
@@ -800,11 +800,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://software.opensuse.org/131/en -->
     <pre>zypper install -R \
-    autoconf automake bash bison bzip2 cmake flex gcc-c++ \
-    gdk-pixbuf-devel gettext-tools git gperf intltool libffi-devel libtool \
-    make openssl libopenssl-devel p7zip patch perl \
-    perl-XML-Parser pkg-config python ruby scons sed unzip \
-    wget xz</pre>
+    autoconf automake bash bison bzip2 flex gcc-c++ \
+    gdk-pixbuf-devel gettext-tools git gperf intltool \
+    libffi-devel libtool make openssl libopenssl-devel \
+    p7zip patch perl perl-XML-Parser pkg-config python \
+    ruby scons sed unzip wget xz</pre>
 
     <p>
     On 64-bit openSUSE, install also:
