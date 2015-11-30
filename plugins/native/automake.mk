@@ -10,7 +10,6 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := http://www.gnu.org/software/automake
-$(PKG)_MAKEFILE := $(realpath $(lastword $(MAKEFILE_LIST)))
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     := autoconf

@@ -9,7 +9,6 @@ $(PKG)_SUBDIR   := flex-$($(PKG)_VERSION)
 $(PKG)_FILE     := flex-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/flex/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := http://flex.sourceforge.net
-$(PKG)_MAKEFILE := $(realpath $(lastword $(MAKEFILE_LIST)))
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=

@@ -9,7 +9,6 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.keepassx.org/releases/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := https://www.keepassx.org
-$(PKG)_MAKEFILE := $(realpath $(lastword $(MAKEFILE_LIST)))
 $(PKG)_OWNER    := https://github.com/starius
 $(PKG)_DEPS     := gcc qt
 

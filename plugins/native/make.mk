@@ -10,7 +10,6 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := http://www.gnu.org/software/make
-$(PKG)_MAKEFILE := $(realpath $(lastword $(MAKEFILE_LIST)))
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 

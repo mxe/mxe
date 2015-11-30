@@ -9,7 +9,6 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://launchpad.net/intltool/trunk/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := http://freedesktop.org/wiki/Software/intltool
-$(PKG)_MAKEFILE := $(realpath $(lastword $(MAKEFILE_LIST)))
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=
