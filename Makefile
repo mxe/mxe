@@ -174,9 +174,7 @@ UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
 
 # some shortcuts for awareness of MXE_PLUGIN_DIRS
-# plugins will need to set their own $(PKG)_MAKEFILE for updates
 # all files for extension plugins will be considered for outdated checks
-PKG_MAKEFILE  = $(realpath $(or $($(1)_MAKEFILE),$(TOP_DIR)/src/$(1).mk))
 PKG_MAKEFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).mk, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 PKG_TESTFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1)-test*, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 PKG_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
@@ -333,11 +331,17 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	fi
 	@touch '$@'
 
+# include core MXE packages and set *_MAKEFILE
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
+$(foreach PKG,$(PKGS),\
+    $(eval $(PKG)_MAKEFILE := $(realpath $(TOP_DIR)/src/$(PKG).mk)))
 
-# include files from MXE_PLUGIN_DIRS
+# include files from MXE_PLUGIN_DIRS, set *_MAKEFILE and `all-<plugin>` target
 PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
 PLUGIN_PKGS  := $(basename $(notdir $(PLUGIN_FILES)))
+$(foreach FILE,$(PLUGIN_FILES),\
+    $(eval $(basename $(notdir $(FILE)))_MAKEFILE ?= $(FILE)) \
+    $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE)))))
 include $(PLUGIN_FILES)
 PKGS := $(sort $(PKGS) $(PLUGIN_PKGS))
 
@@ -606,9 +610,9 @@ define UPDATE
                     $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
                 $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
                 $(if $(findstring undefined, $(origin UPDATE_DRYRUN)),
-                    $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$(PKG_MAKEFILE)'
+                    $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$($(1)_MAKEFILE)'
                     $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                        || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$(PKG_MAKEFILE)'; \
+                        || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$($(1)_MAKEFILE)'; \
                              exit 1; }))),
         $(info Unable to update version number of package $(1) \
             $(newline)$(newline)$($(1)_UPDATE)$(newline)))
@@ -626,7 +630,7 @@ update-package-%:
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
-	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$(call PKG_MAKEFILE,$*)', \
+	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$($*_MAKEFILE)', \
 	    $(error Package $* not found in index.html))
 
 .PHONY: cleanup-style
