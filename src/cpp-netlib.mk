@@ -11,6 +11,10 @@ $(PKG)_URL      := http://downloads.cpp-netlib.org/$($(PKG)_VERSION)/$($(PKG)_FI
 $(PKG)_DEPS     := gcc boost
 
 define $(PKG)_UPDATE
+    $(WGET) -q -O- 'http://cpp-netlib.org/' | \
+    $(SED) -n 's,.*cpp-netlib-\([0-9][^"]*\)-final.tar.gz.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
