@@ -3,7 +3,6 @@
 
 PKG             := qt5
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_UPDATE    = echo $(qtbase_VERSION)
 $(PKG)_DEPS     := $(patsubst $(TOP_DIR)/src/%.mk,%,\
                         $(shell grep -l 'DEPS.*qtbase' \
                                 $(TOP_DIR)/src/qt*.mk \

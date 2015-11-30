@@ -8,10 +8,6 @@ PKG             := pthreads
 $(PKG)_VERSION  := POSIX 1003.1-2001
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    echo $(pthreads_VERSION)
-endef
-
 define $(PKG)_BUILD
     # install and test pkg-config
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
