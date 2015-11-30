@@ -144,8 +144,11 @@ define MXE_GET_GITHUB_TAGS
     | tail -1
 endef
 
+# shared lib preload to disable networking, enable faketime etc
+PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
+
 # use a minimal whitelist of safe environment variables
-ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH LD_PRELOAD ACLOCAL_PATH
+ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH $(PRELOAD_VARS) ACLOCAL_PATH
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
 # disable wine with readonly directory (created by mxe-conf)
@@ -409,7 +412,16 @@ download-only-$(1):
 endef
 $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG))))
 
-$(PREFIX)/lib/nonetwork.so: $(TOP_DIR)/tools/nonetwork.c
+# disable networking during build-only rules for reproducibility
+ifeq ($(findstring darwin,$(BUILD)),)
+    NONET_LIB := $(PREFIX)/lib/nonetwork.so
+    PRELOAD   := LD_PRELOAD='$(NONET_LIB)'
+else
+    NONET_LIB := $(PREFIX)/lib/nonetwork.dylib
+    PRELOAD   := DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES='$(NONET_LIB)'
+endif
+
+$(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c
 	@mkdir -p $(dir $@)
 	@$(BUILD_CC) -shared -fPIC -o $@ $<
 
@@ -424,7 +436,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
                           $(if $(value $(call LOOKUP_PKG_RULE,$(1),URL,$(3))),download-only-$(1)) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(if $(call set_is_not_member,$(1),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS))) \
-                          $(PREFIX)/lib/nonetwork.so
+                          $(NONET_LIB)
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)',
@@ -433,7 +445,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	@if ! (time LD_PRELOAD="$(PREFIX)/lib/nonetwork.so" $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	@if ! (time $(PRELOAD) $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1) for target $(3)!'; \
 	    echo '------------------------------------------------------------'; \
