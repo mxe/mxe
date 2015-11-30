@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 0.11.1
 $(PKG)_CHECKSUM := bd9b081686f1042fa53af7627d4552e039130ada0937ea081097439e3c015eec
 $(PKG)_SUBDIR   := cpp-netlib-$($(PKG)_VERSION)-final
 $(PKG)_FILE     := cpp-netlib-$($(PKG)_VERSION)-final.tar.gz
-$(PKG)_URL      := http://storage.googleapis.com/cpp-netlib-downloads/$($(PKG)_VERSION)/cpp-netlib-$($(PKG)_VERSION)-final.tar.gz
+$(PKG)_URL      := http://downloads.cpp-netlib.org/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost
 
 define $(PKG)_UPDATE
