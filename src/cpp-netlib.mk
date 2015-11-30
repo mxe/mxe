@@ -3,8 +3,8 @@
 
 PKG             := cpp-netlib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.11.1
-$(PKG)_CHECKSUM := bd9b081686f1042fa53af7627d4552e039130ada0937ea081097439e3c015eec
+$(PKG)_VERSION  := 0.11.2
+$(PKG)_CHECKSUM := 71953379c5a6fab618cbda9ac6639d87b35cab0600a4450a7392bc08c930f2b1
 $(PKG)_SUBDIR   := cpp-netlib-$($(PKG)_VERSION)-final
 $(PKG)_FILE     := cpp-netlib-$($(PKG)_VERSION)-final.tar.gz
 $(PKG)_URL      := http://downloads.cpp-netlib.org/$($(PKG)_VERSION)/$($(PKG)_FILE)
