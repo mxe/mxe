@@ -4,7 +4,7 @@
 PKG             := json-glib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.4
-$(PKG)_CHECKSUM := efdf5a66d1d8fb504448a40ba2352bbfef301074
+$(PKG)_CHECKSUM := 80f3593cb6bd13f1465828e46a9f740e2e9bd3cd2257889442b3e62bd6de05cd
 $(PKG)_SUBDIR   := json-glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := json-glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/json-glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -19,16 +19,6 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --enable-static \
-        --disable-shared
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-endef
-
-define $(PKG)_BUILD_SHARED
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-static \
-        --enable-shared
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)/json-glib' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
