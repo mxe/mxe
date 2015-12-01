@@ -73,7 +73,7 @@ installer and Lua library (it installs Lua files to
 
 Build all rocks:
 ```
-$ make all-rocks MXE_PLUGIN_DIRS=plugins/luarocks MXE_TARGETS='i686-w64-mingw32.shared x86_64-w64-mingw32.shared'
+$ make all-luarocks MXE_PLUGIN_DIRS=plugins/luarocks MXE_TARGETS='i686-w64-mingw32.shared x86_64-w64-mingw32.shared'
 ```
 
 Run tests (requires wine):
