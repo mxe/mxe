@@ -111,6 +111,7 @@
     "jasper": "1.900.1",
     "jpeg": "9a",
     "json-c": "0.12",
+    "json-glib": "1.0.4",
     "json_spirit": "4.08",
     "jsoncpp": "1.6.5",
     "lame": "3.99.5",
