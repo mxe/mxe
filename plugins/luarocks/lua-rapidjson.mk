@@ -2,6 +2,8 @@
 # See index.html for further information.
 
 PKG             := lua-rapidjson
+$(PKG)_WEBSITE  := https://github.com/xpol/lua-rapidjson
+$(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.2-1
 $(PKG)_CHECKSUM := 10783d8633df3f50b1ad33c7de89d2a94a7d9cf45e2ce5217d0d2d5e77396fd2

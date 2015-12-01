@@ -2,6 +2,8 @@
 # See index.html for further information.
 
 PKG             := llthreads2
+$(PKG)_WEBSITE  := https://github.com/moteus/lua-llthreads2
+$(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.3
 $(PKG)_CHECKSUM := 8c6fc7966cdcc15ae2f89f66ae72f6727a985e7d254f139ecf75a50956a3e8e4

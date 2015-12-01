@@ -2,6 +2,8 @@
 # See index.html for further information.
 
 PKG             := luasocket
+$(PKG)_WEBSITE  := http://www.impa.br/~diego/software/luasocket
+$(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0-rc1
 $(PKG)_CHECKSUM := 8b67d9b5b545e1b694753dab7bd6cdbc24c290f2b21ba1e14c77b32817ea1249

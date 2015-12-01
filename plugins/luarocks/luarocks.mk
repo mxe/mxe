@@ -2,6 +2,8 @@
 # See index.html for further information.
 
 PKG             := luarocks
+$(PKG)_WEBSITE  := https://luarocks.org/
+$(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.2
 $(PKG)_CHECKSUM := 4f0427706873f30d898aeb1dfb6001b8a3478e46a5249d015c061fe675a1f022
