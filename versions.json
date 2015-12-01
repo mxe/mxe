@@ -156,6 +156,7 @@
     "libiberty": "2.25.1",
     "libical": "1.0.1",
     "libiconv": "1.14",
+    "libid3tag": "0.15.1b",
     "libidn": "1.32",
     "libircclient": "1.8",
     "libjpeg-turbo": "1.4.1",
