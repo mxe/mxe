@@ -18,9 +18,12 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        $(if $(BUILD_SHARED), \
-            lt_cv_deplibs_check_method='file_magic file format (pe-i386|pe-x86-64)' \
-            lt_cv_file_magic_cmd='$$OBJDUMP -f')
+        $(MXE_CONFIGURE_OPTS)
+
+    # libtool misses some dependency libs and there's no lt_cv* etc. options
+    # can be removed after 0.15.1b if recent libtool et al. is used
+    $(if $(BUILD_SHARED),\
+        $(SED) -i 's#^postdeps=""#postdeps="-lz"#g' '$(1)/libtool')
+
     $(MAKE) -C '$(1)' -j '$(JOBS)' install LDFLAGS='-no-undefined'
 endef
