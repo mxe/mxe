@@ -15,7 +15,7 @@ $(PKG)_DEPS     := gcc luarocks
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.inf.puc-rio.br/~roberto/lpeg/' | \
     $(SED) -n 's,.*lpeg-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    sort -h | tail -1
+    $(SORT) -h | tail -1
 endef
 
 # shared-only because luarocks is shared-only

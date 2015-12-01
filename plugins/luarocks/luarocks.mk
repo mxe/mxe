@@ -15,7 +15,7 @@ $(PKG)_DEPS     := gcc lua
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://keplerproject.github.io/luarocks/releases/' | \
     $(SED) -n 's,.*luarocks-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    sort -h | tail -1
+    $(SORT) -h | tail -1
 endef
 
 # shared-only because Lua loads modules in runtime
