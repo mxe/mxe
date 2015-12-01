@@ -24,7 +24,7 @@ define $(PKG)_BUILD_SHARED
         --rocks-tree='$(PREFIX)/$(TARGET)' \
         --lua-version='$(lua_SHORTVER)' \
         --with-lua='$(PREFIX)/$(TARGET)' \
-        --with-lua-bin='$(PREFIX)/bin' \
+        --with-lua-bin='$(PREFIX)/$(BUILD)/bin' \
         --with-downloader='wget' \
         --with-md5-checker='openssl'
     $(MAKE) -C '$(1)' build \

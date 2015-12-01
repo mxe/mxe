@@ -81,7 +81,7 @@ define $(PKG)_BUILD_$(BUILD)
     $(MAKE) -C '$(1)/src' -j '$(JOBS)' \
         PLAT=$(shell ([ `uname -s` == Darwin ] && echo "macosx") || echo `uname -s` | tr '[:upper:]' '[:lower:]')
     $(INSTALL) '$(1)/src/lua' '$(PREFIX)/bin/$(BUILD)-lua'
-    ln -sf '$(BUILD)-lua' '$(PREFIX)/bin/lua'
+    ln -sf '$(PREFIX)/bin/$(BUILD)-lua' '$(PREFIX)/$(BUILD)/bin/lua'
     $(INSTALL) '$(1)/src/luac' '$(PREFIX)/bin/$(BUILD)-luac'
-    ln -sf '$(BUILD)-luac' '$(PREFIX)/bin/luac'
+    ln -sf '$(PREFIX)/bin/$(BUILD)-luac' '$(PREFIX)/$(BUILD)/bin/luac'
 endef
