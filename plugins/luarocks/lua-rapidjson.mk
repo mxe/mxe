@@ -13,8 +13,7 @@ $(PKG)_URL      := https://github.com/xpol/lua-rapidjson/archive/v$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc luarocks
 
 define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, xpol/lua-rapidjson) | \
-    $(SED) 's,^v,,g'
+    $(call MXE_GET_GITHUB_TAGS, xpol/lua-rapidjson, v)
 endef
 
 # shared-only because luarocks is shared-only

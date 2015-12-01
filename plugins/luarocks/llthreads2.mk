@@ -13,8 +13,7 @@ $(PKG)_URL      := https://github.com/moteus/lua-llthreads2/archive/v$($(PKG)_VE
 $(PKG)_DEPS     := gcc luarocks
 
 define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, moteus/lua-llthreads2) | \
-    $(SED) 's,^v,,g'
+    $(call MXE_GET_GITHUB_TAGS, moteus/lua-llthreads2, v)
 endef
 
 # shared-only because luarocks is shared-only

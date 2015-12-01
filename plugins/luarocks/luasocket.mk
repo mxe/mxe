@@ -13,8 +13,7 @@ $(PKG)_URL      := https://github.com/diegonehab/luasocket/archive/v$($(PKG)_VER
 $(PKG)_DEPS     := gcc luarocks
 
 define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, diegonehab/luasocket) | \
-    $(SED) 's,^v,,g'
+    $(call MXE_GET_GITHUB_TAGS, diegonehab/luasocket, v)
 endef
 
 # shared-only because luarocks is shared-only
