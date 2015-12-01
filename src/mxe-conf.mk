@@ -56,7 +56,10 @@ define $(PKG)_BUILD
      echo '    exec "$(PREFIX)/$(BUILD)/bin/cmake" "$$@"'; \
      echo 'else'; \
      echo '    echo "== Using MXE toolchain: $(CMAKE_TOOLCHAIN_FILE)"'; \
-     echo '    exec "$(PREFIX)/$(BUILD)/bin/cmake" -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" "$$@"'; \
+     echo '    echo "== Using MXE runresult: $(CMAKE_RUNRESULT_FILE)"'; \
+     echo '    exec "$(PREFIX)/$(BUILD)/bin/cmake" \
+                         -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" \
+                         -C"$(CMAKE_RUNRESULT_FILE)" "$$@"'; \
      echo 'fi'; \
     ) \
              > '$(PREFIX)/bin/$(TARGET)-cmake'
