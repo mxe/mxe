@@ -4,8 +4,8 @@
 # 2.8.9 is Debian Wheezy version
 cmake_minimum_required(VERSION 2.8.9)
 
-# set languages in individual modules
-project(mxe NONE)
+# use default C and CXX languages
+project(mxe)
 
 # see cmake --help-policy <cmp> for details
 cmake_policy(SET CMP0017 NEW)
