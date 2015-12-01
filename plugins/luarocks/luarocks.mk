@@ -29,9 +29,10 @@ define $(PKG)_BUILD_SHARED
         --with-lua-bin='$(PREFIX)/bin' \
         --with-downloader='wget' \
         --with-md5-checker='openssl'
-    $(MAKE) -C '$(1)' build install \
+    $(MAKE) -C '$(1)' build \
         LUAROCKS_UNAME_S="MXE" \
         LUAROCKS_UNAME_M="$(TARGET)"
+    $(MAKE) -C '$(1)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/luarocks' '$(PREFIX)/bin/$(TARGET)-luarocks'
 
     # create wine wrapper for testing
