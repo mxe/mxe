@@ -423,13 +423,14 @@ ifeq ($(findstring darwin,$(BUILD)),)
 else
     NONET_LIB := $(PREFIX)/$(BUILD)/lib/nonetwork.dylib
     PRELOAD   := DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES='$(NONET_LIB)'
+    NONET_CFLAGS := -arch i386 -arch x86_64
 endif
 
 $(shell [ -d '$(PREFIX)/$(BUILD)/lib' ] || mkdir -p '$(PREFIX)/$(BUILD)/lib')
 
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c
 	@echo '[build nonetwork lib]'
-	@$(BUILD_CC) -shared -fPIC -o $@ $<
+	@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
 
 define PKG_TARGET_RULE
 .PHONY: $(1)
