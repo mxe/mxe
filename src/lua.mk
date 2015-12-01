@@ -14,6 +14,8 @@ $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc
 $(PKG)_DEPS_$(BUILD) :=
 
+lua_SHORTVER    := $(call SHORT_PKG_VERSION,lua)
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.lua.org/download.html' | \
     $(SED) -n 's,.*lua-\([0-9][^>]*\)\.tar.*,\1,p' | \

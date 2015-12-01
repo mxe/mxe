@@ -10,8 +10,6 @@ $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://keplerproject.github.io/luarocks/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc lua
 
-lua_SHORTVER    := $(call SHORT_PKG_VERSION,lua)
-
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://keplerproject.github.io/luarocks/releases/' | \
     $(SED) -n 's,.*luarocks-\([0-9][^>]*\)\.tar.*,\1,p' | \
