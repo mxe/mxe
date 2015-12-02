@@ -76,8 +76,24 @@ MXE_CONFIGURE_OPTS = \
         --enable-static --disable-shared , \
         --disable-static --enable-shared )
 
+# GCC threads and exceptions
 MXE_GCC_THREADS = \
-    $(if $(findstring posix,$(TARGET)),posix,win32)
+    $(if $(findstring posix,$(or $(TARGET),$(1))),posix,win32)
+
+# allowed exception handling for targets
+# default (first item) and alternate, revisit if gcc/mingw-w64 change defaults
+i686-w64-mingw32_EH   := sjlj dw2
+x86_64-w64-mingw32_EH := seh sjlj
+
+# functions to determine exception handling from user-specified target
+TARGET_EH_LIST = $($(firstword $(call split,.,$(or $(TARGET),$(1))))_EH)
+DEFAULT_EH     = $(firstword $(TARGET_EH_LIST))
+GCC_EXCEPTIONS = \
+    $(lastword $(DEFAULT_EH) \
+               $(filter $(TARGET_EH_LIST),$(call split,.,$(or $(TARGET),$(1)))))
+MXE_GCC_EXCEPTION_OPTS = \
+    $(if $(call seq,sjlj,$(GCC_EXCEPTIONS)),--enable-sjlj-exceptions) \
+    $(if $(call seq,dw2,$(GCC_EXCEPTIONS)),--disable-sjlj-exceptions)
 
 # Append these to the "make" and "make install" steps of autotools packages
 # in order to neither build nor install unwanted binaries, manpages,
@@ -331,6 +347,22 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	fi
 	@touch '$@'
 
+# phases are derived from user-specified targets in increasing specificity
+# phase 1 uses the plain triplet for generic packages e.g. binutils
+GET_PHASE_1_TARGET = \
+	$(filter $(MXE_TRIPLETS),$(call split,.,$(1)))
+# phase 2 uses triplet.threads.exceptions convention for gcc variations
+GET_PHASE_2_TARGET = \
+	$(call merge,.,\
+	$(filter $(MXE_TRIPLETS),$(call split,.,$(1))) \
+	$(MXE_GCC_THREADS) \
+	$(GCC_EXCEPTIONS))
+
+PHASE_1_TARGETS := $(sort \
+	$(foreach TARGET,$(MXE_TARGETS),$(call GET_PHASE_1_TARGET,$(TARGET))))
+PHASE_2_TARGETS := $(sort \
+	$(foreach TARGET,$(MXE_TARGETS),$(call GET_PHASE_2_TARGET,$(TARGET))))
+
 # include core MXE packages and set *_MAKEFILE
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 $(foreach PKG,$(PKGS),\
@@ -353,12 +385,21 @@ $(foreach PKG,$(PKGS), \
         $(eval $(TARGET)_PKGS += $(PKG)) \
         $(eval FILTERED_PKGS  += $(PKG))))
 
-# cross targets depend on native target
+# cross targets depend on phase 2 targets
 $(foreach TARGET,$(CROSS_TARGETS),\
+    $(eval $(TARGET)_DEPS = $(call GET_PHASE_2_TARGET,$(TARGET))))
+
+# phase 2 targets depend on phase 1 targets
+$(foreach TARGET,$(PHASE_2_TARGETS),\
+    $(eval $(TARGET)_DEPS = $(call GET_PHASE_1_TARGET,$(TARGET))))
+
+# phase 1 targets depend on native target
+$(foreach TARGET,$(PHASE_1_TARGETS),\
     $(eval $(TARGET)_DEPS = $(BUILD)))
 
-# always add $(BUILD) to our targets
-override MXE_TARGETS := $(CROSS_TARGETS) $(BUILD)
+# always add $(BUILD) and phases to our targets
+override MXE_TARGETS := $(sort \
+    $(BUILD) $(CROSS_TARGETS) $(PHASE_1_TARGETS) $(PHASE_2_TARGETS))
 
 # set column widths for build status messages
 PKG_COL_WIDTH    := $(call plus,2,$(call LIST_NMAX, $(sort $(call map, strlen, $(PKGS)))))
@@ -375,7 +416,7 @@ define TARGET_RULE
 	            i686-w64-mingw32.[$(subst $(space),|,$(MXE_LIB_TYPES))] instead))
 	$(if $(filter $(addsuffix %,$(MXE_TARGET_LIST) $(BUILD) $(MXE_TRIPLETS)),$(1)),,
 	    $(error Invalid target specified: "$(1)"))
-	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),
+	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD) $(PHASE_1_TARGETS) $(PHASE_2_TARGETS),$(1))))),
 	    @echo
 	    @echo '------------------------------------------------------------'
 	    @echo 'Warning: Deprecated target name $(1) specified'

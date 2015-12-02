@@ -4,11 +4,16 @@
 PKG            := mxe-conf
 $(PKG)_VERSION := 1
 $(PKG)_UPDATE  := echo 1
-$(PKG)_TARGETS := $(BUILD) $(MXE_TARGETS)
+$(PKG)_TARGETS := $(BUILD) $(MXE_TARGETS) $(PHASE_1_TARGETS) $(PHASE_2_TARGETS)
 
 define $(PKG)_BUILD
-    # install target-specific autotools config file
+    # create basic directory layout
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/share'
+
+    # install target-specific autotools config file
     # setting ac_cv_build bypasses the config.guess check in every package
     echo "ac_cv_build=$(BUILD)" > '$(PREFIX)/$(TARGET)/share/config.site'
 
@@ -21,7 +26,7 @@ define $(PKG)_BUILD
      echo 'set(BUILD_SHARED_LIBS $(if $(BUILD_SHARED),ON,OFF))'; \
      echo 'set(LIBTYPE $(if $(BUILD_SHARED),SHARED,STATIC))'; \
      echo 'set(CMAKE_PREFIX_PATH $(PREFIX)/$(TARGET))'; \
-     echo 'set(CMAKE_FIND_ROOT_PATH $(PREFIX)/$(TARGET))'; \
+     echo 'set(CMAKE_FIND_ROOT_PATH $(PREFIX)/$(TARGET) $(PREFIX)/$(call GET_PHASE_2_TARGET,$(TARGET)))'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)'; \
      echo 'set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)'; \
@@ -112,3 +117,10 @@ define $(PKG)_BUILD_$(BUILD)
              > '$(PREFIX)/$(BUILD)/bin/wine'
     chmod 0755 '$(PREFIX)/$(BUILD)/bin/wine'
 endef
+
+# define empty rules for phases
+$(foreach TARGET,$(PHASE_1_TARGETS) $(PHASE_2_TARGETS), \
+    $(eval $(PKG)_BUILD_$(TARGET) := ))
+# use common rule for cross targets
+$(foreach TARGET,$(filter-out $(BUILD),$(MXE_TARGETS)), \
+    $(eval $(PKG)_BUILD_$(TARGET) = $$($$(PKG)_BUILD)))

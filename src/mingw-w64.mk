@@ -8,6 +8,7 @@ $(PKG)_CHECKSUM := 89356a0aa8cf9f8b9dc8d92bc8dd01a131d4750c3acb30c6350a406316c42
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
+$(PKG)_TARGETS  := $(PHASE_1_TARGETS)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
