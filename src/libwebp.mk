@@ -3,8 +3,8 @@
 
 PKG             := libwebp
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.4.2
-$(PKG)_CHECKSUM := 14d825d7c2ef7d49621bcb6b83466be455585e671ae0a2ebc1f2e07775a1722d
+$(PKG)_VERSION  := 0.4.4
+$(PKG)_CHECKSUM := c65d34edb57338e331ba4d622227a2b3179444cfca17d02c34f1ead63f603e86
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.webmproject.org/releases/webp/$($(PKG)_FILE)
