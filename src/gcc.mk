@@ -56,7 +56,7 @@ define $(PKG)_POST_BUILD
     # ignore rm failure as parallel build may have cleaned up, but
     # don't wildcard all libs so future additions will be detected
     $(and $(BUILD_SHARED),
-    mv  -v '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+    mv  -v '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/gcc-$($(PKG)_VERSION)/'
     -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/'libgcc_s*.dll
     -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/lib/'libgcc_s*.a
     -rmdir '$(PREFIX)/lib/gcc/$(TARGET)/lib/')
