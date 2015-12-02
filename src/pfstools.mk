@@ -3,8 +3,8 @@
 
 PKG             := pfstools
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := 5e109d09f0c02cebf6800e04fc56851975f5d5e92d5a4ae626e31b58b347ff71
+$(PKG)_VERSION  := 2.0.4
+$(PKG)_CHECKSUM := 4a6c1880193d3d1924d98b8dc2d2fe25827e7b2508823dc38f535653a4fd9942
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
