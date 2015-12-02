@@ -25,6 +25,6 @@ define $(PKG)_BUILD
         --without-matlab \
         --without-octave \
         --without-python
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS='-no-undefined'
     $(MAKE) -C '$(1)' -j 1 install
 endef
