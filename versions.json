@@ -34,6 +34,7 @@
     "coin": "3.1.3",
     "cpp-netlib": "0.11.2",
     "cppunit": "1.13.2",
+    "cryptopp": "5.6.3",
     "crystalhd": "1",
     "cunit": "2.1-3",
     "curl": "7.46.0",
