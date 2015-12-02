@@ -11,15 +11,10 @@ $(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libiconv
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package freetds.' >&2;
-    echo $(freetds_VERSION)
-endef
-define $(PKG)_UPDATE_orig
-    $(WGET) -q -O- 'http://freetds.cvs.sourceforge.net/viewvc/freetds/freetds/' | \
-    grep '<option>R' | \
-    $(SED) -n 's,.*R\([0-9][0-9_]*\)<.*,\1,p' | \
-    $(SED) 's,_,.,g' | \
-    head -1
+    $(WGET) -q -O- 'ftp://ftp.freetds.org/pub/freetds/stable/' | \
+    $(SED) -n 's,.*freetds-\([0-9.]*\)\.tar.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
