@@ -2,20 +2,16 @@
 # See index.html for further information.
 
 PKG             := openthreads
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.4.0
-$(PKG)_CHECKSUM := 5c727d84755da276adf8c4a4a3a8ba9c9570fc4b4969f06f1d2e9f89b1e3040e
-$(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
-$(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).zip
-$(PKG)_URL      := http://trac.openscenegraph.org/downloads/developer_releases/$($(PKG)_FILE)
+$(PKG)_IGNORE    = $(openscenegraph_IGNORE)
+$(PKG)_VERSION   = $(openscenegraph_VERSION)
+$(PKG)_CHECKSUM  = $(openscenegraph_CHECKSUM)
+$(PKG)_SUBDIR    = $(openscenegraph_SUBDIR)
+$(PKG)_FILE      = $(openscenegraph_FILE)
+$(PKG)_URL       = $(openscenegraph_URL)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://trac.openscenegraph.org/downloads/developer_releases/?C=M;O=D' | \
-    $(SED) -n 's,.*OpenSceneGraph-\([0-9]*\.[0-9]*[02468]\.[^<]*\)\.zip.*,\1,p' | \
-    grep -v rc | \
-    $(SORT) -V | \
-    tail -1
+    echo $openscenegraph_VERSION)
 endef
 
 define $(PKG)_BUILD
