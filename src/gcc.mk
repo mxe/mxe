@@ -52,11 +52,17 @@ define $(PKG)_CONFIGURE
 endef
 
 define $(PKG)_POST_BUILD
-    # TODO: find a way to configure the installation of these correctly
-    # ignore rm failure as parallel build may have cleaned up, but
-    # don't wildcard all libs so future additions will be detected
+    # - no non-trivial way to configure installation of *.dlls
+    #   each sudbir has it's own variations of variables like:
+    #       `toolexeclibdir` `install-toolexeclibLTLIBRARIES` etc.
+    #   and maintaining those would be cumbersome
+    # - need to keep `--enable-version-specific-runtime-libs` otherwise
+    #   libraries go directly into $(PREFIX)/$(TARGET)/lib and are
+    #   harder to cleanup
+    # - ignore rm failure as parallel build may have cleaned up, but
+    #   don't wildcard all libs so future additions will be detected
     $(and $(BUILD_SHARED),
-    mv  -v '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/gcc-$($(PKG)_VERSION)/'
+    mv  -v '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
     -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/'libgcc_s*.dll
     -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/lib/'libgcc_s*.a
     -rmdir '$(PREFIX)/lib/gcc/$(TARGET)/lib/')
@@ -100,10 +106,10 @@ define $(PKG)_BUILD_mingw-w64
     $(MAKE) -C '$(1).build' -j 1 install
 
     # shared libgcc isn't installed to version-specific locations
-    # so install correctly to avoid clobbering with multiple versions
+    # so install correctly to simplify cleanup
     $(and $(BUILD_SHARED),
     $(MAKE) -C '$(1).build/$(TARGET)/libgcc' -j 1 \
-        toolexecdir='$(PREFIX)/$(TARGET)/bin/gcc-$($(PKG)_VERSION)' \
+        toolexecdir='$(PREFIX)/$(TARGET)/bin' \
         SHLIB_SLIBDIR_QUAL= \
         install-shared)
 
