@@ -3,12 +3,12 @@
 
 PKG             := ossim
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.18
-$(PKG)_CHECKSUM := 2dd070c2174dab08c04092345e5165ec45dcd5b63be88771c942843a250518ae
+$(PKG)_VERSION  := 1.8.20
+$(PKG)_CHECKSUM := a9148cbc7eebaed1d09d139e68c038592edcf74318ec2623f21494aa56879f52
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-1.tar.gz
 $(PKG)_URL      := http://download.osgeo.org/ossim/source/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype geos jpeg libpng openscenegraph proj tiff zlib
+$(PKG)_DEPS     := gcc freetype geos jpeg libpng openthreads proj tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://download.osgeo.org/ossim/source/latest/' | \
@@ -18,13 +18,14 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DCMAKE_MODULE_PATH='$(1)/ossim_package_support/cmake/CMakeModules' \
-        -DCMAKE_CXX_FLAGS='-DGEOS_INLINE=1' \
+    cd '$(1).build' && '$(TARGET)-cmake' \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DCMAKE_VERBOSE_MAKEFILE=TRUE \
+        -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+        -DCMAKE_MODULE_PATH='$(1)/ossim_package_support/cmake/CMakeModules' \
         -DBUILD_OSSIM_FREETYPE_SUPPORT=ON \
+        -DCMAKE_CXX_FLAGS='-DGEOS_INLINE=1' \
         '$(1)/ossim'
-    $(MAKE) -C '$(1).build/src/ossim' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build/src/ossim' -j 1 install
+
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef
