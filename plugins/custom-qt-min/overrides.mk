@@ -11,6 +11,8 @@
 #
 # make qt MXE_PLUGIN_DIRS='plugins/custom-qt-min'
 
+$(info == Custom Qt overrides: $(lastword $(MAKEFILE_LIST)))
+
 qt_DEPS := gcc
 
 define qt_BUILD
