@@ -59,10 +59,10 @@ function init_git {
 
   echo "Checking for cached $pkg_file"
   if [ ! -f $mxedir/pkg/$pkg_file ]; then
-    make -C "$mxedir" download-$pkg
-    echo "Building the mxe Makefile target 'download-$pkg' to get missing file"
+    make -C "$mxedir" download-only-$pkg
+    echo "Building the mxe Makefile target 'download-only-$pkg' to get missing file"
     if [ ! $? -eq 0 ]; then
-      echo "Could not build target download-$pkg - cancelling init." >&2
+      echo "Could not build target download-only-$pkg - cancelling init." >&2
       exit 1
     fi
   fi
