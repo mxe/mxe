@@ -5,10 +5,7 @@
 
 cmd=$1
 pkg=$2
-patch_name=$3
-if [ -z "$patch_name" ]; then
-    patch_name=1-fixes
-fi
+patch_name=${3:-1-fixes}
 
 setupEnv() {
   # MXE directory
@@ -19,9 +16,6 @@ setupEnv() {
 
   mkdir -p ${gitsdir}
 
-
-  # John Doe <John Doe@acme.org>
-  export author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
 
   export pkg_version=`grep '^$(PKG)_VERSION' $mxedir/src/$pkg.mk  | \
     sed 's/.*:= \(.*\)/\1/'`
@@ -34,7 +28,7 @@ setupEnv() {
     sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
     sed s/'$(PKG)'/$pkg/;`
 
-  export pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
+  export pkg_file=`grep '^$(PKG)_FILE\>' $mxedir/src/$pkg.mk  | \
     sed 's/.*:= \(.*\)/\1/' | \
     sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
     sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
@@ -100,8 +94,14 @@ function export_patch {
     echo ''
     echo 'Contains ad hoc patches for cross building.'
     echo ''
-    git format-patch -p --stdout dist..HEAD | \
-    sed 's/^From: .*/From: MXE/g;'
+    git format-patch \
+        --no-numbered \
+        -p \
+        --no-signature \
+        --stdout \
+        dist..HEAD | \
+    sed 's/^From [0-9a-f]\{40\} /From 0000000000000000000000000000000000000000 /' | \
+    sed 's/^index .......\.\......../index 0000000..0000000/'
   ) > $mxedir/src/${pkg}-${patch_name}.patch && \
   echo "Generated ${mxedir}/src/${pkg}-${patch_name}.patch"
 }
@@ -117,7 +117,7 @@ function import_patch {
     cd $gitsdir/$pkg_subdir && \
     cat ${mxedir}/src/${pkg}-${patch_name}.patch | \
     sed '/^From/,$  !d' | \
-    sed s/'^From: .*'/"From: $author"/'g;' | \
+    sed s/'^From: MXE'/"From: fix@me"/'g;' | \
     git am --keep-cr && \
     echo "Imported ${mxedir}/src/${pkg}-${patch_name}.patch"
   else
