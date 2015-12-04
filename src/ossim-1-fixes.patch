@@ -1,57 +1,15 @@
-diff -burN ossim-1.8.20-1.orig/ossim/include/ossim/ossimConfig.h ossim-1.8.20-1/ossim/include/ossim/ossimConfig.h
---- ossim-1.8.20-1.orig/ossim/include/ossim/ossimConfig.h	1970-01-01 01:00:00.000000000 +0100
-+++ ossim-1.8.20-1/ossim/include/ossim/ossimConfig.h	2015-12-04 12:32:52.002784000 +0100
-@@ -0,0 +1,20 @@
-+/*  $Id: ossimConfig.h.in 13607 2008-09-25 19:39:45Z gpotts $ */
-+#ifndef ossimConfig_HEADER
-+#define ossimConfig_HEADER
-+
-+/* Define to "1" if you have libz installed, "0" if not. */
-+#define OSSIM_HAS_LIBZ 1
-+
-+/* Define to "1" if you have MPI(lam/mpi), "0" if not. */
-+#define OSSIM_HAS_MPI 0
-+
-+/* Define to "1" if you have FREETYPE, "0" if not. */
-+#define OSSIM_HAS_FREETYPE 1
-+
-+/* Define to "1" if you have GEOTIFF, "0" if not. */
-+#define OSSIM_HAS_GEOTIFF 1
-+
-+/* Enable cvs id strings for use with "ident" application. */
-+#define OSSIM_ID_ENABLED 1
-+
-+#endif /* End of "#ifndef ossimConfig_HEADER" */
-diff -burN ossim-1.8.20-1.orig/ossim/include/ossim/ossimVersion.h ossim-1.8.20-1/ossim/include/ossim/ossimVersion.h
---- ossim-1.8.20-1.orig/ossim/include/ossim/ossimVersion.h	1970-01-01 01:00:00.000000000 +0100
-+++ ossim-1.8.20-1/ossim/include/ossim/ossimVersion.h	2015-12-04 12:32:52.002929000 +0100
-@@ -0,0 +1,14 @@
-+#ifndef ossimVersion_HEADER
-+#define ossimVersion_HEADER 1
-+
-+#define OSSIM_VERSION "1.8.20"
-+#define OSSIM_MAJOR_VERSION_NUMBER 1
-+#define OSSIM_MINOR_VERSION_NUMBER 8
-+#define OSSIM_PATCH_VERSION_NUMBER 20  
-+#define OSSIM_RELEASE_NUMBER 1  
-+#define OSSIM_REVISION_NUMBER "UNKNOWN"  
-+
-+// date format = (yyyymmdd)
-+#define OSSIM_BUILD_DATE "20151204"
-+
-+#endif /* End of #ifndef ossimVersion_HEADER */
 diff -burN ossim-1.8.20-1.orig/ossim/include/ossim/point_cloud/ossimGenericPointCloudHandler.h ossim-1.8.20-1/ossim/include/ossim/point_cloud/ossimGenericPointCloudHandler.h
 --- ossim-1.8.20-1.orig/ossim/include/ossim/point_cloud/ossimGenericPointCloudHandler.h	2015-07-21 15:23:00.000000000 +0200
 +++ ossim-1.8.20-1/ossim/include/ossim/point_cloud/ossimGenericPointCloudHandler.h	2015-12-04 12:29:00.001900000 +0100
 @@ -75,7 +75,7 @@
     virtual void close() {  }
- 
+
  protected:
 -   ossimGenericPointCloudHandler() {}
 +   ossimGenericPointCloudHandler();
     ossimPointBlock m_pointBlock;
  };
- 
+
 diff -burN ossim-1.8.20-1.orig/ossim/src/ossim/point_cloud/ossimGenericPointCloudHandler.cpp ossim-1.8.20-1/ossim/src/ossim/point_cloud/ossimGenericPointCloudHandler.cpp
 --- ossim-1.8.20-1.orig/ossim/src/ossim/point_cloud/ossimGenericPointCloudHandler.cpp	1970-01-01 01:00:00.000000000 +0100
 +++ ossim-1.8.20-1/ossim/src/ossim/point_cloud/ossimGenericPointCloudHandler.cpp	2015-12-04 12:27:33.000145000 +0100
