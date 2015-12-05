@@ -187,6 +187,7 @@
     "libshout": "2.3.1",
     "libsigc++": "2.4.0",
     "libsndfile": "1.0.25",
+    "libsodium": "1.0.6",
     "libssh2": "1.6.0",
     "libsvm": "3.20",
     "libtool": "2.4.4",
