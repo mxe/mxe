@@ -38,7 +38,7 @@ WGET       := wget --no-check-certificate \
                    --user-agent=$(shell wget --version | \
                    $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
 
-REQUIREMENTS := autoconf automake autopoint bash bison bzip2 cmake flex \
+REQUIREMENTS := autoconf automake autopoint bash bison bzip2 flex \
                 $(BUILD_CC) $(BUILD_CXX) gperf intltoolize $(LIBTOOL) \
                 $(LIBTOOLIZE) $(MAKE) openssl $(PATCH) $(PERL) python \
                 ruby scons $(SED) $(SORT) unzip wget xz 7za gdk-pixbuf-csource
