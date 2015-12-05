@@ -33,6 +33,30 @@ define $(PKG)_BUILD_SHARED
         LUAROCKS_UNAME_S="MXE" \
         LUAROCKS_UNAME_M="$(TARGET)"
     $(MAKE) -C '$(1)' install
+
+    # move installed lua file luarocks to luarocks.lua
+    mv '$(PREFIX)/$(TARGET)/bin/luarocks' '$(PREFIX)/$(TARGET)/bin/luarocks.lua'
+
+    # create bash wrapper adding inter-process mutex
+    # see https://github.com/mxe/mxe/pull/1017#issuecomment-161557440
+    (echo '#!/usr/bin/env bash'; \
+     echo 'echo "== Using MXE wrapper: $(PREFIX)/$(TARGET)/bin/luarocks"'; \
+     echo '# Creating a directory is an atomic operation, that is why'; \
+     echo '# it can be used as a mutex.'; \
+     echo '# See http://wiki.bash-hackers.org/howto/mutex'; \
+     echo 'while ( ! mkdir "$(PREFIX)/$(TARGET)/lib/luarocks/lock.dir" ); do'; \
+     echo '    echo "Waiting for $(PREFIX)/$(TARGET)/lib/luarocks/lock.dir to lock"'; \
+     echo '    sleep 5'; \
+     echo 'done'; \
+     echo '"$(PREFIX)/$(TARGET)/bin/luarocks.lua" "$$@"'; \
+     echo 'rmdir "$(PREFIX)/$(TARGET)/lib/luarocks/lock.dir"'; \
+    ) \
+             > '$(PREFIX)/$(TARGET)/bin/luarocks'
+    chmod 0755 '$(PREFIX)/$(TARGET)/bin/luarocks'
+    # remove lock dir if it exists after previous failed installation
+    -rmdir "$(PREFIX)/$(TARGET)/lib/luarocks/lock.dir"
+
+    # symlink
     ln -sf '$(PREFIX)/$(TARGET)/bin/luarocks' '$(PREFIX)/bin/$(TARGET)-luarocks'
 
     # create wine wrapper for testing
