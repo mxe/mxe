@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         --disable-visibility \
         --disable-nls \
         --with-expat \
+        LIBS='-lmman' \
         $(if $(BUILD_SHARED),\
             lt_cv_deplibs_check_method='file_magic file format (pe-i386|pe-x86-64)' \
             lt_cv_file_magic_cmd='$$OBJDUMP -f')
