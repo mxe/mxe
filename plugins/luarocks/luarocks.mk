@@ -39,6 +39,7 @@ define $(PKG)_BUILD_SHARED
 
     # create bash wrapper adding inter-process mutex
     # see https://github.com/mxe/mxe/pull/1017#issuecomment-161557440
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/luarocks'
     (echo '#!/usr/bin/env bash'; \
      echo 'echo "== Using MXE wrapper: $(PREFIX)/$(TARGET)/bin/luarocks"'; \
      echo '# Creating a directory is an atomic operation, that is why'; \
