@@ -10,7 +10,11 @@ $(PKG)_CHECKSUM := c740c7bb23a936944e1cc63b7c3c5351a8976d7867c5252c8854f7b2af9da
 $(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)
 $(PKG)_FILE     := lua-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.lua.org/ftp/$($(PKG)_FILE)
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc
+$(PKG)_DEPS_$(BUILD) :=
+
+lua_SHORTVER    := $(call SHORT_PKG_VERSION,lua)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.lua.org/download.html' | \
@@ -38,7 +42,7 @@ define $(PKG)_BUILD
         CC='$(TARGET)-gcc' \
         AR='$(TARGET)-ar rcu' \
         RANLIB='$(TARGET)-ranlib' \
-        a
+        a lua
 
     # lua.h is installed to noinstall/ to avoid error when executing an empty
     # 'install' command.
@@ -49,6 +53,7 @@ define $(PKG)_BUILD
         TO_BIN='lua.h' \
         INSTALL='$(INSTALL)' \
         install
+    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
     $($(PKG)_BUILD_COMMON)
 endef
 
@@ -60,7 +65,7 @@ define $(PKG)_BUILD_SHARED
         RANLIB='echo skipped ranlib' \
         SYSCFLAGS='-DLUA_BUILD_AS_DLL' \
         LUA_A=lua$($(PKG)_SOVERS).dll \
-        a
+        a lua
     $(MAKE) -C '$(1)' -j 1 \
         INSTALL_TOP='$(PREFIX)/$(TARGET)' \
         INSTALL_MAN='$(1)/noinstall' \
@@ -68,17 +73,15 @@ define $(PKG)_BUILD_SHARED
         INSTALL='$(INSTALL)' \
         TO_LIB='liblua.dll.a' \
         install
+    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
     $($(PKG)_BUILD_COMMON)
 endef
 
-# disable native build temporarily
-define $(PKG)_BUILD_DISABLED
+define $(PKG)_BUILD_$(BUILD)
     $(MAKE) -C '$(1)/src' -j '$(JOBS)' \
-        INSTALL_TOP='$(PREFIX)/$(TARGET)' \
-        INSTALL='$(INSTALL)' \
         PLAT=$(shell ([ `uname -s` == Darwin ] && echo "macosx") || echo `uname -s` | tr '[:upper:]' '[:lower:]')
-    $(MAKE) -C '$(1)' -j 1 \
-        INSTALL_TOP='$(PREFIX)/$(TARGET)' \
-        INSTALL='$(INSTALL)' \
-        install
+    $(INSTALL) '$(1)/src/lua' '$(PREFIX)/bin/$(BUILD)-lua'
+    ln -sf '$(PREFIX)/bin/$(BUILD)-lua' '$(PREFIX)/$(BUILD)/bin/lua'
+    $(INSTALL) '$(1)/src/luac' '$(PREFIX)/bin/$(BUILD)-luac'
+    ln -sf '$(PREFIX)/bin/$(BUILD)-luac' '$(PREFIX)/$(BUILD)/bin/luac'
 endef
