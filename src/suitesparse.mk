@@ -25,6 +25,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
         CC='$(TARGET)-gcc' \
         CPLUSPLUS='$(TARGET)-g++' \
+        CXX='$(TARGET)-g++' \
         F77='$(TARGET)-gfortran' \
         AR='$(TARGET)-ar' \
         RANLIB='$(TARGET)-ranlib' \
