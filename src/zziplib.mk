@@ -21,14 +21,12 @@ endef
 define $(PKG)_BUILD
     # don't build and install docs
     (echo '# DISABLED'; echo 'all:'; echo 'install:') > '$(1)/docs/Makefile.in'
+    # mman-win32 is only a partial implementation
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-mmap \
         CFLAGS="-O -ggdb" \
         PKG_CONFIG='$(TARGET)-pkg-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= LDFLAGS="-no-undefined"
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
-
-$(PKG)_BUILD_SHARED =
