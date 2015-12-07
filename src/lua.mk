@@ -4,8 +4,8 @@
 PKG             := lua
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.3.2
-# Shared version
-$(PKG)_SOVERS   := 53
+# Shared version and luarocks subdir
+$(PKG)_SHORTVER := $(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_CHECKSUM := c740c7bb23a936944e1cc63b7c3c5351a8976d7867c5252c8854f7b2af9da68f
 $(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)
 $(PKG)_FILE     := lua-$($(PKG)_VERSION).tar.gz
@@ -13,8 +13,6 @@ $(PKG)_URL      := http://www.lua.org/ftp/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc
 $(PKG)_DEPS_$(BUILD) :=
-
-lua_SHORTVER    := $(call SHORT_PKG_VERSION,lua)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.lua.org/download.html' | \
@@ -64,12 +62,12 @@ define $(PKG)_BUILD_SHARED
         AR='$(TARGET)-gcc -Wl,--out-implib,liblua.dll.a -shared -o' \
         RANLIB='echo skipped ranlib' \
         SYSCFLAGS='-DLUA_BUILD_AS_DLL' \
-        LUA_A=lua$($(PKG)_SOVERS).dll \
+        LUA_A=liblua$($(PKG)_SHORTVER).dll \
         a lua
     $(MAKE) -C '$(1)' -j 1 \
         INSTALL_TOP='$(PREFIX)/$(TARGET)' \
         INSTALL_MAN='$(1)/noinstall' \
-        TO_BIN='lua$($(PKG)_SOVERS).dll' \
+        TO_BIN='liblua$($(PKG)_SHORTVER).dll' \
         INSTALL='$(INSTALL)' \
         TO_LIB='liblua.dll.a' \
         install
