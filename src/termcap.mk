@@ -26,4 +26,8 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar' \
         oldincludedir= \
         install
+
+    # no shared support in configure/Makefile
+    $(if $(BUILD_SHARED), \
+        $(MAKE_SHARED_FROM_STATIC) '$(1)/libtermcap.a')
 endef
