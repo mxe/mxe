@@ -19,9 +19,7 @@ endef
 define $(PKG)_BUILD
     echo 'Requires.private: freetype2' >> '$(1)/SDL2_ttf.pc.in'
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
         --with-freetype-prefix='$(PREFIX)/$(TARGET)'
