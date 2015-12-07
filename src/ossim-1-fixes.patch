@@ -4,6 +4,7 @@ This patch has been taken from:
 
 https://github.com/rkanavath/ossim/commit/643f0b1f6984b97e7a72af7ff05085b7e716f934
 This patch MUST be removed when building ossim version > 1.8.20
+Merged in https://github.com/ossimlabs/ossim/pull/3
 
 diff -burN ossim-1.8.20-1.orig/ossim/include/ossim/point_cloud/ossimGenericPointCloudHandler.h ossim-1.8.20-1/ossim/include/ossim/point_cloud/ossimGenericPointCloudHandler.h
 --- ossim-1.8.20-1.orig/ossim/include/ossim/point_cloud/ossimGenericPointCloudHandler.h	2015-07-21 15:23:00.000000000 +0200
