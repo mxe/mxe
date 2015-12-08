@@ -2,6 +2,8 @@
 # See index.html for further information.
 
 PKG             := tk
+$(PKG)_WEBSITE  := https://tcl.tk
+$(PKG)_OWNER    := https://github.com/highperformancecoder
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 8.6.4
 $(PKG)_CHECKSUM := 08f99df85e5dc9c4271762163c6aabb962c8b297dc5c4c1af8bdd05fc2dd26c1
