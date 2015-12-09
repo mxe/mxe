@@ -68,13 +68,18 @@ endef
 null  :=
 space := $(null) $(null)
 
+MXE_DISABLE_DOC_OPTS = \
+    ac_cv_prog_HAVE_DOXYGEN="false" \
+    --disable-doxygen
+
 MXE_CONFIGURE_OPTS = \
     --host='$(TARGET)' \
     --build='$(BUILD)' \
     --prefix='$(PREFIX)/$(TARGET)' \
     $(if $(BUILD_STATIC), \
         --enable-static --disable-shared , \
-        --disable-static --enable-shared )
+        --disable-static --enable-shared ) \
+    $(MXE_DISABLE_DOC_OPTS)
 
 MXE_GCC_THREADS = \
     $(if $(findstring posix,$(TARGET)),posix,win32)
