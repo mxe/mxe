@@ -5,7 +5,7 @@ This file is part of MXE.
 See index.html for further information.
 
 build-pkg, Build binary packages from MXE packages
-Instructions: http://mxe.redjohn.tk
+Instructions: http://pkg.mxe.cc
 
 Requirements: MXE, lua, tsort, fakeroot, dpkg-deb.
 Usage: lua tools/build-pkg.lua
