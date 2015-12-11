@@ -7,7 +7,7 @@
 
 # This also acts as a CI to file issue on GitHub if download fails.
 
-# DigitalOcean server
+# DigitalOcean server: mirror.mxe.cc
 # IP: 104.131.71.203
 # v6: 2604:a880:800:10::156:f001 2604:a880:800:10::1
 #
