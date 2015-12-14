@@ -62,6 +62,7 @@ local TARGETS = {
 
 local function echo(fmt, ...)
     print(fmt:format(...))
+    io.stdout:flush()
 end
 
 local function log(fmt, ...)
