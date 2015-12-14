@@ -434,8 +434,7 @@ local CONTROL = [[Package: %s
 Version: %s
 Section: devel
 Priority: optional
-Architecture: %s
-Depends: %s
+Architecture: %s%s
 Maintainer: Boris Nagaev <bnagaev@gmail.com>
 Homepage: http://mxe.cc
 Description: %s
@@ -447,7 +446,11 @@ Description: %s
 ]]
 
 local function debianControl(options)
-    local deb_deps_str = table.concat(options.deps, ', ')
+    local deb_deps_str = ''
+    if #options.deps >= 1 then
+        deb_deps_str = '\n' .. 'Depends: ' ..
+            table.concat(options.deps, ', ')
+    end
     local version = options.version .. '-' .. TODAY
     return CONTROL:format(
         options.package,
