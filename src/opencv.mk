@@ -58,6 +58,8 @@ define $(PKG)_BUILD
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
+   $(SED) -i 's,.{OpenCV_ARCH}/.{OpenCV_RUNTIME}/,,g' '$(PREFIX)/$(TARGET)/OpenCVConfig.cmake'
+
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
         '$(1)/samples/c/fback_c.c' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
