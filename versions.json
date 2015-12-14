@@ -69,6 +69,7 @@
     "gdb": "7.10.1",
     "gdk-pixbuf": "2.30.8",
     "gendef": "4.0.4",
+    "geoip-database": "20150317-1",
     "geos": "3.4.2",
     "gettext": "0.19.5.1",
     "giflib": "5.0.5",
