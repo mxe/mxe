@@ -1,0 +1,136 @@
+This file is part of MXE.
+See index.html for further information.
+
+From: Rashad Kanavath <rashad.kanavath@c-s.fr>
+Date: Wed, 06 Jan 2016 12:22:00 +0000
+Subject: [PATCH] fix dll link errors
+
+diff -burN muparser-2.2.5.orig/include/muParserBase.h muparser-2.2.5.new/include/muParserBase.h
+--- muparser-2.2.5.orig/include/muParserBase.h	2015-08-16 16:23:14.000000000 +0200
++++ muparser-2.2.5.new/include/muParserBase.h	2016-01-06 12:04:14.000439000 +0100
+@@ -59,7 +59,7 @@
+   Complementary to a set of internally implemented functions the parser is able to handle
+   user defined functions and variables.
+ */
+-class ParserBase
++class CLASS_EXPORT ParserBase
+ {
+ friend class ParserTokenReader;
+
+@@ -314,4 +314,3 @@
+ } // namespace mu
+
+ #endif
+-
+diff -burN muparser-2.2.5.orig/include/muParserCallback.h muparser-2.2.5.new/include/muParserCallback.h
+--- muparser-2.2.5.orig/include/muParserCallback.h	2015-08-16 16:23:14.000000000 +0200
++++ muparser-2.2.5.new/include/muParserCallback.h	2016-01-06 12:10:54.000139000 +0100
+@@ -27,6 +27,7 @@
+ #define MU_PARSER_CALLBACK_H
+
+ #include "muParserDef.h"
++#include "muParserDLL.h"
+
+ /** \file
+     \brief Definition of the parser callback class.
+@@ -47,7 +48,7 @@
+
+     \author (C) 2004-2011 Ingo Berg
+ */
+-class ParserCallback
++class CLASS_EXPORT ParserCallback
+ {
+ public:
+     ParserCallback(fun_type0  a_pFun, bool a_bAllowOpti);
+@@ -115,4 +116,3 @@
+ } // namespace mu
+
+ #endif
+-
+diff -burN muparser-2.2.5.orig/include/muParserDLL.h muparser-2.2.5.new/include/muParserDLL.h
+--- muparser-2.2.5.orig/include/muParserDLL.h	2015-08-16 16:23:14.000000000 +0200
++++ muparser-2.2.5.new/include/muParserDLL.h	2016-01-06 12:05:47.000423000 +0100
+@@ -28,11 +28,14 @@
+ #if defined(WIN32) || defined(_WIN32)
+     #ifdef MUPARSERLIB_EXPORTS
+         #define API_EXPORT(TYPE) __declspec(dllexport) TYPE __cdecl
++        #define CLASS_EXPORT __declspec(dllexport)
+     #else
+         #define API_EXPORT(TYPE) __declspec(dllimport) TYPE __cdecl
++        #define CLASS_EXPORT __declspec(dllimport)
+     #endif
+ #else
+     #define API_EXPORT(TYPE) TYPE
++    #define CLASS_EXPORT
+ #endif
+
+
+diff -burN muparser-2.2.5.orig/include/muParserError.h muparser-2.2.5.new/include/muParserError.h
+--- muparser-2.2.5.orig/include/muParserError.h	2015-08-16 16:23:14.000000000 +0200
++++ muparser-2.2.5.new/include/muParserError.h	2016-01-06 12:03:45.000081000 +0100
+@@ -34,6 +34,7 @@
+ #include <memory>
+
+ #include "muParserDef.h"
++#include "muParserDLL.h"
+
+ /** \file
+     \brief This file defines the error class used by the parser.
+@@ -100,7 +101,7 @@
+ //---------------------------------------------------------------------------
+ /** \brief A class that handles the error messages.
+ */
+-class ParserErrorMsg
++class CLASS_EXPORT ParserErrorMsg
+ {
+ public:
+     typedef ParserErrorMsg self_type;
+@@ -125,7 +126,7 @@
+
+   Part of the math parser package.
+ */
+-class ParserError
++class CLASS_EXPORT ParserError
+ {
+ private:
+
+@@ -173,4 +174,3 @@
+ } // namespace mu
+
+ #endif
+-
+diff -burN muparser-2.2.5.orig/include/muParser.h muparser-2.2.5.new/include/muParser.h
+--- muparser-2.2.5.orig/include/muParser.h	2015-08-16 16:23:14.000000000 +0200
++++ muparser-2.2.5.new/include/muParser.h	2016-01-06 12:05:28.000239000 +0100
+@@ -48,7 +48,7 @@
+     muparser(at)beltoforion.de
+     </small>
+   */
+-  /* final */ class Parser : public ParserBase
++/* final */ class CLASS_EXPORT Parser : public ParserBase
+   {
+   public:
+
+@@ -112,4 +112,3 @@
+ } // namespace mu
+
+ #endif
+-
+diff -burN muparser-2.2.5.orig/include/muParserTokenReader.h muparser-2.2.5.new/include/muParserTokenReader.h
+--- muparser-2.2.5.orig/include/muParserTokenReader.h	2015-08-16 16:23:14.000000000 +0200
++++ muparser-2.2.5.new/include/muParserTokenReader.h	2016-01-06 12:03:19.000096000 +0100
+@@ -51,7 +51,7 @@
+   /** \brief Token reader for the ParserBase class.
+
+   */
+-  class ParserTokenReader
++class CLASS_EXPORT ParserTokenReader
+   {
+   private:
+
+@@ -157,5 +157,3 @@
+ } // namespace mu
+
+ #endif
+-
+-
