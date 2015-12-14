@@ -744,3 +744,8 @@ if not no_debs then
     makeMxeRequirementsPackage('jessie')
 end
 makeMxeSourcePackage()
+if #unbroken < #build_list then
+    local code = 1
+    local close = true
+    os.exit(code, close)
+end
