@@ -1,0 +1,33 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 6f6377091a12ed3fe749fe646674be921d2c648c Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 00:28:50 +0200
+Subject: [PATCH] do not check qmake existance
+
+Fix ./configure error:
+
+checking for mxe/usr/i686-w64-mingw32.static/qt/bin/qmake...
+configure: error: cannot check for file existence when
+cross compiling
+---
+ configure |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index f28d1b0..a414bd6 100755
+--- a/configure
++++ b/configure
+@@ -4540,7 +4540,7 @@ if eval \${$as_ac_File+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   test "$cross_compiling" = yes &&
+-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
++  echo "cannot check for file existence when cross compiling" "$LINENO" 5
+ if test -r "$QT_QMAKE/qmake"; then
+   eval "$as_ac_File=yes"
+ else
+-- 
+1.7.10.4
+
