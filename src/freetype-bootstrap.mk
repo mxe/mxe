@@ -15,5 +15,5 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(freetype_BUILD)
+    $(freetype_BUILD_COMMON)
 endef
