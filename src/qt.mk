@@ -74,7 +74,6 @@ define $(PKG)_BUILD
 
     # lrelease (from linguist) needed to prepare translation files
     $(MAKE) -C '$(1)/tools/linguist/lrelease' -j '$(JOBS)' install
-    ln -fs '$(PREFIX)/$(TARGET)/bin/lrelease' '$(PREFIX)/bin/$(TARGET)-lrelease'
 
     cd '$(1)/tools/assistant' && '$(1)/bin/qmake' assistant.pro
     # can't figure out where -lQtCLucene comes from so use
