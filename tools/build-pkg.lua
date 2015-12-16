@@ -718,6 +718,7 @@ local function makeMxeSourcePackage()
         'ext',
         'index.html',
         'src',
+        'plugins',
         'tools',
         'versions.json',
     }
