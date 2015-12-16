@@ -496,7 +496,8 @@ local function makePackage(name, files, deps, ver, d1, d2, dst)
         local control_fname = dirname .. '/DEBIAN/control'
         writeFile(control_fname, control_text)
         -- make .deb file
-        local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
+        local cmd = 'dpkg-deb -Zxz -b %s'
+        cmd = 'fakeroot -i deb.fakeroot ' .. cmd
         os.execute(cmd:format(dirname))
         -- cleanup
         os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
