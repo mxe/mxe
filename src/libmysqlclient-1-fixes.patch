@@ -348,3 +348,26 @@ index 1111111..2222222 100644
    double t= d - (double) 0x8000000000000000ULL;
  
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Wed, 16 Dec 2015 17:39:28 +0100
+Subject: [PATCH] fix CMake error if dir contains special regex char
+
+See https://github.com/mxe/mxe/issues/1030
+
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -59,7 +59,10 @@ MACRO(EXTRACT_LINK_LIBRARIES target var)
+     FOREACH(lib ${${target}_LIB_DEPENDS})
+       # Filter out "general", it is not a library, just CMake hint
+       # Also, remove duplicates
+-      IF(NOT lib STREQUAL "general" AND NOT ${var}  MATCHES "-l${lib} ")
++      # To check if "${var}" contains "-l${lib} ", use replace
++      # can't use MATCHES because ${lib} may contain special chars.
++      STRING(REPLACE "-l${lib} " "" var_repl ${var})
++      IF(NOT lib STREQUAL "general" AND ${var} STREQUAL ${var_repl})
+         IF (lib MATCHES "^\\-l")
+           SET(${var} "${${var}} ${lib} ") 
+         ELSEIF(lib MATCHES "^/")
