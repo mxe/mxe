@@ -473,6 +473,13 @@ local function makePackage(name, files, deps, ver, d1, d2, dst)
     local tar_name = dirname .. '.tar.xz'
     local cmd = '%s -T %s --owner=root --group=root -cJf %s'
     os.execute(cmd:format(tool 'tar', list_path, tar_name))
+    -- update list of files back from .tar.xz (see #1067)
+    local cmd = '%s -tf %s'
+    cmd = cmd:format(tool 'tar', tar_name)
+    local tar_reader = io.popen(cmd, 'r')
+    local files_str = tar_reader:read('*all')
+    tar_reader:close()
+    writeFile(list_path, files_str)
     -- make DEBIAN/control file
     local control_text = debianControl {
         package = name,
