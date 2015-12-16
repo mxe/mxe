@@ -24,11 +24,14 @@ various target platforms, which:
 ## Supported Toolchains
 
   * Runtime: MinGW-w64
-  * Host Triplet:
+  * Host Triplets:
     - `i686-w64-mingw32`
     - `x86_64-w64-mingw32`
   * Packages:
     - static
     - shared
+  * GCC Threading Libraries (`winpthreads` is always available):
+    - win32
+    - [posix (experimental)](https://github.com/mxe/mxe/pull/958)
 
 Please see [mxe.cc](http://mxe.cc/) for further information and package support matrix.
