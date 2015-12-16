@@ -700,11 +700,15 @@ local function makeMxeRequirementsPackage(release)
         -- Jessie+
         table.insert(deps, 'libtool-bin')
     end
-    local files = {}
+    local dummy_name = 'mxe-requirements.dummy.' .. release
+    local dummy = io.open(dummy_name, 'w')
+    dummy:close()
+    local files = {dummy_name}
     local d1 = "MXE requirements package"
     local d2 = MXE_REQUIREMENTS_DESCRIPTION2
     local dst = release
     makePackage(name, files, deps, ver, d1, d2, dst)
+    os.remove(dummy_name)
 end
 
 local MXE_SOURCE_DESCRIPTION2 =
