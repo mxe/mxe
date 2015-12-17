@@ -3,8 +3,8 @@
 
 PKG             := libass
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.13.0
-$(PKG)_CHECKSUM := e0071a3b2e95411c8d474014678368e3f0b852f7d663e0564b344e7335eb0671
+$(PKG)_VERSION  := 0.13.1
+$(PKG)_CHECKSUM := 4aa36b1876a61cab46fc9284fee84224b9e2840fe7b3e63d96a8d32574343fe7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := https://github.com/libass/libass/releases/download/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && $(LIBTOOLIZE) && autoreconf -fi
     # fontconfig is only required for legacy XP support
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \

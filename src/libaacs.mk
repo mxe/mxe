@@ -3,8 +3,8 @@
 
 PKG             := libaacs
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.7.1
-$(PKG)_CHECKSUM := ecc49a22ae2a645cfb5b8e732b51fe0e2684e6488a68debc5edd6e07edadb2b0
+$(PKG)_VERSION  := 0.8.1
+$(PKG)_CHECKSUM := 95c344a02c47c9753c50a5386fdfb8313f9e4e95949a5c523a452f0bcb01bbe8
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := http://ftp.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
