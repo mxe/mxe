@@ -11,8 +11,10 @@ $(PKG)_URL      := https://github.com/libass/libass/releases/download/$($(PKG)_V
 $(PKG)_DEPS     := gcc fontconfig freetype fribidi harfbuzz
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://code.google.com/p/libass/downloads/list?sort=-uploaded' | \
-    $(SED) -n 's,.*libass-\([0-9][^<]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- "https://api.github.com/repos/libass/libass/releases" | \
+    grep 'tag_name' | \
+    $(SED) -n 's,.*tag_name": "\([0-9][^>]*\)".*,\1,p' | \
+    $(SORT) -Vr | \
     head -1
 endef
 
