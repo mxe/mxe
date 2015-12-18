@@ -461,3 +461,78 @@ index 1111111..2222222 100644
      {
      vtkErrorMacro(<< "Initialize: couldn't set user data for callback"\
                      << " (" << GetLastError() << ")");
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 19 Dec 2015 02:36:12 +0300
+Subject: [PATCH] cmake: use STREQUAL, not MATCHES to compare paths
+
+See https://github.com/mxe/mxe/issues/1087
+
+diff --git a/Utilities/MaterialLibrary/CMakeLists.txt b/Utilities/MaterialLibrary/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Utilities/MaterialLibrary/CMakeLists.txt
++++ b/Utilities/MaterialLibrary/CMakeLists.txt
+@@ -91,13 +91,13 @@ ENDMACRO(COPY_FILES_TO_DIR)
+ 
+ # Shaders/Materials provided in Utilities/MaterialLibrary/Repository
+ # are copied over to the binary dir.
+-IF (NOT "${VTK_BINARY_DIR}" MATCHES "^${VTK_SOURCE_DIR}$")
++IF (NOT "${VTK_BINARY_DIR}" STREQUAL "${VTK_SOURCE_DIR}")
+   # Ensure that the Source and Build dir are not same.
+   # In that case we don't need to copy anything.
+   COPY_FILES_TO_DIR(${MaterialLibrary_SOURCE_DIR}/Repository
+     ${VTK_DEFAULT_SHADERS_DIR})
+ 
+-ENDIF (NOT "${VTK_BINARY_DIR}" MATCHES "^${VTK_SOURCE_DIR}$")
++ENDIF (NOT "${VTK_BINARY_DIR}" STREQUAL "${VTK_SOURCE_DIR}")
+ 
+ # Build the ShaderCodes Library.
+ SET (CgCodes
+diff --git a/Utilities/vtkTclTest2Py/CMakeLists.txt b/Utilities/vtkTclTest2Py/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Utilities/vtkTclTest2Py/CMakeLists.txt
++++ b/Utilities/vtkTclTest2Py/CMakeLists.txt
+@@ -40,9 +40,9 @@ IF(PYTHON_EXECUTABLE AND VTK_WRAP_PYTHON)
+     SET(VTK_PYTHON_SOURCE_FILES ${VTK_PYTHON_SOURCE_FILES} ${src})
+   ENDFOREACH(file)
+ 
+-  IF ("${VTK_BINARY_DIR}" MATCHES "^${VTK_SOURCE_DIR}$")
++  IF ("${VTK_BINARY_DIR}" STREQUAL "${VTK_SOURCE_DIR}")
+     #MESSAGE("In source build -- no need to copy Python files.")
+-  ELSE ("${VTK_BINARY_DIR}" MATCHES "^${VTK_SOURCE_DIR}$")
++  ELSE ("${VTK_BINARY_DIR}" STREQUAL "${VTK_SOURCE_DIR}")
+     FOREACH(file ${VTK_PYTHON_FILES})
+       SET(src "${VTK_SOURCE_DIR}/Utilities/vtkTclTest2Py/${file}.py")
+       SET(tgt "${VTK_BINARY_DIR}/Utilities/vtkTclTest2Py/${file}.py")
+@@ -52,7 +52,7 @@ IF(PYTHON_EXECUTABLE AND VTK_WRAP_PYTHON)
+                          OUTPUT ${tgt}
+                          COMMENT "source copy")
+     ENDFOREACH(file)
+-  ENDIF ("${VTK_BINARY_DIR}" MATCHES "^${VTK_SOURCE_DIR}$")
++  ENDIF ("${VTK_BINARY_DIR}" STREQUAL "${VTK_SOURCE_DIR}")
+ 
+   # Byte compile the Python files.
+   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/compile_all_vtk.py.in
+diff --git a/Wrapping/Python/CMakeLists.txt b/Wrapping/Python/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Wrapping/Python/CMakeLists.txt
++++ b/Wrapping/Python/CMakeLists.txt
+@@ -468,7 +468,7 @@ IF(PYTHON_EXECUTABLE)
+     SET(VTK_PYTHON_SOURCE_FILES ${VTK_PYTHON_SOURCE_FILES} ${src})
+   ENDFOREACH(file)
+ 
+-  IF (NOT "${VTK_BINARY_DIR}" MATCHES "^${VTK_SOURCE_DIR}$")
++  IF (NOT "${VTK_BINARY_DIR}" STREQUAL "${VTK_SOURCE_DIR}")
+     FOREACH(file ${VTK_PYTHON_FILES})
+       SET(src "${VTK_SOURCE_DIR}/Wrapping/Python/${file}.py")
+       SET(tgt "${VTK_BINARY_DIR}/Wrapping/Python/${file}.py")
+@@ -477,7 +477,7 @@ IF(PYTHON_EXECUTABLE)
+                          OUTPUT ${tgt}
+                          COMMENT "source copy")
+     ENDFOREACH(file)
+-  ENDIF (NOT "${VTK_BINARY_DIR}" MATCHES "^${VTK_SOURCE_DIR}$")
++  ENDIF (NOT "${VTK_BINARY_DIR}" STREQUAL "${VTK_SOURCE_DIR}")
+ 
+   # handle the different configuration types (each will have identical files)
+   SET(VTK_PYTHON_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES})
