@@ -1,0 +1,57 @@
+--- qrencode-3.4.2/tests/Makefile.am.orig       2013-04-08 12:24:46 +0400
++++ qrencode-3.4.2/tests/Makefile.am    2013-04-08 12:32:30 +0400
+@@ -19,7 +19,7 @@
+ libdecoder_a_SOURCES = decoder.c decoder.h
+
+ test_qrinput_SOURCES = test_qrinput.c
+-test_qrinput_LDADD = ../libqrencode.la $(DECODER_LIBS)
++test_qrinput_LDADD = $(DECODER_LIBS) ../libqrencode.la
+
+ test_bitstream_SOURCES = test_bitstream.c
+ test_bitstream_LDADD = ../libqrencode.la
+@@ -28,28 +28,28 @@
+ test_estimatebit_LDADD = ../libqrencode.la
+
+ test_qrspec_SOURCES = test_qrspec.c
+-test_qrspec_LDADD = ../libqrencode.la $(DECODER_LIBS)
++test_qrspec_LDADD = $(DECODER_LIBS) ../libqrencode.la
+
+ test_mqrspec_SOURCES = test_mqrspec.c
+-test_mqrspec_LDADD = ../libqrencode.la $(DECODER_LIBS)
++test_mqrspec_LDADD = $(DECODER_LIBS) ../libqrencode.la
+
+ test_rs_SOURCES = test_rs.c
+ test_rs_LDADD = ../libqrencode.la
+
+ test_qrencode_SOURCES = test_qrencode.c
+-test_qrencode_LDADD = ../libqrencode.la $(DECODER_LIBS)
++test_qrencode_LDADD = $(DECODER_LIBS) ../libqrencode.la
+
+ test_split_SOURCES = test_split.c
+ test_split_LDADD = ../libqrencode.la
+
+ test_monkey_SOURCES = test_monkey.c
+-test_monkey_LDADD = ../libqrencode.la $(DECODER_LIBS)
++test_monkey_LDADD = $(DECODER_LIBS) ../libqrencode.la
+
+ test_mask_SOURCES = test_mask.c
+-test_mask_LDADD = ../libqrencode.la $(DECODER_LIBS)
++test_mask_LDADD = $(DECODER_LIBS) ../libqrencode.la
+
+ test_mmask_SOURCES = test_mmask.c
+-test_mmask_LDADD = ../libqrencode.la $(DECODER_LIBS)
++test_mmask_LDADD = $(DECODER_LIBS) ../libqrencode.la
+
+ prof_qrencode_SOURCES = prof_qrencode.c
+ prof_qrencode_LDADD = ../libqrencode.la
+--- qrencode-3.4.2/tests/Makefile.am.orig       2013-04-08 12:32:30 +0400
++++ qrencode-3.4.2/tests/Makefile.am    2013-04-08 12:34:19 +0400
+@@ -7,6 +7,8 @@
+                                  test_mqrspec test_split test_monkey test_mask test_mmask \
+                                  create_frame_pattern create_mqr_frame_pattern \
+                                  $(sdlPROGRAMS)
++
++TESTS = $(noinst_PROGRAMS)
+ noinst_LIBRARIES = libdecoder.a
+ DECODER_LIBS = libdecoder.a $(LIBICONV)
+ noinst_HEADERS = common.h
