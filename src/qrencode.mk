@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 3.4.4
 $(PKG)_CHECKSUM := efe5188b1ddbcbf98763b819b146be6a90481aac30cfc8d858ab78a19cde1fa5
 $(PKG)_SUBDIR   := qrencode-$($(PKG)_VERSION)
 $(PKG)_FILE     := qrencode-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://fukuchi.org/works/qrencode/qrencode-3.4.4.tar.bz2
+$(PKG)_URL      := http://fukuchi.org/works/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
