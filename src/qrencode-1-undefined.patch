@@ -1,0 +1,10 @@
+--- qrencode-3.3.1/Makefile.am.orig     2012-01-31 07:07:56 +0400
++++ qrencode-3.3.1/Makefile.am  2012-06-27 10:08:09 +0400
+@@ -19,7 +19,7 @@
+                                                 mqrspec.c mqrspec.h \
+                                                 mmask.c mmask.h
+
+-libqrencode_la_LDFLAGS = -version-number $(MAJOR_VERSION):$(MINOR_VERSION):$(MICRO_VERSION)
++libqrencode_la_LDFLAGS = -version-number $(MAJOR_VERSION):$(MINOR_VERSION):$(MICRO_VERSION) -no-undefined
+
+ include_HEADERS = qrencode.h
