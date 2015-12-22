@@ -27,7 +27,6 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' -f Makefile.fip \
         CXX='$(TARGET)-g++' \
-        CXXFLAGS='-DFREEIMAGE_LIB' \
         CC='$(TARGET)-gcc' \
         AR='$(TARGET)-ar' \
         RC='$(TARGET)-windres' \
