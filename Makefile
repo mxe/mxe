@@ -230,6 +230,11 @@ ifneq ($(words $(PWD)),1)
     $(error GNU Make chokes on paths with spaces)
 endif
 
+# dollar signs also cause troubles
+ifneq (,$(findstring $$,$(PWD)))
+    $(error GNU Make chokes on paths with dollar signs)
+endif
+
 ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
 else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
