@@ -193,6 +193,11 @@ local function parseItem(item)
     return item:match("([^~]+)~([^~]+)")
 end
 
+-- return item name from target and package
+local function makeItem(target, package)
+    return target .. '~' .. package
+end
+
 -- return several tables describing packages for all targets
 -- * list of items
 -- * map from item to list of deps (which are also items)
@@ -538,6 +543,19 @@ local function isBuilt(item, files)
     return false
 end
 
+local function findForeignInstalls(item, files)
+    for _, file in ipairs(files) do
+        local pattern = 'usr/([^/]+)/installed/([^/]+)'
+        local t, p = file:match(pattern)
+        if t then
+            local item1 = makeItem(t, p)
+            if item1 ~= item then
+                log('Item %s built item %s', item, item1)
+            end
+        end
+    end
+end
+
 -- script building HUGE_TIMES from MXE main log
 -- https://gist.github.com/starius/3ea9d953b0c30df88aa7
 local HUGE_TIMES = {
@@ -614,6 +632,7 @@ local function buildPackages(items, item2deps)
     for i, item in ipairs(items) do
         if not brokenDep(item) then
             local files = buildItem(item, item2deps, file2item)
+            findForeignInstalls(item, files)
             if isBuilt(item, files) then
                 item2files[item] = files
                 table.insert(unbroken, item)
