@@ -1,0 +1,18 @@
+This file is part of MXE.
+See index.html for further information.
+
+Add the FREEIMAGE_LIB define in order to keep the build process from defining
+dllspec specifications.
+
+diff -ur a/Makefile.fip b/Makefile.fip
+--- a/Makefile.fip	2010-12-09 15:12:12.000000000 +0100
++++ b/Makefile.fip	2015-12-22 13:24:33.071944345 +0100
+@@ -17,7 +17,7 @@
+ MODULES := $(MODULES:.cpp=.o)
+ CFLAGS ?= -O3 -fPIC -fexceptions -fvisibility=hidden -DNO_LCMS
+ CFLAGS += $(INCLUDE)
+-CXXFLAGS ?= -O3 -fPIC -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy
++CXXFLAGS ?= -O3 -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy -DFREEIMAGE_LIB
+ CXXFLAGS += $(INCLUDE)
+ 
+ ifeq ($(shell sh -c 'uname -m 2>/dev/null || echo not'),x86_64)
