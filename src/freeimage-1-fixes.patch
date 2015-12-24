@@ -4,7 +4,7 @@ See index.html for further information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 27 Oct 2012 22:57:27 +0200
 Subject: [PATCH] include string.h for memset
 
@@ -27,7 +27,7 @@ index 1111111..2222222 100644
  
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
+From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 11 May 2013 15:15:39 +1000
 Subject: [PATCH] mingw-w64 fixes
 
