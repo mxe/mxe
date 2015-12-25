@@ -261,6 +261,30 @@ local function sortForBuild(items, item2deps)
     return build_list
 end
 
+-- return if build_list is ordered topologically
+local function isTopoOrdered(build_list, items, item2deps)
+    if #build_list ~= #items then
+        return false, 'Length of build_list is wrong'
+    end
+    local item2index = {}
+    for index, item in ipairs(build_list) do
+        if item2index[item] then
+            return false, 'Duplicate item: ' .. item
+        end
+        item2index[item] = index
+    end
+    for item, deps in pairs(item2deps) do
+        for _, dep in ipairs(deps) do
+            if item2index[item] < item2index[dep] then
+                return false, 'Item ' .. item ..
+                    'is built before its dependency ' ..
+                    dep
+            end
+        end
+    end
+    return true
+end
+
 local function isListed(file, list)
     for _, pattern in ipairs(list) do
         if file:match(pattern) then
@@ -768,6 +792,7 @@ end
 gitInit()
 local items, item2deps, item2ver = getItems()
 local build_list = sortForBuild(items, item2deps)
+assert(isTopoOrdered(build_list, items, item2deps))
 build_list = sliceArray(build_list, max_items)
 local unbroken, item2files = buildPackages(build_list, item2deps)
 makeDebs(unbroken, item2deps, item2ver, item2files)
