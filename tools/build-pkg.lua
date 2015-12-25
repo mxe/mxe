@@ -7,7 +7,7 @@ See index.html for further information.
 build-pkg, Build binary packages from MXE packages
 Instructions: http://pkg.mxe.cc
 
-Requirements: MXE, lua, tsort, fakeroot, dpkg-deb.
+Requirements: MXE, lua, fakeroot, dpkg-deb.
 Usage: lua tools/build-pkg.lua
 Packages are written to `*.tar.xz` files.
 Debian packages are written to `*.deb` files.
@@ -236,28 +236,61 @@ local function getItems()
     return items, item2deps, item2ver
 end
 
+-- graph is a map from item to a list of destinations
+local function transpose(graph)
+    local transposed = {}
+    for item, destinations in pairs(graph) do
+        for _, dest in ipairs(destinations) do
+            if not transposed[dest] then
+                transposed[dest] = {}
+            end
+            table.insert(transposed[dest], item)
+        end
+    end
+    return transposed
+end
+
+local function reverse(list)
+    local n = #list
+    local reversed = {}
+    for i = 1, n do
+        reversed[i] = list[n - i + 1]
+    end
+    return reversed
+end
+
 -- return items ordered in build order
 -- this means, if item depends on item2, then
 -- item2 preceeds item1 in the list
 local function sortForBuild(items, item2deps)
-    -- use sommand tsort
-    local tsort_input_fname = os.tmpname()
-    local tsort_input = io.open(tsort_input_fname, 'w')
-    for _, item1 in ipairs(items) do
-        for _, item2 in ipairs(item2deps[item1]) do
-            tsort_input:write(item2 .. ' ' .. item1 .. '\n')
+    local n = #items
+    local item2followers = transpose(item2deps)
+    -- Tarjan's algorithm
+    -- https://en.wikipedia.org/wiki/Topological_sorting
+    local build_list_reversed = {}
+    local marked_permanently = {}
+    local marked_temporarily = {}
+    local function visit(item1)
+        assert(not marked_temporarily[item1], 'not a DAG')
+        if not marked_permanently[item1] then
+            marked_temporarily[item1] = true
+            local followers = item2followers[item1] or {}
+            for _, item2 in ipairs(followers) do
+                visit(item2)
+            end
+            marked_permanently[item1] = true
+            marked_temporarily[item1] = false
+            table.insert(build_list_reversed, item1)
         end
     end
-    tsort_input:close()
-    --
-    local build_list = {}
-    local tsort = io.popen('tsort ' .. tsort_input_fname, 'r')
-    for line in tsort:lines() do
-        local item = trim(line)
-        table.insert(build_list, item)
+    for _, item in ipairs(items) do
+        if not marked_permanently[item] then
+            visit(item)
+        end
     end
-    tsort:close()
-    os.remove(tsort_input_fname)
+    assert(#build_list_reversed == n)
+    local build_list = reverse(build_list_reversed)
+    assert(#build_list == n)
     return build_list
 end
 
