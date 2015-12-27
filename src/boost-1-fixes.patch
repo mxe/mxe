@@ -2,33 +2,6 @@ This file is part of MXE.
 See index.html for further information.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Pavel Vatagin <pavelvat@gmail.com>
-Date: Wed, 23 Dec 2015 20:50:12 +0300
-Subject: [PATCH] Fixed case sensetive for linux mingw
-
-taken from: https://github.com/boostorg/interprocess/pull/23
-
-diff --git a/include/boost/interprocess/detail/win32_api.hpp b/include/boost/interprocess/detail/win32_api.hpp
-index 1111111..2222222 100644
---- a/boost/interprocess/detail/win32_api.hpp
-+++ b/boost/interprocess/detail/win32_api.hpp
-@@ -35,11 +35,11 @@
- #include <windows.h>
-
- #  if defined(BOOST_INTERPROCESS_BOOTSTAMP_IS_LASTBOOTUPTIME)
--#  include <Wbemidl.h>
--#  include <Objbase.h>
-+#  include <wbemidl.h>
-+#  include <objbase.h>
- #  endif
-
--#include <Shlobj.h>
-+#include <shlobj.h>
- #endif
-
- #if defined(_MSC_VER)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: xantares <xantares09@hotmail.com>
 Date: Mon, 28 Sep 2015 08:21:42 +0000
 Subject: [PATCH] Fix {make,jump}_fcontext visibility with mingw
