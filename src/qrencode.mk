@@ -20,4 +20,3 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j 1 install
 endef
-
