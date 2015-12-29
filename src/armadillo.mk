@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 019ce442a1bcad4c5da0bc01ee35333c9a0783ec6a58237ae1e774da68cd4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc blas boost lapack
+$(PKG)_DEPS     := gcc blas lapack
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/arma/files/' | \
@@ -24,10 +24,8 @@ define $(PKG)_BUILD
         -DARMA_USE_WRAPPER=false
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
 
-    # note: don't use -Werror with GCC 4.7.0 and .1
     '$(TARGET)-g++' \
-        -W -Wall \
+        -W -Wall -Werror \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-armadillo.exe' \
-        -larmadillo -llapack -lblas -lgfortran -lquadmath \
-        -lboost_serialization-mt -lboost_thread_win32-mt -lboost_system-mt
+        -larmadillo -llapack -lblas -lgfortran -lquadmath
 endef
