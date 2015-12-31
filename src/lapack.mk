@@ -24,9 +24,9 @@ define $(PKG)_BUILD
         -DLAPACKE=ON \
         -DCMAKE_Fortran_FLAGS=$(if $(findstring x86_64,$(TARGET)),-fdefault-integer-8) \
         .
-    cp '$(1)/lapacke/include/lapacke_mangling_with_flags.h' '$(1)/lapacke/include/lapacke_mangling.h'
+    cp '$(1)/LAPACKE/include/lapacke_mangling_with_flags.h' '$(1)/LAPACKE/include/lapacke_mangling.h'
     $(MAKE) -C '$(1)/SRC'     -j '$(JOBS)' install
-    $(MAKE) -C '$(1)/lapacke' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/LAPACKE' -j '$(JOBS)' install
 
     '$(TARGET)-gfortran' \
         -W -Wall -Werror -pedantic \
