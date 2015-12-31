@@ -3,14 +3,14 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 374c56944944128d57b33b3b5c1be978a02d3dbb Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:43:43 +0200
-Subject: [PATCH 01/10] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
-index dc139be..e68a490 100644
+index 1111111..2222222 100644
 --- a/gdk/win32/gdkmain-win32.c
 +++ b/gdk/win32/gdkmain-win32.c
 @@ -65,7 +65,7 @@ const GOptionEntry _gdk_windowing_args[] = {
@@ -23,7 +23,7 @@ index dc139be..e68a490 100644
  	 LPVOID    reserved)
  {
 diff --git a/gtk/gtkmain.c b/gtk/gtkmain.c
-index 56c92db..655f575 100644
+index 1111111..2222222 100644
 --- a/gtk/gtkmain.c
 +++ b/gtk/gtkmain.c
 @@ -74,7 +74,7 @@
@@ -35,18 +35,15 @@ index 56c92db..655f575 100644
  	 DWORD     fdwReason,
  	 LPVOID    lpvReserved)
  {
--- 
-1.8.2.2
 
-
-From 8e08b42e368166814289abf32958c979d8d480c6 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:46:20 +0200
-Subject: [PATCH 02/10] s,__declspec(dllimport),,
+Subject: [PATCH] s,__declspec(dllimport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
-index eed3124..7ef1731 100644
+index 1111111..2222222 100644
 --- a/gdk/gdktypes.h
 +++ b/gdk/gdktypes.h
 @@ -41,7 +41,7 @@
@@ -59,7 +56,7 @@ index eed3124..7ef1731 100644
  #else
  #  define GDKVAR extern
 diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
-index 05964f8..a500a8e 100644
+index 1111111..2222222 100644
 --- a/gtk/gtkdebug.h
 +++ b/gtk/gtkdebug.h
 @@ -66,7 +66,7 @@ typedef enum {
@@ -72,7 +69,7 @@ index 05964f8..a500a8e 100644
  #else
  #  define GTKVAR extern
 diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
-index 02a1dae..59e0960 100644
+index 1111111..2222222 100644
 --- a/gtk/gtkmain.h
 +++ b/gtk/gtkmain.h
 @@ -69,7 +69,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
@@ -85,7 +82,7 @@ index 02a1dae..59e0960 100644
  #else
  #define GTKMAIN_C_VAR extern
 diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
-index c624aea..b792ea5 100644
+index 1111111..2222222 100644
 --- a/gtk/gtktexttypes.h
 +++ b/gtk/gtktexttypes.h
 @@ -46,7 +46,7 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
@@ -97,18 +94,15 @@ index c624aea..b792ea5 100644
  #endif
  #else
  #define VARIABLE extern
--- 
-1.8.2.2
 
-
-From 59408e4752be8277c26f9ae458a086874844ab2b Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 15:03:28 +0200
-Subject: [PATCH 03/10] s,__declspec(dllexport),,
+Subject: [PATCH] s,__declspec(dllexport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
-index 7ef1731..7adb7fc 100644
+index 1111111..2222222 100644
 --- a/gdk/gdktypes.h
 +++ b/gdk/gdktypes.h
 @@ -39,7 +39,7 @@
@@ -121,7 +115,7 @@ index 7ef1731..7adb7fc 100644
  #    define GDKVAR extern 
  #  endif
 diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
-index a500a8e..4cc012f 100644
+index 1111111..2222222 100644
 --- a/gtk/gtkdebug.h
 +++ b/gtk/gtkdebug.h
 @@ -64,7 +64,7 @@ typedef enum {
@@ -134,7 +128,7 @@ index a500a8e..4cc012f 100644
  #    define GTKVAR extern 
  #  endif
 diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
-index 59e0960..0d0c8d0 100644
+index 1111111..2222222 100644
 --- a/gtk/gtkmain.h
 +++ b/gtk/gtkmain.h
 @@ -67,7 +67,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
@@ -147,7 +141,7 @@ index 59e0960..0d0c8d0 100644
  #define GTKMAIN_C_VAR extern 
  #endif
 diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
-index b792ea5..f382a64 100644
+index 1111111..2222222 100644
 --- a/gtk/gtktexttypes.h
 +++ b/gtk/gtktexttypes.h
 @@ -44,7 +44,7 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
@@ -159,18 +153,15 @@ index b792ea5..f382a64 100644
  #else
  #define VARIABLE extern 
  #endif
--- 
-1.8.2.2
 
-
-From 15527e24127117bbaf24dec513daa6fb67a00a8c Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:17:22 +0200
-Subject: [PATCH 04/10] fix gtk+-2.0.pc.in
+Subject: [PATCH] fix gtk+-2.0.pc.in
 
 
 diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
-index 46853e1..7f3eb22 100644
+index 1111111..2222222 100644
 --- a/gtk+-2.0.pc.in
 +++ b/gtk+-2.0.pc.in
 @@ -11,5 +11,5 @@ Name: GTK+
@@ -180,44 +171,38 @@ index 46853e1..7f3eb22 100644
 -Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@
 +Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
  Cflags: -I${includedir}/gtk-2.0 @GTK_EXTRA_CFLAGS@
--- 
-1.8.2.2
 
-
-From 165597a3bbe73e830d79dbd2d109e3b075ea2985 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:48:31 +0200
-Subject: [PATCH 05/10] disable gtkbuiltincache
+Subject: [PATCH] disable gtkbuiltincache
 
 
 diff --git a/gtk/Makefile.in b/gtk/Makefile.in
-index 54200e7..e984933 100644
+index 1111111..2222222 100644
 --- a/gtk/Makefile.in
 +++ b/gtk/Makefile.in
-@@ -5660,7 +5660,7 @@ stamp-icons: $(STOCK_ICONS)
+@@ -5713,7 +5713,7 @@ stamp-icons: $(STOCK_ICONS)
  	) done 								\
  	&& touch stamp-icons
  
 -gtkbuiltincache.h: @REBUILD@ stamp-icons
 +_disabled_gtkbuiltincache.h: @REBUILD@ stamp-icons
- 	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+ 	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
  	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
- 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
--- 
-1.8.2.2
+ 	   --include-image-data							\
 
-
-From 465171f3b0ebba7760719c0ee86a0d0f216fe51e Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:49:50 +0200
-Subject: [PATCH 06/10] disable test-inline-pixbufs.h
+Subject: [PATCH] disable test-inline-pixbufs.h
 
 
 diff --git a/demos/Makefile.in b/demos/Makefile.in
-index 97e9536..abf0f14 100644
+index 1111111..2222222 100644
 --- a/demos/Makefile.in
 +++ b/demos/Makefile.in
-@@ -488,7 +488,7 @@ LDADDS = \
+@@ -529,7 +529,7 @@ LDADDS = \
  	$(GTK_DEP_LIBS)							\
  	$(MATH_LIB)
  
@@ -226,21 +211,18 @@ index 97e9536..abf0f14 100644
  testpixbuf_DEPENDENCIES = $(DEPS)
  testpixbuf_drawable_DEPENDENCIES = $(DEPS)
  testpixbuf_save_DEPENDENCIES = $(DEPS)
--- 
-1.8.2.2
 
-
-From 417065a8b000250f6553c2801a26eae4491041dd Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:51:04 +0200
-Subject: [PATCH 07/10] permit static building
+Subject: [PATCH] permit static building
 
 
 diff --git a/configure b/configure
-index c61e096..34a116d 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -4530,9 +4530,9 @@ if test "${enable_static+set}" = set; then :
+@@ -4649,9 +4649,9 @@ if test "${enable_static+set}" = set; then :
    enableval=$enable_static; p=${PACKAGE-default}
      case $enableval in
      yes) enable_static=yes ;;
@@ -250,9 +232,9 @@ index c61e096..34a116d 100755
 -     enable_static=no
 +     enable_static=yes
        # Look at the argument we got.  We use all the common list separators.
-       lt_save_ifs="$IFS"; IFS="${IFS}$PATH_SEPARATOR,"
+       lt_save_ifs=$IFS; IFS=$IFS$PATH_SEPARATOR,
        for pkg in $enableval; do
-@@ -4545,7 +4545,7 @@ if test "${enable_static+set}" = set; then :
+@@ -4664,7 +4664,7 @@ if test "${enable_static+set}" = set; then :
        ;;
      esac
  else
@@ -261,7 +243,7 @@ index c61e096..34a116d 100755
  fi
  
  
-@@ -5114,15 +5114,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+@@ -5233,15 +5233,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
  
  if test "$os_win32" = "yes"; then
    if test x$enable_static = xyes -o x$enable_static = x; then
@@ -283,7 +265,7 @@ index c61e096..34a116d 100755
  fi
  
  enable_win32_dll=yes
-@@ -8951,7 +8951,7 @@ func_stripname_cnf ()
+@@ -9265,7 +9265,7 @@ func_stripname_cnf ()
  if test "${enable_shared+set}" = set; then :
    enableval=$enable_shared; p=${PACKAGE-default}
      case $enableval in
@@ -292,15 +274,15 @@ index c61e096..34a116d 100755
      no) enable_shared=no ;;
      *)
        enable_shared=no
-@@ -8960,14 +8960,14 @@ if test "${enable_shared+set}" = set; then :
+@@ -9274,14 +9274,14 @@ if test "${enable_shared+set}" = set; then :
        for pkg in $enableval; do
- 	IFS="$lt_save_ifs"
+ 	IFS=$lt_save_ifs
  	if test "X$pkg" = "X$p"; then
 -	  enable_shared=yes
 +	  enable_shared=no
  	fi
        done
-       IFS="$lt_save_ifs"
+       IFS=$lt_save_ifs
        ;;
      esac
  else
@@ -309,39 +291,36 @@ index c61e096..34a116d 100755
  fi
  
  
-@@ -12854,7 +12854,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+@@ -13455,7 +13455,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
    # are all built from PIC.
    case $host_os in
    aix3*)
--    test "$enable_shared" = yes && enable_static=no
-+    test "$enable_shared" = yes && enable_static=yes
+-    test yes = "$enable_shared" && enable_static=no
++    test yes = "$enable_shared" && enable_static=yes
      if test -n "$RANLIB"; then
        archive_cmds="$archive_cmds~\$RANLIB \$lib"
        postinstall_cmds='$RANLIB $lib'
-@@ -12863,7 +12863,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
- 
-   aix[4-9]*)
-     if test "$host_cpu" != ia64 && test "$aix_use_runtimelinking" = no ; then
--      test "$enable_shared" = yes && enable_static=no
-+      test "$enable_shared" = yes && enable_static=yes
+@@ -13467,7 +13467,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+       case $enable_shared,$with_aix_soname,$aix_use_runtimelinking in
+       yes,aix,yes) ;;			# shared object as lib.so file only
+       yes,svr4,*) ;;			# shared object as lib.so archive member only
+-      yes,*) enable_static=no ;;	# shared object in lib.a archive as well
++      yes,*) enable_static=yes ;;	# shared object in lib.a archive as well
+       esac
      fi
      ;;
-   esac
--- 
-1.8.2.2
 
-
-From 907f9831f56004a322d785f34417e99735de3109 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:53:18 +0200
-Subject: [PATCH 08/10] no -Wl
+Subject: [PATCH] no -Wl
 
 
 diff --git a/configure b/configure
-index 34a116d..3c12234 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -23441,7 +23441,7 @@ fi
+@@ -24018,7 +24018,7 @@ fi
  fi
  
  if test "x$gdktarget" = "xwin32"; then
@@ -350,21 +329,18 @@ index 34a116d..3c12234 100755
     if true; then
    USE_WIN32_TRUE=
    USE_WIN32_FALSE='#'
--- 
-1.8.2.2
 
-
-From 1e02f2e984433a899bc642af5622bea971a06a3a Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:54:15 +0200
-Subject: [PATCH 09/10] gio not gio-unix
+Subject: [PATCH] gio not gio-unix
 
 
 diff --git a/configure b/configure
-index 3c12234..ce40ad1 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -23673,9 +23673,9 @@ fi
+@@ -24250,9 +24250,9 @@ fi
  CFLAGS="$saved_cflags"
  LDFLAGS="$saved_ldflags"
  
@@ -376,18 +352,15 @@ index 3c12234..ce40ad1 100755
  else
    GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
  fi
--- 
-1.8.2.2
 
-
-From b9bd33ba09c0297b874b7e6955864e6a76b83364 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 15:30:49 +0200
-Subject: [PATCH 10/10] removed duplicate _gtk_marshal_OBJECT__VOID()
+Subject: [PATCH] removed duplicate _gtk_marshal_OBJECT__VOID()
 
 
 diff --git a/perf/marshalers.c b/perf/marshalers.c
-index 9a8c715..14f5ab1 100644
+index 1111111..2222222 100644
 --- a/perf/marshalers.c
 +++ b/perf/marshalers.c
 @@ -49,43 +49,6 @@
@@ -405,9 +378,9 @@ index 9a8c715..14f5ab1 100644
 -{
 -  typedef GObject* (*GMarshalFunc_OBJECT__VOID) (gpointer     data1,
 -                                                 gpointer     data2);
--  register GMarshalFunc_OBJECT__VOID callback;
--  register GCClosure *cc = (GCClosure*) closure;
--  register gpointer data1, data2;
+-  GMarshalFunc_OBJECT__VOID callback;
+-  GCClosure *cc = (GCClosure*) closure;
+-  gpointer data1, data2;
 -  GObject* v_return;
 -
 -  g_return_if_fail (return_value != NULL);
@@ -434,6 +407,3 @@ index 9a8c715..14f5ab1 100644
  /* VOID:ENUM,OBJECT,DOUBLE (./marshalers.list:2) */
  void
  _gtk_marshal_VOID__ENUM_OBJECT_DOUBLE (GClosure     *closure,
--- 
-1.8.2.2
-
