@@ -818,6 +818,7 @@ local function makeMxeSourcePackage()
     makePackage(name, files, deps, ver, d1, d2)
 end
 
+assert(not io.open('usr/.git'), 'Remove usr/')
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
 assert(execute(("%s check-requirements"):format(tool 'make')))
