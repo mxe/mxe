@@ -186,3 +186,41 @@ index 1111111..2222222 100644
          name = y.__name__.replace('Context','').lower()
          class tmp(y):
              cmd = name + '_' + lib32
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Fri, 1 Jan 2016 15:21:46 +0300
+Subject: [PATCH] waf: disable function causing pickling errors
+
+According to Debian patch of py3cairo which also uses waf [1],
+
+80_fix pickle.patch:
+> during the build process, a context instance is pickled, or at
+> least attempted to be.  This fails because self.node_class is assigned to a
+> class which is nested inside the __init__() method.  Because Python cannot
+> find this class at unpickling time (i.e. it cannot be imported), Python
+> refuses to pickle the Context instance, leading to a FTBFS.  Since there's no
+> obvious reason why the class has to be so nested, moving it to a module
+> global solves the build failure.
+
+81_pickling again.patch:
+> follow up to 80_fix-pickle.patch.  just disable pickling
+> altogether since the previous patch doesn't really fix the problem, and not
+> storing the pickle seems to have no adverse effects on the build, while
+> avoiding the observed traceback.
+
+[1] http://sources.debian.net/patches/summary/py3cairo/1.10.0+dfsg-5/
+
+diff --git a/waf b/waf
+index 1111111..2222222 100755
+--- a/waf
++++ b/waf
+@@ -158,6 +158,8 @@ sys.path.insert(0, wafdir)
+ if __name__ == '__main__':
+ 	import waflib.extras.compat15
+ 	from waflib import Scripting
++	from waflib import Build
++	Build.BuildContext.store = lambda self: True
+ 	Scripting.waf_entry_point(cwd, VERSION, wafdir)
+ 
+ #==>
