@@ -821,7 +821,8 @@ end
 assert(not io.open('usr/.git'), 'Remove usr/')
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
-assert(execute(("%s check-requirements"):format(tool 'make')))
+assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
+    tool 'make', table.concat(TARGETS, ' '))))
 if not max_items then
     local cmd = ('%s download -j 6 -k'):format(tool 'make')
     while not execute(cmd) do end
