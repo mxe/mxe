@@ -40,6 +40,8 @@ local TODAY = os.date("%Y%m%d")
 local MXE_DIR = os.getenv('MXE_DIR') or '/usr/lib/mxe'
 
 local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
+local GIT_USER = '-c user.name="build-pkg" ' ..
+    '-c user.email="build-pkg@mxe" '
 
 local BLACKLIST = {
     '^usr/installed/check%-requirements$',
@@ -378,9 +380,7 @@ end
 
 -- git commits changes in ./usr
 local function gitCommit(message)
-    local cmd = GIT .. '-c user.name="build-pkg" ' ..
-        '-c user.email="build-pkg@mxe" ' ..
-        'commit -a -m %q --quiet'
+    local cmd = GIT .. GIT_USER .. 'commit -a -m %q --quiet'
     os.execute(cmd:format(message))
 end
 
