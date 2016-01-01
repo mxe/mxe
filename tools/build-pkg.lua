@@ -185,8 +185,11 @@ local function isCross(target)
     return target ~= NATIVE_TARGET
 end
 
-local cmd = "dpkg-architecture -qDEB_BUILD_ARCH 2> /dev/null"
-local ARCH = trim(shell(cmd))
+local function getArch()
+    local cmd = "dpkg-architecture -qDEB_BUILD_ARCH 2> /dev/null"
+    return trim(shell(cmd))
+end
+local ARCH = getArch()
 
 -- return target and package from item name
 local function parseItem(item)
@@ -392,9 +395,7 @@ local function checkFile(file, item)
     local ext = file:sub(-4):lower()
     local cmd = 'file --dereference --brief %q'
     local file_type = trim(shell(cmd:format(file)))
-    if ext == '.bin' then
-        -- can be an executable or something else (font)
-    elseif ext == '.exe' then
+    if ext == '.exe' then
         if not file_type:match('PE32') then
             log('File %s (%s) is %q. Remove .exe',
                 file, item, file_type)
@@ -404,7 +405,8 @@ local function checkFile(file, item)
             log('File %s (%s) is %q. Remove .dll',
                 file, item, file_type)
         end
-    else
+    elseif ext ~= '.bin' then
+        -- .bin can be an executable or something else (font)
         if file_type:match('PE32') then
             log('File %s (%s) is %q. Add exe or dll',
                 file, item, file_type)
@@ -525,7 +527,7 @@ local function debianControl(options)
 end
 
 local function makePackage(name, files, deps, ver, d1, d2, dst)
-    local dst = dst or '.'
+    dst = dst or '.'
     local dirname = ('%s/%s_%s'):format(dst, name,
         protectVersion(ver))
     -- make .list file
@@ -533,12 +535,12 @@ local function makePackage(name, files, deps, ver, d1, d2, dst)
     writeFile(list_path, table.concat(files, "\n") .. "\n")
     -- make .tar.xz file
     local tar_name = dirname .. '.tar.xz'
-    local cmd = '%s -T %s --owner=root --group=root -cJf %s'
-    os.execute(cmd:format(tool 'tar', list_path, tar_name))
+    local cmd1 = '%s -T %s --owner=root --group=root -cJf %s'
+    os.execute(cmd1:format(tool 'tar', list_path, tar_name))
     -- update list of files back from .tar.xz (see #1067)
-    local cmd = '%s -tf %s'
-    cmd = cmd:format(tool 'tar', tar_name)
-    local tar_reader = io.popen(cmd, 'r')
+    local cmd2 = '%s -tf %s'
+    cmd2 = cmd2:format(tool 'tar', tar_name)
+    local tar_reader = io.popen(cmd2, 'r')
     local files_str = tar_reader:read('*all')
     tar_reader:close()
     writeFile(list_path, files_str)
@@ -558,16 +560,16 @@ local function makePackage(name, files, deps, ver, d1, d2, dst)
         os.execute(('mkdir -p %s'):format(usr))
         os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
         -- use tar to copy files with paths
-        local cmd = '%s -C %s -xf %s'
-        cmd = 'fakeroot -s deb.fakeroot ' .. cmd
-        os.execute(cmd:format(tool 'tar', usr, tar_name))
+        local cmd3 = '%s -C %s -xf %s'
+        cmd3 = 'fakeroot -s deb.fakeroot ' .. cmd3
+        os.execute(cmd3:format(tool 'tar', usr, tar_name))
         -- make DEBIAN/control file
         local control_fname = dirname .. '/DEBIAN/control'
         writeFile(control_fname, control_text)
         -- make .deb file
-        local cmd = 'dpkg-deb -Zxz -b %s'
-        cmd = 'fakeroot -i deb.fakeroot ' .. cmd
-        os.execute(cmd:format(dirname))
+        local cmd4 = 'dpkg-deb -Zxz -b %s'
+        cmd4 = 'fakeroot -i deb.fakeroot ' .. cmd4
+        os.execute(cmd4:format(dirname))
         -- cleanup
         os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
     end
@@ -640,7 +642,7 @@ local function progressPrinter(items)
     local started_at = os.time()
     local sums = {}
     for i, item in ipairs(items) do
-        local target, pkg = parseItem(item)
+        local _, pkg = parseItem(item)
         local expected_time = pkg2time[pkg] or 1
         sums[i] = (sums[i - 1] or 0) + expected_time
     end
@@ -649,11 +651,11 @@ local function progressPrinter(items)
     local pkgs_done = 0
     local printer = {}
     --
-    function printer:advance(i)
+    function printer.advance(_, i)
         pkgs_done = i
         time_done = sums[i]
     end
-    function printer:status()
+    function printer.status(_)
         local now = os.time()
         local spent = now - started_at
         local predicted_duration = spent * total_time / time_done
@@ -667,7 +669,7 @@ local function progressPrinter(items)
     return printer
 end
 
-local function isEmpty(item, files)
+local function isEmpty(files)
     return #files == 1
 end
 
@@ -714,7 +716,7 @@ local function makeDebs(items, item2deps, item2ver, item2files)
     local to_build = {}
     for _, item in ipairs(items) do
         local files = assert(item2files[item], item)
-        if not isEmpty(item, files) then
+        if not isEmpty(files) then
             table.insert(to_build, item)
         end
     end
@@ -727,7 +729,7 @@ local function makeDebs(items, item2deps, item2ver, item2files)
             local files = assert(item2files[item], item)
             for _, dep in ipairs(deps) do
                 local dep_files = item2files[dep]
-                if isEmpty(dep, dep_files) then
+                if isEmpty(dep_files) then
                     log('Item %s depends on ' ..
                         'empty item %s', item, dep)
                     missing_deps_set[dep] = true
