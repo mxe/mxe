@@ -1,0 +1,42 @@
+From c6962803f486e34cde370b34845741c8c380c460 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
+Date: Sat, 19 Sep 2015 01:39:15 +0200
+Subject: [PATCH] check Windows version before allowing IO access
+
+---
+ src/detect.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/src/detect.c b/src/detect.c
+index ca7f85b..d675584 100644
+--- a/src/detect.c
++++ b/src/detect.c
+@@ -49,7 +49,7 @@
+ #elif defined(HAVE_SOLARIS)
+ #include <sys/ddi.h>
+ #include <sys/sunddi.h>
+-#elif defined(HAVE_CYGWIN_NT)
++#elif defined(HAVE_CYGWIN_NT) || defined(HAVE_CYGWIN_9X)
+ #ifdef HAVE_W32API_WINDOWS_H
+ #include <w32api/windows.h>
+ #else
+@@ -191,10 +191,12 @@ check_io (void)
+   }
+   debugprintf ("We can't use IOP, nothing will work\n");
+   #elif defined(HAVE_CYGWIN_9X)
+-  /* note: 95 allows apps direct IO access */
+-  debugprintf ("Taking a guess on port availability (win9x)\n");
+-  capabilities |= IO_CAPABLE;
+-  return 1;
++  /* note: Win32s/95/98/ME allows apps direct IO access */
++  if (GetVersion() & (1 << 31)) {
++    debugprintf ("Taking a guess on port availability (win9x)\n");
++    capabilities |= IO_CAPABLE;
++    return 1;
++  }
+   #endif
+ 
+   return 0;
+-- 
+2.1.4
+
