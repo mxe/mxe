@@ -509,6 +509,7 @@ build-only-$(1)_$(3):
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
 	    autoconf --version 2>/dev/null | head -1
 	    automake --version 2>/dev/null | head -1
+	    python --version
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
