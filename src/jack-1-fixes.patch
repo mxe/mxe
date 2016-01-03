@@ -189,38 +189,232 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
-Date: Fri, 1 Jan 2016 15:21:46 +0300
-Subject: [PATCH] waf: disable function causing pickling errors
+Date: Sun, 3 Jan 2016 16:56:19 +0100
+Subject: [PATCH] update wscript's for waf 1.8.17
 
-According to Debian patch of py3cairo which also uses waf [1],
+  * all waf modules are now submodules of waflib
+  * tool_options => load
+  * check_tool => load
+  * compiler_cc => compiler_c
+  * sub_options => recurse
+  * sub_config => recurse
+  * add_subdirs => recurse
 
-80_fix pickle.patch:
-> during the build process, a context instance is pickled, or at
-> least attempted to be.  This fails because self.node_class is assigned to a
-> class which is nested inside the __init__() method.  Because Python cannot
-> find this class at unpickling time (i.e. it cannot be imported), Python
-> refuses to pickle the Context instance, leading to a FTBFS.  Since there's no
-> obvious reason why the class has to be so nested, moving it to a module
-> global solves the build failure.
-
-81_pickling again.patch:
-> follow up to 80_fix-pickle.patch.  just disable pickling
-> altogether since the previous patch doesn't really fix the problem, and not
-> storing the pickle seems to have no adverse effects on the build, while
-> avoiding the observed traceback.
-
-[1] http://sources.debian.net/patches/summary/py3cairo/1.10.0+dfsg-5/
-
-diff --git a/waf b/waf
-index 1111111..2222222 100755
---- a/waf
-+++ b/waf
-@@ -158,6 +158,8 @@ sys.path.insert(0, wafdir)
- if __name__ == '__main__':
- 	import waflib.extras.compat15
- 	from waflib import Scripting
-+	from waflib import Build
-+	Build.BuildContext.store = lambda self: True
- 	Scripting.waf_entry_point(cwd, VERSION, wafdir)
+diff --git a/common/wscript b/common/wscript
+index 1111111..2222222 100644
+--- a/common/wscript
++++ b/common/wscript
+@@ -1,7 +1,7 @@
+ #! /usr/bin/env python
+ # encoding: utf-8
  
- #==>
+-import Build
++from waflib import Build
+ import re
+ import os
+ 
+diff --git a/dbus/wscript b/dbus/wscript
+index 1111111..2222222 100644
+--- a/dbus/wscript
++++ b/dbus/wscript
+@@ -2,9 +2,9 @@
+ # encoding: utf-8
+ 
+ import os.path
+-import Options
++from waflib import Options
+ import re # subst_func
+-import Logs
++from waflib import Logs
+ 
+ def options(opt):
+     opt.add_option('--enable-pkg-config-dbus-service-dir', action='store_true', default=False, help='force D-Bus service install dir to be one returned by pkg-config')
+diff --git a/man/wscript b/man/wscript
+index 1111111..2222222 100644
+--- a/man/wscript
++++ b/man/wscript
+@@ -1,7 +1,7 @@
+ #! /usr/bin/env python
+ # encoding: utf-8
+ 
+-import Build
++from waflib import Build
+ import re
+ import os
+ 
+diff --git a/wscript b/wscript
+index 1111111..2222222 100644
+--- a/wscript
++++ b/wscript
+@@ -3,14 +3,14 @@
+ from __future__ import print_function
+ 
+ import os
+-import Utils
+-import Options
++from waflib import Utils
++from waflib import Options
+ import subprocess
+ g_maxlen = 40
+ import shutil
+-import Task
++from waflib import Task
+ import re
+-import Logs
++from waflib import Logs
+ import sys
+ 
+ import waflib.Options
+@@ -65,8 +65,8 @@ def create_svnversion_task(bld, header='svnversion.h', define=None):
+ 
+ def options(opt):
+     # options provided by the modules
+-    opt.tool_options('compiler_cxx')
+-    opt.tool_options('compiler_cc')
++    opt.load('compiler_cxx')
++    opt.load('compiler_c')
+ 
+     opt.add_option('--libdir', type='string', help="Library directory [Default: <prefix>/lib]")
+     opt.add_option('--libdir32', type='string', help="32bit Library directory [Default: <prefix>/lib32]")
+@@ -87,11 +87,11 @@ def options(opt):
+     opt.add_option('--autostart', type='string', default="default", help='Autostart method. Possible values: "default", "classic", "dbus", "none"')
+     opt.add_option('--portaudio', action='store_true', default=False, help='Enable Portaudio driver')
+     opt.add_option('--winmme', action='store_true', default=False, help='Enable WinMME driver')
+-    opt.sub_options('dbus')
++    opt.recurse('dbus')
+ 
+ def configure(conf):
+     conf.load('compiler_cxx')
+-    conf.load('compiler_cc')
++    conf.load('compiler_c')
+     if Options.options.dist_target == 'auto':
+         platform = sys.platform
+         conf.env['IS_MACOSX'] = platform == 'darwin'
+@@ -116,34 +116,34 @@ def configure(conf):
+         Logs.pprint('CYAN', "Windows detected")
+ 
+     if conf.env['IS_LINUX']:
+-        conf.check_tool('compiler_cxx')
+-        conf.check_tool('compiler_cc')
++        conf.load('compiler_cxx')
++        conf.load('compiler_c')
+ 
+     if conf.env['IS_MACOSX']:
+-        conf.check_tool('compiler_cxx')
+-        conf.check_tool('compiler_cc')
++        conf.load('compiler_cxx')
++        conf.load('compiler_c')
+ 
+-    # waf 1.5 : check_tool('compiler_cxx') and check_tool('compiler_cc') do not work correctly, so explicit use of gcc and g++
++    # waf 1.5 : load('compiler_cxx') and load('compiler_c') do not work correctly, so explicit use of gcc and g++
+     if conf.env['IS_SUN']:
+-        conf.check_tool('g++')
+-        conf.check_tool('gcc')
++        conf.load('g++')
++        conf.load('gcc')
+ 
+     #if conf.env['IS_SUN']:
+-    #   conf.check_tool('compiler_cxx')
+-    #   conf.check_tool('compiler_cc')
++    #   conf.load('compiler_cxx')
++    #   conf.load('compiler_c')
+ 
+     if conf.env['IS_WINDOWS']:
+-        conf.check_tool('compiler_cxx')
+-        conf.check_tool('compiler_cc')
++        conf.load('compiler_cxx')
++        conf.load('compiler_c')
+         conf.env.append_unique('CCDEFINES', '_POSIX')
+         conf.env.append_unique('CXXDEFINES', '_POSIX')
+ 
+     conf.env.append_unique('CXXFLAGS', '-Wall')
+     conf.env.append_unique('CFLAGS', '-Wall')
+ 
+-    conf.sub_config('common')
++    conf.recurse('common')
+     if conf.env['IS_LINUX']:
+-        conf.sub_config('linux')
++        conf.recurse('linux')
+         if Options.options.alsa and not conf.env['BUILD_DRIVER_ALSA']:
+             conf.fatal('ALSA driver was explicitly requested but cannot be built')
+         if Options.options.freebob and not conf.env['BUILD_DRIVER_FREEBOB']:
+@@ -157,12 +157,12 @@ def configure(conf):
+         conf.env['BUILD_DRIVER_FREEBOB'] = Options.options.freebob
+         conf.env['BUILD_DRIVER_IIO'] = Options.options.iio
+     if conf.env['IS_WINDOWS']:
+-        conf.sub_config('windows')
++        conf.recurse('windows')
+         if Options.options.portaudio and not conf.env['BUILD_DRIVER_PORTAUDIO']:
+             conf.fatal('Portaudio driver was explicitly requested but cannot be built')
+         conf.env['BUILD_DRIVER_WINMME'] = Options.options.winmme
+     if Options.options.dbus:
+-        conf.sub_config('dbus')
++        conf.recurse('dbus')
+         if conf.env['BUILD_JACKDBUS'] != True:
+             conf.fatal('jackdbus was explicitly requested but cannot be built')
+ 
+@@ -171,7 +171,7 @@ def configure(conf):
+     if conf.is_defined('HAVE_SAMPLERATE'):
+         conf.env['LIB_SAMPLERATE'] = ['samplerate']
+ 
+-    conf.sub_config('example-clients')
++    conf.recurse('example-clients')
+ 
+     if conf.check_cfg(package='celt', atleast_version='0.11.0', args='--cflags --libs', mandatory=False):
+         conf.define('HAVE_CELT', 1)
+@@ -404,38 +404,38 @@ def build(bld):
+             waflib.Options.commands.append(bld.cmd + '_' + lib32)
+ 
+     # process subfolders from here
+-    bld.add_subdirs('common')
++    bld.recurse('common')
+ 
+     if bld.variant:
+         # only the wscript in common/ knows how to handle variants
+         return
+ 
+     if bld.env['IS_LINUX']:
+-        bld.add_subdirs('linux')
+-        bld.add_subdirs('example-clients')
+-        bld.add_subdirs('tests')
+-        bld.add_subdirs('man')
++        bld.recurse('linux')
++        bld.recurse('example-clients')
++        bld.recurse('tests')
++        bld.recurse('man')
+         if bld.env['BUILD_JACKDBUS'] == True:
+-           bld.add_subdirs('dbus')
++           bld.recurse('dbus')
+ 
+     if bld.env['IS_MACOSX']:
+-        bld.add_subdirs('macosx')
+-        bld.add_subdirs('example-clients')
+-        bld.add_subdirs('tests')
++        bld.recurse('macosx')
++        bld.recurse('example-clients')
++        bld.recurse('tests')
+         if bld.env['BUILD_JACKDBUS'] == True:
+-            bld.add_subdirs('dbus')
++            bld.recurse('dbus')
+ 
+     if bld.env['IS_SUN']:
+-        bld.add_subdirs('solaris')
+-        bld.add_subdirs('example-clients')
+-        bld.add_subdirs('tests')
++        bld.recurse('solaris')
++        bld.recurse('example-clients')
++        bld.recurse('tests')
+         if bld.env['BUILD_JACKDBUS'] == True:
+-            bld.add_subdirs('dbus')
++            bld.recurse('dbus')
+ 
+     if bld.env['IS_WINDOWS']:
+-        bld.add_subdirs('windows')
+-        bld.add_subdirs('example-clients')
+-        #bld.add_subdirs('tests')
++        bld.recurse('windows')
++        bld.recurse('example-clients')
++        #bld.recurse('tests')
+ 
+     if bld.env['BUILD_DOXYGEN_DOCS'] == True:
+         html_docs_source_dir = "build/default/html"
