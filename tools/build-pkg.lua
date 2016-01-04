@@ -336,10 +336,45 @@ local function isBlacklisted(file)
     return isListed(file, BLACKLIST)
 end
 
+local GIT_INITIAL = 'initial'
+local GIT_ALL = 'first-all'
+
+local function itemToBranch(item)
+    return 'first-' .. item:gsub('~', '_')
+end
+
 -- creates git repo in ./usr
 local function gitInit()
     os.execute('mkdir -p ./usr')
     os.execute(GIT .. 'init --quiet')
+end
+
+local function gitTag(name)
+    os.execute(GIT .. 'tag ' .. name)
+end
+
+local function gitCheckout(new_branch, deps)
+    local main_dep = deps[1]
+    if main_dep then
+        main_dep = itemToBranch(main_dep)
+    else
+        main_dep = GIT_INITIAL
+    end
+    local cmd = '%s checkout -q -b %s %s'
+    os.execute(cmd:format(GIT, new_branch, main_dep))
+    if #deps > 1 then
+        -- merge with other dependencies
+        local merged = {}
+        for i = 2, #deps do
+            table.insert(merged, itemToBranch(deps[i]))
+        end
+        local message = 'Merge ' .. table.concat(deps, ', ')
+        local cmd2 = '%s %s merge -q %s -m %q'
+        os.execute(cmd2:format(GIT,
+            GIT_USER,
+            table.concat(merged, ' '),
+            message))
+    end
 end
 
 local function gitAdd()
@@ -454,6 +489,7 @@ end
 
 -- builds package, returns list of new files
 local function buildItem(item, item2deps, file2item)
+    gitCheckout(itemToBranch(item), item2deps[item])
     local target, pkg = parseItem(item)
     local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
     os.execute(cmd:format(tool 'make', pkg, target))
@@ -821,18 +857,22 @@ end
 assert(not io.open('usr/.git'), 'Remove usr/')
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
+gitInit()
 assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
     tool 'make', table.concat(TARGETS, ' '))))
 if not max_items then
     local cmd = ('%s download -j 6 -k'):format(tool 'make')
     while not execute(cmd) do end
 end
-gitInit()
+gitAdd()
+gitCommit('Initial commit')
+gitTag(GIT_INITIAL)
 local items, item2deps, item2ver = getItems()
 local build_list = sortForBuild(items, item2deps)
 assert(isTopoOrdered(build_list, items, item2deps))
 build_list = sliceArray(build_list, max_items)
 local unbroken, item2files = buildPackages(build_list, item2deps)
+gitCheckout(GIT_ALL, unbroken)
 makeDebs(unbroken, item2deps, item2ver, item2files)
 if not no_debs then
     makeMxeRequirementsPackage('wheezy')
