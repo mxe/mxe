@@ -362,17 +362,13 @@ local function gitCheckout(new_branch, deps)
     end
     local cmd = '%s checkout -q -b %s %s'
     os.execute(cmd:format(GIT, new_branch, main_dep))
-    if #deps > 1 then
-        -- merge with other dependencies
-        local merged = {}
-        for i = 2, #deps do
-            table.insert(merged, itemToBranch(deps[i]))
-        end
-        local message = 'Merge ' .. table.concat(deps, ', ')
-        local cmd2 = '%s %s merge -q %s -m %q'
+    -- merge with other dependencies
+    for i = 2, #deps do
+        local message = 'Merge with ' .. deps[i]
+        local cmd2 = '%s %s merge -q -s recursive -X ours %s -m %q'
         os.execute(cmd2:format(GIT,
             GIT_USER,
-            table.concat(merged, ' '),
+            itemToBranch(deps[i]),
             message))
     end
 end
