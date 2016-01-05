@@ -361,15 +361,15 @@ local function gitCheckout(new_branch, deps)
         main_dep = GIT_INITIAL
     end
     local cmd = '%s checkout -q -b %s %s'
-    os.execute(cmd:format(GIT, new_branch, main_dep))
+    assert(execute(cmd:format(GIT, new_branch, main_dep)))
     -- merge with other dependencies
     for i = 2, #deps do
         local message = 'Merge with ' .. deps[i]
         local cmd2 = '%s %s merge -q -s recursive -X ours %s -m %q'
-        os.execute(cmd2:format(GIT,
+        assert(execute(cmd2:format(GIT,
             GIT_USER,
             itemToBranch(deps[i]),
-            message))
+            message)))
     end
 end
 
