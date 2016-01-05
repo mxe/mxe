@@ -835,16 +835,24 @@ PATCH_BY_NAME = $(patsubst %.mk,%-$(2).patch,$(PKG_MAKEFILES))
 
 define IMPORT_PATCH
     cd '$(call GIT_DIR,$(1))' \
-        && cat '$(PATCH_BY_NAME)' \
+        && cat '$(2)' \
         | sed '/^From/,$$  !d' \
         | sed s/'^From: MXE'/"From: fix@me"/'g;' \
-        | $(call GIT_CMD,$(1)) am --keep-cr
+        | $(call GIT_CMD,$(1)) am --keep-cr ;
 endef
 
 import-patch-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(if $(wildcard $(call GIT_DIR,$*)), \
-	        $(call IMPORT_PATCH,$*,$(PATCH_NAME)), \
+	        $(call IMPORT_PATCH,$*,$(call PATCH_BY_NAME,$*,$(PATCH_NAME))), \
+	        $(error $(call GIT_DIR,$*) does not exist)), \
+	    $(error Package $* not found in index.html))
+
+import-all-patches-%:
+	$(if $(call set_is_member,$*,$(PKGS)), \
+	    $(if $(wildcard $(call GIT_DIR,$*)), \
+	        $(foreach PKG_PATCH,$(call PKG_PATCHES,$*), \
+	            $(call IMPORT_PATCH,$*,$(PKG_PATCH))), \
 	        $(error $(call GIT_DIR,$*) does not exist)), \
 	    $(error Package $* not found in index.html))
 

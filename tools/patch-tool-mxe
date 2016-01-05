@@ -27,12 +27,20 @@ function import_patch {
   make -C $mxedir import-patch-$pkg PATCH_NAME=${patch_name}
 }
 
+function import_all_patches {
+  setupEnv
+  make -C $mxedir import-all-patches-$pkg
+}
+
 case "$cmd" in
   init)
     init_git $pkg
     ;;
   import)
     import_patch $pkg
+    ;;
+  import-all)
+    import_all_patches $pkg
     ;;
   export)
     export_patch $pkg
@@ -44,6 +52,7 @@ case "$cmd" in
     where COMMAND is one of:
       init - create a git directory for the package with the raw source
       import - apply the "pkgname-PATCHNAME.patch" patch commits
+      import-all - apply commits from all the patches of the package
       export - create/replace the "pkgname-PATCHNAME.patch" patch with a patch of all commits since init.
 
     If PATCHNAME is not set, it is default to "1-fixes".
