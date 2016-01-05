@@ -800,6 +800,7 @@ local function makeMxeSourcePackage()
         'CNAME',
         'LICENSE.md',
         'Makefile',
+        'patch.mk',
         'README.md',
         'assets',
         'doc',
