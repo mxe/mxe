@@ -396,6 +396,10 @@ local function gitCheckout(new_branch, deps)
             gitCommit(message)
         end
     end
+    if #deps > 0 then
+        -- prevent accidental rebuilds
+        assert(execute('touch usr/*/installed/*'))
+    end
 end
 
 local function gitAdd()
