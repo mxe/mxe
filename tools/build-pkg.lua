@@ -353,6 +353,17 @@ local function gitTag(name)
     os.execute(GIT .. 'tag ' .. name)
 end
 
+local function gitConflicts()
+    local cmd = GIT .. 'diff --name-only --diff-filter=U'
+    local f = io.popen(cmd, 'r')
+    local conflicts = {}
+    for conflict in f:lines() do
+        table.insert(conflicts, conflict)
+    end
+    f:close()
+    return conflicts
+end
+
 -- git commits changes in ./usr
 local function gitCommit(message)
     local cmd = GIT .. GIT_USER .. 'commit -a -m %q --quiet'
@@ -371,11 +382,19 @@ local function gitCheckout(new_branch, deps)
     -- merge with other dependencies
     for i = 2, #deps do
         local message = 'Merge with ' .. deps[i]
-        local cmd2 = '%s %s merge -q -s recursive -X ours %s -m %q'
-        assert(execute(cmd2:format(GIT,
+        local cmd2 = '%s %s merge -q %s -m %q'
+        if not execute(cmd2:format(GIT,
             GIT_USER,
             itemToBranch(deps[i]),
-            message)))
+            message))
+        then
+            -- probably merge conflict
+            local conflicts = table.concat(gitConflicts(), ' ')
+            log('Merge conflicts: %s', conflicts)
+            local cmd3 = '%s checkout --ours %s'
+            assert(execute(cmd3:format(GIT, conflicts)))
+            gitCommit(message)
+        end
     end
 end
 
