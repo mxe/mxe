@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := a9148cbc7eebaed1d09d139e68c038592edcf74318ec2623f21494aa56879
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)-1
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/ossim/source/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype geos jpeg libpng openthreads proj tiff zlib
+$(PKG)_DEPS     := gcc freetype geos jpeg libgeotiff libpng openthreads proj tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://download.osgeo.org/ossim/source/latest/' | \
