@@ -35,10 +35,6 @@ define $(PKG)_BUILD
 
     cd '$(1)' && ./waf build install
 
-    # It is not trivial to adjust the installation in waf-based builds
-    $(if $(BUILD_STATIC),                         \
-        $(INSTALL) -m644 '$(1)/build/src/libaubio.a' '$(PREFIX)/$(TARGET)/lib')
-
     '$(TARGET)-gcc'                               \
         -W -Wall -Werror -ansi -pedantic          \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-aubio.exe' \
