@@ -344,7 +344,7 @@
     "sox": "14.4.2",
     "speex": "1.2rc2",
     "speexdsp": "1.2rc3",
-    "sqlite": "3090200",
+    "sqlite": "3100000",
     "suitesparse": "4.2.1",
     "t4k_common": "0.1.1",
     "taglib": "1.7.2",
