@@ -412,7 +412,7 @@ end
 -- git commits changes in ./usr
 local function gitCommit(message)
     local cmd = GIT .. GIT_USER .. 'commit -a -m %q --quiet'
-    os.execute(cmd:format(message))
+    assert(execute(cmd:format(message)))
 end
 
 local function isValidBinary(target, file)
@@ -491,7 +491,9 @@ local function buildItem(item, item2deps, file2item)
     os.execute(cmd:format(tool 'make', pkg, target))
     gitAdd()
     local new_files, changed_files = gitStatus()
-    gitCommit(("Build %s"):format(item))
+    if #new_files + #changed_files > 0 then
+        gitCommit(("Build %s"):format(item))
+    end
     for _, file in ipairs(new_files) do
         checkFile(file, item)
         file2item[file] = item
