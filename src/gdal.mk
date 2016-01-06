@@ -87,4 +87,9 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/ogr'   -j '$(JOBS)' install OGR_ENABLED=
     $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
+
+    '$(TARGET)-gcc' -Wall \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gdal.exe' \
+        `'$(TARGET)-pkg-config' --cflags --libs gdal`
+
 endef
