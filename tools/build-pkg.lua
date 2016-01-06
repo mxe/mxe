@@ -7,7 +7,7 @@ See index.html for further information.
 build-pkg, Build binary packages from MXE packages
 Instructions: http://pkg.mxe.cc
 
-Requirements: MXE, lua, tsort, fakeroot, dpkg-deb.
+Requirements: MXE, lua, fakeroot, dpkg-deb.
 Usage: lua tools/build-pkg.lua
 Packages are written to `*.tar.xz` files.
 Debian packages are written to `*.deb` files.
@@ -193,6 +193,11 @@ local function parseItem(item)
     return item:match("([^~]+)~([^~]+)")
 end
 
+-- return item name from target and package
+local function makeItem(target, package)
+    return target .. '~' .. package
+end
+
 -- return several tables describing packages for all targets
 -- * list of items
 -- * map from item to list of deps (which are also items)
@@ -231,29 +236,86 @@ local function getItems()
     return items, item2deps, item2ver
 end
 
+-- graph is a map from item to a list of destinations
+local function transpose(graph)
+    local transposed = {}
+    for item, destinations in pairs(graph) do
+        for _, dest in ipairs(destinations) do
+            if not transposed[dest] then
+                transposed[dest] = {}
+            end
+            table.insert(transposed[dest], item)
+        end
+    end
+    return transposed
+end
+
+local function reverse(list)
+    local n = #list
+    local reversed = {}
+    for i = 1, n do
+        reversed[i] = list[n - i + 1]
+    end
+    return reversed
+end
+
 -- return items ordered in build order
 -- this means, if item depends on item2, then
 -- item2 preceeds item1 in the list
 local function sortForBuild(items, item2deps)
-    -- use sommand tsort
-    local tsort_input_fname = os.tmpname()
-    local tsort_input = io.open(tsort_input_fname, 'w')
-    for _, item1 in ipairs(items) do
-        for _, item2 in ipairs(item2deps[item1]) do
-            tsort_input:write(item2 .. ' ' .. item1 .. '\n')
+    local n = #items
+    local item2followers = transpose(item2deps)
+    -- Tarjan's algorithm
+    -- https://en.wikipedia.org/wiki/Topological_sorting
+    local build_list_reversed = {}
+    local marked_permanently = {}
+    local marked_temporarily = {}
+    local function visit(item1)
+        assert(not marked_temporarily[item1], 'not a DAG')
+        if not marked_permanently[item1] then
+            marked_temporarily[item1] = true
+            local followers = item2followers[item1] or {}
+            for _, item2 in ipairs(followers) do
+                visit(item2)
+            end
+            marked_permanently[item1] = true
+            marked_temporarily[item1] = false
+            table.insert(build_list_reversed, item1)
         end
     end
-    tsort_input:close()
-    --
-    local build_list = {}
-    local tsort = io.popen('tsort ' .. tsort_input_fname, 'r')
-    for line in tsort:lines() do
-        local item = trim(line)
-        table.insert(build_list, item)
+    for _, item in ipairs(items) do
+        if not marked_permanently[item] then
+            visit(item)
+        end
     end
-    tsort:close()
-    os.remove(tsort_input_fname)
+    assert(#build_list_reversed == n)
+    local build_list = reverse(build_list_reversed)
+    assert(#build_list == n)
     return build_list
+end
+
+-- return if build_list is ordered topologically
+local function isTopoOrdered(build_list, items, item2deps)
+    if #build_list ~= #items then
+        return false, 'Length of build_list is wrong'
+    end
+    local item2index = {}
+    for index, item in ipairs(build_list) do
+        if item2index[item] then
+            return false, 'Duplicate item: ' .. item
+        end
+        item2index[item] = index
+    end
+    for item, deps in pairs(item2deps) do
+        for _, dep in ipairs(deps) do
+            if item2index[item] < item2index[dep] then
+                return false, 'Item ' .. item ..
+                    'is built before its dependency ' ..
+                    dep
+            end
+        end
+    end
+    return true
 end
 
 local function isListed(file, list)
@@ -473,6 +535,13 @@ local function makePackage(name, files, deps, ver, d1, d2, dst)
     local tar_name = dirname .. '.tar.xz'
     local cmd = '%s -T %s --owner=root --group=root -cJf %s'
     os.execute(cmd:format(tool 'tar', list_path, tar_name))
+    -- update list of files back from .tar.xz (see #1067)
+    local cmd = '%s -tf %s'
+    cmd = cmd:format(tool 'tar', tar_name)
+    local tar_reader = io.popen(cmd, 'r')
+    local files_str = tar_reader:read('*all')
+    tar_reader:close()
+    writeFile(list_path, files_str)
     -- make DEBIAN/control file
     local control_text = debianControl {
         package = name,
@@ -496,7 +565,8 @@ local function makePackage(name, files, deps, ver, d1, d2, dst)
         local control_fname = dirname .. '/DEBIAN/control'
         writeFile(control_fname, control_text)
         -- make .deb file
-        local cmd = 'fakeroot -i deb.fakeroot dpkg-deb -b %s'
+        local cmd = 'dpkg-deb -Zxz -b %s'
+        cmd = 'fakeroot -i deb.fakeroot ' .. cmd
         os.execute(cmd:format(dirname))
         -- cleanup
         os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
@@ -528,6 +598,19 @@ local function isBuilt(item, files)
         end
     end
     return false
+end
+
+local function findForeignInstalls(item, files)
+    for _, file in ipairs(files) do
+        local pattern = 'usr/([^/]+)/installed/([^/]+)'
+        local t, p = file:match(pattern)
+        if t then
+            local item1 = makeItem(t, p)
+            if item1 ~= item then
+                log('Item %s built item %s', item, item1)
+            end
+        end
+    end
 end
 
 -- script building HUGE_TIMES from MXE main log
@@ -606,6 +689,7 @@ local function buildPackages(items, item2deps)
     for i, item in ipairs(items) do
         if not brokenDep(item) then
             local files = buildItem(item, item2deps, file2item)
+            findForeignInstalls(item, files)
             if isBuilt(item, files) then
                 item2files[item] = files
                 table.insert(unbroken, item)
@@ -692,11 +776,15 @@ local function makeMxeRequirementsPackage(release)
         -- Jessie+
         table.insert(deps, 'libtool-bin')
     end
-    local files = {}
+    local dummy_name = 'mxe-requirements.dummy.' .. release
+    local dummy = io.open(dummy_name, 'w')
+    dummy:close()
+    local files = {dummy_name}
     local d1 = "MXE requirements package"
     local d2 = MXE_REQUIREMENTS_DESCRIPTION2
     local dst = release
     makePackage(name, files, deps, ver, d1, d2, dst)
+    os.remove(dummy_name)
 end
 
 local MXE_SOURCE_DESCRIPTION2 =
@@ -718,6 +806,7 @@ local function makeMxeSourcePackage()
         'ext',
         'index.html',
         'src',
+        'plugins',
         'tools',
         'versions.json',
     }
@@ -736,6 +825,7 @@ end
 gitInit()
 local items, item2deps, item2ver = getItems()
 local build_list = sortForBuild(items, item2deps)
+assert(isTopoOrdered(build_list, items, item2deps))
 build_list = sliceArray(build_list, max_items)
 local unbroken, item2files = buildPackages(build_list, item2deps)
 makeDebs(unbroken, item2deps, item2ver, item2files)

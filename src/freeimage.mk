@@ -25,12 +25,21 @@ define $(PKG)_BUILD
         FREEIMAGE_LIBRARY_TYPE=STATIC \
         TARGET=freeimage
 
+    $(MAKE) -C '$(1)' -j '$(JOBS)' -f Makefile.fip \
+        CXX='$(TARGET)-g++' \
+        CC='$(TARGET)-gcc' \
+        AR='$(TARGET)-ar' \
+        RC='$(TARGET)-windres' \
+        libfreeimageplus.a
+
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libfreeimage.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/libfreeimageplus.a' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/Source/FreeImage.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/Wrapper/FreeImagePlus/FreeImagePlus.h' '$(PREFIX)/$(TARGET)/include/'
 
-    # create pkg-config file
+    # create pkg-config files
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: freeimage'; \
      echo 'Version: $(freeimage_VERSION)'; \
@@ -38,11 +47,22 @@ define $(PKG)_BUILD
      echo 'Cflags: -DFREEIMAGE_LIB'; \
      echo 'Libs: -lfreeimage -lws2_32 -lstdc++';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/freeimage.pc'
+    (echo 'Name: freeimageplus'; \
+     echo 'Version: $(freeimage_VERSION)'; \
+     echo "Description: FreeImagePlus"; \
+     echo 'Cflags: -DFREEIMAGE_LIB'; \
+     echo 'Libs: -lfreeimage -lfreeimageplus -lws2_32';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/freeimageplus.pc'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-freeimage.exe' \
         `'$(TARGET)-pkg-config' freeimage --cflags --libs`
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-freeimageplus.exe' \
+        `'$(TARGET)-pkg-config' freeimageplus --cflags --libs`
 endef
 
 $(PKG)_BUILD_SHARED =

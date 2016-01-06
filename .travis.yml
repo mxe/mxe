@@ -2,7 +2,7 @@ language: c
 sudo: false
 
 script:
-  - make versions.json
+  - make build-matrix.html versions.json
   - if [ "$GH_TOKEN" != "" ]; then ./tools/travis-push.sh; fi
 
 env:

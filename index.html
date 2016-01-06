@@ -86,11 +86,16 @@
     <li>
         integrates well with <a href="#tutorial-5a">autotools</a>,
         <a href="#tutorial-5b">cmake</a>, <a href="#tutorial-5c">qmake</a>,
-        and <a href="#tutorial-5d">hand-written makefiles</a>.
+        and <a href="#tutorial-5d">hand-written makefiles</a>
     </li>
     <li>
         has been in continuous development <a href="#history">since 2007</a>
         and is <a href="#used-by">used by several projects</a>
+    </li>
+    <li>
+        has <a href="http://pkg.mxe.cc/">pre-compiled binaries</a>
+        that <a href="https://github.com/zer0main/battleship">can be used
+        in Continuous Integration systems</a>
     </li>
     </ul>
 
@@ -104,29 +109,29 @@
     </tr>
     <tr>
         <th>Static</th>
-        <th>Shared*</th>
+        <th>Shared</th>
     </tr>
     <tr>
         <td rowspan="2">MinGW-w64</td>
         <td>i686-w64-mingw32</td>
-        <td style='text-align:center'>99% (339/341)</td>
-        <td style='text-align:center'>62% (211/341)</td>
+        <td style='text-align:center'>99% (379/381)</td>
+        <td style='text-align:center'>72% (273/381)</td>
     </tr>
     <tr>
         <td>x86_64-w64-mingw32</td>
-        <td style='text-align:center'>91% (311/341)</td>
-        <td style='text-align:center'>61% (209/341)</td>
+        <td style='text-align:center'>94% (360/381)</td>
+        <td style='text-align:center'>71% (271/381)</td>
     </tr>
     </table>
     <p>
-        These numbers were last updated on October 13, 2014. You can see the
+        These numbers were last updated on December 16, 2015. You can see the
         current status by executing <code>make build-matrix.html</code> in the
         MXE directory.
     </p>
-    <p><small>
-        * Shared support in MXE was just added in early February, 2014. These
-        numbers are expected to rise significantly.
-    </small></p>
+    <p>
+        Experimental support for GCC with posix threads was
+        added in <a href="https://github.com/mxe/mxe/pull/958">November 2015</a>.
+    </p>
 
 </div>
 
@@ -211,7 +216,7 @@ exit</pre>
     </p>
     <pre>cd /opt/mxe</pre>
 
-    <h3 id="tutorial-3">Step 3: Build MXE</h3>
+    <h3 id="tutorial-3">Step 3a: Build MXE</h3>
 
     <p>
     Enter the directory where you've downloaded MXE.
@@ -267,6 +272,15 @@ exit</pre>
 
     <p>
     After you're done it just needs a little post-installation.
+    </p>
+
+    <h3 id="tutorial-3b">Step 3b: Install MXE from the binary distribution</h3>
+
+    <p>
+    Instead of building MXE packages from source, you can
+    download precompiled packages. There are two options:
+    tar archives and Debian packages.
+    See <a href="http://pkg.mxe.cc/">pkg.mxe.cc</a>.
     </p>
 
     <h3 id="tutorial-4">Step 4: Environment Variables</h3>
@@ -645,6 +659,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     Only the <a href="https://www.debian.org/releases/stable/">latest Debian stable series</a> is supported.
+    </p>
+
+    <p>
+    You can install a precompiled MXE via Debian packages.
+    See <a href="http://pkg.mxe.cc/">pkg.mxe.cc</a>.
     </p>
 
     <h3 id="requirements-fedora">Fedora</h3>
@@ -1076,7 +1095,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </tr>
     <tr>
         <td class="package">agg</td>
-        <td class="website"><a href="http://www.antigrain.com/">Anti-Grain Geometry</a></td>
+        <td class="website"><a href="http://agg.sourceforge.net/">Anti-Grain Geometry</a></td>
     </tr>
     <tr>
         <td class="package">alure</td>
@@ -4083,6 +4102,9 @@ endef</pre>
         <a href="https://github.com/mxe/mxe">Project on GitHub</a>
     </li>
     <li>
+        <a href="http://pkg.mxe.cc/">Binary distribution of packages</a>
+    </li>
+    <li>
         <a href="https://www.openhub.net/p/mxe">Entry on Open Hub</a>
     </li>
     <li>
@@ -4190,6 +4212,9 @@ endef</pre>
         <a href="http://sourceforge.net/projects/aorta/">Aorta</a>
     </li>
     <li>
+        <a href="https://github.com/zer0main/battleship">Battleship game</a>
+    </li>
+    <li>
         <a href="https://bino3d.org/">Bino</a>
     </li>
     <li>
@@ -4203,6 +4228,9 @@ endef</pre>
     </li>
     <li>
         <a href="http://www.qtrac.eu/diffpdf.html">DiffPDF</a>
+    </li>
+    <li>
+        <a href="https://github.com/eiskaltdcpp/eiskaltdcpp">EiskaltDC++</a>
     </li>
     <li>
         <a href="http://www.ros.org/wiki/eros">Eros</a>

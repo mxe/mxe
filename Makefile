@@ -45,6 +45,7 @@ REQUIREMENTS := autoconf automake autopoint bash bison bzip2 flex \
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
+GIT_HEAD   := $(shell git rev-parse HEAD)
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(MXE_TMP)/tmp-$(1)
@@ -224,8 +225,15 @@ DOWNLOAD_PKG_ARCHIVE = \
           echo; \
           rm -f '$(PKG_DIR)/$($(1)_FILE)'; )
 
+# open issue from 2002:
+# http://savannah.gnu.org/bugs/?712
 ifneq ($(words $(PWD)),1)
     $(error GNU Make chokes on paths with spaces)
+endif
+
+# dollar signs also cause troubles
+ifneq (,$(findstring $$,$(PWD)))
+    $(error GNU Make chokes on paths with dollar signs)
 endif
 
 ifeq ($(IGNORE_SETTINGS),yes)
@@ -335,6 +343,13 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 	    rm check-requirements-failed; \
 	    exit 1; \
 	fi
+	@touch '$@'
+
+.PHONY: print-git-oneline
+print-git-oneline: $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD)
+$(PREFIX)/installed/print-git-oneline-$(GIT_HEAD):
+	@git log --pretty=tformat:'[git-log]   %h %s' -1 | cat
+	@rm -f '$(PREFIX)/installed/print-git-oneline-'*
 	@touch '$@'
 
 # include core MXE packages and set *_MAKEFILE
@@ -449,7 +464,8 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
                           $(if $(value $(call LOOKUP_PKG_RULE,$(1),URL,$(3))),download-only-$(1)) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(if $(call set_is_not_member,$(1),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS))) \
-                          $(NONET_LIB)
+                          $(NONET_LIB) \
+                          print-git-oneline
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)',
@@ -489,10 +505,11 @@ build-only-$(1)_$(3): CMAKE_SHARED_BOOL = $(if $(findstring shared,$(3)),ON,OFF)
 build-only-$(1)_$(3):
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    uname -a
-	    git show-branch --list --reflog=1
+	    git log --pretty=tformat:"%H - %s [%ar] [%d]" -1
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
 	    autoconf --version 2>/dev/null | head -1
 	    automake --version 2>/dev/null | head -1
+	    python --version
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\

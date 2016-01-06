@@ -3,11 +3,11 @@
 
 PKG             := wt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.4
-$(PKG)_CHECKSUM := 327f9c64504366e3f2fa2c8f1d1a23efc7b8fba8ace3869de375d668f99ede10
+$(PKG)_VERSION  := 3.3.5
+$(PKG)_CHECKSUM := c136ce78ee00fe950071ab56a112b5d9a1fc19944b56a530b1826de865523eaf
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/witty/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/kdeforche/wt/archive/$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc boost graphicsmagick libharu openssl pango postgresql qt sqlite
 
 define $(PKG)_UPDATE

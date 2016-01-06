@@ -8,6 +8,6 @@ git config --global push.default simple
 git config credential.helper "store --file=.git/credentials"
 echo "https://${GH_TOKEN}:@github.com" > .git/credentials
 git remote set-url origin 'https://github.com/mxe/mxe.git'
-git commit -a -m 'Update versions.json' || true
+git commit -a -m 'Update versions.json & build-matrix.html' || true
 git push origin HEAD:master
 git push origin HEAD:gh-pages
