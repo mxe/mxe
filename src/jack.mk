@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 5bc6336e6ac9799e3cb241915e2ba5d01b030589bbb2afae39579a59ef0f2
 $(PKG)_SUBDIR   := jack-$($(PKG)_VERSION)
 $(PKG)_FILE     := jack-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://dl.dropboxusercontent.com/u/28869550/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgnurx libsamplerate libsndfile portaudio pthreads readline waf
+$(PKG)_DEPS     := gcc libgnurx libsamplerate libsndfile portaudio pthreads readline
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://jackaudio.org/downloads/' | \
@@ -17,14 +17,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    rm '$(1)/waf'
     cd '$(1)' &&                                  \
         AR='$(TARGET)-ar'                         \
         CC='$(TARGET)-gcc'                        \
         CXX='$(TARGET)-g++'                       \
         PKGCONFIG='$(TARGET)-pkg-config'          \
-        '$(PREFIX)/$(BUILD)/bin/waf'              \
-            configure build install               \
+        ./waf configure build install             \
             -j '$(JOBS)'                          \
             --prefix='$(PREFIX)/$(TARGET)'        \
             --dist-target=mingw
