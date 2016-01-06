@@ -353,6 +353,12 @@ local function gitTag(name)
     os.execute(GIT .. 'tag ' .. name)
 end
 
+-- git commits changes in ./usr
+local function gitCommit(message)
+    local cmd = GIT .. GIT_USER .. 'commit -a -m %q --quiet'
+    assert(execute(cmd:format(message)))
+end
+
 local function gitCheckout(new_branch, deps)
     local main_dep = deps[1]
     if main_dep then
@@ -407,12 +413,6 @@ local function gitStatus()
     end
     git_st:close()
     return new_files, changed_files
-end
-
--- git commits changes in ./usr
-local function gitCommit(message)
-    local cmd = GIT .. GIT_USER .. 'commit -a -m %q --quiet'
-    assert(execute(cmd:format(message)))
 end
 
 local function isValidBinary(target, file)
