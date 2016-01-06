@@ -27,3 +27,5 @@ define $(PKG)_BUILD
             --prefix='$(PREFIX)/$(TARGET)'        \
             --dist-target=mingw
 endef
+
+$(PKG)_BUILD_STATIC =
