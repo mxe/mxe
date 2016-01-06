@@ -1,20 +1,23 @@
-diff --git a/qbittorrent-3.3.1/configure.ac b/qbittorrent-3.3.1.mingw/configure.ac
-index 172072b..88b420e 100644
---- a/qbittorrent-3.3.1/configure.ac
-+++ b/qbittorrent-3.3.1.mingw/configure.ac
-@@ -261,7 +261,7 @@ AS_IF([test "x$enable_systemd" = "xyes"],
- AC_MSG_NOTICE([Running qmake to generate the makefile...])
- CONFDIR="$( cd "$( dirname "$0" )" && pwd )"
- 
--$QT_QMAKE -r [$CONFDIR]/qbittorrent.pro
-+$QT_QMAKE -r [$CONFDIR]/qbittorrent.pro "QMAKE_LRELEASE=$QMAKE_LRELEASE" "CONF_LIBS=$LIBS"
- 
- ret="$?"
- 
-diff --git a/qbittorrent-3.3.1/m4/qbittorrent.m4 b/qbittorrent-3.3.1.mingw/m4/qbittorrent.m4
-index e104c44..143e934 100644
---- a/qbittorrent-3.3.1/m4/qbittorrent.m4
-+++ b/qbittorrent-3.3.1.mingw/m4/qbittorrent.m4
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Zach Bacon <11doctorwhocanada@gmail.com>
+Date: Wed, 6 Jan 2016 15:59:55 -0500
+Subject: [PATCH] properly detect qmake in mxe
+
+Fix ./configure error:
+
+checking for mxe/usr/i686-w64-mingw32.static/qt/bin/qmake...
+configure: error: cannot check for file existence when
+cross compiling
+
+diff --git a/m4/qbittorrent.m4 b/m4/qbittorrent.m4
+index 1111111..2222222 100644
+--- a/m4/qbittorrent.m4
++++ b/m4/qbittorrent.m4
 @@ -12,9 +12,9 @@ AC_DEFUN([FIND_QT4],
                                  [QT_QMAKE=`AS_DIRNAME(["$QT_QMAKE"])`])
                   ])
@@ -36,10 +39,17 @@ index e104c44..143e934 100644
                [QT_QMAKE="$QT_QMAKE/qmake"],
                [AC_CHECK_FILE([$QT_QMAKE/qmake-qt5],
                               [QT_QMAKE="$QT_QMAKE/qmake-qt5"],
-diff --git a/qbittorrent-3.3.1/src/app/application.cpp b/qbittorrent-3.3.1.mingw/src/app/application.cpp
-index 9bdb627..fa7978e 100644
---- a/qbittorrent-3.3.1/src/app/application.cpp
-+++ b/qbittorrent-3.3.1.mingw/src/app/application.cpp
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 01:58:17 +0200
+Subject: [PATCH] convert includes like <Windows.h> to lowercase
+
+
+diff --git a/src/app/application.cpp b/src/app/application.cpp
+index 1111111..2222222 100644
+--- a/src/app/application.cpp
++++ b/src/app/application.cpp
 @@ -37,7 +37,7 @@
  #ifndef DISABLE_GUI
  #include "gui/guiiconprovider.h"
@@ -49,10 +59,10 @@ index 9bdb627..fa7978e 100644
  #include <QSharedMemory>
  #include <QSessionManager>
  #endif // Q_OS_WIN
-diff --git a/qbittorrent-3.3.1/src/base/bittorrent/torrenthandle.cpp b/qbittorrent-3.3.1.mingw/src/base/bittorrent/torrenthandle.cpp
-index de6ca9c..40b2498 100644
---- a/qbittorrent-3.3.1/src/base/bittorrent/torrenthandle.cpp
-+++ b/qbittorrent-3.3.1.mingw/src/base/bittorrent/torrenthandle.cpp
+diff --git a/src/base/bittorrent/torrenthandle.cpp b/src/base/bittorrent/torrenthandle.cpp
+index 1111111..2222222 100644
+--- a/src/base/bittorrent/torrenthandle.cpp
++++ b/src/base/bittorrent/torrenthandle.cpp
 @@ -43,7 +43,7 @@
  #include <boost/bind.hpp>
  
@@ -62,10 +72,10 @@ index de6ca9c..40b2498 100644
  #endif
  
  #include "base/logger.h"
-diff --git a/qbittorrent-3.3.1/src/base/preferences.cpp b/qbittorrent-3.3.1.mingw/src/base/preferences.cpp
-index 5900393..190632e 100644
---- a/qbittorrent-3.3.1/src/base/preferences.cpp
-+++ b/qbittorrent-3.3.1.mingw/src/base/preferences.cpp
+diff --git a/src/base/preferences.cpp b/src/base/preferences.cpp
+index 1111111..2222222 100644
+--- a/src/base/preferences.cpp
++++ b/src/base/preferences.cpp
 @@ -47,7 +47,7 @@
  #endif
  
@@ -75,10 +85,10 @@ index 5900393..190632e 100644
  #include <winreg.h>
  #endif
  
-diff --git a/qbittorrent-3.3.1/src/base/utils/misc.cpp b/qbittorrent-3.3.1.mingw/src/base/utils/misc.cpp
-index 3a637b8..7e34f0a 100644
---- a/qbittorrent-3.3.1/src/base/utils/misc.cpp
-+++ b/qbittorrent-3.3.1.mingw/src/base/utils/misc.cpp
+diff --git a/src/base/utils/misc.cpp b/src/base/utils/misc.cpp
+index 1111111..2222222 100644
+--- a/src/base/utils/misc.cpp
++++ b/src/base/utils/misc.cpp
 @@ -48,7 +48,7 @@
  
  #ifdef Q_OS_WIN
@@ -88,10 +98,10 @@ index 3a637b8..7e34f0a 100644
  const int UNLEN = 256;
  #else
  #include <unistd.h>
-diff --git a/qbittorrent-3.3.1/src/gui/powermanagement/powermanagement.cpp b/qbittorrent-3.3.1.mingw/src/gui/powermanagement/powermanagement.cpp
-index ec07aa8..c51b229 100644
---- a/qbittorrent-3.3.1/src/gui/powermanagement/powermanagement.cpp
-+++ b/qbittorrent-3.3.1.mingw/src/gui/powermanagement/powermanagement.cpp
+diff --git a/src/gui/powermanagement/powermanagement.cpp b/src/gui/powermanagement/powermanagement.cpp
+index 1111111..2222222 100644
+--- a/src/gui/powermanagement/powermanagement.cpp
++++ b/src/gui/powermanagement/powermanagement.cpp
 @@ -40,7 +40,7 @@
  #endif
  
@@ -101,10 +111,32 @@ index ec07aa8..c51b229 100644
  #endif
  
  PowerManagement::PowerManagement(QObject *parent) : QObject(parent), m_busy(false)
-diff --git a/qbittorrent-3.3.1/winconf-mingw.pri b/qbittorrent-3.3.1.mingw/winconf-mingw.pri
-index 0283d23..9d46759 100644
---- a/qbittorrent-3.3.1/winconf-mingw.pri
-+++ b/qbittorrent-3.3.1.mingw/winconf-mingw.pri
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 02:02:39 +0200
+Subject: [PATCH] fix library list
+
+Replace library list hardcoded in qmake files with
+libraries found by autotools.
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -8345,7 +8345,7 @@ fi
+ $as_echo "$as_me: Running qmake to generate the makefile..." >&6;}
+ CONFDIR="$( cd "$( dirname "$0" )" && pwd )"
+ 
+-$QT_QMAKE -r $CONFDIR/qbittorrent.pro
++$QT_QMAKE -r $CONFDIR/qbittorrent.pro "QMAKE_LRELEASE=$QMAKE_LRELEASE" "CONF_LIBS=$LIBS"
+ 
+ ret="$?"
+ 
+diff --git a/winconf-mingw.pri b/winconf-mingw.pri
+index 1111111..2222222 100644
+--- a/winconf-mingw.pri
++++ b/winconf-mingw.pri
 @@ -20,19 +20,8 @@ CONFIG(debug, debug|release) {
  
  RC_FILE = qbittorrent_mingw.rc
@@ -127,10 +159,10 @@ index 0283d23..9d46759 100644
 -LIBS += libcrypto.dll libssl.dll libwsock32 libws2_32 libz libiconv.dll
 +LIBS += libcrypto libssl libwsock32 libws2_32 libz libiconv
  LIBS += libpowrprof
-diff --git a/qbittorrent-3.3.1/winconf.pri b/qbittorrent-3.3.1.mingw/winconf.pri
-index 73e7921..60c2e6e 100644
---- a/qbittorrent-3.3.1/winconf.pri
-+++ b/qbittorrent-3.3.1.mingw/winconf.pri
+diff --git a/winconf.pri b/winconf.pri
+index 1111111..2222222 100644
+--- a/winconf.pri
++++ b/winconf.pri
 @@ -9,15 +9,6 @@ INCLUDEPATH += $$quote(C:/qBittorrent/Zlib/include)
  # Point this to the openssl include folder
  INCLUDEPATH += $$quote(C:/qBittorrent/openssl/include)
