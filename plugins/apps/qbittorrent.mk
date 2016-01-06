@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && ./boostrap.sh
     cd '$(1)' && \
         QMAKE_LRELEASE='$(PREFIX)/$(TARGET)/qt/bin/lrelease' \
         ./configure \
