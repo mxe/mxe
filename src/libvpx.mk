@@ -3,8 +3,8 @@
 
 PKG             := libvpx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.0
-$(PKG)_CHECKSUM := f582d9b2d60a592a4a3d8c32965ca2d2167e9ade38c6c30bac8801ff66a118e4
+$(PKG)_VERSION  := 1.5.0
+$(PKG)_CHECKSUM := 306d67908625675f8e188d37a81fbfafdf5068b09d9aa52702b6fbe601c76797
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://storage.googleapis.com/downloads.webmproject.org/releases/webm/$($(PKG)_FILE)
