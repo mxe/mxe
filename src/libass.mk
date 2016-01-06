@@ -3,6 +3,8 @@
 
 PKG             := libass
 $(PKG)_IGNORE   :=
+# remove autoreconf step after 0.13.1
+# https://github.com/libass/libass/issues/209
 $(PKG)_VERSION  := 0.13.1
 $(PKG)_CHECKSUM := 4aa36b1876a61cab46fc9284fee84224b9e2840fe7b3e63d96a8d32574343fe7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
