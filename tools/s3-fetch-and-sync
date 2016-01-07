@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # This file is part of MXE.
 # See index.html for further information.
 
@@ -19,7 +19,7 @@
 
 # Manual switch to enable/disable issue filing on GitHub.
 # Useful to prevent the same issue from being filed multiple times
-file_issue=true
+file_issue=false
 
 # List of plugin dirs to include in downloads
 # Can't include all subdirs since some affect versions
