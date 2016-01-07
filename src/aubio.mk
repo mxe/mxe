@@ -27,7 +27,7 @@ define $(PKG)_BUILD
             --prefix='$(PREFIX)/$(TARGET)'        \
             --enable-fftw3f                       \
             $(if $(BUILD_STATIC),                 \
-                --enable-static --disable-shared, \
+                --enable-static --disable-shared --disable-jack, \
                 --disable-static --enable-shared)
 
     # disable txt2man and doxygen
