@@ -1,0 +1,91 @@
+From d8da09469573051c2fb85da1048bef5a4742cb2f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
+Date: Sun, 20 Sep 2015 19:15:15 +0200
+Subject: [PATCH] search for windows.h
+
+instead of relying on the __CYGWIN__ macro
+---
+ configure.in     | 25 ++++++++++---------------
+ src/access_lpt.c |  2 +-
+ src/detect.c     |  2 +-
+ src/ports.c      |  2 +-
+ 4 files changed, 13 insertions(+), 18 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index 7cd9561..9b6b82a 100644
+--- a/configure.in
++++ b/configure.in
+@@ -37,21 +37,16 @@ case "{$host}" in
+         AC_DEFINE(HAVE_SOLARIS,1,enable solaris iop access)
+ 	solaris_io=true
+ ;;
+-*-*-cygwin*)
+-        dnl Strip version number from uname and make sure we're on NT not 9x
+-        case `uname -s | sed 's/-.*$//'` in
+-        CYGWIN_NT*)
+-                AC_CHECK_HEADER(w32api/windows.h, [
+-      	                AC_DEFINE(HAVE_CYGWIN_NT,1,enable w32api access)
+-	        ], AC_MSG_ERROR(You need the cygwin w32api files on NT)) 
+-        ;;
+-        *)
+-      	        AC_DEFINE(HAVE_CYGWIN_9X,1,enable win95 access)
+-        ;;
+-        esac
+-;;
+-*-*-mingw*)
+-dnl        AC_DEFINE(HAVE_CYGWIN_9X,1,enable win95 access)
++*-*-cygwin* | *-*-mingw*)
++	windows_h_found=false
++	AC_CHECK_HEADERS([windows.h] [w32api/windows.h], [
++		windows_h_found=true
++		break
++	])
++	AS_VAR_IF(windows_h_found, [false], [
++		AC_MSG_ERROR(windows.h not found)
++	])
++	AC_DEFINE(HAVE_CYGWIN_9X,1,enable win95 access)
+         AC_DEFINE(HAVE_CYGWIN_NT,1,enable w32api access)
+ ;;
+ *)
+diff --git a/src/access_lpt.c b/src/access_lpt.c
+index ad210f4..8cda6cb 100644
+--- a/src/access_lpt.c
++++ b/src/access_lpt.c
+@@ -51,7 +51,7 @@
+ 
+ #ifdef HAVE_CYGWIN_NT
+ 
+-#ifdef __CYGWIN__
++#ifdef HAVE_W32API_WINDOWS_H
+ #include <w32api/windows.h>
+ #else
+ #include <windows.h>
+diff --git a/src/detect.c b/src/detect.c
+index a53ef19..ca7f85b 100644
+--- a/src/detect.c
++++ b/src/detect.c
+@@ -50,7 +50,7 @@
+ #include <sys/ddi.h>
+ #include <sys/sunddi.h>
+ #elif defined(HAVE_CYGWIN_NT)
+-#ifdef __CYGWIN__
++#ifdef HAVE_W32API_WINDOWS_H
+ #include <w32api/windows.h>
+ #else
+ #include <windows.h>
+diff --git a/src/ports.c b/src/ports.c
+index f3c38f1..ebd5110 100644
+--- a/src/ports.c
++++ b/src/ports.c
+@@ -36,7 +36,7 @@
+ #include "detect.h"
+ 
+ #ifdef HAVE_CYGWIN_NT
+-#ifdef __CYGWIN__
++#ifdef HAVE_W32API_WINDOWS_H
+ #include <w32api/windows.h>
+ #else /* Not cygwin really */
+ /* Don't include windows.h if it isn't necessary. That's why this is here and
+-- 
+2.1.4
+
