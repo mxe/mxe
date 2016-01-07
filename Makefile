@@ -329,10 +329,13 @@ define CHECK_REQUIREMENT_VERSION
     fi
 
 endef
-$(shell [ -d '$(PREFIX)/installed' ] || mkdir -p '$(PREFIX)/installed')
+
+%/.gitkeep:
+	+@mkdir -p '$(dir $@)'
+	@touch '$@'
 
 check-requirements: $(PREFIX)/installed/check-requirements
-$(PREFIX)/installed/check-requirements: $(MAKEFILE)
+$(PREFIX)/installed/check-requirements: $(MAKEFILE) | $(PREFIX)/installed/.gitkeep
 	@echo '[check requirements]'
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[8-9]\|2\.[7-9][0-9])
@@ -349,7 +352,7 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE)
 
 .PHONY: print-git-oneline
 print-git-oneline: $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD)
-$(PREFIX)/installed/print-git-oneline-$(GIT_HEAD):
+$(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkeep
 	@git log --pretty=tformat:'[git-log]   %h %s' -1 | cat
 	@rm -f '$(PREFIX)/installed/print-git-oneline-'*
 	@touch '$@'
@@ -449,9 +452,7 @@ else
     NONET_CFLAGS := -arch i386 -arch x86_64
 endif
 
-$(shell [ -d '$(PREFIX)/$(BUILD)/lib' ] || mkdir -p '$(PREFIX)/$(BUILD)/lib')
-
-$(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c
+$(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
 	@echo '[build nonetwork lib]'
 	@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
 
@@ -467,6 +468,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           $(if $(value $(call LOOKUP_PKG_RULE,$(1),URL,$(3))),download-only-$(1)) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(if $(call set_is_not_member,$(1),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS))) \
                           $(NONET_LIB) \
+                          $(PREFIX)/$(3)/installed/.gitkeep \
                           print-git-oneline
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
@@ -529,7 +531,6 @@ build-only-$(1)_$(3):
 	touch '$(PREFIX)/$(3)/installed/$(1)'
 endef
 $(foreach TARGET,$(MXE_TARGETS), \
-    $(shell [ -d '$(PREFIX)/$(TARGET)/installed' ] || mkdir -p '$(PREFIX)/$(TARGET)/installed') \
     $(foreach PKG,$($(TARGET)_PKGS), \
         $(eval $(call PKG_TARGET_RULE,$(PKG),$(call TMP_DIR,$(PKG)-$(TARGET)),$(TARGET)))))
 
@@ -615,6 +616,7 @@ BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
 
 .PHONY: clean
 clean:
+	-chmod 0755 "$$WINEPREFIX"
 	rm -rf $(call TMP_DIR,*) $(PREFIX) \
 	       $(addprefix $(TOP_DIR)/, $(BUILD_PKG_TMP_FILES))
 
