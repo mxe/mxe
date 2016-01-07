@@ -21,6 +21,10 @@
 # Useful to prevent the same issue from being filed multiple times
 file_issue=true
 
+# List of plugin dirs to include in downloads
+# Can't include all subdirs since some affect versions
+plugin_dirs=`echo plugins/{apps,luarocks,native,tcl.tk}`
+
 cd ~/mxe && git pull
 
 # Test downloading without falling back to S3 download server.
@@ -28,6 +32,7 @@ cd ~/mxe && git pull
 if ! ( \
     cd ~/mxe && \
         make download -k MXE_NO_BACKUP_DL=true MXE_VERBOSE=true \
+            MXE_PLUGIN_DIRS="$plugin_dirs" \
             2>&1 >tmp-download-log \
 ) && $file_issue; then
     # If one or more download process fails, upload log to sprunge.us (a
@@ -39,6 +44,6 @@ if ! ( \
     EDITOR=~/mxe/tools/fake-editor ghi open -L bug -- mxe/mxe
 fi
 
-cd ~/mxe && make clean-junk
+cd ~/mxe && make clean-junk MXE_PLUGIN_DIRS="$plugin_dirs"
 s3cmd sync --acl-public ~/mxe/pkg/* s3://mxe-pkg/
 rm -f ~/mxe/tmp-download-log ~/mxe/tmp-url
