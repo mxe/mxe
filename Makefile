@@ -510,6 +510,7 @@ build-only-$(1)_$(3):
 	    autoconf --version 2>/dev/null | head -1
 	    automake --version 2>/dev/null | head -1
 	    python --version
+	    perl --version 2>&1 | head -3
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
 	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
