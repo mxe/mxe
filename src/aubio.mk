@@ -29,17 +29,13 @@ define $(PKG)_BUILD
             --prefix='$(PREFIX)/$(TARGET)'        \
             --enable-fftw3f                       \
             $(if $(BUILD_STATIC),                 \
-                --enable-static --disable-shared, \
+                --enable-static --disable-shared --disable-jack, \
                 --disable-static --enable-shared)
 
     # disable txt2man and doxygen
     $(SED) -i '/\(TXT2MAN\|DOXYGEN\)/d' '$(1)/build/c4che/_cache.py'
 
     cd '$(1)' && '$(PREFIX)/$(BUILD)/bin/waf' build install
-
-    # It is not trivial to adjust the installation in waf-based builds
-    $(if $(BUILD_STATIC),                         \
-        $(INSTALL) -m644 '$(1)/build/src/libaubio.a' '$(PREFIX)/$(TARGET)/lib')
 
     '$(TARGET)-gcc'                               \
         -W -Wall -Werror -ansi -pedantic          \
