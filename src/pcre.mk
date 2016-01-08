@@ -23,7 +23,7 @@ define $(PKG)_BUILD_SHARED
         --enable-pcre16 \
         --enable-utf \
         --enable-unicode-properties \
-        --disable-cpp \
+        --enable-cpp \
         --disable-pcregrep-libz \
         --disable-pcregrep-libbz2 \
         --disable-pcretest-libreadline
