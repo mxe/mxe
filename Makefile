@@ -45,6 +45,7 @@ REQUIREMENTS := autoconf automake autopoint bash bison bzip2 flex \
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
+GITS_DIR   := $(PWD)/gits
 GIT_HEAD   := $(shell git rev-parse HEAD)
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
@@ -154,7 +155,8 @@ endef
 PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
 
 # use a minimal whitelist of safe environment variables
-ENV_WHITELIST := PATH LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH $(PRELOAD_VARS) ACLOCAL_PATH
+# HOME is needed for ~/.gitconfig for patch-tool-mxe
+ENV_WHITELIST := PATH HOME LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH $(PRELOAD_VARS) ACLOCAL_PATH
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
 # disable wine with readonly directory (created by mxe-conf)
@@ -793,3 +795,7 @@ versions.json: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	        "$($(PKG)_VERSION)",';)} >> $@
 	@echo '    "": null'             >> $@
 	@echo '}'                        >> $@
+
+# for patch-tool-mxe
+
+include patch.mk
