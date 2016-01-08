@@ -3,12 +3,12 @@
 
 PKG             := biosig
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 1.6.4
-$(PKG)_CHECKSUM := 7ca064019f92b813f3d3ee1fc35581b25a8628eb
+$(PKG)_VERSION  := 1.7.3
+$(PKG)_CHECKSUM := c3debc3315dca2ad915bd0e6aac55df29c87b2b2be028f8b8b72a136f1b79c97
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
-$(PKG)_DEPS     := gcc suitesparse zlib libgomp libiberty libiconv
+$(PKG)_DEPS     := gcc suitesparse zlib libiberty libiconv
 
 define $(PKG)_UPDATE
 #    wget -q -O- 'http://biosig.sourceforge.net/download.html' | \
