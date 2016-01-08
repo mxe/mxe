@@ -57,30 +57,3 @@ index b126c30..a97d445 100644
 2.5.0
 
 
-From 46316cbe2097bfebc0681819ae11df4b77a1315d Mon Sep 17 00:00:00 2001
-From: Nikos Mavrogiannopoulos <nmav@redhat.com>
-Date: Tue, 24 Nov 2015 12:54:32 +0100
-Subject: [PATCH 3/3] tools: don't call endservent in windows
-
-
-diff --git a/src/socket.c b/src/socket.c
-index 8991089..be8a4a1 100644
---- a/src/socket.c
-+++ b/src/socket.c
-@@ -33,8 +33,11 @@
- #include <stdlib.h>
- #include <unistd.h>
- #ifndef _WIN32
--#include <arpa/inet.h>
--#include <signal.h>
-+# include <arpa/inet.h>
-+# include <signal.h>
-+#else
-+# undef endservent
-+# define endservent()
- #endif
- #include <socket.h>
- #include <c-ctype.h>
--- 
-2.5.0
-
