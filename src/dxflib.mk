@@ -4,7 +4,7 @@
 PKG             := dxflib
 $(PKG)_IGNORE   := 
 $(PKG)_VERSION  := 2.5.0.0
-$(PKG)_CHECKSUM := af2e496aaf097e40bdb5d6155ba9b0d176d71729
+$(PKG)_CHECKSUM := 20ad9991eec6b0f7a3cc7c500c044481a32110cdc01b65efa7b20d5ff9caefa9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)-1.src
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://qcad.org/archives/$(PKG)/$(PKG)-$($(PKG)_VERSION)-1.src.tar.gz
