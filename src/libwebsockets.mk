@@ -3,16 +3,17 @@
 
 PKG             := libwebsockets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3-chrome37-firefox30
-$(PKG)_CHECKSUM := ee1005165346d2217db4a9c40c4711f741213557
+$(PKG)_VERSION  := 1.4-chrome43-firefox-36
+$(PKG)_CHECKSUM := e11492477e582ef0b1a6ea2f18d81a9619b449170a3a5c43f32a9468461a9798
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/snapshot/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc openssl zlib
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for libwebsockets.' >&2;
-    echo $(libwebsockets_VERSION)
+    $(WGET) -q -O- 'http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/' | \
+    $(SED) -n 's,.*libwebsockets-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD

@@ -3,12 +3,12 @@
 
 PKG             := primesieve
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.4.1
-$(PKG)_CHECKSUM := 553c808aac8d006451e12403cd42e95649e46dea
+$(PKG)_VERSION  := 5.5.0
+$(PKG)_CHECKSUM := f0f818902967ce7c911c330c578a52ec62dbbd9b12a68b8d3a3bc79b601e52b0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://dl.bintray.com/kimwalisch/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgomp
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://primesieve.org/downloads/' | \
@@ -24,7 +24,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 
     $(TARGET)-g++ -s -std=c++0x -fopenmp -o '$(1)/examples/test-primesieve.exe' \
-        '$(1)/examples/count_primes.cpp' \
+        '$(1)/examples/cpp/count_primes.cpp' \
         '-lprimesieve'
     $(INSTALL) -m755 '$(1)/examples/test-primesieve.exe' '$(PREFIX)/$(TARGET)/bin/'
 

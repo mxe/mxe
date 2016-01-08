@@ -4,12 +4,12 @@
 PKG             := ocaml-lablgl
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.05
-$(PKG)_CHECKSUM := 6451294c1591e17db38874e654f319f8ecf401c9
+$(PKG)_CHECKSUM := d8ff03e35b970d2b23a942f9e6ed65da5a6c123986bd0ecf5424a6205af34b61
 $(PKG)_SUBDIR   := lablgl-$($(PKG)_VERSION)
 $(PKG)_FILE     := lablgl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://wwwfun.kurims.kyoto-u.ac.jp/soft/olabl/dist/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://forge.ocamlcore.org/frs/download.php/1254/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ocaml-findlib gtkglarea
+$(PKG)_DEPS     := gcc gtkglarea ocaml-findlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html' | \

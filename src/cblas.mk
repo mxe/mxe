@@ -4,7 +4,7 @@
 PKG             := cblas
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1
-$(PKG)_CHECKSUM := d6970cf52592ef67674a61c78bbd055a4e9d4680
+$(PKG)_CHECKSUM := 0f6354fd67fabd909baf57ced2ef84e962db58fae126e4f41b21dd4fec60a2a3
 $(PKG)_SUBDIR   := CBLAS
 $(PKG)_FILE     := $(PKG).tgz
 $(PKG)_URL      := http://www.netlib.org/blas/blast-forum/$($(PKG)_FILE)

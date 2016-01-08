@@ -3,8 +3,8 @@
 
 PKG             := libbluray
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.7.0
-$(PKG)_CHECKSUM := 12baf71accac2ae9efe7fb077999821ea1430d7b
+$(PKG)_VERSION  := 0.9.2
+$(PKG)_CHECKSUM := efc994f42d2bce6af2ce69d05ba89dbbd88bcec7aca065de094fb3a7880ce7ea
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := http://ftp.videolan.org/pub/videolan/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)

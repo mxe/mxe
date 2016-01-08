@@ -1,0 +1,10 @@
+language: c
+sudo: false
+
+script:
+  - make build-matrix.html versions.json
+  - if [ "$GH_TOKEN" != "" ]; then ./tools/travis-push.sh; fi
+
+env:
+  global:
+    secure: M3fS92HUV+3PklS3h1CVG+TuhZLYgGEeWVsL0ICvJKnbMSvaqm0/OAxwlXbKLkZ/j6JK2yGgChx8QzffkoRr67tHCaPM7cR7mFRn7GivJcgZcA8UAaL9V4AtEHqFIonat8XEsxruUPJyVHgGiTBQfKphQEGtKtHF8iSUhvIxqC8=

@@ -4,7 +4,7 @@
 PKG             := pdflib_lite
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 7.0.5p3
-$(PKG)_CHECKSUM := 42e0605ae21f4b6d25fa2d20e78fed6df36fbaa9
+$(PKG)_CHECKSUM := e5fb30678165d28b2bf066f78d5f5787e73a2a28d4902b63e3e07ce1678616c9
 $(PKG)_SUBDIR   := PDFlib-Lite-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(subst p, ,$($(PKG)_VERSION))))/$($(PKG)_FILE)

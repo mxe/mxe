@@ -3,15 +3,15 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 85f449a5341881f90a6af1dbbb7f3d3cd656bca6 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 27 Oct 2012 22:57:27 +0200
-Subject: [PATCH 1/2] include string.h for memset
+Subject: [PATCH] include string.h for memset
 
 taken from https://sourceforge.net/tracker/?func=detail&aid=3581223&group_id=11504&atid=311504
 
 diff --git a/Source/OpenEXR/IlmImf/ImfAutoArray.h b/Source/OpenEXR/IlmImf/ImfAutoArray.h
-index edb8b10..0b1378e 100755
+index 1111111..2222222 100644
 --- a/Source/OpenEXR/IlmImf/ImfAutoArray.h
 +++ b/Source/OpenEXR/IlmImf/ImfAutoArray.h
 @@ -45,6 +45,10 @@
@@ -25,18 +25,15 @@ index edb8b10..0b1378e 100755
  
  namespace Imf {
  
--- 
-1.8.2.2
 
-
-From 1c85f65b9efc06760ac572ba19c1c513f14d4719 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 11 May 2013 15:15:39 +1000
-Subject: [PATCH 2/2] mingw-w64 fixes
+Subject: [PATCH] mingw-w64 fixes
 
 
 diff --git a/Source/FreeImage/PluginTIFF.cpp b/Source/FreeImage/PluginTIFF.cpp
-index 72218a2..10c86fd 100755
+index 1111111..2222222 100644
 --- a/Source/FreeImage/PluginTIFF.cpp
 +++ b/Source/FreeImage/PluginTIFF.cpp
 @@ -35,6 +35,8 @@
@@ -57,6 +54,25 @@ index 72218a2..10c86fd 100755
  	}
  
  	return tif;
--- 
-1.8.2.2
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: fiesh <weiss@wsoptics.de>
+Date: Tue, 22 Dec 2015 13:45:56 +0100
+Subject: [PATCH] fix freeimage build
+
+Add the FREEIMAGE_LIB define in order to keep the build process from
+defining dllspec specifications. Remove -fPIC to fix a warning.
+
+diff --git a/Makefile.fip b/Makefile.fip
+index 1111111..2222222 100644
+--- a/Makefile.fip
++++ b/Makefile.fip
+@@ -17,7 +17,7 @@ MODULES = $(SRCS:.c=.o)
+ MODULES := $(MODULES:.cpp=.o)
+ CFLAGS ?= -O3 -fPIC -fexceptions -fvisibility=hidden -DNO_LCMS
+ CFLAGS += $(INCLUDE)
+-CXXFLAGS ?= -O3 -fPIC -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy
++CXXFLAGS ?= -O3 -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy -DFREEIMAGE_LIB
+ CXXFLAGS += $(INCLUDE)
+ 
+ ifeq ($(shell sh -c 'uname -m 2>/dev/null || echo not'),x86_64)

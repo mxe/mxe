@@ -4,7 +4,7 @@
 PKG             := bzip2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.6
-$(PKG)_CHECKSUM := 3f89f861209ce81a6bab1fd1998c0ef311712002
+$(PKG)_CHECKSUM := a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd
 $(PKG)_SUBDIR   := bzip2-$($(PKG)_VERSION)
 $(PKG)_FILE     := bzip2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.bzip.org/$($(PKG)_VERSION)/$($(PKG)_FILE)

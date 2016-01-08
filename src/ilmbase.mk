@@ -4,7 +4,7 @@
 PKG             := ilmbase
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.0
-$(PKG)_CHECKSUM := 70d864bc704f276942cb10479f2cb98646ce6ad4
+$(PKG)_CHECKSUM := ecf815b60695555c1fbc73679e84c7c9902f4e8faa6e8000d2f905b8b86cedc7
 $(PKG)_SUBDIR   := ilmbase-$($(PKG)_VERSION)
 $(PKG)_FILE     := ilmbase-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
@@ -32,9 +32,9 @@ define $(PKG)_BUILD
         SHELL=$(SHELL)
     # do the first build step by hand, because programs are built that
     # generate source files
-    cd '$(1)/Half' && g++ eLut.cpp -o eLut
+    cd '$(1)/Half' && $(BUILD_CXX) eLut.cpp -o eLut
     '$(1)/Half/eLut' > '$(1)/eLut.h'
-    cd '$(1)/Half' && g++ toFloat.cpp -o toFloat
+    cd '$(1)/Half' && $(BUILD_CXX) toFloat.cpp -o toFloat
     '$(1)/Half/toFloat' > '$(1)/toFloat.h'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

@@ -3,7 +3,7 @@
 
 PKG             := qwt
 $(PKG)_VERSION  := 6.1.1
-$(PKG)_CHECKSUM := a620c5d4878c7a283d535f10e8207e34bdd38331
+$(PKG)_CHECKSUM := 675966a9e0b883fa5c70e2cee14a74f67bc0f8beb26fa33b4fea510517443c94
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_WEBSITE  := http://qwt.sourceforge.net/

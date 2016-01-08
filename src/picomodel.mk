@@ -4,7 +4,7 @@
 PKG             := picomodel
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1142ad8
-$(PKG)_CHECKSUM := b82b16ee69edaefe751b678b577b90c1971ce4db
+$(PKG)_CHECKSUM := e9dd8b78278a454602a81eb388603142a15f2124f549f478d4edc93149eb6dd0
 $(PKG)_SUBDIR   := ufoai-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/ufoai/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)

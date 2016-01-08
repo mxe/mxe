@@ -4,7 +4,7 @@
 PKG             := sdl_net
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.8
-$(PKG)_CHECKSUM := fd393059fef8d9925dc20662baa3b25e02b8405d
+$(PKG)_CHECKSUM := 5f4a7a8bb884f793c278ac3f3713be41980c5eedccecff0260411347714facb4
 $(PKG)_SUBDIR   := SDL_net-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_net-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.libsdl.org/projects/SDL_net/release/$($(PKG)_FILE)

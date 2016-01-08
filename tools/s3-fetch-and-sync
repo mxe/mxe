@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # This file is part of MXE.
 # See index.html for further information.
 
@@ -7,7 +7,10 @@
 
 # This also acts as a CI to file issue on GitHub if download fails.
 
-# DigitalOcean server IP: 104.131.71.203
+# DigitalOcean server: mirror.mxe.cc
+# IP: 104.131.71.203
+# v6: 2604:a880:800:10::156:f001 2604:a880:800:10::1
+#
 # Admins: https://api.github.com/orgs/mxe/members
 # Keys: https://github.com/<user>.keys or https://api.github.com/users/<user>/keys
 #
@@ -16,7 +19,11 @@
 
 # Manual switch to enable/disable issue filing on GitHub.
 # Useful to prevent the same issue from being filed multiple times
-file_issue=true
+file_issue=false
+
+# List of plugin dirs to include in downloads
+# Can't include all subdirs since some affect versions
+plugin_dirs=`echo plugins/{apps,luarocks,native,tcl.tk}`
 
 cd ~/mxe && git pull
 
@@ -25,6 +32,7 @@ cd ~/mxe && git pull
 if ! ( \
     cd ~/mxe && \
         make download -k MXE_NO_BACKUP_DL=true MXE_VERBOSE=true \
+            MXE_PLUGIN_DIRS="$plugin_dirs" \
             2>&1 >tmp-download-log \
 ) && $file_issue; then
     # If one or more download process fails, upload log to sprunge.us (a
@@ -36,6 +44,6 @@ if ! ( \
     EDITOR=~/mxe/tools/fake-editor ghi open -L bug -- mxe/mxe
 fi
 
-cd ~/mxe && make clean-junk
+cd ~/mxe && make clean-junk MXE_PLUGIN_DIRS="$plugin_dirs"
 s3cmd sync --acl-public ~/mxe/pkg/* s3://mxe-pkg/
 rm -f ~/mxe/tmp-download-log ~/mxe/tmp-url

@@ -3,12 +3,12 @@
 
 PKG             := xerces
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.1
-$(PKG)_CHECKSUM := 177ec838c5119df57ec77eddec9a29f7e754c8b2
+$(PKG)_VERSION  := 3.1.2
+$(PKG)_CHECKSUM := 743bd0a029bf8de56a587c270d97031e0099fe2b7142cef03e0da16e282655a0
 $(PKG)_SUBDIR   := xerces-c-$($(PKG)_VERSION)
 $(PKG)_FILE     := xerces-c-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv curl pthreads
+$(PKG)_DEPS     := gcc curl libiconv pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.apache.org/dist/xerces/c/3/sources/?C=M;O=D' | \

@@ -4,7 +4,7 @@
 PKG             := oce
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.16.1
-$(PKG)_CHECKSUM := 4afae8785f564ac8190cfc43e65e14344f5db1ec
+$(PKG)_CHECKSUM := d31030c8da4a1b33f767d0d59895a995c8eabc8fc65cbe0558734f6021ea2f57
 $(PKG)_SUBDIR   := $(PKG)-OCE-$($(PKG)_VERSION)
 $(PKG)_FILE     := OCE-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/tpaviot/oce/archive/$($(PKG)_FILE)

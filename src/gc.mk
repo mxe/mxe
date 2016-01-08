@@ -4,7 +4,7 @@
 PKG             := gc
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 7.2e
-$(PKG)_CHECKSUM := 3ad593c6d0ed9c0951c21a657b86c55dab6365c8
+$(PKG)_CHECKSUM := 09315b48a82d600371207691126ad058c04677281ac318d86fa84c98c3c9af4b
 $(PKG)_SUBDIR   := $(PKG)-7.2
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://hboehm.info/$(PKG)/$(PKG)_source/$($(PKG)_FILE)

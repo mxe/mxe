@@ -4,12 +4,12 @@
 PKG             := popt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.16
-$(PKG)_CHECKSUM := cfe94a15a2404db85858a81ff8de27c8ff3e235e
+$(PKG)_CHECKSUM := e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://rpm5.org/files/popt/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/p/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
-$(PKG)_DEPS     := gcc libiconv gettext
+$(PKG)_DEPS     := gcc gettext libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://rpm5.org/files/popt/' | \

@@ -3,16 +3,17 @@
 
 PKG             := libvpx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.0
-$(PKG)_CHECKSUM := 191b95817aede8c136cc3f3745fb1b8c50e6d5dc
-$(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://webm.googlecode.com/files/$($(PKG)_FILE)
+$(PKG)_VERSION  := 1.5.0
+$(PKG)_CHECKSUM := 306d67908625675f8e188d37a81fbfafdf5068b09d9aa52702b6fbe601c76797
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := http://storage.googleapis.com/downloads.webmproject.org/releases/webm/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads yasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://code.google.com/p/webm/downloads/list?sort=-uploaded' | \
-    $(SED) -n 's,.*libvpx-v\([0-9][^<]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- 'http://downloads.webmproject.org/releases/webm/index.html' | \
+    $(SED) -n 's,.*libvpx-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SORT) -Vr | \
     head -1
 endef
 

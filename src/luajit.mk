@@ -4,7 +4,7 @@
 PKG             := luajit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.4
-$(PKG)_CHECKSUM := 6e533675180300e85d12c4bbeea2d0e41ad21172
+$(PKG)_CHECKSUM := 620fa4eb12375021bef6e4f237cbd2dd5d49e56beb414bee052c746beef1807d
 $(PKG)_SUBDIR   := LuaJIT-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://luajit.org/download/$($(PKG)_FILE)
@@ -12,10 +12,12 @@ $(PKG)_DEPS     := gcc dlfcn-win32
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
-        HOST_CC='gcc -m$(BITS)' CROSS='$(TARGET)-' \
+        HOST_CC='$(BUILD_CC) -m$(BITS)' CROSS='$(TARGET)-' \
         TARGET_SYS=Windows BUILDMODE=static \
         PREFIX='$(PREFIX)/$(TARGET)' \
         FILE_T=luajit.exe \
+        INSTALL_TNAME=luajit-$($(PKG)_VERSION).exe \
+        INSTALL_TSYMNAME=luajit.exe \
         install
 endef
 

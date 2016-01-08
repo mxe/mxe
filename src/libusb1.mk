@@ -4,7 +4,7 @@
 PKG             := libusb1
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.19
-$(PKG)_CHECKSUM := c5d14ced155233ceeb5107c7eb3b94b16649ae05
+$(PKG)_CHECKSUM := 6c502c816002f90d4f76050a6429c3a7e0d84204222cbff2dce95dd773ba6840
 $(PKG)_SUBDIR   := libusb-$($(PKG)_VERSION)
 $(PKG)_FILE     := libusb-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libusb-$($(PKG)_VERSION)/$($(PKG)_FILE)

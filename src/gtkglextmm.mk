@@ -4,7 +4,7 @@
 PKG             := gtkglextmm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.0
-$(PKG)_CHECKSUM := 5cd489e07517a88262cd6050f723227664e82996
+$(PKG)_CHECKSUM := 8f499c1f95678c56cce908c10bf2c1d0f2267b87e0c480385fa4b128c75bdf7b
 $(PKG)_SUBDIR   := gtkglextmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglextmm-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($(PKG)_VERSION)/$($(PKG)_FILE)

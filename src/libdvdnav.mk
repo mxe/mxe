@@ -4,7 +4,7 @@
 PKG             := libdvdnav
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.0.1
-$(PKG)_CHECKSUM := 9c234fc1a11f760c90cc278b702b1e41fc418b7e
+$(PKG)_CHECKSUM := 72b1cb8266f163d4a1481b92c7b6c53e6dc9274d2a6befb08ffc351fe7a4a2a9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 # Later releases seem to be hosted on VideoLAN's server

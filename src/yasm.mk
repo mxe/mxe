@@ -3,11 +3,14 @@
 
 PKG             := yasm
 $(PKG)_VERSION  := 1.3.0
-$(PKG)_CHECKSUM := b7574e9f0826bedef975d64d3825f75fbaeef55e
+$(PKG)_CHECKSUM := 3dce6601b495f5b3d45b59f7d2492a340ee7e84b5beca17e48f862502bd5603f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.tortall.net/projects/$(PKG)/releases/$($(PKG)_FILE)
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc
+
+$(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/yasm/yasm/tags' | \
@@ -16,21 +19,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # native build of yasm - will the same for all targets
-    # but we don't want to conflict with an un-prefixed version
-    mkdir '$(1).native'
-    cd '$(1).native' && '$(1)/configure' \
-        --prefix='$(PREFIX)' \
-        --program-prefix='$(TARGET)-' \
-        --disable-nls \
-        --disable-python
-    $(MAKE) -C '$(1).native' -j '$(JOBS)' install
+    # link to native yasm compiler on cross builds
+    $(if $(call sne,$(TARGET),$(BUILD)),
+        ln -sf '$(PREFIX)/$(BUILD)/bin/yasm' '$(PREFIX)/bin/$(TARGET)-yasm')
 
     # yasm is always static
     cd '$(1)' && '$(1)/configure' \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-nls
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-nls \
+        --disable-python
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

@@ -86,11 +86,16 @@
     <li>
         integrates well with <a href="#tutorial-5a">autotools</a>,
         <a href="#tutorial-5b">cmake</a>, <a href="#tutorial-5c">qmake</a>,
-        and <a href="#tutorial-5d">hand-written makefiles</a>.
+        and <a href="#tutorial-5d">hand-written makefiles</a>
     </li>
     <li>
         has been in continuous development <a href="#history">since 2007</a>
         and is <a href="#used-by">used by several projects</a>
+    </li>
+    <li>
+        has <a href="http://pkg.mxe.cc/">pre-compiled binaries</a>
+        that <a href="https://github.com/zer0main/battleship">can be used
+        in Continuous Integration systems</a>
     </li>
     </ul>
 
@@ -104,29 +109,29 @@
     </tr>
     <tr>
         <th>Static</th>
-        <th>Shared*</th>
+        <th>Shared</th>
     </tr>
     <tr>
         <td rowspan="2">MinGW-w64</td>
         <td>i686-w64-mingw32</td>
-        <td style='text-align:center'>99% (339/341)</td>
-        <td style='text-align:center'>62% (211/341)</td>
+        <td style='text-align:center'>99% (379/381)</td>
+        <td style='text-align:center'>72% (273/381)</td>
     </tr>
     <tr>
         <td>x86_64-w64-mingw32</td>
-        <td style='text-align:center'>91% (311/341)</td>
-        <td style='text-align:center'>61% (209/341)</td>
+        <td style='text-align:center'>94% (360/381)</td>
+        <td style='text-align:center'>71% (271/381)</td>
     </tr>
     </table>
     <p>
-        These numbers were last updated on October 13, 2014. You can see the
+        These numbers were last updated on December 16, 2015. You can see the
         current status by executing <code>make build-matrix.html</code> in the
         MXE directory.
     </p>
-    <p><small>
-        * Shared support in MXE was just added in early February, 2014. These
-        numbers are expected to rise significantly.
-    </small></p>
+    <p>
+        Experimental support for GCC with posix threads was
+        added in <a href="https://github.com/mxe/mxe/pull/958">November 2015</a>.
+    </p>
 
 </div>
 
@@ -211,7 +216,7 @@ exit</pre>
     </p>
     <pre>cd /opt/mxe</pre>
 
-    <h3 id="tutorial-3">Step 3: Build MXE</h3>
+    <h3 id="tutorial-3">Step 3a: Build MXE</h3>
 
     <p>
     Enter the directory where you've downloaded MXE.
@@ -267,6 +272,15 @@ exit</pre>
 
     <p>
     After you're done it just needs a little post-installation.
+    </p>
+
+    <h3 id="tutorial-3b">Step 3b: Install MXE from the binary distribution</h3>
+
+    <p>
+    Instead of building MXE packages from source, you can
+    download precompiled packages. There are two options:
+    tar archives and Debian packages.
+    See <a href="http://pkg.mxe.cc/">pkg.mxe.cc</a>.
     </p>
 
     <h3 id="tutorial-4">Step 4: Environment Variables</h3>
@@ -345,9 +359,13 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
     <p>
     If you have a
     <a href="http://www.cmake.org/">CMake</a> project,
-    you can use the provided toolchain file:
+    you can use the provided cmake wrapper:
     </p>
-    <pre>cmake ... -DCMAKE_TOOLCHAIN_FILE=/<em>where MXE is installed</em>/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake</pre>
+    <pre>i686-w64-mingw32.static-cmake ...</pre>
+    <p>
+    This will automatically use the MXE version of cmake
+    and locate the toolchain file.
+    </p>
 
     <h3 id="tutorial-5c">Step 5c: Cross compile your Project (Qt)</h3>
 
@@ -464,24 +482,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <a href="https://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">mailing list</a>
     and to <a href="#creating-packages">propose new packages</a>.
     </p>
-
-    <h3 id="committers">For Committers</h3>
-
-    <p>
-    The following <code>.git/config</code> settings ensure
-    that the master branch will always be pushed to the
-    <code><a href="https://help.github.com/categories/github-pages-basics/">gh-pages</a></code>
-    branch,
-    thus ensuring the website will always stay in sync:
-    </p>
-    <pre>[remote "origin"]
-        url = git@github.com:mxe/mxe.git
-        fetch = +refs/heads/*:refs/remotes/origin/*
-        push = refs/heads/master:refs/heads/master
-        push = refs/heads/master:refs/heads/gh-pages
-[branch "master"]
-        remote = origin
-        merge = refs/heads/master</pre>
 </div>
 
 <div class="section">
@@ -512,7 +512,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <table class="requirements">
     <tr>
         <td><a href="https://www.gnu.org/software/autoconf/">Autoconf</a></td>
-        <td>≥ 2.67</td>
+        <td>≥ 2.68</td>
     </tr>
     <tr>
         <td><a href="https://www.gnu.org/software/automake/">Automake</a></td>
@@ -531,15 +531,15 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://www.cmake.org/">CMake</a></td>
-        <td>≥ 2.8.0</td>
-    </tr>
-    <tr>
         <td><a href="http://flex.sourceforge.net/">Flex</a></td>
         <td>≥ 2.5.31</td>
     </tr>
     <tr>
         <td><a href="https://www.gnu.org/software/gcc/">GCC</a> (gcc, g++)</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="http://www.gdk-pixbuf.org/">gdk-pixbuf</a></td>
         <td></td>
     </tr>
     <tr>
@@ -584,6 +584,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </tr>
     <tr>
         <td><a href="https://www.openssl.org/">OpenSSL</a>-dev</td>
+        <td>≥ 1.01</td>
+    </tr>
+    <tr>
+        <td><a href="http://p7zip.sourceforge.net/">p7zip (7-Zip)</a></td>
         <td></td>
     </tr>
     <tr>
@@ -626,16 +630,21 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td><a href="http://tukaani.org/xz/">XZ Utils</a></td>
         <td></td>
     </tr>
+    <tr>
+        <td><a href="http://zlib.net/">zlib</a></td>
+        <td>≥ 1.20</td>
+    </tr>
     </table>
 
     <h3 id="requirements-debian">Debian and derivatives</h3>
 
     <!-- http://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install \
-    autoconf automake autopoint bash bison bzip2 cmake flex gettext \
-    git g++ gperf intltool libffi-dev libtool libltdl-dev \
-    libssl-dev libxml-parser-perl make openssl patch perl \
-    pkg-config python ruby scons sed unzip wget xz-utils</pre>
+    autoconf automake autopoint bash bison bzip2 flex gettext\
+    git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
+    libtool libltdl-dev libssl-dev libxml-parser-perl make \
+    openssl p7zip-full patch perl pkg-config python ruby scons \
+    sed unzip wget xz-utils</pre>
 
     <p>
     On 64-bit Debian, install also:
@@ -643,17 +652,28 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>apt-get install g++-multilib libc6-dev-i386</pre>
 
     <p>
+    On Debian Jessie (8) or Ubuntu Utopic (14.10) or later,
+    install also:
+    </p>
+    <pre>apt-get install libtool-bin</pre>
+
+    <p>
     Only the <a href="https://www.debian.org/releases/stable/">latest Debian stable series</a> is supported.
+    </p>
+
+    <p>
+    You can install a precompiled MXE via Debian packages.
+    See <a href="http://pkg.mxe.cc/">pkg.mxe.cc</a>.
     </p>
 
     <h3 id="requirements-fedora">Fedora</h3>
 
     <!-- https://admin.fedoraproject.org/pkgdb/ -->
     <pre>yum install \
-    autoconf automake bash bison bzip2 cmake flex gcc-c++ \
-    gettext git gperf intltool make sed libffi-devel \
-    libtool openssl-devel patch perl pkgconfig python \
-    ruby scons unzip wget xz</pre>
+    autoconf automake bash bison bzip2 flex gcc-c++ \
+    gdk-pixbuf2-devel gettext git gperf intltool make \
+    sed libffi-devel libtool openssl-devel p7zip patch \
+    perl pkgconfig python ruby scons unzip wget xz</pre>
 
     <p>
     On 64-bit Fedora,
@@ -663,12 +683,24 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3 id="requirements-freebsd">FreeBSD</h3>
 
     <!-- http://www.freshports.org/ -->
-    <pre>pkg_add -r \
-    automake autoconf bash bison cmake coreutils flex \
-    gettext git glib20 gmake gperf gsed intltool libffi \
-    libtool openssl patch perl p5-XML-Parser pkgconf \
-    python ruby scons unzip wget</pre>
+    <pre>pkg install \
+    automake autoconf bash bison coreutils flex \
+    gcc gdk-pixbuf2 gettext git glib gmake gperf gsed intltool libffi \
+    libtool openssl p5-XML-Parser p7zip patch perl5 \
+    pkgconf python ruby scons unzip wget</pre>
 
+    <p>
+    Use gmake instead of make.
+    </p>
+    <p>
+    Install file(1) from ports, because file(1) from base
+    <a href="https://forums.freebsd.org/threads/usr-bin-file-works-very-slow.52958/">works</a>
+    very-very-very slow with long text files.
+    </p>
+    <p>
+    Do not build as root. See
+    <a href="https://github.com/mxe/mxe/issues/902">#902</a>.
+    </p>
     <p>
     Ensure that /usr/local/bin precedes /usr/bin in your $PATH:
     </p>
@@ -679,7 +711,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     For Bourne shells, edit .profile
     </p>
-    <pre>export PATH = /usr/local/bin:$PATH</pre>
+    <pre>export PATH=/usr/local/bin:$PATH</pre>
     <p>
     On 64-bit FreeBSD,
     there are <a href="#issue-non-multilib">issues without a 32-bit compiler</a>.
@@ -702,7 +734,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- http://www.frugalware.org/packages -->
     <pre>pacman-g2 -S \
-    autoconf automake bash bzip2 bison cmake flex gcc \
+    autoconf automake bash bzip2 bison flex gcc gdk-pixbuf2\
     gettext git gperf intltool make sed libffi libtool \
     openssl patch perl perl-xml-parser pkgconfig python \
     ruby scons unzip wget xz xz-lzma</pre>
@@ -717,22 +749,22 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://packages.gentoo.org/ -->
     <pre>emerge \
     sys-devel/autoconf sys-devel/automake app-shells/bash \
-    sys-devel/bison app-arch/bzip2 dev-util/cmake \
+    sys-devel/bison app-arch/bzip2 \
     sys-devel/flex sys-devel/gcc sys-devel/gettext \
     dev-vcs/git dev-util/gperf dev-util/intltool \
     sys-devel/make sys-apps/sed dev-libs/libffi \
-    sys-devel/libtool dev-libs/openssl sys-devel/patch \
-    dev-lang/perl dev-perl/XML-Parser dev-util/pkgconfig \
-    dev-lang/python dev-lang/ruby dev-util/scons \
-    app-arch/unzip net-misc/wget app-arch/xz-utils</pre>
+    sys-devel/libtool dev-libs/openssl app-arch/p7zip \
+    sys-devel/patch dev-lang/perl dev-perl/XML-Parser \
+    dev-util/pkgconfig dev-lang/python dev-lang/ruby \
+    dev-util/scons app-arch/unzip net-misc/wget \
+    app-arch/xz-utils x11-libs/gdk-pixbuf</pre>
 
     <h3 id="requirements-macos">Mac OS X</h3>
 
     <p>
     Install
-    <a href="http://developer.apple.com/xcode/">Xcode 5</a>
+    <a href="http://developer.apple.com/xcode/">the latest Xcode</a>
     </p>
-    <h4 id="requirements-macos-step-1">Step 1</h4>
     <h5 id="requirements-macos-method-1">Method 1 - MacPorts</h5>
     <p>
     Install <a href="http://www.macports.org/">MacPorts</a>,
@@ -740,38 +772,70 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
-    glib2 intltool p5-xml-parser gpatch scons wget xz</pre>
+    autoconf automake bison coreutils flex gettext \
+    gdk-pixbuf2 glib2 gsed intltool libffi libtool \
+    openssl p5-xml-parser p7zip scons wget xz</pre>
+
     <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
     <p>
-    Install <a href="http://rudix.org/">Rudix</a> you can make it with following command
-    </p>
-    <pre>curl -s https://raw.githubusercontent.com/rudix-mac/rpm/2014.6/rudix.py \
-    | sudo python - install rudix</pre>
-    <p>
+    Install <a href="http://rudix.org/">Rudix</a>,
     then run:
     </p>
-    <pre>sudo rudix install glib pkg-config scons wget xz</pre>
-    <h4 id="requirements-macos-step-2">Step 2</h4>
+    <!-- http://rudix.org/packages/index.html -->
+    <pre>sudo rudix install \
+    autoconf automake coreutils gettext glib intltool \
+    libtool p7zip scons sed wget xz</pre>
     <p>
-    After installing pre-requirement run from within the mxe directory:
+    Note: <b>gdk-pixbuf2</b> is not installed in method 2,
+    so you can not build <b>gtk3</b>. Other packages may be
+    missing on Rudix - please open an issue if you find any.
     </p>
-    <pre>make build-requirements</pre>
+
+    <h5 id="requirements-macos-method-3">Method 3 - Homebrew</h5>
+    <p>
+    Install <a href="http://brew.sh/">Homebrew</a>,
+    then run:
+    </p>
+    <!-- http://braumeister.org/ -->
+    <pre>brew install \
+    autoconf automake coreutils gdk-pixbuf gettext \
+    gnu-sed intltool libtool p7zip wget xz</pre>
+    <p>
+    Some formulae are
+    <a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/FAQ.md#what-does-keg-only-mean"><code>keg-only</code></a>
+    and will need <code>brew link</code> to be found.
+    </p>
+
+    <h5 id="requirements-macos-genaral">Genral Notes</h5>
     <p>
     You may be prompted to install a java runtime
     - this is not required.
     </p>
     <p>
-    Mac OS X versions ≤ 10.7 are no longer supported.
+    Mac OS X versions ≤ 10.9 are no longer tested.
     </p>
+    <p>
+    <h5>Certain packages have open issues on OS X</h5>
+    </p>
+    <p>
+    to build the remainder of MXE, run:
+    </p>
+    <pre>make EXCLUDE_PKGS='nsis ocaml%'</pre>
+    <p>
+    to see a list of all dependent downstream packages that
+    will be excluded, run:
+    </p>
+    <pre>make show-downstream-deps-'nsis ocaml%'</pre>
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
     <!-- http://software.opensuse.org/131/en -->
     <pre>zypper install -R \
-    autoconf automake bash bison bzip2 cmake flex gcc-c++ \
-    gettext-tools git gperf intltool libffi-devel libtool \
-    make openssl libopenssl-devel patch perl perl-XML-Parser \
-    pkg-config python ruby scons sed unzip wget xz</pre>
+    autoconf automake bash bison bzip2 flex gcc-c++ \
+    gdk-pixbuf-devel gettext-tools git gperf intltool \
+    libffi-devel libtool make openssl libopenssl-devel \
+    p7zip patch perl perl-XML-Parser pkg-config python \
+    ruby scons sed unzip wget xz</pre>
 
     <p>
     On 64-bit openSUSE, install also:
@@ -1031,7 +1095,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </tr>
     <tr>
         <td class="package">agg</td>
-        <td class="website"><a href="http://www.antigrain.com/">Anti-Grain Geometry</a></td>
+        <td class="website"><a href="http://agg.sourceforge.net/">Anti-Grain Geometry</a></td>
     </tr>
     <tr>
         <td class="package">alure</td>
@@ -1050,6 +1114,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://arma.sourceforge.net/">Armadillo C++ linear algebra library</a></td>
     </tr>
     <tr>
+        <td class="package">aspell</td>
+        <td class="website"><a href="http://aspell.net/">Aspell</a></td>
+    </tr>
+    <tr>
         <td class="package">assimp</td>
         <td class="website"><a href="http://assimp.sourceforge.net/">Assimp Open Asset Import Library</a></td>
     </tr>
@@ -1066,16 +1134,8 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.aubio.org/">aubio</a></td>
     </tr>
     <tr>
-        <td class="package">automoc4</td>
-        <td class="website"><a href="http://www.aubio.org/">automoc4</a></td>
-    </tr>
-    <tr>
-        <td class="package">autoconf</td>
-        <td class="website"><a href="http://www.gnu.org/software/autoconf/">autoconf</a></td>
-    </tr>
-    <tr>
-        <td class="package">automake</td>
-        <td class="website"><a href="http://www.gnu.org/software/automake/">automake</a></td>
+        <td class="package">db</td>
+        <td class="website"><a href="http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html">Oracle Berkeley DB</a></td>
     </tr>
     <tr>
         <td class="package">bfd</td>
@@ -1086,20 +1146,16 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://www.gnu.org/software/binutils/">GNU Binutils</a></td>
     </tr>
     <tr>
-        <td class="package">biosig</td>
-        <td class="website"><a href="http://biosig.sf.net/">biosig</a></td>
-    </tr>
-    <tr>
-        <td class="package">bison</td>
-        <td class="website"><a href="http://www.gnu.org/software/bison/">bison</a></td>
-    </tr>
-    <tr>
         <td class="package">blas</td>
         <td class="website"><a href="http://www.netlib.org/blas/">blas</a></td>
     </tr>
     <tr>
         <td class="package">boost</td>
         <td class="website"><a href="http://www.boost.org/">Boost C++ Library</a></td>
+    </tr>
+    <tr>
+        <td class="package">box2d</td>
+        <td class="website"><a href="http://www.box2d.org/">Box2D</a></td>
     </tr>
     <tr>
         <td class="package">bullet</td>
@@ -1154,6 +1210,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://acoustid.org/chromaprint">Chromaprint</a></td>
     </tr>
     <tr>
+        <td class="package">cloog</td>
+        <td class="website"><a href="http://www.cloog.org/">CLooG Code Generator</a></td>
+    </tr>
+    <tr>
+        <td class="package">cimg</td>
+        <td class="website"><a href="http://cimg.eu/">CImg Library</a></td>
+    </tr>
+    <tr>
         <td class="package">cmake</td>
         <td class="website"><a href="http://www.cmake.org/">cmake</a></td>
     </tr>
@@ -1162,12 +1226,20 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://devernay.free.fr/hacks/cminpack/cminpack.html">cminpack</a></td>
     </tr>
     <tr>
-        <td class="package">coreutils</td>
-        <td class="website"><a href="https://www.gnu.org/software/coreutils/">GNU Core Utilities</a></td>
+        <td class="package">coin</td>
+        <td class="website"><a href="https://bitbucket.org/Coin3D/">Coin3D</a></td>
+    </tr>
+    <tr>
+        <td class="package">cpp-netlib</td>
+        <td class="website"><a href="http://cpp-netlib.org/">Boost C++ Networking Library</a></td>
     </tr>
     <tr>
         <td class="package">cppunit</td>
         <td class="website"><a href="http://www.freedesktop.org/wiki/Software/cppunit/">CppUnit</a></td>
+    </tr>
+    <tr>
+        <td class="package">cryptopp</td>
+        <td class="website"><a href="https://www.cryptopp.com/">Crypto++ Library</a></td>
     </tr>
     <tr>
         <td class="package">crystalhd</td>
@@ -1246,10 +1318,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN">FLANN</a></td>
     </tr>
     <tr>
-        <td class="package">flex</td>
-        <td class="website"><a href="http://flex.sourceforge.net/">flex</a></td>
-    </tr>
-    <tr>
         <td class="package">fltk</td>
         <td class="website"><a href="http://www.fltk.org/">FLTK</a></td>
     </tr>
@@ -1306,22 +1374,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://gcc.gnu.org/">GCC</a></td>
     </tr>
     <tr>
-        <td class="package">gcc-gmp</td>
-        <td class="website"><a href="http://www.gmplib.org/">GMP for GCC</a></td>
-    </tr>
-    <tr>
-        <td class="package">gcc-isl</td>
-        <td class="website"><a href="http://isl.gforge.inria.fr/">ISL for GCC</a></td>
-    </tr>
-    <tr>
-        <td class="package">gcc-mpc</td>
-        <td class="website"><a href="http://www.multiprecision.org/">MPC for GCC</a></td>
-    </tr>
-    <tr>
-        <td class="package">gcc-mpfr</td>
-        <td class="website"><a href="http://www.mpfr.org/">MPFR for GCC</a></td>
-    </tr>
-    <tr>
         <td class="package">gd</td>
         <td class="website"><a href="http://www.libgd.org/">GD  (without support for xpm)</a></td>
     </tr>
@@ -1344,6 +1396,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">gendef</td>
         <td class="website"><a href="http://sourceforge.net/p/mingw-w64/wiki2/gendef/">gendef</a></td>
+    </tr>
+    <tr>
+        <td class="package">geoip-database</td>
+        <td class="website"><a href="http://www.maxmind.com">GeoIP Legacy Database</a></td>
     </tr>
     <tr>
         <td class="package">geos</td>
@@ -1392,10 +1448,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">gnutls</td>
         <td class="website"><a href="https://www.gnu.org/software/gnutls/">GnuTLS</a></td>
-    </tr>
-    <tr>
-        <td class="package">gperf</td>
-        <td class="website"><a href="https://www.gnu.org/software/gperf/">GNU gperf</a></td>
     </tr>
     <tr>
         <td class="package">graphicsmagick</td>
@@ -1454,6 +1506,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.gtkmm.org/">GTKMM</a></td>
     </tr>
     <tr>
+        <td class="package">gtkmm3</td>
+        <td class="website"><a href="http://www.gtkmm.org/">GTKMM</a></td>
+    </tr>
+    <tr>
         <td class="package">gtksourceview</td>
         <td class="website"><a href="http://projects.gnome.org/gtksourceview/">GTKSourceView</a></td>
     </tr>
@@ -1498,10 +1554,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.imagemagick.org/">ImageMagick</a></td>
     </tr>
     <tr>
-        <td class="package">intltool</td>
-        <td class="website"><a href="http://freedesktop.org/wiki/Software/intltool/">Intltool</a></td>
-    </tr>
-    <tr>
         <td class="package">isl</td>
         <td class="website"><a href="http://isl.gforge.inria.fr/">Integer Set Library</a></td>
     </tr>
@@ -1510,8 +1562,8 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.itk.org/">Insight Segmentation and Registration Toolkit (ITK)</a></td>
     </tr>
     <tr>
-        <td class="package">itstool</td>
-        <td class="website"><a href="http://itstool.org/">ITS Tool</a></td>
+        <td class="package">jack</td>
+        <td class="website"><a href="http://jackaudio.org/">JACK Audio Connection Kit</a></td>
     </tr>
     <tr>
         <td class="package">jansson</td>
@@ -1530,8 +1582,16 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://github.com/json-c/json-c/wiki">json-c</a></td>
     </tr>
     <tr>
+        <td class="package">json-glib</td>
+        <td class="website"><a href="https://wiki.gnome.org/action/show/Projects/JsonGlib">JSON-Glib</a></td>
+    </tr>
+    <tr>
         <td class="package">json_spirit</td>
         <td class="website"><a href="https://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented">json_spirit</a></td>
+    </tr>
+    <tr>
+        <td class="package">jsoncpp</td>
+        <td class="website"><a href="https://github.com/open-source-parsers/jsoncpp">jsoncpp</a></td>
     </tr>
     <tr>
         <td class="package">lame</td>
@@ -1588,6 +1648,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">libcdio-paranoia</td>
         <td class="website"><a href="https://www.gnu.org/software/libcdio/">Libcdio-paranoia</a></td>
+    </tr>
+    <tr>
+        <td class="package">libcomm14cux</td>
+        <td class="website"><a href="https://github.com/colinbourassa/libcomm14cux/">libcomm14cux</a></td>
     </tr>
     <tr>
         <td class="package">libcroco</td>
@@ -1666,16 +1730,16 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://trac.osgeo.org/geotiff/">GeoTiff</a></td>
     </tr>
     <tr>
+        <td class="package">libgit2</td>
+        <td class="website"><a href="https://libgit2.github.com/">libgit2</a></td>
+    </tr>
+    <tr>
         <td class="package">libglade</td>
         <td class="website"><a href="http://glade.gnome.org/">glade</a></td>
     </tr>
     <tr>
         <td class="package">libgnurx</td>
         <td class="website"><a href="http://sourceforge.net/projects/mingw/files/UserContributed/regex/">libgnurx</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgomp</td>
-        <td class="website"><a href="http://gcc.gnu.org/projects/gomp/">GCC-libgomp</a></td>
     </tr>
     <tr>
         <td class="package">libgpg_error</td>
@@ -1706,12 +1770,24 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://www.gnu.org/software/libiconv/">libiconv</a></td>
     </tr>
     <tr>
+        <td class="package">libid3tag</td>
+        <td class="website"><a href="http://sourceforge.net/projects/mad/files/libid3tag/">libid3tag</a></td>
+    </tr>
+    <tr>
         <td class="package">libidn</td>
         <td class="website"><a href="https://www.gnu.org/software/libidn/">Libidn</a></td>
     </tr>
     <tr>
+        <td class="package">libieee1284</td>
+        <td class="website"><a href="http://cyberelk.net/tim/software/libieee1284/">libieee1284</a></td>
+    </tr>
+    <tr>
         <td class="package">libircclient</td>
         <td class="website"><a href="http://sourceforge.net/projects/libircclient/">libircclient</a></td>
+    </tr>
+    <tr>
+        <td class="package">libjpeg-turbo</td>
+        <td class="website"><a href="http://libjpeg-turbo.virtualgl.org/">libjpeg-turbo</a></td>
     </tr>
     <tr>
         <td class="package">liblaxjson</td>
@@ -1754,6 +1830,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.musepack.net/">libmpcdec</a></td>
     </tr>
     <tr>
+        <td class="package">libmysqlclient</td>
+        <td class="website"><a href="https://dev.mysql.com/downloads/connector/c/">libmysqlclient</a></td>
+    </tr>
+    <tr>
         <td class="package">libntlm</td>
         <td class="website"><a href="http://www.nongnu.org/libntlm/">Libntlm</a></td>
     </tr>
@@ -1776,6 +1856,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">libpaper</td>
         <td class="website"><a href="http://packages.debian.org/unstable/libpaper1">libpaper</a></td>
+    </tr>
+    <tr>
+        <td class="package">libplist</td>
+        <td class="website"><a href="https://github.com/libimobiledevice/libplist">libplist</a></td>
     </tr>
     <tr>
         <td class="package">libpng</td>
@@ -1806,12 +1890,24 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a></td>
     </tr>
     <tr>
+        <td class="package">libsodium</td>
+        <td class="website"><a href="https://download.libsodium.org/doc/">libsodium</a></td>
+    </tr>
+    <tr>
         <td class="package">libssh2</td>
         <td class="website"><a href="http://www.libssh2.org">libssh2</a></td>
     </tr>
     <tr>
+        <td class="package">libsvm</td>
+        <td class="website"><a href="http://www.csie.ntu.edu.tw/~cjlin/libsvm">libsvm</a></td>
+    </tr>
+    <tr>
         <td class="package">libtool</td>
         <td class="website"><a href="https://www.gnu.org/software/libtool/">GNU Libtool</a></td>
+    </tr>
+    <tr>
+        <td class="package">libtorrent-rasterbar</td>
+        <td class="website"><a href="http://www.rasterbar.com/products/libtorrent/">libtorrent-rasterbar</a></td>
     </tr>
     <tr>
         <td class="package">libunistring</td>
@@ -1878,16 +1974,12 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://luajit.org/luajit.html">LuaJIT</a></td>
     </tr>
     <tr>
+        <td class="package">lzma</td>
+        <td class="website"><a href="http://www.7-zip.org/sdk.html">LZMA SDK</a></td>
+    </tr>
+    <tr>
         <td class="package">lzo</td>
         <td class="website"><a href="http://www.oberhumer.com/opensource/lzo/">lzo</a></td>
-    </tr>
-    <tr>
-        <td class="package">m4</td>
-        <td class="website"><a href="http://www.gnu.org/software/m4/">GNU M4</a></td>
-    </tr>
-    <tr>
-        <td class="package">make</td>
-        <td class="website"><a href="http://www.gnu.org/software/make/">GNU Make</a></td>
     </tr>
     <tr>
         <td class="package">matio</td>
@@ -1896,6 +1988,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">mdbtools</td>
         <td class="website"><a href="http://sourceforge.net/projects/mdbtools/">mdbtools</a></td>
+    </tr>
+    <tr>
+        <td class="package">miniupnpc</td>
+        <td class="website"><a href="http://miniupnp.free.fr/">miniupnpc</a></td>
     </tr>
     <tr>
         <td class="package">minizip</td>
@@ -1931,7 +2027,11 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </tr>
     <tr>
         <td class="package">muparser</td>
-        <td class="website"><a href="http://muparser.sourceforge.net/">muParser</a></td>
+        <td class="website"><a href="http://muparser.beltoforion.de/">muParser</a></td>
+    </tr>
+    <tr>
+        <td class="package">muparserx</td>
+        <td class="website"><a href="http://muparserx.beltoforion.de/">muParserX</a></td>
     </tr>
     <tr>
         <td class="package">mxml</td>
@@ -2050,10 +2150,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.openexr.com/">OpenEXR</a></td>
     </tr>
     <tr>
-        <td class="package">openmpi</td>
-        <td class="website"><a href="http://www.openexr.com/">OpenMPI</a></td>
+        <td class="package">openjpeg</td>
+        <td class="website"><a href="http://www.openjpeg.org/">OpenJPEG</a></td>
     </tr>
-    <tr> 
+    <tr>
         <td class="package">openmp-validation</td>
         <td class="website"><a href="http://web.cs.uh.edu/~openuh/">OpenMP Validation Suite</a></td>
     </tr>
@@ -2066,12 +2166,20 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://www.openssl.org/">openssl</a></td>
     </tr>
     <tr>
+      <td class="package">openthreads</td>
+        <td class="website"><a href="http://www.openscenegraph.org/">OpenThreads</a></td>
+    </tr>
+    <tr>
         <td class="package">opus</td>
         <td class="website"><a href="http://opus-codec.org/">opus</a></td>
     </tr>
     <tr>
         <td class="package">opusfile</td>
         <td class="website"><a href="http://opus-codec.org/">opusfile</a></td>
+    </tr>
+    <tr>
+        <td class="package">ossim</td>
+        <td class="website"><a href="http://trac.osgeo.org/ossim">OSSIM</a></td>
     </tr>
     <tr>
         <td class="package">pango</td>
@@ -2112,6 +2220,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">picomodel</td>
         <td class="website"><a href="http://code.google.com/p/picomodel/">picomodel</a></td>
+    </tr>
+    <tr>
+        <td class="package">pire</td>
+        <td class="website"><a href="https://github.com/yandex/pire">PIRE</a></td>
     </tr>
     <tr>
         <td class="package">pixman</td>
@@ -2206,8 +2318,8 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://fallabs.com/qdbm/">QDBM</a></td>
     </tr>
     <tr>
-        <td class="package">qhull</td>
-        <td class="website"><a href="http://www.qhull.org/">qhull</a></td>
+        <td class="package">qhttpengine</td>
+        <td class="website"><a href="https://github.com/nitroshare/qhttpengine">qhttpengine</a></td>
     </tr>
     <tr>
         <td class="package">qjson</td>
@@ -2361,6 +2473,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://breakfastquay.com/rubberband/">Rubberband</a></td>
     </tr>
     <tr>
+        <td class="package">rucksack</td>
+        <td class="website"><a href="https://github.com/andrewrk/rucksack">rucksack</a></td>
+    </tr>
+    <tr>
         <td class="package">sdl</td>
         <td class="website"><a href="http://www.libsdl.org/">SDL</a></td>
     </tr>
@@ -2421,10 +2537,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.libsdl.org/">SDL2_ttf</a></td>
     </tr>
     <tr>
-        <td class="package">sed</td>
-        <td class="website"><a href="https://www.gnu.org/software/sed/">GNU sed</a></td>
-    </tr>
-    <tr>
         <td class="package">sfml</td>
         <td class="website"><a href="http://www.sfml-dev.org/">SFML</a></td>
     </tr>
@@ -2449,6 +2561,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.speex.org/">Speex</a></td>
     </tr>
     <tr>
+        <td class="package">speexdsp</td>
+        <td class="website"><a href="http://www.speex.org/">SpeexDSP</a></td>
+    </tr>
+    <tr>
         <td class="package">sqlite</td>
         <td class="website"><a href="http://www.sqlite.org/">SQLite</a></td>
     </tr>
@@ -2467,6 +2583,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">taglib</td>
         <td class="website"><a href="http://developer.kde.org/~wheeler/taglib.html">TagLib</a></td>
+    </tr>
+    <tr>
+        <td class="package">tclap</td>
+        <td class="website"><a href="http://tclap.sourceforge.net/">tclap</a></td>
     </tr>
     <tr>
         <td class="package">teem</td>
@@ -2513,6 +2633,18 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.twolame.org/">TwoLAME</a></td>
     </tr>
     <tr>
+        <td class="package">ucl</td>
+        <td class="website"><a href="http://www.oberhumer.com/opensource/ucl/">UCL</a></td>
+    </tr>
+    <tr>
+        <td class="package">unrtf</td>
+        <td class="website"><a href="https://www.gnu.org/software/unrtf/">unRTF</a></td>
+    </tr>
+    <tr>
+        <td class="package">upx</td>
+        <td class="website"><a href="http://upx.sourceforge.net/">UPX</a></td>
+    </tr>
+    <tr>
         <td class="package">vamp-plugin-sdk</td>
         <td class="website"><a href="http://vamp-plugins.org/">Vamp Plugins SDK</a></td>
     </tr>
@@ -2557,6 +2689,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.vtk.org/">VTK6</a></td>
     </tr>
     <tr>
+        <td class="package">waf</td>
+        <td class="website"><a href="https://waf.io/">Waf: the meta build system</a></td>
+    </tr>
+    <tr>
         <td class="package">wavpack</td>
         <td class="website"><a href="http://www.wavpack.com/">WavPack</a></td>
     </tr>
@@ -2573,12 +2709,8 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.winpcap.org/">WinPcap</a></td>
     </tr>
     <tr>
-        <td class="package">winpthreads</td>
-        <td class="website"><a href="http://mingw-w64.sourceforge.net/">MinGW w64 pthreads</a></td>
-    </tr>
-    <tr>
         <td class="package">wt</td>
-        <td class="website"><a href="http://witty.sourceforge.net/">Wt</a></td>
+        <td class="website"><a href="http://www.webtoolkit.eu">Wt</a></td>
     </tr>
     <tr>
         <td class="package">wxmathplot</td>
@@ -2684,6 +2816,25 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
                 })();
             }
         }
+        function loadVersionCache(doneCallback, errCallback) {
+            var request = new XMLHttpRequest();
+            request.open('GET', 'versions.json', true);
+            request.onreadystatechange = function reqCallback() {
+                if (request.readyState === 4) {
+                    if (request.status === 200) {
+                        try {
+                            var versions = JSON.parse(request.responseText);
+                            doneCallback(versions);
+                        } catch (e) {
+                            errCallback();
+                        }
+                    } else {
+                        errCallback();
+                    }
+                }
+            }
+            request.send();
+        }
         function resolveVersions(versions) {
             var resolvedVersions = {};
             for (var package in versions) {
@@ -2701,16 +2852,27 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             for (package in packageElements) {
                 var element = packageElements[package];
                 var version = resolvedVersions[package];
+                var shorten = version.length > 12;
+                if (shorten) {
+                    version = version.substring(0, 12);
+                }
                 var versionEscaped = version.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+                if (shorten) {
+                    versionEscaped += '&hellip;';
+                }
                 var versionHtml = '<td class="version">' + versionEscaped + '</td>';
                 element.insertAdjacentHTML('afterend', versionHtml);
             }
         }
         (function main() {
             var packageElements = getPackageElements();
-            loadVersions(packageElements, function doneCallback(versions) {
-                var resolvedVersions = resolveVersions(versions);
-                showVersions(packageElements, resolvedVersions);
+            loadVersionCache(function doneCallback(versions) {
+                showVersions(packageElements, versions);
+            }, function errCallback() {
+                loadVersions(packageElements, function doneCallback(versions) {
+                    var resolvedVersions = resolveVersions(versions);
+                    showVersions(packageElements, resolvedVersions);
+                });
             });
         })();
     </script>
@@ -2783,9 +2945,9 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         </p>
         <pre>make update-checksum-gettext</pre>
         <p>or:</p>
-        <pre>openssl sha1 pkg/gettext-x.y.z.tar.gz</pre>
+        <pre>openssl sha256 pkg/gettext-x.y.z.tar.gz</pre>
         <p>
-        if you have already downloaded the package
+        if you have already downloaded the package.
         </p>
 
         <p>
@@ -2801,6 +2963,28 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         Always list the dependency on <code>gcc</code> explicitly:
         </p>
         <pre>$(PKG)_DEPS     := gcc ...</pre>
+
+        <p>
+        Things not to do:
+        </p>
+        <ul>
+            <li>
+            <b>do not run target executables with Wine</b>, as Wine is
+            not guaranteed to be installed. Instead build the needed tool
+            natively or (if it is too huge to build one more time) add
+            to MXE's dependencies. This policy is forced by setting
+            WINEPREFIX to an empty directory, which breaks Wine;
+            </li>
+
+            <li>
+            <b>do not download anything while building</b>, as all files
+            downloaded should be verified by checksums. Instead create a
+            package which installs the needed file. This policy is forced
+            on Linux by <a href="https://github.com/starius/nonetwork/"
+            >LD_PRELOAD trick</a>, breaking network functions.
+            </li>
+        </ul>
+
     </li>
 
     <li>
@@ -2993,15 +3177,16 @@ endef</pre>
 </div>
 
 <div class="section">
-<h2 id="copyright">Copyright © <span class="years">2007–2014</span></h2>
+<h2 id="copyright">Copyright © <span class="years">2007–2015</span></h2>
 
     <ul id="authors-list" class="compact-list">
-    <li>Volker Grabsch</li>
+    <li>Volker Diels-Grabsch</li>
     <li>Mark Brand</li>
     <li>Tony Theodore</li>
     <li>Martin Gerhardy</li>
     <li>Tiancheng "Timothy" Gu</li>
-    <li><a href="https://www.ohloh.net/p/mxe/contributors">... and many other contributors</a></li>
+    <li>Boris Nagaev</li>
+    <li><a href="https://github.com/mxe/mxe/graphs/contributors">... and many other contributors</a></li>
     </ul>
 
     <p>(contact via the
@@ -3244,7 +3429,7 @@ endef</pre>
         headers in MinGW in order to support Qt4. Worse yet, having to
         support the unsupported MinGW toolchain impedes adding or
         updating packages, as shown in the <a
-        href"https://github.com/mxe/mxe/pull/453#issuecomment-51703048">pull
+        href="https://github.com/mxe/mxe/pull/453#issuecomment-51703048">pull
         request of updating GLib</a>.
         </p>
 
@@ -3875,7 +4060,7 @@ endef</pre>
         </p>
     </dd>
 
-    <dt>2009-01-31 &ndash; Release 2.2<dt>
+    <dt>2009-01-31 &ndash; Release 2.2</dt>
     <dd>
         <p>
         <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.2.tar.gz">Download</a> |
@@ -4048,6 +4233,9 @@ endef</pre>
         <a href="https://github.com/mxe/mxe">Project on GitHub</a>
     </li>
     <li>
+        <a href="http://pkg.mxe.cc/">Binary distribution of packages</a>
+    </li>
+    <li>
         <a href="https://www.openhub.net/p/mxe">Entry on Open Hub</a>
     </li>
     <li>
@@ -4063,56 +4251,56 @@ endef</pre>
 
     <ul>
     <li>
-        <a href="https://aur.archlinux.org/packages/mingw-w64-crt">Arch Linux mingw-w64 packages</a>
+        <a href="https://www.archlinux.org/groups/x86_64/mingw-w64/">Arch Linux mingw-w64 packages</a>
         <br>
-        win32 cross compiling packages by Arch Linux
+        Win32 cross compiling packages by Arch Linux
     </li>
     <li>
         <a href="http://packages.debian.org/stable/devel/mingw32">Debian mingw32 package</a>
         <br>
-        bare win32 cross compiler
+        Bare win32 cross compiler
     </li>
     <li>
-        <a href="https://admin.fedoraproject.org/pkgdb/acls/list/**mingw**">Fedora MinGW packages</a>
+        <a href="https://admin.fedoraproject.org/pkgdb/packages/mingw*/">Fedora MinGW packages</a>
         <br>
-        win32 cross compiling packages by Fedora
+        Win32 cross compiling packages by Fedora
     </li>
     <li>
         <a href="https://msys2.github.io/">MSYS2</a>
         <br>
-        win32/64 ports of many free software packages
+        Win32/64 ports of many free software packages
     </li>
     <li>
         <a href="http://gnuwin32.sourceforge.net/">GnuWin32</a>
         <br>
-        win32 ports of many free software packages
+        Win32 ports of many free software packages
     </li>
     <li>
         <a href="http://www.sandroid.org/imcross/">IMCROSS</a>
         <br>
-        another project with similar goal
+        Another project with similar goal
     </li>
     <li>
         <a href="http://www.libsdl.org/extras/win32/cross/README.txt">MinGW cross-compiler build script</a>
         <br>
-        old script provided by the
+        Old script provided by the
         <a href="http://www.libsdl.org/">SDL project</a>
     </li>
     <li>
         <a href="http://comments.gmane.org/gmane.comp.gnu.octave.maintainers/30358">mxe-octave</a>
         <br>
-        fork of MXE specialized on building
+        Fork of MXE specialized on building
         <a href="https://www.gnu.org/software/octave/">GNU Octave</a>
     </li>
     <li>
-        <a href="http://download.opensuse.org/repositories/windows:/mingw:/win32/SLE_11/noarch/">openSUSE MinGW packages</a>
+        <a href="https://software.opensuse.org/search?q=mingw&baseproject=openSUSE%3A13.2&search_devel=false&search_unsupported=false">openSUSE MinGW packages</a>
         <br>
-        win32 cross compiling packages by openSUSE
+        Win32 cross compiling packages by openSUSE
     </li>
     <li>
         <a href="http://win-builds.org/">Win-builds</a>
         <br>
-        creates binary packages, runs on both Linux and Windows
+        Creates binary packages, runs on both Linux and Windows
     </li>
     </ul>
 
@@ -4122,7 +4310,7 @@ endef</pre>
     <li>
         <a href="http://thebeezspeaks.blogspot.com/2009/04/cross-compilers-new-wave.html">Cross compilers, the new wave</a>
         <br>
-        appeared on
+        Appeared on
         <a href="http://lxer.com/module/newswire/view/118868">LXer</a>
         and
         <a href="http://www.linuxtoday.com/developer/2009041501335RVSWDV">Linux Today</a>
@@ -4130,62 +4318,56 @@ endef</pre>
     <li>
         <a href="http://wiki.njh.eu/Cross_Compiling_for_Win32">Cross Compiling for Win32</a>
         <br>
-        overview of win32 cross compiling
+        Overview of win32 cross compiling
     </li>
     <li>
         <a href="http://www.mingw.org/wiki/LinuxCrossMinGW">MinGW cross compiler for Linux build environment</a>
         <br>
-        official tutorial of the
-        <a href="">MinGW project</a>
+        Official tutorial of the
+        <a href="http://www.mingw.org/">MinGW project</a>
     </li>
     <li>
         <a href="http://wiki.wxwidgets.org/Cross-Compiling_Under_Linux#Cross-compiling_under_Linux_for_MS_Windows">Cross-compiling under Linux for MS Windows</a>
         <br>
-        old tutorial provided by the
+        Old tutorial provided by the
         <a href="http://www.wxwidgets.org/">wxWidgets project</a>
     </li>
     </ul>
 </div>
 
 <div class="section">
-<h2 id="used-by">Projects which use MXE</h2>
+<h2 id="used-by">Projects which use MXE (alphabetical order)</h2>
 
     <ul class="compact-list">
-    <li>
-        <a href="http://toppler.sourceforge.net/">Tower Toppler</a>
-    </li>
-    <li>
-        <a href="http://pushover.sourceforge.net/">Pushover</a>
-    </li>
-    <li>
-        <a href="http://www.xs4all.nl/~thebeez/4tH/">The 4tH Compiler</a>
-    </li>
-    <li>
-        <a href="http://springrts.com/">Spring RTS</a>
-    </li>
-    <li>
-        <a href="http://ph.on.things.free.fr/projects/ube/">Ube</a>
-    </li>
-    <li>
-        <a href="http://marathon.sourceforge.net/">Marathon Aleph One</a>
-    </li>
     <li>
         <a href="http://sourceforge.net/projects/aorta/">Aorta</a>
     </li>
     <li>
-        <a href="http://msmtp.sourceforge.net/">msmtp</a>
+        <a href="https://github.com/zer0main/battleship">Battleship game</a>
     </li>
     <li>
-        <a href="http://mpop.sourceforge.net/">mpop</a>
+        <a href="https://bino3d.org/">Bino</a>
+    </li>
+    <li>
+        <a href="http://biosig.sourceforge.net/">BioSig</a>
+    </li>
+    <li>
+        <a href="http://en.cataclysmdda.com/">Cataclysm: Dark Days Ahead</a>
     </li>
     <li>
         <a href="http://cvtool.sourceforge.net/">cvtool</a>
     </li>
     <li>
-        <a href="http://tux4kids.alioth.debian.org/tuxmath/">Tux Math</a>
+        <a href="http://www.qtrac.eu/diffpdf.html">DiffPDF</a>
     </li>
     <li>
-        <a href="http://tux4kids.alioth.debian.org/tuxtype/">Tux Typing</a>
+        <a href="https://github.com/eiskaltdcpp/eiskaltdcpp">EiskaltDC++</a>
+    </li>
+    <li>
+        <a href="http://www.ros.org/wiki/eros">Eros</a>
+    </li>
+    <li>
+        <a href="http://www.nongnu.org/galois/">Galois</a>
     </li>
     <li>
         <a href="http://gcompris.net/">GCompris</a>
@@ -4194,61 +4376,79 @@ endef</pre>
         <a href="http://www.nongnu.org/gta/">Generic Tagged Arrays</a>
     </li>
     <li>
-        <a href="http://qtads.sourceforge.net/">QTads</a>
-    </li>
-    <li>
-        <a href="http://ufoai.org/">UFO: Alien Invasion</a>
-    </li>
-    <li>
-        <a href="http://www.pokerth.net/">PokerTH</a>
-    </li>
-    <li>
-        <a href="https://www.tug.org/texworks/">TeXworks</a>
-    </li>
-    <li>
-        <a href="https://bino3d.org/">Bino</a>
-    </li>
-    <li>
-        <a href="http://www.ros.org/wiki/eros">Eros</a>
-    </li>
-    <li>
-        <a href="https://www.bunkus.org/videotools/mkvtoolnix/">MKVToolNix</a>
-    </li>
-    <li>
-        <a href="http://www.openscad.org/">OpenSCAD</a>
-    </li>
-    <li>
-        <a href="http://wz2100.net/">Warzone 2100</a>
-    </li>
-    <li>
-        <a href="http://lightspark.github.com/">Lightspark</a>
+        <a href="https://www.gnu.org/software/freedink/">GNU FreeDink</a>
     </li>
     <li>
         <a href="http://ifwiki.org/index.php/Hugor">Hugor</a>
     </li>
     <li>
-        <a href="http://www.qtrac.eu/diffpdf.html">DiffPDF</a>
+        <a href="http://lightspark.github.com/">Lightspark</a>
     </li>
     <li>
-        <a href="http://pdfgrep.sourceforge.net/">Pdfgrep</a>
-    </li>
-    <li>
-        <a href="http://spek-project.org/">Spek</a>
-    </li>
-    <li>
-        <a href="http://biosig.sourceforge.net/">BioSig</a>
-    </li>
-    <li>
-        <a href="https://www.gnu.org/software/freedink/">GNU FreeDink</a>
-    </li>
-    <li>
-        <a href="http://sigrok.org/">sigrok</a>
+        <a href="http://marathon.sourceforge.net/">Marathon Aleph One</a>
     </li>
     <li>
         <a href="https://www.maxr.org/">Mechanized Assault and eXploration Reloaded</a>
     </li>
     <li>
-        <a href="http://www.nongnu.org/galois/">Galois</a>
+        <a href="https://www.bunkus.org/videotools/mkvtoolnix/">MKVToolNix</a>
+    </li>
+    <li>
+        <a href="http://mpop.sourceforge.net/">mpop</a>
+    </li>
+    <li>
+        <a href="http://msmtp.sourceforge.net/">msmtp</a>
+    </li>
+    <li>
+        <a href="http://www.openscad.org/">OpenSCAD</a>
+    </li>
+    <li>
+        <a href="http://pdfgrep.sourceforge.net/">Pdfgrep</a>
+    </li>
+    <li>
+        <a href="http://www.pokerth.net/">PokerTH</a>
+    </li>
+    <li>
+        <a href="http://pushover.sourceforge.net/">Pushover</a>
+    </li>
+    <li>
+        <a href="http://qtads.sourceforge.net/">QTads</a>
+    </li>
+    <li>
+        <a href="http://sigrok.org/">sigrok</a>
+    </li>
+    <li>
+        <a href="http://spek-project.org/">Spek</a>
+    </li>
+    <li>
+        <a href="http://springrts.com/">Spring RTS</a>
+    </li>
+    <li>
+        <a href="http://www.xs4all.nl/~thebeez/4tH/">The 4tH Compiler</a>
+    </li>
+    <li>
+        <a href="https://www.tug.org/texworks/">TeXworks</a>
+    </li>
+    <li>
+        <a href="http://toppler.sourceforge.net/">Tower Toppler</a>
+    </li>
+    <li>
+        <a href="http://tux4kids.alioth.debian.org/tuxtype/">Tux Typing</a>
+    </li>
+    <li>
+        <a href="http://tux4kids.alioth.debian.org/tuxmath/">Tux Math</a>
+    </li>
+    <li>
+        <a href="http://ph.on.things.free.fr/projects/ube/">Ube</a>
+    </li>
+    <li>
+        <a href="http://ufoai.org/">UFO: Alien Invasion</a>
+    </li>
+    <li>
+        <a href="http://violetland.github.io/">Violetland</a>
+    </li>
+    <li>
+        <a href="http://wz2100.net/">Warzone 2100</a>
     </li>
     <li>
         <a href="https://sourceforge.net/projects/xfemm/">xfemm</a>

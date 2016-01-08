@@ -4,7 +4,7 @@
 PKG             := ftgl
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.1.3~rc5
-$(PKG)_CHECKSUM := 8508f26c84001d7bc949246affa03744fa1fd22e
+$(PKG)_CHECKSUM := 521ff7bd62c459ff5372e269c223e2a6107a6a99a36afdc2ae634a973af70c59
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$(subst ~,-,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/FTGL Source/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -17,11 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && $(SED) -i 's/-lm/-lm -lstdc++/' ftgl.pc.in
-    cd '$(1)' && aclocal -I m4
-    cd '$(1)' && $(LIBTOOLIZE)
-    cd '$(1)' && automake --gnu
-    cd '$(1)' && autoconf
+    $(SED) -i 's/-lm/-lm -lstdc++/' '$(1)/ftgl.pc.in'
+    cd '$(1)' && autoreconf -fi
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --without-x \

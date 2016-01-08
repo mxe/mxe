@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+From b768ced5dfb6e45b03aff92c747af641f12dcf06 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Wed, 2 Sep 2015 20:17:34 +0300
+Subject: [PATCH] fix including winioctl.h (lowcase)
+
+---
+ src/dbinc/win_db.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/dbinc/win_db.h b/src/dbinc/win_db.h
+index e22aba9..bfcc274 100644
+--- a/src/dbinc/win_db.h
++++ b/src/dbinc/win_db.h
+@@ -50,7 +50,7 @@
+ #include <windows.h>
+ #include <winsock2.h>
+ #ifndef DB_WINCE
+-#include <WinIoCtl.h>
++#include <winioctl.h>
+ #endif
+ 
+ #ifdef HAVE_GETADDRINFO
+-- 
+2.1.4
+

@@ -4,7 +4,7 @@
 PKG             := libiconv
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.14
-$(PKG)_CHECKSUM := be7d67e50d72ff067b2c0291311bc283add36965
+$(PKG)_CHECKSUM := 72b24ded17d687193c3366d0ebe7cde1e6b18f0df8c55438ac95be39e8a30613
 $(PKG)_SUBDIR   := libiconv-$($(PKG)_VERSION)
 $(PKG)_FILE     := libiconv-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/libiconv/$($(PKG)_FILE)
@@ -26,6 +26,9 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/lib'        -j '$(JOBS)' install
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/include/iconv.h.inst' '$(PREFIX)/$(TARGET)/include/iconv.h'
+
+    # charset.alias is redundant on mingw and modern glibc systems
+    rm -f '$(PREFIX)/$(TARGET)/lib/charset.alias'
 endef
 
 define $(PKG)_BUILD_$(BUILD)

@@ -4,11 +4,11 @@
 PKG             := libshout
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.1
-$(PKG)_CHECKSUM := 147c5670939727420d0e2ad6a20468e2c2db1e20
+$(PKG)_CHECKSUM := cf3c5f6b4a5e3fcfbe09fb7024aa88ad4099a9945f7cb037ec06bcee7a23926e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.us.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc vorbis ogg theora speex
+$(PKG)_DEPS     := gcc ogg speex theora vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.icecast.org/download.php' | \

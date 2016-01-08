@@ -4,7 +4,7 @@
 PKG             := chromaprint
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1
-$(PKG)_CHECKSUM := 5a250f761761d2ce08e2591b9daa909393552939
+$(PKG)_CHECKSUM := 6b14d7ea4964581b73bd3f8038c8857c01e446421c1ae99cbbf64de26b47cd12
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://bitbucket.org/acoustid/chromaprint/downloads/$(PKG)-$($(PKG)_VERSION).tar.gz

@@ -1,0 +1,47 @@
+This file is part of MXE.
+See index.html for further information.
+
+Taken from:
+https://github.com/beltoforion/muparser/pull/17
+
+From d70b948b5ef9c854ed253f01303480b85a7bd8bd Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 21 Nov 2015 15:38:02 +1100
+Subject: [PATCH] fix dll install directory
+
+---
+ Makefile.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 157be77..005ada6 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -29,6 +29,7 @@ BK_DEPS = @BK_DEPS@
+ srcdir = @srcdir@
+ top_builddir = @top_builddir@
+ libdir = @libdir@
++dlldir = @dlldir@
+ DLLPREFIX = @DLLPREFIX@
+ LIBS = @LIBS@
+ AR = @AR@
+@@ -266,13 +267,14 @@ distclean: clean
+ 
+ @COND_SHARED_1@install_muParser_dll: $(__muParser_dll___depname)
+ @COND_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
++@COND_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(dlldir)
+ @COND_SHARED_1@	$(INSTALL_DATA) $(top_builddir)/lib/$(LIBPREFIX)muparser$(DEBUG_BUILD_POSTFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
+-@COND_SHARED_1@	$(INSTALL_PROGRAM) $(top_builddir)/lib/$(DLLPREFIX)muparser$(DEBUG_BUILD_POSTFIX)$(__muParser_dll___targetsuf3) $(DESTDIR)$(libdir)
++@COND_SHARED_1@	$(INSTALL_PROGRAM) $(top_builddir)/lib/$(DLLPREFIX)muparser$(DEBUG_BUILD_POSTFIX)$(__muParser_dll___targetsuf3) $(DESTDIR)$(dlldir)
+ @COND_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__muParser_dll___so_symlinks_inst_cmd))
+ 
+ @COND_SHARED_1@uninstall_muParser_dll: 
+ @COND_SHARED_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)muparser$(DEBUG_BUILD_POSTFIX).$(DLLIMP_SUFFIX)
+-@COND_SHARED_1@	rm -f $(DESTDIR)$(libdir)/$(DLLPREFIX)muparser$(DEBUG_BUILD_POSTFIX)$(__muParser_dll___targetsuf3)
++@COND_SHARED_1@	rm -f $(DESTDIR)$(dlldir)/$(DLLPREFIX)muparser$(DEBUG_BUILD_POSTFIX)$(__muParser_dll___targetsuf3)
+ @COND_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__muParser_dll___so_symlinks_uninst_cmd))
+ 
+ @COND_SHARED_1@install_muParser_dll_headers: 
+-- 
+2.4.9 (Apple Git-60)
+

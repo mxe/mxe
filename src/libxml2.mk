@@ -4,12 +4,12 @@
 PKG             := libxml2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.9.2
-$(PKG)_CHECKSUM := f46a37ea6d869f702e03f393c376760f3cbee673
+$(PKG)_CHECKSUM := 5178c30b151d044aefb1b08bf54c3003a0ac55c59c866763997529d60770d5bc
 $(PKG)_SUBDIR   := libxml2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://xmlsoft.org/sources/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc xz
+$(PKG)_DEPS     := gcc xz zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/libxml2/refs/tags' | \
@@ -22,6 +22,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,`uname`,MinGW,g' '$(1)/xml2-config.in'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
+        --with-zlib='$(PREFIX)/$(TARGET)/lib' \
         --without-debug \
         --without-python \
         --without-threads

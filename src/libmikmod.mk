@@ -4,7 +4,7 @@
 PKG             := libmikmod
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.3.7
-$(PKG)_CHECKSUM := f936d92ed9752d9f47a3340bdafc78159a270ca9
+$(PKG)_CHECKSUM := 4cf41040a9af99cb960580210ba900c0a519f73ab97b503c780e82428b9bd9a2
 $(PKG)_SUBDIR   := libmikmod-$($(PKG)_VERSION)
 $(PKG)_FILE     := libmikmod-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mikmod/libmikmod/$($(PKG)_VERSION)/$($(PKG)_FILE)

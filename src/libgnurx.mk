@@ -3,20 +3,18 @@
 
 PKG             := libgnurx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.5.1
-$(PKG)_CHECKSUM := f1e4af2541645dac82362b618aaa849658cd4988
+$(PKG)_VERSION  := 2.6.1
+$(PKG)_CHECKSUM := ee6edc110c6b63d0469f4f05ef187564b310cc8a88b6566310a4aebd48b612c7
 $(PKG)_SUBDIR   := mingw-libgnurx-$($(PKG)_VERSION)
 $(PKG)_FILE     := mingw-libgnurx-$($(PKG)_VERSION)-src.tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/Other/UserContributed/regex/mingw-regex-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/TimothyGu/libgnurx/releases/download/libgnurx-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/mingw/files/Other/UserContributed/regex/' | \
-    grep 'mingw-regex-' | \
-    $(SED) -n 's,.*mingw-regex-\([0-9\.]*\).*,\1,p' | \
-    $(SORT) | \
-    uniq | \
-    tail -1
+    $(WGET) -q -O- 'https://api.github.com/repos/TimothyGu/libgnurx/git/refs/tags/' \
+    | $(SED) -n 's#.*"ref": "refs/tags/libgnurx-\([^"]*\).*#\1#p' \
+    | $(SORT) -V \
+    | tail -1
 endef
 
 define $(PKG)_BUILD

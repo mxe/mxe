@@ -5,126 +5,31 @@
 
 cmd=$1
 pkg=$2
-patch_name=$3
-if [ -z "$patch_name" ]; then
-    patch_name=1-fixes
-fi
+patch_name=${3:-1-fixes}
 
 setupEnv() {
   # MXE directory
   export mxedir=$(cd $(dirname $0) && cd .. && pwd)
-
-  # directory for unpacked tarballs/git repos
-  export gitsdir=${mxedir}/gits
-
-  mkdir -p ${gitsdir}
-
-
-  # John Doe <John Doe@acme.org>
-  export author=`git var GIT_AUTHOR_IDENT | sed 's/^\(.* [<].*[>]\).*$/\1/'`
-
-  export pkg_version=`grep '^$(PKG)_VERSION' $mxedir/src/$pkg.mk  | \
-    sed 's/.*:= \(.*\)/\1/'`
-
-  export pkg_short_version=`echo $pkg_version | sed s/'\(.*\)\.[^.]*$'/'\1'/`
-
-  export pkg_subdir=`grep '^$(PKG)_SUBDIR' $mxedir/src/$pkg.mk  | \
-    sed 's/.*:= \(.*\)/\1/' | \
-    sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
-    sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
-    sed s/'$(PKG)'/$pkg/;`
-
-  export pkg_file=`grep '^$(PKG)_FILE' $mxedir/src/$pkg.mk  | \
-    sed 's/.*:= \(.*\)/\1/' | \
-    sed s/'$($(PKG)_VERSION)'/$pkg_version/ | \
-    sed s/'$(call SHORT_PKG_VERSION,$(PKG))'/$pkg_short_version/ | \
-    sed s/'$($(PKG)_SUBDIR)'/$pkg_subdir/ | \
-    sed s/'$(PKG)'/$pkg/;`
-
-  #echo $pkg
-  #echo $pkg_version
-  #echo $pkg_subdir
-  #echo $pkg_file
-
 }
-# init
+
 function init_git {
   setupEnv
-  cd $gitsdir
-
-  if [ -d $gitsdir/$pkg_subdir ]; then
-    echo "Error: $gitsdir/$pkg_subdir already exists. Cancelling init." >&2
-    exit 1
-  fi
-
-  echo "Checking for cached $pkg_file"
-  if [ ! -f $mxedir/pkg/$pkg_file ]; then
-    make -C "$mxedir" download-$pkg
-    echo "Building the mxe Makefile target 'download-$pkg' to get missing file"
-    if [ ! $? -eq 0 ]; then
-      echo "Could not build target download-$pkg - cancelling init." >&2
-      exit 1
-    fi
-  fi
-
-  echo "Unpacking archive..."
-  (echo $pkg_file | grep "\.tar\.gz")  || (echo $pkg_file | grep "\.tgz") \
-    >> /dev/null && tar xf $mxedir/pkg/$pkg_file
-  (echo $pkg_file | grep "\.tar\.bz2") || (echo $pkg_file | grep "\.tbz2") \
-    >> /dev/null && tar xf $mxedir/pkg/$pkg_file
-  (echo $pkg_file | grep "\.tar\.xz")  || (echo $pkg_file | grep "\.txz") \
-    >> /dev/null && xz -dc $mxedir/pkg/$pkg_file | tar xf -
-  echo $pkg_file | grep "\.zip"      >> /dev/null && unzip  $mxedir/pkg/$pkg_file >> /dev/null
-
-  echo "Initializing repo and adding all as first commit"
-  cd $gitsdir/$pkg_subdir && \
-  (git init; git add -A; git commit -m "init") > /dev/null
-
-  echo "Creating 'dist' tag for distribution tarball state"
-  git tag dist
-
-  echo "Repository ready in $gitsdir/$pkg_subdir"
+  make -C $mxedir init-git-$pkg
 }
 
 function export_patch {
   setupEnv
-  if [ ! -d $gitsdir/$pkg_subdir ]; then
-    echo "Error: $gitsdir/$pkg_subdir does not exist, so cannot export patches. Cancelling export." >&2
-    exit 1
-  fi
-
-  cd $gitsdir/$pkg_subdir && \
-  (
-    echo 'This file is part of MXE.'
-    echo 'See index.html for further information.'
-    echo ''
-    echo 'Contains ad hoc patches for cross building.'
-    echo ''
-    git format-patch -p --stdout dist..HEAD | \
-    sed 's/^From: .*/From: MXE/g;'
-  ) > $mxedir/src/${pkg}-${patch_name}.patch && \
-  echo "Generated ${mxedir}/src/${pkg}-${patch_name}.patch"
+  make -C $mxedir export-patch-$pkg PATCH_NAME=${patch_name}
 }
 
 function import_patch {
   setupEnv
-  if [ ! -d $gitsdir/$pkg_subdir ]; then
-    echo "Error: $gitsdir/$pkg_subdir does not exist, so cannot import patches. Cancelling import - try 'init' first." >&2
-    exit 1
-  fi
+  make -C $mxedir import-patch-$pkg PATCH_NAME=${patch_name}
+}
 
-  if [ -f ${mxedir}/src/${pkg}-${patch_name}.patch ]; then
-    cd $gitsdir/$pkg_subdir && \
-    cat ${mxedir}/src/${pkg}-${patch_name}.patch | \
-    sed '/^From/,$  !d' | \
-    sed s/'^From: .*'/"From: $author"/'g;' | \
-    git am --keep-cr && \
-    echo "Imported ${mxedir}/src/${pkg}-${patch_name}.patch"
-  else
-    echo "patch file ${mxedir}/src/${pkg}-${patch_name}.patch not found."
-    echo "Cancelling import." >&2
-    exit 1
-  fi
+function import_all_patches {
+  setupEnv
+  make -C $mxedir import-all-patches-$pkg
 }
 
 case "$cmd" in
@@ -133,6 +38,9 @@ case "$cmd" in
     ;;
   import)
     import_patch $pkg
+    ;;
+  import-all)
+    import_all_patches $pkg
     ;;
   export)
     export_patch $pkg
@@ -144,6 +52,7 @@ case "$cmd" in
     where COMMAND is one of:
       init - create a git directory for the package with the raw source
       import - apply the "pkgname-PATCHNAME.patch" patch commits
+      import-all - apply commits from all the patches of the package
       export - create/replace the "pkgname-PATCHNAME.patch" patch with a patch of all commits since init.
 
     If PATCHNAME is not set, it is default to "1-fixes".

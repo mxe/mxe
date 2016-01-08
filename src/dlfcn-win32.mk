@@ -4,7 +4,7 @@
 PKG             := dlfcn-win32
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.0
-$(PKG)_CHECKSUM := 2e02ffff3cd3a6871bce03d485394bd309d8eaa4
+$(PKG)_CHECKSUM := 36f2e7ef1f1ba04f6ce682a71937eaddd3d6994f09e29df2c7578ec524e47450
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
@@ -25,6 +25,5 @@ define $(PKG)_BUILD
             --disable-static --enable-shared )
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
-
-    # No test avalable temprorarily because MXE doesn't support shared build yet
+    $(MAKE) -C '$(1)' -j '$(JOBS)' test.exe testdll.dll
 endef

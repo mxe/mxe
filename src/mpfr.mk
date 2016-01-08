@@ -3,13 +3,16 @@
 
 PKG             := mpfr
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.2
-$(PKG)_CHECKSUM := 03e593cc6e26639ef5e60be1af8dc527209e5172
+$(PKG)_VERSION  := 3.1.3
+$(PKG)_CHECKSUM := 6835a08bd992c8257641791e9a6a2b35b02336c8de26d0a8577953747e514a16
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc gmp
+
+$(PKG)_DEPS_$(BUILD) := gmp
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.mpfr.org/mpfr-current/#download' | \
@@ -36,4 +39,13 @@ define $(PKG)_BUILD
      printf 'set PATH=..\\;%%PATH%%\r\n'; \
      printf 'for /R %%%%f in (*.exe) do %%%%f || echo %%%%f fail >> all-tests-$(PKG)-$($(PKG)_VERSION).txt\r\n';) \
      > '$(PREFIX)/$(TARGET)/bin/$(PKG)-tests/all-tests-$(PKG)-$($(PKG)_VERSION).bat'
+endef
+
+define $(PKG)_BUILD_$(BUILD)
+    mkdir '$(1).build'
+    cd    '$(1).build' && '$(1)/configure' \
+        $(MXE_CONFIGURE_OPTS) \
+        --with-gmp='$(PREFIX)/$(TARGET)'
+    $(MAKE) -C '$(1).build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).build' -j 1 install
 endef

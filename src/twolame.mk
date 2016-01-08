@@ -4,7 +4,7 @@
 PKG             := twolame
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.3.13
-$(PKG)_CHECKSUM := 3ca460472c2f6eeedad70291d8e37da88b64eb8b
+$(PKG)_CHECKSUM := 98f332f48951f47f23f70fd0379463aff7d7fb26f07e1e24e42ddef22cc6112a
 $(PKG)_SUBDIR   := twolame-$($(PKG)_VERSION)
 $(PKG)_FILE     := twolame-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)

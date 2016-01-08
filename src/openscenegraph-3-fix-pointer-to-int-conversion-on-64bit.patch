@@ -1,0 +1,28 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 9858a76d8daebe3e26f67eb530c89a8f00d5cd28 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Fri, 9 Oct 2015 14:00:54 +0200
+Subject: [PATCH] fix pointer to int conversion on 64bit
+
+---
+ src/osgPlugins/osgjs/WriteVisitor.cpp |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/osgPlugins/osgjs/WriteVisitor.cpp b/src/osgPlugins/osgjs/WriteVisitor.cpp
+index 9f2b3c7..98e0c19 100644
+--- a/src/osgPlugins/osgjs/WriteVisitor.cpp
++++ b/src/osgPlugins/osgjs/WriteVisitor.cpp
+@@ -225,7 +225,7 @@ JSONObject* createImage(osg::Image* image, bool inlineImages, int maxTextureDime
+             // no image file so use this inline name image and create a file
+             std::stringstream ss;
+             ss << osgDB::getFilePath(baseName) << osgDB::getNativePathSeparator();
+-            ss << (long int)image << ".inline_conv_generated.png"; // write the pointer location
++            ss << (uintptr_t)image << ".inline_conv_generated.png"; // write the pointer location
+             std::string filename = ss.str();
+             if (osgDB::writeImageFile(*image, filename)) {
+                 image->setFileName(filename);
+-- 
+1.7.10.4
+

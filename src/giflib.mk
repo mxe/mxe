@@ -4,7 +4,7 @@
 PKG             := giflib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.0.5
-$(PKG)_CHECKSUM := 926fecbcef1c5b1ca9d17257d15a197b8b35e405
+$(PKG)_CHECKSUM := 606d8a366b1c625ab60d62faeca807a799a2b9e88cbdf2a02bfcdf4429bf8609
 $(PKG)_SUBDIR   := giflib-$($(PKG)_VERSION)
 $(PKG)_FILE     := giflib-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/giflib/giflib-5.x/$($(PKG)_FILE)

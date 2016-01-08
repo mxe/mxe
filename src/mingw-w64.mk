@@ -3,8 +3,8 @@
 
 PKG             := mingw-w64
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0.2
-$(PKG)_CHECKSUM := b266b6d7393ee494612db49b0b54c5aaffaf042f
+$(PKG)_VERSION  := 4.0.4
+$(PKG)_CHECKSUM := 89356a0aa8cf9f8b9dc8d92bc8dd01a131d4750c3acb30c6350a406316c42199
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
@@ -16,15 +16,3 @@ define $(PKG)_UPDATE
     $(SORT) -V | \
     tail -1
 endef
-
-define $(PKG)_BUILD_mingw-w64
-    mkdir '$(1).headers-build'
-    cd '$(1).headers-build' && '$(1)/mingw-w64-headers/configure' \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-sdk=all
-    $(MAKE) -C '$(1).headers-build' install
-endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 = $($(PKG)_BUILD_mingw-w64)
-$(PKG)_BUILD_i686-w64-mingw32   = $($(PKG)_BUILD_mingw-w64)

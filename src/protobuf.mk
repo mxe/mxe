@@ -4,7 +4,7 @@
 PKG             := protobuf
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.5.0
-$(PKG)_CHECKSUM := 62c10dcdac4b69cc8c6bb19f73db40c264cb2726
+$(PKG)_CHECKSUM := 13bfc5ae543cf3aa180ac2485c0bc89495e3ae711fc6fab4f8ffe90dfb4bb677
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://protobuf.googlecode.com/files/$($(PKG)_FILE)
@@ -22,13 +22,13 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    cp '$(1)/src/protoc' '$(1)/src/protoc_host'
+    cp '$(1)/src/protoc' '$(PREFIX)/bin/$(TARGET)-protoc'
     $(MAKE) -C '$(1)' -j 1 distclean
 # Second step: Build for target system.
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-zlib \
-        --with-protoc=src/protoc_host
+        --with-protoc='$(PREFIX)/bin/$(TARGET)-protoc'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 

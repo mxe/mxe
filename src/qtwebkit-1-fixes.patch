@@ -1,0 +1,17 @@
+This file is part of MXE.
+See index.html for further information.
+
+Taken from:
+https://github.com/Alexpux/Qt-builds/blob/master/patches/qt/5.0.x/qt-5.0.0-fix-build-under-msys.patch
+
+--- a/Source/WebCore/DerivedSources.pri	2012-12-21 14:10:41 +0300
++++ b/Source/WebCore/DerivedSources.pri	2012-12-21 14:12:19 +0300
+@@ -704,7 +704,7 @@
+ preprocessIdls.input = IDL_ATTRIBUTES_FILE
+ preprocessIdls.script = $$PREPROCESS_IDLS_SCRIPT
+ # FIXME : We need to use only perl at some point.
+-win_cmd_shell: preprocessIdls.commands = type nul > $$IDL_FILES_TMP $$EOC
++win_cmd_shell: preprocessIdls.commands = cat /dev/null > $$IDL_FILES_TMP $$EOC
+ else: preprocessIdls.commands = cat /dev/null > $$IDL_FILES_TMP $$EOC
+ for(binding, IDL_BINDINGS) {
+     # We need "$$binding" instead of "$$binding ", because Windows' echo writes trailing whitespaces. (http://wkb.ug/88304)

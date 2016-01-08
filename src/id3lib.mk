@@ -4,7 +4,7 @@
 PKG             := id3lib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.8.3
-$(PKG)_CHECKSUM := c92c880da41d1ec0b242745a901702ae87970838
+$(PKG)_CHECKSUM := 2749cc3c0cd7280b299518b1ddf5a5bcfe2d1100614519b68702230e26c7d079
 $(PKG)_SUBDIR   := id3lib-$($(PKG)_VERSION)
 $(PKG)_FILE     := id3lib-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)

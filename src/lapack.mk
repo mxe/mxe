@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := lapack
-$(PKG)_VERSION  := 3.5.0
-$(PKG)_CHECKSUM := 5870081889bf5d15fd977993daab29cf3c5ea970
+$(PKG)_VERSION  := 3.6.0
+$(PKG)_CHECKSUM := a9a0082c918fe14e377bbd570057616768dca76cbdc713457d8199aaa233ffc3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
@@ -24,9 +24,9 @@ define $(PKG)_BUILD
         -DLAPACKE=ON \
         -DCMAKE_Fortran_FLAGS=$(if $(findstring x86_64,$(TARGET)),-fdefault-integer-8) \
         .
-    cp '$(1)/lapacke/include/lapacke_mangling_with_flags.h' '$(1)/lapacke/include/lapacke_mangling.h'
+    cp '$(1)/LAPACKE/include/lapacke_mangling_with_flags.h' '$(1)/LAPACKE/include/lapacke_mangling.h'
     $(MAKE) -C '$(1)/SRC'     -j '$(JOBS)' install
-    $(MAKE) -C '$(1)/lapacke' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)/LAPACKE' -j '$(JOBS)' install
 
     '$(TARGET)-gfortran' \
         -W -Wall -Werror -pedantic \

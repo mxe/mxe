@@ -1,0 +1,47 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 12d808cb5f167015b193f3a7f61f4414f93e3876 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 30 Nov 2015 20:34:28 +1100
+Subject: [PATCH] fix dll installation and ws2_32 linking errors
+
+
+diff --git a/libs/network/src/CMakeLists.txt b/libs/network/src/CMakeLists.txt
+index 3f22165..baa70e4 100644
+--- a/libs/network/src/CMakeLists.txt
++++ b/libs/network/src/CMakeLists.txt
+@@ -21,6 +21,7 @@ install(TARGETS cppnetlib-uri
+     EXPORT cppnetlibTargets
+     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}
+     LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
++    RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+     ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
+ 
+ set(CPP-NETLIB_HTTP_SERVER_SRCS server_request_parsers_impl.cpp)
+@@ -33,6 +34,7 @@ install(TARGETS cppnetlib-server-parsers
+     EXPORT cppnetlibTargets
+     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}
+     LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
++    RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+     ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
+ 
+ set(CPP-NETLIB_HTTP_CLIENT_SRCS client.cpp)
+@@ -47,8 +49,12 @@ endif ()
+ if (Boost_FOUND)
+     target_link_libraries(cppnetlib-client-connections ${Boost_LIBRARIES})
+ endif ()
++if (WIN32)
++    target_link_libraries(cppnetlib-client-connections ws2_32)
++endif ()
+ install(TARGETS cppnetlib-client-connections
+     EXPORT cppnetlibTargets
+     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}
+     LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
++    RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+     ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
+-- 
+2.4.9 (Apple Git-60)
+

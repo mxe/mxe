@@ -4,7 +4,7 @@
 PKG             := plibc
 $(PKG)_IGNORE   := %
 $(PKG)_VERSION  := cd7ed09
-$(PKG)_CHECKSUM := 303afa33721e2d0e92044e18f36bb3b57f48da35
+$(PKG)_CHECKSUM := 1e939804e173b8f789e1403964211835b8006253d0a541d55256b540639b0629
 $(PKG)_SUBDIR   := mirror-plibc-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/plibc/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)

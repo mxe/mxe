@@ -3,14 +3,14 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9df4407
-$(PKG)_CHECKSUM := 995c430b05226babc7f5ffaa35ec6f555c34111d
+$(PKG)_VERSION  := 156edf5
+$(PKG)_CHECKSUM := fc9342784ac660b6572a7cc2343e37293e59d499de4ccf141c947fbb732cee89
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libgsasl pthreads zlib
 
-$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, kisli/vmime, master)
+$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, kisli/vmime, master) | $(SED) 's/^\(.......\).*/\1/;'
 
 define $(PKG)_BUILD
     # The following hint is probably needed for ICU:
@@ -35,7 +35,7 @@ define $(PKG)_BUILD
         -DVMIME_TLS_SUPPORT_LIB_IS_OPENSSL=OFF \
         -DVMIME_SHARED_PTR_USE_CXX=ON \
         -DCXX11_COMPILER_FLAGS=ON \
-        -C../../src/vmime-TryRunResults.cmake \
+        -C '$(PWD)/src/vmime-TryRunResults.cmake' \
         .
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'

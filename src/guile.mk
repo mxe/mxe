@@ -4,11 +4,11 @@
 PKG             := guile
 $(PKG)_IGNORE   := 2%
 $(PKG)_VERSION  := 1.8.8
-$(PKG)_CHECKSUM := 548d6927aeda332b117f8fc5e4e82c39a05704f9
+$(PKG)_CHECKSUM := c3471fed2e72e5b04ad133bbaaf16369e8360283679bcf19800bc1b381024050
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libltdl gmp libiconv gettext libunistring gc libffi readline libgnurx
+$(PKG)_DEPS     := gcc gc gettext gmp libffi libgnurx libiconv libltdl libunistring readline
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=guile.git;a=tags' | \
@@ -23,7 +23,7 @@ define $(PKG)_BUILD
     # The setting "scm_cv_struct_timespec=no" ensures that Guile
     # won't try to use the "struct timespec" from <pthreads.h>,
     # which would fail because we tell Guile not to use Pthreads.
-    cd '$(1)' && CC_FOR_BUILD=gcc ./configure \
+    cd '$(1)' && CC_FOR_BUILD=$(BUILD_CC) ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \

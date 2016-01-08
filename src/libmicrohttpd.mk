@@ -4,7 +4,7 @@
 PKG             := libmicrohttpd
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.38
-$(PKG)_CHECKSUM := 1d0a6685b984b022a6be565f7b179c449944b3f1
+$(PKG)_CHECKSUM := 8df2b4dd863c98799a4775a530d905363fbc02fec850af9094da890b28b9e721
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/libmicrohttpd/$($(PKG)_FILE)

@@ -1,0 +1,56 @@
+This file is part of MXE.
+See index.html for further information.
+
+From c78dde633089cdff3142eb30cc01c5bd77a3c617 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Fri, 9 Oct 2015 12:54:07 +0200
+Subject: [PATCH] fix case in library ws2_32
+
+---
+ src/osgPlugins/ZeroConfDevice/CMakeLists.txt |    2 +-
+ src/osgPlugins/osc/CMakeLists.txt            |    2 +-
+ src/osgPlugins/vrml/CMakeLists.txt           |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/osgPlugins/ZeroConfDevice/CMakeLists.txt b/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
+index 5287cfc..fab449e 100644
+--- a/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
++++ b/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
+@@ -19,7 +19,7 @@ IF(WIN32)
+         mdns_win/dns_sd.h
+         mdns_win/dns-sd.c
+     )
+-    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};Ws2_32.lib;winmm")
++    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};ws2_32.lib;winmm")
+     SET(TARGET_LIBRARIES_VARS ZEROCONF_LIBRARY)
+     ADD_DEFINITIONS(-DNOT_HAVE_GETOPT)
+     ADD_DEFINITIONS(-DNOT_HAVE_SETLINEBUF)
+diff --git a/src/osgPlugins/osc/CMakeLists.txt b/src/osgPlugins/osc/CMakeLists.txt
+index 6bf6127..0529e17 100644
+--- a/src/osgPlugins/osc/CMakeLists.txt
++++ b/src/osgPlugins/osc/CMakeLists.txt
+@@ -35,7 +35,7 @@ if(WIN32 AND NOT ANDROID)
+         ip/win32/NetworkingUtils.cpp
+         ip/win32/UdpSocket.cpp
+     )
+-    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};Ws2_32.lib;winmm")
++    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};ws2_32.lib;winmm")
+ ELSE()
+     SET(TARGET_SRC
+         ${TARGET_SRC}
+diff --git a/src/osgPlugins/vrml/CMakeLists.txt b/src/osgPlugins/vrml/CMakeLists.txt
+index 867e0df..5e5eb26 100644
+--- a/src/osgPlugins/vrml/CMakeLists.txt
++++ b/src/osgPlugins/vrml/CMakeLists.txt
+@@ -27,7 +27,7 @@ IF (WIN32)
+         PNG_LIBRARY
+         ZLIB_LIBRARY)
+     SET(TARGET_EXTERNAL_LIBRARIES
+-        Ws2_32.lib)
++        ws2_32.lib)
+ ELSE()
+     SET(TARGET_LIBRARIES_VARS
+         OPENVRML_LIBRARY)
+-- 
+1.7.10.4
+

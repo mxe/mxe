@@ -4,7 +4,7 @@
 PKG             := json-c
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.12
-$(PKG)_CHECKSUM := c6d8019c706af146006aa6cd91839c7d3c581e94
+$(PKG)_CHECKSUM := 6fd6d2311d610b279e1bcdd5c6d4f699700159d3e0786de8306af7b4bc94fb35
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-nodoc.tar.gz
 $(PKG)_URL      := https://s3.amazonaws.com/$(PKG)_releases/releases/$($(PKG)_FILE)

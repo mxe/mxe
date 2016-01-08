@@ -4,7 +4,7 @@
 PKG             := libodbc++
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.5
-$(PKG)_CHECKSUM := 8a77921b21c23926042c413f4a7a187a3656025b
+$(PKG)_CHECKSUM := ba3030a27b34e4aafbececa2ddbbf42a38815e9534f34c051620540531b5e23e
 $(PKG)_SUBDIR   := libodbc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libodbc++-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libodbcxx/libodbc++/$($(PKG)_VERSION)/$($(PKG)_FILE)

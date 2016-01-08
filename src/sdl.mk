@@ -4,7 +4,7 @@
 PKG             := sdl
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.15
-$(PKG)_CHECKSUM := 0c5f193ced810b0d7ce3ab06d808cbb5eef03a2c
+$(PKG)_CHECKSUM := d6d316a793e5e348155f0dd93b979798933fb98aa1edebcc108829d6474aad00
 $(PKG)_SUBDIR   := SDL-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.libsdl.org/release/$($(PKG)_FILE)
@@ -33,4 +33,12 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl.exe' \
         `'$(TARGET)-pkg-config' sdl --cflags --libs`
+
+    # test cmake
+    mkdir '$(1).test-cmake'
+    cd '$(1).test-cmake' && '$(TARGET)-cmake' \
+        -DPKG=$(PKG) \
+        -DPKG_VERSION=$($(PKG)_VERSION) \
+        '$(PWD)/src/cmake/test'
+    $(MAKE) -C '$(1).test-cmake' -j 1 install
 endef

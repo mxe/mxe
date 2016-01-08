@@ -1,7 +1,7 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 470bf2340d0c275d9e02492f11e4103e081d1f93 Mon Sep 17 00:00:00 2001
+From 72357fef95ee2247f79032b2096b3c23938882d5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 21 May 2014 08:59:53 +0200
 Subject: [PATCH] Revert "idc is a host tool"
@@ -21,5 +21,5 @@ index 1898ed5..524ee2e 100644
  SOURCES = main.cpp
  
 -- 
-1.8.4.5
+2.1.4
 

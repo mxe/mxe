@@ -3,12 +3,12 @@
 
 PKG             := openblas
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.2.12
-$(PKG)_CHECKSUM := 2bdedca65e29186d1ecaaed45cb6c9b1f3f1c868
+$(PKG)_VERSION  := 0.2.15
+$(PKG)_CHECKSUM := 73c40ace5978282224e5e122a41c8388c5a19e65a6f2329c2b7c0b61bacc9044
 $(PKG)_SUBDIR   := OpenBLAS-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://github.com/xianyi/OpenBLAS/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc libgomp
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/xianyi/OpenBLAS/releases' | \
@@ -23,8 +23,7 @@ $(PKG)_MAKE_OPTS = \
         CROSS_SUFFIX='$(TARGET)-' \
         FC='$(TARGET)-gfortran' \
         CC='$(TARGET)-gcc' \
-        HOSTFC='gfortran' \
-        HOSTCC='gcc' \
+        HOSTCC='$(BUILD_CC)' \
         CROSS=1 \
         NO_CBLAS=1 \
         NO_LAPACK=1 \

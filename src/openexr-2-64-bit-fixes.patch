@@ -1,0 +1,27 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 317282de70ea0720fcba5339a573f3bd811ff74c Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Mon, 5 Oct 2015 21:16:35 -0400
+Subject: [PATCH] Correct pointer conversion.
+
+
+diff --git a/IlmImf/ImfOptimizedPixelReading.h b/IlmImf/ImfOptimizedPixelReading.h
+index 1c83497..65b0879 100644
+--- a/IlmImf/ImfOptimizedPixelReading.h
++++ b/IlmImf/ImfOptimizedPixelReading.h
+@@ -70,7 +70,7 @@ EXR_FORCEINLINE
+ bool
+ isPointerSSEAligned (const void* EXR_RESTRICT pPointer)
+ {
+-    unsigned long trailingBits = ((unsigned long)pPointer) & 15;
++    uintptr_t trailingBits = ((uintptr_t)pPointer) & 15;
+     return trailingBits == 0;
+ }
+ 
+-- 
+2.1.4
+

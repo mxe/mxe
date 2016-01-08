@@ -4,7 +4,7 @@
 PKG             := vidstab
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.98b
-$(PKG)_CHECKSUM := 1030a1baa9b2cba844758a6cd8dd5d5fc23f9cd9
+$(PKG)_CHECKSUM := 530f0bf7479ec89d9326af3a286a15d7d6a90fcafbb641e3b8bdb8d05637d025
 $(PKG)_SUBDIR   := vid.stab-release-$($(PKG)_VERSION)
 $(PKG)_FILE     := vid.stab-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/georgmartius/vid.stab/archive/release-$($(PKG)_VERSION).tar.gz

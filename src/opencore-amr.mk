@@ -4,7 +4,7 @@
 PKG             := opencore-amr
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.3
-$(PKG)_CHECKSUM := 737f00e97a237f4ae701ea55913bb38dc5513501
+$(PKG)_CHECKSUM := 106bf811c1f36444d7671d8fd2589f8b2e0cca58a2c764da62ffc4a070595385
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_FILE)

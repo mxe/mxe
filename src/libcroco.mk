@@ -4,7 +4,7 @@
 PKG             := libcroco
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.6.2
-$(PKG)_CHECKSUM := 4b0dd540a47f2492b1ac7cd7e3ec63c2ef4c9c2a
+$(PKG)_CHECKSUM := be24853f64c09b63d39e563fb0222e29bae1a33c3d9f6cbffc0bc27669371749
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/libcroco/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

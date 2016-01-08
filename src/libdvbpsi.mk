@@ -4,7 +4,7 @@
 PKG             := libdvbpsi
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.0
-$(PKG)_CHECKSUM := b918985f65e1d14bf19209b6b3def254c902901a
+$(PKG)_CHECKSUM := 36d9b233306e48b58999e87864253b564e20932ed46a485e44ef7058f1f927e8
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := http://download.videolan.org/pub/libdvbpsi/$($(PKG)_VERSION)/$($(PKG)_FILE)

@@ -4,7 +4,7 @@
 PKG             := gtkimageview
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.4
-$(PKG)_CHECKSUM := a6c78744ba98441bca28c9d27bf89245517940db
+$(PKG)_CHECKSUM := 4c681d38d127ee3950a29bce9aa7aa8a2abe3b4d915f7a0c88e526999c1a46f2
 $(PKG)_SUBDIR   := gtkimageview-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkimageview-$($(PKG)_VERSION).tar.gz
 # gtkimageview download server is dead.

@@ -1,0 +1,22 @@
+diff -burN tinyxml.orig/CMakeLists.txt tinyxml/CMakeLists.txt
+--- tinyxml.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ tinyxml/CMakeLists.txt	2015-06-21 19:03:09.878168410 +0200
+@@ -0,0 +1,18 @@
++cmake_minimum_required(VERSION 2.8)
++
++file(GLOB SRCS "${CMAKE_SOURCE_DIR}/tiny*.cpp" )
++
++include_directories(${CMAKE_SOURCE_DIR})
++add_definitions(-DTIXML_USE_STL)
++
++add_library(tinyxml ${SRCS})
++
++install(TARGETS tinyxml
++  RUNTIME DESTINATION bin
++  LIBRARY DESTINATION lib
++  ARCHIVE DESTINATION lib)
++
++file(GLOB HEADERS "${CMAKE_SOURCE_DIR}/*.h")
++install(FILES ${HEADERS}
++  DESTINATION include)
++

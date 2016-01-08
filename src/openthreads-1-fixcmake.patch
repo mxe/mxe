@@ -1,0 +1,50 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -burN OpenSceneGraph-3.4.0.orig/CMakeLists.txt OpenSceneGraph-3.4.0/CMakeLists.txt
+--- OpenSceneGraph-3.4.0.orig/CMakeLists.txt	2015-08-12 08:38:59.000000000 +0200
++++ OpenSceneGraph-3.4.0/CMakeLists.txt	2015-12-02 16:42:16.565976939 +0100
+@@ -1046,16 +1046,7 @@
+ 
+ 
+ # OSG Core
+-ADD_SUBDIRECTORY(src)
+-
+-IF   (BUILD_OSG_APPLICATIONS AND NOT ANDROID)
+-    ADD_SUBDIRECTORY(applications)
+-ENDIF()
+-
+-IF   (BUILD_OSG_EXAMPLES)
+-    ADD_SUBDIRECTORY(examples)
+-ENDIF()
+-
++ADD_SUBDIRECTORY(src/OpenThreads)
+ 
+ IF(APPLE AND NOT ANDROID)
+ 
+@@ -1251,24 +1242,7 @@
+ 
+ # Generate pkg-config configuration files
+ 
+-SET(PKGCONFIG_FILES
+-  openscenegraph
+-  openscenegraph-osg
+-  openscenegraph-osgDB
+-  openscenegraph-osgFX
+-  openscenegraph-osgGA
+-  openscenegraph-osgParticle
+-  openscenegraph-osgSim
+-  openscenegraph-osgText
+-  openscenegraph-osgUtil
+-  openscenegraph-osgTerrain
+-  openscenegraph-osgManipulator
+-  openscenegraph-osgViewer
+-  openscenegraph-osgWidget
+-  openscenegraph-osgShadow
+-  openscenegraph-osgAnimation
+-  openscenegraph-osgVolume
+-)
++SET(PKGCONFIG_FILES)
+ 
+ IF(QT4_FOUND OR Qt5Widgets_FOUND )
+   SET(PKGCONFIG_FILES ${PKGCONFIG_FILES} openscenegraph-osgQt)

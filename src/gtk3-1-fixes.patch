@@ -1,0 +1,139 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+
+---
+These were adapted from the gtk2 patchset.
+
+--- a/configure
++++ b/configure
+@@ -7005,15 +7005,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ if test "$os_win32" = "yes"; then
+   if test x$enable_static = xyes -o x$enable_static = x; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling static library build, must build as DLL on Windows." >&5
+-$as_echo "$as_me: WARNING: Disabling static library build, must build as DLL on Windows." >&2;}
+-    enable_static=no
++    { $as_echo "(disabled warning)" >&5
++$as_echo "(disabled warning)" >&2;}
++    enable_static=yes
+   fi
+   if test x$enable_shared = xno; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Enabling shared library build, must build as DLL on Windows." >&5
+-$as_echo "$as_me: WARNING: Enabling shared library build, must build as DLL on Windows." >&2;}
++    { $as_echo "(disabled warning)" >&5
++$as_echo "(disabled warning)" >&2;}
+   fi
+-  enable_shared=yes
++  enable_shared=no
+ fi
+ 
+ 
+--- a/gdk/win32/gdkmain-win32.c	2015-07-25 23:15:29.947190754 +0200
++++ b/gdk/win32/gdkmain-win32.c	2015-07-25 23:15:55.723190733 +0200
+@@ -64,7 +64,7 @@
+ };
+ 
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL,
++gdk_DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     dwReason,
+ 	 LPVOID    reserved)
+ {
+--- a/gtk/gtkwin32.c	2015-07-25 23:20:57.735190485 +0200
++++ b/gtk/gtkwin32.c	2015-07-25 23:21:13.447190472 +0200
+@@ -42,7 +42,7 @@
+ static HMODULE gtk_dll;
+ 
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL,
++gtk_DllMain (HINSTANCE hinstDLL,
+          DWORD     fdwReason,
+          LPVOID    lpvReserved)
+ {
+--- a/gtk+-3.0.pc.in	2015-07-26 16:55:29.755170491 +0200
++++ b/gtk+-3.0.pc.in	2015-07-26 16:56:23.655170447 +0200
+@@ -12,5 +12,5 @@
+ Version: @VERSION@
+ Requires: gdk-@GTK_API_VERSION@ @GTK_PACKAGES@
+ Requires.private: @GTK_PRIVATE_PACKAGES@
+-Libs: -L${libdir} -lgtk-3 @GTK_EXTRA_LIBS@
++Libs: -L${libdir} -lgtk-3 @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
+ Cflags: -I${includedir}/gtk-@GTK_API_VERSION@ @GTK_EXTRA_CFLAGS@
+---
+Here there were two problems, one is that util/extract-strings.exe
+was being cross-built while it should be built locally, the other is
+that in fact it wasn't even being built because of some problem with
+makefile variables (PROGRAMS appears to be empty even if it is set to
+a nonempty value).
+
+--- a/util/Makefile.in	2014-10-21 17:03:07.000000000 +0200
++++ b/util/Makefile.in	2014-12-27 23:12:40.910506266 +0100
+@@ -107,9 +107,8 @@
+ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
+-extract_strings_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+-	$(extract_strings_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
++extract_strings_LINK = $(CC_FOR_BUILD) \
++	$(extract_strings_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) \
+ 	-o $@
+ AM_V_P = $(am__v_P_@AM_V@)
+ am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
+@@ -485,7 +484,7 @@
+ 
+ extract-strings$(EXEEXT): $(extract_strings_OBJECTS) $(extract_strings_DEPENDENCIES) $(EXTRA_extract_strings_DEPENDENCIES) 
+ 	@rm -f extract-strings$(EXEEXT)
+-	$(AM_V_CCLD)$(extract_strings_LINK) $(extract_strings_OBJECTS) $(extract_strings_LDADD) $(LIBS)
++	$(AM_V_CCLD)$(extract_strings_LINK) $(extract_strings_OBJECTS) $(extract_strings_LDADD)
+ 
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT)
+@@ -517,7 +516,7 @@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
+ 
+ extract_strings-extract-strings.o: extract-strings.c
+-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(extract_strings_CFLAGS) $(CFLAGS) -MT extract_strings-extract-strings.o -MD -MP -MF $(DEPDIR)/extract_strings-extract-strings.Tpo -c -o extract_strings-extract-strings.o `test -f 'extract-strings.c' || echo '$(srcdir)/'`extract-strings.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS_FOR_BUILD) $(extract_strings_CFLAGS) $(CFLAGS_FOR_BUILD) -MT extract_strings-extract-strings.o -MD -MP -MF $(DEPDIR)/extract_strings-extract-strings.Tpo -c -o extract_strings-extract-strings.o `test -f 'extract-strings.c' || echo '$(srcdir)/'`extract-strings.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/extract_strings-extract-strings.Tpo $(DEPDIR)/extract_strings-extract-strings.Po
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='extract-strings.c' object='extract_strings-extract-strings.o' libtool=no @AMDEPBACKSLASH@
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@@ -620,7 +619,7 @@
+ 	done
+ check-am: all-am
+ check: check-am
+-all-am: Makefile $(PROGRAMS)
++all-am: Makefile extract-strings$(EXEEXT)
+ installdirs:
+ install: install-am
+ install-exec: install-exec-am
+---
+This one fixes "cd $builddir" failing because neither $builddir nor
+$HOME were set
+
+--- a/configure	2015-07-24 21:19:46.839151097 +0200
++++ b/configure	2015-07-24 21:20:13.655151075 +0200
+@@ -23215,7 +23215,7 @@
+        NATIVE_GDKPIXBUF_LIBS=`$PKG_CONFIG_FOR_BUILD --libs gdk-pixbuf-2.0`
+        # This is the native gtk-update-icon-cache which will be used at
+        # build time, NOT the one installed on the target host.
+-       GTK_UPDATE_ICON_CACHE="`cd $builddir && pwd`/gtk/native/native-update-icon-cache$BUILD_EXEEXT"
++       GTK_UPDATE_ICON_CACHE="`pwd`/gtk/native/native-update-icon-cache$BUILD_EXEEXT"
+ 
+ 
+ 
+---
+Not sure what happens when this line is commented out.
+
+--- a/gtk/a11y/gtkaccessibility.c	2014-08-15 16:38:05.000000000 +0200
++++ b/gtk/a11y/gtkaccessibility.c	2015-07-26 17:43:36.647168119 +0200
+@@ -991,5 +991,5 @@
+   atk_bridge_adaptor_init (NULL, NULL);
+ #endif
+ 
+-  atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
++  /* atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL); */
+ }

@@ -3,12 +3,13 @@
 
 PKG             := sox
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 14.4.1
-$(PKG)_CHECKSUM := 71f05afc51e3d9b03376b2f98fd452d3a274d595
+$(PKG)_VERSION  := 14.4.2
+$(PKG)_CHECKSUM := b45f598643ffbd8e363ff24d61166ccec4836fea6d3888881b8df53e3bb55f6c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc file flac lame libgomp libmad libpng libsndfile libltdl opencore-amr twolame vorbis wavpack
+$(PKG)_DEPS     := gcc file flac lame libltdl libmad libpng libsndfile \
+                   opencore-amr opus twolame vorbis wavpack
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/sox/files/sox/' | \
@@ -22,7 +23,7 @@ define $(PKG)_BUILD
     $(SED) -i '/Libs.private/d'               '$(1)/sox.pc.in'
     echo Libs.private: @MAGIC_LIBS@ \
         `grep sox_LDADD '$(1)/src/optional-fmts.am' | \
-         $(SED) 's, sox_LDADD += ,,g' | tr -d '\n'` >>'$(1)/sox.pc.in'
+         $(SED) 's, sox_LDADD += ,,g' | tr -d '\n'` @LIBS@ >>'$(1)/sox.pc.in'
 
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
@@ -37,7 +38,6 @@ define $(PKG)_BUILD
         --with-ladspa \
         --with-amrwb \
         --with-amrnb \
-        --without-ffmpeg \
         --with-flac \
         --with-oggvorbis \
         --with-sndfile \
@@ -53,7 +53,8 @@ define $(PKG)_BUILD
         --without-oss \
         --without-pulseaudio \
         --without-sndio \
-        --without-sunaudio
+        --without-sunaudio \
+        LIBS='-lshlwapi -lgnurx'
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= EXTRA_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install

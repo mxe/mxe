@@ -1,0 +1,29 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 258068273e70f25b723c4813805e76f92b18264c Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 29 Aug 2015 11:03:49 +0200
+Subject: [PATCH] GeoIP.c: disable POSIX section
+
+WIN32 is not defined for some reason.
+---
+ src/GeoIP.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/GeoIP.c b/src/GeoIP.c
+index cb4437e..be2c5e4 100644
+--- a/src/GeoIP.c
++++ b/src/GeoIP.c
+@@ -22,7 +22,7 @@
+ 
+ #include "libtorrent/ConvertUTF.h"
+ 
+-#ifndef WIN32
++#ifndef _WIN32
+ #include <netdb.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h> /* For ntohl */
+-- 
+1.7.10.4
+

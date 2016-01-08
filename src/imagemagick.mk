@@ -4,12 +4,13 @@
 PKG             := imagemagick
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.9.0-0
-$(PKG)_CHECKSUM := 6bf4263ceaeea61e00fe15a95db320d49bcc48c4
+$(PKG)_CHECKSUM := 12331c904c691cb128865fdc97e5f8a2654576f9b032e274b74dd7617aa1b9b6
 $(PKG)_SUBDIR   := ImageMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := ImageMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://www.imagemagick.org/download/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 ffmpeg fftw freetype jasper jpeg lcms liblqr-1 libpng libltdl openexr pthreads tiff
+$(PKG)_DEPS     := gcc bzip2 ffmpeg fftw freetype jasper jpeg lcms \
+                   liblqr-1 libltdl libpng openexr pthreads tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.imagemagick.org/' | \
@@ -19,10 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --with-x=no \
         --without-zlib \
         --disable-largefile \
@@ -38,7 +36,3 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-imagemagick.exe' \
         `'$(TARGET)-pkg-config' ImageMagick++ --cflags --libs`
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-
-$(PKG)_BUILD_SHARED =

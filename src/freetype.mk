@@ -3,8 +3,8 @@
 
 PKG             := freetype
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.5.5
-$(PKG)_CHECKSUM := 7b7460ef51a8fdb17baae53c6658fc1ad000a1c2
+$(PKG)_VERSION  := 2.6.2
+$(PKG)_CHECKSUM := baf6bdef7cdcc12ac270583f76ef245efe936267dbecef835f02a3409fcbb892
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(shell echo '$($(PKG)_VERSION)' | cut -d . -f 1,2,3)/$($(PKG)_FILE)
@@ -17,10 +17,7 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_BUILD
-    # alias harfbuzz to handle linking circularity
-    $(if $(BUILD_STATIC),\
-        ln -sf libharfbuzz.a '$(PREFIX)/$(TARGET)/lib/libharfbuzz_too.a',)
+define $(PKG)_BUILD_COMMON
     cd '$(1)' && GNUMAKE=$(MAKE) ./configure \
         $(MXE_CONFIGURE_OPTS) \
         LIBPNG_CFLAGS="`$(TARGET)-pkg-config libpng --cflags`" \
@@ -30,4 +27,11 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/bin/freetype-config' '$(PREFIX)/bin/$(TARGET)-freetype-config'
+endef
+
+define $(PKG)_BUILD
+    # alias harfbuzz to handle linking circularity
+    $(if $(BUILD_STATIC),\
+        ln -sf libharfbuzz.a '$(PREFIX)/$(TARGET)/lib/libharfbuzz_too.a',)
+    $($(PKG)_BUILD_COMMON)
 endef

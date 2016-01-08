@@ -4,7 +4,7 @@
 PKG             := libdnet
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.11
-$(PKG)_CHECKSUM := e2ae8c7f0ca95655ae9f77fd4a0e2235dc4716bf
+$(PKG)_CHECKSUM := 0eb78415c8f2564c2f1e8ad36e98473348d9c94852f796a226360c716cc7ca53
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -19,6 +19,7 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,CYGWIN=no,CYGWIN=yes,g'                     '$(1)/configure'
     $(SED) -i 's,cat /proc/sys/kernel/ostype,,g'             '$(1)/configure'
+    $(SED) -i 's,/dev/tun0,false,g'                          '$(1)/configure'
     $(SED) -i 's,test -d /usr/include/mingw,true,'           '$(1)/configure'
     $(SED) -i 's,Iphlpapi,iphlpapi,g'                        '$(1)/configure'
     $(SED) -i 's,packet32\.h,Packet32.h,g'                   '$(1)/configure'

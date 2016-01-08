@@ -1,0 +1,52 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 68ca8760276836154d4cc09585c21771856c1cf8 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 20 Sep 2015 18:18:36 +0300
+Subject: [PATCH] examples Makefile: add option exe suffix (EXESFX)
+
+On MinGW, `make Mwindows` produces executables without
+.exe suffix. Makefile did not provide an option to set
+the suffix of executables.
+
+ $ make CC=i686-w64-mingw32.static-gcc EXESFX=.exe ...
+---
+ examples/Makefile | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/examples/Makefile b/examples/Makefile
+index af16fdb..fda92d2 100644
+--- a/examples/Makefile
++++ b/examples/Makefile
+@@ -88,6 +88,11 @@ CIMG_VERSION = _cimg_version
+ X11PATH      = /usr/X11R6
+ CC           = g++
+ EXEPFX       =
++ifeq ($(MSYSTEM),MINGW32)
++EXESFX       = .exe
++else
++EXESFX       =
++endif
+ CCVER       = $(CC)
+ ifeq ($(notdir $(CC)),g++)
+ CCVER        = `$(CC) -v 2>&1 | tail -n 1`
+@@ -248,13 +253,9 @@ endif
+ 	@echo
+ 	@echo "** Compiling '$* ($(CIMG_VERSION))' with '$(CCVER)'"
+ 	@echo
+-	$(CC) -o $(EXEPFX)$* $< $(CFLAGS) $(CONF_CFLAGS) $(LIBS) $(CONF_LIBS)
++	$(CC) -o $(EXEPFX)$*$(EXESFX) $< $(CFLAGS) $(CONF_CFLAGS) $(LIBS) $(CONF_LIBS)
+ ifeq ($(STRIP_EXE),true)
+-ifeq ($(MSYSTEM),MINGW32)
+-	strip $(EXEPFX)$*.exe
+-else
+-	strip $(EXEPFX)$*
+-endif
++	strip $(EXEPFX)$*$(EXESFX)
+ endif
+ menu:
+ 	@echo
+-- 
+1.9.1
+
