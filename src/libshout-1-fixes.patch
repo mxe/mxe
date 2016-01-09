@@ -3,30 +3,42 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From b05b2d82333e13f637dffb93f821907f775eb585 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sun, 20 May 2012 23:23:37 +0200
-Subject: [PATCH] mingw fixes
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jean-Baptiste Kempf <jb@videolan.org>
+Date: Mon, 30 Nov 2015 17:19:26 +0100
+Subject: [PATCH] Fix: test arpa/inet.h presence before using it
 
----
- include/shout/shout.h.in |    2 ++
- 1 file changed, 2 insertions(+)
+Fix: test arpa/inet.h presence before using it
 
-diff --git a/include/shout/shout.h.in b/include/shout/shout.h.in
-index 682ad49..f412cdc 100644
---- a/include/shout/shout.h.in
-+++ b/include/shout/shout.h.in
-@@ -23,8 +23,10 @@
+This fixes the Windows build.
+
+Taken from:
+https://git.xiph.org/?p=icecast-libshout.git;a=commit;h=53aa028d13ac624e2c1e71796d529e773867d1d4
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -74,7 +74,7 @@ dnl Checks for programs.
+ dnl Checks for header files.
+ AC_HEADER_STDC
+ AC_HEADER_TIME
+-AC_CHECK_HEADERS([strings.h sys/timeb.h])
++AC_CHECK_HEADERS([strings.h sys/timeb.h arpa/inet.h])
  
- #include <sys/types.h>
- #ifdef WIN32
-+#ifndef __MINGW32__
- #include <os.h>
+ dnl Checks for typedefs, structures, and compiler characteristics.
+ AC_C_CONST
+diff --git a/src/proto_roaraudio.c b/src/proto_roaraudio.c
+index 1111111..2222222 100644
+--- a/src/proto_roaraudio.c
++++ b/src/proto_roaraudio.c
+@@ -28,7 +28,9 @@
  #endif
+ 
+ /* for htonl(). */
++#ifdef HAVE_ARPA_INET_H
+ #include <arpa/inet.h>
 +#endif
  
- #define SHOUTERR_SUCCESS	(0)
- #define SHOUTERR_INSANE		(-1)
--- 
-1.7.9.2
-
+ #include <stdio.h>
+ #include <stdlib.h>
