@@ -8,7 +8,7 @@ MXE_TRIPLETS=`grep ^MXE_TRIPLETS Makefile | cut -d '=' -f2 | cut -d ' ' -f2- | t
 MXE_LIB_TYPES=`grep ^MXE_LIB_TYPES Makefile | cut -d '=' -f2 | cut -d ' ' -f2- | tr ' ' ','`
 MXE_TARGET_LIST=`eval "echo {$MXE_TRIPLETS}.{$MXE_LIB_TYPES}"`
 
-alias mxe='$MAKE -C $MXE_DIR --no-print-directory'
+alias mxe-make='$MAKE -C $MXE_DIR --no-print-directory'
 
 unset `compgen -e | \
     grep -vi '^EDITOR\|^HOME\|^LANG\|MXE\|^PATH' | \
@@ -26,17 +26,6 @@ _mxe()
     tgts=$MXE_TARGET_LIST
 
     case "${cur}" in
-    build-only-*_*)
-        local base=`echo ${cur} | $SED -n 's,\(.*_\).*,\1,p'`
-        local _tgts=$( for x in ${tgts}; do echo $base${x} ; done )
-        COMPREPLY=( $(compgen -W "${_tgts}" -- ${cur}) )
-        return 0
-        ;;
-    build-only-*)
-        local _pkgs=$( for x in ${pkgs}; do echo build-only-${x} ; done )
-        COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
-        return 0
-        ;;
     download-*)
         local _pkgs=$( for x in ${pkgs}; do echo download-${x} ; done )
         COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
@@ -53,14 +42,45 @@ _mxe()
         COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
         return 0
         ;;
+    *-*-*)
+        local base=`echo ${cur} | $SED -n 's,\(.*-.*-\).*,\1,p'`
+        local _pkgs=$( for x in ${pkgs}; do echo $base${x} ; done )
+        COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+        return 0
+        ;;
+    *-*-*-*)
+        local base=`echo ${cur} | $SED -n 's,\(.*-.*-.*-\).*,\1,p'`
+        local _pkgs=$( for x in ${pkgs}; do echo $base${x} ; done )
+        COMPREPLY=( $(compgen -W "${_pkgs}" -- ${cur}) )
+        return 0
+        ;;
     [!-]*)
-        pkgs+=" build-only- build-matrix.html check-requirements \
-                clean clean-pkg download download- update-checksum- \
-                show-deps- show-downstream-deps- show-upstream-deps-"
+        pkgs+=" build-matrix.html \
+                check-requirements \
+                clean \
+                clean-junk \
+                clean-pkg \
+                cleanup-deps-style \
+                cleanup-style \
+                download \
+                download- \
+                download-only- \
+                export-patch- \
+                gmsl-print- \
+                import-all-patches- \
+                import-patch- \
+                init-git- \
+                print-deps-for-build-pkg \
+                show-deps- \
+                show-downstream-deps- \
+                show-upstream-deps- \
+                update \
+                update-checksum- \
+                update-package- "
         COMPREPLY=( $(compgen -W "${pkgs}" -- ${cur}) )
         return 0
         ;;
     esac
 
 }
-complete -o nospace -o default -F _mxe mxe make gmake
+complete -o nospace -o default -F _mxe mxe-make make gmake
