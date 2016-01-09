@@ -596,15 +596,6 @@ index 1111111..2222222 100755
  
  #include <nsis/pluginapi.h> // nsis plugin
  
-@@ -149,7 +150,7 @@ struct FieldType {
-   int    nField; // field number in INI file
-   char  *pszHwndEntry; // "HWND" or "HWND2"
- 
--  long   wndProc; 
-+  long   wndProc;
- };
- 
- // initial buffer size.  buffers will grow as required.
 @@ -759,7 +760,7 @@ BOOL CALLBACK cfgDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
        DrawText(lpdis->hDC, pField->pszText, -1, &rc, DT_VCENTER | DT_WORDBREAK | DT_CALCRECT);
  
@@ -614,24 +605,6 @@ index 1111111..2222222 100755
  
        // Move rect to right if in RTL mode
        if (bRTL)
-@@ -877,7 +878,7 @@ int WINAPI NumbersOnlyPasteWndProc(HWND hWin, UINT uMsg, WPARAM wParam, LPARAM l
-     if (OpenClipboard(hWin))
-     {
-       HGLOBAL hData = GetClipboardData(CF_TEXT);
--      
-+
-       if (hData)
-       {
-         char *lpData = (char *) GlobalLock(hData);
-@@ -1346,7 +1347,7 @@ int WINAPI createCfgDlg()
- 
-                 int keycolor = *bmp & 0xFFFFFF;
- 
--                // Search for transparent pixels 
-+                // Search for transparent pixels
-                 for (y = bm.bmHeight - 1; y >= 0; y--) {
-                   for (x = 0; x < bm.bmWidth;) {
-                     if ((*bmp & 0xFFFFFF) == keycolor) {
 diff --git a/Contrib/Makensisw/afxres.h b/Contrib/Makensisw/afxres.h
 index 1111111..2222222 100755
 --- a/Contrib/Makensisw/afxres.h
@@ -681,86 +654,3 @@ index 1111111..2222222 100755
  
  ### Some other settings
  
-diff --git a/Source/util.cpp b/Source/util.cpp
-index 1111111..2222222 100755
---- a/Source/util.cpp
-+++ b/Source/util.cpp
-@@ -1,15 +1,15 @@
- /*
-  * util.cpp
-- * 
-+ *
-  * This file is a part of NSIS.
-- * 
-+ *
-  * Copyright (C) 1999-2009 Nullsoft and Contributors
-- * 
-+ *
-  * Licensed under the zlib/libpng license (the "License");
-  * you may not use this file except in compliance with the License.
-- * 
-+ *
-  * Licence details can be found in the file COPYING.
-- * 
-+ *
-  * This software is provided 'as-is', without any express or implied
-  * warranty.
-  */
-@@ -616,7 +616,7 @@ typedef struct _VXD_VERSION_RESOURCE {
- } VXD_VERSION_RESOURCE, *PVXD_VERSION_RESOURCE;
- #pragma pack( pop, pre_vxd_ver )
- 
--static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData ) 
-+static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
- {
- 
-   HANDLE hFile        = NULL;
-@@ -673,7 +673,7 @@ static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
-   pDosExeHdr = (PIMAGE_DOS_HEADER) pView;
- 
-   // Check to make sure the file has a DOS EXE header.
--  if ( pDosExeHdr->e_magic != IMAGE_DOS_SIGNATURE ) 
-+  if ( pDosExeHdr->e_magic != IMAGE_DOS_SIGNATURE )
-   {
-     if ( pView )
-       UnmapViewOfFile( pView );
-@@ -693,7 +693,7 @@ static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
-        + pDosExeHdr->e_lfanew );
- 
-   // Check to make sure the file is a VxD.
--  if ( (DWORD) pNtExeHdr->Signature != IMAGE_VXD_SIGNATURE ) 
-+  if ( (DWORD) pNtExeHdr->Signature != IMAGE_VXD_SIGNATURE )
-   {
-     if ( pView )
-       UnmapViewOfFile( pView );
-@@ -769,18 +769,18 @@ static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
-   return TRUE;
- }
- 
--static DWORD GetVxdVersionInfoSize( LPCSTR szFile ) 
-+static DWORD GetVxdVersionInfoSize( LPCSTR szFile )
- {
-   DWORD dwResult = 0;
- 
-   // Call GetVxdVersion() with NULL for the pointer to the buffer.
--  if ( !GetVxdVersion( szFile, &dwResult, NULL ) ) 
-+  if ( !GetVxdVersion( szFile, &dwResult, NULL ) )
-   {
-     DWORD dwError = GetLastError();
- 
-     // GetVxdVersion() will fail with ERROR_INSUFFICIENT_BUFFER and
-     // the required buffer size will be returned in dwResult.
--    if ( dwError == ERROR_INSUFFICIENT_BUFFER ) 
-+    if ( dwError == ERROR_INSUFFICIENT_BUFFER )
-     {
-       SetLastError( 0 );
-       return dwResult;
-@@ -791,7 +791,7 @@ static DWORD GetVxdVersionInfoSize( LPCSTR szFile )
-   return 0;
- }
- 
--static BOOL GetVxdVersionInfo( LPCSTR szFile, DWORD dwLen, LPVOID lpData ) 
-+static BOOL GetVxdVersionInfo( LPCSTR szFile, DWORD dwLen, LPVOID lpData )
- {
-   return GetVxdVersion( szFile, &dwLen, lpData );
- }
