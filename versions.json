@@ -348,7 +348,7 @@
     "sqlite": "3100000",
     "suitesparse": "4.2.1",
     "t4k_common": "0.1.1",
-    "taglib": "1.7.2",
+    "taglib": "1.10",
     "tclap": "1.2.1",
     "teem": "1.11.0",
     "termcap": "1.3.1",
