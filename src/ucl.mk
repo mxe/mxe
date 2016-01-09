@@ -9,6 +9,8 @@ $(PKG)_SUBDIR   := ucl-$($(PKG)_VERSION)
 $(PKG)_FILE     := ucl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.oberhumer.com/opensource/ucl/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
+$(PKG)_DEPS_$(BUILD) :=
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.oberhumer.com/opensource/ucl/' | \

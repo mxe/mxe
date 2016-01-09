@@ -10,6 +10,8 @@ $(PKG)_FILE     := zlib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://zlib.net/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://$(SOURCEFORGE_MIRROR)/project/libpng/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
+$(PKG)_DEPS_$(BUILD) :=
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://zlib.net/' | \
