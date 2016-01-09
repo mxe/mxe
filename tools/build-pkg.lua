@@ -241,6 +241,18 @@ local function getItems()
     return items, item2deps, item2ver
 end
 
+local function getInstalled()
+    local installed = {}
+    local f = io.popen('ls usr/*/installed/*')
+    local pattern = '/([^/]+)/installed/([^/]+)'
+    for file in f:lines() do
+        local target, pkg = assert(file:match(pattern))
+        table.insert(installed, makeItem(target, pkg))
+    end
+    f:close()
+    return installed
+end
+
 -- graph is a map from item to a list of destinations
 local function transpose(graph)
     local transposed = {}
@@ -373,7 +385,7 @@ local function gitCommit(message)
     assert(execute(cmd:format(message)))
 end
 
-local function gitCheckout(new_branch, deps)
+local function gitCheckout(new_branch, deps, item2index)
     local main_dep = deps[1]
     if main_dep then
         main_dep = itemToBranch(main_dep)
@@ -401,7 +413,17 @@ local function gitCheckout(new_branch, deps)
     end
     if #deps > 0 then
         -- prevent accidental rebuilds
-        assert(execute('touch usr/*/installed/*'))
+        -- touch usr/*/installed/* files in build order
+        -- see https://git.io/vuDJY
+        local installed = getInstalled()
+        table.sort(installed, function(x, y)
+            return item2index[x] < item2index[y]
+        end)
+        for _, item in ipairs(installed) do
+            local target, pkg = assert(parseItem(item))
+            local cmd4 = 'touch -c usr/%s/installed/%s'
+            execute(cmd4:format(target, pkg))
+        end
     end
 end
 
@@ -510,8 +532,8 @@ local function checkFileList(files, item)
 end
 
 -- builds package, returns list of new files
-local function buildItem(item, item2deps, file2item)
-    gitCheckout(itemToBranch(item), item2deps[item])
+local function buildItem(item, item2deps, file2item, item2index)
+    gitCheckout(itemToBranch(item), item2deps[item], item2index)
     local target, pkg = parseItem(item)
     local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
     os.execute(cmd:format(tool 'make', pkg, target))
@@ -747,10 +769,12 @@ local function buildPackages(items, item2deps)
         end
         return false
     end
+    local item2index = makeItem2Index(items)
     local progress_printer = progressPrinter(items)
     for i, item in ipairs(items) do
         if not brokenDep(item) then
-            local files = buildItem(item, item2deps, file2item)
+            local files = buildItem(item, item2deps,
+                file2item, item2index)
             findForeignInstalls(item, files)
             if isBuilt(item, files) then
                 item2files[item] = files
@@ -896,7 +920,7 @@ local build_list = sortForBuild(items, item2deps)
 assert(isTopoOrdered(build_list, items, item2deps))
 build_list = sliceArray(build_list, max_items)
 local unbroken, item2files = buildPackages(build_list, item2deps)
-gitCheckout(GIT_ALL, unbroken)
+gitCheckout(GIT_ALL, unbroken, makeItem2Index(build_list))
 makeDebs(unbroken, item2deps, item2ver, item2files)
 if not no_debs then
     makeMxeRequirementsPackage('wheezy')
