@@ -299,18 +299,21 @@ local function sortForBuild(items, item2deps)
     return build_list
 end
 
+local function makeItem2Index(build_list)
+    local item2index = {}
+    for index, item in ipairs(build_list) do
+        assert(not item2index[item], 'Duplicate item')
+        item2index[item] = index
+    end
+    return item2index
+end
+
 -- return if build_list is ordered topologically
 local function isTopoOrdered(build_list, items, item2deps)
     if #build_list ~= #items then
         return false, 'Length of build_list is wrong'
     end
-    local item2index = {}
-    for index, item in ipairs(build_list) do
-        if item2index[item] then
-            return false, 'Duplicate item: ' .. item
-        end
-        item2index[item] = index
-    end
+    local item2index = makeItem2Index(build_list)
     for item, deps in pairs(item2deps) do
         for _, dep in ipairs(deps) do
             if item2index[item] < item2index[dep] then
