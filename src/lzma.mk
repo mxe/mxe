@@ -9,6 +9,8 @@ $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := lzma$(subst .,,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_URL      := http://www.7-zip.org/a/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
+$(PKG)_DEPS_$(BUILD) :=
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.7-zip.org/sdk.html' | \
@@ -40,3 +42,5 @@ define $(PKG)_BUILD
     cp '$(1)/CPP/7zip/Bundles/LzmaCon/lzma.exe' \
         '$(PREFIX)/$(TARGET)/bin/lzma-cxx.exe'
 endef
+
+$(PKG)_BUILD_$(BUILD) :=
