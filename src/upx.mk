@@ -47,6 +47,7 @@ define $(PKG)_BUILD_$(BUILD)
         'CC=$(BUILD_CC)' \
         'PKG_CONFIG=$(PREFIX)/$(BUILD)/bin/pkgconf' \
         'LIBS=-L$(PREFIX)/$(BUILD)/lib -lucl -lz' \
+        $(shell [ `uname -s` == Darwin ] && echo "CXXFLAGS='-Wno-error=unused-local-typedef'") \
         'exeext='
     cp '$(1)/src/upx' '$(PREFIX)/$(BUILD)/bin/'
 endef
