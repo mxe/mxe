@@ -135,3 +135,23 @@ index 1111111..2222222 100644
          osg
          osgDB
          osgUtil
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 10 Jan 2016 14:19:57 +1100
+Subject: [PATCH] use pkg-config for gstreamer detection in mingw
+
+
+diff --git a/CMakeModules/FindGStreamer.cmake b/CMakeModules/FindGStreamer.cmake
+index 1111111..2222222 100644
+--- a/CMakeModules/FindGStreamer.cmake
++++ b/CMakeModules/FindGStreamer.cmake
+@@ -65,7 +65,7 @@
+ #    )
+ #endmacro()
+ 
+-if (WIN32)
++if (WIN32 AND NOT MINGW)
+     macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _header _library)
+         find_path(${_component_prefix}_INCLUDE_DIRS
+             NAMES ${_header}
