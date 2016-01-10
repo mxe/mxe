@@ -11,9 +11,8 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/nsis/NSIS 2/$($(PKG)_VER
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/p/nsis/code/HEAD/tree/NSIS/tags/' | \
-    grep '<a href="' | \
-    $(SED) -n 's,.*<a href="v\([0-9]\)\([^"]*\)".*,\1.\2,p' | \
+    $(WGET) -q -O- 'http://nsis.sourceforge.net/Download' | \
+    $(SED) -n 's,.*nsis-\([0-9.]\+\)-src.tar.*,\1,p' | \
     tail -1
 endef
 
