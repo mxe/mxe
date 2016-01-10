@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := fc9342784ac660b6572a7cc2343e37293e59d499de4ccf141c947fbb732ce
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls iconv libgsasl pthreads zlib
+$(PKG)_DEPS     := gcc gnutls libiconv libgsasl pthreads zlib
 
 $(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, kisli/vmime, master) | $(SED) 's/^\(.......\).*/\1/;'
 
