@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := fc9342784ac660b6572a7cc2343e37293e59d499de4ccf141c947fbb732ce
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls libgsasl pthreads zlib
+$(PKG)_DEPS     := gcc gnutls iconv libgsasl pthreads zlib
 
 $(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, kisli/vmime, master) | $(SED) 's/^\(.......\).*/\1/;'
 
@@ -28,11 +28,8 @@ define $(PKG)_BUILD
         -DVMIME_BUILD_SAMPLES=OFF \
         -DVMIME_BUILD_DOCUMENTATION=OFF \
         -DCMAKE_MODULE_PATH='$(1)/cmake' \
-        -DVMIME_CHARSETCONV_LIB_IS_ICONV=OFF \
-        -DVMIME_CHARSETCONV_LIB_IS_ICU=OFF \
-        -DVMIME_CHARSETCONV_LIB_IS_WIN=ON \
-        -DVMIME_TLS_SUPPORT_LIB_IS_GNUTLS=ON \
-        -DVMIME_TLS_SUPPORT_LIB_IS_OPENSSL=OFF \
+        -DVMIME_CHARSETCONV_LIB=iconv \
+        -DVMIME_TLS_SUPPORT_LIB=gnutls \
         -DVMIME_SHARED_PTR_USE_CXX=ON \
         -DCXX11_COMPILER_FLAGS=ON \
         -C '$(PWD)/src/vmime-TryRunResults.cmake' \
