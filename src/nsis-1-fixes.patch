@@ -1,16 +1,18 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 1cc3dd0dfd47bab82e06be916f9e57ef783406f9 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 12 Aug 2012 12:33:26 +0200
-Subject: [PATCH 1/4] explicit mingw cross prefix
+Subject: [PATCH] explicit mingw cross prefix
 
 This patch has been taken from:
 http://sourceforge.net/tracker/index.php?func=detail&aid=3305366&group_id=22049&atid=373085
 
 diff --git a/SCons/Tools/crossmingw.py b/SCons/Tools/crossmingw.py
-index d27e01c..fef9150 100755
+index 1111111..2222222 100755
 --- a/SCons/Tools/crossmingw.py
 +++ b/SCons/Tools/crossmingw.py
 @@ -61,6 +61,9 @@ prefixes = SCons.Util.Split("""
@@ -24,7 +26,7 @@ index d27e01c..fef9150 100755
          # First search in the SCons path and then the OS path:
          if env.WhereIs(prefix + 'gcc') or SCons.Util.WhereIs(prefix + 'gcc'):
 diff --git a/SConstruct b/SConstruct
-index 80872bc..4f113dd 100755
+index 1111111..2222222 100755
 --- a/SConstruct
 +++ b/SConstruct
 @@ -59,6 +59,7 @@ doc = [
@@ -44,18 +46,15 @@ index 80872bc..4f113dd 100755
  
  Export('defenv')
  
--- 
-2.1.0
 
-
-From 7df0fa80a65279ee7d99da8ec6abdddff7e040b0 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: freeman <free.man.uu@gmail.com>
 Date: Sun, 12 Aug 2012 12:36:39 +0200
-Subject: [PATCH 2/4] add missing header
+Subject: [PATCH] add missing header
 
 
 diff --git a/Source/util.h b/Source/util.h
-index 4259a6a..664923e 100755
+index 1111111..2222222 100755
 --- a/Source/util.h
 +++ b/Source/util.h
 @@ -25,6 +25,7 @@
@@ -66,20 +65,17 @@ index 4259a6a..664923e 100755
  #endif
  
  
--- 
-2.1.0
 
-
-From 9a40694c9177db6fa5db3f28d7d68c042d0a6144 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 3 May 2013 17:28:44 +1000
-Subject: [PATCH 3/4] Enable native 64-bit build
+Subject: [PATCH] Enable native 64-bit build
 
 Taken from:
 http://anonscm.debian.org/gitweb/?p=collab-maint/nsis.git;a=blob;f=debian/patches/makensis_native_64bit.patch;h=2256a0e193db894dd99507ac0de66f8ae060b46b;hb=HEAD
 
 diff --git a/SCons/Config/gnu b/SCons/Config/gnu
-index a1f917f..adfcbd1 100755
+index 1111111..2222222 100755
 --- a/SCons/Config/gnu
 +++ b/SCons/Config/gnu
 @@ -95,8 +95,6 @@ makensis_env.Append(CXXFLAGS = ['-Wno-non-virtual-dtor']) # ignore virtual dtor
@@ -110,7 +106,7 @@ index a1f917f..adfcbd1 100755
  
  ### weird GCC requirements
 diff --git a/Source/DialogTemplate.cpp b/Source/DialogTemplate.cpp
-index 109a1d7..f821a05 100755
+index 1111111..2222222 100755
 --- a/Source/DialogTemplate.cpp
 +++ b/Source/DialogTemplate.cpp
 @@ -74,7 +74,7 @@ void ReadVarLenArr(LPBYTE &seeker, WCHAR* &readInto, unsigned int uCodePage) {
@@ -166,7 +162,7 @@ index 109a1d7..f821a05 100755
    // DONE!
    return pbDlg;
 diff --git a/Source/Platform.h b/Source/Platform.h
-index 52eb9bc..3cdfe32 100755
+index 1111111..2222222 100755
 --- a/Source/Platform.h
 +++ b/Source/Platform.h
 @@ -53,6 +53,7 @@ typedef unsigned char UCHAR;
@@ -229,7 +225,7 @@ index 52eb9bc..3cdfe32 100755
  
  // shell folders
 diff --git a/Source/Plugins.cpp b/Source/Plugins.cpp
-index 6872b28..90ad393 100755
+index 1111111..2222222 100755
 --- a/Source/Plugins.cpp
 +++ b/Source/Plugins.cpp
 @@ -29,7 +29,7 @@
@@ -253,7 +249,7 @@ index 6872b28..90ad393 100755
            const string name = string((char*)exports + FIX_ENDIAN_INT32(names[j]) - ExportDirVA);
            const string signature = dllName + "::" + name;
 diff --git a/Source/ResourceEditor.cpp b/Source/ResourceEditor.cpp
-index 8509414..b819f4e 100755
+index 1111111..2222222 100755
 --- a/Source/ResourceEditor.cpp
 +++ b/Source/ResourceEditor.cpp
 @@ -27,20 +27,10 @@ using namespace std;
@@ -386,7 +382,7 @@ index 8509414..b819f4e 100755
    else {
      m_bHasName = true;
 diff --git a/Source/ResourceEditor.h b/Source/ResourceEditor.h
-index 59def2e..d25be31 100755
+index 1111111..2222222 100755
 --- a/Source/ResourceEditor.h
 +++ b/Source/ResourceEditor.h
 @@ -27,7 +27,7 @@
@@ -435,7 +431,7 @@ index 59def2e..d25be31 100755
  private:
    BYTE* m_pbData;
 diff --git a/Source/ResourceVersionInfo.cpp b/Source/ResourceVersionInfo.cpp
-index 71df19e..7ed0ccf 100755
+index 1111111..2222222 100755
 --- a/Source/ResourceVersionInfo.cpp
 +++ b/Source/ResourceVersionInfo.cpp
 @@ -146,7 +146,7 @@ int GetVersionHeader (LPSTR &p, WORD &wLength, WORD &wValueLength, WORD &wType)
@@ -448,7 +444,7 @@ index 71df19e..7ed0ccf 100755
      return p - baseP;    
  }
 diff --git a/Source/fileform.cpp b/Source/fileform.cpp
-index 72296ba..e879ad5 100755
+index 1111111..2222222 100755
 --- a/Source/fileform.cpp
 +++ b/Source/fileform.cpp
 @@ -149,7 +149,7 @@ void ctlcolors_writer::write(const ctlcolors *data)
@@ -461,7 +457,7 @@ index 72296ba..e879ad5 100755
    m_sink->write_int(data->flags);
  }
 diff --git a/Source/mmap.cpp b/Source/mmap.cpp
-index 1e0be7a..562a7ed 100755
+index 1111111..2222222 100755
 --- a/Source/mmap.cpp
 +++ b/Source/mmap.cpp
 @@ -322,7 +322,7 @@ void MMapFile::release(void *pView, int size)
@@ -474,7 +470,7 @@ index 1e0be7a..562a7ed 100755
    size += alignment;
  #ifdef _WIN32
 diff --git a/Source/script.cpp b/Source/script.cpp
-index a492051..2951d98 100755
+index 1111111..2222222 100755
 --- a/Source/script.cpp
 +++ b/Source/script.cpp
 @@ -2129,7 +2129,7 @@ int CEXEBuild::doCommand(int which_token, LineParser &line)
@@ -523,7 +519,7 @@ index a492051..2951d98 100755
          ent.offsets[3]=add_string(line.gettoken_str(4));
          ent.offsets[4]=which_token == TOK_ENUMREGKEY;
 diff --git a/Source/util.cpp b/Source/util.cpp
-index 2c0b07f..18c31a2 100755
+index 1111111..2222222 100755
 --- a/Source/util.cpp
 +++ b/Source/util.cpp
 @@ -77,9 +77,9 @@ int update_bitmap(CResourceEditor* re, WORD id, const char* filename, int width/
@@ -581,18 +577,15 @@ index 2c0b07f..18c31a2 100755
      {
        SetLastError( 0 );
        return dwResult;
--- 
-2.1.0
 
-
-From eb6e12dd7173f4c259fd31c9074b0c95bc567487 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 9 May 2013 13:08:59 +1000
-Subject: [PATCH 4/4] i686-w64-mingw32 fixes
+Subject: [PATCH] i686-w64-mingw32 fixes
 
 
 diff --git a/Contrib/InstallOptions/InstallerOptions.cpp b/Contrib/InstallOptions/InstallerOptions.cpp
-index d8303b0..fefc8f8 100755
+index 1111111..2222222 100755
 --- a/Contrib/InstallOptions/InstallerOptions.cpp
 +++ b/Contrib/InstallOptions/InstallerOptions.cpp
 @@ -13,6 +13,7 @@
@@ -603,15 +596,6 @@ index d8303b0..fefc8f8 100755
  
  #include <nsis/pluginapi.h> // nsis plugin
  
-@@ -149,7 +150,7 @@ struct FieldType {
-   int    nField; // field number in INI file
-   char  *pszHwndEntry; // "HWND" or "HWND2"
- 
--  long   wndProc; 
-+  long   wndProc;
- };
- 
- // initial buffer size.  buffers will grow as required.
 @@ -759,7 +760,7 @@ BOOL CALLBACK cfgDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
        DrawText(lpdis->hDC, pField->pszText, -1, &rc, DT_VCENTER | DT_WORDBREAK | DT_CALCRECT);
  
@@ -621,26 +605,8 @@ index d8303b0..fefc8f8 100755
  
        // Move rect to right if in RTL mode
        if (bRTL)
-@@ -877,7 +878,7 @@ int WINAPI NumbersOnlyPasteWndProc(HWND hWin, UINT uMsg, WPARAM wParam, LPARAM l
-     if (OpenClipboard(hWin))
-     {
-       HGLOBAL hData = GetClipboardData(CF_TEXT);
--      
-+
-       if (hData)
-       {
-         char *lpData = (char *) GlobalLock(hData);
-@@ -1346,7 +1347,7 @@ int WINAPI createCfgDlg()
- 
-                 int keycolor = *bmp & 0xFFFFFF;
- 
--                // Search for transparent pixels 
-+                // Search for transparent pixels
-                 for (y = bm.bmHeight - 1; y >= 0; y--) {
-                   for (x = 0; x < bm.bmWidth;) {
-                     if ((*bmp & 0xFFFFFF) == keycolor) {
 diff --git a/Contrib/Makensisw/afxres.h b/Contrib/Makensisw/afxres.h
-index d4c5e1f..16b729d 100755
+index 1111111..2222222 100755
 --- a/Contrib/Makensisw/afxres.h
 +++ b/Contrib/Makensisw/afxres.h
 @@ -1,4 +1,4 @@
@@ -650,7 +616,7 @@ index d4c5e1f..16b729d 100755
  
  #ifndef IDC_STATIC
 diff --git a/Contrib/Makensisw/makensisw.h b/Contrib/Makensisw/makensisw.h
-index beadc3f..1479b2f 100755
+index 1111111..2222222 100755
 --- a/Contrib/Makensisw/makensisw.h
 +++ b/Contrib/Makensisw/makensisw.h
 @@ -22,7 +22,7 @@
@@ -663,7 +629,7 @@ index beadc3f..1479b2f 100755
  #include <commctrl.h>
  #include "utils.h"
 diff --git a/Source/SConscript b/Source/SConscript
-index 505e438..f9aee9d 100755
+index 1111111..2222222 100755
 --- a/Source/SConscript
 +++ b/Source/SConscript
 @@ -71,7 +71,7 @@ AddAvailableLibs(env, libs)
@@ -676,7 +642,7 @@ index 505e438..f9aee9d 100755
  ##### Set PCH
  
 diff --git a/Source/exehead/SConscript b/Source/exehead/SConscript
-index bebdd54..2f4e490 100755
+index 1111111..2222222 100755
 --- a/Source/exehead/SConscript
 +++ b/Source/exehead/SConscript
 @@ -53,7 +53,7 @@ Import('env compression solid_compression')
@@ -688,90 +654,3 @@ index bebdd54..2f4e490 100755
  
  ### Some other settings
  
-diff --git a/Source/util.cpp b/Source/util.cpp
-index 18c31a2..fc9443f 100755
---- a/Source/util.cpp
-+++ b/Source/util.cpp
-@@ -1,15 +1,15 @@
- /*
-  * util.cpp
-- * 
-+ *
-  * This file is a part of NSIS.
-- * 
-+ *
-  * Copyright (C) 1999-2009 Nullsoft and Contributors
-- * 
-+ *
-  * Licensed under the zlib/libpng license (the "License");
-  * you may not use this file except in compliance with the License.
-- * 
-+ *
-  * Licence details can be found in the file COPYING.
-- * 
-+ *
-  * This software is provided 'as-is', without any express or implied
-  * warranty.
-  */
-@@ -616,7 +616,7 @@ typedef struct _VXD_VERSION_RESOURCE {
- } VXD_VERSION_RESOURCE, *PVXD_VERSION_RESOURCE;
- #pragma pack( pop, pre_vxd_ver )
- 
--static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData ) 
-+static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
- {
- 
-   HANDLE hFile        = NULL;
-@@ -673,7 +673,7 @@ static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
-   pDosExeHdr = (PIMAGE_DOS_HEADER) pView;
- 
-   // Check to make sure the file has a DOS EXE header.
--  if ( pDosExeHdr->e_magic != IMAGE_DOS_SIGNATURE ) 
-+  if ( pDosExeHdr->e_magic != IMAGE_DOS_SIGNATURE )
-   {
-     if ( pView )
-       UnmapViewOfFile( pView );
-@@ -693,7 +693,7 @@ static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
-        + pDosExeHdr->e_lfanew );
- 
-   // Check to make sure the file is a VxD.
--  if ( (DWORD) pNtExeHdr->Signature != IMAGE_VXD_SIGNATURE ) 
-+  if ( (DWORD) pNtExeHdr->Signature != IMAGE_VXD_SIGNATURE )
-   {
-     if ( pView )
-       UnmapViewOfFile( pView );
-@@ -769,18 +769,18 @@ static BOOL GetVxdVersion( LPCSTR szFile, LPDWORD lpdwLen, LPVOID lpData )
-   return TRUE;
- }
- 
--static DWORD GetVxdVersionInfoSize( LPCSTR szFile ) 
-+static DWORD GetVxdVersionInfoSize( LPCSTR szFile )
- {
-   DWORD dwResult = 0;
- 
-   // Call GetVxdVersion() with NULL for the pointer to the buffer.
--  if ( !GetVxdVersion( szFile, &dwResult, NULL ) ) 
-+  if ( !GetVxdVersion( szFile, &dwResult, NULL ) )
-   {
-     DWORD dwError = GetLastError();
- 
-     // GetVxdVersion() will fail with ERROR_INSUFFICIENT_BUFFER and
-     // the required buffer size will be returned in dwResult.
--    if ( dwError == ERROR_INSUFFICIENT_BUFFER ) 
-+    if ( dwError == ERROR_INSUFFICIENT_BUFFER )
-     {
-       SetLastError( 0 );
-       return dwResult;
-@@ -791,7 +791,7 @@ static DWORD GetVxdVersionInfoSize( LPCSTR szFile )
-   return 0;
- }
- 
--static BOOL GetVxdVersionInfo( LPCSTR szFile, DWORD dwLen, LPVOID lpData ) 
-+static BOOL GetVxdVersionInfo( LPCSTR szFile, DWORD dwLen, LPVOID lpData )
- {
-   return GetVxdVersion( szFile, &dwLen, lpData );
- }
--- 
-2.1.0
-
-
