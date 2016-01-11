@@ -1,13 +1,16 @@
 This file is part of MXE.
 See index.html for further information.
 
-From 5cd28e7a8f0de2539322ede15616904835a4dbe3 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sat, 10 Oct 2015 17:45:24 +0100
 Subject: [PATCH] platform MXE
 
+
 diff --git a/src/luarocks/build/builtin.lua b/src/luarocks/build/builtin.lua
-index 00fd09e..a4985e9 100644
+index 1111111..2222222 100644
 --- a/src/luarocks/build/builtin.lua
 +++ b/src/luarocks/build/builtin.lua
 @@ -165,7 +165,7 @@ function builtin.run(rockspec)
@@ -20,7 +23,7 @@ index 00fd09e..a4985e9 100644
           end
           return execute(variables.LD.." "..variables.LIBFLAG, "-o", library, "-L"..variables.LUA_LIBDIR, unpack(extras))
 diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
-index 99b4077..a17fbaa 100644
+index 1111111..2222222 100644
 --- a/src/luarocks/cfg.lua
 +++ b/src/luarocks/cfg.lua
 @@ -118,6 +118,9 @@ elseif system and system:match("^Windows") then
@@ -78,6 +81,3 @@ index 99b4077..a17fbaa 100644
  if detected.cygwin then
     defaults.lib_extension = "so" -- can be overridden in the config file for mingw builds
     defaults.arch = "cygwin-"..proc
--- 
-2.1.4
-
