@@ -26,21 +26,29 @@ diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
 index 1111111..2222222 100644
 --- a/src/luarocks/cfg.lua
 +++ b/src/luarocks/cfg.lua
-@@ -118,6 +118,9 @@ elseif system and system:match("^Windows") then
- elseif system and system:match("^MINGW") then
-    detected.windows = true
-    detected.mingw32 = true
+@@ -120,6 +120,9 @@ elseif system and system:match("^MINGW") then
+    cfg.platforms.windows = true
+    cfg.platforms.mingw32 = true
+    cfg.platforms.win32 = true
 +elseif system and system:match("^MXE") then
-+   detected.unix = true
-+   detected.mxe = true
++   cfg.platforms.unix = true
++   cfg.platforms.mxe = true
  else
-    detected.unix = true
+    cfg.platforms.unix = true
     -- Fall back to Unix in unknown systems.
-@@ -430,6 +433,44 @@ if detected.unix then
+@@ -137,6 +140,7 @@ local platform_order = {
+    linux = 7,
+    macosx = 8,
+    cygwin = 9,
++   mxe = 13,
+    -- Windows
+    win32 = 10,
+    mingw32 = 11,
+@@ -509,6 +513,44 @@ if cfg.platforms.unix then
     defaults.web_browser = "xdg-open"
  end
  
-+if detected.mxe then
++if cfg.platforms.mxe then
 +   local MXE_ROOT, MXE_TARGET =
 +      assert(site_config.LUAROCKS_PREFIX:match('^(.*)/usr/([^/]+)$'))
 +   defaults.lib_extension = "dll"
@@ -78,6 +86,6 @@ index 1111111..2222222 100644
 +   }
 +end
 +
- if detected.cygwin then
+ if cfg.platforms.cygwin then
     defaults.lib_extension = "so" -- can be overridden in the config file for mingw builds
-    defaults.arch = "cygwin-"..proc
+    defaults.arch = "cygwin-"..cfg.target_cpu
