@@ -15,6 +15,12 @@ $(PKG)_DEPS     := gcc qt
 
 $(PKG)_UPDATE   := $(call MXE_GET_GITHUB_SHA, $($(PKG)_GH_USER)/$($(PKG)_GH_REPO), $($(PKG)_GH_TREE))
 
+define $(PKG)_BUILD
+    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt/bin/qmake'
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j 1 install
+endef
+
 define $(PKG)_BUILD_SHARED
     cd '$(1)' && '$(PREFIX)/$(TARGET)/qt/bin/qmake'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
