@@ -3,8 +3,8 @@
 
 PKG             := gstreamer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.5
-$(PKG)_CHECKSUM := 40801aa7f979024526258a0e94707ba42b8ab6f7d2206e56adbc4433155cb0ae
+$(PKG)_VERSION  := 1.6.2
+$(PKG)_CHECKSUM := 5896716bd8e089dba452932a2eff2bb6f6c9d58ff64a96635d157f1ffaf8feb2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
@@ -21,10 +21,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g'       '$(1)'/gst/Makefile.in
     $(SED) -i 's,glib-genmarshal,$(PREFIX)/$(TARGET)/bin/glib-genmarshal,g' '$(1)'/gst/Makefile.in
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-debug \
         --disable-check \
         --disable-tests \
@@ -33,6 +30,8 @@ define $(PKG)_BUILD
         --docdir='$(1)/sink' \
         --with-html-dir='$(1)/sink'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
-endef
 
-$(PKG)_BUILD_SHARED =
+    # some .dlls are installed to lib - no obvious way to change
+    $(and $(BUILD_SHARED),
+    mv -v '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/')
+endef

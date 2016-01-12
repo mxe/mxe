@@ -17,9 +17,10 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1).build'
     cd '$(1).build' && '$(TARGET)-cmake' \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DDYNAMIC_OPENTHREADS=$(CMAKE_SHARED_BOOL) \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
-        -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+        -DOPENTHREADS_STANDALONE=TRUE \
+        -DOSG_USE_QT=FALSE \
         -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1 \
         -D_OPENTHREADS_ATOMIC_USE_WIN32_INTERLOCKED=1 \
         '$(1)'
