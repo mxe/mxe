@@ -705,7 +705,7 @@ local function findForeignInstalls(item, files)
     for _, file in ipairs(files) do
         local pattern = 'usr/([^/]+)/installed/([^/]+)'
         local t, p = file:match(pattern)
-        if t then
+        if t and p ~= '.gitkeep' then
             local item1 = makeItem(t, p)
             if item1 ~= item then
                 log('Item %s built item %s', item, item1)
