@@ -2,8 +2,8 @@
 # See index.html for further information.
 
 PKG             := wget
-$(PKG)_VERSION  := 1.16.3
-$(PKG)_CHECKSUM := 67f7b7b0f5c14db633e3b18f53172786c001e153d545cfc85d82759c5c2ffb37
+$(PKG)_VERSION  := 1.17.1
+$(PKG)_CHECKSUM := fe559b61eb9cc01635ac6206a14e02cb51591838c35fa83c7a4aacae0bdd97c9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
@@ -18,12 +18,10 @@ endef
 define $(PKG)_BUILD
     # avoid conflict with base64_encode from gnutls
     $(if $(BUILD_STATIC), $(SED) -i 's/^base64_encode /wget_base64_encode /;' '$(1)/src/utils.c')
-    $(SED) -i 's/-lidn/`$(TARGET)-pkg-config --libs libidn`/g;' '$(1)/configure'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-ssl=gnutls \
-        CFLAGS='-DIN6_ARE_ADDR_EQUAL=IN6_ADDR_EQUAL' \
-        LIBS='-lpthread'
+        CFLAGS='-DIN6_ARE_ADDR_EQUAL=IN6_ADDR_EQUAL $(if $(BUILD_STATIC),-DGNUTLS_INTERNAL_BUILD,)'
     $(MAKE) -C '$(1)/lib' -j '$(JOBS)'
     $(MAKE) -C '$(1)/src' -j '$(JOBS)' install-binPROGRAMS
 endef
