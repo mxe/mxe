@@ -1,0 +1,10 @@
+diff --git a/src/serialport/qt4support/serialport.prf b/src/serialport/qt4support/serialport.prf
+index b1d65e1..d20d47a 100644
+--- a/src/serialport/qt4support/serialport.prf
++++ b/src/serialport/qt4support/serialport.prf
+@@ -25,3 +25,5 @@ mac {
+        LIBS += -lQtSerialPort$${QT_LIBINFIX}
+    }
+ }
++
++static:DEFINES += QT_STATIC
