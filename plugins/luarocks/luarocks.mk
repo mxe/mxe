@@ -41,6 +41,7 @@ define $(PKG)_BUILD_SHARED
     # see https://github.com/mxe/mxe/pull/1017#issuecomment-161557440
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/luarocks'
     (echo '#!/usr/bin/env bash'; \
+     echo 'set -ue'; \
      echo 'echo "== Using MXE wrapper: $(PREFIX)/$(TARGET)/bin/luarocks"'; \
      echo '# Creating a directory is an atomic operation, that is why'; \
      echo '# it can be used as a mutex.'; \
