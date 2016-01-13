@@ -1,0 +1,41 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 9160dbc59fa520efdfc4d50d6211fc68c29c5e1b Mon Sep 17 00:00:00 2001
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Mon, 13 Jul 2015 04:32:11 +0200
+Subject: [PATCH] quazip-1-add_-lz_for_shared
+
+---
+ quazip/quazip.pro | 1 +
+ qztest/qztest.pro | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/quazip/quazip.pro b/quazip/quazip.pro
+index c869e59..668a522 100644
+--- a/quazip/quazip.pro
++++ b/quazip/quazip.pro
+@@ -51,6 +51,7 @@ win32 {
+     INSTALLS += headers target
+     # workaround for qdatetime.h macro bug
+     DEFINES += NOMINMAX
++    LIBS += -lz
+ }
+ 
+ 
+diff --git a/qztest/qztest.pro b/qztest/qztest.pro
+index 1329197..b9cff22 100644
+--- a/qztest/qztest.pro
++++ b/qztest/qztest.pro
+@@ -38,7 +38,7 @@ testquazipfile.cpp \
+ OBJECTS_DIR = .obj
+ MOC_DIR = .moc
+ 
+-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../quazip/release/ -lquazip
++win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../quazip/release/ -lquazip -lz
+ else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../quazip/debug/ -lquazip
+ else:unix: LIBS += -L$$OUT_PWD/../quazip/ -lquazip
+ 
+-- 
+2.1.4
+
