@@ -19,4 +19,6 @@ define $(PKG)_BUILD
     cd '$(1)' && '$(PREFIX)/$(TARGET)/qt/bin/qmake'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
+    # install one of the test programs
+    cp -f '$(1)/examples/serialport/cenumerator/debug/cenumerator.exe' '$(PREFIX)/$(TARGET)/bin/test-qtserialport_qt4.exe'
 endef
