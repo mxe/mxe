@@ -1,0 +1,37 @@
+From 1685f2ff2b246607dd85ee5bbbde691465a5854a Mon Sep 17 00:00:00 2001
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Thu, 14 Jan 2016 02:19:14 +0100
+Subject: [PATCH] prevent debug library names in qmake-generated pkgconfig
+ files
+
+ This patch prevents qmake to create 2 (debug and release) variant of the .pc
+ files with the same name, see the correspondig discussion at:
+ https://bugreports.qt.io/browse/QTBUG-30898
+
+ original source of the patch:
+ https://build.opensuse.org/package/view_file/windows:mingw:win32/
+ mingw32-libqt5-qtbase/qt5-prevent-debug-library-names-in-pkgconfig-files.patch
+
+
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ qmake/generators/makefile.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
+index 4a03faf..793607d 100644
+--- a/qmake/generators/makefile.cpp
++++ b/qmake/generators/makefile.cpp
+@@ -3123,6 +3123,9 @@ MakefileGenerator::pkgConfigFileName(bool fixify)
+         if (dot != -1)
+             ret = ret.left(dot);
+     }
++    if (project->isActiveConfig("debug")) {
++        ret += "d";
++    }
+     ret += Option::pkgcfg_ext;
+     QString subdir = project->first("QMAKE_PKGCONFIG_DESTDIR").toQString();
+     if(!subdir.isEmpty()) {
+-- 
+1.9.1
+
