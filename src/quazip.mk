@@ -17,7 +17,15 @@ endef
 
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' $(if $(BUILD_STATIC), DEFINES\+=QUAZIP_STATIC)
+    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' PREFIX=$(PREFIX)/$(TARGET) $(if $(BUILD_STATIC), CONFIG\+=staticlib)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install INSTALL_ROOT=$(PREFIX)/$(TARGET)
+    $(MAKE) -C '$(1)' -j 1 install
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -std=c++0x -pedantic \
+        $(if $(BUILD_STATIC), -D QUAZIP_STATIC) \
+        '$(TOP_DIR)/src/$(PKG)-test.cpp' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
+        `'$(TARGET)-pkg-config' Qt5Core --cflags --libs` \
+        `'$(TARGET)-pkg-config' quazip --cflags --libs`
 endef
