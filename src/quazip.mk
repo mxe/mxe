@@ -17,12 +17,14 @@ endef
 
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' PREFIX=$(PREFIX)/$(TARGET) $(if $(BUILD_STATIC), CONFIG\+=staticlib)
+    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' \
+    $(if $(BUILD_STATIC), CONFIG\+=staticlib) \
+    PREFIX=$(PREFIX)/$(TARGET)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -std=c++0x -pedantic \
+        -W -Wall -Werror -std=c++11 -pedantic \
         $(if $(BUILD_STATIC), -D QUAZIP_STATIC) \
         '$(TOP_DIR)/src/$(PKG)-test.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
