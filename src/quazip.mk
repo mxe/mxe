@@ -21,11 +21,12 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC), CONFIG\+=staticlib) \
     PREFIX=$(PREFIX)/$(TARGET)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(if $(BUILD_STATIC), \
+        echo 'Cflags.private: -DQUAZIP_STATIC' >> $(1)/quazip/lib/pkgconfig/quazip.pc)
     $(MAKE) -C '$(1)' -j 1 install
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++11 -pedantic \
-        $(if $(BUILD_STATIC), -D QUAZIP_STATIC) \
         '$(TOP_DIR)/src/$(PKG)-test.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         `'$(TARGET)-pkg-config' Qt5Core --cflags --libs` \
