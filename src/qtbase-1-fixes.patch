@@ -167,3 +167,36 @@ index 1111111..2222222 100755
  
  #setup the build parts
  if [ -z "$CFG_BUILD_PARTS" ]; then
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Wed, 26 Aug 2015 12:45:43 +0100
+Subject: [PATCH] cmake: Rearrange STATIC vs INTERFACE targets
+
+Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
+for header-only modules when building Qt5 statically.
+
+Source: https://git.io/vzWJz
+See also: https://github.com/mxe/mxe/issues/1185
+
+diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+index 1111111..2222222 100644
+--- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
++++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+@@ -222,13 +222,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+     endif()
+ !!ENDIF
+ 
++!!IF equals(TEMPLATE, aux)
++    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
++!!ELSE
+ !!IF !isEmpty(CMAKE_STATIC_TYPE)
+     add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
+     set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
+ !!ELSE
+-!!IF equals(TEMPLATE, aux)
+-    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
+-!!ELSE
+     add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
+ !!ENDIF
+ !!ENDIF
