@@ -1,0 +1,28 @@
+--- a/Makefile.static	2016-01-17 20:58:14.643232894 +0100
++++ b/Makefile.static	2016-01-17 20:59:21.049300033 +0100
+@@ -104,7 +104,6 @@
+ 	./src/stimfit/gui/table.cpp \
+ 	./src/stimfit/gui/printout.cpp \
+ 	./src/stimfit/gui/main.cpp \
+-	./src/stimfit/gui/stfcheckbox.cpp \
+ 	./src/libstfio/igor/igorlib.cpp \
+ 	./src/libstfio/cfs/cfslib.cpp \
+ 	./src/libstfio/section.cpp \
+@@ -268,7 +278,7 @@
+ OBJECTS  = $(addsuffix .$(OBJEXT), $(basename $(SOURCES)))
+ 
+ $(TARGET): $(OBJECTS)
+-	 $(CXX) $(OBJECTS) $(CXXFLAGS) $(LDFLAGS) $(LIBS) -o "$@"
++	$(CPP) $(OBJECTS) $(CPPFLAGS) $(LDFLAGS) $(LIBS) -o "$@"
+ 
+ %.c: %.h
+ 
+@@ -278,7 +288,7 @@
+ 	$(CC) -c $(CFLAGS) -c -o "$@" "$<"
+ 
+ %.$(OBJEXT): %.cpp
+-	$(CXX) -c $(CXXFLAGS) -c -o "$@" "$<"
++	$(CXX) -c $(CPPFLAGS) -c -o "$@" "$<"
+ 
+ %.$(OBJEXT): %.cc
+ 	$(CXX) -c $(CXXFLAGS) -c -o "$@" "$<"
