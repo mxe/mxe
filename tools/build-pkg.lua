@@ -40,6 +40,8 @@ local TODAY = os.date("%Y%m%d")
 local MXE_DIR = os.getenv('MXE_DIR') or '/usr/lib/mxe'
 
 local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
+local GIT_USER = '-c user.name="build-pkg" ' ..
+    '-c user.email="build-pkg@mxe" '
 
 local BLACKLIST = {
     '^usr/installed/check%-requirements$',
@@ -185,8 +187,11 @@ local function isCross(target)
     return target ~= NATIVE_TARGET
 end
 
-local cmd = "dpkg-architecture -qDEB_BUILD_ARCH 2> /dev/null"
-local ARCH = trim(shell(cmd))
+local function getArch()
+    local cmd = "dpkg-architecture -qDEB_BUILD_ARCH 2> /dev/null"
+    return trim(shell(cmd))
+end
+local ARCH = getArch()
 
 -- return target and package from item name
 local function parseItem(item)
@@ -234,6 +239,18 @@ local function getItems()
     end
     make:close()
     return items, item2deps, item2ver
+end
+
+local function getInstalled()
+    local installed = {}
+    local f = io.popen('ls usr/*/installed/*')
+    local pattern = '/([^/]+)/installed/([^/]+)'
+    for file in f:lines() do
+        local target, pkg = assert(file:match(pattern))
+        table.insert(installed, makeItem(target, pkg))
+    end
+    f:close()
+    return installed
 end
 
 -- graph is a map from item to a list of destinations
@@ -294,18 +311,21 @@ local function sortForBuild(items, item2deps)
     return build_list
 end
 
+local function makeItem2Index(build_list)
+    local item2index = {}
+    for index, item in ipairs(build_list) do
+        assert(not item2index[item], 'Duplicate item')
+        item2index[item] = index
+    end
+    return item2index
+end
+
 -- return if build_list is ordered topologically
 local function isTopoOrdered(build_list, items, item2deps)
     if #build_list ~= #items then
         return false, 'Length of build_list is wrong'
     end
-    local item2index = {}
-    for index, item in ipairs(build_list) do
-        if item2index[item] then
-            return false, 'Duplicate item: ' .. item
-        end
-        item2index[item] = index
-    end
+    local item2index = makeItem2Index(build_list)
     for item, deps in pairs(item2deps) do
         for _, dep in ipairs(deps) do
             if item2index[item] < item2index[dep] then
@@ -331,10 +351,80 @@ local function isBlacklisted(file)
     return isListed(file, BLACKLIST)
 end
 
+local GIT_INITIAL = 'initial'
+local GIT_ALL = 'first-all'
+
+local function itemToBranch(item)
+    return 'first-' .. item:gsub('~', '_')
+end
+
 -- creates git repo in ./usr
 local function gitInit()
     os.execute('mkdir -p ./usr')
     os.execute(GIT .. 'init --quiet')
+end
+
+local function gitTag(name)
+    os.execute(GIT .. 'tag ' .. name)
+end
+
+local function gitConflicts()
+    local cmd = GIT .. 'diff --name-only --diff-filter=U'
+    local f = io.popen(cmd, 'r')
+    local conflicts = {}
+    for conflict in f:lines() do
+        table.insert(conflicts, conflict)
+    end
+    f:close()
+    return conflicts
+end
+
+-- git commits changes in ./usr
+local function gitCommit(message)
+    local cmd = GIT .. GIT_USER .. 'commit -a -m %q --quiet'
+    assert(execute(cmd:format(message)))
+end
+
+local function gitCheckout(new_branch, deps, item2index)
+    local main_dep = deps[1]
+    if main_dep then
+        main_dep = itemToBranch(main_dep)
+    else
+        main_dep = GIT_INITIAL
+    end
+    local cmd = '%s checkout -q -b %s %s'
+    assert(execute(cmd:format(GIT, new_branch, main_dep)))
+    -- merge with other dependencies
+    for i = 2, #deps do
+        local message = 'Merge with ' .. deps[i]
+        local cmd2 = '%s %s merge -q %s -m %q'
+        if not execute(cmd2:format(GIT,
+            GIT_USER,
+            itemToBranch(deps[i]),
+            message))
+        then
+            -- probably merge conflict
+            local conflicts = table.concat(gitConflicts(), ' ')
+            log('Merge conflicts: %s', conflicts)
+            local cmd3 = '%s checkout --ours %s'
+            assert(execute(cmd3:format(GIT, conflicts)))
+            gitCommit(message)
+        end
+    end
+    if #deps > 0 then
+        -- prevent accidental rebuilds
+        -- touch usr/*/installed/* files in build order
+        -- see https://git.io/vuDJY
+        local installed = getInstalled()
+        table.sort(installed, function(x, y)
+            return item2index[x] < item2index[y]
+        end)
+        for _, item in ipairs(installed) do
+            local target, pkg = assert(parseItem(item))
+            local cmd4 = 'touch -c usr/%s/installed/%s'
+            execute(cmd4:format(target, pkg))
+        end
+    end
 end
 
 local function gitAdd()
@@ -373,14 +463,6 @@ local function gitStatus()
     return new_files, changed_files
 end
 
--- git commits changes in ./usr
-local function gitCommit(message)
-    local cmd = GIT .. '-c user.name="build-pkg" ' ..
-        '-c user.email="build-pkg@mxe" ' ..
-        'commit -a -m %q --quiet'
-    os.execute(cmd:format(message))
-end
-
 local function isValidBinary(target, file)
     local cmd = './usr/bin/%s-objdump -t %s > /dev/null 2>&1'
     return execute(cmd:format(target, file))
@@ -392,9 +474,7 @@ local function checkFile(file, item)
     local ext = file:sub(-4):lower()
     local cmd = 'file --dereference --brief %q'
     local file_type = trim(shell(cmd:format(file)))
-    if ext == '.bin' then
-        -- can be an executable or something else (font)
-    elseif ext == '.exe' then
+    if ext == '.exe' then
         if not file_type:match('PE32') then
             log('File %s (%s) is %q. Remove .exe',
                 file, item, file_type)
@@ -404,7 +484,8 @@ local function checkFile(file, item)
             log('File %s (%s) is %q. Remove .dll',
                 file, item, file_type)
         end
-    else
+    elseif ext ~= '.bin' then
+        -- .bin can be an executable or something else (font)
         if file_type:match('PE32') then
             log('File %s (%s) is %q. Add exe or dll',
                 file, item, file_type)
@@ -450,14 +531,33 @@ local function checkFileList(files, item)
     end
 end
 
+local function removeEmptyDirs(item)
+    -- removing an empty dir can reveal another one (parent)
+    local go_on = true
+    while go_on do
+        go_on = false
+        local f = io.popen('find usr/* -empty -type d', 'r')
+        for dir in f:lines() do
+            log("Remove empty directory %s created by %s",
+                dir, item)
+            os.remove(dir)
+            go_on = true
+        end
+        f:close()
+    end
+end
+
 -- builds package, returns list of new files
-local function buildItem(item, item2deps, file2item)
+local function buildItem(item, item2deps, file2item, item2index)
+    gitCheckout(itemToBranch(item), item2deps[item], item2index)
     local target, pkg = parseItem(item)
     local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
     os.execute(cmd:format(tool 'make', pkg, target))
     gitAdd()
     local new_files, changed_files = gitStatus()
-    gitCommit(("Build %s"):format(item))
+    if #new_files + #changed_files > 0 then
+        gitCommit(("Build %s"):format(item))
+    end
     for _, file in ipairs(new_files) do
         checkFile(file, item)
         file2item[file] = item
@@ -473,6 +573,7 @@ local function buildItem(item, item2deps, file2item)
             item, file, creator_item)
     end
     checkFileList(concatArrays(new_files, changed_files), item)
+    removeEmptyDirs(item)
     return new_files
 end
 
@@ -525,7 +626,7 @@ local function debianControl(options)
 end
 
 local function makePackage(name, files, deps, ver, d1, d2, dst)
-    local dst = dst or '.'
+    dst = dst or '.'
     local dirname = ('%s/%s_%s'):format(dst, name,
         protectVersion(ver))
     -- make .list file
@@ -533,12 +634,12 @@ local function makePackage(name, files, deps, ver, d1, d2, dst)
     writeFile(list_path, table.concat(files, "\n") .. "\n")
     -- make .tar.xz file
     local tar_name = dirname .. '.tar.xz'
-    local cmd = '%s -T %s --owner=root --group=root -cJf %s'
-    os.execute(cmd:format(tool 'tar', list_path, tar_name))
+    local cmd1 = '%s -T %s --owner=root --group=root -cJf %s'
+    os.execute(cmd1:format(tool 'tar', list_path, tar_name))
     -- update list of files back from .tar.xz (see #1067)
-    local cmd = '%s -tf %s'
-    cmd = cmd:format(tool 'tar', tar_name)
-    local tar_reader = io.popen(cmd, 'r')
+    local cmd2 = '%s -tf %s'
+    cmd2 = cmd2:format(tool 'tar', tar_name)
+    local tar_reader = io.popen(cmd2, 'r')
     local files_str = tar_reader:read('*all')
     tar_reader:close()
     writeFile(list_path, files_str)
@@ -558,16 +659,16 @@ local function makePackage(name, files, deps, ver, d1, d2, dst)
         os.execute(('mkdir -p %s'):format(usr))
         os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
         -- use tar to copy files with paths
-        local cmd = '%s -C %s -xf %s'
-        cmd = 'fakeroot -s deb.fakeroot ' .. cmd
-        os.execute(cmd:format(tool 'tar', usr, tar_name))
+        local cmd3 = '%s -C %s -xf %s'
+        cmd3 = 'fakeroot -s deb.fakeroot ' .. cmd3
+        os.execute(cmd3:format(tool 'tar', usr, tar_name))
         -- make DEBIAN/control file
         local control_fname = dirname .. '/DEBIAN/control'
         writeFile(control_fname, control_text)
         -- make .deb file
-        local cmd = 'dpkg-deb -Zxz -b %s'
-        cmd = 'fakeroot -i deb.fakeroot ' .. cmd
-        os.execute(cmd:format(dirname))
+        local cmd4 = 'dpkg-deb -Zxz -b %s'
+        cmd4 = 'fakeroot -i deb.fakeroot ' .. cmd4
+        os.execute(cmd4:format(dirname))
         -- cleanup
         os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
     end
@@ -604,7 +705,7 @@ local function findForeignInstalls(item, files)
     for _, file in ipairs(files) do
         local pattern = 'usr/([^/]+)/installed/([^/]+)'
         local t, p = file:match(pattern)
-        if t then
+        if t and p ~= '.gitkeep' then
             local item1 = makeItem(t, p)
             if item1 ~= item then
                 log('Item %s built item %s', item, item1)
@@ -640,7 +741,7 @@ local function progressPrinter(items)
     local started_at = os.time()
     local sums = {}
     for i, item in ipairs(items) do
-        local target, pkg = parseItem(item)
+        local _, pkg = parseItem(item)
         local expected_time = pkg2time[pkg] or 1
         sums[i] = (sums[i - 1] or 0) + expected_time
     end
@@ -649,11 +750,11 @@ local function progressPrinter(items)
     local pkgs_done = 0
     local printer = {}
     --
-    function printer:advance(i)
+    function printer.advance(_, i)
         pkgs_done = i
         time_done = sums[i]
     end
-    function printer:status()
+    function printer.status(_)
         local now = os.time()
         local spent = now - started_at
         local predicted_duration = spent * total_time / time_done
@@ -667,7 +768,7 @@ local function progressPrinter(items)
     return printer
 end
 
-local function isEmpty(item, files)
+local function isEmpty(files)
     return #files == 1
 end
 
@@ -685,10 +786,12 @@ local function buildPackages(items, item2deps)
         end
         return false
     end
+    local item2index = makeItem2Index(items)
     local progress_printer = progressPrinter(items)
     for i, item in ipairs(items) do
         if not brokenDep(item) then
-            local files = buildItem(item, item2deps, file2item)
+            local files = buildItem(item, item2deps,
+                file2item, item2index)
             findForeignInstalls(item, files)
             if isBuilt(item, files) then
                 item2files[item] = files
@@ -714,7 +817,7 @@ local function makeDebs(items, item2deps, item2ver, item2files)
     local to_build = {}
     for _, item in ipairs(items) do
         local files = assert(item2files[item], item)
-        if not isEmpty(item, files) then
+        if not isEmpty(files) then
             table.insert(to_build, item)
         end
     end
@@ -727,7 +830,7 @@ local function makeDebs(items, item2deps, item2ver, item2files)
             local files = assert(item2files[item], item)
             for _, dep in ipairs(deps) do
                 local dep_files = item2files[dep]
-                if isEmpty(dep, dep_files) then
+                if isEmpty(dep_files) then
                     log('Item %s depends on ' ..
                         'empty item %s', item, dep)
                     missing_deps_set[dep] = true
@@ -816,19 +919,25 @@ local function makeMxeSourcePackage()
     makePackage(name, files, deps, ver, d1, d2)
 end
 
+assert(not io.open('usr/.git'), 'Remove usr/')
 assert(trim(shell('pwd')) == MXE_DIR,
     "Clone MXE to " .. MXE_DIR)
-assert(execute(("%s check-requirements"):format(tool 'make')))
+gitInit()
+assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
+    tool 'make', table.concat(TARGETS, ' '))))
 if not max_items then
     local cmd = ('%s download -j 6 -k'):format(tool 'make')
     while not execute(cmd) do end
 end
-gitInit()
+gitAdd()
+gitCommit('Initial commit')
+gitTag(GIT_INITIAL)
 local items, item2deps, item2ver = getItems()
 local build_list = sortForBuild(items, item2deps)
 assert(isTopoOrdered(build_list, items, item2deps))
 build_list = sliceArray(build_list, max_items)
 local unbroken, item2files = buildPackages(build_list, item2deps)
+gitCheckout(GIT_ALL, unbroken, makeItem2Index(build_list))
 makeDebs(unbroken, item2deps, item2ver, item2files)
 if not no_debs then
     makeMxeRequirementsPackage('wheezy')
