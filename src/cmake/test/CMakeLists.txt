@@ -1,17 +1,16 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-# 2.8.9 is Debian Wheezy version
-cmake_minimum_required(VERSION 2.8.9)
+# > Use the cmake_minimum_required command at the
+# > top of your main CMakeLists.txt file:
+# https://cmake.org/cmake/help/latest/policy/CMP0000.html
+# cmake --help-policy CMP0000
+
+# 3.0.2 is Debian Stable version
+cmake_minimum_required(VERSION 3.0.2)
 
 # use default C and CXX languages
 project(mxe)
-
-# see cmake --help-policy <cmp> for details
-cmake_policy(SET CMP0017 NEW)
-if (POLICY CMP0020)
-    cmake_policy(SET CMP0020 NEW)
-endif()
 
 # so we can find pkg-test.cmake files to include
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../.. ${CMAKE_MODULE_PATH})

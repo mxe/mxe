@@ -26,7 +26,7 @@ define $(PKG)_BUILD
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-pkg-config'
 
     # create cmake file
-    echo 'set(PKG_CONFIG_EXECUTABLE $(PREFIX)/bin/$(TARGET)-pkg-config CACHE PATH "pkg-config executable")' \
+    echo 'set(PKG_CONFIG_EXECUTABLE $(PREFIX)/bin/$(TARGET)-pkg-config CACHE PATH "pkg-config executable (mxe)" FORCE)' \
     > '$(CMAKE_TOOLCHAIN_DIR)/pkgconf.cmake'
 
 endef

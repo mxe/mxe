@@ -1,0 +1,54 @@
+# https://cmake.org/cmake/help/latest
+
+# can't set `cmake_minimum_required` in toolchain
+# so set all policies to the NEW behaviour
+cmake_policy(VERSION 3.0.2)
+
+# check if we are using mxe supplied version
+if(NOT ${CMAKE_COMMAND} STREQUAL @PREFIX@/@BUILD@/bin/cmake)
+    message(WARNING "
+** Warning: deprecated direct use of toolchain file
+** Please use wrapper script instead: @PREFIX@/@TARGET@-cmake
+       - uses mxe supplied cmake version @CMAKE_VERSION@
+       - loads toolchain
+       - loads common run results
+")
+endif()
+
+# general configuration
+set(CMAKE_SYSTEM_NAME Windows)
+set(MSYS 1)
+set(BUILD_SHARED_LIBS @CMAKE_SHARED_BOOL@ CACHE BOOL "Build shared libs (mxe)" FORCE)
+set(BUILD_STATIC_LIBS @CMAKE_STATIC_BOOL@ CACHE BOOL "Build static libs (mxe)" FORCE)
+set(BUILD_SHARED @CMAKE_SHARED_BOOL@ CACHE BOOL "Build shared libs (mxe)" FORCE)
+set(BUILD_STATIC @CMAKE_STATIC_BOOL@ CACHE BOOL "Build static libs (mxe)" FORCE)
+set(LIBTYPE @LIBTYPE@)
+
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel (mxe)")
+set(CMAKE_CROSS_COMPILING ON) # Workaround for http://www.cmake.org/Bug/view.php?id=14075
+
+# paths etc.
+set(CMAKE_FIND_ROOT_PATH @PREFIX@/@TARGET@)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_PREFIX_PATH @PREFIX@/@TARGET@)
+set(CMAKE_INSTALL_PREFIX @PREFIX@/@TARGET@ CACHE PATH "Installation Prefix (mxe)")
+
+# For custom mxe FindPackage scripts
+set(CMAKE_MODULE_PATH "@PREFIX@/share/cmake/modules" ${CMAKE_MODULE_PATH})
+
+# programs
+set(CMAKE_C_COMPILER @PREFIX@/bin/@TARGET@-gcc)
+set(CMAKE_CXX_COMPILER @PREFIX@/bin/@TARGET@-g++)
+set(CMAKE_Fortran_COMPILER @PREFIX@/bin/@TARGET@-gfortran)
+set(CMAKE_RC_COMPILER @PREFIX@/bin/@TARGET@-windres)
+set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff <FLAGS> <DEFINES> -o <OBJECT> <SOURCE>") # Workaround for buggy windres rules
+
+# individual package configuration
+file(GLOB mxe_cmake_files
+    "@PREFIX@/@TARGET@/share/cmake/mxe-conf.d/*.cmake"
+)
+foreach(mxe_cmake_file ${mxe_cmake_files})
+    include(${mxe_cmake_file})
+endforeach()

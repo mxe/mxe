@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+echo "== Using MXE wrapper: @PREFIX@/bin/@TARGET@-cmake"
+unset NO_MXE_TOOLCHAIN
+if echo -- "$@" | grep -Ewq "(--build|-E|--system-information)" ; then
+    NO_MXE_TOOLCHAIN=1
+fi
+if [[ "$NO_MXE_TOOLCHAIN" == "1" ]]; then
+    echo "== Skip using MXE toolchain: @TOOLCHAIN_FILE@"
+    # see https://github.com/mxe/mxe/issues/932
+    exec "@PREFIX@/@BUILD@/bin/cmake" "$@"
+else
+    echo "== Using MXE toolchain: @TOOLCHAIN_FILE@"
+    echo "== Using MXE runresult: @RUNRESULT_FILE@"
+    PKG_CONFIG="@PREFIX@/bin/@TARGET@-pkg-config" \
+    exec "@PREFIX@/@BUILD@/bin/cmake" \
+             -DCMAKE_TOOLCHAIN_FILE="@TOOLCHAIN_FILE@" \
+             -C"@RUNRESULT_FILE@" \
+             "$@"
+fi

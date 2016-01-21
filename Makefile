@@ -185,6 +185,7 @@ UNPACK_PKG_ARCHIVE = \
 # some shortcuts for awareness of MXE_PLUGIN_DIRS
 # all files for extension plugins will be considered for outdated checks
 PKG_MAKEFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).mk, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
+PKG_CONFFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).*.in, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 PKG_TESTFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1)-test*, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 PKG_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 
@@ -460,6 +461,7 @@ define PKG_TARGET_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
+                          $(PKG_CONFFILES) \
                           $(PKG_PATCHES) \
                           $(PKG_TESTFILES) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
@@ -524,6 +526,8 @@ build-only-$(1)_$(3):
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    @echo
 	    @find '$(2)' -name 'config.log' -print -exec cat {} \;
+	    @echo
+	    @find '$(2)' -name 'CMakeCache.txt' -print -exec cat {} \;
 	    @echo
 	    @echo 'settings.mk'
 	    @cat '$(TOP_DIR)/settings.mk'
