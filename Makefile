@@ -501,6 +501,8 @@ build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
+build-only-$(1)_$(3): SOURCE_DIR = $(2)/$($(1)_SUBDIR)
+build-only-$(1)_$(3): BUILD_DIR  = $(2)/$($(1)_SUBDIR).build_
 build-only-$(1)_$(3): CMAKE_RUNRESULT_FILE = $(PREFIX)/share/cmake/modules/TryRunResults.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_DIR  = $(PREFIX)/$(3)/share/cmake/mxe-conf.d
@@ -516,7 +518,7 @@ build-only-$(1)_$(3):
 	    python --version
 	    perl --version 2>&1 | head -3
 	    rm -rf   '$(2)'
-	    mkdir -p '$(2)'
+	    mkdir -p '$$(BUILD_DIR)'
 	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
 	        $$(call PREPARE_PKG_SOURCE,$(1),$(2)))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
