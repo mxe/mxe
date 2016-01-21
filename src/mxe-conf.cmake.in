@@ -2,7 +2,10 @@
 
 # can't set `cmake_minimum_required` in toolchain
 # so set all policies to the NEW behaviour
-cmake_policy(VERSION 3.0.2)
+# cmake_policy(VERSION 3.0.2)
+cmake_policy(SET CMP0017 NEW)
+cmake_policy(SET CMP0017 NEW)
+
 
 # check if we are using mxe supplied version
 if(NOT ${CMAKE_COMMAND} STREQUAL @PREFIX@/@BUILD@/bin/cmake)
