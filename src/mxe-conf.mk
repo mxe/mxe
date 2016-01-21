@@ -109,7 +109,7 @@ define $(PKG)_BUILD_$(BUILD)
 
     #create readonly directory to force wine to fail
     mkdir -p "$$WINEPREFIX"
-    touch "$$WINEPREFIX/.gitkeep"
+    [ -f "$$WINEPREFIX/.gitkeep"] || touch "$$WINEPREFIX/.gitkeep"
     chmod 0555 "$$WINEPREFIX"
 
     #create script "wine" in a directory which is in PATH
