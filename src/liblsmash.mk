@@ -10,6 +10,13 @@ $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/l-smash/l-smash/archive/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc
 
+define $(PKG)_UPDATE
+    $(call MXE_GET_GITHUB_TAGS, l-smash/l-smash, v)
+endef
+
+# L-SMASH uses a custom made configure script that doesn't recognize
+# the option --host and fails on unknown options.
+# Therefor $(MXE_CONFIGURE_OPTS) can't be used here.
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
