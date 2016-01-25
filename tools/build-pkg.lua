@@ -13,9 +13,7 @@ Packages are written to `*.tar.xz` files.
 Debian packages are written to `*.deb` files.
 
 Build in directory /usr/lib/mxe
-This directory can not be changed in .deb packages
-To change this directory, set environment variable
-MXE_DIR to other directory.
+This directory can not be changed in .deb packages.
 
 To prevent build-pkg from creating deb packages,
 set environment variable MXE_NO_DEBS to 1
@@ -36,8 +34,6 @@ local max_items = tonumber(os.getenv('MXE_MAX_ITEMS'))
 local no_debs = os.getenv('MXE_NO_DEBS')
 
 local TODAY = os.date("%Y%m%d")
-
-local MXE_DIR = os.getenv('MXE_DIR') or '/usr/lib/mxe'
 
 local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
 local GIT_USER = '-c user.name="build-pkg" ' ..
@@ -149,6 +145,8 @@ local function execute(cmd)
         return os.execute(cmd)
     end
 end
+
+local MXE_DIR = trim(shell('pwd'))
 
 -- for tar, try gtar and gnutar first
 local tools = {}
@@ -920,8 +918,11 @@ local function makeMxeSourcePackage()
 end
 
 assert(not io.open('usr/.git'), 'Remove usr/')
-assert(trim(shell('pwd')) == MXE_DIR,
-    "Clone MXE to " .. MXE_DIR)
+local MXE_DIR_EXPECTED = '/usr/lib/mxe'
+if MXE_DIR ~= MXE_DIR_EXPECTED then
+    log("Warning! Building in dir %s, not in %s",
+        MXE_DIR, MXE_DIR_EXPECTED)
+end
 gitInit()
 assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
     tool 'make', table.concat(TARGETS, ' '))))
