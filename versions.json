@@ -227,7 +227,7 @@
     "ncurses": "e14300b",
     "netcdf": "4.3.0",
     "netpbm": "10.35.96",
-    "nettle": "3.1",
+    "nettle": "3.2",
     "nlopt": "2.4.2",
     "nsis": "2.50",
     "ocaml-cairo": "1.2.0",
