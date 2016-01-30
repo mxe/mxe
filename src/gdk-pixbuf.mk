@@ -3,8 +3,8 @@
 
 PKG             := gdk-pixbuf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.30.8
-$(PKG)_CHECKSUM := 4853830616113db4435837992c0aebd94cbb993c44dc55063cee7f72a7bef8be
+$(PKG)_VERSION  := 2.32.3
+$(PKG)_CHECKSUM := 2b6771f1ac72f687a8971e59810b8dc658e65e7d3086bd2e676e618fd541d031
 $(PKG)_SUBDIR   := gdk-pixbuf-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdk-pixbuf-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)

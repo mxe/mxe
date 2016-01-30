@@ -18,12 +18,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,__declspec(dllimport),,' '$(1)/include/IL/il.h'
+    # autotools files in tarball are ancient (2009) so regenerate
+    $(if $(BUILD_STATIC), \
+        $(SED) -i 's/__declspec(dllimport)//' '$(1)/include/IL/il.h', \
+        cd '$(1)' && $(LIBTOOLIZE) && autoreconf -fi)
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-ILU \
         --enable-ILUT \
         --disable-allegro \
@@ -40,7 +40,3 @@ define $(PKG)_BUILD
         --without-examples
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= INFO_DEPS=
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-
-$(PKG)_BUILD_SHARED =

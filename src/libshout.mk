@@ -3,12 +3,12 @@
 
 PKG             := libshout
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3.1
-$(PKG)_CHECKSUM := cf3c5f6b4a5e3fcfbe09fb7024aa88ad4099a9945f7cb037ec06bcee7a23926e
+$(PKG)_VERSION  := 2.4.1
+$(PKG)_CHECKSUM := f3acb8dec26f2dbf6df778888e0e429a4ce9378a9d461b02a7ccbf2991bbf24d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.us.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ogg speex theora vorbis
+$(PKG)_DEPS     := gcc ogg openssl speex theora vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.icecast.org/download.php' | \
@@ -18,10 +18,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
+        ac_cv_prog_PKGCONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         --disable-thread \
         --infodir='$(1)/sink' \
         --mandir='$(1)/sink'

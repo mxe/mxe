@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)/build' && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DLIBTYPE=$(if $(BUILD_SHARED),SHARED,STATIC) \
-        -DEXAMPLES=FALSE \
+        -DALSOFT_EXAMPLES=FALSE \
         -DALSOFT_UTILS=FALSE
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 

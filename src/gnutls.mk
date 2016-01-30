@@ -2,13 +2,13 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.4.7
-$(PKG)_CHECKSUM := c1be9e4b30295d7b5f96fa332c6a908e6fa2254377b67811301fca92eb882e5a
+$(PKG)_VERSION  := 3.4.8
+$(PKG)_CHECKSUM := e07c05dea525c6bf0dd8017fc5b89d886954f04fedf457ecd1ce488ac3b86ab7
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.4/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4//$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext gmp libgnurx nettle zlib
+$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn nettle zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4/ | \

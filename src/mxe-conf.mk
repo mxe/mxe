@@ -7,15 +7,21 @@ $(PKG)_UPDATE  := echo 1
 $(PKG)_TARGETS := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_BUILD
+    # create basic non-empty directory hierarchy
+    for d in bin include lib share; do \
+        mkdir -p "$(PREFIX)/$(TARGET)/$$d" && \
+        touch    "$(PREFIX)/$(TARGET)/$$d/.gitkeep" ; \
+    done
+
     # install target-specific autotools config file
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/share'
     # setting ac_cv_build bypasses the config.guess check in every package
     echo "ac_cv_build=$(BUILD)" > '$(PREFIX)/$(TARGET)/share/config.site'
 
     # create the CMake toolchain file
     # individual packages (e.g. hdf5) should add their
     # own files under CMAKE_TOOLCHAIN_DIR
-    [ -d '$(CMAKE_TOOLCHAIN_DIR)' ] || mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
+    mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
+    touch '$(CMAKE_TOOLCHAIN_DIR)/.gitkeep'
     (echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
      echo 'set(MSYS 1)'; \
      echo 'set(BUILD_SHARED_LIBS $(if $(BUILD_SHARED),ON,OFF))'; \
@@ -66,7 +72,7 @@ define $(PKG)_BUILD
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-cmake'
 
     # create pkg-config files for OpenGL/GLU
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    mkdir -p '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: gl'; \
      echo 'Version: 0'; \
      echo 'Description: OpenGL'; \
@@ -82,11 +88,11 @@ endef
 
 define $(PKG)_BUILD_$(BUILD)
     # install config.guess for general use
-    $(INSTALL) -d '$(PREFIX)/bin'
+    mkdir -p '$(PREFIX)/bin'
     $(INSTALL) -m755 '$(EXT_DIR)/config.guess' '$(PREFIX)/bin/'
 
     # install cmake modules
-    $(INSTALL) -d '$(PREFIX)/share/cmake/modules'
+    mkdir -p '$(PREFIX)/share/cmake/modules'
     $(INSTALL) -m644 '$(PWD)/src/cmake/modules/'* '$(PREFIX)/share/cmake/modules'
 
     # fail early if autotools can't autoreconf
@@ -102,7 +108,11 @@ define $(PKG)_BUILD_$(BUILD)
     cd '$(1)' && ./configure
 
     #create readonly directory to force wine to fail
-    $(INSTALL) -m444 -d "$$WINEPREFIX"
+    mkdir -p "$$WINEPREFIX"
+    [ -f "$$WINEPREFIX/.gitkeep" ] \
+        || chmod 0755 "$$WINEPREFIX" \
+        && touch "$$WINEPREFIX/.gitkeep"
+    chmod 0555 "$$WINEPREFIX"
 
     #create script "wine" in a directory which is in PATH
     mkdir -p '$(PREFIX)/$(BUILD)/bin/'

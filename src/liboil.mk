@@ -16,19 +16,20 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+# liboil is in maintenance-only phase:
+# http://cgit.freedesktop.org/liboil/commit/?id=04b154aa118c0fdf244932dadc3d085f6290db7a
+
+# configure doesn't wildcard host test for x86_64
+# `as_cv_unaligned_access` so set it manually
+
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-debug \
         --disable-examples \
         --mandir='$(1)/sink' \
         --docdir='$(1)/sink' \
-        --with-html-dir='$(1)/sink'
+        --with-html-dir='$(1)/sink' \
+        as_cv_unaligned_access=yes
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-
-$(PKG)_BUILD_SHARED =

@@ -5,8 +5,8 @@ PKG             := luarocks
 $(PKG)_WEBSITE  := https://luarocks.org/
 $(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.2
-$(PKG)_CHECKSUM := 4f0427706873f30d898aeb1dfb6001b8a3478e46a5249d015c061fe675a1f022
+$(PKG)_VERSION  := 2.3.0
+$(PKG)_CHECKSUM := 68e38feeb66052e29ad1935a71b875194ed8b9c67c2223af5f4d4e3e2464ed97
 $(PKG)_SUBDIR   := luarocks-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://keplerproject.github.io/luarocks/releases/$($(PKG)_FILE)
@@ -41,6 +41,7 @@ define $(PKG)_BUILD_SHARED
     # see https://github.com/mxe/mxe/pull/1017#issuecomment-161557440
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/luarocks'
     (echo '#!/usr/bin/env bash'; \
+     echo 'set -ue'; \
      echo 'echo "== Using MXE wrapper: $(PREFIX)/$(TARGET)/bin/luarocks"'; \
      echo '# Creating a directory is an atomic operation, that is why'; \
      echo '# it can be used as a mutex.'; \
