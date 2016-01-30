@@ -3,12 +3,12 @@
 
 PKG             := biosig
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 1.7.3
-$(PKG)_CHECKSUM := c3debc3315dca2ad915bd0e6aac55df29c87b2b2be028f8b8b72a136f1b79c97
+$(PKG)_VERSION  := 1.7.4
+$(PKG)_CHECKSUM := 5f3b016a5681112a9078852449833046b39cfa48f253d0765949db0cb2bded3b
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
-$(PKG)_DEPS     := gcc suitesparse zlib libiberty libiconv
+$(PKG)_DEPS     := gcc suitesparse zlib libiberty libiconv pthreads
 
 define $(PKG)_UPDATE
 #    wget -q -O- 'http://biosig.sourceforge.net/download.html' | \
@@ -17,6 +17,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_PRE
+
+    #rm -rf '$(1)'
+    #cp -r ~/src/stimfit '$(1)'
+    #rsync -rL  ~/src/biosig-code/biosig4c++/* '$(1)/'
 
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|#||g' '$(1)'/Makefile
@@ -28,7 +32,8 @@ define $(PKG)_BUILD_PRE
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' clean
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' io.h \
 		libbiosig.a libbiosig2.a libgdf.a  libphysicalunits.a \
-		libbiosig.def libbiosig2.def libgdf.def libphysicalunits.def
+		libbiosig.def libbiosig2.def libgdf.def libphysicalunits.def \
+		libbiosig
 
 endef
 
@@ -75,7 +80,7 @@ define $(PKG)_BUILD_POST
 
     mkdir -p $(PREFIX)/release/$(TARGET)/include/
     cd $(PREFIX)/$(TARGET) && cp -r \
-		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h include/io.h \
+		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h \
 		include/libiberty include/iconv.h \
 		include/physicalunits.h \
 		$(PREFIX)/release/$(TARGET)/include/
