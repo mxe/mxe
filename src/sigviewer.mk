@@ -4,7 +4,7 @@
 PKG             := sigviewer
 $(PKG)_IGNORE   := 
 $(PKG)_VERSION  := 0.5.1
-$(PKG)_CHECKSUM := b667d7f8d0f7d1c1b21a517eaea529520156f2fb
+$(PKG)_CHECKSUM := 21338ddf502fa786f1ef4fa3a11549ecdcf4d3988b6be8f386d7fa5ffb2b53cd
 $(PKG)_SUBDIR   := sigviewer-0.5.1-r553-src
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_URL      := http://sourceforge.net/projects/sigviewer/files/0.5.1/$($(PKG)_FILE)/download
