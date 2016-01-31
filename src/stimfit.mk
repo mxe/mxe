@@ -3,8 +3,8 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.14.13windows
-$(PKG)_CHECKSUM := 065d348165b743c09c5c2ddab9e199746061cda6ee5bb2a507b95af769f1b24f
+$(PKG)_VERSION  := 0.14.14windows
+$(PKG)_CHECKSUM := 6f767db350fd3d5321eda12781983b6e8f6170e0efac685bd3af819674281229
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/$($(PKG)_FILE)
@@ -18,10 +18,6 @@ endef
 
 define $(PKG)_BUILD
 
-    rm -rf '$(1)'
-    #cp -r ~/src/stimfit '$(1)'
-    rsync -av  ~/src/stimfit/ '$(1)/'
-
     cd '$(1)' && ./autogen.sh && \
 	CPPFLAGS="-std=gnu++11" \
 	./configure --disable-python --with-biosig --with-pslope \
@@ -34,7 +30,7 @@ define $(PKG)_BUILD
 		--enable-static \
 		--disable-shared
 
-    WXCONF='$(PREFIX)/bin/$(TARGET)-wx-config' make -C '$(1)'
+    cd '$(1)' && make -f Makefile.static
 
     -$(INSTALL) '$(1)/stimfit.exe' '$(PREFIX)/$(TARGET)/bin/'
 
