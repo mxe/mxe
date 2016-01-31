@@ -1,0 +1,63 @@
+diff --git a/Makefile b/Makefile
+index 9890a99..9f9f403 100644
+--- a/Makefile
++++ b/Makefile
+@@ -112,7 +112,7 @@ else ifeq (intel,$(TARGET))
+ 	LD      := /opt/intel/bin/xild
+ 	AR      := /opt/intel/bin/xiar crs
+ else 
+-	prefix  := $(dir $(shell which $(TARGET)-gcc))
++	prefix  := $(subst /bin/,/,$(dir $(shell which $(TARGET)-gcc)))
+ 	CC      := $(TARGET)-gcc
+ 	CXX     := $(TARGET)-g++
+ 	LD      := $(TARGET)-ld
+@@ -346,10 +346,11 @@ endif
+ 
+ ####### Output directory
+ OBJ	      = ./obj
+-INC	      = $(DESTDIR)$(prefix)/include
+-BIN	      = $(DESTDIR)$(prefix)/bin
+-LIB	      = $(DESTDIR)$(prefix)/lib
+-SHARE	      = $(DESTDIR)$(prefix)/share
++PREFIX	      = $(dir $(dir $(prefix)))$(TARGET)
++INC	      = $(DESTDIR)$(PREFIX)/include
++BIN	      = $(DESTDIR)$(PREFIX)/bin
++LIB	      = $(DESTDIR)$(PREFIX)/lib
++SHARE	      = $(DESTDIR)$(PREFIX)/share
+ 
+ ####### Files
+ SOURCES      += biosig.c \
+@@ -501,7 +502,7 @@ ifeq (MINGW, $(findstring MINGW, $(shell uname)))
+ ### MXE-OCTAVE
+ io.h: /include/io.h
+ else
+-io.h: $(prefix)../$(TARGET)/include/io.h
++io.h: $(prefix)$(TARGET)/include/io.h
+ endif
+ 	$(SED) '/ sopen/ s#^#//#' "$<" > "$@"
+ 
+@@ -731,18 +732,18 @@ libbiosig.def: $(OBJECTS) t240/libcnsfef.a libbiosig.pc
+ libbiosig.pc :
+ 	mkdir -p pkgconfig
+ 	echo "# Defines libbiosig.pc"       > "$@"
+-	echo "prefix=$(prefix)"             >>"$@"
+-	echo "exec_prefix=$(prefix)"        >>"$@"
+-	echo "libdir=$(prefix)/lib"         >>"$@"
+-	echo "includedir=$(prefix)/include" >>"$@"
++	echo "prefix=$(PREFIX)"             >>"$@"
++	echo "exec_prefix=$(PREFIX)"        >>"$@"
++	echo "libdir=$(PREFIX)/lib"         >>"$@"
++	echo "includedir=$(PREFIX)/include" >>"$@"
+ 	echo                                >>"$@"
+ 	echo "Name: libbiosig"		    >>"$@"
+ 	echo "Description: Biosig library"  >>"$@"
+ 	echo "Version: ${MAJOR_VERSION}.${MINOR_VERSION}.${STEPPING}" >>"$@"
+ 	echo "URL: http://biosig.sf.net"    >>"$@"
+-	echo "Libs: -L$(prefix)/lib -lbiosig $(LDLIBS)"  >>"$@"
++	echo "Libs: -L$(LIB) -lbiosig $(LDLIBS)"  >>"$@"
+ 	#echo "Libs.private: -liconv"  >>"$@"
+-	echo "Cflags: $(DEFINES) -I$(prefix)/include" >>"$@"
++	echo "Cflags: $(DEFINES) -I$(INC)" >>"$@"
+ 
+ libbiosig2.a: $(OBJECTS) biosig2.o t240/libcnsfef.a
+ 	-$(DELETE) libbiosig2.a

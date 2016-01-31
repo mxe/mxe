@@ -18,10 +18,6 @@ endef
 
 define $(PKG)_BUILD_PRE
 
-    #rm -rf '$(1)'
-    #cp -r ~/src/stimfit '$(1)'
-    #rsync -rL  ~/src/biosig-code/biosig4c++/* '$(1)/'
-
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|#||g' '$(1)'/Makefile
 
@@ -80,7 +76,7 @@ define $(PKG)_BUILD_POST
 
     mkdir -p $(PREFIX)/release/$(TARGET)/include/
     cd $(PREFIX)/$(TARGET) && cp -r \
-		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h \
+		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h include/io.h \
 		include/libiberty include/iconv.h \
 		include/physicalunits.h \
 		$(PREFIX)/release/$(TARGET)/include/
