@@ -26,5 +26,10 @@ define $(PKG)_BUILD
         --disable-pthreads \
         CPPFLAGS='-DENABLE_W32_PREFIX=1'
 
+    # fix undefined reference to `libintl_dgettext'
+    # https://github.com/mxe/mxe/pull/1210#issuecomment-178471641
+    $(if $(BUILD_SHARED),\
+        $(SED) -i 's#^postdeps="-#postdeps="-lintl -#g' '$(1)/libtool')
+
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
