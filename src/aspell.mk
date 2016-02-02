@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := f52583a83a63633701c5f71db3dc40aab87b7f76b29723aeb27941eff42df
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dlfcn-win32 gettext
+$(PKG)_DEPS     := gcc gettext
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/aspell/' | \
@@ -17,11 +17,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi
+    cd '$(1)' && $(LIBTOOLIZE) && autoreconf -fi
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-win32-relocatable \
         --disable-curses \
+        --disable-dlopen \
         --disable-pthreads \
         CPPFLAGS='-DENABLE_W32_PREFIX=1'
 
