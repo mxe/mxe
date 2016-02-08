@@ -3,7 +3,7 @@
  * See index.html for further information.
  */
 
-#include <Inventor/C/errors/debugerror.h>
+#include <Inventor/SbBasic.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
