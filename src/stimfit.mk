@@ -22,7 +22,7 @@ define $(PKG)_BUILD
 	CPPFLAGS="-std=gnu++11" \
 	./configure --disable-python --with-biosig --with-pslope \
 		--with-hdf5-prefix=$(PREFIX)/$(TARGET) \
-                --with-wx-config=$(PREFIX)/$(TARGET)/bin/wx-config \
+		--with-wx-config=$(PREFIX)/$(TARGET)/bin/wx-config \
 		--with-sysroot=$(PREFIX)/$(TARGET)/bin \
 		--host='$(TARGET)' \
 		--build="`config.guess`" \
@@ -30,9 +30,14 @@ define $(PKG)_BUILD
 		--enable-static \
 		--disable-shared
 
-    cd '$(1)' && make -f Makefile.static
+    CXX='$(PREFIX)/bin/$(TARGET)-g++' \
+	CC='$(PREFIX)/bin/$(TARGET)-gcc' \
+	PKGCONF='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+	WXCONF='$(PREFIX)/$(TARGET)/bin/wx-config' \
+	CROSS='$(PREFIX)/$(TARGET)/bin/' \
+	make -C '$(1)' -f Makefile.static -j '$(JOBS)'
 
-    -$(INSTALL) '$(1)/stimfit.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) '$(1)/stimfit.exe' '$(PREFIX)/$(TARGET)/bin/'
 
 endef
 
