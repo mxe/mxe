@@ -4,6 +4,7 @@ This document was created 2016-02-05. It belongs to copydlldeps.sh and is part o
 
 I call it on the command line like:
 
+```
 /share/mxe/tools/copydlldeps.sh --infile /home/mxeuser/test/i686-w64-mingw32.shared/Application.exe \
 				--destdir /home/mxeuser/testdlls/   \
 				--recursivesrcdir /home/mxeuser/mxe/usr/i686-w64-mingw32.shared/ \
@@ -11,9 +12,11 @@ I call it on the command line like:
 				--copy \
 				--enforce /home/mxeuser/mxe/usr/i686-w64-mingw32.shared/qt5/plugins/platforms/ \
 				--objdump /home/mxeuser/mxe/usr/bin/i686-w64-mingw32.shared-objdump
+```
 
 It got embedded in a build script like:
 
+```
 MXEPATH=/path/to/mxe
 compiler=i686-w64-mingw32.shared
 orgDir=/path/to/my/nsis/dll #nsis is then copying all dlls in there to the place where the exe is located
@@ -42,7 +45,7 @@ else
 					--enforce $MXEPATH/usr/$compiler/qt5/plugins/platforms/ \
 					--copy | tee -a $CURLOG
 fi
-
+```
 
 Additional hints
 ================
