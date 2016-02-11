@@ -347,6 +347,7 @@
     "smpeg": "0.4.5+cvs20030824",
     "smpeg2": "2.0.0",
     "sox": "14.4.2",
+    "sparsehash": "2.0.3",
     "speex": "1.2rc2",
     "speexdsp": "1.2rc3",
     "sqlite": "3100200",
