@@ -187,6 +187,7 @@
     "libpaper": "1.1.24+nmu4",
     "libplist": "1.12",
     "libpng": "1.6.21",
+    "librosco": "0.1.11",
     "librsvg": "2.40.5",
     "librtmp": "a107cef",
     "libsamplerate": "0.1.8",
