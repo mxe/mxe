@@ -1,0 +1,22 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -Naur qjson-0.8.1.orig/CMakeLists.txt qjson-0.8.1/CMakeLists.txt
+--- qjson-0.8.1.orig/CMakeLists.txt	2012-11-27 14:06:57.000000000 +0400
++++ qjson-0.8.1/CMakeLists.txt	2016-02-13 03:00:18.725982532 +0300
+@@ -56,13 +56,13 @@
+ set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib" )
+ 
+ # pkg-config
+-IF (NOT WIN32)
++#IF (NOT WIN32)
+   CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/QJson.pc.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/QJson.pc
+                   @ONLY)
+   INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/QJson.pc
+            DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+-ENDIF (NOT WIN32)
++#ENDIF (NOT WIN32)
+ 
+ # Subdirs
+ ADD_SUBDIRECTORY(src)
