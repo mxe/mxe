@@ -19,6 +19,9 @@ To prevent build-pkg from creating deb packages,
 set environment variable MXE_NO_DEBS to 1
 In this case fakeroot and dpkg-deb are not needed.
 
+To switch off the second pass, set MXE_NO_SECOND_PASS to 1.
+See https://github.com/mxe/mxe/issues/1111
+
 To limit number of packages being built to x,
 set environment variable MXE_MAX_ITEMS to x,
 
@@ -32,6 +35,7 @@ How to remove them: http://stackoverflow.com/a/4262545
 
 local max_items = tonumber(os.getenv('MXE_MAX_ITEMS'))
 local no_debs = os.getenv('MXE_NO_DEBS')
+local no_second_pass = os.getenv('MXE_NO_SECOND_PASS')
 
 local TODAY = os.date("%Y%m%d")
 
@@ -1024,10 +1028,11 @@ local function main()
         makeMxeRequirementsPackage('jessie')
     end
     makeMxeSourcePackage()
-    -- second pass
-    buildPackages(
-        build_list, item2deps, 'second', item2files
-    )
+    if not no_second_pass then
+        buildPackages(
+            build_list, item2deps, 'second', item2files
+        )
+    end
     if #unbroken < #build_list then
         local code = 1
         local close = true
