@@ -350,10 +350,10 @@ local function isBlacklisted(file)
 end
 
 local GIT_INITIAL = 'initial'
-local GIT_ALL = 'first-all'
+local GIT_ALL_PSEUDOITEM = 'all'
 
-local function itemToBranch(item)
-    return 'first-' .. item:gsub('~', '_')
+local function itemToBranch(item, pass)
+    return pass .. '-' .. item:gsub('~', '_')
 end
 
 -- creates git repo in ./usr
@@ -383,10 +383,10 @@ local function gitCommit(message)
     assert(execute(cmd:format(message)))
 end
 
-local function gitCheckout(new_branch, deps, item2index)
+local function gitCheckout(new_branch, deps, item2index, pass_of_deps)
     local main_dep = deps[1]
     if main_dep then
-        main_dep = itemToBranch(main_dep)
+        main_dep = itemToBranch(main_dep, pass_of_deps)
     else
         main_dep = GIT_INITIAL
     end
@@ -398,7 +398,7 @@ local function gitCheckout(new_branch, deps, item2index)
         local cmd2 = '%s %s merge -q %s -m %q'
         if not execute(cmd2:format(GIT,
             GIT_USER,
-            itemToBranch(deps[i]),
+            itemToBranch(deps[i], pass_of_deps),
             message))
         then
             -- probably merge conflict
@@ -546,15 +546,17 @@ local function removeEmptyDirs(item)
 end
 
 -- builds package, returns list of new files
-local function buildItem(item, item2deps, file2item, item2index)
-    gitCheckout(itemToBranch(item), item2deps[item], item2index)
+local function buildItem(item, item2deps, file2item, item2index, pass)
+    gitCheckout(
+        itemToBranch(item, pass), item2deps[item], item2index, pass
+    )
     local target, pkg = parseItem(item)
     local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
     os.execute(cmd:format(tool 'make', pkg, target))
     gitAdd()
     local new_files, changed_files = gitStatus()
     if #new_files + #changed_files > 0 then
-        gitCommit(("Build %s"):format(item))
+        gitCommit(("Build %s, pass %s"):format(item, pass))
     end
     for _, file in ipairs(new_files) do
         checkFile(file, item)
@@ -771,7 +773,7 @@ local function isEmpty(files)
 end
 
 -- build all packages, save filelist to list file
-local function buildPackages(items, item2deps)
+local function buildPackages(items, item2deps, pass)
     local broken = {}
     local unbroken = {}
     local file2item = {}
@@ -788,8 +790,9 @@ local function buildPackages(items, item2deps)
     local progress_printer = progressPrinter(items)
     for i, item in ipairs(items) do
         if not brokenDep(item) then
-            local files = buildItem(item, item2deps,
-                file2item, item2index)
+            local files = buildItem(
+                item, item2deps, file2item, item2index, pass
+            )
             findForeignInstalls(item, files)
             if isBuilt(item, files) then
                 item2files[item] = files
@@ -938,8 +941,15 @@ local function main()
     local build_list = sortForBuild(items, item2deps)
     assert(isTopoOrdered(build_list, items, item2deps))
     build_list = sliceArray(build_list, max_items)
-    local unbroken, item2files = buildPackages(build_list, item2deps)
-    gitCheckout(GIT_ALL, unbroken, makeItem2Index(build_list))
+    local unbroken, item2files = buildPackages(
+        build_list, item2deps, 'first'
+    )
+    gitCheckout(
+        itemToBranch(GIT_ALL_PSEUDOITEM, 'first'),
+        unbroken,
+        makeItem2Index(build_list),
+        'first'
+    )
     makeDebs(unbroken, item2deps, item2ver, item2files)
     if not no_debs then
         makeMxeRequirementsPackage('wheezy')
