@@ -531,13 +531,16 @@ end
 
 local function removeEmptyDirs(item)
     -- removing an empty dir can reveal another one (parent)
+    -- don't pass item to mute the log message
     local go_on = true
     while go_on do
         go_on = false
         local f = io.popen('find usr/* -empty -type d', 'r')
         for dir in f:lines() do
-            log("Remove empty directory %s created by %s",
-                dir, item)
+            if item then
+                log("Remove empty directory %s created by %s",
+                    dir, item)
+            end
             os.remove(dir)
             go_on = true
         end
