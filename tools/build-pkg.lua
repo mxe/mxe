@@ -917,36 +917,40 @@ local function makeMxeSourcePackage()
     makePackage(name, files, deps, ver, d1, d2)
 end
 
-assert(not io.open('usr/.git'), 'Remove usr/')
-local MXE_DIR_EXPECTED = '/usr/lib/mxe'
-if MXE_DIR ~= MXE_DIR_EXPECTED then
-    log("Warning! Building in dir %s, not in %s",
-        MXE_DIR, MXE_DIR_EXPECTED)
+local function main()
+    assert(not io.open('usr/.git'), 'Remove usr/')
+    local MXE_DIR_EXPECTED = '/usr/lib/mxe'
+    if MXE_DIR ~= MXE_DIR_EXPECTED then
+        log("Warning! Building in dir %s, not in %s",
+            MXE_DIR, MXE_DIR_EXPECTED)
+    end
+    gitInit()
+    assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
+        tool 'make', table.concat(TARGETS, ' '))))
+    if not max_items then
+        local cmd = ('%s download -j 6 -k'):format(tool 'make')
+        while not execute(cmd) do end
+    end
+    gitAdd()
+    gitCommit('Initial commit')
+    gitTag(GIT_INITIAL)
+    local items, item2deps, item2ver = getItems()
+    local build_list = sortForBuild(items, item2deps)
+    assert(isTopoOrdered(build_list, items, item2deps))
+    build_list = sliceArray(build_list, max_items)
+    local unbroken, item2files = buildPackages(build_list, item2deps)
+    gitCheckout(GIT_ALL, unbroken, makeItem2Index(build_list))
+    makeDebs(unbroken, item2deps, item2ver, item2files)
+    if not no_debs then
+        makeMxeRequirementsPackage('wheezy')
+        makeMxeRequirementsPackage('jessie')
+    end
+    makeMxeSourcePackage()
+    if #unbroken < #build_list then
+        local code = 1
+        local close = true
+        os.exit(code, close)
+    end
 end
-gitInit()
-assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
-    tool 'make', table.concat(TARGETS, ' '))))
-if not max_items then
-    local cmd = ('%s download -j 6 -k'):format(tool 'make')
-    while not execute(cmd) do end
-end
-gitAdd()
-gitCommit('Initial commit')
-gitTag(GIT_INITIAL)
-local items, item2deps, item2ver = getItems()
-local build_list = sortForBuild(items, item2deps)
-assert(isTopoOrdered(build_list, items, item2deps))
-build_list = sliceArray(build_list, max_items)
-local unbroken, item2files = buildPackages(build_list, item2deps)
-gitCheckout(GIT_ALL, unbroken, makeItem2Index(build_list))
-makeDebs(unbroken, item2deps, item2ver, item2files)
-if not no_debs then
-    makeMxeRequirementsPackage('wheezy')
-    makeMxeRequirementsPackage('jessie')
-end
-makeMxeSourcePackage()
-if #unbroken < #build_list then
-    local code = 1
-    local close = true
-    os.exit(code, close)
-end
+
+main()
