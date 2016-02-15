@@ -572,8 +572,8 @@ local function buildItem(item, item2deps, file2item, item2index, pass)
         if not isInArray(creator_item, item2deps[item]) then
             table.insert(item2deps[item], creator_item)
         end
-        log('Item %s changes %s, created by %s',
-            item, file, creator_item)
+        log('Item %s (pass %s) changes %s, created by %s',
+            item, pass, file, creator_item)
     end
     checkFileList(concatArrays(new_files, changed_files), item)
     removeEmptyDirs(item)
