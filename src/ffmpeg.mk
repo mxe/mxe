@@ -3,15 +3,15 @@
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.4
-$(PKG)_CHECKSUM := 83cc8136a7845546062a43cda9ae3cf0a02f43ef5e434d2f997f055231a75f8e
+$(PKG)_VERSION  := 3.0
+$(PKG)_CHECKSUM := f19ff77a2f7f736a41dd1499eef4784bf3cb7461f07c13a268164823590113c0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://launchpad.net/ffmpeg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libbs2b libcaca \
                    libvpx opencore-amr opus sdl speex theora vidstab \
-                   vo-aacenc vo-amrwbenc vorbis x264 xvidcore yasm zlib
+                   vo-amrwbenc vorbis x264 xvidcore yasm zlib
 
 # DO NOT ADD fdk-aac OR openssl SUPPORT.
 # Although they are free softwares, their licenses are not compatible with
@@ -59,7 +59,6 @@ define $(PKG)_BUILD
         --enable-libspeex \
         --enable-libtheora \
         --enable-libvidstab \
-        --enable-libvo-aacenc \
         --enable-libvo-amrwbenc \
         --enable-libvorbis \
         --enable-libvpx \
