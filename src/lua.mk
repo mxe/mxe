@@ -27,6 +27,8 @@ define $(PKG)_BUILD_COMMON
      echo 'Libs: -l$(PKG)';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
+    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lua.exe' \
@@ -50,7 +52,7 @@ define $(PKG)_BUILD
         TO_BIN='lua.h' \
         INSTALL='$(INSTALL)' \
         install
-    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
+
     $($(PKG)_BUILD_COMMON)
 endef
 
@@ -70,7 +72,7 @@ define $(PKG)_BUILD_SHARED
         INSTALL='$(INSTALL)' \
         TO_LIB='liblua.dll.a' \
         install
-    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
+
     $($(PKG)_BUILD_COMMON)
 endef
 
