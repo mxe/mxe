@@ -20,6 +20,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_COMMON
+    touch '$(PREFIX)/$(TARGET)/lib/lua/$($(PKG)_SHORTVER)/.gitkeep'
+    touch '$(PREFIX)/$(TARGET)/share/lua/$($(PKG)_SHORTVER)/.gitkeep'
+
     #pkg-config file
     (echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
