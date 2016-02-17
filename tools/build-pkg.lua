@@ -1013,9 +1013,13 @@ local function main()
     local build_list = sortForBuild(items, item2deps)
     assert(isTopoOrdered(build_list, items, item2deps))
     build_list = sliceArray(build_list, max_items)
+    local first_pass_failed, second_pass_failed
     local unbroken, item2files = buildPackages(
         build_list, item2deps, 'first'
     )
+    if #unbroken < #build_list then
+        first_pass_failed = true
+    end
     gitCheckout(
         itemToBranch(GIT_ALL_PSEUDOITEM, 'first'),
         unbroken,
@@ -1029,11 +1033,14 @@ local function main()
     end
     makeMxeSourcePackage()
     if not no_second_pass then
-        buildPackages(
+        local unbroken_second = buildPackages(
             build_list, item2deps, 'second', item2files
         )
+        if #unbroken_second < #build_list then
+            second_pass_failed = true
+        end
     end
-    if #unbroken < #build_list then
+    if first_pass_failed or second_pass_failed then
         local code = 1
         local close = true
         os.exit(code, close)
