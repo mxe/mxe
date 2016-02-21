@@ -24,7 +24,9 @@ define $(PKG)_BUILD
         --with-qt4=yes \
         --with-boost='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    cp '$(1)'/src/release/qbittorrent.exe '$(PREFIX)/$(TARGET)/bin/'
+    mkdir -p '$(PREFIX)/$(TARGET)/apps/$(PKG)'
+    cp '$(1)'/src/release/qbittorrent.exe \
+        '$(PREFIX)/$(TARGET)/apps/$(PKG)/'
 endef
 
 $(PKG)_BUILD_SHARED =
