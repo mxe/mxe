@@ -548,6 +548,18 @@ local function removeEmptyDirs(item)
     end
 end
 
+local function isBuilt(item, files)
+    local target, pkg = parseItem(item)
+    local INSTALLED = 'usr/%s/installed/%s'
+    local installed = INSTALLED:format(target, pkg)
+    for _, file in ipairs(files) do
+        if file == installed then
+            return true
+        end
+    end
+    return false
+end
+
 -- builds package, returns list of new files
 local function buildItem(item, item2deps, file2item, item2index, pass)
     gitCheckout(
@@ -690,18 +702,6 @@ local function makeDeb(item, files, deps, ver)
         table.insert(deb_deps, nameToDebian(dep))
     end
     makePackage(deb_pkg, files, deb_deps, ver, d1, d2)
-end
-
-local function isBuilt(item, files)
-    local target, pkg = parseItem(item)
-    local INSTALLED = 'usr/%s/installed/%s'
-    local installed = INSTALLED:format(target, pkg)
-    for _, file in ipairs(files) do
-        if file == installed then
-            return true
-        end
-    end
-    return false
 end
 
 local function findForeignInstalls(item, files)
