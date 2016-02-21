@@ -20,7 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && '$(TARGET)-qmake-qt4' \
-        "PREFIX=$(PREFIX)/$(TARGET)/bin/"
+        "PREFIX=$(PREFIX)/$(TARGET)/apps/$(PKG)"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
