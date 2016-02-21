@@ -113,7 +113,7 @@ findAllSrcDirectories(){
 ar_recursiveDirList=${!1}
 string=""
 for curPath in "${ar_recursiveDirList[@]}"; do
-	for element in $(find $curPath -name "*.dll"); do
+	for element in $(find $curPath -iname "*.dll"); do
 		#ar_list+="$(dirname $element) "
 		string+="$(dirname $element) "
 	done
@@ -265,7 +265,7 @@ append_deps() {
 		path=""
 		for curPath in $( echo "${str_srcDirList}" | tr -s ' ' | tr ' ' '\n' ); do
 			counter=0
-			result=$(find $curPath -name "$bn" | tail -n 1)
+			result=$(find $curPath -iname "$bn" | tail -n 1)
 			if [ ! -z $result ];then
 				path=$result
 				counter=$(expr $counter + 1)
