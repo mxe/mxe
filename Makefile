@@ -763,11 +763,11 @@ build-matrix.html: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	            $(eval $(PKG)_VIRTUAL := $(false)) \
 	            $(eval $(PKG)_BUILD_ONLY := $(false)) \
 	            <td class="supported">&#x2713;</td>,            \
-	            <td class="unsupported">&#x2717;</td>)\n)       \
+	            <td class="unsupported">&#215;</td>)\n)         \
 	    $(if $(call set_is_member,$(PKG),$($(BUILD)_PKGS)),        \
 	        $(eval $(PKG)_VIRTUAL := $(false))   \
 	        <td class="supported">&#x2713;</td>, \
-	        <td class="unsupported">&#x2717;</td>)\n \
+	        <td class="unsupported">&#215;</td>)\n \
 	        </tr>\n' >> $@ $(newline)            \
 	    $(if $($(PKG)_VIRTUAL),                  \
 	       $(eval VIRTUAL_PKGCOUNT += x) \
