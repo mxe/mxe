@@ -200,3 +200,22 @@ index 1111111..2222222 100644
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
  !!ENDIF
+
+From 3ebc085c4d7488df899f35e9ac63da819dffc1b9 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Wed, 24 Feb 2016 19:39:46 +0300
+Subject: [PATCH] Fix ar error: `u' modifier ignored since `D' is the default (see `U')
+
+diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
+index 1111111..2222222 100644
+--- a/mkspecs/win32-g++/qmake.conf
++++ b/mkspecs/win32-g++/qmake.conf
+@@ -94,7 +94,7 @@
+ QMAKE_LIBS_QT_ENTRY     = -lmingw32 -lqtmain
+ 
+ QMAKE_IDL               = midl
+-QMAKE_LIB               = $${CROSS_COMPILE}ar -ru
++QMAKE_LIB               = $${CROSS_COMPILE}ar -rc
+ QMAKE_RC                = $${CROSS_COMPILE}windres
+ 
+ QMAKE_STRIP             = $${CROSS_COMPILE}strip
