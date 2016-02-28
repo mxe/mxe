@@ -430,7 +430,7 @@ local function gitCheckout(new_branch, deps, item2index, pass_of_deps)
 end
 
 local function gitAdd()
-    os.execute(GIT .. 'add .')
+    os.execute(GIT .. 'add --all .')
 end
 
 -- return two lists of filepaths under ./usr/
@@ -442,6 +442,7 @@ local function gitStatus()
     local git_st = io.popen(GIT .. 'status --porcelain', 'r')
     for line in git_st:lines() do
         local status, file = line:match('(..) (.*)')
+        assert(status:sub(2, 2) == ' ')
         status = trim(status)
         if file:sub(1, 1) == '"' then
             -- filename with a space is quoted by git
