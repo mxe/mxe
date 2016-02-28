@@ -961,3 +961,37 @@ index 1111111..2222222 100644
                  state->transition_mode[j][k] = InverseQ (state,
                      tmode[state->transient_huffman[j]]);
              }
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 28 Feb 2016 22:39:49 +0300
+Subject: [PATCH] fix symlink for libtds library for shared targets
+
+
+diff --git a/libdca/Makefile.in b/libdca/Makefile.in
+index 1111111..2222222 100644
+--- a/libdca/Makefile.in
++++ b/libdca/Makefile.in
+@@ -196,6 +196,9 @@ libdca_la_LIBADD = $(LIBDCA_LIBS)
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libdca.pc libdts.pc
+ EXTRA_DIST = configure.incl
++libdca_filename = $(wildcard $(libdir)/libdca*.a)
++libdca_base = $(notdir $(libdca_filename))
++libdts_base = $(subst libdca,libdts,$(libdca_base))
+ all: all-am
+ 
+ .SUFFIXES:
+@@ -504,10 +507,10 @@ uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgconfigDATA
+ 
+ 
+ install-exec-hook:
+-	ln -sf "$(libdir)/libdca.a" "$(DESTDIR)$(libdir)/libdts.a"
++	ln -sf "$(libdir)/$(libdca_base)" "$(DESTDIR)$(libdir)/$(libdts_base)"
+ 
+ uninstall-hook:
+-	unlink "$(DESTDIR)$(libdir)/libdts.a"
++	unlink "$(DESTDIR)$(libdir)/libdts*.a"
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
