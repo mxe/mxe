@@ -317,6 +317,18 @@ local function sortForBuild(items, item2deps)
     return build_list
 end
 
+local function isDependency(item, dependency, item2deps)
+    for _, dep in ipairs(item2deps[item]) do
+        if dep == dependency then
+            return true
+        end
+        if isDependency(dep, dependency, item2deps) then
+            return true
+        end
+    end
+    return false
+end
+
 local function makeItem2Index(build_list)
     local item2index = {}
     for index, item in ipairs(build_list) do
@@ -440,7 +452,7 @@ end
 -- return two lists of filepaths under ./usr/
 -- 1. new files
 -- 2. changed files
-local function gitStatus()
+local function gitStatus(item, item2deps, file2item)
     local new_files = {}
     local changed_files = {}
     local git_st = io.popen(GIT .. 'status --porcelain', 'r')
@@ -455,7 +467,17 @@ local function gitStatus()
         file = 'usr/' .. file
         if not fileExists(file) then
             if status == 'D' then
-                log('Removed file: %q', file)
+                local prev_owner = assert(file2item[file])
+                if prev_owner == item then
+                    log('Item %s removed %q installed by itself',
+                        item, file)
+                elseif isDependency(prev_owner, item, item2deps) then
+                    log('Item %s removed %q installed by its follower %s',
+                        item, file, prev_owner)
+                else
+                    log('Item %s removed %q installed by %s',
+                        item, file, prev_owner)
+                end
             elseif isSymlink(file) then
                 log('Broken symlink: %q', file)
             else
@@ -634,7 +656,7 @@ local function buildItem(item, item2deps, file2item, item2index, pass, prev_file
     local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
     os.execute(cmd:format(tool 'make', pkg, target))
     gitAdd()
-    local new_files, changed_files = gitStatus()
+    local new_files, changed_files = gitStatus(item, item2deps, file2item)
     if #new_files + #changed_files > 0 then
         gitCommit(("Build %s, pass %s"):format(item, pass))
     end
