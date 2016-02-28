@@ -178,6 +178,10 @@ local function fileExists(name)
     end
 end
 
+local function isSymlink(name)
+    return shell(("ls -l %q"):format(name)):sub(1, 1) == "l"
+end
+
 local function writeFile(filename, data)
     local file = io.open(filename, 'w')
     file:write(data)
@@ -450,7 +454,13 @@ local function gitStatus()
         end
         file = 'usr/' .. file
         if not fileExists(file) then
-            log('Missing file: %q', file)
+            if status == 'D' then
+                log('Removed file: %q', file)
+            elseif isSymlink(file) then
+                log('Broken symlink: %q', file)
+            else
+                log('Missing file: %q', file)
+            end
         elseif not isBlacklisted(file) then
             if status == 'A' then
                 table.insert(new_files, file)
