@@ -1,13 +1,61 @@
 This file is part of MXE.
 See index.html for further information.
 
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sat, 23 Nov 2013 19:55:09 -0800
+Subject: [PATCH] Mark tables as static constants
+
 Taken from libdca svn: svn://svn.videolan.org/libdca/trunk.
-
+Patch by Diego Flameeyes Petten?\195?\178
 r83 | gbazin | 2008-05-26 12:48:45 +0000 (Mon, 26 May 2008) | 1 line
-Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
 
---- libdca.orig/libdca/tables_fir.h
-+++ libdca/libdca/tables_fir.h
+diff --git a/libdca/parse.c b/libdca/parse.c
+index 1111111..2222222 100644
+--- a/libdca/parse.c
++++ b/libdca/parse.c
+@@ -548,7 +548,7 @@ static int dca_subframe_header (dca_state_t * state)
+     /* Scale factors */
+     for (j = 0; j < state->prim_channels; j++)
+     {
+-        int *scale_table;
++        const int *scale_table;
+         int scale_sum;
+ 
+         for (k = 0; k < state->subband_activity[j]; k++)
+@@ -761,7 +761,7 @@ static int dca_subsubframe (dca_state_t * state)
+     int k, l;
+     int subsubframe = state->current_subsubframe;
+ 
+-    double *quant_step_table;
++    const double *quant_step_table;
+ 
+     /* FIXME */
+     double subband_samples[DCA_PRIM_CHANNELS_MAX][DCA_SUBBANDS][8];
+@@ -1145,7 +1145,7 @@ static void qmf_32_subbands (dca_state_t * state, int chans,
+                              double samples_in[32][8], sample_t *samples_out,
+                              double scale, sample_t bias)
+ {
+-    double *prCoeff;
++    const double *prCoeff;
+     int i, j, k;
+     double raXin[32];
+ 
+@@ -1236,7 +1236,7 @@ static void lfe_interpolation_fir (int nDecimationSelect, int nNumDeciSample,
+      */
+ 
+     int nDeciFactor, k, J;
+-    double *prCoeff;
++    const double *prCoeff;
+ 
+     int NumFIRCoef = 512; /* Number of FIR coefficients */
+     int nInterpIndex = 0; /* Index to the interpolated samples */
+diff --git a/libdca/tables_fir.h b/libdca/tables_fir.h
+index 1111111..2222222 100644
+--- a/libdca/tables_fir.h
++++ b/libdca/tables_fir.h
 @@ -21,7 +21,7 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
@@ -17,7 +65,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
  +1.135985195E-010,
  -6.022448247E-007,
-@@ -537,7 +537,7 @@
+@@ -537,7 +537,7 @@ double fir_32bands_perfect[] =
  -1.135985195E-010
  };
  
@@ -26,7 +74,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
  -1.390191784E-007,
  -1.693738625E-007,
-@@ -1053,7 +1053,7 @@
+@@ -1053,7 +1053,7 @@ double fir_32bands_nonperfect[] =
  +1.390191784E-007
  };
  
@@ -35,7 +83,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
  2.6584343868307770E-004,
  8.1793652498163280E-005,
-@@ -1569,7 +1569,7 @@
+@@ -1569,7 +1569,7 @@ double lfe_fir_64[] =
  2.6584343868307770E-004
  };
  
@@ -44,9 +92,11 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
  0.00053168571,
  0.00016358691,
---- libdca.orig/libdca/tables_huffman.h
-+++ libdca/libdca/tables_huffman.h
-@@ -29,7 +29,7 @@
+diff --git a/libdca/tables_huffman.h b/libdca/tables_huffman.h
+index 1111111..2222222 100644
+--- a/libdca/tables_huffman.h
++++ b/libdca/tables_huffman.h
+@@ -29,7 +29,7 @@ typedef struct huff_entry_s
  
  } huff_entry_t;
  
@@ -55,7 +105,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 1,     0,  1}, { 2,     2,  2}, { 3,     6,  3}, { 4,    14,  4}, 
    { 5,    30,  5}, { 6,    62,  6}, { 8,   255,  7}, { 8,   254,  8}, 
-@@ -37,7 +37,7 @@
+@@ -37,7 +37,7 @@ huff_entry_t bitalloc_a_12[] =
    { 0,     0,  0}
  };
  
@@ -64,7 +114,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 1,     1,  1}, { 2,     0,  2}, { 3,     2,  3}, { 5,    15,  4}, 
    { 5,    12,  5}, { 6,    29,  6}, { 7,    57,  7}, { 7,    56,  8}, 
-@@ -45,7 +45,7 @@
+@@ -45,7 +45,7 @@ huff_entry_t bitalloc_b_12[] =
    { 0,     0,  0}  
  };
  
@@ -73,7 +123,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     0,  1}, { 3,     7,  2}, { 3,     5,  3}, { 3,     4,  4}, 
    { 3,     2,  5}, { 4,    13,  6}, { 4,    12,  7}, { 4,     6,  8}, 
-@@ -53,7 +53,7 @@
+@@ -53,7 +53,7 @@ huff_entry_t bitalloc_c_12[] =
    { 0,     0,  0}
  };
  
@@ -82,7 +132,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     3,  1}, { 2,     2,  2}, { 2,     0,  3}, { 3,     2,  4}, 
    { 4,     6,  5}, { 5,    14,  6}, { 6,    30,  7}, { 7,    62,  8}, 
-@@ -61,7 +61,7 @@
+@@ -61,7 +61,7 @@ huff_entry_t bitalloc_d_12[] =
    { 0,     0,  0}
  };
  
@@ -91,7 +141,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 1,     1,  1}, { 2,     0,  2}, { 3,     2,  3}, { 4,     6,  4}, 
    { 5,    14,  5}, { 7,    63,  6}, { 7,    61,  7}, { 8,   124,  8}, 
-@@ -69,7 +69,7 @@
+@@ -69,7 +69,7 @@ huff_entry_t bitalloc_e_12[] =
    { 0,     0,  0}
  };
  
@@ -100,7 +150,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    bitalloc_a_12,
    bitalloc_b_12,
-@@ -78,7 +78,7 @@
+@@ -78,7 +78,7 @@ huff_entry_t *bitalloc_12[] =
    bitalloc_e_12
  };
  
@@ -109,7 +159,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     1,  0}, { 3,     6,  1}, { 3,     5, -1}, { 3,     0,  2}, 
    { 4,    15, -2}, { 4,     8,  3}, { 4,     3, -3}, { 5,    28,  4}, 
-@@ -115,7 +115,7 @@
+@@ -115,7 +115,7 @@ huff_entry_t scales_a_129[] =
    {14, 15024,-64}, { 0,     0,  0}
  };
  
@@ -118,7 +168,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     3,  0}, { 3,     2,  1}, { 3,     1, -1}, { 4,    15,  2}, 
    { 4,    14, -2}, { 4,    12,  3}, { 4,    11, -3}, { 4,    10,  4}, 
-@@ -152,7 +152,7 @@
+@@ -152,7 +152,7 @@ huff_entry_t scales_b_129[] =
    {15,  3936,-64}, { 0,     0,  0}
  };
  
@@ -127,7 +177,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     4,  0}, { 3,     1,  1}, { 3,     0, -1}, { 4,    13,  2}, 
    { 4,    12, -2}, { 4,     7,  3}, { 4,     6, -3}, { 5,    31,  4}, 
-@@ -189,7 +189,7 @@
+@@ -189,7 +189,7 @@ huff_entry_t scales_c_129[] =
    {15, 20944,-64}, { 0,     0,  0}
  };
  
@@ -136,7 +186,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     0,  0}, { 3,     5,  1}, { 3,     4, -1}, { 4,    15,  2}, 
    { 4,    14, -2}, { 4,     7,  3}, { 4,     6, -3}, { 5,    26,  4}, 
-@@ -226,7 +226,7 @@
+@@ -226,7 +226,7 @@ huff_entry_t scales_d_129[] =
    {15, 28516,-64}, { 0,     0,  0}
  };
  
@@ -145,7 +195,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 4,    14,  0}, { 4,    11,  1}, { 4,    10, -1}, { 4,     7,  2}, 
    { 4,     6, -2}, { 4,     3,  3}, { 4,     2, -3}, { 5,    31,  4}, 
-@@ -263,7 +263,7 @@
+@@ -263,7 +263,7 @@ huff_entry_t scales_e_129[] =
    {16, 57172,-64}, { 0,     0,  0}
  };
  
@@ -154,7 +204,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    scales_a_129,
    scales_b_129,
-@@ -272,36 +272,36 @@
+@@ -272,36 +272,36 @@ huff_entry_t *scales_129[] =
    scales_e_129
  };
  
@@ -197,7 +247,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    bitalloc_a_4,
    bitalloc_b_4,
-@@ -309,64 +309,64 @@
+@@ -309,64 +309,64 @@ huff_entry_t *tmode[] =
    bitalloc_d_4
  };
  
@@ -272,7 +322,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 1,     0,  0}, { 3,     4,  1}, { 4,    15, -1}, { 4,    13,  2}, 
    { 4,    12, -2}, { 4,    10,  3}, { 5,    29, -3}, { 5,    22,  4}, 
-@@ -374,7 +374,7 @@
+@@ -374,7 +374,7 @@ huff_entry_t bitalloc_a_13[] =
    { 7,   112, -6}, { 0,     0,  0}
  };
  
@@ -281,7 +331,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     0,  0}, { 3,     6,  1}, { 3,     5, -1}, { 3,     2,  2}, 
    { 4,    15, -2}, { 4,     9,  3}, { 4,     7, -3}, { 4,     6,  4}, 
-@@ -382,7 +382,7 @@
+@@ -382,7 +382,7 @@ huff_entry_t bitalloc_b_13[] =
    { 6,    56, -6}, { 0,     0,  0}
  };
  
@@ -290,7 +340,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     5,  0}, { 3,     4,  1}, { 3,     3, -1}, { 3,     2,  2}, 
    { 3,     0, -2}, { 4,    15,  3}, { 4,    14, -3}, { 4,    12,  4}, 
-@@ -390,7 +390,7 @@
+@@ -390,7 +390,7 @@ huff_entry_t bitalloc_c_13[] =
    { 5,     4, -6}, { 0,     0,  0}
  };
  
@@ -299,7 +349,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     1,  0}, { 3,     7,  1}, { 3,     6, -1}, { 3,     4,  2}, 
    { 3,     1, -2}, { 4,    11,  3}, { 4,    10, -3}, { 4,     0,  4}, 
-@@ -399,7 +399,7 @@
+@@ -399,7 +399,7 @@ huff_entry_t bitalloc_a_17[] =
    {12,   340, -8}, { 0,     0,  0}
  };
  
@@ -308,7 +358,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     0,  0}, { 3,     6,  1}, { 3,     5, -1}, { 3,     2,  2}, 
    { 4,    15, -2}, { 4,     9,  3}, { 4,     8, -3}, { 5,    29,  4}, 
-@@ -408,7 +408,7 @@
+@@ -408,7 +408,7 @@ huff_entry_t bitalloc_b_17[] =
    { 8,   124, -8}, { 0,     0,  0}
  };
  
@@ -317,7 +367,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     6,  0}, { 3,     4,  1}, { 3,     3, -1}, { 3,     0,  2}, 
    { 4,    15, -2}, { 4,    11,  3}, { 4,    10, -3}, { 4,     4,  4}, 
-@@ -417,7 +417,7 @@
+@@ -417,7 +417,7 @@ huff_entry_t bitalloc_c_17[] =
    { 7,    44, -8}, { 0,     0,  0}
  };
  
@@ -326,7 +376,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 1,     0,  0}, { 3,     7,  1}, { 3,     6, -1}, { 4,    11,  2}, 
    { 4,    10, -2}, { 5,    19,  3}, { 5,    18, -3}, { 6,    35,  4}, 
-@@ -426,7 +426,7 @@
+@@ -426,7 +426,7 @@ huff_entry_t bitalloc_d_17[] =
    { 9,   256, -8}, { 0,     0,  0}
  };
  
@@ -335,7 +385,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 1,     0,  0}, { 3,     5,  1}, { 3,     4, -1}, { 4,    12,  2}, 
    { 5,    31, -2}, { 5,    28,  3}, { 5,    27, -3}, { 6,    60,  4}, 
-@@ -435,7 +435,7 @@
+@@ -435,7 +435,7 @@ huff_entry_t bitalloc_e_17[] =
    { 8,   232, -8}, { 0,     0,  0}
  };
  
@@ -344,7 +394,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     6,  0}, { 3,     5,  1}, { 3,     4, -1}, { 3,     2,  2}, 
    { 3,     1, -2}, { 4,    15,  3}, { 4,    14, -3}, { 4,     6,  4}, 
-@@ -444,7 +444,7 @@
+@@ -444,7 +444,7 @@ huff_entry_t bitalloc_f_17[] =
    { 8,     4, -8}, { 0,     0,  0}
  };
  
@@ -353,7 +403,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     2,  0}, { 3,     7,  1}, { 3,     6, -1}, { 3,     1,  2}, 
    { 3,     0, -2}, { 4,     5,  3}, { 4,     4, -3}, { 5,    14,  4}, 
-@@ -453,7 +453,7 @@
+@@ -453,7 +453,7 @@ huff_entry_t bitalloc_g_17[] =
    { 8,    96, -8}, { 0,     0,  0}
  };
  
@@ -362,7 +412,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     6,  0}, { 3,     4,  1}, { 3,     3, -1}, { 3,     1,  2}, 
    { 3,     0, -2}, { 4,    15,  3}, { 4,    14, -3}, { 4,     5,  4}, 
-@@ -464,7 +464,7 @@
+@@ -464,7 +464,7 @@ huff_entry_t bitalloc_a_25[] =
    {14, 10324,-12}, { 0,     0,  0}
  };
  
@@ -371,7 +421,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     5,  0}, { 3,     2,  1}, { 3,     1, -1}, { 4,    15,  2}, 
    { 4,    14, -2}, { 4,     9,  3}, { 4,     8, -3}, { 4,     6,  4}, 
-@@ -475,7 +475,7 @@
+@@ -475,7 +475,7 @@ huff_entry_t bitalloc_b_25[] =
    { 9,    28,-12}, { 0,     0,  0}
  };
  
@@ -380,7 +430,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     1,  0}, { 4,    15,  1}, { 4,    14, -1}, { 4,    12,  2}, 
    { 4,    11, -2}, { 4,     9,  3}, { 4,     8, -3}, { 4,     6,  4}, 
-@@ -486,7 +486,7 @@
+@@ -486,7 +486,7 @@ huff_entry_t bitalloc_c_25[] =
    { 8,    76,-12}, { 0,     0,  0}
  };
  
@@ -389,7 +439,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     2,  0}, { 3,     7,  1}, { 3,     6, -1}, { 3,     1,  2}, 
    { 3,     0, -2}, { 4,     5,  3}, { 4,     4, -3}, { 5,    13,  4}, 
-@@ -497,7 +497,7 @@
+@@ -497,7 +497,7 @@ huff_entry_t bitalloc_d_25[] =
    {12,  1920,-12}, { 0,     0,  0}
  };
  
@@ -398,7 +448,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     3,  0}, { 3,     3,  1}, { 3,     2, -1}, { 4,    11,  2}, 
    { 4,    10, -2}, { 4,     1,  3}, { 4,     0, -3}, { 5,    17,  4}, 
-@@ -508,7 +508,7 @@
+@@ -508,7 +508,7 @@ huff_entry_t bitalloc_e_25[] =
    { 8,    60,-12}, { 0,     0,  0}
  };
  
@@ -407,7 +457,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     1,  0}, { 3,     0,  1}, { 4,    15, -1}, { 4,    14,  2}, 
    { 4,    13, -2}, { 4,    11,  3}, { 4,    10, -3}, { 4,     8,  4}, 
-@@ -519,7 +519,7 @@
+@@ -519,7 +519,7 @@ huff_entry_t bitalloc_f_25[] =
    {10,   804,-12}, { 0,     0,  0}
  };
  
@@ -416,7 +466,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     1,  0}, { 3,     6,  1}, { 3,     5, -1}, { 3,     0,  2}, 
    { 4,    15, -2}, { 4,     8,  3}, { 4,     3, -3}, { 5,    28,  4}, 
-@@ -530,7 +530,7 @@
+@@ -530,7 +530,7 @@ huff_entry_t bitalloc_g_25[] =
    {10,   936,-12}, { 0,     0,  0}
  };
  
@@ -425,7 +475,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     2,  0}, { 3,     1,  1}, { 3,     0, -1}, { 4,    14,  2}, 
    { 4,    13, -2}, { 4,    12,  3}, { 4,    11, -3}, { 4,     9,  4}, 
-@@ -543,7 +543,7 @@
+@@ -543,7 +543,7 @@ huff_entry_t bitalloc_a_33[] =
    {13,  5504,-16}, { 0,     0,  0}
  };
  
@@ -434,7 +484,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     1,  0}, { 4,    15,  1}, { 4,    14, -1}, { 4,    11,  2}, 
    { 4,    10, -2}, { 4,     8,  3}, { 4,     7, -3}, { 4,     4,  4}, 
-@@ -556,7 +556,7 @@
+@@ -556,7 +556,7 @@ huff_entry_t bitalloc_b_33[] =
    {10,   780,-16}, { 0,     0,  0}
  };
  
@@ -443,7 +493,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 4,    13,  0}, { 4,    11,  1}, { 4,    10, -1}, { 4,     8,  2}, 
    { 4,     7, -2}, { 4,     4,  3}, { 4,     3, -3}, { 4,     2,  4}, 
-@@ -569,7 +569,7 @@
+@@ -569,7 +569,7 @@ huff_entry_t bitalloc_c_33[] =
    { 9,   204,-16}, { 0,     0,  0}
  };
  
@@ -452,7 +502,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     1,  0}, { 3,     6,  1}, { 3,     5, -1}, { 3,     0,  2}, 
    { 4,    15, -2}, { 4,     8,  3}, { 4,     3, -3}, { 5,    28,  4}, 
-@@ -582,7 +582,7 @@
+@@ -582,7 +582,7 @@ huff_entry_t bitalloc_d_33[] =
    {14, 15096,-16}, { 0,     0,  0}
  };
  
@@ -461,7 +511,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 2,     2,  0}, { 3,     2,  1}, { 3,     1, -1}, { 4,    12,  2}, 
    { 4,     7, -2}, { 4,     0,  3}, { 5,    31, -3}, { 5,    27,  4}, 
-@@ -595,7 +595,7 @@
+@@ -595,7 +595,7 @@ huff_entry_t bitalloc_e_33[] =
    { 9,   456,-16}, { 0,     0,  0}
  };
  
@@ -470,7 +520,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 4,    13,  0}, { 4,    12,  1}, { 4,    11, -1}, { 4,     9,  2}, 
    { 4,     8, -2}, { 4,     7,  3}, { 4,     6, -3}, { 4,     4,  4}, 
-@@ -608,7 +608,7 @@
+@@ -608,7 +608,7 @@ huff_entry_t bitalloc_f_33[] =
    {11,  1828,-16}, { 0,     0,  0}
  };
  
@@ -479,7 +529,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     6,  0}, { 3,     3,  1}, { 3,     2, -1}, { 4,    15,  2}, 
    { 4,    14, -2}, { 4,     9,  3}, { 4,     8, -3}, { 4,     1,  4}, 
-@@ -621,7 +621,7 @@
+@@ -621,7 +621,7 @@ huff_entry_t bitalloc_g_33[] =
    {10,   644,-16}, { 0,     0,  0}
  };
  
@@ -488,7 +538,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 4,     6,  0}, { 4,     5,  1}, { 4,     4, -1}, { 4,     2,  2}, 
    { 4,     1, -2}, { 4,     0,  3}, { 5,    31, -3}, { 5,    29,  4}, 
-@@ -642,7 +642,7 @@
+@@ -642,7 +642,7 @@ huff_entry_t bitalloc_a_65[] =
    {16, 40540,-32}, { 0,     0,  0}
  };
  
@@ -497,7 +547,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 4,     4,  0}, { 4,     2,  1}, { 4,     1, -1}, { 5,    30,  2}, 
    { 5,    29, -2}, { 5,    26,  3}, { 5,    25, -3}, { 5,    23,  4}, 
-@@ -663,7 +663,7 @@
+@@ -663,7 +663,7 @@ huff_entry_t bitalloc_b_65[] =
    {12,  2700,-32}, { 0,     0,  0}
  };
  
@@ -506,7 +556,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 5,    28,  0}, { 5,    25,  1}, { 5,    24, -1}, { 5,    23,  2}, 
    { 5,    22, -2}, { 5,    19,  3}, { 5,    18, -3}, { 5,    16,  4}, 
-@@ -684,7 +684,7 @@
+@@ -684,7 +684,7 @@ huff_entry_t bitalloc_c_65[] =
    {11,  1116,-32}, { 0,     0,  0}
  };
  
@@ -515,7 +565,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     4,  0}, { 3,     1,  1}, { 3,     0, -1}, { 4,    13,  2}, 
    { 4,    12, -2}, { 4,     7,  3}, { 4,     6, -3}, { 5,    31,  4}, 
-@@ -705,7 +705,7 @@
+@@ -705,7 +705,7 @@ huff_entry_t bitalloc_d_65[] =
    {15, 28848,-32}, { 0,     0,  0}
  };
  
@@ -524,7 +574,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     4,  0}, { 3,     0,  1}, { 4,    15, -1}, { 4,     7,  2}, 
    { 4,     6, -2}, { 5,    29,  3}, { 5,    28, -3}, { 5,    23,  4}, 
-@@ -726,7 +726,7 @@
+@@ -726,7 +726,7 @@ huff_entry_t bitalloc_e_65[] =
    {10,   812,-32}, { 0,     0,  0}
  };
  
@@ -533,7 +583,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 3,     6,  0}, { 3,     3,  1}, { 3,     2, -1}, { 4,    15,  2}, 
    { 4,    14, -2}, { 4,     9,  3}, { 4,     8, -3}, { 4,     1,  4}, 
-@@ -747,7 +747,7 @@
+@@ -747,7 +747,7 @@ huff_entry_t bitalloc_f_65[] =
    {14,  4064,-32}, { 0,     0,  0}
  };
  
@@ -542,7 +592,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 4,    14,  0}, { 4,    11,  1}, { 4,    10, -1}, { 4,     8,  2}, 
    { 4,     6, -2}, { 4,     4,  3}, { 4,     3, -3}, { 4,     0,  4}, 
-@@ -768,7 +768,7 @@
+@@ -768,7 +768,7 @@ huff_entry_t bitalloc_g_65[] =
    {11,   268,-32}, { 0,     0,  0}
  };
  
@@ -551,7 +601,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 4,     8,  0}, { 4,    10,  1}, { 4,     9, -1}, { 4,     0,  2}, 
    { 5,    31, -2}, { 5,    24,  3}, { 5,    23, -3}, { 5,    12,  4}, 
-@@ -805,7 +805,7 @@
+@@ -805,7 +805,7 @@ huff_entry_t bitalloc_a_129[] =
    {11,  1632,-64}, { 0,     0,  0}
  };
  
@@ -560,7 +610,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 5,    10,  0}, { 5,     7,  1}, { 5,     6, -1}, { 5,     4,  2}, 
    { 5,     3, -2}, { 5,     0,  3}, { 6,    63, -3}, { 6,    60,  4}, 
-@@ -842,7 +842,7 @@
+@@ -842,7 +842,7 @@ huff_entry_t bitalloc_b_129[] =
    {14, 10716,-64}, { 0,     0,  0}
  };
  
@@ -569,7 +619,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 6,    58,  0}, { 6,    55,  1}, { 6,    54, -1}, { 6,    52,  2}, 
    { 6,    51, -2}, { 6,    49,  3}, { 6,    48, -3}, { 6,    46,  4}, 
-@@ -879,7 +879,7 @@
+@@ -879,7 +879,7 @@ huff_entry_t bitalloc_c_129[] =
    {13,  3676,-64}, { 0,     0,  0}
  };
  
@@ -578,7 +628,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 4,     9,  0}, { 4,     6,  1}, { 4,     5, -1}, { 4,     2,  2}, 
    { 4,     1, -2}, { 5,    30,  3}, { 5,    29, -3}, { 5,    26,  4}, 
-@@ -916,7 +916,7 @@
+@@ -916,7 +916,7 @@ huff_entry_t bitalloc_d_129[] =
    {16, 42392,-64}, { 0,     0,  0}
  };
  
@@ -587,7 +637,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 5,    12,  0}, { 5,    11,  1}, { 5,    10, -1}, { 5,     9,  2}, 
    { 5,     8, -2}, { 5,     7,  3}, { 5,     6, -3}, { 5,     4,  4}, 
-@@ -953,7 +953,7 @@
+@@ -953,7 +953,7 @@ huff_entry_t bitalloc_e_129[] =
    {16, 41276,-64}, { 0,     0,  0}
  };
  
@@ -596,7 +646,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 6,    56,  0}, { 6,    55,  1}, { 6,    54, -1}, { 6,    52,  2}, 
    { 6,    51, -2}, { 6,    50,  3}, { 6,    49, -3}, { 6,    48,  4}, 
-@@ -990,7 +990,7 @@
+@@ -990,7 +990,7 @@ huff_entry_t bitalloc_f_129[] =
    {15, 30252,-64}, { 0,     0,  0}
  };
  
@@ -605,7 +655,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 4,     0,  0}, { 5,    29,  1}, { 5,    28, -1}, { 5,    25,  2}, 
    { 5,    24, -2}, { 5,    21,  3}, { 5,    20, -3}, { 5,    17,  4}, 
-@@ -1027,7 +1027,7 @@
+@@ -1027,7 +1027,7 @@ huff_entry_t bitalloc_g_129[] =
    {13,  7712,-64}, { 0,     0,  0}
  };
  
@@ -614,7 +664,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
    { 0 },
    { bitalloc_a_3, 0 },
-@@ -1047,7 +1047,7 @@
+@@ -1047,7 +1047,7 @@ huff_entry_t *bitalloc_select[11][8] =
      bitalloc_e_129, bitalloc_f_129, bitalloc_g_129, 0 },
  };
  
@@ -623,8 +673,10 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
      int value = 0;
      int length = 0, j;
---- libdca.orig/libdca/tables_quantization.h
-+++ libdca/libdca/tables_quantization.h
+diff --git a/libdca/tables_quantization.h b/libdca/tables_quantization.h
+index 1111111..2222222 100644
+--- a/libdca/tables_quantization.h
++++ b/libdca/tables_quantization.h
 @@ -21,7 +21,7 @@
   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   */
@@ -634,7 +686,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
          1,       2,       2,       3,       3,       4,       6,       7, 
         10,      12,      16,      20,      26,      34,      44,      56, 
-@@ -33,7 +33,7 @@
+@@ -33,7 +33,7 @@ int scale_factor_quant6[] =
    1819701, 2344229, 3019952, 3890451, 5011872, 6456542, 8317638,       0
  };
  
@@ -643,7 +695,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
          1,       1,       2,       2,       2,       2,       3,       3, 
          3,       4,       4,       5,       6,       7,       7,       8, 
-@@ -54,7 +54,7 @@
+@@ -54,7 +54,7 @@ int scale_factor_quant7[] =
  };
  
  /* 20bits unsigned fractional binary codes */
@@ -652,7 +704,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
          0, 6710886, 4194304, 3355443, 2474639, 2097152, 1761608, 1426063, 
     796918,  461373,  251658,  146801,   79692,   46137,   27263,   16777, 
-@@ -62,7 +62,7 @@
+@@ -62,7 +62,7 @@ int lossy_quant[] =
         84,      42,      21,       0,       0,       0,       0,       0
  };
  
@@ -661,7 +713,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
            0,     1.6,      1.0,     0.8,    0.59,    0.50,    0.42,    0.34, 
         0.19,    0.11,     0.06,   0.035,   0.019,   0.011,  0.0065,  0.0040, 
-@@ -71,7 +71,7 @@
+@@ -71,7 +71,7 @@ double lossy_quant_d[] =
  };
  
  /* 20bits unsigned fractional binary codes */
@@ -670,7 +722,7 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
          0, 4194304, 2097152, 1384120, 1048576,  696254,  524288,  348127, 
     262144,  131072,   65431,   33026,   16450,    8208,    4100,    2049, 
-@@ -79,7 +79,7 @@
+@@ -79,7 +79,7 @@ int lossless_quant[] =
          4,       2,       1,       0,       0,       0,       0,       0
  };
  
@@ -679,41 +731,233 @@ Mark tables as static constants. Patch by Diego Flameeyes Petten?\195?\178
  {
      0,             1.0,      0.5,     0.33,     0.25,    0.166,    0.125,
      0.083,      0.0625,  0.03125,   0.0156, 7.874E-3, 3.922E-3, 1.957E-3,
---- libdca.orig/libdca/parse.c
-+++ libdca/libdca/parse.c
-@@ -548,7 +548,7 @@
-     /* Scale factors */
-     for (j = 0; j < state->prim_channels; j++)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sat, 23 Nov 2013 19:55:09 -0800
+Subject: [PATCH] Change output normalisation factor from 3/2 to sqrt(2)
+
+Taken from libdca svn: svn://svn.videolan.org/libdca/trunk.
+r84 | gbazin | 2008-06-01 16:13:33 +0000 (Sun, 01 Jun 2008) | 3 lines
+Thanks to Alexander E. Patrakov for finding that this is the proper normalisation factor.
+Fixed a bug where the output bias wasn't applied when downmixing wasn't being done.
+
+diff --git a/libdca/parse.c b/libdca/parse.c
+index 1111111..2222222 100644
+--- a/libdca/parse.c
++++ b/libdca/parse.c
+@@ -59,12 +59,11 @@ void * memalign (size_t align, size_t size);
+ static int decode_blockcode (int code, int levels, int *values);
+ 
+ static void qmf_32_subbands (dca_state_t * state, int chans,
+-                             double samples_in[32][8], sample_t *samples_out,
+-                             double rScale, sample_t bias);
++                             double samples_in[32][8], sample_t *samples_out);
+ 
+ static void lfe_interpolation_fir (int nDecimationSelect, int nNumDeciSample,
+                                    double *samples_in, sample_t *samples_out,
+-                                   double rScale, sample_t bias );
++                                   sample_t bias);
+ 
+ static void pre_calc_cosmod( dca_state_t * state );
+ 
+@@ -123,7 +122,9 @@ static int syncinfo (dca_state_t * state, int * flags,
+     bitstream_get (state, 1);
+ 
+     *frame_length = (bitstream_get (state, 7) + 1) * 32;
++    if (*frame_length < 6 * 32) return 0;
+     frame_size = bitstream_get (state, 14) + 1;
++    if (frame_size < 96) return 0;
+     if (!state->word_mode) frame_size = frame_size * 8 / 14 * 2;
+ 
+     /* Audio channel arrangement */
+@@ -981,14 +982,7 @@ static int dca_subsubframe (dca_state_t * state)
+     /* 32 subbands QMF */
+     for (k = 0; k < state->prim_channels; k++)
      {
--        int *scale_table;
-+        const int *scale_table;
-         int scale_sum;
+-        /*static double pcm_to_float[8] =
+-            {32768.0, 32768.0, 524288.0, 524288.0, 0, 8388608.0, 8388608.0};*/
+-
+-        qmf_32_subbands (state, k,
+-                         subband_samples[k],
+-                         &state->samples[256*k],
+-          /*WTF ???*/    32768.0*3/2/*pcm_to_float[state->source_pcm_res]*/,
+-                         0/*state->bias*/);
++        qmf_32_subbands (state, k, subband_samples[k], &state->samples[256*k]);
+     }
  
-         for (k = 0; k < state->subband_activity[j]; k++)
-@@ -761,7 +761,7 @@
-     int k, l;
-     int subsubframe = state->current_subsubframe;
+     /* Down/Up mixing */
+@@ -1000,6 +994,10 @@ static int dca_subsubframe (dca_state_t * state)
+     {
+         dca_downmix (state->samples, state->amode, state->output, state->bias,
+                      state->clev, state->slev);
++    } else if (state->bias)
++    {
++        for ( k = 0; k < 256*state->prim_channels; k++ )
++            state->samples[k] += state->bias;
+     }
  
--    double *quant_step_table;
-+    const double *quant_step_table;
+     /* Generate LFE samples for this subsubframe FIXME!!! */
+@@ -1011,8 +1009,7 @@ static int dca_subsubframe (dca_state_t * state)
+         lfe_interpolation_fir (state->lfe, 2 * state->lfe,
+                                state->lfe_data + lfe_samples +
+                                2 * state->lfe * subsubframe,
+-                               &state->samples[256*i_channels],
+-                               8388608.0, state->bias);
++                               &state->samples[256*i_channels], state->bias);
+         /* Outputs 20bits pcm samples */
+     }
  
-     /* FIXME */
-     double subband_samples[DCA_PRIM_CHANNELS_MAX][DCA_SUBBANDS][8];
-@@ -1145,7 +1145,7 @@
-                              double samples_in[32][8], sample_t *samples_out,
-                              double scale, sample_t bias)
+@@ -1142,9 +1139,9 @@ static void pre_calc_cosmod( dca_state_t * state )
+ }
+ 
+ static void qmf_32_subbands (dca_state_t * state, int chans,
+-                             double samples_in[32][8], sample_t *samples_out,
+-                             double scale, sample_t bias)
++                             double samples_in[32][8], sample_t *samples_out)
  {
--    double *prCoeff;
-+    const double *prCoeff;
++    static const double scale = 1.4142135623730951 /* sqrt(2) */ * 32768.0;
+     const double *prCoeff;
      int i, j, k;
      double raXin[32];
+@@ -1211,7 +1208,7 @@ static void qmf_32_subbands (dca_state_t * state, int chans,
  
-@@ -1236,7 +1236,7 @@
+         /* Create 32 PCM output samples */
+         for (i=0;i<32;i++)
+-            samples_out[nChIndex++] = subband_fir_hist2[i] / scale + bias;
++            samples_out[nChIndex++] = subband_fir_hist2[i] / scale;
+ 
+         /* Update working arrays */
+         for (i=511;i>=32;i--)
+@@ -1225,7 +1222,7 @@ static void qmf_32_subbands (dca_state_t * state, int chans,
+ 
+ static void lfe_interpolation_fir (int nDecimationSelect, int nNumDeciSample,
+                                    double *samples_in, sample_t *samples_out,
+-                                   double scale, sample_t bias)
++                                   sample_t bias)
+ {
+     /* samples_in: An array holding decimated samples.
+      *   Samples in current subframe starts from samples_in[0],
+@@ -1235,6 +1232,7 @@ static void lfe_interpolation_fir (int nDecimationSelect, int nNumDeciSample,
+      * samples_out: An array holding interpolated samples
       */
  
++    static const double scale = 8388608.0;
      int nDeciFactor, k, J;
--    double *prCoeff;
-+    const double *prCoeff;
+     const double *prCoeff;
  
-     int NumFIRCoef = 512; /* Number of FIR coefficients */
-     int nInterpIndex = 0; /* Index to the interpolated samples */
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sat, 23 Nov 2013 19:55:09 -0800
+Subject: [PATCH] sanity check for subframes and prim_channels to avoid crashes
+ with invalid streams
+
+Taken from libdca svn: svn://svn.videolan.org/libdca/trunk.
+r87 | sam | 2008-07-18 19:22:47 +0000 (Fri, 18 Jul 2008) | 2 lines
+
+diff --git a/libdca/parse.c b/libdca/parse.c
+index 1111111..2222222 100644
+--- a/libdca/parse.c
++++ b/libdca/parse.c
+@@ -305,8 +305,15 @@ int dca_frame (dca_state_t * state, uint8_t * buf, int * flags,
+ 
+     /* Primary audio coding header */
+     state->subframes = bitstream_get (state, 4) + 1;
++
++    if (state->subframes > DCA_SUBFRAMES_MAX)
++        state->subframes = DCA_SUBFRAMES_MAX;
++
+     state->prim_channels = bitstream_get (state, 3) + 1;
+ 
++    if (state->prim_channels > DCA_PRIM_CHANNELS_MAX)
++        state->prim_channels = DCA_PRIM_CHANNELS_MAX;
++
+ #ifdef DEBUG
+     fprintf (stderr, "subframes: %i\n", state->subframes);
+     fprintf (stderr, "prim channels: %i\n", state->prim_channels);
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sat, 23 Nov 2013 19:55:09 -0800
+Subject: [PATCH] fix random crashes caused by invalid 32-bit shifts on 32-bit
+ values.
+
+Taken from libdca svn: svn://svn.videolan.org/libdca/trunk.
+r88 | sam | 2008-07-19 22:26:13 +0000 (Sat, 19 Jul 2008) | 2 lines
+
+diff --git a/libdca/bitstream.c b/libdca/bitstream.c
+index 1111111..2222222 100644
+--- a/libdca/bitstream.c
++++ b/libdca/bitstream.c
+@@ -25,6 +25,7 @@
+ 
+ #include "config.h"
+ 
++#include <stdio.h>
+ #include <inttypes.h>
+ 
+ #include "dca.h"
+@@ -46,7 +47,7 @@ void dca_bitstream_init (dca_state_t * state, uint8_t * buf, int word_mode,
+     state->bigendian_mode = bigendian_mode;
+     bitstream_get (state, align * 8);
+ }
+-#include<stdio.h>
++
+ static inline void bitstream_fill_current (dca_state_t * state)
+ {
+     uint32_t tmp;
+@@ -76,12 +77,14 @@ static inline void bitstream_fill_current (dca_state_t * state)
+ 
+ uint32_t dca_bitstream_get_bh (dca_state_t * state, uint32_t num_bits)
+ {
+-    uint32_t result;
+-
+-    num_bits -= state->bits_left;
++    uint32_t result = 0;
+ 
+-    result = ((state->current_word << (32 - state->bits_left)) >>
+-	      (32 - state->bits_left));
++    if (state->bits_left)
++    {
++	num_bits -= state->bits_left;
++        result = ((state->current_word << (32 - state->bits_left)) >>
++		  (32 - state->bits_left));
++    }
+ 
+     if ( !state->word_mode && num_bits > 28 ) {
+         bitstream_fill_current (state);
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Sat, 23 Nov 2013 19:55:09 -0800
+Subject: [PATCH] avoid crashing with invalid frames setting a bitalloc_huffman
+ component to 7
+
+Taken from libdca svn: svn://svn.videolan.org/libdca/trunk.
+r89 | sam | 2008-07-19 22:26:17 +0000 (Sat, 19 Jul 2008) | 2 lines
+
+diff --git a/libdca/parse.c b/libdca/parse.c
+index 1111111..2222222 100644
+--- a/libdca/parse.c
++++ b/libdca/parse.c
+@@ -364,7 +364,10 @@ int dca_frame (dca_state_t * state, uint8_t * buf, int * flags,
+     for (i = 0; i < state->prim_channels; i++)
+     {
+         state->bitalloc_huffman[i] = bitstream_get (state, 3);
+-        /* if (state->bitalloc_huffman[i] == 7) bailout */
++        /* There might be a way not to trash the whole frame, but for
++         * now we must bail out or we will buffer overflow later. */
++        if (state->bitalloc_huffman[i] == 7)
++            return 1;
+ #ifdef DEBUG
+         fprintf (stderr, "bit allocation quantizer: %i\n",
+                  state->bitalloc_huffman[i]);
+@@ -541,6 +544,7 @@ static int dca_subframe_header (dca_state_t * state)
+                 k < state->vq_start_subband[j] &&
+                 state->bitalloc[j][k] > 0)
+             {
++                /* tmode cannot overflow since transient_huffman[j] < 4 */
+                 state->transition_mode[j][k] = InverseQ (state,
+                     tmode[state->transient_huffman[j]]);
+             }
