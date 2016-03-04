@@ -1,0 +1,27 @@
+This file is part of MXE.
+See index.html for further information.
+
+A wrongly placed #endif causes a missing symbol 'HE5_EHHEisHE5' when
+compiling without szip.  Bug & fix reported upstream.
+
+diff --git a/src/EHapi.c b/src/EHapi.c
+index 46a9b5c..208f447 100755
+--- a/src/EHapi.c
++++ b/src/EHapi.c
+@@ -11379,6 +11379,7 @@ int HE5_szip_can_encode(void )
+   return(-1);
+ }
+ 
++#endif /* H5_HAVE_FILTER_SZIP */
+ 
+ 
+ /*----------------------------------------------------------------------------|
+@@ -11509,8 +11510,6 @@ HE5_EHHEisHE5(char *filename)
+     }
+ }
+ 
+-#endif /* H5_HAVE_FILTER_SZIP */
+-
+ 
+ #ifndef __cplusplus
+ 
