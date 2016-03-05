@@ -3,8 +3,8 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := baec395
-$(PKG)_CHECKSUM := 85e99c383287d8f32a5b198b72bd30a0cc4f9e866e67b1bb78cae21e68120949
+$(PKG)_VERSION  := d271534
+$(PKG)_CHECKSUM := aa71b46af1b169b3c50809813b9fd3129e55d99601bd78f86c47a099a484fa26
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
