@@ -33,5 +33,22 @@ define $(PKG)_BUILD
     $(INSTALL) '$(1)'$(if $(BUILD_STATIC),libcryptopp.a,libcryptopp.dll.a) '$(PREFIX)'/$(TARGET)/lib
     $(if $(BUILD_STATIC),,$(INSTALL) '$(1)'cryptopp.dll '$(PREFIX)'/$(TARGET)/bin)
 
-    $(TARGET)-g++ -w $(2).cpp -o '$(PREFIX)'/$(TARGET)/bin/test-cryptopp.exe -lcryptopp
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'prefix=$(PREFIX)/$(TARGET)'; \
+     echo 'exec_prefix=$${prefix}'; \
+     echo 'libdir=$${exec_prefix}/lib'; \
+     echo 'includedir=$${prefix}/include'; \
+     echo ''; \
+     echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: Crypto++ Library'; \
+     echo 'Libs: -L$${libdir} -lcryptopp'; \
+     echo 'Cflags: -I$${includedir}';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    $(TARGET)-g++ \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `$(TARGET)-pkg-config cryptopp --cflags --libs`
 endef
