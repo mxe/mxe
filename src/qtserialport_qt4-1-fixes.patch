@@ -1,0 +1,41 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Daniel Burr <dburr@topcon.com>
+Date: Tue, 12 Jan 2016 18:37:28 +0100
+Subject: [PATCH] Allow static building of qtserialport_qt4
+
+Taken from:
+https://github.com/qtproject/qtserialport/pull/2
+
+The QtSerialPort library expects QT_STATIC to be defined when it is
+being compiled as a static library.  If is not defined then the
+Q_SERIALPORT_EXPORT macro will be set to one of
+Q_DECL_IMPORT/Q_DECL_EXPORT, resulting in linking errors when the test
+cases are built under Windows.
+
+The following changeset introduced support for the QT_STATIC macro into
+QT:
+
+https://gitlab.com/pteam/pteam-qtbase/commit/96166fa56abb52157387c4911efbd4e5e6beee93
+
+This change is not included in QT 4.8.7 (appears to be 5.x only) and
+therefore QT_STATIC is not defined when QtSerialPort is compiled against
+4.x QT versions.
+
+The workaround used here is for the QSerialPort build system to define
+QT_STATIC when it is being compiled statically.
+
+diff --git a/src/serialport/qt4support/serialport.prf b/src/serialport/qt4support/serialport.prf
+index 1111111..2222222 100644
+--- a/src/serialport/qt4support/serialport.prf
++++ b/src/serialport/qt4support/serialport.prf
+@@ -25,3 +25,5 @@ mac {
+        LIBS += -lQtSerialPort$${QT_LIBINFIX}
+    }
+ }
++
++static:DEFINES += QT_STATIC

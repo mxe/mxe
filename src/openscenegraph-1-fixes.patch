@@ -155,3 +155,30 @@ index 1111111..2222222 100644
      macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _header _library)
          find_path(${_component_prefix}_INCLUDE_DIRS
              NAMES ${_header}
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Mon, 22 Feb 2016 03:35:28 +0300
+Subject: [PATCH] disable ffmpeg
+
+OpenSceneGraph is using removed features of ffmpeg, which have
+been deprecated for 3+ years.
+
+See https://github.com/mxe/mxe/issues/1230#issuecomment-186936198
+Source of patch: http://forum.openscenegraph.org/viewtopic.php?t=10485
+
+diff --git a/src/osgPlugins/CMakeLists.txt b/src/osgPlugins/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/osgPlugins/CMakeLists.txt
++++ b/src/osgPlugins/CMakeLists.txt
+@@ -199,10 +199,6 @@ IF(XINE_FOUND)
+     ADD_SUBDIRECTORY(xine)
+ ENDIF()
+ 
+-IF(FFMPEG_FOUND AND OSG_CPP_EXCEPTIONS_AVAILABLE)
+-    ADD_SUBDIRECTORY(ffmpeg)
+-ENDIF()
+-
+ IF(GSTREAMER_FOUND AND GLIB_FOUND)
+     ADD_SUBDIRECTORY(gstreamer)
+ ENDIF()

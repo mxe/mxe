@@ -314,6 +314,10 @@ LOOKUP_PKG_RULE = $(strip \
 .PHONY: all
 all: all-filtered
 
+# Build native requirements for certain systems
+OS_SHORT_NAME   := $(call lc,$(shell lsb_release -sc 2>/dev/null || uname -s))
+MXE_PLUGIN_DIRS += $(realpath $(TOP_DIR)/plugins/native/$(OS_SHORT_NAME))
+
 .PHONY: check-requirements
 define CHECK_REQUIREMENT
     @if ! $(1) --help &>/dev/null; then \
@@ -616,7 +620,7 @@ BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
 
 .PHONY: clean
 clean:
-	-chmod 0755 "$$WINEPREFIX"
+	@[ -d "$$WINEPREFIX" ] && chmod 0755 "$$WINEPREFIX" || true
 	rm -rf $(call TMP_DIR,*) $(PREFIX) \
 	       $(addprefix $(TOP_DIR)/, $(BUILD_PKG_TMP_FILES))
 

@@ -1,16 +1,18 @@
 This file is part of MXE.
 See index.html for further information.
 
-From b4a1284aa84466a5c757e1efd16a694d128b1038 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Aug 2015 23:35:08 +0200
-Subject: [PATCH 1/6] fix qwindows plugin linking with system-freetype (MXE
+Subject: [PATCH] fix qwindows plugin linking with system-freetype (MXE
  specific)
 
 Change-Id: I8783e3ab2d19011b083dd3c471107298a17293c4
 
 diff --git a/src/3rdparty/freetype_dependency.pri b/src/3rdparty/freetype_dependency.pri
-index 39280de..e152b0d 100644
+index 1111111..2222222 100644
 --- a/src/3rdparty/freetype_dependency.pri
 +++ b/src/3rdparty/freetype_dependency.pri
 @@ -4,4 +4,5 @@ contains(QT_CONFIG, freetype) {
@@ -19,19 +21,16 @@ index 39280de..e152b0d 100644
      include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
 +    win32:shared:LIBS_PRIVATE += -lfreetype
  }
--- 
-2.1.4
 
-
-From 217955a3e041e368857a696ebe8b512576d0cead Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 21 Jun 2014 13:12:49 +0200
-Subject: [PATCH 2/6] use pkg-config for harfbuzz (MXE specific)
+Subject: [PATCH] use pkg-config for harfbuzz (MXE specific)
 
 Change-Id: Id4e4c37d68b63c9f480d72a561d95d4d2a5ded50
 
 diff --git a/config.tests/unix/harfbuzz/harfbuzz.pro b/config.tests/unix/harfbuzz/harfbuzz.pro
-index 32edd6e..a7f2c28 100644
+index 1111111..2222222 100644
 --- a/config.tests/unix/harfbuzz/harfbuzz.pro
 +++ b/config.tests/unix/harfbuzz/harfbuzz.pro
 @@ -1,3 +1,4 @@
@@ -41,7 +40,7 @@ index 32edd6e..a7f2c28 100644
 +CONFIG += link_pkgconfig
 +PKGCONFIG += harfbuzz
 diff --git a/src/3rdparty/harfbuzz_dependency.pri b/src/3rdparty/harfbuzz_dependency.pri
-index 7443368..c24e684 100644
+index 1111111..2222222 100644
 --- a/src/3rdparty/harfbuzz_dependency.pri
 +++ b/src/3rdparty/harfbuzz_dependency.pri
 @@ -2,5 +2,6 @@ contains(QT_CONFIG, harfbuzz) {
@@ -52,19 +51,16 @@ index 7443368..c24e684 100644
 +    CONFIG += link_pkgconfig
 +    PKGCONFIG += harfbuzz
  }
--- 
-2.1.4
 
-
-From 81c61f1cf8a2b8ea01545212081427eed0ab2950 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 8 Dec 2014 14:15:12 +0100
-Subject: [PATCH 3/6] fix oci config test on windows
+Subject: [PATCH] fix oci config test on windows
 
 Change-Id: If1ce2241682259ca495b0ba68bf18410f8548922
 
 diff --git a/config.tests/unix/oci/oci.pro b/config.tests/unix/oci/oci.pro
-index 3ffda1d..39b6f3759 100644
+index 1111111..2222222 100644
 --- a/config.tests/unix/oci/oci.pro
 +++ b/config.tests/unix/oci/oci.pro
 @@ -1,3 +1,3 @@
@@ -72,19 +68,16 @@ index 3ffda1d..39b6f3759 100644
  CONFIG -= qt dylib
 -LIBS += -lclntsh
 +!win32:LIBS += -lclntsh
--- 
-2.1.4
 
-
-From b656a46abeecfa7ace2e08393b63412e74c62589 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Aug 2015 13:24:56 +0200
-Subject: [PATCH 4/6] configure: don't set QT_NO_SYSTEMSEMAPHORE for Windows
+Subject: [PATCH] configure: don't set QT_NO_SYSTEMSEMAPHORE for Windows
 
 Change-Id: I53c110ef40e3d14cc49fa23aa5d294611cac2ffa
 
 diff --git a/configure b/configure
-index cea62fb..d6bbcd2 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
 @@ -4464,7 +4464,7 @@ fi
@@ -96,19 +89,16 @@ index cea62fb..d6bbcd2 100755
      # SYSV IPC is not supported - check POSIX IPC
      if compileTest unix/ipc_posix "ipc_posix" ; then
          QCONFIG_FLAGS="$QCONFIG_FLAGS QT_POSIX_IPC"
--- 
-2.1.4
 
-
-From ae120a60f2f31c911a451036ecd826b4486e2d3f Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 6 Oct 2015 09:53:20 +0200
-Subject: [PATCH 5/6] fix building mysql driver under mingw
+Subject: [PATCH] fix building mysql driver under mingw
 
 Change-Id: I9c4e821d5b3a6919566c6b684cb4916827feb6a9
 
 diff --git a/src/sql/drivers/mysql/qsql_mysql.pri b/src/sql/drivers/mysql/qsql_mysql.pri
-index 3cfb614..8b7063f 100644
+index 1111111..2222222 100644
 --- a/src/sql/drivers/mysql/qsql_mysql.pri
 +++ b/src/sql/drivers/mysql/qsql_mysql.pri
 @@ -4,7 +4,7 @@ SOURCES += $$PWD/qsql_mysql.cpp
@@ -120,14 +110,11 @@ index 3cfb614..8b7063f 100644
      isEmpty(QT_LFLAGS_MYSQL) {
          !contains(LIBS, .*mysqlclient.*):!contains(LIBS, .*mysqld.*) {
              use_libmysqlclient_r:LIBS += -lmysqlclient_r
--- 
-2.1.4
 
-
-From 9f47024d54abca4590fc1954015d14df40b23755 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 18 Oct 2015 23:11:28 +0300
-Subject: [PATCH 6/6] configure: fix log corruption with option -v
+Subject: [PATCH] configure: fix log corruption with option -v
 
 This bug occurs if ./configure is called with -v on systems on
 which fd proc entries point to the files/devices they are open
@@ -163,7 +150,7 @@ Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
 (cherry picked from commit 45fe3f1cde1e516d1ddccddb5e33ea4316497c36)
 
 diff --git a/configure b/configure
-index d6bbcd2..def691f 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
 @@ -3571,10 +3571,9 @@ END {
@@ -180,6 +167,55 @@ index d6bbcd2..def691f 100755
  
  #setup the build parts
  if [ -z "$CFG_BUILD_PARTS" ]; then
--- 
-2.1.4
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Wed, 26 Aug 2015 12:45:43 +0100
+Subject: [PATCH] cmake: Rearrange STATIC vs INTERFACE targets
+
+Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
+for header-only modules when building Qt5 statically.
+
+Source: https://git.io/vzWJz
+See also: https://github.com/mxe/mxe/issues/1185
+
+diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+index 1111111..2222222 100644
+--- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
++++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+@@ -222,13 +222,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+     endif()
+ !!ENDIF
+ 
++!!IF equals(TEMPLATE, aux)
++    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
++!!ELSE
+ !!IF !isEmpty(CMAKE_STATIC_TYPE)
+     add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
+     set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
+ !!ELSE
+-!!IF equals(TEMPLATE, aux)
+-    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
+-!!ELSE
+     add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
+ !!ENDIF
+ !!ENDIF
+
+From 3ebc085c4d7488df899f35e9ac63da819dffc1b9 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Wed, 24 Feb 2016 19:39:46 +0300
+Subject: [PATCH] Fix ar error: `u' modifier ignored since `D' is the default (see `U')
+
+diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
+index 1111111..2222222 100644
+--- a/mkspecs/win32-g++/qmake.conf
++++ b/mkspecs/win32-g++/qmake.conf
+@@ -94,7 +94,7 @@
+ QMAKE_LIBS_QT_ENTRY     = -lmingw32 -lqtmain
+ 
+ QMAKE_IDL               = midl
+-QMAKE_LIB               = $${CROSS_COMPILE}ar -ru
++QMAKE_LIB               = $${CROSS_COMPILE}ar -rc
+ QMAKE_RC                = $${CROSS_COMPILE}windres
+ 
+ QMAKE_STRIP             = $${CROSS_COMPILE}strip
