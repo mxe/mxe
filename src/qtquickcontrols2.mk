@@ -1,14 +1,14 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := qtserialport
+PKG             := qtquickcontrols2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 16ee7fb66bb997df674a12a7a5a1450e2a2b860c8d34d237f3631d9f60853c1f
-$(PKG)_SUBDIR    = $(subst qtbase,qtserialport,$(qtbase_SUBDIR))
-$(PKG)_FILE      = $(subst qtbase,qtserialport,$(qtbase_FILE))
-$(PKG)_URL       = $(subst qtbase,qtserialport,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase
+$(PKG)_CHECKSUM := 59ec6ea2282931bc0d0748b3979a52e1a322e7ef8d1e5490b8a34931e8b9fee0
+$(PKG)_SUBDIR    = $(subst qtbase,qtquickcontrols2,$(qtbase_SUBDIR))
+$(PKG)_FILE      = $(subst qtbase,qtquickcontrols2,$(qtbase_FILE))
+$(PKG)_URL       = $(subst qtbase,qtquickcontrols2,$(qtbase_URL))
+$(PKG)_DEPS     := gcc qtbase qtdeclarative
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

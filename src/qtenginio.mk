@@ -3,11 +3,11 @@
 
 PKG             := qtenginio
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := a79936bd5b6a35aba28dd282291b28c8fa869b8d86652c62efe5e268d94defe2
-$(PKG)_SUBDIR    = $(subst qtbase,qtenginio,$(qtbase_SUBDIR))
-$(PKG)_FILE      = $(subst qtbase,qtenginio,$(qtbase_FILE))
-$(PKG)_URL       = $(subst qtbase,qtenginio,$(qtbase_URL))
+$(PKG)_VERSION   = 1.6.0
+$(PKG)_CHECKSUM := 627ddcfbbfc3ec1a83c9dbb5f24287b5cd6cb5d3b9d09af4d1c444c6ac147f0c
+$(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
+$(PKG)_URL      := $(subst $(qtbase_FILE),$($(PKG)_FILE),$(qtbase_URL))
 $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_UPDATE
