@@ -3,8 +3,8 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.14.14windows
-$(PKG)_CHECKSUM := 6f767db350fd3d5321eda12781983b6e8f6170e0efac685bd3af819674281229
+$(PKG)_VERSION  := 0.14.15windows
+$(PKG)_CHECKSUM := 4acd79408d188c7f09b90e6c046be24e190ee1d9e1b9db8c8885c780be8f5718
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/$($(PKG)_FILE)
