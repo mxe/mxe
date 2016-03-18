@@ -7,7 +7,8 @@ $(PKG)_VERSION  := 1.9.2
 $(PKG)_CHECKSUM := 023da881139b4514647b6f8a830a244071034efcaad8c8e98c6b92393122b4eb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://mirror.23media.de/apache/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := http://archive.apache.org/dist/subversion/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://mirror.23media.de/apache/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc apr apr-util sqlite openssl
 
 define $(PKG)_UPDATE
