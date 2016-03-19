@@ -242,6 +242,7 @@ ifeq ($(IGNORE_SETTINGS),yes)
     $(info [ignore settings.mk])
 else ifeq ($(wildcard $(PWD)/settings.mk),$(PWD)/settings.mk)
     include $(PWD)/settings.mk
+    # `local-pkg-list` may become a default target of `make` here.
 else
     $(info [create settings.mk])
     $(shell { \
@@ -311,6 +312,7 @@ LOOKUP_PKG_RULE = $(strip \
         $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3)),$(1)_$(2)_$(3))\
         $(1)_$(2)_$(3))))
 
+# settings.mk is included above, `local-pkg-list` may be the first target.
 .PHONY: all
 all: all-filtered
 
