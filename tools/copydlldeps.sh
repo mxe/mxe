@@ -356,21 +356,27 @@ fi
 
 for dll in `echo $alldeps | tr '\n' ' '`; do
 	counter=0
+	lower_dll=`echo $dll | tr '[:upper:]' '[:lower:]'`
+	if [ $lower_dll == $dll ]; then
+		lower_dll=""
+	fi
 	for curFolder in $( echo "${str_srcDirList}" | tr -s ' ' | tr ' ' '\n'); do
 		if [ "$logLevel" -gt 1 ]; then
 			echo "search for dll $dll in curFolder $curFolder"
 			sleep 1
-		fi 
-		if [ -e "${curFolder}/${dll}" ]; then
-        		counter=$(expr $counter + 1)
-        		if [ $opmode == "copy" ]; then
-				cp -dpRxv "${curFolder}/${dll}" "$destdir"
-			elif [ $opmode == "print" ]; then
-        			echo "found $dll in: ${curFolder}/${dll}"
-			else
-        			echo "unknown opmode=$opmode"
-        		fi
-        	fi
+		fi
+		for the_dll in $dll $lower_dll; do
+			if [ -e "${curFolder}/${the_dll}" ]; then
+				counter=$(expr $counter + 1)
+				if [ $opmode == "copy" ]; then
+					cp -dpRxv "${curFolder}/${the_dll}" "$destdir"
+				elif [ $opmode == "print" ]; then
+					echo "found $dll in: ${curFolder}/${the_dll}"
+				else
+					echo "unknown opmode=$opmode"
+				fi
+			fi
+		done
 	done
 	if [ $counter == 0 ]; then
 		echo "Warning: \"$dll\"  not found. \$counter=$counter." >&2
