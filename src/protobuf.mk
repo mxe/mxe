@@ -3,23 +3,22 @@
 
 PKG             := protobuf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.5.0
-$(PKG)_CHECKSUM := 13bfc5ae543cf3aa180ac2485c0bc89495e3ae711fc6fab4f8ffe90dfb4bb677
+$(PKG)_VERSION  := 2.6.1
+$(PKG)_CHECKSUM := 2667b7cda4a6bc8a09e5463adf3b5984e08d94e72338277affa8594d8b6e5cd1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://protobuf.googlecode.com/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/google/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_DEPS     := gcc zlib googletest
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://code.google.com/p/protobuf/downloads/list?sort=-uploaded' | \
-    $(SED) -n 's,.*protobuf-\([0-9][^<]*\)\.tar.*,\1,p' | \
-    grep -v 'rc' | \
-    head -1
+    $(call MXE_GET_GITHUB_TAGS, google/protobuf, v)
 endef
 
 define $(PKG)_BUILD
+    $(call PREPARE_PKG_SOURCE,googletest,$(1))
+    cd '$(1)' && mv googletest-release-$(googletest_VERSION)/ gtest
 # First step: Build for host system in order to create "protoc" binary.
-    cd '$(1)' && ./configure \
+    cd '$(1)' && ./autogen.sh && ./configure \
         --disable-shared
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     cp '$(1)/src/protoc' '$(PREFIX)/bin/$(TARGET)-protoc'
