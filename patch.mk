@@ -51,6 +51,7 @@ define EXPORT_PATCH
             --no-signature \
             --stdout \
             --text \
+            -M9 \
             dist..HEAD \
         | sed 's/^From [0-9a-f]\{40\} /From 0000000000000000000000000000000000000000 /' \
         | sed 's/^index .......\.\......../index 1111111..2222222/' \
