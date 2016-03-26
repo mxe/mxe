@@ -1,0 +1,78 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pavel Vatagin <pavelvat@gmail.com>
+Date: Sat, 5 Nov 2016 02:19:37 +0300
+Subject: [PATCH] fix clementine
+
+
+diff --git a/3rdparty/libprojectm/CMakeLists.txt b/3rdparty/libprojectm/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/3rdparty/libprojectm/CMakeLists.txt
++++ b/3rdparty/libprojectm/CMakeLists.txt
+@@ -174,6 +174,8 @@ if(BUNDLE_PROJECTM_PRESETS)
+         COPY_ONLY
+       )
+     endforeach (preset)
++  elseif (WIN32)
++    INSTALL(FILES ${presets} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/projectm-presets)
+   else (APPLE)
+     INSTALL(FILES ${presets} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/clementine/projectm-presets)
+   endif (APPLE)
+diff --git a/3rdparty/libprojectm/glew.h b/3rdparty/libprojectm/glew.h
+index 1111111..2222222 100644
+--- a/3rdparty/libprojectm/glew.h
++++ b/3rdparty/libprojectm/glew.h
+@@ -149,7 +149,7 @@ typedef unsigned short wchar_t;
+ #  endif
+ #endif
+ #if !defined(_PTRDIFF_T_DEFINED) && !defined(_PTRDIFF_T_)
+-#  ifdef _WIN64
++#  if defined(_WIN64) && !defined(__MINGW32__)
+ typedef __int64 ptrdiff_t;
+ #  else
+ typedef _W64 int ptrdiff_t;
+diff --git a/3rdparty/tinysvcmdns/CMakeLists.txt b/3rdparty/tinysvcmdns/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/3rdparty/tinysvcmdns/CMakeLists.txt
++++ b/3rdparty/tinysvcmdns/CMakeLists.txt
+@@ -7,7 +7,7 @@ set(TINYSVCMDNS-SOURCES
+ )
+ 
+ find_library(PTHREAD
+-  pthreadGC2
++  pthread
+ )
+ 
+ add_library(tinysvcmdns STATIC
+diff --git a/ext/clementine-tagreader/CMakeLists.txt b/ext/clementine-tagreader/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/ext/clementine-tagreader/CMakeLists.txt
++++ b/ext/clementine-tagreader/CMakeLists.txt
+@@ -27,10 +27,10 @@ add_executable(clementine-tagreader
+ 
+ target_link_libraries(clementine-tagreader
+   ${TAGLIB_LIBRARIES}
+-  ${QT_QTCORE_LIBRARY}
+-  ${QT_QTNETWORK_LIBRARY}
+   libclementine-common
+   libclementine-tagreader
++  ${QT_QTCORE_LIBRARY}
++  ${QT_QTNETWORK_LIBRARY}
+ )
+ 
+ if(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1343,6 +1343,7 @@ if (WIN32)
+     tinysvcmdns
+     qtwin
+     dsound
++    ${QT_QTGUI_LIBRARY}
+   )
+ endif (WIN32)
+ 
