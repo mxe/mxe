@@ -7,7 +7,9 @@
 #include <stdio.h>
 
 static void print_message() {
-    fprintf(stderr, "Don't use network from MXE build rules!\n");
+    fflush(stderr);
+    fprintf(stderr, "\nDon't use network from MXE build rules!\n");
+    fflush(stderr);
 }
 
 int connect(int sock, const void *addr, unsigned int len) {
