@@ -81,11 +81,7 @@ Optional binary settings:
   -o, --objdump           Specify the path or name of your objdump application
   -e, --enforcedir        [ multiCall ] Enforce executable files and/or DLLs of a specific directory 
                           It will be entirely copied - flat, non recursive. assumes *.dll and *.exe in the top level directory
-<<<<<<< HEAD
  	                  It will copy those into a directory in DESTDIR! 
-=======
-                          It will copy those into a directory in DESTDIR! 
->>>>>>> 704ebfff7e3ee9b83a5bd0b65d420bcea5577a02
                           e.g. <path_to_mxe>/mxe/usr/<compiler>/qt5/plugins/platforms/ - for qwindows.dll becomes
                           DESTDIR/platforms/ containing qwindows.dll
 Other options:
