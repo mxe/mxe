@@ -4,7 +4,7 @@
 PKG             := qtwebkit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := d5c4daac8eef1b24290cda59db432ccc390761af17661f64f3028482647521a1
+$(PKG)_CHECKSUM := 9ca72373841f3a868a7bcc696956cdb0ad7f5e678c693659f6f0b919fdd16dfe
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebkit,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebkit,$(qtbase_FILE))
 $(PKG)_URL       = $(subst /submodules/,/,$(subst official_releases/qt,community_releases,$(subst qtbase,qtwebkit,$(qtbase_URL))))
