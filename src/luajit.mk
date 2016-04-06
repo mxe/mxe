@@ -9,6 +9,7 @@ $(PKG)_SUBDIR   := LuaJIT-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://luajit.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc dlfcn-win32
+$(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
@@ -18,6 +19,13 @@ define $(PKG)_BUILD
         FILE_T=luajit.exe \
         INSTALL_TNAME=luajit-$($(PKG)_VERSION).exe \
         INSTALL_TSYMNAME=luajit.exe \
+        install
+endef
+
+define $(PKG)_BUILD_$(BUILD)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' \
+        BUILDMODE=static \
+        PREFIX='$(PREFIX)/$(BUILD)' \
         install
 endef
 
