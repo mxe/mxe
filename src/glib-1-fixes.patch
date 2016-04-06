@@ -557,3 +557,26 @@ index 1111111..2222222 100644
  }
  
  static gchar *
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: aquiles2k <aj@elane2k.com>
+Date: Wed, 6 Apr 2016 22:39:53 +0300
+Subject: [PATCH] fix error "won't overwrite defined macro" on OSX
+
+See https://github.com/mxe/mxe/issues/1281
+
+diff --git a/m4macros/glib-gettext.m4 b/m4macros/glib-gettext.m4
+index 1111111..2222222 100644
+--- a/m4macros/glib-gettext.m4
++++ b/m4macros/glib-gettext.m4
+@@ -36,8 +36,8 @@ dnl We go to great lengths to make sure that aclocal won't
+ dnl try to pull in the installed version of these macros
+ dnl when running aclocal in the glib directory.
+ dnl
+-m4_copy([AC_DEFUN],[glib_DEFUN])
+-m4_copy([AC_REQUIRE],[glib_REQUIRE])
++m4_copy_force([AC_DEFUN],[glib_DEFUN])
++m4_copy_force([AC_REQUIRE],[glib_REQUIRE])
+ dnl
+ dnl At the end, if we're not within glib, we'll define the public
+ dnl definitions in terms of our private definitions.
