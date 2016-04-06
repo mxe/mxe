@@ -4,7 +4,7 @@ See index.html for further information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Sep 2010 21:42:46 +0200
 Subject: [PATCH] fix tool paths
 
@@ -28,7 +28,7 @@ index 1111111..2222222 100644
  Description: C Utility Library
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:25:01 +0200
 Subject: [PATCH] Avoid DllMain symbol conflict when linking statically
 
@@ -86,7 +86,7 @@ index 1111111..2222222 100644
  {
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:27:22 +0200
 Subject: [PATCH] Allow building without inotify support
 
@@ -114,7 +114,7 @@ index 1111111..2222222 100644
  
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:28:14 +0200
 Subject: [PATCH] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
  Backported from upstream
@@ -135,7 +135,7 @@ index 1111111..2222222 100644
    if test x$enable_static = xyes -a x$enable_shared = xyes; then
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:06 +0200
 Subject: [PATCH] Link with dnsapi
 
@@ -154,7 +154,7 @@ index 1111111..2222222 100644
  Cflags:
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:38 +0200
 Subject: [PATCH] Ensure globals are initialized even when DllMain is not being
  run
@@ -531,8 +531,8 @@ index 1111111..2222222 100644
  
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Wed, 6 Apr 2016 22:24:43 +0300
+From: Gerardo Ballabio <gerardo.ballabio@gmail.com>
+Date: Sun, 16 Aug 2015 13:18:24 +0200
 Subject: [PATCH] Remove an annoying runtime warning
 
 that pops up when using GtkApplication in Gtk+ 3 programs.
