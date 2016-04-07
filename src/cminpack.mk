@@ -17,14 +17,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
-    $(MAKE) -C '$(1)' -j $(JOBS)
-
-    $(INSTALL) -d                         '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/libcminpack.a' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -d                         '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m644 '$(1)/cminpack.h'    '$(PREFIX)/$(TARGET)/include/'
+    '$(TARGET)-cmake' -B'$(BUILD_DIR)' -H'$(SOURCE_DIR)' \
+        -DBUILD_EXAMPLES=OFF
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
-
-$(PKG)_BUILD_SHARED =

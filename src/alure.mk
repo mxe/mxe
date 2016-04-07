@@ -18,17 +18,20 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/build' && cmake \
-        -DBUILD_STATIC=ON \
-        -DBUILD_SHARED=OFF \
+    '$(TARGET)-cmake' -B'$(BUILD_DIR)' -H'$(SOURCE_DIR)' \
         -DBUILD_EXAMPLES=OFF \
         -DFLUIDSYNTH=OFF \
-        -DCMAKE_C_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \
-        -DCMAKE_CXX_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        ..
-    $(MAKE) -C '$(1)/build' -j $(JOBS) VERBOSE=1
-    $(MAKE) -C '$(1)/build' -j $(JOBS) install
-endef
+        $(if $(BUILD_STATIC), \
+            -DCMAKE_C_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \
+            -DCMAKE_CXX_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY")
 
-$(PKG)_BUILD_SHARED =
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) install
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(SOURCE_DIR)/examples/alurestream.c' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' alure$(if $(BUILD_STATIC),-static) \
+        flac libmpg123 sndfile vorbisfile --cflags --libs`
+endef

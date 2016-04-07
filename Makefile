@@ -185,6 +185,7 @@ UNPACK_PKG_ARCHIVE = \
 # some shortcuts for awareness of MXE_PLUGIN_DIRS
 # all files for extension plugins will be considered for outdated checks
 PKG_MAKEFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).mk, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
+PKG_CONFFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).*.in, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 PKG_TESTFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1)-test*, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 PKG_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 
@@ -464,6 +465,7 @@ define PKG_TARGET_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
+                          $(PKG_CONFFILES) \
                           $(PKG_PATCHES) \
                           $(PKG_TESTFILES) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
@@ -505,6 +507,8 @@ build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
+build-only-$(1)_$(3): SOURCE_DIR = $(2)/$($(1)_SUBDIR)
+build-only-$(1)_$(3): BUILD_DIR  = $(2)/$($(1)_SUBDIR).build_
 build-only-$(1)_$(3): CMAKE_RUNRESULT_FILE = $(PREFIX)/share/cmake/modules/TryRunResults.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_DIR  = $(PREFIX)/$(3)/share/cmake/mxe-conf.d
@@ -520,12 +524,14 @@ build-only-$(1)_$(3):
 	    python --version
 	    perl --version 2>&1 | head -3
 	    rm -rf   '$(2)'
-	    mkdir -p '$(2)'
+	    mkdir -p '$$(BUILD_DIR)'
 	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
 	        $$(call PREPARE_PKG_SOURCE,$(1),$(2)))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
 	    @echo
 	    @find '$(2)' -name 'config.log' -print -exec cat {} \;
+	    @echo
+	    @find '$(2)' -name 'CMakeCache.txt' -print -exec cat {} \;
 	    @echo
 	    @echo 'settings.mk'
 	    @cat '$(TOP_DIR)/settings.mk'

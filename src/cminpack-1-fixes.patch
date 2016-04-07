@@ -1,0 +1,100 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: xantares <xantares09@hotmail.com>
+Date: Fri, 3 Oct 2014 19:51:53 +0200
+Subject: [PATCH] Use BUILD_SHARED_LIBS
+
+The standard cmake variable BUILD_SHARED_LIBS is understood by add_library and it's thus not necessary to set LIB_TYPE.
+
+https://github.com/devernay/cminpack/commit/4b5f3ce67a3723b9168228c2f797607f74b7d640
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,17 +26,15 @@ else (OS_LINUX)
+   option (USE_FPIC "Use the -fPIC compiler flag." OFF)
+ endif (OS_LINUX)
+ 
+-option (SHARED_LIBS "Build shared libraries instead of static." OFF)
+-if (SHARED_LIBS)
++option (BUILD_SHARED_LIBS "Build shared libraries instead of static." OFF)
++if (BUILD_SHARED_LIBS)
+   message (STATUS "Building shared libraries.")
+-  set (LIB_TYPE SHARED)
+-else (SHARED_LIBS)
++else ()
+   message (STATUS "Building static libraries.")
+-  set (LIB_TYPE STATIC)
+   if(WIN32)
+     add_definitions(-DCMINPACK_NO_DLL)
+   endif(WIN32)
+-endif (SHARED_LIBS)
++endif ()
+ 
+ #set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/../build)
+ 
+@@ -56,7 +54,7 @@ set (cminpack_srcs
+ set (cminpack_hdrs
+     cminpack.h minpack.h)
+ 
+-add_library (cminpack ${LIB_TYPE} ${cminpack_srcs})
++add_library (cminpack ${cminpack_srcs})
+ 
+ install (TARGETS cminpack 
+    LIBRARY DESTINATION ${CMINPACK_LIB_INSTALL_DIR} COMPONENT library
+@@ -65,9 +63,9 @@ install (TARGETS cminpack
+ install (FILES ${cminpack_hdrs} DESTINATION ${CMINPACK_INCLUDE_INSTALL_DIR}
+     COMPONENT cminpack_hdrs)
+ 
+-if (USE_FPIC AND NOT SHARED_LIBS)
++if (USE_FPIC AND NOT BUILD_SHARED_LIBS)
+   set_target_properties (cminpack PROPERTIES COMPILE_FLAGS -fPIC)
+-endif (USE_FPIC AND NOT SHARED_LIBS)
++endif ()
+ 
+ set_target_properties(cminpack PROPERTIES VERSION ${CMINPACK_VERSION} SOVERSION ${CMINPACK_SOVERSION})
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: xantares <xantares09@hotmail.com>
+Date: Fri, 3 Oct 2014 19:47:22 +0200
+Subject: [PATCH] install dll to bin dir
+
+https://github.com/devernay/cminpack/commit/5fe443c06c579fe52f9e9b6e6dd649e9e6c008ad
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,7 +59,7 @@ add_library (cminpack ${cminpack_srcs})
+ install (TARGETS cminpack 
+    LIBRARY DESTINATION ${CMINPACK_LIB_INSTALL_DIR} COMPONENT library
+    ARCHIVE DESTINATION ${CMINPACK_LIB_INSTALL_DIR} COMPONENT library
+-   RUNTIME DESTINATION ${CMINPACK_LIB_INSTALL_DIR} COMPONENT library)
++   RUNTIME DESTINATION bin COMPONENT library)
+ install (FILES ${cminpack_hdrs} DESTINATION ${CMINPACK_INCLUDE_INSTALL_DIR}
+     COMPONENT cminpack_hdrs)
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: tim smith <github@tim-smith.us>
+Date: Tue, 1 Sep 2015 20:48:36 -0700
+Subject: [PATCH] Install FindCMinpack.cmake underneath CMAKE_INSTALL_PREFIX
+
+https://github.com/devernay/cminpack/commit/17150873b760e48b16c1ca03d354c7b22fc3ef37
+
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -5,4 +5,4 @@ configure_file(cminpack.pc.in ${pkg_conf_file} @ONLY)
+ install(FILES ${pkg_conf_file}
+     DESTINATION ${CMINPACK_LIB_INSTALL_DIR}/pkgconfig/ COMPONENT pkgconfig)
+ 
+-install(FILES FindCMinpack.cmake DESTINATION ${CMAKE_ROOT}/Modules)
++install(FILES FindCMinpack.cmake DESTINATION share/cmake/Modules)
