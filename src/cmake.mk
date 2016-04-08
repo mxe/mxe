@@ -8,7 +8,8 @@ $(PKG)_CHECKSUM := 92c83ad8a4fd6224cf6319a60b399854f55b38ebe9d297c942408b792b1a9
 $(PKG)_SUBDIR   := cmake-$($(PKG)_VERSION)
 $(PKG)_FILE     := cmake-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.cmake.org/files/v$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_TARGETS  := $(BUILD)
+$(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.cmake.org/cmake/resources/software.html' | \
