@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 78a990a15ead79cdc752e86b83cfab7dbf5b7ef51ba409db02570dbdd9ec3
 $(PKG)_SUBDIR   := VTK-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc hdf5 qtbase qttools libpng expat libxml2 jsoncpp cmake tiff
+$(PKG)_DEPS     := gcc hdf5 qtbase qttools libpng expat libxml2 jsoncpp tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
