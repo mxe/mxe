@@ -64,5 +64,4 @@ define $(PKG)_BUILD
         '$(1)/Examples/GUI/Qt/SimpleView'
     $(MAKE) -C '$(1).test' -j '$(JOBS)' VERBOSE=1
     $(INSTALL) '$(1).test/SimpleView.exe' $(PREFIX)/$(TARGET)/bin/test-vtk7.exe
-    
 endef
