@@ -1,0 +1,16 @@
+This file is part of MXE.
+See index.html for further information.
+
+Desktop files not needed for MXE.
+
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -32,7 +32,7 @@
+ @XML_YES@SUBDIRS_XML = xmltools
+ @XML_NO@SUBDIRS_XML = 
+ 
+-SUBDIRS_LAST = desktopfiles
++@DESKTOP_YES@SUBDIRS_LAST = desktopfiles
+ 
+ SUBDIRS = ${SUBDIRS_FIRST} ${SUBDIRS_XML} ${SUBDIRS_I18N} ${SUBDIRS_LAST}
+ 
