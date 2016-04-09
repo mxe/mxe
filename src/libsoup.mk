@@ -16,7 +16,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && NOCONFIGURE=1 ./autogen.sh
+    cd '$(1)' && \
+        NOCONFIGURE=1 \
+        ACLOCAL_FLAGS=-I'$(PREFIX)/$(TARGET)/share/aclocal' \
+        ./autogen.sh
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-vala
