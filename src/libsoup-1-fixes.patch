@@ -1,0 +1,57 @@
+This file is part of MXE.
+See index.html for further information.
+
+diff -Naur libsoup-2.54.0.1.orig/autogen.sh libsoup-2.54.0.1/autogen.sh
+--- libsoup-2.54.0.1.orig/autogen.sh	2016-03-23 15:19:17.000000000 +0300
++++ libsoup-2.54.0.1/autogen.sh	2016-04-09 18:29:05.799748895 +0300
+@@ -19,13 +19,6 @@
+         exit 1
+ fi
+ 
+-GTKDOCIZE=`which gtkdocize`
+-if test -z $GTKDOCIZE; then
+-        echo "*** No GTK-Doc found, please install it ***"
+-        exit 1
+-fi
+-
+-gtkdocize || exit $?
+ intltoolize --automake --copy
+ autoreconf --force --install --verbose
+ 
+diff -Naur libsoup-2.54.0.1.orig/docs/reference/Makefile.am libsoup-2.54.0.1/docs/reference/Makefile.am
+--- libsoup-2.54.0.1.orig/docs/reference/Makefile.am	2016-03-23 15:19:17.000000000 +0300
++++ libsoup-2.54.0.1/docs/reference/Makefile.am	2016-04-09 18:30:33.644569273 +0300
+@@ -77,7 +77,6 @@
+ 	$(GLIB_LIBS)
+ 
+ # include common portion ...
+-include $(top_srcdir)/gtk-doc.make
+ 
+ # kludges
+ $(srcdir)/tmpl/*.sgml:
+diff -Naur libsoup-2.54.0.1.orig/Makefile.am libsoup-2.54.0.1/Makefile.am
+--- libsoup-2.54.0.1.orig/Makefile.am	2016-03-23 15:19:17.000000000 +0300
++++ libsoup-2.54.0.1/Makefile.am	2016-04-09 22:41:40.604386782 +0300
+@@ -1,7 +1,7 @@
+ ## Process this file with automake to produce Makefile.in
+ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ 
+-SUBDIRS = libsoup po tests examples docs build/win32
++SUBDIRS = libsoup tests docs build/win32
+ 
+ EXTRA_DIST =				\
+ 	data/effective_tld_names.dat	\
+diff -Naur libsoup-2.54.0.1.orig/tests/test-utils.c libsoup-2.54.0.1/tests/test-utils.c
+--- libsoup-2.54.0.1.orig/tests/test-utils.c	2016-03-23 15:19:17.000000000 +0300
++++ libsoup-2.54.0.1/tests/test-utils.c	2016-04-09 18:31:51.741646290 +0300
+@@ -215,10 +215,6 @@
+ 		return;
+ 	apache_running = FALSE;
+ 
+-	if (pid) {
+-		while (kill (pid, 0) == 0)
+-			g_usleep (100);
+-	}
+ }
+ 
+ #endif /* HAVE_APACHE */
