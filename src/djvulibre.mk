@@ -8,7 +8,7 @@ $(PKG)_VERSION  := $($(PKG)_SHORTVER).3
 $(PKG)_CHECKSUM := 898d7ed6dd2fa311a521baa95407a91b20a872d80c45e8245442d64f142cb1e0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_SHORTVER)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://sourceforge.net/projects/djvu/files/DjVuLibre/$($(PKG)_SHORTVER)/$($(PKG)_FILE)/download
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/djvu/DjVuLibre/$($(PKG)_SHORTVER)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff zlib
 
 define $(PKG)_UPDATE
