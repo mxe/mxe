@@ -279,3 +279,33 @@ index 1111111..2222222 100644
      p += 1;
    // Cast and return
    return (short**)p;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 10 Apr 2016 14:58:05 +0200
+Subject: [PATCH] fix linking errors in shared builds
+
+> the presence
+> of any one __declspec(dllexport) in any object file disables the
+> auto-export feature, so if you declare any symbol dllexport you have to
+> mark them all (or explicily -Wl,--export-all-symbols.)
+
+See http://mingw-users.1079350.n2.nabble.com/MinGW-produces-incorrect-dll-a-files-tp1109211p1109231.html
+
+./configure adds -Wl,--export-all-symbols if host matches "*-mingw32",
+but MXE's host is "i686-w64-mingw32.shared". This patch changes the
+pattern to "*-mingw32*".
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -2927,7 +2927,7 @@ DLLFLAGS=
+ 
+ # Special cases
+ case "$host" in
+-  *-mingw32)
++  *-mingw32*)
+      DLLFLAGS="$DLLFLAGS -Wl,--export-all-symbols"
+      LIBS=-lmsvcp60
+   ;;
