@@ -20,7 +20,10 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && CPPFLAGS='-DDLL_EXPORT' ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-desktopfiles
+        --disable-desktopfiles \
+        $(if $(BUILD_SHARED),\
+            lt_cv_deplibs_check_method='file_magic file format (pe-i386|pe-x86-64)' \
+            lt_cv_file_magic_cmd='$$OBJDUMP -f')
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)/libdjvu' -j 1 install-lib \
         install-include install-pkgconfig
@@ -30,6 +33,3 @@ define $(PKG)_BUILD
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' ddjvuapi --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
-
