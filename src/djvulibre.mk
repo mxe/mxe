@@ -22,7 +22,13 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --disable-desktopfiles
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(1)/libdjvu' -j 1 install-lib \
+        install-include install-pkgconfig
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -pedantic -DDLL_EXPORT \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' ddjvuapi --libs`
 endef
 
 $(PKG)_BUILD_SHARED =
