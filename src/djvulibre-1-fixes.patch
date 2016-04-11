@@ -296,11 +296,11 @@ See http://mingw-users.1079350.n2.nabble.com/MinGW-produces-incorrect-dll-a-file
 but MXE's host is "i686-w64-mingw32.shared". This patch changes the
 pattern to "*-mingw32*".
 
-diff --git a/configure b/configure
-index 1111111..2222222 100755
---- a/configure
-+++ b/configure
-@@ -2927,7 +2927,7 @@ DLLFLAGS=
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -69,7 +69,7 @@ AC_SUBST(DLLFLAGS)
  
  # Special cases
  case "$host" in
