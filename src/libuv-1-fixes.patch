@@ -1,0 +1,27 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Mon, 11 Apr 2016 02:02:54 +0200
+Subject: [PATCH] set Libs in pc-file
+
+They are already defined in Makefile.am, but are not passed
+(only -lpthread is passed).
+
+According to http://stackoverflow.com/a/30960268 passing LIBS from
+Makefile.am to libuv.pc is impossible, as it is not fully-expanded.
+
+diff --git a/libuv.pc.in b/libuv.pc.in
+index 1111111..2222222 100644
+--- a/libuv.pc.in
++++ b/libuv.pc.in
+@@ -7,5 +7,5 @@ Name: @PACKAGE_NAME@
+ Version: @PACKAGE_VERSION@
+ Description: multi-platform support library with a focus on asynchronous I/O.
+ 
+-Libs: -L${libdir} -luv @LIBS@
++Libs: -L${libdir} -luv -lpthread -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv
+ Cflags: -I${includedir}
