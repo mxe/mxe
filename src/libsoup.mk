@@ -22,7 +22,8 @@ define $(PKG)_BUILD
         ./autogen.sh
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-vala
+        --disable-vala \
+        --without-gssapi
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 
