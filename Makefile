@@ -461,7 +461,7 @@ $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
 	@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
 
 .PHONY: shell
-shell:
+shell: $(NONET_LIB)
 	$(PRELOAD) $(SHELL)
 
 define PKG_TARGET_RULE
