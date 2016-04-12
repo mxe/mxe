@@ -155,8 +155,15 @@ endef
 PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
 
 # use a minimal whitelist of safe environment variables
-# HOME is needed for ~/.gitconfig for patch-tool-mxe
-ENV_WHITELIST := PATH HOME LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH $(PRELOAD_VARS) ACLOCAL_PATH
+# basic working shell environment and mxe variables
+# see http://www.linuxfromscratch.org/lfs/view/stable/chapter04/settingenvironment.html
+ENV_WHITELIST := EDITOR HOME LANG PATH %PROXY %proxy PS1 TERM
+ENV_WHITELIST += MAKE% MXE% $(PRELOAD_VARS)
+
+# OS/Distro related issues - "unsafe" but practical
+# 1. https://github.com/mxe/mxe/issues/697
+ENV_WHITELIST += ACLOCAL_PATH LD_LIBRARY_PATH
+
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
 # disable wine with readonly directory (created by mxe-conf)
@@ -459,6 +466,10 @@ endif
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
 	@echo '[build nonetwork lib]'
 	@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
+
+.PHONY: shell
+shell: $(NONET_LIB)
+	$(PRELOAD) $(SHELL)
 
 define PKG_TARGET_RULE
 .PHONY: $(1)
