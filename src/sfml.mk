@@ -3,8 +3,8 @@
 
 PKG             := sfml
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3.1
-$(PKG)_CHECKSUM := 5c610bd5db3ecd9984f58b038f2eebc1b8856773d50c58cd55b4daf0fe94e120
+$(PKG)_VERSION  := 2.3.2
+$(PKG)_CHECKSUM := 03fe79943c48222037f1126a581b12c95a4dd53168881907964695c5ec3dc395
 $(PKG)_SUBDIR   := SFML-$($(PKG)_VERSION)
 $(PKG)_FILE     := SFML-$($(PKG)_VERSION)-sources.zip
 $(PKG)_URL      := http://sfml-dev.org/download/sfml/$($(PKG)_VERSION)/$($(PKG)_FILE)
