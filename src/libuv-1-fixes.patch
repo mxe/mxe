@@ -4,24 +4,34 @@ See index.html for further information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Mon, 11 Apr 2016 02:02:54 +0200
-Subject: [PATCH] set Libs in pc-file
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 12 Apr 2016 11:06:36 +1000
+Subject: [PATCH] set LIBS in configure.ac instead of Makefile.am
 
-They are already defined in Makefile.am, but are not passed
-(only -lpthread is passed).
 
-According to http://stackoverflow.com/a/30960268 passing LIBS from
-Makefile.am to libuv.pc is impossible, as it is not fully-expanded.
-
-diff --git a/libuv.pc.in b/libuv.pc.in
+diff --git a/Makefile.am b/Makefile.am
 index 1111111..2222222 100644
---- a/libuv.pc.in
-+++ b/libuv.pc.in
-@@ -7,5 +7,5 @@ Name: @PACKAGE_NAME@
- Version: @PACKAGE_VERSION@
- Description: multi-platform support library with a focus on asynchronous I/O.
- 
--Libs: -L${libdir} -luv @LIBS@
-+Libs: -L${libdir} -luv -lpthread -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv
- Cflags: -I${includedir}
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -45,7 +45,6 @@ include_HEADERS += include/uv-win.h include/tree.h
+ AM_CPPFLAGS += -I$(top_srcdir)/src/win \
+                -DWIN32_LEAN_AND_MEAN \
+                -D_WIN32_WINNT=0x0600
+-LIBS += -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv
+ libuv_la_SOURCES += src/win/async.c \
+                     src/win/atomicops-inl.h \
+                     src/win/core.c \
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -58,6 +58,9 @@ AM_CONDITIONAL([NETBSD],   [AS_CASE([$host_os],[netbsd*],       [true], [false])
+ AM_CONDITIONAL([OPENBSD],  [AS_CASE([$host_os],[openbsd*],      [true], [false])])
+ AM_CONDITIONAL([SUNOS],    [AS_CASE([$host_os],[solaris*],      [true], [false])])
+ AM_CONDITIONAL([WINNT],    [AS_CASE([$host_os],[mingw*],        [true], [false])])
++AS_CASE([$host_os],[mingw*], [
++    LIBS="$LIBS -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv"
++])
+ AC_CHECK_HEADERS([sys/ahafs_evProds.h])
+ AC_CHECK_PROG(PKG_CONFIG, pkg-config, yes)
+ AM_CONDITIONAL([HAVE_PKG_CONFIG], [test "x$PKG_CONFIG" != "x"])
