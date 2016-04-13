@@ -10,8 +10,7 @@ $(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/releases/download/v$($(PKG)_
 $(PKG)_DEPS     := gcc icu4c
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package libical need to be written.' >&2;
-    echo $(libical_VERSION)
+    $(call MXE_GET_GITHUB_TAGS, libical/libical, v)
 endef
 
 define $(PKG)_BUILD
