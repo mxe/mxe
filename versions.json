@@ -204,6 +204,7 @@
     "libunistring": "0.9.4",
     "libusb": "1.2.6.0",
     "libusb1": "1.0.19",
+    "libuv": "1.8.0",
     "libvpx": "1.5.0",
     "libwebp": "0.4.4",
     "libwebsockets": "1.4-chrome43-firefox-36",
