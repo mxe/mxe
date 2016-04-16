@@ -1,0 +1,29 @@
+From a0ac50f7a95b3f66519fac62e892b98376576036 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 16 Mar 2016 15:18:00 +0100
+Subject: [PATCH] fix include case
+
+Change-Id: I135deca455ca2ff6bb3969aca990fe9d1c2dd345
+
+diff --git a/src/plugins/common/evr/evrdefs.h b/src/plugins/common/evr/evrdefs.h
+index 3b2c253..7b1af05 100644
+--- a/src/plugins/common/evr/evrdefs.h
++++ b/src/plugins/common/evr/evrdefs.h
+@@ -35,12 +35,12 @@
+ #define EVRDEFS_H
+ 
+ #include <d3d9.h>
+-#include <Evr9.h>
++#include <evr9.h>
+ #include <evr.h>
+ #include <dxva2api.h>
+ #include <mfapi.h>
+ #include <mfidl.h>
+-#include <Mferror.h>
++#include <mferror.h>
+ 
+ extern const CLSID clsid_EnhancedVideoRenderer;
+ extern const GUID mr_VIDEO_RENDER_SERVICE;
+-- 
+2.5.0
+

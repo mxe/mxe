@@ -4,33 +4,46 @@
 // License: MIT
 
 #include <errno.h>
+#include <stdio.h>
+
+static void print_message() {
+    fflush(stderr);
+    fprintf(stderr, "\nDon't use network from MXE build rules!\n");
+    fflush(stderr);
+}
 
 int connect(int sock, const void *addr, unsigned int len) {
+    print_message();
     errno = 13; // EACCES, Permission denied
     return -1;
 }
 
 void *gethostbyname(const char *name) {
+    print_message();
     return 0;
 }
 
 int getaddrinfo(const char *node, const char *service,
                 const void *hints,
                 void **res) {
+    print_message();
     return -4; // EAI_FAIL
 }
 
 void freeaddrinfo(void *res) {
+    print_message();
 }
 
 int getnameinfo(const void * sa,
                 unsigned int salen, char * host,
                 unsigned int hostlen, char * serv,
                 unsigned int servlen, int flags) {
+    print_message();
     return -4; // EAI_FAIL
 }
 
 struct hostent *gethostbyaddr(const void *addr, unsigned int len,
                               int type) {
+    print_message();
     return 0;
 }

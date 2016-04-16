@@ -1,0 +1,22 @@
+From 57c93e64b512b24c1ca983a91c18c1e4bb158d2a Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 19 Mar 2016 15:37:43 +0100
+Subject: [PATCH] fix typo/build failure
+
+
+diff --git a/src/officeopenxml/sml/smlworkbook.cpp b/src/officeopenxml/sml/smlworkbook.cpp
+index dfa8e13..74432db 100644
+--- a/src/officeopenxml/sml/smlworkbook.cpp
++++ b/src/officeopenxml/sml/smlworkbook.cpp
+@@ -37,7 +37,7 @@ QString Workbook::bookView(const QString &attribute) const
+         return QString();
+     if (!bookViews_raw[0].contains(attribute))
+         return QString();
+-    return bookViews_raw[0][attribute].toInt();
++    return bookViews_raw[0][attribute];
+ }
+ 
+ void Workbook::setBookView(const QString &attribute, const QString &val)
+-- 
+2.5.0
+

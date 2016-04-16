@@ -2,16 +2,15 @@
 # See index.html for further information.
 
 PKG             := libical
-$(PKG)_VERSION  := 1.0.1
-$(PKG)_CHECKSUM := 089ce3c42d97fbd7a5d4b3c70adbdd82115dd306349c1f5c46a8fb3f8c949592
+$(PKG)_VERSION  := 2.0.0
+$(PKG)_CHECKSUM := 654c11f759c19237be39f6ad401d917e5a05f36f1736385ed958e60cf21456da
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/releases/download/v$($(PKG)_VERSION)//$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc icu4c
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package libical need to be written.' >&2;
-    echo $(libical_VERSION)
+    $(call MXE_GET_GITHUB_TAGS, libical/libical, v)
 endef
 
 define $(PKG)_BUILD

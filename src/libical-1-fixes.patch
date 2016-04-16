@@ -1,0 +1,133 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Wed, 13 Apr 2016 20:54:43 +0300
+Subject: [PATCH] fix definitions of gmtime/gmtime_r
+
+Fix the following error:
+config.h:508:37: error: expected initializer before '?' token
+
+The error is caused by the following combination:
+
+ #include <unistd.h>
+ #define gmtime_r(tp,tmp) ((gmtime(tp))?(*(tmp)=*(gmtime(tp)),(tmp)):0)
+ #include <time.h>
+
+time.h declares and defines gmtime_r. Because of the macro, the definition
+of gmtime_r is broken. This commit moves time.h before the macro define.
+
+diff --git a/config.h.cmake b/config.h.cmake
+index 1111111..2222222 100644
+--- a/config.h.cmake
++++ b/config.h.cmake
+@@ -495,6 +495,7 @@ typedef ssize_t IO_SSIZE_T;
+ #endif
+ #endif
+ 
++#include <time.h>
+ /* gmtime_r - thread safe gmtime() really only needed on Unix */
+ #if !defined(HAVE_GMTIME_R)
+ #if !defined(_WIN32)
+@@ -507,7 +508,6 @@ typedef ssize_t IO_SSIZE_T;
+ /* FYI: The gmtime() in Microsoft's C library is MT-safe */
+ #define gmtime_r(tp,tmp) (gmtime(tp)?(*(tmp)=*gmtime(tp),(tmp)):0)
+ #endif
+-#include <time.h>
+ 
+ /* localtime_r - thread safe localtime() really only needed on Unix */
+ #if !defined(HAVE_LOCALTIME_R)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Thu, 14 Apr 2016 01:33:47 +0300
+Subject: [PATCH] test, examples: fix linking with static library
+
+Fix errors like the following:
+
+> No rule to make target `bin/libical-static.lib',
+> needed by `src/test/copycluster.exe'.
+
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -23,19 +23,11 @@ add_dependencies(doesnothing ical icalss icalvcal)
+ if(NOT STATIC_ONLY)
+   target_link_libraries(doesnothing ical icalss icalvcal)
+ else()
+-  if(NOT WIN32)
+-    target_link_libraries(doesnothing
+-      ${CMAKE_BINARY_DIR}/lib/libical.a
+-      ${CMAKE_BINARY_DIR}/lib/libicalss.a
+-      ${CMAKE_BINARY_DIR}/lib/libicalvcal.a
+-    )
+-  else()
+-    target_link_libraries(doesnothing
+-      ${CMAKE_BINARY_DIR}/bin/libical-static.lib
+-      ${CMAKE_BINARY_DIR}/bin/libicalss-static.lib
+-      ${CMAKE_BINARY_DIR}/bin/libicalvcal-static.lib
+-    )
+-  endif()
++  target_link_libraries(doesnothing
++    ical-static
++    icalss-static
++    icalvcal-static
++  )
+   target_link_libraries(doesnothing ${CMAKE_THREAD_LIBS_INIT})
+   if(ICU_FOUND)
+     target_link_libraries(doesnothing ${ICU_LIBRARY})
+diff --git a/src/test/CMakeLists.txt b/src/test/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/test/CMakeLists.txt
++++ b/src/test/CMakeLists.txt
+@@ -50,19 +50,11 @@ macro(buildme _name _srcs)
+     endif()
+   else()
+     add_dependencies(${_name} ical-static icalss-static icalvcal-static)
+-    if(NOT WIN32)
+-      target_link_libraries(${_name}
+-        ${CMAKE_BINARY_DIR}/lib/libical.a
+-        ${CMAKE_BINARY_DIR}/lib/libicalss.a
+-        ${CMAKE_BINARY_DIR}/lib/libicalvcal.a
+-      )
+-    else()
+-      target_link_libraries(${_name}
+-        ${CMAKE_BINARY_DIR}/bin/libical-static.lib
+-        ${CMAKE_BINARY_DIR}/bin/libicalss-static.lib
+-        ${CMAKE_BINARY_DIR}/bin/libicalvcal-static.lib
+-      )
+-    endif()
++    target_link_libraries(${_name}
++      ical-static
++      icalss-static
++      icalvcal-static
++    )
+     target_link_libraries(${_name} ${CMAKE_THREAD_LIBS_INIT})
+     if(ICU_FOUND)
+       target_link_libraries(${_name} ${ICU_LIBRARY})
+@@ -74,17 +66,10 @@ macro(buildme _name _srcs)
+       target_link_libraries(${_name} ${BDB_LIBRARY})
+     endif()
+     if(WITH_CXX_BINDINGS)
+-      if(NOT WIN32)
+-        target_link_libraries(${_name}
+-          ${CMAKE_BINARY_DIR}/lib/libical_cxx.a
+-          ${CMAKE_BINARY_DIR}/lib/libicalss_cxx.a
+-        )
+-      else()
+-        target_link_libraries(${_name}
+-          ${CMAKE_BINARY_DIR}/bin/libical_cxx-static.lib
+-          ${CMAKE_BINARY_DIR}/bin/libicalss_cxx-static.lib
+-        )
+-      endif()
++      target_link_libraries(${_name}
++        ical_cxx-static
++        icalss_cxx-static
++      )
+     endif()
+   endif()
+ endmacro()

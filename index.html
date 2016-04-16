@@ -779,7 +779,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>sudo port install \
     autoconf automake bison coreutils flex gettext \
     gdk-pixbuf2 glib2 gsed intltool libffi libtool \
-    openssl p5-xml-parser p7zip scons wget xz</pre>
+    openssl p5-xml-parser p7zip pkgconfig scons wget xz</pre>
 
     <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
     <p>
@@ -1230,6 +1230,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://devernay.free.fr/hacks/cminpack/cminpack.html">cminpack</a></td>
     </tr>
     <tr>
+        <td class="package">coda</td>
+        <td class="website"><a href="https://stcorp.nl/coda/">CODA</a></td>
+    </tr>
+    <tr>
         <td class="package">coin</td>
         <td class="website"><a href="https://bitbucket.org/Coin3D/">Coin3D</a></td>
     </tr>
@@ -1462,6 +1466,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://www.gnu.org/software/gnutls/">GnuTLS</a></td>
     </tr>
     <tr>
+        <td class="package">googletest</td>
+        <td class="website"><a href="https://github.com/google/googletest">Google Test</a></td>
+    </tr>
+    <tr>
         <td class="package">graphicsmagick</td>
         <td class="website"><a href="http://www.graphicsmagick.org/">GraphicsMagick</a></td>
     </tr>
@@ -1681,10 +1689,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">libcroco</td>
         <td class="website"><a href="http://www.freespiders.org/projects/libcroco/">Libcroco</a></td>
-    </tr>
-    <tr>
-        <td class="package">libdca</td>
-        <td class="website"><a href="http://www.videolan.org/developers/libdca.html">libdca (formerly libdts)</a></td>
     </tr>
     <tr>
         <td class="package">libdnet</td>
@@ -1931,6 +1935,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://download.libsodium.org/doc/">libsodium</a></td>
     </tr>
     <tr>
+        <td class="package">libsoup</td>
+        <td class="website"><a href="https://github.com/GNOME/libsoup">libsoup</a></td>
+    </tr>
+    <tr>
         <td class="package">libssh2</td>
         <td class="website"><a href="http://www.libssh2.org">libssh2</a></td>
     </tr>
@@ -1957,6 +1965,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">libusb1</td>
         <td class="website"><a href="http://libusb.org/">LibUsb-1.0</a></td>
+    </tr>
+    <tr>
+        <td class="package">libuv</td>
+        <td class="website"><a href="http://libuv.org/">libuv</a></td>
     </tr>
     <tr>
         <td class="package">libvpx</td>
@@ -2328,7 +2340,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </tr>
     <tr>
         <td class="package">protobuf</td>
-        <td class="website"><a href="http://code.google.com/p/protobuf/">protobuf</a></td>
+        <td class="website"><a href="https://github.com/google/protobuf">protobuf</a></td>
     </tr>
     <tr>
         <td class="package">pstoedit</td>
@@ -2390,6 +2402,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
+        <td class="package">qtcanvas3d</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
         <td class="package">qtconnectivity</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
@@ -2418,11 +2434,15 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td class="package">qtquick1</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+        <td class="package">qtofficeopenxml</td>
+        <td class="website"><a href="https://github.com/dbzhang800/QtOfficeOpenXml/">QtOfficeOpenXml</a></td>
     </tr>
     <tr>
         <td class="package">qtquickcontrols</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
+        <td class="package">qtquickcontrols2</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
@@ -2444,6 +2464,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">qtservice</td>
         <td class="website"><a href="https://qt.gitorious.org/qt-solutions/">Qt Solutions</a></td>
+    </tr>
+    <tr>
+        <td class="package">qtsparkle_qt4</td>
+        <td class="website"><a href="https://github.com/davidsansome/qtsparkle">qtsparkle</a></td>
     </tr>
     <tr>
         <td class="package">qtsvg</td>
@@ -2475,6 +2499,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </tr>
     <tr>
         <td class="package">qtwebsockets</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
+        <td class="package">qtwebview</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
@@ -2624,6 +2652,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">suitesparse</td>
         <td class="website"><a href="http://www.cise.ufl.edu/research/sparse/SuiteSparse/">SuiteSparse</a></td>
+    </tr>
+    <tr>
+        <td class="package">subversion</td>
+        <td class="website"><a href="http://subversion.apache.org">subversion</a></td>
     </tr>
     <tr>
         <td class="package">t4k_common</td>
@@ -2784,10 +2816,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">xerces</td>
         <td class="website"><a href="http://xerces.apache.org/xerces-c/">Xerces-C++</a></td>
-    </tr>
-    <tr>
-        <td class="package">xine-lib</td>
-        <td class="website"><a href="http://www.xine-project.org/">xine-lib</a></td>
     </tr>
     <tr>
         <td class="package">xmlrpc-c</td>
@@ -4296,6 +4324,37 @@ endef</pre>
     </li>
     </ul>
 
+    <h3>Related articles</h3>
+
+    <ul>
+    <li>
+        <a href="http://www.valdyas.org/fading/index.cgi/hacking/krita/mxe_krita.html">Cross-compiling Krita using MXE</a>
+        <br>
+        Experience report of the
+        <a href="https://krita.org/">Krita project</a>
+    </li>
+    <li>
+        <a href="http://thebeezspeaks.blogspot.com/2009/04/cross-compilers-new-wave.html">Cross compilers, the new wave</a>
+        <br>
+        Appeared on
+        <a href="http://lxer.com/module/newswire/view/118868">LXer</a>
+        and
+        <a href="http://www.linuxtoday.com/developer/2009041501335RVSWDV">Linux Today</a>
+    </li>
+    <li>
+        <a href="http://www.mingw.org/wiki/LinuxCrossMinGW">MinGW cross compiler for Linux build environment</a>
+        <br>
+        Official tutorial of the
+        <a href="http://www.mingw.org/">MinGW project</a>
+    </li>
+    <li>
+        <a href="http://wiki.wxwidgets.org/Cross-Compiling_Under_Linux#Cross-compiling_under_Linux_for_MS_Windows">Cross-compiling under Linux for MS Windows</a>
+        <br>
+        Old tutorial provided by the
+        <a href="http://www.wxwidgets.org/">wxWidgets project</a>
+    </li>
+    </ul>
+
     <h3>Related projects</h3>
 
     <ul>
@@ -4352,36 +4411,6 @@ endef</pre>
         Creates binary packages, runs on both Linux and Windows
     </li>
     </ul>
-
-    <h3>Related articles</h3>
-
-    <ul>
-    <li>
-        <a href="http://thebeezspeaks.blogspot.com/2009/04/cross-compilers-new-wave.html">Cross compilers, the new wave</a>
-        <br>
-        Appeared on
-        <a href="http://lxer.com/module/newswire/view/118868">LXer</a>
-        and
-        <a href="http://www.linuxtoday.com/developer/2009041501335RVSWDV">Linux Today</a>
-    </li>
-    <li>
-        <a href="http://wiki.njh.eu/Cross_Compiling_for_Win32">Cross Compiling for Win32</a>
-        <br>
-        Overview of win32 cross compiling
-    </li>
-    <li>
-        <a href="http://www.mingw.org/wiki/LinuxCrossMinGW">MinGW cross compiler for Linux build environment</a>
-        <br>
-        Official tutorial of the
-        <a href="http://www.mingw.org/">MinGW project</a>
-    </li>
-    <li>
-        <a href="http://wiki.wxwidgets.org/Cross-Compiling_Under_Linux#Cross-compiling_under_Linux_for_MS_Windows">Cross-compiling under Linux for MS Windows</a>
-        <br>
-        Old tutorial provided by the
-        <a href="http://www.wxwidgets.org/">wxWidgets project</a>
-    </li>
-    </ul>
 </div>
 
 <div class="section">
@@ -4429,6 +4458,9 @@ endef</pre>
     </li>
     <li>
         <a href="http://ifwiki.org/index.php/Hugor">Hugor</a>
+    </li>
+    <li>
+        <a href="https://krita.org/">Krita</a>
     </li>
     <li>
         <a href="http://lightspark.github.com/">Lightspark</a>

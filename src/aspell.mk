@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := f52583a83a63633701c5f71db3dc40aab87b7f76b29723aeb27941eff42df
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dlfcn-win32
+$(PKG)_DEPS     := gcc gettext
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/aspell/' | \
@@ -17,16 +17,19 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && $(LIBTOOLIZE) && autoreconf -fi
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-win32-relocatable \
         --disable-curses \
-        --disable-nls
+        --disable-dlopen \
+        --disable-pthreads \
+        CPPFLAGS='-DENABLE_W32_PREFIX=1'
 
-    # libtool misses some dependency libs and there's no lt_cv* etc. options
-    # can be removed after 0.60.6.1 if recent libtool et al. is used
+    # fix undefined reference to `libintl_dgettext'
+    # https://github.com/mxe/mxe/pull/1210#issuecomment-178471641
     $(if $(BUILD_SHARED),\
-        $(SED) -i 's#^postdeps="-#postdeps="-ldl -lpthread -#g' '$(1)/libtool')
+        $(SED) -i 's#^postdeps="-#postdeps="-lintl -#g' '$(1)/libtool')
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef

@@ -20,12 +20,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_COMMON
+    touch '$(PREFIX)/$(TARGET)/lib/lua/$($(PKG)_SHORTVER)/.gitkeep'
+    touch '$(PREFIX)/$(TARGET)/share/lua/$($(PKG)_SHORTVER)/.gitkeep'
+
     #pkg-config file
     (echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: $(PKG)'; \
      echo 'Libs: -l$(PKG)';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
@@ -50,7 +55,7 @@ define $(PKG)_BUILD
         TO_BIN='lua.h' \
         INSTALL='$(INSTALL)' \
         install
-    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
+
     $($(PKG)_BUILD_COMMON)
 endef
 
@@ -70,7 +75,7 @@ define $(PKG)_BUILD_SHARED
         INSTALL='$(INSTALL)' \
         TO_LIB='liblua.dll.a' \
         install
-    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
+
     $($(PKG)_BUILD_COMMON)
 endef
 

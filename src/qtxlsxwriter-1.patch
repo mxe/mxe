@@ -1,0 +1,47 @@
+From a50811ed7fcf98e53aab7f10b1e1348716a34ecc Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 13 Jun 2015 22:05:54 +0200
+Subject: [PATCH 1/2] avoid shadowing member
+
+The parameter row shadows the member method row(), which generates
+warning or error.
+
+diff --git a/src/xlsx/xlsxcellreference.h b/src/xlsx/xlsxcellreference.h
+index 6a917c2..db20806 100644
+--- a/src/xlsx/xlsxcellreference.h
++++ b/src/xlsx/xlsxcellreference.h
+@@ -41,7 +41,7 @@ public:
+     QString toString(bool row_abs=false, bool col_abs=false) const;
+     static CellReference fromString(const QString &cell);
+     bool isValid() const;
+-    inline void setRow(int row) { _row = row; }
++    inline void setRow(int arow) { _row = arow; }
+     inline void setColumn(int col) { _column = col; }
+     inline int row() const { return _row; }
+     inline int column() const { return _column; }
+-- 
+2.5.0
+
+
+From 789f259bd86ef817be1e8b9343621a1865479654 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 16 Mar 2016 15:38:08 +0100
+Subject: [PATCH 2/2] fix QList to QVector conversion failure
+
+
+diff --git a/src/xlsx/xlsxzipreader.cpp b/src/xlsx/xlsxzipreader.cpp
+index 7b63a98..38772c3 100644
+--- a/src/xlsx/xlsxzipreader.cpp
++++ b/src/xlsx/xlsxzipreader.cpp
+@@ -48,7 +48,7 @@ ZipReader::~ZipReader()
+ 
+ void ZipReader::init()
+ {
+-    QList<QZipReader::FileInfo> allFiles = m_reader->fileInfoList();
++    const QVector<QZipReader::FileInfo> allFiles = m_reader->fileInfoList();
+     foreach (const QZipReader::FileInfo &fi, allFiles) {
+         if (fi.isFile)
+             m_filePaths.append(fi.filePath);
+-- 
+2.5.0
+

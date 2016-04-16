@@ -4,11 +4,11 @@
 PKG             := qtwebengine
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 7c4d328dd305991aaf0c3450615f4a8e5d80152194bee6f5925bd8d3477e2b90
+$(PKG)_CHECKSUM := 8aa2b5ad6c9f98a781aa99303eab3a40bbe74d26a543eea6b4145f5f47c76a03
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebengine,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebengine,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebengine,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase qtquickcontrols qtwebkit
+$(PKG)_DEPS     := gcc qtbase qtquickcontrols
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

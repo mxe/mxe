@@ -1,11 +1,635 @@
-diff -Naur aspell-0.60.6.1.orig/common/file_util.cpp aspell-0.60.6.1/common/file_util.cpp
---- aspell-0.60.6.1.orig/common/file_util.cpp	2011-07-03 01:09:08.000000000 +0400
-+++ aspell-0.60.6.1/common/file_util.cpp	2015-07-28 18:01:01.435865252 +0300
-@@ -26,6 +26,7 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 Jan 2016 21:13:24 +1100
+Subject: [PATCH] add pthreads option
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -64,6 +64,9 @@ AC_ARG_ENABLE(wide-curses,
+ AC_ARG_ENABLE(regex,
+   [  --disable-regex])
  
- #ifdef WIN32
++AC_ARG_ENABLE(pthreads,
++  [  --disable-pthreads])
++
+ AC_ARG_ENABLE(compile-in-filters,
+   [  --enable-compile-in-filters])
  
-+#include "asc_ctype.hpp"
- #  include <io.h>
+@@ -254,6 +257,8 @@ AM_LANGINFO_CODESET
+ #                                                                 #
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ 
++if test "$enable_pthreads" != "no"
++then
+ AC_SUBST(PTHREAD_LIB)
+ 
+ AC_MSG_CHECKING(if posix mutexes are supported)
+@@ -293,6 +298,7 @@ else
+   AC_MSG_WARN([Unable to find locking mechanism, Aspell will not be thread safe.])
+ fi
+ 
++fi
+ 
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ #                                                                 #
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 Jan 2016 20:10:22 +1100
+Subject: [PATCH] use namespace mingw
+
+taken from:
+https://aur.archlinux.org/cgit/aur.git/plain/0001-use-namespace.mingw.patch?h=mingw-w64-aspell
+
+diff --git a/common/file_util.cpp b/common/file_util.cpp
+index 1111111..2222222 100644
+--- a/common/file_util.cpp
++++ b/common/file_util.cpp
+@@ -30,6 +30,7 @@
  #  define ACCESS _access
  #  include <windows.h>
+ #  include <winbase.h>
++#  include "asc_ctype.hpp"
+ 
+ #else
+ 
+@@ -38,6 +39,7 @@
+ 
+ #endif
+ 
++using namespace acommon;
+ 
+ namespace acommon {
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 Jan 2016 20:14:27 +1100
+Subject: [PATCH] printf mingw
+
+taken from:
+https://aur.archlinux.org/cgit/aur.git/plain/0002-printf.mingw.patch?h=mingw-w64-aspell
+
+diff --git a/common/config.cpp b/common/config.cpp
+index 1111111..2222222 100644
+--- a/common/config.cpp
++++ b/common/config.cpp
+@@ -39,6 +39,9 @@
+ #include "vararray.hpp"
+ #include "string_list.hpp"
+ 
++#define printf printf
++#include "libintl.h"
++#undef printf
+ #include "gettext.h"
+ 
+ #include "iostream.hpp"
+diff --git a/modules/speller/default/language.cpp b/modules/speller/default/language.cpp
+index 1111111..2222222 100644
+--- a/modules/speller/default/language.cpp
++++ b/modules/speller/default/language.cpp
+@@ -24,6 +24,9 @@
+ #  include <langinfo.h>
+ #endif
+ 
++#define printf printf
++#include "libintl.h"
++#undef printf
+ #include "gettext.h"
+ 
+ namespace aspeller {
+diff --git a/prog/aspell.cpp b/prog/aspell.cpp
+index 1111111..2222222 100644
+--- a/prog/aspell.cpp
++++ b/prog/aspell.cpp
+@@ -59,6 +59,9 @@
+ #include "hash-t.hpp"
+ #include "hash_fun.hpp"
+ 
++#define printf printf
++#include "libintl.h"
++#undef printf
+ #include "gettext.h"
+ 
+ using namespace acommon;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 Jan 2016 20:15:48 +1100
+Subject: [PATCH] no-undefined mingw
+
+taken from:
+https://aur.archlinux.org/cgit/aur.git/plain/0003-no-undefined-on.mingw.patch?h=mingw-w64-aspell
+
+diff --git a/Makefile.am b/Makefile.am
+index 1111111..2222222 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -194,7 +194,7 @@ libaspell_la_SOURCES +=\
+ else # not COMPILE_IN_FILTERS
+ 
+ dynamic_optfiles += ${optfiles}
+-filter_ldflags = -module -avoid-version
++filter_ldflags = -module -avoid-version -no-undefined
+ 
+ ### Add name of filter library containing your filter. Name always
+ ### must look like lib<filtername>-filter.la see development manual
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 Jan 2016 20:16:41 +1100
+Subject: [PATCH] reloc mingw
+
+taken from:
+https://aur.archlinux.org/cgit/aur.git/plain/0004-reloc.mingw.patch?h=mingw-w64-aspell
+
+diff --git a/common/config.cpp b/common/config.cpp
+index 1111111..2222222 100644
+--- a/common/config.cpp
++++ b/common/config.cpp
+@@ -22,6 +22,8 @@
+ # include <langinfo.h>
+ #endif
+ 
++#include "info.hpp"
++#include <windows.h>
+ #include "cache.hpp"
+ #include "asc_ctype.hpp"
+ #include "config.hpp"
+@@ -310,6 +312,14 @@ namespace acommon {
+     const Entry * res = 0;
+     const Entry * cur = first_;
+ 
++#ifdef ENABLE_W32_PREFIX
++    if (key == "prefix")
++    {
++      Entry *e = new Config::Entry();
++      e->value = get_w32_prefix ();
++      return e;
++    }
++#endif
+     while (cur) {
+       if (cur->key == key && cur->action != NoOp)  res = cur;
+       cur = cur->next;
+diff --git a/common/info.cpp b/common/info.cpp
+index 1111111..2222222 100644
+--- a/common/info.cpp
++++ b/common/info.cpp
+@@ -39,6 +39,19 @@
+ 
+ #include "gettext.h"
+ 
++#ifdef ENABLE_W32_PREFIX
++extern "C" {
++static HINSTANCE dll_hinstance;
++
++BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
++{
++  if (fdwReason == DLL_PROCESS_ATTACH)
++    dll_hinstance = hinstDLL;
++  return TRUE;
++}
++}
++#endif
++
+ namespace acommon {
+ 
+   class Dir {
+@@ -778,4 +791,60 @@ namespace acommon {
+     return data;
+   }
+ 
++#ifdef ENABLE_W32_PREFIX
++
++const char *
++get_w32_prefix ()
++{
++  
++  static char *wprefix = NULL;
++  
++/*
++      Entry * next;
++      String key;
++      String value;
++      String file;
++*/
++  if (wprefix == NULL)
++  {
++    DWORD bsize = MAX_PATH;
++    DWORD l = bsize;
++    char *bslash, *slash;
++    char *buf = (char *) malloc (bsize);
++    while (l == bsize)
++    {
++      l = GetModuleFileNameA (dll_hinstance, buf, bsize);
++      if (l == 0)
++      {
++        DebugBreak ();
++        abort ();
++      }
++      if (l == bsize)
++      {
++        buf = (char *) realloc ((void *) buf, bsize * 2);
++        bsize *= 2;
++        l = bsize;
++      }
++    }
++    bslash = strrchr (buf, '\\');
++    slash = strrchr (buf, '/');
++    if (bslash > slash)
++      slash = bslash;
++    slash[0] = '\0';
++    l = strlen (buf);
++    if (l > 3 && strcmp (&buf[l - 3], "bin") == 0)
++    {
++      bslash = strrchr (buf, '\\');
++      slash = strrchr (buf, '/');
++      if (bslash > slash)
++        slash = bslash;
++      slash[0] = '\0';
++    }
++    wprefix = buf;
++
++  }
++  return wprefix;
++}
++#endif
++
+ }
+diff --git a/common/info.hpp b/common/info.hpp
+index 1111111..2222222 100644
+--- a/common/info.hpp
++++ b/common/info.hpp
+@@ -140,8 +140,7 @@ namespace acommon {
+   };
+ 
+ 
+-
+-
++  const char * get_w32_prefix ();
+ }
+ 
+ #endif /* ASPELL_INFO__HPP */
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 Jan 2016 20:17:30 +1100
+Subject: [PATCH] w32 home
+
+taken from:
+https://aur.archlinux.org/cgit/aur.git/plain/0005-w32-home.all.patch?h=mingw-w64-aspell
+
+diff --git a/common/config.cpp b/common/config.cpp
+index 1111111..2222222 100644
+--- a/common/config.cpp
++++ b/common/config.cpp
+@@ -664,6 +664,21 @@ namespace acommon {
+ 	  } else { // sep == '|'
+ 	    assert(replace[0] == '$');
+ 	    const char * env = getenv(replace.c_str()+1);
++            if (NULL == env && strcmp (replace.c_str() + 1, "HOME") == 0)
++            {
++              const char *hd, *hp;
++              hd = getenv("HOMEDRIVE");
++              hp = getenv("HOMEPATH");
++              if (hd && hp)
++              {
++                char tmpbuf[strlen ("HOME=") + strlen (hd) + strlen (hp) + 1];
++                strcpy (tmpbuf, "HOME=");
++                strcpy (&tmpbuf[strlen ("HOME=")], hd);
++                strcpy (&tmpbuf[strlen ("HOME=") + strlen (hd)], hp);
++                putenv (tmpbuf);
++                env = getenv(replace.c_str()+1);
++              }
++            }
+ 	    final_str += env ? env : second;
+ 	  }
+ 	  replace = "";
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 Jan 2016 20:18:24 +1100
+Subject: [PATCH] abort mingw
+
+taken from:
+https://aur.archlinux.org/cgit/aur.git/plain/0006-abort.mingw.patch?h=mingw-w64-aspell
+
+diff --git a/common/config.cpp b/common/config.cpp
+index 1111111..2222222 100644
+--- a/common/config.cpp
++++ b/common/config.cpp
+@@ -623,7 +623,7 @@ namespace acommon {
+ 
+       } else {
+       
+-	abort(); // this should not happen
++	DebugBreak(); // this should not happen
+       
+       }
+     
+@@ -857,7 +857,7 @@ namespace acommon {
+         case ListClear:
+           return make_err(no_value_clear, entry->key);
+         default:
+-          abort(); // this shouldn't happen
++          DebugBreak(); // this shouldn't happen
+         }
+       } else {
+         entry->place_holder = -1;
+diff --git a/common/itemize.cpp b/common/itemize.cpp
+index 1111111..2222222 100644
+--- a/common/itemize.cpp
++++ b/common/itemize.cpp
+@@ -12,6 +12,7 @@
+ #include "mutable_container.hpp"
+ #include <stdio.h>
+ #include <cstdio>
++#include <debugapi.h>
+ 
+ //FIXME: it should be possible to escape ',' '+' '-' '!' so that they can
+ //       appear in values
+@@ -97,7 +98,7 @@ namespace acommon {
+ 	RET_ON_ERR(d.clear());
+ 	break;
+       default:
+-	abort();
++	DebugBreak();
+       }
+     }
+     return no_err;
+diff --git a/common/posib_err.cpp b/common/posib_err.cpp
+index 1111111..2222222 100644
+--- a/common/posib_err.cpp
++++ b/common/posib_err.cpp
+@@ -13,7 +13,7 @@
+ #include "posib_err.hpp"
+ 
+ #include "gettext.h"
+-
++#include <debugapi.h>
+ 
+ namespace acommon {
+ 
+@@ -100,7 +100,7 @@ namespace acommon {
+     fputs(_("Unhandled Error: "), stderr);
+     fputs(err_->err->mesg, stderr);
+     fputs("\n", stderr);
+-    abort();
++    DebugBreak();
+   }
+ #endif
+ 
+diff --git a/common/string_list.hpp b/common/string_list.hpp
+index 1111111..2222222 100644
+--- a/common/string_list.hpp
++++ b/common/string_list.hpp
+@@ -12,6 +12,7 @@
+ #include "posib_err.hpp"
+ #include <stdio.h>
+ #include <cstdio>
++#include <debugapi.h>
+ 
+ namespace acommon {
+ 
+@@ -90,7 +91,7 @@ namespace acommon {
+     }
+ 
+     bool empty() const { return first == 0; }
+-    unsigned int size() const { abort(); return 0; }
++    unsigned int size() const { DebugBreak(); return 0; }
+ 
+   };
+ 
+diff --git a/lib/find_speller.cpp b/lib/find_speller.cpp
+index 1111111..2222222 100644
+--- a/lib/find_speller.cpp
++++ b/lib/find_speller.cpp
+@@ -384,7 +384,7 @@ namespace acommon {
+         b_size.req_type = '+';
+       }
+       if (!asc_isdigit(p[0]) || !asc_isdigit(p[1]) || p[2] != '\0')
+-        abort(); //FIXME: create an error condition here
++        DebugBreak(); //FIXME: create an error condition here
+       b_size.requested = atoi(p);
+       b_size.init();
+ 
+diff --git a/modules/filter/tex.cpp b/modules/filter/tex.cpp
+index 1111111..2222222 100644
+--- a/modules/filter/tex.cpp
++++ b/modules/filter/tex.cpp
+@@ -24,6 +24,7 @@
+ #include "string_enumeration.hpp"
+ 
+ #include "gettext.h"
++#include <debugapi.h>
+ 
+ namespace {
+ 
+diff --git a/modules/speller/default/data.cpp b/modules/speller/default/data.cpp
+index 1111111..2222222 100644
+--- a/modules/speller/default/data.cpp
++++ b/modules/speller/default/data.cpp
+@@ -17,6 +17,7 @@
+ #include "vararray.hpp"
+ 
+ #include "gettext.h"
++#include <debugapi.h>
+ 
+ namespace aspeller {
+ 
+@@ -439,7 +440,7 @@ namespace aspeller {
+         w = new_default_replacement_dict();
+         break;
+       default:
+-        abort();
++        DebugBreak();
+       }
+ 
+       RET_ON_ERR(w->load(true_file_name, config, new_dicts, speller));
+diff --git a/modules/speller/default/phonetic.cpp b/modules/speller/default/phonetic.cpp
+index 1111111..2222222 100644
+--- a/modules/speller/default/phonetic.cpp
++++ b/modules/speller/default/phonetic.cpp
+@@ -7,6 +7,7 @@
+ #include "file_util.hpp"
+ #include "file_data_util.hpp"
+ #include "clone_ptr-t.hpp"
++#include <debugapi.h>
+ 
+ namespace aspeller {
+   
+@@ -194,7 +195,7 @@ namespace aspeller {
+     } else if (name == lang->name()) {
+       sl = new PhonetSoundslike(lang);
+     } else {
+-      abort(); // FIXME
++      DebugBreak(); // FIXME
+     }
+     PosibErrBase pe = sl->setup(iconv);
+     if (pe.has_err()) {
+diff --git a/modules/speller/default/readonly_ws.cpp b/modules/speller/default/readonly_ws.cpp
+index 1111111..2222222 100644
+--- a/modules/speller/default/readonly_ws.cpp
++++ b/modules/speller/default/readonly_ws.cpp
+@@ -55,6 +55,7 @@ using std::pair;
+ #include "iostream.hpp"
+ 
+ #include "gettext.h"
++#include <debugapi.h>
+ 
+ typedef unsigned int   u32int;
+ static const u32int u32int_max = (u32int)-1;
+@@ -102,7 +103,7 @@ static inline char * mmap_open(unsigned int,
+ 
+ static inline void mmap_free(char *, unsigned int) 
+ {
+-  abort();
++  DebugBreak();
+ }
+ 
+ #endif
+@@ -204,7 +205,7 @@ namespace {
+       InsensitiveHash  hash;
+       InsensitiveEqual equal;
+       bool is_nonexistent(Value v) const {return v == u32int_max;}
+-      void make_nonexistent(const Value & v) const {abort();}
++      void make_nonexistent(const Value & v) const {DebugBreak();}
+     };
+     typedef VectorHashTable<WordLookupParms> WordLookup;
+ 
+diff --git a/modules/speller/default/speller_impl.cpp b/modules/speller/default/speller_impl.cpp
+index 1111111..2222222 100644
+--- a/modules/speller/default/speller_impl.cpp
++++ b/modules/speller/default/speller_impl.cpp
+@@ -380,7 +380,7 @@ namespace aspeller {
+     static PosibErr<void> save_repl(SpellerImpl * m, bool value) {
+       // FIXME
+       // m->save_on_saveall(DataSet::Id(&m->personal_repl()), value);
+-      abort(); return no_err;
++      DebugBreak(); return no_err;
+     }
+     static PosibErr<void> sug_mode(SpellerImpl * m, const char * mode) {
+       RET_ON_ERR(m->suggest_->set_mode(mode));
+@@ -683,7 +683,7 @@ namespace aspeller {
+     case Dict::multi_dict:
+       break;
+     default:
+-      abort();
++      DebugBreak();
+     }
+     save_on_saveall = false;
+   }
+@@ -709,7 +709,7 @@ namespace aspeller {
+         
+       } else {
+         
+-        abort();
++        DebugBreak();
+         
+       }
+       break;
+diff --git a/prog/aspell.cpp b/prog/aspell.cpp
+index 1111111..2222222 100644
+--- a/prog/aspell.cpp
++++ b/prog/aspell.cpp
+@@ -448,7 +448,7 @@ int main (int argc, const char *argv[])
+   else if (action_str == "merge")
+     action = do_merge;
+   else
+-    abort(); // this should not happen
++    DebugBreak(); // this should not happen
+ 
+   if (action != do_other) {
+     if (args.empty()) {
+@@ -1498,7 +1498,7 @@ void dump (aspeller::Dict * lws, Convert * conv)
+     }
+     break;
+   default:
+-    abort();
++    DebugBreak();
+   }
+ }
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 Jan 2016 20:19:16 +1100
+Subject: [PATCH] fix including langinfo
+
+taken from:
+https://aur.archlinux.org/cgit/aur.git/plain/0007-fix-including-langinfo.patch?h=mingw-w64-aspell
+
+diff --git a/modules/speller/default/language.cpp b/modules/speller/default/language.cpp
+index 1111111..2222222 100644
+--- a/modules/speller/default/language.cpp
++++ b/modules/speller/default/language.cpp
+@@ -20,7 +20,7 @@
+ #include "getdata.hpp"
+ #include "file_util.hpp"
+ 
+-#ifdef ENABLE_NLS
++#ifdef HAVE_LANGINFO_CODESET
+ #  include <langinfo.h>
+ #endif
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 2 Feb 2016 15:46:07 +1100
+Subject: [PATCH] add dlopen option
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -58,6 +58,9 @@ AC_ARG_ENABLE(curses,
+ AC_ARG_ENABLE(curses-include,           
+   [  --enable-curses-include=DIR])
+ 
++AC_ARG_ENABLE(dlopen,
++  [  --enable-dlopen])
++
+ AC_ARG_ENABLE(wide-curses,
+   AS_HELP_STRING([--disable-wide-curses],[disable wide char utf8 cursor control]))
+ 
+@@ -95,14 +98,17 @@ AC_LANG([C++])
+ AM_PROG_CC_C_O
+ 
+ AC_DISABLE_STATIC
+-AC_LIBTOOL_DLOPEN
+ AC_PROG_LIBTOOL
+ 
++if test "$enable_dlopen" = "yes"
++then
+ dnl DL stuff
++AC_LIBTOOL_DLOPEN
+ 
+ AC_CHECK_HEADERS(dlfcn.h,,[enable_compile_in_filters=yes])
+ AC_CHECK_FUNC(dlopen,,
+               AC_CHECK_LIB(dl, dlopen,,[enable_compile_in_filters=yes]))
++fi
+ 
+ dnl
+ 
+@@ -165,9 +171,12 @@ then
+   AC_DEFINE(ENABLE_WIN32_RELOCATABLE, 1, [Defined if win32 relocation should be used])
+ fi
+ 
++if test "$enable_dlopen" = "yes"
++then
+ # DL stuff
+ AC_CHECK_HEADERS(dlfcn.h)
+ AC_CHECK_LIB(dl, dlopen)
++fi
+ 
+ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ #                                                                 #
