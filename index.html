@@ -572,6 +572,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="https://www.gnu.org/software/tar/">GNU Tar</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="http://freedesktop.org/wiki/Software/intltool/">Intltool</a></td>
         <td>≥ 0.40</td>
     </tr>
@@ -778,7 +782,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
     autoconf automake bison coreutils flex gettext \
-    gdk-pixbuf2 glib2 gsed intltool libffi libtool \
+    gdk-pixbuf2 glib2 gnutar gsed intltool libffi libtool \
     openssl p5-xml-parser p7zip pkgconfig scons wget xz</pre>
 
     <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
@@ -789,7 +793,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://rudix.org/packages/index.html -->
     <pre>sudo rudix install \
     autoconf automake coreutils gettext glib intltool \
-    libtool p7zip scons sed wget xz</pre>
+    libtool p7zip scons sed tar wget xz</pre>
     <p>
     Note: <b>gdk-pixbuf2</b> is not installed in method 2,
     so you can not build <b>gtk3</b>. Other packages may be
@@ -804,7 +808,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://braumeister.org/ -->
     <pre>brew install \
     autoconf automake coreutils gdk-pixbuf gettext \
-    gnu-sed intltool libtool p7zip wget xz</pre>
+    gnu-sed gnu-tar intltool libtool p7zip wget xz</pre>
     <p>
     Some formulae are
     <a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/FAQ.md#what-does-keg-only-mean"><code>keg-only</code></a>
