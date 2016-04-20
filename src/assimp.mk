@@ -25,7 +25,7 @@ define $(PKG)_BUILD
         -DASSIMP_BUILD_ASSIMP_TOOLS=OFF \
         -DASSIMP_BUILD_SAMPLES=OFF      \
         -DASSIMP_BUILD_TESTS=OFF        \
-        -DASSIMP_BUILD_STATIC_LIB=$(if $(BUILD_STATIC),ON,OFF)
+        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON)
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
 
     '$(TARGET)-gcc' \
