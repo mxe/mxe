@@ -602,13 +602,15 @@ local function prepareTree(pass, item, item2deps, prev_files, item2index)
             item2index,
             'first'
         )
-        -- Remove files of item from previous build.
-        for _, file in ipairs(prev_files) do
-            os.remove(file)
-        end
         removeEmptyDirs()
-        gitAdd()
-        gitCommit(("Remove %s to rebuild it"):format(item, pass))
+        if prev_files then
+            -- Remove files of item from previous build.
+            for _, file in ipairs(prev_files) do
+                os.remove(file)
+            end
+            gitAdd()
+            gitCommit(("Remove %s to rebuild it"):format(item, pass))
+        end
     else
         error("Unknown pass: " .. pass)
     end
