@@ -19,6 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)/build' && cmake \
+        -DDYNLOAD=OFF \
         -DBUILD_STATIC=ON \
         -DBUILD_SHARED=OFF \
         -DBUILD_EXAMPLES=OFF \
