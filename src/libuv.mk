@@ -3,8 +3,8 @@
 
 PKG             := libuv
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.0
-$(PKG)_CHECKSUM := 6511f734da4fe082dacf85967606d600b7bce557bb9b2f0d2539193535323125
+$(PKG)_VERSION  := 1.9.0
+$(PKG)_CHECKSUM := d595b2725abcce851c76239aab038adc126c58714cfb572b2ebb2d21b3593842
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://dist.libuv.org/dist/v$($(PKG)_VERSION)/$($(PKG)_FILE)
