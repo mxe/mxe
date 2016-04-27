@@ -4,7 +4,7 @@
 PKG             := box2d
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.1
-$(PKG)_CHECKSUM := 2c61505f03ef403b54cf0e510d83d6f567e37882ad79b5b2d486acbc7d5eedea
+$(PKG)_CHECKSUM := 75d62738b13d2836cd56647581b6e574d4005a6e077ddefa5d727d445d649752
 $(PKG)_SUBDIR   := Box2D-$($(PKG)_VERSION)/Box2D
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/erincatto/Box2D/archive/v$($(PKG)_VERSION).tar.gz
