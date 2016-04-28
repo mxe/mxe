@@ -2,7 +2,7 @@
 # See index.html for further information.
 
 PKG             := biosig
-$(PKG)_IGNORE   := 
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.7.7
 $(PKG)_CHECKSUM := b5574b5491964416853b21680c7259d511d5e17908e7d972f14ca6e5609b9727
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
@@ -17,12 +17,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_PRE
-
-
-    rm -rf '$(1)'
-    #cp -r ~/src/stimfit '$(1)'
-    rsync -avL  ~/src/biosig-code/biosig4c++/* '$(1)/'
-
 
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|#||g' '$(1)'/Makefile
@@ -59,13 +53,13 @@ endef
 
 define $(PKG)_BUILD_i686-w64-mingw32
 	$($(PKG)_BUILD_PRE)
-	TARGET=$(TARGET) $(MAKE) -C '$(1)' mexw32 
+	TARGET=$(TARGET) $(MAKE) -C '$(1)' mexw32
 	$($(PKG)_BUILD_POST)
 endef
 
 define $(PKG)_BUILD_x86_64-w64-mingw32
 	$($(PKG)_BUILD_PRE)
-	TARGET=$(TARGET) $(MAKE) -C '$(1)' mexw64 
+	TARGET=$(TARGET) $(MAKE) -C '$(1)' mexw64
 	$($(PKG)_BUILD_POST)
 endef
 
