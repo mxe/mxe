@@ -21,7 +21,7 @@ define $(PKG)_BUILD
 
     CC=$(TARGET)-gcc CXX=$(TARGET)-g++ PKG_CONFIG=$(TARGET)-pkg_config AR=$(TARGET)-ar $(MAKE) -C '$(1)/src'
 
-    $(INSTALL) -d '$(1)/include/b64' '$(PREFIX)/$(TARGET)/include/'
+    cp -r '$(1)/include/b64' '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) '$(1)/src/libb64.a' '$(PREFIX)/$(TARGET)/lib/'
 
 endef
