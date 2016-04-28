@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -liconv -lws2_32" \
+        CXXFLAGS="-std=gnu++98" \
         ./configure \
         -opensource \
         -confirm-license \
