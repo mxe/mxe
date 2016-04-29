@@ -27,7 +27,7 @@ define $(PKG)_BUILD
         --disable-sdltest \
         --disable-gtk-player \
         --disable-opengl-player \
-        CFLAGS='-ffriend-injection'
+        CFLAGS='-ffriend-injection -Wno-narrowing'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 
     '$(TARGET)-gcc' \
