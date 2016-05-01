@@ -27,43 +27,41 @@ $(PKG)_CXXFLAGS := -std=gnu++11
 ...
 ```
 
-Just after adding this plugin (gcc6) some packages were FTBFS:
-* boost
-* cgal
-* dcmtk
-* fdk-aac
-* fdk-aac
-* flann
-* freeimage
-* glib
-* gtkimageview
-* gtkmm2
-* gtkmm3
-* itk
-* jsoncpp
-* json_spirit
-* libical
-* librsvg
-* libxml++
-* log4cxx
-* opencv
-* ossim
-* qt
-* qt3d
-* sdl_sound
-* smpeg2
-* ucl
-* vtk
-* vtk6
-* wxwidgets
+Just after adding this plugin (gcc6) some packages were FTBFS. For now, these
+packages might be already fixed by upstream developers, by additional patches
+or using above mentioned workaround. See the table below for details. If some
+MXE packages or your personal projects are still FTBFS you may look how other
+packages were fixed and use similar approach.
 
-See logs
-[[4](https://gist.github.com/starius/81e25169242155aa3ef6be1a733b9812)]
-[[5](https://gist.github.com/c01ef084eeb85781bd1eb7f6b1e12192)]
-for details.
-
-For now, these packages might be already fixed by upstream developers, by
-additional patches or using above mentioned workaround. If some MXE packages
-or your personal projects are still FTBFS you may look how other packages were
-fixed and use similar approach.
+| package            | target               | fixed in commit                                      |
+| ------------------ | -------------------- | ---------------------------------------------------- |
+| boost              | all                  | [7ca2bce](https://github.com/mxe/mxe/commit/7ca2bce) |
+| cgal               | all                  | -                                                    |
+| dcmtk              | all                  | -                                                    |
+| fdk-aac            | all                  | -                                                    |
+| flann              | all                  | -                                                    |
+| freeimage          | all                  | -                                                    |
+| glib               | all                  | [58c2c96](https://github.com/mxe/mxe/commit/58c2c96) |
+| gtkimageview       | all                  | -                                                    |
+| gtkmm2             | all                  | -                                                    |
+| gtkmm3             | all                  | -                                                    |
+| itk                | all                  | -                                                    |
+| jsoncpp            | all                  | [0bc73f7](https://github.com/mxe/mxe/commit/0bc73f7) |
+| json_spirit        | all                  | -                                                    |
+| libical            | all                  | -                                                    |
+| librsvg            | all                  | -                                                    |
+| libxml++           | all                  | -                                                    |
+| log4cxx            | all                  | -                                                    |
+| opencv             | all                  | -                                                    |
+| ossim              | all                  | -                                                    |
+| qt                 | all                  | [5aac1c3](https://github.com/mxe/mxe/commit/5aac1c3) |
+| qt3d               | all                  | -                                                    |
+| sdl_sound          | all                  | -                                                    |
+| smpeg              | all                  | [57cb6bb](https://github.com/mxe/mxe/commit/57cb6bb) |
+| smpeg2             | all                  | [1a42cbc](https://github.com/mxe/mxe/commit/1a42cbc) |
+| ucl                | all                  | -                                                    |
+| vtk                | all                  | -                                                    |
+| vtk6               | all                  | -                                                    |
+| wxwidgets          | all                  | -                                                    |
+| ...                | ...                  | ...                                                  |
 
