@@ -27,7 +27,6 @@ define $(PKG)_BUILD_PRE
     #$(SED) -i 's| -lssp | |g' '$(1)'/Makefile
 
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' clean
-    TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' io.h
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' tools
 
 endef

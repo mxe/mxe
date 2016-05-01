@@ -21,12 +21,15 @@ define $(PKG)_BUILD_PRE
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|#||g' '$(1)'/Makefile
 
+    ### disables declaration of sopen from io.h (imported through unistd.h)
+    $(SED) -i '/ sopen/ s#^/*#//#g' $(PREFIX)/$(TARGET)/include/io.h
+
     #$(SED) -i 's| -fstack-protector | |g' '$(1)'/Makefile
     #$(SED) -i 's| -D_FORTIFY_SOURCE=2 | |g' '$(1)'/Makefile
     #$(SED) -i 's| -lssp | |g' '$(1)'/Makefile
 
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' clean
-    TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' io.h \
+    TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' \
 		libbiosig.a libbiosig2.a libgdf.a  libphysicalunits.a \
 		libbiosig.def libbiosig2.def libgdf.def libphysicalunits.def \
 		libbiosig
