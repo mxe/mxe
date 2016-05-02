@@ -39,6 +39,8 @@ local no_second_pass = os.getenv('MXE_NO_SECOND_PASS')
 
 local TODAY = os.date("%Y%m%d")
 
+local MAX_TRIES = 10
+
 local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
 local GIT_USER = '-c user.name="build-pkg" ' ..
     '-c user.email="build-pkg@mxe" '
@@ -1027,6 +1029,20 @@ local function makeMxeSourcePackage()
     makePackage(name, files, deps, ver, d1, d2)
 end
 
+local function downloadPackages()
+    local cmd = ('%s download -j 6 -k'):format(tool 'make')
+    for i = 1, MAX_TRIES do
+        log("Downloading packages. Attempt %d.", i)
+        if execute(cmd) then
+            log("All packages were downloaded.")
+            return
+        end
+        log("Some packages failed to download.")
+    end
+    log("%d downloading attempts failed. Giving up.", MAX_TRIES)
+    error('downloading failed')
+end
+
 local function main()
     assert(not io.open('usr/.git'), 'Remove usr/')
     local MXE_DIR_EXPECTED = '/usr/lib/mxe'
@@ -1038,8 +1054,7 @@ local function main()
     assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
         tool 'make', table.concat(TARGETS, ' '))))
     if not max_items then
-        local cmd = ('%s download -j 6 -k'):format(tool 'make')
-        while not execute(cmd) do end
+        downloadPackages()
     end
     gitAdd()
     gitCommit('Initial commit')
