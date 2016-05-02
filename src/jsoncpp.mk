@@ -11,7 +11,7 @@ $(PKG)_URL      := https://github.com/open-source-parsers/jsoncpp/archive/$($(PK
 $(PKG)_DEPS     := gcc
 
 # workaround for builds with GCC >= 6.x
-$(PKG)_CXXFLAGS := -Wno-error=conversion -Wno-error=shift-negative-value
+$(PKG)_CXXFLAGS := -Wno-error=conversion -Wno-shift-negative-value
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/open-source-parsers/jsoncpp/archive/' | \
