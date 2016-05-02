@@ -37,31 +37,31 @@ packages were fixed and use similar approach.
 | ------------------ | --------------------------------------- | ---------------------------------------------------- |
 | boost              | all                                     | [7ca2bce](https://github.com/mxe/mxe/commit/7ca2bce) |
 | cgal               | all                                     | -                                                    |
-| dcmtk              | all                                     | -                                                    |
+| dcmtk              | static (all)                            | -                                                    |
 | fdk-aac            | all                                     | -                                                    |
 | flann              | all                                     | -                                                    |
-| freeimage          | all                                     | -                                                    |
+| freeimage          | static (all)                            | -                                                    |
 | glib               | all                                     | [58c2c96](https://github.com/mxe/mxe/commit/58c2c96) |
-| gtkimageview       | all                                     | -                                                    |
-| gtkmm2             | all                                     | -                                                    |
-| gtkmm3             | all                                     | -                                                    |
+| gtkimageview       | static (all)                            | -                                                    |
+| gtkmm2             | static (all)                            | -                                                    |
+| gtkmm3             | static (all)                            | -                                                    |
 | guile              | i686-w64-mingw32.static (all)           | -                                                    |
 | itk                | all                                     | -                                                    |
 | jsoncpp            | all                                     | [0bc73f7](https://github.com/mxe/mxe/commit/0bc73f7) |
 | json_spirit        | all                                     | -                                                    |
 | librsvg            | all                                     | -                                                    |
 | libxml++           | all                                     | -                                                    |
-| log4cxx            | all                                     | -                                                    |
+| log4cxx            | static (all)                            | -                                                    |
 | ocaml-lablgtk2     | i686-w64-mingw32.static (all)           | -                                                    |
 | opencv             | all                                     | -                                                    |
 | ossim              | all                                     | -                                                    |
 | qt                 | all                                     | [5aac1c3](https://github.com/mxe/mxe/commit/5aac1c3) |
 | qt3d               | all                                     | -                                                    |
 | qtwebkit           | i686-w64-mingw32.shared                 | -                                                    |
-| sdl_sound          | all                                     | -                                                    |
+| sdl_sound          | static (all)                            | -                                                    |
 | smpeg              | all                                     | [57cb6bb](https://github.com/mxe/mxe/commit/57cb6bb) |
 | smpeg2             | all                                     | [1a42cbc](https://github.com/mxe/mxe/commit/1a42cbc) |
 | ucl                | all                                     | -                                                    |
-| vtk                | all                                     | -                                                    |
+| vtk                | static (all)                            | -                                                    |
 | vtk6               | all                                     | -                                                    |
-| wxwidgets          | all                                     | -                                                    |
+| wxwidgets          | static (all)                            | -                                                    |
