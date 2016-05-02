@@ -62,5 +62,3 @@ packages were fixed and use similar approach.
 | vtk                | all                  | -                                                    |
 | vtk6               | all                  | -                                                    |
 | wxwidgets          | all                  | -                                                    |
-| ...                | ...                  | ...                                                  |
-
