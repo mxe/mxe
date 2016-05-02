@@ -48,7 +48,6 @@ packages were fixed and use similar approach.
 | itk                | all                  | -                                                    |
 | jsoncpp            | all                  | [0bc73f7](https://github.com/mxe/mxe/commit/0bc73f7) |
 | json_spirit        | all                  | -                                                    |
-| libical            | all                  | -                                                    |
 | librsvg            | all                  | -                                                    |
 | libxml++           | all                  | -                                                    |
 | log4cxx            | all                  | -                                                    |
