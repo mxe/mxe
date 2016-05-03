@@ -33,6 +33,9 @@ or using above mentioned workaround. See the table below for details. If some
 MXE packages or your personal projects are still FTBFS you may look how other
 packages were fixed and use similar approach.
 
+Please ensure that proposed fixes for packages [also build with earlier GCC
+versions](https://github.com/mxe/mxe/commit/a1cc019).
+
 | package            | target                                  | fixed in commit                                      |
 | ------------------ | --------------------------------------- | ---------------------------------------------------- |
 | boost              | all                                     | [7ca2bce](https://github.com/mxe/mxe/commit/7ca2bce) |
@@ -47,7 +50,7 @@ packages were fixed and use similar approach.
 | gtkmm3             | static (all)                            | -                                                    |
 | guile              | i686-w64-mingw32.static (all)           | -                                                    |
 | itk                | all                                     | -                                                    |
-| jsoncpp            | all                                     | [0bc73f7](https://github.com/mxe/mxe/commit/0bc73f7) |
+| jsoncpp            | all                                     | [a1cc019](https://github.com/mxe/mxe/commit/a1cc019) |
 | json_spirit        | all                                     | -                                                    |
 | librsvg            | all                                     | -                                                    |
 | libxml++           | all                                     | -                                                    |
