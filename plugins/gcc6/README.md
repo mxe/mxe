@@ -43,7 +43,7 @@ versions [[4](https://github.com/mxe/mxe/commit/a1cc019)].
 | dcmtk              | static (all)                            | -                                                    |
 | fdk-aac            | all                                     | -                                                    |
 | flann              | all                                     | [73cd813](https://github.com/mxe/mxe/commit/73cd813) |
-| freeimage          | static (all)                            | -                                                    |
+| freeimage          | static (all)                            | [adc74c9](https://github.com/mxe/mxe/commit/adc74c9) |
 | glib               | all                                     | [58c2c96](https://github.com/mxe/mxe/commit/58c2c96) |
 | gtkimageview       | static (all)                            | -                                                    |
 | gtkmm2             | static (all)                            | -                                                    |
