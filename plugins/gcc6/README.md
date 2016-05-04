@@ -59,7 +59,7 @@ versions](https://github.com/mxe/mxe/commit/a1cc019).
 | opencv             | all                                     | -                                                    |
 | ossim              | all                                     | -                                                    |
 | qt                 | all                                     | [5aac1c3](https://github.com/mxe/mxe/commit/5aac1c3) |
-| qt3d               | all                                     | -                                                    |
+| qt3d               | all                                     | [d52961f](https://github.com/mxe/mxe/commit/d52961f) |
 | qtwebkit           | i686-w64-mingw32.shared                 | -                                                    |
 | sdl_sound          | static (all)                            | -                                                    |
 | smpeg              | all                                     | [57cb6bb](https://github.com/mxe/mxe/commit/57cb6bb) |
