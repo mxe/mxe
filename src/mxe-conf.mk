@@ -24,6 +24,7 @@ define $(PKG)_BUILD
     touch '$(CMAKE_TOOLCHAIN_DIR)/.gitkeep'
     (echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
      echo 'set(MSYS 1)'; \
+     echo 'set(WIN32 TRUE)'; \
      echo 'set(BUILD_SHARED_LIBS $(if $(BUILD_SHARED),ON,OFF))'; \
      echo 'set(LIBTYPE $(if $(BUILD_SHARED),SHARED,STATIC))'; \
      echo 'set(CMAKE_PREFIX_PATH $(PREFIX)/$(TARGET))'; \
