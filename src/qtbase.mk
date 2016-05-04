@@ -18,6 +18,10 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
+QT5_BUILD_TYPE  := -release #-debug-and-release -debug
+QT5_BUILD_MODE  := $(if $(findstring debug,$(QT5_BUILD_TYPE)),debug,release)
+QT5_MODE_SUFFIX := $(if $(findstring debug,$(QT5_BUILD_TYPE)),d)
+
 define $(PKG)_BUILD
     # ICU is buggy. See #653. TODO: reenable it some time in the future.
     cd '$(1)' && \
@@ -33,7 +37,7 @@ define $(PKG)_BUILD
             -device-option PKG_CONFIG='${TARGET}-pkg-config' \
             -force-pkg-config \
             -no-use-gold-linker \
-            -release \
+            $(QT5_BUILD_TYPE) \
             -static \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
             -no-icu \
@@ -60,17 +64,15 @@ define $(PKG)_BUILD
             -dbus-linked \
             -v
 
-    # invoke qmake with removed debug options as a workaround for
-    # https://bugreports.qt-project.org/browse/QTBUG-30898
-    $(MAKE) -C '$(1)' -j '$(JOBS)' QMAKE="$(1)/bin/qmake CONFIG-='debug debug_and_release'"
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt5'
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt5
 
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qt-test.pro'
-    $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
-    $(INSTALL) -m755 '$(1)/test-qt/release/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)' $(QT5_BUILD_MODE)
+    $(INSTALL) -m755 '$(1)/test-qt/$(QT5_BUILD_MODE)/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
 
     # build test the manual way
     mkdir '$(1)/test-$(PKG)-pkgconfig'
@@ -87,7 +89,7 @@ define $(PKG)_BUILD
         '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
-        `'$(TARGET)-pkg-config' Qt5Widgets --cflags --libs`
+        `'$(TARGET)-pkg-config' Qt5Widgets$(QT5_MODE_SUFFIX) --cflags --libs`
 
     # setup cmake toolchain
     echo 'set(CMAKE_SYSTEM_PREFIX_PATH "$(PREFIX)/$(TARGET)/qt5" ${CMAKE_SYSTEM_PREFIX_PATH})' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
