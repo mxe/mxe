@@ -67,4 +67,4 @@ versions [[4](https://github.com/mxe/mxe/commit/a1cc019)].
 | ucl                | all                                     | -                                                    |
 | vtk                | static (all)                            | -                                                    |
 | vtk6               | all                                     | -                                                    |
-| wxwidgets          | static (all)                            | -                                                    |
+| wxwidgets          | static (all)                            | [6869e3b](https://github.com/mxe/mxe/commit/6869e3b) |
