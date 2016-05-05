@@ -41,7 +41,7 @@ versions [[4](https://github.com/mxe/mxe/commit/a1cc019)].
 | boost              | all                                     | [7ca2bce](https://github.com/mxe/mxe/commit/7ca2bce) |
 | cgal               | all                                     | -                                                    |
 | dcmtk              | static (all)                            | -                                                    |
-| fdk-aac            | all                                     | -                                                    |
+| fdk-aac            | all                                     | [363aec7](https://github.com/mxe/mxe/commit/363aec7) |
 | flann              | all                                     | [73cd813](https://github.com/mxe/mxe/commit/73cd813) |
 | freeimage          | static (all)                            | [adc74c9](https://github.com/mxe/mxe/commit/adc74c9) |
 | glib               | all                                     | [58c2c96](https://github.com/mxe/mxe/commit/58c2c96) |
