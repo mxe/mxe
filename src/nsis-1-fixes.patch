@@ -645,7 +645,7 @@ diff --git a/Source/exehead/SConscript b/Source/exehead/SConscript
 index 1111111..2222222 100755
 --- a/Source/exehead/SConscript
 +++ b/Source/exehead/SConscript
-@@ -53,7 +53,7 @@ Import('env compression solid_compression')
+@@ -52,7 +52,7 @@ Import('env compression solid_compression')
  
  env.Append(CPPDEFINES = ['EXEHEAD'])
  env.Append(CPPDEFINES = ['WIN32_LEAN_AND_MEAN'])
@@ -654,3 +654,283 @@ index 1111111..2222222 100755
  
  ### Some other settings
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Fri, 6 May 2016 15:56:21 +0300
+Subject: [PATCH] fix build for x86_64-w64-mingw32 targets
+
+
+diff --git a/Contrib/BgImage/BgImage.cpp b/Contrib/BgImage/BgImage.cpp
+index 1111111..2222222 100755
+--- a/Contrib/BgImage/BgImage.cpp
++++ b/Contrib/BgImage/BgImage.cpp
+@@ -149,7 +149,7 @@ NSISFunc(SetBg) {
+       return;
+     }
+ 
+-    oldProc = (void *)SetWindowLong(hwndParent, GWL_WNDPROC, (long)WndProc);
++    oldProc = (void *)SetWindowLongPtr(hwndParent, GWLP_WNDPROC, (long long)WndProc);
+   }
+ 
+   bgBitmap.bReady = FALSE;
+@@ -345,7 +345,7 @@ NSISFunc(Clear) {
+ NSISFunc(Destroy) {
+   bgBitmap.bReady = FALSE;
+   if (IsWindow(hwndParent) && oldProc)
+-    SetWindowLong(hwndParent, GWL_WNDPROC, (long)oldProc);
++    SetWindowLongPtr(hwndParent, GWLP_WNDPROC, (long long)oldProc);
+   if (IsWindow(hWndImage))
+     SendMessage(hWndImage, WM_CLOSE, 0, 0);
+   hWndImage = 0;
+diff --git a/Contrib/InstallOptions/InstallerOptions.cpp b/Contrib/InstallOptions/InstallerOptions.cpp
+index 1111111..2222222 100755
+--- a/Contrib/InstallOptions/InstallerOptions.cpp
++++ b/Contrib/InstallOptions/InstallerOptions.cpp
+@@ -772,7 +772,7 @@ BOOL CALLBACK cfgDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+       if (lpdis->itemAction & ODA_DRAWENTIRE)
+       {
+         // Get TxtColor unless the user has set another using SetCtlColors
+-        if (!GetWindowLong(lpdis->hwndItem, GWL_USERDATA))
++        if (!GetWindowLongPtr(lpdis->hwndItem, GWLP_USERDATA))
+           SetTextColor(lpdis->hDC, (COLORREF) pField->hImage);
+ 
+         // Draw the text
+@@ -1217,8 +1217,8 @@ int WINAPI createCfgDlg()
+           mySendMessage(hwCtrl, EM_LIMITTEXT, (WPARAM)pField->nMaxLength, (LPARAM)0);
+           if (dwStyle & ES_NUMBER)
+           {
+-            pField->wndProc = GetWindowLong(hwCtrl, GWL_WNDPROC);
+-            SetWindowLong(hwCtrl, GWL_WNDPROC, (long) NumbersOnlyPasteWndProc);
++            pField->wndProc = GetWindowLongPtr(hwCtrl, GWLP_WNDPROC);
++            SetWindowLongPtr(hwCtrl, GWLP_WNDPROC, (long) NumbersOnlyPasteWndProc);
+           }
+           break;
+ 
+@@ -1400,7 +1400,7 @@ int WINAPI createCfgDlg()
+ 
+ #ifdef IO_ENABLE_LINK
+         case FIELD_LINK:
+-          pField->nParentIdx = SetWindowLong(hwCtrl, GWL_WNDPROC, (long)StaticLINKWindowProc);
++          pField->nParentIdx = SetWindowLongPtr(hwCtrl, GWLP_WNDPROC, (long)StaticLINKWindowProc);
+           break;
+ #endif
+       }
+@@ -1438,7 +1438,7 @@ int WINAPI createCfgDlg()
+ 
+ void WINAPI showCfgDlg()
+ {
+-  lpWndProcOld = (void *) SetWindowLong(hMainWindow,DWL_DLGPROC,(long)ParentWndProc);
++  lpWndProcOld = (void *) SetWindowLongPtr(hMainWindow,DWLP_DLGPROC,(long)ParentWndProc);
+ 
+   // Tell NSIS to remove old inner dialog and pass handle of the new inner dialog
+   mySendMessage(hMainWindow, WM_NOTIFY_CUSTOM_READY, (WPARAM)hConfigWindow, 0);
+@@ -1460,7 +1460,7 @@ void WINAPI showCfgDlg()
+   // quit soon, which means the ini might get flushed late and cause crap. :) anwyay.
+   if (!g_is_cancel) SaveSettings();
+ 
+-  SetWindowLong(hMainWindow,DWL_DLGPROC,(long)lpWndProcOld);
++  SetWindowLongPtr(hMainWindow,DWLP_DLGPROC,(long)lpWndProcOld);
+   DestroyWindow(hConfigWindow);
+ 
+   // by ORTIM: 13-August-2002
+diff --git a/Contrib/Makensisw/makensisw.cpp b/Contrib/Makensisw/makensisw.cpp
+index 1111111..2222222 100755
+--- a/Contrib/Makensisw/makensisw.cpp
++++ b/Contrib/Makensisw/makensisw.cpp
+@@ -172,7 +172,7 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
+     {
+       g_sdata.hwnd=hwndDlg;
+       HICON hIcon = LoadIcon(g_sdata.hInstance,MAKEINTRESOURCE(IDI_ICON));
+-      SetClassLong(hwndDlg,GCL_HICON,(long)hIcon);
++      SetClassLongPtr(hwndDlg,GCLP_HICON,(long)hIcon);
+       // Altered by Darren Owen (DrO) on 29/9/2003
+       // Added in receiving of mouse and key events from the richedit control
+       SendMessage(GetDlgItem(hwndDlg,IDC_LOGWIN),EM_SETEVENTMASK,(WPARAM)NULL,ENM_SELCHANGE|ENM_MOUSEEVENTS|ENM_KEYEVENTS);
+@@ -267,7 +267,7 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
+     case WM_ENTERSIZEMOVE:
+     {
+       GetClientRect(g_sdata.hwnd, &g_resize.resizeRect);
+-      return TRUE;
++      return TRUE;
+     }
+     case WM_SIZE:
+     {
+diff --git a/Contrib/NSISdl/nsisdl.cpp b/Contrib/NSISdl/nsisdl.cpp
+index 1111111..2222222 100755
+--- a/Contrib/NSISdl/nsisdl.cpp
++++ b/Contrib/NSISdl/nsisdl.cpp
+@@ -344,7 +344,7 @@ __declspec(dllexport) void download (HWND   parent,
+     {
+       uMsgCreate = RegisterWindowMessage("nsisdl create");
+ 
+-      lpWndProcOld = (void *)SetWindowLong(parent,GWL_WNDPROC,(long)ParentWndProc);
++      lpWndProcOld = (void *)SetWindowLongPtr(parent,GWLP_WNDPROC,(long)ParentWndProc);
+ 
+       SendMessage(parent, uMsgCreate, TRUE, (LPARAM) parent);
+ 
+@@ -418,7 +418,7 @@ __declspec(dllexport) void download (HWND   parent,
+           if (parent)
+           {
+             SendMessage(parent, uMsgCreate, FALSE, (LPARAM) parent);
+-            SetWindowLong(parent, GWL_WNDPROC, (long)lpWndProcOld);
++            SetWindowLongPtr(parent, GWLP_WNDPROC, (long)lpWndProcOld);
+           }
+           break;
+         }
+diff --git a/Contrib/StartMenu/StartMenu.c b/Contrib/StartMenu/StartMenu.c
+index 1111111..2222222 100755
+--- a/Contrib/StartMenu/StartMenu.c
++++ b/Contrib/StartMenu/StartMenu.c
+@@ -120,7 +120,7 @@ void __declspec(dllexport) Init(HWND hwndParent, int string_size, char *variable
+     }
+     else
+     {
+-      lpWndProcOld = (void *) SetWindowLong(hwndParent, DWL_DLGPROC, (long) ParentWndProc);
++      lpWndProcOld = (void *) SetWindowLongPtr(hwndParent, DWLP_DLGPROC, (long) ParentWndProc);
+       wsprintf(buf, "%u", hwStartMenuSelect);
+       pushstring(buf);
+     }
+@@ -145,7 +145,7 @@ void __declspec(dllexport) Show(HWND hwndParent, int string_size, char *variable
+   }
+   DestroyWindow(hwStartMenuSelect);
+ 
+-  SetWindowLong(hwndParent, DWL_DLGPROC, (long) lpWndProcOld);
++  SetWindowLongPtr(hwndParent, DWLP_DLGPROC, (long) lpWndProcOld);
+ }
+ 
+ void __declspec(dllexport) Select(HWND hwndParent, int string_size, char *variables, stack_t **stacktop, extra_parameters *extra)
+diff --git a/Contrib/nsDialogs/nsDialogs.c b/Contrib/nsDialogs/nsDialogs.c
+index 1111111..2222222 100755
+--- a/Contrib/nsDialogs/nsDialogs.c
++++ b/Contrib/nsDialogs/nsDialogs.c
+@@ -194,7 +194,7 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+           xtraDrawStyle |= DT_HIDEPREFIX;
+ 
+         // Use blue unless the user has set another using SetCtlColors
+-        if (!GetWindowLong(lpdis->hwndItem, GWL_USERDATA))
++        if (!GetWindowLongPtr(lpdis->hwndItem, GWLP_USERDATA))
+           SetTextColor(lpdis->hDC, RGB(0,0,255));
+ 
+         // Draw the text
+@@ -276,7 +276,7 @@ void __declspec(dllexport) Create(HWND hwndParent, int string_size, char *variab
+     SWP_NOZORDER | SWP_NOACTIVATE
+   );
+ 
+-  g_dialog.parentOriginalWndproc = (WNDPROC) SetWindowLong(hwndParent, DWL_DLGPROC, (long) ParentProc);
++  g_dialog.parentOriginalWndproc = (WNDPROC) SetWindowLongPtr(hwndParent, DWLP_DLGPROC, (long) ParentProc);
+ 
+   g_dialog.rtl = FALSE;
+ 
+@@ -387,7 +387,7 @@ void __declspec(dllexport) CreateControl(HWND hwndParent, int string_size, char
+   // set the WndProc for the link control
+ 
+   if(g_dialog.controls[id].type == NSCTL_LINK)
+-    g_dialog.controls[id].oldWndProc = (WNDPROC) SetWindowLong(hwItem, GWL_WNDPROC, (long) LinkWndProc);
++    g_dialog.controls[id].oldWndProc = (WNDPROC) SetWindowLongPtr(hwItem, GWLP_WNDPROC, (long) LinkWndProc);
+ 
+   // push back result
+ 
+@@ -588,7 +588,7 @@ void __declspec(dllexport) Show(HWND hwndParent, int string_size, char *variable
+ 
+   // reset wndproc
+ 
+-  SetWindowLong(hwndParent, DWL_DLGPROC, (long) g_dialog.parentOriginalWndproc);
++  SetWindowLongPtr(hwndParent, DWLP_DLGPROC, (long) g_dialog.parentOriginalWndproc);
+ }
+ 
+ BOOL WINAPI DllMain(HANDLE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
+diff --git a/Contrib/zip2exe/main.cpp b/Contrib/zip2exe/main.cpp
+index 1111111..2222222 100755
+--- a/Contrib/zip2exe/main.cpp
++++ b/Contrib/zip2exe/main.cpp
+@@ -633,7 +633,7 @@ BOOL CALLBACK DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+       SetDlgItemText(hwndDlg,IDC_INSTPATH,gp_poi);
+ 
+       hIcon=LoadIcon(g_hInstance,MAKEINTRESOURCE(IDI_ICON1));
+-      SetClassLong(hwndDlg,GCL_HICON,(long)hIcon);
++      SetClassLongPtr(hwndDlg,GCLP_HICON,(long)hIcon);
+ 
+       hFont=CreateFont(15,0,0,0,FW_NORMAL,0,0,0,DEFAULT_CHARSET,
+               OUT_CHARACTER_PRECIS,
+diff --git a/SCons/Config/gnu b/SCons/Config/gnu
+index 1111111..2222222 100755
+--- a/SCons/Config/gnu
++++ b/SCons/Config/gnu
+@@ -73,6 +73,7 @@ if not defenv['DEBUG']:
+ stub_env.Append(CCFLAGS = ['-Wall'])                # all warnings
+ stub_env.Append(CCFLAGS = ['-xc'])                  # force compile as c
+ stub_env.Append(CCFLAGS = ['-fno-strict-aliasing']) # not safe for strict aliasing
++stub_env.Append(CCFLAGS = ['-fpermissive'])         # ignore invalid conversion errors (since C++11)
+ 
+ if not defenv['DEBUG'] and defenv['STRIP'] and defenv['STRIP_W32']:
+ 	stub_env.Append(LINKFLAGS = ['-s'])               # strip
+@@ -109,6 +110,7 @@ if not defenv['DEBUG']:
+ 	plugin_env.Append(CCFLAGS = ['-Os'])              # optimize for size
+ plugin_env.Append(CCFLAGS = ['-Wall'])              # level 3 warnings
+ plugin_env.Append(CCFLAGS = ['-fno-strict-aliasing']) # not safe for strict aliasing
++plugin_env.Append(CCFLAGS = ['-fpermissive'])         # ignore invalid conversion errors (since C++11)
+ 
+ if not defenv['DEBUG'] and defenv['STRIP'] and defenv['STRIP_W32']:
+ 	plugin_env.Append(LINKFLAGS = ['-s'])             # strip
+@@ -126,6 +128,7 @@ if not defenv['DEBUG']:
+ 	cp_util_env.Append(CCFLAGS = ['-O2'])             # optimize
+ cp_util_env.Append(CCFLAGS = ['-Wall'])             # all warnings
+ cp_util_env.Append(CCFLAGS = ['-fno-strict-aliasing']) # not safe for strict aliasing
++cp_util_env.Append(CCFLAGS = ['-fpermissive'])         # ignore invalid conversion errors (since C++11)
+ 
+ conf = FlagsConfigure(cp_util_env)
+ conf.CheckLinkFlag('$MAP_FLAG')                   # generate map file
+diff --git a/Source/exehead/Ui.c b/Source/exehead/Ui.c
+index 1111111..2222222 100755
+--- a/Source/exehead/Ui.c
++++ b/Source/exehead/Ui.c
+@@ -121,7 +121,7 @@ static BOOL NSISCALL _HandleStaticBkColor(UINT uMsg, WPARAM wParam, LPARAM lPara
+ {
+   if ((uMsg - WM_CTLCOLOREDIT) <= (WM_CTLCOLORSTATIC - WM_CTLCOLOREDIT))
+   {
+-    ctlcolors *c = (ctlcolors *)GetWindowLong((HWND)lParam, GWL_USERDATA);
++    ctlcolors *c = (ctlcolors *)GetWindowLongPtr((HWND)lParam, GWLP_USERDATA);
+ 
+     if (c) {
+       COLORREF text;
+@@ -482,7 +482,7 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+       m_hwndOK=GetDlgItem(hwndDlg,IDOK);
+       m_hwndCancel=GetDlgItem(hwndDlg,IDCANCEL);
+       SetDlgItemTextFromLang(hwndDlg,IDC_VERSTR,LANG_BRANDING);
+-      SetClassLong(hwndDlg,GCL_HICON,(long)g_hIcon);
++      SetClassLongPtr(hwndDlg,GCLP_HICON,(long)g_hIcon);
+       // use the following line instead of the above, if .rdata needs shirking
+       //SendMessage(hwndDlg,WM_SETICON,ICON_BIG,(LPARAM)g_hIcon);
+ #if defined(NSIS_SUPPORT_CODECALLBACKS) && defined(NSIS_CONFIG_ENHANCEDUI_SUPPORT)
+@@ -647,7 +647,7 @@ skipPage:
+   }
+   if (uMsg == WM_QUERYENDSESSION)
+   {
+-    SetWindowLong(hwndDlg, DWL_MSGRESULT, FALSE);
++    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, FALSE);
+     return TRUE;
+   }
+   if (uMsg == WM_COMMAND)
+@@ -1288,7 +1288,7 @@ static BOOL CALLBACK SelProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
+     hBMcheck1=LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_BITMAP1));
+ 
+     last_selected_tree_item=-1;
+-    oldTreeWndProc=SetWindowLong(hwndTree1,GWL_WNDPROC,(long)newTreeWndProc);
++    oldTreeWndProc=SetWindowLongPtr(hwndTree1,GWLP_WNDPROC,(long)newTreeWndProc);
+ 
+     hImageList = ImageList_Create(16,16, ILC_COLOR32|ILC_MASK, 6, 0);
+     ImageList_AddMasked(hImageList,hBMcheck1,RGB(255,0,255));
+diff --git a/Source/exehead/exec.c b/Source/exehead/exec.c
+index 1111111..2222222 100755
+--- a/Source/exehead/exec.c
++++ b/Source/exehead/exec.c
+@@ -781,7 +781,7 @@ static int NSISCALL ExecuteEntry(entry *entry_)
+     case EW_SETCTLCOLORS:
+     {
+       ctlcolors *c = (ctlcolors *)(g_blocks[NB_CTLCOLORS].offset + parm1);
+-      SetWindowLong((HWND) GetIntFromParm(0), GWL_USERDATA, (long) c);
++      SetWindowLongPtr((HWND) GetIntFromParm(0), GWLP_USERDATA, (long) c);
+     }
+     break;
+     case EW_SETBRANDINGIMAGE:

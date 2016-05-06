@@ -17,15 +17,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
+        $(SED) -i 's/pei-i386/pei-x86-64/' '$(1)/SCons/Config/linker_script')
     cd '$(1)' && scons \
         MINGW_CROSS_PREFIX='$(TARGET)-' \
         PREFIX='$(PREFIX)/$(TARGET)' \
         `[ -d /usr/local/include ] && echo APPEND_CPPPATH=/usr/local/include` \
         `[ -d /usr/local/lib ]     && echo APPEND_LIBPATH=/usr/local/lib` \
+        $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
+            SKIPPLUGINS='System') \
         SKIPUTILS='NSIS Menu' \
         NSIS_MAX_STRLEN=8192 \
         install
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/makensis' '$(PREFIX)/bin/$(TARGET)-makensis'
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
