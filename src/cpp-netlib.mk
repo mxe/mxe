@@ -20,7 +20,7 @@ define $(PKG)_BUILD
    mkdir '$(1)/build'
    cd '$(1)/build' && cmake .. \
        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-       -DINSTALL_CMAKE_DIR='$(PREFIX)/$(TARGET)/cmake/$(PKG)' \
+       -DINSTALL_CMAKE_DIR='$(PREFIX)/$(TARGET)/cmake/cppnetlib' \
        -DCPP-NETLIB_BUILD_EXAMPLES=OFF \
        -DCPP-NETLIB_BUILD_TESTS=OFF
 
