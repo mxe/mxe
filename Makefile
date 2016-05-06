@@ -199,7 +199,7 @@ define PREPARE_PKG_SOURCE
     cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
     cd '$(2)/$($(1)_SUBDIR)'
     $(foreach PKG_PATCH,$(PKG_PATCHES),
-        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u --binary) < $(PKG_PATCH))
+        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
 endef
 
 PKG_CHECKSUM = \
