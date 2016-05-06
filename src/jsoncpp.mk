@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF \
         -DCMAKE_CXX_FLAGS="$($(PKG)_CXXFLAGS)" \
+        -DJSONCPP_WITH_CMAKE_PACKAGE=ON \
         -DBUILD_STATIC_LIBS=$(if $(BUILD_STATIC),true,false) \
         -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),false,true)
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
