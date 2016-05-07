@@ -33,24 +33,24 @@ or using above mentioned workaround. See the table below for details. If some
 MXE packages or your personal projects are still FTBFS you may look how other
 packages were fixed and use similar approach.
 
-Please ensure that proposed fixes for packages [also build with earlier GCC
-versions](https://github.com/mxe/mxe/commit/a1cc019).
+Please ensure that proposed fixes for packages also build with earlier GCC
+versions [[4](https://github.com/mxe/mxe/commit/a1cc019)].
 
 | package            | target                                  | fixed in commit                                      |
 | ------------------ | --------------------------------------- | ---------------------------------------------------- |
 | boost              | all                                     | [7ca2bce](https://github.com/mxe/mxe/commit/7ca2bce) |
 | cgal               | all                                     | -                                                    |
-| dcmtk              | static (all)                            | -                                                    |
-| fdk-aac            | all                                     | -                                                    |
-| flann              | all                                     | -                                                    |
-| freeimage          | static (all)                            | -                                                    |
+| dcmtk              | static (all)                            | [8608e13](https://github.com/mxe/mxe/commit/8608e13) |
+| fdk-aac            | all                                     | [363aec7](https://github.com/mxe/mxe/commit/363aec7) |
+| flann              | all                                     | [73cd813](https://github.com/mxe/mxe/commit/73cd813) |
+| freeimage          | static (all)                            | [adc74c9](https://github.com/mxe/mxe/commit/adc74c9) |
 | glib               | all                                     | [58c2c96](https://github.com/mxe/mxe/commit/58c2c96) |
 | gtkimageview       | static (all)                            | -                                                    |
 | gtkmm2             | static (all)                            | -                                                    |
 | gtkmm3             | static (all)                            | -                                                    |
 | guile              | i686-w64-mingw32.static (all)           | -                                                    |
 | itk                | all                                     | -                                                    |
-| jsoncpp            | all                                     | [a1cc019](https://github.com/mxe/mxe/commit/a1cc019) |
+| jsoncpp            | all                                     | [0bc73f7](https://github.com/mxe/mxe/commit/0bc73f7) |
 | json_spirit        | all                                     | -                                                    |
 | librsvg            | all                                     | -                                                    |
 | libxml++           | all                                     | -                                                    |
@@ -59,7 +59,7 @@ versions](https://github.com/mxe/mxe/commit/a1cc019).
 | opencv             | all                                     | -                                                    |
 | ossim              | all                                     | -                                                    |
 | qt                 | all                                     | [5aac1c3](https://github.com/mxe/mxe/commit/5aac1c3) |
-| qt3d               | all                                     | -                                                    |
+| qt3d               | all                                     | [d52961f](https://github.com/mxe/mxe/commit/d52961f) |
 | qtwebkit           | i686-w64-mingw32.shared                 | -                                                    |
 | sdl_sound          | static (all)                            | -                                                    |
 | smpeg              | all                                     | [57cb6bb](https://github.com/mxe/mxe/commit/57cb6bb) |
@@ -67,4 +67,4 @@ versions](https://github.com/mxe/mxe/commit/a1cc019).
 | ucl                | all                                     | -                                                    |
 | vtk                | static (all)                            | -                                                    |
 | vtk6               | all                                     | -                                                    |
-| wxwidgets          | static (all)                            | -                                                    |
+| wxwidgets          | static (all)                            | [6869e3b](https://github.com/mxe/mxe/commit/6869e3b) |
