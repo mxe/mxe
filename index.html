@@ -827,9 +827,13 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h5>Certain packages have open issues on OS X</h5>
     </p>
     <p>
-    to build the remainder of MXE, run:
+    For Xcode <7.3, run:
     </p>
     <pre>make EXCLUDE_PKGS='nsis'</pre>
+    <p>
+    For Xcode ≥7.3, run:
+    </p>
+    <pre>make EXCLUDE_PKGS='gsoap'</pre>
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
