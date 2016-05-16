@@ -67,8 +67,8 @@ index 1111111..2222222 100755
  
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Fri, 3 May 2013 17:28:44 +1000
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Mon, 16 May 2016 14:26:59 +0300
 Subject: [PATCH] Enable native 64-bit build
 
 Taken from:
@@ -118,7 +118,7 @@ index 1111111..2222222 100755
        seeker += sizeof(WORD); \
      } \
      else { \
-@@ -444,7 +444,7 @@ void CDialogTemplate::ConvertToRTL() {
+@@ -450,7 +450,7 @@ void CDialogTemplate::ConvertToRTL() {
        szClass = winchar_toansi(m_vItems[i]->szClass);
  
      // Button
@@ -127,7 +127,7 @@ index 1111111..2222222 100755
        m_vItems[i]->dwStyle ^= BS_LEFTTEXT;
        m_vItems[i]->dwStyle ^= BS_RIGHT;
        m_vItems[i]->dwStyle ^= BS_LEFT;
-@@ -458,13 +458,13 @@ void CDialogTemplate::ConvertToRTL() {
+@@ -464,13 +464,13 @@ void CDialogTemplate::ConvertToRTL() {
        }
      }
      // Edit
@@ -143,7 +143,7 @@ index 1111111..2222222 100755
        if ((m_vItems[i]->dwStyle & SS_TYPEMASK) == SS_LEFT || (m_vItems[i]->dwStyle & SS_TYPEMASK) == SS_LEFTNOWORDWRAP)
        {
          m_vItems[i]->dwStyle &= ~SS_TYPEMASK;
-@@ -571,7 +571,7 @@ BYTE* CDialogTemplate::Save(DWORD& dwSize) {
+@@ -577,7 +577,7 @@ BYTE* CDialogTemplate::Save(DWORD& dwSize) {
    // Write all of the items
    for (unsigned int i = 0; i < m_vItems.size(); i++) {
      // DLGITEMTEMPLATE[EX]s must be aligned on DWORD boundary
@@ -152,7 +152,7 @@ index 1111111..2222222 100755
        seeker += sizeof(WORD);
  
      if (m_bExtended) {
-@@ -622,7 +622,7 @@ BYTE* CDialogTemplate::Save(DWORD& dwSize) {
+@@ -628,7 +628,7 @@ BYTE* CDialogTemplate::Save(DWORD& dwSize) {
      }
    }
  
@@ -568,15 +568,6 @@ index 1111111..2222222 100755
    dwSize = pVerRes->dwResSize;
    pRawRes = &(pVerRes->bVerData);
  
-@@ -780,7 +780,7 @@ static DWORD GetVxdVersionInfoSize( LPCSTR szFile )
- 
-     // GetVxdVersion() will fail with ERROR_INSUFFICIENT_BUFFER and
-     // the required buffer size will be returned in dwResult.
--    if ( GetLastError() == ERROR_INSUFFICIENT_BUFFER ) 
-+    if ( dwError == ERROR_INSUFFICIENT_BUFFER ) 
-     {
-       SetLastError( 0 );
-       return dwResult;
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
@@ -738,7 +729,7 @@ diff --git a/Contrib/Makensisw/makensisw.cpp b/Contrib/Makensisw/makensisw.cpp
 index 1111111..2222222 100755
 --- a/Contrib/Makensisw/makensisw.cpp
 +++ b/Contrib/Makensisw/makensisw.cpp
-@@ -172,7 +172,7 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
+@@ -177,7 +177,7 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
      {
        g_sdata.hwnd=hwndDlg;
        HICON hIcon = LoadIcon(g_sdata.hInstance,MAKEINTRESOURCE(IDI_ICON));
@@ -747,7 +738,7 @@ index 1111111..2222222 100755
        // Altered by Darren Owen (DrO) on 29/9/2003
        // Added in receiving of mouse and key events from the richedit control
        SendMessage(GetDlgItem(hwndDlg,IDC_LOGWIN),EM_SETEVENTMASK,(WPARAM)NULL,ENM_SELCHANGE|ENM_MOUSEEVENTS|ENM_KEYEVENTS);
-@@ -267,7 +267,7 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
+@@ -272,7 +272,7 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam) {
      case WM_ENTERSIZEMOVE:
      {
        GetClientRect(g_sdata.hwnd, &g_resize.resizeRect);
@@ -839,7 +830,7 @@ index 1111111..2222222 100755
 +  SetWindowLongPtr(hwndParent, DWLP_DLGPROC, (long) g_dialog.parentOriginalWndproc);
  }
  
- BOOL WINAPI DllMain(HANDLE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
+ BOOL WINAPI DllMain(HINSTANCE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
 diff --git a/Contrib/zip2exe/main.cpp b/Contrib/zip2exe/main.cpp
 index 1111111..2222222 100755
 --- a/Contrib/zip2exe/main.cpp
@@ -912,7 +903,7 @@ index 1111111..2222222 100755
      return TRUE;
    }
    if (uMsg == WM_COMMAND)
-@@ -1288,7 +1288,7 @@ static BOOL CALLBACK SelProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
+@@ -1290,7 +1290,7 @@ static BOOL CALLBACK SelProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
      hBMcheck1=LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_BITMAP1));
  
      last_selected_tree_item=-1;
@@ -925,7 +916,7 @@ diff --git a/Source/exehead/exec.c b/Source/exehead/exec.c
 index 1111111..2222222 100755
 --- a/Source/exehead/exec.c
 +++ b/Source/exehead/exec.c
-@@ -781,7 +781,7 @@ static int NSISCALL ExecuteEntry(entry *entry_)
+@@ -788,7 +788,7 @@ static int NSISCALL ExecuteEntry(entry *entry_)
      case EW_SETCTLCOLORS:
      {
        ctlcolors *c = (ctlcolors *)(g_blocks[NB_CTLCOLORS].offset + parm1);
@@ -934,3 +925,40 @@ index 1111111..2222222 100755
      }
      break;
      case EW_SETBRANDINGIMAGE:
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Mon, 16 May 2016 15:12:58 +0300
+Subject: [PATCH] Fix stdcall
+
+Taken from:
+http://anonscm.debian.org/gitweb/?p=collab-maint/nsis.git;a=blob;f=debian/patches/stdcall.patch;h=46b497e3a48a145afba97644390ac2e026225e89;hb=HEAD
+
+diff --git a/SCons/Config/gnu b/SCons/Config/gnu
+index 1111111..2222222 100755
+--- a/SCons/Config/gnu
++++ b/SCons/Config/gnu
+@@ -9,6 +9,14 @@ Import('FlagsConfigure')
+ ### cross compiling
+ 
+ def cross_env(env):
++	# Set stdcall calling convention for Win32 targets
++	if env.has_key('CPPDEFINES'):
++		for i in range(len(env['CPPDEFINES'])):
++			if 'NSISCALL' in env['CPPDEFINES'][i]:
++				env['CPPDEFINES'][i] = ('NSISCALL', '\'$STDCALL\'')
++				break
++	else:
++		env.Append(CPPDEFINES = [('NSISCALL', '$STDCALL')])
+ 	if env['PLATFORM'] != 'win32':
+ 		env.Tool('crossmingw', toolpath = [Dir('../Tools').rdir()])
+ 
+@@ -35,7 +43,7 @@ defenv['STDCALL'] = '__attribute__((__stdcall__))'
+ 
+ ### defines
+ 
+-defenv.Append(CPPDEFINES = [('NSISCALL', '$STDCALL')])
++defenv.Append(CPPDEFINES = [('NSISCALL', '')])
+ 
+ ### helper functions
+ 
