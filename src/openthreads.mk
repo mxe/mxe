@@ -25,5 +25,5 @@ define $(PKG)_BUILD
         -D_OPENTHREADS_ATOMIC_USE_WIN32_INTERLOCKED=1 \
         '$(1)'
 
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(1).build/src/OpenThreads' -j '$(JOBS)' install VERBOSE=1
 endef
