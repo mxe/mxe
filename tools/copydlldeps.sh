@@ -10,14 +10,14 @@ Welcome to $( basename $0)!
 Authors:  Lars Holger Engelhard - DL5RCW (2016)
           Tiancheng "Timothy" Gu (2014)
 
-Version: 1.1
+Version: 1.3
 
 # This file is part of the MXE Project, sponsored by the named authors
 # it supports the shared build approach by providing an easy way to
 # check for library dependencies in a recursive manner
 
-# Copyright (c) 2014 Tiancheng "Timothy" Gu
-#           (c) 2016 Lars Holger Engelhard - DL5RCW
+# Copyright (c) 2016 Lars Holger Engelhard - DL5RCW
+#           (c) 2014 Tiancheng "Timothy" Gu
 
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -47,7 +47,7 @@ EOF
 OBJDUMP=objdump
 
 # create a temp directory
-tmp=`mktemp -d`
+tmp=$( mktemp -d )
 
 # print an help menu
 help() {
@@ -76,6 +76,7 @@ Operating options:
   -s, --srcdir            [ multiCall ] The directory with DLLs that can be copied. 
   -S, --srcdirs           [ multiCall ] List of directories with DLLs that can be copied. Put "" around them, e.g. "/dir1 /root/dir2 /root/dir3" 
   -R, --recursivesrcdir   [ multiCall ] Target directory for recursive search of folders containing *dll files  
+  -X, --excludepattern    [ multiCall ] Exclude any path that contains such pattern, e.g. /(PREFIX)/(TARGET)/apps/
 
 Optional binary settings:
   -o, --objdump           Specify the path or name of your objdump application
@@ -111,16 +112,16 @@ die() {
 # and findAllSrcDirectories will hunt for dlls in each one recursively
 # it will return a sorted list and duplicates are removed
 findAllSrcDirectories(){
-ar_recursiveDirList=${!1}
-string=""
-for curPath in "${ar_recursiveDirList[@]}"; do
-	for element in $(find $curPath -iname "*.dll"); do
-		#ar_list+="$(dirname $element) "
-		string+="$(dirname $element) "
+	ar_recursiveDirList=${!1}
+	string=""
+	for curPath in "${ar_recursiveDirList[@]}"; do
+		for element in $(find $curPath $excludePattern -iname "*.dll"); do
+			#ar_list+="$(dirname $element) "
+			string+="$(dirname $element) "
+		done
 	done
-done
-string=$(echo "$string" | tr -s ' ' | tr ' ' '\n' | nl | sort -u -k2 | sort -n | cut -f2-)
-echo $string #returns the string 
+	string=$(echo "$string" | tr -s ' ' | tr ' ' '\n' | nl | sort -u -k2 | sort -n | cut -f2-)
+	echo $string #returns the string 
 }
 
 while [ $# -gt 0 ]; do
@@ -150,6 +151,10 @@ while [ $# -gt 0 ]; do
 		;;
 	-R|--recursivesrcdir)
 		recursivesrcdir+=" $1"
+		shift
+		;;
+	-X|--excludepattern)
+		excludepattern+=" $1"
 		shift
 		;;
 	-o|--objdump)
@@ -183,6 +188,8 @@ while [ $# -gt 0 ]; do
 		;;
 	esac
 done
+
+# setting default values if no arguments were given
 if ! [ "$loglevel" ]; then
 	loglevel=0
 fi
@@ -206,6 +213,16 @@ fi
 if [ "$loglevel" -gt 1 ]; then
 	echo "filelist=$filelist"
 	echo "opmode=$opmode"
+fi
+
+excluePattern="" # building an exclude command consisting of patterns. We still contain the first hit of find
+if [ ! -z "$excludepattern" ]; then
+	for curString in $( echo "$excludepattern" | tr -s ' ' | tr ' ' '\n' ); do
+		excludePattern+=" ! -path *$( echo "$curString" | tr -d ' ' )* "
+	done
+fi
+if [ "$loglevel" -gt 1]; then
+	echo "\$excluePattern: $excludePattern"
 fi
 
 str_inputFileList=""
@@ -259,13 +276,16 @@ if [ "$loglevel" -gt 1 ]; then
 	echo "starting in 5 seconds" && sleep 5
 fi
 
+# introducing a whitelist of well known DLLs
+str_whiteListDlls="advapi32.dll kernel32.dll msvcrt.dll user32.dll ws2_32.dll gdi32.dll shell32.dll d3d9.dll ole32.dll winmm.dll mpr.dll opengl32.dll"
+
 # function to append dependencies (recursively)
 append_deps() {
 	if [ "$loglevel" -gt 1 ]; then
 		echo "\$1=$1 + \$2=$2 "
 		sleep 2
 	fi
-	local bn="`basename $1`"
+	local bn="$( basename $1 )"
 	if [ -e "$tmp/$bn" ]; then
 		return 0
 	fi
@@ -275,11 +295,21 @@ append_deps() {
 		path=""
 		for curPath in $( echo "${str_srcDirList}" | tr -s ' ' | tr ' ' '\n' ); do
 			counter=0
-			result=$(find $curPath -iname "$bn" | tail -n 1)
-			if [ ! -z $result ];then
-				path=$result
+			result=""
+			result=$(find $curPath $excludePattern -iname "$bn" -type f | tail -n 1)
+			if [ "$loglevel" -gt 1 ]; then
+				echo "complete find command in append_deps(): # find $curPath $excludePattern -iname $bn -type f | tail -n 1 # "
+			fi
+			if [ ! -z "$result" ];then
+				path="$result"
 				counter=$(expr $counter + 1)
 			fi
+if [ $counter == 0 ]; then
+        #echo "ERROR: could not find \$path for dll $bn, \$counter=$counter: searched $curPath"
+        str_test="1"
+else
+        echo "OKAY:  found path for dll $bn = $path, \$counter=$counter: searched $curPath"
+fi
 			if [ "$loglevel" -gt 1 ]; then
 				if [ $counter == 0 ]; then
 					echo "could not find \$path for dll $bn, \$counter=$counter: searched $curPath"
@@ -304,7 +334,7 @@ append_deps() {
 	fi
 	$OBJDUMP -p "$path" | grep 'DLL Name:' | cut -f3 -d' ' > "$tmp/$bn"
 	echo "executing: $OBJDUMP -p "$path" | grep 'DLL Name:' | cut -f3 -d' ' > "$tmp/$bn""
-	for dll in `cat "$tmp/$bn" | tr '\n' ' '`; do
+	for dll in $( cat "$tmp/$bn" | tr '\n' ' ' ); do
 		append_deps "$dll"
 	done
 	alldeps=$(printf "$alldeps\n%s" "$(cat $tmp/$bn)" | sort | uniq)
@@ -343,7 +373,6 @@ if [ ! -z "$enforcedir" ]; then
 fi
 
 # then we start with our indir or infile list
-#for file in $filelist; do
 for file in $str_inputFileList; do
 	echo "starting for file $file"
 	#sleep 4
@@ -361,28 +390,33 @@ if [ "$loglevel" -eq 1 ]; then
 	tmpStr=${str_srcDirList}
 	echo "\$alldeps has ${#alldeps[@]} elements"
 	echo "and \$str_srcDirList has ${#str_srcDirList} elements"
-	#echo "waiting another 2 seconds"
-	#sleep 2
 fi
 
-for dll in `echo $alldeps | tr '\n' ' '`; do
+str_summary="Here is the summary:"
+str_summary="${str_summary} # ==== 8< ==== START ==== 8< ==== "
+if [ $opmode == "copy" ]; then
+	echo "copying files from \${curFolder} to \$destdir:"
+elif [ $opmode == "print" ]; then
+	echo "printing files:"
+fi
+for dll in $( echo $alldeps | tr '\n' ' ' ); do
 	counter=0
-	lower_dll=`echo $dll | tr '[:upper:]' '[:lower:]'`
-	if [ $lower_dll == $dll ]; then
-		lower_dll=""
+	lowerDll=$( echo $dll | tr '[:upper:]' '[:lower:]' )
+	if [ $lowerDll == $dll ]; then
+		lowerDll=""
 	fi
 	for curFolder in $( echo "${str_srcDirList}" | tr -s ' ' | tr ' ' '\n'); do
 		if [ "$loglevel" -gt 1 ]; then
 			echo "search for dll $dll in curFolder $curFolder"
 			sleep 1
 		fi
-		for the_dll in $dll $lower_dll; do
-			if [ -e "${curFolder}/${the_dll}" ]; then
-				counter=$(expr $counter + 1)
+		for curDll in $dll $lowerDll; do
+			if [ -e "${curFolder}/${curDll}" ]; then
+				counter=$( expr $counter + 1 )
 				if [ $opmode == "copy" ]; then
-					cp -dpRxv "${curFolder}/${the_dll}" "$destdir"
+					cp -dpRxv "${curFolder}/${curDll}" "$destdir"
 				elif [ $opmode == "print" ]; then
-					echo "found $dll in: ${curFolder}/${the_dll}"
+					echo "found $dll in: ${curFolder}/${curDll}"
 				else
 					echo "unknown opmode=$opmode"
 				fi
@@ -390,10 +424,32 @@ for dll in `echo $alldeps | tr '\n' ' '`; do
 		done
 	done
 	if [ $counter == 0 ]; then
-		echo "Warning: \"$dll\"  not found. \$counter=$counter." >&2
+		lowerDll=$( echo $dll | tr '[:upper:]' '[:lower:]' )
+		str_whiteListDlls=$( echo ${str_whiteListDlls} | tr '[:upper:]' '[:lower:]' ) # make whiteListDlls lower case to ensure we find the match (case insensitive)
+		if [ -z "${str_whiteListDlls/*${lowerDll}*}" ]; then
+			if [ "$loglevel" -gt 1 ]; then
+				echo "Info: \"$dll\" not found - but it is white-listed. That means: it is well known by Windows - do not worry too much. "
+			fi
+			str_summary="${str_summary} # Info: \"$dll\" not found - but it is white-listed. That means: it is well known by Windows - do not worry too much. "
+		else
+			if [ "$loglevel" -gt 1 ]; then
+				echo "Warn: \"$dll\" NOT found. \$counter=$counter."
+			fi
+			str_summary="${str_summary} # Warn: \"$dll\" NOT found. \$counter=$counter."
+		fi
 	else
-		echo "Found dll $dll in the list. \$counter=$counter" >&2
+		if [ "$loglevel" -gt 1 ]; then
+			echo "Good: \"$dll\" found in the list. \$counter=$counter"
+		fi
+		str_summary="${str_summary} # Good: \"$dll\" Found in the list. \$counter=$counter"
 	fi
 done
+str_summary="${str_summary} # ==== 8< ==== END ==== 8< ==== "
+echo "Job is done."
+# print the summary now
+for curLine in "$( echo "${str_summary}" | tr -s '#' | tr '#' '\n' )"; do # convert # to a linebreak - string ecomes an array that can be processed in for loop
+	echo "$curLine"
+done
 
+# clean up the temp directory stored in $tmp
 rm -rf "$tmp"
