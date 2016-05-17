@@ -54,6 +54,18 @@ I checked if there is a mxe objdump. If not, I took the native one on my server.
 I actually do not know the difference but decided to include it in the script
 in case it is important to someone.
 
+whitelist
+---------
+I added a whitelist of *dll files that are widely used and very common on windows systems. Most of them are not to be found on MXE, but on native machines. As they are listed as dependencies, they might create warnings. To avoid anxiety, I introduced str_whiteListDlls. Those will create info instead of warning messages. Do not worry about them any longer. It works anyway as those are to be expected on your windows installation.
+
+exclude directory pattern
+-------------------------
+excludedir was added as an aditional option. You may call it multiple times like
+    --excludepattern /path/folder1/ --excludepattern /path/folder2/ -X /path/folder3/
+Try to make it as explicit as possible. If you choose a generic pattern, you may exclude more paths than you intend to. Actually any pattern will work.
+    -X pattern1 -X pattern2
+This was introduced upon the request to have the script avoid /(PREFIX)/(TARGET)/apps/. You may now pass this as an 'excludepattern' option.
+
 enforcedir
 ----------
 My application is using Qt5 and objdump did not return the needed qwindows.dll -
