@@ -528,6 +528,8 @@ build-only-$(1)_$(3):
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
 	    autoconf --version 2>/dev/null | head -1
 	    automake --version 2>/dev/null | head -1
+	    $(BUILD_CC) --version
+	    $(BUILD_CXX) --version
 	    python --version
 	    perl --version 2>&1 | head -3
 	    rm -rf   '$(2)'
