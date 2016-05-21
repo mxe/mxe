@@ -79,7 +79,8 @@ define $(PKG)_BUILD
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
 
     $(MAKE) -C '$(1)'       -j '$(JOBS)' lib-target
-    $(MAKE) -C '$(1)'       -j '$(JOBS)' install-lib
+    $(MAKE) -C '$(1)'       -j '$(JOBS)' gdal.pc
+    $(MAKE) -C '$(1)'       -j '$(JOBS)' install-actions
     $(MAKE) -C '$(1)/port'  -j '$(JOBS)' install
     $(MAKE) -C '$(1)/gcore' -j '$(JOBS)' install
     $(MAKE) -C '$(1)/frmts' -j '$(JOBS)' install
