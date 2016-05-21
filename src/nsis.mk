@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         `[ -d /usr/local/lib ]     && echo APPEND_LIBPATH=/usr/local/lib` \
         $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
             SKIPPLUGINS='System') \
-        SKIPUTILS='MakeLangId,Makensisw,NSIS Menu,UIs,zip2exe' \
+        SKIPUTILS='MakeLangId,Makensisw,NSIS Menu,zip2exe' \
         NSIS_MAX_STRLEN=8192 \
         install
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/makensis' '$(PREFIX)/bin/$(TARGET)-makensis'
