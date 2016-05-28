@@ -28,7 +28,6 @@ define $(PKG)_BUILD
         --enable-local-libopts \
         --with-included-libtasn1 \
         --with-libregex-libs="-lgnurx" \
-        --without-p11-kit \
         --disable-silent-rules \
         CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
         LIBS='-lws2_32' \
