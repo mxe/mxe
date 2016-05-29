@@ -8,7 +8,8 @@ $(PKG)_DEPS_$(BUILD) := libiconv
 define $(PKG)_BUILD_$(BUILD)
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --with-included-libxml
     $(MAKE) -C '$(1).build' -j '$(JOBS)' man1_MANS=
     $(MAKE) -C '$(1).build' -j 1 install man1_MANS=
 endef
