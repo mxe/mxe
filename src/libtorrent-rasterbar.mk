@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         --disable-debug \
         --disable-tests \
         --disable-examples \
-        CXXFLAGS='-D_WIN32_WINNT=0x0501'
+        CXXFLAGS='-D_WIN32_WINNT=0x0501 -g -O2'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
