@@ -57,6 +57,34 @@ index 1111111..2222222 100755
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 29 May 2016 23:35:25 +0200
+Subject: [PATCH] link with boost_random and boost_chrono
+
+libtorrent-rasterbar 1.1.0 uses them
+
+diff --git a/winconf-mingw.pri b/winconf-mingw.pri
+index 1111111..2222222 100644
+--- a/winconf-mingw.pri
++++ b/winconf-mingw.pri
+@@ -23,11 +23,15 @@ RC_FILE = qbittorrent_mingw.rc
+ # Adapt the lib names/versions accordingly
+ CONFIG(debug, debug|release) {
+   LIBS += libtorrent-rasterbar \
++          libboost_random-mt \
++          libboost_chrono-mt \
+           libboost_system-mt \
+           libboost_filesystem-mt \
+           libboost_thread_win32-mt
+ } else {
+   LIBS += libtorrent-rasterbar \
++          libboost_random-mt \
++          libboost_chrono-mt \
+           libboost_system-mt \
+           libboost_filesystem-mt \
+           libboost_thread_win32-mt
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 30 May 2016 00:09:20 +0200
 Subject: [PATCH] disable BOOST_ASIO_SEPARATE_COMPILATION
 
