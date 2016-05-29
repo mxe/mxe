@@ -54,3 +54,41 @@ index 1111111..2222222 100755
  if test -r "$QT_QMAKE/qmake-qt4"; then
    eval "$as_ac_File=yes"
  else
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Mon, 30 May 2016 00:09:20 +0200
+Subject: [PATCH] disable BOOST_ASIO_SEPARATE_COMPILATION
+
+After upgrading libtorrent-rasterbar to 1.1.0, qbittorrent fails to link
+main executable with undefined symbols in boost_asio:
+
+    ./release/application.o:application.cpp:(.text.startup+0x83):
+    undefined reference to `boost::asio::detail::winsock_init_base::startup
+    (boost::asio::detail::winsock_init_base::data&, unsigned char,
+    unsigned char)'
+
+diff --git a/cmake/Modules/winconf.cmake b/cmake/Modules/winconf.cmake
+index 1111111..2222222 100644
+--- a/cmake/Modules/winconf.cmake
++++ b/cmake/Modules/winconf.cmake
+@@ -5,7 +5,6 @@
+ set(LibtorrentRasterbar_USE_STATIC_LIBS True)
+ set(LibtorrentRasterbar_CUSTOM_DEFINITIONS 
+     -DBOOST_ALL_NO_LIB -DBOOST_ASIO_HASH_MAP_BUCKETS=1021
+-    -DBOOST_ASIO_SEPARATE_COMPILATION
+     -DBOOST_EXCEPTION_DISABLE
+     -DBOOST_SYSTEM_STATIC_LINK=1
+     -DTORRENT_USE_OPENSSL
+diff --git a/winconf.pri b/winconf.pri
+index 1111111..2222222 100644
+--- a/winconf.pri
++++ b/winconf.pri
+@@ -21,7 +21,6 @@ LIBS += $$quote(-LC:/qBittorrent/openssl/lib)
+ # LIBTORRENT DEFINES
+ DEFINES += BOOST_ALL_NO_LIB
+ DEFINES += BOOST_ASIO_HASH_MAP_BUCKETS=1021
+-DEFINES += BOOST_ASIO_SEPARATE_COMPILATION
+ # After 1.55 some Windows users reported regular UI freezes.
+ # This makes ASIO use the pre-1.56 way of doing things. See issue #2003
+ DEFINES += BOOST_ASIO_DISABLE_CONNECTEX
