@@ -3,8 +3,8 @@
 
 PKG             := curl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.49.0
-$(PKG)_CHECKSUM := eb0728df1c9224f8b8994d488bda9ddd0ae679485659ab69a13b91ef35755dcb
+$(PKG)_VERSION  := 7.49.1
+$(PKG)_CHECKSUM := 540dd7e2017293ac13c925951a8e3187382b6fe7be045d5806912aae3c1f7c0c
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.lzma
 $(PKG)_URL      := http://curl.haxx.se/download/$($(PKG)_FILE)
