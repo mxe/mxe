@@ -6090,28 +6090,6 @@ index 1111111..2222222 100644
  #ifndef likely
    #define likely(x)     __builtin_expect(!!(x), 1)
  #endif
-diff --git a/src/util/alloc.cpp b/src/util/alloc.cpp
-index 1111111..2222222 100644
---- a/src/util/alloc.cpp
-+++ b/src/util/alloc.cpp
-@@ -61,7 +61,7 @@ namespace ue2 {
- 
- void *aligned_malloc_internal(size_t size, size_t align) {
-     void *mem;
--#if !defined(_WIN32)
-+#if !NATIVE_WIN32
-     int rv = posix_memalign(&mem, align, size);
-     if (rv != 0) {
-         DEBUG_PRINTF("posix_memalign returned %d when asked for %zu bytes\n",
-@@ -85,7 +85,7 @@ void aligned_free_internal(void *ptr) {
-         return;
-     }
- 
--#if defined(_WIN32)
-+#if NATIVE_WIN32
-     _aligned_free(ptr);
- #else
-     free(ptr);
 diff --git a/src/util/bitutils.h b/src/util/bitutils.h
 index 1111111..2222222 100644
 --- a/src/util/bitutils.h
