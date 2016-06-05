@@ -16,6 +16,8 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
+    # Add the following options to run on (virtual) machine without AVX2
+    # -DCMAKE_C_FLAGS="-march=core2" -DCMAKE_CXX_FLAGS="-march=core2"
     cd '$(1).build' && '$(TARGET)-cmake' \
         -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
         '$(1)'
