@@ -6447,3 +6447,26 @@ index 1111111..2222222 100644
  endif()
  
  if(MINGW OR NOT WIN32)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 4 Jun 2016 00:00:24 +0200
+Subject: [PATCH] simplegrep: open file in binary mode
+
+Otherwise it hangs on binary files (MinGW).
+
+See https://github.com/01org/hyperscan/pull/26
+
+diff --git a/examples/simplegrep.c b/examples/simplegrep.c
+index 1111111..2222222 100644
+--- a/examples/simplegrep.c
++++ b/examples/simplegrep.c
+@@ -77,7 +77,7 @@ static int eventHandler(unsigned int id, unsigned long long from,
+  * length with its length. Returns NULL on failure.
+  */
+ static char *readInputData(const char *inputFN, unsigned int *length) {
+-    FILE *f = fopen(inputFN, "r");
++    FILE *f = fopen(inputFN, "rb");
+     if (!f) {
+         fprintf(stderr, "ERROR: unable to open file \"%s\": %s\n", inputFN,
+                 strerror(errno));
