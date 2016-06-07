@@ -27,7 +27,7 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --disable-silent-rules \
         --enable-xpdf-headers \
-        $(if $(filter qtbase,$(PKG)_DEPS), \
+        $(if $(filter qtbase,$($(PKG)_DEPS)), \
           --enable-poppler-qt4 \
           --disable-poppler-qt5, \
           --disable-poppler-qt4 \

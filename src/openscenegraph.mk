@@ -33,7 +33,7 @@ define $(PKG)_BUILD
         -DPOPPLER_HAS_CAIRO_EXITCODE=0 \
         -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1 \
         -D_OPENTHREADS_ATOMIC_USE_WIN32_INTERLOCKED=1 \
-        $(if $(filter qtbase,$(PKG)_DEPS), \
+        $(if $(filter qtbase,$($(PKG)_DEPS)), \
           -DDESIRED_QT_VERSION=4, \
           -DDESIRED_QT_VERSION=5)
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
