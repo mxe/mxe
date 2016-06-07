@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := ba726ea8303c97467a33fca50ee79b7b35212964be808ecf9b145e9042fdf
 $(PKG)_SUBDIR   := p11-kit-$($(PKG)_VERSION)
 $(PKG)_FILE     := p11-kit-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://p11-glue.freedesktop.org/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libtasn1
+$(PKG)_DEPS     := gcc libtasn1 libffi
 
 define $(PKG)_UPDATE
     echo 'TODO: write update script for $(PKG).' >&2;
