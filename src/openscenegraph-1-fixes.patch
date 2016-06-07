@@ -182,3 +182,26 @@ index 1111111..2222222 100644
  IF(GSTREAMER_FOUND AND GLIB_FOUND)
      ADD_SUBDIRECTORY(gstreamer)
  ENDIF()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Saikrishna Arcot <saiarcot895@gmail.com>
+Date: Mon, 6 Jun 2016 19:06:00 -0500
+Subject: [PATCH] Require the presence of either qt5 or qt4.
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -712,9 +712,9 @@ IF(OSG_USE_QT AND NOT ANDROID)
+ 
+     IF  (DESIRED_QT_VERSION)
+         IF  (DESIRED_QT_VERSION MATCHES 5)
+-            FIND_PACKAGE(Qt5Widgets)
++            FIND_PACKAGE(Qt5Widgets REQUIRED)
+         ELSEIF (DESIRED_QT_VERSION MATCHES 4)
+-            FIND_PACKAGE(Qt4)
++            FIND_PACKAGE(Qt4 REQUIRED)
+         ELSE()
+             FIND_PACKAGE(Qt3)
+         ENDIF()
