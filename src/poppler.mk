@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         --disable-silent-rules \
         --enable-xpdf-headers \
         $(if $(filter qtbase,$($(PKG)_DEPS)), \
-          --enable-poppler-qt4 \
-          --disable-poppler-qt5, \
+          --enable-poppler-qt5 \
+          --disable-poppler-qt4, \
           --disable-poppler-qt4 \
           --enable-poppler-qt5) \
         --enable-zlib \
