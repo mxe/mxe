@@ -3,8 +3,8 @@
 
 PKG             := hyperscan
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.1.0
-$(PKG)_CHECKSUM := b8de3f59c2bd1a8765a5aca5dfdd062766cef67218aedf63df2c92766524b3c1
+$(PKG)_VERSION  := 4.2.0
+$(PKG)_CHECKSUM := d06d8f31a62e5d2903a8ccf07696e02cadf4de2024dc3b558d410d913c81dbef
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/01org/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
@@ -16,6 +16,8 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
+    # Add the following options to run on (virtual) machine without AVX2
+    # -DCMAKE_C_FLAGS="-march=core2" -DCMAKE_CXX_FLAGS="-march=core2"
     cd '$(1).build' && '$(TARGET)-cmake' \
         -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
         '$(1)'

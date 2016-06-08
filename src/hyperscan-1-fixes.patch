@@ -41,7 +41,7 @@ index 1111111..2222222 100644
  option(OPTIMISE "Turns off compiler optimizations (on by default unless debug output enabled or coverage testing)" TRUE)
  
  option(DEBUG_OUTPUT "Enable debug output (warning: very verbose)" FALSE)
-@@ -362,12 +356,10 @@ set(RAGEL_C_FLAGS "-Wno-unused")
+@@ -375,12 +369,10 @@ set(RAGEL_C_FLAGS "-Wno-unused")
  endif()
  
  set_source_files_properties(
@@ -55,22 +55,22 @@ index 1111111..2222222 100644
  SET(hs_HEADERS
      src/hs.h
      src/hs_common.h
-@@ -935,7 +927,6 @@ endif()
+@@ -979,15 +971,12 @@ endif()
  # we want the static lib for testing
  add_library(hs STATIC ${hs_SRCS} $<TARGET_OBJECTS:hs_exec>)
  
 -add_dependencies(hs ragel_Parser)
- add_dependencies(hs autogen_compiler autogen_teddy_compiler)
- 
+-
  if (NOT BUILD_SHARED_LIBS)
-@@ -944,7 +935,6 @@ endif()
+ install(TARGETS hs DESTINATION lib)
+ endif()
  
  if (BUILD_STATIC_AND_SHARED OR BUILD_SHARED_LIBS)
      add_library(hs_shared SHARED ${hs_SRCS} $<TARGET_OBJECTS:hs_exec_shared>)
 -    add_dependencies(hs_shared ragel_Parser)
-     add_dependencies(hs_shared autogen_compiler autogen_teddy_compiler)
      set_target_properties(hs_shared PROPERTIES
          OUTPUT_NAME hs
+         VERSION ${LIB_VERSION}
 diff --git a/src/parser/Parser.cpp b/src/parser/Parser.cpp
 new file mode 100644
 index 1111111..2222222
@@ -5534,7 +5534,7 @@ index 1111111..2222222 100644
 @@ -17,7 +15,6 @@ set(expressionutil_SRCS
      ExpressionParser.cpp
      )
- add_library(expressionutil ${expressionutil_SRCS})
+ add_library(expressionutil STATIC ${expressionutil_SRCS})
 -add_dependencies(expressionutil ragel_ExpressionParser)
  
  SET(corpusomatic_SRCS
@@ -5931,45 +5931,6 @@ index 1111111..2222222
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
-Date: Wed, 18 May 2016 01:10:30 +0200
-Subject: [PATCH] add Libs.private to fix linking errors
-
-See https://github.com/01org/hyperscan/issues/18
-
-diff --git a/libhs.pc.in b/libhs.pc.in
-index 1111111..2222222 100644
---- a/libhs.pc.in
-+++ b/libhs.pc.in
-@@ -7,4 +7,5 @@ Name: libhs
- Description: Intel(R) Hyperscan Library
- Version: @HS_VERSION@
- Libs: -L${libdir} -lhs
-+Libs.private: -lstdc++ -lm
- Cflags: -I${includedir}/hs
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Wed, 18 May 2016 01:12:02 +0200
-Subject: [PATCH] fix linking against gtest in shared mode
-
-See https://github.com/01org/hyperscan/issues/19
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -214,7 +214,7 @@ CHECK_FUNCTION_EXISTS(_aligned_malloc HAVE__ALIGNED_MALLOC)
- CHECK_C_COMPILER_FLAG(-fvisibility=hidden HAS_C_HIDDEN)
- CHECK_CXX_COMPILER_FLAG(-fvisibility=hidden HAS_CXX_HIDDEN)
- 
--if (RELEASE_BUILD)
-+if (RELEASE_BUILD AND NOT BUILD_STATIC_AND_SHARED AND NOT BUILD_SHARED_LIBS)
-     if (HAS_C_HIDDEN)
-         set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -fvisibility=hidden")
-     endif()
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
 Date: Wed, 18 May 2016 01:25:59 +0200
 Subject: [PATCH] update preprocessor conditions
 
@@ -5980,7 +5941,7 @@ diff --git a/cmake/config.h.in b/cmake/config.h.in
 index 1111111..2222222 100644
 --- a/cmake/config.h.in
 +++ b/cmake/config.h.in
-@@ -99,3 +99,4 @@
+@@ -89,3 +89,4 @@
  /* define if this is a release build. */
  #cmakedefine RELEASE_BUILD
  
@@ -5998,6 +5959,19 @@ index 1111111..2222222 100644
  #define SNPRINTF_COMPAT _snprintf
  #else
  #define SNPRINTF_COMPAT snprintf
+diff --git a/src/nfa/mcclellan_common_impl.h b/src/nfa/mcclellan_common_impl.h
+index 1111111..2222222 100644
+--- a/src/nfa/mcclellan_common_impl.h
++++ b/src/nfa/mcclellan_common_impl.h
+@@ -26,7 +26,7 @@
+  * POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+-#if defined(__INTEL_COMPILER) || defined(__clang__) || defined(_WIN32) || defined(__GNUC__) && (__GNUC__ < 4)
++#if defined(__INTEL_COMPILER) || defined(__clang__) || NATIVE_WIN32 || defined(__GNUC__) && (__GNUC__ < 4)
+ #define really_flatten
+ #else
+ #define really_flatten __attribute__ ((flatten))
 diff --git a/src/nfa/nfa_internal.h b/src/nfa/nfa_internal.h
 index 1111111..2222222 100644
 --- a/src/nfa/nfa_internal.h
@@ -6011,28 +5985,6 @@ index 1111111..2222222 100644
  
  /* Use for functions that return an integer. */
  #define NFA_API_NO_IMPL(...)                                                   \
-diff --git a/src/rose/rose_internal.h b/src/rose/rose_internal.h
-index 1111111..2222222 100644
---- a/src/rose/rose_internal.h
-+++ b/src/rose/rose_internal.h
-@@ -637,7 +637,7 @@ struct lit_benefits {
-     } expected;
- };
- 
--#if defined(_WIN32)
-+#if NATIVE_WIN32
- #pragma pack(push, 1)
- #endif
- // Rose runtime state
-@@ -645,7 +645,7 @@ struct RoseRuntimeState {
-     u8 stored_depth; /* depth at stream boundary */
-     u8 flags; /* high bit true if delay rebuild needed */
-     u8 broken; /* user has requested that we stop matching */
--#if defined(_WIN32)
-+#if NATIVE_WIN32
- };
- #pragma pack(pop)
- #else
 diff --git a/src/ue2common.h b/src/ue2common.h
 index 1111111..2222222 100644
 --- a/src/ue2common.h
@@ -6090,28 +6042,6 @@ index 1111111..2222222 100644
  #ifndef likely
    #define likely(x)     __builtin_expect(!!(x), 1)
  #endif
-diff --git a/src/util/alloc.cpp b/src/util/alloc.cpp
-index 1111111..2222222 100644
---- a/src/util/alloc.cpp
-+++ b/src/util/alloc.cpp
-@@ -61,7 +61,7 @@ namespace ue2 {
- 
- void *aligned_malloc_internal(size_t size, size_t align) {
-     void *mem;
--#if !defined(_WIN32)
-+#if !NATIVE_WIN32
-     int rv = posix_memalign(&mem, align, size);
-     if (rv != 0) {
-         DEBUG_PRINTF("posix_memalign returned %d when asked for %zu bytes\n",
-@@ -85,7 +85,7 @@ void aligned_free_internal(void *ptr) {
-         return;
-     }
- 
--#if defined(_WIN32)
-+#if NATIVE_WIN32
-     _aligned_free(ptr);
- #else
-     free(ptr);
 diff --git a/src/util/bitutils.h b/src/util/bitutils.h
 index 1111111..2222222 100644
 --- a/src/util/bitutils.h
@@ -6134,16 +6064,21 @@ index 1111111..2222222 100644
      unsigned long r;
      _BitScanReverse(&r, x);
      return 31 - r;
-@@ -86,7 +86,7 @@ u32 clz32(u32 x) {
+@@ -86,11 +86,11 @@ u32 clz32(u32 x) {
  static really_inline
  u32 clz64(u64a x) {
      assert(x); // behaviour not defined for x == 0
--#if defined(_WIN32)
-+#if NATIVE_WIN32
+-#if defined(_WIN64)
++#if NATIVE_WIN32 && defined(_WIN64)
      unsigned long r;
      _BitScanReverse64(&r, x);
      return 63 - r;
-@@ -99,7 +99,7 @@ u32 clz64(u64a x) {
+-#elif defined(_WIN32)
++#elif NATIVE_WIN32
+     unsigned long x1 = (u32)x;
+     unsigned long x2 = (u32)(x >> 32);
+     unsigned long r;
+@@ -109,7 +109,7 @@ u32 clz64(u64a x) {
  static really_inline
  u32 ctz32(u32 x) {
      assert(x); // behaviour not defined for x == 0
@@ -6152,15 +6087,20 @@ index 1111111..2222222 100644
      unsigned long r;
      _BitScanForward(&r, x);
      return r;
-@@ -111,7 +111,7 @@ u32 ctz32(u32 x) {
+@@ -121,11 +121,11 @@ u32 ctz32(u32 x) {
  static really_inline
  u32 ctz64(u64a x) {
      assert(x); // behaviour not defined for x == 0
--#if defined(_WIN32)
-+#if NATIVE_WIN32
+-#if defined(_WIN64)
++#if NATIVE_WIN32 && defined(_WIN64)
      unsigned long r;
      _BitScanForward64(&r, x);
      return r;
+-#elif defined(_WIN32)
++#elif NATIVE_WIN32
+     unsigned long r;
+     if (_BitScanForward(&r, (u32)x)) {
+         return (u32)r;
 diff --git a/src/util/cpuid_flags.c b/src/util/cpuid_flags.c
 index 1111111..2222222 100644
 --- a/src/util/cpuid_flags.c
@@ -6174,7 +6114,7 @@ index 1111111..2222222 100644
  #include <cpuid.h>
  #endif
  
-@@ -54,7 +54,7 @@
+@@ -60,7 +60,7 @@
  static __inline
  void cpuid(unsigned int op, unsigned int leaf, unsigned int *eax,
             unsigned int *ebx, unsigned int *ecx, unsigned int *edx) {
@@ -6183,19 +6123,41 @@ index 1111111..2222222 100644
      __cpuid_count(op, leaf, *eax, *ebx, *ecx, *edx);
  #else
      unsigned int a[4];
+@@ -74,7 +74,7 @@ void cpuid(unsigned int op, unsigned int leaf, unsigned int *eax,
+ 
+ static inline
+ u64a xgetbv(u32 op) {
+-#if defined(_WIN32) || defined(__INTEL_COMPILER)
++#if NATIVE_WIN32 || defined(__INTEL_COMPILER)
+     return _xgetbv(op);
+ #else
+     u32 a, d;
+diff --git a/src/util/make_unique.h b/src/util/make_unique.h
+index 1111111..2222222 100644
+--- a/src/util/make_unique.h
++++ b/src/util/make_unique.h
+@@ -29,7 +29,7 @@
+ #ifndef UTIL_MAKE_UNIQUE_H
+ #define UTIL_MAKE_UNIQUE_H
+ 
+-#if (defined(_WIN32) || defined(_WIN64)) && (_MSC_VER > 1700)
++#if NATIVE_WIN32 && (_MSC_VER > 1700)
+ // VC++ 2013 onwards has make_unique in the STL
+ #define USE_STD
+ #include <memory>
 diff --git a/src/util/popcount.h b/src/util/popcount.h
 index 1111111..2222222 100644
 --- a/src/util/popcount.h
 +++ b/src/util/popcount.h
-@@ -40,7 +40,7 @@
+@@ -38,7 +38,7 @@
+ // We have a native popcount where the compiler has defined __POPCNT__.
+ #if defined(__POPCNT__)
+ #define HAVE_POPCOUNT_INSTR
+-#elif defined(_WIN32) && defined(__AVX__) // TODO: fix win preproc
++#elif NATIVE_WIN32 && defined(__AVX__) // TODO: fix win preproc
  #define HAVE_POPCOUNT_INSTR
  #endif
  
--#if defined(_WIN32) && defined(__AVX__) // TODO: fix win preproc
-+#if NATIVE_WIN32 && defined(__AVX__) // TODO: fix win preproc
- #define HAVE_POPCOUNT_INSTR
- #define __builtin_popcount __popcnt
- #define __builtin_popcountll __popcnt64
 diff --git a/src/util/shuffle.h b/src/util/shuffle.h
 index 1111111..2222222 100644
 --- a/src/util/shuffle.h
@@ -6261,7 +6223,7 @@ diff --git a/unit/hyperscan/test_util.h b/unit/hyperscan/test_util.h
 index 1111111..2222222 100644
 --- a/unit/hyperscan/test_util.h
 +++ b/unit/hyperscan/test_util.h
-@@ -35,7 +35,7 @@
+@@ -37,7 +37,7 @@
  #include "hs.h"
  
  #ifndef UNUSED
@@ -6321,7 +6283,7 @@ index 1111111..2222222 100644
          message(FATAL_ERROR "Windows DLLs currently not supported")
      else()
          message(STATUS "Building shared libraries")
-@@ -227,7 +227,7 @@ endif()
+@@ -238,7 +238,7 @@ include (${CMAKE_MODULE_PATH}/arch.cmake)
  CHECK_C_SOURCE_COMPILES("void *aa_test(void *x) { return __builtin_assume_aligned(x, 16);}\nint main(void) { return 0; }" HAVE_CC_BUILTIN_ASSUME_ALIGNED)
  CHECK_CXX_SOURCE_COMPILES("void *aa_test(void *x) { return __builtin_assume_aligned(x, 16);}\nint main(void) { return 0; }" HAVE_CXX_BUILTIN_ASSUME_ALIGNED)
  
@@ -6330,7 +6292,7 @@ index 1111111..2222222 100644
  set(C_FLAGS_TO_CHECK
  # Variable length arrays are way bad, most especially at run time
  "-Wvla"
-@@ -314,7 +314,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+@@ -325,7 +325,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
      set(FREEBSD true)
  endif(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
  
@@ -6339,17 +6301,26 @@ index 1111111..2222222 100644
  if(CMAKE_C_COMPILER_ID MATCHES "Intel")
      SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -diag-error 10006 -diag-disable 177 -diag-disable 2304 -diag-disable 2305 -diag-disable 2338 -diag-disable 1418 -diag-disable=remark")
  endif()
-@@ -351,7 +351,7 @@ add_subdirectory(src/fdr)
+@@ -345,7 +345,7 @@ endif()
+ configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
+ configure_file(src/hs_version.h.in ${PROJECT_BINARY_DIR}/hs_version.h)
  
- include_directories(${PROJECT_BINARY_DIR}/src/fdr)
+-if (NOT WIN32)
++if (MINGW OR NOT WIN32)
+     # expand out library names for pkgconfig static link info
+     foreach (LIB ${CMAKE_CXX_IMPLICIT_LINK_LIBRARIES})
+         # this is fragile, but protects us from toolchain specific files
+@@ -364,7 +364,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_C_FLAGS}")
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CXX_FLAGS}")
+ 
  
 -if(NOT WIN32)
 +if(MINGW OR NOT WIN32)
  set(RAGEL_C_FLAGS "-Wno-unused")
  endif()
  
-@@ -944,6 +944,6 @@ if (BUILD_STATIC_AND_SHARED OR BUILD_SHARED_LIBS)
- install(TARGETS hs_shared DESTINATION lib)
+@@ -988,6 +988,6 @@ install(TARGETS hs_shared
+     LIBRARY DESTINATION lib)
  endif()
  
 -if(NOT WIN32)
@@ -6369,7 +6340,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -200,6 +200,11 @@ else()
+@@ -208,6 +208,11 @@ else()
  
  endif()
  
@@ -6388,62 +6359,29 @@ index 1111111..2222222 100644
 @@ -8,4 +8,4 @@ Description: Intel(R) Hyperscan Library
  Version: @HS_VERSION@
  Libs: -L${libdir} -lhs
- Libs.private: -lstdc++ -lm
+ Libs.private: @PRIVATE_LIBS@
 -Cflags: -I${includedir}/hs
 +Cflags: -I${includedir}/hs -posix
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
-Date: Wed, 18 May 2016 07:57:11 +0200
-Subject: [PATCH] fix linking errors in shared mode
+Date: Sat, 4 Jun 2016 00:00:24 +0200
+Subject: [PATCH] simplegrep: open file in binary mode
 
-libcorpusomatic depends on libhs (for example, it uses symbol
-ue2::ReportManager::getReport). DLL fails to be linked if
-sime symbols are not resolved.
+Otherwise it hangs on binary files (MinGW).
 
-diff --git a/util/CMakeLists.txt b/util/CMakeLists.txt
+See https://github.com/01org/hyperscan/pull/26
+
+diff --git a/examples/simplegrep.c b/examples/simplegrep.c
 index 1111111..2222222 100644
---- a/util/CMakeLists.txt
-+++ b/util/CMakeLists.txt
-@@ -26,5 +26,5 @@ SET(corpusomatic_SRCS
-     ng_find_matches.h
-     ng_find_matches.cpp
- )
--add_library(corpusomatic ${corpusomatic_SRCS})
-+add_library(corpusomatic STATIC ${corpusomatic_SRCS})
- 
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Wed, 18 May 2016 07:59:57 +0200
-Subject: [PATCH] install .dll to bin/, not to lib/
-
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -926,7 +926,10 @@ if (BUILD_STATIC_AND_SHARED OR BUILD_SHARED_LIBS)
-         OUTPUT_NAME hs_runtime
-         MACOSX_RPATH ON
-         LINKER_LANGUAGE C)
--    install(TARGETS hs_runtime_shared DESTINATION lib)
-+    install(TARGETS hs_runtime_shared
-+        RUNTIME DESTINATION bin
-+        ARCHIVE DESTINATION lib
-+        LIBRARY DESTINATION lib)
- endif()
- 
- # we want the static lib for testing
-@@ -946,7 +949,10 @@ if (BUILD_STATIC_AND_SHARED OR BUILD_SHARED_LIBS)
-         VERSION ${LIB_VERSION}
-         SOVERSION ${LIB_SOVERSION}
-         MACOSX_RPATH ON)
--install(TARGETS hs_shared DESTINATION lib)
-+install(TARGETS hs_shared
-+    RUNTIME DESTINATION bin
-+    ARCHIVE DESTINATION lib
-+    LIBRARY DESTINATION lib)
- endif()
- 
- if(MINGW OR NOT WIN32)
+--- a/examples/simplegrep.c
++++ b/examples/simplegrep.c
+@@ -77,7 +77,7 @@ static int eventHandler(unsigned int id, unsigned long long from,
+  * length with its length. Returns NULL on failure.
+  */
+ static char *readInputData(const char *inputFN, unsigned int *length) {
+-    FILE *f = fopen(inputFN, "r");
++    FILE *f = fopen(inputFN, "rb");
+     if (!f) {
+         fprintf(stderr, "ERROR: unable to open file \"%s\": %s\n", inputFN,
+                 strerror(errno));
