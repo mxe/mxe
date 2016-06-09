@@ -6,9 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1-RC5
 $(PKG)_CHECKSUM := 80165d74d1634aff4fde93531a51c3ce316b6cb1302d8198c80030b183fb9b22
 $(PKG)_SUBDIR   := $(PKG)-version-$($(PKG)_VERSION)
-# $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_FILE     := version-$($(PKG)_VERSION).tar.gz
-# $(PKG)_URL      := https://github.com/vanrein/$($(PKG)_FILE)
 $(PKG)_URL	:= https://github.com/vanrein/quick-der/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc asn2quickder
 

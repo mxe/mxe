@@ -6,9 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.6-RC1
 $(PKG)_CHECKSUM := b1d3145ddb159cf76495157cb25e2c5e047b3809bf7fbffa95bdea56154d74fa
 $(PKG)_SUBDIR   := $(PKG)-version-$($(PKG)_VERSION)
-# $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_FILE     := version-$($(PKG)_VERSION).tar.gz
-# $(PKG)_URL      := https://github.com/vanrein/$($(PKG)_FILE)
 $(PKG)_URL	:= https://github.com/vanrein/asn2quickder/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 

@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := fff4c133ce9c927dfc3e36f48437671c56f1f9a4c2769768c474a0973e412
 $(PKG)_SUBDIR   := tlspool-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/hfmanson/$(PKG)/archive/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads gnutls p11-kit libtasn1 db
+$(PKG)_DEPS     := gcc pthreads gnutls p11-kit libtasn1 db quick-der
 
 define $(PKG)_UPDATE
     echo 'TODO: write update script for $(PKG).' >&2;
