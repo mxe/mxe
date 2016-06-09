@@ -30,8 +30,8 @@ define $(PKG)_BUILD
         $(if $(filter qtbase,$($(PKG)_DEPS)), \
           --enable-poppler-qt5 \
           --disable-poppler-qt4, \
-          --disable-poppler-qt4 \
-          --enable-poppler-qt5) \
+          --disable-poppler-qt5 \
+          --enable-poppler-qt4) \
         --enable-zlib \
         --enable-cms=lcms2 \
         --enable-libcurl \
