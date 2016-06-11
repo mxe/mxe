@@ -26,6 +26,11 @@ See https://github.com/mxe/mxe/issues/1111
 To limit number of packages being built to x,
 set environment variable MXE_BUILD_PKG_MAX_ITEMS to x.
 
+To set list of MXE targets to build,
+set environment variable MXE_BUILD_PKG_TARGETS to
+the list of targets separated by space.
+By default, all 4 major targets are built.
+
 The following error:
 > fakeroot, while creating message channels: Invalid argument
 > This may be due to a lack of SYSV IPC support.
@@ -37,6 +42,7 @@ How to remove them: http://stackoverflow.com/a/4262545
 local max_items = tonumber(os.getenv('MXE_BUILD_PKG_MAX_ITEMS'))
 local no_debs = os.getenv('MXE_BUILD_PKG_NO_DEBS')
 local no_second_pass = os.getenv('MXE_BUILD_PKG_NO_SECOND_PASS')
+local build_targets = os.getenv('MXE_BUILD_PKG_TARGETS')
 
 local TODAY = os.date("%Y%m%d")
 
@@ -64,6 +70,12 @@ local TARGETS = {
     'i686-w64-mingw32.shared',
     'x86_64-w64-mingw32.shared',
 }
+if build_targets then
+    TARGETS = {}
+    for target in build_targets:gmatch('(%S+)') do
+        table.insert(TARGETS, target)
+    end
+end
 
 local function echo(fmt, ...)
     print(fmt:format(...))
