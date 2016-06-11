@@ -158,17 +158,13 @@ PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
 # basic working shell environment and mxe variables
 # see http://www.linuxfromscratch.org/lfs/view/stable/chapter04/settingenvironment.html
 ENV_WHITELIST := EDITOR HOME LANG PATH %PROXY %proxy PS1 TERM
-ENV_WHITELIST += MAKE% MXE% $(PRELOAD_VARS)
+ENV_WHITELIST += MAKE% MXE% $(PRELOAD_VARS) WINEPREFIX
 
 # OS/Distro related issues - "unsafe" but practical
 # 1. https://github.com/mxe/mxe/issues/697
 ENV_WHITELIST += ACLOCAL_PATH LD_LIBRARY_PATH
 
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
-
-# disable wine with readonly directory (created by mxe-conf)
-# see https://github.com/mxe/mxe/issues/841
-export WINEPREFIX=$(PREFIX)/readonly
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
@@ -494,7 +490,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	@if ! (time $(PRELOAD) $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	@if ! (time $(PRELOAD) WINEPREFIX='$(2)/readonly' $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1) for target $(3)!'; \
 	    echo '------------------------------------------------------------'; \
@@ -535,6 +531,12 @@ build-only-$(1)_$(3):
 	    perl --version 2>&1 | head -3
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
+
+	    # disable wine with readonly directory
+	    # see https://github.com/mxe/mxe/issues/841
+	    mkdir -p '$(2)/readonly'
+	    chmod 0555 '$(2)/readonly'
+
 	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
 	        $$(call PREPARE_PKG_SOURCE,$(1),$(2)))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
@@ -634,7 +636,6 @@ BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
 
 .PHONY: clean
 clean:
-	@[ -d "$$WINEPREFIX" ] && chmod 0755 "$$WINEPREFIX" || true
 	rm -rf $(call TMP_DIR,*) $(PREFIX) \
 	       $(addprefix $(TOP_DIR)/, $(BUILD_PKG_TMP_FILES))
 
