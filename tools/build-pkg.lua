@@ -16,14 +16,15 @@ Build in directory /usr/lib/mxe
 This directory can not be changed in .deb packages.
 
 To prevent build-pkg from creating deb packages,
-set environment variable MXE_NO_DEBS to 1
+set environment variable MXE_BUILD_PKG_NO_DEBS to 1
 In this case fakeroot and dpkg-deb are not needed.
 
-To switch off the second pass, set MXE_NO_SECOND_PASS to 1.
+To switch off the second pass, set
+MXE_BUILD_PKG_NO_SECOND_PASS to 1.
 See https://github.com/mxe/mxe/issues/1111
 
 To limit number of packages being built to x,
-set environment variable MXE_MAX_ITEMS to x,
+set environment variable MXE_BUILD_PKG_MAX_ITEMS to x.
 
 The following error:
 > fakeroot, while creating message channels: Invalid argument
@@ -33,9 +34,9 @@ can be caused by leaked ipc resources originating in fakeroot.
 How to remove them: http://stackoverflow.com/a/4262545
 ]]
 
-local max_items = tonumber(os.getenv('MXE_MAX_ITEMS'))
-local no_debs = os.getenv('MXE_NO_DEBS')
-local no_second_pass = os.getenv('MXE_NO_SECOND_PASS')
+local max_items = tonumber(os.getenv('MXE_BUILD_PKG_MAX_ITEMS'))
+local no_debs = os.getenv('MXE_BUILD_PKG_NO_DEBS')
+local no_second_pass = os.getenv('MXE_BUILD_PKG_NO_SECOND_PASS')
 
 local TODAY = os.date("%Y%m%d")
 
