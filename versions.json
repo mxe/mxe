@@ -72,7 +72,7 @@
     "gendef": "4.0.6",
     "geoip-database": "20150317-1",
     "geos": "3.4.2",
-    "gettext": "0.19.8",
+    "gettext": "0.19.8.1",
     "giflib": "5.0.5",
     "glew": "1.12.0",
     "glfw2": "2.7.9",
