@@ -22,6 +22,8 @@ define INIT_GIT
     # if PKG_SUBDIR is ".", the following will move gits/tmp/pkg
     mv '$(abspath $(GITS_DIR)/tmp/$(1)/$($(1)_SUBDIR))' '$(call GIT_DIR,$(1))'
     rm -rf '$(GITS_DIR)/tmp'
+    # rename existing .git directories if any
+    find '$(call GIT_DIR,$(1))' -name .git -prune -exec sh -c 'mv "$$0" "$$0"_' {} \;
     # initialize git
     $(call GIT_CMD,$(1)) init
     $(call GIT_CMD,$(1)) add -A
