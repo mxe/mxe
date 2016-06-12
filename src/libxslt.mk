@@ -20,15 +20,10 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --without-debug \
-        --prefix='$(PREFIX)/$(TARGET)' \
         --with-libxml-prefix='$(PREFIX)/$(TARGET)' \
         --without-python \
         --without-plugins
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
-
-$(PKG)_BUILD_SHARED =

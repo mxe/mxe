@@ -19,6 +19,9 @@ To prevent build-pkg from creating deb packages,
 set environment variable MXE_NO_DEBS to 1
 In this case fakeroot and dpkg-deb are not needed.
 
+To switch off the second pass, set MXE_NO_SECOND_PASS to 1.
+See https://github.com/mxe/mxe/issues/1111
+
 To limit number of packages being built to x,
 set environment variable MXE_MAX_ITEMS to x,
 
@@ -32,8 +35,11 @@ How to remove them: http://stackoverflow.com/a/4262545
 
 local max_items = tonumber(os.getenv('MXE_MAX_ITEMS'))
 local no_debs = os.getenv('MXE_NO_DEBS')
+local no_second_pass = os.getenv('MXE_NO_SECOND_PASS')
 
 local TODAY = os.date("%Y%m%d")
+
+local MAX_TRIES = 10
 
 local GIT = 'git --work-tree=./usr/ --git-dir=./usr/.git '
 local GIT_USER = '-c user.name="build-pkg" ' ..
@@ -174,6 +180,10 @@ local function fileExists(name)
     end
 end
 
+local function isSymlink(name)
+    return shell(("ls -l %q"):format(name)):sub(1, 1) == "l"
+end
+
 local function writeFile(filename, data)
     local file = io.open(filename, 'w')
     file:write(data)
@@ -309,6 +319,18 @@ local function sortForBuild(items, item2deps)
     return build_list
 end
 
+local function isDependency(item, dependency, item2deps)
+    for _, dep in ipairs(item2deps[item]) do
+        if dep == dependency then
+            return true
+        end
+        if isDependency(dep, dependency, item2deps) then
+            return true
+        end
+    end
+    return false
+end
+
 local function makeItem2Index(build_list)
     local item2index = {}
     for index, item in ipairs(build_list) do
@@ -350,10 +372,10 @@ local function isBlacklisted(file)
 end
 
 local GIT_INITIAL = 'initial'
-local GIT_ALL = 'first-all'
+local GIT_ALL_PSEUDOITEM = 'all'
 
-local function itemToBranch(item)
-    return 'first-' .. item:gsub('~', '_')
+local function itemToBranch(item, pass)
+    return pass .. '-' .. item:gsub('~', '_')
 end
 
 -- creates git repo in ./usr
@@ -383,10 +405,10 @@ local function gitCommit(message)
     assert(execute(cmd:format(message)))
 end
 
-local function gitCheckout(new_branch, deps, item2index)
+local function gitCheckout(new_branch, deps, item2index, pass_of_deps)
     local main_dep = deps[1]
     if main_dep then
-        main_dep = itemToBranch(main_dep)
+        main_dep = itemToBranch(main_dep, pass_of_deps)
     else
         main_dep = GIT_INITIAL
     end
@@ -398,7 +420,7 @@ local function gitCheckout(new_branch, deps, item2index)
         local cmd2 = '%s %s merge -q %s -m %q'
         if not execute(cmd2:format(GIT,
             GIT_USER,
-            itemToBranch(deps[i]),
+            itemToBranch(deps[i], pass_of_deps),
             message))
         then
             -- probably merge conflict
@@ -426,18 +448,19 @@ local function gitCheckout(new_branch, deps, item2index)
 end
 
 local function gitAdd()
-    os.execute(GIT .. 'add .')
+    os.execute(GIT .. 'add --all .')
 end
 
 -- return two lists of filepaths under ./usr/
 -- 1. new files
 -- 2. changed files
-local function gitStatus()
+local function gitStatus(item, item2deps, file2item)
     local new_files = {}
     local changed_files = {}
     local git_st = io.popen(GIT .. 'status --porcelain', 'r')
     for line in git_st:lines() do
         local status, file = line:match('(..) (.*)')
+        assert(status:sub(2, 2) == ' ')
         status = trim(status)
         if file:sub(1, 1) == '"' then
             -- filename with a space is quoted by git
@@ -445,7 +468,23 @@ local function gitStatus()
         end
         file = 'usr/' .. file
         if not fileExists(file) then
-            log('Missing file: %q', file)
+            if status == 'D' then
+                local prev_owner = assert(file2item[file])
+                if prev_owner == item then
+                    log('Item %s removed %q installed by itself',
+                        item, file)
+                elseif isDependency(prev_owner, item, item2deps) then
+                    log('Item %s removed %q installed by its follower %s',
+                        item, file, prev_owner)
+                else
+                    log('Item %s removed %q installed by %s',
+                        item, file, prev_owner)
+                end
+            elseif isSymlink(file) then
+                log('Broken symlink: %q', file)
+            else
+                log('Missing file: %q', file)
+            end
         elseif not isBlacklisted(file) then
             if status == 'A' then
                 table.insert(new_files, file)
@@ -531,13 +570,16 @@ end
 
 local function removeEmptyDirs(item)
     -- removing an empty dir can reveal another one (parent)
+    -- don't pass item to mute the log message
     local go_on = true
     while go_on do
         go_on = false
         local f = io.popen('find usr/* -empty -type d', 'r')
         for dir in f:lines() do
-            log("Remove empty directory %s created by %s",
-                dir, item)
+            if item then
+                log("Remove empty directory %s created by %s",
+                    dir, item)
+            end
             os.remove(dir)
             go_on = true
         end
@@ -545,20 +587,90 @@ local function removeEmptyDirs(item)
     end
 end
 
+local function prepareTree(pass, item, item2deps, prev_files, item2index)
+    if pass == 'first' then
+        gitCheckout(
+            itemToBranch(item, pass),
+            item2deps[item],
+            item2index,
+            pass
+        )
+    elseif pass == 'second' then
+        -- Build item second time to check if it builds correctly if
+        -- its followers and unrelated packages have been built.
+        gitCheckout(
+            itemToBranch(item, 'second'),
+            {GIT_ALL_PSEUDOITEM},
+            item2index,
+            'first'
+        )
+        removeEmptyDirs()
+        if prev_files then
+            -- Remove files of item from previous build.
+            for _, file in ipairs(prev_files) do
+                os.remove(file)
+            end
+            gitAdd()
+            gitCommit(("Remove %s to rebuild it"):format(item, pass))
+        end
+    else
+        error("Unknown pass: " .. pass)
+    end
+end
+
+local function comparePasses(item, new_files, prev_file2item, prev_files)
+    local files_set = {}
+    for _, file in ipairs(new_files) do
+        if not prev_file2item[file] then
+            log('Item %s installs a file on second pass only: %s',
+                item, file)
+        elseif prev_file2item[file] ~= item then
+            log('File %s was installed by %s on first pass ' ..
+                'and by %s - on the second pass',
+                file, prev_file2item[file], item)
+        end
+        files_set[file] = true
+    end
+    for _, file in ipairs(prev_files) do
+        if not files_set[file] then
+            log('Item %s installs a file on first pass only: %s',
+                item, file)
+        end
+    end
+    -- TODO compare contents of files (nm for binaries)
+end
+
+local function isBuilt(item, files)
+    local target, pkg = parseItem(item)
+    local INSTALLED = 'usr/%s/installed/%s'
+    local installed = INSTALLED:format(target, pkg)
+    for _, file in ipairs(files) do
+        if file == installed then
+            return true
+        end
+    end
+    return false
+end
+
 -- builds package, returns list of new files
-local function buildItem(item, item2deps, file2item, item2index)
-    gitCheckout(itemToBranch(item), item2deps[item], item2index)
+-- prev_files is passed only to second pass.
+local function buildItem(item, item2deps, file2item, item2index, pass, prev_files)
+    prepareTree(pass, item, item2deps, prev_files, item2index)
     local target, pkg = parseItem(item)
     local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
     os.execute(cmd:format(tool 'make', pkg, target))
     gitAdd()
-    local new_files, changed_files = gitStatus()
+    local new_files, changed_files = gitStatus(item, item2deps, file2item)
     if #new_files + #changed_files > 0 then
-        gitCommit(("Build %s"):format(item))
+        gitCommit(("Build %s, pass %s"):format(item, pass))
     end
-    for _, file in ipairs(new_files) do
-        checkFile(file, item)
-        file2item[file] = item
+    if pass == 'first' then
+        for _, file in ipairs(new_files) do
+            checkFile(file, item)
+            file2item[file] = item
+        end
+    elseif isBuilt(item, new_files) then
+        comparePasses(item, new_files, file2item, prev_files)
     end
     for _, file in ipairs(changed_files) do
         checkFile(file, item)
@@ -567,8 +679,8 @@ local function buildItem(item, item2deps, file2item, item2index)
         if not isInArray(creator_item, item2deps[item]) then
             table.insert(item2deps[item], creator_item)
         end
-        log('Item %s changes %s, created by %s',
-            item, file, creator_item)
+        log('Item %s (pass %s) changes %s, created by %s',
+            item, pass, file, creator_item)
     end
     checkFileList(concatArrays(new_files, changed_files), item)
     removeEmptyDirs(item)
@@ -687,18 +799,6 @@ local function makeDeb(item, files, deps, ver)
     makePackage(deb_pkg, files, deb_deps, ver, d1, d2)
 end
 
-local function isBuilt(item, files)
-    local target, pkg = parseItem(item)
-    local INSTALLED = 'usr/%s/installed/%s'
-    local installed = INSTALLED:format(target, pkg)
-    for _, file in ipairs(files) do
-        if file == installed then
-            return true
-        end
-    end
-    return false
-end
-
 local function findForeignInstalls(item, files)
     for _, file in ipairs(files) do
         local pattern = 'usr/([^/]+)/installed/([^/]+)'
@@ -771,7 +871,8 @@ local function isEmpty(files)
 end
 
 -- build all packages, save filelist to list file
-local function buildPackages(items, item2deps)
+-- prev_files is passed only to second pass.
+local function buildPackages(items, item2deps, pass, prev_item2files)
     local broken = {}
     local unbroken = {}
     local file2item = {}
@@ -784,12 +885,23 @@ local function buildPackages(items, item2deps)
         end
         return false
     end
+    if pass == 'second' then
+        assert(prev_item2files)
+        -- fill file2item with data from prev_item2files
+        for item, files in pairs(prev_item2files) do
+            for _, file in ipairs(files) do
+                file2item[file] = item
+            end
+        end
+    end
     local item2index = makeItem2Index(items)
     local progress_printer = progressPrinter(items)
     for i, item in ipairs(items) do
         if not brokenDep(item) then
-            local files = buildItem(item, item2deps,
-                file2item, item2index)
+            local prev_files = prev_item2files and prev_item2files[item]
+            local files = buildItem(
+                item, item2deps, file2item, item2index, pass, prev_files
+            )
             findForeignInstalls(item, files)
             if isBuilt(item, files) then
                 item2files[item] = files
@@ -917,36 +1029,72 @@ local function makeMxeSourcePackage()
     makePackage(name, files, deps, ver, d1, d2)
 end
 
-assert(not io.open('usr/.git'), 'Remove usr/')
-local MXE_DIR_EXPECTED = '/usr/lib/mxe'
-if MXE_DIR ~= MXE_DIR_EXPECTED then
-    log("Warning! Building in dir %s, not in %s",
-        MXE_DIR, MXE_DIR_EXPECTED)
-end
-gitInit()
-assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
-    tool 'make', table.concat(TARGETS, ' '))))
-if not max_items then
+local function downloadPackages()
     local cmd = ('%s download -j 6 -k'):format(tool 'make')
-    while not execute(cmd) do end
+    for i = 1, MAX_TRIES do
+        log("Downloading packages. Attempt %d.", i)
+        if execute(cmd) then
+            log("All packages were downloaded.")
+            return
+        end
+        log("Some packages failed to download.")
+    end
+    log("%d downloading attempts failed. Giving up.", MAX_TRIES)
+    error('downloading failed')
 end
-gitAdd()
-gitCommit('Initial commit')
-gitTag(GIT_INITIAL)
-local items, item2deps, item2ver = getItems()
-local build_list = sortForBuild(items, item2deps)
-assert(isTopoOrdered(build_list, items, item2deps))
-build_list = sliceArray(build_list, max_items)
-local unbroken, item2files = buildPackages(build_list, item2deps)
-gitCheckout(GIT_ALL, unbroken, makeItem2Index(build_list))
-makeDebs(unbroken, item2deps, item2ver, item2files)
-if not no_debs then
-    makeMxeRequirementsPackage('wheezy')
-    makeMxeRequirementsPackage('jessie')
+
+local function main()
+    assert(not io.open('usr/.git'), 'Remove usr/')
+    local MXE_DIR_EXPECTED = '/usr/lib/mxe'
+    if MXE_DIR ~= MXE_DIR_EXPECTED then
+        log("Warning! Building in dir %s, not in %s",
+            MXE_DIR, MXE_DIR_EXPECTED)
+    end
+    gitInit()
+    assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
+        tool 'make', table.concat(TARGETS, ' '))))
+    if not max_items then
+        downloadPackages()
+    end
+    gitAdd()
+    gitCommit('Initial commit')
+    gitTag(GIT_INITIAL)
+    local items, item2deps, item2ver = getItems()
+    local build_list = sortForBuild(items, item2deps)
+    assert(isTopoOrdered(build_list, items, item2deps))
+    build_list = sliceArray(build_list, max_items)
+    local first_pass_failed, second_pass_failed
+    local unbroken, item2files = buildPackages(
+        build_list, item2deps, 'first'
+    )
+    if #unbroken < #build_list then
+        first_pass_failed = true
+    end
+    gitCheckout(
+        itemToBranch(GIT_ALL_PSEUDOITEM, 'first'),
+        unbroken,
+        makeItem2Index(build_list),
+        'first'
+    )
+    makeDebs(unbroken, item2deps, item2ver, item2files)
+    if not no_debs then
+        makeMxeRequirementsPackage('wheezy')
+        makeMxeRequirementsPackage('jessie')
+    end
+    makeMxeSourcePackage()
+    if not no_second_pass then
+        local unbroken_second = buildPackages(
+            build_list, item2deps, 'second', item2files
+        )
+        if #unbroken_second < #build_list then
+            second_pass_failed = true
+        end
+    end
+    if first_pass_failed or second_pass_failed then
+        local code = 1
+        local close = true
+        os.exit(code, close)
+    end
 end
-makeMxeSourcePackage()
-if #unbroken < #build_list then
-    local code = 1
-    local close = true
-    os.exit(code, close)
-end
+
+main()

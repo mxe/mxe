@@ -158,7 +158,7 @@ PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
 # basic working shell environment and mxe variables
 # see http://www.linuxfromscratch.org/lfs/view/stable/chapter04/settingenvironment.html
 ENV_WHITELIST := EDITOR HOME LANG PATH %PROXY %proxy PS1 TERM
-ENV_WHITELIST += MAKE% MXE% $(PRELOAD_VARS)
+ENV_WHITELIST += MAKE% MXE% $(PRELOAD_VARS) WINEPREFIX
 
 # OS/Distro related issues - "unsafe" but practical
 # 1. https://github.com/mxe/mxe/issues/697
@@ -166,16 +166,13 @@ ENV_WHITELIST += ACLOCAL_PATH LD_LIBRARY_PATH
 
 unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
-# disable wine with readonly directory (created by mxe-conf)
-# see https://github.com/mxe/mxe/issues/841
-export WINEPREFIX=$(PREFIX)/readonly
-
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
 
 UNPACK_ARCHIVE = \
     $(if $(filter %.tgz,     $(1)),tar xzf '$(1)', \
     $(if $(filter %.tar.gz,  $(1)),tar xzf '$(1)', \
+    $(if $(filter %.tar.Z,   $(1)),tar xzf '$(1)', \
     $(if $(filter %.tbz2,    $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.bz2, $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
@@ -184,7 +181,7 @@ UNPACK_ARCHIVE = \
     $(if $(filter %.7z,      $(1)),7za x '$(1)', \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
     $(if $(filter %.deb,     $(1)),ar x '$(1)' && tar xf data.tar*, \
-    $(error Unknown archive format: $(1))))))))))))
+    $(error Unknown archive format: $(1)))))))))))))
 
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
@@ -323,7 +320,7 @@ all: all-filtered
 
 # Build native requirements for certain systems
 OS_SHORT_NAME   := $(call lc,$(shell lsb_release -sc 2>/dev/null || uname -s))
-MXE_PLUGIN_DIRS += $(realpath $(TOP_DIR)/plugins/native/$(OS_SHORT_NAME))
+override MXE_PLUGIN_DIRS += $(realpath $(TOP_DIR)/plugins/native/$(OS_SHORT_NAME))
 
 .PHONY: check-requirements
 define CHECK_REQUIREMENT
@@ -493,7 +490,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	@if ! (time $(PRELOAD) $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	@if ! (time $(PRELOAD) WINEPREFIX='$(2)/readonly' $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1) for target $(3)!'; \
 	    echo '------------------------------------------------------------'; \
@@ -528,10 +525,18 @@ build-only-$(1)_$(3):
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
 	    autoconf --version 2>/dev/null | head -1
 	    automake --version 2>/dev/null | head -1
+	    $(BUILD_CC) --version
+	    $(BUILD_CXX) --version
 	    python --version
 	    perl --version 2>&1 | head -3
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
+
+	    # disable wine with readonly directory
+	    # see https://github.com/mxe/mxe/issues/841
+	    mkdir -p '$(2)/readonly'
+	    chmod 0555 '$(2)/readonly'
+
 	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
 	        $$(call PREPARE_PKG_SOURCE,$(1),$(2)))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
@@ -631,7 +636,6 @@ BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
 
 .PHONY: clean
 clean:
-	@[ -d "$$WINEPREFIX" ] && chmod 0755 "$$WINEPREFIX" || true
 	rm -rf $(call TMP_DIR,*) $(PREFIX) \
 	       $(addprefix $(TOP_DIR)/, $(BUILD_PKG_TMP_FILES))
 

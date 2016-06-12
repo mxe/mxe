@@ -57,151 +57,66 @@ index 1111111..2222222 100755
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 30 Aug 2015 01:58:17 +0200
-Subject: [PATCH] convert includes like <Windows.h> to lowercase
+Date: Sun, 29 May 2016 23:35:25 +0200
+Subject: [PATCH] link with boost_random and boost_chrono
 
+libtorrent-rasterbar 1.1.0 uses them
 
-diff --git a/src/app/application.cpp b/src/app/application.cpp
-index 1111111..2222222 100644
---- a/src/app/application.cpp
-+++ b/src/app/application.cpp
-@@ -37,7 +37,7 @@
- #ifndef DISABLE_GUI
- #include "gui/guiiconprovider.h"
- #ifdef Q_OS_WIN
--#include <Windows.h>
-+#include <windows.h>
- #include <QSharedMemory>
- #include <QSessionManager>
- #endif // Q_OS_WIN
-diff --git a/src/base/bittorrent/torrenthandle.cpp b/src/base/bittorrent/torrenthandle.cpp
-index 1111111..2222222 100644
---- a/src/base/bittorrent/torrenthandle.cpp
-+++ b/src/base/bittorrent/torrenthandle.cpp
-@@ -43,7 +43,7 @@
- #include <boost/bind.hpp>
- 
- #ifdef Q_OS_WIN
--#include <Windows.h>
-+#include <windows.h>
- #endif
- 
- #include "base/logger.h"
-diff --git a/src/base/preferences.cpp b/src/base/preferences.cpp
-index 1111111..2222222 100644
---- a/src/base/preferences.cpp
-+++ b/src/base/preferences.cpp
-@@ -47,7 +47,7 @@
- #endif
- 
- #ifdef Q_OS_WIN
--#include <ShlObj.h>
-+#include <shlobj.h>
- #include <winreg.h>
- #endif
- 
-diff --git a/src/base/utils/misc.cpp b/src/base/utils/misc.cpp
-index 1111111..2222222 100644
---- a/src/base/utils/misc.cpp
-+++ b/src/base/utils/misc.cpp
-@@ -48,7 +48,7 @@
- 
- #ifdef Q_OS_WIN
- #include <windows.h>
--#include <PowrProf.h>
-+#include <powrprof.h>
- const int UNLEN = 256;
- #else
- #include <unistd.h>
-diff --git a/src/gui/powermanagement/powermanagement.cpp b/src/gui/powermanagement/powermanagement.cpp
-index 1111111..2222222 100644
---- a/src/gui/powermanagement/powermanagement.cpp
-+++ b/src/gui/powermanagement/powermanagement.cpp
-@@ -40,7 +40,7 @@
- #endif
- 
- #ifdef Q_OS_WIN
--#include <Windows.h>
-+#include <windows.h>
- #endif
- 
- PowerManagement::PowerManagement(QObject *parent) : QObject(parent), m_busy(false)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 30 Aug 2015 02:02:39 +0200
-Subject: [PATCH] fix library list
-
-Replace library list hardcoded in qmake files with
-libraries found by autotools.
-
-diff --git a/configure b/configure
-index 1111111..2222222 100755
---- a/configure
-+++ b/configure
-@@ -8345,7 +8345,7 @@ fi
- $as_echo "$as_me: Running qmake to generate the makefile..." >&6;}
- CONFDIR="$( cd "$( dirname "$0" )" && pwd )"
- 
--$QT_QMAKE -r $CONFDIR/qbittorrent.pro
-+$QT_QMAKE -r $CONFDIR/qbittorrent.pro "QMAKE_LRELEASE=$QMAKE_LRELEASE" "CONF_LIBS=$LIBS"
- 
- ret="$?"
- 
 diff --git a/winconf-mingw.pri b/winconf-mingw.pri
 index 1111111..2222222 100644
 --- a/winconf-mingw.pri
 +++ b/winconf-mingw.pri
-@@ -20,19 +20,8 @@ CONFIG(debug, debug|release) {
- 
- RC_FILE = qbittorrent_mingw.rc
- 
--# Adapt the lib names/versions accordingly
--CONFIG(debug, debug|release) {
--  LIBS += libtorrent \
--          libboost_system-mgw45-mt-d-1_47 \
--          libboost_filesystem-mgw45-mt-d-1_47 \
--          libboost_thread-mgw45-mt-d-1_47
--} else {
--  LIBS += libtorrent \
--          libboost_system-mgw45-mt-1_47 \
--          libboost_filesystem-mgw45-mt-1_47 \
--          libboost_thread-mgw45-mt-1_47
--}
-+LIBS += $$CONF_LIBS
- 
- LIBS += libadvapi32 libshell32 libuser32
--LIBS += libcrypto.dll libssl.dll libwsock32 libws2_32 libz libiconv.dll
-+LIBS += libcrypto libssl libwsock32 libws2_32 libz libiconv
- LIBS += libpowrprof
+@@ -23,11 +23,15 @@ RC_FILE = qbittorrent_mingw.rc
+ # Adapt the lib names/versions accordingly
+ CONFIG(debug, debug|release) {
+   LIBS += libtorrent-rasterbar \
++          libboost_random-mt \
++          libboost_chrono-mt \
+           libboost_system-mt \
+           libboost_filesystem-mt \
+           libboost_thread_win32-mt
+ } else {
+   LIBS += libtorrent-rasterbar \
++          libboost_random-mt \
++          libboost_chrono-mt \
+           libboost_system-mt \
+           libboost_filesystem-mt \
+           libboost_thread_win32-mt
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Mon, 30 May 2016 00:09:20 +0200
+Subject: [PATCH] disable BOOST_ASIO_SEPARATE_COMPILATION
+
+After upgrading libtorrent-rasterbar to 1.1.0, qbittorrent fails to link
+main executable with undefined symbols in boost_asio:
+
+    ./release/application.o:application.cpp:(.text.startup+0x83):
+    undefined reference to `boost::asio::detail::winsock_init_base::startup
+    (boost::asio::detail::winsock_init_base::data&, unsigned char,
+    unsigned char)'
+
+diff --git a/cmake/Modules/winconf.cmake b/cmake/Modules/winconf.cmake
+index 1111111..2222222 100644
+--- a/cmake/Modules/winconf.cmake
++++ b/cmake/Modules/winconf.cmake
+@@ -5,7 +5,6 @@
+ set(LibtorrentRasterbar_USE_STATIC_LIBS True)
+ set(LibtorrentRasterbar_CUSTOM_DEFINITIONS 
+     -DBOOST_ALL_NO_LIB -DBOOST_ASIO_HASH_MAP_BUCKETS=1021
+-    -DBOOST_ASIO_SEPARATE_COMPILATION
+     -DBOOST_EXCEPTION_DISABLE
+     -DBOOST_SYSTEM_STATIC_LINK=1
+     -DTORRENT_USE_OPENSSL
 diff --git a/winconf.pri b/winconf.pri
 index 1111111..2222222 100644
 --- a/winconf.pri
 +++ b/winconf.pri
-@@ -9,15 +9,6 @@ INCLUDEPATH += $$quote(C:/qBittorrent/Zlib/include)
- # Point this to the openssl include folder
- INCLUDEPATH += $$quote(C:/qBittorrent/openssl/include)
- 
--# Point this to the boost lib folder
--LIBS += $$quote(-LC:/qBittorrent/boost_1_51_0/stage/lib)
--# Point this to the libtorrent lib folder
--LIBS += $$quote(-LC:/qBittorrent/RC_0_16/bin/<path-according-to-the-build-options-chosen>)
--# Point this to the zlib lib folder
--LIBS += $$quote(-LC:/qBittorrent/Zlib/lib)
--# Point this to the openssl lib folder
--LIBS += $$quote(-LC:/qBittorrent/openssl/lib)
--
+@@ -21,7 +21,6 @@ LIBS += $$quote(-LC:/qBittorrent/openssl/lib)
  # LIBTORRENT DEFINES
  DEFINES += BOOST_ALL_NO_LIB
  DEFINES += BOOST_ASIO_HASH_MAP_BUCKETS=1021
-@@ -46,9 +37,4 @@ CONFIG(debug, debug|release) {
- # Enable backtrace support
- CONFIG += strace_win
- 
--win32-g++ {
--    include(winconf-mingw.pri)
--}
--else {
--    include(winconf-msvc.pri)
--}
-+include(winconf-mingw.pri)
+-DEFINES += BOOST_ASIO_SEPARATE_COMPILATION
+ # After 1.55 some Windows users reported regular UI freezes.
+ # This makes ASIO use the pre-1.56 way of doing things. See issue #2003
+ DEFINES += BOOST_ASIO_DISABLE_CONNECTEX

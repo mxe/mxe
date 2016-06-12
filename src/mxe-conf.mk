@@ -107,13 +107,6 @@ define $(PKG)_BUILD_$(BUILD)
     cd '$(1)' && autoreconf -fiv
     cd '$(1)' && ./configure
 
-    #create readonly directory to force wine to fail
-    mkdir -p "$$WINEPREFIX"
-    [ -f "$$WINEPREFIX/.gitkeep" ] \
-        || chmod 0755 "$$WINEPREFIX" \
-        && touch "$$WINEPREFIX/.gitkeep"
-    chmod 0555 "$$WINEPREFIX"
-
     #create script "wine" in a directory which is in PATH
     mkdir -p '$(PREFIX)/$(BUILD)/bin/'
     (echo '#!/usr/bin/env bash'; \

@@ -15,7 +15,8 @@ $(PKG)_UPDATE = $(call MXE_GET_GITHUB_SHA, witwall/mman-win32, master) | $(SED) 
 define $(PKG)_BUILD
     mkdir '$(1).build'
     cd    '$(1).build' && '$(TARGET)-cmake' '$(1)'\
-        -DBUILD_TESTS=OFF
+        -DBUILD_TESTS=OFF \
+        $(if $(BUILD_STATIC),-DBUILD_SHARED_LIBS=OFF)
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 
