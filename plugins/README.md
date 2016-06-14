@@ -12,7 +12,7 @@ The basic usage is to drop some `*.mk` files in a directory `foo/` and set
 `MXE_PLUGIN_DIRS='foo/'` while invoking `make` like this:
 
 ```console
-MXE_PLUGINS_DIR=foo/ make libpng
+MXE_PLUGIN_DIRS=foo/ make libpng
 ```
 
 If needed, you can also pass multiple directories by separating them with a
