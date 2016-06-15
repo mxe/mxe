@@ -1,0 +1,51 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+From 78b2db2f6e5421a6a5669c5fa1eae373126fb052 Mon Sep 17 00:00:00 2001
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Wed, 13 Jan 2016 23:17:39 +0100
+Subject: [PATCH 1/2] static-build-fixes
+
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ quazip/quazip.pro | 1 +
+ qztest/qztest.pro | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/quazip/quazip.pro b/quazip/quazip.pro
+index c869e59..668a522 100644
+--- a/quazip/quazip.pro
++++ b/quazip/quazip.pro
+@@ -51,6 +51,7 @@ win32 {
+     INSTALLS += headers target
+     # workaround for qdatetime.h macro bug
+     DEFINES += NOMINMAX
++    LIBS += -lz
+ }
+ 
+ 
+diff --git a/qztest/qztest.pro b/qztest/qztest.pro
+index 1329197..74471bf 100644
+--- a/qztest/qztest.pro
++++ b/qztest/qztest.pro
+@@ -12,6 +12,8 @@ win32 {
+     DEFINES += NOMINMAX
+ }
+ 
++CONFIG(staticlib): DEFINES += QUAZIP_STATIC
++
+ # Input
+ HEADERS += qztest.h \
+ testjlcompress.h \
+@@ -38,7 +40,7 @@ testquazipfile.cpp \
+ OBJECTS_DIR = .obj
+ MOC_DIR = .moc
+ 
+-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../quazip/release/ -lquazip
++win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../quazip/release/ -lquazip -lz
+ else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../quazip/debug/ -lquazip
+ else:unix: LIBS += -L$$OUT_PWD/../quazip/ -lquazip
+ 
+-- 
+1.9.1
+

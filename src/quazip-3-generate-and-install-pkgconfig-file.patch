@@ -1,0 +1,57 @@
+From 66fa22ebb9e96dac7c2990b41a805d862e4c625a Mon Sep 17 00:00:00 2001
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Mon, 18 Jan 2016 00:30:02 +0100
+Subject: [PATCH] generate and install pkgconfig file
+
+---
+ quazip/quazip.pro | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/quazip/quazip.pro b/quazip/quazip.pro
+index c327a1a..3fc5f3a 100644
+--- a/quazip/quazip.pro
++++ b/quazip/quazip.pro
+@@ -2,6 +2,9 @@ TEMPLATE = lib
+ CONFIG += qt warn_on
+ QT -= gui
+ 
++# Creating pkgconfig .pc file
++CONFIG += create_prl no_install_prl create_pc
++
+ # The ABI version.
+ 
+ !win32:VERSION = 1.0.0
+@@ -49,11 +52,30 @@ win32 {
+     headers.files=$$HEADERS
+     CONFIG(staticlib){
+         target.path=$$PREFIX/lib
++        QMAKE_PKGCONFIG_LIBDIR = $$PREFIX/lib/
++        INSTALLS += target
+     } else {
+         target.path=$$PREFIX/bin
++        ##itarget.files=release/quazip.dll
++#        message("@@@@@@")
++#        message($$target.files)
++#        message("@@@@@@")
++        QMAKE_PKGCONFIG_LIBDIR = $$PREFIX/bin/
++        CONFIG += shared
++        CONFIG += dll
+     }
+ 
+     INSTALLS += headers target
++    QMAKE_PKGCONFIG_PREFIX = $$PREFIX
++    QMAKE_PKGCONFIG_INCDIR = $$headers.path
++    QMAKE_PKGCONFIG_REQUIRES = Qt5Core
++
++    ## odd, this path seems to be relative to the
++    ## target.path, so if we install the .dll into
++    ## the 'bin' dir, the .pc will go there as well,
++    ## unless have to hack the needed path...
++    ## TODO any nicer solution?
++    QMAKE_PKGCONFIG_DESTDIR = ../lib/pkgconfig
+     # workaround for qdatetime.h macro bug
+     DEFINES += NOMINMAX
+     LIBS += -lz
+-- 
+1.9.1
+

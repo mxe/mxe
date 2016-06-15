@@ -1,0 +1,34 @@
+# This file is part of MXE.
+# See index.html for further information.
+
+From ab9114cb07fa5ca5c3404fe4bc5f7acc1fc580c1 Mon Sep 17 00:00:00 2001
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Wed, 13 Jan 2016 23:21:29 +0100
+Subject: [PATCH 2/2] install dlls into <target>/bin
+
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ quazip/quazip.pro | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/quazip/quazip.pro b/quazip/quazip.pro
+index 668a522..c327a1a 100644
+--- a/quazip/quazip.pro
++++ b/quazip/quazip.pro
+@@ -47,7 +47,12 @@ unix:!symbian {
+ win32 {
+     headers.path=$$PREFIX/include/quazip
+     headers.files=$$HEADERS
+-    target.path=$$PREFIX/lib
++    CONFIG(staticlib){
++        target.path=$$PREFIX/lib
++    } else {
++        target.path=$$PREFIX/bin
++    }
++
+     INSTALLS += headers target
+     # workaround for qdatetime.h macro bug
+     DEFINES += NOMINMAX
+-- 
+1.9.1
+
