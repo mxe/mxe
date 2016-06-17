@@ -2,11 +2,11 @@
 # See index.html for further information.
 
 PKG             := tlspool
-$(PKG)_VERSION  := 0.11
-$(PKG)_CHECKSUM := 8decc8c9c459c901fe718eecb38107a958d491c93c7673315eef2a17b4083813
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/hfmanson/$(PKG)/archive/$($(PKG)_FILE)
+$(PKG)_VERSION  := 0.15
+$(PKG)_CHECKSUM := 8fc59535f74927193230e68bf4ec069863649e683eae1977e593a28c9179bc16
+$(PKG)_SUBDIR   := $(PKG)-version-$($(PKG)_VERSION)-alpha1
+$(PKG)_FILE     := $(PKG)-version-$($(PKG)_VERSION)-alpha1.tar.gz
+$(PKG)_URL      := https://github.com/arpa2/$(PKG)/archive/version-$($(PKG)_VERSION)-alpha1.tar.gz
 $(PKG)_DEPS     := gcc pthreads gnutls p11-kit libtasn1 db quick-der
 
 define $(PKG)_UPDATE
