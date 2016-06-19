@@ -52,8 +52,8 @@ define $(PKG)_BUILD
             -system-libpng \
             -system-libjpeg \
             -system-sqlite \
-            -no-fontconfig \
-            -no-freetype \
+            -fontconfig \
+            -system-freetype \
             -system-harfbuzz \
             -system-pcre \
             -openssl-linked \
