@@ -165,26 +165,22 @@ index d2358ca..6b1dc95 100644
 From b9823e1159af3c8b43fdedfae3106af8dec30e1d Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
 Date: Sun, 19 Jun 2016 02:10:42 +0300
-Subject: [PATCH 7/7] fix build with -fontconfig and -system-freetype for MS
- Windows
+Subject: [PATCH 7/7] Fix build of the minimal platform plugin for MS Windows
+ when qtbase is configured with -fontconfig and -system-freetype.
 
 
-diff --git a/src/plugins/platforms/minimal/qminimalintegration.cpp b/src/plugins/platforms/minimal/qminimalintegration.cpp
-index 7224f41..617a449 100644
---- a/src/plugins/platforms/minimal/qminimalintegration.cpp
-+++ b/src/plugins/platforms/minimal/qminimalintegration.cpp
-@@ -120,7 +120,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
-     if (m_options & EnableFonts) {
- #ifndef QT_NO_FONTCONFIG
-         if (!m_fontDatabase)
-+#ifdef Q_OS_WIN
-+            m_fontDatabase = new QBasicFontDatabase;
-+#else // !Q_OS_WIN
-             m_fontDatabase = new QGenericUnixFontDatabase;
-+#endif
- #else
-         return QPlatformIntegration::fontDatabase();
- #endif
+diff --git a/src/plugins/platforms/minimal/minimal.pro b/src/plugins/platforms/minimal/minimal.pro
+index 0d31d66..cfaa781 100644
+--- a/src/plugins/platforms/minimal/minimal.pro
++++ b/src/plugins/platforms/minimal/minimal.pro
+@@ -11,6 +11,7 @@ HEADERS =   qminimalintegration.h \
+ OTHER_FILES += minimal.json
+ 
+ CONFIG += qpa/genericunixfontdatabase
++win32: DEFINES += QT_NO_FONTCONFIG
+ 
+ PLUGIN_TYPE = platforms
+ PLUGIN_CLASS_NAME = QMinimalIntegrationPlugin
 -- 
 2.7.4
 
