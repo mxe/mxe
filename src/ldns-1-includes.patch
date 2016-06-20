@@ -1,0 +1,13 @@
+diff -Nur a/dane.c b/dane.c
+--- a/dane.c        2012-10-08 16:33:22.000000000 +0200
++++ b/dane.c       2016-06-20 22:07:17.711165001 +0200
+@@ -14,9 +14,6 @@
+
+ #include <unistd.h>
+ #include <stdlib.h>
+-#include <sys/types.h>
+-#include <sys/socket.h>
+-#include <netdb.h>
+
+ #ifdef HAVE_SSL
+ #include <openssl/ssl.h>
