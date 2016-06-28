@@ -16,8 +16,8 @@ if [[ "$OSTYPE" =~ "linux" ]]; then
         fi
         DIST=`lsb_release -si`
         REL=`lsb_release -sr`
-        if [[ $DIST =~ "Debian" ]] && (( `echo "$REL > 8" | bc -l` )) || \
-            [[ $DIST =~ "Ubuntu" ]] && (( `echo "$REL > 14.10" | bc -l` )); then
+        if ( [[ $DIST =~ "Debian" ]] && (( `echo "$REL > 8" | bc -l` )) ) || \
+            ( [[ $DIST =~ "Ubuntu" ]] && (( `echo "$REL > 14.10" | bc -l` )) ); then
             apt-get --yes install libtool-bin
         fi
         # install Lua for build-pkg
