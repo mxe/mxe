@@ -24,7 +24,8 @@ define $(PKG)_BUILD
         -DFREEGLUT_REPLACE_GLUT=ON \
         -DFREEGLUT_BUILD_STATIC_LIBS=$(if $(BUILD_STATIC),true,false) \
         -DFREEGLUT_BUILD_SHARED_LIBS=$(if $(BUILD_STATIC),false,true)
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install
+    $(MAKE) -C '$(1).build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).build' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
