@@ -4,6 +4,7 @@ sudo: false
 script:
   - make build-matrix.html versions.json
   - if [ "$GH_TOKEN" != "" ]; then ./tools/travis-push.sh; fi
+  - make download -j 6 -k
 
 env:
   global:
