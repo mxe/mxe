@@ -3,8 +3,8 @@
 PKG             := qtsystems
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4e3a7ed
-$(PKG)_CHECKSUM := 4aceb62b7e3135a1f29a31d71467d1c519ee25c36e1aa0b96b72540af5b198e3
-$(PKG)_SUBDIR   := qtproject-$(PKG)-$($(PKG)_VERSION)
+$(PKG)_CHECKSUM := 710d2b80f9125fb03fdb67dd6f3c4dd51396981e812fd4a3ea99b1b1290853e5
+$(PKG)_SUBDIR   := qt-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/qtproject/qtsystems/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase qtdeclarative qtxmlpatterns
