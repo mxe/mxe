@@ -5,23 +5,25 @@ set -xue
 if [[ "$OSTYPE" =~ "linux" ]]; then
     if which apt-get && which dpkg; then
         # Debian or Ubuntu
-        apt-get install \
+        apt-get --yes install \
             autoconf automake autopoint bash bison bzip2 flex gettext\
             git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
             libtool libltdl-dev libssl-dev libxml-parser-perl make \
             openssl p7zip-full patch perl pkg-config python ruby scons \
             sed unzip wget xz-utils
         if ! [[ `uname -m` =~ "i686" ]]; then
-            apt-get install g++-multilib libc6-dev-i386
+            apt-get --yes install g++-multilib libc6-dev-i386
         fi
+        # install bc to compare Debian releases
+        apt-get --yes install bc
         DIST=`lsb_release -si`
         REL=`lsb_release -sr`
-        if [[ $DIST =~ "Debian" ]] && (( `echo "$REL > 8" | bc -l` )) || \
-            [[ $DIST =~ "Ubuntu" ]] && (( `echo "$REL > 14.10" | bc -l` )); then
-            apt-get install libtool-bin
+        if ( [[ $DIST =~ "Debian" ]] && (( `echo "$REL > 8" | bc -l` )) ) || \
+            ( [[ $DIST =~ "Ubuntu" ]] && (( `echo "$REL > 14.10" | bc -l` )) ); then
+            apt-get --yes install libtool-bin
         fi
         # install Lua for build-pkg
-        apt-get install lua5.1
+        apt-get --yes install lua5.1
     elif which yum; then
         # Fedora
         yum install \
