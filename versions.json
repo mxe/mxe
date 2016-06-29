@@ -56,7 +56,7 @@
     "flann": "1.8.4",
     "fltk": "1.3.3",
     "fontconfig": "2.11.1",
-    "freeglut": "2.8.1",
+    "freeglut": "3.0.0",
     "freeimage": "3.15.4",
     "freetds": "1.00.6",
     "freetype": "2.6.3",
