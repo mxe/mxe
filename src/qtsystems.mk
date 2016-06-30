@@ -6,7 +6,7 @@ $(PKG)_VERSION  := 4e3a7ed
 $(PKG)_CHECKSUM := 710d2b80f9125fb03fdb67dd6f3c4dd51396981e812fd4a3ea99b1b1290853e5
 $(PKG)_SUBDIR   := qt-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/qtproject/qtsystems/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/qt/qtsystems/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase qtdeclarative qtxmlpatterns
 
 define $(PKG)_UPDATE
