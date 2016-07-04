@@ -513,6 +513,9 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 
 
 .PHONY: build-only-$(1)_$(3)
+# target-specific variables provide an extra level of scoping so that named
+# variables can be used in package build rules:
+# https://www.gnu.org/software/make/manual/html_node/Target_002dspecific.html
 build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
