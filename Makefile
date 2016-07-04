@@ -426,7 +426,12 @@ define PKG_RULE
 download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
 
 .PHONY: download-only-$(1)
-download-only-$(1):
+# Packages can share a source archive to build different sets of features
+# or dependencies (see bfd/binutils openscenegraph/openthreads qwt/qwt_qt4).
+# Use a double-colon rule to allow multiple definitions:
+# https://www.gnu.org/software/make/manual/html_node/Double_002dColon.html
+download-only-$(1): download-only-$($(1)_FILE)
+download-only-$($(1)_FILE)::
 	$(and $($(1)_URL),
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
