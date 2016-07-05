@@ -129,13 +129,13 @@ files are named). This is an on-going work that will be addressed.
 To change the set of patches applied:
 
 ```make
-foo_PATHCES := /path/to/fisrt.patch /path/to/second.patch
+foo_PATCHES := /path/to/first.patch /path/to/second.patch
 ```
 
 To apply no patches:
 
 ```make
-foo_PATHCES :=
+foo_PATCHES :=
 ```
 
 To alter dependencies and components:
