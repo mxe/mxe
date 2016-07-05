@@ -2,21 +2,21 @@ This file is part of MXE.
 See index.html for further information.
 
 From da6c9bfc3d57f3aa192972717cb5c84a56e1c422 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 29 Mar 2013 10:21:29 +0100
+From: MXE
+Date: Tue, 05 Jul 2016 21:56:34 +0300
 Subject: [PATCH] fix mktemp_s
 
 
 diff --git a/configure.ac b/configure.ac
-index 1086a9a..d9fa572 100644
+index f8dadf1..bde05c8 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -150,7 +150,7 @@ AC_TYPE_PID_T
+@@ -160,7 +160,7 @@ AC_TYPE_PID_T
  # Checks for library functions.
  AC_FUNC_VPRINTF
  AC_FUNC_MMAP
--AC_CHECK_FUNCS([link mkstemp mkostemp _mktemp_s mkdtemp getopt getopt_long getprogname getexecname rand random lrand48 random_r rand_r readlink regcomp regerror regexec regfree fstatvfs fstatfs lstat])
-+AC_CHECK_FUNCS([link mkstemp mkostemp _mktemp mkdtemp getopt getopt_long getprogname getexecname rand random lrand48 random_r rand_r readlink regcomp regerror regexec regfree fstatvfs fstatfs lstat])
+-AC_CHECK_FUNCS([link mkstemp mkostemp _mktemp_s mkdtemp getopt getopt_long getprogname getexecname rand random lrand48 random_r rand_r readlink fstatvfs fstatfs lstat])
++AC_CHECK_FUNCS([link mkstemp mkostemp _mktemp mkdtemp getopt getopt_long getprogname getexecname rand random lrand48 random_r rand_r readlink fstatvfs fstatfs lstat])
  
  dnl AC_CHECK_FUNCS doesn't check for header files.
  dnl posix_fadvise() may be not available in older libc.
