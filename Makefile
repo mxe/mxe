@@ -190,7 +190,11 @@ UNPACK_PKG_ARCHIVE = \
 # all files for extension plugins will be considered for outdated checks
 PKG_MAKEFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).mk, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 PKG_TESTFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1)-test*, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
-PKG_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
+# allow packages to specify a list of zero or more patches
+PKG_PATCHES   = $(if $(findstring undefined,$(origin $(1)_PATCHES)), \
+                    $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS))))) \
+                $(else), \
+                    $($(1)_PATCHES))
 
 define PREPARE_PKG_SOURCE
     cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
