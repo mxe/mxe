@@ -22,7 +22,7 @@ Building [gohs](https://github.com/flier/gohs), GoLang Binding of
 [HyperScan](https://01.org/hyperscan).
 
 ```
-$ MXE_PLUGIN_DIRS=plugins/go make hyperscan go
+$ make hyperscan go MXE_PLUGIN_DIRS=plugins/go
 $ mkdir gopath
 $ GOPATH=`pwd`/gopath ./usr/bin/i686-w64-mingw32.static-go get \
     github.com/flier/gohs/examples/simplegrep
