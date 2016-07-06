@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         GOROOT_FINAL='$(PREFIX)/$(TARGET)/go' \
         GOOS=windows \
         GOARCH='$(if $(findstring x86_64,$(TARGET)),amd64,386)' \
+        DYLD_INSERT_LIBRARIES= \
         ./make.bash
 
     mkdir -p '$(PREFIX)/$(TARGET)/go'
@@ -39,6 +40,7 @@ define $(PKG)_BUILD
      echo 'CGO_ENABLED=1 \'; \
      echo 'GOOS=windows \'; \
      echo 'GOARCH=$(if $(findstring x86_64,$(TARGET)),amd64,386) \'; \
+     echo 'DYLD_INSERT_LIBRARIES= \'; \
      echo 'CC=$(PREFIX)/bin/$(TARGET)-gcc \'; \
      echo 'CXX=$(PREFIX)/bin/$(TARGET)-g++ \'; \
      echo 'PKG_CONFIG=$(PREFIX)/bin/$(TARGET)-pkg-config \'; \

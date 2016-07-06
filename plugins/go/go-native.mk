@@ -22,6 +22,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)/src' && \
         GOROOT_FINAL='$(PREFIX)/$(TARGET)/go' \
+        DYLD_INSERT_LIBRARIES= \
         ./make.bash
 
     mkdir -p '$(PREFIX)/$(TARGET)/go'
