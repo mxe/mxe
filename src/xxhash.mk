@@ -31,4 +31,9 @@ define $(PKG)_BUILD
      echo 'Description: xxHash'; \
      echo 'Libs: -lxxhash';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
