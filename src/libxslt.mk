@@ -3,8 +3,8 @@
 
 PKG             := libxslt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.28
-$(PKG)_CHECKSUM := 5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c
+$(PKG)_VERSION  := 1.1.29
+$(PKG)_CHECKSUM := b5976e3857837e7617b29f2249ebb5eeac34e249208d31f1fbf7a6ba7a4090ce
 $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://xmlsoft.org/sources/$($(PKG)_FILE)
