@@ -24,5 +24,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 endef
-
-$(PKG)_BUILD_SHARED =
