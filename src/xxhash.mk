@@ -23,4 +23,12 @@ define $(PKG)_BUILD
         '$(1)/cmake_unofficial'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
+
+    # create pkg-config files
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: xxHash'; \
+     echo 'Libs: -lxxhash';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 endef
