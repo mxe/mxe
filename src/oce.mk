@@ -24,7 +24,8 @@ define $(PKG)_BUILD
         -DOCE_INSTALL_PREFIX=$(PREFIX)/$(TARGET) \
         -DOCE_INSTALL_BIN_DIR=$(PREFIX)/$(TARGET)/bin \
         -DOCE_INSTALL_LIB_DIR=$(PREFIX)/$(TARGET)/lib \
-        -DOCE_INSTALL_CMAKE_DATA_DIR=$(PREFIX)/$(TARGET)/lib/cmake/OCE
+        -DOCE_INSTALL_CMAKE_DATA_DIR=$(PREFIX)/$(TARGET)/lib/cmake/OCE \
+        -DOCE_AUTOINSTALL_DEPENDENT_LIBS=OFF
 
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install
