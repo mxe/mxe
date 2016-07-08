@@ -30,6 +30,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-freeglut.exe' \
-        $(if $(BUILD_STATIC),-DFREEGLUT_STATIC) \
-        -L'$(PREFIX)/$(TARGET)/lib' -lglut -lglu32 -lopengl32 -lgdi32 -lwinmm
+        `'$(TARGET)-pkg-config' glut --cflags --libs`
 endef
