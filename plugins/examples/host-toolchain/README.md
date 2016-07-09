@@ -2,7 +2,9 @@ Cross Compiling a Host Toolchain
 --------------------------------
 
 This plugin demonstrates a minimal working toolchain built with MXE to
-execute on a Windows host. To build:
+execute on a Windows host.
+
+#### GCC
 
 ```
 make gcc-host MXE_PLUGIN_DIRS=plugins/examples/host-toolchain/
@@ -14,6 +16,15 @@ second pass to cross-compile the basic toolchain (`binutils` and `gcc`).
 Once complete, copy `usr/{target}` to an appropriate Windows machine
 and execute the `usr\{target}\bin\test-gcc-host.bat` batch file. This
 builds and runs the `libgomp` test as a sanity check.
+
+#### Qt5 tools (`qmake.exe`, `rcc.exe`, etc.)
+
+```
+make qt5-host-tools MXE_PLUGIN_DIRS=plugins/examples/host-toolchain/
+```
+
+This will build `qtbase` then run a second pass to cross-compile the qt tools
+and install them to `usr/{target}/qt5-host-tools/bin`.
 
 Why?
 ----
