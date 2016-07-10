@@ -2913,6 +2913,15 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         The <a href="doc/gmsl.html">GNU Make Standard Library</a> is also
         available (though it should be unnecessary for most packages).
         </p>
+
+        <p>
+        Alternatively you can use tool <code>tools/skeleton.py</code> to
+        create a skeleton of new MXE package. It fills most of the fields
+        of <code>.mk</code> file automatically and supports typical
+        build scenarios through option <code>--builder</code>. It also
+        adds a package to the <a href="#packages">list of packages</a>
+        (see below).
+        </p>
     </li>
 
     <li>
