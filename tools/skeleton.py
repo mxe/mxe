@@ -40,20 +40,18 @@ endef
 
 CMAKE_BUILD = r'''
     # build and install the library
-    mkdir '$(1).build'
-    cd '$(1).build' && $(TARGET)-cmake \
-        '$(1)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 '''
 
 AUTOTOOLS_BUILD = r'''
     # build and install the library
-    mkdir '$(1).build'
-    cd '$(1).build' && $(1)/configure \
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install \
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install \
         bin_PROGRAMS= \
         sbin_PROGRAMS= \
         noinst_PROGRAMS=
@@ -61,8 +59,8 @@ AUTOTOOLS_BUILD = r'''
 
 MAKE_BUILD = r'''
     # build and install the library
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1 install
 '''
 
 BUILDERS = {
