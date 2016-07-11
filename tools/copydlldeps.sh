@@ -453,5 +453,3 @@ done
 
 # clean up the temp directory stored in $tmp
 rm -rf "$tmp"
-
-exit 0
