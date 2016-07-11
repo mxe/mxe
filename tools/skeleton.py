@@ -81,7 +81,7 @@ PC_AND_TEST = r'''
     # compile test
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 '''
 
