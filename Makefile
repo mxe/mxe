@@ -369,16 +369,18 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 	@rm -f '$(PREFIX)/installed/print-git-oneline-'*
 	@touch '$@'
 
-# include core MXE packages and set *_MAKEFILE
+# include core MXE packages and set base filenames
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 $(foreach PKG,$(PKGS),\
-    $(eval $(PKG)_MAKEFILE := $(realpath $(TOP_DIR)/src/$(PKG).mk)))
+    $(eval $(PKG)_MAKEFILE  := $(realpath $(TOP_DIR)/src/$(PKG).mk)) \
+    $(eval $(PKG)_TEST_FILE := $(realpath $(wildcard $(TOP_DIR)/src/$(PKG)-test.*))))
 
-# include files from MXE_PLUGIN_DIRS, set *_MAKEFILE and `all-<plugin>` target
+# include files from MXE_PLUGIN_DIRS, set base filenames and `all-<plugin>` target
 PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
 PLUGIN_PKGS  := $(basename $(notdir $(PLUGIN_FILES)))
 $(foreach FILE,$(PLUGIN_FILES),\
-    $(eval $(basename $(notdir $(FILE)))_MAKEFILE ?= $(FILE)) \
+    $(eval $(basename $(notdir $(FILE)))_MAKEFILE  ?= $(FILE)) \
+    $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(wildcard $(basename $(FILE))-test.*)) \
     $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE)))))
 include $(PLUGIN_FILES)
 PKGS := $(sort $(PKGS) $(PLUGIN_PKGS))
@@ -527,6 +529,7 @@ build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): SOURCE_DIR = $(2)/$($(1)_SUBDIR)
 build-only-$(1)_$(3): BUILD_DIR  = $(2)/$($(1)_SUBDIR).build_
+build-only-$(1)_$(3): TEST_FILE  = $($(1)_TEST_FILE)
 build-only-$(1)_$(3): CMAKE_RUNRESULT_FILE = $(PREFIX)/share/cmake/modules/TryRunResults.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_DIR  = $(PREFIX)/$(3)/share/cmake/mxe-conf.d
