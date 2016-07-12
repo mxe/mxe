@@ -29,6 +29,7 @@ define $(PKG)_BUILD
         --with-included-libtasn1 \
         --with-libregex-libs="-lgnurx" \
         --disable-silent-rules \
+		--with-unbound-root-key-file="C:\\\\Program Files\\\\Unbound\\\\root.key"
         CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
         LIBS='-lws2_32' \
         ac_cv_prog_AR='$(TARGET)-ar'
