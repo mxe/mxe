@@ -170,8 +170,10 @@ def update_index_html(name, description, website):
     packages_html += '\n'
     # build and write HTML
     index_html = prefix + sep1 + packages_html + sep2 + suffix
-    with open('index.html', 'wt') as f:
+    (_, tmp_index_html) = tempfile.mkstemp()
+    with open(tmp_index_html, 'wt') as f:
         f.write(index_html)
+    os.rename(tmp_index_html, 'index.html')
 
 def make_skeleton(
     name,
