@@ -13,7 +13,11 @@ import re
 import shutil
 import subprocess
 import tempfile
-import urllib2
+try:
+    import urllib2
+except:
+    # Python 3
+    import urllib.request as urllib2
 
 MK_TEMPLATE = r'''
 # This file is part of MXE.
@@ -111,7 +115,11 @@ def make_checksum(filepath):
 def deduce_subdir(archive):
     args = ['tar', '-tf', archive]
     tar = subprocess.Popen(args, stdout=subprocess.PIPE)
-    files = tar.communicate()[0].strip().split('\n')
+    output = tar.communicate()[0]
+    if not isinstance(output, str):
+        # Python 3
+        output = output.decode()
+    files = output.strip().split('\n')
     first_file = files[0].strip()
     directory = first_file.split('/', 1)[0]
     return directory
@@ -124,6 +132,9 @@ def update_index_html(name, description, website):
     # read HTML and find a list of packages
     with open('index.html', 'rb') as f:
         index_html = f.read()
+        if not isinstance(index_html, str):
+            # Python 3
+            index_html = index_html.decode()
     sep1 = '    <table id="package-list" class="old">'
     sep2 = '    </table>'
     (prefix, other) = index_html.split(sep1, 1)
@@ -159,7 +170,7 @@ def update_index_html(name, description, website):
     packages_html += '\n'
     # build and write HTML
     index_html = prefix + sep1 + packages_html + sep2 + suffix
-    with open('index.html', 'wb') as f:
+    with open('index.html', 'wt') as f:
         f.write(index_html)
 
 def make_skeleton(
@@ -192,7 +203,7 @@ def make_skeleton(
     libname = name
     if libname.startswith('lib'):
         libname = libname[3:]
-    with open(mk_filename, 'wb') as mk:
+    with open(mk_filename, 'wt') as mk:
         options = {
             'name': name,
             'description': description,
