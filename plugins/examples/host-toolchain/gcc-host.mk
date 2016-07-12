@@ -29,6 +29,7 @@ define $(PKG)_BUILD
         --with-gnu-ld \
         --with-gnu-as \
         --disable-nls \
+        --without-libiconv-prefix \
         $(if $(BUILD_STATIC),--disable-shared) \
         --disable-multilib \
         --without-x \
