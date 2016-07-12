@@ -22,18 +22,15 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-MXE_CONFIGURE_OPTS = \
-	--host='$(TARGET)' \
-	--prefix='$(PREFIX)/$(TARGET)' \
-	--disable-flto \
-	--enable-shared \
-	--without-pthreads \
-	--with-libexpat=$(PREFIX)/$(TARGET) \
-	--with-conf_file="'C:\Program Files (x86)\Unbound\service.conf'"
-	LIBS="`'$(TARGET)-pkg-config' openssl --libs`"
-
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure $(MXE_CONFIGURE_OPTS)
+    cd '$(1)' && ./configure \
+		$(MXE_CONFIGURE_OPTS) \
+		--disable-flto \
+		--enable-shared \
+		--without-pthreads \
+		--with-libexpat=$(PREFIX)/$(TARGET) \
+		--with-conf_file="'C:\Program Files (x86)\Unbound\service.conf'" \
+		LIBS="`'$(TARGET)-pkg-config' openssl --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
 
