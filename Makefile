@@ -143,9 +143,13 @@ define MXE_GET_GITHUB_SHA
     | head -1
 endef
 
-define MXE_GET_GITHUB_TAGS
+define MXE_GET_GITHUB_ALL_TAGS
     $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/tags/' \
-    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p' \
+    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p'
+endef
+
+define MXE_GET_GITHUB_TAGS
+    $(MXE_GET_GITHUB_ALL_TAGS, $(1)) \
     | $(SED) 's,^$(strip $(2)),,g' \
     | $(SORT) -V \
     | tail -1
