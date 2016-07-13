@@ -11,9 +11,10 @@ $(PKG)_URL      := https://github.com/kdeforche/wt/archive/$($(PKG)_VERSION).tar
 $(PKG)_DEPS     := gcc boost graphicsmagick libharu openssl pango postgresql qt sqlite
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/witty/files/wt/' | \
-    $(SED) -n 's,.*<a href="/projects/witty/files/wt/\([0-9][^>]*\)/.*,\1,p' | \
-    head -1
+    $(call MXE_GET_GITHUB_ALL_TAGS, kdeforche/wt) \
+    | grep -v 'rc' \
+    | $(SORT) -V \
+    | tail -1
 endef
 
 define $(PKG)_BUILD
