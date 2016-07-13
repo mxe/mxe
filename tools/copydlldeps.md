@@ -10,7 +10,7 @@ It can be invoked on the command line like:
 				--recursivesrcdir /home/mxeuser/mxe/usr/i686-w64-mingw32.shared/ \
 				--srcdir /home/mxeuser/test/ \
 				--copy \
-				--enforce /home/mxeuser/mxe/usr/i686-w64-mingw32.shared/qt5/plugins/platforms/ \
+				--enforcedir /home/mxeuser/mxe/usr/i686-w64-mingw32.shared/qt5/plugins/platforms/ \
 				--objdump /home/mxeuser/mxe/usr/bin/i686-w64-mingw32.shared-objdump
 ```
 
@@ -38,7 +38,7 @@ if [ ! $( echo $compiler | grep -q "shared" ) ]; then
 	$MXEPATH/tools/copydlldeps.sh 	--infile $executable \
 					--destdir "$sharedLibsDir" \
 					--recursivesrcdir "$MXEPATH/usr/$compiler/" \
-					--enforce "$MXEPATH/usr/$compiler/qt5/plugins/platforms/" \
+					--enforcedir "$MXEPATH/usr/$compiler/qt5/plugins/platforms/" \
 					--copy \
 					--objdump "$OBJDUMP" \
 					| tee -a $CURLOG
@@ -54,11 +54,11 @@ I checked if there is a mxe objdump. If not, I took the native one on my server.
 I actually do not know the difference but decided to include it in the script
 in case it is important to someone.
 
-enforce
--------
+enforcedir
+----------
 My application is using Qt5 and objdump did not return the needed qwindows.dll -
-so I enforce the platform folder. You may add multiple --enforce directories using
-`--enforce /path/folder1 --enforce /path/folder2 --enforce /path/folder3`.
+so I enforce the platform folder. You may add multiple --enforcedir directories using
+`--enforcedir /path/folder1 --enforcedir /path/folder2 --enforcedir /path/folder3`.
 
 They are NOT recursively copied, only flat. See:
 
