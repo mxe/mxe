@@ -22,5 +22,6 @@ define $(PKG)_BUILD
             --host='$(TARGET)',\
     $(binutils_BUILD))
 
-    #rm -rf '$(PREFIX)/$(TARGET)/$(TARGET)'
+    # tools seem to be duplicates of '$(PREFIX)/$(TARGET)'
+    rm -rf '$(PREFIX)/$(TARGET)/$(TARGET)'
 endef

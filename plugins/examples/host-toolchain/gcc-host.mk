@@ -36,7 +36,8 @@ define $(PKG)_BUILD
         --disable-win32-registry \
         --enable-threads=$(MXE_GCC_THREADS) \
         --enable-libgomp \
-        --with-{cloog,gmp,isl,mpc,mpfr}='$(PREFIX)/$(TARGET)'
+        --with-{cloog,gmp,isl,mpc,mpfr}='$(PREFIX)/$(TARGET)' \
+        $($(PKG)_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
