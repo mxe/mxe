@@ -20,5 +20,5 @@ define $(PKG)_BUILD
         '$(SOURCE_DIR)'
 
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) VERBOSE=1
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) install
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
