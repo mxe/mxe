@@ -25,22 +25,6 @@ Comparing files test-gcc-host.exe and TEST-PTHREADS-LIBGOMP.EXE
 FC: no differences encountered
 ```
 
-#### Qt5 tools (`qmake.exe`, `rcc.exe`, etc.)
-
-```
-make qt5-host-tools MXE_PLUGIN_DIRS=plugins/examples/host-toolchain/
-```
-
-This will build `qtbase`, cross-compile the toolchain and qt tools, and
-download `make` binaries from the source recommended by the GNU Make project.
-
-On a windows machine, execute
-`usr\{target}\qt5\test-qt5-host-tools\test-qt5-host-tools.bat` to build and
-confirm the normal `qt` test with the cross-compiled `qtbase` libraries.
-
-**N.B.** shared `gcc` doesn't work with the test program. To build a shared
-test, use the additional option `gcc-host_CONFIGURE_OPTS=--disable-shared`.
-
 #### CMake
 
 ```
@@ -54,10 +38,31 @@ latter is recommended for further investigation since it's closest to the
 normal environment MXE expects. See the following projects for shells and
 terminal emulators:
 
-  - [MSYS2](https://msys2.github.io/)
-  - [Git for Windows](https://git-for-windows.github.io/) - uses MSYS2
-  - [ConEmu](https://conemu.github.io/) - usable terminal
-  - [cmder](http://cmder.net/) - bundles ConEmu and Git
+  - [MSYS2][msys2]
+  - [Git for Windows][git-win] - uses MSYS2
+  - [ConEmu][conemu] - usable terminal
+  - [cmder][cmder] - bundles ConEmu and Git
+
+#### Make
+
+Make is difficult to cross-compile so it is downloaded from the [source
+recommended by the GNU Make team](http://git.savannah.gnu.org/cgit/make.git/tree/README.W32.template).
+
+#### Qt5 tools (`qmake.exe`, `rcc.exe`, etc.)
+
+```
+make qt5-host-tools MXE_PLUGIN_DIRS=plugins/examples/host-toolchain/
+```
+
+This will build `qtbase`, cross-compile the toolchain and qt tools, and
+download `make` binaries.
+
+On a windows machine, execute
+`usr\{target}\qt5\test-qt5-host-tools\test-qt5-host-tools.bat` to build and
+confirm the normal `qt` test with the cross-compiled `qtbase` libraries.
+
+**N.B.** shared `gcc` doesn't work with the test program. To build a shared
+test, use the additional option `gcc-host_CONFIGURE_OPTS=--disable-shared`.
 
 Why?
 ----
@@ -70,3 +75,7 @@ running a Linux VM on Windows).
 
 
 [cmake-generators]:https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html
+[cmder]:http://cmder.net/
+[conemu]:https://conemu.github.io/
+[git-win]:https://git-for-windows.github.io/
+[msys2]:https://msys2.github.io/
