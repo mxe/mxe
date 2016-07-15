@@ -31,7 +31,7 @@ define $(PKG)_BUILD
         -C '$(PWD)/src/cgal-TryRunResults.cmake' .
 
     $(MAKE) -C '$(1)' -j $(JOBS)
-    $(MAKE) -C '$(1)' -j $(JOBS) install
+    $(MAKE) -C '$(1)' -j 1 install
 
     cd '$(1)/examples/AABB_tree' && '$(TARGET)-cmake' \
         -DWITH_CGAL_Qt3:BOOL=OFF \
