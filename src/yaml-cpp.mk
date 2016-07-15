@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ac50a27a201d16dc69a881b80ad39a7be66c4d755eda1f76c3a68781b922a
 $(PKG)_SUBDIR   := $(PKG)-release-$($(PKG)_VERSION)
 $(PKG)_FILE     := yaml-cpp-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/jbeder/yaml-cpp/archive/release-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc boost
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, jbeder/yaml-cpp, \(yaml-cpp-\|release-\))
