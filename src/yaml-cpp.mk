@@ -6,8 +6,8 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.5.3
 $(PKG)_CHECKSUM := ac50a27a201d16dc69a881b80ad39a7be66c4d755eda1f76c3a68781b922af8f
 $(PKG)_SUBDIR   := $(PKG)-release-$($(PKG)_VERSION)
-$(PKG)_FILE     := release-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/jbeder/yaml-cpp/archive/$($(PKG)_FILE)
+$(PKG)_FILE     := yaml-cpp-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/jbeder/yaml-cpp/archive/release-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_BUILD
