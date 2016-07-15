@@ -9,7 +9,7 @@ $(PKG)_SUBDIR    = $(gcc_SUBDIR)
 $(PKG)_FILE      = $(gcc_FILE)
 $(PKG)_URL       = $(gcc_URL)
 $(PKG)_URL_2     = $(gcc_URL_2)
-$(PKG)_DEPS     := gcc binutils-host cloog gmp isl mpfr mpc
+$(PKG)_DEPS     := gcc binutils-host cloog gmp isl mpfr mpc pthreads
 
 define $(PKG)_UPDATE
     echo $(gcc_VERSION)
@@ -43,10 +43,13 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' -j 1 install
 
     # test compilation on host
+    # strip and compare cross and host-built tests
     cp '$(TOP_DIR)/src/pthreads-libgomp-test.c' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).c'
     (printf 'set PATH=..\\bin;%%PATH%%\r\n'; \
      printf 'gcc test-$(PKG).c -o test-$(PKG).exe -fopenmp -v\r\n'; \
      printf 'test-$(PKG).exe\r\n'; \
-     printf 'pause\r\n';) \
+     printf 'strip test-$(PKG).exe test-pthreads-libgomp.exe\r\n'; \
+     printf 'fc /b test-$(PKG).exe test-pthreads-libgomp.exe\r\n'; \
+     printf 'cmd\r\n';) \
      > '$(PREFIX)/$(TARGET)/bin/test-$(PKG).bat'
 endef

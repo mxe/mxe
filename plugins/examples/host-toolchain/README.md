@@ -15,7 +15,15 @@ second pass to cross-compile the basic toolchain (`binutils` and `gcc`).
 
 Once complete, copy `usr/{target}` to an appropriate Windows machine
 and execute the `usr\{target}\bin\test-gcc-host.bat` batch file. This
-builds and runs the `libgomp` test as a sanity check.
+builds and runs the `libgomp` test as a sanity check. The cross and host
+built programs should be identical (after stripping), confirmed with the
+final step:
+
+```
+>fc /b test-gcc-host.exe test-pthreads-libgomp.exe
+Comparing files test-gcc-host.exe and TEST-PTHREADS-LIBGOMP.EXE
+FC: no differences encountered
+```
 
 #### Qt5 tools (`qmake.exe`, `rcc.exe`, etc.)
 
