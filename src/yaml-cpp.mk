@@ -15,9 +15,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && $(TARGET)-cmake \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON)
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
+        '$(SOURCE_DIR)'
 
-    $(MAKE) -C '$(1)' -j $(JOBS) VERBOSE=1
-    $(MAKE) -C '$(1)' -j $(JOBS) install
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) install
 endef
