@@ -10,6 +10,10 @@ $(PKG)_FILE     := yaml-cpp-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/jbeder/yaml-cpp/archive/release-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc
 
+define $(PKG)_UPDATE
+    $(call MXE_GET_GITHUB_TAGS, jbeder/yaml-cpp, \(yaml-cpp-\|release-\))
+endef
+
 define $(PKG)_BUILD
     cd '$(1)' && cmake \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
