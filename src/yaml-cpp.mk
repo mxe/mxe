@@ -15,8 +15,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1)' && $(TARGET)-cmake \
         -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON)
 
     $(MAKE) -C '$(1)' -j $(JOBS) VERBOSE=1
