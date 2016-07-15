@@ -16,7 +16,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
+        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         '$(SOURCE_DIR)'
 
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) VERBOSE=1
