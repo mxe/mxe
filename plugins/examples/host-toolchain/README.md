@@ -48,6 +48,17 @@ terminal emulators:
 Make is difficult to cross-compile so it is downloaded from the [source
 recommended by the GNU Make team](http://git.savannah.gnu.org/cgit/make.git/tree/README.W32.template).
 
+#### pkgconf/pkg-config
+
+```
+make pkgconf-host MXE_PLUGIN_DIRS=plugins/examples/host-toolchain/
+```
+
+This will cross-compile `pkgconf` and create the `pkg-config` wrapper. The
+wrapper requires `/bin/sh` so one of the [MSYS2][msys2] options should be used.
+Run the `usr/{target}/bin/test-pkgconf-host` script to build `libffi` test
+with non-standard include paths.
+
 #### Qt5 tools (`qmake.exe`, `rcc.exe`, etc.)
 
 ```
