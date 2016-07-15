@@ -33,6 +33,24 @@ confirm the normal `qt` test with the cross-compiled `qtbase` libraries.
 **N.B.** shared `gcc` doesn't work with the test program. To build a shared
 test, use the additional option `gcc-host_CONFIGURE_OPTS=--disable-shared`.
 
+#### CMake
+
+```
+make cmake-host MXE_PLUGIN_DIRS=plugins/examples/host-toolchain/
+```
+
+CMake defaults to Visual Studio generators and additional configuration is
+required for [MinGW or MSYS Makefiles][cmake-generators]. MinGW uses `cmd.exe`
+and requires `mingw32-make`, MSYS uses `make` and requires `/bin/sh`. The
+latter is recommended for further investigation since it's closest to the
+normal environment MXE expects. See the following projects for shells and
+terminal emulators:
+
+  - [MSYS2](https://msys2.github.io/)
+  - [Git for Windows](https://git-for-windows.github.io/) - uses MSYS2
+  - [ConEmu](https://conemu.github.io/) - usable terminal
+  - [cmder](http://cmder.net/) - bundles ConEmu and Git
+
 Why?
 ----
 
@@ -40,3 +58,7 @@ Simply for curiosity, it's hard to see a practical use for this. Certainly,
 attempting to use it as a way to bootstrap MXE on Windows would strain
 one's sanity and cross-compiling is the recommended way (even if that means
 running a Linux VM on Windows).
+
+
+
+[cmake-generators]:https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html
