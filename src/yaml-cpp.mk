@@ -21,4 +21,9 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
