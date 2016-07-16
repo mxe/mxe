@@ -16,8 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd    '$(1).build' && '$(TARGET)-cmake' '$(1)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

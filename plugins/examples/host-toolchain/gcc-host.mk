@@ -7,6 +7,7 @@ $(PKG)_VERSION   = $(gcc_VERSION)
 $(PKG)_CHECKSUM  = $(gcc_CHECKSUM)
 $(PKG)_SUBDIR    = $(gcc_SUBDIR)
 $(PKG)_FILE      = $(gcc_FILE)
+$(PKG)_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /gcc-[0-9]*.patch, $(TOP_DIR)/src))))
 $(PKG)_URL       = $(gcc_URL)
 $(PKG)_URL_2     = $(gcc_URL_2)
 $(PKG)_DEPS     := gcc binutils-host cloog gmp isl mpfr mpc pthreads
@@ -16,8 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd    '$(1).build' && '$(1)/configure' \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         --host='$(TARGET)' \
         --target='$(TARGET)' \
         --build='$(BUILD)' \
@@ -39,8 +39,8 @@ define $(PKG)_BUILD
         --with-{cloog,gmp,isl,mpc,mpfr}='$(PREFIX)/$(TARGET)' \
         $($(PKG)_CONFIGURE_OPTS)
 
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # test compilation on host
     # strip and compare cross and host-built tests

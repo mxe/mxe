@@ -13,38 +13,37 @@ $(PKG)_DEPS     := gcc gcc-host make-w32-bin qtbase
 
 define $(PKG)_BUILD
     $(SED) -i 's,BUILD_ON_MAC=yes,BUILD_ON_MAC=no,g' '$(1)/configure'
-    mkdir '$(1).build'
-    cd    '$(1).build' && '$(1)/configure' \
-            -prefix '$(PREFIX)/$(TARGET)/qt5' \
-            -static \
-            -release \
-            -c++std c++11 \
-            -platform win32-g++ \
-            -host-option CROSS_COMPILE=${TARGET}- \
-            -external-hostbindir '$(PREFIX)/$(TARGET)/qt5/bin' \
-            -device-option PKG_CONFIG='${TARGET}-pkg-config' \
-            -device-option CROSS_COMPILE=${TARGET}- \
-            -force-pkg-config \
-            -no-icu \
-            -no-sql-{db2,ibase,mysql,oci,odbc,psql,sqlite,sqlite2,tds} \
-            -no-use-gold-linker \
-            -nomake examples \
-            -nomake tests \
-            -opensource \
-            -confirm-license \
-            -continue \
-            -verbose
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        -prefix '$(PREFIX)/$(TARGET)/qt5' \
+        -static \
+        -release \
+        -c++std c++11 \
+        -platform win32-g++ \
+        -host-option CROSS_COMPILE=${TARGET}- \
+        -external-hostbindir '$(PREFIX)/$(TARGET)/qt5/bin' \
+        -device-option PKG_CONFIG='$(TARGET)-pkg-config' \
+        -device-option CROSS_COMPILE=$(TARGET)- \
+        -force-pkg-config \
+        -no-icu \
+        -no-sql-{db2,ibase,mysql,oci,odbc,psql,sqlite,sqlite2,tds} \
+        -no-use-gold-linker \
+        -nomake examples \
+        -nomake tests \
+        -opensource \
+        -confirm-license \
+        -continue \
+        -verbose
 
     # generate remaining build configuration (qmake is created by configure)
-    $(MAKE) -C '$(1).build' -j $(JOBS) \
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) \
         sub-src-qmake_all
 
     # build other tools
-    $(MAKE) -C '$(1).build/src' -j $(JOBS) \
+    $(MAKE) -C '$(BUILD_DIR)/src' -j $(JOBS) \
         sub-{moc,qdbuscpp2xml,qdbusxml2cpp,qlalr,rcc,uic}-all
 
     # install tools and create `qt.conf` for runtime config
-    cp '$(1).build/bin'/*.exe '$(PREFIX)/$(TARGET)/qt5/bin/'
+    cp '$(BUILD_DIR)/bin'/*.exe '$(PREFIX)/$(TARGET)/qt5/bin/'
     (printf '[Paths]\r\n'; \
      printf 'Prefix = ..\r\n'; \
     ) > '$(PREFIX)/$(TARGET)/qt5/bin/qt.conf'
