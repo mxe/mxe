@@ -224,3 +224,68 @@ index bd6f2d8..4b63461 100644
 -- 
 2.7.4
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 16 Jul 2016 20:31:07 +1000
+Subject: [PATCH] Fix pkgconfig file and library naming
+
+See: https://codereview.qt-project.org/#/c/165394/
+     https://bugreports.qt.io/browse/QTBUG-30898
+
+Currently, *.pc files are generated with debug suffix `d` in `-release`
+mode and without the suffix in `-debug` or `-debug-and-release`. This
+can be worked around by `CONIFG-=debug_and_release`, however, a more
+predictable and consistent naming approach would be preferable.
+
+This change mimics the *.prl file and lib conventions:
+
+  -release: creates normal *.pc files and lib names
+  -release -force-debug-info: normal as above
+  -debug: creates *d.pc and *d lib names
+  -debug-and-release: creates both
+  -default: creates both (default link: debug)
+
+and should be unsurprising to users of `pkg-config`. At very least,
+it's deterministic and easily incorporated into build systems.
+
+Task-number: 30898
+Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
+
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index 1111111..2222222 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -244,6 +244,10 @@ load(qt_installs)
+ 
+ load(qt_targets)
+ 
++# Set TARGET towards the end but before pkgconfig setup to keep naming
++# conventions consistent with *prl files
++TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)
++
+ # this builds on top of qt_common
+ !internal_module:!lib_bundle:if(unix|mingw) {
+     CONFIG += create_pc
+@@ -254,12 +258,12 @@ load(qt_targets)
+         QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
+     QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
+     QMAKE_PKGCONFIG_CFLAGS = -I${includedir}/$$MODULE_INCNAME
+-    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt, "Qt$$QT_MAJOR_VERSION ")
+-    QMAKE_PKGCONFIG_FILE = $$replace(TARGET, ^Qt, Qt$$QT_MAJOR_VERSION)
++    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt$$QT_MAJOR_VERSION ")
++    QMAKE_PKGCONFIG_FILE = $$TARGET
+     for(i, MODULE_DEPENDS): \
+-        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$eval(QT.$${i}.MAJOR_VERSION))
++        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$eval(QT.$${i}.MAJOR_VERSION))$$qtPlatformTargetSuffix()
+     isEmpty(QMAKE_PKGCONFIG_DESCRIPTION): \
+-        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt, "Qt ") module
++        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt ") module
+     pclib_replace.match = $$lib_replace.match
+     !isEmpty(lib_replace.replace): \
+         pclib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
+@@ -293,5 +297,3 @@ win32 {
+     # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
+     DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
+ }
+-
+-TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
