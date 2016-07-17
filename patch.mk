@@ -34,8 +34,8 @@ endef
 define IMPORT_PATCH
     cd '$(call GIT_DIR,$(1))' \
         && cat '$(2)' \
-        | sed '/^From/,$$  !d' \
-        | sed s/'^From: MXE'/"From: fix@me"/'g;' \
+        | $(SED) '/^From/,$$  !d' \
+        | $(SED) s/'^From: MXE'/"From: fix@me"/'g;' \
         | $(call GIT_CMD,$(1)) am --keep-cr ;
 endef
 
@@ -55,8 +55,8 @@ define EXPORT_PATCH
             --text \
             -M9 \
             dist..HEAD \
-        | sed 's/^From [0-9a-f]\{40\} /From 0000000000000000000000000000000000000000 /' \
-        | sed 's/^index .......\.\......../index 1111111..2222222/' \
+        | $(SED) 's/^From [0-9a-f]\{40\} /From 0000000000000000000000000000000000000000 /' \
+        | $(SED) 's/^index .......\.\......../index 1111111..2222222/' \
     ) > '$(PATCH_BY_NAME)'
 endef
 
