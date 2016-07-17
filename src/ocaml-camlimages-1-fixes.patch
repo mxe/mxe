@@ -2381,3 +2381,35 @@ index e1b1c18..5994beb 100644
 -- 
 1.7.2.5
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 17 Jul 2016 12:16:43 +1000
+Subject: [PATCH] fix for giflib >=5.1
+
+
+diff --git a/src/gifread.c b/src/gifread.c
+index 1111111..2222222 100644
+--- a/src/gifread.c
++++ b/src/gifread.c
+@@ -161,7 +161,7 @@ value dGifCloseFile( value hdl )
+      segmentation faults */
+   ((GifFileType *)hdl)->Image.ColorMap = NULL; 
+ 
+-  DGifCloseFile( (GifFileType *) hdl );
++  DGifCloseFile( (GifFileType *) hdl, NULL );
+   CAMLreturn(Val_unit);
+ }
+ 
+diff --git a/src/gifwrite.c b/src/gifwrite.c
+index 1111111..2222222 100644
+--- a/src/gifwrite.c
++++ b/src/gifwrite.c
+@@ -88,7 +88,7 @@ value eGifCloseFile( value hdl )
+      segmentation faults */
+   ((GifFileType *)hdl)->Image.ColorMap = NULL; 
+ 
+-  EGifCloseFile( (GifFileType *) hdl );
++  EGifCloseFile( (GifFileType *) hdl, NULL );
+   CAMLreturn(Val_unit);
+ }
+ 
