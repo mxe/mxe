@@ -73,6 +73,13 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt4
 
+    # symlink mkspecs/default if it isn't already
+    # required on OSX to mimic linux installation
+    [[ -L  '$(PREFIX)/$(TARGET)/qt/mkspecs/default' ]] || \
+    rm -rf '$(PREFIX)/$(TARGET)/qt/mkspecs/default' && \
+    ln -s  '$(PREFIX)/$(TARGET)/qt/mkspecs/win32-g++-4.6' \
+           '$(PREFIX)/$(TARGET)/qt/mkspecs/default'
+
     # lrelease (from linguist) needed to prepare translation files
     $(MAKE) -C '$(1)/tools/linguist/lrelease' -j '$(JOBS)' install
 
