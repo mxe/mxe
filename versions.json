@@ -73,6 +73,7 @@
     "geoip-database": "20150317-1",
     "geos": "3.4.2",
     "gettext": "0.19.8.1",
+    "ghostscript": "9.19",
     "giflib": "5.1.4",
     "glew": "1.12.0",
     "glfw2": "2.7.9",
