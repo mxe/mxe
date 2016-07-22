@@ -201,6 +201,7 @@
     "libsndfile": "1.0.27",
     "libsodium": "1.0.6",
     "libsoup": "2.54.0.1",
+    "libspectre": "0.2.8",
     "libssh2": "1.7.0",
     "libsvm": "3.20",
     "libtool": "2.4.4",
