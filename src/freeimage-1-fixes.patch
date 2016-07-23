@@ -76,3 +76,23 @@ index 1111111..2222222 100644
  CXXFLAGS += $(INCLUDE)
  
  ifeq ($(shell sh -c 'uname -m 2>/dev/null || echo not'),x86_64)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@mail.ru>
+Date: Wed, 04 May 2016 18:43:16 +0300
+Subject: [PATCH] fix build with GCC >= 6.x
+
+diff --git a/Makefile.mingw b/Makefile.mingw
+index 1111111..2222222 100644
+--- a/Makefile.mingw
++++ b/Makefile.mingw
+@@ -67,7 +67,7 @@ MODULES := $(MODULES:.cpp=.o)
+ RESOURCE = $(RCFILE:.rc=.coff)
+ CFLAGS ?= -O3 -fexceptions -DNDEBUG $(WIN32_CFLAGS)
+ CFLAGS += $(INCLUDE)
+-CXXFLAGS ?= -O3 -fexceptions -Wno-ctor-dtor-privacy -DNDEBUG $(WIN32_CXXFLAGS)
++CXXFLAGS ?= -O3 -fexceptions -Wno-ctor-dtor-privacy -Wno-narrowing -DNDEBUG $(WIN32_CXXFLAGS)
+ CXXFLAGS += $(INCLUDE)
+ RCFLAGS ?= -DNDEBUG
+ LDFLAGS ?= -s -shared -static -Wl,-soname,$(SOLIBNAME) $(WIN32_LDFLAGS)
+

@@ -572,6 +572,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="https://www.gnu.org/software/tar/">GNU Tar</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="http://freedesktop.org/wiki/Software/intltool/">Intltool</a></td>
         <td>≥ 0.40</td>
     </tr>
@@ -778,7 +782,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://www.macports.org/ports.php -->
     <pre>sudo port install \
     autoconf automake bison coreutils flex gettext \
-    gdk-pixbuf2 glib2 gsed intltool libffi libtool \
+    gdk-pixbuf2 glib2 gnutar gsed intltool libffi libtool \
     openssl p5-xml-parser p7zip pkgconfig scons wget xz</pre>
 
     <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
@@ -789,7 +793,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://rudix.org/packages/index.html -->
     <pre>sudo rudix install \
     autoconf automake coreutils gettext glib intltool \
-    libtool p7zip scons sed wget xz</pre>
+    libtool p7zip scons sed tar wget xz</pre>
     <p>
     Note: <b>gdk-pixbuf2</b> is not installed in method 2,
     so you can not build <b>gtk3</b>. Other packages may be
@@ -804,7 +808,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- http://braumeister.org/ -->
     <pre>brew install \
     autoconf automake coreutils gdk-pixbuf gettext \
-    gnu-sed intltool libtool p7zip wget xz</pre>
+    gnu-sed gnu-tar intltool libtool p7zip wget xz</pre>
     <p>
     Some formulae are
     <a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/FAQ.md#what-does-keg-only-mean"><code>keg-only</code></a>
@@ -823,9 +827,13 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h5>Certain packages have open issues on OS X</h5>
     </p>
     <p>
-    to build the remainder of MXE, run:
+    For Xcode <7.3, run:
     </p>
     <pre>make EXCLUDE_PKGS='nsis'</pre>
+    <p>
+    For Xcode ≥7.3, run:
+    </p>
+    <pre>make EXCLUDE_PKGS='gsoap'</pre>
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
@@ -1134,10 +1142,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.aubio.org/">aubio</a></td>
     </tr>
     <tr>
-        <td class="package">db</td>
-        <td class="website"><a href="http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html">Oracle Berkeley DB</a></td>
-    </tr>
-    <tr>
         <td class="package">bfd</td>
         <td class="website"><a href="https://www.gnu.org/software/binutils/">Binary File Descriptor library</a></td>
     </tr>
@@ -1206,12 +1210,12 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://acoustid.org/chromaprint">Chromaprint</a></td>
     </tr>
     <tr>
-        <td class="package">cloog</td>
-        <td class="website"><a href="http://www.cloog.org/">CLooG Code Generator</a></td>
-    </tr>
-    <tr>
         <td class="package">cimg</td>
         <td class="website"><a href="http://cimg.eu/">CImg Library</a></td>
+    </tr>
+    <tr>
+        <td class="package">cloog</td>
+        <td class="website"><a href="http://www.cloog.org/">CLooG Code Generator</a></td>
     </tr>
     <tr>
         <td class="package">cmake</td>
@@ -1252,6 +1256,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">curl</td>
         <td class="website"><a href="http://curl.haxx.se/libcurl/">cURL</a></td>
+    </tr>
+    <tr>
+        <td class="package">db</td>
+        <td class="website"><a href="http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html">Oracle Berkeley DB</a></td>
     </tr>
     <tr>
         <td class="package">dbus</td>
@@ -1390,6 +1398,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://www.gnu.org/software/gettext/">gettext</a></td>
     </tr>
     <tr>
+        <td class="package">ghostscript</td>
+        <td class="website"><a href="http://www.ghostscript.com/">ghostscript</a></td>
+    </tr>
+    <tr>
         <td class="package">giflib</td>
         <td class="website"><a href="http://sourceforge.net/projects/libungif/">giflib</a></td>
     </tr>
@@ -1414,16 +1426,16 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.gtkmm.org/">GLibmm</a></td>
     </tr>
     <tr>
+        <td class="package">glm</td>
+        <td class="website"><a href="http://glm.g-truc.net">GLM - OpenGL Mathematics</a></td>
+    </tr>
+    <tr>
         <td class="package">gmp</td>
         <td class="website"><a href="http://www.gmplib.org/">GMP</a></td>
     </tr>
     <tr>
         <td class="package">gnutls</td>
         <td class="website"><a href="https://www.gnu.org/software/gnutls/">GnuTLS</a></td>
-    </tr>
-    <tr>
-        <td class="package">googletest</td>
-        <td class="website"><a href="https://github.com/google/googletest">Google Test</a></td>
     </tr>
     <tr>
         <td class="package">graphicsmagick</td>
@@ -1510,6 +1522,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://harfbuzz.sourceforge.net/">HarfBuzz</a></td>
     </tr>
     <tr>
+        <td class="package">hdf-eos2</td>
+        <td class="website"><a href="https://hdfeos.org/software/library.php">HDF-EOS2</a></td>
+    </tr>
+    <tr>
+        <td class="package">hdf-eos5</td>
+        <td class="website"><a href="https://hdfeos.org/software/library.php">HDF-EOS5</a></td>
+    </tr>
+    <tr>
         <td class="package">hdf4</td>
         <td class="website"><a href="http://www.hdfgroup.org/products/hdf4/">HDF4</a></td>
     </tr>
@@ -1520,6 +1540,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">hunspell</td>
         <td class="website"><a href="http://hunspell.sourceforge.net/">Hunspell</a></td>
+    </tr>
+    <tr>
+        <td class="package">hyperscan</td>
+        <td class="website"><a href="https://01.org/hyperscan">Hyperscan</a></td>
     </tr>
     <tr>
         <td class="package">icu4c</td>
@@ -1850,12 +1874,12 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.libpng.org/">libpng</a></td>
     </tr>
     <tr>
-        <td class="package">librsvg</td>
-        <td class="website"><a href="http://librsvg.sourceforge.net/">librsvg</a></td>
-    </tr>
-    <tr>
         <td class="package">librosco</td>
         <td class="website"><a href="https://github.com/colinbourassa/librosco/">librosco</a></td>
+    </tr>
+    <tr>
+        <td class="package">librsvg</td>
+        <td class="website"><a href="http://librsvg.sourceforge.net/">librsvg</a></td>
     </tr>
     <tr>
         <td class="package">librtmp</td>
@@ -1880,6 +1904,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">libsodium</td>
         <td class="website"><a href="https://download.libsodium.org/doc/">libsodium</a></td>
+    </tr>
+    <tr>
+        <td class="package">libsoup</td>
+        <td class="website"><a href="https://github.com/GNOME/libsoup">libsoup</a></td>
+    </tr>
+    <tr>
+        <td class="package">libspectre</td>
+        <td class="website"><a href="https://libspectre.freedesktop.org">libspectre</a></td>
     </tr>
     <tr>
         <td class="package">libssh2</td>
@@ -1908,6 +1940,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">libusb1</td>
         <td class="website"><a href="http://libusb.org/">LibUsb-1.0</a></td>
+    </tr>
+    <tr>
+        <td class="package">libuv</td>
+        <td class="website"><a href="http://libuv.org/">libuv</a></td>
     </tr>
     <tr>
         <td class="package">libvpx</td>
@@ -1974,16 +2010,16 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://sourceforge.net/projects/mdbtools/">mdbtools</a></td>
     </tr>
     <tr>
+        <td class="package">mingw-w64</td>
+        <td class="website"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64 Runtime</a></td>
+    </tr>
+    <tr>
         <td class="package">miniupnpc</td>
         <td class="website"><a href="http://miniupnp.free.fr/">miniupnpc</a></td>
     </tr>
     <tr>
         <td class="package">minizip</td>
         <td class="website"><a href="http://www.winimage.com/zLibDll/minizip.html">minizip</a></td>
-    </tr>
-    <tr>
-        <td class="package">mingw-w64</td>
-        <td class="website"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64 Runtime</a></td>
     </tr>
     <tr>
         <td class="package">mman-win32</td>
@@ -2126,7 +2162,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://www.openssl.org/">openssl</a></td>
     </tr>
     <tr>
-      <td class="package">openthreads</td>
+        <td class="package">openthreads</td>
         <td class="website"><a href="http://www.openscenegraph.org/">OpenThreads</a></td>
     </tr>
     <tr>
@@ -2294,7 +2330,15 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
+        <td class="package">qtcharts</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
         <td class="package">qtconnectivity</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
+        <td class="package">qtdatavis3d</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
@@ -2302,7 +2346,11 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
-        <td class="package">qtenginio</td>
+        <td class="package">qtdeclarative-render2d</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
+        <td class="package">qtgamepad</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
@@ -2326,6 +2374,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="https://github.com/dbzhang800/QtOfficeOpenXml/">QtOfficeOpenXml</a></td>
     </tr>
     <tr>
+        <td class="package">qtpurchasing</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
         <td class="package">qtquickcontrols</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
@@ -2338,7 +2390,15 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
+        <td class="package">qtscxml</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
         <td class="package">qtsensors</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
+        <td class="package">qtserialbus</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
@@ -2371,6 +2431,10 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </tr>
     <tr>
         <td class="package">qttranslations</td>
+        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
+    </tr>
+    <tr>
+        <td class="package">qtvirtualkeyboard</td>
         <td class="website"><a href="http://qt-project.org/">Qt</a></td>
     </tr>
     <tr>
@@ -2434,6 +2498,30 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.libsdl.org/">SDL</a></td>
     </tr>
     <tr>
+        <td class="package">sdl2</td>
+        <td class="website"><a href="http://www.libsdl.org/">SDL2</a></td>
+    </tr>
+    <tr>
+        <td class="package">sdl2_gfx</td>
+        <td class="website"><a href="http://www.ferzkopp.net/joomla/content/view/19/14/">SDL2_gfx</a></td>
+    </tr>
+    <tr>
+        <td class="package">sdl2_image</td>
+        <td class="website"><a href="http://www.libsdl.org/">SDL2_image</a></td>
+    </tr>
+    <tr>
+        <td class="package">sdl2_mixer</td>
+        <td class="website"><a href="http://www.libsdl.org/">SDL2_mixer</a></td>
+    </tr>
+    <tr>
+        <td class="package">sdl2_net</td>
+        <td class="website"><a href="http://www.libsdl.org/">sdl2_net</a></td>
+    </tr>
+    <tr>
+        <td class="package">sdl2_ttf</td>
+        <td class="website"><a href="http://www.libsdl.org/">SDL2_ttf</a></td>
+    </tr>
+    <tr>
         <td class="package">sdl_gfx</td>
         <td class="website"><a href="http://www.ferzkopp.net/joomla/content/view/19/14/">SDL_gfx</a></td>
     </tr>
@@ -2464,30 +2552,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     <tr>
         <td class="package">sdl_ttf</td>
         <td class="website"><a href="http://www.libsdl.org/projects/SDL_ttf/">SDL_ttf</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2</td>
-        <td class="website"><a href="http://www.libsdl.org/">SDL2</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_gfx</td>
-        <td class="website"><a href="http://www.ferzkopp.net/joomla/content/view/19/14/">SDL2_gfx</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_image</td>
-        <td class="website"><a href="http://www.libsdl.org/">SDL2_image</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_mixer</td>
-        <td class="website"><a href="http://www.libsdl.org/">SDL2_mixer</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_net</td>
-        <td class="website"><a href="http://www.libsdl.org/">sdl2_net</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_ttf</td>
-        <td class="website"><a href="http://www.libsdl.org/">SDL2_ttf</a></td>
     </tr>
     <tr>
         <td class="package">sfml</td>
@@ -2522,12 +2586,12 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.sqlite.org/">SQLite</a></td>
     </tr>
     <tr>
-        <td class="package">suitesparse</td>
-        <td class="website"><a href="http://www.cise.ufl.edu/research/sparse/SuiteSparse/">SuiteSparse</a></td>
-    </tr>
-    <tr>
         <td class="package">subversion</td>
         <td class="website"><a href="http://subversion.apache.org">subversion</a></td>
+    </tr>
+    <tr>
+        <td class="package">suitesparse</td>
+        <td class="website"><a href="http://www.cise.ufl.edu/research/sparse/SuiteSparse/">SuiteSparse</a></td>
     </tr>
     <tr>
         <td class="package">t4k_common</td>
@@ -2682,8 +2746,16 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <td class="website"><a href="http://www.xvid.org/">xvidcore</a></td>
     </tr>
     <tr>
+        <td class="package">xxhash</td>
+        <td class="website"><a href="http://cyan4973.github.io/xxHash/">xxHash</a></td>
+    </tr>
+    <tr>
         <td class="package">xz</td>
         <td class="website"><a href="http://tukaani.org/xz/">XZ</a></td>
+    </tr>
+    <tr>
+        <td class="package">yaml-cpp</td>
+        <td class="website"><a href="https://github.com/jbeder/yaml-cpp">A YAML parser and emitter for C++</a></td>
     </tr>
     <tr>
         <td class="package">yasm</td>
@@ -2856,6 +2928,15 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <p>
         The <a href="doc/gmsl.html">GNU Make Standard Library</a> is also
         available (though it should be unnecessary for most packages).
+        </p>
+
+        <p>
+        Alternatively you can use tool <code>tools/skeleton.py</code> to
+        create a skeleton of new MXE package. It fills most of the fields
+        of <code>.mk</code> file automatically and supports typical
+        build scenarios through option <code>--builder</code>. It also
+        adds a package to the <a href="#packages">list of packages</a>
+        (see below).
         </p>
     </li>
 
@@ -4172,6 +4253,37 @@ endef</pre>
     </li>
     </ul>
 
+    <h3>Related articles</h3>
+
+    <ul>
+    <li>
+        <a href="http://www.valdyas.org/fading/index.cgi/hacking/krita/mxe_krita.html">Cross-compiling Krita using MXE</a>
+        <br>
+        Experience report of the
+        <a href="https://krita.org/">Krita project</a>
+    </li>
+    <li>
+        <a href="http://thebeezspeaks.blogspot.com/2009/04/cross-compilers-new-wave.html">Cross compilers, the new wave</a>
+        <br>
+        Appeared on
+        <a href="http://lxer.com/module/newswire/view/118868">LXer</a>
+        and
+        <a href="http://www.linuxtoday.com/developer/2009041501335RVSWDV">Linux Today</a>
+    </li>
+    <li>
+        <a href="http://www.mingw.org/wiki/LinuxCrossMinGW">MinGW cross compiler for Linux build environment</a>
+        <br>
+        Official tutorial of the
+        <a href="http://www.mingw.org/">MinGW project</a>
+    </li>
+    <li>
+        <a href="http://wiki.wxwidgets.org/Cross-Compiling_Under_Linux#Cross-compiling_under_Linux_for_MS_Windows">Cross-compiling under Linux for MS Windows</a>
+        <br>
+        Old tutorial provided by the
+        <a href="http://www.wxwidgets.org/">wxWidgets project</a>
+    </li>
+    </ul>
+
     <h3>Related projects</h3>
 
     <ul>
@@ -4228,36 +4340,6 @@ endef</pre>
         Creates binary packages, runs on both Linux and Windows
     </li>
     </ul>
-
-    <h3>Related articles</h3>
-
-    <ul>
-    <li>
-        <a href="http://thebeezspeaks.blogspot.com/2009/04/cross-compilers-new-wave.html">Cross compilers, the new wave</a>
-        <br>
-        Appeared on
-        <a href="http://lxer.com/module/newswire/view/118868">LXer</a>
-        and
-        <a href="http://www.linuxtoday.com/developer/2009041501335RVSWDV">Linux Today</a>
-    </li>
-    <li>
-        <a href="http://wiki.njh.eu/Cross_Compiling_for_Win32">Cross Compiling for Win32</a>
-        <br>
-        Overview of win32 cross compiling
-    </li>
-    <li>
-        <a href="http://www.mingw.org/wiki/LinuxCrossMinGW">MinGW cross compiler for Linux build environment</a>
-        <br>
-        Official tutorial of the
-        <a href="http://www.mingw.org/">MinGW project</a>
-    </li>
-    <li>
-        <a href="http://wiki.wxwidgets.org/Cross-Compiling_Under_Linux#Cross-compiling_under_Linux_for_MS_Windows">Cross-compiling under Linux for MS Windows</a>
-        <br>
-        Old tutorial provided by the
-        <a href="http://www.wxwidgets.org/">wxWidgets project</a>
-    </li>
-    </ul>
 </div>
 
 <div class="section">
@@ -4305,6 +4387,9 @@ endef</pre>
     </li>
     <li>
         <a href="http://ifwiki.org/index.php/Hugor">Hugor</a>
+    </li>
+    <li>
+        <a href="https://krita.org/">Krita</a>
     </li>
     <li>
         <a href="http://lightspark.github.com/">Lightspark</a>

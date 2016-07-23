@@ -10,7 +10,7 @@ It can be invoked on the command line like:
 				--recursivesrcdir /home/mxeuser/mxe/usr/i686-w64-mingw32.shared/ \
 				--srcdir /home/mxeuser/test/ \
 				--copy \
-				--enforce /home/mxeuser/mxe/usr/i686-w64-mingw32.shared/qt5/plugins/platforms/ \
+				--enforcedir /home/mxeuser/mxe/usr/i686-w64-mingw32.shared/qt5/plugins/platforms/ \
 				--objdump /home/mxeuser/mxe/usr/bin/i686-w64-mingw32.shared-objdump
 ```
 
@@ -38,7 +38,7 @@ if [ ! $( echo $compiler | grep -q "shared" ) ]; then
 	$MXEPATH/tools/copydlldeps.sh 	--infile $executable \
 					--destdir "$sharedLibsDir" \
 					--recursivesrcdir "$MXEPATH/usr/$compiler/" \
-					--enforce "$MXEPATH/usr/$compiler/qt5/plugins/platforms/" \
+					--enforcedir "$MXEPATH/usr/$compiler/qt5/plugins/platforms/" \
 					--copy \
 					--objdump "$OBJDUMP" \
 					| tee -a $CURLOG
@@ -54,11 +54,23 @@ I checked if there is a mxe objdump. If not, I took the native one on my server.
 I actually do not know the difference but decided to include it in the script
 in case it is important to someone.
 
-enforce
--------
+whitelist
+---------
+I added a whitelist of *dll files that are widely used and very common on windows systems. Most of them are not to be found on MXE, but on native machines. As they are listed as dependencies, they might create warnings. To avoid anxiety, I introduced str_whiteListDlls. Those will create info instead of warning messages. Do not worry about them any longer. It works anyway as those are to be expected on your windows installation.
+
+exclude directory pattern
+-------------------------
+excludedir was added as an aditional option. You may call it multiple times like
+    --excludepattern /path/folder1/ --excludepattern /path/folder2/ -X /path/folder3/
+Try to make it as explicit as possible. If you choose a generic pattern, you may exclude more paths than you intend to. Actually any pattern will work.
+    -X pattern1 -X pattern2
+This was introduced upon the request to have the script avoid /(PREFIX)/(TARGET)/apps/. You may now pass this as an 'excludepattern' option.
+
+enforcedir
+----------
 My application is using Qt5 and objdump did not return the needed qwindows.dll -
-so I enforce the platform folder. You may add multiple --enforce directories using
-`--enforce /path/folder1 --enforce /path/folder2 --enforce /path/folder3`.
+so I enforce the platform folder. You may add multiple --enforcedir directories using
+`--enforcedir /path/folder1 --enforcedir /path/folder2 --enforcedir /path/folder3`.
 
 They are NOT recursively copied, only flat. See:
 

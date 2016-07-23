@@ -3,7 +3,7 @@ See index.html for further information.
 
 Contains ad hoc patches for cross building.
 
-From 54b168c305f54e60de0e32501b166faa7f5913e0 Mon Sep 17 00:00:00 2001
+From 9e13228f4af09b93f6cd123635784e4988694ac2 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Aug 2015 23:35:08 +0200
 Subject: [PATCH 1/8] fix qwindows plugin linking with system-freetype (MXE
@@ -22,10 +22,10 @@ index 39280de..e152b0d 100644
 +    win32:shared:LIBS_PRIVATE += -lfreetype
  }
 -- 
-2.5.0
+2.7.4
 
 
-From 26b89d11b4e51d3aa2aab14dd52216ef8b1c7950 Mon Sep 17 00:00:00 2001
+From 2d7638835de6b5f16cf64e6cf4eede1f8a9ccedb Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 21 Jun 2014 13:12:49 +0200
 Subject: [PATCH 2/8] use pkg-config for harfbuzz (MXE specific)
@@ -55,10 +55,10 @@ index 7443368..c24e684 100644
 +    PKGCONFIG += harfbuzz
  }
 -- 
-2.5.0
+2.7.4
 
 
-From fa5ca49b4ffc1911a597b294ef2d4b5ecb983cad Mon Sep 17 00:00:00 2001
+From 172b7bf1f113b1ea443a64ad4f9a2ecda6ee06e2 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 8 Dec 2014 14:15:12 +0100
 Subject: [PATCH 3/8] fix oci config test on windows
@@ -75,10 +75,10 @@ index 3ffda1d..39b6f3759 100644
 -LIBS += -lclntsh
 +!win32:LIBS += -lclntsh
 -- 
-2.5.0
+2.7.4
 
 
-From 7fd641a032c7b4ce1b14d7ca02da646b0a0c34d5 Mon Sep 17 00:00:00 2001
+From 7756e4e14ae5b33fea04416bd4f238ca1dfe4d30 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Aug 2015 13:24:56 +0200
 Subject: [PATCH 4/8] configure: don't set QT_NO_SYSTEMSEMAPHORE for Windows
@@ -86,10 +86,10 @@ Subject: [PATCH 4/8] configure: don't set QT_NO_SYSTEMSEMAPHORE for Windows
 Change-Id: I53c110ef40e3d14cc49fa23aa5d294611cac2ffa
 
 diff --git a/configure b/configure
-index 7651e29..4a4b478 100755
+index 43b55f0..de2c3ec 100755
 --- a/configure
 +++ b/configure
-@@ -4575,7 +4575,7 @@ fi
+@@ -4656,7 +4656,7 @@ fi
  [ "$XPLATFORM_ANDROID" = "yes" ] && QMakeVar add styles "android"
  
  # check IPC support
@@ -99,10 +99,10 @@ index 7651e29..4a4b478 100755
      if compileTest unix/ipc_posix "ipc_posix" ; then
          QCONFIG_FLAGS="$QCONFIG_FLAGS QT_POSIX_IPC"
 -- 
-2.5.0
+2.7.4
 
 
-From 959d3a71bced8c00967a16f23c6f9305e56fafcd Mon Sep 17 00:00:00 2001
+From e40fdb058ec440d14e3037c530f8181561622f50 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 6 Oct 2015 09:53:20 +0200
 Subject: [PATCH 5/8] fix building mysql driver under mingw
@@ -123,73 +123,13 @@ index 3cfb614..8b7063f 100644
          !contains(LIBS, .*mysqlclient.*):!contains(LIBS, .*mysqld.*) {
              use_libmysqlclient_r:LIBS += -lmysqlclient_r
 -- 
-2.5.0
+2.7.4
 
 
-From a6f45e15cf19e29afc5f42d1e87feb2b4f7e9532 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 18 Oct 2015 23:11:28 +0300
-Subject: [PATCH 6/8] configure: fix log corruption with option -v
-
-This bug occurs if ./configure is called with -v on systems on
-which fd proc entries point to the files/devices they are open
-on instead of being magic nodes which would basically dup() the
-actual fds (e.g., Linux).
-
-In this case, the command "tee $tty" appends to /dev/stderr, which
-may be already opened by the parent process. This breaks the log file.
-
-Normally, the log file starts with
-
- This is the Qt Open Source Edition.
- ...
-
-but with `-v` flag it would start with output of awkprog and maybe
-some zero bytes. Zero bytes are observed on Debian Wheezy.
-
- DEFAULT_INCDIRS=...
- ...
- ^@^@^@^@^@^@^@^@^@^@^@^@...
- Done running configuration tests.
- ...
-
-To fix this problem, the output of `...` is saved to a variable, and
-then eval'd and echo'd (if -v).
-
-This solution was found by Tony Theodore.
-https://github.com/mxe/mxe/issues/938#issuecomment-149770348
-
-Change-Id: Id0c28598890e813774cc92f38ee46a0697b34e77
-Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
-Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
-(cherry picked from commit 45fe3f1cde1e516d1ddccddb5e33ea4316497c36)
-
-diff --git a/configure b/configure
-index 4a4b478..a5c0fd5 100755
---- a/configure
-+++ b/configure
-@@ -3639,10 +3639,9 @@ END {
-         print "DEFAULT_LIBDIRS=\"/lib\n/usr/lib\"\n";
- }'
- 
--unset tty
--[ "$OPT_VERBOSE" = "yes" ] && tty=/dev/stderr
--eval "`LC_ALL=C $TEST_COMPILER $SYSROOT_FLAG $TEST_COMPILER_CXXFLAGS -xc++ -E -v - < /dev/null 2>&1 > /dev/null | $AWK "$awkprog" | tee $tty`"
--unset tty
-+awkprog_result=`LC_ALL=C $TEST_COMPILER $SYSROOT_FLAG $TEST_COMPILER_CXXFLAGS -xc++ -E -v - < /dev/null 2>&1 > /dev/null | $AWK "$awkprog"`
-+eval "$awkprog_result"
-+[ "$OPT_VERBOSE" = "yes" ] && echo "$awkprog_result"
- 
- echo "Done running configuration tests."
- 
--- 
-2.5.0
-
-
-From 6064564099df17f7cddded8ec0c68d9e57d29ae9 Mon Sep 17 00:00:00 2001
+From 236aecbd657f06d0b18bc25b93d5390ac644daaf Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 7/8] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 6/8] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -219,29 +159,133 @@ index d2358ca..6b1dc95 100644
  !!ENDIF
  !!ENDIF
 -- 
-2.5.0
+2.7.4
 
 
-From e74803bac8aa2fd2106f678b2b11584fdb582bc3 Mon Sep 17 00:00:00 2001
-From: Boris Pek <tehnick-8@yandex.ru>
-Date: Wed, 24 Feb 2016 19:39:46 +0300
-Subject: [PATCH 8/8] Fix ar error: `u' modifier ignored since `D' is the
- default (see `U')
+From 0d1b11391894345be8a1fe084afb3799fc828488 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Wed, 18 May 2016 14:40:20 -0700
+Subject: [PATCH 7/8] Fix linking of the minimal platform plugin on OS X
 
+platformsupport/fontdatabases/fontdatabases.pri disables all font
+databases except CoreText on OS X, so this is required for
+linking. Otherwise, we get undefined reference linker errors:
 
-diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
-index 61963c7..25cf750 100644
---- a/mkspecs/win32-g++/qmake.conf
-+++ b/mkspecs/win32-g++/qmake.conf
-@@ -104,7 +104,7 @@ QMAKE_LIBS_COMPAT       = -ladvapi32 -lshell32 -lcomdlg32 -luser32 -lgdi32 -lws2
- QMAKE_LIBS_QT_ENTRY     = -lmingw32 -lqtmain
+Undefined symbols for architecture x86_64:
+  "vtable for QBasicFontDatabase", referenced from:
+      QMinimalIntegration::fontDatabase() const in
+  qminimalintegration.o
+
+Change-Id: I31298e973803b4d6eedbf61607056114d1556584
+Reviewed-by: Jake Petroules <jake.petroules@qt.io>
+(cherry picked from commit 16864c42d6bc0ee6b3e3fa03123ef5884557ceea)
+
+diff --git a/src/plugins/platforms/minimal/minimal.pro b/src/plugins/platforms/minimal/minimal.pro
+index 0d31d66..bd6f2d8 100644
+--- a/src/plugins/platforms/minimal/minimal.pro
++++ b/src/plugins/platforms/minimal/minimal.pro
+@@ -11,6 +11,7 @@ HEADERS =   qminimalintegration.h \
+ OTHER_FILES += minimal.json
  
- QMAKE_IDL               = midl
--QMAKE_LIB               = $${CROSS_COMPILE}ar -ru
-+QMAKE_LIB               = $${CROSS_COMPILE}ar -rc
- QMAKE_RC                = $${CROSS_COMPILE}windres
+ CONFIG += qpa/genericunixfontdatabase
++darwin: DEFINES += QT_NO_FONTCONFIG
  
- QMAKE_STRIP             = $${CROSS_COMPILE}strip
+ PLUGIN_TYPE = platforms
+ PLUGIN_CLASS_NAME = QMinimalIntegrationPlugin
 -- 
-2.5.0
+2.7.4
 
+
+From f504f5805be3cc27e19632e15b29eaaaac0e92e8 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Sun, 19 Jun 2016 03:15:43 +0300
+Subject: [PATCH 8/8] Fix build of the minimal platform plugin for MS Windows
+
+when qtbase is configured with -fontconfig and -system-freetype.
+
+This fix is necessary after 060e0f6628fd185994911307c59f5355acaaf18f.
+Used the same approach as in 16864c42d6bc0ee6b3e3fa03123ef5884557ceea.
+
+Change-Id: Idece0dc11d89e38266c95de1769be751c06324ef
+(cherry picked from commit 02d2969fafe5088bb1c80eb58b2736df447326cd)
+
+diff --git a/src/plugins/platforms/minimal/minimal.pro b/src/plugins/platforms/minimal/minimal.pro
+index bd6f2d8..4b63461 100644
+--- a/src/plugins/platforms/minimal/minimal.pro
++++ b/src/plugins/platforms/minimal/minimal.pro
+@@ -12,6 +12,7 @@ OTHER_FILES += minimal.json
+ 
+ CONFIG += qpa/genericunixfontdatabase
+ darwin: DEFINES += QT_NO_FONTCONFIG
++win32: DEFINES += QT_NO_FONTCONFIG
+ 
+ PLUGIN_TYPE = platforms
+ PLUGIN_CLASS_NAME = QMinimalIntegrationPlugin
+-- 
+2.7.4
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 16 Jul 2016 20:31:07 +1000
+Subject: [PATCH] Fix pkgconfig file and library naming
+
+See: https://codereview.qt-project.org/#/c/165394/
+     https://bugreports.qt.io/browse/QTBUG-30898
+
+Currently, *.pc files are generated with debug suffix `d` in `-release`
+mode and without the suffix in `-debug` or `-debug-and-release`. This
+can be worked around by `CONIFG-=debug_and_release`, however, a more
+predictable and consistent naming approach would be preferable.
+
+This change mimics the *.prl file and lib conventions:
+
+  -release: creates normal *.pc files and lib names
+  -release -force-debug-info: normal as above
+  -debug: creates *d.pc and *d lib names
+  -debug-and-release: creates both
+  -default: creates both (default link: debug)
+
+and should be unsurprising to users of `pkg-config`. At very least,
+it's deterministic and easily incorporated into build systems.
+
+Task-number: 30898
+Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
+
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index 1111111..2222222 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -244,6 +244,10 @@ load(qt_installs)
+ 
+ load(qt_targets)
+ 
++# Set TARGET towards the end but before pkgconfig setup to keep naming
++# conventions consistent with *prl files
++TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)
++
+ # this builds on top of qt_common
+ !internal_module:!lib_bundle:if(unix|mingw) {
+     CONFIG += create_pc
+@@ -254,12 +258,12 @@ load(qt_targets)
+         QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
+     QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
+     QMAKE_PKGCONFIG_CFLAGS = -I${includedir}/$$MODULE_INCNAME
+-    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt, "Qt$$QT_MAJOR_VERSION ")
+-    QMAKE_PKGCONFIG_FILE = $$replace(TARGET, ^Qt, Qt$$QT_MAJOR_VERSION)
++    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt$$QT_MAJOR_VERSION ")
++    QMAKE_PKGCONFIG_FILE = $$TARGET
+     for(i, MODULE_DEPENDS): \
+-        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$eval(QT.$${i}.MAJOR_VERSION))
++        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$eval(QT.$${i}.MAJOR_VERSION))$$qtPlatformTargetSuffix()
+     isEmpty(QMAKE_PKGCONFIG_DESCRIPTION): \
+-        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt, "Qt ") module
++        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt ") module
+     pclib_replace.match = $$lib_replace.match
+     !isEmpty(lib_replace.replace): \
+         pclib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
+@@ -293,5 +297,3 @@ win32 {
+     # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
+     DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
+ }
+-
+-TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end

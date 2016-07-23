@@ -580,3 +580,23 @@ index 1111111..2222222 100644
  dnl
  dnl At the end, if we're not within glib, we'll define the public
  dnl definitions in terms of our private definitions.
+
+
+From: Boris Pek <tehnick-8@mail.ru>
+Date: Thu, 28 Apr 2016 16:48:12 +0300
+Subject: [PATCH] fix build with GCC >= 6.x
+
+See plugins/gcc6/README.md
+
+diff --git a/gio/gregistrysettingsbackend.c b/gio/gregistrysettingsbackend.c
+--- a/gio/gregistrysettingsbackend.c
++++ b/gio/gregistrysettingsbackend.c
+@@ -228,7 +228,7 @@
+   if (result_code == ERROR_KEY_DELETED)
+     trace ("(%s)", win32_message);
+   else
+-    g_message (win32_message);
++    g_message ("%s", win32_message);
+ };
+ 
+ 

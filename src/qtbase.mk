@@ -3,11 +3,11 @@
 
 PKG             := qtbase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.6.0
-$(PKG)_CHECKSUM := 6efa8a5c559e92b2e526d48034e858023d5fd3c39115ac1bfd3bb65834dbd67a
+$(PKG)_VERSION  := 5.7.0
+$(PKG)_CHECKSUM := 3e7b6d123cab23a587ccbc45173296b33786faa409dba0494e4658fda3ede646
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt.io/official_releases/qt/5.6/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt.io/official_releases/qt/5.7/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc dbus fontconfig freetds freetype harfbuzz jpeg libpng libmysqlclient openssl pcre postgresql sqlite zlib
 
 define $(PKG)_UPDATE
@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -liconv -lws2_32" \
         ./configure \
             -opensource \
+            -c++std c++11 \
             -confirm-license \
             -xplatform win32-g++ \
             -device-option CROSS_COMPILE=${TARGET}- \
@@ -57,19 +58,18 @@ define $(PKG)_BUILD
             -system-pcre \
             -openssl-linked \
             -dbus-linked \
-            -v
+            -v \
+            $($(PKG)_CONFIGURE_OPTS)
 
-    # invoke qmake with removed debug options as a workaround for
-    # https://bugreports.qt-project.org/browse/QTBUG-30898
-    $(MAKE) -C '$(1)' -j '$(JOBS)' QMAKE="$(1)/bin/qmake CONFIG-='debug debug_and_release'"
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt5'
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt5
 
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qt-test.pro'
-    $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
-    $(INSTALL) -m755 '$(1)/test-qt/release/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)' $(BUILD_TYPE)
+    $(INSTALL) -m755 '$(1)/test-qt/$(BUILD_TYPE)/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
 
     # build test the manual way
     mkdir '$(1)/test-$(PKG)-pkgconfig'
@@ -86,7 +86,7 @@ define $(PKG)_BUILD
         '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
-        `'$(TARGET)-pkg-config' Qt5Widgets --cflags --libs`
+        `'$(TARGET)-pkg-config' Qt5Widgets$(BUILD_TYPE_SUFFIX) --cflags --libs`
 
     # setup cmake toolchain
     echo 'set(CMAKE_SYSTEM_PREFIX_PATH "$(PREFIX)/$(TARGET)/qt5" ${CMAKE_SYSTEM_PREFIX_PATH})' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'

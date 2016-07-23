@@ -1,0 +1,31 @@
+This file is part of MXE.
+See index.html for further information.
+
+Taken from: https://github.com/mariusmuja/flann/commit/3645f0c30a47267e56e5acdecfc7bac2b76bc3d5
+
+From 3645f0c30a47267e56e5acdecfc7bac2b76bc3d5 Mon Sep 17 00:00:00 2001
+From: Alastair Quadros <alastair.j.quadros@gmail.com>
+Date: Sun, 15 Mar 2015 10:58:57 +1100
+Subject: [PATCH] abs -> std::abs
+
+diff --git a/src/cpp/flann/algorithms/kdtree_index.h b/src/cpp/flann/algorithms/kdtree_index.h
+index 42659ca..fc12d8f 100644
+--- a/src/cpp/flann/algorithms/kdtree_index.h
++++ b/src/cpp/flann/algorithms/kdtree_index.h
+@@ -36,6 +36,7 @@
+ #include <cassert>
+ #include <cstring>
+ #include <stdarg.h>
++#include <cmath>
+ 
+ #include "flann/general.h"
+ #include "flann/algorithms/nn_index.h"
+@@ -663,7 +664,7 @@
+             ElementType max_span = 0;
+             size_t div_feat = 0;
+             for (size_t i=0;i<veclen_;++i) {
+-                ElementType span = abs(point[i]-leaf_point[i]);
++                ElementType span = std::abs(point[i]-leaf_point[i]);
+                 if (span > max_span) {
+                     max_span = span;
+                     div_feat = i;

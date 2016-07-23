@@ -143,9 +143,13 @@ define MXE_GET_GITHUB_SHA
     | head -1
 endef
 
-define MXE_GET_GITHUB_TAGS
+define MXE_GET_GITHUB_ALL_TAGS
     $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/tags/' \
-    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p' \
+    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p'
+endef
+
+define MXE_GET_GITHUB_TAGS
+    $(MXE_GET_GITHUB_ALL_TAGS, $(1)) \
     | $(SED) 's,^$(strip $(2)),,g' \
     | $(SORT) -V \
     | tail -1
@@ -155,13 +159,16 @@ endef
 PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
 
 # use a minimal whitelist of safe environment variables
-# HOME is needed for ~/.gitconfig for patch-tool-mxe
-ENV_WHITELIST := PATH HOME LANG MAKE% MXE% %PROXY %proxy LD_LIBRARY_PATH $(PRELOAD_VARS) ACLOCAL_PATH
-unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
+# basic working shell environment and mxe variables
+# see http://www.linuxfromscratch.org/lfs/view/stable/chapter04/settingenvironment.html
+ENV_WHITELIST := EDITOR HOME LANG PATH %PROXY %proxy PS1 TERM
+ENV_WHITELIST += MAKE% MXE% $(PRELOAD_VARS) WINEPREFIX
 
-# disable wine with readonly directory (created by mxe-conf)
-# see https://github.com/mxe/mxe/issues/841
-export WINEPREFIX=$(PREFIX)/readonly
+# OS/Distro related issues - "unsafe" but practical
+# 1. https://github.com/mxe/mxe/issues/697
+ENV_WHITELIST += ACLOCAL_PATH LD_LIBRARY_PATH
+
+unexport $(filter-out $(ENV_WHITELIST),$(shell env | cut -d '=' -f1))
 
 SHORT_PKG_VERSION = \
     $(word 1,$(subst ., ,$($(1)_VERSION))).$(word 2,$(subst ., ,$($(1)_VERSION)))
@@ -169,6 +176,7 @@ SHORT_PKG_VERSION = \
 UNPACK_ARCHIVE = \
     $(if $(filter %.tgz,     $(1)),tar xzf '$(1)', \
     $(if $(filter %.tar.gz,  $(1)),tar xzf '$(1)', \
+    $(if $(filter %.tar.Z,   $(1)),tar xzf '$(1)', \
     $(if $(filter %.tbz2,    $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.bz2, $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
@@ -177,7 +185,7 @@ UNPACK_ARCHIVE = \
     $(if $(filter %.7z,      $(1)),7za x '$(1)', \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
     $(if $(filter %.deb,     $(1)),ar x '$(1)' && tar xf data.tar*, \
-    $(error Unknown archive format: $(1))))))))))))
+    $(error Unknown archive format: $(1)))))))))))))
 
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
@@ -186,7 +194,11 @@ UNPACK_PKG_ARCHIVE = \
 # all files for extension plugins will be considered for outdated checks
 PKG_MAKEFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).mk, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 PKG_TESTFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1)-test*, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
-PKG_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
+# allow packages to specify a list of zero or more patches
+PKG_PATCHES   = $(if $(findstring undefined,$(origin $(1)_PATCHES)), \
+                    $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS))))) \
+                $(else), \
+                    $($(1)_PATCHES))
 
 define PREPARE_PKG_SOURCE
     cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
@@ -316,7 +328,7 @@ all: all-filtered
 
 # Build native requirements for certain systems
 OS_SHORT_NAME   := $(call lc,$(shell lsb_release -sc 2>/dev/null || uname -s))
-MXE_PLUGIN_DIRS += $(realpath $(TOP_DIR)/plugins/native/$(OS_SHORT_NAME))
+override MXE_PLUGIN_DIRS += $(realpath $(TOP_DIR)/plugins/native/$(OS_SHORT_NAME))
 
 .PHONY: check-requirements
 define CHECK_REQUIREMENT
@@ -361,16 +373,18 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 	@rm -f '$(PREFIX)/installed/print-git-oneline-'*
 	@touch '$@'
 
-# include core MXE packages and set *_MAKEFILE
+# include core MXE packages and set base filenames
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 $(foreach PKG,$(PKGS),\
-    $(eval $(PKG)_MAKEFILE := $(realpath $(TOP_DIR)/src/$(PKG).mk)))
+    $(eval $(PKG)_MAKEFILE  := $(realpath $(TOP_DIR)/src/$(PKG).mk)) \
+    $(eval $(PKG)_TEST_FILE := $(realpath $(wildcard $(TOP_DIR)/src/$(PKG)-test.*))))
 
-# include files from MXE_PLUGIN_DIRS, set *_MAKEFILE and `all-<plugin>` target
+# include files from MXE_PLUGIN_DIRS, set base filenames and `all-<plugin>` target
 PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
 PLUGIN_PKGS  := $(basename $(notdir $(PLUGIN_FILES)))
 $(foreach FILE,$(PLUGIN_FILES),\
-    $(eval $(basename $(notdir $(FILE)))_MAKEFILE ?= $(FILE)) \
+    $(eval $(basename $(notdir $(FILE)))_MAKEFILE  ?= $(FILE)) \
+    $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(wildcard $(basename $(FILE))-test.*)) \
     $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE)))))
 include $(PLUGIN_FILES)
 PKGS := $(sort $(PKGS) $(PLUGIN_PKGS))
@@ -422,7 +436,12 @@ define PKG_RULE
 download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
 
 .PHONY: download-only-$(1)
-download-only-$(1):
+# Packages can share a source archive to build different sets of features
+# or dependencies (see bfd/binutils openscenegraph/openthreads qwt/qwt_qt4).
+# Use a double-colon rule to allow multiple definitions:
+# https://www.gnu.org/software/make/manual/html_node/Double_002dColon.html
+download-only-$(1): download-only-$($(1)_FILE)
+download-only-$($(1)_FILE)::
 	$(and $($(1)_URL),
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
@@ -460,6 +479,10 @@ $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
 	@echo '[build nonetwork lib]'
 	@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
 
+.PHONY: shell
+shell: $(NONET_LIB)
+	$(PRELOAD) $(SHELL)
+
 define PKG_TARGET_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
@@ -482,7 +505,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))')
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	@if ! (time $(PRELOAD) $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	@if ! (time $(PRELOAD) WINEPREFIX='$(2)/readonly' $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	    echo; \
 	    echo 'Failed to build package $(1) for target $(3)!'; \
 	    echo '------------------------------------------------------------'; \
@@ -500,11 +523,19 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 
 
 .PHONY: build-only-$(1)_$(3)
+# target-specific variables provide an extra level of scoping so that named
+# variables can be used in package build rules:
+# https://www.gnu.org/software/make/manual/html_node/Target_002dspecific.html
 build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
+build-only-$(1)_$(3): BUILD_TYPE = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),debug,release)
+build-only-$(1)_$(3): BUILD_TYPE_SUFFIX = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),d)
+build-only-$(1)_$(3): SOURCE_DIR = $(2)/$($(1)_SUBDIR)
+build-only-$(1)_$(3): BUILD_DIR  = $(2)/$($(1)_SUBDIR).build_
+build-only-$(1)_$(3): TEST_FILE  = $($(1)_TEST_FILE)
 build-only-$(1)_$(3): CMAKE_RUNRESULT_FILE = $(PREFIX)/share/cmake/modules/TryRunResults.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_DIR  = $(PREFIX)/$(3)/share/cmake/mxe-conf.d
@@ -517,10 +548,20 @@ build-only-$(1)_$(3):
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
 	    autoconf --version 2>/dev/null | head -1
 	    automake --version 2>/dev/null | head -1
+	    $(BUILD_CC) --version
+	    $(BUILD_CXX) --version
 	    python --version
 	    perl --version 2>&1 | head -3
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
+	    mkdir -p '$$(SOURCE_DIR)'
+	    mkdir -p '$$(BUILD_DIR)'
+
+	    # disable wine with readonly directory
+	    # see https://github.com/mxe/mxe/issues/841
+	    mkdir -p '$(2)/readonly'
+	    chmod 0555 '$(2)/readonly'
+
 	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
 	        $$(call PREPARE_PKG_SOURCE,$(1),$(2)))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
@@ -620,7 +661,6 @@ BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
 
 .PHONY: clean
 clean:
-	@[ -d "$$WINEPREFIX" ] && chmod 0755 "$$WINEPREFIX" || true
 	rm -rf $(call TMP_DIR,*) $(PREFIX) \
 	       $(addprefix $(TOP_DIR)/, $(BUILD_PKG_TMP_FILES))
 

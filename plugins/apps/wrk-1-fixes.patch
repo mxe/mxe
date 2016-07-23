@@ -1,0 +1,679 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 20 Mar 2016 16:36:20 +0100
+Subject: [PATCH] rename conflicting constants
+
+
+diff --git a/src/net.c b/src/net.c
+index 1111111..2222222 100644
+--- a/src/net.c
++++ b/src/net.c
+@@ -7,29 +7,29 @@
+ #include "net.h"
+ 
+ status sock_connect(connection *c) {
+-    return OK;
++    return WRK_OK;
+ }
+ 
+ status sock_close(connection *c) {
+-    return OK;
++    return WRK_OK;
+ }
+ 
+ status sock_read(connection *c, size_t *n) {
+     ssize_t r = read(c->fd, c->buf, sizeof(c->buf));
+     *n = (size_t) r;
+-    return r >= 0 ? OK : ERROR;
++    return r >= 0 ? WRK_OK : WRK_ERROR;
+ }
+ 
+ status sock_write(connection *c, char *buf, size_t len, size_t *n) {
+     ssize_t r;
+     if ((r = write(c->fd, buf, len)) == -1) {
+         switch (errno) {
+-            case EAGAIN: return RETRY;
+-            default:     return ERROR;
++            case EAGAIN: return WRK_RETRY;
++            default:     return WRK_ERROR;
+         }
+     }
+     *n = (size_t) r;
+-    return OK;
++    return WRK_OK;
+ }
+ 
+ size_t sock_readable(connection *c) {
+diff --git a/src/net.h b/src/net.h
+index 1111111..2222222 100644
+--- a/src/net.h
++++ b/src/net.h
+@@ -7,9 +7,9 @@
+ #include "wrk.h"
+ 
+ typedef enum {
+-    OK,
+-    ERROR,
+-    RETRY
++    WRK_OK,
++    WRK_ERROR,
++    WRK_RETRY
+ } status;
+ 
+ struct sock {
+diff --git a/src/ssl.c b/src/ssl.c
+index 1111111..2222222 100644
+--- a/src/ssl.c
++++ b/src/ssl.c
+@@ -54,44 +54,44 @@ status ssl_connect(connection *c) {
+     SSL_set_fd(c->ssl, c->fd);
+     if ((r = SSL_connect(c->ssl)) != 1) {
+         switch (SSL_get_error(c->ssl, r)) {
+-            case SSL_ERROR_WANT_READ:  return RETRY;
+-            case SSL_ERROR_WANT_WRITE: return RETRY;
+-            default:                   return ERROR;
++            case SSL_ERROR_WANT_READ:  return WRK_RETRY;
++            case SSL_ERROR_WANT_WRITE: return WRK_RETRY;
++            default:                   return WRK_ERROR;
+         }
+     }
+-    return OK;
++    return WRK_OK;
+ }
+ 
+ status ssl_close(connection *c) {
+     SSL_shutdown(c->ssl);
+     SSL_clear(c->ssl);
+-    return OK;
++    return WRK_OK;
+ }
+ 
+ status ssl_read(connection *c, size_t *n) {
+     int r;
+     if ((r = SSL_read(c->ssl, c->buf, sizeof(c->buf))) <= 0) {
+         switch (SSL_get_error(c->ssl, r)) {
+-            case SSL_ERROR_WANT_READ:  return RETRY;
+-            case SSL_ERROR_WANT_WRITE: return RETRY;
+-            default:                   return ERROR;
++            case SSL_ERROR_WANT_READ:  return WRK_RETRY;
++            case SSL_ERROR_WANT_WRITE: return WRK_RETRY;
++            default:                   return WRK_ERROR;
+         }
+     }
+     *n = (size_t) r;
+-    return OK;
++    return WRK_OK;
+ }
+ 
+ status ssl_write(connection *c, char *buf, size_t len, size_t *n) {
+     int r;
+     if ((r = SSL_write(c->ssl, buf, len)) <= 0) {
+         switch (SSL_get_error(c->ssl, r)) {
+-            case SSL_ERROR_WANT_READ:  return RETRY;
+-            case SSL_ERROR_WANT_WRITE: return RETRY;
+-            default:                   return ERROR;
++            case SSL_ERROR_WANT_READ:  return WRK_RETRY;
++            case SSL_ERROR_WANT_WRITE: return WRK_RETRY;
++            default:                   return WRK_ERROR;
+         }
+     }
+     *n = (size_t) r;
+-    return OK;
++    return WRK_OK;
+ }
+ 
+ size_t ssl_readable(connection *c) {
+diff --git a/src/wrk.c b/src/wrk.c
+index 1111111..2222222 100644
+--- a/src/wrk.c
++++ b/src/wrk.c
+@@ -349,9 +349,9 @@ static void socket_connected(aeEventLoop *loop, int fd, void *data, int mask) {
+     connection *c = data;
+ 
+     switch (sock.connect(c)) {
+-        case OK:    break;
+-        case ERROR: goto error;
+-        case RETRY: return;
++        case WRK_OK:    break;
++        case WRK_ERROR: goto error;
++        case WRK_RETRY: return;
+     }
+ 
+     http_parser_init(&c->parser, HTTP_RESPONSE);
+@@ -384,9 +384,9 @@ static void socket_writeable(aeEventLoop *loop, int fd, void *data, int mask) {
+     size_t n;
+ 
+     switch (sock.write(c, buf, len, &n)) {
+-        case OK:    break;
+-        case ERROR: goto error;
+-        case RETRY: return;
++        case WRK_OK:    break;
++        case WRK_ERROR: goto error;
++        case WRK_RETRY: return;
+     }
+ 
+     c->written += n;
+@@ -408,9 +408,9 @@ static void socket_readable(aeEventLoop *loop, int fd, void *data, int mask) {
+ 
+     do {
+         switch (sock.read(c, &n)) {
+-            case OK:    break;
+-            case ERROR: goto error;
+-            case RETRY: return;
++            case WRK_OK:    break;
++            case WRK_ERROR: goto error;
++            case WRK_RETRY: return;
+         }
+ 
+         if (http_parser_execute(&c->parser, &parser_settings, c->buf, n) != n) goto error;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 20 Mar 2016 21:34:38 +0100
+Subject: [PATCH] rename zcalloc (conflict with zlib)
+
+
+diff --git a/src/stats.c b/src/stats.c
+index 1111111..2222222 100644
+--- a/src/stats.c
++++ b/src/stats.c
+@@ -9,7 +9,7 @@
+ 
+ stats *stats_alloc(uint64_t max) {
+     uint64_t limit = max + 1;
+-    stats *s = zcalloc(sizeof(stats) + sizeof(uint64_t) * limit);
++    stats *s = zmalloc_calloc(sizeof(stats) + sizeof(uint64_t) * limit);
+     s->limit = limit;
+     s->min   = UINT64_MAX;
+     return s;
+diff --git a/src/wrk.c b/src/wrk.c
+index 1111111..2222222 100644
+--- a/src/wrk.c
++++ b/src/wrk.c
+@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
+ 
+     statistics.latency  = stats_alloc(cfg.timeout * 1000);
+     statistics.requests = stats_alloc(MAX_THREAD_RATE_S);
+-    thread *threads     = zcalloc(cfg.threads * sizeof(thread));
++    thread *threads     = zmalloc_calloc(cfg.threads * sizeof(thread));
+ 
+     lua_State *L = script_create(cfg.script, url, headers);
+     if (!script_resolve(L, host, service)) {
+@@ -204,7 +204,7 @@ void *thread_main(void *arg) {
+         script_request(thread->L, &request, &length);
+     }
+ 
+-    thread->cs = zcalloc(thread->connections * sizeof(connection));
++    thread->cs = zmalloc_calloc(thread->connections * sizeof(connection));
+     connection *c = thread->cs;
+ 
+     for (uint64_t i = 0; i < thread->connections; i++, c++) {
+@@ -436,7 +436,7 @@ static char *copy_url_part(char *url, struct http_parser_url *parts, enum http_p
+     if (parts->field_set & (1 << field)) {
+         uint16_t off = parts->field_data[field].off;
+         uint16_t len = parts->field_data[field].len;
+-        part = zcalloc(len + 1 * sizeof(char));
++        part = zmalloc_calloc(len + 1 * sizeof(char));
+         memcpy(part, &url[off], len);
+     }
+ 
+diff --git a/src/zmalloc.c b/src/zmalloc.c
+index 1111111..2222222 100644
+--- a/src/zmalloc.c
++++ b/src/zmalloc.c
+@@ -107,7 +107,7 @@ void *zmalloc(size_t size) {
+ #endif
+ }
+ 
+-void *zcalloc(size_t size) {
++void *zmalloc_calloc(size_t size) {
+     void *ptr = calloc(1, size+PREFIX_SIZE);
+ 
+     if (!ptr) zmalloc_oom(size);
+diff --git a/src/zmalloc.h b/src/zmalloc.h
+index 1111111..2222222 100644
+--- a/src/zmalloc.h
++++ b/src/zmalloc.h
+@@ -67,7 +67,7 @@
+ #endif
+ 
+ void *zmalloc(size_t size);
+-void *zcalloc(size_t size);
++void *zmalloc_calloc(size_t size);
+ void *zrealloc(void *ptr, size_t size);
+ void zfree(void *ptr);
+ char *zstrdup(const char *s);
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Tue, 22 Mar 2016 23:04:35 +0100
+Subject: [PATCH] allow to specify EXTRA_CFLAGS and EXTRA_LIBS
+
+
+diff --git a/Makefile b/Makefile
+index 1111111..2222222 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+-CFLAGS  := -std=c99 -Wall -O2 -D_REENTRANT
+-LIBS    := -lpthread -lm -lcrypto -lssl
++CFLAGS  := -std=c99 -Wall -O2 -D_REENTRANT $(EXTRA_CFLAGS)
++LIBS    := -lpthread -lm -lcrypto -lssl $(EXTRA_LIBS)
+ 
+ TARGET  := $(shell uname -s | tr '[A-Z]' '[a-z]' 2>/dev/null || echo unknown)
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Tue, 22 Mar 2016 23:05:26 +0100
+Subject: [PATCH] reorder -lssl and -lcrypto
+
+See http://stackoverflow.com/a/27136346
+
+diff --git a/Makefile b/Makefile
+index 1111111..2222222 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ CFLAGS  := -std=c99 -Wall -O2 -D_REENTRANT $(EXTRA_CFLAGS)
+-LIBS    := -lpthread -lm -lcrypto -lssl $(EXTRA_LIBS)
++LIBS    := -lpthread -lm -lssl -lcrypto $(EXTRA_LIBS)
+ 
+ TARGET  := $(shell uname -s | tr '[A-Z]' '[a-z]' 2>/dev/null || echo unknown)
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Tue, 22 Mar 2016 23:14:32 +0100
+Subject: [PATCH] option to use external installation of LuaJIT
+
+LUA_PATH is provided to avoid changing directory to LuaJIT's tree.
+
+diff --git a/Makefile b/Makefile
+index 1111111..2222222 100644
+--- a/Makefile
++++ b/Makefile
+@@ -25,9 +25,11 @@ ODIR := obj
+ OBJ  := $(patsubst %.c,$(ODIR)/%.o,$(SRC)) $(ODIR)/bytecode.o
+ 
+ LDIR     = deps/luajit/src
+-LIBS    := -lluajit $(LIBS)
+-CFLAGS  += -I$(LDIR)
+-LDFLAGS += -L$(LDIR)
++LUA_PATH = $(LDIR)/?.lua # for luajit -b to work
++LUAJIT   = $(LDIR)/luajit
++LUAJIT_A = $(LDIR)/libluajit.a
++LUAJIT_I = $(LDIR)
++CFLAGS  += -I$(LUAJIT_I)
+ 
+ all: $(BIN)
+ 
+@@ -37,16 +39,16 @@ clean:
+ 
+ $(BIN): $(OBJ)
+ 	@echo LINK $(BIN)
+-	@$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
++	@$(CC) $(LDFLAGS) -o $@ $^ $(LUAJIT_A) $(LIBS)
+ 
+-$(OBJ): config.h Makefile $(LDIR)/libluajit.a | $(ODIR)
++$(OBJ): config.h Makefile $(LUAJIT_A) | $(ODIR)
+ 
+ $(ODIR):
+ 	@mkdir -p $@
+ 
+ $(ODIR)/bytecode.o: src/wrk.lua
+ 	@echo LUAJIT $<
+-	@$(SHELL) -c 'cd $(LDIR) && ./luajit -b $(CURDIR)/$< $(CURDIR)/$@'
++	@LUA_PATH=$(LUA_PATH) $(LUAJIT) -b $(CURDIR)/$< $(CURDIR)/$@
+ 
+ $(ODIR)/%.o : %.c
+ 	@echo CC $<
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Tue, 22 Mar 2016 23:21:51 +0100
+Subject: [PATCH] embed bytecode via header instead of object file
+
+Embedding via object file requires -Wl,-E which doesn't work on MinGW.
+Embedding via header is more portable.
+
+diff --git a/.gitignore b/.gitignore
+index 1111111..2222222 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,6 +1,7 @@
+ *.o
+ *.a
+ wrk
++src/bytecode.h
+ 
+ deps/luajit/src/host/buildvm
+ deps/luajit/src/host/buildvm_arch.h
+diff --git a/Makefile b/Makefile
+index 1111111..2222222 100644
+--- a/Makefile
++++ b/Makefile
+@@ -11,10 +11,8 @@ else ifeq ($(TARGET), darwin)
+ else ifeq ($(TARGET), linux)
+ 	CFLAGS  += -D_POSIX_C_SOURCE=200112L -D_BSD_SOURCE
+ 	LIBS    += -ldl
+-	LDFLAGS += -Wl,-E
+ else ifeq ($(TARGET), freebsd)
+ 	CFLAGS  += -D_DECLARE_C99_LDBL_MATH
+-	LDFLAGS += -Wl,-E
+ endif
+ 
+ SRC  := wrk.c net.c ssl.c aprintf.c stats.c script.c units.c \
+@@ -22,7 +20,7 @@ SRC  := wrk.c net.c ssl.c aprintf.c stats.c script.c units.c \
+ BIN  := wrk
+ 
+ ODIR := obj
+-OBJ  := $(patsubst %.c,$(ODIR)/%.o,$(SRC)) $(ODIR)/bytecode.o
++OBJ  := $(patsubst %.c,$(ODIR)/%.o,$(SRC))
+ 
+ LDIR     = deps/luajit/src
+ LUA_PATH = $(LDIR)/?.lua # for luajit -b to work
+@@ -41,12 +39,12 @@ $(BIN): $(OBJ)
+ 	@echo LINK $(BIN)
+ 	@$(CC) $(LDFLAGS) -o $@ $^ $(LUAJIT_A) $(LIBS)
+ 
+-$(OBJ): config.h Makefile $(LUAJIT_A) | $(ODIR)
++$(OBJ): config.h bytecode.h Makefile $(LUAJIT_A) | $(ODIR)
+ 
+ $(ODIR):
+ 	@mkdir -p $@
+ 
+-$(ODIR)/bytecode.o: src/wrk.lua
++src/bytecode.h: src/wrk.lua
+ 	@echo LUAJIT $<
+ 	@LUA_PATH=$(LUA_PATH) $(LUAJIT) -b $(CURDIR)/$< $(CURDIR)/$@
+ 
+diff --git a/src/script.c b/src/script.c
+index 1111111..2222222 100644
+--- a/src/script.c
++++ b/src/script.c
+@@ -5,6 +5,7 @@
+ #include "script.h"
+ #include "http_parser.h"
+ #include "zmalloc.h"
++#include "bytecode.h"
+ 
+ typedef struct {
+     char *name;
+@@ -48,7 +49,17 @@ static const struct luaL_reg threadlib[] = {
+ lua_State *script_create(char *file, char *url, char **headers) {
+     lua_State *L = luaL_newstate();
+     luaL_openlibs(L);
+-    (void) luaL_dostring(L, "wrk = require \"wrk\"");
++
++    // Taken from http://stackoverflow.com/a/19426724
++    lua_getglobal(L, "package");
++    lua_getfield(L, -1, "preload");
++    luaL_loadbuffer(L, luaJIT_BC_wrk, luaJIT_BC_wrk_SIZE, NULL);
++    lua_setfield(L, -2, "wrk");
++    lua_pop(L, 2);
++
++    if (luaL_dostring(L, "wrk = require \"wrk\"")) {
++        fprintf(stderr, "Error in wrk.lua: %s\n", lua_tostring(L, -1));
++    }
+ 
+     luaL_newmetatable(L, "wrk.addr");
+     luaL_register(L, NULL, addrlib);
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Tue, 22 Mar 2016 23:28:09 +0100
+Subject: [PATCH] use send/recv for sockets instead of write/read
+
+write/read returns Bad file descriptor for sockets in MinGW.
+
+diff --git a/src/net.c b/src/net.c
+index 1111111..2222222 100644
+--- a/src/net.c
++++ b/src/net.c
+@@ -15,14 +15,14 @@ status sock_close(connection *c) {
+ }
+ 
+ status sock_read(connection *c, size_t *n) {
+-    ssize_t r = read(c->fd, c->buf, sizeof(c->buf));
++    ssize_t r = recv(c->fd, c->buf, sizeof(c->buf), 0);
+     *n = (size_t) r;
+     return r >= 0 ? WRK_OK : WRK_ERROR;
+ }
+ 
+ status sock_write(connection *c, char *buf, size_t len, size_t *n) {
+     ssize_t r;
+-    if ((r = write(c->fd, buf, len)) == -1) {
++    if ((r = send(c->fd, buf, len, 0)) == -1) {
+         switch (errno) {
+             case EAGAIN: return WRK_RETRY;
+             default:     return WRK_ERROR;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Wed, 23 Mar 2016 22:48:52 +0100
+Subject: [PATCH] compatibility with MinGW
+
+
+diff --git a/Makefile b/Makefile
+index 1111111..2222222 100644
+--- a/Makefile
++++ b/Makefile
+@@ -13,6 +13,8 @@ else ifeq ($(TARGET), linux)
+ 	LIBS    += -ldl
+ else ifeq ($(TARGET), freebsd)
+ 	CFLAGS  += -D_DECLARE_C99_LDBL_MATH
++else ifeq ($(TARGET), mingw)
++	CFLAGS  += -D_POSIX_C_SOURCE=200112L -D_BSD_SOURCE
+ endif
+ 
+ SRC  := wrk.c net.c ssl.c aprintf.c stats.c script.c units.c \
+diff --git a/src/ae.c b/src/ae.c
+index 1111111..2222222 100644
+--- a/src/ae.c
++++ b/src/ae.c
+@@ -35,7 +35,11 @@
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <stdlib.h>
++#ifndef __WIN32__
+ #include <poll.h>
++#else
++#include <winsock2.h>
++#endif
+ #include <string.h>
+ #include <time.h>
+ #include <errno.h>
+@@ -395,6 +399,7 @@ int aeProcessEvents(aeEventLoop *eventLoop, int flags)
+     return processed; /* return the number of processed file/time events */
+ }
+ 
++#ifndef __WIN32__
+ /* Wait for millseconds until the given file descriptor becomes
+  * writable/readable/exception */
+ int aeWait(int fd, int mask, long long milliseconds) {
+@@ -416,6 +421,7 @@ int aeWait(int fd, int mask, long long milliseconds) {
+         return retval;
+     }
+ }
++#endif
+ 
+ void aeMain(aeEventLoop *eventLoop) {
+     eventLoop->stop = 0;
+diff --git a/src/main.h b/src/main.h
+index 1111111..2222222 100644
+--- a/src/main.h
++++ b/src/main.h
+@@ -6,8 +6,14 @@
+ #include <fcntl.h>
+ #include <getopt.h>
+ #include <math.h>
++#ifndef __WIN32__
+ #include <netinet/in.h>
+ #include <netinet/tcp.h>
++#include <sys/uio.h>
++#else
++#include <winsock2.h>
++#include <ws2tcpip.h>
++#endif
+ #include <stdarg.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+@@ -17,7 +23,6 @@
+ #include <time.h>
+ #include <unistd.h>
+ #include <sys/time.h>
+-#include <sys/uio.h>
+ 
+ #include "ssl.h"
+ #include "aprintf.h"
+diff --git a/src/net.c b/src/net.c
+index 1111111..2222222 100644
+--- a/src/net.c
++++ b/src/net.c
+@@ -2,7 +2,12 @@
+ 
+ #include <errno.h>
+ #include <unistd.h>
++
++#ifndef __WIN32__
+ #include <sys/ioctl.h>
++#else
++#include <winsock2.h>
++#endif
+ 
+ #include "net.h"
+ 
+@@ -33,7 +38,13 @@ status sock_write(connection *c, char *buf, size_t len, size_t *n) {
+ }
+ 
+ size_t sock_readable(connection *c) {
++#ifndef __WIN32__
+     int n, rc;
+     rc = ioctl(c->fd, FIONREAD, &n);
++#else
++    unsigned long n;
++    int rc;
++    rc = ioctlsocket(c->fd, FIONREAD, &n);
++#endif
+     return rc == -1 ? 0 : n;
+ }
+diff --git a/src/wrk.c b/src/wrk.c
+index 1111111..2222222 100644
+--- a/src/wrk.c
++++ b/src/wrk.c
+@@ -57,6 +57,14 @@ static void usage() {
+ }
+ 
+ int main(int argc, char **argv) {
++#ifdef __WIN32__
++    WSADATA wsaData;
++    if (WSAStartup(0x202, &wsaData) != 0) {
++        fprintf(stderr, "Failed to initialize WSA\n");
++        exit(1);
++    }
++#endif
++
+     char *url, **headers = zmalloc(argc * sizeof(char *));
+     struct http_parser_url parts = {};
+ 
+@@ -83,7 +91,9 @@ int main(int argc, char **argv) {
+         sock.readable = ssl_readable;
+     }
+ 
++#ifndef __WIN32__
+     signal(SIGPIPE, SIG_IGN);
++#endif
+     signal(SIGINT,  SIG_IGN);
+ 
+     statistics.latency  = stats_alloc(cfg.timeout * 1000);
+@@ -99,7 +109,12 @@ int main(int argc, char **argv) {
+ 
+     for (uint64_t i = 0; i < cfg.threads; i++) {
+         thread *t      = &threads[i];
++#ifndef __WIN32__
+         t->loop        = aeCreateEventLoop(10 + cfg.connections * 3);
++#else
++        // fd on Windows doesn't start from 1
++        t->loop        = aeCreateEventLoop(10000);
++#endif
+         t->connections = cfg.connections / cfg.threads;
+ 
+         t->L = script_create(cfg.script, url, headers);
+@@ -122,12 +137,16 @@ int main(int argc, char **argv) {
+         }
+     }
+ 
++#ifndef __WIN32__
+     struct sigaction sa = {
+         .sa_handler = handler,
+         .sa_flags   = 0,
+     };
+     sigfillset(&sa.sa_mask);
+     sigaction(SIGINT, &sa, NULL);
++#else
++    signal(SIGINT, handler);
++#endif
+ 
+     char *time = format_time_s(cfg.duration);
+     printf("Running %s test @ %s\n", time, url);
+@@ -231,18 +250,34 @@ static int connect_socket(thread *thread, connection *c) {
+     struct addrinfo *addr = thread->addr;
+     struct aeEventLoop *loop = thread->loop;
+     int fd, flags;
++#ifdef __WIN32__
++    unsigned long non_blocking;
++#endif
+ 
+     fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+ 
++#ifndef __WIN32__
+     flags = fcntl(fd, F_GETFL, 0);
+     fcntl(fd, F_SETFL, flags | O_NONBLOCK);
++#else
++    non_blocking = 1;
++    ioctlsocket(fd, FIONBIO, &non_blocking);
++#endif
+ 
+     if (connect(fd, addr->ai_addr, addr->ai_addrlen) == -1) {
++#ifndef __WIN32__
+         if (errno != EINPROGRESS) goto error;
++#else
++        if (WSAGetLastError() != WSAEWOULDBLOCK) goto error;
++#endif
+     }
+ 
+     flags = 1;
+-    setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &flags, sizeof(flags));
++    setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,
++#ifdef __WIN32__
++        (const char*)
++#endif
++        &flags, sizeof(flags));
+ 
+     flags = AE_READABLE | AE_WRITABLE;
+     if (aeCreateFileEvent(loop, fd, flags, socket_connected, c) == AE_OK) {
+diff --git a/src/wrk.h b/src/wrk.h
+index 1111111..2222222 100644
+--- a/src/wrk.h
++++ b/src/wrk.h
+@@ -5,8 +5,14 @@
+ #include <pthread.h>
+ #include <inttypes.h>
+ #include <sys/types.h>
++
++#ifndef __WIN32__
+ #include <netdb.h>
+ #include <sys/socket.h>
++#else
++#include <winsock2.h>
++#include <ws2tcpip.h> // addrinfo
++#endif
+ 
+ #include <openssl/ssl.h>
+ #include <openssl/err.h>

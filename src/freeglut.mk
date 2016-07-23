@@ -3,9 +3,9 @@
 
 PKG             := freeglut
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.1
-$(PKG)_CHECKSUM := dde46626a62a1cd9cf48a11951cdd592e7067c345cffe193a149dfd47aef999a
-$(PKG)_SUBDIR   := freeglut-$(word 1,$(subst -, ,$($(PKG)_VERSION)))
+$(PKG)_VERSION  := 3.0.0
+$(PKG)_CHECKSUM := 2a43be8515b01ea82bcfa17d29ae0d40bd128342f0930cd1f375f1ff999f76a2
+$(PKG)_SUBDIR   := freeglut-$($(PKG)_VERSION)
 $(PKG)_FILE     := freeglut-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freeglut/freeglut/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
@@ -17,13 +17,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./autogen.sh
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --enable-replace-glut \
-        --disable-debug \
-        --without-x
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= $(if $(BUILD_STATIC),EXPORT_FLAGS='-DFREEGLUT_STATIC')
+    mkdir '$(1).build'
+    cd    '$(1).build' && $(TARGET)-cmake '$(1)' \
+        -DFREEGLUT_GLES=OFF \
+        -DFREEGLUT_BUILD_DEMOS=OFF \
+        -DFREEGLUT_REPLACE_GLUT=ON \
+        -DFREEGLUT_BUILD_STATIC_LIBS=$(if $(BUILD_STATIC),true,false) \
+        -DFREEGLUT_BUILD_SHARED_LIBS=$(if $(BUILD_STATIC),false,true)
+    $(MAKE) -C '$(1).build' -j '$(JOBS)'
+    $(MAKE) -C '$(1).build' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \

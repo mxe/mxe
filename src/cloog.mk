@@ -22,13 +22,11 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_BUILD_$(BUILD)
+define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-gmp-prefix='$(PREFIX)/$(TARGET)' \
         --with-isl-prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $(if $(BUILD_SHARED),LDFLAGS=-no-undefined)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
-
-$(PKG)_BUILD_SHARED =

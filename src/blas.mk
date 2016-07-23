@@ -19,8 +19,7 @@ define $(PKG)_BUILD
         FORTRAN='$(TARGET)-gfortran' \
         RANLIB='$(TARGET)-ranlib' \
         ARCH='$(TARGET)-ar' \
-        BLASLIB='libblas.a' \
-        OPTS=$(if $(findstring x86_64,$(TARGET)),-fdefault-integer-8)
+        BLASLIB='libblas.a'
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(if $(BUILD_STATIC), \

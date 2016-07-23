@@ -22,6 +22,8 @@ define INIT_GIT
     # if PKG_SUBDIR is ".", the following will move gits/tmp/pkg
     mv '$(abspath $(GITS_DIR)/tmp/$(1)/$($(1)_SUBDIR))' '$(call GIT_DIR,$(1))'
     rm -rf '$(GITS_DIR)/tmp'
+    # rename existing .git directories if any
+    find '$(call GIT_DIR,$(1))' -name .git -prune -exec sh -c 'mv "$$0" "$$0"_' {} \;
     # initialize git
     $(call GIT_CMD,$(1)) init
     $(call GIT_CMD,$(1)) add -A
@@ -32,8 +34,8 @@ endef
 define IMPORT_PATCH
     cd '$(call GIT_DIR,$(1))' \
         && cat '$(2)' \
-        | sed '/^From/,$$  !d' \
-        | sed s/'^From: MXE'/"From: fix@me"/'g;' \
+        | $(SED) '/^From/,$$  !d' \
+        | $(SED) s/'^From: MXE'/"From: fix@me"/'g;' \
         | $(call GIT_CMD,$(1)) am --keep-cr ;
 endef
 
@@ -53,8 +55,8 @@ define EXPORT_PATCH
             --text \
             -M9 \
             dist..HEAD \
-        | sed 's/^From [0-9a-f]\{40\} /From 0000000000000000000000000000000000000000 /' \
-        | sed 's/^index .......\.\......../index 1111111..2222222/' \
+        | $(SED) 's/^From [0-9a-f]\{40\} /From 0000000000000000000000000000000000000000 /' \
+        | $(SED) 's/^index .......\.\......../index 1111111..2222222/' \
     ) > '$(PATCH_BY_NAME)'
 endef
 
