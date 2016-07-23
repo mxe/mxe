@@ -15,13 +15,19 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+# can't build a working static library for now
+# https://sourceforge.net/p/djvu/bugs/274/
 define $(PKG)_BUILD_SHARED
-    cd '$(1)' && automake
-    cd '$(1)' && ./configure $(MXE_CONFIGURE_OPTS) --disable-desktopfiles
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install-strip
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-desktopfiles
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install-strip \
+        $(MXE_DISABLE_CRUFT) dist_bin_SCRIPTS=
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' ddjvuapi --cflags --libs`
 endef
