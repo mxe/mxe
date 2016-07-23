@@ -26,4 +26,13 @@ define $(PKG)_BUILD
         -DBUILD_TESTING=FALSE \
         '$(1)'
     $(MAKE) -C '$(1).build' install
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: openjp2'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: Openjpeg library'; \
+     echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/openjpeg-2.1"'; \
+     echo 'Cflags.private: -DOPJ_STATIC'; \
+     echo 'Libs: -lopenjp2';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/openjp2.pc'
+     ln -fs openjp2.pc '$(PREFIX)/$(TARGET)/lib/pkgconfig/openjpeg.pc'
 endef

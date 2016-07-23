@@ -37,4 +37,10 @@ define $(PKG)_BUILD_$(BUILD)
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' man1_MANS=
     $(MAKE) -C '$(1).build' -j 1 install man1_MANS=
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: character set conversion library'; \
+     echo 'Libs: -liconv';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 endef
