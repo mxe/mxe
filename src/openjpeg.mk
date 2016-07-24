@@ -33,6 +33,5 @@ define $(PKG)_BUILD
      echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/openjpeg-2.1"'; \
      echo 'Cflags.private: -DOPJ_STATIC'; \
      echo 'Libs: -lopenjp2';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/openjp2.pc'
-     ln -fs openjp2.pc '$(PREFIX)/$(TARGET)/lib/pkgconfig/openjpeg.pc'
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/openjpeg.pc'
 endef
