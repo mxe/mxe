@@ -64,7 +64,7 @@ define $(PKG)_BUILD
      echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/ghostscript"'; \
      echo 'Cflags.private: -DGS_STATIC_LIB'; \
      echo 'Libs: -L"$(PREFIX)/$(TARGET)/lib" -lgs'; \
-     echo 'Requires: libiconv libidn libpaper libtiff-4 libpng jpeg openjp2 lcms2 zlib'; \
+     echo 'Requires: libiconv libidn libpaper libtiff-4 libpng jpeg openjpeg lcms2 zlib'; \
      echo 'Libs.private: -lwinspool';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/ghostscript.pc'
 
