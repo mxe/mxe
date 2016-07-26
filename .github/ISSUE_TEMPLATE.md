@@ -1,2 +1,0 @@
-If a package fails to build, upload the log file to
-[Gist](https://gist.github.com/) and put the link here.
