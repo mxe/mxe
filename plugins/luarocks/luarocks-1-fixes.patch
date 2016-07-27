@@ -81,7 +81,7 @@ index 1111111..2222222 100644
 +   }
 +   defaults.runtime_external_deps_patterns = {
 +      bin = { "?.exe", "?.bat" },
-+      lib = { "?.dll", "lib?.dll" },
++      lib = { "?.dll" },
 +      include = { "?.h" }
 +   }
 +end
