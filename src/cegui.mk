@@ -31,6 +31,7 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1)/build'
     $(PATCH) -d '$(1)' -p1 < '$(TOP_DIR)/src/cegui-fix-linking-order.patch'
+    $(PATCH) -d '$(1)' -p1 < '$(TOP_DIR)/src/cegui-build-pkgconfig-files.patch'
     cd '$(1)/build' && export CXXFLAGS="$($(PKG)_CXXFLAGS) $(shell $(TARGET)-pkg-config --cflags freetype2 glew freeimage)" \
         && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
