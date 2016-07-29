@@ -68,9 +68,7 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -ansi -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-cegui.exe' \
-        `$(TARGET)-pkg-config --cflags --libs CEGUI-0-OPENGL glut freetype2 libpcre` \
-        -lCEGUIFreeImageImageCodec -lCEGUIXercesParser -lCEGUICoreWindowRendererSet \
-        `$(TARGET)-pkg-config --libs --cflags freeimage xerces-c`
+        `$(TARGET)-pkg-config --cflags --libs CEGUI-0-OPENGL glut gl`
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =
