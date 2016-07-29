@@ -1,0 +1,19 @@
+# Fix linking order.
+#
+# Fixed upstream since commit bf699651740a1206c9ce214b91426db1e709ddc4,
+# which was after version 0.8.7, so remove this patch when upgrading to
+# version 0.8.8 or newer.
+# See: https://bitbucket.org/cegui/cegui/issues/1131/opengl-renderers-fail-to-crosscompile-due
+--- old/cegui/src/RendererModules/OpenGL/CMakeLists.txt	2016-04-23 20:19:40.000000000 +0200
++++ new/cegui/src/RendererModules/OpenGL/CMakeLists.txt	2016-07-29 11:58:25.062131930 +0200
+@@ -52,9 +52,9 @@
+     cegui_add_dependency(${CEGUI_TARGET_NAME} GLM)
+     cegui_add_dependency(${CEGUI_TARGET_NAME} EPOXY)
+ elseif (${CEGUI_USE_GLEW})
+-    cegui_add_dependency(${CEGUI_TARGET_NAME} OPENGL)
+     cegui_add_dependency(${CEGUI_TARGET_NAME} GLM)
+     cegui_add_dependency(${CEGUI_TARGET_NAME} GLEW PUBLIC)
++    cegui_add_dependency(${CEGUI_TARGET_NAME} OPENGL)
+ endif ()
+ 
+ cegui_target_link_libraries(${CEGUI_TARGET_NAME} ${CEGUI_BASE_LIBNAME})
