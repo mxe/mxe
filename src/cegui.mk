@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 # Use pkg-config to set FREEIMAGE_LIB and GLEW_STATIC to prevent "_imp__" errors
+# freeimage and xerces don't have shared builds - disable with $(CMAKE_STATIC_BOOL)
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
         -DCEGUI_BUILD_STATIC_CONFIGURATION=$(CMAKE_STATIC_BOOL) \
@@ -27,14 +28,14 @@ define $(PKG)_BUILD
         -DCEGUI_BUILD_APPLICATION_TEMPLATES=OFF \
         -DCEGUI_BUILD_LUA_MODULE=OFF \
         -DCEGUI_BUILD_PYTHON_MODULES=OFF \
-        -DCEGUI_BUILD_XMLPARSER_XERCES=ON \
+        -DCEGUI_BUILD_XMLPARSER_XERCES=$(CMAKE_STATIC_BOOL) \
         -DCEGUI_BUILD_XMLPARSER_LIBXML2=OFF \
         -DCEGUI_BUILD_XMLPARSER_EXPAT=ON \
         -DCEGUI_BUILD_XMLPARSER_TINYXML=OFF \
         -DCEGUI_BUILD_XMLPARSER_RAPIDXML=OFF \
         -DCEGUI_BUILD_IMAGECODEC_CORONA=OFF \
         -DCEGUI_BUILD_IMAGECODEC_DEVIL=OFF \
-        -DCEGUI_BUILD_IMAGECODEC_FREEIMAGE=ON \
+        -DCEGUI_BUILD_IMAGECODEC_FREEIMAGE=$(CMAKE_STATIC_BOOL) \
         -DCEGUI_BUILD_IMAGECODEC_PVR=OFF \
         -DCEGUI_BUILD_IMAGECODEC_SDL2=OFF \
         -DCEGUI_BUILD_IMAGECODEC_SILLY=OFF \
@@ -61,7 +62,3 @@ define $(PKG)_BUILD
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-cegui.exe' \
         `$(TARGET)-pkg-config --cflags --libs CEGUI-0-OPENGL glut gl`
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
-
-$(PKG)_BUILD_SHARED =
