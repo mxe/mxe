@@ -99,3 +99,29 @@ index 1111111..2222222 100644
  # define _POPPLER_QT4_LIB_EXPORT __declspec(dllexport)
  # define _POPPLER_QT4_LIB_IMPORT __declspec(dllimport)
  #elif defined(__GNUC__)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Wed, 27 Jul 2016 10:29:52 +0200
+Subject: [PATCH] do not try to use mman.h (package mman-win32)
+
+fix https://github.com/mxe/mxe/issues/1455
+
+diff --git a/poppler/CairoFontEngine.cc b/poppler/CairoFontEngine.cc
+index 1111111..2222222 100644
+--- a/poppler/CairoFontEngine.cc
++++ b/poppler/CairoFontEngine.cc
+@@ -48,13 +48,6 @@
+ #include "Gfx.h"
+ #include "Page.h"
+ 
+-#if HAVE_FCNTL_H && HAVE_SYS_MMAN_H && HAVE_SYS_STAT_H
+-#include <fcntl.h>
+-#include <sys/stat.h>
+-#include <sys/mman.h>
+-#define CAN_CHECK_OPEN_FACES 1
+-#endif
+-
+ #ifdef USE_GCC_PRAGMAS
+ #pragma implementation
+ #endif

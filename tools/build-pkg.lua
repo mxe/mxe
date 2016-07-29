@@ -461,7 +461,7 @@ local function gitCheckout(new_branch, deps, item2index, pass_of_deps)
 end
 
 local function gitAdd()
-    os.execute(GIT .. 'add --all .')
+    os.execute(GIT .. 'add --all --force .')
 end
 
 -- return two lists of filepaths under ./usr/

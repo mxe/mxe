@@ -28,6 +28,7 @@ define $(PKG)_BUILD
             --with-target-platform='win$(BITS)'   \
             --prefix='$(PREFIX)/$(TARGET)'        \
             --enable-fftw3f                       \
+            --libdir='$(PREFIX)/$(TARGET)/lib'    \
             $(if $(BUILD_STATIC),                 \
                 --enable-static --disable-shared --disable-jack, \
                 --disable-static --enable-shared)
