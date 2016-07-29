@@ -10,9 +10,6 @@ $(PKG)_FILE     := cegui-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/crayzedsgui/CEGUI%20Mk-2/0.8/$($(PKG)_FILE)?download
 $(PKG)_DEPS     := gcc expat freeglut freeimage freetype libxml2 pcre xerces devil glm glew
 
-# Does not detect the freetype header directory otherwise
-#$(PKG)_CXXFLAGS := -I/home/quintus/repos/privat/projekte/misc/mxe/usr/i686-w64-mingw32.static/include/freetype2 -I/home/quintus/repos/privat/projekte/misc/mxe/usr/i686-w64-mingw32.static/include
-
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/downloads' | \
     $(SED) -n 's,.*href=.*get/v\([0-9]*-[0-9]*-[0-9]*\)\.tar.*,\1,p' | \
@@ -21,19 +18,10 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-# The shell escape is required to make CEGUI find the freetype2 header
-# directory, and to define the FREEIMAGE_LIB macro that prevents "_imp__"
-# errors when linking to freeimage. The glew one is required to
-# define GLEW_STATIC, but this is not completed yet (still gives "_imp__"
-# errors on glew).
-#    cd '$(1)' && $(PATCH) < $(TOP_DIR)/src/cegui-find-glew32.patch
-#        -DCMAKE_CXX_FLAGS="$($(PKG)_CXXFLAGS) $(shell $(TARGET)-pkg-config --cflags freetype2 glew freeimage)"
+# Use pkg-config to set FREEIMAGE_LIB and GLEW_STATIC to prevent "_imp__" errors
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && export CXXFLAGS="$($(PKG)_CXXFLAGS) $(shell $(TARGET)-pkg-config --cflags freetype2 glew freeimage)" \
-        && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DCEGUI_BUILD_STATIC_CONFIGURATION=$(if $(BUILD_STATIC),true,false) \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
+        -DCEGUI_BUILD_STATIC_CONFIGURATION=$(CMAKE_STATIC_BOOL) \
         -DCEGUI_SAMPLES_ENABLED=OFF \
         -DCEGUI_BUILD_TESTS=OFF \
         -DCEGUI_BUILD_APPLICATION_TEMPLATES=OFF \
@@ -61,9 +49,12 @@ define $(PKG)_BUILD
         -DCEGUI_BUILD_RENDERER_OGRE=OFF \
         -DCEGUI_BUILD_RENDERER_OPENGL=ON \
         -DCEGUI_BUILD_RENDERER_OPENGL3=OFF \
-        -DCEGUI_BUILD_RENDERER_OPENGLES=OFF
+        -DCEGUI_BUILD_RENDERER_OPENGLES=OFF \
+        -DCMAKE_CXX_FLAGS="`$(TARGET)-pkg-config --cflags glew freeimage`" \
+        $(SOURCE_DIR)
 
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
     '$(TARGET)-g++' \
         -W -Wall -ansi -pedantic \
