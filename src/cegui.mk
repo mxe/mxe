@@ -27,12 +27,13 @@ endef
 # define GLEW_STATIC, but this is not completed yet (still gives "_imp__"
 # errors on glew).
 #    cd '$(1)' && $(PATCH) < $(TOP_DIR)/src/cegui-find-glew32.patch
+#        -DCMAKE_CXX_FLAGS="$($(PKG)_CXXFLAGS) $(shell $(TARGET)-pkg-config --cflags freetype2 glew freeimage)"
 define $(PKG)_BUILD
     mkdir '$(1)/build'
-    $(PATCH) '$(1)/cmake/FindGLEW.cmake' '$(TOP_DIR)/src/cegui-find-glew32.patch'
-    cd '$(1)/build' && cmake .. \
+    $(PATCH) -d '$(1)' -p1 < '$(TOP_DIR)/src/cegui-fix-linking-order.patch'
+    cd '$(1)/build' && export CXXFLAGS="$($(PKG)_CXXFLAGS) $(shell $(TARGET)-pkg-config --cflags freetype2 glew freeimage)" \
+        && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DCMAKE_CXX_FLAGS="$($(PKG)_CXXFLAGS) $(shell $(TARGET)-pkg-config --cflags freetype2 glew freeimage)" \
         -DCEGUI_BUILD_STATIC_CONFIGURATION=$(if $(BUILD_STATIC),true,false) \
         -DCEGUI_SAMPLES_ENABLED=OFF \
         -DCEGUI_BUILD_TESTS=OFF \
