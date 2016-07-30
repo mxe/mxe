@@ -8,9 +8,9 @@
  * and makes CEGUI draw an "in-game" window into it.
  ************************************************/
 
-#include <GL/freeglut.h>
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/OpenGL/GLRenderer.h>
+#include <GL/freeglut.h>
 
 // We’re lazy
 using namespace CEGUI;
@@ -65,11 +65,11 @@ int main(int argc, char* argv[])
 
   // Create the hypothetical CEGUI root window
   Window* p_root_window = WindowManager::getSingleton().createWindow("DefaultWindow", "root");
-  gui_context.setRootWindow(p_rootwindow);
+  gui_context.setRootWindow(p_root_window);
 
   // Create an actual framed window we can look onto
   FrameWindow* p_frame_window = static_cast<FrameWindow*>(WindowManager::getSingleton().createWindow("TaharezLook/FrameWindow", "testWindow"));
-  p_root_window->addChildWindow(p_frame_window);
+  p_root_window->addChild(p_frame_window);
   p_frame_window->setPosition(UVector2(UDim(0.25f, 0), UDim(0.25f, 0)));
   p_frame_window->setSize(USize(UDim(0.5f, 0), UDim(0.5f, 0)));
   p_frame_window->setText("Hello World!");
