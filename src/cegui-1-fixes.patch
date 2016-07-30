@@ -46,7 +46,7 @@ index 1111111..2222222 100644
  configure_file( doc/doxygen/doxyfile.in doc/doxygen/doxyfile )
  
 -if (UNIX AND NOT APPLE)
-+if (NOT(APPLE))
++if (MINGW OR (UNIX AND NOT APPLE))
      configure_file( cegui/CEGUI.pc.in cegui/CEGUI-${CEGUI_VERSION_MAJOR}.pc @ONLY )
      install(FILES ${PROJECT_BINARY_DIR}/cegui/CEGUI-${CEGUI_VERSION_MAJOR}.pc DESTINATION ${CEGUI_PKGCONFIG_INSTALL_DIR})
  
