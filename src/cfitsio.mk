@@ -27,7 +27,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-cfitsio.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-cfitsio.exe' \
         `'$(TARGET)-pkg-config' cfitsio --cflags --libs`
 endef
 

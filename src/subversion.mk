@@ -43,7 +43,7 @@ define $(PKG)_BUILD
         install
     '$(TARGET)-gcc' \
        -mwindows -W -Wall -Werror -pedantic \
-       '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-subversion.exe' \
+       '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-subversion.exe' \
        `'$(TARGET)-pkg-config' libsvn_client --cflags --libs` -lole32
 endef
 

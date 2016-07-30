@@ -49,6 +49,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -pedantic -std=gnu++0x \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-graphicsmagick.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-graphicsmagick.exe' \
         `'$(TARGET)-pkg-config' GraphicsMagick++ --cflags --libs` -llzma
 endef

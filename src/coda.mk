@@ -33,6 +33,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -std=c99 -W -Wall -Werror -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-coda.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-coda.exe' \
         -lcoda
 endef

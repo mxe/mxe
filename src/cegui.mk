@@ -53,7 +53,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -ansi -pedantic \
-         '$(2).cpp' \
+         '$(TEST_FILE)' \
          `'$(TARGET)-pkg-config' --cflags --libs CEGUI-OPENGL glut freetype2 libpcre` \
          -lCEGUIFreeImageImageCodec -lCEGUIXercesParser -lCEGUIFalagardWRBase \
          `'$(TARGET)-pkg-config' --libs --cflags freeimage xerces-c` \

@@ -35,7 +35,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtk2.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk2.exe' \
         `'$(TARGET)-pkg-config' gtk+-2.0 gmodule-2.0 --cflags --libs`
 endef
 

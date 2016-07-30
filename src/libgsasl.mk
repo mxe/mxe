@@ -29,6 +29,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgsasl.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libgsasl.exe' \
         `'$(TARGET)-pkg-config' libgsasl --cflags --libs`
 endef

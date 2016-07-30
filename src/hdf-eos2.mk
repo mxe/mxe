@@ -29,7 +29,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -std=c99 -W -Wall -Werror -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         -lhdfeos -lmfhdf -ldf -lz -ljpeg -lportablexdr -lws2_32
 endef
 
