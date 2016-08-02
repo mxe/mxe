@@ -28,6 +28,6 @@ define $(PKG)_BUILD
     # Don't use `-ansi`, as lensfun uses C++-style `//` comments.
     '$(TARGET)-gcc' \
         -W -Wall -Werror \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lensfun.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-lensfun.exe' \
         `'$(TARGET)-pkg-config' lensfun glib-2.0 --cflags --libs`
 endef

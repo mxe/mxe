@@ -25,7 +25,7 @@ define $(PKG)_BUILD
         -Drun_res=1 -Drun_res__TRYRUN_OUTPUT=""
     $(MAKE) -C '$(1)'/build -j '$(JOBS)' install VERBOSE=1
 
-    '$(TARGET)-g++' -W -Wall '$(2).cpp' -o \
+    '$(TARGET)-g++' -W -Wall '$(TEST_FILE)' -o \
         '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' --cflags --libs eigen3`
 endef

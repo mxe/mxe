@@ -27,7 +27,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -std=c99 -W -Wall -Werror -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         -lhe5_hdfeos -lhdf5_hl -lhdf5 -lz
 endef
 

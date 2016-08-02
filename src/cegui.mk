@@ -81,6 +81,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -ansi -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-cegui.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-cegui.exe' \
         `$(TARGET)-pkg-config --cflags --libs CEGUI-0-OPENGL`
 endef
