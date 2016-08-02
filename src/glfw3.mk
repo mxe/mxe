@@ -33,7 +33,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-glfw3.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-glfw3.exe' \
         `'$(TARGET)-pkg-config' glfw3 --cflags --libs`
 endef
 

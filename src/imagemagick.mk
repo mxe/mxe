@@ -33,6 +33,6 @@ define $(PKG)_BUILD
 
     '$(1)'/libtool --mode=link --tag=CXX \
         '$(TARGET)-g++' -Wall -Wextra -std=gnu++0x \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-imagemagick.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-imagemagick.exe' \
         `'$(TARGET)-pkg-config' ImageMagick++ --cflags --libs`
 endef

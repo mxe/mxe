@@ -26,7 +26,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-luabind.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-luabind.exe' \
         -llua -lluabind
 endef
 

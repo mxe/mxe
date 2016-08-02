@@ -23,6 +23,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --libs`
 endef

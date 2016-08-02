@@ -4,49 +4,82 @@ See index.html for further information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Quintus <quintus@quintilianus.eu>
-Date: Fri, 29 Jul 2016 23:11:19 +1000
-Subject: [PATCH] Fix linking order.
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 3 Aug 2016 03:19:48 +1000
+Subject: [PATCH] cegui: separate shared and static builds
 
-Fixed upstream since commit bf699651740a1206c9ce214b91426db1e709ddc4,
-which was after version 0.8.7, so remove this patch when upgrading to
-version 0.8.8 or newer.
-See: https://bitbucket.org/cegui/cegui/issues/1131/opengl-renderers-fail-to-crosscompile-due
+minimal workaround till correctly implemented upstream:
+https://bitbucket.org/cegui/cegui/issues/1132/libxml2-based-xml-parser-fails-to#comment-29553011
 
-diff --git a/cegui/src/RendererModules/OpenGL/CMakeLists.txt b/cegui/src/RendererModules/OpenGL/CMakeLists.txt
+diff --git a/cmake/CEGUIMacros.cmake b/cmake/CEGUIMacros.cmake
 index 1111111..2222222 100644
---- a/cegui/src/RendererModules/OpenGL/CMakeLists.txt
-+++ b/cegui/src/RendererModules/OpenGL/CMakeLists.txt
-@@ -52,9 +52,9 @@ if (${CEGUI_USE_EPOXY})
-     cegui_add_dependency(${CEGUI_TARGET_NAME} GLM)
-     cegui_add_dependency(${CEGUI_TARGET_NAME} EPOXY)
- elseif (${CEGUI_USE_GLEW})
--    cegui_add_dependency(${CEGUI_TARGET_NAME} OPENGL)
-     cegui_add_dependency(${CEGUI_TARGET_NAME} GLM)
-     cegui_add_dependency(${CEGUI_TARGET_NAME} GLEW PUBLIC)
-+    cegui_add_dependency(${CEGUI_TARGET_NAME} OPENGL)
- endif ()
+--- a/cmake/CEGUIMacros.cmake
++++ b/cmake/CEGUIMacros.cmake
+@@ -49,7 +49,9 @@ endmacro()
+ # Add libs to a target, and correctly handles static versions of libs built by the project
+ #
+ macro (cegui_target_link_libraries _TARGET_NAME)
+-    target_link_libraries(${_TARGET_NAME} ${ARGN})
++    if (CEGUI_BUILD_SHARED_CONFIGURATION)
++        target_link_libraries(${_TARGET_NAME} ${ARGN})
++    endif()
  
- cegui_target_link_libraries(${CEGUI_TARGET_NAME} ${CEGUI_BASE_LIBNAME})
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Quintus <quintus@quintilianus.eu>
-Date: Fri, 29 Jul 2016 23:12:27 +1000
-Subject: [PATCH] Build .pc files on Windows
-
-CEGUI does not build the .pc files when targetting Windows.
-See upstream ticket: https://bitbucket.org/cegui/cegui/issues/1135
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -599,7 +599,7 @@ configure_file( cegui/include/CEGUI/ModuleConfig.h.in cegui/include/CEGUI/Module
- configure_file( samples/common/include/CEGUISamplesConfig.h.in samples/common/include/CEGUISamplesConfig.h )
- configure_file( doc/doxygen/doxyfile.in doc/doxygen/doxyfile )
+     get_target_property(_TARGET_EXISTS ${_TARGET_NAME}_Static TYPE)
+     if (_TARGET_EXISTS)
+@@ -167,8 +169,10 @@ macro (cegui_add_dependency _TARGET_NAME _DEP_NAME)
+     ###########################################################################
+     #                    NON-STATIC VERSION OF TARGET
+     ###########################################################################
+-    if (${_DEP_NAME}_DEFINITIONS)
+-        set_property( TARGET ${_TARGET_NAME} APPEND PROPERTY COMPILE_DEFINITIONS ${${_DEP_NAME}_DEFINITIONS} )
++    if (CEGUI_BUILD_SHARED_CONFIGURATION)
++        if (${_DEP_NAME}_DEFINITIONS)
++            set_property( TARGET ${_TARGET_NAME} APPEND PROPERTY COMPILE_DEFINITIONS ${${_DEP_NAME}_DEFINITIONS} )
++        endif()
+     endif()
+     if (${_DEP_NAME}_COMPILE_FLAGS)
+         set_property( TARGET ${_TARGET_NAME} APPEND PROPERTY COMPILE_FLAGS ${${_DEP_NAME}_COMPILE_FLAGS} )
+@@ -252,10 +256,12 @@ macro (cegui_add_library_impl _LIB_NAME _IS_MODULE _SOURCE_FILES_VAR _HEADER_FIL
+     ###########################################################################
+     #                       SHARED LIBRARY SET UP
+     ###########################################################################
+-    add_library(${_LIB_NAME} ${_LIB_TYPE} ${${_SOURCE_FILES_VAR}} ${${_HEADER_FILES_VAR}})
+-    set_target_properties(${_LIB_NAME} PROPERTIES DEFINE_SYMBOL ${_CEGUI_EXPORT_DEFINE})
++    if (CEGUI_BUILD_SHARED_CONFIGURATION)
++        add_library(${_LIB_NAME} ${_LIB_TYPE} ${${_SOURCE_FILES_VAR}} ${${_HEADER_FILES_VAR}})
++        set_target_properties(${_LIB_NAME} PROPERTIES DEFINE_SYMBOL ${_CEGUI_EXPORT_DEFINE})
++    endif()
  
--if (UNIX AND NOT APPLE)
-+if (MINGW OR (UNIX AND NOT APPLE))
-     configure_file( cegui/CEGUI.pc.in cegui/CEGUI-${CEGUI_VERSION_MAJOR}.pc @ONLY )
-     install(FILES ${PROJECT_BINARY_DIR}/cegui/CEGUI-${CEGUI_VERSION_MAJOR}.pc DESTINATION ${CEGUI_PKGCONFIG_INSTALL_DIR})
+-    if (NOT CEGUI_BUILD_SHARED_LIBS_WITH_STATIC_DEPENDENCIES)
++    if (NOT(CEGUI_BUILD_SHARED_LIBS_WITH_STATIC_DEPENDENCIES) AND CEGUI_BUILD_SHARED_CONFIGURATION)
+         # Starting with CMake 2.8.12 LINK_INTERFACE_LIBRARIES was renamed to INTERFACE_LINK_LIBRARIES
+         if (${CMAKE_VERSION} VERSION_GREATER 2.8.12 OR ${CMAKE_VERSION} VERSION_EQUAL 2.8.12)
+             set_target_properties(${_LIB_NAME} PROPERTIES
+@@ -289,7 +295,7 @@ macro (cegui_add_library_impl _LIB_NAME _IS_MODULE _SOURCE_FILES_VAR _HEADER_FIL
+     # Do not version modules, since we dlopen these directly and need to know
+     # the name is what we think it will be (and not rely on symlinks which will
+     # not be installed always, but usually only as part of *-dev packages).
+-    if (NOT ${_IS_MODULE} AND NOT ANDROID)
++    if (NOT ${_IS_MODULE} AND NOT ANDROID AND CEGUI_BUILD_SHARED_CONFIGURATION)
+         if (NOT APPLE OR CEGUI_APPLE_DYLIB_SET_VERSION_INFO)
+             set_target_properties(${_LIB_NAME} PROPERTIES
+                 VERSION ${CEGUI_ABI_VERSION}
+@@ -308,11 +314,13 @@ macro (cegui_add_library_impl _LIB_NAME _IS_MODULE _SOURCE_FILES_VAR _HEADER_FIL
+             set(_CEGUI_LIB_DEST ${CEGUI_LIB_INSTALL_DIR})
+         endif()
  
+-        install(TARGETS ${_LIB_NAME}
+-          RUNTIME DESTINATION bin COMPONENT cegui_bin
+-          LIBRARY DESTINATION ${_CEGUI_LIB_DEST} COMPONENT cegui_lib
+-          ARCHIVE DESTINATION ${CEGUI_LIB_INSTALL_DIR} COMPONENT cegui_devel
+-        )
++        if (CEGUI_BUILD_SHARED_CONFIGURATION)
++            install(TARGETS ${_LIB_NAME}
++              RUNTIME DESTINATION bin COMPONENT cegui_bin
++              LIBRARY DESTINATION ${_CEGUI_LIB_DEST} COMPONENT cegui_lib
++              ARCHIVE DESTINATION ${CEGUI_LIB_INSTALL_DIR} COMPONENT cegui_devel
++            )
++        endif()
+ 
+         if (CEGUI_BUILD_STATIC_CONFIGURATION)
+             install(TARGETS ${_LIB_NAME}_Static
