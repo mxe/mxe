@@ -29,7 +29,9 @@ endef
 # freeimage and xerces don't have shared builds - disable with $(CMAKE_STATIC_BOOL)
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
+        -DCEGUI_BUILD_SHARED_CONFIGURATION=$(CMAKE_SHARED_BOOL) \
         -DCEGUI_BUILD_STATIC_CONFIGURATION=$(CMAKE_STATIC_BOOL) \
+        -DCEGUI_BUILD_STATIC_FACTORY_MODULE=$(CMAKE_STATIC_BOOL) \
         -DCEGUI_INSTALL_PKGCONFIG=ON \
         -DCEGUI_SAMPLES_ENABLED=OFF \
         -DCEGUI_BUILD_TESTS=OFF \
@@ -65,8 +67,20 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
+    # reconfigure pc files
+    # https://bitbucket.org/cegui/cegui/issues/1135/pkg-config-files-not-installed-when-using#comment-29605718
+    $(SED) -i 's/Requires:\(.*\)/Requires: \1 gl glew glut/' '$(PREFIX)/$(TARGET)/lib/pkgconfig/CEGUI-0-OPENGL.pc'
+    $(if $(BUILD_STATIC),\
+        $(SED) -i 's#\(-lCEGUI.*-0\>\)#\1_Static#g' '$(PREFIX)/$(TARGET)/lib/pkgconfig/CEGUI-0'*.pc
+        (echo 'Libs: -lCEGUIFreeImageImageCodec_Static \
+                     -lCEGUIXercesParser_Static \
+                     -lCEGUICoreWindowRendererSet_Static';\
+         echo 'Requires.private: freeimage freetype2 libpcre xerces-c';\
+         echo 'Cflags.private: -DCEGUI_STATIC';\
+        ) >> '$(PREFIX)/$(TARGET)/lib/pkgconfig/CEGUI-0.pc')
+
     '$(TARGET)-g++' \
         -W -Wall -ansi -pedantic \
         '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-cegui.exe' \
-        `$(TARGET)-pkg-config --cflags --libs CEGUI-0-OPENGL glut gl`
+        `$(TARGET)-pkg-config --cflags --libs CEGUI-0-OPENGL`
 endef
