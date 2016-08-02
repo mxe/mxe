@@ -3,11 +3,11 @@
 
 PKG             := cegui
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.8.7
-$(PKG)_CHECKSUM := b351e8957716d9c170612c13559e49530ef911ae4bac2feeb2dacd70b430e518
-$(PKG)_SUBDIR   := cegui-$($(PKG)_VERSION)
-$(PKG)_FILE     := cegui-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/crayzedsgui/CEGUI%20Mk-2/0.8/$($(PKG)_FILE)?download
+$(PKG)_VERSION  := 9726a2b505fb
+$(PKG)_CHECKSUM := 14b3da7f1f89693192cd9afbf2126f4519508245ed156de893828e31ce676e9e
+$(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := gcc expat freeglut freeimage freetype libxml2 pcre xerces devil glm glew
 
 define $(PKG)_UPDATE
@@ -18,11 +18,19 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
+# track dev branch v0-8 until next release
+define $(PKG)_UPDATE
+    $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/commits/branch/v0-8' | \
+    $(SED) -n 's,.*cegui/cegui/commits/\([^?]\{12\}\).*at=.*,\1,p' | \
+    head -1
+endef
+
 # Use pkg-config to set FREEIMAGE_LIB and GLEW_STATIC to prevent "_imp__" errors
 # freeimage and xerces don't have shared builds - disable with $(CMAKE_STATIC_BOOL)
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
         -DCEGUI_BUILD_STATIC_CONFIGURATION=$(CMAKE_STATIC_BOOL) \
+        -DCEGUI_INSTALL_PKGCONFIG=ON \
         -DCEGUI_SAMPLES_ENABLED=OFF \
         -DCEGUI_BUILD_TESTS=OFF \
         -DCEGUI_BUILD_APPLICATION_TEMPLATES=OFF \
