@@ -34,7 +34,7 @@ define $(PKG)_BUILD
     '$(TARGET)-ocamlfind' opt -linkpkg \
         -package camlimages \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        < '$(2).ml'
+        < '$(TEST_FILE)'
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =

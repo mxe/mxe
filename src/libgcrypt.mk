@@ -30,7 +30,7 @@ define $(PKG)_MAKE
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libgcrypt.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libgcrypt.exe' \
         `$(TARGET)-libgcrypt-config --cflags --libs`
 endef
 

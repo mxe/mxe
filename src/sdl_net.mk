@@ -29,7 +29,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_net.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_net.exe' \
         `'$(TARGET)-pkg-config' SDL_net --cflags --libs`
 endef
 

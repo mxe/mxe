@@ -40,6 +40,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc'                               \
         -W -Wall -Werror -ansi -pedantic          \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-aubio.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-aubio.exe' \
         `'$(TARGET)-pkg-config' aubio --cflags --libs`
 endef

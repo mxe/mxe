@@ -28,7 +28,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -std=c99 -pedantic \
-        '$(2).c' \
+        '$(TEST_FILE)' \
         -o '$(PREFIX)/$(TARGET)/bin/test-libaacs.exe' \
         `'$(TARGET)-pkg-config' libaacs --cflags --libs`
 endef
