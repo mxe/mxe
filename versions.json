@@ -21,7 +21,7 @@
     "cairomm": "1.11.2",
     "cblas": "1",
     "ccfits": "2.4",
-    "cegui": "0.7.9",
+    "cegui": "9726a2b505fb",
     "cfitsio": "3370",
     "cgal": "4.6.3",
     "check": "0.10.0",
