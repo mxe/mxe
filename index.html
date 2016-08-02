@@ -957,6 +957,18 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <a href="#issue-non-multilib">known issues</a>
         </dd>
 
+    <dt>make foo_SOURCE_TREE=/path/to/local/source</dt>
+
+        <dd>
+        build using local source tree for package "foo", bypassing
+        download, checksum and patching
+        </dd>
+        <dd>
+        <strong>N.B.</strong> ensure "foo" has an out-of-source
+        build configured to avoid generation of build artefacts
+        in local tree
+        </dd>
+
     <dt>make check-requirements</dt>
 
         <dd>
