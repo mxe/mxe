@@ -644,10 +644,13 @@ local function comparePasses(item, new_files, prev_file2item, prev_files)
         end
         files_set[file] = true
     end
-    for _, file in ipairs(prev_files) do
-        if not files_set[file] then
-            log('Item %s installs a file on first pass only: %s',
-                item, file)
+    if prev_files then
+        -- prev_files is nil, if the first pass failed
+        for _, file in ipairs(prev_files) do
+            if not files_set[file] then
+                log('Item %s installs a file on first pass only: %s',
+                    item, file)
+            end
         end
     end
     -- TODO compare contents of files (nm for binaries)
