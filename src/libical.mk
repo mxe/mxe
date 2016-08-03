@@ -20,7 +20,9 @@ define $(PKG)_BUILD
         -DSHARED_ONLY=$(CMAKE_SHARED_BOOL) \
         '$(SOURCE_DIR)'
 
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    # libs are built twice, causing parallel failures
+    # https://github.com/libical/libical/issues/174
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
     '$(TARGET)-gcc' \
