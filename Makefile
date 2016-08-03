@@ -409,6 +409,7 @@ PKG_COL_WIDTH    := $(call plus,2,$(call LIST_NMAX, $(sort $(call map, strlen, $
 MAX_TARGET_WIDTH := $(call LIST_NMAX, $(sort $(call map, strlen, $(MXE_TARGETS))))
 TARGET_COL_WIDTH := $(call subtract,100,$(call plus,$(PKG_COL_WIDTH),$(MAX_TARGET_WIDTH)))
 PRINTF_FMT       := printf '%-11s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
+RTRIM            := $(SED) 's, \+$$$$,,'
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
@@ -445,7 +446,7 @@ download-only-$($(1)_FILE)::
 	$(and $($(1)_URL),
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
-	    $(PRINTF_FMT) '[download]' '$(1)'; \
+	    $(PRINTF_FMT) '[download]' '$(1)' | $(RTRIM); \
 	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    grep 'MXE Warning' '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
@@ -499,10 +500,14 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           print-git-oneline
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
-	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)',
-	    @$(PRINTF_FMT) '[no-build]' '$(1)' '$(3)')
+	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)' | $(RTRIM)
+	,
+	    @$(PRINTF_FMT) '[no-build]' '$(1)' '$(3)' | $(RTRIM)
+	)
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3))),
-	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))')
+	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))' \
+	    | $(RTRIM)
+	)
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
 	@if ! (time $(PRELOAD) WINEPREFIX='$(2)/readonly' $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
