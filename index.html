@@ -2945,7 +2945,9 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         Adjust the comments,
         fill in the <code>$(PKG)_*</code> fields.
         </p>
-
+	<p>
+	<b><code>$(PKG)_CHECKSUM</code> must be computed with openssl sh1 &lt;archive&gt;</b>
+	</p>
         <p>
         To fill the <code>$(PKG)_CHECKSUM</code> field, use a command such as (for file gettext.mk):
         </p>
