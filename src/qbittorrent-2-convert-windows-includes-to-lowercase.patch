@@ -1,0 +1,98 @@
+This file is part of MXE.
+See index.html for further information.
+
+From 8976424272266837b7bf7574e555d13694d244e3 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 01:58:17 +0200
+Subject: [PATCH 1/3] convert includes like <Windows.h> to lowercase
+
+---
+ src/app/application.cpp                     |    2 +-
+ src/core/misc.cpp                           |    2 +-
+ src/core/preferences.cpp                    |    2 +-
+ src/core/qtlibtorrent/filterparserthread.h  |    2 +-
+ src/core/qtlibtorrent/qtorrenthandle.cpp    |    2 +-
+ src/gui/powermanagement/powermanagement.cpp |    2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/app/application.cpp b/src/app/application.cpp
+index 2594e9a..90a43e1 100644
+--- a/src/app/application.cpp
++++ b/src/app/application.cpp
+@@ -35,7 +35,7 @@
+ 
+ #ifndef DISABLE_GUI
+ #ifdef Q_OS_WIN
+-#include <Windows.h>
++#include <windows.h>
+ #include <QSharedMemory>
+ #include <QSessionManager>
+ #endif // Q_OS_WIN
+diff --git a/src/core/misc.cpp b/src/core/misc.cpp
+index 5e551ff..632b5ee 100644
+--- a/src/core/misc.cpp
++++ b/src/core/misc.cpp
+@@ -54,7 +54,7 @@
+ 
+ #ifdef Q_OS_WIN
+ #include <windows.h>
+-#include <PowrProf.h>
++#include <powrprof.h>
+ const int UNLEN = 256;
+ #else
+ #include <unistd.h>
+diff --git a/src/core/preferences.cpp b/src/core/preferences.cpp
+index 1c43927..0759b5a 100644
+--- a/src/core/preferences.cpp
++++ b/src/core/preferences.cpp
+@@ -46,7 +46,7 @@
+ #endif
+ 
+ #ifdef Q_OS_WIN
+-#include <ShlObj.h>
++#include <shlobj.h>
+ #include <winreg.h>
+ #endif
+ 
+diff --git a/src/core/qtlibtorrent/filterparserthread.h b/src/core/qtlibtorrent/filterparserthread.h
+index a950865..36536df 100644
+--- a/src/core/qtlibtorrent/filterparserthread.h
++++ b/src/core/qtlibtorrent/filterparserthread.h
+@@ -45,7 +45,7 @@ using namespace std;
+ // P2B Stuff
+ #include <string.h>
+ #ifdef Q_OS_WIN
+-#include <Winsock2.h>
++#include <winsock2.h>
+ #else
+ #include <arpa/inet.h>
+ #endif
+diff --git a/src/core/qtlibtorrent/qtorrenthandle.cpp b/src/core/qtlibtorrent/qtorrenthandle.cpp
+index a1cf5a3..bbe7bfb 100644
+--- a/src/core/qtlibtorrent/qtorrenthandle.cpp
++++ b/src/core/qtlibtorrent/qtorrenthandle.cpp
+@@ -48,7 +48,7 @@
+ #include <libtorrent/entry.hpp>
+ 
+ #ifdef Q_OS_WIN
+-#include <Windows.h>
++#include <windows.h>
+ #endif
+ 
+ using namespace libtorrent;
+diff --git a/src/gui/powermanagement/powermanagement.cpp b/src/gui/powermanagement/powermanagement.cpp
+index ec07aa8..c51b229 100644
+--- a/src/gui/powermanagement/powermanagement.cpp
++++ b/src/gui/powermanagement/powermanagement.cpp
+@@ -40,7 +40,7 @@
+ #endif
+ 
+ #ifdef Q_OS_WIN
+-#include <Windows.h>
++#include <windows.h>
+ #endif
+ 
+ PowerManagement::PowerManagement(QObject *parent) : QObject(parent), m_busy(false)
+-- 
+1.7.10.4
+
