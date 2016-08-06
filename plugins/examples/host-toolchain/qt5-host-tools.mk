@@ -5,7 +5,7 @@ PKG             := $(basename $(notdir $(lastword $(MAKEFILE_LIST))))
 $(PKG)_FILE      = $(qtbase_FILE)
 $(PKG)_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /qtbase-[0-9]*.patch, $(TOP_DIR)/src))))
 $(PKG)_SUBDIR    = $(qtbase_SUBDIR)
-$(PKG)_DEPS     := gcc gcc-host make-w32-bin qtbase
+$(PKG)_DEPS     := gcc gcc-host make-w32-bin qtbase winpthreads-host
 
 # main configure options: -platform -host-option -external-hostbindir
 # further testing needed: -prefix -extprefix -hostprefix -sysroot -no-gcc-sysroot
@@ -15,7 +15,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,BUILD_ON_MAC=yes,BUILD_ON_MAC=no,g' '$(1)/configure'
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         -prefix '$(PREFIX)/$(TARGET)/qt5' \
-        -static \
+        $(if $(BUILD_STATIC),-static,-shared) \
         -release \
         -c++std c++11 \
         -platform win32-g++ \

@@ -42,6 +42,17 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
+    # shared libgcc isn't installed to version-specific locations
+    # so install correctly to simplify cleanup (see gcc.mk)
+    $(and $(BUILD_SHARED),
+    $(MAKE) -C '$(BUILD_DIR)/$(TARGET)/libgcc' -j 1 \
+        toolexecdir='$(PREFIX)/$(TARGET)/bin' \
+        SHLIB_SLIBDIR_QUAL= \
+        install-shared
+    -rm -v '$(PREFIX)/$(TARGET)/lib/gcc/$(TARGET)/'libgcc_s*.dll
+    -rm -v '$(PREFIX)/$(TARGET)/lib/gcc/$(TARGET)/lib/'libgcc_s*.a
+    -rmdir '$(PREFIX)/$(TARGET)/lib/gcc/$(TARGET)/lib/')
+
     # test compilation on host
     # strip and compare cross and host-built tests
     cp '$(TOP_DIR)/src/pthreads-libgomp-test.c' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).c'
