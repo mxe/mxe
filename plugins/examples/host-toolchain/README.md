@@ -72,9 +72,6 @@ On a windows machine, execute
 `usr\{target}\qt5\test-qt5-host-tools\test-qt5-host-tools.bat` to build and
 confirm the normal `qt` test with the cross-compiled `qtbase` libraries.
 
-**N.B.** shared `gcc` doesn't work with the test program. To build a shared
-test, use the additional option `gcc-host_CONFIGURE_OPTS=--disable-shared`.
-
 Why?
 ----
 
