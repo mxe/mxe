@@ -8,7 +8,8 @@ $(PKG)_CHECKSUM := 14b3da7f1f89693192cd9afbf2126f4519508245ed156de893828e31ce676
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
-$(PKG)_DEPS     := gcc expat freeglut freeimage freetype libxml2 pcre xerces devil glm glew
+$(PKG)_DEPS     := gcc expat freeglut freeimage freetype fribidi glew \
+                   glfw3 glm libxml2 minizip pcre xerces
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/downloads' | \
@@ -27,6 +28,8 @@ endef
 
 # Use pkg-config to set FREEIMAGE_LIB and GLEW_STATIC to prevent "_imp__" errors
 # freeimage and xerces don't have shared builds - disable with $(CMAKE_STATIC_BOOL)
+# devil appears to be dead, tinyxml is deprecated, lua needs toluapp
+# boost and sdl2 aren't detected
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
         -DCEGUI_BUILD_SHARED_CONFIGURATION=$(CMAKE_SHARED_BOOL) \
@@ -39,7 +42,7 @@ define $(PKG)_BUILD
         -DCEGUI_BUILD_LUA_MODULE=OFF \
         -DCEGUI_BUILD_PYTHON_MODULES=OFF \
         -DCEGUI_BUILD_XMLPARSER_XERCES=$(CMAKE_STATIC_BOOL) \
-        -DCEGUI_BUILD_XMLPARSER_LIBXML2=OFF \
+        -DCEGUI_BUILD_XMLPARSER_LIBXML2=ON \
         -DCEGUI_BUILD_XMLPARSER_EXPAT=ON \
         -DCEGUI_BUILD_XMLPARSER_TINYXML=OFF \
         -DCEGUI_BUILD_XMLPARSER_RAPIDXML=OFF \
