@@ -14,14 +14,16 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && mkdir build
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
         -DUSE_BUILTIN_TZDATA=true \
-        -DSTATIC_ONLY=$(if $(BUILD_STATIC),true,false) \
-        -DSHARED_ONLY=$(if $(BUILD_STATIC),false,true)
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/build' -j 1 install
+        -DSTATIC_ONLY=$(CMAKE_STATIC_BOOL) \
+        -DSHARED_ONLY=$(CMAKE_SHARED_BOOL) \
+        '$(SOURCE_DIR)'
+
+    # libs are built twice, causing parallel failures
+    # https://github.com/libical/libical/issues/174
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
