@@ -44,7 +44,7 @@
     "dcmtk": "3.6.0",
     "devil": "1.7.8",
     "djvulibre": "3.5.27",
-    "dlfcn-win32": "1.0.0",
+    "dlfcn-win32": "e19bf07",
     "eigen": "3.2.5",
     "exiv2": "0.25",
     "expat": "2.2.0",
