@@ -10,6 +10,8 @@ $(PKG)_FILE     := $(PKG)_$(subst .,_,$($(PKG)_VERSION)).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
+$(PKG)_MESSAGE  :=*** tinyxml is deprecated - please use tinyxml2 ***
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/tinyxml/files/tinyxml/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \

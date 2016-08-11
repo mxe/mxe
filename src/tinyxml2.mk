@@ -3,8 +3,8 @@
 
 PKG             := tinyxml2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.0
-$(PKG)_CHECKSUM := 128aa1553e88403833e0cccf1b651f45ce87bc207871f53fdcc8e7f9ec795747
+$(PKG)_VERSION  := 4.0.1
+$(PKG)_CHECKSUM := 14b38ef25cc136d71339ceeafb4856bb638d486614103453eccd323849267f20
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/leethomason/tinyxml2/archive/$($(PKG)_VERSION).tar.gz
@@ -17,10 +17,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON)
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
+        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DBUILD_STATIC_LIBS=$(CMAKE_STATIC_BOOL) \
+        '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+    '$(TARGET)-g++' \
+        -W -Wall -ansi -pedantic \
+        '$(SOURCE_DIR)/xmltest.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
