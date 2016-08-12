@@ -201,17 +201,25 @@ PKG_PATCHES   = $(if $(findstring undefined,$(origin $(1)_PATCHES)), \
                     $($(1)_PATCHES))
 
 define PREPARE_PKG_SOURCE
-    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
-    cd '$(2)/$($(1)_SUBDIR)'
-    $(foreach PKG_PATCH,$(PKG_PATCHES),
-        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
+    $(if $($(1)_SOURCE_TREE),\
+        ln -si '$(realpath $($(1)_SOURCE_TREE))' '$(2)/$($(1)_SUBDIR)'
+    $(else),\
+        cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
+        cd '$(2)/$($(1)_SUBDIR)'
+        $(foreach PKG_PATCH,$(PKG_PATCHES),
+            (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
+    )
 endef
 
 PKG_CHECKSUM = \
     openssl dgst -sha256 '$(PKG_DIR)/$($(1)_FILE)' 2>/dev/null | $(SED) -n 's,^.*\([0-9a-f]\{64\}\)$$,\1,p'
 
 CHECK_PKG_ARCHIVE = \
-    [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1))`" ]
+    $(if $($(1)_SOURCE_TREE),\
+        $(PRINTF_FMT) '[local]' '$(1)' '$($(1)_SOURCE_TREE)' | $(RTRIM)\
+    $(else),\
+        [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1))`" ]\
+    )
 
 ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
@@ -222,6 +230,9 @@ BACKUP_DOWNLOAD = \
     $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`))
 
 DOWNLOAD_PKG_ARCHIVE = \
+    $(if $($(1)_SOURCE_TREE),\
+        true\
+    $(else),\
         mkdir -p '$(PKG_DIR)' && ( \
             $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' \
             $(if $($(1)_URL_2), \
@@ -237,7 +248,8 @@ DOWNLOAD_PKG_ARCHIVE = \
         ( echo; \
           echo 'Download failed!'; \
           echo; \
-          rm -f '$(PKG_DIR)/$($(1)_FILE)'; )
+          rm -f '$(PKG_DIR)/$($(1)_FILE)'; )\
+    )
 
 # open issue from 2002:
 # http://savannah.gnu.org/bugs/?712
@@ -538,8 +550,8 @@ build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): BUILD_TYPE = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),debug,release)
 build-only-$(1)_$(3): BUILD_TYPE_SUFFIX = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),d)
-build-only-$(1)_$(3): SOURCE_DIR = $(2)/$($(1)_SUBDIR)
-build-only-$(1)_$(3): BUILD_DIR  = $(2)/$($(1)_SUBDIR).build_
+build-only-$(1)_$(3): SOURCE_DIR = $(or $($(1)_SOURCE_TREE),$(2)/$($(1)_SUBDIR))
+build-only-$(1)_$(3): BUILD_DIR  = $(2)/$(if $($(1)_SOURCE_TREE),local,$($(1)_SUBDIR)).build_
 build-only-$(1)_$(3): TEST_FILE  = $($(1)_TEST_FILE)
 build-only-$(1)_$(3): CMAKE_RUNRESULT_FILE = $(PREFIX)/share/cmake/modules/TryRunResults.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
