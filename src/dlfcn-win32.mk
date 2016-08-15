@@ -22,4 +22,13 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
     $(MAKE) -C '$(1)' -j '$(JOBS)' test.exe testdll.dll
+
+    # create pkg-config file - mostly for psapi dependency
+    mkdir -p '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $(PKG)'; \
+     echo 'Libs: -ldl'; \
+     echo 'Libs.private: -lpsapi'; \
+    ) > '$(PREFIX)/$(TARGET)/lib/pkgconfig/dlfcn.pc'
 endef
