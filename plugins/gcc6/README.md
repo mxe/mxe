@@ -65,6 +65,7 @@ versions [[4](https://github.com/mxe/mxe/commit/a1cc019)].
 | smpeg              | all                                     | [57cb6bb](https://github.com/mxe/mxe/commit/57cb6bb) |
 | smpeg2             | all                                     | [1a42cbc](https://github.com/mxe/mxe/commit/1a42cbc) |
 | ucl                | all                                     | [0ac2a77](https://github.com/mxe/mxe/commit/0ac2a77) |
+| upx                | all                                     | [f907a06](https://github.com/mxe/mxe/commit/f907a06) |
 | vtk                | static (all)                            | -                                                    |
 | vtk6               | all                                     | -                                                    |
 | wxwidgets          | static (all)                            | [6869e3b](https://github.com/mxe/mxe/commit/6869e3b) |
