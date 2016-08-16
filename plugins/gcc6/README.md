@@ -64,7 +64,7 @@ versions [[4](https://github.com/mxe/mxe/commit/a1cc019)].
 | sdl_sound          | static (all)                            | -                                                    |
 | smpeg              | all                                     | [57cb6bb](https://github.com/mxe/mxe/commit/57cb6bb) |
 | smpeg2             | all                                     | [1a42cbc](https://github.com/mxe/mxe/commit/1a42cbc) |
-| ucl                | all                                     | -                                                    |
+| ucl                | all                                     | [0ac2a77](https://github.com/mxe/mxe/commit/0ac2a77) |
 | vtk                | static (all)                            | -                                                    |
 | vtk6               | all                                     | -                                                    |
 | wxwidgets          | static (all)                            | [6869e3b](https://github.com/mxe/mxe/commit/6869e3b) |
