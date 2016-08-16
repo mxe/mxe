@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     cd '$(1)' && \
         ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        CFLAGS='-std=c90 -fPIC'
+        CFLAGS='-std=gnu90 -fPIC'
     $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS=-no-undefined
     $(MAKE) -C '$(1)' -j 1 install
 endef
