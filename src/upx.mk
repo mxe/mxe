@@ -47,7 +47,9 @@ define $(PKG)_BUILD_$(BUILD)
         'CC=$(BUILD_CC)' \
         'PKG_CONFIG=$(PREFIX)/$(BUILD)/bin/pkgconf' \
         'LIBS=-L$(PREFIX)/$(BUILD)/lib -lucl -lz' \
-        $(shell [ `uname -s` == Darwin ] && echo "CXXFLAGS='-Wno-error=unused-local-typedef'") \
+        $(shell [ `uname -s` == Darwin ] && \
+            echo "CXXFLAGS=-Wno-error=unused-local-typedefs -Wno-error=misleading-indentation" || \
+            echo "CXXFLAGS=-Wno-error=misleading-indentation") \
         'exeext='
     cp '$(1)/src/upx' '$(PREFIX)/$(BUILD)/bin/'
 endef
