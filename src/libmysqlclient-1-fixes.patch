@@ -426,12 +426,13 @@ diff --git a/mysys/CMakeLists.txt b/mysys/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/mysys/CMakeLists.txt
 +++ b/mysys/CMakeLists.txt
-@@ -78,6 +78,10 @@ IF(CMAKE_USE_PTHREADS_INIT AND CMAKE_C_FLAGS MATCHES "-fsanitize=")
+@@ -78,6 +78,11 @@ IF(CMAKE_USE_PTHREADS_INIT AND CMAKE_C_FLAGS MATCHES "-fsanitize=")
    TARGET_LINK_LIBRARIES(mysys pthread)
  ENDIF()
  
 +IF(HAVE_PTHREAD_H)
 +  ADD_DEFINITIONS(-DUSING_PTHREADS)
++  TARGET_LINK_LIBRARIES(mysys pthread)
 +ENDIF()
 +
  IF(WITH_UNIT_TESTS)
