@@ -3,8 +3,8 @@
 
 PKG             := glm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.7.4
-$(PKG)_CHECKSUM := 0cfa1e40041114cda8ced7e6738860fe6f9a7103d25bcc376adb9840fcf21fe1
+$(PKG)_VERSION  := 0.9.7.6
+$(PKG)_CHECKSUM := 872fdea580b69b752562adc60734d7472fd97d5724c4ead585564083deac3953
 $(PKG)_SUBDIR   := glm-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/g-truc/glm/archive/$($(PKG)_VERSION).tar.gz
