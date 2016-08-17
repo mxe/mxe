@@ -39,7 +39,7 @@ define $(PKG)_BUILD
         $($(PKG)_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install-strip
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
     # shared libgcc isn't installed to version-specific locations
     # so install correctly to simplify cleanup (see gcc.mk)
