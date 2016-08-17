@@ -1,6 +1,9 @@
 This file is part of MXE.
 See index.html for further information.
 
+This patch was adapted for PhysicsFS 2.0.3's file layout from
+https://hg.icculus.org/icculus/physfs/rev/67031168b061.
+
 # HG changeset patch
 # User David Yip <dwyip@peach-bun.com>
 # Date 1471367884 18000
