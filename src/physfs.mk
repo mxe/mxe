@@ -34,5 +34,3 @@ define $(PKG)_BUILD
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-physfs.exe' \
         -lphysfs -lz
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =
