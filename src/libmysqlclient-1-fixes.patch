@@ -371,3 +371,83 @@ index 1111111..2222222 100644
          IF (lib MATCHES "^\\-l")
            SET(${var} "${${var}} ${lib} ") 
          ELSEIF(lib MATCHES "^/")
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Fri, 13 Nov 2015 10:22:12 -0500
+Subject: [PATCH] For Windows, check if POSIX thread model or win32 thread
+ model is being used.
+
+
+diff --git a/configure.cmake b/configure.cmake
+index 1111111..2222222 100644
+--- a/configure.cmake
++++ b/configure.cmake
+@@ -389,6 +389,7 @@ CHECK_INCLUDE_FILES (fnmatch.h HAVE_FNMATCH_H)
+ CHECK_INCLUDE_FILES (sys/un.h HAVE_SYS_UN_H)
+ CHECK_INCLUDE_FILES (vis.h HAVE_VIS_H) # Used by libedit
+ CHECK_INCLUDE_FILES (sasl/sasl.h HAVE_SASL_SASL_H) # Used by memcached
++CHECK_INCLUDE_FILES (pthread.h HAVE_PTHREAD_H)
+ 
+ # For libevent
+ CHECK_INCLUDE_FILES(sys/devpoll.h HAVE_DEVPOLL)
+diff --git a/include/my_pthread.h b/include/my_pthread.h
+index 1111111..2222222 100644
+--- a/include/my_pthread.h
++++ b/include/my_pthread.h
+@@ -20,7 +20,7 @@
+ 
+ #include "my_global.h"                          /* myf */
+ 
+-#if !defined(_WIN32)
++#if !(defined(_WIN32) && !defined(USING_PTHREADS))
+ #include <pthread.h>
+ #endif
+ 
+@@ -35,7 +35,7 @@ extern "C" {
+ #define EXTERNC
+ #endif /* __cplusplus */ 
+ 
+-#if defined(_WIN32)
++#if defined(_WIN32) && !defined(__WINPTHREADS_VERSION)
+ typedef DWORD		 pthread_t;
+ #define pthread_self() GetCurrentThreadId()
+ #define pthread_handler_t EXTERNC void * __cdecl
+@@ -51,7 +51,7 @@ typedef DWORD		 pthread_t;
+ #include "thr_cond.h"
+ #include "thr_rwlock.h"
+ 
+-#if defined(_WIN32)
++#if defined(_WIN32) && !defined(__WINPTHREADS_VERSION)
+ /*
+   Existing mysql_thread_create() or pthread_create() does not work well
+   in windows platform when threads are joined because
+diff --git a/mysys/CMakeLists.txt b/mysys/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/mysys/CMakeLists.txt
++++ b/mysys/CMakeLists.txt
+@@ -78,6 +78,11 @@ IF(CMAKE_USE_PTHREADS_INIT AND CMAKE_C_FLAGS MATCHES "-fsanitize=")
+   TARGET_LINK_LIBRARIES(mysys pthread)
+ ENDIF()
+ 
++IF(HAVE_PTHREAD_H)
++  ADD_DEFINITIONS(-DUSING_PTHREADS)
++  TARGET_LINK_LIBRARIES(mysys pthread)
++ENDIF()
++
+ IF(WITH_UNIT_TESTS)
+ 
+ ADD_EXECUTABLE(thr_lock thr_lock.c)
+diff --git a/mysys/my_winthread.c b/mysys/my_winthread.c
+index 1111111..2222222 100644
+--- a/mysys/my_winthread.c
++++ b/mysys/my_winthread.c
+@@ -16,7 +16,7 @@
+ /*****************************************************************************
+ ** Simulation of posix threads calls for Windows
+ *****************************************************************************/
+-#if defined (_WIN32)
++#if defined (_WIN32) && !defined (USING_PTHREADS)
+ #include "mysys_priv.h"
+ #include <process.h>
+ #include <signal.h>

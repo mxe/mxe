@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := d97dd918a88a4449225998f46aafa85216a3f89163a3411830d6890507ffa
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openssl zlib
+$(PKG)_DEPS     := gcc openssl pthreads zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \
@@ -23,6 +23,7 @@ define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cp -Rp '$(1)' '$(1).native'
     # Since we build only client libary, use bogus tzdata to satisfy configure.
+    # pthreads is needed in both LIBS and PTHREAD_LIBS
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-rpath \
@@ -41,9 +42,15 @@ define $(PKG)_BUILD
         --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null \
-        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl --libs`" \
+        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl pthreads --libs`" \
         ac_cv_func_getaddrinfo=no
-    $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' install
+
+    # enable_thread_safety means "build internal pthreads" on windows
+    # disable it and link mingw-w64 pthreads to and avoid name conflicts
+    $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' \
+        install \
+        enable_thread_safety=no \
+        PTHREAD_LIBS="`'$(TARGET)-pkg-config' pthreads --libs`"
     $(MAKE) -C '$(1)'/src/port             -j '$(JOBS)'
     $(MAKE) -C '$(1)'/src/bin/psql         -j '$(JOBS)' install
     $(INSTALL) -m644 '$(1)/src/include/pg_config.h'    '$(PREFIX)/$(TARGET)/include/'
