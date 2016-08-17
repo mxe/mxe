@@ -79,6 +79,9 @@ define $(PKG)_BUILD
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
 
     $(MAKE) -C '$(1)'       -j '$(JOBS)' lib-target
+    # gdal doesn't have an install-strip target
+    # --strip-debug doesn't reduce size by much, --strip-all breaks libs
+    $(if $(STRIP_LIB),-'$(TARGET)-strip' --strip-debug '$(1)/.libs'/*)
     $(MAKE) -C '$(1)'       -j '$(JOBS)' gdal.pc
     $(MAKE) -C '$(1)'       -j '$(JOBS)' install-actions
     $(MAKE) -C '$(1)/port'  -j '$(JOBS)' install
@@ -86,6 +89,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/frmts' -j '$(JOBS)' install
     $(MAKE) -C '$(1)/alg'   -j '$(JOBS)' install
     $(MAKE) -C '$(1)/ogr'   -j '$(JOBS)' install OGR_ENABLED=
+    $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' all
+    $(if $(STRIP_EXE),-'$(TARGET)-strip' '$(1)/apps'/*.exe)
     $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef
