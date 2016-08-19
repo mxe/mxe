@@ -1,0 +1,51 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2016
+From: Avi Kelman <patcherton.fixesthings@gmail.com>
+Date: Tue, 16 Aug 2016 11:39:00 -0400
+Subject: [PATCH] lua-curl mxe
+
+
+diff --git a/rockspecs/lua-curl-scm-0.rockspec b/rockspecs/lua-curl-scm-0.rockspec
+new file mode 100644
+index 1111111..2222222
+--- a/rockspecs/lua-curl-scm-0.rockspec
++++ b/rockspecs/lua-curl-scm-0.rockspec
+@@ -26,6 +26,12 @@
+         library = "libcurl",
+       }
+     };
++    mxe = {
++      CURL = {
++        header  = "curl/curl.h",
++        library = "libcurl",
++      }
++    };
+     unix = {
+       CURL = {
+         header  = "curl/curl.h",
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2016
+From: Avi Kelman <patcherton.fixesthings@gmail.com>
+Date: Tue, 16 Aug 2016 11:39:00 -0400
+Subject: [PATCH] lua-curl mxe
+
+
+diff --git a/rockspecs/lua-curl-scm-0.rockspec b/rockspecs/lua-curl-scm-0.rockspec
+index 1111111..2222222 100644
+--- a/rockspecs/lua-curl-scm-0.rockspec
++++ b/rockspecs/lua-curl-scm-0.rockspec
+@@ -42,6 +48,11 @@
+   platforms = {
+     windows = { modules = {
++      lcurl = {
++        libraries = {"libcurl", "ws2_32"},
++      }
++    }},
++    mxe = { modules = {
+       lcurl = {
+         libraries = {"libcurl", "ws2_32"},
+       }
