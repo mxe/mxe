@@ -97,6 +97,9 @@ define $(PKG)_BUILD
      printf 'test-qt5.exe\r\n'; \
      printf 'test-qtbase-pkgconfig.exe\r\n';) \
      > '$(PREFIX)/$(TARGET)/bin/test-qt5.bat'
+
+    # add pcre16 to CMake config of Qt5Core to fix static linking
+    $(SED) -i 's,set(_Qt5Core_LIB_DEPENDENCIES \"\"),set(_Qt5Core_LIB_DEPENDENCIES \"pcre16\"),g' '$(PREFIX)/$(TARGET)/qt5/lib/cmake/Qt5Core/Qt5CoreConfig.cmake'
 endef
 
 

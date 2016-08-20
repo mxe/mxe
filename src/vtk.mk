@@ -2,58 +2,65 @@
 # See index.html for further information.
 
 PKG             := vtk
-$(PKG)_IGNORE   := 5.10%
-$(PKG)_VERSION  := 5.8.0
-$(PKG)_CHECKSUM := 83ee74b83403590342c079a52b06eef7ab862417f941d5f4558aea25c6bbc2d5
-$(PKG)_SUBDIR   := VTK
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 7.0.0
+$(PKG)_CHECKSUM := 78a990a15ead79cdc752e86b83cfab7dbf5b7ef51ba409db02570dbdd9ec32c3
+$(PKG)_SUBDIR   := VTK-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc expat freetype hdf5 jpeg libodbc++ libpng libxml2 postgresql qt tiff zlib
+$(PKG)_DEPS     := gcc hdf5 qtbase qttools libpng expat libxml2 jsoncpp tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
-    grep 'refs/tags/v5[0-9.]*"' | \
+    grep 'refs/tags/v[0-9.]*"' | \
     $(SED) 's,.*refs/tags/v\(.*\)".*,\1,g;' | \
-    head -1
+    grep -v rc | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
-
     # first we need a native build to create the compile tools
-    mkdir '$(1)/native_build'
-    cd '$(1)/native_build' && cmake \
+    mkdir '$(1).native_build'
+    cd '$(1).native_build' && '$(PREFIX)/$(BUILD)/bin/cmake' \
+        -DVTK_BUILD_ALL_MODULES=FALSE \
+        -DVTK_Group_Rendering=FALSE \
+        -DVTK_Group_StandAlone=FALSE \
+        -DVTK_Group_CompileTools=TRUE \
         -DBUILD_TESTING=FALSE \
-        -DOPENGL_INCLUDE_DIR='$(1)/Utilities/ParseOGLExt/headers' \
-        -DVTK_USE_RENDERING=FALSE \
-        ..
+        -DCMAKE_BUILD_TYPE="Release" \
+        '$(1)'
+    $(MAKE) -C '$(1).native_build' -j '$(JOBS)' VERBOSE=1 vtkCompileTools
 
-    # only the newly created CompileTools target need to be built
-    $(MAKE) -C '$(1)/native_build' -j '$(JOBS)' VERBOSE=1 CompileTools
+    # DirectX is detected on Mac OSX but we use OpenGL
+    $(SED) -i 's,d3d9,nod3d9,g' '$(1)/CMake/FindDirectX.cmake'
 
-    # DirectX is detected on Mac OSX but requires a DX10 header - dxgi.h
-    rm '$(1)/CMake/FindDirectX.cmake'
+    # now the cross compilation
+    mkdir '$(1).cross_build'
+    cd '$(1).cross_build' && '$(TARGET)-cmake' \
+        -C '$(1)/TryRunResults.cmake' \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DVTKCompileTools_DIR='$(1).native_build' \
+        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
+        -DVTK_Group_Qt=ON \
+        -DVTK_Group_Imaging=ON \
+        -DVTK_QT_VERSION=5 \
+        -DVTK_USE_CXX11_FEATURES=ON \
+        -DVTK_USE_SYSTEM_LIBRARIES=ON \
+        -DVTK_USE_SYSTEM_LIBPROJ4=OFF \
+        -DVTK_USE_SYSTEM_NETCDF=OFF \
+        -DVTK_FORBID_DOWNLOADS=ON \
+        -DBUILD_EXAMPLES=OFF \
+        -DBUILD_TESTING=OFF \
+        '$(1)'
+    $(MAKE) -C '$(1).cross_build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).cross_build' -j 1 VERBOSE=1
+    $(MAKE) -C '$(1).cross_build' -j 1 install VERBOSE=1
 
-    # now for the cross compilation
-    mkdir '$(1)/cross_build'
-    cd '$(1)/cross_build' && cmake \
-        -C '$(1)/TryRunResults.cmake'\
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'\
-        -DBUILD_TESTING=FALSE\
-        -DVTKCompileTools_DIR='$(1)/native_build'\
-        -DVTK_USE_SYSTEM_EXPAT=TRUE\
-        -DVTK_USE_SYSTEM_FREETYPE=FALSE\
-        -DVTK_USE_SYSTEM_HDF5=TRUE \
-        -DVTK_USE_SYSTEM_JPEG=TRUE\
-        -DVTK_USE_SYSTEM_LIBXML2=TRUE\
-        -DVTK_USE_SYSTEM_PNG=TRUE\
-        -DVTK_USE_SYSTEM_TIFF=TRUE\
-        -DVTK_USE_SYSTEM_ZLIB=TRUE\
-        -DVTK_USE_QT=TRUE\
-        -DVTK_USE_POSTGRES=TRUE\
-        -DVTK_USE_ODBC=TRUE\
-        ..
-    $(MAKE) -C '$(1)/cross_build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)/cross_build' -j 1 VERBOSE=1
-    $(MAKE) -C '$(1)/cross_build' -j 1 install VERBOSE=1
+    #now build the GUI -> Qt -> SimpleView Example
+    mkdir '$(1).test'
+    cd '$(1).test' && '$(TARGET)-cmake' \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        '$(1)/Examples/GUI/Qt/SimpleView'
+    $(MAKE) -C '$(1).test' -j '$(JOBS)' VERBOSE=1
+    $(INSTALL) '$(1).test/SimpleView.exe' $(PREFIX)/$(TARGET)/bin/test-$(PKG).exe
 endef
-
-$(PKG)_BUILD_SHARED =

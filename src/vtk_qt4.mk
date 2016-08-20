@@ -1,7 +1,7 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := vtk6
+PKG             := vtk_qt4
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.3.0
 $(PKG)_CHECKSUM := 92a493354c5fa66bea73b5fc014154af5d9f3f6cee8d20a826f4cd5d4b0e8a5e
