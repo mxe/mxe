@@ -10,8 +10,8 @@ include $(EXT_DIR)/gmsl
 
 MXE_TRIPLETS       := i686-w64-mingw32 x86_64-w64-mingw32
 MXE_LIB_TYPES      := static shared
-MXE_TARGET_LIST    := $(foreach TRIPLET,$(MXE_TRIPLETS),\
-                          $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES)))
+MXE_TARGET_LIST    := $(strip $(foreach TRIPLET,$(MXE_TRIPLETS),\
+                          $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES))))
 MXE_TARGETS        := i686-w64-mingw32.static
 
 DEFAULT_MAX_JOBS   := 6
@@ -69,8 +69,10 @@ define newline
 
 endef
 
+\n    := $(newline)
 null  :=
 space := $(null) $(null)
+repeat = $(subst x,$(1),$(subst $(space),,$(call int_encode,$(2))))
 
 MXE_DISABLE_DOC_OPTS = \
     ac_cv_prog_HAVE_DOXYGEN="false" \
@@ -421,27 +423,31 @@ MAX_TARGET_WIDTH := $(call LIST_NMAX, $(sort $(call map, strlen, $(MXE_TARGETS))
 TARGET_COL_WIDTH := $(call subtract,100,$(call plus,$(PKG_COL_WIDTH),$(MAX_TARGET_WIDTH)))
 PRINTF_FMT       := printf '%-11s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
 RTRIM            := $(SED) 's, \+$$$$,,'
+WRAP_MESSAGE      = $(\n)$(\n)$(call repeat,-,60)$(\n)$(1)$(and $(2),$(\n)$(\n)$(2))$(\n)$(call repeat,-,60)$(\n)
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
 
 define TARGET_RULE
-	$(if $(findstring i686-pc-mingw32,$(1)),
-	    $(error Deprecated target specified: "$(1)". Please use \
-	            i686-w64-mingw32.[$(subst $(space),|,$(MXE_LIB_TYPES))] instead))
-	$(if $(filter $(addsuffix %,$(MXE_TARGET_LIST) $(BUILD) $(MXE_TRIPLETS)),$(1)),,
-	    $(error Invalid target specified: "$(1)"))
-	$(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),
-	    @echo
-	    @echo '------------------------------------------------------------'
-	    @echo 'Warning: Deprecated target name $(1) specified'
-	    @echo
-	    @echo 'Please use $(1).[$(subst $(space),|,$(MXE_LIB_TYPES))] instead'
-	    @echo 'See docs/index.html for further information'
-	    @echo '------------------------------------------------------------'
-	    @echo)
+    $(if $(findstring i686-pc-mingw32,$(1)),\
+        $(error $(call WRAP_MESSAGE,\
+                Obsolete target specified: "$(1)",\
+                Please use i686-w64-mingw32.[$(subst $(space),|,$(MXE_LIB_TYPES))]$(\n)\
+                i686-pc-mingw32 removed 2014-10-14 (https://github.com/mxe/mxe/pull/529)\
+                )))\
+    $(if $(filter $(addsuffix %,$(MXE_TARGET_LIST) $(BUILD) $(MXE_TRIPLETS)),$(1)),,\
+        $(error $(call WRAP_MESSAGE,\
+                Invalid target specified: "$(1)",\
+                Please use:$(\n)\
+                $(subst $(space),$(\n) ,$(MXE_TARGET_LIST))\
+                )))\
+    $(if $(findstring 1,$(words $(subst ., ,$(filter-out $(BUILD),$(1))))),\
+        $(warning $(call WRAP_MESSAGE,\
+                Warning: Deprecated target specified "$(1)",\
+                Please use $(1).[$(subst $(space),|,$(MXE_LIB_TYPES))]$(\n) \
+                )))
 endef
-$(foreach TARGET,$(MXE_TARGETS),$(eval $(call TARGET_RULE,$(TARGET))))
+$(foreach TARGET,$(MXE_TARGETS),$(call TARGET_RULE,$(TARGET)))
 
 define PKG_RULE
 .PHONY: download-$(1)
