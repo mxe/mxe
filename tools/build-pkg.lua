@@ -1030,14 +1030,12 @@ local function makeMxeSourcePackage()
         'Makefile',
         'patch.mk',
         'README.md',
-        'assets',
         'docs',
         'ext',
         'index.html',
         'src',
         'plugins',
         'tools',
-        'versions.json',
     }
     local d1 = "MXE source"
     local d2 = MXE_SOURCE_DESCRIPTION2

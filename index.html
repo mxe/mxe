@@ -6,7 +6,7 @@
 
     <title>MXE (M cross environment)</title>
 
-    <link rel="stylesheet" href="assets/common.css">
+    <link rel="stylesheet" href="docs/assets/common.css">
 
 </head>
 <body>
@@ -125,7 +125,7 @@
     </table>
     <p>
         These numbers were last updated on December 16, 2015.
-        See the <a href="build-matrix.html">current status</a>
+        See the <a href="docs/build-matrix.html">current status</a>
         for individual packages.
     </p>
     <p>
@@ -147,15 +147,15 @@
     Cross compiling
     <a href="http://thebeez.home.xs4all.nl/4tH/">4tH</a>:
     </p>
-    <a href="assets/screenshot-4th-compile.png">
-        <img src="assets/screenshot-4th-compile-small.png" alt="4th-compile">
+    <a href="docs/assets/screenshot-4th-compile.png">
+        <img src="docs/assets/screenshot-4th-compile-small.png" alt="4th-compile">
     </a>
 
     <p>
     and running it:
     </p>
-    <a href="assets/screenshot-4th-run.png">
-        <img src="assets/screenshot-4th-run-small.png" alt="4th-run">
+    <a href="docs/assets/screenshot-4th-run.png">
+        <img src="docs/assets/screenshot-4th-run-small.png" alt="4th-run">
     </a>
 </div>
 
@@ -1050,11 +1050,11 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         suitable for usage in shell scripts
         </dd>
 
-    <dt>make build-matrix.html</dt>
+    <dt>make docs/build-matrix.html</dt>
 
         <dd>
         generate a report of what packages are
-        supported on what targets to build-matrix.html
+        supported on what targets to docs/build-matrix.html
         </dd>
 
     <dt>make update</dt>
@@ -2831,7 +2831,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         }
         function loadVersionCache(doneCallback, errCallback) {
             var request = new XMLHttpRequest();
-            request.open('GET', 'versions.json', true);
+            request.open('GET', 'docs/versions.json', true);
             request.onreadystatechange = function reqCallback() {
                 if (request.readyState === 4) {
                     if (request.status === 200) {
