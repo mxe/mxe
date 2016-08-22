@@ -5,7 +5,7 @@ TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
 EXT_DIR  := $(TOP_DIR)/ext
 
 # GNU Make Standard Library (http://gmsl.sourceforge.net/)
-# See doc/gmsl.html for further information
+# See docs/gmsl.html for further information
 include $(EXT_DIR)/gmsl
 
 MXE_TRIPLETS       := i686-w64-mingw32 x86_64-w64-mingw32

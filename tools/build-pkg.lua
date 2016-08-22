@@ -1031,7 +1031,7 @@ local function makeMxeSourcePackage()
         'patch.mk',
         'README.md',
         'assets',
-        'doc',
+        'docs',
         'ext',
         'index.html',
         'src',
