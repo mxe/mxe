@@ -20,6 +20,9 @@ define $(PKG)_BUILD
     # create the CMake toolchain file
     # individual packages (e.g. hdf5) should add their
     # own files under CMAKE_TOOLCHAIN_DIR
+    # CMAKE_RC_COMPILE_OBJECT is defined in:
+    #     <cmake root>/share/cmake-X.Y/Modules/Platform/Windows-windres.cmake
+
     mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
     touch '$(CMAKE_TOOLCHAIN_DIR)/.gitkeep'
     (echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
@@ -39,7 +42,6 @@ define $(PKG)_BUILD
      echo 'set(CMAKE_INSTALL_PREFIX $(PREFIX)/$(TARGET) CACHE PATH "Installation Prefix")'; \
      echo 'set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel")'; \
      echo 'set(CMAKE_CROSS_COMPILING ON) # Workaround for http://www.cmake.org/Bug/view.php?id=14075'; \
-     echo 'set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff <FLAGS> <DEFINES> -o <OBJECT> <SOURCE>") # Workaround for buggy windres rules'; \
      echo ''; \
      echo 'file(GLOB mxe_cmake_files'; \
      echo '    "$(CMAKE_TOOLCHAIN_DIR)/*.cmake"'; \
