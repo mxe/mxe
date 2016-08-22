@@ -975,7 +975,7 @@ local function makeDebs(items, item2deps, item2ver, item2files)
 end
 
 local function getMxeVersion()
-    local index_html = io.open 'index.html'
+    local index_html = io.open 'docs/index.html'
     local text = index_html:read('*all')
     index_html:close()
     return text:match('Release ([^<]+)')
@@ -1032,7 +1032,6 @@ local function makeMxeSourcePackage()
         'README.md',
         'docs',
         'ext',
-        'index.html',
         'src',
         'plugins',
         'tools',

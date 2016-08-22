@@ -50,12 +50,12 @@ TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(MXE_TMP)/tmp-$(1)
 PKGS       := $(call set_create,\
-    $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html'))
+    $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/docs/index.html'))
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
 # All pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
-# These aren't meaningful to the pkg list in index.html so
+# These aren't meaningful to the pkg list in docs/index.html so
 # use a list in case we want to separate autotools, cmake etc.
 MXE_CONF_PKGS := mxe-conf
 PKGS          += $(MXE_CONF_PKGS)
@@ -269,7 +269,7 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '# This is a template of configuration file for MXE. See'; \
-        echo '# index.html for more extensive documentations.'; \
+        echo '# docs/index.html for more extensive documentations.'; \
         echo; \
         echo '# This variable controls the number of compilation processes'; \
         echo '# within one package ("intra-package parallelism").'; \
@@ -369,7 +369,7 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE) | $(PREFIX)/installed/.gitke
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
 	@if [ -e check-requirements-failed ]; then \
 	    echo; \
-	    echo 'Please have a look at "index.html" to ensure'; \
+	    echo 'Please have a look at "docs/index.html" to ensure'; \
 	    echo 'that your system meets all requirements.'; \
 	    echo; \
 	    rm check-requirements-failed; \
@@ -437,7 +437,7 @@ define TARGET_RULE
 	    @echo 'Warning: Deprecated target name $(1) specified'
 	    @echo
 	    @echo 'Please use $(1).[$(subst $(space),|,$(MXE_LIB_TYPES))] instead'
-	    @echo 'See index.html for further information'
+	    @echo 'See docs/index.html for further information'
 	    @echo '------------------------------------------------------------'
 	    @echo)
 endef
@@ -642,7 +642,7 @@ show-deps-%:
 	        $(newline)$(newline)$* downstream dependents:$(newline)\
 	        $(call WALK_DOWNSTREAM,$*))\
 	    @echo,\
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 # show upstream dependencies and downstream dependents separately
 # suitable for usage in shell with: `make show-downstream-deps-foo`
@@ -652,14 +652,14 @@ show-downstream-deps-%:
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $(call WALK_DOWNSTREAM,$*))\
 	    @echo -n,\
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 show-upstream-deps-%:
 	$(if $(call set_is_member,$*,$(PKGS)),\
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $(call WALK_UPSTREAM,$*))\
 	    @echo -n,\
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 # print first level pkg deps for use in build-pkg.lua
 .PHONY: print-deps-for-build-pkg
@@ -717,13 +717,13 @@ update:
 update-package-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(and $($*_UPDATE),$(call UPDATE,$*,$(shell $($*_UPDATE)))), \
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
 	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$($*_MAKEFILE)', \
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 .PHONY: cleanup-style
 define CLEANUP_STYLE
@@ -742,7 +742,7 @@ define CLEANUP_STYLE
 
 endef
 cleanup-style:
-	$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),$(call CLEANUP_STYLE,$(FILE)))
+	$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile docs/index.html CNAME src/*.mk src/*test.* tools/*)),$(call CLEANUP_STYLE,$(FILE)))
 
 .PHONY: cleanup-deps-style
 cleanup-deps-style:

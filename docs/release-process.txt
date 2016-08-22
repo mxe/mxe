@@ -9,7 +9,7 @@
     github issue
     MXE mailing list
     use the following to check for new/changed requirements:
-        http://htmlpreview.github.io/?https://raw.github.com/mxe/mxe/master/index.html
+        http://htmlpreview.github.io/?https://raw.github.com/mxe/mxe/master/docs/index.html
 ...
 
 - Fast-forward the stable branch to master:
