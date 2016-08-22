@@ -1025,7 +1025,6 @@ local function makeMxeSourcePackage()
     -- dependencies
     local deps = {}
     local files = {
-        'CNAME',
         'LICENSE.md',
         'Makefile',
         'patch.mk',

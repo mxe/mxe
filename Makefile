@@ -742,7 +742,7 @@ define CLEANUP_STYLE
 
 endef
 cleanup-style:
-	$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile docs/index.html CNAME src/*.mk src/*test.* tools/*)),$(call CLEANUP_STYLE,$(FILE)))
+	$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile docs/index.html docs/CNAME src/*.mk src/*test.* tools/*)),$(call CLEANUP_STYLE,$(FILE)))
 
 .PHONY: cleanup-deps-style
 cleanup-deps-style:
