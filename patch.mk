@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 GIT_DIR = $(if $(patsubst .,,$($(1)_SUBDIR)) \
     ,$(GITS_DIR)/$($(1)_SUBDIR),$(GITS_DIR)/$(1))
@@ -42,8 +41,7 @@ endef
 define EXPORT_PATCH
     cd '$(call GIT_DIR,$(1))' \
     && ( \
-        echo 'This file is part of MXE.'; \
-        echo 'See index.html for further information.'; \
+        echo 'This file is part of MXE. See LICENSE.md for licensing information.'; \
         echo ''; \
         echo 'Contains ad hoc patches for cross building.'; \
         echo ''; \

@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 diff -Naur libsoup-2.54.0.1.orig/autogen.sh libsoup-2.54.0.1/autogen.sh
 --- libsoup-2.54.0.1.orig/autogen.sh	2016-03-23 15:19:17.000000000 +0300

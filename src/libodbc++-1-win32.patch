@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 --- libodbc++-0.2.5.orig/configure.ac	2009-08-20 23:39:08.000000000 +0200
 +++ libodbc++-0.2.5/configure.ac	2010-02-04 22:40:32.000000000 +0100

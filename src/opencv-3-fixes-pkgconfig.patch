@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 This patch was commited to OpenCV's 2.4 branch and we should be able to drop
 it in the next point release.

@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 # MXE provides a fully featured build of Qt. Some users want more control...
 # http://lists.nongnu.org/archive/html/mingw-cross-env-list/2013-08/msg00010.html

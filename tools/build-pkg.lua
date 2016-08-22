@@ -1,8 +1,7 @@
 #!/usr/bin/env lua
 
 --[[
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 build-pkg, Build binary packages from MXE packages
 Instructions: http://pkg.mxe.cc

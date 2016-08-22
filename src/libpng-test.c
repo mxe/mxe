@@ -1,6 +1,5 @@
 /*
- * This file is part of MXE.
- * See index.html for further information.
+ * This file is part of MXE. See LICENSE.md for licensing information.
  *
  * This is a slightly modified version of:
  * http://ironalbatross.net/wiki/index.php5?title=CPP_LIBPNG#Minimal_Example_of_writing_a_PNG_File

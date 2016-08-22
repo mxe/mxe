@@ -2,8 +2,7 @@
 
 """ Create a skeleton of new MXE package.
 
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 """
 
 import argparse
@@ -20,8 +19,7 @@ except:
     import urllib.request as urllib2
 
 MK_TEMPLATE = r'''
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := %(name)s
 $(PKG)_IGNORE   :=

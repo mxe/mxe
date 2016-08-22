@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 diff -ur mingw-w64-v3.3.0.orig/mingw-w64-tools/widl/include/windef.h mingw-w64-v3.3.0/mingw-w64-tools/widl/include/windef.h
 --- mingw-w64-v3.3.0.orig/mingw-w64-tools/widl/include/windef.h	2014-10-29 20:53:30.000000000 +1100

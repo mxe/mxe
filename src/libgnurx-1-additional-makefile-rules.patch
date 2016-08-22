@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 diff -Nur mingw-libgnurx-2.5.1/Makefile.mxe mingw-libgnurx-2.5.1-mxe/Makefile.mxe
 --- mingw-libgnurx-2.5.1/Makefile.mxe	1970-01-01 01:00:00.000000000 +0100
