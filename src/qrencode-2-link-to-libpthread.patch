@@ -1,0 +1,12 @@
+--- qrencode-3.4.1/Makefile.am.orig     2013-01-20 23:25:18 +0400
++++ qrencode-3.4.1/Makefile.am  2013-01-20 23:28:06 +0400
+@@ -21,6 +21,8 @@
+
+ libqrencode_la_LDFLAGS = -version-number $(MAJOR_VERSION):$(MINOR_VERSION):$(MICRO_VERSION) -no-undefined
+
++libqrencode_la_LIBADD = -lpthread
++
+ include_HEADERS = qrencode.h
+
+ pkgconfigdir = $(libdir)/pkgconfig
+ 
