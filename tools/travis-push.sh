@@ -10,4 +10,3 @@ echo "https://${GH_TOKEN}:@github.com" > .git/credentials
 git remote set-url origin 'https://github.com/mxe/mxe.git'
 git commit -a -m 'Update versions.json & build-matrix.html' || true
 git push origin HEAD:master
-git push origin HEAD:gh-pages
