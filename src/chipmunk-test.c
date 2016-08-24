@@ -17,7 +17,7 @@ int main(void){
     // Add a static line segment shape for the ground.
     // We'll make it slightly tilted so the ball will roll off.
     // We attach it to space->staticBody to tell Chipmunk it shouldn't be movable.
-    cpShape *ground = cpSegmentShapeNew(space->staticBody, cpv(-20, 5), cpv(20, -5), 0);
+    cpShape *ground = cpSegmentShapeNew(cpBodyNewStatic(), cpv(-20, 5), cpv(20, -5), 0);
     cpShapeSetFriction(ground, 1);
     cpSpaceAddShape(space, ground);
 
@@ -36,7 +36,7 @@ int main(void){
     // The cpSpaceAdd*() functions return the thing that you are adding.
     // It's convenient to create and add an object in one line.
     cpBody *ballBody = cpSpaceAddBody(space, cpBodyNew(mass, moment));
-    cpBodySetPos(ballBody, cpv(0, 15));
+    cpBodySetPosition(ballBody, cpv(0, 15));
 
     // Now we create the collision shape for the ball.
     // You can create multiple collision shapes that point to the same body.
@@ -49,8 +49,8 @@ int main(void){
     // It is *highly* recommended to use a fixed size time step.
     cpFloat timeStep = 1.0/60.0;
     for(cpFloat time = 0; time < 2; time += timeStep){
-        cpVect pos = cpBodyGetPos(ballBody);
-        cpVect vel = cpBodyGetVel(ballBody);
+        cpVect pos = cpBodyGetPosition(ballBody);
+        cpVect vel = cpBodyGetVelocity(ballBody);
         printf("Time is %5.2f. ballBody is at (%5.2f, %5.2f). "
                "It's velocity is (%5.2f, %5.2f)\n",
                 time, pos.x, pos.y, vel.x, vel.y);
