@@ -149,7 +149,7 @@ define MXE_GET_GITHUB_ALL_TAGS
 endef
 
 define MXE_GET_GITHUB_TAGS
-    $(MXE_GET_GITHUB_ALL_TAGS, $(1)) \
+    $(call MXE_GET_GITHUB_ALL_TAGS, $(1)) \
     | $(SED) 's,^$(strip $(2)),,g' \
     | $(SORT) -V \
     | tail -1
