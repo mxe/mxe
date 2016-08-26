@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
-Date: Wed, 18 May 2016 01:25:59 +0200
+Date: Wed, 25 Aug 2016 10:28:30 +0200
 Subject: [PATCH] update preprocessor conditions
 
 Add macro NATIVE_WIN32 = Windows && !MinGW.
@@ -33,6 +33,19 @@ index 1111111..2222222 100644
  #define SNPRINTF_COMPAT _snprintf
  #else
  #define SNPRINTF_COMPAT snprintf
+diff --git a/src/nfa/limex_shuffle.h b/src/nfa/limex_shuffle.h
+index 1111111..2222222 100644
+--- a/src/nfa/limex_shuffle.h
++++ b/src/nfa/limex_shuffle.h
+@@ -41,7 +41,7 @@
+ #include "util/bitutils.h"
+ #include "util/simd_utils.h"
+ 
+-#if defined(__BMI2__) || (defined(_WIN32) && defined(__AVX2__))
++#if defined(__BMI2__) || (NATIVE_WIN32 && defined(__AVX2__))
+ #define HAVE_PEXT
+ #endif
+ 
 diff --git a/src/nfa/mcclellan_common_impl.h b/src/nfa/mcclellan_common_impl.h
 index 1111111..2222222 100644
 --- a/src/nfa/mcclellan_common_impl.h
@@ -50,7 +63,7 @@ diff --git a/src/nfa/nfa_internal.h b/src/nfa/nfa_internal.h
 index 1111111..2222222 100644
 --- a/src/nfa/nfa_internal.h
 +++ b/src/nfa/nfa_internal.h
-@@ -240,7 +240,7 @@ int isMultiTopType(u8 t) {
+@@ -195,7 +195,7 @@ int isMultiTopType(u8 t) {
  
  /** Macros used in place of unimplemented NFA API functions for a given
   * engine. */
@@ -72,7 +85,7 @@ index 1111111..2222222 100644
  #define ALIGN_ATTR(x) __declspec(align(x))
  #else
  #define ALIGN_ATTR(x) __attribute__((aligned((x))))
-@@ -75,7 +75,7 @@ typedef u32 ReportID;
+@@ -78,7 +78,7 @@ typedef u32 ReportID;
  
  /* Shorthand for attribute to mark a function as part of our public API.
   * Functions without this attribute will be hidden. */
@@ -81,7 +94,7 @@ index 1111111..2222222 100644
  #define HS_PUBLIC_API     __attribute__((visibility("default")))
  #else
  // TODO: dllexport defines for windows
-@@ -89,14 +89,14 @@ typedef u32 ReportID;
+@@ -88,14 +88,14 @@ typedef u32 ReportID;
  #define ARRAY_LENGTH(a) (sizeof(a)/sizeof((a)[0]))
  
  /** \brief Shorthand for the attribute to shut gcc about unused parameters */
@@ -98,7 +111,7 @@ index 1111111..2222222 100644
  #if defined(HS_OPTIMIZE)
  #define really_inline inline __attribute__ ((always_inline, unused))
  #else
-@@ -126,7 +126,7 @@ typedef u32 ReportID;
+@@ -125,7 +125,7 @@ typedef u32 ReportID;
  
  
  // We use C99-style "restrict".
@@ -107,7 +120,7 @@ index 1111111..2222222 100644
  #ifdef __cplusplus
  #define restrict
  #else
-@@ -182,7 +182,7 @@ typedef u32 ReportID;
+@@ -181,7 +181,7 @@ typedef u32 ReportID;
  #define LIMIT_TO_AT_MOST(a, b) (*(a) = MIN(*(a),(b)))
  #define ENSURE_AT_LEAST(a, b) (*(a) = MAX(*(a),(b)))
  
@@ -232,39 +245,13 @@ index 1111111..2222222 100644
  #define HAVE_POPCOUNT_INSTR
  #endif
  
-diff --git a/src/util/shuffle.h b/src/util/shuffle.h
-index 1111111..2222222 100644
---- a/src/util/shuffle.h
-+++ b/src/util/shuffle.h
-@@ -42,7 +42,7 @@
- #include "simd_utils.h"
- #include "ue2common.h"
- 
--#if defined(__BMI2__) || (defined(_WIN32) && defined(__AVX2__))
-+#if defined(__BMI2__) || (NATIVE_WIN32 && defined(__AVX2__))
- #define HAVE_PEXT
- #endif
- 
 diff --git a/src/util/simd_utils.h b/src/util/simd_utils.h
 index 1111111..2222222 100644
 --- a/src/util/simd_utils.h
 +++ b/src/util/simd_utils.h
-@@ -84,7 +84,7 @@
- #  endif
- #endif
- 
--#ifdef _WIN32
-+#if NATIVE_WIN32
- #define NO_ASM
- #endif
- 
-diff --git a/src/util/simd_utils_ssse3.h b/src/util/simd_utils_ssse3.h
-index 1111111..2222222 100644
---- a/src/util/simd_utils_ssse3.h
-+++ b/src/util/simd_utils_ssse3.h
 @@ -33,7 +33,7 @@
- #ifndef SIMD_UTILS_SSSE3_H_E27DF795C9AA02
- #define SIMD_UTILS_SSSE3_H_E27DF795C9AA02
+ #ifndef SIMD_UTILS
+ #define SIMD_UTILS
  
 -#if !defined(_WIN32) && !defined(__SSSE3__)
 +#if !NATIVE_WIN32 && !defined(__SSSE3__)
@@ -348,7 +335,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -101,7 +101,7 @@ option(BUILD_SHARED_LIBS "Build shared libs instead of static" OFF)
+@@ -125,7 +125,7 @@ option(BUILD_SHARED_LIBS "Build shared libs instead of static" OFF)
  option(BUILD_STATIC_AND_SHARED "Build shared libs as well as static" OFF)
  
  if (BUILD_STATIC_AND_SHARED OR BUILD_SHARED_LIBS)
@@ -357,7 +344,7 @@ index 1111111..2222222 100644
          message(FATAL_ERROR "Windows DLLs currently not supported")
      else()
          message(STATUS "Building shared libraries")
-@@ -238,7 +238,7 @@ include (${CMAKE_MODULE_PATH}/arch.cmake)
+@@ -274,7 +274,7 @@ include (${CMAKE_MODULE_PATH}/arch.cmake)
  CHECK_C_SOURCE_COMPILES("void *aa_test(void *x) { return __builtin_assume_aligned(x, 16);}\nint main(void) { return 0; }" HAVE_CC_BUILTIN_ASSUME_ALIGNED)
  CHECK_CXX_SOURCE_COMPILES("void *aa_test(void *x) { return __builtin_assume_aligned(x, 16);}\nint main(void) { return 0; }" HAVE_CXX_BUILTIN_ASSUME_ALIGNED)
  
@@ -366,7 +353,7 @@ index 1111111..2222222 100644
  set(C_FLAGS_TO_CHECK
  # Variable length arrays are way bad, most especially at run time
  "-Wvla"
-@@ -325,7 +325,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+@@ -366,7 +366,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
      set(FREEBSD true)
  endif(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
  
@@ -375,7 +362,7 @@ index 1111111..2222222 100644
  if(CMAKE_C_COMPILER_ID MATCHES "Intel")
      SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -diag-error 10006 -diag-disable 177 -diag-disable 2304 -diag-disable 2305 -diag-disable 2338 -diag-disable 1418 -diag-disable=remark")
  endif()
-@@ -345,7 +345,7 @@ endif()
+@@ -386,7 +386,7 @@ endif()
  configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
  configure_file(src/hs_version.h.in ${PROJECT_BINARY_DIR}/hs_version.h)
  
@@ -384,7 +371,7 @@ index 1111111..2222222 100644
      # expand out library names for pkgconfig static link info
      foreach (LIB ${CMAKE_CXX_IMPLICIT_LINK_LIBRARIES})
          # this is fragile, but protects us from toolchain specific files
-@@ -364,7 +364,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_C_FLAGS}")
+@@ -405,7 +405,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_C_FLAGS}")
  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CXX_FLAGS}")
  
  
@@ -393,7 +380,7 @@ index 1111111..2222222 100644
  set(RAGEL_C_FLAGS "-Wno-unused")
  endif()
  
-@@ -988,6 +988,6 @@ install(TARGETS hs_shared
+@@ -1058,6 +1058,6 @@ install(TARGETS hs_shared
      LIBRARY DESTINATION lib)
  endif()
  
@@ -414,7 +401,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -208,6 +208,11 @@ else()
+@@ -244,6 +244,11 @@ else()
  
  endif()
  
@@ -436,26 +423,3 @@ index 1111111..2222222 100644
  Libs.private: @PRIVATE_LIBS@
 -Cflags: -I${includedir}/hs
 +Cflags: -I${includedir}/hs -posix
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sat, 4 Jun 2016 00:00:24 +0200
-Subject: [PATCH] simplegrep: open file in binary mode
-
-Otherwise it hangs on binary files (MinGW).
-
-See https://github.com/01org/hyperscan/pull/26
-
-diff --git a/examples/simplegrep.c b/examples/simplegrep.c
-index 1111111..2222222 100644
---- a/examples/simplegrep.c
-+++ b/examples/simplegrep.c
-@@ -77,7 +77,7 @@ static int eventHandler(unsigned int id, unsigned long long from,
-  * length with its length. Returns NULL on failure.
-  */
- static char *readInputData(const char *inputFN, unsigned int *length) {
--    FILE *f = fopen(inputFN, "r");
-+    FILE *f = fopen(inputFN, "rb");
-     if (!f) {
-         fprintf(stderr, "ERROR: unable to open file \"%s\": %s\n", inputFN,
-                 strerror(errno));
