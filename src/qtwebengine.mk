@@ -14,7 +14,9 @@ define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
 endef
 
-define $(PKG)_BUILD
+$(PKG)_MESSAGE  :=*** qtwebengine on windows requires msvc 2013/2015 ***
+
+define $(PKG)_BUILD_DISABLED
     cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
