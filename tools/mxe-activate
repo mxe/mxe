@@ -55,7 +55,8 @@ _mxe()
         return 0
         ;;
     [!-]*)
-        pkgs+=" build-matrix.html \
+        pkgs+=" docs/build-matrix.html \
+                docs/versions.json \
                 check-requirements \
                 clean \
                 clean-junk \

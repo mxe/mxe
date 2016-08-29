@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 # Runtimes can/will have different implementations,
 # but the pre-requisite package and test are the same.

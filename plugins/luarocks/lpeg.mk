@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lpeg
 $(PKG)_WEBSITE  := http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html

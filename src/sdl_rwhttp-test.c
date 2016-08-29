@@ -1,6 +1,5 @@
 /*
- * This file is part of MXE.
- * See index.html for further information.
+ * This file is part of MXE. See LICENSE.md for licensing information.
  *
  * This is a simple test program for SDL_rwhttp that tries to
  * fetch something from the web.

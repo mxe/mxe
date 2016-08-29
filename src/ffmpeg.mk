@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
@@ -16,7 +15,7 @@ $(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libbs2b libcaca \
 # DO NOT ADD fdk-aac OR openssl SUPPORT.
 # Although they are free softwares, their licenses are not compatible with
 # the GPL, and we'd like to enable GPL in our default ffmpeg build.
-# See index.html#potential-legal-issues
+# See docs/index.html#potential-legal-issues
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ffmpeg.org/releases/' | \

@@ -2,8 +2,7 @@
 
 """ Create a skeleton of new MXE package.
 
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 """
 
 import argparse
@@ -20,8 +19,7 @@ except:
     import urllib.request as urllib2
 
 MK_TEMPLATE = r'''
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := %(name)s
 $(PKG)_IGNORE   :=
@@ -130,7 +128,7 @@ def make_build(options, builder):
 
 def update_index_html(name, description, website):
     # read HTML and find a list of packages
-    with open('index.html', 'rb') as f:
+    with open('docs/index.html', 'rb') as f:
         index_html = f.read()
         if not isinstance(index_html, str):
             # Python 3
@@ -173,7 +171,7 @@ def update_index_html(name, description, website):
     (_, tmp_index_html) = tempfile.mkstemp()
     with open(tmp_index_html, 'wt') as f:
         f.write(index_html)
-    os.rename(tmp_index_html, 'index.html')
+    os.rename(tmp_index_html, 'docs/index.html')
 
 def make_skeleton(
     name,

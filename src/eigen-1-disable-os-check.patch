@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 --- a/cmake/EigenDetermineOSVersion.cmake	2012-12-05 16:53:46.305932163 +0100
 +++ b/cmake/EigenDetermineOSVersion.cmake	2012-12-05 16:56:15.937936644 +0100

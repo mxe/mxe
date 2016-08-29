@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 GIT_DIR = $(if $(patsubst .,,$($(1)_SUBDIR)) \
     ,$(GITS_DIR)/$($(1)_SUBDIR),$(GITS_DIR)/$(1))
@@ -42,8 +41,7 @@ endef
 define EXPORT_PATCH
     cd '$(call GIT_DIR,$(1))' \
     && ( \
-        echo 'This file is part of MXE.'; \
-        echo 'See index.html for further information.'; \
+        echo 'This file is part of MXE. See LICENSE.md for licensing information.'; \
         echo ''; \
         echo 'Contains ad hoc patches for cross building.'; \
         echo ''; \
@@ -65,14 +63,14 @@ init-git-%: download-only-%
 	    $(if $(wildcard $(call GIT_DIR,$*)), \
 	        $(error $(call GIT_DIR,$*) already exists), \
 	        $(call INIT_GIT,$*)), \
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 import-patch-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(if $(wildcard $(call GIT_DIR,$*)), \
 	        $(call IMPORT_PATCH,$*,$(call PATCH_BY_NAME,$*,$(PATCH_NAME))), \
 	        $(error $(call GIT_DIR,$*) does not exist)), \
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 import-all-patches-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
@@ -80,11 +78,11 @@ import-all-patches-%:
 	        $(foreach PKG_PATCH,$(call PKG_PATCHES,$*), \
 	            $(call IMPORT_PATCH,$*,$(PKG_PATCH))), \
 	        $(error $(call GIT_DIR,$*) does not exist)), \
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 export-patch-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(if $(wildcard $(call GIT_DIR,$*)), \
 	        $(call EXPORT_PATCH,$*,$(PATCH_NAME)), \
 	        $(error $(call GIT_DIR,$*) does not exist)), \
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))

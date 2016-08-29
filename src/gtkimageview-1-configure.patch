@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 --- gtkimageview-1.6.4.orig/configure	2009-04-05 22:04:32.000000000 +0200
 +++ gtkimageview-1.6.4/configure	2013-03-23 13:59:25.017941993 +0100
