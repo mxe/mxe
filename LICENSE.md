@@ -41,9 +41,9 @@ The [packages][packages] downloaded by MXE (ending up in `pkg/`) each
 have their own licence(s). Please see the individual source trees and/or
 websites for further details.
 
-[contributors]:https://github.com/mxe/mxe/graphs/contributors
-[mailing-list]:https://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list
-[issue-tracker]:https://github.com/mxe/mxe/issues
-[config.guess]:http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
-[gmsl]:https://sourceforge.net/p/gmsl/gmsl/ci/master/tree/__gmsl
-[packages]:http://mxe.cc/#packages
+[contributors]: https://github.com/mxe/mxe/graphs/contributors
+[mailing-list]: https://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list
+[issue-tracker]: https://github.com/mxe/mxe/issues
+[config.guess]: https://github.com/mxe/mxe/blob/master/ext/config.guess#L3-L27
+[gmsl]: https://github.com/mxe/mxe/blob/master/ext/gmsl#L8-L40
+[packages]: http://mxe.cc/#packages
