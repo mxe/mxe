@@ -6,7 +6,7 @@ $(PKG)_VERSION  := 2.82-r2704
 $(PKG)_CHECKSUM := 67e4c9eb76f7adf99501d726d8ad5e9b525dfd0843fbce9ca73aaca4ba9eced2
 $(PKG)_SUBDIR   := bullet-$($(PKG)_VERSION)
 $(PKG)_FILE     := bullet-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := https://bullet.googlecode.com/files/$($(PKG)_FILE)
+$(PKG)_URL      := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/bullet/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
