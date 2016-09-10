@@ -8,4 +8,4 @@ script:
 
 env:
   global:
-    secure: M3fS92HUV+3PklS3h1CVG+TuhZLYgGEeWVsL0ICvJKnbMSvaqm0/OAxwlXbKLkZ/j6JK2yGgChx8QzffkoRr67tHCaPM7cR7mFRn7GivJcgZcA8UAaL9V4AtEHqFIonat8XEsxruUPJyVHgGiTBQfKphQEGtKtHF8iSUhvIxqC8=
+    secure: "i8BKOLA0U/zZchCQmnTmK9yCawoWlRJKXlpSvdmSo5w+OyFbWO372CmMFxyAzSa9umC3QLhCDzd9CcpqtDsSZTKPWqCTPZ+HYKMBmFi8jIxqWOuNVn3KTGWOhpWM6az/w7lDqrJ/W30H2wnJBRJFocOiRdkrSOpuLDv0s0loFsU="
