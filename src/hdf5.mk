@@ -6,7 +6,7 @@ $(PKG)_VERSION  := 1.8.12
 $(PKG)_CHECKSUM := 6d080f913a226a3ce390a11d9b571b2d5866581a2aa4434c398cd371c7063639
 $(PKG)_SUBDIR   := hdf5-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf5-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF5/releases/$($(PKG)_SUBDIR)/src/$($(PKG)_FILE)
+$(PKG)_URL      := https://support.hdfgroup.org/ftp/HDF5/prev-releases/hdf5-$($(PKG)_VERSION)/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads zlib
 
 define $(PKG)_UPDATE
