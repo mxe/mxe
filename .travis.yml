@@ -4,7 +4,7 @@ sudo: false
 script:
   - make docs/build-matrix.html docs/versions.json
   - if [ "$GH_TOKEN" != "" ]; then ./tools/travis-push.sh; fi
-  - make download -j 6 -k
+  - make download -j 6 -k MXE_PLUGIN_DIRS="$(./tools/plugins-with-additional-packages.sh)"
 
 env:
   global:
