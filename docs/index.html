@@ -2825,66 +2825,18 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             }
             return packageElements;
         }
-        function parseVersion(mkfile) {
-            var matchResult = mkfile.match(/^\$\(PKG\)_VERSION\s*:?=\s*(.+)\s*$/m);
-            return matchResult[1];
-        }
-        function loadVersions(packageElements, doneCallback) {
-            var versions = {};
-            var packageCount = 0;
-            for (var package in packageElements) {
-                packageCount++;
-            }
-            var loadCount = 0;
-            for (var packageIndex in packageElements) {
-                (function handlePackage(){
-                    var package = packageIndex;
-                    var request = new XMLHttpRequest();
-                    request.open('GET', 'src/' + package + '.mk', true);
-                    request.onreadystatechange = function reqCallback() {
-                        if (request.readyState === 4) {
-                            versions[package] = parseVersion(request.responseText);
-                            loadCount++;
-                            if (loadCount === packageCount) {
-                                doneCallback(versions);
-                            }
-                        }
-                    }
-                    request.send();
-                })();
-            }
-        }
-        function loadVersionCache(doneCallback, errCallback) {
+        function loadVersionCache(doneCallback) {
             var request = new XMLHttpRequest();
             request.open('GET', 'versions.json', true);
             request.onreadystatechange = function reqCallback() {
                 if (request.readyState === 4) {
                     if (request.status === 200) {
-                        try {
-                            var versions = JSON.parse(request.responseText);
-                            doneCallback(versions);
-                        } catch (e) {
-                            errCallback();
-                        }
-                    } else {
-                        errCallback();
+                        var versions = JSON.parse(request.responseText);
+                        doneCallback(versions);
                     }
                 }
             }
             request.send();
-        }
-        function resolveVersions(versions) {
-            var resolvedVersions = {};
-            for (var package in versions) {
-                var version = versions[package];
-                var matchResult = version.match(/^\$\((.+)_VERSION\)$/);
-                if (matchResult) {
-                    resolvedVersions[package] = versions[matchResult[1]];
-                } else {
-                    resolvedVersions[package] = versions[package];
-                }
-            }
-            return resolvedVersions;
         }
         function showVersions(packageElements, resolvedVersions) {
             for (package in packageElements) {
@@ -2906,11 +2858,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             var packageElements = getPackageElements();
             loadVersionCache(function doneCallback(versions) {
                 showVersions(packageElements, versions);
-            }, function errCallback() {
-                loadVersions(packageElements, function doneCallback(versions) {
-                    var resolvedVersions = resolveVersions(versions);
-                    showVersions(packageElements, resolvedVersions);
-                });
             });
         })();
     </script>
