@@ -2,8 +2,8 @@
 
 PKG             := openssl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.2h
-$(PKG)_CHECKSUM := 1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919
+$(PKG)_VERSION  := 1.0.2i
+$(PKG)_CHECKSUM := 9287487d11c9545b6efb287cdb70535d4e9b284dd10d51441d9b9963d000de6f
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.openssl.org/source/$($(PKG)_FILE)
