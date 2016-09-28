@@ -1,13 +1,14 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
-PKG             := vtk
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.0.0
-$(PKG)_CHECKSUM := 78a990a15ead79cdc752e86b83cfab7dbf5b7ef51ba409db02570dbdd9ec32c3
-$(PKG)_SUBDIR   := VTK-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc hdf5 qtbase qttools libpng expat libxml2 jsoncpp tiff
+PKG               := vtk
+$(PKG)_IGNORE     :=
+$(PKG)_VERSION    := 7.0.0
+$(PKG)_CHECKSUM   := 78a990a15ead79cdc752e86b83cfab7dbf5b7ef51ba409db02570dbdd9ec32c3
+$(PKG)_SUBDIR     := VTK-$($(PKG)_VERSION)
+$(PKG)_FILE       := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_URL        := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_QT_VERSION := 5
+$(PKG)_DEPS       := gcc hdf5 qtbase qttools libpng expat libxml2 jsoncpp tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
@@ -43,7 +44,7 @@ define $(PKG)_BUILD
         -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
         -DVTK_Group_Qt=ON \
         -DVTK_Group_Imaging=ON \
-        -DVTK_QT_VERSION=5 \
+        -DVTK_QT_VERSION=$($(PKG)_QT_VERSION) \
         -DVTK_USE_CXX11_FEATURES=ON \
         -DVTK_USE_SYSTEM_LIBRARIES=ON \
         -DVTK_USE_SYSTEM_LIBPROJ4=OFF \
