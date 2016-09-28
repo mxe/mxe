@@ -3,7 +3,7 @@
 # override relevant vtk and qwt variables to build against Qt 4 instead of 5
 
 PKG               := vtk
-$(PKG)_DEPS       := gcc hdf5 qt libpng expat libxml2 jsoncpp tiff
+$(PKG)_DEPS       := gcc hdf5 qt libpng expat libxml2 jsoncpp tiff freetype
 $(PKG)_QT_VERSION := 4
 
 PKG               := qwt
