@@ -6,11 +6,11 @@ $(PKG)_VERSION  := 3.3.6
 $(PKG)_CHECKSUM := 8f82576076deb1d72cfb8ff42cf7ffb3553a45da32123b2a3cf36e66040678ab
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/kdeforche/wt/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/emweb/wt/archive/$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc boost graphicsmagick libharu openssl pango postgresql qt sqlite
 
 define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_ALL_TAGS, kdeforche/wt) \
+    $(call MXE_GET_GITHUB_ALL_TAGS, emweb/wt) \
     | grep -v 'rc' \
     | $(SORT) -V \
     | tail -1
