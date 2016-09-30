@@ -1,0 +1,12 @@
+--- a/libdane/Makefile.in	2016-09-21 15:32:16.666727456 +0200
++++ b/libdane/Makefile.in	2016-09-21 15:32:35.750727456 +0200
+@@ -1823,7 +1823,7 @@
+ 
+ .PRECIOUS: Makefile
+ 
+-@HAVE_LD_OUTPUT_DEF_TRUE@libgnutls_dane-$(DLL_VERSION).def: libgnutls-dane.la
++@HAVE_LD_OUTPUT_DEF_TRUE@libgnutls-dane-$(DLL_VERSION).def: libgnutls-dane.la
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+
