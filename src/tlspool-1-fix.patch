@@ -1,6 +1,16 @@
 --- a/lib/Makefile	2016-08-24 08:57:20.000000000 +0200
-+++ b/lib/Makefile	2016-10-01 12:07:21.146858000 +0200
-@@ -25,7 +25,7 @@
++++ b/lib/Makefile	2016-10-01 13:06:15.666188000 +0200
+@@ -1,7 +1,6 @@
+-ifdef WINVER
+-TARGETS = libtlspool.dll libtlspool.lib
+-else
+ TARGETS = libtlspool.so libtlspool.a
++ifdef WINVER
++TARGETS += libtlspool.dll libtlspool.lib
+ endif
+ 
+ #
+@@ -25,7 +24,7 @@
  
  ifdef WINVER
  # TODO libtlspool_lidentry and libtlspool_pinentry
@@ -9,3 +19,34 @@
  else
  libtlspool_OBJS = libtlspool.o libtlspool_lidentry.o libtlspool_pinentry.o libtlspool_configvar.o
  endif
+@@ -75,13 +74,13 @@
+ anew: clean all
+ 
+ install: all
++	install libtlspool.so libtlspool.a "$(DESTDIR)$(PREFIX)/lib/"
+ ifdef WINVER
+ 	install libtlspool.dll libtlspool.lib "$(DESTDIR)$(PREFIX)/bin/"
+ 	mkdir -p "$(DESTDIR)$(PREFIX)/include/tlspool"
+ 	install ../include/tlspool/starttls.h "$(DESTDIR)$(PREFIX)/include/tlspool"
+ 	install ../include/tlspool/commands.h "$(DESTDIR)$(PREFIX)/include/tlspool"	
+ else	
+-	install libtlspool.so libtlspool.a "$(DESTDIR)$(PREFIX)/lib/"
+ 	@echo '#'
+ 	@echo '# Python libraries not yet installed'
+ 	@echo '#'
+@@ -91,13 +90,13 @@
+ 	#DIY# @$(foreach w,$(WRAPPERS),$(MAKE) DESTDIR=$(DESTDIR) PREFIX=$(PREFIX) -C '$(w)' install && ) echo Wrappers installed for $(WRAPPERS)
+ 
+ uninstall:
++	rm -f "$(DESTDIR)$(PREFIX)/lib/libtlspool.so"
++	rm -f "$(DESTDIR)$(PREFIX)/lib/libtlspool.a"
+ ifdef WINVER
+ 	rm -f "$(DESTDIR)$(PREFIX)/bin/libtlspool.dll"
+ 	rm -f "$(DESTDIR)$(PREFIX)/bin/libtlspool.lib"
+ 	rm -rf "$(DESTDIR)$(PREFIX)/include/tlspool/"
+ else
+-	rm -f "$(DESTDIR)$(PREFIX)/lib/libtlspool.so"
+-	rm -f "$(DESTDIR)$(PREFIX)/lib/libtlspool.a"
+ 	@echo '#'
+ 	@echo '# Python libraries not yet removed'
+ 	@echo '#'
