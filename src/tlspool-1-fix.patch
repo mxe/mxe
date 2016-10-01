@@ -1,52 +1,11 @@
---- a/lib/Makefile	2016-09-21 20:49:06.554727456 +0200
-+++ b/lib/Makefile	2016-09-21 21:21:08.582727456 +0200
-@@ -1,5 +1,5 @@
- ifdef WINVER
--TARGETS = libtlspool.dll libtlspool.lib
-+TARGETS = libtlspool.so libtlspool.a libtlspool.dll libtlspool.lib
- else
- TARGETS = libtlspool.so libtlspool.a tlspool.pyc tlspool.pyo
- endif
-@@ -14,9 +14,9 @@
+--- a/lib/Makefile	2016-08-24 08:57:20.000000000 +0200
++++ b/lib/Makefile	2016-10-01 12:07:21.146858000 +0200
+@@ -25,7 +25,7 @@
  
  ifdef WINVER
  # TODO libtlspool_lidentry and libtlspool_pinentry
 -libtlspool_OBJS = libtlspool.o
 +libtlspool_OBJS = libtlspool.o libtlspool_configvar.o
  else
--libtlspool_OBJS = libtlspool.o libtlspool_lidentry.o libtlspool_pinentry.o
-+libtlspool_OBJS = libtlspool.o libtlspool_configvar.o libtlspool_lidentry.o libtlspool_pinentry.o
+ libtlspool_OBJS = libtlspool.o libtlspool_lidentry.o libtlspool_pinentry.o libtlspool_configvar.o
  endif
- 
- OBJS = $(libtlspool_OBJS)
-@@ -57,13 +57,13 @@
- anew: clean all
- 
- install: all
-+	install libtlspool.so libtlspool.a "$(DESTDIR)$(PREFIX)/lib/"
- ifdef WINVER
- 	install libtlspool.dll libtlspool.lib "$(DESTDIR)$(PREFIX)/bin/"
- 	mkdir -p "$(DESTDIR)$(PREFIX)/include/tlspool"
- 	install ../include/tlspool/starttls.h "$(DESTDIR)$(PREFIX)/include/tlspool"
- 	install ../include/tlspool/commands.h "$(DESTDIR)$(PREFIX)/include/tlspool"	
- else	
--	install libtlspool.so libtlspool.a "$(DESTDIR)$(PREFIX)/lib/"
- 	@echo '#'
- 	@echo '# Python libraries not yet installed'
- 	@echo '#'
-@@ -72,13 +72,13 @@
- endif
- 
- uninstall:
-+	rm -f "$(DESTDIR)$(PREFIX)/lib/libtlspool.so"
-+	rm -f "$(DESTDIR)$(PREFIX)/lib/libtlspool.a"
- ifdef WINVER
- 	rm -f "$(DESTDIR)$(PREFIX)/bin/libtlspool.dll"
- 	rm -f "$(DESTDIR)$(PREFIX)/bin/libtlspool.lib"
- 	rm -rf "$(DESTDIR)$(PREFIX)/include/tlspool/"
- else
--	rm -f "$(DESTDIR)$(PREFIX)/lib/libtlspool.so"
--	rm -f "$(DESTDIR)$(PREFIX)/lib/libtlspool.a"
- 	@echo '#'
- 	@echo '# Python libraries not yet removed'
- 	@echo '#'
