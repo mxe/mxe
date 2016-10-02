@@ -5,10 +5,10 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sat, 25 Jun 2016 13:51:06 +0200
-Subject: [PATCH] cgo: add environmental variable override for pkg-config
+Subject: [PATCH] cgo: add environment variable override for pkg-config
 
 Allow overriding default name of `pkg-config` utility via
-environmental variable PKG_CONFIG (same as used by autoconf
+environment variable PKG_CONFIG (same as used by autoconf
 pkg.m4 macros). This facilitates easy cross-compilation of cgo
 code.
 
