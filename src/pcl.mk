@@ -2,8 +2,8 @@
 
 PKG             := pcl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.2
-$(PKG)_CHECKSUM := 479f84f2c658a6319b78271111251b4c2d6cf07643421b66bbc351d9bed0ae93
+$(PKG)_VERSION  := 1.8.0
+$(PKG)_CHECKSUM := 9e54b0c1b59a67a386b9b0f4acb2d764272ff9a0377b825c4ed5eedf46ebfcf4
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/PointCloudLibrary/pcl/archive/$($(PKG)_FILE)
@@ -42,6 +42,7 @@ define $(PKG)_BUILD
         -DHAVE_MM_MALLOC_EXITCODE=0 \
         -DHAVE_SSE4_2_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE4_1_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSSE3_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE2_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE_EXTENSIONS_EXITCODE=0
