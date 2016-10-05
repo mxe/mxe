@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := log4cxx
 $(PKG)_IGNORE   :=
@@ -30,7 +29,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-log4cxx.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-log4cxx.exe' \
         `$(TARGET)-pkg-config liblog4cxx --libs`
 endef
 

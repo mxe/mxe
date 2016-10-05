@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lapack
 $(PKG)_VERSION  := 3.6.0
@@ -29,11 +28,11 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gfortran' \
         -W -Wall -Werror -pedantic \
-        '$(2).f' -o '$(PREFIX)/$(TARGET)/bin/test-lapack.exe' \
+        '$(PWD)/src/$(PKG)-test.f' -o '$(PREFIX)/$(TARGET)/bin/test-lapack.exe' \
         -llapack
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lapacke.exe' \
+        '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-lapacke.exe' \
         -llapacke -llapack -lcblas -lblas -lgfortran -lquadmath
 endef

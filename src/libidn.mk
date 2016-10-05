@@ -1,10 +1,9 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libidn
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.32
-$(PKG)_CHECKSUM := ba5d5afee2beff703a34ee094668da5c6ea5afa38784cebba8924105e185c4f5
+$(PKG)_VERSION  := 1.33
+$(PKG)_CHECKSUM := 44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19
 $(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
 $(PKG)_FILE     := libidn-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
@@ -27,6 +26,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libidn.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libidn.exe' \
         `'$(TARGET)-pkg-config' libidn --cflags --libs`
 endef

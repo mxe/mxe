@@ -1,10 +1,9 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freetype
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.6.3
-$(PKG)_CHECKSUM := 371e707aa522acf5b15ce93f11183c725b8ed1ee8546d7b3af549863045863a2
+$(PKG)_VERSION  := 2.7
+$(PKG)_CHECKSUM := d6a451f5b754857d2aa3964fd4473f8bc5c64e879b24516d780fb26bec7f7d48
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(shell echo '$($(PKG)_VERSION)' | cut -d . -f 1,2,3)/$($(PKG)_FILE)

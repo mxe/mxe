@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := poppler
 $(PKG)_IGNORE   :=
@@ -24,14 +23,14 @@ define $(PKG)_BUILD
     cd '$(1)' \
         && PATH='$(PREFIX)/$(TARGET)/qt/bin:$(PATH)' \
         ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
+        $(MXE_CONFIGURE_OPTS) \
         --disable-silent-rules \
-        --disable-shared \
-        --enable-static \
         --enable-xpdf-headers \
-        --enable-poppler-qt4 \
+        $(if $(filter qtbase,$($(PKG)_DEPS)), \
+          --enable-poppler-qt5 \
+          --disable-poppler-qt4, \
+          --disable-poppler-qt5 \
+          --enable-poppler-qt4) \
         --enable-zlib \
         --enable-cms=lcms2 \
         --enable-libcurl \
@@ -61,9 +60,6 @@ define $(PKG)_BUILD
     # Test program
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).cxx' -o '$(PREFIX)/$(TARGET)/bin/test-poppler.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-poppler.exe' \
         `'$(TARGET)-pkg-config' poppler poppler-cpp --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
-

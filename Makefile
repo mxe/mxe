@@ -1,12 +1,11 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
 EXT_DIR  := $(TOP_DIR)/ext
 
 # GNU Make Standard Library (http://gmsl.sourceforge.net/)
-# See doc/gmsl.html for further information
+# See docs/gmsl.html for further information
 include $(EXT_DIR)/gmsl
 
 MXE_TRIPLETS       := i686-w64-mingw32 x86_64-w64-mingw32
@@ -51,12 +50,12 @@ TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(MXE_TMP)/tmp-$(1)
 PKGS       := $(call set_create,\
-    $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/index.html'))
+    $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/docs/index.html'))
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
 # All pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
-# These aren't meaningful to the pkg list in index.html so
+# These aren't meaningful to the pkg list in docs/index.html so
 # use a list in case we want to separate autotools, cmake etc.
 MXE_CONF_PKGS := mxe-conf
 PKGS          += $(MXE_CONF_PKGS)
@@ -143,9 +142,13 @@ define MXE_GET_GITHUB_SHA
     | head -1
 endef
 
-define MXE_GET_GITHUB_TAGS
+define MXE_GET_GITHUB_ALL_TAGS
     $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/tags/' \
-    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p' \
+    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p'
+endef
+
+define MXE_GET_GITHUB_TAGS
+    $(call MXE_GET_GITHUB_ALL_TAGS, $(1)) \
     | $(SED) 's,^$(strip $(2)),,g' \
     | $(SORT) -V \
     | tail -1
@@ -190,20 +193,32 @@ UNPACK_PKG_ARCHIVE = \
 # all files for extension plugins will be considered for outdated checks
 PKG_MAKEFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).mk, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
 PKG_TESTFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1)-test*, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
-PKG_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
+# allow packages to specify a list of zero or more patches
+PKG_PATCHES   = $(if $(findstring undefined,$(origin $(1)_PATCHES)), \
+                    $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS))))) \
+                $(else), \
+                    $($(1)_PATCHES))
 
 define PREPARE_PKG_SOURCE
-    cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
-    cd '$(2)/$($(1)_SUBDIR)'
-    $(foreach PKG_PATCH,$(PKG_PATCHES),
-        (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
+    $(if $($(1)_SOURCE_TREE),\
+        ln -si '$(realpath $($(1)_SOURCE_TREE))' '$(2)/$($(1)_SUBDIR)'
+    $(else),\
+        cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
+        cd '$(2)/$($(1)_SUBDIR)'
+        $(foreach PKG_PATCH,$(PKG_PATCHES),
+            (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
+    )
 endef
 
 PKG_CHECKSUM = \
     openssl dgst -sha256 '$(PKG_DIR)/$($(1)_FILE)' 2>/dev/null | $(SED) -n 's,^.*\([0-9a-f]\{64\}\)$$,\1,p'
 
 CHECK_PKG_ARCHIVE = \
-    [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1))`" ]
+    $(if $($(1)_SOURCE_TREE),\
+        $(PRINTF_FMT) '[local]' '$(1)' '$($(1)_SOURCE_TREE)' | $(RTRIM)\
+    $(else),\
+        [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1))`" ]\
+    )
 
 ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
@@ -214,6 +229,9 @@ BACKUP_DOWNLOAD = \
     $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`))
 
 DOWNLOAD_PKG_ARCHIVE = \
+    $(if $($(1)_SOURCE_TREE),\
+        true\
+    $(else),\
         mkdir -p '$(PKG_DIR)' && ( \
             $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' \
             $(if $($(1)_URL_2), \
@@ -229,7 +247,8 @@ DOWNLOAD_PKG_ARCHIVE = \
         ( echo; \
           echo 'Download failed!'; \
           echo; \
-          rm -f '$(PKG_DIR)/$($(1)_FILE)'; )
+          rm -f '$(PKG_DIR)/$($(1)_FILE)'; )\
+    )
 
 # open issue from 2002:
 # http://savannah.gnu.org/bugs/?712
@@ -250,7 +269,7 @@ else
     $(info [create settings.mk])
     $(shell { \
         echo '# This is a template of configuration file for MXE. See'; \
-        echo '# index.html for more extensive documentations.'; \
+        echo '# docs/index.html for more extensive documentations.'; \
         echo; \
         echo '# This variable controls the number of compilation processes'; \
         echo '# within one package ("intra-package parallelism").'; \
@@ -350,7 +369,7 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE) | $(PREFIX)/installed/.gitke
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
 	@if [ -e check-requirements-failed ]; then \
 	    echo; \
-	    echo 'Please have a look at "index.html" to ensure'; \
+	    echo 'Please have a look at "docs/index.html" to ensure'; \
 	    echo 'that your system meets all requirements.'; \
 	    echo; \
 	    rm check-requirements-failed; \
@@ -365,16 +384,18 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 	@rm -f '$(PREFIX)/installed/print-git-oneline-'*
 	@touch '$@'
 
-# include core MXE packages and set *_MAKEFILE
+# include core MXE packages and set base filenames
 include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
 $(foreach PKG,$(PKGS),\
-    $(eval $(PKG)_MAKEFILE := $(realpath $(TOP_DIR)/src/$(PKG).mk)))
+    $(eval $(PKG)_MAKEFILE  := $(realpath $(TOP_DIR)/src/$(PKG).mk)) \
+    $(eval $(PKG)_TEST_FILE := $(realpath $(wildcard $(TOP_DIR)/src/$(PKG)-test.*))))
 
-# include files from MXE_PLUGIN_DIRS, set *_MAKEFILE and `all-<plugin>` target
+# include files from MXE_PLUGIN_DIRS, set base filenames and `all-<plugin>` target
 PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
 PLUGIN_PKGS  := $(basename $(notdir $(PLUGIN_FILES)))
 $(foreach FILE,$(PLUGIN_FILES),\
-    $(eval $(basename $(notdir $(FILE)))_MAKEFILE ?= $(FILE)) \
+    $(eval $(basename $(notdir $(FILE)))_MAKEFILE  ?= $(FILE)) \
+    $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(wildcard $(basename $(FILE))-test.*)) \
     $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE)))))
 include $(PLUGIN_FILES)
 PKGS := $(sort $(PKGS) $(PLUGIN_PKGS))
@@ -399,6 +420,7 @@ PKG_COL_WIDTH    := $(call plus,2,$(call LIST_NMAX, $(sort $(call map, strlen, $
 MAX_TARGET_WIDTH := $(call LIST_NMAX, $(sort $(call map, strlen, $(MXE_TARGETS))))
 TARGET_COL_WIDTH := $(call subtract,100,$(call plus,$(PKG_COL_WIDTH),$(MAX_TARGET_WIDTH)))
 PRINTF_FMT       := printf '%-11s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
+RTRIM            := $(SED) 's, \+$$$$,,'
 
 .PHONY: download
 download: $(addprefix download-,$(PKGS))
@@ -415,7 +437,7 @@ define TARGET_RULE
 	    @echo 'Warning: Deprecated target name $(1) specified'
 	    @echo
 	    @echo 'Please use $(1).[$(subst $(space),|,$(MXE_LIB_TYPES))] instead'
-	    @echo 'See index.html for further information'
+	    @echo 'See docs/index.html for further information'
 	    @echo '------------------------------------------------------------'
 	    @echo)
 endef
@@ -426,11 +448,16 @@ define PKG_RULE
 download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
 
 .PHONY: download-only-$(1)
-download-only-$(1):
+# Packages can share a source archive to build different sets of features
+# or dependencies (see bfd/binutils openscenegraph/openthreads qwt/qwt_qt4).
+# Use a double-colon rule to allow multiple definitions:
+# https://www.gnu.org/software/make/manual/html_node/Double_002dColon.html
+download-only-$(1): download-only-$($(1)_FILE)
+download-only-$($(1)_FILE)::
 	$(and $($(1)_URL),
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
-	    $(PRINTF_FMT) '[download]' '$(1)'; \
+	    $(PRINTF_FMT) '[download]' '$(1)' | $(RTRIM); \
 	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    grep 'MXE Warning' '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
@@ -484,10 +511,14 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           print-git-oneline
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
-	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)',
-	    @$(PRINTF_FMT) '[no-build]' '$(1)' '$(3)')
+	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)' | $(RTRIM)
+	,
+	    @$(PRINTF_FMT) '[no-build]' '$(1)' '$(3)' | $(RTRIM)
+	)
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3))),
-	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))')
+	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))' \
+	    | $(RTRIM)
+	)
 	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
 	@if ! (time $(PRELOAD) WINEPREFIX='$(2)/readonly' $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
@@ -508,11 +539,19 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 
 
 .PHONY: build-only-$(1)_$(3)
+# target-specific variables provide an extra level of scoping so that named
+# variables can be used in package build rules:
+# https://www.gnu.org/software/make/manual/html_node/Target_002dspecific.html
 build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
+build-only-$(1)_$(3): BUILD_TYPE = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),debug,release)
+build-only-$(1)_$(3): BUILD_TYPE_SUFFIX = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),d)
+build-only-$(1)_$(3): SOURCE_DIR = $(or $($(1)_SOURCE_TREE),$(2)/$($(1)_SUBDIR))
+build-only-$(1)_$(3): BUILD_DIR  = $(2)/$(if $($(1)_SOURCE_TREE),local,$($(1)_SUBDIR)).build_
+build-only-$(1)_$(3): TEST_FILE  = $($(1)_TEST_FILE)
 build-only-$(1)_$(3): CMAKE_RUNRESULT_FILE = $(PREFIX)/share/cmake/modules/TryRunResults.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_FILE = $(PREFIX)/$(3)/share/cmake/mxe-conf.cmake
 build-only-$(1)_$(3): CMAKE_TOOLCHAIN_DIR  = $(PREFIX)/$(3)/share/cmake/mxe-conf.d
@@ -531,6 +570,8 @@ build-only-$(1)_$(3):
 	    perl --version 2>&1 | head -3
 	    rm -rf   '$(2)'
 	    mkdir -p '$(2)'
+	    mkdir -p '$$(SOURCE_DIR)'
+	    mkdir -p '$$(BUILD_DIR)'
 
 	    # disable wine with readonly directory
 	    # see https://github.com/mxe/mxe/issues/841
@@ -601,7 +642,7 @@ show-deps-%:
 	        $(newline)$(newline)$* downstream dependents:$(newline)\
 	        $(call WALK_DOWNSTREAM,$*))\
 	    @echo,\
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 # show upstream dependencies and downstream dependents separately
 # suitable for usage in shell with: `make show-downstream-deps-foo`
@@ -611,14 +652,14 @@ show-downstream-deps-%:
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $(call WALK_DOWNSTREAM,$*))\
 	    @echo -n,\
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 show-upstream-deps-%:
 	$(if $(call set_is_member,$*,$(PKGS)),\
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $(call WALK_UPSTREAM,$*))\
 	    @echo -n,\
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 # print first level pkg deps for use in build-pkg.lua
 .PHONY: print-deps-for-build-pkg
@@ -676,13 +717,13 @@ update:
 update-package-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(and $($*_UPDATE),$(call UPDATE,$*,$(shell $($*_UPDATE)))), \
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
 	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$($*_MAKEFILE)', \
-	    $(error Package $* not found in index.html))
+	    $(error Package $* not found in docs/index.html))
 
 .PHONY: cleanup-style
 define CLEANUP_STYLE
@@ -701,7 +742,7 @@ define CLEANUP_STYLE
 
 endef
 cleanup-style:
-	$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile index.html CNAME src/*.mk src/*test.* tools/*)),$(call CLEANUP_STYLE,$(FILE)))
+	$(foreach FILE,$(wildcard $(addprefix $(TOP_DIR)/,Makefile docs/index.html docs/CNAME src/*.mk src/*test.* tools/*)),$(call CLEANUP_STYLE,$(FILE)))
 
 .PHONY: cleanup-deps-style
 cleanup-deps-style:
@@ -716,7 +757,8 @@ cleanup-deps-style:
 	     || echo '*** Multi-line deps are mangled ***' && comm -3 tmp-$@-pre tmp-$@-post
 	@rm -f $(TOP_DIR)/tmp-$@-*
 
-build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
+.PHONY: docs/build-matrix.html
+docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '<!DOCTYPE html>'                  > $@
 	@echo '<html>'                          >> $@
 	@echo '<head>'                          >> $@
@@ -808,8 +850,8 @@ build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '</body>'                         >> $@
 	@echo '</html>'                         >> $@
 
-.PHONY: versions.json
-versions.json: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
+.PHONY: docs/versions.json
+docs/versions.json: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
 	@echo '{'                         > $@
 	@{$(foreach PKG,$(PKGS),          \
 	    echo '    "$(PKG)":           \

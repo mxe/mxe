@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-cairo
 $(PKG)_IGNORE   :=
@@ -30,7 +29,7 @@ define $(PKG)_BUILD
         -package lablgtk2.auto-init \
         -package cairo.lablgtk2 \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        < '$(2).ml'
+        < '$(TEST_FILE)'
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =

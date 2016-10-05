@@ -1,19 +1,19 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := wt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.5
-$(PKG)_CHECKSUM := c136ce78ee00fe950071ab56a112b5d9a1fc19944b56a530b1826de865523eaf
+$(PKG)_VERSION  := 3.3.6
+$(PKG)_CHECKSUM := 8f82576076deb1d72cfb8ff42cf7ffb3553a45da32123b2a3cf36e66040678ab
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kdeforche/wt/archive/$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc boost graphicsmagick libharu openssl pango postgresql qt sqlite
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/witty/files/wt/' | \
-    $(SED) -n 's,.*<a href="/projects/witty/files/wt/\([0-9][^>]*\)/.*,\1,p' | \
-    head -1
+    $(call MXE_GET_GITHUB_ALL_TAGS, kdeforche/wt) \
+    | grep -v 'rc' \
+    | $(SORT) -V \
+    | tail -1
 endef
 
 define $(PKG)_BUILD

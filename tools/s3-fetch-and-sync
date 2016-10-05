@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 # cron job running on our DigitalOcean server fetching and uploading
 # package tarballs to MXE Amazon S3 backup server.
@@ -23,7 +22,7 @@ file_issue=false
 
 # List of plugin dirs to include in downloads
 # Can't include all subdirs since some affect versions
-plugin_dirs=`echo plugins/{apps,luarocks,native,tcl.tk}`
+plugin_dirs=`./tools/plugins-with-additional-packages.sh`
 
 cd ~/mxe && git pull
 

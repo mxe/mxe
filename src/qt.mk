@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qt
 $(PKG)_IGNORE   :=
@@ -22,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
-        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
+        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -liconv -lws2_32" \
         CXXFLAGS="-std=gnu++98" \
         ./configure \
@@ -66,12 +65,20 @@ define $(PKG)_BUILD
         -system-sqlite \
         -openssl-linked \
         -dbus-linked \
-        -v
+        -v \
+        $($(PKG)_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt'
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt4
+
+    # symlink mkspecs/default if it isn't already
+    # required on OSX to mimic linux installation
+    [[ -L  '$(PREFIX)/$(TARGET)/qt/mkspecs/default' ]] || \
+    rm -rf '$(PREFIX)/$(TARGET)/qt/mkspecs/default' && \
+    ln -s  '$(PREFIX)/$(TARGET)/qt/mkspecs/win32-g++-4.6' \
+           '$(PREFIX)/$(TARGET)/qt/mkspecs/default'
 
     # lrelease (from linguist) needed to prepare translation files
     $(MAKE) -C '$(1)/tools/linguist/lrelease' -j '$(JOBS)' install
@@ -96,7 +103,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/tools/qdbus' -j '$(JOBS)' install
 
     mkdir            '$(1)/test-qt'
-    cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PWD)/$(2).pro'
+    cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PWD)/src/$(PKG)-test.pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 

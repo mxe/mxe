@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := fltk
 $(PKG)_IGNORE   :=
@@ -30,6 +29,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -pedantic -ansi \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-fltk.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-fltk.exe' \
         `$(TARGET)-fltk-config --cxxflags --ld$(if $(BUILD_STATIC),static)flags`
 endef

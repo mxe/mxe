@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libaacs
 $(PKG)_IGNORE   :=
@@ -28,7 +27,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -std=c99 -pedantic \
-        '$(2).c' \
+        '$(TEST_FILE)' \
         -o '$(PREFIX)/$(TARGET)/bin/test-libaacs.exe' \
         `'$(TARGET)-pkg-config' libaacs --cflags --libs`
 endef

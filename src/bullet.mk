@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := bullet
 $(PKG)_IGNORE   :=
@@ -7,7 +6,7 @@ $(PKG)_VERSION  := 2.82-r2704
 $(PKG)_CHECKSUM := 67e4c9eb76f7adf99501d726d8ad5e9b525dfd0843fbce9ca73aaca4ba9eced2
 $(PKG)_SUBDIR   := bullet-$($(PKG)_VERSION)
 $(PKG)_FILE     := bullet-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := https://bullet.googlecode.com/files/$($(PKG)_FILE)
+$(PKG)_URL      := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/bullet/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
@@ -33,6 +32,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef

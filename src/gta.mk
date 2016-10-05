@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gta
 $(PKG)_IGNORE   :=
@@ -26,7 +25,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gta.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gta.exe' \
         `'$(TARGET)-pkg-config' gta --cflags --libs`
 endef
 

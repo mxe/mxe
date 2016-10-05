@@ -1,10 +1,9 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freetds
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.00
-$(PKG)_CHECKSUM := 5d617cc22855814815f815a2a1e354d91e674101ca08e55fbad3e51f14e61040
+$(PKG)_VERSION  := 1.00.15
+$(PKG)_CHECKSUM := 3f23655da694f5cb116a722411cd98cff7e8161ca2988afca5221d5c2b942a83
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)

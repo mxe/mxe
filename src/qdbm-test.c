@@ -1,6 +1,5 @@
 /*
- * This file is part of MXE.
- * See index.html for further information.
+ * This file is part of MXE. See LICENSE.md for licensing information.
  *
  * Taken from examples at http://fallabs.com/qdbm/spex.html
  */

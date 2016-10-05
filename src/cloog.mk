@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cloog
 $(PKG)_IGNORE   :=
@@ -15,6 +14,7 @@ $(PKG)_DEPS     := gcc gmp isl
 $(PKG)_DEPS_$(BUILD) := gmp isl
 
 # stick to tested versions from gcc
+# after gcc4 series, switch to normal updates and bundled isl
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'ftp://gcc.gnu.org/pub/gcc/infrastructure/' | \
     $(SED) -n 's,.*cloog-\([0-9][^>]*\)\.tar.*,\1,p' | \
@@ -22,13 +22,11 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_BUILD_$(BUILD)
+define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-gmp-prefix='$(PREFIX)/$(TARGET)' \
         --with-isl-prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $(if $(BUILD_SHARED),LDFLAGS=-no-undefined)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
-
-$(PKG)_BUILD_SHARED =

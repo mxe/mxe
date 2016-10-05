@@ -1,10 +1,9 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 87b0525
-$(PKG)_CHECKSUM := bd3b3c71f25c493a60dbe9e0f86b9c48fc43c0d7af3fb1a4aa6843422c6c1440
+$(PKG)_VERSION  := b133ce8
+$(PKG)_CHECKSUM := a81eed5ceda803ce3d250cc2c9bbc5ed7eab33308b81dee64747c5c7aa889e59
 $(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)

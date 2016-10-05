@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openexr
 $(PKG)_IGNORE   :=
@@ -62,6 +61,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -Wall -Wextra -std=gnu++0x \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-openexr.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-openexr.exe' \
         `'$(TARGET)-pkg-config' OpenEXR --cflags --libs`
 endef

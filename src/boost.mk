@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := boost
 $(PKG)_IGNORE   :=
@@ -67,7 +66,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-boost.exe' \
+        '$(PWD)/src/$(PKG)-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-boost.exe' \
         -DBOOST_THREAD_USE_LIB \
         -lboost_serialization-mt \
         -lboost_thread_win32-mt \

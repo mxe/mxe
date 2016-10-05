@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtkglext
 $(PKG)_IGNORE   :=
@@ -40,7 +39,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtkglext.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkglext.exe' \
         `'$(TARGET)-pkg-config' gtkglext-1.0 --cflags --libs`
 endef
 

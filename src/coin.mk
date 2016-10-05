@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := coin
 $(PKG)_IGNORE   :=
@@ -35,6 +34,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-coin.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-coin.exe' \
         `'$(TARGET)-pkg-config' Coin --cflags --libs`
 endef

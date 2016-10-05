@@ -1,10 +1,9 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := harfbuzz
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.7
-$(PKG)_CHECKSUM := bba0600ae08b84384e6d2d7175bea10b5fc246c4583dc841498d01894d479026
+$(PKG)_VERSION  := 1.3.2
+$(PKG)_CHECKSUM := 8543a6372f08c5987c632dfaa86210c7edb3f43fbacd96095c609bc3539ce027
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.freedesktop.org/software/$(PKG)/release/$($(PKG)_FILE)

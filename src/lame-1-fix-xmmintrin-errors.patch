@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 Fix compilation of SSE2 sources with GCC 4.9. Since this requires an autoreconf
 run, we manually disable the GTK 1.2 dependency, because we don't have the GTK

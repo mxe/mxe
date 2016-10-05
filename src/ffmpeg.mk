@@ -1,10 +1,9 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0
-$(PKG)_CHECKSUM := f19ff77a2f7f736a41dd1499eef4784bf3cb7461f07c13a268164823590113c0
+$(PKG)_VERSION  := 3.1.1
+$(PKG)_CHECKSUM := a5bca50a90a37b983eaa17c483a387189175f37ca678ae7e51d43e7610b4b3b4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
@@ -16,7 +15,7 @@ $(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libbs2b libcaca \
 # DO NOT ADD fdk-aac OR openssl SUPPORT.
 # Although they are free softwares, their licenses are not compatible with
 # the GPL, and we'd like to enable GPL in our default ffmpeg build.
-# See index.html#potential-legal-issues
+# See docs/index.html#potential-legal-issues
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ffmpeg.org/releases/' | \

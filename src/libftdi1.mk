@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libftdi1
 $(PKG)_IGNORE   :=
@@ -32,6 +31,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Wextra -Werror \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libftdi1.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libftdi1.exe' \
         `'$(TARGET)-pkg-config' libftdi1 --cflags --libs`
 endef

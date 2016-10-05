@@ -1,10 +1,9 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := xerces
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.2
-$(PKG)_CHECKSUM := 743bd0a029bf8de56a587c270d97031e0099fe2b7142cef03e0da16e282655a0
+$(PKG)_VERSION  := 3.1.4
+$(PKG)_CHECKSUM := c98eedac4cf8a73b09366ad349cb3ef30640e7a3089d360d40a3dde93f66ecf6
 $(PKG)_SUBDIR   := xerces-c-$($(PKG)_VERSION)
 $(PKG)_FILE     := xerces-c-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)
@@ -47,7 +46,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-xerces.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-xerces.exe' \
         `'$(TARGET)-pkg-config' xerces-c --cflags --libs`
 endef
 

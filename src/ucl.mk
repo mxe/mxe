@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ucl
 $(PKG)_IGNORE   :=
@@ -21,7 +20,8 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && \
         ./configure \
-        $(MXE_CONFIGURE_OPTS)
+        $(MXE_CONFIGURE_OPTS) \
+        CFLAGS='-std=gnu90 -fPIC'
     $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS=-no-undefined
     $(MAKE) -C '$(1)' -j 1 install
 endef

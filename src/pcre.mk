@@ -1,10 +1,9 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pcre
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8.38
-$(PKG)_CHECKSUM := b9e02d36e23024d6c02a2e5b25204b3a4fa6ade43e0a5f869f254f49535079df
+$(PKG)_VERSION  := 8.39
+$(PKG)_CHECKSUM := b858099f82483031ee02092711689e7245586ada49e534a06e678b8ea9549e8b
 $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/pcre/pcre/$($(PKG)_VERSION)/$($(PKG)_FILE)

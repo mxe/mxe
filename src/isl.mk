@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := isl
 $(PKG)_IGNORE   :=
@@ -15,6 +14,8 @@ $(PKG)_DEPS     := gcc gmp
 $(PKG)_DEPS_$(BUILD) := gmp
 
 # stick to tested versions from gcc
+# while in gcc4 series specific versions are required:
+# http://web.archive.org/web/20141031011459/http://gcc.gnu.org/install/prerequisites.html
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'ftp://gcc.gnu.org/pub/gcc/infrastructure/' | \
     $(SED) -n 's,.*isl-\([0-9][^>]*\)\.tar.*,\1,p' | \
@@ -26,8 +27,6 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-gmp-prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' $(if $(BUILD_SHARED),LDFLAGS=-no-undefined)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
-
-$(PKG)_BUILD_SHARED =

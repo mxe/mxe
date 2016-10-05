@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cgal
 $(PKG)_IGNORE   :=
@@ -23,7 +22,7 @@ define $(PKG)_BUILD
         -DCGAL_INSTALL_INC_DIR:STRING="include" \
         -DCGAL_INSTALL_DOC_DIR:STRING="share/doc/CGAL-$($(PKG)_VERSION)" \
         -DCGAL_INSTALL_BIN_DIR:STRING="bin" \
-        -DCGAL_BUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DCGAL_Boost_USE_STATIC_LIBS:BOOL=$(CMAKE_STATIC_BOOL) \
         -DWITH_CGAL_Qt3:BOOL=OFF \
         -DWITH_OpenGL:BOOL=ON \
@@ -31,7 +30,7 @@ define $(PKG)_BUILD
         -C '$(PWD)/src/cgal-TryRunResults.cmake' .
 
     $(MAKE) -C '$(1)' -j $(JOBS)
-    $(MAKE) -C '$(1)' -j $(JOBS) install
+    $(MAKE) -C '$(1)' -j 1 install
 
     cd '$(1)/examples/AABB_tree' && '$(TARGET)-cmake' \
         -DWITH_CGAL_Qt3:BOOL=OFF \

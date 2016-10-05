@@ -1,8 +1,7 @@
 #!/usr/bin/env lua
 
 --[[
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 build-pkg, Build binary packages from MXE packages
 Instructions: http://pkg.mxe.cc
@@ -16,14 +15,20 @@ Build in directory /usr/lib/mxe
 This directory can not be changed in .deb packages.
 
 To prevent build-pkg from creating deb packages,
-set environment variable MXE_NO_DEBS to 1
+set environment variable MXE_BUILD_PKG_NO_DEBS to 1
 In this case fakeroot and dpkg-deb are not needed.
 
-To switch off the second pass, set MXE_NO_SECOND_PASS to 1.
+To switch off the second pass, set
+MXE_BUILD_PKG_NO_SECOND_PASS to 1.
 See https://github.com/mxe/mxe/issues/1111
 
 To limit number of packages being built to x,
-set environment variable MXE_MAX_ITEMS to x,
+set environment variable MXE_BUILD_PKG_MAX_ITEMS to x.
+
+To set list of MXE targets to build,
+set environment variable MXE_BUILD_PKG_TARGETS to
+the list of targets separated by space.
+By default, all 4 major targets are built.
 
 The following error:
 > fakeroot, while creating message channels: Invalid argument
@@ -33,9 +38,10 @@ can be caused by leaked ipc resources originating in fakeroot.
 How to remove them: http://stackoverflow.com/a/4262545
 ]]
 
-local max_items = tonumber(os.getenv('MXE_MAX_ITEMS'))
-local no_debs = os.getenv('MXE_NO_DEBS')
-local no_second_pass = os.getenv('MXE_NO_SECOND_PASS')
+local max_items = tonumber(os.getenv('MXE_BUILD_PKG_MAX_ITEMS'))
+local no_debs = os.getenv('MXE_BUILD_PKG_NO_DEBS')
+local no_second_pass = os.getenv('MXE_BUILD_PKG_NO_SECOND_PASS')
+local build_targets = os.getenv('MXE_BUILD_PKG_TARGETS')
 
 local TODAY = os.date("%Y%m%d")
 
@@ -63,6 +69,12 @@ local TARGETS = {
     'i686-w64-mingw32.shared',
     'x86_64-w64-mingw32.shared',
 }
+if build_targets then
+    TARGETS = {}
+    for target in build_targets:gmatch('(%S+)') do
+        table.insert(TARGETS, target)
+    end
+end
 
 local function echo(fmt, ...)
     print(fmt:format(...))
@@ -448,7 +460,7 @@ local function gitCheckout(new_branch, deps, item2index, pass_of_deps)
 end
 
 local function gitAdd()
-    os.execute(GIT .. 'add --all .')
+    os.execute(GIT .. 'add --all --force .')
 end
 
 -- return two lists of filepaths under ./usr/
@@ -631,10 +643,13 @@ local function comparePasses(item, new_files, prev_file2item, prev_files)
         end
         files_set[file] = true
     end
-    for _, file in ipairs(prev_files) do
-        if not files_set[file] then
-            log('Item %s installs a file on first pass only: %s',
-                item, file)
+    if prev_files then
+        -- prev_files is nil, if the first pass failed
+        for _, file in ipairs(prev_files) do
+            if not files_set[file] then
+                log('Item %s installs a file on first pass only: %s',
+                    item, file)
+            end
         end
     end
     -- TODO compare contents of files (nm for binaries)
@@ -960,7 +975,7 @@ local function makeDebs(items, item2deps, item2ver, item2files)
 end
 
 local function getMxeVersion()
-    local index_html = io.open 'index.html'
+    local index_html = io.open 'docs/index.html'
     local text = index_html:read('*all')
     index_html:close()
     return text:match('Release ([^<]+)')
@@ -1010,19 +1025,15 @@ local function makeMxeSourcePackage()
     -- dependencies
     local deps = {}
     local files = {
-        'CNAME',
         'LICENSE.md',
         'Makefile',
         'patch.mk',
         'README.md',
-        'assets',
-        'doc',
+        'docs',
         'ext',
-        'index.html',
         'src',
         'plugins',
         'tools',
-        'versions.json',
     }
     local d1 = "MXE source"
     local d2 = MXE_SOURCE_DESCRIPTION2

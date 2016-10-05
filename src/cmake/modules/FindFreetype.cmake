@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 message("== Custom MXE File: " ${CMAKE_CURRENT_LIST_FILE})
 
@@ -9,4 +8,6 @@ endif()
 
 pkg_check_modules(FREETYPE freetype2)
 
-set(FREETYPE_LIBRARY ${FREETYPE_LIBRARIES}) #For compatibility
+#For compatibility
+set(FREETYPE_LIBRARY ${FREETYPE_LIBRARIES})
+set(FREETYPE_INCLUDE_DIR ${FREETYPE_INCLUDE_DIRS})

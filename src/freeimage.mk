@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freeimage
 $(PKG)_IGNORE   :=
@@ -56,12 +55,12 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-freeimage.exe' \
+        '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-freeimage.exe' \
         `'$(TARGET)-pkg-config' freeimage --cflags --libs`
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-freeimageplus.exe' \
+        '$(PWD)/src/$(PKG)-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-freeimageplus.exe' \
         `'$(TARGET)-pkg-config' freeimageplus --cflags --libs`
 endef
 

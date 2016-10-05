@@ -1,15 +1,15 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
-From ffcbf5c48eb8d8ae6a1c20e1496f1866d7903af8 Mon Sep 17 00:00:00 2001
-From: Timothy Gu <timothygu99@gmail.com>
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: MXE
 Date: Sat, 18 Oct 2014 18:25:34 -0400
 Subject: [PATCH 1/2] Fix geos detection
 
-Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/m4/geos.m4 b/m4/geos.m4
-index 386a2c8..cda1510 100644
+index 1111111..2222222 100644
 --- a/m4/geos.m4
 +++ b/m4/geos.m4
 @@ -121,14 +121,14 @@ AC_DEFUN([GEOS_INIT],[
@@ -30,31 +30,36 @@ index 386a2c8..cda1510 100644
  
        AC_CHECK_LIB([geos_c],
          [GEOSversion],
--- 
-1.9.1
 
-
-From 3c60ec35bec710dc9e8fd6f0606abb7646b4f8eb Mon Sep 17 00:00:00 2001
-From: Timothy Gu <timothygu99@gmail.com>
-Date: Sat, 18 Oct 2014 18:33:43 -0400
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 5 Jul 2016 22:23:16 +0300
 Subject: [PATCH 2/2] Use AC_PATH_TOOL for config scripts
 
-Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/configure.in b/configure.in
-index a0cf595..8ab4b5a 100644
+index 1111111..2222222 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -640,7 +640,7 @@ AC_ARG_WITH(pg,
+@@ -866,7 +866,7 @@ AC_ARG_WITH(pg,
  	       [Include PostgreSQL GDAL/OGR Support (ARG=path to pg_config)]),,)
  
  if test "x$with_pg" = "xyes" -o "x$with_pg" = "x" ; then
 -  AC_PATH_PROG(PG_CONFIG, pg_config, no)
 +  AC_PATH_TOOL(PG_CONFIG, pg_config, no)
- else 
+ else
    PG_CONFIG=$with_pg
  fi
-@@ -1719,10 +1719,10 @@ else
+@@ -2016,7 +2016,7 @@ KEA_CONFIG=no
+ AC_ARG_WITH(kea,[  --with-kea[=ARG]      Include kealib (ARG=path to kea-config) [[default=yes]]],,)
+ 
+ if test "$with_kea" = "yes" -o "x$with_kea" = "x" ; then
+-  AC_PATH_PROG(KEA_CONFIG, kea-config, no)
++  AC_PATH_TOOL(KEA_CONFIG, kea-config, no)
+ else
+    KEA_CONFIG=$with_kea
+ fi
+@@ -2079,10 +2079,10 @@ else
    dnl find nc-config location
    unset ac_cv_path_NETCDF_NCCONFIG
    if test "$with_netcdf" = "yes" -o "$with_netcdf" = "" ; then
@@ -67,7 +72,7 @@ index a0cf595..8ab4b5a 100644
    fi
  
    dnl test nc-config
-@@ -2447,7 +2447,7 @@ MYSQL_CONFIG=no
+@@ -2832,7 +2832,7 @@ MYSQL_CONFIG=no
  AC_ARG_WITH(mysql,[  --with-mysql[=ARG]      Include MySQL (ARG=path to mysql_config) [[default=no]]],,)
  
  if test "$with_mysql" = "yes" ; then
@@ -76,7 +81,7 @@ index a0cf595..8ab4b5a 100644
  else
      if test "x$with_mysql" != "x" ; then
        MYSQL_CONFIG=$with_mysql
-@@ -2756,7 +2756,7 @@ if test "`basename xx/$with_curl`" = "curl-config" ; then
+@@ -3162,7 +3162,7 @@ if test "`basename xx/$with_curl`" = "curl-config" ; then
  elif test "$with_curl" = "no" ; then
    LIBCURL_CONFIG=no
  else
@@ -85,7 +90,7 @@ index a0cf595..8ab4b5a 100644
  fi
  
  if test "$LIBCURL_CONFIG" != "no" ; then
-@@ -2798,7 +2798,7 @@ if test "`basename xx/$with_xml2`" = "xml2-config" ; then
+@@ -3204,7 +3204,7 @@ if test "`basename xx/$with_xml2`" = "xml2-config" ; then
  elif test "$with_xml2" = "no" ; then
    LIBXML2_CONFIG=no
  else
@@ -95,7 +100,7 @@ index a0cf595..8ab4b5a 100644
  
  if test "$LIBXML2_CONFIG" != "no" ; then
 diff --git a/m4/geos.m4 b/m4/geos.m4
-index cda1510..3fb4490 100644
+index 1111111..2222222 100644
 --- a/m4/geos.m4
 +++ b/m4/geos.m4
 @@ -58,7 +58,7 @@ AC_DEFUN([GEOS_INIT],[
@@ -116,6 +121,3 @@ index cda1510..3fb4490 100644
          []
        )
  
--- 
-1.9.1
-

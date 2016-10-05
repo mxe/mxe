@@ -1,6 +1,5 @@
 /*
- * This file is part of MXE.
- * See index.html for further information.
+ * This file is part of MXE. See LICENSE.md for licensing information.
  */
 
 /*************************************************
@@ -8,9 +7,9 @@
  * and makes CEGUI draw an "in-game" window into it.
  ************************************************/
 
-#include <GL/freeglut.h>
 #include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/OpenGL/CEGUIOpenGLRenderer.h>
+#include <CEGUI/RendererModules/OpenGL/GLRenderer.h>
+#include <GL/freeglut.h>
 
 // We’re lazy
 using namespace CEGUI;
@@ -34,21 +33,21 @@ int main(int argc, char* argv[])
 
   // Tell CEGUI where to find its resources
   DefaultResourceProvider* p_provider = static_cast<DefaultResourceProvider*>(System::getSingleton().getResourceProvider());
-  p_provider->setResourceGroupDirectory("schemes", "../share/CEGUI/schemes");
-  p_provider->setResourceGroupDirectory("imagesets", "../share/CEGUI/imagesets");
-  p_provider->setResourceGroupDirectory("fonts", "../share/CEGUI/fonts");
-  p_provider->setResourceGroupDirectory("layouts", "../share/CEGUI/layouts");
-  p_provider->setResourceGroupDirectory("looknfeels", "../share/CEGUI/looknfeel");
-  p_provider->setResourceGroupDirectory("lua_scripts", "../share/CEGUI/lua_scripts");
-  p_provider->setResourceGroupDirectory("schemas", "../share/CEGUI/xml_schemas");
-  p_provider->setResourceGroupDirectory("animations", "../share/CEGUI/animations");
+  p_provider->setResourceGroupDirectory("schemes", "../share/cegui-0/schemes");
+  p_provider->setResourceGroupDirectory("imagesets", "../share/cegui-0/imagesets");
+  p_provider->setResourceGroupDirectory("fonts", "../share/cegui-0/fonts");
+  p_provider->setResourceGroupDirectory("layouts", "../share/cegui-0/layouts");
+  p_provider->setResourceGroupDirectory("looknfeels", "../share/cegui-0/looknfeel");
+  p_provider->setResourceGroupDirectory("lua_scripts", "../share/cegui-0/lua_scripts");
+  p_provider->setResourceGroupDirectory("schemas", "../share/cegui-0/xml_schemas");
+  p_provider->setResourceGroupDirectory("animations", "../share/cegui-0/animations");
 
   // Map the resource request to our provider
-  Imageset::setDefaultResourceGroup("imagesets");
-  Font::setDefaultResourceGroup("fonts");
   Scheme::setDefaultResourceGroup("schemes");
-  WidgetLookManager::setDefaultResourceGroup("looknfeels");
+  ImageManager::setImagesetDefaultResourceGroup("imagesets");
+  Font::setDefaultResourceGroup("fonts");
   WindowManager::setDefaultResourceGroup("layouts");
+  WidgetLookManager::setDefaultResourceGroup("looknfeels");
   ScriptModule::setDefaultResourceGroup("lua_scripts");
   AnimationManager::setDefaultResourceGroup("animations");
   XMLParser* p_parser = System::getSingleton().getXMLParser();
@@ -57,18 +56,21 @@ int main(int argc, char* argv[])
     p_parser->setProperty("SchemaDefaultResourceGroup", "schemas");
 
   // Configure the default window layouting
-  SchemeManager::getSingleton().create("TaharezLook.scheme");
-  System::getSingleton().setDefaultMouseCursor("TaharezLook", "MouseArrow");
+  SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
+
+  // Mouse cursor
+  CEGUI::GUIContext& gui_context = CEGUI::System::getSingleton().getDefaultGUIContext();
+  gui_context.getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
 
   // Create the hypothetical CEGUI root window
   Window* p_root_window = WindowManager::getSingleton().createWindow("DefaultWindow", "root");
-  System::getSingleton().setGUISheet(p_root_window);
+  gui_context.setRootWindow(p_root_window);
 
   // Create an actual framed window we can look onto
   FrameWindow* p_frame_window = static_cast<FrameWindow*>(WindowManager::getSingleton().createWindow("TaharezLook/FrameWindow", "testWindow"));
-  p_root_window->addChildWindow(p_frame_window);
+  p_root_window->addChild(p_frame_window);
   p_frame_window->setPosition(UVector2(UDim(0.25f, 0), UDim(0.25f, 0)));
-  p_frame_window->setSize(UVector2(UDim(0.5f, 0), UDim(0.5f, 0)));
+  p_frame_window->setSize(USize(UDim(0.5f, 0), UDim(0.5f, 0)));
   p_frame_window->setText("Hello World!");
 
   // Enter main loop
@@ -90,7 +92,7 @@ void main_loop()
     glutMainLoopEvent(); // Process events
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the window background to a single color
     glFlush();
-    System::getSingleton().renderGUI(); // Tell CEGUI to render all its stuff
+    CEGUI::System::getSingleton().renderAllGUIContexts(); // Tell CEGUI to render all its stuff
     glutSwapBuffers(); // Put the auxiliary rendering buffer onto the screen and make the screen the new auxiliary buffer.
   }
 }

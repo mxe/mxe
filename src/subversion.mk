@@ -1,10 +1,9 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := subversion
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.9.2
-$(PKG)_CHECKSUM := 023da881139b4514647b6f8a830a244071034efcaad8c8e98c6b92393122b4eb
+$(PKG)_VERSION  := 1.9.4
+$(PKG)_CHECKSUM := 1267f9e2ab983f260623bee841e6c9cc458bf4bf776238ed5f100983f79e9299
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://archive.apache.org/dist/subversion/$($(PKG)_FILE)
@@ -43,7 +42,7 @@ define $(PKG)_BUILD
         install
     '$(TARGET)-gcc' \
        -mwindows -W -Wall -Werror -pedantic \
-       '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-subversion.exe' \
+       '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-subversion.exe' \
        `'$(TARGET)-pkg-config' libsvn_client --cflags --libs` -lole32
 endef
 

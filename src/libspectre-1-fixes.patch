@@ -1,0 +1,49 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: darealshinji <djcj@gmx.de>
+Date: Thu, 21 Jul 2016 12:00:00 +0200
+Subject: [PATCH] add PKG_CHECK_MODULES macro to configure.ac
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -65,6 +65,7 @@ AC_CHECK_FUNC(_vscprintf, [ AC_DEFINE(HAVE__VSCPRINTF, 1, [Define if the '_vscpr
+ 
+ LIBGS_REQUIRED="8.62"
+ 
++PKG_CHECK_MODULES(GHOSTSCRIPT, [ghostscript >= $LIBGS_REQUIRED], [LIB_GS="$GHOSTSCRIPT_LIBS"], [
+ AC_CHECK_LIB(gs, gsapi_new_instance, have_libgs=yes, have_libgs=no)
+ if test "x$have_libgs" = "xyes"; then
+     LIB_GS="-lgs"
+@@ -97,6 +98,7 @@ if test "x$have_libgs" = "xyes"; then
+ else
+     AC_MSG_ERROR([You need libgs in order to compile libspectre])
+ fi
++])
+ AC_SUBST(LIB_GS)
+ 
+ AC_ARG_ENABLE(asserts,
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: darealshinji <djcj@gmx.de>
+Date: Thu, 21 Jul 2016 12:00:00 +0200
+Subject: [PATCH] enable out-of-tree builds
+
+
+diff --git a/libspectre/Makefile.am b/libspectre/Makefile.am
+index 1111111..2222222 100644
+--- a/libspectre/Makefile.am
++++ b/libspectre/Makefile.am
+@@ -42,6 +42,7 @@ libspectre_la_SOURCES = 		\
+ 	$(gv_sources)
+ 
+ libspectre_la_CPPFLAGS = 		\
++	-I@top_srcdir@			\
+ 	$(SPECTRE_CFLAGS)
+ 
+ libspectre_la_LIBADD = $(LIB_GS)

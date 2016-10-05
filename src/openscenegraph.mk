@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openscenegraph
 $(PKG)_IGNORE   :=
@@ -32,6 +31,9 @@ define $(PKG)_BUILD
         -DBUILD_OSG_APPLICATIONS=OFF \
         -DPOPPLER_HAS_CAIRO_EXITCODE=0 \
         -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1 \
-        -D_OPENTHREADS_ATOMIC_USE_WIN32_INTERLOCKED=1
+        -D_OPENTHREADS_ATOMIC_USE_WIN32_INTERLOCKED=1 \
+        $(if $(filter qtbase,$($(PKG)_DEPS)), \
+          -DDESIRED_QT_VERSION=5, \
+          -DDESIRED_QT_VERSION=4)
     $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
 endef

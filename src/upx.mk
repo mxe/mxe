@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := upx
 $(PKG)_IGNORE   :=
@@ -22,16 +21,17 @@ define $(PKG)_BUILD
     $(call PREPARE_PKG_SOURCE,ucl,$(1))
     mkdir '$(1)/lzma'
     $(call PREPARE_PKG_SOURCE,lzma,$(1)/lzma)
+
     UPX_UCLDIR='$(1)/$(ucl_SUBDIR)' \
-        UPX_LZMADIR='$(1)/lzma' \
-        UPX_LZMA_VERSION=0x$(subst .,,$(lzma_VERSION)) \
-        $(MAKE) -C '$(1)' -j '$(JOBS)' all \
-        'CXX=$(TARGET)-g++' \
-        'CC=$(TARGET)-gcc' \
-        'LD=$(TARGET)-ld' \
-        'AR=$(TARGET)-ar' \
-        'PKG_CONFIG=$(TARGET)-pkg-config' \
-        'exeext=.exe'
+    UPX_LZMADIR='$(1)/lzma' \
+    UPX_LZMA_VERSION=0x$(subst .,,$(lzma_VERSION)) \
+    $(MAKE) -C '$(1)' -j '$(JOBS)' all \
+        CXX='$(TARGET)-g++' \
+        CC='$(TARGET)-gcc' \
+        LD='$(TARGET)-ld' \
+        AR='$(TARGET)-ar' \
+        PKG_CONFIG='$(TARGET)-pkg-config' \
+        exeext='.exe'
     cp '$(1)/src/upx.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
 
@@ -39,15 +39,16 @@ define $(PKG)_BUILD_$(BUILD)
     $(call PREPARE_PKG_SOURCE,ucl,$(1))
     mkdir '$(1)/lzma'
     $(call PREPARE_PKG_SOURCE,lzma,$(1)/lzma)
+
     UPX_UCLDIR='$(1)/$(ucl_SUBDIR)' \
-        UPX_LZMADIR='$(1)/lzma' \
-        UPX_LZMA_VERSION=0x$(subst .,,$(lzma_VERSION)) \
-        $(MAKE) -C '$(1)' -j '$(JOBS)' all \
-        'CXX=$(BUILD_CXX)' \
-        'CC=$(BUILD_CC)' \
-        'PKG_CONFIG=$(PREFIX)/$(BUILD)/bin/pkgconf' \
-        'LIBS=-L$(PREFIX)/$(BUILD)/lib -lucl -lz' \
-        $(shell [ `uname -s` == Darwin ] && echo "CXXFLAGS='-Wno-error=unused-local-typedef'") \
-        'exeext='
+    UPX_LZMADIR='$(1)/lzma' \
+    UPX_LZMA_VERSION=0x$(subst .,,$(lzma_VERSION)) \
+    $(MAKE) -C '$(1)' -j '$(JOBS)' all \
+        CXX='$(BUILD_CXX)' \
+        CC='$(BUILD_CC)' \
+        PKG_CONFIG='$(PREFIX)/$(BUILD)/bin/pkgconf' \
+        LIBS='-L$(PREFIX)/$(BUILD)/lib -lucl -lz' \
+        CXXFLAGS_WERROR= \
+        exeext=
     cp '$(1)/src/upx' '$(PREFIX)/$(BUILD)/bin/'
 endef

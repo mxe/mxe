@@ -1,9 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.4.13
-$(PKG)_CHECKSUM := fd3386e8e72725980bcd7f40949aa0121dcb7650b5147c6490e794555ed25859
+$(PKG)_VERSION  := 3.4.15
+$(PKG)_CHECKSUM := eb2a013905f5f2a0cbf7bcc1d20c85a50065063ee87bd33b496c4e19815e3498
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.4/$($(PKG)_FILE)
@@ -38,6 +37,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gnutls.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gnutls.exe' \
         `'$(TARGET)-pkg-config' gnutls --cflags --libs`
 endef

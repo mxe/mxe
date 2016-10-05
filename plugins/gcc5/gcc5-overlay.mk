@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 # override relevant cloog, isl, and gcc variables changed in:
 # https://github.com/mxe/mxe/pull/965

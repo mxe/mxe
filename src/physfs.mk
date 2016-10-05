@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := physfs
 $(PKG)_IGNORE   :=
@@ -31,8 +30,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic -std=c99 \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-physfs.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-physfs.exe' \
         -lphysfs -lz
 endef
-
-$(PKG)_BUILD_x86_64-w64-mingw32 =

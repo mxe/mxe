@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl_sound
 $(PKG)_IGNORE   :=
@@ -55,12 +54,12 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -std=c99 -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_sound.exe' \
+        '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_sound.exe' \
         `'$(TARGET)-pkg-config' SDL_sound --cflags --libs`
 
     mkdir -p '$(1)/cmake-build-test'
-    cp '$(2)-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
-    cp '$(2).c' '$(1)/cmake-build-test/'
+    cp '$(PWD)/src/$(PKG)-test-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
+    cp '$(PWD)/src/$(PKG)-test.c' '$(1)/cmake-build-test/'
     cd '$(1)/cmake-build-test' && cmake . \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
     $(MAKE) -C '$(1)/cmake-build-test' -j '$(JOBS)'

@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 --- a/GNUmakefile	2012-12-08 08:05:26.678456631 +0100
 +++ b/GNUmakefile	2012-12-08 08:13:02.002469110 +0100

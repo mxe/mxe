@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hdf5
 $(PKG)_IGNORE   :=
@@ -7,7 +6,7 @@ $(PKG)_VERSION  := 1.8.12
 $(PKG)_CHECKSUM := 6d080f913a226a3ce390a11d9b571b2d5866581a2aa4434c398cd371c7063639
 $(PKG)_SUBDIR   := hdf5-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf5-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.hdfgroup.org/ftp/HDF5/releases/$($(PKG)_SUBDIR)/src/$($(PKG)_FILE)
+$(PKG)_URL      := https://support.hdfgroup.org/ftp/HDF5/prev-releases/hdf5-$($(PKG)_VERSION)/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads zlib
 
 define $(PKG)_UPDATE
@@ -67,7 +66,7 @@ define $(PKG)_BUILD
     ## test hdf5
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hdf5.exe' \
+        '$(PWD)/src/$(PKG)-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-hdf5.exe' \
         -lhdf5_hl -lhdf5 -lz
 
     # test cmake can find hdf5

@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-core
 $(PKG)_IGNORE    = $(ocaml-native_IGNORE)
@@ -113,10 +112,10 @@ define $(PKG)_BUILD
     done
 
     # test ocamlopt
-    cp '$(2).ml' '$(1)/test.ml'
+    cp '$(TEST_FILE)' '$(1)/test.ml'
     cd '$(1)' && '$(TARGET)-ocamlopt' test.ml
     # test ocamlbuild from package ocaml-native, now that ocamlopt works
-    mkdir '$(1)/tmp' && cp '$(2).ml' '$(1)/tmp/test.ml'
+    mkdir '$(1)/tmp' && cp '$(TEST_FILE)' '$(1)/tmp/test.ml'
     cd '$(1)/tmp' && $(TARGET)-ocamlbuild test.native
 endef
 

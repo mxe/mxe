@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := keepassx
 $(PKG)_IGNORE   :=
@@ -7,7 +6,7 @@ $(PKG)_VERSION  := 0.4.3
 $(PKG)_CHECKSUM := cd901a0611ce57e62cf6df7eeeb1b690b5232302bdad8626994eb54adcfa1e85
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://www.keepassx.org/releases/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.keepassx.org/releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := https://www.keepassx.org
 $(PKG)_OWNER    := https://github.com/starius
 $(PKG)_DEPS     := gcc qt

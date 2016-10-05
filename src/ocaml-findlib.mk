@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-findlib
 $(PKG)_IGNORE   :=
@@ -52,7 +51,7 @@ define $(PKG)_BUILD
     # test
     '$(TARGET)-ocamlfind' opt \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        < '$(2).ml'
+        < '$(TEST_FILE)'
 
 endef
 
