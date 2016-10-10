@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := e8ba8c040b9a5520d80e58c6a4cc13c1e1fc15f03ecd51b5a41c5038e591f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/amarsman/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := 
+$(PKG)_DEPS     := qtsvg tlspool
 
 define $(PKG)_UPDATE
     echo 'TODO: write update script for $(PKG).' >&2;
