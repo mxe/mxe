@@ -3,11 +3,11 @@
 
 PKG             := ldns
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.15
-$(PKG)_CHECKSUM := 0e9d3e8f52098a01780f1f747a1d382b8983fdb50c84603599e7b0613f51749b
+$(PKG)_VERSION  := 1.6.17
+$(PKG)_CHECKSUM := 8b88e059452118e8949a2752a55ce59bc71fa5bc414103e17f5b6b06f9bcc8cd
 $(PKG)_SUBDIR   := ldns-$($(PKG)_VERSION)
 $(PKG)_FILE     := ldns-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://nlnetlabs.nl/downloads/$($(PKG)_FILE)
+$(PKG)_URL      := https://nlnetlabs.nl/downloads/ldns/$($(PKG)_FILE)
 # $(PKG)_URL_2    := .../$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc openssl
 

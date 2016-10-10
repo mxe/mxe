@@ -16,7 +16,7 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'
-    cd '$(1)/build' && x86_64-w64-mingw32.shared-cmake ..
+    cd '$(1)/build' && $(TARGET)-cmake ..
 
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install DESTDIR='$(PREFIX)/$(TARGET)'
 endef

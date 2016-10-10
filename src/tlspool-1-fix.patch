@@ -533,7 +533,7 @@ diff -Naur a/lib/Makefile b/lib/Makefile
 diff -Naur a/lib/windows/namedpipe.c b/lib/windows/namedpipe.c
 --- a/lib/windows/namedpipe.c	1970-01-01 01:00:00.000000000 +0100
 +++ b/lib/windows/namedpipe.c	2016-10-01 16:59:01.000000000 +0200
-@@ -0,0 +1,149 @@
+@@ -0,0 +1,148 @@
 +#include "whoami.h"
 +#include <stdio.h>
 +#include <tlspool/starttls.h>
@@ -636,7 +636,6 @@ diff -Naur a/lib/windows/namedpipe.c b/lib/windows/namedpipe.c
 +	if (!fSuccess)
 +	{
 +		_tprintf(TEXT("WriteFile to pipe failed. GLE=%d\n"), GetLastError());
-+		errno = EPIPE;
 +		return -1;
 +	} else {
 +printf ("DEBUG: Wrote %ld bytes to pipe\n", cbWritten);
