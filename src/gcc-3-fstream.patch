@@ -1,0 +1,605 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch has been taken from:
+http://gcc.gnu.org/ml/gcc-patches/2011-06/msg00066.html
+http://sourceforge.net/p/mingw/bugs/1809
+
+diff --git a/libstdc++-v3/config/abi/pre/gnu.ver b/libstdc++-v3/config/abi/pre/gnu.ver
+index 427189c..a09acad 100644
+--- a/libstdc++-v3/config/abi/pre/gnu.ver
++++ b/libstdc++-v3/config/abi/pre/gnu.ver
+@@ -340,36 +340,36 @@ GLIBCXX_3.4 {
+     _ZNSt13basic_filebufI[cw]St11char_traitsI[cw]EE19*;
+     _ZNSt13basic_filebufI[cw]St11char_traitsI[cw]EE2*;
+     _ZNSt13basic_filebufI[cw]St11char_traitsI[cw]EE3*;
+-    _ZNSt13basic_filebufI[cw]St11char_traitsI[cw]EE4openEPKc*;
++    _ZNSt13basic_filebufI[cw]St11char_traitsI[cw]EE4openE[PR]K[cSw]*;
+     _ZNSt13basic_filebufI[cw]St11char_traitsI[cw]EE4sync*;
+     _ZNSt13basic_filebufI[cw]St11char_traitsI[cw]EE[5-9]*;
+     _ZNKSt13basic_filebufI[cw]St11char_traitsI[cw]EE7is_openEv;
+ 
+     # std::basic_fstream
+     _ZNSt13basic_fstreamI[cw]St11char_traitsI[cw]EEC[12]Ev;
+-    _ZNSt13basic_fstreamI[cw]St11char_traitsI[cw]EEC[12]EPKc*;
++    _ZNSt13basic_fstreamI[cw]St11char_traitsI[cw]EEC[12]E[PR]K[cSw]*;
+     _ZNSt13basic_fstreamI[cw]St11char_traitsI[cw]EED*;
+     _ZNSt13basic_fstreamI[cw]St11char_traitsI[cw]EE5closeEv;
+     _ZNSt13basic_fstreamI[cw]St11char_traitsI[cw]EE7is_openEv;
+-    _ZNSt13basic_fstreamI[cw]St11char_traitsI[cw]EE4openEPKc*;
++    _ZNSt13basic_fstreamI[cw]St11char_traitsI[cw]EE4openE[PR]K[cSw]*;
+     _ZNKSt13basic_fstreamI[cw]St11char_traitsI[cw]EE5rdbufEv;
+ 
+     # std::basic_ifstream
+     _ZNSt14basic_ifstreamI[cw]St11char_traitsI[cw]EEC[12]Ev;
+-    _ZNSt14basic_ifstreamI[cw]St11char_traitsI[cw]EEC[12]EPKc*;
++    _ZNSt14basic_ifstreamI[cw]St11char_traitsI[cw]EEC[12]E[PR]K[cSw]*;
+     _ZNSt14basic_ifstreamI[cw]St11char_traitsI[cw]EED*;
+     _ZNSt14basic_ifstreamI[cw]St11char_traitsI[cw]EE5closeEv;
+     _ZNSt14basic_ifstreamI[cw]St11char_traitsI[cw]EE7is_openEv;
+-    _ZNSt14basic_ifstreamI[cw]St11char_traitsI[cw]EE4openEPKc*;
++    _ZNSt14basic_ifstreamI[cw]St11char_traitsI[cw]EE4openE[PR]K[cSw]*;
+     _ZNKSt14basic_ifstreamI[cw]St11char_traitsI[cw]EE5rdbufEv;
+ 
+     # std::basic_ofstream
+     _ZNSt14basic_ofstreamI[cw]St11char_traitsI[cw]EEC[12]Ev;
+-    _ZNSt14basic_ofstreamI[cw]St11char_traitsI[cw]EEC[12]EPKc*;
++    _ZNSt14basic_ofstreamI[cw]St11char_traitsI[cw]EEC[12]E[PR]K[cSw]*;
+     _ZNSt14basic_ofstreamI[cw]St11char_traitsI[cw]EED*;
+     _ZNSt14basic_ofstreamI[cw]St11char_traitsI[cw]EE5closeEv;
+     _ZNSt14basic_ofstreamI[cw]St11char_traitsI[cw]EE7is_openEv;
+-    _ZNSt14basic_ofstreamI[cw]St11char_traitsI[cw]EE4openEPKc*;
++    _ZNSt14basic_ofstreamI[cw]St11char_traitsI[cw]EE4openE[PR]K[cSw]*;
+     _ZNKSt14basic_ofstreamI[cw]St11char_traitsI[cw]EE5rdbufEv;
+ 
+     # std::basic_istream<char>
+diff --git a/libstdc++-v3/config/io/basic_file_stdio.cc b/libstdc++-v3/config/io/basic_file_stdio.cc
+index 1b7e1bb..9f499c5 100644
+--- a/libstdc++-v3/config/io/basic_file_stdio.cc
++++ b/libstdc++-v3/config/io/basic_file_stdio.cc
+@@ -109,7 +109,48 @@ namespace
+       default: return 0; // invalid
+       }
+   }
++  #if _WIN32
++  static const wchar_t*
++  wfopen_mode(std::ios_base::openmode mode)
++  {
++    enum 
++      {
++	in     = std::ios_base::in,
++	out    = std::ios_base::out,
++	trunc  = std::ios_base::trunc,
++	app    = std::ios_base::app,
++	binary = std::ios_base::binary
++      };
++
++    // _GLIBCXX_RESOLVE_LIB_DEFECTS
++    // 596. 27.8.1.3 Table 112 omits "a+" and "a+b" modes.
++    switch (mode & (in|out|trunc|app|binary))
++      {
++      case (   out                 ): return L"w";
++      case (   out      |app       ): return L"a";
++      case (             app       ): return L"a";
++      case (   out|trunc           ): return L"w";
++      case (in                     ): return L"r";
++      case (in|out                 ): return L"r+";
++      case (in|out|trunc           ): return L"w+";
++      case (in|out      |app       ): return L"a+";
++      case (in          |app       ): return L"a+";
++
++      case (   out          |binary): return L"wb";
++      case (   out      |app|binary): return L"ab";
++      case (             app|binary): return L"ab";
++      case (   out|trunc    |binary): return L"wb";
++      case (in              |binary): return L"rb";
++      case (in|out          |binary): return L"r+b";
++      case (in|out|trunc    |binary): return L"w+b";
++      case (in|out      |app|binary): return L"a+b";
++      case (in          |app|binary): return L"a+b";
+ 
++      default: return 0; // invalid
++      }
++  }
++  #endif // _WIN32
++  
+   // Wrapper handling partial write.
+   static std::streamsize
+   xwrite(int __fd, const char* __s, std::streamsize __n)
+@@ -248,6 +289,25 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+     return __ret;
+   }
+   
++  #if _WIN32
++  __basic_file<char>* 
++  __basic_file<char>::open(const wchar_t* __name, ios_base::openmode __mode, 
++			   int /*__prot*/)
++  {
++    __basic_file* __ret = NULL;
++    const wchar_t* __c_mode = wfopen_mode(__mode);
++    if (__c_mode && !this->is_open())
++      {
++	if ((_M_cfile = _wfopen(__name, __c_mode)))
++	  {
++	    _M_cfile_created = true;
++	    __ret = this;
++	  }
++      }
++    return __ret;
++  }
++  #endif // _WIN32
++  
+   bool 
+   __basic_file<char>::is_open() const throw ()
+   { return _M_cfile != 0; }
+diff --git a/libstdc++-v3/config/io/basic_file_stdio.h b/libstdc++-v3/config/io/basic_file_stdio.h
+index f543a89..af95ec8 100644
+--- a/libstdc++-v3/config/io/basic_file_stdio.h
++++ b/libstdc++-v3/config/io/basic_file_stdio.h
+@@ -64,7 +64,12 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+ 
+       __basic_file* 
+       open(const char* __name, ios_base::openmode __mode, int __prot = 0664);
+-
++      
++      #if _WIN32
++      __basic_file*
++      open(const wchar_t* __name, ios_base::openmode __mode, int __prot = 0664);
++      #endif // _WIN32
++      
+       __basic_file*
+       sys_open(__c_file* __file, ios_base::openmode);
+ 
+diff --git a/libstdc++-v3/include/bits/fstream.tcc b/libstdc++-v3/include/bits/fstream.tcc
+index 3d5ca62..e9cf527 100644
+--- a/libstdc++-v3/include/bits/fstream.tcc
++++ b/libstdc++-v3/include/bits/fstream.tcc
+@@ -123,6 +123,42 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+ 	}
+       return __ret;
+     }
++    
++    #ifdef _WIN32
++  template<typename _CharT, typename _Traits>
++    typename basic_filebuf<_CharT, _Traits>::__filebuf_type*
++    basic_filebuf<_CharT, _Traits>::
++    open(const wchar_t* __s, ios_base::openmode __mode)
++    {
++      __filebuf_type *__ret = 0;
++      if (!this->is_open())
++	{
++	  _M_file.open(__s, __mode);
++	  if (this->is_open())
++	    {
++	      _M_allocate_internal_buffer();
++	      _M_mode = __mode;
++
++	      // Setup initial buffer to 'uncommitted' mode.
++	      _M_reading = false;
++	      _M_writing = false;
++	      _M_set_buffer(-1);
++
++	      // Reset to initial state.
++	      _M_state_last = _M_state_cur = _M_state_beg;
++
++	      // 27.8.1.3,4
++	      if ((__mode & ios_base::ate)
++		  && this->seekoff(0, ios_base::end, __mode)
++		  == pos_type(off_type(-1)))
++		this->close();
++	      else
++		__ret = this;
++	    }
++	}
++      return __ret;
++    }
++    #endif // _WIN32
+ 
+   template<typename _CharT, typename _Traits>
+     typename basic_filebuf<_CharT, _Traits>::__filebuf_type*
+diff --git a/libstdc++-v3/include/std/fstream b/libstdc++-v3/include/std/fstream
+index 8ad6e5c..100d0d2 100644
+--- a/libstdc++-v3/include/std/fstream
++++ b/libstdc++-v3/include/std/fstream
+@@ -295,6 +295,50 @@
+        */
+       __filebuf_type*
+       open(const char* __s, ios_base::openmode __mode);
++      
++      #if _WIN32
++      /**
++       *  @brief  Opens an external file.
++       *  @param  s  The name of the file.
++       *  @param  mode  The open mode flags.
++       *  @return  @c this on success, NULL on failure
++       *
++       *  If a file is already open, this function immediately fails.
++       *  Otherwise it tries to open the file named @a s using the flags
++       *  given in @a mode.
++       *
++       *  Table 92, adapted here, gives the relation between openmode
++       *  combinations and the equivalent fopen() flags.
++       *  (NB: lines app, in|out|app, in|app, binary|app, binary|in|out|app,
++       *  and binary|in|app per DR 596)
++       *  +---------------------------------------------------------+
++       *  | ios_base Flag combination            stdio equivalent   |
++       *  |binary  in  out  trunc  app                              |
++       *  +---------------------------------------------------------+
++       *  |             +                        w                  |
++       *  |             +           +            a                  |
++       *  |                         +            a                  |
++       *  |             +     +                  w                  |
++       *  |         +                            r                  |
++       *  |         +   +                        r+                 |
++       *  |         +   +     +                  w+                 |
++       *  |         +   +           +            a+                 |
++       *  |         +               +            a+                 |
++       *  +---------------------------------------------------------+
++       *  |   +         +                        wb                 |
++       *  |   +         +           +            ab                 |
++       *  |   +                     +            ab                 |
++       *  |   +         +     +                  wb                 |
++       *  |   +     +                            rb                 |
++       *  |   +     +   +                        r+b                |
++       *  |   +     +   +     +                  w+b                |
++       *  |   +     +   +           +            a+b                |
++       *  |   +     +               +            a+b                |
++       *  +---------------------------------------------------------+
++       */
++      __filebuf_type*
++      open(const wchar_t* __s, ios_base::openmode __mode);
++      #endif _WIN32
+ 
+ #if __cplusplus >= 201103L
+       /**
+@@ -306,6 +350,18 @@
+       __filebuf_type*
+       open(const std::string& __s, ios_base::openmode __mode)
+       { return open(__s.c_str(), __mode); }
++
++      #if _WIN32
++      /**
++       *  @brief  Opens an external file.
++       *  @param  s  The name of the file.
++       *  @param  mode  The open mode flags.
++       *  @return  @c this on success, NULL on failure
++       */
++      __filebuf_type*
++      open(const std::wstring& __s, ios_base::openmode __mode)
++      { return open(__s.c_str(), __mode); }
++      #endif // _WIN32
+ #endif
+ 
+       /**
+@@ -499,6 +555,26 @@
+ 	this->open(__s, __mode);
+       }
+ 
++      #if _WIN32
++      /**
++       *  @brief  Create an input file stream.
++       *  @param  s  Null terminated string specifying the filename.
++       *  @param  mode  Open file in specified mode (see std::ios_base).
++       *
++       *  @c ios_base::in is automatically included in @a mode.
++       *
++       *  Tip:  When using std::string to hold the filename, you must use
++       *  .c_str() before passing it to this constructor.
++       */
++      explicit
++      basic_ifstream(const wchar_t* __s, ios_base::openmode __mode = ios_base::in)
++      : __istream_type(), _M_filebuf()
++      {
++	this->init(&_M_filebuf);
++	this->open(__s, __mode);
++      }
++      #endif //_WIN32
++
+ #if __cplusplus >= 201103L
+       /**
+        *  @brief  Create an input file stream.
+@@ -516,6 +592,23 @@
+ 	this->open(__s, __mode);
+       }
+ 
++#if _WIN32
++      /**
++       *  @brief  Create an input file stream.
++       *  @param  s  std::string specifying the filename.
++       *  @param  mode  Open file in specified mode (see std::ios_base).
++       *
++       *  @c ios_base::in is automatically included in @a mode.
++       */
++      explicit
++      basic_ifstream(const std::wstring& __s,
++		     ios_base::openmode __mode = ios_base::in)
++      : __istream_type(), _M_filebuf()
++      {
++	this->init(&_M_filebuf);
++	this->open(__s, __mode);
++      }
++      #endif // _WIN32
+       basic_ifstream(const basic_ifstream&) = delete;
+ 
+       basic_ifstream(basic_ifstream&& __rhs)
+@@ -601,6 +694,30 @@
+ 	  // 409. Closing an fstream should clear error state
+ 	  this->clear();
+       }
++      
++      #if _WIN32
++      /**
++       *  @brief  Opens an external file.
++       *  @param  s  The name of the file.
++       *  @param  mode  The open mode flags.
++       *
++       *  Calls @c std::basic_filebuf::open(s,mode|in).  If that function
++       *  fails, @c failbit is set in the stream's error state.
++       *
++       *  Tip:  When using std::string to hold the filename, you must use
++       *  .c_str() before passing it to this constructor.
++       */
++      void
++      open(const wchar_t* __s, ios_base::openmode __mode = ios_base::in)
++      {
++	if (!_M_filebuf.open(__s, __mode | ios_base::in))
++	  this->setstate(ios_base::failbit);
++	else
++	  // _GLIBCXX_RESOLVE_LIB_DEFECTS
++	  // 409. Closing an fstream should clear error state
++	  this->clear();
++      }
++      #endif // _WIN32
+ 
+ #if __cplusplus >= 201103L
+       /**
+@@ -621,6 +738,26 @@
+ 	  // 409. Closing an fstream should clear error state
+ 	  this->clear();
+       }
++      #if _WIN32
++      /**
++       *  @brief  Opens an external file.
++       *  @param  s  The name of the file.
++       *  @param  mode  The open mode flags.
++       *
++       *  Calls @c std::basic_filebuf::open(s,mode|in).  If that function
++       *  fails, @c failbit is set in the stream's error state.
++       */
++      void
++      open(const std::wstring& __s, ios_base::openmode __mode = ios_base::in)
++      {
++	if (!_M_filebuf.open(__s, __mode | ios_base::in))
++	  this->setstate(ios_base::failbit);
++	else
++	  // _GLIBCXX_RESOLVE_LIB_DEFECTS
++	  // 409. Closing an fstream should clear error state
++	  this->clear();
++      }
++      #endif // _WIN32
+ #endif
+ 
+       /**
+@@ -702,6 +839,28 @@
+ 	this->open(__s, __mode);
+       }
+ 
++      #if _WIN32
++      /**
++       *  @brief  Create an output file stream.
++       *  @param  s  Null terminated string specifying the filename.
++       *  @param  mode  Open file in specified mode (see std::ios_base).
++       *
++       *  @c ios_base::out|ios_base::trunc is automatically included in
++       *  @a mode.
++       *
++       *  Tip:  When using std::string to hold the filename, you must use
++       *  .c_str() before passing it to this constructor.
++       */
++      explicit
++      basic_ofstream(const wchar_t* __s,
++		     ios_base::openmode __mode = ios_base::out|ios_base::trunc)
++      : __ostream_type(), _M_filebuf()
++      {
++	this->init(&_M_filebuf);
++	this->open(__s, __mode);
++      }
++      #endif _WIN32
++
+ #if __cplusplus >= 201103L
+       /**
+        *  @brief  Create an output file stream.
+@@ -720,6 +879,24 @@
+ 	this->open(__s, __mode);
+       }
+ 
++      #if _WIN32
++      /**
++       *  @brief  Create an output file stream.
++       *  @param  s  std::string specifying the filename.
++       *  @param  mode  Open file in specified mode (see std::ios_base).
++       *
++       *  @c ios_base::out|ios_base::trunc is automatically included in
++       *  @a mode.
++       */
++      explicit
++      basic_ofstream(const std::wstring& __s,
++		     ios_base::openmode __mode = ios_base::out|ios_base::trunc)
++      : __ostream_type(), _M_filebuf()
++      {
++	this->init(&_M_filebuf);
++	this->open(__s, __mode);
++      }
++      #endif // _WIN32
+       basic_ofstream(const basic_ofstream&) = delete;
+ 
+       basic_ofstream(basic_ofstream&& __rhs)
+@@ -806,6 +983,30 @@
+ 	  // 409. Closing an fstream should clear error state
+ 	  this->clear();
+       }
++      #if _WIN32
++      /**
++       *  @brief  Opens an external file.
++       *  @param  s  The name of the file.
++       *  @param  mode  The open mode flags.
++       *
++       *  Calls @c std::basic_filebuf::open(s,mode|out|trunc).  If that
++       *  function fails, @c failbit is set in the stream's error state.
++       *
++       *  Tip:  When using std::string to hold the filename, you must use
++       *  .c_str() before passing it to this constructor.
++       */
++      void
++      open(const wchar_t* __s,
++	   ios_base::openmode __mode = ios_base::out | ios_base::trunc)
++      {
++	if (!_M_filebuf.open(__s, __mode | ios_base::out))
++	  this->setstate(ios_base::failbit);
++	else
++	  // _GLIBCXX_RESOLVE_LIB_DEFECTS
++	  // 409. Closing an fstream should clear error state
++	  this->clear();
++      }
++      #endif // _WIN32
+ 
+ #if __cplusplus >= 201103L
+       /**
+@@ -827,6 +1028,27 @@
+ 	  // 409. Closing an fstream should clear error state
+ 	  this->clear();
+       }
++      #if _WIN32
++      /**
++       *  @brief  Opens an external file.
++       *  @param  s  The name of the file.
++       *  @param  mode  The open mode flags.
++       *
++       *  Calls @c std::basic_filebuf::open(s,mode|out|trunc).  If that
++       *  function fails, @c failbit is set in the stream's error state.
++       */
++      void
++      open(const std::wstring& __s,
++	   ios_base::openmode __mode = ios_base::out | ios_base::trunc)
++      {
++	if (!_M_filebuf.open(__s, __mode | ios_base::out))
++	  this->setstate(ios_base::failbit);
++	else
++	  // _GLIBCXX_RESOLVE_LIB_DEFECTS
++	  // 409. Closing an fstream should clear error state
++	  this->clear();
++      }
++      #endif // _WIN32
+ #endif
+ 
+       /**
+@@ -907,6 +1129,26 @@
+ 	this->open(__s, __mode);
+       }
+ 
++
++      #if _WIN32
++      /**
++       *  @brief  Create an input/output file stream.
++       *  @param  s  Null terminated string specifying the filename.
++       *  @param  mode  Open file in specified mode (see std::ios_base).
++       *
++       *  Tip:  When using std::string to hold the filename, you must use
++       *  .c_str() before passing it to this constructor.
++       */
++      explicit
++      basic_fstream(const wchar_t* __s,
++		    ios_base::openmode __mode = ios_base::in | ios_base::out)
++      : __iostream_type(0), _M_filebuf()
++      {
++	this->init(&_M_filebuf);
++	this->open(__s, __mode);
++      }
++      #endif // _WIN32
++
+ #if __cplusplus >= 201103L
+       /**
+        *  @brief  Create an input/output file stream.
+@@ -921,6 +1163,21 @@
+ 	this->init(&_M_filebuf);
+ 	this->open(__s, __mode);
+       }
++      #if _WIN32
++      /**
++       *  @brief  Create an input/output file stream.
++       *  @param  s  Null terminated string specifying the filename.
++       *  @param  mode  Open file in specified mode (see std::ios_base).
++       */
++      explicit
++      basic_fstream(const std::wstring& __s,
++		    ios_base::openmode __mode = ios_base::in | ios_base::out)
++      : __iostream_type(0), _M_filebuf()
++      {
++	this->init(&_M_filebuf);
++	this->open(__s, __mode);
++      }
++      #endif // _WIN32
+ 
+       basic_fstream(const basic_fstream&) = delete;
+ 
+@@ -1009,6 +1266,31 @@
+ 	  this->clear();
+       }
+ 
++      #if _WIN32
++      /**
++       *  @brief  Opens an external file.
++       *  @param  s  The name of the file.
++       *  @param  mode  The open mode flags.
++       *
++       *  Calls @c std::basic_filebuf::open(s,mode).  If that
++       *  function fails, @c failbit is set in the stream's error state.
++       *
++       *  Tip:  When using std::string to hold the filename, you must use
++       *  .c_str() before passing it to this constructor.
++       */
++      void
++      open(const wchar_t* __s,
++	   ios_base::openmode __mode = ios_base::in | ios_base::out)
++      {
++	if (!_M_filebuf.open(__s, __mode))
++	  this->setstate(ios_base::failbit);
++	else
++	  // _GLIBCXX_RESOLVE_LIB_DEFECTS
++	  // 409. Closing an fstream should clear error state
++	  this->clear();
++      }
++      #endif // _WIN32
++
+ #if __cplusplus >= 201103L
+       /**
+        *  @brief  Opens an external file.
+@@ -1029,6 +1311,28 @@
+ 	  // 409. Closing an fstream should clear error state
+ 	  this->clear();
+       }
++
++      #if _WIN32
++      /**
++       *  @brief  Opens an external file.
++       *  @param  s  The name of the file.
++       *  @param  mode  The open mode flags.
++       *
++       *  Calls @c std::basic_filebuf::open(s,mode).  If that
++       *  function fails, @c failbit is set in the stream's error state.
++       */
++      void
++      open(const std::wstring& __s,
++	   ios_base::openmode __mode = ios_base::in | ios_base::out)
++      {
++	if (!_M_filebuf.open(__s, __mode))
++	  this->setstate(ios_base::failbit);
++	else
++	  // _GLIBCXX_RESOLVE_LIB_DEFECTS
++	  // 409. Closing an fstream should clear error state
++	  this->clear();
++      }
++      #endif // _WIN32
+ #endif
+ 
+       /**
