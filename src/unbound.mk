@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := unbound-$($(PKG)_VERSION)
 $(PKG)_FILE     := unbound-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.nlnetlabs.nl/~wouter/$($(PKG)_FILE)
 # $(PKG)_URL_2    := .../$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openssl zlib
+$(PKG)_DEPS     := gcc openssl zlib expat
 
 
 
