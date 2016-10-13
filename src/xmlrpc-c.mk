@@ -24,6 +24,8 @@ $(PKG)_MAKE_OPTS = \
     SHARED_LIB_TYPE=@xmlrpc-c-shared-lib-type@ \
     MUST_BUILD_SHLIB=@xmlrpc-c-must-build-shlib@
 
+TMP_BIN_DIR := $(realpath .)/tmp-$(PKG)/curl-bin
+
 define $(PKG)_BUILD_COMMON
     $(SED) -i 's,curl-config,$(TARGET)-curl-config,g' '$(1)/lib/curl_transport/Makefile'
     $(SED) -i 's,curl-config,$(TARGET)-curl-config,g' '$(1)/src/Makefile'
@@ -35,7 +37,8 @@ define $(PKG)_BUILD_COMMON
         --enable-cplusplus \
         --enable-curl-client \
         CURL_CONFIG='$(PREFIX)/$(TARGET)/bin/curl-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' $($(PKG)_MAKE_OPTS)
+    mkdir $(TMP_BIN_DIR); cd $(TMP_BIN_DIR); ln -s $(PREFIX)/$(TARGET)/bin/curl-config
+    PATH=$(TMP_BIN_DIR):$(PATH) $(MAKE) -C '$(1)' -j '$(JOBS)' $($(PKG)_MAKE_OPTS)
     $(MAKE) -C '$(1)' -j 1 install $($(PKG)_MAKE_OPTS)
 
     '$(TARGET)-g++' \
