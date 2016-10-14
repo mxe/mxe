@@ -30,7 +30,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= doc_install='# DISABLED: doc-install.pl'
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -pedantic -std=c++0x \
+        -W -Wall -Wno-deprecated-declarations -Werror -pedantic -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm3.exe' \
         `'$(TARGET)-pkg-config' gtkmm-3.0 --cflags --libs`
 endef
