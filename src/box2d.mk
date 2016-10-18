@@ -18,8 +18,7 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && cmake . \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1).build' && '$(TARGET)-cmake' . \
         -DBOX2D_INSTALL=ON \
         -DBOX2D_BUILD_EXAMPLES=OFF \
         -DBOX2D_BUILD_STATIC=$(CMAKE_STATIC_BOOL) \

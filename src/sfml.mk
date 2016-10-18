@@ -19,15 +19,14 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1)/build' && '$(TARGET)-cmake' .. \
         -DSFML_BUILD_EXAMPLES=FALSE \
         -DSFML_BUILD_DOC=FALSE
 
     # build and install libs
     $(MAKE) -C '$(1)/build/src/SFML' -j '$(JOBS)' install VERBOSE=1
     # install headers
-    cmake -DCOMPONENT=devel -P '$(1)/build/cmake_install.cmake'
+    '$(TARGET)-cmake' -DCOMPONENT=devel -P '$(1)/build/cmake_install.cmake'
 
     # create pkg-config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'

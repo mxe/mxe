@@ -25,9 +25,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).native' -j '$(JOBS)' VERBOSE=1
     # cross-compilation
     mkdir '$(1).build'
-    cd '$(1).build' && cmake \
-        -DCMAKE_INSTALL_PREFIX=$(PREFIX)/$(TARGET) \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1).build' && '$(TARGET)-cmake' \
         -DIMPORT_COMP_ERR='$(1).native/ImportCompErr.cmake' \
         -DHAVE_GCC_ATOMIC_BUILTINS=1 \
         -DDISABLE_SHARED=$(CMAKE_STATIC_BOOL) \

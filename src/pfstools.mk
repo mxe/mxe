@@ -20,8 +20,7 @@ endef
 # only want the library so we don't need them.
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && cmake '$(1)' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1).build' && '$(TARGET)-cmake' '$(1)' \
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         -DWITH_OpenEXR=false \
         -DWITH_ImageMagick=false \

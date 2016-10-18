@@ -18,8 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake . \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1)' && '$(TARGET)-cmake' . \
         $(if $(BUILD_SHARED), \
             -DPHYSFS_BUILD_SHARED=TRUE \
             -DPHYSFS_BUILD_STATIC=FALSE, \

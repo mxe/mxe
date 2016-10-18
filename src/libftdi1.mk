@@ -18,9 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake . \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DCMAKE_BUILD_TYPE=Release \
+    cd '$(1)' && '$(TARGET)-cmake' . \
         -DSHAREDLIBS=$(if $(BUILD_SHARED),yes,no) \
         -DSTATICLIBS=$(if $(BUILD_SHARED),no,yes) \
         -DLIBUSB_INCLUDE_DIR=$(PREFIX)/$(TARGET)/include/libusb-1.0 \

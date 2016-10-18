@@ -17,8 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1)' && '$(TARGET)-cmake' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
         -DLAPACKE=ON \
