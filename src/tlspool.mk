@@ -3,10 +3,10 @@
 
 PKG             := tlspool
 $(PKG)_VERSION  := 0.19
-$(PKG)_CHECKSUM := 9c43077e1eaf96539f03aa1ebe7b5e8a1727306529c0318bf88054f604a9fad8
-$(PKG)_SUBDIR   := $(PKG)-version-$($(PKG)_VERSION)-beta1
-$(PKG)_FILE     := $(PKG)-version-$($(PKG)_VERSION)-beta1.tar.gz
-$(PKG)_URL      := https://github.com/arpa2/$(PKG)/archive/version-$($(PKG)_VERSION)-beta1.tar.gz
+$(PKG)_CHECKSUM := 78817edb274e7caf616e0aabcb80f6ac46842e294c50a423d467d148388fc1b5
+$(PKG)_SUBDIR   := $(PKG)-version-$($(PKG)_VERSION)-beta3
+$(PKG)_FILE     := $(PKG)-version-$($(PKG)_VERSION)-beta3.tar.gz
+$(PKG)_URL      := https://github.com/arpa2/$(PKG)/archive/version-$($(PKG)_VERSION)-beta3.tar.gz
 $(PKG)_DEPS     := gcc pthreads gnutls p11-kit libtasn1 db quick-der ldns unbound
 
 define $(PKG)_UPDATE
@@ -28,3 +28,4 @@ define $(PKG)_BUILD
     $(MAKE)  -C '$(1)/src' -j '$(JOBS)' install $($(PKG)_MAKE_OPTS)
     $(MAKE)  -C '$(1)/lib' -j '$(JOBS)' install $($(PKG)_MAKE_OPTS)
 endef
+
