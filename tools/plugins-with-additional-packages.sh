@@ -6,4 +6,4 @@
 # as opposed to customisation plugins.
 # See plugins/README.md for more information.
 
-echo plugins/{apps,luarocks,native,tcl.tk}
+echo plugins/{apps,go,luarocks,native,tcl.tk}
