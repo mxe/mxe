@@ -54,6 +54,11 @@ PKGS       := $(call set_create,\
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
+# set to empty or $(false) to disable stripping
+STRIP_TOOLCHAIN := $(true)
+STRIP_LIB       := $(false)
+STRIP_EXE       := $(true)
+
 # All pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
 # These aren't meaningful to the pkg list in docs/index.html so
 # use a list in case we want to separate autotools, cmake etc.
@@ -549,6 +554,8 @@ build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): BUILD_TYPE = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),debug,release)
 build-only-$(1)_$(3): BUILD_TYPE_SUFFIX = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),d)
+build-only-$(1)_$(3): INSTALL_STRIP_TOOLCHAIN = install$(if $(STRIP_TOOLCHAIN),-strip)
+build-only-$(1)_$(3): INSTALL_STRIP_LIB = install$(if $(STRIP_LIB),-strip)
 build-only-$(1)_$(3): SOURCE_DIR = $(or $($(1)_SOURCE_TREE),$(2)/$($(1)_SUBDIR))
 build-only-$(1)_$(3): BUILD_DIR  = $(2)/$(if $($(1)_SOURCE_TREE),local,$($(1)_SUBDIR)).build_
 build-only-$(1)_$(3): TEST_FILE  = $($(1)_TEST_FILE)
@@ -586,6 +593,7 @@ build-only-$(1)_$(3):
 	    @echo
 	    @echo 'settings.mk'
 	    @cat '$(TOP_DIR)/settings.mk'
+	    $(if $(STRIP_EXE),-$(TARGET)-strip '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe')
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    )
