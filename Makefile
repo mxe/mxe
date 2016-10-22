@@ -289,6 +289,10 @@ else
         echo '# This variable controls the targets that will build.'; \
         echo '#MXE_TARGETS := $(MXE_TARGET_LIST)'; \
         echo; \
+        echo '# This variable controls which plugins are in use.'; \
+        echo '# See plugins/README.md for further information.'; \
+        echo '#override MXE_PLUGIN_DIRS += plugins/apps plugins/native'; \
+        echo; \
         echo '# This variable controls the download mirror for SourceForge,'; \
         echo '# when it is used. Enabling the value below means auto.'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
