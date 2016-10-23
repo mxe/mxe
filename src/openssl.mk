@@ -8,7 +8,7 @@ $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.openssl.org/source/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://www.openssl.org/source/old/$(call tr,$([a-z]),,$($(PKG)_VERSION))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgcrypt zlib
+$(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.openssl.org/source/' | \
