@@ -2,20 +2,23 @@
 
 PKG             := protobuf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.6.1
-$(PKG)_CHECKSUM := 2667b7cda4a6bc8a09e5463adf3b5984e08d94e72338277affa8594d8b6e5cd1
+$(PKG)_VERSION  := 3.1.0
+$(PKG)_CHECKSUM := 0a0ae63cbffc274efb573bdde9a253e3f32e458c41261df51c5dbc5ad541e8f7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/google/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc zlib googletest
+$(PKG)_DEPS     := gcc zlib googlemock googletest
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, google/protobuf, v)
 endef
 
 define $(PKG)_BUILD
+# Zero step: put googlemock and googletest to the source directory.
+    $(call PREPARE_PKG_SOURCE,googlemock,$(1))
+    cd '$(1)' && mv '$(googlemock_SUBDIR)' gmock
     $(call PREPARE_PKG_SOURCE,googletest,$(1))
-    cd '$(1)' && mv googletest-release-$(googletest_VERSION)/ gtest
+    cd '$(1)' && mv '$(googletest_SUBDIR)' gmock/gtest
 # First step: Build for host system in order to create "protoc" binary.
     cd '$(1)' && ./autogen.sh && ./configure \
         --disable-shared
