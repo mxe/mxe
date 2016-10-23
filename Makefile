@@ -295,7 +295,7 @@ else
         echo; \
         echo '# The three lines below makes `make` build these "local'; \
         echo '# packages" instead of all packages.'; \
-        echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
+        echo '#LOCAL_PKG_LIST := biosig stimfit sigviewer edfbrowser dcmtk opencv pthreads wxwidgets'; \
         echo '#.DEFAULT local-pkg-list:'; \
         echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')

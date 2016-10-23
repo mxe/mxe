@@ -1,0 +1,17 @@
+From the Debian QHull package.
+
+Access globals via a pointer to allocated memory.
+
+ -- Rafael Laboissiere <rafael@debian.org>  Wed, 25 Sep 2002 10:39:30 +0200
+
+--- qhull-orig/src/user.h	2002-04-29 11:01:46.000000000 +0200
++++ qhull/src/user.h	2004-02-02 11:04:47.000000000 +0100
+@@ -509,7 +509,7 @@
+   see:
+     user_eg.c for an example
+ */
+-#define qh_QHpointer 0
++#define qh_QHpointer 1
+ #if 0  /* sample code */
+     qhT *oldqhA, *oldqhB;
+ 

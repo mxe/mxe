@@ -1,0 +1,33 @@
+diff -urN a-3.3.0/Modules/parsermodule.c b-3.3.0/Modules/parsermodule.c
+--- a-3.3.0/Modules/parsermodule.c	2012-09-29 09:00:45.000000000 +0100
++++ b-3.3.0/Modules/parsermodule.c	2012-11-17 23:40:40.108791547 +0000
+@@ -37,7 +37,7 @@
+ #undef Yield
+ #include "ast.h"
+ 
+-extern grammar _PyParser_Grammar; /* From graminit.c */
++PyAPI_DATA(grammar) _PyParser_Grammar; /* From graminit.c */
+ 
+ #ifdef lint
+ #include <note.h>
+diff -urN a-3.3.0/Parser/metagrammar.c b-3.3.0/Parser/metagrammar.c
+--- a-3.3.0/Parser/metagrammar.c	2012-09-29 09:00:48.000000000 +0100
++++ b-3.3.0/Parser/metagrammar.c	2012-11-17 23:40:40.104793597 +0000
+@@ -139,7 +139,7 @@
+     {7, 0},
+     {8, 0},
+ };
+-static grammar _PyParser_Grammar = {
++static grammar _PyParser_MetaGrammar = {
+     6,
+     dfas,
+     {19, labels},
+@@ -149,7 +149,7 @@
+ grammar *
+ meta_grammar(void)
+ {
+-    return &_PyParser_Grammar;
++    return &_PyParser_MetaGrammar;
+ }
+ 
+ grammar *

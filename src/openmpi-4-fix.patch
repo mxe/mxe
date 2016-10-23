@@ -1,0 +1,19 @@
+--- a/opal/include/opal_config_bottom.h	2012-04-03 16:29:45.000000000 +0200
++++ b/opal/include/opal_config_bottom.h	2013-03-13 19:40:00.000000000 +0100
+@@ -556,13 +556,13 @@
+ #define AF_UNSPEC 0
+ #endif
+ #if !HAVE_DECL_PF_UNSPEC
+-#define PF_UNSPEC 0
++//#define PF_UNSPEC 0
+ #endif
+ #if !HAVE_DECL_AF_INET6
+-#define AF_INET6 AF_UNSPEC
++//#define AF_INET6 AF_UNSPEC
+ #endif
+ #if !HAVE_DECL_PF_INET6
+-#define PF_INET6 PF_UNSPEC
++//#define PF_INET6 PF_UNSPEC
+ #endif
+ 
+ #if defined(__APPLE__) && defined(HAVE_INTTYPES_H)

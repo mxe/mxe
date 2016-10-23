@@ -1,0 +1,13 @@
+--- a/opal/win32/win_compat.h	2013-03-13 19:26:27.000000000 +0100
++++ b/opal/win32/win_compat.h	2013-03-13 19:36:35.000000000 +0100
+@@ -317,8 +317,8 @@
+ #define LOG_DEBUG   7
+ 
+ /* hwloc support is not ready on Windows,
+-   will remove this lines when it's done. */
+-#define OPAL_HAVE_HWLOC 0
++    remove this lines when it's done. */
++// #define OPAL_HAVE_HWLOC 0
+ 
+ /*
+  * Mask these to Windows equivalents

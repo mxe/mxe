@@ -1,0 +1,54 @@
+diff --git a/configure.ac b/configure.ac
+index 2d52085..4d58ec0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -172,32 +172,6 @@ if test "$LAPACKLIB" = ""; then
+         # System LAPACK
+         LIBLAPACK_LDFLAGS="/usr/lib/liblapack.dylib -framework Accelerate"
+         CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK -DHAVE_LAPACK_SUFFIX" 
+-    else
+-        AC_CHECK_LIB([lapack], [dgemm_], HAVE_LAPACKX="yes")
+-        if test "${HAVE_LAPACKX}" != "yes" ; then
+-            AC_CHECK_LIB([lapack3], [dgemm_], HAVE_LAPACK3="yes")
+-            if test "${HAVE_LAPACK3}" != "yes" ; then
+-                AC_CHECK_LIB([lapack-3], [dgemm_], HAVE_LAPACK_3="yes")
+-                    if test "${HAVE_LAPACK_3}" != "yes" ; then
+-                        AC_CHECK_LIB([blas], [dgemm_], HAVE_ATLAS="yes")
+-                        if test "${HAVE_ATLAS}" != "yes" ; then
+-                            AC_MSG_ERROR([Couldn't find lapack.])
+-                        else
+-                            LIBLAPACK_LDFLAGS="-llapack -lblas"
+-                            CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK " 
+-                        fi
+-                    else
+-                        LIBLAPACK_LDFLAGS="-llapack-3"
+-                        CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK " 
+-                    fi
+-            else
+-                LIBLAPACK_LDFLAGS=-llapack3
+-                CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK " 
+-            fi
+-        else
+-            LIBLAPACK_LDFLAGS="-llapack -lblas"
+-            CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK " 
+-        fi
+     fi
+ fi
+ AC_SUBST(LIBLAPACK_LDFLAGS)
+@@ -318,16 +292,8 @@ if test "${HDF5PREFIX}" = ""; then
+     fi
+ fi
+ 
+-AC_CHECK_HEADER([hdf5.h], [], [AC_MSG_ERROR([Couldn't find hdf5 header])])
+-AC_CHECK_LIB([hdf5],[H5Fopen],HAVE_HDF5="yes")
+-if test "${HAVE_HDF5}" != "yes" ; then
+-    AC_MSG_ERROR([Couldn't find hdf5 libraries.])
+-else
+-    if test "${HDF5_CFLAGS}" = ""; then
+         CPPFLAGS="${CPPFLAGS} -DH5_USE_16_API"
+         LIBHDF5_LDFLAGS="-lhdf5 -lhdf5_hl"
+-    fi
+-fi
+ AC_SUBST(LIBHDF5_LDFLAGS)
+ 
+ AC_ARG_ENABLE([debug],

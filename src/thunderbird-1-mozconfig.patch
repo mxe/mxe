@@ -1,0 +1,27 @@
+--- /dev/null	2013-02-26 09:43:47.396713554 +0100
++++ b/.mozconfig	2013-04-30 08:36:23.000000000 +0200
+@@ -0,0 +1,24 @@
++#Specify the cross compile
++export CROSS_COMPILE=1
++#ac_add_options --enable-application=browser
++ac_add_options  --enable-application=mail
++#ac_add_options --enable-application=suite
++#ac_add_options --enable-application=calendar
++#ac_add_options --enable-application=xulrunner
++
++ac_add_options --target=i686-pc-mingw32
++ac_add_options --enable-default-toolkit=cairo-windows
++mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../mozilla-mingw
++
++ac_add_options  --enable-debug
++ac_add_options  --disable-optimize
++
++ac_add_options --disable-updater
++ac_add_options --disable-crashreporter
++ac_add_options --disable-maintenance-service
++ac_add_options --disable-webrtc
++
++ac_add_options --disable-accessibility # uncomment if you don't have widl installed
++
++# Use parallel build. Adjust number of processes for your setup.
++mk_add_options MOZ_MAKE_FLAGS=-j8
