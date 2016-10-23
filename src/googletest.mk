@@ -9,6 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-release-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/google/$(PKG)/archive/release-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     :=
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, google/googletest, release-)

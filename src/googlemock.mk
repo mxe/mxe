@@ -8,6 +8,7 @@ $(PKG)_SUBDIR   := googlemock-release-$($(PKG)_VERSION)
 $(PKG)_FILE     := googlemock-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/google/googlemock/archive/release-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     :=
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, google/googlemock, release-)
