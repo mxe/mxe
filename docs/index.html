@@ -3048,6 +3048,77 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         enable/disable all dependency libraries explicitly
         via "<code>--enable-*</code>" and "<code>--disable-*</code>" options.
         </p>
+
+        <p>
+        Useful Makefile variables provided by MXE:
+        </p>
+
+        <ul>
+        <li>
+            <p>
+            <code>$(SOURCE_DIR)</code>
+            is a directory with package source and
+            <code>$(BUILD_DIR)</code>
+            is an empty directory intended for build files.
+            Both directories are temporary.
+            Prefer out-of-tree builds. Autotools
+            and CMake support them.
+            </p>
+        </li>
+        <li>
+            <p>
+            <code>$(PREFIX)</code>
+            is path to <code>usr/</code> directory.
+            <code>$(TOP_DIR)</code>
+            is path to MXE root directory.
+            <code>$(TARGET)</code> is target triplet
+            (e.g., <code>i686-w64-mingw32.static</code>).
+            <code>$(BUILD)</code> is build triplet
+            (e.g., <code>x86_64-unknown-linux-gnu</code>).
+            </p>
+        </li>
+        <li>
+            <p>
+            <code>$(MXE_CONFIGURE_OPTS)</code>
+            adds standard options to <code>./configure</code> script.
+            Typical usage:
+            </p>
+            <pre>
+cd '$(BUILD_DIR)' &amp;&amp; '$(SOURCE_DIR)'/configure \
+    $(MXE_CONFIGURE_OPTS)
+            </pre>
+        </li>
+        <li>
+            <p>
+            <code>$(MXE_DISABLE_CRUFT)</code>
+            disables installation of documentation and programs.
+            </p>
+            <pre>
+$(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+$(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
+            </pre>
+        </li>
+        <li>
+            <p>
+            <code>$(BUILD_SHARED)</code>
+            is TRUE for shared targets. Useful to add flags applicable
+            only to shared targets.
+            </p>
+            <pre>
+$(if $(BUILD_SHARED),LDFLAGS=-no-undefined)
+            </pre>
+            <p>
+            Similarly,
+            <code>$(BUILD_STATIC)</code>
+            is TRUE for static targets;
+            <code>$(BUILD_NATIVE)</code>
+            is TRUE for native targets;
+            <code>$(BUILD_CROSS)</code>
+            is TRUE for cross targets.
+            </p>
+        </li>
+        </ul>
+
     </li>
 
     <li>
