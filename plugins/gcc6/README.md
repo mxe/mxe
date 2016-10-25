@@ -49,7 +49,7 @@ versions [[4](https://github.com/mxe/mxe/commit/a1cc019)].
 | gtkmm2             | static (all)                            | -                                                    |
 | gtkmm3             | static (all)                            | -                                                    |
 | guile              | i686-w64-mingw32.static (all)           | -                                                    |
-| itk                | all                                     | -                                                    |
+| itk                | all                                     | [55e9bba](https://github.com/mxe/mxe/commit/55e9bba) |
 | jsoncpp            | all                                     | [0bc73f7](https://github.com/mxe/mxe/commit/0bc73f7) |
 | json_spirit        | all                                     | -                                                    |
 | librsvg            | all                                     | -                                                    |
