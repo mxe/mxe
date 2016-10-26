@@ -4,11 +4,12 @@
 # Qwt - Qt widgets for technical applications
 PKG             := automoc4
 $(PKG)_VERSION  := 0.9.88
-$(PKG)_CHECKSUM := d864c3dda99d8b5f625b9267acfa1d88ff617e3a
+$(PKG)_CHECKSUM := 234116f4c05ae21d828594d652b4c4a052ef75727e2d8a4f3a4fb605de9e4c49
+#d864c3dda99d8b5f625b9267acfa1d88ff617e3a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_WEBSITE  := http://www.kde.org/
-$(PKG)_URL      := http://mirrors.isc.org/pub/kde/stable/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.kde.org/stable/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qt
 
 define $(PKG)_UPDATE
