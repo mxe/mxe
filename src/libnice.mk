@@ -20,4 +20,7 @@ define $(PKG)_BUILD
         GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
         MAKE=$(MAKE)
     $(MAKE) -C '$(1)'         -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(TARGET)-gcc \
+        '$(1)/examples/simple-example.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `$(TARGET)-pkg-config nice --cflags --libs`
 endef
