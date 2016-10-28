@@ -3,8 +3,8 @@
 
 PKG             := quick-der
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.1-RC12
-$(PKG)_CHECKSUM := f644e8f97ba2a3370f876f84c82002fc5ef3a465ddf1e13290a5b08b98a8dfea
+$(PKG)_VERSION  := 1.0-RC2
+$(PKG)_CHECKSUM := 8afea3b5374b302d9183623aab84ab783c194a3ca9d29152d5d6e82d65b4cf75
 $(PKG)_SUBDIR   := $(PKG)-version-$($(PKG)_VERSION)
 $(PKG)_FILE     := version-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL	:= https://github.com/vanrein/quick-der/archive/$($(PKG)_FILE)
