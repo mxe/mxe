@@ -57,6 +57,7 @@ define $(PKG)_BUILD
             -system-pcre \
             -openssl-linked \
             -dbus-linked \
+            -no-pch \
             -v \
             $($(PKG)_CONFIGURE_OPTS)
 
