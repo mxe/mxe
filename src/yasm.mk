@@ -19,7 +19,7 @@ endef
 
 define $(PKG)_BUILD
     # link to native yasm compiler on cross builds
-    $(if $(call sne,$(TARGET),$(BUILD)),
+    $(if $(BUILD_CROSS),
         ln -sf '$(PREFIX)/$(BUILD)/bin/yasm' '$(PREFIX)/bin/$(TARGET)-yasm')
 
     # yasm is always static
