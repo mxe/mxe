@@ -186,6 +186,7 @@
     "libmodplug": "0.8.8.4",
     "libmpcdec": "1.2.6",
     "libmysqlclient": "6.1.6",
+    "libnice": "0.1.13",
     "libntlm": "1.4",
     "liboauth": "1.0.3",
     "libodbc++": "0.2.5",
