@@ -20,7 +20,6 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1).build'
     cd '$(1).build' && '$(TARGET)-cmake' \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         -DCMAKE_MODULE_PATH='$(1)/ossim_package_support/cmake/CMakeModules' \

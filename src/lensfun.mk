@@ -20,7 +20,6 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1)/building'
     cd '$(1)/building' && '$(TARGET)-cmake' .. \
-        -DBUILD_STATIC=$(if $(BUILD_STATIC),TRUE,FALSE) \
         -DINSTALL_IN_TREE=NO
     $(MAKE) -C '$(1)/building' -j '$(JOBS)' install VERBOSE=1
 

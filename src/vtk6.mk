@@ -42,7 +42,6 @@ define $(PKG)_BUILD
     cd '$(1).cross_build' && '$(TARGET)-cmake' \
         -C '$(1)/TryRunResults.cmake' \
         -DVTKCompileTools_DIR='$(1).native_build' \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
         -DModule_vtkGUISupportQt=TRUE \
         -DModule_vtkGUISupportQtOpenGL=TRUE \
         -DModule_vtkViewsQt=TRUE \

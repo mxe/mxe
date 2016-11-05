@@ -21,7 +21,6 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1).build'
     cd '$(1).build' && '$(TARGET)-cmake' \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
         -DITK_FORBID_DOWNLOADS=TRUE \
         -DBUILD_TESTING=FALSE \

@@ -19,8 +19,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && '$(TARGET)-cmake' . \
-        -DSHAREDLIBS=$(if $(BUILD_SHARED),yes,no) \
-        -DSTATICLIBS=$(if $(BUILD_SHARED),no,yes) \
+        -DSHAREDLIBS=$(CMAKE_SHARED_BOOL) \
+        -DSTATICLIBS=$(CMAKE_STATIC_BOOL) \
         -DLIBUSB_INCLUDE_DIR=$(PREFIX)/$(TARGET)/include/libusb-1.0 \
         -DDOCUMENTATION=no \
         -DEXAMPLES=no \

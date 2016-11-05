@@ -23,11 +23,7 @@ define $(PKG)_BUILD
         -DBUILD_DEMOS=OFF \
         -DINSTALL_DEMOS=OFF \
         $(if $(BUILD_STATIC), \
-            -DBUILD_SHARED=OFF \
-            -DBUILD_STATIC=ON \
             -DINSTALL_STATIC=ON, \
-            -DBUILD_SHARED=ON \
-            -DBUILD_STATIC=OFF \
             -DINSTALL_STATIC=OFF)
 
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install

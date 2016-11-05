@@ -20,8 +20,6 @@ endef
 define $(PKG)_BUILD
     cd '$(1)/build' && '$(TARGET)-cmake' \
         -DDYNLOAD=OFF \
-        -DBUILD_STATIC=ON \
-        -DBUILD_SHARED=OFF \
         -DBUILD_EXAMPLES=OFF \
         -DFLUIDSYNTH=OFF \
         -DCMAKE_C_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \

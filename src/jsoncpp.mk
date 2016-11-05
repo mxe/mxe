@@ -25,7 +25,6 @@ define $(PKG)_BUILD
     cd '$(1)/build' && '$(TARGET)-cmake' .. \
         -DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF \
         -DCMAKE_CXX_FLAGS="$($(PKG)_CXXFLAGS)" \
-        -DJSONCPP_WITH_CMAKE_PACKAGE=ON \
-        -DBUILD_STATIC_LIBS=$(if $(BUILD_STATIC),true,false)
+        -DJSONCPP_WITH_CMAKE_PACKAGE=ON
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 endef
