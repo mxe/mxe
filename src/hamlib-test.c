@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 	rmode_t mode;
 	pbwidth_t width;
 	rig_model_t myrig_model;
-	char portname[64]; 
+	char portname[64];
 	port_t myport;
 
 	strncpy(portname, argv[2], 63);
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 		printf("example:  ./%s /dev/ttyS0\n", argv[0]);
 		return 0;
 	}
-	
+
 	/* Try to detect rig */
 	/* may be overriden by backend probe */
 	myport.type.rig = RIG_PORT_SERIAL;
@@ -46,12 +46,12 @@ int main(int argc, char *argv[]) {
 	rig_set_debug(RIG_DEBUG_ERR);
 	/* Instantiate a rig - your rig */
 	/* my_rig = rig_init(RIG_MODEL_TT565); */
-	my_rig = rig_init(myrig_model); 
+	my_rig = rig_init(myrig_model);
 	/* Set up serial port, baud rate - serial device + baudrate */
 	rig_file = "/dev/ttyUSB0";
 	strncpy(my_rig->state.rigport.pathname, rig_file, FILPATHLEN - 1);
-	my_rig->state.rigport.parm.serial.rate = 57600; 
-	my_rig->state.rigport.parm.serial.rate = 9600; 
+	my_rig->state.rigport.parm.serial.rate = 57600;
+	my_rig->state.rigport.parm.serial.rate = 9600;
 	/* Open my rig */
 	retcode = rig_open(my_rig);
 	printf("retcode of rig_open = %d \n", retcode);
