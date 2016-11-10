@@ -293,7 +293,7 @@
     "poppler": "0.30.0",
     "popt": "1.16",
     "portablexdr": "4.9.1",
-    "portaudio": "19_20140130",
+    "portaudio": "190600_20161030",
     "portmidi": "217",
     "postgresql": "9.2.4",
     "primesieve": "5.5.0",
