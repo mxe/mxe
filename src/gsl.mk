@@ -18,11 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
-        --enable-static
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 
@@ -31,5 +27,3 @@ define $(PKG)_BUILD
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gsl.exe' \
         -lgsl
 endef
-
-$(PKG)_BUILD_SHARED =
