@@ -265,3 +265,36 @@ index 1111111..2222222 100644
  }
 -
 -TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ulf Hermann <ulf.hermann@qt.io>
+Date: Wed, 24 Aug 2016 11:55:35 +0200
+Subject: [PATCH] QLocale: Fix wrong assert
+
+The endptr from reading the exponent of a 'g' form snprintf result
+should not be past the end of the string we're reading from. It has
+nothing to do with the 'e' sign.
+
+Task-number: QTBUG-54482
+Change-Id: I8bdee917b8d21fdc94c255548ad7e008431a07fa
+Reviewed-by: Simon Hausmann <simon.hausmann@qt.io>
+
+See https://github.com/mxe/mxe/issues/1572
+Source: https://codereview.qt-project.org/#/c/168995
+Source: https://github.com/qt/qtbase/commit/de7f281d7ad1bc8e3dc5a54943
+
+Remove this patch when updating to Qt 5.7.1.
+
+diff --git a/src/corelib/tools/qlocale_tools.cpp b/src/corelib/tools/qlocale_tools.cpp
+index 1111111..2222222 100644
+--- a/src/corelib/tools/qlocale_tools.cpp
++++ b/src/corelib/tools/qlocale_tools.cpp
+@@ -224,7 +224,7 @@ void doubleToAscii(double d, QLocaleData::DoubleForm form, int precision, char *
+             const char *endptr;
+             decpt = qstrtoll(target.data() + eSign + 1, &endptr, 10, &ok) + 1;
+             Q_ASSERT(ok);
+-            Q_ASSERT(endptr - target.data() <= length - eSign -1);
++            Q_ASSERT(endptr - target.data() <= length);
+         } else {
+             // No 'e' found, so it's the 'f' form. Variants of snprintf generate numbers with
+             // potentially multiple digits before the '.', but without decimal exponent then. So we
