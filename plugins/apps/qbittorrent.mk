@@ -7,6 +7,8 @@ $(PKG)_CHECKSUM := c0d0d4b72c240f113b59a061146803bc1b7926d3d7f39b06b50a4d26f5ad9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := http://qbittorrent.org/
+$(PKG)_OWNER    := https://github.com/starius
 $(PKG)_DEPS     := gcc libtorrent-rasterbar qt boost
 
 define $(PKG)_UPDATE

@@ -7,6 +7,8 @@ $(PKG)_CHECKSUM := c03bbc283836cb4b706eb6bfd18e724a8ce475e2c16154c13c6323a845b43
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/wg/wrk/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE  := https://github.com/wg/wrk
+$(PKG)_OWNER    := https://github.com/starius
 $(PKG)_DEPS     := gcc luajit openssl pthreads
 
 define $(PKG)_UPDATE
