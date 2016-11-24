@@ -2,8 +2,8 @@
 
 PKG             := hyperscan
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.3.1
-$(PKG)_CHECKSUM := a7bce1287c06d53d1fb34266d024331a92ee24cbb2a7a75061b4ae50a30bae97
+$(PKG)_VERSION  := 4.3.2
+$(PKG)_CHECKSUM := 6cd5820d6da51d6fe4ab12066d1efd9afecc1bc6fb7d6eca9c98f76fd391dbd5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/01org/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz

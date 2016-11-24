@@ -54,6 +54,11 @@ PKGS       := $(call set_create,\
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
+# set to empty or $(false) to disable stripping
+STRIP_TOOLCHAIN := $(true)
+STRIP_LIB       := $(false)
+STRIP_EXE       := $(true)
+
 # All pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
 # These aren't meaningful to the pkg list in docs/index.html so
 # use a list in case we want to separate autotools, cmake etc.
@@ -283,6 +288,10 @@ else
         echo; \
         echo '# This variable controls the targets that will build.'; \
         echo '#MXE_TARGETS := $(MXE_TARGET_LIST)'; \
+        echo; \
+        echo '# This variable controls which plugins are in use.'; \
+        echo '# See plugins/README.md for further information.'; \
+        echo '#override MXE_PLUGIN_DIRS += plugins/apps plugins/native'; \
         echo; \
         echo '# This variable controls the download mirror for SourceForge,'; \
         echo '# when it is used. Enabling the value below means auto.'; \
@@ -545,11 +554,14 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
+build-only-$(1)_$(3): BUILD_$(if $(call seq,$(TARGET),$(BUILD)),NATIVE,CROSS) = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): BUILD_TYPE = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),debug,release)
 build-only-$(1)_$(3): BUILD_TYPE_SUFFIX = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),d)
-build-only-$(1)_$(3): SOURCE_DIR = $(or $($(1)_SOURCE_TREE),$(2)/$($(1)_SUBDIR))
+build-only-$(1)_$(3): INSTALL_STRIP_TOOLCHAIN = install$(if $(STRIP_TOOLCHAIN),-strip)
+build-only-$(1)_$(3): INSTALL_STRIP_LIB = install$(if $(STRIP_LIB),-strip)
+build-only-$(1)_$(3): SOURCE_DIR = $(or $(realpath $($(1)_SOURCE_TREE)),$(2)/$($(1)_SUBDIR))
 build-only-$(1)_$(3): BUILD_DIR  = $(2)/$(if $($(1)_SOURCE_TREE),local,$($(1)_SUBDIR)).build_
 build-only-$(1)_$(3): TEST_FILE  = $($(1)_TEST_FILE)
 build-only-$(1)_$(3): CMAKE_RUNRESULT_FILE = $(PREFIX)/share/cmake/modules/TryRunResults.cmake
@@ -586,6 +598,7 @@ build-only-$(1)_$(3):
 	    @echo
 	    @echo 'settings.mk'
 	    @cat '$(TOP_DIR)/settings.mk'
+	    $(if $(STRIP_EXE),-$(TARGET)-strip '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe')
 	    (du -k -d 0 '$(2)' 2>/dev/null || du -k --max-depth 0 '$(2)') | $(SED) -n 's/^\(\S*\).*/du: \1 KiB/p'
 	    rm -rfv  '$(2)'
 	    )

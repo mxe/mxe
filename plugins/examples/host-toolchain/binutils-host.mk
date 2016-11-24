@@ -24,8 +24,7 @@ define $(PKG)_BUILD
             --prefix='$(PREFIX)/$(TARGET)' \
             --program-prefix='$(TARGET)-' \
             --host='$(TARGET)',\
-    $(subst install, install-strip,\
-    $(binutils_BUILD)))
+    $(binutils_BUILD))
 
     # install unprefixed versions also
     for p in $($(PKG)_PROGS); do \

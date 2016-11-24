@@ -171,7 +171,7 @@ def update_index_html(name, description, website):
     (_, tmp_index_html) = tempfile.mkstemp()
     with open(tmp_index_html, 'wt') as f:
         f.write(index_html)
-    os.rename(tmp_index_html, 'docs/index.html')
+    shutil.move(tmp_index_html, 'docs/index.html')
 
 def make_skeleton(
     name,

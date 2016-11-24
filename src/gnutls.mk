@@ -1,8 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.4.15
-$(PKG)_CHECKSUM := eb2a013905f5f2a0cbf7bcc1d20c85a50065063ee87bd33b496c4e19815e3498
+$(PKG)_VERSION  := 3.4.16
+$(PKG)_CHECKSUM := d99abb1b320771b58c949bab85e4b654dd1e3e9d92e2572204b7dc479d923927
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.4/$($(PKG)_FILE)

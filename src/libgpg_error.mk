@@ -2,8 +2,8 @@
 
 PKG             := libgpg_error
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.24
-$(PKG)_CHECKSUM := 9268e1cc487de5e6e4460fca612a06e4f383072ac43ae90603e5e46783d3e540
+$(PKG)_VERSION  := 1.25
+$(PKG)_CHECKSUM := f628f75843433b38b05af248121beb7db5bd54bb2106f384edac39934261320c
 $(PKG)_SUBDIR   := libgpg-error-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgpg-error-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://mirrors.dotsrc.org/gcrypt/libgpg-error/$($(PKG)_FILE)

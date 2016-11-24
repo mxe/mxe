@@ -49,8 +49,10 @@ define $(PKG)_BUILD_SHARED
      echo '    echo "Waiting for $(PREFIX)/$(TARGET)/lib/luarocks/lock.dir to lock"'; \
      echo '    sleep 5'; \
      echo 'done'; \
-     echo '"$(PREFIX)/$(TARGET)/bin/luarocks.lua" "$$@"'; \
+     echo 'result=0'; \
+     echo '"$(PREFIX)/$(TARGET)/bin/luarocks.lua" "$$@" || result=$$?'; \
      echo 'rmdir "$(PREFIX)/$(TARGET)/lib/luarocks/lock.dir"'; \
+     echo 'exit $$result'; \
     ) \
              > '$(PREFIX)/$(TARGET)/bin/luarocks'
     chmod 0755 '$(PREFIX)/$(TARGET)/bin/luarocks'
