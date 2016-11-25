@@ -28,9 +28,10 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-	--without-x \
+        --without-x \
         --with-tcl=$(PREFIX)/$(TARGET)/lib --with-tk=$(PREFIX)/$(TARGET)/lib
-# bizarrely, the Makefile links against -lX11 for no reason, even if --without-x is specified
+    # bizarrely, the Makefile links against -lX11 for no reason, even if
+    # --without-x is specified
     $(MAKE) -C '$(1)' -j '$(JOBS)' LIBS=
     $(MAKE) -C '$(1)'  PKG_DIR= install
 endef
