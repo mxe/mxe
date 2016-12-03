@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := e7f1b6321c8667fabc0dedce3998a3c6e90ce9ce9dea7186d33dc4359f9e9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gst-plugins-base gstreamer lame libdvdread x264 a52dec libmad libcdio opencore-amr twolame
+$(PKG)_DEPS     := gcc a52dec gst-plugins-base gstreamer lame libcdio libdvdread libmad opencore-amr twolame x264
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-ugly/refs,$(gstreamer_UPDATE))
 
