@@ -230,29 +230,30 @@ ESCAPE_PKG = \
 
 BACKUP_DOWNLOAD = \
     (echo "MXE Warning! Downloading $(1) from backup." >&2 && \
-    ($(WGET) -O- $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-    $(WGET) -O- $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`))
+    ($(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`))
 
 DOWNLOAD_PKG_ARCHIVE = \
     $(if $($(1)_SOURCE_TREE),\
         true\
     $(else),\
         mkdir -p '$(PKG_DIR)' && ( \
-            $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' \
+            $(WGET) -T 30 -t 3 -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' '$($(1)_URL)' \
             $(if $($(1)_URL_2), \
                 || (echo "MXE Warning! Downloading $(1) from second URL." >&2 && \
-                    $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)')) \
+                    $(WGET) -T 30 -t 3 -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' '$($(1)_URL_2)')) \
             $(if $(MXE_NO_BACKUP_DL),, \
                 || $(BACKUP_DOWNLOAD)) \
-        ) \
+        ) && cat '$(PKG_DIR)/.tmp-$($(1)_FILE)' \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
-        > '$(PKG_DIR)/$($(1)_FILE)' || \
+        > '$(PKG_DIR)/$($(1)_FILE)' && \
+        rm '$(PKG_DIR)/.tmp-$($(1)_FILE)' || \
         ( echo; \
           echo 'Download failed!'; \
           echo; \
-          rm -f '$(PKG_DIR)/$($(1)_FILE)'; )\
+          rm -f '$(PKG_DIR)/$($(1)_FILE)' '$(PKG_DIR)/.tmp-$($(1)_FILE)'; )\
     )
 
 # open issue from 2002:
