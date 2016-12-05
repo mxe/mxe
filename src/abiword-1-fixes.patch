@@ -1,0 +1,26 @@
+--- a/src/wp/ap/win/ap_Win32Dialog_Lists.cpp	2013-04-07 15:53:03.000000000 +0200
++++ b/src/wp/ap/win/ap_Win32Dialog_Lists.cpp	2016-11-14 17:29:26.733169000 +0100
+@@ -1112,10 +1112,10 @@
+ 		return;
+ 	}
+ 
+-	const gchar* pszFont;
++	std::string pszFont;
+ 
+ 
+-	if (pDialog->getChangedFontFamily(&pszFont))
++	if (pDialog->getChangedFontFamily(pszFont))
+ 
+ /*
+ 
+--- a/src/wp/ap/xp/ap_Dialog_Spell.cpp	2016-04-15 17:54:03.000000000 +0200
++++ b/src/wp/ap/xp/ap_Dialog_Spell.cpp	2016-11-14 17:32:45.328417003 +0100
+@@ -251,7 +251,7 @@
+ 					UT_return_val_if_fail (m_Suggestions, false);
+ 
+ 					// get suggestions from spelling engine
+-					const UT_GenericVector<UT_UCSChar*> *cpvEngineSuggestions = nullptr;
++					const UT_GenericVector<UT_UCSChar*> *cpvEngineSuggestions = 0;
+ 
+ 					if (checker->checkWord(m_pWord, m_iWordLength) == SpellChecker::LOOKUP_FAILED)
+ 					{

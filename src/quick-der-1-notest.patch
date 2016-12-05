@@ -1,0 +1,13 @@
+--- a/Makefile	2016-07-12 17:30:21.000000000 +0200
++++ b/Makefile	2016-07-12 17:39:55.975584000 +0200
+@@ -3,8 +3,8 @@
+ 
+ VERSION = 0.1-RC5
+ 
+-# SUBDIRS = lib asn2qder test rfc arpa2 itu
+-SUBDIRS = lib tool test rfc
++# SUBDIRS = lib asn2qder rfc arpa2 itu
++SUBDIRS = lib tool rfc
+ 
+ SUBMAKE=$(MAKE) PREFIX='$(PREFIX)' DESTDIR='$(DESTDIR)' VERSION='$(VERSION)'
+ 

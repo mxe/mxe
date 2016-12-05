@@ -1,0 +1,20 @@
+--- a/libdane/dane-params.c	2016-07-12 18:03:22.691584000 +0200
++++ b/libdane/dane-params.c	2016-07-12 18:03:42.507584000 +0200
+@@ -26,7 +26,6 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
+-#include <arpa/inet.h>
+ #include <unbound.h>
+ #include <gnutls/dane.h>
+ #include <gnutls/x509.h>
+--- a/libdane/dane.c	2016-07-12 18:17:47.371584000 +0200
++++ b/libdane/dane.c	2016-07-12 18:17:57.819584000 +0200
+@@ -28,7 +28,6 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
+-#include <arpa/inet.h>
+ #include <unbound.h>
+ #include <gnutls/dane.h>
+ #include <gnutls/x509.h>
