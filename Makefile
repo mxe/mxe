@@ -760,13 +760,13 @@ cleanup-style:
 
 .PHONY: cleanup-deps-style
 cleanup-deps-style:
-	@grep '(PKG)_DEPS.*\\' '$(TOP_DIR)'/src/*.mk > $(TOP_DIR)/tmp-$@-pre
+	@grep '(PKG)_DEPS.*\\' $(foreach 1,$(PKGS),$(PKG_MAKEFILES)) > $(TOP_DIR)/tmp-$@-pre
 	@$(foreach PKG,$(PKGS), \
 	    $(if $(call lne,$(sort $(filter-out gcc,$($(PKG)_DEPS))),$(filter-out gcc,$($(PKG)_DEPS))), \
 	        $(info [cleanup] $(PKG)) \
-	        $(SED) -i 's/^\([^ ]*_DEPS *:=\).*/\1 '"$(strip $(filter gcc,$($(PKG)_DEPS)) $(sort $(filter-out gcc,$($(PKG)_DEPS))))"'/' '$(TOP_DIR)/src/$(PKG).mk'; \
+	        $(SED) -i 's/^\([^ ]*_DEPS *:=\)[^$$]*$$/\1 '"$(strip $(filter gcc,$($(PKG)_DEPS)) $(sort $(filter-out gcc,$($(PKG)_DEPS))))"'/' '$(call PKG_MAKEFILES,$(PKG))'; \
 	    ))
-	@grep '(PKG)_DEPS.*\\' '$(TOP_DIR)'/src/*.mk > $(TOP_DIR)/tmp-$@-post
+	@grep '(PKG)_DEPS.*\\' $(foreach 1,$(PKGS),$(PKG_MAKEFILES)) > $(TOP_DIR)/tmp-$@-post
 	@diff -u $(TOP_DIR)/tmp-$@-pre $(TOP_DIR)/tmp-$@-post >/dev/null \
 	     || echo '*** Multi-line deps are mangled ***' && comm -3 tmp-$@-pre tmp-$@-post
 	@rm -f $(TOP_DIR)/tmp-$@-*
@@ -865,7 +865,7 @@ docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '</html>'                         >> $@
 
 .PHONY: docs/versions.json
-docs/versions.json: $(foreach PKG,$(PKGS), $(TOP_DIR)/src/$(PKG).mk)
+docs/versions.json: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '{'                         > $@
 	@{$(foreach PKG,$(PKGS),          \
 	    echo '    "$(PKG)":           \

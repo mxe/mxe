@@ -8,7 +8,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_OWNER    := https://github.com/andrew-strong
-$(PKG)_DEPS     := gcc libidn libgsasl gnutls libiconv libgpg_error libgcrypt libntlm
+$(PKG)_DEPS     := gcc gnutls libgcrypt libgpg_error libgsasl libiconv libidn libntlm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/msmtp/files/msmtp/' | \

@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 3e7b6d123cab23a587ccbc45173296b33786faa409dba0494e4658fda3ede
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt.io/official_releases/qt/5.7/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dbus fontconfig freetds freetype harfbuzz jpeg libpng libmysqlclient openssl pcre postgresql sqlite zlib
+$(PKG)_DEPS     := gcc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng openssl pcre postgresql sqlite zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.5/ | \

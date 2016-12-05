@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 0a0ae63cbffc274efb573bdde9a253e3f32e458c41261df51c5dbc5ad541e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/google/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc zlib googlemock googletest
+$(PKG)_DEPS     := gcc googlemock googletest zlib
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := googlemock googletest
 

@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 0825e14945bc373107f9a00e66d45d5389bb86368efd834b92c52cddb2ded
 $(PKG)_SUBDIR   := $(PKG)-snapshot-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-snapshot-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/snapshots/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc yasm liblsmash
+$(PKG)_DEPS     := gcc liblsmash yasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.videolan.org/?p=x264.git;a=shortlog' | \

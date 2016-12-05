@@ -9,7 +9,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := http://qbittorrent.org/
 $(PKG)_OWNER    := https://github.com/starius
-$(PKG)_DEPS     := gcc libtorrent-rasterbar qt boost
+$(PKG)_DEPS     := gcc boost libtorrent-rasterbar qt
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.qbittorrent.org/download.php' | \
