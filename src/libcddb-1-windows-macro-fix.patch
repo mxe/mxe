@@ -1,0 +1,18 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Newer versions winioctl.h contain a #define SEARCH_ALL .. which collides with the enum in cddb_conn.h.
+
+diff -Naur libcddb-1.3.2.orig/include/cddb/cddb_conn.h libcddb-1.3.2/include/cddb/cddb_conn.h
+--- libcddb-1.3.2.orig/include/cddb/cddb_conn.h	2009-03-01 04:28:07.000000000 +0100
++++ libcddb-1.3.2/include/cddb/cddb_conn.h	2016-12-05 19:25:13.760000000 +0100
+@@ -59,6 +59,10 @@
+  * Which fields to use for the full text search is defined by one or
+  * more of the constants below.
+  */
++#ifdef SEARCH_ALL
++#undef SEARCH_ALL   // Defined in winioctl.h, causes havoc under windoze
++#endif
++
+ typedef enum {
+     SEARCH_NONE = 0,            /**< no fields */
+     SEARCH_ARTIST = 1,          /**< artist name field */
