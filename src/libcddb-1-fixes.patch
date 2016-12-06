@@ -1,0 +1,90 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Norbert Schlia <nschlia@oblivion-software.de>
+Date: Mon, 12 Dec 2016 08:48:17 +0100
+Subject: [PATCH] Newer versions winioctl.h contain a #define SEARCH_ALL ..
+ which collides with the enum in cddb_conn.h.
+
+
+diff --git a/include/cddb/cddb_conn.h b/include/cddb/cddb_conn.h
+index 1111111..2222222 100644
+--- a/include/cddb/cddb_conn.h
++++ b/include/cddb/cddb_conn.h
+@@ -59,6 +59,10 @@ typedef struct cddb_conn_s cddb_conn_t;
+  * Which fields to use for the full text search is defined by one or
+  * more of the constants below.
+  */
++#ifdef SEARCH_ALL
++#undef SEARCH_ALL   // Defined in winioctl.h, causes havoc under windoze
++#endif
++
+ typedef enum {
+     SEARCH_NONE = 0,            /**< no fields */
+     SEARCH_ARTIST = 1,          /**< artist name field */
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Norbert Schlia <nschlia@oblivion-software.de>
+Date: Mon, 12 Dec 2016 08:50:10 +0100
+Subject: [PATCH] configure falsely detects an alarm() function available,
+ causing compile errors.
+
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -13622,7 +13622,7 @@ rm -f conftest*
+ 
+ 
+ 
+-for ac_func in mkdir regcomp socket strdup strtol strchr memset alarm select realloc
++for ac_func in mkdir regcomp socket strdup strtol strchr memset select realloc
+ do
+ as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ { $as_echo "$as_me:$LINENO: checking for $ac_func" >&5
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Norbert Schlia <nschlia@oblivion-software.de>
+Date: Mon, 12 Dec 2016 08:51:37 +0100
+Subject: [PATCH] libccdb crashes in strlen() under windows because s =
+ getenv("HOME"); returns NULL
+
+
+diff --git a/lib/cddb_conn.c b/lib/cddb_conn.c
+index 1111111..2222222 100644
+--- a/lib/cddb_conn.c
++++ b/lib/cddb_conn.c
+@@ -100,6 +100,13 @@ cddb_conn_t *cddb_new(void)
+         c->use_cache = CACHE_ON;
+         /* construct cache dir '$HOME/[DEFAULT_CACHE]' */
+         s = getenv("HOME");
++        if (s == NULL)
++            s = getenv("TEMP");
++        if (s == NULL)
++            s = getenv("TMP");
++        if (s == NULL)
++            s = ".";
++
+         c->cache_dir = (char*)malloc(strlen(s) + 1 + sizeof(DEFAULT_CACHE) + 1);
+         sprintf(c->cache_dir, "%s/%s", s, DEFAULT_CACHE);
+         c->cache_read = FALSE;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Fri, 16 Dec 2016 03:55:31 +0100
+Subject: [PATCH] pc: add private libs -lgnurx -lregex -lws2_32
+
+
+diff --git a/libcddb.pc.in b/libcddb.pc.in
+index 1111111..2222222 100644
+--- a/libcddb.pc.in
++++ b/libcddb.pc.in
+@@ -7,4 +7,5 @@ Name: libcddb
+ Description: CDDB server access library
+ Version: @VERSION@
+ Libs: -L${libdir} -lcddb @LIBICONV@
++Libs.private: -L${libdir} -lgnurx -lregex -lws2_32
+ Cflags: -I${includedir}
