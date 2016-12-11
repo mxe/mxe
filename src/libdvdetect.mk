@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     grep '<a href="/nschlia/libdvdetect/archive/' | \
     $(SED) -n 's,.*href="/nschlia/libdvdetect/archive/RELEASE_\([0-9][^"]*\)\.tar.*,\1,p' | \
     sort | uniq | \
-    head -1
+    tail -1
 endef
 
 define $(PKG)_BUILD
