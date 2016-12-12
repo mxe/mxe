@@ -2,8 +2,8 @@
 
 PKG             := tor
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.2.6.10
-$(PKG)_CHECKSUM := 0542c0efe43b86619337862fa7eb02c7a74cb23a79d587090628a5f0f1224b8d
+$(PKG)_VERSION  := 0.2.9.8
+$(PKG)_CHECKSUM := fbdd33d3384574297b88744622382008d1e0f9ddd300d330746c464b7a7d746a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://torproject.org/dist/$($(PKG)_FILE)

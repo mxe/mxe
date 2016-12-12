@@ -16,16 +16,16 @@ diff --git a/src/common/compat.c b/src/common/compat.c
 index 1111111..2222222 100644
 --- a/src/common/compat.c
 +++ b/src/common/compat.c
-@@ -101,7 +101,7 @@
- #ifdef HAVE_SYS_UTIME_H
- #include <sys/utime.h>
+@@ -116,7 +116,7 @@ SecureZeroMemory(PVOID ptr, SIZE_T cnt)
+ #ifdef HAVE_SIGNAL_H
+ #include <signal.h>
  #endif
 -#ifdef HAVE_SYS_MMAN_H
 +#if 0
  #include <sys/mman.h>
  #endif
  #ifdef HAVE_SYS_SYSLIMITS_H
-@@ -191,7 +191,7 @@ tor_rename(const char *path_old, const char *path_new)
+@@ -204,7 +204,7 @@ tor_rename(const char *path_old, const char *path_new)
                  sandbox_intern_string(path_new));
  }
  
@@ -38,7 +38,7 @@ diff --git a/src/common/compat.h b/src/common/compat.h
 index 1111111..2222222 100644
 --- a/src/common/compat.h
 +++ b/src/common/compat.h
-@@ -285,7 +285,7 @@ typedef struct tor_mmap_t {
+@@ -311,7 +311,7 @@ typedef struct tor_mmap_t {
    size_t size; /**< Size of the file. */
  
    /* None of the fields below should be accessed from outside compat.c */
