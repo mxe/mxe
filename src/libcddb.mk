@@ -1,6 +1,4 @@
-# mxe/src/libcddb.mk
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libcddb
 $(PKG)_IGNORE   := 
@@ -8,8 +6,8 @@ $(PKG)_VERSION  := 1.3.2
 $(PKG)_CHECKSUM := 35ce0ee1741ea38def304ddfe84a958901413aa829698357f0bee5bb8f0a223b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://downloads.sourceforge.net/project/libcddb/libcddb/$($(PKG)_VERSION)/$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_DEPS     := gcc
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libcddb/libcddb/$($(PKG)_VERSION)/$(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_DEPS     := gcc libiconv libgnurx
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://downloads.sourceforge.net/project/libcddb/libcddb/' | \
@@ -22,16 +20,21 @@ endef
 # ac_cv_func_malloc_0_nonnull=yes		avoid unresolved external
 # ac_cv_func_realloc_0_nonnull=yes		avoid unresolved external
 define $(PKG)_BUILD
-    cd '$(1)' && \
+   cd '$(BUILD_DIR)' && \
 	lt_cv_deplibs_check_method="pass_all" \
     	ac_cv_func_malloc_0_nonnull=yes \
     	ac_cv_func_realloc_0_nonnull=yes \
     	LDFLAGS="-L$(PREFIX)/$(TARGET)/lib/ -L$(PREFIX)/$(TARGET)/bin/" \
     	CPPFLAGS="-I$(PREFIX)/$(TARGET)/include/" \
-    	./configure \
+    	'$(SOURCE_DIR)'/configure \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'                                                                                          
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install                                                                                          
+
+#   '$(TARGET)-g++' \
+#        -W -Wall -ansi -pedantic \
+#        '$(SOURCE_DIR)/xmltest.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+#        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
 
 $(PKG)_BUILD_i686-pc-mingw32    = $(subst @special-target@, x86-win32-gcc,    $($(PKG)_BUILD))
