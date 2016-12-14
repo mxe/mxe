@@ -28,13 +28,11 @@ define $(PKG)_BUILD
     	CPPFLAGS="-I$(PREFIX)/$(TARGET)/include/" \
     	'$(SOURCE_DIR)'/configure \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'                                                                                          
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install                                                                                          
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-#   '$(TARGET)-g++' \
-#        -W -Wall -ansi -pedantic \
-#        '$(SOURCE_DIR)/xmltest.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-#        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
+    # Test binary    
+    mv '$(PREFIX)/$(TARGET)/bin/cddb_query.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
 endef
 
 $(PKG)_BUILD_i686-pc-mingw32    = $(subst @special-target@, x86-win32-gcc,    $($(PKG)_BUILD))
