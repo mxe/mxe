@@ -3,7 +3,7 @@
 PKG             := qtconnectivity
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 9844ca7ec5be187a77dfd7e95051fb267006f6c77157ecb0b8ceeac103a32703
+$(PKG)_CHECKSUM := b3e8b9068304dc5605a8fdf0695102032fd1a216f2c2d4d53a7e4d4dda3ab966
 $(PKG)_SUBDIR    = $(subst qtbase,qtconnectivity,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtconnectivity,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtconnectivity,$(qtbase_URL))

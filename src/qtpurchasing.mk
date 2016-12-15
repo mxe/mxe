@@ -3,7 +3,7 @@
 PKG             := qtpurchasing
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 7e514a3cb98addd0b1344a69c494afe4546d854d43340760aed00ad0062664b5
+$(PKG)_CHECKSUM := f694757929cefa31643daab4bde1fbda8d76c79eda0ee6094e1d86efd4cb7b42
 $(PKG)_SUBDIR    = $(subst qtbase,qtpurchasing,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtpurchasing,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtpurchasing,$(qtbase_URL))

@@ -3,7 +3,7 @@
 PKG             := qtwebview
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 801a3faf312fa0235d489c63aa224d477a70cfe1b1ef7803cbe311a8c29e51c4
+$(PKG)_CHECKSUM := b3bcf9693e0205263f5d227f2204cf12c3a3d1e200b3114723511ee3bdf2159f
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebview,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebview,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebview,$(qtbase_URL))

@@ -3,7 +3,7 @@
 PKG             := qtgamepad
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 5898f7bc002d0ac65b698043f24f3e2ff2bb7ca7735f43b74e37056c2db5663c
+$(PKG)_CHECKSUM := bb2b2165e3bcbf37a7e03c3e1cac4fe9771b087dad7ab9566ba5f7f4f4929182
 $(PKG)_SUBDIR    = $(subst qtbase,qtgamepad,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtgamepad,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtgamepad,$(qtbase_URL))

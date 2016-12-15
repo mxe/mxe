@@ -3,7 +3,7 @@
 PKG             := qtvirtualkeyboard
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := df433de68e23b173b87b422038bc9f3e53349035c11a2b2e495122274664ff2f
+$(PKG)_CHECKSUM := b28b8b937ed15d794c5ebc93e9556d08a0c9761a434864ebf2b454554e652add
 $(PKG)_SUBDIR    = $(subst qtbase,qtvirtualkeyboard,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtvirtualkeyboard,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtvirtualkeyboard,$(qtbase_URL))

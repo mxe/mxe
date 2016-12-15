@@ -3,7 +3,7 @@
 PKG             := qtscxml
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 370b13d76c9a2ddf05336e797edf7f54d41db6063e3b921e0825dd6dd26c51f1
+$(PKG)_CHECKSUM := 9dad4ab220a715b6a63df1d4a196bfa963a1ce7e6e57e7b36462c5dab09db38c
 $(PKG)_SUBDIR    = $(subst qtbase,qtscxml,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtscxml,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtscxml,$(qtbase_URL))
