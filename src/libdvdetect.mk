@@ -39,9 +39,6 @@ define $(PKG)_BUILD
      echo 'Cflags: -I$${includedir}';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
-    # create test binary
-#    $(TARGET)-g++ \
-#              -W -Wall -Werror -ansi -pedantic \
-#              '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-#              `$(TARGET)-pkg-config dvdetect --cflags --libs`    
+    # copy a test binary
+    cp '$(BUILD_DIR)/examples/c/dvdinfo.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
 endef
