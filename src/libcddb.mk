@@ -16,17 +16,17 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-# lt_cv_deplibs_check_method="pass_all"		allow all libs (avoid static lib creation for x64 because of ws2_32.lib)
-# ac_cv_func_malloc_0_nonnull=yes		avoid unresolved external
-# ac_cv_func_realloc_0_nonnull=yes		avoid unresolved external
+# lt_cv_deplibs_check_method="pass_all"        allow all libs (avoid static lib creation for x64 because of ws2_32.lib)
+# ac_cv_func_malloc_0_nonnull=yes        avoid unresolved external
+# ac_cv_func_realloc_0_nonnull=yes        avoid unresolved external
 define $(PKG)_BUILD
    cd '$(BUILD_DIR)' && \
-	lt_cv_deplibs_check_method="pass_all" \
-    	ac_cv_func_malloc_0_nonnull=yes \
-    	ac_cv_func_realloc_0_nonnull=yes \
-    	LDFLAGS="-L$(PREFIX)/$(TARGET)/lib/ -L$(PREFIX)/$(TARGET)/bin/" \
-    	CPPFLAGS="-I$(PREFIX)/$(TARGET)/include/" \
-    	'$(SOURCE_DIR)'/configure \
+    lt_cv_deplibs_check_method="pass_all" \
+        ac_cv_func_malloc_0_nonnull=yes \
+        ac_cv_func_realloc_0_nonnull=yes \
+        LDFLAGS="-L$(PREFIX)/$(TARGET)/lib/ -L$(PREFIX)/$(TARGET)/bin/" \
+        CPPFLAGS="-I$(PREFIX)/$(TARGET)/include/" \
+        '$(SOURCE_DIR)'/configure \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
@@ -34,8 +34,3 @@ define $(PKG)_BUILD
     # Test binary    
     mv '$(PREFIX)/$(TARGET)/bin/cddb_query.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
 endef
-
-$(PKG)_BUILD_i686-pc-mingw32    = $(subst @special-target@, x86-win32-gcc,    $($(PKG)_BUILD))
-$(PKG)_BUILD_i686-w64-mingw32   = $(subst @special-target@, x86-win32-gcc,    $($(PKG)_BUILD))
-$(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @special-target@, x86_64-win64-gcc, $($(PKG)_BUILD))
-
