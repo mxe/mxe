@@ -24,10 +24,10 @@ define $(PKG)_BUILD
         ne_cv_fmt_time_t=%lu \
         ne_cv_libsfor_socket=-lws2_32 \
         ne_cv_libsfor_gethostbyname=-lws2_32 \
-    	'$(SOURCE_DIR)'/configure \
-        $(MXE_CONFIGURE_OPTS) \
-        $(MXE_DISABLE_DOCS) \
-	--with-ssl=yes 
+        '$(SOURCE_DIR)'/configure \
+              $(MXE_CONFIGURE_OPTS) \
+              $(MXE_DISABLE_DOCS) \
+              --with-ssl=yes 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'                                                                                          
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install-lib install-headers install-nls                                                                                          
 endef
