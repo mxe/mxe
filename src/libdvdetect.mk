@@ -39,6 +39,11 @@ define $(PKG)_BUILD
      echo 'Cflags: -I$${includedir}';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
-    # copy a test binary
-    cp '$(BUILD_DIR)/examples/c/.libs/dvdinfo.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
+     # copy a test binary
+     if [ -f '$(BUILD_DIR)/examples/c/.libs/dvdinfo.exe' ]; \
+     then \
+         cp -v '$(BUILD_DIR)/examples/c/.libs/dvdinfo.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'; \
+     else \
+         cp -v '$(BUILD_DIR)/examples/c/dvdinfo.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'; \
+     fi
 endef
