@@ -40,5 +40,5 @@ define $(PKG)_BUILD
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     # copy a test binary
-    cp '$(BUILD_DIR)/examples/c/dvdinfo.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
+    cp '$(BUILD_DIR)/examples/c/.libs/dvdinfo.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
 endef
