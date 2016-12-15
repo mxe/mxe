@@ -29,5 +29,25 @@ define $(PKG)_BUILD
               $(MXE_DISABLE_DOCS) \
               --with-ssl=yes 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'                                                                                          
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install-lib install-headers install-nls                                                                                          
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install-lib install-headers install-nls     
+    
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'prefix=$(PREFIX)/$(TARGET)'; \
+     echo 'exec_prefix=$${prefix}'; \
+     echo 'libdir=$${exec_prefix}/lib'; \
+     echo 'includedir=$${prefix}/include'; \
+     echo ''; \
+     echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: neon is an HTTP and WebDAV client library'; \
+     echo 'Libs: -L$${libdir} -lneon'; \
+     echo 'Cflags: -I$${includedir}';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    # create test binary
+#    $(TARGET)-g++ \
+#              -W -Wall -Werror -ansi -pedantic \
+#              '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+#              `$(TARGET)-pkg-config neon --cflags --libs`    
 endef

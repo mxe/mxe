@@ -24,4 +24,24 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/include' -j '$(JOBS)' install
     $(MAKE) -C '$(BUILD_DIR)/lib' -j '$(JOBS)' install
+    
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'prefix=$(PREFIX)/$(TARGET)'; \
+     echo 'exec_prefix=$${prefix}'; \
+     echo 'libdir=$${exec_prefix}/lib'; \
+     echo 'includedir=$${prefix}/include'; \
+     echo ''; \
+     echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: fast database lookup for DVDs'; \
+     echo 'Libs: -L$${libdir} -ldvdetect'; \
+     echo 'Cflags: -I$${includedir}';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    # create test binary
+#    $(TARGET)-g++ \
+#              -W -Wall -Werror -ansi -pedantic \
+#              '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+#              `$(TARGET)-pkg-config dvdetect --cflags --libs`    
 endef
