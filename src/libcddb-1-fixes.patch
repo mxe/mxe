@@ -66,7 +66,7 @@ index 1111111..2222222 100644
 +        if (s == NULL)
 +            s = getenv("TMP");
 +        if (s == NULL)
-+			s = ".";
++            s = ".";
 +
          c->cache_dir = (char*)malloc(strlen(s) + 1 + sizeof(DEFAULT_CACHE) + 1);
          sprintf(c->cache_dir, "%s/%s", s, DEFAULT_CACHE);

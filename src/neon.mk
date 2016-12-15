@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := neon
-$(PKG)_IGNORE   := 
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.30.2
 $(PKG)_CHECKSUM := db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967fbca
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
@@ -27,10 +27,10 @@ define $(PKG)_BUILD
         '$(SOURCE_DIR)'/configure \
               $(MXE_CONFIGURE_OPTS) \
               $(MXE_DISABLE_DOCS) \
-              --with-ssl=yes 
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'                                                                                          
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install-lib install-headers install-nls     
-    
+              --with-ssl=yes
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install-lib install-headers install-nls
+
     # create pkg-config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'prefix=$(PREFIX)/$(TARGET)'; \
@@ -41,13 +41,14 @@ define $(PKG)_BUILD
      echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: neon is an HTTP and WebDAV client library'; \
+     echo 'Requires.private: openssl'; \
      echo 'Libs: -L$${libdir} -lneon'; \
      echo 'Cflags: -I$${includedir}';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     # create test binary
-#    $(TARGET)-g++ \
-#              -W -Wall -Werror -ansi -pedantic \
-#              '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-#              `$(TARGET)-pkg-config neon --cflags --libs`    
+    $(TARGET)-g++ \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `$(TARGET)-pkg-config neon --cflags --libs`
 endef
