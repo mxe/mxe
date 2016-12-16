@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://webdav.org/$(PKG)/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc openssl expat
+$(PKG)_DEPS     := gcc openssl expat gettext
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://webdav.org/$(PKG)/' | \
@@ -41,7 +41,7 @@ define $(PKG)_BUILD
      echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: neon is an HTTP and WebDAV client library'; \
-     echo 'Requires.private: openssl'; \
+     echo 'Requires.private: openssl gettext'; \
      echo 'Libs: -L$${libdir} -lneon'; \
      echo 'Cflags: -I$${includedir}'; \
     ) \
