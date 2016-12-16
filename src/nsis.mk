@@ -2,11 +2,11 @@
 
 PKG             := nsis
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.51
-$(PKG)_CHECKSUM := 43d4c9209847e35eb6e2c7cd5a7586e1445374c056c2c7899e40a080e17a1be7
+$(PKG)_VERSION  := 3.01
+$(PKG)_CHECKSUM := 604c011593be484e65b2141c50a018f1b28ab28c994268e4ecd377773f3ffba1
 $(PKG)_SUBDIR   := nsis-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := nsis-$($(PKG)_VERSION)-src.tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/nsis/NSIS 2/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/nsis/NSIS 3/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
