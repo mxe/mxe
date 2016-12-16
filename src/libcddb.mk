@@ -26,9 +26,12 @@ define $(PKG)_BUILD
         ac_cv_func_realloc_0_nonnull=yes \
         '$(SOURCE_DIR)'/configure \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
 
-    # Test binary
-    mv '$(PREFIX)/$(TARGET)/bin/cddb_query.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
+    # create test binary
+    $(TARGET)-gcc \
+        -W -Wall -Werror \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `$(TARGET)-pkg-config libcddb --cflags --libs`
 endef

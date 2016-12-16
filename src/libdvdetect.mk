@@ -31,15 +31,16 @@ define $(PKG)_BUILD
      echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: fast database lookup for DVDs'; \
-     echo 'Libs: -L$${libdir} -ldvdetect'; \
-     echo 'Cflags: -I$${includedir}';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+     echo 'Requires.private: openssl'; \
+     echo 'Libs: -L$${libdir} -ldvdetect -lws2_32'; \
+     echo 'Libs.private: -L$${libdir} -ltinyxml -lstdc++'; \
+     echo 'Cflags: -I$${includedir}'; \
+    ) \
+    > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
-     # copy a test binary
-     if [ -f '$(BUILD_DIR)/examples/c/.libs/dvdinfo.exe' ]; \
-     then \
-         cp -v '$(BUILD_DIR)/examples/c/.libs/dvdinfo.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'; \
-     else \
-         cp -v '$(BUILD_DIR)/examples/c/dvdinfo.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'; \
-     fi
+    # create test binary
+    $(TARGET)-gcc \
+        -W -Wall -Werror \
+        '$(SOURCE_DIR)/examples/c/dvdinfo.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `$(TARGET)-pkg-config libdvdetect --cflags --libs`
 endef

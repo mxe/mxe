@@ -71,3 +71,20 @@ index 1111111..2222222 100644
          c->cache_dir = (char*)malloc(strlen(s) + 1 + sizeof(DEFAULT_CACHE) + 1);
          sprintf(c->cache_dir, "%s/%s", s, DEFAULT_CACHE);
          c->cache_read = FALSE;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Fri, 16 Dec 2016 03:55:31 +0100
+Subject: [PATCH] pc: add private libs -lgnurx -lregex -lws2_32
+
+
+diff --git a/libcddb.pc.in b/libcddb.pc.in
+index 1111111..2222222 100644
+--- a/libcddb.pc.in
++++ b/libcddb.pc.in
+@@ -7,4 +7,5 @@ Name: libcddb
+ Description: CDDB server access library
+ Version: @VERSION@
+ Libs: -L${libdir} -lcddb @LIBICONV@
++Libs.private: -L${libdir} -lgnurx -lregex -lws2_32
+ Cflags: -I${includedir}

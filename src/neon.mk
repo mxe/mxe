@@ -43,12 +43,13 @@ define $(PKG)_BUILD
      echo 'Description: neon is an HTTP and WebDAV client library'; \
      echo 'Requires.private: openssl'; \
      echo 'Libs: -L$${libdir} -lneon'; \
-     echo 'Cflags: -I$${includedir}';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+     echo 'Cflags: -I$${includedir}'; \
+    ) \
+    > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     # create test binary
-    $(TARGET)-g++ \
-        -W -Wall -Werror -ansi -pedantic \
+    $(TARGET)-gcc \
+        -W -Wall -Werror -std=c11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `$(TARGET)-pkg-config neon --cflags --libs`
 endef
