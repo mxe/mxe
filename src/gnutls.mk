@@ -7,7 +7,7 @@ $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.4/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4//$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn nettle zlib
+$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn nettle zlib p11-kit
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4/ | \
@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         --enable-local-libopts \
         --with-included-libtasn1 \
         --with-libregex-libs="-lgnurx" \
-        --without-p11-kit \
         --disable-silent-rules \
+		--with-unbound-root-key-file="C:\\\\Program Files\\\\Unbound\\\\root.key"
         CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
         LIBS='-lws2_32' \
         ac_cv_prog_AR='$(TARGET)-ar'
