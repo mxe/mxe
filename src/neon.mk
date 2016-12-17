@@ -41,8 +41,9 @@ define $(PKG)_BUILD
      echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: neon is an HTTP and WebDAV client library'; \
-     echo 'Requires.private: openssl gettext'; \
+     echo 'Requires.private: openssl'; \
      echo 'Libs: -L$${libdir} -lneon'; \
+     echo 'Libs.private: -L$${libdir} -lintl -liconv'; \
      echo 'Cflags: -I$${includedir}'; \
     ) \
     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
