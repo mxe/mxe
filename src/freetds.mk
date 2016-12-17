@@ -7,6 +7,7 @@ $(PKG)_CHECKSUM := 1be0cedc4ad026c28633c6587e84e35844dfa4e05e6779eae6d475572a64d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://fossies.org/linux/privat/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libiconv
 
 define $(PKG)_UPDATE
