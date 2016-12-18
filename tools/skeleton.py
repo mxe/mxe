@@ -22,6 +22,8 @@ MK_TEMPLATE = r'''
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := %(name)s
+$(PKG)_WEBSITE  := %(website)s
+$(PKG)_DESCR    := %(description)s
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := %(version)s
 $(PKG)_CHECKSUM := %(checksum)s
@@ -126,53 +128,6 @@ def make_build(options, builder):
     commands_template = BUILDERS[builder].lstrip() + PC_AND_TEST.rstrip()
     return commands_template % options
 
-def update_index_html(name, description, website):
-    # read HTML and find a list of packages
-    with open('docs/index.html', 'rb') as f:
-        index_html = f.read()
-        if not isinstance(index_html, str):
-            # Python 3
-            index_html = index_html.decode()
-    sep1 = '    <table id="package-list" class="old">'
-    sep2 = '    </table>'
-    (prefix, other) = index_html.split(sep1, 1)
-    (packages_html, suffix) = other.split(sep2, 1)
-    # find existing packages
-    pkg_re = r'''
-    <tr>
-        <td class="package">(?P<name>.*)</td>
-        <td class="website"><a href="(?P<website>.*)">(?P<description>.*)</a></td>
-    </tr>
-    '''.strip()
-    packages = [
-        {
-            'name': match.group('name'),
-            'description': match.group('description'),
-            'website': match.group('website'),
-        }
-        for match in re.finditer(pkg_re, packages_html)
-    ]
-    packages.append({
-        'name': name,
-        'description': description,
-        'website': website,
-    })
-    packages.sort(key=lambda package: package['name'])
-    pkg_template = r'''
-    <tr>
-        <td class="package">%(name)s</td>
-        <td class="website"><a href="%(website)s">%(description)s</a></td>
-    </tr>
-    '''.rstrip()
-    packages_html = ''.join(pkg_template % package for package in packages)
-    packages_html += '\n'
-    # build and write HTML
-    index_html = prefix + sep1 + packages_html + sep2 + suffix
-    (_, tmp_index_html) = tempfile.mkstemp()
-    with open(tmp_index_html, 'wt') as f:
-        f.write(index_html)
-    shutil.move(tmp_index_html, 'docs/index.html')
-
 def make_skeleton(
     name,
     description,
@@ -217,7 +172,6 @@ def make_skeleton(
         }
         options['build'] = make_build(options, builder)
         mk.write(MK_TEMPLATE.lstrip() % options)
-    update_index_html(name, description, website)
 
 def main():
     parser = argparse.ArgumentParser(
