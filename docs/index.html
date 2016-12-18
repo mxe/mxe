@@ -2827,7 +2827,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         }
         function loadVersionCache(doneCallback) {
             var request = new XMLHttpRequest();
-            request.open('GET', 'versions.json', true);
+            request.open('GET', 'packages.json', true);
             request.onreadystatechange = function reqCallback() {
                 if (request.readyState === 4) {
                     if (request.status === 200) {

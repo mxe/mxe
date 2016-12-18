@@ -864,8 +864,8 @@ docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '</body>'                         >> $@
 	@echo '</html>'                         >> $@
 
-.PHONY: docs/versions.json
-docs/versions.json: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
+.PHONY: docs/packages.json
+docs/packages.json: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '{'                         > $@
 	@{$(foreach PKG,$(PKGS),          \
 	    echo '    "$(PKG)":           \
