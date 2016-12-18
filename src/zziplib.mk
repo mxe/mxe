@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := zziplib
+$(PKG)_WEBSITE  := http://zziplib.sourceforge.net/
+$(PKG)_DESCR    := ZZIPlib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.13.62
 $(PKG)_CHECKSUM := a1b8033f1a1fd6385f4820b01ee32d8eca818409235d22caf5119e0078c7525b

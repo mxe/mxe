@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := chromaprint
+$(PKG)_WEBSITE  := http://acoustid.org/chromaprint
+$(PKG)_DESCR    := Chromaprint
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1
 $(PKG)_CHECKSUM := 6b14d7ea4964581b73bd3f8038c8857c01e446421c1ae99cbbf64de26b47cd12

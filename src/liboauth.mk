@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := liboauth
+$(PKG)_WEBSITE  := http://liboauth.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.3
 $(PKG)_CHECKSUM := 0df60157b052f0e774ade8a8bac59d6e8d4b464058cc55f9208d72e41156811f

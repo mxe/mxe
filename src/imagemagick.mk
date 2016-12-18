@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := imagemagick
+$(PKG)_WEBSITE  := http://www.imagemagick.org/
+$(PKG)_DESCR    := ImageMagick
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.9.0-0
 $(PKG)_CHECKSUM := 12331c904c691cb128865fdc97e5f8a2654576f9b032e274b74dd7617aa1b9b6

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := poco
+$(PKG)_WEBSITE  := http://pocoproject.org/
+$(PKG)_DESCR    := POCO C++ Libraries
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4.7p1
 $(PKG)_CHECKSUM := 7037cc465744bf2fa73aca9cea14d1207f040de5ea8073dc266b06a73b3db8df

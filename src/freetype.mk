@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freetype
+$(PKG)_WEBSITE  := http://www.freetype.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7
 $(PKG)_CHECKSUM := d6a451f5b754857d2aa3964fd4473f8bc5c64e879b24516d780fb26bec7f7d48

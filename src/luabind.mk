@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := luabind
+$(PKG)_WEBSITE  := http://www.rasterbar.com/products/luabind.html
+$(PKG)_DESCR    := Luabind
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.1
 $(PKG)_CHECKSUM := 80de5e04918678dd8e6dac3b22a34b3247f74bf744c719bae21faaa49649aaae

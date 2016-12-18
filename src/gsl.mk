@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gsl
+$(PKG)_WEBSITE  := https://www.gnu.org/software/gsl/
+$(PKG)_DESCR    := GSL
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.16
 $(PKG)_CHECKSUM := 73bc2f51b90d2a780e6d266d43e487b3dbd78945dd0b04b14ca5980fe28d2f53

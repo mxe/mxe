@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := upx
+$(PKG)_WEBSITE  := http://upx.sourceforge.net/
+$(PKG)_DESCR    := UPX
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.91
 $(PKG)_CHECKSUM := 527ce757429841f51675352b1f9f6fc8ad97b18002080d7bf8672c466d8c6a3c

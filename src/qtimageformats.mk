@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtimageformats
+$(PKG)_WEBSITE  := http://qt-project.org/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
 $(PKG)_CHECKSUM := 4f97a2a2b269f8a45576256ad9f452320c9c9de6d9c7cc1751fdeac36b0f77f4

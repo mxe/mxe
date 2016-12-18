@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sfml
+$(PKG)_WEBSITE  := http://www.sfml-dev.org/
+$(PKG)_DESCR    := SFML
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.2
 $(PKG)_CHECKSUM := 03fe79943c48222037f1126a581b12c95a4dd53168881907964695c5ec3dc395

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libgpg_error
+$(PKG)_WEBSITE  := ftp://ftp.gnupg.org/gcrypt/libgpg-error/
+$(PKG)_DESCR    := libgpg-error
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.26
 $(PKG)_CHECKSUM := 4c4bcbc90116932e3acd37b37812d8653b1b189c1904985898e860af818aee69

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openexr
+$(PKG)_WEBSITE  := http://www.openexr.com/
+$(PKG)_DESCR    := OpenEXR
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.0
 $(PKG)_CHECKSUM := 36a012f6c43213f840ce29a8b182700f6cf6b214bea0d5735594136b44914231

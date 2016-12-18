@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libpaper
+$(PKG)_WEBSITE  := http://packages.debian.org/unstable/libpaper1
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.24+nmu4
 $(PKG)_CHECKSUM := 2491fce3f590d922d2d3070555df4425921b89c76a18e1c62e36336d6657526a

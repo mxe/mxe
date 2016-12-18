@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ffmpeg
+$(PKG)_WEBSITE  := http://www.ffmpeg.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2.1
 $(PKG)_CHECKSUM := 72abc55bea5ff5397ac82320fa5c4843a05f527d0d7912d66784c92fdfbd12fb

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libtorrent-rasterbar
+$(PKG)_WEBSITE  := http://www.rasterbar.com/products/libtorrent/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.0
 $(PKG)_CHECKSUM := 2713df7da4aec5263ac11b6626ea966f368a5a8081103fd8f2f2ed97b5cd731d

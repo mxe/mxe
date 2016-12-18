@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := opencore-amr
+$(PKG)_WEBSITE  := http://opencore-amr.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.3
 $(PKG)_CHECKSUM := 106bf811c1f36444d7671d8fd2589f8b2e0cca58a2c764da62ffc4a070595385

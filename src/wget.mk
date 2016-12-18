@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := wget
+$(PKG)_WEBSITE  := https://www.gnu.org/software/wget/
 $(PKG)_VERSION  := 1.18
 $(PKG)_CHECKSUM := b5b55b75726c04c06fe253daec9329a6f1a3c0c1878e3ea76ebfebc139ea9cc1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)

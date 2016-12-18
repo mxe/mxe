@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := dbus
+$(PKG)_WEBSITE  := http://dbus.freedesktop.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.11.8
 $(PKG)_CHECKSUM := fa207530d694706e33378c87e65b2b4304eb99fff71fc6d6caa6f70591b9afd5

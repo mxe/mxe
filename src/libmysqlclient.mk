@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libmysqlclient
+$(PKG)_WEBSITE  := https://dev.mysql.com/downloads/connector/c/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.1.6
 $(PKG)_CHECKSUM := 2222433012c415871958b61bc4f3683e1ebe77e3389f698b267058c12533ea78

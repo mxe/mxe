@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libf2c
+$(PKG)_WEBSITE  := http://www.netlib.org/f2c/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1
 $(PKG)_CHECKSUM := 5dff29c58b428fa00cd36b1220e2d71b9882a658fdec1aa094fb7e6e482d6765

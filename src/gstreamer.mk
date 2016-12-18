@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gstreamer
+$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.2
 $(PKG)_CHECKSUM := 5896716bd8e089dba452932a2eff2bb6f6c9d58ff64a96635d157f1ffaf8feb2

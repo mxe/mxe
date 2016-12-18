@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := liboil
+$(PKG)_WEBSITE  := http://liboil.freedesktop.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.3.17
 $(PKG)_CHECKSUM := 105f02079b0b50034c759db34b473ecb5704ffa20a5486b60a8b7698128bfc69

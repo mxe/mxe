@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sqlite
+$(PKG)_WEBSITE  := http://www.sqlite.org/
+$(PKG)_DESCR    := SQLite
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3150200
 $(PKG)_CHECKSUM := 07b35063b9386865b78226cdaca9a299d938a87aaa8fdc4d73edb0cef30f3149

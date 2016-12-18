@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hdf-eos2
+$(PKG)_WEBSITE  := https://hdfeos.org/software/library.php
+$(PKG)_DESCR    := HDF-EOS2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 19v1.00
 $(PKG)_CHECKSUM := 3fffa081466e85d2b9436d984bc44fe97bbb33ad9d8b7055a322095dc4672e31

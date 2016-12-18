@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := luajit
+$(PKG)_WEBSITE  := http://luajit.org/luajit.html
+$(PKG)_DESCR    := LuaJIT
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.4
 $(PKG)_ABIVER   := 5.1

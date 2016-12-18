@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := curl
+$(PKG)_WEBSITE  := http://curl.haxx.se/libcurl/
+$(PKG)_DESCR    := cURL
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 7.52.0
 $(PKG)_CHECKSUM := c8f0114c7c72c8627d716416326593d061274b208cdf123c418c20c6dbe009c2

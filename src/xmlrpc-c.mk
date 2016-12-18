@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := xmlrpc-c
+$(PKG)_WEBSITE  := http://xmlrpc-c.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := d4364f4
 $(PKG)_CHECKSUM := fbd79d86020a87ed61dfdf00f78873c0fd925f477a8705f415b9fee0d6d64b19

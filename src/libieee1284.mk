@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libieee1284
+$(PKG)_WEBSITE  := http://cyberelk.net/tim/software/libieee1284/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.11
 $(PKG)_CHECKSUM := 7730de107782e5d2b071bdcb5b06a44da74856f00ef4a9be85d1ba4806a38f1a

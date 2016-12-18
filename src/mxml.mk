@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mxml
+$(PKG)_WEBSITE  := http://www.msweet.org/projects.php?Z3
+$(PKG)_DESCR    := Mini-XML
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.9
 $(PKG)_CHECKSUM := cded54653c584b24c4a78a7fa1b3b4377d49ac4f451ddf170ebbc8161d85ff92

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := physfs
+$(PKG)_WEBSITE  := http://icculus.org/physfs/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.3
 $(PKG)_CHECKSUM := ca862097c0fb451f2cacd286194d071289342c107b6fe69079c079883ff66b69

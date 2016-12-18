@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := protobuf
+$(PKG)_WEBSITE  := https://github.com/google/protobuf
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.0
 $(PKG)_CHECKSUM := 0a0ae63cbffc274efb573bdde9a253e3f32e458c41261df51c5dbc5ad541e8f7

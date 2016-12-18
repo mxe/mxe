@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := postgresql
+$(PKG)_WEBSITE  := http://www.postgresql.org/
+$(PKG)_DESCR    := PostgreSQL
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 9.2.4
 $(PKG)_CHECKSUM := d97dd918a88a4449225998f46aafa85216a3f89163a3411830d6890507ffae93

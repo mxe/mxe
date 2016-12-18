@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libmng
+$(PKG)_WEBSITE  := http://www.libmng.com/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.3
 $(PKG)_CHECKSUM := 4a462fdd48d4bc82c1d7a21106c8a18b62f8cc0042454323058e6da0dbb57dd3

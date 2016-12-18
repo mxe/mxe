@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := tinyxml
+$(PKG)_WEBSITE  := http://sourceforge.net/projects/tinyxml/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.6.2
 $(PKG)_CHECKSUM := 15bdfdcec58a7da30adc87ac2b078e4417dbe5392f3afb719f9ba6d062645593

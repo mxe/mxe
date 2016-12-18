@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := plib
+$(PKG)_WEBSITE  := http://plib.sourceforge.net/
+$(PKG)_DESCR    := Plib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.5-rc1
 $(PKG)_CHECKSUM := d421a3c84517b4bfc8c6402887c74984ec57c12bc85f2dc2729de3ec4cdcdbe4

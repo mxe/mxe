@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freetds
+$(PKG)_WEBSITE  := http://www.freetds.org/
+$(PKG)_DESCR    := FreeTDS
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.00.23
 $(PKG)_CHECKSUM := 1be0cedc4ad026c28633c6587e84e35844dfa4e05e6779eae6d475572a64d36f

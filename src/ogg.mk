@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ogg
+$(PKG)_WEBSITE  := http://www.xiph.org/ogg/
+$(PKG)_DESCR    := OGG
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.2
 $(PKG)_CHECKSUM := e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692

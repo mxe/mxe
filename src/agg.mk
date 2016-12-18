@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := agg
+$(PKG)_WEBSITE  := http://agg.sourceforge.net/
+$(PKG)_DESCR    := Anti-Grain Geometry
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.5
 $(PKG)_CHECKSUM := ab1edc54cc32ba51a62ff120d501eecd55fceeedf869b9354e7e13812289911f

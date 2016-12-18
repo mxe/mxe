@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qjson
+$(PKG)_WEBSITE  := http://qjson.sourceforge.net/
+$(PKG)_DESCR    := QJson
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.8.1
 $(PKG)_CHECKSUM := cd4db5b956247c4991a9c3e95512da257cd2a6bd011357e363d02300afc814d9

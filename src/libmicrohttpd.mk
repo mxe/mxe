@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libmicrohttpd
+$(PKG)_WEBSITE  := http://www.gnu.org/software/libmicrohttpd/
+$(PKG)_DESCR    := GNU Libmicrohttpd
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.38
 $(PKG)_CHECKSUM := 8df2b4dd863c98799a4775a530d905363fbc02fec850af9094da890b28b9e721

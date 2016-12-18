@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ncurses
+$(PKG)_WEBSITE  := https://www.gnu.org/software/ncurses/
+$(PKG)_DESCR    := Ncurses
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := e14300b
 $(PKG)_CHECKSUM := 3564ffa540cc069854607a0fb10d258c12769f8f6ee752f66038ba95a5e5f650

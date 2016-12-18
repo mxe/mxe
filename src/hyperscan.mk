@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hyperscan
+$(PKG)_WEBSITE  := https://01.org/hyperscan
+$(PKG)_DESCR    := Hyperscan
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.3.2
 $(PKG)_CHECKSUM := 6cd5820d6da51d6fe4ab12066d1efd9afecc1bc6fb7d6eca9c98f76fd391dbd5

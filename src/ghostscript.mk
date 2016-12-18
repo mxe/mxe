@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ghostscript
+$(PKG)_WEBSITE  := http://www.ghostscript.com/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 9.19
 $(PKG)_NODOTVER := $(subst .,,$($(PKG)_VERSION))

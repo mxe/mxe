@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-findlib
+$(PKG)_WEBSITE  := http://download.camlcity.org/
+$(PKG)_DESCR    := findlib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4
 $(PKG)_CHECKSUM := 6e4065e5d79d31176ec213ff94599c4eae17c3904c2896e845d0379a99f1bdf8

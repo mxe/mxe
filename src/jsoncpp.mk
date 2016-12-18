@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := jsoncpp
+$(PKG)_WEBSITE  := https://github.com/open-source-parsers/jsoncpp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.5
 $(PKG)_CHECKSUM := a2b121eaff56ec88cfd034d17685821a908d0d87bc319329b04f91a6552c1ac2

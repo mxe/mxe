@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := aubio
+$(PKG)_WEBSITE  := http://www.aubio.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.4.2
 $(PKG)_CHECKSUM := 1cc58e0fed2b9468305b198ad06b889f228b797a082c2ede716dc30fcb4f8f1f

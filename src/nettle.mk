@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := nettle
+$(PKG)_WEBSITE  := http://www.lysator.liu.se/~nisse/nettle/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.3
 $(PKG)_CHECKSUM := 46942627d5d0ca11720fec18d81fc38f7ef837ea4197c1f630e71ce0d470b11e

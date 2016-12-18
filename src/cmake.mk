@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cmake
+$(PKG)_WEBSITE  := http://www.cmake.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.5.2
 $(PKG)_CHECKSUM := 92d8410d3d981bb881dfff2aed466da55a58d34c7390d50449aa59b32bb5e62a

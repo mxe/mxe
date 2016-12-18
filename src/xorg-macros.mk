@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := xorg-macros
+$(PKG)_WEBSITE  := http://cgit.freedesktop.org/xorg/util/macros/
+$(PKG)_DESCR    := X.org utility macros
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.19.0
 $(PKG)_CHECKSUM := 2835b11829ee634e19fa56517b4cfc52ef39acea0cd82e15f68096e27cbed0ba

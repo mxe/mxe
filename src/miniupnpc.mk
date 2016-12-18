@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := miniupnpc
+$(PKG)_WEBSITE  := http://miniupnp.free.fr/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9
 $(PKG)_CHECKSUM := 2923e453e880bb949e3d4da9f83dd3cb6f08946d35de0b864d0339cf70934464

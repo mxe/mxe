@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := theora
+$(PKG)_WEBSITE  := http://theora.org/
+$(PKG)_DESCR    := Theora
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.1
 $(PKG)_CHECKSUM := 40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e949054916b

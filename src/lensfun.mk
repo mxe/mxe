@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lensfun
+$(PKG)_WEBSITE  := http://lensfun.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.3.0
 $(PKG)_CHECKSUM := c2c3c03873cb549d49d42f118fcb0ffa95d1e45b9ff395e19facb63bf699bec1

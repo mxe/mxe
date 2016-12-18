@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := expat
+$(PKG)_WEBSITE  := http://expat.sourceforge.net/
+$(PKG)_DESCR    := Expat XML Parser
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.0
 $(PKG)_CHECKSUM := d9e50ff2d19b3538bd2127902a89987474e1a4db8e43a66a4d1a712ab9a504ff

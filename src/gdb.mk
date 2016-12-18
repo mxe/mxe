@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gdb
+$(PKG)_WEBSITE  := https://www.gnu.org/software/gdb/
 $(PKG)_VERSION  := 7.12
 $(PKG)_CHECKSUM := 834ff3c5948b30718343ea57b11cbc3235d7995c6a4f3a5cecec8c8114164f94
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)

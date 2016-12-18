@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := json-glib
+$(PKG)_WEBSITE  := https://wiki.gnome.org/action/show/Projects/JsonGlib
+$(PKG)_DESCR    := JSON-Glib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.4
 $(PKG)_CHECKSUM := 80f3593cb6bd13f1465828e46a9f740e2e9bd3cd2257889442b3e62bd6de05cd

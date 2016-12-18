@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vo-aacenc
+$(PKG)_WEBSITE  := https://github.com/mstorsjo/vo-aacenc
+$(PKG)_DESCR    := VO-AACENC
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.3
 $(PKG)_CHECKSUM := e51a7477a359f18df7c4f82d195dab4e14e7414cbd48cf79cc195fc446850f36

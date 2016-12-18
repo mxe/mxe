@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mpfr
+$(PKG)_WEBSITE  := http://www.mpfr.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.5
 $(PKG)_CHECKSUM := 015fde82b3979fbe5f83501986d328331ba8ddf008c1ff3da3c238f49ca062bc

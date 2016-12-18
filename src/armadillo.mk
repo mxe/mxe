@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := armadillo
+$(PKG)_WEBSITE  := http://arma.sourceforge.net/
+$(PKG)_DESCR    := Armadillo C++ linear algebra library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.400.3
 $(PKG)_CHECKSUM := 019ce442a1bcad4c5da0bc01ee35333c9a0783ec6a58237ae1e774da68cd4f2f

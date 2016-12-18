@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libidn
+$(PKG)_WEBSITE  := https://www.gnu.org/software/libidn/
+$(PKG)_DESCR    := Libidn
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.33
 $(PKG)_CHECKSUM := 44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19

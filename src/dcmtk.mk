@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := dcmtk
+$(PKG)_WEBSITE  := http://dicom.offis.de/dcmtk.php.en
+$(PKG)_DESCR    := DCMTK
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.6.0
 $(PKG)_CHECKSUM := cfc509701122adfa359f1ee160e943c1548c7696b607dbb646c5a06f015ed33a

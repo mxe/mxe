@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := harfbuzz
+$(PKG)_WEBSITE  := http://harfbuzz.sourceforge.net/
+$(PKG)_DESCR    := HarfBuzz
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.4
 $(PKG)_CHECKSUM := 718aa6fcadef1a6548315b8cfe42cc27e926256302c337f42df3a443843f6a2b

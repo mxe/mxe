@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cairo
+$(PKG)_WEBSITE  := http://cairographics.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.14.6
 $(PKG)_CHECKSUM := 613cb38447b76a93ff7235e17acd55a78b52ea84a9df128c3f2257f8eaa7b252

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libdvdetect
+$(PKG)_WEBSITE  := https://www.dvdetect.de/
+$(PKG)_DESCR    := Fast database lookup for DVDs
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.71.0
 $(PKG)_CHECKSUM := b098e04660532df78836f50bc0a8044b66c6659b07a6bff6609724ad30a87192

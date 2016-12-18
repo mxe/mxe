@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := binutils
+$(PKG)_WEBSITE  := https://www.gnu.org/software/binutils/
+$(PKG)_DESCR    := GNU Binutils
 # see http://lists.nongnu.org/archive/html/mingw-cross-env-list/2016-01/msg00013.html
 # 2.26 causes incorrect dlls to be built with sjlj exceptions
 $(PKG)_IGNORE   := 2.26

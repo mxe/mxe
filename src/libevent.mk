@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libevent
+$(PKG)_WEBSITE  := http://libevent.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.21
 $(PKG)_CHECKSUM := 872b7cdc199ead2edd9f0d1e93b4d900e67d892c014545bd3314b3ae49505eff

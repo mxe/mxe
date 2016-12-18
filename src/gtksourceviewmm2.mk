@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtksourceviewmm2
+$(PKG)_WEBSITE  := http://projects.gnome.org/gtksourceviewmm/
+$(PKG)_DESCR    := GtkSourceViewmm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.10.3
 $(PKG)_CHECKSUM := 0000df1b582d7be2e412020c5d748f21c0e6e5074c6b2ca8529985e70479375b

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libdnet
+$(PKG)_WEBSITE  := http://libdnet.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.11
 $(PKG)_CHECKSUM := 0eb78415c8f2564c2f1e8ad36e98473348d9c94852f796a226360c716cc7ca53

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := levmar
+$(PKG)_WEBSITE  := http://www.ics.forth.gr/~lourakis/levmar
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.6
 $(PKG)_CHECKSUM := 3bf4ef1ea4475ded5315e8d8fc992a725f2e7940a74ca3b0f9029d9e6e94bad7

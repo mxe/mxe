@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libusb
+$(PKG)_WEBSITE  := http://libusb-win32.sourceforge.net/
+$(PKG)_DESCR    := LibUsb
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.6.0
 $(PKG)_CHECKSUM := f3faf094c9b3415ede42eeb5032feda2e71945f13f0ca3da58ca10dcb439bfee

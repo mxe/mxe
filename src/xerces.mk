@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := xerces
+$(PKG)_WEBSITE  := http://xerces.apache.org/xerces-c/
+$(PKG)_DESCR    := Xerces-C++
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.4
 $(PKG)_CHECKSUM := c98eedac4cf8a73b09366ad349cb3ef30640e7a3089d360d40a3dde93f66ecf6

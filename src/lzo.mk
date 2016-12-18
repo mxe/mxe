@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lzo
+$(PKG)_WEBSITE  := http://www.oberhumer.com/opensource/lzo/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.09
 $(PKG)_CHECKSUM := f294a7ced313063c057c504257f437c8335c41bfeed23531ee4e6a2b87bcb34c

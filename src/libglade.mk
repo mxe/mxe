@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libglade
+$(PKG)_WEBSITE  := http://glade.gnome.org/
+$(PKG)_DESCR    := glade
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.6.4
 $(PKG)_CHECKSUM := c41d189b68457976069073e48d6c14c183075d8b1d8077cb6dfb8b7c5097add3

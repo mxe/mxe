@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cloog
+$(PKG)_WEBSITE  := http://www.cloog.org/
+$(PKG)_DESCR    := CLooG Code Generator
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.18.1
 $(PKG)_CHECKSUM := 02500a4edd14875f94fe84cbeda4290425cb0c1c2474c6f75d75a303d64b4196

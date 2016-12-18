@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := opusfile
+$(PKG)_WEBSITE  := http://opus-codec.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.6
 $(PKG)_CHECKSUM := 2428717b356e139f18ed2fdb5ad990b5654a238907a0058200b39c46a7d03ea6

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := portaudio
+$(PKG)_WEBSITE  := http://www.portaudio.com/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 190600_20161030
 $(PKG)_CHECKSUM := f5a21d7dcd6ee84397446fa1fa1a0675bb2e8a4a6dceb4305a8404698d8d1513

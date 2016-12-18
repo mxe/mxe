@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := oce
+$(PKG)_WEBSITE  := https://github.com/tpaviot/oce
+$(PKG)_DESCR    := Open CASCADE Community Edition
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.17.2
 $(PKG)_CHECKSUM := 8d9995360cd531cbd4a7aa4ca5ed969f08ec7c7a37755e2f3d4ef832c1b2f56e

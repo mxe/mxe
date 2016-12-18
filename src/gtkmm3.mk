@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtkmm3
+$(PKG)_WEBSITE  := http://www.gtkmm.org/
+$(PKG)_DESCR    := GTKMM
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.14.0
 $(PKG)_CHECKSUM := d9f528a62c6ec226fa08287c45c7465b2dce5aae5068e9ac48d30a64a378e48b

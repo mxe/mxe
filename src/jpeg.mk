@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := jpeg
+$(PKG)_WEBSITE  := http://www.ijg.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 9b
 $(PKG)_CHECKSUM := 240fd398da741669bf3c90366f58452ea59041cacc741a489b99f2f6a0bad052

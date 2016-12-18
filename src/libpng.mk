@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libpng
+$(PKG)_WEBSITE  := http://www.libpng.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.26
 $(PKG)_CHECKSUM := 266743a326986c3dbcee9d89b640595f6b16a293fd02b37d8c91348d317b73f9

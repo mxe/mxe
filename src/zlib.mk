@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := zlib
+$(PKG)_WEBSITE  := http://zlib.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.8
 $(PKG)_CHECKSUM := 831df043236df8e9a7667b9e3bb37e1fcb1220a0f163b6de2626774b9590d057

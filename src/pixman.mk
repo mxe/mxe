@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pixman
+$(PKG)_WEBSITE  := http://cairographics.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.33.6
 $(PKG)_CHECKSUM := 4e1e72c0ed31d10944f304976e87e6c87b441c853713eeecf115e22c23d4b17d

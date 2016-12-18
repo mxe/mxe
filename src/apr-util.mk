@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := apr-util
+$(PKG)_WEBSITE  := http://apr.apache.org/
+$(PKG)_DESCR    := APR-util
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.5.4
 $(PKG)_CHECKSUM := 976a12a59bc286d634a21d7be0841cc74289ea9077aa1af46be19d1a6e844c19

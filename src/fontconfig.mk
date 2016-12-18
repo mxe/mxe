@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := fontconfig
+$(PKG)_WEBSITE  := http://fontconfig.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.12.1
 $(PKG)_CHECKSUM := b449a3e10c47e1d1c7a6ec6e2016cca73d3bd68fbbd4f0ae5cc6b573f7d6c7f3

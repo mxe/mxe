@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libsvm
+$(PKG)_WEBSITE  := http://www.csie.ntu.edu.tw/~cjlin/libsvm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.20
 $(PKG)_CHECKSUM := 0f122480bef44dec4df6dae056f468c208e4e08c00771ec1b6dae2707fd945be

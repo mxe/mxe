@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libxslt
+$(PKG)_WEBSITE  := http://xmlsoft.org/XSLT/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.29
 $(PKG)_CHECKSUM := b5976e3857837e7617b29f2249ebb5eeac34e249208d31f1fbf7a6ba7a4090ce

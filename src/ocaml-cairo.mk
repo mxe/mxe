@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-cairo
+$(PKG)_WEBSITE  := http://cairographics.org/cairo-ocaml/
+$(PKG)_DESCR    := cairo-ocaml
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := 4beae96acfc13dbb8b0a798a0664380429c6a94357e7dc5747d76599deabdfc7

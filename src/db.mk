@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := db
+$(PKG)_WEBSITE  := http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html
+$(PKG)_DESCR    := Oracle Berkeley DB
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.1.26
 $(PKG)_CHECKSUM := dd1417af5443f326ee3998e40986c3c60e2a7cfb5bfa25177ef7cadb2afb13a6

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := rucksack
+$(PKG)_WEBSITE  := https://github.com/andrewrk/rucksack
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.0
 $(PKG)_CHECKSUM := dcdaab57b06fdeb9be63ed0f2c2de78d0b1e79f7a896bb1e76561216a4458e3b

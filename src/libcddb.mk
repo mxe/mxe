@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libcddb
+$(PKG)_WEBSITE  := https://sourceforge.net/projects/libcddb/
+$(PKG)_DESCR    := Access data on a CDDB
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.2
 $(PKG)_CHECKSUM := 35ce0ee1741ea38def304ddfe84a958901413aa829698357f0bee5bb8f0a223b

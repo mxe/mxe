@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := subversion
+$(PKG)_WEBSITE  := http://subversion.apache.org
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.4
 $(PKG)_CHECKSUM := 1267f9e2ab983f260623bee841e6c9cc458bf4bf776238ed5f100983f79e9299

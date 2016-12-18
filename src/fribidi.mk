@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := fribidi
+$(PKG)_WEBSITE  := http://fribidi.org/
+$(PKG)_DESCR    := FriBidi
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.19.6
 $(PKG)_CHECKSUM := cba8b7423c817e5adf50d28ec9079d14eafcec9127b9e8c8f1960c5ad585e17d

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtsparkle_qt4
+$(PKG)_WEBSITE  := https://github.com/davidsansome/qtsparkle
+$(PKG)_DESCR    := qtsparkle
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 8882e6ef86cdb79db7932307309d005411fd0c20
 $(PKG)_CHECKSUM := 86f6f010356e05e6efb956b5643ce587ffbbae45e8e7dc1b25b4b1dcf865b5f3

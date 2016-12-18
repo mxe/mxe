@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libdvbpsi
+$(PKG)_WEBSITE  := http://www.videolan.org/developers/libdvbpsi.html
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := 36d9b233306e48b58999e87864253b564e20932ed46a485e44ef7058f1f927e8

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := x264
+$(PKG)_WEBSITE  := http://www.videolan.org/developers/x264.html
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 20161130-2245
 $(PKG)_CHECKSUM := 0825e14945bc373107f9a00e66d45d5389bb86368efd834b92c52cddb2ded1d8

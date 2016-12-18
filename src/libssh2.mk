@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libssh2
+$(PKG)_WEBSITE  := http://www.libssh2.org
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.0
 $(PKG)_CHECKSUM := 39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4

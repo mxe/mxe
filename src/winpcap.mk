@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := winpcap
+$(PKG)_WEBSITE  := http://www.winpcap.org/
+$(PKG)_DESCR    := WinPcap
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4_1_3
 $(PKG)_CHECKSUM := 346a93f6b375ac4c1add5c8c7178498f1feed4172fb33383474a91b48ec6633a

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libvpx
+$(PKG)_WEBSITE  := http://code.google.com/p/webm/
+$(PKG)_DESCR    := vpx
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.5.0
 $(PKG)_CHECKSUM := 306d67908625675f8e188d37a81fbfafdf5068b09d9aa52702b6fbe601c76797

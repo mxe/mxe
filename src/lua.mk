@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lua
+$(PKG)_WEBSITE  := http://www.lua.org/
+$(PKG)_DESCR    := Lua
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.3.3
 # Shared version and luarocks subdir

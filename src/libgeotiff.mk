@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libgeotiff
+$(PKG)_WEBSITE  := http://trac.osgeo.org/geotiff/
+$(PKG)_DESCR    := GeoTiff
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4.0
 $(PKG)_CHECKSUM := d0acb8d341fd6a8f2c673456e09fdb8f50f91e3166ac934719fe05b30d328329

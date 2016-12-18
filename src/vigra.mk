@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vigra
+$(PKG)_WEBSITE  := http://hci.iwr.uni-heidelberg.de/vigra
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.0
 $(PKG)_CHECKSUM := dc041f7ccf838d4321e9bcf522fece1758768dd7a3f8350d1e83e2b8e6daf1e6
