@@ -2841,7 +2841,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         function showVersions(packageElements, resolvedVersions) {
             for (package in packageElements) {
                 var element = packageElements[package];
-                var version = resolvedVersions[package];
+                var version = resolvedVersions[package].version;
                 var shorten = version.length > 12;
                 if (shorten) {
                     version = version.substring(0, 12);

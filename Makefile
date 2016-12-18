@@ -857,7 +857,9 @@ docs/packages.json: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '{'                         > $@
 	@{$(foreach PKG,$(PKGS),          \
 	    echo '    "$(PKG)":           \
-	        "$($(PKG)_VERSION)",';)} >> $@
+	        {"version": "$($(PKG)_VERSION)", \
+	         "website": "$($(PKG)_WEBSITE)", \
+	         "description": "$($(PKG)_DESCR)"},';)} >> $@
 	@echo '    "": null'             >> $@
 	@echo '}'                        >> $@
 
