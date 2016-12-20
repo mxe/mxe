@@ -1267,6 +1267,30 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <pre>$(PKG)_DEPS     := gcc ...</pre>
 
         <p>
+        Specify official name and website of a package.
+        If the official name coincides with the package name,
+        you can omit <code>$(PKG)_DESCR</code>.
+        </p>
+        <pre>
+PKG             := libdvdetect
+$(PKG)_WEBSITE  := https://www.dvdetect.de/
+$(PKG)_DESCR    := Fast database lookup for DVDs</pre>
+
+        <p>
+        Always look for the SSL version of URLs, that is,
+        prefer <code>https://</code> URLs over <code>http://</code> URLs.
+        </p>
+    </li>
+
+    <li>
+        <p>
+        Write your <code>$(PKG)_BUILD</code>.
+        If your library has a <code>./configure</code> script,
+        enable/disable all dependency libraries explicitly
+        via "<code>--enable-*</code>" and "<code>--disable-*</code>" options.
+        </p>
+
+        <p>
         Things not to do:
         </p>
         <ul>
@@ -1286,35 +1310,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             >LD_PRELOAD trick</a>, breaking network functions.
             </li>
         </ul>
-
-    </li>
-
-    <li>
-        <p>
-            Add your package to the <a href="#packages">list of packages</a>.
-        </p>
-        <p>
-            Each package gets its own table row element with table cells
-            specifying your package name, official name and website:
-        </p>
-        <pre>
-&lt;tr&gt;
-    &lt;td class="package"&gt;gettext&lt;/td&gt;
-    &lt;td class="website"&gt;&lt;a href="https://www.gnu.org/software/gettext/"&gt;gettext&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;</pre>
-        <p>
-            Always look for the SSL version of a website, that is,
-            prefer <code>https://</code> URLs over <code>http://</code> URLs.
-        </p>
-    </li>
-
-    <li>
-        <p>
-        Write your <code>$(PKG)_BUILD</code>.
-        If your library has a <code>./configure</code> script,
-        enable/disable all dependency libraries explicitly
-        via "<code>--enable-*</code>" and "<code>--disable-*</code>" options.
-        </p>
 
         <p>
         Useful Makefile variables provided by MXE:
