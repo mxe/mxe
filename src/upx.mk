@@ -48,6 +48,7 @@ define $(PKG)_BUILD_$(BUILD)
         CC='$(BUILD_CC)' \
         PKG_CONFIG='$(PREFIX)/$(BUILD)/bin/pkgconf' \
         LIBS='-L$(PREFIX)/$(BUILD)/lib -lucl -lz' \
+        CXXFLAGS=-DUCL_NO_ASM \
         CXXFLAGS_WERROR= \
         exeext=
     cp '$(1)/src/upx' '$(PREFIX)/$(BUILD)/bin/'
