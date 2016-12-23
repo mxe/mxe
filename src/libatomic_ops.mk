@@ -1,18 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
-PKG             := gc
+PKG             := libatomic_ops
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.6.0
-$(PKG)_CHECKSUM := a14a28b1129be90e55cd6f71127ffc5594e1091d5d54131528c24cd0c03b7d90
-$(PKG)_SUBDIR   := $(PKG)-7.6.0
+$(PKG)_VERSION  := 7.4.4
+$(PKG)_CHECKSUM := bf210a600dd1becbf7936dd2914cf5f5d3356046904848dcfd27d0c8b12b6f8f
+$(PKG)_SUBDIR   := $(PKG)-7.4.4
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://hboehm.info/$(PKG)/$(PKG)_source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libatomic_ops
+$(PKG)_URL      := http://hboehm.info/gc/gc_source/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://hboehm.info/gc/gc_source/' | \
     grep '<a href="gc-' | \
-    $(SED) -n 's,.*<a href="gc-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*<a href="libatomic_ops-\([0-9][^"]*\)\.tar.*,\1,p' | \
     grep -v 'alpha' | \
     $(SORT) -Vr | \
     head -1
