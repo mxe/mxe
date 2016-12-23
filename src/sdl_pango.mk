@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl_pango
+$(PKG)_WEBSITE  := http://sdlpango.sourceforge.net/
+$(PKG)_DESCR    := SDL_Pango
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.2
 $(PKG)_CHECKSUM := 7f75d3b97acf707c696ea126424906204ebfa07660162de925173cdd0257eba4

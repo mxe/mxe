@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := flann
+$(PKG)_WEBSITE  := http://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN
+$(PKG)_DESCR    := FLANN
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.4
 $(PKG)_CHECKSUM := dfbb9321b0d687626a644c70872a2c540b16200e7f4c7bd72f91ae032f445c08

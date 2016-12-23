@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := jasper
+$(PKG)_WEBSITE  := http://www.ece.uvic.ca/~mdadams/jasper/
+$(PKG)_DESCR    := JasPer
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.900.1
 $(PKG)_CHECKSUM := 6b905a9c2aca2e275544212666eefc4eb44d95d0a57e4305457b407fe63f9494

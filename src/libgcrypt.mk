@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libgcrypt
+$(PKG)_WEBSITE  := ftp://ftp.gnupg.org/gcrypt/libgcrypt/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.7.5
 $(PKG)_CHECKSUM := d1fea4128beef2bb30a470af6bafabccc503ced350534fb9dd8f5a53ffbae800

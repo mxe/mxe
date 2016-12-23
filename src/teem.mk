@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := teem
+$(PKG)_WEBSITE  := http://teem.sourceforge.net/
+$(PKG)_DESCR    := Teem
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.11.0
 $(PKG)_CHECKSUM := a01386021dfa802b3e7b4defced2f3c8235860d500c1fa2f347483775d4c8def

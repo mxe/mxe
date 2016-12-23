@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openssl
+$(PKG)_WEBSITE  := https://www.openssl.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.2j
 $(PKG)_CHECKSUM := e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431

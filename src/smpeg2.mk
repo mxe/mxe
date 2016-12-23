@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := smpeg2
+$(PKG)_WEBSITE  := http://icculus.org/smpeg/
+$(PKG)_DESCR    := smpeg
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.0
 $(PKG)_CHECKSUM := 979a65b211744a44fa641a9b6e4d64e64a12ff703ae776bafe3c4c4cd85494b3

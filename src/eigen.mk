@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := eigen
+$(PKG)_WEBSITE  := http://eigen.tuxfamily.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2.5
 $(PKG)_CHECKSUM := 5f6e6cb88188e34185f43cb819d7dab9b48ef493774ff834e568f4805d3dc2f9

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gsoap
+$(PKG)_WEBSITE  := http://gsoap2.sourceforge.net/
+$(PKG)_DESCR    := gSOAP
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.8.22
 $(PKG)_CHECKSUM := 30b045af2633ac5e92ea92fdb4baad784afe6e6548b5ef2f9cad48df6a7d3e48

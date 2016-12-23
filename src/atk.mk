@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := atk
+$(PKG)_WEBSITE  := http://www.gtk.org/
+$(PKG)_DESCR    := ATK
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.16.0
 $(PKG)_CHECKSUM := 095f986060a6a0b22eb15eef84ae9f14a1cf8082488faa6886d94c37438ae562

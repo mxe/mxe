@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libunistring
+$(PKG)_WEBSITE  := https://www.gnu.org/software/libunistring/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.4
 $(PKG)_CHECKSUM := f5246d63286a42902dc096d6d44541fbe4204b6c02d6d5d28b457c9882ddd8a6

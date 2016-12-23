@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libgsasl
+$(PKG)_WEBSITE  := https://www.gnu.org/software/gsasl/
+$(PKG)_DESCR    := Libgsasl
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.0
 $(PKG)_CHECKSUM := 3adfb49f9c92a719dea855fd1840d698cde55d4648d332a69032ba8bea207720

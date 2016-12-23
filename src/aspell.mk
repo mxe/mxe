@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := aspell
+$(PKG)_WEBSITE  := http://aspell.net/
+$(PKG)_DESCR    := Aspell
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.60.6.1
 $(PKG)_CHECKSUM := f52583a83a63633701c5f71db3dc40aab87b7f76b29723aeb27941eff42df6e1

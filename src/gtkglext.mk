@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtkglext
+$(PKG)_WEBSITE  := http://gtkglext.sourceforge.net/
+$(PKG)_DESCR    := GtkGLExt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := e5073f3c6b816e7fa67d359d9745a5bb5de94a628ac85f624c992925a46844f9

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl_rwhttp
+$(PKG)_WEBSITE  := http://github.com/mgerhardy/SDL_rwhttp/
+$(PKG)_DESCR    := SDL_rwhttp
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.0
 $(PKG)_CHECKSUM := 9341f427901b5d24d07fd74c8a9124b3c363669142cdf0b3675ac72afe793ea1

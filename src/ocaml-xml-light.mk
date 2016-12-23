@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-xml-light
+$(PKG)_WEBSITE  := http://tech.motion-twin.com/xmllight.html
+$(PKG)_DESCR    := xml-light
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2
 $(PKG)_CHECKSUM := fdb205e8b3a25922e46fca52aea449b9a2de4000c5442487e7e74d79f1e2274a

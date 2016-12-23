@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := speex
+$(PKG)_WEBSITE  := http://www.speex.org/
+$(PKG)_DESCR    := Speex
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2rc2
 $(PKG)_CHECKSUM := caa27c7247ff15c8521c2ae0ea21987c9e9710a8f2d3448e8b79da9806bce891

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libbs2b
+$(PKG)_WEBSITE  := http://bs2b.sourceforge.net/
+$(PKG)_DESCR    := Bauer Stereophonic-to-Binaural library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.0
 $(PKG)_CHECKSUM := 4799974becdeeedf0db00115bc63f60ea3fe4b25f1dfdb6903505839a720e46f

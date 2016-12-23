@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := librsvg
+$(PKG)_WEBSITE  := http://librsvg.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.40.5
 $(PKG)_CHECKSUM := d14d7b3e25023ce34302022fd7c9b3a468629c94dff6c177874629686bfc71a7

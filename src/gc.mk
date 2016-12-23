@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gc
+$(PKG)_WEBSITE  := http://www.hpl.hp.com/personal/Hans_Boehm/gc/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 7.2e
 $(PKG)_CHECKSUM := 09315b48a82d600371207691126ad058c04677281ac318d86fa84c98c3c9af4b

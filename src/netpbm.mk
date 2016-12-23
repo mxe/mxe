@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := netpbm
+$(PKG)_WEBSITE  := http://netpbm.sourceforge.net/
+$(PKG)_DESCR    := Netpbm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 10.35.96
 $(PKG)_CHECKSUM := e652f3642e930156afaffb4c28e135efe026b41cd64be20e245b0c8124819eee

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := djvulibre
+$(PKG)_WEBSITE  := http://djvu.sourceforge.net/
+$(PKG)_DESCR    := DjVuLibre
 $(PKG)_VERSION  := 3.5.27
 $(PKG)_CHECKSUM := e69668252565603875fb88500cde02bf93d12d48a3884e472696c896e81f505f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)

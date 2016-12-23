@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := blas
+$(PKG)_WEBSITE  := http://www.netlib.org/blas/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.5.0
 $(PKG)_CHECKSUM := ef7d775d380f255d1902bce374ff7c8a594846454fcaeae552292168af1aca24

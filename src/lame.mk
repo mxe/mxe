@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lame
+$(PKG)_WEBSITE  := http://lame.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.99.5
 $(PKG)_CHECKSUM := 24346b4158e4af3bd9f2e194bb23eb473c75fb7377011523353196b19b9a23ff

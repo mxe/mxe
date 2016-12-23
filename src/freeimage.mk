@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freeimage
+$(PKG)_WEBSITE  := http://freeimage.sourceforge.net/
+$(PKG)_DESCR    := FreeImage
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.15.4
 $(PKG)_CHECKSUM := eb6361519d33131690a0e726b085a05825e5adf9fb72c752d8d39100e48dc829

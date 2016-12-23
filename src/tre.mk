@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := tre
+$(PKG)_WEBSITE  := http://laurikari.net/tre/
+$(PKG)_DESCR    := TRE
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.8.0
 $(PKG)_CHECKSUM := be8670a55198bc57485a6a8ae4b497d7db98ea25f90968585b7eb07d94c6a7dd

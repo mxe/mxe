@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-lablgtk2
+$(PKG)_WEBSITE  := http://forge.ocamlcore.org/
+$(PKG)_DESCR    := lablgtk2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.16.0
 $(PKG)_CHECKSUM := a0ea9752eb257dadcfc2914408fff339d4c34357802f02c63329dd41b777de2f

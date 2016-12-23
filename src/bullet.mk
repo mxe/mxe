@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := bullet
+$(PKG)_WEBSITE  := http://bulletphysics.org/
+$(PKG)_DESCR    := Bullet physics, version 2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.82-r2704
 $(PKG)_CHECKSUM := 67e4c9eb76f7adf99501d726d8ad5e9b525dfd0843fbce9ca73aaca4ba9eced2

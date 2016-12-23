@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := unrtf
+$(PKG)_WEBSITE  := https://www.gnu.org/software/unrtf/
+$(PKG)_DESCR    := unRTF
 $(PKG)_VERSION  := 0.21.9
 $(PKG)_CHECKSUM := 22a37826f96d754e335fb69f8036c068c00dd01ee9edd9461a36df0085fb8ddd
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)

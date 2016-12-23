@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := llvm
+$(PKG)_WEBSITE  := http://llvm.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4
 $(PKG)_CHECKSUM := 25a5612d692c48481b9b397e2b55f4870e447966d66c96d655241702d44a2628

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl_mixer
+$(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_mixer/
+$(PKG)_DESCR    := SDL_mixer
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.12
 $(PKG)_CHECKSUM := 1644308279a975799049e4826af2cfc787cad2abb11aa14562e402521f86992a

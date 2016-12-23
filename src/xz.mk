@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := xz
+$(PKG)_WEBSITE  := http://tukaani.org/xz/
+$(PKG)_DESCR    := XZ
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.2.2
 $(PKG)_CHECKSUM := 73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2

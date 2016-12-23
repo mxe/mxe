@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libaacs
+$(PKG)_WEBSITE  := http://www.videolan.org/developers/libaacs.html
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.8.1
 $(PKG)_CHECKSUM := 95c344a02c47c9753c50a5386fdfb8313f9e4e95949a5c523a452f0bcb01bbe8

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := isl
+$(PKG)_WEBSITE  := http://isl.gforge.inria.fr/
+$(PKG)_DESCR    := Integer Set Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.12.2
 $(PKG)_CHECKSUM := f4b3dbee9712850006e44f0db2103441ab3d13b406f77996d1df19ee89d11fb4

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libsamplerate
+$(PKG)_WEBSITE  := http://www.mega-nerd.com/SRC/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.8
 $(PKG)_CHECKSUM := 93b54bdf46d5e6d2354b7034395fe329c222a966790de34520702bb9642f1c06

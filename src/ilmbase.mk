@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ilmbase
+$(PKG)_WEBSITE  := http://www.openexr.com/
+$(PKG)_DESCR    := IlmBase
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.0
 $(PKG)_CHECKSUM := ecf815b60695555c1fbc73679e84c7c9902f4e8faa6e8000d2f905b8b86cedc7

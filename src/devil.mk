@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := devil
+$(PKG)_WEBSITE  := http://openil.sourceforge.net/
+$(PKG)_DESCR    := DevIL
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.7.8
 $(PKG)_CHECKSUM := 682ffa3fc894686156337b8ce473c954bf3f4fb0f3ecac159c73db632d28a8fd

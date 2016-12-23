@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libsoup
+$(PKG)_WEBSITE  := https://github.com/GNOME/libsoup
 $(PKG)_IGNORE   := libsoup-pre%
 $(PKG)_VERSION  := 2.54.0.1
 $(PKG)_APIVER   := 2.4

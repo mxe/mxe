@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtdeclarative-render2d
+$(PKG)_WEBSITE  := http://qt-project.org/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
 $(PKG)_CHECKSUM := 831913488bb887993ae8701e5966f53875667a774c0230fc5dc39d6077828c7f

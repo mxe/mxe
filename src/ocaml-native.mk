@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-native
+$(PKG)_WEBSITE  := http://caml.inria.fr/
+$(PKG)_DESCR    := ocaml
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.00.1
 $(PKG)_CHECKSUM := b48d5c7d3bf4a0cd6125f8fdfc1f654dd65586087399dc9f14716d7b9535e87a

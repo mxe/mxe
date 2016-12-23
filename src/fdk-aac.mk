@@ -4,6 +4,8 @@
 # GPL 2+, but it is with LGPL 2.1+. See docs/index.html#potential-legal-issues
 
 PKG             := fdk-aac
+$(PKG)_WEBSITE  := https://github.com/mstorsjo/fdk-aac
+$(PKG)_DESCR    := FDK-AAC
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.4
 $(PKG)_CHECKSUM := 5910fe788677ca13532e3f47b7afaa01d72334d46a2d5e1d1f080f1173ff15ab

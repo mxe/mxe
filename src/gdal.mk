@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gdal
+$(PKG)_WEBSITE  := http://www.gdal.org/
+$(PKG)_DESCR    := GDAL
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.1.2
 $(PKG)_CHECKSUM := 69761c38acac8c6d3ea71304341f6982b5d66125a1a80d9088b6bfd2019125c9

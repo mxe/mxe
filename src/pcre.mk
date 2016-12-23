@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pcre
+$(PKG)_WEBSITE  := http://www.pcre.org/
+$(PKG)_DESCR    := PCRE
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 8.39
 $(PKG)_CHECKSUM := b858099f82483031ee02092711689e7245586ada49e534a06e678b8ea9549e8b

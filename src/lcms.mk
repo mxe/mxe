@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lcms
+$(PKG)_WEBSITE  := http://www.littlecms.com/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7
 $(PKG)_CHECKSUM := 4524234ae7de185e6b6da5d31d6875085b2198bc63b1211f7dde6e2d197d6a53

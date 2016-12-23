@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := log4cxx
+$(PKG)_WEBSITE  := http://logging.apache.org/log4cxx/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.10.0
 $(PKG)_CHECKSUM := 0de0396220a9566a580166e66b39674cb40efd2176f52ad2c65486c99c920c8c

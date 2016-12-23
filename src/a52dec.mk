@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := a52dec
+$(PKG)_WEBSITE  := http://liba52.sourceforge.net/
+$(PKG)_DESCR    := a52dec (aka. liba52)
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.7.4
 $(PKG)_CHECKSUM := a21d724ab3b3933330194353687df82c475b5dfb997513eef4c25de6c865ec33

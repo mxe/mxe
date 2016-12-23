@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := atkmm
+$(PKG)_WEBSITE  := http://www.gtkmm.org/
+$(PKG)_DESCR    := ATKmm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.22.7
 $(PKG)_CHECKSUM := bfbf846b409b4c5eb3a52fa32a13d86936021969406b3dcafd4dd05abd70f91b

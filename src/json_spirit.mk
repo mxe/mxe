@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := json_spirit
+$(PKG)_WEBSITE  := https://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.08
 $(PKG)_CHECKSUM := 082798e46b3ee4c2b9613c212308f770cd9988c7a08b8ae3c345bf64fdad125f

@@ -3,6 +3,7 @@
 # Note that IPv6 support is partly broken and therefore disabled.
 
 PKG             := libircclient
+$(PKG)_WEBSITE  := http://sourceforge.net/projects/libircclient/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8
 $(PKG)_CHECKSUM := 2cf8523ac683588f2785b08159a2df3e4d15939ee655c0024aa86334149de8f6

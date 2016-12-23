@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libodbc++
+$(PKG)_WEBSITE  := http://libodbcxx.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.5
 $(PKG)_CHECKSUM := ba3030a27b34e4aafbececa2ddbbf42a38815e9534f34c051620540531b5e23e

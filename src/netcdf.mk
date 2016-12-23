@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := netcdf
+$(PKG)_WEBSITE  := http://www.unidata.ucar.edu/software/netcdf/
+$(PKG)_DESCR    := NetCDF
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.3.0
 $(PKG)_CHECKSUM := e796413d27da6b053e07a18f567a1d0c23d2a317cef905faa2a05fe4f725fc63

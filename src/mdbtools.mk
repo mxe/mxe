@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mdbtools
+$(PKG)_WEBSITE  := http://sourceforge.net/projects/mdbtools/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.7.1
 $(PKG)_CHECKSUM := 4eac1bce55066a38d9ea6c52a8e8ecc101b79afe75118ecc16852990472c4721

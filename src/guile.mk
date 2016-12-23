@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := guile
+$(PKG)_WEBSITE  := https://www.gnu.org/software/guile/
+$(PKG)_DESCR    := GNU Guile
 $(PKG)_IGNORE   := 2%
 $(PKG)_VERSION  := 1.8.8
 $(PKG)_CHECKSUM := c3471fed2e72e5b04ad133bbaaf16369e8360283679bcf19800bc1b381024050

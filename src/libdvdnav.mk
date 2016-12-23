@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libdvdnav
+$(PKG)_WEBSITE  := https://dvdnav.mplayerhq.hu/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.0.1
 $(PKG)_CHECKSUM := 72b1cb8266f163d4a1481b92c7b6c53e6dc9274d2a6befb08ffc351fe7a4a2a9

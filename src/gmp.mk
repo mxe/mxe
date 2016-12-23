@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gmp
+$(PKG)_WEBSITE  := http://www.gmplib.org/
+$(PKG)_DESCR    := GMP
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.1.2
 $(PKG)_CHECKSUM := 87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912

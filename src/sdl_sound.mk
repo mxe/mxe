@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl_sound
+$(PKG)_WEBSITE  := http://icculus.org/SDL_sound/
+$(PKG)_DESCR    := SDL_sound
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.3
 $(PKG)_CHECKSUM := 3999fd0bbb485289a52be14b2f68b571cb84e380cc43387eadf778f64c79e6df

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := giflib
+$(PKG)_WEBSITE  := http://sourceforge.net/projects/libungif/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.1.4
 $(PKG)_CHECKSUM := df27ec3ff24671f80b29e6ab1c4971059c14ac3db95406884fc26574631ba8d5

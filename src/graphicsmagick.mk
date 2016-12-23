@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := graphicsmagick
+$(PKG)_WEBSITE  := http://www.graphicsmagick.org/
+$(PKG)_DESCR    := GraphicsMagick
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.21
 $(PKG)_CHECKSUM := 9045304d991776b6a37e1b45b9b6ef152593ada0d49bc744263565617cbf3c1f

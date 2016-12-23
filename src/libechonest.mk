@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libechonest
+$(PKG)_WEBSITE  := https://github.com/lfranchi/libechonest
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.1
 $(PKG)_CHECKSUM := ab961ab952df30c5234b548031594d7e281e7c9f2a9d1ce91fe5421ddde85e7c

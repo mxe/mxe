@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ucl
+$(PKG)_WEBSITE  := http://www.oberhumer.com/opensource/ucl/
+$(PKG)_DESCR    := UCL
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.03
 $(PKG)_CHECKSUM := b865299ffd45d73412293369c9754b07637680e5c826915f097577cd27350348

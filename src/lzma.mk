@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lzma
+$(PKG)_WEBSITE  := http://www.7-zip.org/sdk.html
+$(PKG)_DESCR    := LZMA SDK
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 920
 $(PKG)_CHECKSUM := 8ac221acdca8b6f6dd110120763af42b3707363752fc04e63c7bbff76774a445

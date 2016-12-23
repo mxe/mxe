@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libtool
+$(PKG)_WEBSITE  := https://www.gnu.org/software/libtool/
+$(PKG)_DESCR    := GNU Libtool
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4.4
 $(PKG)_CHECKSUM := 159d4e20c201f929e3562536d3ae6b5e605403fa4bb4e72ef197a4e162c3fedf

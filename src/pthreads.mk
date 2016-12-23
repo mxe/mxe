@@ -4,6 +4,8 @@
 # but the pre-requisite package and test are the same.
 
 PKG             := pthreads
+$(PKG)_WEBSITE  := https://en.wikipedia.org/wiki/POSIX_Threads
+$(PKG)_DESCR    := POSIX Threads
 $(PKG)_VERSION  := POSIX 1003.1-2001
 $(PKG)_DEPS     := gcc
 

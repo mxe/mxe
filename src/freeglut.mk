@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freeglut
+$(PKG)_WEBSITE  := http://freeglut.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0.0
 $(PKG)_CHECKSUM := 2a43be8515b01ea82bcfa17d29ae0d40bd128342f0930cd1f375f1ff999f76a2

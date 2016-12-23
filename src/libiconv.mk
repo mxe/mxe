@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libiconv
+$(PKG)_WEBSITE  := https://www.gnu.org/software/libiconv/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.14
 $(PKG)_CHECKSUM := 72b24ded17d687193c3366d0ebe7cde1e6b18f0df8c55438ac95be39e8a30613

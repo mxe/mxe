@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openscenegraph
+$(PKG)_WEBSITE  := http://www.openscenegraph.org/
+$(PKG)_DESCR    := OpenSceneGraph
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4.0
 $(PKG)_CHECKSUM := 5c727d84755da276adf8c4a4a3a8ba9c9570fc4b4969f06f1d2e9f89b1e3040e

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := nsis
+$(PKG)_WEBSITE  := http://nsis.sourceforge.net/
+$(PKG)_DESCR    := NSIS
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.01
 $(PKG)_CHECKSUM := 604c011593be484e65b2141c50a018f1b28ab28c994268e4ecd377773f3ffba1

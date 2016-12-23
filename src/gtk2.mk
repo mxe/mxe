@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtk2
+$(PKG)_WEBSITE  := http://www.gtk.org/
+$(PKG)_DESCR    := GTK+
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.24.29
 $(PKG)_CHECKSUM := 0741c59600d3d810a223866453dc2bbb18ce4723828681ba24aa6519c37631b8

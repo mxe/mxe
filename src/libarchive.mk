@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libarchive
+$(PKG)_WEBSITE  := http://www.libarchive.org/
+$(PKG)_DESCR    := Libarchive
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.2
 $(PKG)_CHECKSUM := eb87eacd8fe49e8d90c8fdc189813023ccc319c5e752b01fb6ad0cc7b2c53d5e

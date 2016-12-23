@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mingw-w64
+$(PKG)_WEBSITE  := http://mingw-w64.sourceforge.net/
+$(PKG)_DESCR    := MinGW-w64 Runtime
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.0.6
 $(PKG)_CHECKSUM := 0c407394b0d8635553f4fbca674cdfe446aac223e90b4010603d863e4bdd015c

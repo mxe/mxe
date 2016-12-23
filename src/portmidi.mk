@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := portmidi
+$(PKG)_WEBSITE  := http://portmedia.sourceforge.net/portmidi/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 217
 $(PKG)_CHECKSUM := 08e9a892bd80bdb1115213fb72dc29a7bf2ff108b378180586aa65f3cfd42e0f

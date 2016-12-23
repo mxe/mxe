@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libmodplug
+$(PKG)_WEBSITE  := http://modplug-xmms.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.8.8.4
 $(PKG)_CHECKSUM := 5c5ee13dddbed144be26276e5f102da17ff5b1c992f3100389983082da2264f7

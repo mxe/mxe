@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pdcurses
+$(PKG)_WEBSITE  := http://pdcurses.sourceforge.net/
+$(PKG)_DESCR    := PDcurses
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4
 $(PKG)_CHECKSUM := 46ad8fd439e71d44819ea884d775ccbf653b9f8b1f7a418a0cce3a510aa2e64b

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := t4k_common
+$(PKG)_WEBSITE  := http://tux4kids.alioth.debian.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.1
 $(PKG)_CHECKSUM := 42c155816dae2c5dad560faa50edaa1ca84536530283d37859c4b91e82675110

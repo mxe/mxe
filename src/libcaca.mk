@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libcaca
+$(PKG)_WEBSITE  := http://caca.zoy.org/wiki/libcaca
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.99.beta19
 $(PKG)_CHECKSUM := 128b467c4ed03264c187405172a4e83049342cc8cc2f655f53a2d0ee9d3772f4

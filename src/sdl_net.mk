@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl_net
+$(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_net/
+$(PKG)_DESCR    := SDL_net
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.8
 $(PKG)_CHECKSUM := 5f4a7a8bb884f793c278ac3f3713be41980c5eedccecff0260411347714facb4

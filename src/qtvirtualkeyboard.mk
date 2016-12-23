@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtvirtualkeyboard
+$(PKG)_WEBSITE  := http://qt-project.org/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
 $(PKG)_CHECKSUM := b28b8b937ed15d794c5ebc93e9556d08a0c9761a434864ebf2b454554e652add

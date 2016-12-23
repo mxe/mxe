@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sox
+$(PKG)_WEBSITE  := http://sox.sourceforge.net/
+$(PKG)_DESCR    := SoX
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 14.4.2
 $(PKG)_CHECKSUM := b45f598643ffbd8e363ff24d61166ccec4836fea6d3888881b8df53e3bb55f6c

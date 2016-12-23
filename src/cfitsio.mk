@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cfitsio
+$(PKG)_WEBSITE  := http://heasarc.gsfc.nasa.gov/fitsio/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3370
 $(PKG)_CHECKSUM := 092897c6dae4dfe42d91d35a738e45e8236aa3d8f9b3ffc7f0e6545b8319c63a

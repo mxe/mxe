@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libzip
+$(PKG)_WEBSITE  := http://www.nih.at/libzip/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.11.2
 $(PKG)_CHECKSUM := 7cfbbc2c540e154b933b6e9ec781e2671086bd8114eb744ae1a1ade34d2bb6bb

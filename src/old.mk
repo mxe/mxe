@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := old
+$(PKG)_WEBSITE  := http://blitiri.com.ar/p/old/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.17
 $(PKG)_CHECKSUM := d24b0d28bbce308b68d62815df8edc2806af0b7b86129f9e8078bd9381dc5eb5

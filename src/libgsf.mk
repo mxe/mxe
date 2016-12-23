@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libgsf
+$(PKG)_WEBSITE  := http://projects.gnome.org/libgsf/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.14.30
 $(PKG)_CHECKSUM := cb48c3480be4a691963548e664308f497d93c9d7bc12cf6a68d5ebae930a5b70

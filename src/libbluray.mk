@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libbluray
+$(PKG)_WEBSITE  := http://www.videolan.org/developers/libbluray.html
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.2
 $(PKG)_CHECKSUM := efc994f42d2bce6af2ce69d05ba89dbbd88bcec7aca065de094fb3a7880ce7ea

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := liblo
+$(PKG)_WEBSITE  := http://liblo.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.28
 $(PKG)_CHECKSUM := da94a9b67b93625354dd89ff7fe31e5297fc9400b6eaf7378c82ee1caf7db909

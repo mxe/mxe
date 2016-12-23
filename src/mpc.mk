@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mpc
+$(PKG)_WEBSITE  := http://www.multiprecision.org/
+$(PKG)_DESCR    := GNU MPC
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.2
 $(PKG)_CHECKSUM := b561f54d8a479cee3bc891ee52735f18ff86712ba30f036f8b8537bae380c488

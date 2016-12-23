@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := fftw
+$(PKG)_WEBSITE  := http://www.fftw.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.3.4
 $(PKG)_CHECKSUM := 8f0cde90929bc05587c3368d2f15cd0530a60b8a9912a8e2979a72dbe5af0982

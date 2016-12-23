@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gdk-pixbuf
+$(PKG)_WEBSITE  := http://www.gdk-pixbuf.org/
+$(PKG)_DESCR    := GDK-pixbuf
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.32.3
 $(PKG)_CHECKSUM := 2b6771f1ac72f687a8971e59810b8dc658e65e7d3086bd2e676e618fd541d031

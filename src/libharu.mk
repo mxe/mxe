@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libharu
+$(PKG)_WEBSITE  := http://libharu.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.1
 $(PKG)_CHECKSUM := 45fd57044042c0e290ad0f11fc19eeb31b50c4b9edadf9d89dd5a7d9ae4865a7

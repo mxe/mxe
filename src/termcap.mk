@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := termcap
+$(PKG)_WEBSITE  := https://www.gnu.org/software/termutils/
+$(PKG)_DESCR    := Termcap
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.1
 $(PKG)_CHECKSUM := 91a0e22e5387ca4467b5bcb18edf1c51b930262fd466d5fda396dd9d26719100

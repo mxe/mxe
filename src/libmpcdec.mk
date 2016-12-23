@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libmpcdec
+$(PKG)_WEBSITE  := http://www.musepack.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.6
 $(PKG)_CHECKSUM := 4bd54929a80850754f27b568d7891e1e3e1b8d2f208d371f27d1fda09e6f12a8

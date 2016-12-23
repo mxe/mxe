@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtk3
+$(PKG)_WEBSITE  := http://www.gtk.org/
+$(PKG)_DESCR    := GTK+
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.14.4
 $(PKG)_CHECKSUM := a006c716d723dab0c623491566e3292af84c87d9198a30199051d23cfc7bef2f

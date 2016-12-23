@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libshout
+$(PKG)_WEBSITE  := http://www.icecast.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4.1
 $(PKG)_CHECKSUM := f3acb8dec26f2dbf6df778888e0e429a4ce9378a9d461b02a7ccbf2991bbf24d

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libpano13
+$(PKG)_WEBSITE  := http://panotools.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.9.18
 $(PKG)_CHECKSUM := de5d4e43f15c3430e95c0faa1c50c9503516e1b570d0ec0522f610a578caa172

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := poppler
+$(PKG)_WEBSITE  := http://poppler.freedesktop.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.30.0
 $(PKG)_CHECKSUM := b616ee869d0b1f8a7a2c71cf346f55c1bff624cce4badebe17f506ec8ce7ddf5

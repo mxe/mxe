@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := twolame
+$(PKG)_WEBSITE  := http://www.twolame.org/
+$(PKG)_DESCR    := TwoLAME
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.3.13
 $(PKG)_CHECKSUM := 98f332f48951f47f23f70fd0379463aff7d7fb26f07e1e24e42ddef22cc6112a

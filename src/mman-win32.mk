@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mman-win32
+$(PKG)_WEBSITE  := https://code.google.com/p/mman-win32/
+$(PKG)_DESCR    := MMA-Win32
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := b7ec370
 $(PKG)_CHECKSUM := 6f94db28ddf30711c7b227e97c5142f72f77aca2c5cc034a7d012db242cc2f7b

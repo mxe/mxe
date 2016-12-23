@@ -1,6 +1,7 @@
 #This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gst-plugins-ugly
+$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.2
 $(PKG)_CHECKSUM := e7f1b6321c8667fabc0dedce3998a3c6e90ce9ce9dea7186d33dc4359f9e9845

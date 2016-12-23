@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := plotmm
+$(PKG)_WEBSITE  := http://plotmm.sourceforge.net/
+$(PKG)_DESCR    := PlotMM
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.2
 $(PKG)_CHECKSUM := 896bb729eb9cad5f3188d72304789dd7a86fdae66020ac0632fe3bc66abe9653

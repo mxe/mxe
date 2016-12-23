@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := opencv
+$(PKG)_WEBSITE  := http://opencv.org/
+$(PKG)_DESCR    := OpenCV
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4.10
 $(PKG)_CHECKSUM := 1bf4cb87283797fd91669d4f90b622a677a903c20b4a577b7958a2164f7596c6

@@ -49,8 +49,6 @@ GIT_HEAD   := $(shell git rev-parse HEAD)
 TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(MXE_TMP)/tmp-$(1)
-PKGS       := $(call set_create,\
-    $(shell $(SED) -n 's/^.* class="package">\([^<]*\)<.*$$/\1/p' '$(TOP_DIR)/docs/index.html'))
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
 PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
 
@@ -60,10 +58,9 @@ STRIP_LIB       := $(false)
 STRIP_EXE       := $(true)
 
 # All pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
-# These aren't meaningful to the pkg list in docs/index.html so
+# These aren't meaningful to the pkg list in http://mxe.cc/#packages so
 # use a list in case we want to separate autotools, cmake etc.
 MXE_CONF_PKGS := mxe-conf
-PKGS          += $(MXE_CONF_PKGS)
 
 # define some whitespace variables
 define newline
@@ -196,11 +193,11 @@ UNPACK_PKG_ARCHIVE = \
 
 # some shortcuts for awareness of MXE_PLUGIN_DIRS
 # all files for extension plugins will be considered for outdated checks
-PKG_MAKEFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).mk, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
-PKG_TESTFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1)-test*, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS)))))
+PKG_MAKEFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1).mk, $(MXE_PLUGIN_DIRS)))))
+PKG_TESTFILES = $(realpath $(sort $(wildcard $(addsuffix /$(1)-test*, $(MXE_PLUGIN_DIRS)))))
 # allow packages to specify a list of zero or more patches
 PKG_PATCHES   = $(if $(findstring undefined,$(origin $(1)_PATCHES)), \
-                    $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(TOP_DIR)/src $(MXE_PLUGIN_DIRS))))) \
+                    $(realpath $(sort $(wildcard $(addsuffix /$(1)-[0-9]*.patch, $(MXE_PLUGIN_DIRS))))) \
                 $(else), \
                     $($(1)_PATCHES))
 
@@ -310,14 +307,8 @@ endif
 LIST_NMAX   = $(shell echo '$(strip $(1))' | tr ' ' '\n' | sort -n | tail -1)
 LIST_NMIN   = $(shell echo '$(strip $(1))' | tr ' ' '\n' | sort -n | head -1)
 
-NPROCS     := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
-JOBS_AUTO  := $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
-JOBS       := $(strip $(if $(findstring undefined,$(origin JOBS)),\
-                   $(if $(and $(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PKGS))), \
-                       $(info [using autodetected $(JOBS_AUTO) job(s)])) \
-                   $(JOBS_AUTO)\
-              ,\
-                   $(JOBS)))
+NPROCS := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+JOBS   := $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 
 # cache some target string manipulation functions
 # `memoize` and `uc` from gmsl
@@ -346,6 +337,9 @@ LOOKUP_PKG_RULE = $(strip \
 
 .PHONY: all
 all: all-filtered
+
+# Core packages.
+override MXE_PLUGIN_DIRS += $(realpath $(TOP_DIR)/src)
 
 # Build native requirements for certain systems
 OS_SHORT_NAME   := $(call lc,$(shell lsb_release -sc 2>/dev/null || uname -s))
@@ -394,12 +388,6 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 	@rm -f '$(PREFIX)/installed/print-git-oneline-'*
 	@touch '$@'
 
-# include core MXE packages and set base filenames
-include $(patsubst %,$(TOP_DIR)/src/%.mk,$(PKGS))
-$(foreach PKG,$(PKGS),\
-    $(eval $(PKG)_MAKEFILE  := $(realpath $(TOP_DIR)/src/$(PKG).mk)) \
-    $(eval $(PKG)_TEST_FILE := $(realpath $(wildcard $(TOP_DIR)/src/$(PKG)-test.*))))
-
 # include files from MXE_PLUGIN_DIRS, set base filenames and `all-<plugin>` target
 PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
 PLUGIN_PKGS  := $(basename $(notdir $(PLUGIN_FILES)))
@@ -408,7 +396,7 @@ $(foreach FILE,$(PLUGIN_FILES),\
     $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(wildcard $(basename $(FILE))-test.*)) \
     $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE)))))
 include $(PLUGIN_FILES)
-PKGS := $(sort $(PKGS) $(PLUGIN_PKGS))
+PKGS := $(sort $(MXE_CONF_PKGS) $(PLUGIN_PKGS))
 
 # create target sets for PKG_TARGET_RULE loop to avoid creating empty rules
 # and having to explicitly disable $(BUILD) for most packages
@@ -593,7 +581,7 @@ build-only-$(1)_$(3):
 
 	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
 	        $$(call PREPARE_PKG_SOURCE,$(1),$(2)))
-	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR),$(TOP_DIR)/src/$(1)-test)
+	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR))
 	    @echo
 	    @find '$(2)' -name 'config.log' -print -exec cat {} \;
 	    @echo
@@ -656,7 +644,7 @@ show-deps-%:
 	        $(newline)$(newline)$* downstream dependents:$(newline)\
 	        $(call WALK_DOWNSTREAM,$*))\
 	    @echo,\
-	    $(error Package $* not found in docs/index.html))
+	    $(error Package $* not found))
 
 # show upstream dependencies and downstream dependents separately
 # suitable for usage in shell with: `make show-downstream-deps-foo`
@@ -666,14 +654,14 @@ show-downstream-deps-%:
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $(call WALK_DOWNSTREAM,$*))\
 	    @echo -n,\
-	    $(error Package $* not found in docs/index.html))
+	    $(error Package $* not found))
 
 show-upstream-deps-%:
 	$(if $(call set_is_member,$*,$(PKGS)),\
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $(call WALK_UPSTREAM,$*))\
 	    @echo -n,\
-	    $(error Package $* not found in docs/index.html))
+	    $(error Package $* not found))
 
 # print first level pkg deps for use in build-pkg.lua
 .PHONY: print-deps-for-build-pkg
@@ -731,13 +719,13 @@ update:
 update-package-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(and $($*_UPDATE),$(call UPDATE,$*,$(shell $($*_UPDATE)))), \
-	    $(error Package $* not found in docs/index.html))
+	    $(error Package $* not found))
 
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
 	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$($*_MAKEFILE)', \
-	    $(error Package $* not found in docs/index.html))
+	    $(error Package $* not found))
 
 .PHONY: cleanup-style
 define CLEANUP_STYLE
@@ -864,12 +852,14 @@ docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '</body>'                         >> $@
 	@echo '</html>'                         >> $@
 
-.PHONY: docs/versions.json
-docs/versions.json: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
+.PHONY: docs/packages.json
+docs/packages.json: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '{'                         > $@
 	@{$(foreach PKG,$(PKGS),          \
 	    echo '    "$(PKG)":           \
-	        "$($(PKG)_VERSION)",';)} >> $@
+	        {"version": "$($(PKG)_VERSION)", \
+	         "website": "$($(PKG)_WEBSITE)", \
+	         "description": "$($(PKG)_DESCR)"},';)} >> $@
 	@echo '    "": null'             >> $@
 	@echo '}'                        >> $@
 

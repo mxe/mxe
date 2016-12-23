@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := id3lib
+$(PKG)_WEBSITE  := http://id3lib.sourceforge.net/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.8.3
 $(PKG)_CHECKSUM := 2749cc3c0cd7280b299518b1ddf5a5bcfe2d1100614519b68702230e26c7d079

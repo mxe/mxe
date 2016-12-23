@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libftdi1
+$(PKG)_WEBSITE  := http://www.intra2net.com/en/developer/libftdi/index.php
+$(PKG)_DESCR    := LibFTDI1
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2
 $(PKG)_CHECKSUM := a6ea795c829219015eb372b03008351cee3fb39f684bff3bf8a4620b558488d6

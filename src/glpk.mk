@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := glpk
+$(PKG)_WEBSITE  := https://www.gnu.org/software/glpk/
+$(PKG)_DESCR    := GNU Linear Programming Kit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.60
 $(PKG)_CHECKSUM := 1356620cb0a0d33ac3411dd49d9fd40d53ece73eaec8f6b8d19a77887ff5e297

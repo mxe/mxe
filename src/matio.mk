@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := matio
+$(PKG)_WEBSITE  := http://sourceforge.net/projects/matio/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.5.2
 $(PKG)_CHECKSUM := db02d0fb3373c3d766a606309b17e64a5d8da55610e921a9f1a0ec171e911d45

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl_gfx
+$(PKG)_WEBSITE  := http://www.ferzkopp.net/joomla/content/view/19/14/
+$(PKG)_DESCR    := SDL_gfx
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.25
 $(PKG)_CHECKSUM := 556eedc06b6cf29eb495b6d27f2dcc51bf909ad82389ba2fa7bdc4dec89059c0

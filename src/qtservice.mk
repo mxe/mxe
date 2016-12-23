@@ -1,5 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 PKG             := qtservice
+$(PKG)_WEBSITE  := https://qt.gitorious.org/qt-solutions/
+$(PKG)_DESCR    := Qt Solutions
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := ad9bc46
 $(PKG)_CHECKSUM := c708cb14637811b5d9060e33e4afe904a9d1c9f39a9befdc3a570f219825075b
