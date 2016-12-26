@@ -339,7 +339,7 @@ LOOKUP_PKG_RULE = $(strip \
 all: all-filtered
 
 # Core packages.
-override MXE_PLUGIN_DIRS += $(realpath $(TOP_DIR)/src)
+override MXE_PLUGIN_DIRS := $(realpath $(TOP_DIR)/src) $(MXE_PLUGIN_DIRS)
 
 # Build native requirements for certain systems
 OS_SHORT_NAME   := $(call lc,$(shell lsb_release -sc 2>/dev/null || uname -s))
