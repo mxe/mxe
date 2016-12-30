@@ -55,8 +55,8 @@ define $(PKG)_BUILD
         CXXFLAGS=-D_WIN32_WINNT=0x0500 \
         LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
     PATH='$(PREFIX)/$(TARGET)/qt/bin:$(PATH)' \
-        $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) HTML_DIR=
+    $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT) HTML_DIR=
 
     # Test program
     '$(TARGET)-g++' \
