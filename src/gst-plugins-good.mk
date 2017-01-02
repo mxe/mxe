@@ -33,6 +33,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' install CFLAGS='-DWAVE_FORMAT_DOLBY_AC3_SPDIF=0x0092'
 
     # some .dlls are installed to lib - no obvious way to change
-    $(and $(BUILD_SHARED),
-    mv -v '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/')
+    $(if $(BUILD_SHARED),
+        mv -vf '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+    )
 endef
