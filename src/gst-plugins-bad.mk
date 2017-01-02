@@ -25,4 +25,9 @@ define $(PKG)_BUILD
         --docdir='$(1)/sink' \
         --with-html-dir='$(1)/sink'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+
+    # some .dlls are installed to lib - no obvious way to change
+    $(if $(BUILD_SHARED),
+        mv -vf '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+    )
 endef
