@@ -380,7 +380,7 @@
     "sparsehash": {"version": "2.0.3", "website": "https://github.com/sparsehash/sparsehash", "description": ""},
     "speex": {"version": "1.2rc2", "website": "http://www.speex.org/", "description": "Speex"},
     "speexdsp": {"version": "1.2rc3", "website": "http://www.speex.org/", "description": "SpeexDSP"},
-    "sqlite": {"version": "3160000", "website": "http://www.sqlite.org/", "description": "SQLite"},
+    "sqlite": {"version": "3160100", "website": "http://www.sqlite.org/", "description": "SQLite"},
     "subversion": {"version": "1.9.4", "website": "http://subversion.apache.org", "description": ""},
     "suitesparse": {"version": "4.2.1", "website": "http://www.cise.ufl.edu/research/sparse/SuiteSparse/", "description": "SuiteSparse"},
     "t4k_common": {"version": "0.1.1", "website": "http://tux4kids.alioth.debian.org/", "description": ""},
