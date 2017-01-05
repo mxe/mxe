@@ -200,7 +200,7 @@
     "libpano13": {"version": "2.9.18", "website": "http://panotools.sourceforge.net/", "description": ""},
     "libpaper": {"version": "1.1.24+nmu4", "website": "http://packages.debian.org/unstable/libpaper1", "description": ""},
     "libplist": {"version": "1.12", "website": "https://github.com/libimobiledevice/libplist", "description": ""},
-    "libpng": {"version": "1.6.26", "website": "http://www.libpng.org/", "description": ""},
+    "libpng": {"version": "1.6.28", "website": "http://www.libpng.org/", "description": ""},
     "librosco": {"version": "0.1.11", "website": "https://github.com/colinbourassa/librosco/", "description": ""},
     "librsvg": {"version": "2.40.5", "website": "http://librsvg.sourceforge.net/", "description": ""},
     "librtmp": {"version": "a107cef", "website": "http://rtmpdump.mplayerhq.hu/", "description": ""},
