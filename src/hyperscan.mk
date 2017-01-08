@@ -21,7 +21,6 @@ define $(PKG)_BUILD
     # Add the following options to run on (virtual) machine without AVX2
     # -DCMAKE_C_FLAGS="-march=core2" -DCMAKE_CXX_FLAGS="-march=core2"
     cd '$(1).build' && '$(TARGET)-cmake' \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
         -DRAGEL='$(PREFIX)/$(BUILD)/bin/ragel' \
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'

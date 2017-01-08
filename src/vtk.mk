@@ -35,9 +35,8 @@ define $(PKG)_BUILD
 
     # now for the cross compilation
     mkdir '$(1)/cross_build'
-    cd '$(1)/cross_build' && cmake \
+    cd '$(1)/cross_build' && '$(TARGET)-cmake' \
         -C '$(1)/TryRunResults.cmake'\
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'\
         -DBUILD_TESTING=FALSE\
         -DVTKCompileTools_DIR='$(1)/native_build'\
         -DVTK_USE_SYSTEM_EXPAT=TRUE\

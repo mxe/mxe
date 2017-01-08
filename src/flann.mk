@@ -22,9 +22,7 @@ define $(PKG)_BUILD_SHARED
     # workaround for strange "too many sections" error
     # setting CXXFLAGS='-O3' seems to fix it
     # similar to http://www.mail-archive.com/mingw-w64-public@lists.sourceforge.net/msg06329.html
-    cd '$(1)' && CXXFLAGS='-O3' cmake . \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DCMAKE_BUILD_TYPE=Release \
+    cd '$(1)' && CXXFLAGS='-O3' '$(TARGET)-cmake' . \
         -DBUILD_CUDA_LIB=OFF \
         -DBUILD_MATLAB_BINDINGS=OFF \
         -DBUILD_PYTHON_BINDINGS=OFF  \

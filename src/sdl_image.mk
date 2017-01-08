@@ -43,8 +43,7 @@ define $(PKG)_BUILD
     mkdir -p '$(1)/cmake-build-test'
     cp '$(PWD)/src/$(PKG)-test-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
     cp '$(PWD)/src/$(PKG)-test.c' '$(1)/cmake-build-test/'
-    cd '$(1)/cmake-build-test' && cmake . \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
+    cd '$(1)/cmake-build-test' && '$(TARGET)-cmake'
     $(MAKE) -C '$(1)/cmake-build-test' -j '$(JOBS)'
 endef
 

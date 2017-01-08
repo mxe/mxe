@@ -18,15 +18,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/build' && cmake \
+    cd '$(1)/build' && '$(TARGET)-cmake' \
         -DDYNLOAD=OFF \
-        -DBUILD_STATIC=ON \
-        -DBUILD_SHARED=OFF \
         -DBUILD_EXAMPLES=OFF \
         -DFLUIDSYNTH=OFF \
         -DCMAKE_C_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \
         -DCMAKE_CXX_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         ..
     $(MAKE) -C '$(1)/build' -j $(JOBS) VERBOSE=1
     $(MAKE) -C '$(1)/build' -j $(JOBS) install

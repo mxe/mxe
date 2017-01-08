@@ -21,14 +21,13 @@ endef
 define $(PKG)_BUILD
     # build
     mkdir '$(1).build'
-    cd '$(1).build' && cmake \
+    cd '$(1).build' && '$(TARGET)-cmake' \
       -DWITH_QT=OFF \
       -DWITH_OPENGL=ON \
       -DWITH_GSTREAMER=OFF \
       -DWITH_GTK=OFF \
       -DWITH_VIDEOINPUT=ON \
       -DWITH_XINE=OFF \
-      -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
       -DBUILD_opencv_apps=OFF \
       -DBUILD_DOCS=OFF \
       -DBUILD_EXAMPLES=OFF \
@@ -44,7 +43,6 @@ define $(PKG)_BUILD
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
-      -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
       -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500' \
       '$(1)'
 

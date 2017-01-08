@@ -17,7 +17,6 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && '$(TARGET)-cmake' .. \
-        -DBUILD_STATIC=$(if $(BUILD_STATIC),ON,OFF) \
         -DENABLE_DOC_INSTALL=off \
         -DENABLE_TESTAPP_INSTALL=off
 

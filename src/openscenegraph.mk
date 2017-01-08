@@ -23,8 +23,7 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && cmake '$(1)' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1).build' && '$(TARGET)-cmake' '$(1)' \
         -DCMAKE_CXX_FLAGS='-D__STDC_CONSTANT_MACROS' \
         -DCMAKE_HAVE_PTHREAD_H=OFF \
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \

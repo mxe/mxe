@@ -25,8 +25,7 @@ define $(PKG)_BUILD
         -DASSIMP_ENABLE_BOOST_WORKAROUND=OFF \
         -DASSIMP_BUILD_ASSIMP_TOOLS=OFF \
         -DASSIMP_BUILD_SAMPLES=OFF      \
-        -DASSIMP_BUILD_TESTS=OFF        \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON)
+        -DASSIMP_BUILD_TESTS=OFF
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
 
     '$(TARGET)-gcc' \

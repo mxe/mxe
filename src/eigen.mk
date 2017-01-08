@@ -18,9 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && mkdir build && cd build && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DCMAKE_BUILD_TYPE=Release \
+    cd '$(1)' && mkdir build && cd build && '$(TARGET)-cmake' .. \
         -DEIGEN_BUILD_PKGCONFIG=ON \
         -Drun_res=1 -Drun_res__TRYRUN_OUTPUT=""
     $(MAKE) -C '$(1)'/build -j '$(JOBS)' install VERBOSE=1

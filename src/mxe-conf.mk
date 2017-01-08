@@ -26,7 +26,10 @@ define $(PKG)_BUILD
     touch '$(CMAKE_TOOLCHAIN_DIR)/.gitkeep'
     (echo 'set(CMAKE_SYSTEM_NAME Windows)'; \
      echo 'set(MSYS 1)'; \
-     echo 'set(BUILD_SHARED_LIBS $(if $(BUILD_SHARED),ON,OFF))'; \
+     echo 'set(BUILD_SHARED_LIBS $(CMAKE_SHARED_BOOL) CACHE BOOL "BUILD_SHARED_LIBS" FORCE)'; \
+     echo 'set(BUILD_STATIC_LIBS $(CMAKE_STATIC_BOOL) CACHE BOOL "BUILD_STATIC_LIBS" FORCE)'; \
+     echo 'set(BUILD_SHARED $(CMAKE_SHARED_BOOL) CACHE BOOL "BUILD_SHARED" FORCE)'; \
+     echo 'set(BUILD_STATIC $(CMAKE_STATIC_BOOL) CACHE BOOL "BUILD_STATIC" FORCE)'; \
      echo 'set(LIBTYPE $(if $(BUILD_SHARED),SHARED,STATIC))'; \
      echo 'set(CMAKE_PREFIX_PATH $(PREFIX)/$(TARGET))'; \
      echo 'set(CMAKE_FIND_ROOT_PATH $(PREFIX)/$(TARGET))'; \
@@ -39,7 +42,7 @@ define $(PKG)_BUILD
      echo 'set(CMAKE_RC_COMPILER $(PREFIX)/bin/$(TARGET)-windres)'; \
      echo 'set(CMAKE_MODULE_PATH "$(PREFIX)/share/cmake/modules" $${CMAKE_MODULE_PATH}) # For mxe FindPackage scripts'; \
      echo 'set(CMAKE_INSTALL_PREFIX $(PREFIX)/$(TARGET) CACHE PATH "Installation Prefix")'; \
-     echo 'set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel")'; \
+     echo 'set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel" FORCE)'; \
      echo 'set(CMAKE_CROSS_COMPILING ON) # Workaround for http://www.cmake.org/Bug/view.php?id=14075'; \
      echo ''; \
      echo 'file(GLOB mxe_cmake_files'; \

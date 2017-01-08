@@ -29,9 +29,7 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1).build'
     cd '$(1).build' && \
-        cmake '$(1)' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DCMAKE_BUILD_TYPE=Release \
+        '$(TARGET)-cmake' '$(1)' \
         -DCMAKE_RELEASE_POSTFIX='' \
         -DBoost_THREADAPI=win32
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)' -j 1 VERBOSE=1

@@ -22,8 +22,8 @@ define $(PKG)_BUILD
         -DFREEGLUT_GLES=OFF \
         -DFREEGLUT_BUILD_DEMOS=OFF \
         -DFREEGLUT_REPLACE_GLUT=ON \
-        -DFREEGLUT_BUILD_STATIC_LIBS=$(if $(BUILD_STATIC),true,false) \
-        -DFREEGLUT_BUILD_SHARED_LIBS=$(if $(BUILD_STATIC),false,true)
+        -DFREEGLUT_BUILD_STATIC_LIBS=$(CMAKE_STATIC_BOOL) \
+        -DFREEGLUT_BUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL)
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 

@@ -18,10 +18,7 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && $(TARGET)-cmake \
-        -DBUILD_STATIC_LIBS=$(CMAKE_STATIC_BOOL) \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-        '$(1)/cmake_unofficial'
+    cd '$(1).build' && '$(TARGET)-cmake' '$(1)/cmake_unofficial'
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 

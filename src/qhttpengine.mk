@@ -12,9 +12,7 @@ $(PKG)_DEPS     := gcc qtbase
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DBUILD_STATIC=$(if $(BUILD_STATIC),ON,OFF)
+    cd '$(1)/build' && '$(TARGET)-cmake' ..
 
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 endef
