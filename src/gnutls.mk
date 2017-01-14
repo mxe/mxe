@@ -3,16 +3,16 @@
 PKG             := gnutls
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gnutls/
 $(PKG)_DESCR    := GnuTLS
-$(PKG)_VERSION  := 3.4.17
-$(PKG)_CHECKSUM := 9b50e8a670d5e950425d96935c7ddd415eb6f8079615a36df425f09a3143172e
+$(PKG)_VERSION  := 3.5.8
+$(PKG)_CHECKSUM := 0e97f243ae72b70307d684b84c7fe679385aa7a7a0e37e5be810193dcc17d4ff
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.4/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4//$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn nettle zlib
+$(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.5/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5//$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn libunistring nettle zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4/ | \
+    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/ | \
     $(SED) -n 's,.*gnutls-\([1-9]\+\.[0-9]\+.[0-9]\+\)\..*,\1,p' | \
     $(SORT) -V | \
     tail -1
