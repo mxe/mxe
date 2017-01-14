@@ -16,8 +16,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # avoid conflict with base64_encode from gnutls
-    $(if $(BUILD_STATIC), $(SED) -i 's/^base64_encode /wget_base64_encode /;' '$(1)/src/utils.c')
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-ssl=gnutls \
