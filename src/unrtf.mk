@@ -11,8 +11,8 @@ $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.savannah.gnu.org/cgit/unrtf.git/refs/' | \
-    $(SED) -n "s,.*<a href='/cgit/unrtf.git/tag/?id=v\([0-9.]*\)'>.*,\1,p" | \
+    $(WGET) -q -O- 'http://hg.savannah.gnu.org/hgweb/unrtf/tags' | \
+    $(SED) -n "s,^release_,,p" | \
     head -1
 endef
 
