@@ -11,7 +11,7 @@ $(PKG)_DEPS     := gcc gnutls libidn libntlm pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.savannah.gnu.org/cgit/wget.git/refs/' | \
-    $(SED) -n "s,.*<a href='/cgit/wget.git/tag/?id=v\([0-9.]*\)'>.*,\1,p" | \
+    $(SED) -n "s,.*<a href='/cgit/wget.git/tag/?h=v\([0-9.]*\)'>.*,\1,p" | \
     head -1
 endef
 
