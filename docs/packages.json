@@ -51,7 +51,7 @@
     "faad2": {"version": "2.7", "website": "http://www.audiocoding.com/", "description": ""},
     "fdk-aac": {"version": "0.1.4", "website": "https://github.com/mstorsjo/fdk-aac", "description": "FDK-AAC"},
     "ffmpeg": {"version": "3.2.1", "website": "http://www.ffmpeg.org/", "description": ""},
-    "fftw": {"version": "3.3.4", "website": "http://www.fftw.org/", "description": ""},
+    "fftw": {"version": "3.3.6", "website": "http://www.fftw.org/", "description": ""},
     "file": {"version": "5.24", "website": "http://www.darwinsys.com/file/", "description": ""},
     "flac": {"version": "1.3.1", "website": "http://www.xiph.org/flac/", "description": "FLAC"},
     "flann": {"version": "1.8.4", "website": "http://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN", "description": "FLANN"},
@@ -297,7 +297,7 @@
     "plotutils": {"version": "2.6", "website": "https://www.gnu.org/software/plotutils/", "description": ""},
     "poco": {"version": "1.4.7p1", "website": "http://pocoproject.org/", "description": "POCO C++ Libraries"},
     "polarssl": {"version": "1.3.9", "website": "https://polarssl.org/", "description": "Polar SSL Library"},
-    "poppler": {"version": "0.50.0", "website": "http://poppler.freedesktop.org/", "description": ""},
+    "poppler": {"version": "0.51.0", "website": "http://poppler.freedesktop.org/", "description": ""},
     "popt": {"version": "1.16", "website": "http://freshmeat.net/projects/popt/", "description": ""},
     "portablexdr": {"version": "4.9.1", "website": "http://people.redhat.com/~rjones/portablexdr/", "description": "PortableXDR"},
     "portaudio": {"version": "190600_20161030", "website": "http://www.portaudio.com/", "description": ""},
@@ -425,7 +425,7 @@
     "xz": {"version": "5.2.3", "website": "http://tukaani.org/xz/", "description": "XZ"},
     "yaml-cpp": {"version": "0.5.3", "website": "https://github.com/jbeder/yaml-cpp", "description": "A YAML parser and emitter for C++"},
     "yasm": {"version": "1.3.0", "website": "http://yasm.tortall.net//", "description": "Yasm"},
-    "zlib": {"version": "1.2.10", "website": "http://zlib.net/", "description": ""},
+    "zlib": {"version": "1.2.11", "website": "http://zlib.net/", "description": ""},
     "zziplib": {"version": "0.13.62", "website": "http://zziplib.sourceforge.net/", "description": "ZZIPlib"},
     "": null
 }
