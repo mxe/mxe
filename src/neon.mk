@@ -26,9 +26,11 @@ define $(PKG)_BUILD
         ne_cv_fmt_time_t=%lu \
         ne_cv_libsfor_socket=-lws2_32 \
         ne_cv_libsfor_gethostbyname=-lws2_32 \
+        ne_cv_os_uname= \
         '$(SOURCE_DIR)'/configure \
               $(MXE_CONFIGURE_OPTS) \
               $(MXE_DISABLE_DOCS) \
+              PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
               --with-ssl=yes
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install-lib install-headers install-nls
