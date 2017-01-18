@@ -27,6 +27,7 @@ define $(PKG)_BUILD
         --disable-nls \
         --disable-guile \
         --disable-doc \
+        --disable-tests \
         --enable-local-libopts \
         --with-included-libtasn1 \
         --with-libregex-libs="-lgnurx" \
