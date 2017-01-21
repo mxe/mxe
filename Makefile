@@ -34,8 +34,8 @@ PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
 DEFAULT_UA := $(shell wget --version | $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
-WGET0      := wget --no-check-certificate
-WGET       := $(WGET0) --user-agent='$(DEFAULT_UA)'
+WGET        = wget --no-check-certificate \
+                   --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))'
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 flex \
                 $(BUILD_CC) $(BUILD_CXX) gperf intltoolize $(LIBTOOL) \
@@ -233,10 +233,10 @@ DOWNLOAD_PKG_ARCHIVE = \
         true\
     $(else),\
         mkdir -p '$(PKG_DIR)' && ( \
-            $(WGET0) --user-agent='$(if $($(1)_UA),$($(1)_UA),$(DEFAULT_UA))' -T 30 -t 3 -O- '$($(1)_URL)' \
+            $(WGET) -T 30 -t 3 -O- '$($(1)_URL)' \
             $(if $($(1)_URL_2), \
                 || (echo "MXE Warning! Downloading $(1) from second URL." >&2 && \
-                    $(WGET0) --user-agent='$(if $($(1)_UA),$($(1)_UA),$(DEFAULT_UA))' -T 30 -t 3 -O- '$($(1)_URL_2)')) \
+                    $(WGET) -T 30 -t 3 -O- '$($(1)_URL_2)')) \
             $(if $(MXE_NO_BACKUP_DL),, \
                 || $(BACKUP_DOWNLOAD)) \
         ) \
