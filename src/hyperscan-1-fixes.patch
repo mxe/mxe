@@ -422,3 +422,50 @@ index 1111111..2222222 100644
  Libs.private: @PRIVATE_LIBS@
 -Cflags: -I${includedir}/hs
 +Cflags: -I${includedir}/hs -posix
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 21 Jan 2017 14:41:17 +1100
+Subject: [PATCH] add libatomic linking for gcc54 on macos
+
+
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -7,7 +7,7 @@ endif()
+ add_executable(simplegrep simplegrep.c)
+ set_source_files_properties(simplegrep.c PROPERTIES COMPILE_FLAGS
+     "-Wall -Wno-unused-parameter")
+-target_link_libraries(simplegrep hs)
++target_link_libraries(simplegrep hs atomic)
+ 
+ if (PCAP_LIBRARY)
+ add_executable(pcapscan pcapscan.cc)
+diff --git a/libhs.pc.in b/libhs.pc.in
+index 1111111..2222222 100644
+--- a/libhs.pc.in
++++ b/libhs.pc.in
+@@ -7,5 +7,5 @@ Name: libhs
+ Description: Intel(R) Hyperscan Library
+ Version: @HS_VERSION@
+ Libs: -L${libdir} -lhs
+-Libs.private: @PRIVATE_LIBS@
++Libs.private: @PRIVATE_LIBS@ -latomic
+ Cflags: -I${includedir}/hs -posix
+diff --git a/unit/CMakeLists.txt b/unit/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/unit/CMakeLists.txt
++++ b/unit/CMakeLists.txt
+@@ -113,9 +113,9 @@ set(unit_hyperscan_SOURCES
+     )
+ add_executable(unit-hyperscan ${unit_hyperscan_SOURCES})
+ if (BUILD_STATIC_AND_SHARED OR BUILD_SHARED_LIBS)
+-target_link_libraries(unit-hyperscan hs_shared gtest expressionutil)
++target_link_libraries(unit-hyperscan hs_shared gtest expressionutil atomic)
+ else()
+-target_link_libraries(unit-hyperscan hs gtest expressionutil)
++target_link_libraries(unit-hyperscan hs gtest expressionutil atomic)
+ endif()
+ 
+ #
