@@ -32,7 +32,7 @@ define $(PKG)_BUILD
         INFO_DEPS=
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -pedantic -std=c++0x \
+        -W -Wall -Werror -Wno-error=deprecated-declarations -pedantic -std=c++0x \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkglextmm.exe' \
         `'$(TARGET)-pkg-config' gtkglextmm-1.2 --cflags --libs`
 endef
