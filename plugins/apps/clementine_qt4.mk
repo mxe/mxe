@@ -18,7 +18,7 @@ $(PKG)_URL      := https://github.com/clementine-player/clementine/archive/$($(P
 $(PKG)_WEBSITE  := https://www.clementine-player.org/
 $(PKG)_OWNER    := https://github.com/pavelvat
 $(PKG)_DEPS     := gcc boost chromaprint cryptopp dlfcn-win32 fftw glew gst-libav gst-plugins-bad \
-                   gst-plugins-good gst-plugins-ugly libarchive libechonest libid3tag \
+                   gst-plugins-good gst-plugins-ugly libarchive libechonest libid3tag liblastfm_qt4 \
                    libmpcdec libplist libusb1 protobuf qtsparkle_qt4 sparsehash
 
 define $(PKG)_UPDATE
