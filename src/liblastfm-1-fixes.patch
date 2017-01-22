@@ -1,0 +1,30 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 480e2ec663ef867e7892dbbc624737cae176c717 Mon Sep 17 00:00:00 2001
+From: Dominik Schmidt <dev@dominik-schmidt.de>
+Date: Fri, 6 Feb 2015 01:55:40 +0100
+Subject: [PATCH] Add LASTFM_LIB_VERSION_SUFFIX to include dir as well
+ https://github.com/lastfm/liblastfm/commit/480e2ec663ef867e7892dbbc624737cae176c717
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 211ca7e..0f872fb 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -105,4 +105,4 @@ install(TARGETS ${LASTFM_LIB_TARGET_NAME}
+ 
+ file(GLOB liblastfm_HEADERS ${CMAKE_CURRENT_LIST_DIR}/*.h)
+ list(APPEND liblastfm_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/global.h)
+-install(FILES ${liblastfm_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lastfm/)
++install(FILES ${liblastfm_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lastfm${LASTFM_LIB_VERSION_SUFFIX}/)
+diff --git a/src/fingerprint/CMakeLists.txt b/src/fingerprint/CMakeLists.txt
+index fbc492c..126f8d9 100644
+--- a/src/fingerprint/CMakeLists.txt
++++ b/src/fingerprint/CMakeLists.txt
+@@ -48,4 +48,4 @@ install(TARGETS ${FINGERPRINT_LIB_TARGET_NAME}
+     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+ )
+ 
+-install(FILES ${lastfm_fingerprint_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lastfm/)
++install(FILES ${lastfm_fingerprint_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lastfm${LASTFM_LIB_VERSION_SUFFIX}/)
