@@ -11,6 +11,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.bastoul.net/cloog/pages/download/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) := gmp isl
 
 PKG             := isl
 $(PKG)_VERSION  := 0.12.2
