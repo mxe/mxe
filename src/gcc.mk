@@ -3,9 +3,9 @@
 PKG             := gcc
 $(PKG)_WEBSITE  := http://gcc.gnu.org/
 $(PKG)_DESCR    := GCC
-$(PKG)_IGNORE   := 5%
-$(PKG)_VERSION  := 4.9.4
-$(PKG)_CHECKSUM := 6c11d292cd01b294f9f84c9a59c230d80e9e4a47e5c6355f046bb36d4f358092
+$(PKG)_IGNORE   := 6%
+$(PKG)_VERSION  := 5.4.0
+$(PKG)_CHECKSUM := 608df76dec2d34de6558249d8af4cbee21eceddbcb580d666f7a5a583ca3303a
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
