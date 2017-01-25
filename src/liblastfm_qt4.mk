@@ -19,5 +19,3 @@ endef
 $(PKG)_BUILD = $(subst @lastfm_use_qt4@,ON, \
                $(subst @lastfm_version_suffix@,, \
                $(liblastfm_BUILD_COMMON)))
-
-$(PKG)_BUILD_STATIC =

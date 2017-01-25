@@ -37,6 +37,7 @@ define $(PKG)_BUILD_COMMON
      echo 'Requires: Qt@lastfm_version_suffix@Core Qt@lastfm_version_suffix@Network Qt@lastfm_version_suffix@Xml'; \
      echo 'Libs: -L$${libdir} -llastfm@lastfm_version_suffix@'; \
      echo 'Cflags: -I$${includedir}'; \
+     echo 'Cflags.private: -DLASTFM_LIB_STATIC'; \
     ) > '$(PREFIX)/$(TARGET)/lib/pkgconfig/liblastfm@lastfm_version_suffix@.pc'
 
     $(TARGET)-g++ \
@@ -48,5 +49,3 @@ endef
 $(PKG)_BUILD = $(subst @lastfm_use_qt4@,OFF, \
                $(subst @lastfm_version_suffix@,5, \
                $($(PKG)_BUILD_COMMON)))
-
-$(PKG)_BUILD_STATIC =
