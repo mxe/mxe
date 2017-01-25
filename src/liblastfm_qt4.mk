@@ -1,46 +1,23 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := liblastfm_qt4
-$(PKG)_WEBSITE  := https://github.com/lastfm/liblastfm
-$(PKG)_DESCR    := A Qt C++ library for the Last.fm webservices
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.9
-$(PKG)_CHECKSUM := 5276b5fe00932479ce6fe370ba3213f3ab842d70a7d55e4bead6e26738425f7b
-$(PKG)_SUBDIR   := liblastfm-$($(PKG)_VERSION)
-$(PKG)_FILE     := liblastfm-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/lastfm/liblastfm/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_WEBSITE   = $(liblastfm_WEBSITE)
+$(PKG)_DESCR     = $(liblastfm_DESCR)
+$(PKG)_IGNORE    = $(liblastfm_IGNORE)
+$(PKG)_VERSION   = $(liblastfm_VERSION)
+$(PKG)_CHECKSUM  = $(liblastfm_CHECKSUM)
+$(PKG)_SUBDIR    = $(liblastfm_SUBDIR)
+$(PKG)_FILE      = $(liblastfm_FILE)
+$(PKG)_URL       = $(liblastfm_URL)
+$(PKG)_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /liblastfm-[0-9]*.patch, $(TOP_DIR)/src))))
 $(PKG)_DEPS     := gcc fftw libsamplerate qt
 
 define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, lastfm/liblastfm)
+    echo $(liblastfm_VERSION)
 endef
 
-define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DBUILD_WITH_QT4=ON
-
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
-
-    # create pkg-config file
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    (echo 'prefix=$(PREFIX)/$(TARGET)'; \
-     echo 'exec_prefix=$${prefix}'; \
-     echo 'libdir=$${exec_prefix}/lib'; \
-     echo 'includedir=$${prefix}/include'; \
-     echo ''; \
-     echo 'Name: liblastfm'; \
-     echo 'Version: $($(PKG)_VERSION)'; \
-     echo 'Description: A Qt C++ library for the Last.fm webservices'; \
-     echo 'Requires: QtCore QtNetwork QtXml'; \
-     echo 'Libs: -L$${libdir} -llastfm'; \
-     echo 'Cflags: -I$${includedir}';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/liblastfm.pc'
-
-    $(TARGET)-g++ \
-        -W -Wall -Werror -ansi -pedantic \
-        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `$(TARGET)-pkg-config liblastfm --cflags --libs`
-endef
+$(PKG)_BUILD = $(subst @lastfm_use_qt4@,ON, \
+               $(subst @lastfm_version_suffix@,, \
+               $(liblastfm_BUILD_COMMON)))
 
 $(PKG)_BUILD_STATIC =

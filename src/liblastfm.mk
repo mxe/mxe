@@ -15,9 +15,11 @@ define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, lastfm/liblastfm)
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_COMMON
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DBUILD_WITH_QT4=OFF
+        -DBUILD_DEMOS=OFF \
+        -DBUILD_TESTS=OFF \
+        -DBUILD_WITH_QT4=@lastfm_use_qt4@
 
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
@@ -32,15 +34,19 @@ define $(PKG)_BUILD
      echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: A Qt C++ library for the Last.fm webservices'; \
-     echo 'Requires: Qt5Core Qt5Network Qt5Xml'; \
-     echo 'Libs: -L$${libdir} -llastfm5'; \
-     echo 'Cflags: -I$${includedir}';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG)5.pc'
+     echo 'Requires: Qt@lastfm_version_suffix@Core Qt@lastfm_version_suffix@Network Qt@lastfm_version_suffix@Xml'; \
+     echo 'Libs: -L$${libdir} -llastfm@lastfm_version_suffix@'; \
+     echo 'Cflags: -I$${includedir}'; \
+    ) > '$(PREFIX)/$(TARGET)/lib/pkgconfig/liblastfm@lastfm_version_suffix@.pc'
 
     $(TARGET)-g++ \
         -W -Wall -Werror -std=c++11 -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `$(TARGET)-pkg-config $(PKG)5 --cflags --libs`
+        `$(TARGET)-pkg-config liblastfm@lastfm_version_suffix@ --cflags --libs`
 endef
+
+$(PKG)_BUILD = $(subst @lastfm_use_qt4@,OFF, \
+               $(subst @lastfm_version_suffix@,5, \
+               $($(PKG)_BUILD_COMMON)))
 
 $(PKG)_BUILD_STATIC =
