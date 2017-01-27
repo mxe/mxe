@@ -276,7 +276,7 @@
     "openjpeg": {"version": "2.1.0", "website": "http://www.openjpeg.org/", "description": "OpenJPEG"},
     "openmp-validation": {"version": "3.1", "website": "http://web.cs.uh.edu/~openuh/", "description": "OpenMP Validation Suite"},
     "openscenegraph": {"version": "3.4.0", "website": "http://www.openscenegraph.org/", "description": "OpenSceneGraph"},
-    "openssl": {"version": "1.0.2j", "website": "https://www.openssl.org/", "description": ""},
+    "openssl": {"version": "1.0.2k", "website": "https://www.openssl.org/", "description": ""},
     "openthreads": {"version": "3.4.0", "website": "http://www.openscenegraph.org/", "description": "OpenThreads"},
     "opus": {"version": "1.1.1", "website": "http://opus-codec.org/", "description": ""},
     "opusfile": {"version": "0.6", "website": "http://opus-codec.org/", "description": ""},
