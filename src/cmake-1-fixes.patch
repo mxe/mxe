@@ -17,3 +17,56 @@ index 1111111..2222222 100644
 @@ -1 +1 @@
 -set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff <DEFINES> <INCLUDES> <FLAGS> <SOURCE> <OBJECT>")
 +set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff <DEFINES> <INCLUDES> <SOURCE> <OBJECT>")
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 28 Jan 2017 21:00:30 +1100
+Subject: [PATCH] use pkg-config to populate static libs for qt4
+
+
+diff --git a/Modules/FindQt4.cmake b/Modules/FindQt4.cmake
+index 1111111..2222222 100644
+--- a/Modules/FindQt4.cmake
++++ b/Modules/FindQt4.cmake
+@@ -1348,3 +1348,41 @@ set( QT_QT_LIBRARY "")
+ set(QT4_FOUND ${Qt4_FOUND})
+ set(QT_FOUND ${Qt4_FOUND})
+ 
++# mxe specific additions for static libs
++if(BUILD_STATIC)
++    set(QT_MODULES
++        Qt3Support
++        QtCLucene
++        QtCore
++        QtDBus
++        QtDeclarative
++        QtGui
++        QtHelp
++        QtMultimedia
++        QtNetwork
++        QtOpenGL
++        QtScript
++        QtScriptTools
++        QtSql
++        QtSvg
++        QtTest
++        QtUiTools
++        QtXml
++        QtXmlPatterns
++    )
++
++    # add pkg-config --libs to *_LIB_DEPENDENCIES
++    if(NOT PKG_CONFIG_FOUND)
++      find_package(PkgConfig QUIET REQUIRED)
++    endif()
++
++    foreach(QT_MODULE ${QT_MODULES})
++        string(TOUPPER ${QT_MODULE} _upper_qt_module)
++        pkg_check_modules(${_upper_qt_module}_pc QUIET ${QT_MODULE})
++        set(QT_${_upper_qt_module}_LIB_DEPENDENCIES
++            "${QT_${_upper_qt_module}_LIB_DEPENDENCIES};${${_upper_qt_module}_pc_LDFLAGS}")
++        set_property(TARGET Qt4::${QT_MODULE} APPEND PROPERTY
++            INTERFACE_LINK_LIBRARIES
++            "${${_upper_qt_module}_pc_LDFLAGS}")
++    endforeach()
++endif()
