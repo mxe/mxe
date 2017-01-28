@@ -389,12 +389,21 @@ make</pre>
     If you are using Qt plugins
     such as the svg or ico image handlers,
     you should also have a look at the
-    <a href="https://qt-project.org/doc/qt-4.8/plugins-howto.html#static-plugins">Qt documentation about static plugins</a>.
+    documentation about static plugins
+    <a href="https://doc.qt.io/qt-4.8/plugins-howto.html#static-plugins">(Qt 4</a>,
+    <a href="https://doc.qt.io/qt-5/plugins-howto.html#static-plugins">Qt 5)</a>.
     </p>
     <p>
-    Note the sql drivers (-qt-sql-*)
+    Note the Qt 4 sql drivers (-qt-sql-*)
     and the image handlers for jpeg, tiff, gif and mng
     are built-in, <em>not</em> plugins.
+    </p>
+
+    <p>
+    CMake can also be used to build qt projects. Browse the test
+    <a href="../src/qt-test-cmake/CMakeLists.txt">CMakeLists.txt</a>
+    and <a href="../src/qt-test.cpp">source file</a> for
+    pointers.
     </p>
 
     <h3 id="tutorial-5d">Step 5d: Cross compile your Project (Makefile)</h3>

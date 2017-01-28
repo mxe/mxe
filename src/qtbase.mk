@@ -88,15 +88,28 @@ define $(PKG)_BUILD
         '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
+        $(if $(BUILD_STATIC), \
+            '$(PREFIX)/$(TARGET)/qt5/plugins/platforms/libqwindows.a' -lQt5PlatformSupport \
+            '$(PREFIX)/$(TARGET)/qt5/plugins/imageformats/libqico.a' \
+            -DQT_STATICPLUGIN) \
         `'$(TARGET)-pkg-config' Qt5Widgets$(BUILD_TYPE_SUFFIX) --cflags --libs`
 
     # setup cmake toolchain
     echo 'set(CMAKE_SYSTEM_PREFIX_PATH "$(PREFIX)/$(TARGET)/qt5" ${CMAKE_SYSTEM_PREFIX_PATH})' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
-    # batch file to run test programs
+    # test cmake
+    mkdir '$(1).test-cmake'
+    cd '$(1).test-cmake' && '$(TARGET)-cmake' \
+        -DPKG=$(PKG) \
+        -DPKG_VERSION=$($(PKG)_VERSION) \
+        '$(PWD)/src/qt-test-cmake'
+    $(MAKE) -C '$(1).test-cmake' -j 1 install
+
+    # batch file to run test programs for shared build
     (printf 'set PATH=..\\lib;..\\qt5\\bin;..\\qt5\\lib;%%PATH%%\r\n'; \
      printf 'set QT_QPA_PLATFORM_PLUGIN_PATH=..\\qt5\\plugins\r\n'; \
      printf 'test-qt5.exe\r\n'; \
+     printf 'test-qtbase-cmake.exe\r\n'; \
      printf 'test-qtbase-pkgconfig.exe\r\n';) \
      > '$(PREFIX)/$(TARGET)/bin/test-qt5.bat'
 endef
