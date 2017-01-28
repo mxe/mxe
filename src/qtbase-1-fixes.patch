@@ -251,3 +251,28 @@ index 06d1880..ca6d6aa 100644
 -- 
 2.9.3
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 25 Jan 2017 23:59:27 +1100
+Subject: [PATCH] use pkg-config to add static libs in cmake modules
+
+
+diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+index 1111111..2222222 100644
+--- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
++++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+@@ -356,4 +356,14 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+ 
+ _qt5_$${CMAKE_MODULE_NAME}_check_file_exists(\"${CMAKE_CURRENT_LIST_DIR}/Qt5$${CMAKE_MODULE_NAME}ConfigVersion.cmake\")
+ 
++# mxe specific additions for static libs
++if(BUILD_STATIC)
++    if(NOT PKG_CONFIG_FOUND)
++      find_package(PkgConfig QUIET REQUIRED)
++    endif()
++    pkg_check_modules(Qt5$${CMAKE_MODULE_NAME}_PkgConfig QUIET Qt5$${CMAKE_MODULE_NAME})
++
++    set_target_properties(Qt5::$${CMAKE_MODULE_NAME} PROPERTIES
++            \"INTERFACE_LINK_LIBRARIES\" \"${_Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES};${Qt5$${CMAKE_MODULE_NAME}_PkgConfig_LDFLAGS}\")
++endif()
+ endif()
