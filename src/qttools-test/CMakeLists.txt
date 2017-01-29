@@ -22,6 +22,8 @@ target_link_libraries(
     png
     glib-2.0
     winmm
+    dwmapi
+    uxtheme
     ws2_32
     intl
     iconv

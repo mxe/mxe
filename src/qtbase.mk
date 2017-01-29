@@ -4,15 +4,15 @@ PKG             := qtbase
 $(PKG)_WEBSITE  := http://qt-project.org/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.7.1
-$(PKG)_CHECKSUM := edcdf549d94d98aff08e201dcb3ca25bc3628a37b1309e320d5f556b6b66557e
+$(PKG)_VERSION  := 5.8.0
+$(PKG)_CHECKSUM := c17111ae02a44dc7be1ec2cf979a47ee9e58edf4904041a525c21f4fa53fc005
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://download.qt.io/official_releases/qt/5.7/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := http://download.qt.io/official_releases/qt/5.8/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng openssl pcre postgresql sqlite zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.5/ | \
+    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.8/ | \
     $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     sort |
@@ -25,6 +25,9 @@ define $(PKG)_BUILD
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -liconv -lws2_32" \
+        PKG_CONFIG="${TARGET}-pkg-config" \
+        PKG_CONFIG_SYSROOT_DIR="/" \
+        PKG_CONFIG_LIBDIR="$(PREFIX)/$(TARGET)/lib/pc" \
         ./configure \
             -opensource \
             -c++std c++11 \
@@ -32,6 +35,7 @@ define $(PKG)_BUILD
             -xplatform win32-g++ \
             -device-option CROSS_COMPILE=${TARGET}- \
             -device-option PKG_CONFIG='${TARGET}-pkg-config' \
+            -pkg-config \
             -force-pkg-config \
             -no-use-gold-linker \
             -release \
