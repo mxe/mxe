@@ -39,11 +39,12 @@ elseif(USING_QT5)
     # specified (e.g. Qt5::Gui Qt5::Core)
     # http://doc.qt.io/qt-5/cmake-manual.html#imported-targets
     set(link_modules Qt5::Widgets)
-    set(link_plugins Qt5::QWindowsIntegrationPlugin -lQt5PlatformSupport Qt5::QICOPlugin)
+    set(link_plugins Qt5::QWindowsIntegrationPlugin -lQt5PlatformSupport$<$<CONFIG:Debug>:d> Qt5::QICOPlugin)
 endif()
 
 add_executable(${tgt} WIN32 "${CMAKE_CURRENT_LIST_DIR}/../qt-test.cpp")
 target_link_libraries(${tgt} ${link_modules})
+set_property(TARGET ${tgt} PROPERTY RUNTIME_OUTPUT_NAME ${tgt}$<$<CONFIG:Debug>:d>)
 
 # https://doc.qt.io/qt-5/plugins-howto.html#static-plugins
 if(BUILD_STATIC)

@@ -556,6 +556,7 @@ build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): BUILD_TYPE = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),debug,release)
 build-only-$(1)_$(3): BUILD_TYPE_SUFFIX = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),d)
+build-only-$(1)_$(3): BUILD_$$(if $$(findstring debug,$$(TARGET) $$($$(PKG)_CONFIGURE_OPTS)),DEBUG,RELEASE) = TRUE
 build-only-$(1)_$(3): INSTALL_STRIP_TOOLCHAIN = install$(if $(STRIP_TOOLCHAIN),-strip)
 build-only-$(1)_$(3): INSTALL_STRIP_LIB = install$(if $(STRIP_LIB),-strip)
 build-only-$(1)_$(3): SOURCE_DIR = $(or $(realpath $($(1)_SOURCE_TREE)),$(2)/$($(1)_SUBDIR))
