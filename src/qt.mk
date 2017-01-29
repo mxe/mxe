@@ -128,21 +128,29 @@ define $(PKG)_BUILD
         '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
-        `'$(TARGET)-pkg-config' QtGui --cflags --libs`
+        $(if $(BUILD_STATIC), \
+            '$(PREFIX)/$(TARGET)/qt/plugins/imageformats/libqsvg.a' \
+            -DQT_STATICPLUGIN) \
+        `'$(TARGET)-pkg-config' QtSvg --cflags --libs`
 
     # setup cmake toolchain
     echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
-    # fix static linking errors of QtGui to missing lcms2 and lzma
-    # introduced by poor libmng linking
-    echo 'set(MNG_LIBRARY mng lcms2 lzma)' >> '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
     # test cmake
     mkdir '$(1).test-cmake'
     cd '$(1).test-cmake' && '$(TARGET)-cmake' \
         -DPKG=$(PKG) \
         -DPKG_VERSION=$($(PKG)_VERSION) \
-        '$(PWD)/src/cmake/test'
+        '$(PWD)/src/qt-test-cmake'
     $(MAKE) -C '$(1).test-cmake' -j 1 install
+
+    # batch file to run test programs for shared build
+    (printf 'set PATH=..\\lib;..\\qt\\bin;..\\qt\\lib;%%PATH%%\r\n'; \
+     printf 'set QT_QPA_PLATFORM_PLUGIN_PATH=..\\qt\\plugins\r\n'; \
+     printf 'test-qt.exe\r\n'; \
+     printf 'test-qt-cmake.exe\r\n'; \
+     printf 'test-qt-pkgconfig.exe\r\n';) \
+     > '$(PREFIX)/$(TARGET)/bin/test-qt.bat'
 endef
 
 $(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\

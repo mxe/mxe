@@ -23,8 +23,5 @@ define $(PKG)_BUILD
     # test QUiLoader
     mkdir '$(1)'.test
     cd '$(1)'.test && '$(TARGET)-cmake' '$(PWD)/src/qttools-test'
-    $(MAKE) -C '$(1)'.test
-    cp '$(1)'.test/mxe-cmake-qtuitools.exe \
-        '$(PREFIX)/$(TARGET)/bin/test-qttools.exe'
+    $(MAKE) -C '$(1)'.test install
 endef
-
