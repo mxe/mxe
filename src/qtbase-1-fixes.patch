@@ -280,3 +280,40 @@ index 1111111..2222222 100644
 +            \"INTERFACE_LINK_LIBRARIES\" \"${_Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES};${Qt5$${CMAKE_MODULE_NAME}_PkgConfig_LDFLAGS}\")
 +endif()
  endif()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 29 Jan 2017 21:42:59 +1100
+Subject: [PATCH] add support for plugin dependency ordering
+
+
+diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+index 1111111..2222222 100644
+--- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
++++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+@@ -336,6 +336,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+         _qt5_$${CMAKE_MODULE_NAME}_check_file_exists(${imported_location})
+         set_target_properties(Qt5::${Plugin} PROPERTIES
+             \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
++            \"INTERFACE_LINK_LIBRARIES\" \"Qt5::$${CMAKE_MODULE_NAME}\"
+         )
+     endmacro()
+ 
+diff --git a/src/gui/Qt5GuiConfigExtras.cmake.in b/src/gui/Qt5GuiConfigExtras.cmake.in
+index 1111111..2222222 100644
+--- a/src/gui/Qt5GuiConfigExtras.cmake.in
++++ b/src/gui/Qt5GuiConfigExtras.cmake.in
+@@ -178,3 +178,13 @@ foreach(_config ${_configs})
+     )
+ endforeach()
+ unset(_configs)
++
++if(BUILD_STATIC)
++    if(${CMAKE_BUILD_TYPE} MATCHES \".*Debug\")
++        set_target_properties(Qt5::QWindowsIntegrationPlugin PROPERTIES
++            \"INTERFACE_LINK_LIBRARIES\" \"-lQt5PlatformSupportd;Qt5::Gui\")
++    else()
++        set_target_properties(Qt5::QWindowsIntegrationPlugin PROPERTIES
++            \"INTERFACE_LINK_LIBRARIES\" \"-lQt5PlatformSupport;Qt5::Gui\")
++    endif()
++endif()
