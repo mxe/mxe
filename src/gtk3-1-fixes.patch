@@ -2,10 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 29 Jan 2017 21:47:39 +0100
+Subject: [PATCH] These were adapted from the gtk2 patchset.
 
----
-These were adapted from the gtk2 patchset.
 
+diff --git a/configure b/configure
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
 @@ -7005,15 +7005,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
@@ -30,9 +34,11 @@ These were adapted from the gtk2 patchset.
  fi
  
  
---- a/gdk/win32/gdkmain-win32.c	2015-07-25 23:15:29.947190754 +0200
-+++ b/gdk/win32/gdkmain-win32.c	2015-07-25 23:15:55.723190733 +0200
-@@ -64,7 +64,7 @@
+diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
+index 1111111..2222222 100644
+--- a/gdk/win32/gdkmain-win32.c
++++ b/gdk/win32/gdkmain-win32.c
+@@ -64,7 +64,7 @@ const GOptionEntry _gdk_windowing_args[] = {
  };
  
  BOOL WINAPI
@@ -41,8 +47,21 @@ These were adapted from the gtk2 patchset.
  	 DWORD     dwReason,
  	 LPVOID    reserved)
  {
---- a/gtk/gtkwin32.c	2015-07-25 23:20:57.735190485 +0200
-+++ b/gtk/gtkwin32.c	2015-07-25 23:21:13.447190472 +0200
+diff --git a/gtk+-3.0.pc.in b/gtk+-3.0.pc.in
+index 1111111..2222222 100644
+--- a/gtk+-3.0.pc.in
++++ b/gtk+-3.0.pc.in
+@@ -12,5 +12,5 @@ Description: GTK+ Graphical UI Library
+ Version: @VERSION@
+ Requires: gdk-@GTK_API_VERSION@ @GTK_PACKAGES@
+ Requires.private: @GTK_PRIVATE_PACKAGES@
+-Libs: -L${libdir} -lgtk-3 @GTK_EXTRA_LIBS@
++Libs: -L${libdir} -lgtk-3 @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
+ Cflags: -I${includedir}/gtk-@GTK_API_VERSION@ @GTK_EXTRA_CFLAGS@
+diff --git a/gtk/gtkwin32.c b/gtk/gtkwin32.c
+index 1111111..2222222 100644
+--- a/gtk/gtkwin32.c
++++ b/gtk/gtkwin32.c
 @@ -42,7 +42,7 @@
  static HMODULE gtk_dll;
  
@@ -52,25 +71,23 @@ These were adapted from the gtk2 patchset.
           DWORD     fdwReason,
           LPVOID    lpvReserved)
  {
---- a/gtk+-3.0.pc.in	2015-07-26 16:55:29.755170491 +0200
-+++ b/gtk+-3.0.pc.in	2015-07-26 16:56:23.655170447 +0200
-@@ -12,5 +12,5 @@
- Version: @VERSION@
- Requires: gdk-@GTK_API_VERSION@ @GTK_PACKAGES@
- Requires.private: @GTK_PRIVATE_PACKAGES@
--Libs: -L${libdir} -lgtk-3 @GTK_EXTRA_LIBS@
-+Libs: -L${libdir} -lgtk-3 @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
- Cflags: -I${includedir}/gtk-@GTK_API_VERSION@ @GTK_EXTRA_CFLAGS@
----
-Here there were two problems, one is that util/extract-strings.exe
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 29 Jan 2017 21:48:31 +0100
+Subject: [PATCH] Here there were two problems
+
+One is that util/extract-strings.exe
 was being cross-built while it should be built locally, the other is
 that in fact it wasn't even being built because of some problem with
 makefile variables (PROGRAMS appears to be empty even if it is set to
 a nonempty value).
 
---- a/util/Makefile.in	2014-10-21 17:03:07.000000000 +0200
-+++ b/util/Makefile.in	2014-12-27 23:12:40.910506266 +0100
-@@ -107,9 +107,8 @@
+diff --git a/util/Makefile.in b/util/Makefile.in
+index 1111111..2222222 100644
+--- a/util/Makefile.in
++++ b/util/Makefile.in
+@@ -107,9 +107,8 @@ AM_V_lt = $(am__v_lt_@AM_V@)
  am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
  am__v_lt_0 = --silent
  am__v_lt_1 = 
@@ -82,7 +99,7 @@ a nonempty value).
  	-o $@
  AM_V_P = $(am__v_P_@AM_V@)
  am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
-@@ -485,7 +484,7 @@
+@@ -485,7 +484,7 @@ clean-noinstPROGRAMS:
  
  extract-strings$(EXEEXT): $(extract_strings_OBJECTS) $(extract_strings_DEPENDENCIES) $(EXTRA_extract_strings_DEPENDENCIES) 
  	@rm -f extract-strings$(EXEEXT)
@@ -91,7 +108,7 @@ a nonempty value).
  
  mostlyclean-compile:
  	-rm -f *.$(OBJEXT)
-@@ -517,7 +516,7 @@
+@@ -517,7 +516,7 @@ distclean-compile:
  @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
  
  extract_strings-extract-strings.o: extract-strings.c
@@ -100,7 +117,7 @@ a nonempty value).
  @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/extract_strings-extract-strings.Tpo $(DEPDIR)/extract_strings-extract-strings.Po
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='extract-strings.c' object='extract_strings-extract-strings.o' libtool=no @AMDEPBACKSLASH@
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@@ -620,7 +619,7 @@
+@@ -620,7 +619,7 @@ distdir: $(DISTFILES)
  	done
  check-am: all-am
  check: check-am
@@ -109,13 +126,19 @@ a nonempty value).
  installdirs:
  install: install-am
  install-exec: install-exec-am
----
-This one fixes "cd $builddir" failing because neither $builddir nor
-$HOME were set
 
---- a/configure	2015-07-24 21:19:46.839151097 +0200
-+++ b/configure	2015-07-24 21:20:13.655151075 +0200
-@@ -23215,7 +23215,7 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 29 Jan 2017 21:50:01 +0100
+Subject: [PATCH] This one fixes "cd $builddir" failing because neither
+ $builddir nor $HOME were set
+
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -23215,7 +23215,7 @@ fi
         NATIVE_GDKPIXBUF_LIBS=`$PKG_CONFIG_FOR_BUILD --libs gdk-pixbuf-2.0`
         # This is the native gtk-update-icon-cache which will be used at
         # build time, NOT the one installed on the target host.
@@ -124,12 +147,18 @@ $HOME were set
  
  
  
----
-Not sure what happens when this line is commented out.
 
---- a/gtk/a11y/gtkaccessibility.c	2014-08-15 16:38:05.000000000 +0200
-+++ b/gtk/a11y/gtkaccessibility.c	2015-07-26 17:43:36.647168119 +0200
-@@ -991,5 +991,5 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 29 Jan 2017 21:50:48 +0100
+Subject: [PATCH] Not sure what happens when this line is commented out
+
+
+diff --git a/gtk/a11y/gtkaccessibility.c b/gtk/a11y/gtkaccessibility.c
+index 1111111..2222222 100644
+--- a/gtk/a11y/gtkaccessibility.c
++++ b/gtk/a11y/gtkaccessibility.c
+@@ -991,5 +991,5 @@ _gtk_accessibility_init (void)
    atk_bridge_adaptor_init (NULL, NULL);
  #endif
  
