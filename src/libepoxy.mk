@@ -19,7 +19,11 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal'
-    cd '$(1)' && ./configure \
+    cd '$(1)' && \
+        CFLAGS='$(if $(BUILD_STATIC),-DEPOXY_STATIC,-DEPOXY_SHARED -DEPOXY_DLL)' \
+        ./configure \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
+    $(SED) 's/Cflags:/Cflags: -DEPOXY_$(if $(BUILD_STATIC),STATIC,SHARED)/' \
+        -i '$(PREFIX)/$(TARGET)/lib/pkgconfig/epoxy.pc'
 endef
