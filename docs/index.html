@@ -101,10 +101,13 @@
 
     <h3>Supported Toolchains</h3>
 
+    <p>
+        Compiler and runtime: MinGW-w64.
+    </p>
+
     <table id="supported-toolchains">
     <tr>
-        <th rowspan="2">Runtime</th>
-        <th rowspan="2">Host Triplet</th>
+        <th rowspan="2">Target OS</th>
         <th colspan="2">Packages</th>
     </tr>
     <tr>
@@ -112,13 +115,12 @@
         <th>Shared</th>
     </tr>
     <tr>
-        <td rowspan="2">MinGW-w64</td>
-        <td>i686-w64-mingw32</td>
+        <td>32 bit Windows</td>
         <td style='text-align:center'>99% (379/381)</td>
         <td style='text-align:center'>72% (273/381)</td>
     </tr>
     <tr>
-        <td>x86_64-w64-mingw32</td>
+        <td>64 bit Windows</td>
         <td style='text-align:center'>94% (360/381)</td>
         <td style='text-align:center'>71% (271/381)</td>
     </tr>
@@ -127,6 +129,30 @@
         These numbers were last updated on December 16, 2015.
         See the <a href="build-matrix.html">current status</a>
         for individual packages.
+    </p>
+    <p>
+        Executables built for 32 bit Windows can be
+        executed on 64 bit Windows as well.
+    </p>
+    <p>
+        How to choose MXE target:
+        <ol>
+            <li>if you want a 64 bit Windows executable,
+                statically linked into one big executable:
+                use MXE_TARGET x86_64-w64-mingw32.static;</li>
+            <li>if you want a 64 bit Windows executable,
+                splitted in an executable and dependant dlls
+                use MXE_TARGET x86_64-w64-mingw32.shared;</li>
+            <li>if you want a 32 bit Windows executable,
+                statically linked into one big executable:
+                use MXE_TARGET i686-w64-mingw32.static;</li>
+            <li>if you want a 32 bit Windows executable,
+                splitted in an executable and dependant dlls
+                use MXE_TARGET i686-w64-mingw32.shared.</li>
+        </ol>
+        Remark: the 'w64-mingw32' in those names are left-overs from
+        historical evolutions in the open source cross-compilation world
+        and refer in no way to the result being 64 or 32 bit Windows.
     </p>
     <p>
         OpenMP (<a href="http://gcc.gnu.org/projects/gomp/">libgomp</a>)
