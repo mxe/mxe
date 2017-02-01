@@ -4,8 +4,8 @@ PKG             := glib
 $(PKG)_WEBSITE  := http://www.gtk.org/
 $(PKG)_DESCR    := GLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.44.1
-$(PKG)_CHECKSUM := 8811deacaf8a503d0a9b701777ea079ca6a4277be10e3d730d2112735d5eca07
+$(PKG)_VERSION  := 2.50.2
+$(PKG)_CHECKSUM := be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc dbus gettext libffi libiconv pcre zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://git.gnome.org/browse/glib/refs/tags' | \
-    $(SED) -n "s,.*tag/?id=\([0-9]\+\.[0-9]*[02468]\.[^']*\).*,\1,p" | \
+    $(SED) -n "s,.*glib-\([0-9]\+\.[0-9]*[02468]\.[^']*\)\.tar.*,\1,p" | \
     $(SORT) -Vr | \
     head -1
 endef
