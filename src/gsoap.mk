@@ -22,7 +22,8 @@ define $(PKG)_BUILD
     cd '$(1)' && touch configure config.h.in
 
     # Native build to get tools wsdl2h and soapcpp2
-    cd '$(1)' && ./configure
+    cd '$(1)' && ./configure \
+        --disable-ssl
 
     # Work around parallel build problem
     $(MAKE) -C '$(1)'/gsoap/src -j '$(JOBS)' soapcpp2_yacc.h
