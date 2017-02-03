@@ -10,7 +10,6 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.bastoul.net/cloog/pages/download/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
-$(PKG)_TARGETS  := $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc gmp isl
 
 define $(PKG)_UPDATE

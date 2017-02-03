@@ -12,8 +12,6 @@ $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)
 $(PKG)_URL_2    := ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := binutils mingw-w64
 
-$(PKG)_FILE_$(BUILD) :=
-
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
@@ -44,7 +42,6 @@ define $(PKG)_CONFIGURE
         --with-isl='$(PREFIX)/$(BUILD)' \
         --with-mpc='$(PREFIX)/$(BUILD)' \
         --with-mpfr='$(PREFIX)/$(BUILD)' \
-        --with-cloog='$(PREFIX)/$(BUILD)' \
         --with-as='$(PREFIX)/bin/$(TARGET)-as' \
         --with-ld='$(PREFIX)/bin/$(TARGET)-ld' \
         --with-nm='$(PREFIX)/bin/$(TARGET)-nm' \
@@ -119,9 +116,3 @@ endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @gcc-crt-config-opts@,--disable-lib32,$($(PKG)_BUILD_mingw-w64))
 $(PKG)_BUILD_i686-w64-mingw32   = $(subst @gcc-crt-config-opts@,--disable-lib64,$($(PKG)_BUILD_mingw-w64))
-
-define $(PKG)_BUILD_$(BUILD)
-    for f in c++ cpp g++ gcc gcov; do \
-        ln -sf "`which $$f`" '$(PREFIX)/bin/$(TARGET)'-$$f ; \
-    done
-endef
