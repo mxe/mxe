@@ -73,7 +73,8 @@ define $(PKG)_BUILD
         -lboost_serialization-mt \
         -lboost_thread_win32-mt \
         -lboost_system-mt \
-        -lboost_chrono-mt
+        -lboost_chrono-mt \
+        -lboost_context-mt
 
     # test cmake
     mkdir '$(1).test-cmake'
