@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 78817edb274e7caf616e0aabcb80f6ac46842e294c50a423d467d148388fc
 $(PKG)_SUBDIR   := $(PKG)-version-$($(PKG)_VERSION)-beta3
 $(PKG)_FILE     := $(PKG)-version-$($(PKG)_VERSION)-beta3.tar.gz
 $(PKG)_URL      := https://github.com/arpa2/$(PKG)/archive/version-$($(PKG)_VERSION)-beta3.tar.gz
-$(PKG)_DEPS     := gcc pthreads gnutls p11-kit libtasn1 db quick-der ldns unbound
+$(PKG)_DEPS     := gcc pthreads gnutls p11-kit libtasn1 db quick-der ldns
 
 define $(PKG)_UPDATE
     echo 'TODO: write update script for $(PKG).' >&2;

@@ -7,7 +7,7 @@ $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.4/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4//$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn nettle zlib p11-kit
+$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn nettle zlib p11-kit unbound
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4/ | \
