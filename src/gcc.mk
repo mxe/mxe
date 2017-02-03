@@ -48,23 +48,6 @@ define $(PKG)_CONFIGURE
         $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
 endef
 
-define $(PKG)_POST_BUILD
-    # - no non-trivial way to configure installation of *.dlls
-    #   each sudbir has it's own variations of variables like:
-    #       `toolexeclibdir` `install-toolexeclibLTLIBRARIES` etc.
-    #   and maintaining those would be cumbersome
-    # - need to keep `--enable-version-specific-runtime-libs` otherwise
-    #   libraries go directly into $(PREFIX)/$(TARGET)/lib and are
-    #   harder to cleanup
-    # - ignore rm failure as parallel build may have cleaned up, but
-    #   don't wildcard all libs so future additions will be detected
-    $(and $(BUILD_SHARED),
-    mv  -v '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
-    -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/'libgcc_s*.dll
-    -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/lib/'libgcc_s*.a
-    -rmdir '$(PREFIX)/lib/gcc/$(TARGET)/lib/')
-endef
-
 define $(PKG)_BUILD_mingw-w64
     # install mingw-w64 headers
     $(call PREPARE_PKG_SOURCE,mingw-w64,$(BUILD_DIR))
@@ -103,15 +86,33 @@ define $(PKG)_BUILD_mingw-w64
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
-    # shared libgcc isn't installed to version-specific locations
-    # so install correctly to simplify cleanup
+    $($(PKG)_POST_BUILD)
+endef
+
+define $(PKG)_POST_BUILD
+    # - no non-trivial way to configure installation of *.dlls
+    #   each sudbir has it's own variations of variables like:
+    #       `toolexeclibdir` `install-toolexeclibLTLIBRARIES` etc.
+    #   and maintaining those would be cumbersome
+    # - shared libgcc isn't installed to version-specific locations
+    # - need to keep `--enable-version-specific-runtime-libs` otherwise
+    #   libraries go directly into $(PREFIX)/$(TARGET)/lib and are
+    #   harder to cleanup
+    # - ignore rm failure as parallel build may have cleaned up, but
+    #   don't wildcard all libs so future additions will be detected
     $(and $(BUILD_SHARED),
     $(MAKE) -C '$(BUILD_DIR)/$(TARGET)/libgcc' -j 1 \
         toolexecdir='$(PREFIX)/$(TARGET)/bin' \
         SHLIB_SLIBDIR_QUAL= \
-        install-shared)
+        install-shared
+    mv  -v '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+    -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/'libgcc_s*.dll
+    -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/lib/'libgcc_s*.a
+    -rmdir '$(PREFIX)/lib/gcc/$(TARGET)/lib/')
 
-    $($(PKG)_POST_BUILD)
+    # cc1libdir isn't passed to subdirs so install correctly and rm
+    $(MAKE) -C '$(BUILD_DIR)/libcc1' -j 1 install cc1libdir='$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)'
+    -rm -f '$(PREFIX)/lib/'libcc1*
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @gcc-crt-config-opts@,--disable-lib32,$($(PKG)_BUILD_mingw-w64))
