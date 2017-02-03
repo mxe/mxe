@@ -23,8 +23,7 @@ endef
 
 define $(PKG)_CONFIGURE
     # configure gcc
-    mkdir '$(1).build'
-    cd    '$(1).build' && '$(1)/configure' \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         --target='$(TARGET)' \
         --build='$(BUILD)' \
         --prefix='$(PREFIX)' \
@@ -71,47 +70,46 @@ endef
 
 define $(PKG)_BUILD_mingw-w64
     # install mingw-w64 headers
-    $(call PREPARE_PKG_SOURCE,mingw-w64,$(1))
-    mkdir '$(1).headers-build'
-    cd '$(1).headers-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-headers/configure' \
+    $(call PREPARE_PKG_SOURCE,mingw-w64,$(BUILD_DIR))
+    mkdir '$(BUILD_DIR).headers'
+    cd '$(BUILD_DIR).headers' && '$(BUILD_DIR)/$(mingw-w64_SUBDIR)/mingw-w64-headers/configure' \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --enable-sdk=all \
         --enable-idl \
         --enable-secure-api \
         $(mingw-w64-headers_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1).headers-build' install
+    $(MAKE) -C '$(BUILD_DIR).headers' install
 
     # build standalone gcc
     $($(PKG)_CONFIGURE)
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' all-gcc
-    $(MAKE) -C '$(1).build' -j 1 $(INSTALL_STRIP_TOOLCHAIN)-gcc
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' all-gcc
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)-gcc
 
     # build mingw-w64-crt
-    mkdir '$(1).crt-build'
-    cd '$(1).crt-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
+    mkdir '$(BUILD_DIR).crt'
+    cd '$(BUILD_DIR).crt' && '$(BUILD_DIR)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         @gcc-crt-config-opts@
-    $(MAKE) -C '$(1).crt-build' -j '$(JOBS)' || $(MAKE) -C '$(1).crt-build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).crt-build' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
+    $(MAKE) -C '$(BUILD_DIR).crt' -j '$(JOBS)' || $(MAKE) -C '$(BUILD_DIR).crt' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR).crt' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
     # build posix threads
-    mkdir '$(1).pthread-build'
-    cd '$(1).pthread-build' && '$(1)/$(mingw-w64_SUBDIR)/mingw-w64-libraries/winpthreads/configure' \
+    mkdir '$(BUILD_DIR).pthreads'
+    cd '$(BUILD_DIR).pthreads' && '$(BUILD_DIR)/$(mingw-w64_SUBDIR)/mingw-w64-libraries/winpthreads/configure' \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1).pthread-build' -j '$(JOBS)' || $(MAKE) -C '$(1).pthread-build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).pthread-build' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
+    $(MAKE) -C '$(BUILD_DIR).pthreads' -j '$(JOBS)' || $(MAKE) -C '$(BUILD_DIR).pthreads' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR).pthreads' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
     # build rest of gcc
-    cd '$(1).build'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
     # shared libgcc isn't installed to version-specific locations
     # so install correctly to simplify cleanup
     $(and $(BUILD_SHARED),
-    $(MAKE) -C '$(1).build/$(TARGET)/libgcc' -j 1 \
+    $(MAKE) -C '$(BUILD_DIR)/$(TARGET)/libgcc' -j 1 \
         toolexecdir='$(PREFIX)/$(TARGET)/bin' \
         SHLIB_SLIBDIR_QUAL= \
         install-shared)
