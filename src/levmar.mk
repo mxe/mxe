@@ -8,6 +8,7 @@ $(PKG)_CHECKSUM := 3bf4ef1ea4475ded5315e8d8fc992a725f2e7940a74ca3b0f9029d9e6e94b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://www.ics.forth.gr/~lourakis/$(PKG)/$($(PKG)_FILE)
+$(PKG)_UA       := MXE
 $(PKG)_DEPS     := gcc blas lapack libf2c
 
 define $(PKG)_UPDATE
