@@ -87,8 +87,26 @@ MXE_CONFIGURE_OPTS = \
         --disable-static --enable-shared ) \
     $(MXE_DISABLE_DOC_OPTS)
 
+# GCC threads and exceptions
 MXE_GCC_THREADS = \
-    $(if $(findstring posix,$(TARGET)),posix,win32)
+    $(if $(findstring posix,$(or $(TARGET),$(1))),posix,win32)
+
+# allowed exception handling for targets
+# default (first item) and alternate, revisit if gcc/mingw-w64 change defaults
+i686-w64-mingw32_EH   := sjlj dw2
+x86_64-w64-mingw32_EH := seh sjlj
+
+# functions to determine exception handling from user-specified target
+# $(or $(TARGET),$(1)) allows use as both function and inline snippet
+TARGET_EH_LIST = $($(firstword $(call split,.,$(or $(TARGET),$(1))))_EH)
+DEFAULT_EH     = $(firstword $(TARGET_EH_LIST))
+GCC_EXCEPTIONS = \
+    $(lastword $(DEFAULT_EH) \
+               $(filter $(TARGET_EH_LIST),$(call split,.,$(or $(TARGET),$(1)))))
+MXE_GCC_EXCEPTION_OPTS = \
+    $(if $(call seq,sjlj,$(GCC_EXCEPTIONS)),--enable-sjlj-exceptions) \
+    $(if $(call seq,dw2,$(GCC_EXCEPTIONS)),--disable-sjlj-exceptions)
+
 
 # Append these to the "make" and "make install" steps of autotools packages
 # in order to neither build nor install unwanted binaries, manpages,

@@ -37,6 +37,7 @@ define $(PKG)_CONFIGURE
         --without-x \
         --disable-win32-registry \
         --enable-threads=$(MXE_GCC_THREADS) \
+        $(MXE_GCC_EXCEPTION_OPTS) \
         --enable-libgomp \
         --with-gmp='$(PREFIX)/$(BUILD)' \
         --with-isl='$(PREFIX)/$(BUILD)' \
@@ -45,7 +46,8 @@ define $(PKG)_CONFIGURE
         --with-as='$(PREFIX)/bin/$(TARGET)-as' \
         --with-ld='$(PREFIX)/bin/$(TARGET)-ld' \
         --with-nm='$(PREFIX)/bin/$(TARGET)-nm' \
-        $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'")
+        $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'") \
+        $($(PKG)_CONFIGURE_OPTS)
 endef
 
 define $(PKG)_BUILD_mingw-w64
