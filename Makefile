@@ -61,7 +61,7 @@ STRIP_EXE       := $(true)
 # All pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
 # These aren't meaningful to the pkg list in http://mxe.cc/#packages so
 # use a list in case we want to separate autotools, cmake etc.
-MXE_CONF_PKGS := mxe-conf
+MXE_CONF_PKGS := cmake-conf mxe-conf
 
 # define some whitespace variables
 define newline
@@ -525,6 +525,7 @@ $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           $(PKG_PATCHES) \
                           $(PKG_TESTFILES) \
+                          $($(1)_FILE_DEPS) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
                           $(and $($(3)_DEPS),$(addprefix $(PREFIX)/$($(3)_DEPS)/installed/,$(filter-out $(MXE_CONF_PKGS),$($($(3)_DEPS)_PKGS)))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
