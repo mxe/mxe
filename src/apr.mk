@@ -19,18 +19,23 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cp -Rp '$(1)' '$(1).native'
-    cd '$(1).native' && ./configure
-    cd '$(1).native' && $(MAKE) tools/gen_test_char \
-        CFLAGS='-DNEED_ENHANCED_ESCAPES'
-    cd '$(1)' && ./configure \
+    # native build for gen_test_char
+    mkdir '$(BUILD_DIR).native'
+    cd '$(BUILD_DIR).native' && '$(SOURCE_DIR)/configure'
+    $(MAKE) -C '$(BUILD_DIR).native' tools/gen_test_char \
+        CFLAGS='-DNEED_ENHANCED_ESCAPES' -j '$(JOBS)'
+
+    # cross build
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         ac_cv_sizeof_off_t=4 \
         ac_cv_sizeof_pid_t=4 \
         ac_cv_sizeof_size_t=4 \
         ac_cv_sizeof_ssize_t=4 \
+        $(if $(POSIX_THREADS),apr_cv_mutex_robust_shared=yes) \
         CFLAGS=-D_WIN32_WINNT=0x0500
-    $(MAKE) -C '$(1)' -j 1 install GEN_TEST_CHAR='$(1).native/tools/gen_test_char'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' GEN_TEST_CHAR='$(BUILD_DIR).native/tools/gen_test_char'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     ln -sf '$(PREFIX)/$(TARGET)/bin/apr-1-config' '$(PREFIX)/bin/$(TARGET)-apr-1-config'
 endef
