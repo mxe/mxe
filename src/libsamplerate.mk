@@ -3,8 +3,8 @@
 PKG             := libsamplerate
 $(PKG)_WEBSITE  := http://www.mega-nerd.com/SRC/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.1.8
-$(PKG)_CHECKSUM := 93b54bdf46d5e6d2354b7034395fe329c222a966790de34520702bb9642f1c06
+$(PKG)_VERSION  := 0.1.9
+$(PKG)_CHECKSUM := 0a7eb168e2f21353fb6d84da152e4512126f7dc48ccb0be80578c565413444c1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.mega-nerd.com/SRC/$(PKG)-$($(PKG)_VERSION).tar.gz
