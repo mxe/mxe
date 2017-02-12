@@ -206,7 +206,7 @@
     "librosco": {"version": "0.1.11", "website": "https://github.com/colinbourassa/librosco/", "description": ""},
     "librsvg": {"version": "2.40.5", "website": "http://librsvg.sourceforge.net/", "description": ""},
     "librtmp": {"version": "a107cef", "website": "http://rtmpdump.mplayerhq.hu/", "description": ""},
-    "libsamplerate": {"version": "0.1.8", "website": "http://www.mega-nerd.com/SRC/", "description": ""},
+    "libsamplerate": {"version": "0.1.9", "website": "http://www.mega-nerd.com/SRC/", "description": ""},
     "libshout": {"version": "2.4.1", "website": "http://www.icecast.org/", "description": ""},
     "libsigc++": {"version": "2.4.0", "website": "http://libsigc.sourceforge.net/", "description": ""},
     "libsndfile": {"version": "1.0.27", "website": "http://www.mega-nerd.com/libsndfile/", "description": ""},
