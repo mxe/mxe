@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         DYLD_INSERT_LIBRARIES= \
         ./make.bash
 
+    rm -rf '$(PREFIX)/$(TARGET)/go'
     mkdir -p '$(PREFIX)/$(TARGET)/go'
     for d in include src bin pkg; do \
         cp -a '$(1)'/$$d '$(PREFIX)/$(TARGET)/go/' ; \
