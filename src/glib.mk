@@ -47,6 +47,7 @@ define $(PKG)_NATIVE_BUILD
         --disable-fam \
         --disable-xattr \
         --disable-dtrace \
+        --disable-libmount \
         --with-libiconv=gnu \
         --with-pcre=internal \
         CPPFLAGS='-I$(1).native/$(libiconv_SUBDIR)/include -I$(1).native/$(zlib_SUBDIR)' \
