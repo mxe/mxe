@@ -4,8 +4,8 @@ PKG             := postgresql
 $(PKG)_WEBSITE  := http://www.postgresql.org/
 $(PKG)_DESCR    := PostgreSQL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.6.2
-$(PKG)_CHECKSUM := 0187b5184be1c09034e74e44761505e52357248451b0c854dddec6c231fe50c9
+$(PKG)_VERSION  := 9.2.4
+$(PKG)_CHECKSUM := d97dd918a88a4449225998f46aafa85216a3f89163a3411830d6890507ffae93
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -46,7 +46,6 @@ define $(PKG)_BUILD
         LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl pthreads --libs`" \
         ac_cv_func_getaddrinfo=no
 
-    $(MAKE) -C '$(1)'/src/common -j '$(JOBS)'
     # enable_thread_safety means "build internal pthreads" on windows
     # disable it and link mingw-w64 pthreads to and avoid name conflicts
     $(MAKE) -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' \
