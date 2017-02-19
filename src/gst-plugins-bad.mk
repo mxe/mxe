@@ -1,10 +1,10 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gst-plugins-bad
-$(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/
+$(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-bad.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.2
-$(PKG)_CHECKSUM := 650855e39ff56a8bb6cb0c192109c5926ce12f536d06e19ebf829de71ef396fe
+$(PKG)_VERSION  := 1.12.2
+$(PKG)_CHECKSUM := 9c2c7edde4f59d74eb414e0701c55131f562e5c605a3ce9b091754f106c09e37
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
@@ -16,18 +16,16 @@ $(PKG)_DEPS     := gcc chromaprint faad2 fdk-aac gst-plugins-base gstreamer gtk3
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-bad/refs,$(gstreamer_UPDATE))
 
 define $(PKG)_BUILD
-    find '$(1)' -name Makefile.in \
-        -exec $(SED) -i 's,glib-mkenums,$(PREFIX)/$(TARGET)/bin/glib-mkenums,g'       {} \; \
-        -exec $(SED) -i 's,glib-genmarshal,$(PREFIX)/$(TARGET)/bin/glib-genmarshal,g' {} \;
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-debug \
         --disable-examples \
         --disable-opengl \
-        --mandir='$(1)/sink' \
-        --docdir='$(1)/sink' \
-        --with-html-dir='$(1)/sink'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+        --mandir='$(BUILD_DIR)/sink' \
+        --docdir='$(BUILD_DIR)/sink' \
+        --with-html-dir='$(BUILD_DIR)/sink'
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # some .dlls are installed to lib - no obvious way to change
     $(if $(BUILD_SHARED),
