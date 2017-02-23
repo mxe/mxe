@@ -2,9 +2,10 @@
 
 PKG             := jsoncpp
 $(PKG)_WEBSITE  := https://github.com/open-source-parsers/jsoncpp
+$(PKG)_DESCR    := A C++ library for interacting with JSON
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.5
-$(PKG)_CHECKSUM := a2b121eaff56ec88cfd034d17685821a908d0d87bc319329b04f91a6552c1ac2
+$(PKG)_VERSION  := 1.8.0
+$(PKG)_CHECKSUM := 5deb2462cbf0c0121c9d6c9823ec72fe71417e34242e3509bc7c003d526465bc
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/open-source-parsers/jsoncpp/archive/$($(PKG)_VERSION).tar.gz
@@ -14,10 +15,7 @@ $(PKG)_DEPS     := gcc
 $(PKG)_CXXFLAGS := -Wno-error=conversion -Wno-shift-negative-value
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/open-source-parsers/jsoncpp/archive/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/"\.tar.*,\1,p' | \
-    sort | uniq | \
-    head -1
+    $(call MXE_GET_GITHUB_TAGS, open-source-parsers/jsoncpp)
 endef
 
 define $(PKG)_BUILD
