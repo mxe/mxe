@@ -211,7 +211,7 @@
     "libsigc++": {"version": "2.4.0", "website": "http://libsigc.sourceforge.net/", "description": ""},
     "libsndfile": {"version": "1.0.27", "website": "http://www.mega-nerd.com/libsndfile/", "description": ""},
     "libsodium": {"version": "1.0.6", "website": "https://download.libsodium.org/doc/", "description": ""},
-    "libsoup": {"version": "2.54.0.1", "website": "https://github.com/GNOME/libsoup", "description": ""},
+    "libsoup": {"version": "2.57.1", "website": "https://github.com/GNOME/libsoup", "description": "HTTP client/server library for GNOME"},
     "libspectre": {"version": "0.2.8", "website": "https://libspectre.freedesktop.org", "description": ""},
     "libssh2": {"version": "1.8.0", "website": "http://www.libssh2.org", "description": ""},
     "libsvm": {"version": "3.20", "website": "http://www.csie.ntu.edu.tw/~cjlin/libsvm", "description": ""},
