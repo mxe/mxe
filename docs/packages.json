@@ -109,7 +109,7 @@
     "gtksourceviewmm2": {"version": "2.10.3", "website": "http://projects.gnome.org/gtksourceviewmm/", "description": "GtkSourceViewmm"},
     "guile": {"version": "1.8.8", "website": "https://www.gnu.org/software/guile/", "description": "GNU Guile"},
     "hamlib": {"version": "3.0.1", "website": "http://www.hamlib.org", "description": "HamLib"},
-    "harfbuzz": {"version": "1.4.3", "website": "http://harfbuzz.sourceforge.net/", "description": "HarfBuzz"},
+    "harfbuzz": {"version": "1.4.1", "website": "http://harfbuzz.sourceforge.net/", "description": "HarfBuzz"},
     "hdf-eos2": {"version": "19v1.00", "website": "https://hdfeos.org/software/library.php", "description": "HDF-EOS2"},
     "hdf-eos5": {"version": "1.15", "website": "https://hdfeos.org/software/library.php", "description": "HDF-EOS5"},
     "hdf4": {"version": "4.2.10", "website": "https://www.hdfgroup.org/hdf4/", "description": "HDF4"},
