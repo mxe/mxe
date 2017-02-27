@@ -247,7 +247,7 @@
     "muparser": {"version": "2.2.5", "website": "http://muparser.beltoforion.de/", "description": "muParser"},
     "muparserx": {"version": "4.0.4", "website": "http://muparserx.beltoforion.de/", "description": "muParserX"},
     "mxe-conf": {"version": "1", "website": "", "description": ""},
-    "mxml": {"version": "2.9", "website": "http://www.msweet.org/projects.php?Z3", "description": "Mini-XML"},
+    "mxml": {"version": "2.9", "website": "https://michaelrsweet.github.io/", "description": "Mini-XML"},
     "ncurses": {"version": "e14300b", "website": "https://www.gnu.org/software/ncurses/", "description": "Ncurses"},
     "neon": {"version": "0.30.2", "website": "http://webdav.org/neon/", "description": "HTTP and WebDAV client library (libneon)"},
     "netcdf": {"version": "4.3.0", "website": "http://www.unidata.ucar.edu/software/netcdf/", "description": "NetCDF"},
