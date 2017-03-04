@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := expat
-$(PKG)_WEBSITE  := http://expat.sourceforge.net/
+$(PKG)_WEBSITE  := https://github.com/libexpat/libexpat
 $(PKG)_DESCR    := Expat XML Parser
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.0
@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/expat/expat/$($(PKG)_VER
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/expat/files/expat/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/expat/files/expat/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

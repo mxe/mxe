@@ -10,7 +10,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 
 # Later releases seem to be hosted on VideoLAN's server
 # $(PKG)_URL      := https://dvdnav.mplayerhq.hu/releases/$($(PKG)_FILE)
-$(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 
 # libdvdread supports libdvdcss either by dynamic loading (dlfcn-win32) or
 # directly linking to libdvdcss. We directly links to the library here.
@@ -19,7 +19,7 @@ $(PKG)_DEPS     := gcc libdvdcss
 $(PKG)_UPDATE_GIT = $(call MXE_GET_GITHUB_SHA, mirror/libdvdread, master)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://download.videolan.org/pub/videolan/libdvdread/' | \
+    $(WGET) -q -O- 'https://download.videolan.org/pub/videolan/libdvdread/' | \
     $(SED) -n 's,.*href="\([0-9][^<]*\)/".*,\1,p' | \
     grep -v 'alpha\|beta\|rc' | \
     $(SORT) -V | \

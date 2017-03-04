@@ -17,7 +17,7 @@ $(PKG)_DEPS     := gcc libltdl libusb1 libxml2 pthreads
 # grabbing version from sourceforge
 # prefered by Nate N0NB
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/hamlib/files/hamlib/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/hamlib/files/hamlib/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

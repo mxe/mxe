@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/luabind/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost lua
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/luabind/files/luabind/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/luabind/files/luabind/' | \
     $(SED) -n 's,.*<a href="/projects/luabind/files/luabind/\([0-9][^>]*\)/.*,\1,p' | \
     head -1
 endef

@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/glew/glew/$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/glew/files/glew/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/glew/files/glew/' | \
     $(SED) -n 's,.*/\([0-9][^A-Za-z"]*\)/".*,\1,p' | \
     head -1
 endef

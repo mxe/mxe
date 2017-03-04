@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gsoap-$(call SHOR
 $(PKG)_DEPS     := gcc libgcrypt libntlm openssl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/gsoap2/files/gsoap-2.8/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/gsoap2/files/gsoap-2.8/' | \
     $(SED) -n 's,.*gsoap_\([0-9][^>]*\)\.zip.*,\1,p' | \
     head -1
 endef

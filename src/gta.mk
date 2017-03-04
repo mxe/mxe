@@ -11,7 +11,7 @@ $(PKG)_URL      := http://download.savannah.gnu.org/releases/gta/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 xz zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gta.git;a=tags' | \
+    $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=gta.git;a=tags' | \
     grep '<a class="list subject"' | \
     $(SED) -n 's,.*<a[^>]*>libgta-\([0-9.]*\)<.*,\1,p' | \
     head -1

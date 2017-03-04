@@ -11,7 +11,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mpg123/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc sdl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/mpg123/files/mpg123/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/mpg123/files/mpg123/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

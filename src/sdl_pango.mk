@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/sdlpango/SDL_Pango/$($(P
 $(PKG)_DEPS     := gcc pango sdl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/sdlpango/files/SDL_Pango/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/sdlpango/files/SDL_Pango/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

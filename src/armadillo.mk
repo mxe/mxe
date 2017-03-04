@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc blas lapack
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/arma/files/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/arma/files/' | \
     $(SED) -n 's,.*/armadillo-\([0-9.]*\)[.]tar.*".*,\1,p' | \
     head -1
 endef

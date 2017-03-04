@@ -7,12 +7,12 @@ $(PKG)_VERSION  := 1.0.2k
 $(PKG)_CHECKSUM := 6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.openssl.org/source/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://www.openssl.org/source/old/$(call tr,$([a-z]),,$($(PKG)_VERSION))/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.openssl.org/source/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.openssl.org/source/old/$(call tr,$([a-z]),,$($(PKG)_VERSION))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.openssl.org/source/' | \
+    $(WGET) -q -O- 'https://www.openssl.org/source/' | \
     $(SED) -n 's,.*openssl-\([0-9][0-9a-z.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

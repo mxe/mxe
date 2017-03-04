@@ -11,7 +11,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($
 $(PKG)_DEPS     := gcc winpcap
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/libdnet/files/libdnet/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/libdnet/files/libdnet/' | \
     $(SED) -n 's,.*/libdnet-\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
