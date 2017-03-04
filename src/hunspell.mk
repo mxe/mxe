@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/hunspell/Hunspell/$($(PK
 $(PKG)_DEPS     := gcc gettext libiconv pthreads readline
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/hunspell/files/Hunspell/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/hunspell/files/Hunspell/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

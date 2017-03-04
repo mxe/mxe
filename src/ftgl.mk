@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ftgl
-$(PKG)_WEBSITE  := http://sourceforge.net/projects/ftgl/
+$(PKG)_WEBSITE  := https://sourceforge.net/projects/ftgl/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.1.3~rc5
 $(PKG)_CHECKSUM := 521ff7bd62c459ff5372e269c223e2a6107a6a99a36afdc2ae634a973af70c59
@@ -11,7 +11,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/FTGL Source/$($(P
 $(PKG)_DEPS     := gcc freeglut freetype
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/ftgl/files/FTGL Source/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/ftgl/files/FTGL Source/' | \
     $(SED) -n 's,.*<tr title="\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef

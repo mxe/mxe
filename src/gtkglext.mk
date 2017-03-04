@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglext/$($(PK
 $(PKG)_DEPS     := gcc gtk2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.gnome.org/cgit/gtkglext/refs/tags' | \
+    $(WGET) -q -O- 'https://git.gnome.org/cgit/gtkglext/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
     $(SORT) -V | \

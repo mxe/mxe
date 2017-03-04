@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := xxhash
-$(PKG)_WEBSITE  := http://cyan4973.github.io/xxHash/
+$(PKG)_WEBSITE  := https://cyan4973.github.io/xxHash/
 $(PKG)_DESCR    := xxHash
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.6.1

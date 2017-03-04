@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc expat jpeg libiconv libpng sdl tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/wxwindows/files/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/wxwindows/files/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

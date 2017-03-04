@@ -11,7 +11,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_V
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O - http://sourceforge.net/projects/libieee1284/files/ | \
+    $(WGET) -q -O - https://sourceforge.net/projects/libieee1284/files/ | \
     tr '\n' ' ' | \
     $(SED) 's/.*Looking for the latest version//;s/\(libieee1284-[0-9.]\+\)\.[^0-9].*/\1/;s/.*-//'
 endef

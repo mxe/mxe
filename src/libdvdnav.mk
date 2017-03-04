@@ -9,13 +9,13 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 # Later releases seem to be hosted on VideoLAN's server
 # $(PKG)_URL      := https://dvdnav.mplayerhq.hu/releases/$($(PKG)_FILE)
-$(PKG)_URL      := http://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libdvdread
 
 # $(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, mirror/libdvdnav, master)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://download.videolan.org/pub/videolan/libdvdnav/' | \
+    $(WGET) -q -O- 'https://download.videolan.org/pub/videolan/libdvdnav/' | \
     $(SED) -n 's,.*href="\([0-9][^<]*\)/".*,\1,p' | \
     grep -v 'alpha\|beta\|rc' | \
     $(SORT) -V | \

@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := tinyxml
-$(PKG)_WEBSITE  := http://sourceforge.net/projects/tinyxml/
+$(PKG)_WEBSITE  := https://sourceforge.net/projects/tinyxml/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.6.2
 $(PKG)_CHECKSUM := 15bdfdcec58a7da30adc87ac2b078e4417dbe5392f3afb719f9ba6d062645593
@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc
 $(PKG)_MESSAGE  :=*** tinyxml is deprecated - please use tinyxml2 ***
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/tinyxml/files/tinyxml/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/tinyxml/files/tinyxml/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

@@ -12,7 +12,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mikmod/libmikmod/$($(PKG
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/mikmod/files/libmikmod/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/mikmod/files/libmikmod/' | \
     $(SED) -n 's,.*<a href="/projects/mikmod/files/libmikmod/\([0-9][^>]*\)/".*,\1,p' | \
     $(SORT) -Vr | \
     head -1
