@@ -1,0 +1,106 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: John Lindgren <john.lindgren@aol.com>
+Date: Thu, 29 May 2014 22:42:53 -0400
+Subject: [PATCH] Remove "Requires: glib-2.0" since libmms no longer depends on
+ GLib.
+https://sourceforge.net/p/libmms/code/ci/b9bbe17c08e5dcbe3ce841e6bed52ce8d8b10f9e/
+
+diff --git a/pkgconfig/libmms.pc.in b/pkgconfig/libmms.pc.in
+index 1111111..2222222 100644
+--- a/pkgconfig/libmms.pc.in
++++ b/pkgconfig/libmms.pc.in
+@@ -4,8 +4,7 @@ libdir=@libdir@
+ includedir=@includedir@/
+ 
+ Name: libmms
+-Description: Library implementing the MMS protocol 
+-Requires: glib-2.0
++Description: Library implementing the MMS protocol
+ Version: @VERSION@
+ Libs: -L${libdir} -lmms -lm
+ Cflags: -I${includedir}
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: John Lindgren <john.lindgren@tds.net>
+Date: Thu, 19 Nov 2015 13:39:27 +0100
+Subject: [PATCH] Fix build if strndup() is missing
+https://sourceforge.net/p/libmms/code/ci/67d54003b8075b8ea8102bc4a808df4543ab113a/
+
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100755
+--- a/configure.in
++++ b/configure.in
+@@ -14,6 +14,7 @@ AC_PROG_INSTALL
+ 
+ dnl Checks for header files.
+ AC_CHECK_HEADERS([sys/socket.h netinet/in.h netdb.h windows.h winsock2.h])
++AC_CHECK_FUNCS([strndup])
+ 
+ case $host in
+     *beos*)
+diff --git a/src/uri.c b/src/uri.c
+index 1111111..2222222 100644
+--- a/src/uri.c
++++ b/src/uri.c
+@@ -17,6 +17,10 @@
+  * Boston, MA  02111-1307, USA.
+  */
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #include <string.h>
+ #include <stdlib.h>
+ #include <ctype.h>
+@@ -125,6 +129,29 @@ for ($i = 0; $i < 32; $i++)
+ #define ISSPACE(C) (((C) >= 9 && (C) <= 13) || (C) == ' ')
+ 
+ 
++/* Implement the strndup function.
++   Copyright (C) 2005 Free Software Foundation, Inc.
++   Written by Kaveh R. Ghazi <ghazi@caip.rutgers.edu>. */
++#ifndef HAVE_STRNDUP
++char *
++strndup (const char *s, size_t n)
++{
++  char *result;
++  size_t len = strlen (s);
++
++  if (n < len)
++    len = n;
++
++  result = (char *) malloc (len + 1);
++  if (!result)
++    return 0;
++
++  result[len] = '\0';
++  return (char *) memcpy (result, s, len);
++}
++#endif
++
++
+ static int split_user_passwd(const char* in, char** user, char** passwd)
+ {
+   char *pass, *tmp = g_strdup(in);
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pavel Vatagin <pavelvat@gmail.com>
+Date: Sun, 5 Mar 2017 00:31:24 +0300
+Subject: [PATCH] fix pc
+
+
+diff --git a/pkgconfig/libmms.pc.in b/pkgconfig/libmms.pc.in
+index 1111111..2222222 100644
+--- a/pkgconfig/libmms.pc.in
++++ b/pkgconfig/libmms.pc.in
+@@ -7,4 +7,5 @@ Name: libmms
+ Description: Library implementing the MMS protocol
+ Version: @VERSION@
+ Libs: -L${libdir} -lmms -lm
++Libs.private: -lws2_32
+ Cflags: -I${includedir}
