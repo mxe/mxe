@@ -15,6 +15,5 @@ if [ gsort --help >/dev/null 2>&1 ]; then
     SORT='gsort'
 fi
 
-WGET="wget --no-check-certificate
-         --user-agent=$(wget --version |
+WGET="wget --user-agent=$(wget --version |
          $SED -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')"

@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := speexdsp
-$(PKG)_WEBSITE  := http://www.speex.org/
+$(PKG)_WEBSITE  := https://speex.org/
 $(PKG)_DESCR    := SpeexDSP
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2rc3
@@ -12,7 +12,7 @@ $(PKG)_URL      := http://downloads.xiph.org/releases/speex/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.xiph.org/?p=speexdsp.git;a=tags' | \
+    $(WGET) -q -O- 'https://git.xiph.org/?p=speexdsp.git;a=tags' | \
     grep '<a class="list name"' | \
     $(SED) -n 's,.*<a[^>]*>SpeexDSP-\([0-9][^<]*\)<.*,\1,p' | \
     head -1

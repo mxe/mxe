@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libcroco
-$(PKG)_WEBSITE  := http://www.freespiders.org/projects/libcroco/
+$(PKG)_WEBSITE  := http://www.linuxfromscratch.org/blfs/view/svn/general/libcroco.html
 $(PKG)_DESCR    := Libcroco
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.6.2

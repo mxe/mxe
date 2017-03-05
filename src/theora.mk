@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := theora
-$(PKG)_WEBSITE  := http://theora.org/
+$(PKG)_WEBSITE  := https://theora.org/
 $(PKG)_DESCR    := Theora
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.1
@@ -12,7 +12,7 @@ $(PKG)_URL      := http://downloads.xiph.org/releases/theora/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ogg vorbis
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.xiph.org/downloads/' | \
+    $(WGET) -q -O- 'https://www.xiph.org/downloads/' | \
     $(SED) -n 's,.*libtheora-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

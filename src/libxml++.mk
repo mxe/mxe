@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libxml++
-$(PKG)_WEBSITE  := http://libxmlplusplus.sourceforge.net/
+$(PKG)_WEBSITE  := https://libxmlplusplus.sourceforge.io/
 $(PKG)_DESCR    := libxml2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.37.2

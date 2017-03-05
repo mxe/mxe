@@ -6,15 +6,15 @@ $(PKG)_VERSION  := 2.69
 $(PKG)_CHECKSUM := 64ebcec9f8ac5b2487125a86a7760d2591ac9e1d3dbd59489633f9de62a57684
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/autoconf/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/autoconf/$($(PKG)_FILE)
-$(PKG)_WEBSITE  := http://www.gnu.org/software/autoconf
+$(PKG)_URL      := https://ftp.gnu.org/gnu/autoconf/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://ftpmirror.gnu.org/autoconf/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := https://www.gnu.org/software/autoconf
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     := m4
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/autoconf/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/autoconf/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="autoconf-\([0-9][^"]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

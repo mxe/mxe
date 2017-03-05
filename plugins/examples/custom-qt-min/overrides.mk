@@ -1,8 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 # MXE provides a fully featured build of Qt. Some users want more control...
-# http://lists.nongnu.org/archive/html/mingw-cross-env-list/2013-08/msg00010.html
-# http://lists.nongnu.org/archive/html/mingw-cross-env-list/2012-05/msg00019.html
+# https://lists.nongnu.org/archive/html/mingw-cross-env-list/2013-08/msg00010.html
+# https://lists.nongnu.org/archive/html/mingw-cross-env-list/2012-05/msg00019.html
 #
 # build of qt and deps is (say):  25 mins with 12.5 MB test program
 # custom with minimal deps is:     4 mins with  7.6 MB test program

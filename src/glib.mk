@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := glib
-$(PKG)_WEBSITE  := http://www.gtk.org/
+$(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GLib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.50.2

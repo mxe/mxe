@@ -1,13 +1,13 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gst-plugins-base
-$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
+$(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.2
 $(PKG)_CHECKSUM := c75dd400e451526ed71e1c4955e33d470a2581f5e71ecf84920a41c0a5c75322
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib gstreamer liboil libxml2 ogg pango theora vorbis
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-base/refs,$(gstreamer_UPDATE))

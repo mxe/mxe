@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qwt_qt4
-$(PKG)_WEBSITE  := http://qwt.sourceforge.net/
+$(PKG)_WEBSITE  := https://qwt.sourceforge.io/
 $(PKG)_DESCR    := Qwt-qt4
 $(PKG)_VERSION   = $(qwt_VERSION)
 $(PKG)_CHECKSUM  = $(qwt_CHECKSUM)

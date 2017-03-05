@@ -4,7 +4,7 @@ MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
 EXT_DIR  := $(TOP_DIR)/ext
 
-# GNU Make Standard Library (http://gmsl.sourceforge.net/)
+# GNU Make Standard Library (https://gmsl.sourceforge.io/)
 # See docs/gmsl.html for further information
 include $(EXT_DIR)/gmsl
 
@@ -276,7 +276,7 @@ DOWNLOAD_PKG_ARCHIVE = \
     )
 
 # open issue from 2002:
-# http://savannah.gnu.org/bugs/?712
+# https://savannah.gnu.org/bugs/?712
 ifneq ($(words $(PWD)),1)
     $(error GNU Make chokes on paths with spaces)
 endif

@@ -7,12 +7,12 @@ $(PKG)_VERSION  := 3.5.9
 $(PKG)_CHECKSUM := 82b10f0c4ef18f4e64ad8cef5dbaf14be732f5095a41cf366b4ecb4050382951
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.5/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5//$($(PKG)_FILE)
+$(PKG)_URL      := https://gnupg.org/ftp/gcrypt/gnutls/v3.5/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext gmp libgnurx libidn libunistring nettle zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/ | \
+    $(WGET) -q -O- https://gnupg.org/ftp/gcrypt/gnutls/v3.5/ | \
     $(SED) -n 's,.*gnutls-\([1-9]\+\.[0-9]\+.[0-9]\+\)\..*,\1,p' | \
     $(SORT) -V | \
     tail -1
