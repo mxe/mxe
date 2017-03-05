@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 4b124ff5984f2b537790a8f50dbf3d44da89e57d0505ba567128535a2426f
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.lzma
 $(PKG)_URL      := https://curl.haxx.se/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls libidn libssh2
+$(PKG)_DEPS     := gcc gnutls libidn2 libssh2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://curl.haxx.se/download/?C=M;O=D' | \
@@ -22,7 +22,7 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --with-gnutls \
         --without-ssl \
-        --with-libidn \
+        --with-libidn2 \
         --enable-sspi \
         --enable-ipv6 \
         --with-libssh2
