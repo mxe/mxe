@@ -1,13 +1,13 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pfstools
-$(PKG)_WEBSITE  := http://pfstools.sourceforge.net/
+$(PKG)_WEBSITE  := https://pfstools.sourceforge.io/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.4
 $(PKG)_CHECKSUM := 4a6c1880193d3d1924d98b8dc2d2fe25827e7b2508823dc38f535653a4fd9942
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

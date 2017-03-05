@@ -1,13 +1,13 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libdnet
-$(PKG)_WEBSITE  := http://libdnet.sourceforge.net/
+$(PKG)_WEBSITE  := https://libdnet.sourceforge.io/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.11
 $(PKG)_CHECKSUM := 0eb78415c8f2564c2f1e8ad36e98473348d9c94852f796a226360c716cc7ca53
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc winpcap
 
 define $(PKG)_UPDATE

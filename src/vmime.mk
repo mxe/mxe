@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vmime
-$(PKG)_WEBSITE  := http://www.vmime.org/
+$(PKG)_WEBSITE  := https://www.vmime.org/
 $(PKG)_DESCR    := VMime
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3cfcdca

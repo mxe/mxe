@@ -1,14 +1,14 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtkglextmm
-$(PKG)_WEBSITE  := http://gtkglext.sourceforge.net/
+$(PKG)_WEBSITE  := https://gtkglext.sourceforge.io/
 $(PKG)_DESCR    := GtkGLExtmm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := 8f499c1f95678c56cce908c10bf2c1d0f2267b87e0c480385fa4b128c75bdf7b
 $(PKG)_SUBDIR   := gtkglextmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglextmm-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gtkglext gtkmm2
 
 define $(PKG)_UPDATE

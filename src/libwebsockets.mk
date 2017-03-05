@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libwebsockets
-$(PKG)_WEBSITE  := http://libwebsockets.org/
+$(PKG)_WEBSITE  := https://libwebsockets.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4-chrome43-firefox-36
 $(PKG)_CHECKSUM := e11492477e582ef0b1a6ea2f18d81a9619b449170a3a5c43f32a9468461a9798

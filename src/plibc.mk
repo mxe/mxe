@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := plibc
-$(PKG)_WEBSITE  := http://plibc.sourceforge.net/
+$(PKG)_WEBSITE  := https://plibc.sourceforge.io/
 $(PKG)_DESCR    := Plibc
 $(PKG)_IGNORE   := %
 $(PKG)_VERSION  := cd7ed09

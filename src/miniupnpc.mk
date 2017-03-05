@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2923e453e880bb949e3d4da9f83dd3cb6f08946d35de0b864d0339cf70934
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://miniupnp.free.fr/files/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://miniupnp.tuxfamily.org/files/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://miniupnp.tuxfamily.org/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

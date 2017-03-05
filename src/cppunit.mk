@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cppunit
-$(PKG)_WEBSITE  := http://www.freedesktop.org/wiki/Software/cppunit/
+$(PKG)_WEBSITE  := https://www.freedesktop.org/wiki/Software/cppunit/
 $(PKG)_DESCR    := CppUnit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.13.2

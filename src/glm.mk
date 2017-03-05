@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := glm
-$(PKG)_WEBSITE  := http://glm.g-truc.net
+$(PKG)_WEBSITE  := https://glm.g-truc.net/
 $(PKG)_DESCR    := GLM - OpenGL Mathematics
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.7.6

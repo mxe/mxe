@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := geos
-$(PKG)_WEBSITE  := http://trac.osgeo.org/geos/
+$(PKG)_WEBSITE  := https://trac.osgeo.org/geos/
 $(PKG)_DESCR    := GEOS
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4.2

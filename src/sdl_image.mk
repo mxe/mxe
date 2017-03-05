@@ -1,18 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl_image
-$(PKG)_WEBSITE  := http://www.libsdl.org/projects/SDL_image/
+$(PKG)_WEBSITE  := https://www.libsdl.org/projects/SDL_image/
 $(PKG)_DESCR    := SDL_image
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.12
 $(PKG)_CHECKSUM := 0b90722984561004de84847744d566809dbb9daf732a9e503b91a1b5a84e5699
 $(PKG)_SUBDIR   := SDL_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_image-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg libpng libwebp sdl tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://hg.libsdl.org/SDL_image/tags' | \
+    $(WGET) -q -O- 'https://hg.libsdl.org/SDL_image/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     grep '^1\.' | \
     $(SORT) -V | \

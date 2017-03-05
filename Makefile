@@ -4,7 +4,7 @@ MAKEFILE := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 TOP_DIR  := $(patsubst %/,%,$(dir $(MAKEFILE)))
 EXT_DIR  := $(TOP_DIR)/ext
 
-# GNU Make Standard Library (http://gmsl.sourceforge.net/)
+# GNU Make Standard Library (https://gmsl.sourceforge.io/)
 # See docs/gmsl.html for further information
 include $(EXT_DIR)/gmsl
 
@@ -16,8 +16,8 @@ MXE_TARGETS        := i686-w64-mingw32.static
 
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
-PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
-PKG_CDN            := d1yihgixbnrglp.cloudfront.net
+PKG_MIRROR         := https://s3.amazonaws.com/mxe-pkg
+PKG_CDN            := https://d1yihgixbnrglp.cloudfront.net
 GITLAB_BACKUP      := https://gitlab.com/starius/mxe-backup2/raw/master/
 
 PWD        := $(shell pwd)
@@ -35,8 +35,7 @@ PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
 DEFAULT_UA := $(shell wget --version | $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
-WGET        = wget --no-check-certificate \
-                   --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))'
+WGET        = wget --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))'
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 flex \
                 $(BUILD_CC) $(BUILD_CXX) gperf intltoolize $(LIBTOOL) \
@@ -276,7 +275,7 @@ DOWNLOAD_PKG_ARCHIVE = \
     )
 
 # open issue from 2002:
-# http://savannah.gnu.org/bugs/?712
+# https://savannah.gnu.org/bugs/?712
 ifneq ($(words $(PWD)),1)
     $(error GNU Make chokes on paths with spaces)
 endif

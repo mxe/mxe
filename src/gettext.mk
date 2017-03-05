@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ff942af0e438ced4a8b0ea4b0b6e0d6d657157c5e2364de57baa279c1c125
 $(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gettext/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/gettext/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://ftpmirror.gnu.org/gettext/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv
 
 define $(PKG)_UPDATE

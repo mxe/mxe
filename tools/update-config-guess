@@ -2,7 +2,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 #
 # Script to automatically update config.guess
-# (http://savannah.gnu.org/projects/config)
+# (https://savannah.gnu.org/projects/config)
 
 clean(){
     rm -rf tmp-config-guess
@@ -17,7 +17,7 @@ current_version=$(grep 'timestamp.*=' 'ext/config.guess' 2>/dev/null | \
 clean
 
 # Fetch latest config.guess from Savannah Git
-$WGET -q -O tmp-config-guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
+$WGET -q -O tmp-config-guess 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
 
 # Latest config.guess timestamp
 latest_version=$(grep 'timestamp.*=' 'tmp-config-guess' | head -1 | \

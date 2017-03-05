@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 8.40
 $(PKG)_CHECKSUM := 00e27a29ead4267e3de8111fcaa59b132d0533cdfdbdddf4b0604279acbcf4f4
 $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/pcre/pcre/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/pcre/pcre/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftp.pcre.org/pub/pcre/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
