@@ -1,0 +1,87 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 5 Mar 2017 03:01:18 +0100
+Subject: [PATCH] disable gentr46map.exe
+
+This tool was used to regenerate tr46map_data.c.
+The release has recent version of this file anyway.
+
+diff --git a/Makefile.in b/Makefile.in
+index 1111111..2222222 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -94,7 +94,6 @@ PRE_UNINSTALL = :
+ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
+-noinst_PROGRAMS = gentr46map$(EXEEXT)
+ @HAVE_LD_VERSION_SCRIPT_TRUE@am__append_1 = -Wl,--version-script=$(srcdir)/idn2.map
+ @HAVE_LD_VERSION_SCRIPT_FALSE@am__append_2 = -export-symbols-regex '^idn2_.*|_idn2_punycode_..code'
+ subdir = .
+@@ -198,9 +197,6 @@ libidn2_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(libidn2_la_LDFLAGS) $(LDFLAGS) -o $@
+ PROGRAMS = $(noinst_PROGRAMS)
+-gentr46map_SOURCES = gentr46map.c
+-gentr46map_OBJECTS = gentr46map.$(OBJEXT)
+-gentr46map_DEPENDENCIES = $(am__DEPENDENCIES_1)
+ AM_V_P = $(am__v_P_@AM_V@)
+ am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
+ am__v_P_0 = false
+@@ -235,8 +231,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+ am__v_CCLD_0 = @echo "  CCLD    " $@;
+ am__v_CCLD_1 = 
+-SOURCES = $(libidn2_la_SOURCES) gentr46map.c
+-DIST_SOURCES = $(libidn2_la_SOURCES) gentr46map.c
++SOURCES = $(libidn2_la_SOURCES)
++DIST_SOURCES = $(libidn2_la_SOURCES)
+ RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
+ 	ctags-recursive dvi-recursive html-recursive info-recursive \
+ 	install-data-recursive install-dvi-recursive \
+@@ -635,10 +631,9 @@ TR46MAP = IdnaMappingTable.txt
+ TR46MAP_URL = http://www.unicode.org/Public/idna/6.3.0/IdnaMappingTable.txt
+ NFCQC = DerivedNormalizationProps.txt
+ NFCQC_URL = http://www.unicode.org/Public/6.3.0/ucd/DerivedNormalizationProps.txt
+-BUILT_SOURCES = data.c tr46map_data.c
++BUILT_SOURCES = data.c
+ DISTCLEANFILES = tr46map_data.c
+ MAINTAINERCLEANFILES = $(IDNA_TABLE) $(TR46MAP) $(NFCQC)
+-gentr46map_LDADD = $(LTLIBUNISTRING)
+ LCOV_INFO = libidn2.info
+ all: $(BUILT_SOURCES) config.h
+ 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+@@ -744,10 +739,6 @@ clean-noinstPROGRAMS:
+ 	echo " rm -f" $$list; \
+ 	rm -f $$list
+ 
+-gentr46map$(EXEEXT): $(gentr46map_OBJECTS) $(gentr46map_DEPENDENCIES) $(EXTRA_gentr46map_DEPENDENCIES) 
+-	@rm -f gentr46map$(EXEEXT)
+-	$(AM_V_CCLD)$(LINK) $(gentr46map_OBJECTS) $(gentr46map_LDADD) $(LIBS)
+-
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT)
+ 
+@@ -759,7 +750,6 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/data.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/free.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gentr46map.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/idna.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lookup.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/punycode.Plo@am__quote@
+@@ -1261,10 +1251,6 @@ data.c: $(srcdir)/gen-tables-from-iana.pl $(IDNA_TABLE)
+ 	cat $(IDNA_TABLE) | $(srcdir)/gen-tables-from-iana.pl > $@.new
+ 	mv $@.new $@
+ 
+-tr46map_data.c: gentr46map.c gentr46map$(EXEEXT) $(TR46MAP) $(NFCQC)
+-	$(builddir)/gentr46map$(EXEEXT) > $@.new
+-	mv $@.new $@
+-
+ $(IDNA_TABLE):
+ 	if ! echo "4ebaf0c72061474d20078897d254768d894507de $(IDNA_TABLE)" | sha1sum -c -; then \
+ 	  rm -f $(IDNA_TABLE); \
