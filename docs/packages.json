@@ -177,6 +177,7 @@
     "libiconv": {"version": "1.15", "website": "https://www.gnu.org/software/libiconv/", "description": ""},
     "libid3tag": {"version": "0.15.1b", "website": "https://sourceforge.net/projects/mad/files/libid3tag/", "description": ""},
     "libidn": {"version": "1.33", "website": "https://www.gnu.org/software/libidn/", "description": "Libidn"},
+    "libidn2": {"version": "0.16", "website": "https://www.gnu.org/software/libidn/#libidn2", "description": "implementation of IDNA2008/TR46 internationalized domain names"},
     "libieee1284": {"version": "0.2.11", "website": "http://cyberelk.net/tim/software/libieee1284/", "description": ""},
     "libircclient": {"version": "1.8", "website": "https://sourceforge.net/projects/libircclient/", "description": ""},
     "libjpeg-turbo": {"version": "1.5.1", "website": "http://libjpeg-turbo.virtualgl.org/", "description": ""},
