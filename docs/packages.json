@@ -191,6 +191,7 @@
     "libmad": {"version": "0.15.1b", "website": "http://www.underbit.com/products/mad/", "description": ""},
     "libmicrohttpd": {"version": "0.9.38", "website": "https://www.gnu.org/software/libmicrohttpd/", "description": "GNU Libmicrohttpd"},
     "libmikmod": {"version": "3.3.7", "website": "http://mikmod.raphnet.net/", "description": "libMikMod"},
+    "libmms": {"version": "0.6.4", "website": "https://sourceforge.net/projects/libmms/", "description": "a library for downloading (streaming) media files using the mmst and mmsh protocols"},
     "libmng": {"version": "2.0.3", "website": "http://www.libmng.com/", "description": ""},
     "libmodplug": {"version": "0.8.8.4", "website": "http://modplug-xmms.sourceforge.net/", "description": ""},
     "libmpcdec": {"version": "1.2.6", "website": "http://www.musepack.net/", "description": ""},
