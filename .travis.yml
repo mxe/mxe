@@ -1,7 +1,9 @@
 language: c
-sudo: false
+dist: trusty
+sudo: required
 
 script:
+  - sudo update-ca-certificates
   - make docs/build-matrix.html docs/packages.json OS_SHORT_NAME=disable-native-plugins
   - if [ "$GH_TOKEN" != "" ]; then ./tools/travis-push.sh; fi
   # Package wxwidgets is downloaded for more than 10 minutes,
