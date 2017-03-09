@@ -1,18 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libarchive
-$(PKG)_WEBSITE  := http://www.libarchive.org/
+$(PKG)_WEBSITE  := https://www.libarchive.org/
 $(PKG)_DESCR    := Libarchive
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.2
 $(PKG)_CHECKSUM := eb87eacd8fe49e8d90c8fdc189813023ccc319c5e752b01fb6ad0cc7b2c53d5e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.libarchive.org/downloads/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.libarchive.org/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 libiconv libxml2 openssl xz zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.libarchive.org/downloads/' | \
+    $(WGET) -q -O- 'https://www.libarchive.org/downloads/' | \
     $(SED) -n 's,.*libarchive-\([0-9][^<]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

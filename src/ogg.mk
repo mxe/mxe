@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ogg
-$(PKG)_WEBSITE  := http://www.xiph.org/ogg/
+$(PKG)_WEBSITE  := https://www.xiph.org/ogg/
 $(PKG)_DESCR    := OGG
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.2
@@ -12,7 +12,7 @@ $(PKG)_URL      := http://downloads.xiph.org/releases/ogg/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.xiph.org/downloads/' | \
+    $(WGET) -q -O- 'https://www.xiph.org/downloads/' | \
     $(SED) -n 's,.*libogg-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

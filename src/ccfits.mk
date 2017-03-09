@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ccfits
-$(PKG)_WEBSITE  := http://heasarc.gsfc.nasa.gov/fitsio/ccfits
+$(PKG)_WEBSITE  := https://heasarc.gsfc.nasa.gov/fitsio/ccfits
 $(PKG)_DESCR    := CCfits
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4
@@ -12,7 +12,7 @@ $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/fitsio/CCfits/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc cfitsio
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "http://heasarc.gsfc.nasa.gov/docs/software/fitsio/ccfits/" | \
+    $(WGET) -q -O- "https://heasarc.gsfc.nasa.gov/docs/software/fitsio/ccfits/" | \
     grep -i '<a href="CCfits.*tar' | \
     $(SED) -n 's,.*CCfits-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

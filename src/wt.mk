@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := wt
-$(PKG)_WEBSITE  := http://www.webtoolkit.eu
+$(PKG)_WEBSITE  := https://www.webtoolkit.eu/
 $(PKG)_DESCR    := Wt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.3.6

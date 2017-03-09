@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gendef
-$(PKG)_WEBSITE  := http://sourceforge.net/p/mingw-w64/wiki2/gendef/
+$(PKG)_WEBSITE  := https://sourceforge.net/p/mingw-w64/wiki2/gendef/
 $(PKG)_IGNORE    = $(mingw-w64_IGNORE)
 $(PKG)_VERSION   = $(mingw-w64_VERSION)
 $(PKG)_CHECKSUM  = $(mingw-w64_CHECKSUM)

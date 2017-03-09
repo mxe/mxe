@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-lablgtk2
-$(PKG)_WEBSITE  := http://forge.ocamlcore.org/
+$(PKG)_WEBSITE  := https://forge.ocamlcore.org/
 $(PKG)_DESCR    := lablgtk2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.16.0
@@ -12,7 +12,7 @@ $(PKG)_URL      := https://forge.ocamlcore.org/frs/download.php/979/$($(PKG)_FIL
 $(PKG)_DEPS     := gcc gtk2 gtkglarea gtksourceview libglade ocaml-findlib ocaml-lablgl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://forge.ocamlcore.org/frs/?group_id=220' | \
+    $(WGET) -q -O- 'https://forge.ocamlcore.org/frs/?group_id=220' | \
     $(SED) -n 's,.*lablgtk-\(2[^>]*\)\.tar.*,\1,ip' | \
     $(SORT) | \
     tail -1

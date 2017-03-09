@@ -12,7 +12,7 @@ $(PKG)_URL      := https://github.com/michaelrsweet/mxml/releases/download/relea
 $(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.msweet.org/downloads.php?L+Z3' | \
+    $(WGET) -q -O- 'https://www.msweet.org/downloads.php?L+Z3' | \
     $(SED) -n 's,.*<a href="files.*mxml-\([0-9\.]*\)\.tar.*,\1,p' | \
     head -1
 endef

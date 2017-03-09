@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 1.0.21
 $(PKG)_CHECKSUM := 7dce9cce9a81194b7065ee912bcd55eeffebab694ea403ffb91b67db66b1824b
 $(PKG)_SUBDIR   := libusb-$($(PKG)_VERSION)
 $(PKG)_FILE     := libusb-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libusb-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libusb-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

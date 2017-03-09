@@ -6,15 +6,15 @@ $(PKG)_VERSION  := 1.15
 $(PKG)_CHECKSUM := 7946e945a96e28152ba5a6beb0625ca715c6e32ac55f2e353ef54def0c8ed924
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/automake/$($(PKG)_FILE)
-$(PKG)_WEBSITE  := http://www.gnu.org/software/automake
+$(PKG)_URL      := https://ftp.gnu.org/gnu/automake/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://ftpmirror.gnu.org/automake/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := https://www.gnu.org/software/automake
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     := autoconf
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/automake/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/automake/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="automake-\([0-9][^"]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

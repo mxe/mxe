@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gd
-$(PKG)_WEBSITE  := http://www.libgd.org/
+$(PKG)_WEBSITE  := https://libgd.github.io/
 $(PKG)_DESCR    := GD  (without support for xpm)
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.1.0

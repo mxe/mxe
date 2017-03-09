@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := assimp
-$(PKG)_WEBSITE  := http://assimp.sourceforge.net/
+$(PKG)_WEBSITE  := https://assimp.sourceforge.io/
 $(PKG)_DESCR    := Assimp Open Asset Import Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2

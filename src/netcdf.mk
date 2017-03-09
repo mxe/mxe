@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := netcdf
-$(PKG)_WEBSITE  := http://www.unidata.ucar.edu/software/netcdf/
+$(PKG)_WEBSITE  := https://www.unidata.ucar.edu/software/netcdf/
 $(PKG)_DESCR    := NetCDF
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.3.0
@@ -12,7 +12,7 @@ $(PKG)_URL      := ftp://ftp.unidata.ucar.edu/pub/netcdf/old/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc curl hdf4 hdf5 portablexdr zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.unidata.ucar.edu/downloads/netcdf/index.jsp' | \
+    $(WGET) -q -O- 'https://www.unidata.ucar.edu/downloads/netcdf/index.jsp' | \
     grep netcdf | \
     $(SED) -n 's,.*href="netcdf-\([0-9_]*\)">.*,\1,p' | \
     head -1 | \

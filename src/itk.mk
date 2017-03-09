@@ -1,18 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := itk
-$(PKG)_WEBSITE  := http://www.itk.org/
+$(PKG)_WEBSITE  := https://www.itk.org/
 $(PKG)_DESCR    := Insight Segmentation and Registration Toolkit (ITK)
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.10.1
 $(PKG)_CHECKSUM := 334312cc31925fd6c2622c9cd4ed33fecbbbd5b97e03b93f34b259d08352eed7
 $(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc expat hdf5 jpeg libpng tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://itk.org/ITK/resources/software.html' | \
+    $(WGET) -q -O- 'https://itk.org/ITK/resources/software.html' | \
     $(SED) -n 's,.*InsightToolkit-\([0-9][^>]*\)\.tar\.xz.*,\1,p' | \
     $(SORT) -V |
     tail -1

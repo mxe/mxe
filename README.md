@@ -3,7 +3,7 @@
 [![License][license-badge]][license-page]
 
 [license-page]: LICENSE.md
-[license-badge]: http://img.shields.io/badge/License-MIT-brightgreen.svg
+[license-badge]: https://img.shields.io/badge/License-MIT-brightgreen.svg
 
 MXE (M cross environment) is a Makefile that compiles a cross
 compiler and cross compiles many free libraries such as SDL and
