@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 6.400.3
 $(PKG)_CHECKSUM := 019ce442a1bcad4c5da0bc01ee35333c9a0783ec6a58237ae1e774da68cd4f2f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE).orig
 $(PKG)_DEPS     := gcc blas lapack
 
 define $(PKG)_UPDATE
