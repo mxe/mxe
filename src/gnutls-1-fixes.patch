@@ -1,28 +1,28 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 7b62567c0820dd34afc177502638c702177dac39 Mon Sep 17 00:00:00 2001
+From 3f039a0fed396f006a82ff66b30879450f7942c8 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 4 Feb 2013 16:11:12 +0100
 Subject: [PATCH 1/2] add missing private lib to pc file
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index 441b45d..9e2880a 100644
+index c037579..6e71622 100644
 --- a/lib/gnutls.pc.in
 +++ b/lib/gnutls.pc.in
 @@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
  URL: http://www.gnutls.org/
  Version: @VERSION@
  Libs: -L${libdir} -lgnutls
--Libs.private: @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBNSL@ @LTLIBPTHREAD@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LTLIBUNISTRING@
-+Libs.private: @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBNSL@ @LTLIBPTHREAD@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LTLIBUNISTRING@ -lcrypt32
+-Libs.private: @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBNSL@ @LTLIBPTHREAD@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LTLIBUNISTRING@ @LIBIDN2_LIBS@
++Libs.private: @LTLIBZ@ @LTLIBINTL@ @LIBSOCKET@ @LTLIBNSL@ @LTLIBPTHREAD@ @P11_KIT_LIBS@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LTLIBUNISTRING@ @LIBIDN2_LIBS@ -lcrypt32
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
 -- 
 2.9.3
 
 
-From ed39e9884ea4a2ce8bd76e66d85d0579312517cd Mon Sep 17 00:00:00 2001
+From 23f9d7800413bb00a14dcbe55afb61d1272eb448 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 24 Nov 2014 08:56:48 +0100
 Subject: [PATCH 2/2] windows build fix: ws2tcpip.h supplies inet_ntop
