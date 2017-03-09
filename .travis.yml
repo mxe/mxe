@@ -1,5 +1,6 @@
 language: c
 dist: trusty
+sudo: false
 
 script:
   - make docs/build-matrix.html docs/packages.json OS_SHORT_NAME=disable-native-plugins
