@@ -16,8 +16,8 @@ MXE_TARGETS        := i686-w64-mingw32.static
 
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
-PKG_MIRROR         := s3.amazonaws.com/mxe-pkg
-PKG_CDN            := d1yihgixbnrglp.cloudfront.net
+PKG_MIRROR         := http://s3.amazonaws.com/mxe-pkg
+PKG_CDN            := http://d1yihgixbnrglp.cloudfront.net
 GITLAB_BACKUP      := https://gitlab.com/starius/mxe-backup2/raw/master/
 
 PWD        := $(shell pwd)
