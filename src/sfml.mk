@@ -1,18 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sfml
-$(PKG)_WEBSITE  := http://www.sfml-dev.org/
+$(PKG)_WEBSITE  := https://www.sfml-dev.org/
 $(PKG)_DESCR    := SFML
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.2
 $(PKG)_CHECKSUM := 03fe79943c48222037f1126a581b12c95a4dd53168881907964695c5ec3dc395
 $(PKG)_SUBDIR   := SFML-$($(PKG)_VERSION)
 $(PKG)_FILE     := SFML-$($(PKG)_VERSION)-sources.zip
-$(PKG)_URL      := http://sfml-dev.org/download/sfml/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://sfml-dev.org/download/sfml/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype glew jpeg libsndfile openal
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.sfml-dev.org/download.php' | \
+    $(WGET) -q -O- 'https://www.sfml-dev.org/download.php' | \
     $(SED) -n 's,.*download/sfml/\([^"]\+\).*,\1,p' | \
     head -1
 endef

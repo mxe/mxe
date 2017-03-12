@@ -46,7 +46,7 @@ terminal emulators:
 #### Make
 
 Make is difficult to cross-compile so it is downloaded from the [source
-recommended by the GNU Make team](http://git.savannah.gnu.org/cgit/make.git/tree/README.W32.template).
+recommended by the GNU Make team](https://git.savannah.gnu.org/cgit/make.git/tree/README.W32.template).
 
 #### pkgconf/pkg-config
 

@@ -12,7 +12,7 @@ $(PKG)_URL      := http://downloads.xiph.org/releases/vorbis/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ogg
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.xiph.org/downloads/' | \
+    $(WGET) -q -O- 'https://www.xiph.org/downloads/' | \
     $(SED) -n 's,.*libvorbis-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

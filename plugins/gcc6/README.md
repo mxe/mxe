@@ -8,7 +8,7 @@ GCC 6.1 is released with a number of major changes
 > been defaulting to previously, for compiling older `C++` code that might
 > require either explicitly compiling with selected older `C++` standards,
 > or might require some code adjustment, see
-> [[3](http://gcc.gnu.org/gcc-6/porting_to.html)]
+> [[3](https://gcc.gnu.org/gcc-6/porting_to.html)]
 > for details.
 
 So it is expected that some of MXE packages will fails to build from source

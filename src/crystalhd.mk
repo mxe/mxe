@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := crystalhd
-$(PKG)_WEBSITE  := http://www.broadcom.com/support/crystal_hd/
+$(PKG)_WEBSITE  := https://www.broadcom.com/support/crystal_hd/
 $(PKG)_DESCR    := Broadcom Crystal HD Headers
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1

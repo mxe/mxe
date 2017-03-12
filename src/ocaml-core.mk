@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-core
-$(PKG)_WEBSITE  := http://caml.inria.fr/
+$(PKG)_WEBSITE  := https://caml.inria.fr/
 $(PKG)_DESCR    := ocaml
 $(PKG)_IGNORE    = $(ocaml-native_IGNORE)
 $(PKG)_VERSION   = $(ocaml-native_VERSION)

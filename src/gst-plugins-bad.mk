@@ -1,13 +1,13 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gst-plugins-bad
-$(PKG)_WEBSITE  := http://gstreamer.freedesktop.org/
+$(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.2
 $(PKG)_CHECKSUM := 650855e39ff56a8bb6cb0c192109c5926ce12f536d06e19ebf829de71ef396fe
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc faad2 gst-plugins-base gstreamer libass libgcrypt libmms mpg123 neon openal openjpeg vo-aacenc vo-amrwbenc
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-bad/refs,$(gstreamer_UPDATE))

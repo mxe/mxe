@@ -8,11 +8,11 @@ $(PKG)_VERSION  := 1.3.2
 $(PKG)_CHECKSUM := 35ce0ee1741ea38def304ddfe84a958901413aa829698357f0bee5bb8f0a223b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libcddb/libcddb/$($(PKG)_VERSION)/$(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libcddb/libcddb/$($(PKG)_VERSION)/$(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := gcc libiconv libgnurx
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://downloads.sourceforge.net/project/libcddb/libcddb/' | \
+    $(WGET) -q -O- 'https://downloads.sourceforge.net/project/libcddb/libcddb/' | \
     $(SED) -n 's,.*libcddb-\([0-9][^>]*\)\.tar.*,\1,p' | \
     sort | uniq | \
     head -1

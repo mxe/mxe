@@ -12,7 +12,7 @@ $(PKG)_URL      := https://support.hdfgroup.org/ftp/HDF/releases/HDF$($(PKG)_VER
 $(PKG)_DEPS     := gcc jpeg portablexdr zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/' | \
+    $(WGET) -q -O- 'https://www.hdfgroup.org/ftp/HDF/HDF_Current/src/' | \
     grep '<a href.*hdf.*bz2' | \
     $(SED) -n 's,.*hdf-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

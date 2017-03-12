@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := flac
-$(PKG)_WEBSITE  := http://www.xiph.org/flac/
+$(PKG)_WEBSITE  := https://www.xiph.org/flac/
 $(PKG)_DESCR    := FLAC
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.1

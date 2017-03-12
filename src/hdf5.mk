@@ -12,7 +12,7 @@ $(PKG)_URL      := https://support.hdfgroup.org/ftp/HDF5/prev-releases/hdf5-$($(
 $(PKG)_DEPS     := gcc pthreads zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.hdfgroup.org/ftp/HDF5/current/src/' | \
+    $(WGET) -q -O- 'https://www.hdfgroup.org/ftp/HDF5/current/src/' | \
     grep '<a href.*hdf5.*bz2' | \
     $(SED) -n 's,.*hdf5-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

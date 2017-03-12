@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 1.6.2
 $(PKG)_CHECKSUM := 2597acc00171006d49f0d300440a87df51b113d557466e532153abc740db3469
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gst-plugins-base
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-libav/refs,$(gstreamer_UPDATE))

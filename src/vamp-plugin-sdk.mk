@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 2.5
 $(PKG)_CHECKSUM := 7b719f9e4575624b30b335c64c00469d3745aef4bca177f66faf3204f073139d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://code.soundsoftware.ac.uk/attachments/download/690/$(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://code.soundsoftware.ac.uk/attachments/download/690/$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE

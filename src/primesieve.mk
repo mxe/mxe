@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 5.5.0
 $(PKG)_CHECKSUM := f0f818902967ce7c911c330c578a52ec62dbbd9b12a68b8d3a3bc79b601e52b0
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://dl.bintray.com/kimwalisch/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://dl.bintray.com/kimwalisch/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

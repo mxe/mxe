@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gcc
-$(PKG)_WEBSITE  := http://gcc.gnu.org/
+$(PKG)_WEBSITE  := https://gcc.gnu.org/
 $(PKG)_DESCR    := GCC
 $(PKG)_IGNORE   := 5%
 $(PKG)_VERSION  := 4.9.4
@@ -9,14 +9,14 @@ $(PKG)_CHECKSUM := 6c11d292cd01b294f9f84c9a59c230d80e9e4a47e5c6355f046bb36d4f358
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_PATCHES  := $(basename $(lastword $(MAKEFILE_LIST))).patch
-$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := binutils mingw-w64
 
 $(PKG)_FILE_$(BUILD) :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
     $(SORT) -V | \
     tail -1

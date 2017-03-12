@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ossim
-$(PKG)_WEBSITE  := http://trac.osgeo.org/ossim
+$(PKG)_WEBSITE  := https://trac.osgeo.org/ossim
 $(PKG)_DESCR    := OSSIM
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.20

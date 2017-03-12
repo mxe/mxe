@@ -1,19 +1,19 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := apr
-$(PKG)_WEBSITE  := http://apr.apache.org/
+$(PKG)_WEBSITE  := https://apr.apache.org/
 $(PKG)_DESCR    := APR
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.5.2
 $(PKG)_CHECKSUM := 1af06e1720a58851d90694a984af18355b65bb0d047be03ec7d659c746d6dbdb
 $(PKG)_SUBDIR   := apr-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://archive.apache.org/dist/apr/$($(PKG)_FILE)
+$(PKG)_URL      := https://archive.apache.org/dist/apr/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://mirror.apache-kr.org/apr/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://apr.apache.org/download.cgi' | \
+    $(WGET) -q -O- 'https://apr.apache.org/download.cgi' | \
     grep 'apr1.*best' |
     $(SED) -n 's,.*APR \([0-9.]*\).*,\1,p'
 endef

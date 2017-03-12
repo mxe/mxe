@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := dlfcn-win32
-$(PKG)_WEBSITE  := https://code.google.com/p/dlfcn-win32/
+$(PKG)_WEBSITE  := https://github.com/dlfcn-win32/dlfcn-win32
 $(PKG)_DESCR    := POSIX dlfcn wrapper for Windows
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := e19bf07

@@ -11,7 +11,7 @@ $(PKG)_URL      := https://nice.freedesktop.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://cgit.freedesktop.org/libnice/libnice/refs/tags' | \
+    $(WGET) -q -O- 'https://cgit.freedesktop.org/libnice/libnice/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*\.[^<]*\)<.*,\1,p' | \
     $(SORT) -Vr | \

@@ -6,8 +6,8 @@ $(PKG)_VERSION  := 8.23
 $(PKG)_CHECKSUM := ec43ca5bcfc62242accb46b7f121f6b684ee21ecd7d075059bf650ff9e37b82d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://ftpmirror.gnu.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := https://www.gnu.org/software/coreutils
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
@@ -15,7 +15,7 @@ $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS_$(BUILD) := gettext gmp libiconv libtool
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/coreutils/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/coreutils/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="coreutils-\([0-9][^"]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

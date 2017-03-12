@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := db
-$(PKG)_WEBSITE  := http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html
+$(PKG)_WEBSITE  := https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html
 $(PKG)_DESCR    := Oracle Berkeley DB
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.1.26
@@ -12,7 +12,7 @@ $(PKG)_URL      := http://download.oracle.com/berkeley-db/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/downloads/index.html' | \
+    $(WGET) -q -O- 'https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/downloads/index.html' | \
     $(SED) -n 's,.*/db-\([0-9\.]\+\)\.tar.gz.*,\1,p' | \
     head -1
 endef
