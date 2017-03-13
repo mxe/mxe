@@ -69,6 +69,7 @@ define newline
 endef
 
 \n    := $(newline)
+comma := ,
 null  :=
 space := $(null) $(null)
 repeat = $(subst x,$(1),$(subst $(space),,$(call int_encode,$(2))))
@@ -158,6 +159,7 @@ MAKE_SHARED_FROM_STATIC = \
 	--libdir '$(PREFIX)/$(TARGET)/lib' \
 	--bindir '$(PREFIX)/$(TARGET)/bin'
 
+# MXE_GET_GITHUB functions can be removed once all packages use GH_CONF
 define MXE_GET_GITHUB_SHA
     $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' \
     | $(SED) -n 's#.*"sha": "\([^"]\{10\}\).*#\1#p' \
@@ -175,6 +177,9 @@ define MXE_GET_GITHUB_TAGS
     | $(SORT) -V \
     | tail -1
 endef
+
+# include github related functions
+include $(PWD)/github.mk
 
 # shared lib preload to disable networking, enable faketime etc
 PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
@@ -467,6 +472,9 @@ endef
 $(foreach TARGET,$(MXE_TARGETS),$(call TARGET_RULE,$(TARGET)))
 
 define PKG_RULE
+# configure GitHub metadata if GH_CONF is set
+$(and $($(PKG)_GH_CONF),$(eval $(MXE_SETUP_GITHUB)))
+
 .PHONY: download-$(1)
 download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
 
@@ -720,12 +728,16 @@ clean-pkg:
 clean-junk: clean-pkg
 	rm -rf $(LOG_DIR) $(call TMP_DIR,*)
 
+COMPARE_VERSIONS = $(strip \
+    $(if $($(1)_BRANCH),$(call seq,$($(1)_VERSION),$(2)),\
+    $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1))))
+
 .PHONY: update
 define UPDATE
     $(if $(2),
         $(if $(filter $($(1)_IGNORE),$(2)),
             $(info IGNORED  $(1)  $(2)),
-            $(if $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1)),
+            $(if $(COMPARE_VERSIONS),
                 $(if $(filter $(2),$($(1)_VERSION)),
                     $(info .        $(1)  $(2)),
                     $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
