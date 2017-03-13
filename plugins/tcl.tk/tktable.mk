@@ -1,12 +1,13 @@
 # This file is part of MXE.
 # See index.html for further information.
 
-PKG             := TkTable
+PKG             := tktable
+$(PKG)_OWNER    := https://github.com/highperformancecoder
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.11.D3
 $(PKG)_CHECKSUM := fb9fcedd2c1e252653225ac235d50cad01083b6851206bb0e5e63ecfa575fd5e
-$(PKG)_SUBDIR   := $(PKG).$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG).$($(PKG)_VERSION).tar.gz
+$(PKG)_SUBDIR   := TkTable.$($(PKG)_VERSION)
+$(PKG)_FILE     := TkTable.$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/minsky/files/Sources/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc tk
 
@@ -27,8 +28,10 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-shared \
+        --without-x \
         --with-tcl=$(PREFIX)/$(TARGET)/lib --with-tk=$(PREFIX)/$(TARGET)/lib
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    cp $(1)/libTktable2.11.a $(PREFIX)/$(TARGET)/lib
+    # bizarrely, the Makefile links against -lX11 for no reason, even if
+    # --without-x is specified
+    $(MAKE) -C '$(1)' -j '$(JOBS)' LIBS=
+    $(MAKE) -C '$(1)'  PKG_DIR= install
 endef
