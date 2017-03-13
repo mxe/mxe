@@ -65,13 +65,14 @@ GH_TAG_FILTER  = $(subst $(__gmsl_aa_magic),,$(word 3,$(GH_TAG_VARS)))
 GH_VERSION_SEP = $(subst $(__gmsl_aa_magic),,$(word 4,$(GH_TAG_VARS)))
 
 define MXE_SETUP_GITHUB
-    $(PKG)_GH_REPO    := $(GH_REPO)
-    $(PKG)_BRANCH     := $(GH_BRANCH)
-    $(PKG)_TAG_VARS   := $(GH_TAG_VARS)
-    $(PKG)_TAG_PREFIX := $(GH_TAG_PREFIX)
-    $(PKG)_TAG_SUFFIX := $(GH_TAG_SUFFIX)
-    $(PKG)_TAG_FILTER := $(GH_TAG_FILTER)
-    $(PKG)_FILE       := $(or $($(PKG)_FILE),$(PKG)-$$($$(PKG)_TAG_PREFIX)$($(PKG)_VERSION)$$($$(PKG)_TAG_SUFFIX).tar.gz)
+    $(PKG)_GH_REPO     := $(GH_REPO)
+    $(PKG)_BRANCH      := $(GH_BRANCH)
+    $(PKG)_TAG_VARS    := $(GH_TAG_VARS)
+    $(PKG)_TAG_PREFIX  := $(GH_TAG_PREFIX)
+    $(PKG)_TAG_SUFFIX  := $(GH_TAG_SUFFIX)
+    $(PKG)_TAG_FILTER  := $(GH_TAG_FILTER)
+    $(PKG)_VERSION_SEP := $(or $(GH_VERSION_SEP),.)
+    $(PKG)_FILE        := $(or $($(PKG)_FILE),$(PKG)-$$($$(PKG)_TAG_PREFIX)$($(PKG)_VERSION)$$($$(PKG)_TAG_SUFFIX).tar.gz)
     $(if $(and $(GH_BRANCH),$(GH_TAG_VARS)),\
         $(error $(newline) $(PKG) specifies both branch and tag variables $(newline)))
     $(if $(GH_BRANCH),$(value MXE_SETUP_GITHUB_BRANCH),$(value MXE_SETUP_GITHUB_TAG))
@@ -84,9 +85,9 @@ define MXE_SETUP_GITHUB_BRANCH
 endef
 
 define MXE_SETUP_GITHUB_TAG
-    $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$(PKG)-$($(PKG)_TAG_PREFIX)$($(PKG)_VERSION)$($(PKG)_TAG_SUFFIX))
+    $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$(PKG)-$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
     $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_REPO)/archive/$(subst $(PKG)-,,$($(PKG)_SUBDIR)).tar.gz)
-    $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_TAG,$($(PKG)_GH_REPO),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER))))
+    $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_TAG,$($(PKG)_GH_REPO),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
 endef
 
 # called with owner/repo,branch
@@ -108,6 +109,7 @@ define MXE_GET_GH_TAG
     | $(and $(4),grep -v '$(strip $(4))') \
     | $(SED) 's,^$(strip $(2)),,g' \
     | $(SED) 's,$(strip $(3))$$,,g' \
+    | tr '$(strip $(5))' '.' \
     | $(SORT) -V
     | tail -1
 endef
