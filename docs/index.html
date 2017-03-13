@@ -1248,6 +1248,26 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         </p>
 
         <p>
+        GitHub hosted projects can automatically configure updates,
+        urls, file names etc., see:
+        <ul>
+            <li>
+            <a href="https://github.com/mxe/mxe/blob/master/src/vmime.mk">vmime.mk</a>
+            for an example of branch tracking
+            </li>
+            <li>
+            <a href="https://github.com/mxe/mxe/blob/master/src/libevent.mk">libevent.mk</a>
+            for tag tracking
+            </li>
+            <li>
+            <a href="https://github.com/mxe/mxe/blob/master/src/libffi.mk">libffi.mk</a>
+            for externally hosted tarballs with generated sources not
+            present in source tree
+            </li>
+        </ul>
+        </p>
+
+        <p>
         The <a href="gmsl.html">GNU Make Standard Library</a> is also
         available (though it should be unnecessary for most packages).
         </p>
