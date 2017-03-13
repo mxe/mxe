@@ -760,6 +760,9 @@ update-package-%:
 	    $(and $($*_UPDATE),$(call UPDATE,$*,$(shell $($*_UPDATE)))), \
 	    $(error Package $* not found))
 
+check-update-package-%: UPDATE_DRYRUN = true
+check-update-package-%: update-package-% ;
+
 update-checksum-%: MXE_NO_BACKUP_DL = true
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
