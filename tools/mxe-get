@@ -20,7 +20,7 @@ MXE_DONT_INSTALL  Comma/space separated list of package names to skip
                   *-linux-gnu-*, mxe-requirements, mxe-source packages
                   are excluded automatically.
 
-Required: ar (BSD), gpg (2.x), curl, openssl, awk, sed, tar, gzip
+Required: ar (BSD), gpg, curl, openssl, awk, sed, tar, gzip
 
 Author: Viktor Szakats <https://vszakats.net/>"
 }
@@ -106,8 +106,8 @@ mkdir -p "${MXE_HOME}"
 (
   cd "${MXE_HOME}" || exit
 
-  # APT root
-  base='http://pkg.mxe.cc/repos/apt/debian'
+  base='http://pkg.mxe.cc/repos/apt/debian'  # APT root
+  suid='D43A795B73B16ABE9643FE1AFD8FFF16DB45C6AB'  # Signer UID
 
   alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
 
@@ -115,7 +115,9 @@ mkdir -p "${MXE_HOME}"
   mxe_curl \
     -O "${base}/dists/wheezy/Release.gpg" \
     -O "${base}/dists/wheezy/Release"
-  gpg -q --keyserver hkps://keyserver.ubuntu.com --recv-keys 'D43A795B73B16ABE9643FE1AFD8FFF16DB45C6AB'
+  mxe_curl \
+    "https://keyserver.ubuntu.com/pks/lookup?search=0x${suid}&op=get" \
+  | gpg --import --status-fd 1
   gpg --verify-options show-primary-uid-only --verify Release.gpg Release || exit 1
   mxe_curl \
     -O "${base}/dists/wheezy/main/binary-amd64/Packages.gz"
