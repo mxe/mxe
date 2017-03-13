@@ -135,10 +135,24 @@ mkdir -p "${MXE_HOME}"
   echo "! Installed:${done//|/}"
 
   if [ -n "${done}" ]; then
+    ori='/usr/lib/mxe'
+    pwd="$(pwd)"
+
     echo '! Retargeting symlinks...'
     find . -type l -name '*' | while IFS= read -r f; do
       # FIXME: readlink may need to be adapted for non-macOS systems
-      ln -f -s "$(readlink "${f}" | sed "s|/usr/lib/mxe|$(pwd)|")" "${f}"
+      ln -f -s "$(readlink "${f}" | sed "s|${ori}|${pwd}|")" "${f}"
+    done
+
+    echo '! Rewriting hardcoded absolute paths...'
+    find . -type f \
+      -name '*.la' -o \
+      -name '*.pc' -o \
+      -name '*.cmake' -o \
+      -name '*-config' | while IFS= read -r f; do
+
+      sed "s|${ori}|${pwd}|" \
+        < "${f}" > "${f}-mod" && cp "${f}-mod" "${f}" && rm -f "${f}-mod"
     done
   fi
 
