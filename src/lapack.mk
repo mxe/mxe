@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lapack
+$(PKG)_WEBSITE  := http://www.netlib.org/lapack/
 $(PKG)_VERSION  := 3.6.0
 $(PKG)_CHECKSUM := a9a0082c918fe14e377bbd570057616768dca76cbdc713457d8199aaa233ffc3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
@@ -16,8 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1)' && '$(TARGET)-cmake' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
         -DLAPACKE=ON \

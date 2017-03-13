@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mman-win32
+$(PKG)_WEBSITE  := https://code.google.com/p/mman-win32/
+$(PKG)_DESCR    := MMA-Win32
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := b7ec370
 $(PKG)_CHECKSUM := 6f94db28ddf30711c7b227e97c5142f72f77aca2c5cc034a7d012db242cc2f7b
@@ -14,8 +16,7 @@ $(PKG)_UPDATE = $(call MXE_GET_GITHUB_SHA, witwall/mman-win32, master) | $(SED) 
 define $(PKG)_BUILD
     mkdir '$(1).build'
     cd    '$(1).build' && '$(TARGET)-cmake' '$(1)'\
-        -DBUILD_TESTS=OFF \
-        $(if $(BUILD_STATIC),-DBUILD_SHARED_LIBS=OFF)
+        -DBUILD_TESTS=OFF
     $(MAKE) -C '$(1).build' -j '$(JOBS)'
     $(MAKE) -C '$(1).build' -j 1 install
 

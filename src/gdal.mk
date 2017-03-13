@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gdal
+$(PKG)_WEBSITE  := http://www.gdal.org/
+$(PKG)_DESCR    := GDAL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1.0
-$(PKG)_CHECKSUM := eb499b18e5c5262a803bb7530ae56e95c3293be7b26c74bcadf67489203bf2cd
+$(PKG)_VERSION  := 2.1.3
+$(PKG)_CHECKSUM := ae6a0a0dc6eb45a981a46db27e3dfe16c644fcf04732557e2cb315776974074a
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -13,7 +15,7 @@ $(PKG)_DEPS     := gcc armadillo curl expat geos giflib gta hdf4 hdf5 \
                    netcdf openjpeg postgresql proj sqlite tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
+    $(WGET) -q -O- 'https://trac.osgeo.org/gdal/wiki/DownloadSource' | \
     $(SED) -n 's,.*gdal-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

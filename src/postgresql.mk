@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := postgresql
+$(PKG)_WEBSITE  := https://www.postgresql.org/
+$(PKG)_DESCR    := PostgreSQL
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 9.2.4
 $(PKG)_CHECKSUM := d97dd918a88a4449225998f46aafa85216a3f89163a3411830d6890507ffae93
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc openssl pthreads zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \
+    $(WGET) -q -O- 'https://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \
     grep 'refs/tags/REL9[0-9_]*"' | \
     $(SED) 's,.*refs/tags/REL\(.*\)".*,\1,g;' | \
     $(SED) 's,_,.,g' | \

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := suitesparse
+$(PKG)_WEBSITE  := http://faculty.cse.tamu.edu/davis/suitesparse.html
+$(PKG)_DESCR    := SuiteSparse
 $(PKG)_VERSION  := 4.2.1
 $(PKG)_CHECKSUM := e8023850bc30742e20a3623fabda02421cb5774b980e3e7c9c6d9e7e864946bd
 $(PKG)_SUBDIR   := SuiteSparse

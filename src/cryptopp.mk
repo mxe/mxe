@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cryptopp
+$(PKG)_WEBSITE  := https://www.cryptopp.com/
+$(PKG)_DESCR    := Crypto++ Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.6.3
 $(PKG)_CHECKSUM := 9390670a14170dd0f48a6b6b06f74269ef4b056d4718a1a329f6f6069dc957c9

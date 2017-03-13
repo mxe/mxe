@@ -1,12 +1,14 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libvpx
+$(PKG)_WEBSITE  := https://code.google.com/p/webm/
+$(PKG)_DESCR    := vpx
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.5.0
 $(PKG)_CHECKSUM := 306d67908625675f8e188d37a81fbfafdf5068b09d9aa52702b6fbe601c76797
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://storage.googleapis.com/downloads.webmproject.org/releases/webm/$($(PKG)_FILE)
+$(PKG)_URL      := https://storage.googleapis.com/downloads.webmproject.org/releases/webm/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads yasm
 
 define $(PKG)_UPDATE

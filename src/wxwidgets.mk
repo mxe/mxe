@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := wxwidgets
+$(PKG)_WEBSITE  := https://www.wxwidgets.org/
+$(PKG)_DESCR    := wxWidgets
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0.2
 $(PKG)_CHECKSUM := 346879dc554f3ab8d6da2704f651ecb504a22e9d31c17ef5449b129ed711585d
 $(PKG)_SUBDIR   := wxWidgets-$($(PKG)_VERSION)
 $(PKG)_FILE     := wxWidgets-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc expat jpeg libiconv libpng sdl tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/wxwindows/files/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/wxwindows/files/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

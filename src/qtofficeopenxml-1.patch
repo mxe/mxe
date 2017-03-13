@@ -1,7 +1,7 @@
 From 57c93e64b512b24c1ca983a91c18c1e4bb158d2a Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 19 Mar 2016 15:37:43 +0100
-Subject: [PATCH] fix typo/build failure
+Subject: [PATCH 1/2] fix typo/build failure
 
 
 diff --git a/src/officeopenxml/sml/smlworkbook.cpp b/src/officeopenxml/sml/smlworkbook.cpp
@@ -18,5 +18,30 @@ index dfa8e13..74432db 100644
  
  void Workbook::setBookView(const QString &attribute, const QString &val)
 -- 
-2.5.0
+2.9.3
+
+
+From 549e186188a635ed32e1a5abb1ea0fef854fcb25 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 30 Jan 2017 20:31:36 +0100
+Subject: [PATCH 2/2] build fix for Qt 5.8.0
+
+
+diff --git a/src/3rdParty/karchive/karchive.pri b/src/3rdParty/karchive/karchive.pri
+index afe4965..af9116b 100644
+--- a/src/3rdParty/karchive/karchive.pri
++++ b/src/3rdParty/karchive/karchive.pri
+@@ -42,8 +42,8 @@ SOURCES += \
+ win32: LIBS += -ladvapi32
+ msvc*: DEFINES += _CRT_SECURE_NO_WARNINGS
+ 
+-contains(QT_CONFIG, system-zlib) {
+-    if(unix|win32-g++*):     LIBS_PRIVATE += -lz
++contains(QT_CONFIG, system-zlib) | qtConfig(system-zlib) {
++    if(unix|mingw):     LIBS += -lz
+     else:                    LIBS += zdll.lib
+ } else {
+     p1 = $$[QT_INSTALL_HEADERS/get]/QtZlib
+-- 
+2.9.3
 

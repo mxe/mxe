@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hdf5
+$(PKG)_WEBSITE  := https://www.hdfgroup.org/hdf5/
+$(PKG)_DESCR    := HDF5
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.12
 $(PKG)_CHECKSUM := 6d080f913a226a3ce390a11d9b571b2d5866581a2aa4434c398cd371c7063639
@@ -10,7 +12,7 @@ $(PKG)_URL      := https://support.hdfgroup.org/ftp/HDF5/prev-releases/hdf5-$($(
 $(PKG)_DEPS     := gcc pthreads zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.hdfgroup.org/ftp/HDF5/current/src/' | \
+    $(WGET) -q -O- 'https://www.hdfgroup.org/ftp/HDF5/current/src/' | \
     grep '<a href.*hdf5.*bz2' | \
     $(SED) -n 's,.*hdf5-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := geoip-database
+$(PKG)_WEBSITE  := https://www.maxmind.com/
+$(PKG)_DESCR    := GeoIP Legacy Database
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 20150317-1
 $(PKG)_CHECKSUM := 45be84939fd22bef1ccaa1189f83c667fef275a16bbfb91f82b7b2068b4e3735

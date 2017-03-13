@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qdbm
+$(PKG)_WEBSITE  := http://fallabs.com/qdbm/
+$(PKG)_DESCR    := QDBM
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.78
 $(PKG)_CHECKSUM := b466fe730d751e4bfc5900d1f37b0fb955f2826ac456e70012785e012cdcb73e

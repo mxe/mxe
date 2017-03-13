@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := json-c
+$(PKG)_WEBSITE  := https://github.com/json-c/json-c/wiki
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.12
 $(PKG)_CHECKSUM := 6fd6d2311d610b279e1bcdd5c6d4f699700159d3e0786de8306af7b4bc94fb35

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := box2d
+$(PKG)_WEBSITE  := http://www.box2d.org/
+$(PKG)_DESCR    := Box2D
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.1
 $(PKG)_CHECKSUM := 75d62738b13d2836cd56647581b6e574d4005a6e077ddefa5d727d445d649752
@@ -16,8 +18,7 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && cmake . \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1).build' && '$(TARGET)-cmake' . \
         -DBOX2D_INSTALL=ON \
         -DBOX2D_BUILD_EXAMPLES=OFF \
         -DBOX2D_BUILD_STATIC=$(CMAKE_STATIC_BOOL) \

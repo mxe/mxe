@@ -1,15 +1,17 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := djvulibre
+$(PKG)_WEBSITE  := https://djvu.sourceforge.io/
+$(PKG)_DESCR    := DjVuLibre
 $(PKG)_VERSION  := 3.5.27
 $(PKG)_CHECKSUM := e69668252565603875fb88500cde02bf93d12d48a3884e472696c896e81f505f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/djvu/DjVuLibre/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/djvu/DjVuLibre/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/djvu/files/DjVuLibre/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/djvu/files/DjVuLibre/' | \
     $(SED) -n 's,.*/\([0-9][^A-Za-z"]*\)/".*,\1,p' | \
     head -1
 endef

@@ -1,13 +1,14 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gst-plugins-bad
+$(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.2
 $(PKG)_CHECKSUM := 650855e39ff56a8bb6cb0c192109c5926ce12f536d06e19ebf829de71ef396fe
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gst-plugins-base gstreamer faad2 libass libgcrypt mpg123 openjpeg openal vo-aacenc vo-amrwbenc
+$(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc faad2 gst-plugins-base gstreamer libass libgcrypt libmms mpg123 neon openal openjpeg vo-aacenc vo-amrwbenc
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-bad/refs,$(gstreamer_UPDATE))
 
@@ -24,4 +25,9 @@ define $(PKG)_BUILD
         --docdir='$(1)/sink' \
         --with-html-dir='$(1)/sink'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+
+    # some .dlls are installed to lib - no obvious way to change
+    $(if $(BUILD_SHARED),
+        mv -vf '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+    )
 endef

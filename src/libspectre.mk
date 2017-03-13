@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libspectre
+$(PKG)_WEBSITE  := https://libspectre.freedesktop.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.8
 $(PKG)_CHECKSUM := 65256af389823bbc4ee4d25bfd1cc19023ffc29ae9f9677f2d200fa6e98bc7a8

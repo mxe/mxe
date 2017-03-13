@@ -1,16 +1,17 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cairo
+$(PKG)_WEBSITE  := https://cairographics.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.14.6
-$(PKG)_CHECKSUM := 613cb38447b76a93ff7235e17acd55a78b52ea84a9df128c3f2257f8eaa7b252
+$(PKG)_VERSION  := 1.15.4
+$(PKG)_CHECKSUM := deddf31e196e826e7790bbbf7d0f4b3fd15df243aa48511b349f1791b96be291
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://cairographics.org/releases/$($(PKG)_FILE)
+$(PKG)_URL      := https://cairographics.org/snapshots/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc fontconfig freetype-bootstrap glib libpng lzo pixman zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://cairographics.org/releases/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://cairographics.org/releases/?C=M;O=D' | \
     $(SED) -n 's,.*"cairo-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

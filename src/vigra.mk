@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vigra
+$(PKG)_WEBSITE  := https://ukoethe.github.io/vigra/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.0
 $(PKG)_CHECKSUM := dc041f7ccf838d4321e9bcf522fece1758768dd7a3f8350d1e83e2b8e6daf1e6
@@ -25,9 +26,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,\bSHARED\b,STATIC,' '$(1)/config/VIGRA_ADD_NUMPY_MODULE.cmake'
     $(SED) -i 's,\bSHARED\b,STATIC,' '$(1)/vigranumpy/test/CMakeLists.txt'
     mkdir '$(1)/build'
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DLIBTYPE=STATIC \
+    cd '$(1)/build' && '$(TARGET)-cmake' .. \
         -DVIGRA_STATIC_LIB=1 \
         -DWITH_HDF5=OFF \
         -DWITH_VIGRANUMPY=OFF \

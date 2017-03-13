@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := smpeg
+$(PKG)_WEBSITE  := https://icculus.org/smpeg/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.4.5+cvs20030824
 $(PKG)_CHECKSUM := 1276ea797dd9fde8a12dd3f33f180153922544c28ca9fc7b477c018876be1916
@@ -10,7 +11,7 @@ $(PKG)_URL      := http://ftp.debian.org/debian/pool/main/s/$(PKG)/$($(PKG)_FILE
 $(PKG)_DEPS     := gcc sdl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://packages.debian.org/unstable/source/smpeg' | \
+    $(WGET) -q -O- 'https://packages.debian.org/unstable/source/smpeg' | \
     $(SED) -n 's,.*smpeg_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | \
     head -1
 endef

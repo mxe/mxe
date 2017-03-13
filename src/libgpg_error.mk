@@ -1,17 +1,19 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libgpg_error
+$(PKG)_WEBSITE  := https://www.gnupg.org/related_software/libgpg-error/
+$(PKG)_DESCR    := libgpg-error
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.25
-$(PKG)_CHECKSUM := f628f75843433b38b05af248121beb7db5bd54bb2106f384edac39934261320c
+$(PKG)_VERSION  := 1.27
+$(PKG)_CHECKSUM := 4f93aac6fecb7da2b92871bb9ee33032be6a87b174f54abf8ddf0911a22d29d2
 $(PKG)_SUBDIR   := libgpg-error-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgpg-error-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://mirrors.dotsrc.org/gcrypt/libgpg-error/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/libgpg-error/$($(PKG)_FILE)
+$(PKG)_URL      := https://gnupg.org/ftp/gcrypt/libgpg-error/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/libgpg-error/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgpg-error/' | \
+    $(WGET) -q -O- 'https://gnupg.org/ftp/gcrypt/libgpg-error/' | \
     $(SED) -n 's,.*libgpg-error-\([1-9]\.[1-9][0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

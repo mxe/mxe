@@ -3,16 +3,17 @@
 # Note that IPv6 support is partly broken and therefore disabled.
 
 PKG             := libircclient
+$(PKG)_WEBSITE  := https://sourceforge.net/projects/libircclient/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8
 $(PKG)_CHECKSUM := 2cf8523ac683588f2785b08159a2df3e4d15939ee655c0024aa86334149de8f6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/libircclient/files/libircclient/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/libircclient/files/libircclient/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

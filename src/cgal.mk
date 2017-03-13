@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cgal
+$(PKG)_WEBSITE  := https://www.cgal.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.6.3
 $(PKG)_CHECKSUM := e338027b8767c0a7a6e4fd8679182d1b83b5b1a0da0a1fe4546e7c0ca094fc21
@@ -22,7 +23,6 @@ define $(PKG)_BUILD
         -DCGAL_INSTALL_INC_DIR:STRING="include" \
         -DCGAL_INSTALL_DOC_DIR:STRING="share/doc/CGAL-$($(PKG)_VERSION)" \
         -DCGAL_INSTALL_BIN_DIR:STRING="bin" \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DCGAL_Boost_USE_STATIC_LIBS:BOOL=$(CMAKE_STATIC_BOOL) \
         -DWITH_CGAL_Qt3:BOOL=OFF \
         -DWITH_OpenGL:BOOL=ON \

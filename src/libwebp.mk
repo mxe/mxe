@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libwebp
+$(PKG)_WEBSITE  := https://developers.google.com/speed/webp/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.4.4
 $(PKG)_CHECKSUM := c65d34edb57338e331ba4d622227a2b3179444cfca17d02c34f1ead63f603e86

@@ -4,8 +4,8 @@ PKG             := go
 $(PKG)_WEBSITE  := https://golang.org/
 $(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.3
-$(PKG)_CHECKSUM := 79430a0027a09b0b3ad57e214c4c1acfdd7af290961dd08d322818895af1ef44
+$(PKG)_VERSION  := 1.8
+$(PKG)_CHECKSUM := 406865f587b44be7092f206d73fc1de252600b79b3cacc587b74b5ef5c623596
 $(PKG)_SUBDIR   := go
 $(PKG)_FILE     := go$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://storage.googleapis.com/golang/$($(PKG)_FILE)
@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         DYLD_INSERT_LIBRARIES= \
         ./make.bash
 
+    rm -rf '$(PREFIX)/$(TARGET)/go'
     mkdir -p '$(PREFIX)/$(TARGET)/go'
     for d in include src bin pkg; do \
         cp -a '$(1)'/$$d '$(PREFIX)/$(TARGET)/go/' ; \

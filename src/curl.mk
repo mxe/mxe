@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := curl
+$(PKG)_WEBSITE  := https://curl.haxx.se/libcurl/
+$(PKG)_DESCR    := cURL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.51.0
-$(PKG)_CHECKSUM := 9eef5f6bbb972ffc631f4c76cfe93161bf5186926133c77267b24f5191700518
+$(PKG)_VERSION  := 7.53.1
+$(PKG)_CHECKSUM := 4b124ff5984f2b537790a8f50dbf3d44da89e57d0505ba567128535a2426f5e2
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.lzma
-$(PKG)_URL      := http://curl.haxx.se/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls libidn libssh2
+$(PKG)_URL      := https://curl.haxx.se/download/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc gnutls libidn2 libssh2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://curl.haxx.se/download/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://curl.haxx.se/download/?C=M;O=D' | \
     $(SED) -n 's,.*curl-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
@@ -20,7 +22,7 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --with-gnutls \
         --without-ssl \
-        --with-libidn \
+        --with-libidn2 \
         --enable-sspi \
         --enable-ipv6 \
         --with-libssh2

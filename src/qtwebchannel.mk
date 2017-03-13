@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtwebchannel
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 3ab4cd177cc742ee5015f2b7f943c16ce13380b840f824436b5005485b749816
+$(PKG)_CHECKSUM := 5bf5b15413baa235ee2cbfd136ea3b9303b32879b54f9f25bfb4dc96d37d0b4a
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebchannel,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebchannel,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebchannel,$(qtbase_URL))

@@ -2,11 +2,13 @@
 
 PKG             := tor
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.2.6.10
-$(PKG)_CHECKSUM := 0542c0efe43b86619337862fa7eb02c7a74cb23a79d587090628a5f0f1224b8d
+$(PKG)_VERSION  := 0.2.9.9
+$(PKG)_CHECKSUM := 33325d2b250fd047ba2ddc5d11c2190c4e2951f4b03ec48ebd8bf0666e990d43
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://torproject.org/dist/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := https://torproject.org/
+$(PKG)_OWNER    := https://github.com/starius
 $(PKG)_DEPS     := gcc libevent openssl zlib
 
 define $(PKG)_UPDATE

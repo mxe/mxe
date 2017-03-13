@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openscenegraph
+$(PKG)_WEBSITE  := http://www.openscenegraph.org/
+$(PKG)_DESCR    := OpenSceneGraph
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4.0
 $(PKG)_CHECKSUM := 5c727d84755da276adf8c4a4a3a8ba9c9570fc4b4969f06f1d2e9f89b1e3040e
@@ -21,8 +23,7 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && cmake '$(1)' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1).build' && '$(TARGET)-cmake' '$(1)' \
         -DCMAKE_CXX_FLAGS='-D__STDC_CONSTANT_MACROS' \
         -DCMAKE_HAVE_PTHREAD_H=OFF \
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \

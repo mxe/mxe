@@ -1,12 +1,13 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pkgconf
+$(PKG)_WEBSITE  := https://github.com/pkgconf/pkgconf
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := da179fd
 $(PKG)_CHECKSUM := 91b2e5d7ce06583d5920c373b61d7d6554cd085cbd61ed176c7ff7ff3032523d
 $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://github.com/$(PKG)/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     :=
 

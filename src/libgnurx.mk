@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libgnurx
+$(PKG)_WEBSITE  := https://sourceforge.net/projects/mingw/files/UserContributed/regex/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.6.1
 $(PKG)_CHECKSUM := ee6edc110c6b63d0469f4f05ef187564b310cc8a88b6566310a4aebd48b612c7

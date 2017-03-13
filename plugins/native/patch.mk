@@ -6,15 +6,15 @@ $(PKG)_VERSION  := 2.7.5
 $(PKG)_CHECKSUM := 7436f5a19f93c3ca83153ce9c5cbe4847e97c5d956e57a220121e741f6e7968f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_WEBSITE  := http://www.gnu.org/software/$(PKG)
+$(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://ftpmirror.gnu.org/$(PKG)/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := https://www.gnu.org/software/$(PKG)
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/patch/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/patch/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="patch-\([0-9][^"]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

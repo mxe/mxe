@@ -1,16 +1,17 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freetype
+$(PKG)_WEBSITE  := https://www.freetype.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7
 $(PKG)_CHECKSUM := d6a451f5b754857d2aa3964fd4473f8bc5c64e879b24516d780fb26bec7f7d48
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(shell echo '$($(PKG)_VERSION)' | cut -d . -f 1,2,3)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(shell echo '$($(PKG)_VERSION)' | cut -d . -f 1,2,3)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 harfbuzz libpng zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/freetype/files/freetype2/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/freetype/files/freetype2/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     $(SORT) -V | \
     tail -1

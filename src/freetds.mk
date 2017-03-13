@@ -1,12 +1,15 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freetds
+$(PKG)_WEBSITE  := http://www.freetds.org/
+$(PKG)_DESCR    := FreeTDS
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.00.15
-$(PKG)_CHECKSUM := 3f23655da694f5cb116a722411cd98cff7e8161ca2988afca5221d5c2b942a83
+$(PKG)_VERSION  := 1.00.26
+$(PKG)_CHECKSUM := 25950873df171d866614546a4e18adfbfd211077acb6dc04fed49917d7c75017
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://fossies.org/linux/privat/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libiconv
 
 define $(PKG)_UPDATE

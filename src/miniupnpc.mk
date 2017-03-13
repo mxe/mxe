@@ -1,13 +1,14 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := miniupnpc
+$(PKG)_WEBSITE  := http://miniupnp.free.fr/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9
 $(PKG)_CHECKSUM := 2923e453e880bb949e3d4da9f83dd3cb6f08946d35de0b864d0339cf70934464
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://miniupnp.free.fr/files/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://miniupnp.tuxfamily.org/files/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://miniupnp.tuxfamily.org/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

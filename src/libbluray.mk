@@ -1,17 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libbluray
+$(PKG)_WEBSITE  := https://www.videolan.org/developers/libbluray.html
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.2
 $(PKG)_CHECKSUM := efc994f42d2bce6af2ce69d05ba89dbbd88bcec7aca065de094fb3a7880ce7ea
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
-$(PKG)_URL      := http://ftp.videolan.org/pub/videolan/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.videolan.org/pub/videolan/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.videolan.org/pub/videolan/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := http://videolan-nyc.defaultroute.com/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freetype libxml2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ftp.videolan.org/pub/videolan/libbluray/' | \
+    $(WGET) -q -O- 'https://download.videolan.org/pub/videolan/libbluray/' | \
     $(SED) -n 's,<a href="\([0-9][^<]*\)/".*,\1,p' | \
     $(SORT) -Vr | \
     head -1

@@ -1,22 +1,22 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtwebkit
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := c7a3253cbf8e6035c54c3b08d8a9457bd82efbce71d4b363c8f753fd07bd34df
+$(PKG)_CHECKSUM := 79ae8660086bf92ffb0008b17566270e6477c8fa0daf9bb3ac29404fb5911bec
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebkit,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebkit,$(qtbase_FILE))
-$(PKG)_URL       = $(subst /submodules/,/,$(subst official_releases/qt,community_releases,$(subst qtbase,qtwebkit,$(qtbase_URL))))
-$(PKG)_DEPS     := gcc qtbase qtmultimedia sqlite
+$(PKG)_URL       = https://download.qt.io/community_releases/5.8/5.8.0-final/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc qtbase qtmultimedia qtquickcontrols sqlite
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
 endef
 
 define $(PKG)_BUILD_SHARED
-    # looks for build tools with .exe suffix and tries to use win_flex
-    $(SED) -i 's,\.exe,,' '$(1)/Tools/qmake/mkspecs/features/functions.prf'
-    cd '$(1)' && mkdir -p .git && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' FLEX=flex
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    cd '$(BUILD_DIR)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

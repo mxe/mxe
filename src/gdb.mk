@@ -1,16 +1,17 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gdb
-$(PKG)_VERSION  := 7.12
-$(PKG)_CHECKSUM := 834ff3c5948b30718343ea57b11cbc3235d7995c6a4f3a5cecec8c8114164f94
+$(PKG)_WEBSITE  := https://www.gnu.org/software/gdb/
+$(PKG)_VERSION  := 7.12.1
+$(PKG)_CHECKSUM := 4607680b973d3ec92c30ad029f1b7dbde3876869e6b3a117d8a7e90081113186
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://ftp.gnu.org/pub/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.cs.tu-berlin.de/pub/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://ftpmirror.gnu.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc dlfcn-win32 expat libiconv readline zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/gdb/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/gdb/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="gdb-\([0-9][^"]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lua
+$(PKG)_WEBSITE  := https://www.lua.org/
+$(PKG)_DESCR    := Lua
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.3.3
 # Shared version and luarocks subdir
@@ -9,12 +11,12 @@ $(PKG)_DLLVER   := $(subst .,,$($(PKG)_SHORTVER))
 $(PKG)_CHECKSUM := 5113c06884f7de453ce57702abaac1d618307f33f6789fa870e87a59d772aca2
 $(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)
 $(PKG)_FILE     := lua-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.lua.org/ftp/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.lua.org/ftp/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.lua.org/download.html' | \
+    $(WGET) -q -O- 'https://www.lua.org/download.html' | \
     $(SED) -n 's,.*lua-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

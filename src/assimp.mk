@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := assimp
+$(PKG)_WEBSITE  := https://assimp.sourceforge.io/
+$(PKG)_DESCR    := Assimp Open Asset Import Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2
 $(PKG)_CHECKSUM := 187f825c563e84b1b17527a4da0351aa3d575dfd696a9d204ae4bb19ee7df94a
@@ -23,8 +25,7 @@ define $(PKG)_BUILD
         -DASSIMP_ENABLE_BOOST_WORKAROUND=OFF \
         -DASSIMP_BUILD_ASSIMP_TOOLS=OFF \
         -DASSIMP_BUILD_SAMPLES=OFF      \
-        -DASSIMP_BUILD_TESTS=OFF        \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON)
+        -DASSIMP_BUILD_TESTS=OFF
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
 
     '$(TARGET)-gcc' \

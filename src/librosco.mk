@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := librosco
+$(PKG)_WEBSITE  := https://github.com/colinbourassa/librosco/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.1.11
 $(PKG)_CHECKSUM := 48bb2d07c2575f39bdb6cf022889f20bd855eb9100bb19d4e2536a771198e3a4
@@ -16,7 +17,6 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1)/build'
     cd '$(1)/build' && '$(TARGET)-cmake' .. \
-        -DBUILD_STATIC=$(if $(BUILD_STATIC),ON,OFF) \
         -DENABLE_DOC_INSTALL=off \
         -DENABLE_TESTAPP_INSTALL=off
 

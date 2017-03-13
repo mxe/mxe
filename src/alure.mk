@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := alure
+$(PKG)_WEBSITE  := http://kcat.strangesoft.net/alure.html
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2
 $(PKG)_CHECKSUM := 465e6adae68927be3a023903764662d64404e40c4c152d160e3a8838b1d70f71
@@ -17,15 +18,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/build' && cmake \
+    cd '$(1)/build' && '$(TARGET)-cmake' \
         -DDYNLOAD=OFF \
-        -DBUILD_STATIC=ON \
-        -DBUILD_SHARED=OFF \
         -DBUILD_EXAMPLES=OFF \
         -DFLUIDSYNTH=OFF \
         -DCMAKE_C_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \
         -DCMAKE_CXX_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         ..
     $(MAKE) -C '$(1)/build' -j $(JOBS) VERBOSE=1
     $(MAKE) -C '$(1)/build' -j $(JOBS) install

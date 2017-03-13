@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := glfw3
+$(PKG)_WEBSITE  := http://www.glfw.org/
+$(PKG)_DESCR    := GLFW 3.x
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.2
 $(PKG)_CHECKSUM := 6ac642087682aaf7f8397761a41a99042b2c656498217a1c63ba9706d1eef122
@@ -15,9 +17,7 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd    '$(1).build' && cmake '$(1)' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
+    cd    '$(1).build' && '$(TARGET)-cmake' '$(1)' \
         -DGLFW_BUILD_EXAMPLES=FALSE \
         -DGLFW_BUILD_TESTS=FALSE \
         -DGLFW_BUILD_DOCS=FALSE \

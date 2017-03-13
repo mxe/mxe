@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libsndfile
+$(PKG)_WEBSITE  := http://www.mega-nerd.com/libsndfile/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.27
 $(PKG)_CHECKSUM := a391952f27f4a92ceb2b4c06493ac107896ed6c76be9a613a4731f076d30fac0

@@ -101,10 +101,13 @@
 
     <h3>Supported Toolchains</h3>
 
+    <p>
+        Compiler and runtime: MinGW-w64.
+    </p>
+
     <table id="supported-toolchains">
     <tr>
-        <th rowspan="2">Runtime</th>
-        <th rowspan="2">Host Triplet</th>
+        <th rowspan="2">Target OS</th>
         <th colspan="2">Packages</th>
     </tr>
     <tr>
@@ -112,13 +115,12 @@
         <th>Shared</th>
     </tr>
     <tr>
-        <td rowspan="2">MinGW-w64</td>
-        <td>i686-w64-mingw32</td>
+        <td>32 bit Windows</td>
         <td style='text-align:center'>99% (379/381)</td>
         <td style='text-align:center'>72% (273/381)</td>
     </tr>
     <tr>
-        <td>x86_64-w64-mingw32</td>
+        <td>64 bit Windows</td>
         <td style='text-align:center'>94% (360/381)</td>
         <td style='text-align:center'>71% (271/381)</td>
     </tr>
@@ -129,13 +131,41 @@
         for individual packages.
     </p>
     <p>
-        OpenMP (<a href="http://gcc.gnu.org/projects/gomp/">libgomp</a>)
-        and pthreads (<a href="http://mingw-w64.sourceforge.net/">winpthreads</a>)
+        Executables built for 32 bit Windows can be
+        executed on 64 bit Windows as well.
+    </p>
+    <p>
+        How to choose MXE target:
+        <ol>
+            <li>If you want a 64 bit Windows executable,
+                statically linked into one big executable:
+                use MXE_TARGET x86_64-w64-mingw32.static;</li>
+            <li>If you want a 64 bit Windows executable,
+                split into an executable and dependant dlls
+                use MXE_TARGET x86_64-w64-mingw32.shared;</li>
+            <li>If you want a 32 bit Windows executable,
+                statically linked into one big executable:
+                use MXE_TARGET i686-w64-mingw32.static;</li>
+            <li>If you want a 32 bit Windows executable,
+                split into an executable and dependant dlls
+                use MXE_TARGET i686-w64-mingw32.shared.</li>
+        </ol>
+        Remark: The 'w64-mingw32' in those names are left-overs from
+        historical evolutions in the open source cross-compilation world
+        and refer in no way to the result being 64 or 32 bit Windows.
+    </p>
+    <p>
+        OpenMP (<a href="https://gcc.gnu.org/projects/gomp/">libgomp</a>)
+        and pthreads (<a href="https://mingw-w64.sourceforge.io/">winpthreads</a>)
         are always available.
     </p>
     <p>
         Experimental support for GCC with posix threads was
         added in <a href="https://github.com/mxe/mxe/pull/958">November 2015</a>.
+    </p>
+    <p>
+        Experimental support for alternate GCC Exception Handling was
+        added in <a href="https://github.com/mxe/mxe/pull/1664">February 2017</a>.
     </p>
 
 </div>
@@ -145,7 +175,7 @@
 
     <p>
     Cross compiling
-    <a href="http://thebeez.home.xs4all.nl/4tH/">4tH</a>:
+    <a href="https://thebeez.home.xs4all.nl/4tH/">4tH</a>:
     </p>
     <a href="assets/screenshot-4th-compile.png">
         <img src="assets/screenshot-4th-compile-small.png" alt="4th-compile">
@@ -363,7 +393,7 @@ If a cross compiler is detected then cross compile mode will be used.</pre>
 
     <p>
     If you have a
-    <a href="http://www.cmake.org/">CMake</a> project,
+    <a href="https://www.cmake.org/">CMake</a> project,
     you can use the provided cmake wrapper:
     </p>
     <pre>i686-w64-mingw32.static-cmake ...</pre>
@@ -536,7 +566,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://flex.sourceforge.net/">Flex</a></td>
+        <td><a href="https://flex.sourceforge.io/">Flex</a></td>
         <td>≥ 2.5.31</td>
     </tr>
     <tr>
@@ -548,7 +578,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://git-scm.com/">Git</a></td>
+        <td><a href="https://git-scm.com/">Git</a></td>
         <td>≥ 1.7</td>
     </tr>
     <tr>
@@ -576,7 +606,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://freedesktop.org/wiki/Software/intltool/">Intltool</a></td>
+        <td><a href="https://freedesktop.org/wiki/Software/intltool/">Intltool</a></td>
         <td>≥ 0.40</td>
     </tr>
     <tr>
@@ -596,7 +626,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td>≥ 1.01</td>
     </tr>
     <tr>
-        <td><a href="http://p7zip.sourceforge.net/">p7zip (7-Zip)</a></td>
+        <td><a href="https://p7zip.sourceforge.io/">p7zip (7-Zip)</a></td>
         <td></td>
     </tr>
     <tr>
@@ -604,7 +634,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://www.perl.org/">Perl</a></td>
+        <td><a href="https://www.perl.org/">Perl</a></td>
         <td></td>
     </tr>
     <tr>
@@ -612,7 +642,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://www.freedesktop.org/wiki/Software/pkg-config/">Pkg-config</a></td>
+        <td><a href="https://www.freedesktop.org/wiki/Software/pkg-config/">Pkg-config</a></td>
         <td>≥ 0.16</td>
     </tr>
     <tr>
@@ -647,7 +677,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-debian">Debian and derivatives</h3>
 
-    <!-- http://www.debian.org/distrib/packages#search_packages -->
+    <!-- https://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install \
     autoconf automake autopoint bash bison bzip2 flex gettext\
     git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
@@ -691,7 +721,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-freebsd">FreeBSD</h3>
 
-    <!-- http://www.freshports.org/ -->
+    <!-- https://www.freshports.org/ -->
     <pre>pkg install \
     automake autoconf bash bison coreutils flex \
     gcc gdk-pixbuf2 gettext git glib gmake gperf gsed intltool libffi \
@@ -741,7 +771,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-frugalware">Frugalware</h3>
 
-    <!-- http://www.frugalware.org/packages -->
+    <!-- https://www.frugalware.org/packages -->
     <pre>pacman-g2 -S \
     autoconf automake bash bzip2 bison flex gcc gdk-pixbuf2\
     gettext git gperf intltool make sed libffi libtool \
@@ -755,7 +785,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-gentoo">Gentoo</h3>
 
-    <!-- http://packages.gentoo.org/ -->
+    <!-- https://packages.gentoo.org/ -->
     <pre>emerge \
     sys-devel/autoconf sys-devel/automake app-shells/bash \
     sys-devel/bison app-arch/bzip2 \
@@ -772,14 +802,14 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     Install
-    <a href="http://developer.apple.com/xcode/">the latest Xcode</a>
+    <a href="https://developer.apple.com/xcode/">the latest Xcode</a>
     </p>
     <h5 id="requirements-macos-method-1">Method 1 - MacPorts</h5>
     <p>
-    Install <a href="http://www.macports.org/">MacPorts</a>,
+    Install <a href="https://www.macports.org/">MacPorts</a>,
     then run:
     </p>
-    <!-- http://www.macports.org/ports.php -->
+    <!-- https://www.macports.org/ports.php -->
     <pre>sudo port install \
     autoconf automake bison coreutils flex gettext \
     gdk-pixbuf2 glib2 gnutar gsed intltool libffi libtool \
@@ -802,7 +832,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h5 id="requirements-macos-method-3">Method 3 - Homebrew</h5>
     <p>
-    Install <a href="http://brew.sh/">Homebrew</a>,
+    Install <a href="https://brew.sh/">Homebrew</a>,
     then run:
     </p>
     <!-- http://braumeister.org/ -->
@@ -830,14 +860,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     For Xcode <7.3, run:
     </p>
     <pre>make EXCLUDE_PKGS='nsis'</pre>
-    <p>
-    For Xcode ≥7.3, run:
-    </p>
-    <pre>make EXCLUDE_PKGS='gsoap'</pre>
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
-    <!-- http://software.opensuse.org/131/en -->
+    <!-- https://software.opensuse.org/131/en -->
     <pre>zypper install -R \
     autoconf automake bash bison bzip2 flex gcc-c++ \
     gdk-pixbuf-devel gettext-tools git gperf intltool \
@@ -1111,1765 +1137,37 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
     </p>
     <table id="package-list" class="old">
     <tr>
-        <td class="package">a52dec</td>
-        <td class="website"><a href="http://liba52.sourceforge.net/">a52dec (aka. liba52)</a></td>
-    </tr>
-    <tr>
-        <td class="package">agg</td>
-        <td class="website"><a href="http://agg.sourceforge.net/">Anti-Grain Geometry</a></td>
-    </tr>
-    <tr>
-        <td class="package">alure</td>
-        <td class="website"><a href="http://kcat.strangesoft.net/alure.html">alure</a></td>
-    </tr>
-    <tr>
-        <td class="package">apr</td>
-        <td class="website"><a href="http://apr.apache.org/">APR</a></td>
-    </tr>
-    <tr>
-        <td class="package">apr-util</td>
-        <td class="website"><a href="http://apr.apache.org/">APR-util</a></td>
-    </tr>
-    <tr>
-        <td class="package">armadillo</td>
-        <td class="website"><a href="http://arma.sourceforge.net/">Armadillo C++ linear algebra library</a></td>
-    </tr>
-    <tr>
-        <td class="package">aspell</td>
-        <td class="website"><a href="http://aspell.net/">Aspell</a></td>
-    </tr>
-    <tr>
-        <td class="package">assimp</td>
-        <td class="website"><a href="http://assimp.sourceforge.net/">Assimp Open Asset Import Library</a></td>
-    </tr>
-    <tr>
-        <td class="package">atk</td>
-        <td class="website"><a href="http://www.gtk.org/">ATK</a></td>
-    </tr>
-    <tr>
-        <td class="package">atkmm</td>
-        <td class="website"><a href="http://www.gtkmm.org/">ATKmm</a></td>
-    </tr>
-    <tr>
-        <td class="package">aubio</td>
-        <td class="website"><a href="http://www.aubio.org/">aubio</a></td>
-    </tr>
-    <tr>
-        <td class="package">bfd</td>
-        <td class="website"><a href="https://www.gnu.org/software/binutils/">Binary File Descriptor library</a></td>
-    </tr>
-    <tr>
-        <td class="package">binutils</td>
-        <td class="website"><a href="https://www.gnu.org/software/binutils/">GNU Binutils</a></td>
-    </tr>
-    <tr>
-        <td class="package">blas</td>
-        <td class="website"><a href="http://www.netlib.org/blas/">blas</a></td>
-    </tr>
-    <tr>
-        <td class="package">boost</td>
-        <td class="website"><a href="http://www.boost.org/">Boost C++ Library</a></td>
-    </tr>
-    <tr>
-        <td class="package">box2d</td>
-        <td class="website"><a href="http://www.box2d.org/">Box2D</a></td>
-    </tr>
-    <tr>
-        <td class="package">bullet</td>
-        <td class="website"><a href="http://bulletphysics.org/">Bullet physics, version 2</a></td>
-    </tr>
-    <tr>
-        <td class="package">bzip2</td>
-        <td class="website"><a href="http://www.bzip.org/">bzip2</a></td>
-    </tr>
-    <tr>
-        <td class="package">cairo</td>
-        <td class="website"><a href="http://cairographics.org/">cairo</a></td>
-    </tr>
-    <tr>
-        <td class="package">cairomm</td>
-        <td class="website"><a href="http://cairographics.org/cairomm/">cairomm</a></td>
-    </tr>
-    <tr>
-        <td class="package">cblas</td>
-        <td class="website"><a href="http://www.netlib.org/blas/">cblas</a></td>
-    </tr>
-    <tr>
-        <td class="package">ccfits</td>
-        <td class="website"><a href="http://heasarc.gsfc.nasa.gov/fitsio/ccfits">CCfits</a></td>
-    </tr>
-    <tr>
-        <td class="package">cegui</td>
-        <td class="website"><a href="http://cegui.org.uk/">Crazy Eddie’s GUI System (CEGUI)</a></td>
-    </tr>
-    <tr>
-        <td class="package">cfitsio</td>
-        <td class="website"><a href="http://heasarc.gsfc.nasa.gov/fitsio/">cfitsio</a></td>
-    </tr>
-    <tr>
-        <td class="package">cgal</td>
-        <td class="website"><a href="http://www.cgal.org/">cgal</a></td>
-    </tr>
-    <tr>
-        <td class="package">check</td>
-        <td class="website"><a href="http://check.sourceforge.net/">check</a></td>
-    </tr>
-    <tr>
-        <td class="package">chipmunk</td>
-        <td class="website"><a href="https://chipmunk-physics.net/">Chipmunk Physics</a></td>
-    </tr>
-    <tr>
-        <td class="package">chromaprint</td>
-        <td class="website"><a href="http://acoustid.org/chromaprint">Chromaprint</a></td>
-    </tr>
-    <tr>
-        <td class="package">cimg</td>
-        <td class="website"><a href="http://cimg.eu/">CImg Library</a></td>
-    </tr>
-    <tr>
-        <td class="package">cloog</td>
-        <td class="website"><a href="http://www.cloog.org/">CLooG Code Generator</a></td>
-    </tr>
-    <tr>
-        <td class="package">cmake</td>
-        <td class="website"><a href="http://www.cmake.org/">cmake</a></td>
-    </tr>
-    <tr>
-        <td class="package">cminpack</td>
-        <td class="website"><a href="http://devernay.free.fr/hacks/cminpack/cminpack.html">cminpack</a></td>
-    </tr>
-    <tr>
-        <td class="package">coda</td>
-        <td class="website"><a href="https://stcorp.nl/coda/">CODA</a></td>
-    </tr>
-    <tr>
-        <td class="package">coin</td>
-        <td class="website"><a href="https://bitbucket.org/Coin3D/">Coin3D</a></td>
-    </tr>
-    <tr>
-        <td class="package">cpp-netlib</td>
-        <td class="website"><a href="http://cpp-netlib.org/">Boost C++ Networking Library</a></td>
-    </tr>
-    <tr>
-        <td class="package">cppunit</td>
-        <td class="website"><a href="http://www.freedesktop.org/wiki/Software/cppunit/">CppUnit</a></td>
-    </tr>
-    <tr>
-        <td class="package">cryptopp</td>
-        <td class="website"><a href="https://www.cryptopp.com/">Crypto++ Library</a></td>
-    </tr>
-    <tr>
-        <td class="package">crystalhd</td>
-        <td class="website"><a href="http://www.broadcom.com/support/crystal_hd/">Broadcom Crystal HD Headers</a></td>
-    </tr>
-    <tr>
-        <td class="package">cunit</td>
-        <td class="website"><a href="http://cunit.sourceforge.net/">cunit</a></td>
-    </tr>
-    <tr>
-        <td class="package">curl</td>
-        <td class="website"><a href="http://curl.haxx.se/libcurl/">cURL</a></td>
-    </tr>
-    <tr>
-        <td class="package">db</td>
-        <td class="website"><a href="http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html">Oracle Berkeley DB</a></td>
-    </tr>
-    <tr>
-        <td class="package">dbus</td>
-        <td class="website"><a href="http://dbus.freedesktop.org/">dbus</a></td>
-    </tr>
-    <tr>
-        <td class="package">dcmtk</td>
-        <td class="website"><a href="http://dicom.offis.de/dcmtk.php.en">DCMTK</a></td>
-    </tr>
-    <tr>
-        <td class="package">devil</td>
-        <td class="website"><a href="http://openil.sourceforge.net/">DevIL</a></td>
-    </tr>
-    <tr>
-        <td class="package">djvulibre</td>
-        <td class="website"><a href="http://djvu.sourceforge.net/">DjVuLibre</a></td>
-    </tr>
-    <tr>
-        <td class="package">dlfcn-win32</td>
-        <td class="website"><a href="https://code.google.com/p/dlfcn-win32/">POSIX dlfcn wrapper for Windows</a></td>
-    </tr>
-    <tr>
-        <td class="package">eigen</td>
-        <td class="website"><a href="http://eigen.tuxfamily.org/">eigen</a></td>
-    </tr>
-    <tr>
-        <td class="package">exiv2</td>
-        <td class="website"><a href="http://www.exiv2.org/">Exiv2</a></td>
-    </tr>
-    <tr>
-        <td class="package">expat</td>
-        <td class="website"><a href="http://expat.sourceforge.net/">Expat XML Parser</a></td>
-    </tr>
-    <tr>
-        <td class="package">faad2</td>
-        <td class="website"><a href="http://www.audiocoding.com/">faad2</a></td>
-    </tr>
-    <tr>
-        <td class="package">fdk-aac</td>
-        <td class="website"><a href="https://github.com/mstorsjo/fdk-aac">FDK-AAC</a></td>
-    </tr>
-    <tr>
-        <td class="package">ffmpeg</td>
-        <td class="website"><a href="http://www.ffmpeg.org/">ffmpeg</a></td>
-    </tr>
-    <tr>
-        <td class="package">fftw</td>
-        <td class="website"><a href="http://www.fftw.org/">fftw</a></td>
-    </tr>
-    <tr>
-        <td class="package">file</td>
-        <td class="website"><a href="http://www.darwinsys.com/file/">file</a></td>
-    </tr>
-    <tr>
-        <td class="package">flac</td>
-        <td class="website"><a href="http://www.xiph.org/flac/">FLAC</a></td>
-    </tr>
-    <tr>
-        <td class="package">flann</td>
-        <td class="website"><a href="http://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN">FLANN</a></td>
-    </tr>
-    <tr>
-        <td class="package">fltk</td>
-        <td class="website"><a href="http://www.fltk.org/">FLTK</a></td>
-    </tr>
-    <tr>
-        <td class="package">fontconfig</td>
-        <td class="website"><a href="http://fontconfig.org/">fontconfig</a></td>
-    </tr>
-    <tr>
-        <td class="package">freeglut</td>
-        <td class="website"><a href="http://freeglut.sourceforge.net/">freeglut</a></td>
-    </tr>
-    <tr>
-        <td class="package">freeimage</td>
-        <td class="website"><a href="http://freeimage.sourceforge.net/">FreeImage</a></td>
-    </tr>
-    <tr>
-        <td class="package">freetds</td>
-        <td class="website"><a href="http://www.freetds.org/">FreeTDS</a></td>
-    </tr>
-    <tr>
-        <td class="package">freetype</td>
-        <td class="website"><a href="http://www.freetype.org/">freetype</a></td>
-    </tr>
-    <tr>
-        <td class="package">freetype-bootstrap</td>
-        <td class="website"><a href="http://www.freetype.org/">freetype (without harfbuzz)</a></td>
-    </tr>
-    <tr>
-        <td class="package">fribidi</td>
-        <td class="website"><a href="http://fribidi.org/">FriBidi</a></td>
-    </tr>
-    <tr>
-        <td class="package">ftgl</td>
-        <td class="website"><a href="http://sourceforge.net/projects/ftgl/">ftgl</a></td>
-    </tr>
-    <tr>
-        <td class="package">gc</td>
-        <td class="website"><a href="http://www.hpl.hp.com/personal/Hans_Boehm/gc/">gc</a></td>
-    </tr>
-    <tr>
-        <td class="package">gcc</td>
-        <td class="website"><a href="http://gcc.gnu.org/">GCC</a></td>
-    </tr>
-    <tr>
-        <td class="package">gd</td>
-        <td class="website"><a href="http://www.libgd.org/">GD  (without support for xpm)</a></td>
-    </tr>
-    <tr>
-        <td class="package">gdal</td>
-        <td class="website"><a href="http://www.gdal.org/">GDAL</a></td>
-    </tr>
-    <tr>
-        <td class="package">gdb</td>
-        <td class="website"><a href="https://www.gnu.org/software/gdb/">gdb</a></td>
-    </tr>
-    <tr>
-        <td class="package">gdk-pixbuf</td>
-        <td class="website"><a href="http://www.gdk-pixbuf.org/">GDK-pixbuf</a></td>
-    </tr>
-    <tr>
-        <td class="package">gendef</td>
-        <td class="website"><a href="http://sourceforge.net/p/mingw-w64/wiki2/gendef/">gendef</a></td>
-    </tr>
-    <tr>
-        <td class="package">geoip-database</td>
-        <td class="website"><a href="http://www.maxmind.com">GeoIP Legacy Database</a></td>
-    </tr>
-    <tr>
-        <td class="package">geos</td>
-        <td class="website"><a href="http://trac.osgeo.org/geos/">GEOS</a></td>
-    </tr>
-    <tr>
-        <td class="package">gettext</td>
-        <td class="website"><a href="https://www.gnu.org/software/gettext/">gettext</a></td>
-    </tr>
-    <tr>
-        <td class="package">ghostscript</td>
-        <td class="website"><a href="http://www.ghostscript.com/">ghostscript</a></td>
-    </tr>
-    <tr>
-        <td class="package">giflib</td>
-        <td class="website"><a href="http://sourceforge.net/projects/libungif/">giflib</a></td>
-    </tr>
-    <tr>
-        <td class="package">glew</td>
-        <td class="website"><a href="http://glew.sourceforge.net/">GLEW</a></td>
-    </tr>
-    <tr>
-        <td class="package">glfw2</td>
-        <td class="website"><a href="http://www.glfw.org/">GLFW 2.x</a></td>
-    </tr>
-    <tr>
-        <td class="package">glfw3</td>
-        <td class="website"><a href="http://www.glfw.org/">GLFW 3.x</a></td>
-    </tr>
-    <tr>
-        <td class="package">glib</td>
-        <td class="website"><a href="http://www.gtk.org/">GLib</a></td>
-    </tr>
-    <tr>
-        <td class="package">glibmm</td>
-        <td class="website"><a href="http://www.gtkmm.org/">GLibmm</a></td>
-    </tr>
-    <tr>
-        <td class="package">glm</td>
-        <td class="website"><a href="http://glm.g-truc.net">GLM - OpenGL Mathematics</a></td>
-    </tr>
-    <tr>
-        <td class="package">glpk</td>
-        <td class="website"><a href="https://www.gnu.org/software/glpk/">GNU Linear Programming Kit</a></td>
-    </tr>
-    <tr>
-        <td class="package">gmp</td>
-        <td class="website"><a href="http://www.gmplib.org/">GMP</a></td>
-    </tr>
-    <tr>
-        <td class="package">gnutls</td>
-        <td class="website"><a href="https://www.gnu.org/software/gnutls/">GnuTLS</a></td>
-    </tr>
-    <tr>
-        <td class="package">graphicsmagick</td>
-        <td class="website"><a href="http://www.graphicsmagick.org/">GraphicsMagick</a></td>
-    </tr>
-    <tr>
-        <td class="package">gsl</td>
-        <td class="website"><a href="https://www.gnu.org/software/gsl/">GSL</a></td>
-    </tr>
-    <tr>
-        <td class="package">gsoap</td>
-        <td class="website"><a href="http://gsoap2.sourceforge.net/">gSOAP</a></td>
-    </tr>
-    <tr>
-        <td class="package">gst-plugins-bad</td>
-        <td class="website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-bad</a></td>
-    </tr>
-    <tr>
-        <td class="package">gst-plugins-base</td>
-        <td class="website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-base</a></td>
-    </tr>
-    <tr>
-        <td class="package">gst-plugins-good</td>
-        <td class="website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-good</a></td>
-    </tr>
-    <tr>
-        <td class="package">gst-plugins-ugly</td>
-        <td class="website"><a href="http://gstreamer.freedesktop.org/">gst-plugins-ugly</a></td>
-    </tr>
-    <tr>
-        <td class="package">gstreamer</td>
-        <td class="website"><a href="http://gstreamer.freedesktop.org/">gstreamer</a></td>
-    </tr>
-    <tr>
-        <td class="package">gta</td>
-        <td class="website"><a href="http://www.nongnu.org/gta/">gta</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtk2</td>
-        <td class="website"><a href="http://www.gtk.org/">GTK+</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtk3</td>
-        <td class="website"><a href="http://www.gtk.org/">GTK+</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtkglarea</td>
-        <td class="website"><a href="http://www.mono-project.com/GtkGLArea/">GtkGLArea</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtkglext</td>
-        <td class="website"><a href="http://gtkglext.sourceforge.net/">GtkGLExt</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtkglextmm</td>
-        <td class="website"><a href="http://gtkglext.sourceforge.net/">GtkGLExtmm</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtkimageview</td>
-        <td class="website"><a href="http://trac.bjourne.webfactional.com/">GtkImageView</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtkmm2</td>
-        <td class="website"><a href="http://www.gtkmm.org/">GTKMM</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtkmm3</td>
-        <td class="website"><a href="http://www.gtkmm.org/">GTKMM</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtksourceview</td>
-        <td class="website"><a href="http://projects.gnome.org/gtksourceview/">GTKSourceView</a></td>
-    </tr>
-    <tr>
-        <td class="package">gtksourceviewmm2</td>
-        <td class="website"><a href="http://projects.gnome.org/gtksourceviewmm/">GtkSourceViewmm</a></td>
-    </tr>
-    <tr>
-        <td class="package">guile</td>
-        <td class="website"><a href="https://www.gnu.org/software/guile/">GNU Guile</a></td>
-    </tr>
-    <tr>
-        <td class="package">harfbuzz</td>
-        <td class="website"><a href="http://harfbuzz.sourceforge.net/">HarfBuzz</a></td>
-    </tr>
-    <tr>
-        <td class="package">hdf-eos2</td>
-        <td class="website"><a href="https://hdfeos.org/software/library.php">HDF-EOS2</a></td>
-    </tr>
-    <tr>
-        <td class="package">hdf-eos5</td>
-        <td class="website"><a href="https://hdfeos.org/software/library.php">HDF-EOS5</a></td>
-    </tr>
-    <tr>
-        <td class="package">hdf4</td>
-        <td class="website"><a href="https://www.hdfgroup.org/hdf4/">HDF4</a></td>
-    </tr>
-    <tr>
-        <td class="package">hdf5</td>
-        <td class="website"><a href="https://www.hdfgroup.org/hdf5/">HDF5</a></td>
-    </tr>
-    <tr>
-        <td class="package">hunspell</td>
-        <td class="website"><a href="http://hunspell.sourceforge.net/">Hunspell</a></td>
-    </tr>
-    <tr>
-        <td class="package">hyperscan</td>
-        <td class="website"><a href="https://01.org/hyperscan">Hyperscan</a></td>
-    </tr>
-    <tr>
-        <td class="package">icu4c</td>
-        <td class="website"><a href="http://site.icu-project.org/">ICU4C</a></td>
-    </tr>
-    <tr>
-        <td class="package">id3lib</td>
-        <td class="website"><a href="http://id3lib.sourceforge.net/">id3lib</a></td>
-    </tr>
-    <tr>
-        <td class="package">ilmbase</td>
-        <td class="website"><a href="http://www.openexr.com/">IlmBase</a></td>
-    </tr>
-    <tr>
-        <td class="package">imagemagick</td>
-        <td class="website"><a href="http://www.imagemagick.org/">ImageMagick</a></td>
-    </tr>
-    <tr>
-        <td class="package">isl</td>
-        <td class="website"><a href="http://isl.gforge.inria.fr/">Integer Set Library</a></td>
-    </tr>
-    <tr>
-        <td class="package">itk</td>
-        <td class="website"><a href="http://www.itk.org/">Insight Segmentation and Registration Toolkit (ITK)</a></td>
-    </tr>
-    <tr>
-        <td class="package">jack</td>
-        <td class="website"><a href="http://jackaudio.org/">JACK Audio Connection Kit</a></td>
-    </tr>
-    <tr>
-        <td class="package">jansson</td>
-        <td class="website"><a href="http://www.digip.org/jansson/">Jansson</a></td>
-    </tr>
-    <tr>
-        <td class="package">jasper</td>
-        <td class="website"><a href="http://www.ece.uvic.ca/~mdadams/jasper/">JasPer</a></td>
-    </tr>
-    <tr>
-        <td class="package">jpeg</td>
-        <td class="website"><a href="http://www.ijg.org/">jpeg</a></td>
-    </tr>
-    <tr>
-        <td class="package">json-c</td>
-        <td class="website"><a href="https://github.com/json-c/json-c/wiki">json-c</a></td>
-    </tr>
-    <tr>
-        <td class="package">json-glib</td>
-        <td class="website"><a href="https://wiki.gnome.org/action/show/Projects/JsonGlib">JSON-Glib</a></td>
-    </tr>
-    <tr>
-        <td class="package">json_spirit</td>
-        <td class="website"><a href="https://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented">json_spirit</a></td>
-    </tr>
-    <tr>
-        <td class="package">jsoncpp</td>
-        <td class="website"><a href="https://github.com/open-source-parsers/jsoncpp">jsoncpp</a></td>
-    </tr>
-    <tr>
-        <td class="package">lame</td>
-        <td class="website"><a href="http://lame.sourceforge.net/">lame</a></td>
-    </tr>
-    <tr>
-        <td class="package">lapack</td>
-        <td class="website"><a href="http://www.netlib.org/lapack/">lapack</a></td>
-    </tr>
-    <tr>
-        <td class="package">lcms</td>
-        <td class="website"><a href="http://www.littlecms.com/">lcms</a></td>
-    </tr>
-    <tr>
-        <td class="package">lcms1</td>
-        <td class="website"><a href="http://www.littlecms.com/">lcms1</a></td>
-    </tr>
-    <tr>
-        <td class="package">lensfun</td>
-        <td class="website"><a href="http://lensfun.sourceforge.net/">lensfun</a></td>
-    </tr>
-    <tr>
-        <td class="package">levmar</td>
-        <td class="website"><a href="http://www.ics.forth.gr/~lourakis/levmar">levmar</a></td>
-    </tr>
-    <tr>
-        <td class="package">libaacs</td>
-        <td class="website"><a href="http://www.videolan.org/developers/libaacs.html">libaacs</a></td>
-    </tr>
-    <tr>
-        <td class="package">libarchive</td>
-        <td class="website"><a href="http://www.libarchive.org/">Libarchive</a></td>
-    </tr>
-    <tr>
-        <td class="package">libass</td>
-        <td class="website"><a href="http://code.google.com/p/libass/">libass</a></td>
-    </tr>
-    <tr>
-        <td class="package">libbluray</td>
-        <td class="website"><a href="http://www.videolan.org/developers/libbluray.html">libbluray</a></td>
-    </tr>
-    <tr>
-        <td class="package">libbs2b</td>
-        <td class="website"><a href="http://bs2b.sourceforge.net/">Bauer Stereophonic-to-Binaural library</a></td>
-    </tr>
-    <tr>
-        <td class="package">libcaca</td>
-        <td class="website"><a href="http://caca.zoy.org/wiki/libcaca">libcaca</a></td>
-    </tr>
-    <tr>
-        <td class="package">libcdio</td>
-        <td class="website"><a href="https://www.gnu.org/software/libcdio/">Libcdio</a></td>
-    </tr>
-    <tr>
-        <td class="package">libcdio-paranoia</td>
-        <td class="website"><a href="https://www.gnu.org/software/libcdio/">Libcdio-paranoia</a></td>
-    </tr>
-    <tr>
-        <td class="package">libcomm14cux</td>
-        <td class="website"><a href="https://github.com/colinbourassa/libcomm14cux/">libcomm14cux</a></td>
-    </tr>
-    <tr>
-        <td class="package">libcroco</td>
-        <td class="website"><a href="http://www.freespiders.org/projects/libcroco/">Libcroco</a></td>
-    </tr>
-    <tr>
-        <td class="package">libdnet</td>
-        <td class="website"><a href="http://libdnet.sourceforge.net/">libdnet</a></td>
-    </tr>
-    <tr>
-        <td class="package">libdvbpsi</td>
-        <td class="website"><a href="http://www.videolan.org/developers/libdvbpsi.html">libdvbpsi</a></td>
-    </tr>
-    <tr>
-        <td class="package">libdvdcss</td>
-        <td class="website"><a href="http://www.videolan.org/developers/libdvdcss.html">libdvdcss</a></td>
-    </tr>
-    <tr>
-        <td class="package">libdvdnav</td>
-        <td class="website"><a href="https://dvdnav.mplayerhq.hu/">libdvdnav</a></td>
-    </tr>
-    <tr>
-        <td class="package">libdvdread</td>
-        <td class="website"><a href="https://dvdnav.mplayerhq.hu/">libdvdread</a></td>
-    </tr>
-    <tr>
-        <td class="package">libechonest</td>
-        <td class="website"><a href="https://github.com/lfranchi/libechonest">libechonest</a></td>
-    </tr>
-    <tr>
-        <td class="package">libepoxy</td>
-        <td class="website"><a href="https://github.com/anholt/libepoxy">libepoxy</a></td>
-    </tr>
-    <tr>
-        <td class="package">libevent</td>
-        <td class="website"><a href="http://libevent.org/">libevent</a></td>
-    </tr>
-    <tr>
-        <td class="package">libf2c</td>
-        <td class="website"><a href="http://www.netlib.org/f2c/">libf2c</a></td>
-    </tr>
-    <tr>
-        <td class="package">libffi</td>
-        <td class="website"><a href="https://sourceware.org/libffi/">libffi</a></td>
-    </tr>
-    <tr>
-        <td class="package">libftdi</td>
-        <td class="website"><a href="http://www.intra2net.com/en/developer/libftdi/index.php">LibFTDI</a></td>
-    </tr>
-    <tr>
-        <td class="package">libftdi1</td>
-        <td class="website"><a href="http://www.intra2net.com/en/developer/libftdi/index.php">LibFTDI1</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgcrypt</td>
-        <td class="website"><a href="ftp://ftp.gnupg.org/gcrypt/libgcrypt/">libgcrypt</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgda</td>
-        <td class="website"><a href="http://www.gnome-db.org/">libgda</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgdamm</td>
-        <td class="website"><a href="https://launchpad.net/libgdamm">libgdamm</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgee</td>
-        <td class="website"><a href="http://live.gnome.org/Libgee">libgee</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgeotiff</td>
-        <td class="website"><a href="http://trac.osgeo.org/geotiff/">GeoTiff</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgit2</td>
-        <td class="website"><a href="https://libgit2.github.com/">libgit2</a></td>
-    </tr>
-    <tr>
-        <td class="package">libglade</td>
-        <td class="website"><a href="http://glade.gnome.org/">glade</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgnurx</td>
-        <td class="website"><a href="http://sourceforge.net/projects/mingw/files/UserContributed/regex/">libgnurx</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgpg_error</td>
-        <td class="website"><a href="ftp://ftp.gnupg.org/gcrypt/libgpg-error/">libgpg-error</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgsasl</td>
-        <td class="website"><a href="https://www.gnu.org/software/gsasl/">Libgsasl</a></td>
-    </tr>
-    <tr>
-        <td class="package">libgsf</td>
-        <td class="website"><a href="http://projects.gnome.org/libgsf/">libgsf</a></td>
-    </tr>
-    <tr>
-        <td class="package">libharu</td>
-        <td class="website"><a href="http://libharu.org/">libharu</a></td>
-    </tr>
-    <tr>
-        <td class="package">libiberty</td>
-        <td class="website"><a href="http://gcc.gnu.org/onlinedocs/libiberty/">libiberty</a></td>
-    </tr>
-    <tr>
-        <td class="package">libical</td>
-        <td class="website"><a href="http://freeassociation.sourceforge.net/">libical</a></td>
-    </tr>
-    <tr>
-        <td class="package">libiconv</td>
-        <td class="website"><a href="https://www.gnu.org/software/libiconv/">libiconv</a></td>
-    </tr>
-    <tr>
-        <td class="package">libid3tag</td>
-        <td class="website"><a href="http://sourceforge.net/projects/mad/files/libid3tag/">libid3tag</a></td>
-    </tr>
-    <tr>
-        <td class="package">libidn</td>
-        <td class="website"><a href="https://www.gnu.org/software/libidn/">Libidn</a></td>
-    </tr>
-    <tr>
-        <td class="package">libieee1284</td>
-        <td class="website"><a href="http://cyberelk.net/tim/software/libieee1284/">libieee1284</a></td>
-    </tr>
-    <tr>
-        <td class="package">libircclient</td>
-        <td class="website"><a href="http://sourceforge.net/projects/libircclient/">libircclient</a></td>
-    </tr>
-    <tr>
-        <td class="package">libjpeg-turbo</td>
-        <td class="website"><a href="http://libjpeg-turbo.virtualgl.org/">libjpeg-turbo</a></td>
-    </tr>
-    <tr>
-        <td class="package">liblaxjson</td>
-        <td class="website"><a href="https://github.com/andrewrk/liblaxjson">liblaxjson</a></td>
-    </tr>
-    <tr>
-        <td class="package">liblo</td>
-        <td class="website"><a href="http://liblo.sourceforge.net/">liblo</a></td>
-    </tr>
-    <tr>
-        <td class="package">liblqr-1</td>
-        <td class="website"><a href="http://liblqr.wikidot.com/">liblqr-1</a></td>
-    </tr>
-    <tr>
-        <td class="package">liblsmash</td>
-        <td class="website"><a href="https://l-smash.github.io/l-smash/">L-SMASH</a></td>
-    </tr>
-    <tr>
-        <td class="package">libltdl</td>
-        <td class="website"><a href="http://www.gnu.org/software/libtool/manual/html_node/Using-libltdl.html#Using-libltdl">GNU Libtool Library (libltdl)</a></td>
-    </tr>
-    <tr>
-        <td class="package">libmad</td>
-        <td class="website"><a href="http://www.underbit.com/products/mad/">libmad</a></td>
-    </tr>
-    <tr>
-        <td class="package">libmicrohttpd</td>
-        <td class="website"><a href="http://www.gnu.org/software/libmicrohttpd/">GNU Libmicrohttpd</a></td>
-    </tr>
-    <tr>
-        <td class="package">libmikmod</td>
-        <td class="website"><a href="http://mikmod.raphnet.net/">libMikMod</a></td>
-    </tr>
-    <tr>
-        <td class="package">libmng</td>
-        <td class="website"><a href="http://www.libmng.com/">libmng</a></td>
-    </tr>
-    <tr>
-        <td class="package">libmodplug</td>
-        <td class="website"><a href="http://modplug-xmms.sourceforge.net/">libmodplug</a></td>
-    </tr>
-    <tr>
-        <td class="package">libmpcdec</td>
-        <td class="website"><a href="http://www.musepack.net/">libmpcdec</a></td>
-    </tr>
-    <tr>
-        <td class="package">libmysqlclient</td>
-        <td class="website"><a href="https://dev.mysql.com/downloads/connector/c/">libmysqlclient</a></td>
-    </tr>
-    <tr>
-        <td class="package">libnice</td>
-        <td class="website"><a href="https://nice.freedesktop.org/wiki/">libnice</a></td>
-    </tr>
-    <tr>
-        <td class="package">libntlm</td>
-        <td class="website"><a href="http://www.nongnu.org/libntlm/">Libntlm</a></td>
-    </tr>
-    <tr>
-        <td class="package">liboauth</td>
-        <td class="website"><a href="http://liboauth.sourceforge.net/">liboauth</a></td>
-    </tr>
-    <tr>
-        <td class="package">libodbc++</td>
-        <td class="website"><a href="http://libodbcxx.sourceforge.net/">libodbc++</a></td>
-    </tr>
-    <tr>
-        <td class="package">liboil</td>
-        <td class="website"><a href="http://liboil.freedesktop.org/">liboil</a></td>
-    </tr>
-    <tr>
-        <td class="package">libpano13</td>
-        <td class="website"><a href="http://panotools.sourceforge.net/">libpano13</a></td>
-    </tr>
-    <tr>
-        <td class="package">libpaper</td>
-        <td class="website"><a href="http://packages.debian.org/unstable/libpaper1">libpaper</a></td>
-    </tr>
-    <tr>
-        <td class="package">libplist</td>
-        <td class="website"><a href="https://github.com/libimobiledevice/libplist">libplist</a></td>
-    </tr>
-    <tr>
-        <td class="package">libpng</td>
-        <td class="website"><a href="http://www.libpng.org/">libpng</a></td>
-    </tr>
-    <tr>
-        <td class="package">librosco</td>
-        <td class="website"><a href="https://github.com/colinbourassa/librosco/">librosco</a></td>
-    </tr>
-    <tr>
-        <td class="package">librsvg</td>
-        <td class="website"><a href="http://librsvg.sourceforge.net/">librsvg</a></td>
-    </tr>
-    <tr>
-        <td class="package">librtmp</td>
-        <td class="website"><a href="http://rtmpdump.mplayerhq.hu/">librtmp</a></td>
-    </tr>
-    <tr>
-        <td class="package">libsamplerate</td>
-        <td class="website"><a href="http://www.mega-nerd.com/SRC/">libsamplerate</a></td>
-    </tr>
-    <tr>
-        <td class="package">libshout</td>
-        <td class="website"><a href="http://www.icecast.org/">libshout</a></td>
-    </tr>
-    <tr>
-        <td class="package">libsigc++</td>
-        <td class="website"><a href="http://libsigc.sourceforge.net/">libsigc++</a></td>
-    </tr>
-    <tr>
-        <td class="package">libsndfile</td>
-        <td class="website"><a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a></td>
-    </tr>
-    <tr>
-        <td class="package">libsodium</td>
-        <td class="website"><a href="https://download.libsodium.org/doc/">libsodium</a></td>
-    </tr>
-    <tr>
-        <td class="package">libsoup</td>
-        <td class="website"><a href="https://github.com/GNOME/libsoup">libsoup</a></td>
-    </tr>
-    <tr>
-        <td class="package">libspectre</td>
-        <td class="website"><a href="https://libspectre.freedesktop.org">libspectre</a></td>
-    </tr>
-    <tr>
-        <td class="package">libssh2</td>
-        <td class="website"><a href="http://www.libssh2.org">libssh2</a></td>
-    </tr>
-    <tr>
-        <td class="package">libsvm</td>
-        <td class="website"><a href="http://www.csie.ntu.edu.tw/~cjlin/libsvm">libsvm</a></td>
-    </tr>
-    <tr>
-        <td class="package">libtool</td>
-        <td class="website"><a href="https://www.gnu.org/software/libtool/">GNU Libtool</a></td>
-    </tr>
-    <tr>
-        <td class="package">libtorrent-rasterbar</td>
-        <td class="website"><a href="http://www.rasterbar.com/products/libtorrent/">libtorrent-rasterbar</a></td>
-    </tr>
-    <tr>
-        <td class="package">libunistring</td>
-        <td class="website"><a href="https://www.gnu.org/software/libunistring/">libunistring</a></td>
-    </tr>
-    <tr>
-        <td class="package">libusb</td>
-        <td class="website"><a href="http://libusb-win32.sourceforge.net/">LibUsb</a></td>
-    </tr>
-    <tr>
-        <td class="package">libusb1</td>
-        <td class="website"><a href="http://libusb.org/">LibUsb-1.0</a></td>
-    </tr>
-    <tr>
-        <td class="package">libuv</td>
-        <td class="website"><a href="http://libuv.org/">libuv</a></td>
-    </tr>
-    <tr>
-        <td class="package">libvpx</td>
-        <td class="website"><a href="http://code.google.com/p/webm/">vpx</a></td>
-    </tr>
-    <tr>
-        <td class="package">libwebp</td>
-        <td class="website"><a href="https://developers.google.com/speed/webp/">libwebp</a></td>
-    </tr>
-    <tr>
-        <td class="package">libwebsockets</td>
-        <td class="website"><a href="http://libwebsockets.org/">libwebsockets</a></td>
-    </tr>
-    <tr>
-        <td class="package">libxml++</td>
-        <td class="website"><a href="http://libxmlplusplus.sourceforge.net/">libxml2</a></td>
-    </tr>
-    <tr>
-        <td class="package">libxml2</td>
-        <td class="website"><a href="http://www.xmlsoft.org/">libxml2</a></td>
-    </tr>
-    <tr>
-        <td class="package">libxslt</td>
-        <td class="website"><a href="http://xmlsoft.org/XSLT/">libxslt</a></td>
-    </tr>
-    <tr>
-        <td class="package">libzip</td>
-        <td class="website"><a href="http://www.nih.at/libzip/">libzip</a></td>
-    </tr>
-    <tr>
-        <td class="package">llvm</td>
-        <td class="website"><a href="http://llvm.org/">llvm</a></td>
-    </tr>
-    <tr>
-        <td class="package">log4cxx</td>
-        <td class="website"><a href="http://logging.apache.org/log4cxx/">log4cxx</a></td>
-    </tr>
-    <tr>
-        <td class="package">lua</td>
-        <td class="website"><a href="http://www.lua.org/">Lua</a></td>
-    </tr>
-    <tr>
-        <td class="package">luabind</td>
-        <td class="website"><a href="http://www.rasterbar.com/products/luabind.html">Luabind</a></td>
-    </tr>
-    <tr>
-        <td class="package">luajit</td>
-        <td class="website"><a href="http://luajit.org/luajit.html">LuaJIT</a></td>
-    </tr>
-    <tr>
-        <td class="package">lzma</td>
-        <td class="website"><a href="http://www.7-zip.org/sdk.html">LZMA SDK</a></td>
-    </tr>
-    <tr>
-        <td class="package">lzo</td>
-        <td class="website"><a href="http://www.oberhumer.com/opensource/lzo/">lzo</a></td>
-    </tr>
-    <tr>
-        <td class="package">matio</td>
-        <td class="website"><a href="http://sourceforge.net/projects/matio/">matio</a></td>
-    </tr>
-    <tr>
-        <td class="package">mdbtools</td>
-        <td class="website"><a href="http://sourceforge.net/projects/mdbtools/">mdbtools</a></td>
-    </tr>
-    <tr>
-        <td class="package">mingw-w64</td>
-        <td class="website"><a href="http://mingw-w64.sourceforge.net/">MinGW-w64 Runtime</a></td>
-    </tr>
-    <tr>
-        <td class="package">miniupnpc</td>
-        <td class="website"><a href="http://miniupnp.free.fr/">miniupnpc</a></td>
-    </tr>
-    <tr>
-        <td class="package">minizip</td>
-        <td class="website"><a href="http://www.winimage.com/zLibDll/minizip.html">minizip</a></td>
-    </tr>
-    <tr>
-        <td class="package">mman-win32</td>
-        <td class="website"><a href="https://code.google.com/p/mman-win32/">MMA-Win32</a></td>
-    </tr>
-    <tr>
-        <td class="package">mpc</td>
-        <td class="website"><a href="http://www.multiprecision.org/">GNU MPC</a></td>
-    </tr>
-    <tr>
-        <td class="package">mpfr</td>
-        <td class="website"><a href="http://www.mpfr.org/">mpfr</a></td>
-    </tr>
-    <tr>
-        <td class="package">mpg123</td>
-        <td class="website"><a href="http://www.mpg123.de/">mpg123</a></td>
-    </tr>
-    <tr>
-        <td class="package">muparser</td>
-        <td class="website"><a href="http://muparser.beltoforion.de/">muParser</a></td>
-    </tr>
-    <tr>
-        <td class="package">muparserx</td>
-        <td class="website"><a href="http://muparserx.beltoforion.de/">muParserX</a></td>
-    </tr>
-    <tr>
-        <td class="package">mxml</td>
-        <td class="website"><a href="http://www.msweet.org/projects.php?Z3">Mini-XML</a></td>
-    </tr>
-    <tr>
-        <td class="package">ncurses</td>
-        <td class="website"><a href="https://www.gnu.org/software/ncurses/">Ncurses</a></td>
-    </tr>
-    <tr>
-        <td class="package">netcdf</td>
-        <td class="website"><a href="http://www.unidata.ucar.edu/software/netcdf/">NetCDF</a></td>
-    </tr>
-    <tr>
-        <td class="package">netpbm</td>
-        <td class="website"><a href="http://netpbm.sourceforge.net/">Netpbm</a></td>
-    </tr>
-    <tr>
-        <td class="package">nettle</td>
-        <td class="website"><a href="http://www.lysator.liu.se/~nisse/nettle/">nettle</a></td>
-    </tr>
-    <tr>
-        <td class="package">nlopt</td>
-        <td class="website"><a href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a></td>
-    </tr>
-    <tr>
-        <td class="package">nsis</td>
-        <td class="website"><a href="http://nsis.sourceforge.net/">NSIS</a></td>
-    </tr>
-    <tr>
-        <td class="package">ocaml-cairo</td>
-        <td class="website"><a href="http://cairographics.org/cairo-ocaml/">cairo-ocaml</a></td>
-    </tr>
-    <tr>
-        <td class="package">ocaml-camlimages</td>
-        <td class="website"><a href="http://gallium.inria.fr/camlimages">camlimages</a></td>
-    </tr>
-    <tr>
-        <td class="package">ocaml-core</td>
-        <td class="website"><a href="http://caml.inria.fr/">ocaml</a></td>
-    </tr>
-    <tr>
-        <td class="package">ocaml-findlib</td>
-        <td class="website"><a href="http://download.camlcity.org/">findlib</a></td>
-    </tr>
-    <tr>
-        <td class="package">ocaml-flexdll</td>
-        <td class="website"><a href="http://alain.frisch.fr/">flexdll</a></td>
-    </tr>
-    <tr>
-        <td class="package">ocaml-lablgl</td>
-        <td class="website"><a href="http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html">lablgl</a></td>
-    </tr>
-    <tr>
-        <td class="package">ocaml-lablgtk2</td>
-        <td class="website"><a href="http://forge.ocamlcore.org/">lablgtk2</a></td>
-    </tr>
-    <tr>
-        <td class="package">ocaml-native</td>
-        <td class="website"><a href="http://caml.inria.fr/">ocaml</a></td>
-    </tr>
-    <tr>
-        <td class="package">ocaml-xml-light</td>
-        <td class="website"><a href="http://tech.motion-twin.com/xmllight.html">xml-light</a></td>
-    </tr>
-    <tr>
-        <td class="package">oce</td>
-        <td class="website"><a href="https://github.com/tpaviot/oce">Open CASCADE Community Edition</a></td>
-    </tr>
-    <tr>
-        <td class="package">ogg</td>
-        <td class="website"><a href="http://www.xiph.org/ogg/">OGG</a></td>
-    </tr>
-    <tr>
-        <td class="package">old</td>
-        <td class="website"><a href="http://blitiri.com.ar/p/old/">old</a></td>
-    </tr>
-    <tr>
-        <td class="package">openal</td>
-        <td class="website"><a href="http://kcat.strangesoft.net/openal.html">openal</a></td>
-    </tr>
-    <tr>
-        <td class="package">openblas</td>
-        <td class="website"><a href="http://www.openblas.net/">OpenBLAS</a></td>
-    </tr>
-    <tr>
-        <td class="package">opencore-amr</td>
-        <td class="website"><a href="http://opencore-amr.sourceforge.net/">opencore-amr</a></td>
-    </tr>
-    <tr>
-        <td class="package">opencsg</td>
-        <td class="website"><a href="http://www.opencsg.org/">opencsg</a></td>
-    </tr>
-    <tr>
-        <td class="package">opencv</td>
-        <td class="website"><a href="http://opencv.org/">OpenCV</a></td>
-    </tr>
-    <tr>
-        <td class="package">openexr</td>
-        <td class="website"><a href="http://www.openexr.com/">OpenEXR</a></td>
-    </tr>
-    <tr>
-        <td class="package">openjpeg</td>
-        <td class="website"><a href="http://www.openjpeg.org/">OpenJPEG</a></td>
-    </tr>
-    <tr>
-        <td class="package">openmp-validation</td>
-        <td class="website"><a href="http://web.cs.uh.edu/~openuh/">OpenMP Validation Suite</a></td>
-    </tr>
-    <tr>
-        <td class="package">openscenegraph</td>
-        <td class="website"><a href="http://www.openscenegraph.org/">OpenSceneGraph</a></td>
-    </tr>
-    <tr>
-        <td class="package">openssl</td>
-        <td class="website"><a href="https://www.openssl.org/">openssl</a></td>
-    </tr>
-    <tr>
-        <td class="package">openthreads</td>
-        <td class="website"><a href="http://www.openscenegraph.org/">OpenThreads</a></td>
-    </tr>
-    <tr>
-        <td class="package">opus</td>
-        <td class="website"><a href="http://opus-codec.org/">opus</a></td>
-    </tr>
-    <tr>
-        <td class="package">opusfile</td>
-        <td class="website"><a href="http://opus-codec.org/">opusfile</a></td>
-    </tr>
-    <tr>
-        <td class="package">ossim</td>
-        <td class="website"><a href="http://trac.osgeo.org/ossim">OSSIM</a></td>
-    </tr>
-    <tr>
-        <td class="package">pango</td>
-        <td class="website"><a href="http://www.pango.org/">Pango</a></td>
-    </tr>
-    <tr>
-        <td class="package">pangomm</td>
-        <td class="website"><a href="http://www.pango.org/">Pangomm</a></td>
-    </tr>
-    <tr>
-        <td class="package">pcl</td>
-        <td class="website"><a href="http://www.pointclouds.org/">PCL (Point Cloud Library)</a></td>
-    </tr>
-    <tr>
-        <td class="package">pcre</td>
-        <td class="website"><a href="http://www.pcre.org/">PCRE</a></td>
-    </tr>
-    <tr>
-        <td class="package">pdcurses</td>
-        <td class="website"><a href="http://pdcurses.sourceforge.net/">PDcurses</a></td>
-    </tr>
-    <tr>
-        <td class="package">pdflib_lite</td>
-        <td class="website"><a href="http://www.pdflib.com/download/free-software/pdflib-lite-7/">PDFlib Lite</a></td>
-    </tr>
-    <tr>
-        <td class="package">pfstools</td>
-        <td class="website"><a href="http://pfstools.sourceforge.net/">pfstools</a></td>
-    </tr>
-    <tr>
-        <td class="package">physfs</td>
-        <td class="website"><a href="http://icculus.org/physfs/">physfs</a></td>
-    </tr>
-    <tr>
-        <td class="package">picomodel</td>
-        <td class="website"><a href="http://code.google.com/p/picomodel/">picomodel</a></td>
-    </tr>
-    <tr>
-        <td class="package">pire</td>
-        <td class="website"><a href="https://github.com/yandex/pire">PIRE</a></td>
-    </tr>
-    <tr>
-        <td class="package">pixman</td>
-        <td class="website"><a href="http://cairographics.org/">pixman</a></td>
-    </tr>
-    <tr>
-        <td class="package">pkgconf</td>
-        <td class="website"><a href="https://github.com/pkgconf/pkgconf">pkgconf</a></td>
-    </tr>
-    <tr>
-        <td class="package">plib</td>
-        <td class="website"><a href="http://plib.sourceforge.net/">Plib</a></td>
-    </tr>
-    <tr>
-        <td class="package">plibc</td>
-        <td class="website"><a href="http://plibc.sourceforge.net/">Plibc</a></td>
-    </tr>
-    <tr>
-        <td class="package">plotmm</td>
-        <td class="website"><a href="http://plotmm.sourceforge.net/">PlotMM</a></td>
-    </tr>
-    <tr>
-        <td class="package">plotutils</td>
-        <td class="website"><a href="https://www.gnu.org/software/plotutils/">plotutils</a></td>
-    </tr>
-    <tr>
-        <td class="package">poco</td>
-        <td class="website"><a href="http://pocoproject.org/">POCO C++ Libraries</a></td>
-    </tr>
-    <tr>
-        <td class="package">polarssl</td>
-        <td class="website"><a href="https://polarssl.org/">Polar SSL Library</a></td>
-    </tr>
-    <tr>
-        <td class="package">poppler</td>
-        <td class="website"><a href="http://poppler.freedesktop.org/">poppler</a></td>
-    </tr>
-    <tr>
-        <td class="package">popt</td>
-        <td class="website"><a href="http://freshmeat.net/projects/popt/">popt</a></td>
-    </tr>
-    <tr>
-        <td class="package">portablexdr</td>
-        <td class="website"><a href="http://people.redhat.com/~rjones/portablexdr/">PortableXDR</a></td>
-    </tr>
-    <tr>
-        <td class="package">portaudio</td>
-        <td class="website"><a href="http://www.portaudio.com/">portaudio</a></td>
-    </tr>
-    <tr>
-        <td class="package">portmidi</td>
-        <td class="website"><a href="http://portmedia.sourceforge.net/portmidi/">portmidi</a></td>
-    </tr>
-    <tr>
-        <td class="package">postgresql</td>
-        <td class="website"><a href="http://www.postgresql.org/">PostgreSQL</a></td>
-    </tr>
-    <tr>
-        <td class="package">primesieve</td>
-        <td class="website"><a href="http://primesieve.org/">Primesieve</a></td>
-    </tr>
-    <tr>
-        <td class="package">proj</td>
-        <td class="website"><a href="http://trac.osgeo.org/proj/">proj</a></td>
-    </tr>
-    <tr>
-        <td class="package">protobuf</td>
-        <td class="website"><a href="https://github.com/google/protobuf">protobuf</a></td>
-    </tr>
-    <tr>
-        <td class="package">pthreads</td>
-        <td class="website"><a href="https://en.wikipedia.org/wiki/POSIX_Threads">POSIX Threads</a></td>
-    </tr>
-    <tr>
-        <td class="package">qdbm</td>
-        <td class="website"><a href="http://fallabs.com/qdbm/">QDBM</a></td>
-    </tr>
-    <tr>
-        <td class="package">qhttpengine</td>
-        <td class="website"><a href="https://github.com/nitroshare/qhttpengine">qhttpengine</a></td>
-    </tr>
-    <tr>
-        <td class="package">qjson</td>
-        <td class="website"><a href="http://qjson.sourceforge.net/">QJson</a></td>
-    </tr>
-    <tr>
-        <td class="package">qscintilla2</td>
-        <td class="website"><a href="http://www.riverbankcomputing.com/software/qscintilla/intro">QScintilla2</a></td>
-    </tr>
-    <tr>
-        <td class="package">qt</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qt3d</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qt5</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtactiveqt</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtbase</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtcanvas3d</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtcharts</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtconnectivity</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtdatavis3d</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtdeclarative</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtdeclarative-render2d</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtgamepad</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtgraphicaleffects</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtimageformats</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtlocation</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtmultimedia</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtofficeopenxml</td>
-        <td class="website"><a href="https://github.com/dbzhang800/QtOfficeOpenXml/">QtOfficeOpenXml</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtpurchasing</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtquickcontrols</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtquickcontrols2</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtscript</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtscxml</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtsensors</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtserialbus</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtserialport</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtserialport_qt4</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtservice</td>
-        <td class="website"><a href="https://qt.gitorious.org/qt-solutions/">Qt Solutions</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtsparkle_qt4</td>
-        <td class="website"><a href="https://github.com/davidsansome/qtsparkle">qtsparkle</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtsvg</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtsystems</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qttools</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qttranslations</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtvirtualkeyboard</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtwebchannel</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtwebkit</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtwebsockets</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtwebview</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtwinextras</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtxlsxwriter</td>
-        <td class="website"><a href="https://github.com/dbzhang800/QtXlsxWriter/">QtXlsxWriter</a></td>
-    </tr>
-    <tr>
-        <td class="package">qtxmlpatterns</td>
-        <td class="website"><a href="http://qt-project.org/">Qt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qwt</td>
-        <td class="website"><a href="http://qwt.sourceforge.net/">Qwt</a></td>
-    </tr>
-    <tr>
-        <td class="package">qwt_qt4</td>
-        <td class="website"><a href="http://qwt.sourceforge.net/">Qwt-qt4</a></td>
-    </tr>
-    <tr>
-        <td class="package">qwtplot3d</td>
-        <td class="website"><a href="http://qwtplot3d.sourceforge.net/">QwtPlot3D</a></td>
-    </tr>
-    <tr>
-        <td class="package">ragel</td>
-        <td class="website"><a href="https://www.colm.net/open-source/ragel/">Ragel</a></td>
-    </tr>
-    <tr>
-        <td class="package">readline</td>
-        <td class="website"><a href="http://tiswww.case.edu/php/chet/readline/rltop.html">Readline</a></td>
-    </tr>
-    <tr>
-        <td class="package">rubberband</td>
-        <td class="website"><a href="http://breakfastquay.com/rubberband/">Rubberband</a></td>
-    </tr>
-    <tr>
-        <td class="package">rucksack</td>
-        <td class="website"><a href="https://github.com/andrewrk/rucksack">rucksack</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl</td>
-        <td class="website"><a href="http://www.libsdl.org/">SDL</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2</td>
-        <td class="website"><a href="http://www.libsdl.org/">SDL2</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_gfx</td>
-        <td class="website"><a href="http://www.ferzkopp.net/joomla/content/view/19/14/">SDL2_gfx</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_image</td>
-        <td class="website"><a href="http://www.libsdl.org/">SDL2_image</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_mixer</td>
-        <td class="website"><a href="http://www.libsdl.org/">SDL2_mixer</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_net</td>
-        <td class="website"><a href="http://www.libsdl.org/">sdl2_net</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl2_ttf</td>
-        <td class="website"><a href="http://www.libsdl.org/">SDL2_ttf</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl_gfx</td>
-        <td class="website"><a href="http://www.ferzkopp.net/joomla/content/view/19/14/">SDL_gfx</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl_image</td>
-        <td class="website"><a href="http://www.libsdl.org/projects/SDL_image/">SDL_image</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl_mixer</td>
-        <td class="website"><a href="http://www.libsdl.org/projects/SDL_mixer/">SDL_mixer</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl_net</td>
-        <td class="website"><a href="http://www.libsdl.org/projects/SDL_net/">SDL_net</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl_pango</td>
-        <td class="website"><a href="http://sdlpango.sourceforge.net/">SDL_Pango</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl_rwhttp</td>
-        <td class="website"><a href="http://github.com/mgerhardy/SDL_rwhttp/">SDL_rwhttp</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl_sound</td>
-        <td class="website"><a href="http://icculus.org/SDL_sound/">SDL_sound</a></td>
-    </tr>
-    <tr>
-        <td class="package">sdl_ttf</td>
-        <td class="website"><a href="http://www.libsdl.org/projects/SDL_ttf/">SDL_ttf</a></td>
-    </tr>
-    <tr>
-        <td class="package">sfml</td>
-        <td class="website"><a href="http://www.sfml-dev.org/">SFML</a></td>
-    </tr>
-    <tr>
-        <td class="package">smpeg</td>
-        <td class="website"><a href="http://icculus.org/smpeg/">smpeg</a></td>
-    </tr>
-    <tr>
-        <td class="package">smpeg2</td>
-        <td class="website"><a href="http://icculus.org/smpeg/">smpeg</a></td>
-    </tr>
-    <tr>
-        <td class="package">sox</td>
-        <td class="website"><a href="http://sox.sourceforge.net/">SoX</a></td>
-    </tr>
-    <tr>
-        <td class="package">sparsehash</td>
-        <td class="website"><a href="https://github.com/sparsehash/sparsehash">sparsehash</a></td>
-    </tr>
-    <tr>
-        <td class="package">speex</td>
-        <td class="website"><a href="http://www.speex.org/">Speex</a></td>
-    </tr>
-    <tr>
-        <td class="package">speexdsp</td>
-        <td class="website"><a href="http://www.speex.org/">SpeexDSP</a></td>
-    </tr>
-    <tr>
-        <td class="package">sqlite</td>
-        <td class="website"><a href="http://www.sqlite.org/">SQLite</a></td>
-    </tr>
-    <tr>
-        <td class="package">subversion</td>
-        <td class="website"><a href="http://subversion.apache.org">subversion</a></td>
-    </tr>
-    <tr>
-        <td class="package">suitesparse</td>
-        <td class="website"><a href="http://www.cise.ufl.edu/research/sparse/SuiteSparse/">SuiteSparse</a></td>
-    </tr>
-    <tr>
-        <td class="package">t4k_common</td>
-        <td class="website"><a href="http://tux4kids.alioth.debian.org/">t4k_common</a></td>
-    </tr>
-    <tr>
-        <td class="package">taglib</td>
-        <td class="website"><a href="http://developer.kde.org/~wheeler/taglib.html">TagLib</a></td>
-    </tr>
-    <tr>
-        <td class="package">tclap</td>
-        <td class="website"><a href="http://tclap.sourceforge.net/">tclap</a></td>
-    </tr>
-    <tr>
-        <td class="package">teem</td>
-        <td class="website"><a href="http://teem.sourceforge.net/">Teem</a></td>
-    </tr>
-    <tr>
-        <td class="package">termcap</td>
-        <td class="website"><a href="https://www.gnu.org/software/termutils/">Termcap</a></td>
-    </tr>
-    <tr>
-        <td class="package">theora</td>
-        <td class="website"><a href="http://theora.org/">Theora</a></td>
-    </tr>
-    <tr>
-        <td class="package">tiff</td>
-        <td class="website"><a href="http://www.remotesensing.org/libtiff/">LibTIFF</a></td>
-    </tr>
-    <tr>
-        <td class="package">tinyxml</td>
-        <td class="website"><a href="http://sourceforge.net/projects/tinyxml/">tinyxml</a></td>
-    </tr>
-    <tr>
-        <td class="package">tinyxml2</td>
-        <td class="website"><a href="http://grinninglizard.com/tinyxml2/">tinyxml2</a></td>
-    </tr>
-    <tr>
-        <td class="package">tre</td>
-        <td class="website"><a href="http://laurikari.net/tre/">TRE</a></td>
-    </tr>
-    <tr>
-        <td class="package">twolame</td>
-        <td class="website"><a href="http://www.twolame.org/">TwoLAME</a></td>
-    </tr>
-    <tr>
-        <td class="package">ucl</td>
-        <td class="website"><a href="http://www.oberhumer.com/opensource/ucl/">UCL</a></td>
-    </tr>
-    <tr>
-        <td class="package">unrtf</td>
-        <td class="website"><a href="https://www.gnu.org/software/unrtf/">unRTF</a></td>
-    </tr>
-    <tr>
-        <td class="package">upx</td>
-        <td class="website"><a href="http://upx.sourceforge.net/">UPX</a></td>
-    </tr>
-    <tr>
-        <td class="package">vamp-plugin-sdk</td>
-        <td class="website"><a href="http://vamp-plugins.org/">Vamp Plugins SDK</a></td>
-    </tr>
-    <tr>
-        <td class="package">vcdimager</td>
-        <td class="website"><a href="https://www.gnu.org/software/vcdimager/">vcdimager</a></td>
-    </tr>
-    <tr>
-        <td class="package">vidstab</td>
-        <td class="website"><a href="http://public.hronopik.de/vid.stab/features.php?lang=en">vid.stab video stablizer</a></td>
-    </tr>
-    <tr>
-        <td class="package">vigra</td>
-        <td class="website"><a href="http://hci.iwr.uni-heidelberg.de/vigra">vigra</a></td>
-    </tr>
-    <tr>
-        <td class="package">vmime</td>
-        <td class="website"><a href="http://www.vmime.org/">VMime</a></td>
-    </tr>
-    <tr>
-        <td class="package">vo-aacenc</td>
-        <td class="website"><a href="https://github.com/mstorsjo/vo-aacenc">VO-AACENC</a></td>
-    </tr>
-    <tr>
-        <td class="package">vo-amrwbenc</td>
-        <td class="website"><a href="https://github.com/mstorsjo/vo-amrwbenc">VO-AMRWBENC</a></td>
-    </tr>
-    <tr>
-        <td class="package">vorbis</td>
-        <td class="website"><a href="http://www.vorbis.com/">Vorbis</a></td>
-    </tr>
-    <tr>
-        <td class="package">vtk</td>
-        <td class="website"><a href="http://www.vtk.org/">vtk</a></td>
-    </tr>
-    <tr>
-        <td class="package">vtk6</td>
-        <td class="website"><a href="http://www.vtk.org/">VTK6</a></td>
-    </tr>
-    <tr>
-        <td class="package">waf</td>
-        <td class="website"><a href="https://waf.io/">Waf: the meta build system</a></td>
-    </tr>
-    <tr>
-        <td class="package">wavpack</td>
-        <td class="website"><a href="http://www.wavpack.com/">WavPack</a></td>
-    </tr>
-    <tr>
-        <td class="package">wget</td>
-        <td class="website"><a href="https://www.gnu.org/software/wget/">wget</a></td>
-    </tr>
-    <tr>
-        <td class="package">widl</td>
-        <td class="website"><a href="https://www.winehq.org/docs/widl/">Wine IDL Compiler</a></td>
-    </tr>
-    <tr>
-        <td class="package">winpcap</td>
-        <td class="website"><a href="http://www.winpcap.org/">WinPcap</a></td>
-    </tr>
-    <tr>
-        <td class="package">wt</td>
-        <td class="website"><a href="http://www.webtoolkit.eu">Wt</a></td>
-    </tr>
-    <tr>
-        <td class="package">wxwidgets</td>
-        <td class="website"><a href="http://www.wxwidgets.org/">wxWidgets</a></td>
-    </tr>
-    <tr>
-        <td class="package">x264</td>
-        <td class="website"><a href="http://www.videolan.org/developers/x264.html">x264</a></td>
-    </tr>
-    <tr>
-        <td class="package">xapian-core</td>
-        <td class="website"><a href="http://xapian.org/">Xapian-Core</a></td>
-    </tr>
-    <tr>
-        <td class="package">xerces</td>
-        <td class="website"><a href="http://xerces.apache.org/xerces-c/">Xerces-C++</a></td>
-    </tr>
-    <tr>
-        <td class="package">xmlrpc-c</td>
-        <td class="website"><a href="http://xmlrpc-c.sourceforge.net/">xmlrpc-c</a></td>
-    </tr>
-    <tr>
-        <td class="package">xmlwrapp</td>
-        <td class="website"><a href="http://sourceforge.net/projects/xmlwrapp/">xmlwrapp</a></td>
-    </tr>
-    <tr>
-        <td class="package">xorg-macros</td>
-        <td class="website"><a href="http://cgit.freedesktop.org/xorg/util/macros/">X.org utility macros</a></td>
-    </tr>
-    <tr>
-        <td class="package">xvidcore</td>
-        <td class="website"><a href="http://www.xvid.org/">xvidcore</a></td>
-    </tr>
-    <tr>
-        <td class="package">xxhash</td>
-        <td class="website"><a href="http://cyan4973.github.io/xxHash/">xxHash</a></td>
-    </tr>
-    <tr>
-        <td class="package">xz</td>
-        <td class="website"><a href="http://tukaani.org/xz/">XZ</a></td>
-    </tr>
-    <tr>
-        <td class="package">yaml-cpp</td>
-        <td class="website"><a href="https://github.com/jbeder/yaml-cpp">A YAML parser and emitter for C++</a></td>
-    </tr>
-    <tr>
-        <td class="package">yasm</td>
-        <td class="website"><a href="http://yasm.tortall.net//">Yasm</a></td>
-    </tr>
-    <tr>
-        <td class="package">zlib</td>
-        <td class="website"><a href="http://zlib.net/">zlib</a></td>
-    </tr>
-    <tr>
-        <td class="package">zziplib</td>
-        <td class="website"><a href="http://zziplib.sourceforge.net/">ZZIPlib</a></td>
+        <td>Loading package list...</td>
     </tr>
     </table>
-
     <script>
-        function getPackageElements() {
-            var packageElements = {};
-            var elements = document.getElementById('package-list').getElementsByTagName('td');
-            for (var i = 0; i < elements.length; i++) {
-                var element = elements[i];
-                if (element.className === 'package') {
-                    var package = element.textContent;
-                    packageElements[package] = element;
-                }
-            }
-            return packageElements;
-        }
-        function parseVersion(mkfile) {
-            var matchResult = mkfile.match(/^\$\(PKG\)_VERSION\s*:?=\s*(.+)\s*$/m);
-            return matchResult[1];
-        }
-        function loadVersions(packageElements, doneCallback) {
-            var versions = {};
-            var packageCount = 0;
-            for (var package in packageElements) {
-                packageCount++;
-            }
-            var loadCount = 0;
-            for (var packageIndex in packageElements) {
-                (function handlePackage(){
-                    var package = packageIndex;
-                    var request = new XMLHttpRequest();
-                    request.open('GET', 'src/' + package + '.mk', true);
-                    request.onreadystatechange = function reqCallback() {
-                        if (request.readyState === 4) {
-                            versions[package] = parseVersion(request.responseText);
-                            loadCount++;
-                            if (loadCount === packageCount) {
-                                doneCallback(versions);
-                            }
-                        }
-                    }
-                    request.send();
-                })();
-            }
-        }
-        function loadVersionCache(doneCallback, errCallback) {
+        function loadPackageCache(doneCallback) {
             var request = new XMLHttpRequest();
-            request.open('GET', 'versions.json', true);
+            request.open('GET', 'packages.json', false);
             request.onreadystatechange = function reqCallback() {
                 if (request.readyState === 4) {
                     if (request.status === 200) {
-                        try {
-                            var versions = JSON.parse(request.responseText);
-                            doneCallback(versions);
-                        } catch (e) {
-                            errCallback();
-                        }
-                    } else {
-                        errCallback();
+                        var pkgs = JSON.parse(request.responseText);
+                        doneCallback(pkgs);
                     }
                 }
             }
             request.send();
         }
-        function resolveVersions(versions) {
-            var resolvedVersions = {};
-            for (var package in versions) {
-                var version = versions[package];
-                var matchResult = version.match(/^\$\((.+)_VERSION\)$/);
-                if (matchResult) {
-                    resolvedVersions[package] = versions[matchResult[1]];
-                } else {
-                    resolvedVersions[package] = versions[package];
-                }
+        function showPackages(pkgs) {
+            var names = []
+            for (pkg in pkgs) {
+                names.push(pkg);
             }
-            return resolvedVersions;
-        }
-        function showVersions(packageElements, resolvedVersions) {
-            for (package in packageElements) {
-                var element = packageElements[package];
-                var version = resolvedVersions[package];
+            names.sort();
+            var trs = [];
+            for (var i = 0; i < names.length; i++) {
+                var pkg = names[i];
+                if (pkg == "" || pkg == "mxe-conf") {
+                    // "" is last line of packages.json.
+                    continue;
+                }
+                var version = pkgs[pkg].version;
                 var shorten = version.length > 12;
                 if (shorten) {
                     version = version.substring(0, 12);
@@ -2878,20 +1176,23 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
                 if (shorten) {
                     versionEscaped += '&hellip;';
                 }
-                var versionHtml = '<td class="version">' + versionEscaped + '</td>';
-                element.insertAdjacentHTML('afterend', versionHtml);
+                var website = pkgs[pkg].website;
+                var description = pkgs[pkg].description;
+                if (description == "") {
+                    description = pkg;
+                }
+                var pkgHtml = '<tr>' +
+                    '<td class="package">' + pkg + '</td>' +
+                    '<td class="version">' + versionEscaped + '</td>' +
+                    '<td class="website"><a href="' + website + '">' + description + '</a></td>' +
+                    '</tr>';
+                trs.push(pkgHtml);
             }
+            var packageList = document.getElementById('package-list');
+            packageList.innerHTML = trs.join('\n');
         }
         (function main() {
-            var packageElements = getPackageElements();
-            loadVersionCache(function doneCallback(versions) {
-                showVersions(packageElements, versions);
-            }, function errCallback() {
-                loadVersions(packageElements, function doneCallback(versions) {
-                    var resolvedVersions = resolveVersions(versions);
-                    showVersions(packageElements, resolvedVersions);
-                });
-            });
+            loadPackageCache(showPackages);
         })();
     </script>
 </div>
@@ -2904,7 +1205,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <p>
         The package should be a
         <a href="https://www.gnu.org/philosophy/free-sw.html">free</a>
-        <a href="http://www.debian.org/social_contract#guidelines">software</a>
+        <a href="https://www.debian.org/social_contract#guidelines">software</a>
         <a href="http://www.opensource.org/osd.html">library</a>
         that is really used by one of your applications. Please also review our
         <a href="#legal">legal notes</a>.
@@ -2992,6 +1293,30 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <pre>$(PKG)_DEPS     := gcc ...</pre>
 
         <p>
+        Specify official name and website of a package.
+        If the official name coincides with the package name,
+        you can omit <code>$(PKG)_DESCR</code>.
+        </p>
+        <pre>
+PKG             := libdvdetect
+$(PKG)_WEBSITE  := https://www.dvdetect.de/
+$(PKG)_DESCR    := Fast database lookup for DVDs</pre>
+
+        <p>
+        Always look for the SSL version of URLs, that is,
+        prefer <code>https://</code> URLs over <code>http://</code> URLs.
+        </p>
+    </li>
+
+    <li>
+        <p>
+        Write your <code>$(PKG)_BUILD</code>.
+        If your library has a <code>./configure</code> script,
+        enable/disable all dependency libraries explicitly
+        via "<code>--enable-*</code>" and "<code>--disable-*</code>" options.
+        </p>
+
+        <p>
         Things not to do:
         </p>
         <ul>
@@ -3012,34 +1337,76 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             </li>
         </ul>
 
-    </li>
+        <p>
+        Useful Makefile variables provided by MXE:
+        </p>
 
-    <li>
-        <p>
-            Add your package to the <a href="#packages">list of packages</a>.
-        </p>
-        <p>
-            Each package gets its own table row element with table cells
-            specifying your package name, official name and website:
-        </p>
-        <pre>
-&lt;tr&gt;
-    &lt;td class="package"&gt;gettext&lt;/td&gt;
-    &lt;td class="website"&gt;&lt;a href="https://www.gnu.org/software/gettext/"&gt;gettext&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;</pre>
-        <p>
-            Always look for the SSL version of a website, that is,
-            prefer <code>https://</code> URLs over <code>http://</code> URLs.
-        </p>
-    </li>
+        <ul>
+        <li>
+            <p>
+            <code>$(SOURCE_DIR)</code>
+            is a directory with package source and
+            <code>$(BUILD_DIR)</code>
+            is an empty directory intended for build files.
+            Both directories are temporary.
+            Prefer out-of-tree builds. Autotools
+            and CMake support them.
+            </p>
+        </li>
+        <li>
+            <p>
+            <code>$(PREFIX)</code>
+            is path to <code>usr/</code> directory.
+            <code>$(TOP_DIR)</code>
+            is path to MXE root directory.
+            <code>$(TARGET)</code> is target triplet
+            (e.g., <code>i686-w64-mingw32.static</code>).
+            <code>$(BUILD)</code> is build triplet
+            (e.g., <code>x86_64-unknown-linux-gnu</code>).
+            </p>
+        </li>
+        <li>
+            <p>
+            <code>$(MXE_CONFIGURE_OPTS)</code>
+            adds standard options to <code>./configure</code> script.
+            Typical usage:
+            </p>
+            <pre>
+cd '$(BUILD_DIR)' &amp;&amp; '$(SOURCE_DIR)'/configure \
+    $(MXE_CONFIGURE_OPTS)
+            </pre>
+        </li>
+        <li>
+            <p>
+            <code>$(MXE_DISABLE_CRUFT)</code>
+            disables installation of documentation and programs.
+            </p>
+            <pre>
+$(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+$(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
+            </pre>
+        </li>
+        <li>
+            <p>
+            <code>$(BUILD_SHARED)</code>
+            is TRUE for shared targets. Useful to add flags applicable
+            only to shared targets.
+            </p>
+            <pre>
+$(if $(BUILD_SHARED),LDFLAGS=-no-undefined)
+            </pre>
+            <p>
+            Similarly,
+            <code>$(BUILD_STATIC)</code>
+            is TRUE for static targets;
+            <code>$(BUILD_NATIVE)</code>
+            is TRUE for native targets;
+            <code>$(BUILD_CROSS)</code>
+            is TRUE for cross targets.
+            </p>
+        </li>
+        </ul>
 
-    <li>
-        <p>
-        Write your <code>$(PKG)_BUILD</code>.
-        If your library has a <code>./configure</code> script,
-        enable/disable all dependency libraries explicitly
-        via "<code>--enable-*</code>" and "<code>--disable-*</code>" options.
-        </p>
     </li>
 
     <li>
@@ -3276,24 +1643,24 @@ endef</pre>
     The best starting point for any legal questions would be the
     </p>
     <p>
-    <a href="http://fsfe.org/projects/ftf/">FTF (Freedom Task Force of the FSFE (Free Software Foundation Europe)).</a>
+    <a href="https://fsfe.org/projects/ftf/">FTF (Freedom Task Force of the FSFE (Free Software Foundation Europe)).</a>
     </p>
     <p>
     They have been very helpful in the past, and maintain an
-    <a href="http://fsfe.org/projects/ftf/network.en.html">extensive network</a>
+    <a href="https://fsfe.org/projects/ftf/network.en.html">extensive network</a>
     of legal contacts, both within and outside Europe.
     </p>
 
     <p>Your local jurisdiction may be a signatory to various
-    <a href="http://en.wikipedia.org/wiki/List_of_parties_to_international_copyright_agreements">international agreements,</a>
+    <a href="https://en.wikipedia.org/wiki/List_of_parties_to_international_copyright_agreements">international agreements,</a>
     so be sure to mention where you are in any correspondence (much like any
     detailed bug report really).
     </p>
 
     <p>Additionally, you should also do some background reading from the
-    <a href="http://www.gnu.org/licenses/gpl-faq.html#GPLIncompatibleLibs">FSF (Free Software Foundation)</a>
+    <a href="https://www.gnu.org/licenses/gpl-faq.html#GPLIncompatibleLibs">FSF (Free Software Foundation)</a>
     and
-    <a href="http://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License">Wikipedia</a>
+    <a href="https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License">Wikipedia</a>
     to familiarise yourself with some of the potential issues (and experience
     some context-switching overhead).
     </p>
@@ -3329,23 +1696,23 @@ endef</pre>
     or
     <a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/faq#distribute">ambiguous</a>
     will be
-    <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-12/msg00049.html">removed</a>
+    <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-12/msg00049.html">removed</a>
     or
-    <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-09/msg00063.html">rejected</a>.
+    <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-09/msg00063.html">rejected</a>.
     </p>
 
     <p>
     The definition of free must be one of:
     </p>
     <ul>
-    <li><a href="http://www.gnu.org/philosophy/free-sw.html">The Free Software Definition</a></li>
-    <li><a href="http://www.debian.org/social_contract#guidelines">The Debian Free Software Guidelines (DFSG)</a></li>
+    <li><a href="https://www.gnu.org/philosophy/free-sw.html">The Free Software Definition</a></li>
+    <li><a href="https://www.debian.org/social_contract#guidelines">The Debian Free Software Guidelines (DFSG)</a></li>
     <li><a href="http://www.opensource.org/osd.html">The Open Source Definition</a></li>
     </ul>
 
     <p>
     Please contact the
-    <a href="http://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">mailing list</a>
+    <a href="https://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">mailing list</a>
     if you notice a package that doesn't meet these guidlines.
     </p>
 
@@ -3354,15 +1721,15 @@ endef</pre>
     <p>
     In addition to the usual considerations (copyrights, patents,
     trademarks, export regulations etc.), building
-    <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-12/msg00025.html">statically linked</a>
+    <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2010-12/msg00025.html">statically linked</a>
     libraries
-    <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2011-02/msg00018.html">for Windows</a>
+    <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2011-02/msg00018.html">for Windows</a>
     exposes some edge cases that you may not have encountered before.
     </p>
 
     <p>
     According to
-    <a href="http://www.gnu.org/philosophy/free-sw.html">freedom 0</a> and our
+    <a href="https://www.gnu.org/philosophy/free-sw.html">freedom 0</a> and our
     <a href="#copyright">own licence</a>,
     you can use mxe in countless different
     environments, each with it's own special legal considerations. The
@@ -3389,14 +1756,14 @@ endef</pre>
     <h4>GNU Licenses</h4>
     <p>
     Review the
-    <a href="http://www.gnu.org/licenses/gpl-faq.html#content">FAQ</a>
+    <a href="https://www.gnu.org/licenses/gpl-faq.html#content">FAQ</a>
     </p>
 
     <h4>LGPL and Static Linking</h4>
 
     <p>
     Review the
-    <a href="http://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License#Differences_from_the_GPL">Differences from the GPL</a>
+    <a href="https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License#Differences_from_the_GPL">Differences from the GPL</a>
     section of the Wikipedia article mentioned above.
     </p>
 
@@ -3404,9 +1771,9 @@ endef</pre>
 
     <p>
     See conflicting accounts from the
-    <a href="http://www.gnu.org/licenses/license-list.html#OpenSSL">FSF</a>
+    <a href="https://www.gnu.org/licenses/license-list.html#OpenSSL">FSF</a>
     and the
-    <a href="http://www.openssl.org/support/faq.html#LEGAL2">OpenSSL project</a>.
+    <a href="https://www.openssl.org/docs/faq.html#LEGAL2">OpenSSL project</a>.
     </p>
     <p>
     A similar situation also exists for package fdk-aac.
@@ -3573,7 +1940,7 @@ endef</pre>
 
         <p>
         The project has been
-        <a href="http://lists.nongnu.org/archive/html/mingw-cross-env-list/2012-03/msg00101.html">renamed</a>
+        <a href="https://lists.nongnu.org/archive/html/mingw-cross-env-list/2012-03/msg00101.html">renamed</a>
         from
         mingw-cross-env (MinGW cross compiling environment)
         to
@@ -3596,7 +1963,7 @@ endef</pre>
     <dd>
         <p>
         <a href="https://bitbucket.org/vog/mingw-cross-env/downloads/mingw-cross-env-2.21.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.21">Changelog</a>
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.21">Changelog</a>
         </p>
 
         <p>
@@ -3621,13 +1988,13 @@ endef</pre>
     <dd>
         <p>
         <a href="https://bitbucket.org/vog/mingw-cross-env/downloads/mingw-cross-env-2.20.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.20">Changelog</a>
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.20">Changelog</a>
         </p>
 
         <p>
         This release fixes a download error caused by the pixman project
         (a sudden change of their URL scheme without proper redirects).
-        <a href="http://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
+        <a href="https://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
         </p>
     </dd>
 
@@ -3635,7 +2002,7 @@ endef</pre>
     <dd>
         <p>
         <a href="https://bitbucket.org/vog/mingw-cross-env/downloads/mingw-cross-env-2.19.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.19">Changelog</a>
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.19">Changelog</a>
         </p>
 
         <p>
@@ -3666,7 +2033,7 @@ endef</pre>
 
         <p>
         Note for <code>boost::filesystem</code> users:
-        <a href="http://beta.boost.org/doc/libs/1_46_1/libs/filesystem/v3/doc/index.htm">Version 3 is a major revision</a>
+        <a href="https://beta.boost.org/doc/libs/1_46_1/libs/filesystem/v3/doc/index.htm">Version 3 is a major revision</a>
         and now the default in 1.46.
         </p>
     </dd>
@@ -3674,22 +2041,22 @@ endef</pre>
     <dt>2010-12-15 &ndash; Release 2.18</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.18.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.18">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.18.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.18">Changelog</a>
         </p>
 
         <p>
         This release fixes a checksum error caused by the atkmm project
         (a sudden change of their current source tarball).
-        <a href="http://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
+        <a href="https://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
         </p>
     </dd>
 
     <dt>2010-12-11 &ndash; Release 2.17</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.17.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.17">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.17.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.17">Changelog</a>
         </p>
 
         <p>
@@ -3711,8 +2078,8 @@ endef</pre>
     <dt>2010-10-27 &ndash; Release 2.16</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.16.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.16">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.16.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.16">Changelog</a>
         </p>
 
         <p>
@@ -3740,8 +2107,8 @@ endef</pre>
     <dt>2010-06-16 &ndash; Release 2.15</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.15.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.15">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.15.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.15">Changelog</a>
         </p>
 
         <p>
@@ -3757,14 +2124,14 @@ endef</pre>
     <dt>2010-06-08 &ndash; Release 2.14</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.14.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.14">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.14.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.14">Changelog</a>
         </p>
 
         <p>
         This release fixes download errors caused by the MinGW project
         (a sudden change of their URL scheme without proper redirects).
-        <a href="http://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
+        <a href="https://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
         </p>
 
         <p>
@@ -3780,8 +2147,8 @@ endef</pre>
     <dt>2010-05-31 &ndash; Release 2.13</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.13.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.13">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.13.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.13">Changelog</a>
         </p>
 
         <p>
@@ -3826,8 +2193,8 @@ endef</pre>
     <dt>2010-02-21 &ndash; Release 2.12</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.12.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.12">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.12.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.12">Changelog</a>
         </p>
 
         <p>
@@ -3857,8 +2224,8 @@ endef</pre>
     <dt>2010-02-20 &ndash; Release 2.11</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.11.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.11">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.11.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.11">Changelog</a>
         </p>
 
         <p>
@@ -3870,8 +2237,8 @@ endef</pre>
     <dt>2009-12-23 &ndash; Release 2.10</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.10.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.10">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.10.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.10">Changelog</a>
         </p>
 
         <p>
@@ -3898,8 +2265,8 @@ endef</pre>
     <dt>2009-10-24 &ndash; Release 2.9</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.9.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.9">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.9.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.9">Changelog</a>
         </p>
 
         <p>
@@ -3922,8 +2289,8 @@ endef</pre>
     <dt>2009-09-11 &ndash; Release 2.8</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.8.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.8">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.8.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.8">Changelog</a>
         </p>
 
         <p>
@@ -3965,8 +2332,8 @@ endef</pre>
     <dt>2009-08-11 &ndash; Release 2.7</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.7.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.7">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.7.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.7">Changelog</a>
         </p>
 
         <p>
@@ -3987,8 +2354,8 @@ endef</pre>
     <dt>2009-06-19 &ndash; Release 2.6</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.6.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.6">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.6.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.6">Changelog</a>
         </p>
 
         <p>
@@ -4019,14 +2386,14 @@ endef</pre>
     <dt>2009-04-06 &ndash; Release 2.5</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.5.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.5">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.5.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.5">Changelog</a>
         </p>
 
         <p>
         This release fixes a download error caused by the MinGW project.
         They suddenly changed the names of their source tarballs.
-        <a href="http://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
+        <a href="https://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
         </p>
 
         <p>
@@ -4047,8 +2414,8 @@ endef</pre>
     <dt>2009-03-08 &ndash; Release 2.4</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.4.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.4">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.4.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.4">Changelog</a>
         </p>
 
         <p>
@@ -4065,8 +2432,8 @@ endef</pre>
     <dt>2009-02-09 &ndash; Release 2.3</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.3.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.3">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.3.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.3">Changelog</a>
         </p>
 
         <p>
@@ -4089,8 +2456,8 @@ endef</pre>
     <dt>2009-01-31 &ndash; Release 2.2</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.2.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.2">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.2.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.2">Changelog</a>
         </p>
 
         <p>
@@ -4110,14 +2477,14 @@ endef</pre>
     <dt>2008-12-13 &ndash; Release 2.1</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.1.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.1">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.1.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.1">Changelog</a>
         </p>
 
         <p>
         This release fixes a download error caused by the GDAL project.
         They suddenly changed their download URLs.
-        <a href="http://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
+        <a href="https://www.w3.org/Provider/Style/URI">That sort of thing should never happen!</a>
         </p>
 
         <p>
@@ -4132,8 +2499,8 @@ endef</pre>
     <dt>2008-11-10 &ndash; Release 2.0</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.0.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.0">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-2.0.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/2.0">Changelog</a>
         </p>
 
         <p>
@@ -4151,8 +2518,8 @@ endef</pre>
     <dt>2008-01-11 &ndash; Release 1.4</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.4.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.4">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.4.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.4">Changelog</a>
         </p>
 
         <p>
@@ -4162,7 +2529,7 @@ endef</pre>
         </p>
 
         <p>
-        At the <a href="http://www.fefe.de/nowindows/">request of its author</a>,
+        At the <a href="https://www.fefe.de/nowindows/">request of its author</a>,
         libowfat is no longer supported from this release on.
         </p>
 
@@ -4177,14 +2544,14 @@ endef</pre>
     <dt>2007-12-23 &ndash; Release 1.3</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.3.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.3">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.3.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.3">Changelog</a>
         </p>
 
         <p>
         A sudden change in the download URLs of GEOS
         made the automatic download fail.
-        <a href="http://www.w3.org/Provider/Style/URI">Such changes should never happen!</a>
+        <a href="https://www.w3.org/Provider/Style/URI">Such changes should never happen!</a>
         But it happened,
         and this quick release is an attempt to limit the damage.
         </p>
@@ -4198,8 +2565,8 @@ endef</pre>
     <dt>2007-12-13 &ndash; Release 1.2</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.2.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.2">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.2.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.2">Changelog</a>
         </p>
 
         <p>
@@ -4212,8 +2579,8 @@ endef</pre>
     <dt>2007-07-24 &ndash; Release 1.1</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.1.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.1">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.1.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.1">Changelog</a>
         </p>
 
         <p>
@@ -4230,8 +2597,8 @@ endef</pre>
     <dt>2007-06-19 &ndash; Release 1.0</dt>
     <dd>
         <p>
-        <a href="http://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.0.tar.gz">Download</a> |
-        <a href="http://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.0">Changelog</a>
+        <a href="https://download.savannah.nongnu.org/releases/mingw-cross-env/mingw-cross-env-1.0.tar.gz">Download</a> |
+        <a href="https://hg.savannah.nongnu.org/hgweb/mingw-cross-env/log/1.0">Changelog</a>
         </p>
 
         <p>
@@ -4268,7 +2635,7 @@ endef</pre>
         <a href="https://savannah.nongnu.org/projects/mingw-cross-env">Entry on Savannah</a>
     </li>
     <li>
-        <a href="http://lists.debian.org/debian-embedded/2007/06/msg00007.html">First release anouncement</a>
+        <a href="https://lists.debian.org/debian-embedded/2007/06/msg00007.html">First release anouncement</a>
         and the discussion around it
     </li>
     </ul>
@@ -4283,7 +2650,7 @@ endef</pre>
         <a href="https://krita.org/">Krita project</a>
     </li>
     <li>
-        <a href="http://thebeezspeaks.blogspot.com/2009/04/cross-compilers-new-wave.html">Cross compilers, the new wave</a>
+        <a href="https://thebeezspeaks.blogspot.com/2009/04/cross-compilers-new-wave.html">Cross compilers, the new wave</a>
         <br>
         Appeared on
         <a href="http://lxer.com/module/newswire/view/118868">LXer</a>
@@ -4297,10 +2664,10 @@ endef</pre>
         <a href="http://www.mingw.org/">MinGW project</a>
     </li>
     <li>
-        <a href="http://wiki.wxwidgets.org/Cross-Compiling_Under_Linux#Cross-compiling_under_Linux_for_MS_Windows">Cross-compiling under Linux for MS Windows</a>
+        <a href="https://wiki.wxwidgets.org/Cross-Compiling_Under_Linux#Cross-compiling_under_Linux_for_MS_Windows">Cross-compiling under Linux for MS Windows</a>
         <br>
         Old tutorial provided by the
-        <a href="http://www.wxwidgets.org/">wxWidgets project</a>
+        <a href="https://www.wxwidgets.org/">wxWidgets project</a>
     </li>
     </ul>
 
@@ -4313,7 +2680,7 @@ endef</pre>
         Win32 cross compiling packages by Arch Linux
     </li>
     <li>
-        <a href="http://packages.debian.org/stable/devel/mingw32">Debian mingw32 package</a>
+        <a href="https://packages.debian.org/stable/devel/mingw32">Debian mingw32 package</a>
         <br>
         Bare win32 cross compiler
     </li>
@@ -4328,7 +2695,7 @@ endef</pre>
         Win32/64 ports of many free software packages
     </li>
     <li>
-        <a href="http://gnuwin32.sourceforge.net/">GnuWin32</a>
+        <a href="https://gnuwin32.sourceforge.io/">GnuWin32</a>
         <br>
         Win32 ports of many free software packages
     </li>
@@ -4338,13 +2705,13 @@ endef</pre>
         Another project with similar goal
     </li>
     <li>
-        <a href="http://www.libsdl.org/extras/win32/cross/README.txt">MinGW cross-compiler build script</a>
+        <a href="https://www.libsdl.org/extras/win32/cross/README.txt">MinGW cross-compiler build script</a>
         <br>
         Old script provided by the
-        <a href="http://www.libsdl.org/">SDL project</a>
+        <a href="https://www.libsdl.org/">SDL project</a>
     </li>
     <li>
-        <a href="http://comments.gmane.org/gmane.comp.gnu.octave.maintainers/30358">mxe-octave</a>
+        <a href="https://comments.gmane.org/gmane.comp.gnu.octave.maintainers/30358">mxe-octave</a>
         <br>
         Fork of MXE specialized on building
         <a href="https://www.gnu.org/software/octave/">GNU Octave</a>
@@ -4367,7 +2734,7 @@ endef</pre>
 
     <ul class="compact-list">
     <li>
-        <a href="http://sourceforge.net/projects/aorta/">Aorta</a>
+        <a href="https://sourceforge.net/projects/aorta/">Aorta</a>
     </li>
     <li>
         <a href="https://github.com/zer0main/battleship">Battleship game</a>
@@ -4376,16 +2743,19 @@ endef</pre>
         <a href="https://bino3d.org/">Bino</a>
     </li>
     <li>
-        <a href="http://biosig.sourceforge.net/">BioSig</a>
+        <a href="https://biosig.sourceforge.io/">BioSig</a>
     </li>
     <li>
         <a href="http://en.cataclysmdda.com/">Cataclysm: Dark Days Ahead</a>
     </li>
     <li>
-        <a href="http://cvtool.sourceforge.net/">cvtool</a>
+        <a href="https://cvtool.sourceforge.io/">cvtool</a>
     </li>
     <li>
         <a href="http://www.qtrac.eu/diffpdf.html">DiffPDF</a>
+    </li>
+    <li>
+        <a href="https://www.digikam.org/">digiKam</a>
     </li>
     <li>
         <a href="https://github.com/eiskaltdcpp/eiskaltdcpp">EiskaltDC++</a>
@@ -4412,10 +2782,10 @@ endef</pre>
         <a href="https://krita.org/">Krita</a>
     </li>
     <li>
-        <a href="http://lightspark.github.com/">Lightspark</a>
+        <a href="https://lightspark.github.io/">Lightspark</a>
     </li>
     <li>
-        <a href="http://marathon.sourceforge.net/">Marathon Aleph One</a>
+        <a href="https://alephone.lhowon.org/">Marathon Aleph One</a>
     </li>
     <li>
         <a href="https://www.maxr.org/">Mechanized Assault and eXploration Reloaded</a>
@@ -4424,49 +2794,52 @@ endef</pre>
         <a href="https://www.bunkus.org/videotools/mkvtoolnix/">MKVToolNix</a>
     </li>
     <li>
-        <a href="http://mpop.sourceforge.net/">mpop</a>
+        <a href="https://mpop.sourceforge.io/">mpop</a>
     </li>
     <li>
-        <a href="http://msmtp.sourceforge.net/">msmtp</a>
+        <a href="https://msmtp.sourceforge.io/">msmtp</a>
     </li>
     <li>
         <a href="http://www.openscad.org/">OpenSCAD</a>
     </li>
     <li>
-        <a href="http://pdfgrep.sourceforge.net/">Pdfgrep</a>
+        <a href="https://pdfgrep.org/">Pdfgrep</a>
     </li>
     <li>
-        <a href="http://www.pokerth.net/">PokerTH</a>
+        <a href="https://www.pokerth.net/">PokerTH</a>
     </li>
     <li>
-        <a href="http://pushover.sourceforge.net/">Pushover</a>
+        <a href="https://pushover.sourceforge.io/">Pushover</a>
     </li>
     <li>
-        <a href="http://qtads.sourceforge.net/">QTads</a>
+        <a href="https://qtads.sourceforge.io/">QTads</a>
     </li>
     <li>
-        <a href="http://sigrok.org/">sigrok</a>
+        <a href="https://github.com/sibuserv/sibuserv">Sibuserv</a>
+    </li>
+    <li>
+        <a href="https://sigrok.org/">sigrok</a>
     </li>
     <li>
         <a href="http://spek-project.org/">Spek</a>
     </li>
     <li>
-        <a href="http://springrts.com/">Spring RTS</a>
+        <a href="https://springrts.com/">Spring RTS</a>
     </li>
     <li>
-        <a href="http://www.xs4all.nl/~thebeez/4tH/">The 4tH Compiler</a>
+        <a href="https://thebeez.home.xs4all.nl/4tH/">The 4tH Compiler</a>
     </li>
     <li>
         <a href="https://www.tug.org/texworks/">TeXworks</a>
     </li>
     <li>
-        <a href="http://toppler.sourceforge.net/">Tower Toppler</a>
+        <a href="https://toppler.sourceforge.io/">Tower Toppler</a>
     </li>
     <li>
-        <a href="http://tux4kids.alioth.debian.org/tuxtype/">Tux Typing</a>
+        <a href="https://tux4kids.alioth.debian.org/tuxtype/">Tux Typing</a>
     </li>
     <li>
-        <a href="http://tux4kids.alioth.debian.org/tuxmath/">Tux Math</a>
+        <a href="https://tux4kids.alioth.debian.org/tuxmath/">Tux Math</a>
     </li>
     <li>
         <a href="http://ph.on.things.free.fr/projects/ube/">Ube</a>
@@ -4475,7 +2848,7 @@ endef</pre>
         <a href="http://ufoai.org/">UFO: Alien Invasion</a>
     </li>
     <li>
-        <a href="http://violetland.github.io/">Violetland</a>
+        <a href="https://violetland.github.io/">Violetland</a>
     </li>
     <li>
         <a href="http://wz2100.net/">Warzone 2100</a>

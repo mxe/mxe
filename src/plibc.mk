@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := plibc
+$(PKG)_WEBSITE  := https://plibc.sourceforge.io/
+$(PKG)_DESCR    := Plibc
 $(PKG)_IGNORE   := %
 $(PKG)_VERSION  := cd7ed09
 $(PKG)_CHECKSUM := 1e939804e173b8f789e1403964211835b8006253d0a541d55256b540639b0629

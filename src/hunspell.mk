@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hunspell
+$(PKG)_WEBSITE  := https://hunspell.sourceforge.io/
+$(PKG)_DESCR    := Hunspell
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.3
 $(PKG)_CHECKSUM := a7b2c0de0e2ce17426821dc1ac8eb115029959b3ada9d80a81739fa19373246c
 $(PKG)_SUBDIR   := hunspell-$($(PKG)_VERSION)
 $(PKG)_FILE     := hunspell-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/hunspell/Hunspell/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/hunspell/Hunspell/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gettext libiconv pthreads readline
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/hunspell/files/Hunspell/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/hunspell/files/Hunspell/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

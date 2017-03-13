@@ -3,7 +3,7 @@
 [![License][license-badge]][license-page]
 
 [license-page]: LICENSE.md
-[license-badge]: http://img.shields.io/badge/License-MIT-brightgreen.svg
+[license-badge]: https://img.shields.io/badge/License-MIT-brightgreen.svg
 
 MXE (M cross environment) is a Makefile that compiles a cross
 compiler and cross compiles many free libraries such as SDL and
@@ -33,5 +33,12 @@ various target platforms, which:
   * GCC Threading Libraries (`winpthreads` is always available):
     - win32
     - [posix (experimental)](https://github.com/mxe/mxe/pull/958)
+  * GCC Exception Handling:
+    - Default
+      - i686: sjlj
+      - x86_64: seh
+    - [Alternatives (experimental)](https://github.com/mxe/mxe/pull/1664)
+      - i686: dw2
+      - x86_64: sjlj
 
 Please see [mxe.cc](http://mxe.cc/) for further information and package support matrix.

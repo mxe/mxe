@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hdf4
+$(PKG)_WEBSITE  := https://www.hdfgroup.org/hdf4/
+$(PKG)_DESCR    := HDF4
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.2.10
 $(PKG)_CHECKSUM := 44e9c7f5bdd463c4a01738f44ad4f0ee9c68e3f0cb9872eca160e3fddc8b994c
@@ -10,7 +12,7 @@ $(PKG)_URL      := https://support.hdfgroup.org/ftp/HDF/releases/HDF$($(PKG)_VER
 $(PKG)_DEPS     := gcc jpeg portablexdr zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.hdfgroup.org/ftp/HDF/HDF_Current/src/' | \
+    $(WGET) -q -O- 'https://www.hdfgroup.org/ftp/HDF/HDF_Current/src/' | \
     grep '<a href.*hdf.*bz2' | \
     $(SED) -n 's,.*hdf-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

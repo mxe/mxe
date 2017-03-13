@@ -1,16 +1,17 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := aubio
+$(PKG)_WEBSITE  := https://www.aubio.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.4.2
 $(PKG)_CHECKSUM := 1cc58e0fed2b9468305b198ad06b889f228b797a082c2ede716dc30fcb4f8f1f
 $(PKG)_SUBDIR   := aubio-$($(PKG)_VERSION)
 $(PKG)_FILE     := aubio-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.aubio.org/pub/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.aubio.org/pub/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ffmpeg fftw jack libsamplerate libsndfile waf
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.aubio.org/download' | \
+    $(WGET) -q -O- 'https://www.aubio.org/download' | \
     $(SED) -n 's,.*aubio-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

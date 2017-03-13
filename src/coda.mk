@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := coda
+$(PKG)_WEBSITE  := https://stcorp.nl/coda/
+$(PKG)_DESCR    := CODA
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.15.1
 $(PKG)_CHECKSUM := 51076ff958ec15633d741ea021761fc6d8c6492f931175c489288481e37ac810
