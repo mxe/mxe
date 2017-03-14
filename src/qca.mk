@@ -18,14 +18,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd    '$(1).build' && $(TARGET)-cmake '$(1)' \
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DBUILD_TESTS=OFF \
         -DBUILD_TOOLS=OFF \
         -DUSE_RELATIVE_PATHS=OFF \
-        -DBUILD_PLUGINS="auto"
-        -DBUILD_STATIC_LIBS=$(CMAKE_STATIC_BOOL) \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL)
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+        -DBUILD_PLUGINS="auto" \
+        -DQCA_MAN_INSTALL_DIR="$(BUILD_DIR)/null"
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
