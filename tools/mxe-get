@@ -15,10 +15,11 @@ Environment:
 
 MXE_HOME          Configure directory where packages will be installed.
                   Default: ~/mxe
-MXE_DONT_INSTALL  Comma/space separated list of package names to skip
+MXE_SKIP_INSTALL  Comma/space separated list of package names to skip
                   installing. Useful to exclude unnecessary dependencies.
                   *-linux-gnu-*, mxe-requirements, mxe-source packages
                   are excluded automatically.
+MXE_INST_LINUX    Install 'linux-gnu' packages. Default: no
 
 Required: ar (BSD), gpg, curl, openssl, awk, sed, tar, gzip
 
@@ -37,11 +38,11 @@ mxe_get_pkg() {
     plat="${BASH_REMATCH[4]}"  # mingw32 | linux-gnu
     name="${BASH_REMATCH[6]}"  # harfbuzz
 
-    # skip native packages
-    if [ ! "${plat}" = 'linux-gnu' ]; then
+    # skip Linux packages by default
+    if [ ! "${plat}" = 'linux-gnu' ] || [ "${MXE_INST_LINUX}" = 'yes' ]; then
 
-      # skip packages on the don't install list
-      if [[ ! "${name}" =~ ^("${MXE_DONT_INSTALL//[, ]/|}")$ ]]; then
+      # skip packages on the skip install list
+      if [[ ! "${name}" =~ ^("${MXE_SKIP_INSTALL//[, ]/|}")$ ]]; then
 
         idid="${repo}-${name}"  # package id for internal purposes
         if [[ ! "${done}" = *"|${idid}|"* ]]; then  # avoid installing the same package twice
@@ -83,7 +84,7 @@ mxe_get_pkg() {
               mxe_get_pkg "$i"  # recurse
             done
           else
-            echo "! Error: Cannot find file in file list: '${repo}-${name}_*'"
+            echo "! Error: Download failed."
           fi
         fi
       fi
@@ -99,7 +100,8 @@ if [ $# -eq 0 ]; then
   exit
 fi
 
-[ -z "${MXE_DONT_INSTALL+x}" ] && MXE_DONT_INSTALL='gcc'
+[ -z "${MXE_SKIP_INSTALL+x}" ] && MXE_SKIP_INSTALL='gcc'
+[ -z "${MXE_INST_LINUX+x}" ] && MXE_INST_LINUX='no'
 [ -z "${MXE_HOME+x}" ] && MXE_HOME="${HOME}/mxe"
 
 mkdir -p "${MXE_HOME}"
