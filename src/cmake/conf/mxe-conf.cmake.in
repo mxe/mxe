@@ -25,7 +25,6 @@ endif()
 ## General configuration
 set(CMAKE_SYSTEM_NAME Windows)
 set(MSYS 1)
-set(CMAKE_BUILD_TYPE Release CACHE STRING "Debug|Release|RelWithDebInfo|MinSizeRel" FORCE)
 set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY ON)
 # Workaround for https://www.cmake.org/Bug/view.php?id=14075
 set(CMAKE_CROSS_COMPILING ON)
