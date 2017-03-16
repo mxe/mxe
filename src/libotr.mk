@@ -23,6 +23,7 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --with-libgcrypt-prefix='$(PREFIX)/$(TARGET)'
 
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_SHARED), LDFLAGS=-no-undefined)
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' \
+        $(if $(BUILD_SHARED), LDFLAGS=-no-undefined) $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
 endef
