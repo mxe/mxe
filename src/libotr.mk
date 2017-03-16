@@ -18,12 +18,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ACLOCAL_PATH='$(PREFIX)/$(TARGET)/share/aclocal' autoreconf -fi
-    cd '$(1)' && ./configure \
+    cd '$(SOURCE_DIR)' && ACLOCAL_PATH='$(PREFIX)/$(TARGET)/share/aclocal' autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --with-libgcrypt-prefix='$(PREFIX)/$(TARGET)'
 
-    $(MAKE) -C '$(1)' -j '$(JOBS)' $(if $(BUILD_SHARED), LDFLAGS=-no-undefined)
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_SHARED), LDFLAGS=-no-undefined)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
-

@@ -1,0 +1,23 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Thu, 16 Mar 2017 04:09:42 +0100
+Subject: [PATCH] fix out-of-tree build
+
+Fix the error:
+libotr-4.1.1/toolkit/otr_parse.c:26:19: fatal error: proto.h:
+    No such file or directory
+
+diff --git a/toolkit/Makefile.am b/toolkit/Makefile.am
+index 1111111..2222222 100644
+--- a/toolkit/Makefile.am
++++ b/toolkit/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CPPFLAGS = -I$(includedir) -I../src @LIBGCRYPT_CFLAGS@
++AM_CPPFLAGS = -I$(includedir) -I$(top_srcdir)/src @LIBGCRYPT_CFLAGS@
+ 
+ noinst_HEADERS = aes.h ctrmode.h parse.h sesskeys.h readotr.h sha1hmac.h
+ 
