@@ -26,4 +26,9 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' \
         $(if $(BUILD_SHARED), LDFLAGS=-no-undefined) $(MXE_DISABLE_CRUFT)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
