@@ -21,3 +21,23 @@ index 1111111..2222222 100644
  
  noinst_HEADERS = aes.h ctrmode.h parse.h sesskeys.h readotr.h sha1hmac.h
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Thu, 16 Mar 2017 06:09:50 +0100
+Subject: [PATCH] .pc: add -fstack-protector-all and private libs
+
+The flags taken from the build log.
+
+diff --git a/libotr.pc.in b/libotr.pc.in
+index 1111111..2222222 100644
+--- a/libotr.pc.in
++++ b/libotr.pc.in
+@@ -7,5 +7,6 @@ Name: libotr
+ Description: Off-the-Record Messaging Library
+ Version: @VERSION@
+ URL: https://otr.cypherpunks.ca/
+-Libs: -L${libdir} -lotr
++Libs: -L${libdir} -lotr -fstack-protector-all
++Libs.private: -lgcrypt -lgpg-error -lintl -liconv
+ Cflags: -I${includedir}
