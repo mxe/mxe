@@ -3,10 +3,10 @@
 PKG             := lensfun
 $(PKG)_WEBSITE  := https://lensfun.sourceforge.io/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.3.0
-$(PKG)_CHECKSUM := c2c3c03873cb549d49d42f118fcb0ffa95d1e45b9ff395e19facb63bf699bec1
+$(PKG)_VERSION  := 0.3.2
+$(PKG)_CHECKSUM := ae8bcad46614ca47f5bda65b00af4a257a9564a61725df9c74cb260da544d331
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/lensfun/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libgnurx libpng
 
@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1)/building'
     cd '$(1)/building' && '$(TARGET)-cmake' .. \
-        -DINSTALL_IN_TREE=NO
+        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)/building' -j '$(JOBS)' install VERBOSE=1
 
     # Don't use `-ansi`, as lensfun uses C++-style `//` comments.

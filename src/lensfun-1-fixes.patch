@@ -21,7 +21,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -16,16 +16,18 @@ SET(VERSION_BUGFIX 0)
+@@ -20,15 +20,17 @@ SET(LENSFUN_DB_VERSION 1)
  
  # check if some include are available
  INCLUDE(CheckIncludeFiles)
@@ -32,7 +32,6 @@ index 1111111..2222222 100644
  # set include directories
  INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
  INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include/lensfun)
- INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include/auxfun)
 -IF(NOT HAVE_REGEX_H)
 +IF(NOT REGEX_FOUND)
    INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include/regex)
@@ -42,20 +41,20 @@ index 1111111..2222222 100644
  ENDIF()
  
  # options controlling the build process
-@@ -153,7 +155,7 @@ ENDIF()
+@@ -148,7 +150,7 @@ ADD_SUBDIRECTORY(apps)
  
  # install include files
- INSTALL(FILES ${CMAKE_BINARY_DIR}/lensfun.h DESTINATION ${INCLUDEDIR}/lensfun)
+ INSTALL(FILES ${CMAKE_BINARY_DIR}/lensfun.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lensfun)
 -IF(NOT HAVE_REGEX_H)
 +IF(NOT REGEX_FOUND)
-   INSTALL(FILES include/regex/regex.h DESTINATION ${INCLUDEDIR}/regex)
+   INSTALL(FILES include/regex/regex.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/regex)
  ENDIF()
- IF(BUILD_AUXFUN)
-diff --git a/build/CMakeModules/FindRegex.cmake b/build/CMakeModules/FindRegex.cmake
+ 
+diff --git a/cmake/modules/FindRegex.cmake b/cmake/modules/FindRegex.cmake
 new file mode 100644
 index 1111111..2222222
 --- /dev/null
-+++ b/build/CMakeModules/FindRegex.cmake
++++ b/cmake/modules/FindRegex.cmake
 @@ -0,0 +1,64 @@
 +#                                               -*- cmake -*-
 +#
@@ -137,7 +136,7 @@ index 1111111..2222222 100644
 +++ b/libs/lensfun/CMakeLists.txt
 @@ -17,8 +17,10 @@ ELSE()
  ENDIF()
- SET_TARGET_PROPERTIES(lensfun PROPERTIES SOVERSION "${VERSION_MAJOR}" VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}")  
+ SET_TARGET_PROPERTIES(lensfun PROPERTIES SOVERSION "${VERSION_API}" VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}")
  
 -IF(NOT HAVE_REGEX_H)
 +IF(NOT REGEX_FOUND)
@@ -180,7 +179,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -172,7 +172,7 @@ IF(BUILD_DOC)
+@@ -164,7 +164,7 @@ IF(BUILD_DOC)
    ADD_SUBDIRECTORY(docs)
  ENDIF()
  
@@ -189,38 +188,6 @@ index 1111111..2222222 100644
    FIND_FILE(GLIB2_DLL 
              NAMES glib-2.dll glib-2-vs9.dll
              PATHS "${GLIB2_BASE_DIR}/bin"
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Timothy Gu <timothygu99@gmail.com>
-Date: Tue, 21 Oct 2014 18:41:09 -0700
-Subject: [PATCH] Add option whether or not to install into source tree on
- WIN32
-
-Signed-off-by: Timothy Gu <timothygu99@gmail.com>
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -38,6 +38,9 @@ OPTION(BUILD_FOR_SSE "Build with support for SSE" ON)
- OPTION(BUILD_FOR_SSE2 "Build with support for SSE2" ON)
- OPTION(BUILD_DOC "Build documentation with doxygen" OFF)
- OPTION(INSTALL_HELPER_SCRIPTS "Install various helper scripts" ON)
-+IF(WIN32)
-+  OPTION(INSTALL_IN_TREE "Install into source tree" ON)
-+ENDIF()
- 
- IF(NOT CMAKE_BUILD_TYPE)
-   set(CMAKE_BUILD_TYPE Debug CACHE STRING
-@@ -102,7 +105,7 @@ IF(BUILD_DOC)
-   SET(DOCDIR share/doc/lensfun-${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_MICRO}.${VERSION_BUGFIX} CACHE PATH "Directory to put library documentation in")
- ENDIF(BUILD_DOC)
- 
--IF(WIN32)
-+IF(WIN32 AND INSTALL_IN_TREE)
-   # install into place in build-dir  
-   SET(LENSFUN_INSTALL_PREFIX "${SOURCE_BASE_DIR}/lensfun" CACHE PATH "Install prefix for lensfun")    
- ELSE()
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
