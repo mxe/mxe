@@ -135,7 +135,7 @@
     "lapack": {"version": "3.6.0", "website": "http://www.netlib.org/lapack/", "description": ""},
     "lcms": {"version": "2.8", "website": "http://www.littlecms.com/", "description": ""},
     "lcms1": {"version": "1.19", "website": "http://www.littlecms.com/", "description": ""},
-    "lensfun": {"version": "0.3.0", "website": "https://lensfun.sourceforge.io/", "description": ""},
+    "lensfun": {"version": "0.3.2", "website": "https://lensfun.sourceforge.io/", "description": ""},
     "levmar": {"version": "2.6", "website": "https://www.ics.forth.gr/~lourakis/levmar", "description": ""},
     "libaacs": {"version": "0.8.1", "website": "https://www.videolan.org/developers/libaacs.html", "description": ""},
     "libarchive": {"version": "3.1.2", "website": "https://www.libarchive.org/", "description": "Libarchive"},
