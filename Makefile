@@ -759,6 +759,7 @@ update-package-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(and $($*_UPDATE),$(call UPDATE,$*,$(shell $($*_UPDATE)))), \
 	    $(error Package $* not found))
+	    @echo -n
 
 check-update-package-%: UPDATE_DRYRUN = true
 check-update-package-%: update-package-% ;
