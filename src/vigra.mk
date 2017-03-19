@@ -5,19 +5,8 @@ $(PKG)_WEBSITE  := https://ukoethe.github.io/vigra/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.0
 $(PKG)_CHECKSUM := dc041f7ccf838d4321e9bcf522fece1758768dd7a3f8350d1e83e2b8e6daf1e6
-$(PKG)_SUBDIR   := vigra-Version-$(subst .,-,$($(PKG)_VERSION))
-$(PKG)_FILE     := vigra-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/ukoethe/vigra/archive/Version-$(subst .,-,$($(PKG)_VERSION)).tar.gz
+$(PKG)_GH_CONF  := ukoethe/vigra, Version-,,,-
 $(PKG)_DEPS     := gcc jpeg libpng openexr tiff
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://api.github.com/repos/ukoethe/vigra/releases" | \
-    grep 'tag_name' | \
-    $(SED) -n 's,.*tag_name": "Version-\([0-9][^>]*\)".*,\1,p' | \
-    tr '-' '.' | \
-    $(SORT) -Vr | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     # Make sure the package gets built statically

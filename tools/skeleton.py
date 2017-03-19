@@ -27,18 +27,28 @@ $(PKG)_DESCR    := %(description)s
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := %(version)s
 $(PKG)_CHECKSUM := %(checksum)s
+%(file_specs)s
+$(PKG)_DEPS     := gcc
+%(update)s
+define $(PKG)_BUILD
+    %(build)s
+endef
+'''
+
+GH_CONF=r'''
+$(PKG)_GH_CONF  := %(gh_conf)s
+'''
+
+FILE_SPECS=r'''
 $(PKG)_SUBDIR   := %(subdir_template)s
 $(PKG)_FILE     := %(filename_template)s
 $(PKG)_URL      := %(file_url_template)s
-$(PKG)_DEPS     := gcc
+'''
 
+UPDATE = r'''
 define $(PKG)_UPDATE
     echo 'TODO: write update script for %(name)s.' >&2;
     echo $(%(name)s_VERSION)
-endef
-
-define $(PKG)_BUILD
-    %(build)s
 endef
 '''
 
@@ -92,6 +102,10 @@ PC_AND_TEST = r'''
 def get_filename(file_url):
     return file_url.rsplit('/', 1)[1]
 
+def deduce_gh_conf(file_url):
+    if deduce_website(file_url) == 'github.com':
+        return '/'.join(file_url.split('://', 1)[1].split('/')[1:3])
+
 def deduce_version(file_url):
     filename = get_filename(file_url)
     return re.search(r'\d[\d.-_]+\d|\d', filename).group()
@@ -137,7 +151,7 @@ def make_skeleton(
     website,
     builder,
 ):
-    mk_filename = 'src/%s.mk' % name
+    mk_filename = 'src/%s.mk' % name.lower()
     if os.path.isfile(mk_filename):
         raise Exception('File %s exists!' % mk_filename)
     if description is None:
@@ -146,6 +160,13 @@ def make_skeleton(
         version = deduce_version(file_url)
     if website is None:
         website = deduce_website(file_url)
+    gh_conf = deduce_gh_conf(file_url)
+    if gh_conf is None:
+        file_specs = FILE_SPECS
+        update = UPDATE
+    else:
+        file_specs = GH_CONF
+        update = ''
     with tempfile.NamedTemporaryFile() as pkg_file:
         download_file(pkg_file.name, file_url)
         checksum = make_checksum(pkg_file.name)
@@ -165,11 +186,14 @@ def make_skeleton(
             'libname': libname,
             'website': website,
             'file_url_template': file_url_template,
+            'gh_conf': gh_conf,
             'checksum': checksum,
             'version': version,
             'subdir_template': subdir_template,
             'filename_template': filename_template,
         }
+        options['file_specs'] = file_specs.strip() % options
+        options['update'] = update % options
         options['build'] = make_build(options, builder)
         mk.write(MK_TEMPLATE.lstrip() % options)
 

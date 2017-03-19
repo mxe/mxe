@@ -7,14 +7,8 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.57.1
 $(PKG)_APIVER   := 2.4
 $(PKG)_CHECKSUM := 675c3bc11c2a6347625ca5215720d41c84fd8e9498dd664cda8a635fd5105a26
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/GNOME/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_GH_CONF  := GNOME/libsoup,,,pre\|SOUP\|base
 $(PKG)_DEPS     := gcc glib libxml2 sqlite
-
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, GNOME/libsoup)
-endef
 
 define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && \
