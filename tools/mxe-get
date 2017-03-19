@@ -151,6 +151,9 @@ mkdir -p "${MXE_HOME}"
       -name '*.la' -o \
       -name '*.pc' -o \
       -name '*.cmake' -o \
+      -name '*.prf' -o \
+      -name '*.pri' -o \
+      -name '*.prl' -o \
       -name '*-config' | while IFS= read -r f; do
 
       sed "s|${ori}|${pwd}|" \
