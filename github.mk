@@ -40,7 +40,7 @@ GITHUB_SHA_LENGTH := 7
 #     a version string and bypass `sort -V`
 #
 #   Track tags - Archive API
-#     GH_CONF := owner/repo, tag prefix, tag suffix, tag filter, version separator
+#     GH_CONF := owner/repo, tag prefix, tag suffix, tag filter-out, version separator
 #     updates will construct a version number based on:
 #     <tag prefix><s/<version sep>/./version><tag suffix>
 
@@ -103,12 +103,11 @@ define MXE_GET_GH_TAGS
     | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p'
 endef
 
-# called with owner/repo, tag prefix, tag suffix, filter, version sep
+# called with owner/repo, tag prefix, tag suffix, filter-out, version sep
 define MXE_GET_GH_TAG
     $(MXE_GET_GH_TAGS) \
     | $(if $(4),grep -v '$(strip $(4))') \
-    | $(SED) 's,^$(strip $(2)),,g' \
-    | $(SED) 's,$(strip $(3))$$,,g' \
+    | $(SED) -n 's,^$(strip $(2))\([^"]*\)$(strip $(3))$$,\1,p' \
     | tr '$(strip $(5))' '.' \
     | $(SORT) -V
     | tail -1
