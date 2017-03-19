@@ -473,7 +473,7 @@ $(foreach TARGET,$(MXE_TARGETS),$(call TARGET_RULE,$(TARGET)))
 
 define PKG_RULE
 # configure GitHub metadata if GH_CONF is set
-$(and $($(PKG)_GH_CONF),$(eval $(MXE_SETUP_GITHUB)))
+$(if $($(PKG)_GH_CONF),$(eval $(MXE_SETUP_GITHUB)))
 
 .PHONY: download-$(1)
 download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)

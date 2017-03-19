@@ -106,7 +106,7 @@ endef
 # called with owner/repo, tag prefix, tag suffix, filter, version sep
 define MXE_GET_GH_TAG
     $(MXE_GET_GH_TAGS) \
-    | $(and $(4),grep -v '$(strip $(4))') \
+    | $(if $(4),grep -v '$(strip $(4))') \
     | $(SED) 's,^$(strip $(2)),,g' \
     | $(SED) 's,$(strip $(3))$$,,g' \
     | tr '$(strip $(5))' '.' \
