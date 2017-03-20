@@ -5,6 +5,7 @@
 #   Archive:
 #     url = <owner>/<repo>/archive/<ref>.tar.gz
 #     dir = <repo>-<ref>
+#       if <ref> starts with a single `v`, it is removed from dir
 #
 #   Tarball:
 #     url = <owner>/<repo>/tarball/<ref>/output-file.tar.gz
@@ -85,8 +86,9 @@ define MXE_SETUP_GITHUB_BRANCH
 endef
 
 define MXE_SETUP_GITHUB_TAG
-    $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$(PKG)-$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
-    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_REPO)/archive/$(subst $(PKG)-,,$($(PKG)_SUBDIR)).tar.gz)
+    $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$(PKG)-$(if $(call sne,v,$($(PKG)_TAG_PREFIX)),$($(PKG)_TAG_PREFIX))$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
+    $(PKG)_TAR_GZ := $(or $($(PKG)_TAR_GZ),$(PKG)-$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
+    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_REPO)/archive/$(subst $(PKG)-,,$($(PKG)_TAR_GZ)).tar.gz)
     $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_TAG,$($(PKG)_GH_REPO),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
 endef
 
