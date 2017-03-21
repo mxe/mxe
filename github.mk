@@ -114,3 +114,24 @@ define MXE_GET_GH_TAG
     | $(SORT) -V
     | tail -1
 endef
+
+GITHUB_PKGS = $(patsubst %_GH_CONF,%,$(filter %_GH_CONF,$(.VARIABLES)))
+
+# check-gh-conf   : test updates and source directory
+# check-gh-conf-dl: removes downloads and tests above
+
+# a test of many package updates may hit rate limit of 60/hr
+# https://developer.github.com/v3/#rate-limiting
+
+.PHONY: check-gh-conf check-gh-conf-%
+check-gh-conf-dl: REMOVE_DOWNLOAD = true
+check-gh-conf-dl: MXE_NO_BACKUP_DL = true
+check-gh-conf-dl: check-gh-conf
+check-gh-conf-pkg-%: check-update-package-% download-only-%
+	@$(PRINTF_FMT) '[prep-src]'  '$(*)' | $(RTRIM)
+	@($(MAKE) -f '$(MAKEFILE)' 'prepare-pkg-source-$(*)') > /dev/null
+	@rm -rf '$(call TMP_DIR,$(*))'
+
+# secondexpansion here since this file is included before pkg makefiles
+.SECONDEXPANSION:
+check-gh-conf: $$(addprefix check-gh-conf-pkg-,$$(GITHUB_PKGS))
