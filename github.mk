@@ -11,7 +11,8 @@
 #     url = <owner>/<repo>/tarball/<ref>/output-file.tar.gz
 #     dir = <owner>-<repo>-<short sha>
 #
-## also third api - `releases` see libass.mk
+# TODO: also third api - `releases` see libass.mk
+# grep -l 'MXE_GET_GITHUB\|api.github.com\|github.com.*archive' src/*.mk | xargs grep -L 'GH_CONF'
 #
 # Filename doesn't matter as we stream the url to a name of our choosing.
 #
