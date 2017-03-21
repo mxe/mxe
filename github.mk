@@ -57,7 +57,8 @@ GITHUB_TAG_FILTER := alpha\|beta\|rc
 #     and looks out of place.
 #   - don't redefine manually set standard variables (FILE, SUBDIR, URL, UPDATE)
 
-GH_REPO        = $(subst $(space),/,$(wordlist 1,2,$(subst /,$(space),$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
+GH_OWNER       = $(word 1,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
+GH_REPO        = $(word 2,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
 GH_BRANCH      = $(word 3,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
 GH_TAG_VARS    = $(call rest,$(subst $(comma),$(space)$(__gmsl_aa_magic),$(subst $(space),,$($(PKG)_GH_CONF))))
 GH_TAG_PREFIX  = $(subst $(__gmsl_aa_magic),,$(word 1,$(GH_TAG_VARS)))
@@ -66,6 +67,7 @@ GH_TAG_FILTER  = $(subst $(__gmsl_aa_magic),,$(word 3,$(GH_TAG_VARS)))
 GH_VERSION_SEP = $(subst $(__gmsl_aa_magic),,$(word 4,$(GH_TAG_VARS)))
 
 define MXE_SETUP_GITHUB
+    $(PKG)_GH_OWNER    := $(GH_OWNER)
     $(PKG)_GH_REPO     := $(GH_REPO)
     $(PKG)_BRANCH      := $(GH_BRANCH)
     $(PKG)_TAG_VARS    := $(GH_TAG_VARS)
@@ -80,16 +82,16 @@ define MXE_SETUP_GITHUB
 endef
 
 define MXE_SETUP_GITHUB_BRANCH
-    $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$(subst /,-,$($(PKG)_GH_REPO))-$($(PKG)_VERSION))
-    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_REPO)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE))
-    $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_SHA,$($(PKG)_GH_REPO),$($(PKG)_BRANCH)))
+    $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_OWNER)-$($(PKG)_GH_REPO)-$($(PKG)_VERSION))
+    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE))
+    $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_SHA,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO),$($(PKG)_BRANCH)))
 endef
 
 define MXE_SETUP_GITHUB_TAG
-    $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$(PKG)-$(if $(call sne,v,$($(PKG)_TAG_PREFIX)),$($(PKG)_TAG_PREFIX))$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
-    $(PKG)_TAR_GZ := $(or $($(PKG)_TAR_GZ),$(PKG)-$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
-    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_REPO)/archive/$(subst $(PKG)-,,$($(PKG)_TAR_GZ)).tar.gz)
-    $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_TAG,$($(PKG)_GH_REPO),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
+    $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_REPO)-$(if $(call sne,v,$($(PKG)_TAG_PREFIX)),$($(PKG)_TAG_PREFIX))$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
+    $(PKG)_TAR_GZ := $(or $($(PKG)_TAR_GZ),$($(PKG)_GH_REPO)-$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
+    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/archive/$(subst $($(PKG)_GH_REPO)-,,$($(PKG)_TAR_GZ)).tar.gz)
+    $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_TAG,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
 endef
 
 # called with owner/repo,branch
@@ -135,3 +137,4 @@ check-gh-conf-pkg-%: check-update-package-% download-only-%
 # secondexpansion here since this file is included before pkg makefiles
 .SECONDEXPANSION:
 check-gh-conf: $$(addprefix check-gh-conf-pkg-,$$(GITHUB_PKGS))
+github-pkgs: $$(GITHUB_PKGS)
