@@ -13,6 +13,7 @@ MXE_LIB_TYPES      := static shared
 MXE_TARGET_LIST    := $(strip $(foreach TRIPLET,$(MXE_TRIPLETS),\
                           $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES))))
 MXE_TARGETS        := i686-w64-mingw32.static
+.DEFAULT_GOAL      := all-filtered
 
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
@@ -361,9 +362,6 @@ LOOKUP_PKG_RULE = $(strip \
                 $(1)_$(2))),\
         $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3)),$(1)_$(2)_$(3))\
         $(1)_$(2)_$(3))))
-
-.PHONY: all
-all: all-filtered
 
 # Core packages.
 override MXE_PLUGIN_DIRS := $(realpath $(TOP_DIR)/src) $(MXE_PLUGIN_DIRS)
