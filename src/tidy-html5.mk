@@ -6,24 +6,15 @@ $(PKG)_DESCR    := HTML/XML syntax checker and reformatter
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.4.0
 $(PKG)_CHECKSUM := a2d754b7349982e33f12d798780316c047a3b264240dc6bbd4641542e57a0b7a
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/htacg/tidy-html5/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_GH_CONF  := htacg/tidy-html5
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/htacg/tidy-html5/releases' | \
-    $(SED) -n 's,.*/htacg/tidy-html5/archive/\([0-9][^>]*\)\.tar\.gz.*,\1,p' | \
-    head -1
-endef
-
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd    '$(1).build' && $(TARGET)-cmake '$(1)' \
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DTIDY_COMPAT_HEADERS:BOOL=YES \
         -DBUILD_SHARED_LIB=$(CMAKE_SHARED_BOOL)
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     $(if $(BUILD_STATIC),
         cd '$(PREFIX)/$(TARGET)/lib' && mv libtidys.a libtidy.a,
