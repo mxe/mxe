@@ -1,0 +1,11 @@
+--- a/configure
++++ b/configure
+@@ -5313,7 +5313,7 @@
+ fi
+ 
+ # check IPC support
+-if [ "$XPLATFORM_SYMBIAN_SBSV2" = "no" ]; then
++if [ "$XPLATFORM_SYMBIAN_SBSV2" = "no" -a "$XPLATFORM_MINGW" = "no" ]; then
+     # Raptor does not support configure tests.
+     if ! compileTest unix/ipc_sysv "ipc_sysv" ; then
+         # SYSV IPC is not supported - check POSIX IPC
