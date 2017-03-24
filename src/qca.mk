@@ -26,4 +26,11 @@ define $(PKG)_BUILD
         -DQCA_MAN_INSTALL_DIR="$(BUILD_DIR)/null"
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+
+    $(if $(BUILD_SHARED), \
+        mkdir '$(BUILD_DIR)/test-qca'
+        cd '$(BUILD_DIR)/test-qca' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qca-test.pro'
+        $(MAKE) -C '$(BUILD_DIR)/test-qca' -j $(JOBS) $(BUILD_TYPE)
+        $(INSTALL) -m755 '$(BUILD_DIR)/test-qca/$(BUILD_TYPE)/test-qca5.exe' '$(PREFIX)/$(TARGET)/bin/')
 endef
+
