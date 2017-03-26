@@ -20,17 +20,18 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
+    # build test as qmake project
     $(if $(BUILD_SHARED), \
         mkdir '$(BUILD_DIR)/test-qca'
         cd '$(BUILD_DIR)/test-qca' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qca-test.pro'
         $(MAKE) -C '$(BUILD_DIR)/test-qca' -j $(JOBS) $(BUILD_TYPE)
-        $(INSTALL) -m755 '$(BUILD_DIR)/test-qca/$(BUILD_TYPE)/test-qca5.exe' '$(PREFIX)/$(TARGET)/bin/')
+        $(INSTALL) -m755 '$(BUILD_DIR)/test-qca/$(BUILD_TYPE)/test-qca5-qmake.exe' '$(PREFIX)/$(TARGET)/bin/')
 
-    # compile test
+    # build test manually
     '$(TARGET)-g++' \
-        -W -Wall -Werror \
-        '$(SOURCE_DIR)/examples/base64test/base64test.cpp' \
-        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        -W -Wall -Werror -std=gnu++11  \
+        '$(PWD)/src/qca-test.cpp' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         `'$(TARGET)-pkg-config' qca2-qt5 --cflags --libs`
 endef
 
