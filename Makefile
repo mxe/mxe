@@ -13,6 +13,7 @@ MXE_LIB_TYPES      := static shared
 MXE_TARGET_LIST    := $(strip $(foreach TRIPLET,$(MXE_TRIPLETS),\
                           $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES))))
 MXE_TARGETS        := i686-w64-mingw32.static
+.DEFAULT_GOAL      := all-filtered
 
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
@@ -362,9 +363,6 @@ LOOKUP_PKG_RULE = $(strip \
         $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3)),$(1)_$(2)_$(3))\
         $(1)_$(2)_$(3))))
 
-.PHONY: all
-all: all-filtered
-
 # Core packages.
 override MXE_PLUGIN_DIRS := $(realpath $(TOP_DIR)/src) $(MXE_PLUGIN_DIRS)
 
@@ -488,6 +486,7 @@ download-only-$(1): download-only-$($(1)_FILE)
 download-only-$($(1)_FILE)::
 	$(and $($(1)_URL),
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
+	@$$(if $$(REMOVE_DOWNLOAD),rm -f '$(PKG_DIR)/$($(1)_FILE)')
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(PRINTF_FMT) '[download]' '$(1)' | $(RTRIM); \
 	    (set -x; $(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
@@ -506,8 +505,14 @@ download-only-$($(1)_FILE)::
 	        exit 1; \
 	    fi; \
 	fi)
+
+.PHONY: prepare-pkg-source-$(1)
+prepare-pkg-source-$(1): download-only-$(1)
+	rm -rf '$(2)'
+	mkdir -p '$(2)'
+	$$(call PREPARE_PKG_SOURCE,$(1),$(2))
 endef
-$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG))))
+$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 
 # disable networking during build-only rules for reproducibility
 ifeq ($(findstring darwin,$(BUILD)),)
