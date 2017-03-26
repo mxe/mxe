@@ -14,7 +14,7 @@
     "binutils": {"version": "2.25.1", "website": "https://www.gnu.org/software/binutils/", "description": "GNU Binutils"},
     "blas": {"version": "3.5.0", "website": "http://www.netlib.org/blas/", "description": ""},
     "boost": {"version": "1.60.0", "website": "https://www.boost.org/", "description": "Boost C++ Library"},
-    "box2d": {"version": "2.3.1", "website": "http://www.box2d.org/", "description": "Box2D"},
+    "box2d": {"version": "2.3.1", "website": "http://www.box2d.org/", "description": ""},
     "bullet": {"version": "2.82-r2704", "website": "http://bulletphysics.org/", "description": "Bullet physics, version 2"},
     "bzip2": {"version": "1.0.6", "website": "http://www.bzip.org/", "description": ""},
     "cairo": {"version": "1.15.4", "website": "https://cairographics.org/", "description": ""},
