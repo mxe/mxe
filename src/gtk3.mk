@@ -22,15 +22,13 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-explicit-deps \
         --disable-glibtest \
-        --disable-modules \
         --disable-cups \
         --disable-test-print-backend \
         --disable-gtk-doc \
         --disable-man \
         --with-included-immodules \
-        --without-x
+        --enable-win32-backend
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
@@ -38,5 +36,3 @@ define $(PKG)_BUILD
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk3.exe' \
         `'$(TARGET)-pkg-config' gtk+-3.0 --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
