@@ -21,17 +21,17 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # build test as qmake project
-    $(if $(BUILD_SHARED), \
-        mkdir '$(BUILD_DIR)/test-qca'
-        cd '$(BUILD_DIR)/test-qca' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qca-test.pro'
-        $(MAKE) -C '$(BUILD_DIR)/test-qca' -j $(JOBS) $(BUILD_TYPE)
-        $(INSTALL) -m755 '$(BUILD_DIR)/test-qca/$(BUILD_TYPE)/test-qca5-qmake.exe' '$(PREFIX)/$(TARGET)/bin/')
+    mkdir '$(BUILD_DIR)/test-qca'
+    cd '$(BUILD_DIR)/test-qca' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qca-test.pro'
+    $(MAKE) -C '$(BUILD_DIR)/test-qca' -j $(JOBS) $(BUILD_TYPE)
+    $(INSTALL) -m755 '$(BUILD_DIR)/test-qca/$(BUILD_TYPE)/test-qca-qmake.exe' '$(PREFIX)/$(TARGET)/bin/'
 
     # build test manually
     '$(TARGET)-g++' \
-        -W -Wall -Werror -std=gnu++11  \
+        -W -Wall -Werror -std=gnu++11 \
         '$(PWD)/src/qca-test.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
+        $(if $(BUILD_STATIC), -L'$(PREFIX)/$(TARGET)/qt5/plugins/crypto' -lqca-ossl) \
         `'$(TARGET)-pkg-config' qca2-qt5 --cflags --libs`
 endef
 
