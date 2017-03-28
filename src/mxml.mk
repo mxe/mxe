@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mxml
-$(PKG)_WEBSITE  := https://michaelrsweet.github.io/
+$(PKG)_WEBSITE  := https://michaelrsweet.github.io/mxml/
 $(PKG)_DESCR    := Mini-XML
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.10
