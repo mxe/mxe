@@ -6,16 +6,8 @@ $(PKG)_DESCR    := Implementation of OMEMO in C
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.4.1
 $(PKG)_CHECKSUM := af66fd2958dc5d6b23bc488b69e9f431bfb308d79bdd1b1c31de4575862c5142
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/gkdr/libomemo/archive/v$($(PKG)_VERSION).tar.gz
+$(PKG)_GH_CONF  := gkdr/libomemo, v
 $(PKG)_DEPS     := gcc glib libgcrypt mxml sqlite
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/gkdr/libomemo/releases' | \
-    $(SED) -n 's,.*/gkdr/libomemo/archive/v\([0-9\.]*\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' all \
