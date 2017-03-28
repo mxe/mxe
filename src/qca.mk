@@ -26,6 +26,13 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)/test-qca' -j $(JOBS) $(BUILD_TYPE)
     $(INSTALL) -m755 '$(BUILD_DIR)/test-qca/$(BUILD_TYPE)/test-qca-qmake.exe' '$(PREFIX)/$(TARGET)/bin/'
 
+    # build test as cmake project
+    mkdir '$(1).test-cmake'
+    cd '$(1).test-cmake' && $(TARGET)-cmake \
+        -DPKG=$(PKG) \
+        '$(PWD)/src/cmake/test'
+    $(MAKE) -C '$(1).test-cmake' -j 1 install VERBOSE=ON
+
     # build test manually
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=gnu++11 \
