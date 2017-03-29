@@ -20,6 +20,13 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/build'/libomemo*.a  '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -m644 '$(1)/src'/libomemo*.h  '$(PREFIX)/$(TARGET)/include/'
+
+    # test cmake
+    mkdir '$(1).test-cmake'
+    cd '$(1).test-cmake' && '$(TARGET)-cmake' \
+        -DPKG=$(PKG) \
+        '$(PWD)/src/cmake/test'
+    $(MAKE) -C '$(1).test-cmake' -j 1 install
 endef
 
 $(PKG)_BUILD_SHARED =
