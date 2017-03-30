@@ -41,3 +41,5 @@ define $(PKG)_BUILD
         $(if $(BUILD_STATIC), -L'$(PREFIX)/$(TARGET)/qt5/plugins/crypto' -lqca-ossl) \
         `'$(TARGET)-pkg-config' qca2-qt5 --cflags --libs`
 endef
+
+$(PKG)_BUILD_STATIC =
