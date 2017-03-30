@@ -19,4 +19,11 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC),
         cd '$(PREFIX)/$(TARGET)/lib' && mv libtidys.a libtidy.a,
         rm -f '$(PREFIX)/$(TARGET)/lib/libtidys.a')
+
+    # build test manually
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror \
+        '$(PWD)/src/$(PKG)-test.c' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
+        -ltidy
 endef
