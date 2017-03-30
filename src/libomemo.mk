@@ -10,23 +10,23 @@ $(PKG)_GH_CONF  := gkdr/libomemo, v
 $(PKG)_DEPS     := gcc glib libgcrypt mxml sqlite
 
 define $(PKG)_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' all \
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' all \
         CC='$(TARGET)-gcc' \
         LD='$(TARGET)-ld' \
         AR='$(TARGET)-ar' \
         PKG_CONFIG='$(TARGET)-pkg-config' \
         LIBGCRYPT_CONFIG='$(PREFIX)/$(TARGET)/bin/libgcrypt-config'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/build'/libomemo*.a  '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m644 '$(1)/src'/libomemo*.h  '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(SOURCE_DIR)/build'/libomemo*.a  '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(SOURCE_DIR)/src'/libomemo*.h  '$(PREFIX)/$(TARGET)/include/'
 
     # test cmake
-    mkdir '$(1).test-cmake'
-    cd '$(1).test-cmake' && '$(TARGET)-cmake' \
+    mkdir '$(SOURCE_DIR).test-cmake'
+    cd '$(SOURCE_DIR).test-cmake' && '$(TARGET)-cmake' \
         -DPKG=$(PKG) \
         '$(PWD)/src/cmake/test'
-    $(MAKE) -C '$(1).test-cmake' -j 1 install
+    $(MAKE) -C '$(SOURCE_DIR).test-cmake' -j 1 install
 endef
 
 $(PKG)_BUILD_SHARED =
