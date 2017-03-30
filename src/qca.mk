@@ -21,17 +21,17 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # build test as qmake project
-    mkdir '$(BUILD_DIR)/test-qca'
-    cd '$(BUILD_DIR)/test-qca' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qca-test.pro'
-    $(MAKE) -C '$(BUILD_DIR)/test-qca' -j $(JOBS) $(BUILD_TYPE)
-    $(INSTALL) -m755 '$(BUILD_DIR)/test-qca/$(BUILD_TYPE)/test-qca-qmake.exe' '$(PREFIX)/$(TARGET)/bin/'
+    mkdir '$(BUILD_DIR).test-qmake'
+    cd '$(BUILD_DIR).test-qmake' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qca-test.pro'
+    $(MAKE) -C '$(BUILD_DIR).test-qmake' -j 1
+    $(INSTALL) -m755 '$(BUILD_DIR).test-qmake/$(BUILD_TYPE)/test-qca-qmake.exe' '$(PREFIX)/$(TARGET)/bin/'
 
     # build test as cmake project
-    mkdir '$(1).test-cmake'
-    cd '$(1).test-cmake' && $(TARGET)-cmake \
+    mkdir '$(BUILD_DIR).test-cmake'
+    cd '$(BUILD_DIR).test-cmake' && $(TARGET)-cmake \
         -DPKG=$(PKG) \
         '$(PWD)/src/cmake/test'
-    $(MAKE) -C '$(1).test-cmake' -j 1 install VERBOSE=ON
+    $(MAKE) -C '$(BUILD_DIR).test-cmake' -j 1 install VERBOSE=ON
 
     # build test manually
     '$(TARGET)-g++' \
@@ -41,4 +41,3 @@ define $(PKG)_BUILD
         $(if $(BUILD_STATIC), -L'$(PREFIX)/$(TARGET)/qt5/plugins/crypto' -lqca-ossl) \
         `'$(TARGET)-pkg-config' qca2-qt5 --cflags --libs`
 endef
-
