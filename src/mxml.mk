@@ -4,36 +4,19 @@ PKG             := mxml
 $(PKG)_WEBSITE  := https://michaelrsweet.github.io/
 $(PKG)_DESCR    := Mini-XML
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.9
-$(PKG)_CHECKSUM := cded54653c584b24c4a78a7fa1b3b4377d49ac4f451ddf170ebbc8161d85ff92
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/michaelrsweet/mxml/releases/download/release-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := c8a2f57
+$(PKG)_CHECKSUM := 571f63e2929d756dc9a635f2e7b2d032604d92a7a568dc0849a16dd12cc30330
+$(PKG)_GH_CONF  := tonytheodore/mxml/cmake
 $(PKG)_DEPS     := gcc pthreads
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.msweet.org/downloads.php?L+Z3' | \
-    $(SED) -n 's,.*<a href="files.*mxml-\([0-9\.]*\)\.tar.*,\1,p' | \
-    head -1
-endef
-
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --enable-threads
-    $(MAKE) -C '$(1)' -j '$(JOBS)' libmxml.a
-    $(MAKE) -C '$(1)' -j 1 install-libmxml.a
-    $(INSTALL) -d                   '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m644 '$(1)/mxml.h'  '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -d                   '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    $(INSTALL) -m644 '$(1)/mxml.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DENABLE_THREADS=ON
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-mxml.exe' \
         `'$(TARGET)-pkg-config' mxml --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =
