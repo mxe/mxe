@@ -19,6 +19,7 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC),
         cd '$(PREFIX)/$(TARGET)/lib' && mv libtidys.a libtidy.a,
         rm -f '$(PREFIX)/$(TARGET)/lib/libtidys.a')
+    rm -f '$(PREFIX)/$(TARGET)/bin/tidy.exe'
 
     # build test manually
     '$(TARGET)-gcc' \
