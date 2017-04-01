@@ -25,6 +25,6 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror \
         '$(PWD)/src/$(PKG)-test.c' \
-        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         -ltidy
 endef
