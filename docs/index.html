@@ -934,7 +934,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         the package list can also be set in
         <code>settings.mk</code>
         <pre>LOCAL_PKG_LIST := foo bar
-.DEFAULT local-pkg-list:
+.DEFAULT_GOAL  := local-pkg-list
 local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         </dd>
         <dd>
