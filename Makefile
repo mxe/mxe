@@ -326,9 +326,14 @@ else
         echo '# The three lines below makes `make` build these "local'; \
         echo '# packages" instead of all packages.'; \
         echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
-        echo '#.DEFAULT local-pkg-list:'; \
+        echo '#.DEFAULT_GOAL  := local-pkg-list'; \
         echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
+endif
+
+ifneq ($(LOCAL_PKG_LIST),)
+    .DEFAULT_GOAL := local-pkg-list
+    $(info [pkg-list]  $(LOCAL_PKG_LIST))
 endif
 
 # Numeric min and max list functions
