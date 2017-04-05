@@ -1,0 +1,99 @@
+This file is part of MXE.
+See index.html for further information.
+
+This patch allows gettext to be compiled on systems which have a version
+of libxml2 prior to 2.9.1 installed (e.g. Debian 7.10).  It was adapted
+from the fix proposed in https://savannah.gnu.org/bugs/?46844
+
+diff --git a/gnulib-local/m4/libxml.m4 b/gnulib-local/m4/libxml.m4
+index 3edca0f..3734a95 100644
+--- a/gnulib-local/m4/libxml.m4
++++ b/gnulib-local/m4/libxml.m4
+@@ -44,8 +44,12 @@ AC_DEFUN([gl_LIBXML],
+       LIBS="$gl_save_LIBS $LIBXML2 $LIBICONV"
+       AC_TRY_LINK([#include <libxml/xmlversion.h>
+                    #include <libxml/xmlmemory.h>
++                   #include <libxml/xpath.h>
+                   ],
+-        [xmlCheckVersion (0); xmlFree ((void *) 0);],
++        [xmlCheckVersion (0);
++         xmlFree ((void *) 0);
++         xmlXPathSetContextNode ((void *)0, (void *)0);
++        ],
+         [gl_cv_libxml=yes
+          gl_cv_LIBXML="$LIBXML2 $LIBICONV"
+          gl_cv_LTLIBXML="$LTLIBXML2 $LTLIBICONV"
+@@ -55,8 +59,12 @@ AC_DEFUN([gl_LIBXML],
+         CPPFLAGS="$CPPFLAGS $INCXML2"
+         AC_TRY_LINK([#include <libxml/xmlversion.h>
+                      #include <libxml/xmlmemory.h>
++                     #include <libxml/xpath.h>
+                     ],
+-          [xmlCheckVersion (0); xmlFree ((void *) 0);],
++          [xmlCheckVersion (0);
++           xmlFree ((void *) 0);
++           xmlXPathSetContextNode ((void *)0, (void *)0);
++          ],
+           [gl_cv_libxml=yes
+            gl_cv_LIBXML="$LIBXML2 $LIBICONV"
+            gl_cv_LTLIBXML="$LTLIBXML2 $LTLIBICONV"
+@@ -82,8 +90,12 @@ AC_DEFUN([gl_LIBXML],
+             CPPFLAGS="$gl_save_CPPFLAGS -I$libxml2_include_dir"
+             AC_TRY_LINK([#include <libxml/xmlversion.h>
+                          #include <libxml/xmlmemory.h>
++                         #include <libxml/xpath.h>
+                         ],
+-              [xmlCheckVersion (0); xmlFree ((void *) 0);],
++              [xmlCheckVersion (0);
++               xmlFree ((void *) 0);
++               xmlXPathSetContextNode ((void *)0, (void *)0);
++              ],
+               [gl_cv_libxml=yes
+                gl_cv_LIBXML="$LIBXML2 $LIBICONV"
+                gl_cv_LTLIBXML="$LTLIBXML2 $LTLIBICONV"
+diff --git a/gnulib-local/m4/libxml.m4 b/gnulib-local/m4/libxml.m4
+index 3edca0f..3734a95 100644
+--- a/gettext-tools/gnulib-m4/libxml.m4
++++ b/gettext-tools/gnulib-m4/libxml.m4
+@@ -44,8 +44,12 @@ AC_DEFUN([gl_LIBXML],
+       LIBS="$gl_save_LIBS $LIBXML2 $LIBICONV"
+       AC_TRY_LINK([#include <libxml/xmlversion.h>
+                    #include <libxml/xmlmemory.h>
++                   #include <libxml/xpath.h>
+                   ],
+-        [xmlCheckVersion (0); xmlFree ((void *) 0);],
++        [xmlCheckVersion (0);
++         xmlFree ((void *) 0);
++         xmlXPathSetContextNode ((void *)0, (void *)0);
++        ],
+         [gl_cv_libxml=yes
+          gl_cv_LIBXML="$LIBXML2 $LIBICONV"
+          gl_cv_LTLIBXML="$LTLIBXML2 $LTLIBICONV"
+@@ -55,8 +59,12 @@ AC_DEFUN([gl_LIBXML],
+         CPPFLAGS="$CPPFLAGS $INCXML2"
+         AC_TRY_LINK([#include <libxml/xmlversion.h>
+                      #include <libxml/xmlmemory.h>
++                     #include <libxml/xpath.h>
+                     ],
+-          [xmlCheckVersion (0); xmlFree ((void *) 0);],
++          [xmlCheckVersion (0);
++           xmlFree ((void *) 0);
++           xmlXPathSetContextNode ((void *)0, (void *)0);
++          ],
+           [gl_cv_libxml=yes
+            gl_cv_LIBXML="$LIBXML2 $LIBICONV"
+            gl_cv_LTLIBXML="$LTLIBXML2 $LTLIBICONV"
+@@ -82,8 +90,12 @@ AC_DEFUN([gl_LIBXML],
+             CPPFLAGS="$gl_save_CPPFLAGS -I$libxml2_include_dir"
+             AC_TRY_LINK([#include <libxml/xmlversion.h>
+                          #include <libxml/xmlmemory.h>
++                         #include <libxml/xpath.h>
+                         ],
+-              [xmlCheckVersion (0); xmlFree ((void *) 0);],
++              [xmlCheckVersion (0);
++               xmlFree ((void *) 0);
++               xmlXPathSetContextNode ((void *)0, (void *)0);
++              ],
+               [gl_cv_libxml=yes
+                gl_cv_LIBXML="$LIBXML2 $LIBICONV"
+                gl_cv_LTLIBXML="$LTLIBXML2 $LTLIBICONV"
