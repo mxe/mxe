@@ -1,0 +1,50 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 139ba3d771b8b18aee29d9d1fc4ac2cdc772153a Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 6 Oct 2015 08:51:01 -0400
+Subject: [PATCH 1/2] Fix case in include header.
+
+
+diff --git a/src/osg/DisplaySettings.cpp b/src/osg/DisplaySettings.cpp
+index 8ebae0d..8731c10 100644
+--- a/src/osg/DisplaySettings.cpp
++++ b/src/osg/DisplaySettings.cpp
+@@ -24,7 +24,7 @@ using namespace osg;
+ using namespace std;
+ 
+ #if defined(WIN32) && !defined(__CYGWIN__)
+-#include<Windows.h>
++#include<windows.h>
+ extern "C" { OSG_EXPORT DWORD NvOptimusEnablement=0x00000001; }
+ #else
+ extern "C" { int NvOptimusEnablement=0x00000001; }
+-- 
+2.1.4
+
+
+From 671fc554e2f541c56b51a0bceba04df523121617 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 14 Oct 2015 20:48:42 -0400
+Subject: [PATCH 2/2] Fix pointer type.
+
+
+diff --git a/src/osgPlugins/osgjs/WriteVisitor.cpp b/src/osgPlugins/osgjs/WriteVisitor.cpp
+index 9f2b3c7..1b7490a 100644
+--- a/src/osgPlugins/osgjs/WriteVisitor.cpp
++++ b/src/osgPlugins/osgjs/WriteVisitor.cpp
+@@ -225,7 +225,7 @@ JSONObject* createImage(osg::Image* image, bool inlineImages, int maxTextureDime
+             // no image file so use this inline name image and create a file
+             std::stringstream ss;
+             ss << osgDB::getFilePath(baseName) << osgDB::getNativePathSeparator();
+-            ss << (long int)image << ".inline_conv_generated.png"; // write the pointer location
++            ss << (uintptr_t)image << ".inline_conv_generated.png"; // write the pointer location
+             std::string filename = ss.str();
+             if (osgDB::writeImageFile(*image, filename)) {
+                 image->setFileName(filename);
+-- 
+2.1.4
+
