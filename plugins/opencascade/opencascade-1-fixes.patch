@@ -1,0 +1,1768 @@
+diff -ur a/adm/lin/amk/DRAWEXE/Makefile.am c/adm/lin/amk/DRAWEXE/Makefile.am
+--- a/adm/lin/amk/DRAWEXE/Makefile.am	2015-05-07 20:32:42.000000000 +0200
++++ c/adm/lin/amk/DRAWEXE/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -24,3 +24,5 @@
+ ../TKG3d/libTKG3d.la \
+ ../TKernel/libTKernel.la \
+ ../TKService/libTKService.la $(STLPort_LIB) $(CSF_TclLibs_LIB) $(CSF_TclTkLibs_LIB) $(CSF_gdi32_LIB) $(CSF_advapi32_LIB) $(CSF_user32_LIB) $(CSF_TBB_LIB) $(CSF_objc_LIB) $(CSF_Appkit_LIB) $(CSF_IOKit_LIB) $(CSF_SOCKETLibs_LIB) $(CSF_FPELibs_LIB) $(CSF_ThreadLibs_LIB) $(CSF_kernel32_LIB) $(CSF_OpenGlLibs_LIB) $(CSF_XwLibs_LIB) $(CSF_dpsLibs_LIB) $(CSF_XmuLibs_LIB) $(CSF_FreeImagePlus_LIB) $(CSF_FREETYPE_LIB)  
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__DRAWEXE_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKDraw/.libs -lTKDraw -L../TKMesh/.libs -lTKMesh -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKHLR/.libs -lTKHLR -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKGeomBase/.libs -lTKGeomBase -L../TKG2d/.libs -lTKG2d -L../TKBRep/.libs -lTKBRep -L../TKMath/.libs -lTKMath -L../TKG3d/.libs -lTKG3d -L../TKernel/.libs -lTKernel -L../TKService/.libs -lTKService
+diff -ur a/adm/lin/amk/FWOSPlugin/Makefile.am c/adm/lin/amk/FWOSPlugin/Makefile.am
+--- a/adm/lin/amk/FWOSPlugin/Makefile.am	2015-05-07 20:32:30.000000000 +0200
++++ c/adm/lin/amk/FWOSPlugin/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -28,3 +28,5 @@
+ @top_srcdir@/src/FWOSDriver/FWOSDriver.cxx \
+ @top_srcdir@/src/FWOSDriver/FWOSDriver_DriverFactory.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__FWOSDriver_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKCDF/.libs -lTKCDF
+diff -ur a/adm/lin/amk/Makefile.am c/adm/lin/amk/Makefile.am
+--- a/adm/lin/amk/Makefile.am	2015-05-07 20:32:42.000000000 +0200
++++ c/adm/lin/amk/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -102,4 +102,4 @@
+ 		cd $$d; $(MAKE) $(AM_MAKEFLAGS) lib$$d.la; cd ..; \
+ 	done
+ 
+-.PHONY: FoundationClasses ModelingData ModelingAlgorithms Visualization ApplicationFramework DataExchange Draw
+\ No newline at end of file
++.PHONY: FoundationClasses ModelingData ModelingAlgorithms Visualization ApplicationFramework DataExchange Draw
+diff -ur a/adm/lin/amk/PTKernel/Makefile.am c/adm/lin/amk/PTKernel/Makefile.am
+--- a/adm/lin/amk/PTKernel/Makefile.am	2015-05-07 20:32:26.000000000 +0200
++++ c/adm/lin/amk/PTKernel/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -111,3 +111,5 @@
+ @top_srcdir@/src/PMMgt/PMMgt_PManaged.cxx \
+ @top_srcdir@/src/PStandard/PStandard_ArrayNode.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__DBC_DLL -D__PCollection_DLL -D__PColStd_DLL -D__PMMgt_DLL -D__PShort_DLL -D__PStandard_DLL -D__PTColStd_DLL -D__ObjMgt_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel
+diff -ur a/adm/lin/amk/TKBin/Makefile.am c/adm/lin/amk/TKBin/Makefile.am
+--- a/adm/lin/amk/TKBin/Makefile.am	2015-05-07 20:32:29.000000000 +0200
++++ c/adm/lin/amk/TKBin/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -58,3 +58,5 @@
+ @top_srcdir@/src/BinMPrsStd/BinMPrsStd_AISPresentationDriver.cxx \
+ @top_srcdir@/src/BinMPrsStd/BinMPrsStd_PositionDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__BinDrivers_DLL -D__BinMDataXtd_DLL -D__BinMPrsStd_DLL -D__BinMNaming_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKCAF/.libs -lTKCAF -L../TKCDF/.libs -lTKCDF -L../TKLCAF/.libs -lTKLCAF -L../TKV3d/.libs -lTKV3d -L../TKBinL/.libs -lTKBinL
+diff -ur a/adm/lin/amk/TKBinL/Makefile.am c/adm/lin/amk/TKBinL/Makefile.am
+--- a/adm/lin/amk/TKBinL/Makefile.am	2015-05-07 20:32:28.000000000 +0200
++++ c/adm/lin/amk/TKBinL/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -86,3 +86,5 @@
+ @top_srcdir@/src/BinMFunction/BinMFunction_ScopeDriver.cxx \
+ @top_srcdir@/src/BinObjMgt/BinObjMgt_Persistent.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__BinMDF_DLL -D__BinMDataStd_DLL -D__BinMFunction_DLL -D__BinMDocStd_DLL -D__BinObjMgt_DLL -D__BinLDrivers_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../TKernel/.libs -lTKernel -L../TKLCAF/.libs -lTKLCAF
+diff -ur a/adm/lin/amk/TKBinTObj/Makefile.am c/adm/lin/amk/TKBinTObj/Makefile.am
+--- a/adm/lin/amk/TKBinTObj/Makefile.am	2015-05-07 20:32:30.000000000 +0200
++++ c/adm/lin/amk/TKBinTObj/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -38,3 +38,5 @@
+ @top_srcdir@/src/BinTObjDrivers/BinTObjDrivers_ReferenceDriver.cxx \
+ @top_srcdir@/src/BinTObjDrivers/BinTObjDrivers_XYZDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__BinTObjDrivers_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../TKernel/.libs -lTKernel -L../TKTObj/.libs -lTKTObj -L../TKMath/.libs -lTKMath -L../TKLCAF/.libs -lTKLCAF -L../TKBinL/.libs -lTKBinL
+diff -ur a/adm/lin/amk/TKBinXCAF/Makefile.am c/adm/lin/amk/TKBinXCAF/Makefile.am
+--- a/adm/lin/amk/TKBinXCAF/Makefile.am	2015-05-07 20:32:40.000000000 +0200
++++ c/adm/lin/amk/TKBinXCAF/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -56,3 +56,5 @@
+ @top_srcdir@/src/BinXCAFDrivers/BinXCAFDrivers_DocumentRetrievalDriver.cxx \
+ @top_srcdir@/src/BinXCAFDrivers/BinXCAFDrivers_DocumentStorageDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__BinXCAFDrivers_DLL -D__BinMXCAFDoc_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKXCAF/.libs -lTKXCAF -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKBinL/.libs -lTKBinL -L../TKG2d/.libs -lTKG2d -L../TKCAF/.libs -lTKCAF -L../TKCDF/.libs -lTKCDF -L../TKG3d/.libs -lTKG3d -L../TKLCAF/.libs -lTKLCAF -L../TKBin/.libs -lTKBin
+diff -ur a/adm/lin/amk/TKBO/Makefile.am c/adm/lin/amk/TKBO/Makefile.am
+--- a/adm/lin/amk/TKBO/Makefile.am	2015-05-07 20:32:20.000000000 +0200
++++ c/adm/lin/amk/TKBO/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -179,3 +179,5 @@
+ @top_srcdir@/src/IntTools/IntTools_Tools.cxx \
+ @top_srcdir@/src/IntTools/IntTools_TopolTool.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__IntTools_DLL -D__BRepAlgoAPI_DLL -D__BOPCol_DLL -D__BOPDS_DLL -D__BOPAlgo_DLL -D__BOPTools_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKGeomBase/.libs -lTKGeomBase -L../TKPrim/.libs -lTKPrim
+diff -ur a/adm/lin/amk/TKBool/Makefile.am c/adm/lin/amk/TKBool/Makefile.am
+--- a/adm/lin/amk/TKBool/Makefile.am	2015-05-07 20:32:21.000000000 +0200
++++ c/adm/lin/amk/TKBool/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -442,3 +442,5 @@
+ @top_srcdir@/src/TopOpeBRepTool/TopOpeBRepTool_trace.cxx \
+ @top_srcdir@/src/TopOpeBRepTool/TopOpeBRepTool_traceSTATE.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__TopOpeBRep_DLL -D__TopOpeBRepDS_DLL -D__TopOpeBRepBuild_DLL -D__TopOpeBRepTool_DLL -D__BRepAlgo_DLL -D__BRepFill_DLL -D__BRepProj_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKPrim/.libs -lTKPrim -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKShHealing/.libs -lTKShHealing -L../TKGeomBase/.libs -lTKGeomBase -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKBO/.libs -lTKBO
+diff -ur a/adm/lin/amk/TKBRep/Makefile.am c/adm/lin/amk/TKBRep/Makefile.am
+--- a/adm/lin/amk/TKBRep/Makefile.am	2015-05-07 20:32:17.000000000 +0200
++++ c/adm/lin/amk/TKBRep/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -200,3 +200,5 @@
+ @top_srcdir@/src/TopoDS/TopoDS_Vertex.cxx \
+ @top_srcdir@/src/TopoDS/TopoDS_Wire.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__TopoDS_DLL -D__TopExp_DLL -D__TopTools_DLL -D__BRep_DLL -D__BRepLProp_DLL -D__BRepAdaptor_DLL -D__BRepTools_DLL -D__BinTools_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomBase/.libs -lTKGeomBase
+diff -ur a/adm/lin/amk/TKCAF/Makefile.am c/adm/lin/amk/TKCAF/Makefile.am
+--- a/adm/lin/amk/TKCAF/Makefile.am	2015-05-07 20:32:27.000000000 +0200
++++ c/adm/lin/amk/TKCAF/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -113,3 +113,5 @@
+ @top_srcdir@/src/TPrsStd/TPrsStd_PlaneDriver.cxx \
+ @top_srcdir@/src/TPrsStd/TPrsStd_PointDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__TDataXtd_DLL -D__TNaming_DLL -D__TPrsStd_DLL -D__AppStd_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKGeomBase/.libs -lTKGeomBase -L../TKBRep/.libs -lTKBRep -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKMath/.libs -lTKMath -L../TKService/.libs -lTKService -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKCDF/.libs -lTKCDF -L../TKLCAF/.libs -lTKLCAF -L../TKV3d/.libs -lTKV3d -L../TKBO/.libs -lTKBO
+diff -ur a/adm/lin/amk/TKCDF/Makefile.am c/adm/lin/amk/TKCDF/Makefile.am
+--- a/adm/lin/amk/TKCDF/Makefile.am	2015-05-07 20:32:27.000000000 +0200
++++ c/adm/lin/amk/TKCDF/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -105,3 +105,5 @@
+ @top_srcdir@/src/PCDM/PCDM_Writer.cxx \
+ @top_srcdir@/src/UTL/UTL.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__CDM_DLL -D__PCDM_DLL -D__CDF_DLL -D__UTL_DLL -D__LDOM_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel
+diff -ur a/adm/lin/amk/TKDCAF/Makefile.am c/adm/lin/amk/TKDCAF/Makefile.am
+--- a/adm/lin/amk/TKDCAF/Makefile.am	2015-05-07 20:32:41.000000000 +0200
++++ c/adm/lin/amk/TKDCAF/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -118,3 +118,5 @@
+ @top_srcdir@/src/DrawDim/DrawDim_PlanarRadius.cxx \
+ @top_srcdir@/src/DrawDim/DrawDim_Radius.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__DDF_DLL -D__DDocStd_DLL -D__DNaming_DLL -D__DDataStd_DLL -D__DPrsStd_DLL -D__DrawDim_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKGeomBase/.libs -lTKGeomBase -L../TKBRep/.libs -lTKBRep -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKDraw/.libs -lTKDraw -L../TKCDF/.libs -lTKCDF -L../TKV3d/.libs -lTKV3d -L../TKNIS/.libs -lTKNIS -L../TKService/.libs -lTKService -L../TKLCAF/.libs -lTKLCAF -L../TKFillet/.libs -lTKFillet -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKPrim/.libs -lTKPrim -L../TKBool/.libs -lTKBool -L../TKBO/.libs -lTKBO -L../TKCAF/.libs -lTKCAF -L../TKViewerTest/.libs -lTKViewerTest
+diff -ur a/adm/lin/amk/TKDraw/Makefile.am c/adm/lin/amk/TKDraw/Makefile.am
+--- a/adm/lin/amk/TKDraw/Makefile.am	2015-05-07 20:32:40.000000000 +0200
++++ c/adm/lin/amk/TKDraw/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -113,3 +113,5 @@
+ @top_srcdir@/src/DrawTrSurf/DrawTrSurf_Triangulation.cxx \
+ @top_srcdir@/src/DrawTrSurf/DrawTrSurf_Triangulation2D.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__Draw_DLL -D__DBRep_DLL -D__DrawTrSurf_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../TKGeomBase/.libs -lTKGeomBase -L../TKG3d/.libs -lTKG3d -L../TKMath/.libs -lTKMath -L../TKBRep/.libs -lTKBRep -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKMesh/.libs -lTKMesh -L../TKService/.libs -lTKService -L../TKHLR/.libs -lTKHLR
+diff -ur a/adm/lin/amk/TKernel/Makefile.am c/adm/lin/amk/TKernel/Makefile.am
+--- a/adm/lin/amk/TKernel/Makefile.am	2015-05-07 20:32:13.000000000 +0200
++++ c/adm/lin/amk/TKernel/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -444,3 +444,5 @@
+ @top_srcdir@/src/Units/Units_UnitsSystem.cxx \
+ @top_srcdir@/src/UnitsAPI/UnitsAPI.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__FSD_DLL -D__MMgt_DLL -D__OSD_DLL -D__Plugin_DLL -D__Quantity_DLL -D__Resource_DLL -D__SortTools_DLL -D__Standard_DLL -D__StdFail_DLL -D__Storage_DLL -D__TColStd_DLL -D__TCollection_DLL -D__TShort_DLL -D__Units_DLL -D__UnitsAPI_DLL -D__Dico_DLL -D__NCollection_DLL -D__Message_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols
+diff -ur a/adm/lin/amk/TKFeat/Makefile.am c/adm/lin/amk/TKFeat/Makefile.am
+--- a/adm/lin/amk/TKFeat/Makefile.am	2015-05-07 20:32:23.000000000 +0200
++++ c/adm/lin/amk/TKFeat/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -83,3 +83,5 @@
+ @top_srcdir@/src/LocOpe/LocOpe_Spliter.cxx \
+ @top_srcdir@/src/LocOpe/LocOpe_WiresOnShape.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__LocOpe_DLL -D__BRepFeat_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKGeomBase/.libs -lTKGeomBase -L../TKPrim/.libs -lTKPrim -L../TKG2d/.libs -lTKG2d -L../TKBO/.libs -lTKBO -L../TKG3d/.libs -lTKG3d -L../TKBool/.libs -lTKBool
+diff -ur a/adm/lin/amk/TKFillet/Makefile.am c/adm/lin/amk/TKFillet/Makefile.am
+--- a/adm/lin/amk/TKFillet/Makefile.am	2015-05-07 20:32:22.000000000 +0200
++++ c/adm/lin/amk/TKFillet/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -188,3 +188,5 @@
+ @top_srcdir@/src/FilletSurf/FilletSurf_Builder.cxx \
+ @top_srcdir@/src/FilletSurf/FilletSurf_InternalBuilder.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__ChFiDS_DLL -D__ChFi2d_DLL -D__ChFi3d_DLL -D__ChFiKPart_DLL -D__Blend_DLL -D__BRepBlend_DLL -D__BlendFunc_DLL -D__BRepFilletAPI_DLL -D__FilletSurf_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKGeomBase/.libs -lTKGeomBase -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKG2d/.libs -lTKG2d -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKG3d/.libs -lTKG3d -L../TKBool/.libs -lTKBool -L../TKShHealing/.libs -lTKShHealing
+diff -ur a/adm/lin/amk/TKG2d/Makefile.am c/adm/lin/amk/TKG2d/Makefile.am
+--- a/adm/lin/amk/TKG2d/Makefile.am	2015-05-07 20:32:15.000000000 +0200
++++ c/adm/lin/amk/TKG2d/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -104,3 +104,5 @@
+ @top_srcdir@/src/LProp/LProp_AnalyticCurInf.cxx \
+ @top_srcdir@/src/LProp/LProp_CurAndInf.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__Geom2d_DLL -D__LProp_DLL -D__TColGeom2d_DLL -D__Adaptor2d_DLL -D__Geom2dLProp_DLL -D__Geom2dAdaptor_DLL -D__GProp_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath
+diff -ur a/adm/lin/amk/TKG3d/Makefile.am c/adm/lin/amk/TKG3d/Makefile.am
+--- a/adm/lin/amk/TKG3d/Makefile.am	2015-05-07 20:32:16.000000000 +0200
++++ c/adm/lin/amk/TKG3d/Makefile.am	2016-01-26 16:08:39.062898082 +0100
+@@ -146,3 +146,5 @@
+ @top_srcdir@/src/LProp3d/LProp3d_SurfaceTool.cxx \
+ @top_srcdir@/src/TopAbs/TopAbs.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__Geom_DLL -D__TColGeom_DLL -D__GeomAdaptor_DLL -D__AdvApprox_DLL -D__GeomLProp_DLL -D__Adaptor3d_DLL -D__LProp3d_DLL -D__TopAbs_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d
+diff -ur a/adm/lin/amk/TKGeomAlgo/Makefile.am c/adm/lin/amk/TKGeomAlgo/Makefile.am
+--- a/adm/lin/amk/TKGeomAlgo/Makefile.am	2015-05-07 20:32:19.000000000 +0200
++++ c/adm/lin/amk/TKGeomAlgo/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -563,3 +563,5 @@
+ @top_srcdir@/src/TopTrans/TopTrans_CurveTransition.cxx \
+ @top_srcdir@/src/TopTrans/TopTrans_SurfaceTransition.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__Hatch_DLL -D__GeomInt_DLL -D__IntStart_DLL -D__IntWalk_DLL -D__IntImp_DLL -D__IntCurveSurface_DLL -D__IntSurf_DLL -D__IntPatch_DLL -D__Geom2dInt_DLL -D__IntImpParGen_DLL -D__IntRes2d_DLL -D__IntCurve_DLL -D__TopTrans_DLL -D__Intf_DLL -D__ApproxInt_DLL -D__GccAna_DLL -D__GccEnt_DLL -D__GccInt_DLL -D__HatchGen_DLL -D__Geom2dHatch_DLL -D__Law_DLL -D__AppBlend_DLL -D__Plate_DLL -D__GeomPlate_DLL -D__LocalAnalysis_DLL -D__GeomAPI_DLL -D__GeomFill_DLL -D__Geom2dAPI_DLL -D__Geom2dGcc_DLL -D__FairCurve_DLL -D__NLPlate_DLL -D__IntPolyh_DLL -D__TopClass_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKG3d/.libs -lTKG3d -L../TKG2d/.libs -lTKG2d -L../TKGeomBase/.libs -lTKGeomBase -L../TKBRep/.libs -lTKBRep
+diff -ur a/adm/lin/amk/TKGeomBase/Makefile.am c/adm/lin/amk/TKGeomBase/Makefile.am
+--- a/adm/lin/amk/TKGeomBase/Makefile.am	2015-05-07 20:32:17.000000000 +0200
++++ c/adm/lin/amk/TKGeomBase/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -428,3 +428,5 @@
+ @top_srcdir@/src/gce/gce_MakeTranslation2d.cxx \
+ @top_srcdir@/src/gce/gce_Root.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__ProjLib_DLL -D__GeomProjLib_DLL -D__GCPnts_DLL -D__CPnts_DLL -D__Approx_DLL -D__AppParCurves_DLL -D__FEmTool_DLL -D__AppCont_DLL -D__Extrema_DLL -D__IntAna_DLL -D__IntAna2d_DLL -D__GeomConvert_DLL -D__AdvApp2Var_DLL -D__GeomLib_DLL -D__Geom2dConvert_DLL -D__Hermit_DLL -D__BndLib_DLL -D__AppDef_DLL -D__GeomTools_DLL -D__GC_DLL -D__GCE2d_DLL -D__gce_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d
+diff -ur a/adm/lin/amk/TKHLR/Makefile.am c/adm/lin/amk/TKHLR/Makefile.am
+--- a/adm/lin/amk/TKHLR/Makefile.am	2015-05-07 20:32:22.000000000 +0200
++++ c/adm/lin/amk/TKHLR/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -197,3 +197,5 @@
+ @top_srcdir@/src/Intrv/Intrv_Intervals.cxx \
+ @top_srcdir@/src/TopCnx/TopCnx_EdgeFaceTransition.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__HLRTopoBRep_DLL -D__HLRBRep_DLL -D__HLRAlgo_DLL -D__HLRAppli_DLL -D__Intrv_DLL -D__TopBas_DLL -D__TopCnx_DLL -D__Contap_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKGeomBase/.libs -lTKGeomBase -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKTopAlgo/.libs -lTKTopAlgo
+diff -ur a/adm/lin/amk/TKIGES/Makefile.am c/adm/lin/amk/TKIGES/Makefile.am
+--- a/adm/lin/amk/TKIGES/Makefile.am	2015-05-07 20:32:38.000000000 +0200
++++ c/adm/lin/amk/TKIGES/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -568,3 +568,5 @@
+ @top_srcdir@/src/IGESToBRep/IGESToBRep_TopoCurve.cxx \
+ @top_srcdir@/src/IGESToBRep/IGESToBRep_TopoSurface.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__IGESData_DLL -D__IGESFile_DLL -D__IGESBasic_DLL -D__IGESGraph_DLL -D__IGESGeom_DLL -D__IGESDimen_DLL -D__IGESDraw_DLL -D__IGESSolid_DLL -D__IGESDefs_DLL -D__IGESAppli_DLL -D__IGESConvGeom_DLL -D__IGESSelect_DLL -D__IGESToBRep_DLL -D__GeomToIGES_DLL -D__Geom2dToIGES_DLL -D__BRepToIGES_DLL -D__BRepToIGESBRep_DLL -D__IGESControl_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKShHealing/.libs -lTKShHealing -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomBase/.libs -lTKGeomBase -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKPrim/.libs -lTKPrim -L../TKBool/.libs -lTKBool -L../TKOffset/.libs -lTKOffset -L../TKXSBase/.libs -lTKXSBase
+diff -ur a/adm/lin/amk/TKIVtk/Makefile.am c/adm/lin/amk/TKIVtk/Makefile.am
+--- a/adm/lin/amk/TKIVtk/Makefile.am	2015-05-07 20:32:25.000000000 +0200
++++ c/adm/lin/amk/TKIVtk/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -60,3 +60,5 @@
+ @top_srcdir@/src/IVtkVTK/IVtkVTK_ShapeData.cxx \
+ @top_srcdir@/src/IVtkVTK/IVtkVTK_View.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__IVtk_DLL -D__IVtkOCC_DLL -D__IVtkVTK_DLL -D__IVtkTools_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKBRep/.libs -lTKBRep -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKGeomBase/.libs -lTKGeomBase -L../TKMath/.libs -lTKMath -L../TKMesh/.libs -lTKMesh -L../TKService/.libs -lTKService -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKV3d/.libs -lTKV3d vtkCommonCore-6.-L../1/.libs -l1 vtkCommonDataModel-6.-L../1/.libs -l1 vtkCommonExecutionModel-6.-L../1/.libs -l1 vtkCommonMath-6.-L../1/.libs -l1 vtkCommonTransforms-6.-L../1/.libs -l1 vtkRenderingCore-6.-L../1/.libs -l1 vtkRenderingOpenGL-6.-L../1/.libs -l1 vtkFiltersGeneral-6.-L../1/.libs -l1 vtkIOCore-6.-L../1/.libs -l1 vtkIOImage-6.-L../1/.libs -l1 vtkImagingCore-6.-L../1/.libs -l1 vtkInteractionStyle-6.-L../1/.libs -l1
+diff -ur a/adm/lin/amk/TKIVtkDraw/Makefile.am c/adm/lin/amk/TKIVtkDraw/Makefile.am
+--- a/adm/lin/amk/TKIVtkDraw/Makefile.am	2015-05-07 20:32:42.000000000 +0200
++++ c/adm/lin/amk/TKIVtkDraw/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -41,3 +41,5 @@
+ @top_srcdir@/src/IVtkDraw/IVtkDraw_HighlightAndSelectionPipeline.cxx \
+ @top_srcdir@/src/IVtkDraw/IVtkDraw_Interactor.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__IVtkDraw_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKBRep/.libs -lTKBRep -L../TKDraw/.libs -lTKDraw -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKGeomBase/.libs -lTKGeomBase -L../TKMath/.libs -lTKMath -L../TKMesh/.libs -lTKMesh -L../TKService/.libs -lTKService -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKV3d/.libs -lTKV3d -L../TKOpenGl/.libs -lTKOpenGl -L../TKIVtk/.libs -lTKIVtk vtkCommonCore-6.-L../1/.libs -l1 vtkCommonDataModel-6.-L../1/.libs -l1 vtkCommonExecutionModel-6.-L../1/.libs -l1 vtkCommonMath-6.-L../1/.libs -l1 vtkCommonTransforms-6.-L../1/.libs -l1 vtkRenderingCore-6.-L../1/.libs -l1 vtkRenderingOpenGL-6.-L../1/.libs -l1 vtkFiltersGeneral-6.-L../1/.libs -l1 vtkIOCore-6.-L../1/.libs -l1 vtkIOImage-6.-L../1/.libs -l1 vtkImagingCore-6.-L../1/.libs -l1 vtkInteractionStyle-6.-L../1/.libs -l1
+diff -ur a/adm/lin/amk/TKLCAF/Makefile.am c/adm/lin/amk/TKLCAF/Makefile.am
+--- a/adm/lin/amk/TKLCAF/Makefile.am	2015-05-07 20:32:27.000000000 +0200
++++ c/adm/lin/amk/TKLCAF/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -220,3 +220,5 @@
+ @top_srcdir@/src/TFunction/TFunction_Logbook.cxx \
+ @top_srcdir@/src/TFunction/TFunction_Scope.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__TDF_DLL -D__TDataStd_DLL -D__TFunction_DLL -D__TDocStd_DLL -D__AppStdL_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../TKernel/.libs -lTKernel
+diff -ur a/adm/lin/amk/TKMath/Makefile.am c/adm/lin/amk/TKMath/Makefile.am
+--- a/adm/lin/amk/TKMath/Makefile.am	2015-05-07 20:32:15.000000000 +0200
++++ c/adm/lin/amk/TKMath/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -391,3 +391,5 @@
+ @top_srcdir@/src/math/math_ValueAndWeight.cxx \
+ @top_srcdir@/src/math/math_Vector.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__math_DLL -D__ElCLib_DLL -D__ElSLib_DLL -D__BSplCLib_DLL -D__BSplSLib_DLL -D__PLib_DLL -D__Precision_DLL -D__GeomAbs_DLL -D__Poly_DLL -D__CSLib_DLL -D__Convert_DLL -D__Bnd_DLL -D__BVH_DLL -D__gp_DLL -D__TColgp_DLL -D__TopLoc_DLL -D__Expr_DLL -D__ExprIntrp_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel
+diff -ur a/adm/lin/amk/TKMesh/Makefile.am c/adm/lin/amk/TKMesh/Makefile.am
+--- a/adm/lin/amk/TKMesh/Makefile.am	2015-05-07 20:32:23.000000000 +0200
++++ c/adm/lin/amk/TKMesh/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -52,3 +52,5 @@
+ @top_srcdir@/src/BRepMesh/BRepMesh_WireChecker.cxx \
+ @top_srcdir@/src/BRepMesh/BRepMesh_WireInterferenceChecker.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__BRepMesh_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomBase/.libs -lTKGeomBase -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKGeomAlgo/.libs -lTKGeomAlgo
+diff -ur a/adm/lin/amk/TKMeshVS/Makefile.am c/adm/lin/amk/TKMeshVS/Makefile.am
+--- a/adm/lin/amk/TKMeshVS/Makefile.am	2015-05-07 20:32:25.000000000 +0200
++++ c/adm/lin/amk/TKMeshVS/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -93,3 +93,5 @@
+ @top_srcdir@/src/MeshVS/MeshVS_TwoColors.cxx \
+ @top_srcdir@/src/MeshVS/MeshVS_VectorPrsBuilder.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__MeshVS_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKV3d/.libs -lTKV3d -L../TKMath/.libs -lTKMath -L../TKService/.libs -lTKService -L../TKernel/.libs -lTKernel -L../TKG3d/.libs -lTKG3d -L../TKG2d/.libs -lTKG2d
+diff -ur a/adm/lin/amk/TKNIS/Makefile.am c/adm/lin/amk/TKNIS/Makefile.am
+--- a/adm/lin/amk/TKNIS/Makefile.am	2015-05-07 20:32:25.000000000 +0200
++++ c/adm/lin/amk/TKNIS/Makefile.am	2016-02-02 13:35:32.957466151 +0100
+@@ -44,3 +44,5 @@
+ @top_srcdir@/src/NIS/NIS_TriangulatedDrawer.cxx \
+ @top_srcdir@/src/NIS/NIS_View.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__NIS_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKV3d/.libs -lTKV3d -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKService/.libs -lTKService -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKMesh/.libs -lTKMesh -lopengl32
+diff -ur a/adm/lin/amk/TKOffset/Makefile.am c/adm/lin/amk/TKOffset/Makefile.am
+--- a/adm/lin/amk/TKOffset/Makefile.am	2015-05-07 20:32:22.000000000 +0200
++++ c/adm/lin/amk/TKOffset/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -104,3 +104,5 @@
+ @top_srcdir@/src/Draft/Draft_Modification_1.cxx \
+ @top_srcdir@/src/Draft/Draft_VertexInfo.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__BRepOffsetAPI_DLL -D__Draft_DLL -D__BRepOffset_DLL -D__BiTgte_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKFillet/.libs -lTKFillet -L../TKBRep/.libs -lTKBRep -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKGeomBase/.libs -lTKGeomBase -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKShHealing/.libs -lTKShHealing -L../TKBO/.libs -lTKBO -L../TKPrim/.libs -lTKPrim -L../TKBool/.libs -lTKBool
+diff -ur a/adm/lin/amk/TKOpenGl/Makefile.am c/adm/lin/amk/TKOpenGl/Makefile.am
+--- a/adm/lin/amk/TKOpenGl/Makefile.am	2015-05-07 20:32:25.000000000 +0200
++++ c/adm/lin/amk/TKOpenGl/Makefile.am	2016-02-02 13:34:50.429464539 +0100
+@@ -91,3 +91,5 @@
+ @top_srcdir@/src/OpenGl/OpenGl_Workspace_5.cxx \
+ @top_srcdir@/src/OpenGl/OpenGl_telem_util.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__OpenGl_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKService/.libs -lTKService -L../TKMath/.libs -lTKMath -L../TKV3d/.libs -lTKV3d -lopengl32 -lglu32
+diff -ur a/adm/lin/amk/TKPCAF/Makefile.am c/adm/lin/amk/TKPCAF/Makefile.am
+--- a/adm/lin/amk/TKPCAF/Makefile.am	2015-05-07 20:32:29.000000000 +0200
++++ c/adm/lin/amk/TKPCAF/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -99,3 +99,5 @@
+ @top_srcdir@/src/PPrsStd/PPrsStd_AISPresentation.cxx \
+ @top_srcdir@/src/PPrsStd/PPrsStd_AISPresentation_1.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__PDataXtd_DLL -D__PNaming_DLL -D__PPrsStd_DLL -D__MDataXtd_DLL -D__MPrsStd_DLL -D__MNaming_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../PTKernel/.libs -lPTKernel -L../TKBRep/.libs -lTKBRep -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKCDF/.libs -lTKCDF -L../TKG2d/.libs -lTKG2d -L../TKV3d/.libs -lTKV3d -L../TKService/.libs -lTKService -L../TKG3d/.libs -lTKG3d -L../TKPShape/.libs -lTKPShape -L../TKCAF/.libs -lTKCAF -L../TKLCAF/.libs -lTKLCAF -L../TKPLCAF/.libs -lTKPLCAF
+diff -ur a/adm/lin/amk/TKPLCAF/Makefile.am c/adm/lin/amk/TKPLCAF/Makefile.am
+--- a/adm/lin/amk/TKPLCAF/Makefile.am	2015-05-07 20:32:29.000000000 +0200
++++ c/adm/lin/amk/TKPLCAF/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -202,3 +202,5 @@
+ @top_srcdir@/src/PDocStd/PDocStd_XLink.cxx \
+ @top_srcdir@/src/PFunction/PFunction_Function.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__PDF_DLL -D__PDataStd_DLL -D__PFunction_DLL -D__PDocStd_DLL -D__MDF_DLL -D__MDataStd_DLL -D__MFunction_DLL -D__MDocStd_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../PTKernel/.libs -lPTKernel -L../TKernel/.libs -lTKernel -L../TKLCAF/.libs -lTKLCAF
+diff -ur a/adm/lin/amk/TKPrim/Makefile.am c/adm/lin/amk/TKPrim/Makefile.am
+--- a/adm/lin/amk/TKPrim/Makefile.am	2015-05-07 20:32:20.000000000 +0200
++++ c/adm/lin/amk/TKPrim/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -71,3 +71,5 @@
+ @top_srcdir@/src/Sweep/Sweep_NumShapeIterator.cxx \
+ @top_srcdir@/src/Sweep/Sweep_NumShapeTool.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__BRepPrim_DLL -D__BRepSweep_DLL -D__Sweep_DLL -D__BRepPrimAPI_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKG2d/.libs -lTKG2d -L../TKGeomBase/.libs -lTKGeomBase -L../TKG3d/.libs -lTKG3d -L../TKTopAlgo/.libs -lTKTopAlgo
+diff -ur a/adm/lin/amk/TKPShape/Makefile.am c/adm/lin/amk/TKPShape/Makefile.am
+--- a/adm/lin/amk/TKPShape/Makefile.am	2015-05-07 20:32:26.000000000 +0200
++++ c/adm/lin/amk/TKPShape/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -283,3 +283,5 @@
+ @top_srcdir@/src/PTopoDS/PTopoDS_Vertex.cxx \
+ @top_srcdir@/src/PTopoDS/PTopoDS_Wire.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__PBRep_DLL -D__PTopoDS_DLL -D__PGeom_DLL -D__PGeom2d_DLL -D__PPoly_DLL -D__PColgp_DLL -D__PTopLoc_DLL -D__MgtBRep_DLL -D__MgtGeom_DLL -D__MgtGeom2d_DLL -D__MgtPoly_DLL -D__MgtTopLoc_DLL -D__MgtTopoDS_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../PTKernel/.libs -lPTKernel -L../TKBRep/.libs -lTKBRep
+diff -ur a/adm/lin/amk/TKQADraw/Makefile.am c/adm/lin/amk/TKQADraw/Makefile.am
+--- a/adm/lin/amk/TKQADraw/Makefile.am	2015-05-07 20:32:41.000000000 +0200
++++ c/adm/lin/amk/TKQADraw/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -155,3 +155,5 @@
+ @top_srcdir@/src/QANewModTopOpe/QANewModTopOpe_ReShaper.cxx \
+ @top_srcdir@/src/QANewModTopOpe/QANewModTopOpe_Tools.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__QABugs_DLL -D__QADNaming_DLL -D__QADraw_DLL -D__QANCollection_DLL -D__QANewBRepNaming_DLL -D__QANewDBRepNaming_DLL -D__QANewModTopOpe_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKNIS/.libs -lTKNIS -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKService/.libs -lTKService -L../TKG2d/.libs -lTKG2d -L../TKDraw/.libs -lTKDraw -L../PTKernel/.libs -lPTKernel -L../TKV3d/.libs -lTKV3d -L../TKGeomBase/.libs -lTKGeomBase -L../TKG3d/.libs -lTKG3d -L../TKViewerTest/.libs -lTKViewerTest -L../TKCDF/.libs -lTKCDF -L../TKDCAF/.libs -lTKDCAF -L../TKLCAF/.libs -lTKLCAF -L../TKFillet/.libs -lTKFillet -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKHLR/.libs -lTKHLR -L../TKBool/.libs -lTKBool -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKPrim/.libs -lTKPrim -L../TKBO/.libs -lTKBO -L../TKShHealing/.libs -lTKShHealing -L../TKOffset/.libs -lTKOffset -L../TKFeat/.libs -lTKFeat -L../TKCAF/.libs -lTKCAF -L../TKIGES/.libs -lTKIGES -L../TKXSBase/.libs -lTKXSBase -L../TKMesh/.libs -lTKMesh -L../TKXCAF/.libs -lTKXCAF -L../TKSTEP/.libs -lTKSTEP -L../TKXDESTEP/.libs -lTKXDESTEP -L../TKXSDRAW/.libs -lTKXSDRAW -L../TKSTL/.libs -lTKSTL -L../TKVoxel/.libs -lTKVoxel -L../TKShapeSchema/.libs -lTKShapeSchema -L../TKPShape/.libs -lTKPShape
+diff -ur a/adm/lin/amk/TKService/Makefile.am c/adm/lin/amk/TKService/Makefile.am
+--- a/adm/lin/amk/TKService/Makefile.am	2015-05-07 20:32:24.000000000 +0200
++++ c/adm/lin/amk/TKService/Makefile.am	2016-02-02 13:30:33.125454790 +0100
+@@ -6,6 +6,7 @@
+ @top_srcdir@/drv/InterfaceGraphic : @top_srcdir@/src/InterfaceGraphic: \
+ @top_srcdir@/drv/SelectBasics : @top_srcdir@/src/SelectBasics: \
+ @top_srcdir@/drv/Xw : @top_srcdir@/src/Xw: \
++@top_srcdir@/drv/WNT : @top_srcdir@/src/WNT: \
+ @top_srcdir@/drv/Image : @top_srcdir@/src/Image: \
+ @top_srcdir@/drv/Cocoa : @top_srcdir@/src/Cocoa: \
+ @top_srcdir@/drv/TColQuantity : @top_srcdir@/src/TColQuantity: \
+@@ -24,6 +25,7 @@
+ -I@top_srcdir@/drv/InterfaceGraphic -I@top_srcdir@/src/InterfaceGraphic \
+ -I@top_srcdir@/drv/SelectBasics -I@top_srcdir@/src/SelectBasics \
+ -I@top_srcdir@/drv/Xw -I@top_srcdir@/src/Xw \
++-I@top_srcdir@/drv/WNT -I@top_srcdir@/src/WNT \
+ -I@top_srcdir@/drv/Image -I@top_srcdir@/src/Image \
+ -I@top_srcdir@/drv/Cocoa -I@top_srcdir@/src/Cocoa \
+ -I@top_srcdir@/drv/TColQuantity -I@top_srcdir@/src/TColQuantity \
+@@ -85,5 +87,7 @@
+ @top_srcdir@/src/SelectBasics/SelectBasics.cxx \
+ @top_srcdir@/src/SelectBasics/SelectBasics_EntityOwner.cxx \
+ @top_srcdir@/src/SelectBasics/SelectBasics_SensitiveEntity.cxx \
+-@top_srcdir@/src/Xw/Xw_Window.cxx
++@top_srcdir@/src/WNT/WNT_Window.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__Aspect_DLL -D__InterfaceGraphic_DLL -D__SelectBasics_DLL -D__Image_DLL -D__WNT_DLL -D__Cocoa_DLL -D__TColQuantity_DLL -D__Font_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKBRep/.libs -lTKBRep -L../TKShHealing/.libs -lTKShHealing -L../TKGeomBase/.libs -lTKGeomBase -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKTopAlgo/.libs -lTKTopAlgo
+diff -ur a/adm/lin/amk/TKShapeSchema/Makefile.am c/adm/lin/amk/TKShapeSchema/Makefile.am
+--- a/adm/lin/amk/TKShapeSchema/Makefile.am	2015-05-07 20:32:28.000000000 +0200
++++ c/adm/lin/amk/TKShapeSchema/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -241,3 +241,5 @@
+ @top_srcdir@/drv/ShapeSchema/ShapeSchema_gp_XYZ.cxx \
+ @top_srcdir@/src/PCDMShape/PCDMShape_Document.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__ShapeSchema_DLL -D__PCDMShape_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../PTKernel/.libs -lPTKernel -L../TKMath/.libs -lTKMath -L../TKCDF/.libs -lTKCDF -L../TKPShape/.libs -lTKPShape
+diff -ur a/adm/lin/amk/TKShHealing/Makefile.am c/adm/lin/amk/TKShHealing/Makefile.am
+--- a/adm/lin/amk/TKShHealing/Makefile.am	2015-05-07 20:32:23.000000000 +0200
++++ c/adm/lin/amk/TKShHealing/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -183,3 +183,5 @@
+ @top_srcdir@/src/ShapeUpgrade/ShapeUpgrade_UnifySameDomain.cxx \
+ @top_srcdir@/src/ShapeUpgrade/ShapeUpgrade_WireDivide.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__ShapeBuild_DLL -D__ShapeExtend_DLL -D__ShapeConstruct_DLL -D__ShapeCustom_DLL -D__ShapeAnalysis_DLL -D__ShapeFix_DLL -D__ShapeUpgrade_DLL -D__ShapeAlgo_DLL -D__ShapeProcess_DLL -D__ShapeProcessAPI_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKG2d/.libs -lTKG2d -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKG3d/.libs -lTKG3d -L../TKGeomBase/.libs -lTKGeomBase -L../TKGeomAlgo/.libs -lTKGeomAlgo
+diff -ur a/adm/lin/amk/TKStdLSchema/Makefile.am c/adm/lin/amk/TKStdLSchema/Makefile.am
+--- a/adm/lin/amk/TKStdLSchema/Makefile.am	2015-05-07 20:32:30.000000000 +0200
++++ c/adm/lin/amk/TKStdLSchema/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -100,3 +100,5 @@
+ @top_srcdir@/src/StdLDrivers/StdLDrivers_DocumentRetrievalDriver.cxx \
+ @top_srcdir@/src/StdLDrivers/StdLDrivers_DocumentStorageDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__StdLSchema_DLL -D__StdLDrivers_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../PTKernel/.libs -lPTKernel -L../TKernel/.libs -lTKernel -L../TKShapeSchema/.libs -lTKShapeSchema -L../TKLCAF/.libs -lTKLCAF -L../TKPLCAF/.libs -lTKPLCAF
+diff -ur a/adm/lin/amk/TKStdSchema/Makefile.am c/adm/lin/amk/TKStdSchema/Makefile.am
+--- a/adm/lin/amk/TKStdSchema/Makefile.am	2015-05-07 20:32:30.000000000 +0200
++++ c/adm/lin/amk/TKStdSchema/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -99,3 +99,5 @@
+ @top_srcdir@/src/StdDrivers/StdDrivers_DocumentRetrievalDriver.cxx \
+ @top_srcdir@/src/StdDrivers/StdDrivers_DocumentStorageDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__StdSchema_DLL -D__StdDrivers_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../PTKernel/.libs -lPTKernel -L../TKPLCAF/.libs -lTKPLCAF -L../TKernel/.libs -lTKernel -L../TKCAF/.libs -lTKCAF -L../TKShapeSchema/.libs -lTKShapeSchema -L../TKLCAF/.libs -lTKLCAF -L../TKStdLSchema/.libs -lTKStdLSchema -L../TKG3d/.libs -lTKG3d -L../TKPShape/.libs -lTKPShape -L../TKMath/.libs -lTKMath -L../TKG2d/.libs -lTKG2d -L../TKPCAF/.libs -lTKPCAF
+diff -ur a/adm/lin/amk/TKSTEP/Makefile.am c/adm/lin/amk/TKSTEP/Makefile.am
+--- a/adm/lin/amk/TKSTEP/Makefile.am	2015-05-07 20:32:37.000000000 +0200
++++ c/adm/lin/amk/TKSTEP/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -392,3 +392,5 @@
+ @top_srcdir@/src/TopoDSToStep/TopoDSToStep_Tool.cxx \
+ @top_srcdir@/src/TopoDSToStep/TopoDSToStep_WireframeBuilder.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__StepAP214_DLL -D__RWStepAP214_DLL -D__StepAP203_DLL -D__RWStepAP203_DLL -D__STEPConstruct_DLL -D__STEPEdit_DLL -D__GeomToStep_DLL -D__StepToGeom_DLL -D__StepToTopoDS_DLL -D__TopoDSToStep_DLL -D__STEPControl_DLL -D__STEPSelections_DLL -D__StepAP209_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKSTEPAttr/.libs -lTKSTEPAttr -L../TKSTEP209/.libs -lTKSTEP209 -L../TKSTEPBase/.libs -lTKSTEPBase -L../TKBRep/.libs -lTKBRep -L../TKMath/.libs -lTKMath -L../TKG2d/.libs -lTKG2d -L../TKShHealing/.libs -lTKShHealing -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKG3d/.libs -lTKG3d -L../TKGeomBase/.libs -lTKGeomBase -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKXSBase/.libs -lTKXSBase
+diff -ur a/adm/lin/amk/TKSTEP209/Makefile.am c/adm/lin/amk/TKSTEP209/Makefile.am
+--- a/adm/lin/amk/TKSTEP209/Makefile.am	2015-05-07 20:32:36.000000000 +0200
++++ c/adm/lin/amk/TKSTEP209/Makefile.am	2016-01-26 16:08:39.066898082 +0100
+@@ -247,3 +247,5 @@
+ @top_srcdir@/src/StepFEA/StepFEA_SymmetricTensor43dMember.cxx \
+ @top_srcdir@/src/StepFEA/StepFEA_Volume3dElementRepresentation.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__StepElement_DLL -D__StepFEA_DLL -D__RWStepElement_DLL -D__RWStepFEA_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKXSBase/.libs -lTKXSBase -L../TKSTEPBase/.libs -lTKSTEPBase
+diff -ur a/adm/lin/amk/TKSTEPAttr/Makefile.am c/adm/lin/amk/TKSTEPAttr/Makefile.am
+--- a/adm/lin/amk/TKSTEPAttr/Makefile.am	2015-05-07 20:32:35.000000000 +0200
++++ c/adm/lin/amk/TKSTEPAttr/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -254,3 +254,5 @@
+ @top_srcdir@/src/StepVisual/StepVisual_TextStyleWithBoxCharacteristics.cxx \
+ @top_srcdir@/src/StepVisual/StepVisual_ViewVolume.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__StepVisual_DLL -D__RWStepVisual_DLL -D__StepDimTol_DLL -D__RWStepDimTol_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKXSBase/.libs -lTKXSBase -L../TKSTEPBase/.libs -lTKSTEPBase
+diff -ur a/adm/lin/amk/TKSTEPBase/Makefile.am c/adm/lin/amk/TKSTEPBase/Makefile.am
+--- a/adm/lin/amk/TKSTEPBase/Makefile.am	2015-05-07 20:32:34.000000000 +0200
++++ c/adm/lin/amk/TKSTEPBase/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -829,3 +829,5 @@
+ @top_srcdir@/src/StepShape/StepShape_VertexLoop.cxx \
+ @top_srcdir@/src/StepShape/StepShape_VertexPoint.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__StepBasic_DLL -D__RWStepBasic_DLL -D__StepRepr_DLL -D__RWStepRepr_DLL -D__StepGeom_DLL -D__RWStepGeom_DLL -D__StepShape_DLL -D__RWStepShape_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKXSBase/.libs -lTKXSBase -L../TKMath/.libs -lTKMath
+diff -ur a/adm/lin/amk/TKSTL/Makefile.am c/adm/lin/amk/TKSTL/Makefile.am
+--- a/adm/lin/amk/TKSTL/Makefile.am	2015-05-07 20:32:39.000000000 +0200
++++ c/adm/lin/amk/TKSTL/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -53,3 +53,5 @@
+ @top_srcdir@/src/StlMesh/StlMesh_MeshTriangle.cxx \
+ @top_srcdir@/src/StlTransfer/StlTransfer.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__StlMesh_DLL -D__StlAPI_DLL -D__StlTransfer_DLL -D__RWStl_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKBRep/.libs -lTKBRep -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKMesh/.libs -lTKMesh -L../TKTopAlgo/.libs -lTKTopAlgo
+diff -ur a/adm/lin/amk/TKTObj/Makefile.am c/adm/lin/amk/TKTObj/Makefile.am
+--- a/adm/lin/amk/TKTObj/Makefile.am	2015-05-07 20:32:30.000000000 +0200
++++ c/adm/lin/amk/TKTObj/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -49,3 +49,5 @@
+ @top_srcdir@/src/TObj/TObj_TReference.cxx \
+ @top_srcdir@/src/TObj/TObj_TXYZ.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__TObj_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKLCAF/.libs -lTKLCAF
+diff -ur a/adm/lin/amk/TKTObjDRAW/Makefile.am c/adm/lin/amk/TKTObjDRAW/Makefile.am
+--- a/adm/lin/amk/TKTObjDRAW/Makefile.am	2015-05-07 20:32:41.000000000 +0200
++++ c/adm/lin/amk/TKTObjDRAW/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -32,3 +32,5 @@
+ libTKTObjDRAW_la_SOURCES = \
+ @top_srcdir@/src/TObjDRAW/TObjDRAW.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__TObjDRAW_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKernel/.libs -lTKernel -L../TKCDF/.libs -lTKCDF -L../TKLCAF/.libs -lTKLCAF -L../TKTObj/.libs -lTKTObj -L../TKMath/.libs -lTKMath -L../TKDraw/.libs -lTKDraw -L../TKDCAF/.libs -lTKDCAF
+diff -ur a/adm/lin/amk/TKTopAlgo/Makefile.am c/adm/lin/amk/TKTopAlgo/Makefile.am
+--- a/adm/lin/amk/TKTopAlgo/Makefile.am	2015-05-07 20:32:20.000000000 +0200
++++ c/adm/lin/amk/TKTopAlgo/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -273,3 +273,5 @@
+ @top_srcdir@/src/MAT2d/MAT2d_SketchExplorer.cxx \
+ @top_srcdir@/src/MAT2d/MAT2d_Tool2d.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__IntCurvesFace_DLL -D__MAT_DLL -D__MAT2d_DLL -D__Bisector_DLL -D__BRepMAT2d_DLL -D__BRepCheck_DLL -D__BRepBndLib_DLL -D__BRepExtrema_DLL -D__BRepClass_DLL -D__BRepClass3d_DLL -D__BRepLib_DLL -D__BRepGProp_DLL -D__BRepIntCurveSurface_DLL -D__BRepTopAdaptor_DLL -D__BRepBuilderAPI_DLL -D__BRepApprox_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomBase/.libs -lTKGeomBase -L../TKBRep/.libs -lTKBRep -L../TKGeomAlgo/.libs -lTKGeomAlgo
+diff -ur a/adm/lin/amk/TKTopTest/Makefile.am c/adm/lin/amk/TKTopTest/Makefile.am
+--- a/adm/lin/amk/TKTopTest/Makefile.am	2015-05-07 20:32:41.000000000 +0200
++++ c/adm/lin/amk/TKTopTest/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -170,3 +170,5 @@
+ @top_srcdir@/src/TestTopOpeTools/TestTopOpeTools_Trace.cxx \
+ @top_srcdir@/src/TestTopOpeTools/TestTopOpeTools_TraceCommands.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__TestTopOpeDraw_DLL -D__TestTopOpeTools_DLL -D__TestTopOpe_DLL -D__BRepTest_DLL -D__GeometryTest_DLL -D__HLRTest_DLL -D__MeshTest_DLL -D__GeomliteTest_DLL -D__DrawFairCurve_DLL -D__BOPTest_DLL -D__SWDRAW_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKBO/.libs -lTKBO -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKDraw/.libs -lTKDraw -L../TKHLR/.libs -lTKHLR -L../TKGeomBase/.libs -lTKGeomBase -L../TKMesh/.libs -lTKMesh -L../TKService/.libs -lTKService -L../TKV3d/.libs -lTKV3d -L../TKFillet/.libs -lTKFillet -L../TKPrim/.libs -lTKPrim -L../TKBool/.libs -lTKBool -L../TKOffset/.libs -lTKOffset -L../TKFeat/.libs -lTKFeat -L../TKShHealing/.libs -lTKShHealing
+diff -ur a/adm/lin/amk/TKV3d/Makefile.am c/adm/lin/amk/TKV3d/Makefile.am
+--- a/adm/lin/amk/TKV3d/Makefile.am	2015-05-07 20:32:25.000000000 +0200
++++ c/adm/lin/amk/TKV3d/Makefile.am	2016-01-28 17:14:56.241596246 +0100
+@@ -380,3 +380,5 @@
+ @top_srcdir@/src/Visual3d/Visual3d_View.cxx \
+ @top_srcdir@/src/Visual3d/Visual3d_ViewManager.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__V3d_DLL -D__Graphic3d_DLL -D__Visual3d_DLL -D__Select3D_DLL -D__Prs3d_DLL -D__StdPrs_DLL -D__SelectMgr_DLL -D__PrsMgr_DLL -D__AIS_DLL -D__DsgPrs_DLL -D__StdSelect_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKService/.libs -lTKService -L../TKShHealing/.libs -lTKShHealing -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKGeomBase/.libs -lTKGeomBase -L../TKMesh/.libs -lTKMesh -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKHLR/.libs -lTKHLR -lgdi32 -lcomdlg32 -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKBO/.libs -lTKBO
+diff -ur a/adm/lin/amk/TKViewerTest/Makefile.am c/adm/lin/amk/TKViewerTest/Makefile.am
+--- a/adm/lin/amk/TKViewerTest/Makefile.am	2015-05-07 20:32:41.000000000 +0200
++++ c/adm/lin/amk/TKViewerTest/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -59,3 +59,5 @@
+ @top_srcdir@/src/ViewerTest/ViewerTest_ViewerCommands.cxx \
+ @top_srcdir@/src/ViewerTest/ViewerTest_VoxelCommands.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__ViewerTest_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKGeomBase/.libs -lTKGeomBase -L../TKFillet/.libs -lTKFillet -L../TKBRep/.libs -lTKBRep -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKHLR/.libs -lTKHLR -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKNIS/.libs -lTKNIS -L../TKService/.libs -lTKService -L../TKShHealing/.libs -lTKShHealing -L../TKBool/.libs -lTKBool -L../TKPrim/.libs -lTKPrim -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKG2d/.libs -lTKG2d -L../TKTopTest/.libs -lTKTopTest -L../TKG3d/.libs -lTKG3d -L../TKOffset/.libs -lTKOffset -L../TKVoxel/.libs -lTKVoxel -L../TKMesh/.libs -lTKMesh -L../TKV3d/.libs -lTKV3d -L../TKDraw/.libs -lTKDraw -L../TKOpenGl/.libs -lTKOpenGl
+diff -ur a/adm/lin/amk/TKVoxel/Makefile.am c/adm/lin/amk/TKVoxel/Makefile.am
+--- a/adm/lin/amk/TKVoxel/Makefile.am	2015-05-07 20:32:25.000000000 +0200
++++ c/adm/lin/amk/TKVoxel/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -48,3 +48,5 @@
+ @top_srcdir@/src/Voxel/Voxel_SplitData.cxx \
+ @top_srcdir@/src/Voxel/Voxel_Writer.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__Voxel_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKernel/.libs -lTKernel -L../TKV3d/.libs -lTKV3d -L../TKMath/.libs -lTKMath -L../TKService/.libs -lTKService -L../TKGeomBase/.libs -lTKGeomBase -L../TKG2d/.libs -lTKG2d -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKG3d/.libs -lTKG3d -L../TKMesh/.libs -lTKMesh
+diff -ur a/adm/lin/amk/TKVRML/Makefile.am c/adm/lin/amk/TKVRML/Makefile.am
+--- a/adm/lin/amk/TKVRML/Makefile.am	2015-05-07 20:32:40.000000000 +0200
++++ c/adm/lin/amk/TKVRML/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -108,3 +108,5 @@
+ @top_srcdir@/src/VrmlData/VrmlData_ShapeConvert.cxx \
+ @top_srcdir@/src/VrmlData/VrmlData_WorldInfo.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__VrmlConverter_DLL -D__VrmlAPI_DLL -D__Vrml_DLL -D__VrmlData_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKMath/.libs -lTKMath -L../TKGeomBase/.libs -lTKGeomBase -L../TKernel/.libs -lTKernel -L../TKPrim/.libs -lTKPrim -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKMesh/.libs -lTKMesh -L../TKHLR/.libs -lTKHLR -L../TKService/.libs -lTKService -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKV3d/.libs -lTKV3d
+diff -ur a/adm/lin/amk/TKXCAF/Makefile.am c/adm/lin/amk/TKXCAF/Makefile.am
+--- a/adm/lin/amk/TKXCAF/Makefile.am	2015-05-07 20:32:39.000000000 +0200
++++ c/adm/lin/amk/TKXCAF/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -75,3 +75,5 @@
+ @top_srcdir@/src/XCAFPrs/XCAFPrs_Driver.cxx \
+ @top_srcdir@/src/XCAFPrs/XCAFPrs_Style.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__XCAFApp_DLL -D__XCAFDoc_DLL -D__XCAFPrs_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKService/.libs -lTKService -L../TKG2d/.libs -lTKG2d -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKV3d/.libs -lTKV3d -L../TKCDF/.libs -lTKCDF -L../TKLCAF/.libs -lTKLCAF -L../TKG3d/.libs -lTKG3d -L../TKCAF/.libs -lTKCAF
+diff -ur a/adm/lin/amk/TKXCAFSchema/Makefile.am c/adm/lin/amk/TKXCAFSchema/Makefile.am
+--- a/adm/lin/amk/TKXCAFSchema/Makefile.am	2015-05-07 20:32:39.000000000 +0200
++++ c/adm/lin/amk/TKXCAFSchema/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -143,3 +143,5 @@
+ @top_srcdir@/src/XCAFDrivers/XCAFDrivers_DocumentRetrievalDriver.cxx \
+ @top_srcdir@/src/XCAFDrivers/XCAFDrivers_DocumentStorageDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__MXCAFDoc_DLL -D__PXCAFDoc_DLL -D__XCAFDrivers_DLL -D__XCAFSchema_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKPLCAF/.libs -lTKPLCAF -L../TKernel/.libs -lTKernel -L../PTKernel/.libs -lPTKernel -L../TKMath/.libs -lTKMath -L../TKPShape/.libs -lTKPShape -L../TKCDF/.libs -lTKCDF -L../TKShapeSchema/.libs -lTKShapeSchema -L../TKLCAF/.libs -lTKLCAF -L../TKPCAF/.libs -lTKPCAF -L../TKXCAF/.libs -lTKXCAF -L../TKStdLSchema/.libs -lTKStdLSchema -L../TKStdSchema/.libs -lTKStdSchema
+diff -ur a/adm/lin/amk/TKXDEDRAW/Makefile.am c/adm/lin/amk/TKXDEDRAW/Makefile.am
+--- a/adm/lin/amk/TKXDEDRAW/Makefile.am	2015-05-07 20:32:41.000000000 +0200
++++ c/adm/lin/amk/TKXDEDRAW/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -54,3 +54,5 @@
+ @top_srcdir@/src/XDEDRAW/XDEDRAW_Props.cxx \
+ @top_srcdir@/src/XDEDRAW/XDEDRAW_Shapes.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__XDEDRAW_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../TKBRep/.libs -lTKBRep -L../TKXCAF/.libs -lTKXCAF -L../TKernel/.libs -lTKernel -L../TKIGES/.libs -lTKIGES -L../TKV3d/.libs -lTKV3d -L../TKMath/.libs -lTKMath -L../TKNIS/.libs -lTKNIS -L../TKService/.libs -lTKService -L../TKXSBase/.libs -lTKXSBase -L../TKG2d/.libs -lTKG2d -L../TKCAF/.libs -lTKCAF -L../TKDraw/.libs -lTKDraw -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKLCAF/.libs -lTKLCAF -L../TKG3d/.libs -lTKG3d -L../TKSTEPBase/.libs -lTKSTEPBase -L../TKSTEP/.libs -lTKSTEP -L../TKMesh/.libs -lTKMesh -L../TKXSDRAW/.libs -lTKXSDRAW -L../TKXDEIGES/.libs -lTKXDEIGES -L../TKXDESTEP/.libs -lTKXDESTEP -L../TKDCAF/.libs -lTKDCAF -L../TKViewerTest/.libs -lTKViewerTest
+diff -ur a/adm/lin/amk/TKXDEIGES/Makefile.am c/adm/lin/amk/TKXDEIGES/Makefile.am
+--- a/adm/lin/amk/TKXDEIGES/Makefile.am	2015-05-07 20:32:39.000000000 +0200
++++ c/adm/lin/amk/TKXDEIGES/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -36,3 +36,5 @@
+ @top_srcdir@/src/IGESCAFControl/IGESCAFControl_Reader.cxx \
+ @top_srcdir@/src/IGESCAFControl/IGESCAFControl_Writer.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__IGESCAFControl_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKXSBase/.libs -lTKXSBase -L../TKCDF/.libs -lTKCDF -L../TKLCAF/.libs -lTKLCAF -L../TKG2d/.libs -lTKG2d -L../TKXCAF/.libs -lTKXCAF -L../TKIGES/.libs -lTKIGES
+diff -ur a/adm/lin/amk/TKXDESTEP/Makefile.am c/adm/lin/amk/TKXDESTEP/Makefile.am
+--- a/adm/lin/amk/TKXDESTEP/Makefile.am	2015-05-07 20:32:39.000000000 +0200
++++ c/adm/lin/amk/TKXDESTEP/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -63,3 +63,5 @@
+ @top_srcdir@/src/STEPCAFControl/STEPCAFControl_Reader.cxx \
+ @top_srcdir@/src/STEPCAFControl/STEPCAFControl_Writer.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__STEPCAFControl_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKSTEPAttr/.libs -lTKSTEPAttr -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKXSBase/.libs -lTKXSBase -L../TKG2d/.libs -lTKG2d -L../TKCAF/.libs -lTKCAF -L../TKSTEPBase/.libs -lTKSTEPBase -L../TKCDF/.libs -lTKCDF -L../TKLCAF/.libs -lTKLCAF -L../TKG3d/.libs -lTKG3d -L../TKXCAF/.libs -lTKXCAF -L../TKSTEP/.libs -lTKSTEP
+diff -ur a/adm/lin/amk/TKXMesh/Makefile.am c/adm/lin/amk/TKXMesh/Makefile.am
+--- a/adm/lin/amk/TKXMesh/Makefile.am	2015-05-07 20:32:23.000000000 +0200
++++ c/adm/lin/amk/TKXMesh/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -30,3 +30,5 @@
+ libTKXMesh_la_SOURCES = \
+ @top_srcdir@/src/XBRepMesh/XBRepMesh.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__XBRepMesh_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../TKMesh/.libs -lTKMesh
+diff -ur a/adm/lin/amk/TKXml/Makefile.am c/adm/lin/amk/TKXml/Makefile.am
+--- a/adm/lin/amk/TKXml/Makefile.am	2015-05-07 20:32:29.000000000 +0200
++++ c/adm/lin/amk/TKXml/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -60,3 +60,5 @@
+ @top_srcdir@/src/XmlMPrsStd/XmlMPrsStd_AISPresentationDriver.cxx \
+ @top_srcdir@/src/XmlMPrsStd/XmlMPrsStd_PositionDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__XmlDrivers_DLL -D__XmlMDataXtd_DLL -D__XmlMNaming_DLL -D__XmlMPrsStd_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../TKernel/.libs -lTKernel -L../TKV3d/.libs -lTKV3d -L../TKMath/.libs -lTKMath -L../TKBRep/.libs -lTKBRep -L../TKG2d/.libs -lTKG2d -L../TKGeomBase/.libs -lTKGeomBase -L../TKG3d/.libs -lTKG3d -L../TKLCAF/.libs -lTKLCAF -L../TKCAF/.libs -lTKCAF -L../TKXmlL/.libs -lTKXmlL
+diff -ur a/adm/lin/amk/TKXmlL/Makefile.am c/adm/lin/amk/TKXmlL/Makefile.am
+--- a/adm/lin/amk/TKXmlL/Makefile.am	2015-05-07 20:32:28.000000000 +0200
++++ c/adm/lin/amk/TKXmlL/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -92,3 +92,5 @@
+ @top_srcdir@/src/XmlObjMgt/XmlObjMgt_GP.cxx \
+ @top_srcdir@/src/XmlObjMgt/XmlObjMgt_Persistent.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__XmlLDrivers_DLL -D__XmlMDF_DLL -D__XmlMDataStd_DLL -D__XmlMDocStd_DLL -D__XmlMFunction_DLL -D__XmlObjMgt_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKLCAF/.libs -lTKLCAF
+diff -ur a/adm/lin/amk/TKXmlTObj/Makefile.am c/adm/lin/amk/TKXmlTObj/Makefile.am
+--- a/adm/lin/amk/TKXmlTObj/Makefile.am	2015-05-07 20:32:30.000000000 +0200
++++ c/adm/lin/amk/TKXmlTObj/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -38,3 +38,5 @@
+ @top_srcdir@/src/XmlTObjDrivers/XmlTObjDrivers_ReferenceDriver.cxx \
+ @top_srcdir@/src/XmlTObjDrivers/XmlTObjDrivers_XYZDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__XmlTObjDrivers_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKCDF/.libs -lTKCDF -L../TKernel/.libs -lTKernel -L../TKTObj/.libs -lTKTObj -L../TKMath/.libs -lTKMath -L../TKLCAF/.libs -lTKLCAF -L../TKXmlL/.libs -lTKXmlL
+diff -ur a/adm/lin/amk/TKXmlXCAF/Makefile.am c/adm/lin/amk/TKXmlXCAF/Makefile.am
+--- a/adm/lin/amk/TKXmlXCAF/Makefile.am	2015-05-07 20:32:40.000000000 +0200
++++ c/adm/lin/amk/TKXmlXCAF/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -57,3 +57,5 @@
+ @top_srcdir@/src/XmlXCAFDrivers/XmlXCAFDrivers_DocumentRetrievalDriver.cxx \
+ @top_srcdir@/src/XmlXCAFDrivers/XmlXCAFDrivers_DocumentStorageDriver.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__XmlXCAFDrivers_DLL -D__XmlMXCAFDoc_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKXmlL/.libs -lTKXmlL -L../TKBRep/.libs -lTKBRep -L../TKCDF/.libs -lTKCDF -L../TKMath/.libs -lTKMath -L../TKernel/.libs -lTKernel -L../TKG2d/.libs -lTKG2d -L../TKGeomBase/.libs -lTKGeomBase -L../TKCAF/.libs -lTKCAF -L../TKG3d/.libs -lTKG3d -L../TKLCAF/.libs -lTKLCAF -L../TKXCAF/.libs -lTKXCAF -L../TKXml/.libs -lTKXml
+diff -ur a/adm/lin/amk/TKXSBase/Makefile.am c/adm/lin/amk/TKXSBase/Makefile.am
+--- a/adm/lin/amk/TKXSBase/Makefile.am	2015-05-07 20:32:32.000000000 +0200
++++ c/adm/lin/amk/TKXSBase/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -388,3 +388,5 @@
+ @top_srcdir@/src/XSControl/XSControl_WorkSession.cxx \
+ @top_srcdir@/src/XSControl/XSControl_Writer.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__Interface_DLL -D__Transfer_DLL -D__IFGraph_DLL -D__IFSelect_DLL -D__TransferBRep_DLL -D__XSControl_DLL -D__StepData_DLL -D__StepFile_DLL -D__HeaderSection_DLL -D__RWHeaderSection_DLL -D__APIHeaderSection_DLL -D__StepSelect_DLL -D__UnitsMethods_DLL -D__XSAlgo_DLL -D__LibCtl_DLL -D__MoniTool_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKernel/.libs -lTKernel -L../TKMath/.libs -lTKMath -L../TKG2d/.libs -lTKG2d -L../TKG3d/.libs -lTKG3d -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKGeomBase/.libs -lTKGeomBase -L../TKShHealing/.libs -lTKShHealing
+diff -ur a/adm/lin/amk/TKXSDRAW/Makefile.am c/adm/lin/amk/TKXSDRAW/Makefile.am
+--- a/adm/lin/amk/TKXSDRAW/Makefile.am	2015-05-07 20:32:41.000000000 +0200
++++ c/adm/lin/amk/TKXSDRAW/Makefile.am	2016-01-26 16:08:39.070898083 +0100
+@@ -66,3 +66,5 @@
+ @top_srcdir@/src/XSDRAWSTLVRML/XSDRAWSTLVRML_DataSource3D.cxx \
+ @top_srcdir@/src/XSDRAWSTLVRML/XSDRAWSTLVRML_DrawableMesh.cxx
+ 
++AM_CPPFLAGS = -DNDEBUG -D_WINDOWS -DWNT -DNo_Exception -DCSFDB -D__XSDRAW_DLL -D__XSDRAWIGES_DLL -D__XSDRAWSTEP_DLL -D__XSDRAWSTLVRML_DLL
++AM_LDFLAGS = -no-undefined -Wl,--export-all-symbols -L../TKBRep/.libs -lTKBRep -L../TKV3d/.libs -lTKV3d -L../TKMath/.libs -lTKMath -L../TKNIS/.libs -lTKNIS -L../TKernel/.libs -lTKernel -L../TKService/.libs -lTKService -L../TKXSBase/.libs -lTKXSBase -L../TKMeshVS/.libs -lTKMeshVS -L../TKG3d/.libs -lTKG3d -L../TKViewerTest/.libs -lTKViewerTest -L../TKG2d/.libs -lTKG2d -L../TKSTEPBase/.libs -lTKSTEPBase -L../TKTopAlgo/.libs -lTKTopAlgo -L../TKGeomBase/.libs -lTKGeomBase -L../TKGeomAlgo/.libs -lTKGeomAlgo -L../TKMesh/.libs -lTKMesh -L../TKDraw/.libs -lTKDraw -L../TKSTEP/.libs -lTKSTEP -L../TKIGES/.libs -lTKIGES -L../TKSTL/.libs -lTKSTL -L../TKVRML/.libs -lTKVRML
+diff -ur a/configure.ac c/configure.ac
+--- a/configure.ac	2015-05-07 20:32:42.000000000 +0200
++++ c/configure.ac	2016-01-26 16:08:39.070898083 +0100
+@@ -1,7 +1,8 @@
+ dnl Process this file with autoconf to produce a configure script.
+ AC_INIT([OpenCASCADE], [6.9.0])
+ AC_CONFIG_AUX_DIR(make)
+-AM_INIT_AUTOMAKE([foreign])
++AM_INIT_AUTOMAKE([subdir-objects foreign])
++AC_CONFIG_MACRO_DIRS([m4])
+ AC_CANONICAL_HOST
+ dnl AM_CONFIG_SRCDIR(src/Standard/Standard.cxx)
+ 
+@@ -52,8 +53,6 @@
+ AC_CHECK_HEADERS(stream.h strstream.h istream.h ostream.h fstream.h stdlib.h ios.h iostream.h)
+ AC_CHECK_HEADERS(iomanip.h limits.h values.h float.h)
+ AC_CHECK_HEADERS(siginfo.h bits/sigset.h bstring.h sys/types.h sys/select.h)
+-AC_CHECK_HEADERS(X11/extensions/transovl.h X11/extensions/readdisplay.h)
+-AC_CHECK_HEADERS(X11/extensions/multibuf.h,[],[],[#include <X11/Xlib.h>])
+ AC_CHECK_HEADERS(sys/filio.h sys/mman.h libc.h)
+ 
+ #-----------------------------------------------------------------------------
+@@ -64,12 +63,6 @@
+ CSF_ThreadLibs_LIB=-lpthread
+ AC_SUBST(CSF_ThreadLibs_LIB)
+ 
+-#-----------------------------------------------------------------------------
+-# dl library is required
+-#-----------------------------------------------------------------------------
+-AC_CHECK_LIB([dl],[dlopen],[],[AC_MSG_ERROR([dl library is required])])
+-CSF_SOCKETLibs_LIB=-ldl
+-
+ #---------------------------------------------------------------------
+ #
+ # Test for 64-bit platforms
+@@ -136,7 +129,7 @@
+ AC_SUBST(CSF_TclLibs_LIB)
+ AC_SUBST(CSF_TclTkLibs_LIB)
+ 
+-platform=`uname -s`
++platform='Win32'
+ 
+ dnl Make sure CSFDB is defined in CXXFLAGS and CFLAGS
+ CXXFLAGS="$CXXFLAGS -DCSFDB -DOCC_CONVERT_SIGNALS"
+@@ -153,6 +146,8 @@
+         OSF1*)  CXXFLAGS="$CXXFLAGS -DDECOSF1 -D__USE_STD_IOSTREAM -D_RWSTD_NO_EXCEPTIONS" 
+                 CFLAGS="$CFLAGS -std1 -DDECOSF1"
+ 		LD=$CXX;;
++	Win32*) CXXFLAGS="$CXXFLAGS -DWNT"
++		CFLAGS="$CFLAGS -DWNT";;
+ 	*) ;;
+ esac
+ AC_SUBST(CSF_SOCKETLibs_LIB)
+@@ -360,63 +355,23 @@
+ 
+ #---------------------------------------------------------------------
+ #
+-# Configure X11 and check for utility library
+-#
+-#---------------------------------------------------------------------
+-AC_LANG([C])
+-
+-AC_PATH_X
+-HAVE_X11=no
+-X_INCLUDE=""
+-X_LIBS=""
+-CSF_XmuLibs_INCLUDES=""
+-CSF_XmuLibs_LIB=""
+-if test "xyes" != "x$no_x"; then
+-  HAVE_X11=yes
+-  if test "x" != "x$x_includes"; then
+-    X_INCLUDE="-I$x_includes"
+-    CSF_XmuLibs_INCLUDES="$X_INCLUDE"
+-    CXXFLAGS="$CXXFLAGS -I$x_includes"
+-  fi
+-  if test "x" != "x$x_libraries"; then
+-    X_LIBS="-L$x_libraries"
+-    CSF_XmuLibs_LIB="$X_LIBS"
+-    LDFLAGS="$LDFLAGS -L$x_libraries"
+-  fi
+-  AC_CHECK_LIB( [X11], [XCreateWindow], [X_LIBS="${X_LIBS} -lXt -lX11"], [HAVE_X11=no] )
+-  AC_CHECK_HEADER( [X11/Xmu/Xmu.h], [], [HAVE_X11=no] )
+-  AC_CHECK_LIB( [Xmu], [XmuLookupStandardColormap], [CSF_XmuLibs_LIB="$CSF_XmuLibs_LIB -lXmu"], [HAVE_X11=no], [-lXt -lX11] )
+-fi
+-
+-#---------------------------------------------------------------------
+-#
+ # Check for OpenGL Libraries
+ #  
+ #  
+ #---------------------------------------------------------------------
+ CSF_OpenGlLibs_INCLUDES="$X_INCLUDE"
+ CSF_OpenGlLibs_LIB="$X_LIBS"
+-if test "xno" = "x$HAVE_X11"; then
+-  HAVE_GL=no
+-else
+ AC_LANG([C])
+-  HAVE_GL=yes
+-  HAVE_GL_INC=yes
+-  AC_CHECK_HEADER( [GL/gl.h], [AC_CHECK_HEADER([GL/glu.h],[],[HAVE_GL_INC=no])], [HAVE_GL_INC=no] )
+-  if test "x$HAVE_GL_INC" = "xyes"; then
+-    AC_CHECK_TYPE(_GLUfuncptr,[],[CSF_OpenGlLibs_INCLUDES="$CSF_OpenGlLibs_INCLUDES -DNOGLUfuncptr=1"],[#include "GL/glu.h"])
+-  else
+-    HAVE_GL=no
+-    AC_MSG_NOTICE("Specify CPPFLAGS=-I<opengl_inc_dir> to enable OpenGL support")
+-  fi
+-  CPPFLAGS="$CSF_OpenGlLibs_INCLUDES $CPPFLAGS"
+-  HAVE_GL_LIB=yes
+-  AC_CHECK_LIB( [GL], [glClear], [AC_CHECK_LIB([GLU],[gluSphere],[CSF_OpenGlLibs_LIB="$CSF_OpenGlLibs_LIB -lGLU -lGL"],[HAVE_GL_LIB=no],[-lGL])], [HAVE_GL_LIB=no] )
+-  if test "xno" = "x$HAVE_GL_LIB"; then
+-    HAVE_GL=no
+-    AC_MSG_NOTICE("Specify LDFLAGS=-L<opengl_lib_dir> to enable OpenGL support")
+-  fi
++HAVE_GL=yes
++HAVE_GL_INC=yes
++AC_CHECK_HEADER( [GL/gl.h], [AC_CHECK_HEADER([GL/glu.h],[],[HAVE_GL_INC=no])], [HAVE_GL_INC=no] )
++if test "x$HAVE_GL_INC" = "xyes"; then
++  AC_CHECK_TYPE(_GLUfuncptr,[],[CSF_OpenGlLibs_INCLUDES="$CSF_OpenGlLibs_INCLUDES -DNOGLUfuncptr=1"],[#include "GL/glu.h"])
++else
++  HAVE_GL=no
++  AC_MSG_NOTICE("Specify CPPFLAGS=-I<opengl_inc_dir> to enable OpenGL support")
+ fi
++CPPFLAGS="$CSF_OpenGlLibs_INCLUDES $CPPFLAGS"
+ AM_CONDITIONAL( HAVE_GL, [test "xyes" = "x$HAVE_GL"] )
+ 
+ #---------------------------------------------------------------------
+@@ -1146,11 +1101,6 @@
+     DISABLE_VIS_REASON="(FoundationClasses component disabled)"
+     ENABLE_VIS=no
+   fi
+-  if test "xyes" = "x$ENABLE_VIS" -a "xyes" != "x$HAVE_X11"; then
+-    AC_MSG_NOTICE([Disabling Visualization: X11 not found])
+-    DISABLE_VIS_REASON="(X11 not found)"
+-    ENABLE_VIS=no
+-  fi
+   if test "xyes" = "x$ENABLE_VIS" -a "xyes" != "x$HAVE_GL"; then
+     AC_MSG_NOTICE([Disabling Visualization: GL not found])
+     DISABLE_VIS_REASON="(GL not found)"
+@@ -1304,8 +1254,8 @@
+ AC_SUBST(CSF_GL2PS_INCLUDES)
+ AC_SUBST(CSF_GL2PS_LIB)
+ AC_SUBST(HAVE_FREEIMAGE)
+-AC_SUBST(CSF_FreeImagePlus_INCLUDES)
+-AC_SUBST(CSF_FreeImagePlus_LIB)
++AC_SUBST(CSF_FreeImage_INCLUDES)
++AC_SUBST(CSF_FreeImage_LIB)
+ AC_SUBST(CSF_advapi32_LIB)
+ AC_SUBST(CSF_gdi32_LIB)
+ AC_SUBST(CSF_user32_LIB)
+diff -ur a/inc/Draw_Viewer.hxx c/inc/Draw_Viewer.hxx
+--- a/inc/Draw_Viewer.hxx	2015-05-07 20:17:03.000000000 +0200
++++ c/inc/Draw_Viewer.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -37,6 +37,10 @@
+ # else
+ #  define __Draw_API /*__declspec( dllimport )*/
+ # endif
++#else
++# ifndef __Draw_API
++# define __Draw_API
++# endif
+ #endif
+ #else
+ #  define __Draw_API  
+diff -ur a/inc/Draw_Window.hxx c/inc/Draw_Window.hxx
+--- a/inc/Draw_Window.hxx	2015-05-07 20:17:03.000000000 +0200
++++ c/inc/Draw_Window.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -363,6 +363,10 @@
+ # else
+ #  define __Draw_API __declspec( dllimport )
+ # endif
++#else
++# ifndef __Draw_API
++# define __Draw_API
++# endif
+ #endif
+ 
+ // definition de la classe Segment
+diff -ur a/inc/IVtkTools_ShapePicker.hxx c/inc/IVtkTools_ShapePicker.hxx
+--- a/inc/IVtkTools_ShapePicker.hxx	2015-05-07 20:17:13.000000000 +0200
++++ c/inc/IVtkTools_ShapePicker.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -124,8 +124,8 @@
+ 
+   //! Convert display coordinates to world coordinates
+   static bool convertDisplayToWorld (vtkRenderer *theRenderer,
+-                                     vtkFloatingPointType theDisplayCoord[3],
+-                                     vtkFloatingPointType theWorldCoord[3] );
++                                     double theDisplayCoord[3],
++                                     double theWorldCoord[3] );
+ 
+ private: // not copyable
+   IVtkTools_ShapePicker (const IVtkTools_ShapePicker&);
+diff -ur a/inc/NCollection_UtfString.lxx c/inc/NCollection_UtfString.lxx
+--- a/inc/NCollection_UtfString.lxx	2015-05-07 20:17:17.000000000 +0200
++++ c/inc/NCollection_UtfString.lxx	2016-01-26 16:08:39.074898083 +0100
+@@ -280,20 +280,6 @@
+ void NCollection_UtfString<Type>::FromLocale (const char*            theString,
+                                               const Standard_Integer theLength)
+ {
+-#if(defined(_WIN32) || defined(__WIN32__))
+-  // use WinAPI
+-  int aWideSize = MultiByteToWideChar (CP_ACP, MB_PRECOMPOSED, theString, -1, NULL, 0);
+-  if (aWideSize <= 0)
+-  {
+-    Clear();
+-    return;
+-  }
+-  wchar_t* aWideBuffer = new wchar_t[aWideSize + 1];
+-  MultiByteToWideChar (CP_ACP, MB_PRECOMPOSED, theString, -1, aWideBuffer, aWideSize);
+-  aWideBuffer[aWideSize] = L'\0';
+-  FromUnicode (aWideBuffer, theLength);
+-  delete[] aWideBuffer;
+-#else
+   // this is size in bytes but should probably be enough to store string in wide chars
+   // notice that these functions are sensitive to locale set by application!
+   int aMbLen = mblen (theString, MB_CUR_MAX);
+@@ -307,7 +293,6 @@
+   aWideBuffer[aMbLen] = L'\0';
+   FromUnicode (aWideBuffer, theLength);
+   delete[] aWideBuffer;
+-#endif
+ }
+ 
+ // =======================================================================
+@@ -319,11 +304,7 @@
+                                             const Standard_Integer theSizeBytes) const
+ {
+   NCollection_UtfString<wchar_t> aWideCopy (myString, myLength);
+-#if(defined(_WIN32) || defined(__WIN32__))
+-  int aMbBytes = WideCharToMultiByte (CP_ACP, 0, aWideCopy.ToCString(), -1, theBuffer, theSizeBytes, NULL, NULL);
+-#else
+   std::size_t aMbBytes = std::wcstombs (theBuffer, aWideCopy.ToCString(), theSizeBytes);
+-#endif
+   if (aMbBytes <= 0)
+   {
+     *theBuffer = '\0';
+diff -ur a/inc/OSD_EnvironmentIterator.hxx c/inc/OSD_EnvironmentIterator.hxx
+--- a/inc/OSD_EnvironmentIterator.hxx	2015-05-07 20:24:50.000000000 +0200
++++ c/inc/OSD_EnvironmentIterator.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -73,7 +73,7 @@
+ 
+ 
+   Standard_Address myEnv;
+-  Standard_Integer myCount;
++  std::size_t myCount;
+   OSD_Error myError;
+ 
+ 
+diff -ur a/inc/OSD_FileNode.hxx c/inc/OSD_FileNode.hxx
+--- a/inc/OSD_FileNode.hxx	2015-05-07 20:24:50.000000000 +0200
++++ c/inc/OSD_FileNode.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -68,10 +68,10 @@
+   Standard_EXPORT   Quantity_Date CreationMoment() ;
+   
+   //! Returns User Identification.
+-  Standard_EXPORT   Standard_Integer UserId() ;
++  Standard_EXPORT   std::size_t UserId() ;
+   
+   //! Returns Group Identification.
+-  Standard_EXPORT   Standard_Integer GroupId() ;
++  Standard_EXPORT   std::size_t GroupId() ;
+   
+   //! Returns TRUE if an error occurs
+   Standard_EXPORT   Standard_Boolean Failed()  const;
+diff -ur a/inc/OSD_Process.hxx c/inc/OSD_Process.hxx
+--- a/inc/OSD_Process.hxx	2015-05-07 20:24:50.000000000 +0200
++++ c/inc/OSD_Process.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -41,7 +41,7 @@
+   Standard_EXPORT   Quantity_Date SystemDate() ;
+   
+   //! Returns the 'User Id'.
+-  Standard_EXPORT   Standard_Integer UserId() ;
++  Standard_EXPORT   std::size_t UserId() ;
+   
+   //! Returns the user name.
+   Standard_EXPORT   TCollection_AsciiString UserName() ;
+diff -ur a/inc/OSD_WNT_1.hxx c/inc/OSD_WNT_1.hxx
+--- a/inc/OSD_WNT_1.hxx	2015-05-07 20:17:18.000000000 +0200
++++ c/inc/OSD_WNT_1.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -35,10 +35,6 @@
+ #  endif
+ # endif  /* OSDAPI */
+ 
+-#if defined(__CYGWIN32__) || defined(__MINGW32__)
+-#define _TINT int
+-#endif
+-
+ # ifdef __cplusplus
+ extern "C" {
+ # endif  /* __cplusplus */
+diff -ur a/inc/Standard_Integer.hxx c/inc/Standard_Integer.hxx
+--- a/inc/Standard_Integer.hxx	2015-05-07 20:17:28.000000000 +0200
++++ c/inc/Standard_Integer.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -15,6 +15,8 @@
+ #ifndef _Standard_Integer_HeaderFile
+ #define _Standard_Integer_HeaderFile
+ 
++#include <climits>
++
+ #include <Standard_TypeDef.hxx>
+ #include <Standard_values.h>
+ 
+diff -ur a/inc/Standard_values.h c/inc/Standard_values.h
+--- a/inc/Standard_values.h	2015-05-07 20:17:28.000000000 +0200
++++ c/inc/Standard_values.h	2016-01-26 16:08:39.074898083 +0100
+@@ -17,6 +17,8 @@
+ #ifndef _Standard_values_HeaderFile
+ # define _Standard_values_HeaderFile
+ 
++#include <climits>
++
+ #if defined(_MSC_VER) && !defined(WNT)
+ #error "Wrong compiler options has been detected. Add /DWNT option for proper compilation!!!!!"
+ #endif
+diff -ur a/Makefile.am c/Makefile.am
+--- a/Makefile.am	2015-05-08 15:08:15.000000000 +0200
++++ c/Makefile.am	2016-01-26 16:08:39.074898083 +0100
+@@ -1,5 +1,7 @@
+ srcdir = @srcdir@
+ 
++ACLOCAL_AMFLAGS = -I m4
++
+ SUBDIRS = adm/lin/amk
+ 
+ VPATH = @srcdir@ @top_srcdir@/adm/lin/amk: @top_srcdir@/adm/lin/amk:
+@@ -82,27 +84,10 @@
+ 	cd $(top_builddir)/adm/lin/amk && $(MAKE) $(AM_MAKEFLAGS) Draw
+ 
+ install-exec-local:
+-	$(INSTALL) -d $(prefix)/$(platform)
+-	if [ -e $(prefix)/bin -a ! -e $(prefix)/$(platform)/bin ]; then \
+-		cd $(prefix)/$(platform) && ln -s ../bin bin; \
+-	fi
+-	if [ -e $(prefix)/lib -a ! -e $(prefix)/$(platform)/lib ]; then \
+-		cd $(prefix)/$(platform) && ln -s ../lib lib; \
+-	fi
+ 	buildd=`pwd`; cd $(top_srcdir); sourced=`pwd`; cd $(prefix); installd=`pwd`; cd $$buildd; \
+ 	if [ "$$installd" != "$$sourced" ]; then \
+-		$(INSTALL) -d $(prefix)/inc; \
+-		cp -frL $(top_srcdir)/inc $(prefix); \
+-		cp -frL $$buildd/config.h $(prefix); \
+-		for d in  $(FoundationClasses_DIRS) $(ModelingData_DIRS) $(ModelingAlgorithms_DIRS) $(Visualization_DIRS) $(ApplicationFramework_DIRS) $(DataExchange_DIRS) $(Draw_DIRS); do \
+-			$(INSTALL) -d $(prefix)/src/$$d; \
+-			cp -frL $(top_srcdir)/src/$$d $(prefix)/src; \
+-		done; \
+-	fi
+-	if [ -e $(prefix)/inc/config.h ]; then \
+-		rm -f $(prefix)/inc/config.h; \
++		$(INSTALL) -d $(prefix)/include; \
++		cp -frL $(top_srcdir)/inc $(prefix)/include/opencascade; \
+ 	fi
+-	cd $(prefix)/inc && ln -s ../config.h config.h
+-	cd $(top_srcdir) && cp *.sh $(prefix)
+ 
+-.PHONY: FoundationClasses ModelingData ModelingAlgorithms Visualization ApplicationFramework DataExchange Draw
+\ No newline at end of file
++.PHONY: FoundationClasses ModelingData ModelingAlgorithms Visualization ApplicationFramework DataExchange Draw
+diff -ur a/src/AIS/AIS_Dimension.cxx c/src/AIS/AIS_Dimension.cxx
+--- a/src/AIS/AIS_Dimension.cxx	2015-05-07 20:16:54.000000000 +0200
++++ c/src/AIS/AIS_Dimension.cxx	2016-01-26 16:08:39.074898083 +0100
+@@ -404,6 +404,10 @@
+ //function : DrawText
+ //purpose  : 
+ //=======================================================================
++#ifdef DrawText
++#warning Warning, target operating system is mentally handicapped
++#undef DrawText
++#endif
+ void AIS_Dimension::DrawText (const Handle(Prs3d_Presentation)& thePresentation,
+                               const gp_Pnt& theTextPos,
+                               const gp_Dir& theTextDir,
+diff -ur a/src/AppBlend/AppBlend_Debug.cxx c/src/AppBlend/AppBlend_Debug.cxx
+--- a/src/AppBlend/AppBlend_Debug.cxx	2015-05-07 20:16:55.000000000 +0200
++++ c/src/AppBlend/AppBlend_Debug.cxx	2016-01-26 16:08:39.074898083 +0100
+@@ -17,7 +17,7 @@
+ #include <Standard_Boolean.hxx>
+ 
+ #ifndef __AppBlend_API
+-# if defined(WNT) && !defined(HAVE_NO_DLL)
++# if !defined(__MINGW32__) && defined(WNT) && !defined(HAVE_NO_DLL)
+ #  ifdef __AppBlend_DLL
+ #   define __AppBlend_API __declspec( dllexport )
+ #  else
+diff -ur a/src/BinLDrivers/BinLDrivers_DocumentRetrievalDriver.cxx c/src/BinLDrivers/BinLDrivers_DocumentRetrievalDriver.cxx
+--- a/src/BinLDrivers/BinLDrivers_DocumentRetrievalDriver.cxx	2015-05-07 20:17:00.000000000 +0200
++++ c/src/BinLDrivers/BinLDrivers_DocumentRetrievalDriver.cxx	2016-01-26 16:08:39.074898083 +0100
+@@ -180,7 +180,7 @@
+ 
+   // Open the file stream
+ #ifdef _WIN32
+-  ifstream anIS ((const wchar_t*) theFileName.ToExtString(), ios::in | ios::binary);
++  ifstream anIS (aFileName.ToCString(), ios::in | ios::binary);
+ #else
+   ifstream anIS (aFileName.ToCString());
+ #endif
+diff -ur a/src/BinLDrivers/BinLDrivers_DocumentStorageDriver.cxx c/src/BinLDrivers/BinLDrivers_DocumentStorageDriver.cxx
+--- a/src/BinLDrivers/BinLDrivers_DocumentStorageDriver.cxx	2015-05-07 20:17:00.000000000 +0200
++++ c/src/BinLDrivers/BinLDrivers_DocumentStorageDriver.cxx	2016-01-26 16:08:39.074898083 +0100
+@@ -97,7 +97,7 @@
+     }
+ 
+ #if defined(_WIN32)
+-    ofstream anOS ((const wchar_t*) theFileName.ToExtString(), ios::in | ios::binary | ios::ate);
++    ofstream anOS (aFileName.ToCString(), ios::in | ios::binary | ios::ate);
+ #elif !defined(IRIX) // 10.10.2005
+     ofstream anOS (aFileName.ToCString(), ios::in | ios::binary | ios::ate);
+ #else
+diff -ur a/src/Blend/Blend_Debug.cxx c/src/Blend/Blend_Debug.cxx
+--- a/src/Blend/Blend_Debug.cxx	2015-05-07 20:17:00.000000000 +0200
++++ c/src/Blend/Blend_Debug.cxx	2016-01-26 16:08:39.074898083 +0100
+@@ -17,7 +17,7 @@
+ #include <Standard_Boolean.hxx>
+ 
+ #ifndef __Blend_API
+-# if defined(WNT) && !defined(HAVE_NO_DLL)
++# if !defined(__MINGW32__) && defined(WNT) && !defined(HAVE_NO_DLL)
+ #  ifdef __Blend_DLL
+ #   define __Blend_API __declspec( dllexport )
+ #  else
+diff -ur a/src/Draw/Draw_Viewer.hxx c/src/Draw/Draw_Viewer.hxx
+--- a/src/Draw/Draw_Viewer.hxx	2015-05-07 20:17:03.000000000 +0200
++++ c/src/Draw/Draw_Viewer.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -37,6 +37,10 @@
+ # else
+ #  define __Draw_API /*__declspec( dllimport )*/
+ # endif
++#else
++# ifndef __Draw_API
++# define __Draw_API
++# endif
+ #endif
+ #else
+ #  define __Draw_API  
+diff -ur a/src/Draw/Draw_Window.hxx c/src/Draw/Draw_Window.hxx
+--- a/src/Draw/Draw_Window.hxx	2015-05-07 20:17:03.000000000 +0200
++++ c/src/Draw/Draw_Window.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -363,6 +363,10 @@
+ # else
+ #  define __Draw_API __declspec( dllimport )
+ # endif
++#else
++# ifndef __Draw_API
++# define __Draw_API
++# endif
+ #endif
+ 
+ // definition de la classe Segment
+diff -ur a/src/FSD/FSD_File.cxx c/src/FSD/FSD_File.cxx
+--- a/src/FSD/FSD_File.cxx	2015-05-07 20:17:04.000000000 +0200
++++ c/src/FSD/FSD_File.cxx	2016-01-26 16:08:39.074898083 +0100
+@@ -73,17 +73,6 @@
+ 
+   if (OpenMode() == Storage_VSNone) {
+ 
+-#ifdef _WIN32
+-    TCollection_ExtendedString aWName(aName);
+-    if (aMode == Storage_VSRead) {
+-      myStream.open( (const wchar_t*) aWName.ToExtString(),ios::in); // ios::nocreate is not portable
+-    }
+-    else if (aMode == Storage_VSWrite) {
+-      myStream.open( (const wchar_t*) aWName.ToExtString(),ios::out);
+-    }
+-    else if (aMode == Storage_VSReadWrite) {
+-      myStream.open( (const wchar_t*) aWName.ToExtString(),ios::in|ios::out);
+-#else
+     if (aMode == Storage_VSRead) {
+       myStream.open(aName.ToCString(),ios::in); // ios::nocreate is not portable
+     }
+@@ -92,7 +81,6 @@
+     }
+     else if (aMode == Storage_VSReadWrite) {
+       myStream.open(aName.ToCString(),ios::in|ios::out);
+-#endif
+     }
+     
+     if (myStream.fail()) {
+diff -ur a/src/IVtkTools/IVtkTools_ShapePicker.cxx c/src/IVtkTools/IVtkTools_ShapePicker.cxx
+--- a/src/IVtkTools/IVtkTools_ShapePicker.cxx	2015-05-07 20:17:13.000000000 +0200
++++ c/src/IVtkTools/IVtkTools_ShapePicker.cxx	2016-01-26 16:08:39.074898083 +0100
+@@ -74,14 +74,14 @@
+ // Purpose: Convert display coordinates to world coordinates
+ //============================================================================
+ bool IVtkTools_ShapePicker::convertDisplayToWorld (vtkRenderer         *theRenderer,
+-                                                   vtkFloatingPointType theDisplayCoord[3],
+-                                                   vtkFloatingPointType theWorldCoord[3])
++                                                   double theDisplayCoord[3],
++                                                   double theWorldCoord[3])
+ {
+   // Convert the selection point into world coordinates.
+   theRenderer->SetDisplayPoint (theDisplayCoord[0], theDisplayCoord[1], theDisplayCoord[2]);
+   theRenderer->DisplayToWorld();
+ 
+-  vtkFloatingPointType* const aCoords = theRenderer->GetWorldPoint();
++  double* const aCoords = theRenderer->GetWorldPoint();
+   if (aCoords[3] == 0.0)
+   {
+     return false;
+diff -ur a/src/IVtkTools/IVtkTools_ShapePicker.hxx c/src/IVtkTools/IVtkTools_ShapePicker.hxx
+--- a/src/IVtkTools/IVtkTools_ShapePicker.hxx	2015-05-07 20:17:13.000000000 +0200
++++ c/src/IVtkTools/IVtkTools_ShapePicker.hxx	2016-01-26 16:08:39.074898083 +0100
+@@ -124,8 +124,8 @@
+ 
+   //! Convert display coordinates to world coordinates
+   static bool convertDisplayToWorld (vtkRenderer *theRenderer,
+-                                     vtkFloatingPointType theDisplayCoord[3],
+-                                     vtkFloatingPointType theWorldCoord[3] );
++                                     double theDisplayCoord[3],
++                                     double theWorldCoord[3] );
+ 
+ private: // not copyable
+   IVtkTools_ShapePicker (const IVtkTools_ShapePicker&);
+diff -ur a/src/IVtkVTK/IVtkVTK_View.cxx c/src/IVtkVTK/IVtkVTK_View.cxx
+--- a/src/IVtkVTK/IVtkVTK_View.cxx	2015-05-07 20:17:13.000000000 +0200
++++ c/src/IVtkVTK/IVtkVTK_View.cxx	2016-01-26 16:08:39.074898083 +0100
+@@ -150,7 +150,7 @@
+   myRenderer->SetDisplayPoint (theDisplayPnt.X(), theDisplayPnt.Y(), 0.0);
+   myRenderer->DisplayToWorld();
+ 
+-  vtkFloatingPointType* const aCoords = myRenderer->GetWorldPoint();
++  double* const aCoords = myRenderer->GetWorldPoint();
+   if (aCoords[3] == 0.0) // Point at infinity in homogeneous coordinates
+   {
+     return false;
+diff -ur a/src/NCollection/NCollection_UtfString.lxx c/src/NCollection/NCollection_UtfString.lxx
+--- a/src/NCollection/NCollection_UtfString.lxx	2015-05-07 20:17:17.000000000 +0200
++++ c/src/NCollection/NCollection_UtfString.lxx	2016-01-26 16:08:39.078898083 +0100
+@@ -280,20 +280,6 @@
+ void NCollection_UtfString<Type>::FromLocale (const char*            theString,
+                                               const Standard_Integer theLength)
+ {
+-#if(defined(_WIN32) || defined(__WIN32__))
+-  // use WinAPI
+-  int aWideSize = MultiByteToWideChar (CP_ACP, MB_PRECOMPOSED, theString, -1, NULL, 0);
+-  if (aWideSize <= 0)
+-  {
+-    Clear();
+-    return;
+-  }
+-  wchar_t* aWideBuffer = new wchar_t[aWideSize + 1];
+-  MultiByteToWideChar (CP_ACP, MB_PRECOMPOSED, theString, -1, aWideBuffer, aWideSize);
+-  aWideBuffer[aWideSize] = L'\0';
+-  FromUnicode (aWideBuffer, theLength);
+-  delete[] aWideBuffer;
+-#else
+   // this is size in bytes but should probably be enough to store string in wide chars
+   // notice that these functions are sensitive to locale set by application!
+   int aMbLen = mblen (theString, MB_CUR_MAX);
+@@ -307,7 +293,6 @@
+   aWideBuffer[aMbLen] = L'\0';
+   FromUnicode (aWideBuffer, theLength);
+   delete[] aWideBuffer;
+-#endif
+ }
+ 
+ // =======================================================================
+@@ -319,11 +304,7 @@
+                                             const Standard_Integer theSizeBytes) const
+ {
+   NCollection_UtfString<wchar_t> aWideCopy (myString, myLength);
+-#if(defined(_WIN32) || defined(__WIN32__))
+-  int aMbBytes = WideCharToMultiByte (CP_ACP, 0, aWideCopy.ToCString(), -1, theBuffer, theSizeBytes, NULL, NULL);
+-#else
+   std::size_t aMbBytes = std::wcstombs (theBuffer, aWideCopy.ToCString(), theSizeBytes);
+-#endif
+   if (aMbBytes <= 0)
+   {
+     *theBuffer = '\0';
+diff -ur a/src/OpenGl/OpenGl_Context.cxx c/src/OpenGl/OpenGl_Context.cxx
+--- a/src/OpenGl/OpenGl_Context.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OpenGl/OpenGl_Context.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -528,7 +528,7 @@
+ #if defined(HAVE_EGL)
+   return (void* )eglGetProcAddress (theFuncName);
+ #elif defined(_WIN32)
+-  return wglGetProcAddress (theFuncName);
++  return reinterpret_cast<void *>(wglGetProcAddress (theFuncName));
+ #elif defined(__APPLE__) && !defined(MACOSX_USE_GLX)
+   return (myGlLibHandle != NULL) ? dlsym (myGlLibHandle, theFuncName) : NULL;
+ #else
+diff -ur a/src/OSD/OSD.cxx c/src/OSD/OSD.cxx
+--- a/src/OSD/OSD.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -66,8 +66,9 @@
+ //purpose  : Cause the process to sleep during a amount of seconds 
+ //=======================================================================
+ 
++#include <unistd.h>
+ #ifdef WNT
+-# include <Windows.h>
++# include <windows.h>
+ #if !defined(__CYGWIN32__) && !defined(__MINGW32__)
+ //# include <Mapiwin.h>
+ #endif
+@@ -93,29 +94,11 @@
+ //purpose  : Cause the process to sleep during a amount of milliseconds  
+ //=======================================================================
+ 
+-#ifdef _WIN32
+-
+ void OSD::MilliSecSleep(const Standard_Integer aDelay)
+ {
+-  Sleep(aDelay) ;
++  usleep(aDelay * 1000);
+ }
+ 
+-#else
+-
+-#include <sys/time.h>
+-
+-void OSD::MilliSecSleep(const Standard_Integer aDelay)
+-{
+-  struct timeval timeout ;
+-
+-  timeout.tv_sec = aDelay / 1000 ;
+-  timeout.tv_usec = (aDelay % 1000) * 1000 ;
+-
+-  select(0,NULL,NULL,NULL,&timeout) ;
+-}
+-
+-#endif
+-
+ //=======================================================================
+ //function : IsDivisible
+ //purpose  : 
+diff -ur a/src/OSD/OSD_Directory.cxx c/src/OSD/OSD_Directory.cxx
+--- a/src/OSD/OSD_Directory.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_Directory.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -39,10 +39,9 @@
+ Standard_Integer internal_prot;
+ TCollection_AsciiString aBuffer;
+ 
+- internal_prot = Protect.Internal();
+  myPath.SystemName(aBuffer);
+  umask ( 0 );
+- status = mkdir (aBuffer.ToCString(), (mode_t)internal_prot);
++ status = mkdir (aBuffer.ToCString());
+  if (status == -1) 
+   if (errno != EEXIST) {
+    Standard_PCharacter err_message;
+@@ -64,10 +63,8 @@
+ Standard_CString        name = tmpnam(NULL);
+ TCollection_AsciiString aString (name);
+ 
+- internal_prot = Protect.Internal();
+-
+  umask ( 0 );
+- mkdir (name, (mode_t)internal_prot);
++ mkdir (name);
+  unlink(name);//Destroys link but directory still exists while 
+               //current process lives.
+ 
+diff -ur a/src/OSD/OSD_EnvironmentIterator.cxx c/src/OSD/OSD_EnvironmentIterator.cxx
+--- a/src/OSD/OSD_EnvironmentIterator.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_EnvironmentIterator.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -101,7 +101,7 @@
+ OSD_EnvironmentIterator :: OSD_EnvironmentIterator () {
+ 
+  myEnv   = GetEnvironmentStrings ();
+- myCount = ( Standard_Integer )myEnv;
++ myCount = (std::size_t) myEnv;
+ 
+ }  // end constructor
+ 
+diff -ur a/src/OSD/OSD_File.cxx c/src/OSD/OSD_File.cxx
+--- a/src/OSD/OSD_File.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_File.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -16,6 +16,8 @@
+ //                    UNIX Part
+ //------------------------------------------------------------------------
+ 
++#include <cstdio>
++
+ #ifndef _WIN32
+ 
+ #include <Standard_ProgramError.hxx>
+@@ -1040,13 +1042,13 @@
+  }
+                                         
+  Standard_Integer NbyteRead;
+- Standard_Address buff;
+ 
+  TEST_RAISE(  "Read"  );
+      
+- buff = ( Standard_Address )new Standard_Character[ Nbyte + 1 ];
++ Standard_Character * buff = new Standard_Character[ Nbyte + 1 ];
+ 
+- Read ( buff, Nbyte, NbyteRead );
++ void * b = (void *) buff;
++ Read ( b, Nbyte, NbyteRead );
+ 
+  (  ( Standard_PCharacter )buff  )[ NbyteRead ] = 0;
+ 
+@@ -1430,23 +1432,7 @@
+ 
+ }  // end OSD_File :: KindOfFile
+ 
+-#ifdef VAC
+- char tmpbuf [MAX_PATH];
+- if (GetTempPath (MAX_PATH, tmpbuf) == 0)
+- {
+-    perror ("ERROR in GetTempPath");
+-    exit (10);
+- }
+- char tmpbuf2 [MAX_PATH];
+- if (GetTempFileName (tmpbuf, NULL, 0, tmpbuf2) == 0)
+- {
+-    perror ("ERROR in GetTempFileName");
+-    exit (10);
+- }
+- TCollection_AsciiString fileName (  tmpbuf2  );
+-#else
+- TCollection_AsciiString fileName (  _ttmpnam ( NULL )  );
+-#endif
++ TCollection_AsciiString fileName (  std::tmpnam ( NULL )  );
+ 
+ 
+ //-------------------------------------------------debutpri???980424
+@@ -2017,10 +2003,10 @@
+  }  // end while
+ 
+ #ifdef VAC
+- retVal  = (DWORDLONG) ( ( (unsigned __int64) ((DWORD) buffer + dwBuffSize) ) << 32 );
++ retVal  = (DWORDLONG) ( ( (unsigned __int64) ((DWORDLONG) buffer + dwBuffSize) ) << 32 );
+  retVal = (DWORDLONG) ( (unsigned __int64) retVal & (((unsigned __int64) 0xFFFFFFFF) << 32) );
+ #else
+- retVal  = (   (  ( DWORDLONG )( ( DWORD )buffer + dwBuffSize )  ) << 32   );
++ retVal  = (   (  ( DWORDLONG )( ( DWORDLONG )buffer + dwBuffSize )  ) << 32   );
+  retVal &= 0xFFFFFFFF00000000;
+ #endif
+ 
+diff -ur a/src/OSD/OSD_FileNode.cxx c/src/OSD/OSD_FileNode.cxx
+--- a/src/OSD/OSD_FileNode.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_FileNode.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -286,7 +286,7 @@
+ 
+ // Returns User Id
+ 
+-Standard_Integer OSD_FileNode::UserId(){
++std::size_t OSD_FileNode::UserId(){
+ struct stat buffer;
+ 
+ // if (myPath.Name().Length()==0)
+@@ -306,7 +306,7 @@
+ 
+ // Returns Group Id
+ 
+-Standard_Integer OSD_FileNode::GroupId(){
++std::size_t OSD_FileNode::GroupId(){
+ struct stat buffer;
+ 
+ // if (myPath.Name().Length()==0)
+@@ -811,7 +811,7 @@
+ //purpose  : 
+ //=======================================================================
+ 
+-Standard_Integer OSD_FileNode::UserId () {
++std::size_t OSD_FileNode::UserId () {
+ 
+  PSID                    pSIDowner = NULL;
+  PSID                    retVal = NULL;
+@@ -843,7 +843,7 @@
+ 
+   FreeFileSecurity ( pSD );
+  
+- return ( Standard_Integer )retVal;
++ return ( std::size_t )retVal;
+ 
+ }  // end OSD_FileNode :: UserId
+ 
+@@ -852,7 +852,7 @@
+ //purpose  : 
+ //=======================================================================
+ 
+-Standard_Integer OSD_FileNode::GroupId () {
++std::size_t OSD_FileNode::GroupId () {
+ 
+  PGROUP_SID              retVal = NULL;
+  TCollection_AsciiString fName;
+@@ -877,7 +877,7 @@
+ 
+   _osd_wnt_set_error ( myError, OSD_WFileNode );
+ 
+- return ( Standard_Integer )retVal;
++ return ( std::size_t )retVal;
+ 
+ }  // end OSD_FileNode :: GroupId
+ 
+diff -ur a/src/OSD/OSD_MemInfo.cxx c/src/OSD/OSD_MemInfo.cxx
+--- a/src/OSD/OSD_MemInfo.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_MemInfo.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -18,7 +18,7 @@
+   #include <winbase.h>
+   #include <process.h>
+   #include <malloc.h>
+-  #include <Psapi.h>
++  #include <psapi.h>
+   #ifdef _MSC_VER
+     #pragma comment(lib, "Psapi.lib")
+   #endif
+diff -ur a/src/OSD/OSD_OpenFile.cxx c/src/OSD/OSD_OpenFile.cxx
+--- a/src/OSD/OSD_OpenFile.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_OpenFile.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -63,13 +63,7 @@
+                      const char* theName,
+                      const std::ios_base::openmode theMode)
+ {
+-#ifdef _WIN32
+-  // file name is treated as UTF-8 string and converted to UTF-16 one
+-  const TCollection_ExtendedString aFileNameW (theName, Standard_True);
+-  theBuff.open ((const wchar_t* )aFileNameW.ToExtString(), theMode);
+-#else
+   theBuff.open (theName, theMode);
+-#endif
+ }
+ 
+ // ==============================================
+@@ -80,13 +74,9 @@
+                      const TCollection_ExtendedString& theName,
+                      const std::ios_base::openmode theMode)
+ {
+-#ifdef _WIN32
+-  theBuff.open ((const wchar_t* )theName.ToExtString(), theMode);
+-#else
+   // conversion in UTF-8 for linux
+   NCollection_Utf8String aString((const Standard_Utf16Char*)theName.ToExtString());
+   theBuff.open (aString.ToCString(),theMode);
+-#endif
+ }
+ 
+ // ==============================================
+@@ -97,13 +87,7 @@
+                     const char* theName,
+                     const std::ios_base::openmode theMode)
+ {
+-#ifdef _WIN32
+-  // file name is treated as UTF-8 string and converted to UTF-16 one
+-  const TCollection_ExtendedString aFileNameW (theName, Standard_True);
+-  theStream.open ((const wchar_t* )aFileNameW.ToExtString(), theMode);
+-#else
+   theStream.open (theName, theMode);
+-#endif
+ }
+ 
+ // ==============================================
+@@ -114,12 +98,8 @@
+                     const TCollection_ExtendedString& theName,
+                     const std::ios_base::openmode theMode)
+ {
+-#ifdef _WIN32
+-  theStream.open ((const wchar_t* )theName.ToExtString(), theMode);
+-#else
+   // conversion in UTF-8 for linux
+   NCollection_Utf8String aString((const Standard_Utf16Char*)theName.ToExtString());
+   theStream.open (aString.ToCString(),theMode);
+-#endif
+ }
+ 
+diff -ur a/src/OSD/OSD_Process.cxx c/src/OSD/OSD_Process.cxx
+--- a/src/OSD/OSD_Process.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_Process.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -81,7 +81,7 @@
+ }
+ 
+ 
+-Standard_Integer OSD_Process::UserId(){
++std::size_t OSD_Process::UserId(){
+  return (getuid());
+ }
+ 
+@@ -196,7 +196,7 @@
+ #include <TCollection_ExtendedString.hxx>
+ 
+ #include <OSD_WNT_1.hxx>
+-#include <LMCONS.H> /// pour UNLEN  ( see MSDN about GetUserName() )
++#include <lmcons.h> /// pour UNLEN  ( see MSDN about GetUserName() )
+ 
+ 
+ #pragma warning( disable : 4700 )
+@@ -267,7 +267,7 @@
+ 
+ }  // end OSD_Process :: SystemDate
+ 
+-Standard_Integer OSD_Process :: UserId () {
++std::size_t OSD_Process :: UserId () {
+ 
+  PSID         retVal        = NULL;
+  HANDLE       hProcessToken = INVALID_HANDLE_VALUE;
+@@ -289,7 +289,7 @@
+  if ( hProcessToken != INVALID_HANDLE_VALUE ) CloseHandle ( hProcessToken );
+  if ( pTKowner      != NULL                 ) FreeTokenInformation ( pTKowner );
+ 
+- return ( Standard_Integer )retVal;
++ return ( std::size_t )retVal;
+ 
+ }  // end OSD_Process :: UserId
+ 
+diff -ur a/src/OSD/OSD_Thread.cxx c/src/OSD/OSD_Thread.cxx
+--- a/src/OSD/OSD_Thread.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_Thread.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -137,7 +137,9 @@
+   WNTthread_data *adata = (WNTthread_data*)data;
+   void* ret = adata->func ( adata->data );
+   free ( adata );
+-  return (DWORD)ret;
++  DWORD d;
++  memcpy(&ret, &d, sizeof(d));
++  return d;
+ }
+ #endif
+ 
+diff -ur a/src/OSD/OSD_WNT_1.hxx c/src/OSD/OSD_WNT_1.hxx
+--- a/src/OSD/OSD_WNT_1.hxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_WNT_1.hxx	2016-01-26 16:08:39.078898083 +0100
+@@ -35,10 +35,6 @@
+ #  endif
+ # endif  /* OSDAPI */
+ 
+-#if defined(__CYGWIN32__) || defined(__MINGW32__)
+-#define _TINT int
+-#endif
+-
+ # ifdef __cplusplus
+ extern "C" {
+ # endif  /* __cplusplus */
+diff -ur a/src/OSD/OSD_WNT.cxx c/src/OSD/OSD_WNT.cxx
+--- a/src/OSD/OSD_WNT.cxx	2015-05-07 20:17:18.000000000 +0200
++++ c/src/OSD/OSD_WNT.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -909,9 +909,9 @@
+  BOOL                 fFind;
+  BOOL                 retVal = FALSE;
+  DIR_RESPONSE         response;
+- DWORD                level;
++ DWORDLONG            level;
+ 
+- if (   (  level = ( DWORD )TlsGetValue ( dwLevel )  ) == NULL   ) {
++ if (   (  level = ( DWORDLONG )TlsGetValue ( dwLevel )  ) == NULL   ) {
+ 
+   ++level;
+   TlsSetValue (  dwLevel, ( LPVOID )level  );
+diff -ur a/src/Standard/Standard_CLocaleSentry.cxx c/src/Standard/Standard_CLocaleSentry.cxx
+--- a/src/Standard/Standard_CLocaleSentry.cxx	2015-05-07 20:17:28.000000000 +0200
++++ c/src/Standard/Standard_CLocaleSentry.cxx	2016-02-03 09:22:47.800550348 +0100
+@@ -33,7 +33,7 @@
+     #ifdef HAVE_XLOCALE_H
+     : myLocale (newlocale (LC_ALL_MASK, "C", NULL))
+     #elif defined(_WIN32)
+-    : myLocale (_create_locale (LC_ALL, "C"))
++    : myLocale (NULL)
+     #else
+     : myLocale (NULL)
+     #endif
+@@ -44,7 +44,6 @@
+     #ifdef HAVE_XLOCALE_H
+       freelocale (myLocale);
+     #elif defined(_WIN32)
+-      _free_locale (myLocale);
+     #endif
+     }
+ 
+diff -ur a/src/Standard/Standard_CString.cxx c/src/Standard/Standard_CString.cxx
+--- a/src/Standard/Standard_CString.cxx	2015-05-07 20:17:28.000000000 +0200
++++ c/src/Standard/Standard_CString.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -60,39 +60,13 @@
+ // of string to real and vice-versa
+ //======================================================================
+ 
+-#ifdef __APPLE__
+-  // There are a lot of *_l functions availalbe on Mac OS X - we use them
+-  #define SAVE_TL()
+-#elif defined(_WIN32)
+-  // MSVCRT has equivalents with slightly different syntax
+-  #define SAVE_TL()
+-  #define strtod_l(thePtr, theNextPtr, theLocale)                _strtod_l(thePtr, theNextPtr, theLocale)
+-  #define vprintf_l(theLocale, theFormat, theArgPtr)             _vprintf_l(theFormat, theLocale, theArgPtr)
+-  #define vsprintf_l(theBuffer, theLocale, theFormat, theArgPtr) _vsprintf_l(theBuffer, theFormat, theLocale, theArgPtr)
+-  #define vfprintf_l(theFile,   theLocale, theFormat, theArgPtr) _vfprintf_l(theFile,   theFormat, theLocale, theArgPtr)
+-#else
+-  // glibc provides only limited xlocale implementation:
+-  // strtod_l/strtol_l/strtoll_l functions with explicitly specified locale
+-  // and newlocale/uselocale/freelocale to switch locale within current thread only.
+-  // So we switch to C locale temporarily
+-  #define SAVE_TL() Standard_CLocaleSentry aLocaleSentry;
+-  #ifndef HAVE_XLOCALE_H
+-    // glibc version for android platform use locale-independent implementation of
+-    // strtod, strtol, strtoll functions. For other system with locale-depended
+-    // implementations problems may appear if "C" locale is not set explicitly.
+-    #ifndef __ANDROID__
+-      #error System does not support xlocale. Import/export could be broken if C locale did not specified by application.
+-    #endif
+-    #define strtod_l(thePtr, theNextPtr, theLocale)              strtod(thePtr, theNextPtr)
+-  #endif
+-  #define vprintf_l(theLocale, theFormat, theArgPtr)             vprintf(theFormat, theArgPtr)
+-  #define vsprintf_l(theBuffer, theLocale, theFormat, theArgPtr) vsprintf(theBuffer, theFormat, theArgPtr)
+-  #define vfprintf_l(theFile,   theLocale, theFormat, theArgPtr) vfprintf(theFile,   theFormat, theArgPtr)
+-#endif
++#define vprintf_l(theLocale, theFormat, theArgPtr)             vprintf(theFormat, theArgPtr)
++#define vsprintf_l(theBuffer, theLocale, theFormat, theArgPtr) vsprintf(theBuffer, theFormat, theArgPtr)
++#define vfprintf_l(theFile,   theLocale, theFormat, theArgPtr) vfprintf(theFile,   theFormat, theArgPtr)
+ 
+ double Strtod (const char* theStr, char** theNextPtr)
+ {
+-  return strtod_l (theStr, theNextPtr, Standard_CLocaleSentry::GetCLocale());
++  return strtod(theStr, theNextPtr);
+ }
+ 
+ double Atof (const char* theStr)
+@@ -102,7 +76,7 @@
+ 
+ int Printf  (const Standard_CString theFormat, ...)
+ {
+-  SAVE_TL();
++  //SAVE_TL();
+   va_list argp;
+   va_start(argp, theFormat);
+   int result = vprintf_l (Standard_CLocaleSentry::GetCLocale(), theFormat, argp);
+@@ -112,7 +86,7 @@
+ 
+ int Fprintf (FILE* theFile, const char* theFormat, ...)
+ {
+-  SAVE_TL();
++  //SAVE_TL();
+   va_list argp;
+   va_start(argp, theFormat);
+   int result = vfprintf_l(theFile, Standard_CLocaleSentry::GetCLocale(), theFormat, argp);
+@@ -122,7 +96,7 @@
+ 
+ int Sprintf (char* theBuffer, const char* theFormat, ...)
+ {
+-  SAVE_TL();
++  //SAVE_TL();
+   va_list argp;
+   va_start(argp, theFormat);
+   int result = vsprintf_l(theBuffer, Standard_CLocaleSentry::GetCLocale(), theFormat, argp);
+diff -ur a/src/Standard/Standard.cxx c/src/Standard/Standard.cxx
+--- a/src/Standard/Standard.cxx	2015-05-07 20:17:28.000000000 +0200
++++ c/src/Standard/Standard.cxx	2016-01-26 16:08:39.078898083 +0100
+@@ -85,37 +85,6 @@
+   aVar = getenv ("MMGT_OPT");
+   Standard_Integer anAllocId   = (aVar ?  atoi (aVar): OCCT_MMGT_OPT_DEFAULT);
+ 
+-#if defined(_WIN32) && !defined(_WIN64)
+-  static const DWORD _SSE2_FEATURE_BIT(0x04000000);
+-  if ( anAllocId == 2 )
+-  {
+-    // CR25396: Check if SSE2 instructions are supported, if not then use MMgrRaw
+-    // instead of MMgrTBBalloc. It is to avoid runtime crash when running on a 
+-    // CPU that supports SSE but does not support SSE2 (some modifications of
+-    // AMD Sempron).
+-    DWORD volatile dwFeature;
+-    _asm
+-    {
+-      push eax
+-      push ebx
+-      push ecx
+-      push edx
+-
+-      // get the CPU feature bits
+-      mov eax, 1
+-      cpuid
+-      mov dwFeature, edx
+-
+-      pop edx
+-      pop ecx
+-      pop ebx
+-      pop eax
+-    }
+-    if ((dwFeature & _SSE2_FEATURE_BIT) == 0)
+-      anAllocId = 0;
+-  }
+-#endif
+-
+   aVar = getenv ("MMGT_CLEAR");
+   Standard_Boolean toClear     = (aVar ? (atoi (aVar) != 0) : Standard_True);
+ 
+diff -ur a/src/Standard/Standard_Integer.hxx c/src/Standard/Standard_Integer.hxx
+--- a/src/Standard/Standard_Integer.hxx	2015-05-07 20:17:28.000000000 +0200
++++ c/src/Standard/Standard_Integer.hxx	2016-01-26 16:08:39.078898083 +0100
+@@ -15,6 +15,8 @@
+ #ifndef _Standard_Integer_HeaderFile
+ #define _Standard_Integer_HeaderFile
+ 
++#include <climits>
++
+ #include <Standard_TypeDef.hxx>
+ #include <Standard_values.h>
+ 
+diff -ur a/src/Standard/Standard_values.h c/src/Standard/Standard_values.h
+--- a/src/Standard/Standard_values.h	2015-05-07 20:17:28.000000000 +0200
++++ c/src/Standard/Standard_values.h	2016-01-26 16:08:39.078898083 +0100
+@@ -17,6 +17,8 @@
+ #ifndef _Standard_values_HeaderFile
+ # define _Standard_values_HeaderFile
+ 
++#include <climits>
++
+ #if defined(_MSC_VER) && !defined(WNT)
+ #error "Wrong compiler options has been detected. Add /DWNT option for proper compilation!!!!!"
+ #endif
+diff -ur a/src/STEPConstruct/STEPConstruct_AP203Context.cxx c/src/STEPConstruct/STEPConstruct_AP203Context.cxx
+--- a/src/STEPConstruct/STEPConstruct_AP203Context.cxx	2015-05-07 20:17:26.000000000 +0200
++++ c/src/STEPConstruct/STEPConstruct_AP203Context.cxx	2016-01-26 16:08:39.082898083 +0100
+@@ -197,7 +197,7 @@
+     Handle(StepBasic_Person) aPerson = new StepBasic_Person;
+     Handle(TCollection_HAsciiString) uid = new TCollection_HAsciiString ( orgId );
+     uid->AssignCat ( "," );
+-    uid->AssignCat ( TCollection_AsciiString ( sys.UserId() ).ToCString() );
++    uid->AssignCat ( TCollection_AsciiString ( static_cast<Standard_Integer>(sys.UserId())).ToCString() );
+     Handle(Interface_HArray1OfHAsciiString) suffix, prefix;
+     aPerson->Init ( uid, Standard_True, lname, Standard_True, fname, ( ! mname.IsNull() ),
+ 		    mname, Standard_False, suffix, Standard_False, prefix );
+diff -ur a/src/WNT/WNT_Window.cxx c/src/WNT/WNT_Window.cxx
+--- a/src/WNT/WNT_Window.cxx	2015-05-07 20:17:41.000000000 +0200
++++ c/src/WNT/WNT_Window.cxx	2016-02-02 13:32:53.805460120 +0100
+@@ -12,6 +12,8 @@
+ // Alternatively, this file may be used under the terms of Open CASCADE
+ // commercial license or contractual agreement.
+ 
++#include <cstdlib>
++
+ // include windows.h first to have all definitions available
+ #include <windows.h>
+ 
+@@ -210,10 +212,10 @@
+ 
+   if (wp.showCmd != SW_SHOWMINIMIZED)
+   {
+-    if (Abs (wp.rcNormalPosition.left   - aXLeft  ) > 2) mask |= 1;
+-    if (Abs (wp.rcNormalPosition.right  - aXRight ) > 2) mask |= 2;
+-    if (Abs (wp.rcNormalPosition.top    - aYTop   ) > 2) mask |= 4;
+-    if (Abs (wp.rcNormalPosition.bottom - aYBottom) > 2) mask |= 8;
++    if (std::abs (wp.rcNormalPosition.left   - aXLeft  ) > 2) mask |= 1;
++    if (std::abs (wp.rcNormalPosition.right  - aXRight ) > 2) mask |= 2;
++    if (std::abs (wp.rcNormalPosition.top    - aYTop   ) > 2) mask |= 4;
++    if (std::abs (wp.rcNormalPosition.bottom - aYBottom) > 2) mask |= 8;
+ 
+     switch (mask)
+     {
