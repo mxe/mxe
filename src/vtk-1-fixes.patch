@@ -399,7 +399,7 @@ index 1111111..2222222 100644
        }
      this->Enabled = 0;
      }
-@@ -182,13 +184,13 @@ void vtkWin32RenderWindowInteractor::Enable()
+@@ -182,11 +184,11 @@ void vtkWin32RenderWindowInteractor::Enable()
        // well send a USER message to the other
        // event handler so that it can properly
        // call this event handler if required
@@ -413,8 +413,6 @@ index 1111111..2222222 100644
        }
      
  #ifdef VTK_USE_TDX
-     if(this->UseTDx)
-       {
 @@ -232,11 +234,11 @@ void vtkWin32RenderWindowInteractor::Disable()
        // well send a USER message to the other
        // event handler so that it can properly
@@ -535,3 +533,23 @@ index 1111111..2222222 100644
  
    # handle the different configuration types (each will have identical files)
    SET(VTK_PYTHON_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES})
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Manuel Massing <m.massing@warped-space.de>
+Date: Tue, 25 Apr 2017 12:32:34 +0200
+Subject: [PATCH] cmake: update regex to also match gcc6 versions
+
+
+diff --git a/CMake/vtkCompilerExtras.cmake b/CMake/vtkCompilerExtras.cmake
+index 1111111..2222222 100644
+--- a/CMake/vtkCompilerExtras.cmake
++++ b/CMake/vtkCompilerExtras.cmake
+@@ -25,7 +25,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
+   # Now check if we can use visibility to selectively export symbols
+   exec_program(${CMAKE_C_COMPILER} ARGS --version OUTPUT_VARIABLE
+     _gcc_version_info)
+-  string (REGEX MATCH "[345]\\.[0-9]\\.[0-9]" 
++  string (REGEX MATCH "[3456]\\.[0-9]\\.[0-9]" 
+     _gcc_version "${_gcc_version_info}")
+   if(NOT _gcc_version)
+     string (REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" 
