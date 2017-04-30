@@ -1,25 +1,25 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hunspell
-$(PKG)_WEBSITE  := https://hunspell.sourceforge.io/
+$(PKG)_WEBSITE  := http://hunspell.github.io/
 $(PKG)_DESCR    := Hunspell
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.3
-$(PKG)_CHECKSUM := a7b2c0de0e2ce17426821dc1ac8eb115029959b3ada9d80a81739fa19373246c
+$(PKG)_VERSION  := 1.6.1
+$(PKG)_CHECKSUM := 30f593733c50b794016bb03d31fd2a2071e4610c6fa4708e33edad2335102c49
 $(PKG)_SUBDIR   := hunspell-$($(PKG)_VERSION)
 $(PKG)_FILE     := hunspell-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/hunspell/Hunspell/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/hunspell/hunspell/archive/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc gettext libiconv pthreads readline
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/hunspell/files/Hunspell/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(WGET) -q -O- 'https://github.com/hunspell/hunspell/releases' | \
+    $(SED) -n 's,.*/archive/v\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
     # Note: the configure file doesn't pick up pdcurses, so "ui" is disabled
-    cd '$(1)' && ./configure \
+    cd '$(1)' && autoreconf -vfi && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-warnings \
         --without-ui \
