@@ -18,12 +18,13 @@ $(WGET) -q -O- 'https://torproject.org/download/download' | \
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && \
+    cd '$(BUILD_DIR)' && \
         LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
-        ./configure \
+        '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
-    $(SED) 's@#define HAVE_SYS_MMAN_H 1@// Disabled in MXE #define HAVE_SYS_MMAN_H 1@' -i '$(1)/orconfig.h'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_DOCS)
+    $(SED) 's@#define HAVE_SYS_MMAN_H 1@// Disabled in MXE #define HAVE_SYS_MMAN_H 1@' -i '$(BUILD_DIR)/orconfig.h'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
 endef
 
 $(PKG)_BUILD_SHARED =
