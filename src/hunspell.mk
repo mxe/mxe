@@ -11,12 +11,13 @@ $(PKG)_DEPS     := gcc gettext libiconv pthreads readline
 
 define $(PKG)_BUILD
     # Note: the configure file doesn't pick up pdcurses, so "ui" is disabled
-    cd '$(1)' && autoreconf -vfi && ./configure \
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --with-warnings \
         --without-ui \
         --with-readline
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # Test
     '$(TARGET)-g++' \
