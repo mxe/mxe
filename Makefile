@@ -117,6 +117,7 @@ MXE_GCC_EXCEPTION_OPTS = \
 # install files such as pcre-config (which we do want to be installed).
 
 MXE_DISABLE_PROGRAMS = \
+    dist_bin_SCRIPTS= \
     bin_PROGRAMS= \
     sbin_PROGRAMS= \
     noinst_PROGRAMS= \
