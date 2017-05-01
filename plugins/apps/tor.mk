@@ -26,5 +26,3 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
 endef
-
-$(PKG)_BUILD_SHARED =
