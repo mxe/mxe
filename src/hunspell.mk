@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hunspell
-$(PKG)_WEBSITE  := http://hunspell.github.io/
+$(PKG)_WEBSITE  := https://hunspell.github.io/
 $(PKG)_DESCR    := Hunspell
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.1
