@@ -1,13 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 2a80acdcd9ef656b3f6c3cd4193eb66f77d0aa5f Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 4 Feb 2013 16:11:12 +0100
-Subject: [PATCH 1/2] add missing private lib to pc file
+Subject: [PATCH] add missing private lib to pc file
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index f656d12c4..03e8fd746 100644
+index 1111111..2222222 100644
 --- a/lib/gnutls.pc.in
 +++ b/lib/gnutls.pc.in
 @@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
@@ -18,14 +20,11 @@ index f656d12c4..03e8fd746 100644
 +Libs.private: @LIBZ_PC@ @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ -lcrypt32
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
--- 
-2.11.0
 
-
-From d07dcbb72df78506d18fec9205d492b5bbd0399b Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 24 Nov 2014 08:56:48 +0100
-Subject: [PATCH 2/2] windows build fix: ws2tcpip.h supplies inet_ntop
+Subject: [PATCH] windows build fix: ws2tcpip.h supplies inet_ntop
 
 Follow-up to 492c2b937ab66134d0b37499a6f3a747e19bc31a
 
@@ -34,7 +33,7 @@ Signed-off-by: Mark Brand <mabrand@mabrand.nl>
 taken from: http://lists.gnutls.org/pipermail/gnutls-devel/2014-November/007250.html
 
 diff --git a/lib/x509/ip.c b/lib/x509/ip.c
-index b4b31a4f9..85f130036 100644
+index 1111111..2222222 100644
 --- a/lib/x509/ip.c
 +++ b/lib/x509/ip.c
 @@ -26,7 +26,11 @@
@@ -50,6 +49,23 @@ index b4b31a4f9..85f130036 100644
  #endif
  
  /*-
--- 
-2.11.0
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Tue, 2 May 2017 23:52:16 +0200
+Subject: [PATCH] gnutls.pc: hardcode -lunistring -liconv
+
+See https://github.com/mxe/mxe/issues/1753#issuecomment-298772548
+
+diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
+index 1111111..2222222 100644
+--- a/lib/gnutls.pc.in
++++ b/lib/gnutls.pc.in
+@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
+ URL: http://www.gnutls.org/
+ Version: @VERSION@
+ Libs: -L${libdir} -lgnutls
+-Libs.private: @LIBZ_PC@ @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ -lcrypt32
++Libs.private: @LIBZ_PC@ @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ -lunistring -liconv @LIBIDN2_LIBS@ -lcrypt32
+ @GNUTLS_REQUIRES_PRIVATE@
+ Cflags: -I${includedir}
