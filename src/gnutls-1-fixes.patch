@@ -69,3 +69,61 @@ index 1111111..2222222 100644
 +Libs.private: @LIBZ_PC@ @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ -lunistring -liconv @LIBIDN2_LIBS@ -lcrypt32
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 7 May 2017 20:17:13 +0200
+Subject: [PATCH] let gnutls configure detect libidn2
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -483,24 +483,19 @@ with_libidn=no
+ if test "$try_libidn" = yes;then
+ 
+   if test "$try_libidn2" = yes;then
+-  AC_SEARCH_LIBS(idn2_lookup_u8, idn2, [
+-      with_libidn2=yes;
++    PKG_CHECK_MODULES(LIBIDN2, libidn2, [with_libidn2=yes], [with_libidn2=no])
++    if test "$with_libidn2" != "no";then
+       idna_support="IDNA 2008 (libidn2)"
++
+       AC_DEFINE([HAVE_LIBIDN2], 1, [Define if IDNA 2008 support is enabled.])
+-      AC_SUBST([LIBIDN_LIBS], [-lidn2])
+-      AC_SUBST([LIBIDN2_LIBS], [-lidn2]) dnl used in gnutls.pc.in
+-dnl enable once libidn2.pc is widespread; and remove LIBIDN2_LIBS from gnutls.pc.in (Libs.private)
+-dnl      if test "x$GNUTLS_REQUIRES_PRIVATE" = "x"; then
+-dnl        GNUTLS_REQUIRES_PRIVATE="Requires.private: libidn2"
+-dnl      else
+-dnl        GNUTLS_REQUIRES_PRIVATE="${GNUTLS_REQUIRES_PRIVATE}, libidn2"
+-dnl      fi
+-    ],[
+-      with_libidn2=no;
++      if test "x$GNUTLS_REQUIRES_PRIVATE" = "x"; then
++        GNUTLS_REQUIRES_PRIVATE="Requires.private: libidn2"
++      else
++        GNUTLS_REQUIRES_PRIVATE="${GNUTLS_REQUIRES_PRIVATE}, libidn2"
++      fi
++    else
+       AC_MSG_WARN(*** LIBIDN2 was not found. You will not be able to use IDN2008 support)
+-    ])
+-  else
+-    with_libidn2=no
++    fi
+   fi
+ 
+   if test "$with_libidn2" = "no"; then
+diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
+index 1111111..2222222 100644
+--- a/lib/gnutls.pc.in
++++ b/lib/gnutls.pc.in
+@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
+ URL: http://www.gnutls.org/
+ Version: @VERSION@
+ Libs: -L${libdir} -lgnutls
+-Libs.private: @LIBZ_PC@ @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ -lunistring -liconv @LIBIDN2_LIBS@ -lcrypt32
++Libs.private: @LIBZ_PC@ @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ -lunistring -liconv -lcrypt32
+ @GNUTLS_REQUIRES_PRIVATE@
+ Cflags: -I${includedir}
