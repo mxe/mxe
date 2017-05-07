@@ -20,6 +20,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && rm aclocal.m4 && autoreconf -fi
+    # don't build and install docs
+    (echo '# DISABLED'; echo 'all:'; echo 'install:') > '$(1)/doc/Makefile.in'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-csharp \
