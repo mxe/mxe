@@ -17,7 +17,8 @@ define $(PKG)_BUILD
         --with-warnings \
         --without-ui \
         --with-readline
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
 
     # Test
     '$(TARGET)-g++' \
