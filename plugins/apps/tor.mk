@@ -2,8 +2,8 @@
 
 PKG             := tor
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.2.9.9
-$(PKG)_CHECKSUM := 33325d2b250fd047ba2ddc5d11c2190c4e2951f4b03ec48ebd8bf0666e990d43
+$(PKG)_VERSION  := 0.3.0.7
+$(PKG)_CHECKSUM := 9640c4448ef3cad7237c68ed6984e705db8fb2b9d6bb74c8815d01bb06527d02
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://torproject.org/dist/$($(PKG)_FILE)
@@ -18,11 +18,11 @@ $(WGET) -q -O- 'https://torproject.org/download/download' | \
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && \
+    cd '$(BUILD_DIR)' && \
         LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
-        ./configure \
+        '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_DOCS)
+    $(SED) 's@#define HAVE_SYS_MMAN_H 1@// Disabled in MXE #define HAVE_SYS_MMAN_H 1@' -i '$(BUILD_DIR)/orconfig.h'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
 endef
-
-$(PKG)_BUILD_SHARED =
