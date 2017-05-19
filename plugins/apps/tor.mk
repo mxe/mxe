@@ -21,6 +21,9 @@ define $(PKG)_BUILD
     cd '$(1)' && \
         LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         ./configure \
+        --bindir '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin' \
+        --sysconfdir '$(PREFIX)/$(TARGET)/apps/$(PKG)/etc' \
+        --datarootdir '$(PREFIX)/$(TARGET)/apps/$(PKG)/share' \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_DOCS)
 endef
