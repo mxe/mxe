@@ -2,7 +2,7 @@
  * This file is part of MXE. See LICENSE.md for licensing information.
  *
  * This code was originally found on:
- *   http://eigen.tuxfamily.org/dox/GettingStarted.html
+ *   https://eigen.tuxfamily.org/dox/GettingStarted.html
  */
 
 #include <Eigen/Dense>
