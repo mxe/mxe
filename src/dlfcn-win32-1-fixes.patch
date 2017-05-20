@@ -1,0 +1,33 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 24 Jul 2016 00:36:49 +0300
+Subject: [PATCH] configure: put test.{c,dll} to current directory
+
+instead of /tmp/ to avoid races when building for multiple targets.
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -154,13 +154,13 @@ disabled shared && disabled static && {
+ }
+ 
+ # simple cc test
+-cat > /tmp/test.c << EOF
++cat > tmptest.c << EOF
+ #include <windows.h>
+ void function(void)
+ { LoadLibrary(NULL); }
+ EOF
+-echo testing compiler: $cc -shared -o /tmp/test.dll /tmp/test.c
+-$cc -shared -o /tmp/test.dll /tmp/test.c
++echo testing compiler: $cc -shared -o tmptest.dll tmptest.c
++$cc -shared -o tmptest.dll tmptest.c
+ 
+ test "$?" != 0 && {
+     echo "$cc could not create shared file with Windows API functions.";
