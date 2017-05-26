@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cgal
-$(PKG)_WEBSITE  := http://www.cgal.org/
+$(PKG)_WEBSITE  := https://www.cgal.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.9.1
 $(PKG)_CHECKSUM := 56557da971b5310c2678ffc5def4109266666ff3adc7babbe446797ee2b90cca
