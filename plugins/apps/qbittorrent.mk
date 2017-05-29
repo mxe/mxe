@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --with-qt4=yes \
         --with-boost='$(PREFIX)/$(TARGET)'
+    cd '$(1)/src' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' CONFIG+=win32-g++
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     cp '$(1)'/src/release/qbittorrent.exe '$(PREFIX)/$(TARGET)/bin/'
 endef
