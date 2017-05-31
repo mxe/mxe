@@ -7,33 +7,6 @@ From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 29 Jan 2017 21:47:39 +0100
 Subject: [PATCH] These were adapted from the gtk2 patchset.
 
-
-diff --git a/configure b/configure
-index 1111111..2222222 100755
---- a/configure
-+++ b/configure
-@@ -9378,15 +9378,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
- 
- if test "$os_win32" = "yes"; then
-   if test x$enable_static = xyes -o x$enable_static = x; then
--    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling static library build, must build as DLL on Windows." >&5
--$as_echo "$as_me: WARNING: Disabling static library build, must build as DLL on Windows." >&2;}
--    enable_static=no
-+    { $as_echo "(disabled warning)" >&5
-+$as_echo "(disabled warning)" >&2;}
-+    enable_static=yes
-   fi
-   if test x$enable_shared = xno; then
--    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Enabling shared library build, must build as DLL on Windows." >&5
--$as_echo "$as_me: WARNING: Enabling shared library build, must build as DLL on Windows." >&2;}
-+    { $as_echo "(disabled warning)" >&5
-+$as_echo "(disabled warning)" >&2;}
-   fi
--  enable_shared=yes
-+  enable_shared=no
- fi
- 
- 
 diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
 index 1111111..2222222 100644
 --- a/gdk/win32/gdkmain-win32.c

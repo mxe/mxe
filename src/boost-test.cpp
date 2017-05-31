@@ -9,7 +9,7 @@
 
 boost::thread_specific_ptr<int> ptr;
 
-// http://www.boost.org/doc/libs/1_60_0/libs/context/doc/html/context/context.html
+// https://www.boost.org/doc/libs/1_60_0/libs/context/doc/html/context/context.html
 #include <boost/context/all.hpp>
 boost::context::fcontext_t fcm,fc1,fc2;
 

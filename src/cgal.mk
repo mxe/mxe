@@ -3,12 +3,12 @@
 PKG             := cgal
 $(PKG)_WEBSITE  := https://www.cgal.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.6.3
-$(PKG)_CHECKSUM := e338027b8767c0a7a6e4fd8679182d1b83b5b1a0da0a1fe4546e7c0ca094fc21
+$(PKG)_VERSION  := 4.9.1
+$(PKG)_CHECKSUM := 56557da971b5310c2678ffc5def4109266666ff3adc7babbe446797ee2b90cca
 $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
 $(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://gforge.inria.fr/frs/download.php/latestfile/2743/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost gmp mpfr qt
+$(PKG)_URL      := https://github.com/CGAL/cgal/releases/download/releases%2F$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc boost gmp mpfr qt5
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gforge.inria.fr/frs/?group_id=52' | \

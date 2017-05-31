@@ -13,6 +13,7 @@ MXE_LIB_TYPES      := static shared
 MXE_TARGET_LIST    := $(strip $(foreach TRIPLET,$(MXE_TRIPLETS),\
                           $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES))))
 MXE_TARGETS        := i686-w64-mingw32.static
+.DEFAULT_GOAL      := all-filtered
 
 DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
@@ -35,7 +36,8 @@ PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
 DEFAULT_UA := $(shell wget --version | $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
-WGET        = wget --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))'
+WGET_TOOL   = wget
+WGET        = $(WGET_TOOL) --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))'
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 flex \
                 $(BUILD_CC) $(BUILD_CXX) gperf intltoolize $(LIBTOOL) \
@@ -60,7 +62,7 @@ STRIP_EXE       := $(true)
 # All pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
 # These aren't meaningful to the pkg list in http://mxe.cc/#packages so
 # use a list in case we want to separate autotools, cmake etc.
-MXE_CONF_PKGS := mxe-conf
+MXE_CONF_PKGS := cmake-conf mxe-conf
 
 # define some whitespace variables
 define newline
@@ -69,6 +71,7 @@ define newline
 endef
 
 \n    := $(newline)
+comma := ,
 null  :=
 space := $(null) $(null)
 repeat = $(subst x,$(1),$(subst $(space),,$(call int_encode,$(2))))
@@ -114,6 +117,7 @@ MXE_GCC_EXCEPTION_OPTS = \
 # install files such as pcre-config (which we do want to be installed).
 
 MXE_DISABLE_PROGRAMS = \
+    dist_bin_SCRIPTS= \
     bin_PROGRAMS= \
     sbin_PROGRAMS= \
     noinst_PROGRAMS= \
@@ -140,7 +144,18 @@ MXE_DISABLE_DOCS = \
     dist_man7_MANS= \
     dist_man8_MANS= \
     dist_man9_MANS= \
+    nodist_man_MANS= \
+    nodist_man1_MANS= \
+    nodist_man2_MANS= \
+    nodist_man3_MANS= \
+    nodist_man4_MANS= \
+    nodist_man5_MANS= \
+    nodist_man6_MANS= \
+    nodist_man7_MANS= \
+    nodist_man8_MANS= \
+    nodist_man9_MANS= \
     notrans_dist_man_MANS= \
+    MANLINKS= \
     info_TEXINFOS= \
     doc_DATA= \
     dist_doc_DATA= \
@@ -158,6 +173,7 @@ MAKE_SHARED_FROM_STATIC = \
 	--libdir '$(PREFIX)/$(TARGET)/lib' \
 	--bindir '$(PREFIX)/$(TARGET)/bin'
 
+# MXE_GET_GITHUB functions can be removed once all packages use GH_CONF
 define MXE_GET_GITHUB_SHA
     $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' \
     | $(SED) -n 's#.*"sha": "\([^"]\{10\}\).*#\1#p' \
@@ -175,6 +191,9 @@ define MXE_GET_GITHUB_TAGS
     | $(SORT) -V \
     | tail -1
 endef
+
+# include github related functions
+include $(PWD)/github.mk
 
 # shared lib preload to disable networking, enable faketime etc
 PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
@@ -319,9 +338,14 @@ else
         echo '# The three lines below makes `make` build these "local'; \
         echo '# packages" instead of all packages.'; \
         echo '#LOCAL_PKG_LIST := boost curl file flac lzo pthreads vorbis wxwidgets'; \
-        echo '#.DEFAULT local-pkg-list:'; \
+        echo '#.DEFAULT_GOAL  := local-pkg-list'; \
         echo '#local-pkg-list: $$(LOCAL_PKG_LIST)'; \
     } >'$(PWD)/settings.mk')
+endif
+
+ifneq ($(LOCAL_PKG_LIST),)
+    .DEFAULT_GOAL := local-pkg-list
+    $(info [pkg-list]  $(LOCAL_PKG_LIST))
 endif
 
 # Numeric min and max list functions
@@ -355,9 +379,6 @@ LOOKUP_PKG_RULE = $(strip \
                 $(1)_$(2))),\
         $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3)),$(1)_$(2)_$(3))\
         $(1)_$(2)_$(3))))
-
-.PHONY: all
-all: all-filtered
 
 # Core packages.
 override MXE_PLUGIN_DIRS := $(realpath $(TOP_DIR)/src) $(MXE_PLUGIN_DIRS)
@@ -467,6 +488,9 @@ endef
 $(foreach TARGET,$(MXE_TARGETS),$(call TARGET_RULE,$(TARGET)))
 
 define PKG_RULE
+# configure GitHub metadata if GH_CONF is set
+$(if $($(PKG)_GH_CONF),$(eval $(MXE_SETUP_GITHUB)))
+
 .PHONY: download-$(1)
 download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
 
@@ -479,6 +503,7 @@ download-only-$(1): download-only-$($(1)_FILE)
 download-only-$($(1)_FILE)::
 	$(and $($(1)_URL),
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
+	@$$(if $$(REMOVE_DOWNLOAD),rm -f '$(PKG_DIR)/$($(1)_FILE)')
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(PRINTF_FMT) '[download]' '$(1)' | $(RTRIM); \
 	    (set -x; $(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
@@ -497,8 +522,14 @@ download-only-$($(1)_FILE)::
 	        exit 1; \
 	    fi; \
 	fi)
+
+.PHONY: prepare-pkg-source-$(1)
+prepare-pkg-source-$(1): download-only-$(1)
+	rm -rf '$(2)'
+	mkdir -p '$(2)'
+	$$(call PREPARE_PKG_SOURCE,$(1),$(2))
 endef
-$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG))))
+$(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 
 # disable networking during build-only rules for reproducibility
 ifeq ($(findstring darwin,$(BUILD)),)
@@ -524,6 +555,7 @@ $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           $(PKG_PATCHES) \
                           $(PKG_TESTFILES) \
+                          $($(1)_FILE_DEPS) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
                           $(and $($(3)_DEPS),$(addprefix $(PREFIX)/$($(3)_DEPS)/installed/,$(filter-out $(MXE_CONF_PKGS),$($($(3)_DEPS)_PKGS)))) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
@@ -719,12 +751,16 @@ clean-pkg:
 clean-junk: clean-pkg
 	rm -rf $(LOG_DIR) $(call TMP_DIR,*)
 
+COMPARE_VERSIONS = $(strip \
+    $(if $($(1)_BRANCH),$(call seq,$($(1)_VERSION),$(2)),\
+    $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1))))
+
 .PHONY: update
 define UPDATE
     $(if $(2),
         $(if $(filter $($(1)_IGNORE),$(2)),
             $(info IGNORED  $(1)  $(2)),
-            $(if $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1)),
+            $(if $(COMPARE_VERSIONS),
                 $(if $(filter $(2),$($(1)_VERSION)),
                     $(info .        $(1)  $(2)),
                     $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
@@ -746,6 +782,10 @@ update-package-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(and $($*_UPDATE),$(call UPDATE,$*,$(shell $($*_UPDATE)))), \
 	    $(error Package $* not found))
+	    @echo -n
+
+check-update-package-%: UPDATE_DRYRUN = true
+check-update-package-%: update-package-% ;
 
 update-checksum-%: MXE_NO_BACKUP_DL = true
 update-checksum-%:
@@ -850,7 +890,8 @@ docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	            $(eval $(PKG)_BUILD_ONLY := $(false)) \
 	            <td class="supported">&#x2713;</td>,            \
 	            <td class="unsupported">&#x2717;</td>)\n)       \
-	    $(if $(call set_is_member,$(PKG),$($(BUILD)_PKGS)),        \
+	    $(if $(and $(call set_is_member,$(PKG),$($(BUILD)_PKGS)), \
+	               $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD)))), \
 	        $(eval $(PKG)_VIRTUAL := $(false))   \
 	        <td class="supported">&#x2713;</td>, \
 	        <td class="unsupported">&#x2717;</td>)\n \

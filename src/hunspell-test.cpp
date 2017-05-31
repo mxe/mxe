@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <vector>
 #include <hunspell.hxx>
 
 int main(int argc, char *argv[])
@@ -19,18 +21,18 @@ int main(int argc, char *argv[])
     aff.close();
     Hunspell h("hunspell-test.aff", "hunspell-test.dic");
 
-    if (h.spell("Hello") == 0)
+    if (h.spell(std::string("Hello")) == 0)
     {
         std::cerr << "Error: hunspell marked correct word as wrong" << std::endl;
     }
-    if (h.spell("wrld") != 0)
+    if (h.spell(std::string("wrld")) != 0)
     {
         std::cerr << "Error: hunspell marked wrong word as correct" << std::endl;
     }
 
-    char ** result;
-    int n = h.suggest(&result, "ell");
-    for (int i = 0; i < n; i++) std::cout << result[i];
+    std::vector<std::string> result;
+    result = h.suggest(std::string("ell"));
+    for (unsigned int i = 0; i < result.size(); i++) std::cout << result[i];
 
     return 0;
 }

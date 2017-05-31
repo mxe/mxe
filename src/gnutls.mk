@@ -3,13 +3,13 @@
 PKG             := gnutls
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gnutls/
 $(PKG)_DESCR    := GnuTLS
-$(PKG)_VERSION  := 3.5.10
-$(PKG)_CHECKSUM := af443e86ba538d4d3e37c4732c00101a492fe4b56a55f4112ff0ab39dbe6579d
+$(PKG)_VERSION  := 3.5.12
+$(PKG)_CHECKSUM := 63cb39a5eaa029381df2e49a74cfb7be89fc4a592445191818ffe1e66bde57cb
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gnupg.org/ftp/gcrypt/gnutls/v3.5/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn libunistring nettle zlib
+$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn2 libunistring nettle zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- https://gnupg.org/ftp/gcrypt/gnutls/v3.5/ | \
@@ -21,7 +21,7 @@ endef
 define $(PKG)_BUILD
     # AI_ADDRCONFIG referenced by src/serv.c but not provided by mingw.
     # Value taken from https://msdn.microsoft.com/en-us/library/windows/desktop/ms737530%28v=vs.85%29.aspx
-    cd '$(1)' && ./configure \
+    cd '$(1)' && autoreconf -fi && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-rpath \
         --disable-nls \
