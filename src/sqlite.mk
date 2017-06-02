@@ -18,6 +18,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # The system include path doesn't belong in CFLAGS
+    # Causes problems like https://gitlab.kitware.com/cmake/cmake/issues/16919
+    $(SED) -i 's/^Cflags/#Cflags/;' '$(1)/sqlite3.pc.in'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-readline \
