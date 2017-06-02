@@ -5,10 +5,10 @@ $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 79ae8660086bf92ffb0008b17566270e6477c8fa0daf9bb3ac29404fb5911bec
+$(PKG)_CHECKSUM := 8dad193b740055a998312e04a040f2e32a923c0823b2d239b24eab08276a4e04
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebkit,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebkit,$(qtbase_FILE))
-$(PKG)_URL       = https://download.qt.io/community_releases/5.8/5.8.0-final/$($(PKG)_FILE)
+$(PKG)_URL       = https://download.qt.io/community_releases/5.9/5.9.0-final/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qtbase qtmultimedia qtquickcontrols sqlite
 
 define $(PKG)_UPDATE

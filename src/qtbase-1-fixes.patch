@@ -1,9 +1,9 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 12eed60ff166200c12d203d0daaa6c58c41df0ea Mon Sep 17 00:00:00 2001
+From cebc5ce4d7497007b4df6129cc7a3e7fa1eb2567 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/4] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -12,10 +12,10 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index d2358ca..6b1dc95 100644
+index 4f342d67d7a..28cd405c1a5 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -222,13 +222,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -224,13 +224,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      endif()
  !!ENDIF
  
@@ -33,13 +33,13 @@ index d2358ca..6b1dc95 100644
  !!ENDIF
  !!ENDIF
 -- 
-2.9.3
+2.11.0
 
 
-From 9d8bca4d8c1d312cca4b161c93a091147dd7aa37 Mon Sep 17 00:00:00 2001
+From 84a904fbfe966a83d5a6a025828075465a53d6d3 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/5] Fix pkgconfig file and library naming
+Subject: [PATCH 2/4] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -64,10 +64,10 @@ Task-number: 30898
 Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 31d6285..8e24520 100644
+index 36f632e8caa..b07085ac429 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
-@@ -248,6 +248,10 @@ load(qt_installs)
+@@ -263,6 +263,10 @@ load(qt_installs)
  
  load(qt_targets)
  
@@ -78,7 +78,7 @@ index 31d6285..8e24520 100644
  # this builds on top of qt_common
  !internal_module:!lib_bundle:if(unix|mingw) {
      CONFIG += create_pc
-@@ -258,12 +262,12 @@ load(qt_targets)
+@@ -273,12 +277,12 @@ load(qt_targets)
          QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
      QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
      QMAKE_PKGCONFIG_CFLAGS = -I${includedir}/$$MODULE_INCNAME
@@ -87,36 +87,36 @@ index 31d6285..8e24520 100644
 +    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt$$QT_MAJOR_VERSION ")
 +    QMAKE_PKGCONFIG_FILE = $$TARGET
      for(i, MODULE_DEPENDS): \
--        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$eval(QT.$${i}.MAJOR_VERSION))
-+        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$eval(QT.$${i}.MAJOR_VERSION))$$qtPlatformTargetSuffix()
+-        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$section(QT.$${i}.VERSION, ., 0, 0))
++        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$section(QT.$${i}.VERSION, ., 0, 0))$$qtPlatformTargetSuffix()
      isEmpty(QMAKE_PKGCONFIG_DESCRIPTION): \
 -        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt, "Qt ") module
 +        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt ") module
      pclib_replace.match = $$lib_replace.match
      !isEmpty(lib_replace.replace): \
          pclib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
-@@ -297,5 +301,3 @@ win32 {
+@@ -312,5 +316,3 @@ win32 {
      # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
      DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
  }
 -
 -TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
 -- 
-2.9.3
+2.11.0
 
 
-From e4da2904bcab29d15ad137508390bec0595c0e72 Mon Sep 17 00:00:00 2001
+From 7608e9aee345980061fcbf83b3623035fbde5c81 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/4] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 1f50116..dd94429 100644
+index 73e59a7ad9d..eb7c9230a3b 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -471,7 +471,7 @@
+@@ -479,7 +479,7 @@
          },
          "fontconfig": {
              "label": "Fontconfig",
@@ -126,61 +126,37 @@ index 1f50116..dd94429 100644
          },
          "gbm": {
 diff --git a/src/plugins/platforms/minimal/qminimalintegration.cpp b/src/plugins/platforms/minimal/qminimalintegration.cpp
-index 03c7250..7d0ffbd 100644
+index ca33689cd72..194523eee00 100644
 --- a/src/plugins/platforms/minimal/qminimalintegration.cpp
 +++ b/src/plugins/platforms/minimal/qminimalintegration.cpp
-@@ -120,7 +120,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
-     if (m_options & EnableFonts) {
+@@ -130,7 +130,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
+ {
+     if (!m_fontDatabase && (m_options & EnableFonts)) {
  #if QT_CONFIG(fontconfig)
-         if (!m_fontDatabase)
 +#ifdef Q_OS_WIN
-+            m_fontDatabase = new QBasicFontDatabase;
++        m_fontDatabase = new QFreeTypeFontDatabase;
 +#else
-             m_fontDatabase = new QGenericUnixFontDatabase;
+         m_fontDatabase = new QGenericUnixFontDatabase;
 +#endif
- #else
-         return QPlatformIntegration::fontDatabase();
- #endif
+ #elif defined(Q_OS_WINRT)
+         m_fontDatabase = new QWinRTFontDatabase;
+ #elif defined(Q_OS_WIN)
 -- 
-2.9.3
+2.11.0
 
 
-From db3c6f5fecb9b93f3553273576954d363d0630bc Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sun, 29 Jan 2017 14:00:06 +0100
-Subject: [PATCH 4/5] fix included file name case
-
-Change-Id: I026787441aa43128aec001cfe1a7bc8d37799826
-
-diff --git a/src/plugins/platforms/windows/qwin10helpers.cpp b/src/plugins/platforms/windows/qwin10helpers.cpp
-index 977bbfd..12cccd1 100644
---- a/src/plugins/platforms/windows/qwin10helpers.cpp
-+++ b/src/plugins/platforms/windows/qwin10helpers.cpp
-@@ -57,7 +57,7 @@
- #endif
- 
- #ifdef HAS_UI_VIEW_SETTINGS_INTEROP
--#  include <UIViewSettingsInterop.h>
-+#  include <uiviewsettingsinterop.h>
- #endif
- 
- #ifndef HAS_UI_VIEW_SETTINGS_INTEROP
--- 
-2.9.3
-
-
-From ddf845adb0080016c2f69fcfa7e23edf70e5151a Mon Sep 17 00:00:00 2001
+From 2b35f94bc2613e0723f7b2bec21f5dbe20213f41 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
-Subject: [PATCH 5/5] fix treatment of SYBASE_LIBS
+Subject: [PATCH 4/4] fix treatment of SYBASE_LIBS
 
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
 diff --git a/src/sql/configure.pri b/src/sql/configure.pri
-index 1d8847b..229b6a1 100644
+index 05794582e9e..15a78f68f3a 100644
 --- a/src/sql/configure.pri
 +++ b/src/sql/configure.pri
-@@ -76,7 +76,7 @@ defineTest(qtConfLibrary_sybaseEnv) {
+@@ -89,7 +89,7 @@ defineTest(qtConfLibrary_sybaseEnv) {
          libs += "-L$${sybase}/lib"
      libs += $$getenv(SYBASE_LIBS)
      !isEmpty(libs) {
@@ -190,5 +166,5 @@ index 1d8847b..229b6a1 100644
      }
      return(true)
 -- 
-2.9.3
+2.11.0
 
