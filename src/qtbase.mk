@@ -30,7 +30,6 @@ define $(PKG)_BUILD
         PKG_CONFIG_LIBDIR="$(PREFIX)/$(TARGET)/lib/pc" \
         ./configure \
             -opensource \
-            -c++std c++11 \
             -confirm-license \
             -xplatform win32-g++ \
             -device-option CROSS_COMPILE=${TARGET}- \
