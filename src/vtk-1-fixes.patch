@@ -5,151 +5,50 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Martin=20M=C3=BCllenhaupt?= <mm+mxe.cc@netlair.de>
 Date: Sat, 22 Jun 2013 18:44:18 +1000
-Subject: [PATCH] add TryRunResults.cmake
+Subject: [PATCH] fix libharu shared linking
 
 
-diff -Naur a/TryRunResults.cmake b/TryRunResults.cmake
-new file mode 100644
-index 1111111..2222222
---- /dev/null
-+++ b/TryRunResults.cmake
-@@ -0,0 +1,30 @@
-+SET( VTK_TYPE_CHAR_IS_SIGNED 
-+     "1"
-+     CACHE STRING "Result from TRY_RUN" FORCE)
-+SET( VTK_ANSI_STREAM_EOF_RESULT 
-+     "1"
-+     CACHE STRING "Result from TRY_RUN" FORCE)
-+SET( KWSYS_CHAR_IS_SIGNED 
-+     "0"
-+     CACHE STRING "Result from TRY_RUN" FORCE)
-+
-+SET( KWSYS_CHAR_IS_SIGNED__TRYRUN_OUTPUT 
-+     ""
-+     CACHE STRING "Output from TRY_RUN" FORCE)
-+
-+SET( CMAKE_REQUIRE_LARGE_FILE_SUPPORT
-+     "0"
-+     CACHE STRING "Result from TRY_RUN" FORCE)
-+
-+SET( CMAKE_REQUIRE_LARGE_FILE_SUPPORT__TRYRUN_OUTPUT
-+     ""
-+     CACHE STRING "Output from TRY_RUN" FORCE)
-+
-+SET( KWSYS_LFS_WORKS
-+     "0"
-+     CACHE STRING "Result from TRY_RUN" FORCE)
-+
-+SET( KWSYS_LFS_WORKS__TRYRUN_OUTPUT
-+     ""
-+     CACHE STRING "Output from TRY_RUN" FORCE)
-+
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Martin=20M=C3=BCllenhaupt?= <mm+mxe.cc@netlair.de>
-Date: Thu, 29 Aug 2013 10:19:49 +0200
-Subject: [PATCH] strip down native configure to required compile tools
-
-diff --git a/Utilities/EncodeString/module.cmake b/Utilities/EncodeString/module.cmake
-index 9d91fca..1404374 100644
---- a/Utilities/EncodeString/module.cmake
-+++ b/Utilities/EncodeString/module.cmake
-@@ -1,2 +1,4 @@
- vtk_module(vtkUtilitiesEncodeString
-+  GROUPS
-+    CompileTools
-   EXCLUDE_FROM_WRAPPING)
-diff --git a/Utilities/HashSource/module.cmake b/Utilities/HashSource/module.cmake
-index f29b54e..53852f5 100644
---- a/Utilities/HashSource/module.cmake
-+++ b/Utilities/HashSource/module.cmake
-@@ -1,4 +1,6 @@
- vtk_module(vtkUtilitiesHashSource
-+  GROUPS
-+    CompileTools
-   DEPENDS
-     vtksys
-   EXCLUDE_FROM_WRAPPING
-diff --git a/Utilities/ParseOGLExt/module.cmake b/Utilities/ParseOGLExt/module.cmake
-index c0f6dbc..ac7a7bf 100644
---- a/Utilities/ParseOGLExt/module.cmake
-+++ b/Utilities/ParseOGLExt/module.cmake
-@@ -1,2 +1,4 @@
- vtk_module(vtkParseOGLExt
-+  GROUPS
-+    CompileTools
-   EXCLUDE_FROM_WRAPPING)
-
-Make VTKs version check compatible with GCC 6 (requires CMake 2.8.10)
---- a/CMake/vtkCompilerExtras.cmake	2016-01-28 17:17:38.000000000 +0100
-+++ b/CMake/vtkCompilerExtras.cmake.new	2016-09-27 13:58:58.474017696 +0200
-@@ -27,24 +27,12 @@
-       "${VTK_EXTRA_SHARED_LINKER_FLAGS} -Wl,--no-undefined -lc ${CMAKE_SHARED_LINKER_FLAGS}")
-   endif()
+--- a/IO/Export/CMakeLists.txt	2017-05-19 15:20:47.000000000 +0200
++++ b/IO/Export/CMakeLists.txt	2017-06-05 11:13:51.646391244 +0200
+@@ -33,6 +33,16 @@
+   ABSTRACT
+   )
  
--  # Now check if we can use visibility to selectively export symbols
--  execute_process(COMMAND ${CMAKE_C_COMPILER} ARGS --version
--    OUTPUT_VARIABLE _gcc_version_info
--    ERROR_VARIABLE _gcc_version_info)
--
--  string (REGEX MATCH "[345]\\.[0-9]\\.[0-9]*"
--    _gcc_version "${_gcc_version_info}")
--  if(NOT _gcc_version)
--    string (REGEX REPLACE ".*\\(GCC\\).*([34]\\.[0-9]).*" "\\1.0"
--      _gcc_version "${_gcc_version_info}")
--  endif()
--
-   # GCC visibility support, on by default and in testing.
-   check_cxx_compiler_flag(-fvisibility=hidden HAVE_GCC_VISIBILITY)
-   option(VTK_USE_GCC_VISIBILITY "Use GCC visibility support if available." OFF)
-   mark_as_advanced(VTK_USE_GCC_VISIBILITY)
++if(VTK_BUILD_SHARED_LIBS)
++  set_source_files_properties(
++      vtkPDFContextDevice2D.cxx
++      vtkPDFExporter.cxx
++    PROPERTIES
++    COMPILE_DEFINITIONS
++      HPDF_DLL
++    )
++endif()
++
+ vtk_module_library(vtkIOExport ${Module_SRCS})
+ include(vtkOpenGL)
+ vtk_opengl_link(vtkIOExport)
+--- a/CMake/FindLibHaru.cmake	2017-05-19 15:20:47.000000000 +0200
++++ b/VTK-8.0.0.rc1/CMake/FindLibHaru.cmake	2017-06-05 12:56:24.120790922 +0200
+@@ -19,7 +19,7 @@
  
--  if(${_gcc_version} VERSION_GREATER 4.2.0 AND BUILD_SHARED_LIBS
-+  if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.2.0 AND BUILD_SHARED_LIBS
-     AND HAVE_GCC_VISIBILITY AND VTK_USE_GCC_VISIBILITY
-     AND NOT MINGW AND NOT CYGWIN)
-     # Should only be set if GCC is newer than 4.2.0
---- a/CMake/GenerateExportHeader.cmake	2016-09-28 09:31:22.765722045 +0200
-+++ b/CMake/GenerateExportHeader.cmake.new	2016-09-28 09:31:12.458735596 +0200
-@@ -163,19 +163,7 @@
- macro(_test_compiler_hidden_visibility)
+ find_path(LIBHARU_INCLUDE_DIR hpdf.h)
  
-   if(CMAKE_COMPILER_IS_GNUCXX)
--    execute_process(COMMAND ${CMAKE_C_COMPILER} ARGS --version
--      OUTPUT_VARIABLE _gcc_version_info
--      ERROR_VARIABLE _gcc_version_info)
--    string(REGEX MATCH "[345]\\.[0-9]\\.[0-9]*"
--      _gcc_version "${_gcc_version_info}")
--    # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the
--    # patch level, handle this here:
--    if(NOT _gcc_version)
--      string(REGEX REPLACE ".*\\(GCC\\).*([34]\\.[0-9]).*" "\\1.0"
--        _gcc_version "${_gcc_version_info}")
--    endif()
--
--    if(${_gcc_version} VERSION_LESS "4.2")
-+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.2")
-       set(GCC_TOO_OLD TRUE)
-     endif()
-   endif()
-
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Manuel Massing <m.massing@warped-space.de>
-Date: Tue, 25 Apr 2017 12:32:34 +0200
-Subject: [PATCH] cmake: update regex to also match gcc6 versions
-
-
-diff --git a/CMake/vtkCompilerExtras.cmake b/CMake/vtkCompilerExtras.cmake
-index 1111111..2222222 100644
---- a/CMake/vtkCompilerExtras.cmake
-+++ b/CMake/vtkCompilerExtras.cmake
-@@ -25,7 +25,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
-   # Now check if we can use visibility to selectively export symbols
-   exec_program(${CMAKE_C_COMPILER} ARGS --version OUTPUT_VARIABLE
-     _gcc_version_info)
--  string (REGEX MATCH "[345]\\.[0-9]\\.[0-9]" 
-+  string (REGEX MATCH "[3456]\\.[0-9]\\.[0-9]" 
-     _gcc_version "${_gcc_version_info}")
-   if(NOT _gcc_version)
-     string (REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" 
+-find_library(LIBHARU_LIBRARY NAMES hpdf)
++find_library(LIBHARU_LIBRARY NAMES hpdf hpdfs)
+ 
+ # handle the QUIETLY and REQUIRED arguments and set FONTCONFIG_FOUND to TRUE if
+ # all listed variables are TRUE
+--- a/Rendering/OpenGL2/CMakeLists.txt	2017-05-19 15:20:47.000000000 +0200
++++ b/Rendering/OpenGL2/CMakeLists.txt	2017-06-06 01:11:16.512084625 +0200
+@@ -122,6 +122,11 @@
+   vtkTransformFeedback
+   WRAP_EXCLUDE)
+ 
++if(NOT VTK_BUILD_SHARED_LIBS)
++  set_source_files_properties(${Module_SRCS}
++    PROPERTIES COMPILE_DEFINITIONS GLEW_STATIC)
++endif()
++
+ set_source_files_properties(
+   ${CMAKE_CURRENT_BINARY_DIR}/${vtk-module}ObjectFactory.cxx
+   vtkOpenGLGL2PSHelper
