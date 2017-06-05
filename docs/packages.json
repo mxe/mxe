@@ -172,7 +172,7 @@
     "libgpg_error": {"version": "1.27", "website": "https://www.gnupg.org/related_software/libgpg-error/", "description": "libgpg-error"},
     "libgsasl": {"version": "1.8.0", "website": "https://www.gnu.org/software/gsasl/", "description": "Libgsasl"},
     "libgsf": {"version": "1.14.30", "website": "https://developer.gnome.org/gsf/", "description": ""},
-    "libharu": {"version": "2.2.1", "website": "http://libharu.org/", "description": ""},
+    "libharu": {"version": "2.3.0", "website": "http://libharu.org/", "description": ""},
     "libiberty": {"version": "2.25.1", "website": "https://gcc.gnu.org/onlinedocs/libiberty/", "description": ""},
     "libical": {"version": "2.0.0", "website": "https://freeassociation.sourceforge.io/", "description": ""},
     "libiconv": {"version": "1.15", "website": "https://www.gnu.org/software/libiconv/", "description": ""},
