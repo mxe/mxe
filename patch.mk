@@ -18,6 +18,8 @@ define INIT_GIT
     rm -rf '$(GITS_DIR)/tmp'
     mkdir -p '$(GITS_DIR)/tmp/$(1)'
     cd '$(GITS_DIR)/tmp/$(1)' && $(call UNPACK_PKG_ARCHIVE,$(1))
+    # the following is really needed for multilevel subdirs (xvidcore)
+    mkdir -p '$(shell dirname $(call GIT_DIR,$(1)))'
     # if PKG_SUBDIR is ".", the following will move gits/tmp/pkg
     mv '$(abspath $(GITS_DIR)/tmp/$(1)/$($(1)_SUBDIR))' '$(call GIT_DIR,$(1))'
     rm -rf '$(GITS_DIR)/tmp'
