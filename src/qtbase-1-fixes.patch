@@ -3,7 +3,7 @@ This file is part of MXE. See LICENSE.md for licensing information.
 From cebc5ce4d7497007b4df6129cc7a3e7fa1eb2567 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/4] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -39,7 +39,7 @@ index 4f342d67d7a..28cd405c1a5 100644
 From 84a904fbfe966a83d5a6a025828075465a53d6d3 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/4] Fix pkgconfig file and library naming
+Subject: [PATCH 2/5] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -108,7 +108,7 @@ index 36f632e8caa..b07085ac429 100644
 From 7608e9aee345980061fcbf83b3623035fbde5c81 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/4] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
@@ -148,7 +148,7 @@ index ca33689cd72..194523eee00 100644
 From 2b35f94bc2613e0723f7b2bec21f5dbe20213f41 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
-Subject: [PATCH 4/4] fix treatment of SYBASE_LIBS
+Subject: [PATCH 4/5] fix treatment of SYBASE_LIBS
 
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
@@ -165,6 +165,31 @@ index 05794582e9e..15a78f68f3a 100644
          export($${1}.libs)
      }
      return(true)
+-- 
+2.11.0
+
+
+From 656dc60fbd347668ae06e943f35ad9143405b76f Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 11 Jun 2017 00:27:41 +0200
+Subject: [PATCH 5/5] use pkg-config for harfbuzz
+
+Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
+
+diff --git a/src/gui/configure.json b/src/gui/configure.json
+index eb7c9230a3b..9c4560b56b0 100644
+--- a/src/gui/configure.json
++++ b/src/gui/configure.json
+@@ -123,7 +123,8 @@
+             "label": "HarfBuzz",
+             "test": "unix/harfbuzz",
+             "sources": [
+-                "-lharfbuzz"
++               { "type": "pkgConfig", "args": "harfbuzz" },
++               "-lharfbuzz"
+             ]
+         },
+         "imf": {
 -- 
 2.11.0
 
