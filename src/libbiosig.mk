@@ -2,9 +2,11 @@
 # See index.html for further information.
 
 PKG             := libbiosig
+$(PKG)_WEBSITE  := http://biosig.sf.net/
+$(PKG)_DESCR    := libbiosig
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.4b
-$(PKG)_CHECKSUM := faac6e65ad6365d8643f8058f87e238112cfc72ebd75edb0d21947faa5ceda78
+$(PKG)_VERSION  := 1.8.5
+$(PKG)_CHECKSUM := 9fa7a50ab032dcf21b941e93c21b43a7b75f5ffc38a02b5bddc65b8bd33e2aea
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
@@ -20,6 +22,7 @@ define $(PKG)_BUILD_PRE
 
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|#||g' '$(1)'/Makefile
+    $(SED) -i '/^DEFINE.*WITH_PTHREAD/ s|^|#|g' '$(1)'/Makefile
 
     ### disables declaration of sopen from io.h (imported through unistd.h)
     $(SED) -i '/ sopen/ s#^/*#//#g' $(PREFIX)/$(TARGET)/include/io.h
@@ -31,8 +34,7 @@ define $(PKG)_BUILD_PRE
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' clean
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' \
 		libbiosig.a libbiosig2.a libgdf.a  libphysicalunits.a \
-		libbiosig.def libbiosig2.def libgdf.def libphysicalunits.def \
-		libbiosig
+		libbiosig.def libbiosig2.def libgdf.def libphysicalunits.def
 
 endef
 
@@ -68,7 +70,7 @@ define $(PKG)_BUILD_POST
     ### make release file
     rm -f $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip
     cd $(PREFIX)/$(TARGET) && zip $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip \
-		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h include/io.h \
+		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h  \
 		lib/libbiosig.a lib/libbiosig.def lib/libbiosig.dll lib/libbiosig.dll.a \
 		lib/libbiosig2.a lib/libbiosig2.def lib/libbiosig2.dll lib/libbiosig2.dll.a \
 		lib/libgdf.a lib/libgdf.def lib/libgdf.dll lib/libgdf.dll.a \
@@ -79,7 +81,7 @@ define $(PKG)_BUILD_POST
 
     mkdir -p $(PREFIX)/release/$(TARGET)/include/
     cd $(PREFIX)/$(TARGET) && cp -r \
-		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h include/io.h \
+		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h \
 		include/libiberty include/iconv.h \
 		include/physicalunits.h \
 		$(PREFIX)/release/$(TARGET)/include/
