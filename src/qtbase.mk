@@ -27,7 +27,7 @@ define $(PKG)_BUILD
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -liconv -lws2_32" \
         PKG_CONFIG="${TARGET}-pkg-config" \
         PKG_CONFIG_SYSROOT_DIR="/" \
-        PKG_CONFIG_LIBDIR="$(PREFIX)/$(TARGET)/lib/pc" \
+        PKG_CONFIG_LIBDIR="$(PREFIX)/$(TARGET)/lib/pkgconfig" \
         ./configure \
             -opensource \
             -confirm-license \
