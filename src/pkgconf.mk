@@ -25,6 +25,7 @@ define $(PKG)_BUILD
            PKG_CONFIG_SYSROOT_DIR= \
            PKG_CONFIG_LIBDIR="$(PREFIX)/$(TARGET)/lib/pkgconfig" \
            PKG_CONFIG_SYSTEM_INCLUDE_PATH="$(PREFIX)/$(TARGET)/include" \
+           PKG_CONFIG_SYSTEM_LIBRARY_PATH="$(PREFIX)/$(TARGET)/lib" \
            exec "$(PREFIX)/$(BUILD)/bin/pkgconf" $(if $(BUILD_STATIC),--static) "$$@"') \
              > '$(PREFIX)/bin/$(TARGET)-pkg-config'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-pkg-config'
