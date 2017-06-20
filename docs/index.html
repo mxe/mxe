@@ -845,7 +845,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     and will need <code>brew link</code> to be found.
     </p>
 
-    <h5 id="requirements-macos-genaral">Genral Notes</h5>
+    <h5 id="requirements-macos-general">Genral Notes</h5>
     <p>
     You may be prompted to install a java runtime
     - this is not required.
@@ -855,6 +855,16 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <p>
     <h5>Certain packages have open issues on OS X</h5>
+    </p>
+    <p>
+    For Xcode ≥ 8.3 install an alternate compiler to build `gcc`.
+    For example, if you use Macports run:
+    <pre>sudo port install gcc5
+make cmake && \
+sudo port select gcc mp-gcc5 && \
+make gcc -j4 && \
+sudo port select gcc none && \
+make -j4 -k</pre>
     </p>
     <p>
     For Xcode <7.3, run:
