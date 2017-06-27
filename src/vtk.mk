@@ -2,8 +2,8 @@
 
 PKG               := vtk
 $(PKG)_IGNORE     :=
-$(PKG)_VERSION    := 8.0.0.rc1
-$(PKG)_CHECKSUM   := 83f2d9f306fec6e00b8d1aca91814ef1fa87aebee9d40d7b7d3ff3e7eb530c0c
+$(PKG)_VERSION    := 8.0.0
+$(PKG)_CHECKSUM   := c7e727706fb689fb6fd764d3b47cac8f4dc03204806ff19a10dfd406c6072a27
 $(PKG)_SUBDIR     := VTK-$($(PKG)_VERSION)
 $(PKG)_FILE       := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL        := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
