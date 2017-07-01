@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtksourceview
+$(PKG)_WEBSITE  := https://projects.gnome.org/gtksourceview/
+$(PKG)_DESCR    := GTKSourceView
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.10.5
 $(PKG)_CHECKSUM := c585773743b1df8a04b1be7f7d90eecdf22681490d6810be54c81a7ae152191e
 $(PKG)_SUBDIR   := gtksourceview-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtksourceview-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.gnome.org/sources/gtksourceview/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gtk2 libxml2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.gnome.org/browse/gtksourceview/refs/tags' | \
+    $(WGET) -q -O- 'https://git.gnome.org/browse/gtksourceview/refs/tags' | \
     $(SED) -n 's,.*>GTKSOURCEVIEW_\([0-9]\+_[0-9]*[02468]_[0-9_]\+\)<.*,\1,p' | \
     $(SED) 's,_,.,g' | \
     grep -v '^2\.9[0-9]\.' | \

@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-lablgl
+$(PKG)_WEBSITE  := http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html
+$(PKG)_DESCR    := lablgl
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.05
 $(PKG)_CHECKSUM := d8ff03e35b970d2b23a942f9e6ed65da5a6c123986bd0ecf5424a6205af34b61

@@ -1,16 +1,15 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 544cc902caf39c937bbac7c9f7b07f5fcb869d81 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Sep 2010 21:42:46 +0200
-Subject: [PATCH 1/6] fix tool paths
+Subject: [PATCH] fix tool paths
 
 
 diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
-index 275fc01..ac09887 100644
+index 1111111..2222222 100644
 --- a/glib-2.0.pc.in
 +++ b/glib-2.0.pc.in
 @@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
@@ -26,21 +25,21 @@ index 275fc01..ac09887 100644
  
  Name: GLib
  Description: C Utility Library
--- 
-2.3.2 (Apple Git-55)
 
-
-From 10e38774090ee198d7f70e80f7dd29ef18dcd9d9 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:25:01 +0200
-Subject: [PATCH 2/6] Avoid DllMain symbol conflict when linking statically
+Subject: [PATCH] Avoid DllMain symbol conflict when linking statically
 
+Adjusted by Boris Nagaev on 29-Jan-2017 to fix
+https://gist.github.com/starius/f4fc85939352cb50122ba29e0f5b140d
+when updating to glib-2.50.2.
 
 diff --git a/gio/giomodule.c b/gio/giomodule.c
-index 510f652..f66ca9b 100644
+index 1111111..2222222 100644
 --- a/gio/giomodule.c
 +++ b/gio/giomodule.c
-@@ -904,14 +904,12 @@ extern GType g_gtk_notification_backend_get_type (void);
+@@ -928,14 +928,12 @@ extern GType g_cocoa_notification_backend_get_type (void);
  
  static HMODULE gio_dll = NULL;
  
@@ -57,7 +56,7 @@ index 510f652..f66ca9b 100644
  	 DWORD     fdwReason,
  	 LPVOID    lpvReserved)
  {
-@@ -921,8 +919,6 @@ DllMain (HINSTANCE hinstDLL,
+@@ -945,8 +943,6 @@ DllMain (HINSTANCE hinstDLL,
    return TRUE;
  }
  
@@ -67,10 +66,10 @@ index 510f652..f66ca9b 100644
  _g_io_win32_get_module (void)
  {
 diff --git a/glib/glib-init.c b/glib/glib-init.c
-index 24efe9d..6fb9e25 100644
+index 1111111..2222222 100644
 --- a/glib/glib-init.c
 +++ b/glib/glib-init.c
-@@ -237,14 +237,14 @@ glib_init (void)
+@@ -245,14 +245,14 @@ glib_init (void)
  
  #if defined (G_OS_WIN32)
  
@@ -87,21 +86,31 @@ index 24efe9d..6fb9e25 100644
           DWORD     fdwReason,
           LPVOID    lpvReserved)
  {
--- 
-2.3.2 (Apple Git-55)
+diff --git a/gobject/gtype.c b/gobject/gtype.c
+index 1111111..2222222 100644
+--- a/gobject/gtype.c
++++ b/gobject/gtype.c
+@@ -4450,7 +4450,7 @@ gobject_init (void)
+   _g_signal_init ();
+ }
+ 
+-#if defined (G_OS_WIN32)
++#if 0
+ 
+ BOOL WINAPI DllMain (HINSTANCE hinstDLL,
+                      DWORD     fdwReason,
 
-
-From ca4e5a60cc9176279bd27a44c679e18666fac5e6 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:27:22 +0200
-Subject: [PATCH 3/6] Allow building without inotify support
+Subject: [PATCH] Allow building without inotify support
 
 
 diff --git a/configure.ac b/configure.ac
-index 4a904a4..427d9e2 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1669,10 +1669,16 @@ dnl *****************************
+@@ -1599,10 +1599,16 @@ dnl *****************************
  dnl ** Check for inotify (GIO) **
  dnl *****************************
  inotify_support=no
@@ -118,22 +127,19 @@ index 4a904a4..427d9e2 100644
  
  AM_CONDITIONAL(HAVE_INOTIFY, [test "$inotify_support" = "yes"])
  
--- 
-2.3.2 (Apple Git-55)
 
-
-From 024bc122e81e418096281400b4b5340a7949eca1 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:28:14 +0200
-Subject: [PATCH 4/6] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
+Subject: [PATCH] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
  Backported from upstream
 
 
 diff --git a/configure.ac b/configure.ac
-index 427d9e2..afb6232 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -499,6 +499,8 @@ LT_INIT([disable-static win32-dll])
+@@ -511,6 +511,8 @@ LT_INIT([disable-static win32-dll])
  dnl when using libtool 2.x create libtool early, because it's used in configure
  m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
  
@@ -142,18 +148,15 @@ index 427d9e2..afb6232 100644
  
  AS_IF([test "$glib_native_win32" = "yes"], [
    if test x$enable_static = xyes -a x$enable_shared = xyes; then
--- 
-2.3.2 (Apple Git-55)
 
-
-From bb1a73677634f3a70dbe5baac36ba8e6acf4f4cd Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:06 +0200
-Subject: [PATCH 5/6] Link with dnsapi
+Subject: [PATCH] Link with dnsapi
 
 
 diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
-index 899af0c..b8308f8 100644
+index 1111111..2222222 100644
 --- a/gio-2.0.pc.in
 +++ b/gio-2.0.pc.in
 @@ -13,6 +13,6 @@ Description: glib I/O library
@@ -164,22 +167,19 @@ index 899af0c..b8308f8 100644
 +Libs: -L${libdir} -lgio-2.0 -ldnsapi -liphlpapi
  Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@ @SELINUX_LIBS@ @COCOA_LIBS@ @CARBON_LIBS@
  Cflags:
--- 
-2.3.2 (Apple Git-55)
 
-
-From bb796f32a497ef983e2e7483cab25b6142e15630 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:38 +0200
-Subject: [PATCH 6/6] Ensure globals are initialized even when DllMain is not
+Subject: [PATCH] Ensure globals are initialized even when DllMain is not
  being run
 
 
 diff --git a/glib/gmain.c b/glib/gmain.c
-index 30fac70..736cb57 100644
+index 1111111..2222222 100644
 --- a/glib/gmain.c
 +++ b/glib/gmain.c
-@@ -2566,12 +2566,15 @@ g_get_real_time (void)
+@@ -2657,12 +2657,15 @@ g_get_real_time (void)
  #if defined (G_OS_WIN32)
  static ULONGLONG (*g_GetTickCount64) (void) = NULL;
  static guint32 g_win32_tick_epoch = 0;
@@ -195,7 +195,7 @@ index 30fac70..736cb57 100644
    g_GetTickCount64 = NULL;
    kernel32 = GetModuleHandle ("KERNEL32.DLL");
    if (kernel32 != NULL)
-@@ -2630,6 +2633,9 @@ g_get_monotonic_time (void)
+@@ -2721,6 +2724,9 @@ g_get_monotonic_time (void)
     *    timeBeginPeriod() to increase it as much as they want
     */
  
@@ -206,7 +206,7 @@ index 30fac70..736cb57 100644
      {
        guint32 ticks_as_32bit;
 diff --git a/glib/gthread-win32.c b/glib/gthread-win32.c
-index 275ecc6..8285187 100644
+index 1111111..2222222 100644
 --- a/glib/gthread-win32.c
 +++ b/glib/gthread-win32.c
 @@ -116,18 +116,28 @@ typedef struct
@@ -535,7 +535,7 @@ index 275ecc6..8285187 100644
    win32_check_for_error (WAIT_FAILED != WaitForSingleObject (wt->handle, INFINITE));
  }
  
-@@ -984,6 +1088,8 @@ g_thread_lookup_native_funcs (void)
+@@ -1041,6 +1145,8 @@ g_thread_lookup_native_funcs (void)
  void
  g_thread_win32_init (void)
  {
@@ -544,6 +544,54 @@ index 275ecc6..8285187 100644
    if (!g_thread_lookup_native_funcs ())
      g_thread_xp_init ();
  
--- 
-2.3.2 (Apple Git-55)
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gerardo Ballabio <gerardo.ballabio@gmail.com>
+Date: Sun, 16 Aug 2015 13:18:24 +0200
+Subject: [PATCH] Remove an annoying runtime warning
+
+that pops up when using GtkApplication in Gtk+ 3 programs.
+
+diff --git a/gio/gdbusaddress.c b/gio/gdbusaddress.c
+index 1111111..2222222 100644
+--- a/gio/gdbusaddress.c
++++ b/gio/gdbusaddress.c
+@@ -1387,6 +1387,7 @@ __declspec(dllexport) void CALLBACK g_win32_run_session_bus (HWND hwnd, HINSTANC
+ __declspec(dllexport) void CALLBACK
+ g_win32_run_session_bus (HWND hwnd, HINSTANCE hinst, char *cmdline, int nCmdShow)
+ {
++  /*
+   GDBusDaemon *daemon;
+   GMainLoop *loop;
+   const char *address;
+@@ -1418,6 +1419,7 @@ g_win32_run_session_bus (HWND hwnd, HINSTANCE hinst, char *cmdline, int nCmdShow
+ 
+   g_main_loop_unref (loop);
+   g_object_unref (daemon);
++  */
+ }
+ 
+ static gchar *
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: aquiles2k <aj@elane2k.com>
+Date: Wed, 6 Apr 2016 22:39:53 +0300
+Subject: [PATCH] fix error "won't overwrite defined macro" on OSX
+
+See https://github.com/mxe/mxe/issues/1281
+
+diff --git a/m4macros/glib-gettext.m4 b/m4macros/glib-gettext.m4
+index 1111111..2222222 100644
+--- a/m4macros/glib-gettext.m4
++++ b/m4macros/glib-gettext.m4
+@@ -36,8 +36,8 @@ dnl We go to great lengths to make sure that aclocal won't
+ dnl try to pull in the installed version of these macros
+ dnl when running aclocal in the glib directory.
+ dnl
+-m4_copy([AC_DEFUN],[glib_DEFUN])
+-m4_copy([AC_REQUIRE],[glib_REQUIRE])
++m4_copy_force([AC_DEFUN],[glib_DEFUN])
++m4_copy_force([AC_REQUIRE],[glib_REQUIRE])
+ dnl
+ dnl At the end, if we're not within glib, we'll define the public
+ dnl definitions in terms of our private definitions.

@@ -1,0 +1,64 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 11c943734757cf703daa6768b3919b7a580fe8b0 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 10 Oct 2015 22:00:31 +0100
+Subject: [PATCH 1/2] build on MXE
+
+---
+ luasocket-scm-0.rockspec | 14 ++++++++++++--
+ src/usocket_dummy.lua    |  1 +
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+ create mode 100644 src/usocket_dummy.lua
+
+diff --git a/luasocket-scm-0.rockspec b/luasocket-scm-0.rockspec
+index f86567b..9b4da80 100644
+--- a/luasocket-scm-0.rockspec
++++ b/luasocket-scm-0.rockspec
+@@ -46,7 +46,14 @@ local function make_plat(plat)
+ 		 "WINVER=0x0501",
+ 		 "LUASOCKET_API=__declspec(dllexport)",
+ 		 "MIME_API=__declspec(dllexport)"
+-	  }
++	  },
++	  mxe = {
++		 "LUASOCKET_DEBUG",
++		 "LUASOCKET_INET_PTON",
++		 "WINVER=0x0501",
++		 "LUASOCKET_API=__declspec(dllexport)",
++		 "MIME_API=__declspec(dllexport)"
++	  },
+ 	}
+ 	local modules = {
+ 		["socket.core"] = {
+@@ -85,9 +92,11 @@ local function make_plat(plat)
+ 		  incdir = "/src"
+ 		}
+ 	end
+-    if  plat == "win32" or plat == "mingw32" then
++    if  plat == "win32" or plat == "mingw32" or plat == "mxe" then
+ 	    modules["socket.core"].sources[#modules["socket.core"].sources+1] = "src/wsocket.c"
+ 	    modules["socket.core"].libraries = { "ws2_32" }
++	    modules["socket.unix"] = "src/usocket_dummy.lua"
++	    modules["socket.serial"] = "src/usocket_dummy.lua"
+ 	end
+ 	return { modules = modules }
+ end
+@@ -95,6 +104,7 @@ end
+ build = {
+    type = "builtin",
+    platforms = {
++     mxe = make_plat("mxe"),
+      unix = make_plat("unix"),
+      macosx = make_plat("macosx"),
+      win32 = make_plat("win32"),
+diff --git a/src/usocket_dummy.lua b/src/usocket_dummy.lua
+new file mode 100644
+index 0000000..3cce676
+--- /dev/null
++++ b/src/usocket_dummy.lua
+@@ -0,0 +1 @@
++return error("This file was created to suppress build of usocket.c for MXE")
+-- 
+2.1.4
+

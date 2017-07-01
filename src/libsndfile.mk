@@ -1,10 +1,10 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libsndfile
+$(PKG)_WEBSITE  := http://www.mega-nerd.com/libsndfile/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.25
-$(PKG)_CHECKSUM := 59016dbd326abe7e2366ded5c344c853829bebfd1702ef26a07ef662d6aa4882
+$(PKG)_VERSION  := 1.0.28
+$(PKG)_CHECKSUM := 1ff33929f042fa333aed1e8923aa628c3ee9e1eb85512686c55092d1e5a9dfa9
 $(PKG)_SUBDIR   := libsndfile-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsndfile-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.mega-nerd.com/libsndfile/files/$($(PKG)_FILE)

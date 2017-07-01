@@ -1,5 +1,4 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 TEMPLATE = app
 greaterThan(QT_MAJOR_VERSION, 4): TARGET = test-qt5
 else: TARGET = test-qt

@@ -1,10 +1,11 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 # WIDL is called "Wine IDL Compiler"; but we use mingw-w64's copy of it to
 # avoid downloading Wine's entire tree.
 
 PKG             := widl
+$(PKG)_WEBSITE  := https://www.winehq.org/docs/widl/
+$(PKG)_DESCR    := Wine IDL Compiler
 $(PKG)_IGNORE    = $(mingw-w64_IGNORE)
 $(PKG)_VERSION   = $(mingw-w64_VERSION)
 $(PKG)_CHECKSUM  = $(mingw-w64_CHECKSUM)
@@ -24,7 +25,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)' \
         --target='$(TARGET)'
     $(MAKE) -C '$(1)/mingw-w64-tools/widl' -j '$(JOBS)' install
-	
+
     # create cmake file
     echo 'set(CMAKE_WIDL $(PREFIX)/bin/$(TARGET)-$(PKG) CACHE PATH "widl executable")' \
     > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'

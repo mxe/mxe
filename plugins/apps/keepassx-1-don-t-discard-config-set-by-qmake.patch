@@ -1,0 +1,26 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From e941cfd42870fe214f8c44cd5e4d8ee6893b0904 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Fri, 25 Sep 2015 10:19:17 +0200
+Subject: [PATCH] don't discard CONFIG set by qmake
+
+See https://github.com/mxe/mxe/commit/6c561c5f3307944d7b6d7ec3de732b25bf69ed00
+---
+ src/src.pro |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/src.pro b/src/src.pro
+index 7644b93..827741d 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -1,5 +1,5 @@
+ 
+-CONFIG = qt uic resources thread stl warn_on
++CONFIG += qt uic resources thread stl warn_on
+ QT += xml
+ 
+ *-g++ : QMAKE_CXXFLAGS_WARN_ON += -Wno-sign-compare
+-- 
+1.7.10.4
+

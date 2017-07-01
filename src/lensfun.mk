@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lensfun
+$(PKG)_WEBSITE  := https://lensfun.sourceforge.io/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.3.0
-$(PKG)_CHECKSUM := c2c3c03873cb549d49d42f118fcb0ffa95d1e45b9ff395e19facb63bf699bec1
+$(PKG)_VERSION  := 0.3.2
+$(PKG)_CHECKSUM := ae8bcad46614ca47f5bda65b00af4a257a9564a61725df9c74cb260da544d331
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/lensfun/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/lensfun/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib libgnurx libpng
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/lensfun/files/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/lensfun/files/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     $(SORT) -V | \
     tail -1
@@ -19,15 +19,13 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1)/building'
-    cd '$(1)/building' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DBUILD_STATIC=$(if $(BUILD_STATIC),TRUE,FALSE) \
-        -DINSTALL_IN_TREE=NO
+    cd '$(1)/building' && '$(TARGET)-cmake' .. \
+        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)/building' -j '$(JOBS)' install VERBOSE=1
 
     # Don't use `-ansi`, as lensfun uses C++-style `//` comments.
     '$(TARGET)-gcc' \
         -W -Wall -Werror \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-lensfun.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-lensfun.exe' \
         `'$(TARGET)-pkg-config' lensfun glib-2.0 --cflags --libs`
 endef

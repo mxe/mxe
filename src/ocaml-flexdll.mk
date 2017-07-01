@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-flexdll
+$(PKG)_WEBSITE  := http://alain.frisch.fr/
+$(PKG)_DESCR    := flexdll
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.31
 $(PKG)_CHECKSUM := f01d90a8b89a82a6021f3d96a2977a54cb858c561f062a43e5dd451618119e2c

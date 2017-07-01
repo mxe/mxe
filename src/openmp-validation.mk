@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openmp-validation
+$(PKG)_WEBSITE  := https://github.com/uhhpctools/omp-validation
+$(PKG)_DESCR    := OpenMP Validation Suite
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1
 $(PKG)_CHECKSUM := 9dbfe3cf49ab6187def83c85b57e133e11fbb667aa111f0fd70775166254dbff

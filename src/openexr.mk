@@ -1,13 +1,14 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openexr
+$(PKG)_WEBSITE  := http://www.openexr.com/
+$(PKG)_DESCR    := OpenEXR
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.0
 $(PKG)_CHECKSUM := 36a012f6c43213f840ce29a8b182700f6cf6b214bea0d5735594136b44914231
 $(PKG)_SUBDIR   := openexr-$($(PKG)_VERSION)
 $(PKG)_FILE     := openexr-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ilmbase pthreads zlib
 
 define $(PKG)_UPDATE
@@ -62,6 +63,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -Wall -Wextra -std=gnu++0x \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-openexr.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-openexr.exe' \
         `'$(TARGET)-pkg-config' OpenEXR --cflags --libs`
 endef

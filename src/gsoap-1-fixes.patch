@@ -1,14 +1,15 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
-From 933115892cfe9e4c9942a9667b3362dbf5c64b52 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 23 Oct 2011 21:36:53 +0200
-Subject: [PATCH 1/2] support static linking to ntlm
+Subject: [PATCH] support static linking to ntlm
 
 
 diff --git a/configure b/configure
-index 5454a6a..8508b30 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
 @@ -5023,8 +5023,8 @@ case "${host}" in
@@ -22,18 +23,15 @@ index 5454a6a..8508b30 100755
  			;;
          *-*-freebsd*)   platform=FREEBSD ;;
          *-*-openbsd*)   platform=OPENBSD ;;
--- 
-2.1.4
 
-
-From b7210831195d6ed4b2f43f8c7b0a8d877b86d65f Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 24 Oct 2011 11:17:13 +0200
-Subject: [PATCH 2/2] ntlm support in .pc files
+Subject: [PATCH] ntlm support in .pc files
 
 
 diff --git a/gsoap++.pc.in b/gsoap++.pc.in
-index e22c7e4..cefef8c 100644
+index 1111111..2222222 100644
 --- a/gsoap++.pc.in
 +++ b/gsoap++.pc.in
 @@ -9,4 +9,4 @@ Version: @VERSION@
@@ -43,7 +41,7 @@ index e22c7e4..cefef8c 100644
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
 diff --git a/gsoap.pc.in b/gsoap.pc.in
-index d5e1860..810dea1 100644
+index 1111111..2222222 100644
 --- a/gsoap.pc.in
 +++ b/gsoap.pc.in
 @@ -9,4 +9,4 @@ Version: @VERSION@
@@ -53,7 +51,7 @@ index d5e1860..810dea1 100644
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_DOM -DWITH_NTLM -I${includedir}
 diff --git a/gsoapck++.pc.in b/gsoapck++.pc.in
-index 9699198..7d023b2 100644
+index 1111111..2222222 100644
 --- a/gsoapck++.pc.in
 +++ b/gsoapck++.pc.in
 @@ -9,4 +9,4 @@ Version: @VERSION@
@@ -63,7 +61,7 @@ index 9699198..7d023b2 100644
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
 diff --git a/gsoapck.pc.in b/gsoapck.pc.in
-index 96b94ee..3e01ef6 100644
+index 1111111..2222222 100644
 --- a/gsoapck.pc.in
 +++ b/gsoapck.pc.in
 @@ -9,4 +9,4 @@ Version: @VERSION@
@@ -73,7 +71,7 @@ index 96b94ee..3e01ef6 100644
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_COOKIES -DWITH_DOM -DWITH_NTLM -I${includedir}
 diff --git a/gsoapssl++.pc.in b/gsoapssl++.pc.in
-index 6378d0e..2a68e09 100644
+index 1111111..2222222 100644
 --- a/gsoapssl++.pc.in
 +++ b/gsoapssl++.pc.in
 @@ -9,4 +9,4 @@ Version: @VERSION@
@@ -83,7 +81,7 @@ index 6378d0e..2a68e09 100644
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
 diff --git a/gsoapssl.pc.in b/gsoapssl.pc.in
-index 365274b..82af331 100644
+index 1111111..2222222 100644
 --- a/gsoapssl.pc.in
 +++ b/gsoapssl.pc.in
 @@ -9,4 +9,4 @@ Version: @VERSION@
@@ -92,6 +90,29 @@ index 365274b..82af331 100644
  Libs.private: @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
 -Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
 +Cflags: @SOAPCPP2_IPV6@ -DWITH_OPENSSL -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -DWITH_GZIP -I${includedir}
--- 
-2.1.4
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 1 Feb 2017 12:32:00 +1100
+Subject: [PATCH] workaround for building on newer OSX, can be removed in next
+ update.
+
+similar to https://github.com/unbit/uwsgi/pull/966
+
+diff --git a/gsoap/stdsoap2.h b/gsoap/stdsoap2.h
+index 1111111..2222222 100644
+--- a/gsoap/stdsoap2.h
++++ b/gsoap/stdsoap2.h
+@@ -2859,6 +2859,12 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_putsetcookies(struct soap *soap);
+ SOAP_FMAC1 int SOAP_FMAC2 soap_putcookies(struct soap *soap, const char *domain, const char *path, int secure);
+ #endif
+ 
++#ifdef TCP_FASTOPEN
++  #ifndef SOL_TCP
++    #define SOL_TCP IPPROTO_TCP
++  #endif
++#endif
++
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif

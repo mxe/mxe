@@ -1,10 +1,10 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := librtmp
+$(PKG)_WEBSITE  := https://rtmpdump.mplayerhq.hu/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := a1900c3
-$(PKG)_CHECKSUM := fa4edd83cb6ed19d97f89a6d83aef6231c1bd8079aea5d33c083f827459a9ab2
+$(PKG)_VERSION  := a107cef
+$(PKG)_CHECKSUM := aea53f2a2c6596c93eeb288d97266e89a97b31795b678daccedc31d70dad28c4
 $(PKG)_SUBDIR   := mirror-rtmpdump-$($(PKG)_VERSION)
 $(PKG)_FILE     := rtmpdump-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/rtmpdump/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)

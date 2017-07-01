@@ -1,20 +1,16 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mxml
+$(PKG)_WEBSITE  := https://michaelrsweet.github.io/mxml/
+$(PKG)_DESCR    := Mini-XML
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.9
-$(PKG)_CHECKSUM := cded54653c584b24c4a78a7fa1b3b4377d49ac4f451ddf170ebbc8161d85ff92
+$(PKG)_VERSION  := 2.10
+$(PKG)_CHECKSUM := 267ff58b64ddc767170d71dab0c729c06f45e1df9a9b6f75180b564f09767891
+$(PKG)_GH_CONF  := michaelrsweet/mxml, release-
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.msweet.org/files/project3/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/michaelrsweet/mxml/releases/download/release-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc pthreads
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.msweet.org/downloads.php?L+Z3' | \
-    $(SED) -n 's,.*<a href="files.*mxml-\([0-9\.]*\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
@@ -31,7 +27,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-mxml.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-mxml.exe' \
         `'$(TARGET)-pkg-config' mxml --cflags --libs`
 endef
 

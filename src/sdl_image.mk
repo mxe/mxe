@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl_image
+$(PKG)_WEBSITE  := https://www.libsdl.org/projects/SDL_image/
+$(PKG)_DESCR    := SDL_image
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.12
 $(PKG)_CHECKSUM := 0b90722984561004de84847744d566809dbb9daf732a9e503b91a1b5a84e5699
 $(PKG)_SUBDIR   := SDL_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_image-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg libpng libwebp sdl tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://hg.libsdl.org/SDL_image/tags' | \
+    $(WGET) -q -O- 'https://hg.libsdl.org/SDL_image/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     grep '^1\.' | \
     $(SORT) -V | \
@@ -36,14 +37,13 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_image.exe' \
+        '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_image.exe' \
         `'$(TARGET)-pkg-config' SDL_image --cflags --libs`
 
     mkdir -p '$(1)/cmake-build-test'
-    cp '$(2)-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
-    cp '$(2).c' '$(1)/cmake-build-test/'
-    cd '$(1)/cmake-build-test' && cmake . \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
+    cp '$(PWD)/src/$(PKG)-test-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
+    cp '$(PWD)/src/$(PKG)-test.c' '$(1)/cmake-build-test/'
+    cd '$(1)/cmake-build-test' && '$(TARGET)-cmake'
     $(MAKE) -C '$(1)/cmake-build-test' -j '$(JOBS)'
 endef
 

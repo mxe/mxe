@@ -1,7 +1,7 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cminpack
+$(PKG)_WEBSITE  := http://devernay.free.fr/hacks/cminpack/cminpack.html
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.4
 $(PKG)_CHECKSUM := 3b517bf7dca68cc9a882883db96dac0a0d37d72aba6dfb0c9c7e78e67af503ca
@@ -17,8 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'
+    cd '$(1)' && '$(TARGET)-cmake'
     $(MAKE) -C '$(1)' -j $(JOBS)
 
     $(INSTALL) -d                         '$(PREFIX)/$(TARGET)/lib'

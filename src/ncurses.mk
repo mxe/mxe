@@ -1,21 +1,22 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ncurses
+$(PKG)_WEBSITE  := https://www.gnu.org/software/ncurses/
+$(PKG)_DESCR    := Ncurses
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := e14300b
 $(PKG)_CHECKSUM := 3564ffa540cc069854607a0fb10d258c12769f8f6ee752f66038ba95a5e5f650
 # $(PKG)_VERSION  := 5.9
 # $(PKG)_SUBDIR   := ncurses-$($(PKG)_VERSION)
 # $(PKG)_FILE     := ncurses-$($(PKG)_VERSION).tar.gz
-# $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/ncurses/$($(PKG)_FILE)
+# $(PKG)_URL      := https://ftp.gnu.org/gnu/ncurses/$($(PKG)_FILE)
 $(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgnurx
 
 define $(PKG)_UPDATE_RELEASE
-    $(WGET) -q -O- 'http://ftp.gnu.org/pub/gnu/ncurses/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/ncurses/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="ncurses-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

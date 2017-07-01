@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-native
+$(PKG)_WEBSITE  := https://caml.inria.fr/
+$(PKG)_DESCR    := ocaml
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.00.1
 $(PKG)_CHECKSUM := b48d5c7d3bf4a0cd6125f8fdfc1f654dd65586087399dc9f14716d7b9535e87a
 $(PKG)_SUBDIR   := ocaml-$($(PKG)_VERSION)
 $(PKG)_FILE     := ocaml-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://caml.inria.fr/pub/distrib/ocaml-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://caml.inria.fr/pub/distrib/ocaml-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://caml.inria.fr/download.en.html' | \
+    $(WGET) -q -O- 'https://caml.inria.fr/download.en.html' | \
     $(SED) -n 's,.*ocaml-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libpano13
+$(PKG)_WEBSITE  := https://panotools.sourceforge.io/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.9.18
 $(PKG)_CHECKSUM := de5d4e43f15c3430e95c0faa1c50c9503516e1b570d0ec0522f610a578caa172
 $(PKG)_SUBDIR   := $(PKG)-$(word 1,$(subst _, ,$($(PKG)_VERSION)))
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/panotools/$(PKG)/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/panotools/$(PKG)/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg libpng tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/api/file/index/project-id/96188/rss?path=/libpano13' | \
+    $(WGET) -q -O- 'https://sourceforge.net/api/file/index/project-id/96188/rss?path=/libpano13' | \
     $(SED) -n 's,.*libpano13-\([0-9].*\)\.tar.*,\1,p' | \
     grep -v beta | \
     grep -v rc | \

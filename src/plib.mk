@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := plib
+$(PKG)_WEBSITE  := https://plib.sourceforge.io/
+$(PKG)_DESCR    := Plib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.5-rc1
 $(PKG)_CHECKSUM := d421a3c84517b4bfc8c6402887c74984ec57c12bc85f2dc2729de3ec4cdcdbe4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "http://sourceforge.net/projects/plib/files/plib/" | \
+    $(WGET) -q -O- "https://sourceforge.net/projects/plib/files/plib/" | \
     grep 'plib/files/plib' | \
     $(SED) -n 's,.*plib/\([0-9][^>]*\)/.*,\1,p' | \
     head -1

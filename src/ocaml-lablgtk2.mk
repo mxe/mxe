@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-lablgtk2
+$(PKG)_WEBSITE  := https://forge.ocamlcore.org/
+$(PKG)_DESCR    := lablgtk2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.16.0
 $(PKG)_CHECKSUM := a0ea9752eb257dadcfc2914408fff339d4c34357802f02c63329dd41b777de2f
@@ -11,7 +12,7 @@ $(PKG)_URL      := https://forge.ocamlcore.org/frs/download.php/979/$($(PKG)_FIL
 $(PKG)_DEPS     := gcc gtk2 gtkglarea gtksourceview libglade ocaml-findlib ocaml-lablgl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://forge.ocamlcore.org/frs/?group_id=220' | \
+    $(WGET) -q -O- 'https://forge.ocamlcore.org/frs/?group_id=220' | \
     $(SED) -n 's,.*lablgtk-\(2[^>]*\)\.tar.*,\1,ip' | \
     $(SORT) | \
     tail -1
@@ -30,7 +31,7 @@ define $(PKG)_BUILD
     '$(TARGET)-ocamlfind' opt -linkpkg \
         -package lablgtk2.gl \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        < '$(2).ml'
+        < '$(TEST_FILE)'
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =

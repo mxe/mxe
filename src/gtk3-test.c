@@ -1,6 +1,5 @@
 /*
- * This file is part of MXE.
- * See index.html for further information.
+ * This file is part of MXE. See LICENSE.md for licensing information.
  */
 
 #include <gtk/gtk.h>
@@ -14,7 +13,7 @@ static void activate(GtkApplication *app)
   button = gtk_button_new_with_label("Hello World");
 
   g_signal_connect_swapped(button, "clicked",
-			   G_CALLBACK(gtk_widget_destroy), window);
+               G_CALLBACK(gtk_widget_destroy), window);
   gtk_container_add(GTK_CONTAINER(window), button);
 
   gtk_widget_show_all(window);

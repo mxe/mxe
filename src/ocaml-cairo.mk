@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-cairo
+$(PKG)_WEBSITE  := https://cairographics.org/cairo-ocaml/
+$(PKG)_DESCR    := cairo-ocaml
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := 4beae96acfc13dbb8b0a798a0664380429c6a94357e7dc5747d76599deabdfc7
 $(PKG)_SUBDIR   := cairo-ocaml-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-ocaml_$($(PKG)_VERSION).orig.tar.gz
-$(PKG)_URL      := http://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/$($(PKG)_FILE)
+$(PKG)_URL      := https://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ocaml-core ocaml-findlib ocaml-lablgtk2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/?C=M;O=D' | \
     $(SED) -n 's,.*cairo-ocaml_\([0-9][^>]*\)\.orig\.tar.*,\1,ip' | \
     head -1
 endef
@@ -30,7 +31,7 @@ define $(PKG)_BUILD
         -package lablgtk2.auto-init \
         -package cairo.lablgtk2 \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        < '$(2).ml'
+        < '$(TEST_FILE)'
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =

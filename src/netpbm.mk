@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := netpbm
+$(PKG)_WEBSITE  := https://netpbm.sourceforge.io/
+$(PKG)_DESCR    := Netpbm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 10.35.96
 $(PKG)_CHECKSUM := e652f3642e930156afaffb4c28e135efe026b41cd64be20e245b0c8124819eee
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/netpbm/super_stable/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/netpbm/super_stable/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/netpbm/files/super_stable/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/netpbm/files/super_stable/' | \
     $(SED) -n 's,.*netpbm-\([0-9][^>]*\)\.tgz.*,\1,p' | \
     head -1
 endef

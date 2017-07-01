@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libgee
+$(PKG)_WEBSITE  := https://wiki.gnome.org/Projects/Libgee
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.5.0
 $(PKG)_CHECKSUM := aa6a2563867d3e3d56921bd1f7a7869d24599e1b5beb70e83f55b718fdddff51
 $(PKG)_SUBDIR   := libgee-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgee-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/libgee/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.gnome.org/sources/libgee/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.gnome.org/browse/libgee/refs/tags' | \
+    $(WGET) -q -O- 'https://git.gnome.org/browse/libgee/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=LIBGEE_\\([0-9]*_[0-9]*_[^<]*\\)'.*,\\1,p" | \
     $(SED) 's,_,.,g' | \

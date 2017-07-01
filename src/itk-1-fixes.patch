@@ -1,0 +1,111 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Rashad Kanavath <rashad.kanavath@c-s.fr>
+Date: Wed, 2 Dec 2015 15:00:54 +0100
+Subject: [PATCH] fix shared build
+
+
+diff --git a/Modules/ThirdParty/GDCM/src/gdcm/Utilities/socketxx/socket++/CMakeLists.txt b/Modules/ThirdParty/GDCM/src/gdcm/Utilities/socketxx/socket++/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Modules/ThirdParty/GDCM/src/gdcm/Utilities/socketxx/socket++/CMakeLists.txt
++++ b/Modules/ThirdParty/GDCM/src/gdcm/Utilities/socketxx/socket++/CMakeLists.txt
+@@ -6,6 +6,8 @@ set(PACKAGE "socket++")
+ include(CheckFunctionExists)
+ CHECK_FUNCTION_EXISTS(strsignal SOCKETXX_HAVE_STRSIGNAL)
+ 
++add_definitions(-Dsocketxx_EXPORTS)
++
+ # specific
+ if(WIN32)
+ else()
+@@ -67,6 +69,8 @@ if(UNIX)
+     )
+ endif()
+ 
++set(GDCM_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
++
+ add_library(${SOCKETXX_LIBRARY_NAME} ${libsocket___la_SOURCES})
+ set_target_properties (${SOCKETXX_LIBRARY_NAME}
+   PROPERTIES DEFINE_SYMBOL  "socketxx_EXPORTS" )
+@@ -105,4 +109,3 @@ if(NOT SOCKETXX_INSTALL_NO_DEVELOPMENT)
+     DESTINATION ${SOCKETXX_INSTALL_INCLUDE_DIR} COMPONENT Headers
+   )
+ endif()
+-
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Mon, 24 Oct 2016 02:01:07 +0300
+Subject: [PATCH] disable try-run
+
+It is impossible to run while cross-compiling.
+
+Fix the following error:
+
+  CMake Error at Modules/ThirdParty/VNL/src/vxl/config/cmake/config/VXLIntrospectionConfig.cmake:736 (message):
+    Compiler is required to have has_infinity.
+  Call Stack (most recent call first):
+    Modules/ThirdParty/VNL/src/vxl/CMakeLists.txt:184 (include)
+
+diff --git a/Modules/ThirdParty/VNL/src/vxl/config/cmake/config/VXLIntrospectionConfig.cmake b/Modules/ThirdParty/VNL/src/vxl/config/cmake/config/VXLIntrospectionConfig.cmake
+index 1111111..2222222 100644
+--- a/Modules/ThirdParty/VNL/src/vxl/config/cmake/config/VXLIntrospectionConfig.cmake
++++ b/Modules/ThirdParty/VNL/src/vxl/config/cmake/config/VXLIntrospectionConfig.cmake
+@@ -141,52 +141,8 @@ endmacro()
+ # and returns 0 (indicating success).
+ #
+ macro(PERFORM_CMAKE_TEST_RUN PLFM_TEST_FILE TEST)
+-  if( VXL_UPDATE_CONFIGURATION )
+-    unset( ${TEST} )
+-  endif()
+-  if(NOT DEFINED "${TEST}")
+-    # Perform test
+-    set(MACRO_CHECK_FUNCTION_DEFINITIONS
+-        "-D${TEST} ${CMAKE_REQUIRED_FLAGS}")
+-    if(CMAKE_REQUIRED_LIBRARIES)
+-      set(TEST_ADD_LIBRARIES
+-          "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
+-    endif()
+-    message(STATUS "Performing Test ${TEST}")
+-
+-    try_run(${TEST} ${TEST}_COMPILED
+-            ${CMAKE_BINARY_DIR}
+-            ${PLFM_TEST_FILE}
+-            CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_FUNCTION_DEFINITIONS}
+-            "${TEST_ADD_LIBRARIES}"
+-            OUTPUT_VARIABLE OUTPUT)
+-    if(${TEST}_COMPILED)
+-      if(${TEST})
+-        message(STATUS "Performing Test ${TEST} - Failed")
+-        set(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION} (failed to run)")
+-        file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
+-                   "Performing Test ${TEST} failed with the following output:\n"
+-                   "${OUTPUT}\n")
+-      else()
+-        set(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION} (successful run)")
+-        message(STATUS "Performing Test ${TEST} - Success")
+-        file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
+-                   "Performing Test ${TEST} succeeded with the following output:\n"
+-                   "${OUTPUT}\n")
+-      endif()
+-    else()
+-      message(STATUS "Performing Try-Run Test ${TEST} - Test Compilation Failed")
+-      set(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION} (failed to compile)")
+-      file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
+-                 "Performing Try-Run Test ${TEST} failed to compile with the following output:\n"
+-                 "${OUTPUT}\n")
+-    endif()
+-  else()
+-    # Have result
+-    #foreach(tst ${TEST})
+-    #  message("Test ${TEST} resulted in ${${tst}}")
+-    #endforeach()
+-  endif()
++  # We are cross-compliling and can not run anything.
++  set( ${TEST} 1)
+ endmacro()
+ 
+ #

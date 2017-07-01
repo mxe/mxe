@@ -1,10 +1,11 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtserialport
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := a034dbfb023db1b9b9de54390f7e76a48c1d1eb12533b0ffd574505c99968f7a
+$(PKG)_CHECKSUM := 80022e3e6d5652502891fec3774615a36d51901dacc4fbb2dfe6e562fd729d7f
 $(PKG)_SUBDIR    = $(subst qtbase,qtserialport,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtserialport,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtserialport,$(qtbase_URL))
@@ -15,9 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # invoke qmake with removed debug options as a workaround for
-    # https://bugreports.qt-project.org/browse/QTBUG-30898
-    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' CONFIG-='debug debug_and_release'
+    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef

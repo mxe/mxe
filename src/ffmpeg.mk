@@ -1,25 +1,25 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ffmpeg
+$(PKG)_WEBSITE  := https://ffmpeg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.7.2
-$(PKG)_CHECKSUM := 7ceb7550ad628c526fa6c9ff23fdfb687a62f54d90c4a730998d8c2b417b9ef2
+$(PKG)_VERSION  := 3.2.4
+$(PKG)_CHECKSUM := c0fa3593a2e9e96ace3c1757900094437ad96d1d6ca19f057c378b5f394496a4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://launchpad.net/ffmpeg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
+$(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://launchpad.net/ffmpeg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libbs2b libcaca \
                    libvpx opencore-amr opus sdl speex theora vidstab \
-                   vo-aacenc vo-amrwbenc vorbis x264 xvidcore yasm zlib
+                   vo-amrwbenc vorbis x264 xvidcore yasm zlib
 
 # DO NOT ADD fdk-aac OR openssl SUPPORT.
 # Although they are free softwares, their licenses are not compatible with
 # the GPL, and we'd like to enable GPL in our default ffmpeg build.
-# See index.html#potential-legal-issues
+# See docs/index.html#potential-legal-issues
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ffmpeg.org/releases/' | \
+    $(WGET) -q -O- 'https://ffmpeg.org/releases/' | \
     $(SED) -n 's,.*ffmpeg-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'alpha\|beta\|rc\|git' | \
     $(SORT) -Vr | \
@@ -59,7 +59,6 @@ define $(PKG)_BUILD
         --enable-libspeex \
         --enable-libtheora \
         --enable-libvidstab \
-        --enable-libvo-aacenc \
         --enable-libvo-amrwbenc \
         --enable-libvorbis \
         --enable-libvpx \

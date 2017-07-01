@@ -1,0 +1,55 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 25007fd7fed18926728b9a1249f827a27e1d03f1 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 10 Oct 2015 23:14:31 +0100
+Subject: [PATCH 2/2] luaL_checkint -> luaL_checkinteger
+
+---
+ gem/gem.c       | 2 +-
+ src/luasocket.c | 2 +-
+ src/mime.c      | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/gem/gem.c b/gem/gem.c
+index 976f74d..40f33b0 100644
+--- a/gem/gem.c
++++ b/gem/gem.c
+@@ -24,7 +24,7 @@ static int pushchar(int c, int last, const char *marker,
+ }
+ 
+ static int eol(lua_State *L) {
+-  int context = luaL_checkint(L, 1);
++  int context = luaL_checkinteger(L, 1);
+   size_t isize = 0;
+   const char *input = luaL_optlstring(L, 2, NULL, &isize);
+   const char *last = input + isize;
+diff --git a/src/luasocket.c b/src/luasocket.c
+index e6ee747..1bdfb13 100644
+--- a/src/luasocket.c
++++ b/src/luasocket.c
+@@ -64,7 +64,7 @@ static luaL_Reg func[] = {
+ * Skip a few arguments
+ \*-------------------------------------------------------------------------*/
+ static int global_skip(lua_State *L) {
+-    int amount = luaL_checkint(L, 1);
++    int amount = luaL_checkinteger(L, 1);
+     int ret = lua_gettop(L) - amount - 1;
+     return ret >= 0 ? ret : 0;
+ }
+diff --git a/src/mime.c b/src/mime.c
+index dd37dcf..bd9a2a9 100644
+--- a/src/mime.c
++++ b/src/mime.c
+@@ -661,7 +661,7 @@ static int eolprocess(int c, int last, const char *marker,
+ \*-------------------------------------------------------------------------*/
+ static int mime_global_eol(lua_State *L)
+ {
+-    int ctx = luaL_checkint(L, 1);
++    int ctx = luaL_checkinteger(L, 1);
+     size_t isize = 0;
+     const char *input = luaL_optlstring(L, 2, NULL, &isize);
+     const char *last = input + isize;
+-- 
+2.1.4
+

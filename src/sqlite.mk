@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sqlite
+$(PKG)_WEBSITE  := https://www.sqlite.org/
+$(PKG)_DESCR    := SQLite
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3090200
-$(PKG)_CHECKSUM := 064c0abe9c9177534d4c770bca7a5902f9924b629ac886b4c08956be6dfbc36b
+$(PKG)_VERSION  := 3190300
+$(PKG)_CHECKSUM := 06129c03dced9f87733a8cba408871bd60673b8f93b920ba8d815efab0a06301
 $(PKG)_SUBDIR   := $(PKG)-autoconf-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-autoconf-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.sqlite.org/2015/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.sqlite.org/2017/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.sqlite.org/download.html' | \
+    $(WGET) -q -O- 'https://www.sqlite.org/download.html' | \
     $(SED) -n 's,.*sqlite-autoconf-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

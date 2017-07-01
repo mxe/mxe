@@ -1,13 +1,14 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libftdi
+$(PKG)_WEBSITE  := https://www.intra2net.com/en/developer/libftdi/index.php
+$(PKG)_DESCR    := LibFTDI
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.20
 $(PKG)_CHECKSUM := 3176d5b5986438f33f5208e690a8bfe90941be501cc0a72118ce3d338d4b838e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.intra2net.com/en/developer/libftdi/download/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.intra2net.com/en/developer/libftdi/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libusb
 
 $(PKG)_MESSAGE  :=*** libftdi is deprecated - please use libftdi1 ***
@@ -18,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_UPDATE_DISABLED
-    $(WGET) -q -O- 'http://www.intra2net.com/en/developer/libftdi/download.php' | \
+    $(WGET) -q -O- 'https://www.intra2net.com/en/developer/libftdi/download.php' | \
     $(SED) -n 's,.*libftdi-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

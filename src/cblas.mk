@@ -1,7 +1,7 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cblas
+$(PKG)_WEBSITE  := http://www.netlib.org/blas/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1
 $(PKG)_CHECKSUM := 0f6354fd67fabd909baf57ced2ef84e962db58fae126e4f41b21dd4fec60a2a3

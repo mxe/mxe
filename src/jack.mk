@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := jack
+$(PKG)_WEBSITE  := http://jackaudio.org/
+$(PKG)_DESCR    := JACK Audio Connection Kit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.10
 $(PKG)_CHECKSUM := 5bc6336e6ac9799e3cb241915e2ba5d01b030589bbb2afae39579a59ef0f2f56
@@ -17,6 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # TODO: use waf installed by MXE package waf
     cd '$(1)' &&                                  \
         AR='$(TARGET)-ar'                         \
         CC='$(TARGET)-gcc'                        \
@@ -27,3 +29,5 @@ define $(PKG)_BUILD
             --prefix='$(PREFIX)/$(TARGET)'        \
             --dist-target=mingw
 endef
+
+$(PKG)_BUILD_STATIC =

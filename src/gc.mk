@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gc
+$(PKG)_WEBSITE  := http://www.hpl.hp.com/personal/Hans_Boehm/gc/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 7.2e
 $(PKG)_CHECKSUM := 09315b48a82d600371207691126ad058c04677281ac318d86fa84c98c3c9af4b
 $(PKG)_SUBDIR   := $(PKG)-7.2
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://hboehm.info/$(PKG)/$(PKG)_source/$($(PKG)_FILE)
+$(PKG)_URL      := https://hboehm.info/$(PKG)/$(PKG)_source/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://hboehm.info/gc/gc_source/' | \
+    $(WGET) -q -O- 'https://hboehm.info/gc/gc_source/' | \
     grep '<a href="gc-' | \
     $(SED) -n 's,.*<a href="gc-\([0-9][^"]*\)\.tar.*,\1,p' | \
     grep -v 'alpha' | \

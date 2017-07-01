@@ -1,0 +1,50 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: darealshinji <djcj@gmx.de>
+Date: Sun, 24 Jul 2016 09:33:22 +0200
+Subject: [PATCH] define XXX_EXPORT symbols
+
+
+diff --git a/libdjvu/Makefile.am b/libdjvu/Makefile.am
+index 1111111..2222222 100644
+--- a/libdjvu/Makefile.am
++++ b/libdjvu/Makefile.am
+@@ -33,6 +33,8 @@ libdjvulibre_la_LIBADD = $(JPEG_LIBS) $(PTHREAD_LIBS)
+ libdjvulibre_la_LDFLAGS = -no-undefined -version-info $(version_info)
+ 
+ if HAVE_OS_WIN32
++libdjvulibre_la_CPPFLAGS += -DDJVUAPI_EXPORT
++libdjvulibre_la_CPPFLAGS += -DDDJVUAPI_EXPORT -DMINILISPAPI_EXPORT
+ libdjvulibre_la_LDFLAGS += -Wl,--export-all-symbols
+ endif
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: darealshinji <djcj@gmx.de>
+Date: Sun, 24 Jul 2016 09:36:49 +0200
+Subject: [PATCH] disable unknown pragma warnings
+
+
+diff --git a/libdjvu/miniexp.cpp b/libdjvu/miniexp.cpp
+index 1111111..2222222 100644
+--- a/libdjvu/miniexp.cpp
++++ b/libdjvu/miniexp.cpp
+@@ -382,6 +382,7 @@ static void NTAPI gctls_cb(PVOID, DWORD dwReason, PVOID) {
+     {CSLOCK(r);TlsFree(tlsIndex);tlsIndex=TLS_OUT_OF_INDEXES;}
+ }
+ # endif
++#ifndef __GNUC__
+ // -- Very black magic to clean tls variables.
+ # ifdef _M_IX86
+ #  pragma comment (linker, "/INCLUDE:_tlscb")
+@@ -391,6 +392,7 @@ static void NTAPI gctls_cb(PVOID, DWORD dwReason, PVOID) {
+ # pragma const_seg(".CRT$XLB")
+ extern "C" PIMAGE_TLS_CALLBACK tlscb = gctls_cb;
+ # pragma const_seg()
++#endif  /* !__GNUC__ */
+ 
+ #else
+ // No threads

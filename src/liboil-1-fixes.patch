@@ -1,0 +1,162 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: David Schleef <ds@schleef.org>
+Date: Tue, 20 Jul 2010 14:05:26 -0700
+Subject: [PATCH] x86: Fix cpuid function on x86-64
+
+Taken from:
+http://cgit.freedesktop.org/liboil/commit/?id=705916007fba0a845229a02dc6474cb523eff150
+
+diff --git a/liboil/liboilcpu-x86.c b/liboil/liboilcpu-x86.c
+index 1111111..2222222 100644
+--- a/liboil/liboilcpu-x86.c
++++ b/liboil/liboilcpu-x86.c
+@@ -162,13 +162,10 @@ get_cpuid (uint32_t op, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d)
+ static void
+ get_cpuid (uint32_t op, uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d)
+ {
++  *a = op;
+   __asm__ (
+-      "  pushq %%rbx\n"
+       "  cpuid\n"
+-      "  mov %%ebx, %%esi\n"
+-      "  popq %%rbx\n"
+-      : "=a" (*a), "=S" (*b), "=c" (*c), "=d" (*d)
+-      : "0" (op));
++      : "+a" (*a), "=b" (*b), "=c" (*c), "=d" (*d));
+ }
+ #endif
+ 
+@@ -185,7 +182,7 @@ oil_cpu_detect_cpuid (void)
+ {
+   uint32_t eax, ebx, ecx, edx;
+   uint32_t level;
+-  char vendor[13] = { 0 };
++  char vendor[13+4] = { 0 };
+   int ret;
+ 
+   oil_fault_check_enable ();
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 9 Jan 2016 11:21:30 +1100
+Subject: [PATCH] Win64 Support
+
+Taken from:
+https://bugs.freedesktop.org/show_bug.cgi?id=26651
+
+diff --git a/liboil/amd64/wavelet.c b/liboil/amd64/wavelet.c
+index 1111111..2222222 100644
+--- a/liboil/amd64/wavelet.c
++++ b/liboil/amd64/wavelet.c
+@@ -2,7 +2,7 @@
+ #include <liboil/liboilfunction.h>
+ #include <liboil/liboilclasses.h>
+ #include <stddef.h>
+-
++#include <stdint.h>
+ 
+ void
+ deinterleave2_asm (int16_t *d1, int16_t *d2, int16_t *s_2xn, int n)
+@@ -1409,7 +1409,7 @@ multiply_and_acc_12xn_s16_u8_mmx (int16_t *i1, int is1, int16_t *s1,
+       "  jnz 1b\n"
+       "  emms\n"
+       : "+r" (i1), "+r" (s1), "+r" (s2), "+r" (n)
+-      : "r" ((long)is1), "r" ((long)ss1), "r" ((long)ss2)
++      : "r" ((intptr_t)is1), "r" ((intptr_t)ss1), "r" ((intptr_t)ss2)
+       );
+ }
+ OIL_DEFINE_IMPL_FULL (multiply_and_acc_12xn_s16_u8_mmx,
+@@ -1596,7 +1596,7 @@ mas4_across_add_s16_mmx (int16_t *d, int16_t *s1, int16_t *s2_nx4, int sstr2,
+         [s2_nx4_off] "+r" (s2_nx4_off),
+         [n] "+m" (n),
+         [s1] "+r" (s1)
+-      : [sstr] "r" ((long)(sstr2))
++      : [sstr] "r" ((intptr_t)(sstr2))
+       );
+ }
+ OIL_DEFINE_IMPL_FULL (mas4_across_add_s16_mmx, mas4_across_add_s16,
+@@ -1753,8 +1753,8 @@ mas8_across_add_s16_mmx (int16_t *d, int16_t *s1, int16_t *s2_nx8, int sstr2,
+         [s3_8] "+r" (s3_8),
+         [d] "+r" (d),
+         [n] "+m" (n),
+-        [s1] "+r" ((long)(s1))
+-      : [sstr] "r" ((long)(sstr2))
++        [s1] "+r" ((intptr_t)(s1))
++      : [sstr] "r" ((intptr_t)(sstr2))
+       );
+ }
+ OIL_DEFINE_IMPL_FULL (mas8_across_add_s16_mmx, mas8_across_add_s16,
+diff --git a/liboil/i386_amd64/mas.c b/liboil/i386_amd64/mas.c
+index 1111111..2222222 100644
+--- a/liboil/i386_amd64/mas.c
++++ b/liboil/i386_amd64/mas.c
+@@ -1,7 +1,7 @@
+ 
+ #include <liboil/liboilfunction.h>
+ #include <liboil/liboilclasses.h>
+-
++#include <stdint.h>
+ 
+ void
+ mas10_u8_mmx (uint8_t *d, const uint8_t *s1_np9, const int16_t *s2_10,
+@@ -1106,7 +1106,7 @@ mas8_across_u8_mmx_3 (uint8_t *d, const uint8_t *s1_nx8, int ss1,
+       "  packuswb %%mm2, %%mm2\n"
+       "  movd %%mm2, 0(%[d])\n"
+       : [p] "+r" (p)
+-      : [d] "r" (d), [ss1] "r" ((long)ss1));
++      : [d] "r" (d), [ss1] "r" ((intptr_t)ss1));
+     d+=4;
+     s1_nx8+=4;
+     n--;
+diff --git a/liboil/i386_amd64/multiply_and_acc.c b/liboil/i386_amd64/multiply_and_acc.c
+index 1111111..2222222 100644
+--- a/liboil/i386_amd64/multiply_and_acc.c
++++ b/liboil/i386_amd64/multiply_and_acc.c
+@@ -1,6 +1,7 @@
+ 
+ #include <liboil/liboilfunction.h>
+ #include <liboil/liboilclasses.h>
++#include <stdint.h>
+ 
+ void
+ multiply_and_acc_6xn_s16_u8_mmx (int16_t *i1, int is1, int16_t *s1,
+@@ -32,7 +33,7 @@ multiply_and_acc_6xn_s16_u8_mmx (int16_t *i1, int is1, int16_t *s1,
+ #ifdef __i386__
+       : "m" (is1), "m" (ss1), "m" (ss2)
+ #else
+-      : "r" ((long)is1), "r" ((long)ss1), "r" ((long)ss2)
++      : "r" ((intptr_t)is1), "r" ((intptr_t)ss1), "r" ((intptr_t)ss2)
+ #endif
+       );
+ }
+@@ -68,7 +69,7 @@ multiply_and_acc_8xn_s16_u8_mmx (int16_t *i1, int is1, int16_t *s1,
+ #ifdef __i386__
+       : "m" (is1), "m" (ss1), "m" (ss2)
+ #else
+-      : "r" ((long)is1), "r" ((long)ss1), "r" ((long)ss2)
++      : "r" ((intptr_t)is1), "r" ((intptr_t)ss1), "r" ((intptr_t)ss2)
+ #endif
+       );
+ }
+@@ -114,7 +115,7 @@ multiply_and_acc_16xn_s16_u8_mmx (int16_t *i1, int is1, int16_t *s1,
+ #ifdef __i386__
+       : "m" (is1), "m" (ss1), "m" (ss2)
+ #else
+-      : "r" ((long)is1), "r" ((long)ss1), "r" ((long)ss2)
++      : "r" ((intptr_t)is1), "r" ((intptr_t)ss1), "r" ((intptr_t)ss2)
+ #endif
+       );
+ }
+@@ -170,7 +171,7 @@ multiply_and_acc_24xn_s16_u8_mmx (int16_t *i1, int is1, int16_t *s1,
+ #ifdef __i386__
+       : "m" (is1), "m" (ss1), "m" (ss2)
+ #else
+-      : "r" ((long)is1), "r" ((long)ss1), "r" ((long)ss2)
++      : "r" ((intptr_t)is1), "r" ((intptr_t)ss1), "r" ((intptr_t)ss2)
+ #endif
+       );
+ }

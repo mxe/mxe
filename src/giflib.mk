@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := giflib
+$(PKG)_WEBSITE  := https://sourceforge.net/projects/libungif/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.0.5
-$(PKG)_CHECKSUM := 606d8a366b1c625ab60d62faeca807a799a2b9e88cbdf2a02bfcdf4429bf8609
+$(PKG)_VERSION  := 5.1.4
+$(PKG)_CHECKSUM := df27ec3ff24671f80b29e6ab1c4971059c14ac3db95406884fc26574631ba8d5
 $(PKG)_SUBDIR   := giflib-$($(PKG)_VERSION)
 $(PKG)_FILE     := giflib-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/giflib/giflib-5.x/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/giflib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/giflib/files/giflib-5.x/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/giflib/files/' | \
     grep '<a href.*giflib.*bz2/download' | \
     $(SED) -n 's,.*giflib-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

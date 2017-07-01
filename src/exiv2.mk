@@ -1,14 +1,15 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := exiv2
+$(PKG)_WEBSITE  := http://www.exiv2.org/
+$(PKG)_DESCR    := Exiv2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.24
-$(PKG)_CHECKSUM := f4a443e6c7fb9d9f5e787732f76969a64c72c4c04af69b10ed57f949c2dfef8e
+$(PKG)_VERSION  := 0.25
+$(PKG)_CHECKSUM := c80bfc778a15fdb06f71265db2c3d49d8493c382e516cb99b8c9f9cbde36efa4
 $(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)
 $(PKG)_FILE     := exiv2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.exiv2.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc expat gettext zlib
+$(PKG)_DEPS     := gcc expat gettext mman-win32 zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.exiv2.org/download.html' | \
@@ -27,6 +28,7 @@ define $(PKG)_BUILD
         --disable-visibility \
         --disable-nls \
         --with-expat \
+        LIBS='-lmman' \
         $(if $(BUILD_SHARED),\
             lt_cv_deplibs_check_method='file_magic file format (pe-i386|pe-x86-64)' \
             lt_cv_file_magic_cmd='$$OBJDUMP -f')

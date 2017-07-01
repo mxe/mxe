@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qwtplot3d
+$(PKG)_WEBSITE  := https://qwtplot3d.sourceforge.io/
+$(PKG)_DESCR    := QwtPlot3D
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.7
 $(PKG)_CHECKSUM := 1208336b15e82e7a9d22cbc743e46f27e2fad716094a9c133138f259fa299a42
 $(PKG)_SUBDIR   := $(PKG)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qt zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/$(PKG)/files/$(PKG)/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/$(PKG)/files/$(PKG)/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

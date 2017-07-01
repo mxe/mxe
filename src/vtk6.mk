@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vtk6
+$(PKG)_WEBSITE  := http://www.vtk.org/
+$(PKG)_DESCR    := VTK6
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.3.0
 $(PKG)_CHECKSUM := 92a493354c5fa66bea73b5fc014154af5d9f3f6cee8d20a826f4cd5d4b0e8a5e
@@ -38,11 +39,9 @@ define $(PKG)_BUILD
 
     # now the cross compilation
     mkdir '$(1).cross_build'
-    cd '$(1).cross_build' && cmake \
+    cd '$(1).cross_build' && '$(TARGET)-cmake' \
         -C '$(1)/TryRunResults.cmake' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DVTKCompileTools_DIR='$(1).native_build' \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
         -DModule_vtkGUISupportQt=TRUE \
         -DModule_vtkGUISupportQtOpenGL=TRUE \
         -DModule_vtkViewsQt=TRUE \
@@ -58,8 +57,7 @@ define $(PKG)_BUILD
 
     #now build the GUI -> Qt -> SimpleView Example
     mkdir '$(1).test'
-    cd '$(1).test' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1).test' && '$(TARGET)-cmake' \
         '$(1)/Examples/GUI/Qt/SimpleView'
     $(MAKE) -C '$(1).test' -j '$(JOBS)' VERBOSE=1
 endef

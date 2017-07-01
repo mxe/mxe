@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libodbc++
+$(PKG)_WEBSITE  := https://libodbcxx.sourceforge.io/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.5
 $(PKG)_CHECKSUM := ba3030a27b34e4aafbececa2ddbbf42a38815e9534f34c051620540531b5e23e
 $(PKG)_SUBDIR   := libodbc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libodbc++-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libodbcxx/libodbc++/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libodbcxx/libodbc++/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "http://sourceforge.net/projects/libodbcxx/files/libodbc%2B%2B" | \
+    $(WGET) -q -O- "https://sourceforge.net/projects/libodbcxx/files/libodbc%2B%2B" | \
     grep 'libodbcxx/files/libodbc%2B%2B/' | \
     $(SED) -n 's,.*/\([0-9][^>]*\)/.*,\1,p' | \
     head -1

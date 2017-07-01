@@ -1,0 +1,137 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Thomas Danckaert <thomas.danckaert@gmail.com>
+Date: Thu, 3 Mar 2016 17:13:29 +0100
+Subject: [PATCH] Remove AC_TRY_RUN to fix cross compiling.
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100755
+--- a/configure.ac
++++ b/configure.ac
+@@ -160,17 +160,7 @@ dnl Check if -Df2cFortran is specified
+ dnl Running only the preprocessor may not be a good idea
+ dnl because this can be hard-coded.
+ AC_MSG_CHECKING([for fc2Fortran macro])
+-AC_CACHE_VAL([he2_cv_f2cFortran_defined],
+-    [AC_TRY_RUN([
+-    int main(void)
+-    {
+-    #ifdef f2cFortran
+-      return 0;
+-    #else
+-      return 1;
+-    #endif
+-    }
+-    ], [he2_cv_f2cFortran_defined=yes], [he2_cv_f2cFortran_defined=no],)])
++AC_CACHE_VAL([he2_cv_f2cFortran_defined],[he2_cv_f2cFortran_defined=yes])
+ if test ${he2_cv_f2cFortran_defined} = "yes"; then
+   F2CFORTRAN_MACRO="yes"
+   AC_MSG_RESULT([defined])
+@@ -181,18 +171,7 @@ fi
+ 
+ if test ${he2_cv_f2cFortran_defined} = "yes"; then
+ 
+-  AC_CHECK_SIZEOF([int*])
+-  AC_CACHE_VAL([he2_cv_32ptr],
+-      [AC_TRY_RUN([
+-      int main(void)
+-      {
+-#ifdef SIZEOF_INTP
+-	return SIZEOF_INTP == 4 ? 0 : 1;
+-#else
+-#error SIZEOF_INTP is not defined
+-#endif
+-      }
+-      ], [he2_cv_32ptr=yes], [he2_cv_32ptr=no],)])
++  AC_CACHE_VAL([he2_cv_32ptr],[he2_cv_32ptr=no])
+   if test ${he2_cv_32ptr} = "yes"; then
+     AC_MSG_NOTICE([possibly 32 bit system])
+     F2CFORTRAN_32PTR="yes"
+@@ -346,32 +325,9 @@ if test "X$HAVE_SZLIB" = "Xyes"; then
+ 
+     AC_MSG_CHECKING([for szlib encoder])
+ 
+-    AC_CACHE_VAL([he2_cv_szlib_functional],
+-        [AC_TRY_RUN([
+-	#include <stddef.h>
+-        #include <szlib.h>
+-
+-        int main(void)
+-        {
+-            SZ_encoder_enabled();
+-            exit(0);
+-        }
+-        ], [he2_cv_szlib_functional=yes], [he2_cv_szlib_functional=no],)])
+-
+-    AC_CACHE_VAL([he2_cv_szlib_can_encode],
+-        [AC_TRY_RUN([
+-	#include <stddef.h>
+-        #include <szlib.h>
+-
+-        int main(void)
+-        {
+-            /* SZ_encoder_enabled returns 1 if encoder is present */
+-            if(SZ_encoder_enabled() == 1)
+-                exit(0);
+-            else
+-                exit(1);
+-        }
+-        ], [he2_cv_szlib_can_encode=yes], [he2_cv_szlib_can_encode=no],)])
++    AC_CACHE_VAL([he2_cv_szlib_functional],[he2_cv_szlib_functional=no])
++
++    AC_CACHE_VAL([he2_cv_szlib_can_encode],[he2_cv_szlib_can_encode=no])
+ 
+     CC="$saved_CC"
+     rm -f $SZIP_CC
+@@ -477,22 +433,7 @@ if test "x$HAVE_HDF4" = "xyes"; then
+   dnl Check if HDF4 is linked with SZIP encoder
+ 
+   AC_MSG_CHECKING([for hdf4 szip decoding filter])
+-  AC_CACHE_VAL([he2_cv_hdf4_szip_can_decode],
+-      [AC_TRY_RUN([
+-      #include <hdf.h>
+-
+-      int main(void)
+-      {
+-	comp_coder_t codertype = COMP_CODE_SZIP;
+-	uint32 configinfo;
+-	int decoder = 0;
+-
+-	HCget_config_info(codertype, &configinfo);
+-	decoder = configinfo & COMP_DECODER_ENABLED;
+-	if (decoder) exit(0);
+-	else exit(1);
+-      }
+-      ], [he2_cv_hdf4_szip_can_decode=yes], [he2_cv_hdf4_szip_can_decode=no],)])
++  AC_CACHE_VAL([he2_cv_hdf4_szip_can_decode],[he2_cv_hdf4_szip_can_decode=no])
+   if test ${he2_cv_hdf4_szip_can_decode} = "yes"; then
+     AC_DEFINE(HAVE_HDF4_SZIP_DECODER, 1,
+ 	    [Define if HDF4 has szip decoder filter])
+@@ -502,22 +443,7 @@ if test "x$HAVE_HDF4" = "xyes"; then
+   fi
+ 
+   AC_MSG_CHECKING([for hdf4 szip encoding filter])
+-  AC_CACHE_VAL([he2_cv_hdf4_szip_can_encode],
+-      [AC_TRY_RUN([
+-      #include <hdf.h>
+-
+-      int main(void)
+-      {
+-	comp_coder_t codertype = COMP_CODE_SZIP;
+-	uint32 configinfo;
+-	int encoder = 0;
+-
+-	HCget_config_info(codertype, &configinfo);
+-	encoder = configinfo & COMP_ENCODER_ENABLED;
+-	if (encoder) exit(0);
+-	else exit(1);
+-      }
+-      ], [he2_cv_hdf4_szip_can_encode=yes], [he2_cv_hdf4_szip_can_encode=no],)])
++  AC_CACHE_VAL([he2_cv_hdf4_szip_can_encode],[he2_cv_hdf4_szip_can_encode=no])
+ 
+   if test ${he2_cv_hdf4_szip_can_encode} = "yes"; then
+     AC_DEFINE(HAVE_HDF4_SZIP_ENCODER, 1,

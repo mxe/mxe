@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := bfd
+$(PKG)_WEBSITE  := https://www.gnu.org/software/binutils/
+$(PKG)_DESCR    := Binary File Descriptor library
 $(PKG)_IGNORE    = $(binutils_IGNORE)
 $(PKG)_VERSION   = $(binutils_VERSION)
 $(PKG)_CHECKSUM  = $(binutils_CHECKSUM)

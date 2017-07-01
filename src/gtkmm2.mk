@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtkmm2
+$(PKG)_WEBSITE  := https://www.gtkmm.org/
+$(PKG)_DESCR    := GTKMM
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.24.4
 $(PKG)_CHECKSUM := 443a2ff3fcb42a915609f1779000390c640a6d7fd19ad8816e6161053696f5ee
 $(PKG)_SUBDIR   := gtkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.gnome.org/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc atkmm cairomm gtk2 libsigc++ pangomm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.gnome.org/browse/gtkmm/refs/tags' | \
+    $(WGET) -q -O- 'https://git.gnome.org/browse/gtkmm/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
     grep -v '^2\.9' | \
@@ -30,8 +31,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= doc_install='# DISABLED: doc-install.pl'
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -pedantic -std=c++0x \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm2.exe' \
+        -W -Wall -Wno-deprecated-declarations -Werror -pedantic -std=c++11 \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm2.exe' \
         `'$(TARGET)-pkg-config' gtkmm-2.4 --cflags --libs`
 endef
 

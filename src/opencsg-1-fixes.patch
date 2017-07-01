@@ -1,11 +1,10 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-diff -ur OpenCSG-1.4.0.orig/example/example.pro OpenCSG-1.4.0/example/example.pro
---- OpenCSG-1.4.0.orig/example/example.pro	2014-09-15 22:25:33.000000000 +0200
-+++ OpenCSG-1.4.0/example/example.pro	2015-03-22 14:08:27.706916987 +0100
+diff -ur OpenCSG-1.4.1.orig/example/example.pro OpenCSG-1.4.1/example/example.pro
+--- OpenCSG-1.4.1.orig/example/example.pro	2016-09-08 23:08:33.000000000 +0200
++++ OpenCSG-1.4.1/example/example.pro	2016-09-11 14:24:18.839741352 +0200
 @@ -1,10 +1,10 @@
  TEMPLATE = app
  TARGET = opencsgexample
@@ -29,19 +28,20 @@ diff -ur OpenCSG-1.4.0.orig/example/example.pro OpenCSG-1.4.0/example/example.pr
  }
  
  HEADERS = displaylistPrimitive.h
-diff -ur OpenCSG-1.4.0.orig/src/src.pro OpenCSG-1.4.0/src/src.pro
---- OpenCSG-1.4.0.orig/src/src.pro	2014-09-15 22:25:33.000000000 +0200
-+++ OpenCSG-1.4.0/src/src.pro	2015-03-22 14:05:18.275029066 +0100
-@@ -2,10 +2,10 @@
- TARGET = opencsg
- VERSION = 1.4.0
+diff -ur OpenCSG-1.4.1.orig/src/src.pro OpenCSG-1.4.1/src/src.pro
+--- OpenCSG-1.4.1.orig/src/src.pro	2016-09-08 23:08:33.000000000 +0200
++++ OpenCSG-1.4.1/src/src.pro	2016-09-11 14:25:15.833496135 +0200
+@@ -6,10 +6,11 @@
+   INSTALLDIR = /usr/local
+ }
  
 -CONFIG += opengl warn_on release
 +CONFIG += opengl warn_on release link_pkgconfig
- INCLUDEPATH += ../include ../
+ INCLUDEPATH += ../include ../ $$INSTALLDIR/include
  CONFIG -= qt
--LIBS += -lGLEW
+-LIBS += -L$$INSTALLDIR/lib -lGLEW
++LIBS += -L$$INSTALLDIR/lib
 +PKGCONFIG += glew glut
  
  DESTDIR = ../lib
- INSTALLDIR = /usr/local
+ headers.files = ../include/opencsg.h

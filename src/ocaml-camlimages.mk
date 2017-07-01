@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ocaml-camlimages
+$(PKG)_WEBSITE  := http://gallium.inria.fr/camlimages
+$(PKG)_DESCR    := camlimages
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.0.1
 $(PKG)_CHECKSUM := b40237c1505487049799a7af296eb3996b3fa08eab94415546f46d61355747c4
@@ -34,7 +35,7 @@ define $(PKG)_BUILD
     '$(TARGET)-ocamlfind' opt -linkpkg \
         -package camlimages \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        < '$(2).ml'
+        < '$(TEST_FILE)'
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 =

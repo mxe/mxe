@@ -1,0 +1,157 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Thomas Danckaert <thomas.danckaert@gmail.com>
+Date: Fri, 27 May 2016 17:39:23 +0200
+Subject: [PATCH] fixes
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -104,17 +104,7 @@ dnl Check if -Df2cFortran is specified
+ dnl Running only the preprocessor may not be a good idea
+ dnl because this can be hard-coded.
+ AC_MSG_CHECKING([for fc2Fortran macro])
+-AC_CACHE_VAL([he5_cv_f2cFortran_defined],
+-    [AC_TRY_RUN([
+-    int main(void)
+-    {
+-    #ifdef f2cFortran
+-      return 0;
+-    #else
+-      return 1;
+-    #endif
+-    }
+-    ], [he5_cv_f2cFortran_defined=yes], [he5_cv_f2cFortran_defined=no],)])
++AC_CACHE_VAL([he5_cv_f2cFortran_defined],[he5_cv_f2cFortran_defined=yes])
+ if test ${he5_cv_f2cFortran_defined} = "yes"; then
+   F2CFORTRAN_MACRO="yes"
+   AC_MSG_RESULT([defined])
+@@ -124,18 +114,7 @@ else
+ fi
+ 
+ if test ${he5_cv_f2cFortran_defined} = "yes"; then
+-  AC_CHECK_SIZEOF([int*])
+-  AC_CACHE_VAL([he5_cv_32ptr],
+-      [AC_TRY_RUN([
+-      int main(void)
+-      {
+-#ifdef SIZEOF_INTP
+-	return SIZEOF_INTP == 4 ? 0 : 1;
+-#else
+-#error SIZEOF_INTP is not defined
+-#endif
+-      }
+-      ], [he5_cv_32ptr=yes], [he5_cv_32ptr=no],)])
++  AC_CACHE_VAL([he5_cv_32ptr],[he5_cv_32ptr=no])
+   if test ${he5_cv_32ptr} = "yes"; then
+     AC_MSG_NOTICE([possibly 32 bit system])
+     F2CFORTRAN_32PTR="yes"
+@@ -417,20 +396,7 @@ fi
+ 
+ # Check whether HDF5 threadsafety is enabled
+ AC_MSG_CHECKING([if HDF5 threadsafe mode is enabled])
+-AC_TRY_RUN([
+-#include "hdf5.h"
+-
+-int main(void) {
+-#ifdef H5_HAVE_THREADSAFE
+-  return 0;
+-#else
+-  return 1;
+-#endif
+-} ], 
+-  [ AC_MSG_RESULT([yes])
+-    THREADSAFE="yes"],
+-  [AC_MSG_RESULT([no])
+-    THREADSAFE="no"])
++THREADSAFE=no
+ 
+ # Record threadsafe status in config.h and for Makefiles
+ if test "X$THREADSAFE" = "Xyes"; then
+@@ -445,24 +411,7 @@ if test "x$HAVE_HDF5" = "xyes"; then
+   dnl Check if HDF5 is linked with SZIP encoder
+ 
+   AC_MSG_CHECKING([for hdf5 szip decoding filter])
+-  AC_CACHE_VAL([he5_cv_hdf5_szip_can_decode],
+-      [AC_TRY_RUN([
+-      #include <H5Ipublic.h>
+-      #include <H5Zpublic.h>
+-      
+-      int main(int argc, char **argv)
+-      {
+-              herr_t ret;
+-              unsigned int flags = 0;
+-              int decoder = 0;
+-      
+-              ret = H5Zget_filter_info(H5Z_FILTER_SZIP, &flags);
+-	      if (ret < 0) exit(1);
+-              decoder = flags & H5Z_FILTER_CONFIG_DECODE_ENABLED;
+-              if (decoder) exit(0);
+-              else exit(1);
+-      }
+-      ], [he5_cv_hdf5_szip_can_decode=yes], [he5_cv_hdf5_szip_can_decode=no],)])
++  AC_CACHE_VAL([he5_cv_hdf5_szip_can_decode],[he5_cv_hdf5_szip_can_decode=no])
+   if test ${he5_cv_hdf5_szip_can_decode} = "yes"; then
+     AC_DEFINE(HAVE_HDF5_SZIP_DECODER, 1,
+ 	    [Define if HDF5 has szip decoder filter])
+@@ -474,24 +423,7 @@ if test "x$HAVE_HDF5" = "xyes"; then
+   fi
+ 
+   AC_MSG_CHECKING([for hdf5 szip encoding filter])
+-  AC_CACHE_VAL([he5_cv_hdf5_szip_can_encode],
+-      [AC_TRY_RUN([
+-      #include <H5Ipublic.h>
+-      #include <H5Zpublic.h>
+-      
+-      int main(int argc, char **argv)
+-      {
+-              herr_t ret;
+-              unsigned int flags = 0;
+-              int encoder = 0;
+-      
+-              ret = H5Zget_filter_info(H5Z_FILTER_SZIP, &flags);
+-	      if (ret < 0) exit(1);
+-              encoder = flags & H5Z_FILTER_CONFIG_ENCODE_ENABLED;
+-              if (encoder) exit(0);
+-              else exit(1);
+-      }
+-      ], [he5_cv_hdf5_szip_can_encode=yes], [he5_cv_hdf5_szip_can_encode=no],)])
++  AC_CACHE_VAL([he5_cv_hdf5_szip_can_encode],[he5_cv_hdf5_szip_can_encode=no])
+ 
+   if test ${he5_cv_hdf5_szip_can_encode} = "yes"; then
+     AC_DEFINE(HAVE_HDF5_SZIP_ENCODER, 1,
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Thomas Danckaert <thomas.danckaert@gmail.com>
+Date: Fri, 27 May 2016 17:49:30 +0200
+Subject: [PATCH] Fix compilation without SZIP.
+
+A wrongly placed #endif causes a missing symbol 'HE5_EHHEisHE5' when
+compiling without szip.  Bug & fix reported upstream.
+
+diff --git a/src/EHapi.c b/src/EHapi.c
+index 1111111..2222222 100755
+--- a/src/EHapi.c
++++ b/src/EHapi.c
+@@ -11379,6 +11379,7 @@ int HE5_szip_can_encode(void )
+   return(-1);
+ }
+ 
++#endif /* H5_HAVE_FILTER_SZIP */
+ 
+ 
+ /*----------------------------------------------------------------------------|
+@@ -11509,8 +11510,6 @@ HE5_EHHEisHE5(char *filename)
+     }
+ }
+ 
+-#endif /* H5_HAVE_FILTER_SZIP */
+-
+ 
+ #ifndef __cplusplus
+ 

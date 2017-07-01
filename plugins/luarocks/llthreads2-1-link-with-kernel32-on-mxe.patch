@@ -1,0 +1,32 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 1d8e959ee39e7a46e150e722af12252448c7ac22 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 11 Oct 2015 01:56:36 +0100
+Subject: [PATCH] link with kernel32 on MXE
+
+---
+ rockspecs/lua-llthreads2-scm-0.rockspec | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/rockspecs/lua-llthreads2-scm-0.rockspec b/rockspecs/lua-llthreads2-scm-0.rockspec
+index 8f907b8..26d5b80 100644
+--- a/rockspecs/lua-llthreads2-scm-0.rockspec
++++ b/rockspecs/lua-llthreads2-scm-0.rockspec
+@@ -27,6 +27,13 @@ build = {
+         }
+       }
+     },
++    mxe = {
++      modules = {
++        llthreads2 = {
++          libraries = {"kernel32"},
++        }
++      }
++    },
+     windows = {
+       modules = {
+         llthreads2 = {
+-- 
+2.1.4
+

@@ -1,18 +1,19 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := apr-util
+$(PKG)_WEBSITE  := https://apr.apache.org/
+$(PKG)_DESCR    := APR-util
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.5.4
 $(PKG)_CHECKSUM := 976a12a59bc286d634a21d7be0841cc74289ea9077aa1af46be19d1a6e844c19
 $(PKG)_SUBDIR   := apr-util-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-util-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://archive.apache.org/dist/apr/$($(PKG)_FILE)
+$(PKG)_URL      := https://archive.apache.org/dist/apr/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://mirror.apache-kr.org/apr/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc apr expat libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://apr.apache.org/download.cgi' | \
+    $(WGET) -q -O- 'https://apr.apache.org/download.cgi' | \
     grep 'aprutil1.*best' |
     $(SED) -n 's,.*APR-util \([0-9.]*\).*,\1,p'
 endef

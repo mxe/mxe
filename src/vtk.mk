@@ -1,7 +1,7 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vtk
+$(PKG)_WEBSITE  := http://www.vtk.org/
 $(PKG)_IGNORE   := 5.10%
 $(PKG)_VERSION  := 5.8.0
 $(PKG)_CHECKSUM := 83ee74b83403590342c079a52b06eef7ab862417f941d5f4558aea25c6bbc2d5
@@ -35,9 +35,8 @@ define $(PKG)_BUILD
 
     # now for the cross compilation
     mkdir '$(1)/cross_build'
-    cd '$(1)/cross_build' && cmake \
+    cd '$(1)/cross_build' && '$(TARGET)-cmake' \
         -C '$(1)/TryRunResults.cmake'\
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)'\
         -DBUILD_TESTING=FALSE\
         -DVTKCompileTools_DIR='$(1)/native_build'\
         -DVTK_USE_SYSTEM_EXPAT=TRUE\

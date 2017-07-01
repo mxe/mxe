@@ -1,0 +1,264 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
+Date: Sun, 3 Jan 2016 05:48:59 +0100
+Subject: [PATCH] make configure determine if basetsd.h is needed for ssize_t
+
+The result is hardcoded in ieee1284.h.
+Duplicate logic in detect.h is replaced by including that file.
+
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -72,7 +72,17 @@ if test $ac_cv_use_python = yes; then
+ AM_PATH_PYTHON
+ fi
+ 
++AC_CHECK_TYPE([ssize_t],,,[#include <sys/types.h>])
++if test $ac_cv_type_ssize_t != yes; then
++	AC_CHECK_TYPE([SSIZE_T],
++		AC_SUBST([SSIZE_T_IN_BASETSD_H], 1),
++		AC_MSG_ERROR([No definition of ssize_t found.]),
++		[#include <basetsd.h>])
++else
++		AC_SUBST([SSIZE_T_IN_BASETSD_H], 0)
++fi
++
+ dnl Checks for library functions.
+ 
+-AC_CONFIG_FILES(Makefile libieee1284.spec)
++AC_CONFIG_FILES([Makefile libieee1284.spec include/ieee1284.h])
+ AC_OUTPUT
+diff --git a/include/ieee1284.h b/include/ieee1284.h.in
+similarity index 99%
+rename from include/ieee1284.h
+rename to include/ieee1284.h.in
+index 1111111..2222222 100644
+--- a/include/ieee1284.h
++++ b/include/ieee1284.h.in
+@@ -27,7 +27,7 @@
+ #include <winsock2.h> /* for struct timeval */
+ #endif
+ 
+-#if (defined __MINGW32__ || defined _MSC_VER) && !defined OWN_SSIZE_T
++#if @SSIZE_T_IN_BASETSD_H@ && !defined OWN_SSIZE_T
+ #include <basetsd.h> /* for SSIZE_T */
+ #define OWN_SSIZE_T
+ typedef SSIZE_T ssize_t;
+diff --git a/src/detect.h b/src/detect.h
+index 1111111..2222222 100644
+--- a/src/detect.h
++++ b/src/detect.h
+@@ -24,18 +24,7 @@
+ #ifndef _DETECT_H_
+ #define _DETECT_H_
+ 
+-#include <stdlib.h>
+-#ifndef _MSC_VER
+-#include <sys/time.h>
+-#else
+-#include <winsock2.h>
+-#endif
+-
+-#if (defined __MINGW32__ || defined _MSC_VER) && !defined OWN_SSIZE_T
+-#include <basetsd.h> /* for SSIZE_T */
+-#define OWN_SSIZE_T
+-typedef SSIZE_T ssize_t;
+-#endif
++#include "ieee1284.h"
+ 
+ struct parport;
+ struct parport_internal;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
+Date: Sun, 20 Sep 2015 19:14:18 +0200
+Subject: [PATCH] persuade libtool build a DLL on windows
+
+
+diff --git a/Makefile.am b/Makefile.am
+index 1111111..2222222 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -8,7 +8,7 @@ libieee1284_la_SOURCES = src/detect.c src/detect.h src/ports.c src/deviceid.c \
+ 	src/par_nt.h src/io.h src/conf.h src/conf.c libieee1284.sym
+ # When rolling a release, remember to adjust the version info.
+ # It's current:release:age.
+-libieee1284_la_LDFLAGS = -version-info 5:2:2 \
++libieee1284_la_LDFLAGS = -version-info 5:2:2 -no-undefined \
+ 	-export-symbols $(top_srcdir)/libieee1284.sym
+ include_HEADERS = include/ieee1284.h
+ INCLUDES = -I$(top_srcdir)/include
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
+Date: Sun, 20 Sep 2015 19:15:15 +0200
+Subject: [PATCH] search for windows.h
+
+instead of relying on the __CYGWIN__ macro
+
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -37,21 +37,16 @@ case "{$host}" in
+         AC_DEFINE(HAVE_SOLARIS,1,enable solaris iop access)
+ 	solaris_io=true
+ ;;
+-*-*-cygwin*)
+-        dnl Strip version number from uname and make sure we're on NT not 9x
+-        case `uname -s | sed 's/-.*$//'` in
+-        CYGWIN_NT*)
+-                AC_CHECK_HEADER(w32api/windows.h, [
+-      	                AC_DEFINE(HAVE_CYGWIN_NT,1,enable w32api access)
+-	        ], AC_MSG_ERROR(You need the cygwin w32api files on NT)) 
+-        ;;
+-        *)
+-      	        AC_DEFINE(HAVE_CYGWIN_9X,1,enable win95 access)
+-        ;;
+-        esac
+-;;
+-*-*-mingw*)
+-dnl        AC_DEFINE(HAVE_CYGWIN_9X,1,enable win95 access)
++*-*-cygwin* | *-*-mingw*)
++	windows_h_found=false
++	AC_CHECK_HEADERS([windows.h] [w32api/windows.h], [
++		windows_h_found=true
++		break
++	])
++	AS_VAR_IF(windows_h_found, [false], [
++		AC_MSG_ERROR(windows.h not found)
++	])
++	AC_DEFINE(HAVE_CYGWIN_9X,1,enable win95 access)
+         AC_DEFINE(HAVE_CYGWIN_NT,1,enable w32api access)
+ ;;
+ *)
+diff --git a/src/access_lpt.c b/src/access_lpt.c
+index 1111111..2222222 100644
+--- a/src/access_lpt.c
++++ b/src/access_lpt.c
+@@ -51,7 +51,7 @@
+ 
+ #ifdef HAVE_CYGWIN_NT
+ 
+-#ifdef __CYGWIN__
++#ifdef HAVE_W32API_WINDOWS_H
+ #include <w32api/windows.h>
+ #else
+ #include <windows.h>
+diff --git a/src/detect.c b/src/detect.c
+index 1111111..2222222 100644
+--- a/src/detect.c
++++ b/src/detect.c
+@@ -50,7 +50,7 @@
+ #include <sys/ddi.h>
+ #include <sys/sunddi.h>
+ #elif defined(HAVE_CYGWIN_NT)
+-#ifdef __CYGWIN__
++#ifdef HAVE_W32API_WINDOWS_H
+ #include <w32api/windows.h>
+ #else
+ #include <windows.h>
+diff --git a/src/ports.c b/src/ports.c
+index 1111111..2222222 100644
+--- a/src/ports.c
++++ b/src/ports.c
+@@ -36,7 +36,7 @@
+ #include "detect.h"
+ 
+ #ifdef HAVE_CYGWIN_NT
+-#ifdef __CYGWIN__
++#ifdef HAVE_W32API_WINDOWS_H
+ #include <w32api/windows.h>
+ #else /* Not cygwin really */
+ /* Don't include windows.h if it isn't necessary. That's why this is here and
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
+Date: Sat, 19 Sep 2015 01:39:15 +0200
+Subject: [PATCH] check Windows version before allowing IO access
+
+
+diff --git a/src/detect.c b/src/detect.c
+index 1111111..2222222 100644
+--- a/src/detect.c
++++ b/src/detect.c
+@@ -49,7 +49,7 @@
+ #elif defined(HAVE_SOLARIS)
+ #include <sys/ddi.h>
+ #include <sys/sunddi.h>
+-#elif defined(HAVE_CYGWIN_NT)
++#elif defined(HAVE_CYGWIN_NT) || defined(HAVE_CYGWIN_9X)
+ #ifdef HAVE_W32API_WINDOWS_H
+ #include <w32api/windows.h>
+ #else
+@@ -191,10 +191,12 @@ check_io (void)
+   }
+   debugprintf ("We can't use IOP, nothing will work\n");
+   #elif defined(HAVE_CYGWIN_9X)
+-  /* note: 95 allows apps direct IO access */
+-  debugprintf ("Taking a guess on port availability (win9x)\n");
+-  capabilities |= IO_CAPABLE;
+-  return 1;
++  /* note: Win32s/95/98/ME allows apps direct IO access */
++  if (GetVersion() & (1 << 31)) {
++    debugprintf ("Taking a guess on port availability (win9x)\n");
++    capabilities |= IO_CAPABLE;
++    return 1;
++  }
+   #endif
+ 
+   return 0;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
+Date: Mon, 4 Jan 2016 00:49:41 +0100
+Subject: [PATCH] add pkg-config metadata file
+
+
+diff --git a/Makefile.am b/Makefile.am
+index 1111111..2222222 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -30,6 +30,9 @@ bin_PROGRAMS = libieee1284_test
+ libieee1284_test_SOURCES = tests/test.c
+ libieee1284_test_LDADD = libieee1284.la
+ 
++pkgconfigdir = $(libdir)/pkgconfig
++pkgconfig_DATA = libieee1284.pc
++
+ # Python bindings
+ src_ieee1284module_la_SOURCES = src/ieee1284module.c
+ if PYTHON
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -79,5 +79,5 @@ fi
+ 
+ dnl Checks for library functions.
+ 
+-AC_CONFIG_FILES([Makefile libieee1284.spec include/ieee1284.h])
++AC_CONFIG_FILES([Makefile libieee1284.spec libieee1284.pc include/ieee1284.h])
+ AC_OUTPUT
+diff --git a/libieee1284.pc.in b/libieee1284.pc.in
+new file mode 100644
+index 1111111..2222222
+--- /dev/null
++++ b/libieee1284.pc.in
+@@ -0,0 +1,11 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++
++Name: @PACKAGE@
++Version: @VERSION@
++Description: IEEE1284 parallel port library
++URL: http://cyberelk.net/tim/software/libieee1284/
++Libs: -L${libdir} -lieee1284
++Cflags: -I${includedir}

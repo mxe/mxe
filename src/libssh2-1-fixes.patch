@@ -1,25 +1,61 @@
-This file is part of MXE.
-See index.html for further information.
-
-From a1d0ed70e2c94d89d0b598eacca6ac79b8cd5508 Mon Sep 17 00:00:00 2001
+From 65ae975e2a670869580e289d5d9bf255d2a10209 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 2 Sep 2012 00:55:28 +0200
-Subject: [PATCH] include gpg-error with gcrypt for static linking
+Subject: [PATCH 1/2] include gpg-error with gcrypt for static linking
  (mxe-specific)
 
+Git rid of the extra -lgcrypt here since we have to pass the
+whole list via LIBS. Otherwise, LIBS gets simplified with
+-lgcrypt appearing only after its static dependencies.
 
-diff --git a/configure.ac b/configure.ac
-index 563fb04..16caa88 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -124,6 +124,7 @@ if test "$ac_cv_libgcrypt" = "yes"; then
-   AC_DEFINE(LIBSSH2_LIBGCRYPT, 1, [Use libgcrypt])
-   LIBSREQUIRED= # libgcrypt doesn't provide a .pc file. sad face.
-   LIBS="$LIBS -lgcrypt"
-+  LIBS="$LIBS `${prefix}/bin/gpg-error-config --libs`"
-   found_crypto=libgcrypt
- fi
- AM_CONDITIONAL(LIBGCRYPT, test "$ac_cv_libgcrypt" = "yes")
+diff --git a/acinclude.m4 b/acinclude.m4
+index 734ef07..a6ee65a 100644
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -423,7 +423,6 @@ AC_DEFUN([LIBSSH2_CHECKFOR_GCRYPT], [
+   if test "$ac_cv_libgcrypt" = "yes"; then
+     AC_DEFINE(LIBSSH2_LIBGCRYPT, 1, [Use libgcrypt])
+     LIBSREQUIRED= # libgcrypt doesn't provide a .pc file. sad face.
+-    LIBS="$LIBS -lgcrypt"
+     found_crypto=libgcrypt
+   else
+     # restore
 -- 
-2.1.0
+2.9.3
+
+
+From fb65371e600772e72491f06a368a727c96d525c7 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 7 Nov 2016 10:47:13 +0100
+Subject: [PATCH 2/2] fix yes/no in lib path
+
+
+diff --git a/acinclude.m4 b/acinclude.m4
+index a6ee65a..510a0d3 100644
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -386,10 +386,6 @@ AC_DEFUN([LIBSSH2_CHECKFOR_MBEDTLS], [
+ 
+   old_LDFLAGS=$LDFLAGS
+   old_CFLAGS=$CFLAGS
+-  if test -n "$use_mbedtls" && test "$use_mbedtls" != "no"; then
+-    LDFLAGS="$LDFLAGS -L$use_mbedtls/lib"
+-    CFLAGS="$CFLAGS -I$use_mbedtls/include"
+-  fi
+ 
+   AC_LIB_HAVE_LINKFLAGS([mbedtls], [], [
+     #include <mbedtls/version.h>
+@@ -412,10 +408,6 @@ AC_DEFUN([LIBSSH2_CHECKFOR_GCRYPT], [
+ 
+   old_LDFLAGS=$LDFLAGS
+   old_CFLAGS=$CFLAGS
+-  if test -n "$use_libgcrypt" && test "$use_libgcrypt" != "no"; then
+-    LDFLAGS="$LDFLAGS -L$use_libgcrypt/lib"
+-    CFLAGS="$CFLAGS -I$use_libgcrypt/include"
+-  fi
+   AC_LIB_HAVE_LINKFLAGS([gcrypt], [], [
+     #include <gcrypt.h>
+   ])
+-- 
+2.9.3
 

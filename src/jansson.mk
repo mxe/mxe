@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := jansson
+$(PKG)_WEBSITE  := http://www.digip.org/jansson/
+$(PKG)_DESCR    := Jansson
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7
 $(PKG)_CHECKSUM := 459f2b7cf22fb676286723f26169a17cf111fbfb6f54e3dc2ec6b6f9f4a97bdc

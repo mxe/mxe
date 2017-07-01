@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtkglextmm
+$(PKG)_WEBSITE  := https://gtkglext.sourceforge.io/
+$(PKG)_DESCR    := GtkGLExtmm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := 8f499c1f95678c56cce908c10bf2c1d0f2267b87e0c480385fa4b128c75bdf7b
 $(PKG)_SUBDIR   := gtkglextmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglextmm-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gtkglext gtkmm2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.gnome.org/cgit/gtkglextmm/refs/tags' | \
+    $(WGET) -q -O- 'https://git.gnome.org/cgit/gtkglextmm/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
     $(SORT) -V | \
@@ -31,8 +32,8 @@ define $(PKG)_BUILD
         INFO_DEPS=
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -pedantic -std=c++0x \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-gtkglextmm.exe' \
+        -W -Wall -Werror -Wno-error=deprecated-declarations -pedantic -std=c++0x \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkglextmm.exe' \
         `'$(TARGET)-pkg-config' gtkglextmm-1.2 --cflags --libs`
 endef
 

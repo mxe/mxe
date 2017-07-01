@@ -1,10 +1,10 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := portaudio
+$(PKG)_WEBSITE  := http://www.portaudio.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 19_20140130
-$(PKG)_CHECKSUM := 8fe024a5f0681e112c6979808f684c3516061cc51d3acc0b726af98fc96c8d57
+$(PKG)_VERSION  := 190600_20161030
+$(PKG)_CHECKSUM := f5a21d7dcd6ee84397446fa1fa1a0675bb2e8a4a6dceb4305a8404698d8d1513
 $(PKG)_SUBDIR   := portaudio
 $(PKG)_FILE     := pa_stable_v$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://www.portaudio.com/archives/$($(PKG)_FILE)
@@ -36,6 +36,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-portaudio.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-portaudio.exe' \
         `'$(TARGET)-pkg-config' portaudio-2.0 --cflags --libs`
 endef

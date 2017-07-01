@@ -1,0 +1,23 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 26 Mar 2017 12:36:55 +1100
+Subject: [PATCH] qca: add INSTAL_PKGCONFIG option
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -233,7 +233,7 @@ foreach(PATH QCA_PLUGINS_INSTALL_DIR
+   endif()
+ endforeach()
+ 
+-if(NOT WIN32)
++if(NOT WIN32 OR INSTAL_PKGCONFIG)
+   if(OSX_FRAMEWORK)
+     set(PKGCONFIG_CFLAGS "-F\${libdir} -I\${includedir}")
+     set(PKGCONFIG_LIBS "-F\${libdir} -framework ${QCA_LIB_NAME}")

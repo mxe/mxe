@@ -1,0 +1,110 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 3 Aug 2016 03:19:48 +1000
+Subject: [PATCH] cegui: separate shared and static builds
+
+minimal workaround till correctly implemented upstream:
+https://bitbucket.org/cegui/cegui/issues/1132/libxml2-based-xml-parser-fails-to#comment-29553011
+
+diff --git a/cmake/CEGUIMacros.cmake b/cmake/CEGUIMacros.cmake
+index 1111111..2222222 100644
+--- a/cmake/CEGUIMacros.cmake
++++ b/cmake/CEGUIMacros.cmake
+@@ -49,7 +49,9 @@ endmacro()
+ # Add libs to a target, and correctly handles static versions of libs built by the project
+ #
+ macro (cegui_target_link_libraries _TARGET_NAME)
+-    target_link_libraries(${_TARGET_NAME} ${ARGN})
++    if (CEGUI_BUILD_SHARED_CONFIGURATION)
++        target_link_libraries(${_TARGET_NAME} ${ARGN})
++    endif()
+ 
+     get_target_property(_TARGET_EXISTS ${_TARGET_NAME}_Static TYPE)
+     if (_TARGET_EXISTS)
+@@ -167,11 +169,13 @@ macro (cegui_add_dependency _TARGET_NAME _DEP_NAME)
+     ###########################################################################
+     #                    NON-STATIC VERSION OF TARGET
+     ###########################################################################
+-    if (${_DEP_NAME}_DEFINITIONS)
+-        set_property( TARGET ${_TARGET_NAME} APPEND PROPERTY COMPILE_DEFINITIONS ${${_DEP_NAME}_DEFINITIONS} )
+-    endif()
+-    if (${_DEP_NAME}_COMPILE_FLAGS)
+-        set_property( TARGET ${_TARGET_NAME} APPEND PROPERTY COMPILE_FLAGS ${${_DEP_NAME}_COMPILE_FLAGS} )
++    if (CEGUI_BUILD_SHARED_CONFIGURATION)
++        if (${_DEP_NAME}_DEFINITIONS)
++            set_property( TARGET ${_TARGET_NAME} APPEND PROPERTY COMPILE_DEFINITIONS ${${_DEP_NAME}_DEFINITIONS} )
++        endif()
++        if (${_DEP_NAME}_COMPILE_FLAGS)
++            set_property( TARGET ${_TARGET_NAME} APPEND PROPERTY COMPILE_FLAGS ${${_DEP_NAME}_COMPILE_FLAGS} )
++        endif()
+     endif()
+ 
+     if (CEGUI_BUILD_SHARED_LIBS_WITH_STATIC_DEPENDENCIES)
+@@ -252,10 +256,12 @@ macro (cegui_add_library_impl _LIB_NAME _IS_MODULE _SOURCE_FILES_VAR _HEADER_FIL
+     ###########################################################################
+     #                       SHARED LIBRARY SET UP
+     ###########################################################################
+-    add_library(${_LIB_NAME} ${_LIB_TYPE} ${${_SOURCE_FILES_VAR}} ${${_HEADER_FILES_VAR}})
+-    set_target_properties(${_LIB_NAME} PROPERTIES DEFINE_SYMBOL ${_CEGUI_EXPORT_DEFINE})
++    if (CEGUI_BUILD_SHARED_CONFIGURATION)
++        add_library(${_LIB_NAME} ${_LIB_TYPE} ${${_SOURCE_FILES_VAR}} ${${_HEADER_FILES_VAR}})
++        set_target_properties(${_LIB_NAME} PROPERTIES DEFINE_SYMBOL ${_CEGUI_EXPORT_DEFINE})
++    endif()
+ 
+-    if (NOT CEGUI_BUILD_SHARED_LIBS_WITH_STATIC_DEPENDENCIES)
++    if (NOT(CEGUI_BUILD_SHARED_LIBS_WITH_STATIC_DEPENDENCIES) AND CEGUI_BUILD_SHARED_CONFIGURATION)
+         # Starting with CMake 2.8.12 LINK_INTERFACE_LIBRARIES was renamed to INTERFACE_LINK_LIBRARIES
+         if (${CMAKE_VERSION} VERSION_GREATER 2.8.12 OR ${CMAKE_VERSION} VERSION_EQUAL 2.8.12)
+             set_target_properties(${_LIB_NAME} PROPERTIES
+@@ -289,7 +295,7 @@ macro (cegui_add_library_impl _LIB_NAME _IS_MODULE _SOURCE_FILES_VAR _HEADER_FIL
+     # Do not version modules, since we dlopen these directly and need to know
+     # the name is what we think it will be (and not rely on symlinks which will
+     # not be installed always, but usually only as part of *-dev packages).
+-    if (NOT ${_IS_MODULE} AND NOT ANDROID)
++    if (NOT ${_IS_MODULE} AND NOT ANDROID AND CEGUI_BUILD_SHARED_CONFIGURATION)
+         if (NOT APPLE OR CEGUI_APPLE_DYLIB_SET_VERSION_INFO)
+             set_target_properties(${_LIB_NAME} PROPERTIES
+                 VERSION ${CEGUI_ABI_VERSION}
+@@ -308,11 +314,13 @@ macro (cegui_add_library_impl _LIB_NAME _IS_MODULE _SOURCE_FILES_VAR _HEADER_FIL
+             set(_CEGUI_LIB_DEST ${CEGUI_LIB_INSTALL_DIR})
+         endif()
+ 
+-        install(TARGETS ${_LIB_NAME}
+-          RUNTIME DESTINATION bin COMPONENT cegui_bin
+-          LIBRARY DESTINATION ${_CEGUI_LIB_DEST} COMPONENT cegui_lib
+-          ARCHIVE DESTINATION ${CEGUI_LIB_INSTALL_DIR} COMPONENT cegui_devel
+-        )
++        if (CEGUI_BUILD_SHARED_CONFIGURATION)
++            install(TARGETS ${_LIB_NAME}
++              RUNTIME DESTINATION bin COMPONENT cegui_bin
++              LIBRARY DESTINATION ${_CEGUI_LIB_DEST} COMPONENT cegui_lib
++              ARCHIVE DESTINATION ${CEGUI_LIB_INSTALL_DIR} COMPONENT cegui_devel
++            )
++        endif()
+ 
+         if (CEGUI_BUILD_STATIC_CONFIGURATION)
+             install(TARGETS ${_LIB_NAME}_Static
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 4 Aug 2016 13:30:13 +1000
+Subject: [PATCH] use cegui_target_link_libraries for minizip
+
+
+diff --git a/cegui/src/CMakeLists.txt b/cegui/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/cegui/src/CMakeLists.txt
++++ b/cegui/src/CMakeLists.txt
+@@ -86,7 +86,7 @@ endif ()
+ if (CEGUI_HAS_MINIZIP_RESOURCE_PROVIDER)
+     cegui_add_dependency(${CEGUI_TARGET_NAME} MINIZIP PRIVATE TRUE)
+     if (MINGW)
+-        target_link_libraries(${CEGUI_TARGET_NAME} shlwapi)
++        cegui_target_link_libraries(${CEGUI_TARGET_NAME} shlwapi)
+     endif ()
+ endif ()
+ 

@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := rubberband
+$(PKG)_WEBSITE  := http://breakfastquay.com/rubberband/
+$(PKG)_DESCR    := Rubberband
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.1
 $(PKG)_CHECKSUM := ff0c63b0b5ce41f937a8a3bc560f27918c5fe0b90c6bc1cb70829b86ada82b75
@@ -24,14 +25,13 @@ define $(PKG)_BUILD
         DYNAMIC_EXTENSION='.dll' \
         DYNAMIC_FULL_VERSION= \
         DYNAMIC_ABI_VERSION= \
-        lib vamp \
-        $(if $(BUILD_STATIC),static,dynamic)
+        lib \
+        $(if $(BUILD_STATIC),static,dynamic vamp)
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/$(PKG)'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/vamp'
-    $(INSTALL) -m644 '$(1)/$(PKG)/'* '$(PREFIX)/$(TARGET)/include/$(PKG)'
-    $(INSTALL) -m644 '$(1)/lib/lib$(PKG).$(LIB_SUFFIX)' '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)/lib/vamp-'*.dll '$(PREFIX)/$(TARGET)/lib/vamp'
+    $(INSTALL) -m644 '$(1)/$(PKG)/'*.h '$(PREFIX)/$(TARGET)/include/$(PKG)'
+    $(INSTALL) -m644 '$(1)/lib/'*.$(LIB_SUFFIX) '$(PREFIX)/$(TARGET)/$(if $(BUILD_STATIC),lib,bin)'
     $(INSTALL) -m644 '$(1)/vamp/vamp-rubberband.cat' '$(PREFIX)/$(TARGET)/lib/vamp'
     $(SED) 's,%PREFIX%,$(PREFIX)/$(TARGET),' '$(1)/$(PKG).pc.in' \
         > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'

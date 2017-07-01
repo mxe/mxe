@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gnutls
-$(PKG)_VERSION  := 3.4.5
-$(PKG)_CHECKSUM := af88b8e0460728d034ff3f454f7851a09b7f0959a93531b6f8d35658ef0f7aae
+$(PKG)_WEBSITE  := https://www.gnu.org/software/gnutls/
+$(PKG)_DESCR    := GnuTLS
+$(PKG)_VERSION  := 3.5.13
+$(PKG)_CHECKSUM := 79f5480ad198dad5bc78e075f4a40c4a315a1b2072666919d2d05a08aec13096
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://mirrors.dotsrc.org/gnupg/gnutls/v3.4/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4//$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext gmp libgnurx nettle zlib
+$(PKG)_URL      := https://gnupg.org/ftp/gcrypt/gnutls/v3.5/$($(PKG)_FILE)
+$(PKG)_URL_2    := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc gettext gmp libgnurx libidn2 libunistring nettle zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4/ | \
+    $(WGET) -q -O- https://gnupg.org/ftp/gcrypt/gnutls/v3.5/ | \
     $(SED) -n 's,.*gnutls-\([1-9]\+\.[0-9]\+.[0-9]\+\)\..*,\1,p' | \
     $(SORT) -V | \
     tail -1
@@ -19,13 +20,14 @@ endef
 
 define $(PKG)_BUILD
     # AI_ADDRCONFIG referenced by src/serv.c but not provided by mingw.
-    # Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms737530%28v=vs.85%29.aspx
-    cd '$(1)' && ./configure \
+    # Value taken from https://msdn.microsoft.com/en-us/library/windows/desktop/ms737530%28v=vs.85%29.aspx
+    cd '$(1)' && autoreconf -fi && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-rpath \
         --disable-nls \
         --disable-guile \
         --disable-doc \
+        --disable-tests \
         --enable-local-libopts \
         --with-included-libtasn1 \
         --with-libregex-libs="-lgnurx" \
@@ -38,6 +40,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gnutls.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gnutls.exe' \
         `'$(TARGET)-pkg-config' gnutls --cflags --libs`
 endef

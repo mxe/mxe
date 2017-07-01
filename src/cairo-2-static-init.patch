@@ -1,5 +1,4 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 When DllMain is not being run, we need to initialize the font face mutex before using it.
 

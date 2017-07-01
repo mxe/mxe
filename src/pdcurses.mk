@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pdcurses
+$(PKG)_WEBSITE  := https://pdcurses.sourceforge.io/
+$(PKG)_DESCR    := PDcurses
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4
 $(PKG)_CHECKSUM := 46ad8fd439e71d44819ea884d775ccbf653b9f8b1f7a418a0cce3a510aa2e64b
 $(PKG)_SUBDIR   := PDCurses-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDCurses-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/pdcurses/pdcurses/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/pdcurses/pdcurses/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/pdcurses/files/pdcurses/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/pdcurses/files/pdcurses/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

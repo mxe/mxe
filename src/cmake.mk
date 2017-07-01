@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cmake
+$(PKG)_WEBSITE  := https://www.cmake.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.2
-$(PKG)_CHECKSUM := 6b4ea61eadbbd9bec0ccb383c29d1f4496eacc121ef7acf37c7a24777805693e
+$(PKG)_VERSION  := 3.7.2
+$(PKG)_CHECKSUM := dc1246c4e6d168ea4d6e042cfba577c1acd65feea27e56f5ff37df920c30cae0
 $(PKG)_SUBDIR   := cmake-$($(PKG)_VERSION)
 $(PKG)_FILE     := cmake-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.cmake.org/files/v$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.cmake.org/files/v$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.cmake.org/cmake/resources/software.html' | \
+    $(WGET) -q -O- 'https://www.cmake.org/cmake/resources/software.html' | \
     $(SED) -n 's,.*cmake-\([0-9.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

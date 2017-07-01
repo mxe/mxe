@@ -1,16 +1,13 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 # Runtimes can/will have different implementations,
 # but the pre-requisite package and test are the same.
 
 PKG             := pthreads
+$(PKG)_WEBSITE  := https://en.wikipedia.org/wiki/POSIX_Threads
+$(PKG)_DESCR    := POSIX Threads
 $(PKG)_VERSION  := POSIX 1003.1-2001
 $(PKG)_DEPS     := gcc
-
-define $(PKG)_UPDATE
-    echo $(pthreads_VERSION)
-endef
 
 define $(PKG)_BUILD
     # install and test pkg-config

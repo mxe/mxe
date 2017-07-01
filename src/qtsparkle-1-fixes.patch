@@ -1,0 +1,20 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pavel Vatagin <pavelvat@gmail.com>
+Date: Sat, 28 Jan 2017 03:05:58 +0300
+Subject: [PATCH] disable build exampleapp
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -34,4 +34,4 @@ SET(CMAKE_C_FLAGS    "${CMAKE_C_FLAGS} -Wall")
+ SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
+ 
+ add_subdirectory(src)
+-add_subdirectory(exampleapp)
++#add_subdirectory(exampleapp)

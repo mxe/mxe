@@ -1,10 +1,11 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gdal
+$(PKG)_WEBSITE  := http://www.gdal.org/
+$(PKG)_DESCR    := GDAL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.11.2
-$(PKG)_CHECKSUM := 66bc8192d24e314a66ed69285186d46e6999beb44fc97eeb9c76d82a117c0845
+$(PKG)_VERSION  := 2.1.3
+$(PKG)_CHECKSUM := ae6a0a0dc6eb45a981a46db27e3dfe16c644fcf04732557e2cb315776974074a
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -14,7 +15,7 @@ $(PKG)_DEPS     := gcc armadillo curl expat geos giflib gta hdf4 hdf5 \
                    netcdf openjpeg postgresql proj sqlite tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://trac.osgeo.org/gdal/wiki/DownloadSource' | \
+    $(WGET) -q -O- 'https://trac.osgeo.org/gdal/wiki/DownloadSource' | \
     $(SED) -n 's,.*gdal-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
@@ -79,12 +80,18 @@ define $(PKG)_BUILD
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4`"
 
     $(MAKE) -C '$(1)'       -j '$(JOBS)' lib-target
-    $(MAKE) -C '$(1)'       -j '$(JOBS)' install-lib
+    # gdal doesn't have an install-strip target
+    # --strip-debug doesn't reduce size by much, --strip-all breaks libs
+    $(if $(STRIP_LIB),-'$(TARGET)-strip' --strip-debug '$(1)/.libs'/*)
+    $(MAKE) -C '$(1)'       -j '$(JOBS)' gdal.pc
+    $(MAKE) -C '$(1)'       -j '$(JOBS)' install-actions
     $(MAKE) -C '$(1)/port'  -j '$(JOBS)' install
     $(MAKE) -C '$(1)/gcore' -j '$(JOBS)' install
     $(MAKE) -C '$(1)/frmts' -j '$(JOBS)' install
     $(MAKE) -C '$(1)/alg'   -j '$(JOBS)' install
     $(MAKE) -C '$(1)/ogr'   -j '$(JOBS)' install OGR_ENABLED=
+    $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' all
+    $(if $(STRIP_EXE),-'$(TARGET)-strip' '$(1)/apps'/*.exe)
     $(MAKE) -C '$(1)/apps'  -j '$(JOBS)' install
     ln -sf '$(PREFIX)/$(TARGET)/bin/gdal-config' '$(PREFIX)/bin/$(TARGET)-gdal-config'
 endef

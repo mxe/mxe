@@ -1,0 +1,121 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 00:28:50 +0200
+Subject: [PATCH] do not check qmake existance
+
+Fix ./configure error:
+
+checking for mxe/usr/i686-w64-mingw32.static/qt/bin/qmake...
+configure: error: cannot check for file existence when
+cross compiling
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -4500,7 +4500,7 @@ if eval \${$as_ac_File+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   test "$cross_compiling" = yes &&
+-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
++  echo "cannot check for file existence when cross compiling" "$LINENO" 5
+ if test -r "$QT_QMAKE/qmake"; then
+   eval "$as_ac_File=yes"
+ else
+@@ -4520,7 +4520,7 @@ if eval \${$as_ac_File+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   test "$cross_compiling" = yes &&
+-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
++  echo "cannot check for file existence when cross compiling" "$LINENO" 5
+ if test -r "$QT_QMAKE/qmake-qt5"; then
+   eval "$as_ac_File=yes"
+ else
+@@ -4617,7 +4617,7 @@ if eval \${$as_ac_File+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   test "$cross_compiling" = yes &&
+-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
++  echo "cannot check for file existence when cross compiling" "$LINENO" 5
+ if test -r "$QT_QMAKE/qmake"; then
+   eval "$as_ac_File=yes"
+ else
+@@ -4637,7 +4637,7 @@ if eval \${$as_ac_File+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   test "$cross_compiling" = yes &&
+-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
++  echo "cannot check for file existence when cross compiling" "$LINENO" 5
+ if test -r "$QT_QMAKE/qmake-qt4"; then
+   eval "$as_ac_File=yes"
+ else
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 29 May 2016 23:35:25 +0200
+Subject: [PATCH] link with boost_random and boost_chrono
+
+libtorrent-rasterbar 1.1.0 uses them
+
+diff --git a/winconf-mingw.pri b/winconf-mingw.pri
+index 1111111..2222222 100644
+--- a/winconf-mingw.pri
++++ b/winconf-mingw.pri
+@@ -23,11 +23,15 @@ RC_FILE = qbittorrent_mingw.rc
+ # Adapt the lib names/versions accordingly
+ CONFIG(debug, debug|release) {
+   LIBS += libtorrent-rasterbar \
++          libboost_random-mt \
++          libboost_chrono-mt \
+           libboost_system-mt \
+           libboost_filesystem-mt \
+           libboost_thread_win32-mt
+ } else {
+   LIBS += libtorrent-rasterbar \
++          libboost_random-mt \
++          libboost_chrono-mt \
+           libboost_system-mt \
+           libboost_filesystem-mt \
+           libboost_thread_win32-mt
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Mon, 30 May 2016 00:09:20 +0200
+Subject: [PATCH] disable BOOST_ASIO_SEPARATE_COMPILATION
+
+After upgrading libtorrent-rasterbar to 1.1.0, qbittorrent fails to link
+main executable with undefined symbols in boost_asio:
+
+    ./release/application.o:application.cpp:(.text.startup+0x83):
+    undefined reference to `boost::asio::detail::winsock_init_base::startup
+    (boost::asio::detail::winsock_init_base::data&, unsigned char,
+    unsigned char)'
+
+diff --git a/cmake/Modules/winconf.cmake b/cmake/Modules/winconf.cmake
+index 1111111..2222222 100644
+--- a/cmake/Modules/winconf.cmake
++++ b/cmake/Modules/winconf.cmake
+@@ -5,7 +5,6 @@
+ set(LibtorrentRasterbar_USE_STATIC_LIBS True)
+ set(LibtorrentRasterbar_CUSTOM_DEFINITIONS 
+     -DBOOST_ALL_NO_LIB -DBOOST_ASIO_HASH_MAP_BUCKETS=1021
+-    -DBOOST_ASIO_SEPARATE_COMPILATION
+     -DBOOST_EXCEPTION_DISABLE
+     -DBOOST_SYSTEM_STATIC_LINK=1
+     -DTORRENT_USE_OPENSSL
+diff --git a/winconf.pri b/winconf.pri
+index 1111111..2222222 100644
+--- a/winconf.pri
++++ b/winconf.pri
+@@ -21,7 +21,6 @@ LIBS += $$quote(-LC:/qBittorrent/openssl/lib)
+ # LIBTORRENT DEFINES
+ DEFINES += BOOST_ALL_NO_LIB
+ DEFINES += BOOST_ASIO_HASH_MAP_BUCKETS=1021
+-DEFINES += BOOST_ASIO_SEPARATE_COMPILATION
+ # After 1.55 some Windows users reported regular UI freezes.
+ # This makes ASIO use the pre-1.56 way of doing things. See issue #2003
+ DEFINES += BOOST_ASIO_DISABLE_CONNECTEX

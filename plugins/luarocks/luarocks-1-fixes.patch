@@ -1,0 +1,35 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sat, 10 Oct 2015 17:45:24 +0100
+Subject: [PATCH] platform MXE
+
+
+diff --git a/src/luarocks/build/builtin.lua b/src/luarocks/build/builtin.lua
+index 1111111..2222222 100644
+--- a/src/luarocks/build/builtin.lua
++++ b/src/luarocks/build/builtin.lua
+@@ -165,7 +165,7 @@ function builtin.run(rockspec)
+             add_flags(extras, "-Wl,-rpath,%s:", libdirs)
+          end
+          add_flags(extras, "-l%s", libraries)
+-         if cfg.is_platform("cygwin") then
++         if cfg.is_platform("cygwin") or cfg.is_platform("mxe") then
+             add_flags(extras, "-l%s", {"lua"})
+          end
+          return execute(variables.LD.." "..variables.LIBFLAG, "-o", library, "-L"..variables.LUA_LIBDIR, unpack(extras))
+diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
+index 1111111..2222222 100644
+--- a/src/luarocks/cfg.lua
++++ b/src/luarocks/cfg.lua
+@@ -137,6 +140,7 @@ local platform_order = {
+    linux = 7,
+    macosx = 8,
+    cygwin = 9,
++   mxe = 13,
+    -- Windows
+    win32 = 10,
+    mingw32 = 11,

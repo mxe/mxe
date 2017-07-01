@@ -1,10 +1,10 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := jpeg
+$(PKG)_WEBSITE  := http://www.ijg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9a
-$(PKG)_CHECKSUM := 3a753ea48d917945dd54a2d97de388aa06ca2eb1066cbfdc6652036349fe05a7
+$(PKG)_VERSION  := 9b
+$(PKG)_CHECKSUM := 240fd398da741669bf3c90366f58452ea59041cacc741a489b99f2f6a0bad052
 $(PKG)_SUBDIR   := jpeg-$($(PKG)_VERSION)
 $(PKG)_FILE     := jpegsrc.v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.ijg.org/files/$($(PKG)_FILE)
@@ -31,6 +31,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-jpeg.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-jpeg.exe' \
         `'$(TARGET)-pkg-config' jpeg --libs`
 endef

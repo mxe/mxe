@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pire
+$(PKG)_WEBSITE  := https://github.com/yandex/pire
+$(PKG)_DESCR    := PIRE
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.0.5
 $(PKG)_CHECKSUM := 85a9bd66fff568554826e4aff9b188ed6124e3ea0530cc561723b36aea2a58e3
@@ -11,8 +12,7 @@ $(PKG)_URL      := https://github.com/yandex/pire/archive/release-$($(PKG)_VERSI
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, yandex/pire) | \
-    $(SED) 's,^release-,,g'
+    $(call MXE_GET_GITHUB_TAGS, yandex/pire, release-)
 endef
 
 define $(PKG)_BUILD

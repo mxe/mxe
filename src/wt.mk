@@ -1,25 +1,27 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := wt
+$(PKG)_WEBSITE  := https://www.webtoolkit.eu/
+$(PKG)_DESCR    := Wt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.4
-$(PKG)_CHECKSUM := 327f9c64504366e3f2fa2c8f1d1a23efc7b8fba8ace3869de375d668f99ede10
+$(PKG)_VERSION  := 3.3.7
+$(PKG)_CHECKSUM := 054af8d62a7c158df62adc174a6a57610868470a07e7192ee7ce60a18552851d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/witty/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/emweb/wt/archive/$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc boost graphicsmagick libharu openssl pango postgresql qt sqlite
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/witty/files/wt/' | \
-    $(SED) -n 's,.*<a href="/projects/witty/files/wt/\([0-9][^>]*\)/.*,\1,p' | \
-    head -1
+    $(call MXE_GET_GITHUB_ALL_TAGS, emweb/wt) \
+    | grep -v 'rc' \
+    | $(SORT) -V \
+    | tail -1
 endef
 
 define $(PKG)_BUILD
     # build wt libraries
     mkdir '$(1).build'
-    cd '$(1).build' && cmake \
+    cd '$(1).build' && '$(TARGET)-cmake' \
         -DCONFIGDIR='$(PREFIX)/$(TARGET)/etc/wt' \
         -DBUILD_EXAMPLES=OFF \
         -DBUILD_TESTS=OFF \
@@ -34,7 +36,6 @@ define $(PKG)_BUILD
         -DPANGO_FT2_LIBS="`'$(TARGET)-pkg-config' --libs-only-l pangoft2`" \
         -DENABLE_QT4=ON \
         -DWT_CMAKE_FINDER_INSTALL_DIR='/lib/wt' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1

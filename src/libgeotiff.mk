@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libgeotiff
+$(PKG)_WEBSITE  := https://trac.osgeo.org/geotiff/
+$(PKG)_DESCR    := GeoTiff
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4.0
 $(PKG)_CHECKSUM := d0acb8d341fd6a8f2c673456e09fdb8f50f91e3166ac934719fe05b30d328329
@@ -12,7 +13,7 @@ $(PKG)_URL_2    := ftp://ftp.remotesensing.org/geotiff/libgeotiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg proj tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://trac.osgeo.org/geotiff/' | \
+    $(WGET) -q -O- 'https://trac.osgeo.org/geotiff/' | \
     $(SED) -n 's,.*libgeotiff-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

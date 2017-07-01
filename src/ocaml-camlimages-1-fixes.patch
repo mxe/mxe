@@ -1,19 +1,19 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From c09e9baa34783c7dd44cc5afc65f1f4b4030ebf2 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sun, 12 Aug 2012 20:55:49 +0200
-Subject: [PATCH 1/4] set back configure build system that enables cross compilation (instead of OMake)
+Subject: [PATCH] set back configure build system that enables cross
+ compilation (instead of OMake)
 
 this patch and next ones are taken from camlimages bug tracker :
 http://modulogic.inria.fr/bugtracker/view.php?id=7
 
 diff --git a/Makefile.am b/Makefile.am
 new file mode 100644
-index 0000000..cdaf30d
+index 1111111..2222222
 --- /dev/null
 +++ b/Makefile.am
 @@ -0,0 +1,58 @@
@@ -77,7 +77,7 @@ index 0000000..cdaf30d
 +# 	$(INSTALL) -g caml -m g+w $(DISTFILE) $(FTPSITEDIR)
 diff --git a/Makefile.rules b/Makefile.rules
 new file mode 100644
-index 0000000..a2a41d9
+index 1111111..2222222
 --- /dev/null
 +++ b/Makefile.rules
 @@ -0,0 +1,36 @@
@@ -119,7 +119,7 @@ index 0000000..a2a41d9
 +@AMDEP_TRUE@@am__include@ @am__quote@.depend@am__quote@
 diff --git a/Makefile.variables b/Makefile.variables
 new file mode 100644
-index 0000000..c29c97b
+index 1111111..2222222
 --- /dev/null
 +++ b/Makefile.variables
 @@ -0,0 +1,49 @@
@@ -173,7 +173,7 @@ index 0000000..c29c97b
 +	     $(OCAMLSOURCES:.ml=.cmi) \
 +	     $(COBJS)
 diff --git a/configure.ac b/configure.ac
-index 06464b3..12269c9 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -1,68 +1,62 @@
@@ -472,7 +472,7 @@ index 06464b3..12269c9 100644
  Lablgtk2 support:    $SUPPORT_LABLGTK2
 diff --git a/doc/Makefile.am b/doc/Makefile.am
 new file mode 100644
-index 0000000..3c4ac76
+index 1111111..2222222
 --- /dev/null
 +++ b/doc/Makefile.am
 @@ -0,0 +1,36 @@
@@ -514,7 +514,7 @@ index 0000000..3c4ac76
 +	mv eng.html.tmp eng.html
 diff --git a/doc/sphinx/Makefile b/doc/sphinx/Makefile
 new file mode 100644
-index 0000000..45073fd
+index 1111111..2222222
 --- /dev/null
 +++ b/doc/sphinx/Makefile
 @@ -0,0 +1,89 @@
@@ -609,7 +609,7 @@ index 0000000..45073fd
 +	      "results in $(BUILDDIR)/doctest/output.txt."
 diff --git a/examples/Makefile.am b/examples/Makefile.am
 new file mode 100644
-index 0000000..38d4474
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/Makefile.am
 @@ -0,0 +1,37 @@
@@ -652,7 +652,7 @@ index 0000000..38d4474
 +endif
 diff --git a/examples/converter/Makefile.am b/examples/converter/Makefile.am
 new file mode 100644
-index 0000000..1de0339
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/converter/Makefile.am
 @@ -0,0 +1,43 @@
@@ -701,7 +701,7 @@ index 0000000..1de0339
 +include ../../Makefile.rules
 diff --git a/examples/crop/Makefile.am b/examples/crop/Makefile.am
 new file mode 100644
-index 0000000..23e3852
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/crop/Makefile.am
 @@ -0,0 +1,44 @@
@@ -751,7 +751,7 @@ index 0000000..23e3852
 +include ../../Makefile.rules
 diff --git a/examples/edgedetect/Makefile.am b/examples/edgedetect/Makefile.am
 new file mode 100644
-index 0000000..556730a
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/edgedetect/Makefile.am
 @@ -0,0 +1,42 @@
@@ -799,7 +799,7 @@ index 0000000..556730a
 +include ../../Makefile.rules
 diff --git a/examples/gifanim/Makefile.am b/examples/gifanim/Makefile.am
 new file mode 100644
-index 0000000..1c8c5e0
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/gifanim/Makefile.am
 @@ -0,0 +1,50 @@
@@ -855,7 +855,7 @@ index 0000000..1c8c5e0
 +include ../../Makefile.rules
 diff --git a/examples/imgstat/Makefile.am b/examples/imgstat/Makefile.am
 new file mode 100644
-index 0000000..b74f90c
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/imgstat/Makefile.am
 @@ -0,0 +1,42 @@
@@ -903,7 +903,7 @@ index 0000000..b74f90c
 +include ../../Makefile.rules
 diff --git a/examples/liv-furuse/Makefile.am b/examples/liv-furuse/Makefile.am
 new file mode 100644
-index 0000000..7c993d8
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/liv-furuse/Makefile.am
 @@ -0,0 +1,77 @@
@@ -986,7 +986,7 @@ index 0000000..7c993d8
 +include ../../Makefile.rules
 diff --git a/examples/liv/Makefile.am b/examples/liv/Makefile.am
 new file mode 100644
-index 0000000..7c993d8
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/liv/Makefile.am
 @@ -0,0 +1,77 @@
@@ -1069,7 +1069,7 @@ index 0000000..7c993d8
 +include ../../Makefile.rules
 diff --git a/examples/monochrome/Makefile.am b/examples/monochrome/Makefile.am
 new file mode 100644
-index 0000000..9cfb0bc
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/monochrome/Makefile.am
 @@ -0,0 +1,42 @@
@@ -1117,7 +1117,7 @@ index 0000000..9cfb0bc
 +include ../../Makefile.rules
 diff --git a/examples/normalize/Makefile.am b/examples/normalize/Makefile.am
 new file mode 100644
-index 0000000..6af840b
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/normalize/Makefile.am
 @@ -0,0 +1,42 @@
@@ -1165,7 +1165,7 @@ index 0000000..6af840b
 +include ../../Makefile.rules
 diff --git a/examples/resize/Makefile.am b/examples/resize/Makefile.am
 new file mode 100644
-index 0000000..10a181c
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/resize/Makefile.am
 @@ -0,0 +1,42 @@
@@ -1213,7 +1213,7 @@ index 0000000..10a181c
 +include ../../Makefile.rules
 diff --git a/examples/tiffps/Makefile.am b/examples/tiffps/Makefile.am
 new file mode 100644
-index 0000000..56e657d
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/tiffps/Makefile.am
 @@ -0,0 +1,42 @@
@@ -1261,7 +1261,7 @@ index 0000000..56e657d
 +include ../../Makefile.rules
 diff --git a/examples/ttfimg/Makefile.am b/examples/ttfimg/Makefile.am
 new file mode 100644
-index 0000000..32a518d
+index 1111111..2222222
 --- /dev/null
 +++ b/examples/ttfimg/Makefile.am
 @@ -0,0 +1,42 @@
@@ -1308,7 +1308,7 @@ index 0000000..32a518d
 +
 +include ../../Makefile.rules
 diff --git a/ocaml.m4 b/ocaml.m4
-index 9a59648..6431281 100644
+index 1111111..2222222 100644
 --- a/ocaml.m4
 +++ b/ocaml.m4
 @@ -1,279 +1,197 @@
@@ -1787,7 +1787,7 @@ index 9a59648..6431281 100644
 +])
 diff --git a/src/Makefile.am b/src/Makefile.am
 new file mode 100644
-index 0000000..6d90c5d
+index 1111111..2222222
 --- /dev/null
 +++ b/src/Makefile.am
 @@ -0,0 +1,256 @@
@@ -2049,7 +2049,7 @@ index 0000000..6d90c5d
 +include ../Makefile.rules
 diff --git a/test/Makefile.am b/test/Makefile.am
 new file mode 100644
-index 0000000..a02b0bf
+index 1111111..2222222
 --- /dev/null
 +++ b/test/Makefile.am
 @@ -0,0 +1,54 @@
@@ -2107,18 +2107,15 @@ index 0000000..a02b0bf
 +
 +
 +include ../Makefile.rules
--- 
-1.7.2.5
 
-
-From 79be4b11cf6e32056ac199efb48728fd7a09bbe9 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sun, 12 Aug 2012 20:56:46 +0200
-Subject: [PATCH 2/4] modify META file with ad-hock patch to make it usable in MXE
+Subject: [PATCH] modify META file with ad-hock patch to make it usable in MXE
 
 
 diff --git a/src/META.in b/src/META.in
-index 45e96d6..e1b1c18 100644
+index 1111111..2222222 100644
 --- a/src/META.in
 +++ b/src/META.in
 @@ -2,68 +2,15 @@ name = "CamlImages"
@@ -2194,18 +2191,16 @@ index 45e96d6..e1b1c18 100644
 +  archive(byte) = "camlimages.cma"
 +  archive(native) = "camlimages.cmxa"  
  )
--- 
-1.7.2.5
 
-
-From 7ecf7a9c4ca35e5f43514cfc634d09999ee0a099 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sun, 12 Aug 2012 20:58:10 +0200
-Subject: [PATCH 3/4] update gifread.c and gifwrite.c for new giflib-5.0.0, and png for similar purpose
+Subject: [PATCH] update gifread.c and gifwrite.c for new giflib-5.0.0, and png
+ for similar purpose
 
 
 diff --git a/src/gifread.c b/src/gifread.c
-index ecf40c4..097db1d 100644
+index 1111111..2222222 100644
 --- a/src/gifread.c
 +++ b/src/gifread.c
 @@ -140,7 +140,7 @@ value dGifOpenFileName( value name )
@@ -2232,7 +2227,7 @@ index ecf40c4..097db1d 100644
    }
    CAMLreturn(buf);
 diff --git a/src/gifwrite.c b/src/gifwrite.c
-index 4b6399f..caf04c0 100644
+index 1111111..2222222 100644
 --- a/src/gifwrite.c
 +++ b/src/gifwrite.c
 @@ -25,7 +25,7 @@
@@ -2285,7 +2280,7 @@ index 4b6399f..caf04c0 100644
      failwith("EGifPutExtension");
    }
 diff --git a/src/pngread.c b/src/pngread.c
-index cc576e8..ce25110 100644
+index 1111111..2222222 100644
 --- a/src/pngread.c
 +++ b/src/pngread.c
 @@ -69,7 +69,7 @@ value read_png_file_as_rgb24( name )
@@ -2325,7 +2320,7 @@ index cc576e8..ce25110 100644
        png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
        fclose(fp);
 diff --git a/src/pngwrite.c b/src/pngwrite.c
-index 3248562..6937cd8 100644
+index 1111111..2222222 100644
 --- a/src/pngwrite.c
 +++ b/src/pngwrite.c
 @@ -62,7 +62,7 @@ value write_png_file_rgb( name, buffer, width, height, with_alpha )
@@ -2346,18 +2341,16 @@ index 3248562..6937cd8 100644
      /* Free all of the memory associated with the png_ptr and info_ptr */
      png_destroy_write_struct(&png_ptr, &info_ptr);
      fclose(fp);
--- 
-1.7.2.5
 
-
-From f35cfc4a23431f0da77f9fa75f6d102a7b09e094 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Wed, 3 Oct 2012 09:37:05 +0200
-Subject: [PATCH 4/4] META : add camlimages.lablgtk2 and camlimages.freetype (referencing camlimages.all_formats)
+Subject: [PATCH] META : add camlimages.lablgtk2 and camlimages.freetype
+ (referencing camlimages.all_formats)
 
 
 diff --git a/src/META.in b/src/META.in
-index e1b1c18..5994beb 100644
+index 1111111..2222222 100644
 --- a/src/META.in
 +++ b/src/META.in
 @@ -9,8 +9,16 @@ package "core" (
@@ -2378,6 +2371,36 @@ index e1b1c18..5994beb 100644
    archive(byte) = "camlimages.cma"
    archive(native) = "camlimages.cmxa"  
  )
--- 
-1.7.2.5
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 17 Jul 2016 12:16:43 +1000
+Subject: [PATCH] fix for giflib >=5.1
+
+
+diff --git a/src/gifread.c b/src/gifread.c
+index 1111111..2222222 100644
+--- a/src/gifread.c
++++ b/src/gifread.c
+@@ -161,7 +161,7 @@ value dGifCloseFile( value hdl )
+      segmentation faults */
+   ((GifFileType *)hdl)->Image.ColorMap = NULL; 
+ 
+-  DGifCloseFile( (GifFileType *) hdl );
++  DGifCloseFile( (GifFileType *) hdl, NULL );
+   CAMLreturn(Val_unit);
+ }
+ 
+diff --git a/src/gifwrite.c b/src/gifwrite.c
+index 1111111..2222222 100644
+--- a/src/gifwrite.c
++++ b/src/gifwrite.c
+@@ -88,7 +88,7 @@ value eGifCloseFile( value hdl )
+      segmentation faults */
+   ((GifFileType *)hdl)->Image.ColorMap = NULL; 
+ 
+-  EGifCloseFile( (GifFileType *) hdl );
++  EGifCloseFile( (GifFileType *) hdl, NULL );
+   CAMLreturn(Val_unit);
+ }
+ 

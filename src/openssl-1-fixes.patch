@@ -1,7 +1,6 @@
-This file is part of MXE.
-See index.html for further information.
+This file is part of MXE. See LICENSE.md for licensing information.
 
-From 1ac04c802cf192e09bcfad270a39030fb23bcdb1 Mon Sep 17 00:00:00 2001
+From 81a26ea97cb0c66a21069ddb1d07d285427791e9 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 8 Jan 2014 02:19:10 +0100
 Subject: [PATCH 1/2] winsock2
@@ -10,7 +9,7 @@ Subject: [PATCH 1/2] winsock2
 -http://rt.openssl.org/Ticket/Display.html?id=2285&user=guest&pass=guest
 
 diff --git a/ssl/dtls1.h b/ssl/dtls1.h
-index 4af7e4a..48a3714 100644
+index 30bbcf2..ef9f336 100644
 --- a/ssl/dtls1.h
 +++ b/ssl/dtls1.h
 @@ -68,7 +68,7 @@
@@ -23,10 +22,10 @@ index 4af7e4a..48a3714 100644
  #  include <sys/timeval.h>
  # else
 diff --git a/ssl/ssltest.c b/ssl/ssltest.c
-index 0113b65..53114fd 100644
+index 890e476..ca1fbfd 100644
 --- a/ssl/ssltest.c
 +++ b/ssl/ssltest.c
-@@ -197,7 +197,7 @@
+@@ -198,7 +198,7 @@
  #define _XOPEN_SOURCE_EXTENDED  1
  
  #ifdef OPENSSL_SYS_WINDOWS
@@ -36,10 +35,10 @@ index 0113b65..53114fd 100644
  # include OPENSSL_UNISTD
  #endif
 -- 
-2.1.2
+2.9.3
 
 
-From 564e3c9850584b3dd57b9ffba85574dbfcf6910b Mon Sep 17 00:00:00 2001
+From fe545f8c5ae1296dcd388c27b5e82c787c3e9f81 Mon Sep 17 00:00:00 2001
 From: Tom Molesworth <tom@entitymodel.com>
 Date: Wed, 8 Jan 2014 02:20:21 +0100
 Subject: [PATCH 2/2] Patch OpenSSL POD docs for perl-5.16+
@@ -50,10 +49,10 @@ stage fails without these applied.
 Should be harmless for earlier versions of perl.
 
 diff --git a/doc/apps/cms.pod b/doc/apps/cms.pod
-index 76dbf2c..7f2e678 100644
+index ac69804..170588b 100644
 --- a/doc/apps/cms.pod
 +++ b/doc/apps/cms.pod
-@@ -478,28 +478,28 @@ with caution. For a fuller description see L<CMS_decrypt(3)|CMS_decrypt(3)>).
+@@ -482,28 +482,28 @@ with caution. For a fuller description see L<CMS_decrypt(3)|CMS_decrypt(3)>).
  
  =over 4
  
@@ -89,10 +88,10 @@ index 76dbf2c..7f2e678 100644
  the message was verified correctly but an error occurred writing out
  the signers certificates.
 diff --git a/doc/apps/smime.pod b/doc/apps/smime.pod
-index d39a59a..1a5cfa6 100644
+index 04a83ca..728cde5 100644
 --- a/doc/apps/smime.pod
 +++ b/doc/apps/smime.pod
-@@ -308,28 +308,28 @@ remains DER.
+@@ -312,28 +312,28 @@ remains DER.
  
  =over 4
  
@@ -128,7 +127,7 @@ index d39a59a..1a5cfa6 100644
  the message was verified correctly but an error occurred writing out
  the signers certificates.
 diff --git a/doc/crypto/rand.pod b/doc/crypto/rand.pod
-index d102df2..f422bb0 100644
+index b754854..19037d3 100644
 --- a/doc/crypto/rand.pod
 +++ b/doc/crypto/rand.pod
 @@ -74,16 +74,16 @@ First up I will state the things I believe I need for a good RNG.
@@ -183,10 +182,10 @@ index d102df2..f422bb0 100644
  Given the random number output stream, it should not be possible to determine
  the RNG state or the next random number.
 diff --git a/doc/ssl/SSL_COMP_add_compression_method.pod b/doc/ssl/SSL_COMP_add_compression_method.pod
-index f4d191c..5f2a3f1 100644
+index 2bb4403..add6b0e 100644
 --- a/doc/ssl/SSL_COMP_add_compression_method.pod
 +++ b/doc/ssl/SSL_COMP_add_compression_method.pod
-@@ -53,11 +53,11 @@ SSL_COMP_add_compression_method() may return the following values:
+@@ -59,11 +59,11 @@ SSL_COMP_add_compression_method() may return the following values:
  
  =over 4
  
@@ -446,33 +445,29 @@ index 89260b5..1207658 100644
  The file descriptor linked to B<ssl>.
  
 diff --git a/doc/ssl/SSL_read.pod b/doc/ssl/SSL_read.pod
-index 8ca0ce5..14c472f 100644
+index ef983c9..e99d659 100644
 --- a/doc/ssl/SSL_read.pod
 +++ b/doc/ssl/SSL_read.pod
-@@ -81,12 +81,12 @@ The following return values can occur:
+@@ -81,16 +81,16 @@ The following return values can occur:
  
  =over 4
  
--=item E<gt>0
-+=item * E<gt>0
+-=item E<gt> 0
++=item * E<gt> 0
  
- The read operation was successful; the return value is the number of
- bytes actually read from the TLS/SSL connection.
+ The read operation was successful.
+ The return value is the number of bytes actually read from the TLS/SSL
+ connection.
  
--=item Z<>0
-+=item * Z<>0
+-=item Z<><= 0
++=item * Z<><= 0
  
- The read operation was not successful. The reason may either be a clean
- shutdown due to a "close notify" alert sent by the peer (in which case
-@@ -103,7 +103,7 @@ only be detected, whether the underlying connection was closed. It cannot
- be checked, whether the closure was initiated by the peer or by something
- else.
  
 -=item E<lt>0
 +=item * E<lt>0
  
- The read operation was not successful, because either an error occurred
- or action must be taken by the calling process. Call SSL_get_error() with the
+ The read operation was not successful, because either the connection was closed,
+ an error occurred or action must be taken by the calling process.
 diff --git a/doc/ssl/SSL_session_reused.pod b/doc/ssl/SSL_session_reused.pod
 index b09d8a7..7f49da1 100644
 --- a/doc/ssl/SSL_session_reused.pod
@@ -579,33 +574,24 @@ index efbff5a..56c48b2 100644
  The shutdown was not successful because a fatal error occurred either
  at the protocol level or a connection failure occurred. It can also occur if
 diff --git a/doc/ssl/SSL_write.pod b/doc/ssl/SSL_write.pod
-index a57617f..70c1630 100644
+index 4c1a7ee..e006b41 100644
 --- a/doc/ssl/SSL_write.pod
 +++ b/doc/ssl/SSL_write.pod
 @@ -74,12 +74,12 @@ The following return values can occur:
  
  =over 4
  
--=item E<gt>0
-+=item * E<gt>0
+-=item E<gt> 0
++=item * E<gt> 0
  
  The write operation was successful, the return value is the number of
  bytes actually written to the TLS/SSL connection.
  
--=item Z<>0
-+=item * Z<>0
+-=item Z<><= 0
++=item * Z<><= 0
  
- The write operation was not successful. Probably the underlying connection
- was closed. Call SSL_get_error() with the return value B<ret> to find out,
-@@ -90,7 +90,7 @@ SSLv2 (deprecated) does not support a shutdown alert protocol, so it can
- only be detected, whether the underlying connection was closed. It cannot
- be checked, why the closure happened.
- 
--=item E<lt>0
-+=item * E<lt>0
- 
- The write operation was not successful, because either an error occurred
- or action must be taken by the calling process. Call SSL_get_error() with the
+ The write operation was not successful, because either the connection was
+ closed, an error occurred or action must be taken by the calling process.
 -- 
-2.1.2
+2.9.3
 

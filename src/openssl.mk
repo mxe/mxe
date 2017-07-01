@@ -1,25 +1,25 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openssl
+$(PKG)_WEBSITE  := https://www.openssl.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.2d
-$(PKG)_CHECKSUM := 671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8
+$(PKG)_VERSION  := 1.0.2l
+$(PKG)_CHECKSUM := ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.openssl.org/source/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.openssl.org/source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgcrypt zlib
+$(PKG)_URL      := https://www.openssl.org/source/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.openssl.org/source/old/$(call tr,$([a-z]),,$($(PKG)_VERSION))/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.openssl.org/source/' | \
+    $(WGET) -q -O- 'https://www.openssl.org/source/' | \
     $(SED) -n 's,.*openssl-\([0-9][0-9a-z.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && CC='$(TARGET)-gcc' ./Configure \
+    cd '$(1)' && CC='$(TARGET)-gcc' RC='$(TARGET)-windres' ./Configure \
         @openssl-target@ \
         zlib \
         $(if $(BUILD_STATIC),no-,)shared \
@@ -30,6 +30,11 @@ define $(PKG)_BUILD
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar rcu' \
         CROSS_COMPILE='$(TARGET)-'
+
+    # no way to configure engines subdir install
+    $(if $(BUILD_SHARED),
+        rm -rf '$(PREFIX)/$(TARGET)/bin/engines' && \
+        mv -vf '$(PREFIX)/$(TARGET)/lib/engines' '$(PREFIX)/$(TARGET)/bin/')
 endef
 
 $(PKG)_BUILD_i686-w64-mingw32   = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))

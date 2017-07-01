@@ -1,18 +1,19 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := opencv
+$(PKG)_WEBSITE  := http://opencv.org/
+$(PKG)_DESCR    := OpenCV
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4.10
 $(PKG)_CHECKSUM := 1bf4cb87283797fd91669d4f90b622a677a903c20b4a577b7958a2164f7596c6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://distfiles.macports.org/opencv/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://distfiles.macports.org/opencv/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc eigen ffmpeg jasper jpeg lcms1 libpng openexr tiff xz zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/opencvlibrary/files/opencv-unix/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
@@ -20,14 +21,13 @@ endef
 define $(PKG)_BUILD
     # build
     mkdir '$(1).build'
-    cd '$(1).build' && cmake \
+    cd '$(1).build' && '$(TARGET)-cmake' \
       -DWITH_QT=OFF \
       -DWITH_OPENGL=ON \
       -DWITH_GSTREAMER=OFF \
       -DWITH_GTK=OFF \
       -DWITH_VIDEOINPUT=ON \
       -DWITH_XINE=OFF \
-      -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),OFF,ON) \
       -DBUILD_opencv_apps=OFF \
       -DBUILD_DOCS=OFF \
       -DBUILD_EXAMPLES=OFF \
@@ -43,7 +43,6 @@ define $(PKG)_BUILD
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
-      -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
       -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500' \
       '$(1)'
 

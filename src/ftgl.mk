@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ftgl
+$(PKG)_WEBSITE  := https://sourceforge.net/projects/ftgl/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.1.3~rc5
 $(PKG)_CHECKSUM := 521ff7bd62c459ff5372e269c223e2a6107a6a99a36afdc2ae634a973af70c59
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$(subst ~,-,$($(PKG)_VERSION)).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/FTGL Source/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/FTGL Source/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc freeglut freetype
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/ftgl/files/FTGL Source/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/ftgl/files/FTGL Source/' | \
     $(SED) -n 's,.*<tr title="\([0-9][^"]*\)".*,\1,p' | \
     head -1
 endef
@@ -35,7 +35,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' freetype2 --cflags --libs` \
         `'$(TARGET)-pkg-config' ftgl --cflags --libs`
 endef

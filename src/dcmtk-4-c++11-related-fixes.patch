@@ -1,0 +1,16 @@
+From: Boris Pek
+Date: Thu, 05 May 2016 15:38:47 +0300
+Subject: [PATCH] fix build with GCC >= 6.x
+
+diff --git a/ofstd/libsrc/ofstd.cc b/ofstd/libsrc/ofstd.cc
+--- a/ofstd/libsrc/ofstd.cc
++++ b/ofstd/libsrc/ofstd.cc
+@@ -175,7 +175,7 @@
+ 
+ 
+ // some systems don't properly define isnan()
+-#ifdef HAVE_ISNAN
++#if defined(HAVE_ISNAN) && (__cplusplus < 201103L)
+ #ifndef HAVE_PROTOTYPE_ISNAN
+ extern "C"
+ {

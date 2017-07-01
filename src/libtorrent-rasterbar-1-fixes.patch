@@ -1,0 +1,32 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Mon, 30 May 2016 00:10:30 +0200
+Subject: [PATCH] disable BOOST_ASIO_SEPARATE_COMPILATION
+
+After upgrading libtorrent-rasterbar to 1.1.0, qbittorrent fails to link
+main executable with undefined symbols in boost_asio:
+
+    ./release/application.o:application.cpp:(.text.startup+0x83):
+    undefined reference to `boost::asio::detail::winsock_init_base::startup
+    (boost::asio::detail::winsock_init_base::data&, unsigned char,
+    unsigned char)'
+
+diff --git a/include/libtorrent/config.hpp b/include/libtorrent/config.hpp
+index 1111111..2222222 100644
+--- a/include/libtorrent/config.hpp
++++ b/include/libtorrent/config.hpp
+@@ -64,10 +64,6 @@ POSSIBILITY OF SUCH DAMAGE.
+ #error TORRENT_DEBUG_BUFFERS only works if you also disable pool allocators with TORRENT_DISABLE_POOL_ALLOCATOR
+ #endif
+ 
+-#if !defined BOOST_ASIO_SEPARATE_COMPILATION && !defined BOOST_ASIO_DYN_LINK
+-#define BOOST_ASIO_SEPARATE_COMPILATION
+-#endif
+-
+ #ifndef _MSC_VER
+ #ifndef __STDC_FORMAT_MACROS
+ #define __STDC_FORMAT_MACROS 1

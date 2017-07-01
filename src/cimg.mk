@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cimg
+$(PKG)_WEBSITE  := http://cimg.eu/
+$(PKG)_DESCR    := CImg Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.3
 $(PKG)_CHECKSUM := c2a3c62d05d1e322afa6afae086cf96df82a3a13b839e9bf1cedcb014d921ce7

@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pfstools
+$(PKG)_WEBSITE  := https://pfstools.sourceforge.io/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := 5e109d09f0c02cebf6800e04fc56851975f5d5e92d5a4ae626e31b58b347ff71
+$(PKG)_VERSION  := 2.0.4
+$(PKG)_CHECKSUM := 4a6c1880193d3d1924d98b8dc2d2fe25827e7b2508823dc38f535653a4fd9942
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/pfstools/files/pfstools/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/pfstools/files/pfstools/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
@@ -20,8 +20,7 @@ endef
 # only want the library so we don't need them.
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && cmake '$(1)' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1).build' && '$(TARGET)-cmake' '$(1)' \
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         -DWITH_OpenEXR=false \
         -DWITH_ImageMagick=false \
@@ -38,7 +37,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -Wall -Wextra -Werror \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-pfstools.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-pfstools.exe' \
         `'$(TARGET)-pkg-config' pfs --cflags --libs`
 endef
 

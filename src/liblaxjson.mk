@@ -1,7 +1,7 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := liblaxjson
+$(PKG)_WEBSITE  := https://github.com/andrewrk/liblaxjson
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.5
 $(PKG)_CHECKSUM := ffc495b5837e703b13af3f5a5790365dc3a6794f12f0fa93fb8593b162b0b762
@@ -31,6 +31,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic -std=c99 \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-liblaxjson.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-liblaxjson.exe' \
         -llaxjson
 endef

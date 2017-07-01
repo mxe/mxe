@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := opusfile
+$(PKG)_WEBSITE  := https://opus-codec.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.6
 $(PKG)_CHECKSUM := 2428717b356e139f18ed2fdb5ad990b5654a238907a0058200b39c46a7d03ea6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://downloads.xiph.org/releases/opus/$($(PKG)_FILE)
+$(PKG)_URL      := https://archive.mozilla.org/pub/opus/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ogg opus
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://downloads.xiph.org/releases/opus/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://archive.mozilla.org/pub/opus/?C=M;O=D' | \
     $(SED) -n 's,.*opusfile-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'alpha' | \
     grep -v 'beta' | \

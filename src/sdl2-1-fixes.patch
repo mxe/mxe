@@ -1,0 +1,125 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Robert Norris <rob@eatenbyagrue.org>
+Date: Sat, 28 Mar 2015 21:47:00 +0100
+Subject: [PATCH] disable DirectInput because of missing wbemcli.h
+
+This patch has been taken from:
+https://bugzilla.libsdl.org/show_bug.cgi?id=1739
+
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -2662,7 +2662,7 @@ AC_HELP_STRING([--enable-directx], [use DirectX for Windows audio/video [[defaul
+         # FIXME: latest Cygwin finds dinput headers, but we die on other win32 headers.
+         # FIXME:  ...so force it off for now.
+         case "$host" in
+-            *-*-cygwin*)
++            *-*-cygwin* | *-pc-mingw32*)
+             have_dinput=false
+             ;;
+         esac
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tobias Gruetzmacher <tobias-git@23.gs>
+Date: Sat, 28 Mar 2015 21:47:32 +0100
+Subject: [PATCH] fix shared build, libtool
+
+This patch is a combination of 2 patches from:
+https://bugzilla.libsdl.org/show_bug.cgi?id=1431
+
+-  Use libtool everywhere (by john)
+-  MingW fixes for "Use libtool everywhere" (by Daniel Scharrer)
+
+These fix compiles in a strictly shared build (with --disable-static) by always
+building libSDL2main.a and libSDL2_test.a staticly
+
+diff --git a/Makefile.in b/Makefile.in
+index 1111111..2222222 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -36,10 +36,10 @@ GEN_HEADERS = @GEN_HEADERS@
+ GEN_OBJECTS = @GEN_OBJECTS@
+ VERSION_OBJECTS = @VERSION_OBJECTS@
+ 
+-SDLMAIN_TARGET = libSDL2main.a
++SDLMAIN_TARGET = libSDL2main.la
+ SDLMAIN_OBJECTS = @SDLMAIN_OBJECTS@
+ 
+-SDLTEST_TARGET = libSDL2_test.a
++SDLTEST_TARGET = libSDL2_test.la
+ SDLTEST_OBJECTS = @SDLTEST_OBJECTS@
+ 
+ WAYLAND_SCANNER = @WAYLAND_SCANNER@
+@@ -144,15 +144,13 @@ update-revision:
+ .PHONY: all update-revision install install-bin install-hdrs install-lib install-data uninstall uninstall-bin uninstall-hdrs uninstall-lib uninstall-data clean distclean dist $(OBJECTS:.lo=.d)
+ 
+ $(objects)/$(TARGET): $(GEN_HEADERS) $(GEN_OBJECTS) $(OBJECTS) $(VERSION_OBJECTS)
+-	$(RUN_CMD_LTLINK)$(LIBTOOL) --tag=CC --mode=link $(CC) -o $@ $(OBJECTS) $(GEN_OBJECTS) $(VERSION_OBJECTS) $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS)
++	$(LIBTOOL) --mode=link $(CC) -o $@ $^ $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS)
+ 
+ $(objects)/$(SDLMAIN_TARGET): $(SDLMAIN_OBJECTS)
+-	$(RUN_CMD_AR)$(AR) cru $@ $(SDLMAIN_OBJECTS)
+-	$(RUN_CMD_RANLIB)$(RANLIB) $@
++	$(LIBTOOL) --mode=link $(CC) -o $@ $^ $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS) -all-static
+ 
+ $(objects)/$(SDLTEST_TARGET): $(SDLTEST_OBJECTS)
+-	$(RUN_CMD_AR)$(AR) cru $@ $(SDLTEST_OBJECTS)
+-	$(RUN_CMD_RANLIB)$(RANLIB) $@
++	$(LIBTOOL) --mode=link $(CC) -o $@ $^ $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS) -all-static
+ 
+ install: all install-bin install-hdrs install-lib install-data
+ install-bin:
+@@ -173,10 +171,8 @@ install-hdrs: update-revision
+ install-lib: $(objects) $(objects)/$(TARGET) $(objects)/$(SDLMAIN_TARGET) $(objects)/$(SDLTEST_TARGET)
+ 	$(SHELL) $(auxdir)/mkinstalldirs $(DESTDIR)$(libdir)
+ 	$(LIBTOOL) --mode=install $(INSTALL) $(objects)/$(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+-	$(INSTALL) -m 644 $(objects)/$(SDLMAIN_TARGET) $(DESTDIR)$(libdir)/$(SDLMAIN_TARGET)
+-	$(RANLIB) $(DESTDIR)$(libdir)/$(SDLMAIN_TARGET)
+-	$(INSTALL) -m 644 $(objects)/$(SDLTEST_TARGET) $(DESTDIR)$(libdir)/$(SDLTEST_TARGET)
+-	$(RANLIB) $(DESTDIR)$(libdir)/$(SDLTEST_TARGET)
++	$(LIBTOOL) --mode=install $(INSTALL) -m 644 $(objects)/$(SDLMAIN_TARGET) $(DESTDIR)$(libdir)/$(SDLMAIN_TARGET)
++	$(LIBTOOL) --mode=install $(INSTALL) -m 644 $(objects)/$(SDLTEST_TARGET) $(DESTDIR)$(libdir)/$(SDLTEST_TARGET)
+ install-data:
+ 	$(SHELL) $(auxdir)/mkinstalldirs $(DESTDIR)$(datadir)/aclocal
+ 	$(INSTALL) -m 644 $(srcdir)/sdl2.m4 $(DESTDIR)$(datadir)/aclocal/sdl2.m4
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -3597,23 +3597,23 @@ GEN_OBJECTS=`echo "$GEN_SOURCES" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.l
+ 
+ VERSION_OBJECTS=`echo $VERSION_SOURCES`
+ VERSION_DEPENDS=`echo $VERSION_SOURCES`
+-VERSION_OBJECTS=`echo "$VERSION_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.rc,$(objects)/\1.o,g'`
++VERSION_OBJECTS=`echo "$VERSION_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.rc,$(objects)/\1.lo,g'`
+ VERSION_DEPENDS=`echo "$VERSION_DEPENDS" | sed "s,\\([[^ ]]*\\)/\\([[^ ]]*\\)\\.rc,\\\\
+-\\$(objects)/\\2.o: \\1/\\2.rc\\\\
+-	\\$(WINDRES) \\$< \\$@,g"`
++\\$(objects)/\\2.lo: \\1/\\2.rc\\\\
++	\\$(LIBTOOL) --mode=compile --tag=RC \\$(WINDRES) -i \\$< -o \\$@,g"`
+ 
+ SDLMAIN_OBJECTS=`echo $SDLMAIN_SOURCES`
+ SDLMAIN_DEPENDS=`echo $SDLMAIN_SOURCES`
+-SDLMAIN_OBJECTS=`echo "$SDLMAIN_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.o,g'`
++SDLMAIN_OBJECTS=`echo "$SDLMAIN_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.lo,g'`
+ SDLMAIN_DEPENDS=`echo "$SDLMAIN_DEPENDS" | sed "s,\\([[^ ]]*\\)/\\([[^ ]]*\\)\\.c,\\\\
+-\\$(objects)/\\2.o: \\1/\\2.c\\\\
++\\$(objects)/\\2.lo: \\1/\\2.c\\\\
+ 	\\$(RUN_CMD_CC)\\$(LIBTOOL) --tag=CC --mode=compile \\$(CC) \\$(CFLAGS) \\$(EXTRA_CFLAGS) $DEPENDENCY_TRACKING_OPTIONS -c \\$< -o \\$@,g"`
+ 
+ SDLTEST_OBJECTS=`echo $SDLTEST_SOURCES`
+ SDLTEST_DEPENDS=`echo $SDLTEST_SOURCES`
+-SDLTEST_OBJECTS=`echo "$SDLTEST_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.o,g'`
++SDLTEST_OBJECTS=`echo "$SDLTEST_OBJECTS" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.lo,g'`
+ SDLTEST_DEPENDS=`echo "$SDLTEST_DEPENDS" | sed "s,\\([[^ ]]*\\)/\\([[^ ]]*\\)\\.c,\\\\
+-\\$(objects)/\\2.o: \\1/\\2.c\\\\
++\\$(objects)/\\2.lo: \\1/\\2.c\\\\
+ 	\\$(RUN_CMD_CC)\\$(LIBTOOL) --tag=CC --mode=compile \\$(CC) \\$(CFLAGS) \\$(EXTRA_CFLAGS) $DEPENDENCY_TRACKING_OPTIONS -c \\$< -o \\$@,g"`
+ 
+ # Set runtime shared library paths as needed
+

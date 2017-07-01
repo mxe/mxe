@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtk2
+$(PKG)_WEBSITE  := https://gtk.org/
+$(PKG)_DESCR    := GTK+
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.24.22
-$(PKG)_CHECKSUM := b114b6e9fb389bf3aa8a6d09576538f58dce740779653084046852fb4140ae7f
+$(PKG)_VERSION  := 2.24.29
+$(PKG)_CHECKSUM := 0741c59600d3d810a223866453dc2bbb18ce4723828681ba24aa6519c37631b8
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc atk cairo gdk-pixbuf gettext glib jasper jpeg libpng pango tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.gnome.org/browse/gtk+/refs/tags' | \
+    $(WGET) -q -O- 'https://git.gnome.org/browse/gtk+/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
     grep -v '^2\.9' | \
@@ -35,7 +36,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-gtk2.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk2.exe' \
         `'$(TARGET)-pkg-config' gtk+-2.0 gmodule-2.0 --cflags --libs`
 endef
 

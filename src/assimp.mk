@@ -1,35 +1,26 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := assimp
+$(PKG)_WEBSITE  := https://assimp.sourceforge.io/
+$(PKG)_DESCR    := Assimp Open Asset Import Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.1
-$(PKG)_CHECKSUM := 3b8d16eaf6c4b26479295f4f7436388bee1e42e8c0b11f6f695b7194985eb00e
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).zip
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_VERSION  := 3.2
+$(PKG)_CHECKSUM := 187f825c563e84b1b17527a4da0351aa3d575dfd696a9d204ae4bb19ee7df94a
+$(PKG)_GH_CONF  := assimp/assimp, v
 $(PKG)_DEPS     := gcc boost
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://api.github.com/repos/assimp/assimp/releases" | \
-    grep 'tag_name' | \
-    $(SED) -n 's,.*tag_name": "v\([0-9][^>]*\)".*,\1,p' | \
-    $(SORT) -Vr | \
-    head -1
-endef
-
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && $(TARGET)-cmake $(1) \
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
         -DASSIMP_ENABLE_BOOST_WORKAROUND=OFF \
         -DASSIMP_BUILD_ASSIMP_TOOLS=OFF \
-        -DASSIMP_BUILD_SAMPLES=OFF      \
-        -DASSIMP_BUILD_TESTS=OFF        \
-        -DASSIMP_BUILD_STATIC_LIB=$(if $(BUILD_STATIC),ON,OFF)
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
+        -DASSIMP_BUILD_SAMPLES=OFF \
+        -DASSIMP_BUILD_TESTS=OFF \
+        '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-assimp.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-assimp.exe' \
         `'$(TARGET)-pkg-config' assimp --cflags --libs`
 endef

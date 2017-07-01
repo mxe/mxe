@@ -1,7 +1,8 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libltdl
+$(PKG)_WEBSITE  := https://www.gnu.org/software/libtool/manual/html_node/Using-libltdl.html#Using-libltdl
+$(PKG)_DESCR    := GNU Libtool Library (libltdl)
 $(PKG)_IGNORE    = $(libtool_IGNORE)
 $(PKG)_VERSION   = $(libtool_VERSION)
 $(PKG)_CHECKSUM  = $(libtool_CHECKSUM)

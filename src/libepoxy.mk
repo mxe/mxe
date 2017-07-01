@@ -1,7 +1,7 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libepoxy
+$(PKG)_WEBSITE  := https://github.com/anholt/libepoxy
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.1
 $(PKG)_CHECKSUM := 6700ddedffb827b42c72cce1e0be6fba67b678b19bf256e1b5efd3ea38cc2bb4
@@ -19,7 +19,17 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal'
-    cd '$(1)' && ./configure \
+    cd '$(1)' && \
+        CFLAGS='$(if $(BUILD_STATIC),-DEPOXY_STATIC,-DEPOXY_SHARED -DEPOXY_DLL)' \
+        ./configure \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
+    $(SED) 's/Cflags:/Cflags: -DEPOXY_$(if $(BUILD_STATIC),STATIC,SHARED)/' \
+        -i '$(PREFIX)/$(TARGET)/lib/pkgconfig/epoxy.pc'
+
+    # compile test
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' epoxy --cflags --libs`
 endef

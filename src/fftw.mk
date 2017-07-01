@@ -1,10 +1,10 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := fftw
+$(PKG)_WEBSITE  := http://www.fftw.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.4
-$(PKG)_CHECKSUM := 8f0cde90929bc05587c3368d2f15cd0530a60b8a9912a8e2979a72dbe5af0982
+$(PKG)_VERSION  := 3.3.6-pl1
+$(PKG)_CHECKSUM := 1ef4aa8427d9785839bc767f3eb6a84fcb5e9a37c31ed77a04e7e047519a183d
 $(PKG)_SUBDIR   := fftw-$($(PKG)_VERSION)
 $(PKG)_FILE     := fftw-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.fftw.org/$($(PKG)_FILE)

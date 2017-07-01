@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libusb1
+$(PKG)_WEBSITE  := http://libusb.org/
+$(PKG)_DESCR    := LibUsb-1.0
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.19
-$(PKG)_CHECKSUM := 6c502c816002f90d4f76050a6429c3a7e0d84204222cbff2dce95dd773ba6840
+$(PKG)_VERSION  := 1.0.21
+$(PKG)_CHECKSUM := 7dce9cce9a81194b7065ee912bcd55eeffebab694ea403ffb91b67db66b1824b
 $(PKG)_SUBDIR   := libusb-$($(PKG)_VERSION)
 $(PKG)_FILE     := libusb-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libusb-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libusb-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/libusb/files/libusb-1.0/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/libusb/files/libusb-1.0/' | \
     grep -i 'libusb/files/libusb-1.0' | \
     $(SED) -n 's,.*/libusb-1.0/libusb-\([0-9\.]*\)/.*,\1,p' | \
     head -1
@@ -25,6 +26,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         -W -Wall -Wextra -Werror \
-        '$(2).c' -o '$(PREFIX)/$(TARGET)/bin/test-libusb1.exe' \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libusb1.exe' \
         `'$(TARGET)-pkg-config' libusb-1.0 --cflags --libs`
 endef

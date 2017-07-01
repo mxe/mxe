@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := xz
+$(PKG)_WEBSITE  := https://tukaani.org/xz/
+$(PKG)_DESCR    := XZ
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.2.2
-$(PKG)_CHECKSUM := 73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2
+$(PKG)_VERSION  := 5.2.3
+$(PKG)_CHECKSUM := 71928b357d0a09a12a4b4c5fafca8c31c19b0e7d3b8ebb19622e96f26dbf28cb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://tukaani.org/xz/$($(PKG)_FILE)
+$(PKG)_URL      := https://tukaani.org/xz/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://tukaani.org/xz/' | \
+    $(WGET) -q -O- 'https://tukaani.org/xz/' | \
     $(SED) -n 's,.*xz-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

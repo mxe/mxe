@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := boost
+$(PKG)_WEBSITE  := https://www.boost.org/
+$(PKG)_DESCR    := Boost C++ Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.57.0
-$(PKG)_CHECKSUM := 910c8c022a33ccec7f088bd65d4f14b466588dda94ba2124e78b8c57db264967
+$(PKG)_VERSION  := 1.60.0
+$(PKG)_CHECKSUM := 686affff989ac2488f79a97b9479efb9f2abae035b5ed4d8226de6857933fd3b
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 expat zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.boost.org/users/download/' | \
+    $(WGET) -q -O- 'https://www.boost.org/users/download/' | \
     $(SED) -n 's,.*/boost/\([0-9][^"/]*\)/".*,\1,p' | \
     grep -v beta | \
     head -1
@@ -29,13 +30,14 @@ define $(PKG)_BUILD
     cd '$(1)/tools/build/' && ./bootstrap.sh
 
     # cross-build, see b2 options at:
-    # http://www.boost.org/build/doc/html/bbv2/overview/invocation.html
+    # https://www.boost.org/build/doc/html/bbv2/overview/invocation.html
     cd '$(1)' && ./tools/build/b2 \
         -a \
         -q \
         -j '$(JOBS)' \
         --ignore-site-config \
         --user-config=user-config.jam \
+        abi=ms \
         address-model=$(BITS) \
         architecture=x86 \
         binary-format=pe \
@@ -45,6 +47,7 @@ define $(PKG)_BUILD
         threading=multi \
         variant=release \
         toolset=gcc-mxe \
+        cxxflags=$(if $(findstring posix,$(MXE_GCC_THREADS)),-std=gnu++11,-std=gnu++98) \
         --layout=tagged \
         --disable-icu \
         --without-mpi \
@@ -65,12 +68,13 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-boost.exe' \
+        '$(PWD)/src/$(PKG)-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-boost.exe' \
         -DBOOST_THREAD_USE_LIB \
         -lboost_serialization-mt \
         -lboost_thread_win32-mt \
         -lboost_system-mt \
-        -lboost_chrono-mt
+        -lboost_chrono-mt \
+        -lboost_context-mt
 
     # test cmake
     mkdir '$(1).test-cmake'

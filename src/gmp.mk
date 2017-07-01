@@ -1,10 +1,11 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gmp
+$(PKG)_WEBSITE  := https://gmplib.org/
+$(PKG)_DESCR    := GMP
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.1.0
-$(PKG)_CHECKSUM := 68dadacce515b0f8a54f510edf07c1b636492bcdb8e8d54c56eb216225d16989
+$(PKG)_VERSION  := 6.1.2
+$(PKG)_CHECKSUM := 87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gmplib.org/download/$(PKG)/$($(PKG)_FILE)
@@ -14,7 +15,7 @@ $(PKG)_DEPS     := gcc
 $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.gmplib.org/' | \
+    $(WGET) -q -O- 'https://gmplib.org/' | \
     grep '<a href="' | \
     $(SED) -n 's,.*gmp-\([0-9][^>]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \

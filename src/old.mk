@@ -1,17 +1,17 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := old
+$(PKG)_WEBSITE  := https://blitiri.com.ar/p/old/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.17
 $(PKG)_CHECKSUM := d24b0d28bbce308b68d62815df8edc2806af0b7b86129f9e8078bd9381dc5eb5
 $(PKG)_SUBDIR   := old-$($(PKG)_VERSION)
 $(PKG)_FILE     := old-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://blitiri.com.ar/p/old/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://blitiri.com.ar/p/old/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://blitiri.com.ar/p/old/' | \
+    $(WGET) -q -O- 'https://blitiri.com.ar/p/old/' | \
     grep 'old-' | \
     $(SED) -n 's,.*old-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

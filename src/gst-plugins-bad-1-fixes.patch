@@ -1,0 +1,41 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Fri, 30 Dec 2016 19:59:12 +0100
+Subject: [PATCH] fix neon headers location
+
+See https://github.com/mxe/mxe/issues/1619
+
+diff --git a/ext/neon/gstneonhttpsrc.c b/ext/neon/gstneonhttpsrc.c
+index 1111111..2222222 100644
+--- a/ext/neon/gstneonhttpsrc.c
++++ b/ext/neon/gstneonhttpsrc.c
+@@ -25,7 +25,7 @@
+ #include <unistd.h>
+ #endif /* _HAVE_UNISTD_H */
+ 
+-#include <ne_redirect.h>
++#include <neon/ne_redirect.h>
+ 
+ #define STATUS_IS_REDIRECTION(status)     ((status) >= 300 && (status) < 400)
+ 
+diff --git a/ext/neon/gstneonhttpsrc.h b/ext/neon/gstneonhttpsrc.h
+index 1111111..2222222 100644
+--- a/ext/neon/gstneonhttpsrc.h
++++ b/ext/neon/gstneonhttpsrc.h
+@@ -23,9 +23,9 @@
+ 
+ G_BEGIN_DECLS
+ 
+-#include <ne_session.h>
+-#include <ne_request.h>
+-#include <ne_socket.h>
++#include <neon/ne_session.h>
++#include <neon/ne_request.h>
++#include <neon/ne_socket.h>
+ 
+ #define GST_TYPE_NEONHTTP_SRC \
+   (gst_neonhttp_src_get_type())

@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qt
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.8.7
 $(PKG)_CHECKSUM := e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626ea0
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc dbus freetds jpeg libmng libpng openssl postgresql sqlite tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/4.8/ | \
+    $(WGET) -q -O- https://download.qt.io/official_releases/qt/4.8/ | \
     $(SED) -n 's,.*href="\(4\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     $(SORT) -V | \
@@ -22,8 +23,9 @@ define $(PKG)_BUILD
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
-        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl` -lws2_32" \
+        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l gnutls` -liconv -lws2_32" \
+        CXXFLAGS="-std=gnu++98" \
         ./configure \
         -opensource \
         -confirm-license \
@@ -65,16 +67,24 @@ define $(PKG)_BUILD
         -system-sqlite \
         -openssl-linked \
         -dbus-linked \
-        -v
+        -no-pch \
+        -v \
+        $($(PKG)_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt'
     $(MAKE) -C '$(1)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt4
 
+    # symlink mkspecs/default if it isn't already
+    # required on OSX to mimic linux installation
+    [[ -L  '$(PREFIX)/$(TARGET)/qt/mkspecs/default' ]] || \
+    rm -rf '$(PREFIX)/$(TARGET)/qt/mkspecs/default' && \
+    ln -s  '$(PREFIX)/$(TARGET)/qt/mkspecs/win32-g++-4.6' \
+           '$(PREFIX)/$(TARGET)/qt/mkspecs/default'
+
     # lrelease (from linguist) needed to prepare translation files
     $(MAKE) -C '$(1)/tools/linguist/lrelease' -j '$(JOBS)' install
-    ln -fs '$(PREFIX)/$(TARGET)/bin/lrelease' '$(PREFIX)/bin/$(TARGET)-lrelease'
 
     cd '$(1)/tools/assistant' && '$(1)/bin/qmake' assistant.pro
     # can't figure out where -lQtCLucene comes from so use
@@ -96,7 +106,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/tools/qdbus' -j '$(JOBS)' install
 
     mkdir            '$(1)/test-qt'
-    cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PWD)/$(2).pro'
+    cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' '$(PWD)/src/$(PKG)-test.pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/release/test-qt.exe' '$(PREFIX)/$(TARGET)/bin/'
 

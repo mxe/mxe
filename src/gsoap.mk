@@ -1,17 +1,18 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gsoap
+$(PKG)_WEBSITE  := https://www.genivia.com/dev.html
+$(PKG)_DESCR    := gSOAP
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.8.22
 $(PKG)_CHECKSUM := 30b045af2633ac5e92ea92fdb4baad784afe6e6548b5ef2f9cad48df6a7d3e48
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/gsoap2/gSOAP/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gsoap2/gsoap-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgcrypt libntlm openssl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/gsoap2/files/gSOAP/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/gsoap2/files/gsoap-2.8/' | \
     $(SED) -n 's,.*gsoap_\([0-9][^>]*\)\.zip.*,\1,p' | \
     head -1
 endef
@@ -21,7 +22,8 @@ define $(PKG)_BUILD
     cd '$(1)' && touch configure config.h.in
 
     # Native build to get tools wsdl2h and soapcpp2
-    cd '$(1)' && ./configure
+    cd '$(1)' && ./configure \
+        --disable-ssl
 
     # Work around parallel build problem
     $(MAKE) -C '$(1)'/gsoap/src -j '$(JOBS)' soapcpp2_yacc.h
@@ -45,7 +47,7 @@ define $(PKG)_BUILD
 
     # Build for mingw. Static by default.
     # Prevent undefined reference to _rpl_malloc.
-    # http://groups.google.com/group/ikarus-users/browse_thread/thread/fd1d101eac32633f
+    # https://groups.google.com/group/ikarus-users/browse_thread/thread/fd1d101eac32633f
     cd '$(1)' && ac_cv_func_malloc_0_nonnull=yes ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \

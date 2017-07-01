@@ -1,33 +1,30 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := armadillo
+$(PKG)_WEBSITE  := https://arma.sourceforge.io/
+$(PKG)_DESCR    := Armadillo C++ linear algebra library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.550.1
-$(PKG)_CHECKSUM := f44e85a4cc2d1631339ef974464730d952f3b2bf9141eedfc42ed4ace9148260
+$(PKG)_VERSION  := 7.800.1
+$(PKG)_CHECKSUM := 5ada65a5a610301ae188bb34f0ac6e7fdafbdbcd0450b0adb7715349ae14b8db
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc blas boost lapack
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc blas lapack
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/arma/files/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/arma/files/' | \
     $(SED) -n 's,.*/armadillo-\([0-9.]*\)[.]tar.*".*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_SHARED),YES,NO) \
+    cd '$(1)/build' && '$(TARGET)-cmake' .. \
         -DARMA_USE_WRAPPER=false
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install VERBOSE=1
 
-    # note: don't use -Werror with GCC 4.7.0 and .1
     '$(TARGET)-g++' \
-        -W -Wall \
-        '$(2).cpp' -o '$(PREFIX)/$(TARGET)/bin/test-armadillo.exe' \
-        -larmadillo -llapack -lblas -lgfortran -lquadmath \
-        -lboost_serialization-mt -lboost_thread_win32-mt -lboost_system-mt
+        -W -Wall -Werror \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-armadillo.exe' \
+        -larmadillo -llapack -lblas -lgfortran -lquadmath
 endef

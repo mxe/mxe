@@ -1,13 +1,14 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mpc
+$(PKG)_WEBSITE  := http://www.multiprecision.org/
+$(PKG)_DESCR    := GNU MPC
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.2
 $(PKG)_CHECKSUM := b561f54d8a479cee3bc891ee52735f18ff86712ba30f036f8b8537bae380c488
 $(PKG)_SUBDIR   := mpc-$($(PKG)_VERSION)
 $(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.multiprecision.org/mpc/download/$($(PKG)_FILE)
+$(PKG)_URL      := https://ftp.gnu.org/gnu/mpc/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/m/mpclib/mpclib_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc gmp mpfr
