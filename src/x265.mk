@@ -1,7 +1,7 @@
-# This file is part of MXE.
-# See index.html for further information.
+# This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := x265
+$(PKG)_WEBSITE  := http://x265.org
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4
 $(PKG)_CHECKSUM := 9c2aa718d78f6fecdd783f08ab83b98d3169e5f670404da4c16439306907d729
@@ -27,7 +27,7 @@ define $(PKG)_BUILD
         -DENABLE_SHARED=OFF \
         -DENABLE_ASSEMBLY=$(if $(findstring x86_64,$(TARGET)),ON,OFF) \
         -DENABLE_CLI=OFF \
-	    -DWINXP_SUPPORT=ON \
+        -DWINXP_SUPPORT=ON \
         -DENABLE_DYNAMIC_HDR10=ON \
         -DMAIN12=ON
     $(MAKE) -C '$(BUILD_DIR)/12bit' -j '$(JOBS)'
