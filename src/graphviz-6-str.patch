@@ -1,0 +1,15 @@
+--- a/lib/common/colxlate.c	2016-08-16 19:45:00.225435570 +1000
++++ b/lib/common/colxlate.c	2016-08-16 19:45:14.713115698 +1000
+@@ -31,12 +31,6 @@
+ 
+ static char* colorscheme;
+ 
+-#ifdef WIN32
+-extern int strcasecmp(const char *s1, const char *s2);
+-extern int strncasecmp(const char *s1, const char *s2, unsigned int n);
+-#endif
+-
+-
+ static void hsv2rgb(double h, double s, double v,
+ 			double *r, double *g, double *b)
+ {

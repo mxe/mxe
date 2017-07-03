@@ -1,0 +1,398 @@
+diff -ur a/ast_common.h b/ast_common.h
+--- a/ast_common.h	2016-08-11 20:45:52.985309265 +1000
++++ b/ast_common.h	2016-08-11 20:52:48.433612672 +1000
+@@ -134,10 +134,10 @@
+ /* dynamic linked library external scope handling */
+ #undef extern
+ #if _dll_import && !defined(__EXPORT__) && _DLL_BLD
+-#define __EXPORT__      __declspec(dllexport)
++#define __EXPORT__      
+ #endif
+ #if _dll_import && !defined(__IMPORT__)
+-#define __IMPORT__      __declspec(dllimport)
++#define __IMPORT__      
+ #endif
+ #if !defined(_astimport)
+ #if defined(__IMPORT__) && _DLL_BLD
+diff -ur a/ast_common.h.in b/ast_common.h.in
+--- a/ast_common.h.in	2016-08-11 20:45:46.086470285 +1000
++++ b/ast_common.h.in	2016-08-11 20:52:48.434612649 +1000
+@@ -134,10 +134,10 @@
+ /* dynamic linked library external scope handling */
+ #undef extern
+ #if _dll_import && !defined(__EXPORT__) && _DLL_BLD
+-#define __EXPORT__      __declspec(dllexport)
++#define __EXPORT__      
+ #endif
+ #if _dll_import && !defined(__IMPORT__)
+-#define __IMPORT__      __declspec(dllimport)
++#define __IMPORT__      
+ #endif
+ #if !defined(_astimport)
+ #if defined(__IMPORT__) && _DLL_BLD
+diff -ur a/cmd/dot/dot_builtins.c b/cmd/dot/dot_builtins.c
+--- a/cmd/dot/dot_builtins.c	2016-08-11 20:45:45.997472362 +1000
++++ b/cmd/dot/dot_builtins.c	2016-08-11 20:52:26.243130600 +1000
+@@ -18,7 +18,6 @@
+ #include "gvplugin.h"
+ 
+ #if defined(GVDLL) && !defined(ENABLE_LTDL)
+-#define extern	__declspec(dllimport)
+ #endif
+ 
+ extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
+diff -ur a/cmd/dot/dot.c b/cmd/dot/dot.c
+--- a/cmd/dot/dot.c	2016-08-11 20:45:45.997472362 +1000
++++ b/cmd/dot/dot.c	2016-08-11 20:52:26.245130553 +1000
+@@ -23,8 +23,8 @@
+ #include "gvio.h"
+ 
+ #ifdef WIN32_DLL
+-__declspec(dllimport) boolean MemTest;
+-__declspec(dllimport) int GvExitOnUsage;
++ boolean MemTest;
++ int GvExitOnUsage;
+ /*gvc.lib cgraph.lib*/
+     #pragma comment( lib, "cgraph.lib" )
+     #pragma comment( lib, "gvc.lib" )
+diff -ur a/cmd/smyrna/gui/callbacks.h b/cmd/smyrna/gui/callbacks.h
+--- a/cmd/smyrna/gui/callbacks.h	2016-08-11 20:45:45.995472409 +1000
++++ b/cmd/smyrna/gui/callbacks.h	2016-08-11 20:52:23.702189906 +1000
+@@ -22,7 +22,7 @@
+ #endif
+ 
+ #ifdef	WIN32			//this shit is needed on WIN32 to get libglade see the callback
+-#define _BB  __declspec(dllexport)
++#define _BB  
+ #else
+ #define _BB
+ #endif
+diff -ur a/cmd/smyrna/gui/toolboxcallbacks.h b/cmd/smyrna/gui/toolboxcallbacks.h
+--- a/cmd/smyrna/gui/toolboxcallbacks.h	2016-08-11 20:45:45.995472409 +1000
++++ b/cmd/smyrna/gui/toolboxcallbacks.h	2016-08-11 20:52:23.714189625 +1000
+@@ -16,7 +16,7 @@
+ #include <gtk/gtk.h>
+ #include "gui.h"
+ #if WIN32
+-#define _BB  __declspec(dllexport)
++#define _BB  
+ #else
+ #define _BB /**/
+ #endif
+diff -ur a/cmd/smyrna/smyrnadefs.h b/cmd/smyrna/smyrnadefs.h
+--- a/cmd/smyrna/smyrnadefs.h	2016-08-11 20:45:45.995472409 +1000
++++ b/cmd/smyrna/smyrnadefs.h	2016-08-11 20:52:26.453125698 +1000
+@@ -19,7 +19,7 @@
+ #endif
+ #endif
+ #ifdef	WIN32			//this  is needed on WIN32 to get libglade see the callback
+-#define _BB  __declspec(dllexport)
++#define _BB  
+ #else
+ #define _BB
+ #endif
+@@ -40,7 +40,7 @@
+ #endif
+ 
+ #ifdef	WIN32			//this is needed on WIN32 to get libglade see the callback
+-#define _BB  __declspec(dllexport)
++#define _BB  
+ #else
+ #define _BB
+ #endif
+diff -ur a/cmd/tools/gvpack.c b/cmd/tools/gvpack.c
+--- a/cmd/tools/gvpack.c	2016-08-11 20:45:45.989472549 +1000
++++ b/cmd/tools/gvpack.c	2016-08-11 20:52:26.539123691 +1000
+@@ -52,7 +52,6 @@
+ 
+ /*visual studio*/
+ #if defined(WIN32)
+-#define extern __declspec(dllimport)
+ #endif
+ /*end visual studio*/
+ extern gvplugin_library_t gvplugin_neato_layout_LTX_library;
+diff -ur a/lib/cdt/cdt.h b/lib/cdt/cdt.h
+--- a/lib/cdt/cdt.h	2016-08-11 20:45:47.666433408 +1000
++++ b/lib/cdt/cdt.h	2016-08-11 20:52:26.932114519 +1000
+@@ -27,8 +27,6 @@
+ #endif
+ 
+ #ifdef WIN32
+-#define __EXPORT__  __declspec (dllexport)
+-#define __IMPORT__	__declspec (dllimport)
+ #endif
+ 
+ 
+diff -ur a/lib/cgraph/cgraph.h b/lib/cgraph/cgraph.h
+--- a/lib/cgraph/cgraph.h	2016-08-11 20:45:49.307395108 +1000
++++ b/lib/cgraph/cgraph.h	2016-08-11 20:52:27.419103153 +1000
+@@ -183,7 +183,6 @@
+ 
+ /*visual studio*/
+ #if defined(WIN32) && !defined(CGRAPH_EXPORTS)
+-#define extern __declspec(dllimport)
+ #endif
+ /*end visual studio*/
+ 
+@@ -420,7 +420,6 @@
+ #   endif
+ #endif
+ #if defined(WIN32) && !defined(CGRAPH_EXPORTS)
+-#define extern __declspec(dllimport)
+ #endif
+ 
+ extern Agdesc_t Agdirected, Agstrictdirected, Agundirected,
+diff -ur a/lib/common/geomprocs.h b/lib/common/geomprocs.h
+--- a/lib/common/geomprocs.h	2016-08-11 20:45:46.420462489 +1000
++++ b/lib/common/geomprocs.h	2016-08-11 20:52:30.488031524 +1000
+@@ -26,9 +26,7 @@
+ 
+ #ifdef WIN32
+ #ifdef GVDLL
+-#define extern __declspec(dllexport)
+ #else
+-#define extern __declspec(dllimport)
+ #endif
+ #endif	
+ 
+diff -ur a/lib/common/globals.h b/lib/common/globals.h
+--- a/lib/common/globals.h	2016-08-11 20:45:46.371463633 +1000
++++ b/lib/common/globals.h	2016-08-11 20:52:30.490031477 +1000
+@@ -36,16 +36,13 @@
+ #endif
+ #if defined(GVDLL)
+ #if !defined(_BLD_gvc)
+-#define extern	__declspec(dllimport)
+ #else
+-#define extern __declspec(dllexport)
+ #endif
+ #endif
+ #endif
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/common/memory.h b/lib/common/memory.h
+--- a/lib/common/memory.h	2016-08-11 20:45:46.422462443 +1000
++++ b/lib/common/memory.h	2016-08-11 20:52:30.594029050 +1000
+@@ -43,11 +43,9 @@
+ #define ZALLOC(size,ptr,type,osize) (ptr? (type*)zrealloc(ptr,size,sizeof(type),osize):(type*)zmalloc((size)*sizeof(type)))
+ #endif
+ #ifdef GVDLL
+-#define extern __declspec(dllexport)
+ #else
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ 
+diff -ur a/lib/common/pointset.h b/lib/common/pointset.h
+--- a/lib/common/pointset.h	2016-08-11 20:45:46.425462373 +1000
++++ b/lib/common/pointset.h	2016-08-11 20:52:30.600028909 +1000
+@@ -24,7 +24,6 @@
+     typedef Dict_t PointSet;
+     typedef Dict_t PointMap;
+ #ifdef GVDLL
+-#define extern __declspec(dllexport)
+ #else
+ #define extern
+ #endif
+@@ -32,7 +32,6 @@
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/common/render.h b/lib/common/render.h
+--- a/lib/common/render.h	2016-08-11 20:45:46.360463890 +1000
++++ b/lib/common/render.h	2016-08-11 20:52:30.606028769 +1000
+@@ -61,7 +61,6 @@
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/common/utils.h b/lib/common/utils.h
+--- a/lib/common/utils.h	2016-08-11 20:45:46.425462373 +1000
++++ b/lib/common/utils.h	2016-08-11 20:52:30.699026599 +1000
+@@ -22,7 +22,6 @@
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/gvc/gvcext.h b/lib/gvc/gvcext.h
+--- a/lib/gvc/gvcext.h	2016-08-11 20:45:47.083447015 +1000
++++ b/lib/gvc/gvcext.h	2016-08-11 20:52:34.283942927 +1000
+@@ -66,9 +66,9 @@
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-__declspec(dllimport) lt_symlist_t lt_preloaded_symbols[];
++ lt_symlist_t lt_preloaded_symbols[];
+ #else
+-//__declspec(dllexport) lt_symlist_t lt_preloaded_symbols[];
++// lt_symlist_t lt_preloaded_symbols[];
+ //lt_symlist_t lt_preloaded_symbols[];
+ #endif
+ #endif
+@@ -77,7 +77,7 @@
+ 
+ #ifndef WIN32_DLL
+ #if defined(GVDLL)
+-	__declspec(dllexport) lt_symlist_t lt_preloaded_symbols[];
++	 lt_symlist_t lt_preloaded_symbols[];
+ #else
+ #if !defined(LTDL_H)
+ 	extern lt_symlist_t lt_preloaded_symbols[];
+diff -ur a/lib/gvc/gvc.h b/lib/gvc/gvc.h
+--- a/lib/gvc/gvc.h	2016-08-11 20:45:47.082447039 +1000
++++ b/lib/gvc/gvc.h	2016-08-11 20:52:34.287942833 +1000
+@@ -22,7 +22,6 @@
+ #endif
+ 
+ #ifdef GVDLL
+-#define extern __declspec(dllexport)
+ #else
+ #define extern
+ #endif
+@@ -30,7 +30,6 @@
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/gvc/gvio.h b/lib/gvc/gvio.h
+--- a/lib/gvc/gvio.h	2016-08-11 20:45:47.055447669 +1000
++++ b/lib/gvc/gvio.h	2016-08-11 20:52:34.495937979 +1000
+@@ -21,7 +21,6 @@
+ #endif
+ 
+ #ifdef GVDLL
+-#define extern __declspec(dllexport)
+ #else
+ #define extern
+ #endif
+@@ -29,7 +29,6 @@
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/gvc/gvplugin_loadimage.h b/lib/gvc/gvplugin_loadimage.h
+--- a/lib/gvc/gvplugin_loadimage.h	2016-08-11 20:45:47.084446992 +1000
++++ b/lib/gvc/gvplugin_loadimage.h	2016-08-11 20:52:34.542936882 +1000
+@@ -23,13 +23,11 @@
+ #endif
+ 
+ #ifdef GVDLL
+-#  define extern __declspec(dllexport)
+ #endif
+ 
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/pack/pack.h b/lib/pack/pack.h
+--- a/lib/pack/pack.h	2016-08-11 20:45:49.447391841 +1000
++++ b/lib/pack/pack.h	2016-08-11 20:52:37.452868964 +1000
+@@ -60,7 +60,6 @@
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef GVC_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/pathplan/pathutil.h b/lib/pathplan/pathutil.h
+--- a/lib/pathplan/pathutil.h	2016-08-11 20:45:49.476391164 +1000
++++ b/lib/pathplan/pathutil.h	2016-08-11 20:52:37.513867540 +1000
+@@ -34,7 +34,6 @@
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef PATHPLAN_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/pathplan/vis.h b/lib/pathplan/vis.h
+--- a/lib/pathplan/vis.h	2016-08-11 20:45:49.477391140 +1000
++++ b/lib/pathplan/vis.h	2016-08-11 20:52:37.618865089 +1000
+@@ -48,7 +48,6 @@
+     };
+ #ifdef WIN32_DLL
+ #ifndef PATHPLAN_EXPORTS
+-#define extern __declspec(dllimport)
+ #endif
+ #endif
+ /*end visual studio*/
+diff -ur a/lib/sfio/sfio.h b/lib/sfio/sfio.h
+--- a/lib/sfio/sfio.h	2016-08-11 20:45:48.868405354 +1000
++++ b/lib/sfio/sfio.h	2016-08-11 20:52:38.179851996 +1000
+@@ -278,7 +278,6 @@
+      _BEGIN_EXTERNS_ extern ssize_t _Sfi;
+ 
+ #if _BLD_sfio && defined(GVDLL)
+-#define extern	__declspec(dllexport)
+ #endif
+ /* standard in/out/err streams */
+     extern Sfio_t *sfstdin;
+diff -ur a/lib/vmalloc/vmalloc.h b/lib/vmalloc/vmalloc.h
+--- a/lib/vmalloc/vmalloc.h	2016-08-11 20:45:49.521390113 +1000
++++ b/lib/vmalloc/vmalloc.h	2016-08-11 20:52:39.072831154 +1000
+@@ -112,9 +112,7 @@
+ /*visual studio*/
+ #ifdef WIN32_DLL
+ #ifndef VMALLOC_EXPORTS
+-#define extern __declspec(dllimport)
+ #else
+-#define extern __declspec(dllexport)
+ #endif
+ #endif
+ /*end visual studio*/		 
+diff -ur a/libltdl/libltdl/lt__private.h b/libltdl/libltdl/lt__private.h
+--- a/libltdl/libltdl/lt__private.h	2016-08-11 20:45:52.989309172 +1000
++++ b/libltdl/libltdl/lt__private.h	2016-08-11 20:52:35.138922971 +1000
+@@ -65,7 +65,7 @@
+ #ifndef LT_GLOBAL_DATA
+ # if defined(__WINDOWS__) || defined(__CYGWIN__)
+ #  if defined(DLL_EXPORT)	/* defined by libtool (if required) */
+-#   define LT_GLOBAL_DATA	__declspec(dllexport)
++#   define LT_GLOBAL_DATA	
+ #  endif
+ # endif
+ # ifndef LT_GLOBAL_DATA
+diff -ur a/libltdl/libltdl/lt_system.h b/libltdl/libltdl/lt_system.h
+--- a/libltdl/libltdl/lt_system.h	2016-08-11 20:45:52.989309172 +1000
++++ b/libltdl/libltdl/lt_system.h	2016-08-11 20:52:35.139922948 +1000
+@@ -113,11 +113,11 @@
+ #if !defined(LT_SCOPE)
+ #  if defined(__WINDOWS__) || defined(__CYGWIN__)
+ #    if defined(DLL_EXPORT)		/* defined by libtool (if required) */
+-#      define LT_SCOPE	extern __declspec(dllexport)
++#      define LT_SCOPE	extern 
+ #    endif
+ #    if defined(LIBLTDL_DLL_IMPORT)	/* define if linking with this dll */
+        /* note: cygwin/mingw compilers can rely instead on auto-import */
+-#      define LT_SCOPE	extern __declspec(dllimport)
++#      define LT_SCOPE	extern 
+ #    endif
+ #  endif
+ #  if !defined(LT_SCOPE)		/* static linking or !__WINDOWS__ */

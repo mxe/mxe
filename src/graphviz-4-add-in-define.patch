@@ -1,0 +1,11 @@
+--- a/lib/sfio/sfio.h	2016-08-10 21:29:29.107305197 +1000
++++ b/lib/sfio/sfio.h	2016-08-10 21:30:00.867550911 +1000
+@@ -289,7 +289,7 @@
+     extern Sfio_t _Sfstderr;
+ #undef extern
+ 
+-#if _DLL && _DLL_INDIRECT_DATA
++#if defined(_DLL) && _DLL_INDIRECT_DATA
+ /* The Uwin shared library environment requires these to be defined
+    in a global structure set up by the Uwin start-up procedure.
+ */

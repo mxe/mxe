@@ -1,0 +1,12 @@
+diff -ur lib_old/gvpr/gprstate.c lib/gvpr/gprstate.c
+--- a/lib/gvpr/gprstate.c	2016-08-11 19:33:44.193009726 +1000
++++ b/lib/gvpr/gprstate.c	2016-08-11 20:27:03.225804273 +1000
+@@ -19,7 +19,7 @@
+ 
+ #ifdef WIN32
+ #include "windows.h"
+-#include "Shlwapi.h"
++#include "shlwapi.h"
+ #endif
+ 
+ #include <gprstate.h>

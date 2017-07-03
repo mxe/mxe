@@ -1,0 +1,79 @@
+From 6b69f3aeead3b28cb9f5fc6bd90aa19157a87f64 Mon Sep 17 00:00:00 2001
+From: Alexandre Boulgakov <sasha_bu@hotmail.com>
+Date: Fri, 9 May 2014 07:48:59 +0100
+Subject: [PATCH] Fix regexes on Windows.
+
+---
+ lib/gvc/gvconfig.c    | 10 +++++++---
+ lib/gvc/regex_win32.c | 20 ++++++++++----------
+ 2 files changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/lib/gvc/gvconfig.c b/lib/gvc/gvconfig.c
+index dc3d578..37754af 100644
+--- a/lib/gvc/gvconfig.c
++++ b/lib/gvc/gvconfig.c
+@@ -19,6 +19,13 @@
+ 
+ #include	<string.h>
+ 
++#ifdef WIN32
++#include "regex_win32.h"
++#include "regex_win32.c"
++#else
++#include        <regex.h>
++#endif
++
+ #ifdef ENABLE_LTDL
+ #include	<sys/types.h>
+ #ifdef WIN32
+@@ -28,8 +35,6 @@
+ #define GLOB_NOMATCH    3   /* No matches found.  */
+ #define GLOB_NOSORT     4
+ #define DMKEY "Software\\Microsoft" //key to look for library dir
+-#include "regex_win32.h"
+-//#include        <regex_win32.c>
+ typedef struct {
+     int gl_pathc;           /* count of total paths so far */
+     int gl_matchc;          /* count of paths matching pattern */
+@@ -40,7 +45,6 @@ typedef struct {
+ static void globfree (glob_t* pglob);
+ static int glob (GVC_t * gvc, char*, int, int (*errfunc)(const char *, int), glob_t*);
+ #else
+-#include        <regex.h>
+ #include	<glob.h>
+ #endif 
+ #include	<sys/stat.h>
+diff --git a/lib/gvc/regex_win32.c b/lib/gvc/regex_win32.c
+index fdf7817..84c303b 100644
+--- a/lib/gvc/regex_win32.c
++++ b/lib/gvc/regex_win32.c
+@@ -3645,19 +3645,19 @@ re_search_2(struct re_pattern_buffer *bufp,
+ 
+ /* Free everything we malloc.  */
+ #ifdef MATCH_MAY_ALLOCATE
+-#define FREE_VAR(var) if (var) REGEX_FREE (var); var = NULL
++#define FREE_VAR(cast, var) if (var) REGEX_FREE (cast var); var = NULL
+ #define FREE_VARIABLES()                                                \
+   do {                                                                  \
+     REGEX_FREE_STACK (fail_stack.stack);                                \
+-    FREE_VAR ((void*) regstart);                                        \
+-    FREE_VAR ((void*) regend);                                          \
+-    FREE_VAR ((void*) old_regstart);                                    \
+-    FREE_VAR ((void*) old_regend);                                      \
+-    FREE_VAR ((void*) best_regstart);                                   \
+-    FREE_VAR ((void*) best_regend);                                     \
+-    FREE_VAR ((void*) reg_info);                                        \
+-    FREE_VAR ((void*) reg_dummy);                                       \
+-    FREE_VAR ((void*) reg_info_dummy);                                  \
++    FREE_VAR ((void*), regstart);                                        \
++    FREE_VAR ((void*), regend);                                          \
++    FREE_VAR ((void*), old_regstart);                                    \
++    FREE_VAR ((void*), old_regend);                                      \
++    FREE_VAR ((void*), best_regstart);                                   \
++    FREE_VAR ((void*), best_regend);                                     \
++    FREE_VAR ((void*), reg_info);                                        \
++    FREE_VAR ((void*), reg_dummy);                                       \
++    FREE_VAR ((void*), reg_info_dummy);                                  \
+   } while (0)
+ #else
+ #define FREE_VARIABLES() ((void)0) /* Do nothing!  But inhibit gcc warning.  */
