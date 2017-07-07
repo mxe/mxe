@@ -3,11 +3,11 @@
 PKG             := cgal
 $(PKG)_WEBSITE  := https://www.cgal.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.9.1
-$(PKG)_CHECKSUM := 56557da971b5310c2678ffc5def4109266666ff3adc7babbe446797ee2b90cca
+$(PKG)_VERSION  := 4.10
+$(PKG)_CHECKSUM := eb56e17dcdecddf6a6fb808931b2142f20aaa182916ddbd912273c51e0f0c045
 $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
 $(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://github.com/CGAL/cgal/releases/download/releases%2F$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/CGAL/cgal/releases/download/releases/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc boost gmp mpfr qt5
 
 define $(PKG)_UPDATE
