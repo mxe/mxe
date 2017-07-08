@@ -681,7 +681,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>apt-get install \
     autoconf automake autopoint bash bison bzip2 flex gettext\
     git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
-    libtool libltdl-dev libssl-dev libxml-parser-perl make \
+    libtool-bin libltdl-dev libssl-dev libxml-parser-perl make \
     openssl p7zip-full patch perl pkg-config python ruby scons \
     sed unzip wget xz-utils</pre>
 
@@ -691,10 +691,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>apt-get install g++-multilib libc6-dev-i386</pre>
 
     <p>
-    On Debian Jessie (8) or Ubuntu Utopic (14.10) or later,
-    install also:
+    Prior to Debian Jessie (8) or Ubuntu Utopic (14.10),
+    install <code>libtool</code> instead of <code>libtool-bin</code>.
     </p>
-    <pre>apt-get install libtool-bin</pre>
 
     <p>
     Only the <a href="https://www.debian.org/releases/stable/">latest Debian stable series</a> is supported.
