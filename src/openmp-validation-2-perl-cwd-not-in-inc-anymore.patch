@@ -1,0 +1,14 @@
+diff --git a/runtest.pl b/runtest.pl
+index 3472351..e84595b 100755
+--- a/runtest.pl
++++ b/runtest.pl
+@@ -1,5 +1,9 @@
+ #!/usr/bin/env perl
+ 
++BEGIN {
++  unshift @INC, '.';
++}
++
+ # runtest [options] FILENAME
+ #
+ # Read the file FILENAME. Each line contains a test.
