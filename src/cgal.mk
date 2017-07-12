@@ -32,19 +32,4 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j $(JOBS)
     $(MAKE) -C '$(1)' -j 1 install
 
-    cd '$(1)/examples/AABB_tree' && '$(TARGET)-cmake' \
-        -DWITH_CGAL_Qt3:BOOL=OFF \
-        -DCGAL_BUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-        -DCGAL_Boost_USE_STATIC_LIBS:BOOL=$(CMAKE_STATIC_BOOL) \
-        -DCGAL_DIR:STRING="../.." .
-    $(MAKE) -C '$(1)/examples/AABB_tree' -j $(JOBS)
-    $(INSTALL) '$(1)/examples/AABB_tree/AABB_polyhedron_edge_example.exe' '$(PREFIX)/$(TARGET)/bin/test-cgal.exe'
-
-    cd '$(1)/examples/CGALimageIO' && '$(TARGET)-cmake' \
-        -DWITH_CGAL_Qt3:BOOL=OFF \
-        -DCGAL_BUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-        -DCGAL_Boost_USE_STATIC_LIBS:BOOL=$(CMAKE_STATIC_BOOL) \
-        -DCGAL_DIR:STRING="../.." .
-    $(MAKE) -C '$(1)/examples/CGALimageIO' -j $(JOBS)
-    $(INSTALL) '$(1)/examples/CGALimageIO/convert_raw_image_to_inr.exe' '$(PREFIX)/$(TARGET)/bin/test-cgalimgio.exe'
 endef

@@ -223,11 +223,20 @@ SET( OPENGL_RUN_RES__TRYRUN_OUTPUT
      CACHE STRING "Output from TRY_RUN" FORCE)
 
 
-SET( QT4_RUN_RES
+SET( QT_RUN_RES
      "0"
      CACHE STRING "Result from TRY_RUN" FORCE)
 
-SET( QT4_RUN_RES__TRYRUN_OUTPUT
-     "version=4.8.6"
+SET( QT_RUN_RES__TRYRUN_OUTPUT
+     "version=5.9.0"
+     CACHE STRING "Output from TRY_RUN" FORCE)
+
+
+SET( CGAL_test_cpp_version_RUN_RES
+     "0"
+     CACHE STRING "Result from TRY_RUN" FORCE)
+
+SET( CGAL_test_cpp_version_RUN_RES__TRYRUN_OUTPUT
+     "201103L"
      CACHE STRING "Output from TRY_RUN" FORCE)
 
