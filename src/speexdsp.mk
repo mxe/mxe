@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 1.2rc3
 $(PKG)_CHECKSUM := 4ae688600039f5d224bdf2e222d2fbde65608447e4c2f681585e4dca6df692f1
 $(PKG)_SUBDIR   := speexdsp-$($(PKG)_VERSION)
 $(PKG)_FILE     := speexdsp-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://downloads.xiph.org/releases/speex/$($(PKG)_FILE)
+$(PKG)_URL      := https://downloads.xiph.org/releases/speex/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
