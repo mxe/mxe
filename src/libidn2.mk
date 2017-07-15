@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 2.0.2
 $(PKG)_CHECKSUM := 8cd62828b2ab0171e0f35a302f3ad60c3a3fffb45733318b3a8205f9d187eeab
 $(PKG)_SUBDIR   := libidn2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libidn2-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://ftp.gnu.org/gnu/libidn//$($(PKG)_FILE)
+$(PKG)_URL      := https://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv libunistring
 
 define $(PKG)_UPDATE
