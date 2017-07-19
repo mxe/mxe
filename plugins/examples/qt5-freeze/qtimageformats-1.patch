@@ -1,0 +1,79 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 30f968c6f65c5668a9760ccfd48312b786ab318b Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 3 Nov 2011 14:11:02 +0100
+Subject: [PATCH 1/2] add pkg-config support for libtiff-4
+
+Change-Id: I387517e04fed7729e5acf28bacdfc289fb2d17bd
+
+diff --git a/config.tests/libtiff/libtiff.pro b/config.tests/libtiff/libtiff.pro
+index f7ac4c1..bd2c6b0 100644
+--- a/config.tests/libtiff/libtiff.pro
++++ b/config.tests/libtiff/libtiff.pro
+@@ -2,5 +2,7 @@ SOURCES = libtiff.cpp
+ CONFIG -= qt dylib
+ mac:CONFIG -= app_bundle
+ win32:CONFIG += console
+-unix|mingw: LIBS += -ltiff
++CONFIG += link_pkgconfig
++packagesExist(libtiff-4):PKGCONFIG += libtiff-4
++else:if(unix|win32-g++*): LIBS += -ltiff
+ else:win32: LIBS += libtiff.lib
+diff --git a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/tiff/tiff.pro
+index 0f841ab..fa22141 100644
+--- a/src/plugins/imageformats/tiff/tiff.pro
++++ b/src/plugins/imageformats/tiff/tiff.pro
+@@ -10,7 +10,9 @@ wince*: SOURCES += qfunctions_wince.cpp
+ OTHER_FILES += tiff.json
+ 
+ config_libtiff {
+-    unix|mingw: LIBS += -ltiff
++    CONFIG += link_pkgconfig
++    packagesExist(libtiff-4):PKGCONFIG += libtiff-4
++    else:if(unix|win32-g++*): LIBS += -ltiff
+     else:win32: LIBS += libtiff.lib
+ } else {
+     include($$PWD/../../../3rdparty/libtiff.pri)
+-- 
+1.8.4.5
+
+
+From c791e0599f640cf637d5f925b111dbd7a5569244 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 19 Dec 2012 23:29:52 +0100
+Subject: [PATCH 2/2] add pkg-config support for libmng (mxe-specific)
+
+Change-Id: I1216f35a01a974321efa2463b687c121baa22667
+
+diff --git a/config.tests/libmng/libmng.pro b/config.tests/libmng/libmng.pro
+index adc096e..a20a0a0 100644
+--- a/config.tests/libmng/libmng.pro
++++ b/config.tests/libmng/libmng.pro
+@@ -2,5 +2,7 @@ SOURCES = libmng.cpp
+ CONFIG -= qt dylib
+ mac:CONFIG -= app_bundle
+ win32:CONFIG += console
+-unix|mingw: LIBS += -lmng
++CONFIG += link_pkgconfig
++packagesExist(libmng):PKGCONFIG += libmng
++else:if(unix|win32-g++*): LIBS += -lmng
+ else:win32: LIBS += libmng.lib
+diff --git a/src/plugins/imageformats/mng/qmnghandler.pri b/src/plugins/imageformats/mng/qmnghandler.pri
+index 5c0fff1..00cd0b3 100644
+--- a/src/plugins/imageformats/mng/qmnghandler.pri
++++ b/src/plugins/imageformats/mng/qmnghandler.pri
+@@ -3,7 +3,9 @@ INCLUDEPATH *= $$PWD
+ HEADERS += $$PWD/qmnghandler_p.h
+ SOURCES += $$PWD/qmnghandler.cpp
+ config_libmng {
+-    unix|mingw: LIBS += -lmng
++    CONFIG += link_pkgconfig
++    packagesExist(libmng):PKGCONFIG += libmng
++    else:if(unix|win32-g++*): LIBS += -lmng
+     else:win32: LIBS += libmng.lib
+ } else {
+     include($$PWD/../../../3rdparty/libmng.pri)
+-- 
+1.8.4.5
+
