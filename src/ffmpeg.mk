@@ -3,12 +3,11 @@
 PKG             := ffmpeg
 $(PKG)_WEBSITE  := https://ffmpeg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.4
-$(PKG)_CHECKSUM := c0fa3593a2e9e96ace3c1757900094437ad96d1d6ca19f057c378b5f394496a4
+$(PKG)_VERSION  := 3.3.2
+$(PKG)_CHECKSUM := 216900d5c0af9017bb8f76b0ad23f0ac53cf7fc618cf04b40d989bd99b088e6a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://launchpad.net/ffmpeg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libbs2b libcaca \
                    libvpx opencore-amr opus sdl speex theora vidstab \
                    vo-amrwbenc vorbis x264 xvidcore yasm zlib
@@ -38,7 +37,6 @@ define $(PKG)_BUILD
             --disable-static --enable-shared ) \
         --yasmexe='$(TARGET)-yasm' \
         --disable-debug \
-        --enable-memalign-hack \
         --disable-pthreads \
         --enable-w32threads \
         --disable-doc \
