@@ -18,13 +18,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
+    # configure script is ancient and isn't easy to regenerate
+    # filter out invalid options
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(subst docdir$(comma),,$(MXE_CONFIGURE_OPTS)) \
         --with-apr='$(PREFIX)/$(TARGET)' \
         --with-apr-util='$(PREFIX)/$(TARGET)' \
         CFLAGS=-D_WIN32_WINNT=0x0500 \
         CXXFLAGS=-D_WIN32_WINNT=0x0500
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
+
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
+
     mkdir -p '$(PREFIX)/$(TARGET)/share/cmake/log4cxx'
     cp '$(1)/log4cxx-config.cmake' '$(PREFIX)/$(TARGET)/share/cmake/log4cxx/log4cxx-config.cmake'
 
