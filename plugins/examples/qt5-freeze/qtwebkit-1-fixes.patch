@@ -1,0 +1,47 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 18 Jan 2017 19:38:56 +1100
+Subject: [PATCH] fix msys build
+
+Taken from:
+https://github.com/Alexpux/Qt-builds/blob/master/patches/qt/5.0.x/qt-5.0.0-fix-build-under-msys.patch
+
+diff --git a/Source/WebCore/DerivedSources.pri b/Source/WebCore/DerivedSources.pri
+index 1111111..2222222 100644
+--- a/Source/WebCore/DerivedSources.pri
++++ b/Source/WebCore/DerivedSources.pri
+@@ -752,7 +752,7 @@ IDL_ATTRIBUTES_FILE = $$PWD/bindings/scripts/IDLAttributes.txt
+ preprocessIdls.input = IDL_ATTRIBUTES_FILE
+ preprocessIdls.script = $$PREPROCESS_IDLS_SCRIPT
+ # FIXME : We need to use only perl at some point.
+-win_cmd_shell: preprocessIdls.commands = type nul > $$IDL_FILES_TMP $$EOC
++win_cmd_shell: preprocessIdls.commands = cat /dev/null > $$IDL_FILES_TMP $$EOC
+ else: preprocessIdls.commands = cat /dev/null > $$IDL_FILES_TMP $$EOC
+ for(binding, IDL_BINDINGS) {
+     # We need "$$binding" instead of "$$binding ", because Windows' echo writes trailing whitespaces. (http://wkb.ug/88304)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Martchus <martchus@gmx.net>
+Date: Sun, 25 Sep 2016 22:21:54 +0200
+Subject: [PATCH] Include intrin.h for declaration of _mm_mfence
+
+taken from:
+https://aur.archlinux.org/cgit/aur.git/tree/0007-Include-intrin.h-for-declaration-of-_mm_mfence.patch?h=mingw-w64-qt5-webkit
+
+diff --git a/Source/WTF/wtf/Atomics.h b/Source/WTF/wtf/Atomics.h
+index 1111111..2222222 100644
+--- a/Source/WTF/wtf/Atomics.h
++++ b/Source/WTF/wtf/Atomics.h
+@@ -68,6 +68,8 @@
+ #elif !COMPILER(GCC)
+ extern "C" void _ReadWriteBarrier(void);
+ #pragma intrinsic(_ReadWriteBarrier)
++#else
++#include <intrin.h>
+ #endif
+ #include <windows.h>
+ #elif OS(QNX)
