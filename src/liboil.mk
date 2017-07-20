@@ -23,13 +23,11 @@ endef
 # `as_cv_unaligned_access` so set it manually
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-debug \
         --disable-examples \
-        --mandir='$(1)/sink' \
-        --docdir='$(1)/sink' \
-        --with-html-dir='$(1)/sink' \
         as_cv_unaligned_access=yes
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
