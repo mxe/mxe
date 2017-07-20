@@ -3,8 +3,8 @@
 PKG             := cfitsio
 $(PKG)_WEBSITE  := https://heasarc.gsfc.nasa.gov/fitsio/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3370
-$(PKG)_CHECKSUM := 092897c6dae4dfe42d91d35a738e45e8236aa3d8f9b3ffc7f0e6545b8319c63a
+$(PKG)_VERSION  := 3410
+$(PKG)_CHECKSUM := a556ac7ea1965545dcb4d41cfef8e4915eeb8c0faa1b52f7ff70870f8bb5734c
 $(PKG)_SUBDIR   := cfitsio
 $(PKG)_FILE     := cfitsio$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$($(PKG)_FILE)
@@ -18,12 +18,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        FC='$(TARGET)-gfortran'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
