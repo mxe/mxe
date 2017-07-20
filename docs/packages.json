@@ -349,6 +349,7 @@
     "qtservice": {"version": "ad9bc46", "website": "https://qt.gitorious.org/qt-solutions/", "description": "Qt Solutions"},
     "qtsparkle": {"version": "4c852e57061d7928573afdf88f04f89d85167477", "website": "https://github.com/davidsansome/qtsparkle", "description": "Qt auto-updater lib"},
     "qtsparkle_qt4": {"version": "4c852e57061d7928573afdf88f04f89d85167477", "website": "https://github.com/davidsansome/qtsparkle", "description": "Qt auto-updater lib"},
+    "qtspeech": {"version": "5.9.0", "website": "https://www.qt.io/", "description": "Qt"},
     "qtsvg": {"version": "5.9.0", "website": "https://www.qt.io/", "description": "Qt"},
     "qtsystems": {"version": "4e3a7ed", "website": "https://www.qt.io/", "description": "Qt"},
     "qttools": {"version": "5.9.0", "website": "https://www.qt.io/", "description": "Qt"},
