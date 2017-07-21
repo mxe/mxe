@@ -221,7 +221,7 @@ if [ ! -z "$excludepattern" ]; then
 		excludePattern+=" ! -path *$( echo "$curString" | tr -d ' ' )* "
 	done
 fi
-if [ "$loglevel" -gt 1]; then
+if [ "$loglevel" -gt 1 ]; then
 	echo "\$excluePattern: $excludePattern"
 fi
 
