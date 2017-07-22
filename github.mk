@@ -111,10 +111,10 @@ endef
 # called with owner/repo, tag prefix, tag suffix, filter-out, version sep
 define MXE_GET_GH_TAG
     $(MXE_GET_GH_TAGS) \
-    | $(if $(4),grep -v '$(strip $(4))') \
+    | $(if $(4),grep -vi '$(strip $(4))') \
     | $(SED) -n 's,^$(strip $(2))\([^"]*\)$(strip $(3))$$,\1,p' \
     | tr '$(strip $(5))' '.' \
-    | $(SORT) -V
+    | $(SORT) -V \
     | tail -1
 endef
 
