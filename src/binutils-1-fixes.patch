@@ -1,0 +1,29 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sylvain Beucler <beuc@beuc.net>
+Date: Fri, 31 Mar 2017 11:59:35 +0200
+Subject: [PATCH] Ensure that the timestamp in PE/COFF headers is always
+ initialised.
+
+Source: http://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;f=bfd/peXXigen.c;h=1c5f704fc035bc705dee887418f42cb8bca24b5d
+
+PR ld/20634
+* peXXigen.c (_bfd_XXi_only_swap_filehdr_out): Put 0 in the
+timestamp field if real time values are not being stored.
+
+diff --git a/bfd/peXXigen.c b/bfd/peXXigen.c
+index 1111111..2222222 100644
+--- a/bfd/peXXigen.c
++++ b/bfd/peXXigen.c
+@@ -875,6 +875,8 @@ _bfd_XXi_only_swap_filehdr_out (bfd * abfd, void * in, void * out)
+   /* Only use a real timestamp if the option was chosen.  */
+   if ((pe_data (abfd)->insert_timestamp))
+     H_PUT_32 (abfd, time (0), filehdr_out->f_timdat);
++  else
++    H_PUT_32 (abfd, 0, filehdr_out->f_timdat);
+ 
+   PUT_FILEHDR_SYMPTR (abfd, filehdr_in->f_symptr,
+ 		      filehdr_out->f_symptr);
