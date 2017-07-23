@@ -3,11 +3,8 @@
 PKG             := binutils
 $(PKG)_WEBSITE  := https://www.gnu.org/software/binutils/
 $(PKG)_DESCR    := GNU Binutils
-# see https://lists.nongnu.org/archive/html/mingw-cross-env-list/2016-01/msg00013.html
-# 2.26 causes incorrect dlls to be built with sjlj exceptions
-$(PKG)_IGNORE   := 2.26
-$(PKG)_VERSION  := 2.25.1
-$(PKG)_CHECKSUM := b5b14added7d78a8d1ca70b5cb75fef57ce2197264f4f5835326b0df22ac9f22
+$(PKG)_VERSION  := 2.28
+$(PKG)_CHECKSUM := 6297433ee120b11b4b0a1c8f3512d7d73501753142ab9e2daa13c5a3edd32a72
 $(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
 $(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ftp.gnu.org/gnu/binutils/$($(PKG)_FILE)
