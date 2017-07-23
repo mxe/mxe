@@ -19,7 +19,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_DISABLE_DOC_OPTS) \
         --target='$(TARGET)' \
         --build='$(BUILD)' \
         --prefix='$(PREFIX)' \
@@ -31,8 +32,8 @@ define $(PKG)_BUILD
         --disable-nls \
         --disable-shared \
         --disable-werror
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
     rm -f $(addprefix $(PREFIX)/$(TARGET)/bin/, ar as dlltool ld ld.bfd nm objcopy objdump ranlib strip)
 endef
