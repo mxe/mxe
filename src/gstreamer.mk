@@ -23,10 +23,7 @@ define $(PKG)_BUILD
         --disable-debug \
         --disable-check \
         --disable-tests \
-        --disable-examples \
-        --mandir='$(BUILD_DIR)/sink' \
-        --docdir='$(BUILD_DIR)/sink' \
-        --with-html-dir='$(BUILD_DIR)/sink'
+        --disable-examples
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

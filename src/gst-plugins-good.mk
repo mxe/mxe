@@ -23,10 +23,7 @@ define $(PKG)_BUILD
         --disable-examples \
         --disable-aalib \
         $(if $(BUILD_SHARED), --disable-shout2) \
-        --disable-x \
-        --mandir='$(BUILD_DIR)/sink' \
-        --docdir='$(BUILD_DIR)/sink' \
-        --with-html-dir='$(BUILD_DIR)/sink'
+        --disable-x
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) CFLAGS='-DWAVE_FORMAT_DOLBY_AC3_SPDIF=0x0092'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install CFLAGS='-DWAVE_FORMAT_DOLBY_AC3_SPDIF=0x0092'
 

@@ -18,10 +18,7 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --disable-debug \
         --disable-examples \
-        --disable-opengl \
-        --mandir='$(BUILD_DIR)/sink' \
-        --docdir='$(BUILD_DIR)/sink' \
-        --with-html-dir='$(BUILD_DIR)/sink'
+        --disable-opengl
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

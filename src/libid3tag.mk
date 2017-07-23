@@ -17,13 +17,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    # configure script is ancient so regenerate
+    touch '$(SOURCE_DIR)'/{NEWS,AUTHORS,ChangeLog}
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
-
-    # libtool misses some dependency libs and there's no lt_cv* etc. options
-    # can be removed after 0.15.1b if recent libtool et al. is used
-    $(if $(BUILD_SHARED),\
-        $(SED) -i 's#^postdeps=""#postdeps="-lz"#g' '$(1)/libtool')
-
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install LDFLAGS='-no-undefined'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS='-no-undefined'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
