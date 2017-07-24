@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-glibtest \
         --disable-cups \
@@ -29,7 +29,12 @@ define $(PKG)_BUILD
         --disable-man \
         --with-included-immodules \
         --enable-win32-backend
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) EXTRA_DIST=
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT) EXTRA_DIST=
+
+    # cleanup to avoid gtk2/3 conflicts (EXTRA_DIST doesn't exclude it)
+    # and *.def files aren't really relevant for MXE
+    rm -f '$(PREFIX)/$(TARGET)/lib/gailutil.def'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
