@@ -138,7 +138,7 @@
     "lensfun": {"version": "0.3.2", "website": "https://lensfun.sourceforge.io/", "description": ""},
     "levmar": {"version": "2.6", "website": "https://www.ics.forth.gr/~lourakis/levmar", "description": ""},
     "libaacs": {"version": "0.8.1", "website": "https://www.videolan.org/developers/libaacs.html", "description": ""},
-    "libarchive": {"version": "3.1.2", "website": "https://www.libarchive.org/", "description": "Libarchive"},
+    "libarchive": {"version": "3.3.2", "website": "https://www.libarchive.org/", "description": "Libarchive"},
     "libass": {"version": "0.13.1", "website": "https://code.google.com/p/libass/", "description": ""},
     "libbluray": {"version": "0.9.2", "website": "https://www.videolan.org/developers/libbluray.html", "description": ""},
     "libbs2b": {"version": "3.1.0", "website": "https://bs2b.sourceforge.io/", "description": "Bauer Stereophonic-to-Binaural library"},
