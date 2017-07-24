@@ -5,8 +5,8 @@ PKG             := libbiosig
 $(PKG)_WEBSITE  := http://biosig.sf.net/
 $(PKG)_DESCR    := libbiosig
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.5
-$(PKG)_CHECKSUM := 9fa7a50ab032dcf21b941e93c21b43a7b75f5ffc38a02b5bddc65b8bd33e2aea
+$(PKG)_VERSION  := 1.8.6
+$(PKG)_CHECKSUM := adf1a11260c23c2bf3e6cf89f0344d87ac4e2cc96af931a9670cc87425cd675d
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
@@ -33,14 +33,15 @@ define $(PKG)_BUILD_PRE
 
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' clean
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' \
-		libbiosig.a libbiosig2.a libgdf.a  libphysicalunits.a \
-		libbiosig.def libbiosig2.def libgdf.def libphysicalunits.def
+		libbiosig.a libgdf.a  libphysicalunits.a \
+		libbiosig.def libgdf.def libphysicalunits.def
 
 endef
 
 define $(PKG)_BUILD_POST
 
     $(INSTALL) -m644 '$(1)/biosig.h'             '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/biosig2.h'            '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/gdftime.h'            '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/biosig-dev.h'         '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/libbiosig.a'          '$(PREFIX)/$(TARGET)/lib/'
@@ -53,11 +54,6 @@ define $(PKG)_BUILD_POST
     $(INSTALL) -m644 '$(1)/libgdf.dll.a' 	 '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libgdf.dll'	 	 '$(PREFIX)/$(TARGET)/lib/'
 
-    $(INSTALL) -m644 '$(1)/biosig2.h'            '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m644 '$(1)/libbiosig2.a'         '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/libbiosig2.def' 	 '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/libbiosig2.dll.a' 	 '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/libbiosig2.dll'	 '$(PREFIX)/$(TARGET)/lib/'
 
     $(INSTALL) -m644 '$(1)/physicalunits.h'      '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/libphysicalunits.a'   '$(PREFIX)/$(TARGET)/lib/'
@@ -72,7 +68,6 @@ define $(PKG)_BUILD_POST
     cd $(PREFIX)/$(TARGET) && zip $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip \
 		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h  \
 		lib/libbiosig.a lib/libbiosig.def lib/libbiosig.dll lib/libbiosig.dll.a \
-		lib/libbiosig2.a lib/libbiosig2.def lib/libbiosig2.dll lib/libbiosig2.dll.a \
 		lib/libgdf.a lib/libgdf.def lib/libgdf.dll lib/libgdf.dll.a \
 		lib/libz.a lib/libcholmod.a lib/liblapack.a lib/libiconv.a lib/libiberty.a  \
 		include/libiberty/*.h include/iconv.h \
@@ -89,7 +84,6 @@ define $(PKG)_BUILD_POST
     mkdir -p $(PREFIX)/release/$(TARGET)/lib/
     cd $(PREFIX)/$(TARGET) && cp -r \
 		lib/libbiosig.a lib/libbiosig.def lib/libbiosig.dll lib/libbiosig.dll.a \
-		lib/libbiosig2.a lib/libbiosig2.def lib/libbiosig2.dll lib/libbiosig2.dll.a \
 		lib/libgdf.a lib/libgdf.def lib/libgdf.dll lib/libgdf.dll.a \
 		lib/libz.a lib/libcholmod.a lib/liblapack.a lib/libiconv.a lib/libiberty.a  \
 		lib/libphysicalunits.a lib/libphysicalunits.def lib/libphysicalunits.dll lib/libphysicalunits.dll.a \
@@ -107,7 +101,6 @@ define $(PKG)_BUILD_POST
     ### these cause problems when compiling stimfit
     rm -rf '$(PREFIX)/$(TARGET)/lib/libphysicalunits.dll.a' \
 	'$(PREFIX)/$(TARGET)/lib/libbiosig.dll.a' \
-	'$(PREFIX)/$(TARGET)/lib/libbiosig2.dll.a' \
 	'$(PREFIX)/$(TARGET)/lib/libgdf.dll.a'
 
 endef
