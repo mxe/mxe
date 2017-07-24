@@ -33,10 +33,10 @@ define $(PKG)_BUILD
 
     # now the cross compilation
     mkdir '$(1).cross_build'
-    cd '$(1).cross_build' && '$(TARGET)-cmake' \
+    cd '$(1).cross_build' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
         -DVTKCompileTools_DIR='$(1).native_build' \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
+        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DVTK_Group_Qt=ON \
         -DVTK_Group_Imaging=ON \
         -DVTK_QT_VERSION=$($(PKG)_QT_VERSION) \
@@ -52,9 +52,9 @@ define $(PKG)_BUILD
         -DVTK_FORBID_DOWNLOADS=ON \
         -DVTK_USE_SYSTEM_LIBHARU=ON \
         -DBUILD_EXAMPLES=OFF \
-        -DBUILD_TESTING=OFF \
-        '$(1)'
-    $(MAKE) -C '$(1).cross_build' -j '$(JOBS)' VERBOSE=1 install
+        -DBUILD_TESTING=OFF
+    $(MAKE) -C '$(1).cross_build' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(1).cross_build' -j 1 install VERBOSE=1
 
     #now build the GUI -> Qt -> SimpleView Example
     mkdir '$(1).test'
