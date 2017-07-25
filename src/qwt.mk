@@ -8,6 +8,7 @@ $(PKG)_CHECKSUM := 027c32c0473a682c1db5b9cb02ebed5e39a4fbb0afd2306e23b1113c30006
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_QT_DIR   := qt5
 $(PKG)_DEPS     := gcc qtbase qtsvg
 
 define $(PKG)_UPDATE
@@ -21,11 +22,11 @@ define $(PKG)_BUILD
         echo "QWT_CONFIG -= QwtDll" >> '$(1)/qwtconfig.pri')
 
     # build
-    cd '$(1)/src' && $(PREFIX)/$(TARGET)/qt5/bin/qmake
+    cd '$(1)/src' && $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake
     $(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
 
     #build sinusplot example to test linkage
-    cd '$(1)/examples/sinusplot' && $(PREFIX)/$(TARGET)/qt5/bin/qmake
+    cd '$(1)/examples/sinusplot' && $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake
     $(MAKE) -C '$(1)/examples/sinusplot' -f 'Makefile.Release' -j '$(JOBS)'
 
     # install
