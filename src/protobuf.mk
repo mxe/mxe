@@ -10,7 +10,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/google/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc googlemock googletest zlib
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS_$(BUILD) := googlemock googletest
+$(PKG)_DEPS_$(BUILD) := googlemock googletest libtool
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, google/protobuf, v)
