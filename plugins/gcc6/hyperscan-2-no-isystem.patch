@@ -1,0 +1,32 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1ceff6d..a4f227f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -65,7 +65,7 @@ endif()
+ set(CMAKE_INCLUDE_CURRENT_DIR 1)
+ include_directories(${PROJECT_SOURCE_DIR}/src)
+ include_directories(${PROJECT_BINARY_DIR})
+-include_directories(SYSTEM include)
++include_directories(${PROJECT_SOURCE_DIR}/include)
+ 
+ set(BOOST_USE_STATIC_LIBS OFF)
+ set(BOOST_USE_MULTITHREADED OFF)
+@@ -355,12 +355,12 @@ CHECK_CXX_COMPILER_FLAG("-Wunused-variable" CXX_WUNUSED_VARIABLE)
+ 
+ endif()
+ 
+-if (NOT XCODE)
+-    include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+-else()
+-    # cmake doesn't think Xcode supports isystem
+-    set(EXTRA_CXX_FLAGS "${EXTRA_CXX_FLAGS} -isystem ${Boost_INCLUDE_DIRS}")
+-endif()
++# if (NOT XCODE)
++#     include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
++# else()
++#     # cmake doesn't think Xcode supports isystem
++#     set(EXTRA_CXX_FLAGS "${EXTRA_CXX_FLAGS} -isystem ${Boost_INCLUDE_DIRS}")
++# endif()
+ 
+ 
+ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
