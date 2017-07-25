@@ -21,21 +21,18 @@ endef
 
 define $(PKG)_BUILD
     # first we need a native build to create the compile tools
-    mkdir '$(1).native_build'
-    cd '$(1).native_build' && '$(PREFIX)/$(BUILD)/bin/cmake' \
+    mkdir '$(BUILD_DIR).native'
+    cd '$(BUILD_DIR).native' && '$(PREFIX)/$(BUILD)/bin/cmake' '$(SOURCE_DIR)' \
         -DBUILD_TESTING=FALSE \
-        -DCMAKE_BUILD_TYPE="Release" \
-        '$(1)'
-    $(MAKE) -C '$(1).native_build' -j '$(JOBS)' VERBOSE=1 vtkCompileTools
+        -DCMAKE_BUILD_TYPE="Release"
+    $(MAKE) -C '$(BUILD_DIR).native' -j '$(JOBS)' VERBOSE=1 vtkCompileTools
 
     # DirectX is detected on Mac OSX but we use OpenGL
     $(SED) -i 's,d3d9,nod3d9,g' '$(1)/CMake/FindDirectX.cmake'
 
     # now the cross compilation
-    mkdir '$(1).cross_build'
-    cd '$(1).cross_build' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DVTKCompileTools_DIR='$(1).native_build' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DVTKCompileTools_DIR='$(BUILD_DIR).native' \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DVTK_Group_Qt=ON \
         -DVTK_Group_Imaging=ON \
@@ -53,14 +50,13 @@ define $(PKG)_BUILD
         -DVTK_USE_SYSTEM_LIBHARU=ON \
         -DBUILD_EXAMPLES=OFF \
         -DBUILD_TESTING=OFF
-    $(MAKE) -C '$(1).cross_build' -j '$(JOBS)' VERBOSE=1
-    $(MAKE) -C '$(1).cross_build' -j 1 install VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
     #now build the GUI -> Qt -> SimpleView Example
-    mkdir '$(1).test'
-    cd '$(1).test' && '$(TARGET)-cmake' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        '$(1)/Examples/GUI/Qt/SimpleView'
-    $(MAKE) -C '$(1).test' -j '$(JOBS)' VERBOSE=1
-    $(INSTALL) '$(1).test/SimpleView.exe' $(PREFIX)/$(TARGET)/bin/test-$(PKG).exe
+    mkdir '$(BUILD_DIR).test'
+    cd '$(BUILD_DIR).test' && '$(TARGET)-cmake' \
+        '$(SOURCE_DIR)/Examples/GUI/Qt/SimpleView'
+    $(MAKE) -C '$(BUILD_DIR).test' -j '$(JOBS)' VERBOSE=1
+    $(INSTALL) '$(BUILD_DIR).test/SimpleView.exe' $(PREFIX)/$(TARGET)/bin/test-$(PKG).exe
 endef
