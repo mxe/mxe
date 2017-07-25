@@ -15,6 +15,7 @@ define $(PKG)_BUILD
     # -DCMAKE_C_FLAGS="-march=core2" -DCMAKE_CXX_FLAGS="-march=core2"
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
         -DRAGEL='$(PREFIX)/$(BUILD)/bin/ragel' \
+        -DMXE_DISABLE_INCLUDE_SYSTEM_FLAG=TRUE \
         '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
