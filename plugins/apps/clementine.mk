@@ -1,23 +1,15 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
-# lconvert and lupdate are not provided by MXE for Qt4,
-# so for Debian/Ubuntu you need install packages qt4-linguist-tools
-# (this package contains lupdate and lrelease) and qt4-dev-tools
-# (this package contains lconvert):
-# apt-get install qt4-linguist-tools qt4-dev-tools
-# Or you may use lupdate, lrelease, lconvert from Qt5:
-# apt-get install qttools5-dev-tools
-
-PKG             := clementine_qt4
+PKG             := clementine
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := f885931a9ab7c88607d07b50c64fcce46fc05f13dd2c0a04188c94eff938f37c
-$(PKG)_GH_CONF  := clementine-player/Clementine
+$(PKG)_VERSION  := fbc2f78
+$(PKG)_CHECKSUM := ed26f77c41869cbb054a0ca33cc5bb98b5d8cf5ff248ca3ab188b896fb16cc7c
+$(PKG)_GH_CONF  := clementine-player/Clementine/qt5
 $(PKG)_WEBSITE  := https://www.clementine-player.org/
 $(PKG)_OWNER    := https://github.com/pavelvat
 $(PKG)_DEPS     := gcc boost chromaprint cryptopp fftw glew gst-libav gst-plugins-bad \
-                   gst-plugins-good gst-plugins-ugly libechonest liblastfm_qt4 \
-                   libmpcdec protobuf qtsparkle_qt4 sparsehash
+                   gst-plugins-good gst-plugins-ugly liblastfm \
+                   libmpcdec protobuf qtsparkle sparsehash
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
@@ -67,8 +59,11 @@ define $(PKG)_BUILD
         $(INSTALL) '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/libgstwavparse.dll'          '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/gstreamer-plugins'
 
         $(INSTALL) -d '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/imageformats'
-        $(INSTALL) '$(PREFIX)/$(TARGET)/qt/plugins/imageformats/qgif4.dll'  '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/imageformats'
-        $(INSTALL) '$(PREFIX)/$(TARGET)/qt/plugins/imageformats/qjpeg4.dll' '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/imageformats'
+        $(INSTALL) '$(PREFIX)/$(TARGET)/qt5/plugins/imageformats/qgif.dll'  '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/imageformats'
+        $(INSTALL) '$(PREFIX)/$(TARGET)/qt5/plugins/imageformats/qjpeg.dll' '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/imageformats'
+
+        $(INSTALL) -d '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/platforms'
+        $(INSTALL) '$(PREFIX)/$(TARGET)/qt5/plugins/platforms/qwindows.dll' '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/platforms'
 
         '$(TOP_DIR)/tools/copydlldeps.sh' -c \
                                           -d '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin' \
@@ -80,5 +75,4 @@ define $(PKG)_BUILD
     )
 endef
 
-# libechonest doesn't support static builds
 $(PKG)_BUILD_STATIC =
