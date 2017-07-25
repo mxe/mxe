@@ -1,0 +1,13 @@
+diff --git a/SDL_sound.h b/SDL_sound.h
+index b0b8c97..81c1446 100644
+--- a/SDL_sound.h
++++ b/SDL_sound.h
+@@ -114,7 +114,7 @@ typedef enum
+         /* these are set during decoding... */
+     SOUND_SAMPLEFLAG_EOF     = 1 << 29, /**< End of input stream. */
+     SOUND_SAMPLEFLAG_ERROR   = 1 << 30, /**< Unrecoverable error. */
+-    SOUND_SAMPLEFLAG_EAGAIN  = 1 << 31  /**< Function would block, or temp error. */
++    SOUND_SAMPLEFLAG_EAGAIN  = (int)(1u << 31)  /**< Function would block, or temp error. */
+ } Sound_SampleFlags;
+ 
+ 
