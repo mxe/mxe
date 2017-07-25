@@ -101,3 +101,24 @@ index 1111111..2222222
 +)
 +echo. >> %LOG_FILE%
 +echo Total tests: !TEST_COUNT!  Total Failed: !FAIL_COUNT! Total Passed: !PASS_COUNT!>> %LOG_FILE%
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Bunkus <moritz@bunkus.org>
+Date: Tue, 25 Jul 2017 16:46:33 +1000
+Subject: [PATCH] perl cwd not in inc anymore
+
+
+diff --git a/runtest.pl b/runtest.pl
+index 1111111..2222222 100755
+--- a/runtest.pl
++++ b/runtest.pl
+@@ -1,5 +1,9 @@
+ #!/usr/bin/env perl
+ 
++BEGIN {
++  unshift @INC, '.';
++}
++
+ # runtest [options] FILENAME
+ #
+ # Read the file FILENAME. Each line contains a test.
