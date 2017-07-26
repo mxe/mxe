@@ -14,6 +14,7 @@ $(PKG)_DEPS     := cc boost gmp mpfr qtbase
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DMXE_DISABLE_INCLUDE_SYSTEM_FLAG=TRUE \
         -DCGAL_INSTALL_CMAKE_DIR:STRING="lib/CGAL" \
         -DCGAL_INSTALL_INC_DIR:STRING="include" \
         -DCGAL_INSTALL_DOC_DIR:STRING="share/doc/CGAL-$($(PKG)_VERSION)" \
@@ -27,12 +28,16 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     mkdir '$(BUILD_DIR).test-tree'
-    cd '$(BUILD_DIR).test-tree' && '$(TARGET)-cmake' '$(SOURCE_DIR)/examples/AABB_tree'
+    cd '$(BUILD_DIR).test-tree' && '$(TARGET)-cmake' '$(SOURCE_DIR)/examples/AABB_tree' \
+        -DMXE_DISABLE_INCLUDE_SYSTEM_FLAG=TRUE \
+        -DCMAKE_CXX_STANDARD=98
     $(MAKE) -C '$(BUILD_DIR).test-tree' -j $(JOBS)
     $(INSTALL) '$(BUILD_DIR).test-tree/AABB_polyhedron_edge_example.exe' '$(PREFIX)/$(TARGET)/bin/test-cgal.exe'
 
     mkdir '$(BUILD_DIR).test-image'
-    cd '$(BUILD_DIR).test-image' && '$(TARGET)-cmake' '$(SOURCE_DIR)/examples/CGALimageIO'
+    cd '$(BUILD_DIR).test-image' && '$(TARGET)-cmake' '$(SOURCE_DIR)/examples/CGALimageIO' \
+        -DMXE_DISABLE_INCLUDE_SYSTEM_FLAG=TRUE \
+        -DCMAKE_CXX_STANDARD=98
     $(MAKE) -C '$(BUILD_DIR).test-image' -j $(JOBS)
     $(INSTALL) '$(BUILD_DIR).test-image/convert_raw_image_to_inr.exe' '$(PREFIX)/$(TARGET)/bin/test-cgalimgio.exe'
 endef
