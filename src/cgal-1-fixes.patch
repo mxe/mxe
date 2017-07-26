@@ -1,0 +1,37 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 26 Jul 2017 18:34:16 +1000
+Subject: [PATCH] link examples with boost libraries
+
+
+diff --git a/cmake/modules/CGAL_CreateSingleSourceCGALProgram.cmake b/cmake/modules/CGAL_CreateSingleSourceCGALProgram.cmake
+index 1111111..2222222 100644
+--- a/cmake/modules/CGAL_CreateSingleSourceCGALProgram.cmake
++++ b/cmake/modules/CGAL_CreateSingleSourceCGALProgram.cmake
+@@ -1,6 +1,8 @@
+ include(CGAL_add_test)
+ include(CMakeParseArguments)
+ 
++find_package(Boost COMPONENTS system thread REQUIRED)
++
+ function(create_single_source_cgal_program firstfile )
+   set(options NO_TESTING)
+   set(oneValueArgs)
+@@ -61,11 +63,11 @@ function(create_single_source_cgal_program firstfile )
+     # Link the executable to CGAL and third-party libraries
+     if ( CGAL_AUTO_LINK_ENABLED )
+ 
+-      target_link_libraries(${exe_name} ${CGAL_3RD_PARTY_LIBRARIES} )
++      target_link_libraries(${exe_name} ${CGAL_3RD_PARTY_LIBRARIES} ${Boost_LIBRARIES} )
+ 
+     else()
+ 
+-      target_link_libraries(${exe_name} ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
++      target_link_libraries(${exe_name} ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} ${Boost_LIBRARIES} )
+ 
+     endif()
+   else()
