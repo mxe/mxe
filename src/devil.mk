@@ -10,6 +10,8 @@ $(PKG)_GH_CONF  := DentonW/DevIL/master
 $(PKG)_DEPS     := gcc freeglut jasper jpeg lcms libmng libpng openexr sdl tiff zlib
 
 define $(PKG)_BUILD
+    # for some reason, patching fails with EOL issues
+    $(SED) -i 's,resources\\\\,./resources/,' '$(SOURCE_DIR)/DevIL/src-IL/msvc/IL.rc'
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)/DevIL' \
         -DIL_TESTS=OFF \
         -DCMAKE_CXX_FLAGS="-D__STDC_LIMIT_MACROS"

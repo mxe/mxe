@@ -57,20 +57,10 @@ From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 20 Jul 2017 16:34:51 +1000
 Subject: [PATCH] fix resource paths
 
+DevIL/src-IL/msvc/IL.rc has wierd EOL issues and patches don't
+apply - use $(SED) in build rule instead
 
-diff --git a/DevIL/src-IL/msvc/IL.rc b/DevIL/src-IL/msvc/IL.rc
-index 1111111..2222222 100644
---- a/DevIL/src-IL/msvc/IL.rc
-+++ b/DevIL/src-IL/msvc/IL.rc
-@@ -69,7 +69,7 @@ END
- 
- // Icon with lowest ID value placed first to ensure application icon
- // remains consistent on all systems.
--IDI_ICON1               ICON                    "resources\\IL Logo.ico"
-+IDI_ICON1               ICON                    "./resources/IL Logo.ico"
- 
- #ifdef APSTUDIO_INVOKED
- /////////////////////////////////////////////////////////////////////////////
+
 diff --git a/DevIL/src-ILU/msvc/ILU.rc b/DevIL/src-ILU/msvc/ILU.rc
 index 1111111..2222222 100644
 --- a/DevIL/src-ILU/msvc/ILU.rc
