@@ -45,3 +45,50 @@ index 1111111..2222222 100644
  #endif
  #include <windows.h>
  #elif OS(QNX)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Konstantin Tokarev <annulen@yandex.ru>
+Date: Fri, 4 Nov 2016 00:44:49 +0300
+Subject: [PATCH] Fixed crash (probably miscompilation) with MinGW-w64 5.3.0
+
+Change-Id: Iac1c5fe1879abfaa299ec909e5928912c2354126
+
+taken from:
+https://github.com/Martchus/PKGBUILDs/blob/c7b900625449ba7f00539d4e23d2500765bc6f9a/qt5-webkit/mingw-w64/0009-Fixed-crash-probably-miscompilation-with-MinGW-w64-5.patch
+
+diff --git a/Source/WebKit/qt/WidgetApi/qwebframe.cpp b/Source/WebKit/qt/WidgetApi/qwebframe.cpp
+index 1111111..2222222 100644
+--- a/Source/WebKit/qt/WidgetApi/qwebframe.cpp
++++ b/Source/WebKit/qt/WidgetApi/qwebframe.cpp
+@@ -119,16 +119,6 @@ QWebFrameAdapter* QWebFramePrivate::createChildFrame(QWebFrameData* frameData)
+     return newFrame->d;
+ }
+ 
+-QWebFrame *QWebFramePrivate::apiHandle()
+-{
+-    return q;
+-}
+-
+-QObject *QWebFramePrivate::handle()
+-{
+-    return q;
+-}
+-
+ void QWebFramePrivate::contentsSizeDidChange(const QSize &size)
+ {
+     emit q->contentsSizeChanged(size);
+diff --git a/Source/WebKit/qt/WidgetApi/qwebframe_p.h b/Source/WebKit/qt/WidgetApi/qwebframe_p.h
+index 1111111..2222222 100644
+--- a/Source/WebKit/qt/WidgetApi/qwebframe_p.h
++++ b/Source/WebKit/qt/WidgetApi/qwebframe_p.h
+@@ -49,8 +49,8 @@ public:
+     static QWebFrame* kit(const QWebFrameAdapter*);
+ 
+     // Adapter implementation
+-    virtual QWebFrame* apiHandle() OVERRIDE;
+-    virtual QObject* handle() OVERRIDE;
++    virtual QWebFrame* apiHandle() OVERRIDE { return q; }
++    virtual QObject* handle() OVERRIDE { return q; }
+     virtual void contentsSizeDidChange(const QSize &) OVERRIDE;
+     virtual int scrollBarPolicy(Qt::Orientation) const OVERRIDE;
+     virtual void emitUrlChanged() OVERRIDE;
