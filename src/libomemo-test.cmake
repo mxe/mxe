@@ -9,14 +9,14 @@ add_executable(${TGT} ${CMAKE_CURRENT_LIST_DIR}/${PKG}-test.c)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLIB2 glib-2.0)
+pkg_check_modules(MXML mxml)
 
 include_directories(${GLIB2_INCLUDE_DIRS})
 target_link_libraries(${TGT} omemo-conversations
-                             mxml
+                             ${MXML_LIBRARIES}
                              gcrypt
                              gpg-error
                              pthread
                              ${GLIB2_LIBRARIES})
 
 install(TARGETS ${TGT} DESTINATION bin)
-
