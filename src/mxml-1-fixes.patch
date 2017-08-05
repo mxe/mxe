@@ -1,0 +1,197 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 1 Apr 2017 14:47:54 +1100
+Subject: [PATCH] Add minimal cmake-based build
+
+Allows support for cross-compiling both static and shared libs. Tested
+using [MXE](mxe.cc) with:
+`{i686-w64-mingw32,x86_64-w64-mingw32}.{static,shared}`
+
+Closes #188
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 1111111..2222222
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,74 @@
++cmake_minimum_required(VERSION 3.1)
++project(mxml C)
++
++set(VERSION_MAJOR 2)
++set(VERSION_MINOR 11)
++set(SO_VERSION 1)
++set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}")
++set(VERSION_H "Mini-XML v${VERSION_MAJOR}.${VERSION_MINOR}")
++
++option(ENABLE_THREADS ON)
++if(ENABLE_THREADS)
++    set(CMAKE_THREAD_PREFER_PTHREAD ON)
++    find_package(Threads REQUIRED)
++    set(HAVE_PTHREAD_H ON)
++endif()
++
++include(CheckFunctionExists)
++check_function_exists(snprintf  HAVE_SNPRINTF)
++check_function_exists(vasprintf HAVE_VASPRINTF)
++check_function_exists(vsnprintf HAVE_VSNPRINTF)
++check_function_exists(strdup    HAVE_STRDUP)
++check_function_exists(strlcpy   HAVE_STRLCPY)
++
++include(CheckTypeSize)
++check_type_size("long long" LONG_LONG)
++
++include_directories("${PROJECT_SOURCE_DIR}")
++include_directories("${CMAKE_CURRENT_BINARY_DIR}")
++
++set(SOURCES mxml-attr.c
++            mxml-entity.c
++            mxml-file.c
++            mxml-get.c
++            mxml-index.c
++            mxml-node.c
++            mxml-search.c
++            mxml-set.c
++            mxml-private.c
++            mxml-string.c
++)
++
++add_library(mxml ${SOURCES})
++set_target_properties(mxml PROPERTIES
++     SOVERSION ${SO_VERSION})
++
++if(WIN32 AND BUILD_SHARED_LIBS)
++    set(PC_LIB_NAME mxml-${SO_VERSION})
++    set_target_properties(mxml PROPERTIES
++         OUTPUT_NAME ${PC_LIB_NAME})
++else()
++    set(PC_LIB_NAME mxml)
++endif()
++
++if(ENABLE_THREADS)
++    target_link_libraries(mxml Threads::Threads)
++endif()
++
++set(prefix ${CMAKE_INSTALL_PREFIX})
++set(exec_prefix "\$\{prefix\}")
++set(libdir "\$\{exec_prefix\}/lib")
++set(includedir "\$\{prefix\}/include")
++set(PC_LIBS "-L\$\{libdir\} -l${PC_LIB_NAME}")
++set(PTHREAD_LIBS ${CMAKE_THREAD_LIBS_INIT})
++set(PC_CFLAGS "-I\$\{includedir\} ${CMAKE_C_FLAGS}")
++set(PTHREAD_FLAGS "")
++
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/mxml.pc.in ${CMAKE_CURRENT_BINARY_DIR}/mxml.pc)
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
++
++install(FILES "mxml.h" DESTINATION include)
++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/mxml.pc" DESTINATION lib/pkgconfig)
++install(TARGETS mxml
++        DESTINATION lib
++        RUNTIME DESTINATION bin)
+diff --git a/config.h.cmake.in b/config.h.cmake.in
+new file mode 100644
+index 1111111..2222222
+--- /dev/null
++++ b/config.h.cmake.in
+@@ -0,0 +1,96 @@
++/*
++ * Configuration file for Mini-XML, a small XML file parsing library.
++ *
++ * Copyright 2003-2017 by Michael R Sweet.
++ *
++ * These coded instructions, statements, and computer programs are the
++ * property of Michael R Sweet and are protected by Federal copyright
++ * law.  Distribution and use rights are outlined in the file "COPYING"
++ * which should have been included with this file.  If this file is
++ * missing or damaged, see the license at:
++ *
++ *     https://michaelrsweet.github.io/mxml
++ */
++
++/*
++ * Include necessary headers...
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <stdarg.h>
++#include <ctype.h>
++
++
++/*
++ * Version number...
++ */
++
++#define MXML_VERSION	"@VERSION_H@"
++
++
++/*
++ * Inline function support...
++ */
++
++#define inline
++
++
++/*
++ * Long long support...
++ */
++
++#cmakedefine HAVE_LONG_LONG
++
++
++/*
++ * Do we have the *printf() functions?
++ */
++
++#cmakedefine HAVE_SNPRINTF
++#cmakedefine HAVE_VASPRINTF
++#cmakedefine HAVE_VSNPRINTF
++
++
++/*
++ * Do we have the strXXX() functions?
++ */
++
++#cmakedefine HAVE_STRDUP
++#cmakedefine HAVE_STRLCPY
++
++
++/*
++ * Do we have threading support?
++ */
++
++#cmakedefine HAVE_PTHREAD_H
++
++
++/*
++ * Define prototypes for string functions as needed...
++ */
++
++#  ifndef HAVE_STRDUP
++extern char	*_mxml_strdup(const char *);
++#    define strdup _mxml_strdup
++#  endif /* !HAVE_STRDUP */
++
++#  ifndef HAVE_STRLCPY
++extern size_t	_mxml_strlcpy(char *, const char *, size_t);
++#    define strlcpy _mxml_strlcpy
++#  endif /* !HAVE_STRLCPY */
++
++extern char	*_mxml_strdupf(const char *, ...);
++extern char	*_mxml_vstrdupf(const char *, va_list);
++
++#  ifndef HAVE_SNPRINTF
++extern int	_mxml_snprintf(char *, size_t, const char *, ...);
++#    define snprintf _mxml_snprintf
++#  endif /* !HAVE_SNPRINTF */
++
++#  ifndef HAVE_VSNPRINTF
++extern int	_mxml_vsnprintf(char *, size_t, const char *, va_list);
++#    define vsnprintf _mxml_vsnprintf
++#  endif /* !HAVE_VSNPRINTF */
