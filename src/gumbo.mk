@@ -19,14 +19,6 @@ define $(PKG)_BUILD
         sbin_PROGRAMS= \
         noinst_PROGRAMS=
 
-    # create pkg-config files
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    (echo 'Name: $(PKG)'; \
-     echo 'Version: $($(PKG)_VERSION)'; \
-     echo 'Description: Gumbo, an HTML5 parsing library'; \
-     echo 'Libs: -lgumbo';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
-
     # compile test
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
