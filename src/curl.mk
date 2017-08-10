@@ -4,10 +4,10 @@ PKG             := curl
 $(PKG)_WEBSITE  := https://curl.haxx.se/libcurl/
 $(PKG)_DESCR    := cURL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.54.1
-$(PKG)_CHECKSUM := 2b7af34d4900887e0b4e0a9f545b9511ff774d07151ae4976485060d3e1bdb6e
+$(PKG)_VERSION  := 7.55.0
+$(PKG)_CHECKSUM := cdd58522f8607fd4e871df79d73acb3155075e2134641e5adab12a0962df059d
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
-$(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.lzma
+$(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://curl.haxx.se/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gnutls libidn2 libssh2
 
