@@ -9,7 +9,7 @@ Subject: [PATCH] fix pkg-config
 
 
 diff --git a/build/pkgconfig/libarchive.pc.in b/build/pkgconfig/libarchive.pc.in
-index 1111111..2222222 100644
+index 95d7159..8288f31 100644
 --- a/build/pkgconfig/libarchive.pc.in
 +++ b/build/pkgconfig/libarchive.pc.in
 @@ -8,4 +8,4 @@ Description: library that can create and read several streaming archive formats
@@ -18,17 +18,30 @@ index 1111111..2222222 100644
  Libs: -L${libdir} -larchive
 -Libs.private: @LIBS@
 +Libs.private: @LIBS@ -liconv
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tim Kientzle <kientzle@acm.org>
-Date: Sun, 16 Jul 2017 16:10:08 -0700
-Subject: [PATCH] Issue #924: fix capitalization of bcrypt.h header
-
-taken from:
-https://github.com/libarchive/libarchive/commit/06052e47e500ef4c8c937c4c8b987433a647cb4c
-
+diff --git a/libarchive/archive_cryptor.c b/libarchive/archive_cryptor.c
+index ced52fd..7fbd67d 100644
+--- a/libarchive/archive_cryptor.c
++++ b/libarchive/archive_cryptor.c
+@@ -57,7 +57,7 @@ pbkdf2_sha1(const char *pw, size_t pw_len, const uint8_t *salt,
+ 	return 0;
+ }
+ 
+-#elif defined(_WIN32) && !defined(__CYGWIN__) && defined(HAVE_BCRYPT_H)
++#elif 0 && defined(_WIN32) && !defined(__CYGWIN__) && defined(HAVE_BCRYPT_H)
+ #ifdef _MSC_VER
+ #pragma comment(lib, "Bcrypt.lib")
+ #endif
+@@ -85,7 +85,7 @@ pbkdf2_sha1(const char *pw, size_t pw_len, const uint8_t *salt,
+ 	return (BCRYPT_SUCCESS(status)) ? 0: -1;
+ }
+ 
+-#elif defined(HAVE_LIBNETTLE) && defined(HAVE_NETTLE_PBKDF2_H)
++#elif 0 && defined(HAVE_LIBNETTLE) && defined(HAVE_NETTLE_PBKDF2_H)
+ 
+ static int
+ pbkdf2_sha1(const char *pw, size_t pw_len, const uint8_t *salt,
 diff --git a/libarchive/archive_cryptor_private.h b/libarchive/archive_cryptor_private.h
-index 1111111..2222222 100644
+index 0ca544b..b975922 100644
 --- a/libarchive/archive_cryptor_private.h
 +++ b/libarchive/archive_cryptor_private.h
 @@ -64,7 +64,7 @@ typedef struct {
