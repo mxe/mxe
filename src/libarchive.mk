@@ -19,10 +19,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(if $(BUILD_STATIC),\
-        $(SED) -i '1i#ifndef LIBARCHIVE_STATIC\n#define LIBARCHIVE_STATIC\n#endif' -i '$(1)/libarchive/archive.h'
-        $(SED) -i '1i#ifndef LIBARCHIVE_STATIC\n#define LIBARCHIVE_STATIC\n#endif' -i '$(1)/libarchive/archive_entry.h')
-
     # use nettle instead of bcrypt for CNG(Crypto Next Generation)
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
@@ -38,5 +34,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libarchive.exe' \
-        `'$(TARGET)-pkg-config' --libs-only-l libarchive`
+        `'$(TARGET)-pkg-config' --libs-only-l --cflags libarchive`
 endef
