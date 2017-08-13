@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         $(SED) -i '1i#ifndef LIBARCHIVE_STATIC\n#define LIBARCHIVE_STATIC\n#endif' -i '$(1)/libarchive/archive_entry.h')
 
     # use nettle instead of bcrypt for CNG(Crypto Next Generation)
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-bsdtar \
         --disable-bsdcpio \
@@ -32,8 +32,8 @@ define $(PKG)_BUILD
         --without-cng \
         --with-nettle \
         XML2_CONFIG='$(PREFIX)/$(TARGET)'/bin/xml2-config
-    $(MAKE) -C '$(1)' -j '$(JOBS)' man_MANS=
-    $(MAKE) -C '$(1)' -j 1 install man_MANS=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' man_MANS=
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install man_MANS=
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
