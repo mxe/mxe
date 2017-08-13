@@ -20,23 +20,21 @@ index 1111111..2222222 100644
 +Libs.private: @LIBS@ -liconv
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tim Kientzle <kientzle@acm.org>
-Date: Sun, 16 Jul 2017 16:10:08 -0700
-Subject: [PATCH] Issue #924: fix capitalization of bcrypt.h header
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 13 Aug 2017 14:38:47 +1000
+Subject: [PATCH] libarchive.pc.in: add Cflags.private for static linking
 
 taken from:
-https://github.com/libarchive/libarchive/commit/06052e47e500ef4c8c937c4c8b987433a647cb4c
+https://github.com/libarchive/libarchive/pull/934
 
-diff --git a/libarchive/archive_cryptor_private.h b/libarchive/archive_cryptor_private.h
+diff --git a/build/pkgconfig/libarchive.pc.in b/build/pkgconfig/libarchive.pc.in
 index 1111111..2222222 100644
---- a/libarchive/archive_cryptor_private.h
-+++ b/libarchive/archive_cryptor_private.h
-@@ -64,7 +64,7 @@ typedef struct {
- } archive_crypto_ctx;
- 
- #elif defined(_WIN32) && !defined(__CYGWIN__) && defined(HAVE_BCRYPT_H)
--#include <Bcrypt.h>
-+#include <bcrypt.h>
- 
- /* Common in other bcrypt implementations, but missing from VS2008. */
- #ifndef BCRYPT_SUCCESS
+--- a/build/pkgconfig/libarchive.pc.in
++++ b/build/pkgconfig/libarchive.pc.in
+@@ -7,5 +7,6 @@ Name: libarchive
+ Description: library that can create and read several streaming archive formats
+ Version: @VERSION@
+ Cflags: -I${includedir}
++Cflags.private: -DLIBARCHIVE_STATIC
+ Libs: -L${libdir} -larchive
+ Libs.private: @LIBS@ -liconv
