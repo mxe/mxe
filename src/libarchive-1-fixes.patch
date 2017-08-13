@@ -19,24 +19,3 @@ index 1111111..2222222 100644
 -Libs.private: @LIBS@
 +Libs.private: @LIBS@ -liconv
 
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tim Kientzle <kientzle@acm.org>
-Date: Sun, 16 Jul 2017 16:10:08 -0700
-Subject: [PATCH] Issue #924: fix capitalization of bcrypt.h header
-
-taken from:
-https://github.com/libarchive/libarchive/commit/06052e47e500ef4c8c937c4c8b987433a647cb4c
-
-diff --git a/libarchive/archive_cryptor_private.h b/libarchive/archive_cryptor_private.h
-index 1111111..2222222 100644
---- a/libarchive/archive_cryptor_private.h
-+++ b/libarchive/archive_cryptor_private.h
-@@ -64,7 +64,7 @@ typedef struct {
- } archive_crypto_ctx;
- 
- #elif defined(_WIN32) && !defined(__CYGWIN__) && defined(HAVE_BCRYPT_H)
--#include <Bcrypt.h>
-+#include <bcrypt.h>
- 
- /* Common in other bcrypt implementations, but missing from VS2008. */
- #ifndef BCRYPT_SUCCESS
