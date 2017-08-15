@@ -30,7 +30,6 @@ see also:
 https://gitlab.kitware.com/cmake/cmake/issues/16291
 https://gitlab.kitware.com/cmake/cmake/issues/16919
 
-
 diff --git a/Modules/Compiler/GNU.cmake b/Modules/Compiler/GNU.cmake
 index 1111111..2222222 100644
 --- a/Modules/Compiler/GNU.cmake
@@ -44,3 +43,25 @@ index 1111111..2222222 100644
      set(CMAKE_INCLUDE_SYSTEM_FLAG_${lang} "-isystem ")
    endif()
  endmacro()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 15 Aug 2017 15:25:06 +1000
+Subject: [PATCH] add CPACK_NSIS_EXECUTABLE variable
+
+
+diff --git a/Source/CPack/cmCPackNSISGenerator.cxx b/Source/CPack/cmCPackNSISGenerator.cxx
+index 1111111..2222222 100644
+--- a/Source/CPack/cmCPackNSISGenerator.cxx
++++ b/Source/CPack/cmCPackNSISGenerator.cxx
+@@ -384,7 +384,9 @@ int cmCPackNSISGenerator::InitializeInternal()
+   }
+ #endif
+ 
+-  nsisPath = cmSystemTools::FindProgram("makensis", path, false);
++  this->SetOptionIfNotSet("CPACK_NSIS_EXECUTABLE", "makensis");
++  nsisPath = cmSystemTools::FindProgram(
++    this->GetOption("CPACK_NSIS_EXECUTABLE"), path, false);
+ 
+   if (nsisPath.empty()) {
+     cmCPackLogger(

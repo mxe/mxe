@@ -36,6 +36,8 @@ define $(PKG)_BUILD
         -DINPUT='$(PWD)/src/cmake/conf/target-cmake.in' \
         -DOUTPUT='$(PREFIX)/bin/$(TARGET)-cmake'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-cmake'
+
+    ln -sf '$(PREFIX)/$(BUILD)/bin/cpack' '$(PREFIX)/bin/$(TARGET)-cpack'
 endef
 
 define $(PKG)_BUILD_$(BUILD)
