@@ -1,25 +1,27 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From dc0cb681cde6899b40923570c29adcf1c20c54cb Mon Sep 17 00:00:00 2001
+From 9aad92fdf482f1a38360559586db9ee2df5d9fc4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 6 Aug 2015 20:41:14 +0200
-Subject: [PATCH] fix undefined reference to `__imp_CreateRectRgn'
+Date: Sun, 29 Jan 2017 20:27:29 +0100
+Subject: [PATCH] build fix for MXE
 
-Change-Id: I707d168173b210034e3dff9580388fb630d858f8
+Needed for the shared build. In the static build, gdi32 is probably brought in as a transitive dependency.
+
+Change-Id: Ic0b1ab49cfb04559823c7446bda197b34ea15f54
 
 diff --git a/src/winextras/winextras.pro b/src/winextras/winextras.pro
-index 7f6bba4..835b2e7 100644
+index 5d93c6b..4c423b0 100644
 --- a/src/winextras/winextras.pro
 +++ b/src/winextras/winextras.pro
-@@ -47,7 +47,7 @@ QMAKE_DOCS = $$PWD/doc/qtwinextras.qdocconf
+@@ -45,7 +45,7 @@ HEADERS += \
  
- DEFINES += NTDDI_VERSION=0x06010000 _WIN32_WINNT=0x0601
- LIBS_PRIVATE += -lole32 -lshlwapi -lshell32
--win32:!qtHaveModule(opengl)|contains(QT_CONFIG, dynamicgl):LIBS_PRIVATE += -lgdi32
-+win32:shared|!qtHaveModule(opengl)|contains(QT_CONFIG, dynamicgl):LIBS_PRIVATE += -lgdi32
+ QMAKE_DOCS = $$PWD/doc/qtwinextras.qdocconf
+ 
+-LIBS_PRIVATE += -lole32 -lshlwapi -lshell32 -ldwmapi
++LIBS_PRIVATE += -lole32 -lshlwapi -lshell32 -ldwmapi -lgdi32
+ win32:!qtHaveModule(opengl)|qtConfig(dynamicgl):LIBS_PRIVATE += -lgdi32
  
  OTHER_FILES += \
-     doc/qtwinextras.qdocconf \
 -- 
-2.1.4
+2.9.3
 

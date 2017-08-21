@@ -4,8 +4,8 @@ PKG             := go
 $(PKG)_WEBSITE  := https://golang.org/
 $(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.2
-$(PKG)_CHECKSUM := 787b0b750d037016a30c6ed05a8a70a91b2e9db4bd9b1a2453aa502a63f1bccc
+$(PKG)_VERSION  := 1.8
+$(PKG)_CHECKSUM := 406865f587b44be7092f206d73fc1de252600b79b3cacc587b74b5ef5c623596
 $(PKG)_SUBDIR   := go
 $(PKG)_FILE     := go$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://storage.googleapis.com/golang/$($(PKG)_FILE)
@@ -13,7 +13,7 @@ $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://golang.org/dl/' | \
-    $(SED) -n 's,.*go\(1.6.[0-9][^>]*\)\.src\.tar.*,\1,p' | \
+    $(SED) -n 's,.*go\(1.[0-9][^>]*\)\.src\.tar.*,\1,p' | \
     $(SORT) -h | tail -1
 endef
 
@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         DYLD_INSERT_LIBRARIES= \
         ./make.bash
 
+    rm -rf '$(PREFIX)/$(TARGET)/go'
     mkdir -p '$(PREFIX)/$(TARGET)/go'
     for d in include src bin pkg; do \
         cp -a '$(1)'/$$d '$(PREFIX)/$(TARGET)/go/' ; \

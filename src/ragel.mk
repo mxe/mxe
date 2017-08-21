@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ragel
+$(PKG)_WEBSITE  := https://www.colm.net/open-source/ragel/
+$(PKG)_DESCR    := Ragel
 $(PKG)_IGNORE   := 7%
 $(PKG)_VERSION  := 6.9
 $(PKG)_CHECKSUM := 6e07be0fab5ca1d9c2d9e177718a018fc666141f594a5d6e7025658620cf660a

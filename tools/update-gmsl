@@ -2,7 +2,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 #
 # Script to automatically update GNU Make Standard Library
-# (http://gmsl.sourceforge.net/)
+# (https://gmsl.sourceforge.io/)
 
 clean(){
     rm -rf tmp-gmsl.tar.gz gmsl-*
@@ -15,7 +15,7 @@ current_version=$(grep 'gmsl_version.*=' 'ext/__gmsl' | \
                   cut -d'=' -f2 | $SED -e 's/^ //' -e 's/ *$//' | tr ' ' '.')
 # Latest GMSL version fetched from SourceForge
 latest_version=$(
-    $WGET -q -O- http://sourceforge.net/projects/gmsl/files/GNU%20Make%20Standard%20Library/ | \
+    $WGET -q -O- https://sourceforge.net/projects/gmsl/files/GNU%20Make%20Standard%20Library/ | \
     $SED -n 's,.*/v\([0-9][^"]*\)/".*,\1,p' | \
     $SORT -V | \
     tail -1)
@@ -24,7 +24,7 @@ clean
 if [ $current_version != $latest_version ]; then
     echo "New version found: $current_version --> $latest_version"
     $WGET -q -O tmp-gmsl.tar.gz \
-        "http://downloads.sourceforge.net/project/gmsl/GNU%20Make%20Standard%20Library/v${latest_version}/gmsl-${latest_version}.tar.gz"
+        "https://downloads.sourceforge.net/project/gmsl/GNU%20Make%20Standard%20Library/v${latest_version}/gmsl-${latest_version}.tar.gz"
     tar xzf tmp-gmsl.tar.gz
     rm -f ext/*gmsl docs/gmsl*
     cp -a gmsl-${latest_version}/gmsl ext/

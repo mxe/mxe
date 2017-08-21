@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := isl
+$(PKG)_WEBSITE  := http://isl.gforge.inria.fr/
+$(PKG)_DESCR    := Integer Set Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.12.2
-$(PKG)_CHECKSUM := f4b3dbee9712850006e44f0db2103441ab3d13b406f77996d1df19ee89d11fb4
+$(PKG)_VERSION  := 0.15
+$(PKG)_CHECKSUM := 8ceebbf4d9a81afa2b4449113cee4b7cb14a687d7a549a963deb5e2a41458b6b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://isl.gforge.inria.fr/$($(PKG)_FILE)
@@ -15,7 +17,7 @@ $(PKG)_DEPS_$(BUILD) := gmp
 
 # stick to tested versions from gcc
 # while in gcc4 series specific versions are required:
-# http://web.archive.org/web/20141031011459/http://gcc.gnu.org/install/prerequisites.html
+# https://web.archive.org/web/20141031011459/https://gcc.gnu.org/install/prerequisites.html
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'ftp://gcc.gnu.org/pub/gcc/infrastructure/' | \
     $(SED) -n 's,.*isl-\([0-9][^>]*\)\.tar.*,\1,p' | \

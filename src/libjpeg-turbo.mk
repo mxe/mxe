@@ -1,16 +1,17 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libjpeg-turbo
+$(PKG)_WEBSITE  := http://libjpeg-turbo.virtualgl.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.0
-$(PKG)_CHECKSUM := 9f397c31a67d2b00ee37597da25898b03eb282ccd87b135a50a69993b6a2035f
+$(PKG)_VERSION  := 1.5.1
+$(PKG)_CHECKSUM := 41429d3d253017433f66e3d472b8c7d998491d2f41caa7306b8d9a6f2a2c666c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc yasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/$(PKG)/files/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/$(PKG)/files/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

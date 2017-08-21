@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libsodium
+$(PKG)_WEBSITE  := https://download.libsodium.org/doc/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.6
 $(PKG)_CHECKSUM := 940d03ea7d2caa7940e24564bf6d9f66d6edd1df1e0111ff8e3655f3b864fb59

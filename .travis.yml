@@ -1,9 +1,13 @@
+dist: trusty
 language: c
 sudo: false
 
 script:
-  - make docs/build-matrix.html docs/versions.json
+  - make docs/build-matrix.html docs/packages.json OS_SHORT_NAME=disable-native-plugins
   - if [ "$GH_TOKEN" != "" ]; then ./tools/travis-push.sh; fi
+  # Package wxwidgets is downloaded for more than 10 minutes,
+  # Travis failed because of no output for 10 minutes.
+  - while true; do sleep 60; echo -n ' '; done &
   - make download -j 6 -k MXE_PLUGIN_DIRS="$(./tools/plugins-with-additional-packages.sh)"
 
 env:

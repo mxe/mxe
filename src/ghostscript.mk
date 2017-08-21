@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ghostscript
+$(PKG)_WEBSITE  := https://www.ghostscript.com/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 9.19
 $(PKG)_NODOTVER := $(subst .,,$($(PKG)_VERSION))
@@ -11,7 +12,7 @@ $(PKG)_URL      := https://github.com/ArtifexSoftware/ghostpdl-downloads/release
 $(PKG)_DEPS     := gcc dbus fontconfig freetype lcms libiconv libidn libjpeg-turbo libpaper libpng openjpeg tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ghostscript.com/Releases.html' | \
+    $(WGET) -q -O- 'https://ghostscript.com/Releases.html' | \
     $(SED) -n 's:.*GPL_Ghostscript_::p' | \
     $(SED) -n 's:\.html.*::p'
 endef

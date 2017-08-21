@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := poco
+$(PKG)_WEBSITE  := https://pocoproject.org/
+$(PKG)_DESCR    := POCO C++ Libraries
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.4.7p1
 $(PKG)_CHECKSUM := 7037cc465744bf2fa73aca9cea14d1207f040de5ea8073dc266b06a73b3db8df
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := http://pocoproject.org/releases/$(PKG)-$(word 1,$(subst p, ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
+$(PKG)_URL      := https://pocoproject.org/releases/$(PKG)-$(word 1,$(subst p, ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc expat openssl pcre sqlite zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://pocoproject.org/download/' | \
+    $(WGET) -q -O- 'https://pocoproject.org/download/' | \
     $(SED) -n 's,.*poco-\([0-9][^>/]*\)\.tar.*,\1,p' | \
     head -1
 endef

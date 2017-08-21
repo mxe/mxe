@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := polarssl
+$(PKG)_WEBSITE  := https://polarssl.org/
+$(PKG)_DESCR    := Polar SSL Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.9
 $(PKG)_CHECKSUM := d3605afc28ed4b7d1d9e3142d72e42855e4a23c07c951bbb0299556b02d36755
@@ -21,8 +23,7 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+    cd '$(1)/build' && '$(TARGET)-cmake' .. \
         -DUSE_STATIC_POLARSSL_LIBRARY=$(CMAKE_STATIC_BOOL) \
         -DUSE_SHARED_POLARSSL_LIBRARY=$(CMAKE_SHARED_BOOL) \
         -DENABLE_TESTING=OFF \

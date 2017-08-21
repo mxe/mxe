@@ -6,7 +6,7 @@
  * Copyright (c) 2013 Andrew Kelley
  *
  * This file is part of liblaxjson, which is MIT licensed.
- * See http://opensource.org/licenses/MIT
+ * See https://opensource.org/licenses/MIT
  */
 
 #include <laxjson.h>

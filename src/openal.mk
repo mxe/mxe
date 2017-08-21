@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openal
+$(PKG)_WEBSITE  := http://kcat.strangesoft.net/openal.html
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.16.0
 $(PKG)_CHECKSUM := 2f3dcd313fe26391284fbf8596863723f99c65d6c6846dccb48e79cadaf40d5f
@@ -17,9 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/build' && cmake .. \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DLIBTYPE=$(if $(BUILD_SHARED),SHARED,STATIC) \
+    cd '$(1)/build' && '$(TARGET)-cmake' .. \
         -DALSOFT_EXAMPLES=FALSE \
         -DALSOFT_UTILS=FALSE
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install

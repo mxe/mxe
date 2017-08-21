@@ -1,30 +1,25 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libharu
+$(PKG)_WEBSITE  := http://libharu.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.1
-$(PKG)_CHECKSUM := 45fd57044042c0e290ad0f11fc19eeb31b50c4b9edadf9d89dd5a7d9ae4865a7
-$(PKG)_SUBDIR   := libharu-$($(PKG)_VERSION)
-$(PKG)_FILE     := libharu-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://libharu.org/files/$($(PKG)_FILE)
+$(PKG)_VERSION  := 2.3.0
+$(PKG)_CHECKSUM := 8f9e68cc5d5f7d53d1bc61a1ed876add1faf4f91070dbc360d8b259f46d9a4d2
+$(PKG)_GH_CONF  := libharu/libharu,RELEASE_,,,_
 $(PKG)_DEPS     := gcc libpng zlib
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/libharu/libharu/tags' | \
-    $(SED) -n 's,.*/archive/RELEASE_\([0-9][^"]*\)\.tar.*,\1,p' | \
-    $(SED) 's,_,.,g' | \
-    grep -v 'RC' | \
-    head -1
-endef
-
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
-        --with-zlib='$(PREFIX)/$(TARGET)' \
-        --with-png='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
-endef
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DCMAKE_C_FLAGS=$(if $(BUILD_STATIC),,-DHPDF_DLL_MAKE) \
+        -DLIBHPDF_SHARED=$(CMAKE_SHARED_BOOL) \
+        -DLIBHPDF_STATIC=$(CMAKE_STATIC_BOOL) \
+        -DDEVPAK=ON
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
-$(PKG)_BUILD_SHARED =
+    $(TARGET)-gcc -o $(PREFIX)/$(TARGET)/bin/test-$(PKG).exe \
+        $(if $(BUILD_STATIC),,-DHPDF_DLL) \
+        '$(1)/demo/slide_show_demo.c' \
+        $(if $(BUILD_STATIC),'-lhpdfs','-lhpdf') \
+        `$(TARGET)-pkg-config libpng zlib --libs`
+endef

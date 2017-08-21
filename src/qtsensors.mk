@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtsensors
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 283dcc66a24c4367e865fa8301b6ea04d0cb78bd0f166fd09a6bb42e1e3731be
+$(PKG)_CHECKSUM := 5af19397aa8ccd88c1fbb7cda4ee2a583f05bdf8ae090eb616bb276ff2e9e29c
 $(PKG)_SUBDIR    = $(subst qtbase,qtsensors,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtsensors,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtsensors,$(qtbase_URL))

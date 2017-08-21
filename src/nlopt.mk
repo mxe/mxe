@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := nlopt
+$(PKG)_WEBSITE  := http://ab-initio.mit.edu/wiki/index.php/NLopt
+$(PKG)_DESCR    := NLopt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.4.2
 $(PKG)_CHECKSUM := 8099633de9d71cbc06cd435da993eb424bbcdbded8f803cdaa9fb8c6e09c8e89

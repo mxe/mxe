@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := glew
+$(PKG)_WEBSITE  := https://glew.sourceforge.io/
+$(PKG)_DESCR    := GLEW
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.12.0
 $(PKG)_CHECKSUM := af58103f4824b443e7fa4ed3af593b8edac6f3a7be3b30911edbc7344f48e4bf
 $(PKG)_SUBDIR   := glew-$($(PKG)_VERSION)
 $(PKG)_FILE     := glew-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/glew/glew/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/glew/glew/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/glew/files/glew/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/glew/files/glew/' | \
     $(SED) -n 's,.*/\([0-9][^A-Za-z"]*\)/".*,\1,p' | \
     head -1
 endef

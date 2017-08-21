@@ -8,7 +8,7 @@ GCC 6.1 is released with a number of major changes
 > been defaulting to previously, for compiling older `C++` code that might
 > require either explicitly compiling with selected older `C++` standards,
 > or might require some code adjustment, see
-> [[3](http://gcc.gnu.org/gcc-6/porting_to.html)]
+> [[3](https://gcc.gnu.org/gcc-6/porting_to.html)]
 > for details.
 
 So it is expected that some of MXE packages will fails to build from source
@@ -49,7 +49,7 @@ versions [[4](https://github.com/mxe/mxe/commit/a1cc019)].
 | gtkmm2             | static (all)                            | -                                                    |
 | gtkmm3             | static (all)                            | -                                                    |
 | guile              | i686-w64-mingw32.static (all)           | -                                                    |
-| itk                | all                                     | -                                                    |
+| itk                | all                                     | [55e9bba](https://github.com/mxe/mxe/commit/55e9bba) |
 | jsoncpp            | all                                     | [0bc73f7](https://github.com/mxe/mxe/commit/0bc73f7) |
 | json_spirit        | all                                     | -                                                    |
 | librsvg            | all                                     | -                                                    |

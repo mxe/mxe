@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libass
+$(PKG)_WEBSITE  := https://code.google.com/p/libass/
 $(PKG)_IGNORE   :=
 # remove autoreconf step after 0.13.1
 # https://github.com/libass/libass/issues/209

@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pcl
+$(PKG)_WEBSITE  := http://www.pointclouds.org/
+$(PKG)_DESCR    := PCL (Point Cloud Library)
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.0
 $(PKG)_CHECKSUM := 9e54b0c1b59a67a386b9b0f4acb2d764272ff9a0377b825c4ed5eedf46ebfcf4
@@ -26,10 +28,8 @@ define $(PKG)_BUILD
     mkdir '$(1).build'
     cd '$(1).build' && \
         CXXFLAGS="-D__FLOAT_H -DFLT_MAX=__FLT_MAX__ -DFLT_MIN=__FLT_MIN__ -DDBL_MAX=__DBL_MAX__ -DDBL_MIN=__DBL_MIN__ -DDBL_EPSILON=__DBL_EPSILON__" \
-        cmake '$(1)' \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        '$(TARGET)-cmake' '$(1)' \
         -DVTK_DIR='$(PREFIX)/$(TARGET)/lib/vtk-5.8' \
-        -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_RELEASE_POSTFIX='' \
         -DBoost_THREADAPI=win32 \
         -DPCL_SHARED_LIBS=OFF \
@@ -38,6 +38,7 @@ define $(PKG)_BUILD
         -DBUILD_examples=OFF \
         -DBUILD_global_tests=OFF \
         -DBUILD_tools=OFF \
+        -DWITH_CUDA=OFF \
         -DWITH_PCAP=OFF \
         -DHAVE_MM_MALLOC_EXITCODE=0 \
         -DHAVE_SSE4_2_EXTENSIONS_EXITCODE=0 \

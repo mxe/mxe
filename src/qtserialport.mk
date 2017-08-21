@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtserialport
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 5ce150d843a243854736489d4a71205a8ca8dc8f93626ec29d1aa7a249a08265
+$(PKG)_CHECKSUM := e1fe85bf292929c3a62cb4d21efaaa4e89f70f48ea10914da07d0670ec617a69
 $(PKG)_SUBDIR    = $(subst qtbase,qtserialport,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtserialport,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtserialport,$(qtbase_URL))

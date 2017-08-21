@@ -1,5 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 PKG             := qtsystems
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4e3a7ed
 $(PKG)_CHECKSUM := 710d2b80f9125fb03fdb67dd6f3c4dd51396981e812fd4a3ea99b1b1290853e5

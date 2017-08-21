@@ -221,20 +221,26 @@ if [ ! -z "$excludepattern" ]; then
 		excludePattern+=" ! -path *$( echo "$curString" | tr -d ' ' )* "
 	done
 fi
-if [ "$loglevel" -gt 1]; then
+if [ "$loglevel" -gt 1 ]; then
 	echo "\$excluePattern: $excludePattern"
 fi
 
 str_inputFileList=""
 if [ "$indir" ]; then
 	for curPath in $( echo "${indir}" | tr -s ' ' | tr ' ' '\n' ); do
-		curList=$( find $curPath -iregex '.*\(dll\|exe\)' | tr '\n' ' ' )
+	if [ `uname -s` == "Darwin" ]; then
+		curList=$( find $curPath -iname *.exe -or -iname *.dll | tr '\n' ' '  )
+		else curList=$( find $curPath -iregex '.*\(dll\|exe\)' | tr '\n' ' ' )
+	fi
 		str_inputFileList+=" $curList"
 	done
 fi
 if [ "$infile" ]; then
 	for curFile in $( echo "${infile}" | tr -s ' ' | tr ' ' '\n' ); do
-		curString=$( find $curFile -iregex '.*\(dll\|exe\)' | tr '\n' ' ' )
+	if [ `uname -s` == "Darwin" ]; then
+		curString=$( find $curPath -iname *.exe -or -iname *.dll | tr '\n' ' '  )
+		else curString=$( find $curPath -iregex '.*\(dll\|exe\)' | tr '\n' ' ' )
+	fi
 		str_inputFileList+=" $curString"
 	done
 fi
@@ -352,14 +358,20 @@ process_enforced_deps(){
 	# if we would do this file recursively, we should loop to find those and append them all to the list
 	str_srcDirList+=" $enforcedDirectory"
 	# now we search for the dll and exe files to be included
-	string=$( find $enforcedDirectory -maxdepth 1 -iregex '.*\(dll\|exe\)' | tr '\n' ' ' )
+	if [ `uname -s` == "Darwin" ]; then
+		string=$( find $enforcedDirectory -maxdepth 1 -iname *.exe -or -iname *.dll | tr '\n' ' ' )
+		else string=$( find $enforcedDirectory -maxdepth 1 -iregex '.*\(dll\|exe\)' | tr '\n' ' ' )
+	fi
 	if [ "$loglevel" -gt 1 ]; then
 		echo "enforcedDirectory=$enforcedDirectory"
 		echo "we found dlls and exes:$string"
 		sleep 4
 	fi
 	# we hard copy it to DEST
-	cp -dpRxv "${enforcedDirectory}" "$destdir"
+	if [ `uname -s` == "Darwin" ]; then
+		cp -av "${enforcedDirectory}" "$destdir"
+		else cp -dpRxv "${enforcedDirectory}" "$destdir"
+	fi
 }
 
 # beginning of the main function
@@ -414,7 +426,11 @@ for dll in $( echo $alldeps | tr '\n' ' ' ); do
 			if [ -e "${curFolder}/${curDll}" ]; then
 				counter=$( expr $counter + 1 )
 				if [ $opmode == "copy" ]; then
-					cp -dpRxv "${curFolder}/${curDll}" "$destdir"
+					if [ `uname -s` == "Darwin" ]; then
+						cp -av "${curFolder}/${curDll}" "$destdir"
+					else cp -dpRxv "${curFolder}/${curDll}" "$destdir"
+					fi
+					
 				elif [ $opmode == "print" ]; then
 					echo "found $dll in: ${curFolder}/${curDll}"
 				else

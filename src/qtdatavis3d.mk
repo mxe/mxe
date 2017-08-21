@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtdatavis3d
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 9a5d7a383dce211a904bca3b8b6054bb448148ca07cede2bd46d255de016e8a2
+$(PKG)_CHECKSUM := 233cab90fa35c926717bf697e7259b4e5bc7af6a26183657b006dac80fc0a191
 $(PKG)_SUBDIR    = $(subst qtbase,qtdatavis3d,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtdatavis3d,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtdatavis3d,$(qtbase_URL))

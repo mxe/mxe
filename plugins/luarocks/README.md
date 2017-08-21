@@ -87,8 +87,8 @@ See also:
   * [LuaRocks wiki][wiki]
   * [the thread in MXE mailing list about LuaRocks in MXE][thread]
 
-[lua]:http://lua.org/
+[lua]:https://lua.org/
 [luarocks]:https://luarocks.org/
 [backends]:https://github.com/keplerproject/luarocks/wiki/Rockspec-format#Build_backends
 [wiki]:https://github.com/keplerproject/luarocks/wiki/
-[thread]:http://lists.nongnu.org/archive/html/mingw-cross-env-list/2015-10/msg00008.html
+[thread]:https://lists.nongnu.org/archive/html/mingw-cross-env-list/2015-10/msg00008.html

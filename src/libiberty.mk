@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libiberty
+$(PKG)_WEBSITE  := https://gcc.gnu.org/onlinedocs/libiberty/
 $(PKG)_IGNORE    = $(binutils_IGNORE)
 $(PKG)_VERSION   = $(binutils_VERSION)
 $(PKG)_CHECKSUM  = $(binutils_CHECKSUM)

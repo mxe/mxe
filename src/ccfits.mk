@@ -1,28 +1,27 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ccfits
+$(PKG)_WEBSITE  := https://heasarc.gsfc.nasa.gov/fitsio/ccfits
+$(PKG)_DESCR    := CCfits
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4
-$(PKG)_CHECKSUM := ba6c5012b260adf7633f92581279ea582e331343d8c973981aa7de07242bd7f8
+$(PKG)_VERSION  := 2.5
+$(PKG)_CHECKSUM := 938ecd25239e65f519b8d2b50702416edc723de5f0a5387cceea8c4004a44740
 $(PKG)_SUBDIR   := CCfits
 $(PKG)_FILE     := CCfits-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/fitsio/CCfits/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc cfitsio
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "http://heasarc.gsfc.nasa.gov/docs/software/fitsio/ccfits/" | \
+    $(WGET) -q -O- "https://heasarc.gsfc.nasa.gov/docs/software/fitsio/ccfits/" | \
     grep -i '<a href="CCfits.*tar' | \
     $(SED) -n 's,.*CCfits-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --with-cfitsio='$(PREFIX)/$(TARGET)'
-
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
 
 $(PKG)_BUILD_SHARED =

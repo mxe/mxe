@@ -1,12 +1,13 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := blas
+$(PKG)_WEBSITE  := http://www.netlib.org/blas/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.5.0
 $(PKG)_CHECKSUM := ef7d775d380f255d1902bce374ff7c8a594846454fcaeae552292168af1aca24
 $(PKG)_SUBDIR   := BLAS-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG).tgz
-$(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.netlib.org/404
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE

@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := tinyxml2
+$(PKG)_WEBSITE  := http://grinninglizard.com/tinyxml2/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.0.1
 $(PKG)_CHECKSUM := 14b38ef25cc136d71339ceeafb4856bb638d486614103453eccd323849267f20
@@ -16,10 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-        -DBUILD_STATIC_LIBS=$(CMAKE_STATIC_BOOL) \
-        '$(SOURCE_DIR)'
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

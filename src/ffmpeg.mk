@@ -1,13 +1,13 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ffmpeg
+$(PKG)_WEBSITE  := https://ffmpeg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.1
-$(PKG)_CHECKSUM := a5bca50a90a37b983eaa17c483a387189175f37ca678ae7e51d43e7610b4b3b4
+$(PKG)_VERSION  := 3.3.2
+$(PKG)_CHECKSUM := 216900d5c0af9017bb8f76b0ad23f0ac53cf7fc618cf04b40d989bd99b088e6a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://launchpad.net/ffmpeg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
+$(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libbs2b libcaca \
                    libvpx opencore-amr opus sdl speex theora vidstab \
                    vo-amrwbenc vorbis x264 xvidcore yasm zlib
@@ -18,7 +18,7 @@ $(PKG)_DEPS     := gcc bzip2 gnutls lame libass libbluray libbs2b libcaca \
 # See docs/index.html#potential-legal-issues
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://ffmpeg.org/releases/' | \
+    $(WGET) -q -O- 'https://ffmpeg.org/releases/' | \
     $(SED) -n 's,.*ffmpeg-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'alpha\|beta\|rc\|git' | \
     $(SORT) -Vr | \
@@ -37,7 +37,6 @@ define $(PKG)_BUILD
             --disable-static --enable-shared ) \
         --yasmexe='$(TARGET)-yasm' \
         --disable-debug \
-        --enable-memalign-hack \
         --disable-pthreads \
         --enable-w32threads \
         --disable-doc \

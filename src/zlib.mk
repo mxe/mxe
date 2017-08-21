@@ -1,19 +1,20 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := zlib
+$(PKG)_WEBSITE  := https://zlib.net/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.8
-$(PKG)_CHECKSUM := 831df043236df8e9a7667b9e3bb37e1fcb1220a0f163b6de2626774b9590d057
+$(PKG)_VERSION  := 1.2.11
+$(PKG)_CHECKSUM := 4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066
 $(PKG)_SUBDIR   := zlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := zlib-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://zlib.net/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://$(SOURCEFORGE_MIRROR)/project/libpng/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://zlib.net/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://$(SOURCEFORGE_MIRROR)/project/libpng/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://zlib.net/' | \
+    $(WGET) -q -O- 'https://zlib.net/' | \
     $(SED) -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,ip' | \
     head -1
 endef

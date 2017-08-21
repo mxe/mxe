@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
 import shutil
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     not_found_dlls = set()
 
     # Create a list of all available .dll files in the libdir directories
-    # Flattening list: http://stackoverflow.com/questions/952914
+    # Flattening list: https://stackoverflow.com/questions/952914
     for libdir in [item for sublist in args.libdirs for item in sublist]:
         for dll_filename in os.listdir(libdir):
             dll_filename_full = os.path.join(libdir, dll_filename)
@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
     # Create a list of initial dependencies (dlls_to_copy) and already copied
     # DLLs (copied_dlls) from the checkdir arguments.
-    # Flattening list: http://stackoverflow.com/questions/952914
+    # Flattening list: https://stackoverflow.com/questions/952914
     for checkdir in [item for sublist in args.checkdirs for item in sublist]:
         for pe_filename in os.listdir(checkdir):
             pe_filename_full = os.path.join(checkdir, pe_filename)

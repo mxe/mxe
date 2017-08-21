@@ -1,16 +1,17 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libssh2
+$(PKG)_WEBSITE  := https://www.libssh2.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.0
-$(PKG)_CHECKSUM := e4561fd43a50539a8c2ceb37841691baf03ecb7daf043766da1b112e4280d584
+$(PKG)_VERSION  := 1.8.0
+$(PKG)_CHECKSUM := 39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af4676d4
 $(PKG)_SUBDIR   := libssh2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh2-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.libssh2.org/download/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.libssh2.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libgcrypt zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.libssh2.org/download/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://www.libssh2.org/download/?C=M;O=D' | \
     grep 'libssh2-' | \
     $(SED) -n 's,.*libssh2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
@@ -23,6 +24,7 @@ define $(PKG)_BUILD
         --disable-examples-build \
         --without-openssl \
         --with-libgcrypt \
+        LIBS="`$(PREFIX)/$(TARGET)/bin/libgcrypt-config --libs`" \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 

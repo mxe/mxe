@@ -2,6 +2,8 @@
 #Author: Julien Michel <julien.michel@orfeo-toolbox.org>
 
 PKG             := openjpeg
+$(PKG)_WEBSITE  := http://www.openjpeg.org/
+$(PKG)_DESCR    := OpenJPEG
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.1.0
 $(PKG)_CHECKSUM := 1232bb814fd88d8ed314c94f0bfebb03de8559583a33abbe8c64ef3fc0a8ff03
@@ -19,9 +21,7 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && cmake \
-        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
-        -DBUILD_SHARED_LIBS=$(if $(BUILD_STATIC),FALSE,TRUE) \
+    cd '$(1).build' && '$(TARGET)-cmake' \
         -DBUILD_TESTING=FALSE \
         '$(1)'
     $(MAKE) -C '$(1).build' install

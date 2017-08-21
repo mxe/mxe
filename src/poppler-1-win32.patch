@@ -98,6 +98,19 @@ index 1111111..2222222 100644
  # define _POPPLER_QT4_LIB_EXPORT __declspec(dllexport)
  # define _POPPLER_QT4_LIB_IMPORT __declspec(dllimport)
  #elif defined(__GNUC__)
+diff --git a/qt5/src/poppler-export.h b/qt5/src/poppler-export.h
+index 1111111..2222222 100644
+--- a/qt5/src/poppler-export.h
++++ b/qt5/src/poppler-export.h
+@@ -2,7 +2,7 @@
+ * This file is used to set the poppler_qt4_EXPORT macros right.
+ * This is needed for setting the visibility on windows, it will have no effect on other platforms.
+ */
+-#if defined(_WIN32)
++#if defined(_WIN32) && defined(DLL_EXPORT)
+ # define _POPPLER_QT5_LIB_EXPORT __declspec(dllexport)
+ # define _POPPLER_QT5_LIB_IMPORT __declspec(dllimport)
+ #elif defined(__GNUC__)
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>

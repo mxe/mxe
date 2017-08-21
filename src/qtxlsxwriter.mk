@@ -1,8 +1,10 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 PKG             := qtxlsxwriter
+$(PKG)_WEBSITE  := https://github.com/dbzhang800/QtXlsxWriter/
+$(PKG)_DESCR    := QtXlsxWriter
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3c474f376d1eb098793c45c2f512b216e696052b
-$(PKG)_CHECKSUM := 9b9dc38ec4817dcc8e720276ea590a5b39f27908b67e8bfdb98b946b2f35ef67
+$(PKG)_VERSION  := 6895d8ba6c3a80768c98539445b124654801e8dd
+$(PKG)_CHECKSUM := fdf6a7c81e1b8f222770471158b067d3aa49dd2de426bd066b346f2c10bebfb9
 $(PKG)_SUBDIR   := QtXlsxWriter-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/VSRonin/QtXlsxWriter/archive/$($(PKG)_VERSION).tar.gz

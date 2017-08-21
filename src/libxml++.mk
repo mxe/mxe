@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libxml++
+$(PKG)_WEBSITE  := https://libxmlplusplus.sourceforge.io/
+$(PKG)_DESCR    := libxml2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.37.2
-$(PKG)_CHECKSUM := bb3e10a2148e90fc61098499a0923b4de786b1dd86466d7ec6255e154baa773b
+$(PKG)_VERSION  := 2.40.1
+$(PKG)_CHECKSUM := 4ad4abdd3258874f61c2e2a41d08e9930677976d303653cd1670d3e9f35463e9
 $(PKG)_SUBDIR   := libxml++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml++-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://ftp.gnome.org/pub/GNOME/sources/libxml++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.gnome.org/sources/libxml++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glibmm libxml2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.gnome.org/browse/libxml++/refs/tags' | \
+    $(WGET) -q -O- 'https://git.gnome.org/browse/libxml++/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1

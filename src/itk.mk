@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := itk
+$(PKG)_WEBSITE  := https://www.itk.org/
+$(PKG)_DESCR    := Insight Segmentation and Registration Toolkit (ITK)
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.8.2
-$(PKG)_CHECKSUM := fec268ba180bdb78d760aa4f6f467d0a5fc71b3a34e3201d8425d0edfa23ef5f
+$(PKG)_VERSION  := 4.10.1
+$(PKG)_CHECKSUM := 334312cc31925fd6c2622c9cd4ed33fecbbbd5b97e03b93f34b259d08352eed7
 $(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc expat hdf5 jpeg libpng tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://itk.org/ITK/resources/software.html' | \
+    $(WGET) -q -O- 'https://itk.org/ITK/resources/software.html' | \
     $(SED) -n 's,.*InsightToolkit-\([0-9][^>]*\)\.tar\.xz.*,\1,p' | \
     $(SORT) -V |
     tail -1
@@ -19,7 +21,6 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1).build'
     cd '$(1).build' && '$(TARGET)-cmake' \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
         -DITK_FORBID_DOWNLOADS=TRUE \
         -DBUILD_TESTING=FALSE \

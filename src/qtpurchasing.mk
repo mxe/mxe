@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtpurchasing
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 7e514a3cb98addd0b1344a69c494afe4546d854d43340760aed00ad0062664b5
+$(PKG)_CHECKSUM := 5a8f270158b901d926086667d9d84eee5f46a7110d4f04cd32edac6cb0a2302c
 $(PKG)_SUBDIR    = $(subst qtbase,qtpurchasing,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtpurchasing,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtpurchasing,$(qtbase_URL))

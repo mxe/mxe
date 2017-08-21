@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtserialbus
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 2c437ace393e9dcf170990b519cec59c5cbcfc3c830e46116abb52549dc15d38
+$(PKG)_CHECKSUM := caa9feefbf1d51b38d6bc923428009d524c0c5eb77f30e4b6d84fec1ce19f3c3
 $(PKG)_SUBDIR    = $(subst qtbase,qtserialbus,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtserialbus,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtserialbus,$(qtbase_URL))

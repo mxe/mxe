@@ -22,9 +22,12 @@ target_link_libraries(
     png
     glib-2.0
     winmm
+    dwmapi
+    uxtheme
     ws2_32
     intl
     iconv
-    pcre16
+    pcre2-16
+    version
     z
 )

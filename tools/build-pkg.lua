@@ -35,7 +35,7 @@ The following error:
 > This may be due to a lack of SYSV IPC support.
 > fakeroot: error while starting the `faked' daemon.
 can be caused by leaked ipc resources originating in fakeroot.
-How to remove them: http://stackoverflow.com/a/4262545
+How to remove them: https://stackoverflow.com/a/4262545
 ]]
 
 local max_items = tonumber(os.getenv('MXE_BUILD_PKG_MAX_ITEMS'))
@@ -58,6 +58,7 @@ local BLACKLIST = {
     '^usr/share/info/',
     '^usr/share/man/',
     '^usr/share/gcc',
+    '^usr/share/gtk-doc',
     '^usr/lib/nonetwork.so',
     '^usr/[^/]+/share/doc/',
     '^usr/[^/]+/share/info/',

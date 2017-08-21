@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gdk-pixbuf
+$(PKG)_WEBSITE  := https://gtk.org/
+$(PKG)_DESCR    := GDK-pixbuf
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.32.3
 $(PKG)_CHECKSUM := 2b6771f1ac72f687a8971e59810b8dc658e65e7d3086bd2e676e618fd541d031
 $(PKG)_SUBDIR   := gdk-pixbuf-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdk-pixbuf-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.gnome.org/sources/gdk-pixbuf/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib jasper jpeg libiconv libpng tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://git.gnome.org/browse/gdk-pixbuf/refs/tags' | \
+    $(WGET) -q -O- 'https://git.gnome.org/browse/gdk-pixbuf/refs/tags' | \
     grep '<a href=' | \
     $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
     grep -v '^2\.9' | \

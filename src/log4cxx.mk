@@ -1,6 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := log4cxx
+$(PKG)_WEBSITE  := https://logging.apache.org/log4cxx/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.10.0
 $(PKG)_CHECKSUM := 0de0396220a9566a580166e66b39674cb40efd2176f52ad2c65486c99c920c8c
@@ -11,19 +12,24 @@ $(PKG)_URL_2    := http://apache.mirror.cdnetworks.com//logging/log4cxx/0.10.0/$
 $(PKG)_DEPS     := gcc apr-util
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://logging.apache.org/log4cxx/download.html' | \
+    $(WGET) -q -O- 'https://logging.apache.org/log4cxx/download.html' | \
     $(SED) -n 's,.*log4cxx-\([0-9.]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
+    # configure script is ancient and isn't easy to regenerate
+    # filter out invalid options
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(subst docdir$(comma),,$(MXE_CONFIGURE_OPTS)) \
         --with-apr='$(PREFIX)/$(TARGET)' \
         --with-apr-util='$(PREFIX)/$(TARGET)' \
         CFLAGS=-D_WIN32_WINNT=0x0500 \
         CXXFLAGS=-D_WIN32_WINNT=0x0500
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
+
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
+
     mkdir -p '$(PREFIX)/$(TARGET)/share/cmake/log4cxx'
     cp '$(1)/log4cxx-config.cmake' '$(PREFIX)/$(TARGET)/share/cmake/log4cxx/log4cxx-config.cmake'
 

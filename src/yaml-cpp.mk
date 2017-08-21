@@ -1,6 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := yaml-cpp
+$(PKG)_WEBSITE  := https://github.com/jbeder/yaml-cpp
+$(PKG)_DESCR    := A YAML parser and emitter for C++
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.5.3
 $(PKG)_CHECKSUM := ac50a27a201d16dc69a881b80ad39a7be66c4d755eda1f76c3a68781b922af8f
@@ -14,10 +16,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-        '$(SOURCE_DIR)'
-
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

@@ -6,14 +6,14 @@ $(PKG)_VERSION  := 2.5.39
 $(PKG)_CHECKSUM := add2b55f3bc38cb512b48fad7d72f43b11ef244487ff25fc00aabec1e32b617f
 $(PKG)_SUBDIR   := flex-$($(PKG)_VERSION)
 $(PKG)_FILE     := flex-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/flex/$($(PKG)_FILE)
-$(PKG)_WEBSITE  := http://flex.sourceforge.net
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/flex/$($(PKG)_FILE)
+$(PKG)_WEBSITE  := https://flex.sourceforge.io/
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/projects/flex/files/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/flex/files/' | \
     grep -i 'flex/files/' | \
     $(SED) -n 's,.*/flex-\([0-9\.]*\)\.tar.*/.*,\1,p' | \
     head -1

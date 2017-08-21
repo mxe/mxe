@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := zziplib
+$(PKG)_WEBSITE  := https://zziplib.sourceforge.io/
+$(PKG)_DESCR    := ZZIPlib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.13.62
 $(PKG)_CHECKSUM := a1b8033f1a1fd6385f4820b01ee32d8eca818409235d22caf5119e0078c7525b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)$(word 2,$(subst ., ,$($(PKG)_VERSION)))/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)$(word 2,$(subst ., ,$($(PKG)_VERSION)))/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://sourceforge.net/p/zziplib/svn/HEAD/tree/tags/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/p/zziplib/svn/HEAD/tree/tags/' | \
     $(SED) -n 's,.*<a href="V_\([0-9][^"]*\)">.*,\1,p' | \
     tr '_' '.' | \
     $(SORT) -V | \

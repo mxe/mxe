@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtwebview
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 801a3faf312fa0235d489c63aa224d477a70cfe1b1ef7803cbe311a8c29e51c4
+$(PKG)_CHECKSUM := d6f77bfa60033561d123b1224679178c956319549666e84d4736c5e109ccbd62
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebview,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebview,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebview,$(qtbase_URL))

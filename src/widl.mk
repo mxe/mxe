@@ -4,6 +4,8 @@
 # avoid downloading Wine's entire tree.
 
 PKG             := widl
+$(PKG)_WEBSITE  := https://www.winehq.org/docs/widl/
+$(PKG)_DESCR    := Wine IDL Compiler
 $(PKG)_IGNORE    = $(mingw-w64_IGNORE)
 $(PKG)_VERSION   = $(mingw-w64_VERSION)
 $(PKG)_CHECKSUM  = $(mingw-w64_CHECKSUM)

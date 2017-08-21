@@ -450,3 +450,23 @@ index 1111111..2222222 100644
  #include "mysys_priv.h"
  #include <process.h>
  #include <signal.h>
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 8 Feb 2017 11:51:42 +1100
+Subject: [PATCH] only define localtime_r and gmtime_r when pthreads isn't used
+
+
+diff --git a/include/my_global.h b/include/my_global.h
+index 1111111..2222222 100644
+--- a/include/my_global.h
++++ b/include/my_global.h
+@@ -629,7 +629,7 @@ enum loglevel {
+ };
+ 
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(_POSIX_THREAD_SAFE_FUNCTIONS)
+ /****************************************************************************
+ ** Replacements for localtime_r and gmtime_r
+ ****************************************************************************/

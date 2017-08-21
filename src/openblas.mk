@@ -1,12 +1,14 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openblas
+$(PKG)_WEBSITE  := http://www.openblas.net/
+$(PKG)_DESCR    := OpenBLAS
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.15
 $(PKG)_CHECKSUM := 73c40ace5978282224e5e122a41c8388c5a19e65a6f2329c2b7c0b61bacc9044
 $(PKG)_SUBDIR   := OpenBLAS-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := http://github.com/xianyi/OpenBLAS/archive/v$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/xianyi/OpenBLAS/archive/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc pthreads
 
 define $(PKG)_UPDATE

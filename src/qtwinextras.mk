@@ -1,9 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtwinextras
+$(PKG)_WEBSITE  := https://www.qt.io/
+$(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 8dabe231a4fdaa74acc2f79a44391a49ef779db8d0acf41cbb29f2c71d9e07ba
+$(PKG)_CHECKSUM := 1acc9ebd85146c75ae8dde20dcf5ffadd04da5d998a452eba055bce10849eef4
 $(PKG)_SUBDIR    = $(subst qtbase,qtwinextras,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwinextras,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwinextras,$(qtbase_URL))

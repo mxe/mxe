@@ -1,16 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := boost
+$(PKG)_WEBSITE  := https://www.boost.org/
+$(PKG)_DESCR    := Boost C++ Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.60.0
 $(PKG)_CHECKSUM := 686affff989ac2488f79a97b9479efb9f2abae035b5ed4d8226de6857933fd3b
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc bzip2 expat zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.boost.org/users/download/' | \
+    $(WGET) -q -O- 'https://www.boost.org/users/download/' | \
     $(SED) -n 's,.*/boost/\([0-9][^"/]*\)/".*,\1,p' | \
     grep -v beta | \
     head -1
@@ -28,7 +30,7 @@ define $(PKG)_BUILD
     cd '$(1)/tools/build/' && ./bootstrap.sh
 
     # cross-build, see b2 options at:
-    # http://www.boost.org/build/doc/html/bbv2/overview/invocation.html
+    # https://www.boost.org/build/doc/html/bbv2/overview/invocation.html
     cd '$(1)' && ./tools/build/b2 \
         -a \
         -q \
@@ -71,7 +73,8 @@ define $(PKG)_BUILD
         -lboost_serialization-mt \
         -lboost_thread_win32-mt \
         -lboost_system-mt \
-        -lboost_chrono-mt
+        -lboost_chrono-mt \
+        -lboost_context-mt
 
     # test cmake
     mkdir '$(1).test-cmake'
