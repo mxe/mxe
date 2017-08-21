@@ -3,11 +3,11 @@
 PKG             := gcc
 $(PKG)_WEBSITE  := https://gcc.gnu.org/
 $(PKG)_DESCR    := GCC
-$(PKG)_IGNORE   := 6%
-$(PKG)_VERSION  := 5.4.0
-$(PKG)_CHECKSUM := 608df76dec2d34de6558249d8af4cbee21eceddbcb580d666f7a5a583ca3303a
+#$(PKG)_IGNORE   := 6%
+$(PKG)_VERSION  := 7.2.0
+$(PKG)_CHECKSUM := 1cf7adf8ff4b5aa49041c8734bbcf1ad18cc4c94d0029aae0f4e48841088479a
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
-$(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := binutils mingw-w64
