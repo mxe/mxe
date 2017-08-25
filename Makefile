@@ -267,9 +267,9 @@ ESCAPE_PKG = \
 
 BACKUP_DOWNLOAD = \
     (echo "MXE Warning! Downloading $(1) from backup." >&2 && \
-    ($(WGET) --no-check-certificate -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-    $(WGET) --no-check-certificate -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` || \
-    $(WGET) --no-check-certificate -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(GITLAB_BACKUP)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM)))
+    ($(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` || \
+    $(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(GITLAB_BACKUP)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM)))
 
 DOWNLOAD_PKG_ARCHIVE = \
     $(if $($(1)_SOURCE_TREE),\
