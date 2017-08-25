@@ -5,18 +5,18 @@ PKG             := openjpeg
 $(PKG)_WEBSITE  := http://www.openjpeg.org/
 $(PKG)_DESCR    := OpenJPEG
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1.0
-$(PKG)_CHECKSUM := 1232bb814fd88d8ed314c94f0bfebb03de8559583a33abbe8c64ef3fc0a8ff03
-$(PKG)_SUBDIR   := openjpeg-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := https://sourceforge.net/projects/openjpeg.mirror/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := 2.2.0
+$(PKG)_CHECKSUM := 6fddbce5a618e910e03ad00d66e7fcd09cc6ee307ce69932666d54c73b7c6e7b
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/uclouvain/openjpeg/archive/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := gcc lcms libpng tiff zlib
 
-#git commit 3d95bcf
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/openjpeg.mirror/files/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
+    $(WGET) -q -O- 'https://api.github.com/repos/uclouvain/openjpeg/git/refs/tags/' | \
+    $(SED) -n 's#.*"ref": "refs/tags/v\([0-9,.]*\).*#\1#p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
