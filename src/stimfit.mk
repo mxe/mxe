@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2e99df9c8b92c90b11a2c87a24244863be4a0f3a42f1ae9cbfbb72678b6db
 $(PKG)_SUBDIR   := stimfit-0.15.4windows
 $(PKG)_FILE     := 0.15.4windows.tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libbiosig wxwidgets hdf5 boost fftw libtool
+$(PKG)_DEPS     := gcc libbiosig wxwidgets hdf5 boost fftw
 
 define $(PKG)_UPDATE
     wget -q -O- 'https://github.com/neurodroid/stimfit/releases' | \
@@ -18,7 +18,7 @@ endef
 
 define $(PKG)_BUILD
 
-	cd '$(1)' && CPPFLAGS="-std=gnu++11" \
+	cd '$(1)' && ./autogen.sh && CPPFLAGS="-std=gnu++11" \
 	./configure --disable-python --with-biosig2 --with-pslope \
 		--with-hdf5-prefix=$(PREFIX)/$(TARGET) \
 		--with-wx-config=$(PREFIX)/$(TARGET)/bin/wx-config \
