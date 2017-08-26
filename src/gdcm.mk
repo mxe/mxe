@@ -3,11 +3,11 @@
 
 PKG             := gdcm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.3
-$(PKG)_CHECKSUM := 83b9ff0744a37b4bf8f687ed198aabea7a9dfc70
+$(PKG)_VERSION  := 2.8.2
+$(PKG)_CHECKSUM := 5462c7859e01e5d5d0fb86a19a6c775484a6c44abd8545ea71180d4c41bf0f89
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG) 2.x/GDCM $($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)%202.x/GDCM%20$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := expat zlib
 
 $(PKG)_CMAKE_OPTS :=
@@ -18,8 +18,8 @@ ifeq ($(MXE_NATIVE_MINGW_BUILD),yes)
 endif
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package gdcm.' >&2;
-    echo $(gdcm_VERSION)
+    wget -q -O- 'https://sourceforge.net/projects/gdcm/files/gdcm%202.x/' | \
+         sed -n 's_.*Download gdcm-\([0-9\.]*\)\.tar\.gz.*_\1_ip'
 endef
 
 ifeq ($(MXE_SYSTEM),msvc)
