@@ -3,24 +3,23 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.14.15windows
-$(PKG)_CHECKSUM := 4acd79408d188c7f09b90e6c046be24e190ee1d9e1b9db8c8885c780be8f5718
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := v$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 0.15.4
+$(PKG)_CHECKSUM := 2e99df9c8b92c90b11a2c87a24244863be4a0f3a42f1ae9cbfbb72678b6dbb44
+$(PKG)_SUBDIR   := stimfit-0.15.4windows
+$(PKG)_FILE     := 0.15.4windows.tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc biosig wxwidgets hdf5 boost fftw libtool
+$(PKG)_DEPS     := gcc libbiosig wxwidgets hdf5 boost fftw libtool
 
 define $(PKG)_UPDATE
     wget -q -O- 'https://github.com/neurodroid/stimfit/releases' | \
-    $(SED) -n 's_.*<a href="/neurodroid/stimfit/tree/\([0-9\.]*\)\.tar\.gz.*_\1_ip' | \
-    head -1
+	sed -n 's_.*<a href="/neurodroid/stimfit/archive/\([0-9\.]*\)windows.tar.gz" rel="nofollow">.*_\1_ip' \
+	head -1
 endef
 
 define $(PKG)_BUILD
 
-    cd '$(1)' && ./autogen.sh && \
-	CPPFLAGS="-std=gnu++11" \
-	./configure --disable-python --with-biosig --with-pslope \
+	cd '$(1)' && CPPFLAGS="-std=gnu++11" \
+	./configure --disable-python --with-biosig2 --with-pslope \
 		--with-hdf5-prefix=$(PREFIX)/$(TARGET) \
 		--with-wx-config=$(PREFIX)/$(TARGET)/bin/wx-config \
 		--with-sysroot=$(PREFIX)/$(TARGET)/bin \
