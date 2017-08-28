@@ -241,7 +241,7 @@
     "luabind": {"version": "0.9.1", "website": "http://www.rasterbar.com/products/luabind.html", "description": "Luabind"},
     "luajit": {"version": "2.0.4", "website": "https://luajit.org/luajit.html", "description": "LuaJIT"},
     "lz4": {"version": "1.8.0", "website": "https://github.com/lz4/lz4", "description": "lossless compression algorithm optimized for speed"},
-    "lzma": {"version": "1700", "website": "http://www.7-zip.org/sdk.html", "description": "LZMA SDK"},
+    "lzma": {"version": "1701", "website": "http://www.7-zip.org/sdk.html", "description": "LZMA SDK"},
     "lzo": {"version": "2.09", "website": "https://www.oberhumer.com/opensource/lzo/", "description": ""},
     "matio": {"version": "1.5.2", "website": "https://sourceforge.net/projects/matio/", "description": ""},
     "mdbtools": {"version": "0.7.1", "website": "https://sourceforge.net/projects/mdbtools/", "description": ""},
