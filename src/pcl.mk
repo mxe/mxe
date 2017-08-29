@@ -51,4 +51,31 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
 endef
 
-$(PKG)_BUILD_SHARED =
+define $(PKG)_BUILD_SHARED
+    find '$(1)' -type f -name CMakeLists.txt -exec sed -i'' -e 's/Rpcrt4/rpcrt4/g' {} \;
+    mkdir '$(1).build'
+    cd '$(1).build' && \
+        CXXFLAGS="-D__FLOAT_H -DFLT_MAX=__FLT_MAX__ -DFLT_MIN=__FLT_MIN__ -DDBL_MAX=__DBL_MAX__ -DDBL_MIN=__DBL_MIN__ -DDBL_EPSILON=__DBL_EPSILON__" \
+        '$(TARGET)-cmake' '$(1)' \
+        -DVTK_DIR='$(PREFIX)/$(TARGET)/lib/vtk-5.8' \
+        -DCMAKE_RELEASE_POSTFIX='' \
+        -DBoost_THREADAPI=win32 \
+        -DPCL_SHARED_LIBS=ON \
+        -DBUILD_TESTS=OFF \
+        -DBUILD_apps=OFF \
+        -DBUILD_examples=OFF \
+        -DBUILD_global_tests=OFF \
+        -DBUILD_tools=OFF \
+        -DWITH_CUDA=OFF \
+        -DWITH_PCAP=OFF \
+        -DHAVE_MM_MALLOC_EXITCODE=0 \
+        -DHAVE_SSE4_2_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE4_1_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSSE3_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE2_EXTENSIONS_EXITCODE=0 \
+        -DHAVE_SSE_EXTENSIONS_EXITCODE=0
+    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
+    $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
+endef
+
