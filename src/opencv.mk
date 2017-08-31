@@ -4,8 +4,8 @@ PKG             := opencv
 $(PKG)_WEBSITE  := http://opencv.org/
 $(PKG)_DESCR    := OpenCV
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4.10
-$(PKG)_CHECKSUM := 1bf4cb87283797fd91669d4f90b622a677a903c20b4a577b7958a2164f7596c6
+$(PKG)_VERSION  := 3.3.0
+$(PKG)_CHECKSUM := 3546c3837f88177c898e4172942da7a3ca6c4e8e98a33d0cbccb2b499167c5ba
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -58,7 +58,7 @@ define $(PKG)_BUILD
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi -pedantic \
-        '$(1)/samples/c/fback_c.c' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
+        -W -Wall -Werror -ansi \
+        '$(1)/samples/cpp/fback.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
         `'$(TARGET)-pkg-config' opencv --cflags --libs`
 endef
