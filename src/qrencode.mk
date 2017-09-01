@@ -12,8 +12,11 @@ $(PKG)_URL      := https://fukuchi.org/works/qrencode/qrencode-$($(PKG)_VERSION)
 $(PKG)_DEPS     := gcc libpng
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for qrencode.' >&2;
-    echo $(qrencode_VERSION)
+    $(WGET) -q -O- 'https://fukuchi.org/works/qrencode/index.html' | \
+    grep 'qrencode-' | \
+    $(SED) -n 's,.*qrencode-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SORT) -Vr | \
+    head -1
 endef
 
 define $(PKG)_BUILD
