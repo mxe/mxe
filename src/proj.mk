@@ -12,7 +12,7 @@ $(PKG)_URL_2    := ftp://ftp.remotesensing.org/proj/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://trac.osgeo.org/proj/' | \
+    $(WGET) -q -O- 'http://proj4.org/download.html' | \
     $(SED) -n 's,.*proj-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
