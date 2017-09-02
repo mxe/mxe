@@ -40,6 +40,8 @@ define $(PKG)_BUILD
       -DBUILD_TIFF=OFF \
       -DBUILD_JASPER=OFF \
       -DBUILD_JPEG=OFF \
+      -DBUILD_WEBP=ON \
+      -DBUILD_PROTOBUF=ON \
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
@@ -56,9 +58,8 @@ define $(PKG)_BUILD
         $(SED) -i 's/OpenEXR//' '$(1).build/unix-install/opencv.pc')
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-
-    '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi \
-        '$(1)/samples/cpp/fback.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
-        `'$(TARGET)-pkg-config' opencv --cflags --libs`
+# Final command
+# export pkgout=`'$(TARGET)-pkg-config' opencv --cflags --libs | gsed -r 's/-llib([0-9a-zA-Z]+)/-l\1/g'`
+# echo pkgout is: ${pkgout}
+'$(TARGET)-g++' -v -W -Wall -Werror -ansi '$(1)/samples/cpp/fback.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' `echo \`i686-w64-mingw32.static-pkg-config opencv --cflags --libs | $(SED) -r 's/-llib([0-9a-zA-Z]+)/-l\1/g'\``
 endef

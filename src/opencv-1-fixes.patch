@@ -58,7 +58,7 @@ index 1111111..2222222 100644
  # --- Extra HighGUI and VideoIO libs on Windows ---
  if(WIN32)
 -  list(APPEND HIGHGUI_LIBRARIES comctl32 gdi32 ole32 setupapi ws2_32)
-+  list(APPEND HIGHGUI_LIBRARIES -lcomctl32 -lgdi32 -lole32 -lsetupapi -lws2_32 -lvfw32 -lstrmiids -loleaut32 -luuid)
++  list(APPEND HIGHGUI_LIBRARIES -lcomctl32 -lcomdlg32 -lgdi32 -lole32 -lsetupapi -lws2_32 -lvfw32 -lstrmiids -loleaut32 -luuid)
    if(HAVE_VFW)
      list(APPEND VIDEOIO_LIBRARIES vfw32)
    endif()
