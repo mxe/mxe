@@ -1,56 +1,51 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-diff -ru a/cmake/OpenCVGenConfig.cmake b/cmake/OpenCVGenConfig.cmake
---- a/cmake/OpenCVGenConfig.cmake	2014-10-01 08:33:36.000000000 +0100
-+++ b/cmake/OpenCVGenConfig.cmake	2015-01-06 22:41:05.094464515 +0000
-@@ -137,8 +137,8 @@
-     install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${OpenCV_INSTALL_BINARIES_PREFIX}lib" COMPONENT dev)
-     install(EXPORT OpenCVModules DESTINATION "${OpenCV_INSTALL_BINARIES_PREFIX}lib" FILE OpenCVModules${modules_file_suffix}.cmake COMPONENT dev)
-   else()
--    install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib" COMPONENT dev)
--    install(EXPORT OpenCVModules DESTINATION "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib" FILE OpenCVModules${modules_file_suffix}.cmake COMPONENT dev)
-+    install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig.cmake" DESTINATION "${OpenCV_INSTALL_BINARIES_PREFIX}lib" COMPONENT dev)
-+    install(EXPORT OpenCVModules DESTINATION "${OpenCV_INSTALL_BINARIES_PREFIX}lib" FILE OpenCVModules${modules_file_suffix}.cmake COMPONENT dev)
-   endif()
-   install(FILES "${CMAKE_BINARY_DIR}/win-install/OpenCVConfig-version.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}" COMPONENT dev)
-   install(FILES "${OpenCV_SOURCE_DIR}/cmake/OpenCVConfig.cmake" DESTINATION "${CMAKE_INSTALL_PREFIX}/" COMPONENT dev)
-diff -ru a/CMakeLists.txt b/CMakeLists.txt
---- a/CMakeLists.txt	2014-10-01 08:33:36.000000000 +0100
-+++ b/CMakeLists.txt	2015-01-06 22:31:50.118454434 +0000
-@@ -269,14 +269,7 @@
-   set(OPENCV_DOC_INSTALL_PATH share/OpenCV/doc)
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Thu, 31 Aug 2017 18:32:39 -0300
+Subject: [PATCH] Update patch 2 for opencv-3.3.0
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -360,14 +360,7 @@ else()
+   ocv_update(OPENCV_DOC_INSTALL_PATH share/OpenCV/doc)
  endif()
  
--if(WIN32)
+-if(WIN32 AND CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
 -  if(DEFINED OpenCV_RUNTIME AND DEFINED OpenCV_ARCH)
--    set(OpenCV_INSTALL_BINARIES_PREFIX "${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
+-    ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
 -  else()
 -    message(STATUS "Can't detect runtime and/or arch")
--    set(OpenCV_INSTALL_BINARIES_PREFIX "")
+-    ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "")
 -  endif()
 -elseif(ANDROID)
 +if(ANDROID)
-   set(OpenCV_INSTALL_BINARIES_PREFIX "sdk/native/")
+   ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "sdk/native/")
  else()
-   set(OpenCV_INSTALL_BINARIES_PREFIX "")
-@@ -310,12 +303,8 @@
-   set(LIBRARY_OUTPUT_PATH         "${OpenCV_BINARY_DIR}/lib")
-   set(3P_LIBRARY_OUTPUT_PATH      "${OpenCV_BINARY_DIR}/3rdparty/lib${LIB_SUFFIX}")
-   if(WIN32)
+   ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "")
+@@ -415,12 +408,8 @@ else()
+   ocv_update(3P_LIBRARY_OUTPUT_PATH      "${OpenCV_BINARY_DIR}/3rdparty/lib${LIB_SUFFIX}")
+ 
+   if(WIN32 AND CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
 -    if(OpenCV_STATIC)
--      set(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib${LIB_SUFFIX}")
+-      ocv_update(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib${LIB_SUFFIX}")
 -    else()
--      set(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
+-      ocv_update(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
 -    endif()
--    set(OPENCV_3P_LIB_INSTALL_PATH  "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib${LIB_SUFFIX}")
-+    set(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
-+    set(OPENCV_3P_LIB_INSTALL_PATH  "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
-     set(OPENCV_SAMPLES_SRC_INSTALL_PATH    samples/native)
-   else()
-     set(OPENCV_LIB_INSTALL_PATH     lib${LIB_SUFFIX})
-@@ -339,15 +328,9 @@
-   set(OPENCV_INCLUDE_INSTALL_PATH ${OPENCV_INCLUDE_INSTALL_PATH}/opencv-${OPENCV_VERSION})
+-    ocv_update(OPENCV_3P_LIB_INSTALL_PATH  "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib${LIB_SUFFIX}")
++	ocv_update(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
++	ocv_update(OPENCV_3P_LIB_INSTALL_PATH  "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
+     ocv_update(OPENCV_SAMPLES_SRC_INSTALL_PATH    samples/native)
+     ocv_update(OPENCV_JAR_INSTALL_PATH java)
+     ocv_update(OPENCV_OTHER_INSTALL_PATH   etc)
+@@ -464,15 +453,9 @@ if(INSTALL_TO_MANGLED_PATHS)
  endif()
+ 
  
 -if(WIN32)
 -  # Postfix of DLLs:
