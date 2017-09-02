@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := tiff
-$(PKG)_WEBSITE  := http://www.libtiff.org/
+$(PKG)_WEBSITE  := http://simplesystems.org/libtiff/
 $(PKG)_DESCR    := LibTIFF
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.0.8
@@ -13,7 +13,7 @@ $(PKG)_URL_2    := ftp://ftp.remotesensing.org/libtiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc jpeg xz zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.libtiff.org/' | \
+    $(WGET) -q -O- 'http://simplesystems.org/libtiff/' | \
     $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
     head -1
 endef

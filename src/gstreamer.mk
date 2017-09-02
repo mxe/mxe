@@ -23,15 +23,13 @@ define $(PKG)_BUILD
         --disable-debug \
         --disable-check \
         --disable-tests \
-        --disable-examples \
-        --mandir='$(BUILD_DIR)/sink' \
-        --docdir='$(BUILD_DIR)/sink' \
-        --with-html-dir='$(BUILD_DIR)/sink'
+        --disable-examples
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # some .dlls are installed to lib - no obvious way to change
     $(if $(BUILD_SHARED),
-        mv -vf '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+        $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0'
+        mv -vf '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/'
     )
 endef

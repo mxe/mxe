@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc liblsmash yasm
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.videolan.org/?p=x264.git;a=shortlog' | \
     $(SED) -n 's,.*\([0-9]\{4\}\)-\([0-9]\{2\}\)-\([0-9]\{2\}\).*,\1\2\3-2245,p' | \
-    sort | \
+    $(SORT) | \
     tail -1
 endef
 

@@ -23,15 +23,13 @@ define $(PKG)_BUILD
         --disable-examples \
         --disable-aalib \
         $(if $(BUILD_SHARED), --disable-shout2) \
-        --disable-x \
-        --mandir='$(BUILD_DIR)/sink' \
-        --docdir='$(BUILD_DIR)/sink' \
-        --with-html-dir='$(BUILD_DIR)/sink'
+        --disable-x
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) CFLAGS='-DWAVE_FORMAT_DOLBY_AC3_SPDIF=0x0092'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install CFLAGS='-DWAVE_FORMAT_DOLBY_AC3_SPDIF=0x0092'
 
     # some .dlls are installed to lib - no obvious way to change
     $(if $(BUILD_SHARED),
-        mv -vf '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+        $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0'
+        mv -vf '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/'
     )
 endef

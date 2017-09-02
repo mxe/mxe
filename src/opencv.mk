@@ -20,8 +20,7 @@ endef
 
 define $(PKG)_BUILD
     # build
-    mkdir '$(1).build'
-    cd '$(1).build' && '$(TARGET)-cmake' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
       -DWITH_QT=OFF \
       -DWITH_OPENGL=ON \
       -DWITH_GSTREAMER=OFF \
@@ -45,21 +44,22 @@ define $(PKG)_BUILD
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
-      -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500' \
-      '$(1)'
+      -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500 -D__STDC_LIMIT_MACROS'
 
     # install
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
     # fixup and install pkg-config file
     # openexr isn't available on x86_64-w64-mingw32
     # opencv builds it's own libIlmImf.a
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
-        $(SED) -i 's/OpenEXR//' '$(1).build/unix-install/opencv.pc')
+    $(SED) -i 's/OpenEXR//' '$(1).build/unix-install/opencv.pc')
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(1).build/unix-install/opencv.pc'
     $(INSTALL) -m755 '$(1).build/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-# Final command
-# export pkgout=`'$(TARGET)-pkg-config' opencv --cflags --libs | gsed -r 's/-llib([0-9a-zA-Z]+)/-l\1/g'`
-# echo pkgout is: ${pkgout}
-'$(TARGET)-g++' -v -W -Wall -Werror -ansi '$(1)/samples/cpp/fback.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' `echo \`i686-w64-mingw32.static-pkg-config opencv --cflags --libs | $(SED) -r 's/-llib([0-9a-zA-Z]+)/-l\1/g'\``
+    
+    '$(TARGET)-g++' \
+      -v -W -Wall -Werror -ansi \
+      '$(1)/samples/cpp/fback.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
+      `echo \`i686-w64-mingw32.static-pkg-config opencv --cflags --libs | $(SED) -r 's/-llib([0-9a-zA-Z]+)/-l\1/g'\``
 endef

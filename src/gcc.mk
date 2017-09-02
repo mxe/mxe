@@ -22,6 +22,7 @@ endef
 define $(PKG)_CONFIGURE
     # configure gcc
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_DISABLE_DOC_OPTS) \
         --target='$(TARGET)' \
         --build='$(BUILD)' \
         --prefix='$(PREFIX)' \

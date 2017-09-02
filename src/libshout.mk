@@ -17,13 +17,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    # doesn't support out-of-tree builds
+    cd '$(SOURCE_DIR)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         ac_cv_prog_PKGCONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        --disable-thread \
-        --infodir='$(1)/sink' \
-        --mandir='$(1)/sink'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+        --disable-thread
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1 install
 endef
 
 $(PKG)_BUILD_SHARED =

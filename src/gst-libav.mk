@@ -20,6 +20,7 @@ define $(PKG)_BUILD
 
     # some .dlls are installed to lib - no obvious way to change
     $(if $(BUILD_SHARED),
-        mv -vf '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+        $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0'
+        mv -vf '$(PREFIX)/$(TARGET)/lib/gstreamer-1.0/'*.dll '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/'
     )
 endef

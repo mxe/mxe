@@ -1,6 +1,6 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From cebc5ce4d7497007b4df6129cc7a3e7fa1eb2567 Mon Sep 17 00:00:00 2001
+From 0e4abbfb6a0ac7bcc31fa0db0e2ae2c6e0310b26 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
 Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
@@ -12,7 +12,7 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 4f342d67d7a..28cd405c1a5 100644
+index 17da8b979e0..bddd70960a8 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -224,13 +224,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -36,7 +36,7 @@ index 4f342d67d7a..28cd405c1a5 100644
 2.11.0
 
 
-From 84a904fbfe966a83d5a6a025828075465a53d6d3 Mon Sep 17 00:00:00 2001
+From 421e7313cfa5421dd41adb136a7449ecafc86e4e Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
 Subject: [PATCH 2/5] Fix pkgconfig file and library naming
@@ -105,7 +105,7 @@ index 36f632e8caa..b07085ac429 100644
 2.11.0
 
 
-From 7608e9aee345980061fcbf83b3623035fbde5c81 Mon Sep 17 00:00:00 2001
+From b84844de9f60380c328a481b58cd2a035851d5d3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
 Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
@@ -113,10 +113,10 @@ Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 73e59a7ad9d..eb7c9230a3b 100644
+index 2fb03a452ab..91ae39177f2 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -479,7 +479,7 @@
+@@ -498,7 +498,7 @@
          },
          "fontconfig": {
              "label": "Fontconfig",
@@ -145,18 +145,18 @@ index ca33689cd72..194523eee00 100644
 2.11.0
 
 
-From 2b35f94bc2613e0723f7b2bec21f5dbe20213f41 Mon Sep 17 00:00:00 2001
+From c35d305ba4e1bdb4a6bdc7ad85515e0358b8d3bc Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
 Subject: [PATCH 4/5] fix treatment of SYBASE_LIBS
 
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
-diff --git a/src/sql/configure.pri b/src/sql/configure.pri
-index 05794582e9e..15a78f68f3a 100644
---- a/src/sql/configure.pri
-+++ b/src/sql/configure.pri
-@@ -89,7 +89,7 @@ defineTest(qtConfLibrary_sybaseEnv) {
+diff --git a/src/plugins/sqldrivers/configure.pri b/src/plugins/sqldrivers/configure.pri
+index 9fb957291fd..d0640809022 100644
+--- a/src/plugins/sqldrivers/configure.pri
++++ b/src/plugins/sqldrivers/configure.pri
+@@ -92,7 +92,7 @@ defineTest(qtConfLibrary_sybaseEnv) {
          libs += "-L$${sybase}/lib"
      libs += $$getenv(SYBASE_LIBS)
      !isEmpty(libs) {
@@ -169,7 +169,7 @@ index 05794582e9e..15a78f68f3a 100644
 2.11.0
 
 
-From 656dc60fbd347668ae06e943f35ad9143405b76f Mon Sep 17 00:00:00 2001
+From 4bf338634788b012bd73b7bb4aeea81e42e9bb82 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
 Subject: [PATCH 5/5] use pkg-config for harfbuzz
@@ -177,10 +177,10 @@ Subject: [PATCH 5/5] use pkg-config for harfbuzz
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index eb7c9230a3b..9c4560b56b0 100644
+index 91ae39177f2..398d07d0b13 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -123,7 +123,8 @@
+@@ -130,7 +130,8 @@
              "label": "HarfBuzz",
              "test": "unix/harfbuzz",
              "sources": [

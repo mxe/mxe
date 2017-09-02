@@ -22,9 +22,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd '$(1).build' && '$(TARGET)-cmake' '$(1)' \
-        -DCMAKE_CXX_FLAGS='-D__STDC_CONSTANT_MACROS' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DCMAKE_CXX_FLAGS='-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS' \
         -DCMAKE_HAVE_PTHREAD_H=OFF \
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         -DDYNAMIC_OPENTHREADS=$(CMAKE_SHARED_BOOL) \
@@ -36,5 +35,6 @@ define $(PKG)_BUILD
         $(if $(filter qtbase,$($(PKG)_DEPS)), \
           -DDESIRED_QT_VERSION=5, \
           -DDESIRED_QT_VERSION=4)
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef

@@ -20,10 +20,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && \
-        ./configure \
-        $(MXE_CONFIGURE_OPTS) \
+    # configure script is ancient and isn't easy to regenerate
+    # filter out invalid options
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(subst docdir$(comma),,$(MXE_CONFIGURE_OPTS)) \
         CFLAGS='-std=gnu90 -fPIC'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS=-no-undefined
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS='-no-undefined'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
