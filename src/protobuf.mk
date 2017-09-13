@@ -3,8 +3,8 @@
 PKG             := protobuf
 $(PKG)_WEBSITE  := https://github.com/google/protobuf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.2
-$(PKG)_CHECKSUM := 8b8e442becbeff637f160c1ef4a3a56769c50ba7c9ff939ccc94086530ff00e4
+$(PKG)_VERSION  := 3.4.0
+$(PKG)_CHECKSUM := f6600abeee3babfa18591961a0ff21e7db6a6d9ef82418a261ec4fee44ee6d44
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/google/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
