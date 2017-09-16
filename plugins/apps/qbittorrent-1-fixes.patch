@@ -3,9 +3,9 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 30 Aug 2015 00:28:50 +0200
-Subject: [PATCH] do not check qmake existance
+From: Zach Bacon <11doctorwhocanada@gmail.com>
+Date: Wed, 6 Jan 2016 15:59:55 -0500
+Subject: [PATCH] properly detect qmake in mxe
 
 Fix ./configure error:
 
@@ -13,46 +13,31 @@ checking for mxe/usr/i686-w64-mingw32.static/qt/bin/qmake...
 configure: error: cannot check for file existence when
 cross compiling
 
-diff --git a/configure b/configure
-index 1111111..2222222 100755
---- a/configure
-+++ b/configure
-@@ -4500,7 +4500,7 @@ if eval \${$as_ac_File+:} false; then :
-   $as_echo_n "(cached) " >&6
- else
-   test "$cross_compiling" = yes &&
--  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-+  echo "cannot check for file existence when cross compiling" "$LINENO" 5
- if test -r "$QT_QMAKE/qmake"; then
-   eval "$as_ac_File=yes"
- else
-@@ -4520,7 +4520,7 @@ if eval \${$as_ac_File+:} false; then :
-   $as_echo_n "(cached) " >&6
- else
-   test "$cross_compiling" = yes &&
--  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-+  echo "cannot check for file existence when cross compiling" "$LINENO" 5
- if test -r "$QT_QMAKE/qmake-qt5"; then
-   eval "$as_ac_File=yes"
- else
-@@ -4617,7 +4617,7 @@ if eval \${$as_ac_File+:} false; then :
-   $as_echo_n "(cached) " >&6
- else
-   test "$cross_compiling" = yes &&
--  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-+  echo "cannot check for file existence when cross compiling" "$LINENO" 5
- if test -r "$QT_QMAKE/qmake"; then
-   eval "$as_ac_File=yes"
- else
-@@ -4637,7 +4637,7 @@ if eval \${$as_ac_File+:} false; then :
-   $as_echo_n "(cached) " >&6
- else
-   test "$cross_compiling" = yes &&
--  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-+  echo "cannot check for file existence when cross compiling" "$LINENO" 5
- if test -r "$QT_QMAKE/qmake-qt4"; then
-   eval "$as_ac_File=yes"
- else
+diff --git a/m4/qbittorrent.m4 b/m4/qbittorrent.m4
+index 1111111..2222222 100644
+--- a/m4/qbittorrent.m4
++++ b/m4/qbittorrent.m4
+@@ -12,9 +12,9 @@ AC_DEFUN([FIND_QT4],
+                                 [QT_QMAKE=`AS_DIRNAME(["$QT_QMAKE"])`])
+                  ])
+ 
+-AC_CHECK_FILE([$QT_QMAKE/qmake],
++AS_IF([$QT_QMAKE/qmake],
+               [QT_QMAKE="$QT_QMAKE/qmake"],
+-              [AC_CHECK_FILE([$QT_QMAKE/qmake-qt4],
++              [AS_IF([$QT_QMAKE/qmake-qt4],
+                              [QT_QMAKE="$QT_QMAKE/qmake-qt4"],
+                              [QT_QMAKE=""])
+               ])
+@@ -36,7 +36,7 @@ AC_DEFUN([FIND_QT5],
+                                 [host_bins])
+                  ])
+ 
+-AC_CHECK_FILE([$QT_QMAKE/qmake],
++AS_IF([$QT_QMAKE/qmake],
+               [QT_QMAKE="$QT_QMAKE/qmake"],
+               [AC_CHECK_FILE([$QT_QMAKE/qmake-qt5],
+                              [QT_QMAKE="$QT_QMAKE/qmake-qt5"],
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
