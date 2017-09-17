@@ -4,8 +4,8 @@
 PKG             := biosig
 $(PKG)_WEBSITE  := http://biosig.sf.net/
 $(PKG)_DESCR    := Biosig
-$(PKG)_VERSION  := 1.8.6
-$(PKG)_CHECKSUM := adf1a11260c23c2bf3e6cf89f0344d87ac4e2cc96af931a9670cc87425cd675d
+$(PKG)_VERSION  := 1.9.0
+$(PKG)_CHECKSUM := 36d623a803ef67882a0cb4f175abdab18c41d46dc775cfbee68b5c3bed10654c
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
@@ -18,6 +18,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_PRE
+
+    cd '$(1)' && ./configure \
+        ac_cv_func_malloc_0_nonnull=yes \
+        ac_cv_func_realloc_0_nonnull=yes \
+        $(MXE_CONFIGURE_OPTS)
 
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|#||g' '$(1)'/Makefile

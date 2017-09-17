@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 21338ddf502fa786f1ef4fa3a11549ecdcf4d3988b6be8f386d7fa5ffb2b5
 $(PKG)_SUBDIR   := sigviewer-0.5.1-r553-src
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_URL      := http://sourceforge.net/projects/sigviewer/files/0.5.1/$($(PKG)_FILE)/download
-$(PKG)_DEPS     := gcc biosig qt
+$(PKG)_DEPS     := gcc libbiosig qt
 
 define $(PKG)_UPDATE
 #    wget -q -O- 'http://biosig.sourceforge.net/download.html' | \
