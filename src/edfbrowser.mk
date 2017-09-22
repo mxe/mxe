@@ -3,11 +3,11 @@
 
 PKG             := edfbrowser
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 1.57
-$(PKG)_CHECKSUM := e84c6de28f294d5a02078080bf03c6c2f8548a4b8656c87850101933311e8b71
-$(PKG)_SUBDIR   := edfbrowser_157_source
+$(PKG)_VERSION  := 1.60
+$(PKG)_CHECKSUM := beeed235bb87abcd28df865f4dc60e25b119b1306fb07faf616d2ad91fa43b1e
+$(PKG)_SUBDIR   := edfbrowser_160_source
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := http://www.teuniz.net/edfbrowser/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.teuniz.net/edfbrowser/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc qt
 
 define $(PKG)_UPDATE
