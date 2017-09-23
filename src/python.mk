@@ -4,7 +4,7 @@
 PKG             := python
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.3.0
-$(PKG)_CHECKSUM := 3e1464bc2c1dfa74287bc58da81168f50b0ae5c7
+$(PKG)_CHECKSUM := 15c113fd6c058712f05d31b4eff149d4d823b8e39ef5e37228dc5dc4f8716df9
 $(PKG)_SUBDIR   := Python-$($(PKG)_VERSION)
 $(PKG)_FILE     := Python-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://python.org/ftp/python/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -25,7 +25,7 @@ define $(PKG)_BUILD
 		echo "Built host python and Parser/pgen in $(PATH_TO_HOST_PYTHON)";  \
 		( cd $$(dirname $(PATH_TO_HOST_PYTHON)) && tar xf $(PWD)/pkg/$($(PKG)_FILE) ); \
 		( cd $(PATH_TO_HOST_PYTHON) && \
-			./configure && \
+			./configure --disable-ipv6 && \
 			$(MAKE) python Parser/pgen Modules/_freeze_importlib \
 			) ; \
 	fi
