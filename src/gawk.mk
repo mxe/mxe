@@ -3,16 +3,17 @@
 
 PKG             := gawk
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.1.0
-$(PKG)_CHECKSUM := 1d5bf6feca1228550b9c5d0b223ddc53ffc39c19
+$(PKG)_VERSION  := 4.1.4
+$(PKG)_CHECKSUM := 53e184e2d0f90def9207860531802456322be091c7b48f23fdc79cda65adc266
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := gawk-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := gawk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package gawk.' >&2;
-    echo $(gnuplot_VERSION)
+    $(WGET) -q -O- "https://ftp.gnu.org/gnu/gawk/?C=M;O=D" | \
+    $(SED) -n 's,.*a href="gawk-\([0-9.]*\).tar.gz.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
