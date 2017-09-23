@@ -299,7 +299,7 @@ end
 
 -- return items ordered in build order
 -- this means, if item depends on item2, then
--- item2 preceeds item1 in the list
+-- item2 precedes item1 in the list
 local function sortForBuild(items, item2deps)
     local n = #items
     local item2followers = transpose(item2deps)

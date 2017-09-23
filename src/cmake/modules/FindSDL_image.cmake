@@ -8,7 +8,7 @@ endif()
 
 pkg_check_modules(SDL_IMAGE SDL_image)
 
-# for backward compatiblity
+# for backward compatibility
 set(SDLIMAGE_LIBRARY ${SDL_IMAGE_LIBRARIES})
 set(SDL_IMAGE_LIBRARY ${SDL_IMAGE_LIBRARIES})
 set(SDLIMAGE_INCLUDE_DIR ${SDL_IMAGE_INCLUDE_DIRS})
