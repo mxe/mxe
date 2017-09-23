@@ -3,8 +3,8 @@
 PKG             := tinyxml2
 $(PKG)_WEBSITE  := http://grinninglizard.com/tinyxml2/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0.1
-$(PKG)_CHECKSUM := 14b38ef25cc136d71339ceeafb4856bb638d486614103453eccd323849267f20
+$(PKG)_VERSION  := 5.0.1
+$(PKG)_CHECKSUM := cd33f70a856b681506e3650f9f5f5e5e6c7232da7fa3cfc4e8f56fe7b77dd735
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/leethomason/tinyxml2/archive/$($(PKG)_VERSION).tar.gz
