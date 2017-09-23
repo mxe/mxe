@@ -3,15 +3,16 @@
 PKG             := blas
 $(PKG)_WEBSITE  := http://www.netlib.org/blas/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.5.0
-$(PKG)_CHECKSUM := ef7d775d380f255d1902bce374ff7c8a594846454fcaeae552292168af1aca24
+$(PKG)_VERSION  := 3.7.1
+$(PKG)_CHECKSUM := c5a654351f0b046a502bf04b16740b9ab49c7d8512d6d57ad3a64184c8e575c3
 $(PKG)_SUBDIR   := BLAS-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG).tgz
-$(PKG)_URL      := http://www.netlib.org/404
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
+$(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    echo 1
+    $(WGET) -q -O- 'http://www.netlib.org/blas/' | \
+    $(SED) -n 's,.*>REFERENCE BLAS Version \([0-9.]*\)<.*,\1,p'
 endef
 
 define $(PKG)_BUILD
