@@ -5,7 +5,7 @@ $(PKG)_WEBSITE  := https://www.threadingbuildingblocks.org
 $(PKG)_DESCR    := Intel Threading Building Blocks
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := c28c8be
-$(PKG)_CHECKSUM := 95e45abe3cb6dc685c75df88f18b5f1be178a74bbf112ec69d51a9fd80a063ae
+$(PKG)_CHECKSUM := a9a0f059703f9c018c83ec52bc10eb31d1e32da37f464a7de7fdcec80f23c645
 $(PKG)_GH_CONF  := wjakob/tbb/master
 $(PKG)_DEPS     := gcc
 
