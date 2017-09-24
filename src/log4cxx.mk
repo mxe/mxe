@@ -7,8 +7,8 @@ $(PKG)_VERSION  := 0.10.0
 $(PKG)_CHECKSUM := 0de0396220a9566a580166e66b39674cb40efd2176f52ad2c65486c99c920c8c
 $(PKG)_SUBDIR   := apache-log4cxx-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := http://www.eu.apache.org/dist/logging/log4cxx/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://apache.mirror.cdnetworks.com//logging/log4cxx/0.10.0/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.apache.org/dist/logging/log4cxx/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://archive.apache.org/dist/logging/log4cxx/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc apr-util
 
 define $(PKG)_UPDATE
