@@ -65,6 +65,10 @@ local BLACKLIST = {
     -- usr/lib/nonetwork.so and
     -- usr/x86_64-unknown-linux-gnu/lib/nonetwork.so
     'lib/nonetwork.so',
+
+    -- https://github.com/mxe/mxe/issues/1886#issuecomment-331719282
+    'installed/.gitkeep',
+    'lib/.gitkeep',
 }
 
 local TARGETS = {
