@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 30 Aug 2015 00:28:50 +0200
-Subject: [PATCH] do not check qmake existance
+Subject: [PATCH] do not check qmake existence
 
 Fix ./configure error:
 

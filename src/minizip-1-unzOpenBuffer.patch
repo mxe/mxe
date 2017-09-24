@@ -3,7 +3,7 @@ This file is part of MXE. See LICENSE.md for licensing information.
 This patch has been taken from:
 https://github.com/Alexpux/MINGW-packages/tree/master/mingw-w64-zlib
 
-Modifications have been made to accomodate for commit.
+Modifications have been made to accommodate for commit.
 nmoinvaz/minizip@9bccc22efb2d.
 
 From c162a3620a3d0d317f59af8ddc2d1605bf5ee4b3 Mon Sep 17 00:00:00 2001

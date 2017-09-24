@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	/* Try to detect rig */
-	/* may be overriden by backend probe */
+	/* may be overridden by backend probe */
 	myport.type.rig = RIG_PORT_SERIAL;
 	myport.parm.serial.rate = 9600;
 	myport.parm.serial.data_bits = 8;
