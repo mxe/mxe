@@ -4,12 +4,12 @@ PKG             := armadillo
 $(PKG)_WEBSITE  := https://arma.sourceforge.io/
 $(PKG)_DESCR    := Armadillo C++ linear algebra library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.800.1
-$(PKG)_CHECKSUM := 5ada65a5a610301ae188bb34f0ac6e7fdafbdbcd0450b0adb7715349ae14b8db
+$(PKG)_VERSION  := 8.100.1
+$(PKG)_CHECKSUM := 54773f7d828bd3885c598f90122b530ded65d9b195c9034e082baea737cd138d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc blas lapack
+$(PKG)_DEPS     := gcc blas lapack hdf5
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/arma/files/' | \
@@ -26,5 +26,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-armadillo.exe' \
-        -larmadillo -llapack -lblas -lgfortran -lquadmath
+        -larmadillo -lhdf5 -llapack -lblas -lgfortran -lquadmath -lz
 endef
