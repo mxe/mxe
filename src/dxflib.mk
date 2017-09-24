@@ -11,8 +11,8 @@ $(PKG)_URL      := http://qcad.org/archives/$(PKG)/$(PKG)-$($(PKG)_VERSION)-1.sr
 $(PKG)_DEPS     := gcc qt5
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://qcad.org/en/dxflib-downloads' | \
-    $(SED) 's,.*<a href="/archives/dxflib/dxflib-\([0-9\.]*[0-9-]*\).src.tar.gz">.*,\1,g;' | \
+    $(WGET) -q -O- 'https://qcad.org/en/dxflib-downloads' | \
+    $(SED) -n '/a href/ s,.*/archives/dxflib/dxflib-\([0-9.]*\)-src.tar.gz.*,\1,g;' | \
     head -1
 endef
 
