@@ -56,9 +56,9 @@ define $(PKG)_BUILD
     # opencv builds it's own libIlmImf.a
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
         $(SED) -i 's/OpenEXR//' '$(BUILD_DIR)/unix-install/opencv.pc')
-    
+
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(BUILD_DIR)/unix-install/opencv.pc'
-    
+
     $(INSTALL) -m755 '$(BUILD_DIR)/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-g++' \
