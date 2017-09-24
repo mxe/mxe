@@ -59,9 +59,12 @@ local BLACKLIST = {
     '^usr/share/man/',
     '^usr/share/gcc',
     '^usr/share/gtk-doc',
-    '^usr/lib/nonetwork.so',
     '^usr/[^/]+/share/doc/',
     '^usr/[^/]+/share/info/',
+
+    -- usr/lib/nonetwork.so and
+    -- usr/x86_64-unknown-linux-gnu/lib/nonetwork.so
+    'lib/nonetwork.so',
 }
 
 local TARGETS = {
