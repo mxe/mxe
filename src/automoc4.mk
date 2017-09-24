@@ -13,10 +13,9 @@ $(PKG)_URL      := http://download.kde.org/stable/$(PKG)/$($(PKG)_VERSION)/$($(P
 $(PKG)_DEPS     := gcc qt
 
 define $(PKG)_UPDATE
-#    $(WGET) -q -O- 'http://sourceforge.net/projects/qwt/files/qwt/' | \
-#    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
-#    head -1
-     echo 1
+    $(WGET) -q -O- 'https://download.kde.org/stable/automoc4/' | \
+    $(SED) -n 's,.*a href="\([0-9.]*\)/".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
