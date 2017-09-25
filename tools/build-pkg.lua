@@ -892,10 +892,6 @@ local function progressPrinter(items)
     return printer
 end
 
-local function isEmpty(files)
-    return #files == 1
-end
-
 -- build all packages, save filelist to list file
 -- prev_files is passed only to second pass.
 local function buildPackages(items, item2deps, pass, prev_item2files)
@@ -949,40 +945,12 @@ local function buildPackages(items, item2deps, pass, prev_item2files)
 end
 
 local function makeDebs(items, item2deps, item2ver, item2files)
-    -- start from building non-empty packages
-    local to_build = {}
     for _, item in ipairs(items) do
+        local deps = assert(item2deps[item], item)
+        local ver = assert(item2ver[item], item)
         local files = assert(item2files[item], item)
-        if not isEmpty(files) then
-            table.insert(to_build, item)
-        end
+        makeDeb(item, files, deps, ver)
     end
-    local built = {}
-    repeat
-        local missing_deps_set = {}
-        for _, item in ipairs(to_build) do
-            local deps = assert(item2deps[item], item)
-            local ver = assert(item2ver[item], item)
-            local files = assert(item2files[item], item)
-            for _, dep in ipairs(deps) do
-                local dep_files = item2files[dep]
-                if isEmpty(dep_files) then
-                    log('Item %s depends on ' ..
-                        'empty item %s', item, dep)
-                    missing_deps_set[dep] = true
-                end
-            end
-            makeDeb(item, files, deps, ver)
-            built[item] = true
-        end
-        -- empty packages built to satisfy non-empty
-        to_build = {}
-        for item in pairs(missing_deps_set) do
-            if not built[item] then
-                table.insert(to_build, item)
-            end
-        end
-    until #to_build == 0
 end
 
 local function getMxeVersion()
