@@ -4,8 +4,8 @@ PKG             := oce
 $(PKG)_WEBSITE  := https://github.com/tpaviot/oce
 $(PKG)_DESCR    := Open CASCADE Community Edition
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.18.1
-$(PKG)_CHECKSUM := 1acf5da4bffa3592ca9f3535af9b927b79fcfeadcb81e9963e89aec192929a6c
+$(PKG)_VERSION  := 0.18.2
+$(PKG)_CHECKSUM := dc21ddea678a500ad87c773e9a502ed7a71768cf83d9af0bd4c43294186a7fef
 $(PKG)_GH_CONF  := tpaviot/oce,OCE-
 $(PKG)_DEPS     := gcc freetype
 
