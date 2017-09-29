@@ -4,7 +4,7 @@
 PKG             := qrupdate
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.2
-$(PKG)_CHECKSUM := f7403b646ace20f4a2b080b4933a1e9152fac526
+$(PKG)_CHECKSUM := e2a1c711dc8ebc418e21195833814cb2f84b878b90a2774365f0166402308e08
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := qrupdate-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://sourceforge.net/projects/qrupdate/files/$($(PKG)_FILE)
