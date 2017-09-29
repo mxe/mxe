@@ -3,11 +3,11 @@
 
 PKG             := qhull
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2009.1
-$(PKG)_CHECKSUM := 108d59efa60b2ebaf94b121414c8f8b7b76a7409
+$(PKG)_VERSION  := 2015.2
+$(PKG)_CHECKSUM := ccba72a9d9c614181b45666f12df1a8fd0b34236099f247b9bc008f6c3ec7872
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := qhull-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://download.savannah.gnu.org/releases/qhull/$($(PKG)_FILE)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).zip
+$(PKG)_URL      := http://www.qhull.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
@@ -16,16 +16,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && aclocal && libtoolize && autoreconf
     mkdir '$(1)/.build'
-    cd '$(1)/.build' && '$(1)/configure' \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
-        --enable-static \
-        --enable-openmp
+    cd '$(1)/.build' && $(TARGET)-cmake $(1)
 
-    $(MAKE) -C '$(1)/.build' -j '$(JOBS)' install
+    make -C '$(1)/.build' -j '$(JOBS)'
+    make -C '$(1)/.build' install
 endef
 
