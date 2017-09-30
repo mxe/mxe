@@ -127,7 +127,7 @@
     "itk": {"version": "4.10.1", "website": "https://www.itk.org/", "description": "Insight Segmentation and Registration Toolkit (ITK)"},
     "jack": {"version": "1.9.10", "website": "http://jackaudio.org/", "description": "JACK Audio Connection Kit"},
     "jansson": {"version": "2.7", "website": "http://www.digip.org/jansson/", "description": "Jansson"},
-    "jasper": {"version": "2.0.13", "website": "https://www.ece.uvic.ca/~mdadams/jasper/", "description": "JasPer"},
+    "jasper": {"version": "2.0.14", "website": "https://www.ece.uvic.ca/~mdadams/jasper/", "description": "JasPer"},
     "jpeg": {"version": "9b", "website": "http://www.ijg.org/", "description": ""},
     "json-c": {"version": "0.12", "website": "https://github.com/json-c/json-c/wiki", "description": ""},
     "json-glib": {"version": "1.0.4", "website": "https://wiki.gnome.org/action/show/Projects/JsonGlib", "description": "JSON-Glib"},
