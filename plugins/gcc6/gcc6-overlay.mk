@@ -22,3 +22,4 @@ $(PKG)_CHECKSUM := 850bf21eafdfe5cd5f6827148184c08c4a0852a37ccf36ce69855334d2c91
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc6.patch
