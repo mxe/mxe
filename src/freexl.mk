@@ -18,16 +18,16 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(SOURCE_DIR)' && ./configure \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
-    $(MAKE) -C '$(1)' -j 1 $(INSTALL_STRIP_LIB)
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1 $(INSTALL_STRIP_LIB)
 
     # the test program comes from the freexl sources itself (test_xl.c)
-    '$(TARGET)-g++' \
+    '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(1)/examples/test_xl.c' -o '$(PREFIX)/$(TARGET)/bin/test-freexl.exe' \
-        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs` -liconv
+        '$(SOURCE_DIR)/examples/test_xl.c' -o '$(PREFIX)/$(TARGET)/bin/test-freexl.exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 
     # create a batch file to run the test program (as the test program requires arguments)
     (printf 'REM Run the test program against the provided .xls file.\r\n'; \
@@ -35,5 +35,5 @@ define $(PKG)_BUILD
      > '$(PREFIX)/$(TARGET)/bin/test-freexl.bat'
 
     # copy a test xls file to the target bin directory
-    cp -f '$(1)/tests/testdata/testcase1.xls' '$(PREFIX)/$(TARGET)/bin/test-freexl.xls'
+    cp -f '$(SOURCE_DIR)/tests/testdata/testcase1.xls' '$(PREFIX)/$(TARGET)/bin/test-freexl.xls'
 endef
