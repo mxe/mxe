@@ -36,3 +36,21 @@ index 1111111..2222222 100644
  
    #-----------------------------------------------------------------------
    #   --enable-controlpoints
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Mon, 2 Oct 2017 11:27:24 +0200
+Subject: [PATCH] Add static dependency to .pc file
+
+
+diff --git a/spatialite.pc.in b/spatialite.pc.in
+index 1111111..2222222 100644
+--- a/spatialite.pc.in
++++ b/spatialite.pc.in
+@@ -8,5 +8,5 @@ includedir=@includedir@
+ Name: spatialite
+ Description: Spatial SQL database engine based on SQLite
+ Version: @VERSION@
+-Libs: -L${libdir} -lspatialite
++Libs: -L${libdir} -lspatialite -lgeos_c -lgeos -lxml2 -lws2_32 -lstdc++ -lm
+ Cflags: -I${includedir}
