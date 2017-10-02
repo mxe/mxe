@@ -6,8 +6,8 @@ From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Tue, 29 Aug 2017 16:31:09 +0200
 Subject: [PATCH] Detect spatialite more effectively than just checking for
-  headers in the system paths. PostgreSQL detection requires -lpthread when
-  building statically. Added detection for openjpeg-2.2.
+ headers in the system paths. PostgreSQL detection requires -lpthread when
+ building statically.
 
 
 diff --git a/configure.ac b/configure.ac
@@ -23,51 +23,6 @@ index 1111111..2222222 100644
  
    if test "${HAVE_PG}" = "yes" ; then
      LIBS=-L`$PG_CONFIG --libdir`" -lpq $LIBS"
-@@ -2545,14 +2545,23 @@ elif test "$with_openjpeg" = "yes" -o "$with_openjpeg" = "" ; then
-     if test "$HAVE_OPENJPEG" = "yes"; then
-         LIBS="-lopenjp2 $LIBS"
-     fi
--  else
--    AC_CHECK_HEADERS([openjpeg-2.1/openjpeg.h])
--    if test "$ac_cv_header_openjpeg_2_1_openjpeg_h" = "yes"; then
--        AC_CHECK_LIB(openjp2,opj_stream_set_user_data_length,HAVE_OPENJPEG=yes,HAVE_OPENJPEG=no,)
--        if test "$HAVE_OPENJPEG" = "yes"; then
--            OPENJPEG_VERSION=20100
--            LIBS="-lopenjp2 $LIBS"
--        fi
-+  fi
-+
-+  AC_CHECK_HEADERS([openjpeg-2.1/openjpeg.h])
-+  if test "$ac_cv_header_openjpeg_2_1_openjpeg_h" = "yes"; then
-+    AC_CHECK_LIB(openjp2,opj_stream_set_user_data_length,HAVE_OPENJPEG=yes,HAVE_OPENJPEG=no,)
-+    if test "$HAVE_OPENJPEG" = "yes"; then
-+      OPENJPEG_VERSION=20100
-+      LIBS="-lopenjp2 $LIBS"
-+    fi
-+  fi
-+
-+  AC_CHECK_HEADERS([openjpeg-2.2/openjpeg.h])
-+  if test "$ac_cv_header_openjpeg_2_2_openjpeg_h" = "yes"; then
-+    AC_CHECK_LIB(openjp2,opj_stream_set_user_data_length,HAVE_OPENJPEG=yes,HAVE_OPENJPEG=no,)
-+    if test "$HAVE_OPENJPEG" = "yes"; then
-+      OPENJPEG_VERSION=20200
-+      LIBS="-lopenjp2 $LIBS"
-     fi
-   fi
- else
-@@ -2563,8 +2572,11 @@ else
-   elif test -r $with_openjpeg/include/openjpeg-2.1/openjpeg.h ; then
-     OPENJPEG_VERSION=20100
-     EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
-+  elif test -r $with_openjpeg/include/openjpeg-2.2/openjpeg.h ; then
-+    OPENJPEG_VERSION=20200
-+    EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
-   else
--    AC_MSG_ERROR([openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.1])
-+    AC_MSG_ERROR([openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0, $with_openjpeg/include/openjpeg-2.1 or $with_openjpeg/include/openjpeg-2.2])
-   fi
- 
-   AC_CHECK_LIB(openjp2,opj_stream_set_user_data_length,HAVE_OPENJPEG=yes,HAVE_OPENJPEG=no,-L$with_openjpeg/lib)
 @@ -3532,16 +3544,21 @@ AC_ARG_WITH(spatialite-soname,
  
  HAVE_SPATIALITE=no
@@ -93,21 +48,6 @@ index 1111111..2222222 100644
              if test "$SPATIALITE_INIT_FOUND" = "yes"; then
                  HAVE_SPATIALITE=yes
                  SPATIALITE_LIBS="-lspatialite -lsqlite3"
-diff --git a/frmts/openjpeg/openjpegdataset.cpp b/frmts/openjpeg/openjpegdataset.cpp
-index 1111111..2222222 100644
---- a/frmts/openjpeg/openjpegdataset.cpp
-+++ b/frmts/openjpeg/openjpegdataset.cpp
-@@ -34,7 +34,9 @@
- #pragma clang diagnostic ignored "-Wdocumentation"
- #endif
- 
--#if defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20100
-+#if defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20200
-+#include <openjpeg-2.2/openjpeg.h>
-+#elif defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20100
- #include <openjpeg-2.1/openjpeg.h>
- #else
- #include <stdio.h> /* openjpeg.h needs FILE* */
 diff --git a/m4/geos.m4 b/m4/geos.m4
 index 1111111..2222222 100644
 --- a/m4/geos.m4
@@ -130,3 +70,24 @@ index 1111111..2222222 100644
  
        AC_CHECK_LIB([geos_c],
          [GEOSversion],
+
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Tue, 26 Sep 2017 14:56:19 +0200
+Subject: [PATCH] Use the new proj dll version number for the latest proj.
+
+diff --git a/ogr/ogrct.cpp b/ogr/ogrct.cpp
+index 1111111..2222222 100644
+--- a/ogr/ogrct.cpp
++++ b/ogr/ogrct.cpp
+@@ -96,9 +96,9 @@ static bool      bProjLocaleSafe = false;
+ // build) it can be named either way, so use PROJSO environment variable to
+ // specify the right library name. By default assume that in Cygwin/MinGW all
+ // components were built in the same way.
+-#  define LIBNAME "libproj-9.dll"
++#  define LIBNAME "libproj-12.dll"
+ #elif defined(__CYGWIN__)
+-#  define LIBNAME "cygproj-9.dll"
++#  define LIBNAME "cygproj-12.dll"
+ #elif defined(__APPLE__)
+ #  define LIBNAME "libproj.dylib"
+ #else
