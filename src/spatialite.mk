@@ -19,25 +19,23 @@ endef
 
 define $(PKG)_BUILD
     # freeXL support is only necessary if you want to be able to parse .xls files.
-    # If you disable freexl support, remove -lfreexl from the test program below.
-    cd '$(1)' && autoreconf -fi -I ./m4
-    cd '$(1)' && ./configure \
-    $(MXE_CONFIGURE_OPTS) \
-    --enable-freexl=yes \
-    --with-geosconfig='$(PREFIX)/$(TARGET)/bin/geos-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' $(if $(BUILD_SHARED), LDFLAGS='-no-undefined')
-    $(MAKE) -C '$(1)' -j 1  $(INSTALL_STRIP_LIB)
+    # If you disable freexl support, remove freexl from the test program below.
+    cd '$(SOURCE_DIR)' && autoreconf -fi -I ./m4
+    cd '$(SOURCE_DIR)' && ./configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --enable-freexl=yes \
+        --with-geosconfig='$(PREFIX)/$(TARGET)/bin/geos-config'
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' $(if $(BUILD_SHARED), LDFLAGS='-no-undefined')
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1  $(INSTALL_STRIP_LIB)
 
-    # compile one of the demo programs (copied from the source package)
-    '$(TARGET)-g++' $(if $(BUILD_SHARED), -Wno-undefined) \
-       -W -Wall -Werror -ansi -pedantic \
-       '$(TOP_DIR)/src/spatialite-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-spatialite.exe' \
-       `'$(TARGET)-pkg-config' $(PKG) --cflags --libs` \
-       `'$(TARGET)-pkg-config' sqlite3 --cflags --libs` \
-       $(if $(BUILD_STATIC), -lgeos_c -lgeos -lfreexl -lxml2 -liconv -llzma -lproj -lws2_32 -lz -lstdc++ -lm)
+    # compile one of the demo programs
+    '$(TARGET)-gcc' $(if $(BUILD_SHARED), -Wno-undefined) \
+        -W -Wall -ansi -pedantic \
+        '$(SOURCE_DIR)/examples/demo4.c' -o '$(PREFIX)/$(TARGET)/bin/test-spatialite.exe' \
+        `'$(TARGET)-pkg-config' $(PKG) sqlite3 freexl proj zlib liblzma --cflags --libs`
 
     # create a batch file to run the test program (as the program requires arguments)
-    (printf 'REM run against a database that should not exist, but remove afterward to save space.\r\n'; \
+    (printf 'REM run against a database that should not exist, but will be removed afterward to save space.\r\n'; \
      printf 'test-spatialite.exe test-db.sqlite\r\n'; \
      printf 'del test-db.sqlite\r\n';) \
      > '$(PREFIX)/$(TARGET)/bin/test-spatialite.bat'
