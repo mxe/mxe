@@ -21,8 +21,10 @@ endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
-        CFLAGS='-pthread' \
+        CFLAGS='-pthread -lpng' \
+        LDFLAGS='-L$(PREFIX)/$(TARGET)/lib' \
          --without-tools \
+         --with-tests \
         $(MXE_CONFIGURE_OPTS) \
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
@@ -33,8 +35,6 @@ define $(PKG)_BUILD
     (echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: libqrencode'; \
-     echo 'Libs: -lqrencode';) \
+     echo 'Libs: -lqrencode -lpng';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
-
 endef
-
