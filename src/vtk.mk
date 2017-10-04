@@ -6,12 +6,12 @@ $(PKG)_VERSION    := 8.0.0
 $(PKG)_CHECKSUM   := c7e727706fb689fb6fd764d3b47cac8f4dc03204806ff19a10dfd406c6072a27
 $(PKG)_SUBDIR     := VTK-$($(PKG)_VERSION)
 $(PKG)_FILE       := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL        := http://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL        := https://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_QT_VERSION := 5
 $(PKG)_DEPS       := gcc hdf5 qtbase qttools libpng expat libxml2 jsoncpp tiff freetype lz4 hdf5 libharu glew
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://vtk.org/gitweb?p=VTK.git;a=tags' | \
+    $(WGET) -q -O- 'https://vtk.org/gitweb?p=VTK.git;a=tags' | \
     grep 'refs/tags/v[0-9.]*"' | \
     $(SED) 's,.*refs/tags/v\(.*\)".*,\1,g;' | \
     grep -v rc | \

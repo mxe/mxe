@@ -3,7 +3,7 @@
 PKG             := clementine
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := fbc2f78
-$(PKG)_CHECKSUM := ed26f77c41869cbb054a0ca33cc5bb98b5d8cf5ff248ca3ab188b896fb16cc7c
+$(PKG)_CHECKSUM := b36dc3f24366aabd591e83998b0d437f13755eae62cff4d8a2833c5995bc2f0f
 $(PKG)_GH_CONF  := clementine-player/Clementine/qt5
 $(PKG)_WEBSITE  := https://www.clementine-player.org/
 $(PKG)_OWNER    := https://github.com/pavelvat

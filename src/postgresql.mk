@@ -23,7 +23,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cp -Rp '$(1)' '$(1).native'
-    # Since we build only client libary, use bogus tzdata to satisfy configure.
+    # Since we build only client library, use bogus tzdata to satisfy configure.
     # pthreads is needed in both LIBS and PTHREAD_LIBS
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \

@@ -57,7 +57,7 @@ From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 20 Jul 2017 16:34:51 +1000
 Subject: [PATCH] fix resource paths
 
-DevIL/src-IL/msvc/IL.rc has wierd EOL issues and patches don't
+DevIL/src-IL/msvc/IL.rc has weird EOL issues and patches don't
 apply - use $(SED) in build rule instead
 
 

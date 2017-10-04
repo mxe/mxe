@@ -8,7 +8,7 @@ endif()
 
 pkg_check_modules(TIFF libtiff-4)
 
-# for backward compatiblity
+# for backward compatibility
 set(TIFF_LIBRARY ${TIFF_LIBRARIES})
 set(TIFF_INCLUDE_DIR ${TIFF_INCLUDE_DIRS})
 set(TIFF_VERSION_STRING ${TIFF_VERSION})

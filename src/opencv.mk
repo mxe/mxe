@@ -4,13 +4,13 @@ PKG             := opencv
 $(PKG)_WEBSITE  := http://opencv.org/
 $(PKG)_DESCR    := OpenCV
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4.10
-$(PKG)_CHECKSUM := 1bf4cb87283797fd91669d4f90b622a677a903c20b4a577b7958a2164f7596c6
+$(PKG)_VERSION  := 3.3.0
+$(PKG)_CHECKSUM := 3546c3837f88177c898e4172942da7a3ca6c4e8e98a33d0cbccb2b499167c5ba
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://distfiles.macports.org/opencv/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc eigen ffmpeg jasper jpeg lcms1 libpng openexr tiff xz zlib
+$(PKG)_DEPS     := gcc eigen ffmpeg jasper jpeg lcms1 libpng libwebp openexr protobuf tiff xz zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/opencvlibrary/files/opencv-unix/' | \
@@ -39,10 +39,13 @@ define $(PKG)_BUILD
       -DBUILD_TIFF=OFF \
       -DBUILD_JASPER=OFF \
       -DBUILD_JPEG=OFF \
+      -DBUILD_WEBP=OFF \
+      -DBUILD_PROTOBUF=OFF \
+      -DPROTOBUF_UPDATE_FILES=ON \
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
-      -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500 -D__STDC_LIMIT_MACROS'
+      -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500'
 
     # install
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
@@ -53,11 +56,13 @@ define $(PKG)_BUILD
     # opencv builds it's own libIlmImf.a
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
         $(SED) -i 's/OpenEXR//' '$(BUILD_DIR)/unix-install/opencv.pc')
+
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(BUILD_DIR)/unix-install/opencv.pc'
+
     $(INSTALL) -m755 '$(BUILD_DIR)/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi -pedantic \
-        '$(1)/samples/c/fback_c.c' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
+        -W -Wall -Werror -ansi \
+        '$(SOURCE_DIR)/samples/cpp/fback.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
         `'$(TARGET)-pkg-config' opencv --cflags --libs`
 endef

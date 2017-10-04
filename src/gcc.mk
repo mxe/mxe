@@ -86,6 +86,8 @@ define $(PKG)_BUILD_mingw-w64
     $(MAKE) -C '$(BUILD_DIR).pthreads' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
     # build rest of gcc
+    # `all-target-libstdc++-v3` sometimes has parallel failure
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' all-target-libstdc++-v3
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 

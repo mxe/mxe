@@ -1298,7 +1298,7 @@ index 1111111..2222222 100644
 +EXEEXTAUX="$EXEEXT"
 +CROSS_COMPILING=no
 +
-+AC_ARG_VAR(CCAUX, [auxilliary C compiler])
++AC_ARG_VAR(CCAUX, [auxiliary C compiler])
 +
 +if test "$cross_compiling" = yes ; then
 +  CROSS_COMPILING=yes

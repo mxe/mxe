@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 2.4.1
 $(PKG)_CHECKSUM := f3acb8dec26f2dbf6df778888e0e429a4ce9378a9d461b02a7ccbf2991bbf24d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://downloads.us.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://downloads.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc ogg openssl speex theora vorbis
 
 define $(PKG)_UPDATE

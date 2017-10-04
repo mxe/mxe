@@ -1,0 +1,27 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 2 Feb 2017 02:05:50 +1100
+Subject: [PATCH] allow native cpu detection when building with clang
+
+function was disabled for non-gcc5 in:
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b587c12551143c14f023860a1dbdf7316ae71f27;hp=43096b526a9f23008b9769372f11475ae63487bc
+
+clang can build it correctly and this should probably be a feature test
+
+diff --git a/gcc/config/i386/driver-i386.c b/gcc/config/i386/driver-i386.c
+index 1111111..2222222 100644
+--- a/gcc/config/i386/driver-i386.c
++++ b/gcc/config/i386/driver-i386.c
+@@ -24,7 +24,7 @@ along with GCC; see the file COPYING3.  If not see
+ 
+ const char *host_detect_local_cpu (int argc, const char **argv);
+ 
+-#if defined(__GNUC__) && (__GNUC__ >= 5 || !defined(__PIC__))
++#if defined(__GNUC__) && (__GNUC__ >= 5 || !defined(__PIC__)) || defined(__clang__)
+ #include "cpuid.h"
+ 
+ struct cache_desc

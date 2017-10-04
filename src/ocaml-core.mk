@@ -41,7 +41,7 @@ define $(PKG)_BUILD
     # overwriting the binary versions which ship with the compiler with
     # ones that contain the filename-win32-dirsep patch.
     $(MAKE) -C '$(1)' -j 1 coreboot
-    # second time, otherwise Segfault in some cases (depending on the runing system?)
+    # second time, otherwise Segfault in some cases (depending on the running system?)
     $(MAKE) -C '$(1)' -j 1 coreboot
     $(MAKE) -C '$(1)' -j 1 all
     # install ocamldoc and camlp4 (non cross versions)
