@@ -6,6 +6,7 @@ $(PKG)_VERSION   = $(mingw-w64_VERSION)
 $(PKG)_CHECKSUM  = $(mingw-w64_CHECKSUM)
 $(PKG)_SUBDIR    = $(mingw-w64_SUBDIR)
 $(PKG)_FILE      = $(mingw-w64_FILE)
+$(PKG)_PATCHES   = $(mingw-w64_PATCHES)
 $(PKG)_URL       = $(mingw-w64_URL)
 $(PKG)_URL_2     = $(mingw-w64_URL_2)
 $(PKG)_DEPS     := gcc
