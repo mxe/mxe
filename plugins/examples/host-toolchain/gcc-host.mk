@@ -38,6 +38,8 @@ define $(PKG)_BUILD
         --with-{gmp,isl,mpc,mpfr}='$(PREFIX)/$(TARGET)' \
         $($(PKG)_CONFIGURE_OPTS)
 
+    # `all-target-libstdc++-v3` sometimes has parallel failure
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' all-target-libstdc++-v3 || $(MAKE) -C '$(BUILD_DIR)' -j 1 all-target-libstdc++-v3
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
