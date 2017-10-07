@@ -1,9 +1,9 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 0e4abbfb6a0ac7bcc31fa0db0e2ae2c6e0310b26 Mon Sep 17 00:00:00 2001
+From dc63e2c9b8d03b631d04faa0505ebee59a594d98 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -12,7 +12,7 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 17da8b979e0..bddd70960a8 100644
+index 55c74aad66..d7bcffeb9c 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -224,13 +224,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -36,10 +36,10 @@ index 17da8b979e0..bddd70960a8 100644
 2.11.0
 
 
-From 421e7313cfa5421dd41adb136a7449ecafc86e4e Mon Sep 17 00:00:00 2001
+From 697c74a0dfc3ed83e002ddb28bbd3d654f9a4ebf Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/5] Fix pkgconfig file and library naming
+Subject: [PATCH 2/6] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -64,7 +64,7 @@ Task-number: 30898
 Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 36f632e8caa..b07085ac429 100644
+index 36f632e8ca..b07085ac42 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
 @@ -263,6 +263,10 @@ load(qt_installs)
@@ -105,18 +105,18 @@ index 36f632e8caa..b07085ac429 100644
 2.11.0
 
 
-From b84844de9f60380c328a481b58cd2a035851d5d3 Mon Sep 17 00:00:00 2001
+From 703f33010fce0ab7abe90e4a51c6685121649ad3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 2fb03a452ab..91ae39177f2 100644
+index 28c8034c75..cf9753ba21 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -498,7 +498,7 @@
+@@ -905,7 +905,7 @@
          },
          "fontconfig": {
              "label": "Fontconfig",
@@ -126,7 +126,7 @@ index 2fb03a452ab..91ae39177f2 100644
          },
          "gbm": {
 diff --git a/src/plugins/platforms/minimal/qminimalintegration.cpp b/src/plugins/platforms/minimal/qminimalintegration.cpp
-index ca33689cd72..194523eee00 100644
+index ca33689cd7..194523eee0 100644
 --- a/src/plugins/platforms/minimal/qminimalintegration.cpp
 +++ b/src/plugins/platforms/minimal/qminimalintegration.cpp
 @@ -130,7 +130,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
@@ -145,15 +145,15 @@ index ca33689cd72..194523eee00 100644
 2.11.0
 
 
-From c35d305ba4e1bdb4a6bdc7ad85515e0358b8d3bc Mon Sep 17 00:00:00 2001
+From ac2d89921b37f58d304e82b64784446190f61f9b Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
-Subject: [PATCH 4/5] fix treatment of SYBASE_LIBS
+Subject: [PATCH 4/6] fix treatment of SYBASE_LIBS
 
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
 diff --git a/src/plugins/sqldrivers/configure.pri b/src/plugins/sqldrivers/configure.pri
-index 9fb957291fd..d0640809022 100644
+index b69b51b679..d37423adbd 100644
 --- a/src/plugins/sqldrivers/configure.pri
 +++ b/src/plugins/sqldrivers/configure.pri
 @@ -92,7 +92,7 @@ defineTest(qtConfLibrary_sybaseEnv) {
@@ -169,20 +169,20 @@ index 9fb957291fd..d0640809022 100644
 2.11.0
 
 
-From 4bf338634788b012bd73b7bb4aeea81e42e9bb82 Mon Sep 17 00:00:00 2001
+From b3f30dd89e8fe9bd2d26c60d11e03a5d68e2a479 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 5/5] use pkg-config for harfbuzz
+Subject: [PATCH 5/6] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 91ae39177f2..398d07d0b13 100644
+index cf9753ba21..4061920b8d 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -130,7 +130,8 @@
-             "label": "HarfBuzz",
-             "test": "unix/harfbuzz",
+@@ -218,7 +218,8 @@
+                 ]
+             },
              "sources": [
 -                "-lharfbuzz"
 +               { "type": "pkgConfig", "args": "harfbuzz" },
@@ -190,6 +190,51 @@ index 91ae39177f2..398d07d0b13 100644
              ]
          },
          "imf": {
+-- 
+2.11.0
+
+
+From 3699942ab30b6b0da29ee6ddddfeda0432f48faa Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 7 Oct 2017 11:39:29 +0200
+Subject: [PATCH 6/6] Revert "qmake: don't limit command line length when not
+ actually on windows"
+
+This breaks cross compiling for mingw.
+
+This reverts commit 8bebded9ab02b8eec67c44bfddf802d6bf9cda3c.
+
+diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
+index 185afaaa49..20a2a6fab0 100644
+--- a/mkspecs/win32-g++/qmake.conf
++++ b/mkspecs/win32-g++/qmake.conf
+@@ -50,10 +50,8 @@ QMAKE_LFLAGS_CONSOLE    = -Wl,-subsystem,console
+ QMAKE_LFLAGS_WINDOWS    = -Wl,-subsystem,windows
+ QMAKE_LFLAGS_DLL        = -shared
+ QMAKE_LFLAGS_GCSECTIONS = -Wl,--gc-sections
+-equals(QMAKE_HOST.os, Windows) {
+-    QMAKE_LINK_OBJECT_MAX = 10
+-    QMAKE_LINK_OBJECT_SCRIPT = object_script
+-}
++QMAKE_LINK_OBJECT_MAX   = 10
++QMAKE_LINK_OBJECT_SCRIPT = object_script
+ QMAKE_PREFIX_SHLIB      =
+ QMAKE_EXTENSION_SHLIB   = dll
+ QMAKE_PREFIX_STATICLIB  = lib
+diff --git a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
+index bad53dc5b7..c3b876531c 100644
+--- a/qmake/generators/win32/mingw_make.cpp
++++ b/qmake/generators/win32/mingw_make.cpp
+@@ -285,8 +285,7 @@ void MingwMakefileGenerator::writeLibsPart(QTextStream &t)
+ 
+ void MingwMakefileGenerator::writeObjectsPart(QTextStream &t)
+ {
+-    const ProString &objmax = project->first("QMAKE_LINK_OBJECT_MAX");
+-    if (objmax.isEmpty() || project->values("OBJECTS").count() < objmax.toInt()) {
++    if (project->values("OBJECTS").count() < var("QMAKE_LINK_OBJECT_MAX").toInt()) {
+         objectsLinkLine = "$(OBJECTS)";
+     } else if (project->isActiveConfig("staticlib") && project->first("TEMPLATE") == "lib") {
+         QString ar_script_file = var("QMAKE_LINK_OBJECT_SCRIPT") + "." + var("TARGET");
 -- 
 2.11.0
 
