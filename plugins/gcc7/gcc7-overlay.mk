@@ -23,3 +23,6 @@ $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc7.patch
+
+# use mingw-w64 patch from #1782 - breaks cgal and opencv for gcc5
+mingw-w64_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/mingw-w64-1-fixes.patch
