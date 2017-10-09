@@ -247,7 +247,7 @@ define PREPARE_PKG_SOURCE
     $(else),\
         cd '$(2)' && $(call UNPACK_PKG_ARCHIVE,$(1))
         cd '$(2)/$($(1)_SUBDIR)'
-        $(foreach PKG_PATCH,$(PKG_PATCHES),
+        $(foreach PKG_PATCH,$($(1)_PATCHES),
             (cd '$(2)/$($(1)_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
     )
 endef
@@ -491,6 +491,7 @@ $(foreach TARGET,$(MXE_TARGETS),$(call TARGET_RULE,$(TARGET)))
 define PKG_RULE
 # configure GitHub metadata if GH_CONF is set
 $(if $($(PKG)_GH_CONF),$(eval $(MXE_SETUP_GITHUB)))
+$(eval $(PKG)_PATCHES := $(PKG_PATCHES))
 
 .PHONY: download-$(1)
 download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
@@ -554,7 +555,7 @@ define PKG_TARGET_RULE
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
-                          $(PKG_PATCHES) \
+                          $($(PKG)_PATCHES) \
                           $(PKG_TESTFILES) \
                           $($(1)_FILE_DEPS) \
                           $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
