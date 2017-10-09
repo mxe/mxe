@@ -4,8 +4,8 @@ PKG             := libgeotiff
 $(PKG)_WEBSITE  := https://trac.osgeo.org/geotiff/
 $(PKG)_DESCR    := GeoTiff
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.0
-$(PKG)_CHECKSUM := d0acb8d341fd6a8f2c673456e09fdb8f50f91e3166ac934719fe05b30d328329
+$(PKG)_VERSION  := 1.4.2
+$(PKG)_CHECKSUM := ad87048adb91167b07f34974a8e53e4ec356494c29f1748de95252e8f81a5e6e
 $(PKG)_SUBDIR   := libgeotiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgeotiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
@@ -18,6 +18,8 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+# Note: towgs84 is set to disabled for binary compatibility to < 1.4.2
+# Enabling towgs84 *may* require some work.
 define $(PKG)_BUILD
     $(SED) -i 's,/usr/local,@prefix@,' '$(1)/bin/Makefile.in'
     touch '$(1)/configure'
@@ -26,6 +28,7 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --with-jpeg \
         --with-zlib \
+        --disable-towgs84 \
         LIBS="`'$(TARGET)-pkg-config' --libs libtiff-4` -ljpeg -lz"
     $(MAKE) -C '$(1)' -j 1 all install \
         LDFLAGS=-no-undefined \
