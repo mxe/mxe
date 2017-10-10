@@ -17,9 +17,19 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
-    $(TARGET)-gcc -o $(PREFIX)/$(TARGET)/bin/test-$(PKG).exe \
-        $(if $(BUILD_STATIC),,-DHPDF_DLL) \
-        '$(1)/demo/slide_show_demo.c' \
-        $(if $(BUILD_STATIC),'-lhpdfs','-lhpdf') \
-        `$(TARGET)-pkg-config libpng zlib --libs`
+    # create pkg-config files
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: open source library for generating PDF files'; \
+     echo 'Cflags: $(if $(BUILD_STATIC),,-DHPDF_DLL)'; \
+     echo 'Libs: $(if $(BUILD_STATIC),-lhpdfs,-lhpdf)'; \
+     echo 'Requires: libpng zlib';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    '$(TARGET)-gcc' \
+        -W -Wall -ansi \
+        '$(SOURCE_DIR)/demo/slide_show_demo.c' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
