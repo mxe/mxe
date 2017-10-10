@@ -29,6 +29,9 @@ export QT5_PKGS=${QT5_PKGS}qtbase
 cp `eval echo src/{$QT5_PKGS}.mk` $PLUGIN_DIR
 cp `eval echo src/{$QT5_PKGS}-*.patch` $PLUGIN_DIR
 
+# copy other relevant sources
+cp -R src/qttools-test $PLUGIN_DIR
+
 # set $(PKG)_PATCHES to only look for patches in the current directory
 # on macos, use `gsed` instead of `sed`
 find $PLUGIN_DIR -name "qt[^5]*.mk" -exec sed -i '9i$(PKG)_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/$(PKG)-[0-9]*.patch)))' {} \;

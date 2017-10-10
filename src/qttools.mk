@@ -11,6 +11,8 @@ $(PKG)_FILE      = $(subst qtbase,qttools,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qttools,$(qtbase_URL))
 $(PKG)_DEPS     := gcc qtactiveqt qtbase qtdeclarative
 
+$(PKG)_TEST_DIR := $(dir $(lastword $(MAKEFILE_LIST)))/qttools-test
+
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
 endef
@@ -22,9 +24,8 @@ define $(PKG)_BUILD
 
     # test QUiLoader
     mkdir '$(1)'.test
-    cd '$(1)'.test && '$(TARGET)-cmake' '$(PWD)/src/qttools-test'
+    cd '$(1)'.test && '$(TARGET)-cmake' '$($(PKG)_TEST_DIR)'
     $(MAKE) -C '$(1)'.test
     cp '$(1)'.test/mxe-cmake-qtuitools.exe \
         '$(PREFIX)/$(TARGET)/bin/test-qttools.exe'
 endef
-
