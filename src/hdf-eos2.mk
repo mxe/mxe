@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     cd '$(1)' && \
         ac_cv_func_malloc_0_nonnull=yes \
         ac_cv_func_realloc_0_nonnull=yes \
-	./configure $(MXE_CONFIGURE_OPTS) \
+    ./configure $(MXE_CONFIGURE_OPTS) \
         --enable-install-include
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'

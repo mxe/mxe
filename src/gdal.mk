@@ -12,7 +12,7 @@ $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FIL
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc armadillo curl expat geos giflib gta hdf4 hdf5 \
                    jpeg json-c libgeotiff libmysqlclient libpng libxml2 \
-                   netcdf openjpeg postgresql proj sqlite tiff zlib spatialite
+                   netcdf openjpeg postgresql proj spatialite sqlite tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://trac.osgeo.org/gdal/wiki/DownloadSource' | \
