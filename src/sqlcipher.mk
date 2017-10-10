@@ -14,6 +14,8 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         "LIBS=$$($(TARGET)-pkg-config --libs libcrypto)" \
         "CFLAGS=-DSQLITE_HAS_CODEC" \
+        config_BUILD_EXEEXT='' \
+        config_TARGET_EXEEXT='.exe' \
         --enable-tempstore=yes \
         --disable-tcl \
         --disable-editline \
@@ -21,19 +23,11 @@ define $(PKG)_BUILD
         --with-readline \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-#    # create pkg-config files
-#    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-#    (echo 'Name: $(PKG)'; \
-#     echo 'Version: $($(PKG)_VERSION)'; \
-#     echo 'Description: SQLite extension that provides 256 bit AES encryption of database files'; \
-#     echo 'Libs: -lsqlcipher';) \
-#     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
-#
-#    # compile test
-#    '$(TARGET)-gcc' \
-#        -W -Wall -Werror -ansi -pedantic \
-#        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-#        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
+    # compile test
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror \
+        '$(SOURCE_DIR)/mptest/mptest.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
