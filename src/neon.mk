@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://webdav.org/$(PKG)/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc openssl expat gettext
+$(PKG)_DEPS     := gcc expat gettext openssl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://webdav.org/$(PKG)/' | \

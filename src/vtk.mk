@@ -8,7 +8,7 @@ $(PKG)_SUBDIR     := VTK-$($(PKG)_VERSION)
 $(PKG)_FILE       := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL        := https://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_QT_VERSION := 5
-$(PKG)_DEPS       := gcc hdf5 qtbase qttools libpng expat libxml2 jsoncpp tiff freetype lz4 hdf5 libharu glew
+$(PKG)_DEPS       := gcc expat freetype glew hdf5 jsoncpp libharu libpng libxml2 lz4 qtbase qttools tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://vtk.org/gitweb?p=VTK.git;a=tags' | \
