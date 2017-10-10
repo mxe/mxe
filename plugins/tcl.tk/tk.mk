@@ -18,11 +18,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/win' && ./configure \
+    # autoreconf to treat unrecognized options as warnings
+    cd '$(SOURCE_DIR)/win' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/win/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-threads \
-	$(if $(findstring x86_64,$(TARGET)), --enable-64bit) \
-	CFLAGS=-D__MINGW_EXCPT_DEFINE_PSDK
-    $(MAKE) -C '$(1)/win' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        $(if $(findstring x86_64,$(TARGET)), --enable-64bit) \
+        CFLAGS='-D__MINGW_EXCPT_DEFINE_PSDK'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
-
