@@ -18,18 +18,9 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-# There is a strange problem where including <cfloat> leads to an error
-# in some of the #include_next magic with float.h.
-# We work around this by avoiding an #include_next in MinGW's float.h
-# (by defining __FLOAT_H) and then manually defining the MIN/MAX macros
-# that PCL wants to use.
-
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd '$(1).build' && \
-        CXXFLAGS="-D__FLOAT_H -DFLT_MAX=__FLT_MAX__ -DFLT_MIN=__FLT_MIN__ -DDBL_MAX=__DBL_MAX__ -DDBL_MIN=__DBL_MIN__ -DDBL_EPSILON=__DBL_EPSILON__" \
-        '$(TARGET)-cmake' '$(1)' \
-        -DVTK_DIR='$(PREFIX)/$(TARGET)/lib/vtk-5.8' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DMXE_DISABLE_INCLUDE_SYSTEM_FLAG=TRUE \
         -DCMAKE_RELEASE_POSTFIX='' \
         -DBoost_THREADAPI=win32 \
         -DPCL_SHARED_LIBS=OFF \
@@ -47,8 +38,8 @@ define $(PKG)_BUILD
         -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE2_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE_EXTENSIONS_EXITCODE=0
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
-    $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(BUILD_DIR)' -j 1 VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef
 
 $(PKG)_BUILD_SHARED =
