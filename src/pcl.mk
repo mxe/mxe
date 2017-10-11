@@ -25,14 +25,13 @@ endef
 # that PCL wants to use.
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd '$(1).build' && \
+    find '$(SOURCE_DIR)' -type f -name CMakeLists.txt -exec $(SED) -i -e 's/Rpcrt4/rpcrt4/g' {} \;
+    cd '$(BUILD_DIR)' && \
         CXXFLAGS="-D__FLOAT_H -DFLT_MAX=__FLT_MAX__ -DFLT_MIN=__FLT_MIN__ -DDBL_MAX=__DBL_MAX__ -DDBL_MIN=__DBL_MIN__ -DDBL_EPSILON=__DBL_EPSILON__" \
-        '$(TARGET)-cmake' '$(1)' \
-        -DVTK_DIR='$(PREFIX)/$(TARGET)/lib/vtk-5.8' \
+        '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DCMAKE_RELEASE_POSTFIX='' \
         -DBoost_THREADAPI=win32 \
-        -DPCL_SHARED_LIBS=OFF \
+        -DPCL_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DBUILD_TESTS=OFF \
         -DBUILD_apps=OFF \
         -DBUILD_examples=OFF \
@@ -47,8 +46,6 @@ define $(PKG)_BUILD
         -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE2_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE_EXTENSIONS_EXITCODE=0
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
-    $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(BUILD_DIR)' -j 1 VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef
-
-$(PKG)_BUILD_SHARED =
