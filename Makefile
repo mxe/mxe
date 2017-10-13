@@ -52,7 +52,7 @@ TIMESTAMP  := $(shell date +%Y%m%d_%H%M%S)
 PKG_DIR    := $(PWD)/pkg
 TMP_DIR     = $(MXE_TMP)/tmp-$(1)
 BUILD      := $(shell '$(EXT_DIR)/config.guess')
-PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(PATH)
+PATH       := $(PREFIX)/$(BUILD)/bin:$(PREFIX)/bin:$(shell echo $$PATH | $(SED) -e 's,:\.$$,,' -e 's,\.:,,g')
 
 # set to empty or $(false) to disable stripping
 STRIP_TOOLCHAIN := $(true)
