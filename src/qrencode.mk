@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := e794e26a96019013c0e3665cb06b18992668f352c5553d0a553f5d144f7f2
 $(PKG)_SUBDIR   := qrencode-$($(PKG)_VERSION)
 $(PKG)_FILE     := qrencode-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://fukuchi.org/works/qrencode/qrencode-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc libpng
+$(PKG)_DEPS     := gcc libpng pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://fukuchi.org/works/qrencode/index.html' | \
