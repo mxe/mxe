@@ -9,7 +9,7 @@ $(PKG)_GH_CONF  := atgreen/libffi, v
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.mirrorservice.org/sites/sourceware.org/pub/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://sourceware.org/pub/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://sourceware.org/pub/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_BUILD
