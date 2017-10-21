@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := a9a0082c918fe14e377bbd570057616768dca76cbdc713457d8199aaa233f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.eq.uc.pt/pub/software/math/netlib/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://ftp.eq.uc.pt/software/math/netlib/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc cblas
 
 define $(PKG)_UPDATE

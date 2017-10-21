@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 8ceebbf4d9a81afa2b4449113cee4b7cb14a687d7a549a963deb5e2a41458
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://isl.gforge.inria.fr/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := gcc gmp
 
@@ -19,7 +19,7 @@ $(PKG)_DEPS_$(BUILD) := gmp
 # while in gcc4 series specific versions are required:
 # https://web.archive.org/web/20141031011459/https://gcc.gnu.org/install/prerequisites.html
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'ftp://gcc.gnu.org/pub/gcc/infrastructure/' | \
+    $(WGET) -q -O- 'https://gcc.gnu.org/pub/gcc/infrastructure/' | \
     $(SED) -n 's,.*isl-\([0-9][^>]*\)\.tar.*,\1,p' | \
     $(SORT) -V |
     tail -1

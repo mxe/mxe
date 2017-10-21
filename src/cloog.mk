@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 325adf3710ce2229b7eeb9e84d3b539556d093ae860027185e7af8a8b00a7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.bastoul.net/cloog/pages/download/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc gmp isl
 
 define $(PKG)_UPDATE
