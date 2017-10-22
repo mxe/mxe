@@ -12,6 +12,7 @@ $(PKG)_GH_CONF  := KhronosGroup/OpenCL-Headers/master
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_BUILD
+    rm -rf '$(PREFIX)/$(TARGET)/include/CL'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/CL'
     $(INSTALL) -m644 '$(SOURCE_DIR)/opencl$($(PKG)_API)/CL/'*.h '$(PREFIX)/$(TARGET)/include/CL/'
 endef
