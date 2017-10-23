@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6419989
 $(PKG)_CHECKSUM := 5552fc5bb41adcc2701196281c997b728f2653b065b961596e476bb16aaf36a1
 $(PKG)_GH_CONF  := Bufius/vertminer-gpu/master
-$(PKG)_DEPS     := gcc curl opencl-icd pthreads
+$(PKG)_DEPS     := gcc curl opencl-amd pthreads
 
 define $(PKG)_BUILD
     # doesn't seem to support out-of-source builds
