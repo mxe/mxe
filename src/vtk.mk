@@ -23,6 +23,8 @@ define $(PKG)_BUILD
     # first we need a native build to create the compile tools
     mkdir '$(BUILD_DIR).native'
     cd '$(BUILD_DIR).native' && '$(PREFIX)/$(BUILD)/bin/cmake' '$(SOURCE_DIR)' \
+        -DVTK_USE_X=OFF \
+        -DVTK_USE_OFFSCREEN=ON \
         -DBUILD_TESTING=FALSE \
         -DCMAKE_BUILD_TYPE="Release"
     $(MAKE) -C '$(BUILD_DIR).native' -j '$(JOBS)' VERBOSE=1 vtkCompileTools
