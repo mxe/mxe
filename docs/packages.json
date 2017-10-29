@@ -222,6 +222,7 @@
     "libsoup": {"version": "2.57.1", "website": "https://github.com/GNOME/libsoup", "description": "HTTP client/server library for GNOME"},
     "libspatialindex": {"version": "1.8.5", "website": "https://libspatialindex.github.io/", "description": "libspatialindex"},
     "libspectre": {"version": "0.2.8", "website": "https://libspectre.freedesktop.org/", "description": ""},
+    "libssh": {"version": "0.7.5", "website": "https://www.libssh.org", "description": "SSHv2 and SSHv1 protocol on client and server side"},
     "libssh2": {"version": "1.8.0", "website": "https://libssh2.org/", "description": ""},
     "libsvm": {"version": "3.22", "website": "https://www.csie.ntu.edu.tw/~cjlin/libsvm", "description": ""},
     "libtool": {"version": "2.4.4", "website": "https://www.gnu.org/software/libtool/", "description": "GNU Libtool"},
