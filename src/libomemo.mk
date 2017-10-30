@@ -23,8 +23,16 @@ define $(PKG)_BUILD
         $(INSTALL) -m644 '$(SOURCE_DIR)/build'/libomemo*.a  '$(PREFIX)/$(TARGET)/lib/' \
     $(else), \
         $(MAKE_SHARED_FROM_STATIC) '$(SOURCE_DIR)/build/libomemo-conversations.a' \
-        `$(TARGET)-pkg-config --libs-only-l glib-2.0 sqlite3 mxml` \
-        `$(TARGET)-libgcrypt-config --libs | sed s/-L.*\b//`)
+        `$(TARGET)-pkg-config --libs-only-l glib-2.0 sqlite3 mxml libgcrypt`)
+
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $($(PKG)_DESCR)'; \
+     echo 'Requires: glib-2.0 sqlite3 mxml libgcrypt'; \
+     echo 'Libs: -lomemo-conversations';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     # test cmake
     mkdir '$(SOURCE_DIR).test-cmake'

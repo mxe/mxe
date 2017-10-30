@@ -28,10 +28,19 @@ define $(PKG)_MAKE
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     ln -sf '$(PREFIX)/$(TARGET)/bin/libgcrypt-config' '$(PREFIX)/bin/$(TARGET)-libgcrypt-config'
 
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $(PKG)'; \
+     echo 'Libs: ' "`$(TARGET)-libgcrypt-config --libs`"; \
+     echo 'Cflags: ' "`$(TARGET)-libgcrypt-config --cflags`";) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libgcrypt.exe' \
-        `$(TARGET)-libgcrypt-config --cflags --libs`
+        `$(TARGET)-pkg-config libgcrypt --cflags --libs`
 endef
 
 define $(PKG)_BUILD
