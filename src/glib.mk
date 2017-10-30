@@ -59,7 +59,7 @@ endef
 define $(PKG)_BUILD_$(BUILD)
     # glib tools need to be close to glib-cross version.
     # easy to build on linux, but error-prone on darwin (and freebsd?)
-    $(if $(findstring darwin, $(OS_SHORT_NAME)), \
+    $(if $(findstring darwin, $(BUILD)), \
         $($(PKG)_BUILD_DARWIN), \
         $($(PKG)_BUILD_NATIVE))
 endef

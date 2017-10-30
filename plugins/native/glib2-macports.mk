@@ -12,10 +12,6 @@ $(PKG)_URL      := https://packages.macports.org/glib2/glib2-$($(PKG)_VERSION)_0
 $(PKG)_DEPS     :=
 $(PKG)_TARGETS  := $(BUILD)
 
-glib_DEPS_$(BUILD)      := $(PKG)
-gettext_BUILD_$(BUILD)  :=
-libiconv_BUILD_$(BUILD) :=
-
 define $(PKG)_UPDATE
     echo 'manually update glib2-macports as necessary' >&2;
     echo $(glib2-macports_VERSION)
