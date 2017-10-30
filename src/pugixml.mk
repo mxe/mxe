@@ -23,7 +23,7 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
-     echo 'Description: Light-weight, simple, and fast XML parser for C++ with XPath support'; \
+     echo 'Description: $($(PKG)_DESCR)'; \
      echo 'Libs: -lpugixml';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
