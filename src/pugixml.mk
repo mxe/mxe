@@ -5,11 +5,9 @@ $(PKG)_WEBSITE  := https://pugixml.org/
 $(PKG)_DESCR    := Light-weight, simple, and fast XML parser for C++ with XPath support
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8
-$(PKG)_CHECKSUM := 8ef26a51c670fbe79a71e9af94df4884d5a4b00a2db38a0608a87c14113b2904
-$(PKG)_SUBDIR   := pugixml-$($(PKG)_VERSION)
-$(PKG)_FILE     := pugixml-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/zeux/pugixml/releases/download/v$($(PKG)_VERSION)/pugixml-$($(PKG)_VERSION).tar.gz
+$(PKG)_CHECKSUM := 9823684a9600e9ab6d1bc7685d01d07c56f9df41ed3ebf8541aa3dfe8d4074b2
 $(PKG)_DEPS     := gcc
+$(PKG)_GH_CONF  := zeux/pugixml,v
 
 
 define $(PKG)_BUILD
@@ -32,9 +30,4 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -pedantic \
         '$(PWD)/src/$(PKG)-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
-endef
-
-define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
 endef
