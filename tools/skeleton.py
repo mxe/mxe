@@ -84,12 +84,14 @@ BUILDERS = {
 }
 
 PC_AND_TEST = r'''
-    # create pkg-config files
+    # create pkg-config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
-     echo 'Description: %(description)s'; \
-     echo 'Libs: -l%(libname)s';) \
+     echo 'Description: $($(PKG)_DESCR)'; \
+     echo 'Requires:'; \
+     echo 'Libs: -l%(libname)s'; \
+     echo 'Cflags.private:';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     # compile test
