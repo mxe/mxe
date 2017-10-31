@@ -3,12 +3,12 @@
 PKG             := x264
 $(PKG)_WEBSITE  := https://www.videolan.org/developers/x264.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 20161130-2245
-$(PKG)_CHECKSUM := 0825e14945bc373107f9a00e66d45d5389bb86368efd834b92c52cddb2ded1d8
+$(PKG)_VERSION  := 20170626-2245
+$(PKG)_CHECKSUM := 28cf90f63964e24e65b05084c75d114a997004c8d3f72feae7229da3a098988e
 $(PKG)_SUBDIR   := $(PKG)-snapshot-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-snapshot-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/snapshots/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc liblsmash yasm
+$(PKG)_DEPS     := gcc liblsmash nasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.videolan.org/?p=x264.git;a=shortlog' | \
@@ -18,7 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,yasm,$(TARGET)-yasm,g' '$(1)/configure'
+    $(SED) -i 's,AS-nasm,AS-${cross_prefix}nasm,g' '$(1)/configure'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --cross-prefix='$(TARGET)'- \
