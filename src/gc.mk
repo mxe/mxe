@@ -3,12 +3,12 @@
 PKG             := gc
 $(PKG)_WEBSITE  := http://www.hpl.hp.com/personal/Hans_Boehm/gc/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.2e
-$(PKG)_CHECKSUM := 09315b48a82d600371207691126ad058c04677281ac318d86fa84c98c3c9af4b
-$(PKG)_SUBDIR   := $(PKG)-7.2
+$(PKG)_VERSION  := 7.6.0
+$(PKG)_CHECKSUM := a14a28b1129be90e55cd6f71127ffc5594e1091d5d54131528c24cd0c03b7d90
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://hboehm.info/$(PKG)/$(PKG)_source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := gcc libatomic_ops
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://hboehm.info/gc/gc_source/' | \
@@ -20,15 +20,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-threads=win32 \
         --enable-cplusplus
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
-
-$(PKG)_BUILD_SHARED =
