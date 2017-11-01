@@ -17,11 +17,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
-        -DCMAKE_INSTALL_PREFIX:STRING="lib/itpp" \
-        -DBLAS_LIBRARIES=libblas.dll \
-        '$(SOURCE_DIR)'
-
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DITPP_SHARED_LIB=$(CMAKE_SHARED_BOOL) \
+        -DHTML_DOCS=OFF \
+        -DBLAS_LIBRARIES=-lblas \
+        -DLAPACK_LIBRARIES='-llapack -lgfortran -lquadmath'
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+
+    # compile test
+    '$(TARGET)-g++' \
+        -W -Wall -pedantic \
+        '$(SOURCE_DIR)/tests/array_test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
