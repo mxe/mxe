@@ -126,6 +126,7 @@
     "intel-tbb": {"version": "c28c8be", "website": "https://www.threadingbuildingblocks.org", "description": "Intel Threading Building Blocks"},
     "isl": {"version": "0.15", "website": "http://isl.gforge.inria.fr/", "description": "Integer Set Library"},
     "itk": {"version": "4.10.1", "website": "https://www.itk.org/", "description": "Insight Segmentation and Registration Toolkit (ITK)"},
+    "itpp": {"version": "4.3.1", "website": "http://itpp.sourceforge.net", "description": ""},
     "jack": {"version": "1.9.10", "website": "http://jackaudio.org/", "description": "JACK Audio Connection Kit"},
     "jansson": {"version": "2.7", "website": "http://www.digip.org/jansson/", "description": "Jansson"},
     "jasper": {"version": "2.0.14", "website": "https://www.ece.uvic.ca/~mdadams/jasper/", "description": "JasPer"},
