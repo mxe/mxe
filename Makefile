@@ -784,50 +784,6 @@ clean-pkg:
 clean-junk: clean-pkg
 	rm -rf $(LOG_DIR) $(call TMP_DIR,*)
 
-COMPARE_VERSIONS = $(strip \
-    $(if $($(1)_BRANCH),$(call seq,$($(1)_VERSION),$(2)),\
-    $(filter $(2),$(shell printf '$($(1)_VERSION)\n$(2)' | $(SORT) -V | head -1))))
-
-.PHONY: update
-define UPDATE
-    $(if $(2),
-        $(if $(filter $($(1)_IGNORE),$(2)),
-            $(info IGNORED  $(1)  $(2)),
-            $(if $(COMPARE_VERSIONS),
-                $(if $(filter $(2),$($(1)_VERSION)),
-                    $(info .        $(1)  $(2)),
-                    $(info OLD      $(1)  $($(1)_VERSION) --> $(2) ignoring)),
-                $(info NEW      $(1)  $($(1)_VERSION) --> $(2))
-                $(if $(findstring undefined, $(origin UPDATE_DRYRUN)),
-                    $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $(2)/' '$($(1)_MAKEFILE)'
-                    $(MAKE) -f '$(MAKEFILE)' 'update-checksum-$(1)' \
-                        || { $(SED) -i 's/^\([^ ]*_VERSION *:=\).*/\1 $($(1)_VERSION)/' '$($(1)_MAKEFILE)'; \
-                             exit 1; }))),
-        $(info Unable to update version number of package $(1) \
-            $(newline)$(newline)$($(1)_UPDATE)$(newline)))
-
-endef
-update:
-	$(foreach PKG,$(PKGS),\
-	    $(and $($(PKG)_UPDATE),$(call UPDATE,$(PKG),$(shell $($(PKG)_UPDATE)))))
-
-update-package-%:
-	$(if $(call set_is_member,$*,$(PKGS)), \
-	    $(and $($*_UPDATE),$(call UPDATE,$*,$(shell $($*_UPDATE)))), \
-	    $(error Package $* not found))
-	    @echo -n
-
-check-update-package-%: UPDATE_DRYRUN = true
-check-update-package-%: update-package-% ;
-
-update-checksum-%: MXE_NO_BACKUP_DL = true
-update-checksum-%: SKIP_CHECHSUM = true
-update-checksum-%:
-	$(if $(call set_is_member,$*,$(PKGS)), \
-	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
-	    $(SED) -i 's/^\([^ ]*_CHECKSUM *:=\).*/\1 '"`$(call PKG_CHECKSUM,$*)`"'/' '$($*_MAKEFILE)', \
-	    $(error Package $* not found))
-
 .PHONY: cleanup-style
 define CLEANUP_STYLE
     @$(SED) ' \
@@ -965,6 +921,6 @@ docs/packages.json: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '    "": null'             >> $@
 	@echo '}'                        >> $@
 
-# for patch-tool-mxe
-
+# for other mxe functions
 include patch.mk
+include updates.mk

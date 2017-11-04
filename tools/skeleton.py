@@ -47,9 +47,18 @@ $(PKG)_URL      := %(file_url_template)s
 
 UPDATE = r'''
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for %(name)s.' >&2;
-    echo $(%(name)s_VERSION)
+    $(call GET_LATEST_VERSION, %(update_url_template)s)
 endef
+# $(call GET_LATEST_VERSION, base url[, prefix, ext, filter, separator])
+#  base url : required page returning list of versions
+#               e.g https://ftp.gnu.org/gnu/libfoo
+#  prefix   : segment before version
+#               defaults to lastword of url with dash i.e. `libfoo-`
+#  ext      : segment ending version - default `\.tar`
+#  filter   : `grep -i` filter-out pattern - default alpha\|beta\|rc
+#  separator: transform char to `.` - typically `_`
+
+# test with make check-update-package-%(name)s and delete comments
 '''
 
 CMAKE_BUILD = r'''
@@ -177,6 +186,7 @@ def make_skeleton(
     filename = get_filename(file_url)
     filename_template = filename.replace(version, '$($(PKG)_VERSION)')
     file_url_template = file_url.replace(version, '$($(PKG)_VERSION)')
+    update_url_template = file_url.replace('/' + filename,'')
     subdir_template = subdir.replace(version, '$($(PKG)_VERSION)')
     libname = name
     if libname.startswith('lib'):
@@ -188,6 +198,7 @@ def make_skeleton(
             'libname': libname,
             'website': website,
             'file_url_template': file_url_template,
+            'update_url_template': update_url_template,
             'gh_conf': gh_conf,
             'checksum': checksum,
             'version': version,
