@@ -1,0 +1,23 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 2 Nov 2017 20:06:28 +1100
+Subject: [PATCH] fix cross-compiling on darwin
+
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -17775,7 +17775,7 @@ fi
+ 
+ 
+ # check OSX deployment target, if needed
+-if echo $build_os | grep darwin > /dev/null; then
++if echo $host_os | grep darwin > /dev/null; then
+   sdk_p=`xcode-select -print-path`;
+   sdk_v="$( /usr/bin/xcrun --show-sdk-version )";
+   case $sdk_v in
