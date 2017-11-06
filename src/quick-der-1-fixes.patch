@@ -1,0 +1,103 @@
+From 1d5e21fc369855c7d55c16b441e4df76272f0e46 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 6 Nov 2017 23:00:31 +1100
+Subject: [PATCH 1/2] python setup: relax asn1ate and pytest-runner
+ requirements
+
+---
+ setup.py | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index d772f68..f15368c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -31,12 +31,11 @@ setup(
+     },
+     install_requires=[
+         'six',
+-        'asn1ate==0.5.1.dev0',
++        'asn1ate>=0.5.1.dev0',
+     ],
+     dependency_links=[
+         'git+https://github.com/kimgr/asn1ate.git@baf6a89b2f08892f184cf36c4c7a250251b195b1#egg=asn1ate-0.5.1.dev0',
+     ],
+-    setup_requires=['pytest-runner'],
+-    tests_require=['pytest'],
++    tests_require=['pytest','pytest-runner'],
+     test_suite='tests',
+ )
+-- 
+2.14.2
+
+From a86faa3db6680b0b28d390b3a07aff3ddc5b96fc Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 7 Nov 2017 02:43:08 +1100
+Subject: [PATCH 2/2] cmake install: add components for static/shared libs,
+ dev, and docs
+
+---
+ CMakeLists.txt              |  2 +-
+ cmake/MacroASN1Module.cmake |  6 ++++--
+ lib/CMakeLists.txt          | 11 +++++++----
+ 3 files changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 770615b..b245d10 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -106,4 +106,4 @@ install(FILES
+ 		cmake/MacroASN1Module.cmake 
+ 		cmake/module-test.c.in
+ 		cmake/module-test.py.in
+-	DESTINATION ${ARPA2CM_TOOLCHAIN_DIR})
++	DESTINATION ${ARPA2CM_TOOLCHAIN_DIR} COMPONENT dev)
+diff --git a/cmake/MacroASN1Module.cmake b/cmake/MacroASN1Module.cmake
+index 2bef713..0bf6008 100644
+--- a/cmake/MacroASN1Module.cmake
++++ b/cmake/MacroASN1Module.cmake
+@@ -78,7 +78,8 @@ macro(add_asn1_module _modulename _groupname)
+ 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${_modulename}.asn1
+ 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/python/testing
+ 		COMMENT "Build Python script ${_modulename}.py from ASN.1 spec")
+-	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/quick-der/${_modulename}.h DESTINATION include/quick-der)
++	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/quick-der/${_modulename}.h
++	        DESTINATION include/quick-der COMPONENT dev)
+ 
+ 	add_custom_target(${_modulename}_asn1_h DEPENDS 
+ 		${CMAKE_CURRENT_BINARY_DIR}/quick-der/${_modulename}.h
+@@ -120,7 +121,8 @@ macro(add_asn1_document _docname _groupname)
+ 		WORKING_DIRECTORY doc
+ 		COMMENT "Build markdown text file ${_docname}.md from ASN.1 spec")
+ 	add_custom_target(${_docname}_asn1_md DEPENDS doc/${_docname}.md)
+-	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/doc/${_docname}.md DESTINATION share/doc/quick-der)
++	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/doc/${_docname}.md
++	        DESTINATION share/doc/quick-der COMPONENT docs)
+ endmacro()
+ 
+ macro(add_asn1_documents _groupname)
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index 24c68ad..141e978 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -35,10 +35,13 @@ set_target_properties (quickderStatic
+ # from the top-level include/ directory. For installing the headers, don't
+ # need an extra quick-der/ level because that's retained in the file paths.
+ install (TARGETS quickderShared
+-	LIBRARY DESTINATION lib
+-	PUBLIC_HEADER DESTINATION include/quick-der)
++	ARCHIVE DESTINATION lib COMPONENT quickderShared
++	LIBRARY DESTINATION lib COMPONENT quickderShared
++	RUNTIME DESTINATION bin COMPONENT quickderShared
++	PUBLIC_HEADER DESTINATION include/quick-der COMPONENT dev)
+ install (TARGETS quickderStatic
+-	ARCHIVE DESTINATION lib)
++	ARCHIVE DESTINATION lib COMPONENT quickderStatic
++	LIBRARY DESTINATION lib COMPONENT quickderStatic)
+ install (DIRECTORY ../include/quick-der
+-	DESTINATION include
++	DESTINATION include COMPONENT dev
+ 	FILES_MATCHING PATTERN "*.h")
+-- 
+2.14.2
+
