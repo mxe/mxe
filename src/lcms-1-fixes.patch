@@ -12,15 +12,15 @@ Subject: [PATCH] add missing static dependencies to .pc file
  1 files changed, 2 insertions(+), 1 deletions(-)
 
 diff --git a/lcms2.pc.in b/lcms2.pc.in
-index b715f59..4a8fdb3 100644
+index 1111111..2222222 100644
 --- a/lcms2.pc.in
 +++ b/lcms2.pc.in
 @@ -7,5 +7,6 @@ Name: @PACKAGE@
  Description: LCMS Color Management Library
  Version: @VERSION@
  Libs: -L${libdir} -llcms2
--Libs.private: @LIB_MATH@ 
-+Libs.private: -ljpeg @LIB_MATH@ 
+-Libs.private: @LIB_MATH@ @LIB_THREAD@
++Libs.private: -ljpeg @LIB_MATH@ @LIB_THREAD@
  Cflags: -I${includedir}
 +Requires: libtiff-4
 -- 
