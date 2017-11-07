@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := itpp
-$(PKG)_WEBSITE  := http://itpp.sourceforge.net
+$(PKG)_WEBSITE  := https://itpp.sourceforge.io/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.3.1
 $(PKG)_CHECKSUM := 50717621c5dfb5ed22f8492f8af32b17776e6e06641dfe3a3a8f82c8d353b877
