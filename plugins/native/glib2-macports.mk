@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := glib2-macports
-$(PKG)_WEBSITE  := packages.macports.org
+$(PKG)_WEBSITE  := https://packages.macports.org/
 $(PKG)_DESCR    := glib2 pre-built macports package
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.50.3
