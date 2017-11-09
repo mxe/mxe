@@ -6,8 +6,8 @@ $(PKG)_DESCR    := Light-weight, simple, and fast XML parser for C++ with XPath 
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8
 $(PKG)_CHECKSUM := 9823684a9600e9ab6d1bc7685d01d07c56f9df41ed3ebf8541aa3dfe8d4074b2
+$(PKG)_GH_CONF  := zeux/pugixml/tags,v
 $(PKG)_DEPS     := gcc
-$(PKG)_GH_CONF  := zeux/pugixml,v
 
 
 define $(PKG)_BUILD

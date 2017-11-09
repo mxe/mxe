@@ -6,7 +6,7 @@ $(PKG)_DESCR    := Implementation of OMEMO in C
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.6.1
 $(PKG)_CHECKSUM := 26e2ef3df93d9461ed6d62bbb495b8ac6de385ec7a5aa28ff28dd869ba908170
-$(PKG)_GH_CONF  := gkdr/libomemo, v
+$(PKG)_GH_CONF  := gkdr/libomemo/tags, v
 $(PKG)_DEPS     := gcc glib libgcrypt mxml sqlite
 
 define $(PKG)_BUILD

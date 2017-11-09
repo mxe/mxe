@@ -5,7 +5,7 @@ $(PKG)_WEBSITE  := http://www.box2d.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.1
 $(PKG)_CHECKSUM := 75d62738b13d2836cd56647581b6e574d4005a6e077ddefa5d727d445d649752
-$(PKG)_GH_CONF  := erincatto/Box2D, v
+$(PKG)_GH_CONF  := erincatto/Box2D/tags, v
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_BUILD

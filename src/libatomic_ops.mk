@@ -6,7 +6,7 @@ $(PKG)_DESCR    := The atomic_ops project (Atomic memory update operations porta
 $(PKG)_IGNORE   := 7.6%
 $(PKG)_VERSION  := 7.4.8
 $(PKG)_CHECKSUM := b985816abc69df5781d6d9fcf081e03a3a1e44032030d0a2c28f8de731e7f20f
-$(PKG)_GH_CONF  := ivmai/libatomic_ops,v
+$(PKG)_GH_CONF  := ivmai/libatomic_ops/tags,v
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_BUILD

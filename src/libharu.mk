@@ -5,7 +5,7 @@ $(PKG)_WEBSITE  := http://libharu.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.0
 $(PKG)_CHECKSUM := 8f9e68cc5d5f7d53d1bc61a1ed876add1faf4f91070dbc360d8b259f46d9a4d2
-$(PKG)_GH_CONF  := libharu/libharu,RELEASE_,,,_
+$(PKG)_GH_CONF  := libharu/libharu/tags,RELEASE_,,,_
 $(PKG)_DEPS     := gcc libpng zlib
 
 define $(PKG)_BUILD

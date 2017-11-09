@@ -6,7 +6,7 @@ $(PKG)_DESCR    := GLFW 3.x
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.2
 $(PKG)_CHECKSUM := 6ac642087682aaf7f8397761a41a99042b2c656498217a1c63ba9706d1eef122
-$(PKG)_GH_CONF  := glfw/glfw
+$(PKG)_GH_CONF  := glfw/glfw/tags
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_BUILD

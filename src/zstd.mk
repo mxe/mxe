@@ -6,7 +6,7 @@ $(PKG)_DESCR    := Zstandard is a fast lossless compression algorithm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.2
 $(PKG)_CHECKSUM := ac5054a3c64e6510bc1ae890d05e3d271cc33ceebc9d06ac9f08105766d2798a
-$(PKG)_GH_CONF  := facebook/zstd,v
+$(PKG)_GH_CONF  := facebook/zstd/tags,v
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_BUILD
