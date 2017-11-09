@@ -1,18 +1,25 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 # Standardise GitHub downloads and updates
-# Download API has two forms:
+# Download API has three forms:
 #   Archive:
 #     url = <owner>/<repo>/archive/<ref>.tar.gz
 #     dir = <repo>-<ref>
 #       if <ref> starts with a single `v`, it is removed from dir
 #
+#   Release:
+#     Manually uploaded distribution tarballs, especially useful for
+#     autotools packages with generated sources. No universal convention,
+#     but generally:
+#     url = <owner>/<repo>/releases/downloads/<ref>/<repo>-<version>.tar.[bz2,gz,xz,...]
+#     dir = <repo>-<version>
+#
 #   Tarball:
 #     url = <owner>/<repo>/tarball/<ref>/output-file.tar.gz
 #     dir = <owner>-<repo>-<short sha>
 #
-# TODO: also third api - `releases` see libass.mk
-# grep -l 'MXE_GET_GITHUB\|api.github.com\|github.com.*archive' src/*.mk | xargs grep -L 'GH_CONF'
+# TODO: update remaining packages
+# grep -l 'MXE_GET_GITHUB\|api.github.com\|github.com.*' src/*.mk | xargs grep -L 'GH_CONF'
 #
 # Filename doesn't matter as we stream the url to a name of our choosing.
 #
@@ -21,12 +28,17 @@
 # into it without knowing the SHA beforehand, but the directory length would
 # be comical in logs etc.
 #
+# The release API is based on tags but the uploaded tarballs may use
+# any naming convention for the filename and subdir, and also other
+# archive types e.g. *.xz
+#
 # The tarball API accepts references to commits or tags, always using the
 # short SHA as the directory. In this case, tag tracking packages would have
 # to store the SHA (see #1002). However, this only works for lightweight
 # tags, not annotated tags that most projects use for releases.
 #
-# In summary, we have to use both.
+# In summary, we have to use all three.
+
 
 # The tarball API determines the short SHA length used in the directory name.
 # Chances of a collision on a "given" commit seem to decrease as the chance
@@ -41,10 +53,19 @@ GITHUB_SHA_LENGTH := 7
 #     updates will use the last commit from the specified branch as
 #     a version string and bypass `sort -V`
 #
+#   Track releases - Release API
+#     GH_CONF := owner/repo/releases[/latest], tag prefix, tag suffix, tag filter-out, version separator
+#     updates can optionally use the latest non-prerelease with /latest
+#     or manually specify version numbering based on:
+#     <tag prefix><s/<version sep>/./version><tag suffix>
+#
 #   Track tags - Archive API
-#     GH_CONF := owner/repo, tag prefix, tag suffix, tag filter-out, version separator
+#     GH_CONF := owner/repo/tags, tag prefix, tag suffix, tag filter-out, version separator
 #     updates will construct a version number based on:
 #     <tag prefix><s/<version sep>/./version><tag suffix>
+#
+# Using the third segment for api means you can't track a branch with these names:
+GH_APIS := releases tags
 
 # common tag filtering is applied with `grep -v`:
 GITHUB_TAG_FILTER := alpha\|beta\|rc
@@ -60,7 +81,9 @@ GITHUB_TAG_FILTER := alpha\|beta\|rc
 
 GH_OWNER       = $(word 1,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
 GH_REPO        = $(word 2,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
-GH_BRANCH      = $(word 3,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
+GH_API         = $(filter $(GH_APIS),$(word 3,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF))))))
+GH_BRANCH      = $(filter-out $(GH_APIS),$(word 3,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF))))))
+GH_LATEST      = $(word 4,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
 GH_TAG_VARS    = $(call rest,$(subst $(comma),$(space)$(__gmsl_aa_magic),$(subst $(space),,$($(PKG)_GH_CONF))))
 GH_TAG_PREFIX  = $(subst $(__gmsl_aa_magic),,$(word 1,$(GH_TAG_VARS)))
 GH_TAG_SUFFIX  = $(subst $(__gmsl_aa_magic),,$(word 2,$(GH_TAG_VARS)))
@@ -70,6 +93,7 @@ GH_VERSION_SEP = $(subst $(__gmsl_aa_magic),,$(word 4,$(GH_TAG_VARS)))
 define MXE_SETUP_GITHUB
     $(PKG)_GH_OWNER    := $(GH_OWNER)
     $(PKG)_GH_REPO     := $(GH_REPO)
+    $(PKG)_GH_LATEST   := $(if $(GH_LATEST),/latest)
     $(PKG)_BRANCH      := $(GH_BRANCH)
     $(PKG)_TAG_VARS    := $(GH_TAG_VARS)
     $(PKG)_TAG_PREFIX  := $(GH_TAG_PREFIX)
@@ -79,7 +103,9 @@ define MXE_SETUP_GITHUB
     $(PKG)_FILE        := $(or $($(PKG)_FILE),$(PKG)-$$($$(PKG)_TAG_PREFIX)$($(PKG)_VERSION)$$($$(PKG)_TAG_SUFFIX).tar.gz)
     $(if $(and $(GH_BRANCH),$(GH_TAG_VARS)),\
         $(error $(newline) $(PKG) specifies both branch and tag variables $(newline)))
-    $(if $(GH_BRANCH),$(value MXE_SETUP_GITHUB_BRANCH),$(value MXE_SETUP_GITHUB_TAG))
+    $(if $(and $(GH_BRANCH),$(GH_LATEST)),\
+        $(error $(newline) $(PKG) has fragments after github branch $(newline)))
+    $(if $(GH_BRANCH),$(value MXE_SETUP_GITHUB_BRANCH),$(value MXE_SETUP_GITHUB_$(call uc,$(GH_API))))
 endef
 
 define MXE_SETUP_GITHUB_BRANCH
@@ -88,11 +114,29 @@ define MXE_SETUP_GITHUB_BRANCH
     $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_SHA,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO),$($(PKG)_BRANCH)))
 endef
 
-define MXE_SETUP_GITHUB_TAG
+define MXE_SETUP_GITHUB_RELEASES
+    $(PKG)_SUBDIR  := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_REPO)-$(if $(call sne,v,$($(PKG)_TAG_PREFIX)),$($(PKG)_TAG_PREFIX))$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
+    $(PKG)_TAG_REF := $(or $($(PKG)_TAG_REF),$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
+    $(PKG)_URL     := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/releases/download/$($(PKG)_TAG_REF)/$($(PKG)_SUBDIR).tar.gz)
+    $(PKG)_UPDATE  := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_RELEASE,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/releases$($(PKG)_GH_LATEST),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
+endef
+
+define MXE_SETUP_GITHUB_TAGS
     $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_REPO)-$(if $(call sne,v,$($(PKG)_TAG_PREFIX)),$($(PKG)_TAG_PREFIX))$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
     $(PKG)_TAR_GZ := $(or $($(PKG)_TAR_GZ),$($(PKG)_GH_REPO)-$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
     $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/archive/$(subst $($(PKG)_GH_REPO)-,,$($(PKG)_TAR_GZ)).tar.gz)
     $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_TAG,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
+endef
+
+# called with owner/repo/releases[/latest],tag prefix, tag suffix, filter-out, version sep
+define MXE_GET_GH_RELEASE
+    $(WGET) -q -O- 'https://github.com/$(strip $(1))' \
+    | $(SED) -n 's,.*releases/tag/\([^"]*\)".*,\1,p' \
+    | $(if $(4),grep -vi '$(strip $(4))') \
+    | $(SED) -n 's,^$(strip $(2))\([^"]*\)$(strip $(3))$$,\1,p' \
+    | tr '$(strip $(5))' '.' \
+    | $(SORT) -V \
+    | tail -1
 endef
 
 # called with owner/repo,branch
@@ -104,8 +148,8 @@ endef
 
 # called with owner/repo
 define MXE_GET_GH_TAGS
-    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/tags/' \
-    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p'
+    $(WGET) -q -O- 'https://github.com/$(strip $(1))/tags' \
+    | $(SED) -n 's#.*releases/tag/\([^"]*\).*#\1#p'
 endef
 
 # called with owner/repo, tag prefix, tag suffix, filter-out, version sep

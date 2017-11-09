@@ -6,7 +6,7 @@ $(PKG)_DESCR    := Open CASCADE Community Edition
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.18.2
 $(PKG)_CHECKSUM := dc21ddea678a500ad87c773e9a502ed7a71768cf83d9af0bd4c43294186a7fef
-$(PKG)_GH_CONF  := tpaviot/oce,OCE-
+$(PKG)_GH_CONF  := tpaviot/oce/tags,OCE-
 $(PKG)_DEPS     := gcc freetype
 
 define $(PKG)_BUILD

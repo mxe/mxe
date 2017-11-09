@@ -6,7 +6,7 @@ $(PKG)_DESCR    := Hunspell
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.6.1
 $(PKG)_CHECKSUM := 30f593733c50b794016bb03d31fd2a2071e4610c6fa4708e33edad2335102c49
-$(PKG)_GH_CONF  := hunspell/hunspell, v
+$(PKG)_GH_CONF  := hunspell/hunspell/tags, v
 $(PKG)_DEPS     := gcc gettext libiconv pthreads readline
 
 define $(PKG)_BUILD

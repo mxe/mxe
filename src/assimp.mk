@@ -6,7 +6,7 @@ $(PKG)_DESCR    := Assimp Open Asset Import Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2
 $(PKG)_CHECKSUM := 187f825c563e84b1b17527a4da0351aa3d575dfd696a9d204ae4bb19ee7df94a
-$(PKG)_GH_CONF  := assimp/assimp, v
+$(PKG)_GH_CONF  := assimp/assimp/tags, v
 $(PKG)_DEPS     := gcc boost
 
 define $(PKG)_BUILD

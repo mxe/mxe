@@ -6,7 +6,7 @@ $(PKG)_DESCR    := Hyperscan
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.3.2
 $(PKG)_CHECKSUM := 6cd5820d6da51d6fe4ab12066d1efd9afecc1bc6fb7d6eca9c98f76fd391dbd5
-$(PKG)_GH_CONF  := 01org/hyperscan, v
+$(PKG)_GH_CONF  := 01org/hyperscan/tags, v
 $(PKG)_DEPS     := gcc boost
 # $(PKG)_NATIVE_DEPS := ragel
 
