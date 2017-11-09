@@ -1245,12 +1245,24 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         $(PKG)_UPDATE</code> sections.
         </p>
         <p>
-        To track normal release tags set:
-        <pre>$(PKG)_GH_CONF  := owner/repo[, tag prefix, tag suffix, tag filter-out, version separator]</pre>
+        To track releases set:
+        <pre>$(PKG)_GH_CONF  := owner/repo/releases[/latest][, tag prefix, tag suffix, tag filter-out, version separator]</pre>
+        Releases may require setting _FILE, _SUBDIR, _URL, depending on
+        the naming convention used by the project for tarballs.
+        </p>
+        <p>
+        To track tags set:
+        <pre>$(PKG)_GH_CONF  := owner/repo/tags[, tag prefix, tag suffix, tag filter-out, version separator]</pre>
+        </p>
+        <p>
         To track branches, set:
         <pre>$(PKG)_GH_CONF  := owner/repo/branch</pre>
         See the following packages for examples:
         <ul>
+            <li>
+            <a href="https://github.com/mxe/mxe/blob/master/src/gc.mk">gc.mk</a>
+            for release tracking
+            </li>
             <li>
             <a href="https://github.com/mxe/mxe/blob/master/src/vmime.mk">vmime.mk</a>
             for branch tracking
