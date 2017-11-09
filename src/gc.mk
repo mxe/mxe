@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 7.6.0
 $(PKG)_CHECKSUM := a14a28b1129be90e55cd6f71127ffc5594e1091d5d54131528c24cd0c03b7d90
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://hboehm.info/$(PKG)/$(PKG)_source/$($(PKG)_FILE)
+$(PKG)_URL      := http://hboehm.info/$(PKG)/$(PKG)_source/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libatomic_ops
 
 define $(PKG)_UPDATE
