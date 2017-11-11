@@ -1,5 +1,7 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
+Contains ad hoc patches for cross building.
+
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: xantares <xantares09@hotmail.com>
 Date: Mon, 28 Sep 2015 08:21:42 +0000
@@ -7,7 +9,7 @@ Subject: [PATCH] Fix {make,jump}_fcontext visibility with mingw
 
 taken from: https://github.com/boostorg/context/pull/22
 
-diff --git a/libs/context/src/asm/jump_i386_ms_pe_gas.asm b/src/asm/jump_i386_ms_pe_gas.asm
+diff --git a/libs/context/src/asm/jump_i386_ms_pe_gas.asm b/libs/context/src/asm/jump_i386_ms_pe_gas.asm
 index 1111111..2222222 100644
 --- a/libs/context/src/asm/jump_i386_ms_pe_gas.asm
 +++ b/libs/context/src/asm/jump_i386_ms_pe_gas.asm
@@ -18,7 +20,7 @@ index 1111111..2222222 100644
 +
 +.section .drectve
 +.ascii " -export:\"jump_fcontext\""
-diff --git a/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm b/src/asm/jump_x86_64_ms_pe_gas.asm
+diff --git a/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm b/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm
 index 1111111..2222222 100644
 --- a/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm
 +++ b/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm
@@ -29,7 +31,7 @@ index 1111111..2222222 100644
 +
 +.section .drectve
 +.ascii " -export:\"jump_fcontext\""
-diff --git a/libs/context/src/asm/make_i386_ms_pe_gas.asm b/src/asm/make_i386_ms_pe_gas.asm
+diff --git a/libs/context/src/asm/make_i386_ms_pe_gas.asm b/libs/context/src/asm/make_i386_ms_pe_gas.asm
 index 1111111..2222222 100644
 --- a/libs/context/src/asm/make_i386_ms_pe_gas.asm
 +++ b/libs/context/src/asm/make_i386_ms_pe_gas.asm
@@ -40,7 +42,7 @@ index 1111111..2222222 100644
 +
 +.section .drectve
 +.ascii " -export:\"make_fcontext\""
-diff --git a/libs/context/src/asm/make_x86_64_ms_pe_gas.asm b/src/asm/make_x86_64_ms_pe_gas.asm
+diff --git a/libs/context/src/asm/make_x86_64_ms_pe_gas.asm b/libs/context/src/asm/make_x86_64_ms_pe_gas.asm
 index 1111111..2222222 100644
 --- a/libs/context/src/asm/make_x86_64_ms_pe_gas.asm
 +++ b/libs/context/src/asm/make_x86_64_ms_pe_gas.asm
@@ -52,3 +54,44 @@ index 1111111..2222222 100644
 +.section .drectve
 +.ascii " -export:\"make_fcontext\""
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: jzmaddock <john@johnmaddock.co.uk>
+Date: Fri, 24 Jul 2015 18:50:28 +0100
+Subject: [PATCH] Remove depricated type_traits usage.
+
+taken from: https://github.com/boostorg/iostreams/pull/15
+
+diff --git a/boost/iostreams/detail/is_dereferenceable.hpp b/boost/iostreams/detail/is_dereferenceable.hpp
+index 1111111..2222222 100644
+--- a/boost/iostreams/detail/is_dereferenceable.hpp
++++ b/boost/iostreams/detail/is_dereferenceable.hpp
+@@ -9,9 +9,8 @@
+ #ifndef BOOST_IOSTREAMS_DETAIL_IS_DEREFERENCEABLE_HPP_INCLUDED
+ #define BOOST_IOSTREAMS_DETAIL_IS_DEREFERENCEABLE_HPP_INCLUDED
+ 
+-# include <boost/type_traits/detail/bool_trait_def.hpp>
+-# include <boost/type_traits/detail/template_arity_spec.hpp>
+ # include <boost/type_traits/remove_cv.hpp>
++# include <boost/type_traits/integral_constant.hpp>
+ # include <boost/mpl/aux_/lambda_support.hpp>
+ # include <boost/mpl/bool.hpp>
+ # include <boost/detail/workaround.hpp>
+@@ -69,17 +68,10 @@ namespace is_dereferenceable_
+ # undef BOOST_comma
+ 
+ template<typename T> 
+-struct is_dereferenceable 
+-    BOOST_TT_AUX_BOOL_C_BASE(is_dereferenceable_::impl<T>::value)
+-{ 
+-    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(is_dereferenceable_::impl<T>::value)
+-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_dereferenceable,(T))
+-};
++struct is_dereferenceable : public boost::integral_constant<bool, is_dereferenceable_::impl<T>::value> {};
+ 
+ } } 
+ 
+-BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1, ::boost::iostreams::detail::is_dereferenceable)
+-
+ } // End namespaces detail, iostreams, boost.
+ 
+ #endif // BOOST_IOSTREAMS_DETAIL_IS_DEREFERENCEABLE_HPP_INCLUDED
