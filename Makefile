@@ -19,7 +19,7 @@ DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
 PKG_MIRROR         := https://s3.amazonaws.com/mxe-pkg
 PKG_CDN            := http://d1yihgixbnrglp.cloudfront.net
-GITLAB_BACKUP      := http://gitlab.com/starius/mxe-backup2/raw/master/
+GITLAB_BACKUP      := http://gitlab.com/starius/mxe-backup2/raw/master
 
 PWD        := $(shell pwd)
 SHELL      := bash
@@ -257,45 +257,48 @@ define PREPARE_PKG_SOURCE
 endef
 
 PKG_CHECKSUM = \
-    openssl dgst -sha256 '$(PKG_DIR)/$($(1)_FILE)' 2>/dev/null | $(SED) -n 's,^.*\([0-9a-f]\{64\}\)$$,\1,p'
+    openssl dgst -sha256 '$(or $(2),$(PKG_DIR)/$($(1)_FILE))' 2>/dev/null | $(SED) -n 's,^.*\([0-9a-f]\{64\}\)$$,\1,p'
 
 CHECK_PKG_ARCHIVE = \
     $(if $($(1)_SOURCE_TREE),\
         $(PRINTF_FMT) '[local]' '$(1)' '$($(1)_SOURCE_TREE)' | $(RTRIM)\
-    $(else),\
-        [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1))`" ]\
-    )
+    $(else),$(if $(SKIP_CHECHSUM),true, \
+        [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1),$(2))`" ]\
+    ))
 
 ESCAPE_PKG = \
 	echo '$($(1)_FILE)' | perl -lpe 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($$$$1))/seg'
 
 BACKUP_DOWNLOAD = \
     (echo "MXE Warning! Downloading $(1) from backup." >&2 && \
-    ($(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` || \
-    $(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` || \
-    $(WGET) -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' $(GITLAB_BACKUP)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM)))
+    (($(WGET) -O '$(TMP_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` && $(call CHECK_PKG_ARCHIVE,$(1),'$(TMP_FILE)')) || \
+    ($(WGET) -O '$(TMP_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` && $(call CHECK_PKG_ARCHIVE,$(1),'$(TMP_FILE)')) || \
+    $(WGET) -O '$(TMP_FILE)' $(GITLAB_BACKUP)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM)))
 
 DOWNLOAD_PKG_ARCHIVE = \
+    $(eval TMP_FILE := $(PKG_DIR)/.tmp-$($(1)_FILE)) \
     $(if $($(1)_SOURCE_TREE),\
         true\
     $(else),\
         mkdir -p '$(PKG_DIR)' && ( \
-            $(WGET) -T 30 -t 3 -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' '$($(1)_URL)' \
+            ($(WGET) -T 30 -t 3 -O '$(TMP_FILE)' '$($(1)_URL)' && \
+             $(call CHECK_PKG_ARCHIVE,$(1),'$(TMP_FILE)')) \
             $(if $($(1)_URL_2), \
                 || (echo "MXE Warning! Downloading $(1) from second URL." >&2 && \
-                    $(WGET) -T 30 -t 3 -O '$(PKG_DIR)/.tmp-$($(1)_FILE)' '$($(1)_URL_2)')) \
+                    $(WGET) -T 30 -t 3 -O '$(TMP_FILE)' '$($(1)_URL_2)' && \
+                    $(call CHECK_PKG_ARCHIVE,$(1),'$(TMP_FILE)'))) \
             $(if $(MXE_NO_BACKUP_DL),, \
                 || $(BACKUP_DOWNLOAD)) \
-        ) && cat '$(PKG_DIR)/.tmp-$($(1)_FILE)' \
+        ) && cat '$(TMP_FILE)' \
         $(if $($(1)_FIX_GZIP), \
             | gzip -d | gzip -9n, \
             ) \
         > '$(PKG_DIR)/$($(1)_FILE)' && \
-        rm '$(PKG_DIR)/.tmp-$($(1)_FILE)' || \
+        rm '$(TMP_FILE)' || \
         ( echo; \
           echo 'Download failed!'; \
           echo; \
-          rm -f '$(PKG_DIR)/$($(1)_FILE)' '$(PKG_DIR)/.tmp-$($(1)_FILE)'; )\
+          rm -f '$(PKG_DIR)/$($(1)_FILE)' '$(TMP_FILE)'; )\
     )
 
 # open issue from 2002:
@@ -794,6 +797,7 @@ check-update-package-%: UPDATE_DRYRUN = true
 check-update-package-%: update-package-% ;
 
 update-checksum-%: MXE_NO_BACKUP_DL = true
+update-checksum-%: SKIP_CHECHSUM = true
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
