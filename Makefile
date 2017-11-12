@@ -271,8 +271,8 @@ ESCAPE_PKG = \
 
 BACKUP_DOWNLOAD = \
     (echo "MXE Warning! Downloading $(1) from backup." >&2 && \
-    (($(WGET) -O '$(TMP_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))` && $(call CHECK_PKG_ARCHIVE,$(1),'$(TMP_FILE)')) || \
-    ($(WGET) -O '$(TMP_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))` && $(call CHECK_PKG_ARCHIVE,$(1),'$(TMP_FILE)')) || \
+    ($(WGET) -O '$(TMP_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) || \
+    $(WGET) -O '$(TMP_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) || \
     $(WGET) -O '$(TMP_FILE)' $(GITLAB_BACKUP)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM)))
 
 DOWNLOAD_PKG_ARCHIVE = \
@@ -294,6 +294,7 @@ DOWNLOAD_PKG_ARCHIVE = \
             | gzip -d | gzip -9n, \
             ) \
         > '$(PKG_DIR)/$($(1)_FILE)' && \
+        $(if $(CREATE_SUFFIXED_ARCHIVE),cp '$(PKG_DIR)/$($(1)_FILE)' '$(PKG_DIR)/$($(1)_FILE)_$($(1)_CHECKSUM)' &&) \
         rm '$(TMP_FILE)' || \
         ( echo; \
           echo 'Download failed!'; \
@@ -753,7 +754,7 @@ clean:
 clean-pkg:
 	rm -f $(patsubst %,'%', \
                   $(filter-out \
-                      $(foreach PKG,$(PKGS),$(PKG_DIR)/$($(PKG)_FILE)), \
+                      $(foreach PKG,$(PKGS),$(PKG_DIR)/$($(PKG)_FILE) $(PKG_DIR)/$($(PKG)_FILE)_$($(PKG)_CHECKSUM)), \
                       $(wildcard $(PKG_DIR)/*)))
 
 .PHONY: clean-junk
