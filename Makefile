@@ -19,7 +19,7 @@ DEFAULT_MAX_JOBS   := 6
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
 PKG_MIRROR         := https://s3.amazonaws.com/mxe-pkg
 PKG_CDN            := http://d1yihgixbnrglp.cloudfront.net
-GITLAB_BACKUP      := http://gitlab.com/starius/mxe-backup2/raw/master
+GITLAB_BACKUP      := https://gitlab.com/starius/mxe-backup2/raw/master
 
 PWD        := $(shell pwd)
 SHELL      := bash
@@ -271,9 +271,9 @@ ESCAPE_PKG = \
 
 BACKUP_DOWNLOAD = \
     (echo "MXE Warning! Downloading $(1) from backup." >&2 && \
-    ($(WGET) -O '$(TMP_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) || \
-    $(WGET) -O '$(TMP_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) || \
-    $(WGET) -O '$(TMP_FILE)' $(GITLAB_BACKUP)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM)))
+    ($(WGET) -O '$(TMP_FILE)' $(GITLAB_BACKUP)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) || \
+    $(WGET) -O '$(TMP_FILE)' $(PKG_MIRROR)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) || \
+    $(WGET) -O '$(TMP_FILE)' $(PKG_CDN)/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM)))
 
 DOWNLOAD_PKG_ARCHIVE = \
     $(eval TMP_FILE := $(PKG_DIR)/.tmp-$($(1)_FILE)) \
