@@ -366,31 +366,6 @@ LIST_NMIN   = $(shell echo '$(strip $(1))' | tr ' ' '\n' | sort -n | head -1)
 NPROCS := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
 JOBS   := $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 
-# cache some target string manipulation functions
-# `memoize` and `uc` from gmsl
-_CHOP_TARGET = $(call merge,.,$(call chop,$(call split,.,$(1))))
-CHOP_TARGET  = $(call memoize,_CHOP_TARGET,$(1))
-_UC_LIB_TYPE = $(call uc,$(word 2,$(subst ., ,$(1))))
-UC_LIB_TYPE  = $(call memoize,_UC_LIB_TYPE,$(1))
-
-# finds a package build rule or deps by truncating the target elements
-# $(call LOOKUP_PKG_RULE, package, rule type ie. BUILD|DEPS|FILE, target,[lib type, original target to cache])
-# returns variable name for use with $(value)
-#
-# caches result with gmsl associative arrays (`get` and `set` functions)
-# since `memoize` only works with single argument
-LOOKUP_PKG_RULE = $(strip \
-    $(or $(call get,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3))),\
-    $(if $(findstring undefined, $(flavor $(1)_$(2)_$(3))),\
-        $(if $(3),\
-            $(call LOOKUP_PKG_RULE,$(1),$(2),$(call CHOP_TARGET,$(3)),$(or $(4),$(call UC_LIB_TYPE,$(3))),$(or $(5),$(3))),\
-            $(if $(4),\
-                $(call LOOKUP_PKG_RULE,$(1),$(2),$(4),,$(5)),\
-                $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(5),$(1)_$(2))\
-                $(1)_$(2))),\
-        $(call set,LOOKUP_PKG_RULE_,$(1)_$(2)_$(or $(5),$(3)),$(1)_$(2)_$(3))\
-        $(1)_$(2)_$(3))))
-
 # Core packages.
 override MXE_PLUGIN_DIRS := $(realpath $(TOP_DIR)/src) $(MXE_PLUGIN_DIRS)
 
@@ -466,6 +441,46 @@ $(foreach TARGET,$(CROSS_TARGETS),\
 # always add $(BUILD) to our targets
 override MXE_TARGETS := $(CROSS_TARGETS) $(BUILD)
 
+# cache some target string manipulation functions with normal make variables
+CHOP_TARGETS = \
+    $(if $(1),\
+        $(eval CHOPPED := $(call merge,.,$(call chop,$(call split,.,$(1)))))\
+        $(eval $(1)_CHOPPED := $(CHOPPED))\
+        $(call CHOP_TARGETS,$(CHOPPED)))
+
+$(foreach TARGET,$(MXE_TARGETS),\
+    $(call CHOP_TARGETS,$(TARGET))\
+    $(eval $(TARGET)_UC_LIB_TYPE := $(if $(findstring shared,$(TARGET)),SHARED,STATIC)))
+
+# finds a package rule defintion
+RULE_TYPES := BUILD DEPS FILE MESSAGE URL
+# by truncating the target elements then looking for STAIC|SHARED rules:
+#
+# foo_BUILD_i686-w64-mingw32.static.posix.dw2
+# foo_BUILD_i686-w64-mingw32.static.posix
+# foo_BUILD_i686-w64-mingw32.static
+# foo_BUILD_i686-w64-mingw32
+# foo_BUILD_SHARED
+# foo_BUILD
+
+# return the pre-populated rule if defined
+LOOKUP_PKG_RULE = $(or $(LOOKUP_PKG_RULE_$(1)_$(2)_$(3)),$(1)_$(2))
+
+# $(call _LOOKUP_PKG_RULE, package, rule type, target [, lib type])
+# returns variable name for use with $(value). PKG_RULE below will
+# populate LOOKUP_PKG_RULE_* variables for rules that require lookups
+_LOOKUP_PKG_RULE = $(strip \
+    $(if $(findstring undefined, $(flavor $(PKG)_$(RULE)_$(3))),\
+        $(if $(3),\
+            $(call _LOOKUP_PKG_RULE,$(PKG),$(RULE),$($(3)_CHOPPED),$(or $(4),$($(3)_UC_LIB_TYPE)))\
+        $(else),\
+            $(if $(4),\
+                $(call _LOOKUP_PKG_RULE,$(PKG),$(RULE),$(4))\
+            $(else),\
+                $(PKG)_$(RULE)))\
+    $(else),\
+        $(PKG)_$(RULE)_$(3)))
+
 # set column widths for build status messages
 PKG_COL_WIDTH    := $(call plus,2,$(call LIST_NMAX, $(sort $(call map, strlen, $(PKGS)))))
 MAX_TARGET_WIDTH := $(call LIST_NMAX, $(sort $(call map, strlen, $(MXE_TARGETS))))
@@ -540,6 +555,12 @@ prepare-pkg-source-$(1): download-only-$(1)
 	rm -rf '$(2)'
 	mkdir -p '$(2)'
 	$$(call PREPARE_PKG_SOURCE,$(1),$(2))
+
+# populate LOOKUP_PKG_RULE_ variables where there are multiple defined
+$(foreach RULE,$(RULE_TYPES),\
+    $(if $(filter-out %_URL_2,$(filter-out $(PKG)_$(RULE),$(filter $(PKG)_$(RULE)%,$(.VARIABLES)))),\
+        $(foreach TARGET,$(MXE_TARGETS),\
+            $(eval LOOKUP_PKG_RULE_$(PKG)_$(RULE)_$(TARGET) := $(call _LOOKUP_PKG_RULE,$(PKG),$(RULE),$(TARGET))))))
 endef
 $(foreach PKG,$(PKGS),$(eval $(call PKG_RULE,$(PKG),$(call TMP_DIR,$(PKG)))))
 
@@ -691,9 +712,9 @@ WALK_DOWNSTREAM = \
     $(strip \
         $(foreach PKG,$(PKGS),\
             $(call SET_CLEAR,PKGS_VISITED)\
-            $(eval $(PKG)_DEPS_ALL := $(call WALK_UPSTREAM,$(PKG))))\
+            $(eval ALL_$(PKG)_DEPS := $(call WALK_UPSTREAM,$(PKG))))\
         $(foreach PKG,$(PKGS),\
-            $(if $(filter $(1),$($(PKG)_DEPS_ALL)),$(PKG))))
+            $(if $(filter $(1),$(ALL_$(PKG)_DEPS)),$(PKG))))
 
 # EXCLUDE_PKGS can be a list of pkgs and/or wildcards
 RECURSIVELY_EXCLUDED_PKGS = \
