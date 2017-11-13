@@ -736,13 +736,13 @@ show-upstream-deps-%:
 # print first level pkg deps for use in build-pkg.lua
 .PHONY: print-deps-for-build-pkg
 print-deps-for-build-pkg:
-	$(foreach TARGET,$(MXE_TARGETS), \
+	$(foreach TARGET,$(sort $(MXE_TARGETS)), \
 	    $(foreach PKG,$(sort $($(TARGET)_PKGS)), \
-	        $(info for-build-pkg $(TARGET)~$(PKG) \
+	        $(info $(strip for-build-pkg $(TARGET)~$(PKG) \
 	        $(subst $(space),-,$($(PKG)_VERSION)) \
 	        $(addprefix $(TARGET)~,$(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET)))) \
 	        $(addprefix $(TARGET)~,$(if $(call set_is_not_member,$(PKG),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS))) \
-	        $(and $($(TARGET)_DEPS),$(addprefix $($(TARGET)_DEPS)~,$($($(TARGET)_DEPS)_PKGS))))))
+	        $(and $($(TARGET)_DEPS),$(addprefix $($(TARGET)_DEPS)~,$($($(TARGET)_DEPS)_PKGS)))))))
 	        @echo -n
 
 BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
