@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -136,6 +136,7 @@
     </p>
     <p>
         How to choose MXE target:
+    </p>
         <ol>
             <li>If you want a 64 bit Windows executable,
                 statically linked into one big executable:
@@ -150,6 +151,7 @@
                 split into an executable and dependant dlls
                 use MXE_TARGETS i686-w64-mingw32.shared.</li>
         </ol>
+    <p>
         Remark: The 'w64-mingw32' in those names are left-overs from
         historical evolutions in the open source cross-compilation world
         and refer in no way to the result being 64 or 32 bit Windows.
@@ -542,6 +544,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <li><a href="#requirements-gentoo">Gentoo</a></li>
         <li><a href="#requirements-macos">Mac OS X</a></li>
         <li><a href="#requirements-opensuse">openSUSE</a></li>
+        <li><a href="#requirements-wsl">Windows Subsystem for Linux</a></li>
     </ul>
 
     <table class="requirements">
@@ -847,11 +850,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     Mac OS X versions ≤ 10.9 are no longer tested.
     </p>
-    <p>
     <h5>Certain packages have open issues on OS X</h5>
-    </p>
     <p>
-    For Xcode <7.3, run:
+    For Xcode &lt;7.3, run:
     </p>
     <pre>make EXCLUDE_PKGS='nsis'</pre>
 
@@ -871,6 +872,30 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>zypper install -R \
     gcc-32bit glibc-devel-32bit libgcc46-32bit \
     libgomp46-32bit libstdc++46-devel-32bit</pre>
+
+    <h3 id="requirements-wsl">Windows Subsystem for Linux</h3>
+
+    <p>
+    Requirements should match the Debian, Fedora, openSUSE etc. sections
+    above, but care should be taken to ensure MXE is installed in the
+    Linux subsystem under <code>/</code> instead of the mounted Windows
+    folders in <code>/mnt</code>.
+    </p>
+
+    <p>
+    It can be <a href="https://github.com/mxe/mxe/issues/1892#issuecomment-344004704">
+    made to work using symlinks and specifying</a>:
+    </p>
+    <pre>make MXE_TMP=/tmp/mxe-tmp ...</pre>
+    <p>
+    See further reading in:
+    </p>
+    <ul>
+    <li><a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq#how-do-i-use-a-windows-file-with-a-linux-app">
+    WSL FAQ file section</a></li>
+    <li><a href="https://blogs.msdn.microsoft.com/commandline/2016/11/17/do-not-change-linux-files-using-windows-apps-and-tools/">
+    MSDN Blog</a></li>
+    </ul>
 
     <h3 id="issue-non-multilib">Issues without a 32-bit compiler</h3>
 
@@ -1246,18 +1271,23 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         </p>
         <p>
         To track releases set:
+        </p>
         <pre>$(PKG)_GH_CONF  := owner/repo/releases[/latest][, tag prefix, tag suffix, tag filter-out, version separator]</pre>
+        <p>
         Releases may require setting _FILE, _SUBDIR, _URL, depending on
         the naming convention used by the project for tarballs.
         </p>
         <p>
         To track tags set:
-        <pre>$(PKG)_GH_CONF  := owner/repo/tags[, tag prefix, tag suffix, tag filter-out, version separator]</pre>
         </p>
+        <pre>$(PKG)_GH_CONF  := owner/repo/tags[, tag prefix, tag suffix, tag filter-out, version separator]</pre>
         <p>
         To track branches, set:
+        </p>
         <pre>$(PKG)_GH_CONF  := owner/repo/branch</pre>
+        <p>
         See the following packages for examples:
+        </p>
         <ul>
             <li>
             <a href="https://github.com/mxe/mxe/blob/master/src/gc.mk">gc.mk</a>
@@ -1277,7 +1307,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             present in source tree
             </li>
         </ul>
-        </p>
 
         <p>
         The <a href="gmsl.html">GNU Make Standard Library</a> is also
