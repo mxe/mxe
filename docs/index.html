@@ -542,6 +542,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <li><a href="#requirements-gentoo">Gentoo</a></li>
         <li><a href="#requirements-macos">Mac OS X</a></li>
         <li><a href="#requirements-opensuse">openSUSE</a></li>
+        <li><a href="#requirements-wsl">Windows Subsystem for Linux</a></li>
     </ul>
 
     <table class="requirements">
@@ -871,6 +872,30 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>zypper install -R \
     gcc-32bit glibc-devel-32bit libgcc46-32bit \
     libgomp46-32bit libstdc++46-devel-32bit</pre>
+
+    <h3 id="requirements-wsl">Windows Subsystem for Linux</h3>
+
+    <p>
+    Requirements should match the Debian, Fedora, openSUSE etc. sections
+    above, but care should be taken to ensure MXE is installed in the
+    Linux subsystem under <code>/</code> instead of the mounted Windows
+    folders in <code>/mnt</code>.
+    </p>
+
+    <p>
+    It can be <a href="https://github.com/mxe/mxe/issues/1892#issuecomment-344004704">
+    made to work using symlinks and specifying</a>:
+    </p>
+    <pre>make MXE_TMP=/tmp/mxe-tmp ...</pre>
+    <p>
+    See further reading in:
+    </p>
+    <ul>
+    <li><a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq#how-do-i-use-a-windows-file-with-a-linux-app">
+    WSL FAQ file section</a></li>
+    <li><a href="https://blogs.msdn.microsoft.com/commandline/2016/11/17/do-not-change-linux-files-using-windows-apps-and-tools/">
+    MSDN Blog</a></li>
+    </ul>
 
     <h3 id="issue-non-multilib">Issues without a 32-bit compiler</h3>
 
