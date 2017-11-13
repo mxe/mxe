@@ -44,6 +44,5 @@ if ! ( \
     EDITOR=~/mxe/tools/fake-editor ghi open -L bug -- mxe/mxe
 fi
 
-cd ~/mxe && make clean-junk MXE_PLUGIN_DIRS="$plugin_dirs"
 s3cmd sync --acl-public ~/mxe/pkg/* s3://mxe-pkg/
 rm -f ~/mxe/tmp-download-log ~/mxe/tmp-url
