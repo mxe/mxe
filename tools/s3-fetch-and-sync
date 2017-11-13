@@ -45,4 +45,4 @@ if ! ( \
 fi
 
 s3cmd sync --acl-public ~/mxe/pkg/* s3://mxe-pkg/
-rm -f ~/mxe/tmp-download-log ~/mxe/tmp-url
+rm -rf ~/mxe/tmp-download-log ~/mxe/tmp-url ~/mxe/log
