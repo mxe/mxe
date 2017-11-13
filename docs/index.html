@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -136,6 +136,7 @@
     </p>
     <p>
         How to choose MXE target:
+    </p>
         <ol>
             <li>If you want a 64 bit Windows executable,
                 statically linked into one big executable:
@@ -150,6 +151,7 @@
                 split into an executable and dependant dlls
                 use MXE_TARGETS i686-w64-mingw32.shared.</li>
         </ol>
+    <p>
         Remark: The 'w64-mingw32' in those names are left-overs from
         historical evolutions in the open source cross-compilation world
         and refer in no way to the result being 64 or 32 bit Windows.
@@ -848,11 +850,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     Mac OS X versions ≤ 10.9 are no longer tested.
     </p>
-    <p>
     <h5>Certain packages have open issues on OS X</h5>
-    </p>
     <p>
-    For Xcode <7.3, run:
+    For Xcode &lt;7.3, run:
     </p>
     <pre>make EXCLUDE_PKGS='nsis'</pre>
 
@@ -1271,18 +1271,23 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         </p>
         <p>
         To track releases set:
+        </p>
         <pre>$(PKG)_GH_CONF  := owner/repo/releases[/latest][, tag prefix, tag suffix, tag filter-out, version separator]</pre>
+        <p>
         Releases may require setting _FILE, _SUBDIR, _URL, depending on
         the naming convention used by the project for tarballs.
         </p>
         <p>
         To track tags set:
-        <pre>$(PKG)_GH_CONF  := owner/repo/tags[, tag prefix, tag suffix, tag filter-out, version separator]</pre>
         </p>
+        <pre>$(PKG)_GH_CONF  := owner/repo/tags[, tag prefix, tag suffix, tag filter-out, version separator]</pre>
         <p>
         To track branches, set:
+        </p>
         <pre>$(PKG)_GH_CONF  := owner/repo/branch</pre>
+        <p>
         See the following packages for examples:
+        </p>
         <ul>
             <li>
             <a href="https://github.com/mxe/mxe/blob/master/src/gc.mk">gc.mk</a>
@@ -1302,7 +1307,6 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
             present in source tree
             </li>
         </ul>
-        </p>
 
         <p>
         The <a href="gmsl.html">GNU Make Standard Library</a> is also
