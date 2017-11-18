@@ -18,8 +18,8 @@ endef
 
 define $(PKG)_BUILD_SHARED
     # looks for build tools with .exe suffix and tries to use win_flex
-    $(SED) -i 's,\.exe,,' '$(1)/Tools/qmake/mkspecs/features/functions.prf'
-    cd '$(1)' && mkdir -p .git && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' FLEX=flex
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(SED) -i 's,\.exe,,' '$(SOURCE_DIR)/Tools/qmake/mkspecs/features/functions.prf'
+    cd '$(BUILD_DIR)' && mkdir -p .git && $(QMAKE_EXECUTABLE) FLEX=flex '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

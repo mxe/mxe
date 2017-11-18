@@ -12,6 +12,17 @@ $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := http://download.qt.io/official_releases/qt/5.7/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng openssl pcre postgresql sqlite zlib
 
+# allows for side-by-side install with later Qt
+# pkg-config and cmake will need tweaking to really get working
+$(PKG)_VERSION_ID := qt5
+QMAKE_EXECUTABLE   = $(TARGET)-qmake-$(qtbase_VERSION_ID)
+
+define QMAKE_MAKE_INSTALL
+    cd '$(BUILD_DIR)' && $(QMAKE_EXECUTABLE) '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+endef
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://download.qt-project.org/official_releases/qt/5.5/ | \
     $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
@@ -37,7 +48,7 @@ define $(PKG)_BUILD
             -no-use-gold-linker \
             -release \
             -static \
-            -prefix '$(PREFIX)/$(TARGET)/qt5' \
+            -prefix '$(PREFIX)/$(TARGET)/$($(PKG)_VERSION_ID)' \
             -no-icu \
             -opengl desktop \
             -no-glib \
@@ -65,41 +76,42 @@ define $(PKG)_BUILD
             $($(PKG)_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
-    rm -rf '$(PREFIX)/$(TARGET)/qt5'
+    rm -rf '$(PREFIX)/$(TARGET)/$($(PKG)_VERSION_ID)'
     $(MAKE) -C '$(1)' -j 1 install
-    ln -sf '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-qt5
+    ln -sf '$(PREFIX)/$(TARGET)/$($(PKG)_VERSION_ID)/bin/qmake' '$(PREFIX)/bin/$(TARGET)'-qmake-$($(PKG)_VERSION_ID)
 
     mkdir            '$(1)/test-qt'
-    cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qt-test.pro'
+    cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/$($(PKG)_VERSION_ID)/bin/qmake' '$(PWD)/src/qt-test.pro'
     $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)' $(BUILD_TYPE)
-    $(INSTALL) -m755 '$(1)/test-qt/$(BUILD_TYPE)/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m755 '$(1)/test-qt/$(BUILD_TYPE)/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/test-$($(PKG)_VERSION_ID).exe'
 
     # build test the manual way
     mkdir '$(1)/test-$(PKG)-pkgconfig'
-    '$(PREFIX)/$(TARGET)/qt5/bin/uic' -o '$(1)/test-$(PKG)-pkgconfig/ui_qt-test.h' '$(TOP_DIR)/src/qt-test.ui'
-    '$(PREFIX)/$(TARGET)/qt5/bin/moc' \
+    '$(PREFIX)/$(TARGET)/$($(PKG)_VERSION_ID)/bin/uic' -o '$(1)/test-$(PKG)-pkgconfig/ui_qt-test.h' '$(TOP_DIR)/src/qt-test.ui'
+    '$(PREFIX)/$(TARGET)/$($(PKG)_VERSION_ID)/bin/moc' \
         -o '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
         '$(TOP_DIR)/src/qt-test.hpp'
-    '$(PREFIX)/$(TARGET)/qt5/bin/rcc' -name qt-test -o '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' '$(TOP_DIR)/src/qt-test.qrc'
+    '$(PREFIX)/$(TARGET)/$($(PKG)_VERSION_ID)/bin/rcc' -name qt-test -o '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' '$(TOP_DIR)/src/qt-test.qrc'
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -pedantic \
         '$(TOP_DIR)/src/qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \
-        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$($(PKG)_VERSION_ID)-pkgconfig.exe' \
         -I'$(1)/test-$(PKG)-pkgconfig' \
-        `'$(TARGET)-pkg-config' Qt5Widgets$(BUILD_TYPE_SUFFIX) --cflags --libs`
+        `PKG_CONFIG_PATH_$(subst .,_,$(subst -,_,$(TARGET)))=$(PREFIX)/$(TARGET)/$($(PKG)_VERSION_ID)/lib/pkgconfig \
+         '$(TARGET)-pkg-config' Qt5Widgets$(BUILD_TYPE_SUFFIX) --cflags --libs`
 
     # setup cmake toolchain
-    echo 'set(CMAKE_SYSTEM_PREFIX_PATH "$(PREFIX)/$(TARGET)/qt5" ${CMAKE_SYSTEM_PREFIX_PATH})' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
+    echo 'set(CMAKE_SYSTEM_PREFIX_PATH "$(PREFIX)/$(TARGET)/$($(PKG)_VERSION_ID)" ${CMAKE_SYSTEM_PREFIX_PATH})' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG)-$($(PKG)_VERSION_ID).cmake'
 
     # batch file to run test programs
-    (printf 'set PATH=..\\lib;..\\qt5\\bin;..\\qt5\\lib;%%PATH%%\r\n'; \
-     printf 'set QT_QPA_PLATFORM_PLUGIN_PATH=..\\qt5\\plugins\r\n'; \
-     printf 'test-qt5.exe\r\n'; \
-     printf 'test-qtbase-pkgconfig.exe\r\n';) \
-     > '$(PREFIX)/$(TARGET)/bin/test-qt5.bat'
+    (printf 'set PATH=..\\lib;..\\$($(PKG)_VERSION_ID)\\bin;..\\$($(PKG)_VERSION_ID)\\lib;%%PATH%%\r\n'; \
+     printf 'set QT_QPA_PLATFORM_PLUGIN_PATH=..\\$($(PKG)_VERSION_ID)\\plugins\r\n'; \
+     printf 'test-$($(PKG)_VERSION_ID).exe\r\n'; \
+     printf 'test-$($(PKG)_VERSION_ID)-pkgconfig.exe\r\n';) \
+     > '$(PREFIX)/$(TARGET)/bin/test-$($(PKG)_VERSION_ID).bat'
 endef
 
 
