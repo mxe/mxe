@@ -4,7 +4,7 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Sat, 27 Oct 2012 22:57:27 +0200
+Date: Sat, 18 Nov 2017 22:27:54 +1100
 Subject: [PATCH] include string.h for memset
 
 taken from https://sourceforge.net/tracker/?func=detail&aid=3581223&group_id=11504&atid=311504
@@ -27,7 +27,7 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
-Date: Sat, 11 May 2013 15:15:39 +1000
+Date: Sat, 18 Nov 2017 22:28:39 +1100
 Subject: [PATCH] mingw-w64 fixes
 
 
@@ -56,7 +56,7 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: fiesh <weiss@wsoptics.de>
-Date: Tue, 22 Dec 2015 13:45:56 +0100
+Date: Sat, 18 Nov 2017 22:29:10 +1100
 Subject: [PATCH] fix freeimage build
 
 Add the FREEIMAGE_LIB define in order to keep the build process from
@@ -78,8 +78,9 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@mail.ru>
-Date: Wed, 04 May 2016 18:43:16 +0300
+Date: Sat, 18 Nov 2017 22:29:57 +1100
 Subject: [PATCH] fix build with GCC >= 6.x
+
 
 diff --git a/Makefile.mingw b/Makefile.mingw
 index 1111111..2222222 100644
@@ -94,4 +95,3 @@ index 1111111..2222222 100644
  CXXFLAGS += $(INCLUDE)
  RCFLAGS ?= -DNDEBUG
  LDFLAGS ?= -s -shared -static -Wl,-soname,$(SOLIBNAME) $(WIN32_LDFLAGS)
-
