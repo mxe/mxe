@@ -23,7 +23,7 @@ index 1111111..2222222 100644
  
    if test "${HAVE_PG}" = "yes" ; then
      LIBS=-L`$PG_CONFIG --libdir`" -lpq $LIBS"
-@@ -3532,16 +3544,21 @@ AC_ARG_WITH(spatialite-soname,
+@@ -3544,16 +3544,21 @@ AC_ARG_WITH(spatialite-soname,
  
  HAVE_SPATIALITE=no
  SPATIALITE_AMALGAMATION=no
@@ -71,9 +71,11 @@ index 1111111..2222222 100644
        AC_CHECK_LIB([geos_c],
          [GEOSversion],
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Tue, 26 Sep 2017 14:56:19 +0200
 Subject: [PATCH] Use the new proj dll version number for the latest proj.
+
 
 diff --git a/ogr/ogrct.cpp b/ogr/ogrct.cpp
 index 1111111..2222222 100644

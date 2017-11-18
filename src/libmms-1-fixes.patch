@@ -7,6 +7,7 @@ From: John Lindgren <john.lindgren@aol.com>
 Date: Thu, 29 May 2014 22:42:53 -0400
 Subject: [PATCH] Remove "Requires: glib-2.0" since libmms no longer depends on
  GLib.
+
 https://sourceforge.net/p/libmms/code/ci/b9bbe17c08e5dcbe3ce841e6bed52ce8d8b10f9e/
 
 diff --git a/pkgconfig/libmms.pc.in b/pkgconfig/libmms.pc.in
@@ -28,6 +29,7 @@ From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: John Lindgren <john.lindgren@tds.net>
 Date: Thu, 19 Nov 2015 13:39:27 +0100
 Subject: [PATCH] Fix build if strndup() is missing
+
 https://sourceforge.net/p/libmms/code/ci/67d54003b8075b8ea8102bc4a808df4543ab113a/
 
 diff --git a/configure.in b/configure.in
