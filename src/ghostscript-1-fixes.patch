@@ -1289,10 +1289,11 @@ index 1111111..2222222 100644
        EXEEXT=".exe"
      ;;
    esac
-@@ -2543,6 +2535,36 @@ fi
+@@ -2542,6 +2534,36 @@ fi
+ 
  AC_SUBST(EXEEXT)
  
- dnl --------------------------------------------------
++dnl --------------------------------------------------
 +dnl AUX and cross compiling
 +dnl --------------------------------------------------
 +EXEEXTAUX="$EXEEXT"
@@ -1322,10 +1323,9 @@ index 1111111..2222222 100644
 +AC_SUBST(EXEEXTAUX)
 +AC_SUBST(CROSS_COMPILING)
 +
-+dnl --------------------------------------------------
+ dnl --------------------------------------------------
  dnl Do substitutions
  dnl --------------------------------------------------
- SRCDIR="$srcdir"
 diff --git a/ijs/ijs_exec_unix.c b/ijs/ijs_exec_unix.c
 index 1111111..2222222 100644
 --- a/ijs/ijs_exec_unix.c
