@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' || $(MAKE) -C '$(1)' -j  1
-    $(MAKE) -C '$(1)' -j 1 install
+    cd '$(BUILD_DIR)' && $(QMAKE_EXECUTABLE) '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' || $(MAKE) -C '$(BUILD_DIR)' -j 1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
