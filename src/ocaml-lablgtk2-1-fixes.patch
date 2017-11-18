@@ -5,8 +5,8 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:21:18 +0200
-Subject: [PATCH] split configure.in in configure.ac and ocaml.m4. Makefile.am
- links to src/Makefile
+Subject: [PATCH 1/6] split configure.in in configure.ac and ocaml.m4.
+ Makefile.am links to src/Makefile
 
 
 diff --git a/Makefile.am b/Makefile.am
@@ -635,8 +635,8 @@ index 1111111..2222222
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:29:39 +0200
-Subject: [PATCH] install = findlib-uninstall + findlib-install to remove error
- if 'make install' is called a second time
+Subject: [PATCH 2/6] install = findlib-uninstall + findlib-install to remove
+ error if 'make install' is called a second time
 
 
 diff --git a/src/Makefile b/src/Makefile
@@ -656,7 +656,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:33:57 +0200
-Subject: [PATCH] allows install with 'make lablgtkopt' only
+Subject: [PATCH 3/6] allows install with 'make lablgtkopt' only
 
 
 diff --git a/src/Makefile b/src/Makefile
@@ -722,7 +722,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:36:37 +0200
-Subject: [PATCH] add prefixed ocamlfind support
+Subject: [PATCH 4/6] add prefixed ocamlfind support
 
 
 diff --git a/config.make.in b/config.make.in
@@ -771,7 +771,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:39:01 +0200
-Subject: [PATCH] remove a command that is already called in uninstall, and
+Subject: [PATCH 5/6] remove a command that is already called in uninstall, and
  which fails if used as is
 
 
@@ -791,7 +791,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Sun, 30 Sep 2012 17:44:48 +0200
-Subject: [PATCH] use prefixed ocamlp4 tools if available
+Subject: [PATCH 6/6] use prefixed ocamlp4 tools if available
 
 
 diff --git a/configure.ac b/configure.ac

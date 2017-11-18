@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Mon, 4 Aug 2014 18:28:33 -0700
-Subject: [PATCH] Remove the special _shared lib
+Subject: [PATCH 1/1] Remove the special _shared lib
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 

@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Sun, 31 Aug 2014 13:57:14 -0700
-Subject: [PATCH] build: Modernize
+Subject: [PATCH 1/2] build: Modernize
 
 dist-lzma was removed in automake 1.11.2.
 
@@ -35,7 +35,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Sun, 31 Aug 2014 14:11:44 -0700
-Subject: [PATCH] Make libsndfile optional
+Subject: [PATCH 2/2] Make libsndfile optional
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 

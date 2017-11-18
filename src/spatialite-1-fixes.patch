@@ -5,8 +5,8 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Wed, 23 Aug 2017 12:51:27 +0200
-Subject: [PATCH] Patch: Makes sure to link against all of geos' libs as well
- as the stdc++ lib
+Subject: [PATCH 1/2] Patch: Makes sure to link against all of geos' libs as
+ well as the stdc++ lib
 
 
 diff --git a/configure.ac b/configure.ac
@@ -40,7 +40,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Mon, 2 Oct 2017 11:27:24 +0200
-Subject: [PATCH] Add static dependency to .pc file
+Subject: [PATCH 2/2] Add static dependency to .pc file
 
 
 diff --git a/spatialite.pc.in b/spatialite.pc.in

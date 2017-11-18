@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:02:33 +0200
-Subject: [PATCH] use unix style names for openssl on mingw-cross-env
+Subject: [PATCH 1/4] use unix style names for openssl on mingw-cross-env
 
 
 diff --git a/configure.in b/configure.in
@@ -32,7 +32,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:09:38 +0200
-Subject: [PATCH] do not check autoconf version
+Subject: [PATCH 2/4] do not check autoconf version
 
 
 diff --git a/configure.in b/configure.in
@@ -54,7 +54,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 1 Jul 2014 14:27:21 -0700
-Subject: [PATCH] Fix shared lib install location
+Subject: [PATCH 3/4] Fix shared lib install location
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
@@ -106,7 +106,8 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 1 Jul 2014 14:41:44 -0700
-Subject: [PATCH] Don't build shared lib on win32 if --disable-shared is set
+Subject: [PATCH 4/4] Don't build shared lib on win32 if --disable-shared is
+ set
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 

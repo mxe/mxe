@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Mon, 27 Feb 2012 14:41:08 +0100
-Subject: [PATCH] add static dependency to .pc file
+Subject: [PATCH 1/1] add static dependency to .pc file
 
 
 diff --git a/SDL_net.pc.in b/SDL_net.pc.in

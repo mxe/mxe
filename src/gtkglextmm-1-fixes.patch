@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Wed, 29 Sep 2010 23:08:44 +0200
-Subject: [PATCH] allow deprecated GThreadFunctions and GdkSpanFunc
+Subject: [PATCH 1/1] allow deprecated GThreadFunctions and GdkSpanFunc
 
 
 diff --git a/gdkglext/gdkmm/gl/Makefile.in b/gdkglext/gdkmm/gl/Makefile.in

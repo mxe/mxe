@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sat, 16 Jul 2016 00:24:39 +0200
-Subject: [PATCH] generate .pc file on MinGW
+Subject: [PATCH 1/1] generate .pc file on MinGW
 
 Install to lib/pkgconfig, not to bin/pkgconfig.
 

@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Martin=20M=C3=BCllenhaupt?= <mm+mxe.cc@netlair.de>
 Date: Sat, 18 Nov 2017 23:04:57 +1100
-Subject: [PATCH] fix libharu shared linking
+Subject: [PATCH 1/1] fix libharu shared linking
 
 
 diff --git a/CMake/FindLibHaru.cmake b/CMake/FindLibHaru.cmake

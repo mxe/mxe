@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 18 Nov 2017 23:32:38 +1100
-Subject: [PATCH] fixes
+Subject: [PATCH 1/1] fixes
 
 
 diff --git a/advanced/lib/curl_transport/curltransaction.c b/advanced/lib/curl_transport/curltransaction.c

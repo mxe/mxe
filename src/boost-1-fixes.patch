@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: xantares <xantares09@hotmail.com>
 Date: Mon, 28 Sep 2015 08:21:42 +0000
-Subject: [PATCH] Fix {make,jump}_fcontext visibility with mingw
+Subject: [PATCH 1/1] Fix {make,jump}_fcontext visibility with mingw
 
 taken from: https://github.com/boostorg/context/pull/22
 

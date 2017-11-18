@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Tue, 12 Nov 2013 00:45:28 +1100
-Subject: [PATCH] add requirements to pkg-config file
+Subject: [PATCH 1/1] add requirements to pkg-config file
 
 
 diff --git a/libmicrohttpd.pc.in b/libmicrohttpd.pc.in

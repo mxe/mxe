@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 10 Oct 2014 15:10:32 +1100
-Subject: [PATCH] original patch fixes
+Subject: [PATCH 1/2] original patch fixes
 
 
 diff --git a/guile-readline/configure b/guile-readline/configure
@@ -38,7 +38,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 10 Oct 2014 15:16:19 +1100
-Subject: [PATCH] fix mingw-w64 build
+Subject: [PATCH 2/2] fix mingw-w64 build
 
 
 diff --git a/libguile/posix.c b/libguile/posix.c

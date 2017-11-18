@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 17 Aug 2013 20:16:41 +0200
-Subject: [PATCH] include stdio.h for FILE
+Subject: [PATCH 1/1] include stdio.h for FILE
 
 
 diff --git a/jpeglib.h b/jpeglib.h

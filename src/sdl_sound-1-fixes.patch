@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Moritz Bunkus <moritz@bunkus.org>
 Date: Tue, 25 Jul 2017 17:25:57 +1000
-Subject: [PATCH] fix test program compilation with gcc >= 6
+Subject: [PATCH 1/1] fix test program compilation with gcc >= 6
 
 taken from:
 https://github.com/mxe/mxe/pull/1816

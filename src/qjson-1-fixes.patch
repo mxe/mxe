@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 18 Nov 2017 21:41:08 +1100
-Subject: [PATCH] fixes
+Subject: [PATCH 1/2] fixes
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -32,7 +32,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 18 Nov 2017 21:42:43 +1100
-Subject: [PATCH] build as static lib
+Subject: [PATCH 2/2] build as static lib
 
 taken from:
 http://sourceforge.net/mailarchive/forum.php?thread_name=4E1DBC0D.10000%40jrit.at&forum_name=qjson-devel

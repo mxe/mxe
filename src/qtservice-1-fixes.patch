@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 29 Aug 2013 09:27:08 +0200
-Subject: [PATCH] qtservice: fixes for static build
+Subject: [PATCH 1/4] qtservice: fixes for static build
 
 
 diff --git a/qtservice/buildlib/buildlib.pro b/qtservice/buildlib/buildlib.pro
@@ -39,7 +39,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 29 Aug 2013 09:31:40 +0200
-Subject: [PATCH] qtservice: build as static lib and generate .prl
+Subject: [PATCH 2/4] qtservice: build as static lib and generate .prl
 
 
 diff --git a/qtservice/buildlib/buildlib.pro b/qtservice/buildlib/buildlib.pro
@@ -60,7 +60,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 29 Aug 2013 09:44:49 +0200
-Subject: [PATCH] qtservice: no debug
+Subject: [PATCH 3/4] qtservice: no debug
 
 
 diff --git a/qtservice/buildlib/buildlib.pro b/qtservice/buildlib/buildlib.pro
@@ -80,7 +80,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 29 Aug 2013 11:32:45 +0200
-Subject: [PATCH] qtservice: install to Qt directory
+Subject: [PATCH 4/4] qtservice: install to Qt directory
 
 
 diff --git a/qtservice/buildlib/buildlib.pro b/qtservice/buildlib/buildlib.pro

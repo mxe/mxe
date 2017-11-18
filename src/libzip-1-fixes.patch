@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Sylvain Beucler <beuc@beuc.net>
 Date: Sun, 15 Jan 2017 17:25:49 +0100
-Subject: [PATCH] static build fixes
+Subject: [PATCH 1/2] static build fixes
 
 
 diff --git a/lib/zip.h b/lib/zip.h
@@ -28,7 +28,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Sylvain Beucler <beuc@beuc.net>
 Date: Sun, 15 Jan 2017 17:28:42 +0100
-Subject: [PATCH] pkgconfig private
+Subject: [PATCH 2/2] pkgconfig private
 
 
 diff --git a/libzip.pc.in b/libzip.pc.in

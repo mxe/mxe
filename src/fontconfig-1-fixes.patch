@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Tue, 5 Jul 2016 21:56:34 +0300
-Subject: [PATCH] fix mktemp_s
+Subject: [PATCH 1/1] fix mktemp_s
 
 
 diff --git a/configure.ac b/configure.ac

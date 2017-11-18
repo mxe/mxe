@@ -5,7 +5,8 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Stephen Kitt <skitt@debian.org>
 Date: Sat, 15 Jul 2017 00:09:40 +1000
-Subject: [PATCH] Allow the PE timestamp to be specified with SOURCE_DATE_EPOCH
+Subject: [PATCH 1/1] Allow the PE timestamp to be specified with
+ SOURCE_DATE_EPOCH
 
 Taken from:
 https://sources.debian.net/patches/binutils-mingw-w64/7.4/specify-timestamp.patch/

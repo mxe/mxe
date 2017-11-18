@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 18 Nov 2017 22:42:47 +1100
-Subject: [PATCH] small modification of Makefile for cross-compilation
+Subject: [PATCH 1/2] small modification of Makefile for cross-compilation
 
 includes external glext.h
 
@@ -11176,7 +11176,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 18 Nov 2017 22:43:31 +1100
-Subject: [PATCH] ml_gl.c : refer to new glext.h
+Subject: [PATCH 2/2] ml_gl.c : refer to new glext.h
 
 
 diff --git a/src/ml_gl.c b/src/ml_gl.c

@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 29 Jan 2017 21:47:39 +0100
-Subject: [PATCH] These were adapted from the gtk2 patchset.
+Subject: [PATCH 1/4] These were adapted from the gtk2 patchset.
 
 
 diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
@@ -49,7 +49,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 29 Jan 2017 21:50:48 +0100
-Subject: [PATCH] Not sure what happens when this line is commented out
+Subject: [PATCH 2/4] Not sure what happens when this line is commented out
 
 
 diff --git a/gtk/a11y/gtkaccessibility.c b/gtk/a11y/gtkaccessibility.c
@@ -67,7 +67,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 29 Jan 2017 22:50:45 +0100
-Subject: [PATCH] disable gtk-update-icon-cache
+Subject: [PATCH 3/4] disable gtk-update-icon-cache
 
 The error: https://gist.github.com/b3030a43a325ee7646a2bda2864465b5
 
@@ -99,7 +99,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gerardo Ballabio <gerardo.ballabio@gmail.com>
 Date: Fri, 10 Nov 2017 08:22:39 +1100
-Subject: [PATCH] restore built-in icons from 3.12
+Subject: [PATCH 4/4] restore built-in icons from 3.12
 
 http://lists.nongnu.org/archive/html/mingw-cross-env-list/2017-11/msg00000.html
 

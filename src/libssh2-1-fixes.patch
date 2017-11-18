@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 2 Sep 2012 00:55:28 +0200
-Subject: [PATCH] include gpg-error with gcrypt for static linking
+Subject: [PATCH 1/2] include gpg-error with gcrypt for static linking
  (mxe-specific)
 
 Git rid of the extra -lgcrypt here since we have to pass the
@@ -28,7 +28,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 7 Nov 2016 10:47:13 +0100
-Subject: [PATCH] fix yes/no in lib path
+Subject: [PATCH 2/2] fix yes/no in lib path
 
 
 diff --git a/acinclude.m4 b/acinclude.m4

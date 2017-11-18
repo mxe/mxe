@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Mon, 30 Nov 2015 20:34:28 +1100
-Subject: [PATCH] fix dll installation and ws2_32 linking errors
+Subject: [PATCH 1/1] fix dll installation and ws2_32 linking errors
 
 
 diff --git a/libs/network/src/CMakeLists.txt b/libs/network/src/CMakeLists.txt

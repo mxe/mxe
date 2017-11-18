@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 5 Sep 2013 14:25:31 -0700
-Subject: [PATCH] Linking as test is not good for cross compiling
+Subject: [PATCH 1/2] Linking as test is not good for cross compiling
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
@@ -27,7 +27,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 5 Sep 2013 14:28:28 -0700
-Subject: [PATCH] Fix /bin/bash
+Subject: [PATCH 2/2] Fix /bin/bash
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 

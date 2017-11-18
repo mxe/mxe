@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 23 Dec 2011 00:01:31 +0100
-Subject: [PATCH] add missing static dependencies to .pc file
+Subject: [PATCH 1/1] add missing static dependencies to .pc file
 
 
 diff --git a/lcms2.pc.in b/lcms2.pc.in

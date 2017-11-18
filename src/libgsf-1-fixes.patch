@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 23:34:26 +0200
-Subject: [PATCH] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 1/1] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gsf/gsf-utils.c b/gsf/gsf-utils.c

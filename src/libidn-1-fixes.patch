@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "a@mxe.org" <a@mxe.org>
 Date: Fri, 25 Nov 2011 15:58:28 +0100
-Subject: [PATCH] fix Libs.private
+Subject: [PATCH 1/4] fix Libs.private
 
 
 diff --git a/libidn.pc.in b/libidn.pc.in
@@ -23,7 +23,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
 Date: Wed, 1 Feb 2017 10:44:36 +0100
-Subject: [PATCH] Update intprops.h for gcc-7 compatibility
+Subject: [PATCH 2/4] Update intprops.h for gcc-7 compatibility
 
 (cherry picked from commit 230930b3bc3e431b819eb45420cb42475d83ca93)
 
@@ -349,7 +349,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
 Date: Wed, 1 Feb 2017 10:45:29 +0100
-Subject: [PATCH] Increase value for -Wframe-larger-than (gcc-7)
+Subject: [PATCH 3/4] Increase value for -Wframe-larger-than (gcc-7)
 
 (cherry picked from commit a6fcdb4f953e40ea162a9104cac034bce01706af)
 
@@ -370,7 +370,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
 Date: Wed, 1 Feb 2017 11:06:39 +0100
-Subject: [PATCH] Fix -Wformat warnings
+Subject: [PATCH 4/4] Fix -Wformat warnings
 
 (cherry picked from commit 7148adf34dae30345c2e4d9d437838a45ba6f6e8)
 

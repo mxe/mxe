@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Mon, 6 Oct 2014 00:15:00 +1100
-Subject: [PATCH] detect if host cc accepts -malign-double
+Subject: [PATCH 1/1] detect if host cc accepts -malign-double
 
 This patch has been taken from:
 

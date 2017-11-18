@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Sun, 17 Jun 2012 17:42:39 +0200
-Subject: [PATCH] use of ocaml.m4 from ocaml-autoconf ; modifications for
+Subject: [PATCH 1/1] use of ocaml.m4 from ocaml-autoconf ; modifications for
  cross-compilation
 
 taken from

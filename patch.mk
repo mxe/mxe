@@ -46,7 +46,7 @@ define EXPORT_PATCH
         echo 'Contains ad hoc patches for cross building.'; \
         echo ''; \
         $(call GIT_CMD,$(1)) format-patch \
-            --no-numbered \
+            --numbered \
             -p \
             --no-signature \
             --stdout \

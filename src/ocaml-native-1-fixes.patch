@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Wed, 3 Oct 2012 09:25:11 +0200
-Subject: [PATCH] ocamlbuild : support for prefixed
+Subject: [PATCH 1/1] ocamlbuild : support for prefixed
  ocaml{c,opt,mklib,mktop,find} tools
 
 

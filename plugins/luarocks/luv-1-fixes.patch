@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 25 Apr 2016 02:31:37 +0200
-Subject: [PATCH] add rockspec from upstream
+Subject: [PATCH 1/2] add rockspec from upstream
 
 
 diff --git a/luv-1.9.0-1.rockspec b/luv-1.9.0-1.rockspec
@@ -52,7 +52,7 @@ index 1111111..2222222
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 25 Apr 2016 02:25:47 +0200
-Subject: [PATCH] use external libuv
+Subject: [PATCH 2/2] use external libuv
 
 
 diff --git a/luv-1.9.0-1.rockspec b/luv-1.9.0-1.rockspec

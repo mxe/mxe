@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 4 Jan 2016 01:00:02 +0300
-Subject: [PATCH] disable readline on linux, macosx and freebsd
+Subject: [PATCH 1/1] disable readline on linux, macosx and freebsd
 
 
 diff --git a/src/Makefile b/src/Makefile

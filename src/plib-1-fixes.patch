@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Mon, 22 Jun 2015 14:10:16 -0700
-Subject: [PATCH] Fix pointer-to-integer cast for 64-bit architecture.
+Subject: [PATCH 1/1] Fix pointer-to-integer cast for 64-bit architecture.
 
 
 diff --git a/src/sl/slDSP.cxx b/src/sl/slDSP.cxx

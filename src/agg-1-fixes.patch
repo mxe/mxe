@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 12 Jun 2012 17:05:49 +0200
-Subject: [PATCH] automake 1.12 compatibility fix
+Subject: [PATCH 1/1] automake 1.12 compatibility fix
 
 
 diff --git a/configure.in b/configure.in

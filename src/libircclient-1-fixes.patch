@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 8 Oct 2013 22:37:07 +0200
-Subject: [PATCH] use the proper WIN32 define
+Subject: [PATCH 1/2] use the proper WIN32 define
 
 
 diff --git a/include/libircclient.h b/include/libircclient.h
@@ -25,7 +25,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 8 Oct 2013 22:37:29 +0200
-Subject: [PATCH] fix missing header
+Subject: [PATCH 2/2] fix missing header
 
 
 diff --git a/include/libircclient.h b/include/libircclient.h

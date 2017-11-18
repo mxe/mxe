@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 18 Nov 2017 22:56:46 +1100
-Subject: [PATCH] add missing #include <cstdio>
+Subject: [PATCH 1/4] add missing #include <cstdio>
 
 
 diff --git a/src/qwt3d_function.cpp b/src/qwt3d_function.cpp
@@ -21,7 +21,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 18 Nov 2017 22:57:14 +1100
-Subject: [PATCH] add missing #include <GL/glu.h>
+Subject: [PATCH 2/4] add missing #include <GL/glu.h>
 
 We use symbols defined in this header.
 Should not rely on Qt to include this file indirectly.
@@ -39,7 +39,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 18 Nov 2017 22:57:46 +1100
-Subject: [PATCH] configure project for MXE
+Subject: [PATCH 3/4] configure project for MXE
 
 
 diff --git a/qwtplot3d.pro b/qwtplot3d.pro
@@ -76,7 +76,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 18 Nov 2017 22:58:05 +1100
-Subject: [PATCH] fix building examples for MXE
+Subject: [PATCH 4/4] fix building examples for MXE
 
 
 diff --git a/examples/common.pro b/examples/common.pro

@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Tue, 14 Feb 2012 12:40:24 +0100
-Subject: [PATCH] fix pkg-config
+Subject: [PATCH 1/2] fix pkg-config
 
 
 diff --git a/build/pkgconfig/libarchive.pc.in b/build/pkgconfig/libarchive.pc.in
@@ -22,7 +22,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 13 Aug 2017 14:38:47 +1000
-Subject: [PATCH] libarchive.pc.in: add Cflags.private for static linking
+Subject: [PATCH 2/2] libarchive.pc.in: add Cflags.private for static linking
 
 taken from:
 https://github.com/libarchive/libarchive/pull/934
