@@ -12,7 +12,7 @@ diff --git a/Makefile b/Makefile
 index 1111111..2222222 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -185,14 +185,21 @@ omp_testsuite.h: ompts-c.conf c/*
+@@ -184,14 +184,21 @@ omp_testsuite.h: ompts-c.conf c/*
  .c.o: omp_testsuite omp_my_sleep
  	$(CC) $(CFLAGS) -c $<
  

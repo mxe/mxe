@@ -25,7 +25,7 @@ diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
 index 1111111..2222222 100644
 --- a/src/luarocks/cfg.lua
 +++ b/src/luarocks/cfg.lua
-@@ -137,6 +140,7 @@ local platform_order = {
+@@ -137,6 +137,7 @@ local platform_order = {
     linux = 7,
     macosx = 8,
     cygwin = 9,

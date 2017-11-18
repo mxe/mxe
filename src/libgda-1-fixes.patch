@@ -10,7 +10,6 @@ Subject: [PATCH] Misc. demos/ corrections
 Fix of libgda-ui/demos/ddl_queries.c was excluded, because
 we need this only to fix Perl failure.
 
-
 diff --git a/libgda-ui/demos/geninclude.pl.in b/libgda-ui/demos/geninclude.pl.in
 index 1111111..2222222 100755
 --- a/libgda-ui/demos/geninclude.pl.in

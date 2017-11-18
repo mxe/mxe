@@ -60,7 +60,6 @@ Subject: [PATCH] fix resource paths
 DevIL/src-IL/msvc/IL.rc has weird EOL issues and patches don't
 apply - use $(SED) in build rule instead
 
-
 diff --git a/DevIL/src-ILU/msvc/ILU.rc b/DevIL/src-ILU/msvc/ILU.rc
 index 1111111..2222222 100644
 --- a/DevIL/src-ILU/msvc/ILU.rc

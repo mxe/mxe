@@ -4,7 +4,7 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
-Date: Wed, 25 Aug 2016 10:28:30 +0200
+Date: Thu, 25 Aug 2016 10:28:30 +0200
 Subject: [PATCH] update preprocessor conditions
 
 Add macro NATIVE_WIN32 = Windows && !MinGW.

@@ -80,7 +80,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -483,24 +483,19 @@ with_libidn=no
+@@ -489,24 +489,19 @@ with_libidn=no
  if test "$try_libidn" = yes;then
  
    if test "$try_libidn2" = yes;then

@@ -171,8 +171,8 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:38 +0200
-Subject: [PATCH] Ensure globals are initialized even when DllMain is not
- being run
+Subject: [PATCH] Ensure globals are initialized even when DllMain is not being
+ run
 
 
 diff --git a/glib/gmain.c b/glib/gmain.c

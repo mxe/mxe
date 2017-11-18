@@ -86,14 +86,13 @@ Original patch by Arfrever
 This fixes https://github.com/clementine-player/Clementine/issues/5297
 https://github.com/clementine-player/Clementine/pull/5669
 
-
 diff --git a/src/core/database.cpp b/src/core/database.cpp
 index 1111111..2222222 100644
 --- a/src/core/database.cpp
 +++ b/src/core/database.cpp
 @@ -265,6 +265,20 @@ QSqlDatabase Database::Connect() {
    StaticInit();
-
+ 
    {
 +
 +#ifdef SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER

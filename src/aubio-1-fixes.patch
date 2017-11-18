@@ -236,7 +236,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 21:27:05 -0500
-Subject: [PATCH] [MXE] disable tests and examples
+Subject: [PATCH] disable tests and examples
 
 
 diff --git a/wscript b/wscript

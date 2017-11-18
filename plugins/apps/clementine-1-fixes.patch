@@ -140,7 +140,6 @@ Original patch by Arfrever
 This fixes https://github.com/clementine-player/Clementine/issues/5297
 https://github.com/clementine-player/Clementine/pull/5669
 
-
 diff --git a/src/core/database.cpp b/src/core/database.cpp
 index 1111111..2222222 100644
 --- a/src/core/database.cpp
@@ -175,7 +174,6 @@ Subject: [PATCH] Fix build in src/ui/
 It looks like there is a problem with build of src/ui/appearancesettingspage.cpp
 It might fix it.
 https://github.com/clementine-player/Clementine/pull/5784
-
 
 diff --git a/src/ui/appearancesettingspage.cpp b/src/ui/appearancesettingspage.cpp
 index 1111111..2222222 100644
