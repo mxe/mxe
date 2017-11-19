@@ -24,7 +24,7 @@
     "ccfits": {"version": "2.5", "website": "https://heasarc.gsfc.nasa.gov/fitsio/ccfits", "description": "CCfits"},
     "cegui": {"version": "9726a2b505fb", "website": "http://cegui.org.uk/", "description": "Crazy Eddie’s GUI System (CEGUI)"},
     "cfitsio": {"version": "3410", "website": "https://heasarc.gsfc.nasa.gov/fitsio/", "description": ""},
-    "cgal": {"version": "4.10", "website": "https://www.cgal.org/", "description": ""},
+    "cgal": {"version": "4.11", "website": "https://www.cgal.org/", "description": ""},
     "check": {"version": "0.10.0", "website": "https://check.sourceforge.io/", "description": ""},
     "chipmunk": {"version": "6.2.2", "website": "https://chipmunk-physics.net/", "description": "Chipmunk Physics"},
     "chromaprint": {"version": "1.1", "website": "https://acoustid.org/chromaprint", "description": "Chromaprint"},
