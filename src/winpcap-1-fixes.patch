@@ -2,16 +2,9 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sat, 18 Nov 2017 21:48:44 +1100
-Subject: [PATCH 1/1] fixes
-
-
-diff --git a/packetNtx/Dll/Packet32-Int.h b/packetNtx/Dll/Packet32-Int.h
-index 1111111..2222222 100644
---- a/packetNtx/Dll/Packet32-Int.h
-+++ b/packetNtx/Dll/Packet32-Int.h
+diff -ur winpcap/packetNtx/Dll/Packet32-Int.h winpcap.new/packetNtx/Dll/Packet32-Int.h
+--- winpcap/packetNtx/Dll/Packet32-Int.h	2010-10-14 08:16:46.000000000 +1100
++++ winpcap.new/packetNtx/Dll/Packet32-Int.h	2014-10-03 00:37:40.000000000 +1000
 @@ -43,7 +43,7 @@
  #endif //HAVE_NPFIM_API
  
@@ -21,11 +14,10 @@ index 1111111..2222222 100644
  #include <ntddndis.h>
  #else /*__MINGW64__*/
  #include <ddk/ntddndis.h>
-diff --git a/wpcap/PRJ/GNUmakefile b/wpcap/PRJ/GNUmakefile
-index 1111111..2222222 100644
---- a/wpcap/PRJ/GNUmakefile
-+++ b/wpcap/PRJ/GNUmakefile
-@@ -32,12 +32,12 @@ CFLAGS = -I ../libpcap -I ../libpcap/bpf -I ../libpcap/lbl \
+diff -ur winpcap/wpcap/PRJ/GNUmakefile winpcap.new/wpcap/PRJ/GNUmakefile
+--- winpcap/wpcap/PRJ/GNUmakefile	2010-10-18 13:00:36.000000000 +1100
++++ winpcap.new/wpcap/PRJ/GNUmakefile	2014-10-03 00:35:44.000000000 +1000
+@@ -32,12 +32,12 @@
  	-DSIZEOF_CHAR=1 -DSIZEOF_SHORT=2 -DSIZEOF_INT=4 -DSIZEOF_LONG_LONG=8 -DWPCAP -D'_U_=' \
  	-DHAVE_SNPRINTF -DHAVE_VSNPRINTF \
  	-DSIZEOF_LONG_LONG=8 \
@@ -40,17 +32,16 @@ index 1111111..2222222 100644
  LDFLAGS = -Wl,--out-implib,../lib/libwpcap.a
  LIBS = -L ../../${PACKET_DIR}/Dll/Project -lpacket -lws2_32
  OBJS = ../libpcap/bpf/net/bpf_filter.o \
-@@ -93,3 +93,6 @@ clean:
+@@ -93,3 +93,6 @@
  	${FLEX} ${LFLAGS} -t $< >$*.c
  .c.o:
  	${CC} ${CFLAGS} -o $*.o -c $<
 +libwpcap.a: ${OBJS}
 +	${AR} rc $@ ${OBJS}
 +	${RANLIB} $@
-diff --git a/wpcap/libpcap/Win32/Src/gai_strerror.c b/wpcap/libpcap/Win32/Src/gai_strerror.c
-index 1111111..2222222 100644
---- a/wpcap/libpcap/Win32/Src/gai_strerror.c
-+++ b/wpcap/libpcap/Win32/Src/gai_strerror.c
+diff -ur winpcap/wpcap/libpcap/Win32/Src/gai_strerror.c winpcap.new/wpcap/libpcap/Win32/Src/gai_strerror.c
+--- winpcap/wpcap/libpcap/Win32/Src/gai_strerror.c	2009-10-07 00:19:58.000000000 +1100
++++ winpcap.new/wpcap/libpcap/Win32/Src/gai_strerror.c	2014-10-03 00:35:44.000000000 +1000
 @@ -1,83 +1 @@
 -/*
 - * Copyright (C) 1995, 1996, 1997, and 1998 WIDE Project.
@@ -137,11 +128,10 @@ index 1111111..2222222 100644
 -#endif /* gai_strerror */
 \ No newline at end of file
 +/* already handled by <ws2tcpip.h> */
-diff --git a/wpcap/libpcap/inet.c b/wpcap/libpcap/inet.c
-index 1111111..2222222 100644
---- a/wpcap/libpcap/inet.c
-+++ b/wpcap/libpcap/inet.c
-@@ -804,7 +804,7 @@ pcap_lookupdev(errbuf)
+diff -ur winpcap/wpcap/libpcap/inet.c winpcap.new/wpcap/libpcap/inet.c
+--- winpcap/wpcap/libpcap/inet.c	2009-10-07 00:20:04.000000000 +1100
++++ winpcap.new/wpcap/libpcap/inet.c	2014-10-03 00:35:44.000000000 +1000
+@@ -804,7 +804,7 @@
  		while(NAdapts--)
  		{
  			strcpy((char*)tUstr, tAstr);
@@ -150,11 +140,10 @@ index 1111111..2222222 100644
  			tAstr += strlen(tAstr) + 1;
  		}
  
-diff --git a/wpcap/libpcap/pcap-win32.c b/wpcap/libpcap/pcap-win32.c
-index 1111111..2222222 100644
---- a/wpcap/libpcap/pcap-win32.c
-+++ b/wpcap/libpcap/pcap-win32.c
-@@ -38,7 +38,7 @@ static const char rcsid[] _U_ =
+diff -ur winpcap/wpcap/libpcap/pcap-win32.c winpcap.new/wpcap/libpcap/pcap-win32.c
+--- winpcap/wpcap/libpcap/pcap-win32.c	2013-02-28 17:22:00.000000000 +1100
++++ winpcap.new/wpcap/libpcap/pcap-win32.c	2014-10-03 00:37:02.000000000 +1000
+@@ -38,7 +38,7 @@
  
  #include <pcap-int.h>
  #include <Packet32.h>
