@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 30 May 2016 00:10:30 +0200
-Subject: [PATCH] disable BOOST_ASIO_SEPARATE_COMPILATION
+Subject: [PATCH 1/1] disable BOOST_ASIO_SEPARATE_COMPILATION
 
 After upgrading libtorrent-rasterbar to 1.1.0, qbittorrent fails to link
 main executable with undefined symbols in boost_asio:

@@ -1,6 +1,44 @@
---- subversion-1.9.2/configure.ac	2015-07-27 01:03:10.000000000 +0200
-+++ subversion-1.9.2.new/configure.ac	2015-12-09 13:58:49.000000000 +0100
-@@ -467,9 +467,6 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 21:45:25 +1100
+Subject: [PATCH 1/1] fixes
+
+
+diff --git a/build/generator/gen_make.py b/build/generator/gen_make.py
+index 1111111..2222222 100644
+--- a/build/generator/gen_make.py
++++ b/build/generator/gen_make.py
+@@ -633,7 +633,7 @@ DIR=`pwd`
+         lib_required_private=[],
+         )
+       # libsvn_foo -> -lsvn_foo
+-      data.lib_deps.append('-l%s' % lib_name.replace('lib', '', 1))
++      data.lib_deps.append('-l%s-1' % lib_name.replace('lib', '', 1))
+       for lib_dep in lib_deps.split():
+         if lib_dep == 'apriconv':
+           # apriconv is part of apr-util, skip it
+diff --git a/build/generator/templates/pkg-config.in.ezt b/build/generator/templates/pkg-config.in.ezt
+index 1111111..2222222 100644
+--- a/build/generator/templates/pkg-config.in.ezt
++++ b/build/generator/templates/pkg-config.in.ezt
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ libdir=@libdir@
+-includedir=@includedir@
++includedir=@includedir@/subversion-1
+ 
+ Name: [lib_name]
+ Description: [lib_desc]
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -467,9 +467,6 @@ fi
  
  dnl Mac OS specific features -------------------
  
@@ -10,7 +48,7 @@
  
  dnl APR_HAS_DSO -------------------
  
-@@ -1271,7 +1268,6 @@
+@@ -1271,7 +1268,6 @@ AS_HELP_STRING([--enable-gprof],
  # Python: Used for testsuite, and bindings
  
  
@@ -18,9 +56,10 @@
  if test -z "$PYTHON"; then
    AC_MSG_WARN([Python 2.7 or later is required to run the testsuite])
    AC_MSG_WARN([or to use the Subversion Python bindings])
-
---- subversion-1.9.2/subversion/libsvn_subr/config_win.c	2015-04-17 06:00:18.000000000 +0200
-+++ subversion-1.9.2.new/subversion/libsvn_subr/config_win.c	2015-12-10 09:49:11.645120955 +0100
+diff --git a/subversion/libsvn_subr/config_win.c b/subversion/libsvn_subr/config_win.c
+index 1111111..2222222 100644
+--- a/subversion/libsvn_subr/config_win.c
++++ b/subversion/libsvn_subr/config_win.c
 @@ -34,7 +34,7 @@
  #define WIN32_LEAN_AND_MEAN
  /* winsock2.h includes windows.h */
@@ -30,9 +69,24 @@
  
  #include <shlobj.h>
  
---- subversion-1.9.2/subversion/libsvn_subr/win32_xlate.c	2015-02-03 13:56:57.000000000 +0100
-+++ subversion-1.9.2.new/subversion/libsvn_subr/win32_xlate.c	2015-12-10 09:48:56.725192873 +0100
-@@ -36,7 +36,7 @@
+diff --git a/subversion/libsvn_subr/io.c b/subversion/libsvn_subr/io.c
+index 1111111..2222222 100644
+--- a/subversion/libsvn_subr/io.c
++++ b/subversion/libsvn_subr/io.c
+@@ -1789,7 +1789,7 @@ svn_io__utf8_to_unicode_longpath(const WCHAR **result,
+         }
+     }
+ 
+-    SVN_ERR(svn_utf__win32_utf8_to_utf16(&(const WCHAR*)buffer, source,
++    SVN_ERR(svn_utf__win32_utf8_to_utf16((const WCHAR**)&buffer, source,
+                                          prefix, result_pool));
+ 
+     /* Convert slashes to backslashes because the \\?\ path format
+diff --git a/subversion/libsvn_subr/win32_xlate.c b/subversion/libsvn_subr/win32_xlate.c
+index 1111111..2222222 100644
+--- a/subversion/libsvn_subr/win32_xlate.c
++++ b/subversion/libsvn_subr/win32_xlate.c
+@@ -36,7 +36,7 @@ typedef int win32_xlate__dummy;
  
  /* winsock2.h includes windows.h */
  #include <winsock2.h>
@@ -41,7 +95,7 @@
  #include <mlang.h>
  
  #include <apr.h>
-@@ -53,6 +53,8 @@
+@@ -53,6 +53,8 @@ typedef int win32_xlate__dummy;
  
  #include "svn_private_config.h"
  
@@ -50,7 +104,7 @@
  static svn_atomic_t com_initialized = 0;
  
  /* Initializes COM and keeps COM available until process exit.
-@@ -139,10 +139,12 @@
+@@ -138,10 +140,12 @@ get_page_id_from_name(UINT *page_id_p, const char *page_name, apr_pool_t *pool)
        return saved; /* probably SVN_ERR_ATOMIC_INIT_FAILURE */
      }
  
@@ -63,36 +117,3 @@
      return APR_EGENERAL;
  
    /* Convert page name to wide string. */
---- subversion-1.9.2/subversion/libsvn_subr/io.c	2015-09-11 06:00:13.000000000 +0200
-+++ subversion-1.9.2.new/subversion/libsvn_subr/io.c	2015-12-10 10:21:22.272463424 +0100
-@@ -1789,7 +1789,7 @@
-         }
-     }
- 
--    SVN_ERR(svn_utf__win32_utf8_to_utf16(&(const WCHAR*)buffer, source,
-+    SVN_ERR(svn_utf__win32_utf8_to_utf16((const WCHAR**)&buffer, source,
-                                          prefix, result_pool));
- 
-     /* Convert slashes to backslashes because the \\?\ path format
---- subversion-1.9.2/build/generator/gen_make.py	2015-07-27 01:03:10.000000000 +0200
-+++ subversion-1.9.2.new/build/generator/gen_make.py	2015-12-09 13:58:49.000000000 +0100
-@@ -633,7 +633,7 @@
-         lib_required_private=[],
-         )
-       # libsvn_foo -> -lsvn_foo
--      data.lib_deps.append('-l%s' % lib_name.replace('lib', '', 1))
-+      data.lib_deps.append('-l%s-1' % lib_name.replace('lib', '', 1))
-       for lib_dep in lib_deps.split():
-         if lib_dep == 'apriconv':
-           # apriconv is part of apr-util, skip it
---- subversion-1.9.2/build/generator/templates/pkg-config.in.ezt	2016-02-11 15:48:52.204400231 +0100
-+++ subversion-1.9.2.new/build/generator/templates/pkg-config.in.ezt	2014-05-05 17:04:00.000000000 +0200
-@@ -1,7 +1,7 @@
- prefix=@prefix@
- exec_prefix=@exec_prefix@
- libdir=@libdir@
--includedir=@includedir@
-+includedir=@includedir@/subversion-1
- 
- Name: [lib_name]
- Description: [lib_desc]

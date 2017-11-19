@@ -2,14 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From aab6124359bbf8d0b3003ccf4adc791e0d921aa3 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 8 Oct 2013 22:37:07 +0200
 Subject: [PATCH 1/2] use the proper WIN32 define
 
 
 diff --git a/include/libircclient.h b/include/libircclient.h
-index 250a0d1..7ff83be 100644
+index 1111111..2222222 100644
 --- a/include/libircclient.h
 +++ b/include/libircclient.h
 @@ -46,7 +46,7 @@
@@ -21,18 +21,15 @@ index 250a0d1..7ff83be 100644
  	#include <sys/select.h>	/* fd_set */
  #else
  	#include <winsock2.h>
--- 
-1.8.1.4
 
-
-From 1ac4521bd869d7cb3a82640d44f80cb9f9388eb7 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 8 Oct 2013 22:37:29 +0200
 Subject: [PATCH 2/2] fix missing header
 
 
 diff --git a/include/libircclient.h b/include/libircclient.h
-index 7ff83be..677f41f 100644
+index 1111111..2222222 100644
 --- a/include/libircclient.h
 +++ b/include/libircclient.h
 @@ -133,6 +133,7 @@ typedef void (*irc_dcc_callback_t) (irc_session_t * session, irc_dcc_t id, int s
@@ -43,6 +40,3 @@ index 7ff83be..677f41f 100644
  #undef IN_INCLUDE_LIBIRC_H
  
  
--- 
-1.8.1.4
-

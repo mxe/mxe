@@ -1,13 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
+Contains ad hoc patches for cross building.
+
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: xantares <xantares09@hotmail.com>
 Date: Mon, 28 Sep 2015 08:21:42 +0000
-Subject: [PATCH] Fix {make,jump}_fcontext visibility with mingw
+Subject: [PATCH 1/1] Fix {make,jump}_fcontext visibility with mingw
 
 taken from: https://github.com/boostorg/context/pull/22
 
-diff --git a/libs/context/src/asm/jump_i386_ms_pe_gas.asm b/src/asm/jump_i386_ms_pe_gas.asm
+diff --git a/libs/context/src/asm/jump_i386_ms_pe_gas.asm b/libs/context/src/asm/jump_i386_ms_pe_gas.asm
 index 1111111..2222222 100644
 --- a/libs/context/src/asm/jump_i386_ms_pe_gas.asm
 +++ b/libs/context/src/asm/jump_i386_ms_pe_gas.asm
@@ -18,7 +20,7 @@ index 1111111..2222222 100644
 +
 +.section .drectve
 +.ascii " -export:\"jump_fcontext\""
-diff --git a/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm b/src/asm/jump_x86_64_ms_pe_gas.asm
+diff --git a/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm b/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm
 index 1111111..2222222 100644
 --- a/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm
 +++ b/libs/context/src/asm/jump_x86_64_ms_pe_gas.asm
@@ -29,7 +31,7 @@ index 1111111..2222222 100644
 +
 +.section .drectve
 +.ascii " -export:\"jump_fcontext\""
-diff --git a/libs/context/src/asm/make_i386_ms_pe_gas.asm b/src/asm/make_i386_ms_pe_gas.asm
+diff --git a/libs/context/src/asm/make_i386_ms_pe_gas.asm b/libs/context/src/asm/make_i386_ms_pe_gas.asm
 index 1111111..2222222 100644
 --- a/libs/context/src/asm/make_i386_ms_pe_gas.asm
 +++ b/libs/context/src/asm/make_i386_ms_pe_gas.asm
@@ -40,7 +42,7 @@ index 1111111..2222222 100644
 +
 +.section .drectve
 +.ascii " -export:\"make_fcontext\""
-diff --git a/libs/context/src/asm/make_x86_64_ms_pe_gas.asm b/src/asm/make_x86_64_ms_pe_gas.asm
+diff --git a/libs/context/src/asm/make_x86_64_ms_pe_gas.asm b/libs/context/src/asm/make_x86_64_ms_pe_gas.asm
 index 1111111..2222222 100644
 --- a/libs/context/src/asm/make_x86_64_ms_pe_gas.asm
 +++ b/libs/context/src/asm/make_x86_64_ms_pe_gas.asm
@@ -51,4 +53,3 @@ index 1111111..2222222 100644
 +
 +.section .drectve
 +.ascii " -export:\"make_fcontext\""
-

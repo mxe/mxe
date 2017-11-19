@@ -1,8 +1,17 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-diff -uNr bzip2-1.0.6.orig/bzip2.c bzip2-1.0.6/bzip2.c
---- bzip2-1.0.6.orig/bzip2.c	2010-09-11 01:04:53.000000000 +0200
-+++ bzip2-1.0.6/bzip2.c	2013-01-30 16:24:00.170396872 +0100
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 20:31:24 +1100
+Subject: [PATCH 1/1] fixes
+
+
+diff --git a/bzip2.c b/bzip2.c
+index 1111111..2222222 100644
+--- a/bzip2.c
++++ b/bzip2.c
 @@ -128,7 +128,7 @@
  #if BZ_LCCWIN32
  #   include <io.h>
@@ -12,10 +21,11 @@ diff -uNr bzip2-1.0.6.orig/bzip2.c bzip2-1.0.6/bzip2.c
  
  #   define NORETURN       /**/
  #   define PATH_SEP       '\\'
-diff -uNr bzip2-1.0.6.orig/bzlib.h bzip2-1.0.6/bzlib.h
---- bzip2-1.0.6.orig/bzlib.h	2010-09-11 01:08:42.000000000 +0200
-+++ bzip2-1.0.6/bzlib.h	2013-01-30 16:22:10.514401460 +0100
-@@ -75,7 +75,7 @@
+diff --git a/bzlib.h b/bzlib.h
+index 1111111..2222222 100644
+--- a/bzlib.h
++++ b/bzlib.h
+@@ -75,7 +75,7 @@ typedef
  #include <stdio.h>
  #endif
  
@@ -24,7 +34,7 @@ diff -uNr bzip2-1.0.6.orig/bzlib.h bzip2-1.0.6/bzlib.h
  #   include <windows.h>
  #   ifdef small
        /* windows.h define small to char */
-@@ -116,7 +116,7 @@
+@@ -116,7 +116,7 @@ BZ_EXTERN int BZ_API(BZ2_bzCompressEnd) (
  BZ_EXTERN int BZ_API(BZ2_bzDecompressInit) ( 
        bz_stream *strm, 
        int       verbosity, 
@@ -33,7 +43,7 @@ diff -uNr bzip2-1.0.6.orig/bzlib.h bzip2-1.0.6/bzlib.h
     );
  
  BZ_EXTERN int BZ_API(BZ2_bzDecompress) ( 
-@@ -140,7 +140,7 @@
+@@ -140,7 +140,7 @@ BZ_EXTERN BZFILE* BZ_API(BZ2_bzReadOpen) (
        int*  bzerror,   
        FILE* f, 
        int   verbosity, 
@@ -42,7 +52,7 @@ diff -uNr bzip2-1.0.6.orig/bzlib.h bzip2-1.0.6/bzlib.h
        void* unused,    
        int   nUnused 
     );
-@@ -216,7 +216,7 @@
+@@ -216,7 +216,7 @@ BZ_EXTERN int BZ_API(BZ2_bzBuffToBuffDecompress) (
        unsigned int* destLen,
        char*         source, 
        unsigned int  sourceLen,

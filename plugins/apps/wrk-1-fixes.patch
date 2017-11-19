@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 20 Mar 2016 16:36:20 +0100
-Subject: [PATCH] rename conflicting constants
+Subject: [PATCH 1/8] rename conflicting constants
 
 
 diff --git a/src/net.c b/src/net.c
@@ -174,7 +174,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 20 Mar 2016 21:34:38 +0100
-Subject: [PATCH] rename zcalloc (conflict with zlib)
+Subject: [PATCH 2/8] rename zcalloc (conflict with zlib)
 
 
 diff --git a/src/stats.c b/src/stats.c
@@ -251,7 +251,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Tue, 22 Mar 2016 23:04:35 +0100
-Subject: [PATCH] allow to specify EXTRA_CFLAGS and EXTRA_LIBS
+Subject: [PATCH 3/8] allow to specify EXTRA_CFLAGS and EXTRA_LIBS
 
 
 diff --git a/Makefile b/Makefile
@@ -270,7 +270,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Tue, 22 Mar 2016 23:05:26 +0100
-Subject: [PATCH] reorder -lssl and -lcrypto
+Subject: [PATCH 4/8] reorder -lssl and -lcrypto
 
 See http://stackoverflow.com/a/27136346
 
@@ -289,7 +289,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Tue, 22 Mar 2016 23:14:32 +0100
-Subject: [PATCH] option to use external installation of LuaJIT
+Subject: [PATCH 5/8] option to use external installation of LuaJIT
 
 LUA_PATH is provided to avoid changing directory to LuaJIT's tree.
 
@@ -336,7 +336,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Tue, 22 Mar 2016 23:21:51 +0100
-Subject: [PATCH] embed bytecode via header instead of object file
+Subject: [PATCH 6/8] embed bytecode via header instead of object file
 
 Embedding via object file requires -Wl,-E which doesn't work on MinGW.
 Embedding via header is more portable.
@@ -427,7 +427,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Tue, 22 Mar 2016 23:28:09 +0100
-Subject: [PATCH] use send/recv for sockets instead of write/read
+Subject: [PATCH 7/8] use send/recv for sockets instead of write/read
 
 write/read returns Bad file descriptor for sockets in MinGW.
 
@@ -456,7 +456,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Wed, 23 Mar 2016 22:48:52 +0100
-Subject: [PATCH] compatibility with MinGW
+Subject: [PATCH 8/8] compatibility with MinGW
 
 
 diff --git a/Makefile b/Makefile

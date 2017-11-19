@@ -1,13 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From cf3aef0903fef54aa0ae4bdf997c4bafb7128bb5 Mon Sep 17 00:00:00 2001
-From: MXE
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Thu, 25 Apr 2013 18:17:52 +1000
 Subject: [PATCH 1/2] fix obsolete AM_CONFIG_HEADER
 
 
 diff --git a/configure.in b/configure.in
-index 18165f3..524d343 100644
+index 1111111..2222222 100644
 --- a/configure.in
 +++ b/configure.in
 @@ -12,7 +12,7 @@ AC_INIT(event.c)
@@ -19,18 +21,15 @@ index 18165f3..524d343 100644
  AC_DEFINE(NUMERIC_VERSION, 0x02001500, [Numeric representation of the version])
  
  dnl Initialize prefix.
--- 
-1.8.2.1
 
-
-From 9b22ff6236276fc5d8fd0c4ead9841b6b49b02c8 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Thu, 25 Apr 2013 19:02:55 +1000
 Subject: [PATCH 2/2] remove broken test specification
 
 
 diff --git a/test/Makefile.am b/test/Makefile.am
-index b10c41a..86cad83 100644
+index 1111111..2222222 100644
 --- a/test/Makefile.am
 +++ b/test/Makefile.am
 @@ -19,7 +19,6 @@ endif
@@ -41,6 +40,3 @@ index b10c41a..86cad83 100644
  
  BUILT_SOURCES =
  if BUILD_REGRESS
--- 
-1.8.2.1
-

@@ -1,14 +1,22 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 20:43:52 +1100
+Subject: [PATCH 1/2] fixes
+
 This patch has been taken from: https://bitbucket.org/msys2/coin/commits/69e9990b05cee506f5fa16c6edad02a7808bc610/raw/
 
 It was modified to work with Coin 3.1.3.
 (The order of the template arguments of SbHash was switched.)
 
 diff --git a/include/Inventor/C/glue/spidermonkey.h b/include/Inventor/C/glue/spidermonkey.h
+index 1111111..2222222 100644
 --- a/include/Inventor/C/glue/spidermonkey.h
 +++ b/include/Inventor/C/glue/spidermonkey.h
-@@ -56,7 +56,7 @@
+@@ -47,7 +47,7 @@ extern "C" {
     Structs and defines.
  */
  typedef int JSBool;
@@ -17,10 +25,487 @@ diff --git a/include/Inventor/C/glue/spidermonkey.h b/include/Inventor/C/glue/sp
  typedef jsword jsval;
  typedef jsword jsid;
  typedef int intN;
+diff --git a/include/Inventor/C/glue/spidermonkey.h.orig b/include/Inventor/C/glue/spidermonkey.h.orig
+new file mode 100644
+index 1111111..2222222
+--- /dev/null
++++ b/include/Inventor/C/glue/spidermonkey.h.orig
+@@ -0,0 +1,470 @@
++#ifndef COIN_GLUE_SPIDERMONKEY_H
++#define COIN_GLUE_SPIDERMONKEY_H
++
++/**************************************************************************\
++ *
++ *  This file is part of the Coin 3D visualization library.
++ *  Copyright (C) by Kongsberg Oil & Gas Technologies.
++ *
++ *  This library is free software; you can redistribute it and/or
++ *  modify it under the terms of the GNU General Public License
++ *  ("GPL") version 2 as published by the Free Software Foundation.
++ *  See the file LICENSE.GPL at the root directory of this source
++ *  distribution for additional information about the GNU GPL.
++ *
++ *  For using Coin with software that can not be combined with the GNU
++ *  GPL, and for taking advantage of the additional benefits of our
++ *  support services, please contact Kongsberg Oil & Gas Technologies
++ *  about acquiring a Coin Professional Edition License.
++ *
++ *  See http://www.coin3d.org/ for more information.
++ *
++ *  Kongsberg Oil & Gas Technologies, Bygdoy Alle 5, 0257 Oslo, NORWAY.
++ *  http://www.sim.no/  sales@sim.no  coin-support@coin3d.org
++ *
++\**************************************************************************/
++
++#include <Inventor/C/basic.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif /* __cplusplus */
++
++#if 0 /* to get proper auto-indentation in emacs */
++}
++#endif /* emacs indentation */
++
++
++/*
++  This is used to detect whether the 'jsapi.h' was included by the
++  user or not. The JSVERSION_IS_ECMA is defined in the 'jspubtd.h'
++  file in the SpiderMonkey header directory. 
++*/
++#ifndef JSVERSION_IS_ECMA
++
++
++/*
++   Structs and defines.
++*/
++typedef int JSBool;
++typedef long jsword;
++typedef jsword jsval;
++typedef jsword jsid;
++typedef int intN;
++typedef unsigned int uintN;
++typedef uint16_t jschar;
++
++typedef int32_t jsrefcount;
++typedef uint8_t jsbytecode;
++typedef uint32_t JSHashNumber;
++typedef uint32_t jsatomid;
++
++typedef enum JSType {
++  JSTYPE_VOID,
++  JSTYPE_OBJECT,
++  JSTYPE_FUNCTION,
++  JSTYPE_STRING,
++  JSTYPE_NUMBER,
++  JSTYPE_BOOLEAN,
++  JSTYPE_LIMIT
++} JSType;
++
++typedef enum JSAccessMode {
++  JSACC_PROTO = 0,
++  JSACC_PARENT = 1,
++  JSACC_IMPORT = 2,
++  JSACC_WATCH = 3,
++  JSACC_READ = 4,
++  JSACC_WRITE = 8,
++  JSACC_LIMIT
++} JSAccessMode;
++
++typedef enum JSGCStatus {
++  JSGC_BEGIN,
++  JSGC_END,
++  JSGC_MARK_END,
++  JSGC_FINALIZE_END
++} JSGCStatus;
++
++struct JSIdArray {
++    int32_t length;
++    jsid vector[1];
++};
++
++typedef void JSRuntime;
++typedef void JSContext;
++typedef void JSObject;
++typedef void JSObjectOps;
++typedef void JSXDRState;
++typedef void JSString;
++typedef struct JSClass JSClass;
++typedef struct JSPropertySpec JSPropertySpec;
++typedef int JSVersion;
++typedef void JSFunction;
++typedef struct JSFunctionSpec JSFunctionSpec;
++typedef struct JSErrorReport JSErrorReport;
++typedef void JSScript;
++
++#define JS_DLL_CALLBACK /* FIXME: set up this define properly. 20050601 mortene. */
++
++typedef JSBool (* JS_DLL_CALLBACK JSPropertyOp)(JSContext *, JSObject *, jsval, jsval *);
++typedef JSBool (* JS_DLL_CALLBACK JSEnumerateOp)(JSContext *, JSObject *);
++typedef JSBool (* JS_DLL_CALLBACK JSResolveOp)(JSContext *, JSObject *, jsval);
++typedef JSBool (* JS_DLL_CALLBACK JSConvertOp)(JSContext *, JSObject *, JSType, jsval *);
++typedef void (* JS_DLL_CALLBACK JSFinalizeOp)(JSContext *, JSObject *);
++typedef JSObjectOps * (* JS_DLL_CALLBACK JSGetObjectOps)(JSContext *, JSClass *);
++typedef JSBool (* JS_DLL_CALLBACK JSCheckAccessOp)(JSContext *, JSObject *, jsval, JSAccessMode, jsval *);
++typedef JSBool (* JS_DLL_CALLBACK JSNative)(JSContext *, JSObject *, uintN, jsval *, jsval *);
++typedef JSBool (* JS_DLL_CALLBACK JSXDRObjectOp)(JSXDRState *, JSObject **);
++typedef JSBool (* JS_DLL_CALLBACK JSHasInstanceOp)(JSContext *, JSObject *, jsval, JSBool *);
++typedef uint32_t (* JS_DLL_CALLBACK JSMarkOp)(JSContext *, JSObject *, void *);
++
++struct JSClass {
++  const char * name;
++  uint32_t flags;
++  JSPropertyOp addProperty;
++  JSPropertyOp delProperty;
++  JSPropertyOp getProperty;
++  JSPropertyOp setProperty;
++  JSEnumerateOp enumerate;
++  JSResolveOp resolve;
++  JSConvertOp convert;
++  JSFinalizeOp finalize;
++  JSGetObjectOps getObjectOps;
++  JSCheckAccessOp checkAccess;
++  JSNative call;
++  JSNative construct;
++  JSXDRObjectOp xdrObject;
++  JSHasInstanceOp hasInstance;
++  JSMarkOp mark;
++  jsword spare;
++};
++
++struct JSPropertySpec {
++  const char * name;
++  int8_t tinyid;
++  uint8_t flags;
++  JSPropertyOp getter;
++  JSPropertyOp setter;
++};
++
++struct JSFunctionSpec {
++  const char *name;
++  JSNative call;
++  uint8_t nargs;
++  uint8_t flags;
++  uint16_t extra;
++};
++
++struct JSErrorReport {
++  const char * filename;
++  uintN lineno;
++  const char * linebuf;
++  const char * tokenptr;
++  const jschar * uclinebuf;
++  const jschar * uctokenptr;
++  uintN flags;
++  uintN errorNumber;
++  const jschar * ucmessage;
++  const jschar ** messageArgs;
++};
++
++
++/* Defines and macros. ************************************************** */
++
++#define JSVAL_OBJECT 0x0
++#define JSVAL_INT 0x1
++#define JSVAL_DOUBLE 0x2
++#define JSVAL_STRING 0x4
++#define JSVAL_BOOLEAN 0x6
++
++#define JS_BIT(n)       ((uint32_t)1 << (n))
++#define JS_BITMASK(n)   (JS_BIT(n) - 1)
++
++#define JSVAL_TAGBITS 3
++#define JSVAL_TAGMASK           JS_BITMASK(JSVAL_TAGBITS)
++#define JSVAL_TAG(v)            ((v) & JSVAL_TAGMASK)
++#define JSVAL_SETTAG(v,t) ((v) | (t))
++#define JSVAL_CLRTAG(v)         ((v) & ~(jsval)JSVAL_TAGMASK)
++
++#define JSVAL_IS_PRIMITIVE(v)   (!JSVAL_IS_OBJECT(v) || JSVAL_IS_NULL(v))
++#define JSVAL_IS_OBJECT(v)      (JSVAL_TAG(v) == JSVAL_OBJECT)
++#define JSVAL_IS_NUMBER(v)      (JSVAL_IS_INT(v) || JSVAL_IS_DOUBLE(v))
++#define JSVAL_IS_INT(v)         (((v) & JSVAL_INT) && (v) != JSVAL_VOID)
++#define JSVAL_IS_DOUBLE(v)      (JSVAL_TAG(v) == JSVAL_DOUBLE)
++#define JSVAL_IS_STRING(v)      (JSVAL_TAG(v) == JSVAL_STRING)
++#define JSVAL_IS_BOOLEAN(v)     (JSVAL_TAG(v) == JSVAL_BOOLEAN)
++#define JSVAL_IS_NULL(v)        ((v) == JSVAL_NULL)
++#define JSVAL_IS_VOID(v)        ((v) == JSVAL_VOID)
++
++#define BOOLEAN_TO_JSVAL(b) JSVAL_SETTAG((jsval)(b) << JSVAL_TAGBITS, JSVAL_BOOLEAN)
++#define JSVAL_TO_BOOLEAN(v) ((JSBool)((v) >> JSVAL_TAGBITS))
++
++#define JSVAL_INT_BITS          31
++#define JSVAL_INT_POW2(n)       ((jsval)1 << (n))
++#define JSVAL_INT_MIN           ((jsval)1 - JSVAL_INT_POW2(30))
++#define JSVAL_INT_MAX           (JSVAL_INT_POW2(30) - 1)
++#define INT_FITS_IN_JSVAL(i)    ((uint32_t)((i)+JSVAL_INT_MAX) <= 2*JSVAL_INT_MAX)
++#define JSVAL_TO_INT(v)         ((int32_t)(v) >> 1)
++#define INT_TO_JSVAL(i)         (((jsval)(i) << 1) | JSVAL_INT)
++
++#define JSVAL_TO_GCTHING(v)     ((void *)JSVAL_CLRTAG(v))
++#define JSVAL_TO_OBJECT(v)      ((JSObject *)JSVAL_TO_GCTHING(v))
++#define JSVAL_TO_DOUBLE(v)      ((double *)JSVAL_TO_GCTHING(v))
++#define JSVAL_TO_STRING(v)      ((JSString *)JSVAL_TO_GCTHING(v))
++#define OBJECT_TO_JSVAL(obj)    ((jsval)(obj))
++#define DOUBLE_TO_JSVAL(dp)     JSVAL_SETTAG((jsval)(dp), JSVAL_DOUBLE)
++#define STRING_TO_JSVAL(str)    JSVAL_SETTAG((jsval)(str), JSVAL_STRING)
++#define JSVAL_TO_PRIVATE(v)     ((void *)((v) & ~JSVAL_INT))
++#define PRIVATE_TO_JSVAL(p)     ((jsval)(p) | JSVAL_INT)
++
++#define JSPROP_ENUMERATE 0x01
++#define JSPROP_READONLY 0x02
++#define JSPROP_PERMANENT 0x04
++#define JSPROP_EXPORTED 0x08
++#define JSPROP_GETTER 0x10
++#define JSPROP_SETTER 0x20
++#define JSPROP_SHARED 0x40
++#define JSPROP_INDEX 0x80
++
++#define JS_FALSE (int)0
++#define JS_TRUE (int)1
++
++#define JSVAL_VOID   INT_TO_JSVAL(0 - JSVAL_INT_POW2(30))
++#define JSVAL_NULL   OBJECT_TO_JSVAL(0)
++#define JSVAL_ZERO   INT_TO_JSVAL(0)
++#define JSVAL_ONE    INT_TO_JSVAL(1)
++#define JSVAL_FALSE  BOOLEAN_TO_JSVAL(JS_FALSE)
++#define JSVAL_TRUE   BOOLEAN_TO_JSVAL(JS_TRUE)
++
++#define JSCLASS_HAS_PRIVATE             (1<<0)
++#define JSCLASS_NEW_ENUMERATE           (1<<1)
++#define JSCLASS_NEW_RESOLVE             (1<<2)
++#define JSCLASS_PRIVATE_IS_NSISUPPORTS  (1<<3)
++#define JSCLASS_SHARE_ALL_PROPERTIES    (1<<4)
++#define JSCLASS_NEW_RESOLVE_GETS_START  (1<<5)
++
++#define JSFUN_BOUND_METHOD 0x40
++
++#define JSOPTION_STRICT                 JS_BIT(0)
++#define JSOPTION_WERROR                 JS_BIT(1)
++#define JSOPTION_VAROBJFIX              JS_BIT(2)
++#define JSOPTION_PRIVATE_IS_NSISUPPORTS JS_BIT(3)
++#define JSOPTION_COMPILE_N_GO           JS_BIT(4)
++
++
++/* Function typedefs. *************************************************** */
++
++typedef void (* JS_DLL_CALLBACK JSErrorReporter)(JSContext *, const char *, JSErrorReport *);
++typedef JSBool (* JS_DLL_CALLBACK JSGCCallback)(JSContext *, JSGCStatus);
++
++#endif /* !JSVERSION_IS_ECMA */
++
++typedef JSBool (* JS_EvaluateScript_t)(JSContext *, JSObject *, const char *, uintN, const char *, uintN, jsval *);
++typedef JSString * (* JS_ValueToString_t)(JSContext *, jsval);
++typedef char * (* JS_GetStringBytes_t)(JSString *);
++typedef JSBool (* JS_SetProperty_t)(JSContext *, JSObject *, const char *, jsval *);
++typedef JSBool (* JS_GetProperty_t)(JSContext *, JSObject *, const char *, jsval *);
++typedef JSBool (* JS_CallFunctionName_t)(JSContext *, JSObject *, const char *, uintN, jsval *, jsval *);
++typedef JSBool (* JS_CallFunctionValue_t)(JSContext *, JSObject *, jsval, uintN, jsval *, jsval *);
++typedef JSObject * (* JS_ConstructObjectWithArguments_t)(JSContext *, JSClass *, JSObject *, JSObject *, uintN, jsval *);
++typedef JSRuntime * (* JS_NewRuntime_t)(uint32_t);
++typedef void (* JS_DestroyRuntime_t)(JSRuntime *);
++typedef JSContext * (* JS_NewContext_t)(JSRuntime *, size_t);
++typedef void (* JS_DestroyContext_t)(JSContext *);
++typedef void (* JS_ShutDown_t)(void);
++typedef JSObject * (* JS_NewObject_t)(JSContext *, JSClass *, JSObject *, JSObject *);
++typedef JSBool (* JS_InitStandardClasses_t)(JSContext *, JSObject *);
++typedef JSErrorReporter (* JS_SetErrorReporter_t)(JSContext *, JSErrorReporter);
++typedef JSBool (* JS_PropertyStub_t)(JSContext *, JSObject *, jsval, jsval *);
++typedef JSBool (* JS_EnumerateStub_t)(JSContext *, JSObject *);
++typedef JSBool (* JS_ResolveStub_t)(JSContext *, JSObject *, jsval);
++typedef JSBool (* JS_ConvertStub_t)(JSContext *, JSObject *, JSType, jsval *);
++typedef void (* JS_FinalizeStub_t)(JSContext *, JSObject *);
++typedef const char * (* JS_GetImplementationVersion_t)(void);
++typedef void * (* JS_GetPrivate_t)(JSContext *, JSObject *);
++typedef JSBool (* JS_SetPrivate_t)(JSContext *, JSObject *, void *);
++typedef JSFunction * (* JS_NewFunction_t)(JSContext *, JSNative, uintN, uintN flags, JSObject *, const char *);
++typedef JSObject * (* JS_GetFunctionObject_t)(JSFunction *);
++typedef JSObject * (* JS_DefineObject_t)(JSContext *, JSObject *, const char *, JSClass *, JSObject *, uintN);
++typedef JSBool (* JS_DefineProperties_t)(JSContext *, JSObject *, JSPropertySpec *);
++typedef JSObject * (* JS_GetParent_t)(JSContext *, JSObject *);
++typedef JSBool (* JS_SetParent_t)(JSContext *, JSObject *, JSObject *);
++typedef JSBool (* JS_DefineFunctions_t)(JSContext *, JSObject *, JSFunctionSpec *);
++typedef JSString * (* JS_NewStringCopyZ_t)(JSContext *, const char *);
++typedef JSType (* JS_TypeOfValue_t)(JSContext *, jsval);
++typedef const char * (* JS_GetTypeName_t)(JSContext *, JSType);
++typedef JSBool (* JS_InstanceOf_t)(JSContext *, JSObject *, JSClass *, jsval *);
++typedef JSObject * (* JS_InitClass_t)(JSContext *, JSObject *, JSObject *, JSClass *,
++                                      JSNative, uintN, JSPropertySpec *, JSFunctionSpec *,
++                                      JSPropertySpec *, JSFunctionSpec *);
++typedef JSBool (* JS_NewDoubleValue_t)(JSContext *, double, jsval *);
++typedef void * (* JS_GetContextPrivate_t)(JSContext *);
++typedef void (* JS_SetContextPrivate_t)(JSContext *, void *);
++typedef JSBool (* JS_ValueToBoolean_t)(JSContext *, jsval, JSBool *);
++typedef JSBool (* JS_ValueToNumber_t)(JSContext *, jsval, double *);
++typedef JSObject * (* JS_NewArrayObject_t)(JSContext *, int32_t, jsval *);
++typedef JSBool (* JS_GetArrayLength_t)(JSContext *, JSObject *, uint32_t *);
++typedef JSBool (* JS_SetArrayLength_t)(JSContext *, JSObject *, uint32_t);
++typedef JSBool (* JS_HasArrayLength_t)(JSContext *, JSObject *, uint32_t *);
++typedef JSBool (* JS_GetElement_t)(JSContext *, JSObject *, int32_t, jsval *);
++typedef JSBool (* JS_SetElement_t)(JSContext *, JSObject *, int32_t, jsval *);
++typedef JSBool (* JS_AddRoot_t)(JSContext *, void *);
++typedef JSBool (* JS_RemoveRoot_t)(JSContext *, void *);
++typedef size_t (* JS_GetStringLength_t)(JSString *);
++typedef JSBool (* JS_LookupProperty_t)(JSContext *, JSObject *, const char *, jsval *);
++typedef JSBool (* JS_DefineProperty_t)(JSContext *, JSObject *, const char *, jsval, JSPropertyOp, JSPropertyOp, uintN);
++typedef JSScript * (* JS_CompileFile_t)(JSContext *, JSObject *, const char *);
++typedef JSBool (* JS_ValueToObject_t)(JSContext *, jsval, JSObject **);
++typedef JSBool (* JS_ExecuteScript_t)(JSContext *, JSObject *, JSScript *, jsval *);
++typedef JSBool (* JS_IsExceptionPending_t)(JSContext *);
++typedef JSBool (* JS_GetPendingException_t)(JSContext *, jsval *);
++typedef void (* JS_SetPendingException_t)(JSContext *, jsval);
++typedef void (* JS_ClearPendingException_t)(JSContext *);
++typedef double * (* JS_NewDouble_t)(JSContext *, double);
++typedef JSBool (* JS_CallFunction_t)(JSContext *, JSObject *, JSFunction *, uintN, jsval *, jsval *);
++typedef JSFunction * (* JS_ValueToFunction_t)(JSContext *, jsval);
++typedef void (* JS_ReportError_t)(JSContext *, const char *, ...);
++typedef JSBool (* JS_IsArrayObject_t)(JSContext *, JSObject *);
++typedef JSBool (* JS_ObjectIsFunction_t)(JSContext *, JSObject *);
++typedef JSBool (* JS_ValueToECMAInt32_t)(JSContext *, jsval, int32_t *);
++typedef JSFunction * (* JS_DefineFunction_t)(JSContext *, JSObject *, const char *, JSNative, uintN, uintN);
++typedef JSObject * (* JS_GetGlobalObject_t)(JSContext *);
++typedef JSGCCallback (* JS_SetGCCallback_t)(JSContext *, JSGCCallback);
++typedef void (* JS_GC_t)(JSContext *);
++typedef void (* JS_MaybeGC_t)(JSContext *);
++typedef JSBool (* JS_IsRunning_t)(JSContext *);
++typedef JSBool (* JS_DeleteProperty_t)(JSContext *, JSObject *, const char *);
++typedef JSScript * (* JS_CompileScript_t)(JSContext *, JSObject *,
++                                          const char *, size_t,
++                                          const char *, uintN);
++typedef jsval (* JS_GetNaNValue_t)(JSContext *);
++typedef jsval (* JS_GetNegativeInfinityValue_t)(JSContext *);
++typedef jsval (* JS_GetPositiveInfinityValue_t)(JSContext *);
++typedef jsval (* JS_GetEmptyStringValue_t)(JSContext *);
++typedef JSBool (* JS_SetPropertyAttributes_t)(JSContext *, JSObject *, const char *, uintN, JSBool *);
++typedef JSBool (* JS_GetPropertyAttributes_t)(JSContext *, JSObject *, const char *, uintN *, JSBool *);
++typedef JSClass * (* JS_GetClass_t)(JSObject *);
++typedef JSObject * (* JS_GetPrototype_t)(JSContext *, JSObject *);
++typedef JSObject * (* JS_SetPrototype_t)(JSContext *, JSObject *, JSObject *);
++typedef intN (* JS_CompareStrings_t)(JSString *, JSString *);
++typedef uint32_t (* JS_GetOptions_t)(JSContext *);
++typedef uint32_t (* JS_SetOptions_t)(JSContext *, uint32_t);
++typedef uint32_t (* JS_ToggleOptions_t)(JSContext *, uint32_t);
++typedef struct JSIdArray * (* JS_Enumerate_t)(JSContext *, JSObject *);
++typedef JSBool (* JS_IdToValue_t)(JSContext *, jsid, jsval *);
++typedef const char * (* JS_GetFunctionName_t)(JSFunction *);
++typedef JSObject * (* JS_GetConstructor_t)(JSContext *, JSObject *);
++typedef void (* JS_DestroyIdArray_t)(JSContext *, struct JSIdArray *);
++
++
++/* Access interface. **************************************************** */
++
++typedef struct {
++  int available;
++
++  JS_CallFunctionName_t JS_CallFunctionName;
++  JS_CallFunctionValue_t JS_CallFunctionValue;
++  JS_ConstructObjectWithArguments_t JS_ConstructObjectWithArguments;
++  JS_ConvertStub_t JS_ConvertStub;
++  JS_DestroyContext_t JS_DestroyContext;
++  JS_DestroyRuntime_t JS_DestroyRuntime;
++  JS_EnumerateStub_t JS_EnumerateStub;
++  JS_EvaluateScript_t JS_EvaluateScript;
++  JS_FinalizeStub_t JS_FinalizeStub;
++  JS_GetClass_t JS_GetClass;
++  JS_GetImplementationVersion_t JS_GetImplementationVersion;
++  JS_GetProperty_t JS_GetProperty;
++  JS_GetStringBytes_t JS_GetStringBytes;
++  JS_InitStandardClasses_t JS_InitStandardClasses;
++  JS_NewContext_t JS_NewContext;
++  JS_NewObject_t JS_NewObject;
++  JS_NewRuntime_t JS_NewRuntime;
++  JS_PropertyStub_t JS_PropertyStub;
++  JS_ResolveStub_t JS_ResolveStub;
++  JS_SetErrorReporter_t JS_SetErrorReporter;
++  JS_SetProperty_t JS_SetProperty;
++  JS_ShutDown_t JS_ShutDown;
++  JS_ValueToString_t JS_ValueToString;
++  JS_DefineObject_t JS_DefineObject;
++  JS_DefineProperties_t JS_DefineProperties;
++  JS_GetPrivate_t JS_GetPrivate;
++  JS_SetPrivate_t JS_SetPrivate;
++  JS_NewFunction_t JS_NewFunction;
++  JS_GetFunctionObject_t JS_GetFunctionObject;
++  JS_GetParent_t JS_GetParent;
++  JS_SetParent_t JS_SetParent;
++  JS_DefineFunctions_t JS_DefineFunctions;
++  JS_NewStringCopyZ_t JS_NewStringCopyZ;
++  JS_TypeOfValue_t JS_TypeOfValue;
++  JS_GetTypeName_t JS_GetTypeName;
++  JS_InstanceOf_t JS_InstanceOf;
++  JS_InitClass_t JS_InitClass;
++  JS_NewDoubleValue_t JS_NewDoubleValue;
++  JS_GetContextPrivate_t JS_GetContextPrivate;
++  JS_SetContextPrivate_t JS_SetContextPrivate;
++  JS_ValueToBoolean_t JS_ValueToBoolean;
++  JS_ValueToNumber_t JS_ValueToNumber;
++  JS_NewArrayObject_t JS_NewArrayObject;
++  JS_GetArrayLength_t JS_GetArrayLength;
++  JS_SetArrayLength_t JS_SetArrayLength;
++  JS_HasArrayLength_t JS_HasArrayLength;
++  JS_GetElement_t JS_GetElement;
++  JS_SetElement_t JS_SetElement;
++  JS_AddRoot_t JS_AddRoot;
++  JS_RemoveRoot_t JS_RemoveRoot;
++  JS_GetStringLength_t JS_GetStringLength;
++  JS_LookupProperty_t JS_LookupProperty;
++  JS_DefineProperty_t JS_DefineProperty;
++  JS_CompileFile_t JS_CompileFile;
++  JS_ValueToObject_t JS_ValueToObject;
++  JS_ExecuteScript_t JS_ExecuteScript;
++  JS_IsExceptionPending_t JS_IsExceptionPending;
++  JS_GetPendingException_t JS_GetPendingException;
++  JS_SetPendingException_t JS_SetPendingException;
++  JS_ClearPendingException_t JS_ClearPendingException;
++  JS_NewDouble_t JS_NewDouble;
++  JS_CallFunction_t JS_CallFunction;
++  JS_ValueToFunction_t JS_ValueToFunction;
++  JS_ReportError_t JS_ReportError;
++  JS_IsArrayObject_t JS_IsArrayObject;
++  JS_ObjectIsFunction_t JS_ObjectIsFunction;
++  // Note: We use this function instead of JS_ValueToInt32() since the 
++  // latter is buggy in versions of SpiderMonkey older than 2005-09-29, 
++  // see Mozilla bug #284032.
++  JS_ValueToECMAInt32_t JS_ValueToECMAInt32;
++  JS_DefineFunction_t JS_DefineFunction;
++  JS_GetGlobalObject_t JS_GetGlobalObject;
++  JS_SetGCCallback_t JS_SetGCCallback;
++  JS_GC_t JS_GC;
++  JS_MaybeGC_t JS_MaybeGC;
++  JS_IsRunning_t JS_IsRunning;
++  JS_DeleteProperty_t JS_DeleteProperty;
++  JS_CompileScript_t JS_CompileScript;
++  JS_GetNaNValue_t JS_GetNaNValue;
++  JS_GetNegativeInfinityValue_t JS_GetNegativeInfinityValue;
++  JS_GetPositiveInfinityValue_t JS_GetPositiveInfinityValue;
++  JS_GetEmptyStringValue_t JS_GetEmptyStringValue;
++  JS_SetPropertyAttributes_t JS_SetPropertyAttributes;
++  JS_GetPropertyAttributes_t JS_GetPropertyAttributes;
++  JS_GetPrototype_t JS_GetPrototype;
++  JS_SetPrototype_t JS_SetPrototype;
++  JS_CompareStrings_t JS_CompareStrings;
++  JS_GetOptions_t JS_GetOptions;
++  JS_SetOptions_t JS_SetOptions;
++  JS_ToggleOptions_t JS_ToggleOptions;
++  JS_Enumerate_t JS_Enumerate;
++  JS_IdToValue_t JS_IdToValue;
++  JS_GetFunctionName_t JS_GetFunctionName;
++  JS_GetConstructor_t JS_GetConstructor;
++  JS_DestroyIdArray_t JS_DestroyIdArray;
++
++} SpiderMonkey_t;
++
++COIN_DLL_API const SpiderMonkey_t * spidermonkey(void);
++
++#ifdef __cplusplus
++}
++#endif /* __cplusplus */
++
++#endif /* !COIN_GLUE_SPIDERMONKEY_H */
 diff --git a/src/foreignfiles/SoSTLFileKit.cpp b/src/foreignfiles/SoSTLFileKit.cpp
+index 1111111..2222222 100644
 --- a/src/foreignfiles/SoSTLFileKit.cpp
 +++ b/src/foreignfiles/SoSTLFileKit.cpp
-@@ -566,14 +566,14 @@
+@@ -594,14 +594,14 @@ SoSTLFileKit::addFacet(const SbVec3f & v1, const SbVec3f & v2, const SbVec3f & v
      SO_GET_ANY_PART(this, "facets", SoIndexedFaceSet);
  
    // find existing indexes if any
@@ -43,10 +528,816 @@ diff --git a/src/foreignfiles/SoSTLFileKit.cpp b/src/foreignfiles/SoSTLFileKit.c
  
    // toss out invalid facets - facets where two or more points are in
    // the same location.  what are these - are they lines and points or
+diff --git a/src/foreignfiles/SoSTLFileKit.cpp.orig b/src/foreignfiles/SoSTLFileKit.cpp.orig
+new file mode 100644
+index 1111111..2222222
+--- /dev/null
++++ b/src/foreignfiles/SoSTLFileKit.cpp.orig
+@@ -0,0 +1,799 @@
++/**************************************************************************\
++ *
++ *  This file is part of the Coin 3D visualization library.
++ *  Copyright (C) by Kongsberg Oil & Gas Technologies.
++ *
++ *  This library is free software; you can redistribute it and/or
++ *  modify it under the terms of the GNU General Public License
++ *  ("GPL") version 2 as published by the Free Software Foundation.
++ *  See the file LICENSE.GPL at the root directory of this source
++ *  distribution for additional information about the GNU GPL.
++ *
++ *  For using Coin with software that can not be combined with the GNU
++ *  GPL, and for taking advantage of the additional benefits of our
++ *  support services, please contact Kongsberg Oil & Gas Technologies
++ *  about acquiring a Coin Professional Edition License.
++ *
++ *  See http://www.coin3d.org/ for more information.
++ *
++ *  Kongsberg Oil & Gas Technologies, Bygdoy Alle 5, 0257 Oslo, NORWAY.
++ *  http://www.sim.no/  sales@sim.no  coin-support@coin3d.org
++ *
++\**************************************************************************/
++
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif // HAVE_CONFIG_H
++
++#ifdef HAVE_NODEKITS
++
++#include <ForeignFiles/SoSTLFileKit.h>
++
++#include <Inventor/SbBasic.h>
++#include <Inventor/lists/SbList.h>
++#include <Inventor/errors/SoDebugError.h>
++#include <Inventor/actions/SoCallbackAction.h>
++#include <Inventor/actions/SoReorganizeAction.h>
++#include <Inventor/nodes/SoSeparator.h>
++#include <Inventor/nodes/SoShapeHints.h>
++#include <Inventor/nodes/SoTexture2.h>
++#include <Inventor/nodes/SoNormal.h>
++#include <Inventor/nodes/SoNormalBinding.h>
++#include <Inventor/nodes/SoMaterial.h>
++#include <Inventor/nodes/SoMaterialBinding.h>
++#include <Inventor/nodes/SoCoordinate3.h>
++#include <Inventor/nodes/SoIndexedFaceSet.h>
++#include <Inventor/nodes/SoInfo.h>
++#include <Inventor/SbBSPTree.h>
++#include <Inventor/SoPrimitiveVertex.h>
++
++#include "steel.h"
++#include "nodekits/SoSubKitP.h"
++
++
++#if 0
++  SoCallback         "callbackList"         SoBaseKit
++  SoSeparator        "topSeparator"         SoForeignFileKit
++  SoShapeHints         "shapehints"           SoSTLFileKit
++  SoTexture2           "texture"              SoSTLFileKit
++  SoNormalBinding      "normalbinding"        SoSTLFileKit
++  SoNormal             "normals"              SoSTLFileKit
++  SoMaterialBinding    "materialbinding"      SoSTLFileKit
++  SoMaterial           "material"             SoSTLFileKit
++  SoCoordinate3        "coordinates"          SoSTLFileKit
++  SoIndexedFaceSet     "facets"               SoSTLFileKit
++#endif // 0
++
++class SoSTLFileKitP {
++public:
++  SoSTLFileKitP(SoSTLFileKit * pub)
++  : api(pub) {
++    this->data = new SbList<uint16_t>;
++    this->points = new SbBSPTree;
++    this->normals = new SbBSPTree;
++  }
++  ~SoSTLFileKitP(void) {
++    delete this->data;
++    delete this->points;
++    delete this->normals;
++  }
++
++public:
++  SoSTLFileKit * const api;
++
++  SbList<uint16_t> * data;
++  SbBSPTree * points;
++  SbBSPTree * normals;
++
++  int numfacets;
++  int numvertices;
++  int numnormals;
++  int numsharedvertices;
++  int numsharednormals;
++  int numredundantfacets;
++}; // SoSTLFileKitP
++
++// *************************************************************************
++
++/*!
++  \class SoSTLFileKit SoSTLFileKit.h ForeignFiles/SoSTLFileKit.h
++  \brief SoSTLFileKit is a class for using STL files with Coin.
++
++  Class for using STL files with Coin.  You can use it to read and
++  write STL files, and convert back and forth between Open Inventor
++  scene graphs and SoSTLFileKits.
++
++  STL files are 3D models intended for 3D printers, and is a format
++  supported by a wide variety of computer-aided design programs.  STL
++  models are, because of their intended purpose, always
++  representations of solid objects.  STL is short for
++  Stereolithography, the process used for 3D printing.
++
++  Ordinary STL models do not contain color information.  There are,
++  however, two extensions to the binary file format for specifying
++  color.  Currently neither extension is supported.  This is caused by
++  lack of sample models using the extensions and will be added as soon
++  as such models are found.  We have the specs on the extensions, and
++  it should be pretty straight-forwards to implement, but we want to
++  get it right at once since we have write support (we don't want to
++  inadvertently create a third color extension ;).
++
++  When writing STL files, certain STL model criterias are not enforced
++  by SoSTLFileKit.  These are:
++
++  - STL models should represent complete solids - it is the user's
++    responsibility to give models of solid data to readScene(), and
++    not readScene()'s responsibility to check the incoming data.
++
++  - STL models should have all triangles in counterclockwise order.
++    This is not enforced either.
++
++  - STL models should reside in the positive octant of the coordinate
++    space.  This is also the user's responsibility to ensure, although
++    adding functionality for translating the model should be easy, so
++    it might get implemented.
++
++  Since the color extensions are not supported yet, color information
++  is not collected either when converting Open Inventor scene graphs to
++  SoSTLFileKits.
++
++  \relates foreignfileformats
++  \COIN_CLASS_EXTENSION
++  \since Coin 3.0
++*/
++
++#define PRIVATE(obj) ((obj)->pimpl)
++
++SO_KIT_SOURCE(SoSTLFileKit)
++
++/*!
++  Initializes class and registers file identification functions.
++*/
++
++void
++SoSTLFileKit::initClass(void)
++{
++  SO_KIT_INIT_CLASS(SoSTLFileKit, SoForeignFileKit, SoForeignFileKit);
++
++  SoType type = SoSTLFileKit::getClassTypeId();
++  SoForeignFileKit::registerFileExtension(type, "stl", SoSTLFileKit::identify);
++}
++
++/*!
++  Returns wether or not \a filename is identified as an STL file.
++*/
++
++SbBool
++SoSTLFileKit::identify(const char * filename)
++{
++  assert(filename);
++  stl_reader * reader = stl_reader_create(filename);
++  if ( !reader ) {
++    return FALSE;
++  }
++  stl_reader_destroy(reader);
++  return TRUE;
++}
++
++/*!
++  Constructor.
++*/
++
++SoSTLFileKit::SoSTLFileKit(void)
++{
++  PRIVATE(this) = new SoSTLFileKitP(this);
++
++  SO_KIT_INTERNAL_CONSTRUCTOR(SoSTLFileKit);
++
++  SO_KIT_ADD_FIELD(info, (""));
++  SO_KIT_ADD_FIELD(binary, (FALSE));
++  SO_KIT_ADD_FIELD(colorization, (SoSTLFileKit::GREY));
++
++  SO_KIT_DEFINE_ENUM_VALUE(Colorization, GREY);
++  SO_KIT_DEFINE_ENUM_VALUE(Colorization, MATERIALISE);
++  SO_KIT_DEFINE_ENUM_VALUE(Colorization, TNO_VISICAM);
++
++  SO_KIT_SET_SF_ENUM_TYPE(colorization, Colorization);
++
++  SO_KIT_ADD_CATALOG_ENTRY(facets, SoIndexedFaceSet,
++                           FALSE, topSeparator, \x0, FALSE);
++  SO_KIT_ADD_CATALOG_ENTRY(coordinates, SoCoordinate3,
++                           FALSE, topSeparator, facets, FALSE);
++  SO_KIT_ADD_CATALOG_ENTRY(material, SoMaterial,
++                           FALSE, topSeparator, coordinates, FALSE);
++  SO_KIT_ADD_CATALOG_ENTRY(materialbinding, SoMaterialBinding,
++                           FALSE, topSeparator, material, FALSE);
++  SO_KIT_ADD_CATALOG_ENTRY(normals, SoNormal,
++                           FALSE, topSeparator, materialbinding, FALSE);
++  SO_KIT_ADD_CATALOG_ENTRY(normalbinding, SoNormalBinding,
++                           FALSE, topSeparator, normals, FALSE);
++  SO_KIT_ADD_CATALOG_ENTRY(texture, SoTexture2,
++                           FALSE, topSeparator, normalbinding, FALSE);
++  SO_KIT_ADD_CATALOG_ENTRY(shapehints, SoShapeHints,
++                           FALSE, topSeparator, texture, FALSE);
++
++  SO_KIT_INIT_INSTANCE();
++}
++
++/*!
++  Destructor.
++*/
++
++SoSTLFileKit::~SoSTLFileKit(void)
++{
++  delete PRIVATE(this);
++  PRIVATE(this) = NULL;
++}
++
++// doc in inherited class
++SbBool
++SoSTLFileKit::canReadFile(const char * filename) const
++{
++  if ( !filename ) return TRUE; // we can read STL files, in general
++  return SoSTLFileKit::identify(filename);
++}
++
++/*!
++  Reads in an STL file.  Both ascii and binary files are supported.
++  For binary files, the color extensions are not implemented yet.
++
++  Returns FALSE if \a filename could not be opened or parsed
++  correctly.
++
++  \sa canReadFile, canWriteScene, writeScene
++*/
++
++SbBool
++SoSTLFileKit::readFile(const char * filename)
++{
++  assert(filename);
++
++  this->reset();
++
++  stl_reader * reader = stl_reader_create(filename);
++  if ( !reader ) {
++    SoDebugError::postInfo("SoSTLFileKit::readFile",
++                           "unable to create STL reader for '%s'.",
++                           filename);
++    return FALSE;
++  }
++
++  SbBool binary = (stl_reader_flags(reader) & STL_BINARY) ? TRUE : FALSE;
++
++  SoShapeHints * hints =
++    SO_GET_ANY_PART(this, "shapehints", SoShapeHints);
++  hints->vertexOrdering.setValue(SoShapeHints::UNKNOWN_ORDERING);
++  // what it should have been
++  // hints->vertexOrdering.setValue(SoShapeHints::COUNTERCLOCKWISE);
++  hints->shapeType.setValue(SoShapeHints::SOLID);
++  hints->faceType.setValue(SoShapeHints::UNKNOWN_FACE_TYPE);
++
++  SoNormalBinding * normalbinding =
++    SO_GET_ANY_PART(this, "normalbinding", SoNormalBinding);
++  normalbinding->value = SoNormalBinding::PER_FACE_INDEXED;
++
++  stl_facet * facet = stl_facet_create();
++  SbBool loop = TRUE, success = TRUE;
++  while ( loop ) {
++    const int peekval = stl_reader_peek(reader);
++    if ( peekval == STL_BEGIN ) {
++    } else if ( peekval == STL_INIT_INFO ) {
++      // FIXME: set info
++    } else if ( peekval == STL_EXIT_INFO ) {
++    } else if ( peekval == STL_END ) {
++      loop = FALSE;
++    } else if ( peekval == STL_FACET ) {
++      stl_real x, y, z;
++      stl_reader_fill_facet(reader, facet);
++      stl_facet_get_normal(facet, &x, &y, &z);
++      SbVec3f normal((float) x, (float) y, (float) z);
++      stl_facet_get_vertex1(facet, &x, &y, &z);
++      SbVec3f vertex1((float) x, (float) y, (float) z);
++      stl_facet_get_vertex2(facet, &x, &y, &z);
++      SbVec3f vertex2((float) x, (float) y, (float) z);
++      stl_facet_get_vertex3(facet, &x, &y, &z);
++      SbVec3f vertex3((float) x, (float) y, (float) z);
++      if ( normal.length() == 0.0f ) { // auto-calculate
++        SbVec3f v1(vertex2-vertex1);
++        SbVec3f v2(vertex3-vertex1);
++        normal = v1.cross(v2);
++        float len = normal.length();
++        if ( len > 0 ) normal /= len;
++      }
++      unsigned int data = stl_facet_get_padding(facet);
++
++      SbBool added = this->addFacet(vertex1, vertex2, vertex3, normal);
++
++#if defined(COIN_EXTRA_DEBUG) || 1
++      if ( added && binary ) {
++        // binary contains padding, which might be colorization
++        // colorization is not implemented yet, so therefore some debug
++        // output comes here so colorized models can be detected.
++        PRIVATE(this)->data->append((uint16_t) data);
++        if ( data != 0 ) {
++          fprintf(stderr, "facet %5d - data: %04x\n", PRIVATE(this)->numfacets - 1, data);
++        }
++      }
++#endif // COIN_EXTRA_DEBUG
++    } else if ( peekval == STL_ERROR ) {
++      SoDebugError::post("SoSTLFileKit::readFile",
++                         "error '%s' after %d facets, line %d.",
++                         stl_reader_get_error(reader),
++                         PRIVATE(this)->numfacets,
++                         stl_reader_get_line_number(reader));
++      loop = FALSE;
++      success = FALSE;
++      if (strcmp(stl_reader_get_error(reader), "premature end of file") == 0) {
++        // this one we will accept though - models with missing
++        // end-indicator have been found...
++        success = TRUE;
++      }
++    }
++  }
++
++  // done - no need for the BSP trees to contain data any more
++  PRIVATE(this)->points->clear();
++  PRIVATE(this)->normals->clear();
++
++  stl_facet_destroy(facet);
++  stl_reader_destroy(reader);
++
++  if ( !success ) {
++    this->reset();
++  } else {
++    this->organizeModel();
++  }
++  return success;
++}
++
++// doc in inherited class
++SbBool
++SoSTLFileKit::canReadScene(void) const
++{
++  return TRUE;
++}
++
++/*!
++  Converts a scene graph into an SoSTLFileKit.  Useful for creating
++  STL files.
++
++  \sa canReadScene, canWriteFile, writeFile
++*/
++
++SbBool
++SoSTLFileKit::readScene(SoNode * scene)
++{
++  this->reset();
++
++  scene->ref();
++  SoCallbackAction cba;
++  cba.addTriangleCallback(SoType::fromName("SoNode"), add_facet_cb, this);
++  cba.apply(scene);
++  scene->unrefNoDelete();
++
++  // no need for the BSP trees to contain data any more
++  PRIVATE(this)->points->clear();
++  PRIVATE(this)->normals->clear();
++
++  this->organizeModel();
++
++  return TRUE;
++}
++
++// doc in inherited class
++SbBool
++SoSTLFileKit::canWriteScene(const char * format) const
++{
++  if ( !format ) return TRUE;
++  // FIXME: implement format checking (VRML1, VRML97)
++  return TRUE;
++}
++
++/*!
++  Converts the STL model into a native scene graph.
++
++  \sa canWriteScene
++*/
++
++SbBool
++SoSTLFileKit::writeScene(SoNode *& root, const char * format)
++{
++  static const char default_format[] = "#VRML 1.0"; // syntax for this?
++  if ( !format ) format = default_format;
++
++  SbBool success = true;
++
++  // FIXME: implement format check to specify scene graph setup
++  enum Format {
++    UNKNOWN,
++    VRML1,
++    VRML97
++  };
++
++  Format build = VRML1;
++
++  if ( build == VRML1 ) {
++    // create VRML1 scene
++    SoSeparator * sceneroot = new SoSeparator;
++    sceneroot->ref();
++
++    SoInfo * info = new SoInfo;
++    info->string = "STL model data, created by Coin " COIN_VERSION ".";
++    sceneroot->addChild(info);
++    
++    SoShapeHints * shapehints_orig =
++      SO_GET_ANY_PART(this, "shapehints", SoShapeHints);
++    SoShapeHints * shapehints_copy = new SoShapeHints;
++    shapehints_copy->copyContents(shapehints_orig, FALSE);
++    sceneroot->addChild(shapehints_copy);
++
++    SoTexture2 * texture_orig = SO_GET_ANY_PART(this, "texture", SoTexture2);
++    SoTexture2 * texture_copy = new SoTexture2;
++    texture_copy->copyContents(texture_orig, FALSE);
++    sceneroot->addChild(texture_copy);
++
++    SoNormalBinding * normalbinding_orig =
++      SO_GET_ANY_PART(this, "normalbinding", SoNormalBinding);
++    SoNormalBinding * normalbinding_copy = new SoNormalBinding;
++    normalbinding_copy->copyContents(normalbinding_orig, FALSE);
++    sceneroot->addChild(normalbinding_copy);
++
++    SoNormal * normals_orig = SO_GET_ANY_PART(this, "normals", SoNormal);
++    SoNormal * normals_copy = new SoNormal;
++    normals_copy->copyContents(normals_orig, FALSE);
++    sceneroot->addChild(normals_copy);
++
++    SoMaterialBinding * materialbinding_orig =
++      SO_GET_ANY_PART(this, "materialbinding", SoMaterialBinding);
++    SoMaterialBinding * materialbinding_copy = new SoMaterialBinding;
++    materialbinding_copy->copyContents(materialbinding_orig, FALSE);
++    sceneroot->addChild(materialbinding_copy);
++
++    SoMaterial * material_orig = SO_GET_ANY_PART(this, "material", SoMaterial);
++    SoMaterial * material_copy = new SoMaterial;
++    material_copy->copyContents(material_orig, FALSE);
++    sceneroot->addChild(material_copy);
++
++    SoCoordinate3 * coordinates_orig =
++      SO_GET_ANY_PART(this, "coordinates", SoCoordinate3);
++    SoCoordinate3 * coordinates_copy = new SoCoordinate3;
++    coordinates_copy->copyContents(coordinates_orig, FALSE);
++    sceneroot->addChild(coordinates_copy);
++
++    SoIndexedFaceSet * facets_orig =
++      SO_GET_ANY_PART(this, "facets", SoIndexedFaceSet);
++    SoIndexedFaceSet * facets_copy = new SoIndexedFaceSet;
++    facets_copy->copyContents(facets_orig, FALSE);
++    sceneroot->addChild(facets_copy);
++
++    // optimize/reorganize mesh
++    SoReorganizeAction ra;
++    ra.apply(sceneroot);
++
++    // FIXME: remove redundant scene graph nodes after scene reorganization
++
++    sceneroot->unrefNoDelete();
++    root = sceneroot;
++  } else {
++    SoDebugError::postWarning("SoSTLFileKit::writeScene",
++                              "unsupported format - could not create scene.");
++    success = FALSE;
++  }
++
++  return success;
++}
++
++// doc in inherited class
++SbBool
++SoSTLFileKit::canWriteFile(const char * filename) const
++{
++  return inherited::canWriteFile(filename);
++}
++
++/*!
++  Writes the STL model to an STL file.
++
++  \sa binary, info, canWriteFile, canReadScene
++*/
++
++SbBool
++SoSTLFileKit::writeFile(const char * filename)
++{
++  unsigned int flags = 0;
++  if ( this->binary.getValue() ) {
++    flags |= STL_BINARY;
++    // set up flags for colorization if wanted
++  }
++
++  stl_writer * writer = stl_writer_create(filename, flags);
++  if ( !writer ) {
++    return FALSE;
++  }
++
++  stl_facet * facet = stl_facet_create();
++  assert(facet);
++  stl_writer_set_facet(writer, facet);
++
++  SbString infostring = this->info.getValue();
++  if ( infostring.getLength() > 0 ) {
++    if ( stl_writer_set_info(writer, infostring.getString()) != STL_OK ) {
++      SoDebugError::post("SoSTLFileKit::writeFile",
++                         "error: '%s'",
++                         stl_writer_get_error(writer));
++      return FALSE;
++    }
++  }
++
++  this->ref();
++  SoCallbackAction cba;
++  cba.addTriangleCallback(SoNode::getClassTypeId(), put_facet_cb, writer);
++  cba.apply(this);
++  this->unrefNoDelete();
++
++  stl_writer_destroy(writer);
++
++  return TRUE;
++}
++
++// *************************************************************************
++
++/*!
++  Resets the STL model so it contains nothing.
++*/
++
++void
++SoSTLFileKit::reset(void)
++{
++  PRIVATE(this)->numvertices = 0;
++  PRIVATE(this)->numfacets = 0;
++  PRIVATE(this)->numnormals = 0;
++  PRIVATE(this)->numsharedvertices = 0;
++  PRIVATE(this)->numsharednormals = 0;
++  PRIVATE(this)->numredundantfacets = 0;
++
++  PRIVATE(this)->data->truncate(0);
++  PRIVATE(this)->points->clear();
++  PRIVATE(this)->normals->clear();
++    
++  this->setAnyPart("shapehints", new SoShapeHints);
++  this->setAnyPart("texture", new SoTexture2);
++  this->setAnyPart("normalbinding", new SoNormalBinding);
++  this->setAnyPart("normals", new SoNormal);
++  this->setAnyPart("materialbinding", new SoMaterialBinding);
++  this->setAnyPart("material", new SoMaterial);
++  this->setAnyPart("coordinates", new SoCoordinate3);
++  this->setAnyPart("facets", new SoIndexedFaceSet);
++
++  SoNormalBinding * normalbinding =
++    SO_GET_ANY_PART(this, "normalbinding", SoNormalBinding);
++  normalbinding->value = SoNormalBinding::PER_FACE_INDEXED;
++
++  SoShapeHints * shapehints =
++    SO_GET_ANY_PART(this, "shapehints", SoShapeHints);
++  shapehints->vertexOrdering = SoShapeHints::UNKNOWN_ORDERING;
++  // proper model is
++  //   shapehints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
++  // but many models are not proper
++  shapehints->shapeType = SoShapeHints::SOLID;
++}
++
++/*!
++  Adds one triangle to the STL model.
++
++  \sa reset, organizeModel
++*/
++
++SbBool
++SoSTLFileKit::addFacet(const SbVec3f & v1, const SbVec3f & v2, const SbVec3f & v3, const SbVec3f & n)
++{
++  SoNormal * normals =
++    SO_GET_ANY_PART(this, "normals", SoNormal);
++  SoCoordinate3 * coordinates =
++    SO_GET_ANY_PART(this, "coordinates", SoCoordinate3);
++  SoIndexedFaceSet * facets =
++    SO_GET_ANY_PART(this, "facets", SoIndexedFaceSet);
++
++  // find existing indexes if any
++  long v1idx = PRIVATE(this)->points->findPoint(v1), v1new = (v1idx == -1);
++  long v2idx = PRIVATE(this)->points->findPoint(v2), v2new = (v2idx == -1);
++  long v3idx = PRIVATE(this)->points->findPoint(v3), v3new = (v3idx == -1);
++  if (!v1new) { v1idx = (long) PRIVATE(this)->points->getUserData(v1idx); }
++  if (!v2new) { v2idx = (long) PRIVATE(this)->points->getUserData(v2idx); }
++  if (!v3new) { v3idx = (long) PRIVATE(this)->points->getUserData(v3idx); }
++  long nidx = PRIVATE(this)->normals->findPoint(n);
++  if (nidx != -1) { nidx = (long) PRIVATE(this)->normals->getUserData(nidx); }
++
++  // toss out invalid facets - facets where two or more points are in
++  // the same location.  what are these - are they lines and points or
++  // something?  selection?  borders?  creases?
++  if ((!v1new && !v2new && (v1idx == v2idx)) ||
++      (!v1new && !v3new && (v1idx == v3idx)) ||
++      (!v2new && !v3new && (v2idx == v3idx)) ||
++      (v1new && v2new && (v1 == v2)) ||
++      (v1new && v3new && (v1 == v3)) ||
++      (v2new && v3new && (v2 == v3))) {
++    // the above test is optimized for using vertex indexes if
++    // possible and avoid vec3f-comparisons when index-comparisons
++    // should have sufficed.
++    PRIVATE(this)->numredundantfacets += 1;
++    return FALSE;
++  }
++
++#if 0 // disabled (O(n^2))
++  // toss out redundant facets, if any...
++  if (!v1new && !v2new && !v3new) {
++    int count = facets->coordIndex.getNum();
++    const int32_t * points = facets->coordIndex.getValues(0);
++    int i;
++    for (i = 0; i < count; i++) {
++      if (points[i] == v1idx) {
++        int beg = i - (i % 4);
++        if ( ((points[beg] == v1idx) && (points[beg+1] == v2idx) &&
++              (points[beg+2] == v3idx)) ||
++             ((points[beg] == v2idx) && (points[beg+1] == v3idx) &&
++              (points[beg+2] == v1idx)) ||
++             ((points[beg] == v3idx) && (points[beg+1] == v1idx) &&
++              (points[beg+2] == v2idx)) ) {
++          // same vertices, same vertex ordering (we drop comparing normal)
++          PRIVATE(this)->numredundantfacets += 1;
++          return FALSE;
++        }
++      }
++    }
++  }
++#endif
++
++  // add facet (triangle) to faceset
++  if (v1new) {
++    v1idx = PRIVATE(this)->numvertices;
++    coordinates->point.set1Value(v1idx, v1);
++    PRIVATE(this)->points->addPoint(v1, (void *) v1idx);
++    PRIVATE(this)->numvertices++;
++  } else {
++    PRIVATE(this)->numsharedvertices++;
++  }
++  facets->coordIndex.set1Value(PRIVATE(this)->numfacets*4, v1idx);
++  
++  if (v2new) {
++    v2idx = PRIVATE(this)->numvertices;
++    coordinates->point.set1Value(v2idx, v2);
++    PRIVATE(this)->points->addPoint(v2, (void *) v2idx);
++    PRIVATE(this)->numvertices++;
++  } else {
++    PRIVATE(this)->numsharedvertices++;
++  }
++  facets->coordIndex.set1Value(PRIVATE(this)->numfacets*4+1, v2idx);
++
++  if (v3new) {
++    v3idx = PRIVATE(this)->numvertices;
++    coordinates->point.set1Value(v3idx, v3);
++    PRIVATE(this)->points->addPoint(v3, (void *) v3idx);
++    PRIVATE(this)->numvertices++;
++  } else {
++    PRIVATE(this)->numsharedvertices++;
++  }
++  facets->coordIndex.set1Value(PRIVATE(this)->numfacets*4+2, v3idx);
++  facets->coordIndex.set1Value(PRIVATE(this)->numfacets*4+3, -1);
++
++  if (nidx == -1) {
++    nidx = PRIVATE(this)->numnormals;
++    normals->vector.set1Value(nidx, n);
++    PRIVATE(this)->normals->addPoint(n, (void *) nidx);
++    PRIVATE(this)->numnormals++;
++  } else {
++    PRIVATE(this)->numsharednormals++;
++  }
++  facets->normalIndex.set1Value(PRIVATE(this)->numfacets, nidx);
++
++  PRIVATE(this)->numfacets++;
++  return TRUE;
++}
++
++/*!
++  Should be called after the STL model is completely set up in the
++  SoSTLFileKit through import from a file or from a scene graph.  The
++  model will then be optimized for fast rendering.
++
++  \sa addFacet, reset
++*/
++
++void
++SoSTLFileKit::organizeModel(void)
++{
++#if defined(COIN_EXTRA_DEBUG)
++  SoDebugError::postInfo("SoSTLFileKit::organizeModel",
++                         "model data imported successfully. "
++                         "%d unique vertices, %d reuses. "
++                         "%d unique normals, %d reuses. "
++                         "%d facets, %d redundant facets.",
++                         PRIVATE(this)->numvertices,
++                         PRIVATE(this)->numsharedvertices,
++                         PRIVATE(this)->numnormals,
++                         PRIVATE(this)->numsharednormals,
++                         PRIVATE(this)->numfacets,
++                         PRIVATE(this)->numredundantfacets);
++#endif // COIN_EXTRA_DEBUG
++
++  SoIndexedFaceSet * facets =
++    SO_GET_ANY_PART(this, "facets", SoIndexedFaceSet);
++
++  assert(facets->coordIndex.getNum() == PRIVATE(this)->numfacets*4);
++  assert(facets->normalIndex.getNum() == (PRIVATE(this)->numfacets));
++
++  if ( PRIVATE(this)->numfacets > 300 ) {
++    // FIXME: at some number of facets, reorganization for faster
++    // rendering should really be performed.
++  }
++}
++
++/*!
++  Helper callback for readScene(), calling addFacet() for each
++  triangle in the provided scene graph.
++
++  \sa readScene
++*/
++
++void
++SoSTLFileKit::add_facet_cb(void * closure,
++                           SoCallbackAction * action,
++                           const SoPrimitiveVertex * v1,
++                           const SoPrimitiveVertex * v2,
++                           const SoPrimitiveVertex * v3)
++{
++  assert(closure); assert(v1); assert(v2); assert(v3);
++  SoSTLFileKit * filekit = (SoSTLFileKit *) closure;
++
++  SbVec3f vertex1(v1->getPoint());
++  SbVec3f vertex2(v2->getPoint());
++  SbVec3f vertex3(v3->getPoint());
++
++  SbVec3f vec1(vertex2-vertex1);
++  SbVec3f vec2(vertex3-vertex1);
++  SbVec3f normal(vec1.cross(vec2));
++  float len = normal.length();
++  if ( len > 0.0f && len != 1.0f ) normal /= len;
++  assert(len != 0.0f);
++
++  filekit->addFacet(vertex1, vertex2, vertex3, normal);
++}
++
++/*!
++  Helper callback for writeFile(), writing each triangle in the STL
++  model to the STL file.
++
++  \sa writeFile
++*/
++
++void
++SoSTLFileKit::put_facet_cb(void * closure,
++                           SoCallbackAction * action,
++                           const SoPrimitiveVertex * v1,
++                           const SoPrimitiveVertex * v2,
++                           const SoPrimitiveVertex * v3)
++{
++  assert(closure); assert(v1); assert(v2); assert(v3);
++  stl_writer * writer = (stl_writer *) closure;
++
++  SbVec3f vertex1(v1->getPoint());
++  SbVec3f vertex2(v2->getPoint());
++  SbVec3f vertex3(v3->getPoint());
++
++  SbVec3f vec1(vertex2-vertex1);
++  SbVec3f vec2(vertex3-vertex1);
++  SbVec3f normal(vec1.cross(vec2));
++  float len = normal.length();
++  if ( len > 0 ) normal /= len;
++
++  stl_facet * facet = stl_writer_get_facet(writer);
++  assert(facet);
++  stl_facet_set_vertex1(facet, vertex1[0], vertex1[1], vertex1[2]);
++  stl_facet_set_vertex2(facet, vertex2[0], vertex2[1], vertex2[2]);
++  stl_facet_set_vertex3(facet, vertex3[0], vertex3[1], vertex3[2]);
++  stl_facet_set_normal(facet, normal[0], normal[1], normal[2]);
++  stl_facet_set_padding(facet, 0);
++
++  stl_writer_put_facet(writer, facet);
++}
++
++#undef PRIVATE
++#endif // HAVE_NODEKITS
 diff --git a/src/threads/thread.cpp b/src/threads/thread.cpp
+index 1111111..2222222 100644
 --- a/src/threads/thread.cpp
 +++ b/src/threads/thread.cpp
-@@ -130,7 +130,7 @@
+@@ -120,7 +120,7 @@ cc_thread_join(cc_thread * thread,
  void
  cc_sleep(float seconds)
  {
@@ -55,7 +1346,7 @@ diff --git a/src/threads/thread.cpp b/src/threads/thread.cpp
    /* FIXME: 20011107, thammer: create a configure macro to detect
     * which sleep function is available */
    sleep(floor(seconds));
-@@ -164,7 +164,7 @@
+@@ -154,7 +154,7 @@ cc_thread_id(void)
        assert(0 && "unexpected failure");
      }
    }
@@ -64,10 +1355,364 @@ diff --git a/src/threads/thread.cpp b/src/threads/thread.cpp
  }
  
  static void 
+diff --git a/src/threads/thread.cpp.orig b/src/threads/thread.cpp.orig
+new file mode 100644
+index 1111111..2222222
+--- /dev/null
++++ b/src/threads/thread.cpp.orig
+@@ -0,0 +1,347 @@
++/**************************************************************************\
++ *
++ *  This file is part of the Coin 3D visualization library.
++ *  Copyright (C) by Kongsberg Oil & Gas Technologies.
++ *
++ *  This library is free software; you can redistribute it and/or
++ *  modify it under the terms of the GNU General Public License
++ *  ("GPL") version 2 as published by the Free Software Foundation.
++ *  See the file LICENSE.GPL at the root directory of this source
++ *  distribution for additional information about the GNU GPL.
++ *
++ *  For using Coin with software that can not be combined with the GNU
++ *  GPL, and for taking advantage of the additional benefits of our
++ *  support services, please contact Kongsberg Oil & Gas Technologies
++ *  about acquiring a Coin Professional Edition License.
++ *
++ *  See http://www.coin3d.org/ for more information.
++ *
++ *  Kongsberg Oil & Gas Technologies, Bygdoy Alle 5, 0257 Oslo, NORWAY.
++ *  http://www.sim.no/  sales@sim.no  coin-support@coin3d.org
++ *
++\**************************************************************************/
++
++#include <Inventor/C/threads/thread.h>
++
++#include <stdlib.h>
++#include <assert.h>
++
++#ifdef HAVE_CONFIG_H
++#include <config.h>
++#endif /* HAVE_CONFIG_H */
++
++#ifdef HAVE_UNISTD_H
++#include <unistd.h>
++#endif /* HAVE_UNISTD_H */
++
++#include <Inventor/C/errors/debugerror.h>
++
++#include "threads/threadp.h"
++#include "threads/mutexp.h"
++#include "threads/recmutexp.h"
++#include "threads/syncp.h"
++#include "tidbitsp.h"
++
++
++/* ********************************************************************** */
++
++/*
++ FIXME:
++ - copy struct malloc/free/init/clean setup scheme from cc_string
++ - use static table of cc_thread structures?
++ - use cc_storage to reference self-structure for cc_thread_get_self()?
++*/
++
++/* ********************************************************************** */
++
++#ifdef USE_PTHREAD
++#include "threads/thread_pthread.icc"
++#endif /* USE_PTHREAD */
++
++#ifdef USE_W32THREAD
++#include "threads/thread_win32.icc"
++#endif /* USE_W32THREAD */
++
++/*
++*/
++
++cc_thread *
++cc_thread_construct(cc_thread_f * func, void * closure)
++{
++  cc_thread * thread;
++  int ok;
++
++  thread = (cc_thread*) malloc(sizeof(cc_thread));
++  assert(thread != NULL);
++  thread->func = func;
++  thread->closure = closure;
++
++  ok = internal_init(thread);
++  if (ok) return thread;
++  assert(0 && "unable to create thread");
++  free(thread);
++  return NULL;
++}
++
++/* ********************************************************************** */
++
++/*
++*/
++
++void
++cc_thread_destruct(cc_thread * thread)
++{
++  int ok;
++  assert(thread != NULL);
++  ok = internal_clean(thread);
++  assert(ok == CC_OK);
++  free(thread);
++}
++
++/* ********************************************************************** */
++
++/*
++*/
++
++int
++cc_thread_join(cc_thread * thread,
++               void ** retvalptr)
++{
++  int ok;
++  assert(thread != NULL);
++
++  ok = internal_join(thread, retvalptr);
++  assert(ok == CC_OK);
++  return ok;
++}
++
++/* ********************************************************************** */
++
++void
++cc_sleep(float seconds)
++{
++#ifndef _WIN32
++  /* FIXME: 20011107, thammer: create a configure macro to detect
++   * which sleep function is available */
++  sleep(floor(seconds));
++#else
++  Sleep((int)(seconds*1000.0));
++#endif
++};
++
++#ifdef USE_PTHREAD
++unsigned long 
++cc_thread_id(void)
++{
++  return (unsigned long) pthread_self();
++}
++#endif /* USE_PTHREAD */
++
++#ifdef USE_W32THREAD
++
++static DWORD win32_threadid_idx;
++
++unsigned long 
++cc_thread_id(void)
++{
++  static unsigned long currentidx = 1;
++  LPVOID val = TlsGetValue(win32_threadid_idx);
++  if (val == 0) { /* not set yet */
++    cc_mutex_global_lock();
++    val = (LPVOID) currentidx++;
++    cc_mutex_global_unlock();
++    if (!TlsSetValue(win32_threadid_idx, (LPVOID)val)) {
++      assert(0 && "unexpected failure");
++    }
++  }
++  return (unsigned long) val;
++}
++
++static void 
++win32_threadid_idx_cleanup(void)
++{
++  TlsFree(win32_threadid_idx);
++}
++
++#endif /* USE_WIN32THREAD */
++
++
++void
++cc_thread_init(void)
++{
++  cc_mutex_init();
++  cc_sync_init();
++#ifdef USE_W32THREAD
++  /* needed to quickly generate a thread-id for each thread */
++  win32_threadid_idx = TlsAlloc();
++  assert(win32_threadid_idx != TLS_OUT_OF_INDEXES); 
++  /* clean-up priority for the thread sub-system in Coin is set so it
++     is done very late at exit */
++  /* FIXME: not sure if this really needs the "- 2", but I added it
++     to keep the same order wrt the other thread-related clean-up
++     functions, since before I changed hard-coded numbers for
++     enumerated values for coin_atexit() invocations. 20060301 mortene. */
++  coin_atexit(win32_threadid_idx_cleanup, CC_ATEXIT_THREADING_SUBSYSTEM_VERYLOWPRIORITY);
++#endif /* USE_WIN32THREAD */ 
++  cc_recmutex_init();
++}
++
++/* ********************************************************************** */
++
++/* maybe use static table of thread structures, reference counted, to be
++   able to implement something like this, if needed */
++/* cc_thread * cc_thread_get_self(void); */
++
++/* ********************************************************************** */
++
++/*
++ * We don't really want to expose internal id types, which would mean we
++ * must include threads-implementation-specific headers in the header files.
++ * It's therefore better to implement the missing/needed functionality for
++ * the cc_thread type, so id peeking won't be necessary.
++ */
++
++/* <id> cc_thread_get_id(cc_thread * thread); */
++/* <id> cc_thread_get_current_id(void); */
++
++/* ********************************************************************** */
++
++/*!
++  \page multithreading_support Multithreading Support in Coin
++
++  The support in Coin for using multiple threads in application
++  programs and the Coin library itself, consists of two main features:
++
++  <ul>
++
++  <li>
++  Coin provides platform-independent thread-handling abstraction
++  classes. These are classes that the application programmer can
++  freely use in her application code to start new threads, control
++  their execution, work with mutexes and do other tasks related to
++  handling multiple threads.
++
++  The classes in question are SbThread, SbMutex, SbStorage, SbBarrier,
++  SbCondVar, SbFifo, SbThreadAutoLock, SbRWMutex, and
++  SbTypedStorage. See their respective documentation for the detailed
++  information.
++
++  The classes fully hides the system-specific implementation, which is
++  either done on top of native Win32 (if on Microsoft Windows), or
++  over POSIX threads (on UNIX and UNIX-like systems).
++  </li>
++
++  <li>
++  The other aspect of our multi-threading support is that Coin can be
++  specially configured so that rendering traversals of the scene graph
++  are done in a thread-safe manner. This means e.g. that it is
++  possible to have Coin render the scene in parallel on multiple CPUs
++  for multiple rendering pipes, to better take advantage of such
++  high-end systems (like CAVE environments, for instance).
++
++  Thread-safe render traversals are \e off by default, because there
++  is a small overhead involved which would make rendering (very)
++  slightly slower on single-threaded invocations.
++
++  To get a Coin library built with thread-safe rendering, one must
++  actively re-configure Coin and build a special, local version. For
++  configure-based builds (UNIX and UNIX-like systems, or with Cygwin
++  on Microsoft Windows) this is done with the option
++  "--enable-threadsafe" to Autoconf configure. For how to change the
++  configuration and re-build with Visual Studio, get in touch with us
++  at "coin-support@coin3d.org".
++  </li>
++
++  </ul>
++
++  There are some restrictions and other issues which it is important
++  to be aware of:
++  
++  <ul>
++
++  <li> We do not yet provide any support for binding the
++  multi-threaded rendering support into the SoQt / SoWin / etc GUI
++  bindings, and neither do we provide bindings against any specific
++  library that handles multi-pipe rendering. This means the
++  application programmer will have to possess some expertise, and put
++  in some effort, to be able to utilize multi-pipe rendering with
++  Coin. </li>
++
++  <li> Rendering traversals is currently the only operation which we
++  publicly support to be thread-safe. There are other aspects of Coin
++  that we know are thread-safe, like most other action traversals
++  beside just rendering, but we make no guarantees in this
++  regard. </li>
++
++  <li> Be careful about using a separate thread for changing Coin
++  structures versus what is used for the application's GUI event
++  thread.
++
++  We are aware of at least issues with Qt (and thereby SoQt), where
++  you should not modify the scene graph in any way in a thread
++  separate from the main Qt thread. This because it will trigger
++  operations where Qt is not thread-safe. </li>
++
++  </ul>
++
++  \since Coin 2.0
++*/
++
++/* ********************************************************************** */
++
++/*!
++  \class SbThread Inventor/threads/SbThread.h
++  \brief A class for managing threads.
++  \ingroup threads
++
++  This class provides a portable framework around the tasks of
++  instantiating, starting, stopping and joining threads.
++
++  It wraps the underlying native thread-handling toolkit in a
++  transparent manner, to make multiplatform threads programming
++  straightforward for the application programmer.
++*/
++
++/*!
++  \fn static SbThread * SbThread::create(void *(*func)(void *), void * closure)
++
++  This function creates a new thread, or returns NULL on failure.
++*/
++
++/*!
++  \fn static void SbThread::destroy(SbThread * thread)
++
++  This function destroys a thread.
++*/
++
++/*!
++  \fn static int SbThread::join(SbThread * thread, void ** retval)
++
++  This function waits on the death of the given thread, returning the thread's
++  return value at the location pointed to by \c retval.
++*/
++
++/*!
++  \fn int SbThread::join(void ** retval)
++
++  This function waits on the death of the given thread, returning the thread's
++  return value at the location pointed to by \c retval.
++*/
++
++/*!
++  \fn SbThread::SbThread(cc_thread * thread)
++
++  Protected constructor handling the internal thread ADT.
++
++  \sa SbThread::create
++*/
++
++/*!
++  \fn SbThread::~SbThread(void)
++
++  Destructor.
++
++  \sa SbThread::destroy
++*/
++
++/* ********************************************************************** */
 diff --git a/src/threads/thread_win32.icc b/src/threads/thread_win32.icc
+index 1111111..2222222 100644
 --- a/src/threads/thread_win32.icc
 +++ b/src/threads/thread_win32.icc
-@@ -38,7 +38,7 @@
+@@ -29,7 +29,7 @@ static DWORD WINAPI
  cc_w32thread_thread_proc(LPVOID lpParameter)
  {
    cc_thread *thread = (cc_thread *)lpParameter;
@@ -76,10 +1721,127 @@ diff --git a/src/threads/thread_win32.icc b/src/threads/thread_win32.icc
  }
  
  static int
+diff --git a/src/threads/thread_win32.icc.orig b/src/threads/thread_win32.icc.orig
+new file mode 100644
+index 1111111..2222222
+--- /dev/null
++++ b/src/threads/thread_win32.icc.orig
+@@ -0,0 +1,110 @@
++/**************************************************************************\
++ *
++ *  This file is part of the Coin 3D visualization library.
++ *  Copyright (C) by Kongsberg Oil & Gas Technologies.
++ *
++ *  This library is free software; you can redistribute it and/or
++ *  modify it under the terms of the GNU General Public License
++ *  ("GPL") version 2 as published by the Free Software Foundation.
++ *  See the file LICENSE.GPL at the root directory of this source
++ *  distribution for additional information about the GNU GPL.
++ *
++ *  For using Coin with software that can not be combined with the GNU
++ *  GPL, and for taking advantage of the additional benefits of our
++ *  support services, please contact Kongsberg Oil & Gas Technologies
++ *  about acquiring a Coin Professional Edition License.
++ *
++ *  See http://www.coin3d.org/ for more information.
++ *
++ *  Kongsberg Oil & Gas Technologies, Bygdoy Alle 5, 0257 Oslo, NORWAY.
++ *  http://www.sim.no/  sales@sim.no  coin-support@coin3d.org
++ *
++\**************************************************************************/
++
++/* this file should only be included from thread.c */
++
++#include "glue/win32api.h"
++
++static DWORD WINAPI
++cc_w32thread_thread_proc(LPVOID lpParameter)
++{
++  cc_thread *thread = (cc_thread *)lpParameter;
++  return (DWORD) thread->func(thread->closure);
++}
++
++static int
++internal_init(cc_thread * thread)
++{
++  DWORD threadid_unused;
++
++  thread->w32thread.threadhandle = CreateThread(NULL, 0,
++    cc_w32thread_thread_proc, (LPVOID) thread, 0, &threadid_unused);
++
++  /* threadid_unused - see PlatformSDK doc. for CreateThread */
++
++  /* FIXME: thammer 20011108, check PlatformSDK doc for
++   * _beginthreadex, _endthreadex, and note about using these with
++   * LIBCMT.LIB "A thread that uses functions from the C run-time
++   * libraries should use the beginthread and endthread C run-time
++   * functions for thread management rather than CreateThread and
++   * ExitThread. Failure to do so results in small memory leaks when
++   * ExitThread is called. " */
++
++  if (thread->w32thread.threadhandle == NULL) {
++    if (COIN_DEBUG) {
++      cc_win32_print_error("internal_init", "CreateThread()", GetLastError());
++    }
++    return CC_ERROR;
++  }
++  return CC_OK;
++}
++
++static int
++internal_clean(cc_thread * thread_struct)
++{
++  /* FIXME: Is there really nothing to do here? pederb, 2001-12-10 */
++  return CC_OK;
++}
++
++static int
++internal_join(cc_thread * thread,
++               void ** retvalptr)
++{
++  DWORD status;
++  BOOL bstatus;
++  DWORD exitcode;
++
++  status = WaitForSingleObject(thread->w32thread.threadhandle, INFINITE);
++  if (status == WAIT_FAILED) {
++    if (COIN_DEBUG) {
++      cc_win32_print_error("internal_join", "WaitForSingleObject()",
++                           GetLastError());
++    }
++    return CC_ERROR;
++  }
++  else if (status != WAIT_OBJECT_0) {
++    if (COIN_DEBUG) {
++      cc_debugerror_post("internal_join",
++                         "WaitForSingleObject() - unknown return value: %d\n",
++                         status);
++    }
++    return CC_ERROR;
++  }
++  bstatus = GetExitCodeThread(thread->w32thread.threadhandle, &exitcode);
++  if (bstatus == FALSE) {
++    if (COIN_DEBUG) {
++      cc_win32_print_error("internal_join", "GetExitCodeThread()",
++                           GetLastError());
++    }
++  }
++  else if (retvalptr) {
++    *retvalptr = (void *)exitcode;
++  }
++  /* termination could be forced with TerminateThread() - but this
++   * will result in memory leaks - or bigger problems - see Platform
++   * SDK doc. */
++  CloseHandle(thread->w32thread.threadhandle);
++  thread->w32thread.threadhandle = NULL;
++
++  return bstatus ? CC_OK : CC_ERROR;
++}
 diff --git a/src/vrml97/JS_VRMLClasses.cpp b/src/vrml97/JS_VRMLClasses.cpp
+index 1111111..2222222 100644
 --- a/src/vrml97/JS_VRMLClasses.cpp
 +++ b/src/vrml97/JS_VRMLClasses.cpp
-@@ -110,8 +110,11 @@
+@@ -100,8 +100,11 @@ struct CoinVrmlJs {
  struct CoinVrmlJs_SensorInfo {
    SbList <JSObject *> objects;
  };
@@ -92,7 +1854,7 @@ diff --git a/src/vrml97/JS_VRMLClasses.cpp b/src/vrml97/JS_VRMLClasses.cpp
  
  const char * CoinVrmlJs_SFColorAliases[] = {"r", "g", "b"};
  const char * CoinVrmlJs_SFRotationAliases[] = {"x", "y", "z", "angle"};
-@@ -674,7 +677,11 @@
+@@ -664,7 +667,11 @@ static void SFNode_deleteCB(void * data, SoSensor * sensor)
  {
    SoNode * node = ((SoNodeSensor *) sensor)->getAttachedNode();
    void * tmp;
@@ -104,7 +1866,7 @@ diff --git a/src/vrml97/JS_VRMLClasses.cpp b/src/vrml97/JS_VRMLClasses.cpp
      assert(FALSE && "Trying to delete an unregistered SoNodeSensor. Internal error.");
      return;
    }
-@@ -690,7 +697,11 @@
+@@ -680,7 +687,11 @@ static void SFNode_deleteCB(void * data, SoSensor * sensor)
  
    // Store the sensor-pointer so that it can be properly deleted later
    nodesensorstobedeleted->append((SoNodeSensor *) sensor);
@@ -116,7 +1878,7 @@ diff --git a/src/vrml97/JS_VRMLClasses.cpp b/src/vrml97/JS_VRMLClasses.cpp
    delete si;
  }
  
-@@ -1428,13 +1439,21 @@
+@@ -1418,13 +1429,21 @@ static void attachSensorToNode(SoNode * node, JSObject * obj)
  {
    // Has the hash-table been initialized?
    if (!CoinVrmlJs_sensorinfohash) {
@@ -138,7 +1900,7 @@ diff --git a/src/vrml97/JS_VRMLClasses.cpp b/src/vrml97/JS_VRMLClasses.cpp
      CoinVrmlJs_SensorInfo * si = (CoinVrmlJs_SensorInfo *) tmp;
      si->objects.append(obj);
    }
-@@ -1444,7 +1463,11 @@
+@@ -1434,7 +1453,11 @@ static void attachSensorToNode(SoNode * node, JSObject * obj)
      ns->attach(node);
      CoinVrmlJs_SensorInfo * si = new CoinVrmlJs_SensorInfo;
      si->objects.append(obj);
@@ -150,3 +1912,2129 @@ diff --git a/src/vrml97/JS_VRMLClasses.cpp b/src/vrml97/JS_VRMLClasses.cpp
    }
  }
  
+diff --git a/src/vrml97/JS_VRMLClasses.cpp.orig b/src/vrml97/JS_VRMLClasses.cpp.orig
+new file mode 100644
+index 1111111..2222222
+--- /dev/null
++++ b/src/vrml97/JS_VRMLClasses.cpp.orig
+@@ -0,0 +1,2099 @@
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif // HAVE_CONFIG_H
++
++#ifdef HAVE_VRML97
++
++/**************************************************************************\
++ *
++ *  This file is part of the Coin 3D visualization library.
++ *  Copyright (C) by Kongsberg Oil & Gas Technologies.
++ *
++ *  This library is free software; you can redistribute it and/or
++ *  modify it under the terms of the GNU General Public License
++ *  ("GPL") version 2 as published by the Free Software Foundation.
++ *  See the file LICENSE.GPL at the root directory of this source
++ *  distribution for additional information about the GNU GPL.
++ *
++ *  For using Coin with software that can not be combined with the GNU
++ *  GPL, and for taking advantage of the additional benefits of our
++ *  support services, please contact Kongsberg Oil & Gas Technologies
++ *  about acquiring a Coin Professional Edition License.
++ *
++ *  See http://www.coin3d.org/ for more information.
++ *
++ *  Kongsberg Oil & Gas Technologies, Bygdoy Alle 5, 0257 Oslo, NORWAY.
++ *  http://www.sim.no/  sales@sim.no  coin-support@coin3d.org
++ *
++\**************************************************************************/
++
++#include "JS_VRMLClasses.h"
++
++#include <Inventor/actions/SoWriteAction.h>
++#include <Inventor/misc/SoJavaScriptEngine.h>
++#include <Inventor/C/glue/spidermonkey.h>
++#include <Inventor/fields/SoSFBool.h>
++#include <Inventor/fields/SoSFInt32.h>
++#include <Inventor/fields/SoSFEnum.h>
++#include <Inventor/fields/SoSFFloat.h>
++#include <Inventor/fields/SoSFString.h>
++#include <Inventor/fields/SoSFTime.h>
++#include <Inventor/fields/SoSFColor.h>
++#include <Inventor/fields/SoSFNode.h>
++#include <Inventor/fields/SoSFImage.h>
++#include <Inventor/fields/SoSFVec2f.h>
++#include <Inventor/fields/SoSFVec3f.h>
++#include <Inventor/fields/SoSFVec3d.h>
++#include <Inventor/fields/SoSFRotation.h>
++#include <Inventor/fields/SoMFInt32.h>
++#include <Inventor/fields/SoMFFloat.h>
++#include <Inventor/fields/SoMFString.h>
++#include <Inventor/fields/SoMFTime.h>
++#include <Inventor/fields/SoMFColor.h>
++#include <Inventor/fields/SoMFNode.h>
++#include <Inventor/fields/SoMFVec2f.h>
++#include <Inventor/fields/SoMFVec3f.h>
++#include <Inventor/fields/SoMFVec3d.h>
++#include <Inventor/fields/SoMFRotation.h>
++#include <Inventor/nodes/SoGroup.h>
++#include <Inventor/nodes/SoSeparator.h>
++#include <Inventor/SoDB.h>
++#include <Inventor/SoInput.h>
++#include <Inventor/SoOutput.h> 
++#include <Inventor/VRMLnodes/SoVRMLGroup.h>
++#include <Inventor/errors/SoDebugError.h>
++#include <Inventor/sensors/SoNodeSensor.h>
++
++#include "misc/SbHash.h"
++
++// FIXME: toString() missing for all classes
++
++// "namespace" for all vrml classes
++struct CoinVrmlJs {
++  struct ClassDescriptor {
++    JSClass cls;
++    JSFunctionSpec * functions;
++
++  };
++
++  static ClassDescriptor SFColor;
++  static ClassDescriptor SFNode;
++  static ClassDescriptor SFRotation;
++  static ClassDescriptor SFVec2f;
++  static ClassDescriptor SFVec3f;
++  static ClassDescriptor SFVec3d;
++
++  static ClassDescriptor MFColor;
++  static ClassDescriptor MFFloat;
++  static ClassDescriptor MFInt32;
++  static ClassDescriptor MFNode;
++  static ClassDescriptor MFRotation;
++  static ClassDescriptor MFString;
++  static ClassDescriptor MFTime;
++  static ClassDescriptor MFVec2f;
++  static ClassDescriptor MFVec3f;
++  static ClassDescriptor MFVec3d;
++};
++
++// Struct and SbHash for keeping track of SoNodeSensors for recycling
++// purposes.
++struct CoinVrmlJs_SensorInfo {
++  SbList <JSObject *> objects;
++};
++SbHash <void *, unsigned long> * CoinVrmlJs_sensorinfohash = NULL;
++
++
++const char * CoinVrmlJs_SFColorAliases[] = {"r", "g", "b"};
++const char * CoinVrmlJs_SFRotationAliases[] = {"x", "y", "z", "angle"};
++float CoinVrmlJs_SFdefaultValues[] = {0.0, 0.0, 0.0, 0.0};
++double CoinVrmlJs_SFdefaultValuesDouble[] = {0.0, 0.0, 0.0, 0.0};
++float CoinVrmlJs_SFRotationDefaultValues[] = {0.0, 1.0, 0.0, 0.0};
++
++// Macros for instance checking
++#define JSVAL_IS_SFVEC2F(cx, jsval) (JSVAL_IS_OBJECT(jsval) && spidermonkey()->JS_InstanceOf(cx, JSVAL_TO_OBJECT(jsval), &CoinVrmlJs::SFVec2f.cls, NULL))
++#define JSVAL_IS_SFVEC3F(cx, jsval) (JSVAL_IS_OBJECT(jsval) && spidermonkey()->JS_InstanceOf(cx, JSVAL_TO_OBJECT(jsval), &CoinVrmlJs::SFVec3f.cls, NULL))
++#define JSVAL_IS_SFVEC3D(cx, jsval) (JSVAL_IS_OBJECT(jsval) && spidermonkey()->JS_InstanceOf(cx, JSVAL_TO_OBJECT(jsval), &CoinVrmlJs::SFVec3d.cls, NULL))
++#define JSVAL_IS_SFCOLOR(cx, jsval) (JSVAL_IS_OBJECT(jsval) && spidermonkey()->JS_InstanceOf(cx, JSVAL_TO_OBJECT(jsval), &CoinVrmlJs::SFColor.cls, NULL))
++#define JSVAL_IS_SFROTATION(cx, jsval) (JSVAL_IS_OBJECT(jsval) && spidermonkey()->JS_InstanceOf(cx, JSVAL_TO_OBJECT(jsval), &CoinVrmlJs::SFRotation.cls, NULL))
++
++// Handlers
++#define SFColorHandler CoinVrmlJsSFHandler<SbColor, 3, CoinVrmlJs_SFColorAliases, float, CoinVrmlJs_SFdefaultValues>
++#define SFRotationHandler CoinVrmlJsSFHandler<SbVec4f, 4, CoinVrmlJs_SFRotationAliases, float, CoinVrmlJs_SFRotationDefaultValues>
++#define SFVec2fHandler CoinVrmlJsSFHandler<SbVec2f, 2, CoinVrmlJs_SFRotationAliases, float, CoinVrmlJs_SFdefaultValues>
++#define SFVec3fHandler CoinVrmlJsSFHandler<SbVec3f, 3, CoinVrmlJs_SFRotationAliases, float, CoinVrmlJs_SFdefaultValues>
++#define SFVec3dHandler CoinVrmlJsSFHandler<SbVec3d, 3, CoinVrmlJs_SFRotationAliases, double, CoinVrmlJs_SFdefaultValuesDouble>
++
++#define MFColorHandler CoinVrmlJsMFHandler<SoMFColor, SoSFColor, &CoinVrmlJs::MFColor>
++#define MFFloatHandler CoinVrmlJsMFHandler<SoMFFloat, SoSFFloat, &CoinVrmlJs::MFFloat>
++#define MFInt32Handler CoinVrmlJsMFHandler<SoMFInt32, SoSFInt32, &CoinVrmlJs::MFInt32>
++#define MFNodeHandler CoinVrmlJsMFHandler<SoMFNode, SoSFNode, &CoinVrmlJs::MFNode>
++#define MFRotationHandler CoinVrmlJsMFHandler<SoMFRotation, SoSFRotation, &CoinVrmlJs::MFRotation>
++#define MFStringHandler CoinVrmlJsMFHandler<SoMFString, SoSFString, &CoinVrmlJs::MFString>
++#define MFTimeHandler CoinVrmlJsMFHandler<SoMFTime, SoSFTime, &CoinVrmlJs::MFTime>
++#define MFVec2fHandler CoinVrmlJsMFHandler<SoMFVec2f, SoSFVec2f, &CoinVrmlJs::MFVec2f>
++#define MFVec3fHandler CoinVrmlJsMFHandler<SoMFVec3f, SoSFVec3f, &CoinVrmlJs::MFVec3f>
++#define MFVec3dHandler CoinVrmlJsMFHandler<SoMFVec3d, SoSFVec3d, &CoinVrmlJs::MFVec3d>
++
++static JSFunctionSpec MFFunctions[] = {
++//  {"toString", MF_toString, 0, 0, 0},
++  {NULL, NULL, 0, 0, 0}
++};
++
++static JSBool SFRotationConstructor(JSContext * cx, JSObject * obj,
++                                    uintN argc, jsval * argv, jsval * rval);
++
++// Factory methods for converting to javascript objects
++static JSObject * SFColorFactory(JSContext * cx, const SbColor & self);
++static JSObject * SFNodeFactory(JSContext * cx, SoNode * container);
++static JSObject * SFRotationFactory(JSContext * cx, const SbRotation & self);
++static JSObject * SFVec2fFactory(JSContext * cx, const SbVec2f & self);
++static JSObject * SFVec3fFactory(JSContext * cx, const SbVec3f & self);
++static JSObject * SFVec3dFactory(JSContext * cx, const SbVec3d & self);
++
++static SbList <JSObject *> * garbagecollectedobjects = NULL;
++static SbList <SoNodeSensor *> * nodesensorstobedeleted = NULL;
++
++// getIndex returns -1 if id is not an alias or in range 0-max
++static JSBool getIndex(JSContext * cx, jsval id, const char * aliases[], int max)
++{
++  int index;
++
++  if (JSVAL_IS_INT(id)) {
++    index = JSVAL_TO_INT(id);
++    if (index < 0 || index >= max) {
++      spidermonkey()->JS_ReportError(cx, "index must be between 0 and %d", max);
++      return -1;
++    }
++    return index;
++  }
++  else {
++    JSString * jsstr = spidermonkey()->JS_ValueToString(cx, id);
++    const char * str = spidermonkey()->JS_GetStringBytes(jsstr);
++
++    for (index=0; index<max; ++index) {
++      if (strcmp(str, aliases[index]) == 0) {
++        return index;
++      }
++    }
++    return -1;
++  }
++}
++
++// *************************************************************************
++// handlers
++bool jsval2int(JSContext *cx, const jsval v, int32_t &value) 
++{
++  if (JSVAL_IS_NULL(v)) return false;
++  int32_t tempval;
++  if (!spidermonkey()->JS_ValueToECMAInt32(cx, v, &tempval)) {
++    return false;
++  }
++  value = tempval;
++  return true;
++}
++
++bool jsval2double(JSContext *cx, const jsval v, double &value) 
++{
++  if (JSVAL_IS_NULL(v)) return false;
++  double tempval;
++  if (!spidermonkey()->JS_ValueToNumber(cx, v, &tempval)) {
++    return false;
++  }
++  value = tempval;
++  return true;
++}
++
++
++// FIXME: number of aliases must not be lower than max. This may lead to
++// unsafe programming. 20050721 erikgors.
++template <class Base, int max, const char * aliases[], class basetype, basetype defaultValues[]>
++struct CoinVrmlJsSFHandler {
++  static JSBool get(JSContext * cx, JSObject * obj, jsval id, jsval * rval)
++  {
++    int index = getIndex(cx, id, aliases, max);
++    if (index == -1) {
++      return JS_TRUE;
++    }
++
++    Base * data = (Base *)spidermonkey()->JS_GetPrivate(cx, obj);
++    assert(data != NULL);
++    basetype var = (*data)[index];
++    SbBool ok = spidermonkey()->JS_NewDoubleValue(cx, (double)var, rval);
++    assert(ok && "JS_NewDoubleValue failed");
++    return JS_TRUE;
++  }
++
++  static JSBool set(JSContext * cx, JSObject * obj, jsval id, jsval * val)
++  {
++    int index = getIndex(cx, id, aliases, max);
++    if (index == -1) {
++      return JS_FALSE;
++    }
++
++    Base * data = (Base *)spidermonkey()->JS_GetPrivate(cx, obj);
++    assert(data != NULL);
++
++    // FIXME: number may be NaN, PositiveInfinity and NegativeInfinity.
++    // Should be checked for every time we run JS_ValueToNumber.
++    // ie: "blipp" will become NaN. 20050720 erikgors.
++    double number;
++    spidermonkey()->JS_ValueToNumber(cx, *val, &number);
++    (*data)[index] = (basetype)number;
++    return JS_TRUE;
++  }
++
++  static JSBool constructor(JSContext * cx, JSObject * obj,
++                            uintN argc, jsval * argv, jsval * rval)
++  {
++    basetype vals[max];
++
++    // convert all arguments to numbers or use defaultValues if missing
++    uint32_t i;
++    for (i=0; i<max; ++i) {
++      vals[i] = defaultValues[i];
++      if (i<argc) {
++        double val;
++        if (spidermonkey()->JS_ValueToNumber(cx, argv[i], &val)) {
++          vals[i] = (basetype)val;
++        }
++        else {
++          spidermonkey()->JS_ReportError(cx, "WARNING: failed converting argument %d "
++                                             "to a double", i + 1);
++        }
++      }
++    }
++
++    Base * data = new Base(vals);
++    spidermonkey()->JS_SetPrivate(cx, obj, data);
++    *rval = OBJECT_TO_JSVAL(obj);
++    return JS_TRUE;
++  }
++  static void destructor(JSContext * cx, JSObject * obj)
++  {
++    Base * data = (Base *)spidermonkey()->JS_GetPrivate(cx, obj);
++    // FIXME: We cannot assume this since the class object itself is an
++    // instance of this JSClass. kintel 20050804.
++    //    assert(data != NULL);
++    delete data;
++  }
++};
++
++template <class MFFieldClass, class SFFieldClass, CoinVrmlJs::ClassDescriptor * desc>
++struct CoinVrmlJsMFHandler {
++  static JSBool constructor(JSContext * cx, JSObject * obj, uintN argc, jsval * argv, jsval * rval)
++  {
++    jsval * val = new jsval;
++    JSObject * array = spidermonkey()->JS_NewArrayObject(cx, 0, NULL);
++    *val = OBJECT_TO_JSVAL(array);
++    SbBool ok = spidermonkey()->JS_AddRoot(cx, val);
++    assert(ok && "JS_AddRoot failed");
++    spidermonkey()->JS_SetPrivate(cx, obj, val);
++
++    SFFieldClass * field = (SFFieldClass *)SFFieldClass::createInstance();
++    uintN i;
++
++    for (i=0; i<argc; ++i) {
++      if (SoJavaScriptEngine::getEngine(cx)->jsval2field(argv[i], field)) {
++        SbBool ok = spidermonkey()->JS_SetElement(cx, array, i, &argv[i]);
++        assert(ok && "JS_SetElement failed");
++      }
++      else {
++        // FIXME: should we insert a default value? 20050727 erikgors.
++        spidermonkey()->JS_ReportError(cx, "argv %d is of wrong type", i);
++      }
++    }
++    delete field;
++    return JS_TRUE;
++  }
++
++  static void destructor(JSContext * cx, JSObject * obj)
++  {
++    jsval * val = (jsval *)spidermonkey()->JS_GetPrivate(cx, obj);
++    if (val != NULL) {
++      SbBool ok = spidermonkey()->JS_RemoveRoot(cx, val);
++      assert(ok && "JS_RemoveRoot failed");
++      delete val;
++    }
++  }
++
++  static JSObject * init(JSContext * cx, JSObject * obj)
++  {
++    return spidermonkey()->JS_InitClass(cx, obj, NULL, &desc->cls,
++                                        constructor, 0,
++                                        NULL, MFFunctions, NULL, NULL);
++  }
++
++  static void resize(JSContext * cx, JSObject * array, uint32_t newLength)
++  {
++    uint32_t length;
++    SbBool ok = spidermonkey()->JS_GetArrayLength(cx, array, &length);
++    assert(ok && "JS_GetArrayLength failed");
++
++    if (length > newLength) {
++      spidermonkey()->JS_SetArrayLength(cx, array, newLength);
++    }
++    else {
++      SoType type = MFFieldClass::getClassTypeId();
++
++      // expand and fill with new objects
++      for (; length<newLength; ++length) {
++        jsval val;
++
++        if (type == SoMFInt32::getClassTypeId() ||
++            type == SoMFFloat::getClassTypeId()) {
++          val = INT_TO_JSVAL(0);
++        }
++        else if (type == SoMFString::getClassTypeId()) {
++          JSString * str = spidermonkey()->JS_NewStringCopyZ(cx, "");
++          val = STRING_TO_JSVAL(str);
++        }
++        else if (type == SoMFNode::getClassTypeId()) {
++          // All elements not explicitly initialized are set to NULL
++          val = JSVAL_VOID;
++        }
++        else if (type == SoMFColor::getClassTypeId()) {
++          JSObject * newObj =
++            spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFColor.cls, NULL, NULL);
++          assert(newObj != NULL);
++          SFColorHandler::constructor(cx, newObj, 0, NULL, &val);
++          val = OBJECT_TO_JSVAL(newObj);
++        }
++        else if (type == SoMFRotation::getClassTypeId()) {
++          JSObject * newObj =
++            spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFRotation.cls, NULL, NULL);
++          assert(newObj != NULL);
++          SFRotationConstructor(cx, newObj, 0, NULL, &val);
++          val = OBJECT_TO_JSVAL(newObj);
++        }
++        else if (type == SoMFVec2f::getClassTypeId()) {
++          JSObject * newObj =
++            spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFVec2f.cls, NULL, NULL);
++          assert(newObj != NULL);
++          SFVec2fHandler::constructor(cx, newObj, 0, NULL, &val);
++          val = OBJECT_TO_JSVAL(newObj);
++        }
++        else if (type == SoMFVec3f::getClassTypeId()) {
++          JSObject * newObj =
++            spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFVec3f.cls, NULL, NULL);
++          assert(newObj != NULL);
++          SFVec3fHandler::constructor(cx, newObj, 0, NULL, &val);
++          val = OBJECT_TO_JSVAL(newObj);
++        }
++        else if (type == SoMFVec3d::getClassTypeId()) {
++          JSObject * newObj =
++            spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFVec3d.cls, NULL, NULL);
++          assert(newObj != NULL);
++          SFVec3dHandler::constructor(cx, newObj, 0, NULL, &val);
++          val = OBJECT_TO_JSVAL(newObj);
++        }
++        else {
++          assert(0 && "this should not happen");
++        }
++        SbBool ok = spidermonkey()->JS_SetElement(cx, array, length, &val);
++        assert(ok && "JS_SetElement failed");
++      }
++    }
++  }
++
++  static JSBool get(JSContext * cx, JSObject * obj, jsval id, jsval * rval)
++  {
++
++    jsval * array = (jsval *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++    if (JSVAL_IS_INT(id)) {
++      assert(array != NULL);
++      int index = JSVAL_TO_INT(id);
++      return spidermonkey()->JS_GetElement(cx, JSVAL_TO_OBJECT(*array), index, rval);
++    }
++    else if (JSVAL_IS_STRING(id)) {
++      const char * str = spidermonkey()->JS_GetStringBytes(JSVAL_TO_STRING(id));
++      if (SbName("length") == str) {
++        assert(array != NULL);
++        uint32_t length;
++        SbBool ok = spidermonkey()->JS_GetArrayLength(cx, JSVAL_TO_OBJECT(*array), &length);
++        assert(ok && "JS_GetArrayLength failed");
++        *rval = INT_TO_JSVAL(length);
++        return JS_TRUE;
++      }
++    }
++
++    return JS_TRUE;
++  }
++
++  static JSBool set(JSContext * cx, JSObject * obj, jsval id, jsval * val)
++  {
++    jsval * array = (jsval *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++    if (JSVAL_IS_INT(id)) {
++      int index = JSVAL_TO_INT(id);
++
++      // check for bounds
++      if (index < 0) {
++        return JS_FALSE;
++      }
++
++      // resize if necessary
++      uint32_t length;
++      SbBool ok = spidermonkey()->JS_GetArrayLength(cx, JSVAL_TO_OBJECT(*array), &length);
++      assert(ok && "JS_GetArrayLength failed");
++      if (index >= (int)length) {
++        resize(cx, JSVAL_TO_OBJECT(*array), index+1);
++      }
++
++      SFFieldClass * field = (SFFieldClass *)SFFieldClass::createInstance();
++      // Check if val is not of wrong type
++      if (SoJavaScriptEngine::getEngine(cx)->jsval2field(*val, field)) {
++        // assign it
++        SbBool ok = spidermonkey()->JS_SetElement(cx, JSVAL_TO_OBJECT(*array), index, val);
++        assert(ok && "JS_SetElement failed");
++        return JS_TRUE;
++      }
++      delete field;
++    }
++    else if (JSVAL_IS_STRING(id)) {
++      const char * str = spidermonkey()->JS_GetStringBytes(JSVAL_TO_STRING(id));
++      if (SbName("length") == str) {
++        double number;
++        spidermonkey()->JS_ValueToNumber(cx, *val, &number);
++        if (number < 0) {
++          spidermonkey()->JS_ReportError(cx, "RangeError: invalid array length");
++        }
++        else {
++          resize(cx, JSVAL_TO_OBJECT(*array), (uint32_t)number);
++        }
++        return JS_TRUE;
++      }
++    }
++
++    return JS_FALSE;
++  }
++
++
++  static SbBool jsval2field(JSContext * cx, const jsval v, SoField * f)
++  {
++    if (JSVAL_IS_OBJECT(v) &&
++        spidermonkey()->JS_InstanceOf(cx, JSVAL_TO_OBJECT(v), &desc->cls, NULL)) {
++      JSObject * obj = JSVAL_TO_OBJECT(v);
++      jsval * array = (jsval *)spidermonkey()->JS_GetPrivate(cx, obj);
++      assert(array != NULL);
++
++      jsval element;
++      uint32_t i;
++      uint32_t num;
++      JSBool ok = spidermonkey()->JS_GetArrayLength(cx, JSVAL_TO_OBJECT(*array), &num);
++
++      SFFieldClass * field = (SFFieldClass *)SFFieldClass::createInstance();
++
++      for (i=0; i<num; ++i) {
++        ok = spidermonkey()->JS_GetElement(cx, obj, i, &element);
++        assert(ok);
++
++        ok = SoJavaScriptEngine::getEngine(cx)->jsval2field(element, field);
++        assert(ok && "jsval2field failed");
++        ((MFFieldClass *)f)->set1Value(i, field->getValue());
++      }
++      delete field;
++      return TRUE;
++    }
++    return FALSE;
++  }
++
++  static void field2jsval(JSContext * cx, const SoField * f, jsval * v)
++  {
++    JSObject * obj = spidermonkey()->JS_NewObject(cx, &desc->cls, NULL, NULL);
++    spidermonkey()->JS_DefineFunctions(cx, obj, desc->functions);
++
++    int num = ((SoMField *)f)->getNum();
++    jsval * vals = new jsval[num];
++
++    MFFieldClass & mf = *(MFFieldClass *)f;
++
++    SFFieldClass * field = (SFFieldClass *)SFFieldClass::createInstance();
++    for (int i=0; i<num; ++i) {
++      field->setValue(mf[i]);
++      SbBool ok = SoJavaScriptEngine::getEngine(cx)->field2jsval(field, &vals[i]);
++      assert(ok && "field2jsval failed");
++    }
++
++    jsval rval;
++    constructor(cx, obj, num, vals, &rval);
++    *v = OBJECT_TO_JSVAL(obj);
++    delete field;
++    delete [] vals;
++  }
++};
++
++// *************************************************************************
++// constructors
++
++static JSBool SFRotationConstructor(JSContext * cx, JSObject * obj,
++                                    uintN argc, jsval * argv, jsval * rval)
++{
++  if (argc == 2) {
++    if (JSVAL_IS_SFVEC3F(cx, argv[0])) {
++      SbVec3f & vec =
++        *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++
++      SbVec4f * data = new SbVec4f();
++      spidermonkey()->JS_SetPrivate(cx, obj, data);
++      *rval = OBJECT_TO_JSVAL(obj);
++      // new SFRotation(SFVec3f fromVector, SFVec3f toVector)
++      if (JSVAL_IS_SFVEC3F(cx, argv[1])) {
++        SbVec3f & vec2 =
++          *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[1]));
++
++        SbRotation rot(vec, vec2);
++        SbVec3f axis;
++        float rad;
++        rot.getValue(axis, rad);
++
++        data->setValue(axis[0], axis[1], axis[2], rad);
++        return JS_TRUE;
++      }
++      // new SFRotation(SFVec3f axis, numeric angle)
++      else {
++        SbVec4f * data = new SbVec4f();
++        spidermonkey()->JS_SetPrivate(cx, obj, data);
++        *rval = OBJECT_TO_JSVAL(obj);
++
++        double number = 0.0;
++        spidermonkey()->JS_ValueToNumber(cx, argv[1], &number);
++
++        data->setValue(vec[0], vec[1], vec[2], (float)number);
++        return JS_TRUE;
++      }
++    }
++  }
++  // new SFRotation(numeric x, numeric y, numeric z, numeric angle)
++  // Missing values default to 0.0, except y, which defaults to 1.0.
++  //
++  // SbRotation will default to 0.0, 0.0, 1.0, when angle is 0.0
++  // So we use SbVec4f to hold values for SFRotation, since we need to support
++  // patterns like this:
++  // var colors = new MFColor();
++  // colors.length = 10;
++  // colors[0].x = 1
++  // colors[0].y = 0
++  // colors[0].z = 0
++  // colors[0].angle = 1.8
++  //
++  // This will not work when SbRotation holds the values. 20050714 erikgors.
++
++  return SFRotationHandler::constructor(cx, obj, argc, argv, rval);
++}
++
++// *************************************************************************
++// functions
++
++static JSBool SFNode_ref(JSContext * cx, JSObject * obj, uintN argc,
++                         jsval * argv, jsval * rval)
++{
++  // Check if the JS object has already been garbage collected. This
++  // must be done to prevent a Java script from crashing the
++  // application.
++  if (garbagecollectedobjects->find(obj) != -1) {
++    if (SoJavaScriptEngine::debug())
++      SoDebugError::postInfo("SFNode_ref", "WARNING! Trying to ref a deleted node.");
++    return JSVAL_FALSE;
++  }
++
++  SoNode & node = *(SoNode *)spidermonkey()->JS_GetPrivate(cx, obj);
++  node.ref();
++  return JSVAL_TRUE;
++}
++
++static JSBool SFNode_unref(JSContext * cx, JSObject * obj, uintN argc,
++                           jsval * argv, jsval * rval)
++{
++  // Check if the JS object has already been garbage collected. This
++  // must be done to prevent a Java script from crashing the
++  // application.
++  if (garbagecollectedobjects->find(obj) != -1) {
++    if (SoJavaScriptEngine::debug())
++      SoDebugError::postInfo("SFNode_unref", "WARNING! Trying to unref an already deleted node.");
++    return JSVAL_FALSE;
++  }
++
++  SoNode & node = *(SoNode *)spidermonkey()->JS_GetPrivate(cx, obj);
++  node.unref();
++  return JSVAL_TRUE;
++}
++
++static void *
++buffer_realloc(void * bufptr, size_t size)
++{
++  char *buffer = (char *)realloc(bufptr, size);
++  return buffer;
++}
++
++static JSBool SFNode_toString(JSContext * cx, JSObject * obj, uintN argc,
++                              jsval * argv, jsval * rval)
++{
++  // Check if the JS object has already been garbage collected. This
++  // must be done to prevent a Java script from crashing the
++  // application.
++  if (garbagecollectedobjects->find(obj) != -1) {
++    if (SoJavaScriptEngine::debug())
++      SoDebugError::postInfo("SFNode_toString", "WARNING! Trying to access "
++                             "an already deleted node.");
++    return JSVAL_FALSE;
++  }
++
++  SoNode *node = (SoNode *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  SoOutput out;
++  out.setHeaderString("#VRML V2.0 utf8");
++  size_t buffer_size = 1024;
++  void *buffer = (void *)malloc(buffer_size);
++  out.setBuffer(buffer, buffer_size, buffer_realloc);
++  
++  SoWriteAction wa(&out);
++  wa.apply(node);
++  
++  out.getBuffer(buffer, buffer_size);
++
++  *rval = STRING_TO_JSVAL(spidermonkey()->JS_NewStringCopyZ(cx, 
++    (char *)buffer));
++
++  free(buffer);
++
++  return JSVAL_TRUE;
++}
++
++static void SFNode_deleteCB(void * data, SoSensor * sensor)
++{
++  SoNode * node = ((SoNodeSensor *) sensor)->getAttachedNode();
++  void * tmp;
++  if(!CoinVrmlJs_sensorinfohash->get((unsigned long) node, tmp)) {
++    assert(FALSE && "Trying to delete an unregistered SoNodeSensor. Internal error.");
++    return;
++  }
++
++  CoinVrmlJs_SensorInfo * si = (CoinVrmlJs_SensorInfo *) tmp;
++
++  // Delete all JSObjects which were connected to this SoNode
++  while (si->objects.getLength()) {
++    JSObject * obj = si->objects[0];
++    garbagecollectedobjects->append(obj);
++    si->objects.removeFast(0);
++  }
++
++  // Store the sensor-pointer so that it can be properly deleted later
++  nodesensorstobedeleted->append((SoNodeSensor *) sensor);
++  CoinVrmlJs_sensorinfohash->remove((unsigned long) node);
++  delete si;
++}
++
++static void cleanupObsoleteNodeSensors(void)
++{
++  // Delete all SoNodeSensors which no longer have a node attached.
++  while(nodesensorstobedeleted->getLength() > 0) {
++    SoNodeSensor * ns = (SoNodeSensor *) (*nodesensorstobedeleted)[0];
++    nodesensorstobedeleted->removeItem(ns);
++    delete ns;
++  }
++}
++
++static JSBool SFVec2f_add(JSContext * cx, JSObject * obj, uintN argc,
++                          jsval * argv, jsval * rval)
++{
++  SbVec2f & vec1 = *(SbVec2f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC2F(cx, argv[0])) {
++    SbVec2f & vec2 = *(SbVec2f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    SbVec2f result = vec1 + vec2;
++    *rval = OBJECT_TO_JSVAL(SFVec2fFactory(cx, result));
++    return JS_TRUE;
++  }
++
++  return JS_FALSE;
++}
++
++static JSBool SFVec3f_add(JSContext * cx, JSObject * obj, uintN argc,
++                          jsval * argv, jsval * rval)
++{
++  SbVec3f & vec1 = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC3F(cx, argv[0])) {
++    SbVec3f & vec2 = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    SbVec3f result = vec1 + vec2;
++    *rval = OBJECT_TO_JSVAL(SFVec3fFactory(cx, result));
++    return JS_TRUE;
++  }
++
++  return JS_FALSE;
++}
++
++static JSBool SFVec3d_add(JSContext * cx, JSObject * obj, uintN argc,
++                          jsval * argv, jsval * rval)
++{
++  SbVec3d & vec1 = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC3D(cx, argv[0])) {
++    SbVec3d & vec2 = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    SbVec3d result = vec1 + vec2;
++    *rval = OBJECT_TO_JSVAL(SFVec3dFactory(cx, result));
++    return JS_TRUE;
++  }
++
++  return JS_FALSE;
++}
++
++static JSBool SFVec2f_divide(JSContext * cx, JSObject * obj, uintN argc,
++                             jsval * argv, jsval * rval)
++{
++  SbVec2f & vec = *(SbVec2f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  double number;
++  if (argc >= 1 && jsval2double(cx, argv[0], number)) {
++    SbVec2f newVec = vec / (float)number;
++    *rval = OBJECT_TO_JSVAL(SFVec2fFactory(cx, newVec));
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec3f_divide(JSContext * cx, JSObject * obj, uintN argc,
++                             jsval * argv, jsval * rval)
++{
++  SbVec3f & vec = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  double number;
++  if (argc >= 1 && jsval2double(cx, argv[0], number)) {
++    SbVec3f newVec = vec / (float)number;
++    *rval = OBJECT_TO_JSVAL(SFVec3fFactory(cx, newVec));
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec3d_divide(JSContext * cx, JSObject * obj, uintN argc,
++                             jsval * argv, jsval * rval)
++{
++  SbVec3d & vec = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  double number;
++  if (argc >= 1 && jsval2double(cx, argv[0], number)) {
++    SbVec3d newVec = vec / number;
++    *rval = OBJECT_TO_JSVAL(SFVec3dFactory(cx, newVec));
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec2f_dot(JSContext *cx, JSObject *obj, uintN argc,
++                          jsval *argv, jsval *rval)
++{
++  SbVec2f & vec1 = *(SbVec2f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC2F(cx, argv[0])) {
++    SbVec2f & vec2 = *(SbVec2f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++
++    float dot = vec1.dot(vec2);
++    JSBool ok = spidermonkey()->JS_NewDoubleValue(cx, dot, rval);
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec3f_dot(JSContext *cx, JSObject *obj, uintN argc,
++                          jsval *argv, jsval *rval)
++{
++  SbVec3f & vec = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC3F(cx, argv[0])) {
++
++    SbVec3f & vec2 = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++
++    float dot = vec.dot(vec2);
++    JSBool ok = spidermonkey()->JS_NewDoubleValue(cx, dot, rval);
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec3d_dot(JSContext *cx, JSObject *obj, uintN argc,
++                          jsval *argv, jsval *rval)
++{
++  SbVec3d & vec = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC3D(cx, argv[0])) {
++
++    SbVec3d & vec2 = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++
++    double dot = vec.dot(vec2);
++    JSBool ok = spidermonkey()->JS_NewDoubleValue(cx, dot, rval);
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec2_length(JSContext * cx, JSObject * obj, uintN argc,
++                            jsval * argv, jsval * rval)
++{
++  SbVec2f * vec = (SbVec2f *)spidermonkey()->JS_GetPrivate(cx, obj);
++  JSBool ok = spidermonkey()->JS_NewDoubleValue(cx, vec->length(), rval);
++  return JS_TRUE;
++}
++
++static JSBool SFVec3f_length(JSContext * cx, JSObject * obj, uintN argc,
++                            jsval * argv, jsval * rval)
++{
++  SbVec3f * vec = (SbVec3f *)spidermonkey()->JS_GetPrivate(cx, obj);
++  JSBool ok = spidermonkey()->JS_NewDoubleValue(cx, vec->length(), rval);
++  return JS_TRUE;
++}
++
++static JSBool SFVec3d_length(JSContext * cx, JSObject * obj, uintN argc,
++                            jsval * argv, jsval * rval)
++{
++  SbVec3d * vec = (SbVec3d *)spidermonkey()->JS_GetPrivate(cx, obj);
++  JSBool ok = spidermonkey()->JS_NewDoubleValue(cx, vec->length(), rval);
++  return JS_TRUE;
++}
++
++static JSBool SFVec2f_multiply(JSContext * cx, JSObject * obj, uintN argc,
++                               jsval * argv, jsval * rval)
++{
++
++  SbVec2f & vec = *(SbVec2f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_NUMBER(argv[0])) {
++    double number;
++    spidermonkey()->JS_ValueToNumber(cx, argv[0], &number);
++
++    SbVec2f newVec = vec * (float)number;
++
++    *rval = OBJECT_TO_JSVAL(SFVec2fFactory(cx, newVec));
++
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec3f_multiply(JSContext * cx, JSObject * obj, uintN argc,
++                               jsval * argv, jsval * rval)
++{
++  SbVec3f & vec = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  double number;
++  if (argc >= 1 && jsval2double(cx, argv[0], number)) {
++    SbVec3f newVec = vec * (float)number;
++    *rval = OBJECT_TO_JSVAL(SFVec3fFactory(cx, newVec));
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec3d_multiply(JSContext * cx, JSObject * obj, uintN argc,
++                               jsval * argv, jsval * rval)
++{
++  SbVec3d & vec = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  double number;
++  if (argc >= 1 && jsval2double(cx, argv[0], number)) {
++    SbVec3d newVec = vec * number;
++    *rval = OBJECT_TO_JSVAL(SFVec3dFactory(cx, newVec));
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec2f_normalize(JSContext * cx, JSObject * obj, uintN argc,
++                                jsval * argv, jsval * rval)
++{
++  SbVec2f vec = *(SbVec2f *)spidermonkey()->JS_GetPrivate(cx, obj);
++  vec.normalize();
++  *rval = OBJECT_TO_JSVAL(SFVec2fFactory(cx, vec));
++  return JS_TRUE;
++}
++
++static JSBool SFVec3f_normalize(JSContext * cx, JSObject * obj, uintN argc,
++                                jsval * argv, jsval * rval)
++{
++  SbVec3f vec = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, obj);
++  vec.normalize();
++  *rval = OBJECT_TO_JSVAL(SFVec3fFactory(cx, vec));
++  return JS_TRUE;
++}
++
++static JSBool SFVec3d_normalize(JSContext * cx, JSObject * obj, uintN argc,
++                                jsval * argv, jsval * rval)
++{
++  SbVec3d vec = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, obj);
++  vec.normalize();
++  *rval = OBJECT_TO_JSVAL(SFVec3dFactory(cx, vec));
++  return JS_TRUE;
++}
++
++static JSBool SFVec3f_negate(JSContext * cx, JSObject * obj, uintN argc,
++                                     jsval * argv, jsval * rval)
++{
++  SbVec3f vec = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, obj);
++  vec.negate();
++  *rval = OBJECT_TO_JSVAL(SFVec3fFactory(cx, vec));
++  return JS_TRUE;
++}
++
++static JSBool SFVec3d_negate(JSContext * cx, JSObject * obj, uintN argc,
++                                     jsval * argv, jsval * rval)
++{
++  SbVec3d vec = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, obj);
++  vec.negate();
++  *rval = OBJECT_TO_JSVAL(SFVec3dFactory(cx, vec));
++  return JS_TRUE;
++}
++
++static JSBool SFVec2f_subtract(JSContext * cx, JSObject * obj, uintN argc,
++                               jsval * argv, jsval * rval)
++{
++  SbVec2f & vec1 = *(SbVec2f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC2F(cx, argv[0])) {
++    SbVec2f & vec2 = *(SbVec2f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    SbVec2f result = vec1 - vec2;
++    *rval = OBJECT_TO_JSVAL(SFVec2fFactory(cx, result));
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFVec3f_subtract(JSContext * cx, JSObject * obj, uintN argc,
++                               jsval * argv, jsval * rval)
++{
++  SbVec3f & vec1 = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC3F(cx, argv[0])) {
++    SbVec3f & vec2 = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    SbVec3f result = vec1 - vec2;
++    *rval = OBJECT_TO_JSVAL(SFVec3fFactory(cx, result));
++    return JS_TRUE;
++  }
++
++  return JS_FALSE;
++}
++
++static JSBool SFVec3d_subtract(JSContext * cx, JSObject * obj, uintN argc,
++                               jsval * argv, jsval * rval)
++{
++  SbVec3d & vec1 = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC3D(cx, argv[0])) {
++    SbVec3d & vec2 = *(SbVec3d *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    SbVec3d result = vec1 - vec2;
++    *rval = OBJECT_TO_JSVAL(SFVec3dFactory(cx, result));
++    return JS_TRUE;
++  }
++
++  return JS_FALSE;
++}
++
++static JSBool SFColor_setHSV(JSContext * cx, JSObject * obj, uintN argc,
++                             jsval * argv, jsval * rval)
++{
++  if (argc != 3) {
++    return JS_FALSE;
++  }
++  SbColor & color = *(SbColor *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  float vals[3];
++  int i;
++
++  for (i=0; i<3; ++i) {
++    double number;
++    spidermonkey()->JS_ValueToNumber(cx, argv[i], &number);
++    vals[i] = (float)number;
++  }
++
++  color.setHSVValue(vals);
++
++  *rval = JSVAL_VOID;
++  return JS_TRUE;
++}
++
++static JSBool SFColor_getHSV(JSContext * cx, JSObject * obj, uintN argc,
++                             jsval * argv, jsval * rval)
++{
++  SbColor & color = *(SbColor *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  float vals[3];
++  color.getHSVValue(vals);
++
++  jsval vector[3];
++  for (int i=0; i<3; ++i) {
++    spidermonkey()->JS_NewDoubleValue(cx, vals[i], &vector[i]);
++  }
++
++  *rval = OBJECT_TO_JSVAL(spidermonkey()->JS_NewArrayObject(cx, 3, vector));
++
++  return JS_TRUE;
++}
++
++static JSBool SFRotation_getAxis(JSContext * cx, JSObject * obj, uintN argc,
++                                 jsval * argv, jsval * rval)
++{
++  SbVec4f & rot = *(SbVec4f *)spidermonkey()->JS_GetPrivate(cx, obj);
++  SbVec3f axis(rot[0], rot[1], rot[2]);
++  *rval = OBJECT_TO_JSVAL(SFVec3fFactory(cx, axis));
++  return JS_TRUE;
++}
++
++static JSBool SFRotation_inverse(JSContext * cx, JSObject * obj, uintN argc,
++                                 jsval * argv, jsval * rval)
++{
++  SbVec4f & rot = *(SbVec4f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  SbVec3f axis(rot[0], rot[1], rot[2]);
++  SbRotation newRot(axis, rot[3]);
++  newRot.invert();
++
++  *rval = OBJECT_TO_JSVAL(SFRotationFactory(cx, newRot));
++  return JS_TRUE;
++}
++
++static JSBool SFRotation_multiply(JSContext * cx, JSObject * obj, uintN argc,
++                                  jsval * argv, jsval * rval)
++{
++  SbVec4f & vec1 = *(SbVec4f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFROTATION(cx, argv[0])) {
++    SbVec4f & vec2 = *(SbVec4f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    SbVec3f axis1(vec1[0], vec1[1], vec1[2]);
++    SbVec3f axis2(vec2[0], vec2[1], vec2[2]);
++    SbRotation result = SbRotation(axis1, vec1[3]) * SbRotation(axis2, vec2[3]);
++
++    *rval = OBJECT_TO_JSVAL(SFRotationFactory(cx, result));
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFRotation_multVec(JSContext * cx, JSObject * obj, uintN argc,
++                                 jsval * argv, jsval * rval)
++{
++  SbVec4f & vec = *(SbVec4f *)spidermonkey()->JS_GetPrivate(cx, obj);
++  SbVec3f axis(vec[0], vec[1], vec[2]);
++  SbRotation rot(axis, vec[3]);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC3F(cx, argv[0])) {
++    SbVec3f & src = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    SbVec3f dst;
++    rot.multVec(src, dst);
++
++    *rval = OBJECT_TO_JSVAL(SFVec3fFactory(cx, dst));
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFRotation_setAxis(JSContext * cx, JSObject * obj, uintN argc,
++                                 jsval * argv, jsval * rval)
++{
++  SbVec4f & rot = *(SbVec4f *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (argc >= 1 && JSVAL_IS_SFVEC3F(cx, argv[0])) {
++    SbVec3f & axis = *(SbVec3f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    rot[0] = axis[0];
++    rot[1] = axis[1];
++    rot[2] = axis[2];
++
++    *rval = JSVAL_VOID;
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSBool SFRotation_slerp(JSContext * cx, JSObject * obj, uintN argc,
++                               jsval * argv, jsval * rval)
++{
++  SbVec4f & vec = *(SbVec4f *)spidermonkey()->JS_GetPrivate(cx, obj);
++  SbVec3f axis(vec[0], vec[1], vec[2]);
++  SbRotation rot(axis, vec[3]);
++
++  double number;
++  if (argc >= 2 && JSVAL_IS_SFROTATION(cx, argv[0]) && jsval2double(cx, argv[1], number)) {
++    SbVec4f & vec2 = *(SbVec4f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(argv[0]));
++    SbVec3f axis2(vec2[0], vec2[1], vec2[2]);
++    SbRotation dest(axis2, vec2[3]);
++
++    SbRotation result = SbRotation::slerp(rot, dest, (float)number);
++
++    *rval = OBJECT_TO_JSVAL(SFRotationFactory(cx, result));
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSFunctionSpec SFNodeFunctions[] = {
++  {"ref", SFNode_ref, 0, 0, 0},
++  {"unref", SFNode_unref, 0, 0, 0},
++  {"toString", SFNode_toString, 0, 0, 0},
++  {NULL, NULL, 0, 0, 0}
++};
++
++static JSFunctionSpec SFVec2fFunctions[] = {
++  {"add", SFVec2f_add, 1, 0, 0},
++  {"divide", SFVec2f_divide, 1, 0, 0},
++  {"dot", SFVec2f_dot, 1, 0, 0},
++  {"length", SFVec2_length, 0, 0, 0},
++  {"multiply", SFVec2f_multiply, 1, 0, 0},
++  {"normalize", SFVec2f_normalize, 0, 0, 0},
++  {"subtract", SFVec2f_subtract, 1, 0, 0},
++  {NULL, NULL, 0, 0, 0}
++};
++
++static JSFunctionSpec SFVec3fFunctions[] = {
++  {"add", SFVec3f_add, 1, 0, 0},
++  {"divide", SFVec3f_divide, 1, 0, 0},
++  {"dot", SFVec3f_dot, 1, 0, 0},
++  {"length", SFVec3f_length, 0, 0, 0},
++  {"multiply", SFVec3f_multiply, 1, 0, 0},
++  {"normalize", SFVec3f_normalize, 0, 0, 0},
++  {"negate", SFVec3f_negate, 0, 0, 0},
++  {"subtract", SFVec3f_subtract, 1, 0, 0},
++  {NULL, NULL, 0, 0, 0}
++};
++
++static JSFunctionSpec SFVec3dFunctions[] = {
++  {"add", SFVec3d_add, 1, 0, 0},
++  {"divide", SFVec3d_divide, 1, 0, 0},
++  {"dot", SFVec3d_dot, 1, 0, 0},
++  {"length", SFVec3d_length, 0, 0, 0},
++  {"multiply", SFVec3d_multiply, 1, 0, 0},
++  {"normalize", SFVec3d_normalize, 0, 0, 0},
++  {"negate", SFVec3d_negate, 0, 0, 0},
++  {"subtract", SFVec3d_subtract, 1, 0, 0},
++  {NULL, NULL, 0, 0, 0}
++};
++
++static JSFunctionSpec SFColorFunctions[] = {
++  {"setHSV", SFColor_setHSV, 3, 0, 0},
++  {"getHSV", SFColor_getHSV, 0, 0, 0},
++  {NULL, NULL, 0, 0, 0}
++};
++
++static JSFunctionSpec SFRotationFunctions[] = {
++  {"getAxis", SFRotation_getAxis, 0, 0, 0},
++  {"inverse", SFRotation_inverse, 0, 0, 0},
++  {"multiply", SFRotation_multiply, 1, 0, 0},
++  {"multVec", SFRotation_multVec, 1, 0, 0},
++  {"setAxis", SFRotation_setAxis, 1, 0, 0},
++  {"slerp", SFRotation_slerp, 2, 0, 0},
++  {NULL, NULL, 0, 0, 0}
++};
++
++// *************************************************************************
++// factory
++
++static JSObject * SFColorFactory(JSContext * cx, const SbColor & self)
++{
++  JSObject * obj =
++    spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFColor.cls, NULL, NULL);
++  spidermonkey()->JS_DefineFunctions(cx, obj, SFColorFunctions);
++
++  SbColor * color = new SbColor(self);
++  spidermonkey()->JS_SetPrivate(cx, obj, color);
++
++  return obj;
++}
++
++static JSObject * SFRotationFactory(JSContext * cx, const SbRotation & self)
++{
++  JSObject * obj =
++    spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFRotation.cls, NULL, NULL);
++  spidermonkey()->JS_DefineFunctions(cx, obj, SFRotationFunctions);
++
++  SbVec3f axis;
++  float angle;
++  self.getValue(axis, angle);
++  SbVec4f * data = new SbVec4f(axis[0], axis[1], axis[2], angle);
++  spidermonkey()->JS_SetPrivate(cx, obj, data);
++
++  return obj;
++}
++
++static JSObject * SFVec2fFactory(JSContext * cx, const SbVec2f & self)
++{
++  JSObject * obj =
++    spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFVec2f.cls, NULL, NULL);
++  spidermonkey()->JS_DefineFunctions(cx, obj, SFVec2fFunctions);
++
++  SbVec2f * data = new SbVec2f(self);
++  spidermonkey()->JS_SetPrivate(cx, obj, data);
++  return obj;
++}
++
++static JSObject * SFVec3fFactory(JSContext * cx, const SbVec3f & self)
++{
++  JSObject * obj =
++    spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFVec3f.cls, NULL, NULL);
++  spidermonkey()->JS_DefineFunctions(cx, obj, SFVec3fFunctions);
++
++  SbVec3f * data = new SbVec3f(self);
++  spidermonkey()->JS_SetPrivate(cx, obj, data);
++
++  return obj;
++}
++
++static JSObject * SFVec3dFactory(JSContext * cx, const SbVec3d & self)
++{
++  JSObject * obj =
++    spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFVec3d.cls, NULL, NULL);
++  spidermonkey()->JS_DefineFunctions(cx, obj, SFVec3dFunctions);
++
++  SbVec3d * data = new SbVec3d(self);
++  spidermonkey()->JS_SetPrivate(cx, obj, data);
++
++  return obj;
++}
++
++static JSObject * SFVec2f_init(JSContext * cx, JSObject * obj)
++{
++  return spidermonkey()->JS_InitClass(cx, obj, NULL, &CoinVrmlJs::SFVec2f.cls,
++                                      SFVec2fHandler::constructor, 0,
++                                      NULL, SFVec2fFunctions, NULL, NULL);
++}
++
++static JSObject * SFVec3f_init(JSContext * cx, JSObject * obj)
++{
++  return spidermonkey()->JS_InitClass(cx, obj, NULL, &CoinVrmlJs::SFVec3f.cls,
++                                      SFVec3fHandler::constructor, 0,
++                                      NULL, SFVec3fFunctions, NULL, NULL);
++}
++
++static JSObject * SFVec3d_init(JSContext * cx, JSObject * obj)
++{
++  return spidermonkey()->JS_InitClass(cx, obj, NULL, &CoinVrmlJs::SFVec3d.cls,
++                                      SFVec3dHandler::constructor, 0,
++                                      NULL, SFVec3dFunctions, NULL, NULL);
++}
++
++static JSObject * SFColor_init(JSContext * cx, JSObject * obj)
++{
++  return spidermonkey()->JS_InitClass(cx, obj, NULL, &CoinVrmlJs::SFColor.cls,
++                                      SFColorHandler::constructor, 0,
++                                      NULL, SFColorFunctions, NULL, NULL);
++}
++
++static JSObject * SFRotation_init(JSContext * cx, JSObject * obj)
++{
++  return spidermonkey()->JS_InitClass(cx, obj, NULL, &CoinVrmlJs::SFRotation.cls,
++                                      SFRotationConstructor, 0,
++                                      NULL, SFRotationFunctions, NULL, NULL);
++}
++
++// *************************************************************************
++// SFNode
++
++static JSBool SFNode_get(JSContext * cx, JSObject * obj, jsval id, jsval * rval)
++{
++
++  if (garbagecollectedobjects->find(obj) != -1) {
++    spidermonkey()->JS_ReportError(cx, "Trying to access an object with refcount=0.");
++    return JS_FALSE;
++  }
++
++  SoNode * container = (SoNode *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (container == NULL) {
++    // this will only happen when JS_NewObject calls "constructor"
++    // or the node is "undefined"
++
++    if (JSVAL_IS_STRING(id)) {
++      const char * str = spidermonkey()->JS_GetStringBytes(JSVAL_TO_STRING(id));
++      if (SbName("constructor") == str) {
++        return JS_TRUE;
++      }
++    }
++    spidermonkey()->JS_ReportError(cx, "node is undefined");
++    return JS_FALSE;
++  }
++
++  if (JSVAL_IS_STRING(id)) {
++    SbString str(spidermonkey()->JS_GetStringBytes(JSVAL_TO_STRING(id)));
++
++    SoField * out = container->getField(SbName(str));
++
++    int len = str.getLength();
++    static const char post[] = "_changed";
++    static const size_t postLen = sizeof(post) - 1;
++
++    if (out == NULL && len > (int)postLen &&
++        str.getSubString(len - postLen) == post) {
++      out = container->getField(SbName(str.getSubString(0, len - postLen - 1)));
++    }
++
++    if (out != NULL) {
++      SoJavaScriptEngine::getEngine(cx)->field2jsval(out, rval);
++      return JS_TRUE;
++    }
++  }
++
++  /* Note: If we're unable to find the field, we return JS_TRUE
++     instead of JS_FALSE, which might seem as the logical choice
++     for indicating a failure. If we return JS_FALSE, execution of
++     the script will halt. One side-effect of this is that it is not
++     possible to extend the SFNode JavaScript object by adding
++     properties, which can be very useful in some cases. This is also
++     more in line with the JavaScript philosophy that one can
++     dynamically add and remove properties for any object at any time.
++
++     2005-11-23 thammer.
++
++     Update: We should look more closely into the return values 
++     JS_TRUE / JS_FALSE for all getters and setters, and possibly for
++     other functions as well. It might be more robust to report the
++     error (using JS_ReportError) and return JS_TRUE to allow the
++     script to continue running than to abort the script.
++
++     2006-06-21 thammer.
++  */
++  return JS_TRUE;
++}
++
++static JSBool SFNode_set(JSContext * cx, JSObject * obj, jsval id, jsval * rval)
++{
++  SoNode * container = (SoNode *)spidermonkey()->JS_GetPrivate(cx, obj);
++
++  if (container == NULL) {
++    spidermonkey()->JS_ReportError(cx, "node is undefined");
++    return JS_FALSE;
++  }
++
++  if (JSVAL_IS_STRING(id)) {
++    SbString str(spidermonkey()->JS_GetStringBytes(JSVAL_TO_STRING(id)));
++
++    SoField * in = container->getField(SbName(str));
++
++    int len = str.getLength();
++    static const char pre[] = "set_";
++    static const size_t preLen = sizeof(pre) - 1;
++
++    if (in == NULL && len > (int)preLen &&
++        str.getSubString(0, preLen - 1) == pre) {
++      in = container->getField(SbName(str.getSubString(preLen)));
++    }
++
++    if (in != NULL) {
++      SoJavaScriptEngine::getEngine(cx)->jsval2field(*rval, in);
++      if (SoJavaScriptEngine::debug()) {
++        SoDebugError::postInfo("SFNode_set", "setting field %s", str.getString());
++      }
++    } else if (SoJavaScriptEngine::debug())
++      SoDebugError::postWarning("SFNode_set", "no such field %s", str.getString());
++  }
++
++  // See note in SFNode_get() about return value. 2005-11-23 thammer.
++  return JS_TRUE;
++}
++
++static void SFNodeDestructor(JSContext * cx, JSObject * obj)
++{
++  // Delete all SoNodeSensors which no longer has a node attached.
++  cleanupObsoleteNodeSensors();
++  if(garbagecollectedobjects->find(obj) != -1) { // Pointer is marked as garbage-collected
++    garbagecollectedobjects->removeItem(obj);
++  }
++
++  SoNode * container = (SoNode *)spidermonkey()->JS_GetPrivate(cx, obj);
++  // FIXME: We cannot assume this since the class object itself is an
++  // instance of this JSClass. kintel 20050804.
++  //  assert(container != NULL);
++  if (SoJavaScriptEngine::getEngine(cx)->getAutoNodeUnrefState())
++    if (container) container->unref();
++}
++
++// Called via coin_atexit() when Coin exits.
++static void deleteSensorInfoHash(void)
++{
++  CoinVrmlJs_sensorinfohash->clear();
++  delete CoinVrmlJs_sensorinfohash;
++}
++
++/*
++  Attach an SoNodeSensor to node. Adds a 'delete callback' to the
++  sensor which includes the 'obj' parameter.
++*/
++static void attachSensorToNode(SoNode * node, JSObject * obj)
++{
++  // Has the hash-table been initialized?
++  if (!CoinVrmlJs_sensorinfohash) {
++    CoinVrmlJs_sensorinfohash = new SbHash <void *, unsigned long>;
++    coin_atexit(deleteSensorInfoHash, CC_ATEXIT_NORMAL);
++  }
++
++  // Is a sensor already attached to this SoNode?
++  void * tmp;
++  if (CoinVrmlJs_sensorinfohash->get((unsigned long) node, tmp)) {
++    CoinVrmlJs_SensorInfo * si = (CoinVrmlJs_SensorInfo *) tmp;
++    si->objects.append(obj);
++  }
++  else {
++    SoNodeSensor * ns = new SoNodeSensor();
++    ns->setDeleteCallback(SFNode_deleteCB, obj);
++    ns->attach(node);
++    CoinVrmlJs_SensorInfo * si = new CoinVrmlJs_SensorInfo;
++    si->objects.append(obj);
++    CoinVrmlJs_sensorinfohash->put((unsigned long) node, si);
++  }
++}
++
++static JSObject * SFNodeFactory(JSContext * cx, SoNode * container)
++{
++  // Delete all SoNodeSensors which no longer has a node attached.
++  cleanupObsoleteNodeSensors();
++
++  JSObject * obj = spidermonkey()->JS_NewObject(cx, &CoinVrmlJs::SFNode.cls, NULL, NULL);
++
++  if(garbagecollectedobjects->find(obj) != -1) // Pointer has been used before. Remove from list.
++    garbagecollectedobjects->removeItem(obj);
++
++  spidermonkey()->JS_SetPrivate(cx, obj, container);
++  spidermonkey()->JS_DefineFunctions(cx, obj, SFNodeFunctions);
++
++  // FIXME: If the node has enums, define them here. 2007-03-08 thammer.
++
++  attachSensorToNode(container, obj);
++
++  if (SoJavaScriptEngine::getEngine(cx)->getAutoNodeUnrefState())
++    container->ref();
++
++  return obj;
++}
++
++static JSBool SFNodeConstructor(JSContext * cx, JSObject * obj,
++                                uintN argc, jsval * argv, jsval *rval)
++{
++  // Delete all SoNodeSensors which no longer has a node attached.
++  cleanupObsoleteNodeSensors();
++
++  // spidermonkey ignores the return value
++  if (argc >= 1 && JSVAL_IS_STRING(argv[0])) {
++    JSString * js = JSVAL_TO_STRING(argv[0]);
++    char * str = spidermonkey()->JS_GetStringBytes(js);
++    size_t len = spidermonkey()->JS_GetStringLength(js);
++
++    // FIXME: what about UTF8? 20050701 erikgors.
++
++    if (SoJavaScriptEngine::debug()) {
++      SoDebugError::postInfo("SFNodeConstructor",
++                             "creating new node with str = '%s'", str);
++    }
++
++    SoInput input;
++    const char * array[2];
++    array[0] = str;
++    array[1] = NULL;
++    input.setStringArray(array);
++
++    SoGroup * group;
++    
++    if (input.isFileVRML2())
++      group = SoDB::readAllVRML(&input);
++    else
++      group = SoDB::readAll(&input);
++
++    if (group == NULL) {
++      spidermonkey()->JS_ReportError(cx, "input is not legal VRML string");
++      return JS_FALSE;
++    }
++    if (group->getNumChildren() == 0) {
++      spidermonkey()->JS_ReportError(cx, "no top-level node, result is undefined");
++      *rval = JSVAL_VOID;
++      return JS_FALSE;
++    }
++
++    if(garbagecollectedobjects->find(obj) != -1) { // Pointer has been used before. Remove from list.
++      garbagecollectedobjects->removeItem(obj);
++    }
++
++    attachSensorToNode(group, obj);
++
++    if (SoJavaScriptEngine::getEngine(cx)->getAutoNodeUnrefState())
++      group->ref();
++
++    spidermonkey()->JS_SetPrivate(cx, obj, group);
++    spidermonkey()->JS_DefineFunctions(cx, obj, SFNodeFunctions);
++
++    return JS_TRUE;
++  }
++  return JS_FALSE;
++}
++
++static JSObject * SFNode_init(JSContext * cx, JSObject * obj)
++{
++  return spidermonkey()->JS_InitClass(cx, obj, NULL, &CoinVrmlJs::SFNode.cls,
++                                      SFNodeConstructor, 0,
++                                      NULL, NULL, NULL, NULL);
++}
++
++
++// *************************************************************************
++// jsval2field
++
++static SbBool SFBool_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  if (JSVAL_IS_BOOLEAN(v)) {
++    const SbBool b = JSVAL_TO_BOOLEAN(v);
++    ((SoSFBool *)f)->setValue(b);
++    return TRUE;
++  }
++  else {
++    JSBool b;
++    if (spidermonkey()->JS_ValueToBoolean(cx, v, &b)) {
++      ((SoSFBool *)f)->setValue(b);
++      return TRUE;
++    }
++  }
++  return FALSE;
++}
++
++static SbBool SFColor_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  if (JSVAL_IS_SFCOLOR(cx, v)) {
++    SbColor * color = (SbColor *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(v));
++    assert(color != NULL);
++    ((SoSFColor *)f)->setValue(*color);
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFFloat_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  double number;
++  if (jsval2double(cx, v, number)) {
++    ((SoSFFloat *)f)->setValue((float)number);
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFInt32_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  int32_t val;
++  if (jsval2int(cx, v, val)) {
++    ((SoSFInt32 *)f)->setValue(val);
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFEnum_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  int32_t val;
++  if (jsval2int(cx, v, val)) {
++    ((SoSFInt32 *)f)->setValue(val);
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFNode_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  if (JSVAL_IS_NULL(v)) {
++    ((SoSFNode *)f)->setValue(NULL);
++    return TRUE;
++  }
++  if (JSVAL_IS_OBJECT(v) &&
++      spidermonkey()->JS_InstanceOf(cx, JSVAL_TO_OBJECT(v), &CoinVrmlJs::SFNode.cls, NULL)) {
++    SoNode * node = (SoNode *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(v));
++    ((SoSFNode *)f)->setValue(node);
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFRotation_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  if (JSVAL_IS_SFROTATION(cx, v)) {
++    SbVec4f * rot = (SbVec4f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(v));
++    assert(rot != NULL);
++    SbVec3f axis((*rot)[0], (*rot)[1], (*rot)[2]);
++    ((SoSFRotation *)f)->setValue(SbRotation(axis, (*rot)[3]));
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFString_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  if (JSVAL_IS_STRING(v)) {
++    const char * str = spidermonkey()->JS_GetStringBytes(JSVAL_TO_STRING(v));
++    ((SoSFString *)f)->setValue(str);
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFTime_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  double number;
++  if (jsval2double(cx, v, number)) {
++    spidermonkey()->JS_ValueToNumber(cx, v, &number);
++    ((SoSFTime*)f)->setValue(SbTime(number));
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFVec2f_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  if (JSVAL_IS_SFVEC2F(cx, v)) {
++    SbVec2f * vec = (SbVec2f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(v));
++    assert(vec != NULL);
++    ((SoSFVec2f *)f)->setValue(*vec);
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFVec3f_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  if (JSVAL_IS_SFVEC3F(cx, v)) {
++    SbVec3f * vec = (SbVec3f *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(v));
++    assert(vec != NULL);
++    ((SoSFVec3f *)f)->setValue(*vec);
++    return TRUE;
++  }
++  return FALSE;
++}
++
++static SbBool SFVec3d_jsval2field(JSContext * cx, const jsval v, SoField * f)
++{
++  if (JSVAL_IS_SFVEC3D(cx, v)) {
++    SbVec3d * vec = (SbVec3d *)spidermonkey()->JS_GetPrivate(cx, JSVAL_TO_OBJECT(v));
++    assert(vec != NULL);
++    ((SoSFVec3d *)f)->setValue(*vec);
++    return TRUE;
++  }
++  return FALSE;
++}
++
++// *************************************************************************
++// field2jsval
++
++static void SFBool_field2jsval(JSContext * cx, const SoField * f, jsval * v)
++{
++  const SbBool val = ((SoSFBool *)f)->getValue();
++  *v = BOOLEAN_TO_JSVAL(val);
++}
++
++static void SFColor_field2jsval(JSContext * cx, const SoField * f, jsval *v)
++{
++  const SbColor & val = ((SoSFColor *)f)->getValue();
++  JSObject * obj = SFColorFactory(cx, val);
++  *v = OBJECT_TO_JSVAL(obj);
++}
++
++static void SFFloat_field2jsval(JSContext * cx, const SoField * f, jsval * v)
++{
++  const float val = ((SoSFFloat *)f)->getValue();
++  JSBool ok = spidermonkey()->JS_NewDoubleValue(cx, val, v);
++}
++
++static void SFInt32_field2jsval(JSContext * cx, const SoField * f, jsval * v)
++{
++  const int32_t val = ((SoSFInt32 *)f)->getValue();
++  *v = INT_TO_JSVAL(val);
++}
++
++static void SFEnum_field2jsval(JSContext * cx, const SoField * f, jsval * v)
++{
++  const int32_t val = ((SoSFInt32 *)f)->getValue();
++  *v = INT_TO_JSVAL(val);
++}
++
++static void SFNode_field2jsval(JSContext * cx, const SoField * f, jsval * v)
++{
++  SoNode * node = ((SoSFNode *)f)->getValue();
++  if (node == NULL)
++    *v = JSVAL_NULL;
++  else {
++    JSObject * obj = SFNodeFactory(cx, node);
++    *v = OBJECT_TO_JSVAL(obj);
++  }
++}
++
++static void SFRotation_field2jsval(JSContext * cx, const SoField * f, jsval *v)
++{
++  const SbRotation & val = ((SoSFRotation *)f)->getValue();
++  JSObject * obj = SFRotationFactory(cx, val);
++  *v = OBJECT_TO_JSVAL(obj);
++}
++
++static void SFString_field2jsval(JSContext * cx, const SoField * f, jsval * v)
++{
++  const SbString & val = ((SoSFString *)f)->getValue();
++  JSString * str = spidermonkey()->JS_NewStringCopyZ(cx, val.getString());
++  *v = STRING_TO_JSVAL(str);
++}
++
++static void SFTime_field2jsval(JSContext * cx, const SoField * f, jsval * v)
++{
++  const SbTime & time = ((SoSFTime *)f)->getValue();
++  spidermonkey()->JS_NewDoubleValue(cx, time.getValue(), v);
++}
++
++static void SFVec2f_field2jsval(JSContext * cx, const SoField * f, jsval *v)
++{
++  const SbVec2f & val = ((SoSFVec2f *)f)->getValue();
++  JSObject * obj = SFVec2fFactory(cx, val);
++  *v = OBJECT_TO_JSVAL(obj);
++}
++
++static void SFVec3f_field2jsval(JSContext * cx, const SoField * f, jsval *v)
++{
++  const SbVec3f & val = ((SoSFVec3f *)f)->getValue();
++  JSObject * obj = SFVec3fFactory(cx, val);
++  *v = OBJECT_TO_JSVAL(obj);
++}
++
++static void SFVec3d_field2jsval(JSContext * cx, const SoField * f, jsval *v)
++{
++  const SbVec3d & val = ((SoSFVec3d *)f)->getValue();
++  JSObject * obj = SFVec3dFactory(cx, val);
++  *v = OBJECT_TO_JSVAL(obj);
++}
++
++// *************************************************************************
++// classes
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::SFColor = {
++  {
++    "SFColor", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    SFColorHandler::get, SFColorHandler::set,
++    NULL, NULL, NULL,
++    SFColorHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  SFColorFunctions
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::SFNode = {
++  {
++    "SFNode", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    SFNode_get, SFNode_set,
++    NULL, NULL, NULL,
++    SFNodeDestructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  NULL
++};
++
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::SFRotation = {
++  {
++    "SFRotation", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    SFRotationHandler::get, SFRotationHandler::set,
++    NULL, NULL, NULL,
++    SFRotationHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  SFRotationFunctions
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::SFVec2f = {
++  {
++    "SFVec2f", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    SFVec2fHandler::get, SFVec2fHandler::set,
++    NULL, NULL, NULL,
++    SFVec2fHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  SFVec2fFunctions
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::SFVec3f = {
++  {
++    "SFVec3f", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    SFVec3fHandler::get, SFVec3fHandler::set,
++    NULL, NULL, NULL,
++    SFVec3fHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  SFVec3fFunctions
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::SFVec3d = {
++  {
++    "SFVec3d", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    SFVec3dHandler::get, SFVec3dHandler::set,
++    NULL, NULL, NULL,
++    SFVec3dHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  SFVec3dFunctions
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFColor = {
++  {
++    "MFColor", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFColorHandler::get, MFColorHandler::set,
++    NULL, NULL, NULL,
++    MFColorHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFFloat = {
++  {
++    "MFFloat", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFFloatHandler::get, MFFloatHandler::set,
++    NULL, NULL, NULL,
++    MFFloatHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFInt32 = {
++  {
++    "MFInt32", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFInt32Handler::get, MFInt32Handler::set,
++    NULL, NULL, NULL,
++    MFInt32Handler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFNode = {
++  {
++    "MFNode", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFNodeHandler::get, MFNodeHandler::set,
++    NULL, NULL, NULL,
++    MFNodeHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFRotation = {
++  {
++    "MFRotation", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFRotationHandler::get, MFRotationHandler::set,
++    NULL, NULL, NULL,
++    MFRotationHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFString = {
++  {
++    "MFString", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFStringHandler::get, MFStringHandler::set,
++    NULL, NULL, NULL,
++    MFStringHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFTime = {
++  {
++    "MFTime", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFTimeHandler::get, MFTimeHandler::set,
++    NULL, NULL, NULL,
++    MFTimeHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFVec2f = {
++  {
++    "MFVec2f", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFVec2fHandler::get, MFVec2fHandler::set,
++    NULL, NULL, NULL,
++    MFVec2fHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFVec3f = {
++  {
++    "MFVec3f", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFVec3fHandler::get, MFVec3fHandler::set,
++    NULL, NULL, NULL,
++    MFVec3fHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++CoinVrmlJs::ClassDescriptor CoinVrmlJs::MFVec3d = {
++  {
++    "MFVec3d", JSCLASS_HAS_PRIVATE, NULL, NULL,
++    MFVec3dHandler::get, MFVec3dHandler::set,
++    NULL, NULL, NULL,
++    MFVec3dHandler::destructor,
++    NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0
++  },
++  MFFunctions,
++};
++
++
++CoinVrmlJs::ClassDescriptor * CLASSDESCRIPTORS[] = {
++  &CoinVrmlJs::SFColor, &CoinVrmlJs::SFNode, &CoinVrmlJs::SFRotation,
++  &CoinVrmlJs::SFVec2f, &CoinVrmlJs::SFVec3f, &CoinVrmlJs::SFVec3d, 
++  &CoinVrmlJs::MFColor, 
++  &CoinVrmlJs::MFFloat, &CoinVrmlJs::MFInt32, &CoinVrmlJs::MFNode,
++  &CoinVrmlJs::MFRotation, &CoinVrmlJs::MFString, &CoinVrmlJs::MFTime,
++  &CoinVrmlJs::MFVec2f, &CoinVrmlJs::MFVec3f, &CoinVrmlJs::MFVec3d
++};
++
++// *************************************************************************
++
++// cleans up static / one-off resource allocations
++static void
++js_vrmlclasses_cleanup(void)
++{
++  delete garbagecollectedobjects;
++  delete nodesensorstobedeleted;
++
++  garbagecollectedobjects = NULL;
++  nodesensorstobedeleted = NULL;
++}
++
++// *************************************************************************
++// helper function to add all classes to engine
++
++void
++JS_addVRMLclasses(SoJavaScriptEngine * engine)
++{
++  // init static data
++  if (garbagecollectedobjects == NULL) {
++    garbagecollectedobjects = new SbList <JSObject *>;
++    nodesensorstobedeleted = new SbList <SoNodeSensor *>;
++    coin_atexit((coin_atexit_f *)js_vrmlclasses_cleanup, CC_ATEXIT_NORMAL);
++
++    // set up default function stubs for Spidermonkey classes we
++    // make. must be done at run-time to avoid calling spidermonkey()
++    // early (i.e. not on demand).
++    const size_t NRELEMENTS = sizeof(CLASSDESCRIPTORS) / sizeof(CLASSDESCRIPTORS[0]);
++    for (size_t i=0; i < NRELEMENTS; i++) {
++      CoinVrmlJs::ClassDescriptor * desc = CLASSDESCRIPTORS[i];
++      desc->cls.addProperty = spidermonkey()->JS_PropertyStub;
++      desc->cls.delProperty = spidermonkey()->JS_PropertyStub;
++      desc->cls.enumerate = spidermonkey()->JS_EnumerateStub;
++      desc->cls.resolve = spidermonkey()->JS_ResolveStub;
++      desc->cls.convert = spidermonkey()->JS_ConvertStub;
++    }
++  }
++
++  // Bool
++  engine->addHandler(
++    SoSFBool::getClassTypeId(), NULL,
++    SFBool_field2jsval, SFBool_jsval2field);
++
++  // Color
++  engine->addHandler(
++    SoSFColor::getClassTypeId(), SFColor_init,
++    SFColor_field2jsval, SFColor_jsval2field);
++  engine->addHandler(
++    SoMFColor::getClassTypeId(),
++    MFColorHandler::init,
++    MFColorHandler::field2jsval,
++    MFColorHandler::jsval2field);
++
++  // Float
++  engine->addHandler(
++    SoSFFloat::getClassTypeId(), NULL,
++    SFFloat_field2jsval, SFFloat_jsval2field);
++  engine->addHandler(
++    SoMFFloat::getClassTypeId(),
++    MFFloatHandler::init,
++    MFFloatHandler::field2jsval,
++    MFFloatHandler::jsval2field);
++
++  // Int32
++  engine->addHandler(
++    SoSFInt32::getClassTypeId(), NULL,
++    SFInt32_field2jsval, SFInt32_jsval2field);
++  engine->addHandler(
++    SoMFInt32::getClassTypeId(),
++    MFInt32Handler::init,
++    MFInt32Handler::field2jsval,
++    MFInt32Handler::jsval2field);
++
++  // Enum 
++  engine->addHandler(
++    SoSFEnum::getClassTypeId(), NULL,
++    SFEnum_field2jsval, SFEnum_jsval2field);
++
++  // Node
++  engine->addHandler(
++    SoSFNode::getClassTypeId(), SFNode_init,
++    SFNode_field2jsval, SFNode_jsval2field);
++  engine->addHandler(
++    SoMFNode::getClassTypeId(),
++    MFNodeHandler::init,
++    MFNodeHandler::field2jsval,
++    MFNodeHandler::jsval2field);
++
++  // Rotation
++  engine->addHandler(
++    SoSFRotation::getClassTypeId(), SFRotation_init,
++    SFRotation_field2jsval, SFRotation_jsval2field);
++  engine->addHandler(
++    SoMFRotation::getClassTypeId(),
++    MFRotationHandler::init,
++    MFRotationHandler::field2jsval,
++    MFRotationHandler::jsval2field);
++
++  // String
++  engine->addHandler(
++    SoSFString::getClassTypeId(), NULL,
++    SFString_field2jsval, SFString_jsval2field);
++  engine->addHandler(
++    SoMFString::getClassTypeId(),
++    MFStringHandler::init,
++    MFStringHandler::field2jsval,
++    MFStringHandler::jsval2field);
++
++  // Time
++  engine->addHandler(
++    SoSFTime::getClassTypeId(), NULL,
++    SFTime_field2jsval, SFTime_jsval2field);
++  engine->addHandler(
++    SoMFTime::getClassTypeId(),
++    MFTimeHandler::init,
++    MFTimeHandler::field2jsval,
++    MFTimeHandler::jsval2field);
++
++  // Vec2f
++  engine->addHandler(
++    SoSFVec2f::getClassTypeId(), SFVec2f_init,
++    SFVec2f_field2jsval, SFVec2f_jsval2field);
++  engine->addHandler(
++    SoMFVec2f::getClassTypeId(),
++    MFVec2fHandler::init,
++    MFVec2fHandler::field2jsval,
++    MFVec2fHandler::jsval2field);
++
++  // Vec3f
++  engine->addHandler(
++    SoSFVec3f::getClassTypeId(), SFVec3f_init,
++    SFVec3f_field2jsval, SFVec3f_jsval2field);
++  engine->addHandler(
++    SoMFVec3f::getClassTypeId(),
++    MFVec3fHandler::init,
++    MFVec3fHandler::field2jsval,
++    MFVec3fHandler::jsval2field);
++
++  // Vec3d
++  engine->addHandler(
++    SoSFVec3d::getClassTypeId(), SFVec3d_init,
++    SFVec3d_field2jsval, SFVec3d_jsval2field);
++  engine->addHandler(
++    SoMFVec3d::getClassTypeId(),
++    MFVec3dHandler::init,
++    MFVec3dHandler::field2jsval,
++    MFVec3dHandler::jsval2field);
++}
++
++#endif // HAVE_VRML97
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 20:45:31 +1100
+Subject: [PATCH 2/2] gcc 4.7 fixes
+
+This patch was taken from Gentoo:
+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/coin/files/coin-3.1.3-gcc-4.7.patch?id=17d7c853393ff83e3422e48e9ad2810f23889bbf
+
+diff --git a/include/Inventor/SbBasic.h b/include/Inventor/SbBasic.h
+index 1111111..2222222 100644
+--- a/include/Inventor/SbBasic.h
++++ b/include/Inventor/SbBasic.h
+@@ -24,6 +24,7 @@
+  *
+ \**************************************************************************/
+ 
++#include <Inventor/C/errors/debugerror.h>
+ #include <Inventor/C/basic.h>
+ 
+ /* ********************************************************************** */

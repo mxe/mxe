@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 2 Feb 2017 02:05:50 +1100
-Subject: [PATCH] allow native cpu detection when building with clang
+Subject: [PATCH 1/2] allow native cpu detection when building with clang
 
 function was disabled for non-gcc5 in:
 https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b587c12551143c14f023860a1dbdf7316ae71f27;hp=43096b526a9f23008b9769372f11475ae63487bc
@@ -29,7 +29,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: iains <iains@138bc75d-0d04-0410-961f-82ee72b054a4>
 Date: Mon, 25 Sep 2017 23:49:58 +0000
-Subject: [PATCH] Fix 81037 by adjutng headers
+Subject: [PATCH 2/2] Fix 81037 by adjutng headers
 
 taken from:
 https://github.com/gcc-mirror/gcc/commit/8e49ac832c6ef83afa52e59f0e7e0e6151f5bd3d

@@ -1,15 +1,16 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Christos Zoulas <christos@zoulas.com>
+Date: Sat, 18 Nov 2017 22:17:57 +1100
+Subject: [PATCH 1/1] PR/466: Windows fixes.
+
 From https://github.com/file/file/commit/d5f2c28536f1645e3da25fa3f8da5a0a45404dc4.
 
-From 4e654ecfd1ca6535540b7d33dcd66051b9b62def Mon Sep 17 00:00:00 2001
-From: Christos Zoulas <christos@zoulas.com>
-Date: Mon, 27 Jul 2015 00:14:29 -0400
-Subject: [PATCH] PR/466: Windows fixes.
-
-
 diff --git a/src/file.h b/src/file.h
-index 1b4ef6f..00d2abe 100644
+index 1111111..2222222 100644
 --- a/src/file.h
 +++ b/src/file.h
 @@ -44,9 +44,11 @@
@@ -25,7 +26,7 @@ index 1b4ef6f..00d2abe 100644
  
  #include <stdio.h>	/* Include that here, to make sure __P gets defined */
 diff --git a/src/gmtime_r.c b/src/gmtime_r.c
-index 963dfee..7e27ed6 100644
+index 1111111..2222222 100644
 --- a/src/gmtime_r.c
 +++ b/src/gmtime_r.c
 @@ -9,7 +9,7 @@ FILE_RCSID("@(#)$File: gmtime_r.c,v 1.1 2015/01/09 19:28:32 christos Exp $")
@@ -38,7 +39,7 @@ index 963dfee..7e27ed6 100644
  	struct tm *tmp = gmtime(t);
  	if (tmp == NULL)
 diff --git a/src/localtime_r.c b/src/localtime_r.c
-index 69d78d9..35c3b40 100644
+index 1111111..2222222 100644
 --- a/src/localtime_r.c
 +++ b/src/localtime_r.c
 @@ -9,7 +9,7 @@ FILE_RCSID("@(#)$File: localtime_r.c,v 1.1 2015/01/09 19:28:32 christos Exp $")
@@ -51,7 +52,7 @@ index 69d78d9..35c3b40 100644
  	struct tm *tmp = localtime(t);
  	if (tmp == NULL)
 diff --git a/src/magic.c b/src/magic.c
-index bc8c344..59b7e45 100644
+index 1111111..2222222 100644
 --- a/src/magic.c
 +++ b/src/magic.c
 @@ -137,6 +137,14 @@ _w32_get_magic_relative_to(char **hmagicpath, HINSTANCE module)
@@ -70,7 +71,7 @@ index bc8c344..59b7e45 100644
  	if (sp > 3 && stricmp(&dllpath[sp - 3], "bin") == 0) {
  		_w32_append_path(hmagicpath,
 diff --git a/src/readelf.c b/src/readelf.c
-index bc6e7f6..ab36d26 100644
+index 1111111..2222222 100644
 --- a/src/readelf.c
 +++ b/src/readelf.c
 @@ -1054,9 +1054,11 @@ doshn(struct magic_set *ms, int clazz, int swap, int fd, off_t off, int num,
@@ -98,6 +99,3 @@ index bc6e7f6..ab36d26 100644
  				file_badread(ms);
  				free(nbuf);
  				return -1;
--- 
-1.9.1
-

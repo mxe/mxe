@@ -1,12 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
-From 25b591198c896959ca5b7dc9ad3a35605c66dc63 Mon Sep 17 00:00:00 2001
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Guilherme Lima Bernal <dev@lbguilherme.com>
 Date: Sat, 28 Mar 2015 20:52:05 +0100
-Subject: [PATCH] fixes for cross-building
+Subject: [PATCH 1/1] fixes for cross-building
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 0087edb..749f813 100644
+index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -846,6 +846,7 @@ IF(HAVE_WINDOWS_H)
@@ -55,7 +58,3 @@ index 0087edb..749f813 100644
  
  # Add an install target here
  INSTALL(TARGETS ${LIBNAME}
--- 
-2.1.0
-
-

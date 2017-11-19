@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Christian Weigel <christian.weigel@idmt.fraunhofer.de>
 Date: Fri, 17 Feb 2017 10:07:48 +0100
-Subject: [PATCH] fix static build of ilu and ilut
+Subject: [PATCH 1/2] fix static build of ilu and ilut
 
 taken from https://github.com/DentonW/DevIL/pull/59
 
@@ -55,11 +55,10 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 20 Jul 2017 16:34:51 +1000
-Subject: [PATCH] fix resource paths
+Subject: [PATCH 2/2] fix resource paths
 
 DevIL/src-IL/msvc/IL.rc has weird EOL issues and patches don't
 apply - use $(SED) in build rule instead
-
 
 diff --git a/DevIL/src-ILU/msvc/ILU.rc b/DevIL/src-ILU/msvc/ILU.rc
 index 1111111..2222222 100644

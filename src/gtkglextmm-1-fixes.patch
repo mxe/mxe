@@ -2,16 +2,17 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 865936e91293bdc59c2e9c47e5a4b54fb6f1629e Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Wed, 29 Sep 2010 23:08:44 +0200
-Subject: [PATCH] allow deprecated GThreadFunctions and GdkSpanFunc
+Subject: [PATCH 1/1] allow deprecated GThreadFunctions and GdkSpanFunc
 
 
-diff -ur a/gdkglext/gdkmm/gl/Makefile.in b/gdkglext/gdkmm/gl/Makefile.in
---- a/gdkglext/gdkmm/gl/Makefile.in	2006-02-28 02:45:07.000000000 +0100
-+++ b/gdkglext/gdkmm/gl/Makefile.in	2013-06-29 07:14:29.684968635 +0200
-@@ -210,7 +210,6 @@
+diff --git a/gdkglext/gdkmm/gl/Makefile.in b/gdkglext/gdkmm/gl/Makefile.in
+index 1111111..2222222 100644
+--- a/gdkglext/gdkmm/gl/Makefile.in
++++ b/gdkglext/gdkmm/gl/Makefile.in
+@@ -210,7 +210,6 @@ sublib_topdir = gdkglext
  sublib_cflags = \
  	$(GDKGLEXTMM_DEP_CFLAGS)	\
  	-DGDKMM_GL_COMPILATION		\
@@ -19,10 +20,11 @@ diff -ur a/gdkglext/gdkmm/gl/Makefile.in b/gdkglext/gdkmm/gl/Makefile.in
  	-DGDK_DISABLE_DEPRECATED	\
  	-DGDK_PIXBUF_DISABLE_DEPRECATED
  
-diff -ur a/gtkglext/gtkmm/gl/Makefile.in b/gtkglext/gtkmm/gl/Makefile.in
---- a/gtkglext/gtkmm/gl/Makefile.in	2006-02-28 02:45:09.000000000 +0100
-+++ b/gtkglext/gtkmm/gl/Makefile.in	2013-06-29 07:19:30.968981703 +0200
-@@ -208,8 +208,6 @@
+diff --git a/gtkglext/gtkmm/gl/Makefile.in b/gtkglext/gtkmm/gl/Makefile.in
+index 1111111..2222222 100644
+--- a/gtkglext/gtkmm/gl/Makefile.in
++++ b/gtkglext/gtkmm/gl/Makefile.in
+@@ -208,8 +208,6 @@ sublib_cflags = \
  	-I$(top_srcdir)/gdkglext	\
  	$(GTKGLEXTMM_DEP_CFLAGS)	\
  	-DGTKMM_GL_COMPILATION		\

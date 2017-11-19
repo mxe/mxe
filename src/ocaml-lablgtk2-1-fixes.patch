@@ -2,8 +2,8 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 7a45f91cc0f2b0c1744b2ee725ca1999ad24a72b Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:21:18 +0200
 Subject: [PATCH 1/6] split configure.in in configure.ac and ocaml.m4.
  Makefile.am links to src/Makefile
@@ -11,14 +11,14 @@ Subject: [PATCH 1/6] split configure.in in configure.ac and ocaml.m4.
 
 diff --git a/Makefile.am b/Makefile.am
 new file mode 100644
-index 0000000..af437a6
+index 1111111..2222222
 --- /dev/null
 +++ b/Makefile.am
 @@ -0,0 +1 @@
 +SUBDIRS = src
 diff --git a/configure.ac b/configure.ac
 new file mode 100644
-index 0000000..3b27786
+index 1111111..2222222
 --- /dev/null
 +++ b/configure.ac
 @@ -0,0 +1,406 @@
@@ -430,7 +430,7 @@ index 0000000..3b27786
 +echo -e  "	C compiler	$CC"
 diff --git a/ocaml.m4 b/ocaml.m4
 new file mode 100644
-index 0000000..6431281
+index 1111111..2222222
 --- /dev/null
 +++ b/ocaml.m4
 @@ -0,0 +1,197 @@
@@ -631,19 +631,16 @@ index 0000000..6431281
 +  AC_MSG_RESULT([$OCAML_OS_TYPE])
 +  AC_SUBST([OCAML_OS_TYPE])
 +])
--- 
-1.7.9.5
 
-
-From 412fb361bc02b4d1d4e5e3d3f6481595fcbf83b9 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:29:39 +0200
 Subject: [PATCH 2/6] install = findlib-uninstall + findlib-install to remove
  error if 'make install' is called a second time
 
 
 diff --git a/src/Makefile b/src/Makefile
-index c498882..fda935e 100755
+index 1111111..2222222 100755
 --- a/src/Makefile
 +++ b/src/Makefile
 @@ -23,7 +23,7 @@ TARGETS = varcc$(XE) lablgtktop$(XE) lablgtk2$(XB) gdk_pixbuf_mlsource$(XE) \
@@ -655,18 +652,15 @@ index c498882..fda935e 100755
  uninstall: findlib-uninstall
  
  MLLIBS = lablgtk.cma
--- 
-1.7.9.5
 
-
-From c17556b4d42274c4190a6b29aa10eef730aa4e21 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:33:57 +0200
 Subject: [PATCH 3/6] allows install with 'make lablgtkopt' only
 
 
 diff --git a/src/Makefile b/src/Makefile
-index fda935e..54ae4b4 100755
+index 1111111..2222222 100755
 --- a/src/Makefile
 +++ b/src/Makefile
 @@ -391,42 +391,7 @@ old-uninstall:
@@ -724,18 +718,15 @@ index fda935e..54ae4b4 100755
  
  findlib-uninstall:
  	ocamlfind remove lablgtk2
--- 
-1.7.9.5
 
-
-From 19debade0cd5de6f3ea1d5771ecc627906e3c22f Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:36:37 +0200
 Subject: [PATCH 4/6] add prefixed ocamlfind support
 
 
 diff --git a/config.make.in b/config.make.in
-index e689bda..0edb14a 100644
+index 1111111..2222222 100644
 --- a/config.make.in
 +++ b/config.make.in
 @@ -3,6 +3,7 @@
@@ -747,7 +738,7 @@ index e689bda..0edb14a 100644
  CAMLDEP=@OCAMLDEP@
  OCAMLDOC=@OCAMLDOC@
 diff --git a/src/Makefile b/src/Makefile
-index 54ae4b4..aa09593 100755
+index 1111111..2222222 100755
 --- a/src/Makefile
 +++ b/src/Makefile
 @@ -391,12 +391,12 @@ old-uninstall:
@@ -776,19 +767,16 @@ index 54ae4b4..aa09593 100755
  	for f in lablgladecc2$(XE) lablgtk2$(XB) gdk_pixbuf_mlsource$(XE); \
  	  do rm -f "$(BINDIR)"/$$f; done
  
--- 
-1.7.9.5
 
-
-From 8c5204c3b7db4449f66092f3bb58277bf3c4c777 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Thu, 13 Sep 2012 23:39:01 +0200
-Subject: [PATCH 5/6] remove a command that is already called in uninstall,
- and which fails if used as is
+Subject: [PATCH 5/6] remove a command that is already called in uninstall, and
+ which fails if used as is
 
 
 diff --git a/src/Makefile b/src/Makefile
-index aa09593..e1f1c88 100755
+index 1111111..2222222 100755
 --- a/src/Makefile
 +++ b/src/Makefile
 @@ -395,7 +395,6 @@ findlib-install:
@@ -799,18 +787,15 @@ index aa09593..e1f1c88 100755
  	$(MAKE) INSTALLDIR=`$(OCAMLFIND) query lablgtk2 | tr -d '\r'` lablgtk2$(XB)
  	cp lablgtk2$(XB) "$(BINDIR)"
  	if test -f lablgladecc$(XE); then \
--- 
-1.7.9.5
 
-
-From d7972344ade17f341ef658c6561943bc87f2fc00 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sun, 30 Sep 2012 17:44:48 +0200
 Subject: [PATCH 6/6] use prefixed ocamlp4 tools if available
 
 
 diff --git a/configure.ac b/configure.ac
-index 3b27786..205186a 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -356,7 +356,7 @@ AC_SUBST(CAMLOPT,$OCAMLOPT)
@@ -823,7 +808,7 @@ index 3b27786..205186a 100644
  AC_SUBST(HAVE_SVGZ)
  AC_SUBST(USE_CC)
 diff --git a/ocaml.m4 b/ocaml.m4
-index 6431281..8dd2101 100644
+index 1111111..2222222 100644
 --- a/ocaml.m4
 +++ b/ocaml.m4
 @@ -84,7 +84,7 @@ AC_DEFUN([AC_PROG_CAMLP4],
@@ -858,6 +843,3 @@ index 6431281..8dd2101 100644
  ])
  
  
--- 
-1.7.9.5
-

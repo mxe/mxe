@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Tue, 31 Oct 2017 16:56:24 +1100
-Subject: [PATCH] install *.dll to bin
+Subject: [PATCH 1/1] install *.dll to bin
 
 taken from:
 https://github.com/fukuchi/libqrencode/issues/112

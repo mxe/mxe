@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: darealshinji <djcj@gmx.de>
 Date: Thu, 21 Jul 2016 12:00:00 +0200
-Subject: [PATCH] add PKG_CHECK_MODULES macro to configure.ac
+Subject: [PATCH 1/2] add PKG_CHECK_MODULES macro to configure.ac
 
 
 diff --git a/configure.ac b/configure.ac
@@ -32,7 +32,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: darealshinji <djcj@gmx.de>
 Date: Thu, 21 Jul 2016 12:00:00 +0200
-Subject: [PATCH] enable out-of-tree builds
+Subject: [PATCH 2/2] enable out-of-tree builds
 
 
 diff --git a/libspectre/Makefile.am b/libspectre/Makefile.am

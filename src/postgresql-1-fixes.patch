@@ -2,14 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From a92f8ef8826f38edfe010752badc5c280f5b9605 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:02:33 +0200
 Subject: [PATCH 1/4] use unix style names for openssl on mingw-cross-env
 
 
 diff --git a/configure.in b/configure.in
-index 2f8bb3d..441b42b 100644
+index 1111111..2222222 100644
 --- a/configure.in
 +++ b/configure.in
 @@ -926,13 +926,8 @@ fi
@@ -28,18 +28,15 @@ index 2f8bb3d..441b42b 100644
  fi
  
  if test "$with_pam" = yes ; then
--- 
-1.9.1
 
-
-From 6bbf26ce1f6c0bbd6fc53db1152b1132795b2850 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "a@a.org" <a@a.org>
 Date: Mon, 24 Oct 2011 14:09:38 +0200
 Subject: [PATCH 2/4] do not check autoconf version
 
 
 diff --git a/configure.in b/configure.in
-index 441b42b..1257071 100644
+index 1111111..2222222 100644
 --- a/configure.in
 +++ b/configure.in
 @@ -19,10 +19,6 @@ m4_pattern_forbid(^PGAC_)dnl to catch undefined macros
@@ -53,11 +50,8 @@ index 441b42b..1257071 100644
  AC_COPYRIGHT([Copyright (c) 1996-2012, PostgreSQL Global Development Group])
  AC_CONFIG_SRCDIR([src/backend/access/common/heaptuple.c])
  AC_CONFIG_AUX_DIR(config)
--- 
-1.9.1
 
-
-From e7cdd570742aa958d5b45c6971253d9a0ac8ecf4 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 1 Jul 2014 14:27:21 -0700
 Subject: [PATCH 3/4] Fix shared lib install location
@@ -65,7 +59,7 @@ Subject: [PATCH 3/4] Fix shared lib install location
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/src/Makefile.shlib b/src/Makefile.shlib
-index 294d10f..3acdd81 100644
+index 1111111..2222222 100644
 --- a/src/Makefile.shlib
 +++ b/src/Makefile.shlib
 @@ -293,6 +293,7 @@ endif
@@ -108,11 +102,8 @@ index 294d10f..3acdd81 100644
  endif # not aix
  else # no soname
  	$(INSTALL_SHLIB) $< '$(DESTDIR)$(pkglibdir)/$(shlib)'
--- 
-1.9.1
 
-
-From 49f1ebdd0a4523f77b889b7dfbd5d34c2e11dab1 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 1 Jul 2014 14:41:44 -0700
 Subject: [PATCH 4/4] Don't build shared lib on win32 if --disable-shared is
@@ -121,7 +112,7 @@ Subject: [PATCH 4/4] Don't build shared lib on win32 if --disable-shared is
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/src/Makefile.shlib b/src/Makefile.shlib
-index 3acdd81..68084cd 100644
+index 1111111..2222222 100644
 --- a/src/Makefile.shlib
 +++ b/src/Makefile.shlib
 @@ -291,11 +291,15 @@ ifeq ($(PORTNAME), cygwin)
@@ -144,6 +135,3 @@ index 3acdd81..68084cd 100644
  endif
  
  
--- 
-1.9.1
-

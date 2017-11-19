@@ -1,21 +1,19 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 34ee29b2233764519fecf3a9c5d7ed36ad680215 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 8 Nov 2015 23:58:55 +0100
-Subject: [PATCH] do not use winmm
+Subject: [PATCH 1/1] do not use winmm
 
   * do not link against winmm
   * comment out call to timeGetTime (defined in winmm)
 
 winmm was used only to measure performance in an example.
----
- acc/acclib/uclock.ch |    2 +-
- configure            |    8 --------
- 2 files changed, 1 insertion(+), 9 deletions(-)
 
 diff --git a/acc/acclib/uclock.ch b/acc/acclib/uclock.ch
-index d20dc9c..2de1f31 100644
+index 1111111..2222222 100644
 --- a/acc/acclib/uclock.ch
 +++ b/acc/acclib/uclock.ch
 @@ -157,7 +157,7 @@ ACCLIB_PUBLIC(void, acc_uclock_read) (acc_uclock_handle_p h, acc_uclock_p c)
@@ -28,7 +26,7 @@ index d20dc9c..2de1f31 100644
      struct rusage ru;
      if (getrusage(RUSAGE_SELF, &ru) != 0) c->ticks.rd = 0;
 diff --git a/configure b/configure
-index 8f7e300..13bc5b4 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
 @@ -31409,14 +31409,6 @@ done
@@ -46,6 +44,3 @@ index 8f7e300..13bc5b4 100755
  
  
  
--- 
-1.7.10.4
-

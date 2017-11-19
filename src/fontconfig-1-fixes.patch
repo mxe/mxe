@@ -1,13 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From da6c9bfc3d57f3aa192972717cb5c84a56e1c422 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Tue, 05 Jul 2016 21:56:34 +0300
-Subject: [PATCH] fix mktemp_s
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Tue, 5 Jul 2016 21:56:34 +0300
+Subject: [PATCH 1/1] fix mktemp_s
 
 
 diff --git a/configure.ac b/configure.ac
-index f8dadf1..bde05c8 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -160,7 +160,7 @@ AC_TYPE_PID_T
@@ -20,7 +22,7 @@ index f8dadf1..bde05c8 100644
  dnl AC_CHECK_FUNCS doesn't check for header files.
  dnl posix_fadvise() may be not available in older libc.
 diff --git a/src/fccompat.c b/src/fccompat.c
-index f4f3f5f..68a70ff 100644
+index 1111111..2222222 100644
 --- a/src/fccompat.c
 +++ b/src/fccompat.c
 @@ -152,8 +152,8 @@ FcMakeTempfile (char *template)
@@ -34,6 +36,3 @@ index f4f3f5f..68a70ff 100644
         return -1;
     fd = FcOpen(template, O_RDWR | O_EXCL | O_CREAT, 0600);
  #endif
--- 
-1.8.4.5
-

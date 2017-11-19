@@ -1,13 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 6c79d4a98dca226b41987ecccd7919b698df597e Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "a@mxe.org" <a@mxe.org>
 Date: Fri, 25 Nov 2011 15:58:28 +0100
 Subject: [PATCH 1/4] fix Libs.private
 
 
 diff --git a/libidn.pc.in b/libidn.pc.in
-index 74b84be6..629de30a 100644
+index 1111111..2222222 100644
 --- a/libidn.pc.in
 +++ b/libidn.pc.in
 @@ -19,5 +19,5 @@ Description: IETF stringprep, nameprep, punycode, IDNA text processing.
@@ -17,11 +19,8 @@ index 74b84be6..629de30a 100644
 -Libs.private: @LTLIBICONV@
 +Libs.private: -lintl -liconv
  Cflags: -I${includedir}
--- 
-2.11.0
 
-
-From 884d44d1d9752062c86c4dd2bddd8b40d9f80222 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
 Date: Wed, 1 Feb 2017 10:44:36 +0100
 Subject: [PATCH 2/4] Update intprops.h for gcc-7 compatibility
@@ -29,7 +28,7 @@ Subject: [PATCH 2/4] Update intprops.h for gcc-7 compatibility
 (cherry picked from commit 230930b3bc3e431b819eb45420cb42475d83ca93)
 
 diff --git a/gl/intprops.h b/gl/intprops.h
-index e1fce5c9..eb06b691 100644
+index 1111111..2222222 100644
 --- a/gl/intprops.h
 +++ b/gl/intprops.h
 @@ -1,18 +1,18 @@
@@ -188,7 +187,7 @@ index e1fce5c9..eb06b691 100644
  #endif
  
 diff --git a/lib/gltests/intprops.h b/lib/gltests/intprops.h
-index e1fce5c9..eb06b691 100644
+index 1111111..2222222 100644
 --- a/lib/gltests/intprops.h
 +++ b/lib/gltests/intprops.h
 @@ -1,18 +1,18 @@
@@ -346,11 +345,8 @@ index e1fce5c9..eb06b691 100644
  # endif
  #endif
  
--- 
-2.11.0
 
-
-From e2cb42d99c6dccb4436bdeb8ecfeb2db9de08f18 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
 Date: Wed, 1 Feb 2017 10:45:29 +0100
 Subject: [PATCH 3/4] Increase value for -Wframe-larger-than (gcc-7)
@@ -358,7 +354,7 @@ Subject: [PATCH 3/4] Increase value for -Wframe-larger-than (gcc-7)
 (cherry picked from commit a6fcdb4f953e40ea162a9104cac034bce01706af)
 
 diff --git a/configure.ac b/configure.ac
-index 649ddcd5..c802c5df 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -128,7 +128,7 @@ AC_ARG_ENABLE([gcc-warnings],
@@ -370,11 +366,8 @@ index 649ddcd5..c802c5df 100644
  
    nw="$nw -Wsystem-headers"         # Don't let system headers trigger warnings
    nw="$nw -Wpadded"                 # Struct in src/idn_cmd.h is not padded
--- 
-2.11.0
 
-
-From 94e4faf96e711d10e04fae12c90c1be20e490391 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
 Date: Wed, 1 Feb 2017 11:06:39 +0100
 Subject: [PATCH 4/4] Fix -Wformat warnings
@@ -382,7 +375,7 @@ Subject: [PATCH 4/4] Fix -Wformat warnings
 (cherry picked from commit 7148adf34dae30345c2e4d9d437838a45ba6f6e8)
 
 diff --git a/examples/example.c b/examples/example.c
-index 6e917838..24f64e04 100644
+index 1111111..2222222 100644
 --- a/examples/example.c
 +++ b/examples/example.c
 @@ -55,7 +55,7 @@ main (void)
@@ -413,7 +406,7 @@ index 6e917838..24f64e04 100644
      }
  
 diff --git a/examples/example3.c b/examples/example3.c
-index fc11c1c0..ffb90424 100644
+index 1111111..2222222 100644
 --- a/examples/example3.c
 +++ b/examples/example3.c
 @@ -56,7 +56,7 @@ main (void)
@@ -435,7 +428,7 @@ index fc11c1c0..ffb90424 100644
  
    free (p);
 diff --git a/examples/example4.c b/examples/example4.c
-index 1b319c94..a3315a14 100644
+index 1111111..2222222 100644
 --- a/examples/example4.c
 +++ b/examples/example4.c
 @@ -56,7 +56,7 @@ main (void)
@@ -457,7 +450,7 @@ index 1b319c94..a3315a14 100644
  
    free (p);
 diff --git a/examples/example5.c b/examples/example5.c
-index df557984..29d40b9d 100644
+index 1111111..2222222 100644
 --- a/examples/example5.c
 +++ b/examples/example5.c
 @@ -68,7 +68,7 @@ main (void)
@@ -470,7 +463,7 @@ index df557984..29d40b9d 100644
  
    p = stringprep_locale_to_utf8 (buf);
 diff --git a/src/idn.c b/src/idn.c
-index be1c7d1b..13eb3c9c 100644
+index 1111111..2222222 100644
 --- a/src/idn.c
 +++ b/src/idn.c
 @@ -419,7 +419,7 @@ main (int argc, char *argv[])
@@ -483,7 +476,7 @@ index be1c7d1b..13eb3c9c 100644
  
  	  fprintf (stdout, "%s\n", p);
 diff --git a/tests/tst_idna.c b/tests/tst_idna.c
-index 415764ee..4ac046fd 100644
+index 1111111..2222222 100644
 --- a/tests/tst_idna.c
 +++ b/tests/tst_idna.c
 @@ -220,13 +220,14 @@ doit (void)
@@ -572,7 +565,7 @@ index 415764ee..4ac046fd 100644
  	    printf ("ERROR\n");
  	}
 diff --git a/tests/tst_idna2.c b/tests/tst_idna2.c
-index 65b3a4d8..38932caa 100644
+index 1111111..2222222 100644
 --- a/tests/tst_idna2.c
 +++ b/tests/tst_idna2.c
 @@ -461,14 +461,14 @@ static const struct idna idna[] = {
@@ -611,7 +604,7 @@ index 65b3a4d8..38932caa 100644
  		printf ("ERROR\n");
  	    }
 diff --git a/tests/tst_idna3.c b/tests/tst_idna3.c
-index a189378f..f65628c1 100644
+index 1111111..2222222 100644
 --- a/tests/tst_idna3.c
 +++ b/tests/tst_idna3.c
 @@ -59,13 +59,13 @@ doit (void)
@@ -643,7 +636,7 @@ index a189378f..f65628c1 100644
        if (out)
  	idn_free (out);
 diff --git a/tests/tst_nfkc.c b/tests/tst_nfkc.c
-index d150fecf..f5af9c6a 100644
+index 1111111..2222222 100644
 --- a/tests/tst_nfkc.c
 +++ b/tests/tst_nfkc.c
 @@ -68,18 +68,18 @@ void
@@ -678,7 +671,7 @@ index d150fecf..f5af9c6a 100644
  	    printf ("ERROR\n");
  	}
 diff --git a/tests/tst_pr29.c b/tests/tst_pr29.c
-index 3dc5466d..11d0ede1 100644
+index 1111111..2222222 100644
 --- a/tests/tst_pr29.c
 +++ b/tests/tst_pr29.c
 @@ -91,7 +91,7 @@ static const struct tv tv[] = {
@@ -736,7 +729,7 @@ index 3dc5466d..11d0ede1 100644
  	    if (debug)
  	      printf ("FATAL\n");
 diff --git a/tests/tst_punycode.c b/tests/tst_punycode.c
-index 493b8a21..997744a5 100644
+index 1111111..2222222 100644
 --- a/tests/tst_punycode.c
 +++ b/tests/tst_punycode.c
 @@ -173,7 +173,8 @@ doit (void)
@@ -795,7 +788,7 @@ index 493b8a21..997744a5 100644
  		printf ("ERROR\n");
  	    }
 diff --git a/tests/tst_strerror.c b/tests/tst_strerror.c
-index 71fff59a..730f5e49 100644
+index 1111111..2222222 100644
 --- a/tests/tst_strerror.c
 +++ b/tests/tst_strerror.c
 @@ -110,7 +110,7 @@ doit (void)
@@ -881,7 +874,7 @@ index 71fff59a..730f5e49 100644
        }
    }
 diff --git a/tests/tst_stringprep.c b/tests/tst_stringprep.c
-index 149ce6f5..7c9ab06e 100644
+index 1111111..2222222 100644
 --- a/tests/tst_stringprep.c
 +++ b/tests/tst_stringprep.c
 @@ -205,7 +205,7 @@ doit (void)
@@ -936,7 +929,7 @@ index 149ce6f5..7c9ab06e 100644
  		printf ("ERROR\n");
  	    }
 diff --git a/tests/tst_tld.c b/tests/tst_tld.c
-index 2f8e12e8..d038c790 100644
+index 1111111..2222222 100644
 --- a/tests/tst_tld.c
 +++ b/tests/tst_tld.c
 @@ -80,7 +80,7 @@ const Tld_table * my_tld_tables[] =
@@ -1016,7 +1009,7 @@ index 2f8e12e8..d038c790 100644
      }
  }
 diff --git a/tests/utils.c b/tests/utils.c
-index 717ee012..5577dc32 100644
+index 1111111..2222222 100644
 --- a/tests/utils.c
 +++ b/tests/utils.c
 @@ -49,7 +49,7 @@ escapeprint (const char *str, size_t len)
@@ -1046,6 +1039,3 @@ index 717ee012..5577dc32 100644
        if ((i + 1) % 8 == 0)
  	printf (" ");
        if ((i + 1) % 16 == 0 && i + 1 < len)
--- 
-2.11.0
-

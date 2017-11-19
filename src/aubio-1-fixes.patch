@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Paul Brossier <piem@piem.org>
 Date: Tue, 5 Jan 2016 21:28:06 -0500
-Subject: [PATCH] wscript: check HAVE_AV* from ctx.env
+Subject: [PATCH 1/7] wscript: check HAVE_AV* from ctx.env
 
 From https://github.com/aubio/aubio/commit/eb6899125ac83900710180c02b94bc593a1426d2
 
@@ -26,7 +26,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 21:47:01 -0500
-Subject: [PATCH] wscript: check more variables from ctx.env
+Subject: [PATCH 2/7] wscript: check more variables from ctx.env
 
 
 diff --git a/wscript b/wscript
@@ -52,7 +52,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 22:48:20 -0500
-Subject: [PATCH] wscript: fftw3 support requires pthreads
+Subject: [PATCH 3/7] wscript: fftw3 support requires pthreads
 
 
 diff --git a/wscript b/wscript
@@ -74,7 +74,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 22:18:21 -0500
-Subject: [PATCH] wscript: Install static library
+Subject: [PATCH 4/7] wscript: Install static library
 
 
 diff --git a/src/wscript_build b/src/wscript_build
@@ -93,7 +93,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 21:15:37 -0500
-Subject: [PATCH] Add options for enabling shared and/or static libraries
+Subject: [PATCH 5/7] Add options for enabling shared and/or static libraries
 
 
 diff --git a/src/wscript_build b/src/wscript_build
@@ -153,7 +153,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 21:25:46 -0500
-Subject: [PATCH] Add static deps to pkgconfig file
+Subject: [PATCH 6/7] Add static deps to pkgconfig file
 
 
 diff --git a/aubio.pc.in b/aubio.pc.in
@@ -236,7 +236,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 21:27:05 -0500
-Subject: [PATCH] [MXE] disable tests and examples
+Subject: [PATCH 7/7] disable tests and examples
 
 
 diff --git a/wscript b/wscript

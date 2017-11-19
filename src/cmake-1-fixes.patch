@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 12 Aug 2016 02:01:20 +1000
-Subject: [PATCH] fix windres invocation options
+Subject: [PATCH 1/3] fix windres invocation options
 
 windres doesn't recognise various gcc flags like -mms-bitfields,
 -fopenmp, -mthreads etc. (basically not `-D` or `-I`)
@@ -21,7 +21,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Tue, 25 Jul 2017 20:34:56 +1000
-Subject: [PATCH] add option to disable -isystem
+Subject: [PATCH 2/3] add option to disable -isystem
 
 taken from (not accepted):
 https://gitlab.kitware.com/cmake/cmake/merge_requests/895
@@ -47,7 +47,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Tue, 15 Aug 2017 15:25:06 +1000
-Subject: [PATCH] add CPACK_NSIS_EXECUTABLE variable
+Subject: [PATCH 3/3] add CPACK_NSIS_EXECUTABLE variable
 
 
 diff --git a/Source/CPack/cmCPackNSISGenerator.cxx b/Source/CPack/cmCPackNSISGenerator.cxx

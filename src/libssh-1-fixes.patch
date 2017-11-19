@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 29 Oct 2017 00:11:28 +1100
-Subject: [PATCH] add option to disable shared libs
+Subject: [PATCH 1/2] add option to disable shared libs
 
 Taken from:
 https://www.libssh.org/archive/libssh/2017-10/0000012.html
@@ -66,7 +66,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 29 Oct 2017 00:45:55 +1100
-Subject: [PATCH] add indentation for shared lib hunks
+Subject: [PATCH 2/2] add indentation for shared lib hunks
 
 Taken from:
 https://www.libssh.org/archive/libssh/2017-10/0000012.html

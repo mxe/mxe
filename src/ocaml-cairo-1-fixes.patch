@@ -2,20 +2,18 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-[master 8ae01b4] new version
- 4 files changed, 48 insertions(+), 58 deletions(-)
- create mode 100644 META
-From 8ae01b48ebab343933829d2891480d7202bbf1ae Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sun, 17 Jun 2012 17:42:39 +0200
-Subject: [PATCH] use of ocaml.m4 from ocaml-autoconf ; modifications for cross-compilation
+Subject: [PATCH 1/1] use of ocaml.m4 from ocaml-autoconf ; modifications for
+ cross-compilation
 
 taken from
 https://bugs.freedesktop.org/show_bug.cgi?id=51994
 
 diff --git a/META b/META
 new file mode 100644
-index 0000000..06060f2
+index 1111111..2222222
 --- /dev/null
 +++ b/META
 @@ -0,0 +1,17 @@
@@ -38,7 +36,7 @@ index 0000000..06060f2
 +)
 \ No newline at end of file
 diff --git a/configure.ac b/configure.ac
-index 6c8c4e9..dc72693 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -16,7 +16,7 @@ AC_ARG_VAR(LABLGTKDIR,[Location of the LablGTK library])
@@ -51,7 +49,7 @@ index 6c8c4e9..dc72693 100644
    if test "$LABLGTKDIR" ; then
      # Check for gdk-pixbuf
 diff --git a/src/Makefile b/src/Makefile
-index 46a62f6..ec9cf28 100644
+index 1111111..2222222 100644
 --- a/src/Makefile
 +++ b/src/Makefile
 @@ -92,10 +92,10 @@ install: all
@@ -70,7 +68,7 @@ index 46a62f6..ec9cf28 100644
  DOCFILES = cairo.mli cairo_bigarray.mli cairo_png.mli cairo_pdf.mli cairo_ps.mli cairo_ft.mli
  ifdef LABLGTKDIR
 diff --git a/support/ocaml.m4 b/support/ocaml.m4
-index 9d6e910..6431281 100644
+index 1111111..2222222 100644
 --- a/support/ocaml.m4
 +++ b/support/ocaml.m4
 @@ -11,10 +11,10 @@ dnl For documentation, please read the ocaml.m4 man page.
@@ -238,6 +236,3 @@ index 9d6e910..6431281 100644
  ])
  
  
--- 
-1.7.9.5
-

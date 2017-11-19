@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Pavel Vatagin <pavelvat@gmail.com>
 Date: Sat, 28 Jan 2017 03:05:58 +0300
-Subject: [PATCH] disable build exampleapp
+Subject: [PATCH 1/1] disable build exampleapp
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt

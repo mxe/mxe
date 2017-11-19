@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Mon, 2 Oct 2017 15:32:20 +0200
-Subject: [PATCH] Add static dependency to .pc file
+Subject: [PATCH 1/1] Add static dependency to .pc file
 
 
 diff --git a/freexl.pc.in b/freexl.pc.in

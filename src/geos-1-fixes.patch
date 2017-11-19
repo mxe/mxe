@@ -5,7 +5,9 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Mon, 7 Aug 2017 15:24:32 +0200
-Subject: [PATCH] Always link as static (based on the previous patch by Timothy Gu)
+Subject: [PATCH 1/1] Always link as static (based on the previous patch by
+ Timothy Gu)
+
 
 diff --git a/tools/geos-config.in b/tools/geos-config.in
 index 1111111..2222222 100644

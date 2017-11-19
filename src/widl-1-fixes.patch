@@ -1,9 +1,18 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-diff -ur mingw-w64-v3.3.0.orig/mingw-w64-tools/widl/include/windef.h mingw-w64-v3.3.0/mingw-w64-tools/widl/include/windef.h
---- mingw-w64-v3.3.0.orig/mingw-w64-tools/widl/include/windef.h	2014-10-29 20:53:30.000000000 +1100
-+++ mingw-w64-v3.3.0/mingw-w64-tools/widl/include/windef.h	2014-10-29 20:54:09.000000000 +1100
-@@ -85,7 +85,7 @@
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 21:47:35 +1100
+Subject: [PATCH 1/1] fixes
+
+
+diff --git a/mingw-w64-tools/widl/include/windef.h b/mingw-w64-tools/widl/include/windef.h
+index 1111111..2222222 100644
+--- a/mingw-w64-tools/widl/include/windef.h
++++ b/mingw-w64-tools/widl/include/windef.h
+@@ -85,7 +85,7 @@ extern "C" {
  #endif /* __cdecl */
  
  #ifndef __ms_va_list
@@ -12,4 +21,3 @@ diff -ur mingw-w64-v3.3.0.orig/mingw-w64-tools/widl/include/windef.h mingw-w64-v
  #  define __ms_va_list __builtin_ms_va_list
  #  define __ms_va_start(list,arg) __builtin_ms_va_start(list,arg)
  #  define __ms_va_end(list) __builtin_ms_va_end(list)
- 

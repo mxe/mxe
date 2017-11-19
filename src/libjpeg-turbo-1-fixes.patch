@@ -3,13 +3,12 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: MXE
+From: "fix@me" <fix@me>
 Date: Sun, 6 Sep 2015 23:16:12 +1000
-Subject: [PATCH] fix typedef conflicts
+Subject: [PATCH 1/1] fix typedef conflicts
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/tree/0001-header-compat.mingw.patch?h=mingw-w64-libjpeg-turbo
-
 
 diff --git a/jmorecfg.h b/jmorecfg.h
 index 1111111..2222222 100644

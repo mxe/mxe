@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Tue, 1 Aug 2017 10:20:44 +0200
-Subject: [PATCH] Patch template definitions
+Subject: [PATCH 1/1] Patch template definitions
 
 
 diff --git a/configure.ac b/configure.ac

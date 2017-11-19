@@ -2,17 +2,17 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From f2970c9c697dd6a6104495ea91ed2488ead297b7 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 23:34:26 +0200
 Subject: [PATCH 1/1] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gsf/gsf-utils.c b/gsf/gsf-utils.c
-index d7a7247..cc52d99 100644
+index 1111111..2222222 100644
 --- a/gsf/gsf-utils.c
 +++ b/gsf/gsf-utils.c
-@@ -115,9 +115,9 @@ static GTypeModule *static_type_module = NULL;
+@@ -76,9 +76,9 @@ static GTypeModule *static_type_module = NULL;
  #include <windows.h>
  static HMODULE gsf_dll_hmodule;
  BOOL WINAPI
@@ -24,6 +24,3 @@ index d7a7247..cc52d99 100644
  {
  	if (fdwReason == DLL_PROCESS_ATTACH) gsf_dll_hmodule = hinstDLL;
  	return TRUE;
--- 
-1.7.1
-
