@@ -1,0 +1,125 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 20 Nov 2017 22:54:25 +1100
+Subject: [PATCH 1/5] mingw-w64-does-not-have-sys-resource-h
+
+taken from:
+https://github.com/Alexpux/MINGW-packages/blob/484b873e8a1967b7809127682635888b7329417f/mingw-w64-metis/0001-mingw-w64-does-not-have-sys-resource-h.patch
+
+diff --git a/GKlib/gk_arch.h b/GKlib/gk_arch.h
+index 1111111..2222222 100644
+--- a/GKlib/gk_arch.h
++++ b/GKlib/gk_arch.h
+@@ -41,7 +41,9 @@
+ #endif
+   #include <inttypes.h>
+   #include <sys/types.h>
+-  #include <sys/resource.h>
++  #ifndef __MINGW32__
++    #include <sys/resource.h>
++  #endif
+   #include <sys/time.h>
+ #endif
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 20 Nov 2017 22:55:34 +1100
+Subject: [PATCH 2/5] mingw-w64-do-not-use-reserved-double-underscored-names
+
+taken from:
+https://github.com/Alexpux/MINGW-packages/blob/484b873e8a1967b7809127682635888b7329417f/mingw-w64-metis/0002-mingw-w64-do-not-use-reserved-double-underscored-names.patch
+
+diff --git a/GKlib/gk_getopt.h b/GKlib/gk_getopt.h
+index 1111111..2222222 100644
+--- a/GKlib/gk_getopt.h
++++ b/GKlib/gk_getopt.h
+@@ -52,10 +52,10 @@ struct gk_option {
+ 
+ 
+ /* Function prototypes */
+-extern int gk_getopt(int __argc, char **__argv, char *__shortopts);
+-extern int gk_getopt_long(int __argc, char **__argv, char *__shortopts,
++extern int gk_getopt(int gk_argc, char **gk_argv, char *__shortopts);
++extern int gk_getopt_long(int gk_argc, char **gk_argv, char *__shortopts,
+               struct gk_option *__longopts, int *__longind);
+-extern int gk_getopt_long_only (int __argc, char **__argv,
++extern int gk_getopt_long_only (int gk_argc, char **gk_argv,
+               char *__shortopts, struct gk_option *__longopts, int *__longind);
+ 
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 20 Nov 2017 22:58:20 +1100
+Subject: [PATCH 3/5] WIN32-Install-RUNTIME-to-bin
+
+taken from:
+https://github.com/Alexpux/MINGW-packages/blob/484b873e8a1967b7809127682635888b7329417f/mingw-w64-metis/0003-WIN32-Install-RUNTIME-to-bin.patch
+
+diff --git a/libmetis/CMakeLists.txt b/libmetis/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/libmetis/CMakeLists.txt
++++ b/libmetis/CMakeLists.txt
+@@ -8,9 +8,15 @@ if(UNIX)
+   target_link_libraries(metis m)
+ endif()
+ 
++if(WIN32)
++  set(RT_DEST bin)
++else()
++  set(RT_DEST lib)
++endif()
++
+ if(METIS_INSTALL)
+   install(TARGETS metis
+     LIBRARY DESTINATION lib
+-    RUNTIME DESTINATION lib
++    RUNTIME DESTINATION ${RT_DEST}
+     ARCHIVE DESTINATION lib)
+ endif()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 20 Nov 2017 22:59:10 +1100
+Subject: [PATCH 4/5] Fix-GKLIB_PATH-default-for-out-of-tree-builds
+
+taken from:
+https://github.com/Alexpux/MINGW-packages/blob/484b873e8a1967b7809127682635888b7329417f/mingw-w64-metis/0004-Fix-GKLIB_PATH-default-for-out-of-tree-builds.patch
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ cmake_minimum_required(VERSION 2.8)
+ project(METIS)
+ 
+-set(GKLIB_PATH "GKlib" CACHE PATH "path to GKlib")
++set(GKLIB_PATH "${CMAKE_SOURCE_DIR}/GKlib" CACHE PATH "path to GKlib")
+ set(SHARED FALSE CACHE BOOL "build a shared library")
+ 
+ if(MSVC)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 20 Nov 2017 23:05:12 +1100
+Subject: [PATCH 5/5] disable programs
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -24,4 +24,6 @@ include_directories(include)
+ # Recursively look for CMakeLists.txt in subdirs.
+ add_subdirectory("include")
+ add_subdirectory("libmetis")
+-add_subdirectory("programs")
++if(BUILD_PROGRAMS)
++  add_subdirectory("programs")
++endif()
