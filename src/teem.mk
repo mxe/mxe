@@ -19,9 +19,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(TARGET)-cmake' . \
-        -DQNANHIBIT_VALUE=1 -DQNANHIBIT_VALUE__TRYRUN_OUTPUT=1
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DQNANHIBIT_VALUE=1 \
+        -DQNANHIBIT_VALUE__TRYRUN_OUTPUT=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef
-
-$(PKG)_BUILD_SHARED =

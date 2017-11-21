@@ -1,18 +1,19 @@
-From f33262c29c253608f57e91af0e96bdb7bfa3cc00 Mon Sep 17 00:00:00 2001
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Sun, 19 Oct 2014 12:09:55 -0400
-Subject: [PATCH] Don't export package
+Subject: [PATCH 1/1] Don't export package
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
----
- CMakeLists.txt | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d0f2180..5ecba48 100644
+index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -402,7 +402,9 @@ install(TARGETS armadillo EXPORT ArmadilloLibraryDepends
+@@ -444,7 +444,9 @@ install(TARGETS armadillo EXPORT ArmadilloLibraryDepends
    
  # Export the package for use from the build-tree
  # (this registers the build-tree with a global CMake-registry)
@@ -23,6 +24,3 @@ index d0f2180..5ecba48 100644
  
  ## LOCAL FILES
  # Create ArmadilloConfig.cmake file for the use from the build tree
--- 
-1.9.1
-

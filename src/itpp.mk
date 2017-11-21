@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 50717621c5dfb5ed22f8492f8af32b17776e6e06641dfe3a3a8f82c8d353b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc blas lapack fftw
+$(PKG)_DEPS     := gcc openblas fftw
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/itpp/files/itpp/' | \
@@ -20,8 +20,8 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DITPP_SHARED_LIB=$(CMAKE_SHARED_BOOL) \
         -DHTML_DOCS=OFF \
-        -DBLAS_LIBRARIES=-lblas \
-        -DLAPACK_LIBRARIES='-llapack -lgfortran -lquadmath'
+        -DBLAS_LIBRARIES="`'$(TARGET)-pkg-config' --libs openblas`" \
+        -DLAPACK_LIBRARIES="`'$(TARGET)-pkg-config' --libs openblas`"
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

@@ -9,13 +9,16 @@ $(PKG)_SUBDIR   := CBLAS
 $(PKG)_FILE     := $(PKG).tgz
 $(PKG)_URL      := http://www.netlib.org/blas/blast-forum/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftp.eq.uc.pt/software/math/netlib/blas/blast-forum/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc blas
+$(PKG)_DEPS     := gcc openblas
+
+$(PKG)_MESSAGE  :=*** cblas has been replaced by openblas ***
 
 define $(PKG)_UPDATE
-    echo 1
+    echo 'Warning: cblas has been replaced by openblas' >&2;
+    echo $(cblas_VERSION)
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_DISABLED_BUILD
     $(SED) -i 's, make , $(MAKE) ,g' '$(1)/Makefile'
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
         CBDIR='$(1)' \

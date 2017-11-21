@@ -8,15 +8,16 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftp.eq.uc.pt/software/math/netlib/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc cblas
+$(PKG)_DEPS     := gcc openblas
+
+$(PKG)_MESSAGE  :=*** lapack has been replaced by openblas ***
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.netlib.org/lapack/' | \
-    $(SED) -n 's_.*>LAPACK, version \([0-9]\.[0-9]\.[0-9]\).*_\1_ip' | \
-    head -1
+    echo 'Warning: lapack has been replaced by openblas' >&2;
+    echo $(lapack_VERSION)
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_DISABLED_BUILD
     cd '$(1)' && '$(TARGET)-cmake' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
