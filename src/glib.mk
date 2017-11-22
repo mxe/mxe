@@ -30,6 +30,7 @@ endef
 
 define $(PKG)_BUILD_NATIVE
     # native build for glib-tools
+    cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-regex \
