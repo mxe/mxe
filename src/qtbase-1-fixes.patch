@@ -1,6 +1,6 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From dc63e2c9b8d03b631d04faa0505ebee59a594d98 Mon Sep 17 00:00:00 2001
+From 175468257ac65fc97370330d25b014c50642f572 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
 Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
@@ -15,7 +15,7 @@ diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/featu
 index 55c74aad66..d7bcffeb9c 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -224,13 +224,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -224,12 +224,12 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      endif()
  !!ENDIF
  
@@ -25,18 +25,17 @@ index 55c74aad66..d7bcffeb9c 100644
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
      add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
- !!ELSE
+-!!ELSE
 -!!IF equals(TEMPLATE, aux)
 -    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
--!!ELSE
+ !!ELSE
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
- !!ENDIF
 -- 
-2.11.0
+2.14.1
 
 
-From 697c74a0dfc3ed83e002ddb28bbd3d654f9a4ebf Mon Sep 17 00:00:00 2001
+From 5739bd00432dba348b6a598a525390566b061c3f Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
 Subject: [PATCH 2/6] Fix pkgconfig file and library naming
@@ -102,10 +101,10 @@ index 36f632e8ca..b07085ac42 100644
 -
 -TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
 -- 
-2.11.0
+2.14.1
 
 
-From 703f33010fce0ab7abe90e4a51c6685121649ad3 Mon Sep 17 00:00:00 2001
+From 9701b36a23339705ae8d4d936a0cb210c41aac02 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
 Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
@@ -142,10 +141,10 @@ index ca33689cd7..194523eee0 100644
          m_fontDatabase = new QWinRTFontDatabase;
  #elif defined(Q_OS_WIN)
 -- 
-2.11.0
+2.14.1
 
 
-From ac2d89921b37f58d304e82b64784446190f61f9b Mon Sep 17 00:00:00 2001
+From f4a3e4168f52bac9a7db7ac9c539d52a986ce34b Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
 Subject: [PATCH 4/6] fix treatment of SYBASE_LIBS
@@ -166,10 +165,10 @@ index b69b51b679..d37423adbd 100644
      }
      return(true)
 -- 
-2.11.0
+2.14.1
 
 
-From b3f30dd89e8fe9bd2d26c60d11e03a5d68e2a479 Mon Sep 17 00:00:00 2001
+From 973a39266b682f248588a388e136ea7239339ac3 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
 Subject: [PATCH 5/6] use pkg-config for harfbuzz
@@ -191,10 +190,10 @@ index cf9753ba21..4061920b8d 100644
          },
          "imf": {
 -- 
-2.11.0
+2.14.1
 
 
-From 3699942ab30b6b0da29ee6ddddfeda0432f48faa Mon Sep 17 00:00:00 2001
+From 677fbc1c2f68e4b73bff065620a73078191c5a70 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 7 Oct 2017 11:39:29 +0200
 Subject: [PATCH 6/6] Revert "qmake: don't limit command line length when not
@@ -222,10 +221,10 @@ index 185afaaa49..20a2a6fab0 100644
  QMAKE_EXTENSION_SHLIB   = dll
  QMAKE_PREFIX_STATICLIB  = lib
 diff --git a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
-index bad53dc5b7..c3b876531c 100644
+index 792ffb1997..3300232689 100644
 --- a/qmake/generators/win32/mingw_make.cpp
 +++ b/qmake/generators/win32/mingw_make.cpp
-@@ -285,8 +285,7 @@ void MingwMakefileGenerator::writeLibsPart(QTextStream &t)
+@@ -279,8 +279,7 @@ void MingwMakefileGenerator::writeLibsPart(QTextStream &t)
  
  void MingwMakefileGenerator::writeObjectsPart(QTextStream &t)
  {
@@ -236,5 +235,5 @@ index bad53dc5b7..c3b876531c 100644
      } else if (project->isActiveConfig("staticlib") && project->first("TEMPLATE") == "lib") {
          QString ar_script_file = var("QMAKE_LINK_OBJECT_SCRIPT") + "." + var("TARGET");
 -- 
-2.11.0
+2.14.1
 
