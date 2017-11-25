@@ -428,6 +428,8 @@ MXE_REQS_PKGS   =
 VIRTUAL_PKG_TYPES := archive meta
 # used in deps rules and build-pkg
 BUILD_PKG_TYPES := meta
+# used to avoid unpacking archives when $(PKG)_FILE can't be unset
+SCRIPT_PKG_TYPES := script
 
 # all pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
 MXE_CONF_PKGS := mxe-conf
@@ -753,7 +755,8 @@ build-only-$(1)_$(3):
 	    mkdir -p '$(2)/readonly'
 	    chmod 0555 '$(2)/readonly'
 
-	    $$(if $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
+	    $$(if $(and $(value $(call LOOKUP_PKG_RULE,$(1),FILE,$(3))),\
+	                $(call not,$(filter $(SCRIPT_PKG_TYPES),$($(PKG)_TYPE)))),\
 	        $$(call PREPARE_PKG_SOURCE,$(1),$(2)))
 	    $$(call $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3)),$(2)/$($(1)_SUBDIR))
 	    @echo
