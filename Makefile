@@ -418,6 +418,9 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 #   - downloads and `build-pkg` use both explicit and implicit deps
 #   - don't depend on `disabled` rules but do depend on virtual pkgs
 
+# cross libraries depend on virtual toolchain package, variable used
+# in `cleanup-deps-style` rule below
+CROSS_COMPILER := cc
 MXE_REQS_PKGS   =
 
 # distinguish between deliberately empty rules and disabled ones
@@ -884,9 +887,9 @@ cleanup-style:
 cleanup-deps-style:
 	@grep '(PKG)_DEPS.*\\' $(foreach 1,$(PKGS),$(PKG_MAKEFILES)) > $(TOP_DIR)/tmp-$@-pre
 	@$(foreach PKG,$(PKGS), \
-	    $(if $(call lne,$(sort $(filter-out gcc,$($(PKG)_DEPS))),$(filter-out gcc,$($(PKG)_DEPS))), \
+	    $(if $(call lne,$(sort $(filter-out $(CROSS_COMPILER),$($(PKG)_DEPS))),$(filter-out $(CROSS_COMPILER),$($(PKG)_DEPS))), \
 	        $(info [cleanup] $(PKG)) \
-	        $(SED) -i 's/^\([^ ]*_DEPS *:=\)[^$$]*$$/\1 '"$(strip $(filter gcc,$($(PKG)_DEPS)) $(sort $(filter-out gcc,$($(PKG)_DEPS))))"'/' '$(call PKG_MAKEFILES,$(PKG))'; \
+	        $(SED) -i 's/^\([^ ]*_DEPS *:=\)[^$$]*$$/\1 '"$(strip $(filter $(CROSS_COMPILER),$($(PKG)_DEPS)) $(sort $(filter-out $(CROSS_COMPILER),$($(PKG)_DEPS))))"'/' '$(call PKG_MAKEFILES,$(PKG))'; \
 	    ))
 	@grep '(PKG)_DEPS.*\\' $(foreach 1,$(PKGS),$(PKG_MAKEFILES)) > $(TOP_DIR)/tmp-$@-post
 	@diff -u $(TOP_DIR)/tmp-$@-pre $(TOP_DIR)/tmp-$@-post >/dev/null \

@@ -28,7 +28,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := %(version)s
 $(PKG)_CHECKSUM := %(checksum)s
 %(file_specs)s
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 %(update)s
 define $(PKG)_BUILD
     %(build)s
