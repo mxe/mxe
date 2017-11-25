@@ -416,21 +416,24 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 	@rm -f '$(PREFIX)/installed/print-git-oneline-'*
 	@touch '$@'
 
+# distinguish between deliberately empty rules and disabled ones
+VIRTUAL_PKG_TYPES := archive meta
+
 # include files from MXE_PLUGIN_DIRS, set base filenames and `all-<plugin>` target
 PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
-PLUGIN_PKGS  := $(basename $(notdir $(PLUGIN_FILES)))
+PKGS         := $(sort $(basename $(notdir $(PLUGIN_FILES))))
 $(foreach FILE,$(PLUGIN_FILES),\
     $(eval $(basename $(notdir $(FILE)))_MAKEFILE  ?= $(FILE)) \
     $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(wildcard $(basename $(FILE))-test.*)) \
     $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE)))))
 include $(PLUGIN_FILES)
-PKGS := $(sort $(MXE_CONF_PKGS) $(PLUGIN_PKGS))
 
 # create target sets for PKG_TARGET_RULE loop to avoid creating empty rules
 # and having to explicitly disable $(BUILD) for most packages
 CROSS_TARGETS := $(filter-out $(BUILD),$(MXE_TARGETS))
 $(foreach PKG,$(PKGS), \
-    $(foreach TARGET,$(or $(sort $($(PKG)_TARGETS)),$(CROSS_TARGETS)), \
+    $(if $($(PKG)_TARGETS),,$(eval $(PKG)_TARGETS := $(CROSS_TARGETS))) \
+    $(foreach TARGET,$($(PKG)_TARGETS), \
         $(eval $(TARGET)_PKGS += $(PKG)) \
         $(eval FILTERED_PKGS  += $(PKG))))
 
@@ -526,6 +529,7 @@ download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
 # or dependencies (see bfd/binutils openscenegraph/openthreads qwt/qwt_qt4).
 # Use a double-colon rule to allow multiple definitions:
 # https://www.gnu.org/software/make/manual/html_node/Double_002dColon.html
+.PHONY: download-only-$($(1)_FILE)
 download-only-$(1): download-only-$($(1)_FILE)
 download-only-$($(1)_FILE)::
 	$(and $($(1)_URL),
@@ -576,7 +580,7 @@ endif
 
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
 	@echo '[build nonetwork lib]'
-	@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
+	+@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
 
 .PHONY: shell
 shell: $(NONET_LIB)
@@ -597,33 +601,42 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           $(NONET_LIB) \
                           $(PREFIX)/$(3)/installed/.gitkeep \
                           print-git-oneline
-	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
-	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
-	    @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)' | $(RTRIM)
-	,
-	    @$(PRINTF_FMT) '[no-build]' '$(1)' '$(3)' | $(RTRIM)
-	)
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3))),
 	    @$(PRINTF_FMT) '[message]'  '$(1)' '$(3) $($(call LOOKUP_PKG_RULE,$(1),MESSAGE,$(3)))' \
 	    | $(RTRIM)
 	)
-	@touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
-	@ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	@if ! (time $(PRELOAD) WINEPREFIX='$(2)/readonly' $(MAKE) -f '$(MAKEFILE)' 'build-only-$(1)_$(3)' WGET=false) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
-	    echo; \
-	    echo 'Failed to build package $(1) for target $(3)!'; \
-	    echo '------------------------------------------------------------'; \
-	    $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
-	        tail -n 10 '$(LOG_DIR)/$(1)_$(3)' | $(SED) -n '/./p';, \
-	        $(SED) -n '/./p' '$(LOG_DIR)/$(1)_$(3)';) \
-	    echo '------------------------------------------------------------'; \
-	    echo '[log]      $(LOG_DIR)/$(1)_$(3)'; \
-	    echo; \
-	    exit 1; \
-	fi
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
-	    @$(PRINTF_FMT) '[done]' '$(1)' '$(3)' "`grep -a '^du:.*KiB$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | cut -d ':' -f2 | tail -1`" \
-	                                          "`grep -a '^real.*m.*s$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | tr '\t' ' ' | cut -d ' ' -f2 | tail -1`")
+	    $(if $(BUILD_DRY_RUN), \
+	        @$(PRINTF_FMT) '[dry-run]' '$(1)' '$(3)' | $(RTRIM)
+	        @touch '$(PREFIX)/$(3)/installed/$(1)'
+	    $(else),
+	        @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)' | $(RTRIM)
+	        @[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
+	        @touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
+	        @ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
+	        @if ! (time $(PRELOAD) WINEPREFIX='$(2)/readonly' \
+	               $(MAKE) -f '$(MAKEFILE)' \
+	                   'build-only-$(1)_$(3)' \
+	                   WGET=false \
+	               ) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	            echo; \
+	            echo 'Failed to build package $(1) for target $(3)!'; \
+	            echo '------------------------------------------------------------'; \
+	            $(if $(findstring undefined, $(origin MXE_VERBOSE)),\
+	                tail -n 10 '$(LOG_DIR)/$(1)_$(3)' | $(SED) -n '/./p';, \
+	                $(SED) -n '/./p' '$(LOG_DIR)/$(1)_$(3)';) \
+	            echo '------------------------------------------------------------'; \
+	            echo '[log]      $(LOG_DIR)/$(1)_$(3)'; \
+	            echo; \
+	            exit 1; \
+	        fi
+	        @$(PRINTF_FMT) '[done]' '$(1)' '$(3)' "`grep -a '^du:.*KiB$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | cut -d ':' -f2 | tail -1`" \
+	                                          "`grep -a '^real.*m.*s$$\' '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)' | tr '\t' ' ' | cut -d ' ' -f2 | tail -1`"
+	    )
+	$(else),
+	    @$(PRINTF_FMT) '[$(or $($(PKG)_TYPE),disabled)]' '$(1)' '$(3)' | $(RTRIM)
+	    @touch '$(PREFIX)/$(3)/installed/$(1)'
+	)
 
 
 .PHONY: build-only-$(1)_$(3)
@@ -867,29 +880,41 @@ docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 #     $(eval $(VIRTUAL_PKGCOUNT += x))
 # vs
 #     $(eval $(VIRTUAL_PKGCOUNT := $(call int_inc,$(VIRTUAL_PKGCOUNT))))
-	@$(foreach PKG,$(PKGS),                      \
-	    $(eval $(PKG)_VIRTUAL := $(true))        \
-	    $(eval $(PKG)_BUILD_ONLY := $(true))     \
-	    echo -e '<tr>\n                          \
-	        <th class="row">$(PKG)</th>\n        \
-	        <td>$(call substr,$($(PKG)_VERSION),1,12)$(if $(call gt,$(call strlen,$($(PKG)_VERSION)),12),&hellip;)</td>\n\
-	    $(foreach TARGET,$(MXE_TARGET_LIST),     \
-	        $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
-	            $(eval $(TARGET)_PKGCOUNT += x) \
-	            $(eval $(PKG)_VIRTUAL := $(false)) \
-	            $(eval $(PKG)_BUILD_ONLY := $(false)) \
-	            <td class="supported">&#x2713;</td>,            \
-	            <td class="unsupported">&#x2717;</td>)\n)       \
-	    $(if $(and $(call set_is_member,$(PKG),$($(BUILD)_PKGS)), \
-	               $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD)))), \
-	        $(eval $(PKG)_VIRTUAL := $(false))   \
-	        <td class="supported">&#x2713;</td>, \
-	        <td class="unsupported">&#x2717;</td>)\n \
-	        </tr>\n' >> $@ $(newline)            \
-	    $(if $($(PKG)_VIRTUAL),                  \
-	       $(eval VIRTUAL_PKGCOUNT += x) \
-	        $(eval $(PKG)_BUILD_ONLY := $(false))) \
-	    $(if $($(PKG)_BUILD_ONLY),               \
+	@$(foreach PKG,$(PKGS), \
+	    $(eval $(PKG)_VIRTUAL := $(true)) \
+	    $(eval $(PKG)_BUILD_ONLY := $(true)) \
+	    echo -e '<tr>\n \
+	        <th class="row" \
+	            title="$($(PKG)_MESSAGE)"> \
+	            $(PKG) \
+	            $(if $($(PKG)_TYPE), [$($(PKG)_TYPE)-pkg]) \
+	            $(if $($(PKG)_MESSAGE), **)\
+	        </th>\n \
+	        <td>$(call substr,$($(PKG)_VERSION),1,12) \
+	            $(if $(call gt,$(call strlen,$($(PKG)_VERSION)),12),&hellip;)</td>\n\
+	    $(foreach TARGET,$(MXE_TARGET_LIST), \
+	        $(if $(filter $(VIRTUAL_PKG_TYPES),$($(PKG)_TYPE)), \
+	            $(if $(filter $(TARGET),$($(PKG)_TARGETS)), \
+	                <td class="neutral">&bull;</td>, \
+	                <td></td>), \
+	            $(if $(filter $(TARGET),$($(PKG)_TARGETS)), \
+	                $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
+	                    $(eval $(TARGET)_PKGCOUNT += x) \
+	                    <td class="supported">&#x2713;</td>, \
+	                    <td class="unsupported">&#x2717;</td>),\
+	                	<td></td>))\n) \
+	    $(if $(filter $(VIRTUAL_PKG_TYPES),$($(PKG)_TYPE)), \
+	        $(eval VIRTUAL_PKGCOUNT += x) \
+	        $(if $(filter $(BUILD),$($(PKG)_TARGETS)), \
+	            <td class="neutral">&bull;</td>, \
+	            <td></td>), \
+	        $(if $(filter $(BUILD),$($(PKG)_TARGETS)), \
+	            $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD))), \
+	                <td class="supported">&#x2713;</td>, \
+	                <td class="unsupported">&#x2717;</td>), \
+	                <td></td>))\n \
+	        </tr>\n' >> $@ $(newline) \
+	    $(if $(call seq,$(BUILD),$($(PKG)_TARGETS)), \
 	        $(eval BUILD_ONLY_PKGCOUNT += x)))
 	@echo '<tr>'                            >> $@
 	@echo '<th class="row" colspan="2">'    >> $@
