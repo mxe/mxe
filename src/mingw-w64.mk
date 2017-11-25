@@ -9,6 +9,7 @@ $(PKG)_CHECKSUM := 2a601db99ef579b9be69c775218ad956a24a09d7dabc9ff6c5bd60da9ccc9
 $(PKG)_SUBDIR   := $(PKG)-v$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-v$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-release/$($(PKG)_FILE)
+$(PKG)_TYPE     := archive
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
