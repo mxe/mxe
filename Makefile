@@ -595,6 +595,9 @@ $(eval $(PKG)_PATCHES := $(PKG_PATCHES))
 # or dependencies (see bfd/binutils openscenegraph/openthreads qwt/qwt_qt4).
 # Use a double-colon rule to allow multiple definitions:
 # https://www.gnu.org/software/make/manual/html_node/Double_002dColon.html
+# N.B. the `::` rule will use values from first lexical definition e.g.:
+# $ make download-only-binutils
+# [download]  bfd
 .PHONY: download-only-$($(1)_FILE)
 download-only-$(1): download-only-$($(1)_FILE)
 download-only-$($(1)_FILE)::
@@ -602,7 +605,7 @@ download-only-$($(1)_FILE)::
 	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@$$(if $$(REMOVE_DOWNLOAD),rm -f '$(PKG_DIR)/$($(1)_FILE)')
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
-	    $(PRINTF_FMT) '[download]' '$(1)' | $(RTRIM); \
+	    $(PRINTF_FMT) '[download]' '$($(1)_FILE)' | $(RTRIM); \
 	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    grep 'MXE Warning' '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
