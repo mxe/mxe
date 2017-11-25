@@ -15,20 +15,6 @@ define $(PKG)_BUILD
     # install target-specific autotools config file
     # setting ac_cv_build bypasses the config.guess check in every package
     echo "ac_cv_build=$(BUILD)" > '$(PREFIX)/$(TARGET)/share/config.site'
-
-    # create pkg-config files for OpenGL/GLU
-    mkdir -p '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    (echo 'Name: gl'; \
-     echo 'Version: 0'; \
-     echo 'Description: OpenGL'; \
-     echo 'Libs: -lopengl32';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/gl.pc'
-    (echo 'Name: glu'; \
-     echo 'Version: 0'; \
-     echo 'Description: OpenGL'; \
-     echo 'Libs: -lglu32';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/glu.pc'
-
 endef
 
 define $(PKG)_BUILD_$(BUILD)
