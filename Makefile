@@ -424,7 +424,10 @@ CROSS_COMPILER := cc
 MXE_REQS_PKGS   =
 
 # distinguish between deliberately empty rules and disabled ones
+# used in build-matrix
 VIRTUAL_PKG_TYPES := archive meta
+# used in deps rules and build-pkg
+BUILD_PKG_TYPES := meta
 
 # all pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
 MXE_CONF_PKGS := mxe-conf
@@ -453,11 +456,11 @@ PKG_DEPS = \
     $(foreach DEP,$(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET))), \
         $(if $(filter $(DEP),$(PKGS)), \
             $(if $(or $(value $(call LOOKUP_PKG_RULE,$(DEP),BUILD,$(TARGET))), \
-                      $(filter $($(DEP)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+                      $(filter $($(DEP)_TYPE),$(BUILD_PKG_TYPES))), \
                 $(TARGET)/installed/$(DEP)) \
         $(else), \
             $(if $(or $(value $(call LOOKUP_PKG_RULE,$($(DEP)_PKG),BUILD,$($(DEP)_TGT))), \
-                      $(filter $($($(DEP)_PKG)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+                      $(filter $($($(DEP)_PKG)_TYPE),$(BUILD_PKG_TYPES))), \
                 $($(DEP)_TGT)/installed/$($(DEP)_PKG))))
 
 # order-only package deps unlikely to need target lookup
@@ -465,11 +468,11 @@ PKG_OO_DEPS = \
     $(foreach DEP,$($(PKG)_OO_DEPS), \
         $(if $(filter $(DEP),$(PKGS)), \
             $(if $(or $(value $(call LOOKUP_PKG_RULE,$(DEP),BUILD,$(TARGET))), \
-                      $(filter $($(DEP)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+                      $(filter $($(DEP)_TYPE),$(BUILD_PKG_TYPES))), \
                 $(TARGET)/installed/$(DEP)) \
         $(else), \
             $(if $(or $(value $(call LOOKUP_PKG_RULE,$($(DEP)_PKG),BUILD,$($(DEP)_TGT))), \
-                      $(filter $($($(DEP)_PKG)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+                      $(filter $($($(DEP)_PKG)_TYPE),$(BUILD_PKG_TYPES))), \
                 $($(DEP)_TGT)/installed/$($(DEP)_PKG))))
 
 # all deps for download rule
@@ -702,7 +705,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    )
 	$(else),
 	    @$(PRINTF_FMT) '[$(or $($(PKG)_TYPE),disabled)]' '$(1)' '$(3)' | $(RTRIM)
-	    $(if $(filter $($(PKG)_TYPE),$(VIRTUAL_PKG_TYPES)),@touch '$(PREFIX)/$(3)/installed/$(1)')
+	    $(if $(filter $($(PKG)_TYPE),$(BUILD_PKG_TYPES)),@touch '$(PREFIX)/$(3)/installed/$(1)')
 	)
 
 
@@ -840,7 +843,7 @@ print-deps-for-build-pkg:
 	$(foreach TARGET,$(sort $(MXE_TARGETS)), \
 	    $(foreach PKG,$(sort $($(TARGET)_PKGS)), \
 	        $(if $(or $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
-	                  $(filter $($(PKG)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+	                  $(filter $($(PKG)_TYPE),$(BUILD_PKG_TYPES))), \
 	            $(info $(strip for-build-pkg $(TARGET)~$(PKG) \
 	            $(subst $(space),-,$($(PKG)_VERSION)) \
 	            $(subst /installed/,~,$(PKG_DEPS) $(PKG_OO_DEPS)))))))
