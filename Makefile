@@ -62,11 +62,6 @@ STRIP_TOOLCHAIN := $(true)
 STRIP_LIB       := $(false)
 STRIP_EXE       := $(true)
 
-# All pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
-# These aren't meaningful to the pkg list in http://mxe.cc/#packages so
-# use a list in case we want to separate autotools, cmake etc.
-MXE_CONF_PKGS := cmake-conf mxe-conf
-
 # define some whitespace variables
 define newline
 
@@ -416,8 +411,71 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 	@rm -f '$(PREFIX)/installed/print-git-oneline-'*
 	@touch '$@'
 
+# Common dependency lists for `make` prerequisites and `build-pkg`
+#   - `make` considers only explicit normal deps to trigger rebuilds
+#   - packages can add themselves to implicit MXE_REQS_PKGS in the case
+#       of a tool like `patch` which may be outdated on some systems
+#   - downloads and `build-pkg` use both explicit and implicit deps
+#   - don't depend on `disabled` rules but do depend on virtual pkgs
+
+MXE_REQS_PKGS   =
+
 # distinguish between deliberately empty rules and disabled ones
 VIRTUAL_PKG_TYPES := archive meta
+
+# all pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
+MXE_CONF_PKGS := mxe-conf
+
+# autotools/cmake are generally always required, but separate them
+# for the case of `make gcc` which should only build real deps.
+AUTOTOOLS_PKGS := $(filter-out $(MXE_CONF_PKGS) $(BUILD)~autotools, \
+    $(sort $(basename $(notdir \
+        $(shell grep -l 'auto[conf\|reconf\|gen\|make]\|aclocal\|LIBTOOL' \
+                $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS)))))))
+
+CMAKE_PKGS := $(filter-out $(MXE_CONF_PKGS) cmake-conf cmake, \
+    $(sort $(basename $(notdir \
+        $(shell grep -l '(TARGET)-cmake' \
+                $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS)))))))
+
+# all other packages should list their deps explicitly, if tools become
+# universally used, we can add them to the toolchain deps (e.g. pkgconf)
+# or add new implicit `${TOOL}_PKGS` rules
+
+# $(PKG) and $(TARGET) are in scope from the calling loop so reference
+# variables by name instead of position
+
+# explicit normal package deps
+PKG_DEPS = \
+    $(foreach DEP,$(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET))), \
+        $(if $(filter $(DEP),$(PKGS)), \
+            $(if $(or $(value $(call LOOKUP_PKG_RULE,$(DEP),BUILD,$(TARGET))), \
+                      $(filter $($(DEP)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+                $(TARGET)/installed/$(DEP)) \
+        $(else), \
+            $(if $(or $(value $(call LOOKUP_PKG_RULE,$($(DEP)_PKG),BUILD,$($(DEP)_TGT))), \
+                      $(filter $($($(DEP)_PKG)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+                $($(DEP)_TGT)/installed/$($(DEP)_PKG))))
+
+# order-only package deps unlikely to need target lookup
+PKG_OO_DEPS = \
+    $(foreach DEP,$($(PKG)_OO_DEPS), \
+        $(if $(filter $(DEP),$(PKGS)), \
+            $(if $(or $(value $(call LOOKUP_PKG_RULE,$(DEP),BUILD,$(TARGET))), \
+                      $(filter $($(DEP)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+                $(TARGET)/installed/$(DEP)) \
+        $(else), \
+            $(if $(or $(value $(call LOOKUP_PKG_RULE,$($(DEP)_PKG),BUILD,$($(DEP)_TGT))), \
+                      $(filter $($($(DEP)_PKG)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+                $($(DEP)_TGT)/installed/$($(DEP)_PKG))))
+
+# all deps for download rule
+PKG_ALL_DEPS = \
+    $(foreach DEP,$($(PKG)_OO_DEPS) $(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET))), \
+        $(if $(filter $(DEP),$(PKGS)), \
+            $(TARGET)~$(DEP), \
+            $(DEP)))
+
 
 # include files from MXE_PLUGIN_DIRS, set base filenames and `all-<plugin>` target
 PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
@@ -430,16 +488,19 @@ include $(PLUGIN_FILES)
 
 # create target sets for PKG_TARGET_RULE loop to avoid creating empty rules
 # and having to explicitly disable $(BUILD) for most packages
+# add autotools, cmake, mxe-conf implicit order-only deps
 CROSS_TARGETS := $(filter-out $(BUILD),$(MXE_TARGETS))
 $(foreach PKG,$(PKGS), \
+    $(if $(filter $(PKG),$(filter-out $(autotools_DEPS),$(AUTOTOOLS_PKGS))),\
+        $(eval $(PKG)_OO_DEPS += $(BUILD)~autotools)) \
+    $(if $(filter $(PKG),$(CMAKE_PKGS)),$(eval $(PKG)_OO_DEPS += cmake-conf)) \
+    $(if $(filter $(PKG),$(MXE_CONF_PKGS)),,$(eval $(PKG)_OO_DEPS += mxe-conf)) \
     $(if $($(PKG)_TARGETS),,$(eval $(PKG)_TARGETS := $(CROSS_TARGETS))) \
     $(foreach TARGET,$($(PKG)_TARGETS), \
+        $(eval $(TARGET)~$(PKG)_PKG := $(PKG)) \
+        $(eval $(TARGET)~$(PKG)_TGT := $(TARGET)) \
         $(eval $(TARGET)_PKGS += $(PKG)) \
         $(eval FILTERED_PKGS  += $(PKG))))
-
-# cross targets depend on native target
-$(foreach TARGET,$(CROSS_TARGETS),\
-    $(eval $(TARGET)_DEPS = $(BUILD)))
 
 # always add $(BUILD) to our targets
 override MXE_TARGETS := $(CROSS_TARGETS) $(BUILD)
@@ -521,9 +582,6 @@ define PKG_RULE
 $(if $($(PKG)_GH_CONF),$(eval $(MXE_SETUP_GITHUB)))
 $(eval $(PKG)_PATCHES := $(PKG_PATCHES))
 
-.PHONY: download-$(1)
-download-$(1): $(addprefix download-,$($(1)_DEPS)) download-only-$(1)
-
 .PHONY: download-only-$(1)
 # Packages can share a source archive to build different sets of features
 # or dependencies (see bfd/binutils openscenegraph/openthreads qwt/qwt_qt4).
@@ -587,17 +645,23 @@ shell: $(NONET_LIB)
 	$(PRELOAD) $(SHELL)
 
 define PKG_TARGET_RULE
+.PHONY: download-$(1)
+download-$(1): download-$(3)~$(1) download-only-$(1)
+
+.PHONY: download-$(3)~$(1)
+download-$(3)~$(1): download-only-$(1) \
+                    $(addprefix download-,$(PKG_ALL_DEPS))
+
 .PHONY: $(1)
 $(1): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           $($(PKG)_PATCHES) \
                           $(PKG_TESTFILES) \
                           $($(1)_FILE_DEPS) \
-                          $(addprefix $(PREFIX)/$(3)/installed/,$(value $(call LOOKUP_PKG_RULE,$(1),DEPS,$(3)))) \
-                          $(and $($(3)_DEPS),$(addprefix $(PREFIX)/$($(3)_DEPS)/installed/,$(filter-out $(MXE_CONF_PKGS),$($($(3)_DEPS)_PKGS)))) \
+                          $(addprefix $(PREFIX)/,$(PKG_DEPS)) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
                           $(if $(value $(call LOOKUP_PKG_RULE,$(1),URL,$(3))),download-only-$(1)) \
-                          $(addprefix $(PREFIX)/$(3)/installed/,$(if $(call set_is_not_member,$(1),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS))) \
+                          $(addprefix $(PREFIX)/,$(PKG_OO_DEPS)) \
                           $(NONET_LIB) \
                           $(PREFIX)/$(3)/installed/.gitkeep \
                           print-git-oneline
@@ -635,7 +699,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    )
 	$(else),
 	    @$(PRINTF_FMT) '[$(or $($(PKG)_TYPE),disabled)]' '$(1)' '$(3)' | $(RTRIM)
-	    @touch '$(PREFIX)/$(3)/installed/$(1)'
+	    $(if $(filter $($(PKG)_TYPE),$(VIRTUAL_PKG_TYPES)),@touch '$(PREFIX)/$(3)/installed/$(1)')
 	)
 
 
@@ -772,12 +836,12 @@ show-upstream-deps-%:
 print-deps-for-build-pkg:
 	$(foreach TARGET,$(sort $(MXE_TARGETS)), \
 	    $(foreach PKG,$(sort $($(TARGET)_PKGS)), \
-	        $(info $(strip for-build-pkg $(TARGET)~$(PKG) \
-	        $(subst $(space),-,$($(PKG)_VERSION)) \
-	        $(addprefix $(TARGET)~,$(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET)))) \
-	        $(addprefix $(TARGET)~,$(if $(call set_is_not_member,$(PKG),$(MXE_CONF_PKGS)),$(MXE_CONF_PKGS))) \
-	        $(and $($(TARGET)_DEPS),$(addprefix $($(TARGET)_DEPS)~,$($($(TARGET)_DEPS)_PKGS)))))))
-	        @echo -n
+	        $(if $(or $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
+	                  $(filter $($(PKG)_TYPE),$(VIRTUAL_PKG_TYPES))), \
+	            $(info $(strip for-build-pkg $(TARGET)~$(PKG) \
+	            $(subst $(space),-,$($(PKG)_VERSION)) \
+	            $(subst /installed/,~,$(PKG_DEPS) $(PKG_OO_DEPS)))))))
+	            @echo -n
 
 BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
 
