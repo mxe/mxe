@@ -707,7 +707,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    )
 	$(else),
 	    @$(PRINTF_FMT) '[$(or $($(PKG)_TYPE),disabled)]' '$(1)' '$(3)' | $(RTRIM)
-	    $(if $(filter $($(PKG)_TYPE),$(BUILD_PKG_TYPES)),@touch '$(PREFIX)/$(3)/installed/$(1)')
+	    @touch '$(PREFIX)/$(3)/installed/$(1)'
 	)
 
 
