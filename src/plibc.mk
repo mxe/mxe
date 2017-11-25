@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 1e939804e173b8f789e1403964211835b8006253d0a541d55256b540639b0
 $(PKG)_SUBDIR   := mirror-plibc-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/plibc/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 $(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, mirror/plibc, master)
 

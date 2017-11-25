@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 0daa0a15a3a2b6a8c9459744e4a25f7a26fdae0e9e406e0ac0809c3fbbacf
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := lzma$(subst .,,$($(PKG)_VERSION)).7z
 $(PKG)_URL      := http://www.7-zip.org/a/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 

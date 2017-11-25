@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b05
 $(PKG)_SUBDIR   := $(PKG)-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/5.9/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc qtbase qtmultimedia qtquickcontrols sqlite
+$(PKG)_DEPS     := cc qtbase qtmultimedia qtquickcontrols sqlite
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

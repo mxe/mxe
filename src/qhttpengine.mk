@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 6df0e2f303eb5fb80995e0322903c2991b398a0b89fb483dae7c24bdefa1e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/nitroshare/qhttpengine/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc qtbase
+$(PKG)_DEPS     := cc qtbase
 
 define $(PKG)_BUILD
     mkdir '$(1)/build'

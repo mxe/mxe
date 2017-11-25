@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 0a7eb168e2f21353fb6d84da152e4512126f7dc48ccb0be80578c56541344
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.mega-nerd.com/SRC/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.mega-nerd.com/SRC/download.html' | \

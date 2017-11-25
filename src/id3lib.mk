@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2749cc3c0cd7280b299518b1ddf5a5bcfe2d1100614519b68702230e26c7d
 $(PKG)_SUBDIR   := id3lib-$($(PKG)_VERSION)
 $(PKG)_FILE     := id3lib-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/id3lib/files/id3lib/' | \

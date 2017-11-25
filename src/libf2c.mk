@@ -11,7 +11,7 @@ $(PKG)_URL      := http://www.netlib.org/f2c/$($(PKG)_FILE)
 # $(PKG)_URL_2 was disabled in https://github.com/mxe/mxe/issues/1719
 # because it has old version of the file.
 # $(PKG)_URL_2    := http://netlib.sandia.gov/f2c/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     echo 1

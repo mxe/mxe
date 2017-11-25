@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 054af8d62a7c158df62adc174a6a57610868470a07e7192ee7ce60a185528
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/emweb/wt/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc boost graphicsmagick libharu openssl pango postgresql qt sqlite
+$(PKG)_DEPS     := cc boost graphicsmagick libharu openssl pango postgresql qt sqlite
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_ALL_TAGS, emweb/wt) \

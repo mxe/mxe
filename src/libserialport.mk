@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 4a2af9d9c3ff488e92fb75b4ba38b35bcf9b8a66df04773eba2a7bbf1fa75
 $(PKG)_SUBDIR   := libserialport-$($(PKG)_VERSION)
 $(PKG)_FILE     := libserialport-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://sigrok.org/download/source/libserialport/libserialport-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(call GET_LATEST_VERSION, https://sigrok.org/download/source/libserialport)

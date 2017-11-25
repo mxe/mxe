@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := a940123baa6c71b75b6c02836bae2155cd2f74f7682e1a1d6f7b889f7bc9e
 $(PKG)_SUBDIR   := xxHash-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/Cyan4973/xxHash/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, Cyan4973/xxHash) | \

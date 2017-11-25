@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 5a24f62a610249d744cbd8d28ee399d8905db7222bf3bdbc8a8b4a76e5976
 $(PKG)_SUBDIR   := SDL2_mixer-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2_mixer-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libmodplug ogg sdl2 smpeg2 vorbis
+$(PKG)_DEPS     := cc libmodplug ogg sdl2 smpeg2 vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://hg.libsdl.org/SDL_mixer/tags' | \

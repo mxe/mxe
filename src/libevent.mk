@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.21
 $(PKG)_CHECKSUM := 872b7cdc199ead2edd9f0d1e93b4d900e67d892c014545bd3314b3ae49505eff
 $(PKG)_GH_CONF  := libevent/libevent/tags, release-, -stable
-$(PKG)_DEPS     := gcc openssl
+$(PKG)_DEPS     := cc openssl
 
 define $(PKG)_BUILD
     cd '$(1)' && ./autogen.sh && OPENSSL_LIBADD=-lz ./configure \

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 979a65b211744a44fa641a9b6e4d64e64a12ff703ae776bafe3c4c4cd8549
 $(PKG)_SUBDIR   := smpeg2-$($(PKG)_VERSION)
 $(PKG)_FILE     := smpeg2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.libsdl.org/projects/smpeg/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl2
+$(PKG)_DEPS     := cc sdl2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.libsdl.org/projects/smpeg/release' | \

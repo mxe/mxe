@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ef7d775d380f255d1902bce374ff7c8a594846454fcaeae552292168af1ac
 $(PKG)_SUBDIR   := BLAS-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openblas
+$(PKG)_DEPS     := cc openblas
 
 $(PKG)_MESSAGE  :=*** blas has been replaced by openblas ***
 

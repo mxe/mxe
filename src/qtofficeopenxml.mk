@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := b8b7a452df6aaa1322863f47c27b63b95f528af2c7a70a4baca975fc89d36
 $(PKG)_SUBDIR   := QtOfficeOpenXml-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/dbzhang800/QtOfficeOpenXml/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc qtbase
+$(PKG)_DEPS     := cc qtbase
 
 $(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, dbzhang800/QtOfficeOpenXml, master)
 

@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://webdav.org/$(PKG)/$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL_2    := https://fossies.org/linux/www/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc expat gettext openssl
+$(PKG)_DEPS     := cc expat gettext openssl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://webdav.org/$(PKG)/' | \

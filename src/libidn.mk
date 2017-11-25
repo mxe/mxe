@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
 $(PKG)_FILE     := libidn-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftpmirror.gnu.org/libidn/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gettext libiconv
+$(PKG)_DEPS     := cc gettext libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=libidn.git;a=tags' | \

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 7037cc465744bf2fa73aca9cea14d1207f040de5ea8073dc266b06a73b3db
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://pocoproject.org/releases/$(PKG)-$(word 1,$(subst p, ,$($(PKG)_VERSION)))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc expat openssl pcre sqlite zlib
+$(PKG)_DEPS     := cc expat openssl pcre sqlite zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://pocoproject.org/download/' | \

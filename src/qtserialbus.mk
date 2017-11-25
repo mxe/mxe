@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 3f594784d952dd40e6d7740cd6267a9259a877330cecd83feebef81f52003
 $(PKG)_SUBDIR    = $(subst qtbase,qtserialbus,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtserialbus,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtserialbus,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase qtserialport
+$(PKG)_DEPS     := cc qtbase qtserialport
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

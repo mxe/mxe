@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 556eedc06b6cf29eb495b6d27f2dcc51bf909ad82389ba2fa7bdc4dec8905
 $(PKG)_SUBDIR   := SDL_gfx-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_gfx-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.ferzkopp.net/Software/SDL_gfx-2.0/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl
+$(PKG)_DEPS     := cc sdl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.ferzkopp.net/joomla/content/view/19/14/' | \

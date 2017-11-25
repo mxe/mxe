@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2ad4f354746e8260d46036cde1496c223ec79765041ea28eb920ced015e26
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc qtbase zlib
+$(PKG)_DEPS     := cc qtbase zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/quazip/files/quazip/' | \

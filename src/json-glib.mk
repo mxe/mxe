@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 80f3593cb6bd13f1465828e46a9f740e2e9bd3cd2257889442b3e62bd6de0
 $(PKG)_SUBDIR   := json-glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := json-glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/json-glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib
+$(PKG)_DEPS     := cc glib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/json-glib/refs/tags' | \

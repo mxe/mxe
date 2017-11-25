@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := f67acdcfcde1f86757ff3553cd719f12eac2d7681a0e96d8bdd1f40a0f47b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$($(PKG)_NODOTVER)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dbus fontconfig freetype lcms libiconv libidn libjpeg-turbo libpaper libpng openjpeg tiff zlib
+$(PKG)_DEPS     := cc dbus fontconfig freetype lcms libiconv libidn libjpeg-turbo libpaper libpng openjpeg tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ghostscript.com/Releases.html' | \

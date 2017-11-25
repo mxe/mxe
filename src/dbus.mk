@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 272bb5091770b047c8188b926d5e6038fa4fe6745488b2add96b23e2d9a83
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc expat
+$(PKG)_DEPS     := cc expat
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cgit.freedesktop.org/dbus/dbus/refs/tags' | \

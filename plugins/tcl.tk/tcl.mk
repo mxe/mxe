@@ -2,4 +2,4 @@
 
 PKG             := tcl
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := cc zlib

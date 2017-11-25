@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 654c11f759c19237be39f6ad401d917e5a05f36f1736385ed958e60cf2145
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/$(PKG)/$(PKG)/releases/download/v$($(PKG)_VERSION)//$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc icu4c
+$(PKG)_DEPS     := cc icu4c
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, libical/libical, v)

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := d275b1b3622c36efacfac748d5eecaf0e80349a551f72abb6ce5afa8c2e6b
 $(PKG)_SUBDIR   := libssh-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://git.libssh.org/projects/libssh.git/snapshot/libssh-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc libgcrypt zlib
+$(PKG)_DEPS     := cc libgcrypt zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.libssh.org/projects/libssh.git/refs/tags' | \

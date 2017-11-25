@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.0
 $(PKG)_CHECKSUM := 2ca482ea7a9bb103603108b5a7510b7592b90158c151ff50a28f1ca8389fccf6
 $(PKG)_GH_CONF  := lz4/lz4/tags,v
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     # build and install the library

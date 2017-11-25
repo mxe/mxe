@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.2
 $(PKG)_CHECKSUM := ac5054a3c64e6510bc1ae890d05e3d271cc33ceebc9d06ac9f08105766d2798a
 $(PKG)_GH_CONF  := facebook/zstd/tags,v
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     # build and install the library

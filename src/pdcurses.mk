@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 46ad8fd439e71d44819ea884d775ccbf653b9f8b1f7a418a0cce3a510aa2e
 $(PKG)_SUBDIR   := PDCurses-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDCurses-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/pdcurses/pdcurses/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/pdcurses/files/pdcurses/' | \

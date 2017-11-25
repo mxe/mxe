@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := d3605afc28ed4b7d1d9e3142d72e42855e4a23c07c951bbb0299556b02d36
 $(PKG)_SUBDIR   := polarssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := polarssl-$($(PKG)_VERSION)-gpl.tgz
 $(PKG)_URL      := https://tls.mbed.org/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := cc zlib
 
 # Match lines like:
 # <a href="/tech-updates/releases/polarssl-1.3.4-released">PolarSSL 1.3.4 released</a></br>

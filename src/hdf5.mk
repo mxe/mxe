@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 6d080f913a226a3ce390a11d9b571b2d5866581a2aa4434c398cd371c7063
 $(PKG)_SUBDIR   := hdf5-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf5-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(call SHORT_PKG_VERSION,$(PKG))/hdf5-$($(PKG)_VERSION)/src/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads zlib
+$(PKG)_DEPS     := cc pthreads zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.hdfgroup.org/ftp/HDF5/current/src/' | \

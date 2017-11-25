@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := apr-util-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-util-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://archive.apache.org/dist/apr/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://mirror.apache-kr.org/apr/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc apr expat libiconv
+$(PKG)_DEPS     := cc apr expat libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://apr.apache.org/download.cgi' | \

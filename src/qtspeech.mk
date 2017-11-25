@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 79159e1a9502ccb67145e0f6bdc43e3c2248835ff22be04a10c18db15a845
 $(PKG)_SUBDIR    = $(subst qtbase,qtspeech,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtspeech,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtspeech,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase
+$(PKG)_DEPS     := cc qtbase
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

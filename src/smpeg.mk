@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 1276ea797dd9fde8a12dd3f33f180153922544c28ca9fc7b477c018876be1
 $(PKG)_SUBDIR   := smpeg-$($(PKG)_VERSION).orig
 $(PKG)_FILE     := smpeg_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_URL      := http://ftp.debian.org/debian/pool/main/s/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl
+$(PKG)_DEPS     := cc sdl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://packages.debian.org/unstable/source/smpeg' | \

@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.4.0
 $(PKG)_CHECKSUM := a2d754b7349982e33f12d798780316c047a3b264240dc6bbd4641542e57a0b7a
 $(PKG)_GH_CONF  := htacg/tidy-html5/tags
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ee6edc110c6b63d0469f4f05ef187564b310cc8a88b6566310a4aebd48b61
 $(PKG)_SUBDIR   := mingw-libgnurx-$($(PKG)_VERSION)
 $(PKG)_FILE     := mingw-libgnurx-$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_URL      := https://github.com/TimothyGu/libgnurx/releases/download/libgnurx-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://api.github.com/repos/TimothyGu/libgnurx/git/refs/tags/' \

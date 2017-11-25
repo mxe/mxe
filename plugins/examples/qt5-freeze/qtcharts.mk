@@ -10,7 +10,7 @@ $(PKG)_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST
 $(PKG)_SUBDIR    = $(subst qtbase,qtcharts,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtcharts,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtcharts,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase qtdeclarative qtmultimedia
+$(PKG)_DEPS     := cc qtbase qtdeclarative qtmultimedia
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

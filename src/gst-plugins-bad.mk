@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 36d059761852bed0f1a7fcd3ef64a8aeecab95d2bca53cd6aa0f08054b1cb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc chromaprint faad2 fdk-aac gst-plugins-base gstreamer gtk3 \
+$(PKG)_DEPS     := cc chromaprint faad2 fdk-aac gst-plugins-base gstreamer gtk3 \
                    libass libbs2b libdvdnav libdvdread libgcrypt libmms libmodplug librsvg \
                    librtmp libsndfile libwebp mpg123 neon openal opencv openexr \
                    openjpeg openssl opus vo-aacenc vo-amrwbenc

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := c51f0e3a30770f6b940de3228bee40a871aaf7611a1b5ec546a7d2b9e1041
 $(PKG)_SUBDIR   := Chipmunk2D-Chipmunk-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/slembcke/Chipmunk2D/archive/Chipmunk-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/slembcke/Chipmunk2D/releases' | \

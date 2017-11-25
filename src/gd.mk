@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := fa6665dfe3d898019671293c84d77067a3d2ede50884dbcb6df899d508370
 $(PKG)_SUBDIR   := libgd-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgd-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://bitbucket.org/libgd/gd-libgd/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc fontconfig freetype jpeg libpng libvpx pthreads tiff
+$(PKG)_DEPS     := cc fontconfig freetype jpeg libpng libvpx pthreads tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://bitbucket.org/libgd/gd-libgd/downloads/' | \

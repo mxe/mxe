@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 40952956c47811928d1e7922cda3bc1f427eb75680c3c37249c91e9490549
 $(PKG)_SUBDIR   := libtheora-$($(PKG)_VERSION)
 $(PKG)_FILE     := libtheora-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://downloads.xiph.org/releases/theora/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ogg vorbis
+$(PKG)_DEPS     := cc ogg vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.xiph.org/downloads/' | \

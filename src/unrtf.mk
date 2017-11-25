@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 22a37826f96d754e335fb69f8036c068c00dd01ee9edd9461a36df0085fb8
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv
+$(PKG)_DEPS     := cc libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://hg.savannah.gnu.org/hgweb/unrtf/tags' | \

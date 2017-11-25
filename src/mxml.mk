@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.11
 $(PKG)_CHECKSUM := 7d3dfe661e50908fe41aef9b97ba6f7f158cab5208515c6be9f5bc9daf032329
 $(PKG)_GH_CONF  := michaelrsweet/mxml/tags, v
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_DEPS     := cc pthreads
 
 define $(PKG)_BUILD
     # doesn't support out-of-source builds

@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/libmicrohttpd/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftpmirror.gnu.org/libmicrohttpd/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc plibc pthreads
+$(PKG)_DEPS     := cc plibc pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/libmicrohttpd/?C=M;O=D' | \

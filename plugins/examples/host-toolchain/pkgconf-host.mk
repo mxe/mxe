@@ -8,7 +8,7 @@ $(PKG)_SUBDIR    = $(pkgconf_SUBDIR)
 $(PKG)_FILE      = $(pkgconf_FILE)
 $(PKG)_URL       = $(pkgconf_URL)
 $(PKG)_URL_2     = $(pkgconf_URL_2)
-$(PKG)_DEPS     := gcc libffi
+$(PKG)_DEPS     := cc libffi
 
 define $(PKG)_UPDATE
     echo $(pkgconf_VERSION)

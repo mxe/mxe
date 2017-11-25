@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 76faebe03f6c963127dbb73c13eab58c9a3faeae48779f049066a21c087c5
 $(PKG)_SUBDIR   := metis-$($(PKG)_VERSION)
 $(PKG)_FILE     := metis-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(call GET_LATEST_VERSION, http://glaros.dtc.umn.edu/gkhome/metis/metis/download, metis-)

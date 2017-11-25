@@ -12,7 +12,7 @@ $(PKG)_FILE     := $(PKG)_v$($(PKG)_VERSION).zip
 # https://www.codeproject.com/KB/recipes/JSON_Spirit/json_spirit_v4.08.zip
 # is behind a login screen. Use manually downloaded cache on the S3 bucket.
 $(PKG)_URL       = $(PKG_MIRROR)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost
+$(PKG)_DEPS     := cc boost
 
 define $(PKG)_UPDATE
     echo 'TODO: json_spirit automatic update explicitly disabled. Please ' >&2;

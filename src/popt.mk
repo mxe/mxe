@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://rpm5.org/files/popt/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/p/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
-$(PKG)_DEPS     := gcc gettext libiconv
+$(PKG)_DEPS     := cc gettext libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://rpm5.org/files/popt/' | \

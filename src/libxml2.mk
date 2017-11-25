@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := libxml2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://xmlsoft.org/sources/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc xz zlib
+$(PKG)_DEPS     := cc xz zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/libxml2/refs/tags' | \

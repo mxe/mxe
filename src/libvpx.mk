@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 306d67908625675f8e188d37a81fbfafdf5068b09d9aa52702b6fbe601c76
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://storage.googleapis.com/downloads.webmproject.org/releases/webm/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads yasm
+$(PKG)_DEPS     := cc pthreads yasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://downloads.webmproject.org/releases/webm/index.html' | \

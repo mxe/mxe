@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 3a3eafbceea5125c04be585373bfd8b3a18f259bd7eae3efc4e6d8e60e0d7
 $(PKG)_SUBDIR   := SDL2_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2_image-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc jpeg libpng libwebp sdl2 tiff
+$(PKG)_DEPS     := cc jpeg libpng libwebp sdl2 tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://hg.libsdl.org/SDL_image/tags' | \

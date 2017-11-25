@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := ff8cf0c
 $(PKG)_CHECKSUM := 9a86e52c2901488c5af87a83bb771818ea1650c3aec79cb4b5aa5b8f6888533f
 $(PKG)_GH_CONF  := uhhpctools/omp-validation/master
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' \

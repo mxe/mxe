@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := cf0c30807d08f6a28ab46c61b8dbd55c97d2f292cf88f3a07d3384687f31f
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
 $(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://fontconfig.org/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc expat freetype-bootstrap
+$(PKG)_DEPS     := cc expat freetype-bootstrap
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://fontconfig.org/release/' | \

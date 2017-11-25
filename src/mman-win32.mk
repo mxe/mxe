@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 6f94db28ddf30711c7b227e97c5142f72f77aca2c5cc034a7d012db242cc2
 $(PKG)_SUBDIR   := witwall-mman-win32-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/witwall/mman-win32/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 $(PKG)_UPDATE = $(call MXE_GET_GITHUB_SHA, witwall/mman-win32, master) | $(SED) 's/^\(.......\).*/\1/;'
 

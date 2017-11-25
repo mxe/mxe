@@ -10,7 +10,7 @@ $(PKG)_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST
 $(PKG)_SUBDIR    = $(subst qtbase,qtwebchannel,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtwebchannel,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtwebchannel,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase qtdeclarative qtwebsockets
+$(PKG)_DEPS     := cc qtbase qtdeclarative qtwebsockets
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

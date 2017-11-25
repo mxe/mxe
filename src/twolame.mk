@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 98f332f48951f47f23f70fd0379463aff7d7fb26f07e1e24e42ddef22cc61
 $(PKG)_SUBDIR   := twolame-$($(PKG)_VERSION)
 $(PKG)_FILE     := twolame-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/$(PKG)/files/$(PKG)/' | \

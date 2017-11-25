@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 8ba04f6fde6a7b42527d69742c49da2ac529354f71f553409f9f821d618de
 $(PKG)_SUBDIR   := SFML-$($(PKG)_VERSION)
 $(PKG)_FILE     := SFML-$($(PKG)_VERSION)-sources.zip
 $(PKG)_URL      := https://sfml-dev.org/download/sfml/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype glew jpeg libsndfile openal
+$(PKG)_DEPS     := cc freetype glew jpeg libsndfile openal
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.sfml-dev.org/download.php' | \

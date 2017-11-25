@@ -141,7 +141,7 @@ foo_PATCHES :=
 To alter dependencies and components:
 
 ```make
-qt_DEPS := gcc dbus jpeg libmng libpng openssl tiff zlib
+qt_DEPS := cc dbus jpeg libmng libpng openssl tiff zlib
 
 qt_BUILD := \
     $(subst -accessibility ,-no-accessibility ,\

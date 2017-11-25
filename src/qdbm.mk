@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := b466fe730d751e4bfc5900d1f37b0fb955f2826ac456e70012785e012cdcb
 $(PKG)_SUBDIR   := qdbm-$($(PKG)_VERSION)
 $(PKG)_FILE     := qdbm-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://fallabs.com/qdbm/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 libiconv lzo zlib
+$(PKG)_DEPS     := cc bzip2 libiconv lzo zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://fallabs.com/qdbm/' | \

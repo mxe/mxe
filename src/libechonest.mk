@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ab961ab952df30c5234b548031594d7e281e7c9f2a9d1ce91fe5421ddde85
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/lfranchi/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc qjson qt
+$(PKG)_DEPS     := cc qjson qt
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, lfranchi/libechonest)

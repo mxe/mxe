@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := d6d316a793e5e348155f0dd93b979798933fb98aa1edebcc108829d6474aa
 $(PKG)_SUBDIR   := SDL-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.libsdl.org/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv
+$(PKG)_DEPS     := cc libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://hg.libsdl.org/SDL/tags' | \
