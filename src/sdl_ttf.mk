@@ -18,16 +18,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    echo 'Requires.private: freetype2' >> '$(1)/SDL_ttf.pc.in'
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+    echo 'Requires.private: freetype2' >> '$(SOURCE_DIR)/SDL_ttf.pc.in'
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
         --with-freetype-prefix='$(PREFIX)/$(TARGET)' \
         WINDRES='$(TARGET)-windres'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
 endef
-
-$(PKG)_BUILD_SHARED =

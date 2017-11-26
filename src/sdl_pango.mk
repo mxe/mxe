@@ -20,14 +20,14 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,\r$$,,'                        '$(1)/SDL_Pango.pc.in'
     $(SED) -i 's,^\(Requires:.*\),\1 pangoft2,' '$(1)/SDL_Pango.pc.in'
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(subst docdir$(comma),,$(MXE_CONFIGURE_OPTS)) \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
-        PKG_CONFIG='$(TARGET)-pkg-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        PKG_CONFIG='$(TARGET)-pkg-config' \
+        $(if $(BUILD_SHARED),\
+            lt_cv_deplibs_check_method='file_magic file format (pe-i386|pe-x86-64)' \
+            lt_cv_file_magic_cmd='$$OBJDUMP -f')
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
 endef
-
-$(PKG)_BUILD_SHARED =

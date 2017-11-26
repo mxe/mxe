@@ -20,31 +20,29 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,^\(Requires:.*\),\1 libtiff-4 libpng libwebp,' '$(1)/SDL_image.pc.in'
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+    $(SED) -i 's,^\(Requires:.*\),\1 libtiff-4 libpng libwebp,' '$(SOURCE_DIR)/SDL_image.pc.in'
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
-        --disable-jpg-shared \
-        --disable-png-shared \
-        --disable-tif-shared \
-        --disable-webp-shared \
+        $(if $(BUILD_STATIC), \
+            --disable-jpg-shared \
+            --disable-png-shared \
+            --disable-tif-shared \
+            --disable-webp-shared) \
         WINDRES='$(TARGET)-windres' \
         LIBS='-lz'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_image.exe' \
         `'$(TARGET)-pkg-config' SDL_image --cflags --libs`
 
-    mkdir -p '$(1)/cmake-build-test'
-    cp '$(PWD)/src/$(PKG)-test-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
-    cp '$(PWD)/src/$(PKG)-test.c' '$(1)/cmake-build-test/'
-    cd '$(1)/cmake-build-test' && '$(TARGET)-cmake'
-    $(MAKE) -C '$(1)/cmake-build-test' -j '$(JOBS)'
+    mkdir -p '$(BUILD_DIR).cmake-build-test'
+    cp '$(PWD)/src/$(PKG)-test-CMakeLists.txt' '$(BUILD_DIR).cmake-build-test/CMakeLists.txt'
+    cp '$(PWD)/src/$(PKG)-test.c' '$(BUILD_DIR).cmake-build-test/'
+    cd '$(BUILD_DIR).cmake-build-test' && '$(TARGET)-cmake'
+    $(MAKE) -C '$(BUILD_DIR).cmake-build-test' -j '$(JOBS)'
 endef
-
-$(PKG)_BUILD_SHARED =
