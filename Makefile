@@ -425,7 +425,7 @@ MXE_REQS_PKGS   =
 
 # distinguish between deliberately empty rules and disabled ones
 # used in build-matrix
-VIRTUAL_PKG_TYPES := archive meta
+VIRTUAL_PKG_TYPES := source-only meta
 # used in deps rules and build-pkg
 BUILD_PKG_TYPES := meta
 # used to avoid unpacking archives when $(PKG)_FILE can't be unset
@@ -557,7 +557,7 @@ _LOOKUP_PKG_RULE = $(strip \
 PKG_COL_WIDTH    := $(call plus,2,$(call LIST_NMAX, $(sort $(call map, strlen, $(PKGS)))))
 MAX_TARGET_WIDTH := $(call LIST_NMAX, $(sort $(call map, strlen, $(MXE_TARGETS))))
 TARGET_COL_WIDTH := $(call subtract,100,$(call plus,$(PKG_COL_WIDTH),$(MAX_TARGET_WIDTH)))
-PRINTF_FMT       := printf '%-11s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
+PRINTF_FMT       := printf '%-13s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
 RTRIM            := $(SED) 's, \+$$$$,,'
 WRAP_MESSAGE      = $(\n)$(\n)$(call repeat,-,60)$(\n)$(1)$(and $(2),$(\n)$(\n)$(2))$(\n)$(call repeat,-,60)$(\n)
 
