@@ -419,7 +419,7 @@
     "termcap": {"version": "1.3.1", "website": "https://www.gnu.org/software/termutils/", "description": "Termcap"},
     "theora": {"version": "1.1.1", "website": "https://theora.org/", "description": "Theora"},
     "tidy-html5": {"version": "5.4.0", "website": "http://www.html-tidy.org/", "description": "HTML/XML syntax checker and reformatter"},
-    "tiff": {"version": "4.0.8", "website": "http://simplesystems.org/libtiff/", "description": "LibTIFF"},
+    "tiff": {"version": "4.0.9", "website": "http://simplesystems.org/libtiff/", "description": "LibTIFF"},
     "tinyxml": {"version": "2.6.2", "website": "https://sourceforge.net/projects/tinyxml/", "description": ""},
     "tinyxml2": {"version": "4.0.1", "website": "http://grinninglizard.com/tinyxml2/", "description": ""},
     "tre": {"version": "0.8.0", "website": "https://laurikari.net/tre/", "description": "TRE"},
