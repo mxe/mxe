@@ -663,8 +663,8 @@ download-$(1): download-$(3)~$(1) download-only-$(1)
 download-$(3)~$(1): download-only-$(1) \
                     $(addprefix download-,$(PKG_ALL_DEPS))
 
-.PHONY: $(1)
-$(1): $(PREFIX)/$(3)/installed/$(1)
+.PHONY: $(1) $(1)~$(3)
+$(1) $(1)~$(3): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           $($(PKG)_PATCHES) \
                           $(PKG_TESTFILES) \
