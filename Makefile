@@ -504,7 +504,7 @@ $(foreach PKG,$(PKGS), \
     $(if $(filter $(PKG),$(CMAKE_PKGS)),$(eval $(PKG)_OO_DEPS += cmake-conf)) \
     $(if $(filter $(PKG),$(MXE_CONF_PKGS)),,$(eval $(PKG)_OO_DEPS += mxe-conf)) \
     $(if $($(PKG)_TARGETS),,$(eval $(PKG)_TARGETS := $(CROSS_TARGETS))) \
-    $(foreach TARGET,$($(PKG)_TARGETS), \
+    $(foreach TARGET,$(filter $($(PKG)_TARGETS),$(CROSS_TARGETS) $(BUILD)), \
         $(eval $(TARGET)~$(PKG)_PKG := $(PKG)) \
         $(eval $(TARGET)~$(PKG)_TGT := $(TARGET)) \
         $(eval $(TARGET)_PKGS += $(PKG)) \
@@ -602,10 +602,10 @@ $(eval $(PKG)_PATCHES := $(PKG_PATCHES))
 download-only-$(1): download-only-$($(1)_FILE)
 download-only-$($(1)_FILE)::
 	$(and $($(1)_URL),
-	@[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	@$$(if $$(REMOVE_DOWNLOAD),rm -f '$(PKG_DIR)/$($(1)_FILE)')
 	@if ! $(call CHECK_PKG_ARCHIVE,$(1)); then \
 	    $(PRINTF_FMT) '[download]' '$($(1)_FILE)' | $(RTRIM); \
+	    [ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'; \
 	    ($(call DOWNLOAD_PKG_ARCHIVE,$(1))) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    grep 'MXE Warning' '$(LOG_DIR)/$(TIMESTAMP)/$(1)-download'; \
 	    ln -sf '$(TIMESTAMP)/$(1)-download' '$(LOG_DIR)/$(1)-download'; \
@@ -683,6 +683,8 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    $(if $(BUILD_DRY_RUN), \
 	        @$(PRINTF_FMT) '[dry-run]' '$(1)' '$(3)' | $(RTRIM)
+	        @[ -d '$(PREFIX)/$(3)/lib' ] || mkdir -p '$(PREFIX)/$(3)/lib'
+	        @touch '$(PREFIX)/$(3)/lib/$(1).dry-run'
 	        @touch '$(PREFIX)/$(3)/installed/$(1)'
 	    $(else),
 	        @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)' | $(RTRIM)
