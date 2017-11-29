@@ -1,0 +1,33 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andrei Alexeyev <0x416b617269@gmail.com>
+Date: Wed, 29 Nov 2017 20:36:44 +0200
+Subject: [PATCH 1/1] Use only distutils for consistency
+
+
+diff --git a/setup.py b/setup.py
+index 1111111..2222222 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,15 +23,9 @@ if sys.version_info[0] < 3:
+     print('Tried to install with Python 2, Meson only supports Python 3.')
+     sys.exit(1)
+ 
+-# We need to support Python installations that have nothing but the basic
+-# Python installation. Use setuptools when possible and fall back to
+-# plain distutils when setuptools is not available.
+-try:
+-    from setuptools import setup
+-    from setuptools.command.install_scripts import install_scripts as orig
+-except ImportError:
+-    from distutils.core import setup
+-    from distutils.command.install_scripts import install_scripts as orig
++# Use only distutils for consistency
++from distutils.core import setup
++from distutils.command.install_scripts import install_scripts as orig
+ 
+ class install_scripts(orig):
+     def run(self):
