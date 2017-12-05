@@ -318,7 +318,7 @@
     "plotmm": {"version": "0.1.2", "website": "https://plotmm.sourceforge.io/", "description": "PlotMM"},
     "plotutils": {"version": "2.6", "website": "https://www.gnu.org/software/plotutils/", "description": ""},
     "poco": {"version": "1.4.7p1", "website": "https://pocoproject.org/", "description": "POCO C++ Libraries"},
-    "polarssl": {"version": "1.3.9", "website": "https://polarssl.org/", "description": "Polar SSL Library"},
+    "polarssl": {"version": "1.3.9", "website": "https://tls.mbed.org/", "description": "Polar SSL Library"},
     "poppler": {"version": "0.51.0", "website": "https://poppler.freedesktop.org/", "description": ""},
     "popt": {"version": "1.16", "website": "http://freshmeat.net/projects/popt/", "description": ""},
     "portablexdr": {"version": "4.9.1", "website": "https://people.redhat.com/~rjones/portablexdr/", "description": "PortableXDR"},
