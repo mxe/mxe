@@ -423,6 +423,14 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 CROSS_COMPILER := cc
 MXE_REQS_PKGS   =
 
+# warning about switching from `gcc` to `cc`
+$(if $(and $(filter gcc,$(LOCAL_PKG_LIST)$(MAKECMDGOALS)),\
+           $(call seq,1,$(words $(LOCAL_PKG_LIST)$(MAKECMDGOALS)))),\
+    $(info == gcc is now a dependency of virtual toolchain package cc) \
+    $(info $(call repeat,$(space),6)- cc will build gcc, pkgconf, and other core toolchain packages)\
+    $(info $(call repeat,$(space),6)- please update scripts accordingly (ignore if you are building gcc alone))\
+    $(info ))
+
 # distinguish between deliberately empty rules and disabled ones
 # used in build-matrix
 VIRTUAL_PKG_TYPES := source-only meta
