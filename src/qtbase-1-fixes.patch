@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/7] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/8] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -37,7 +37,7 @@ index 55c74aad..d7bcffeb 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/7] Fix pkgconfig file and library naming
+Subject: [PATCH 2/8] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -103,7 +103,7 @@ index c0a8dcc2..d5e24ac1 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/7] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/8] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
@@ -140,7 +140,7 @@ index ca33689c..194523ee 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
-Subject: [PATCH 4/7] fix treatment of SYBASE_LIBS
+Subject: [PATCH 4/8] fix treatment of SYBASE_LIBS
 
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
@@ -161,7 +161,7 @@ index b69b51b6..d37423ad 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 5/7] use pkg-config for harfbuzz
+Subject: [PATCH 5/8] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
@@ -183,7 +183,7 @@ index 4791b345..5f606217 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 7 Oct 2017 11:39:29 +0200
-Subject: [PATCH 6/7] Revert "qmake: don't limit command line length when not
+Subject: [PATCH 6/8] Revert "qmake: don't limit command line length when not
  actually on windows"
 
 This breaks cross compiling for mingw.
@@ -225,7 +225,7 @@ index 792ffb19..33002326 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 20 Dec 2017 12:08:48 +1100
-Subject: [PATCH 7/7] qtbase: add workaround for internal compiler error
+Subject: [PATCH 7/8] qtbase: add workaround for internal compiler error
 
 taken from:
 https://codereview.qt-project.org/#/c/212360/
@@ -243,3 +243,162 @@ index 67691903..c1a775a5 100644
  static qsizetype qt_random_cpu(void *buffer, qsizetype count) Q_DECL_NOTHROW;
  
  #  ifdef Q_PROCESSOR_X86_64
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Robert Manner <robert.manner@balabit.com>
+Date: Tue, 12 Dec 2017 15:57:37 +0100
+Subject: [PATCH 8/8] angle: added crosscompile support
+
+
+diff --git a/config.tests/win/angle_d3d11_qdtd/angle_d3d11_qdtd.cpp b/config.tests/win/angle_d3d11_qdtd/angle_d3d11_qdtd.cpp
+index 2dde2914..da41a9b6 100644
+--- a/config.tests/win/angle_d3d11_qdtd/angle_d3d11_qdtd.cpp
++++ b/config.tests/win/angle_d3d11_qdtd/angle_d3d11_qdtd.cpp
+@@ -37,7 +37,7 @@
+ **
+ ****************************************************************************/
+ 
+-#include <D3D11.h>
++#include <d3d11.h>
+ 
+ int main(int, char**)
+ {
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index d5e24ac1..99f6ec2b 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -278,7 +278,7 @@ TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)
+     else: \
+         QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
+     QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
+-    QMAKE_PKGCONFIG_CFLAGS = -I${includedir}/$$MODULE_INCNAME
++    QMAKE_PKGCONFIG_CFLAGS = -I${includedir}/$$MODULE_INCNAME -I${includedir}/QtANGLE
+     QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt$$QT_MAJOR_VERSION ")
+     QMAKE_PKGCONFIG_FILE = $$TARGET
+     for(i, MODULE_DEPENDS): \
+diff --git a/src/3rdparty/angle/src/compiler/translator/glslang.l b/src/3rdparty/angle/src/compiler/translator/glslang.l
+index d09358dd..258d5403 100644
+--- a/src/3rdparty/angle/src/compiler/translator/glslang.l
++++ b/src/3rdparty/angle/src/compiler/translator/glslang.l
+@@ -516,6 +516,10 @@ void yyerror(YYLTYPE* lloc, TParseContext* context, void *scanner, const char* r
+     context->recover();
+ }
+ 
++void glslangerror(YYLTYPE* lloc, TParseContext* context, void *scanner, const char* reason) {
++    yyerror(lloc, context, scanner, reason);
++}
++
+ int int_constant(TParseContext *context) {
+     struct yyguts_t* yyg = (struct yyguts_t*) context->getScanner();
+ 
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+index 0173311b..a0274219 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+@@ -11,7 +11,7 @@
+ #include <EGL/eglext.h>
+ #include <sstream>
+ #if !defined(ANGLE_MINGW32_COMPAT) && WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP
+-#include <VersionHelpers.h>
++#include <versionhelpers.h>
+ #endif
+ 
+ #include "common/tls.h"
+diff --git a/src/angle/src/common/common.pri b/src/angle/src/common/common.pri
+index c1fad149..67dc4008 100644
+--- a/src/angle/src/common/common.pri
++++ b/src/angle/src/common/common.pri
+@@ -21,10 +21,14 @@ lib_replace.replace = \$\$\$\$[QT_INSTALL_LIBS]
+ lib_replace.CONFIG = path
+ QMAKE_PRL_INSTALL_REPLACE += lib_replace
+ 
+-# DirectX is included in the Windows 8 Kit, but everything else requires the DX SDK.
+-winrt|msvc {
++!equals(QMAKE_HOST.os, Windows) {
++    # If doing crosscompile, we expect shader header files already compiled by some other way
++    FXC = echo
++} else:winrt|msvc {
++    # DirectX is included in the Windows 8 Kit
+     FXC = fxc.exe
+ } else {
++    # Everything else requires the DX SDK.
+     DX_DIR = $$(DXSDK_DIR)
+     isEmpty(DX_DIR) {
+         error("Cannot determine DirectX SDK location. Please set DXSDK_DIR environment variable.")
+diff --git a/src/angle/src/compiler/translator.pro b/src/angle/src/compiler/translator.pro
+index 398b9230..d0c04384 100644
+--- a/src/angle/src/compiler/translator.pro
++++ b/src/angle/src/compiler/translator.pro
+@@ -179,31 +179,10 @@ SOURCES += \
+ 
+ 
+ # NOTE: 'flex' and 'bison' can be found in qt5/gnuwin32/bin
+-flex.commands = $$addGnuPath(flex) --noline --nounistd --outfile=${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+-flex.output = $${BUILDSUBDIR}${QMAKE_FILE_BASE}_lex.cpp
+-flex.input = FLEX_SOURCES
+-flex.dependency_type = TYPE_C
+-flex.variable_out = GENERATED_SOURCES
+-QMAKE_EXTRA_COMPILERS += flex
++CONFIG += lex
++QMAKE_MOD_LEX = "_lex"
++LEXSOURCES = $$FLEX_SOURCES
+ 
+-defineReplace(myDirName) { return($$dirname(1)) }
+-bison.commands = $$addGnuPath(bison) --no-lines --skeleton=yacc.c --defines=${QMAKE_FILE_OUT} \
+-                --output=${QMAKE_FUNC_FILE_OUT_myDirName}$$QMAKE_DIR_SEP${QMAKE_FILE_OUT_BASE}.cpp \
+-                ${QMAKE_FILE_NAME}$$escape_expand(\\n\\t) \
+-                @echo // EOF>>${QMAKE_FUNC_FILE_OUT_myDirName}$$QMAKE_DIR_SEP${QMAKE_FILE_OUT_BASE}.cpp
+-bison.output = $${BUILDSUBDIR}${QMAKE_FILE_BASE}_tab.h
+-bison.input = BISON_SOURCES
+-bison.dependency_type = TYPE_C
+-bison.variable_out = GENERATED_SOURCES
+-QMAKE_EXTRA_COMPILERS += bison
+-
+-# This is a dummy compiler to work around the fact that an extra compiler can only
+-# have one output file even if the command generates two.
+-MAKEFILE_NOOP_COMMAND = @echo -n
+-msvc: MAKEFILE_NOOP_COMMAND = @echo >NUL
+-bison_impl.output = $${BUILDSUBDIR}${QMAKE_FILE_BASE}_tab.cpp
+-bison_impl.input = BISON_SOURCES
+-bison_impl.commands = $$MAKEFILE_NOOP_COMMAND
+-bison_impl.depends = $${BUILDSUBDIR}${QMAKE_FILE_BASE}_tab.h
+-bison_impl.variable_out = GENERATED_SOURCES
+-QMAKE_EXTRA_COMPILERS += bison_impl
++CONFIG += yacc
++QMAKE_MOD_YACC = "_tab"
++YACCSOURCES = $$BISON_SOURCES
+diff --git a/src/angle/src/config.pri b/src/angle/src/config.pri
+index 4beb0952..48d017ce 100644
+--- a/src/angle/src/config.pri
++++ b/src/angle/src/config.pri
+@@ -52,7 +52,7 @@ CONFIG(debug, debug|release) {
+     DEFINES += NDEBUG
+ }
+ 
+-!isEmpty(BUILD_PASS): BUILDSUBDIR = $$lower($$BUILD_PASS)/
++BUILDSUBDIR = $${_PRO_FILE_PWD_}/
+ 
+ # c++11 is needed by MinGW to get support for unordered_map.
+ CONFIG += stl exceptions c++11
+diff --git a/src/angle/src/libGLESv2/libANGLE b/src/angle/src/libGLESv2/libANGLE
+new file mode 120000
+index 00000000..bc79f1f9
+--- /dev/null
++++ b/src/angle/src/libGLESv2/libANGLE
+@@ -0,0 +1 @@
++../QtANGLE/libANGLE
+\ No newline at end of file
+diff --git a/src/gui/configure.json b/src/gui/configure.json
+index 5f606217..531e387e 100644
+--- a/src/gui/configure.json
++++ b/src/gui/configure.json
+@@ -634,8 +634,7 @@
+             "type": "directX",
+             "files": [
+                 "d3dcompiler.h",
+-                "d3d11.lib",
+-                "fxc.exe"
++                "libd3d11.a"
+             ]
+         },
+         "egl-x11": {
