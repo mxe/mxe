@@ -1,6 +1,6 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 175468257ac65fc97370330d25b014c50642f572 Mon Sep 17 00:00:00 2001
+From 217773585b1b6db3dd7cd1df5581da0f6f5dc1c4 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
 Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
@@ -35,7 +35,7 @@ index 55c74aad66..d7bcffeb9c 100644
 2.14.1
 
 
-From 5739bd00432dba348b6a598a525390566b061c3f Mon Sep 17 00:00:00 2001
+From 5e4b97c8a228274121bafc2ed003d84552bf97cc Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
 Subject: [PATCH 2/6] Fix pkgconfig file and library naming
@@ -63,10 +63,10 @@ Task-number: 30898
 Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 36f632e8ca..b07085ac42 100644
+index c0a8dcc251..d5e24ac1cc 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
-@@ -263,6 +263,10 @@ load(qt_installs)
+@@ -265,6 +265,10 @@ load(qt_installs)
  
  load(qt_targets)
  
@@ -77,7 +77,7 @@ index 36f632e8ca..b07085ac42 100644
  # this builds on top of qt_common
  !internal_module:!lib_bundle:if(unix|mingw) {
      CONFIG += create_pc
-@@ -273,12 +277,12 @@ load(qt_targets)
+@@ -275,12 +279,12 @@ load(qt_targets)
          QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
      QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
      QMAKE_PKGCONFIG_CFLAGS = -I${includedir}/$$MODULE_INCNAME
@@ -94,7 +94,7 @@ index 36f632e8ca..b07085ac42 100644
      pclib_replace.match = $$lib_replace.match
      !isEmpty(lib_replace.replace): \
          pclib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
-@@ -312,5 +316,3 @@ win32 {
+@@ -314,5 +318,3 @@ win32 {
      # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
      DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
  }
@@ -104,7 +104,7 @@ index 36f632e8ca..b07085ac42 100644
 2.14.1
 
 
-From 9701b36a23339705ae8d4d936a0cb210c41aac02 Mon Sep 17 00:00:00 2001
+From 1ef5456da03ae02672f71a276f06fe9b9c80f454 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
 Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
@@ -112,10 +112,10 @@ Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 28c8034c75..cf9753ba21 100644
+index 0a591e110c..4791b34525 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -905,7 +905,7 @@
+@@ -928,7 +928,7 @@
          },
          "fontconfig": {
              "label": "Fontconfig",
@@ -144,7 +144,7 @@ index ca33689cd7..194523eee0 100644
 2.14.1
 
 
-From f4a3e4168f52bac9a7db7ac9c539d52a986ce34b Mon Sep 17 00:00:00 2001
+From e9432e47e3c25e9630ce34dd11a2d72472e90a85 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
 Subject: [PATCH 4/6] fix treatment of SYBASE_LIBS
@@ -168,7 +168,7 @@ index b69b51b679..d37423adbd 100644
 2.14.1
 
 
-From 973a39266b682f248588a388e136ea7239339ac3 Mon Sep 17 00:00:00 2001
+From 50e1a4a60a2348cbcdb261056559cad0d2c16f15 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
 Subject: [PATCH 5/6] use pkg-config for harfbuzz
@@ -176,10 +176,10 @@ Subject: [PATCH 5/6] use pkg-config for harfbuzz
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index cf9753ba21..4061920b8d 100644
+index 4791b34525..5f6062170d 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -218,7 +218,8 @@
+@@ -220,7 +220,8 @@
                  ]
              },
              "sources": [
@@ -193,7 +193,7 @@ index cf9753ba21..4061920b8d 100644
 2.14.1
 
 
-From 677fbc1c2f68e4b73bff065620a73078191c5a70 Mon Sep 17 00:00:00 2001
+From 1d43b7d2db26cace31f12b8d9229dc8866618d42 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 7 Oct 2017 11:39:29 +0200
 Subject: [PATCH 6/6] Revert "qmake: don't limit command line length when not
@@ -204,10 +204,10 @@ This breaks cross compiling for mingw.
 This reverts commit 8bebded9ab02b8eec67c44bfddf802d6bf9cda3c.
 
 diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
-index 185afaaa49..20a2a6fab0 100644
+index 884286ea30..780e551282 100644
 --- a/mkspecs/win32-g++/qmake.conf
 +++ b/mkspecs/win32-g++/qmake.conf
-@@ -50,10 +50,8 @@ QMAKE_LFLAGS_CONSOLE    = -Wl,-subsystem,console
+@@ -52,10 +52,8 @@ QMAKE_LFLAGS_CONSOLE    = -Wl,-subsystem,console
  QMAKE_LFLAGS_WINDOWS    = -Wl,-subsystem,windows
  QMAKE_LFLAGS_DLL        = -shared
  QMAKE_LFLAGS_GCSECTIONS = -Wl,--gc-sections
