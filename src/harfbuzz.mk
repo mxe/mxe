@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc cairo freetype-bootstrap glib icu4c
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cgit.freedesktop.org/harfbuzz/refs/tags' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9.]*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=[^0-9]*\\([0-9.]*\\)'.*,\\1,p" | \
     $(SORT) -V | \
     tail -1
 endef

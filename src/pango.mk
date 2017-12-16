@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc cairo fontconfig freetype glib harfbuzz
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/pango/refs/tags' | \
     grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1
 endef
 

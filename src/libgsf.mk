@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc bzip2 glib libxml2 zlib
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/libgsf/refs/tags' | \
     grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=LIBGSF_\\([0-9]*_[0-9]*[02468]_[^<]*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=LIBGSF_\\([0-9]*_[0-9]*[02468]_[^<]*\\)'.*,\\1,p" | \
     $(SED) 's,_,.,g' | \
     head -1
 endef

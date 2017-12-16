@@ -12,7 +12,7 @@ $(PKG)_DEPS     := gcc expat
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=dbus-\\([0-9][^']*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=dbus-\\([0-9][^']*\\)'.*,\\1,p" | \
     $(SORT) -V | \
     tail -1
 endef

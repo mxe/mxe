@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc glib
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/libgee/refs/tags' | \
     grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=LIBGEE_\\([0-9]*_[0-9]*_[^<]*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=LIBGEE_\\([0-9]*_[0-9]*_[^<]*\\)'.*,\\1,p" | \
     $(SED) 's,_,.,g' | \
     head -1
 endef

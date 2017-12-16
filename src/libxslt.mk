@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc libgcrypt libxml2
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/libxslt/refs/tags' | \
     grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=v\\([0-9][^']*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=v\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1
 endef
 

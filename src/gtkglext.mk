@@ -14,7 +14,7 @@ $(PKG)_DEPS     := gcc gtk2
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/cgit/gtkglext/refs/tags' | \
     grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=\\([0-9][^']*\\)'.*,\\1,p" | \
     $(SORT) -V | \
     tail -1
 endef
