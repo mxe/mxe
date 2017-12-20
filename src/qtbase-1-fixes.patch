@@ -1,9 +1,11 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 217773585b1b6db3dd7cd1df5581da0f6f5dc1c4 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/7] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -12,7 +14,7 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 55c74aad66..d7bcffeb9c 100644
+index 55c74aad..d7bcffeb 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -224,12 +224,12 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -31,14 +33,11 @@ index 55c74aad66..d7bcffeb9c 100644
  !!ELSE
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
--- 
-2.14.1
 
-
-From 5e4b97c8a228274121bafc2ed003d84552bf97cc Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/6] Fix pkgconfig file and library naming
+Subject: [PATCH 2/7] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -63,7 +62,7 @@ Task-number: 30898
 Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index c0a8dcc251..d5e24ac1cc 100644
+index c0a8dcc2..d5e24ac1 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
 @@ -265,6 +265,10 @@ load(qt_installs)
@@ -100,19 +99,16 @@ index c0a8dcc251..d5e24ac1cc 100644
  }
 -
 -TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
--- 
-2.14.1
 
-
-From 1ef5456da03ae02672f71a276f06fe9b9c80f454 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/7] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 0a591e110c..4791b34525 100644
+index 0a591e11..4791b345 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
 @@ -928,7 +928,7 @@
@@ -125,7 +121,7 @@ index 0a591e110c..4791b34525 100644
          },
          "gbm": {
 diff --git a/src/plugins/platforms/minimal/qminimalintegration.cpp b/src/plugins/platforms/minimal/qminimalintegration.cpp
-index ca33689cd7..194523eee0 100644
+index ca33689c..194523ee 100644
 --- a/src/plugins/platforms/minimal/qminimalintegration.cpp
 +++ b/src/plugins/platforms/minimal/qminimalintegration.cpp
 @@ -130,7 +130,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
@@ -140,19 +136,16 @@ index ca33689cd7..194523eee0 100644
  #elif defined(Q_OS_WINRT)
          m_fontDatabase = new QWinRTFontDatabase;
  #elif defined(Q_OS_WIN)
--- 
-2.14.1
 
-
-From e9432e47e3c25e9630ce34dd11a2d72472e90a85 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
-Subject: [PATCH 4/6] fix treatment of SYBASE_LIBS
+Subject: [PATCH 4/7] fix treatment of SYBASE_LIBS
 
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
 diff --git a/src/plugins/sqldrivers/configure.pri b/src/plugins/sqldrivers/configure.pri
-index b69b51b679..d37423adbd 100644
+index b69b51b6..d37423ad 100644
 --- a/src/plugins/sqldrivers/configure.pri
 +++ b/src/plugins/sqldrivers/configure.pri
 @@ -92,7 +92,7 @@ defineTest(qtConfLibrary_sybaseEnv) {
@@ -164,19 +157,16 @@ index b69b51b679..d37423adbd 100644
          export($${1}.libs)
      }
      return(true)
--- 
-2.14.1
 
-
-From 50e1a4a60a2348cbcdb261056559cad0d2c16f15 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 5/6] use pkg-config for harfbuzz
+Subject: [PATCH 5/7] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 4791b34525..5f6062170d 100644
+index 4791b345..5f606217 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
 @@ -220,7 +220,8 @@
@@ -189,14 +179,11 @@ index 4791b34525..5f6062170d 100644
              ]
          },
          "imf": {
--- 
-2.14.1
 
-
-From 1d43b7d2db26cace31f12b8d9229dc8866618d42 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 7 Oct 2017 11:39:29 +0200
-Subject: [PATCH 6/6] Revert "qmake: don't limit command line length when not
+Subject: [PATCH 6/7] Revert "qmake: don't limit command line length when not
  actually on windows"
 
 This breaks cross compiling for mingw.
@@ -204,7 +191,7 @@ This breaks cross compiling for mingw.
 This reverts commit 8bebded9ab02b8eec67c44bfddf802d6bf9cda3c.
 
 diff --git a/mkspecs/win32-g++/qmake.conf b/mkspecs/win32-g++/qmake.conf
-index 884286ea30..780e551282 100644
+index 884286ea..780e5512 100644
 --- a/mkspecs/win32-g++/qmake.conf
 +++ b/mkspecs/win32-g++/qmake.conf
 @@ -52,10 +52,8 @@ QMAKE_LFLAGS_CONSOLE    = -Wl,-subsystem,console
@@ -221,7 +208,7 @@ index 884286ea30..780e551282 100644
  QMAKE_EXTENSION_SHLIB   = dll
  QMAKE_PREFIX_STATICLIB  = lib
 diff --git a/qmake/generators/win32/mingw_make.cpp b/qmake/generators/win32/mingw_make.cpp
-index 792ffb1997..3300232689 100644
+index 792ffb19..33002326 100644
 --- a/qmake/generators/win32/mingw_make.cpp
 +++ b/qmake/generators/win32/mingw_make.cpp
 @@ -279,8 +279,7 @@ void MingwMakefileGenerator::writeLibsPart(QTextStream &t)
@@ -234,6 +221,25 @@ index 792ffb1997..3300232689 100644
          objectsLinkLine = "$(OBJECTS)";
      } else if (project->isActiveConfig("staticlib") && project->first("TEMPLATE") == "lib") {
          QString ar_script_file = var("QMAKE_LINK_OBJECT_SCRIPT") + "." + var("TARGET");
--- 
-2.14.1
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 20 Dec 2017 12:08:48 +1100
+Subject: [PATCH 7/7] qtbase: add workaround for internal compiler error
+
+taken from:
+https://codereview.qt-project.org/#/c/212360/
+
+diff --git a/src/corelib/global/qrandom.cpp b/src/corelib/global/qrandom.cpp
+index 67691903..c1a775a5 100644
+--- a/src/corelib/global/qrandom.cpp
++++ b/src/corelib/global/qrandom.cpp
+@@ -92,7 +92,7 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando
+ 
+ QT_BEGIN_NAMESPACE
+ 
+-#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
++#if 0
+ static qsizetype qt_random_cpu(void *buffer, qsizetype count) Q_DECL_NOTHROW;
+ 
+ #  ifdef Q_PROCESSOR_X86_64
