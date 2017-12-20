@@ -1,0 +1,25 @@
+From e42cfab5a84d20af50083cc6e40ebc6cc5150ca6 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 6 Nov 2017 21:52:32 +1100
+Subject: [PATCH] Add install component for pkg-config files
+
+Matches the component of the *.cmake config files as they're likely
+to be installed together.
+---
+ modules/MacroCreateConfigFiles.cmake | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/modules/MacroCreateConfigFiles.cmake b/modules/MacroCreateConfigFiles.cmake
+index de67472..4b89d5a 100644
+--- a/modules/MacroCreateConfigFiles.cmake
++++ b/modules/MacroCreateConfigFiles.cmake
+@@ -89,7 +89,8 @@ macro (create_config_files _packagename)
+ 		create_config_file_internal(${_packagename} pkgconfig .pc)
+ 		install (FILES
+ 			"${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${_packagename}.pc"
+-			DESTINATION "lib/pkgconfig/")
++			DESTINATION "lib/pkgconfig/"
++			COMPONENT dev)
+ 	endif()
+ 
+ 	write_basic_package_version_file(
