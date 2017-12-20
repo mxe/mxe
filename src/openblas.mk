@@ -23,6 +23,7 @@ $(PKG)_MAKE_OPTS = \
         BUILD_RELAPACK=1 \
         USE_THREAD=1 \
         USE_OPENMP=1 \
+        NUM_THREADS=$(call LIST_NMAX, 2 $(NPROCS)) \
         TARGET=CORE2 \
         DYNAMIC_ARCH=1 \
         ARCH=$(strip \
