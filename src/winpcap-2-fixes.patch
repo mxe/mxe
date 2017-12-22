@@ -1,0 +1,55 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Fri, 22 Dec 2017 14:32:47 +1100
+Subject: [PATCH 1/2] fix building test program
+
+
+diff --git a/wpcap/libpcap/pcap-win32.c b/wpcap/libpcap/pcap-win32.c
+index 1111111..2222222 100644
+--- a/wpcap/libpcap/pcap-win32.c
++++ b/wpcap/libpcap/pcap-win32.c
+@@ -86,7 +86,7 @@ struct bpf_hdr {
+ 
+ CRITICAL_SECTION g_PcapCompileCriticalSection;
+ 
+-BOOL WINAPI DllMain(
++BOOL WINAPI DllMain_disabled(
+   HANDLE hinstDLL,
+   DWORD dwReason,
+   LPVOID lpvReserved
+diff --git a/wpcap/libpcap/scanner.c b/wpcap/libpcap/scanner.c
+index 1111111..2222222 100644
+--- a/wpcap/libpcap/scanner.c
++++ b/wpcap/libpcap/scanner.c
+@@ -39,6 +39,7 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <stdlib.h>
++#include <ws2tcpip.h>
+ 
+ /* end standard C headers. */
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Fri, 22 Dec 2017 14:54:56 +1100
+Subject: [PATCH 2/2] fix posix build
+
+
+diff --git a/wpcap/libpcap/Win32/Include/net/netdb.h b/wpcap/libpcap/Win32/Include/net/netdb.h
+index 1111111..2222222 100644
+--- a/wpcap/libpcap/Win32/Include/net/netdb.h
++++ b/wpcap/libpcap/Win32/Include/net/netdb.h
+@@ -57,7 +57,7 @@
+ #ifndef _NETDB_H_
+ #define _NETDB_H_
+ 
+-#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT)
++#if (defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(_REENTRANT)) && !defined(_WIN32)
+ #include <stdio.h>
+ #include <netinet/in.h>
+ #endif

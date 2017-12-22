@@ -19,7 +19,7 @@ endef
 
 define $(PKG)_BUILD
     # build
-    cd '$(1)' && $(TARGET)-gcc -ICommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/Packet32.c'
+    cd '$(1)' && $(TARGET)-gcc -ICommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/Packet32.c' -D_WINNT4
     cd '$(1)' && $(TARGET)-gcc -ICommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/AdInfo.c'
     cd '$(1)' && $(TARGET)-gcc -ICommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/NpfImExt.c'
     $(TARGET)-ar rc '$(1)/libpacket.a' '$(1)/Packet32.o' '$(1)/AdInfo.o' '$(1)/NpfImExt.o'
@@ -60,6 +60,22 @@ define $(PKG)_BUILD
         '$(PREFIX)/$(TARGET)/include/pcap/'
 
     $(INSTALL) -m644 '$(1)/wpcap/PRJ/libwpcap.a' '$(PREFIX)/$(TARGET)/lib/'
+
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $($(PKG)_DESCR)'; \
+     echo 'Requires:'; \
+     echo 'Libs: -lwpcap -lpacket -lws2_32 -lversion'; \
+     echo 'Cflags: -I$(PREFIX)/$(TARGET)/include/pcap';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    # compile test
+    '$(TARGET)-gcc' \
+        -W -Wall \
+        '$(SOURCE_DIR)/Examples-pcap/basic_dump_ex/basic_dump_ex.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
 
 $(PKG)_BUILD_SHARED =
