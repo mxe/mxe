@@ -389,7 +389,7 @@
     "sdl2": {"version": "2.0.7", "website": "https://www.libsdl.org/", "description": "SDL2"},
     "sdl2_gfx": {"version": "1.0.3", "website": "http://www.ferzkopp.net/joomla/content/view/19/14/", "description": "SDL2_gfx"},
     "sdl2_image": {"version": "2.0.1", "website": "https://www.libsdl.org/", "description": "SDL2_image"},
-    "sdl2_mixer": {"version": "2.0.1", "website": "https://www.libsdl.org/", "description": "SDL2_mixer"},
+    "sdl2_mixer": {"version": "2.0.2", "website": "https://www.libsdl.org/", "description": "SDL2_mixer"},
     "sdl2_net": {"version": "2.0.0", "website": "https://www.libsdl.org/", "description": ""},
     "sdl2_ttf": {"version": "2.0.14", "website": "https://www.libsdl.org/", "description": "SDL2_ttf"},
     "sdl_gfx": {"version": "2.0.25", "website": "http://www.ferzkopp.net/joomla/content/view/19/14/", "description": "SDL_gfx"},
