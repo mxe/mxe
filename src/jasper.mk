@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.14
 $(PKG)_CHECKSUM := 85266eea728f8b14365db9eaf1edc7be4c348704e562bb05095b9a077cf1a97b
 $(PKG)_GH_CONF  := mdadams/jasper/tags, version-
-$(PKG)_DEPS     := gcc jpeg
+$(PKG)_DEPS     := cc jpeg
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \

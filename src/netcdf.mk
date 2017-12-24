@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := e796413d27da6b053e07a18f567a1d0c23d2a317cef905faa2a05fe4f725f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := ftp://ftp.unidata.ucar.edu/pub/netcdf/old/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc curl hdf4 hdf5 portablexdr zlib
+$(PKG)_DEPS     := cc curl hdf4 hdf5 portablexdr zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.unidata.ucar.edu/downloads/netcdf/index.jsp' | \

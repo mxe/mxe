@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 1ff33929f042fa333aed1e8923aa628c3ee9e1eb85512686c55092d1e5a9d
 $(PKG)_SUBDIR   := libsndfile-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsndfile-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.mega-nerd.com/libsndfile/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc flac ogg vorbis
+$(PKG)_DEPS     := cc flac ogg vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.mega-nerd.com/libsndfile/' | \

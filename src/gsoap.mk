@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 30b045af2633ac5e92ea92fdb4baad784afe6e6548b5ef2f9cad48df6a7d3
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gsoap2/gsoap-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgcrypt libntlm openssl
+$(PKG)_DEPS     := cc libgcrypt libntlm openssl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/gsoap2/files/gsoap-2.8/' | \

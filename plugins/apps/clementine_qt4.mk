@@ -15,7 +15,7 @@ $(PKG)_CHECKSUM := f885931a9ab7c88607d07b50c64fcce46fc05f13dd2c0a04188c94eff938f
 $(PKG)_GH_CONF  := clementine-player/Clementine/tags
 $(PKG)_WEBSITE  := https://www.clementine-player.org/
 $(PKG)_OWNER    := https://github.com/pavelvat
-$(PKG)_DEPS     := gcc boost chromaprint cryptopp fftw glew gst-libav gst-plugins-bad \
+$(PKG)_DEPS     := cc boost chromaprint cryptopp fftw glew gst-libav gst-plugins-bad \
                    gst-plugins-good gst-plugins-ugly libechonest liblastfm_qt4 \
                    libmpcdec protobuf qtsparkle_qt4 sparsehash
 

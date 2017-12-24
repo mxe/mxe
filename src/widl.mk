@@ -27,6 +27,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/mingw-w64-tools/widl' -j '$(JOBS)' install
 
     # create cmake file
+    mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
     echo 'set(CMAKE_WIDL $(PREFIX)/bin/$(TARGET)-$(PKG) CACHE PATH "widl executable")' \
     > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 endef

@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftpmirror.gnu.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libpng pthreads
+$(PKG)_DEPS     := cc libpng pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/plotutils/?C=M;O=D' | \

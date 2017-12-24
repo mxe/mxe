@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := e5fb30678165d28b2bf066f78d5f5787e73a2a28d4902b63e3e07ce167861
 $(PKG)_SUBDIR   := PDFlib-Lite-$($(PKG)_VERSION)
 $(PKG)_FILE     := PDFlib-Lite-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(subst p, ,$($(PKG)_VERSION))))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.pdflib.com/download/free-software/pdflib-lite-7/' | \

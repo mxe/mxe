@@ -10,7 +10,7 @@ $(PKG)_CHECKSUM := 930eb46f05781a76883ec16c5f49cfb29a059421db131005d75bec4d78401
 $(PKG)_SUBDIR   := OpenSceneGraph-OpenSceneGraph-$($(PKG)_VERSION)
 $(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/openscenegraph/OpenSceneGraph/archive/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost curl dcmtk freetype gdal giflib gstreamer \
+$(PKG)_DEPS     := cc boost curl dcmtk freetype gdal giflib gstreamer \
                    gta jasper jpeg libpng openal openexr openthreads poppler \
                    qt tiff zlib
 

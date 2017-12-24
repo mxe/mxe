@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 9c2aa718d78f6fecdd783f08ab83b98d3169e5f670404da4c16439306907d
 $(PKG)_SUBDIR   := x265_$($(PKG)_VERSION)
 $(PKG)_FILE     := x265_$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://bitbucket.org/multicoreware/x265/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc yasm
+$(PKG)_DEPS     := cc yasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- https://ftp.videolan.org/pub/videolan/x265/ | \

@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://archive.apache.org/dist/subversion/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://mirror.23media.de/apache/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc apr apr-util openssl sqlite
+$(PKG)_DEPS     := cc apr apr-util openssl sqlite
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://subversion.apache.org/download.cgi' | \

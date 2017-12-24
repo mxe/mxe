@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := ed2dbd6954792b2c054ccf8ec4b330a54b85904a80cef477a1c74643ddafa
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.libarchive.org/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 libiconv libxml2 nettle openssl xz zlib
+$(PKG)_DEPS     := cc bzip2 libiconv libxml2 nettle openssl xz zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.libarchive.org/downloads/' | \

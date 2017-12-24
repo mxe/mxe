@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 6d81c67d3b13073eb5a25aa77188f141b242ec328518fad95367ede253d0a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.csie.ntu.edu.tw/~cjlin/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.csie.ntu.edu.tw/~cjlin/libsvm/' | \

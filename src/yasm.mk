@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.tortall.net/projects/$(PKG)/releases/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc $(BUILD)~$(PKG)
 
 $(PKG)_DEPS_$(BUILD) :=
 

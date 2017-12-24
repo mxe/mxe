@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 24c32d50042cb0ddf162eb263f8ac75c5a158e12bf32ed534c1d5c71ee369
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://taglib.github.io/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, taglib/taglib, v)

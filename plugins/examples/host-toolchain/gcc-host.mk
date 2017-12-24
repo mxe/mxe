@@ -9,7 +9,7 @@ $(PKG)_FILE      = $(gcc_FILE)
 $(PKG)_PATCHES   = $(gcc_PATCHES)
 $(PKG)_URL       = $(gcc_URL)
 $(PKG)_URL_2     = $(gcc_URL_2)
-$(PKG)_DEPS     := gcc binutils-host gmp isl mpfr mpc pthreads
+$(PKG)_DEPS     := cc binutils-host gmp isl mpc mpfr pthreads
 
 define $(PKG)_UPDATE
     echo $(gcc_VERSION)

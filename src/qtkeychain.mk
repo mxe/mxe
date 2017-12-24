@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 0.8.0
 $(PKG)_CHECKSUM := b492f603197538bc04b2714105b1ab2b327a9a98d400d53d9a7cb70edd2db12f
 $(PKG)_FILE     := qtkeychain-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/frankosterfeld/qtkeychain/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc qttools
+$(PKG)_DEPS     := cc qttools
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/frankosterfeld/qtkeychain/releases' | \

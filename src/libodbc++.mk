@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ba3030a27b34e4aafbececa2ddbbf42a38815e9534f34c051620540531b5e
 $(PKG)_SUBDIR   := libodbc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libodbc++-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libodbcxx/libodbc++/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://sourceforge.net/projects/libodbcxx/files/libodbc%2B%2B" | \

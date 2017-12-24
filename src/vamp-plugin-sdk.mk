@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 7b719f9e4575624b30b335c64c00469d3745aef4bca177f66faf3204f0731
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://code.soundsoftware.ac.uk/attachments/download/690/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package vamp-plugin-sdk need to be written.' >&2;

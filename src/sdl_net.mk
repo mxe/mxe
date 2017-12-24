@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 5f4a7a8bb884f793c278ac3f3713be41980c5eedccecff0260411347714fa
 $(PKG)_SUBDIR   := SDL_net-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_net-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.libsdl.org/projects/SDL_net/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl
+$(PKG)_DEPS     := cc sdl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.libsdl.org/projects/SDL_net/release/?C=M;O=D' | \

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654
 $(PKG)_SUBDIR   := libogg-$($(PKG)_VERSION)
 $(PKG)_FILE     := libogg-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://downloads.xiph.org/releases/ogg/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.xiph.org/downloads/' | \

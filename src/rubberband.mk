@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := ff0c63b0b5ce41f937a8a3bc560f27918c5fe0b90c6bc1cb70829b86ada82
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://code.breakfastquay.com/attachments/download/34/$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_DEPS     := gcc fftw libsamplerate libsndfile pthreads vamp-plugin-sdk
+$(PKG)_DEPS     := cc fftw libsamplerate libsndfile pthreads vamp-plugin-sdk
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package rubberband need to be written.' >&2;

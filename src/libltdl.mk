@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM  = $(libtool_CHECKSUM)
 $(PKG)_SUBDIR    = $(libtool_SUBDIR)
 $(PKG)_FILE      = $(libtool_FILE)
 $(PKG)_URL       = $(libtool_URL)
-$(PKG)_DEPS     := gcc dlfcn-win32
+$(PKG)_DEPS     := cc dlfcn-win32
 
 define $(PKG)_UPDATE
     echo $(libtool_VERSION)

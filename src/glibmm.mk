@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 985083d97378d234da27a7243587cc0d186897a4b2d3c1286f794089be1a3
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib libsigc++
+$(PKG)_DEPS     := cc glib libsigc++
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/glibmm/refs/tags' | \

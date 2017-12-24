@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ae7a42df026550b85daca8389b6a60ba6313b0567f374392e54918588a411
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.lysator.liu.se/~nisse/archive/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gmp
+$(PKG)_DEPS     := cc gmp
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.lysator.liu.se/~nisse/archive/' | \

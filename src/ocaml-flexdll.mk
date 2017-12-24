@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := f01d90a8b89a82a6021f3d96a2977a54cb858c561f062a43e5dd451618119
 $(PKG)_SUBDIR   := flexdll
 $(PKG)_FILE     := flexdll-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://alain.frisch.fr/flexdll/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ocaml-native
+$(PKG)_DEPS     := cc ocaml-native
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://alain.frisch.fr/flexdll/?C=M;O=D' | \

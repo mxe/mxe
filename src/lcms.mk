@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 00756bed09ce059a68289f10de56b00267667647393ddc30400cb87c0d903
 $(PKG)_SUBDIR   := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION))
 $(PKG)_FILE     := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION)).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(subst a,,$($(PKG)_VERSION))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc jpeg tiff zlib
+$(PKG)_DEPS     := cc jpeg tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/lcms/files/lcms/' | \

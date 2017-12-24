@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.14.0
 $(PKG)_CHECKSUM := 8d5a5c920b90b70a108007ffcd2289ac652c0e03fc88e6eecefa37df0f2e7fdf
 $(PKG)_GH_CONF  := libass/libass/releases/latest
-$(PKG)_DEPS     := gcc fontconfig freetype fribidi harfbuzz
+$(PKG)_DEPS     := cc fontconfig freetype fribidi harfbuzz
 
 define $(PKG)_BUILD
     # fontconfig is only required for legacy XP support

@@ -10,7 +10,7 @@ $(PKG)_SUBDIR    = $(qtsparkle_SUBDIR)
 $(PKG)_FILE      = $(qtsparkle_FILE)
 $(PKG)_URL       = $(qtsparkle_URL)
 $(PKG)_PATCHES   = $(realpath $(sort $(wildcard $(addsuffix /qtsparkle-[0-9]*.patch, $(TOP_DIR)/src))))
-$(PKG)_DEPS     := gcc qt
+$(PKG)_DEPS     := cc qt
 
 define $(PKG)_UPDATE
     echo $(qtsparkle_VERSION)

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2222433012c415871958b61bc4f3683e1ebe77e3389f698b267058c12533e
 $(PKG)_SUBDIR   := mysql-connector-c-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://dev.mysql.com/get/Downloads/Connector-C/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openssl zlib
+$(PKG)_DEPS     := cc openssl zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://dev.mysql.com/downloads/connector/c/' | \

@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.0
 $(PKG)_CHECKSUM := dc041f7ccf838d4321e9bcf522fece1758768dd7a3f8350d1e83e2b8e6daf1e6
 $(PKG)_GH_CONF  := ukoethe/vigra/tags, Version-,,,-
-$(PKG)_DEPS     := gcc jpeg libpng openexr tiff
+$(PKG)_DEPS     := cc jpeg libpng openexr tiff
 
 define $(PKG)_BUILD
     # Make sure the package gets built statically

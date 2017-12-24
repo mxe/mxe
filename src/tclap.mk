@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 9f9f0fe3719e8a89d79b6ca30cf2d16620fba3db5b9610f9b51dd2cd033de
 $(PKG)_SUBDIR   := tclap-$($(PKG)_VERSION)
 $(PKG)_FILE     := tclap-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/tclap/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/tclap/files/' | \

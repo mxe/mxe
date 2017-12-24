@@ -9,7 +9,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/wg/wrk/archive/$($(PKG)_VERSION).tar.gz
 $(PKG)_WEBSITE  := https://github.com/wg/wrk
 $(PKG)_OWNER    := https://github.com/starius
-$(PKG)_DEPS     := gcc luajit openssl pthreads
+$(PKG)_DEPS     := cc luajit openssl pthreads $(BUILD)~luajit
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, wg/wrk)

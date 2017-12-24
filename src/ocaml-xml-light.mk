@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := fdb205e8b3a25922e46fca52aea449b9a2de4000c5442487e7e74d79f1e22
 $(PKG)_SUBDIR   := xml-light
 $(PKG)_FILE     := xml-light-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://tech.motion-twin.com/zip/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ocaml-findlib
+$(PKG)_DEPS     := cc ocaml-findlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://tech.motion-twin.com/xmllight.html' | \

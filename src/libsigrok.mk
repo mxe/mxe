@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 4c8c86779b880a5c419f6c77a08b1147021e5a19fa83b0f3b19da27463c9f
 $(PKG)_SUBDIR   := libsigrok-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsigrok-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://sigrok.org/download/source/libsigrok/libsigrok-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc glibmm libftdi1 libieee1284 libserialport libzip
+$(PKG)_DEPS     := cc glibmm libftdi1 libieee1284 libserialport libzip
 
 define $(PKG)_UPDATE
     $(call GET_LATEST_VERSION, https://sigrok.org/download/source/libsigrok)

@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := apache-log4cxx-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://www.apache.org/dist/logging/log4cxx/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://archive.apache.org/dist/logging/log4cxx/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc apr-util
+$(PKG)_DEPS     := cc apr-util
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://logging.apache.org/log4cxx/download.html' | \

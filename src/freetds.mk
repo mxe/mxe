@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://fossies.org/linux/privat/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls libiconv
+$(PKG)_DEPS     := cc gnutls libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'ftp://ftp.freetds.org/pub/freetds/stable/' | \

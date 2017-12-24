@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := fab5ba54f141711afc432216d03f3664710798204c78a2a7414479f10b2b2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/luvit/luv/releases/download/1.9.0-1/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libuv luarocks
+$(PKG)_DEPS     := cc libuv luarocks
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, luvit/luv)

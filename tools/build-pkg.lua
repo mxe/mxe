@@ -688,8 +688,8 @@ end
 local function buildItem(item, item2deps, file2item, item2index, pass, prev_files)
     prepareTree(pass, item, item2deps, prev_files, item2index)
     local target, pkg = parseItem(item)
-    local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
-    os.execute(cmd:format(tool 'make', pkg, target))
+    local cmd = '%s %s~%s MXE_TARGETS=%s --jobs=1'
+    os.execute(cmd:format(tool 'make', pkg, target, target))
     gitAdd()
     local new_files, changed_files = gitStatus(item, item2deps, file2item)
     if #new_files + #changed_files > 0 then

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 0000df1b582d7be2e412020c5d748f21c0e6e5074c6b2ca8529985e704793
 $(PKG)_SUBDIR   := gtksourceviewmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtksourceviewmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gtkmm2 gtksourceview
+$(PKG)_DEPS     := cc gtkmm2 gtksourceview
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/cgit/gtksourceviewmm/refs/tags' | \

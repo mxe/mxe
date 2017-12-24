@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 6b14d7ea4964581b73bd3f8038c8857c01e446421c1ae99cbbf64de26b47c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://bitbucket.org/acoustid/chromaprint/downloads/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc ffmpeg
+$(PKG)_DEPS     := cc ffmpeg
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package chromaprint need to be written.' >&2;

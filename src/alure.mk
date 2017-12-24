@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 465e6adae68927be3a023903764662d64404e40c4c152d160e3a8838b1d70
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://kcat.strangesoft.net/alure-releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc flac libsndfile mpg123 ogg openal vorbis
+$(PKG)_DEPS     := cc flac libsndfile mpg123 ogg openal vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://repo.or.cz/w/alure.git/tags | \

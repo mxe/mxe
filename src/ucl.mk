@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := b865299ffd45d73412293369c9754b07637680e5c826915f097577cd27350
 $(PKG)_SUBDIR   := ucl-$($(PKG)_VERSION)
 $(PKG)_FILE     := ucl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.oberhumer.com/opensource/ucl/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 

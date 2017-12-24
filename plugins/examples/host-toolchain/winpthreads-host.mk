@@ -9,7 +9,7 @@ $(PKG)_FILE      = $(mingw-w64_FILE)
 $(PKG)_PATCHES   = $(mingw-w64_PATCHES)
 $(PKG)_URL       = $(mingw-w64_URL)
 $(PKG)_URL_2     = $(mingw-w64_URL_2)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     echo $(mingw-w64_VERSION)

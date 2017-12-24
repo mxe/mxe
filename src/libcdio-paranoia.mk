@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := ec1d9b1d5a28cc042f2cb33a7cc0a2b5ce5525f102bc4c15db1fac322559a
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_URL      := https://ftp.gnu.org/gnu/libcdio/$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_DEPS     := gcc libcdio
+$(PKG)_DEPS     := cc libcdio
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package libcdio-paranoia need to be written.' >&2;

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 5276b5fe00932479ce6fe370ba3213f3ab842d70a7d55e4bead6e26738425
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/lastfm/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc fftw libsamplerate qtbase
+$(PKG)_DEPS     := cc fftw libsamplerate qtbase
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, lastfm/liblastfm)

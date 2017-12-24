@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := CBLAS
 $(PKG)_FILE     := $(PKG).tgz
 $(PKG)_URL      := http://www.netlib.org/blas/blast-forum/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftp.eq.uc.pt/software/math/netlib/blas/blast-forum/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openblas
+$(PKG)_DEPS     := cc openblas
 
 $(PKG)_MESSAGE  :=*** cblas has been replaced by openblas ***
 

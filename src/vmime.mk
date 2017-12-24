@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 680057b
 $(PKG)_CHECKSUM := 9612e121f59db8aea3414583a050494a58cecc5dc754b114044d013170cf38a3
 $(PKG)_GH_CONF  := kisli/vmime/master
-$(PKG)_DEPS     := gcc gnutls libgsasl libiconv pthreads zlib
+$(PKG)_DEPS     := cc gnutls libgsasl libiconv pthreads zlib
 
 define $(PKG)_BUILD
     # The following hint is probably needed for ICU:

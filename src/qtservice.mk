@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := c708cb14637811b5d9060e33e4afe904a9d1c9f39a9befdc3a570f2198250
 $(PKG)_SUBDIR   := qtproject-qt-solutions-$($(PKG)_VERSION)
 $(PKG)_FILE     := qt-solutions-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/qtproject/qt-solutions/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc qtbase
+$(PKG)_DEPS     := cc qtbase
 
 define $(PKG)_UPDATE
     echo 'Warning: Updates are temporarily disabled for package qtservice.' >&2;

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 28cf90f63964e24e65b05084c75d114a997004c8d3f72feae7229da3a0989
 $(PKG)_SUBDIR   := $(PKG)-snapshot-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-snapshot-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/snapshots/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc liblsmash nasm
+$(PKG)_DEPS     := cc liblsmash $(BUILD)~nasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.videolan.org/?p=x264.git;a=shortlog' | \

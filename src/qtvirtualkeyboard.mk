@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 2c2ddd65a335ecdd15e9ff1032a1634330e0d2359760f2a968b21dbc9f4e0
 $(PKG)_SUBDIR    = $(subst qtbase,qtvirtualkeyboard,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtvirtualkeyboard,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtvirtualkeyboard,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase qtdeclarative qtmultimedia qtquickcontrols qtsvg
+$(PKG)_DEPS     := cc qtbase qtdeclarative qtmultimedia qtquickcontrols qtsvg
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

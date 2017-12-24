@@ -12,7 +12,7 @@
 
 $(info == Custom Qt overrides: $(lastword $(MAKEFILE_LIST)))
 
-qt_DEPS := gcc
+qt_DEPS := cc
 
 define qt_BUILD
     $(SED) -i 's,\(^QMAKE_CFLAGS_RELEASE\).*,\1 = -pipe -Os -fomit-frame-pointer -momit-leaf-frame-pointer -fdata-sections -ffunction-sections,g' '$(1)/mkspecs/win32-g++/qmake.conf'

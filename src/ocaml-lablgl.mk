@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := lablgl-$($(PKG)_VERSION)
 $(PKG)_FILE     := lablgl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://wwwfun.kurims.kyoto-u.ac.jp/soft/olabl/dist/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://forge.ocamlcore.org/frs/download.php/1254/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gtkglarea ocaml-findlib
+$(PKG)_DEPS     := cc gtkglarea ocaml-findlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html' | \

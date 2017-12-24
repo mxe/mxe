@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 5a617da9aade997938197ef0f8aabd7f97b670c216dc173977e1d56eef9e1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-nodoc.tar.gz
 $(PKG)_URL      := https://s3.amazonaws.com/$(PKG)_releases/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://s3.amazonaws.com/json-c_releases' | \

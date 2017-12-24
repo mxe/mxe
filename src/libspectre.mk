@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 65256af389823bbc4ee4d25bfd1cc19023ffc29ae9f9677f2d200fa6e98bc
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://libspectre.freedesktop.org/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc cairo ghostscript
+$(PKG)_DEPS     := cc cairo ghostscript
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://libspectre.freedesktop.org/releases/' | \

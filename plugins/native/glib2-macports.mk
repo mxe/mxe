@@ -11,6 +11,7 @@ $(PKG)_FILE     := glib2-$($(PKG)_VERSION)_0.darwin_16.x86_64.tbz2
 $(PKG)_URL      := https://packages.macports.org/glib2/glib2-$($(PKG)_VERSION)_0.darwin_16.x86_64.tbz2
 $(PKG)_DEPS     :=
 $(PKG)_TARGETS  := $(BUILD)
+$(PKG)_TYPE     := source-only
 
 define $(PKG)_UPDATE
     echo 'manually update glib2-macports as necessary' >&2;

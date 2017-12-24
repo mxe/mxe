@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.0.0
 $(PKG)_CHECKSUM := c2c8a8110354463a3332cb48abf8581c8d94136af4dc1418f891cc9c7719e3c1
 $(PKG)_GH_CONF  := fukuchi/libqrencode/tags,v
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_DEPS     := cc pthreads
 
 define $(PKG)_BUILD
     # build and install the library

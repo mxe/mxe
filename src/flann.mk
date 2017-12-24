@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := dfbb9321b0d687626a644c70872a2c540b16200e7f4c7bd72f91ae032f445
 $(PKG)_SUBDIR   := flann-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := flann-$($(PKG)_VERSION)-src.zip
 $(PKG)_URL      := https://www.cs.ubc.ca/research/flann/uploads/FLANN/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.cs.ubc.ca/research/flann/index.php/FLANN/Changelog' | \

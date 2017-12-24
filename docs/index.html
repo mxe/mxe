@@ -278,7 +278,7 @@ exit</pre>
     <p>
     If you only need the most basic tools you can also use:
     </p>
-    <pre>make gcc</pre>
+    <pre>make cc</pre>
     <p>
     and add any additional packages you need later on.
     You can also supply a host of packages on the
@@ -933,7 +933,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         non-parallel
         </dd>
 
-    <dt>make gcc</dt>
+    <dt>make cc</dt>
 
         <dd>
         build a minimal useful set of packages,
@@ -1344,14 +1344,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         The easiest way to get the dependencies right
         is to start with a minimal setup.
         That is,
-        initialize MXE with <code>make gcc</code> only,
+        initialize MXE with <code>make cc</code> only,
         then check whether your package builds successfully.
         </p>
 
         <p>
-        Always list the dependency on <code>gcc</code> explicitly:
+        Always list the dependency on <code>cc</code> explicitly:
         </p>
-        <pre>$(PKG)_DEPS     := gcc ...</pre>
+        <pre>$(PKG)_DEPS     := cc ...</pre>
 
         <p>
         Specify official name and website of a package.
