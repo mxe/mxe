@@ -30,6 +30,8 @@ define $(PKG)_BUILD_$(BUILD)
     $(INSTALL) -d '$(PREFIX)/$(BUILD)/vtkCompileTools'
     cd '$(PREFIX)/$(BUILD)/vtkCompileTools' && '$(PREFIX)/$(BUILD)/bin/cmake' '$(SOURCE_DIR)' \
         -DBUILD_TESTING=FALSE \
+        -DVTK_USE_X=OFF \
+        -DVTK_USE_OFFSCREEN=ON \
         -DCMAKE_BUILD_TYPE="Release"
     $(MAKE) -C '$(PREFIX)/$(BUILD)/vtkCompileTools' -j '$(JOBS)' VERBOSE=1 vtkCompileTools
 endef
