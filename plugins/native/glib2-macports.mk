@@ -13,6 +13,8 @@ $(PKG)_DEPS     :=
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_TYPE     := source-only
 
+MXE_REQS_PKGS   += $(BUILD)~patch
+
 define $(PKG)_UPDATE
     echo 'manually update glib2-macports as necessary' >&2;
     echo $(glib2-macports_VERSION)
