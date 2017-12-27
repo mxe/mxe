@@ -6,23 +6,22 @@ $(PKG)_DESCR    := AO
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.2
 $(PKG)_CHECKSUM := df8a6d0e238feeccb26a783e778716fb41a801536fe7b6fce068e313c0e2bf4d
-$(PKG)_SUBDIR   := libao-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/xiph/libao/archive/$($(PKG)_FILE)
+$(PKG)_GH_CONF  := xiph/libao/tags
 $(PKG)_DEPS     := gcc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://downloads.xiph.org/releases' | \
-    $(SED) -n 's,.*<a href="libao-\([0-9][0-9.]*\)\.tar\.[gx]z">.*,\1,p' | \
-    $(SORT) -V | \
-    tail -1
-endef
-
 define $(PKG)_BUILD
-    cd '$(1)' && ./autogen.sh && \
-    ./configure \
+    cd '$(SOURCE_DIR)' && ./autogen.sh
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-wmm
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        --enable-wmm \
+        LIBS=-lksuser
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    # compile test
+    '$(TARGET)-gcc' \
+        -W -Wall \
+        '$(SOURCE_DIR)/doc/ao_example.c' -o \
+        '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' ao --cflags --libs`
 endef
