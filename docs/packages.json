@@ -144,6 +144,7 @@
     "lensfun": {"version": "0.3.2", "website": "https://lensfun.sourceforge.io/", "description": ""},
     "levmar": {"version": "2.6", "website": "https://www.ics.forth.gr/~lourakis/levmar", "description": ""},
     "libaacs": {"version": "0.8.1", "website": "https://www.videolan.org/developers/libaacs.html", "description": ""},
+    "libao": {"version": "1.2.2", "website": "https://www.xiph.org/libao/", "description": "AO"},
     "libarchive": {"version": "3.3.2", "website": "https://www.libarchive.org/", "description": "Libarchive"},
     "libass": {"version": "0.14.0", "website": "https://code.google.com/p/libass/", "description": ""},
     "libatomic_ops": {"version": "7.4.8", "website": "https://github.com/ivmai/libatomic_ops", "description": "The atomic_ops project (Atomic memory update operations portable implementation)"},
