@@ -12,7 +12,7 @@ $(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/openscenegraph/OpenSceneGraph/archive/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc boost curl dcmtk freetype gdal giflib gstreamer \
                    gta jasper jpeg libpng openal openexr openthreads poppler \
-                   qt tiff zlib
+                   qtbase tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.openscenegraph.org/index.php/download-section/stable-releases' | \
