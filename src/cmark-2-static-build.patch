@@ -1,0 +1,24 @@
+commit 9ead98df8ae2a64842dd157485b69756b5a32a2c
+Author: Nick Wellnhofer <wellnhofer@aevum.de>
+Date:   Tue Nov 14 14:42:06 2017 +0100
+
+    Generate export header for static-only build
+    
+    Fixes issue #247.
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index d5a1936..995a9df 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -115,6 +115,11 @@ if (CMARK_STATIC)
+       VERSION ${PROJECT_VERSION})
+   endif(MSVC)
+ 
++  if (NOT CMARK_SHARED)
++    generate_export_header(${STATICLIBRARY}
++      BASE_NAME ${PROJECT_NAME})
++  endif()
++
+   list(APPEND CMARK_INSTALL ${STATICLIBRARY})
+ endif()
+ 
