@@ -1,0 +1,22 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Bunkus <moritz@bunkus.org>
+Date: Mon, 1 Jan 2018 16:17:41 +0100
+Subject: [PATCH 1/1] do not build and install man pages
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -30,7 +30,6 @@ add_subdirectory(src)
+ if(CMARK_TESTS AND CMARK_SHARED)
+   add_subdirectory(api_test)
+ endif()
+-add_subdirectory(man)
+ if(CMARK_TESTS)
+   enable_testing()
+   add_subdirectory(test testdir)
