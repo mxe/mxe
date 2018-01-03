@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 5069e02e50138600f10cc5f7674e44e9bf6f1930af81d0e1d2f869b3c0ee4
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/mpg123/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc sdl
+$(PKG)_DEPS     := cc sdl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/mpg123/files/mpg123/' | \

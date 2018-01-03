@@ -1,0 +1,25 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 2e44887c114a4c6fb92a65f5505c8cf4cc452b8c Mon Sep 17 00:00:00 2001
+From: Julien Michel <julien.michel@orfeo-toolbox.org>
+Date: Sat, 26 Aug 2017 01:13:50 +0200
+Subject: [PATCH] dllmacro
+
+
+diff --git a/src/lib/openjp2/openjpeg.h b/src/lib/openjp2/openjpeg.h
+index d571c516..d12f1c36 100644
+--- a/src/lib/openjp2/openjpeg.h
++++ b/src/lib/openjp2/openjpeg.h
+@@ -76,7 +76,8 @@ Most compilers implement their own version of this keyword ...
+ #define OPJ_DEPRECATED(func) func
+ #endif
+ 
+-#if defined(OPJ_STATIC) || !defined(_WIN32)
++
++#if defined(OPJ_STATIC) || defined(__MINGW32__) || !defined(_WIN32)
+ /* http://gcc.gnu.org/wiki/Visibility */
+ #   if __GNUC__ >= 4
+ #       if defined(OPJ_STATIC) /* static library uses "hidden" */
+-- 
+2.11.0
+

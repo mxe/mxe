@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://dicom.offis.de/download/$(PKG)/$(PKG)$(subst .,,$($(PKG)_VERSION))/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/d/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
-$(PKG)_DEPS     := gcc libpng libxml2 openssl tiff zlib
+$(PKG)_DEPS     := cc libpng libxml2 openssl tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://dicom.offis.de/dcmtk.php.en' | \

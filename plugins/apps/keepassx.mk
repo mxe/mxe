@@ -9,7 +9,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.keepassx.org/releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := https://www.keepassx.org
 $(PKG)_OWNER    := https://github.com/starius
-$(PKG)_DEPS     := gcc qt
+$(PKG)_DEPS     := cc qt
 
 define $(PKG)_UPDATE
 $(WGET) -q -O- 'https://www.keepassx.org/downloads/' | \

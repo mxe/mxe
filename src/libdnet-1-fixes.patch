@@ -1,5 +1,12 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 20:58:20 +1100
+Subject: [PATCH 1/1] fixes
+
 Patch taken from http://sourceforge.net/mailarchive/message.php?msg_id=27995461
 
 mingwrt 3.20 provides ssize_t and defines _SSIZE_T_. This patch
@@ -7,7 +14,7 @@ allows libdnet to use this ssize_t instead of defining its
 own which causes build failure. Applies to libdnet 1.11.
 
 diff --git a/include/dnet/os.h b/include/dnet/os.h
-index c12c7b2..9e8bdd2 100644
+index 1111111..2222222 100644
 --- a/include/dnet/os.h
 +++ b/include/dnet/os.h
 @@ -23,8 +23,10 @@
@@ -21,6 +28,3 @@ index c12c7b2..9e8bdd2 100644
  #else
  # include <sys/param.h>
  # include <sys/types.h>
--- 
-1.7.6
-

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM  = $(openscenegraph_CHECKSUM)
 $(PKG)_SUBDIR    = $(openscenegraph_SUBDIR)
 $(PKG)_FILE      = $(openscenegraph_FILE)
 $(PKG)_URL       = $(openscenegraph_URL)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     echo $openscenegraph_VERSION)

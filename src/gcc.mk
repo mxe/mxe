@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := binutils mingw-w64
+$(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
@@ -22,6 +22,7 @@ endef
 define $(PKG)_CONFIGURE
     # configure gcc
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_DISABLE_DOC_OPTS) \
         --target='$(TARGET)' \
         --build='$(BUILD)' \
         --prefix='$(PREFIX)' \
@@ -85,6 +86,8 @@ define $(PKG)_BUILD_mingw-w64
     $(MAKE) -C '$(BUILD_DIR).pthreads' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
     # build rest of gcc
+    # `all-target-libstdc++-v3` sometimes has parallel failure
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' all-target-libstdc++-v3 || $(MAKE) -C '$(BUILD_DIR)' -j 1 all-target-libstdc++-v3
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 

@@ -11,7 +11,7 @@ PATCH_NAME = 1-fixes
 
 # can't use PKG_PATCHES here, because it returns existing patches
 # while export-patch creates new patch
-PATCH_BY_NAME = $(patsubst %.mk,%-$(2).patch,$(PKG_MAKEFILES))
+PATCH_BY_NAME = $(patsubst %.mk,%-$(2).patch,$($(1)_MAKEFILE))
 
 define INIT_GIT
     # unpack to gits/tmp/pkg
@@ -46,7 +46,7 @@ define EXPORT_PATCH
         echo 'Contains ad hoc patches for cross building.'; \
         echo ''; \
         $(call GIT_CMD,$(1)) format-patch \
-            --no-numbered \
+            --numbered \
             -p \
             --no-signature \
             --stdout \
@@ -58,21 +58,22 @@ define EXPORT_PATCH
     ) > '$(PATCH_BY_NAME)'
 endef
 
-init-git-%: download-only-%
+_init-git-%: TIMESTAMP = patch
+_init-git-%: download-only-%
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(if $(wildcard $(call GIT_DIR,$*)), \
 	        $(error $(call GIT_DIR,$*) already exists), \
 	        $(call INIT_GIT,$*)), \
 	    $(error Package $* not found))
 
-import-patch-%:
+_import-patch-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(if $(wildcard $(call GIT_DIR,$*)), \
 	        $(call IMPORT_PATCH,$*,$(call PATCH_BY_NAME,$*,$(PATCH_NAME))), \
 	        $(error $(call GIT_DIR,$*) does not exist)), \
 	    $(error Package $* not found))
 
-import-all-patches-%:
+_import-all-patches-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(if $(wildcard $(call GIT_DIR,$*)), \
 	        $(foreach PKG_PATCH,$(call PKG_PATCHES,$*), \
@@ -80,9 +81,46 @@ import-all-patches-%:
 	        $(error $(call GIT_DIR,$*) does not exist)), \
 	    $(error Package $* not found))
 
-export-patch-%:
+_export-patch-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(if $(wildcard $(call GIT_DIR,$*)), \
 	        $(call EXPORT_PATCH,$*,$(PATCH_NAME)), \
 	        $(error $(call GIT_DIR,$*) does not exist)), \
 	    $(error Package $* not found))
+
+# use .SECONDARY: when refreshing all patches if you don't
+# want to unpack everything every time
+#.SECONDARY:
+init-git-%: $(PREFIX)/installed/patch/init-git-% ;
+import-patch-%: $(PREFIX)/installed/patch/import-patch-% ;
+import-all-patches-%: $(PREFIX)/installed/patch/import-all-patches-% ;
+export-patch-%: $(PREFIX)/installed/patch/export-patch-% ;
+
+refresh-patch-%: $(PREFIX)/installed/patch/refresh-patch-% ;
+$(PREFIX)/installed/patch/refresh-patch-%:
+	@rm -rf $(PWD)/tmp-patch/$*
+	@$(MAKE) -f '$(MAKEFILE)' init-git-$*     GITS_DIR=$(PWD)/tmp-patch/$*
+	@$(MAKE) -f '$(MAKEFILE)' import-patch-$* GITS_DIR=$(PWD)/tmp-patch/$*
+	@$(MAKE) -f '$(MAKEFILE)' export-patch-$* GITS_DIR=$(PWD)/tmp-patch/$*
+	@# darwin sometimes chokes deleting large git repos
+	@rm -rf $(PWD)/tmp-patch/$* || sleep 5; rm -rf $(PWD)/tmp-patch/$*
+	+@mkdir -p '$(dir $@)'
+	@touch '$@'
+
+$(PREFIX)/installed/patch/%:
+	@echo '[$*]'
+	@[ -d '$(LOG_DIR)/patch' ] || mkdir -p '$(LOG_DIR)/patch'
+	@(time $(MAKE) -f '$(MAKEFILE)' _$*) &> '$(LOG_DIR)/patch/$*'
+	+@mkdir -p '$(dir $@)'
+	@touch '$@'
+
+
+PATCH_FORMAT_PATCHES := $(shell find $(MXE_PLUGIN_DIRS) plugins -name "*-$(PATCH_NAME).patch")
+PATCH_FORMAT_PKGS    := $(sort $(subst -$(PATCH_NAME),,$(basename $(notdir $(PATCH_FORMAT_PATCHES)))))
+PATCH_FORMAT_DIRS    := $(sort $(basename $(dir $(PATCH_FORMAT_PATCHES))))
+
+.PHONY: refresh-patches
+refresh-patches:
+	@$(MAKE) -f '$(MAKEFILE)' -j '$(JOBS)'\
+	    $(addprefix refresh-patch-,$(PATCH_FORMAT_PKGS)) \
+	    MXE_PLUGIN_DIRS='$(PATCH_FORMAT_DIRS)'

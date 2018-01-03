@@ -3,17 +3,57 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sat, 18 Oct 2014 18:25:34 -0400
-Subject: [PATCH 1/2] Fix geos detection
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Tue, 29 Aug 2017 16:31:09 +0200
+Subject: [PATCH 1/2] Detect spatialite more effectively than just checking for
+ headers in the system paths. PostgreSQL detection requires -lpthread when
+ building statically.
 
 
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1124,7 +1124,7 @@ else
+ 
+   AC_MSG_RESULT([yes])
+ 
+-  AC_CHECK_LIB(pq,PQconnectdb,HAVE_PG=yes,HAVE_PG=no,-L`$PG_CONFIG --libdir`)
++  AC_CHECK_LIB(pq,PQconnectdb,HAVE_PG=yes,HAVE_PG=no,-L`$PG_CONFIG --libdir` -lpthread)
+ 
+   if test "${HAVE_PG}" = "yes" ; then
+     LIBS=-L`$PG_CONFIG --libdir`" -lpq $LIBS"
+@@ -3557,16 +3557,21 @@ AC_ARG_WITH(spatialite-soname,
+ 
+ HAVE_SPATIALITE=no
+ SPATIALITE_AMALGAMATION=no
++HAVE_SPAT_PKG=no
+ 
+ if test -z "$with_spatialite" -o "$with_spatialite" = "no"; then
+     AC_MSG_RESULT(disabled)
+ elif test "$with_spatialite" = "yes"; then
+     AC_CHECK_HEADERS(sqlite3.h)
+     if test "$ac_cv_header_sqlite3_h" = "yes"; then
+-        AC_MSG_CHECKING([for spatialite.h in /usr/include or /usr/local/include])
+-        if test -f "/usr/include/spatialite.h" -o -f "/usr/local/include/spatialite.h"; then
+-            AC_MSG_RESULT(found)
++        #AC_MSG_CHECKING([for spatialite.h in /usr/include or /usr/local/include])
++        #if test -f "/usr/include/spatialite.h" -o -f "/usr/local/include/spatialite.h"; then
++        PKG_CHECK_MODULES(SPATIALITE, spatialite, [HAVE_SPAT_PKG=yes], [HAVE_SPAT_PKG=no])
++        if test "$HAVE_SPAT_PKG" = "yes"; then
++            OLD_LIBS="$LIBS"
++            LIBS="$LIBS -lsqlite3 -lspatialite -lgeos_c -lgeos -lxml2 -liconv -llzma -lproj -lstdc++ -lws2_32 -lm -lz"
+             AC_CHECK_LIB(spatialite,spatialite_init,SPATIALITE_INIT_FOUND=yes,SPATIALITE_INIT_FOUND=no,)
++            LIBS="$OLD_LIBS"
+             if test "$SPATIALITE_INIT_FOUND" = "yes"; then
+                 HAVE_SPATIALITE=yes
+                 SPATIALITE_LIBS="-lspatialite -lsqlite3"
 diff --git a/m4/geos.m4 b/m4/geos.m4
 index 1111111..2222222 100644
 --- a/m4/geos.m4
 +++ b/m4/geos.m4
 @@ -121,14 +121,14 @@ AC_DEFUN([GEOS_INIT],[
-       
+ 
        HAVE_GEOS="no"
  
 -      GEOS_LIBS="`${GEOS_CONFIG} --ldflags` -lgeos_c"
@@ -32,92 +72,24 @@ index 1111111..2222222 100644
          [GEOSversion],
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Tue, 5 Jul 2016 22:23:16 +0300
-Subject: [PATCH 2/2] Use AC_PATH_TOOL for config scripts
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Tue, 26 Sep 2017 14:56:19 +0200
+Subject: [PATCH 2/2] Use the new proj dll version number for the latest proj.
 
 
-diff --git a/configure.in b/configure.in
+diff --git a/ogr/ogrct.cpp b/ogr/ogrct.cpp
 index 1111111..2222222 100644
---- a/configure.in
-+++ b/configure.in
-@@ -866,7 +866,7 @@ AC_ARG_WITH(pg,
- 	       [Include PostgreSQL GDAL/OGR Support (ARG=path to pg_config)]),,)
- 
- if test "x$with_pg" = "xyes" -o "x$with_pg" = "x" ; then
--  AC_PATH_PROG(PG_CONFIG, pg_config, no)
-+  AC_PATH_TOOL(PG_CONFIG, pg_config, no)
- else
-   PG_CONFIG=$with_pg
- fi
-@@ -2016,7 +2016,7 @@ KEA_CONFIG=no
- AC_ARG_WITH(kea,[  --with-kea[=ARG]      Include kealib (ARG=path to kea-config) [[default=yes]]],,)
- 
- if test "$with_kea" = "yes" -o "x$with_kea" = "x" ; then
--  AC_PATH_PROG(KEA_CONFIG, kea-config, no)
-+  AC_PATH_TOOL(KEA_CONFIG, kea-config, no)
- else
-    KEA_CONFIG=$with_kea
- fi
-@@ -2079,10 +2079,10 @@ else
-   dnl find nc-config location
-   unset ac_cv_path_NETCDF_NCCONFIG
-   if test "$with_netcdf" = "yes" -o "$with_netcdf" = "" ; then
--    AC_PATH_PROG(NETCDF_NCCONFIG, nc-config, no)
-+    AC_PATH_TOOL(NETCDF_NCCONFIG, nc-config, no)
-   else
-     tmp_path="$with_netcdf/bin$PATH_SEPARATOR$with_netcdf"
--    AC_PATH_PROG(NETCDF_NCCONFIG, nc-config, no, $tmp_path)
-+    AC_PATH_TOOL(NETCDF_NCCONFIG, nc-config, no, $tmp_path)
-   fi
- 
-   dnl test nc-config
-@@ -2832,7 +2832,7 @@ MYSQL_CONFIG=no
- AC_ARG_WITH(mysql,[  --with-mysql[=ARG]      Include MySQL (ARG=path to mysql_config) [[default=no]]],,)
- 
- if test "$with_mysql" = "yes" ; then
--  AC_PATH_PROG(MYSQL_CONFIG, mysql_config, no)
-+  AC_PATH_TOOL(MYSQL_CONFIG, mysql_config, no)
- else
-     if test "x$with_mysql" != "x" ; then
-       MYSQL_CONFIG=$with_mysql
-@@ -3162,7 +3162,7 @@ if test "`basename xx/$with_curl`" = "curl-config" ; then
- elif test "$with_curl" = "no" ; then
-   LIBCURL_CONFIG=no
- else
--  AC_PATH_PROG(LIBCURL_CONFIG, curl-config, no)
-+  AC_PATH_TOOL(LIBCURL_CONFIG, curl-config, no)
- fi
- 
- if test "$LIBCURL_CONFIG" != "no" ; then
-@@ -3204,7 +3204,7 @@ if test "`basename xx/$with_xml2`" = "xml2-config" ; then
- elif test "$with_xml2" = "no" ; then
-   LIBXML2_CONFIG=no
- else
--  AC_PATH_PROG(LIBXML2_CONFIG, xml2-config, no)
-+  AC_PATH_TOOL(LIBXML2_CONFIG, xml2-config, no)
- fi
- 
- if test "$LIBXML2_CONFIG" != "no" ; then
-diff --git a/m4/geos.m4 b/m4/geos.m4
-index 1111111..2222222 100644
---- a/m4/geos.m4
-+++ b/m4/geos.m4
-@@ -58,7 +58,7 @@ AC_DEFUN([GEOS_INIT],[
- 
-   elif test x"$with_geos" = x"yes" -o x"$with_geos" = x"" ; then
- 
--    AC_PATH_PROG(GEOS_CONFIG, geos-config, no)
-+    AC_PATH_TOOL(GEOS_CONFIG, geos-config, no)
-     ac_geos_config_auto=yes
- 
-   else
-@@ -133,7 +133,7 @@ AC_DEFUN([GEOS_INIT],[
-       AC_CHECK_LIB([geos_c],
-         [GEOSversion],
-         [HAVE_GEOS="yes"],
--        [HAVE_GEOS="no"],
-+        [HAVE_GEOS="no" && echo "$GEOS_LIBS" && exit 1],
-         []
-       )
- 
+--- a/ogr/ogrct.cpp
++++ b/ogr/ogrct.cpp
+@@ -96,9 +96,9 @@ static bool      bProjLocaleSafe = false;
+ // build) it can be named either way, so use PROJSO environment variable to
+ // specify the right library name. By default assume that in Cygwin/MinGW all
+ // components were built in the same way.
+-#  define LIBNAME "libproj-9.dll"
++#  define LIBNAME "libproj-12.dll"
+ #elif defined(__CYGWIN__)
+-#  define LIBNAME "cygproj-9.dll"
++#  define LIBNAME "cygproj-12.dll"
+ #elif defined(__APPLE__)
+ #  define LIBNAME "libproj.dylib"
+ #else

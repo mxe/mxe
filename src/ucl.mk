@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := b865299ffd45d73412293369c9754b07637680e5c826915f097577cd27350
 $(PKG)_SUBDIR   := ucl-$($(PKG)_VERSION)
 $(PKG)_FILE     := ucl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.oberhumer.com/opensource/ucl/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
@@ -20,10 +20,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && \
-        ./configure \
-        $(MXE_CONFIGURE_OPTS) \
+    # configure script is ancient and isn't easy to regenerate
+    # filter out invalid options
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(subst docdir$(comma),,$(MXE_CONFIGURE_OPTS)) \
         CFLAGS='-std=gnu90 -fPIC'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS=-no-undefined
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS='-no-undefined'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

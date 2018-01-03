@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_GITHUB   := https://github.com/anholt/$(PKG)
 $(PKG)_URL      := $($(PKG)_GITHUB)/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc xorg-macros
+$(PKG)_DEPS     := cc xorg-macros
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- '$(libepoxy_GITHUB)/releases' | \

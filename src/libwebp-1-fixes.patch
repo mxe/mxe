@@ -2,8 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 21:36:24 +1100
+Subject: [PATCH 1/1] fixes
+
+
 diff --git a/src/dec/webp.c b/src/dec/webp.c
-index 59e21a9..074f04c 100644
+index 1111111..2222222 100644
 --- a/src/dec/webp.c
 +++ b/src/dec/webp.c
 @@ -451,7 +451,7 @@ void WebPResetDecParams(WebPDecParams* const params) {

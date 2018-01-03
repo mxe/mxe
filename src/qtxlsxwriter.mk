@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := fdf6a7c81e1b8f222770471158b067d3aa49dd2de426bd066b346f2c10beb
 $(PKG)_SUBDIR   := QtXlsxWriter-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/VSRonin/QtXlsxWriter/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc qtbase
+$(PKG)_DEPS     := cc qtbase
 
 $(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, VSRonin/QtXlsxWriter, master)
 

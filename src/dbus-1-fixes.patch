@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: darealshinji <djcj@gmx.de>
 Date: Mon, 3 Jul 2017 01:55:45 +0200
-Subject: [PATCH] Avoid multiple definitions of DllMain in static builds
+Subject: [PATCH 1/1] Avoid multiple definitions of DllMain in static builds
 
 
 diff --git a/dbus/dbus-sysdeps-thread-win.c b/dbus/dbus-sysdeps-thread-win.c

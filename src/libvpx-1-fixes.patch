@@ -2,21 +2,18 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 1408d07fb86254ae1aded0e8cf38e7e0c2550550 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 5 Sep 2013 14:25:31 -0700
 Subject: [PATCH 1/2] Linking as test is not good for cross compiling
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
----
- configure | 3 ---
- 1 file changed, 3 deletions(-)
 
 diff --git a/configure b/configure
-index be36e56..987b2e9 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -490,9 +490,6 @@ process_detect() {
+@@ -561,9 +561,6 @@ process_detect() {
          }
      fi
      check_header stdio.h || die "Unable to invoke compiler: ${CC} ${CFLAGS}"
@@ -26,11 +23,8 @@ index be36e56..987b2e9 100755
      # check system headers
      check_header stdint.h
      check_header pthread.h
--- 
-1.8.1.2
 
-
-From bada4be247273378809a30bf9a0ca7d9c9d2b936 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 5 Sep 2013 14:28:28 -0700
 Subject: [PATCH 2/2] Fix /bin/bash
@@ -38,7 +32,7 @@ Subject: [PATCH 2/2] Fix /bin/bash
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/build/make/gen_msvs_def.sh b/build/make/gen_msvs_def.sh
-index 4defcc2..12e3573 100755
+index 1111111..2222222 100755
 --- a/build/make/gen_msvs_def.sh
 +++ b/build/make/gen_msvs_def.sh
 @@ -1,4 +1,4 @@
@@ -48,7 +42,7 @@ index 4defcc2..12e3573 100755
  ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
 diff --git a/build/make/gen_msvs_proj.sh b/build/make/gen_msvs_proj.sh
-index 6d42941..4418034 100755
+index 1111111..2222222 100755
 --- a/build/make/gen_msvs_proj.sh
 +++ b/build/make/gen_msvs_proj.sh
 @@ -1,4 +1,4 @@
@@ -58,7 +52,7 @@ index 6d42941..4418034 100755
  ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
 diff --git a/build/make/gen_msvs_sln.sh b/build/make/gen_msvs_sln.sh
-index 240678b..2089f68 100755
+index 1111111..2222222 100755
 --- a/build/make/gen_msvs_sln.sh
 +++ b/build/make/gen_msvs_sln.sh
 @@ -1,4 +1,4 @@
@@ -67,5 +61,3 @@ index 240678b..2089f68 100755
  ##
  ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
--- 
-1.8.1.2

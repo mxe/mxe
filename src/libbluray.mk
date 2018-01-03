@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://videolan-nyc.defaultroute.com/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype libxml2
+$(PKG)_DEPS     := cc freetype libxml2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://download.videolan.org/pub/videolan/libbluray/' | \

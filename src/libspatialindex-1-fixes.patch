@@ -1,0 +1,24 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Thu, 24 Aug 2017 10:53:39 +0200
+Subject: [PATCH 1/1] Remove explicit header check - mingw does not ship with
+ this header.
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -38,7 +38,7 @@ AC_CHECK_HEADERS(pthread.h, [
+ LIBS="$LIBS -lpthread"
+ #endif])
+ 
+-AC_CHECK_HEADERS(sys/resource.h,, [AC_MSG_ERROR([cannot find sys/resource.h, bailing out])])
++#AC_CHECK_HEADERS(sys/resource.h,, [AC_MSG_ERROR([cannot find sys/resource.h, bailing out])])
+ AC_CHECK_HEADERS(sys/time.h,, [AC_MSG_ERROR([cannot find sys/time.h, bailing out])])
+ AC_CHECK_HEADERS(stdint.h,, [AC_MSG_ERROR([cannot find stdint.h, bailing out])])
+ AC_CHECK_HEADERS(features.h)

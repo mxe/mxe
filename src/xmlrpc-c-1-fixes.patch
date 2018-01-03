@@ -1,9 +1,17 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-Index: stable/lib/curl_transport/curltransaction.c
-===================================================================
---- stable/lib/curl_transport/curltransaction.c	(revision 2571)
-+++ stable/lib/curl_transport/curltransaction.c	(working copy)
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 23:32:38 +1100
+Subject: [PATCH 1/1] fixes
+
+
+diff --git a/advanced/lib/curl_transport/curltransaction.c b/advanced/lib/curl_transport/curltransaction.c
+index 1111111..2222222 100644
+--- a/advanced/lib/curl_transport/curltransaction.c
++++ b/advanced/lib/curl_transport/curltransaction.c
 @@ -2,8 +2,6 @@
      curlTransaction
  =============================================================================*/
@@ -13,14 +21,15 @@ Index: stable/lib/curl_transport/curltransaction.c
  #include <assert.h>
  #include <string.h>
  #include <stdlib.h>
-Index: stable/lib/expat/xmlparse/xmlparse.c
-===================================================================
---- stable/lib/expat/xmlparse/xmlparse.c	(revision 2571)
-+++ stable/lib/expat/xmlparse/xmlparse.c	(working copy)
-@@ -4547,14 +4547,6 @@
+diff --git a/advanced/lib/expat/xmlparse/xmlparse.c b/advanced/lib/expat/xmlparse/xmlparse.c
+index 1111111..2222222 100644
+--- a/advanced/lib/expat/xmlparse/xmlparse.c
++++ b/advanced/lib/expat/xmlparse/xmlparse.c
+@@ -4546,14 +4546,6 @@ parseNoBuffer(Parser *     const parser,
+ }
  
  
- int
+-int
 -XML_SetHashSalt(XML_Parser parser,
 -                unsigned long hash_salt)
 -{
@@ -28,15 +37,14 @@ Index: stable/lib/expat/xmlparse/xmlparse.c
 -  return 1;
 -}
 -
--int
+ int
  xmlrpc_XML_Parse(XML_Parser   const xmlParserP,
                   const char * const s,
-                  size_t       const len,
-Index: stable/lib/expat/xmlparse/xmlparse.h
-===================================================================
---- stable/lib/expat/xmlparse/xmlparse.h	(revision 2571)
-+++ stable/lib/expat/xmlparse/xmlparse.h	(working copy)
-@@ -491,8 +491,6 @@
+diff --git a/advanced/lib/expat/xmlparse/xmlparse.h b/advanced/lib/expat/xmlparse/xmlparse.h
+index 1111111..2222222 100644
+--- a/advanced/lib/expat/xmlparse/xmlparse.h
++++ b/advanced/lib/expat/xmlparse/xmlparse.h
+@@ -491,8 +491,6 @@ xmlrpc_XML_SetParamEntityParsing(XML_Parser parser,
     function behavior. This must be called before parsing is started.
     Returns 1 if successful, 0 when called after parsing has started.
  */
@@ -45,10 +53,10 @@ Index: stable/lib/expat/xmlparse/xmlparse.h
  
  enum XML_Error {
    XML_ERROR_NONE,
-Index: stable/src/cpp/packetsocket.cpp
-===================================================================
---- stable/src/cpp/packetsocket.cpp	(revision 2571)
-+++ stable/src/cpp/packetsocket.cpp	(working copy)
+diff --git a/advanced/src/cpp/packetsocket.cpp b/advanced/src/cpp/packetsocket.cpp
+index 1111111..2222222 100644
+--- a/advanced/src/cpp/packetsocket.cpp
++++ b/advanced/src/cpp/packetsocket.cpp
 @@ -45,7 +45,7 @@
    example, an unplugged TCP/IP network cable.  It's probably better
    to use the TCP keepalive facility for that.
@@ -58,20 +66,20 @@ Index: stable/src/cpp/packetsocket.cpp
  
  #include <cassert>
  #include <string>
-Index: stable/src/cpp/server_abyss.cpp
-===================================================================
---- stable/src/cpp/server_abyss.cpp	(revision 2571)
-+++ stable/src/cpp/server_abyss.cpp	(working copy)
+diff --git a/advanced/src/cpp/server_abyss.cpp b/advanced/src/cpp/server_abyss.cpp
+index 1111111..2222222 100644
+--- a/advanced/src/cpp/server_abyss.cpp
++++ b/advanced/src/cpp/server_abyss.cpp
 @@ -1,4 +1,4 @@
 -#include "xmlrpc_config.h"
 +#define MSVCRT 1
  #define WIN32_LEAN_AND_MEAN  /* required by xmlrpc-c/abyss.h */
  #include <cstdlib>
  #include <string>
-Index: stable/src/cpp/server_cgi.cpp
-===================================================================
---- stable/src/cpp/server_cgi.cpp	(revision 2571)
-+++ stable/src/cpp/server_cgi.cpp	(working copy)
+diff --git a/advanced/src/cpp/server_cgi.cpp b/advanced/src/cpp/server_cgi.cpp
+index 1111111..2222222 100644
+--- a/advanced/src/cpp/server_cgi.cpp
++++ b/advanced/src/cpp/server_cgi.cpp
 @@ -12,7 +12,7 @@
     Contributed to the public domain by its author.
  =============================================================================*/
@@ -81,10 +89,10 @@ Index: stable/src/cpp/server_cgi.cpp
  #if MSVCRT
  #ifndef _CRT_SECURE_NO_WARNINGS
  #define _CRT_SECURE_NO_WARNINGS
-Index: stable/src/cpp/server_pstream.cpp
-===================================================================
---- stable/src/cpp/server_pstream.cpp	(revision 2571)
-+++ stable/src/cpp/server_pstream.cpp	(working copy)
+diff --git a/advanced/src/cpp/server_pstream.cpp b/advanced/src/cpp/server_pstream.cpp
+index 1111111..2222222 100644
+--- a/advanced/src/cpp/server_pstream.cpp
++++ b/advanced/src/cpp/server_pstream.cpp
 @@ -14,7 +14,7 @@
     Contributed to the public domain by its author.
  =============================================================================*/
@@ -94,10 +102,10 @@ Index: stable/src/cpp/server_pstream.cpp
  #if MSVCRT
  #ifndef _CRT_SECURE_NO_WARNINGS
  #define _CRT_SECURE_NO_WARNINGS
-Index: stable/src/xmlrpc_datetime.c
-===================================================================
---- stable/src/xmlrpc_datetime.c	(revision 2571)
-+++ stable/src/xmlrpc_datetime.c	(working copy)
+diff --git a/advanced/src/xmlrpc_datetime.c b/advanced/src/xmlrpc_datetime.c
+index 1111111..2222222 100644
+--- a/advanced/src/xmlrpc_datetime.c
++++ b/advanced/src/xmlrpc_datetime.c
 @@ -1,7 +1,5 @@
  #include "xmlrpc_config.h"
  

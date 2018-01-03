@@ -1,0 +1,26 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Bunkus <moritz@bunkus.org>
+Date: Tue, 25 Jul 2017 17:25:57 +1000
+Subject: [PATCH 1/1] fix test program compilation with gcc >= 6
+
+taken from:
+https://github.com/mxe/mxe/pull/1816
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71803
+
+diff --git a/SDL_sound.h b/SDL_sound.h
+index 1111111..2222222 100644
+--- a/SDL_sound.h
++++ b/SDL_sound.h
+@@ -114,7 +114,7 @@ typedef enum
+         /* these are set during decoding... */
+     SOUND_SAMPLEFLAG_EOF     = 1 << 29, /**< End of input stream. */
+     SOUND_SAMPLEFLAG_ERROR   = 1 << 30, /**< Unrecoverable error. */
+-    SOUND_SAMPLEFLAG_EAGAIN  = 1 << 31  /**< Function would block, or temp error. */
++    SOUND_SAMPLEFLAG_EAGAIN  = (int)(1u << 31)  /**< Function would block, or temp error. */
+ } Sound_SampleFlags;
+ 
+ 

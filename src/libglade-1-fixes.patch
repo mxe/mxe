@@ -2,15 +2,15 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 01e3cf1fae96edc0b5e8ccd0bf2c2ea11d0a6987 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sun, 4 Aug 2013 23:32:15 +0200
-Subject: [PATCH] comment out production of some file for make install to
+Subject: [PATCH 1/1] comment out production of some file for make install to
  succeed
 
 
 diff --git a/glade/Makefile.am b/glade/Makefile.am
-index f6271f7..fae55bc 100644
+index 1111111..2222222 100644
 --- a/glade/Makefile.am
 +++ b/glade/Makefile.am
 @@ -13,10 +13,10 @@ if OS_WIN32
@@ -26,6 +26,3 @@ index f6271f7..fae55bc 100644
  else
  
  export_symbols = -export-symbols-regex "^[^_].*"
--- 
-1.8.1.2
-

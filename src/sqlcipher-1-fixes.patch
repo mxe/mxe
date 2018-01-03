@@ -1,0 +1,25 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Wed, 27 Sep 2017 15:26:44 +0000
+Subject: [PATCH 1/1] fix dependency
+
+Source:
+https://github.com/Alexpux/MINGW-packages/blob/f083f27fb163b68673d5ac649fae353f44b49c7d/mingw-w64-sqlcipher/01-fix_dep.diff
+
+diff --git a/Makefile.in b/Makefile.in
+index 1111111..2222222 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -1074,7 +1074,7 @@ FTS5_SRC = \
+    $(TOP)/ext/fts5/fts5_varint.c \
+    $(TOP)/ext/fts5/fts5_vocab.c  \
+ 
+-fts5parse.c:	$(TOP)/ext/fts5/fts5parse.y lemon 
++fts5parse.c:	$(TOP)/ext/fts5/fts5parse.y lemon$(BEXE)
+ 	cp $(TOP)/ext/fts5/fts5parse.y .
+ 	rm -f fts5parse.h
+ 	./lemon$(BEXE) $(OPTS) fts5parse.y

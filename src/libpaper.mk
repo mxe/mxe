@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := libpaper-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpaper_$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://linux.mirrors.es.net/pub/ubuntu/pool/main/libp/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://packages.debian.org/unstable/source/libpaper' | \

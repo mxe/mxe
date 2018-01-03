@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 8099633de9d71cbc06cd435da993eb424bbcdbded8f803cdaa9fb8c6e09c8
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://ab-initio.mit.edu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://ab-initio.mit.edu/wiki/index.php/NLopt' | \

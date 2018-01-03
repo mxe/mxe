@@ -26,20 +26,20 @@ void *minst;
 
 int main(int argc, char *argv[])
 {
-	int code;
+    int code;
 
-	(void)argc;
-	(void)argv;
+    (void)argc;
+    (void)argv;
 
-	code = gsapi_new_instance(&minst, 0);
-	if (code < 0)
-		return 1;
+    code = gsapi_new_instance(&minst, 0);
+    if (code < 0)
+        return 1;
 
-	code = gsapi_exit(minst);
-	if (code < 0)
-		return 1;
+    code = gsapi_exit(minst);
+    if (code < 0)
+        return 1;
 
-	gsapi_delete_instance(minst);
+    gsapi_delete_instance(minst);
 
-	return 0;
+    return 0;
 }

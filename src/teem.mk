@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := a01386021dfa802b3e7b4defced2f3c8235860d500c1fa2f347483775d4c8
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 levmar libpng pthreads zlib
+$(PKG)_DEPS     := cc bzip2 levmar libpng pthreads zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://sourceforge.net/projects/teem/files/teem/" | \
@@ -19,9 +19,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(TARGET)-cmake' . \
-        -DQNANHIBIT_VALUE=1 -DQNANHIBIT_VALUE__TRYRUN_OUTPUT=1
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DQNANHIBIT_VALUE=1 \
+        -DQNANHIBIT_VALUE__TRYRUN_OUTPUT=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef
-
-$(PKG)_BUILD_SHARED =

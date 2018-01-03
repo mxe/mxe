@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 0b90722984561004de84847744d566809dbb9daf732a9e503b91a1b5a84e5
 $(PKG)_SUBDIR   := SDL_image-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_image-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc jpeg libpng libwebp sdl tiff
+$(PKG)_DEPS     := cc jpeg libpng libwebp sdl tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://hg.libsdl.org/SDL_image/tags' | \
@@ -20,31 +20,29 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,^\(Requires:.*\),\1 libtiff-4 libpng libwebp,' '$(1)/SDL_image.pc.in'
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)' \
+    $(SED) -i 's,^\(Requires:.*\),\1 libtiff-4 libpng libwebp,' '$(SOURCE_DIR)/SDL_image.pc.in'
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_CONFIGURE_OPTS) \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)' \
         --disable-sdltest \
-        --disable-jpg-shared \
-        --disable-png-shared \
-        --disable-tif-shared \
-        --disable-webp-shared \
+        $(if $(BUILD_STATIC), \
+            --disable-jpg-shared \
+            --disable-png-shared \
+            --disable-tif-shared \
+            --disable-webp-shared) \
         WINDRES='$(TARGET)-windres' \
         LIBS='-lz'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl_image.exe' \
         `'$(TARGET)-pkg-config' SDL_image --cflags --libs`
 
-    mkdir -p '$(1)/cmake-build-test'
-    cp '$(PWD)/src/$(PKG)-test-CMakeLists.txt' '$(1)/cmake-build-test/CMakeLists.txt'
-    cp '$(PWD)/src/$(PKG)-test.c' '$(1)/cmake-build-test/'
-    cd '$(1)/cmake-build-test' && '$(TARGET)-cmake'
-    $(MAKE) -C '$(1)/cmake-build-test' -j '$(JOBS)'
+    mkdir -p '$(BUILD_DIR).cmake-build-test'
+    cp '$(PWD)/src/$(PKG)-test-CMakeLists.txt' '$(BUILD_DIR).cmake-build-test/CMakeLists.txt'
+    cp '$(PWD)/src/$(PKG)-test.c' '$(BUILD_DIR).cmake-build-test/'
+    cd '$(BUILD_DIR).cmake-build-test' && '$(TARGET)-cmake'
+    $(MAKE) -C '$(BUILD_DIR).cmake-build-test' -j '$(JOBS)'
 endef
-
-$(PKG)_BUILD_SHARED =

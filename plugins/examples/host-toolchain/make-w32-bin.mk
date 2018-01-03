@@ -2,8 +2,8 @@
 
 PKG             := make-w32-bin
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.2
-$(PKG)_CHECKSUM := 6cab11301e601996ab0cb7b3b903e5a55d5bd795614946cf6bd025cd61c710c6
+$(PKG)_VERSION  := 4.2.1
+$(PKG)_CHECKSUM := 30641be9602712be76212b99df7209f4f8f518ba764cf564262bc9d6e4047cc7
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := make-$($(PKG)_VERSION)-without-guile-w32-bin.zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/ezwinports/$($(PKG)_FILE)

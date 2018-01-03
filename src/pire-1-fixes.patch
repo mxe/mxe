@@ -2,8 +2,8 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 563abb90dd28a922b5da52c8adb9a296537bbf86 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sat, 25 Jul 2015 16:39:52 +0300
 Subject: [PATCH 1/2] remove custom isatty
 
@@ -20,7 +20,7 @@ inline.lpp:40:12: note: previous declaration with 'C++' linkage
 make[5]: *** [inline.o] Error 1
 
 diff --git a/pire/inline.lpp b/pire/inline.lpp
-index e5f6b55..25ef388 100644
+index 1111111..2222222 100644
 --- a/pire/inline.lpp
 +++ b/pire/inline.lpp
 @@ -36,10 +36,6 @@ ystring filename = "";
@@ -34,18 +34,15 @@ index e5f6b55..25ef388 100644
  class Die {
  public:
  	Die() {
--- 
-2.3.2 (Apple Git-55)
 
-
-From de14f09bb7d7a37220aefb877c378ec445837486 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Mon, 21 Sep 2015 18:41:12 +1000
 Subject: [PATCH 2/2] check for target AR
 
 
 diff --git a/configure.ac b/configure.ac
-index e185cb9..86c5c1e 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -8,6 +8,7 @@ AC_CONFIG_MACRO_DIR([m4])
@@ -56,6 +53,3 @@ index e185cb9..86c5c1e 100644
  AC_PROG_CXX
  AC_PROG_CC
  AC_PROG_LEX
--- 
-2.3.2 (Apple Git-55)
-

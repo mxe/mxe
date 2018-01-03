@@ -2,15 +2,15 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 3a3ddccba8fa90a42551fb4d529c921c0aac4f63 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Wed, 3 Oct 2012 09:25:11 +0200
-Subject: [PATCH] ocamlbuild : support for prefixed
+Subject: [PATCH 1/1] ocamlbuild : support for prefixed
  ocaml{c,opt,mklib,mktop,find} tools
 
 
 diff --git a/ocamlbuild/findlib.ml b/ocamlbuild/findlib.ml
-index b5ef878..77454ed 100644
+index 1111111..2222222 100644
 --- a/ocamlbuild/findlib.ml
 +++ b/ocamlbuild/findlib.ml
 @@ -44,7 +44,7 @@ let report_error e =
@@ -23,7 +23,7 @@ index b5ef878..77454ed 100644
  type package = {
    name: string;
 diff --git a/ocamlbuild/options.ml b/ocamlbuild/options.ml
-index 1be4b63..e7313de 100644
+index 1111111..2222222 100644
 --- a/ocamlbuild/options.ml
 +++ b/ocamlbuild/options.ml
 @@ -39,16 +39,17 @@ let use_menhir = ref false
@@ -95,6 +95,3 @@ index 1be4b63..e7313de 100644
    end;
  
    let reorder x y = x := !x @ (List.concat (List.rev !y)) in
--- 
-1.8.1.2
-

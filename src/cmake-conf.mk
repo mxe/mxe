@@ -4,7 +4,9 @@ PKG            := cmake-conf
 $(PKG)_VERSION := 1
 $(PKG)_UPDATE  := echo 1
 $(PKG)_TARGETS := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS    := $(BUILD)~$(PKG)
 $(PKG)_FILE_DEPS := $(wildcard $(PWD)/src/cmake/conf/*)
+$(PKG)_DEPS_$(BUILD) := cmake
 
 define $(PKG)_BUILD
     # create the CMake toolchain file using template
@@ -36,6 +38,8 @@ define $(PKG)_BUILD
         -DINPUT='$(PWD)/src/cmake/conf/target-cmake.in' \
         -DOUTPUT='$(PREFIX)/bin/$(TARGET)-cmake'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-cmake'
+
+    ln -sf '$(PREFIX)/$(BUILD)/bin/cpack' '$(PREFIX)/bin/$(TARGET)-cpack'
 endef
 
 define $(PKG)_BUILD_$(BUILD)

@@ -2,17 +2,17 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 002715e4bdd4f2aacb6ce8b1b89bae734b6c36fc Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Wed, 13 Jun 2012 22:27:54 +0200
-Subject: [PATCH] various patches to build an ocaml cross compiler
+Subject: [PATCH 1/1] various patches to build an ocaml cross compiler
 
 
 diff --git a/Makefile b/Makefile
-index e53fd0d..0decd00 100644
+index 1111111..2222222 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -289,16 +289,17 @@ install:
+@@ -288,16 +288,17 @@ install:
  	for i in $(OTHERLIBRARIES); do \
  	  (cd otherlibs/$$i; $(MAKE) install) || exit $$?; \
  	done
@@ -33,7 +33,7 @@ index e53fd0d..0decd00 100644
  	cd asmrun; $(MAKE) install
  	cp ocamlopt $(BINDIR)/ocamlopt$(EXE)
  	cd stdlib; $(MAKE) installopt
-@@ -737,7 +738,7 @@ ocamlbuild.native: ocamlopt ocamlbuild-mixed-boot
+@@ -736,7 +737,7 @@ ocamlbuild.native: ocamlopt ocamlbuild-mixed-boot
  ocamlbuildlib.native: ocamlopt ocamlbuild-mixed-boot
  	./build/ocamlbuildlib-native-only.sh
  
@@ -44,7 +44,7 @@ index e53fd0d..0decd00 100644
  
 diff --git a/Makefile-mingw.in b/Makefile-mingw.in
 new file mode 100644
-index 0000000..c3dddf6
+index 1111111..2222222
 --- /dev/null
 +++ b/Makefile-mingw.in
 @@ -0,0 +1,160 @@
@@ -209,7 +209,7 @@ index 0000000..c3dddf6
 +BUILD_CFLAGS=
 +
 diff --git a/asmrun/Makefile b/asmrun/Makefile
-index d4f0c56..a535666 100644
+index 1111111..2222222 100644
 --- a/asmrun/Makefile
 +++ b/asmrun/Makefile
 @@ -26,7 +26,7 @@ COBJS=startup.o main.o fail.o roots.o globroots.o signals.o signals_asm.o \
@@ -240,7 +240,7 @@ index d4f0c56..a535666 100644
  
  clean::
 diff --git a/asmrun/i386.S b/asmrun/i386.S
-index e8e00a4..800247e 100644
+index 1111111..2222222 100644
 --- a/asmrun/i386.S
 +++ b/asmrun/i386.S
 @@ -76,6 +76,9 @@
@@ -254,7 +254,7 @@ index e8e00a4..800247e 100644
  #else
  #define PROFILE_CAML
 diff --git a/byterun/Makefile.common b/byterun/Makefile.common
-index b519f75..2274562 100755
+index 1111111..2222222 100755
 --- a/byterun/Makefile.common
 +++ b/byterun/Makefile.common
 @@ -24,7 +24,7 @@ COMMONOBJS=\
@@ -267,7 +267,7 @@ index b519f75..2274562 100755
  PRIMS=\
    alloc.c array.c compare.c extern.c floats.c gc_ctrl.c hash.c \
 diff --git a/byterun/dynlink.c b/byterun/dynlink.c
-index 5cb2ed7..b6605fa 100644
+index 1111111..2222222 100644
 --- a/byterun/dynlink.c
 +++ b/byterun/dynlink.c
 @@ -80,7 +80,12 @@ static char * parse_ld_conf(void)
@@ -285,7 +285,7 @@ index 5cb2ed7..b6605fa 100644
    strcpy(ldconfname, stdlib);
    strcat(ldconfname, "/" LD_CONF_NAME);
 diff --git a/byterun/unix.c b/byterun/unix.c
-index 7d24ef4..3619e67 100644
+index 1111111..2222222 100644
 --- a/byterun/unix.c
 +++ b/byterun/unix.c
 @@ -15,6 +15,8 @@
@@ -304,7 +304,7 @@ index 7d24ef4..3619e67 100644
 +
 +#endif /* !WIN32 */
 diff --git a/byterun/win32.c b/byterun/win32.c
-index f8ba9c9..82afc1c 100644
+index 1111111..2222222 100644
 --- a/byterun/win32.c
 +++ b/byterun/win32.c
 @@ -13,6 +13,8 @@
@@ -369,7 +369,7 @@ index f8ba9c9..82afc1c 100644
 +#endif /* WIN32 */
 diff --git a/hardcode_mingw_include.patch b/hardcode_mingw_include.patch
 new file mode 100644
-index 0000000..571747d
+index 1111111..2222222
 --- /dev/null
 +++ b/hardcode_mingw_include.patch
 @@ -0,0 +1,24 @@
@@ -398,7 +398,7 @@ index 0000000..571747d
 + and ocamlopt = ref (compiler_path "ocamlopt")
 + and output = ref "a"        (* Output name for Caml part of library *)
 diff --git a/myocamlbuild.ml b/myocamlbuild.ml
-index c687242..ccdd937 100644
+index 1111111..2222222 100644
 --- a/myocamlbuild.ml
 +++ b/myocamlbuild.ml
 @@ -107,9 +107,11 @@ let if_mixed_dir dir =
@@ -417,7 +417,7 @@ index c687242..ccdd937 100644
  let threads_dir    = if_mixed_dir "otherlibs/threads";;
  let systhreads_dir = if_mixed_dir "otherlibs/systhreads";;
 diff --git a/ocamldoc/Makefile b/ocamldoc/Makefile
-index 74c82d3..61036c8 100644
+index 1111111..2222222 100644
 --- a/ocamldoc/Makefile
 +++ b/ocamldoc/Makefile
 @@ -69,6 +69,7 @@ INCLUDES_DEP=-I $(OCAMLSRCDIR)/parsing \
@@ -429,7 +429,7 @@ index 74c82d3..61036c8 100644
  	-I $(OCAMLSRCDIR)/otherlibs/num \
  	-I $(OCAMLSRCDIR)/otherlibs/graph
 diff --git a/otherlibs/Makefile.shared b/otherlibs/Makefile.shared
-index 2c084a0..0e13022 100644
+index 1111111..2222222 100644
 --- a/otherlibs/Makefile.shared
 +++ b/otherlibs/Makefile.shared
 @@ -33,7 +33,7 @@ MKLIB=$(CAMLRUN) $(ROOTDIR)/tools/ocamlmklib
@@ -463,7 +463,7 @@ index 2c084a0..0e13022 100644
  lib$(CLIBNAME).$(A): $(COBJS)
  	$(MKLIB) -oc $(CLIBNAME) $(COBJS) $(LDOPTS)
 diff --git a/otherlibs/bigarray/Makefile b/otherlibs/bigarray/Makefile
-index d442edb..dc34d6d 100644
+index 1111111..2222222 100644
 --- a/otherlibs/bigarray/Makefile
 +++ b/otherlibs/bigarray/Makefile
 @@ -14,8 +14,8 @@
@@ -478,7 +478,7 @@ index d442edb..dc34d6d 100644
  CAMLOBJS=bigarray.cmo
  HEADERS=bigarray.h
 diff --git a/otherlibs/systhreads/Makefile b/otherlibs/systhreads/Makefile
-index 502498f..7ed53df 100644
+index 1111111..2222222 100644
 --- a/otherlibs/systhreads/Makefile
 +++ b/otherlibs/systhreads/Makefile
 @@ -15,13 +15,13 @@
@@ -526,7 +526,7 @@ index 502498f..7ed53df 100644
  # See remark above: force static linking of libthreadsnat.a
  threads.cmxa: $(THREAD_OBJS:.cmo=.cmx)
 diff --git a/otherlibs/systhreads/Makefile.nt b/otherlibs/systhreads/Makefile.nt
-index dc118b7..4b53d6e 100644
+index 1111111..2222222 100644
 --- a/otherlibs/systhreads/Makefile.nt
 +++ b/otherlibs/systhreads/Makefile.nt
 @@ -21,6 +21,7 @@ CAMLOPT=../../boot/ocamlrun ../../ocamlopt -I ../../stdlib -I ../win32unix
@@ -572,7 +572,7 @@ index dc118b7..4b53d6e 100644
  	cp threads.cmxs $(LIBDIR)/threads
  
 diff --git a/otherlibs/systhreads/st_win32.h b/otherlibs/systhreads/st_win32.h
-index da602b7..7e1dcb9 100644
+index 1111111..2222222 100644
 --- a/otherlibs/systhreads/st_win32.h
 +++ b/otherlibs/systhreads/st_win32.h
 @@ -17,7 +17,7 @@
@@ -585,7 +585,7 @@ index da602b7..7e1dcb9 100644
  #include <signal.h>
  
 diff --git a/otherlibs/win32graph/Makefile.nt b/otherlibs/win32graph/Makefile.nt
-index 62c4678..e7c6d6b 100644
+index 1111111..2222222 100644
 --- a/otherlibs/win32graph/Makefile.nt
 +++ b/otherlibs/win32graph/Makefile.nt
 @@ -18,10 +18,11 @@ COBJS=open.$(O) draw.$(O) events.$(O) dib.$(O)
@@ -602,7 +602,7 @@ index 62c4678..e7c6d6b 100644
  	cp ../graph/graphics.ml graphics.ml
  graphics.mli: ../graph/graphics.mli
 diff --git a/otherlibs/win32unix/Makefile.nt b/otherlibs/win32unix/Makefile.nt
-index 76a1c19..c401bbb 100644
+index 1111111..2222222 100644
 --- a/otherlibs/win32unix/Makefile.nt
 +++ b/otherlibs/win32unix/Makefile.nt
 @@ -40,7 +40,6 @@ LIBNAME=unix
@@ -623,7 +623,7 @@ index 76a1c19..c401bbb 100644
  	rm -f $(UNIX_FILES) $(UNIX_CAML_FILES)
  
 diff --git a/utils/config.mlp b/utils/config.mlp
-index cdf67d4..b905059 100644
+index 1111111..2222222 100644
 --- a/utils/config.mlp
 +++ b/utils/config.mlp
 @@ -86,11 +86,7 @@ let ext_asm = "%%EXT_ASM%%"
@@ -648,6 +648,3 @@ index cdf67d4..b905059 100644
    p "default_executable_name" default_executable_name;
    p_bool "systhread_supported" systhread_supported;
    flush oc;
--- 
-1.7.9.5
-

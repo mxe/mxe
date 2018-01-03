@@ -1,7 +1,18 @@
-diff -burN libgeotiff-1.4.0.orig/configure.ac libgeotiff-1.4.0/configure.ac
---- libgeotiff-1.4.0.orig/configure.ac	2015-06-21 03:50:03.341076086 +0200
-+++ libgeotiff-1.4.0/configure.ac	2015-06-21 03:50:39.741125191 +0200
-@@ -280,7 +280,7 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Tue, 1 Aug 2017 10:20:44 +0200
+Subject: [PATCH 1/1] Patch template definitions
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -281,7 +281,7 @@ elif test "$PROJ_LIB" != "" -a "$PROJ_INC" != "" ; then
    PROJ_INC=-I$PROJ_INC
  
    AC_SUBST(PROJ_INC,$PROJ_INC)
@@ -10,3 +21,12 @@ diff -burN libgeotiff-1.4.0.orig/configure.ac libgeotiff-1.4.0/configure.ac
    AC_DEFINE(HAVE_LIBPROJ)
    AC_SUBST([HAVE_LIBPROJ])
    PROJ_CONFIG="yes"
+@@ -317,7 +317,7 @@ fi
+ AM_CONDITIONAL([CSV_IS_CONFIG], [test ! x$CSV_CONFIG = xno])
+ 
+ 
+-AC_ARG_ENABLE(towgs84, [  --disable-towgs84       Disable WGS84 parameters for binary compatibility with pre-1.4.1], AC_DEFINE(GEO_NORMALIZE_DISABLE_TOWGS84))
++AC_ARG_ENABLE(towgs84, [  --disable-towgs84       Disable WGS84 parameters for binary compatibility with pre-1.4.1], AC_DEFINE([GEO_NORMALIZE_DISABLE_TOWGS84], [], [Description]))
+ 
+ dnl #########################################################################
+ dnl Doxygen settings

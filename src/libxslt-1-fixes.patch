@@ -2,14 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 5cdef88cc0bd288b4814509062234b72d27dc176 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Tue, 05 Jul 2016 21:12:38 +0300
-Subject: [PATCH] fix for deprecated mkdir
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Tue, 5 Jul 2016 21:12:38 +0300
+Subject: [PATCH 1/1] fix for deprecated mkdir
 
 
 diff --git a/libxslt/security.c b/libxslt/security.c
-index 965175f..be36f4b 100644
+index 1111111..2222222 100644
 --- a/libxslt/security.c
 +++ b/libxslt/security.c
 @@ -343,7 +343,7 @@ xsltCheckWritePath(xsltSecurityPrefsPtr sec,
@@ -21,6 +21,3 @@ index 965175f..be36f4b 100644
  	}
  	xmlFree(directory);
  	if (ret < 0)
--- 
-1.8.2.3
-

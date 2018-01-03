@@ -8,11 +8,11 @@ $(PKG)_VERSION  := 1.2.0
 $(PKG)_CHECKSUM := 4beae96acfc13dbb8b0a798a0664380429c6a94357e7dc5747d76599deabdfc7
 $(PKG)_SUBDIR   := cairo-ocaml-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-ocaml_$($(PKG)_VERSION).orig.tar.gz
-$(PKG)_URL      := https://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ocaml-core ocaml-findlib ocaml-lablgtk2
+$(PKG)_URL      := https://debian.inf.tu-dresden.de/debian/pool/main/c/cairo-ocaml/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc ocaml-core ocaml-findlib ocaml-lablgtk2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.de.debian.org/debian/pool/main/c/cairo-ocaml/?C=M;O=D' | \
+    $(WGET) -q -O- 'https://debian.inf.tu-dresden.de/debian/pool/main/c/cairo-ocaml/?C=M;O=D' | \
     $(SED) -n 's,.*cairo-ocaml_\([0-9][^>]*\)\.orig\.tar.*,\1,ip' | \
     head -1
 endef

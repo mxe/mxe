@@ -59,9 +59,17 @@ local BLACKLIST = {
     '^usr/share/man/',
     '^usr/share/gcc',
     '^usr/share/gtk-doc',
-    '^usr/lib/nonetwork.so',
     '^usr/[^/]+/share/doc/',
     '^usr/[^/]+/share/info/',
+    '^usr/[^/]+/bin/%.waf%-.*',
+
+    -- usr/lib/nonetwork.so and
+    -- usr/x86_64-unknown-linux-gnu/lib/nonetwork.so
+    'lib/nonetwork.so',
+
+    -- https://github.com/mxe/mxe/issues/1886#issuecomment-331719282
+    'installed/.gitkeep',
+    'lib/.gitkeep',
 }
 
 local TARGETS = {
@@ -193,6 +201,13 @@ local function fileExists(name)
     end
 end
 
+local function fileSize(name)
+    local f = io.open(name, "r")
+    local size = f:seek("end")
+    io.close(f)
+    return size
+end
+
 local function isSymlink(name)
     return shell(("ls -l %q"):format(name)):sub(1, 1) == "l"
 end
@@ -299,7 +314,7 @@ end
 
 -- return items ordered in build order
 -- this means, if item depends on item2, then
--- item2 preceeds item1 in the list
+-- item2 precedes item1 in the list
 local function sortForBuild(items, item2deps)
     local n = #items
     local item2followers = transpose(item2deps)
@@ -673,8 +688,8 @@ end
 local function buildItem(item, item2deps, file2item, item2index, pass, prev_files)
     prepareTree(pass, item, item2deps, prev_files, item2index)
     local target, pkg = parseItem(item)
-    local cmd = '%s %s MXE_TARGETS=%s --jobs=1'
-    os.execute(cmd:format(tool 'make', pkg, target))
+    local cmd = '%s %s~%s MXE_TARGETS=%s --jobs=1'
+    os.execute(cmd:format(tool 'make', pkg, target, target))
     gitAdd()
     local new_files, changed_files = gitStatus(item, item2deps, file2item)
     if #new_files + #changed_files > 0 then
@@ -724,6 +739,7 @@ Version: %s
 Section: devel
 Priority: optional
 Architecture: %s%s
+Installed-Size: %d
 Maintainer: Boris Nagaev <bnagaev@gmail.com>
 Homepage: http://mxe.cc
 Description: %s
@@ -752,12 +768,20 @@ local function debianControl(options)
         version,
         options.arch,
         deb_deps_str,
+        math.ceil(options.size_bytes / 1024),
         options.description1,
         options.description2
     )
 end
 
 local function makePackage(name, files, deps, ver, d1, d2, dst, recommends)
+    -- calculate size_bytes
+    local size_bytes = 0
+    for _, f in ipairs(files) do
+        local size = math.ceil(fileSize(f) / 4096) * 4096
+        size_bytes = size_bytes + size
+    end
+    -- dirname
     dst = dst or '.'
     local dirname = ('%s/%s_%s'):format(dst, name,
         protectVersion(ver))
@@ -782,6 +806,7 @@ local function makePackage(name, files, deps, ver, d1, d2, dst, recommends)
         arch = ARCH,
         deps = deps,
         recommends = recommends,
+        size_bytes = size_bytes,
         description1 = d1,
         description2 = d2,
     }
@@ -889,10 +914,6 @@ local function progressPrinter(items)
     return printer
 end
 
-local function isEmpty(files)
-    return #files == 1
-end
-
 -- build all packages, save filelist to list file
 -- prev_files is passed only to second pass.
 local function buildPackages(items, item2deps, pass, prev_item2files)
@@ -946,40 +967,12 @@ local function buildPackages(items, item2deps, pass, prev_item2files)
 end
 
 local function makeDebs(items, item2deps, item2ver, item2files)
-    -- start from building non-empty packages
-    local to_build = {}
     for _, item in ipairs(items) do
+        local deps = assert(item2deps[item], item)
+        local ver = assert(item2ver[item], item)
         local files = assert(item2files[item], item)
-        if not isEmpty(files) then
-            table.insert(to_build, item)
-        end
+        makeDeb(item, files, deps, ver)
     end
-    local built = {}
-    repeat
-        local missing_deps_set = {}
-        for _, item in ipairs(to_build) do
-            local deps = assert(item2deps[item], item)
-            local ver = assert(item2ver[item], item)
-            local files = assert(item2files[item], item)
-            for _, dep in ipairs(deps) do
-                local dep_files = item2files[dep]
-                if isEmpty(dep_files) then
-                    log('Item %s depends on ' ..
-                        'empty item %s', item, dep)
-                    missing_deps_set[dep] = true
-                end
-            end
-            makeDeb(item, files, deps, ver)
-            built[item] = true
-        end
-        -- empty packages built to satisfy non-empty
-        to_build = {}
-        for item in pairs(missing_deps_set) do
-            if not built[item] then
-                table.insert(to_build, item)
-            end
-        end
-    until #to_build == 0
 end
 
 local function getMxeVersion()

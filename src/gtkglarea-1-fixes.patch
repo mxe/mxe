@@ -2,17 +2,17 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 8ca212a3a9fa7a034b1fa3680422e9a7cad21d4a Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sun, 17 Jun 2012 09:05:56 +0200
-Subject: [PATCH] deactivates dll build which is not supported by mxe, and
+Subject: [PATCH 1/1] deactivates dll build which is not supported by mxe, and
  introduce option --disable-shared to handle it.
 
 taken from
 https://github.com/GNOME/gtkglarea/pull/1
 
 diff --git a/configure.ac b/configure.ac
-index 07be73f..2728c10 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -53,6 +53,16 @@ if test "$native_win32" = "yes"; then
@@ -53,7 +53,7 @@ index 07be73f..2728c10 100644
  echo "---"
  echo "Configuration summary"
 diff --git a/gtkgl/Makefile.am b/gtkgl/Makefile.am
-index c7e65cd..23d4fdb 100644
+index 1111111..2222222 100644
 --- a/gtkgl/Makefile.am
 +++ b/gtkgl/Makefile.am
 @@ -1,28 +1,28 @@
@@ -103,6 +103,3 @@ index c7e65cd..23d4fdb 100644
  
 -uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
 +uninstall-local: $(UNINSTALL_EXTRA)
--- 
-1.7.9.5
-

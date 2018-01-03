@@ -1,0 +1,56 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Wed, 23 Aug 2017 12:51:27 +0200
+Subject: [PATCH 1/2] Patch: Makes sure to link against all of geos' libs as
+ well as the stdc++ lib
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -293,18 +293,18 @@ if test x"$enable_geos" != "xno"; then
+   GEOS_LDFLAGS=`$GEOSCONFIG --ldflags`
+   GEOS_CFLAGS=-I`$GEOSCONFIG --includes`
+   AC_SUBST([GEOS_LDFLAGS])
+-  AC_SUBST([GEOS_CFLAGS])	
++  AC_SUBST([GEOS_CFLAGS])
+   # Ensure that we can parse geos_c.h
+   CPPFLAGS_SAVE="$CPPFLAGS"
+   CPPFLAGS="$GEOS_CFLAGS"
+   AC_CHECK_HEADERS([geos_c.h],, [AC_MSG_ERROR([could not find geos_c.h - you may need to specify the directory of a geos-config file using --with-geosconfig])])
+-  CPPFLAGS="$CPPFLAGS_SAVE"	
++  CPPFLAGS="$CPPFLAGS_SAVE -I`$GEOSCONFIG --includes`"
+   # Ensure we can link against libgeos_c
+   LIBS_SAVE="$LIBS"
+-  LIBS="$GEOS_LDFLAGS"
++  LIBS="$GEOS_LDFLAGS `$GEOSCONFIG --clibs`"
+   AC_SEARCH_LIBS(GEOSCoveredBy,geos_c,,AC_MSG_ERROR([could not find libgeos_c (or obsolete 'libgeos_c' < v.3.3.0 found) - you may need to specify the directory of a geos-config file using --with-geosconfig]))
+   LIBS="$LIBS_SAVE"
+-  LIBS="$LIBS $GEOS_LDFLAGS -lgeos_c"
++  LIBS="$LIBS $GEOS_LDFLAGS `$GEOSCONFIG --clibs`"
+ 
+   #-----------------------------------------------------------------------
+   #   --enable-controlpoints
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Mon, 2 Oct 2017 11:27:24 +0200
+Subject: [PATCH 2/2] Add static dependency to .pc file
+
+
+diff --git a/spatialite.pc.in b/spatialite.pc.in
+index 1111111..2222222 100644
+--- a/spatialite.pc.in
++++ b/spatialite.pc.in
+@@ -8,5 +8,5 @@ includedir=@includedir@
+ Name: spatialite
+ Description: Spatial SQL database engine based on SQLite
+ Version: @VERSION@
+-Libs: -L${libdir} -lspatialite
++Libs: -L${libdir} -lspatialite -lgeos_c -lgeos -lxml2 -lws2_32 -lstdc++ -lm
+ Cflags: -I${includedir}

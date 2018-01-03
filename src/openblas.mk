@@ -4,20 +4,13 @@ PKG             := openblas
 $(PKG)_WEBSITE  := http://www.openblas.net/
 $(PKG)_DESCR    := OpenBLAS
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.2.15
-$(PKG)_CHECKSUM := 73c40ace5978282224e5e122a41c8388c5a19e65a6f2329c2b7c0b61bacc9044
-$(PKG)_SUBDIR   := OpenBLAS-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := https://github.com/xianyi/OpenBLAS/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_VERSION  := 0.2.20
+$(PKG)_CHECKSUM := 5ef38b15d9c652985774869efd548b8e3e972e1e99475c673b25537ed7bcf394
+$(PKG)_GH_CONF  := xianyi/OpenBLAS/tags, v
+$(PKG)_DEPS     := cc pthreads
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/xianyi/OpenBLAS/releases' | \
-    $(SED) -n 's,.*OpenBLAS/archive/v\([0-9][^"]*\)\.tar\.gz.*,\1,p' | \
-    grep -v 'rc' | \
-    $(SORT) -V | \
-    tail -1
-endef
+# openblas has it's own optimised versions of netlib lapack that
+# it bundles into -lopenblas so won't conflict with those libs
 
 $(PKG)_MAKE_OPTS = \
         PREFIX='$(PREFIX)/$(TARGET)' \
@@ -25,11 +18,12 @@ $(PKG)_MAKE_OPTS = \
         FC='$(TARGET)-gfortran' \
         CC='$(TARGET)-gcc' \
         HOSTCC='$(BUILD_CC)' \
+        MAKE_NB_JOBS=-1 \
         CROSS=1 \
-        NO_CBLAS=1 \
-        NO_LAPACK=1 \
+        BUILD_RELAPACK=1 \
         USE_THREAD=1 \
         USE_OPENMP=1 \
+        NUM_THREADS=$(call LIST_NMAX, 2 $(NPROCS)) \
         TARGET=CORE2 \
         DYNAMIC_ARCH=1 \
         ARCH=$(strip \
@@ -38,9 +32,14 @@ $(PKG)_MAKE_OPTS = \
         BINARY=$(BITS) \
         $(if $(BUILD_STATIC),NO_SHARED=1) \
         $(if $(BUILD_SHARED),NO_STATIC=1) \
-        EXTRALIB="`'$(TARGET)-pkg-config' --libs pthreads` -fopenmp"
+        EXTRALIB="`'$(TARGET)-pkg-config' --libs pthreads` -fopenmp -lgfortran -lquadmath"
 
 define $(PKG)_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' $($(PKG)_MAKE_OPTS)
-    $(MAKE) -C '$(1)' -j 1 install $($(PKG)_MAKE_OPTS)
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' $($(PKG)_MAKE_OPTS)
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1 install $($(PKG)_MAKE_OPTS)
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' --cflags --libs $(PKG)`
 endef

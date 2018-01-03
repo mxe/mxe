@@ -8,10 +8,10 @@ endif()
 
 pkg_check_modules(SDL_MIXER SDL_mixer)
 
-#compatiblity
+#compatibility
 set(SDL_MIXER_VERSION_STRING ${SDL_MIXER_VERSION})
 
-# for backward compatiblity
+# for backward compatibility
 set(SDLMIXER_LIBRARY ${SDL_MIXER_LIBRARIES})
 set(SDLMIXER_INCLUDE_DIR ${SDL_MIXER_INCLUDE_DIRS})
 set(SDLMIXER_FOUND ${SDL_MIXER_FOUND})

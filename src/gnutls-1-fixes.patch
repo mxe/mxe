@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 4 Feb 2013 16:11:12 +0100
-Subject: [PATCH] add missing private lib to pc file
+Subject: [PATCH 1/4] add missing private lib to pc file
 
 
 diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
@@ -24,7 +24,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 24 Nov 2014 08:56:48 +0100
-Subject: [PATCH] windows build fix: ws2tcpip.h supplies inet_ntop
+Subject: [PATCH 2/4] windows build fix: ws2tcpip.h supplies inet_ntop
 
 Follow-up to 492c2b937ab66134d0b37499a6f3a747e19bc31a
 
@@ -53,7 +53,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Tue, 2 May 2017 23:52:16 +0200
-Subject: [PATCH] gnutls.pc: hardcode -lunistring -liconv
+Subject: [PATCH 3/4] gnutls.pc: hardcode -lunistring -liconv
 
 See https://github.com/mxe/mxe/issues/1753#issuecomment-298772548
 
@@ -73,14 +73,14 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 7 May 2017 20:17:13 +0200
-Subject: [PATCH] let gnutls configure detect libidn2
+Subject: [PATCH 4/4] let gnutls configure detect libidn2
 
 
 diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -483,24 +483,19 @@ with_libidn=no
+@@ -489,24 +489,19 @@ with_libidn=no
  if test "$try_libidn" = yes;then
  
    if test "$try_libidn2" = yes;then

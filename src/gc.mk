@@ -1,34 +1,21 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gc
-$(PKG)_WEBSITE  := http://www.hpl.hp.com/personal/Hans_Boehm/gc/
+$(PKG)_WEBSITE  := https://github.com/ivmai/bdwgc
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.2e
-$(PKG)_CHECKSUM := 09315b48a82d600371207691126ad058c04677281ac318d86fa84c98c3c9af4b
-$(PKG)_SUBDIR   := $(PKG)-7.2
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://hboehm.info/$(PKG)/$(PKG)_source/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hboehm.info/gc/gc_source/' | \
-    grep '<a href="gc-' | \
-    $(SED) -n 's,.*<a href="gc-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    grep -v 'alpha' | \
-    $(SORT) -Vr | \
-    head -1
-endef
+$(PKG)_VERSION  := 7.4.6
+$(PKG)_CHECKSUM := 8c9b91cc2facc7d0ec3829fe9ab29179c1879adafecb4474a827aa2a18596533
+$(PKG)_GH_CONF  := ivmai/bdwgc/releases/latest,v
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_URL      := https://github.com/ivmai/bdwgc/releases/download/v$($(PKG)_VERSION)/$($(PKG)_SUBDIR).tar.gz
+$(PKG)_DEPS     := cc libatomic_ops
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared \
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
         --enable-threads=win32 \
         --enable-cplusplus
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
-
-$(PKG)_BUILD_SHARED =

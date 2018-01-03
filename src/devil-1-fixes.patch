@@ -1,0 +1,88 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Christian Weigel <christian.weigel@idmt.fraunhofer.de>
+Date: Fri, 17 Feb 2017 10:07:48 +0100
+Subject: [PATCH 1/2] fix static build of ilu and ilut
+
+taken from https://github.com/DentonW/DevIL/pull/59
+
+diff --git a/DevIL/src-ILU/CMakeLists.txt b/DevIL/src-ILU/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/DevIL/src-ILU/CMakeLists.txt
++++ b/DevIL/src-ILU/CMakeLists.txt
+@@ -42,9 +42,13 @@ source_group("Source Files" FILES src/*.cpp)
+ source_group("Header Files" FILES ${ILU_INC} )
+ source_group("Resource Files" FILES ${ILU_RSRC} )
+ 
+-# Remove SHARED to create a static library
+-add_library(ILU SHARED ${ILU_SRCS} ${ILU_INC} ${ILU_RSRC})
+-set_target_properties(ILU PROPERTIES SOVERSION 1)
++if(BUILD_SHARED_LIBS)
++    add_library(ILU SHARED ${ILU_SRCS} ${ILU_INC} ${ILU_RSRC})
++    set_target_properties(ILU PROPERTIES SOVERSION 1)
++else(BUILD_SHARED_LIBS)
++    add_library(ILU ${ILU_SRCS} ${ILU_INC} ${ILU_RSRC})
++endif(BUILD_SHARED_LIBS)
++
+ 
+ 
+ ## ILU requires IL
+diff --git a/DevIL/src-ILUT/CMakeLists.txt b/DevIL/src-ILUT/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/DevIL/src-ILUT/CMakeLists.txt
++++ b/DevIL/src-ILUT/CMakeLists.txt
+@@ -62,9 +62,13 @@ source_group("Source Files" FILES src/*.cpp)
+ source_group("Header Files" FILES ${ILUT_INC} )
+ source_group("Resource Files" FILES ${ILUT_RSRC} )
+ 
+-# Remove SHARED to create a static library
+-add_library(ILUT SHARED ${ILUT_SRCS} ${ILUT_INC} ${ILUT_RSRC})
+-set_target_properties(ILUT PROPERTIES SOVERSION 1)
++if(BUILD_SHARED_LIBS)
++    add_library(ILUT SHARED ${ILUT_SRCS} ${ILUT_INC} ${ILUT_RSRC})
++    set_target_properties(ILUT PROPERTIES SOVERSION 1)
++else(BUILD_SHARED_LIBS)
++    add_library(ILUT ${ILUT_SRCS} ${ILUT_INC} ${ILUT_RSRC})
++endif(BUILD_SHARED_LIBS)
++
+ 
+ ## add link sub library info
+ target_link_libraries(ILUT
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 20 Jul 2017 16:34:51 +1000
+Subject: [PATCH 2/2] fix resource paths
+
+DevIL/src-IL/msvc/IL.rc has weird EOL issues and patches don't
+apply - use $(SED) in build rule instead
+
+diff --git a/DevIL/src-ILU/msvc/ILU.rc b/DevIL/src-ILU/msvc/ILU.rc
+index 1111111..2222222 100644
+--- a/DevIL/src-ILU/msvc/ILU.rc
++++ b/DevIL/src-ILU/msvc/ILU.rc
+@@ -101,7 +101,7 @@ END
+ 
+ // Icon with lowest ID value placed first to ensure application icon
+ // remains consistent on all systems.
+-IDI_ICON1               ICON                    "resources\\IL Logo.ico"
++IDI_ICON1               ICON                    "./resources/IL Logo.ico"
+ 
+ /////////////////////////////////////////////////////////////////////////////
+ //
+diff --git a/DevIL/src-ILUT/msvc/ILUT.rc b/DevIL/src-ILUT/msvc/ILUT.rc
+index 1111111..2222222 100644
+--- a/DevIL/src-ILUT/msvc/ILUT.rc
++++ b/DevIL/src-ILUT/msvc/ILUT.rc
+@@ -101,7 +101,7 @@ END
+ 
+ // Icon with lowest ID value placed first to ensure application icon
+ // remains consistent on all systems.
+-IDI_ICON1               ICON                    "resources\\IL Logo.ico"
++IDI_ICON1               ICON                    "./resources/IL Logo.ico"
+ 
+ /////////////////////////////////////////////////////////////////////////////
+ //

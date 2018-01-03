@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := d421a3c84517b4bfc8c6402887c74984ec57c12bc85f2dc2729de3ec4cdcd
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://sourceforge.net/projects/plib/files/plib/" | \

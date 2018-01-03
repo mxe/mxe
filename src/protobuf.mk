@@ -3,14 +3,14 @@
 PKG             := protobuf
 $(PKG)_WEBSITE  := https://github.com/google/protobuf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.0
-$(PKG)_CHECKSUM := 2a25c2b71c707c5552ec9afdfb22532a93a339e1ca5d38f163fe4107af08c54c
+$(PKG)_VERSION  := 3.4.0
+$(PKG)_CHECKSUM := f6600abeee3babfa18591961a0ff21e7db6a6d9ef82418a261ec4fee44ee6d44
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/google/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc googlemock googletest zlib
+$(PKG)_DEPS     := cc googlemock googletest zlib $(BUILD)~$(PKG)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS_$(BUILD) := googlemock googletest
+$(PKG)_DEPS_$(BUILD) := googlemock googletest libtool
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, google/protobuf, v)

@@ -2,14 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From c79e894db7f1a5cbd6ba57352f79d68595175666 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 1 Oct 2010 14:43:15 +0200
 Subject: [PATCH 1/4] remove pangox dependency
 
 
 diff --git a/configure.in b/configure.in
-index e5b678c..54bb867 100644
+index 1111111..2222222 100644
 --- a/configure.in
 +++ b/configure.in
 @@ -349,7 +349,6 @@ PKG_CHECK_MODULES([BASE_DEPENDENCIES], [\
@@ -29,12 +29,9 @@ index e5b678c..54bb867 100644
  GDKGLEXT_EXTRA_CFLAGS="$GL_CFLAGS $GDKGLEXT_WIN_CFLAGS"
  GDKGLEXT_EXTRA_LIBS="$GL_LIBS $GDKGLEXT_WIN_LIBS"
  GDKGLEXT_DEP_CFLAGS="$GDKGLEXT_EXTRA_CFLAGS `$PKG_CONFIG --cflags $GDKGLEXT_PACKAGES`"
--- 
-1.7.1
 
-
-From a6894898cad4238a3676cf6fbfe6c378217317ca Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 1 Oct 2010 14:44:37 +0200
 Subject: [PATCH 2/4] use correct glib mkenums patch
 
@@ -42,7 +39,7 @@ This patch has been taken from:
 https://bugzilla.gnome.org/show_bug.cgi?id=618599
 
 diff --git a/gdk/Makefile.am b/gdk/Makefile.am
-index 525bfc2..fbeae34 100644
+index 1111111..2222222 100644
 --- a/gdk/Makefile.am
 +++ b/gdk/Makefile.am
 @@ -157,7 +157,7 @@ $(libgdkglext_x11_@API_MJ@_@API_MI@_la_OBJECTS) $(libgdkglext_win32_@API_MJ@_@AP
@@ -64,7 +61,7 @@ index 525bfc2..fbeae34 100644
  			--fprod "\n/* enumerations from \"@filename@\" */" \
  			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
 diff --git a/gdk/Makefile.in b/gdk/Makefile.in
-index 005bd1b..ace11c7 100644
+index 1111111..2222222 100644
 --- a/gdk/Makefile.in
 +++ b/gdk/Makefile.in
 @@ -844,7 +844,7 @@ $(libgdkglext_x11_@API_MJ@_@API_MI@_la_OBJECTS) $(libgdkglext_win32_@API_MJ@_@AP
@@ -85,12 +82,9 @@ index 005bd1b..ace11c7 100644
  			--fhead "#include \"gdkgl.h\"" \
  			--fprod "\n/* enumerations from \"@filename@\" */" \
  			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
--- 
-1.7.1
 
-
-From 9080ce06af85a0beee38f0d391ee8fab8dc07fdf Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 1 Oct 2010 14:47:30 +0200
 Subject: [PATCH 3/4] don't use deprecated functions
 
@@ -98,7 +92,7 @@ This patch has been taken from:
 https://bugzilla.gnome.org/show_bug.cgi?id=618601
 
 diff --git a/gtk/gtkglwidget.c b/gtk/gtkglwidget.c
-index ecb41ef..2a31c5a 100644
+index 1111111..2222222 100644
 --- a/gtk/gtkglwidget.c
 +++ b/gtk/gtkglwidget.c
 @@ -127,7 +127,7 @@ gtk_gl_widget_size_allocate (GtkWidget       *widget,
@@ -175,18 +169,15 @@ index ecb41ef..2a31c5a 100644
  
    return gdk_window_get_gl_window (widget->window);
  }
--- 
-1.7.1
 
-
-From eb64eb053481321cb1b0d3ec9e2fcb46c55c0972 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 1 Oct 2010 14:50:25 +0200
 Subject: [PATCH 4/4] removed import declarations
 
 
 diff --git a/gdk/gdkgldefs.h b/gdk/gdkgldefs.h
-index 1120822..62a84c2 100644
+index 1111111..2222222 100644
 --- a/gdk/gdkgldefs.h
 +++ b/gdk/gdkgldefs.h
 @@ -27,9 +27,9 @@ G_BEGIN_DECLS
@@ -202,7 +193,7 @@ index 1120822..62a84c2 100644
  #else
  #  define GDK_GL_VAR extern
 diff --git a/gtk/gtkgldefs.h b/gtk/gtkgldefs.h
-index c917007..5ed957e 100644
+index 1111111..2222222 100644
 --- a/gtk/gtkgldefs.h
 +++ b/gtk/gtkgldefs.h
 @@ -25,9 +25,9 @@ G_BEGIN_DECLS
@@ -217,6 +208,3 @@ index c917007..5ed957e 100644
  #  endif
  #else
  #  define GTK_GL_VAR extern
--- 
-1.7.1
-

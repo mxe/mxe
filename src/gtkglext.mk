@@ -9,12 +9,12 @@ $(PKG)_CHECKSUM := e5073f3c6b816e7fa67d359d9745a5bb5de94a628ac85f624c992925a4684
 $(PKG)_SUBDIR   := gtkglext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkglext-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglext/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gtk2
+$(PKG)_DEPS     := cc gtk2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/cgit/gtkglext/refs/tags' | \
     grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=\\([0-9][^']*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=\\([0-9][^']*\\)'.*,\\1,p" | \
     $(SORT) -V | \
     tail -1
 endef

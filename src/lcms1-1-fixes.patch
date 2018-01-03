@@ -2,14 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 6f4063fc97b3acc653605c077c94b862a9808fd4 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Fri, 23 Dec 2011 00:07:18 +0100
-Subject: [PATCH] add missing static dependencies to .pc file
+Subject: [PATCH 1/1] add missing static dependencies to .pc file
 
 
 diff --git a/lcms.pc.in b/lcms.pc.in
-index b3897b0..c72ef2f 100755
+index 1111111..2222222 100755
 --- a/lcms.pc.in
 +++ b/lcms.pc.in
 @@ -7,4 +7,6 @@ Name: @PACKAGE@
@@ -19,6 +19,3 @@ index b3897b0..c72ef2f 100755
 +Libs.private: -ljpeg
  Cflags: -I${includedir}
 +Requires.private: libtiff-4
--- 
-1.7.8
-

@@ -7,7 +7,7 @@ PKG             := pthreads
 $(PKG)_WEBSITE  := https://en.wikipedia.org/wiki/POSIX_Threads
 $(PKG)_DESCR    := POSIX Threads
 $(PKG)_VERSION  := POSIX 1003.1-2001
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     # install and test pkg-config

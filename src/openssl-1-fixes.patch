@@ -1,6 +1,8 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 81a26ea97cb0c66a21069ddb1d07d285427791e9 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 8 Jan 2014 02:19:10 +0100
 Subject: [PATCH 1/2] winsock2
@@ -9,7 +11,7 @@ Subject: [PATCH 1/2] winsock2
 -http://rt.openssl.org/Ticket/Display.html?id=2285&user=guest&pass=guest
 
 diff --git a/ssl/dtls1.h b/ssl/dtls1.h
-index 30bbcf2..ef9f336 100644
+index 1111111..2222222 100644
 --- a/ssl/dtls1.h
 +++ b/ssl/dtls1.h
 @@ -68,7 +68,7 @@
@@ -22,7 +24,7 @@ index 30bbcf2..ef9f336 100644
  #  include <sys/timeval.h>
  # else
 diff --git a/ssl/ssltest.c b/ssl/ssltest.c
-index 890e476..ca1fbfd 100644
+index 1111111..2222222 100644
 --- a/ssl/ssltest.c
 +++ b/ssl/ssltest.c
 @@ -198,7 +198,7 @@
@@ -34,11 +36,8 @@ index 890e476..ca1fbfd 100644
  #else
  # include OPENSSL_UNISTD
  #endif
--- 
-2.9.3
 
-
-From fe545f8c5ae1296dcd388c27b5e82c787c3e9f81 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tom Molesworth <tom@entitymodel.com>
 Date: Wed, 8 Jan 2014 02:20:21 +0100
 Subject: [PATCH 2/2] Patch OpenSSL POD docs for perl-5.16+
@@ -49,10 +48,10 @@ stage fails without these applied.
 Should be harmless for earlier versions of perl.
 
 diff --git a/doc/apps/cms.pod b/doc/apps/cms.pod
-index ac69804..170588b 100644
+index 1111111..2222222 100644
 --- a/doc/apps/cms.pod
 +++ b/doc/apps/cms.pod
-@@ -482,28 +482,28 @@ with caution. For a fuller description see L<CMS_decrypt(3)|CMS_decrypt(3)>).
+@@ -483,28 +483,28 @@ with caution. For a fuller description see L<CMS_decrypt(3)|CMS_decrypt(3)>).
  
  =over 4
  
@@ -88,10 +87,10 @@ index ac69804..170588b 100644
  the message was verified correctly but an error occurred writing out
  the signers certificates.
 diff --git a/doc/apps/smime.pod b/doc/apps/smime.pod
-index 04a83ca..728cde5 100644
+index 1111111..2222222 100644
 --- a/doc/apps/smime.pod
 +++ b/doc/apps/smime.pod
-@@ -312,28 +312,28 @@ remains DER.
+@@ -313,28 +313,28 @@ remains DER.
  
  =over 4
  
@@ -127,7 +126,7 @@ index 04a83ca..728cde5 100644
  the message was verified correctly but an error occurred writing out
  the signers certificates.
 diff --git a/doc/crypto/rand.pod b/doc/crypto/rand.pod
-index b754854..19037d3 100644
+index 1111111..2222222 100644
 --- a/doc/crypto/rand.pod
 +++ b/doc/crypto/rand.pod
 @@ -74,16 +74,16 @@ First up I will state the things I believe I need for a good RNG.
@@ -182,7 +181,7 @@ index b754854..19037d3 100644
  Given the random number output stream, it should not be possible to determine
  the RNG state or the next random number.
 diff --git a/doc/ssl/SSL_COMP_add_compression_method.pod b/doc/ssl/SSL_COMP_add_compression_method.pod
-index 2bb4403..add6b0e 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_COMP_add_compression_method.pod
 +++ b/doc/ssl/SSL_COMP_add_compression_method.pod
 @@ -59,11 +59,11 @@ SSL_COMP_add_compression_method() may return the following values:
@@ -200,7 +199,7 @@ index 2bb4403..add6b0e 100644
  The operation failed. Check the error queue to find out the reason.
  
 diff --git a/doc/ssl/SSL_CTX_add_session.pod b/doc/ssl/SSL_CTX_add_session.pod
-index c660a18..86c720c 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_CTX_add_session.pod
 +++ b/doc/ssl/SSL_CTX_add_session.pod
 @@ -52,13 +52,13 @@ The following values are returned by all functions:
@@ -220,7 +219,7 @@ index c660a18..86c720c 100644
   The operation succeeded.
  
 diff --git a/doc/ssl/SSL_CTX_load_verify_locations.pod b/doc/ssl/SSL_CTX_load_verify_locations.pod
-index d1d8977..449c8c9 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_CTX_load_verify_locations.pod
 +++ b/doc/ssl/SSL_CTX_load_verify_locations.pod
 @@ -100,13 +100,13 @@ The following return values can occur:
@@ -240,7 +239,7 @@ index d1d8977..449c8c9 100644
  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_CTX_set_client_CA_list.pod b/doc/ssl/SSL_CTX_set_client_CA_list.pod
-index 4965385..02aa22e 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_CTX_set_client_CA_list.pod
 +++ b/doc/ssl/SSL_CTX_set_client_CA_list.pod
 @@ -66,13 +66,13 @@ values:
@@ -260,7 +259,7 @@ index 4965385..02aa22e 100644
  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_CTX_set_session_id_context.pod b/doc/ssl/SSL_CTX_set_session_id_context.pod
-index 7c9e515..ea36746 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_CTX_set_session_id_context.pod
 +++ b/doc/ssl/SSL_CTX_set_session_id_context.pod
 @@ -64,13 +64,13 @@ return the following values:
@@ -280,7 +279,7 @@ index 7c9e515..ea36746 100644
  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_CTX_set_ssl_version.pod b/doc/ssl/SSL_CTX_set_ssl_version.pod
-index e254f96..c15f86e 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_CTX_set_ssl_version.pod
 +++ b/doc/ssl/SSL_CTX_set_ssl_version.pod
 @@ -42,11 +42,11 @@ and SSL_set_ssl_method():
@@ -298,7 +297,7 @@ index e254f96..c15f86e 100644
  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_CTX_use_psk_identity_hint.pod b/doc/ssl/SSL_CTX_use_psk_identity_hint.pod
-index 12db0da..f7b6ca3 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_CTX_use_psk_identity_hint.pod
 +++ b/doc/ssl/SSL_CTX_use_psk_identity_hint.pod
 @@ -83,7 +83,7 @@ Return values from the server callback are interpreted as follows:
@@ -311,7 +310,7 @@ index 12db0da..f7b6ca3 100644
  PSK identity was not found. An "unknown_psk_identity" alert message
  will be sent and the connection setup fails.
 diff --git a/doc/ssl/SSL_accept.pod b/doc/ssl/SSL_accept.pod
-index 89ad6bd..d7f3034 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_accept.pod
 +++ b/doc/ssl/SSL_accept.pod
 @@ -41,18 +41,18 @@ The following return values can occur:
@@ -337,7 +336,7 @@ index 89ad6bd..d7f3034 100644
  The TLS/SSL handshake was not successful because a fatal error occurred either
  at the protocol level or a connection failure occurred. The shutdown was
 diff --git a/doc/ssl/SSL_clear.pod b/doc/ssl/SSL_clear.pod
-index ba192bd..479f97f 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_clear.pod
 +++ b/doc/ssl/SSL_clear.pod
 @@ -56,12 +56,12 @@ The following return values can occur:
@@ -356,7 +355,7 @@ index ba192bd..479f97f 100644
  The SSL_clear() operation was successful.
  
 diff --git a/doc/ssl/SSL_connect.pod b/doc/ssl/SSL_connect.pod
-index 68e2b82..52c4aa9 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_connect.pod
 +++ b/doc/ssl/SSL_connect.pod
 @@ -41,18 +41,18 @@ The following return values can occur:
@@ -382,7 +381,7 @@ index 68e2b82..52c4aa9 100644
  The TLS/SSL handshake was not successful, because a fatal error occurred either
  at the protocol level or a connection failure occurred. The shutdown was
 diff --git a/doc/ssl/SSL_do_handshake.pod b/doc/ssl/SSL_do_handshake.pod
-index 8b590c9..1ba1827 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_do_handshake.pod
 +++ b/doc/ssl/SSL_do_handshake.pod
 @@ -42,18 +42,18 @@ The following return values can occur:
@@ -408,7 +407,7 @@ index 8b590c9..1ba1827 100644
  The TLS/SSL handshake was not successful because a fatal error occurred either
  at the protocol level or a connection failure occurred. The shutdown was
 diff --git a/doc/ssl/SSL_get_ex_data_X509_STORE_CTX_idx.pod b/doc/ssl/SSL_get_ex_data_X509_STORE_CTX_idx.pod
-index 165c6a5..073e99c 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_get_ex_data_X509_STORE_CTX_idx.pod
 +++ b/doc/ssl/SSL_get_ex_data_X509_STORE_CTX_idx.pod
 @@ -36,11 +36,11 @@ before the SSL index is created.
@@ -426,7 +425,7 @@ index 165c6a5..073e99c 100644
  An error occurred, check the error stack for a detailed error message.
  
 diff --git a/doc/ssl/SSL_get_fd.pod b/doc/ssl/SSL_get_fd.pod
-index 89260b5..1207658 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_get_fd.pod
 +++ b/doc/ssl/SSL_get_fd.pod
 @@ -26,12 +26,12 @@ The following return values can occur:
@@ -445,7 +444,7 @@ index 89260b5..1207658 100644
  The file descriptor linked to B<ssl>.
  
 diff --git a/doc/ssl/SSL_read.pod b/doc/ssl/SSL_read.pod
-index ef983c9..e99d659 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_read.pod
 +++ b/doc/ssl/SSL_read.pod
 @@ -81,16 +81,16 @@ The following return values can occur:
@@ -469,7 +468,7 @@ index ef983c9..e99d659 100644
  The read operation was not successful, because either the connection was closed,
  an error occurred or action must be taken by the calling process.
 diff --git a/doc/ssl/SSL_session_reused.pod b/doc/ssl/SSL_session_reused.pod
-index b09d8a7..7f49da1 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_session_reused.pod
 +++ b/doc/ssl/SSL_session_reused.pod
 @@ -27,11 +27,11 @@ The following return values can occur:
@@ -487,7 +486,7 @@ index b09d8a7..7f49da1 100644
  A session was reused.
  
 diff --git a/doc/ssl/SSL_set_fd.pod b/doc/ssl/SSL_set_fd.pod
-index 1480871..bfc39ed 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_set_fd.pod
 +++ b/doc/ssl/SSL_set_fd.pod
 @@ -35,11 +35,11 @@ The following return values can occur:
@@ -505,7 +504,7 @@ index 1480871..bfc39ed 100644
  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_set_session.pod b/doc/ssl/SSL_set_session.pod
-index 197b521..fbdee4c 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_set_session.pod
 +++ b/doc/ssl/SSL_set_session.pod
 @@ -37,11 +37,11 @@ The following return values can occur:
@@ -523,7 +522,7 @@ index 197b521..fbdee4c 100644
  The operation succeeded.
  
 diff --git a/doc/ssl/SSL_set_shutdown.pod b/doc/ssl/SSL_set_shutdown.pod
-index fe01308..879a33a 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_set_shutdown.pod
 +++ b/doc/ssl/SSL_set_shutdown.pod
 @@ -24,16 +24,16 @@ The shutdown state of an ssl connection is a bitmask of:
@@ -547,7 +546,7 @@ index fe01308..879a33a 100644
  A shutdown alert was received form the peer, either a normal "close notify"
  or a fatal error.
 diff --git a/doc/ssl/SSL_shutdown.pod b/doc/ssl/SSL_shutdown.pod
-index efbff5a..56c48b2 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_shutdown.pod
 +++ b/doc/ssl/SSL_shutdown.pod
 @@ -92,19 +92,19 @@ The following return values can occur:
@@ -574,7 +573,7 @@ index efbff5a..56c48b2 100644
  The shutdown was not successful because a fatal error occurred either
  at the protocol level or a connection failure occurred. It can also occur if
 diff --git a/doc/ssl/SSL_write.pod b/doc/ssl/SSL_write.pod
-index 4c1a7ee..e006b41 100644
+index 1111111..2222222 100644
 --- a/doc/ssl/SSL_write.pod
 +++ b/doc/ssl/SSL_write.pod
 @@ -74,12 +74,12 @@ The following return values can occur:
@@ -592,6 +591,3 @@ index 4c1a7ee..e006b41 100644
  
  The write operation was not successful, because either the connection was
  closed, an error occurred or action must be taken by the calling process.
--- 
-2.9.3
-

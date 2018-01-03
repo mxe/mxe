@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 729a295a59a9fd6e5b9fe9fd291d36ae391a9d2be0b0824510a214cfaa05c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://www.nih.at/libzip/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.nih.at/libzip/' | \

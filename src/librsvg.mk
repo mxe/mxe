@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := d14d7b3e25023ce34302022fd7c9b3a468629c94dff6c177874629686bfc7
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc cairo gdk-pixbuf glib libcroco libgsf pango
+$(PKG)_DEPS     := cc cairo gdk-pixbuf glib libcroco libgsf pango
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/librsvg/refs/tags' | \

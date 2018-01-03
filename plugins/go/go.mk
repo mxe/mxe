@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 406865f587b44be7092f206d73fc1de252600b79b3cacc587b74b5ef5c623
 $(PKG)_SUBDIR   := go
 $(PKG)_FILE     := go$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://storage.googleapis.com/golang/$($(PKG)_FILE)
-$(PKG)_DEPS     :=
+$(PKG)_DEPS     := $(BUILD)~go-native
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://golang.org/dl/' | \

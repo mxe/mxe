@@ -12,3 +12,7 @@ td.unsupported {
     background-color: #f99;
     text-align: center;
 }
+td.neutral {
+    background-color: #d1d1d1;
+    text-align: center;
+}

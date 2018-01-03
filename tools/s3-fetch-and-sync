@@ -32,6 +32,7 @@ if ! ( \
     cd ~/mxe && \
         make download -k MXE_NO_BACKUP_DL=true MXE_VERBOSE=true \
             MXE_PLUGIN_DIRS="$plugin_dirs" \
+            CREATE_SUFFIXED_ARCHIVE=true \
             2>&1 >tmp-download-log \
 ) && $file_issue; then
     # If one or more download process fails, upload log to sprunge.us (a
@@ -43,6 +44,5 @@ if ! ( \
     EDITOR=~/mxe/tools/fake-editor ghi open -L bug -- mxe/mxe
 fi
 
-cd ~/mxe && make clean-junk MXE_PLUGIN_DIRS="$plugin_dirs"
 s3cmd sync --acl-public ~/mxe/pkg/* s3://mxe-pkg/
-rm -f ~/mxe/tmp-download-log ~/mxe/tmp-url
+rm -rf ~/mxe/tmp-download-log ~/mxe/tmp-url ~/mxe/log

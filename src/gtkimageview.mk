@@ -11,7 +11,7 @@ $(PKG)_FILE     := gtkimageview-$($(PKG)_VERSION).tar.gz
 # gtkimageview download server is dead.
 # $(PKG)_URL    := http://trac.bjourne.webfactional.com/chrome/common/releases/$($(PKG)_FILE)
 $(PKG)_URL      := https://distfiles.macports.org/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gtk2
+$(PKG)_DEPS     := cc gtk2
 
 define $(PKG)_UPDATE_DISABLED
     $(WGET) -q -O- "http://trac.bjourne.webfactional.com/chrome/common/releases/?C=M;O=D" | \

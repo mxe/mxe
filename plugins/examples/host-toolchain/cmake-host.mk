@@ -8,7 +8,7 @@ $(PKG)_SUBDIR    = $(cmake_SUBDIR)
 $(PKG)_FILE      = $(cmake_FILE)
 $(PKG)_URL       = $(cmake_URL)
 $(PKG)_URL_2     = $(cmake_URL_2)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     echo $(cmake_VERSION)

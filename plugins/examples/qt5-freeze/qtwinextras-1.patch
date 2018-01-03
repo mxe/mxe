@@ -1,0 +1,25 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From dc0cb681cde6899b40923570c29adcf1c20c54cb Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 6 Aug 2015 20:41:14 +0200
+Subject: [PATCH] fix undefined reference to `__imp_CreateRectRgn'
+
+Change-Id: I707d168173b210034e3dff9580388fb630d858f8
+
+diff --git a/src/winextras/winextras.pro b/src/winextras/winextras.pro
+index 7f6bba4..835b2e7 100644
+--- a/src/winextras/winextras.pro
++++ b/src/winextras/winextras.pro
+@@ -47,7 +47,7 @@ QMAKE_DOCS = $$PWD/doc/qtwinextras.qdocconf
+ 
+ DEFINES += NTDDI_VERSION=0x06010000 _WIN32_WINNT=0x0601
+ LIBS_PRIVATE += -lole32 -lshlwapi -lshell32
+-win32:!qtHaveModule(opengl)|contains(QT_CONFIG, dynamicgl):LIBS_PRIVATE += -lgdi32
++win32:shared|!qtHaveModule(opengl)|contains(QT_CONFIG, dynamicgl):LIBS_PRIVATE += -lgdi32
+ 
+ OTHER_FILES += \
+     doc/qtwinextras.qdocconf \
+-- 
+2.1.4
+

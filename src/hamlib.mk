@@ -6,16 +6,16 @@ PKG             := hamlib
 $(PKG)_WEBSITE  := http://www.hamlib.org/
 $(PKG)_DESCR    := HamLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.1
-$(PKG)_CHECKSUM := 3fec97ea326d02aa8f35834c4af34194a3f544e6212f391397d788c566b44e32
+$(PKG)_VERSION  := 3.1
+$(PKG)_CHECKSUM := 682304c3e88ff6ccfd6a5fc28b33bcc95d2d0a54321973fef015ff62570c994e
 $(PKG)_SUBDIR   := hamlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := Hamlib-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/hamlib/hamlib/$($(PKG)_VERSION)/hamlib-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL_2    := https://github.com/N0NB/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc libltdl libusb1 libxml2 pthreads
+$(PKG)_DEPS     := cc libltdl libusb1 libxml2 pthreads
 
 # grabbing version from sourceforge
-# prefered by Nate N0NB
+# preferred by Nate N0NB
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/hamlib/files/hamlib/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
@@ -40,6 +40,7 @@ define $(PKG)_BUILD
     (echo 'Name: $(PKG)'; \
      echo 'Version: $(hamlib_VERSION)'; \
      echo 'Description: $(PKG)'; \
+     echo 'Requires: libusb-1.0'; \
      echo 'Cflags: -DHAMLIB_LIB'; \
      echo 'Libs: -lhamlib -lpthread -lws2_32';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'

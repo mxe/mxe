@@ -1,0 +1,29 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 20 Nov 2017 10:25:44 +1100
+Subject: [PATCH 1/1] fix boost linking errors
+
+
+diff --git a/src/CGAL/CMakeLists.txt b/src/CGAL/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/CGAL/CMakeLists.txt
++++ b/src/CGAL/CMakeLists.txt
+@@ -2,6 +2,14 @@ message("Configuring libCGAL")
+ 
+ use_essential_libs()
+ 
++# same as src/CGAL_Core/CMakeLists.txt
++if (NOT MSVC)
++  # See the release notes of CGAL-4.10: CGAL_Core now requires
++  # Boost.Thread, with all compilers but MSVC.
++  find_package( Boost 1.48 REQUIRED thread system )
++  cache_set(CGAL_3RD_PARTY_LIBRARIES    ${CGAL_3RD_PARTY_LIBRARIES} ${Boost_LIBRARIES} )
++endif(NOT MSVC)
++
+ include_directories (SYSTEM ${CGAL_3RD_PARTY_INCLUDE_DIRS})
+ 
+ add_definitions(${CGAL_3RD_PARTY_DEFINITIONS})

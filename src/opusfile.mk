@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2428717b356e139f18ed2fdb5ad990b5654a238907a0058200b39c46a7d03
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://archive.mozilla.org/pub/opus/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ogg opus
+$(PKG)_DEPS     := cc ogg opus
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://archive.mozilla.org/pub/opus/?C=M;O=D' | \

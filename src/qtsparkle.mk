@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 6b8500de51c6a8dd402663fed99bced0588e5be50cfe8474f6d3b46f92025
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/davidsansome/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc qttools
+$(PKG)_DEPS     := cc qttools
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, davidsansome/qtsparkle)

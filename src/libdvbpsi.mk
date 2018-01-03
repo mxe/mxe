@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 36d9b233306e48b58999e87864253b564e20932ed46a485e44ef7058f1f92
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/libdvbpsi/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.videolan.org/developers/libdvbpsi.html' | \

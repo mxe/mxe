@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 1ef4aa8427d9785839bc767f3eb6a84fcb5e9a37c31ed77a04e7e047519a1
 $(PKG)_SUBDIR   := fftw-$($(PKG)_VERSION)
 $(PKG)_FILE     := fftw-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.fftw.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.fftw.org/download.html' | \

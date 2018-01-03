@@ -13,7 +13,7 @@ $(PKG)_CHECKSUM := 3564ffa540cc069854607a0fb10d258c12769f8f6ee752f66038ba95a5e5f
 $(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgnurx
+$(PKG)_DEPS     := cc libgnurx
 
 define $(PKG)_UPDATE_RELEASE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/ncurses/?C=M;O=D' | \

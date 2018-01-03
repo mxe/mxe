@@ -2,14 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From e11d3cd0b909b21c97e6a0e3379d4ad42cc5c537 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Wed, 21 Oct 2015 20:51:02 +1100
-Subject: [PATCH] add install components
+Subject: [PATCH 1/1] add install components
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index f008f13..cf89967 100644
+index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -39,5 +39,8 @@ set_target_properties(primitives_test PROPERTIES
@@ -23,6 +23,3 @@ index f008f13..cf89967 100644
 +install(TARGETS laxjson COMPONENT shared-lib
 +        DESTINATION lib
 +        RUNTIME DESTINATION bin)
--- 
-2.3.8 (Apple Git-58)
-

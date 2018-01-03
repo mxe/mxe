@@ -1,0 +1,223 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pavel Vatagin <pavelvat@gmail.com>
+Date: Tue, 31 Jan 2017 22:15:13 +0300
+Subject: [PATCH 1/4] fix build
+
+
+diff --git a/3rdparty/libprojectm/CMakeLists.txt b/3rdparty/libprojectm/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/3rdparty/libprojectm/CMakeLists.txt
++++ b/3rdparty/libprojectm/CMakeLists.txt
+@@ -176,6 +176,8 @@ if(BUNDLE_PROJECTM_PRESETS)
+         COPY_ONLY
+       )
+     endforeach (preset)
++  elseif (WIN32)
++    INSTALL(FILES ${presets} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/projectm-presets)
+   else (APPLE)
+     INSTALL(FILES ${presets} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/clementine/projectm-presets)
+   endif (APPLE)
+diff --git a/3rdparty/libprojectm/glew.h b/3rdparty/libprojectm/glew.h
+index 1111111..2222222 100644
+--- a/3rdparty/libprojectm/glew.h
++++ b/3rdparty/libprojectm/glew.h
+@@ -149,7 +149,7 @@ typedef unsigned short wchar_t;
+ #  endif
+ #endif
+ #if !defined(_PTRDIFF_T_DEFINED) && !defined(_PTRDIFF_T_)
+-#  ifdef _WIN64
++#  if defined(_WIN64) && !defined(__MINGW32__)
+ typedef __int64 ptrdiff_t;
+ #  else
+ typedef _W64 int ptrdiff_t;
+diff --git a/3rdparty/qtsingleapplication/qtlocalpeer.cpp b/3rdparty/qtsingleapplication/qtlocalpeer.cpp
+index 1111111..2222222 100644
+--- a/3rdparty/qtsingleapplication/qtlocalpeer.cpp
++++ b/3rdparty/qtsingleapplication/qtlocalpeer.cpp
+@@ -54,14 +54,12 @@ static PProcessIdToSessionId pProcessIdToSessionId = 0;
+ #include <time.h>
+ #endif
+ 
+-namespace QtLP_Private {
+ #include "qtlockedfile.cpp"
+ #if defined(Q_OS_WIN)
+ #include "qtlockedfile_win.cpp"
+ #else
+ #include "qtlockedfile_unix.cpp"
+ #endif
+-}
+ 
+ const char* QtLocalPeer::ack = "ack";
+ 
+@@ -113,7 +111,7 @@ bool QtLocalPeer::isClient()
+     if (lockFile.isLocked())
+         return false;
+ 
+-    if (!lockFile.lock(QtLP_Private::QtLockedFile::WriteLock, false))
++    if (!lockFile.lock(QtLockedFile::WriteLock, false))
+         return true;
+ 
+     bool res = server->listen(socketName);
+diff --git a/3rdparty/qtsingleapplication/qtlocalpeer.h b/3rdparty/qtsingleapplication/qtlocalpeer.h
+index 1111111..2222222 100644
+--- a/3rdparty/qtsingleapplication/qtlocalpeer.h
++++ b/3rdparty/qtsingleapplication/qtlocalpeer.h
+@@ -67,7 +67,7 @@ protected:
+     QString id;
+     QString socketName;
+     QLocalServer* server;
+-    QtLP_Private::QtLockedFile lockFile;
++    QtLockedFile lockFile;
+ 
+ private:
+     static const char* ack;
+diff --git a/3rdparty/qtsingleapplication/qtlockedfile.h b/3rdparty/qtsingleapplication/qtlockedfile.h
+index 1111111..2222222 100644
+--- a/3rdparty/qtsingleapplication/qtlockedfile.h
++++ b/3rdparty/qtsingleapplication/qtlockedfile.h
+@@ -61,8 +61,6 @@
+ #  define QT_QTLOCKEDFILE_EXPORT
+ #endif
+ 
+-namespace QtLP_Private {
+-
+ class QT_QTLOCKEDFILE_EXPORT QtLockedFile : public QFile
+ {
+ public:
+@@ -92,5 +90,5 @@ private:
+ #endif
+     LockMode m_lock_mode;
+ };
+-}
++
+ #endif
+diff --git a/3rdparty/qtsingleapplication/qtlockedfile_win.cpp b/3rdparty/qtsingleapplication/qtlockedfile_win.cpp
+index 1111111..2222222 100644
+--- a/3rdparty/qtsingleapplication/qtlockedfile_win.cpp
++++ b/3rdparty/qtsingleapplication/qtlockedfile_win.cpp
+@@ -62,7 +62,7 @@ Qt::HANDLE QtLockedFile::getMutexHandle(int idx, bool doCreate)
+         QT_WA( { mutex = CreateMutexW(NULL, FALSE, (TCHAR*)mname.utf16()); },
+                { mutex = CreateMutexA(NULL, FALSE, mname.toLocal8Bit().constData()); } );
+ #else
+-        mutex = CreateMutexW(NULL, FALSE, (TCHAR*)mname.utf16());
++        mutex = CreateMutexW(NULL, FALSE, (WCHAR*)mname.utf16());
+ #endif
+         if (!mutex) {
+             qErrnoWarning("QtLockedFile::lock(): CreateMutex failed");
+@@ -74,7 +74,7 @@ Qt::HANDLE QtLockedFile::getMutexHandle(int idx, bool doCreate)
+         QT_WA( { mutex = OpenMutexW(SYNCHRONIZE | MUTEX_MODIFY_STATE, FALSE, (TCHAR*)mname.utf16()); },
+                { mutex = OpenMutexA(SYNCHRONIZE | MUTEX_MODIFY_STATE, FALSE, mname.toLocal8Bit().constData()); } );
+ #else
+-        mutex = OpenMutexW(SYNCHRONIZE | MUTEX_MODIFY_STATE, FALSE, (TCHAR*)mname.utf16());
++        mutex = OpenMutexW(SYNCHRONIZE | MUTEX_MODIFY_STATE, FALSE, (WCHAR*)mname.utf16());
+ #endif
+         if (!mutex) {
+             if (GetLastError() != ERROR_FILE_NOT_FOUND)
+diff --git a/3rdparty/tinysvcmdns/CMakeLists.txt b/3rdparty/tinysvcmdns/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/3rdparty/tinysvcmdns/CMakeLists.txt
++++ b/3rdparty/tinysvcmdns/CMakeLists.txt
+@@ -7,7 +7,7 @@ set(TINYSVCMDNS-SOURCES
+ )
+ 
+ find_library(PTHREAD
+-  pthreadGC2
++  pthread
+ )
+ 
+ add_library(tinysvcmdns STATIC
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Alexander Golubev <fatzer2@gmail.com>
+Date: Thu, 16 Mar 2017 14:54:55 +0300
+Subject: [PATCH 2/4] core/database: configure fts3 tokenizer support
+
+Original patch by Arfrever
+This fixes https://github.com/clementine-player/Clementine/issues/5297
+https://github.com/clementine-player/Clementine/pull/5669
+
+diff --git a/src/core/database.cpp b/src/core/database.cpp
+index 1111111..2222222 100644
+--- a/src/core/database.cpp
++++ b/src/core/database.cpp
+@@ -265,6 +265,20 @@ QSqlDatabase Database::Connect() {
+   StaticInit();
+ 
+   {
++
++#ifdef SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER
++    // In case sqlite>=3.12 is compiled without -DSQLITE_ENABLE_FTS3_TOKENIZER (generally a good idea
++    // due to security reasons) the fts3 support should be enabled explicitly.
++    // see https://github.com/clementine-player/Clementine/issues/5297
++    QVariant v = db.driver()->handle();
++    if (v.isValid() && qstrcmp(v.typeName(), "sqlite3*") == 0) {
++      sqlite3* handle = *static_cast<sqlite3**>(v.data());
++      if (handle) {
++        sqlite3_db_config(handle, SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER, 1, NULL);
++      }
++    }
++#endif
++
+     QSqlQuery set_fts_tokenizer(db);
+     set_fts_tokenizer.prepare("SELECT fts3_tokenizer(:name, :pointer)");
+     set_fts_tokenizer.bindValue(":name", "unicode");
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Krzysztof Sobiecki <sobkas@gmail.com>
+Date: Sun, 9 Jul 2017 19:05:14 +0200
+Subject: [PATCH 3/4] Fix build in src/ui/
+
+It looks like there is a problem with build of src/ui/appearancesettingspage.cpp
+It might fix it.
+https://github.com/clementine-player/Clementine/pull/5784
+
+diff --git a/src/ui/appearancesettingspage.cpp b/src/ui/appearancesettingspage.cpp
+index 1111111..2222222 100644
+--- a/src/ui/appearancesettingspage.cpp
++++ b/src/ui/appearancesettingspage.cpp
+@@ -81,7 +81,7 @@ AppearanceSettingsPage::AppearanceSettingsPage(SettingsDialog* dialog)
+   connect(ui_->use_no_background, SIGNAL(toggled(bool)),
+           SLOT(DisableBlurAndOpacitySliders(bool)));
+ #if !defined (Q_OS_UNIX) || defined (Q_OS_MACOS)
+-  ui_->sys_icons->setDisabled(true);
++  ui_->b_use_sys_icons->setDisabled(true);
+ #endif
+ }
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Pavel Vatagin <pavelvat@gmail.com>
+Date: Mon, 24 Jul 2017 20:49:21 +0300
+Subject: [PATCH 4/4] fix qtsparkle headers
+
+
+diff --git a/src/main.cpp b/src/main.cpp
+index 1111111..2222222 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -95,7 +95,7 @@ const QDBusArgument& operator>>(const QDBusArgument& arg, QImage& image);
+ #endif
+ 
+ #ifdef Q_OS_WIN32
+-#include <qtsparkle/Updater>
++#include <qtsparkle-qt5/Updater>
+ #endif
+ 
+ // Load sqlite plugin on windows and mac.
+diff --git a/src/ui/mainwindow.cpp b/src/ui/mainwindow.cpp
+index 1111111..2222222 100644
+--- a/src/ui/mainwindow.cpp
++++ b/src/ui/mainwindow.cpp
+@@ -38,7 +38,7 @@
+ #include <QtDebug>
+ 
+ #ifdef Q_OS_WIN32
+-#include <qtsparkle/Updater>
++#include <qtsparkle-qt5/Updater>
+ #endif
+ 
+ #include "core/appearance.h"

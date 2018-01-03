@@ -4,12 +4,12 @@ PKG             := lzma
 $(PKG)_WEBSITE  := http://www.7-zip.org/sdk.html
 $(PKG)_DESCR    := LZMA SDK
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1700
-$(PKG)_CHECKSUM := 2e87fbd0f61560187d40d23dd5ed6eecb871070d58acabd0ed7b349860c352f4
+$(PKG)_VERSION  := 1701
+$(PKG)_CHECKSUM := 0daa0a15a3a2b6a8c9459744e4a25f7a26fdae0e9e406e0ac0809c3fbbacf2e4
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := lzma$(subst .,,$($(PKG)_VERSION)).7z
 $(PKG)_URL      := http://www.7-zip.org/a/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 

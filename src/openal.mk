@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2f3dcd313fe26391284fbf8596863723f99c65d6c6846dccb48e79cadaf40
 $(PKG)_SUBDIR   := openal-soft-$($(PKG)_VERSION)
 $(PKG)_FILE     := openal-soft-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://kcat.strangesoft.net/openal-releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc portaudio
+$(PKG)_DEPS     := cc portaudio
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://kcat.strangesoft.net/openal-releases/?C=M;O=D' | \

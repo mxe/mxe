@@ -5,11 +5,10 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Vivien Malerba <malerba@gnome-db.org>
 Date: Sun, 22 Feb 2015 21:41:46 +0100
-Subject: [PATCH] Misc. demos/ corrections
+Subject: [PATCH 1/1] Misc. demos/ corrections
 
 Fix of libgda-ui/demos/ddl_queries.c was excluded, because
 we need this only to fix Perl failure.
-
 
 diff --git a/libgda-ui/demos/geninclude.pl.in b/libgda-ui/demos/geninclude.pl.in
 index 1111111..2222222 100755

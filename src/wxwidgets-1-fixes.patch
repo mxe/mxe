@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@mail.ru>
 Date: Thu, 5 May 2016 19:11:19 +0300
-Subject: [PATCH] fix build with GCC >= 6.x
+Subject: [PATCH 1/2] fix build with GCC >= 6.x
 
 
 diff --git a/src/stc/scintilla/src/Editor.cxx b/src/stc/scintilla/src/Editor.cxx
@@ -36,7 +36,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: darealshinji <djcj@gmx.de>
 Date: Fri, 26 May 2017 09:33:22 +0200
-Subject: [PATCH] make it possible to install DLLs into $(libdir)/../bin
+Subject: [PATCH 2/2] make it possible to install DLLs into $(libdir)/../bin
 
 
 diff --git a/Makefile.in b/Makefile.in

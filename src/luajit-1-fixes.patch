@@ -2,20 +2,20 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 7f9e517a6ffb86e2392f2f6ab60fc530aacd71db Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Mon, 6 Oct 2014 00:15:00 +1100
-Subject: [PATCH] detect if host cc accepts -malign-double
+Subject: [PATCH 1/1] detect if host cc accepts -malign-double
 
 This patch has been taken from:
 
 http://www.freelists.org/post/luajit/detect-if-host-cc-accepts-maligndouble
 
 diff --git a/src/Makefile b/src/Makefile
-index 9551781..682260e 100644
+index 1111111..2222222 100644
 --- a/src/Makefile
 +++ b/src/Makefile
-@@ -167,6 +167,7 @@ CCOPTIONS= $(CCDEBUG) $(CCOPT) $(CCWARN) $(XCFLAGS) $(CFLAGS)
+@@ -169,6 +169,7 @@ CCOPTIONS= $(CCDEBUG) $(CCOPT) $(CCWARN) $(XCFLAGS) $(CFLAGS)
  LDOPTIONS= $(CCDEBUG) $(LDFLAGS)
  
  HOST_CC= $(CC)
@@ -23,7 +23,7 @@ index 9551781..682260e 100644
  HOST_RM= rm -f
  # If left blank, minilua is built and used. You can supply an installed
  # copy of (plain) Lua 5.1 or 5.2, plus Lua BitOp. E.g. with: HOST_LUA=lua
-@@ -333,7 +334,7 @@ endif
+@@ -331,7 +332,7 @@ endif
  
  ifneq ($(HOST_SYS),$(TARGET_SYS))
    ifeq (Windows,$(TARGET_SYS))
@@ -32,6 +32,3 @@ index 9551781..682260e 100644
    else
    ifeq (Linux,$(TARGET_SYS))
      HOST_XCFLAGS+= -DLUAJIT_OS=LUAJIT_OS_LINUX
--- 
-1.9.3 (Apple Git-50)
-

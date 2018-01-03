@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Sun, 12 Aug 2012 20:55:49 +0200
-Subject: [PATCH] set back configure build system that enables cross
+Subject: [PATCH 1/5] set back configure build system that enables cross
  compilation (instead of OMake)
 
 this patch and next ones are taken from camlimages bug tracker :
@@ -2111,7 +2111,8 @@ index 1111111..2222222
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Sun, 12 Aug 2012 20:56:46 +0200
-Subject: [PATCH] modify META file with ad-hock patch to make it usable in MXE
+Subject: [PATCH 2/5] modify META file with ad-hock patch to make it usable in
+ MXE
 
 
 diff --git a/src/META.in b/src/META.in
@@ -2195,8 +2196,8 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Sun, 12 Aug 2012 20:58:10 +0200
-Subject: [PATCH] update gifread.c and gifwrite.c for new giflib-5.0.0, and png
- for similar purpose
+Subject: [PATCH 3/5] update gifread.c and gifwrite.c for new giflib-5.0.0, and
+ png for similar purpose
 
 
 diff --git a/src/gifread.c b/src/gifread.c
@@ -2345,7 +2346,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Wed, 3 Oct 2012 09:37:05 +0200
-Subject: [PATCH] META : add camlimages.lablgtk2 and camlimages.freetype
+Subject: [PATCH 4/5] META : add camlimages.lablgtk2 and camlimages.freetype
  (referencing camlimages.all_formats)
 
 
@@ -2375,7 +2376,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 17 Jul 2016 12:16:43 +1000
-Subject: [PATCH] fix for giflib >=5.1
+Subject: [PATCH 5/5] fix for giflib >=5.1
 
 
 diff --git a/src/gifread.c b/src/gifread.c

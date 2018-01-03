@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dbus freetds jpeg libmng libpng openssl postgresql sqlite tiff zlib
+$(PKG)_DEPS     := cc dbus freetds jpeg libmng libpng openssl postgresql sqlite tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- https://download.qt.io/official_releases/qt/4.8/ | \
@@ -54,6 +54,7 @@ define $(PKG)_BUILD
         -nomake demos \
         -nomake docs \
         -nomake examples \
+        -xmlpatterns \
         -qt-sql-sqlite \
         -qt-sql-odbc \
         -qt-sql-psql \
@@ -131,7 +132,7 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' QtGui --cflags --libs`
 
     # setup cmake toolchain
-    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake)' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
+    echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake CACHE FILEPATH "Qt4 qmake executable")' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
     # fix static linking errors of QtGui to missing lcms2 and lzma
     # introduced by poor libmng linking
     echo 'set(MNG_LIBRARY mng lcms2 lzma)' >> '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'

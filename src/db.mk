@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := dd1417af5443f326ee3998e40986c3c60e2a7cfb5bfa25177ef7cadb2afb1
 $(PKG)_SUBDIR   := db-$($(PKG)_VERSION)
 $(PKG)_FILE     := db-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.oracle.com/berkeley-db/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/downloads/index.html' | \

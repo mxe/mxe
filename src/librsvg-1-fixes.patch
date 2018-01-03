@@ -2,14 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 6cf410c4901e851d53e6dd211b5cad0ca48ff61a Mon Sep 17 00:00:00 2001
-From: MXE <a@mxe.cc>
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Mon, 27 Sep 2010 12:00:52 +0200
 Subject: [PATCH 1/3] fix .pc requirements
 
 
 diff --git a/librsvg.pc.in b/librsvg.pc.in
-index a451de0..9488551 100644
+index 1111111..2222222 100644
 --- a/librsvg.pc.in
 +++ b/librsvg.pc.in
 @@ -9,7 +9,7 @@ css_supported=true
@@ -21,11 +21,8 @@ index a451de0..9488551 100644
  Requires.private:
  Libs: -L${libdir} -lrsvg-@RSVG_API_MAJOR_VERSION@ -lm
  Cflags: -I${includedir}/librsvg-@RSVG_API_VERSION@
--- 
-1.8.3.2
 
-
-From 8b8816e8d52da47ce9e14f6ec1f823f17184c29d Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Chun-wei Fan <fanchunwei@src.gnome.org>
 Date: Mon, 18 Aug 2014 12:27:28 +0800
 Subject: [PATCH 2/3] rsvg-base.c: Have realpath() Work On Windows
@@ -40,13 +37,14 @@ Taken from: https://bug710163.bugzilla-attachments.gnome.org/attachment.cgi?id=2
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/rsvg-base.c b/rsvg-base.c
-index 683d607..c40669a 100644
+index 1111111..2222222 100644
 --- a/rsvg-base.c
 +++ b/rsvg-base.c
-@@ -58,6 +58,15 @@
+@@ -57,6 +57,15 @@
+ #include "rsvg-paint-server.h"
  #include "rsvg-xml.h"
  
- /*
++/*
 + * XXX: Perhaps do a GIO-based implementation for
 + * realpath() or use gnulib implementation for this
 + * https://bugzilla.gnome.org/show_bug.cgi?id=710163
@@ -55,19 +53,15 @@ index 683d607..c40669a 100644
 +#define realpath(a,b) _fullpath(b,a,_MAX_PATH)
 +#endif
 +
-+/*
+ /*
   * This is configurable at runtime
   */
- #define RSVG_DEFAULT_DPI_X 90.0
--- 
-1.8.3.2
 
-
-From 4a2811e8f55e757d36bfb182990038bdfb48e514 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Wed, 17 Sep 2014 17:00:13 -0700
-Subject: [PATCH 3/3] [MXE] Disable checking gio-unix-2.0 and disable
- rsvg_convert program
+Subject: [PATCH 3/3] Disable checking gio-unix-2.0 and disable rsvg_convert
+ program
 
 rsvg_convert uses Unix features.
 
@@ -75,7 +69,7 @@ I decided not to change the Makefile.am and configure.in because autoreconf
 doesn't work on librsvg. Didn't investigate further.
 
 diff --git a/Makefile.in b/Makefile.in
-index 782d576..d2e21e8 100644
+index 1111111..2222222 100644
 --- a/Makefile.in
 +++ b/Makefile.in
 @@ -81,7 +81,7 @@ PRE_UNINSTALL = :
@@ -88,7 +82,7 @@ index 782d576..d2e21e8 100644
  @OS_WIN32_TRUE@am__append_2 = -mwindows
  @HAVE_INTROSPECTION_TRUE@am__append_3 = $(nodist_gir_DATA) $(nodist_typelibs_DATA)
 diff --git a/configure b/configure
-index 6c4d27f..0a4dfb7 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
 @@ -13662,12 +13662,12 @@ if test -n "$RSVG_CONVERT_CFLAGS"; then
@@ -141,6 +135,3 @@ index 6c4d27f..0a4dfb7 100755
  
  $RSVG_CONVERT_PKG_ERRORS
  
--- 
-1.8.3.2
-

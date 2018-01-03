@@ -2,19 +2,19 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 29ddb2d1493f45ac281bbaa6cae80b3767201c9b Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Thu, 10 May 2012 20:07:55 +0200
-Subject: [PATCH 1/2] small modification of Makefile for cross-compilation ;
- includes external glext.h
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 22:42:47 +1100
+Subject: [PATCH 1/2] small modification of Makefile for cross-compilation
 
+includes external glext.h
 
 diff --git a/src/Makefile b/src/Makefile
-index d930dfe..93f62bf 100644
+index 1111111..2222222 100644
 --- a/src/Makefile
 +++ b/src/Makefile
-@@ -28,10 +28,10 @@ all:	var2def$(XE) var2switch$(XE) lablgl.cma
- opt: lablgl.cmxa
+@@ -31,10 +31,10 @@ opt: lablgl.cmxa
+ tools: var2def$(XE) var2switch$(XE)
  
  var2def$(XE): var2def.ml
 -	$(LINKER) -pp camlp4o var2def.ml -o $@
@@ -28,7 +28,7 @@ index d930dfe..93f62bf 100644
  liblablgl$(XA): $(COBJS)
 diff --git a/src/glext.h b/src/glext.h
 new file mode 100644
-index 0000000..9048515
+index 1111111..2222222
 --- /dev/null
 +++ b/src/glext.h
 @@ -0,0 +1,11127 @@
@@ -11160,7 +11160,7 @@ index 0000000..9048515
 +
 +#endif
 diff --git a/src/ml_shader.c b/src/ml_shader.c
-index e10cbce..e337d9b 100644
+index 1111111..2222222 100644
 --- a/src/ml_shader.c
 +++ b/src/ml_shader.c
 @@ -12,7 +12,7 @@
@@ -11172,18 +11172,15 @@ index e10cbce..e337d9b 100644
  #endif
  
  #include <caml/misc.h>
--- 
-1.8.1.2
 
-
-From 3693a79d1c425d88b20be62f8ca2064bd82bf2c7 Mon Sep 17 00:00:00 2001
-From: MXE
-Date: Sun, 4 Aug 2013 21:35:28 +0200
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 22:43:31 +1100
 Subject: [PATCH 2/2] ml_gl.c : refer to new glext.h
 
 
 diff --git a/src/ml_gl.c b/src/ml_gl.c
-index c9b04ad..3ccedaa 100644
+index 1111111..2222222 100644
 --- a/src/ml_gl.c
 +++ b/src/ml_gl.c
 @@ -10,7 +10,7 @@
@@ -11195,6 +11192,3 @@ index c9b04ad..3ccedaa 100644
  #undef GL_VERSION_1_3
  #endif
  #include <caml/misc.h>
--- 
-1.8.1.2
-

@@ -1,11 +1,19 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-Fix broken Makefile, add relevant object files and don't use -DCRYPTOPP_EXPORTS
+Contains ad hoc patches for cross building.
 
-diff -ur a/GNUmakefile b/GNUmakefile
---- a/GNUmakefile	2015-11-22 22:17:59.000000000 +0100
-+++ b/GNUmakefile	2015-11-29 13:04:15.587252779 +0100
-@@ -255,8 +255,7 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 20:50:55 +1100
+Subject: [PATCH 1/1] Fix broken Makefile, add relevant object files and don't
+ use -DCRYPTOPP_EXPORTS
+
+
+diff --git a/GNUmakefile b/GNUmakefile
+index 1111111..2222222 100755
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -255,8 +255,7 @@ TESTOBJS := bench.o bench2.o test.o validat1.o validat2.o validat3.o adhoc.o dat
  LIBOBJS := $(filter-out $(TESTOBJS),$(OBJS))
  
  # List cryptlib.cpp first in an attempt to tame C++ static initialization problems

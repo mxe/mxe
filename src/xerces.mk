@@ -8,8 +8,8 @@ $(PKG)_VERSION  := 3.1.4
 $(PKG)_CHECKSUM := c98eedac4cf8a73b09366ad349cb3ef30640e7a3089d360d40a3dde93f66ecf6
 $(PKG)_SUBDIR   := xerces-c-$($(PKG)_VERSION)
 $(PKG)_FILE     := xerces-c-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://www.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc curl libiconv pthreads
+$(PKG)_URL      := https://archive.apache.org/dist/xerces/c/$(word 1,$(subst ., ,$($(PKG)_VERSION)))/sources/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc curl libiconv pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.apache.org/dist/xerces/c/3/sources/?C=M;O=D' | \

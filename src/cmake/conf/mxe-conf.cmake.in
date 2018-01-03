@@ -56,6 +56,7 @@ set(CMAKE_Fortran_COMPILER @PREFIX@/bin/@TARGET@-gfortran)
 set(CMAKE_RC_COMPILER @PREFIX@/bin/@TARGET@-windres)
 # CMAKE_RC_COMPILE_OBJECT is defined in:
 #     <cmake root>/share/cmake-X.Y/Modules/Platform/Windows-windres.cmake
+set(CPACK_NSIS_EXECUTABLE @TARGET@-makensis)
 
 ## Individual package configuration
 file(GLOB mxe_cmake_files

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := dcdaab57b06fdeb9be63ed0f2c2de78d0b1e79f7a896bb1e76561216a4458
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/andrewrk/rucksack/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc freeimage liblaxjson
+$(PKG)_DEPS     := cc freeimage liblaxjson
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/andrewrk/rucksack/releases' | \

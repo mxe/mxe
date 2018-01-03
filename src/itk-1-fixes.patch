@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rashad Kanavath <rashad.kanavath@c-s.fr>
 Date: Wed, 2 Dec 2015 15:00:54 +0100
-Subject: [PATCH] fix shared build
+Subject: [PATCH 1/2] fix shared build
 
 
 diff --git a/Modules/ThirdParty/GDCM/src/gdcm/Utilities/socketxx/socket++/CMakeLists.txt b/Modules/ThirdParty/GDCM/src/gdcm/Utilities/socketxx/socket++/CMakeLists.txt
@@ -39,7 +39,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 24 Oct 2016 02:01:07 +0300
-Subject: [PATCH] disable try-run
+Subject: [PATCH 2/2] disable try-run
 
 It is impossible to run while cross-compiling.
 

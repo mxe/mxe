@@ -2,15 +2,15 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 0516b3ebc54e3acdf3882b218e0f30133a23fa61 Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Wed, 2 Dec 2015 18:47:45 +1100
 Subject: [PATCH 1/2] Security fix for CVE-2015-1182 from:
 
 https://polarssl.org/tech-updates/security-advisories/polarssl-security-advisory-2014-04
 
 diff --git a/library/asn1parse.c b/library/asn1parse.c
-index a3a2b56..e2117bf 100644
+index 1111111..2222222 100644
 --- a/library/asn1parse.c
 +++ b/library/asn1parse.c
 @@ -278,6 +278,8 @@ int asn1_get_sequence_of( unsigned char **p,
@@ -22,18 +22,15 @@ index a3a2b56..e2117bf 100644
              cur = cur->next;
          }
      }
--- 
-2.4.9 (Apple Git-60)
 
-
-From e13da28ce07af59a1ee9736d41fc80e7a2861e7b Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Wed, 2 Dec 2015 18:50:21 +1100
 Subject: [PATCH 2/2] fix shared lib install locations
 
 
 diff --git a/library/CMakeLists.txt b/library/CMakeLists.txt
-index 33d96b4..262b463 100644
+index 1111111..2222222 100644
 --- a/library/CMakeLists.txt
 +++ b/library/CMakeLists.txt
 @@ -131,6 +131,8 @@ if(USE_SHARED_POLARSSL_LIBRARY)
@@ -46,6 +43,3 @@ index 33d96b4..262b463 100644
 +			RUNTIME DESTINATION bin
  			PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
  endif(USE_SHARED_POLARSSL_LIBRARY)
--- 
-2.4.9 (Apple Git-60)
-

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 67e4c9eb76f7adf99501d726d8ad5e9b525dfd0843fbce9ca73aaca4ba9ec
 $(PKG)_SUBDIR   := bullet-$($(PKG)_VERSION)
 $(PKG)_FILE     := bullet-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/bullet/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://code.google.com/p/bullet/downloads/list?sort=-uploaded' | \

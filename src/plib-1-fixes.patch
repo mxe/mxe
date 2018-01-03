@@ -2,14 +2,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 46f57c8b505104ceb1966dcc4a9b76447479a59f Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Mon, 22 Jun 2015 14:10:16 -0700
-Subject: [PATCH] Fix pointer-to-integer cast for 64-bit architecture.
+Subject: [PATCH 1/1] Fix pointer-to-integer cast for 64-bit architecture.
 
 
 diff --git a/src/sl/slDSP.cxx b/src/sl/slDSP.cxx
-index 933e20b..1d46ddc 100644
+index 1111111..2222222 100644
 --- a/src/sl/slDSP.cxx
 +++ b/src/sl/slDSP.cxx
 @@ -237,8 +237,8 @@ void slDSP::open ( const char *device, int _rate, int _stereo, int _bps )
@@ -24,7 +24,7 @@ index 933e20b..1d46ddc 100644
        wperror( result);
  
 diff --git a/src/ssg/ssgParser.cxx b/src/ssg/ssgParser.cxx
-index c006c27..cc1ea48 100644
+index 1111111..2222222 100644
 --- a/src/ssg/ssgParser.cxx
 +++ b/src/ssg/ssgParser.cxx
 @@ -263,7 +263,7 @@ void _ssgParser::expectNextToken( const char* name )
@@ -36,6 +36,3 @@ index c006c27..cc1ea48 100644
  	
  	onechartokenbuf_ptr [ 0 ] = *ptr;
  	onechartokenbuf_ptr [ 1 ] = 0;
--- 
-2.1.4
-

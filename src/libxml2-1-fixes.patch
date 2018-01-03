@@ -1,13 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 91a883b212d0ea5f1d36618362baeca2f35abb29 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Sat, 16 Jun 2012 19:44:21 +0200
-Subject: [PATCH] .pc requires.private liblzma
+Date: Sat, 18 Nov 2017 22:36:56 +1100
+Subject: [PATCH 1/1] .pc requires.private liblzma
 
 
 diff --git a/libxml-2.0.pc.in b/libxml-2.0.pc.in
-index f5f5f03..21b14d1 100644
+index 1111111..2222222 100644
 --- a/libxml-2.0.pc.in
 +++ b/libxml-2.0.pc.in
 @@ -8,6 +8,7 @@ Name: libXML
@@ -16,8 +18,5 @@ index f5f5f03..21b14d1 100644
  Requires:
 +Requires.private: liblzma
  Libs: -L${libdir} -lxml2
- Libs.private: @ICU_LIBS@ @THREAD_LIBS@ @Z_LIBS@ @ICONV_LIBS@ @M_LIBS@ @WIN32_EXTRA_LIBADD@ @LIBS@
+ Libs.private: @ICU_LIBS@ @THREAD_LIBS@ @Z_LIBS@ @LZMA_LIBS@ @ICONV_LIBS@ @M_LIBS@ @WIN32_EXTRA_LIBADD@ @LIBS@
  Cflags: @XML_INCLUDEDIR@ @XML_CFLAGS@
--- 
-1.7.10.4
-

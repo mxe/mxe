@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 14b38ef25cc136d71339ceeafb4856bb638d486614103453eccd323849267
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/leethomason/tinyxml2/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/leethomason/tinyxml2/releases' | \

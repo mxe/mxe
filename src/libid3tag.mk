@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 63da4f6e7997278f8a3fef4c6a372d342f705051d1eeb6a46a86b03610e26
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/mad/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/mad/files/libid3tag/' | \
@@ -17,13 +17,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    # configure script is ancient so regenerate
+    touch '$(SOURCE_DIR)'/{NEWS,AUTHORS,ChangeLog}
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
-
-    # libtool misses some dependency libs and there's no lt_cv* etc. options
-    # can be removed after 0.15.1b if recent libtool et al. is used
-    $(if $(BUILD_SHARED),\
-        $(SED) -i 's#^postdeps=""#postdeps="-lz"#g' '$(1)/libtool')
-
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install LDFLAGS='-no-undefined'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS='-no-undefined'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

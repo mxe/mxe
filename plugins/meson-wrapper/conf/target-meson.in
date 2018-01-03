@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+echo "== Using MXE wrapper: @PREFIX@/bin/@TARGET@-meson"
+
+unset NO_MESON_CROSSFILE
+if echo -- "$@" | grep -Ewq "configure"; then
+    NO_MESON_CROSSFILE=1
+fi
+
+if [[ "$NO_MESON_CROSSFILE" == "1" ]]; then
+    echo "== Skip using Meson cross file: @MESON_CROSS_FILE@"
+    exec meson "$@"
+else
+    echo "== Using Meson cross file: @MESON_CROSS_FILE@"
+    exec meson \
+              --cross-file "@MESON_CROSS_FILE@" \
+              --default-library "@LIBTYPE@" \
+              --prefix "@PREFIX@/@TARGET@" \
+              "$@"
+fi
