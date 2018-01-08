@@ -13,6 +13,7 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && ./autogen.sh
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
+        --disable-esd \
         --enable-wmm \
         LIBS=-lksuser
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
