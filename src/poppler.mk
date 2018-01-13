@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     #       because libtiff is not found, but because some references are
     #       undefined)
     cd '$(1)' \
-        && PATH='$(PREFIX)/$(TARGET)/qt/bin:$(PATH)' \
+        && PATH='$(PREFIX)/$(TARGET)/$(if $(filter qtbase,$($(PKG)_DEPS)),qt5,qt)/bin:$(PATH)' \
         ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-silent-rules \
@@ -54,7 +54,7 @@ define $(PKG)_BUILD
         PKG_CONFIG_PATH_$(subst .,_,$(subst -,_,$(TARGET)))='$(PREFIX)/$(TARGET)/qt/lib/pkgconfig' \
         CXXFLAGS=-D_WIN32_WINNT=0x0500 \
         LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
-    PATH='$(PREFIX)/$(TARGET)/qt/bin:$(PATH)' \
+    PATH='$(PREFIX)/$(TARGET)/$(if $(filter qtbase,$($(PKG)_DEPS)),qt5,qt)/bin:$(PATH)' \
         $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) HTML_DIR=
     $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT) HTML_DIR=
 
