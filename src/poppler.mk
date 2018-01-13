@@ -52,7 +52,7 @@ define $(PKG)_BUILD
         --disable-gtk-doc-pdf \
         --with-font-configuration=win32 \
         PKG_CONFIG_PATH_$(subst .,_,$(subst -,_,$(TARGET)))='$(PREFIX)/$(TARGET)/qt/lib/pkgconfig' \
-        CXXFLAGS=-D_WIN32_WINNT=0x0500 \
+        CXXFLAGS="-D_WIN32_WINNT=0x0500 -std=c++11" \
         LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
     PATH='$(PREFIX)/$(TARGET)/$(if $(filter qtbase,$($(PKG)_DEPS)),qt5,qt)/bin:$(PATH)' \
         $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) HTML_DIR=
