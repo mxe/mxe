@@ -9,3 +9,9 @@ $(PKG)_QT_VERSION := 4
 PKG               := qwt
 $(PKG)_DEPS       := cc qt
 $(PKG)_QT_DIR     := qt
+
+PKG               := poppler
+$(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
+
+PKG               := openscenegraph
+$(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
