@@ -72,7 +72,7 @@
     "gcc": {"version": "5.4.0", "website": "https://gcc.gnu.org/", "description": "GCC"},
     "gd": {"version": "2.1.0", "website": "https://libgd.github.io/", "description": "GD  (without support for xpm)"},
     "gdal": {"version": "2.2.3", "website": "http://www.gdal.org/", "description": "GDAL"},
-    "gdb": {"version": "8.0.1", "website": "https://www.gnu.org/software/gdb/", "description": ""},
+    "gdb": {"version": "8.1", "website": "https://www.gnu.org/software/gdb/", "description": ""},
     "gdk-pixbuf": {"version": "2.32.3", "website": "https://gtk.org/", "description": "GDK-pixbuf"},
     "gendef": {"version": "5.0.3", "website": "https://sourceforge.net/p/mingw-w64/wiki2/gendef/", "description": ""},
     "geoip-database": {"version": "20150317-1", "website": "https://www.maxmind.com/", "description": "GeoIP Legacy Database"},
