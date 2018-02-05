@@ -12,7 +12,7 @@ MXE_TRIPLETS       := i686-w64-mingw32 x86_64-w64-mingw32
 MXE_LIB_TYPES      := static shared
 MXE_TARGET_LIST    := $(strip $(foreach TRIPLET,$(MXE_TRIPLETS),\
                           $(addprefix $(TRIPLET).,$(MXE_LIB_TYPES))))
-MXE_TARGETS        := i686-w64-mingw32.static
+MXE_TARGETS        := i686-w64-mingw32.static x86_64-w64-mingw32.static
 .DEFAULT_GOAL      := all-filtered
 
 DEFAULT_MAX_JOBS   := 6
@@ -327,6 +327,7 @@ else
         echo; \
         echo '# This variable controls the targets that will build.'; \
         echo '#MXE_TARGETS := $(MXE_TARGET_LIST)'; \
+        echo 'MXE_TARGETS := $(MXE_TARGETS)'; \
         echo; \
         echo '# This variable controls which plugins are in use.'; \
         echo '# See plugins/README.md for further information.'; \
