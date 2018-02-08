@@ -1,10 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
-PKG            := meson-wrapper
-$(PKG)_VERSION := 1
-$(PKG)_UPDATE  := echo 1
-$(PKG)_TARGETS := $(MXE_TARGETS)
+PKG              := meson-wrapper
+$(PKG)_VERSION   := 1
+$(PKG)_UPDATE    := echo 1
+$(PKG)_TARGETS   := $(MXE_TARGETS)
 $(PKG)_FILE_DEPS := $(wildcard $(PWD)/plugins/meson-wrapper/conf/*)
+$(PKG)_DEPS      := cmake-conf
 
 define $(PKG)_BUILD
     # create the Meson cross file
