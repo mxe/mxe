@@ -1,0 +1,60 @@
+commit 7b4dcd0522fcd7962fb7b1ebfc454b257744a397
+Author: Alois Schloegl <alois.schloegl@ist.ac.at>
+Date:   Fri Feb 9 14:51:15 2018 +0100
+
+    enable configuration with openblas (prefered over lapack)
+
+diff --git a/Makefile.static b/Makefile.static
+index f9184b0a..8e6f095a 100644
+--- a/Makefile.static
++++ b/Makefile.static
+@@ -51,7 +51,7 @@ endif
+ endif
+ 
+ DEFINES += -DWITH_BIOSIG2
+-DEFINES += -DHAVE_LAPACK
++DEFINES += -DHAVE_OPENBLAS
+ #DEFINES += -DWITHOUT_ABF
+ #DEFINES += -DWITHOUT_AXG
+ DEFINES += -DWITH_PSLOPE
+@@ -174,8 +174,14 @@ SOURCES_AXG = ./src/libstfio/axg/axglib.cpp \
+ 	./src/libstfio/axg/byteswap.cpp \
+ 
+ ### DEPENDENCIES ###
+-ifneq (,$(findstring HAVE_LAPACK, $(DEFINES)))
+-  LIBS   += -llapack -lblas
++ifneq (,$(findstring HAVE_OPENBLAS, $(DEFINES)))
++  LIBS   += -lopenblas -lgomp -lpthread -lm
++  DEFINES += -I/usr/include/openblas
++  LDFLAGS += -L/usr/lib/openblas
++else
++  ifneq (,$(findstring HAVE_LAPACK, $(DEFINES)))
++    LIBS   += -llapack -lblas
++  endif
+ endif
+ 
+ ifeq (,$(findstring WITHOUT_ABF, $(DEFINES)))
+diff --git a/configure.ac b/configure.ac
+index dc01eb55..955cf90f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -180,6 +180,8 @@ if test "$LAPACKLIB" = ""; then
+         LIBLAPACK_LDFLAGS="/usr/lib/liblapack.dylib -framework Accelerate"
+         CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK -DHAVE_LAPACK_SUFFIX" 
+     else
++      AC_CHECK_LIB([openblas], [dgemm_], HAVE_OPENBLAS="yes",, [-lgomp -lpthread -lm])
++      if test "${HAVE_OPENBLAS}" != "yes" ; then
+         AC_CHECK_LIB([lapack], [dgemm_], HAVE_LAPACKX="yes")
+         if test "${HAVE_LAPACKX}" != "yes" ; then
+             AC_CHECK_LIB([lapack3], [dgemm_], HAVE_LAPACK3="yes")
+@@ -205,6 +207,10 @@ if test "$LAPACKLIB" = ""; then
+             LIBLAPACK_LDFLAGS="-llapack -lblas"
+             CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK " 
+         fi
++      else
++        LIBLAPACK_LDFLAGS="-lopenblas"
++        CPPFLAGS="${CPPFLAGS} -DWITH_OPENBLAS -DHAVE_LAPACK"
++      fi
+     fi
+ fi
+ AC_SUBST(LIBLAPACK_LDFLAGS)

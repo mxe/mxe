@@ -1,0 +1,18 @@
+commit d3605183e1d29acf335edaf12bc407bc650946dd
+Author: Alois Schloegl <alois.schloegl@ist.ac.at>
+Date:   Fri Feb 9 14:48:27 2018 +0100
+
+    configure -std=C99 or higher (C++11 is not required)
+
+diff --git a/configure.ac b/configure.ac
+index 073b1f65..dc01eb55 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -5,6 +5,7 @@ AM_SILENT_RULES([yes])
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+ AC_PROG_CC
++AC_PROG_CC_STDC
+ AC_PROG_INSTALL
+ 
+ _LT_SET_OPTION([LT_INIT],[dlopen])
