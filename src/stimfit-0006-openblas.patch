@@ -8,15 +8,6 @@ diff --git a/Makefile.static b/Makefile.static
 index f9184b0a..8e6f095a 100644
 --- a/Makefile.static
 +++ b/Makefile.static
-@@ -51,7 +51,7 @@ endif
- endif
- 
- DEFINES += -DWITH_BIOSIG2
--DEFINES += -DHAVE_LAPACK
-+DEFINES += -DHAVE_OPENBLAS
- #DEFINES += -DWITHOUT_ABF
- #DEFINES += -DWITHOUT_AXG
- DEFINES += -DWITH_PSLOPE
 @@ -174,8 +174,14 @@ SOURCES_AXG = ./src/libstfio/axg/axglib.cpp \
  	./src/libstfio/axg/byteswap.cpp \
  

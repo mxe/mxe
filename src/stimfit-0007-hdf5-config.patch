@@ -2,7 +2,7 @@ diff --git a/configure.ac b/configure.ac
 index a464260d..0a7ddaf4 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -325,7 +332,7 @@ if test "${HDF5PREFIX}" = ""; then
+@@ -332,7 +332,7 @@ if test "${HDF5PREFIX}" = ""; then
  fi
  
  AC_CHECK_HEADER([hdf5.h], [], [AC_MSG_ERROR([Couldn't find hdf5 header])])

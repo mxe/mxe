@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 2a2199606eb806f40318e4d0b6c6d05e58cd8cfdf51d584cd7822b04729f7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libbiosig wxwidgets hdf5 boost fftw libtool openblas
+$(PKG)_DEPS     := gcc libbiosig wxwidgets hdf5 boost fftw libtool levmar
 
 define $(PKG)_UPDATE
     wget -q -O- 'https://github.com/neurodroid/stimfit/releases' | \

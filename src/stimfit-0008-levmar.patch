@@ -1,0 +1,93 @@
+--- a/Makefile.static	2018-02-11 21:58:23.245946256 +0100
++++ b/Makefile.static	2018-02-11 21:57:41.172520504 +0100
+@@ -51,6 +51,7 @@
+ endif
+ 
+ DEFINES += -DWITH_BIOSIG2
++DEFINES += -DWITH_LIBLEVMAR
+ DEFINES += -DHAVE_LAPACK
+ #DEFINES += -DWITHOUT_ABF
+ #DEFINES += -DWITHOUT_AXG
+@@ -75,19 +76,20 @@
+ 
+ vpath %.cpp ./src/stimfit:./src/stimfit/gui:./src/stimfit/gui/dlgs:./src/stimfit/gui/usrdlg:./src/libstfnum:./src/libstfio/:./src/libstfio/cfs/:./src/libstfio/atf/:./src/libstfio/abf/:./src/libstfio/abf/axon2:./src/libstfio/abf/axon/Common:./src/libstfio/abf/axon/AxAbfFio32:./src/libstfio/abf/axon/AxAtfFio32/:./src/libstfio/biosig/:./src/libstfio/hdf5/:./src/libstfio/heka/:./src/libstfio/igor:./src/libstfio/ascii/:./src/libstfio/axg/
+ 
+-vpath %.c ./src/libstfnum/levmar/:./src/libstfio/igor/:./src/libstfio/cfs/
+-vpath %.cpp ./src/libstfnum/:./src/libstfnum/levmar/:./src/stimfit/gui/:./src/stimfit/gui/dlgs/:./src/libstfio/:./src/libstfio/biosig/:./src/libstfio/igor/:./src/libstfio/cfs/
++ifeq (,$(findstring WITH_LIBLEVMAR, $(DEFINES)))
++  vpath %.c ./src/libstfnum/levmar/:./src/libstfio/igor/:./src/libstfio/cfs/
++  vpath %.cpp ./src/libstfnum/:./src/libstfnum/levmar/:./src/stimfit/gui/:./src/stimfit/gui/dlgs/:./src/libstfio/:./src/libstfio/biosig/:./src/libstfio/igor/:./src/libstfio/cfs/
++else
++  vpath %.c ./src/libstfio/igor/:./src/libstfio/cfs/
++  vpath %.cpp ./src/libstfnum/:./src/stimfit/gui/:./src/stimfit/gui/dlgs/:./src/libstfio/:./src/libstfio/biosig/:./src/libstfio/igor/:./src/libstfio/cfs/
++endif
++
+ 
+ SOURCES = ./src/stimfit/stf.cpp \
+ 	./src/libstfnum/stfnum.cpp \
+ 	./src/libstfnum/funclib.cpp \
+ 	./src/libstfnum/measure.cpp \
+ 	./src/libstfnum/fit.cpp \
+-	./src/libstfnum/levmar/lm.c \
+-	./src/libstfnum/levmar/Axb.c \
+-	./src/libstfnum/levmar/misc.c \
+-	./src/libstfnum/levmar/lmbc.c \
+-	./src/libstfnum/levmar/lmlec.c \
+ 	./src/stimfit/gui/doc.cpp \
+ 	./src/stimfit/gui/zoom.cpp \
+ 	./src/stimfit/gui/childframe.cpp \
+@@ -120,6 +122,12 @@
+ 	./src/libstfio/igor/CrossPlatformFileIO.c \
+ 	./src/libstfio/cfs/cfs.c 
+ 
++SOURCES_LEVMAR = ./src/libstfnum/levmar/lm.c \
++	./src/libstfnum/levmar/Axb.c \
++	./src/libstfnum/levmar/misc.c \
++	./src/libstfnum/levmar/lmbc.c \
++	./src/libstfnum/levmar/lmlec.c \
++
+ SOURCES_OPTIONAL = \
+ 	./src/libstfio/heka/hekalib.cpp \
+ 
+@@ -174,6 +182,12 @@
+ 	./src/libstfio/axg/byteswap.cpp \
+ 
+ ### DEPENDENCIES ###
++ifeq (,$(findstring WITH_LIBLEVMAR, $(DEFINES)))
++	SOURCES += $(SOURCES_LEVMAR)
++else
++	LIBS  += -llevmar
++endif
++
+ ifneq (,$(findstring HAVE_OPENBLAS, $(DEFINES)))
+   LIBS   += -lopenblas -lgomp -lpthread -lm
+   DEFINES += -I/usr/include/openblas
+@@ -223,11 +237,6 @@
+ PREFIX   ?= /usr
+ PKGCONF  ?= $(CROSS)pkg-config
+ 
+-ifeq (5,$(shell $(CXX) -v 2>&1 | awk '/gcc version / {print substr($$3,1,1)}' ))
+-  # g++-5 changes default ABI, if WX was compiled with an earlier compiler
+-  CXXFLAGS += -fabi-version=2
+-endif
+-
+ CPPFLAGS  += -I$(WXDIR)
+ 
+ ## HDF5 related stuff ##
+@@ -257,7 +266,7 @@
+     LDFLAGS  += -L/usr/lib/$(PLATFORM)
+     LIBS     += -lhdf5_serial_hl -lhdf5_serial
+   else
+-    LIBS     += -lhdf5_hl -lhdf5
++    LIBS     += -lhdf5_hl -lhdf5 -lz
+   endif
+ endif
+ endif
+@@ -279,7 +288,6 @@
+ 
+ ifeq (mingw,$(findstring mingw, $(WXCONF)))
+   LIBS   += -lgfortran -lquadmath
+-  LIBS   += -liberty -liconv
+ endif
+ 
+ 
