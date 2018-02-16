@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 618f569eb0d00789917050c5d0bc7cb959599821 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -40,7 +40,7 @@ index 55c74aad66..d7bcffeb9c 100644
 From 68f406b40eb3708809c042dfaf41b5366b437308 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/5] Fix pkgconfig file and library naming
+Subject: [PATCH 2/6] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -109,7 +109,7 @@ index e6a0d97f1a..5aefea28e5 100644
 From d0ccaee377241a6b661ccb9a6d57ebc694b50f76 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
@@ -149,7 +149,7 @@ index ca33689cd7..194523eee0 100644
 From 35e8ce1f490f973045c77385f96acaa3736c8787 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
-Subject: [PATCH 4/5] fix treatment of SYBASE_LIBS
+Subject: [PATCH 4/6] fix treatment of SYBASE_LIBS
 
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
@@ -173,7 +173,7 @@ index b69b51b679..d37423adbd 100644
 From 4474738cdb894d948b2e7b30c32bf05455d41001 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 5/5] use pkg-config for harfbuzz
+Subject: [PATCH 5/6] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
@@ -191,6 +191,43 @@ index b90ce6e4d9..fc9a3470c1 100644
              ]
          },
          "imf": {
+-- 
+2.14.1
+
+
+From 8427c411a789c537b41d113d1f8f9ea7eb9d009a Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 23 Nov 2017 11:28:47 +0200
+Subject: [PATCH 6/6] disable qt_random_cpu for i686-w64-mingw32
+
+Workaround for gcc internal error compiling for mingw32:
+    global/qrandom.cpp: In function 'qsizetype qt_random_cpu(void*, qsizetype)':
+    global/qrandom.cpp:123:1: internal compiler error: in
+    ix86_compute_frame_layout, at config/i386/i386.c:10145
+     }
+     ^
+
+    global/qrandom.cpp:123:1: internal compiler error: Segmentation fault
+    i686-w64-mingw32.static-g++: internal compiler error: Segmentation fault
+    (program cc1plus)
+
+Based on https://codereview.qt-project.org/#/c/212360/
+
+Change-Id: Ia1c902e7b147bdda2b8d7904b40a3b968b8d0369
+
+diff --git a/src/corelib/global/qrandom.cpp b/src/corelib/global/qrandom.cpp
+index 72ba299280..90a0f378ff 100644
+--- a/src/corelib/global/qrandom.cpp
++++ b/src/corelib/global/qrandom.cpp
+@@ -92,7 +92,7 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando
+ 
+ QT_BEGIN_NAMESPACE
+ 
+-#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
++#if defined(Q_PROCESSOR_X86) && !defined(Q_PROCESSOR_X86_32) && QT_COMPILER_SUPPORTS_HERE(RDRND)
+ static qsizetype qt_random_cpu(void *buffer, qsizetype count) Q_DECL_NOTHROW;
+ 
+ #  ifdef Q_PROCESSOR_X86_64
 -- 
 2.14.1
 
