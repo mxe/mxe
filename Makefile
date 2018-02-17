@@ -485,7 +485,7 @@ PKG_OO_DEPS = \
                       $(filter $($($(DEP)_PKG)_TYPE),$(BUILD_PKG_TYPES))), \
                 $($(DEP)_TGT)/installed/$($(DEP)_PKG))))
 
-# all deps for download rule
+# all deps for download rules (includes source-only pkgs)
 PKG_ALL_DEPS = \
     $(foreach DEP,$($(PKG)_OO_DEPS) $(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET))), \
         $(if $(filter $(DEP),$(PKGS)), \
@@ -681,6 +681,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           | $(if $(DONT_CHECK_REQUIREMENTS),,check-requirements) \
                           $(if $(value $(call LOOKUP_PKG_RULE,$(1),URL,$(3))),download-only-$(1)) \
                           $(addprefix $(PREFIX)/,$(PKG_OO_DEPS)) \
+                          $(addprefix download-,$(PKG_ALL_DEPS)) \
                           $(NONET_LIB) \
                           $(PREFIX)/$(3)/installed/.gitkeep \
                           print-git-oneline
