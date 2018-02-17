@@ -1,3 +1,7 @@
+/*
+ * This file is part of MXE. See LICENSE.md for licensing information.
+ */
+
 #include <assert.h>
 #include <glib.h>
 #include <glib-object.h>
