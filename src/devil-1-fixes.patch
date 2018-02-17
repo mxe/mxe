@@ -92,6 +92,7 @@ From: Eshed <ashdnazg@gmail.com>
 Date: Sun, 21 Jan 2018 22:07:18 +0200
 Subject: [PATCH 3/3] Fix case
 
+See: https://github.com/DentonW/DevIL/pull/71
 
 diff --git a/DevIL/src-IL/CMakeLists.txt b/DevIL/src-IL/CMakeLists.txt
 index 1111111..2222222 100644
