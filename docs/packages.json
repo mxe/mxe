@@ -137,7 +137,7 @@
     "json-glib": {"version": "1.0.4", "website": "https://wiki.gnome.org/action/show/Projects/JsonGlib", "description": "JSON-Glib"},
     "json_spirit": {"version": "4.08", "website": "https://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented", "description": ""},
     "jsoncpp": {"version": "1.8.0", "website": "https://github.com/open-source-parsers/jsoncpp", "description": "A C++ library for interacting with JSON"},
-    "lame": {"version": "3.99.5", "website": "https://lame.sourceforge.io/", "description": ""},
+    "lame": {"version": "3.100", "website": "https://lame.sourceforge.io/", "description": ""},
     "lapack": {"version": "3.6.0", "website": "http://www.netlib.org/lapack/", "description": ""},
     "lcms": {"version": "2.9", "website": "http://www.littlecms.com/", "description": ""},
     "lcms1": {"version": "1.19", "website": "http://www.littlecms.com/", "description": ""},
