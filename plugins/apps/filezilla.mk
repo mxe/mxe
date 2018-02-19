@@ -15,7 +15,7 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.qbittorrent.org/download.php' | \
     $(SED) -n 's,.*qbittorrent-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
-ndef
+endef
 
 define $(PKG)_BUILD
     cd '$(1)' && \
