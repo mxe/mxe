@@ -46,8 +46,8 @@ define $(PKG)_BUILD
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     # compile test
-    '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic \
-        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
+    #'$(TARGET)-gcc' \
+    #    -W -Wall -Werror -ansi -pedantic \
+    #    '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+    #    `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
