@@ -4,8 +4,8 @@ PKG             := sqlcipher
 $(PKG)_WEBSITE  := https://www.zetetic.net/sqlcipher/
 $(PKG)_DESCR    := SQLite extension that provides 256 bit AES encryption of database files
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.4.1
-$(PKG)_CHECKSUM := 4172cc6e5a79d36e178d36bd5cc467a938e08368952659bcd95eccbaf0fa4ad4
+$(PKG)_VERSION  := 3.4.2
+$(PKG)_CHECKSUM := 69897a5167f34e8a84c7069f1b283aba88cdfa8ec183165c4a5da2c816cfaadb
 $(PKG)_GH_CONF  := sqlcipher/sqlcipher/tags, v
 $(PKG)_DEPS     := cc openssl readline $(BUILD)~tcl
 
