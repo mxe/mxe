@@ -22,10 +22,47 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_DARWIN
-    # on darwin, use pre-built tools from macports with pinned
-    # version set in plugins/native/darwin/glib2-macports
-    $(call PREPARE_PKG_SOURCE,glib2-macports,$(BUILD_DIR))
-    cp -Rp '$(BUILD_DIR)/opt/local/bin' '$(PREFIX)/$(TARGET)/'
+    # native build for glib-tools
+    # libiconv/gettext cause issues with other packages so build inline
+    mkdir '$(BUILD_DIR).src'
+    $(call PREPARE_PKG_SOURCE,libiconv,$(BUILD_DIR).src)
+    cd '$(BUILD_DIR).src/$(libiconv_SUBDIR)' && ./configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --prefix='$(BUILD_DIR).usr'
+    $(MAKE) -C '$(BUILD_DIR).src/$(libiconv_SUBDIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(BUILD_DIR).src/$(libiconv_SUBDIR)' -j 1 install $(MXE_DISABLE_DOCS)
+
+    $(call PREPARE_PKG_SOURCE,gettext,$(BUILD_DIR).src)
+    cd '$(BUILD_DIR).src/$(gettext_SUBDIR)' && ./configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --prefix='$(BUILD_DIR).usr'
+    $(MAKE) -C '$(BUILD_DIR).src/$(gettext_SUBDIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(BUILD_DIR).src/$(gettext_SUBDIR)' -j 1 install $(MXE_DISABLE_DOCS)
+
+    cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_CONFIGURE_OPTS) \
+        --enable-regex \
+        --disable-threads \
+        --disable-selinux \
+        --disable-inotify \
+        --disable-fam \
+        --disable-xattr \
+        --disable-dtrace \
+        --disable-libmount \
+        --with-pcre=internal \
+        CPPFLAGS='-I$(BUILD_DIR).usr/include' \
+        LDFLAGS='-L$(BUILD_DIR).usr/lib'
+    $(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    $(MAKE) -C '$(BUILD_DIR)/gio/xdgmime'     -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gio/kqueue'      -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-schemas
+    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-resources
+    $(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
 endef
 
 define $(PKG)_BUILD_NATIVE
