@@ -678,16 +678,43 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install \
-    autoconf automake autopoint bash bison bzip2 flex gettext\
-    git g++ gperf intltool libgdk-pixbuf2.0-dev \
-    libtool-bin libltdl-dev libssl-dev libxml-parser-perl make \
-    openssl p7zip-full patch perl pkg-config python ruby scons \
-    sed unzip wget xz-utils</pre>
+    autoconf \
+    automake \
+    autopoint \
+    bash \
+    bison \
+    bzip2 \
+    flex \
+    g++ \
+    gettext\
+    git \
+    gperf \
+    intltool \
+    libgdk-pixbuf2.0-dev \
+    libltdl-dev \
+    libssl-dev \
+    libtool-bin \
+    libxml-parser-perl \
+    make \
+    openssl \
+    p7zip-full \
+    patch \
+    perl \
+    pkg-config \
+    python \
+    ruby \
+    scons \
+    sed \
+    unzip \
+    wget \
+    xz-utils</pre>
 
     <p>
     On 64-bit Debian, install also:
     </p>
-    <pre>apt-get install g++-multilib libc6-dev-i386</pre>
+    <pre>apt-get install \
+    g++-multilib \
+    libc6-dev-i386</pre>
 
     <p>
     Only the <a href="https://www.debian.org/releases/stable/">latest Debian stable series</a> is supported.
@@ -702,10 +729,32 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://admin.fedoraproject.org/pkgdb/ -->
     <pre>yum install \
-    autoconf automake bash bison bzip2 flex gcc-c++ \
-    gdk-pixbuf2-devel gettext git gperf intltool make \
-    sed libtool openssl-devel p7zip patch \
-    perl pkgconfig python ruby scons unzip wget xz</pre>
+    autoconf \
+    automake \
+    bash \
+    bison \
+    bzip2 \
+    flex \
+    gcc-c++ \
+    gdk-pixbuf2-devel \
+    gettext \
+    git \
+    gperf \
+    intltool \
+    libtool \
+    make \
+    openssl-devel \
+    p7zip \
+    patch \
+    perl \
+    pkgconfig \
+    python \
+    ruby \
+    scons \
+    sed \
+    unzip \
+    wget \
+    xz</pre>
 
     <p>
     On 64-bit Fedora,
@@ -716,10 +765,33 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://www.freshports.org/ -->
     <pre>pkg install \
-    automake autoconf bash bison coreutils flex \
-    gcc gdk-pixbuf2 gettext git glib gmake gperf gsed intltool \
-    libtool openssl p5-XML-Parser p7zip patch perl5 \
-    pkgconf python ruby scons unzip wget</pre>
+    autoconf \
+    automake \
+    bash \
+    bison \
+    coreutils \
+    flex \
+    gcc \
+    gdk-pixbuf2 \
+    gettext \
+    git \
+    glib \
+    gmake \
+    gperf \
+    gsed \
+    intltool \
+    libtool \
+    openssl \
+    p5-XML-Parser \
+    p7zip \
+    patch \
+    perl5 \
+    pkgconf \
+    python \
+    ruby \
+    scons \
+    unzip \
+    wget</pre>
 
     <p>
     Use gmake instead of make.
@@ -766,10 +838,33 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://www.frugalware.org/packages -->
     <pre>pacman-g2 -S \
-    autoconf automake bash bzip2 bison flex gcc gdk-pixbuf2\
-    gettext git gperf intltool make sed libtool \
-    openssl patch perl perl-xml-parser pkgconfig python \
-    ruby scons unzip wget xz xz-lzma</pre>
+    autoconf \
+    automake \
+    bash \
+    bison \
+    bzip2 \
+    flex \
+    gcc \
+    gdk-pixbuf2\
+    gettext \
+    git \
+    gperf \
+    intltool \
+    libtool \
+    make \
+    openssl \
+    patch \
+    perl \
+    perl-xml-parser \
+    pkgconfig \
+    python \
+    ruby \
+    scons \
+    sed \
+    unzip \
+    wget \
+    xz \
+    xz-lzma</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -780,16 +875,33 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://packages.gentoo.org/ -->
     <pre>emerge \
-    sys-devel/autoconf sys-devel/automake app-shells/bash \
-    sys-devel/bison app-arch/bzip2 \
-    sys-devel/flex sys-devel/gcc sys-devel/gettext \
-    dev-vcs/git dev-util/gperf dev-util/intltool \
-    sys-devel/make sys-apps/sed \
-    sys-devel/libtool dev-libs/openssl app-arch/p7zip \
-    sys-devel/patch dev-lang/perl dev-perl/XML-Parser \
-    dev-util/pkgconfig dev-lang/python dev-lang/ruby \
-    dev-util/scons app-arch/unzip net-misc/wget \
-    app-arch/xz-utils x11-libs/gdk-pixbuf</pre>
+    app-arch/bzip2 \
+    app-arch/p7zip \
+    app-arch/unzip \
+    app-arch/xz-utils \
+    app-shells/bash \
+    dev-lang/perl \
+    dev-lang/python \
+    dev-lang/ruby \
+    dev-libs/openssl \
+    dev-perl/XML-Parser \
+    dev-util/gperf \
+    dev-util/intltool \
+    dev-util/pkgconfig \
+    dev-util/scons \
+    dev-vcs/git \
+    net-misc/wget \
+    sys-apps/sed \
+    sys-devel/autoconf \
+    sys-devel/automake \
+    sys-devel/bison \
+    sys-devel/flex \
+    sys-devel/gcc \
+    sys-devel/gettext \
+    sys-devel/libtool \
+    sys-devel/make \
+    sys-devel/patch \
+    x11-libs/gdk-pixbuf</pre>
 
     <h3 id="requirements-macos">Mac OS X</h3>
 
@@ -804,9 +916,24 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- https://www.macports.org/ports.php -->
     <pre>sudo port install \
-    autoconf automake bison coreutils flex gettext \
-    gdk-pixbuf2 gnutar gsed intltool libtool \
-    openssl p5-xml-parser p7zip pkgconfig scons wget xz</pre>
+    autoconf \
+    automake \
+    bison \
+    coreutils \
+    flex \
+    gdk-pixbuf2 \
+    gettext \
+    gnutar \
+    gsed \
+    intltool \
+    libtool \
+    openssl \
+    p5-xml-parser \
+    p7zip \
+    pkgconfig \
+    scons \
+    wget \
+    xz</pre>
 
     <h5 id="requirements-macos-rudix">Rudix</h5>
     <p>
@@ -815,8 +942,19 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://rudix.org/packages/index.html -->
     <pre>sudo rudix install \
-    autoconf automake coreutils gettext glib intltool \
-    libtool p7zip scons sed tar wget xz</pre>
+    autoconf \
+    automake \
+    coreutils \
+    gettext \
+    glib \
+    intltool \
+    libtool \
+    p7zip \
+    scons \
+    sed \
+    tar \
+    wget \
+    xz</pre>
     <p>
     Note: <b>gdk-pixbuf2</b> is not installed in method 2,
     so you can not build <b>gtk3</b>. Other packages may be
@@ -830,8 +968,19 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <!-- http://braumeister.org/ -->
     <pre>brew install \
-    autoconf automake coreutils gdk-pixbuf gettext \
-    gnu-sed gnu-tar intltool libtool p7zip scons wget xz</pre>
+    autoconf \
+    automake \
+    coreutils \
+    gdk-pixbuf \
+    gettext \
+    gnu-sed \
+    gnu-tar \
+    intltool \
+    libtool \
+    p7zip \
+    scons \
+    wget \
+    xz</pre>
     <p>
     Some formulae are
     <a href="https://github.com/Homebrew/brew/blob/master/docs/FAQ.md#what-does-keg-only-mean"><code>keg-only</code></a>
@@ -864,18 +1013,44 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://software.opensuse.org/131/en -->
     <pre>zypper install -R \
-    autoconf automake bash bison bzip2 flex gcc-c++ \
-    gdk-pixbuf-devel gettext-tools git gperf intltool \
-    libtool make openssl libopenssl-devel \
-    p7zip patch perl perl-XML-Parser pkg-config python \
-    ruby scons sed unzip wget xz</pre>
+    autoconf \
+    automake \
+    bash \
+    bison \
+    bzip2 \
+    flex \
+    gcc-c++ \
+    gdk-pixbuf-devel \
+    gettext-tools \
+    git \
+    gperf \
+    intltool \
+    libopenssl-devel \
+    libtool \
+    make \
+    openssl \
+    p7zip \
+    patch \
+    perl \
+    perl-XML-Parser \
+    pkg-config \
+    python \
+    ruby \
+    scons \
+    sed \
+    unzip \
+    wget \
+    xz</pre>
 
     <p>
     On 64-bit openSUSE, install also:
     </p>
     <pre>zypper install -R \
-    gcc-32bit glibc-devel-32bit libgcc46-32bit \
-    libgomp46-32bit libstdc++46-devel-32bit</pre>
+    gcc-32bit \
+    glibc-devel-32bit \
+    libgcc46-32bit \
+    libgomp46-32bit \
+    libstdc++46-devel-32bit</pre>
 
     <h3 id="requirements-wsl">Windows Subsystem for Linux</h3>
 
