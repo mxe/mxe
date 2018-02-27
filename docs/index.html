@@ -617,10 +617,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="https://sourceware.org/libffi/">libffi</a></td>
-        <td>≥ 3.0.0</td>
-    </tr>
-    <tr>
         <td><a href="https://www.gnu.org/software/libtool/">Libtool</a></td>
         <td>≥ 2.2</td>
     </tr>
@@ -683,7 +679,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- https://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install \
     autoconf automake autopoint bash bison bzip2 flex gettext\
-    git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
+    git g++ gperf intltool libgdk-pixbuf2.0-dev \
     libtool-bin libltdl-dev libssl-dev libxml-parser-perl make \
     openssl p7zip-full patch perl pkg-config python ruby scons \
     sed unzip wget xz-utils</pre>
@@ -708,7 +704,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>yum install \
     autoconf automake bash bison bzip2 flex gcc-c++ \
     gdk-pixbuf2-devel gettext git gperf intltool make \
-    sed libffi-devel libtool openssl-devel p7zip patch \
+    sed libtool openssl-devel p7zip patch \
     perl pkgconfig python ruby scons unzip wget xz</pre>
 
     <p>
@@ -721,7 +717,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- https://www.freshports.org/ -->
     <pre>pkg install \
     automake autoconf bash bison coreutils flex \
-    gcc gdk-pixbuf2 gettext git glib gmake gperf gsed intltool libffi \
+    gcc gdk-pixbuf2 gettext git glib gmake gperf gsed intltool \
     libtool openssl p5-XML-Parser p7zip patch perl5 \
     pkgconf python ruby scons unzip wget</pre>
 
@@ -771,7 +767,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- https://www.frugalware.org/packages -->
     <pre>pacman-g2 -S \
     autoconf automake bash bzip2 bison flex gcc gdk-pixbuf2\
-    gettext git gperf intltool make sed libffi libtool \
+    gettext git gperf intltool make sed libtool \
     openssl patch perl perl-xml-parser pkgconfig python \
     ruby scons unzip wget xz xz-lzma</pre>
 
@@ -788,7 +784,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     sys-devel/bison app-arch/bzip2 \
     sys-devel/flex sys-devel/gcc sys-devel/gettext \
     dev-vcs/git dev-util/gperf dev-util/intltool \
-    sys-devel/make sys-apps/sed dev-libs/libffi \
+    sys-devel/make sys-apps/sed \
     sys-devel/libtool dev-libs/openssl app-arch/p7zip \
     sys-devel/patch dev-lang/perl dev-perl/XML-Parser \
     dev-util/pkgconfig dev-lang/python dev-lang/ruby \
@@ -809,7 +805,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- https://www.macports.org/ports.php -->
     <pre>sudo port install \
     autoconf automake bison coreutils flex gettext \
-    gdk-pixbuf2 gnutar gsed intltool libffi libtool \
+    gdk-pixbuf2 gnutar gsed intltool libtool \
     openssl p5-xml-parser p7zip pkgconfig scons wget xz</pre>
 
     <h5 id="requirements-macos-rudix">Rudix</h5>
@@ -870,7 +866,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <pre>zypper install -R \
     autoconf automake bash bison bzip2 flex gcc-c++ \
     gdk-pixbuf-devel gettext-tools git gperf intltool \
-    libffi-devel libtool make openssl libopenssl-devel \
+    libtool make openssl libopenssl-devel \
     p7zip patch perl perl-XML-Parser pkg-config python \
     ruby scons sed unzip wget xz</pre>
 
