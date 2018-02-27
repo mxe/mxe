@@ -51,8 +51,8 @@ define $(PKG)_BUILD_DARWIN
         --disable-dtrace \
         --disable-libmount \
         --with-pcre=internal \
-        CPPFLAGS='-I$(BUILD_DIR).usr/include' \
-        LDFLAGS='-L$(BUILD_DIR).usr/lib'
+        CPPFLAGS='-I$(BUILD_DIR).usr/include -I$(PREFIX)/$(TARGET)/include' \
+        LDFLAGS='-L$(BUILD_DIR).usr/lib -L$(PREFIX)/$(TARGET)/lib -lffi'
     $(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
