@@ -1,0 +1,44 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 27 Feb 2018 16:22:41 +0100
+Subject: [PATCH 1/1] MXE build fixes
+
+
+diff --git a/win32/makefile.gcc b/win32/makefile.gcc
+index 1111111..2222222 100644
+--- a/win32/makefile.gcc
++++ b/win32/makefile.gcc
+@@ -150,10 +150,10 @@ zipcloak.exe: $(OBJC)
+ 	$(LD) $(LDFLAGS) $(OBJC) $(LIBS)
+ 
+ zipnote.exe: $(OBJN)
+-	$(LD) $(LDFLAGS) $(OBJN)
++	$(LD) $(LDFLAGS) $(OBJN) $(LIBS)
+ 
+ zipsplit.exe: $(OBJS)
+-	$(LD) $(LDFLAGS) $(OBJS)
++	$(LD) $(LDFLAGS) $(OBJS) $(LIBS)
+ 
+ clean:
+ 	rm -f *.o $(ZIPS)
+diff --git a/win32/osdep.h b/win32/osdep.h
+index 1111111..2222222 100644
+--- a/win32/osdep.h
++++ b/win32/osdep.h
+@@ -438,10 +438,10 @@
+ #endif
+ 
+ #ifdef _MBCS
+-#  if (!defined(__EMX__) && !defined(__MINGW32__) && !defined(__CYGWIN__))
++//#  if (!defined(__EMX__) && !defined(__MINGW32__) && !defined(__CYGWIN__))
+ #    include <stdlib.h>
+ #    include <mbstring.h>
+-#  endif
++//#  endif
+ #  if (defined(__MINGW32__) && !defined(MB_CUR_MAX))
+ #    ifdef __MSVCRT__
+        IZ_IMP extern int *__p___mb_cur_max(void);
