@@ -23,22 +23,6 @@ endef
 
 define $(PKG)_BUILD_DARWIN
     # native build for glib-tools
-    # libiconv/gettext cause issues with other packages so build inline
-    mkdir '$(BUILD_DIR).src'
-    $(call PREPARE_PKG_SOURCE,libiconv,$(BUILD_DIR).src)
-    cd '$(BUILD_DIR).src/$(libiconv_SUBDIR)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --prefix='$(BUILD_DIR).usr'
-    $(MAKE) -C '$(BUILD_DIR).src/$(libiconv_SUBDIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
-    $(MAKE) -C '$(BUILD_DIR).src/$(libiconv_SUBDIR)' -j 1 install $(MXE_DISABLE_DOCS)
-
-    $(call PREPARE_PKG_SOURCE,gettext,$(BUILD_DIR).src)
-    cd '$(BUILD_DIR).src/$(gettext_SUBDIR)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --prefix='$(BUILD_DIR).usr'
-    $(MAKE) -C '$(BUILD_DIR).src/$(gettext_SUBDIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
-    $(MAKE) -C '$(BUILD_DIR).src/$(gettext_SUBDIR)' -j 1 install $(MXE_DISABLE_DOCS)
-
     cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
@@ -52,8 +36,8 @@ define $(PKG)_BUILD_DARWIN
         --disable-libmount \
         --with-pcre=internal \
         PKG_CONFIG='$(PREFIX)/$(TARGET)/bin/pkgconf' \
-        CPPFLAGS='-I$(BUILD_DIR).usr/include' \
-        LDFLAGS='-L$(BUILD_DIR).usr/lib'
+        CPPFLAGS='-I$(PREFIX)/$(TARGET).gnu/include' \
+        LDFLAGS='-L$(PREFIX)/$(TARGET).gnu/lib'
     $(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
@@ -97,8 +81,6 @@ define $(PKG)_BUILD_NATIVE
 endef
 
 define $(PKG)_BUILD_$(BUILD)
-    # glib tools need to be close to glib-cross version.
-    # easy to build on linux, but error-prone on darwin (and freebsd?)
     $(if $(findstring darwin, $(BUILD)), \
         $($(PKG)_BUILD_DARWIN), \
         $($(PKG)_BUILD_NATIVE))

@@ -32,10 +32,27 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' install
 endef
 
-define $(PKG)_BUILD_$(BUILD)
+define $(PKG)_BUILD_NATIVE
     # build and install the library
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
+endef
+
+define $(PKG)_BUILD_DARWIN
+    # causes issues with other packages so use different prefix
+    # but install *.m4 files to standard /share
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --prefix='$(PREFIX)/$(TARGET).gnu' \
+        --datarootdir='$(PREFIX)/$(TARGET)/share'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
+endef
+
+define $(PKG)_BUILD_$(BUILD)
+    $(if $(findstring darwin, $(BUILD)), \
+        $($(PKG)_BUILD_DARWIN), \
+        $($(PKG)_BUILD_NATIVE))
 endef
