@@ -25,6 +25,7 @@ define $(PKG)_BUILD
         CXX='$(TARGET)-g++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
+        $(shell [ `uname -s` == Darwin ] && echo "PERL=/usr/bin/perl") \
         MAKE=$(MAKE)
     $(MAKE) -C '$(1)/gio/src' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
     $(MAKE) -C '$(1)'         -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
