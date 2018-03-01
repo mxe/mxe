@@ -2,6 +2,11 @@
 
 # override relevant package variables to build against Qt 4 instead of 5
 
+PKG               := libechonest
+$(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt qjson
+$(PKG)_QT_SUFFIX  := 4
+$(PKG)_QT4_BOOL   := ON
+
 PKG               := openscenegraph
 $(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
 
