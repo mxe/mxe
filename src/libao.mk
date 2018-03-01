@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.2.2
 $(PKG)_CHECKSUM := df8a6d0e238feeccb26a783e778716fb41a801536fe7b6fce068e313c0e2bf4d
 $(PKG)_GH_CONF  := xiph/libao/tags
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && ./autogen.sh
