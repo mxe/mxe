@@ -1,5 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <file>qt.mk</file>
+    <file>qtbase.mk</file>
 </qresource>
 </RCC>
