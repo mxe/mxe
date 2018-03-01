@@ -16,6 +16,7 @@ MXE_TARGETS        := i686-w64-mingw32.static
 .DEFAULT_GOAL      := all-filtered
 
 DEFAULT_MAX_JOBS   := 6
+PRINTF_COL_1_WIDTH := 13
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
 MXE_MIRROR         := https://mirror.mxe.cc/pkg
 PKG_MIRROR         := https://s3.amazonaws.com/mxe-pkg
@@ -74,6 +75,8 @@ comma := ,
 null  :=
 space := $(null) $(null)
 repeat = $(subst x,$(1),$(subst $(space),,$(call int_encode,$(2))))
+
+PLUGIN_HEADER = $(info $(shell printf '%-$(PRINTF_COL_1_WIDTH)s %s\n' [plugin] $(dir $(lastword $(MAKEFILE_LIST)))))
 
 MXE_DISABLE_DOC_OPTS = \
     ac_cv_prog_HAVE_DOXYGEN="false" \
@@ -406,7 +409,7 @@ endef
 
 check-requirements: $(PREFIX)/installed/check-requirements
 $(PREFIX)/installed/check-requirements: $(MAKEFILE) | $(PREFIX)/installed/.gitkeep
-	@echo '[check requirements]'
+	@echo '[check reqs]'
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[8-9]\|2\.[7-9][0-9])
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
@@ -581,7 +584,7 @@ _LOOKUP_PKG_RULE = $(strip \
 PKG_COL_WIDTH    := $(call plus,2,$(call LIST_NMAX, $(sort $(call map, strlen, $(PKGS)))))
 MAX_TARGET_WIDTH := $(call LIST_NMAX, $(sort $(call map, strlen, $(MXE_TARGETS))))
 TARGET_COL_WIDTH := $(call subtract,100,$(call plus,$(PKG_COL_WIDTH),$(MAX_TARGET_WIDTH)))
-PRINTF_FMT       := printf '%-13s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
+PRINTF_FMT       := printf '%-$(PRINTF_COL_1_WIDTH)s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
 RTRIM            := $(SED) 's, \+$$$$,,'
 WRAP_MESSAGE      = $(\n)$(\n)$(call repeat,-,60)$(\n)$(1)$(and $(2),$(\n)$(\n)$(2))$(\n)$(call repeat,-,60)$(\n)
 
@@ -672,7 +675,7 @@ else
 endif
 
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
-	@echo '[build nonetwork lib]'
+	@$(PRINTF_FMT) '[nonet lib]' '$@'
 	+@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
 
 .PHONY: shell
@@ -832,6 +835,12 @@ WALK_DOWNSTREAM = \
         $(foreach PKG,$(PKGS),\
             $(if $(filter $(1),$(ALL_$(PKG)_DEPS)),$(PKG))))
 
+# list of direct downstream deps
+DIRECT_DOWNSTREAM = \
+    $(strip \
+        $(foreach PKG,$(PKGS),\
+            $(if $(filter $(1),$($(PKG)_DEPS)),$(PKG))))
+
 # EXCLUDE_PKGS can be a list of pkgs and/or wildcards
 RECURSIVELY_EXCLUDED_PKGS = \
     $(sort \
@@ -848,7 +857,9 @@ show-deps-%:
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $* upstream dependencies:$(newline)\
 	        $(call WALK_UPSTREAM,$*)\
-	        $(newline)$(newline)$* downstream dependents:$(newline)\
+	        $(newline)$(newline)$* direct downstream dependents:$(newline)\
+	        $(call DIRECT_DOWNSTREAM,$*)\
+	        $(newline)$(newline)$* recursive downstream dependents:$(newline)\
 	        $(call WALK_DOWNSTREAM,$*))\
 	    @echo,\
 	    $(error Package $* not found))
@@ -860,6 +871,12 @@ show-downstream-deps-%:
 	$(if $(call set_is_member,$*,$(PKGS)),\
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $(call WALK_DOWNSTREAM,$*))\
+	    @echo -n,\
+	    $(error Package $* not found))
+
+show-direct-downstream-deps-%:
+	$(if $(call set_is_member,$*,$(PKGS)),\
+	    $(info $(call DIRECT_DOWNSTREAM,$*))\
 	    @echo -n,\
 	    $(error Package $* not found))
 
