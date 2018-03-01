@@ -3,13 +3,11 @@
 PKG             := libtorrent-rasterbar
 $(PKG)_WEBSITE  := http://www.rasterbar.com/products/libtorrent/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.0
-$(PKG)_CHECKSUM := 2713df7da4aec5263ac11b6626ea966f368a5a8081103fd8f2f2ed97b5cd731d
+$(PKG)_VERSION  := 1.1.6
+$(PKG)_CHECKSUM := b7c74d004bd121bd6e9f8975ee1fec3c95c74044c6a6250f6b07f259f55121ef
 $(PKG)_SUBDIR   := libtorrent-rasterbar-$($(PKG)_VERSION)
 $(PKG)_FILE     := libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$($(PKG)_VERSION))/libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
-# this will likely revert to standard naming in future releases
-$(PKG)_URL      := https://github.com/arvidn/libtorrent/releases/download/libtorrent-1_1/libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc boost openssl
 
 define $(PKG)_UPDATE
