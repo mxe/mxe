@@ -28,14 +28,7 @@ index 1111111..2222222 100644
      ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
  
  set(CPP-NETLIB_HTTP_CLIENT_SRCS client.cpp)
-@@ -47,8 +49,12 @@ endif ()
- if (Boost_FOUND)
-     target_link_libraries(cppnetlib-client-connections ${Boost_LIBRARIES})
- endif ()
-+if (WIN32)
-+    target_link_libraries(cppnetlib-client-connections ws2_32)
-+endif ()
- install(TARGETS cppnetlib-client-connections
+@@ -47,6 +48,7 @@ endif ()
      EXPORT cppnetlibTargets
      PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}
      LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
