@@ -7,6 +7,10 @@ $(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt qjson
 $(PKG)_QT_SUFFIX  := 4
 $(PKG)_QT4_BOOL   := ON
 
+PKG               := opencsg
+$(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
+$(PKG)_QT_DIR     := qt
+
 PKG               := openscenegraph
 $(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
 
