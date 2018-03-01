@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 054af8d62a7c158df62adc174a6a57610868470a07e7192ee7ce60a185528
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/emweb/wt/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := cc boost graphicsmagick libharu openssl pango postgresql qt sqlite
+$(PKG)_DEPS     := cc boost graphicsmagick libharu openssl pango postgresql sqlite
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_ALL_TAGS, emweb/wt) \
@@ -34,7 +34,6 @@ define $(PKG)_BUILD
         -DGM_PREFIX='$(PREFIX)/$(TARGET)' \
         -DGM_LIBS="`'$(TARGET)-pkg-config' --libs-only-l GraphicsMagick++`" \
         -DPANGO_FT2_LIBS="`'$(TARGET)-pkg-config' --libs-only-l pangoft2`" \
-        -DENABLE_QT4=ON \
         -DWT_CMAKE_FINDER_INSTALL_DIR='/lib/wt' \
         '$(1)'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1).build' -j 1 VERBOSE=1
