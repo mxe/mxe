@@ -35,6 +35,7 @@ DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
 INSTALL    := $(shell ginstall --help >/dev/null 2>&1 && echo g)install
 LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
+OPENSSL    := openssl
 PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
@@ -44,7 +45,7 @@ WGET        = $(WGET_TOOL) --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))'
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 flex \
                 $(BUILD_CC) $(BUILD_CXX) gperf intltoolize $(LIBTOOL) \
-                $(LIBTOOLIZE) $(MAKE) openssl $(PATCH) $(PERL) python \
+                $(LIBTOOLIZE) $(MAKE) $(OPENSSL) $(PATCH) $(PERL) python \
                 ruby scons $(SED) $(SORT) unzip wget xz 7za gdk-pixbuf-csource
 
 PREFIX     := $(PWD)/usr
@@ -255,7 +256,7 @@ define PREPARE_PKG_SOURCE
 endef
 
 PKG_CHECKSUM = \
-    openssl dgst -sha256 '$(or $(2),$(PKG_DIR)/$($(1)_FILE))' 2>/dev/null | $(SED) -n 's,^.*\([0-9a-f]\{64\}\)$$,\1,p'
+    $(OPENSSL) dgst -sha256 '$(or $(2),$(PKG_DIR)/$($(1)_FILE))' 2>/dev/null | $(SED) -n 's,^.*\([0-9a-f]\{64\}\)$$,\1,p'
 
 CHECK_PKG_ARCHIVE = \
     $(if $($(1)_SOURCE_TREE),\
