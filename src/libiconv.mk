@@ -43,7 +43,8 @@ define $(PKG)_BUILD_NATIVE
 endef
 
 define $(PKG)_BUILD_DARWIN
-    # causes issues with other packages so use different prefix
+    # required for glib but causes issues with other packages
+    # (e.g. gcc) so use different prefix
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
         --prefix='$(PREFIX)/$(TARGET).gnu'
