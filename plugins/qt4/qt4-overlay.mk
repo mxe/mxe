@@ -26,6 +26,10 @@ PKG               := qwt
 $(PKG)_DEPS       := cc qt
 $(PKG)_QT_DIR     := qt
 
+PKG               := qwtplot3d
+$(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
+$(PKG)_QT_DIR     := qt
+
 PKG               := vtk
 $(PKG)_DEPS       := cc hdf5 qt libpng expat libxml2 jsoncpp tiff freetype lz4 hdf5 libharu glew
 $(PKG)_QT_VERSION := 4
