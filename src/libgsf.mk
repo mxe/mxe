@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         --with-zlib \
         --with-bz2 \
         --with-gio \
+        $(shell [ `uname -s` == Darwin ] && echo "INTLTOOL_PERL=/usr/bin/perl") \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)'     -j '$(JOBS)' install-pkgconfigDATA
     $(MAKE) -C '$(1)/gsf' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
