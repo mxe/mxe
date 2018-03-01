@@ -1262,21 +1262,28 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
 
         <dd>
         print a list of upstream dependencies
-        and downstream dependents
+        and all downstream dependents (direct and recursive)
         </dd>
 
     <dt>make show-downstream-deps-foo</dt>
 
         <dd>
-        print a list of downstream dependents
-        suitable for usage in shell scripts
+        print a list of all recursive downstream dependents
+        - suitable for use in shell scripts
+        </dd>
+
+    <dt>make show-direct-downstream-deps-foo</dt>
+
+        <dd>
+        print a list of direct downstream dependents
+        - suitable for use in shell scripts
         </dd>
 
     <dt>make show-upstream-deps-foo</dt>
 
         <dd>
         print a list of upstream dependencies
-        suitable for usage in shell scripts
+        - suitable for use in shell scripts
         </dd>
 
     <dt>make docs/build-matrix.html</dt>
