@@ -4,27 +4,22 @@ PKG             := qjson
 $(PKG)_WEBSITE  := https://qjson.sourceforge.io/
 $(PKG)_DESCR    := QJson
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.8.1
-$(PKG)_CHECKSUM := cd4db5b956247c4991a9c3e95512da257cd2a6bd011357e363d02300afc814d9
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc qt
+$(PKG)_VERSION  := 0.9.0
+$(PKG)_CHECKSUM := e812617477f3c2bb990561767a4cd8b1d3803a52018d4878da302529552610d4
+$(PKG)_GH_CONF  := flavio/qjson/tags
+$(PKG)_DEPS     := cc qtbase
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/qjson/files/qjson/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
-endef
+$(PKG)_QT_SUFFIX := -qt5
+$(PKG)_QT4_BOOL  := OFF
 
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && '$(TARGET)-cmake' ..
-
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DQT4_BUILD=$($(PKG)_QT4_BOOL)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi -pedantic \
+        -W -Wall -Werror -std=c++11 -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' QJson --cflags --libs`
+        `'$(TARGET)-pkg-config' QJson$($(PKG)_QT_SUFFIX) --cflags --libs`
 endef

@@ -17,6 +17,11 @@ $(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
 PKG               := poppler
 $(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
 
+PKG               := qjson
+$(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
+$(PKG)_QT_SUFFIX  :=
+$(PKG)_QT4_BOOL   := ON
+
 PKG               := qwt
 $(PKG)_DEPS       := cc qt
 $(PKG)_QT_DIR     := qt
