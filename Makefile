@@ -196,6 +196,21 @@ define MXE_GET_GITHUB_TAGS
     | tail -1
 endef
 
+define AUTOTOOLS_CONFIGURE
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS)
+endef
+
+define AUTOTOOLS_MAKE
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
+endef
+
+define AUTOTOOLS_BUILD
+    $(AUTOTOOLS_CONFIGURE)
+    $(AUTOTOOLS_MAKE)
+endef
+
 # include github related functions
 include $(PWD)/github.mk
 
