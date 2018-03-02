@@ -18,12 +18,14 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+# openssl 1.1 breaks build and newer version switched to cmake with
+# build that requires wine - disable openssl for now
 define $(PKG)_BUILD
     cd '$(1)'/config && autoconf -f
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --with-openssl \
+        --without-openssl \
         --with-libtiff \
         --with-libpng \
         --with-libxml \
