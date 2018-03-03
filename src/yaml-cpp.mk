@@ -10,7 +10,9 @@ $(PKG)_GH_CONF  := jbeder/yaml-cpp/releases/latest,yaml-cpp-
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DYAML_CPP_BUILD_TESTS=OFF \
+        -DYAML_CPP_BUILD_TOOLS=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
