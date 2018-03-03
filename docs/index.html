@@ -976,18 +976,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     wget \
     xz</pre>
     <p>
-    Some formulae are
+    You will see messages about
     <a href="https://github.com/Homebrew/brew/blob/master/docs/FAQ.md#what-does-keg-only-mean"><code>keg-only</code></a>
-    and may need <code>brew link</code> to be found. Alternately, paths
-    for conflicting tools can be added to your session:
-    </p>
-    <pre>export PATH="/usr/local/opt/gettext/bin:/usr/local/opt/openssl/bin:$PATH"
-    make ...</pre>
-    <p>
-    or <code>make</code> invocation:
-    </p>
-    <pre>PATH="/usr/local/opt/gettext/bin:/usr/local/opt/openssl/bin:$PATH" \
-    make ...</pre>
+    formulae and tools prefixed with 'g' - you can safely ignore these
+    and no homebrew related <code>$PATH</code> modifications or
+    <code>brew link</code>s are necessary.
 
     <h5 id="requirements-macos-general">Genral Notes</h5>
     <p>
