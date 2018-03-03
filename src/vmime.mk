@@ -9,6 +9,10 @@ $(PKG)_CHECKSUM := 9612e121f59db8aea3414583a050494a58cecc5dc754b114044d013170cf3
 $(PKG)_GH_CONF  := kisli/vmime/master
 $(PKG)_DEPS     := cc gnutls libgsasl libiconv pthreads zlib
 
+# see plugins/examples/openssl1.0 for example of enabling openssl 1.0.x
+# support (see https://github.com/kisli/vmime/issues/146 for v1.1.x)
+$(PKG)_TLS_LIB  := gnutls
+
 define $(PKG)_BUILD
     # The following hint is probably needed for ICU:
     # -DICU_LIBRARIES="`'$(TARGET)-pkg-config' --libs-only-l icu-i18n`"
@@ -25,7 +29,7 @@ define $(PKG)_BUILD
         -DVMIME_BUILD_DOCUMENTATION=OFF \
         -DCMAKE_MODULE_PATH='$(1)/cmake' \
         -DVMIME_CHARSETCONV_LIB=iconv \
-        -DVMIME_TLS_SUPPORT_LIB=gnutls \
+        -DVMIME_TLS_SUPPORT_LIB=$($(PKG)_TLS_LIB) \
         -DVMIME_SHARED_PTR_USE_CXX=ON \
         -DCXX11_COMPILER_FLAGS=ON \
         -C '$(PWD)/src/vmime-TryRunResults.cmake' \
