@@ -6,7 +6,7 @@ This file is part of MXE. See LICENSE.md for licensing information.
 build-pkg, Build binary packages from MXE packages
 Instructions: http://pkg.mxe.cc
 
-Requirements: MXE, lua, fakeroot, dpkg-deb.
+Requirements: MXE, lua, fakeroot, dpkg-deb, dpkg-architecture.
 Usage: lua tools/build-pkg.lua
 Packages are written to `*.tar.xz` files.
 Debian packages are written to `*.deb` files.
