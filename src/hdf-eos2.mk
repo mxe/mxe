@@ -22,9 +22,9 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && chmod -R ugo+w .
     cd '$(SOURCE_DIR)' && autoconf
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-	    $(MXE_CONFIGURE_OPTS) \
-	    --includedir='$(PREFIX)/$(TARGET)/include/$(PKG)' \
-	    --libdir='$(PREFIX)/$(TARGET)/lib/$(PKG)' \
+        $(MXE_CONFIGURE_OPTS) \
+        --includedir='$(PREFIX)/$(TARGET)/include/$(PKG)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib/$(PKG)' \
         --enable-install-include \
         ac_cv_func_malloc_0_nonnull=yes \
         ac_cv_func_realloc_0_nonnull=yes

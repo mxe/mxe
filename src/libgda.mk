@@ -33,7 +33,7 @@ define $(PKG)_BUILD
         --without-java \
         --enable-binreloc \
         --disable-crypto \
-	$(shell [ `uname -s` == Darwin ] && echo "INTLTOOL_PERL=/usr/bin/perl") \
+    $(shell [ `uname -s` == Darwin ] && echo "INTLTOOL_PERL=/usr/bin/perl") \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
