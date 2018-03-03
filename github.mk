@@ -100,7 +100,7 @@ define MXE_SETUP_GITHUB
     $(PKG)_TAG_SUFFIX  := $(GH_TAG_SUFFIX)
     $(PKG)_TAG_FILTER  := $(GH_TAG_FILTER)
     $(PKG)_VERSION_SEP := $(or $(GH_VERSION_SEP),.)
-    $(PKG)_FILE        := $(or $($(PKG)_FILE),$(PKG)-$$($$(PKG)_TAG_PREFIX)$($(PKG)_VERSION)$$($$(PKG)_TAG_SUFFIX).tar.gz)
+    $(PKG)_FILE        := $(or $($(PKG)_FILE),$(PKG)-$$(filter-out $$(PKG)-,$$($$(PKG)_TAG_PREFIX))$($(PKG)_VERSION)$$($$(PKG)_TAG_SUFFIX).tar.gz)
     $(if $(and $(GH_BRANCH),$(GH_TAG_VARS)),\
         $(error $(newline) $(PKG) specifies both branch and tag variables $(newline)))
     $(if $(and $(GH_BRANCH),$(GH_LATEST)),\
@@ -118,6 +118,7 @@ define MXE_SETUP_GITHUB_RELEASES
     $(PKG)_SUBDIR  := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_REPO)-$(if $(call sne,v,$($(PKG)_TAG_PREFIX)),$($(PKG)_TAG_PREFIX))$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
     $(PKG)_TAG_REF := $(or $($(PKG)_TAG_REF),$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
     $(PKG)_URL     := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/releases/download/$($(PKG)_TAG_REF)/$($(PKG)_SUBDIR).tar.gz)
+    $(PKG)_URL_2   := $(or $($(PKG)_URL_2),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/archive/$($(PKG)_TAG_REF).tar.gz)
     $(PKG)_UPDATE  := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_RELEASE,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/releases$($(PKG)_GH_LATEST),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
 endef
 
