@@ -19,7 +19,8 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --disable-vala \
         --without-apache-httpd \
-        --without-gssapi
+        --without-gssapi \
+	$(shell [ `uname -s` == Darwin ] && echo "INTLTOOL_PERL=/usr/bin/perl")
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
