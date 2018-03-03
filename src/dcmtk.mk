@@ -20,6 +20,7 @@ endef
 
 # openssl 1.1 breaks build and newer version switched to cmake with
 # build that requires wine - disable openssl for now
+# see plugins/examples/openssl1.0 for example of re-enabling support
 define $(PKG)_BUILD
     cd '$(1)'/config && autoconf -f
     cd '$(1)' && ./configure \
@@ -37,7 +38,8 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar' \
         ARFLAGS=cru \
         LIBTOOL=$(LIBTOOL) \
-        ac_cv_my_c_rightshift_unsigned=no
+        ac_cv_my_c_rightshift_unsigned=no \
+        $($(PKG)_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install-lib
 endef
 

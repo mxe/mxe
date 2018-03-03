@@ -3,13 +3,15 @@
 PKG             := openssl
 $(PKG)_WEBSITE  := https://www.openssl.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.0g
-$(PKG)_CHECKSUM := de4d501267da39310905cb6dc8c6121f7a2cad45a7707f76df828fe1b85073af
+$(PKG)_VERSION  := 1.0.2n
+$(PKG)_CHECKSUM := 370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.openssl.org/source/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.openssl.org/source/old/$(call tr,$([a-z]),,$($(PKG)_VERSION))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc zlib
+
+$(PKG)_PATCHES  := $(basename $(lastword $(MAKEFILE_LIST)))-1-fixes.patch
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.openssl.org/source/' | \
@@ -35,9 +37,12 @@ define $(PKG)_BUILD
         CC='$(TARGET)-gcc' \
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar rcu' \
-        RC='$(TARGET)-windres' \
-        CROSS_COMPILE='$(TARGET)-' \
-        $(if $(BUILD_SHARED), ENGINESDIR='$(PREFIX)/$(TARGET)/bin/engines')
+        CROSS_COMPILE='$(TARGET)-'
+
+    # no way to configure engines subdir install
+    $(if $(BUILD_SHARED),
+        rm -rf '$(PREFIX)/$(TARGET)/bin/engines' && \
+        mv -vf '$(PREFIX)/$(TARGET)/lib/engines' '$(PREFIX)/$(TARGET)/bin/')
 endef
 
 $(PKG)_BUILD_i686-w64-mingw32   = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))
