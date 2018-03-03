@@ -1,6 +1,6 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
-PKG             := openssl
+PKG             := openssl1.0
 $(PKG)_WEBSITE  := https://www.openssl.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.2n
@@ -11,10 +11,9 @@ $(PKG)_URL      := https://www.openssl.org/source/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.openssl.org/source/old/$(call tr,$([a-z]),,$($(PKG)_VERSION))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc zlib
 
-$(PKG)_PATCHES  := $(basename $(lastword $(MAKEFILE_LIST)))-1-fixes.patch
-
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.openssl.org/source/' | \
+    grep "openssl-1.0.2" | \
     $(SED) -n 's,.*openssl-\([0-9][0-9a-z.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1
