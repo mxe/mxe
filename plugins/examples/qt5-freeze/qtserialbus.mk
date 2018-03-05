@@ -10,7 +10,7 @@ $(PKG)_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST
 $(PKG)_SUBDIR    = $(subst qtbase,qtserialbus,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtserialbus,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtserialbus,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase qtserialport
+$(PKG)_DEPS     := cc qtbase qtserialport
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

@@ -10,7 +10,7 @@ $(PKG)_FILE     := libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$($(PKG)_VERSION))/libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
 # this will likely revert to standard naming in future releases
 $(PKG)_URL      := https://github.com/arvidn/libtorrent/releases/download/libtorrent-1_1/libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc boost openssl
+$(PKG)_DEPS     := cc boost openssl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/arvidn/libtorrent/releases' | \

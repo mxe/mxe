@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 8c9b91cc2facc7d0ec3829fe9ab29179c1879adafecb4474a827aa2a18596
 $(PKG)_GH_CONF  := ivmai/bdwgc/releases/latest,v
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_URL      := https://github.com/ivmai/bdwgc/releases/download/v$($(PKG)_VERSION)/$($(PKG)_SUBDIR).tar.gz
-$(PKG)_DEPS     := gcc libatomic_ops
+$(PKG)_DEPS     := cc libatomic_ops
 
 define $(PKG)_BUILD
     # build and install the library

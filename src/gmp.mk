@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gmplib.org/download/$(PKG)/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 $(PKG)_DEPS_$(BUILD) :=
 

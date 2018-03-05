@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 08e9a892bd80bdb1115213fb72dc29a7bf2ff108b378180586aa65f3cfd42
 $(PKG)_SUBDIR   := portmidi
 $(PKG)_FILE     := $(PKG)-src-$($(PKG)_VERSION).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/portmedia/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://sourceforge.net/projects/portmedia/files/portmidi/" | \

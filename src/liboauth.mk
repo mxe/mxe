@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 0df60157b052f0e774ade8a8bac59d6e8d4b464058cc55f9208d72e411568
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc curl openssl
+$(PKG)_DEPS     := cc curl openssl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/liboauth/files/' | \

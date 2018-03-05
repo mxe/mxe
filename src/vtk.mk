@@ -8,7 +8,10 @@ $(PKG)_SUBDIR     := VTK-$($(PKG)_VERSION)
 $(PKG)_FILE       := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL        := https://www.vtk.org/files/release/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_QT_VERSION := 5
-$(PKG)_DEPS       := gcc expat freetype glew hdf5 jsoncpp libharu libpng libxml2 lz4 qtbase qttools tiff
+$(PKG)_DEPS       := cc expat freetype glew hdf5 jsoncpp libharu libpng libxml2 lz4 qtbase qttools tiff $(BUILD)~$(PKG)
+
+$(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) := cmake
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://vtk.org/gitweb?p=VTK.git;a=tags' | \
@@ -19,22 +22,27 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_$(BUILD)
     # first we need a native build to create the compile tools
-    mkdir '$(BUILD_DIR).native'
-    cd '$(BUILD_DIR).native' && '$(PREFIX)/$(BUILD)/bin/cmake' '$(SOURCE_DIR)' \
+    # must be built in dest since there's no way to install tools only
+    # and the build rules reference certain make targets
+    rm -rf '$(PREFIX)/$(BUILD)/vtkCompileTools'
+    $(INSTALL) -d '$(PREFIX)/$(BUILD)/vtkCompileTools'
+    cd '$(PREFIX)/$(BUILD)/vtkCompileTools' && '$(PREFIX)/$(BUILD)/bin/cmake' '$(SOURCE_DIR)' \
+        -DBUILD_TESTING=FALSE \
         -DVTK_USE_X=OFF \
         -DVTK_USE_OFFSCREEN=ON \
-        -DBUILD_TESTING=FALSE \
         -DCMAKE_BUILD_TYPE="Release"
-    $(MAKE) -C '$(BUILD_DIR).native' -j '$(JOBS)' VERBOSE=1 vtkCompileTools
+    $(MAKE) -C '$(PREFIX)/$(BUILD)/vtkCompileTools' -j '$(JOBS)' VERBOSE=1 vtkCompileTools
+endef
 
+define $(PKG)_BUILD
     # DirectX is detected on Mac OSX but we use OpenGL
     $(SED) -i 's,d3d9,nod3d9,g' '$(1)/CMake/FindDirectX.cmake'
 
     # now the cross compilation
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
-        -DVTKCompileTools_DIR='$(BUILD_DIR).native' \
+        -DVTKCompileTools_DIR='$(PREFIX)/$(BUILD)/vtkCompileTools' \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DVTK_Group_Qt=ON \
         -DVTK_Group_Imaging=ON \

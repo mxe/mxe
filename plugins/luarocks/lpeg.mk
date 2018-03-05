@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 62d9f7a9ea3c1f215c77e0cadd8534c6ad9af0fb711c3f89188a8891c72f0
 $(PKG)_SUBDIR   := lpeg-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := http://www.inf.puc-rio.br/~roberto/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc luarocks
+$(PKG)_DEPS     := cc luarocks
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.inf.puc-rio.br/~roberto/lpeg/' | \

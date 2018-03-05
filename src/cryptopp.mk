@@ -11,7 +11,7 @@ $(PKG)_VERSIONF := $(shell echo $($(PKG)_VERSION) | tr -d .)
 $(PKG)_FILE     := $(PKG)$($(PKG)_VERSIONF).zip
 $(PKG)_URL      := $(SOURCEFORGE_MIRROR)/cryptopp/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.cryptopp.com/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.cryptopp.com/' | \

@@ -12,7 +12,7 @@ $(PKG)_SUBDIR   := hamlib-$($(PKG)_VERSION)
 $(PKG)_FILE     := Hamlib-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/hamlib/hamlib/$($(PKG)_VERSION)/hamlib-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL_2    := https://github.com/N0NB/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc libltdl libusb1 libxml2 pthreads
+$(PKG)_DEPS     := cc libltdl libusb1 libxml2 pthreads
 
 # grabbing version from sourceforge
 # preferred by Nate N0NB

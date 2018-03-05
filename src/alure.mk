@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 465e6adae68927be3a023903764662d64404e40c4c152d160e3a8838b1d70
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://kcat.strangesoft.net/alure-releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc flac libsndfile mpg123 ogg openal vorbis
+$(PKG)_DEPS     := cc flac libsndfile mpg123 ogg openal vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://repo.or.cz/w/alure.git/tags | \
@@ -18,15 +18,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/build' && '$(TARGET)-cmake' \
-        -DDYNLOAD=OFF \
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DDYNLOAD=$(CMAKE_SHARED_BOOL) \
+        -DBUILD_SHARED=$(CMAKE_SHARED_BOOL) \
+        -DBUILD_STATIC=$(CMAKE_STATIC_BOOL) \
         -DBUILD_EXAMPLES=OFF \
         -DFLUIDSYNTH=OFF \
-        -DCMAKE_C_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \
-        -DCMAKE_CXX_FLAGS="-DAL_LIBTYPE_STATIC -DALURE_STATIC_LIBRARY" \
-        ..
-    $(MAKE) -C '$(1)/build' -j $(JOBS) VERBOSE=1
-    $(MAKE) -C '$(1)/build' -j $(JOBS) install
+        -DSTATIC_CFLAGS="-DAL_LIBTYPE_STATIC"
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
-
-$(PKG)_BUILD_SHARED =

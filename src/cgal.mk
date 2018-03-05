@@ -10,7 +10,7 @@ $(PKG)_GH_CONF  := CGAL/cgal/tags, releases%2FCGAL-
 $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
 $(PKG)_FILE     := CGAL-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://github.com/CGAL/cgal/releases/download/releases/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost gmp mpfr qt5
+$(PKG)_DEPS     := cc boost gmp mpfr qt5
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \

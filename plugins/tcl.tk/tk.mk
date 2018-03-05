@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 08f99df85e5dc9c4271762163c6aabb962c8b297dc5c4c1af8bdd05fc2dd2
 $(PKG)_SUBDIR   := tk$($(PKG)_VERSION)
 $(PKG)_FILE     := tk$($(PKG)_VERSION)-src.tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/tcl/Tcl/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc tcl
+$(PKG)_DEPS     := cc tcl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/tcl/files/Tcl/' | \

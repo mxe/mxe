@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 39f34e2f6835f4b992cafe8625073a88e5a28ba78f83e8099610a7b3af467
 $(PKG)_SUBDIR   := libssh2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://libssh2.org/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgcrypt zlib
+$(PKG)_DEPS     := cc libgcrypt zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://libssh2.org/download/?C=M;O=D' | \

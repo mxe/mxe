@@ -6,3 +6,4 @@ $(PKG)_DESCR    := Dependency package to ensure the autotools work
 $(PKG)_VERSION  := 1
 $(PKG)_DEPS     := libtool pkgconf
 $(PKG)_TARGETS  := $(BUILD)
+$(PKG)_TYPE     := meta

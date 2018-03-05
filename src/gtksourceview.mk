@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := c585773743b1df8a04b1be7f7d90eecdf22681490d6810be54c81a7ae1521
 $(PKG)_SUBDIR   := gtksourceview-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtksourceview-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://download.gnome.org/sources/gtksourceview/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gtk2 libxml2
+$(PKG)_DEPS     := cc gtk2 libxml2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/gtksourceview/refs/tags' | \
@@ -26,7 +26,8 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-gtk-doc \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
-        GLIB_MKENUMS='$(PREFIX)/$(TARGET)/bin/glib-mkenums'
+        GLIB_MKENUMS='$(PREFIX)/$(TARGET)/bin/glib-mkenums' \
+        $(shell [ `uname -s` == Darwin ] && echo "INTLTOOL_PERL=/usr/bin/perl")
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

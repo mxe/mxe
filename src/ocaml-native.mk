@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := b48d5c7d3bf4a0cd6125f8fdfc1f654dd65586087399dc9f14716d7b9535e
 $(PKG)_SUBDIR   := ocaml-$($(PKG)_VERSION)
 $(PKG)_FILE     := ocaml-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://caml.inria.fr/pub/distrib/ocaml-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://caml.inria.fr/download.en.html' | \

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 63c53b03dd23afde1008dced06a011dad581d24392818c8069a40af99f6ac
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://waf.io/$($(PKG)_FILE)
-$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_TARGETS  := $(BUILD)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://waf.io/' | \

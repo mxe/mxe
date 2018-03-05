@@ -10,7 +10,7 @@ $(PKG)_CHECKSUM := 3dc787c1bb6023ba846c2a0d9b1f6e179f1cd255172bde9eb75b01f1e6c7d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/uclouvain/openjpeg/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc lcms libpng tiff zlib
+$(PKG)_DEPS     := cc lcms libpng tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://api.github.com/repos/uclouvain/openjpeg/git/refs/tags/' | \

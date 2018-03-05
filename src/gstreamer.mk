@@ -3,16 +3,16 @@
 PKG             := gstreamer
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gstreamer.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.12.3
-$(PKG)_CHECKSUM := d388f492440897f02b01eebb033ca2d41078a3d85c0eddc030cdea5a337a216e
+$(PKG)_VERSION  := 1.12.4
+$(PKG)_CHECKSUM := 5a8704aa4c2eeb04da192c4a9942f94f860ac1a585de90d9f914bac26a970674
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib libxml2 pthreads
+$(PKG)_DEPS     := cc glib libxml2 pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cgit.freedesktop.org/gstreamer/gstreamer/refs/tags' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9]\..[02468]\.[0-9][^']*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=[^0-9]*\\([0-9]\..[02468]\.[0-9][^']*\\)'.*,\\1,p" | \
     $(SORT) -Vr | \
     head -1
 endef

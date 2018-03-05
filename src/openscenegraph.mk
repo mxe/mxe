@@ -4,19 +4,19 @@ PKG             := openscenegraph
 $(PKG)_WEBSITE  := http://www.openscenegraph.org/
 $(PKG)_DESCR    := OpenSceneGraph
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.4.0
-$(PKG)_CHECKSUM := 5c727d84755da276adf8c4a4a3a8ba9c9570fc4b4969f06f1d2e9f89b1e3040e
-$(PKG)_SUBDIR   := OpenSceneGraph-$($(PKG)_VERSION)
-$(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).zip
-$(PKG)_URL      := http://trac.openscenegraph.org/downloads/developer_releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost curl dcmtk freetype gdal giflib gstreamer \
+$(PKG)_VERSION  := 3.4.1
+$(PKG)_CHECKSUM := 930eb46f05781a76883ec16c5f49cfb29a059421db131005d75bec4d78401fd5
+#$(PKG)_GH_CONF  := openscenegraph/OpenSceneGraph/tags, OpenSceneGraph-
+$(PKG)_SUBDIR   := OpenSceneGraph-OpenSceneGraph-$($(PKG)_VERSION)
+$(PKG)_FILE     := OpenSceneGraph-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/openscenegraph/OpenSceneGraph/archive/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc boost curl dcmtk freetype gdal giflib gstreamer \
                    gta jasper jpeg libpng openal openexr openthreads poppler \
-                   qt tiff zlib
+                   qtbase tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://trac.openscenegraph.org/downloads/developer_releases/?C=M;O=D' | \
-    $(SED) -n 's,.*OpenSceneGraph-\([0-9]*\.[0-9]*[02468]\.[^<]*\)\.zip.*,\1,p' | \
-    grep -v rc | \
+    $(WGET) -q -O- 'http://www.openscenegraph.org/index.php/download-section/stable-releases' | \
+    $(SED) -n 's,.*OpenSceneGraph/tree/OpenSceneGraph-\([0-9]*\.[0-9]*[02468]\.[^<]*\)">.*,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef

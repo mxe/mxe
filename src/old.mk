@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := d24b0d28bbce308b68d62815df8edc2806af0b7b86129f9e8078bd9381dc5
 $(PKG)_SUBDIR   := old-$($(PKG)_VERSION)
 $(PKG)_FILE     := old-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://blitiri.com.ar/p/old/files/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://blitiri.com.ar/p/old/' | \

@@ -3,12 +3,12 @@
 PKG             := jpeg
 $(PKG)_WEBSITE  := http://www.ijg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9b
-$(PKG)_CHECKSUM := 240fd398da741669bf3c90366f58452ea59041cacc741a489b99f2f6a0bad052
+$(PKG)_VERSION  := 9c
+$(PKG)_CHECKSUM := 39e111cd9da5e72a589b98feeded334bb0e5776511e507e3d811ab25a213a3cd
 $(PKG)_SUBDIR   := jpeg-$($(PKG)_VERSION)
 $(PKG)_FILE     := jpegsrc.v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.ijg.org/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.ijg.org/' | \

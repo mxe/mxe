@@ -9,10 +9,10 @@ $(PKG)_CHECKSUM := be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acf
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dbus gettext libffi libiconv pcre zlib
+$(PKG)_DEPS     := cc dbus gettext libffi libiconv pcre zlib $(BUILD)~$(PKG)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
-$(PKG)_DEPS_$(BUILD) := autotools gettext libiconv zlib
+$(PKG)_DEPS_$(BUILD) := autotools gettext libffi libiconv zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/glib/refs/tags' | \
@@ -22,10 +22,32 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_DARWIN
-    # on darwin, use pre-built tools from macports with pinned
-    # version set in plugins/native/darwin/glib2-macports
-    $(call PREPARE_PKG_SOURCE,glib2-macports,$(BUILD_DIR))
-    cp -Rp '$(BUILD_DIR)/opt/local/bin' '$(PREFIX)/$(TARGET)/'
+    # native build for glib-tools
+    cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_CONFIGURE_OPTS) \
+        --enable-regex \
+        --disable-threads \
+        --disable-selinux \
+        --disable-inotify \
+        --disable-fam \
+        --disable-xattr \
+        --disable-dtrace \
+        --disable-libmount \
+        --with-pcre=internal \
+        PKG_CONFIG='$(PREFIX)/$(TARGET)/bin/pkgconf' \
+        CPPFLAGS='-I$(PREFIX)/$(TARGET).gnu/include' \
+        LDFLAGS='-L$(PREFIX)/$(TARGET).gnu/lib'
+    $(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    $(MAKE) -C '$(BUILD_DIR)/gio/xdgmime'     -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gio/kqueue'      -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-schemas
+    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-resources
+    $(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
 endef
 
 define $(PKG)_BUILD_NATIVE
@@ -43,6 +65,7 @@ define $(PKG)_BUILD_NATIVE
         --disable-libmount \
         --with-libiconv=gnu \
         --with-pcre=internal \
+        PKG_CONFIG='$(PREFIX)/$(TARGET)/bin/pkgconf' \
         CPPFLAGS='-I$(PREFIX)/$(TARGET)/include' \
         LDFLAGS='-L$(PREFIX)/$(TARGET)/lib'
     $(SED) -i 's,#define G_ATOMIC.*,,' '$(BUILD_DIR)/config.h'
@@ -58,8 +81,6 @@ define $(PKG)_BUILD_NATIVE
 endef
 
 define $(PKG)_BUILD_$(BUILD)
-    # glib tools need to be close to glib-cross version.
-    # easy to build on linux, but error-prone on darwin (and freebsd?)
     $(if $(findstring darwin, $(BUILD)), \
         $($(PKG)_BUILD_DARWIN), \
         $($(PKG)_BUILD_NATIVE))

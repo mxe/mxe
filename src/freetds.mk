@@ -4,13 +4,13 @@ PKG             := freetds
 $(PKG)_WEBSITE  := http://www.freetds.org/
 $(PKG)_DESCR    := FreeTDS
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.00.79
-$(PKG)_CHECKSUM := 6be4b124372b4664b1be377f268cf44e8e5b054ade41fc0de8763e5f33d66d4a
+$(PKG)_VERSION  := 1.00.82
+$(PKG)_CHECKSUM := ccc6d3df74096cfc3b8d169e5483f5cfa3e58f1bb82ec144ba490c140661ec6a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := ftp://ftp.freetds.org/pub/$(PKG)/stable/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://fossies.org/linux/privat/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gnutls libiconv
+$(PKG)_DEPS     := cc gnutls libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'ftp://ftp.freetds.org/pub/freetds/stable/' | \

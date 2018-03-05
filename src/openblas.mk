@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.2.20
 $(PKG)_CHECKSUM := 5ef38b15d9c652985774869efd548b8e3e972e1e99475c673b25537ed7bcf394
 $(PKG)_GH_CONF  := xianyi/OpenBLAS/tags, v
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_DEPS     := cc pthreads
 
 # openblas has it's own optimised versions of netlib lapack that
 # it bundles into -lopenblas so won't conflict with those libs
@@ -23,6 +23,7 @@ $(PKG)_MAKE_OPTS = \
         BUILD_RELAPACK=1 \
         USE_THREAD=1 \
         USE_OPENMP=1 \
+        NUM_THREADS=$(call LIST_NMAX, 2 $(NPROCS)) \
         TARGET=CORE2 \
         DYNAMIC_ARCH=1 \
         ARCH=$(strip \

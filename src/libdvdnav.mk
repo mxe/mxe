@@ -10,7 +10,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 # Later releases seem to be hosted on VideoLAN's server
 # $(PKG)_URL      := https://dvdnav.mplayerhq.hu/releases/$($(PKG)_FILE)
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libdvdread
+$(PKG)_DEPS     := cc libdvdread
 
 # $(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, mirror/libdvdnav, master)
 

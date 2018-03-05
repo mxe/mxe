@@ -5,11 +5,11 @@ $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := ef62745e1793515e03fa586171de13eb17ee7699c9eb626f76a4dc5a00c46938
+$(PKG)_CHECKSUM := 0650a17950f140130ec20520b06592618850cc5673a815cb4fd585590d922257
 $(PKG)_SUBDIR    = $(subst qtbase,qtserialbus,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtserialbus,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtserialbus,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase qtserialport
+$(PKG)_DEPS     := cc qtbase qtserialport
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

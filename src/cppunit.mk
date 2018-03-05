@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 3f47d246e3346f2ba4d7c9e882db3ad9ebd3fcbd2e8b732f946e0e3eeb9f4
 $(PKG)_SUBDIR   := cppunit-$($(PKG)_VERSION)
 $(PKG)_FILE     := cppunit-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://dev-www.libreoffice.org/src/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://dev-www.libreoffice.org/src/' | \

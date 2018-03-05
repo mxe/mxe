@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 68e38feeb66052e29ad1935a71b875194ed8b9c67c2223af5f4d4e3e2464e
 $(PKG)_SUBDIR   := luarocks-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://keplerproject.github.io/luarocks/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc lua
+$(PKG)_DEPS     := cc lua $(BUILD)~lua
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://keplerproject.github.io/luarocks/releases/' | \

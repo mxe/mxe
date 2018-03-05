@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 7f75d3b97acf707c696ea126424906204ebfa07660162de925173cdd0257e
 $(PKG)_SUBDIR   := SDL_Pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL_Pango-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/sdlpango/SDL_Pango/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pango sdl
+$(PKG)_DEPS     := cc pango sdl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/sdlpango/files/SDL_Pango/' | \

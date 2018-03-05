@@ -9,7 +9,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://torproject.org/dist/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := https://torproject.org/
 $(PKG)_OWNER    := https://github.com/starius
-$(PKG)_DEPS     := gcc libevent openssl zlib
+$(PKG)_DEPS     := cc libevent openssl zlib
 
 define $(PKG)_UPDATE
 $(WGET) -q -O- 'https://torproject.org/download/download' | \

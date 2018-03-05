@@ -9,7 +9,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-src.tar.bz2
 $(PKG)_URL      := https://ricochet.im/releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := https://ricochet.im/
 $(PKG)_OWNER    := https://github.com/starius
-$(PKG)_DEPS     := gcc openssl protobuf qtbase qtdeclarative qtmultimedia qtquickcontrols qttools
+$(PKG)_DEPS     := cc openssl protobuf qtbase qtdeclarative qtmultimedia qtquickcontrols qttools
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, ricochet-im/ricochet, v)

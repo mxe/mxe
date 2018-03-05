@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 334312cc31925fd6c2622c9cd4ed33fecbbbd5b97e03b93f34b259d08352e
 $(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc expat hdf5 jpeg libpng tiff zlib
+$(PKG)_DEPS     := cc expat hdf5 jpeg libpng tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://itk.org/ITK/resources/software.html' | \

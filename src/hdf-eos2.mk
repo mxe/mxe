@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 3fffa081466e85d2b9436d984bc44fe97bbb33ad9d8b7055a322095dc4672
 $(PKG)_SUBDIR   := hdfeos
 $(PKG)_FILE     := HDF-EOS2.$($(PKG)_VERSION).tar.Z
 $(PKG)_URL      := ftp://edhs1.gsfc.nasa.gov/edhs/hdfeos/latest_release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc hdf4
+$(PKG)_DEPS     := cc hdf4
 
 define $(PKG)_UPDATE
     echo 'TODO: write update script for hdf-eos2.' >&2;
@@ -22,9 +22,9 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && chmod -R ugo+w .
     cd '$(SOURCE_DIR)' && autoconf
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-	    $(MXE_CONFIGURE_OPTS) \
-	    --includedir='$(PREFIX)/$(TARGET)/include/$(PKG)' \
-	    --libdir='$(PREFIX)/$(TARGET)/lib/$(PKG)' \
+        $(MXE_CONFIGURE_OPTS) \
+        --includedir='$(PREFIX)/$(TARGET)/include/$(PKG)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib/$(PKG)' \
         --enable-install-include \
         ac_cv_func_malloc_0_nonnull=yes \
         ac_cv_func_realloc_0_nonnull=yes

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM = $(freetype_CHECKSUM)
 $(PKG)_SUBDIR   = $(freetype_SUBDIR)
 $(PKG)_FILE     = $(freetype_FILE)
 $(PKG)_URL      = $(freetype_URL)
-$(PKG)_DEPS    := gcc bzip2 libpng zlib
+$(PKG)_DEPS    := cc bzip2 libpng zlib
 
 define $(PKG)_UPDATE
     echo $(freetype_VERSION)

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 7c414acd520c4e4dd7267952f72d738ff50321a7869af4d75c65aefad44f1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/libdvdcss/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://download.videolan.org/pub/libdvdcss/' | \

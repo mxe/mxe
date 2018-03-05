@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := libgeotiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgeotiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/geotiff/libgeotiff/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc jpeg proj tiff zlib
+$(PKG)_DEPS     := cc jpeg proj tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://trac.osgeo.org/geotiff/' | \

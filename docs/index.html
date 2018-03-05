@@ -278,7 +278,7 @@ exit</pre>
     <p>
     If you only need the most basic tools you can also use:
     </p>
-    <pre>make gcc</pre>
+    <pre>make cc</pre>
     <p>
     and add any additional packages you need later on.
     You can also supply a host of packages on the
@@ -617,10 +617,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="https://sourceware.org/libffi/">libffi</a></td>
-        <td>≥ 3.0.0</td>
-    </tr>
-    <tr>
         <td><a href="https://www.gnu.org/software/libtool/">Libtool</a></td>
         <td>≥ 2.2</td>
     </tr>
@@ -682,16 +678,48 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://www.debian.org/distrib/packages#search_packages -->
     <pre>apt-get install \
-    autoconf automake autopoint bash bison bzip2 flex gettext\
-    git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
-    libtool-bin libltdl-dev libssl-dev libxml-parser-perl make \
-    openssl p7zip-full patch perl pkg-config python ruby scons \
-    sed unzip wget xz-utils</pre>
+    autoconf \
+    automake \
+    autopoint \
+    bash \
+    bison \
+    bzip2 \
+    flex \
+    g++ \
+    g++-multilib \
+    gettext \
+    git \
+    gperf \
+    intltool \
+    libc6-dev-i386 \
+    libgdk-pixbuf2.0-dev \
+    libltdl-dev \
+    libssl-dev \
+    libtool-bin \
+    libxml-parser-perl \
+    make \
+    openssl \
+    p7zip-full \
+    patch \
+    perl \
+    pkg-config \
+    python \
+    ruby \
+    scons \
+    sed \
+    unzip \
+    wget \
+    xz-utils</pre>
 
     <p>
-    On 64-bit Debian, install also:
+    On 32-bit installs,
+    <pre>
+    g++-multilib
+    libc6-dev-i386
+    </pre>
+    are not required, however there are potential issues with
+    <a href="#issue-32-bit-systems">32-bit systems</a>.
     </p>
-    <pre>apt-get install g++-multilib libc6-dev-i386</pre>
 
     <p>
     Only the <a href="https://www.debian.org/releases/stable/">latest Debian stable series</a> is supported.
@@ -706,10 +734,32 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://admin.fedoraproject.org/pkgdb/ -->
     <pre>yum install \
-    autoconf automake bash bison bzip2 flex gcc-c++ \
-    gdk-pixbuf2-devel gettext git gperf intltool make \
-    sed libffi-devel libtool openssl-devel p7zip patch \
-    perl pkgconfig python ruby scons unzip wget xz</pre>
+    autoconf \
+    automake \
+    bash \
+    bison \
+    bzip2 \
+    flex \
+    gcc-c++ \
+    gdk-pixbuf2-devel \
+    gettext \
+    git \
+    gperf \
+    intltool \
+    libtool \
+    make \
+    openssl-devel \
+    p7zip \
+    patch \
+    perl \
+    pkgconfig \
+    python \
+    ruby \
+    scons \
+    sed \
+    unzip \
+    wget \
+    xz</pre>
 
     <p>
     On 64-bit Fedora,
@@ -720,10 +770,33 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://www.freshports.org/ -->
     <pre>pkg install \
-    automake autoconf bash bison coreutils flex \
-    gcc gdk-pixbuf2 gettext git glib gmake gperf gsed intltool libffi \
-    libtool openssl p5-XML-Parser p7zip patch perl5 \
-    pkgconf python ruby scons unzip wget</pre>
+    autoconf \
+    automake \
+    bash \
+    bison \
+    coreutils \
+    flex \
+    gcc \
+    gdk-pixbuf2 \
+    gettext \
+    git \
+    glib \
+    gmake \
+    gperf \
+    gsed \
+    intltool \
+    libtool \
+    openssl \
+    p5-XML-Parser \
+    p7zip \
+    patch \
+    perl5 \
+    pkgconf \
+    python \
+    ruby \
+    scons \
+    unzip \
+    wget</pre>
 
     <p>
     Use gmake instead of make.
@@ -770,10 +843,33 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://www.frugalware.org/packages -->
     <pre>pacman-g2 -S \
-    autoconf automake bash bzip2 bison flex gcc gdk-pixbuf2\
-    gettext git gperf intltool make sed libffi libtool \
-    openssl patch perl perl-xml-parser pkgconfig python \
-    ruby scons unzip wget xz xz-lzma</pre>
+    autoconf \
+    automake \
+    bash \
+    bison \
+    bzip2 \
+    flex \
+    gcc \
+    gdk-pixbuf2\
+    gettext \
+    git \
+    gperf \
+    intltool \
+    libtool \
+    make \
+    openssl \
+    patch \
+    perl \
+    perl-xml-parser \
+    pkgconfig \
+    python \
+    ruby \
+    scons \
+    sed \
+    unzip \
+    wget \
+    xz \
+    xz-lzma</pre>
 
     <p>
     On 64-bit Frugalware,
@@ -784,16 +880,33 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://packages.gentoo.org/ -->
     <pre>emerge \
-    sys-devel/autoconf sys-devel/automake app-shells/bash \
-    sys-devel/bison app-arch/bzip2 \
-    sys-devel/flex sys-devel/gcc sys-devel/gettext \
-    dev-vcs/git dev-util/gperf dev-util/intltool \
-    sys-devel/make sys-apps/sed dev-libs/libffi \
-    sys-devel/libtool dev-libs/openssl app-arch/p7zip \
-    sys-devel/patch dev-lang/perl dev-perl/XML-Parser \
-    dev-util/pkgconfig dev-lang/python dev-lang/ruby \
-    dev-util/scons app-arch/unzip net-misc/wget \
-    app-arch/xz-utils x11-libs/gdk-pixbuf</pre>
+    app-arch/bzip2 \
+    app-arch/p7zip \
+    app-arch/unzip \
+    app-arch/xz-utils \
+    app-shells/bash \
+    dev-lang/perl \
+    dev-lang/python \
+    dev-lang/ruby \
+    dev-libs/openssl \
+    dev-perl/XML-Parser \
+    dev-util/gperf \
+    dev-util/intltool \
+    dev-util/pkgconfig \
+    dev-util/scons \
+    dev-vcs/git \
+    net-misc/wget \
+    sys-apps/sed \
+    sys-devel/autoconf \
+    sys-devel/automake \
+    sys-devel/bison \
+    sys-devel/flex \
+    sys-devel/gcc \
+    sys-devel/gettext \
+    sys-devel/libtool \
+    sys-devel/make \
+    sys-devel/patch \
+    x11-libs/gdk-pixbuf</pre>
 
     <h3 id="requirements-macos">Mac OS X</h3>
 
@@ -801,46 +914,78 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     Install
     <a href="https://developer.apple.com/xcode/">the latest Xcode</a>
     </p>
-    <h5 id="requirements-macos-method-1">Method 1 - MacPorts</h5>
+    <h5 id="requirements-macos-macports">MacPorts</h5>
     <p>
     Install <a href="https://www.macports.org/">MacPorts</a>,
     then run:
     </p>
     <!-- https://www.macports.org/ports.php -->
     <pre>sudo port install \
-    autoconf automake bison coreutils flex gettext \
-    gdk-pixbuf2 gnutar gsed intltool libffi libtool \
-    openssl p5-xml-parser p7zip pkgconfig scons wget xz</pre>
+    autoconf \
+    automake \
+    coreutils \
+    gdk-pixbuf2 \
+    gnutar \
+    gsed \
+    intltool \
+    libtool \
+    p7zip \
+    pkgconfig \
+    scons \
+    wget \
+    xz</pre>
 
-    <h5 id="requirements-macos-method-2">Method 2 - Rudix</h5>
+    <h5 id="requirements-macos-rudix">Rudix</h5>
     <p>
     Install <a href="http://rudix.org/">Rudix</a>,
     then run:
     </p>
     <!-- http://rudix.org/packages/index.html -->
     <pre>sudo rudix install \
-    autoconf automake coreutils gettext glib intltool \
-    libtool p7zip scons sed tar wget xz</pre>
+    autoconf \
+    automake \
+    coreutils \
+    glib \
+    intltool \
+    libtool \
+    p7zip \
+    scons \
+    sed \
+    tar \
+    wget \
+    xz</pre>
     <p>
     Note: <b>gdk-pixbuf2</b> is not installed in method 2,
     so you can not build <b>gtk3</b>. Other packages may be
     missing on Rudix - please open an issue if you find any.
     </p>
 
-    <h5 id="requirements-macos-method-3">Method 3 - Homebrew</h5>
+    <h5 id="requirements-macos-homebrew">Homebrew</h5>
     <p>
     Install <a href="https://brew.sh/">Homebrew</a>,
     then run:
     </p>
     <!-- http://braumeister.org/ -->
     <pre>brew install \
-    autoconf automake coreutils gdk-pixbuf gettext \
-    gnu-sed gnu-tar intltool libtool p7zip wget xz</pre>
+    autoconf \
+    automake \
+    coreutils \
+    gdk-pixbuf \
+    gnu-sed \
+    gnu-tar \
+    intltool \
+    libtool \
+    p7zip \
+    pkg-config \
+    scons \
+    wget \
+    xz</pre>
     <p>
-    Some formulae are
-    <a href="https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/FAQ.md#what-does-keg-only-mean"><code>keg-only</code></a>
-    and will need <code>brew link</code> to be found.
-    </p>
+    You will see messages about
+    <a href="https://github.com/Homebrew/brew/blob/master/docs/FAQ.md#what-does-keg-only-mean"><code>keg-only</code></a>
+    formulae and tools prefixed with 'g' - you can safely ignore these
+    and no homebrew related <code>$PATH</code> modifications or
+    <code>brew link</code>s are necessary.
 
     <h5 id="requirements-macos-general">Genral Notes</h5>
     <p>
@@ -860,18 +1005,52 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <!-- https://software.opensuse.org/131/en -->
     <pre>zypper install -R \
-    autoconf automake bash bison bzip2 flex gcc-c++ \
-    gdk-pixbuf-devel gettext-tools git gperf intltool \
-    libffi-devel libtool make openssl libopenssl-devel \
-    p7zip patch perl perl-XML-Parser pkg-config python \
-    ruby scons sed unzip wget xz</pre>
+    autoconf \
+    automake \
+    bash \
+    bison \
+    bzip2 \
+    flex \
+    gcc-32bit \
+    gcc-c++ \
+    gdk-pixbuf-devel \
+    gettext-tools \
+    git \
+    glibc-devel-32bit \
+    gperf \
+    intltool \
+    libgcc46-32bit \
+    libgomp46-32bit \
+    libopenssl-devel \
+    libstdc++46-devel-32bit \
+    libtool \
+    make \
+    openssl \
+    p7zip \
+    patch \
+    perl \
+    perl-XML-Parser \
+    pkg-config \
+    python \
+    ruby \
+    scons \
+    sed \
+    unzip \
+    wget \
+    xz</pre>
 
     <p>
-    On 64-bit openSUSE, install also:
+    On 32-bit installs,
+    <pre>
+    gcc-32bit
+    glibc-devel-32bit
+    libgcc46-32bit
+    libgomp46-32bit
+    libstdc++46-devel-32bit
+    </pre>
+    are not required, however there are potential issues with
+    <a href="#issue-32-bit-systems">32-bit systems</a>.
     </p>
-    <pre>zypper install -R \
-    gcc-32bit glibc-devel-32bit libgcc46-32bit \
-    libgomp46-32bit libstdc++46-devel-32bit</pre>
 
     <h3 id="requirements-wsl">Windows Subsystem for Linux</h3>
 
@@ -896,6 +1075,11 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <li><a href="https://blogs.msdn.microsoft.com/commandline/2016/11/17/do-not-change-linux-files-using-windows-apps-and-tools/">
     MSDN Blog</a></li>
     </ul>
+
+    <h3 id="issue-32-bit-systems">Issues with 32-bit systems</h3>
+    32-bit systems
+    <a href="https://github.com/mxe/mxe/issues/1381#issuecomment-225459494">
+    may have insufficient virtual memory</a> to build all of MXE.
 
     <h3 id="issue-non-multilib">Issues without a 32-bit compiler</h3>
 
@@ -933,7 +1117,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         non-parallel
         </dd>
 
-    <dt>make gcc</dt>
+    <dt>make cc</dt>
 
         <dd>
         build a minimal useful set of packages,
@@ -1344,14 +1528,14 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         The easiest way to get the dependencies right
         is to start with a minimal setup.
         That is,
-        initialize MXE with <code>make gcc</code> only,
+        initialize MXE with <code>make cc</code> only,
         then check whether your package builds successfully.
         </p>
 
         <p>
-        Always list the dependency on <code>gcc</code> explicitly:
+        Always list the dependency on <code>cc</code> explicitly:
         </p>
-        <pre>$(PKG)_DEPS     := gcc ...</pre>
+        <pre>$(PKG)_DEPS     := cc ...</pre>
 
         <p>
         Specify official name and website of a package.
@@ -2822,6 +3006,9 @@ endef</pre>
         <a href="https://github.com/eiskaltdcpp/eiskaltdcpp">EiskaltDC++</a>
     </li>
     <li>
+        <a href="https://github.com/ThKattanek/emu64">Emu64</a>
+    </li>
+    <li>
         <a href="http://www.ros.org/wiki/eros">Eros</a>
     </li>
     <li>
@@ -2870,6 +3057,9 @@ endef</pre>
         <a href="https://www.pokerth.net/">PokerTH</a>
     </li>
     <li>
+        <a href="https://psi-plus.com/">Psi+</a>
+    </li>
+    <li>
         <a href="https://pushover.sourceforge.io/">Pushover</a>
     </li>
     <li>
@@ -2892,6 +3082,9 @@ endef</pre>
     </li>
     <li>
         <a href="https://subsurface-divelog.org/">Subsurface</a>
+    </li>
+    <li>
+        <a href="https://taisei-project.org/">Taisei Project</a>
     </li>
     <li>
         <a href="https://thebeez.home.xs4all.nl/4tH/">The 4tH Compiler</a>

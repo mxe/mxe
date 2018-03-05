@@ -1,0 +1,56 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 17 Feb 2018 16:45:12 +1100
+Subject: [PATCH 1/2] fix xmmintrin errors
+
+Fix compilation of SSE2 sources with GCC 4.9. Since this requires an autoreconf
+run, we manually disable the GTK 1.2 dependency, because we don't have the GTK
+M4 files available.
+
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -439,7 +439,8 @@ CONFIG_MATH_LIB="${USE_LIBM}"
+ 
+ dnl configure use of features
+ 
+-AM_PATH_GTK(1.2.0, HAVE_GTK="yes", HAVE_GTK="no")
++HAVE_GTK="no"
++AC_SUBST(GTK_CFLAGS)
+ 
+ dnl ElectricFence malloc debugging
+ AC_MSG_CHECKING(use of ElectricFence malloc debugging)
+diff --git a/libmp3lame/vector/Makefile.am b/libmp3lame/vector/Makefile.am
+index 1111111..2222222 100644
+--- a/libmp3lame/vector/Makefile.am
++++ b/libmp3lame/vector/Makefile.am
+@@ -20,6 +20,7 @@ xmm_sources = xmm_quantize_sub.c
+ 
+ if WITH_XMM
+ liblamevectorroutines_la_SOURCES = $(xmm_sources)
++liblamevectorroutines_la_CFLAGS = -msse
+ endif
+ 
+ noinst_HEADERS = lame_intrin.h
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: darealshinji <djcj@gmx.de>
+Date: Tue, 9 Jan 2018 20:41:26 +0100
+Subject: [PATCH 2/2] remove deprecated symbol
+
+
+diff --git a/include/libmp3lame.sym b/include/libmp3lame.sym
+index 1111111..2222222 100644
+--- a/include/libmp3lame.sym
++++ b/include/libmp3lame.sym
+@@ -1,5 +1,4 @@
+ lame_init
+-lame_init_old
+ lame_set_num_samples
+ lame_get_num_samples
+ lame_set_in_samplerate

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 31ec0a9305c3bd6b4ad60a5261cba5402366dd7d1969a8846099717778e9a
 $(PKG)_SUBDIR   := spatialindex-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := spatialindex-src-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://download.osgeo.org/libspatialindex/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads
+$(PKG)_DEPS     := cc pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://download.osgeo.org/libspatialindex/' | \

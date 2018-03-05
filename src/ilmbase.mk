@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := ecf815b60695555c1fbc73679e84c7c9902f4e8faa6e8000d2f905b8b86ce
 $(PKG)_SUBDIR   := ilmbase-$($(PKG)_VERSION)
 $(PKG)_FILE     := ilmbase-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.openexr.com/downloads.html' | \

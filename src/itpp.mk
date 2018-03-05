@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 50717621c5dfb5ed22f8492f8af32b17776e6e06641dfe3a3a8f82c8d353b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openblas fftw
+$(PKG)_DEPS     := cc fftw openblas
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/itpp/files/itpp/' | \

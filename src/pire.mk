@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 85a9bd66fff568554826e4aff9b188ed6124e3ea0530cc561723b36aea2a5
 $(PKG)_SUBDIR   := pire-release-$($(PKG)_VERSION)
 $(PKG)_FILE     := pire-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/yandex/pire/archive/release-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, yandex/pire, release-)

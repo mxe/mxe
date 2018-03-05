@@ -4,13 +4,13 @@ PKG             := gdal
 $(PKG)_WEBSITE  := http://www.gdal.org/
 $(PKG)_DESCR    := GDAL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.2
-$(PKG)_CHECKSUM := 14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544
+$(PKG)_VERSION  := 2.2.3
+$(PKG)_CHECKSUM := 52f01bda8968643633016769607e6082a8ba1c746fadc2c1abe12cf7dc8f61dd
 $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := ftp://ftp.remotesensing.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc armadillo curl expat geos giflib gta hdf4 hdf5 \
+$(PKG)_DEPS     := cc armadillo curl expat geos giflib gta hdf4 hdf5 \
                    jpeg json-c libgeotiff libmysqlclient libpng libxml2 \
                    netcdf openjpeg postgresql proj spatialite sqlite tiff zlib
 

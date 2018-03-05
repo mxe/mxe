@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := a21d724ab3b3933330194353687df82c475b5dfb997513eef4c25de6c865e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://liba52.sourceforge.io/files/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://liba52.sourceforge.io/downloads.html' | \

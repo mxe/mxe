@@ -1,0 +1,30 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 1 Mar 2018 15:42:14 +1100
+Subject: [PATCH 1/1] fix for crash on High Sierra due to usage of %n in
+ dynamic format strings
+
+taken from:
+https://github.com/macports/macports-ports/commit/14451f57e899ba3bd8672830944209cf0bbb87a7
+
+With format string strictness, High Sierra also enforces that %n isn't used
+in dynamic format strings, but we should just disable its use on darwin in
+general.
+
+diff --git a/lib/vasnprintf.c b/lib/vasnprintf.c
+index 1111111..2222222 100644
+--- a/lib/vasnprintf.c
++++ b/lib/vasnprintf.c
+@@ -4858,7 +4858,7 @@ VASNPRINTF (DCHAR_T *resultbuf, size_t *lengthp,
+ #endif
+                   *fbp = dp->conversion;
+ #if USE_SNPRINTF
+-# if !(((__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 3)) && !defined __UCLIBC__) || ((defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__))
++# if !defined(__APPLE__) && !(((__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 3)) && !defined __UCLIBC__) || ((defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__))
+                 fbp[1] = '%';
+                 fbp[2] = 'n';
+                 fbp[3] = '\0';

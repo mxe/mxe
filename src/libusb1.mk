@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 7dce9cce9a81194b7065ee912bcd55eeffebab694ea403ffb91b67db66b18
 $(PKG)_SUBDIR   := libusb-$($(PKG)_VERSION)
 $(PKG)_FILE     := libusb-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libusb-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/libusb/files/libusb-1.0/' | \

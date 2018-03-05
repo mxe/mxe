@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_QT_DIR   := qt5
-$(PKG)_DEPS     := gcc qtbase qtsvg
+$(PKG)_DEPS     := cc qtbase qtsvg
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/qwt/files/qwt/' | \

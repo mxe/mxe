@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := libpng-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpng-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libpng/libpng16/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftp-osl.osuosl.org/pub/libpng/src/libpng16/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/p/libpng/code/ref/master/tags/' | \

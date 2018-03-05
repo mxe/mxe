@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := f8276629226c7e1e74209b66ca421d09d6aec87f72f60ae9b1d3debd0a13d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ftp.gnu.org/gnu/libcdio/$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     echo 'TODO: Updates for package libcdio need to be written.' >&2;

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 583478c581317862aa03a19f14c527c3888478a06284b9a46a0155fa5886d
 $(PKG)_SUBDIR   := Coin-$($(PKG)_VERSION)
 $(PKG)_FILE     := Coin-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://bitbucket.org/Coin3D/coin/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dlfcn-win32
+$(PKG)_DEPS     := cc dlfcn-win32
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://bitbucket.org/Coin3D/coin/downloads' | \

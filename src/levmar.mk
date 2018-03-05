@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := https://www.ics.forth.gr/~lourakis/$(PKG)/$($(PKG)_FILE)
 $(PKG)_UA       := MXE
-$(PKG)_DEPS     := gcc openblas
+$(PKG)_DEPS     := cc openblas
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://www.ics.forth.gr/~lourakis/levmar/"  | \

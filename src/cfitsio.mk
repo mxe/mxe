@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := a556ac7ea1965545dcb4d41cfef8e4915eeb8c0faa1b52f7ff70870f8bb57
 $(PKG)_SUBDIR   := cfitsio
 $(PKG)_FILE     := cfitsio$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/?C=M;O=D" | \

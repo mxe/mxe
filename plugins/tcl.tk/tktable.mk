@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := fb9fcedd2c1e252653225ac235d50cad01083b6851206bb0e5e63ecfa575f
 $(PKG)_SUBDIR   := TkTable.$($(PKG)_VERSION)
 $(PKG)_FILE     := TkTable.$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/minsky/files/Sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc tk
+$(PKG)_DEPS     := cc tk
 
 # Note, the official tktable project at
 # https://sourceforge.net/projects/tktable/ appears to be abandoned,

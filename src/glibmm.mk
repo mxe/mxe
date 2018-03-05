@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 985083d97378d234da27a7243587cc0d186897a4b2d3c1286f794089be1a3
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib libsigc++
+$(PKG)_DEPS     := cc glib libsigc++
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/glibmm/refs/tags' | \
@@ -25,6 +25,7 @@ define $(PKG)_BUILD
         CXX='$(TARGET)-g++' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
+        $(shell [ `uname -s` == Darwin ] && echo "PERL=/usr/bin/perl") \
         MAKE=$(MAKE)
     $(MAKE) -C '$(1)/gio/src' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
     $(MAKE) -C '$(1)'         -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=

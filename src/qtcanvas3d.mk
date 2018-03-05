@@ -5,11 +5,11 @@ $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION   = $(qtbase_VERSION)
-$(PKG)_CHECKSUM := 5e38b17844af801be57844da0379cc6882750b9019034f4fe884aae70c300abc
+$(PKG)_CHECKSUM := de829a8e6aa4b8496048e9b6f3bff306a80c35935855a94426025ddfb8bcb0c0
 $(PKG)_SUBDIR    = $(subst qtbase,qtcanvas3d,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtcanvas3d,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtcanvas3d,$(qtbase_URL))
-$(PKG)_DEPS     := gcc qtbase qtdeclarative
+$(PKG)_DEPS     := cc qtbase qtdeclarative
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)

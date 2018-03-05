@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.0
 $(PKG)_CHECKSUM := 5deb2462cbf0c0121c9d6c9823ec72fe71417e34242e3509bc7c003d526465bc
 $(PKG)_GH_CONF  := open-source-parsers/jsoncpp/tags,,,svn
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 # workaround for builds with GCC >= 6.x
 $(PKG)_CXXFLAGS := -Wno-error=conversion -Wno-shift-negative-value

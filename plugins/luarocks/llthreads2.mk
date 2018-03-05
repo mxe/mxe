@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 8c6fc7966cdcc15ae2f89f66ae72f6727a985e7d254f139ecf75a50956a3e
 $(PKG)_SUBDIR   := lua-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/moteus/lua-llthreads2/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc luarocks
+$(PKG)_DEPS     := cc luarocks
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, moteus/lua-llthreads2, v)

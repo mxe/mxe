@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 45be84939fd22bef1ccaa1189f83c667fef275a16bbfb91f82b7b2068b4e3
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := $(PKG)_$($(PKG)_VERSION)_all.deb
 $(PKG)_URL      := http://http.debian.net/debian/pool/main/g/$(PKG)/$($(PKG)_FILE)
-$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_TARGETS  := $(BUILD)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://packages.debian.org/jessie/all/geoip-database/download' | \

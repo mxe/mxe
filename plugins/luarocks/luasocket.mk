@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 8b67d9b5b545e1b694753dab7bd6cdbc24c290f2b21ba1e14c77b32817ea1
 $(PKG)_SUBDIR   := luasocket-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/diegonehab/luasocket/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc luarocks
+$(PKG)_DEPS     := cc luarocks
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, diegonehab/luasocket, v)

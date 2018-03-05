@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 4773c0099dba767d963fd92143263be338c48702172e8754b9bc5103efe1c
 $(PKG)_SUBDIR   := flac-$($(PKG)_VERSION)
 $(PKG)_FILE     := flac-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://downloads.xiph.org/releases/flac/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ogg
+$(PKG)_DEPS     := cc ogg
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://downloads.xiph.org/releases/flac/' | \

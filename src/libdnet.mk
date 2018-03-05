@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 0eb78415c8f2564c2f1e8ad36e98473348d9c94852f796a226360c716cc7c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc winpcap
+$(PKG)_DEPS     := cc winpcap
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/libdnet/files/libdnet/' | \

@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.7.6
 $(PKG)_CHECKSUM := 872fdea580b69b752562adc60734d7472fd97d5724c4ead585564083deac3953
 $(PKG)_GH_CONF  := g-truc/glm/tags
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \

@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 938ecd25239e65f519b8d2b50702416edc723de5f0a5387cceea8c4004a44
 $(PKG)_SUBDIR   := CCfits
 $(PKG)_FILE     := CCfits-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/fitsio/CCfits/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc cfitsio
+$(PKG)_DEPS     := cc cfitsio
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://heasarc.gsfc.nasa.gov/docs/software/fitsio/ccfits/" | \

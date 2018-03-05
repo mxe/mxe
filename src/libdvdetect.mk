@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := b098e04660532df78836f50bc0a8044b66c6659b07a6bff6609724ad30a87
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/nschlia/libdvdetect/releases/download/RELEASE_0_71/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc openssl tinyxml
+$(PKG)_DEPS     := cc openssl tinyxml
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GITHUB_TAGS, libdvdetect/libdvdetect, release-)

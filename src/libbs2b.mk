@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 4799974becdeeedf0db00115bc63f60ea3fe4b25f1dfdb6903505839a720e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/bs2b/libbs2b/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/bs2b/files/libbs2b/' | \

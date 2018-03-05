@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae3
 $(PKG)_SUBDIR   := xvidcore
 $(PKG)_FILE     := xvidcore-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://downloads.xvid.org/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc pthreads yasm
+$(PKG)_DEPS     := cc pthreads yasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://labs.xvid.com/source/' | \

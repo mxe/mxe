@@ -3,12 +3,12 @@
 PKG             := gst-plugins-bad
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-bad.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.12.3
-$(PKG)_CHECKSUM := 36d059761852bed0f1a7fcd3ef64a8aeecab95d2bca53cd6aa0f08054b1cbfec
+$(PKG)_VERSION  := 1.12.4
+$(PKG)_CHECKSUM := 0c7857be16686d5c1ba6e34bd338664d3d4599d32714a8eca5c8a41a101e2d08
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc chromaprint faad2 fdk-aac gst-plugins-base gstreamer gtk3 \
+$(PKG)_DEPS     := cc chromaprint faad2 fdk-aac gst-plugins-base gstreamer gtk3 \
                    libass libbs2b libdvdnav libdvdread libgcrypt libmms libmodplug librsvg \
                    librtmp libsndfile libwebp mpg123 neon openal opencv openexr \
                    openjpeg openssl opus vo-aacenc vo-amrwbenc

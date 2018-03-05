@@ -14,7 +14,7 @@ $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VE
 
 # libdvdread supports libdvdcss either by dynamic loading (dlfcn-win32) or
 # directly linking to libdvdcss. We directly links to the library here.
-$(PKG)_DEPS     := gcc libdvdcss
+$(PKG)_DEPS     := cc libdvdcss
 
 $(PKG)_UPDATE_GIT = $(call MXE_GET_GITHUB_SHA, mirror/libdvdread, master)
 

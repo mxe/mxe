@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 8b3b182424251067a952fb4e6c7b95a21e644fbb27fbd5f8af2b2ed87ca41
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://otr.cypherpunks.ca/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgcrypt libgpg_error libiconv
+$(PKG)_DEPS     := cc libgcrypt libgpg_error libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://otr.cypherpunks.ca/' | \

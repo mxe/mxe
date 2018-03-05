@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 80f7fff0a147044c5eb197e565f598ac1f137d86d0a548cbc8f52fb7ff7ca
 $(PKG)_SUBDIR   := libspatialite-$($(PKG)_VERSION)
 $(PKG)_FILE     := libspatialite-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.gaia-gis.it/gaia-sins/libspatialite-sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc dlfcn-win32 freexl geos libiconv libxml2 proj sqlite zlib
+$(PKG)_DEPS     := cc dlfcn-win32 freexl geos libiconv libxml2 proj sqlite zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.gaia-gis.it/gaia-sins/libspatialite-sources/' | \

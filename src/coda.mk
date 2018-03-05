@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 51076ff958ec15633d741ea021761fc6d8c6492f931175c489288481e37ac
 $(PKG)_SUBDIR   := coda-$($(PKG)_VERSION)
 $(PKG)_FILE     := coda-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/stcorp/coda/releases/download/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     echo 'TODO: write update script for $(PKG).' >&2;

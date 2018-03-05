@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := f8ed29e03a6155454e538fce621e53991a270fcee31120ded339cff252365
 $(PKG)_SUBDIR   := freexl-$($(PKG)_VERSION)
 $(PKG)_FILE     := freexl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.gaia-gis.it/gaia-sins/freexl-sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv
+$(PKG)_DEPS     := cc libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.gaia-gis.it/gaia-sins/freexl-sources/' | \

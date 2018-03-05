@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 7593d5fa9187bbad7c6868dce375ce3079a805f3f1e74236143bceb15a37c
 $(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsigc++-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/libsigc++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/libsigc++2/refs/tags' | \

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := f5b29137f845bb08b77ec60584fdb728b4e58f1023e6f249a464efa49a40f
 $(PKG)_SUBDIR   := CUnit-$($(PKG)_VERSION)
 $(PKG)_FILE     := CUnit-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/cunit/CUnit/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/cunit/files/CUnit/' | \

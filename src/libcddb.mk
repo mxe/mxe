@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 35ce0ee1741ea38def304ddfe84a958901413aa829698357f0bee5bb8f0a2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libcddb/libcddb/$($(PKG)_VERSION)/$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_DEPS     := gcc libgnurx libiconv
+$(PKG)_DEPS     := cc libgnurx libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://downloads.sourceforge.net/project/libcddb/libcddb/' | \

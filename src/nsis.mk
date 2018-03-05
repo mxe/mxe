@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 604c011593be484e65b2141c50a018f1b28ab28c994268e4ecd377773f3ff
 $(PKG)_SUBDIR   := nsis-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := nsis-$($(PKG)_VERSION)-src.tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/nsis/NSIS 3/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://nsis.sourceforge.io/Download' | \
