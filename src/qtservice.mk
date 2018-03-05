@@ -16,7 +16,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/qtservice/buildlib' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake'
+    cd '$(1)/qtservice/buildlib' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' \
+	    'CONFIG += static' \
+	    '-after' \
+	    'CONFIG -= dll debug_and_release build_all' \
+	    'DESTDIR =' \
+	    'target.path = $$$$[QT_INSTALL_LIBS]' \
+	    'headers.path = $$$$[QT_INSTALL_HEADERS]' \
+	    'headers.files += ../src/qtservice.h' \
+	    'INSTALLS += target headers'
     $(MAKE) -C '$(1)/qtservice/buildlib' -j '$(JOBS)'
     $(MAKE) -C '$(1)/qtservice/buildlib' -j 1 install
 endef
