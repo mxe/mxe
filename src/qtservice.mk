@@ -19,7 +19,8 @@ define $(PKG)_BUILD
     cd '$(1)/qtservice/buildlib' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' \
 	    '-after' \
 	    'CONFIG -= dll debug_and_release build_all' \
-	    'CONFIG += create_prl' \
+	    'CONFIG += create_prl create_pc' \
+	    'QMAKE_PKGCONFIG_DESTDIR = pkgconfig' \
 	    'DESTDIR =' \
 	    'DLLDESTDIR =' \
 	    'headers.path = $$$$[QT_INSTALL_HEADERS]' \
