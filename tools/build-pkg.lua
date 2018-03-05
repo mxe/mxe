@@ -6,7 +6,9 @@ This file is part of MXE. See LICENSE.md for licensing information.
 build-pkg, Build binary packages from MXE packages
 Instructions: http://pkg.mxe.cc
 
-Requirements: MXE, lua, fakeroot, dpkg-deb.
+Requirements (see bootstrapped build below for non-debian systems):
+    MXE
+    apt-get install lua5.1 fakeroot dpkg dpkg-dev
 Usage: lua tools/build-pkg.lua
 Packages are written to `*.tar.xz` files.
 Debian packages are written to `*.deb` files.
@@ -36,6 +38,20 @@ The following error:
 > fakeroot: error while starting the `faked' daemon.
 can be caused by leaked ipc resources originating in fakeroot.
 How to remove them: https://stackoverflow.com/a/4262545
+
+Bootstrapped build (non-debian systems building w/o deb pkgs):
+export MXE_DIR=/path/to/mxe && \
+export BUILD=`$MXE_DIR/ext/config.guess` && \
+rm -rf $MXE_DIR/usr* && \
+make -C $MXE_DIR lua \
+    MXE_TARGETS=$BUILD \
+    lua_TARGETS=$BUILD \
+    PREFIX=$MXE_DIR/usr.lua && \
+MXE_BUILD_PKG_TARGETS="`echo {i686-w64-mingw32,x86_64-w64-mingw32}.{static,shared}`" \
+MXE_BUILD_PKG_MAX_ITEMS=10000 \
+MXE_BUILD_PKG_NO_DEBS=1 \
+MXE_BUILD_PKG_NO_SECOND_PASS=0 \
+$MXE_DIR/usr.lua/$BUILD/bin/lua $MXE_DIR/tools/build-pkg.lua
 ]]
 
 local max_items = tonumber(os.getenv('MXE_BUILD_PKG_MAX_ITEMS'))
