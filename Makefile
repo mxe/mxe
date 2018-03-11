@@ -215,7 +215,7 @@ define AUTOTOOLS_BUILD
 endef
 
 # include github related functions
-include $(PWD)/github.mk
+include $(PWD)/mxe.github.mk
 
 # shared lib preload to disable networking, enable faketime etc
 PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
@@ -1081,5 +1081,5 @@ docs/packages.json: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '}'                        >> $@
 
 # for other mxe functions
-include patch.mk
-include updates.mk
+include mxe.patch.mk
+include mxe.updates.mk
