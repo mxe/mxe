@@ -674,6 +674,9 @@ $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
 	@$(PRINTF_FMT) '[nonet lib]' '$@'
 	+@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
 
+.PHONY: nonet-lib
+nonet-lib: $(NONET_LIB)
+
 .PHONY: shell
 shell: $(NONET_LIB)
 	$(PRELOAD) $(SHELL)

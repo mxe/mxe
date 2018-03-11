@@ -439,6 +439,7 @@ end
 local function gitInit()
     os.execute('mkdir -p ./usr')
     os.execute(GIT .. 'init --quiet')
+    os.execute('echo .waf* >> ./usr/.git/info/exclude')
 end
 
 local function gitTag(name)
@@ -1096,7 +1097,7 @@ local function main()
             MXE_DIR, MXE_DIR_EXPECTED)
     end
     gitInit()
-    assert(execute(("%s check-requirements MXE_TARGETS=%q"):format(
+    assert(execute(("%s check-requirements nonet-lib print-git-oneline MXE_TARGETS=%q"):format(
         tool 'make', table.concat(TARGETS, ' '))))
     if not max_items then
         downloadPackages()
