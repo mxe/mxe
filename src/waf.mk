@@ -10,6 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://waf.io/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD)
+$(PKG)_TYPE     := source-only
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://waf.io/' | \
@@ -17,7 +18,5 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD_$(BUILD)
-    mkdir -p '$(PREFIX)/$(BUILD)/bin'
-    cp '$(1)/waf' '$(PREFIX)/$(BUILD)/bin/waf'
-endef
+# waf (python) creates a runtime bytecode cache that causes issues
+# with packaging - unpack source into build dir and use directly
