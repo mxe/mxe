@@ -705,7 +705,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    | $(RTRIM)
 	)
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
-	    $(if $(BUILD_DRY_RUN), \
+	    $(if $(BUILD_DRY_RUN)$(MXE_BUILD_DRY_RUN), \
 	        @$(PRINTF_FMT) '[dry-run]' '$(1)' '$(3)' | $(RTRIM)
 	        @[ -d '$(PREFIX)/$(3)/lib' ] || mkdir -p '$(PREFIX)/$(3)/lib'
 	        @touch '$(PREFIX)/$(3)/lib/$(1).dry-run'

@@ -20,6 +20,10 @@ To prevent build-pkg from creating deb packages,
 set environment variable MXE_BUILD_PKG_NO_DEBS to 1
 In this case fakeroot and dpkg-deb are not needed.
 
+To do a dry run without actually building any packages,
+set environment variable MXE_BUILD_DRY_RUN to any value
+Packages will be downloaded, but builds will be skipped.
+
 To switch off the second pass, set
 MXE_BUILD_PKG_NO_SECOND_PASS to 1.
 See https://github.com/mxe/mxe/issues/1111
@@ -31,6 +35,13 @@ To set list of MXE targets to build,
 set environment variable MXE_BUILD_PKG_TARGETS to
 the list of targets separated by space.
 By default, all 4 major targets are built.
+
+To set list of MXE packages to build,
+set environment variable MXE_BUILD_PKG_PKGS to
+the list of packages separated by space. This is similar
+to a normal `make` invocation in that all dependencies
+will be built, so list just the packages you require.
+By default, all packages are built.
 
 The following error:
 > fakeroot, while creating message channels: Invalid argument
@@ -48,7 +59,9 @@ make -C $MXE_DIR lua \
     lua_TARGETS=$BUILD \
     PREFIX=$MXE_DIR/usr.lua && \
 MXE_BUILD_PKG_TARGETS="`echo {i686-w64-mingw32,x86_64-w64-mingw32}.{static,shared}`" \
-MXE_BUILD_PKG_MAX_ITEMS=10000 \
+MXE_BUILD_PKG_PKGS= \
+MXE_BUILD_DRY_RUN=1 \
+MXE_BUILD_PKG_MAX_ITEMS= \
 MXE_BUILD_PKG_NO_DEBS=1 \
 MXE_BUILD_PKG_NO_SECOND_PASS=0 \
 $MXE_DIR/usr.lua/$BUILD/bin/lua $MXE_DIR/tools/build-pkg.lua
