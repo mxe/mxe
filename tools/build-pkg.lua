@@ -1057,14 +1057,16 @@ local function makeMxeSourcePackage()
     -- dependencies
     local deps = {}
     local files = {
-        'LICENSE.md',
-        'Makefile',
-        'patch.mk',
-        'README.md',
         'docs',
         'ext',
-        'src',
+        'LICENSE.md',
+        'Makefile',
+        'mxe.github.mk',
+        'mxe.patch.mk',
+        'mxe.updates.mk',
         'plugins',
+        'README.md',
+        'src',
         'tools',
     }
     local d1 = "MXE source"
