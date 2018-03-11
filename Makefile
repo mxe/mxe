@@ -534,8 +534,7 @@ $(foreach PKG,$(PKGS), \
     $(foreach TARGET,$(filter $($(PKG)_TARGETS),$(CROSS_TARGETS) $(BUILD)), \
         $(eval $(TARGET)~$(PKG)_PKG := $(PKG)) \
         $(eval $(TARGET)~$(PKG)_TGT := $(TARGET)) \
-        $(eval $(TARGET)_PKGS += $(PKG)) \
-        $(eval FILTERED_PKGS  += $(PKG))))
+        $(eval $(TARGET)_PKGS += $(PKG))))
 
 # always add $(BUILD) to our targets
 override MXE_TARGETS := $(CROSS_TARGETS) $(BUILD)
@@ -587,9 +586,6 @@ TARGET_COL_WIDTH := $(call subtract,100,$(call plus,$(PKG_COL_WIDTH),$(MAX_TARGE
 PRINTF_FMT       := printf '%-$(PRINTF_COL_1_WIDTH)s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
 RTRIM            := $(SED) 's, \+$$$$,,'
 WRAP_MESSAGE      = $(\n)$(\n)$(call repeat,-,60)$(\n)$(1)$(and $(2),$(\n)$(\n)$(2))$(\n)$(call repeat,-,60)$(\n)
-
-.PHONY: download
-download: $(addprefix download-,$(PKGS))
 
 define TARGET_RULE
     $(if $(findstring i686-pc-mingw32,$(1)),\
@@ -815,15 +811,17 @@ SET_CLEAR = \
     $(eval $(1) := )
 
 # WALK functions accept a list of pkgs and/or wildcards
+# use PKG_ALL_DEPS and strip target prefixes to get
+# global package level deps
 WALK_UPSTREAM = \
     $(strip \
         $(foreach PKG,$(filter $(1),$(PKGS)),\
-            $(foreach DEP,$($(PKG)_DEPS) $(foreach TARGET,$(MXE_TARGETS),\
-                $(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET)))),\
-                    $(if $(filter-out $(PKGS_VISITED),$(DEP)),\
-                        $(call SET_APPEND,PKGS_VISITED,$(DEP))\
-                        $(call WALK_UPSTREAM,$(DEP))\
-                        $(DEP)))))
+          $(foreach TARGET,$($(PKG)_TARGETS), \
+            $(foreach DEP,$(sort $(subst $(BUILD)~,,$(subst $(TARGET)~,,$(PKG_ALL_DEPS)))),\
+              $(if $(filter-out $(PKGS_VISITED),$(DEP)),\
+                  $(call SET_APPEND,PKGS_VISITED,$(DEP))\
+                  $(call WALK_UPSTREAM,$(DEP))\
+                  $(DEP))))))
 
 # not really walking downstream - that seems to be quadratic, so take
 # a linear approach and filter the fully expanded upstream for each pkg
@@ -848,8 +846,24 @@ RECURSIVELY_EXCLUDED_PKGS = \
         $(call SET_CLEAR,PKGS_VISITED)\
         $(call WALK_DOWNSTREAM,$(EXCLUDE_PKGS)))
 
+# INCLUDE_PKGS can be a list of pkgs and/or wildcards
+# only used by build-pkg
+INCLUDE_PKGS := $(MXE_BUILD_PKG_PKGS)
+RECURSIVELY_INCLUDED_PKGS = \
+    $(sort \
+        $(filter $(INCLUDE_PKGS),$(PKGS))\
+        $(call SET_CLEAR,PKGS_VISITED)\
+        $(call WALK_UPSTREAM,$(INCLUDE_PKGS)))
+
+REQUIRED_PKGS = \
+    $(filter-out $(and $(EXCLUDE_PKGS),$(RECURSIVELY_EXCLUDED_PKGS)),\
+      $(or $(and $(INCLUDE_PKGS),$(strip $(RECURSIVELY_INCLUDED_PKGS))),$(PKGS)))
+
 .PHONY: all-filtered
-all-filtered: $(filter-out $(call RECURSIVELY_EXCLUDED_PKGS),$(FILTERED_PKGS))
+all-filtered: $(REQUIRED_PKGS)
+
+.PHONY: download
+download: $(addprefix download-,$(REQUIRED_PKGS))
 
 # print a list of upstream dependencies and downstream dependents
 show-deps-%:
@@ -891,7 +905,7 @@ show-upstream-deps-%:
 .PHONY: print-deps-for-build-pkg
 print-deps-for-build-pkg:
 	$(foreach TARGET,$(sort $(MXE_TARGETS)), \
-	    $(foreach PKG,$(sort $($(TARGET)_PKGS)), \
+	    $(foreach PKG,$(filter $(REQUIRED_PKGS),$(sort $($(TARGET)_PKGS))), \
 	        $(if $(or $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
 	                  $(filter $($(PKG)_TYPE),$(BUILD_PKG_TYPES))), \
 	            $(info $(strip for-build-pkg $(TARGET)~$(PKG) \
