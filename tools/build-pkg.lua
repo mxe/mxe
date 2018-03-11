@@ -90,7 +90,6 @@ local BLACKLIST = {
     '^usr/share/gtk-doc',
     '^usr/[^/]+/share/doc/',
     '^usr/[^/]+/share/info/',
-    '^usr/[^/]+/bin/%.waf%-.*',
 
     -- usr/lib/nonetwork.so and
     -- usr/x86_64-unknown-linux-gnu/lib/nonetwork.so
@@ -439,7 +438,6 @@ end
 local function gitInit()
     os.execute('mkdir -p ./usr')
     os.execute(GIT .. 'init --quiet')
-    os.execute('echo .waf* >> ./usr/.git/info/exclude')
 end
 
 local function gitTag(name)
