@@ -25,7 +25,8 @@ define $(PKG)_BUILD
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: $($(PKG)_DESCR)'; \
      echo 'Requires: libsodium'; \
-     echo 'Libs: -lzmq -lws2_32 -lrpcrt4 -liphlpapi'; \
+     echo 'Libs: -lzmq'; \
+     echo 'Libs.private: -lws2_32 -lrpcrt4 -liphlpapi'; \
      echo 'Cflags.private: -DZMQ_STATIC';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
