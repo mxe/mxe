@@ -3,28 +3,17 @@
 PKG             := miniupnpc
 $(PKG)_WEBSITE  := http://miniupnp.free.fr/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.9
-$(PKG)_CHECKSUM := 2923e453e880bb949e3d4da9f83dd3cb6f08946d35de0b864d0339cf70934464
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://miniupnp.free.fr/files/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://miniupnp.tuxfamily.org/files/$($(PKG)_FILE)
+$(PKG)_VERSION  := 2.0
+$(PKG)_CHECKSUM := 253a0ea5fe8f17d9f79f8758e1b6415d6a560e58bf3e9b5dbe714413dc908446
+$(PKG)_GH_CONF  := miniupnp/miniupnp/tags,miniupnpc_,,,_
 $(PKG)_DEPS     := cc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://api.github.com/repos/miniupnp/miniupnp/git/refs/tags/' | \
-    $(SED) -n 's#.*"ref": "refs/tags/miniupnpc_\([^"]*\).*#\1#p' | \
-    $(SED) 's,_,.,g' | \
-    $(SORT) -V | \
-    tail -1
-endef
-
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd    '$(1).build' && '$(TARGET)-cmake' '$(1)' \
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)/miniupnpc' \
         -DUPNPC_BUILD_STATIC=$(CMAKE_STATIC_BOOL) \
         -DUPNPC_BUILD_SHARED=$(CMAKE_SHARED_BOOL) \
         -DUPNPC_BUILD_TESTS=OFF
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
