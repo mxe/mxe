@@ -6,14 +6,15 @@ $(PKG)_DESCR    := Ncurses
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := e14300b
 $(PKG)_CHECKSUM := 3564ffa540cc069854607a0fb10d258c12769f8f6ee752f66038ba95a5e5f650
+$(PKG)_GH_CONF  := mirror/ncurses/branches/master
 # $(PKG)_VERSION  := 5.9
 # $(PKG)_SUBDIR   := ncurses-$($(PKG)_VERSION)
 # $(PKG)_FILE     := ncurses-$($(PKG)_VERSION).tar.gz
 # $(PKG)_URL      := https://ftp.gnu.org/gnu/ncurses/$($(PKG)_FILE)
-$(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc libgnurx
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS     := cc libgnurx $(BUILD)~$(PKG)
+
+$(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE_RELEASE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/ncurses/?C=M;O=D' | \
@@ -21,18 +22,10 @@ define $(PKG)_UPDATE_RELEASE
     head -1
 endef
 
-$(PKG)_UPDATE = $(call MXE_GET_GITHUB_SHA, mirror/ncurses, master)
-
 define $(PKG)_BUILD
-    # native build of terminfo compiler
-    cp -Rp '$(1)' '$(1).native'
-    cd '$(1).native' && ./configure
-    $(MAKE) -C '$(1).native/include' -j '$(JOBS)'
-    $(MAKE) -C '$(1).native/progs'   -j '$(JOBS)' tic
-
-    cd '$(1)' && \
-        TIC_PATH='$(1).native/progs/tic' \
-        ./configure \
+    cd '$(BUILD_DIR)' && \
+        TIC_PATH='$(PREFIX)/$(BUILD)/bin/tic' \
+        $(SOURCE_DIR)/configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix=$(PREFIX)/$(TARGET) \
@@ -52,6 +45,18 @@ define $(PKG)_BUILD
         $(if $(BUILD_STATIC), \
             --with-normal    --without-shared --with-static, \
             --without-normal --without-static --with-shared)
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+endef
+
+define $(PKG)_BUILD_$(BUILD)
+    # native build of terminfo compiler
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        --prefix=$(PREFIX)/$(TARGET) \
+        --with-normal \
+        --without-shared \
+        --with-static
+    $(MAKE) -C '$(BUILD_DIR)/include' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/progs'   -j '$(JOBS)' tic
+    $(INSTALL) -m755 '$(BUILD_DIR)/progs/tic' '$(PREFIX)/$(TARGET)/bin'
 endef
