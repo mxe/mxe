@@ -4,16 +4,10 @@ PKG             := libdvdetect
 $(PKG)_WEBSITE  := https://www.dvdetect.de/
 $(PKG)_DESCR    := Fast database lookup for DVDs
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.71.0
-$(PKG)_CHECKSUM := b098e04660532df78836f50bc0a8044b66c6659b07a6bff6609724ad30a87192
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/nschlia/libdvdetect/releases/download/RELEASE_0_71/$(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 0.71
+$(PKG)_CHECKSUM := 55de9fffb3c14459148b5de6c16cded6aa8aff62df69150bfb4b1a1815a7d1ef
+$(PKG)_GH_CONF  := nschlia/libdvdetect/tags,RELEASE_,,,_
 $(PKG)_DEPS     := cc openssl tinyxml
-
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, libdvdetect/libdvdetect, release-)
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && \
