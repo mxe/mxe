@@ -4,20 +4,13 @@ PKG             := taglib
 $(PKG)_WEBSITE  := https://developer.kde.org/~wheeler/taglib.html
 $(PKG)_DESCR    := TagLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.10
-$(PKG)_CHECKSUM := 24c32d50042cb0ddf162eb263f8ac75c5a158e12bf32ed534c1d5c71ee369baa
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://taglib.github.io/releases/$($(PKG)_FILE)
+$(PKG)_VERSION  := 1.11.1
+$(PKG)_CHECKSUM := b6d1a5a610aae6ff39d93de5efd0fdc787aa9e9dc1e7026fa4c961b26563526b
+$(PKG)_GH_CONF  := taglib/taglib/tags,v
 $(PKG)_DEPS     := cc zlib
 
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, taglib/taglib, v)
-endef
-
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && '$(TARGET)-cmake' .. \
-        -DENABLE_STATIC=$(CMAKE_STATIC_BOOL)
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
