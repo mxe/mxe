@@ -8,24 +8,8 @@ $(PKG)_DESCR    := HamLib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1
 $(PKG)_CHECKSUM := 682304c3e88ff6ccfd6a5fc28b33bcc95d2d0a54321973fef015ff62570c994e
-$(PKG)_SUBDIR   := hamlib-$($(PKG)_VERSION)
-$(PKG)_FILE     := Hamlib-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/hamlib/hamlib/$($(PKG)_VERSION)/hamlib-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL_2    := https://github.com/N0NB/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_GH_CONF  := hamlib/hamlib/releases/latest
 $(PKG)_DEPS     := cc libltdl libusb1 libxml2 pthreads
-
-# grabbing version from sourceforge
-# preferred by Nate N0NB
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/hamlib/files/hamlib/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
-endef
-
-## grabbing version from github via MXE
-#define $(PKG)_UPDATE
-#    $(call MXE_GET_GITHUB_TAGS, N0NB/hamlib)
-#endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
