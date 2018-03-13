@@ -3,21 +3,18 @@
 PKG             := libwebsockets
 $(PKG)_WEBSITE  := https://libwebsockets.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4-chrome43-firefox-36
-$(PKG)_CHECKSUM := e11492477e582ef0b1a6ea2f18d81a9619b449170a3a5c43f32a9468461a9798
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/warmcat/libwebsockets/archive/v$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 2.4.2
+$(PKG)_CHECKSUM := 73012d7fcf428dedccc816e83a63a01462e27819d5537b8e0d0c7264bfacfad6
+$(PKG)_GH_CONF  := warmcat/libwebsockets/tags, v
 $(PKG)_DEPS     := cc openssl zlib
 
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, warmcat/libwebsockets, \(v\|.[^0-9].*\))
-endef
-
 define $(PKG)_BUILD
-    cd '$(1)' && '$(TARGET)-cmake' \
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DLWS_WITH_STATIC=$(CMAKE_STATIC_BOOL) \
+        -DLWS_WITH_SHARED=$(CMAKE_SHARED_BOOL) \
         -DLWS_WITHOUT_TESTAPPS=ON \
         -DLWS_USE_EXTERNAL_ZLIB=ON
-    $(MAKE) -C '$(1)' -j $(JOBS)
-    $(MAKE) -C '$(1)' install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
