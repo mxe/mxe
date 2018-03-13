@@ -22,7 +22,7 @@ define $(PKG)_BUILD
         'headers.files = $$$$HEADERS' \
         'win32:dlltarget.path = $$$$[QT_INSTALL_BINS]' \
         'target.path = $$$$[QT_INSTALL_LIBS]' \
-	'!static:win32:target.CONFIG = no_dll' \
+        '!static:win32:target.CONFIG = no_dll' \
         'win32:INSTALLS += dlltarget' \
         'INSTALLS += target headers'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
