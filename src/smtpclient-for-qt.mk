@@ -6,7 +6,7 @@ $(PKG)_DESCR    := SmtpClient-for-Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := ca43f9d
 $(PKG)_CHECKSUM := 60bd3621d5075bbe41afd821a62a99bc1cb8b180a85f23b39f6d44d7926c9df3
-$(PKG)_GH_CONF  := bluetiger9/SmtpClient-for-Qt/v1.1
+$(PKG)_GH_CONF  := bluetiger9/SmtpClient-for-Qt/branches/v1.1
 $(PKG)_DEPS     := cc qtbase
 
 define $(PKG)_BUILD

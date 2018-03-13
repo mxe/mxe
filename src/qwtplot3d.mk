@@ -6,7 +6,7 @@ $(PKG)_DESCR    := QwtPlot3D
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := d80c908
 $(PKG)_CHECKSUM := 41a241a5efa7bf72b21de67792fbc5c7e273cea70a445673a41a310ea71318d8
-$(PKG)_GH_CONF  := sintegrial/qwtplot3d/master
+$(PKG)_GH_CONF  := sintegrial/qwtplot3d/branches/master
 $(PKG)_DEPS     := cc qtbase zlib
 
 $(PKG)_QT_DIR   := qt5
