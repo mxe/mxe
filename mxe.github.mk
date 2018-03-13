@@ -124,8 +124,8 @@ endef
 
 define MXE_SETUP_GITHUB_TAGS
     $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_REPO)-$(if $(call sne,v,$($(PKG)_TAG_PREFIX)),$($(PKG)_TAG_PREFIX))$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
-    $(PKG)_TAR_GZ := $(or $($(PKG)_TAR_GZ),$($(PKG)_GH_REPO)-$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
-    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/archive/$(subst $($(PKG)_GH_REPO)-,,$($(PKG)_TAR_GZ)).tar.gz)
+    $(PKG)_TAR_GZ := $(or $($(PKG)_TAR_GZ),$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
+    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/archive/$($(PKG)_TAR_GZ).tar.gz)
     $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_TAG,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
 endef
 
