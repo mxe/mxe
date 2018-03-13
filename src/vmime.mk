@@ -4,8 +4,8 @@ PKG             := vmime
 $(PKG)_WEBSITE  := https://www.vmime.org/
 $(PKG)_DESCR    := VMime
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 680057b
-$(PKG)_CHECKSUM := 9612e121f59db8aea3414583a050494a58cecc5dc754b114044d013170cf38a3
+$(PKG)_VERSION  := ed825ba
+$(PKG)_CHECKSUM := 5faf9e00fc85b17ce5ac53a275353db64dcb3a7f9c7f72968c5459d741d14609
 $(PKG)_GH_CONF  := kisli/vmime/master
 $(PKG)_DEPS     := cc gnutls libgsasl libiconv pthreads zlib
 
