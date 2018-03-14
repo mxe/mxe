@@ -6,14 +6,8 @@ $(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0-rc1
 $(PKG)_CHECKSUM := 8b67d9b5b545e1b694753dab7bd6cdbc24c290f2b21ba1e14c77b32817ea1249
-$(PKG)_SUBDIR   := luasocket-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := https://github.com/diegonehab/luasocket/archive/v$($(PKG)_VERSION).tar.gz
+$(PKG)_GH_CONF  := diegonehab/luasocket/tags, v
 $(PKG)_DEPS     := cc luarocks
-
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, diegonehab/luasocket, v)
-endef
 
 # shared-only because luarocks is shared-only
 
