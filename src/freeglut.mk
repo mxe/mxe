@@ -17,15 +17,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd    '$(1).build' && $(TARGET)-cmake '$(1)' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DFREEGLUT_GLES=OFF \
         -DFREEGLUT_BUILD_DEMOS=OFF \
         -DFREEGLUT_REPLACE_GLUT=ON \
         -DFREEGLUT_BUILD_STATIC_LIBS=$(CMAKE_STATIC_BOOL) \
         -DFREEGLUT_BUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL)
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
