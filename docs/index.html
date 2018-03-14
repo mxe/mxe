@@ -1475,14 +1475,18 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <p>
         To track branches, set:
         </p>
-        <pre>$(PKG)_GH_CONF  := owner/repo/branch</pre>
+        <pre>$(PKG)_GH_CONF  := owner/repo/branches/&lt;branch name&gt;</pre>
         <p>
         See the following packages for examples:
         </p>
         <ul>
             <li>
             <a href="https://github.com/mxe/mxe/blob/master/src/gc.mk">gc.mk</a>
-            for release tracking
+            for release tracking with non-standard file name
+            </li>
+            <li>
+            <a href="https://github.com/mxe/mxe/blob/master/src/yaml-cpp.mk">yaml-cpp.mk</a>
+            for release tracking with standard file name
             </li>
             <li>
             <a href="https://github.com/mxe/mxe/blob/master/src/vmime.mk">vmime.mk</a>
