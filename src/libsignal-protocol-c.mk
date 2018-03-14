@@ -16,4 +16,9 @@ define $(PKG)_BUILD
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libsignal-protocol-c.exe' \
+        `'$(TARGET)-pkg-config' libsignal-protocol-c --cflags --libs`
 endef
