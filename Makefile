@@ -180,25 +180,6 @@ MAKE_SHARED_FROM_STATIC = \
 	--libdir '$(PREFIX)/$(TARGET)/lib' \
 	--bindir '$(PREFIX)/$(TARGET)/bin'
 
-# MXE_GET_GITHUB functions can be removed once all packages use GH_CONF
-define MXE_GET_GITHUB_SHA
-    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' \
-    | $(SED) -n 's#.*"sha": "\([^"]\{10\}\).*#\1#p' \
-    | head -1
-endef
-
-define MXE_GET_GITHUB_ALL_TAGS
-    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/tags/' \
-    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p'
-endef
-
-define MXE_GET_GITHUB_TAGS
-    $(call MXE_GET_GITHUB_ALL_TAGS, $(1)) \
-    | $(SED) 's,^$(strip $(2)),,g' \
-    | $(SORT) -V \
-    | tail -1
-endef
-
 define AUTOTOOLS_CONFIGURE
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)

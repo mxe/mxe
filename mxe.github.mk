@@ -17,9 +17,6 @@
 #   Tarball:
 #     url = <owner>/<repo>/tarball/<ref>/output-file.tar.gz
 #     dir = <owner>-<repo>-<short sha>
-#
-# TODO: update remaining packages
-# grep -l 'MXE_GET_GITHUB\|api.github.com\|github.com.*archive|github.com.*tarball|github.com.*releases' src/*.mk | xargs grep -L 'GH_CONF'
 
 # Filename doesn't matter as we stream the url to a name of our choosing.
 #
