@@ -4,8 +4,9 @@
 
 PKG               := libechonest
 $(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt qjson
-$(PKG)_QT_SUFFIX  := 4
+$(PKG)_QT_SUFFIX  :=
 $(PKG)_QT4_BOOL   := ON
+$(PKG)_BUILD_STATIC =
 
 PKG               := opencsg
 $(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
