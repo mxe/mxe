@@ -9,8 +9,6 @@ $(PKG)_CHECKSUM := 05a6161cca61e16679fe189039b3cdebe26ed7ee8414d59afdc60363f46fb
 $(PKG)_GH_CONF  := signalapp/libsignal-protocol-c/branches/master
 $(PKG)_DEPS     := cc pthreads
 
-$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, signalapp/libsignal-protocol-c, master)
-
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config'
