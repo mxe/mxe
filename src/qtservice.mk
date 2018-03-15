@@ -17,19 +17,19 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)/qtservice/buildlib' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' \
-	    '-after' \
-	    'CONFIG -= dll debug_and_release build_all' \
-	    'CONFIG += create_prl create_pc' \
-	    'QMAKE_PKGCONFIG_DESTDIR = pkgconfig' \
-	    'DESTDIR =' \
-	    'DLLDESTDIR =' \
-	    'headers.path = $$$$[QT_INSTALL_HEADERS]' \
-	    'headers.files += ../src/qtservice.h' \
-	    'win32:dlltarget.path = $$$$[QT_INSTALL_BINS]' \
-	    'target.path = $$$$[QT_INSTALL_LIBS]' \
-	    '!static:win32:target.CONFIG = no_dll' \
-	    'win32:INSTALLS += dlltarget' \
-	    'INSTALLS += target headers'
+        '-after' \
+        'CONFIG -= dll debug_and_release build_all' \
+        'CONFIG += create_prl create_pc' \
+        'QMAKE_PKGCONFIG_DESTDIR = pkgconfig' \
+        'DESTDIR =' \
+        'DLLDESTDIR =' \
+        'headers.path = $$$$[QT_INSTALL_HEADERS]' \
+        'headers.files += ../src/qtservice.h' \
+        'win32:dlltarget.path = $$$$[QT_INSTALL_BINS]' \
+        'target.path = $$$$[QT_INSTALL_LIBS]' \
+        '!static:win32:target.CONFIG = no_dll' \
+        'win32:INSTALLS += dlltarget' \
+        'INSTALLS += target headers'
     $(MAKE) -C '$(1)/qtservice/buildlib' -j '$(JOBS)'
     $(MAKE) -C '$(1)/qtservice/buildlib' -j 1 install
 endef
