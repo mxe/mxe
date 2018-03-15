@@ -17,16 +17,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         --with-boost='$(PREFIX)/$(TARGET)' \
         --disable-debug \
         --disable-tests \
         --disable-examples \
-        CXXFLAGS='-D_WIN32_WINNT=0x0501 -g -O2'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+        CXXFLAGS='-D_WIN32_WINNT=0x0501 -g -O2' \
+        LIBS='-lws2_32 -lmswsock'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS=-no-undefined
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install LDFLAGS=-no-undefined
 endef
-
-$(PKG)_BUILD_SHARED =
