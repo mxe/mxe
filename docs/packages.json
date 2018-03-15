@@ -225,6 +225,7 @@
     "libserialport": {"version": "0.1.1", "website": "https://sigrok.org/wiki/Libserialport", "description": "libserialport"},
     "libshout": {"version": "2.4.1", "website": "http://www.icecast.org/", "description": ""},
     "libsigc++": {"version": "2.4.0", "website": "https://libsigc.sourceforge.io/", "description": ""},
+    "libsignal-protocol-c": {"version": "9e10362", "website": "https://github.com/signalapp/libsignal-protocol-c", "description": "libsignal-protocol-c"},
     "libsigrok": {"version": "0.5.0", "website": "https://www.sigrok.org/wiki/Libsigrok", "description": "libsigrok"},
     "libsndfile": {"version": "1.0.28", "website": "http://www.mega-nerd.com/libsndfile/", "description": ""},
     "libsodium": {"version": "1.0.15", "website": "https://download.libsodium.org/doc/", "description": ""},
