@@ -5,30 +5,23 @@ $(PKG)_WEBSITE  := https://github.com/andrewrk/rucksack
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.0
 $(PKG)_CHECKSUM := dcdaab57b06fdeb9be63ed0f2c2de78d0b1e79f7a896bb1e76561216a4458e3b
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/andrewrk/rucksack/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_GH_CONF  := andrewrk/rucksack/tags
 $(PKG)_DEPS     := cc freeimage liblaxjson
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/andrewrk/rucksack/releases' | \
-    $(SED) -n 's,.*/archive/\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
-
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && '$(TARGET)-cmake' ..
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
 
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' \
-        rucksack_static \
-        rucksackspritesheet_static \
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' \
+        rucksack_$(if $(BUILD_STATIC),static,shared) \
+        rucksackspritesheet_$(if $(BUILD_STATIC),static,shared) \
         VERBOSE=1
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/rucksack'
-    $(INSTALL) -m644 '$(1)/src/rucksack.h'    '$(PREFIX)/$(TARGET)/include/rucksack'
-    $(INSTALL) -m644 '$(1)/src/spritesheet.h' '$(PREFIX)/$(TARGET)/include/rucksack'
-    $(INSTALL) -m644 '$(1)/build/lib'*.a      '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(SOURCE_DIR)/src/rucksack.h'    '$(PREFIX)/$(TARGET)/include/rucksack'
+    $(INSTALL) -m644 '$(SOURCE_DIR)/src/spritesheet.h' '$(PREFIX)/$(TARGET)/include/rucksack'
+    $(INSTALL) -m644 -v '$(BUILD_DIR)/lib'*.a   '$(PREFIX)/$(TARGET)/lib/'
+    $(if $(BUILD_SHARED),\
+    $(INSTALL) -m755 -v '$(BUILD_DIR)/lib'*.dll '$(PREFIX)/$(TARGET)/bin/')
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic -std=c99 \
