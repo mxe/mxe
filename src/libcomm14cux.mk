@@ -5,14 +5,11 @@ $(PKG)_WEBSITE  := https://github.com/colinbourassa/libcomm14cux/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.1.1
 $(PKG)_CHECKSUM := 4b3d0969e2226a0f3c1250c609858e487631507ed62bf6732ce82f13f0d9fcc9
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/colinbourassa/libcomm14cux/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_GH_CONF  := colinbourassa/libcomm14cux/releases/latest
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && '$(TARGET)-cmake' ..
-
-    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
