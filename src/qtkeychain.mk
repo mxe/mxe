@@ -6,26 +6,18 @@ $(PKG)_DESCR    := QtKeychain
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.8.0
 $(PKG)_CHECKSUM := b492f603197538bc04b2714105b1ab2b327a9a98d400d53d9a7cb70edd2db12f
-$(PKG)_FILE     := qtkeychain-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/frankosterfeld/qtkeychain/archive/v$($(PKG)_VERSION).tar.gz
+$(PKG)_GH_CONF  := frankosterfeld/qtkeychain/tags,v
 $(PKG)_DEPS     := cc qttools
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/frankosterfeld/qtkeychain/releases' | \
-    grep '<a href="/frankosterfeld/qtkeychain/archive/' | \
-    $(SED) -n 's,.*href="/frankosterfeld/qtkeychain/archive/v\([0-9][^"]*\)\.tar.*,\1,p' | \
-    head -1
-endef
-
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)$(PKG)-$($(PKG)_VERSION)' \
-        $(if $(BUILD_STATIC),-DQTKEYCHAIN_STATIC=ON)
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DQTKEYCHAIN_STATIC=$(CMAKE_STATIC_BOOL)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic -std=c++11 \
-        '$(SOURCE_DIR)$(PKG)-$($(PKG)_VERSION)/testclient.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-qt5keychain.exe' \
+        '$(SOURCE_DIR)/testclient.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-qt5keychain.exe' \
         `'$(TARGET)-pkg-config' Qt5Core --cflags --libs` \
         '-I$(PREFIX)/$(TARGET)/include/qt5keychain' -lqt5keychain
 
