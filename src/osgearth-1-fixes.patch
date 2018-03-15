@@ -1,0 +1,71 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Fri, 22 Dec 2017 23:09:25 +0300
+Subject: [PATCH 1/3] fix osgEarthSplat static library
+
+
+diff --git a/src/osgEarthSplat/Export b/src/osgEarthSplat/Export
+index 1111111..2222222 100644
+--- a/src/osgEarthSplat/Export
++++ b/src/osgEarthSplat/Export
+@@ -42,7 +42,7 @@
+ 
+ #if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
+     #  if defined( OSGEARTHSPLAT_LIBRARY_STATIC )
+-    #    define OSGEARTH_SPLAT_EXPORT
++    #    define OSGEARTHSPLAT_EXPORT
+     #  elif defined( OSGEARTHSPLAT_LIBRARY )
+     #    define OSGEARTHSPLAT_EXPORT   __declspec(dllexport)
+     #  else
+
+From 0000000000000000000000000000000000000000
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Fri, 22 Dec 2017 23:15:21 +0300
+Subject: [PATCH 2/3] disable usage of extra libraries
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -126,10 +126,10 @@ FIND_PACKAGE(OpenGL)
+ 
+ FIND_PACKAGE(CURL)
+ FIND_PACKAGE(GDAL)
+-FIND_PACKAGE(GEOS)
++#FIND_PACKAGE(GEOS)
+ FIND_PACKAGE(Sqlite3)
+ FIND_PACKAGE(ZLIB)
+-FIND_PACKAGE(Poco)
++#FIND_PACKAGE(Poco)
+ 
+ FIND_PACKAGE(LevelDB)
+ FIND_PACKAGE(RocksDB)
+
+From 0000000000000000000000000000000000000000
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Fri, 22 Dec 2017 23:17:03 +0300
+Subject: [PATCH 3/3] disable build of applications
+
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -23,9 +23,9 @@ ENDFOREACH( lib )
+ 
+ ADD_SUBDIRECTORY( osgEarthDrivers )
+ 
+-IF(NOT OSG_BUILD_PLATFORM_IPHONE AND NOT OSG_BUILD_PLATFORM_IPHONE_SIMULATOR AND NOT ANDROID)
+-    ADD_SUBDIRECTORY( applications )
+-ENDIF()
++#IF(NOT OSG_BUILD_PLATFORM_IPHONE AND NOT OSG_BUILD_PLATFORM_IPHONE_SIMULATOR AND NOT ANDROID)
++#    ADD_SUBDIRECTORY( applications )
++#ENDIF()
+ 
+ #IF (Qt5Widgets_FOUND OR QT4_FOUND AND NOT ANDROID AND OSGEARTH_USE_QT)
+ #    ADD_SUBDIRECTORY(osgEarthQt)
