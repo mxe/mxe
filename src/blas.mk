@@ -3,30 +3,20 @@
 PKG             := blas
 $(PKG)_WEBSITE  := http://www.netlib.org/blas/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.5.0
-$(PKG)_CHECKSUM := ef7d775d380f255d1902bce374ff7c8a594846454fcaeae552292168af1aca24
-$(PKG)_SUBDIR   := BLAS-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc openblas
-
-$(PKG)_MESSAGE  :=*** blas has been replaced by openblas ***
+$(PKG)_VERSION  := 3.8.0
+$(PKG)_CHECKSUM := a8ce4930cfc695a7c09118060f5f2aa3601130e5265b2f4572c0984d5f282e49
+$(PKG)_SUBDIR   := lapack-release-lapack-$($(PKG)_VERSION)
+$(PKG)_FILE     := lapack-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/Reference-LAPACK/lapack-release/archive/lapack-$($(PKG)_VERSION).tar.gz
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    echo 'Warning: blas has been replaced by openblas' >&2;
-    echo $(blas_VERSION)
+    echo 1
 endef
 
-define $(PKG)_DISABLED_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' \
-        FORTRAN='$(TARGET)-gfortran' \
-        RANLIB='$(TARGET)-ranlib' \
-        ARCH='$(TARGET)-ar' \
-        BLASLIB='libblas.a'
-
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(if $(BUILD_STATIC), \
-        $(INSTALL) -m644 '$(1)/libblas.a' '$(PREFIX)/$(TARGET)/lib/', \
-        $(MAKE_SHARED_FROM_STATIC) '$(1)/libblas.a' --ld '$(TARGET)-gfortran' \
-    )
+define $(PKG)_BUILD
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
+        -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib'
+    $(MAKE) -C '$(BUILD_DIR)/BLAS' -j '$(JOBS)' install
 endef
