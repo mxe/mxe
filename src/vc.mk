@@ -1,8 +1,8 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vc
-$(PKG)_WEBSITE  := github.com
-$(PKG)_DESCR    := vc
+$(PKG)_WEBSITE  := https://github.com/VcDevel/Vc
+$(PKG)_DESCR    := SIMD Vector Classes for C++
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.3
 $(PKG)_CHECKSUM := 08c629d2e14bfb8e4f1a10f09535e4a3c755292503c971ab46637d2986bdb4fe
