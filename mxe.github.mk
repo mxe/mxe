@@ -100,7 +100,8 @@ define MXE_SETUP_GITHUB
     $(if $(and $(GH_BRANCH),$(GH_TAG_VARS)),\
         $(error $(newline) $(PKG) specifies both branch and tag variables $(newline)))
     $(if $(filter-out $(GH_APIS),$(GH_API))$(filter x,x$(GH_API)),\
-        $(error $(newline) $(PKG) has unknown API $($(PKG)_GH_CONF) $(newline)))
+        $(error $(newline) $(PKG) has unknown API in GH_CONF := $($(PKG)_GH_CONF) $(newline)\
+                           must be branches|tags|releases))
     $(if $(GH_BRANCH),$(value MXE_SETUP_GITHUB_BRANCH),$(value MXE_SETUP_GITHUB_$(call uc,$(GH_API))))
 endef
 
