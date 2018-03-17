@@ -1,0 +1,28 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 17 Mar 2018 12:34:39 +1100
+Subject: [PATCH 1/1] CMake pc file - libgomp requires pthreads for static
+ linking
+
+See:
+https://github.com/georgmartius/vid.stab/pull/56
+
+Libgomp uses pthreads internally and it's usually sufficient to to specify `-fopenmp` in CFLAGS to pick up the required libs. Some configure scripts (e.g. ffmpeg) don't pass these through from pkg-config and only use `--libs`, so setting it here is necessary for static builds.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -74,7 +74,7 @@ set(PKG_EXTRA_LIBS "${PKG_EXTRA_LIBS} ${ORC_LIBRARIES}")
+ endif()
+ if(USE_OMP)
+ target_link_libraries(vidstab gomp)
+-set(PKG_EXTRA_LIBS "${PKG_EXTRA_LIBS} -lgomp")
++set(PKG_EXTRA_LIBS "${PKG_EXTRA_LIBS} -lgomp -lpthread")
+ endif()
+ 
+ 
