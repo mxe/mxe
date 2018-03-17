@@ -1019,7 +1019,7 @@ docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	                $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
 	                    $(eval $(TARGET)_PKGCOUNT += x) \
 	                    <td class="supported">&#x2713;</td>, \
-	                    <td class="unsupported">&#x2717;</td>),\
+	                    <td class="unsupported">&#215;</td>),\
 	                	<td></td>))\n) \
 	    $(if $(filter $(VIRTUAL_PKG_TYPES),$($(PKG)_TYPE)), \
 	        $(eval VIRTUAL_PKGCOUNT += x) \
@@ -1029,7 +1029,7 @@ docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	        $(if $(filter $(BUILD),$($(PKG)_TARGETS)), \
 	            $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD))), \
 	                <td class="supported">&#x2713;</td>, \
-	                <td class="unsupported">&#x2717;</td>), \
+	                <td class="unsupported">&#215;</td>), \
 	                <td></td>))\n \
 	        </tr>\n' >> $@ $(newline) \
 	    $(if $(call seq,$(BUILD),$($(PKG)_TARGETS)), \
