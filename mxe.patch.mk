@@ -54,7 +54,7 @@ define EXPORT_PATCH
             -M9 \
             dist..HEAD \
         | $(SED) 's/^From [0-9a-f]\{40\} /From 0000000000000000000000000000000000000000 /' \
-        | $(SED) 's/^index .......\.\......../index 1111111..2222222/' \
+        | $(SED) 's/^index .......*\.\........* /index 1111111..2222222 /' \
     ) > '$(PATCH_BY_NAME)'
 endef
 
