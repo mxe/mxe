@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.1.0
 $(PKG)_CHECKSUM := 14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb
 $(PKG)_GH_CONF  := georgmartius/vid.stab/tags,v
-$(PKG)_DEPS     := cc pthreads
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
@@ -17,5 +17,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-vidstab.exe' \
-        `'$(TARGET)-pkg-config' --static --cflags --libs vidstab pthreads`
+        `'$(TARGET)-pkg-config' --static --cflags --libs vidstab`
 endef
