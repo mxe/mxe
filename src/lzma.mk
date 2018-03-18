@@ -19,6 +19,8 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+# liblzma is actually installed by xz
+# https://github.com/mxe/mxe/issues/1481
 define $(PKG)_BUILD
     $(MAKE) all -C '$(1)/C/Util/Lzma' \
         -f makefile.gcc -j '$(JOBS)' \
