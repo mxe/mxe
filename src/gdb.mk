@@ -21,6 +21,8 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-system-readline \
+        --disable-gdbtk \
+        --disable-tui \
         host_configargs="LIBS=\"`$(TARGET)-pkg-config --libs dlfcn`\"" \
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
