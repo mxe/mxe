@@ -9,4 +9,4 @@ git config credential.helper "store --file=.git/credentials"
 echo "https://${GH_TOKEN}:@github.com" > .git/credentials
 git remote set-url origin 'https://github.com/mxe/mxe.git'
 git commit -a -m 'Update packages.json & build-matrix.html' || true
-[ `git rev-parse --abbrev-ref HEAD` == master ] && git push origin HEAD:master
+git push origin HEAD:master
