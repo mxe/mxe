@@ -22,6 +22,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # sed modification to force absolute path to the file
+    $(SED) -i "s~../msvc~$(SOURCE_DIR)/msvc/msvc~g" $(SOURCE_DIR)/src/dvd_input.c
     # build and install the library
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)
