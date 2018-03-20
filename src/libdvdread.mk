@@ -10,7 +10,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 
 # libdvdread supports libdvdcss either by dynamic loading (dlfcn-win32) or
-# directly linking to libdvdcss. We directly links to the library here.
+# directly linking to libdvdcss. We directly link to the library here.
 $(PKG)_DEPS     := cc libdvdcss
 
 define $(PKG)_UPDATE
@@ -24,7 +24,8 @@ endef
 define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
-        $(MXE_CONFIGURE_OPTS)
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-dlfcn \
         --with-libdvdcss \
         --disable-apidoc
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS=-no-undefined
