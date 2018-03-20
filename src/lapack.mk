@@ -2,33 +2,33 @@
 
 PKG             := lapack
 $(PKG)_WEBSITE  := http://www.netlib.org/lapack/
+$(PKG)_DESCR    := Reference LAPACK — Linear Algebra PACKage
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.8.0
-$(PKG)_CHECKSUM := a8ce4930cfc695a7c09118060f5f2aa3601130e5265b2f4572c0984d5f282e49
-$(PKG)_SUBDIR   := lapack-release-$(PKG)-$($(PKG)_VERSION)
+$(PKG)_CHECKSUM := deb22cc4a6120bff72621155a9917f485f96ef8319ac074a7afbc68aab88bcf6
+$(PKG)_GH_CONF  := Reference-LAPACK/lapack/tags,v
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/Reference-LAPACK/lapack-release/archive/$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc cblas
-
-define $(PKG)_UPDATE
-    echo 1
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
+        -DBLAS_LIBRARIES=blas \
+        -DCBLAS=OFF \
         -DLAPACKE=ON
-    $(MAKE) -C '$(BUILD_DIR)/SRC'     -j '$(JOBS)' install
-    $(MAKE) -C '$(BUILD_DIR)/LAPACKE' -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
+    # pkg-config files don't pick up deps correctly
+    # see https://github.com/Reference-LAPACK/lapack/pull/119
     '$(TARGET)-gfortran' \
         -W -Wall -Werror -pedantic \
         '$(PWD)/src/$(PKG)-test.f' -o '$(PREFIX)/$(TARGET)/bin/test-lapack.exe' \
-        -llapack
+        `'$(TARGET)-pkg-config' $(PKG) blas --cflags --libs`
 
-    '$(TARGET)-gcc' \
+    '$(TARGET)-gfortran' \
         -W -Wall -Werror -pedantic \
         '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-lapacke.exe' \
-        -llapacke -llapack -lcblas -lblas -lgfortran -lquadmath
+        `'$(TARGET)-pkg-config' lapacke lapack cblas blas --cflags --libs`
 endef

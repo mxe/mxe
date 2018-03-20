@@ -2,32 +2,36 @@
 
 PKG             := cblas
 $(PKG)_WEBSITE  := http://www.netlib.org/blas/
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.8.0
-$(PKG)_CHECKSUM := a8ce4930cfc695a7c09118060f5f2aa3601130e5265b2f4572c0984d5f282e49
-$(PKG)_SUBDIR   := lapack-release-lapack-$($(PKG)_VERSION)
-$(PKG)_FILE     := lapack-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/Reference-LAPACK/lapack-release/archive/lapack-$($(PKG)_VERSION).tar.gz
+$(PKG)_DESCR    := C interface to Reference BLAS
+$(PKG)_IGNORE    = $(lapack_IGNORE)
+$(PKG)_VERSION   = $(lapack_VERSION)
+$(PKG)_CHECKSUM  = $(lapack_CHECKSUM)
+$(PKG)_SUBDIR    = $(lapack_SUBDIR)
+$(PKG)_FILE      = $(lapack_FILE)
+$(PKG)_URL       = $(lapack_URL)
 $(PKG)_DEPS     := cc blas
 
 define $(PKG)_UPDATE
-    echo 1
+    echo $(lapack_VERSION)
 endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
-        -DCBLAS=ON
-    $(MAKE) -C '$(BUILD_DIR)/CBLAS' -j '$(JOBS)' install
+        -DBLAS_LIBRARIES=blas \
+        -DCBLAS=ON \
+        -DLAPACKE=OFF
+    $(MAKE) -C '$(BUILD_DIR)/CBLAS' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/CBLAS' -j 1 install
 
-    '$(TARGET)-gcc' \
+    '$(TARGET)-gfortran' \
         -W -Wall -Werror -ansi -pedantic \
         '$(SOURCE_DIR)/CBLAS/examples/cblas_example1.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        -lcblas -lblas -lgfortran -lquadmath
+        `'$(TARGET)-pkg-config' $(PKG) blas --cflags --libs`
 
-    '$(TARGET)-gcc' \
+    '$(TARGET)-gfortran' \
         -W -Wall -Werror -ansi -pedantic \
         '$(SOURCE_DIR)/CBLAS/examples/cblas_example2.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-F77.exe' \
-        -lcblas -lblas -lgfortran -lquadmath -DADD_
+        `'$(TARGET)-pkg-config' $(PKG) blas --cflags --libs`
 endef
