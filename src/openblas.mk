@@ -42,4 +42,13 @@ define $(PKG)_BUILD
         -W -Wall -Werror \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' --cflags --libs $(PKG)`
+
+    # set BLA_VENDOR and -fopenmp to find openblas
+    mkdir '$(BUILD_DIR).test-cmake'
+    cd '$(BUILD_DIR).test-cmake' && '$(TARGET)-cmake' \
+        -DPKG=$(PKG) \
+        -DBLA_VENDOR=OpenBLAS \
+        -DCMAKE_C_FLAGS=-fopenmp \
+        '$(PWD)/src/cmake/test'
+    $(MAKE) -C '$(BUILD_DIR).test-cmake' -j 1 install
 endef
