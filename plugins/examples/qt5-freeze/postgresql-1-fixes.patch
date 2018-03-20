@@ -1,0 +1,137 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "a@a.org" <a@a.org>
+Date: Mon, 24 Oct 2011 14:02:33 +0200
+Subject: [PATCH 1/4] use unix style names for openssl on mingw-cross-env
+
+
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -926,13 +926,8 @@ fi
+ 
+ if test "$with_openssl" = yes ; then
+   dnl Order matters!
+-  if test "$PORTNAME" != "win32"; then
+-     AC_CHECK_LIB(crypto, CRYPTO_new_ex_data, [], [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])])
+-     AC_CHECK_LIB(ssl,    SSL_library_init, [], [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])])
+-  else
+-     AC_SEARCH_LIBS(CRYPTO_new_ex_data, eay32 crypto, [], [AC_MSG_ERROR([library 'eay32' or 'crypto' is required for OpenSSL])])
+-     AC_SEARCH_LIBS(SSL_library_init, ssleay32 ssl, [], [AC_MSG_ERROR([library 'ssleay32' or 'ssl' is required for OpenSSL])])
+-  fi
++  AC_CHECK_LIB(crypto, CRYPTO_new_ex_data, [], [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])])
++  AC_CHECK_LIB(ssl,    SSL_library_init, [], [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])])
+ fi
+ 
+ if test "$with_pam" = yes ; then
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "a@a.org" <a@a.org>
+Date: Mon, 24 Oct 2011 14:09:38 +0200
+Subject: [PATCH 2/4] do not check autoconf version
+
+
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -19,10 +19,6 @@ m4_pattern_forbid(^PGAC_)dnl to catch undefined macros
+ 
+ AC_INIT([PostgreSQL], [9.2.4], [pgsql-bugs@postgresql.org])
+ 
+-m4_if(m4_defn([m4_PACKAGE_VERSION]), [2.63], [], [m4_fatal([Autoconf version 2.63 is required.
+-Untested combinations of 'autoconf' and PostgreSQL versions are not
+-recommended.  You can remove the check from 'configure.in' but it is then
+-your responsibility whether the result works or not.])])
+ AC_COPYRIGHT([Copyright (c) 1996-2012, PostgreSQL Global Development Group])
+ AC_CONFIG_SRCDIR([src/backend/access/common/heaptuple.c])
+ AC_CONFIG_AUX_DIR(config)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 1 Jul 2014 14:27:21 -0700
+Subject: [PATCH 3/4] Fix shared lib install location
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/src/Makefile.shlib b/src/Makefile.shlib
+index 1111111..2222222 100644
+--- a/src/Makefile.shlib
++++ b/src/Makefile.shlib
+@@ -293,6 +293,7 @@ endif
+ ifeq ($(PORTNAME), win32)
+   ifdef SO_MAJOR_VERSION
+     shlib		= lib$(NAME)$(DLSUFFIX)
++    stlib		= lib$(NAME)$(DLSUFFIX).a
+   endif
+   haslibarule   = yes
+ endif
+@@ -447,14 +448,16 @@ ifeq ($(PORTNAME), darwin)
+ endif
+ 
+ ifeq ($(enable_shared), yes)
+-install-lib-shared: $(shlib) installdirs-lib
++install-lib-shared: $(shlib)
++ifeq (, $(filter $(PORTNAME), win32 cygwin))
++install-lib-shared: installdirs-lib
++endif # not win32 or cygwin
+ ifdef soname
+ # we don't install $(shlib) on AIX
+ # (see http://archives.postgresql.org/message-id/52EF20B2E3209443BC37736D00C3C1380A6E79FE@EXADV1.host.magwien.gv.at)
+ ifneq ($(PORTNAME), aix)
++ifeq (, $(filter $(PORTNAME), win32 cygwin))
+ 	$(INSTALL_SHLIB) $< '$(DESTDIR)$(libdir)/$(shlib)'
+-ifneq ($(PORTNAME), cygwin)
+-ifneq ($(PORTNAME), win32)
+ ifneq ($(shlib), $(shlib_major))
+ 	cd '$(DESTDIR)$(libdir)' && \
+ 	rm -f $(shlib_major) && \
+@@ -465,8 +468,9 @@ ifneq ($(shlib), $(shlib_bare))
+ 	rm -f $(shlib_bare) && \
+ 	$(LN_S) $(shlib) $(shlib_bare)
+ endif
+-endif # not win32
+-endif # not cygwin
++else  # win32 or cygwin
++	$(INSTALL_SHLIB) $< '$(DESTDIR)$(bindir)/$(shlib)'
++endif # not win32 or cygwin
+ endif # not aix
+ else # no soname
+ 	$(INSTALL_SHLIB) $< '$(DESTDIR)$(pkglibdir)/$(shlib)'
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Tue, 1 Jul 2014 14:41:44 -0700
+Subject: [PATCH 4/4] Don't build shared lib on win32 if --disable-shared is
+ set
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/src/Makefile.shlib b/src/Makefile.shlib
+index 1111111..2222222 100644
+--- a/src/Makefile.shlib
++++ b/src/Makefile.shlib
+@@ -291,11 +291,15 @@ ifeq ($(PORTNAME), cygwin)
+ endif
+ 
+ ifeq ($(PORTNAME), win32)
+-  ifdef SO_MAJOR_VERSION
+-    shlib		= lib$(NAME)$(DLSUFFIX)
+-    stlib		= lib$(NAME)$(DLSUFFIX).a
++  ifeq ($(enable_shared), yes)
++    ifdef SO_MAJOR_VERSION
++      shlib		= lib$(NAME)$(DLSUFFIX)
++      stlib		= lib$(NAME)$(DLSUFFIX).a
++    endif
++    haslibarule   = yes
++  else
++    shlib		=
+   endif
+-  haslibarule   = yes
+ endif
+ 
+ 
