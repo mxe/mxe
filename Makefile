@@ -498,7 +498,7 @@ PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
 PKGS         := $(sort $(basename $(notdir $(PLUGIN_FILES))))
 $(foreach FILE,$(PLUGIN_FILES),\
     $(eval $(basename $(notdir $(FILE)))_MAKEFILE  ?= $(FILE)) \
-    $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(wildcard $(basename $(FILE))-test.*)) \
+    $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(filter-out %.cmake,$(wildcard $(basename $(FILE))-test.*))) \
     $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE)))))
 include $(PLUGIN_FILES)
 
