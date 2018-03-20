@@ -1,0 +1,29 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+see https://github.com/mxe/mxe/issues/672
+
+From b18fec680ef90c65247d998e3f68e7574d45e83e Mon Sep 17 00:00:00 2001
+From: "Avi Halachmi (:avih)" <avihpit@yahoo.com>
+Date: Fri, 24 Apr 2015 07:25:04 +0300
+Subject: [PATCH] autoconf: require minimum version 2.50
+
+---
+ configure.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.in b/configure.in
+index 1257071..24f91cd 100644
+--- a/configure.in
++++ b/configure.in
+@@ -17,6 +17,7 @@ dnl Read the Autoconf manual for details.
+ dnl
+ m4_pattern_forbid(^PGAC_)dnl to catch undefined macros
+ 
++AC_PREREQ(2.63)
+ AC_INIT([PostgreSQL], [9.2.4], [pgsql-bugs@postgresql.org])
+ 
+ AC_COPYRIGHT([Copyright (c) 1996-2012, PostgreSQL Global Development Group])
+-- 
+1.9.1
+
