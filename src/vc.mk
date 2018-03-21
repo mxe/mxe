@@ -24,7 +24,7 @@ define $(PKG)_BUILD
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: $($(PKG)_DESCR)'; \
      echo 'Requires:'; \
-     echo 'Libs: -lvc'; \
+     echo 'Libs: -lVc'; \
      echo 'Cflags.private:';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
