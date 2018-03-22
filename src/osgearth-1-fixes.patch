@@ -4,32 +4,60 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
-Date: Fri, 16 Mar 2018 17:10:49 +0300
-Subject: [PATCH 2/2] disable build of applications and tests
+Date: Thu, 22 Mar 2018 22:40:00 +0300
+Subject: [PATCH 1/2] Added cmake options for disabling building of
+ applications and tests
 
 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -326,6 +326,10 @@ ENDIF(INSTALL_TO_OSG_DIR)
+ # osgEarth Examples
+ OPTION(BUILD_OSGEARTH_EXAMPLES "Enable to build osgEarth Examples" ON)
+ 
++# Applications and tests
++OPTION(BUILD_APPLICATIONS "Enable build of Applications" ON)
++OPTION(BUILD_TESTS "Enable build of Tests" ON)
++
+ # OE Core
+ ADD_SUBDIRECTORY(src)
+ 
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -23,13 +23,13 @@ ENDFOREACH( lib )
+@@ -23,11 +23,11 @@ ENDFOREACH( lib )
  
  ADD_SUBDIRECTORY( osgEarthDrivers )
  
 -IF(NOT ANDROID)
--    ADD_SUBDIRECTORY( applications )
--ENDIF()
--
++IF(BUILD_APPLICATIONS AND NOT ANDROID)
+     ADD_SUBDIRECTORY( applications )
+ ENDIF()
+ 
 -IF(NOT OSGEARTH_BUILD_PLATFORM_IPHONE AND NOT OSGEARTH_BUILD_PLATFORM_IPHONE_SIMULATOR)
--    ADD_SUBDIRECTORY( tests )
--ENDIF()
-+#IF(NOT ANDROID)
-+#    ADD_SUBDIRECTORY( applications )
-+#ENDIF()
-+#
-+#IF(NOT OSGEARTH_BUILD_PLATFORM_IPHONE AND NOT OSGEARTH_BUILD_PLATFORM_IPHONE_SIMULATOR)
-+#    ADD_SUBDIRECTORY( tests )
-+#ENDIF()
++IF(BUILD_TESTS AND NOT OSGEARTH_BUILD_PLATFORM_IPHONE AND NOT OSGEARTH_BUILD_PLATFORM_IPHONE_SIMULATOR)
+     ADD_SUBDIRECTORY( tests )
+ ENDIF()
  
- 
- IF(MSVC80)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Thu, 22 Mar 2018 22:53:10 +0300
+Subject: [PATCH 2/2] Fixed linking of osgEarthSymbology with geos when build
+ as shared library
+
+
+diff --git a/src/osgEarthSymbology/CMakeLists.txt b/src/osgEarthSymbology/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/osgEarthSymbology/CMakeLists.txt
++++ b/src/osgEarthSymbology/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ IF   (DYNAMIC_OSGEARTH)
+     ADD_DEFINITIONS(-DOSGEARTHSYMBOLOGY_LIBRARY)
++    ADD_DEFINITIONS(-DGEOS_INLINE)
+ ELSE (DYNAMIC_OSGEARTH)
+     ADD_DEFINITIONS(-DOSGEARTHSYMBOLOGY_LIBRARY_STATIC)
+ ENDIF(DYNAMIC_OSGEARTH)

@@ -13,7 +13,9 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DWITH_EXTERNAL_TINYXML=ON \
         -DDYNAMIC_OSGEARTH=$(CMAKE_SHARED_BOOL) \
-        -DBUILD_OSGEARTH_EXAMPLES=OFF
+        -DBUILD_OSGEARTH_EXAMPLES=OFF \
+        -DBUILD_APPLICATIONS=OFF \
+        -DBUILD_TESTS=OFF
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
