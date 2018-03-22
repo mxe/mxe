@@ -11,9 +11,11 @@ $(PKG)_DEPS     := cc pthreads
 
 # openblas has it's own optimised versions of netlib lapack that
 # it bundles into -lopenblas so won't conflict with those libs
+# headers do conflict so install to separate directory
 
 $(PKG)_MAKE_OPTS = \
         PREFIX='$(PREFIX)/$(TARGET)' \
+        OPENBLAS_INCLUDE_DIR='$(PREFIX)/$(TARGET)/include/openblas' \
         CROSS_SUFFIX='$(TARGET)-' \
         FC='$(TARGET)-gfortran' \
         CC='$(TARGET)-gcc' \
