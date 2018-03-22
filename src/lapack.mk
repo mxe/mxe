@@ -20,15 +20,14 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-    # pkg-config files don't pick up deps correctly
-    # see https://github.com/Reference-LAPACK/lapack/pull/119
+    # if blas/cblas routines are used directly, add to pkg-config call
     '$(TARGET)-gfortran' \
         -W -Wall -Werror -pedantic \
         '$(PWD)/src/$(PKG)-test.f' -o '$(PREFIX)/$(TARGET)/bin/test-lapack.exe' \
-        `'$(TARGET)-pkg-config' $(PKG) blas --cflags --libs`
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 
     '$(TARGET)-gfortran' \
         -W -Wall -Werror -pedantic \
         '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-lapacke.exe' \
-        `'$(TARGET)-pkg-config' lapacke lapack cblas blas --cflags --libs`
+        `'$(TARGET)-pkg-config' lapacke cblas --cflags --libs`
 endef
