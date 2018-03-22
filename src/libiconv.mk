@@ -56,4 +56,7 @@ define $(PKG)_BUILD_$(BUILD)
     $(if $(findstring darwin, $(BUILD)), \
         $($(PKG)_BUILD_DARWIN), \
         $($(PKG)_BUILD_NATIVE))
+
+    # charset.alias is redundant on mingw and modern glibc systems
+    rm -f '$(PREFIX)/$(TARGET)/lib/charset.alias'
 endef
