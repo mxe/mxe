@@ -19,14 +19,15 @@ endef
 
 define $(PKG)_BUILD
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
-        $(SED) -i 's/pei-i386/pei-x86-64/' '$(1)/SCons/Config/linker_script')
+        $(SED) -i 's/pei-i386/pei-x86-64/' '$(1)/SCons/Config/linker_script' && \
+        $(SED) -i 's/m_target_type=TARGET_X86ANSI/m_target_type=TARGET_AMD64/' '$(1)/Source/build.cpp')
     cd '$(1)' && scons \
         MINGW_CROSS_PREFIX='$(TARGET)-' \
         PREFIX='$(PREFIX)/$(TARGET)' \
         `[ -d /usr/local/include ] && echo APPEND_CPPPATH=/usr/local/include` \
         `[ -d /usr/local/lib ]     && echo APPEND_LIBPATH=/usr/local/lib` \
         $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
-            SKIPPLUGINS='System') \
+            SKIPPLUGINS='System' TARGET_ARCH=amd64) \
         SKIPUTILS='MakeLangId,Makensisw,NSIS Menu,zip2exe' \
         NSIS_MAX_STRLEN=8192 \
         install
