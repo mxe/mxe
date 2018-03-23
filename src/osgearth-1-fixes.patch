@@ -42,22 +42,3 @@ index 1111111..2222222 100644
      ADD_SUBDIRECTORY( tests )
  ENDIF()
  
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Pek <tehnick-8@yandex.ru>
-Date: Thu, 22 Mar 2018 22:53:10 +0300
-Subject: [PATCH 2/2] Fixed linking of osgEarthSymbology with geos when build
- as shared library
-
-
-diff --git a/src/osgEarthSymbology/CMakeLists.txt b/src/osgEarthSymbology/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/osgEarthSymbology/CMakeLists.txt
-+++ b/src/osgEarthSymbology/CMakeLists.txt
-@@ -1,5 +1,6 @@
- IF   (DYNAMIC_OSGEARTH)
-     ADD_DEFINITIONS(-DOSGEARTHSYMBOLOGY_LIBRARY)
-+    ADD_DEFINITIONS(-DGEOS_INLINE)
- ELSE (DYNAMIC_OSGEARTH)
-     ADD_DEFINITIONS(-DOSGEARTHSYMBOLOGY_LIBRARY_STATIC)
- ENDIF(DYNAMIC_OSGEARTH)
