@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc qtbase zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/quazip/files/quazip/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/projects/.*/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 

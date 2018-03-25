@@ -13,7 +13,7 @@ $(PKG)_DEPS     := cc bzip2 freetype jasper jpeg lcms libltdl libpng libxml2 pth
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 

@@ -13,7 +13,7 @@ $(PKG)_DEPS     := cc gtkmm2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/plotmm/files/plotmm/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 

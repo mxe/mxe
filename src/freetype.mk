@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc bzip2 harfbuzz libpng zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/freetype/files/freetype2/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef

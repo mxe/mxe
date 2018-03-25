@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc glib libgnurx libpng
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/lensfun/files/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef
