@@ -15,7 +15,7 @@ $(PKG)_DEPS     := cc eigen ffmpeg jasper jpeg lcms1 libpng libwebp \
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/opencvlibrary/files/opencv-unix/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 
