@@ -1,0 +1,12 @@
+diff -rupN evince-3.24.0/backend/pdf/ev-poppler.cc evince-3.24.0.new/backend/pdf/ev-poppler.cc
+--- evince-3.24.0/backend/pdf/ev-poppler.cc	2016-02-27 03:31:02.000000000 -0500
++++ evince-3.24.0.new/backend/pdf/ev-poppler.cc	2017-07-14 01:53:25.336648463 -0400
+@@ -20,7 +20,7 @@
+  */
+ 
+ #include "config.h"
+-
++#include <fcntl.h>
+ #include <math.h>
+ #include <string.h>
+ #include <gtk/gtk.h>
