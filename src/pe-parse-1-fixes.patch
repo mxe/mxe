@@ -1,0 +1,186 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 26 Mar 2018 18:25:08 +1100
+Subject: [PATCH 1/3] mingw-w64 fixes
+
+  - `WIN32` is user-defined, `_WIN32` is pre-defined by toolchain[1]
+  - use gcc options instead of MSVC
+    - `-fPIC` is redundant on mingw
+    - don't error on `old-style-cast`
+
+[1] https://msdn.microsoft.com/en-us/library/b0084kay.aspx
+
+diff --git a/cmake/compilation_flags.cmake b/cmake/compilation_flags.cmake
+index 1111111..2222222 100644
+--- a/cmake/compilation_flags.cmake
++++ b/cmake/compilation_flags.cmake
+@@ -1,4 +1,4 @@
+-if (WIN32)
++if (MSVC)
+   list(APPEND DEFAULT_CXX_FLAGS /W4 /analyze)
+ 
+   if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+@@ -13,8 +13,13 @@ else ()
+   set(CMAKE_CXX_STANDARD 11)
+   set(CMAKE_CXX_EXTENSIONS OFF)
+ 
++  if (MINGW)
++    list(APPEND DEFAULT_CXX_FLAGS -Wno-error=old-style-cast)
++  else ()
++    list(APPEND DEFAULT_CXX_FLAGS -fPIC)
++  endif ()
++
+   list(APPEND DEFAULT_CXX_FLAGS
+-    -fPIC
+ 
+     -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization
+     -Wformat=2 -Winit-self -Wlong-long -Wmissing-declarations -Wmissing-include-dirs -Wcomment
+diff --git a/examples/peaddrconv/CMakeLists.txt b/examples/peaddrconv/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/examples/peaddrconv/CMakeLists.txt
++++ b/examples/peaddrconv/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ cmake_minimum_required(VERSION 3.1)
+ project(peaddrconv)
+ 
+-if (WIN32)
++if (MSVC)
+   list(APPEND PEADDRCONV_CXXFLAGS /W4 /analyze)
+ 
+   if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+diff --git a/pe-parser-library/src/buffer.cpp b/pe-parser-library/src/buffer.cpp
+index 1111111..2222222 100644
+--- a/pe-parser-library/src/buffer.cpp
++++ b/pe-parser-library/src/buffer.cpp
+@@ -28,7 +28,7 @@ THE SOFTWARE.
+ // keep this header above "windows.h" because it contains many types
+ #include <parser-library/parse.h>
+ 
+-#ifdef WIN32
++#ifdef _WIN32
+ 
+ #define WIN32_LEAN_AND_MEAN
+ #define VC_EXTRALEAN
+@@ -76,7 +76,7 @@ extern std::uint32_t err;
+ extern std::string err_loc;
+ 
+ struct buffer_detail {
+-#ifdef WIN32
++#ifdef _WIN32
+   HANDLE file;
+   HANDLE sec;
+ #else
+@@ -157,7 +157,7 @@ bool readQword(bounded_buffer *b, std::uint32_t offset, std::uint64_t &out) {
+ }
+ 
+ bounded_buffer *readFileToFileBuffer(const char *filePath) {
+-#ifdef WIN32
++#ifdef _WIN32
+   HANDLE h = CreateFileA(filePath,
+                          GENERIC_READ,
+                          FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+@@ -205,7 +205,7 @@ bounded_buffer *readFileToFileBuffer(const char *filePath) {
+   p->detail = d;
+ 
+ // only where we have mmap / open / etc
+-#ifdef WIN32
++#ifdef _WIN32
+   p->detail->file = h;
+ 
+   HANDLE hMap = CreateFileMapping(h, nullptr, PAGE_READONLY, 0, 0, nullptr);
+@@ -296,7 +296,7 @@ void deleteBuffer(bounded_buffer *b) {
+   }
+ 
+   if (!b->copy) {
+-#ifdef WIN32
++#ifdef _WIN32
+     UnmapViewOfFile(b->buf);
+     CloseHandle(b->detail->sec);
+     CloseHandle(b->detail->file);
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 26 Mar 2018 18:31:58 +1100
+Subject: [PATCH 2/3] add option to build shared libs
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -13,8 +13,10 @@ endif ()
+ include(cmake/compilation_flags.cmake)
+ list(APPEND GLOBAL_CXXFLAGS ${DEFAULT_CXX_FLAGS})
+ 
++option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+ add_subdirectory(pe-parser-library)
+ add_subdirectory(dump-pe)
+ 
+ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
++message(STATUS "Build Shared: ${BUILD_SHARED_LIBS}")
+ message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
+diff --git a/pe-parser-library/CMakeLists.txt b/pe-parser-library/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/pe-parser-library/CMakeLists.txt
++++ b/pe-parser-library/CMakeLists.txt
+@@ -11,10 +11,14 @@ list(APPEND PEPARSERLIB_SOURCEFILES
+   src/parse.cpp
+ )
+ 
+-add_library(${PROJECT_NAME} STATIC ${PEPARSERLIB_SOURCEFILES})
++add_library(${PROJECT_NAME} ${PEPARSERLIB_SOURCEFILES})
+ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+ target_compile_options(${PROJECT_NAME} PRIVATE ${GLOBAL_CXXFLAGS})
+ 
+-install(TARGETS ${PROJECT_NAME} DESTINATION "lib")
++install(TARGETS ${PROJECT_NAME}
++  RUNTIME DESTINATION "bin"
++  LIBRARY DESTINATION "lib"
++  ARCHIVE DESTINATION "lib"
++)
+ install(FILES "cmake/peparse-config.cmake" DESTINATION "lib/cmake/peparse")
+ install(DIRECTORY "include/parser-library" DESTINATION "include")
+diff --git a/pe-parser-library/cmake/peparse-config.cmake b/pe-parser-library/cmake/peparse-config.cmake
+index 1111111..2222222 100644
+--- a/pe-parser-library/cmake/peparse-config.cmake
++++ b/pe-parser-library/cmake/peparse-config.cmake
+@@ -1,5 +1,5 @@
+ find_path(PEPARSE_INCLUDE_DIR "parser-library/parse.h")
+-find_library(PEPARSE_LIBRARIES NAMES "libpe-parser-library.a")
++find_library(PEPARSE_LIBRARIES NAMES "libpe-parser-library")
+ 
+ include(FindPackageHandleStandardArgs)
+-find_package_handle_standard_args(libproxy DEFAULT_MSG PEPARSE_INCLUDE_DIR PEPARSE_LIBRARIES)
++find_package_handle_standard_args(peparse DEFAULT_MSG PEPARSE_INCLUDE_DIR PEPARSE_LIBRARIES)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 26 Mar 2018 18:32:23 +1100
+Subject: [PATCH 3/3] add option to disable example
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,9 +14,15 @@ include(cmake/compilation_flags.cmake)
+ list(APPEND GLOBAL_CXXFLAGS ${DEFAULT_CXX_FLAGS})
+ 
+ option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
++option(BUILD_EXAMPLES "Build Examples" ON)
++
+ add_subdirectory(pe-parser-library)
+-add_subdirectory(dump-pe)
++
++if (BUILD_EXAMPLES)
++  add_subdirectory(dump-pe)
++endif ()
+ 
+ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+ message(STATUS "Build Shared: ${BUILD_SHARED_LIBS}")
++message(STATUS "Build Examples: ${BUILD_EXAMPLES}")
+ message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
