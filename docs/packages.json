@@ -304,6 +304,7 @@
     "openthreads": {"version": "3.4.1", "website": "http://www.openscenegraph.org/", "description": "OpenThreads"},
     "opus": {"version": "1.1.1", "website": "https://opus-codec.org/", "description": ""},
     "opusfile": {"version": "0.6", "website": "https://opus-codec.org/", "description": ""},
+    "osgearth": {"version": "2.9", "website": "http://osgearth.org/", "description": "Geospatial SDK for OpenSceneGraph"},
     "ossim": {"version": "43a071a", "website": "https://trac.osgeo.org/ossim", "description": "OSSIM"},
     "pango": {"version": "1.37.4", "website": "http://www.pango.org/", "description": "Pango"},
     "pangomm": {"version": "2.34.0", "website": "http://www.pango.org/", "description": "Pangomm"},
