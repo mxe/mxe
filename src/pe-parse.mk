@@ -4,8 +4,8 @@ PKG             := pe-parse
 $(PKG)_WEBSITE  := https://github.com/trailofbits/pe-parse
 $(PKG)_DESCR    := Principled, lightweight C/C++ PE parser
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 752f526
-$(PKG)_CHECKSUM := 0a8733fa5bb7e4a077237c869c55b3e5d185f93c7c7d48664f2ebeead1091b47
+$(PKG)_VERSION  := 64989f6
+$(PKG)_CHECKSUM := 7b9844bf3af80191a850bb3ef3c3e1a451dbca6b8441d5094a2a6260afb414b7
 $(PKG)_GH_CONF  := trailofbits/pe-parse/branches/master
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc
@@ -17,7 +17,7 @@ $(PKG)_BUILD_$(BUILD) :=
 define $(PKG)_BUILD
     # build and install the cross-library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DBUILD_EXAMPLES=OFF
+        -DBUILD_COMMAND_LINE_TOOLS=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
