@@ -9,9 +9,14 @@ $(PKG)_GH_CONF  := lsh123/xmlsec/tags,xmlsec-,,,_
 $(PKG)_DEPS     := cc libltdl libxml2 libxslt openssl gnutls
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi
-    cd '$(1)' && ./configure \
-    	$(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' VERBOSE=1
-    $(MAKE) -C '$(1)' -j 1 install VERBOSE=1
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --enable-docs=no \
+        --enable-apps=no \
+        --enable-shared=$(if $(BUILD_STATIC),no,yes) \
+        --enable-static=$(if $(BUILD_STATIC),yes,no)
+
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1 $(MXE_DISABLE_CRUFT)
 endef
