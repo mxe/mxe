@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 04f9475
 $(PKG)_CHECKSUM := d3f9f713fa9af3d43d3a25b803525752ac75353b2da343af0b82a4fcd318b78a
 $(PKG)_GH_CONF  := gsauthof/pe-util/branches/master
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS     := cc boost pe-parse
+$(PKG)_DEPS     := cc boost pe-parse $(BUILD)~$(PKG)
 $(PKG)_DEPS_$(BUILD) := boost cmake pe-parse
 
 define $(PKG)_PRE_CONFIGURE
