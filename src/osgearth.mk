@@ -15,8 +15,7 @@ define $(PKG)_BUILD
         -DWITH_EXTERNAL_TINYXML=OFF \
         -DBUILD_OSGEARTH_EXAMPLES=OFF \
         -DBUILD_APPLICATIONS=OFF \
-        -DBUILD_TESTS=OFF \
-        -DCMAKE_CXX_FLAGS='-DGEOS_INLINE=1'
+        -DBUILD_TESTS=OFF
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
