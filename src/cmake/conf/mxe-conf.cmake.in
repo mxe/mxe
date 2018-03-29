@@ -22,6 +22,16 @@ if(NOT ${CMAKE_COMMAND} STREQUAL @PREFIX@/@BUILD@/bin/cmake AND NOT DEFINED ENV{
     set(ENV{_MXE_CMAKE_TOOLCHAIN_INCLUDED} TRUE)
 endif()
 
+# Use CACHE variables to allow user setting with `-D`
+# Use CACHE FORCE in rare cases of misconfigured CMakeLists.txt
+#   - e.g include(FindPkgConfig)
+#     https://github.com/mxe/mxe/issues/1023
+#   - projects may still set these in which case FORCE doesn't have
+#     any advantage, just causes inconvenience
+#     https://github.com/mxe/mxe/pull/1621#discussion_r106937505
+# Use normal variables expected to be set by toolchain/system
+#   - projects should test for these values and not try to override
+
 ## General configuration
 set(CMAKE_SYSTEM_NAME Windows)
 set(CMAKE_SYSTEM_PROCESSOR @PROCESSOR@ CACHE STRING "System Processor")
@@ -32,19 +42,30 @@ set(CMAKE_CROSS_COMPILING ON)
 
 
 ## Library config
-set(BUILD_SHARED_LIBS @CMAKE_SHARED_BOOL@ CACHE BOOL "BUILD_SHARED_LIBS" FORCE)
-set(BUILD_STATIC_LIBS @CMAKE_STATIC_BOOL@ CACHE BOOL "BUILD_STATIC_LIBS" FORCE)
-set(BUILD_SHARED @CMAKE_SHARED_BOOL@ CACHE BOOL "BUILD_SHARED" FORCE)
-set(BUILD_STATIC @CMAKE_STATIC_BOOL@ CACHE BOOL "BUILD_STATIC" FORCE)
+set(BUILD_SHARED_LIBS @CMAKE_SHARED_BOOL@ CACHE BOOL "BUILD_SHARED_LIBS")
+set(BUILD_STATIC_LIBS @CMAKE_STATIC_BOOL@ CACHE BOOL "BUILD_STATIC_LIBS")
+set(BUILD_SHARED @CMAKE_SHARED_BOOL@ CACHE BOOL "BUILD_SHARED")
+set(BUILD_STATIC @CMAKE_STATIC_BOOL@ CACHE BOOL "BUILD_STATIC")
 set(LIBTYPE @LIBTYPE@)
 
 
 ## Paths etc.
-set(CMAKE_FIND_ROOT_PATH @PREFIX@/@TARGET@)
+# These MODEs shouldn't be changed by users, we only want headers/libs
+# from cross-build and "never" want binaries. We do, however, want
+# `*-config` scripts but there's no way to instruct cmake to do that.
+#
+# The best solution may be to whitelist utilities
+#   https://github.com/mxe/mxe/issues/1667
+# and symlink them to an additional root path, changing PROGRAM to ONLY
+
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_PREFIX_PATH @PREFIX@/@TARGET@)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+# Allow user to specify list of locations to search
+set(CMAKE_FIND_ROOT_PATH @PREFIX@/@TARGET@ CACHE PATH "List of root paths to search on the filesystem")
+set(CMAKE_PREFIX_PATH @PREFIX@/@TARGET@ CACHE PATH "List of directories specifying installation prefixes to be searched")
 set(CMAKE_INSTALL_PREFIX @PREFIX@/@TARGET@ CACHE PATH "Installation Prefix")
 # For custom mxe FindPackage scripts
 set(CMAKE_MODULE_PATH "@PREFIX@/share/cmake/modules" ${CMAKE_MODULE_PATH})

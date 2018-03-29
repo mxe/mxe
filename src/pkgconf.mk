@@ -28,10 +28,22 @@ define $(PKG)_BUILD
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-pkg-config'
 
     # create cmake file
+    # either of these before `project` command will find native
+    # `pkg-config` regardless of CACHE FORCE setting in toolchain
+    #   - find_package(PkgConfig)
+    #   - include(FindPkgConfig)
+    #
+    # it seems the `project` command loads CMAKE_TOOLCHAIN_FILE
+    # but that isn't documented anywhere
     mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
-    echo 'set(PKG_CONFIG_EXECUTABLE $(PREFIX)/bin/$(TARGET)-pkg-config CACHE PATH "pkg-config executable")' \
-    > '$(CMAKE_TOOLCHAIN_DIR)/pkgconf.cmake'
-
+    (echo 'if(PKG_CONFIG_FOUND)'; \
+     echo '  message(FATAL_ERROR "'; \
+     echo '  ** find_package(PkgConfig) or (deprecated) include(FindPkgConfig)'; \
+     echo '  ** must be invoked after project() command when using CMAKE_TOOLCHAIN_FILE'; \
+     echo '  ")'; \
+     echo 'endif()'; \
+     echo 'set(PKG_CONFIG_EXECUTABLE $(PREFIX)/bin/$(TARGET)-pkg-config CACHE PATH "pkg-config executable")'; \
+    )> '$(CMAKE_TOOLCHAIN_DIR)/pkgconf.cmake'
 endef
 
 define $(PKG)_BUILD_$(BUILD)
