@@ -6,31 +6,21 @@ PKG             := hamlib
 $(PKG)_WEBSITE  := http://www.hamlib.org/
 $(PKG)_DESCR    := HamLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1
-$(PKG)_CHECKSUM := 682304c3e88ff6ccfd6a5fc28b33bcc95d2d0a54321973fef015ff62570c994e
+$(PKG)_VERSION  := 3.2
+$(PKG)_CHECKSUM := b55cb5e6a8e876cceb86590c594ea5a6eb5dff2e30fc13ce053b46baa6d7ad1d
 $(PKG)_GH_CONF  := hamlib/hamlib/releases/latest
-$(PKG)_DEPS     := cc libltdl libusb1 libxml2 pthreads
+$(PKG)_DEPS     := cc libusb1 libxml2 pthreads
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --with-included-ltdl \
+        LIBS='-lusb-1.0' \
         --disable-winradio
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' || $(MAKE) -C '$(BUILD_DIR)' -j 1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
 
-    # create pkg-config files
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    (echo 'Name: $(PKG)'; \
-     echo 'Version: $(hamlib_VERSION)'; \
-     echo 'Description: $(PKG)'; \
-     echo 'Requires: libusb-1.0'; \
-     echo 'Cflags: -DHAMLIB_LIB'; \
-     echo 'Libs: -lhamlib -lpthread -lws2_32';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
-
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' --cflags --libs hamlib pthreads`
+        `'$(TARGET)-pkg-config' --cflags --libs hamlib`
 endef
