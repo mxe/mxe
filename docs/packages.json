@@ -114,7 +114,7 @@
     "gtksourceviewmm2": {"version": "2.10.3", "website": "https://projects.gnome.org/gtksourceview/", "description": "GtkSourceViewmm"},
     "guile": {"version": "1.8.8", "website": "https://www.gnu.org/software/guile/", "description": "GNU Guile"},
     "gumbo": {"version": "0.10.1", "website": "https://github.com/google/gumbo-parser", "description": "Gumbo, an HTML5 parsing library"},
-    "hamlib": {"version": "3.1", "website": "http://www.hamlib.org/", "description": "HamLib"},
+    "hamlib": {"version": "3.2", "website": "http://www.hamlib.org/", "description": "HamLib"},
     "harfbuzz": {"version": "1.7.6", "website": "https://wiki.freedesktop.org/www/Software/HarfBuzz/", "description": "HarfBuzz"},
     "hdf-eos2": {"version": "19v1.00", "website": "http://hdfeos.org/software/library.php", "description": "HDF-EOS2"},
     "hdf-eos5": {"version": "1.15", "website": "https://hdfeos.org/software/library.php", "description": "HDF-EOS5"},
