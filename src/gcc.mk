@@ -3,17 +3,18 @@
 PKG             := gcc
 $(PKG)_WEBSITE  := https://gcc.gnu.org/
 $(PKG)_DESCR    := GCC
-$(PKG)_IGNORE   := 6%
-$(PKG)_VERSION  := 5.4.0
-$(PKG)_CHECKSUM := 608df76dec2d34de6558249d8af4cbee21eceddbcb580d666f7a5a583ca3303a
+$(PKG)_IGNORE   :=
+$(PKG)_VERSION  := 5.5.0
+$(PKG)_CHECKSUM := 530cea139d82fe542b358961130c69cfde8b3d14556370b65823d2f91f0ced87
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
-$(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
+    grep -v 'gcc-6\|gcc-7' | \
     $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
     $(SORT) -V | \
     tail -1
@@ -27,6 +28,7 @@ define $(PKG)_CONFIGURE
         --build='$(BUILD)' \
         --prefix='$(PREFIX)' \
         --libdir='$(PREFIX)/lib' \
+        --with-sysroot='$(PREFIX)/$(TARGET)' \
         --enable-languages='c,c++,objc,fortran' \
         --enable-version-specific-runtime-libs \
         --with-gcc \
@@ -118,6 +120,12 @@ define $(PKG)_POST_BUILD
     # cc1libdir isn't passed to subdirs so install correctly and rm
     $(MAKE) -C '$(BUILD_DIR)/libcc1' -j 1 install cc1libdir='$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)'
     -rm -f '$(PREFIX)/lib/'libcc1*
+
+    # compile test
+    cd '$(PREFIX)/$(TARGET)/bin' && '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        --coverage -fprofile-dir=. -v \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
 endef
 
 $(PKG)_BUILD_x86_64-w64-mingw32 = $(subst @gcc-crt-config-opts@,--disable-lib32,$($(PKG)_BUILD_mingw-w64))
