@@ -459,6 +459,7 @@
     "xapian-core": {"version": "1.2.21", "website": "https://xapian.org/", "description": "Xapian-Core"},
     "xerces": {"version": "3.1.4", "website": "https://xerces.apache.org/xerces-c/", "description": "Xerces-C++"},
     "xmlrpc-c": {"version": "d4364f4", "website": "https://xmlrpc-c.sourceforge.io/", "description": ""},
+    "xmlsec": {"version": "1.2.25", "website": "https://www.aleksey.com/xmlsec/", "description": ""},
     "xmlwrapp": {"version": "0.7.0", "website": "https://sourceforge.net/projects/xmlwrapp/", "description": ""},
     "xorg-macros": {"version": "1.19.0", "website": "https://cgit.freedesktop.org/xorg/util/macros/", "description": "X.org utility macros"},
     "xvidcore": {"version": "1.3.4", "website": "https://www.xvid.com/", "description": ""},
