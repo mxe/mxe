@@ -13,10 +13,14 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-docs=no \
-        --enable-apps=no \
-        --enable-shared=$(if $(BUILD_STATIC),no,yes) \
-        --enable-static=$(if $(BUILD_STATIC),yes,no)
+        --enable-apps=no
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 $(MXE_DISABLE_CRUFT)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1 $(MXE_DISABLE_CRUFT)
+
+    # compile test
+    '$(TARGET)-gcc' \
+        -W -Wall -ansi -pedantic \
+        '$(SOURCE_DIR)/examples/decrypt1.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' xmlsec1-openssl --cflags --libs`
 endef
