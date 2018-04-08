@@ -444,7 +444,7 @@ MXE_CONF_PKGS := mxe-conf
 
 # autotools/cmake are generally always required, but separate them
 # for the case of `make gcc` which should only build real deps.
-AUTOTOOLS_PKGS := $(filter-out $(MXE_CONF_PKGS) $(BUILD)~autotools autoconf automake libtool, \
+AUTOTOOLS_PKGS := $(filter-out $(MXE_CONF_PKGS) %autotools autoconf automake libtool, \
     $(sort $(basename $(notdir \
         $(shell grep -l 'auto[conf\|reconf\|gen\|make]\|aclocal\|LIBTOOL' \
                 $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS)))))))
