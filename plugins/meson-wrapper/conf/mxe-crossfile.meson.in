@@ -3,8 +3,9 @@
 [binaries]
 c = '@PREFIX@/bin/@TARGET@-gcc'
 cpp = '@PREFIX@/bin/@TARGET@-g++'
-ar = '@PREFIX@/bin/@TARGET@-ar'
-ranlib = '@PREFIX@/bin/@TARGET@-ranlib'
+ar = '@PREFIX@/bin/@TARGET@-gcc-ar'
+nm = '@PREFIX@/bin/@TARGET@-gcc-nm'
+ranlib = '@PREFIX@/bin/@TARGET@-gcc-ranlib'
 ld = '@PREFIX@/bin/@TARGET@-ld'
 strip = '@PREFIX@/bin/@TARGET@-strip'
 windres = '@PREFIX@/bin/@TARGET@-windres'

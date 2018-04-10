@@ -26,6 +26,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)' \
         --disable-multilib \
         --enable-deterministic-archives \
+        --enable-lto \
         --with-gcc \
         --with-gnu-ld \
         --with-gnu-as \

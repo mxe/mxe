@@ -31,6 +31,7 @@ define $(PKG)_CONFIGURE
         --with-sysroot='$(PREFIX)/$(TARGET)' \
         --enable-languages='c,c++,objc,fortran' \
         --enable-version-specific-runtime-libs \
+        --enable-lto \
         --with-gcc \
         --with-gnu-ld \
         --with-gnu-as \
