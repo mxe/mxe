@@ -1,17 +1,17 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 1b750c225c874854ed1fc254b6bee7c50376d537 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Mar 2015 14:36:38 +0200
-Subject: [PATCH] workaround for -isystem flag messing up include order
+Subject: [PATCH 1/2] workaround for -isystem flag messing up include order
 
 https://bugzilla.redhat.com/show_bug.cgi?id=843436
 
 diff --git a/mingw-w64-headers/crt/float.h b/mingw-w64-headers/crt/float.h
-index 5874f4e..c031ce0 100644
+index 1111111..2222222 100644
 --- a/mingw-w64-headers/crt/float.h
 +++ b/mingw-w64-headers/crt/float.h
-@@ -105,6 +105,15 @@
+@@ -114,6 +114,15 @@
  	#define DBL_MAX_10_EXP	__DBL_MAX_10_EXP__
  	#define LDBL_MAX_10_EXP	__LDBL_MAX_10_EXP__
  
@@ -27,6 +27,38 @@ index 5874f4e..c031ce0 100644
  	/* Addition rounds to 0: zero, 1: nearest, 2: +inf, 3: -inf, -1: unknown.  */
  	/* ??? This is supposed to change with calls to fesetround in <fenv.h>.  */
  	#undef FLT_ROUNDS
--- 
-2.1.4
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mateusz <mateuszb@poczta.onet.pl>
+Date: Mon, 22 Jan 2018 20:58:48 +0100
+Subject: [PATCH 2/2] intrin-impl.h: do not define _xgetbv for GCC 8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GCC 8 from r248028 has defined function _xgetbv and we should
+avoid double definition of this function.
+
+Signed-off-by: Mateusz Brzostek <mateuszb@poczta.onet.pl>
+Signed-off-by: Martin Storsjö <martin@martin.st>
+
+diff --git a/mingw-w64-headers/include/psdk_inc/intrin-impl.h b/mingw-w64-headers/include/psdk_inc/intrin-impl.h
+index 1111111..2222222 100644
+--- a/mingw-w64-headers/include/psdk_inc/intrin-impl.h
++++ b/mingw-w64-headers/include/psdk_inc/intrin-impl.h
+@@ -1405,6 +1405,7 @@ __buildmov(__movsd, unsigned __LONG32, "d")
+ #define __INTRINSIC_DEFINED___movsd
+ #endif /* __INTRINSIC_PROLOG */
+ 
++#if !defined(__GNUC__) || __GNUC__ < 8 /* GCC 8 has already defined _xgetbv */
+ /* NOTE: This should be in immintrin.h */
+ #if __INTRINSIC_PROLOG(_xgetbv)
+ unsigned __int64 _xgetbv(unsigned int);
+@@ -1426,6 +1427,7 @@ unsigned __int64 _xgetbv(unsigned int index)
+ }
+ #define __INTRINSIC_DEFINED__xgetbv
+ #endif /* __INTRINSIC_PROLOG */
++#endif /* __GNUC__ < 8 */
+ 
+ #endif /* defined(__x86_64__) || defined(_AMD64_) || defined(__i386__) || defined(_X86_) */
+ 
