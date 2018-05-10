@@ -18,13 +18,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg libpng openjpeg tiff zlib
+    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2art libpng openjpeg tiff zlib
     cd '$(SOURCE_DIR)' && autoreconf -f -i
     cd '$(BUILD_DIR)' && CCAUX='$(BUILD_CC)' \
         CPPFLAGS='$(CPPFLAGS) -DHAVE_SYS_TIMES_H=0' \
         $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-exe-ext='.exe' \
         --with-drivers=ALL \
         --with-arch_h='$(SOURCE_DIR)/arch/windows-x$(if $(filter x86_64-%,$(TARGET)),64,86)-msvc.h' \
         --with-memory-alignment='$(if $(filter x86_64-%,$(TARGET)),8,4)' \
@@ -32,13 +31,11 @@ define $(PKG)_BUILD
         --disable-cups \
         --disable-gtk \
         --with-libiconv=gnu \
-        --with-system-libtiff \
         --without-ijs
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_STATIC),all libgs,so \
-        CFLAGS_SO='' \
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' so CFLAGS_SO='' \
         GS_LDFLAGS_SO='-shared -Wl,--out-implib=sobin/libgs.dll.a' \
         GS_SONAME_MAJOR='libgs-ignore-me.dll' \
-        GS_SONAME_MAJOR_MINOR='libgs-9.dll')
+        GS_SONAME_MAJOR_MINOR='libgs-9.dll'
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/ghostscript'
     $(INSTALL) '$(SOURCE_DIR)/devices/gdevdsp.h' '$(PREFIX)/$(TARGET)/include/ghostscript/gdevdsp.h'
@@ -48,9 +45,12 @@ define $(PKG)_BUILD
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    #$(INSTALL) '$(BUILD_DIR)/$(if $(BUILD_STATIC),bin/gs,sobin/gsc).exe' '$(PREFIX)/$(TARGET)/bin/gs.exe'
     $(if $(BUILD_STATIC),\
-        $(INSTALL) '$(BUILD_DIR)/bin/gs.a' '$(PREFIX)/$(TARGET)/lib/libgs.a',\
+        cd '$(BUILD_DIR)' && \
+        '$(PREFIX)/bin/$(TARGET)-ar' qc libgs.a `cat soobj/ldt.tr | tr ' ' '\n' | grep '^\./soobj/.*\.o$$'` && \
+        '$(PREFIX)/bin/$(TARGET)-ranlib' libgs.a && \
+        $(INSTALL) libgs.a '$(PREFIX)/$(TARGET)/lib/libgs.a' \
+    ,\
         $(INSTALL) '$(BUILD_DIR)/sobin/libgs-9.dll' '$(PREFIX)/$(TARGET)/bin/libgs-9.dll' && \
         $(INSTALL) '$(BUILD_DIR)/sobin/libgs.dll.a' '$(PREFIX)/$(TARGET)/lib/libgs.dll.a')
 
