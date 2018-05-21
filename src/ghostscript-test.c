@@ -2,31 +2,15 @@
  * This file is part of MXE. See LICENSE.md for licensing information.
  */
 
-#ifdef _WIN32
-
+#ifdef __WIN32__
 #include <windows.h>
-
-#ifndef _Windows
-# define _Windows
 #endif
-
-#ifndef GSDLLEXPORT
-# ifdef GS_STATIC_LIB
-#  define GSDLLEXPORT
-# else
-#  define GSDLLEXPORT __declspec(dllimport)
-# endif
-#endif
-
-#endif  /* _WIN32 */
-
 #include <iapi.h>
-
-void *minst;
 
 int main(int argc, char *argv[])
 {
     int code;
+    void *minst = NULL;
 
     (void)argc;
     (void)argv;
