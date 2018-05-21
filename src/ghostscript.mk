@@ -18,24 +18,44 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2art libpng openjpeg tiff zlib
+    cp -f $(SOURCE_DIR)/libpng/{config.guess,config.sub,install-sh} '$(SOURCE_DIR)'
     cd '$(SOURCE_DIR)' && autoreconf -f -i
-    cd '$(BUILD_DIR)' && CCAUX='$(BUILD_CC)' \
-        CPPFLAGS='$(CPPFLAGS) -DHAVE_SYS_TIMES_H=0' \
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        --without-libtiff \
+        --disable-contrib \
+        --disable-fontconfig \
+        --disable-dbus \
+        --disable-freetype \
+        --disable-fapi \
+        --disable-cups \
+        --disable-openjpeg \
+        --disable-gtk \
+        --with-libiconv=no \
+        --without-libidn \
+        --without-libpaper \
+        --without-pdftoraster \
+        --without-ijs \
+        --without-luratech \
+        --without-jbig2dec \
+        --without-x \
+        --with-drivers=''
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' obj_/aux_/{echogs,genarch,genconf,gendev,mkromfs,packps}
+    rm -f $(BUILD_DIR)/obj_/*.h
+    cp -r '$(BUILD_DIR)/obj_' '$(BUILD_DIR)/soobj_'
+    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2art libpng openjpeg tiff zlib
+
+    cd '$(BUILD_DIR)' && CFLAGS='$(CFLAGS) -I$(PREFIX)/$(TARGET)/include/openjpeg-2.3' \
+        CPPFLAGS='$(CPPFLAGS) -I$(PREFIX)/$(TARGET)/include/openjpeg-2.3' \
         $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-drivers=ALL \
-        --with-arch_h='$(SOURCE_DIR)/arch/windows-x$(if $(filter x86_64-%,$(TARGET)),64,86)-msvc.h' \
-        --with-memory-alignment='$(if $(filter x86_64-%,$(TARGET)),8,4)' \
+        --with-drivers=ALL,display \
         --disable-contrib \
         --disable-cups \
         --disable-gtk \
         --with-libiconv=gnu \
-        --without-ijs
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' so CFLAGS_SO='' \
-        GS_LDFLAGS_SO='-shared -Wl,--out-implib=sobin/libgs.dll.a' \
-        GS_SONAME_MAJOR='libgs-ignore-me.dll' \
-        GS_SONAME_MAJOR_MINOR='libgs-9.dll'
+        --without-ijs \
+        --with-aux-exe-ext=''
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_STATIC),libgs,so)
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/ghostscript'
     $(INSTALL) '$(SOURCE_DIR)/devices/gdevdsp.h' '$(PREFIX)/$(TARGET)/include/ghostscript/gdevdsp.h'
@@ -45,12 +65,7 @@ define $(PKG)_BUILD
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(if $(BUILD_STATIC),\
-        cd '$(BUILD_DIR)' && \
-        '$(PREFIX)/bin/$(TARGET)-ar' qc libgs.a `cat soobj/ldt.tr | tr ' ' '\n' | grep '^\./soobj/.*\.o$$'` && \
-        '$(PREFIX)/bin/$(TARGET)-ranlib' libgs.a && \
-        $(INSTALL) libgs.a '$(PREFIX)/$(TARGET)/lib/libgs.a' \
-    ,\
+    $(if $(BUILD_STATIC),$(INSTALL) '$(BUILD_DIR)/bin/gs.a' '$(PREFIX)/$(TARGET)/lib/libgs.a', \
         $(INSTALL) '$(BUILD_DIR)/sobin/libgs-9.dll' '$(PREFIX)/$(TARGET)/bin/libgs-9.dll' && \
         $(INSTALL) '$(BUILD_DIR)/sobin/libgs.dll.a' '$(PREFIX)/$(TARGET)/lib/libgs.dll.a')
 
@@ -59,7 +74,6 @@ define $(PKG)_BUILD
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: Ghostscript library'; \
      echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/ghostscript"'; \
-     echo 'Cflags.private: -DGS_STATIC_LIB'; \
      echo 'Libs: -L"$(PREFIX)/$(TARGET)/lib" -lgs'; \
      echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng jpeg lcms2 zlib'; \
      echo '# https://github.com/mxe/mxe/issues/1446'; \
