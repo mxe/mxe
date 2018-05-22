@@ -3,18 +3,10 @@
 PKG             := tinyxml2
 $(PKG)_WEBSITE  := http://grinninglizard.com/tinyxml2/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0.1
-$(PKG)_CHECKSUM := 14b38ef25cc136d71339ceeafb4856bb638d486614103453eccd323849267f20
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/leethomason/tinyxml2/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 6.0.0
+$(PKG)_CHECKSUM := 9444ba6322267110b4aca61cbe37d5dcab040344b5c97d0b36c119aa61319b0f
+$(PKG)_GH_CONF  := leethomason/tinyxml2/tags
 $(PKG)_DEPS     := cc
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/leethomason/tinyxml2/releases' | \
-    $(SED) -n 's,.*/archive/\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)'

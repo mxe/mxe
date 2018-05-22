@@ -16,6 +16,7 @@ MXE_TARGETS        := i686-w64-mingw32.static
 .DEFAULT_GOAL      := all-filtered
 
 DEFAULT_MAX_JOBS   := 6
+PRINTF_COL_1_WIDTH := 13
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
 MXE_MIRROR         := https://mirror.mxe.cc/pkg
 PKG_MIRROR         := https://s3.amazonaws.com/mxe-pkg
@@ -74,6 +75,8 @@ comma := ,
 null  :=
 space := $(null) $(null)
 repeat = $(subst x,$(1),$(subst $(space),,$(call int_encode,$(2))))
+
+PLUGIN_HEADER = $(info $(shell printf '%-$(PRINTF_COL_1_WIDTH)s %s\n' [plugin] $(dir $(lastword $(MAKEFILE_LIST)))))
 
 MXE_DISABLE_DOC_OPTS = \
     ac_cv_prog_HAVE_DOXYGEN="false" \
@@ -177,25 +180,6 @@ MAKE_SHARED_FROM_STATIC = \
 	--libdir '$(PREFIX)/$(TARGET)/lib' \
 	--bindir '$(PREFIX)/$(TARGET)/bin'
 
-# MXE_GET_GITHUB functions can be removed once all packages use GH_CONF
-define MXE_GET_GITHUB_SHA
-    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/heads/$(strip $(2))' \
-    | $(SED) -n 's#.*"sha": "\([^"]\{10\}\).*#\1#p' \
-    | head -1
-endef
-
-define MXE_GET_GITHUB_ALL_TAGS
-    $(WGET) -q -O- 'https://api.github.com/repos/$(strip $(1))/git/refs/tags/' \
-    | $(SED) -n 's#.*"ref": "refs/tags/\([^"]*\).*#\1#p'
-endef
-
-define MXE_GET_GITHUB_TAGS
-    $(call MXE_GET_GITHUB_ALL_TAGS, $(1)) \
-    | $(SED) 's,^$(strip $(2)),,g' \
-    | $(SORT) -V \
-    | tail -1
-endef
-
 define AUTOTOOLS_CONFIGURE
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)
@@ -212,7 +196,7 @@ define AUTOTOOLS_BUILD
 endef
 
 # include github related functions
-include $(PWD)/github.mk
+include $(PWD)/mxe.github.mk
 
 # shared lib preload to disable networking, enable faketime etc
 PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
@@ -406,7 +390,7 @@ endef
 
 check-requirements: $(PREFIX)/installed/check-requirements
 $(PREFIX)/installed/check-requirements: $(MAKEFILE) | $(PREFIX)/installed/.gitkeep
-	@echo '[check requirements]'
+	@echo '[check reqs]'
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[8-9]\|2\.[7-9][0-9])
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
@@ -460,7 +444,7 @@ MXE_CONF_PKGS := mxe-conf
 
 # autotools/cmake are generally always required, but separate them
 # for the case of `make gcc` which should only build real deps.
-AUTOTOOLS_PKGS := $(filter-out $(MXE_CONF_PKGS) $(BUILD)~autotools autoconf automake libtool, \
+AUTOTOOLS_PKGS := $(filter-out $(MXE_CONF_PKGS) %autotools autoconf automake libtool, \
     $(sort $(basename $(notdir \
         $(shell grep -l 'auto[conf\|reconf\|gen\|make]\|aclocal\|LIBTOOL' \
                 $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS)))))))
@@ -514,7 +498,7 @@ PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
 PKGS         := $(sort $(basename $(notdir $(PLUGIN_FILES))))
 $(foreach FILE,$(PLUGIN_FILES),\
     $(eval $(basename $(notdir $(FILE)))_MAKEFILE  ?= $(FILE)) \
-    $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(wildcard $(basename $(FILE))-test.*)) \
+    $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(filter-out %.cmake,$(wildcard $(basename $(FILE))-test.*))) \
     $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE)))))
 include $(PLUGIN_FILES)
 
@@ -531,8 +515,7 @@ $(foreach PKG,$(PKGS), \
     $(foreach TARGET,$(filter $($(PKG)_TARGETS),$(CROSS_TARGETS) $(BUILD)), \
         $(eval $(TARGET)~$(PKG)_PKG := $(PKG)) \
         $(eval $(TARGET)~$(PKG)_TGT := $(TARGET)) \
-        $(eval $(TARGET)_PKGS += $(PKG)) \
-        $(eval FILTERED_PKGS  += $(PKG))))
+        $(eval $(TARGET)_PKGS += $(PKG))))
 
 # always add $(BUILD) to our targets
 override MXE_TARGETS := $(CROSS_TARGETS) $(BUILD)
@@ -581,12 +564,9 @@ _LOOKUP_PKG_RULE = $(strip \
 PKG_COL_WIDTH    := $(call plus,2,$(call LIST_NMAX, $(sort $(call map, strlen, $(PKGS)))))
 MAX_TARGET_WIDTH := $(call LIST_NMAX, $(sort $(call map, strlen, $(MXE_TARGETS))))
 TARGET_COL_WIDTH := $(call subtract,100,$(call plus,$(PKG_COL_WIDTH),$(MAX_TARGET_WIDTH)))
-PRINTF_FMT       := printf '%-13s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
+PRINTF_FMT       := printf '%-$(PRINTF_COL_1_WIDTH)s %-$(PKG_COL_WIDTH)s %-$(TARGET_COL_WIDTH)s %-15s %s\n'
 RTRIM            := $(SED) 's, \+$$$$,,'
 WRAP_MESSAGE      = $(\n)$(\n)$(call repeat,-,60)$(\n)$(1)$(and $(2),$(\n)$(\n)$(2))$(\n)$(call repeat,-,60)$(\n)
-
-.PHONY: download
-download: $(addprefix download-,$(PKGS))
 
 define TARGET_RULE
     $(if $(findstring i686-pc-mingw32,$(1)),\
@@ -672,8 +652,11 @@ else
 endif
 
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
-	@echo '[build nonetwork lib]'
+	@$(PRINTF_FMT) '[nonet lib]' '$@'
 	+@$(BUILD_CC) -shared -fPIC $(NONET_CFLAGS) -o $@ $<
+
+.PHONY: nonet-lib
+nonet-lib: $(NONET_LIB)
 
 .PHONY: shell
 shell: $(NONET_LIB)
@@ -706,7 +689,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    | $(RTRIM)
 	)
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
-	    $(if $(BUILD_DRY_RUN), \
+	    $(if $(BUILD_DRY_RUN)$(MXE_BUILD_DRY_RUN), \
 	        @$(PRINTF_FMT) '[dry-run]' '$(1)' '$(3)' | $(RTRIM)
 	        @[ -d '$(PREFIX)/$(3)/lib' ] || mkdir -p '$(PREFIX)/$(3)/lib'
 	        @touch '$(PREFIX)/$(3)/lib/$(1).dry-run'
@@ -752,6 +735,7 @@ build-only-$(1)_$(3): BUILD_$(if $(call seq,$(TARGET),$(BUILD)),NATIVE,CROSS) = 
 build-only-$(1)_$(3): $(if $(findstring posix,$(TARGET)),POSIX,WIN32)_THREADS = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
+build-only-$(1)_$(3): PROCESSOR = $(firstword $(call split,-,$(3)))
 build-only-$(1)_$(3): BUILD_TYPE = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),debug,release)
 build-only-$(1)_$(3): BUILD_TYPE_SUFFIX = $(if $(findstring debug,$(3) $($(1)_CONFIGURE_OPTS)),d)
 build-only-$(1)_$(3): INSTALL_STRIP_TOOLCHAIN = install$(if $(STRIP_TOOLCHAIN),-strip)
@@ -812,15 +796,17 @@ SET_CLEAR = \
     $(eval $(1) := )
 
 # WALK functions accept a list of pkgs and/or wildcards
+# use PKG_ALL_DEPS and strip target prefixes to get
+# global package level deps
 WALK_UPSTREAM = \
     $(strip \
         $(foreach PKG,$(filter $(1),$(PKGS)),\
-            $(foreach DEP,$($(PKG)_DEPS) $(foreach TARGET,$(MXE_TARGETS),\
-                $(value $(call LOOKUP_PKG_RULE,$(PKG),DEPS,$(TARGET)))),\
-                    $(if $(filter-out $(PKGS_VISITED),$(DEP)),\
-                        $(call SET_APPEND,PKGS_VISITED,$(DEP))\
-                        $(call WALK_UPSTREAM,$(DEP))\
-                        $(DEP)))))
+          $(foreach TARGET,$($(PKG)_TARGETS), \
+            $(foreach DEP,$(sort $(subst $(BUILD)~,,$(subst $(TARGET)~,,$(PKG_ALL_DEPS)))),\
+              $(if $(filter-out $(PKGS_VISITED),$(DEP)),\
+                  $(call SET_APPEND,PKGS_VISITED,$(DEP))\
+                  $(call WALK_UPSTREAM,$(DEP))\
+                  $(DEP))))))
 
 # not really walking downstream - that seems to be quadratic, so take
 # a linear approach and filter the fully expanded upstream for each pkg
@@ -832,6 +818,12 @@ WALK_DOWNSTREAM = \
         $(foreach PKG,$(PKGS),\
             $(if $(filter $(1),$(ALL_$(PKG)_DEPS)),$(PKG))))
 
+# list of direct downstream deps
+DIRECT_DOWNSTREAM = \
+    $(strip \
+        $(foreach PKG,$(PKGS),\
+            $(if $(filter $(1),$($(PKG)_DEPS)),$(PKG))))
+
 # EXCLUDE_PKGS can be a list of pkgs and/or wildcards
 RECURSIVELY_EXCLUDED_PKGS = \
     $(sort \
@@ -839,8 +831,24 @@ RECURSIVELY_EXCLUDED_PKGS = \
         $(call SET_CLEAR,PKGS_VISITED)\
         $(call WALK_DOWNSTREAM,$(EXCLUDE_PKGS)))
 
+# INCLUDE_PKGS can be a list of pkgs and/or wildcards
+# only used by build-pkg
+INCLUDE_PKGS := $(MXE_BUILD_PKG_PKGS)
+RECURSIVELY_INCLUDED_PKGS = \
+    $(sort \
+        $(filter $(INCLUDE_PKGS),$(PKGS))\
+        $(call SET_CLEAR,PKGS_VISITED)\
+        $(call WALK_UPSTREAM,$(INCLUDE_PKGS)))
+
+REQUIRED_PKGS = \
+    $(filter-out $(and $(EXCLUDE_PKGS),$(RECURSIVELY_EXCLUDED_PKGS)),\
+      $(or $(and $(INCLUDE_PKGS),$(strip $(RECURSIVELY_INCLUDED_PKGS))),$(PKGS)))
+
 .PHONY: all-filtered
-all-filtered: $(filter-out $(call RECURSIVELY_EXCLUDED_PKGS),$(FILTERED_PKGS))
+all-filtered: $(REQUIRED_PKGS)
+
+.PHONY: download
+download: $(addprefix download-,$(REQUIRED_PKGS))
 
 # print a list of upstream dependencies and downstream dependents
 show-deps-%:
@@ -848,7 +856,9 @@ show-deps-%:
 	    $(call SET_CLEAR,PKGS_VISITED)\
 	    $(info $* upstream dependencies:$(newline)\
 	        $(call WALK_UPSTREAM,$*)\
-	        $(newline)$(newline)$* downstream dependents:$(newline)\
+	        $(newline)$(newline)$* direct downstream dependents:$(newline)\
+	        $(call DIRECT_DOWNSTREAM,$*)\
+	        $(newline)$(newline)$* recursive downstream dependents:$(newline)\
 	        $(call WALK_DOWNSTREAM,$*))\
 	    @echo,\
 	    $(error Package $* not found))
@@ -863,6 +873,12 @@ show-downstream-deps-%:
 	    @echo -n,\
 	    $(error Package $* not found))
 
+show-direct-downstream-deps-%:
+	$(if $(call set_is_member,$*,$(PKGS)),\
+	    $(info $(call DIRECT_DOWNSTREAM,$*))\
+	    @echo -n,\
+	    $(error Package $* not found))
+
 show-upstream-deps-%:
 	$(if $(call set_is_member,$*,$(PKGS)),\
 	    $(call SET_CLEAR,PKGS_VISITED)\
@@ -874,7 +890,7 @@ show-upstream-deps-%:
 .PHONY: print-deps-for-build-pkg
 print-deps-for-build-pkg:
 	$(foreach TARGET,$(sort $(MXE_TARGETS)), \
-	    $(foreach PKG,$(sort $($(TARGET)_PKGS)), \
+	    $(foreach PKG,$(filter $(REQUIRED_PKGS),$(sort $($(TARGET)_PKGS))), \
 	        $(if $(or $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
 	                  $(filter $($(PKG)_TYPE),$(BUILD_PKG_TYPES))), \
 	            $(info $(strip for-build-pkg $(TARGET)~$(PKG) \
@@ -1004,7 +1020,7 @@ docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	                $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
 	                    $(eval $(TARGET)_PKGCOUNT += x) \
 	                    <td class="supported">&#x2713;</td>, \
-	                    <td class="unsupported">&#x2717;</td>),\
+	                    <td class="unsupported">&#215;</td>),\
 	                	<td></td>))\n) \
 	    $(if $(filter $(VIRTUAL_PKG_TYPES),$($(PKG)_TYPE)), \
 	        $(eval VIRTUAL_PKGCOUNT += x) \
@@ -1014,7 +1030,7 @@ docs/build-matrix.html: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	        $(if $(filter $(BUILD),$($(PKG)_TARGETS)), \
 	            $(if $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(BUILD))), \
 	                <td class="supported">&#x2713;</td>, \
-	                <td class="unsupported">&#x2717;</td>), \
+	                <td class="unsupported">&#215;</td>), \
 	                <td></td>))\n \
 	        </tr>\n' >> $@ $(newline) \
 	    $(if $(call seq,$(BUILD),$($(PKG)_TARGETS)), \
@@ -1050,5 +1066,5 @@ docs/packages.json: $(foreach 1,$(PKGS),$(PKG_MAKEFILES))
 	@echo '}'                        >> $@
 
 # for other mxe functions
-include patch.mk
-include updates.mk
+include mxe.patch.mk
+include mxe.updates.mk

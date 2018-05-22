@@ -1262,21 +1262,28 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
 
         <dd>
         print a list of upstream dependencies
-        and downstream dependents
+        and all downstream dependents (direct and recursive)
         </dd>
 
     <dt>make show-downstream-deps-foo</dt>
 
         <dd>
-        print a list of downstream dependents
-        suitable for usage in shell scripts
+        print a list of all recursive downstream dependents
+        - suitable for use in shell scripts
+        </dd>
+
+    <dt>make show-direct-downstream-deps-foo</dt>
+
+        <dd>
+        print a list of direct downstream dependents
+        - suitable for use in shell scripts
         </dd>
 
     <dt>make show-upstream-deps-foo</dt>
 
         <dd>
         print a list of upstream dependencies
-        suitable for usage in shell scripts
+        - suitable for use in shell scripts
         </dd>
 
     <dt>make docs/build-matrix.html</dt>
@@ -1468,14 +1475,18 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <p>
         To track branches, set:
         </p>
-        <pre>$(PKG)_GH_CONF  := owner/repo/branch</pre>
+        <pre>$(PKG)_GH_CONF  := owner/repo/branches/&lt;branch name&gt;</pre>
         <p>
         See the following packages for examples:
         </p>
         <ul>
             <li>
             <a href="https://github.com/mxe/mxe/blob/master/src/gc.mk">gc.mk</a>
-            for release tracking
+            for release tracking with non-standard file name
+            </li>
+            <li>
+            <a href="https://github.com/mxe/mxe/blob/master/src/yaml-cpp.mk">yaml-cpp.mk</a>
+            for release tracking with standard file name
             </li>
             <li>
             <a href="https://github.com/mxe/mxe/blob/master/src/vmime.mk">vmime.mk</a>
@@ -2021,7 +2032,15 @@ endef</pre>
     <a href="https://www.openssl.org/docs/faq.html#LEGAL2">OpenSSL project</a>.
     </p>
     <p>
-    A similar situation also exists for package fdk-aac.
+    Since August 2015, there is an
+    <a href="https://www.openssl.org/blog/blog/categories/license/">
+    ongoing effort to re-license to Apache v2</a>.
+    </p>
+
+    <h4>FDK AAC and GPL</h4>
+    <p>
+    The <a href="https://github.com/mstorsjo/fdk-aac/blob/master/NOTICE">FDK license</a>
+    has a "no charging fees" clause that likely violates the GPL.
     </p>
 </div>
 

@@ -17,10 +17,7 @@
 #   Tarball:
 #     url = <owner>/<repo>/tarball/<ref>/output-file.tar.gz
 #     dir = <owner>-<repo>-<short sha>
-#
-# TODO: update remaining packages
-# grep -l 'MXE_GET_GITHUB\|api.github.com\|github.com.*' src/*.mk | xargs grep -L 'GH_CONF'
-#
+
 # Filename doesn't matter as we stream the url to a name of our choosing.
 #
 # The archive API could be used for all packages, however, if the reference
@@ -49,7 +46,7 @@ GITHUB_SHA_LENGTH := 7
 
 # Packages must set the following metadata:
 #   Track branch - Tarball API
-#     GH_CONF := owner/repo/branch
+#     GH_CONF := owner/repo/branches/branch
 #     updates will use the last commit from the specified branch as
 #     a version string and bypass `sort -V`
 #
@@ -64,8 +61,7 @@ GITHUB_SHA_LENGTH := 7
 #     updates will construct a version number based on:
 #     <tag prefix><s/<version sep>/./version><tag suffix>
 #
-# Using the third segment for api means you can't track a branch with these names:
-GH_APIS := releases tags
+GH_APIS := branches releases tags
 
 # common tag filtering is applied with `grep -v`:
 GITHUB_TAG_FILTER := alpha\|beta\|rc
@@ -81,9 +77,9 @@ GITHUB_TAG_FILTER := alpha\|beta\|rc
 
 GH_OWNER       = $(word 1,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
 GH_REPO        = $(word 2,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
-GH_API         = $(filter $(GH_APIS),$(word 3,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF))))))
-GH_BRANCH      = $(filter-out $(GH_APIS),$(word 3,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF))))))
-GH_LATEST      = $(word 4,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
+GH_API         = $(word 3,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF)))))
+GH_BRANCH      = $(and $(filter branches,$(GH_API)),$(word 4,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF))))))
+GH_LATEST      = $(and $(filter releases,$(GH_API)),$(word 4,$(subst /,$(space),$(word 1,$(subst $(comma),$(space),$($(PKG)_GH_CONF))))))
 GH_TAG_VARS    = $(call rest,$(subst $(comma),$(space)$(__gmsl_aa_magic),$(subst $(space),,$($(PKG)_GH_CONF))))
 GH_TAG_PREFIX  = $(subst $(__gmsl_aa_magic),,$(word 1,$(GH_TAG_VARS)))
 GH_TAG_SUFFIX  = $(subst $(__gmsl_aa_magic),,$(word 2,$(GH_TAG_VARS)))
@@ -103,8 +99,9 @@ define MXE_SETUP_GITHUB
     $(PKG)_FILE        := $(or $($(PKG)_FILE),$(PKG)-$$(filter-out $$(PKG)-,$$($$(PKG)_TAG_PREFIX))$($(PKG)_VERSION)$$($$(PKG)_TAG_SUFFIX).tar.gz)
     $(if $(and $(GH_BRANCH),$(GH_TAG_VARS)),\
         $(error $(newline) $(PKG) specifies both branch and tag variables $(newline)))
-    $(if $(and $(GH_BRANCH),$(GH_LATEST)),\
-        $(error $(newline) $(PKG) has fragments after github branch $(newline)))
+    $(if $(filter-out $(GH_APIS),$(GH_API))$(filter x,x$(GH_API)),\
+        $(error $(newline) $(PKG) has unknown API in GH_CONF := $($(PKG)_GH_CONF) $(newline)\
+                           must be branches|tags|releases))
     $(if $(GH_BRANCH),$(value MXE_SETUP_GITHUB_BRANCH),$(value MXE_SETUP_GITHUB_$(call uc,$(GH_API))))
 endef
 
@@ -124,8 +121,8 @@ endef
 
 define MXE_SETUP_GITHUB_TAGS
     $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_REPO)-$(if $(call sne,v,$($(PKG)_TAG_PREFIX)),$($(PKG)_TAG_PREFIX))$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
-    $(PKG)_TAR_GZ := $(or $($(PKG)_TAR_GZ),$($(PKG)_GH_REPO)-$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
-    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/archive/$(subst $($(PKG)_GH_REPO)-,,$($(PKG)_TAR_GZ)).tar.gz)
+    $(PKG)_TAR_GZ := $(or $($(PKG)_TAR_GZ),$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
+    $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/archive/$($(PKG)_TAR_GZ).tar.gz)
     $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_TAG,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
 endef
 
@@ -165,19 +162,20 @@ endef
 
 GITHUB_PKGS = $(patsubst %_GH_CONF,%,$(filter %_GH_CONF,$(.VARIABLES)))
 
-# check-gh-conf   : test updates and source directory
-# check-gh-conf-dl: removes downloads and tests above
+# test downloads, updates, and source directory
+# make check-gh-conf MXE_PLUGIN_DIRS="`find plugins -name '*.mk' -print0 | xargs -0 -n1 dirname | sort | uniq | tr '\n' ' '`"
 
 # a test of many package updates may hit rate limit of 60/hr
 # https://developer.github.com/v3/#rate-limiting
 
 .PHONY: check-gh-conf check-gh-conf-%
-check-gh-conf-dl: REMOVE_DOWNLOAD = true
-check-gh-conf-dl: MXE_NO_BACKUP_DL = true
-check-gh-conf-dl: check-gh-conf
-check-gh-conf-pkg-%: check-update-package-% download-only-%
+check-gh-conf-pkg-%: check-update-package-%
+	@$(MAKE) -f '$(MAKEFILE)' 'download-only-$(*)' \
+	    REMOVE_DOWNLOAD=true \
+	    MXE_NO_BACKUP_DL=true \
+	    --no-print-directory
 	@$(PRINTF_FMT) '[prep-src]'  '$(*)' | $(RTRIM)
-	@($(MAKE) -f '$(MAKEFILE)' 'prepare-pkg-source-$(*)') > /dev/null
+	@($(MAKE) -f '$(MAKEFILE)' 'prepare-pkg-source-$(*)') &> '$(LOG_DIR)/$(*)-prep-src'
 	@rm -rf '$(call TMP_DIR,$(*))'
 
 # secondexpansion here since this file is included before pkg makefiles

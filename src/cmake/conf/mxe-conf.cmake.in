@@ -24,6 +24,7 @@ endif()
 
 ## General configuration
 set(CMAKE_SYSTEM_NAME Windows)
+set(CMAKE_SYSTEM_PROCESSOR @PROCESSOR@ CACHE STRING "System Processor")
 set(MSYS 1)
 set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY ON)
 # Workaround for https://www.cmake.org/Bug/view.php?id=14075

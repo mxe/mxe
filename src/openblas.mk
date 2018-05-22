@@ -11,9 +11,11 @@ $(PKG)_DEPS     := cc pthreads
 
 # openblas has it's own optimised versions of netlib lapack that
 # it bundles into -lopenblas so won't conflict with those libs
+# headers do conflict so install to separate directory
 
 $(PKG)_MAKE_OPTS = \
         PREFIX='$(PREFIX)/$(TARGET)' \
+        OPENBLAS_INCLUDE_DIR='$(PREFIX)/$(TARGET)/include/openblas' \
         CROSS_SUFFIX='$(TARGET)-' \
         FC='$(TARGET)-gfortran' \
         CC='$(TARGET)-gcc' \
@@ -42,4 +44,13 @@ define $(PKG)_BUILD
         -W -Wall -Werror \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' --cflags --libs $(PKG)`
+
+    # set BLA_VENDOR and -fopenmp to find openblas
+    mkdir '$(BUILD_DIR).test-cmake'
+    cd '$(BUILD_DIR).test-cmake' && '$(TARGET)-cmake' \
+        -DPKG=$(PKG) \
+        -DBLA_VENDOR=OpenBLAS \
+        -DCMAKE_C_FLAGS=-fopenmp \
+        '$(PWD)/src/cmake/test'
+    $(MAKE) -C '$(BUILD_DIR).test-cmake' -j 1 install
 endef

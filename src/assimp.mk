@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2
 $(PKG)_CHECKSUM := 187f825c563e84b1b17527a4da0351aa3d575dfd696a9d204ae4bb19ee7df94a
 $(PKG)_GH_CONF  := assimp/assimp/tags, v
-$(PKG)_DEPS     := cc boost
+$(PKG)_DEPS     := cc boost minizip
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
@@ -22,5 +22,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-assimp.exe' \
-        `'$(TARGET)-pkg-config' assimp --cflags --libs`
+        `'$(TARGET)-pkg-config' assimp minizip --cflags --libs`
 endef

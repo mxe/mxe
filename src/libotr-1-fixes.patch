@@ -39,5 +39,5 @@ index 1111111..2222222 100644
  URL: https://otr.cypherpunks.ca/
 -Libs: -L${libdir} -lotr
 +Libs: -L${libdir} -lotr -fstack-protector-all
-+Libs.private: -lgcrypt -lgpg-error -lintl -liconv
++Libs.private: -lgcrypt -lgpg-error -lintl -liconv -lws2_32
  Cflags: -I${includedir}

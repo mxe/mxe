@@ -1,0 +1,59 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 15 Mar 2018 18:47:38 +1100
+Subject: [PATCH 1/1] Enable static builds
+
+see: https://github.com/nitroshare/qhttpengine/pull/25
+
+If unspecified, `add_library` uses the value from cmake's builtin `BUILD_SHARED_LIBS` (default true).
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -39,7 +39,7 @@ if(WIN32)
+     set(SRC ${SRC} "${CMAKE_CURRENT_BINARY_DIR}/resource.rc")
+ endif()
+ 
+-add_library(qhttpengine SHARED ${HEADERS} ${SRC})
++add_library(qhttpengine ${HEADERS} ${SRC})
+ 
+ set_target_properties(qhttpengine PROPERTIES
+     CXX_STANDARD          11
+diff --git a/src/qhttpengine.pc.in b/src/qhttpengine.pc.in
+index 1111111..2222222 100644
+--- a/src/qhttpengine.pc.in
++++ b/src/qhttpengine.pc.in
+@@ -6,5 +6,6 @@ Name: @PROJECT_NAME@
+ Description: @PROJECT_DESCRIPTION@
+ URL: @PROJECT_URL@
+ Version: @PROJECT_VERSION@
++Requires: Qt5Network
+ Cflags: -I${includedir}
+ Libs: -L${libdir} -lqhttpengine
+diff --git a/src/qhttpengine_export.h.in b/src/qhttpengine_export.h.in
+index 1111111..2222222 100644
+--- a/src/qhttpengine_export.h.in
++++ b/src/qhttpengine_export.h.in
+@@ -30,10 +30,14 @@
+ #define QHTTPENGINE_VERSION_PATCH @PROJECT_VERSION_PATCH@
+ #define QHTTPENGINE_VERSION       "@PROJECT_VERSION@"
+ 
+-#if defined(QHTTPENGINE_LIBRARY)
+-#  define QHTTPENGINE_EXPORT Q_DECL_EXPORT
++#if defined(QT_STATIC)
++# define QHTTPENGINE_EXPORT
+ #else
+-#  define QHTTPENGINE_EXPORT Q_DECL_IMPORT
++#  if defined(QHTTPENGINE_LIBRARY)
++#    define QHTTPENGINE_EXPORT Q_DECL_EXPORT
++#  else
++#    define QHTTPENGINE_EXPORT Q_DECL_IMPORT
++#  endif
+ #endif
+ 
+ #endif // QHTTPENGINE_QHTTPENGINE_H

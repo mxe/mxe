@@ -13,8 +13,9 @@ $(PKG)_DEPS     := cc expat jpeg libiconv libpng sdl tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/wxwindows/files/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
+    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
+    sort -V | \
+    tail -1
 endef
 
 define $(PKG)_CONFIGURE_OPTS

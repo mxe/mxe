@@ -1,0 +1,40 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 27 Feb 2018 17:10:54 +0100
+Subject: [PATCH 1/2] MXE build fix
+
+https://sourceforge.net/p/mingw-w64/bugs/682/
+
+diff --git a/win32/nt.c b/win32/nt.c
+index 1111111..2222222 100644
+--- a/win32/nt.c
++++ b/win32/nt.c
+@@ -37,8 +37,8 @@
+ 
+ #define WIN32_LEAN_AND_MEAN
+ #define UNZIP_INTERNAL
+-#include "../unzip.h"
+ #include <windows.h>
++#include "../unzip.h"
+ #ifdef __RSXNT__
+ #  include "../win32/rsxntwin.h"
+ #endif
+diff --git a/win32/win32.c b/win32/win32.c
+index 1111111..2222222 100644
+--- a/win32/win32.c
++++ b/win32/win32.c
+@@ -54,8 +54,8 @@
+ 
+ 
+ #define UNZIP_INTERNAL
+-#include "../unzip.h"
+ #include <windows.h>    /* must be AFTER unzip.h to avoid struct G problems */
++#include "../unzip.h"
+ #ifdef __RSXNT__
+ #  include "../win32/rsxntwin.h"
+ #endif
+

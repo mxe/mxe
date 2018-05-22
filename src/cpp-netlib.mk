@@ -4,19 +4,10 @@ PKG             := cpp-netlib
 $(PKG)_WEBSITE  := http://cpp-netlib.org/
 $(PKG)_DESCR    := Boost C++ Networking Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.11.2
-$(PKG)_CHECKSUM := 71953379c5a6fab618cbda9ac6639d87b35cab0600a4450a7392bc08c930f2b1
-$(PKG)_SUBDIR   := cpp-netlib-$($(PKG)_VERSION)-final
-$(PKG)_FILE     := cpp-netlib-$($(PKG)_VERSION)-final.tar.gz
-$(PKG)_URL      := http://downloads.cpp-netlib.org/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := 73d4024
+$(PKG)_CHECKSUM := 576f18cbad20ab123db68c72d1e541387a8b5d3b191698e44e2d96936a1f323b
+$(PKG)_GH_CONF  := cpp-netlib/cpp-netlib/branches/0.13-release
 $(PKG)_DEPS     := cc boost openssl
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://cpp-netlib.org/' | \
-    $(SED) -n 's,.*cpp-netlib-\([0-9][^"]*\)-final.tar.gz.*,\1,p' | \
-    $(SORT) -V | \
-    tail -1
-endef
 
 define $(PKG)_BUILD
    mkdir '$(1)/build'

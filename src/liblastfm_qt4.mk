@@ -6,14 +6,8 @@ $(PKG)_DESCR    := A Qt C++ library for the Last.fm webservices
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.9
 $(PKG)_CHECKSUM := 5276b5fe00932479ce6fe370ba3213f3ab842d70a7d55e4bead6e26738425f7b
-$(PKG)_SUBDIR   := liblastfm-$($(PKG)_VERSION)
-$(PKG)_FILE     := liblastfm-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/lastfm/liblastfm/archive/$($(PKG)_VERSION).tar.gz
+$(PKG)_GH_CONF  := lastfm/liblastfm/tags
 $(PKG)_DEPS     := cc fftw libsamplerate qt
-
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, lastfm/liblastfm)
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \

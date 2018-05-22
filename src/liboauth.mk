@@ -17,11 +17,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-curl
-    $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS='-no-undefined'
-    $(MAKE) -C '$(1)' -j 1 install
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS='-no-undefined'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \

@@ -4,8 +4,8 @@ PKG             := lzma
 $(PKG)_WEBSITE  := http://www.7-zip.org/sdk.html
 $(PKG)_DESCR    := LZMA SDK
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1801
-$(PKG)_CHECKSUM := 630f2534f73633011d60c6724cd8c1b3e549edd844dc09f54aae358d64089802
+$(PKG)_VERSION  := 1805
+$(PKG)_CHECKSUM := d4ad382070d20edde117a8e544e7149ab6c84fdedd220aafe75454056a924732
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := lzma$(subst .,,$($(PKG)_VERSION)).7z
 $(PKG)_URL      := http://www.7-zip.org/a/$($(PKG)_FILE)
@@ -19,6 +19,8 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+# liblzma is actually installed by xz
+# https://github.com/mxe/mxe/issues/1481
 define $(PKG)_BUILD
     $(MAKE) all -C '$(1)/C/Util/Lzma' \
         -f makefile.gcc -j '$(JOBS)' \

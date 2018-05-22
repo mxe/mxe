@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Jean-Baptiste Kempf <jb@videolan.org>
 Date: Mon, 30 Nov 2015 17:19:26 +0100
-Subject: [PATCH 1/1] Fix: test arpa/inet.h presence before using it
+Subject: [PATCH 1/2] Fix: test arpa/inet.h presence before using it
 
 Fix: test arpa/inet.h presence before using it
 
@@ -41,3 +41,22 @@ index 1111111..2222222 100644
  
  #include <stdio.h>
  #include <stdlib.h>
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 25 Feb 2018 14:53:34 +1100
+Subject: [PATCH 2/2] openssl 1.1 fix
+
+
+diff --git a/src/tls.c b/src/tls.c
+index 1111111..2222222 100644
+--- a/src/tls.c
++++ b/src/tls.c
+@@ -65,7 +65,6 @@ static inline int tls_setup(shout_tls_t *tls)
+ 
+ 	SSL_library_init();
+ 	SSL_load_error_strings();
+-	SSLeay_add_all_algorithms();
+  	SSLeay_add_ssl_algorithms();
+ 
+ 	meth = TLSv1_client_method();

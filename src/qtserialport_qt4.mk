@@ -6,7 +6,7 @@ $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5c3b6cc
 $(PKG)_CHECKSUM := d49c1cd4bb47706561f52c07d6075bb9931700d3bcae656ef3b6d3db3eb014ab
-$(PKG)_GH_CONF  := qt/qtserialport/qt4-dev
+$(PKG)_GH_CONF  := qt/qtserialport/branches/qt4-dev
 $(PKG)_DEPS     := cc qt
 
 define $(PKG)_BUILD

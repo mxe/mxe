@@ -4,25 +4,15 @@ PKG             := vidstab
 $(PKG)_WEBSITE  := http://public.hronopik.de/vid.stab/features.php?lang=en
 $(PKG)_DESCR    := vid.stab video stablizer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.98b
-$(PKG)_CHECKSUM := 530f0bf7479ec89d9326af3a286a15d7d6a90fcafbb641e3b8bdb8d05637d025
-$(PKG)_SUBDIR   := vid.stab-release-$($(PKG)_VERSION)
-$(PKG)_FILE     := vid.stab-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/georgmartius/vid.stab/archive/release-$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 1.1.0
+$(PKG)_CHECKSUM := 14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb
+$(PKG)_GH_CONF  := georgmartius/vid.stab/tags,v
 $(PKG)_DEPS     := cc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/georgmartius/vid.stab/tags' | \
-    grep '<a href="/georgmartius/vid.stab/archive/' | \
-    $(SED) -n 's,.*href="/georgmartius/vid.stab/archive/release-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    head -1
-endef
-
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$(1)/build' && '$(TARGET)-cmake' ..
-    $(MAKE) -C '$(1)/build' -j $(JOBS)
-    $(MAKE) -C '$(1)/build' -j 1 install
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -pedantic \

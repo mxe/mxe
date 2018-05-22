@@ -17,12 +17,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(call PREPARE_PKG_SOURCE,waf,$(BUILD_DIR))
     rm -rf '$(1)/waf' '$(1)/waflib'
     cd '$(1)' &&                                  \
         AR='$(TARGET)-ar'                         \
         CC='$(TARGET)-gcc'                        \
         PKGCONFIG='$(TARGET)-pkg-config'          \
-        '$(PREFIX)/$(BUILD)/bin/waf'              \
+        '$(BUILD_DIR)/$(waf_SUBDIR)/waf'          \
             configure                             \
             -j '$(JOBS)'                          \
             --with-target-platform='win$(BITS)'   \
@@ -36,7 +37,7 @@ define $(PKG)_BUILD
     # disable txt2man and doxygen
     $(SED) -i '/\(TXT2MAN\|DOXYGEN\)/d' '$(1)/build/c4che/_cache.py'
 
-    cd '$(1)' && '$(PREFIX)/$(BUILD)/bin/waf' build install
+    cd '$(1)' && '$(BUILD_DIR)/$(waf_SUBDIR)/waf' build install
 
     '$(TARGET)-gcc'                               \
         -W -Wall -Werror -ansi -pedantic          \

@@ -2,31 +2,25 @@
 
 PKG             := blas
 $(PKG)_WEBSITE  := http://www.netlib.org/blas/
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.5.0
-$(PKG)_CHECKSUM := ef7d775d380f255d1902bce374ff7c8a594846454fcaeae552292168af1aca24
-$(PKG)_SUBDIR   := BLAS-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc openblas
-
-$(PKG)_MESSAGE  :=*** blas has been replaced by openblas ***
+$(PKG)_DESCR    := Reference BLAS (Basic Linear Algebra Subprograms)
+$(PKG)_IGNORE    = $(lapack_IGNORE)
+$(PKG)_VERSION   = $(lapack_VERSION)
+$(PKG)_CHECKSUM  = $(lapack_CHECKSUM)
+$(PKG)_SUBDIR    = $(lapack_SUBDIR)
+$(PKG)_FILE      = $(lapack_FILE)
+$(PKG)_URL       = $(lapack_URL)
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    echo 'Warning: blas has been replaced by openblas' >&2;
-    echo $(blas_VERSION)
+    echo $(lapack_VERSION)
 endef
 
-define $(PKG)_DISABLED_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' \
-        FORTRAN='$(TARGET)-gfortran' \
-        RANLIB='$(TARGET)-ranlib' \
-        ARCH='$(TARGET)-ar' \
-        BLASLIB='libblas.a'
-
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(if $(BUILD_STATIC), \
-        $(INSTALL) -m644 '$(1)/libblas.a' '$(PREFIX)/$(TARGET)/lib/', \
-        $(MAKE_SHARED_FROM_STATIC) '$(1)/libblas.a' --ld '$(TARGET)-gfortran' \
-    )
+define $(PKG)_BUILD
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
+        -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
+        -DCBLAS=OFF \
+        -DLAPACKE=OFF
+    $(MAKE) -C '$(BUILD_DIR)/BLAS' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/BLAS' -j 1 install
 endef
