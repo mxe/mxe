@@ -7,8 +7,7 @@
 
 #include <QApplication>
 
-#include <QtWebKitWidgets/QWebView>
-#include <QtWebKitWidgets/QWebFrame>
+#include <QtWebKitWidgets>
 
 int main(int argc, char **argv){
 
