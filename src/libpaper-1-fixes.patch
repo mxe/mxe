@@ -1,0 +1,23 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: darealshinji <djcj@gmx.de>
+Date: Fri, 25 May 2018 01:21:03 +0200
+Subject: [PATCH 1/1] enable DLL builds
+
+
+diff --git a/lib/Makefile.am b/lib/Makefile.am
+index 1111111..2222222 100644
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -1,7 +1,7 @@
+ 
+ lib_LTLIBRARIES = libpaper.la
+ libpaper_la_SOURCES = dimen.c paper.c dimen.h paperspecs.h
+-libpaper_la_LDFLAGS = -version-info 2:2:1
++libpaper_la_LDFLAGS = -no-undefined -version-info 2:2:1
+ libpaper_la_CPPFLAGS = -D_REENTRANT
+ 
+ BUILT_SOURCES = paperspecs.h
