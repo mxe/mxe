@@ -4,11 +4,11 @@ PKG             := qtbase
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.10.1
-$(PKG)_CHECKSUM := d8660e189caa5da5142d5894d328b61a4d3ee9750b76d61ad74e4eee8765a969
+$(PKG)_VERSION  := 5.11.0
+$(PKG)_CHECKSUM := ed6e46db84f7d34923ab4eae165c63e05ab3cfa9d19a73d3f57b4e7bfd41de66
 $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.qt.io/official_releases/qt/5.10/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.qt.io/official_releases/qt/5.11/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng openssl pcre2 postgresql sqlite zlib
 
 define $(PKG)_UPDATE
@@ -85,7 +85,7 @@ define $(PKG)_BUILD
         '$(TOP_DIR)/src/qt-test.hpp'
     '$(PREFIX)/$(TARGET)/qt5/bin/rcc' -name qt-test -o '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' '$(TOP_DIR)/src/qt-test.qrc'
     '$(TARGET)-g++' \
-        -W -Wall -Werror -std=c++0x -pedantic \
+        -W -Wall -std=c++0x -pedantic \
         '$(TOP_DIR)/src/qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \

@@ -2,10 +2,10 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 618f569eb0d00789917050c5d0bc7cb959599821 Mon Sep 17 00:00:00 2001
+From ec06a0993dd7ceae8002852646dc1826111a1882 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/7] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/8] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -14,11 +14,11 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 55c74aad66..d7bcffeb9c 100644
+index 27f4c277d6..84ff9ae0ef 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -224,12 +224,12 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
-     endif()
+@@ -214,12 +214,12 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+     list(APPEND _Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES \"$${CMAKE_INTERFACE_QT5_MODULE_DEPS}\")
  !!ENDIF
  
 +!!IF equals(TEMPLATE, aux)
@@ -37,10 +37,10 @@ index 55c74aad66..d7bcffeb9c 100644
 2.17.0
 
 
-From 68f406b40eb3708809c042dfaf41b5366b437308 Mon Sep 17 00:00:00 2001
+From dad81660aaf6e7bd011b3541e9ab9a0a27120973 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/7] Fix pkgconfig file and library naming
+Subject: [PATCH 2/8] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -65,10 +65,10 @@ Task-number: 30898
 Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index e6a0d97f1a..5aefea28e5 100644
+index f8729de947..e7f6e3651d 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
-@@ -265,6 +265,10 @@ load(qt_installs)
+@@ -264,6 +264,10 @@ load(qt_installs)
  
  load(qt_targets)
  
@@ -79,7 +79,7 @@ index e6a0d97f1a..5aefea28e5 100644
  # this builds on top of qt_common
  !internal_module:!lib_bundle:if(unix|mingw) {
      CONFIG += create_pc
-@@ -275,12 +279,12 @@ load(qt_targets)
+@@ -274,12 +278,12 @@ load(qt_targets)
          QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
      QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
      QMAKE_PKGCONFIG_CFLAGS = -D$$MODULE_DEFINE -I${includedir}/$$MODULE_INCNAME
@@ -96,7 +96,7 @@ index e6a0d97f1a..5aefea28e5 100644
      pclib_replace.match = $$lib_replace.match
      !isEmpty(lib_replace.replace): \
          pclib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
-@@ -314,5 +318,3 @@ win32 {
+@@ -313,5 +317,3 @@ win32 {
      # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
      DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
  }
@@ -106,50 +106,51 @@ index e6a0d97f1a..5aefea28e5 100644
 2.17.0
 
 
-From d0ccaee377241a6b661ccb9a6d57ebc694b50f76 Mon Sep 17 00:00:00 2001
+From 69740750f7905baa5c66e48bad22e39b5e07ca72 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/7] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/8] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index dab66fafb4..b90ce6e4d9 100644
+index 219385a108..eee90b5b20 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -956,7 +956,7 @@
-         },
+@@ -973,7 +973,7 @@
          "fontconfig": {
              "label": "Fontconfig",
--            "condition": "!config.win32 && !config.darwin && features.system-freetype && libs.fontconfig",
-+            "condition": "!config.darwin && features.system-freetype && libs.fontconfig",
+             "autoDetect": "!config.darwin",
+-            "condition": "!config.win32 && features.system-freetype && libs.fontconfig",
++            "condition": "features.system-freetype && libs.fontconfig",
              "output": [ "privateFeature", "feature" ]
          },
          "gbm": {
 diff --git a/src/plugins/platforms/minimal/qminimalintegration.cpp b/src/plugins/platforms/minimal/qminimalintegration.cpp
-index ca33689cd7..194523eee0 100644
+index 0c04608fca..a26e02fbf3 100644
 --- a/src/plugins/platforms/minimal/qminimalintegration.cpp
 +++ b/src/plugins/platforms/minimal/qminimalintegration.cpp
-@@ -130,7 +130,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
- {
-     if (!m_fontDatabase && (m_options & EnableFonts)) {
+@@ -161,7 +161,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
+ 
+         if (!m_fontDatabase) {
  #if QT_CONFIG(fontconfig)
+-            m_fontDatabase = new QGenericUnixFontDatabase;
 +#ifdef Q_OS_WIN
 +        m_fontDatabase = new QFreeTypeFontDatabase;
 +#else
-         m_fontDatabase = new QGenericUnixFontDatabase;
++        m_fontDatabase = new QGenericUnixFontDatabase;
 +#endif
- #elif defined(Q_OS_WINRT)
-         m_fontDatabase = new QWinRTFontDatabase;
- #elif defined(Q_OS_WIN)
+ #else
+             m_fontDatabase = QPlatformIntegration::fontDatabase();
+ #endif
 -- 
 2.17.0
 
 
-From 35e8ce1f490f973045c77385f96acaa3736c8787 Mon Sep 17 00:00:00 2001
+From e28fcb374385d6dfb29a6c99bea283a4fbc894a7 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
-Subject: [PATCH 4/7] fix treatment of SYBASE_LIBS
+Subject: [PATCH 4/8] fix treatment of SYBASE_LIBS
 
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
@@ -170,15 +171,15 @@ index b69b51b679..d37423adbd 100644
 2.17.0
 
 
-From 4474738cdb894d948b2e7b30c32bf05455d41001 Mon Sep 17 00:00:00 2001
+From ef350f7199772d5846a1f6f9214e8d562183f393 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 5/7] use pkg-config for harfbuzz
+Subject: [PATCH 5/8] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index b90ce6e4d9..fc9a3470c1 100644
+index eee90b5b20..6c6745b1dd 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
 @@ -215,7 +215,8 @@
@@ -195,10 +196,10 @@ index b90ce6e4d9..fc9a3470c1 100644
 2.17.0
 
 
-From 8427c411a789c537b41d113d1f8f9ea7eb9d009a Mon Sep 17 00:00:00 2001
+From 65353949d9a7f6bbdcd5ddabf09ac3e5357eac1d Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Nov 2017 11:28:47 +0200
-Subject: [PATCH 6/7] disable qt_random_cpu for i686-w64-mingw32
+Subject: [PATCH 6/8] disable qt_random_cpu for i686-w64-mingw32
 
 Workaround for gcc internal error compiling for mingw32:
     global/qrandom.cpp: In function 'qsizetype qt_random_cpu(void*, qsizetype)':
@@ -216,10 +217,10 @@ Based on https://codereview.qt-project.org/#/c/212360/
 Change-Id: Ia1c902e7b147bdda2b8d7904b40a3b968b8d0369
 
 diff --git a/src/corelib/global/qrandom.cpp b/src/corelib/global/qrandom.cpp
-index 72ba299280..90a0f378ff 100644
+index ebf9864b15..9a31933975 100644
 --- a/src/corelib/global/qrandom.cpp
 +++ b/src/corelib/global/qrandom.cpp
-@@ -92,7 +92,7 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando
+@@ -90,7 +90,7 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando
  
  QT_BEGIN_NAMESPACE
  
@@ -232,10 +233,10 @@ index 72ba299280..90a0f378ff 100644
 2.17.0
 
 
-From 757881f896daa935361ec220733fe6c85af0002a Mon Sep 17 00:00:00 2001
+From 84cf457b4bc814fb82b08e0917b09397bbf9ec1a Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Tue, 8 May 2018 21:57:07 -0700
-Subject: [PATCH 7/7] Fix build with GCC 8: memset/memcpy/memmove of
+Subject: [PATCH 7/8] Fix build with GCC 8: memset/memcpy/memmove of
  non-trivials
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -248,7 +249,7 @@ Change-Id: I5d0ee9389a794d80983efffd152ce10eb557341f
 Reviewed-by: Ville Voutilainen <ville.voutilainen@qt.io>
 
 diff --git a/src/corelib/tools/qarraydataops.h b/src/corelib/tools/qarraydataops.h
-index b7c3bc1287..e7f9c8a2f4 100644
+index d0f83d2b6a..7e1b43f9b1 100644
 --- a/src/corelib/tools/qarraydataops.h
 +++ b/src/corelib/tools/qarraydataops.h
 @@ -65,7 +65,7 @@ struct QPodArrayOps
@@ -260,7 +261,7 @@ index b7c3bc1287..e7f9c8a2f4 100644
          this->size = int(newSize);
      }
  
-@@ -120,8 +120,9 @@ struct QPodArrayOps
+@@ -121,8 +121,9 @@ struct QPodArrayOps
          Q_ASSERT(e <= where || b > this->end()); // No overlap
          Q_ASSERT(size_t(e - b) <= this->alloc - uint(this->size));
  
@@ -272,7 +273,7 @@ index b7c3bc1287..e7f9c8a2f4 100644
          this->size += (e - b);
      }
  
-@@ -132,7 +133,8 @@ struct QPodArrayOps
+@@ -133,7 +134,8 @@ struct QPodArrayOps
          Q_ASSERT(b >= this->begin() && b < this->end());
          Q_ASSERT(e > this->begin() && e < this->end());
  
@@ -282,6 +283,79 @@ index b7c3bc1287..e7f9c8a2f4 100644
          this->size -= (e - b);
      }
  };
+-- 
+2.17.0
+
+
+From 77082d00f719fc72daa85ad2a59f3f395201ba6a Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
+Date: Mon, 9 Apr 2018 18:34:18 +0200
+Subject: [PATCH 8/8] qmake: fix look-up of relative files from .depend_command
+ in shadow builds
+
+the dependency paths are fixified against the output directory, so we
+must resolve them accordingly.
+
+Change-Id: Id92750aad358153bd2db5daca3194c54eda58dbb
+Reviewed-by: Joerg Bornemann <joerg.bornemann@qt.io>
+(cherry picked from commit 75587c8030ff8057b90200cb20cff1e4549c00b5)
+
+diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
+index 82573347b6..99aecdd8ce 100644
+--- a/qmake/generators/makefile.cpp
++++ b/qmake/generators/makefile.cpp
+@@ -1953,11 +1953,12 @@ MakefileGenerator::writeExtraCompilerTargets(QTextStream &t)
+                         }
+                         QT_PCLOSE(proc);
+                         if(!indeps.isEmpty()) {
++                            QDir outDir(Option::output_dir);
+                             // ### This is basically fubar. Add 'lines' flag to CONFIG?
+                             QStringList dep_cmd_deps = indeps.replace('\n', ' ').simplified().split(' ');
+                             for(int i = 0; i < dep_cmd_deps.count(); ++i) {
+                                 QString &file = dep_cmd_deps[i];
+-                                QString absFile = QDir(Option::output_dir).absoluteFilePath(file);
++                                QString absFile = outDir.absoluteFilePath(file);
+                                 if (exists(absFile)) {
+                                     file = absFile;
+                                 } else {
+@@ -1965,8 +1966,9 @@ MakefileGenerator::writeExtraCompilerTargets(QTextStream &t)
+                                     QList<QMakeLocalFileName> depdirs = QMakeSourceFileInfo::dependencyPaths();
+                                     for (QList<QMakeLocalFileName>::Iterator dit = depdirs.begin();
+                                         dit != depdirs.end(); ++dit) {
+-                                        if (exists((*dit).local() + '/' + file)) {
+-                                            localFile = (*dit).local() + '/' + file;
++                                        QString lf = outDir.absoluteFilePath((*dit).local() + '/' + file);
++                                        if (exists(lf)) {
++                                            localFile = lf;
+                                             break;
+                                         }
+                                     }
+@@ -2045,11 +2047,12 @@ MakefileGenerator::writeExtraCompilerTargets(QTextStream &t)
+                     }
+                     QT_PCLOSE(proc);
+                     if(!indeps.isEmpty()) {
++                        QDir outDir(Option::output_dir);
+                         // ### This is basically fubar. Add 'lines' flag to CONFIG?
+                         QStringList dep_cmd_deps = indeps.replace('\n', ' ').simplified().split(' ');
+                         for(int i = 0; i < dep_cmd_deps.count(); ++i) {
+                             QString &file = dep_cmd_deps[i];
+-                            QString absFile = QDir(Option::output_dir).absoluteFilePath(file);
++                            QString absFile = outDir.absoluteFilePath(file);
+                             if (exists(absFile)) {
+                                 file = absFile;
+                             } else {
+@@ -2057,8 +2060,9 @@ MakefileGenerator::writeExtraCompilerTargets(QTextStream &t)
+                                 QList<QMakeLocalFileName> depdirs = QMakeSourceFileInfo::dependencyPaths();
+                                 for (QList<QMakeLocalFileName>::Iterator dit = depdirs.begin();
+                                     dit != depdirs.end(); ++dit) {
+-                                    if (exists((*dit).local() + '/' + file)) {
+-                                        localFile = (*dit).local() + '/' + file;
++                                    QString lf = outDir.absoluteFilePath((*dit).local() + '/' + file);
++                                    if (exists(lf)) {
++                                        localFile = lf;
+                                         break;
+                                     }
+                                 }
 -- 
 2.17.0
 
