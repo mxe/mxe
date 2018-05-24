@@ -18,43 +18,24 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cp -f $(SOURCE_DIR)/libpng/{config.guess,config.sub,install-sh} '$(SOURCE_DIR)'
+    #cp -f $(SOURCE_DIR)/libpng/{config.guess,config.sub,install-sh} '$(SOURCE_DIR)'
+    cp -f `automake --print-libdir`/{config.guess,config.sub,install-sh} '$(SOURCE_DIR)'
+    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2art libpng openjpeg tiff
     cd '$(SOURCE_DIR)' && autoreconf -f -i
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
-        --without-libtiff \
-        --disable-contrib \
-        --disable-fontconfig \
-        --disable-dbus \
-        --disable-freetype \
-        --disable-fapi \
-        --disable-cups \
-        --disable-openjpeg \
-        --disable-gtk \
-        --with-libiconv=no \
-        --without-libidn \
-        --without-libpaper \
-        --without-pdftoraster \
-        --without-ijs \
-        --without-luratech \
-        --without-jbig2dec \
-        --without-x \
-        --with-drivers=''
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' obj_/aux_/{echogs,genarch,genconf,gendev,mkromfs,packps}
-    rm -f $(BUILD_DIR)/obj_/*.h
-    cp -r '$(BUILD_DIR)/obj_' '$(BUILD_DIR)/soobj_'
-    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2art libpng openjpeg tiff zlib
-
-    cd '$(BUILD_DIR)' && CFLAGS='$(CFLAGS) -I$(PREFIX)/$(TARGET)/include/openjpeg-2.3' \
-        CPPFLAGS='$(CPPFLAGS) -I$(PREFIX)/$(TARGET)/include/openjpeg-2.3' \
-        $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-drivers=ALL,display \
+        --with-arch_h='$(SOURCE_DIR)/arch/windows-x$(if $(filter x86_64-%,$(TARGET)),64,86)-msvc.h' \
+        --enable-dbus \
         --disable-contrib \
         --disable-cups \
         --disable-gtk \
         --with-libiconv=gnu \
         --without-ijs \
-        --with-aux-exe-ext=''
+        --without-x \
+        --with-exe-ext='' \
+        --enable-hidden-visibility \
+        --without-local-zlib
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_STATIC),libgs,so)
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/ghostscript'
@@ -75,9 +56,9 @@ define $(PKG)_BUILD
      echo 'Description: Ghostscript library'; \
      echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/ghostscript"'; \
      echo 'Libs: -L"$(PREFIX)/$(TARGET)/lib" -lgs'; \
-     echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng jpeg lcms2 zlib'; \
+     echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng libopenjp2 jpeg lcms2 zlib'; \
      echo '# https://github.com/mxe/mxe/issues/1446'; \
-     echo 'Libs.private: -lm -liconv -lpaper -lopenjp2 -lwinspool';) \
+     echo 'Libs.private: -lm -liconv -lpaper -lwinspool';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/ghostscript.pc'
 
     '$(TARGET)-gcc' \
