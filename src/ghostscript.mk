@@ -23,6 +23,7 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2art libpng openjpeg tiff
     cd '$(SOURCE_DIR)' && autoreconf -f -i
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        CPPFLAGS='$(CPPFLAGS) -DHAVE_SYS_TIMES_H=0' \
         $(MXE_CONFIGURE_OPTS) \
         --with-drivers=ALL,display \
         --with-arch_h='$(SOURCE_DIR)/arch/windows-x$(if $(filter x86_64-%,$(TARGET)),64,86)-msvc.h' \
