@@ -214,7 +214,7 @@
     "libomemo": {"version": "0.6.1", "website": "https://github.com/gkdr/libomemo", "description": "Implementation of OMEMO in C"},
     "libotr": {"version": "4.1.1", "website": "https://otr.cypherpunks.ca/", "description": "Off-the-Record Messaging"},
     "libpano13": {"version": "2.9.18", "website": "https://panotools.sourceforge.io/", "description": ""},
-    "libpaper": {"version": "1.1.24+nmu4", "website": "https://packages.debian.org/unstable/libpaper1", "description": ""},
+    "libpaper": {"version": "1.1.24+nmu5", "website": "https://packages.debian.org/unstable/libpaper1", "description": ""},
     "libplist": {"version": "2.0.0", "website": "https://github.com/libimobiledevice/libplist", "description": ""},
     "libpng": {"version": "1.6.34", "website": "http://www.libpng.org/", "description": ""},
     "libqrencode": {"version": "4.0.0", "website": "https://fukuchi.org/works/qrencode/", "description": "a fast and compact QR Code encoding library"},
