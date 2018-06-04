@@ -29,56 +29,18 @@ index 1111111..2222222 100644
  	#undef FLT_ROUNDS
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mateusz <mateuszb@poczta.onet.pl>
-Date: Mon, 22 Jan 2018 20:58:48 +0100
-Subject: [PATCH 2/2] intrin-impl.h: do not define _xgetbv for GCC 8
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-GCC 8 from r248028 has defined function _xgetbv and we should
-avoid double definition of this function.
-
-Signed-off-by: Mateusz Brzostek <mateuszb@poczta.onet.pl>
-Signed-off-by: Martin Storsjö <martin@martin.st>
-
-diff --git a/mingw-w64-headers/include/psdk_inc/intrin-impl.h b/mingw-w64-headers/include/psdk_inc/intrin-impl.h
-index 1111111..2222222 100644
---- a/mingw-w64-headers/include/psdk_inc/intrin-impl.h
-+++ b/mingw-w64-headers/include/psdk_inc/intrin-impl.h
-@@ -1405,6 +1405,7 @@ __buildmov(__movsd, unsigned __LONG32, "d")
- #define __INTRINSIC_DEFINED___movsd
- #endif /* __INTRINSIC_PROLOG */
- 
-+#if !defined(__GNUC__) || __GNUC__ < 8 /* GCC 8 has already defined _xgetbv */
- /* NOTE: This should be in immintrin.h */
- #if __INTRINSIC_PROLOG(_xgetbv)
- unsigned __int64 _xgetbv(unsigned int);
-@@ -1426,6 +1427,7 @@ unsigned __int64 _xgetbv(unsigned int index)
- }
- #define __INTRINSIC_DEFINED__xgetbv
- #endif /* __INTRINSIC_PROLOG */
-+#endif /* __GNUC__ < 8 */
- 
- #endif /* defined(__x86_64__) || defined(_AMD64_) || defined(__i386__) || defined(_X86_) */
- 
-From e9f10474cfd239bbb656a9d15163a439fc0efa78 Mon Sep 17 00:00:00 2001
 From: Jonathan Yong <10walls@gmail.com>
 Date: Fri, 22 Dec 2017 13:01:03 +0000
-Subject: [PATCH] dwmapi.def: Regenegerate from Windows 10
+Subject: [PATCH 2/2] dwmapi.def: Regenegerate from Windows 10
 
 Remove ordinals from x86 library too.
 
 Signed-off-by: Jonathan Yong <10walls@gmail.com>
 
 Taken from: https://sourceforge.net/p/mingw-w64/mailman/message/36166386/
----
- mingw-w64-crt/lib32/dwmapi.def | 44 ++++++++++++++----------------------------
- mingw-w64-crt/lib64/dwmapi.def | 26 ++++++++++++++++++++++---
- 2 files changed, 38 insertions(+), 32 deletions(-)
 
 diff --git a/mingw-w64-crt/lib32/dwmapi.def b/mingw-w64-crt/lib32/dwmapi.def
-index 798116fb..96009459 100644
+index 1111111..2222222 100644
 --- a/mingw-w64-crt/lib32/dwmapi.def
 +++ b/mingw-w64-crt/lib32/dwmapi.def
 @@ -5,47 +5,29 @@
@@ -156,7 +118,7 @@ index 798116fb..96009459 100644
  DwmUnregisterThumbnail@4
  DwmUpdateThumbnailProperties@8
 diff --git a/mingw-w64-crt/lib64/dwmapi.def b/mingw-w64-crt/lib64/dwmapi.def
-index 871947e5..d8bf23f1 100644
+index 1111111..2222222 100644
 --- a/mingw-w64-crt/lib64/dwmapi.def
 +++ b/mingw-w64-crt/lib64/dwmapi.def
 @@ -1,8 +1,13 @@
@@ -210,6 +172,3 @@ index 871947e5..d8bf23f1 100644
  DwmUnregisterThumbnail
  DwmUpdateThumbnailProperties
 -
--- 
-2.13.6
-
