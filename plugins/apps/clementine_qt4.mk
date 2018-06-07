@@ -10,9 +10,9 @@
 
 PKG             := clementine_qt4
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := f885931a9ab7c88607d07b50c64fcce46fc05f13dd2c0a04188c94eff938f37c
-$(PKG)_GH_CONF  := clementine-player/Clementine/tags
+$(PKG)_VERSION  := 925e74f
+$(PKG)_CHECKSUM := 9da96ca2dc8adbba9dc9b6921def258a18d8c004eebacb897369b7821ec0c320
+$(PKG)_GH_CONF  := clementine-player/Clementine/branches/master
 $(PKG)_WEBSITE  := https://www.clementine-player.org/
 $(PKG)_OWNER    := https://github.com/pavelvat
 $(PKG)_DEPS     := cc boost chromaprint cryptopp fftw glew gst-libav gst-plugins-bad \
@@ -38,7 +38,7 @@ define $(PKG)_BUILD
         $(INSTALL) '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/libgstautodetect.dll'        '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/gstreamer-plugins'
         $(INSTALL) '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/libgstcdio.dll'              '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/gstreamer-plugins'
         $(INSTALL) '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/libgstcoreelements.dll'      '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/gstreamer-plugins'
-        $(INSTALL) '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/libgstdirectsoundsink.dll'   '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/gstreamer-plugins'
+        $(INSTALL) '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/libgstdirectsound.dll'       '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/gstreamer-plugins'
         $(INSTALL) '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/libgstequalizer.dll'         '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/gstreamer-plugins'
         $(INSTALL) '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/libgstfaad.dll'              '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/gstreamer-plugins'
         $(INSTALL) '$(PREFIX)/$(TARGET)/bin/gstreamer-1.0/libgstflac.dll'              '$(PREFIX)/$(TARGET)/apps/$(PKG)/bin/gstreamer-plugins'
