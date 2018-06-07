@@ -1,31 +1,87 @@
-This file is part of MXE. See LICENSE.md for licensing information.
-
-Contains ad hoc patches for cross building.
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Dominik Schmidt <dev@dominik-schmidt.de>
-Date: Fri, 6 Feb 2015 01:55:40 +0100
-Subject: [PATCH 1/1] Add LASTFM_LIB_VERSION_SUFFIX to include dir as well
- https://github.com/lastfm/liblastfm/commit/480e2ec663ef867e7892dbbc624737cae176c717
-
-
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -105,4 +105,4 @@ install(TARGETS ${LASTFM_LIB_TARGET_NAME}
+diff -ruN liblastfm-1.0.9.orig/CMakeLists.txt liblastfm-1.0.9/CMakeLists.txt
+--- liblastfm-1.0.9.orig/CMakeLists.txt	2014-10-02 16:05:46.000000000 +0200
++++ liblastfm-1.0.9/CMakeLists.txt	2018-06-07 19:12:38.439957140 +0200
+@@ -35,6 +35,7 @@
+ endif()
+ 
+ if(Qt5Core_DIR)
++    find_package(Qt5 REQUIRED COMPONENTS Core Network Xml Sql Test)
+     set(LASTFM_LIB_VERSION_SUFFIX 5)
+     message(STATUS "Found Qt5! Please keep in mind, this is highly experimental and not our main development target..")
+     include_directories(${Qt5Core_INCLUDE_DIRS})
+@@ -57,8 +58,8 @@
+ else()
+     find_package(Qt4 COMPONENTS QtCore QtNetwork QtXml REQUIRED)
+ 
+-    macro(qt5_use_modules)
+-    endmacro()
++    #macro(qt5_use_modules)
++    #endmacro()
+ endif()
+ 
+ 
+diff -ruN liblastfm-1.0.9.orig/src/CMakeLists.txt liblastfm-1.0.9/src/CMakeLists.txt
+--- liblastfm-1.0.9.orig/src/CMakeLists.txt	2014-10-02 16:05:46.000000000 +0200
++++ liblastfm-1.0.9/src/CMakeLists.txt	2018-06-07 19:20:37.969353324 +0200
+@@ -10,8 +10,8 @@
+ )
+ 
+ list(APPEND liblastfm_QT5_MODULES
+-    Xml
+-    Network
++    Qt5::Xml
++    Qt5::Network
+ )
+ 
+ set(liblastfm_SOURCES
+@@ -84,11 +84,11 @@
+         linux/LNetworkConnectionMonitor_linux.cpp
+     )
+     list(APPEND liblastfm_LIBRARIES ${QT_QTDBUS_LIBRARY})
+-    list(APPEND liblastfm_QT5_MODULES DBus)
++    list(APPEND liblastfm_QT5_MODULES Qt5::DBus)
+ endif()
+ 
+ add_library(${LASTFM_LIB_TARGET_NAME} SHARED ${liblastfm_SOURCES})
+-qt5_use_modules(${LASTFM_LIB_TARGET_NAME} ${liblastfm_QT5_MODULES})
++target_link_libraries(${LASTFM_LIB_TARGET_NAME} ${liblastfm_QT5_MODULES})
+ 
+ target_link_libraries(${LASTFM_LIB_TARGET_NAME} ${liblastfm_LIBRARIES})
+ set_target_properties(${LASTFM_LIB_TARGET_NAME} PROPERTIES
+@@ -105,4 +105,4 @@
  
  file(GLOB liblastfm_HEADERS ${CMAKE_CURRENT_LIST_DIR}/*.h)
  list(APPEND liblastfm_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/global.h)
 -install(FILES ${liblastfm_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lastfm/)
 +install(FILES ${liblastfm_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lastfm${LASTFM_LIB_VERSION_SUFFIX}/)
-diff --git a/src/fingerprint/CMakeLists.txt b/src/fingerprint/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/fingerprint/CMakeLists.txt
-+++ b/src/fingerprint/CMakeLists.txt
-@@ -48,4 +48,4 @@ install(TARGETS ${FINGERPRINT_LIB_TARGET_NAME}
+diff -ruN liblastfm-1.0.9.orig/src/fingerprint/CMakeLists.txt liblastfm-1.0.9/src/fingerprint/CMakeLists.txt
+--- liblastfm-1.0.9.orig/src/fingerprint/CMakeLists.txt	2014-10-02 16:05:46.000000000 +0200
++++ liblastfm-1.0.9/src/fingerprint/CMakeLists.txt	2018-06-07 19:21:06.457202117 +0200
+@@ -40,7 +40,7 @@
+     SOVERSION ${LASTFM_SOVERSION}
+ )
+ 
+-qt5_use_modules(${FINGERPRINT_LIB_TARGET_NAME} Network Sql Xml)
++target_link_libraries(${FINGERPRINT_LIB_TARGET_NAME} Qt5::Network Qt5::Sql Qt5::Xml)
+ 
+ install(TARGETS ${FINGERPRINT_LIB_TARGET_NAME}
+     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+@@ -48,4 +48,5 @@
      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
  )
  
 -install(FILES ${lastfm_fingerprint_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lastfm/)
 +install(FILES ${lastfm_fingerprint_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lastfm${LASTFM_LIB_VERSION_SUFFIX}/)
++
+diff -ruN liblastfm-1.0.9.orig/tests/lastfm_add_test.cmake liblastfm-1.0.9/tests/lastfm_add_test.cmake
+--- liblastfm-1.0.9.orig/tests/lastfm_add_test.cmake	2014-10-02 16:05:46.000000000 +0200
++++ liblastfm-1.0.9/tests/lastfm_add_test.cmake	2018-06-07 18:49:26.760253021 +0200
+@@ -6,7 +6,7 @@
+     configure_file(Test${LASTFM_TEST_CLASS}.h Test${LASTFM_TEST_CLASS}.h)
+     add_executable(${LASTFM_TEST_CLASS}Test Test${LASTFM_TEST_CLASS}.cpp)
+ 
+-    qt5_use_modules(${LASTFM_TEST_CLASS}Test Core Test Xml Network)
++    target_link_libraries(${LASTFM_TEST_CLASS}Test Qt5::Core Qt5::Test Qt5::Xml Qt5::Network)
+ 
+     target_link_libraries(${LASTFM_TEST_CLASS}Test
+         ${LASTFM_LIB_TARGET_NAME}
