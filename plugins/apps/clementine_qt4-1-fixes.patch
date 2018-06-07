@@ -47,34 +47,6 @@ index 1111111..2222222 100644
  )
  
  add_library(tinysvcmdns STATIC
-diff --git a/ext/clementine-tagreader/CMakeLists.txt b/ext/clementine-tagreader/CMakeLists.txt
-index 1111111..2222222 100644
---- a/ext/clementine-tagreader/CMakeLists.txt
-+++ b/ext/clementine-tagreader/CMakeLists.txt
-@@ -27,10 +27,10 @@ add_executable(clementine-tagreader
- 
- target_link_libraries(clementine-tagreader
-   ${TAGLIB_LIBRARIES}
--  ${QT_QTCORE_LIBRARY}
--  ${QT_QTNETWORK_LIBRARY}
-   libclementine-common
-   libclementine-tagreader
-+  ${QT_QTCORE_LIBRARY}
-+  ${QT_QTNETWORK_LIBRARY}
- )
- 
- if(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -1343,6 +1343,7 @@ if (WIN32)
-     tinysvcmdns
-     qtwin
-     dsound
-+    ${QT_QTGUI_LIBRARY}
-   )
- endif (WIN32)
  
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001

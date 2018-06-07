@@ -1,0 +1,9 @@
+diff -ruN clementine-player-Clementine-4619a4c.orig/3rdparty/libmygpo-qt5/src/CMakeLists.txt clementine-player-Clementine-4619a4c/3rdparty/libmygpo-qt5/src/CMakeLists.txt
+--- clementine-player-Clementine-4619a4c.orig/3rdparty/libmygpo-qt5/src/CMakeLists.txt	2018-05-23 15:23:21.000000000 +0200
++++ clementine-player-Clementine-4619a4c/3rdparty/libmygpo-qt5/src/CMakeLists.txt	2018-06-07 21:27:00.817420485 +0200
+@@ -86,4 +86,4 @@
+ add_library( ${MYGPO_QT_TARGET_NAME} STATIC ${LIBMYGPO_QT_SRC} ${LIBMYGPO_QT_MOC_SRC} )
+ 
+ target_link_libraries( ${MYGPO_QT_TARGET_NAME} ${QJSON_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY}  )
+-qt5_use_modules( ${MYGPO_QT_TARGET_NAME} Core Network )
++target_link_libraries( ${MYGPO_QT_TARGET_NAME} Qt5::Core Qt5::Network )
