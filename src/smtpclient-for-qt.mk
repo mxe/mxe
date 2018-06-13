@@ -4,8 +4,8 @@ PKG             := smtpclient-for-qt
 $(PKG)_WEBSITE  := https://github.com/bluetiger9/SmtpClient-for-Qt/
 $(PKG)_DESCR    := SmtpClient-for-Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3d87c63
-$(PKG)_CHECKSUM := d4cb9966dbc686600c7697926ecfb60d936e587c562298e6c9246b7bc6962b39
+$(PKG)_VERSION  := 1f4f2e2
+$(PKG)_CHECKSUM := 4be4a91f0ff943766ebdde8bd227c747c132710909d091dd44d1e8aaffb99608
 $(PKG)_GH_CONF  := bluetiger9/SmtpClient-for-Qt/branches/v1.1
 $(PKG)_DEPS     := cc qtbase
 
