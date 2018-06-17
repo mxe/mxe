@@ -49,6 +49,8 @@ The following error:
 > fakeroot: error while starting the `faked' daemon.
 can be caused by leaked ipc resources originating in fakeroot.
 How to remove them: https://stackoverflow.com/a/4262545
+Alternatively, to switch off using fakeroot (e.g. inside docker),
+set MXE_BUILD_PKG_NO_FAKEROOT to 1.
 
 Bootstrapped build (non-debian systems building w/o deb pkgs):
 export MXE_DIR=/path/to/mxe && \
@@ -69,6 +71,7 @@ $MXE_DIR/usr.lua/$BUILD/bin/lua $MXE_DIR/tools/build-pkg.lua
 
 local max_items = tonumber(os.getenv('MXE_BUILD_PKG_MAX_ITEMS'))
 local no_debs = os.getenv('MXE_BUILD_PKG_NO_DEBS')
+local no_fakeroot = os.getenv('MXE_BUILD_PKG_NO_FAKEROOT')
 local no_second_pass = os.getenv('MXE_BUILD_PKG_NO_SECOND_PASS')
 local build_targets = os.getenv('MXE_BUILD_PKG_TARGETS')
 
@@ -846,14 +849,18 @@ local function makePackage(name, files, deps, ver, d1, d2, dst, recommends)
         os.execute(('mkdir -p %s/DEBIAN'):format(dirname))
         -- use tar to copy files with paths
         local cmd3 = '%s -C %s -xf %s'
-        cmd3 = 'fakeroot -s deb.fakeroot ' .. cmd3
+        if not no_fakeroot then
+            cmd3 = 'fakeroot -s deb.fakeroot ' .. cmd3
+        end
         os.execute(cmd3:format(tool 'tar', usr, tar_name))
         -- make DEBIAN/control file
         local control_fname = dirname .. '/DEBIAN/control'
         writeFile(control_fname, control_text)
         -- make .deb file
         local cmd4 = 'dpkg-deb -Zxz -b %s'
-        cmd4 = 'fakeroot -i deb.fakeroot ' .. cmd4
+        if not no_fakeroot then
+            cmd4 = 'fakeroot -i deb.fakeroot ' .. cmd4
+        end
         os.execute(cmd4:format(dirname))
         -- cleanup
         os.execute(('rm -fr %s deb.fakeroot'):format(dirname))
