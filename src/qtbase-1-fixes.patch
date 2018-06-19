@@ -2,10 +2,10 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From ec06a0993dd7ceae8002852646dc1826111a1882 Mon Sep 17 00:00:00 2001
+From 68d6fb331d75a6fc23be38861866da8c3fc6fd6d Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/8] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -34,13 +34,13 @@ index 27f4c277d6..84ff9ae0ef 100644
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
 -- 
-2.17.0
+2.17.1
 
 
-From dad81660aaf6e7bd011b3541e9ab9a0a27120973 Mon Sep 17 00:00:00 2001
+From 1d10513c2b03761addf96010ce9da8dd93d714fb Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/8] Fix pkgconfig file and library naming
+Subject: [PATCH 2/6] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -103,13 +103,13 @@ index f8729de947..e7f6e3651d 100644
 -
 -TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
 -- 
-2.17.0
+2.17.1
 
 
-From 69740750f7905baa5c66e48bad22e39b5e07ca72 Mon Sep 17 00:00:00 2001
+From 31c615cd57701f2e4b99bb7fcdd023565a081257 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/8] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
@@ -144,13 +144,13 @@ index 0c04608fca..a26e02fbf3 100644
              m_fontDatabase = QPlatformIntegration::fontDatabase();
  #endif
 -- 
-2.17.0
+2.17.1
 
 
-From e28fcb374385d6dfb29a6c99bea283a4fbc894a7 Mon Sep 17 00:00:00 2001
+From f881ea1a1010939a4fe7c2c74f01d3e54d2c7c96 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
-Subject: [PATCH 4/8] fix treatment of SYBASE_LIBS
+Subject: [PATCH 4/6] fix treatment of SYBASE_LIBS
 
 Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
 
@@ -168,13 +168,13 @@ index b69b51b679..d37423adbd 100644
      }
      return(true)
 -- 
-2.17.0
+2.17.1
 
 
-From ef350f7199772d5846a1f6f9214e8d562183f393 Mon Sep 17 00:00:00 2001
+From 9e31811ee08a69d21f19dc7a0a86581c2d71a8c1 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 5/8] use pkg-config for harfbuzz
+Subject: [PATCH 5/6] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
@@ -193,13 +193,13 @@ index eee90b5b20..6c6745b1dd 100644
          },
          "imf": {
 -- 
-2.17.0
+2.17.1
 
 
-From 65353949d9a7f6bbdcd5ddabf09ac3e5357eac1d Mon Sep 17 00:00:00 2001
+From c3de4dbd709d1f8c33d46ed12506444685e3db0e Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Nov 2017 11:28:47 +0200
-Subject: [PATCH 6/8] disable qt_random_cpu for i686-w64-mingw32
+Subject: [PATCH 6/6] disable qt_random_cpu for i686-w64-mingw32
 
 Workaround for gcc internal error compiling for mingw32:
     global/qrandom.cpp: In function 'qsizetype qt_random_cpu(void*, qsizetype)':
@@ -230,132 +230,5 @@ index ebf9864b15..9a31933975 100644
  
  #  ifdef Q_PROCESSOR_X86_64
 -- 
-2.17.0
-
-
-From 84cf457b4bc814fb82b08e0917b09397bbf9ec1a Mon Sep 17 00:00:00 2001
-From: Thiago Macieira <thiago.macieira@intel.com>
-Date: Tue, 8 May 2018 21:57:07 -0700
-Subject: [PATCH 7/8] Fix build with GCC 8: memset/memcpy/memmove of
- non-trivials
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-qarraydataops.h:73:17: error: ‘void* memset(void*, int, size_t)’ clearing an object of non-trivial type
-‘struct TCBPoint’; use assignment or value-initialization instead [-Werror=class-memaccess]
-
-Change-Id: I5d0ee9389a794d80983efffd152ce10eb557341f
-Reviewed-by: Ville Voutilainen <ville.voutilainen@qt.io>
-
-diff --git a/src/corelib/tools/qarraydataops.h b/src/corelib/tools/qarraydataops.h
-index d0f83d2b6a..7e1b43f9b1 100644
---- a/src/corelib/tools/qarraydataops.h
-+++ b/src/corelib/tools/qarraydataops.h
-@@ -65,7 +65,7 @@ struct QPodArrayOps
-         Q_ASSERT(newSize > uint(this->size));
-         Q_ASSERT(newSize <= this->alloc);
- 
--        ::memset(this->end(), 0, (newSize - this->size) * sizeof(T));
-+        ::memset(static_cast<void *>(this->end()), 0, (newSize - this->size) * sizeof(T));
-         this->size = int(newSize);
-     }
- 
-@@ -121,8 +121,9 @@ struct QPodArrayOps
-         Q_ASSERT(e <= where || b > this->end()); // No overlap
-         Q_ASSERT(size_t(e - b) <= this->alloc - uint(this->size));
- 
--        ::memmove(where + (e - b), where, (static_cast<const T*>(this->end()) - where) * sizeof(T));
--        ::memcpy(where, b, (e - b) * sizeof(T));
-+        ::memmove(static_cast<void *>(where + (e - b)), static_cast<void *>(where),
-+                  (static_cast<const T*>(this->end()) - where) * sizeof(T));
-+        ::memcpy(static_cast<void *>(where), static_cast<const void *>(b), (e - b) * sizeof(T));
-         this->size += (e - b);
-     }
- 
-@@ -133,7 +134,8 @@ struct QPodArrayOps
-         Q_ASSERT(b >= this->begin() && b < this->end());
-         Q_ASSERT(e > this->begin() && e < this->end());
- 
--        ::memmove(b, e, (static_cast<T *>(this->end()) - e) * sizeof(T));
-+        ::memmove(static_cast<void *>(b), static_cast<void *>(e),
-+                  (static_cast<T *>(this->end()) - e) * sizeof(T));
-         this->size -= (e - b);
-     }
- };
--- 
-2.17.0
-
-
-From 77082d00f719fc72daa85ad2a59f3f395201ba6a Mon Sep 17 00:00:00 2001
-From: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
-Date: Mon, 9 Apr 2018 18:34:18 +0200
-Subject: [PATCH 8/8] qmake: fix look-up of relative files from .depend_command
- in shadow builds
-
-the dependency paths are fixified against the output directory, so we
-must resolve them accordingly.
-
-Change-Id: Id92750aad358153bd2db5daca3194c54eda58dbb
-Reviewed-by: Joerg Bornemann <joerg.bornemann@qt.io>
-(cherry picked from commit 75587c8030ff8057b90200cb20cff1e4549c00b5)
-
-diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
-index 82573347b6..99aecdd8ce 100644
---- a/qmake/generators/makefile.cpp
-+++ b/qmake/generators/makefile.cpp
-@@ -1953,11 +1953,12 @@ MakefileGenerator::writeExtraCompilerTargets(QTextStream &t)
-                         }
-                         QT_PCLOSE(proc);
-                         if(!indeps.isEmpty()) {
-+                            QDir outDir(Option::output_dir);
-                             // ### This is basically fubar. Add 'lines' flag to CONFIG?
-                             QStringList dep_cmd_deps = indeps.replace('\n', ' ').simplified().split(' ');
-                             for(int i = 0; i < dep_cmd_deps.count(); ++i) {
-                                 QString &file = dep_cmd_deps[i];
--                                QString absFile = QDir(Option::output_dir).absoluteFilePath(file);
-+                                QString absFile = outDir.absoluteFilePath(file);
-                                 if (exists(absFile)) {
-                                     file = absFile;
-                                 } else {
-@@ -1965,8 +1966,9 @@ MakefileGenerator::writeExtraCompilerTargets(QTextStream &t)
-                                     QList<QMakeLocalFileName> depdirs = QMakeSourceFileInfo::dependencyPaths();
-                                     for (QList<QMakeLocalFileName>::Iterator dit = depdirs.begin();
-                                         dit != depdirs.end(); ++dit) {
--                                        if (exists((*dit).local() + '/' + file)) {
--                                            localFile = (*dit).local() + '/' + file;
-+                                        QString lf = outDir.absoluteFilePath((*dit).local() + '/' + file);
-+                                        if (exists(lf)) {
-+                                            localFile = lf;
-                                             break;
-                                         }
-                                     }
-@@ -2045,11 +2047,12 @@ MakefileGenerator::writeExtraCompilerTargets(QTextStream &t)
-                     }
-                     QT_PCLOSE(proc);
-                     if(!indeps.isEmpty()) {
-+                        QDir outDir(Option::output_dir);
-                         // ### This is basically fubar. Add 'lines' flag to CONFIG?
-                         QStringList dep_cmd_deps = indeps.replace('\n', ' ').simplified().split(' ');
-                         for(int i = 0; i < dep_cmd_deps.count(); ++i) {
-                             QString &file = dep_cmd_deps[i];
--                            QString absFile = QDir(Option::output_dir).absoluteFilePath(file);
-+                            QString absFile = outDir.absoluteFilePath(file);
-                             if (exists(absFile)) {
-                                 file = absFile;
-                             } else {
-@@ -2057,8 +2060,9 @@ MakefileGenerator::writeExtraCompilerTargets(QTextStream &t)
-                                 QList<QMakeLocalFileName> depdirs = QMakeSourceFileInfo::dependencyPaths();
-                                 for (QList<QMakeLocalFileName>::Iterator dit = depdirs.begin();
-                                     dit != depdirs.end(); ++dit) {
--                                    if (exists((*dit).local() + '/' + file)) {
--                                        localFile = (*dit).local() + '/' + file;
-+                                    QString lf = outDir.absoluteFilePath((*dit).local() + '/' + file);
-+                                    if (exists(lf)) {
-+                                        localFile = lf;
-                                         break;
-                                     }
-                                 }
--- 
-2.17.0
+2.17.1
 
