@@ -11,7 +11,8 @@ $(PKG)_DEPS     := cc qttools
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DQTKEYCHAIN_STATIC=$(CMAKE_STATIC_BOOL)
+        -DQTKEYCHAIN_STATIC=$(CMAKE_STATIC_BOOL) \
+        -DBUILD_TEST_APPLICATION="OFF"
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
