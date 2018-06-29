@@ -3,8 +3,8 @@
 PKG             := quazip
 $(PKG)_WEBSITE  := https://github.com/stachenov/quazip
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.7.5
-$(PKG)_CHECKSUM := f3a56647d4706c9daef411e40e3884702e2bd770e980145c3899321788ba8bb2
+$(PKG)_VERSION  := 0.7.6
+$(PKG)_CHECKSUM := 4118a830a375a81211956611cc34b1b5b4ddc108c126287b91b40c2493046b70
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_GH_CONF  := stachenov/quazip/tags
