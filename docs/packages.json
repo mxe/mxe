@@ -386,7 +386,7 @@
     "qtwinextras": {"version": "5.11.1", "website": "https://www.qt.io/", "description": "Qt"},
     "qtxlsxwriter": {"version": "06911c4", "website": "https://github.com/dbzhang800/QtXlsxWriter/", "description": "QtXlsxWriter"},
     "qtxmlpatterns": {"version": "5.11.1", "website": "https://www.qt.io/", "description": "Qt"},
-    "quazip": {"version": "0.7.5", "website": "https://github.com/stachenov/quazip", "description": ""},
+    "quazip": {"version": "0.7.6", "website": "https://github.com/stachenov/quazip", "description": ""},
     "qwt": {"version": "6.1.3", "website": "https://qwt.sourceforge.io/", "description": "Qwt"},
     "qwtplot3d": {"version": "d80c908", "website": "https://github.com/sintegrial/qwtplot3d", "description": "QwtPlot3D"},
     "ragel": {"version": "6.9", "website": "https://www.colm.net/open-source/ragel/", "description": "Ragel"},
