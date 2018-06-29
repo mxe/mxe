@@ -20,7 +20,9 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(SOURCE_DIR)' \
         $(if $(BUILD_STATIC), CONFIG\+=staticlib) \
-        PREFIX=$(PREFIX)/$(TARGET)
+        PREFIX=$(PREFIX)/$(TARGET) \
+	'-after' \
+        'win32:static:LIBS_PRIVATE += -lz'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(if $(BUILD_STATIC), \
         echo 'Cflags.private: -DQUAZIP_STATIC' >> $(BUILD_DIR)/quazip/lib/pkgconfig/quazip.pc)
