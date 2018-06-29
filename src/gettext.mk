@@ -9,7 +9,9 @@ $(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gettext/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftpmirror.gnu.org/gettext/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc libiconv
+# native gettext isn't technically required, but downstream
+# cross-packages may need binaries and/or *.m4 files etc.
+$(PKG)_DEPS     := cc libiconv $(BUILD)~$(PKG)
 
 $(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := libiconv
