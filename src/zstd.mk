@@ -18,18 +18,9 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-    # create pkg-config files
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    (echo 'Name: $(PKG)'; \
-     echo 'Version: $($(PKG)_VERSION)'; \
-     echo 'Description: $($(PKG)_DESCR)'; \
-     echo 'Libs: -L$(PREFIX)/$(TARGET)/lib -l$(PKG)'; \
-     echo 'Cflags: -I$(PREFIX)/$(TARGET)/include';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
-
     # compile test
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
+        `'$(TARGET)-pkg-config' lib$(PKG) --cflags --libs`
 endef
