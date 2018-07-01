@@ -275,6 +275,7 @@
     "ncurses": {"version": "e14300b", "website": "https://www.gnu.org/software/ncurses/", "description": "Ncurses"},
     "neon": {"version": "0.30.2", "website": "http://webdav.org/neon/", "description": "HTTP and WebDAV client library (libneon)"},
     "netcdf": {"version": "4.6.1", "website": "https://www.unidata.ucar.edu/software/netcdf/", "description": "NetCDF"},
+    "netcdf-cxx4": {"version": "4.3.0", "website": "https://www.unidata.ucar.edu/software/netcdf/", "description": "NetCDF-CXX4"},
     "netpbm": {"version": "10.35.96", "website": "https://netpbm.sourceforge.io/", "description": "Netpbm"},
     "nettle": {"version": "3.4", "website": "https://www.lysator.liu.se/~nisse/nettle/", "description": ""},
     "nlopt": {"version": "2.4.2", "website": "http://ab-initio.mit.edu/wiki/index.php/NLopt", "description": "NLopt"},
