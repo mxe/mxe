@@ -47,6 +47,7 @@ define $(PKG)_BUILD_DARWIN
     # but install *.m4 files and bins to standard location
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
+        --with-included-libcroco \
         --prefix='$(PREFIX)/$(TARGET).gnu' \
         --bindir='$(PREFIX)/$(TARGET)/bin' \
         --datarootdir='$(PREFIX)/$(TARGET)/share'
