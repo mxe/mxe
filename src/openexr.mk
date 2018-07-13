@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := openexr
-$(PKG)_WEBSITE  := http://www.openexr.com/
+$(PKG)_WEBSITE  := https://www.openexr.com/
 $(PKG)_DESCR    := OpenEXR
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.0
@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.savannah.nongnu.org/releases/openexr/$($(PKG
 $(PKG)_DEPS     := cc ilmbase pthreads zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.openexr.com/downloads.html' | \
+    $(WGET) -q -O- 'https://www.openexr.com/downloads.html' | \
     grep 'openexr-' | \
     $(SED) -n 's,.*openexr-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

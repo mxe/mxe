@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vorbis
-$(PKG)_WEBSITE  := http://www.vorbis.com/
+$(PKG)_WEBSITE  := https://xiph.org/vorbis/
 $(PKG)_DESCR    := Vorbis
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.5

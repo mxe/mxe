@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := luasocket
-$(PKG)_WEBSITE  := http://www.impa.br/~diego/software/luasocket
+$(PKG)_WEBSITE  := https://www.impa.br/~diego/software/luasocket
 $(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0-rc1

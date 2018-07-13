@@ -8,11 +8,11 @@ $(PKG)_VERSION  := 1.8.5
 $(PKG)_CHECKSUM := 31ec0a9305c3bd6b4ad60a5261cba5402366dd7d1969a8846099717778e9a50a
 $(PKG)_SUBDIR   := spatialindex-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := spatialindex-src-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://download.osgeo.org/libspatialindex/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.osgeo.org/libspatialindex/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://download.osgeo.org/libspatialindex/' | \
+    $(WGET) -q -O- 'https://download.osgeo.org/libspatialindex/' | \
     $(SED) -n 's,.*spatialindex-src-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

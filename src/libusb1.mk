@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libusb1
-$(PKG)_WEBSITE  := http://libusb.org/
+$(PKG)_WEBSITE  := https://libusb.info/
 $(PKG)_DESCR    := LibUsb-1.0
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.21

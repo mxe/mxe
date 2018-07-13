@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := tidy-html5
-$(PKG)_WEBSITE  := http://www.html-tidy.org/
+$(PKG)_WEBSITE  := https://www.html-tidy.org/
 $(PKG)_DESCR    := HTML/XML syntax checker and reformatter
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.4.0
