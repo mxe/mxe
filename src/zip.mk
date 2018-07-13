@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := zip
-$(PKG)_WEBSITE  := http://www.info-zip.org
+$(PKG)_WEBSITE  := https://infozip.sourceforge.io/Zip.html
 $(PKG)_DESCR    := Info-ZIP
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.0

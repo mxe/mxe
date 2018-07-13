@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libmad
-$(PKG)_WEBSITE  := http://www.underbit.com/products/mad/
+$(PKG)_WEBSITE  := https://www.underbit.com/products/mad/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.15.1b
 $(PKG)_CHECKSUM := bbfac3ed6bfbc2823d3775ebb931087371e142bb0e9bb1bee51a76a6e0078690

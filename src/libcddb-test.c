@@ -2,7 +2,7 @@
  * This file is part of MXE. See LICENSE.md for licensing information.
  */
 
-// Based on: http://libcddb.sourceforge.net/tutorial.html
+/* Based on: https://libcddb.sourceforge.io/tutorial.html */
 
 #include <stdio.h>
 

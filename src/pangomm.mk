@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := pangomm
-$(PKG)_WEBSITE  := http://www.pango.org/
+$(PKG)_WEBSITE  := https://www.pango.org/
 $(PKG)_DESCR    := Pangomm
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.34.0

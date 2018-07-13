@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := glfw2
-$(PKG)_WEBSITE  := http://www.glfw.org/
+$(PKG)_WEBSITE  := https://www.glfw.org/
 $(PKG)_DESCR    := GLFW 2.x
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7.9

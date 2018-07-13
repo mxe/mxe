@@ -1,21 +1,21 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mpfr
-$(PKG)_WEBSITE  := http://www.mpfr.org/
+$(PKG)_WEBSITE  := https://www.mpfr.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.1.5
 $(PKG)_CHECKSUM := 015fde82b3979fbe5f83501986d328331ba8ddf008c1ff3da3c238f49ca062bc
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.mpfr.org/mpfr-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc gmp
 
 $(PKG)_DEPS_$(BUILD) := gmp
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.mpfr.org/mpfr-current/#download' | \
+    $(WGET) -q -O- 'https://www.mpfr.org/mpfr-current/#download' | \
     grep 'mpfr-' | \
     $(SED) -n 's,.*mpfr-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := neon
-$(PKG)_WEBSITE  := http://webdav.org/neon/
+$(PKG)_WEBSITE  := https://web.archive.org/web/webdav.org/neon/
 $(PKG)_DESCR    := HTTP and WebDAV client library (libneon)
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.30.2

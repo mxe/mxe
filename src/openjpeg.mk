@@ -2,7 +2,7 @@
 #Author: Julien Michel <julien.michel@orfeo-toolbox.org>
 
 PKG             := openjpeg
-$(PKG)_WEBSITE  := http://www.openjpeg.org/
+$(PKG)_WEBSITE  := https://www.openjpeg.org/
 $(PKG)_DESCR    := OpenJPEG
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.0

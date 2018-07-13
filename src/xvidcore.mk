@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 1.3.4
 $(PKG)_CHECKSUM := 4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f
 $(PKG)_SUBDIR   := xvidcore
 $(PKG)_FILE     := xvidcore-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://downloads.xvid.org/downloads/$($(PKG)_FILE)
+$(PKG)_URL      := https://downloads.xvid.com/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc pthreads yasm
 
 define $(PKG)_UPDATE

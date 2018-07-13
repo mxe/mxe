@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lapack
-$(PKG)_WEBSITE  := http://www.netlib.org/lapack/
+$(PKG)_WEBSITE  := https://www.netlib.org/lapack/
 $(PKG)_DESCR    := Reference LAPACK — Linear Algebra PACKage
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.8.0

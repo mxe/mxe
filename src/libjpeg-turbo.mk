@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libjpeg-turbo
-$(PKG)_WEBSITE  := http://libjpeg-turbo.virtualgl.org/
+$(PKG)_WEBSITE  := https://libjpeg-turbo.virtualgl.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.5.3
 $(PKG)_CHECKSUM := b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523
