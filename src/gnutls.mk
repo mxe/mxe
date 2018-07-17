@@ -3,8 +3,8 @@
 PKG             := gnutls
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gnutls/
 $(PKG)_DESCR    := GnuTLS
-$(PKG)_VERSION  := 3.5.18
-$(PKG)_CHECKSUM := ae2248d9e78747cf9c469dde81ff8f90b56838b707a0637f3f7d4eee90e80234
+$(PKG)_VERSION  := 3.5.19
+$(PKG)_CHECKSUM := 1936eb64f03aaefd6eb16cef0567457777618573826b94d03376bb6a4afadc44
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gnupg.org/ftp/gcrypt/gnutls/v3.5/$($(PKG)_FILE)
