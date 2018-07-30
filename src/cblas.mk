@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cblas
-$(PKG)_WEBSITE  := http://www.netlib.org/blas/
+$(PKG)_WEBSITE  := https://www.netlib.org/blas/
 $(PKG)_DESCR    := C interface to Reference BLAS
 $(PKG)_IGNORE    = $(lapack_IGNORE)
 $(PKG)_VERSION   = $(lapack_VERSION)

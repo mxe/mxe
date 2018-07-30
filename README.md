@@ -41,4 +41,4 @@ various target platforms, which:
       - i686: dw2
       - x86_64: sjlj
 
-Please see [mxe.cc](http://mxe.cc/) for further information and package support matrix.
+Please see [mxe.cc](https://mxe.cc/) for further information and package support matrix.

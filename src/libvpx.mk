@@ -12,7 +12,7 @@ $(PKG)_URL      := https://storage.googleapis.com/downloads.webmproject.org/rele
 $(PKG)_DEPS     := cc pthreads yasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://downloads.webmproject.org/releases/webm/index.html' | \
+    $(WGET) -q -O- 'https://storage.googleapis.com/downloads.webmproject.org/releases/webm/index.html' | \
     $(SED) -n 's,.*libvpx-\([0-9][^>]*\)\.tar.*,\1,p' | \
     $(SORT) -Vr | \
     head -1
