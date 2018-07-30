@@ -772,7 +772,7 @@ Priority: optional
 Architecture: %s%s
 Installed-Size: %d
 Maintainer: Boris Nagaev <bnagaev@gmail.com>
-Homepage: http://mxe.cc
+Homepage: https://mxe.cc/
 Description: %s
  MXE (M cross environment) is a Makefile that compiles
  a cross compiler and cross compiles many free libraries
