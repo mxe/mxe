@@ -51,6 +51,7 @@ define $(PKG)_BUILD
         -no-reduce-exports \
         -no-rpath \
         -make libs \
+        -make translations \
         -nomake demos \
         -nomake docs \
         -nomake examples \
