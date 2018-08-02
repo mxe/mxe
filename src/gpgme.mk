@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(1)' && GPG_ERROR_CONFIG=$(PREFIX)/bin/$(TARGET)-gpg-error-config ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-nls \
         --disable-languages
