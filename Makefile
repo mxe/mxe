@@ -15,7 +15,7 @@ MXE_TARGET_LIST    := $(strip $(foreach TRIPLET,$(MXE_TRIPLETS),\
 MXE_TARGETS        := i686-w64-mingw32.static
 .DEFAULT_GOAL      := all-filtered
 
-DEFAULT_MAX_JOBS   := 6
+DEFAULT_MAX_JOBS   := 32
 PRINTF_COL_1_WIDTH := 13
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
 MXE_MIRROR         := https://mirror.mxe.cc/pkg
