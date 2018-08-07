@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Sep 2010 21:42:46 +0200
-Subject: [PATCH 1/9] fix tool paths
+Subject: [PATCH 1/7] fix tool paths
 
 
 diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
@@ -29,7 +29,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:25:01 +0200
-Subject: [PATCH 2/9] Avoid DllMain symbol conflict when linking statically
+Subject: [PATCH 2/7] Avoid DllMain symbol conflict when linking statically
 
 Adjusted by Boris Nagaev on 29-Jan-2017 to fix
 https://gist.github.com/starius/f4fc85939352cb50122ba29e0f5b140d
@@ -39,7 +39,7 @@ diff --git a/gio/giomodule.c b/gio/giomodule.c
 index 1111111..2222222 100644
 --- a/gio/giomodule.c
 +++ b/gio/giomodule.c
-@@ -928,14 +928,12 @@ extern GType g_cocoa_notification_backend_get_type (void);
+@@ -968,14 +968,12 @@ extern GType _g_win32_network_monitor_get_type (void);
  
  static HMODULE gio_dll = NULL;
  
@@ -56,7 +56,7 @@ index 1111111..2222222 100644
  	 DWORD     fdwReason,
  	 LPVOID    lpvReserved)
  {
-@@ -945,8 +943,6 @@ DllMain (HINSTANCE hinstDLL,
+@@ -985,8 +983,6 @@ DllMain (HINSTANCE hinstDLL,
    return TRUE;
  }
  
@@ -69,7 +69,7 @@ diff --git a/glib/glib-init.c b/glib/glib-init.c
 index 1111111..2222222 100644
 --- a/glib/glib-init.c
 +++ b/glib/glib-init.c
-@@ -245,14 +245,14 @@ glib_init (void)
+@@ -275,14 +275,14 @@ glib_init (void)
  
  #if defined (G_OS_WIN32)
  
@@ -90,7 +90,7 @@ diff --git a/gobject/gtype.c b/gobject/gtype.c
 index 1111111..2222222 100644
 --- a/gobject/gtype.c
 +++ b/gobject/gtype.c
-@@ -4450,7 +4450,7 @@ gobject_init (void)
+@@ -4451,7 +4451,7 @@ gobject_init (void)
    _g_signal_init ();
  }
  
@@ -103,14 +103,14 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:27:22 +0200
-Subject: [PATCH 3/9] Allow building without inotify support
+Subject: [PATCH 3/7] Allow building without inotify support
 
 
 diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1599,10 +1599,16 @@ dnl *****************************
+@@ -1698,10 +1698,16 @@ dnl *****************************
  dnl ** Check for inotify (GIO) **
  dnl *****************************
  inotify_support=no
@@ -131,7 +131,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:28:14 +0200
-Subject: [PATCH 4/9] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
+Subject: [PATCH 4/7] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
  Backported from upstream
 
 
@@ -139,7 +139,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -511,6 +511,8 @@ LT_INIT([disable-static win32-dll])
+@@ -486,6 +486,8 @@ LT_INIT([disable-static win32-dll])
  dnl when using libtool 2.x create libtool early, because it's used in configure
  m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
  
@@ -152,7 +152,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:06 +0200
-Subject: [PATCH 5/9] Link with dnsapi
+Subject: [PATCH 5/7] Link with dnsapi
 
 
 diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
@@ -165,390 +165,13 @@ index 1111111..2222222 100644
  Requires.private: gmodule-no-export-2.0
 -Libs: -L${libdir} -lgio-2.0
 +Libs: -L${libdir} -lgio-2.0 -ldnsapi -liphlpapi
- Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@ @SELINUX_LIBS@ @COCOA_LIBS@ @CARBON_LIBS@
+ Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@ @SELINUX_LIBS@ @COCOA_LIBS@ @CARBON_LIBS@ @LIBMOUNT_LIBS@
  Cflags:
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Hans Petter Jansson <hpj@cl.no>
-Date: Fri, 15 Jun 2012 15:29:38 +0200
-Subject: [PATCH 6/9] Ensure globals are initialized even when DllMain is not
- being run
-
-
-diff --git a/glib/gmain.c b/glib/gmain.c
-index 1111111..2222222 100644
---- a/glib/gmain.c
-+++ b/glib/gmain.c
-@@ -2657,12 +2657,15 @@ g_get_real_time (void)
- #if defined (G_OS_WIN32)
- static ULONGLONG (*g_GetTickCount64) (void) = NULL;
- static guint32 g_win32_tick_epoch = 0;
-+static gboolean g_win32_clock_is_initialized;
- 
- void
- g_clock_win32_init (void)
- {
-   HMODULE kernel32;
- 
-+  g_win32_clock_is_initialized = TRUE;
-+
-   g_GetTickCount64 = NULL;
-   kernel32 = GetModuleHandle ("KERNEL32.DLL");
-   if (kernel32 != NULL)
-@@ -2721,6 +2724,9 @@ g_get_monotonic_time (void)
-    *    timeBeginPeriod() to increase it as much as they want
-    */
- 
-+  if (!g_win32_clock_is_initialized)
-+    g_clock_win32_init ();
-+
-   if (g_GetTickCount64 != NULL)
-     {
-       guint32 ticks_as_32bit;
-diff --git a/glib/gthread-win32.c b/glib/gthread-win32.c
-index 1111111..2222222 100644
---- a/glib/gthread-win32.c
-+++ b/glib/gthread-win32.c
-@@ -116,18 +116,28 @@ typedef struct
-   void     (__stdcall * WakeConditionVariable)       (gpointer cond);
- } GThreadImplVtable;
- 
-+/* Needed for static builds where DllMain initializer doesn't get called */
-+static gboolean g_threads_is_initialized;
-+G_GNUC_INTERNAL void g_thread_win32_init (void);
-+
- static GThreadImplVtable g_thread_impl_vtable;
- 
- /* {{{1 GMutex */
- void
- g_mutex_init (GMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.InitializeSRWLock (mutex);
- }
- 
- void
- g_mutex_clear (GMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   if (g_thread_impl_vtable.DeleteSRWLock != NULL)
-     g_thread_impl_vtable.DeleteSRWLock (mutex);
- }
-@@ -135,18 +145,27 @@ g_mutex_clear (GMutex *mutex)
- void
- g_mutex_lock (GMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.AcquireSRWLockExclusive (mutex);
- }
- 
- gboolean
- g_mutex_trylock (GMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   return g_thread_impl_vtable.TryAcquireSRWLockExclusive (mutex);
- }
- 
- void
- g_mutex_unlock (GMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.ReleaseSRWLockExclusive (mutex);
- }
- 
-@@ -157,6 +176,9 @@ g_rec_mutex_impl_new (void)
- {
-   CRITICAL_SECTION *cs;
- 
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   cs = g_slice_new (CRITICAL_SECTION);
-   InitializeCriticalSection (cs);
- 
-@@ -167,6 +189,10 @@ static void
- g_rec_mutex_impl_free (CRITICAL_SECTION *cs)
- {
-   DeleteCriticalSection (cs);
-+
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_slice_free (CRITICAL_SECTION, cs);
- }
- 
-@@ -175,6 +201,9 @@ g_rec_mutex_get_impl (GRecMutex *mutex)
- {
-   CRITICAL_SECTION *impl = mutex->p;
- 
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   if G_UNLIKELY (mutex->p == NULL)
-     {
-       impl = g_rec_mutex_impl_new ();
-@@ -189,30 +218,45 @@ g_rec_mutex_get_impl (GRecMutex *mutex)
- void
- g_rec_mutex_init (GRecMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   mutex->p = g_rec_mutex_impl_new ();
- }
- 
- void
- g_rec_mutex_clear (GRecMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_rec_mutex_impl_free (mutex->p);
- }
- 
- void
- g_rec_mutex_lock (GRecMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   EnterCriticalSection (g_rec_mutex_get_impl (mutex));
- }
- 
- void
- g_rec_mutex_unlock (GRecMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   LeaveCriticalSection (mutex->p);
- }
- 
- gboolean
- g_rec_mutex_trylock (GRecMutex *mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   return TryEnterCriticalSection (g_rec_mutex_get_impl (mutex));
- }
- 
-@@ -221,12 +265,18 @@ g_rec_mutex_trylock (GRecMutex *mutex)
- void
- g_rw_lock_init (GRWLock *lock)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.InitializeSRWLock (lock);
- }
- 
- void
- g_rw_lock_clear (GRWLock *lock)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   if (g_thread_impl_vtable.DeleteSRWLock != NULL)
-     g_thread_impl_vtable.DeleteSRWLock (lock);
- }
-@@ -234,36 +284,54 @@ g_rw_lock_clear (GRWLock *lock)
- void
- g_rw_lock_writer_lock (GRWLock *lock)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.AcquireSRWLockExclusive (lock);
- }
- 
- gboolean
- g_rw_lock_writer_trylock (GRWLock *lock)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   return g_thread_impl_vtable.TryAcquireSRWLockExclusive (lock);
- }
- 
- void
- g_rw_lock_writer_unlock (GRWLock *lock)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.ReleaseSRWLockExclusive (lock);
- }
- 
- void
- g_rw_lock_reader_lock (GRWLock *lock)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.AcquireSRWLockShared (lock);
- }
- 
- gboolean
- g_rw_lock_reader_trylock (GRWLock *lock)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   return g_thread_impl_vtable.TryAcquireSRWLockShared (lock);
- }
- 
- void
- g_rw_lock_reader_unlock (GRWLock *lock)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.ReleaseSRWLockShared (lock);
- }
- 
-@@ -271,12 +339,18 @@ g_rw_lock_reader_unlock (GRWLock *lock)
- void
- g_cond_init (GCond *cond)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.InitializeConditionVariable (cond);
- }
- 
- void
- g_cond_clear (GCond *cond)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   if (g_thread_impl_vtable.DeleteConditionVariable)
-     g_thread_impl_vtable.DeleteConditionVariable (cond);
- }
-@@ -284,12 +358,18 @@ g_cond_clear (GCond *cond)
- void
- g_cond_signal (GCond *cond)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.WakeConditionVariable (cond);
- }
- 
- void
- g_cond_broadcast (GCond *cond)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.WakeAllConditionVariable (cond);
- }
- 
-@@ -297,6 +377,9 @@ void
- g_cond_wait (GCond  *cond,
-              GMutex *entered_mutex)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   g_thread_impl_vtable.SleepConditionVariableSRW (cond, entered_mutex, INFINITE, 0);
- }
- 
-@@ -307,6 +390,9 @@ g_cond_wait_until (GCond  *cond,
- {
-   gint64 span;
- 
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   span = end_time - g_get_monotonic_time ();
- 
-   if G_UNLIKELY (span < 0)
-@@ -339,6 +425,9 @@ g_private_get_impl (GPrivate *key)
- 
-   if G_UNLIKELY (impl == 0)
-     {
-+      if (!g_threads_is_initialized)
-+        g_thread_win32_init ();
-+
-       EnterCriticalSection (&g_private_lock);
-       impl = (DWORD) key->p;
-       if (impl == 0)
-@@ -432,6 +521,9 @@ g_system_thread_free (GRealThread *thread)
- {
-   GThreadWin32 *wt = (GThreadWin32 *) thread;
- 
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   win32_check_for_error (CloseHandle (wt->handle));
-   g_slice_free (GThreadWin32, wt);
- }
-@@ -439,6 +531,9 @@ g_system_thread_free (GRealThread *thread)
- void
- g_system_thread_exit (void)
- {
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   _endthreadex (0);
- }
- 
-@@ -447,6 +542,9 @@ g_thread_win32_proxy (gpointer data)
- {
-   GThreadWin32 *self = data;
- 
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   self->proxy (self);
- 
-   g_system_thread_exit ();
-@@ -464,6 +562,9 @@ g_system_thread_new (GThreadFunc   func,
-   GThreadWin32 *thread;
-   guint ignore;
- 
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   thread = g_slice_new0 (GThreadWin32);
-   thread->proxy = func;
- 
-@@ -493,6 +594,9 @@ g_system_thread_wait (GRealThread *thread)
- {
-   GThreadWin32 *wt = (GThreadWin32 *) thread;
- 
-+  if (!g_threads_is_initialized)
-+    g_thread_win32_init ();
-+
-   win32_check_for_error (WAIT_FAILED != WaitForSingleObject (wt->handle, INFINITE));
- }
- 
-@@ -1041,6 +1145,8 @@ g_thread_lookup_native_funcs (void)
- void
- g_thread_win32_init (void)
- {
-+  g_threads_is_initialized = TRUE;
-+
-   if (!g_thread_lookup_native_funcs ())
-     g_thread_xp_init ();
- 
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gerardo Ballabio <gerardo.ballabio@gmail.com>
 Date: Sun, 16 Aug 2015 13:18:24 +0200
-Subject: [PATCH 7/9] Remove an annoying runtime warning
+Subject: [PATCH 6/7] Remove an annoying runtime warning
 
 that pops up when using GtkApplication in Gtk+ 3 programs.
 
@@ -556,7 +179,7 @@ diff --git a/gio/gdbusaddress.c b/gio/gdbusaddress.c
 index 1111111..2222222 100644
 --- a/gio/gdbusaddress.c
 +++ b/gio/gdbusaddress.c
-@@ -1387,6 +1387,7 @@ __declspec(dllexport) void CALLBACK g_win32_run_session_bus (HWND hwnd, HINSTANC
+@@ -1406,6 +1406,7 @@ __declspec(dllexport) void CALLBACK g_win32_run_session_bus (HWND hwnd, HINSTANC
  __declspec(dllexport) void CALLBACK
  g_win32_run_session_bus (HWND hwnd, HINSTANCE hinst, char *cmdline, int nCmdShow)
  {
@@ -564,7 +187,7 @@ index 1111111..2222222 100644
    GDBusDaemon *daemon;
    GMainLoop *loop;
    const char *address;
-@@ -1418,6 +1419,7 @@ g_win32_run_session_bus (HWND hwnd, HINSTANCE hinst, char *cmdline, int nCmdShow
+@@ -1438,6 +1439,7 @@ g_win32_run_session_bus (HWND hwnd, HINSTANCE hinst, char *cmdline, int nCmdShow
  
    g_main_loop_unref (loop);
    g_object_unref (daemon);
@@ -576,7 +199,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: aquiles2k <aj@elane2k.com>
 Date: Wed, 6 Apr 2016 22:39:53 +0300
-Subject: [PATCH 8/9] fix error "won't overwrite defined macro" on OSX
+Subject: [PATCH 7/7] fix error "won't overwrite defined macro" on OSX
 
 See https://github.com/mxe/mxe/issues/1281
 
@@ -584,7 +207,7 @@ diff --git a/m4macros/glib-gettext.m4 b/m4macros/glib-gettext.m4
 index 1111111..2222222 100644
 --- a/m4macros/glib-gettext.m4
 +++ b/m4macros/glib-gettext.m4
-@@ -36,8 +36,8 @@ dnl We go to great lengths to make sure that aclocal won't
+@@ -39,8 +39,8 @@ dnl We go to great lengths to make sure that aclocal won't
  dnl try to pull in the installed version of these macros
  dnl when running aclocal in the glib directory.
  dnl
@@ -595,49 +218,3 @@ index 1111111..2222222 100644
  dnl
  dnl At the end, if we're not within glib, we'll define the public
  dnl definitions in terms of our private definitions.
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Mon, 26 Feb 2018 16:09:53 +1100
-Subject: [PATCH 9/9] darwin: disable g_cocoa_notification_backend
-
-
-diff --git a/gio/Makefile.am b/gio/Makefile.am
-index 1111111..2222222 100644
---- a/gio/Makefile.am
-+++ b/gio/Makefile.am
-@@ -279,10 +279,6 @@ unix_sources = \
- 
- appinfo_sources += $(unix_appinfo_sources)
- 
--if OS_COCOA
--unix_sources += gcocoanotificationbackend.c
--endif
--
- giounixincludedir=$(includedir)/gio-unix-2.0/gio
- giounixinclude_HEADERS = \
- 	gdesktopappinfo.h	\
-diff --git a/gio/giomodule.c b/gio/giomodule.c
-index 1111111..2222222 100644
---- a/gio/giomodule.c
-+++ b/gio/giomodule.c
-@@ -918,9 +918,6 @@ extern GType g_proxy_resolver_portal_get_type (void);
- extern GType g_network_monitor_portal_get_type (void);
- #endif
- 
--#ifdef HAVE_COCOA
--extern GType g_cocoa_notification_backend_get_type (void);
--#endif
- 
- #ifdef G_PLATFORM_WIN32
- 
-@@ -1117,9 +1114,6 @@ _g_io_modules_ensure_loaded (void)
-       g_type_ensure (g_network_monitor_portal_get_type ());
-       g_type_ensure (g_proxy_resolver_portal_get_type ());
- #endif
--#ifdef HAVE_COCOA
--      g_type_ensure (g_cocoa_notification_backend_get_type ());
--#endif
- #ifdef G_OS_WIN32
-       g_type_ensure (_g_winhttp_vfs_get_type ());
- #endif

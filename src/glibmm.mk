@@ -4,17 +4,16 @@ PKG             := glibmm
 $(PKG)_WEBSITE  := https://www.gtkmm.org/
 $(PKG)_DESCR    := GLibmm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.42.0
-$(PKG)_CHECKSUM := 985083d97378d234da27a7243587cc0d186897a4b2d3c1286f794089be1a3397
+$(PKG)_VERSION  := 2.56.0
+$(PKG)_CHECKSUM := 6e74fcba0d245451c58fc8a196e9d103789bc510e1eee1a9b1e816c5209e79a9
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc glib libsigc++
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/glibmm/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
+    $(call MXE_GET_GH_TAGS,GNOME/glibmm) | \
+    $(SED) -n 's,^\([0-9]*\.[0-9]*[02468].*\),\1,p' | \
     $(SORT) -Vr | \
     head -1
 endef

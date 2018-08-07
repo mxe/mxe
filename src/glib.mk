@@ -4,8 +4,8 @@ PKG             := glib
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.50.2
-$(PKG)_CHECKSUM := be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5
+$(PKG)_VERSION  := 2.56.1
+$(PKG)_CHECKSUM := 40ef3f44f2c651c7a31aedee44259809b6f03d3d20be44545cd7d177221c0b8d
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -15,8 +15,8 @@ $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := autotools gettext libffi libiconv zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/glib/refs/tags' | \
-    $(SED) -n "s,.*glib-\([0-9]\+\.[0-9]*[02468]\.[^']*\)\.tar.*,\1,p" | \
+    $(call MXE_GET_GH_TAGS,GNOME/glib) | \
+    $(SED) -n 's,^\([0-9]*\.[0-9]*[02468].*\),\1,p' | \
     $(SORT) -Vr | \
     head -1
 endef
