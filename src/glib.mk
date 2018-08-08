@@ -16,7 +16,7 @@ $(PKG)_DEPS_$(BUILD) := autotools gettext libffi libiconv zlib
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GH_TAGS,GNOME/glib) | \
-    $(SED) -n 's,^\([0-9]*\.[0-9]*[02468].*\),\1,p' | \
+    $(SED) -n 's,^\([0-9]*\.[0-9]*[02468]\..*\),\1,p' | \
     $(SORT) -Vr | \
     head -1
 endef

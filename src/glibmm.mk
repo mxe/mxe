@@ -13,12 +13,12 @@ $(PKG)_DEPS     := cc glib libsigc++
 
 define $(PKG)_UPDATE
     $(call MXE_GET_GH_TAGS,GNOME/glibmm) | \
-    $(SED) -n 's,^\([0-9]*\.[0-9]*[02468].*\),\1,p' | \
+    $(SED) -n 's,^\([0-9]*\.[0-9]*[02468]\..*\),\1,p' | \
     $(SORT) -Vr | \
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_POSIX
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         CXX='$(TARGET)-g++' \
@@ -29,3 +29,5 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/gio/src' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
     $(MAKE) -C '$(1)'         -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
+
+$(call MXE_REQUIRE_POSIX,$(PKG))

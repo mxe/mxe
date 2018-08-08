@@ -4,18 +4,18 @@ PKG             := atk
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := ATK
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.16.0
-$(PKG)_CHECKSUM := 095f986060a6a0b22eb15eef84ae9f14a1cf8082488faa6886d94c37438ae562
+$(PKG)_VERSION  := 2.28.1
+$(PKG)_CHECKSUM := cd3a1ea6ecc268a2497f0cd018e970860de24a6d42086919d6bf6c8e8d53f4fc
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gettext glib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/atk/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?h=ATK_\\([0-9]*_[0-9]*[02468]_[^<]*\\)'.*,\\1,p" | \
+    $(call MXE_GET_GH_TAGS,GNOME/atk) | \
+    $(SED) -n 's,ATK_\([0-9]*_[0-9]*[02468]_.*\),\1,p' | \
     $(SED) 's,_,.,g' | \
+    $(SORT) -Vr | \
     head -1
 endef
 

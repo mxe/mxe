@@ -116,6 +116,11 @@ MXE_GCC_EXCEPTION_OPTS = \
     $(if $(call seq,sjlj,$(GCC_EXCEPTIONS)),--enable-sjlj-exceptions) \
     $(if $(call seq,dw2,$(GCC_EXCEPTIONS)),--disable-sjlj-exceptions)
 
+# enable builds for posix toolchains only
+MXE_REQUIRE_POSIX = \
+    $(foreach TRIPLET,$(MXE_TRIPLETS),\
+        $(foreach LIB_TYPE,$(MXE_LIB_TYPES),\
+            $(eval $(1)_BUILD_$(TRIPLET).$(LIB_TYPE).posix = $$($(1)_BUILD_POSIX))))
 
 # Append these to the "make" and "make install" steps of autotools packages
 # in order to neither build nor install unwanted binaries, manpages,
