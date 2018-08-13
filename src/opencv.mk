@@ -19,6 +19,8 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+# -DCMAKE_CXX_STANDARD=98 required for non-posix gcc7 build
+
 define $(PKG)_BUILD
     # build
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
@@ -46,6 +48,7 @@ define $(PKG)_BUILD
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
+      -DCMAKE_CXX_STANDARD=98 \
       -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500'
 
     # install
