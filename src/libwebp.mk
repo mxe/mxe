@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://developers.google.com/speed/webp/download' | \
-    $(SED) -n 's,.*<a href="http://downloads.webmproject.org/releases/webp/libwebp-\([0-9][^"]*\)\.tar.gz">Download</a> |,\1,p' | \
+    $(SED) -n 's,.*<a href="//storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-\([0-9][^"]*\)\.tar.gz">Download</a> |,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef

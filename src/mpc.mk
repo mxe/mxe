@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := b561f54d8a479cee3bc891ee52735f18ff86712ba30f036f8b8537bae380c
 $(PKG)_SUBDIR   := mpc-$($(PKG)_VERSION)
 $(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/mpc/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/m/mpclib/mpclib_$($(PKG)_VERSION).orig.tar.gz
+$(PKG)_URL_2    := https://deb.debian.org/debian/pool/main/m/mpclib/mpclib_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc gmp mpfr
 
