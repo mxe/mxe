@@ -4,8 +4,8 @@ PKG             := itk
 $(PKG)_WEBSITE  := https://www.itk.org/
 $(PKG)_DESCR    := Insight Segmentation and Registration Toolkit (ITK)
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.10.1
-$(PKG)_CHECKSUM := 334312cc31925fd6c2622c9cd4ed33fecbbbd5b97e03b93f34b259d08352eed7
+$(PKG)_VERSION  := 4.13.0
+$(PKG)_CHECKSUM := feb3fce3cd3bf08405e49da30876dc766e5145c821e5e3f8736df1d1717da125
 $(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -19,8 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd '$(1).build' && '$(TARGET)-cmake' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
         -DITK_FORBID_DOWNLOADS=TRUE \
         -DBUILD_TESTING=FALSE \
@@ -30,7 +29,7 @@ define $(PKG)_BUILD
         -DITK_USE_SYSTEM_JPEG=TRUE \
         -DITK_USE_SYSTEM_PNG=TRUE \
         -DITK_USE_SYSTEM_TIFF=TRUE \
-        -DITK_USE_SYSTEM_ZLIB=TRUE \
-        '$(1)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
+        -DITK_USE_SYSTEM_ZLIB=TRUE
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef
