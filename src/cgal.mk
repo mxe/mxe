@@ -27,12 +27,14 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     mkdir '$(BUILD_DIR).test-tree'
-    cd '$(BUILD_DIR).test-tree' && '$(TARGET)-cmake' '$(SOURCE_DIR)/examples/AABB_tree'
+    cd '$(BUILD_DIR).test-tree' && '$(TARGET)-cmake' '$(SOURCE_DIR)/examples/AABB_tree' \
+        -DCMAKE_CXX_STANDARD=98
     $(MAKE) -C '$(BUILD_DIR).test-tree' -j $(JOBS)
     $(INSTALL) '$(BUILD_DIR).test-tree/AABB_polyhedron_edge_example.exe' '$(PREFIX)/$(TARGET)/bin/test-cgal.exe'
 
     mkdir '$(BUILD_DIR).test-image'
-    cd '$(BUILD_DIR).test-image' && '$(TARGET)-cmake' '$(SOURCE_DIR)/examples/CGALimageIO'
+    cd '$(BUILD_DIR).test-image' && '$(TARGET)-cmake' '$(SOURCE_DIR)/examples/CGALimageIO' \
+        -DCMAKE_CXX_STANDARD=98
     $(MAKE) -C '$(BUILD_DIR).test-image' -j $(JOBS)
     $(INSTALL) '$(BUILD_DIR).test-image/convert_raw_image_to_inr.exe' '$(PREFIX)/$(TARGET)/bin/test-cgalimgio.exe'
 endef
