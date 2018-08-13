@@ -27,15 +27,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd '$(1).build' && \
-        '$(TARGET)-cmake' '$(1)' \
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DCMAKE_RELEASE_POSTFIX='' \
-        -DBoost_THREADAPI=win32
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(1)' -j 1 VERBOSE=1
-    $(MAKE) -C '$(1).build' -j 1 install VERBOSE=1
+        -DBoost_THREADAPI=win32 \
+        -DCMAKE_CXX_STANDARD=98
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(BUILD_DIR)' -j 1 VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
     $(TARGET)-g++ \
-        '$(1)/json_demo/json_demo.cpp' \
+        '$(SOURCE_DIR)/json_demo/json_demo.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-json_spirit.exe' -ljson_spirit
 endef
