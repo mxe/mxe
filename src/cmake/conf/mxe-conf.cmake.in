@@ -49,6 +49,15 @@ set(CMAKE_INSTALL_PREFIX @PREFIX@/@TARGET@ CACHE PATH "Installation Prefix")
 # For custom mxe FindPackage scripts
 set(CMAKE_MODULE_PATH "@PREFIX@/share/cmake/modules" ${CMAKE_MODULE_PATH})
 
+# projects (mis)use `-isystem` to silence warnings from 3rd-party
+# source (among other things). gcc6 introduces changes to search
+# order which breaks this usage.
+#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70129
+#   https://gitlab.kitware.com/cmake/cmake/issues/16291
+#   https://gitlab.kitware.com/cmake/cmake/issues/16919
+set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES @PREFIX@/@TARGET@/include)
+set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES @PREFIX@/@TARGET@/include)
+
 
 ## Programs
 set(CMAKE_C_COMPILER @PREFIX@/bin/@TARGET@-gcc)
