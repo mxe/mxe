@@ -7,8 +7,8 @@ $(PKG)_VERSION  := 1.1.24+nmu5
 $(PKG)_CHECKSUM := e29deda4cd7350189c71af0925cbf4a4473f9841d1419a922e1e8ff1954db1f2
 $(PKG)_SUBDIR   := libpaper-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpaper_$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://linux.mirrors.es.net/pub/ubuntu/pool/main/libp/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://deb.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE

@@ -8,7 +8,6 @@ $(PKG)_CHECKSUM := 95c344a02c47c9753c50a5386fdfb8313f9e4e95949a5c523a452f0bcb01b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://videolan-nyc.defaultroute.com/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt libgpg_error
 
 define $(PKG)_UPDATE
