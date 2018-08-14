@@ -27,3 +27,8 @@ $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc8.patch
 # copy db-2-install-exe.patch to gcc7 plugin when gcc8 is default
 db_PATCHES := $(TOP_DIR)/src/db-1-fix-including-winioctl-h-lowcase.patch
 
+# set these in respective makefiles when gcc7 becomes default
+# remove from here and leave them blank for gcc5 plugin
+libssh_EXTRA_WARNINGS = -Wno-error=implicit-fallthrough
+gtkimageview_EXTRA_WARNINGS = -Wno-error=misleading-indentation
+guile_EXTRA_WARNINGS = -Wno-error=misleading-indentation
