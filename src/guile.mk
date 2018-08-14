@@ -29,7 +29,7 @@ define $(PKG)_BUILD
         --without-threads \
         scm_cv_struct_timespec=no \
         LIBS='-lunistring -lintl -liconv -ldl' \
-        CFLAGS='-Wno-unused-but-set-variable -Wno-unused-value -Wno-error=misleading-indentation'
+        CFLAGS='-Wno-unused-but-set-variable -Wno-unused-value $($(PKG)_EXTRA_WARNINGS)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) schemelib_DATA=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT) schemelib_DATA=
 
