@@ -4,19 +4,10 @@ PKG             := itk
 $(PKG)_WEBSITE  := https://www.itk.org/
 $(PKG)_DESCR    := Insight Segmentation and Registration Toolkit (ITK)
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.13.0
-$(PKG)_CHECKSUM := feb3fce3cd3bf08405e49da30876dc766e5145c821e5e3f8736df1d1717da125
-$(PKG)_SUBDIR   := InsightToolkit-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_VERSION  := 4.13.1
+$(PKG)_CHECKSUM := b352060d8b7289916a3cb033dfdbcf423423ba474643b79706966e679268e3d7
+$(PKG)_GH_CONF  := InsightSoftwareConsortium/ITK/releases/latest, v
 $(PKG)_DEPS     := cc expat hdf5 jpeg libpng tiff zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://itk.org/ITK/resources/software.html' | \
-    $(SED) -n 's,.*InsightToolkit-\([0-9][^>]*\)\.tar\.xz.*,\1,p' | \
-    $(SORT) -V |
-    tail -1
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
