@@ -24,3 +24,8 @@ $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc6.patch
+
+# set these in respective makefiles if gcc6 becomes default
+# and leave them blank for gcc5 plugin
+gtkimageview_EXTRA_WARNINGS = -Wno-error=misleading-indentation
+guile_EXTRA_WARNINGS = -Wno-error=misleading-indentation
