@@ -22,6 +22,7 @@ $(PKG)_CHECKSUM := 196c3c04ba2613f893283977e6011b2345d1cd1af9abeac58e916b1aab3e0
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc8.patch
 
 # copy db-2-install-exe.patch to gcc7 plugin when gcc8 is default
