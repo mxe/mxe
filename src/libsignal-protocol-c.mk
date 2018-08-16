@@ -16,7 +16,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -pedantic \
+        -W -Wall -Werror -pedantic -std=c99 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libsignal-protocol-c.exe' \
         `'$(TARGET)-pkg-config' libsignal-protocol-c --cflags --libs`
 endef

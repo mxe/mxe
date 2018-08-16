@@ -29,7 +29,7 @@ define $(PKG)_BUILD
 
     # compile test
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -pedantic \
+        -W -Wall -Werror -pedantic -std=c99 \
         '$(SOURCE_DIR)/tests/test_stack.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' atomic_ops_gpl --cflags --libs`
 endef
