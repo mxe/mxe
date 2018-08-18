@@ -15,11 +15,7 @@ $(PKG)_DEPS     := cc gmp mpfr
 $(PKG)_DEPS_$(BUILD) := gmp mpfr
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://ftp.gnu.org/gnu/mpc/ | \
-	grep -oP 'mpc-[0-9.]*[0-9]' | \
-	grep -o '[0-9.]*' | \
-	sort --version-sort | \
-	tail -1
+    $(call GET_LATEST_VERSION, https://ftp.gnu.org/gnu/mpc/)
 endef
 
 define $(PKG)_BUILD_$(BUILD)
