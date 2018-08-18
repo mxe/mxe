@@ -9,7 +9,7 @@ if [[ "$OSTYPE" =~ "linux" ]]; then
             autoconf automake autopoint bash bison bzip2 flex gettext\
             git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
             libtool libltdl-dev libssl-dev libxml-parser-perl make \
-            openssl p7zip-full patch perl pkg-config python ruby scons \
+            openssl p7zip-full patch perl pkg-config python ruby \
             sed unzip wget xz-utils
         if ! [[ `uname -m` =~ "i686" ]]; then
             apt-get --yes install g++-multilib libc6-dev-i386
@@ -31,14 +31,14 @@ if [[ "$OSTYPE" =~ "linux" ]]; then
             autoconf automake bash bison bzip2 flex gcc-c++ \
             gdk-pixbuf2-devel gettext git gperf intltool make \
             sed libffi-devel libtool openssl-devel p7zip patch \
-            perl pkgconfig python ruby scons unzip wget xz
+            perl pkgconfig python ruby unzip wget xz
     elif which pacman-g2; then
         # Frugalware
         pacman-g2 -S \
             autoconf automake bash bzip2 bison flex gcc gdk-pixbuf2\
             gettext git gperf intltool make sed libffi libtool \
             openssl patch perl perl-xml-parser pkgconfig python \
-            ruby scons unzip wget xz xz-lzma
+            ruby unzip wget xz xz-lzma
     elif which emerge; then
         # Gentoo
         emerge \
@@ -50,7 +50,7 @@ if [[ "$OSTYPE" =~ "linux" ]]; then
             sys-devel/libtool dev-libs/openssl app-arch/p7zip \
             sys-devel/patch dev-lang/perl dev-perl/XML-Parser \
             dev-util/pkgconfig dev-lang/python dev-lang/ruby \
-            dev-util/scons app-arch/unzip net-misc/wget \
+            app-arch/unzip net-misc/wget \
             app-arch/xz-utils x11-libs/gdk-pixbuf
     elif which zypper; then
         # openSUSE
@@ -59,7 +59,7 @@ if [[ "$OSTYPE" =~ "linux" ]]; then
             gdk-pixbuf-devel gettext-tools git gperf intltool \
             libffi-devel libtool make openssl libopenssl-devel \
             p7zip patch perl perl-XML-Parser pkg-config python \
-            ruby scons sed unzip wget xz
+            ruby sed unzip wget xz
         if ! [[ `uname -m` =~ i686 ]]; then
             zypper install -R \
                 gcc-32bit glibc-devel-32bit libgcc46-32bit \
@@ -70,13 +70,13 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     port install \
         autoconf automake bison coreutils flex gettext \
         gdk-pixbuf2 glib2 gnutar gsed intltool libffi libtool \
-        openssl p5-xml-parser p7zip pkgconfig scons wget xz
+        openssl p5-xml-parser p7zip pkgconfig wget xz
 elif [[ "$OSTYPE" == "freebsd"* ]]; then
     pkg install \
         automake autoconf bash bison coreutils flex \
         gcc gdk-pixbuf2 gettext git glib gmake gperf gsed intltool libffi \
         libtool openssl p5-XML-Parser p7zip patch perl5 \
-        pkgconf python ruby scons unzip wget
+        pkgconf python ruby unzip wget
     pkg install file
 else
     echo "unknown: $OSTYPE"
