@@ -11,6 +11,12 @@ $(PKG)_FILE     := nsis-$($(PKG)_VERSION)-src.tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/nsis/NSIS 3/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
+define SCONSBIN
+   $(if $(findstring python2,`[ -e /usr/bin/python2 ] && echo python2`), \
+      cp /usr/bin/scons $(1)/ && sed -i s/python/python2/g $(1)/scons && ./scons, \
+      scons)
+endef
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://nsis.sourceforge.io/Download' | \
     $(SED) -n 's,.*nsis-\([0-9.]\+\)-src.tar.*,\1,p' | \
@@ -21,7 +27,7 @@ define $(PKG)_BUILD
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
         $(SED) -i 's/pei-i386/pei-x86-64/' '$(1)/SCons/Config/linker_script' && \
         $(SED) -i 's/m_target_type=TARGET_X86ANSI/m_target_type=TARGET_AMD64/' '$(1)/Source/build.cpp')
-    cd '$(1)' && scons \
+    cd '$(1)' && $(SCONSBIN) \
         MINGW_CROSS_PREFIX='$(TARGET)-' \
         XGCC_W32_PREFIX='$(TARGET)-' \
         PREFIX='$(PREFIX)/$(TARGET)' \
