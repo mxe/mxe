@@ -9,15 +9,14 @@ Subject: fix openal static
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index bf5a805..78e5630 100755
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -87,6 +87,7 @@
- # define SFML_STATIC if the build type is not set to 'shared'
- if(NOT BUILD_SHARED_LIBS)
-     add_definitions(-DSFML_STATIC)
-+    add_definitions(-DAL_LIBTYPE_STATIC)
- endif()
- 
- # remove SL security warnings with Visual C++
+index 1111111..2222222 100644
+--- a/cmake/Macros.cmake
++++ b/cmake/Macros.cmake
+@@ -173,6 +173,7 @@
+     # define SFML_STATIC if the build type is not set to 'shared'
+     if(NOT BUILD_SHARED_LIBS)
+         target_compile_definitions(${target} PUBLIC "SFML_STATIC")
++        target_compile_definitions(${target} PUBLIC "AL_LIBTYPE_STATIC")
+     endif()
 
+ endmacro()
