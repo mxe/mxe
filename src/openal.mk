@@ -3,8 +3,8 @@
 PKG             := openal
 $(PKG)_WEBSITE  := http://kcat.strangesoft.net/openal.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.16.0
-$(PKG)_CHECKSUM := 2f3dcd313fe26391284fbf8596863723f99c65d6c6846dccb48e79cadaf40d5f
+$(PKG)_VERSION  := 1.18.2
+$(PKG)_CHECKSUM := 9f8ac1e27fba15a59758a13f0c7f6540a0605b6c3a691def9d420570506d7e82
 $(PKG)_SUBDIR   := openal-soft-$($(PKG)_VERSION)
 $(PKG)_FILE     := openal-soft-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://kcat.strangesoft.net/openal-releases/$($(PKG)_FILE)
@@ -18,7 +18,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # Update OpenAL cross compilation script with mxe root path
+    $(SED) -i "s|CMAKE_FIND_ROOT_PATH \"/usr/\$${HOST}\"|CMAKE_FIND_ROOT_PATH \"$(PREFIX)/$(TARGET)\"|" $(1)/XCompile.txt
+    cat $(1)/XCompile.txt
+
     cd '$(1)/build' && '$(TARGET)-cmake' .. \
+        -DHOST=$(TARGET) \
+        -DCMAKE_TOOLCHAIN_FILE=../XCompile.txt \
         -DALSOFT_EXAMPLES=FALSE \
         -DALSOFT_UTILS=FALSE
     $(MAKE) -C '$(1)/build' -j '$(JOBS)' install

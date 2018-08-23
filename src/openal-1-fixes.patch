@@ -2,9 +2,12 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
+Edit:There was a mess in OpenAL' `CMakeLists.txt` - `CHECK_INCLUDE_FILES` has been misused.
+
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Guilherme Lima Bernal <dev@lbguilherme.com>
-Date: Sat, 28 Mar 2015 20:52:05 +0100
+Edited by: Patryk (PsychoX) L. <psychoxivi+mxe@gmail.com>
+Date: 2018-08-23 13:12:36.274477600 +0200
 Subject: [PATCH 1/1] fixes for cross-building
 
 
@@ -12,7 +15,17 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -846,6 +846,7 @@ IF(HAVE_WINDOWS_H)
+@@ -965,7 +965,8 @@
+ OPTION(ALSOFT_REQUIRE_MMDEVAPI "Require MMDevApi backend" OFF)
+ IF(HAVE_WINDOWS_H)
+     # Check MMSystem backend
+-    CHECK_INCLUDE_FILES("windows.h;mmsystem.h" HAVE_MMSYSTEM_H -D_WIN32_WINNT=0x0502)
++    CHECK_INCLUDE_FILES("windows.h;mmsystem.h" HAVE_MMSYSTEM_H)
++       ADD_DEFINITIONS("-D_WIN32_WINNT=0x0502")
+     IF(HAVE_MMSYSTEM_H)
+         CHECK_SHARED_FUNCTION_EXISTS(waveOutOpen "windows.h;mmsystem.h" winmm "" HAVE_LIBWINMM)
+         IF(HAVE_LIBWINMM)
+@@ -975,6 +976,7 @@
                  SET(BACKENDS  "${BACKENDS} WinMM,")
                  SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/winmm.c)
                  SET(EXTRA_LIBS winmm ${EXTRA_LIBS})
@@ -20,15 +33,15 @@ index 1111111..2222222 100644
              ENDIF()
          ENDIF()
      ENDIF()
-@@ -862,6 +863,7 @@ IF(HAVE_WINDOWS_H)
-             IF(CMAKE_VERSION VERSION_LESS "2.8.8")
-                 INCLUDE_DIRECTORIES(${DSOUND_INCLUDE_DIRS})
-             ENDIF()
+@@ -988,6 +990,7 @@
+             SET(BACKENDS  "${BACKENDS} DirectSound${IS_LINKED},")
+             SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/dsound.c)
+             ADD_BACKEND_LIBS(${DSOUND_LIBRARIES})
 +            SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -luuid -lole32")
          ENDIF()
      ENDIF()
- 
-@@ -873,6 +875,7 @@ IF(HAVE_WINDOWS_H)
+
+@@ -999,6 +1002,7 @@
              SET(HAVE_MMDEVAPI 1)
              SET(BACKENDS  "${BACKENDS} MMDevApi,")
              SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/mmdevapi.c)
@@ -36,25 +49,3 @@ index 1111111..2222222 100644
          ENDIF()
      ENDIF()
  ENDIF()
-@@ -1027,10 +1030,10 @@ CONFIGURE_FILE(
-     @ONLY)
- 
- # Build a common library with reusable helpers
--ADD_LIBRARY(common STATIC ${COMMON_OBJS})
-+#ADD_LIBRARY(common STATIC ${COMMON_OBJS})
- 
- # Build main library
--ADD_LIBRARY(${LIBNAME} ${LIBTYPE} ${OPENAL_OBJS} ${ALC_OBJS})
-+ADD_LIBRARY(${LIBNAME} ${LIBTYPE} ${COMMON_OBJS} ${OPENAL_OBJS} ${ALC_OBJS})
- SET_PROPERTY(TARGET ${LIBNAME} APPEND PROPERTY COMPILE_DEFINITIONS AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES)
- IF(WIN32 AND ALSOFT_NO_UID_DEFS)
-     SET_PROPERTY(TARGET ${LIBNAME} APPEND PROPERTY COMPILE_DEFINITIONS AL_NO_UID_DEFS)
-@@ -1091,7 +1094,7 @@ IF(WIN32 AND NOT LIBTYPE STREQUAL "STATIC")
-     ENDIF()
- ENDIF()
- 
--TARGET_LINK_LIBRARIES(${LIBNAME} common ${EXTRA_LIBS})
-+TARGET_LINK_LIBRARIES(${LIBNAME} ${EXTRA_LIBS})
- 
- # Add an install target here
- INSTALL(TARGETS ${LIBNAME}
