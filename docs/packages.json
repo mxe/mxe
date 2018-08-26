@@ -264,7 +264,7 @@
     "miniupnpc": {"version": "2.0", "website": "http://miniupnp.free.fr/", "description": ""},
     "minizip": {"version": "68a48aa", "website": "http://www.winimage.com/zLibDll/minizip.html", "description": ""},
     "mman-win32": {"version": "b7ec370", "website": "https://code.google.com/p/mman-win32/", "description": "MMA-Win32"},
-    "mpc": {"version": "1.0.2", "website": "http://www.multiprecision.org/", "description": "GNU MPC"},
+    "mpc": {"version": "1.1.0", "website": "http://www.multiprecision.org/", "description": "GNU MPC"},
     "mpfr": {"version": "3.1.5", "website": "https://www.mpfr.org/", "description": ""},
     "mpg123": {"version": "1.22.4", "website": "https://www.mpg123.de/", "description": ""},
     "muparser": {"version": "2.2.5", "website": "http://muparser.beltoforion.de/", "description": "muParser"},
