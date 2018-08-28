@@ -3,6 +3,8 @@ From: Michael Simacek <msimacek@redhat.com>
 Date: Thu, 8 Feb 2018 14:47:08 +0100
 Subject: [PATCH] Remove invalid pure_func qualifiers
 
+https://src.fedoraproject.org/rpms/nasm/raw/0cc3eb244bd971df81a7f02bc12c5ec259e1a5d6/f/0001-Remove-invalid-pure_func-qualifiers.patch
+
 ---
  include/nasmlib.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
