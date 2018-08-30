@@ -4,8 +4,8 @@ PKG             := qtkeychain
 $(PKG)_WEBSITE  := https://github.com/frankosterfeld/qtkeychain
 $(PKG)_DESCR    := QtKeychain
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9.0
-$(PKG)_CHECKSUM := 0935e5eb67fbed0b2db5e74ea8cbd667c6be6eed3767f212eac6ac318ab8a6fc
+$(PKG)_VERSION  := 0.9.1
+$(PKG)_CHECKSUM := 9c2762d9d0759a65cdb80106d547db83c6e9fdea66f1973c6e9014f867c6f28e
 $(PKG)_GH_CONF  := frankosterfeld/qtkeychain/tags,v
 $(PKG)_DEPS     := cc qttools
 
