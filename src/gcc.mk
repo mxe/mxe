@@ -14,7 +14,7 @@ $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
-    grep -v 'gcc-6\|gcc-7' | \
+    grep -v 'gcc-6\|gcc-7\|gcc-8' | \
     $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
     $(SORT) -V | \
     tail -1
