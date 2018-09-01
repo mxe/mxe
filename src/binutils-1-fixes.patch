@@ -1,20 +1,6 @@
-This file is part of MXE. See LICENSE.md for licensing information.
-
-Contains ad hoc patches for cross building.
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Stephen Kitt <skitt@debian.org>
-Date: Sat, 15 Jul 2017 00:09:40 +1000
-Subject: [PATCH 1/1] Allow the PE timestamp to be specified with
- SOURCE_DATE_EPOCH
-
-Taken from:
-https://sources.debian.net/patches/binutils-mingw-w64/7.4/specify-timestamp.patch/
-
-diff --git a/bfd/peXXigen.c b/bfd/peXXigen.c
-index 1111111..2222222 100644
---- a/bfd/peXXigen.c
-+++ b/bfd/peXXigen.c
+diff -ruN binutils-2.29.1.orig/bfd/peXXigen.c binutils-2.29.1/bfd/peXXigen.c
+--- binutils-2.29.1.orig/bfd/peXXigen.c	2017-09-14 12:18:38.000000000 +0200
++++ binutils-2.29.1/bfd/peXXigen.c	2018-07-13 17:23:14.504995548 +0200
 @@ -70,6 +70,9 @@
  #include <wctype.h>
  #endif
@@ -25,7 +11,7 @@ index 1111111..2222222 100644
  /* NOTE: it's strange to be including an architecture specific header
     in what's supposed to be general (to PE/PEI) code.  However, that's
     where the definitions are, and they don't vary per architecture
-@@ -878,10 +881,38 @@ _bfd_XXi_only_swap_filehdr_out (bfd * abfd, void * in, void * out)
+@@ -878,10 +881,38 @@
    H_PUT_16 (abfd, filehdr_in->f_nscns, filehdr_out->f_nscns);
  
    /* Only use a real timestamp if the option was chosen.  */
@@ -67,11 +53,10 @@ index 1111111..2222222 100644
  
    PUT_FILEHDR_SYMPTR (abfd, filehdr_in->f_symptr,
  		      filehdr_out->f_symptr);
-diff --git a/ld/emultempl/pe.em b/ld/emultempl/pe.em
-index 1111111..2222222 100644
---- a/ld/emultempl/pe.em
-+++ b/ld/emultempl/pe.em
-@@ -305,7 +305,7 @@ gld${EMULATION_NAME}_add_options
+diff -ruN binutils-2.29.1.orig/ld/emultempl/pe.em binutils-2.29.1/ld/emultempl/pe.em
+--- binutils-2.29.1.orig/ld/emultempl/pe.em	2017-07-10 11:54:42.000000000 +0200
++++ binutils-2.29.1/ld/emultempl/pe.em	2018-07-13 17:23:14.504995548 +0200
+@@ -305,7 +305,7 @@
       OPTION_USE_NUL_PREFIXED_IMPORT_TABLES},
      {"no-leading-underscore", no_argument, NULL, OPTION_NO_LEADING_UNDERSCORE},
      {"leading-underscore", no_argument, NULL, OPTION_LEADING_UNDERSCORE},
@@ -80,11 +65,10 @@ index 1111111..2222222 100644
      {"no-insert-timestamp", no_argument, NULL, OPTION_NO_INSERT_TIMESTAMP},
  #ifdef DLL_SUPPORT
      /* getopt allows abbreviations, so we do this to stop it
-diff --git a/ld/emultempl/pep.em b/ld/emultempl/pep.em
-index 1111111..2222222 100644
---- a/ld/emultempl/pep.em
-+++ b/ld/emultempl/pep.em
-@@ -321,7 +321,7 @@ gld${EMULATION_NAME}_add_options
+diff -ruN binutils-2.29.1.orig/ld/emultempl/pep.em binutils-2.29.1/ld/emultempl/pep.em
+--- binutils-2.29.1.orig/ld/emultempl/pep.em	2017-07-10 11:54:42.000000000 +0200
++++ binutils-2.29.1/ld/emultempl/pep.em	2018-07-13 17:23:14.504995548 +0200
+@@ -321,7 +321,7 @@
      {"no-bind", no_argument, NULL, OPTION_NO_BIND},
      {"wdmdriver", no_argument, NULL, OPTION_WDM_DRIVER},
      {"tsaware", no_argument, NULL, OPTION_TERMINAL_SERVER_AWARE},
@@ -93,10 +77,9 @@ index 1111111..2222222 100644
      {"no-insert-timestamp", no_argument, NULL, OPTION_NO_INSERT_TIMESTAMP},
      {"build-id", optional_argument, NULL, OPTION_BUILD_ID},
      {NULL, no_argument, NULL, 0}
-diff --git a/ld/pe-dll.c b/ld/pe-dll.c
-index 1111111..2222222 100644
---- a/ld/pe-dll.c
-+++ b/ld/pe-dll.c
+diff -ruN binutils-2.29.1.orig/ld/pe-dll.c binutils-2.29.1/ld/pe-dll.c
+--- binutils-2.29.1.orig/ld/pe-dll.c	2017-07-10 11:54:42.000000000 +0200
++++ binutils-2.29.1/ld/pe-dll.c	2018-07-13 17:26:31.183783132 +0200
 @@ -26,6 +26,8 @@
  #include "filenames.h"
  #include "safe-ctype.h"
@@ -106,12 +89,14 @@ index 1111111..2222222 100644
  #include <time.h>
  
  #include "ld.h"
-@@ -1192,8 +1194,36 @@ fill_edata (bfd *abfd, struct bfd_link_info *info ATTRIBUTE_UNUSED)
+@@ -1209,8 +1211,38 @@
  
    memset (edata_d, 0, edata_sz);
  
 -  if (pe_data (abfd)->insert_timestamp)
 -    H_PUT_32 (abfd, time (0), edata_d + 4);
++  //if (pe_data (abfd)->insert_timestamp)
++  //  H_PUT_32 (abfd, time (0), edata_d + 4);
 +  if (pe_data (abfd)->insert_timestamp) {
 +    time_t now;
 +    char *source_date_epoch;
