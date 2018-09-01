@@ -12,8 +12,8 @@ $(PKG)_URL      := https://download.qt.io/official_releases/qt/5.11/$($(PKG)_VER
 $(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng openssl pcre2 postgresql sqlite zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/5.8/ | \
-    $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
+    $(WGET) -q -O- https://download.qt.io/official_releases/qt/5.11/ | \
+    $(SED) -n 's,.*href="\(5\.11\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     sort |
     tail -1
