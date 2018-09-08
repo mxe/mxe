@@ -537,8 +537,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
 
     <ul class="compact-list">
-        <li><a href="#requirements-debian">Debian</a></li>
-        <li><a href="#requirements-fedora">Fedora</a></li>
+        <li><a href="#requirements-debian">Debian/Ubuntu</a></li>
+        <li><a href="#requirements-fedora">Fedora/Red Hat/CentOS</a></li>
         <li><a href="#requirements-freebsd">FreeBSD</a></li>
         <li><a href="#requirements-frugalware">Frugalware</a></li>
         <li><a href="#requirements-gentoo">Gentoo</a></li>
@@ -725,7 +725,15 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     See <a href="http://pkg.mxe.cc/">pkg.mxe.cc</a>.
     </p>
 
-    <h3 id="requirements-fedora">Fedora</h3>
+    <h3 id="requirements-fedora">Fedora/Red Hat/Centos</h3>
+
+    <p>
+    Ensure <a href="https://fedoraproject.org/wiki/EPEL">Extra Packages
+    for Enterprise Linux (EPEL)</a> is installed/available. On some
+    systems, it may be as simple as:
+    </p>
+
+    <pre>yum install epel-release</pre>
 
     <!-- https://admin.fedoraproject.org/pkgdb/ -->
     <pre>yum install \
