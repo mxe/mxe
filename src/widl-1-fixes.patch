@@ -9,15 +9,18 @@ Subject: [PATCH 1/1] fixes
 
 
 diff --git a/mingw-w64-tools/widl/include/windef.h b/mingw-w64-tools/widl/include/windef.h
-index 1111111..2222222 100644
+index 8e8a08a..3d50e13 100644
 --- a/mingw-w64-tools/widl/include/windef.h
 +++ b/mingw-w64-tools/widl/include/windef.h
-@@ -85,7 +85,7 @@ extern "C" {
+@@ -101,7 +101,7 @@ extern "C" {
  #endif /* __cdecl */
  
  #ifndef __ms_va_list
--# if defined(__x86_64__) && defined (__GNUC__)
-+# if defined(__x86_64__) && defined (__GNUC__) && defined(__builtin_ms_va_list)
+-# if (defined(__x86_64__) || defined(__aarch64__)) && defined (__GNUC__)
++# if (defined(__x86_64__) || defined(__aarch64__)) && defined (__GNUC__) && defined(__builtin_ms_va_list)
  #  define __ms_va_list __builtin_ms_va_list
  #  define __ms_va_start(list,arg) __builtin_ms_va_start(list,arg)
  #  define __ms_va_end(list) __builtin_ms_va_end(list)
+-- 
+2.17.1
+
