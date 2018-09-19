@@ -101,6 +101,10 @@ MXE_CONFIGURE_OPTS = \
         --disable-static --enable-shared ) \
     $(MXE_DISABLE_DOC_OPTS)
 
+PKG_CONFIGURE_OPTS = \
+    $(_$(PKG)_CONFIGURE_OPTS) \
+    $($(PKG)_CONFIGURE_OPTS)
+
 # GCC threads and exceptions
 MXE_GCC_THREADS = \
     $(if $(findstring posix,$(or $(TARGET),$(1))),posix,win32)
