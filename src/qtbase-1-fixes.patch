@@ -2,7 +2,7 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 68d6fb331d75a6fc23be38861866da8c3fc6fd6d Mon Sep 17 00:00:00 2001
+From 4fbf912931617fed598564878e862cad47cb0903 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
 Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
@@ -37,7 +37,7 @@ index 27f4c277d6..84ff9ae0ef 100644
 2.17.1
 
 
-From 1d10513c2b03761addf96010ce9da8dd93d714fb Mon Sep 17 00:00:00 2001
+From 0aca562282cc8e8e22f69f297db1f4e09409daec Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
 Subject: [PATCH 2/6] Fix pkgconfig file and library naming
@@ -65,10 +65,10 @@ Task-number: 30898
 Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index f8729de947..e7f6e3651d 100644
+index 8c7adc45eb..b00034d3ca 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
-@@ -264,6 +264,10 @@ load(qt_installs)
+@@ -265,6 +265,10 @@ load(qt_installs)
  
  load(qt_targets)
  
@@ -79,7 +79,7 @@ index f8729de947..e7f6e3651d 100644
  # this builds on top of qt_common
  !internal_module:!lib_bundle:if(unix|mingw) {
      CONFIG += create_pc
-@@ -274,12 +278,12 @@ load(qt_targets)
+@@ -275,12 +279,12 @@ load(qt_targets)
          QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
      QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
      QMAKE_PKGCONFIG_CFLAGS = -D$$MODULE_DEFINE -I${includedir}/$$MODULE_INCNAME
@@ -96,7 +96,7 @@ index f8729de947..e7f6e3651d 100644
      pclib_replace.match = $$lib_replace.match
      !isEmpty(lib_replace.replace): \
          pclib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
-@@ -313,5 +317,3 @@ win32 {
+@@ -314,5 +318,3 @@ win32 {
      # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
      DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
  }
@@ -106,7 +106,7 @@ index f8729de947..e7f6e3651d 100644
 2.17.1
 
 
-From 31c615cd57701f2e4b99bb7fcdd023565a081257 Mon Sep 17 00:00:00 2001
+From f042032627bec6dd4829184ab6e93a55c44dbe32 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
 Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
@@ -147,7 +147,7 @@ index 0c04608fca..a26e02fbf3 100644
 2.17.1
 
 
-From f881ea1a1010939a4fe7c2c74f01d3e54d2c7c96 Mon Sep 17 00:00:00 2001
+From 8f650f4125b8631542d9a083fc5a6cce1340eea0 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 16:22:03 +0100
 Subject: [PATCH 4/6] fix treatment of SYBASE_LIBS
@@ -171,7 +171,7 @@ index b69b51b679..d37423adbd 100644
 2.17.1
 
 
-From 9e31811ee08a69d21f19dc7a0a86581c2d71a8c1 Mon Sep 17 00:00:00 2001
+From 09e34945ca9ea37202405af63a8bb29704e9a9f4 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
 Subject: [PATCH 5/6] use pkg-config for harfbuzz
@@ -196,7 +196,7 @@ index eee90b5b20..6c6745b1dd 100644
 2.17.1
 
 
-From c3de4dbd709d1f8c33d46ed12506444685e3db0e Mon Sep 17 00:00:00 2001
+From 120fc0ccb7290be0726487502710a26fd33f3166 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Nov 2017 11:28:47 +0200
 Subject: [PATCH 6/6] disable qt_random_cpu for i686-w64-mingw32
