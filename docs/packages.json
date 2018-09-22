@@ -240,7 +240,7 @@
     "libunistring": {"version": "0.9.10", "website": "https://www.gnu.org/software/libunistring/", "description": ""},
     "libusb": {"version": "1.2.6.0", "website": "https://libusb-win32.sourceforge.io/", "description": "LibUsb"},
     "libusb1": {"version": "1.0.21", "website": "https://libusb.info/", "description": "LibUsb-1.0"},
-    "libuv": {"version": "1.19.2", "website": "https://libuv.org", "description": ""},
+    "libuv": {"version": "1.23.1", "website": "https://libuv.org", "description": ""},
     "libvpx": {"version": "1.5.0", "website": "https://www.webmproject.org/code/", "description": "vpx"},
     "libwebp": {"version": "0.4.4", "website": "https://developers.google.com/speed/webp/", "description": ""},
     "libwebsockets": {"version": "2.4.2", "website": "https://libwebsockets.org/", "description": ""},
