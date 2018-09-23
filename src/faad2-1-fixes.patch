@@ -1,0 +1,12 @@
+diff -ruN faad2-2.8.8.orig/libfaad/decoder.c faad2-2.8.8/libfaad/decoder.c
+--- faad2-2.8.8.orig/libfaad/decoder.c	2017-12-17 17:17:36.000000000 +0100
++++ faad2-2.8.8/libfaad/decoder.c	2018-07-14 04:46:07.058232749 +0200
+@@ -54,7 +54,7 @@
+ #endif
+ 
+ #if defined WIN32 || defined _WIN32 || defined WIN64 || defined _WIN64
+-#include "win32_ver.h"
++//#include "win32_ver.h"
+ #endif
+ 
+ /* static function declarations */
