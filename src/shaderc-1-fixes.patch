@@ -1,0 +1,108 @@
+From 5c4c01b051e5d4000adc5d54536c4b4481619f13 Mon Sep 17 00:00:00 2001
+From: Andrei Alexeyev <0x416b617269@gmail.com>
+Date: Sun, 23 Sep 2018 23:08:14 +0300
+Subject: [PATCH] MXE fixes:
+
+    * Respect BUILD_SHARED/BUILD_STATIC
+    * Don't build glslc.exe and examples
+---
+ CMakeLists.txt            |  2 --
+ libshaderc/CMakeLists.txt | 26 ++++++++++++++++++++++----
+ 2 files changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b9bd0df..b5411c6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -56,8 +56,6 @@ add_subdirectory(third_party)
+ 
+ add_subdirectory(libshaderc_util)
+ add_subdirectory(libshaderc)
+-add_subdirectory(glslc)
+-add_subdirectory(examples)
+ 
+ add_custom_target(build-version
+   ${PYTHON_EXE}
+diff --git a/libshaderc/CMakeLists.txt b/libshaderc/CMakeLists.txt
+index 14da8ce..1ef9545 100644
+--- a/libshaderc/CMakeLists.txt
++++ b/libshaderc/CMakeLists.txt
+@@ -14,6 +14,7 @@ add_library(shaderc STATIC ${SHADERC_SOURCES})
+ shaderc_default_compile_options(shaderc)
+ target_include_directories(shaderc PUBLIC include PRIVATE ${glslang_SOURCE_DIR})
+ 
++if(BUILD_SHARED)
+ add_library(shaderc_shared SHARED ${SHADERC_SOURCES})
+ shaderc_default_compile_options(shaderc_shared)
+ target_include_directories(shaderc_shared PUBLIC include PRIVATE ${glslang_SOURCE_DIR})
+@@ -21,6 +22,7 @@ target_compile_definitions(shaderc_shared
+     PRIVATE SHADERC_IMPLEMENTATION
+     PUBLIC SHADERC_SHAREDLIB
+ )
++endif()
+ 
+ if(SHADERC_ENABLE_INSTALL)
+   install(
+@@ -30,10 +32,15 @@ if(SHADERC_ENABLE_INSTALL)
+     DESTINATION
+       ${CMAKE_INSTALL_INCLUDEDIR}/shaderc)
+ 
+-  install(TARGETS shaderc shaderc_shared
+-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
++  if(BUILD_SHARED)
++    install(TARGETS shaderc_shared
++      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
++  endif()
++
++  # Don't install the plain static library, it's basically useless.
++  # We'll install the _combined version that includes the vendored dependencies.
+ endif(SHADERC_ENABLE_INSTALL)
+ 
+ find_package(Threads)
+@@ -45,7 +52,10 @@ set(SHADERC_LIBS
+ )
+ 
+ target_link_libraries(shaderc PRIVATE ${SHADERC_LIBS})
++
++if(BUILD_SHARED)
+ target_link_libraries(shaderc_shared PRIVATE ${SHADERC_LIBS})
++endif(BUILD_SHARED)
+ 
+ shaderc_add_tests(
+   TEST_PREFIX shaderc
+@@ -57,6 +67,8 @@ shaderc_add_tests(
+     shaderc_cpp
+     shaderc_private)
+ 
++if(BUILD_SHARED)
++
+ shaderc_add_tests(
+   TEST_PREFIX shaderc_shared
+   LINK_LIBS shaderc_shared SPIRV-Tools
+@@ -67,6 +79,10 @@ shaderc_add_tests(
+     shaderc_cpp
+     shaderc_private)
+ 
++endif(BUILD_SHARED)
++
++if(BUILD_STATIC)
++
+ shaderc_combine_static_lib(shaderc_combined shaderc)
+ 
+ if(SHADERC_ENABLE_INSTALL)
+@@ -94,6 +110,8 @@ shaderc_add_tests(
+     shaderc
+     shaderc_cpp)
+ 
++endif(BUILD_STATIC)
++
+ if(${SHADERC_ENABLE_TESTS})
+   add_executable(shaderc_c_smoke_test ./src/shaderc_c_smoke_test.c)
+   shaderc_default_c_compile_options(shaderc_c_smoke_test)
+-- 
+2.19.0
+
