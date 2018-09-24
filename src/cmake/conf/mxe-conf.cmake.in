@@ -55,8 +55,12 @@ set(CMAKE_C_COMPILER @PREFIX@/bin/@TARGET@-gcc)
 set(CMAKE_CXX_COMPILER @PREFIX@/bin/@TARGET@-g++)
 set(CMAKE_Fortran_COMPILER @PREFIX@/bin/@TARGET@-gfortran)
 set(CMAKE_RC_COMPILER @PREFIX@/bin/@TARGET@-windres)
-set(CMAKE_AR @PREFIX@/bin/@TARGET@-gcc-ar)
-set(CMAKE_RANLIB @PREFIX@/bin/@TARGET@-gcc-ranlib)
+
+# These must be CACHED, otherwise C++ projects fail to configure for some reason.
+# https://stackoverflow.com/questions/43751132/cmake-3-8-0-generates-wrong-link-command-in-makefiles/43777707#43777707
+set(CMAKE_AR @PREFIX@/bin/@TARGET@-gcc-ar CACHE FILEPATH "ar" FORCE)
+set(CMAKE_RANLIB @PREFIX@/bin/@TARGET@-gcc-ranlib CACHE FILEPATH "ranlib" FORCE)
+
 # CMAKE_RC_COMPILE_OBJECT is defined in:
 #     <cmake root>/share/cmake-X.Y/Modules/Platform/Windows-windres.cmake
 set(CPACK_NSIS_EXECUTABLE @TARGET@-makensis)
