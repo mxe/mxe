@@ -1,0 +1,76 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+diff --git a/installerfw.pro b/installerfw.pro
+index 10414ad5..1cec9c6a 100644
+--- a/installerfw.pro
++++ b/installerfw.pro
+@@ -2,8 +2,6 @@ TEMPLATE = subdirs
+ SUBDIRS += src tools
+ tools.depends = src
+ 
+-requires(!cross_compile)
+-
+ include (installerfw.pri)
+ include (doc/doc.pri)
+ 
+diff --git a/src/libs/7zip/win/CPP/Windows/SecurityUtils.h b/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
+index 715de250..bfb65a34 100644
+--- a/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
++++ b/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
+@@ -3,7 +3,7 @@
+ #ifndef __WINDOWS_SECURITY_UTILS_H
+ #define __WINDOWS_SECURITY_UTILS_H
+ 
+-#include <NTSecAPI.h>
++#include <ntsecapi.h>
+ 
+ #include "Defs.h"
+ 
+diff --git a/src/libs/installer/createshortcutoperation.cpp b/src/libs/installer/createshortcutoperation.cpp
+index 2c2e96ef..36f97b0c 100644
+--- a/src/libs/installer/createshortcutoperation.cpp
++++ b/src/libs/installer/createshortcutoperation.cpp
+@@ -41,7 +41,7 @@ using namespace QInstaller;
+ #ifdef Q_OS_WIN
+ #include <qt_windows.h>
+ #include <shlobj.h>
+-#include <Intshcut.h>
++#include <intshcut.h>
+ 
+ #ifndef PIDLIST_ABSOLUTE
+ typedef ITEMIDLIST *PIDLIST_ABSOLUTE;
+diff --git a/src/libs/installer/binaryformat.h b/src/libs/installer/binaryformat.h
+index 3bd8a6aa..87d5e323 100644
+--- a/src/libs/installer/binaryformat.h
++++ b/src/libs/installer/binaryformat.h
+@@ -33,7 +33,7 @@
+ #include "range.h"
+ 
+ #include <QCoreApplication>
+-#include <QtCore/private/qfsfileengine_p.h>
++#include <QtCore/QFile>
+ #include <QList>
+ #include <QSharedPointer>
+ 
+@@ -81,7 +81,7 @@ private:
+     void setOpenMode(OpenMode mode) { QIODevice::setOpenMode(mode); }
+ 
+ private:
+-    QFSFileEngine m_file;
++    QFile m_file;
+     QByteArray m_name;
+     Range<qint64> m_segment;
+ };
+diff --git a/src/libs/installer/extractarchiveoperation_p.h b/src/libs/installer/extractarchiveoperation_p.h
+index f333da36..9f528b6a 100644
+--- a/src/libs/installer/extractarchiveoperation_p.h
++++ b/src/libs/installer/extractarchiveoperation_p.h
+@@ -37,6 +37,8 @@
+ 
+ #include <QRunnable>
+ #include <QThread>
++#include <QFileInfo>
++#include <QDir>
+ 
+ namespace QInstaller {
+ 
