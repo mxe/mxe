@@ -1,0 +1,15 @@
+--- a/KF5CoreAddonsConfig.cmake.in	2017-03-23 16:42:26.597795068 +0100
++++ b/KF5CoreAddonsConfig.cmake.in	2017-03-23 16:46:46.384418763 +0100
+@@ -8,9 +8,10 @@
+     find_file(TARGETSFILE KF5CoreAddons/KF5CoreAddonsToolingTargets.cmake PATHS ${KF5_HOST_TOOLING} ${CMAKE_CURRENT_LIST_DIR} NO_DEFAULT_PATH)
+     include("${TARGETSFILE}")
+ else()
+-    include("${CMAKE_CURRENT_LIST_DIR}/KF5CoreAddonsToolingTargets.cmake")
++    #include("${CMAKE_CURRENT_LIST_DIR}/KF5CoreAddonsToolingTargets.cmake")
+     if(CMAKE_CROSSCOMPILING AND DESKTOPTOJSON_EXECUTABLE)
+-        set_target_properties(KF5::desktoptojson PROPERTIES IMPORTED_LOCATION_NONE ${DESKTOPTOJSON_EXECUTABLE})
++        #set_target_properties(KF5::desktoptojson PROPERTIES IMPORTED_LOCATION_NONE ${DESKTOPTOJSON_EXECUTABLE})
++        add_executable(KF5::desktoptojson IMPORTED GLOBAL)
+         set_target_properties(KF5::desktoptojson PROPERTIES IMPORTED_LOCATION ${DESKTOPTOJSON_EXECUTABLE})
+     endif()
+ endif()
