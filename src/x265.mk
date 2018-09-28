@@ -3,17 +3,17 @@
 PKG             := x265
 $(PKG)_WEBSITE  := http://x265.org
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4
-$(PKG)_CHECKSUM := 9c2aa718d78f6fecdd783f08ab83b98d3169e5f670404da4c16439306907d729
-$(PKG)_SUBDIR   := x265_$($(PKG)_VERSION)
+$(PKG)_VERSION  := 2.6
+$(PKG)_CHECKSUM := 1bf0036415996af841884802161065b9e6be74f5f6808ac04831363e2549cdbf
+$(PKG)_SUBDIR   := x265_v$($(PKG)_VERSION)
 $(PKG)_FILE     := x265_$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://bitbucket.org/multicoreware/x265/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc yasm
+$(PKG)_DEPS     := cc $(BUILD)~nasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://ftp.videolan.org/pub/videolan/x265/ | \
+    $(WGET) -q -O- https://bitbucket.org/multicoreware/x265/downloads/ | \
     $(SED) -n 's,.*">x265_\([0-9][^<]*\)\.t.*,\1,p' | \
-    tail -1
+    head -1
 endef
 
 # note: assembly for i686 targets is not officially supported
