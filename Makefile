@@ -657,7 +657,7 @@ ifeq ($(findstring darwin,$(BUILD)),)
 else
     NONET_LIB := $(PREFIX)/$(BUILD)/lib/nonetwork.dylib
     PRELOAD   := DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES='$(NONET_LIB)'
-    NONET_CFLAGS := -arch i386 -arch x86_64
+    NONET_CFLAGS := -arch x86_64
 endif
 
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
