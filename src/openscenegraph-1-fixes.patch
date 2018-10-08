@@ -57,26 +57,6 @@ index 1111111..2222222 100644
          osgUtil
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sun, 10 Jan 2016 14:19:57 +1100
-Subject: [PATCH 3/6] use pkg-config for gstreamer detection in mingw
-
-
-diff --git a/CMakeModules/FindGStreamer.cmake b/CMakeModules/FindGStreamer.cmake
-index 1111111..2222222 100644
---- a/CMakeModules/FindGStreamer.cmake
-+++ b/CMakeModules/FindGStreamer.cmake
-@@ -65,7 +65,7 @@
- #    )
- #endmacro()
- 
--if (WIN32)
-+if (WIN32 AND NOT MINGW)
-     macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _header _library)
-         find_path(${_component_prefix}_INCLUDE_DIRS
-             NAMES ${_header}
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 22 Feb 2016 03:35:28 +0300
 Subject: [PATCH 4/6] disable ffmpeg
@@ -88,43 +68,20 @@ See https://github.com/mxe/mxe/issues/1230#issuecomment-186936198
 Source of patch: http://forum.openscenegraph.org/viewtopic.php?t=10485
 
 diff --git a/src/osgPlugins/CMakeLists.txt b/src/osgPlugins/CMakeLists.txt
-index 1111111..2222222 100644
+index 77d66f8..1c8398e 100644
 --- a/src/osgPlugins/CMakeLists.txt
 +++ b/src/osgPlugins/CMakeLists.txt
-@@ -199,10 +199,6 @@ IF(XINE_FOUND)
-     ADD_SUBDIRECTORY(xine)
+@@ -213,10 +213,6 @@ IF(OSG_CPP_EXCEPTIONS_AVAILABLE)
+     ADD_PLUGIN_DIRECTORY(txp)
  ENDIF()
  
 -IF(FFMPEG_FOUND AND OSG_CPP_EXCEPTIONS_AVAILABLE)
--    ADD_SUBDIRECTORY(ffmpeg)
+-    ADD_PLUGIN_DIRECTORY(ffmpeg)
 -ENDIF()
 -
  IF(GSTREAMER_FOUND AND GLIB_FOUND)
-     ADD_SUBDIRECTORY(gstreamer)
+     ADD_PLUGIN_DIRECTORY(gstreamer)
  ENDIF()
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Saikrishna Arcot <saiarcot895@gmail.com>
-Date: Mon, 6 Jun 2016 19:06:00 -0500
-Subject: [PATCH 5/6] Require the presence of either qt5 or qt4.
-
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -708,9 +708,9 @@ IF(OSG_USE_QT AND NOT ANDROID)
- 
-     IF  (DESIRED_QT_VERSION)
-         IF  (DESIRED_QT_VERSION MATCHES 5)
--            FIND_PACKAGE(Qt5Widgets)
-+            FIND_PACKAGE(Qt5Widgets REQUIRED)
-         ELSEIF (DESIRED_QT_VERSION MATCHES 4)
--            FIND_PACKAGE(Qt4)
-+            FIND_PACKAGE(Qt4 REQUIRED)
-         ELSE()
-             FIND_PACKAGE(Qt3)
-         ENDIF()
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
