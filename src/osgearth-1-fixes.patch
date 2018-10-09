@@ -42,3 +42,26 @@ index 1111111..2222222 100644
      ADD_SUBDIRECTORY( tests )
  ENDIF()
  
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Mon, 18 Jun 2018 18:49:40 +0300
+Subject: Fix build with OpenSceneGraph >= 3.6.1
+
+
+diff --git a/src/osgEarth/ScreenSpaceLayout.cpp b/src/osgEarth/ScreenSpaceLayout.cpp
+index 346d7bcae..760d26fa8 100644
+--- a/src/osgEarth/ScreenSpaceLayout.cpp
++++ b/src/osgEarth/ScreenSpaceLayout.cpp
+@@ -106,7 +106,11 @@ namespace
+                     return diff < 0.0f;
+ 
+                 // then fallback on traversal order.
++#if OSG_VERSION_GREATER_THAN(3,6,1)
++                diff = float(lhs->_traversalOrderNumber) - float(rhs->_traversalOrderNumber);
++#else
+                 diff = float(lhs->_traversalNumber) - float(rhs->_traversalNumber);
++#endif
+                 return diff < 0.0f;
+             }
+         }
+
