@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 PKG             := kwindowsystem
-$(PKG)_VERSION  := 5.49.0
-$(PKG)_CHECKSUM  := d7390eca239f42033af9ebca5e3b7f2987dc605c34844ebce70a362b33ffb99c
+$(PKG)_VERSION  := 5.51.0
+$(PKG)_CHECKSUM  := 
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_HOME     := http://download.kde.org/stable/frameworks

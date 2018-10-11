@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 PKG             := kdeclarative
-$(PKG)_VERSION  := 5.49.0
-$(PKG)_CHECKSUM  := 49bbdf17f1ba3212b96ab8ebfbc31c78b3772b04b2f3c9c4b49a74c7d1e2ea4d
+$(PKG)_VERSION  := 5.51.0
+$(PKG)_CHECKSUM  := 
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_HOME     := http://download.kde.org/stable/frameworks

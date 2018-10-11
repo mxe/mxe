@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 PKG             := ki18n
-$(PKG)_VERSION  := 5.49.0
-$(PKG)_CHECKSUM := 5f4a54e755990104537729f4c26e054f146cd20acdd5e90cfd8558ab7a6e99c4
+$(PKG)_VERSION  := 5.51.0
+$(PKG)_CHECKSUM := 
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_HOME     := http://download.kde.org/stable/frameworks
