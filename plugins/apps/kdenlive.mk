@@ -12,7 +12,7 @@ $(PKG)_DEPS     := \
 	qtbase qtdeclarative qtquickcontrols \
 	breeze-icons karchive kconfig kcoreaddons kdbusaddons kguiaddons ki18n kitemviews kplotting kwidgetsaddons \
 	kcompletion kcrash kjobwidgets kdeclarative \
-	kbookmarks kconfigwidgets kiconthemes kio knewstuff knotifications knotifyconfig kservice ktextwidgets kxmlgui kinit
+	kbookmarks kconfigwidgets kiconthemes kio knewstuff knotifications knotifyconfig kservice ktextwidgets kxmlgui kinit purpose
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- http://download.kde.org/stable/applications | \

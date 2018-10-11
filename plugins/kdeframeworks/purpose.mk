@@ -1,12 +1,12 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
-PKG             := kiconthemes
+PKG             := purpose
 $(PKG)_VERSION  := 5.50.0
-$(PKG)_CHECKSUM  := 3e7fde8852464dcc4d4af52f676fb004d7c9fecabdc1cfcd93308f4e81bfe046
+$(PKG)_CHECKSUM  := ce44af170180390f40afe3817e103ce6523fa94cb8ed9d5d42993859431aa586
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_HOME     := https://download.kde.org/stable/frameworks
 $(PKG)_URL      := $($(PKG)_HOME)/$(basename $($(PKG)_VERSION))/$($(PKG)_FILE)
-$(PKG)_DEPS     := qtbase extra-cmake-modules qtsvg karchive ki18n kconfigwidgets kwidgetsaddons kitemviews breeze-icons
+$(PKG)_DEPS     := qtbase extra-cmake-modules kconfig kcoreaddons ki18n
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- https://download.kde.org/stable/frameworks/ | \
@@ -18,7 +18,7 @@ define $(PKG)_BUILD
     mkdir "$(1)/build"
     cd "$(1)/build" && cmake .. \
         -DCMAKE_TOOLCHAIN_FILE="$(CMAKE_TOOLCHAIN_FILE)" \
-        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_BUILD_TYPE=Release \
         -DKDE_INSTALL_USE_QT_SYS_PATHS=ON \
         -DBUILD_TESTING=OFF
     $(MAKE) -C "$(1)/build" -j $(JOBS) install
