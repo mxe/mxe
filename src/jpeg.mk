@@ -21,16 +21,8 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
 
-    # create pkg-config file
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-    (echo 'Name: jpeg'; \
-     echo 'Version: 0'; \
-     echo 'Description: jpeg'; \
-     echo 'Libs: -ljpeg';) \
-     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/jpeg.pc'
-
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-jpeg.exe' \
-        `'$(TARGET)-pkg-config' jpeg --libs`
+        `'$(TARGET)-pkg-config' libjpeg --libs`
 endef

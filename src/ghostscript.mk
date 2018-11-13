@@ -57,7 +57,7 @@ define $(PKG)_BUILD
      echo 'Description: Ghostscript library'; \
      echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/ghostscript"'; \
      echo 'Libs: -L"$(PREFIX)/$(TARGET)/lib" -lgs'; \
-     echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng libopenjp2 jpeg lcms2 zlib'; \
+     echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng libopenjp2 libjpeg lcms2 zlib'; \
      echo '# https://github.com/mxe/mxe/issues/1446'; \
      echo 'Libs.private: -lm -liconv -lpaper -lwinspool';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/ghostscript.pc'
