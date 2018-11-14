@@ -9,6 +9,7 @@ $(PKG)_CHECKSUM := 6a64f2a687f5c4f203a46fa659f43dd43d1f8b845df8d723107e8a7e6158e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://github.com/fribidi/fribidi/releases/download/v$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_GH_CONF  := fribidi/fribidi/releases/download, v
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
