@@ -23,6 +23,6 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --disable-nls \
         --disable-languages
-    $(MAKE) -C '$(1)/src' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)/src' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)/src' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/src' -j 1 install
 endef
