@@ -83,7 +83,7 @@
     "giflib": {"version": "5.1.4", "website": "https://sourceforge.net/projects/libungif/", "description": ""},
     "glew": {"version": "1.12.0", "website": "https://glew.sourceforge.io/", "description": "GLEW"},
     "glfw2": {"version": "2.7.9", "website": "https://www.glfw.org/", "description": "GLFW 2.x"},
-    "glfw3": {"version": "3.1.2", "website": "https://www.glfw.org/", "description": "GLFW 3.x"},
+    "glfw3": {"version": "3.2.1", "website": "https://www.glfw.org/", "description": "GLFW 3.x"},
     "glib": {"version": "2.50.2", "website": "https://gtk.org/", "description": "GLib"},
     "glibmm": {"version": "2.42.0", "website": "https://www.gtkmm.org/", "description": "GLibmm"},
     "glm": {"version": "0.9.9.0", "website": "https://glm.g-truc.net/", "description": "GLM - OpenGL Mathematics"},
