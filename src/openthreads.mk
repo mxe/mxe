@@ -12,19 +12,19 @@ $(PKG)_URL       = $(openscenegraph_URL)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    echo $openscenegraph_VERSION)
+    echo $(openscenegraph_VERSION)
 endef
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd '$(1).build' && '$(TARGET)-cmake' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DDYNAMIC_OPENTHREADS=$(CMAKE_SHARED_BOOL) \
+        -DOSG_DETERMINE_WIN_VERSION=OFF \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
-        -DOSG_USE_QT=FALSE \
         -DPOPPLER_HAS_CAIRO_EXITCODE=0 \
         -D_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS_EXITCODE=1 \
         -D_OPENTHREADS_ATOMIC_USE_WIN32_INTERLOCKED=1 \
         '$(1)'
 
-    $(MAKE) -C '$(1).build/src/OpenThreads' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)/src/OpenThreads' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)/src/OpenThreads' -j 1 install VERBOSE=1
 endef
