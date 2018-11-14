@@ -76,6 +76,7 @@ define $(PKG)_BUILD_mingw-w64
     cd '$(BUILD_DIR).crt' && '$(BUILD_DIR)/$(mingw-w64_SUBDIR)/mingw-w64-crt/configure' \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --with-default-msvcrt=msvcrt \
         @gcc-crt-config-opts@
     $(MAKE) -C '$(BUILD_DIR).crt' -j '$(JOBS)' || $(MAKE) -C '$(BUILD_DIR).crt' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR).crt' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
