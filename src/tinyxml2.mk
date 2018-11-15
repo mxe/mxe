@@ -3,8 +3,8 @@
 PKG             := tinyxml2
 $(PKG)_WEBSITE  := http://grinninglizard.com/tinyxml2/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.0.0
-$(PKG)_CHECKSUM := 9444ba6322267110b4aca61cbe37d5dcab040344b5c97d0b36c119aa61319b0f
+$(PKG)_VERSION  := 7.0.0
+$(PKG)_CHECKSUM := fa0d1c745d65d4d833e62cb183e23c2034dc7a35ec1a4977e808bdebb9b4fe60
 $(PKG)_GH_CONF  := leethomason/tinyxml2/tags
 $(PKG)_DEPS     := cc
 
