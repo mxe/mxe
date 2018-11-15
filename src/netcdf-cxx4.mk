@@ -21,5 +21,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
         '$(SOURCE_DIR)/examples/simple_xy_rd.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        -l$(PKG) `'$(TARGET)-pkg-config' netcdf jpeg libcurl --cflags --libs` -lportablexdr
+        -l$(PKG) `'$(TARGET)-pkg-config' netcdf libjpeg libcurl --cflags --libs` -lportablexdr
 endef

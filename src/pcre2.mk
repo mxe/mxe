@@ -4,8 +4,8 @@ PKG             := pcre2
 $(PKG)_WEBSITE  := https://www.pcre.org/
 $(PKG)_DESCR    := PCRE2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 10.31
-$(PKG)_CHECKSUM := e07d538704aa65e477b6a392b32ff9fc5edf75ab9a40ddfc876186c4ff4d68ac
+$(PKG)_VERSION  := 10.32
+$(PKG)_CHECKSUM := f29e89cc5de813f45786580101aaee3984a65818631d4ddbda7b32f699b87c2e
 $(PKG)_SUBDIR   := pcre2-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre2-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ftp.pcre.org/pub/pcre/$($(PKG)_FILE)
@@ -14,8 +14,8 @@ $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.pcre.org/pub/pcre/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
+    $(SED) -n 's,.*pcre2-\([0-9]\+\)\(\.[0-9]\+\)*\.zip.*,\1\2,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD_SHARED
