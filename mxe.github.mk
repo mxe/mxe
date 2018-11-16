@@ -104,11 +104,11 @@ define MXE_SETUP_GITHUB
         $(error $(newline) $(PKG) specifies both branch and tag variables $(newline)))
     $(if $(filter-out $(GH_APIS),$(GH_API))$(filter x,x$(GH_API)),\
         $(error $(newline) $(PKG) has unknown API in GH_CONF := $($(PKG)_GH_CONF) $(newline)\
-                           must be branches|tags|releases))
-    $(if $(GH_BRANCH),$(value MXE_SETUP_GITHUB_BRANCH),$(value MXE_SETUP_GITHUB_$(call uc,$(GH_API))))
+                           must be $(call merge,|,$(GH_APIS))))
+    $(value MXE_SETUP_GITHUB_$(call uc,$(GH_API)))
 endef
 
-define MXE_SETUP_GITHUB_BRANCH
+define MXE_SETUP_GITHUB_BRANCHES
     $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_OWNER)-$($(PKG)_GH_REPO)-$($(PKG)_VERSION))
     $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE))
     $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_SHA,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO),$($(PKG)_BRANCH)))
