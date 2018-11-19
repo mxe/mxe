@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := ffb911191e509b966deb55de705387f14156e1a56b21824357cdf00532336
 $(PKG)_SUBDIR   := libxml2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://xmlsoft.org/sources/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://xmlsoft.org/libxml2/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://ftp.osuosl.org/pub/blfs/conglomeration/libxml2/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc xz zlib
 
 define $(PKG)_UPDATE

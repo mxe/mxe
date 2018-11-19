@@ -9,7 +9,6 @@ $(PKG)_CHECKSUM := 6e7bdeec2c310734e734d19aae3a71ebe37a4d842e0e23dbb1b8921c0026c
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.osgeo.org/libtiff/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.remotesensing.org/libtiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc jpeg xz zlib
 
 define $(PKG)_UPDATE

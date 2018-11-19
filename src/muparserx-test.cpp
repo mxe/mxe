@@ -2,7 +2,7 @@
  * This file is part of MXE. See LICENSE.md for licensing information.
  *
  * based on:
- * http://articles.beltoforion.de/article.php?a=muparserx&hl=en&p=using&s=idInclude#idEval
+ * http://beltoforion.de/article.php?a=muparserx&hl=en&p=using&s=idInclude#idEval
  */
 
 #include "mpParser.h"
