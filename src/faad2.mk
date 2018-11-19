@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := faad2
-$(PKG)_WEBSITE  := http://www.audiocoding.com/
+$(PKG)_WEBSITE  := https://www.audiocoding.com/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.8.8
 $(PKG)_CHECKSUM := 985c3fadb9789d2815e50f4ff714511c79c2710ac27a4aaaf5c0c2662141426d
