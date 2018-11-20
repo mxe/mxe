@@ -3,8 +3,8 @@
 PKG             := gst-libav
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-libav.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.14.3
-$(PKG)_CHECKSUM := 9b03529bb45785ad1b6b1f4856c52a832ad5fc472285ce49174439e8015ab677
+$(PKG)_VERSION  := 1.14.4
+$(PKG)_CHECKSUM := dfd78591901df7853eab7e56a86c34a1b03635da0d3d56b89aa577f1897865da
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
