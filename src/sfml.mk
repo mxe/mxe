@@ -4,8 +4,8 @@ PKG             := sfml
 $(PKG)_WEBSITE  := https://www.sfml-dev.org/
 $(PKG)_DESCR    := SFML
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.5.0
-$(PKG)_CHECKSUM := 4bc5ed0b6658f73a31bfb8b36878d71fe1678e6e95e4f20834ab589a1bdc7ef4
+$(PKG)_VERSION  := 2.5.1
+$(PKG)_CHECKSUM := 438c91a917cc8aa19e82c6f59f8714da353c488584a007d401efac8368e1c785
 $(PKG)_GH_CONF  := SFML/SFML/tags
 $(PKG)_DEPS     := cc freetype glew jpeg libsndfile openal
 
@@ -25,13 +25,8 @@ define $(PKG)_BUILD
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: sfml'; \
      echo 'Requires: freetype2 glew openal sndfile vorbisenc vorbisfile'; \
-     $(if $(findstring static,$(TARGET)), \
-         echo 'Cflags: -DSFML_STATIC'; \
-         echo 'Libs: -lsfml-audio-s -lsfml-network-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s'; \
-     $(else), \
-         echo 'Cflags: -DSFML_SHARED'; \
-         echo 'Libs: -lsfml-audio -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system'; \
-     ) \
+     echo 'Cflags.private: -DSFML_STATIC'; \
+     echo 'Libs: $(addprefix -lsfml-,$(addsuffix $(if $(BUILD_STATIC),-s), audio network graphics window system))'; \
      echo 'Libs.private: -ljpeg -lws2_32 -lgdi32';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/sfml.pc'
     cat '$(PREFIX)/$(TARGET)/lib/pkgconfig/sfml.pc'
