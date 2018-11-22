@@ -415,7 +415,7 @@
     "sdl_rwhttp": {"version": "0.2.0", "website": "https://github.com/mgerhardy/SDL_rwhttp/", "description": "SDL_rwhttp"},
     "sdl_sound": {"version": "1.0.3", "website": "https://icculus.org/SDL_sound/", "description": "SDL_sound"},
     "sdl_ttf": {"version": "2.0.11", "website": "https://www.libsdl.org/projects/SDL_ttf/", "description": "SDL_ttf"},
-    "sfml": {"version": "2.4.2", "website": "https://www.sfml-dev.org/", "description": "SFML"},
+    "sfml": {"version": "2.5.1", "website": "https://www.sfml-dev.org/", "description": "SFML"},
     "smpeg": {"version": "0.4.5+cvs20030824", "website": "https://icculus.org/smpeg/", "description": ""},
     "smpeg2": {"version": "2.0.0", "website": "https://icculus.org/smpeg/", "description": "smpeg"},
     "smtpclient-for-qt": {"version": "1f4f2e2", "website": "https://github.com/bluetiger9/SmtpClient-for-Qt/", "description": "SmtpClient-for-Qt"},
