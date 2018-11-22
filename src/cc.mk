@@ -7,3 +7,5 @@ $(PKG)_VERSION  := 1
 $(PKG)_DEPS     := gcc
 $(PKG)_OO_DEPS   = pkgconf $(MXE_REQS_PKGS)
 $(PKG)_TYPE     := meta
+$(PKG)_DEPS_$(BUILD) :=
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
