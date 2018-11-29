@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := b4cf5a382c061cd75081cf246c2aa2f9df8db04bdda8dcdc6b6cca55bede2
 $(PKG)_SUBDIR   := SDL2_mixer-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2_mixer-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc libmodplug mpg123 ogg sdl2 smpeg2 vorbis
+$(PKG)_DEPS     := cc libmodplug mpg123 ogg opusfile sdl2 smpeg2 vorbis
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://hg.libsdl.org/SDL_mixer/tags' | \
@@ -18,7 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,^\(Requires:.*\),\1 vorbisfile,' '$(1)/SDL2_mixer.pc.in'
+    $(SED) -i 's,^\(Requires:.*\),\1 opusfile vorbisfile,' '$(1)/SDL2_mixer.pc.in'
     echo \
         'Libs.private:' \
         "`$(TARGET)-pkg-config libmodplug libmpg123 --libs`" \
@@ -47,5 +47,3 @@ define $(PKG)_BUILD
         '$(TOP_DIR)/src/sdl_mixer-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-sdl2_mixer.exe' \
         `'$(TARGET)-pkg-config' SDL2_mixer --cflags --libs`
 endef
-
-
