@@ -10,18 +10,23 @@
 
 PKG             := clementine_qt4
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 925e74f
-$(PKG)_CHECKSUM := 9da96ca2dc8adbba9dc9b6921def258a18d8c004eebacb897369b7821ec0c320
+$(PKG)_VERSION  := 95187ed
+$(PKG)_CHECKSUM := e65624b70dc803aaa98a4827586f5e22a06cf533f861992a36987f60784490ec
 $(PKG)_GH_CONF  := clementine-player/Clementine/branches/master
 $(PKG)_WEBSITE  := https://www.clementine-player.org/
 $(PKG)_OWNER    := https://github.com/pavelvat
-$(PKG)_DEPS     := cc boost chromaprint cryptopp fftw glew gst-libav gst-plugins-bad \
-                   gst-plugins-good gst-plugins-ugly libechonest liblastfm_qt4 \
-                   libmpcdec protobuf qtsparkle_qt4 sparsehash
+$(PKG)_DEPS     := cc boost cryptopp fftw glew protobuf sparsehash libmpcdec \
+                   gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav \
+                   qtsparkle_qt4 qjson-qt4 liblastfm_qt4 chromaprint
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DCMAKE_INSTALL_PREFIX=$(PREFIX)/$(TARGET)/apps/$(PKG)
+        -DCMAKE_INSTALL_PREFIX=$(PREFIX)/$(TARGET)/apps/$(PKG) \
+        -DENABLE_DBUS=OFF \
+        -DENABLE_DEVICEKIT=OFF \
+        -DENABLE_UDISKS2=OFF \
+        -DENABLE_WIIMOTEDEV=OFF \
+        -DENABLE_SPOTIFY=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
