@@ -13,7 +13,7 @@ $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://sourceforge.net/projects/libb64/files/' | \
-    $(SED) -n '/href/ s_.*libb64-\([0-9.]*\).zip.*_\1_ip' | \
+    $(SED) -n 's_.*libb64-\([0-9]\.[0-9]\.[0-9]\).*zip_\1_ip' | \
     head -1
 endef
 
