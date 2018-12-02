@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.0
 $(PKG)_CHECKSUM := e812617477f3c2bb990561767a4cd8b1d3803a52018d4878da302529552610d4
 $(PKG)_GH_CONF  := flavio/qjson/tags
-$(PKG)_DEPS     := cc qtbase
+$(PKG)_DEPS     := cc qt
 
 $(PKG)_QT4_BOOL  := ON
 
