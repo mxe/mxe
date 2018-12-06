@@ -2,10 +2,10 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 4fbf912931617fed598564878e862cad47cb0903 Mon Sep 17 00:00:00 2001
+From f1dbf592c625533c9f8a704e4d5f12f3111a1fb3 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -14,7 +14,7 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 27f4c277d6..84ff9ae0ef 100644
+index 3ed6dd5889..cc5bc9dc16 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -214,12 +214,12 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -34,13 +34,13 @@ index 27f4c277d6..84ff9ae0ef 100644
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
 -- 
-2.17.1
+2.19.1
 
 
-From 0aca562282cc8e8e22f69f297db1f4e09409daec Mon Sep 17 00:00:00 2001
+From b822f7ff799d10297b0b36408e7cfa44fd416118 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/6] Fix pkgconfig file and library naming
+Subject: [PATCH 2/5] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -65,10 +65,10 @@ Task-number: 30898
 Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 8c7adc45eb..b00034d3ca 100644
+index 51b5bde67a..faba17aedd 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
-@@ -265,6 +265,10 @@ load(qt_installs)
+@@ -263,6 +263,10 @@ load(qt_installs)
  
  load(qt_targets)
  
@@ -77,12 +77,12 @@ index 8c7adc45eb..b00034d3ca 100644
 +TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)
 +
  # this builds on top of qt_common
- !internal_module:!lib_bundle:if(unix|mingw) {
+ !internal_module:if(unix|mingw) {
      CONFIG += create_pc
-@@ -275,12 +279,12 @@ load(qt_targets)
-         QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
-     QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
-     QMAKE_PKGCONFIG_CFLAGS = -D$$MODULE_DEFINE -I${includedir}/$$MODULE_INCNAME
+@@ -278,12 +282,12 @@ load(qt_targets)
+         QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
+         QMAKE_PKGCONFIG_CFLAGS = -D$$MODULE_DEFINE -I${includedir}/$$MODULE_INCNAME
+     }
 -    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt, "Qt$$QT_MAJOR_VERSION ")
 -    QMAKE_PKGCONFIG_FILE = $$replace(TARGET, ^Qt, Qt$$QT_MAJOR_VERSION)
 +    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt$$QT_MAJOR_VERSION ")
@@ -96,28 +96,28 @@ index 8c7adc45eb..b00034d3ca 100644
      pclib_replace.match = $$lib_replace.match
      !isEmpty(lib_replace.replace): \
          pclib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
-@@ -314,5 +318,3 @@ win32 {
+@@ -317,5 +321,3 @@ win32 {
      # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
      DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
  }
 -
 -TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
 -- 
-2.17.1
+2.19.1
 
 
-From f042032627bec6dd4829184ab6e93a55c44dbe32 Mon Sep 17 00:00:00 2001
+From 7773e45dfdd82ede2415a6818332de3e36e7c824 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 219385a108..eee90b5b20 100644
+index 0332631ec8..e2d87e77b3 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -973,7 +973,7 @@
+@@ -1003,7 +1003,7 @@
          "fontconfig": {
              "label": "Fontconfig",
              "autoDetect": "!config.darwin",
@@ -144,45 +144,21 @@ index 0c04608fca..a26e02fbf3 100644
              m_fontDatabase = QPlatformIntegration::fontDatabase();
  #endif
 -- 
-2.17.1
+2.19.1
 
 
-From 8f650f4125b8631542d9a083fc5a6cce1340eea0 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sun, 29 Jan 2017 16:22:03 +0100
-Subject: [PATCH 4/6] fix treatment of SYBASE_LIBS
-
-Change-Id: I4c9914cf7ef9d91feb0718a57f2551c1eeed47e0
-
-diff --git a/src/plugins/sqldrivers/configure.pri b/src/plugins/sqldrivers/configure.pri
-index b69b51b679..d37423adbd 100644
---- a/src/plugins/sqldrivers/configure.pri
-+++ b/src/plugins/sqldrivers/configure.pri
-@@ -92,7 +92,7 @@ defineTest(qtConfLibrary_sybaseEnv) {
-         libs += "-L$${sybase}/lib"
-     libs += $$getenv(SYBASE_LIBS)
-     !isEmpty(libs) {
--        $${1}.libs = "$$val_escape(libs)"
-+        $${1}.libs = $$libs
-         export($${1}.libs)
-     }
-     return(true)
--- 
-2.17.1
-
-
-From 09e34945ca9ea37202405af63a8bb29704e9a9f4 Mon Sep 17 00:00:00 2001
+From 82d08b0378db0a30007ca5ee965ffa034859af5c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 5/6] use pkg-config for harfbuzz
+Subject: [PATCH 4/5] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index eee90b5b20..6c6745b1dd 100644
+index e2d87e77b3..4eb37aea17 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -215,7 +215,8 @@
+@@ -224,7 +224,8 @@
                  ]
              },
              "sources": [
@@ -193,13 +169,13 @@ index eee90b5b20..6c6745b1dd 100644
          },
          "imf": {
 -- 
-2.17.1
+2.19.1
 
 
-From 120fc0ccb7290be0726487502710a26fd33f3166 Mon Sep 17 00:00:00 2001
+From 8ea9633854e8c2ad94df00866a9b9e3a4394d161 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Nov 2017 11:28:47 +0200
-Subject: [PATCH 6/6] disable qt_random_cpu for i686-w64-mingw32
+Subject: [PATCH 5/5] disable qt_random_cpu for i686-w64-mingw32
 
 Workaround for gcc internal error compiling for mingw32:
     global/qrandom.cpp: In function 'qsizetype qt_random_cpu(void*, qsizetype)':
@@ -217,7 +193,7 @@ Based on https://codereview.qt-project.org/#/c/212360/
 Change-Id: Ia1c902e7b147bdda2b8d7904b40a3b968b8d0369
 
 diff --git a/src/corelib/global/qrandom.cpp b/src/corelib/global/qrandom.cpp
-index ebf9864b15..9a31933975 100644
+index 23e5e499b2..d0b3159c0d 100644
 --- a/src/corelib/global/qrandom.cpp
 +++ b/src/corelib/global/qrandom.cpp
 @@ -90,7 +90,7 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando
@@ -230,5 +206,5 @@ index ebf9864b15..9a31933975 100644
  
  #  ifdef Q_PROCESSOR_X86_64
 -- 
-2.17.1
+2.19.1
 

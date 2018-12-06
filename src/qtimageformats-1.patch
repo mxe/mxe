@@ -54,21 +54,22 @@ index 1111111..2222222 100644
 +packagesExist(libmng):PKGCONFIG += libmng
 +else:if(unix|win32-g++*): LIBS += -lmng
  else:win32: LIBS += libmng.lib
-diff --git a/src/plugins/imageformats/mng/qmnghandler.pri b/src/plugins/imageformats/mng/qmnghandler.pri
+diff --git a/src/plugins/imageformats/mng/mng.pro b/src/plugins/imageformats/mng/mng.pro
 index 1111111..2222222 100644
---- a/src/plugins/imageformats/mng/qmnghandler.pri
-+++ b/src/plugins/imageformats/mng/qmnghandler.pri
-@@ -3,7 +3,9 @@ INCLUDEPATH *= $$PWD
- HEADERS += $$PWD/qmnghandler_p.h
- SOURCES += $$PWD/qmnghandler.cpp
- config_libmng {
--    unix|mingw: LIBS += -lmng
-+    CONFIG += link_pkgconfig
-+    packagesExist(libmng):PKGCONFIG += libmng
-+    else:if(unix|win32-g++*): LIBS += -lmng
-     else:win32: LIBS += libmng.lib
- } else {
-     include($$PWD/../../../3rdparty/libmng.pri)
+--- a/src/plugins/imageformats/mng/mng.pro
++++ b/src/plugins/imageformats/mng/mng.pro
+@@ -5,7 +5,10 @@ SOURCES += main.cpp \
+            qmnghandler.cpp
+ OTHER_FILES += mng.json
+ 
+-msvc: LIBS += libmng.lib
++CONFIG += link_pkgconfig
++packagesExist(libmng):PKGCONFIG += libmng
++else:if(unix|mingw): LIBS += -lmng
++else:msvc: LIBS += libmng.lib
+ else: LIBS += -lmng
+ 
+ PLUGIN_TYPE = imageformats
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
