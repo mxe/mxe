@@ -3,39 +3,28 @@
 PKG             := ghostscript
 $(PKG)_WEBSITE  := https://www.ghostscript.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.23
+$(PKG)_VERSION  := 9.26
 $(PKG)_NODOTVER := $(subst .,,$($(PKG)_VERSION))
-$(PKG)_CHECKSUM := 1fcedc27d4d6081105cdf35606cb3f809523423a6cf9e3c23cead3525d6ae8d9
+$(PKG)_CHECKSUM := 90ed475f37584f646e9ef829932b2525d5c6fc2e0147e8d611bc50aa0e718598
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$($(PKG)_NODOTVER)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dbus fontconfig freetype lcms libiconv libidn libpaper libpng openjpeg tiff zlib
+$(PKG)_DEPS     := cc dbus fontconfig freetype libiconv libidn libpaper libpng openjpeg tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ghostscript.com/Releases.html' | \
-    $(SED) -n 's:.*GPL_Ghostscript_::p' | \
-    $(SED) -n 's:\.html.*::p'
+    $(WGET) -q -O- 'https://api.github.com/repos/ArtifexSoftware/ghostpdl-downloads/releases' | \
+    $(SED) -n 's,.*"ghostscript-\([0-9\.]*\)\.tar.xz".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
-    #cp -f $(SOURCE_DIR)/libpng/{config.guess,config.sub,install-sh} '$(SOURCE_DIR)'
     cp -f `automake --print-libdir`/{config.guess,config.sub,install-sh} '$(SOURCE_DIR)'
-    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2art libpng openjpeg tiff
+    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg libpng openjpeg tiff
     cd '$(SOURCE_DIR)' && autoreconf -f -i
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         CPPFLAGS='$(CPPFLAGS) -DHAVE_SYS_TIMES_H=0' \
         $(MXE_CONFIGURE_OPTS) \
-        --with-drivers=ALL,display \
-        --with-arch_h='$(SOURCE_DIR)/arch/windows-x$(if $(filter x86_64-%,$(TARGET)),64,86)-msvc.h' \
-        --enable-dbus \
-        --disable-contrib \
-        --disable-cups \
-        --disable-gtk \
         --with-libiconv=gnu \
-        --without-ijs \
-        --without-x \
-        --with-exe-ext='' \
-        --enable-hidden-visibility \
         --without-local-zlib
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_STATIC),libgs,so)
 
@@ -57,7 +46,7 @@ define $(PKG)_BUILD
      echo 'Description: Ghostscript library'; \
      echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/ghostscript"'; \
      echo 'Libs: -L"$(PREFIX)/$(TARGET)/lib" -lgs'; \
-     echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng libopenjp2 libjpeg lcms2 zlib'; \
+     echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng libopenjp2 libjpeg zlib'; \
      echo '# https://github.com/mxe/mxe/issues/1446'; \
      echo 'Libs.private: -lm -liconv -lpaper -lwinspool';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/ghostscript.pc'
