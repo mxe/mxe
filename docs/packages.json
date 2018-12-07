@@ -80,7 +80,7 @@
     "geoip-database": {"version": "20150317-1", "website": "https://www.maxmind.com/", "description": "GeoIP Legacy Database"},
     "geos": {"version": "3.6.2", "website": "https://trac.osgeo.org/geos/", "description": "GEOS"},
     "gettext": {"version": "0.19.8.1", "website": "https://www.gnu.org/software/gettext/", "description": ""},
-    "ghostscript": {"version": "9.23", "website": "https://www.ghostscript.com/", "description": ""},
+    "ghostscript": {"version": "9.26", "website": "https://www.ghostscript.com/", "description": ""},
     "giflib": {"version": "5.1.4", "website": "https://sourceforge.net/projects/libungif/", "description": ""},
     "glew": {"version": "1.12.0", "website": "https://glew.sourceforge.io/", "description": "GLEW"},
     "glfw2": {"version": "2.7.9", "website": "https://www.glfw.org/", "description": "GLFW 2.x"},
