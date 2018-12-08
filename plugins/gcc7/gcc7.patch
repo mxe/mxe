@@ -36,7 +36,7 @@ diff --git a/gcc/config.gcc b/gcc/config.gcc
 index 1111111..2222222 100644
 --- a/gcc/config.gcc
 +++ b/gcc/config.gcc
-@@ -1713,7 +1713,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+@@ -1771,7 +1771,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
  			tmake_file="${tmake_file} i386/t-mingw-w32"
  			;;
  	esac
@@ -49,7 +49,7 @@ diff --git a/gcc/config/i386/mingw32.h b/gcc/config/i386/mingw32.h
 index 1111111..2222222 100644
 --- a/gcc/config/i386/mingw32.h
 +++ b/gcc/config/i386/mingw32.h
-@@ -170,7 +170,7 @@ along with GCC; see the file COPYING3.  If not see
+@@ -172,7 +172,7 @@ along with GCC; see the file COPYING3.  If not see
  /* For native mingw-version we need to take care that NATIVE_SYSTEM_HEADER_DIR
     macro contains POSIX-style path.  See bug 52947.  */
  #undef NATIVE_SYSTEM_HEADER_DIR
