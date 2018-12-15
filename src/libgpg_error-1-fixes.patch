@@ -1,0 +1,21 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 15 Dec 2018 16:51:30 +0100
+Subject: [PATCH 1/1] [MXE] more tolerant parsing for mingw in host triplet
+
+
+diff --git a/src/mkheader.c b/src/mkheader.c
+index 1111111..2222222 100644
+--- a/src/mkheader.c
++++ b/src/mkheader.c
+@@ -601,7 +601,7 @@ write_special (const char *fname, int lnr, const char *tag)
+     }
+   else if (!strcmp (tag, "include:os-add"))
+     {
+-      if (!strcmp (host_os, "mingw32"))
++      if (strstr (host_os, "mingw"))
+         {
+           include_file (fname, lnr, "w32-add.h", write_line);
+         }
