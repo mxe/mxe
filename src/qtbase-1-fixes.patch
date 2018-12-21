@@ -1,11 +1,9 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-Contains ad hoc patches for cross building.
-
 From f1dbf592c625533c9f8a704e4d5f12f3111a1fb3 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -40,7 +38,7 @@ index 3ed6dd5889..cc5bc9dc16 100644
 From b822f7ff799d10297b0b36408e7cfa44fd416118 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/5] Fix pkgconfig file and library naming
+Subject: [PATCH 2/6] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -109,7 +107,7 @@ index 51b5bde67a..faba17aedd 100644
 From 7773e45dfdd82ede2415a6818332de3e36e7c824 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
+Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
 
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
@@ -150,7 +148,7 @@ index 0c04608fca..a26e02fbf3 100644
 From 82d08b0378db0a30007ca5ee965ffa034859af5c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 4/5] use pkg-config for harfbuzz
+Subject: [PATCH 4/6] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
@@ -175,7 +173,7 @@ index e2d87e77b3..4eb37aea17 100644
 From 8ea9633854e8c2ad94df00866a9b9e3a4394d161 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Nov 2017 11:28:47 +0200
-Subject: [PATCH 5/5] disable qt_random_cpu for i686-w64-mingw32
+Subject: [PATCH 5/6] disable qt_random_cpu for i686-w64-mingw32
 
 Workaround for gcc internal error compiling for mingw32:
     global/qrandom.cpp: In function 'qsizetype qt_random_cpu(void*, qsizetype)':
@@ -205,6 +203,68 @@ index 23e5e499b2..d0b3159c0d 100644
  static qsizetype qt_random_cpu(void *buffer, qsizetype count) Q_DECL_NOTHROW;
  
  #  ifdef Q_PROCESSOR_X86_64
+-- 
+2.19.1
+
+
+From ef8e04865ce94182a04c5ce9c08e3e648b8ee39e Mon Sep 17 00:00:00 2001
+From: Ville Voutilainen <ville.voutilainen@qt.io>
+Date: Wed, 21 Nov 2018 14:07:18 +0200
+Subject: [PATCH 6/6] Fix compilation of qendian's qswap specializations on gcc
+ 4.8
+
+Task-number: QTBUG-71945
+Change-Id: Icf2b75c72946f57ebffc880c9238531dea13ab5b
+Reviewed-by: Ivan Komissarov <ABBAPOH@gmail.com>
+Reviewed-by: Simon Hausmann <simon.hausmann@qt.io>
+(cherry picked from commit 1eeebae7e3b5eb8dda37755b32aafe6719b5cf7b)
+
+diff --git a/src/corelib/global/qendian.h b/src/corelib/global/qendian.h
+index 0e67a1ab8e..f2e5833468 100644
+--- a/src/corelib/global/qendian.h
++++ b/src/corelib/global/qendian.h
+@@ -162,17 +162,17 @@ Float qbswapFloatHelper(Float source)
+     return qFromUnaligned<Float>(&temp);
+ }
+ 
+-template <> inline qfloat16 qbswap<qfloat16>(qfloat16 source)
++inline qfloat16 qbswap(qfloat16 source)
+ {
+     return qbswapFloatHelper(source);
+ }
+ 
+-template <> inline float qbswap<float>(float source)
++inline float qbswap(float source)
+ {
+     return qbswapFloatHelper(source);
+ }
+ 
+-template <> inline double qbswap<double>(double source)
++inline double qbswap(double source)
+ {
+     return qbswapFloatHelper(source);
+ }
+@@ -185,7 +185,7 @@ template <> inline double qbswap<double>(double source)
+ */
+ template <typename T> inline void qbswap(const T src, void *dest)
+ {
+-    qToUnaligned<T>(qbswap<T>(src), dest);
++    qToUnaligned<T>(qbswap(src), dest);
+ }
+ 
+ template <int Size> void *qbswap(const void *source, qsizetype count, void *dest) noexcept;
+@@ -223,9 +223,9 @@ template <typename T> inline void qFromLittleEndian(const void *source, qsizetyp
+ #else // Q_LITTLE_ENDIAN
+ 
+ template <typename T> inline Q_DECL_CONSTEXPR T qToBigEndian(T source)
+-{ return qbswap<T>(source); }
++{ return qbswap(source); }
+ template <typename T> inline Q_DECL_CONSTEXPR T qFromBigEndian(T source)
+-{ return qbswap<T>(source); }
++{ return qbswap(source); }
+ template <typename T> inline Q_DECL_CONSTEXPR T qToLittleEndian(T source)
+ { return source; }
+ template <typename T> inline Q_DECL_CONSTEXPR T qFromLittleEndian(T source)
 -- 
 2.19.1
 
