@@ -7,11 +7,11 @@ build-pkg, Build binary packages from MXE packages
 Instructions: http://pkg.mxe.cc
 
 Requirements (see bootstrapped build below for non-debian systems):
-    MXE
+    MXE (https://mxe.cc/#requirements-debian)
     apt-get install lua5.1 fakeroot dpkg dpkg-dev
 Usage: lua tools/build-pkg.lua
-Packages are written to `*.tar.xz` files.
-Debian packages are written to `*.deb` files.
+Packages are written to `<codename>/*.tar.xz` files.
+Debian packages are written to `<codename>/*.deb` files.
 
 Build in directory /usr/lib/mxe
 This directory can not be changed in .deb packages.
@@ -23,6 +23,11 @@ In this case fakeroot and dpkg-deb are not needed.
 To do a dry run without actually building any packages,
 set environment variable MXE_BUILD_DRY_RUN to any value
 Packages will be downloaded, but builds will be skipped.
+
+To override the codename detection of `lsb_release -sc`, set
+MXE_BUILD_PKG_CODENAME. This sets the output directory and name
+mangling for the pool directory in the apt repo. Could be used to
+create lowest-common-glibc based versions.
 
 To switch off the second pass, set
 MXE_BUILD_PKG_NO_SECOND_PASS to 1.
