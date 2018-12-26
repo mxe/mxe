@@ -7,9 +7,9 @@ $(PKG)_CHECKSUM := 92b46fb36efc77d43aec66fca2c9dd3a6c4b8cc57527a67a1c72e4454ced8
 $(PKG)_GH_CONF  := clementine-player/Clementine/branches/qt5
 $(PKG)_WEBSITE  := https://www.clementine-player.org/
 $(PKG)_OWNER    := https://github.com/pavelvat
-$(PKG)_DEPS     := cc boost chromaprint cryptopp fftw glew protobuf qt5 qtwinextras \
-                   gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav \
-                   libmpcdec qtsparkle sparsehash liblastfm
+$(PKG)_DEPS     := cc boost chromaprint cryptopp fftw glew \
+                   gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav \
+                   libmpcdec protobuf qtbase qtsparkle qtwinextras sparsehash liblastfm
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \

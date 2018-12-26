@@ -1,0 +1,78 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Wed, 26 Dec 2018 18:09:34 +0100
+Subject: [PATCH 1/3] Fix tinysvcmdns compile
+
+
+diff --git a/3rdparty/tinysvcmdns/CMakeLists.txt b/3rdparty/tinysvcmdns/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/3rdparty/tinysvcmdns/CMakeLists.txt
++++ b/3rdparty/tinysvcmdns/CMakeLists.txt
+@@ -7,7 +7,7 @@ set(TINYSVCMDNS-SOURCES
+ )
+ 
+ find_library(PTHREAD
+-  pthreadGC2
++  pthread
+ )
+ 
+ add_library(tinysvcmdns STATIC
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Wed, 26 Dec 2018 18:09:51 +0100
+Subject: [PATCH 2/3] Fix libprojectm compile
+
+
+diff --git a/3rdparty/libprojectm/CMakeLists.txt b/3rdparty/libprojectm/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/3rdparty/libprojectm/CMakeLists.txt
++++ b/3rdparty/libprojectm/CMakeLists.txt
+@@ -178,6 +178,8 @@ if(BUNDLE_PROJECTM_PRESETS)
+         COPY_ONLY
+       )
+     endforeach (preset)
++  elseif (WIN32)
++    INSTALL(FILES ${presets} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/projectm-presets)
+   else (APPLE)
+     INSTALL(FILES ${presets} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/clementine/projectm-presets)
+   endif (APPLE)
+diff --git a/3rdparty/libprojectm/glew.h b/3rdparty/libprojectm/glew.h
+index 1111111..2222222 100644
+--- a/3rdparty/libprojectm/glew.h
++++ b/3rdparty/libprojectm/glew.h
+@@ -149,7 +149,7 @@ typedef unsigned short wchar_t;
+ #  endif
+ #endif
+ #if !defined(_PTRDIFF_T_DEFINED) && !defined(_PTRDIFF_T_)
+-#  ifdef _WIN64
++#  if defined(_WIN64) && !defined(__MINGW32__)
+ typedef __int64 ptrdiff_t;
+ #  else
+ typedef _W64 int ptrdiff_t;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Wed, 26 Dec 2018 18:10:15 +0100
+Subject: [PATCH 3/3] Fix chromaprinter compile
+
+
+diff --git a/src/musicbrainz/chromaprinter.cpp b/src/musicbrainz/chromaprinter.cpp
+index 1111111..2222222 100644
+--- a/src/musicbrainz/chromaprinter.cpp
++++ b/src/musicbrainz/chromaprinter.cpp
+@@ -29,6 +29,10 @@
+ #include "core/logging.h"
+ #include "core/signalchecker.h"
+ 
++#ifndef u_int32_t
++typedef unsigned int u_int32_t;
++#endif
++
+ static const int kDecodeRate = 11025;
+ static const int kDecodeChannels = 1;
+ static const int kPlayLengthSecs = 30;

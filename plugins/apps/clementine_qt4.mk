@@ -15,9 +15,9 @@ $(PKG)_CHECKSUM := e65624b70dc803aaa98a4827586f5e22a06cf533f861992a36987f6078449
 $(PKG)_GH_CONF  := clementine-player/Clementine/branches/master
 $(PKG)_WEBSITE  := https://www.clementine-player.org/
 $(PKG)_OWNER    := https://github.com/pavelvat
-$(PKG)_DEPS     := cc boost cryptopp fftw glew protobuf sparsehash libmpcdec \
-                   gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav \
-                   qtsparkle_qt4 qjson-qt4 liblastfm_qt4 chromaprint
+$(PKG)_DEPS     := cc boost chromaprint cryptopp fftw glew \
+                   gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav \
+                   sparsehash libmpcdec protobuf qtsparkle_qt4 qjson-qt4 liblastfm_qt4
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
