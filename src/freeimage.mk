@@ -67,6 +67,7 @@ define $(PKG)_BUILD_STATIC
 endef
 
 define $(PKG)_BUILD_SHARED
+    $(SED) -i 's,-shared -static,-shared,' '$(1)/Makefile.mingw'
     $(MAKE) -C '$(1)' -j '$(JOBS)' -f Makefile.mingw \
         CXX='$(TARGET)-g++' \
         CC='$(TARGET)-gcc' \
